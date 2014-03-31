@@ -148,7 +148,7 @@ CONNECT BY 절
 
 **ORDER SIBLINGS BY** 절은 계층 질의 결과 값들의 계층 정보를 유지하면서 특정 칼럼을 기준으로 오름차순 또는 내림차순으로 데이터를 정렬하며, 동일한 부모를 가진 자식 행들을 정렬할 수 있다. 계층적 질의문에서 데이터의 계층적 순서를 파악하기 위해 사용한다. ::
 
-    ORDER SIBLINGS BY col_1 [ASC|DESC] [, col_2 [ASC|DESC] […[, col_n [ASC|DESC]]…]]
+    ORDER SIBLINGS BY col_1 [ASC|DESC] [, col_2 [ASC|DESC] [...[, col_n [ASC|DESC]]...]]
 
 다음은 상사와 그의 부하 직원을 출력하되, 출생 연도가 앞서는 사람부터 출력하는 예제이다.
 

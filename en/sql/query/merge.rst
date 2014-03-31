@@ -14,7 +14,7 @@ The **MERGE** statement is used to select rows from one or more sources and to u
      
     <merge_update_clause> ::=
     WHEN MATCHED THEN UPDATE
-    SET <col = expr> [,<col = expr>,…] [WHERE <update_condition>]
+    SET <col = expr> [,<col = expr>,...] [WHERE <update_condition>]
     [DELETE WHERE <delete_condition>]
      
     <merge_insert_clause> ::=

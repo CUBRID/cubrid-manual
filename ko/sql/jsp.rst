@@ -290,13 +290,13 @@ CUBRID에서 Java 저장 함수/프로시저를 사용하기 위해서는 Call S
 
 ::
 
-    CREATE [OR REPLACE] FUNCTION function_name[(param[, param]…)] RETURN sql_type
+    CREATE [OR REPLACE] FUNCTION function_name[(param[, param]...)] RETURN sql_type
     {IS | AS} LANGUAGE JAVA
-    NAME 'method_fullname (java_type_fullname[,java_type_fullname]…) [return java_type_fullname]';
+    NAME 'method_fullname (java_type_fullname[,java_type_fullname]...) [return java_type_fullname]';
 
-    CREATE [OR REPLACE] PROCEDURE procedure_name[(param[, param] …)]
+    CREATE [OR REPLACE] PROCEDURE procedure_name[(param[, param] ...)]
     {IS | AS} LANGUAGE JAVA
-    NAME 'method_fullname (java_type_fullname[,java_type_fullname]…) [return java_type_fullname]';
+    NAME 'method_fullname (java_type_fullname[,java_type_fullname]...) [return java_type_fullname]';
 
     parameter_name [IN|OUT|IN OUT|INOUT] sql_type
        (default IN)
@@ -406,7 +406,7 @@ CALL 문
 
 등록된 Java 저장 함수/프로시저는 **CALL** 문을 사용하거나, SQL 문에서 호출하거나, Java 응용프로그램에서 호출될 수 있다. 다음과 같이 **CALL** 문을 사용하여 호출할 수 있다. **CALL** 문에서 호출되는 Java 저장 함수/프로시저의 이름은 대소문자를 구분하지 않는다. ::
 
-    CALL {procedure_name ([param[, param]…]) | function_name ([param[, param]…]) INTO :host_variable
+    CALL {procedure_name ([param[, param]...]) | function_name ([param[, param]...]) INTO :host_variable
     param {literal | :host_variable}
 
 .. code-block:: sql

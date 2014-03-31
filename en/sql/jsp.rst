@@ -290,13 +290,13 @@ If there is a return value, it is a function; if not, it is a procedure.
 
 ::
 
-    CREATE [OR REPLACE] FUNCTION function_name[(param[, param]…)] RETURN sql_type
+    CREATE [OR REPLACE] FUNCTION function_name[(param[, param]...)] RETURN sql_type
     {IS | AS} LANGUAGE JAVA
-    NAME 'method_fullname (java_type_fullname[,java_type_fullname]…) [return java_type_fullname]';
+    NAME 'method_fullname (java_type_fullname[,java_type_fullname]...) [return java_type_fullname]';
 
-    CREATE [OR REPLACE] PROCEDURE procedure_name[(param[, param] …)]
+    CREATE [OR REPLACE] PROCEDURE procedure_name[(param[, param] ...)]
     {IS | AS} LANGUAGE JAVA
-    NAME 'method_fullname (java_type_fullname[,java_type_fullname]…) [return java_type_fullname]';
+    NAME 'method_fullname (java_type_fullname[,java_type_fullname]...) [return java_type_fullname]';
 
     parameter_name [IN|OUT|IN OUT|INOUT] sql_type
        (default IN)
@@ -406,7 +406,7 @@ Using CALL Statement
 
 You can call the Java stored functions/procedures by using a **CALL** statement, from SQL statements or Java applications. The following shows how to call them by using the **CALL** statement. The name of the Java stored function/procedure called from a **CALL** statement is not case sensitive. ::
 
-    CALL {procedure_name ([param[, param]…]) | function_name ([param[, param]…]) INTO :host_variable
+    CALL {procedure_name ([param[, param]...]) | function_name ([param[, param]...]) INTO :host_variable
     param {literal | :host_variable}
 
 .. code-block:: sql

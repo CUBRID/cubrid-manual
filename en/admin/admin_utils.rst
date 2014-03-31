@@ -1240,7 +1240,7 @@ The following shows [options] available with the **cubrid statdump** utility.
     |                  +------------------------------------------+--------------------------------------------------------------------------------------+
     |                  | Num_btree_resumes                        | The exceeding number of index scan specified in index_scan_oid_buffer_pages          |
     |                  +------------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_btree_multirange_optimization        | The number of executions on multi-range optimization for the WHERE … IN …            |
+    |                  | Num_btree_multirange_optimization        | The number of executions on multi-range optimization for the WHERE ... IN ...        |
     |                  |                                          | LIMIT condition query statement                                                      |
     |                  +------------------------------------------+--------------------------------------------------------------------------------------+
     |                  | Num_btree_splits                         | The number of B-tree split-operations                                                |

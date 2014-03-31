@@ -440,26 +440,26 @@ RENAME TRIGGER
 REPLACE와 INSERT ... ON DUPLICATE KEY UPDATE에서의 트리거
 =========================================================
 
-CUBRID에서는 **REPLACE** 문과 **INSERT … ON DUPLICATE KEY UPDATE** 문 실행 시 내부적으로 **DELETE**, **UPDATE**, **INSERT** 작업이 발생하면서 해당 트리거가 실행된다. 다음 표는 **REPLACE** 혹은 **INSERT … ON DUPLICATE KEY UPDATE** 문이 수행될 때 발생하는 이벤트에 따라 CUBRID에서 트리거가 어떤 순서로 동작하는지를 나타낸다. **REPLACE** 문과 **INSERT … ON DUPLICATE KEY UPDATE** 문 모두 상속받은 클래스(테이블)에서는 트리거가 동작하지 않는다.
+CUBRID에서는 **REPLACE** 문과 **INSERT ... ON DUPLICATE KEY UPDATE** 문 실행 시 내부적으로 **DELETE**, **UPDATE**, **INSERT** 작업이 발생하면서 해당 트리거가 실행된다. 다음 표는 **REPLACE** 혹은 **INSERT ... ON DUPLICATE KEY UPDATE** 문이 수행될 때 발생하는 이벤트에 따라 CUBRID에서 트리거가 어떤 순서로 동작하는지를 나타낸다. **REPLACE** 문과 **INSERT ... ON DUPLICATE KEY UPDATE** 문 모두 상속받은 클래스(테이블)에서는 트리거가 동작하지 않는다.
 
-**REPLACE와 INSERT … ON DUPLICATE KEY UPDATE 문에서 트리거의 동작 순서**
+**REPLACE와 INSERT ... ON DUPLICATE KEY UPDATE 문에서 트리거의 동작 순서**
 
-+------------------------------------------+------------------+
-| 이벤트                                   | 트리거 동작 순서 |
-+==========================================+==================+
-| REPLACE                                  | BEFORE DELETE >  |
-| 레코드가 삭제되고 삽입될 때              | AFTER DELETE >   |
-|                                          | BEFORE INSERT >  |
-|                                          | AFTER INSERT     |
-+------------------------------------------+------------------+
-| INSERT … ON DUPLICATE KEY UPDATE         | BEFORE UPDATE >  |
-| 레코드가 업데이트될 때                   | AFTER UPDATE     |
-+------------------------------------------+------------------+
-| REPLACE, INSERT … ON DUPLCATE KEY UPDATE | BEFORE INSERT >  |
-| 레코드가 삽입만 될 때                    | AFTER INSERT     |
-+------------------------------------------+------------------+
++--------------------------------------------+------------------+
+| 이벤트                                     | 트리거 동작 순서 |
++============================================+==================+
+| REPLACE                                    | BEFORE DELETE >  |
+| 레코드가 삭제되고 삽입될 때                | AFTER DELETE >   |
+|                                            | BEFORE INSERT >  |
+|                                            | AFTER INSERT     |
++--------------------------------------------+------------------+
+| INSERT ... ON DUPLICATE KEY UPDATE         | BEFORE UPDATE >  |
+| 레코드가 업데이트될 때                     | AFTER UPDATE     |
++--------------------------------------------+------------------+
+| REPLACE, INSERT ... ON DUPLCATE KEY UPDATE | BEFORE INSERT >  |
+| 레코드가 삽입만 될 때                      | AFTER INSERT     |
++--------------------------------------------+------------------+
 
-다음은 *with_trigger* 테이블에 **INSERT … ON DUPLICATE KEY UPDATE** 와 **RELPACE** 를 수행하면 트리거가 동작하여 *trigger_actions* 테이블에 레코드를 삽입하는 예제이다.
+다음은 *with_trigger* 테이블에 **INSERT ... ON DUPLICATE KEY UPDATE** 와 **RELPACE** 를 수행하면 트리거가 동작하여 *trigger_actions* 테이블에 레코드를 삽입하는 예제이다.
 
 .. code-block:: sql
 

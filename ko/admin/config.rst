@@ -1016,7 +1016,7 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
                                                                               
 **add_column_update_hard_default**
 
-    **add_column_update_hard_default**\ 는 **ALTER TABLE … ADD COLUMN** 절로 새로운 칼럼을 추가할 때 이 칼럼에 입력할 값을 고정 기본값(hard_default)으로 제공할지 여부를 설정하는 파라미터로서, 기본값은 **no**\ 이다.
+    **add_column_update_hard_default**\ 는 **ALTER TABLE ... ADD COLUMN** 절로 새로운 칼럼을 추가할 때 이 칼럼에 입력할 값을 고정 기본값(hard_default)으로 제공할지 여부를 설정하는 파라미터로서, 기본값은 **no**\ 이다.
 
     **NOT NULL** 제약 조건이 있고 **DEFAULT** 제약 조건이 없을 때 이 파라미터 값이 **yes**\ 이면 칼럼의 새로운 입력값을 고정 기본값(hard default value)으로 입력하며, **no**\ 이면 에러를 반환한다. 이 파라미터의 값이 **yes**\ 일 때 추가하려는 칼럼의 타입에 고정 기본값이 없으면 에러를 반환한다. 각 타입별 고정 기본값에 대해서는 **ALTER TABLE** 문의 :ref:`change-column`\ 을 참고한다.
 
@@ -1232,7 +1232,7 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
 
 **require_like_escape_character**
 
-    **require_like_escape_character**\ 는 **LIKE** 절의 이스케이프 문자 사용 여부에 관한 파라미터로서, 기본값은 **no**\ 이다. 이 파라미터 값이 yes이고 **no_backslash_escapes** 가 no이면 **LIKE** 절의 문자열에서 백슬래시(\\)가 이스케이프 문자로 사용되며, 그렇지 않으면 **LIKE… ESCAPE** 절을 사용하여 이스케이프 문자를 명시해야 한다. 자세한 내용은 :ref:`like-expr` 을 참고한다.
+    **require_like_escape_character**\ 는 **LIKE** 절의 이스케이프 문자 사용 여부에 관한 파라미터로서, 기본값은 **no**\ 이다. 이 파라미터 값이 yes이고 **no_backslash_escapes** 가 no이면 **LIKE** 절의 문자열에서 백슬래시(\\)가 이스케이프 문자로 사용되며, 그렇지 않으면 **LIKE... ESCAPE** 절을 사용하여 이스케이프 문자를 명시해야 한다. 자세한 내용은 :ref:`like-expr` 을 참고한다.
 
 **return_null_on_function_errors**
 
@@ -1575,7 +1575,7 @@ HA 관련 파라미터
 
 **multi_range_optimization_limit**
 
-    **multi_range_optimization_limit**\ 은 다중 범위(col IN (? , ?, …,?))의 조건을 가지며 인덱스 사용이 가능한 질의에서, **LIMIT** 절이 지정하는 행의 개수가 이 파라미터가 지정하는 숫자 이내이면 인덱스 정렬 방식에 대한 최적화를 수행한다. 기본값은 **100**\ 이다.
+    **multi_range_optimization_limit**\ 은 다중 범위(col IN (? , ?, ...,?))의 조건을 가지며 인덱스 사용이 가능한 질의에서, **LIMIT** 절이 지정하는 행의 개수가 이 파라미터가 지정하는 숫자 이내이면 인덱스 정렬 방식에 대한 최적화를 수행한다. 기본값은 **100**\ 이다.
 
     예를 들어, 이 파라미터의 값이 50일 때 LIMIT 10이면 이 파라미터가 지정한 값 이내이므로 각 조건에 해당하는 범위의 값을 정렬하면서 결과를 생성한다. LIMIT 60이면 파라미터 설정값을 초과하므로 각 조건에 해당하는 범위의 값을 모두 가져온 후 정렬한다.
 
@@ -1634,7 +1634,7 @@ HA 관련 파라미터
 
 **use_orderby_sort_limit**
 
-    **use_orderby_sort_limit**\ 은 **ORDER BY … LIMIT** *row_count* 절을 포함하는 구문에서 질의의 정렬 및 합병(sort and merge) 과정의 중간 결과를 *row_count* 만큼만 유지할 것인지를 지정하는 파라미터이다. yes이면 중간 정렬 결과를 *row_count* 만큼만 유지하기 때문에 불필요한 비교 및 합병 과정을 줄일 수 있다. 기본값은 **yes**\ 이다.
+    **use_orderby_sort_limit**\ 은 **ORDER BY ... LIMIT** *row_count* 절을 포함하는 구문에서 질의의 정렬 및 합병(sort and merge) 과정의 중간 결과를 *row_count* 만큼만 유지할 것인지를 지정하는 파라미터이다. yes이면 중간 정렬 결과를 *row_count* 만큼만 유지하기 때문에 불필요한 비교 및 합병 과정을 줄일 수 있다. 기본값은 **yes**\ 이다.
 
 .. _broker-configuration:
 

@@ -98,7 +98,7 @@ CUBRID HA를 설정하는 방법은 :ref:`cubrid-service-util`\ 을 참고한다
 ::
 
     # cubrid.conf
-    …
+    ...
 
     [service]
 
@@ -233,14 +233,14 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 9.2……
+    CUBRID 9.2......
 
     ++ cubrid server start: success
     @ cubrid server start: testdb
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 9.2……
+    CUBRID 9.2......
 
     ++ cubrid server start: success
     @ cubrid broker start
@@ -474,7 +474,7 @@ cubrid_utility.log 파일의 크기는 cubrid.conf의 error_log_size 파라미�
 
     [@<db_name>]
     <ip_addr>
-    …
+    ...
 
 *   <db_name>: 접근을 허용할 데이터베이스 이름.
 *   <ip_addr>: 접근을 허용할 IP 주소. 뒷자리를 \*로 입력하면 뒷자리의 모든 IP를 허용한다. 하나의 데이터베이스 이름 다음 줄에 여러 줄의 <ip_addr>을 추가할 수 있다.
@@ -1358,7 +1358,7 @@ SHARD-Q는 Shard Waiting Queue를 줄인 말이다. SHARD proxy 프로세스가 
 *   <broker_name>: 브로커 이름. **cubrid_broker.conf**\에서 지정한 브로커 이름 중 하나이다.
 *   <db_name>: 데이터베이스 이름. \*로 지정하면 모든 데이터베이스를 허용한다.
 *   <db_user>: 데이터베이스 사용자 ID. \*로 지정하면 모든 데이터베이스 사용자 ID를 허용한다.
-*   <ip_list_file>: 접속 가능한 IP 목록을 저장한 파일의 이름. ip_list_file1, ip_list_file2, …와 같이 파일 여러 개를 쉼표(,)로 구분하여 지정할 수 있다.
+*   <ip_list_file>: 접속 가능한 IP 목록을 저장한 파일의 이름. ip_list_file1, ip_list_file2, ...와 같이 파일 여러 개를 쉼표(,)로 구분하여 지정할 수 있다.
 
 브로커별로 [%<*broker_name*>]과 <*db_name*>:*<db_user*>:<*ip_list_file*>을 추가 지정할 수 있으며, 같은 <*db_name*>, 같은 <*db_user*>에 대해 별도의 라인으로 추가 지정할 수 있다.
 IP 목록은 하나의 브로커 내에서 <*db_name*>:<*db_user*> 별로 최대 256 라인까지 작성될 수 있다.
@@ -2246,7 +2246,7 @@ broker_log_runner
 ::
     
     % broker_log_runner -I 192.168.1.10 -P 30000 -d demodb -o result -Q query_convert.in
-    …
+    ...
     %cat result.0
     -------------- query -----------------
     SELECT * FROM athlete where code=10099;

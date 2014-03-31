@@ -8,18 +8,18 @@ You can insert a new record into a table in a database by using the **INSERT** s
 
 ::
 
-    <INSERT … VALUES statement>
+    <INSERT ... VALUES statement>
     INSERT [INTO] table_name [(column_name, ...)]
         {VALUES | VALUE}({expr | DEFAULT}, ...)[,({expr | DEFAULT}, ...),...]
         [ON DUPLICATE KEY UPDATE column_name = expr, ... ]
     INSERT [INTO] table_name DEFAULT [ VALUES ]
      
-    <INSERT … SET statement>
+    <INSERT ... SET statement>
     INSERT [INTO] table_name
         SET column_name = {expr | DEFAULT}[, column_name = {expr | DEFAULT},...]
         [ON DUPLICATE KEY UPDATE column_name = expr, ... ]
      
-    <INSERT … SELECT statement>
+    <INSERT ... SELECT statement>
     INSERT [INTO] table_name [(column_name, ...)]
         SELECT...
         [ON DUPLICATE KEY UPDATE column_name = expr, ... ]
@@ -198,9 +198,9 @@ In a situation in which a duplicate value is inserted into a column for which th
 
 ::
 
-    <INSERT … VALUES statement>
-    <INSERT … SET statement>
-    <INSERT … SELECT statement>
+    <INSERT ... VALUES statement>
+    <INSERT ... SET statement>
+    <INSERT ... SELECT statement>
         INSERT ...
         [ON DUPLICATE KEY UPDATE column_name = expr, ... ]
 

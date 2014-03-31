@@ -6,15 +6,15 @@ REPLACE
 
 ::
 
-    <REPLACE … VALUES statement>
+    <REPLACE ... VALUES statement>
     REPLACE [INTO] table_name [(column_name, ...)]
         {VALUES | VALUE}({expr | DEFAULT}, ...)[,({expr | DEFAULT}, ...),...]
      
-    <REPLACE … SET statement>
+    <REPLACE ... SET statement>
     REPLACE [INTO] table_name
         SET column_name = {expr | DEFAULT}[, column_name = {expr | DEFAULT},...]
      
-    <REPLACE … SELECT statement>
+    <REPLACE ... SELECT statement>
     REPLACE [INTO] table_name [(column_name, ...)]
         SELECT...
 

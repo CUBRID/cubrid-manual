@@ -148,7 +148,7 @@ Ordering Data with the Hierarchical Query
 
 The **ORDER SIBLINGS BY** clause will cause the ordering of the rows while preserving the hierarchy ordering so that the child nodes with the same parent will be stored according to the column list. ::
 
-    ORDER SIBLINGS BY col_1 [ASC|DESC] [, col_2 [ASC|DESC] […[, col_n [ASC|DESC]]…]]
+    ORDER SIBLINGS BY col_1 [ASC|DESC] [, col_2 [ASC|DESC] [...[, col_n [ASC|DESC]]...]]
 
 The following example shows how to display information about seniors and subordinates in a company in the order of birth year.
 

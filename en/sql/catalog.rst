@@ -1403,7 +1403,7 @@ The following example shows how to retrieve index key information of the class.
       'game'                'host_year'           'pk_game_host_year_event_code_athlete_code'
       'game'                'event_code'          'fk_game_event_code'
       'game'                'athlete_code'        'fk_game_athlete_code'
-     …
+     ...
 
 DB_AUTH
 -------

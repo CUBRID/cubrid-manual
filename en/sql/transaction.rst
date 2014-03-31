@@ -64,7 +64,7 @@ Let each **UPDATE** statement have the current seats of each stadium. To verify 
         'Goudi Olympic Hall'                6000
         'Vouliagmeni Olympic Centre'        4400
 
-If the update is properly done, the changes can be semi-permanently fixed. In this time, use the **COMMIT WORK**  as below:
+If the update is properly done, the changes can be semi-permanently fixed. In this time, use the **COMMIT WORK**  as below:
 
 .. code-block:: sql
 
@@ -664,7 +664,7 @@ The below is an example that T1 waits a lock until T2 commits updated data when 
 Transaction Deadlock
 --------------------
 
-A deadlock  is a state in which two or more transactions wait at once for another transaction's lock to be released. CUBRID resolves the problem by rolling back one of the transactions because transactions in a deadlock state will hinder the work of another transaction. The transaction to be rolled back is usually the transaction which has made the least updates; it is usually the one that started more recently. As soon as a transaction is rolled back, the lock held by the transaction is released and other transactions in a deadlock are permitted to proceed.
+A deadlock  is a state in which two or more transactions wait at once for another transaction's lock to be released. CUBRID resolves the problem by rolling back one of the transactions because transactions in a deadlock state will hinder the work of another transaction. The transaction to be rolled back is usually the transaction which has made the least updates; it is usually the one that started more recently. As soon as a transaction is rolled back, the lock held by the transaction is released and other transactions in a deadlock are permitted to proceed.
 
 It is impossible to predict such deadlocks, but it is recommended that you reduce the range to which lock is applied by setting the index, shortening the transaction, or setting the transaction isolation level as low in order to decrease such occurrences.
 
@@ -778,7 +778,7 @@ In the following error log file, (1) indicates a table name which causes deadloc
 Transaction Lock Timeout
 ------------------------
 
-CUBRID provides the  lock timeout feature, which sets the waiting time for the lock until the transaction lock setting is allowed.
+CUBRID provides the  lock timeout feature, which sets the waiting time for the lock until the transaction lock setting is allowed.
 
 If the lock is allowed within the lock timeout, CUBRID rolls back the transaction and outputs an error message when the timeout has passed. If a transaction deadlock occurs within the lock timeout, CUBRID rolls back the transaction whose waiting time is closest to the timeout.
 
@@ -795,7 +795,7 @@ The system parameter **lock_timeout** in the **$CUBRID/conf/cubrid.conf** file o
 
 *   **INFINITE** : Wait indefinitely until the transaction lock is allowed. Has the same effect as setting the system parameter **lock_timeout** to -1.
 *   **OFF** : Do not wait for the lock, but roll back the transaction and display an error message. Has the same effect as setting the system parameter **lock_timeout** to 0.
-*   *unsigned_integer* : Set in seconds. Wait for the transaction lock for the specified time period.  
+*   *unsigned_integer* : Set in seconds. Wait for the transaction lock for the specified time period.  
 *   *variable* : A variable can be specified. Wait for the transaction lock for the value stored by the variable.
 
 **Example 1** ::
@@ -811,7 +811,7 @@ The system parameter **lock_timeout** in the **$CUBRID/conf/cubrid.conf** file o
 
 **Checking the Lock Timeout**
 
-You can check the lock timeout set for the current application by using the **GET TRANSACTION** statement, or store this value in a variable. ::
+You can check the lock timeout set for the current application by using the **GET TRANSACTION** statement, or store this value in a variable. ::
 
     GET TRANSACTION LOCK TIMEOUT [ { INTO | TO } variable ] [ ; ]
 
@@ -838,7 +838,7 @@ The following message is displayed if lock timeout occurs in a transaction that 
 
 *   user1@host1|csql(9807), user1@host1|csql(9805): Another transactions waiting for termination to lock **IX_LOCK**
 
-That is, the above lock error message can be interpreted as meaning that "Because another client is holding **X_LOCK** on a specific row in the *participant* table, transaction 3 which running on the host *cdbs006.cub* waited for the lock and was rolled back as the timeout has passed". If you want to check the lock information of the transaction specified in the error message, you can do so by using the **cubrid lockdb** utility to search for the OID value (ex: 0|636|34) of a specific row where the **X_LOCK** is set currently to find the transaction ID currently holding the lock, the client program name and the process ID (PID). For details, see :ref:`lockdb`. You can also check the transaction lock information in the CUBRID Manager.
+That is, the above lock error message can be interpreted as meaning that "Because another client is holding **X_LOCK** on a specific row in the *participant* table, transaction 3 which running on the host *cdbs006.cub* waited for the lock and was rolled back as the timeout has passed". If you want to check the lock information of the transaction specified in the error message, you can do so by using the **cubrid lockdb** utility to search for the OID value (ex: 0|636|34) of a specific row where the **X_LOCK** is set currently to find the transaction ID currently holding the lock, the client program name and the process ID (PID). For details, see :ref:`lockdb`. You can also check the transaction lock information in the CUBRID Manager.
 
 You can organize the transactions by checking uncommitted queries through the SQL log after checking the transaction lock information in the manner described above. For information on checking the SQL log, see :ref:`broker-logs`.
 
@@ -888,7 +888,7 @@ You can set the level of transaction isolation by using **isolation_level** and 
     -- or
     SET TRANSACTION ISOLATION LEVEL READ COMMITTED CLASS,READ UNCOMMITTED INSTANCES;
 
-The following table shows the isolation levels from 1 to 6. It consists of table schema (row) and isolation level. For the unsupported isolation level, see :ref:`unsupported-isolation-level`.
+The following table shows the isolation levels from 1 to 6. It consists of table schema (row) and isolation level. For the unsupported isolation level, see :ref:`unsupported-isolation-level`.
 
 **Levels of Isolation Supported by CUBRID**
 
@@ -904,10 +904,10 @@ The following table shows the isolation levels from 1 to 6. It consists of table
 | (or CURSOR STABILITY) (4)                                 | Transaction T1 may experience R read (non-repeatable read) that was updated and committed by another transaction T2 when it is repeatedly retrieving the record R.                  |
 +-----------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | REPEATABLE READ CLASS with READ UNCOMMITTED INSTANCES (3) | Default isolation level.                                                                                                                                                            |
-|                                                           | Another transaction T2 cannot update the schema of table A  while transaction T1 is viewing table A.                                                                                |
+|                                                           | Another transaction T2 cannot update the schema of table A  while transaction T1 is viewing table A.                                                                                |
 |                                                           | Transaction T1 may experience R' read (dirty read) for the record that was updated but not committed by another transaction T2.                                                     |
 +-----------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| READ COMMITTED CLASS with READ COMMITTED INSTANCES (2)    | Transaction T1 may experience A' read (non-repeatable read) for the table that was updated and committed by another transaction  T2 while it is viewing table A repeatedly.         |
+| READ COMMITTED CLASS with READ COMMITTED INSTANCES (2)    | Transaction T1 may experience A' read (non-repeatable read) for the table that was updated and committed by another transaction  T2 while it is viewing table A repeatedly.         |
 |                                                           | Transaction T1 may experience R' read (non-repeatable read) for the record that was updated and committed by another transaction T2 while it is retrieving the record R repeatedly. |
 +-----------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | READ COMMITTED CLASS with READ UNCOMMITTED INSTANCES (1)  | Transaction T1 may experience A' read (non-repeatable read) for the table that was updated and committed by another transaction T2 while it is repeatedly viewing table A.          |
@@ -1200,7 +1200,7 @@ The following are the rules of this isolation level:
 *   Transaction T1 can update/insert record to the table being viewed by another transaction T2.
 *   Transaction T1 cannot change the schema of the table being viewed by another transaction T2.
 
-This isolation level follows a two-phase locking protocol for an exclusive lock. A shared lock on a row is released immediately after it is read; however, an intent lock on a table is released when a transaction terminates to ensure repeatable read on the schema.
+This isolation level follows a two-phase locking protocol for an exclusive lock. A shared lock on a row is released immediately after it is read; however, an intent lock on a table is released when a transaction terminates to ensure repeatable read on the schema.
 
 **Example**
 
@@ -1731,8 +1731,8 @@ CUBRID flushes dirty data (or dirty record) in the client buffers to the databas
 
 *   Dirty data can be flushed to server when a transaction is committed.
 *   Some of dirty data can be flushed to server when a lot of data is loaded into the client buffers.
-*   Dirty data of table *A* can be flushed to server when the schema of table *A* is updated.
-*   Dirty data of table *A* can be flushed to server when the table *A* is retrieved (**SELECT**)
+*   Dirty data of table *A* can be flushed to server when the schema of table *A* is updated.
+*   Dirty data of table *A* can be flushed to server when the table *A* is retrieved (**SELECT**)
 *   Some of dirty data can be flushed to server when a server function is called.
 
 Transaction Termination and Restoration
@@ -1747,7 +1747,7 @@ Restarting Database
 
 CUBRID uses log volumes/files and database backups to restore committed or uncommitted transactions when system or media (disk) error occurs. Logs are also used to support the user-specified rollback. A log consists of a collection of sequential files created by CUBRID. The most recent log is called the active log, and the rest are called archive logs. A log file refers to both the active and archive logs.
 
-All updates of the database are written to the log. Actually, two copies of the updates are logged. The first one is called a before image (UNDO log) and used to restore data during execution of the user-specified **ROLLBACK WORK** statement or during media or system errors. The second copy is an after image (REDO log) and used to re-apply the updates when media or system error occurs.
+All updates of the database are written to the log. Actually, two copies of the updates are logged. The first one is called a before image (UNDO log) and used to restore data during execution of the user-specified **ROLLBACK WORK** statement or during media or system errors. The second copy is an after image (REDO log) and used to re-apply the updates when media or system error occurs.
 
 When the active log is full, CUBRID copies it to an archive log to store in the disk. The archive log is needed to restore the database when a system failure occurs.
 

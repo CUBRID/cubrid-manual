@@ -210,7 +210,7 @@ INDEX_CARDINALITY
     :param key_pos: Partial key location. It *key_pos* starts from 0 and has a range that is smaller than the number of columns consisting of keys; that is, the *key_pos* of the first column is 0. For the single column index, it is 0. It can be one of the following types.
     
         *   Character string that can be converted to a numeric type.
-        *   Numeric type that can be converted to an integer type. The **FLOAT** or the **DOUBLE** types will be the value converted by the **ROUND** function.
+        *   Numeric type that can be converted to an integer type. The **FLOAT** or the **DOUBLE** types will be the value converted by the **ROUND** function.
 
     :rtype: INT
 
@@ -487,7 +487,7 @@ LIST_DBS
 
 .. function:: LIST_DBS()
 
-    The **LIST_DBS** function outputs the list of all databases in the directory file(**$CUBRID_DATABASES/databases.txt**), separated by blanks. 
+    The **LIST_DBS** function outputs the list of all databases in the directory file(**$CUBRID_DATABASES/databases.txt**), separated by blanks.
 
     :rtype: STRING
         

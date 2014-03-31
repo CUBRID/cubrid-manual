@@ -258,7 +258,7 @@ Represents domain information. An index for object_of is created.
 | class_of           | _db_class              | Domain class if the data type is an object,                                                             |
 |                    |                        | **NULL** otherwise.                                                                                     |
 +--------------------+------------------------+---------------------------------------------------------------------------------------------------------+
-| code_set           | INTEGER                | Character set (value of table "character sets supported by CUBRID" in                                   |
+| code_set           | INTEGER                | Character set (value of table "character sets supported by CUBRID" in                                   |
 |                    |                        | :ref:`db-attribute`)                                                                                    |
 |                    |                        | if it is character data type. 0 otherwise.                                                              |
 |                    |                        |                                                                                                         |
@@ -595,12 +595,12 @@ Represents partition information. Indexes for class_of and pname are created.
 +====================+===============+=================================+
 | class_of           | _db_class     | OID of the parent class         |
 +--------------------+---------------+---------------------------------+
-| pname              | VARCHAR(255)  | Parent -                        |
+| pname              | VARCHAR(255)  | Parent -                        |
 |                    |               | **NULL**                        |
 +--------------------+---------------+---------------------------------+
-| ptype              | INTEGER       | 0 - HASH                        |
-|                    |               | 1 - RANGE                       |
-|                    |               | 2 - LIST                        |
+| ptype              | INTEGER       | 0 - HASH                        |
+|                    |               | 1 - RANGE                       |
+|                    |               | 2 - LIST                        |
 +--------------------+---------------+---------------------------------+
 | pexpr              | VARCHAR(255)  | Parent only                     |
 +--------------------+---------------+---------------------------------+
@@ -921,7 +921,7 @@ The following example shows how to retrieve virtual classes that can be accessed
       'db_direct_super_class'
       'db_class'
 
-The following example shows how to retrieve system classes that can be accessed by the current user (**PUBLIC** user).
+The following example shows how to retrieve system classes that can be accessed by the current user(**PUBLIC** user).
 
 .. code-block:: sql
 
@@ -1549,15 +1549,15 @@ Represents argument information of Java stored procedure for which the current u
 +--------------------+---------------+---------------------------+
 |   Attribute Name   |   Data Type   |   Description             |
 +====================+===============+===========================+
-|  sp_name           | VARCHAR(255)  | Stored procedure name     |
+| sp_name            | VARCHAR(255)  | Stored procedure name     |
 +--------------------+---------------+---------------------------+
-|  index_of          | INTEGER       | Order of the arguments    |
+| index_of           | INTEGER       | Order of the arguments    |
 +--------------------+---------------+---------------------------+
-|  arg_name          | VARCHAR(256)  | Argument name             |
+| arg_name           | VARCHAR(256)  | Argument name             |
 +--------------------+---------------+---------------------------+
-|  data_type         | VARCHAR(16)   | Data type of the argument |
+| data_type          | VARCHAR(16)   | Data type of the argument |
 +--------------------+---------------+---------------------------+
-|  mode              | VARCHAR(6)    | Mode (IN, OUT, INOUT)     |
+| mode               | VARCHAR(6)    | Mode (IN, OUT, INOUT)     |
 +--------------------+---------------+---------------------------+
 
 The following example shows how to retrieve arguments the 'phone_info' Java stored procedure in the order of the arguments.

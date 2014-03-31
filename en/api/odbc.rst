@@ -86,7 +86,7 @@ In the [Config CUBRID Data Sources] dialog box, enter information as follows:
 
 *   **FETCH_SIZE** : A value configures the number of records fetched from server whenever the **cci_fetch** () function of CCI library (which CUBRID ODBC driver internally uses) is called.
 
-After you filled out every field, click the [OK] button. You will notice that data source is added in the [User Data Sources] as shown below.
+After you filled out every field, click the [OK] button. You will notice that data source is added in the [User Data Sources] as shown below.
 
 .. image:: /images/image81.png
 
@@ -111,7 +111,7 @@ When you are programming CUBRID ODBC, write the connection strings as follows:
 +--------------+----------------+-----------------------------------------------------------+
 | Category     | Example        | Description                                               |
 +==============+================+===========================================================+
-| Driver       | CUBRID  Driver | Driver name                                               |
+| Driver       | CUBRID Driver  | Driver name                                               |
 +--------------+----------------+-----------------------------------------------------------+
 | UID          | PUBLIC         | User ID                                                   |
 +--------------+----------------+-----------------------------------------------------------+
@@ -147,7 +147,7 @@ In the virtual directory where the ASP sample program runs, right-click "Default
 
 .. image:: /images/image82.png
 
-In the picture above, if you select **(All Unassigned)** from the [IP Address] dropdown list under [Web Site Identification], it is recognized as localhost. If you want to see the sample program through a specific IP address, make an IP address recognize a directory as a virtual directory and register the IP address in the registration information.
+In the picture above, if you select **(All Unassigned)** from the [IP Address] dropdown list under [Web Site Identification], it is recognized as localhost. If you want to see the sample program through a specific IP address, make an IP address recognize a directory as a virtual directory and register the IP address in the registration information.
 
 The following example shows that an IP address is configured as localhost.
 
@@ -282,7 +282,7 @@ The following example shows how to create cubrid.asp and store it in a virtual d
 You can check the result of the sample program by connecting to http://localhost/cubrid.asp. When you execute the ASP sample code above, you will get the following output. Enter an appropriate value in each field, enter the query statement in the Query field, and click [Run]. The query result will be displayed at the lower part of the page.
 
 .. image:: /images/image83.png
- 
+
 ODBC API
 ========
 

@@ -424,7 +424,7 @@ LOG2
 
 .. function:: LOG2 ( x )
 
-    The **LOG2** function returns a log value whose antilogarithm is *x* and base is 2. The return value is a **DOUBLE** type. If the antilogarithm is 0 or a negative number, an error is returned. When you input the string which cannot be transformed into the number, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
+    The **LOG2** function returns a log value whose antilogarithm is *x* and base is 2. The return value is a **DOUBLE** type. If the antilogarithm is 0 or a negative number, an error is returned. When you input the string which cannot be transformed into the number, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
 
     :param x: An expression that returns a positive number
     :rtype: DOUBLE
@@ -797,7 +797,7 @@ TRUNC, TRUNCATE
 .. function:: TRUNC ( x[, dec] )
 .. function:: TRUNCATE ( x, dec )
 
-    The function **TRUNC** or **TRUNCATE** truncates the numbers of the specified argument *x* to the right of the *dec* position. If the *dec* argument is a negative number, it displays 0s to the *dec-* th position left to the decimal point. Note that the *dec* argument of the **TRUNC** function can be omitted, but that of the **TRUNCATE** function cannot be omitted. If the *dec* argument is a negative number, it displays 0s to the *dec* -th position left to the decimal point. The number of digits of the return value to be represented follows the argument *x*. When you input the string which cannot be transformed into the number, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
+    The function **TRUNC** or **TRUNCATE** truncates the numbers of the specified argument *x* to the right of the *dec* position. If the *dec* argument is a negative number, it displays 0s to the *dec-* th position left to the decimal point. Note that the *dec* argument of the **TRUNC** function can be omitted, but that of the **TRUNCATE** function cannot be omitted. If the *dec* argument is a negative number, it displays 0s to the *dec* -th position left to the decimal point. The number of digits of the return value to be represented follows the argument *x*. When you input the string which cannot be transformed into the number, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
 
     :param x: An expression that returns a numeric value
     :param dec: The place to be truncated is specified. If a positive integer *n* is specified, the number is represented to the *n-*\th place after the decimal point; if a negative integer *n* is specified, the number is truncated to the *n-*\th place before the decimal point. It truncates to the first place after the decimal point if the *dec* argument is 0 or omitted. Note that the *dec* argument cannot be omitted in the **TRUNCATE** function.

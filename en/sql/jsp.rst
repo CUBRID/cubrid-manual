@@ -45,7 +45,7 @@ For Windows, CUBRID loads the **jvm.dll** file to run the Java Virtual Machine. 
 
 You can configure the **JAVA_HOME** environment variable and add the directory in which the Java executable file is located to **Path**, by executing the command as follows: For information on configuring environment variables using GUI, see Installing and Configuring JDBC.
 
-*   An example of installing 64 Bit JDK 1.6 and configuring the environment variables ::
+*   An example of installing 64 Bit JDK 1.6 and configuring the environment variables ::
 
     % set JAVA_HOME=C:\jdk1.6.0
     % set PATH=%PATH%;%JAVA_HOME%\jre\bin\server

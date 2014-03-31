@@ -267,15 +267,15 @@ In the following :ref:`Date/Time Format 2 <datetime-format2>` table, the month/d
 +------------------+-------------------------------------------------------------------------------------------------------------------+
 | format Value     | Meaning                                                                                                           |
 +==================+===================================================================================================================+
-| %a               | Weekday, English abbreviation (Sun, ... , Sat)                                                                    |
+| %a               | Weekday, English abbreviation (Sun, ... , Sat)                                                                    |
 +------------------+-------------------------------------------------------------------------------------------------------------------+
-| %b               | Month, English abbreviation (Jan, ... , Dec)                                                                      |
+| %b               | Month, English abbreviation (Jan, ... , Dec)                                                                      |
 +------------------+-------------------------------------------------------------------------------------------------------------------+
-| %c               | Month (1, ... , 12)                                                                                               |
+| %c               | Month (1, ... , 12)                                                                                               |
 +------------------+-------------------------------------------------------------------------------------------------------------------+
 | %D               | Day of the month, English ordinal number (1st, 2nd, 3rd, ...)                                                     |
 +------------------+-------------------------------------------------------------------------------------------------------------------+
-| %d               | Day of the month, two-digit number (01, ... , 31)                                                                 |
+| %d               | Day of the month, two-digit number (01, ... , 31)                                                                 |
 +------------------+-------------------------------------------------------------------------------------------------------------------+
 | %e               | Day of the month (1, ... , 31)                                                                                    |
 +------------------+-------------------------------------------------------------------------------------------------------------------+
@@ -324,14 +324,14 @@ In the following :ref:`Date/Time Format 2 <datetime-format2>` table, the month/d
 | %w               | Day of the week, number index (0=Sunday, ... , 6=Saturday)                                                        |
 +------------------+-------------------------------------------------------------------------------------------------------------------+
 | %X               | Year, four-digit number calculated as the week number with Sunday being the first day of the week                 |
-|                  | (0000, ... , 9999) (Available to use in combination with %V)                                                      |
+|                  | (0000, ... , 9999) (Available to use in combination with %V)                                                      |
 +------------------+-------------------------------------------------------------------------------------------------------------------+
 | %x               | Year, four-digit number calculated as the week number with Monday being the first day of the week                 |
 |                  | (0000, ... , 9999) (Available to use in combination with %V)                                                      |
 +------------------+-------------------------------------------------------------------------------------------------------------------+
 | %Y               | Year, four-digit number (0001, ... , 9999)                                                                        |
 +------------------+-------------------------------------------------------------------------------------------------------------------+
-| %y               | Year, two-digit number (00, 01, ... ,  99)                                                                        |
+| %y               | Year, two-digit number (00, 01, ... ,  99)                                                                        |
 +------------------+-------------------------------------------------------------------------------------------------------------------+
 | %%               | Output the special character "%" as a string                                                                      |
 +------------------+-------------------------------------------------------------------------------------------------------------------+
@@ -430,7 +430,7 @@ FORMAT
 
 Thousands separator symbol and decimal point symbol is output in the format according to the specified language. The language is specified by the **intl_number_lang** system parameter. If the value of **intl_number_lang** is not set, the language specified when creating DB is applied. 
 
-For example, when the language is one of the European languages, such as "de_DE" or "fr_FR", "." is interpreted as the thousands separator and "," as the decimal point symbol (see :ref:`Default output of number by language <tochar-default-number-format>` of the :func:`TO_CHAR`).
+For example, when the language is one of the European languages, such as "de_DE" or "fr_FR", "." is interpreted as the thousands separator and "," as the decimal point symbol (see :ref:`Default output of number by language <tochar-default-number-format>` of the :func:`TO_CHAR`).
 
 The following example shows command execution by setting the value of the **intl_number_lang system** parameter to "en_US".
 
@@ -477,7 +477,7 @@ When the *format* argument is assigned, the *string* is interpreted according to
 
 For example, when the language is "de_DE" and the *format* is "%d %M %Y", the string "3 Oktober 2009" is interpreted as the **DATE** type of "2009-10-03". If the *format* argument does not correspond to the given *string*, an error is returned.
 
-0 is not allowed in the argument value corresponding to year, month, and day; however, if 0 is inputted in every argument value corresponding to date and time, the value of **DATE** or **DATETIME** type that has 0 for every date and time value is returned as an exception. Note that operation in JDBC program is determined by the configuration of zeroDateTimeBehavior, connection URL property. For more information about zeroDateTimeBehavior, please refer :ref:`jdbc-connection-conf`.
+0 is not allowed in the argument value corresponding to year, month, and day; however, if 0 is inputted in every argument value corresponding to date and time, the value of **DATE** or **DATETIME** type that has 0 for every date and time value is returned as an exception. Note that operation in JDBC program is determined by the configuration of zeroDateTimeBehavior, connection URL property. For more information about zeroDateTimeBehavior, please refer :ref:`jdbc-connection-conf`.
 
 The following example shows the case when the system parameter **intl_date_lang** is "en_US".
 
@@ -626,7 +626,7 @@ TO_CHAR(date_time)
     :param date_lang_string_literal: Specifies a language applied to a return value.
     :rtype: STRING
     
-When the *format* argument is specified, the *date_time* is output according to the specified language (see the :ref:`Date/Time Format 1 <datetime-format1>` table). A language is defined by the *date_lang_string_literal*. If *date_lang_string_literal* is omitted, the language specified by the *intl_date_lang* parameter is applied; if the value of *intl_date_lang* is not specified, the language specified when creating DB is applied.
+When the *format* argument is specified, the *date_time* is output according to the specified language (see the :ref:`Date/Time Format 1 <datetime-format1>` table). A language is defined by the *date_lang_string_literal*. If *date_lang_string_literal* is omitted, the language specified by the *intl_date_lang* parameter is applied; if the value of *intl_date_lang* is not specified, the language specified when creating DB is applied.
 
 For example, when the language is set to "de_DE" and the format is "HH:MI:SS:AM", "08:46:53 PM" is output as "08:46:53 Nachm.". When the *format* argument specified does not correspond to the given *string*, an error is returned.
 
@@ -1092,7 +1092,7 @@ TO_DATE
 
 .. function:: TO_DATE(string [,format [,date_lang_string_literal]])
 
-    The **TO_DATE** function interprets a character string based on the date format given as an argument, converts it to a **DATE** type value, and returns it. For the format, see :ref:`Date/Time Format 1 <datetime-format1>`.
+    The **TO_DATE** function interprets a character string based on the date format given as an argument, converts it to a **DATE** type value, and returns it. For the format, see :ref:`Date/Time Format 1 <datetime-format1>`.
 
     :param string: Specifies an expression that returns character string. If the value is **NULL**, **NULL** is returned.
     :param format: Specifies a format of return value to be converted as **DATE** type. See :ref:`Date/Time Format 1 <datetime-format1>`. If the value is **NULL**, **NULL** is returned.
@@ -1348,7 +1348,7 @@ TO_TIME
     :param date_lang_string_literal: Specifies the language for the input value to be applied.
     :rtype: TIME
 
-When the *format* argument is specified, the *string* is interpreted according to the specified language. At this time, the language is set by *date_lang_string_literal*  argument. If *date_lang_string_literal* argument is not set, the language is specified by the **intl_date_lang** system parameter; if the value of **intl_date_lang** is not set, the language specified when creating DB is applied. 
+When the *format* argument is specified, the *string* is interpreted according to the specified language. At this time, the language is set by *date_lang_string_literal* argument. If *date_lang_string_literal* argument is not set, the language is specified by the **intl_date_lang** system parameter; if the value of **intl_date_lang** is not set, the language specified when creating DB is applied. 
 When the *format* parameter does not correspond to the given *string*, an error is returned.
 
 For example, when a language is "de_DE" and *string* is "10:23:00 Nachm.", and *format* is "HH/MI/SS/AM, it is interpreted as 10:23:00 PM.

@@ -13,17 +13,17 @@ Statement set operators are used to get union, difference or intersection on the
     [{statement_set_operator [qualifier] query_term}];  
      
     query_term :
-    • query_specification
-    • subquery
+    *   query_specification
+    *   subquery
      
     qualifier :
-    • DISTINCT, DISTINCTROW or UNIQUE(A returned instance is a distinct value.)
-    • ALL (All instances are returned. Duplicates are allowed.)
+    *   DISTINCT, DISTINCTROW or UNIQUE(A returned instance is a distinct value.)
+    *   ALL (All instances are returned. Duplicates are allowed.)
      
     statement_set_operator :
-    • UNION (union)
-    • DIFFERENCE (difference)
-    • INTERSECT | INTERSECTION (intersection)
+    *   UNION (union)
+    *   DIFFERENCE (difference)
+    *   INTERSECT | INTERSECTION (intersection)
 
 The following table shows statement set operators supported by CUBRID.
 

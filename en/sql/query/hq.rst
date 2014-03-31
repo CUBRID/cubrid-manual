@@ -175,7 +175,7 @@ The result with hierarchical query shows parent and child nodes in a row accordi
     4            1  'Smith'                      1974            2
     3            1  'Jonas'                      1976            2
 
-The following example shows how to display information about seniors and subordinates in a company in the order of joining. For the same level, the employee ID numbers are assigned in the order of joining. *id* indicates employee ID numbers (parent and child nodes) and *mgrid* indicates the employee ID numbers of their seniors.
+The following example shows how to display information about seniors and subordinates in a company in the order of joining.?For the same level, the employee ID numbers are assigned in the order of joining. *id* indicates employee ID numbers (parent and child nodes) and *mgrid* indicates the employee ID numbers of their seniors.
 
 .. code-block:: sql
 
@@ -287,7 +287,7 @@ CONNECT_BY_ISCYCLE
 
 The **CONNECT_BY_ISCYCLE** pseudo-column can be used in the **WHERE**, **ORDER BY** and **GROUP BY** ... **HAVING** clauses of the **SELECT** statement. It can also be used in aggregate functions.
 
-.. note:: This pseudocolumn is available only when the **NOCYCLE** keyword is used in the statement.
+.. note:: This pseudocolumn is available only when the **NOCYCLE** keyword is used in the statement.
 
 The following example shows how to retrieve the **CONNECT_BY_ISCYCE** value to check a row that occurs loop.
 
@@ -337,13 +337,13 @@ Operators for Hierarchical Query
 CONNECT_BY_ROOT
 ---------------
 
-The **CONNECTION_BY_ROOT** operator returns the value of a root row as a column value. This operator can be used in the **WHERE** and **ORDER BY** clauses of the **SELECT** statement.
+The **CONNECTION_BY_ROOT** operator returns the value of a root row as a column value. This operator can be used in the **WHERE** and **ORDER BY** clauses of the **SELECT** statement.
 
 The following example shows how to retrieve the root row's *id* value.
 
 .. code-block:: sql
 
-    -- Checking the id value of a root row for each row
+    -- Checking the id value of a root row for each row
     SELECT id, mgrid, name, CONNECT_BY_ROOT id
     FROM tree
     START WITH mgrid IS NULL

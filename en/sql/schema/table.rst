@@ -1189,20 +1189,23 @@ When you change data types using the **CHANGE** clause or the **MODIFY** clause,
 
 ::
 
-    ALTER TABLE tbl_name table_options;
+    ALTER [/*+ SKIP_UPDATE_NULL */] TABLE tbl_name <table_options> ;
      
         <table_options> ::=
-            <table_option> [, <table_option>]
-            
+            <table_option>[, <table_option>, ...]
+     
             <table_option> ::=
-                CHANGE [COLUMN | CLASS ATTRIBUTE] old_col_name new_col_name column_definition [FIRST | AFTER col_name] |
-                MODIFY [COLUMN | CLASS ATTRIBUTE] col_name column_definition [FIRST | AFTER col_name]
+                CHANGE [COLUMN | CLASS ATTRIBUTE] old_col_name new_col_name column_definition
+                         [FIRST | AFTER col_name]
+              | MODIFY [COLUMN | CLASS ATTRIBUTE] col_name column_definition
+                         [FIRST | AFTER col_name]
 
-*   *tbl_name* : Specifies the name of the table including the column to change.
-*   *old_col_name* : Specifies the existing column name.
-*   *new_col_name* : Specifies the column name to change
-*   *column_definition* : Specifies the type, size, and attribute of the column to change.
-*   *col_name* : Specifies the column name to which the type, size, and attribute of the column to apply changes.
+*   *tbl_name*: Specifies the name of the table including the column to change.
+*   *old_col_name*: Specifies the existing column name.
+*   *new_col_name*: Specifies the column name to change
+*   *column_definition*: Specifies the type, size, and attribute of the column to change.
+*   *col_name*: Specifies the location where the column to change exists.
+*   **SKIP_UPDATE_NULL**: If this hint is added, CUBRID does not check the previous NULLs even if NOT NULL constraint is added. See :ref:`SKIP_UPDATE_NULL <skip-update-null>`.
 
 .. code-block:: sql
 
@@ -1340,6 +1343,16 @@ When you change data types using the **CHANGE** clause or the **MODIFY** clause,
       '1   '
       '-214'
       '2147'
+
+.. _skip-update-null:
+
+.. note:: 
+  
+    When you change NULL constraint into NOT NULL, it takes a long time by the time updating values into **hard default**; to resolve this problem, CUBRID can skip updating values which already exists by using **SKIP_UPDATE_NULL**. However, you should consider that NULL values which do not match with the NOT NULL constraints, can exists.
+  
+    .. code-block:: sql 
+  
+        ALTER /*+ SKIP_UPDATE_NULL */ TABLE foo MODIFY col INT NOT NULL; 
 
 Changes of Table Attributes based on Changes of Column Type
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1570,7 +1583,7 @@ You can delete an index defined for a column by using the **DROP INDEX** clause.
 
 ::
 
-    ALTER [ TABLE | CLASS ] table_name DROP INDEX index_name ;
+    ALTER [TABLE | CLASS] table_name DROP INDEX index_name ;
 
 *   *table_name* : Specifies the name of a table of which constraints will be deleted.
 *   *index_name* : Specifies the name of an index to be deleted.
@@ -1584,7 +1597,7 @@ DROP PRIMARY KEY Clause
 
 You can delete a primary key constraint defined for a table by using the **DROP PRIMARY KEY** clause. You do have to specify the name of the primary key constraint because only one primary key can be defined by table. ::
 
-    ALTER [ TABLE | CLASS ] table_name DROP PRIMARY KEY ;
+    ALTER [TABLE | CLASS] table_name DROP PRIMARY KEY ;
 
 *   *table_name* : Specifies the name of a table that has a primary key constraint to be deleted.
 
@@ -1615,13 +1628,13 @@ You can drop an existing table by the **DROP** statement. Multiple tables can be
 ::
 
     DROP [TABLE | CLASS] [IF EXISTS] <table_specification_comma_list> [CASCADE CONSTRAINTS] ;
-    
+
         <table_specification_comma_list> ::= 
-            <single_table_spec> | ( <table_specification_comma_list> ) 
+            <single_table_spec> | (<table_specification_comma_list>) 
 
             <single_table_spec> ::= 
-                |[ ONLY ] table_name 
-                | ALL table_name [ ( EXCEPT table_name, ... ) ] 
+                |[ONLY] table_name 
+                | ALL table_name [( EXCEPT table_name, ... )] 
                 
 *   *table_name* : Specifies the name of the table to be dropped. You can delete multiple tables simultaneously by separating them with commas.
 *   If a super class name is specified after the **ONLY** keyword, only the super class, not the sub classes inheriting from it, is deleted. If a super class name is specified after the **ALL** keyword, the super classes as well as the sub classes inheriting from it are all deleted. You can specify the list of sub classes not to be deleted after the **EXCEPT** keyword.
@@ -1642,7 +1655,7 @@ You can drop an existing table by the **DROP** statement. Multiple tables can be
 ::
 
     ERROR: Unknown class "a_tbl".
-    
+
 *   If **CASCADE CONSTRAINTS** is specified, the specified table is dropped even if some tables refer the dropping table's primary key; foreign keys of other tables which refer this table are also dropped. However, the data of tables which are referred are not deleted.
 
 The below shows to drop a_parent table which b_child table refers. A foreign key of b_child table also dropped, and the data of b_child table are kept.
@@ -1660,13 +1673,13 @@ The below shows to drop a_parent table which b_child table refers. A foreign key
     ); 
 
     DROP TABLE a_parent CASCADE CONSTRAINTS;     
-    
+
 RENAME TABLE
 ============
 
 You can change the name of a table by using the **RENAME TABLE** statement and specify a list of the table name to change the names of multiple tables. ::
 
-    RENAME  [TABLE | CLASS] old_table_name {AS | TO} new_table_name [, old_table_name {AS | TO} new_table_name, ...];
+    RENAME  [TABLE | CLASS] old_table_name {AS | TO} new_table_name [, old_table_name {AS | TO} new_table_name, ...] ;
 
 *   *old_table_name* : Specifies the old table name to be renamed.
 *   *new_table_name* : Specifies a new table name(maximum: 254 bytes).

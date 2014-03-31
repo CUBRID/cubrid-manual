@@ -603,8 +603,8 @@ OID(Object Identifier)는 볼륨 번호, 페이지 번호, 슬롯 번호와 같�
      
 .. code-block:: sql
     
-    CREATE TABLE t3 (a VARCHAR (20)) REUSE_OID COLLATE euckr_bin;
-    CREATE TABLE t4 (a VARCHAR (20)) COLLATE euckr_bin REUSE_OID;
+    CREATE TABLE t3(a VARCHAR (20)) REUSE_OID COLLATE euckr_bin;
+    CREATE TABLE t4(a VARCHAR (20)) COLLATE euckr_bin REUSE_OID;
 
 .. note::
 
@@ -689,7 +689,7 @@ CREATE TABLE LIKE
      <Constraints>
      
          PRIMARY KEY pk_new_tbl_id ON new_tbl (id)
-     
+
 CREATE TABLE AS SELECT
 ----------------------
 
@@ -1191,21 +1191,22 @@ CHANGE/MODIFY 절
 
     ALTER [/*+ SKIP_UPDATE_NULL */] TABLE tbl_name <table_options> ;
      
-    <table_options> ::=
-         <table_option>[, <table_option>, ...]
+        <table_options> ::=
+            <table_option>[, <table_option>, ...]
      
-    <table_option> ::=
-        CHANGE [COLUMN | CLASS ATTRIBUTE] old_col_name new_col_name column_definition
-                 [FIRST | AFTER col_name]
-      | MODIFY [COLUMN | CLASS ATTRIBUTE] col_name column_definition
-                 [FIRST | AFTER col_name]
+            <table_option> ::=
+                CHANGE [COLUMN | CLASS ATTRIBUTE] old_col_name new_col_name column_definition
+                         [FIRST | AFTER col_name]
+              | MODIFY [COLUMN | CLASS ATTRIBUTE] col_name column_definition
+                         [FIRST | AFTER col_name]
 
-*   *tbl_name* : 변경할 칼럼이 속한 테이블의 이름을 지정한다.
-*   *old_col_name* : 기존 칼럼의 이름을 지정한다.
-*   *new_col_name* : 변경할 칼럼의 이름을 지정한다.
-*   *column_definition* : 변경할 칼럼의 타입, 크기 및 속성을 지정한다.
-*   *col_name* : 변경할 칼럼의 타입, 크기 및 속성을 적용할 칼럼의 이름을 지정한다.
-*   **SKIP_UPDATE_NULL**: NOT NULL 제약 조건을 추가할 때 기존의 NULL 값을 검사하지 않는다. :ref:`SKIP_UPDATE_NULL <skip-update-null>`\ 을 참고한다.
+
+*   *tbl_name*: 변경할 칼럼이 속한 테이블의 이름을 지정한다.
+*   *old_col_name*: 기존 칼럼의 이름을 지정한다.
+*   *new_col_name*: 변경할 칼럼의 이름을 지정한다.
+*   *column_definition*: 변경할 칼럼의 타입, 크기 및 속성을 지정한다.
+*   *col_name*: 변경할 칼럼이 어느 칼럼 뒤에 위치할지를 지정한다.
+*   **SKIP_UPDATE_NULL**: 이 힌트가 추가되면 NOT NULL 제약 조건을 추가할 때 기존의 NULL 값을 검사하지 않는다. :ref:`SKIP_UPDATE_NULL <skip-update-null>`\ 을 참고한다.
 
 .. code-block:: sql
 
@@ -1528,14 +1529,14 @@ RENAME INDEX/CONSTRAINT 절
     
     ALTER TABLE a_tbl RENAME CONSTRAINT c_u AS c_unique_name;
     ALTER TABLE a_tbl RENAME CONSTRAINT pk_id AS primary_key_id;
-    
+
 DROP COLUMN 절
 --------------
 
 **DROP COLUMN** 절을 사용하여 테이블에 존재하는 칼럼을 삭제할 수 있다. 삭제하고자 하는 칼럼들을 쉼표(,)로 구분하여 여러 개의 칼럼을 한 번에 삭제할 수 있다. ::
 
-    ALTER [ TABLE | CLASS | VCLASS | VIEW ] table_name
-    DROP [ COLUMN | ATTRIBUTE ] column_name, ... ;
+    ALTER [TABLE | CLASS | VCLASS | VIEW] table_name
+    DROP [COLUMN | ATTRIBUTE] column_name, ... ;
 
 *   *table_name* : 삭제할 칼럼의 테이블 이름을 명시한다.
 *   *column_ name* : 삭제할 칼럼의 이름을 명시한다. 쉼표로 구분하여 여러 개의 칼럼을 지정할 수 있다.
@@ -1549,7 +1550,7 @@ DROP CONSTRAINT 절
 
 **DROP CONSTRAINT** 절을 사용하여, 테이블에 이미 정의된 **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** 제약 조건을 삭제할 수 있다. 삭제할 제약 조건 이름을 지정해야 하며, 이는 CSQL 명령어( **;schema table_name** )를 사용하여 확인할 수 있다. ::
 
-    ALTER [ TABLE | CLASS ] table_name
+    ALTER [TABLE | CLASS] table_name
     DROP CONSTRAINT constraint_name ;
 
 *   *table_name* : 제약 조건을 삭제할 테이블의 이름을 지정한다.
@@ -1629,11 +1630,11 @@ DROP TABLE
     DROP [TABLE | CLASS] [IF EXISTS] <table_specification_comma_list> [CASCADE CONSTRAINTS] ;
 
         <table_specification_comma_list> ::= 
-            <single_table_spec> | ( <table_specification_comma_list> ) 
+            <single_table_spec> | (<table_specification_comma_list>) 
 
             <single_table_spec> ::= 
                 |[ONLY] table_name 
-                | ALL table_name [ ( EXCEPT table_name, ... ) ] 
+                | ALL table_name [( EXCEPT table_name, ... )] 
 
 *   *table_name* : 삭제할 테이블의 이름을 지정한다. 쉼표로 구분하여 여러 개의 테이블을 한 번에 삭제할 수 있다.
 *   **ONLY** 키워드 뒤에 수퍼클래스 이름이 명시되면, 해당 수퍼클래스만 삭제하고 이를 상속받는 서브클래스는 삭제하지 않는다.

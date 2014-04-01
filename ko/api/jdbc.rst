@@ -117,7 +117,7 @@ JDBC 프로그래밍
 **DriverManager** 는 JDBC 드라이버를 관리하기 위한 기본적인 인터페이스이며, 데이터베이스 드라이버를 선택하고 새로운 데이터베이스 연결을 생성하는 기능을 한다. CUBRID JDBC 드라이버가 등록되어 있다면 **DriverManager.getConnection** (*db-url*, *user-id*, *password*) 메서드를 호출하여 데이터베이스에 접속한다.
 **getConnection** 메서드는 **Connection** 객체를 반환한다. 그리고 그것은 질의 실행과 명령문 실행 그리고 트랜잭션의 커밋 또는 롤백에 사용된다. 연결 설정을 위한 *db-url* 인자의 구성은 다음과 같다. ::
 
-    jdbc:cubrid:<host>:<port>:<db-name>:[user-id]:[password]:[?<property> [& <property>]]
+    jdbc:cubrid:<host>:<port>:<db-name>:[user-id]:[password]:[?<property> [& <property>] ... ]
      
     <host> ::=
     hostname | ip_address
@@ -132,44 +132,49 @@ JDBC 프로그래밍
                  | logFile=<file_name>
                  | logOnException=<bool_type>
                  | logSlowQueries=<bool_type>&slowQueryThresholdMillis=<millisecond>
+                 | useLazyConnection=<bool_type>
                  
     <alternative_hosts> ::=
     <standby_broker1_host>:<port> [,<standby_broker2_host>:<port>]
     <behavior_type> ::= exception | round | convertToNull
     <bool_type> ::= true | false
 
-*   *host* : CUBRID 브로커가 동작하고 있는 서버의 IP 주소 또는 호스트 이름
-*   *port* : CUBRID 브로커의 포트 번호(기본값: 33000)
-*   *db-name* : 접속할 데이터베이스 이름
+*   *host*: CUBRID 브로커가 동작하고 있는 서버의 IP 주소 또는 호스트 이름
+*   *port*: CUBRID 브로커의 포트 번호(기본값: 33000)
+*   *db-name*: 접속할 데이터베이스 이름
 
-*   *user-id* : 데이터베이스에 접속할 사용자 ID이다. 기본적으로 데이터베이스에는 **dba** 와 **public** 두 개의 사용자가 존재한다. 빈 문자열("")을 입력하면 **public** 사용자로 데이터베이스에 접속한다.
-*   *password* : 데이터베이스에 접속할 사용자의 암호이다. 해당 사용자에 암호가 설정되어 있지 않으면, 빈 문자열("")을 입력한다.
+*   *user-id*: 데이터베이스에 접속할 사용자 ID이다. 기본적으로 데이터베이스에는 **dba** 와 **public** 두 개의 사용자가 존재한다. 빈 문자열("")을 입력하면 **public** 사용자로 데이터베이스에 접속한다.
+*   *password*: 데이터베이스에 접속할 사용자의 암호이다. 해당 사용자에 암호가 설정되어 있지 않으면, 빈 문자열("")을 입력한다.
 
-*   **altHosts** : HA 환경에서 장애 시 fail-over할 하나 이상의 standby 브로커의 호스트 IP와 접속 포트이다.
-*   **rcTime** : 첫 번째로 접속했던 브로커에 장애가 발생한 이후 altHosts 에 명시한 브로커로 접속한다(failover). 이후, rcTime만큼 시간이 경과할 때마다 원래의 브로커에 재접속을 시도한다(기본값 600초). 입력 방법은 아래 URL 예제를 참고한다.
-*   **loadBalance** : 이 값이 true면 응용 프로그램이 메인 호스트와 altHosts에 지정한 호스트들에 랜덤한 순서로 연결한다(기본값: false). 
+*   **altHosts**: HA 환경에서 장애 시 fail-over할 하나 이상의 standby 브로커의 호스트 IP와 접속 포트이다.
 
     .. note:: 메인 호스트와 **altHosts** 브로커들의 **ACCESS_MODE**\ 설정에 **RW**\ 와 **RO**\ 가 섞여 있다 하더라도, 응용 프로그램은 **ACCESS_MODE**\ 와 무관하게 접속 대상 호스트를 결정한다. 따라서 사용자는 접속 대상 브로커의 **ACCESS_MODE**\ 를 감안해서 메인 호스트와 **altHosts**\ 를 정해야 한다.
 
-*   **connectTimeout** : 데이터베이스 접속에 대한 타임아웃 시간을 초 단위로 설정한다.  기본값은 30초이다. 이 값이 0인 경우 무한 대기를 의미한다. 이 값은 최초 접속 이후 내부적인 재접속이 발생하는 경우에도 적용된다. **DriverManger.setLoginTimeout** () 메서드로 설정할 수도 있으나, 연결 URL에 이 값을 설정하면 메서드로 설정한 값은 무시된다.
+*   **rcTime**: 첫 번째로 접속했던 브로커에 장애가 발생한 이후 altHosts 에 명시한 브로커로 접속한다(failover). 이후, rcTime만큼 시간이 경과할 때마다 원래의 브로커에 재접속을 시도한다(기본값 600초). 입력 방법은 아래 URL 예제를 참고한다.
+*   **loadBalance**: 이 값이 true면 응용 프로그램이 메인 호스트와 altHosts에 지정한 호스트들에 랜덤한 순서로 연결한다(기본값: false). 
 
-*   **queryTimeout** : 질의 수행에 대한 타임아웃 시간을 초 단위로 설정한다(기본값: 0, 무제한). 최대값은 2,000,000이다. 이 값은 **DriverManger.setQueryTimeout** () 메서드에 의해 변경될 수 있다.  executeBatch() 메서드를 수행하는 경우 한 개의 질의에 대한 타임아웃이 아닌 한 번의 메서드 호출에 대한 타임아웃이 적용된다.
+*   **connectTimeout**: 데이터베이스 접속에 대한 타임아웃 시간을 초 단위로 설정한다.  기본값은 30초이다. 이 값이 0인 경우 무한 대기를 의미한다. 이 값은 최초 접속 이후 내부적인 재접속이 발생하는 경우에도 적용된다. **DriverManger.setLoginTimeout** () 메서드로 설정할 수도 있으나, 연결 URL에 이 값을 설정하면 메서드로 설정한 값은 무시된다.
+
+*   **queryTimeout**: 질의 수행에 대한 타임아웃 시간을 초 단위로 설정한다(기본값: 0, 무제한). 최대값은 2,000,000이다. 이 값은 **DriverManger.setQueryTimeout** () 메서드에 의해 변경될 수 있다.  executeBatch() 메서드를 수행하는 경우 한 개의 질의에 대한 타임아웃이 아닌 한 번의 메서드 호출에 대한 타임아웃이 적용된다.
 
     .. note:: executeBatch() 메서드를 수행하는 경우 한 개의 질의에 대한 타임아웃이 아닌 한 번의 메서드 호출에 대한 타임아웃이 적용된다.
 
-*   **charSet** : 접속하고자 하는 DB의 문자셋(charSet)이다.
-*   **zeroDateTimeBehavior** : JDBC에서는 java.sql.Date 형 객체에 날짜와 시간 값이 모두 0인 값을 허용하지 않으므로 이 값을 출력해야 할 때 어떻게 처리할 것인지를 정하는 속성. 기본 동작은 **exception** 이다. 날짜와 시간 값이 모두 0인 값에 대한 설명은 :ref:`date-time-type` 을 참고한다.
+*   **charSet**: 접속하고자 하는 DB의 문자셋(charSet)이다.
+*   **zeroDateTimeBehavior**: JDBC에서는 java.sql.Date 형 객체에 날짜와 시간 값이 모두 0인 값을 허용하지 않으므로 이 값을 출력해야 할 때 어떻게 처리할 것인지를 정하는 속성. 기본 동작은 **exception** 이다. 날짜와 시간 값이 모두 0인 값에 대한 설명은 :ref:`date-time-type` 을 참고한다.
 
     설정값에 따른 동작은 다음과 같다.
 
-    *   **exception** : 기본 동작. SQLException 예외로 처리한다.
-    *   **round** : 반환할 타입의 최소값으로 변환한다. 단, TIMESTAMP 타입은 '1970-01-01 00:00:00'(GST)를 반환한다.
-    *   **convertToNull** : **NULL** 로 변환한다.
+    *   **exception**: 기본 동작. SQLException 예외로 처리한다.
+    *   **round**: 반환할 타입의 최소값으로 변환한다. 단, TIMESTAMP 타입은 '1970-01-01 00:00:00'(GST)를 반환한다.
+    *   **convertToNull**: **NULL** 로 변환한다.
 
-*   **logFile** : 디버깅용 로그 파일 이름(기본값: cubrid_jdbc.log). 별도의 경로 설정이 없으면 응용 프로그램을 실행하는 위치에 저장된다.
-*   **logOnException** : 디버깅용 예외 처리 로깅 여부(기본값: false)
-*   **logSlowQueries** : 디버깅용 슬로우 쿼리 로깅 여부(기본값: false)
-*   **slowQueryThresholdMillis** : 디버깅용 슬로우 쿼리 로깅 시 슬로우 쿼리 제한 시간(기본값: 60000). 단위는 밀리 초이다.
+*   **logFile**: 디버깅용 로그 파일 이름(기본값: cubrid_jdbc.log). 별도의 경로 설정이 없으면 응용 프로그램을 실행하는 위치에 저장된다.
+*   **logOnException**: 디버깅용 예외 처리 로깅 여부(기본값: false)
+*   **logSlowQueries**: 디버깅용 슬로우 쿼리 로깅 여부(기본값: false)
+
+    *   **slowQueryThresholdMillis**: 디버깅용 슬로우 쿼리 로깅 시 슬로우 쿼리 제한 시간(기본값: 60000). 단위는 밀리 초이다.
+
+*   **useLazyConnection**: 이 값이 true이면 사용자의 연결 요청 시 브로커 연결 없이 성공을 반환(기본값: false)하고, prepare나 execute 등의 함수를 호출할 때 브로커에 연결한다. 이 값을 true로 설정하면 많은 응용 클라이언트가 동시에 재시작되면서 연결 풀(connection pool)을 생성할 때 접속이 지연되거나 실패하는 현상을 피할 수 있다. 
 
 **예제 1** ::
 
@@ -300,7 +305,7 @@ DataSource로부터 연결 객체를 얻기 위해서는 getConnection 메서드
 CUBRIDConnectionPoolDataSource는 connectionpool datasource를 CUBRID에서 구현한 객체인데, CUBRIDDataSource의 메서드들과 같은 이름의 메서드들을 포함하고 있다.
 
 보다 자세한 예제는 :ref:`jdbc-examples`\ 의 **DataSource 객체로 연결**\ 을 참고한다.
-    
+
 .. _jdbc-con-tostring:
 
 SQL LOG 확인 
@@ -329,11 +334,9 @@ cubrid.jdbc.driver.CUBRIDConnection 클래스의 toString() 메서드를 사용�
 
     getCrossReference(String parentCatalog, String parentSchema, String parentTable, String foreignCatalog, String foreignSchema, String foreignTable)
 
-*   **getImportedKeys** 메서드 : 인자로 주어진 테이블의 외래 키 칼럼들이 참조하고 있는 기본 키 칼럼들의 정보를 조회한다. 결과는 **PKTABLE_NAME** 및 **KEY_SEQ** 순서로 정렬되어 반환된다.
-
-*   **getExportedKeys** 메서드 : 주어진 테이블의 기본 키 칼럼들을 참조하는 모든 외래 키 칼럼들의 정보를 조회하며, 결과는 **FKTABLE_NAME** 및 **KEY_SEQ** 순서로 정렬된다.
-
-*   **getCrossReference** 메서드 : 인자로 주어진 테이블의 외래 키 칼럼들이 참조하고 있는 기본 키 칼럼들의 정보를 조회한다. 결과는 **PKTABLE_NAME** 및 **KEY_SEQ** 순서로 정렬되어 반환된다.
+*   **getImportedKeys** 메서드: 인자로 주어진 테이블의 외래 키 칼럼들이 참조하고 있는 기본 키 칼럼들의 정보를 조회한다. 결과는 **PKTABLE_NAME** 및 **KEY_SEQ** 순서로 정렬되어 반환된다.
+*   **getExportedKeys** 메서드: 주어진 테이블의 기본 키 칼럼들을 참조하는 모든 외래 키 칼럼들의 정보를 조회하며, 결과는 **FKTABLE_NAME** 및 **KEY_SEQ** 순서로 정렬된다.
+*   **getCrossReference** 메서드: 인자로 주어진 테이블의 외래 키 칼럼들이 참조하고 있는 기본 키 칼럼들의 정보를 조회한다. 결과는 **PKTABLE_NAME** 및 **KEY_SEQ** 순서로 정렬되어 반환된다.
 
 **반환 값**
 
@@ -675,15 +678,15 @@ OID를 사용할 때 다음의 규칙을 지켜야 한다.
 
     *   아래와 같이 **PreparedStatement** 객체를 작성한다.
     
-    .. code-block:: java
+        .. code-block:: java
     
-        Connection.prepareStatement(sql statement, Statement.RETURN_GENERATED_KEYS);
+            Connection.prepareStatement(sql statement, Statement.RETURN_GENERATED_KEYS);
         
     *   **Statement.execute** 메서드를 사용하여 행을 삽입할 경우, 아래와 같이 사용한다.
     
-    .. code-block:: java
+        .. code-block:: java
 
-        Statement.execute(sql statement, Statement.RETURN_GENERATED_KEYS);
+            Statement.execute(sql statement, Statement.RETURN_GENERATED_KEYS);
         
 *   **PreparedStatement.getGeneratedKeys** 메서드 또는 **Statement.getGeneratedKeys** 메서드를 호출하여 자동 생성된 키 값이 포함된 **ResultSet** 객체를 검색한다.
     **ResultSet** 에서 자동 생성된 키의 데이터 유형은 해당 도메인의 데이터 유형에 상관 없이 **DECIMAL** 이다.
@@ -737,13 +740,9 @@ BLOB/CLOB 사용
 JDBC에서 **LOB** 데이터를 처리하는 인터페이스는 JDBC 4.0 스펙을 기반으로 구현되었으며, 다음과 같은 제약 사항을 가진다.
 
 *   **BLOB**, **CLOB** 객체를 생성할 때에는 순차 쓰기만을 지원한다. 임의 위치에 대한 쓰기는 지원하지 않는다.
-
 *   ResultSet에서 얻어온 **BLOB**, **CLOB** 객체의 메서드를 호출하여 **BLOB** , **CLOB** 데이터를 변경할 수 없다.
-
 *   **Blob.truncate** , **Clob.truncate** , **Blob.position** , **Clob.position** 메서드는 지원하지 않는다.
-
 *   **BLOB** / **CLOB** 타입 칼럼에 대해 **PreparedStatement.setAsciiStream** , **PreparedStatement.setBinaryStream** , **PreparedStatement.setCharacterStream** 메서드를 호출하여 **LOB** 데이터를 바인딩할 수 없다.
-
 *   JDBC 4.0을 지원하지 않는 환경(예: JDK 1.5 이하)에서 **BLOB** / **CLOB** 타입을 사용하기 위해서는 conn 객체를 **CUBRIDConnection** 로 명시적 타입 변환하여 사용하여야 한다. 아래 예제를 참고한다.
 
     .. code-block:: java
@@ -769,7 +768,6 @@ JDBC에서 **LOB** 데이터를 처리하는 인터페이스는 JDBC 4.0 스펙�
 **LOB** 타입 데이터를 바인딩하는 방법은 다음과 같다. 예제를 참고한다.
 
 *   java.sql.Blob 또는 java.sql.Clob 객체를 생성하고 그 객체에 파일 내용을 저장한 다음, PreparedStatement의 **setBlob** () 혹은 **setClob** ()을 사용한다. (예제 1)
-
 *   질의를 한 다음, 그 ResultSet 객체에서 java.sql.Blob 혹은 java.sql.Clob 객체를 얻고, 그 객체를 PreparedStatement에서 바인딩한다. (예제 2)
 
 **예제 1**
@@ -832,7 +830,6 @@ JDBC에서 **LOB** 데이터를 처리하는 인터페이스는 JDBC 4.0 스펙�
 **LOB** 타입 데이터를 조회하는 방법은 다음과 같다.
 
 *   ResultSet에서 **getBytes** () 혹은 **getString** () 메서드를 사용하여 데이터를 바로 인출한다. (예제 1)
-
 *   ResultSet에서 **getBlob** () 혹은 **getClob** () 메서드를 호출하여 java.sql.Blob 혹은 java.sql.Clob 객체를 얻은 다음, 이 객체에 대해 **getBytes** () 혹은 **getSubString** () 메서드를 사용하여 데이터를 인출한다. (예제 2)
 
 **예제 1**
@@ -1207,7 +1204,7 @@ CUBRIDDataSource에 대한 자세한 설명은 :ref:`jdbc-conn-datasource`\ 을 
             }
         }
     }
-        
+
 **데이터베이스 조작(질의 수행 및 ResultSet 처리)**
 
 접속된 데이터베이스에 질의문을 전달하고 실행시키기 위하여 **Statement** , **PrepardStatement** , **CallableStatement** 객체를 생성한다.
@@ -1218,7 +1215,7 @@ CUBRIDDataSource에 대한 자세한 설명은 :ref:`jdbc-conn-datasource`\ 을 
 
     2008 R4.x 이하 버전에서 질의 수행 후 커밋을 수행하면 ResultSet을 자동으로 닫으므로, 커밋 이후에는 ResultSet을 사용하지 않아야 한다. CUBRID는 기본적으로 자동 커밋 모드로 수행되므로, 이를 원하지 않으면 반드시 **conn.setAutocommit(false);** 를 코드에 명시해야 한다.
     
-    9.1 이상 버전부터는 :ref:`커서 유지(cursor holdability) <cursor-holding>`\ 가 지원되므로 커밋 이후에도 ResultSet을 사용할 수 있다.
+    9.1 이상 버전부터는 :ref:`커서 유지(cursor holdability) <cursor-holding>`\가 지원되므로 커밋 이후에도 **ResultSet**\ 을 사용할 수 있다.
 
 **데이터베이스 연결 해제**
 
@@ -1295,9 +1292,9 @@ CUBRIDDataSource에 대한 자세한 설명은 :ref:`jdbc-conn-datasource`\ 을 
           }
        }
     }
-    
+
 **SELECT**
-    
+
 다음은 CUBRID 설치 시 기본 제공되는 *demodb* 에 접속하여 **SELECT** 질의를 수행하는 예제이다.
 
 .. code-block:: java
@@ -1341,7 +1338,7 @@ CUBRIDDataSource에 대한 자세한 설명은 :ref:`jdbc-conn-datasource`\ 을 
     }
 
 **INSERT**
-    
+
 다음은 CUBRID 설치 시 기본 제공되는 *demodb* 에 접속하여 **INSERT** 질의를 수행하는 예제이다. 데이터 삭제 및 갱신 방법은 데이터 삽입 방법과 동일하므로 아래 코드에서 질의문만 변경하여 사용할 수 있다.
 
 .. code-block:: java
@@ -1416,7 +1413,5 @@ JDBC API에 대한 자세한 내용은 Java API Specification 문서(http://docs
 .. note::
     
     *   :ref:`커서 유지(cursor holdability) <cursor-holding>`\ 와 관련하여 설정을 명시하지 않으면 기본으로 커서가 유지된다.
-
     *   2008 R4.3부터 자동 커밋이 ON일 때 질의문을 일괄 처리하는 메서드의 동작 방식이 변경되었음에 주의한다. 질의문을 일괄 처리하는 메서드는 PreparedStatement.executeBatch와 Statement.executeBatch이다. 이들은 2008 R4.1 버전까지 자동 커밋 모드에서 배열 내의 모든 질의를 수행한 후에 커밋했으나, 2008 R4.3버전부터는 각 질의를 수행할 때마다 커밋하도록 변경되었다.
-    
     *   자동 커밋이 OFF일 때 질의문을 일괄 처리하는 메서드에서 배열 내의 질의 수행 중 일부에서 일반적인 오류가 발생하는 경우, 이를 건너뛰고 다음 질의를 계속 수행한다. 그러나, 교착 상태가 발생하면 트랜잭션을 롤백하고 오류 처리한다.

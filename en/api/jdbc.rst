@@ -132,7 +132,8 @@ The **DriverManager** is an interface for managing the JDBC driver. It is used t
                  | logFile=<file_name>
                  | logOnException=<bool_type>
                  | logSlowQueries=<bool_type>&slowQueryThresholdMillis=<millisecond>
-     
+                 | useLazyConnection=<bool_type>
+                 
     <alternative_hosts> ::=
     <standby_broker1_host>:<port> [,<standby_broker2_host>:<port>]
     <behavior_type> ::= exception | round | convertToNull
@@ -150,29 +151,30 @@ The **DriverManager** is an interface for managing the JDBC driver. It is used t
     .. note:: Even if there are **RW** and **RO** together in *ACCESS_MODE** setting of brokers of main host and **altHosts**, application decides the target host to access without the relation for the setting of **ACCESS_MODE**. Therefore, you should define the main host and **altHosts** as considering **ACCESS_MODE** of target brokers.
 
 *   **rcTime**: Interval time (in seconds) to try to connect active brokers during failover in the HA environment. See the below URL example.
-*   **loadBalance** : If this value is true, the application tries to connect with main host and altHosts in random order(default value: false). 
+*   **loadBalance**: If this value is true, the application tries to connect with main host and altHosts in random order(default value: false). 
 
-*   **connectTimeout** : Timeout value (in seconds) for database connection. The default value is 30 seconds. If this value is 0, it means infinite waiting. This value is also applied when internal reconnection occurs after the initial connection. The **DriverManger.setLoginTimeout** () method can be used to configure it; however, the value configured in this method will be ignored if a value is configured in the connection URL.
+*   **connectTimeout**: Timeout value (in seconds) for database connection. The default value is 30 seconds. If this value is 0, it means infinite waiting. This value is also applied when internal reconnection occurs after the initial connection. The **DriverManger.setLoginTimeout** () method can be used to configure it; however, the value configured in this method will be ignored if a value is configured in the connection URL.
 
-
-*   **queryTimeout** : Timeout value (in seconds) for query execution (default value: 0, infinite). The maximum value is 2,000,000. This value can be changed by the **DriverManger.setQueryTimeout** () method. 
+*   **queryTimeout**: Timeout value (in seconds) for query execution (default value: 0, infinite). The maximum value is 2,000,000. This value can be changed by the **DriverManger.setQueryTimeout** () method. 
 
     .. note:: When you run executeBatch() method, the query timeout is applied in one method call, not in one query.
 
-*   **charSet** : The character set of a database to be connected
-
-*   **zeroDateTimeBehavior** : The property used to determine the way to handle an output value; because JDBC does not allow a value having zero for both date and time regardless of date and time in the object with the **java.sql.Date** type. For information about the value having zero for both date and date, see :ref:`date-time-type`.
+*   **charSet**: The character set of a database to be connected
+*   **zeroDateTimeBehavior**: The property used to determine the way to handle an output value; because JDBC does not allow a value having zero for both date and time regardless of date and time in the object with the **java.sql.Date** type. For information about the value having zero for both date and date, see :ref:`date-time-type`.
 
     The default operation is **exception**. The operation for each configuration is as follows:
 
-    *   **exception** : Default operation. It is handled as an SQLException exception.
-    *   **round** : Converts to the minimum value allowed for a type to be returned. Exceptionally, when the value's type is TIMESTAMP, this value is rounded as '1970-01-01 00:00:00'(GST). (yyyy-mm-dd hh24:mi:ss)
-    *   **convertToNull** : Converts to **NULL**.
+    *   **exception**: Default operation. It is handled as an SQLException exception.
+    *   **round**: Converts to the minimum value allowed for a type to be returned. Exceptionally, when the value's type is TIMESTAMP, this value is rounded as '1970-01-01 00:00:00'(GST). (yyyy-mm-dd hh24:mi:ss)
+    *   **convertToNull**: Converts to **NULL**.
 
-*   **logFile** : The name of a log file for debugging (default value: cubrid_jdbc.log). If a path is not configured, it is stored the location where applications are running.
-*   **logOnException** : Whether to log exception handling for debugging (default value: false)
-*   **logSlowQueries** : Whether to log slow queries for debugging (default value: false)
-*   **slowQueryThresholdMillis**: Timeout value (in milliseconds) of slow queries (default value: 60,000).
+*   **logFile**: The name of a log file for debugging (default value: cubrid_jdbc.log). If a path is not configured, it is stored the location where applications are running.
+*   **logOnException**: Whether to log exception handling for debugging (default value: false)
+*   **logSlowQueries**: Whether to log slow queries for debugging (default value: false)
+
+    *   **slowQueryThresholdMillis**: Timeout value (in milliseconds) of slow queries (default value: 60,000).
+
+*   **useLazyConnection**: If this is true, it returns success without connecting to the broker when user requests the connection, and it connects to the broker after calling prepare or execute function(default: false). If this value is true, it can prevent from access delay or failure as many application clients restart simultaniously and create connection pools.
 
 **Example 1** ::
 
@@ -735,26 +737,25 @@ The interface that handles **LOB** data in JDBC is implemented based on JDBC 4.0
 *   You cannot change **BLOB** or **CLOB** data by calling methods of **BLOB** or **CLOB** object fetched from **ResultSet**. 
 *   **Blob.truncate**, **Clob.truncate**, **Blob.position**, and **Clob.position** methods are supported.
 *   You cannot bind the LOB data by calling **PreparedStatement.setAsciiStream**, **PreparedStatement.setBinaryStream**, and **PreparedStatement.setCharacterStream** methods for **BLOB/CLOB** type columns.
-
 *   To use **BLOB** / **CLOB** type in the environment where JDBC 4.0 is not supported such as JDK versions 1.5 or earlier, you must do explicit type conversion for the conn object to **CUBRIDConnection**. See example below.
 
-.. code-block:: java
+    .. code-block:: java
 
-    //JDK 1.6 or higher
+        //JDK 1.6 or higher
 
-    import java.sql.*;
+        import java.sql.*;
 
-    Connection conn = DriverManager.getConnection(url, id, passwd);
-    Blob blob = conn.createBlob();
+        Connection conn = DriverManager.getConnection(url, id, passwd);
+        Blob blob = conn.createBlob();
 
     
-    //JDK 1.5 or lower
+        //JDK 1.5 or lower
 
-    import java.sql.*;
-    import cubrid.jdbc.driver.*;
+        import java.sql.*;
+        import cubrid.jdbc.driver.*;
 
-    Connection conn = DriverManager.getConnection(url, id, passwd);
-    Blob blob = ((CUBRIDConnection)conn).createBlob();
+        Connection conn = DriverManager.getConnection(url, id, passwd);
+        Blob blob = ((CUBRIDConnection)conn).createBlob();
 
 **Storing LOB Data**
 
@@ -859,7 +860,9 @@ You can get the **LOB** type data in the following ways.
         Bytes[] bArray = bImange.getBytes(1, (int)bImage.length());
     }
 
-.. note:: If a string longer than defined max length is inserted (**INSERT**) or updated (**UPDATE**), the string will be truncated.
+.. note::
+
+    If a string longer than defined max length is inserted (**INSERT**) or updated (**UPDATE**), the string will be truncated.
 
 .. _jdbc-error-codes:
 
@@ -1023,7 +1026,7 @@ To connect to CUBRID, load the JDBC driver by using the **forName** () method of
 
     Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
 
-**Connecting to a Database**
+**Connecting to Database**
 
 After loading the JDBC driver, use the **getConnection** () method of the **DriverManager** to connect to the database. To create a **Connection** object, you must specify information such as the URL which indicates the location of a database, user name, password, etc. For more information, see :ref:`jdbc-connection-conf`.
 
@@ -1198,12 +1201,14 @@ Codes are separated with DataSourceMT.java and DataSourceExample.java.
 
 **Manipulating Database (Executing Queries and Processing ResultSet)**
 
-To send a query statement to the connected database and execute it, create **Statement**, **PrepardStatement**, and **CallableStatemen** objects. After the **Statement** object is created, execute the query statement by using **executeQuery** () or **executeUpdate** () method of the **Statement** object. You can use the **next** () method to process the next row from the **ResultSet** that has been returned as a result of executing the **executeQuery** () method.
+To send a query statement to the connected database and execute it, create **Statement**, **PrepardStatement**, and **CallableStatemen** objects. 
+After the **Statement** object is created, execute the query statement by using **executeQuery** () or **executeUpdate** () method of the **Statement** object. 
+You can use the **next** () method to process the next row from the **ResultSet** that has been returned as a result of executing the **executeQuery** () method.
 
 .. note::
 
-    In the 2008 R4.x or lower, if you execute commit after query execution, **ResultSet** will be automatically closed. Therefore, you must not use **ResultSet** after commit. Generally CUBRID is executed in auto-commit mode; if you do not want for CUBRID being executed in auto-commit mode, you should specify **conn.setAutocommit(false);** in the code.
-   
+    In the version of 2008 R4.x or before, if you execute commit after query execution, **ResultSet** will be automatically closed. Therefore, you must not use **ResultSet** after commit. Generally CUBRID is executed in auto-commit mode; if you do not want for CUBRID being executed in auto-commit mode, you should specify **conn.setAutocommit(false);** in the code.
+    
     From 9.1, :ref:`Cursor holdability <cursor-holding>` is supported; therefore, you can use **ResultSet** after commit.
 
 **Disconnecting from Database**
@@ -1399,7 +1404,5 @@ The following table shows the JDBC standard and extended interface supported by 
 .. note::
 
     *   If :ref:`cursor holdability <cursor-holding>` is not specified, cursor is hold in default.
-    
     *   From CUBRID 2008 R4.3 version, the behavior of batching the queries on the autocommit mode was changed. The methods that batch the queries are PreparedStatement.executeBatch and Statement.executeBatch. Until 2008 R4.1 version, these methods had  committed the transaction after executing all queries on the array. From 2008 R4.3, they commit each query on the array.
-    
     *   In autocommit mode off, if the general error occurs during executing one of the queries in the array on the method which does a batch processing of the queries, the query with an error is ignored and the next query is executed continuously. But if the deadlock occurs, the error occurs as rolling back the transaction. 

@@ -1213,7 +1213,8 @@ cubrid heartbeat Utility
 
 **cubrid heartbeat** command can be run as **cubrid hb**, the abbreviated command.
 
-**start**
+start
+^^^^^
 
 This utility is used to activate CUBRID HA feature and start all processes of CUBRID HA in the node(database server process, replication log copy process, and replication log reflection process). Note that a master node or a slave node is determined based on the execution order of **cubrid heartbeat start**.
 
@@ -1227,7 +1228,8 @@ Specify the database name at the end of the command to run only the HA configura
 
     $ cubrid heartbeat start testdb
 
-**stop**
+stop
+^^^^
 
 This utility is used to disable and stop all components of CUBRID. The node that executes this command stops and a failover occurs to the next slave node according to the CUBRID HA configuration.
 
@@ -1249,7 +1251,8 @@ If you want to deactivate CUBRID HA feature immediately, add -i option into the 
     or
     $cubrid heartbeat stop --immediately
     
-**copylogdb**
+copylogdb
+^^^^^^^^^
 
 This utility is used to start or stop the **copylogdb** process that copies the transaction logs for the *db_name* of a specific peer_node in the CUBRID HA configuration. You can pause log copy for rebuilding replications in the middle of operation and then rerun it whenever you want.
 
@@ -1268,7 +1271,8 @@ When *nodeB* is a node to run a command and *nodeA* is *peer_node*, you can run 
 
 When the **copylogdb** process is started/stopped, the configuration information of the **cubrid_ha.conf** is used. We recommend that you do not change the configuration as possible after you have set the configuration once. If you need to change it, it is recommended to restart the whole nodes.
 
-**applylogdb**
+applylogdb
+^^^^^^^^^^
 
 This utility is used to start or stop the **copylogdb** process that reflects the transaction logs for the *db_name* of a specific peer_node in the CUBRID HA configuration. You can pause log copy for rebuilding replications in the middle of operation and then rerun it whenever you want.
 
@@ -1287,7 +1291,8 @@ When *nodeB* is a node to run a command and *nodeA* is *peer_node*, you can run 
 
 When the **applylogdb** process is started/stopped, the configuration information of the **cubrid_ha.conf** is used. We recommend that you do not change the configuration as possible after you have set the configuration once. If you need to change it, it is recommended to restart the whole nodes.
 
-**reload**
+reload
+^^^^^^
 
 This utility is used to retrieve the CUBRID HA information again, and it starts or stops the CUBRID HA components according to new CUBRID HA configuration. Used to add or delete a node; it starts the HA processes which correspond to the added nodes after modification or it stops the HA processes which correspond to the deleted nodes.
 
@@ -1297,7 +1302,8 @@ How to use this utility is as shown below. ::
 
 Reconfigurable parameters are **ha_node_list** and **ha_replica_list**. Even if an error occurs on a special node during running this command, the left jobs are continued. After **reload** command is finished, check if the reconfiguration of nodes is applied well or not. If it fails, find the reason and resolve it.
 
-**replication(or repl) start** 
+replication(or repl) start
+^^^^^^^^^^^^^^^^^^^^^^^^^^
   
 This utility is used to run in batch HA processes(copylogdb/applylogdb) related to a specific node; in general, it is used to run in batch HA replication processes of added nodes after running **cubrid heartbeat reload**.
 
@@ -1309,7 +1315,8 @@ This utility is used to run in batch HA processes(copylogdb/applylogdb) related 
   
 *   *node_name*: one of nodes specified in **ha_node_list** of cubrid_ha.conf.
      
-**replication(또는 repl) stop** 
+replication(or repl) stop
+^^^^^^^^^^^^^^^^^^^^^^^^^
   
 This utility is used to stop in batch HA processes(copylogdb/applylogdb) related to a specific node; in general, it is used to stop in batch HA replication processes of removed nodes after running **cubrid heartbeat reload**.
 
@@ -1321,7 +1328,8 @@ This utility is used to stop in batch HA processes(copylogdb/applylogdb) related
      
 *   *node_name*: one of nodes specified in **ha_node_list** of cubrid_ha.conf.
 
-**status**
+status
+^^^^^^
 
 This utility is used to output the information of CUBRID HA group and CUBRID HA components. How to use this utility is as shown below. ::
 
@@ -4220,6 +4228,7 @@ Operate the below process when you complete to run **ha_make_slavedb.sh** script
            Node nodeC (priority 32767, state replica)
            Node nodeB(priority 2, state slave)
            Node nodeA (priority 1, state master)
+
 
          HA-Process Info (master 27221, state slave)
            Applylogdb testdb@nodeA:/home1/cubrid/CUBRID/databases/testdb_nodeA (pid 27455, state registered)

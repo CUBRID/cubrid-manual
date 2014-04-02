@@ -133,7 +133,6 @@ DB 서버 연결은 **cubrid_broker.conf**\ 의 **PREFERRED_HOSTS**, **CONNECT_O
 databases.txt의 db-host가 node B:node C:node A 순이므로, B, C, A 순으로 접속을 시도한다. 이때 db-host에 명시된 "node B:node C:node A"는 /etc/hosts 파일에 정의된 실제 호스트 이름이다.
 
 *   Example 1.  node B는 비정상 종료된 상태이고, node C는 standby 상태이며, node A는 active 상태이다. 따라서 최종적으로 node A와 연결한다.
-
 *   Example 2.  node B는 비정상 종료된 상태이고, node C는 active 상태이다. 따라서 최종적으로 node C와 연결한다.
 
 **Read Only**
@@ -307,11 +306,11 @@ CUBRID HA에 포함할 데이터베이스를 모든 CUBRID HA 노드에서 동�
     # Service parameters
     [service]
     service=server,broker,manager
-     
+
     # Common section
     [common]
     service=server,broker,manager
-     
+
     # Server parameters
     server=testdb
     data_buffer_size=512M
@@ -407,8 +406,8 @@ CUBRID HA 그룹 내의 각 노드에서 **cubrid changemode** 유틸리티를 �
         [nodeB]$ csql -u dba testdb@localhost -l -c "select * from abc;"
         === <Result of SELECT Command in Line 1> ===
         <00001> a: 1
-                b: 1
-                c: 1
+                b: 1
+                c: 1
         [nodeB]$
 
 .. _quick-broker-config:
@@ -1182,7 +1181,8 @@ cubrid heartbeat 유틸리티
 
 **cubrid heartbeat** 명령은 줄여서 **cubrid hb**\로도 실행할 수 있다.
 
-**start**
+start
+^^^^^
 
 해당 노드의 CUBRID HA 기능을 활성화하고 구성 프로세스(데이터베이스 서버 프로세스, 복제 로그 복사 프로세스, 복제 로그 반영 프로세스)를 모두 구동한다. **cubrid heartbeat start** 를 실행하는 순서에 따라 마스터 노드와 슬레이브 노드가 결정되므로, 순서를 주의해야 한다.
 
@@ -1196,7 +1196,8 @@ HA 모드로 설정된 데이터베이스 서버 프로세스는 **cubrid server
 
     $ cubrid heartbeat start testdb
 
-**stop**
+stop
+^^^^
 
 해당 노드의 CUBRID HA 기능을 비활성화하고 구성 프로세스(데이터베이스 서버 프로세스, 복제 로그 복사 프로세스, 복제 로그 반영 프로세스)를 모두 종료한다. 이 명령을 실행한 노드의 HA 기능은 종료되고 HA 구성에 있는 다음 순위의 슬레이브 노드로 failover가 일어난다.
 
@@ -1218,7 +1219,8 @@ CUBRID HA 기능을 즉각 비활성화하려면 "cubrid heartbeat stop" 명령�
     or
     $cubrid heartbeat stop --immediately
     
-**copylogdb**
+copylogdb
+^^^^^^^^^
 
 CUBRID HA 구성에서 특정 peer_node의 db_name에 대한 트랜잭션 로그를 복사하는 **copylogdb** 프로세스를 시작 또는 정지한다. 운영 도중 복제 재구축을 위해 로그 복사를 일시 정지했다가 재구동하고 싶은 경우 사용할 수 있다.
 
@@ -1237,7 +1239,8 @@ CUBRID HA 구성에서 특정 peer_node의 db_name에 대한 트랜잭션 로그
 
 **copylogdb** 프로세스의 시작/정지 시 **cubrid_ha.conf** 의 설정 정보를 사용하므로 한 번 정한 설정은 가급적 바꾸지 않을 것을 권장하며, 바꾸어야만 하는 경우 노드 전체를 재구동할 것을 권장한다.
 
-**applylogdb**
+applylogdb
+^^^^^^^^^^
 
 CUBRID HA 구성에서 특정 peer_node의 db_name에 대한 트랜잭션 로그를 반영하는 **applylogdb** 프로세스를 시작 또는 정지한다. 운영 도중 복제 재구축을 위해 로그 반영을 일시 정지했다가 재구동하고 싶은 경우 사용할 수 있다.
 
@@ -1256,7 +1259,8 @@ CUBRID HA 구성에서 특정 peer_node의 db_name에 대한 트랜잭션 로그
 
 **applylogdb** 프로세스의 시작/정지 시 **cubrid_ha.conf** 의 설정 정보를 사용하므로 한 번 정한 설정은 가급적 바꾸지 않을 것을 권장하며, 바꾸어야만 하는 경우 노드 전체를 재구동할 것을 권장한다.
 
-**reload**
+reload
+^^^^^^
 
 **cubrid_ha.conf**\ 에서 CUBRID HA 구성 정보를 다시 읽는다. 노드를 추가하거나 삭제하는 경우 사용하며, **reload** 명령 이후에 추가/삭제된 노드의 HA 복제 프로세스를 일괄적으로 구동/정지하려면 "**cubrid replication start/stop**" 명령을 사용할 수 있다. 
 
@@ -1266,8 +1270,9 @@ CUBRID HA 구성에서 특정 peer_node의 db_name에 대한 트랜잭션 로그
 
 변경할 수 있는 구성 정보는 **ha_node_list**\ 와 **ha_replica_list**\ 이다. **reload** 명령이 실행된 후 **status** 명령으로 노드의 재구성이 잘 반영되었는지 확인한다. 재구성에 실패한 경우 원인을 찾아 해소하도록 한다. 
 
-**replication(또는 repl) start** 
-  
+replication(또는 repl) start
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 특정 노드와 관련된 HA 프로세스(copylogdb/applylogdb)를 일괄 구동하기 위한 명령으로, 일반적으로 **cubrid heartbeat reload** 이후 추가된 노드의 HA 복제 프로세스들을 일괄적으로 시작하기 위해 실행한다. 
   
 **replication** 명령은 줄여서 **repl**\로도 사용할 수 있다. 
@@ -1276,10 +1281,11 @@ CUBRID HA 구성에서 특정 peer_node의 db_name에 대한 트랜잭션 로그
   
     cubrid heartbeat repl start <node_name> 
   
-* *node_name*: cubrid_ha.conf의 **ha_node_list**\에 명시된 노드 이름 중 하나 
+*   *node_name*: cubrid_ha.conf의 **ha_node_list**\에 명시된 노드 이름 중 하나 
      
-**replication(또는 repl) stop** 
-  
+replication(또는 repl) stop
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 특정 노드와 관련된 HA 프로세스(copylogdb/applylogdb)를 일괄 정지하기 위한 명령으로,일반적으로 **cubrid heartbeat reload** 이후 삭제된 노드의 HA 복제 프로세스들을 일괄적으로 정지하기 위해 실행한다. 
   
 **replication** 명령은 줄여서 **repl**\로도 사용할 수 있다. 
@@ -1288,9 +1294,10 @@ CUBRID HA 구성에서 특정 peer_node의 db_name에 대한 트랜잭션 로그
   
     cubrid heartbeat repl stop <node_name> 
      
-* *node_name*: cubrid_ha.conf의 **ha_node_list**\에 명시된 노드 이름 중 하나 
+*   *node_name*: cubrid_ha.conf의 **ha_node_list**\에 명시된 노드 이름 중 하나 
 
-**status**
+status
+^^^^^^
 
 CUBRID HA 그룹 정보와 CUBRID HA 구성 요소의 정보를 확인할 수 있다. 사용법은 다음과 같다. ::
 

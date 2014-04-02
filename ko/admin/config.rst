@@ -94,7 +94,7 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
     +-------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     | 용도 구분                     | 파라미터 이름                       | 적용 구분               | 타입     | 기본값                         | 동적 변경       |
     +===============================+=====================================+=========================+==========+================================+=================+
-    | :ref:`connection-parameters`  | cubrid_port_id                      | 클라이언트              | int      | 1523                           |                 |
+    | :ref:`connection-parameters`  | cubrid_port_id                      | 클라이언트              | int      | 1,523                          |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     |                               | check_peer_alive                    | 클라이언트/서버         | string   | both                           | 가능            |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
@@ -174,6 +174,8 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
     |                               |                                     |                         |          | :ref:`log_page_size <lpg>`     |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     |                               | log_max_archives                    | 서버                    | int      | INT_MAX                        | 가능            |
+    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
+    |                               | log_trace_flush_time                | 서버                    | msec     | 0                              | 가능            |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     |                               | max_flush_size_per_second           | 서버                    | byte     | 10,000 *                       | 가능            |
     |                               |                                     |                         |          | :ref:`db_page_size <dpg>`      |                 |
@@ -319,7 +321,7 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
   
     [standalone] 섹션에 정의된 설정은 "cubrid"로 시작하는 cubrid 유틸리티들이 독립 모드로 구동할 때만 사용된다. 
     예를 들어, 위와 같이 설정한 상태에서 --CS-mode(기본값)으로 DB를 구동(cubrid database start db_name)하면 "sort_buffer_size=2M"가 적용된다. 하지만 DB를 정지하고 "cubrid loaddb --SA-mode"를 실행할 때는 "sort_buffer_size=256M"가 적용된다. "cubrid loaddb --SA-mode"를 실행할 때 인덱스 생성 과정에서 정렬 버퍼(sort buffer)를 더 많이 사용할 것으로 예상되므로 이를 늘려주는 것이 "loaddb" 수행 성능에 도움이 된다.
-    
+
 **기본 제공 파라미터**
 
     CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**cubrid.conf**)에는 데이터베이스 서버 파라미터 중 반드시 변경해야 할 일부 파라미터가 기본적으로 포함된다. 기본으로 포함되지 않는 파라미터의 설정값을 변경하기 원할 경우 직접 추가/편집해서 사용하면 된다.
@@ -401,7 +403,7 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
 +--------------------+----------+-------------------+---------+---------+
 | 파라미터 이름      | 타입     | 기본값            | 최소값  | 최대값  |
 +====================+==========+===================+=========+=========+
-| cubrid_port_id     | int      | 1523              | 1       |         |
+| cubrid_port_id     | int      | 1,523             | 1       |         |
 +--------------------+----------+-------------------+---------+---------+
 | check_peer_alive   | string   | both              |         |         |
 +--------------------+----------+-------------------+---------+---------+
@@ -414,10 +416,10 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
 
 **cubrid_port_id**
 
-    **cubrid_port_id**\ 는 마스터 프로세스가 사용하는 포트를 설정하기 위한 파라미터로 기본값은 **1523**\ 이다. CUBRID를 설치한 서버에서 이미 1,523 포트를 사용하고 있거나, 방화벽에 의해 1523 포트가 차단된 경우에는 마스터 프로세스가 정상적으로 구동할 수 없으므로, 마스터 서버와 연결할 수 없다는 에러 메시지가 나타날 수 있다. 이와 같이 포트 충돌이 발생하는 경우, 관리자는 서버 환경을 고려하여 **cubrid_port_id** 의 설정값을 변경해야 한다.
+    **cubrid_port_id**\ 는 마스터 프로세스가 사용하는 포트를 설정하기 위한 파라미터로 기본값은 **1,523**\ 이다. CUBRID를 설치한 서버에서 이미 1,523 포트를 사용하고 있거나, 방화벽에 의해 1523 포트가 차단된 경우에는 마스터 프로세스가 정상적으로 구동할 수 없으므로, 마스터 서버와 연결할 수 없다는 에러 메시지가 나타날 수 있다. 이와 같이 포트 충돌이 발생하는 경우, 관리자는 서버 환경을 고려하여 **cubrid_port_id** 의 설정값을 변경해야 한다.
 
 .. _check_peer_alive:
-    
+
 **check_peer_alive**
 
     **check_peer_alive**\ 는 클라이언트 프로세스와 서버 프로세스가 정상 동작하는지 각각 확인하는 과정의 수행 여부를 결정하는 파라미터이다. 기본값은 **both**\ 이다. 
@@ -626,7 +628,7 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
 +-----------------------------------+--------+--------------------------------+
 | error_log_warning                 | bool   | no                             |
 +-----------------------------------+--------+--------------------------------+
-| error_log_size                    | int    | 8000000                        |
+| error_log_size                    | int    | 8,000,000                      |
 +-----------------------------------+--------+--------------------------------+
 
 **call_stack_dump_activation_list**
@@ -851,7 +853,7 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
 | checkpoint_every_size         | byte   | 10,000 *                   | 10  *                      |                            |
 |                               |        | :ref:`log_page_size <lpg>` | :ref:`log_page_size <lpg>` | :ref:`log_page_size <lpg>` |
 +-------------------------------+--------+----------------------------+----------------------------+----------------------------+
-| checkpoint_interval           | msec   | 6min                       | 1min                       | 35791394min                |
+| checkpoint_interval           | msec   | 6min                       | 1min                       | 35,791,394min              |
 +-------------------------------+--------+----------------------------+----------------------------+----------------------------+
 | force_remove_log_archives     | bool   | yes                        |                            |                            |
 +-------------------------------+--------+----------------------------+----------------------------+----------------------------+
@@ -859,6 +861,8 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
 |                               |        | :ref:`log_page_size <lpg>` | :ref:`log_page_size <lpg>` | :ref:`log_page_size <lpg>` |
 +-------------------------------+--------+----------------------------+----------------------------+----------------------------+
 | log_max_archives              | int    | INT_MAX                    | 0                          | INT_MAX                    |
++-------------------------------+--------+----------------------------+----------------------------+----------------------------+
+| log_trace_flush_time          | int    | 0                          | 0                          | INT_MAX                    |
 +-------------------------------+--------+----------------------------+----------------------------+----------------------------+
 | max_flush_size_per_second     | byte   | 10,000 *                   | 1 *                        | INT_MAX *                  |
 |                               |        | :ref:`db_page_size <dpg>`  | :ref:`db_page_size <dpg>`  | :ref:`db_page_size <dpg>`  |
@@ -923,6 +927,31 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
     
         2008 R4.3 이하 버전과 9.1 버전에서 **log_max_archives**\ 는 HA 환경에서 복제 로그 파일의 최대 보존 개수를 지정할 때도 사용되었으나, 
         2008 R4.4와 9.2 이상 버전에서는 cubrid_ha.conf의 :ref:`ha_copy_log_max_archives <ha_copy_log_max_archives>` 파라미터가 그 역할을 대신하게 되었다.
+
+**log_trace_flush_time** 
+  
+이 파라미터에 설정한 시간보다 로그 플러싱 시간이 오래 걸리는 경우 해당 이벤트가 데이터베이스 서버 로그에 기록된다. 
+
+기록되는 정보의 예는 다음과 같다. 
+  
+:: 
+  
+    03/18/14 10:20:45.889 - LOG_FLUSH_THREAD_WAIT 
+      total flush count: 1 page(s) 
+      total flush time: 310 ms 
+      time waiting for log writer: 308 ms 
+      last log writer info 
+        client: DBA@cdbs037.cub|copylogdb(15312) 
+        time spent by log writer: 308 ms 
+  
+*   LOG_FLUSH_THREAD_WAIT: 이벤트 이름 
+*   total flush count: 이벤트 발생 당시 플러시(flush)한 페이지 수 
+*   total flush time: 총 플러시 소요 시간 
+*   time waiting for log writer: LFT(Log Flushing Thread)가 LWT(Log Writer Thread)를 대기한 시간 
+*   last log writer info 
+  
+    *   DBA@cdbs037.cub|copylogdb(15312): LFT를 대기하게 한 LWT와 관련된 copylogdb 정보 <사용자@호스트명|클라이언트명(pid)> 
+    *   time spent by log writer: LWT에서 측정한 LWT 소요 시간(일반적으로 time waiting for log writer와 동일)
 
 **max_flush_size_per_second**
 
@@ -1013,7 +1042,7 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
 +---------------------------------+--------+------------+------------+------------+
 | update_use_attribute_references | bool   | no         |            |            |
 +---------------------------------+--------+------------+------------+------------+
-                                                                              
+
 **add_column_update_hard_default**
 
     **add_column_update_hard_default**\ 는 **ALTER TABLE ... ADD COLUMN** 절로 새로운 칼럼을 추가할 때 이 칼럼에 입력할 값을 고정 기본값(hard_default)으로 제공할지 여부를 설정하는 파라미터로서, 기본값은 **no**\ 이다.
@@ -1549,7 +1578,7 @@ HA 관련 파라미터
     
 **agg_hash_respect_order**
 
-    **agg_hash_respect_order**\ 는 집계 함수에서 그룹이 순서대로 반환되는지 여부를 설정하는 파라미터이다. 기본값은 **yes**\ 이다. ref:`max_agg_hash_size <max_agg_hash_size>`\ 를 참고한다.
+    **agg_hash_respect_order**\ 는 집계 함수에서 그룹이 순서대로 반환되는지 여부를 설정하는 파라미터이다. 기본값은 **yes**\ 이다. :ref:`max_agg_hash_size <max_agg_hash_size>`\ 를 참고한다.
     
     이 모든 그룹(키와 누적 결과)이 해시 메모리에 상주할 수 있으면, "agg_hash_respect_order=no" 설정은 결과를 출력하기 전에 정렬하는 과정을 생략할 것이므로, 순서가 보장되지 않을 것이라고 예측할 수 있다. 그러나, 오버플로우가 발생하면 정렬 과정이 수행되어야 하며 "agg_hash_respect_order=false"로 설정되었더라도 정렬된 결과를 얻게 된다.
 
@@ -1608,13 +1637,13 @@ HA 관련 파라미터
 
 **sort_limit_max_count**
 
-    "ORDER BY ... LIMIT *N*\ " 구문에 의해 top-N개의 행이 정렬될 때 적용될 수 있는 SORT-LIMIT 최적화와 관련하여, 해당 최적화를 적용하는 것을 제한하는 LIMIT 행 개수를 명시한다. *N*\ 의 값이 **sort_limit_max_count**\ 의 값보다 작을 때 SORT-LIMIT 최적화가 적용된다. 기본값은 1000이며, 최소값은 0(최적화를 항상 안 한다는 뜻), 최대값은 INT_MAX이다.
+    "ORDER BY ... LIMIT *N*\ " 구문에 의해 top-N개의 행이 정렬될 때 적용될 수 있는 SORT-LIMIT 최적화와 관련하여, 해당 최적화를 적용하는 것을 제한하는 LIMIT 행 개수를 명시한다. *N*\ 의 값이 **sort_limit_max_count**\ 의 값보다 작을 때 SORT-LIMIT 최적화가 적용된다. 기본값은 **1,000**\ 이며, 최소값은 0(최적화를 항상 안 한다는 뜻), 최대값은 INT_MAX이다.
 
     좀더 자세한 사항은 :ref:`sort-limit-optimization`\ 를 참고한다.
 
 **sql_trace_slow**
 
-    **sql_trace_slow**\ 는 장기 실행 질의(long running query)로 판단될 질의 실행 시간을 설정하는 파라미터이다. ms, s, min, h 단위를 지정할 수 있으며 각각 milliseconds, seconds, minutes, hours를 의미한다. 단위 생략 시 기본 단위는 밀리초(ms)이다. 기본값은 -1이고 최대값은 86,400,000 밀리초(24h)이다. -1은 무한대 시간을 의미하며 어떤 질의도 장기 실행 질의로 판단되지 않는다. 자세한 내용은 아래의 **sql_trace_execution_plan** 의 설명을 참고한다.
+    **sql_trace_slow**\ 는 장기 실행 질의(long running query)로 판단될 질의 실행 시간을 설정하는 파라미터이다. ms, s, min, h 단위를 지정할 수 있으며 각각 milliseconds, seconds, minutes, hours를 의미한다. 단위 생략 시 기본 단위는 밀리초(ms)이다. 기본값은 **-1**\ 이고 최대값은 86,400,000 밀리초(24h)이다. -1은 무한대 시간을 의미하며 어떤 질의도 장기 실행 질의로 판단되지 않는다. 자세한 내용은 아래의 **sql_trace_execution_plan** 의 설명을 참고한다.
     
     .. note::
         
@@ -1622,13 +1651,13 @@ HA 관련 파라미터
 
 **sql_trace_execution_plan**
 
-    **sql_trace_execution_plan**\ 은 **sql_trace_slow** 파라미터 값의 설정 시간을 초과한 장기 실행 질의(long running query)의 실행 계획을 출력할지 여부를 설정하는 파라미터이다. 기본값은 no이다.
+    **sql_trace_execution_plan**\ 은 **sql_trace_slow** 파라미터 값의 설정 시간을 초과한 장기 실행 질의(long running query)의 실행 계획을 출력할지 여부를 설정하는 파라미터이다. 기본값은 **no**\ 이다.
 
     이 값이 yes이면 서버 에러 로그 파일($CUBRID/log/server 이하의 파일), CAS 로그 파일($CUBRID/log/broker/sql_log 이하의 파일)에 해당 SQL 문, 질의 실행 계획, cubrid statdump 명령의 출력 정보를 기록하며, cubrid plandump를 실행할 때 해당 SQL 문과 질의 실행 계획을 출력한다. 
 
     이 값이 no면 서버 에러 로그 파일, CAS 로그 파일에 해당 SQL문만 기록하며, cubrid plandump를 실행할 때 해당 SQL 문만 출력한다.
 
-    예를 들어 5초를 초과하면 느린 질의(slow query)로 규정하고 해당 질의의 실행 계획을 로그 파일에 출력하고 싶은 경우, **sql_trace_slow**\ 의 값을 5000(ms)로 설정하고 **sql_trace_execution_plan** 의 값을 yes로 설정한다. 
+    예를 들어 5초를 초과하면 느린 질의(slow query)로 규정하고 해당 질의의 실행 계획을 로그 파일에 출력하고 싶은 경우, **sql_trace_slow**\ 의 값을 5,000(ms)로 설정하고 **sql_trace_execution_plan** 의 값을 yes로 설정한다. 
         
     단, 서버 에러 로그 파일에는 error_log_level 파라미터의 값이 NOTIFICATION인 경우에만 해당 정보를 기록한다.
 
@@ -1683,7 +1712,7 @@ cubrid_broker.conf 설정 파일과 기본 제공 파라미터
     |                                 |                         +---------------------------------+--------+------------------------------+-----------+
     |                                 |                         | APPL_SERVER_MAX_SIZE            | MB     | Windows 32비트: 40,          | 가능      |
     |                                 |                         |                                 |        | Windows 64비트: 80,          |           |
-    |                                 |                         |                                 |        | Linux: 0                     |           |
+    |                                 |                         |                                 |        | Linux: 0 (최대값: 2,097,151) |           |
     |                                 |                         +---------------------------------+--------+------------------------------+-----------+
     |                                 |                         | APPL_SERVER_MAX_SIZE_HARD_LIMIT | MB     | 1,024(최대값: 2,097,151)     | 가능      |
     |                                 |                         +---------------------------------+--------+------------------------------+-----------+
@@ -1701,9 +1730,9 @@ cubrid_broker.conf 설정 파일과 기본 제공 파라미터
     |                                 +-------------------------+---------------------------------+--------+------------------------------+-----------+
     |                                 | 트랜잭션 및 질의        | CCI_DEFAULT_AUTOCOMMIT          | string | ON                           |           |
     |                                 |                         +---------------------------------+--------+------------------------------+-----------+
-    |                                 |                         | LONG_QUERY_TIME                 | sec    | 60                           | 가능      |
+    |                                 |                         | LONG_QUERY_TIME                 | sec    | 60(최대값: 86,400)           | 가능      |
     |                                 |                         +---------------------------------+--------+------------------------------+-----------+
-    |                                 |                         | LONG_TRANSACTION_TIME           | sec    | 60                           | 가능      |
+    |                                 |                         | LONG_TRANSACTION_TIME           | sec    | 60(최대값: 86,400)           | 가능      |
     |                                 |                         +---------------------------------+--------+------------------------------+-----------+
     |                                 |                         | MAX_PREPARED_STMT_COUNT         | int    | 2,000(최소값: 1)             |           |
     |                                 |                         +---------------------------------+--------+------------------------------+-----------+
@@ -1904,9 +1933,10 @@ cubrid_broker.conf 설정 파일과 기본 제공 파라미터
   
     CAS가 서버에 재연결을 시도하는 특정 상황은 다음과 같다. 
      
-    *   CAS가 **PREFERRED_HOSTS**\가 아닌 다른 DB 서버에 연결한 경우 
-    *   "ACCESS_MODE=RO"(Read Only)인 CAS가 active DB 서버에 연결한 경우 
-     
+    *   CAS가 **PREFERRED_HOSTS**\에 명시한 DB 서버가 아닌 databases.txt의 db-host에 명시한 DB 서버에 연결한 경우
+    *   "ACCESS_MODE=RO"(Read Only)인 CAS가 standby DB 서버가 아닌 active DB 서버에 연결한 경우 
+    *   CAS가 복제 지연 상태인 DB 서버와 연결한 경우
+    
     **RECONNECT_TIME** 값이 0이면 재연결을 시도하지 않는다. 
     
 .. _replica_only: 
@@ -1914,7 +1944,7 @@ cubrid_broker.conf 설정 파일과 기본 제공 파라미터
 **REPLICA_ONLY**
   
     **REPLICA_ONLY**\의 값이 **ON**\이면 CAS가 레플리카에만 접속된다. 기본값은 **OFF**\이다. **REPLICA_ONLY**\의 값이 **ON**\이더라도 **ACCESS_MODE**\의 값이 **RW**\이면 레플리카 DB에도 쓰기 작업을 수행할 수 있다.
-    
+
 브로커 응용 서버(CAS)
 ^^^^^^^^^^^^^^^^^^^^^
 
@@ -1945,7 +1975,7 @@ cubrid_broker.conf 설정 파일과 기본 제공 파라미터
 
     **APPL_SERVER_MAX_SIZE** 파라미터는 Windows 버전과 Linux 버전의 기본값이 다르므로 주의한다.
 
-    Windows 버전의 CUBRID는 32비트 버전에서는 **APPL_SERVER_MAX_SIZE** 의 기본값이 **40** (MB)이고, 64비트 버전에서는 **80** (MB)이다. 현재 프로세스의 크기가 **APPL_SERVER_MAX_SIZE** 의 값을 초과하면, 브로커가 해당 CAS를 재구동한다.
+    Windows 버전의 CUBRID는 32비트 버전에서는 **APPL_SERVER_MAX_SIZE** 의 기본값이 **40** (MB)이고, 64비트 버전에서는 **80** (MB)이다. 최대값은  Windows 버전과 Linux 버전 모두 동일하며 2,097,151 (MB)이다. 현재 프로세스의 크기가 **APPL_SERVER_MAX_SIZE** 의 값을 초과하면, 브로커가 해당 CAS를 재구동한다.
 
     Linux 버전의 CUBRID는 **APPL_SERVER_MAX_SIZE** 의 기본값이 **0**\ 이고, 다음의 경우에 해당 CAS를 재구동한다. 
 
@@ -2019,15 +2049,21 @@ cubrid_broker.conf 설정 파일과 기본 제공 파라미터
 
         **CCI_DEFAULT_AUTOCOMMIT**  파라미터는 2008 R4.0부터 지원하기 시작했고, 이 때 기본값은 OFF였다. **CCI_DEFAULT_AUTOCOMMIT**\ 을 설정하지 않은 2008 R4.0 혹은 그 이전 버전 사용자는 자동 커밋 모드가 OFF이므로, 2008 R4.1 이상 버전으로 업그레이드한 사용자가 기존 응용 프로그램을 그대로 사용하고자 하는 경우, 이 값을 OFF로 설정해야 의도하지 않은 트랜잭션의 자동 커밋을 방지할 수 있다.
 
-    .. warning:: 9.3 버전부터 ODBC 사용자는 **CCI_DEFAULT_AUTOCOMMIT**\ 의 설정이 무시되어 항상 OFF인 상태로 동작하므로, 프로그램에서 자동 커밋 여부를 직접 설정해야 한다.
-        
+    .. warning:: 
+
+        9.3 버전부터 ODBC 사용자는 **CCI_DEFAULT_AUTOCOMMIT**\ 의 설정이 무시되어 항상 OFF인 상태로 동작하므로, 프로그램에서 자동 커밋 여부를 직접 설정해야 한다.
+
 **LONG_QUERY_TIME**
 
-    **LONG_QUERY_TIME**\ 은 장기 실행 질의(long-duration query)로 판단될 질의 실행 시간을 설정하는 파라미터이다. 값 뒤에 ms, s, min, h의 단위 지정이 가능하며, 각각 milliseconds, seconds, minutes, hours를 의미한다. 단위가 생략되면 s로 지정된다. 기본값은 **60** (초)이고 소수점을 사용하여 밀리초(msec) 단위의 값을 설정할 수 있다. 예를 들어 500밀리초로 설정하려면 값을 0.5로 설정한다. 파라미터 값을 0으로 설정하면 장기 실행 질의를 판단하지 않는다.
+    **LONG_QUERY_TIME**\ 은 장기 실행 질의(long-duration query)로 판단될 질의 실행 시간을 설정하는 파라미터이다. 값 뒤에 ms, s, min, h의 단위 지정이 가능하며, 각각 milliseconds, seconds, minutes, hours를 의미한다. 단위가 생략되면 s로 지정된다. 기본값은 **60** (초)이고, 최대값은 86,400(하루)이다.
+
+    소수점을 사용하여 밀리초(msec) 단위의 값을 설정할 수 있다. 예를 들어 500밀리초로 설정하려면 값을 0.5로 설정한다. 
+    
+    파라미터 값을 0으로 설정하면 장기 실행 질의를 판단하지 않는다.
 
 **LONG_TRANSACTION_TIME**
 
-    **LONG_TRANSACTION_TIME**\ 은 장기 실행 트랜잭션(long-duration transaction)으로 판단될 트랜잭션의 실행 시간을 설정하는 파라미터이다. 값 뒤에 ms, s, min, h의 단위 지정이 가능하며, 각각 milliseconds, seconds, minutes, hours를 의미한다. 단위가 생략되면 s로 지정된다. 기본값은 **60** (초)이다.
+    **LONG_TRANSACTION_TIME**\ 은 장기 실행 트랜잭션(long-duration transaction)으로 판단될 트랜잭션의 실행 시간을 설정하는 파라미터이다. 값 뒤에 ms, s, min, h의 단위 지정이 가능하며, 각각 milliseconds, seconds, minutes, hours를 의미한다. 단위가 생략되면 s로 지정된다. 기본값은 **60** (초)이고, 최대값은 86,400(하루)이다.
 
     소수점을 사용하여 밀리초(msec) 단위의 값을 설정할 수 있다. 예를 들어 값을 0.5로 설정하여 500밀리초로 설정할 수 있다. 
     
@@ -2150,7 +2186,7 @@ SHARD 기능을 사용하려면 **cubrid_broker.conf.shard**\ 를 참고하여 *
         export SHARD1_SHARD_DB_PASSWORD=shard123
 
     .. note:: SHARD_DB_USER/SHARD_DB_PASSWORD 파라미터는 제거될 예정(deprecated)이므로, 응용 프로그램을 통해 접속 정보를 입력할 것을 권장한다. 
-        
+
 **SHARD_DB_USER** 
 
     backend shard DB의 사용자 이름으로서, CAS 프로세스에서 backend DBMS와 연결을 수행하는데 사용되며, 응용의 연결 요청이 유효한지 검사하는 데에도 사용된다. 모든 shard DB의 사용자 이름은 동일해야 한다.
@@ -2194,7 +2230,7 @@ SHARD 기능을 사용하려면 **cubrid_broker.conf.shard**\ 를 참고하여 *
 **SHARD_PROXY_CONN_WAIT_TIMEOUT**
   
     이 파라미터로 명시한 시간 동안 아무런 요청이 없으면 CAS가 DB와의 접속을 끊는다. 기본값은 **8h**\ 이다. 값 뒤에 ms, s, min, h의 단위 지정이 가능하며, 각각 milliseconds, seconds, minutes, hours를 의미한다. 단위가 생략되면 s로 지정된다. 
-    이전 비밀번호 정보를 지닌 CAS는 더 이상 사용할 수 없으므로 종료되어야 되는데, 이 기능은 이러한 CAS가 불필요하게 계속 유지되는 것을 방지한다. 
+    이전 비밀번호 정보를 지닌 CAS는 더 이상 사용할 수 없으므로 종료되어야 되는데, 이 기능은 이러한 CAS가 불필요하게 계속 유지되는 것을 방지한다.
     
 **SHARD_PROXY_LOG**
 
@@ -2221,7 +2257,7 @@ SHARD 기능을 사용하려면 **cubrid_broker.conf.shard**\ 를 참고하여 *
 **SHARD_PROXY_SHM_ID**
 
     proxy가 이용하는 공유 메모리 ID 를 지정하기 위한 파라미터로 시스템 내에서 유일한 값이어야 한다. 
-    
+
 **SHARD_PROXY_TIMEOUT**
 
     proxy에서 CAS가 사용 가능해지기를 기다리거나 statement가 준비(prepare)되기를 기다리는 최대 시간. 대기 시간이 만료되면 드라이버의 요청을 에러 처리함. 기본값: 30(초). 이 값이 0이면 시스템 파라미터 query_timeout의 값에 의해 대기 시간이 결정되며, query_timeout의 값도 0이면 무한 대기한다. SHARD_PROXY_TIMEOUT의 값이 0보다 크면 query_timeout 값과 SHARD_PROXY_TIMEOUT 값 중 큰 값에 의해 대기 시간이 결정된다. 값 뒤에 ms, s, min, h의 단위 지정이 가능하며, 각각 milliseconds, seconds, minutes, hours를 의미한다. 단위가 생략되면 s로 지정된다.
@@ -2277,3 +2313,14 @@ SHARD 기능을 사용하려면 **cubrid_broker.conf.shard**\ 를 참고하여 *
     **SOURCE_ENV**\ 는 브로커 각각에 대해 개별적으로 운영체제 환경 변수를 설정할 수 있는 파일을 정하는 파라미터로, 파일 확장자는 반드시 **env** 여야 한다. **cubrid.conf**\ 에서 지정하는 모든 파라미터는 환경 변수를 통해서도 설정할 수 있다. 예를 들어, **cubrid.conf**\ 에서 **lock_timeout**\ 은 환경 변수 **CUBRID_LOCK_TIMEOUT**\ 으로 지정할 수 있다. 또 다른 예로, broker1에서만 데이터 정의문 수행을 차단하려면 **SOURCE_ENV**\ 에서 지정한 파일에 **CUBRID_BLOCK_DDL_STATEMENT**\ 를 1로 설정하면 된다.
 
     환경변수가 있으면 **cubrid.conf** 보다 우선한다. 기본값은 **cubrid.env**\ 이다.
+
+HA 설정
+=======
+
+HA 설정은 :ref:`ha-configuration`\ 을 참고한다.
+
+
+SHARD 설정
+==========
+
+SHARD 설정은 :ref:`default-shard-conf`\ 을 참고한다.

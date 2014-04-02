@@ -258,18 +258,20 @@ CSQL에서 ";plan detail" 명령 입력 또는 "SET OPTIMIZATION LEVEL 513;"을 
     
 다음은 USE_MERGE 힌트를 명시하여 m-join(정렬 병합 조인, sort merge join)을 수행하는 경우의 예이다. 일반적으로 정렬 병합 조인은 outer 테이블과 inner 테이블을 정렬하여 병합하는 것이 인덱스를 사용하여 중첩 루프 조인(nested loop join)을 수행하는 것보다 유리하다고 판단될 때 사용되며, 조인되는 두 테이블 모두 행의 개수가 매우 많은 경우 유리할 수 있다. 대부분의 경우 정렬 병합 조인을 수행하지 않는 것이 바람직하다.
 
+.. CUBRIDSUS-13186: merge join은 스펙아웃될 예정임. 현재는 USE_MERGE 힌트를 제공해야만 적용됨.
+
 .. code-block:: sql
 
     SET OPTIMIZATION LEVEL 513;
     -- csql> ;plan detail
 
-    SELECT /*+ RECOMPILE USE_MERGE*/  DISTINCT h.host_year, o.host_nation	
-    FROM history h LEFT OUTER JOIN olympic o ON h.host_year = o.host_year AND o.host_year > 1950;	
+    SELECT /*+ RECOMPILE USE_MERGE*/  DISTINCT h.host_year, o.host_nation
+    FROM history h LEFT OUTER JOIN olympic o ON h.host_year = o.host_year AND o.host_year > 1950;
     
 :: 
 
-	Query plan:
-	
+    Query plan:
+    
     temp(distinct)
         subplan: temp
                      order: host_year[0]

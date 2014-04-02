@@ -258,18 +258,20 @@ The following show the meaning for each term which is printed as a query plan.
     
 The following is an example of performing m-join(sort merge join) as specifying USE_MERGE hint. In general, sort merge join is used when sorting and merging an outer table and an inner table is judged as having an advantage than performing nested loop join. In most cases, it is desired that you do not perform sort merge join.
 
+.. CUBRIDSUS-13186: merge join will be deprecated
+
 .. code-block:: sql
 
     SET OPTIMIZATION LEVEL 513;
     -- csql> ;plan detail
 
-    SELECT /*+ RECOMPILE USE_MERGE*/  DISTINCT h.host_year, o.host_nation	
-    FROM history h LEFT OUTER JOIN olympic o ON h.host_year = o.host_year AND o.host_year > 1950;	
+    SELECT /*+ RECOMPILE USE_MERGE*/  DISTINCT h.host_year, o.host_nation
+    FROM history h LEFT OUTER JOIN olympic o ON h.host_year = o.host_year AND o.host_year > 1950;
     
 :: 
 
-	Query plan:
-	
+    Query plan:
+    
     temp(distinct)
         subplan: temp
                      order: host_year[0]

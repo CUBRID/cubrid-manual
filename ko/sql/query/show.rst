@@ -994,7 +994,7 @@ SHOW HEAP CAPACITY
 =========================================== =============== ===============================================================================================================================
 칼럼 이름                                   타입            설명                                                                                                                           
 =========================================== =============== ===============================================================================================================================
-Class_name                                  VARCHAR(256)    테이블 이름
+Table_name                                  VARCHAR(256)    테이블 이름
 Class_oid                                   VARCHAR(64)     힙 파일 식별자
 Volume_id                                   INT             파일이 존재하는 볼륨 식별자       
 File_id                                     INT             파일 식별자
@@ -1025,26 +1025,26 @@ Total_size_fixed_width_attrs                INT             고정 길이 칼럼
     
 ::
 
-    <00001> Class_name                             : 'athlete'
-            Class_oid                              : '(0|463|8)'
-            Volume_id                              : 0
-            File_id                                : 147
-            Header_page_id                         : 590
-            Num_recs                               : 6677
-            Num_relocated_recs                     : 0
-            Num_overflowed_recs                    : 0
-            Num_pages                              : 27
-            Avg_rec_len                            : 53
-            Avg_free_space_per_page                : 2139
-            Avg_overhead_per_page_without_last_page: 1663
-            Avg_overhead_per_page                  : 993
-            Repr_id                                : 1
-            Num_total_attrs                        : 5
-            Num_fixed_width_attrs                  : 3
-            Num_variable_width_attrs               : 2
-            Num_shared_attrs                       : 0
-            Num_class_attrs                        : 0
-            Total_size_fixed_width_attrs           : 8
+    <00001> Table_name                              : 'athlete'
+            Class_oid                               : '(0|463|8)'
+            Volume_id                               : 0
+            File_id                                 : 147
+            Header_page_id                          : 590
+            Num_recs                                : 6677
+            Num_relocated_recs                      : 0
+            Num_overflowed_recs                     : 0
+            Num_pages                               : 27
+            Avg_rec_len                             : 53
+            Avg_free_space_per_page                 : 2139
+            Avg_free_space_per_page_except_last_page: 1663
+            Avg_overhead_per_page                   : 993
+            Repr_id                                 : 1
+            Num_total_attrs                         : 5
+            Num_fixed_width_attrs                   : 3
+            Num_variable_width_attrs                : 2
+            Num_shared_attrs                        : 0
+            Num_class_attrs                         : 0
+            Total_size_fixed_width_attrs            : 8
     
 .. code-block:: sql
 
@@ -1052,66 +1052,66 @@ Total_size_fixed_width_attrs                INT             고정 길이 칼럼
     
 ::
     
-    <00001> Class_name                             : 'participant2'
-            Class_oid                              : '(0|467|6)'
-            Volume_id                              : 0
-            File_id                                : 374
-            Header_page_id                         : 940
-            Num_recs                               : 0
-            Num_relocated_recs                     : 0
-            Num_overflowed_recs                    : 0
-            Num_pages                              : 1
-            Avg_rec_len                            : 0
-            Avg_free_space_per_page                : 16016
-            Avg_overhead_per_page_without_last_page: 0
-            Avg_overhead_per_page                  : 4
-            Repr_id                                : 1
-            Num_total_attrs                        : 5
-            Num_fixed_width_attrs                  : 5
-            Num_variable_width_attrs               : 0
-            Num_shared_attrs                       : 0
-            Num_class_attrs                        : 0
-            Total_size_fixed_width_attrs           : 20
-    <00002> Class_name                             : 'participant2__p__before_2000'
-            Class_oid                              : '(0|467|7)'
-            Volume_id                              : 0
-            File_id                                : 376
-            Header_page_id                         : 950
-            Num_recs                               : 0
-            Num_relocated_recs                     : 0
-            Num_overflowed_recs                    : 0
-            Num_pages                              : 1
-            Avg_rec_len                            : 0
-            Avg_free_space_per_page                : 16016
-            Avg_overhead_per_page_without_last_page: 0
-            Avg_overhead_per_page                  : 4
-            Repr_id                                : 1
-            Num_total_attrs                        : 5
-            Num_fixed_width_attrs                  : 5
-            Num_variable_width_attrs               : 0
-            Num_shared_attrs                       : 0
-            Num_class_attrs                        : 0
-            Total_size_fixed_width_attrs           : 20
-    <00003> Class_name                             : 'participant2__p__before_2008'
-            Class_oid                              : '(0|467|8)'
-            Volume_id                              : 0
-            File_id                                : 378
-            Header_page_id                         : 960
-            Num_recs                               : 0
-            Num_relocated_recs                     : 0
-            Num_overflowed_recs                    : 0
-            Num_pages                              : 1
-            Avg_rec_len                            : 0
-            Avg_free_space_per_page                : 16016
-            Avg_overhead_per_page_without_last_page: 0
-            Avg_overhead_per_page                  : 4
-            Repr_id                                : 1
-            Num_total_attrs                        : 5
-            Num_fixed_width_attrs                  : 5
-            Num_variable_width_attrs               : 0
-            Num_shared_attrs                       : 0
-            Num_class_attrs                        : 0
-            Total_size_fixed_width_attrs           : 20
+    <00001> Table_name                              : 'participant2'
+            Class_oid                               : '(0|467|6)'
+            Volume_id                               : 0
+            File_id                                 : 374
+            Header_page_id                          : 940
+            Num_recs                                : 0
+            Num_relocated_recs                      : 0
+            Num_overflowed_recs                     : 0
+            Num_pages                               : 1
+            Avg_rec_len                             : 0
+            Avg_free_space_per_page                 : 16016
+            Avg_free_space_per_page_except_last_page: 0
+            Avg_overhead_per_page                   : 4
+            Repr_id                                 : 1
+            Num_total_attrs                         : 5
+            Num_fixed_width_attrs                   : 5
+            Num_variable_width_attrs                : 0
+            Num_shared_attrs                        : 0
+            Num_class_attrs                         : 0
+            Total_size_fixed_width_attrs            : 20
+    <00002> Table_name                              : 'participant2__p__before_2000'
+            Class_oid                               : '(0|467|7)'
+            Volume_id                               : 0
+            File_id                                 : 376
+            Header_page_id                          : 950
+            Num_recs                                : 0
+            Num_relocated_recs                      : 0
+            Num_overflowed_recs                     : 0
+            Num_pages                               : 1
+            Avg_rec_len                             : 0
+            Avg_free_space_per_page                 : 16016
+            Avg_free_space_per_page_except_last_page: 0
+            Avg_overhead_per_page                   : 4
+            Repr_id                                 : 1
+            Num_total_attrs                         : 5
+            Num_fixed_width_attrs                   : 5
+            Num_variable_width_attrs                : 0
+            Num_shared_attrs                        : 0
+            Num_class_attrs                         : 0
+            Total_size_fixed_width_attrs            : 20
+    <00003> Table_name                              : 'participant2__p__before_2008'
+            Class_oid                               : '(0|467|8)'
+            Volume_id                               : 0
+            File_id                                 : 378
+            Header_page_id                          : 960
+            Num_recs                                : 0
+            Num_relocated_recs                      : 0
+            Num_overflowed_recs                     : 0
+            Num_pages                               : 1
+            Avg_rec_len                             : 0
+            Avg_free_space_per_page                 : 16016
+            Avg_free_space_per_page_except_last_page: 0
+            Avg_overhead_per_page                   : 4
+            Repr_id                                 : 1
+            Num_total_attrs                         : 5
+            Num_fixed_width_attrs                   : 5
+            Num_variable_width_attrs                : 0
+            Num_shared_attrs                        : 0
+            Num_class_attrs                         : 0
+            Total_size_fixed_width_attrs            : 20
 
 SHOW SLOTTED PAGE HEADER
 ========================

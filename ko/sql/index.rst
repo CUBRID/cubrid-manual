@@ -26,7 +26,7 @@ CUBRID SQL 설명서
 * CUBRID 시스템 카탈로그: CUBRID 데이터베이스의 내부 정보인 시스템 카탈로그에 대해 설명한다.
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 3
 
     identifier.rst
     keyword.rst

@@ -26,7 +26,7 @@ The main topics covered in this chapter are as follows:
 *   CUBRID system catalog: Describes the CUBRID system catalog, the internal information of the CUBRID database.
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 3
 
     identifier.rst
     keyword.rst

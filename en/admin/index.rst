@@ -113,7 +113,7 @@ See :ref:`cubrid-utilities` for details.
     To run the command prompt on Windows Vista or later with an administrator account, right-click [Start] > [All Programs] > [Accessories] > [Command Prompt] and select [Run as Administrator]. In the dialog verifying authorization, click [Yes], and then the command prompt is run as an administrator account.
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 3
 
     control.rst
     admin_utils.rst

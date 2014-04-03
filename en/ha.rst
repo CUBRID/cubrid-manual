@@ -549,6 +549,8 @@ For details about **max_clients**, see :ref:`connection-parameters`.
 
 *   **HA-related parameters** : HA parameters included in **cubrid_ha.conf** must be identical by default. However, the following parameters can be set differently according to the node.
 
+**The Parameters That Can be Different Among Nodes**
+
     *   The **ha_mode** parameter in replica node
     *   The **ha_copy_sync_mode** parameter
     *   The **ha_ping_hosts** parameter
@@ -716,7 +718,7 @@ This parameter specifies the term of applying the replicated data between a mast
 **ha_replica_time_bound**
 
 In a master node, only the transactions which have been run on the specified time with this parameter are applied to the replica node. The format of this value is "YYYY-MM-DD hh:mi:ss". There is no default value.
-    
+
 .. note::
 
     The following example shows how to configure **cubrid_ha.conf**. 
@@ -760,12 +762,32 @@ See the above description of **ha_delay_limit**.
 When the abnormal status of a server process is kept, the server can be restarted infinitely; it is better to remove this kind of node from the HA components. Because the server is restarted within a short time when the abnormal status is continued, specify this term with this parameter to detect this situation. If the server is restarted within the specified term, CUBRID assumes that this server is abnormal and remove(demote) this node from the HA components.
 The default is 2min. If the unit is omitted, it is specified as milliseconds(msec).
 
+Prefetch Log 
+^^^^^^^^^^^^ 
+  
+The following parameters are used in **prefetchlogdb** utility.
+  
+**ha_prefetchlogdb_enable** 
+  
+Specifies whether CUBRID uses **prefetchlogdb** process or not. The default is **no**.
+  
+**ha_prefetchlogdb_max_thread_count** 
+  
+The maximum number of threads which perform prefetching. The default is **4**. The proper setting value is about "(Number of CPU core on the server)/2". 
+  
+If this value is large, CPU usage can be increased rapidly, if this is too small, also prefetching effect can be small.
+  
+**ha_prefetchlogdb_max_page_count** 
+  
+The number of pages which can be prefetched in maximum. The default is **1000**.
+
 SQL Logging
 ^^^^^^^^^^^
 
 **ha_enable_sql_logging**
 
-If the value of this parameter is **yes**, CUBRID generates the log file of SQL which **aplylogdb** process applies to the DB volume. The log file is located under the sql_log of the replication log directory(**ha_copy_log_base**). The default is **no**.
+If the value of this parameter is **yes**, CUBRID generates the log file of SQL which **aplylogdb** process applies to the DB volume. The log file is located under the sql_log of the replication log directory(**ha_copy_log_base**). 
+The default is **no**.
 
 The format of this log file name is *<db name>_<master hostname>*\ **.sql.log.**\ *<id>*, and *<id>* starts from 0.
 If this size is over **ha_sql_log_max_size_in_mbytes**, a new file with "*<id>* + 1" is created.
@@ -838,7 +860,6 @@ Its value can be one of the following: **RW** (Read Write), **RO** (Read Only), 
 **REPLICA_ONLY**
 
 CAS is only accessed to the replica DB if the value of **REPLICA_ONLY** is **ON**. The default is **OFF**. If the value of **REPLICA_ONLY** is **ON** and the value of **ACCESS_MODE** is **RW**, writing job is possible to even replica DB.
-
 
 Access Order
 ^^^^^^^^^^^^
@@ -1308,11 +1329,11 @@ replication(or repl) start
 This utility is used to run in batch HA processes(copylogdb/applylogdb) related to a specific node; in general, it is used to run in batch HA replication processes of added nodes after running **cubrid heartbeat reload**.
 
 **replication** command can be abbreviated by **repl**.
+
+::
   
-:: 
-  
-    cubrid heartbeat repl start <node_name> 
-  
+    cubrid heartbeat repl start <node_name>
+
 *   *node_name*: one of nodes specified in **ha_node_list** of cubrid_ha.conf.
      
 replication(or repl) stop
@@ -1347,6 +1368,26 @@ This utility is used to output the information of CUBRID HA group and CUBRID HA 
        Server testdb (pid 2393, state registered_and_standby)
 
 .. note:: **act**, **deact**, and **deregister** commands which were used in versions lower than CUBRID 9.0 are no longer used.
+
+prefetchlogdb 
+^^^^^^^^^^^^^ 
+
+**prefetchlogdb** utility performs the job to read the indexes of replicated logs and data pages which will be applied to a slave node or a replica node by **applylogdb** process in advance, and to load them into the database buffer.
+Therefore, if you start this utility, applied speed of replicated logs in **applylogdb** process is improved.
+
+To run **prefetchlogdb** process, the value of **ha_prefetchlogdb_enable** parameter in cubrid_ha.conf should be **yes**(Default: **no**).
+If the value of **ha_prefetchlogdb_enable** parameter is yes, **prefetchlogdb** will be started together with **copylogdb** and **applylogdb** when **cubrid heartbeat start** command is executed.
+
+If you want to start/stop **prefetchlogdb** process only, do not specify the value of **ha_prefetchlogdb_enable** or specify this value as **no**. The usage is as follows.
+
+::
+
+    cubrid heartbeat prefetchlogdb [start/stop] database host 
+  
+* **start**: Start **prefetchlogdb** process
+* **stop**: Stop **prefetchlogdb** process 
+* *database*: Target database name to run **prefetchlogdb** process
+* *host*: Target host name to run **prefetchlogdb** process
 
 .. _cubrid-service-util:
 
@@ -1471,18 +1512,18 @@ The items shown by each status are as follows:
     *   Fail Count: The number of DML and DDL statements in which log reflection through replication log reflection process fails.
     
 *   Copied Active Info.
-    
+
     *   DB name: Name of a target database in which the replication log copy process copies logs
     *   DB creation time: The creation time of a database copied through replication log copy process
-    
+
     *   EOF LSA: Information of pageid and offset copied at the last time on the target node by the replication log copy process. There will be a delay in copying logs as much as difference with the EOF LSA value of "Active Info." and with the Append LSA value of "Copied Active Info."
-    
+
     *   Append LSA: Information of pageid and offset written at the last time on the disk by the replication log copy process. This value can be less than or equal to EOF LSA. There will be a delay in copying logs as much as difference between the EOF LSA value of "Copied Active Info." and this value.
-    
+
     *   HA server state: Status of a database server process which replication log copy process receives logs from. For details on status, see :ref:`ha-server`.
-    
+
 *   Active Info.
-    
+
     *   DB name: Name of a database whose node was configured in the **-r** option.
     *   DB creation time: Database creation time of a node that is configured in the **-r** option.
     *   EOF LSA: The last information of pageid and offset of a database transaction log of a node that is configured in the **-r** option. There will be a delay in copying logs as much as difference between the EOF LSA value of "Copied Active Info." and this value.
@@ -1563,7 +1604,7 @@ The following shows [options] used in **cubrid changemode**.
 .. option:: -f, --force
 
     Configures whether or not to forcibly change the server status. This option must be configured if you want to change the server status from to-be-active to active.   |
-    
+
     If it is not configured, the status will not be changed to active. 
     Forcibly change may cause data inconsistency among replication nodes; so it is not recommended.                                                                       |
 

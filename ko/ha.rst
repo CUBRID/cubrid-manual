@@ -560,7 +560,7 @@ CUBRID HA 기능을 사용하면 기본적으로 복제 로그 복사 프로세�
     # Service Parameters
     [service]
     service=server,broker,manager
-     
+
     # Server Parameters
     server=testdb
     data_buffer_size=512M
@@ -570,11 +570,11 @@ CUBRID HA 기능을 사용하면 기본적으로 복제 로그 복사 프로세�
     cubrid_port_id=1523
     db_volume_size=512M
     log_volume_size=512M
-     
+
     # HA 구성 시 추가 (Logging parameters)
     log_max_archives=100
     force_remove_log_archives=no
-     
+
     # HA 구성 시 추가 (HA 모드)
     ha_mode=on
     log_max_archives=100
@@ -741,7 +741,7 @@ CUBRID HA의 복제 로그 반영 프로세스에서 에러가 발생하면 해�
 .. _ha_delay_limit:
 
 **ha_delay_limit** 
-  
+
 **ha_delay_limit**\은 CUBRID가 스스로 복제 지연 상태임을 판단하는 기준 시간이고 **ha_delay_limit_delta**\는 복제 지연 시간에서 복제 지연 해제 시간을 뺀 값이다. 한번 복제 지연이라고 판단된 서버는 복제 지연 시간이 (**ha_delay_limit** - **ha_delay_limit_delta**) 이하로 낮아질 경우에 복제 지연이 해소되었다고 판단한다. 
 슬레이브 노드 또는 레플리카 노드가 복제 지연 여부를 판단하는 대상 서버, 즉 standby 상태의 DB 서버에 해당한다. 
   
@@ -756,9 +756,28 @@ CUBRID HA의 복제 로그 반영 프로세스에서 에러가 발생하면 해�
 위의 **ha_delay_limit** 설명을 참고한다. 
 
 **ha_unacceptable_proc_restart_timediff**
- 
+
 서버 프로세스의 비정상 상황이 지속되는 경우 서버 재시작이 무한 반복될 수 있고, 이런 경우를 유발하는 노드는 HA 구성에서 제외하는 것이 바람직하다. 비정상 상황이 지속되면 보통 짧은 시간 간격 이내에 서버가 재시작되므로, 이를 감지하기 위해 이 파라미터로 시간 간격을 명시한다. 명시한 시간 간격 이내에 서버가 재시작되면 CUBRID는 이 서버를 비정상으로 간주하고 해당 노드를 HA 구성에서 제외(demote)한다.
 기본값은 2min이며, 단위를 지정하지 않으면 밀리초(msec)로 지정된다.
+
+Prefetch Log 
+^^^^^^^^^^^^ 
+  
+다음은 **prefetchlogdb** 유틸리티에서 사용하는 파라미터들이다. 
+  
+**ha_prefetchlogdb_enable** 
+  
+**prefetchlogdb** 프로세스를 사용할 것인지 여부를 설정한다. 기본값은 **no**\이다. 
+  
+**ha_prefetchlogdb_max_thread_count** 
+  
+prefetch를 수행하는 최대 스레드 개수이다. 기본값은 **4**\이다. "(장비의 CPU core 수)/2" 정도가 적절한 설정값이다. 
+  
+이 값을 크게 설정하면 CPU 사용량이 급증할 수 있고, 너무 작게 설정하면 prefetch 효과가 작을 수 있다. 
+  
+**ha_prefetchlogdb_max_page_count** 
+  
+최대로 prefetch하는 페이지 개수이다. 기본값은 **1000**\이다.
 
 SQL 로깅
 ^^^^^^^^
@@ -768,7 +787,8 @@ SQL 로깅
 이 파라미터의 값이 **yes**\ 이면 복제 로그 디렉터리(**ha_copy_log_base**) 이하의 sql_log 디렉터리 이하에 **applylogdb** 프로세스가 DB에 반영하는 SQL에 대한 로그 파일을 생성한다.
 기본값은 **no**\ 이다. 
 
-로그 파일 이름의 형식은 *<db name>_<master hostname>*\ **.sql.log.**\ *<id>*\ 이며, *<id>*\ 는 0부터 시작한다. **ha_sql_log_max_size_in_mbytes**\에서 지정한 크기를 초과하면 *<id>*\ 의 값이 하나 증가된 새로운 파일이 생성된다.
+로그 파일 이름의 형식은 *<db name>_<master hostname>*\ **.sql.log.**\ *<id>*\ 이며, *<id>*\ 는 0부터 시작한다. 
+**ha_sql_log_max_size_in_mbytes**\에서 지정한 크기를 초과하면 *<id>*\ 의 값이 하나 증가된 새로운 파일이 생성된다.
 예를 들어, "ha_sql_log_max_size_in_mbytes=100"이면 demodb_nodeA.sql.log.0 파일이 100MB가 되면서 demodb_nodeA.sql.log.1이 새로 생성된다.
 
 이 파라미터를 켜는 경우 SQL 로그 파일이 계속 쌓이므로, 사용자는 디스크 여유 공간을 확보하기 위해 로그 파일들을 직접 삭제해야 한다.
@@ -845,7 +865,9 @@ cubrid_broker.conf
 **CONNECT_ORDER**
 
 CAS가 연결할 호스트 순서를 결정할 때 **$CUBRID_DATABASES/databases.txt**\의 **db-host**\ 에 설정된 호스트에서 순서대로 연결을 시도할지 랜덤한 순서대로 연결을 시도할지를 지정하는 파라미터이다. 
-기본값은 **SEQ**\ 이며 순서대로 연결을 시도한다. 이 값이 **RANDOM**\ 이면 랜덤한 순서대로 연결을 시도한다. **PREFERRED_HOSTS** 파라미터 값이 명시되어 있으면 먼저 **PREFERRED_HOSTS**\ 에 명시된 호스트의 순서대로 연결을 시도한 후 실패할 경우에만 **db-host**\의 설정 값을 사용한다. 그리고 **CONNECT_ORDER**\는 **PREFERRED_HOSTS**\의 순서에는 영향을 주지 않는다.
+
+기본값은 **SEQ**\ 이며 순서대로 연결을 시도한다. 이 값이 **RANDOM**\ 이면 랜덤한 순서대로 연결을 시도한다.
+**PREFERRED_HOSTS** 파라미터 값이 명시되어 있으면 먼저 **PREFERRED_HOSTS**\ 에 명시된 호스트의 순서대로 연결을 시도한 후 실패할 경우에만 **db-host**\의 설정 값을 사용한다. 그리고 **CONNECT_ORDER**\는 **PREFERRED_HOSTS**\의 순서에는 영향을 주지 않는다.
 
 한 곳으로 DB 접속이 집중되는 상황이 우려되는 경우 이 값을 **RANDOM**\으로 설정한다.
 
@@ -1268,19 +1290,19 @@ reload
 
     $ cubrid heartbeat reload
 
-변경할 수 있는 구성 정보는 **ha_node_list**\ 와 **ha_replica_list**\ 이다. **reload** 명령이 실행된 후 **status** 명령으로 노드의 재구성이 잘 반영되었는지 확인한다. 재구성에 실패한 경우 원인을 찾아 해소하도록 한다. 
+변경할 수 있는 구성 정보는 **ha_node_list**\ 와 **ha_replica_list**\ 이다. **reload** 명령이 실행된 후 **status** 명령으로 노드의 재구성이 잘 반영되었는지 확인한다. 재구성에 실패한 경우 원인을 찾아 해소하도록 한다.
 
 replication(또는 repl) start
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 특정 노드와 관련된 HA 프로세스(copylogdb/applylogdb)를 일괄 구동하기 위한 명령으로, 일반적으로 **cubrid heartbeat reload** 이후 추가된 노드의 HA 복제 프로세스들을 일괄적으로 시작하기 위해 실행한다. 
+
+**replication** 명령은 줄여서 **repl**\로도 사용할 수 있다.
+
+::
   
-**replication** 명령은 줄여서 **repl**\로도 사용할 수 있다. 
-  
-:: 
-  
-    cubrid heartbeat repl start <node_name> 
-  
+    cubrid heartbeat repl start <node_name>
+
 *   *node_name*: cubrid_ha.conf의 **ha_node_list**\에 명시된 노드 이름 중 하나 
      
 replication(또는 repl) stop
@@ -1315,6 +1337,26 @@ CUBRID HA 그룹 정보와 CUBRID HA 구성 요소의 정보를 확인할 수 �
        Server testdb (pid 2393, state registered_and_standby)
 
 .. note:: CUBRID 9.0 미만 버전에서 사용되었던 **act**, **deact**, **deregister** 명령은 더 이상 사용되지 않는다.
+
+prefetchlogdb 
+^^^^^^^^^^^^^ 
+
+**prefetchlogdb** 유틸리티는 복제 반영 프로세스(**applylogdb**)가 슬레이브 또는 레플리카 노드에 반영할 복제 로그의 인덱스 및 데이터 페이지를 미리 읽어서 데이터베이스 버퍼에 로딩하는 작업을 수행한다.
+따라서 이 유틸리티를 구동하면 **applylogdb** 프로세스의 복제 로그 반영 속도가 향상된다. 
+  
+**prefetchlogdb** 프로세스를 구동하기 위해서는 **cubrid_ha.conf**\에 있는 **ha_prefetchlogdb_enable** 파라미터의 값을 **yes**\로 설정해야 한다(기본값: **no**). 
+**ha_prefetchlogdb_enable** 파라미터의 값이 yes이면, **cubrid heartbeat start** 명령을 수행할 때 **copylogdb** 프로세스, **applylogdb** 프로세스와 함께 **prefetchlogdb** 프로세스가 수행된다. 
+  
+**prefetchlogdb** 프로세스만 별도로 구동/정지하고자 하는 경우 **ha_prefetchlogdb_enable** 파라미터의 값을 설정하지 않거나 **no**\로 설정하며, 사용법은 다음과 같다. 
+
+::
+
+    cubrid heartbeat prefetchlogdb [start/stop] database host 
+  
+* **start**: **prefetchlogdb** 프로세스를 구동 
+* **stop**: **prefetchlogdb** 프로세스를 종료 
+* *database*: **prefetchlogdb** 프로세스를 수행할 대상 데이터베이스 이름 
+* *host*: **prefetchlogdb** 프로세스를 수행할 대상 호스트 이름
 
 .. _cubrid-service-util:
 
@@ -1442,11 +1484,11 @@ CUBRID HA의 복제 로그 복사 및 반영 상태를 확인한다. ::
 
     *   DB name : 복제 로그 복사 프로세스가 로그를 복사하는 대상 데이터베이스의 이름
     *   DB creation time : 복제 로그 복사 프로세스가 복사하는 데이터베이스의 생성 시간
-        
+
     *   EOF LSA : 복제 로그 복사 프로세스가 대상 노드에서 복사한 로그의 마지막 pageid와 offset 정보. 이 값과 "Active Info."의 EOF LSA 값의 차이 및 "Copied Active Info."의 Append LSA 값의 차이만큼 로그 복사의 지연이 있다.
-    
+
     *   Append LSA : 복제 로그 복사 프로세스가 디스크에 실제로 쓴 로그의 마지막 pageid와 offset 정보. 이는 EOF LSA보다 작거나 같을 수 있다. 이 값과 "Copied Active Info"의 EOF LSA 값의 차이만큼 로그 복사의 지연이 있다.
-    
+
     *   HA server state : 복제 로그 복사 프로세스가 로그를 받아오는 데이터베이스 서버 프로세스의 상태. 상태에 대한 자세한 설명은 :ref:`ha-server` 를 참고하도록 한다.
 
 *   Active Info.
@@ -1531,10 +1573,10 @@ CUBRID HA의 서버 상태를 확인하고 변경한다. ::
 .. option:: -f, --force
 
     서버의 상태를 강제로 변경할지 여부를 설정한다. 
-    
+
     현재 서버가 to-be-active 상태일 때 active 상태로 강제 변경하려고 하는 경우에는 반드시 사용하며, 이를 설정하지 않으면 active 상태로 변경되지 않는다. 
     강제 변경 시 복제 노드 간 데이터 불일치가 발생할 수 있으므로 사용하지 않는 것을 권장한다. 
-    
+
 .. option:: -t, --timeout=SECOND
     
     기본값 5(초). 노드 상태를 **standby**\에서 **maintenance**\로 변경할 때 진행 중이던 트랜잭션이 정상 종료되기까지 대기하는 시간을 설정한다. 
@@ -1643,7 +1685,7 @@ HA 기본 구성의 각 노드는 다음과 같이 설정한다.
      
     # Broker mode setting parameter
         ACCESS_MODE             =RW
-    
+
 **응용 프로그램 연결 설정**
 
 환경 설정의 :ref:`ha-jdbc-conf`, :ref:`ha-cci-conf`, :ref:`ha-php-conf` 을 참고한다.
@@ -3654,8 +3696,6 @@ ha_make_slavedb.sh 스크립트
            continue ? ([y]es / [n]o / [s]kip) : y
 
 5.  대상 레플리카 노드의 HA 관련 스크립트들을 원본 레플리카 노드에 복사하는 단계이다.
-
-    **expect** 명령이 설치(root 계정에서 yum install expect)되어 있지 않으면 이 단계에서 오류가 발생할 수 있다.
 
     ::
     

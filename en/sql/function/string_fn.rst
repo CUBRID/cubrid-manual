@@ -9,21 +9,20 @@ A concatenation operator gets a character string or bit string data type as an o
 
 If **pipes_as_concat** that is a parameter related to SQL statement is set to **no** (default value: yes), a double pipe (||) symbol is interpreted as an **OR** operator. If plus_as_concat is set to no (default value: yes), a plus (+) symbol is interpreted as a plus (+) operator. In such case, It is recommended to concatenate strings or bit strings, by using the **CONCAT** function. ::
 
-    concat_operand1   +  concat_operand1
-    concat_operand2   ||  concat_operand2
-    concat_operand1 :
-    • bit string
-    • NULL
-     
-    concat_operand2 :
-    • bit string
-    • character string
-    • NULL
+    <concat_operand1> +  <concat_operand1>
+    <concat_operand2> || <concat_operand2>
+    
+        <concat_operand1> ::=
+            bit string |
+            NULL
+         
+        <concat_operand2> ::=
+            bit string |
+            character string
+            NULL
 
 *   *concat_operand1* : Left string after concatenation. String or bit string can be specified.
 *   *concat_operand2* : Right string after concatenation. String or bit string can be specified.
-
-**Example**
 
 .. code-block:: sql
 
@@ -115,8 +114,7 @@ BIT_LENGTH
 .. function:: BIT_LENGTH (string)
 
     The **BIT_LENGTH** function returns the length (bits) of a character string or bit string as an integer value. The return value of the **BIT_LENGTH** function may depend on the character set, because for the character string, the number of bytes taken up by a single character is different depending on the character set of the data input environment (e.g., UTF-8 Korean characters: one Korean character is 3*8 bits). For details about character sets supported by CUBRID, see :ref:`char-data-type`. When you input the invalid value, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
-    
-    
+
     :param string: Specifies the character string or bit string whose number of bits is to be calculated. If this value is **NULL**, **NULL** is returned. 
     :rtype: INT
 
@@ -193,12 +191,12 @@ CHAR_LENGTH, CHARACTER_LENGTH, LENGTHB, LENGTH
 
     :param string: Specifies the string whose length will be calculated according to the number of characters. If the character string is **NULL**, **NULL** is returned.
     :rtype: INT
-    
-.. note:: 
 
-    * In versions lower than CUBRID 9.0, the multibyte string returns the number of bytes in the string. Therefore, the length of one character is calculated as 2- or 3-bytes according to the charset.
-    * The length of each space character that is included in a character string is one byte.
-    * The length of empty quotes (") to represent a space character is 0. Note that in a  **CHAR** (*n*) type, the length of a space character is *n*, and it is specified as 1 if n is omitted.
+.. note::
+
+    *   In versions lower than CUBRID 9.0, the multibyte string returns the number of bytes in the string. Therefore, the length of one character is calculated as 2- or 3-bytes according to the charset.
+    *   The length of each space character that is included in a character string is one byte.
+    *   The length of empty quotes (") to represent a space character is 0. Note that in a  **CHAR** (*n*) type, the length of a space character is *n*, and it is specified as 1 if n is omitted.
 
 .. code-block:: sql
 
@@ -256,7 +254,7 @@ CHR
 .. function:: CHR (number_operand  [USING charset_name])
 
     The **CHR** function returns a character that corresponds to the return value of the expression specified as an argument. When you input the code value within invalid ranges, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
-    
+
     :param number_operand: Specifies an expression that returns a numeric value.
     :param charset_name: Characterset name. It supports utf8 and iso88591.
     :rtype: STRING
@@ -556,6 +554,31 @@ FIND_IN_SET
 
     2
 
+FROM_BASE64 
+=========== 
+
+.. function:: FROM_BASE64(str) 
+
+    **FROM_BASE64** function returns the the decoded result as binary string from the input string encoded as base-64 rule, which is used in **TO_BASE64** function. If the input value is **NULL**, it returns **NULL. When you input the invalid base-64 string, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default); NULL if this value is yes.
+    See :func:`TO_BASE64` for more details on base-64 encoding rules.
+     
+    :param str: Input string
+    :rtype: STRING 
+
+.. code-block:: sql 
+
+    SELECT TO_BASE64('abcd'), FROM_BASE64(TO_BASE64('abcd')); 
+     
+:: 
+
+       to_base64('abcd') from_base64( to_base64('abcd')) 
+    ============================================ 
+      'YWJjZA==' 'abcd' 
+
+.. seealso::
+
+    :func:`TO_BASE64`
+
 INSERT
 ======
 
@@ -809,7 +832,7 @@ LEFT
       left('CUBRID', 10)
     ======================
       'CUBRID'
-      
+
 LOCATE
 ======
 
@@ -1129,18 +1152,18 @@ POSITION
 .. function:: POSITION ( substring IN string )
 
     The **POSITION** function returns the position of a character string corresponding to *substring* within a character string corresponding to *string*.
-    
+
     An expression that returns a character string or a bit string can be specified as an argument of this function. The return value is an integer greater than or equal to 0. This function returns the position value in character unit for a character string, and in bits for a bit string.
-    
+
     The **POSITION** function is occasionally used in combination with other functions. For example, if you want to extract a certain string from another string, you can use the result of the **POSITION** function as an input to the **SUBSTRING** function.
-    
+
     .. note::
     
         The location is returned in the unit of byte, not the character, in version lower than CUBRID 9.0. The multi-byte charset uses different numbers of bytes to express one character, so the result value may differ.
-    
+
     :param substring: Specifies the character string whose position is to be returned. If the value is an empty character, 1 is returned. If the value is **NULL**, **NULL** is returned.
     :rtype: INT
-    
+
 .. code-block:: sql
 
     --character set is UTF-8 for Korean characters
@@ -1245,7 +1268,7 @@ REPEAT
 ::
 
     ERROR: Cannot coerce 'a' to type integer.
-    
+
 REPLACE
 =======
 
@@ -1310,7 +1333,7 @@ The following shows how to print out the newline as "\\n".
 ::
 
     This is a test for\n\n new line.
-      
+
 REVERSE
 =======
 
@@ -1574,7 +1597,7 @@ STRCMP
 ::
 
     1
-     
+
 .. note::
 
     Until the previous version of 9.0, STRCMP did not distinguish an uppercase and a lowercase. From 9.0, it compares the strings case-sensitively.    
@@ -1617,7 +1640,7 @@ SUBSTR
 .. function:: SUBSTR ( string, position [, substring_length])
 
     The **SUBSTR** function extracts a character string with the length of *substring_length* from a position, *position*, within character string, *string*, and then returns it.
-    
+
     .. note::
     
         In the earlier versions of CUBRID, the starting position and string length are calculated in byte unit, not in character unit. Therefore, in a multi-byte character set, you must specify the parameter in consideration of the number of bytes representing a single character.
@@ -1777,6 +1800,38 @@ SUBSTRING_INDEX
       substring_index('www.cubrid.org', '.', 100)
     ======================
       'www.cubrid.org'
+
+TO_BASE64 
+=========
+
+.. function:: TO_BASE64(str) 
+
+    Returns the result as the transformed base-64 string. If the input argument is not a string, it is changed into a string before it is transformed. If the input argument is **NULL**, it returns **NULL**. The base-64 encoded string can be decoded with :func:`FROM_BASE64` function.
+     
+    :param str: Input string
+    :rtype: STRING 
+
+.. code-block:: sql 
+
+    SELECT TO_BASE64('abcd'), FROM_BASE64(TO_BASE64('abcd')); 
+     
+:: 
+
+       to_base64('abcd') from_base64( to_base64('abcd')) 
+    ============================================ 
+      'YWJjZA==' 'abcd' 
+
+The following is rules for :func:`TO_BASE64` function and :func:`FROM_BASE64`.
+
+*   The encoded character for the alphabet value 62 is '+'.
+*   The encoded character for the alphabet value 63 is '/'.
+*   The encoded result consists of character groups, and each group has 4 characters which can be printed out. The 3 bytes of the input data are encoded into 4 bytes. If the last group are not filled with 4 characters, '=' character is padded into that group and 4 characters are made.
+*   To divide the long output into the several lines, a newline is added into each 76 encoded output characters.
+*   Decoding process indicates newline, carriage return, tab, and space and ignore them.
+
+.. seealso::
+
+    :func:`FROM_BASE64`
 
 TRANSLATE
 =========

@@ -9,21 +9,20 @@
 
 SQL 구문 관련 파라미터인 **pipes_as_concat** 파라미터(기본값: yes)가 no이면 이중 파이프 기호(||)가 불리언(Boolean) OR 연산자로 해석되며 **plus_as_concat** 파라미터(기본값: yes)가 no이면 덧셈 기호가 + 연산자로 해석되므로, 이러한 경우 **CONCAT** 함수를 사용하여 문자열 또는 비트열을 병합하는 것이 좋다. ::
 
-    concat_operand1   +  concat_operand1
-    concat_operand2   ||  concat_operand2
-    concat_operand1 :
-    • bit string
-    • NULL
-     
-    concat_operand2 :
-    • bit string
-    • character string
-    • NULL
+    <concat_operand1> +  <concat_operand1>
+    <concat_operand2> || <concat_operand2>
+    
+        <concat_operand1> ::=
+            bit string |
+            NULL
+         
+        <concat_operand2> ::=
+            bit string |
+            character string
+            NULL
 
-*   *concat_operand1* : 병합 후 왼쪽에 위치할 문자열 또는 비트열이다.
-*   *concat_operand2* : 병합 후 오른쪽에 위치할 문자열 또는 비트열이다.
-
-**예제**
+*   <*concat_operand1*> : 병합 후 왼쪽에 위치할 문자열 또는 비트열이다.
+*   <*concat_operand2*> : 병합 후 오른쪽에 위치할 문자열 또는 비트열이다.
 
 .. code-block:: sql
 
@@ -187,17 +186,17 @@ CHAR_LENGTH, CHARACTER_LENGTH, LENGTHB, LENGTH
 .. function:: LENGTHB (string)
 .. function:: LENGTH (string)
 
-    문자의 개수를 정수 값으로 반환한다. CUBRID가 지원하는 문자셋에 관한 상세한 설명은 :doc:`/sql/i18n` 을 참고한다.
+    문자의 개수를 정수 값으로 반환한다. CUBRID가 지원하는 문자셋에 관한 상세한 설명은 :doc:`/sql/i18n`\ 을 참고한다.
     **CHAR_LENGTH**, **CHARACTER_LENGTH**, **LENGTHB**, **LENGTH** 함수는 동일하다.
-    
+
     :param string: 문자 개수 단위로 길이를 구할 문자열을 지정한다. **NULL** 이 지정된 경우는 **NULL** 값이 반환된다.
     :rtype: INT
 
 .. note::
 
-    * CUBRID 9.0 미만 버전에서 멀티바이트 문자열의 경우 문자열의 바이트 수를 반환한다. 즉, 문자셋에 따라 문자 한 개당 길이가 2바이트 또는 3바이트로 계산된다.
-    * 문자열 내에 포함된 공백 문자(space)의 길이는 1바이트이다.
-    * 공백 문자를 표현하기 위한 빈 따옴표('')의 길이는 0이다. 단, **CHAR** (*n*) 타입에서는 공백 문자의 길이가 *n* 이고, *n* 이 생략되는 경우 1로 처리되므로 주의한다.
+    *   CUBRID 9.0 미만 버전에서 멀티바이트 문자열의 경우 문자열의 바이트 수를 반환한다. 즉, 문자셋에 따라 문자 한 개당 길이가 2바이트 또는 3바이트로 계산된다.
+    *   문자열 내에 포함된 공백 문자(space)의 길이는 1바이트이다.
+    *   공백 문자를 표현하기 위한 빈 따옴표('')의 길이는 0이다. 단, **CHAR** (*n*) 타입에서는 공백 문자의 길이가 *n* 이고, *n* 이 생략되는 경우 1로 처리되므로 주의한다.
 
 .. code-block:: sql
 
@@ -555,6 +554,31 @@ FIND_IN_SET
 
     2
 
+FROM_BASE64 
+=========== 
+
+.. function:: FROM_BASE64(str) 
+
+    **FROM_BASE64** 함수는 **TO_BASE64** 함수에서 사용되는 base-64 암호화 규칙으로 암호화된 문자열을 인자로 입력받아 복호화된 결과를 바이너리 문자열로 반환한다. 입력 인자가 **NULL**\이면 **NULL**\을 반환한다. 유효하지 않은 base-64 문자열일 때 **cubrid.conf**\의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다. 
+    암호화 규칙에 대한 상세 내용은 :func:`TO_BASE64`\를 참고한다. 
+     
+    :param str: 입력 문자열 
+    :rtype: STRING 
+
+.. code-block:: sql 
+
+    SELECT TO_BASE64('abcd'), FROM_BASE64(TO_BASE64('abcd')); 
+     
+:: 
+
+       to_base64('abcd') from_base64( to_base64('abcd')) 
+    ============================================ 
+      'YWJjZA==' 'abcd' 
+
+.. seealso::
+
+    :func:`TO_BASE64`
+
 INSERT
 ======
 
@@ -764,20 +788,18 @@ LCASE, LOWER
        lower(_utf8'Ă')
     ======================
       'Ă'
-    
-콜레이션이 utf8_ro_cs이면 변환이 가능하다.
+
+콜레이션이 utf8_ro_cs이면 'Ă'는 소문자로 변환이 가능하다.
 
 .. code-block:: sql
 
     SET NAMES utf8 COLLATE utf8_ro_cs;
     SELECT LOWER('Ă');
     
-
        lower(_utf8'Ă' COLLATE utf8_ro_cs)
     ======================
       'ă'
 
-   
 CUBRID가 지원하는 콜레이션에 관한 상세한 설명은 :ref:`cubrid-all-collation`\ 을 참고한다.
 
 LEFT
@@ -878,7 +900,7 @@ LPAD
     :param n: *char1* 의 전체 문자 개수를 지정한다. 값이 **NULL** 이면 결과는 **NULL** 이 반환된다.
     :param char2:  *char1* 의 길이가 *n* 이 될 때까지 왼쪽에 덧붙일 문자열을 지정한다. 이를 지정하지 않으면 공백 문자(' ')가 *char2* 의 기본값으로 사용된다. 값이 **NULL** 이면 결과는 **NULL** 이 반환된다.
     :rtype: STRING
-    
+
 .. note::
 
     CUBRID 9.0 미만 버전에서 멀티바이트 문자셋이면 한 문자를 2바이트 또는 3바이트로 처리하는데, n 값에 의해 한 문자를 표현하는 첫 번째 바이트까지 char1을 잘라내는 경우, 마지막 문자를 정상적으로 표현할 수 없으므로 마지막 바이트를 제거하고 왼쪽에 공백 문자 하나(1바이트)를 덧붙인다. 값이 **NULL** 이면 결과는 **NULL** 이 반환된다.
@@ -1318,7 +1340,7 @@ REVERSE
 .. function:: REVERSE( string )
 
     **REVERSE** 함수는 문자열 *string*\ 을 역순으로 변환한 후 반환한다. 
-    
+
     :param string: 입력 문자열을 지정한다. 입력 값이 공백 문자열이면 공백 문자열을 반환하고, **NULL** 이면 **NULL** 을 반환한다.
     :rtype: STRING
 
@@ -1611,7 +1633,7 @@ STRCMP
     ::
     
         0
-        
+
 SUBSTR
 ======
 
@@ -1778,6 +1800,38 @@ SUBSTRING_INDEX
       substring_index('www.cubrid.org', '.', 100)
     ======================
       'www.cubrid.org'
+
+TO_BASE64 
+=========
+
+.. function:: TO_BASE64(str) 
+
+    문자열을 base-64 암호화 형식으로 변환하여 결과를 반환한다. 입력 인자가 문자열이 아니면 변환이 발생하기 전에 문자열로 변환된다. 입력 인자가 **NULL**\이면 **NULL**\을 반환한다. Base-64로 암호화된 문자열은 :func:`FROM_BASE64` 함수로 복호화될 수 있다. 
+     
+    :param str: 입력 문자열 
+    :rtype: STRING 
+
+.. code-block:: sql 
+
+    SELECT TO_BASE64('abcd'), FROM_BASE64(TO_BASE64('abcd')); 
+     
+:: 
+
+       to_base64('abcd') from_base64( to_base64('abcd')) 
+    ============================================ 
+      'YWJjZA==' 'abcd' 
+
+다음은 :func:`TO_BASE64` 함수와 :func:`FROM_BASE64` 함수에서 사용되는 암호화 및 복호화 규칙이다. 
+
+*   알파벳 값 62에 대한 암호화는 '+'이다. 
+*   알파벳 값 63에 대한 암호화는 '/'이다. 
+*   암호화된 결과는 4개의 출력 가능한 문자 그룹으로 구성되어 있다. 입력 데이터의 세 바이트는 네 개의 문자로 암호화된다. 마지막 그룹이 네 개의 문자로 채워지지 않으면 '=' 문자를 덧붙여(padding) 네 개 문자의 길이를 만든다. 
+*   긴 출력을 여러 개의 라인으로 나누기 위해 76개의 암호화된 출력 문자마다 뉴라인(newline)이 추가된다. 
+*   복호화는 뉴 라인(newline), 캐리지 리턴(carriage return), 탭, 공백 문자를 인식하고 이들을 무시한다. 
+
+.. seealso::
+
+    :func:`FROM_BASE64`
 
 TRANSLATE
 =========

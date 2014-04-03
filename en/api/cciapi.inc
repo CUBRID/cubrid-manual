@@ -183,7 +183,7 @@ CCI API Reference
      
     :return: Error code(0: success) 
   
-    The *length* argument can be used for binding a string which includes '\0' as below.
+    The *length* argument can be used for binding a string which includes '\\0' as below.
      
     .. code-block:: c 
   

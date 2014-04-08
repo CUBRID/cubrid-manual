@@ -60,13 +60,14 @@ And more, SHARD feature can be used only after the broker is started and "SHARD"
 Controlling CUBRID Manager Server
 ---------------------------------
 
-To use the CUBRID Manager, the Manager server must be running where database server is running. The following **cubrid** utility syntax shows how to control the CUBRID Manager processes. One of the following can be specified in *command*: **start**, **stop**, or **status**; **start** is used to run services; **stop** is used to stop services; **status** is used to check status. 
+To use the CUBRID Manager, the Manager server must be running where database server is running. The following **cubrid** utility syntax shows how to control the CUBRID Manager processes. 
 
 ::
 
     cubrid manager <command>
     <command>: {start|stop|status}
 
+One of the following can be specified in *command*: **start**, **stop**, or **status**; **start** is used to run services; **stop** is used to stop services; **status** is used to check status.
 
 Controlling CUBRID HA
 ---------------------
@@ -496,7 +497,7 @@ The following example shows **access_ip_control_file**.
 
     [@dbname3]
     192.168.1.15
-    
+
 The example above shows that *dbname1* database allows the access of IP addresses starting with 10.156;
 *dbname2* database allows the access of every IP address;
 *dbname3* database allows the access of an IP address, 192.168.1.15, only.
@@ -2150,7 +2151,7 @@ To store SQL logs created in log/broker/sql_log under the installation directory
 ::
 
     broker_log_converter [option] SQL_log_file output_file
-    
+
 * *SQL_log_file*: SQL log file located in $CUBRID/log/broker/sql_log directory. It only saves SQL log when the application sends a query through only a driver, and does not save SQL log when the query is executed through CSQL interpreter.
 * *output_file*: an output file which the input format is followed by **broker_log_runner**
 
@@ -2291,7 +2292,7 @@ cubrid_replay
 **cubrid_replay** utility replays the SQL log in the broker and outputs the results sorted in order from the large difference(from the slower query than the existing one) by comparing the difference in the execution time of playback and the existing execution time.
 
 This utility plays back the queries that are logged in the SQL log, but does not execute the queries to change the data. If any options are not given, only SELECT queries are run; if **-r** option is given, it changes the UPDATE and DELETE queries into SELECT queries and runs them.
-  
+
 This utility can be used to compare the performance between two different hosts; for example, there can be a performance difference for a same query between master and slave even if their h/w specs are the same.
 
 :: 
@@ -2346,19 +2347,19 @@ If you run the above command, the summary of execution result is displayed on th
      
     ------------------- Result Summary -------------------------- 
     * Total queries : 153103 
-    * Skipped queries (out : skip.sql) : 5127 
-    * Error queries (out : replay.err) : 30 
-    * Longer than difftime lower : 89987 
-    * Max different time : 0.016 
-    * Average different time : -0.001 
+    * Skipped queries (see skip.sql) : 5127 
+    * Error queries (see replay.err) : 30 
+    * Slow queries (time diff > 0.000 secs) : 89987 
+    * Max execution time diff : 0.016 
+    * Avg execution time diff : -0.001 
      
     cubrid_replay run time : 245.308417 sec 
   
 *   Total queries: Number of total queries within the specified date and time. They include DDL and DML
 *   Skipped queries: Number of queries which cannot be changed from UPDATE/DELETE into SELECT when **-r** option is specified. These queries are saved into skip.sql
-*   Longer than difftime lower: Number of queries of which execution time difference is bigger than the specified value by **-D** option(the replayed execution time is slower than the previous execution time plus the specified value). If you omit the **-D** option, this option value is specified as 0.01 second
-*   Max different time: The biggest value among the differences of the execution time(unit: sec)
-*   Average different time: Average value of the differences of the execution time(unit: sec)
+*   Slow queries: Number of queries of which execution time difference is bigger than the specified value by **-D** option(the replayed execution time is slower than the previous execution time plus the specified value). If you omit the **-D** option, this option value is specified as 0.01 second
+*   Max execution time diff: The biggest value among the differences of the execution time(unit: sec)
+*   Avg execution time diff: Average value of the differences of the execution time(unit: sec)
 *   cubrid_replay run time: Execution time of this utility
 
 "Skipped queries" are the cases which query-transform from UPDATE/DELETE to SELECT is impossible by the internal reason; the queries which are written to skip.sql are needed to check separately.
@@ -2615,7 +2616,7 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
         Specifies the authority to monitor status which will be granted to a new CM user. You can use **admin**, **none** (default), and **monitor** as *AUTHORITY*
 
         The following example shows how to create a CM user whose name is *testcm* and password is *testcmpwd* and then configure monitoring authority to admin. 
-        
+
         ::
 
             cm_admin adduser -m admin testcm testcmpwd
@@ -2623,11 +2624,10 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
     .. option:: -d, --dbinfo INFO_STRING
 
         Specifies database information of a new CM user. The format of *INFO_STRING* must be "<dbname>;<uid>;<broker_ip>,<broker_port>".
+        The following example shows how to add database information "testdb;dba;localhost,30000" to a CM user named *testcm* .
 
-        The following example shows how to add database information "testdb;dba;localhost,30000" to a CM user named *testcm* . 
-        
         ::
-        
+
             cm_admin adduser -d "testdb;dba;localhost,30000" testcm testcmpwd
 
 **Deleting CM Users**
@@ -2647,7 +2647,7 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
 **Displaying CM User information**
 
     The **cm_admin viewuser** utility displays information of a CM user. 
-    
+
     ::
 
         cm_admin viewuser cmuser-name
@@ -2663,7 +2663,7 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
         cm_admin viewuser testcm
 
     The information will be displayed as follows: 
-    
+
     ::
 
         CM USER: testcm
@@ -2693,8 +2693,8 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
 
     .. option:: -b, --broker AUTHORITY
 
-        Specifies the broker authority that will be granted to a CM user. 
-        You can use **admin**, **none**, and **monitor** as *AUTHORITY* .
+        Specifies the broker authority that will be granted to a CM user.
+        You can use **admin**, **none**, and **monitor** as *AUTHORITY*.
 
         The following example shows how to change the broker authority of a CM user named *testcm* to monitor. 
         
@@ -2708,7 +2708,7 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
         You can use **admin** and **none** as *AUTHORITY* .
 
         The following example shows how to change the database creation authority of a CM user named *testcm* to admin. 
-        
+
         ::
 
             cm_admin changeuserauth -c admin testcm
@@ -2716,10 +2716,10 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
     .. option:: -m, --monitor 
 
         Specifies the authority to monitor status which will be granted to a CM user.
-        You can use **admin**, **none**, and **monitor** as *AUTHORITY* .
+        You can use **admin**, **none**, and **monitor** as *AUTHORITY*.
 
         The following example shows how to change the monitoring authority of a CM user named *testcm* to admin. 
-        
+
         ::
 
             cm_admin changeuserauth -m admin testcm
@@ -2727,7 +2727,7 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
 **Changing the CM User Password**
 
     The **cm_admin changeuserpwd** utility changes the password of a CM user. 
-    
+
     ::
 
         cm_admin changeuserpwd [options] cmuser-name  
@@ -2743,7 +2743,7 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
         Specifies the existing password of a CM user.
 
         The following example shows how to change a password of a CM user named *testcm* . 
-        
+
         ::
 
             cm_admin changeuserpwd -o old_password -n new_password testcm
@@ -2753,7 +2753,7 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
         The password of an admin user can be specified instead of old CM user's password that you don't know. 
 
         The following example shows how to change a password of a CM user named *testcm* by using an admin password. 
-        
+
         ::
 
             cm_admin changeuserauth --adminpass admin_password -n new_password testcm
@@ -2787,11 +2787,11 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
 
         Specifies the ID of a database user to be added. The default value is **dba**.
 
-        The following example shows how to add a database whose name is *testdb* and user ID is *uid* to a CM user named *testcm*. 
+        The following example shows how to add a database whose name is *testdb* and user ID is *cubriduser* to a CM user named *testcm*. 
         
         ::
 
-            cm_admin adddbinfo -u uid testcm testdb
+            cm_admin adddbinfo -u cubriduser testcm testdb
         
     .. option:: -h, --host IP
 
@@ -2801,9 +2801,9 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
 
             cm_admin adddbinfo -h 127.0.0.1 testcm testdb
 
-    .. option:: -p, --port
+    .. option:: -p, --port NUMBER
 
-        Specifies the port number of a broker used when clients access a database. The default value: **30000** .
+        Specifies the port number of a broker used when clients access a database. The default value: **30000**.
 
 **Deleting database information from CM Users**
 
@@ -2816,14 +2816,16 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
     *   *cmuser-name*: CM user name
     *   *database-name*: The name of a database to be deleted
 
-    The following example shows how to delete database information whose name is *testdb* from a CM user named *testcm* . ::
+    The following example shows how to delete database information whose name is *testdb* from a CM user named *testcm*.
 
-        cm_admin deldbinfo  testcm testdb
+::
+
+        cm_admin deldbinfo testcm testdb
 
 **Changing Database Information of a CM user**
 
     The **cm_admin changedbinfo** utility changes database information of a specified CM user. 
-    
+
     ::
 
         cm_admin changedbinfo [options] cmuser-name database-name
@@ -2841,15 +2843,19 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
 
         Specifies the ID of a database user.
 
-        The following example shows how to update user ID information to *uid* in the *testdb* database which belongs to a CM user named *testcm* . ::
-        
+        The following example shows how to update user ID information to *uid* in the *testdb* database which belongs to a CM user named *testcm* . 
+
+::
+
             cm_admin changedbinfo -u uid testcm testdb
-        
+
     .. option:: -h, --host IP
 
         Specifies the host of a broker used when clients access a database.
 
-        The following example shows how to update host IP information to *10.34.63.132* in the *testdb* database which belongs to a CM user named *testcm* . ::
+        The following example shows how to update host IP information to *10.34.63.132* in the *testdb* database which belongs to a CM user named *testcm* . 
+
+::
 
             cm_admin changedbinfo -h 10.34.63.132 testcm testdb
 

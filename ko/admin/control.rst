@@ -61,12 +61,13 @@ CUBRID 매니저 서버 제어
 -----------------------
 
 CUBRID 매니저를 사용하기 위해서는 데이터베이스 서버가 실행된 곳에 매니저 서버가 실행되어야 한다. CUBRID 매니저 프로세스를 제어하기 위한 **cubrid** 유틸리티 구문은 다음과 같다.
-<command>로 올 수 있는 명령어는 매니저 서버 프로세스 구동을 위한 **start**, 종료를 위한 **stop**, 상태 확인을 위한 **status**\가 있다. 
 
 ::
 
     cubrid manager <command>
     <command>: {start|stop|status}
+
+<command>로 올 수 있는 명령어는 매니저 서버 프로세스 구동을 위한 **start**, 종료를 위한 **stop**, 상태 확인을 위한 **status**\가 있다.
 
 CUBRID HA 제어
 ---------------
@@ -978,7 +979,7 @@ I/O 읽기를 많이 발생시킨 질의를 기록한다. cubrid.conf의 **sql_t
     =======================================================================================================================================================================
     * query_editor         13200 30000    5    0      0      0        0        0        0        0        0     0/60.0     0/60.0       0             0         0        0
     * broker1              13269 33000    5    0     70     60       10       20       10       10       10     0/60.0     0/60.0      30            10       213        1
-    
+
 *   NAME: 브로커 이름
 *   PID: 브로커의 프로세스 ID
 *   PORT: 브로커의 포트 번호
@@ -2288,12 +2289,12 @@ broker_log_runner
 cubrid_replay 
 """"""""""""" 
   
-**cubrid_replay** 유틸리티는 브로커의 SQL 로그를 재생하여, 기존의 수행 시간과 재생할 때의 수행 시간 차이를 비교하여 차이가 큰 것부터(기존보다 느린 것부터) 순서대로 정렬한 결과를 출력한다. 
-  
-이 유틸리티는 SQL 로그에 기록된 질의들을 재생하되, 데이터의 변경이 발생하는 질의는 실행하지 않는다. 별도의 옵션을 주지 않으면 SELECT 문만 수행되며, -r 옵션을 부여하면 UPDATE, DELETE 문을 SELECT 문으로 변환하여 수행한다. 
-  
-이 유틸리티는 서로 다른 두 장비 간 성능을 비교할 때 사용할 수 있는데, 예를 들어 하드웨어 스펙이 동일한 마스터와 슬레이브 사이에서도 같은 질의에 대해 성능 차이가 존재할 수 있다. 
-  
+**cubrid_replay** 유틸리티는 브로커의 SQL 로그를 재생하여, 기존의 수행 시간과 재생할 때의 수행 시간 차이를 비교하여 차이가 큰 것부터(기존보다 느린 것부터) 순서대로 정렬한 결과를 출력한다.
+
+이 유틸리티는 SQL 로그에 기록된 질의들을 재생하되, 데이터의 변경이 발생하는 질의는 실행하지 않는다. 별도의 옵션을 주지 않으면 SELECT 문만 수행되며, -r 옵션을 부여하면 UPDATE, DELETE 문을 SELECT 문으로 변환하여 수행한다.
+
+이 유틸리티는 서로 다른 두 장비 간 성능을 비교할 때 사용할 수 있는데, 예를 들어 하드웨어 스펙이 동일한 마스터와 슬레이브 사이에서도 같은 질의에 대해 성능 차이가 존재할 수 있다.
+
 :: 
   
     cubrid_replay -I <broker_host> -P <broker_port> -d <db_name> [options] <sql_log_file> <output_file> 
@@ -2346,19 +2347,19 @@ cubrid_replay
      
     ------------------- Result Summary -------------------------- 
     * Total queries : 153103 
-    * Skipped queries (out : skip.sql) : 5127 
-    * Error queries (out : replay.err) : 30 
-    * Longer than difftime lower : 89987 
-    * Max different time : 0.016 
-    * Average different time : -0.001 
+    * Skipped queries (see skip.sql) : 5127 
+    * Error queries (see replay.err) : 30 
+    * Slow queries (time diff > 0.000 secs) : 89987 
+    * Max execution time diff : 0.016 
+    * Avg execution time diff : -0.001 
      
     cubrid_replay run time : 245.308417 sec 
   
 *   Total queries: 날짜 및 시간이 지정된 범위 안의 전체 질의 개수. DDL, DML을 포함
 *   Skipped queries: **-r** 옵션이 사용되었을 때 UPDATE/DELETE 문을 SELECT 문으로 변환할 수 없는 질의 개수. 이 질의는 skip.sql 파일에 기록됨
-*   Longer than difftime lower: **-D** 옵션의 설정 값보다 수행 시간의 차이가 더 큰(재생된 실행 시간이 기존 실행 시간에 설정한 값을 더한 것보다 느린) 질의 개수. **-D** 옵션을 생략하면 0.01초를 기본으로 설정함.
-*   Max different time: 수행 시간의 차이 중 가장 큰 값(단위: 초)
-*   Average different time: 수행 시간의 차이의 평균 값(단위: 초)
+*   Slow queries: **-D** 옵션의 설정 값보다 수행 시간의 차이가 더 큰(재생된 실행 시간이 기존 실행 시간에 설정한 값을 더한 것보다 느린) 질의 개수. **-D** 옵션을 생략하면 0.01초를 기본으로 설정함.
+*   Max execution time diff: 수행 시간의 차이 중 가장 큰 값(단위: 초)
+*   Avg execution time diff: 수행 시간의 차이의 평균 값(단위: 초)
 *   cubrid_replay run time: 유틸리티의 수행 시간
   
 "Skipped queries"는 내부 요인에 의해 UPDATE/DELETE 문에서 SELECT 문으로 질의 변환이 불가능한 경우로, skip.sql 파일에 기록된 질의문의 성능에 대해서는 별도로 확인해볼 필요가 있다. 
@@ -2620,9 +2621,9 @@ CUBRID 매니저 사용자의 계정과 비밀번호는 CUBRID 매니저 클라�
 
             cm_admin adduser -m admin testcm testcmpwd
 
-    .. option:: -d, --dbinfo STRING
+    .. option:: -d, --dbinfo INFO_STRING
 
-        생성할 CM 사용자의 데이터베이스 정보를 지정한다. DBINFO는 "<dbname>;<uid>;<broker_ip>,<broker_port>"의 형식으로 지정해야 한다.
+        생성할 CM 사용자의 데이터베이스 정보를 지정한다. *INFO_STRING*\은 "<dbname>;<uid>;<broker_ip>,<broker_port>"의 형식으로 지정해야 한다.
 
         다음은 이름이 *testcm*\인 CM 사용자에게 "testdb;dba;localhost,30000"이라는 데이터베이스 정보를 추가하는 예이다.
 
@@ -2661,7 +2662,7 @@ CUBRID 매니저 사용자의 계정과 비밀번호는 CUBRID 매니저 클라�
     ::
 
         cm_admin viewuser testcm
-        
+
     다음과 같이 정보가 출력된다.
 
     ::
@@ -2712,12 +2713,12 @@ CUBRID 매니저 사용자의 계정과 비밀번호는 CUBRID 매니저 클라�
         ::
 
             cm_admin changeuserauth -c admin testcm
-        
-    .. option:: -m, --monitor 
-        
-        CM 사용자의 모니터링 권한을 지정한다. 사용할 수 있는 값은 **admin**, **none**, **monitor**\이다.
 
-        
+    .. option:: -m, --monitor 
+
+        CM 사용자의 모니터링 권한을 지정한다.
+        사용할 수 있는 값은 **admin**, **none**, **monitor**\이다.
+
         다음은 이름이 *testcm*\인 CM 사용자의 상태 모니터링 권한을 **admin**\으로 변경하는 예이다.
 
         ::
@@ -2800,9 +2801,9 @@ CUBRID 매니저 사용자의 계정과 비밀번호는 CUBRID 매니저 클라�
         다음은 이름이 *testcm*\인 CM 사용자에게 이름이 *testdb*\이고 호스트 IP가 *127.0.0.1*\인 데이터베이스를 추가하는 예이다. ::
 
             cm_admin adddbinfo -h 127.0.0.1 testcm testdb
-        
+
     .. option:: -p, --port NUMBER
-        
+
         클라이언트가 데이터베이스에 접속할 때 사용하는 브로커의 포트 번호를 지정한다. 기본값은 **30000**\이다.
 
 **CM 사용자의 데이터베이스 정보 삭제**
@@ -2816,7 +2817,9 @@ CUBRID 매니저 사용자의 계정과 비밀번호는 CUBRID 매니저 클라�
     *   cmuser-name: CM 사용자 이름
     *   databse-name: 삭제할 데이터베이스 이름
 
-    다음은 이름이 *testcm*\인 CM 사용자에게서 이름이 *testdb*\인 데이터베이스 정보를 삭제하는 예이다. ::
+    다음은 이름이 *testcm*\인 CM 사용자에게서 이름이 *testdb*\인 데이터베이스 정보를 삭제하는 예이다. 
+
+::
 
         cm_admin deldbinfo testcm testdb
 
@@ -2841,7 +2844,9 @@ CUBRID 매니저 사용자의 계정과 비밀번호는 CUBRID 매니저 클라�
 
         데이터베이스의 사용자 ID를 지정한다.
 
-        다음은 이름이 *testcm*\인 CM 사용자의 *testdb* 데이터베이스에서 사용자 ID 정보를 *uid*\로 업데이트하는 예이다.  ::
+        다음은 이름이 *testcm*\인 CM 사용자의 *testdb* 데이터베이스에서 사용자 ID 정보를 *uid*\로 업데이트하는 예이다.
+
+::
 
             cm_admin changedbinfo -u uid testcm testdb
 
@@ -2849,12 +2854,14 @@ CUBRID 매니저 사용자의 계정과 비밀번호는 CUBRID 매니저 클라�
 
         클라이언트가 데이터베이스에 접속할 때 사용하는 브로커의 호스트를 지정한다.
 
-        다음은 이름이 *testcm*\인 CM 사용자의 *testdb* 데이터베이스에서 호스트 IP 정보를 *10.34.63.132*\로 업데이트하는 예이다. ::
+        다음은 이름이 *testcm*\인 CM 사용자의 *testdb* 데이터베이스에서 호스트 IP 정보를 *10.34.63.132*\로 업데이트하는 예이다. 
+
+::
 
             cm_admin changedbinfo -h 10.34.63.132 testcm testdb
-        
+
     .. option:: -p, --port NUMBER
-        
+
         클라이언트가 데이터베이스에 접속할 때 사용하는 브로커의 포트 번호를 지정한다.
 
         다음은 이름이 *testcm*\인 CM 사용자의 *testdb* 데이터베이스에서 브로커 포트 정보를 *33000*\로 업데이트하는 예이다. ::

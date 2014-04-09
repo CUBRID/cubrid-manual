@@ -109,7 +109,7 @@ CEIL
 .. function:: CEIL( number_operand )
 
     **CEIL** 함수는 인자보다 크거나 같은 최소 정수 값을 인자의 타입으로 반환한다. 리턴 값은 *number_operand* 인자로 지정된 값의 유효 자릿수를 따른다. 숫자로 변환되지 않는 문자열을 입력할 때 **cubrid.conf**\ 의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다.
-    
+
     :param number_operand: 수치 값을 반환하는 임의의 연산식이다.
     :rtype: INT
 
@@ -235,7 +235,7 @@ DRANDOM, DRAND
 
     **DRANDOM** / **DRAND** 함수는 구간 0.0 이상 1.0 미만의 구간에서 임의의 이중 정밀도(double-precision) 부동 소수점 값을 반환하며, *seed* 인자를 지정할 수 있다. *seed* 인자의 타입은 **INTEGER** 이며, 실수가 지정되면 반올림하고, **INTEGER** 범위를 초과하면 에러를 반환한다.
 
-    **DRAND** 함수는 연산을 출력하는 행(row)의 개수와 관계없이 한 문장 내에서 1회만 연산을 수행하여 오직 한 개의 임의값만 생성하는 반면, **DRANDOM** 함수는 함수가 호출될 때마다 매번 연산을 수행하므로 한 문장 내에서 여러 개의 다른 임의 값을 생성한다. 따라서, 무작위 순서로 행을 출력하기 위해서는 **ORDER BY** 절에 **DRANDOM** 함수를 이용해야 한다. 무작위 정수값을 구하기 위해서는 :func:`RANDOM`\ 를 사용한다.
+    *seed* 값이 주어지지 않은 경우 **DRAND()**\는 연산을 출력하는 행(row)의 개수와 관계없이 한 문장 내에서 1회만 연산을 수행하여 오직 한 개의 임의값만 생성하는 반면, **DRANDOM()**\는 함수가 호출될 때마다 매번 연산을 수행하므로 한 문장 내에서 여러 개의 다른 임의 값을 생성한다. 따라서, 무작위 순서로 행을 출력하기 위해서는 **ORDER BY** 절에 **DRANDOM()**\을 이용해야 한다. 무작위 정수값을 구하기 위해서는 :func:`RANDOM`\ 를 사용한다.
 
     :param seed: seed 값
     :rtype: DOUBLE
@@ -488,7 +488,7 @@ MOD
     :param m: 피제수를 나타내며, 수치 값을 반환하는 연산식이다.
     :param n: 제수를 나타내며, 수치 값을 반환하는 연산식이다.
     :rtype: INT
-    
+
 .. code-block:: sql
 
     --it returns the reminder of m divided by n
@@ -555,7 +555,7 @@ POW, POWER
 
     --it returns an error when the negative base is powered by a non-int exponent
     SELECT POWER(-2, -5.1), POWER(-2, -5.1);
-     
+    
 ::
      
     ERROR: Argument of power() is out of range.
@@ -588,7 +588,7 @@ RANDOM, RAND
 
     **RANDOM** / **RAND** 함수는 0 이상 2 31 미만 구간에서 임의의 정수 값을 반환하며, *seed* 인자를 지정할 수 있다. *seed* 인자의 타입은 **INTEGER** 이며, 실수가 지정되면 반올림하고 **INTEGER** 범위를 초과하면 에러를 반환한다.
 
-    **RAND** 함수는 연산을 출력하는 행(row)의 개수와 관계없이 한 문장 내에서 1회만 연산을 수행하여 오직 한 개의 임의값만 생성하는 반면, **RANDOM** 함수는 함수가 호출될 때마다 매번 연산을 수행하므로 한 문장 내에서 여러 개의 다른 임의 값을 생성한다. 따라서, 무작위 순서로 행을 출력하기 위해서는 **RANDOM** 함수를 이용해야 한다.
+    *seed* 값이 주어지지 않은 경우 **RAND()**는 연산을 출력하는 행(row)의 개수와 관계없이 한 문장 내에서 1회만 연산을 수행하여 오직 한 개의 임의값만 생성하는 반면, **RANDOM()**\은 함수가 호출될 때마다 매번 연산을 수행하므로 한 문장 내에서 여러 개의 다른 임의 값을 생성한다. 따라서, 무작위 순서로 행을 출력하기 위해서는 **RANDOM()**\을 이용해야 한다.
 
     무작위 실수 값을 구하기 위해서는 :func:`DRANDOM` 를 사용한다.
 
@@ -842,9 +842,9 @@ WIDTH_BUCKET
 .. function:: WIDTH_BUCKET(expression, from, to, num_buckets)
 
     **WIDTH_BUCKET** 함수는 순차적인 데이터 집합을 균등한 범위로 부여된 일련의 버킷으로 나누며, 각 행에 적당한 버킷 번호를 1부터 할당한다. 즉, WIDTH_BUCKET 함수는 equi-width histogram을 생성한다. 반환되는 값은 정수이다. 숫자로 변환되지 않는 문자열을 입력할 때 **cubrid.conf**\ 의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다.
-    
+
     이 함수는 주어진 버킷 개수로 범위를 균등하게 나누어 버킷 번호를 부여한다. 즉, 버킷마다 각 범위의 넓이는 균등하다.
-    
+
     참고로 :func:`NTILE` 분석 함수는 이에 비해 주어진 버킷 개수로 전체 행의 개수를 균등하게 나누어 버킷 번호를 부여한다. 즉, 버킷마다 각 행의 개수는 균등하다.
 
     :param expression: 버킷 번호를 부여받기 위한 입력 값. 수치 값을 반환하는 임의의 연산식을 지정한다.
@@ -862,7 +862,6 @@ WIDTH_BUCKET
         * [70, 60)이면 2, 
         * [60, 50)이면 3, 
         * 50보다 작거나 같으면 4가 된다.
-    
 
 다음 예제는 80점보다 작거나 같고 50점보다 큰 범위를 1부터 3까지 균등한 점수 범위로 나누어 등급을 부여한다. 해당 범위를 벗어나는 경우 80점보다 크면 0, 50점이거나 50점보다 작으면 4등급을 부여한다.
 

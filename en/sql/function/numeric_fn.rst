@@ -16,9 +16,9 @@ ABS
 
     --it returns the absolute value of the argument
     SELECT ABS(12.3), ABS(-12.3), ABS(-12.3000), ABS(0.0);
-    
-::
 
+::
+    
       abs(12.3)             abs(-12.3)            abs(-12.3000)         abs(0.0)
     ================================================================================
       12.3                  12.3                  12.3000               .0
@@ -36,9 +36,9 @@ ACOS
 .. code-block:: sql
 
     SELECT ACOS(1), ACOS(0), ACOS(-1);
-    
-::
 
+::
+    
       acos(1)                   acos(0)                  acos(-1)
     ==================================================================================
       0.000000000000000e+00     1.570796326794897e+00     3.141592653589793e+00
@@ -85,7 +85,7 @@ ATAN
 
 ATAN2
 =====
-     
+
 .. function:: ATAN2 ( y, x )
 
     The **ATAN2** function returns the arc tangent value of *y/x* in radian. This function is working like the :func:`ATAN`. Arguments *x* and *y* must be specified. The return value is a **DOUBLE** type. When you input the string which cannot be transformed into the number, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
@@ -137,7 +137,6 @@ CONV
 .. function:: CONV (number,from_base,to_base)
 
     The **CONV** function converts numbers between different number bases. This function returns a string representation of a converted number. The minimum value is 2 and the maximum value is 36. If *to_base* (representing the base to be returned) is negative, *number* is regarded as a signed number. Otherwise, it regarded as a unsigned number. When you input the string which cannot be transformed into the number to *from_base* or *to_base*, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
-
 
     :param number: An input number
     :param from_base: The base of an input number
@@ -236,7 +235,7 @@ DRANDOM, DRAND
 
     The function **DRANDOM** or **DRAND** returns a random double-precision floating point value in the range of between 0.0 and 1.0. A *seed* argument that is **INTEGER** type can be specified. It rounds up real numbers and an error is returned when it exceeds the range of **INTEGER**.
 
-    The **DRAND** function performs the operation only once to produce only one random number regardless of the number of rows where the operation is output, but the **DRANDOM** function performs the operation every time the statement is repeated to produce a different random value for each row. Therefore, to output rows in a random order, you must use the **DRANDOM** function in the **ORDER BY** clause. To obtain a random integer value, use the :func:`RANDOM`.
+    When *seed* value is not given, the **DRAND** function performs the operation only once to produce only one random number regardless of the number of rows where the operation is output, but the **DRANDOM** function performs the operation every time the statement is repeated to produce a different random value for each row. Therefore, to output rows in a random order, you must use the **DRANDOM** function in the **ORDER BY** clause. To obtain a random integer value, use the :func:`RANDOM`.
 
     :param seed: seed value
     :rtype: DOUBLE
@@ -261,7 +260,7 @@ DRANDOM, DRAND
     INSERT INTO rand_tbl VALUES 
         (1, 'a'), (2, 'b'), (3, 'c'), (4, 'd'), (5, 'e'), 
         (6, 'f'), (7, 'g'), (8, 'h'), (9, 'i'), (10, 'j');
-    
+
     SELECT * FROM rand_tbl;
 
 ::
@@ -515,7 +514,7 @@ PI
 
 .. function:: PI ()
 
-    The **PI** function returns the π value of type **DOUBLE**. 
+    The **PI** function returns the ? value of type **DOUBLE**. 
 
     :rtype: DOUBLE
 
@@ -559,7 +558,7 @@ POW, POWER
 ::
      
     ERROR: Argument of power() is out of range.
-    
+
 RADIANS
 =======
 
@@ -588,8 +587,8 @@ RANDOM, RAND
 
     The function **RANDOM** or **RAND** returns any integer value, which is greater than or equal to 0 and less than 2 31, and a *seed* argument that is **INTEGER** type can be specified. It rounds up real numbers and an error is returned when it exceeds the range of **INTEGER**. 
 
-    The **RAND** function performs the operation only once to produce only one random number regardless of the number of rows where the operation is output, but the **RANDOM** function performs the operation every time the statement is repeated to produce a different random value for each row. Therefore, to output rows in a random order, you must use the **RANDOM** function. 
-    
+    When *seed* value is not given, the **RAND** function performs the operation only once to produce only one random number regardless of the number of rows where the operation is output, but the **RANDOM** function performs the operation every time the statement is repeated to produce a different random value for each row. Therefore, to output rows in a random order, you must use the **RANDOM** function. 
+
     To obtain a random real number, use the :func:`DRANDOM`.
 
     :param seed: 
@@ -802,7 +801,7 @@ TRUNC, TRUNCATE
     :param x: An expression that returns a numeric value
     :param dec: The place to be truncated is specified. If a positive integer *n* is specified, the number is represented to the *n-*\th place after the decimal point; if a negative integer *n* is specified, the number is truncated to the *n-*\th place before the decimal point. It truncates to the first place after the decimal point if the *dec* argument is 0 or omitted. Note that the *dec* argument cannot be omitted in the **TRUNCATE** function.
     :rtype: same type as the *x*
-    
+
 .. code-block:: sql
 
     --it returns a number truncated to 0 places
@@ -842,20 +841,19 @@ WIDTH_BUCKET
 .. function:: WIDTH_BUCKET(expression, from, to, num_buckets)
 
     **WIDTH_BUCKET** distributes the rows in an ordered partition into a specified number of buckets. The buckets are numbered, starting from one. That is, **WIDTH_BUCKET** function creates an equi-width histogram. The return value is an integer. When you input the string which cannot be transformed into the number, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
-    
+
     This function equally divides the range by the given number of buckets and assigns the bucket number to each bucket. That is, every interval (bucket) has the identical size.
 
     Note that :func:`NTILE` function equally divides the number of rows by the given number of buckets and assigns the bucket number to each bucket. That is, every bucket has the same number of rows.
 
-    
     :param expression: an input value to assign the bucket number. It specifies a certain expression which returns the number.
-    :param from: a start value of the range, which is given to *expression*. It is included in the entire range. 
+    :param from: a start value of the range, which is given to *expression*. It is included in the entire range.
     :param to: an end value of the range, which is given to *expression*. It is not included in the entire range.
     :param num_buckets: the number of buckets. The #0 bucket and the #(*num_buckets* + 1) bucket are created to include the contents beyond the range.
     :rtype: INT
 
     *expression* is an input value to assign the bucket number. *from* and *to* should be numeric values, date/time values, or the string which can be converted to date/time value. *from* is included in the acceptable range, but *to* is beyond the range.
-    
+
     For example, WIDTH_BUCKET (score, 80, 50, 3) returns
     
         *   0 when the score is larger than 80,

@@ -575,12 +575,12 @@ The following is a query and a result to run **FIRST_VALUE** function.
                 2            6         NULL
                 2            7         NULL
     
-CUBRID sorts **NULL** value as first order than other values. The below SQL1 is interpreted as SQL2 which includes **NULLS FIRST** in ORDER BY clause.
+.. note:: CUBRID sorts **NULL** value as first order than other values. The below SQL1 is interpreted as SQL2 which includes **NULLS FIRST** in ORDER BY clause.
 
-::
+    ::
 
-    SQL1: FIRST_VALUE(itemno) OVER(PARTITION BY groupid ORDER BY itemno) AS ret_val 
-    SQL2: FIRST_VALUE(itemno) OVER(PARTITION BY groupid ORDER BY itemno NULLS FIRST) AS ret_val 
+        SQL1: FIRST_VALUE(itemno) OVER(PARTITION BY groupid ORDER BY itemno) AS ret_val 
+        SQL2: FIRST_VALUE(itemno) OVER(PARTITION BY groupid ORDER BY itemno NULLS FIRST) AS ret_val 
     
 The following is an example to specify **IGNORE NULLS**.
 
@@ -621,7 +621,9 @@ GROUP_CONCAT
     :param SEPARATOR: Specifies the separator to divide the result values. If it is omitted, the default character, comma (,) will be used as a separator.
     :rtype: STRING
 
-The maximum size of the return value follows the configuration of the system parameter, **group_concat_max_len**. The default is **1024** bytes, the minimum value is 4 bytes and the maximum value is 33,554,432 bytes. If it exceeds the maximum value, **NULL** will be returned.
+The maximum size of the return value follows the configuration of the system parameter, **group_concat_max_len**. The default is **1024** bytes, the minimum value is 4 bytes and the maximum value is 33,554,432 bytes.
+
+This function is affected by **string_max_size_bytes** parameter; if the value of **group_concat_max_len** is larger than the value **string_max_size_bytes** and the result size of **GROUP_CONCAT** exceeds the value of **string_max_size_bytes**, an error occurs.
 
 To remove the duplicate values, use the **DISTINCT** clause. The default separator for the group result values is comma (,). To represent the separator explicitly, add the character string to use as a separator in the **SEPARATOR** clause and after that. If you want to remove separators, enter empty strings after the **SEPARATOR** clause.
 
@@ -720,7 +722,7 @@ LAST_VALUE
 
     :param expression: a column or an expression which returns a number or a string. **LAST_VALUE** function or other analytic function cannot be included.
     :rtype: a type of an *expression*
-    
+
     .. seealso:: 
     
         :func:`FIRST_VALUE`, :func:`NTH_VALUE`
@@ -771,12 +773,12 @@ The following is a query and a result to run **LAST_VALUE** function.
 
 **LAST_VALUE** function is calculated by the current row. That is, values which are not binded are not included on the calculation. For example, on the above result, the value of **LAST_VALUE** is 1 when "(groupid, itemno) = (1, 1)"; 2 when "(groupid, itemno) = (1, 2)
 
-CUBRID sorts **NULL** value as first order than other values. The below SQL1 is interpreted as SQL2 which includes **NULLS FIRST** in **ORDER BY** clause.
+.. note:: CUBRID sorts **NULL** value as first order than other values. The below SQL1 is interpreted as SQL2 which includes **NULLS FIRST** in **ORDER BY** clause.
 
-::
+    ::
 
-    SQL1: LAST_VALUE(itemno) OVER(PARTITION BY groupid ORDER BY itemno) AS ret_val 
-    SQL2: LAST_VALUE(itemno) OVER(PARTITION BY groupid ORDER BY itemno NULLS FIRST) AS ret_val     
+        SQL1: LAST_VALUE(itemno) OVER(PARTITION BY groupid ORDER BY itemno) AS ret_val 
+        SQL2: LAST_VALUE(itemno) OVER(PARTITION BY groupid ORDER BY itemno NULLS FIRST) AS ret_val     
 
 LEAD
 ====
@@ -859,7 +861,7 @@ If a WHERE condition is enclosed in parentheses, the values of next_title and pr
       num  title                 next_title            prev_title
     ===============================================================================
         5  'title 5'             'title 6'             'title 4'
-        
+
 MAX
 ===
 
@@ -876,10 +878,10 @@ The following example shows how to retrieve the maximum number of gold (*gold*) 
 
 .. code-block:: sql
 
+    SELECT MAX(gold) FROM participant WHERE nation_code = 'KOR';
+
 ::
 
-    SELECT MAX(gold) FROM participant WHERE nation_code = 'KOR';
-    
         max(gold)
     =============
                12
@@ -1021,10 +1023,6 @@ NTH_VALUE
     :param N: a constant, a binding variable, a column or an expression which can be interpreted as a positive integer
     :rtype: a type of an *expression*
 
-    
-    **LAST_VALUE** function is used as an analytic function only. It returns **NULL** if the last value in the set is null. But, if you specify **IGNORE NULLS**, the last value will be returned as excluding null or **NULL** will be returned if all values are null.
-
-   
     .. seealso:: 
     
         :func:`FIRST_VALUE`, :func:`LAST_VALUE` 
@@ -1075,13 +1073,20 @@ The following is a query and results to run **NTH_VALUE** function by the value 
                 2            6         NULL
                 2            7            7
 
+.. note:: CUBRID sorts **NULL** value as first order than other values. The below SQL1 is interpreted as SQL2 which includes **NULLS FIRST** in **ORDER BY** clause.
+
+    ::
+
+        SQL1: LAST_VALUE(itemno) OVER(PARTITION BY groupid ORDER BY itemno) AS ret_val 
+        SQL2: LAST_VALUE(itemno) OVER(PARTITION BY groupid ORDER BY itemno NULLS FIRST) AS ret_val
+
 NTILE
 =====
 
 .. function:: NTILE(expression) OVER ([partition_by_clause] [order_by_clause])
 
-     **NTILE** is an analytic function. It divides an ordered data set into a number of buckets indicated by the input parameter value and assigns the appropriate bucket number to each row. The buckets are numbered 1. In other words, the NTILE function creates an equi-height histogram. The return value is an integer. This function equally divides the number of rows by the given number of buckets and assigns the bucket number to each bucket. That is, every bucket has the same number of rows.
-    
+     **NTILE** is an analytic function. It divides an ordered data set into a number of buckets indicated by the input parameter value and assigns the appropriate bucket number from 1 to each row.
+
     :param expression: the number of buckets. It specifies a certain expression which returns a number value. 
     :rtype: INT
     
@@ -1486,7 +1491,7 @@ The following is a formula that is applied to the function.
 The following example shows how to output the population standard variance of all students for all subjects.
 
 .. code-block:: sql
-        
+    
     CREATE TABLE student (name VARCHAR(32), subjects_id INT, score DOUBLE);
     INSERT INTO student VALUES
     ('Jane',1, 78), ('Jane',2, 50), ('Jane',3, 60),
@@ -1494,9 +1499,8 @@ The following example shows how to output the population standard variance of al
     ('Lee', 1, 85), ('Lee', 2, 88), ('Lee', 3, 93),
     ('Wane', 1, 32), ('Wane', 2, 42), ('Wane', 3, 99),
     ('Sara', 1, 17), ('Sara', 2, 55), ('Sara', 3, 43);
-
-         
-    SELECT STDDEV_POP(score) FROM student;
+     
+    SELECT STDDEV_POP (score) FROM student;
      
 ::
 
@@ -1508,7 +1512,8 @@ The following example shows how to output the score and population standard vari
 
 .. code-block:: sql    
 
-    SELECT subjects_id, name, score, STDDEV_POP(score) OVER(PARTITION BY subjects_id) std_pop 
+    SELECT subjects_id, name, score, 
+    STDDEV_POP(score) OVER(PARTITION BY subjects_id) std_pop
     FROM student 
     ORDER BY subjects_id, name;
      
@@ -1535,7 +1540,7 @@ The following example shows how to output the score and population standard vari
 STDDEV_SAMP
 ===========
 
-.. function:: STDDEV_SAMP( [ DISTINCT | DISTINCTROW | UNIQUE | ALL] expression )
+.. function:: STDDEV_SAMP( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
 
     The **STDDEV_SAMP** function is used as an aggregate function or an analytic function. It calculates the sample standard variance. Only one *expression* is specified as a parameter. If the **DISTINCT** or **UNIQUE** keyword is inserted before the expression, it calculates the sample standard variance after deleting duplicates; if a keyword is omitted or **ALL**, it calculates the sample standard variance for all values.
 
@@ -1544,7 +1549,7 @@ STDDEV_SAMP
     :param DISTINCT,DISTINCTROW,UNIQUE: Used to calculate the standard variance for the unique values without duplicates.
     :rtype: DOUBLE
 
-The return value is the same as the square root of its sample variance (:func:`VAR_SAMP`) and it is a **DOUBLE** type. If there are no rows that can be used for calculating a result, **NULL** is returned.
+The return value is the same as the square root of its sample variance (:func:`VAR_SAMP`) and it is a **DOUBLE** type. If there are no rows that can be used for calculating a result, **NULL** is returned.
 
 The following are the formulas applied to the function.
 
@@ -1564,10 +1569,10 @@ The following example shows how to output the sample standard variance of all s
     ('Wane', 1, 32), ('Wane', 2, 42), ('Wane', 3, 99),
     ('Sara', 1, 17), ('Sara', 2, 55), ('Sara', 3, 43);
      
-    SELECT STDDEV_SAMP(score) FROM student;
+    SELECT STDDEV_SAMP (score) FROM student;
+    
+::    
      
-::
-
             stddev_samp(score)
     ==========================
          2.411480477888654e+01
@@ -1577,7 +1582,7 @@ The following example shows how to output the sample standard variance of all st
 .. code-block:: sql
 
     SELECT subjects_id, name, score, 
-        STDDEV_SAMP(score) OVER(PARTITION BY subjects_id) std_samp 
+    STDDEV_SAMP(score) OVER(PARTITION BY subjects_id) std_samp 
     FROM student 
     ORDER BY subjects_id, name;
      
@@ -1624,7 +1629,7 @@ The following is an example that outputs the top 10 countries and the total numb
     LIMIT 10;
      
 ::
-     
+
       nation_code             sum(gold)
     ===================================
       'USA'                         190
@@ -1704,7 +1709,7 @@ The following is a formula that is applied to the function.
 
 .. image:: /images/var_pop.jpg
 
-.. note:: In CUBRID 2008 R3.1 or earlier, the **VARIANCE** function worked the same as the :func:`VAR_SAMP`.
+.. note:: In CUBRID 2008 R3.1 or earlier, the **VARIANCE** function worked the same as the :func:`VAR_SAMP`.
 
 The following example shows how to output the population variance of all students for all subjects
 

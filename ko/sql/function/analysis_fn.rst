@@ -157,8 +157,7 @@
 집계 함수와 분석 함수 비교
 ==========================
 
-**집계 함수(aggregate functions)**\ 는 행들의 그룹에 기반하여 각 그룹 당 하나의 결과를 반환한다. **GROUP BY** 절을 포함하면 각 그룹마다 한 행의 집계 결과를 반환한다. **GROUP BY**
-절을 생략하면 전체 행에 대해 한 행의 집계 결과를 반환한다. **HAVING** 절은 **GROUP BY** 절이 있는 질의에 조건을 추가할 때 사용한다.
+**집계 함수(aggregate functions)**\ 는 행들의 그룹에 기반하여 각 그룹 당 하나의 결과를 반환한다. **GROUP BY** 절을 포함하면 각 그룹마다 한 행의 집계 결과를 반환한다. **GROUP BY** 절을 생략하면 전체 행에 대해 한 행의 집계 결과를 반환한다. **HAVING** 절은 **GROUP BY** 절이 있는 질의에 조건을 추가할 때 사용한다.
 
 대부분의 집계 함수는 **DISTINCT**, **UNIQUE** 제약 조건을 사용할 수 있다. **GROUP BY ... HAVING** 절에 대해서는 :ref:`group-by-clause` 을 참고한다.
 
@@ -179,6 +178,7 @@
             [, { expr | position | column_alias } [ ASC | DESC ] ] ...
 
 *   <*partition_clause*> : 하나 이상의 *value_expr* 에 기반한 그룹들로, 질의 결과를 분할하기 위해 **PARTITION BY** 절을 사용한다.
+
 *   <*order_by_clause*> : <*partition_clause*>에 의한 분할(partition) 내에서 데이터의 정렬 방식을 명시한다. 여러 개의 키로 정렬할 수 있다. <*partition_clause*>가 생략될 경우 전체 결과 셋 내에서 데이터를 정렬한다. 정렬된 순서에 의해 이전 값을 포함하여 누적한 레코드의 컬럼 값을 대상으로 함수를 적용하여 계산한다.
 
 분석 함수의 OVER 절 뒤에 함께 사용되는  ORDER BY/PARTITION BY 절의 표현식에 따른 동작 방식은 다음과 같다.
@@ -337,7 +337,7 @@ CUME_DIST
 분석 함수인 경우, **PARTITION BY**\ 에 의해 나누어진 그룹별로 각 행을 **ORDER BY** 절에 명시된 순서로 정렬한 후 그룹 내 값의 상대적인 위치를 반환한다. 상대적인 위치는 입력 인자 값보다 작거나 같은 값을 가진 행의 개수를 그룹 내 총 행(*partition_clause*\ 에 의해 그룹핑된 행 또는 전체 행)의 개수로 나눈 것이다. 즉, (어떤 행의 누적된 RANK)/(그룹 내 행의 개수)를 반환한다. 예를 들어, 전체 10개의 행 중에서 RANK가 1인 행의 개수가 2개이면 첫번째 행과 두번째 행의 **CUME_DUST** 값은 "2/10 = 0.2"가 된다. 
 
 다음은 이 함수의 예에서 사용될 스키마 및 데이터이다.
-        
+
 .. code-block:: sql
 
     CREATE TABLE scores(id INT PRIMARY KEY AUTO_INCREMENT, math INT, english INT, pe CHAR, grade INT);
@@ -444,6 +444,7 @@ CUME_DIST
        13           95           90  'A'                             2     1.000000000000000e+00
 
 위의 결과에서 *id*\ 가 1인 행은 *grade*\ 가 1인 10개의 행 중에서 첫번째와 두번째에 위치하며, **CUME_DUST**\ 의 값은 2/10, 즉 0.2가 된다.
+
 id가 5인 행은 *grade*\ 가 1인 10개의 행 중에서 다섯번째에 위치하며, **CUME_DUST**\ 의 값은 5/10, 즉 0.5가 된다.
 
 DENSE_RANK
@@ -620,7 +621,9 @@ GROUP_CONCAT
     :param SEPARATOR: 결과 값 사이에 구분할 구분자를 지정한다. 생략하면 기본값인 쉼표(,)를 구분자로 사용한다.
     :rtype: STRING
 
-리턴 값의 최대 크기는 시스템 파라미터 **group_concat_max_len** 의 설정을 따른다. 기본값은 **1024** 바이트이며, 최소값은 4바이트, 최대값은 33,554,432바이트이다. 최대값을 초과하면 **NULL** 을 반환한다.
+리턴 값의 최대 크기는 시스템 파라미터 **group_concat_max_len** 의 설정을 따른다. 기본값은 **1024** 바이트이며, 최소값은 4바이트, 최대값은 33,554,432바이트이다.
+
+이 함수는 **string_max_size_bytes** 파라미터의 영향을 받는데,  **group_concat_max_len**\의 값이 **string_max_size_bytes**\의 값보다 크고 **GROUP_CONCAT** 함수의 결과가 **string_max_size_bytes**\의 크기 제한을 넘으면 오류가 반환된다.
 
 중복되는 값을 제거하려면 **DISTINCT** 절을 사용하면 된다. 그룹 결과의 값 사이에 사용되는 기본 구분자는 쉼표(,)이며, 구분자를 명시적으로 표현하려면 **SEPARATOR** 절과 그 뒤에 구분자로 사용할 문자열을 추가한다. 구분자를 제거하려면 **SEPARATOR** 절 뒤에 빈 문자열(empty string)을 입력한다.
 
@@ -769,8 +772,8 @@ LAST_VALUE
                 2            7            7
 
 LAST_VALUE 함수는 현재 행을 기준으로 계산된다. 즉, 아직 바인딩되지 않은 값은 계산에 포함되지 않는다. 예를 들어, 위의 결과에서 (groupid, itemno) = (1, 1)인 LAST_VALUE 함수의 값은 1이고, (groupid, itemno) = (1, 2)인 LAST_VALUE 함수의 값은 2이다.
-                
-.. note::  CUBRID는 NULL을 모든 값보다 앞의 순서로 정렬한다. 즉, 아래의 SQL1은 ORDER BY 절에 NULLS FIRST가 포함된 SQL2로 해석된다.
+
+.. note:: CUBRID는 NULL 값을 모든 값보다 앞의 순서로 정렬한다. 즉, 아래의 SQL1은 ORDER BY 절에 NULLS FIRST가 포함된 SQL2로 해석된다.
 
     ::
 
@@ -876,7 +879,7 @@ MAX
 .. code-block:: sql
 
     SELECT MAX(gold) FROM participant WHERE nation_code = 'KOR';
-    
+
 ::
 
         max(gold)
@@ -914,7 +917,7 @@ MEDIAN
 .. function:: MEDIAN(expression)
 .. function:: MEDIAN(expression) OVER ([partition_clause])
 
-   **MEDIAN** 함수는 집계 함수 또는 분석 함수로 사용되며, 중앙값(median value)을 반환한다. 중앙값은 데이터의 최소값과 최대값의 중앙에 위치하게 되는 값을 말한다.
+    **MEDIAN** 함수는 집계 함수 또는 분석 함수로 사용되며, 중앙값(median value)을 반환한다. 중앙값은 데이터의 최소값과 최대값의 중앙에 위치하게 되는 값을 말한다.
     
     :param expression: 숫자 또는 날짜로 변환될 수 있는 값을 가진 칼럼 또는 연산식
     :rtype: **DOUBLE** 또는 **DATETIME**
@@ -942,7 +945,7 @@ MEDIAN
                 3  5.000000000000000e+00
 
     
-다음은 분석 함수로 사용되는 예로서, col1을 기준으로 각 그룹별 col2의 중앙값을 반환한다. 
+다음은 분석 함수로 사용되는 예로서, col1을 기준으로 각 그룹별 col2의 중앙값을 반환한다.
 
 .. code-block:: sql
 
@@ -1075,15 +1078,14 @@ NTH_VALUE
 
         SQL1: NTH_VALUE(itemno) OVER(PARTITION BY groupid ORDER BY itemno) AS ret_val 
         SQL2: NTH_VALUE(itemno) OVER(PARTITION BY groupid ORDER BY itemno NULLS FIRST) AS ret_val
-        
+
 NTILE
 =====
 
 .. function:: NTILE(expression) OVER ([partition_by_clause] [order_by_clause])
 
     **NTILE** 함수는 분석 함수로만 사용되며, 순차적인 데이터 집합을 입력 인자 값에 의해 일련의 버킷으로 나누며, 각 행에 적당한 버킷 번호를 1부터 할당한다.
-    반환되는 값은 정수이다. 
-    
+
     :param expression: 버킷의 개수. 숫자 값을 반환하는 임의의 연산식을 지정한다. 
     :rtype: INT
     
@@ -1334,13 +1336,13 @@ RANK
     RANK 함수는 분석 함수로만 사용되며, **PARTITION BY** 절에 의한 칼럼 값의 그룹에서 값의 순위를 계산하여 **INTEGER** 로 출력한다. 공동 순위가 존재하면 그 다음 순위는 공동 순위의 개수를 더한 숫자이다. 예를 들어, 13위에 해당하는 행이 3개이면 그 다음 행의 순위는 14위가 아니라 16위가 된다. 반면, :func:`DENSE_RANK` 함수는 이와 달리 순위에 1을 더해 다음 순위의 값을 계산한다.
 
     :rtype: INT
-    
+
 다음은 역대 올림픽에서 연도별로 금메달을 많이 획득한 국가의 금메달 개수와 순위를 출력하는 예제이다. 공동 순위의 다음 순위 값은 공동 순위의 개수를 더한다.
 
 .. code-block:: sql
 
     SELECT host_year, nation_code, gold,
-        RANK() OVER (PARTITION BY host_year ORDER BY gold DESC) AS g_rank
+    RANK() OVER (PARTITION BY host_year ORDER BY gold DESC) AS g_rank
     FROM participant;
      
 ::
@@ -1410,7 +1412,7 @@ ROW_NUMBER
 .. code-block:: sql
 
     SELECT host_year, nation_code, gold,
-        ROW_NUMBER() OVER (PARTITION BY host_year ORDER BY gold DESC) AS r_num
+    ROW_NUMBER() OVER (PARTITION BY host_year ORDER BY gold DESC) AS r_num
     FROM participant;
      
 ::
@@ -1511,7 +1513,7 @@ STDDEV, STDDEV_POP
 .. code-block:: sql    
 
     SELECT subjects_id, name, score, 
-        STDDEV_POP (score) OVER(PARTITION BY subjects_id) std_pop 
+    STDDEV_POP(score) OVER(PARTITION BY subjects_id) std_pop
     FROM student 
     ORDER BY subjects_id, name;
      
@@ -1580,7 +1582,7 @@ STDDEV_SAMP
 .. code-block:: sql
 
     SELECT subjects_id, name, score, 
-        STDDEV_SAMP (score) OVER(PARTITION BY subjects_id) std_samp 
+    STDDEV_SAMP(score) OVER(PARTITION BY subjects_id) std_samp 
     FROM student 
     ORDER BY subjects_id, name;
      
@@ -1623,7 +1625,7 @@ SUM
     SELECT nation_code, SUM(gold) 
     FROM participant 
     GROUP BY nation_code
-    ORDER BY SUM(gold) DESC 
+    ORDER BY SUM(gold) DESC
     LIMIT 10;
      
 ::
@@ -1687,10 +1689,10 @@ SUM
              1996  'AUT'                           0            5
              1992  'AUT'                           0            5
              1988  'AUT'                           1            5
-             
+
 VARIANCE, VAR_POP
 =================
-      
+
 .. function:: VARIANCE( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
 .. function:: VAR_POP( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
 
@@ -1707,7 +1709,7 @@ VARIANCE, VAR_POP
 
 .. image:: /images/var_pop.jpg
 
-.. note:: CUBRID 2008 R3.1 이하 버전에서 **VARIANCE** 함수는 :func:`VAR_SAMP` 와 같은 기능을 수행했다.
+.. note:: CUBRID 2008 R3.1 이하 버전에서 **VARIANCE** 함수는 :func:`VAR_SAMP`\ 와 같은 기능을 수행했다.
 
 다음은 전체 과목에 대해 전체 학생의 모분산을 출력하는 예제이다.
 
@@ -1762,7 +1764,7 @@ VAR_SAMP
 
 .. function:: VAR_SAMP( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
 
-    **VAR_SAMP** 함수는 집계 함수 또는 분석 함수로 사용되며, 표본 분산을 반환한다. 분모는 모든 행의 개수 - 1이다. 하나의 연산식 *expression* 만 인자로 지정되며, 연산식 앞에 **DISTINCT** 또는 **UNIQUE** 키워드를 포함시키면 연산식 값 중 중복을 제거한 후, 표본 분산을 구하고, 키워드가 생략되거나 **ALL** 인 경우에는 모든 값에 대해 표본 분산을 구한다.
+    **VAR_SAMP** 함수는 집계 함수 또는 분석 함수로 사용되며, 표본 분산을 반환한다. 분모는 모든 행의 개수 - 1이다. 하나의 *expression*\ 만 인자로 지정되며, *expression* 앞에 **DISTINCT** 또는 **UNIQUE** 키워드를 포함시키면 연산식 값 중 중복을 제거한 후, 표본 분산을 구하고, 키워드가 생략되거나 **ALL** 인 경우에는 모든 값에 대해 표본 분산을 구한다.
 
     :param expression: 수치를 반환하는 하나의 연산식을 지정한다.
     :param ALL: 모든 값에 대해 표본 분산을 구하기 위해 사용되며, 기본값이다.

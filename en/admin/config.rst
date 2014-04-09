@@ -1099,7 +1099,9 @@ The following are parameters related to SQL statements and data types supported 
 **group_concat_max_len**
 
     **group_concat_max_len** is a parameter used to limit the return value size of the :func:`GROUP_CONCAT` function.
-    You can set a unit as B, K, M, G or T, which stands for bytes, kilobytes(KB), megabytes(MB), gigabytes(GB) or terabytes(TB) respectively. If you omit the unit, bytes will be applied. The default value is **1,024**. The minimum value is 4 and the maximum value is INT_MAX. If the return value of the :func:`GROUP_CONCAT` function exceeds the limitation, **NULL** will be returned.
+    You can set a unit as B, K, M, G or T, which stands for bytes, kilobytes(KB), megabytes(MB), gigabytes(GB) or terabytes(TB) respectively. If you omit the unit, bytes will be applied. The default value is **1,024**. The minimum value is 4 and the maximum value is 33,554,432 bytes. 
+    
+    This function is affected by **string_max_size_bytes** parameter; if the value of **group_concat_max_len** is larger than the value **string_max_size_bytes** and the result size of **GROUP_CONCAT** exceeds the value of **string_max_size_bytes**, an error occurs.
 
 **intl_check_input_string**
 
@@ -1351,7 +1353,7 @@ The following are parameters related to SQL statements and data types supported 
     *   :func:`CONCAT_WS`
     *   '**+**': Operand of string
     *   :func:`REPEAT`
-    *   :func:`GROUP_CONCAT` : This function is affected not only by **string_max_size_bytes** parameter but also by **group_concat_max_len**.
+    *   :func:`GROUP_CONCAT`\: This function is affected not only by **string_max_size_bytes** parameter, but also by **group_concat_max_len**.
     *   :func:`INSERT` function
 
 .. _unicode_input_normalization:

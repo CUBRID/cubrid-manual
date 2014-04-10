@@ -432,7 +432,7 @@ The **SUBSETEQ** operator returns **TRUE** (1) when a first operand is a subset 
 
     collection_operand SUBSETEQ collection_operand
 
-**Example **
+**Example **
 
 .. code-block:: sql
 

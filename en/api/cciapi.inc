@@ -3355,7 +3355,7 @@ CCI API Reference
 
     These functions can return the **CCI_ER_LOGIN_TIMEOUT** error if **login_timeout** is configured in the connection URL, which is an argument of :c:func:`cci_connect_with_url` function; this means that login timeout happens between application client and CAS during re-connection.
 
-    It is going through the process of re-connection between application client and CAS when an application restarts or it is re-scheduled. Re-scheduling is a process that CAS chooses an application client, and starts and stops connection in the unit of transaction. If **KEEP_CONNECTION**, broker parameter, is OFF, it always happens; if AUTO, it can happen depending on its situation. For details, see the description of **KEEP_CONNECTION** in the :ref:`parameter-by-broker`
+    It is going through the process of re-connection between application client and CAS when an application restarts or it is re-scheduled. Re-scheduling is a process that CAS chooses an application client, and starts and stops connection in the unit of transaction. If **KEEP_CONNECTION**, broker parameter, is OFF, it always happens; if AUTO, it can happen depending on its situation. For details, see the description of **KEEP_CONNECTION** in the :ref:`parameter-by-broker`
 
 .. c:function:: int cci_set_size(T_CCI_SET set)
 

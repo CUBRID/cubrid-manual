@@ -454,7 +454,7 @@ CUBRID 9.0 이전 버전에서 분할 프루닝은 질의 컴파일 단계에서
 
 .. code-block:: sql
 
-    ALTER TABLE nation2 ADD PARTITION PARTITIONS 3;
+    ALTER TABLE nation2 ADD PARTITION PARTITIONS 3;
 
 .. _promote-partitions:
 

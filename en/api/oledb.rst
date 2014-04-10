@@ -136,7 +136,7 @@ A connection string using the example above is as follows: ::
 
 .. note::
 
-    *   Because a semi-colon (;) is used as a separator in URL string, it is not allowed to use a semi-colon as parts of a password (PWD) when specifying the password in connection string.
+    *   Because a semi-colon (;) is used as a separator in URL string, it is not allowed to use a semi-colon as parts of a password (PWD) when specifying the password in connection string.
     *   If a string longer than defined max length is inserted (**INSERT**) or updated (**UPDATE**), the string will be truncated.
     *   The database connection in thread-based programming must be used independently each other.
     *   In autocommit mode, the transaction is not committed if all results are not fetched after running the SELECT statement. Therefore, although in autocommit mode, you should end the transaction by executing COMMIT or ROLLBACK if some error occurs during fetching for the resultset.

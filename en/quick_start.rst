@@ -48,7 +48,7 @@ On the Windows environment, you can start or stop a service as follows:
 
 .. note::
 
-    An administrator level (SYSTEM) authorization is required to start/stop CUBRID processes through the CUBRID Service tray; a login level user authorization is required to start/stop them with shell commands. If you cannot control the CUBRID processes on the Windows Vista or later version environment, select [Execute as an administrator (A)] in the [Start] > [All Programs] > [Accessories] > [Command Prompt]) or execute it by using the CUBRID Service Tray. When all processes of CUBRID Server stops, an icon on the CUBRID Service tray turns out gray.
+    An administrator level (SYSTEM) authorization is required to start/stop CUBRID processes through the CUBRID Service tray; a login level user authorization is required to start/stop them with shell commands. If you cannot control the CUBRID processes on the Windows Vista or later version environment, select [Execute as an administrator (A)] in the [Start] > [All Programs] > [Accessories] > [Command Prompt]) or execute it by using the CUBRID Service Tray. When all processes of CUBRID Server stops, an icon on the CUBRID Service tray turns out gray.
 
 Creating Databases
 ------------------
@@ -76,7 +76,7 @@ You can start a database process by using the **cubrid server** utility. ::
 
     % cubrid server start testdb
 
-To have *testdb* started upon startup of the CUBRID service (cubrid service start), configure *testdb* in the **server**  parameter of the **cubrid.conf**  file. ::
+To have *testdb* started upon startup of the CUBRID service (cubrid service start), configure *testdb* in the **server**  parameter of the **cubrid.conf**  file. ::
 
     % vi cubrid.conf
 

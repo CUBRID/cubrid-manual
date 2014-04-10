@@ -37,7 +37,7 @@ You can create a serial object in the database by using the **CREATE SERIAL** st
 
 *   **NOMAXVALUE**\ : 10,000,000,000,000,000,000,000,000,000,000,000,000(10^37) is set automatically as a maximum value for the ascending serial, -1 for the descending serial.
 
-*   **CYCLE**\ : Specifies that the serial will be generated continuously after reaching the maximum or minimum value. When a serial in ascending order reaches the maximum value, the minimum value is created as the next value; when a serial in descending order reaches the minimum value, the maximum value is created as the next value.
+*   **CYCLE**\ : Specifies that the serial will be generated continuously after reaching the maximum or minimum value. When a serial in ascending order reaches the maximum value, the minimum value is created as the next value; when a serial in descending order reaches the minimum value, the maximum value is created as the next value.
 
 *   **NOCYCLE**\ : Specifies that the serial will not be generated any more after reaching the maximum or minimum value. The default value is **NOCYCLE**.
 
@@ -90,7 +90,7 @@ The following example shows how to create the *athlete_idx* table to store athle
 ALTER SERIAL
 ============
 
-With the **ALTER SERIAL** statement, you can update the increment of the serial value, set or delete its initial or minimum/maximum values, and set its cycle attribute. ::
+With the **ALTER SERIAL** statement, you can update the increment of the serial value, set or delete its initial or minimum/maximum values, and set its cycle attribute. ::
 
     ALTER SERIAL serial_identifier
     [ INCREMENT BY interval ]
@@ -134,7 +134,7 @@ With the **ALTER SERIAL** statement, you can update the increment of the serial
     
 .. warning::
 
-     In CUBRID 2008 R1.x version, the serial value can be modified by updating the db_serial table, a system catalog. However, in CUBRID 2008 R2.0 version or above, the modification of the db_serial table is not allowed but use of the **ALTER SERIAL** statement is allowed. Therefore, if an **ALTER SERIAL** statement is included in the data exported (unloaddb) from CUBRID 2008 R2.0 or above, it is not allowed to import (loaddb) the data in CUBRID 2008 R1.x or below.
+     In CUBRID 2008 R1.x version, the serial value can be modified by updating the db_serial table, a system catalog. However, in CUBRID 2008 R2.0 version or above, the modification of the db_serial table is not allowed but use of the **ALTER SERIAL** statement is allowed. Therefore, if an **ALTER SERIAL** statement is included in the data exported (unloaddb) from CUBRID 2008 R2.0 or above, it is not allowed to import (loaddb) the data in CUBRID 2008 R1.x or below.
     
 .. warning::
 
@@ -223,13 +223,13 @@ Functions
 
 The **SERIAL_CURRENT_VALUE** function returns the current serial value, which is the same value as *serial_name* **.current_value**.
 
-This function returns as much added value as interval specified. The serial interval is determined by the value of a **CREATE SERIAL ... INCREMENT BY** statement. **SERIAL_NEXT_VALUE** (*serial_name*, 1) returns the same value as *serial_name* **.next_value**.
+This function returns as much added value as interval specified. The serial interval is determined by the value of a **CREATE SERIAL ... INCREMENT BY** statement. **SERIAL_NEXT_VALUE** (*serial_name*, 1) returns the same value as *serial_name* **.next_value**.
 
 To get a large amount of serials at once, specify the desired number as an argument to call the **SERIAL_NEXT_VALUE** function only once; which has an advantage over calling repeatedly *serial_name* **.next_value** in terms of performance.
 
-Assume that an application process is trying to get the number of n serials at once. To perform it, call **SERIAL_NEXT_VALUE** (*serial_name*, N) one time to store a return value and calculate a serial value between (a serial start value) and (the return value). (Serial value at the point of function call) is equal to the value of (return value) - (desired number of serials) * (serial interval).
+Assume that an application process is trying to get the number of n serials at once. To perform it, call **SERIAL_NEXT_VALUE** (*serial_name*, N) one time to store a return value and calculate a serial value between (a serial start value) and (the return value). (Serial value at the point of function call) is equal to the value of (return value) - (desired number of serials) * (serial interval).
 
-For example, if you create a serial starting 101 and increasing by 1 and call **SERIAL_NEXT_VALUE** (*serial_name*, 10), it returns 110. The start value at the point is 110-(10-1)*1 = 101. Therefore, 10 serial values such as 101, 102, 103, ... 110 can be used by an application process. If **SERIAL_NEXT_VALUE** (*serial_name*, 10) is called in succession, 120 is returned; the start value at this point is 120-(10-1)*1 = 111.
+For example, if you create a serial starting 101 and increasing by 1 and call **SERIAL_NEXT_VALUE** (*serial_name*, 10), it returns 110. The start value at the point is 110-(10-1)*1 = 101. Therefore, 10 serial values such as 101, 102, 103, ... 110 can be used by an application process. If **SERIAL_NEXT_VALUE** (*serial_name*, 10) is called in succession, 120 is returned; the start value at this point is 120-(10-1)*1 = 111.
 
 .. code-block:: sql
 

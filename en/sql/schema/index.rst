@@ -37,7 +37,7 @@ The following example shows how to create a descending index.
 
 .. code-block:: sql
 
-    CREATE INDEX gold_index ON participant(gold DESC);
+    CREATE INDEX gold_index ON participant(gold DESC);
 
 The following example shows how to create a multiple column index.
 

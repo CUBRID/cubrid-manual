@@ -15,7 +15,7 @@ You can delete records in the table by using the **DELETE** statement. You can s
     <DELETE FROM multiple tables USING ...>
     DELETE FROM table_name[, table_name] ... USING <table_specifications> [ WHERE <search_condition> ]
 
-*   <*table_specifications*>: You can specify the statement such as **FROM** clause of the **SELECT** statement and one or more tables can be specified.
+*   <*table_specifications*>: You can specify the statement such as **FROM** clause of the **SELECT** statement and one or more tables can be specified.
 
 *   *table_name*: Specifies the name of a table where the data to be deleted is contained. If the number of table is one, the **FROM** keyword can be omitted.
 
@@ -23,7 +23,7 @@ You can delete records in the table by using the **DELETE** statement. You can s
 
 *   *row_count*: Specifies the number of records to be deleted in the :ref:`limit-clause`. An integer greater than 0 can be given.
 
-When a table to delete records is only one, :ref:`limit-clause` can be specified. You can limit the number of records by specifying the :ref:`limit-clause`.  If the number of records satisfying the :ref:`where-clause` exceeds *row_count*, only the number of records specified in *row_count* will be deleted.
+When a table to delete records is only one, :ref:`limit-clause` can be specified. You can limit the number of records by specifying the :ref:`limit-clause`.  If the number of records satisfying the :ref:`where-clause` exceeds *row_count*, only the number of records specified in *row_count* will be deleted.
 
 .. note:: \
 

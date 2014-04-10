@@ -64,7 +64,7 @@ You must already have Java installed and the **JAVA_HOME** environment variable 
 
 After installing Java, right-click [My Computer] and click [System Properties]. In the [Advanced] tab, click [Environment Variables]. The [Environment Variables] dialog will appear.
 
-In the [System Variables], click [New]. Enter **JAVA_HOME** and Java installation path such as C:\Program Files\Java\jdk1.6.0_13 and then click [OK].
+In the [System Variables], click [New]. Enter **JAVA_HOME** and Java installation path such as C:\Program Files\Java\jdk1.6.0_13 and then click [OK].
 
 .. image:: /images/image51.png
 
@@ -79,7 +79,7 @@ You can also configure **JAVA_HOME** and **PATH** values in the shell instead of
 
 **Configuring the environment variables for Linux**
 
-Specify the directory path where Java is installed (example: /usr/java/jdk1.6.0_13) as a **JAVA_HOME** environment variable and add **$JAVA_HOME/bin** to the **PATH** environment variable. ::
+Specify the directory path where Java is installed (example: /usr/java/jdk1.6.0_13) as a **JAVA_HOME** environment variable and add **$JAVA_HOME/bin** to the **PATH** environment variable. ::
 
     export JAVA_HOME=/usr/java/jdk1.6.0_16     #bash
     export PATH=$JAVA_HOME/bin:$PATH           #bash
@@ -91,7 +91,7 @@ Specify the directory path where Java is installed (example: /usr/java/jdk1.6.0_
 
 To use JDBC, you should specify the path where the CUBRID JDBC driver is located in the **CLASSPATH** environment variable.
 
-The CUBRID JDBC driver (**cubrid_jdbc.jar**) is located in the jdbc directory under the directory of CUBRID installation.
+The CUBRID JDBC driver (**cubrid_jdbc.jar**) is located in the jdbc directory under the directory of CUBRID installation.
 
 .. image:: /images/image53.png
 
@@ -168,7 +168,7 @@ The **DriverManager** is an interface for managing the JDBC driver. It is used t
     *   **round**: Converts to the minimum value allowed for a type to be returned. Exceptionally, when the value's type is TIMESTAMP, this value is rounded as '1970-01-01 00:00:00'(GST). (yyyy-mm-dd hh24:mi:ss)
     *   **convertToNull**: Converts to **NULL**.
 
-*   **logFile**: The name of a log file for debugging (default value: cubrid_jdbc.log). If a path is not configured, it is stored the location where applications are running.
+*   **logFile**: The name of a log file for debugging (default value: cubrid_jdbc.log). If a path is not configured, it is stored the location where applications are running.
 *   **logOnException**: Whether to log exception handling for debugging (default value: false)
 *   **logSlowQueries**: Whether to log slow queries for debugging (default value: false)
 
@@ -406,7 +406,7 @@ Using Object Identifiers (OIDs) and Collections
 
 In addition to the methods defined in the JDBC specification, CUBRID JDBC driver provides methods that handle OIDs and collections (set, multiset, and sequence).
 
-To use these methods, you must import **cubrid.sql.*;** as well as the CUBRID JDBC driver classes which are imported by default. Furthermore, you should convert to not the  **ResultSet** class, which is provided by the standard JDBC API) but the **CUBRIDResultSet** class to get result.
+To use these methods, you must import **cubrid.sql.*;** as well as the CUBRID JDBC driver classes which are imported by default. Furthermore, you should convert to not the  **ResultSet** class, which is provided by the standard JDBC API) but the **CUBRIDResultSet** class to get result.
 
 .. code-block:: java
 
@@ -665,7 +665,7 @@ Getting Auto Increment Column Value
 
 Auto increment (**AUTO_INCREMENT**) is a column-related feature that increments the numeric value of each row. For more information, see :ref:`column-definition`. It can be defined only for numeric domains (**SMALLINT**, **INTEGER**, **DECIMAL** (*p*, 0), and **NUMERIC** (*p*, 0)).
 
-Auto increment is recognized as automatically created keys in the JDBC programs. To retrieve the key, you need to specify the time to insert a row from which the automatically created key value is to be retrieved. To perform it, you must set the flag by calling **Connection.prepareStatement** and **Statement.execute** methods. In this case, the command executed should be the **INSERT** statement or **INSERT** within **SELECT** statement. For other commands, the JDBC driver ignores the flag-setting parameter. 
+Auto increment is recognized as automatically created keys in the JDBC programs. To retrieve the key, you need to specify the time to insert a row from which the automatically created key value is to be retrieved. To perform it, you must set the flag by calling **Connection.prepareStatement** and **Statement.execute** methods. In this case, the command executed should be the **INSERT** statement or **INSERT** within **SELECT** statement. For other commands, the JDBC driver ignores the flag-setting parameter. 
 
 **Steps**
 
@@ -734,10 +734,10 @@ Using BLOB/CLOB
 The interface that handles **LOB** data in JDBC is implemented based on JDBC 4.0 specification. The constraints of the interface are as follows:
 
 *   Only sequential write is supported when creating **BLOB** or **CLOB** object. Writing to arbitrary locations is not supported.
-*   You cannot change **BLOB** or **CLOB** data by calling methods of **BLOB** or **CLOB** object fetched from **ResultSet**. 
+*   You cannot change **BLOB** or **CLOB** data by calling methods of **BLOB** or **CLOB** object fetched from **ResultSet**. 
 *   **Blob.truncate**, **Clob.truncate**, **Blob.position**, and **Clob.position** methods are supported.
 *   You cannot bind the LOB data by calling **PreparedStatement.setAsciiStream**, **PreparedStatement.setBinaryStream**, and **PreparedStatement.setCharacterStream** methods for **BLOB/CLOB** type columns.
-*   To use **BLOB** / **CLOB** type in the environment where JDBC 4.0 is not supported such as JDK versions 1.5 or earlier, you must do explicit type conversion for the conn object to **CUBRIDConnection**. See example below.
+*   To use **BLOB** / **CLOB** type in the environment where JDBC 4.0 is not supported such as JDK versions 1.5 or earlier, you must do explicit type conversion for the conn object to **CUBRIDConnection**. See example below.
 
     .. code-block:: java
 
@@ -1016,7 +1016,7 @@ JDBC error codes which occur in SQLException are as follows.
 JDBC Sample Program
 ===================
 
-The following sample shows how to connect to CUBRID by using the JDBC driver, and retrieve and insert data. To run the sample program, make sure that the database you are trying to connect to and the CUBRID broker are running. In the sample, you will use the *demodb* database that is automatically created during the installation.
+The following sample shows how to connect to CUBRID by using the JDBC driver, and retrieve and insert data. To run the sample program, make sure that the database you are trying to connect to and the CUBRID broker are running. In the sample, you will use the *demodb* database that is automatically created during the installation.
 
 **Loading JDBC Driver**
 
@@ -1388,11 +1388,11 @@ The following table shows the JDBC standard and extended interface supported by 
 +-----------------------------------------------+----------------------------------+---------------------------------------------------------+
 | java.sql.Statement                            | java.sql.CUBRIDStatement         | The getGeneratedKeys() method of JDBC 3.0 is supported. |
 +-----------------------------------------------+----------------------------------+---------------------------------------------------------+
-| java.sql.DriverManager                        |                                  | Supported                                               |
+| java.sql.DriverManager                        |                                  | Supported                                               |
 +-----------------------------------------------+----------------------------------+---------------------------------------------------------+
 | Java.sql.SQLException                         | Java.sql.CUBRIDException         | Supported                                               |
 +-----------------------------------------------+----------------------------------+---------------------------------------------------------+
-| java.sql.Array                                |                                  | Not Supported                                           |
+| java.sql.Array                                |                                  | Not Supported                                           |
 | java.sql.ParameterMetaData                    |                                  |                                                         |
 | java.sql.Ref                                  |                                  |                                                         |
 | java.sql.Savepoint                            |                                  |                                                         |

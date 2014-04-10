@@ -25,7 +25,7 @@ CUBRID supports the following numeric data types to store integers or real numbe
 | **FLOAT**,           | 4         | -3.402823466E+38                | +3.402823466E+38               | approximate numeric |
 | **REAL**             |           | (ANSI/IEEE 754-1985 standard)   | (ANSI/IEEE 754-1985 standard)  | floating point : 7  |
 +----------------------+-----------+---------------------------------+--------------------------------+---------------------+
-| **DOUBLE**,          | 8         | -1.7976931348623157E+308        | +1.7976931348623157E+308       | approximate numeric |
+| **DOUBLE**,          | 8         | -1.7976931348623157E+308        | +1.7976931348623157E+308       | approximate numeric |
 | **DOUBLE PRECISION** |           | (ANSI/IEEE 754-1985 standard)   | (ANSI/IEEE 754-1985 standard)  | floating point : 15 |
 +----------------------+-----------+---------------------------------+--------------------------------+---------------------+
 
@@ -89,7 +89,7 @@ On the above table, two types on the same cell are identical types but it always
 INT/INTEGER
 -----------
 
-The **INTEGER** data type is used to represent integers. The value range is available is from -2,147,483,648 to +2,147,483,647. **SMALLINT** is used for small integers, and **BIGINT** is used for big integers.
+The **INTEGER** data type is used to represent integers. The value range is available is from -2,147,483,648 to +2,147,483,647. **SMALLINT** is used for small integers, and **BIGINT** is used for big integers.
 
 *   If a real number is entered for an **INT** type, the number is rounded to zero decimal place and the integer value is stored.
 *   **INTEGER** and **INT** are used interchangeably.
@@ -113,7 +113,7 @@ The **SMALLINT** data type is used to represent a small integer type. The value 
 
 ::
 
-    If you specify 8934 as SMALLINT, 8934 is stored.
+    If you specify 8934 as SMALLINT, 8934 is stored.
     If you specify 34.5 as SMALLINT, 35 is stored (all digits after the decimal point are rounded).
     If you specify 23467 as SMALLINT, 23467 is stored.
     If you specify 89354 as SMALLINT, an error occurs (if the allowable limit is exceeded).
@@ -178,17 +178,17 @@ The minimum value for the precision *p* is 1 and the maximum value is 38. When t
 
 ::
 
-    If you specify 16777217 as FLOAT, 16777216 is stored and 1.677722e+07 is displayed (if precision is omitted, 8-th digit is rounded up because it is represented as 7 significant figures).
-    If you specify 16777217 as FLOAT(5), 16777216 is stored and 1.677722e+07 is displayed (if precision is in seven or less, 8-th digit is rounded up because it is represented as 7 significant figures).
-    If you specify 16777.217 as FLOAT(5), 16777.216 is stored and 1.677722e+04 is displayed (if precision is in seven or less, 8-th digit is rounded up because it is represented as 7 significant figures).
-    If you specify 16777.217 as FLOAT(10), 16777.217 is stored and 1.677721700000000e+04 is displayed (if precision is greater than 7 and less than or equal to 38, zeroes are added because it is represented as 15 significant figures).
+    If you specify 16777217 as FLOAT, 16777216 is stored and 1.677722e+07 is displayed (if precision is omitted, 8-th digit is rounded up because it is represented as 7 significant figures).
+    If you specify 16777217 as FLOAT(5), 16777216 is stored and 1.677722e+07 is displayed (if precision is in seven or less, 8-th digit is rounded up because it is represented as 7 significant figures).
+    If you specify 16777.217 as FLOAT(5), 16777.216 is stored and 1.677722e+04 is displayed (if precision is in seven or less, 8-th digit is rounded up because it is represented as 7 significant figures).
+    If you specify 16777.217 as FLOAT(10), 16777.217 is stored and 1.677721700000000e+04 is displayed (if precision is greater than 7 and less than or equal to 38, zeroes are added because it is represented as 15 significant figures).
 
 DOUBLE/DOUBLE PRECISION
 -----------------------
 
 The **DOUBLE** data type is used to represent floating point numbers.
 
-The ranges of values that can be described as normalized values are from -1.7976931348623157E+308 to -2.2250738585072014E-308, 0, and from 2.2250738585072014E-308 to 1.7976931348623157E+308, whereas the values other than normalized values, which are closer to 0, are described as de-normalized values. It conforms to the ANSI/IEEE 754-1985 standard.
+The ranges of values that can be described as normalized values are from -1.7976931348623157E+308 to -2.2250738585072014E-308, 0, and from 2.2250738585072014E-308 to 1.7976931348623157E+308, whereas the values other than normalized values, which are closer to 0, are described as de-normalized values. It conforms to the ANSI/IEEE 754-1985 standard.
 
 The precision *p* is not specified. The data specified as this data type is represented as double precision (in 15 significant figures).
 
@@ -223,7 +223,7 @@ Date/time data types are used to represent the date or time (or both together). 
 | **TIMESTAMP** | 4         | 1970-01-01 00:00:01 (GMT) | 2038-01-19 03:14:07 (GMT) | As an exception, TIMESTAMP '0000-00-00 00:00:00' format is allowed. |
 |               |           | 1970-01-01 09:00:01 (KST) | 2038-01-19 12:14:07 (KST) |                                                                     |
 +---------------+-----------+---------------------------+---------------------------+---------------------------------------------------------------------+
-| **DATETIME**  | 8         | 0001-01-01 00:00:0.000    | 9999-12-31 23:59:59.999   | As an exception, DATETIME '0000-00-00 00:00:00' format is allowed.  |
+| **DATETIME**  | 8         | 0001-01-01 00:00:0.000    | 9999-12-31 23:59:59.999   | As an exception, DATETIME '0000-00-00 00:00:00' format is allowed.  |
 +---------------+-----------+---------------------------+---------------------------+---------------------------------------------------------------------+
 
 **Range and Resolution**
@@ -272,8 +272,8 @@ The **DATE** data type is used to represent the year (yyyy), month (mm) and day 
 
 *   All fields must be entered as integer.
 *   The date value is displayed in the type of 'MM/DD/YYYY' in CSQL, and it is displayed in the type of 'YYYY-MM-DD' in JDBC application programs and the CUBRID Manager.
-*   The :func:`TO_DATE` function is used to convert a character string type into a **DATE** type. 
-*   0 is not allowed to input in year, month, and day; however, '0000-00-00', which every digit consisting of year, month, and day is 0, is allowed as an exception.
+*   The :func:`TO_DATE` function is used to convert a character string type into a **DATE** type. 
+*   0 is not allowed to input in year, month, and day; however, '0000-00-00', which every digit consisting of year, month, and day is 0, is allowed as an exception.
 *   **DEFAULT** constraint can be specified in a column of this type.
 
 ::
@@ -322,7 +322,7 @@ The **TIMESTAMP** data type is used to represent a data value in which the date 
 *   If the year is omitted, the current year is specified by default. If the time value (hour/minute/second) is omitted, 12:00:00 AM is specified.
 *   You can store the timestamp value of the system in the **TIMESTAMP** type by using the :c:macro:`SYS_TIMESTAMP`\ (or :c:macro:`SYSTIMESTAMP`, :c:macro:`CURRENT_TIMESTAMP`). 
 *   The :func:`TIMESTAMP` or :func:`TO_TIMESTAMP` function is used to cast a character string type into a **TIMESTAMP** type.
-*   0 is not allowed to input in year, month, and day; however, '0000-00-00 00:00:00', which every digit consisting of year, month, day, hour, minute, and second is 0, is allowed as an exception. GMT timestamp'1970-01-01 12:00:00 AM' or KST timestamp'1970-01-01 09:00:00 AM' is translated into timestamp'0000-00-00 00:00:00'.
+*   0 is not allowed to input in year, month, and day; however, '0000-00-00 00:00:00', which every digit consisting of year, month, day, hour, minute, and second is 0, is allowed as an exception. GMT timestamp'1970-01-01 12:00:00 AM' or KST timestamp'1970-01-01 09:00:00 AM' is translated into timestamp'0000-00-00 00:00:00'.
 *   **DEFAULT** constraint can be specified in a column of this type.
 
 ::
@@ -360,7 +360,7 @@ The input format of **TIMESTAMP** is as follows: ::
 
     DATETIME'10/31' is outputted as '12:00:00.000 AM 10/31/2011' (if the value for year/time is omitted, a default value is outputted).
     DATETIME'10/31/2008' is outputted as '12:00:00.000 AM 10/31/2008'.
-    DATETIME'13:15:45 10/31/2008' is outputted as '01:15:45.000 PM 10/31/2008'.
+    DATETIME'13:15:45 10/31/2008' is outputted as '01:15:45.000 PM 10/31/2008'.
     DATETIME'01:15:45 PM 2008-10-31' is outputted as '01:15:45.000 PM 10/31/2008'.
     DATETIME'13:15:45 2008-10-31' is outputted as '01:15:45.000 PM 10/31/2008'.
     DATETIME'10/31/2008 01:15:45 PM' is outputted as '01:15:45.000 PM 10/31/2008'.
@@ -571,7 +571,7 @@ Available Format for Strings in Date/Time Type
 
     *   Separators should be identical in the input string.
 
-    *   For the Time-Date string, you can only use colon (:) for a Time separator and hyphen (-) or slash (/) for a Date separator. If you use a hyphen when entering date, you should enter like yyyy-mm-dd; in case of  a slash, enter like mm/dd/yyyy.
+    *   For the Time-Date string, you can only use colon (:) for a Time separator and hyphen (-) or slash (/) for a Date separator. If you use a hyphen when entering date, you should enter like yyyy-mm-dd; in case of  a slash, enter like mm/dd/yyyy.
 
     The following rules will be applied in the part of date.
 
@@ -603,7 +603,7 @@ Available Format for Strings in Date/Time Type
 
     *   All input strings including the time part allow *[.msec]* on conversion, but only the **DATETIME** type can be maintained. If you convert this to a type such as **DATE**, **TIMESTAMP** or **TIME**, the *msec* value is discarded.
 
-    *   All conversions in the **DATETIME**, **TIME** string allow English locale following after time value or am/pm specifier written in the current locale of a server.
+    *   All conversions in the **DATETIME**, **TIME** string allow English locale following after time value or am/pm specifier written in the current locale of a server.
 
     .. code-block:: sql
 
@@ -769,7 +769,7 @@ The following are the rules that are applied when using the character string typ
 
 *   If you want to include a single quote as part of a character string, enter two single quotes in a row. For example, the character string on the left is stored as the one on the right. ::
 
-    ''abcde''fghij'            'abcde'fghij
+    ''abcde''fghij'            'abcde'fghij
 
 *   The maximum size of the token for all the character strings is 16 KB.
 
@@ -808,7 +808,7 @@ CHAR(n)
 
 A fixed-length character string is represented as **CHAR** *(n)*, in which *n* represents the number of characters. If *n* is not specified, the value is specified as 1, default value.
 
-When the length of a character string exceeds *n*, they are truncated. When character string which is shorter than *n* is stored, whitespace characters are used to fill up the trailing space.
+When the length of a character string exceeds *n*, they are truncated. When character string which is shorter than *n* is stored, whitespace characters are used to fill up the trailing space.
 
 **CHAR** (*n*) and **CHARACTER** (*n*) are used interchangeably.
 
@@ -823,9 +823,9 @@ When the length of a character string exceeds *n*, they are truncated. When char
 ::
 
     If you specify 'pacesetter' as CHAR(12), 'pacesetter ' is stored (a 10-character string plus two whitespace characters).
-    If you specify 'pacesetter ' as CHAR(10), 'pacesetter' is stored (a 10-character string; two whitespace characters are truncated).
+    If you specify 'pacesetter ' as CHAR(10), 'pacesetter' is stored (a 10-character string; two whitespace characters are truncated).
     If you specify 'pacesetter' as CHAR(4), 'pace' is stored (truncated as the length of the character string is greater than 4).
-    If you specify 'p ' as CHAR, 'p' is stored (if n is not specified, the length is set to the default value 1).
+    If you specify 'p ' as CHAR, 'p' is stored (if n is not specified, the length is set to the default value 1).
 
 *   **DEFAULT** constraint can be specified in a column of this type.
 
@@ -834,7 +834,7 @@ VARCHAR(n)/CHAR VARYING(n)
 
 Variable-length character strings are represented as **VARCHAR** (*n*), where *n* represents the number of characters. If *n* is not specified, the value is specified as 1,073,741,823, the maximum length.
 
-When the length of a character string exceeds *n*, they are truncated. When character string which is shorter than *n* is stored, whitespace characters are used to fill up the trailing space for **VARCHAR** (*n*), the length of string used are stored. 
+When the length of a character string exceeds *n*, they are truncated. When character string which is shorter than *n* is stored, whitespace characters are used to fill up the trailing space for **VARCHAR** (*n*), the length of string used are stored. 
 
 **VARCHAR** (*n*), **CHARACTER, VARYING** (*n*), and **CHAR VARYING** (*n*) are used interchangeably.
 
@@ -847,10 +847,10 @@ When the length of a character string exceeds *n*, they are truncated. When char
 ::
 
     If you specify 'pacesetter' as CHAR(4), 'pace' is stored (truncated as the length of the character string is greater than 4).
-    If you specify 'pacesetter' as VARCHAR(12), 'pacesetter' is stored (a 10-character string).
+    If you specify 'pacesetter' as VARCHAR(12), 'pacesetter' is stored (a 10-character string).
     If you specify 'pacesetter ' as VARCHAR(12), 'pacesetter ' is stored (a 10-character string plus two whitespace characters).
     If you specify 'pacesetter ' as VARCHAR(10), 'pacesetter' is stored (a 10-character string; two whitespace characters are truncated).
-    If you specify 'p ' as VARCHAR, 'p' is stored (if n is not specified, the default value 1,073,741,823 is used, and the trailing space is not filled with whitespace characters).
+    If you specify 'p ' as VARCHAR, 'p' is stored (if n is not specified, the default value 1,073,741,823 is used, and the trailing space is not filled with whitespace characters).
 
 *   **DEFAULT** constraint can be specified in a column of this type.
 
@@ -1436,7 +1436,7 @@ When you get a **LOB** type column, the data stored in a file to which the colum
 
 *   To use the string process function, the strings need to be converted by :func:`CLOB_TO_CHAR` function.
 
-*   You cannot specify a **LOB** column in ** GROUP BY** clause and **ORDER BY** clause.
+*   You cannot specify a **LOB** column in ** GROUP BY** clause and **ORDER BY** clause.
 
 *   Comparison operators, relational operators, **IN**, **NOT IN** operators cannot be used to compare **LOB** columns. However, **IS NULL** expression can be used to compare whether it is a **LOB** column value (Locator) or **NULL**. This means that **TRUE** will be returned when a column value is **NULL**, and if a column value is **NULL**, there is no file to store **LOB** data.
 
@@ -1569,8 +1569,8 @@ To expand or change the **lob-base-path** of the database, change its **lob-base
     # You can change to a new directory from the lob-base-path of databases.txt file.
     % cat $CUBRID_DATABASES/databases.txt
 
-    #db-name         vol-path             db-host         log-path         lob-base-path    
-    image_db         /home1/data1         localhost       /home1/data1     file:/home1/data2
+    #db-name         vol-path             db-host         log-path         lob-base-path    
+    image_db         /home1/data1         localhost       /home1/data1     file:/home1/data2
 
 Backup/recovery for data files of **LOB** type columns are not supported, while those for meta data(Locator) are supported.
 
@@ -1615,10 +1615,10 @@ Commit/Rollback for **LOB** data changes are supported. That is, it ensures the 
 
 .. note:: 
 
-    *   When selecting **LOB** data in an application through a driver such as JDBC, the driver can get **ResultSet** from DB server and fetch the record while changing the cursor location on **Resultset**. That is, only Locator, the meta data of a **LOB** column, is stored at the time when **ResultSet** is imported, and **LOB** data that is referred by a File Locator will be fetched from the file Locator at the time when a record is fetched. Therefore, if **LOB** data is updated between two different points of time, there could be an error, as the mapping of **LOB** Locator and actual **LOB** data will be invalid.
+    *   When selecting **LOB** data in an application through a driver such as JDBC, the driver can get **ResultSet** from DB server and fetch the record while changing the cursor location on **Resultset**. That is, only Locator, the meta data of a **LOB** column, is stored at the time when **ResultSet** is imported, and **LOB** data that is referred by a File Locator will be fetched from the file Locator at the time when a record is fetched. Therefore, if **LOB** data is updated between two different points of time, there could be an error, as the mapping of **LOB** Locator and actual **LOB** data will be invalid.
     *   Since backup/recovery is supported only for meta data (Locator) of the **LOB** type columns, an error is likely to occur, as the mapping of **LOB** Locator and LOB data is invalid if recovery is performed based on a specific point of time.
     *   TO execute **INSERT** the **LOB** data into other device, LOB data referred by the meta data (Locator) of a **LOB** column must be read.
-    *   In a CUBRID HA environment, the meta data (Locator) of a  **LOB** column is replicated and data of a **LOB** type is not replicated. Therefore, if storage of a **LOB** type is located on the local machine, no tasks on the columns in a slave node or a master node after failover are allowed.
+    *   In a CUBRID HA environment, the meta data (Locator) of a  **LOB** column is replicated and data of a **LOB** type is not replicated. Therefore, if storage of a **LOB** type is located on the local machine, no tasks on the columns in a slave node or a master node after failover are allowed.
 
 .. warning::
 
@@ -1634,7 +1634,7 @@ Allowing multiple data values to be stored in a single attribute is an extended 
 +--------------+---------------------------------------+------------------------------------+----------------------------+----------------------------+
 | Type         | Description                           | Definition                         | Input Data                 | Stored Data                |
 +==============+=======================================+====================================+============================+============================+
-| **SET**      | A union which does not allow          | col_name SET VARCHAR(20) or        | {'c','c','c','b','b','a'}  | {'a','b','c'}              |
+| **SET**      | A union which does not allow          | col_name SET VARCHAR(20) or        | {'c','c','c','b','b','a'}  | {'a','b','c'}              |
 |              | duplicates                            | col_name SET (VARCHAR(20))         |                            |                            |
 +--------------+---------------------------------------+------------------------------------+----------------------------+----------------------------+
 | **MULTISET** | A union which allows                  | col_name MULTISET VARCHAR(20) or   | {'c','c','c','b','b','a'}  | {'a','b','b','c','c','c'}  |
@@ -1772,7 +1772,7 @@ An implicit type conversion represents an automatic conversion of a type of expr
 
 **SET**, **MULTISET**, **LIST** and **SEQUENCE** should be converted explicitly.
 
-If you convert the **DATETIME** and the **TIMESTAMP** types to the **DATE** type or the **TIME** type, data loss may occur. If you convert the **DATE** type to the **DATETIME** type or the **TIMESTAMP** type, the time will be set to '12:00:00 AM.'
+If you convert the **DATETIME** and the **TIMESTAMP** types to the **DATE** type or the **TIME** type, data loss may occur. If you convert the **DATE** type to the **DATETIME** type or the **TIMESTAMP** type, the time will be set to '12:00:00 AM.'
 
 If you convert a string type or an exact numeric type to a floating-point numeric type, the value may not be accurate. Because a string type and an exact type use a decimal precision to represent the value, but a floating-point numeric type uses a binary precision.
 
@@ -2183,7 +2183,7 @@ Arithmetic Operation
     ::
     
          ERROR: Cannot coerce '10' to type datetime.    
-     
+     
 *   **Numeric Type & String Type Operands**
 
     If a numeric type and a string type are operands, they will be applied according to the following rules.

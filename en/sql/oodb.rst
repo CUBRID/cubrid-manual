@@ -26,7 +26,7 @@ The following cautions must be observed during inheritance:
 Class Attribute and Method
 ==========================
 
-You can create class attributes to store the aggregate property of all instances in the class. When you define a **CLASS** attribute or method, you must precede the attribute or method name with the keyword **CLASS**. Because a class attribute is associated with the class itself, not with an instances of the class, it has only one value. For example, a class attribute can be used to store the average value determined by a class method or the timestamp when the class was created. A class method is executed in the class object itself. It can be used to calculate the aggregate value for the instances of the class.  
+You can create class attributes to store the aggregate property of all instances in the class. When you define a **CLASS** attribute or method, you must precede the attribute or method name with the keyword **CLASS**. Because a class attribute is associated with the class itself, not with an instances of the class, it has only one value. For example, a class attribute can be used to store the average value determined by a class method or the timestamp when the class was created. A class method is executed in the class object itself. It can be used to calculate the aggregate value for the instances of the class.  
 
 When a sub class inherits a super class, each class has a separate storage space for class attributes, so that two classes may have different values of class attribute. Therefore, the sub class does not change even when the attributes of the super class are changed.
 

@@ -152,7 +152,7 @@ The following example shows incremental backup. Let's example backup levels in d
 
 .. image:: /images/image11.png
 
-*   **Full backup (backup level 0)** : Backup level 0 is a full backup that includes all database pages. 
+*   **Full backup (backup level 0)** : Backup level 0 is a full backup that includes all database pages. 
 
 The level of a backup which is attempted first on the database naturally becomes a 0 level. **DBA** must perform full backups regularly to prepare for restore situations. In the example, full backups were performed on December 31st and January 5th.
 
@@ -215,9 +215,9 @@ During the backup process, if there is not enough space on the disk to store the
 Managing Archive Logs
 ---------------------
 
-You must not delete archive logs by using the file deletion command such as rm or del by yourself; the archive logs should be deleted by system configuration or the **cubrid backupdb** utility. In the following three cases, archive logs can be deleted.
+You must not delete archive logs by using the file deletion command such as rm or del by yourself; the archive logs should be deleted by system configuration or the **cubrid backupdb** utility. In the following three cases, archive logs can be deleted.
 
-*   In an HA environment, configure the **force_remove_log_archives** values to no and archive logs are automatically deleted it by specifying the number of  the **log_max_archives** values (it will be deleted after replication is applied).
+*   In an HA environment, configure the **force_remove_log_archives** values to no and archive logs are automatically deleted it by specifying the number of  the **log_max_archives** values (it will be deleted after replication is applied).
 
 *   In non-HA environment, configure the **force_remove_log_archives** value to yes and archive logs are automatically deleted it by specifying the number of **log_max_archives** values.
 
@@ -305,7 +305,7 @@ The following table shows options available with the **cubrid restoredb** utilit
 
     You can perform restoration by specifying the backup level of the database to 0, 1, or 2. For details on backup levels, see :ref:`Incremental Backup <incremental-backup>` . ::
 
-        cubrid restoredb -l 1 demodb
+        cubrid restoredb -l 1 demodb
 
 .. option:: -p, --partial-recovery
 
@@ -408,7 +408,7 @@ The following procedure shows how to perform backup and restoration described in
 |                 | demodb                                       | *demodb*                                                                                                                      |
 |                 |                                              | online and creates backup files in the specified directory. Overwrites the first incremental backup file created at 10:00.    |
 +-----------------+----------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------+
-| 2008/8/14 15:30 |                                              | A system failure occurs.                                                                                                      |
+| 2008/8/14 15:30 |                                              | A system failure occurs.                                                                                                      |
 +-----------------+----------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------+
 | 2008/8/14 15:40 | cubrid restoredb -l 1 -d 08/14/2008:15:25:00 | Restores                                                                                                                      |
 |                 | demodb                                       | *demodb*                                                                                                                      |
@@ -429,7 +429,7 @@ Suppose that *demodb* is backed up in the /home/cubrid/db/demodb directory on se
 
 #.  Backing up on server A
 
-    Back up *demodb* on server *A*. If a backup has been performed earlier, you can perform an incremental backup for data only that have changed since the last backup. The directory where the backup files are created, if not specified in the **-D** option, is created by default in the location where the log volume is stored. The following is a backup command with recommended options. For details on the options, see :ref:`db-backup` . ::
+    Back up *demodb* on server *A*. If a backup has been performed earlier, you can perform an incremental backup for data only that have changed since the last backup. The directory where the backup files are created, if not specified in the **-D** option, is created by default in the location where the log volume is stored. The following is a backup command with recommended options. For details on the options, see :ref:`db-backup` . ::
 
         cubrid backupdb -z demodb
 

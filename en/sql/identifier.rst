@@ -60,7 +60,7 @@ Illegal Identifiers
 
         col1 t1
 
-**An identifier containing operator special characters **
+**An identifier containing operator special characters **
 
     An identifier which contains operator special characters (+, -, \*, /, %, ||, !, < , > , =, \|, ^, & , ~ ) is not allowed. ::
 

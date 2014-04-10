@@ -7,7 +7,7 @@ Concatenation Operator
 
 A concatenation operator gets a character string or bit string data type as an operand and returns a concatenated string. The plus sign (+) and double pipe symbol (||) are provided as concatenation operators for character string data. If **NULL** is specified as an operand, a **NULL** value is returned.
 
-If **pipes_as_concat** that is a parameter related to SQL statement is set to **no** (default value: yes), a double pipe (||) symbol is interpreted as an **OR** operator. If plus_as_concat is set to no (default value: yes), a plus (+) symbol is interpreted as a plus (+) operator. In such case, It is recommended to concatenate strings or bit strings, by using the **CONCAT** function. ::
+If **pipes_as_concat** that is a parameter related to SQL statement is set to **no** (default value: yes), a double pipe (||) symbol is interpreted as an **OR** operator. If plus_as_concat is set to no (default value: yes), a plus (+) symbol is interpreted as a plus (+) operator. In such case, It is recommended to concatenate strings or bit strings, by using the **CONCAT** function. ::
 
     <concat_operand1> +  <concat_operand1>
     <concat_operand2> || <concat_operand2>
@@ -404,7 +404,7 @@ ELT
 
     If *N* is 1, the **ELT** function returns *string1* and if *N* is 2, it returns *string2*. The return value is a **VARCHAR** type. You can add conditional expressions as needed.
 
-    The maximum byte length of the character string is 33,554,432 and if this length is exceeded, **NULL** will be returned.
+    The maximum byte length of the character string is 33,554,432 and if this length is exceeded, **NULL** will be returned.
 
     If *N* is 0 or a negative number, an empty string will be returned. If *N* is greater than the number of this input character string, **NULL** will be returned as it is out of range. If *N* is a type that cannot be converted to an integer, an error will be returned.
 
@@ -584,7 +584,7 @@ INSERT
 
 .. function:: INSERT ( str, pos, len, string )
 
-    The **INSERT** function inserts a partial character string as long as the length from the specific location of the input character string. The return value is a **VARCHAR** type. The maximum length of the character string is 33,554,432 and if this length is exceeded, **NULL** will be returned.
+    The **INSERT** function inserts a partial character string as long as the length from the specific location of the input character string. The return value is a **VARCHAR** type. The maximum length of the character string is 33,554,432 and if this length is exceeded, **NULL** will be returned.
 
     :param str: Input character string
     :param pos: *str* location. Starts from 1. If *pos* is smaller than 1 or greater than the length of *string* + 1, the *string* will not be inserted and the *str* will be returned instead.
@@ -1080,7 +1080,7 @@ OCTET_LENGTH
 
 .. function:: OCTET_LENGTH ( string )
 
-    The **OCTET_LENGTH** function returns the length (byte) of a character string or bit string as an integer. Therefore, it returns 1 (byte) if the length of the bit string is 8 bits, but 2 (bytes) if the length is 9 bits.
+    The **OCTET_LENGTH** function returns the length (byte) of a character string or bit string as an integer. Therefore, it returns 1 (byte) if the length of the bit string is 8 bits, but 2 (bytes) if the length is 9 bits.
 
     :param string: Specifies the character or bit string whose length is to be returned in bytes. If the value is **NULL**, **NULL** is returned.
     :rtype: INT
@@ -1161,7 +1161,7 @@ POSITION
     
         The location is returned in the unit of byte, not the character, in version lower than CUBRID 9.0. The multi-byte charset uses different numbers of bytes to express one character, so the result value may differ.
 
-    :param substring: Specifies the character string whose position is to be returned. If the value is an empty character, 1 is returned. If the value is **NULL**, **NULL** is returned.
+    :param substring: Specifies the character string whose position is to be returned. If the value is an empty character, 1 is returned. If the value is **NULL**, **NULL** is returned.
     :rtype: INT
 
 .. code-block:: sql

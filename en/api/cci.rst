@@ -473,7 +473,7 @@ General process for writing applications is as follows. For using the prepared s
 Configuring Library
 -------------------
 
-Once you have written applications using CCI, you should decide, according to its features, whether to execute CCI as static or dynamic link before you build it. See the table in :ref:`cci-overview` to decide which library will be used.
+Once you have written applications using CCI, you should decide, according to its features, whether to execute CCI as static or dynamic link before you build it. See the table in :ref:`cci-overview` to decide which library will be used.
 
 The following is an example of Makefile, which makes a link by using the dynamic library on UNIX/Linux. ::
 
@@ -657,8 +657,8 @@ The database error buffer (err_buf) is a struct variable of T_CCI_ERROR defined 
 
 CCI error codes which starting with **CCI_ER** are defined in enum called **T_CCI_ERROR_CODE** under the **$CUBRID/include/cas_cci.h** file. Therefore, to use this error code name in program code, you should include a header file in the upper side of code by entering **#include "cas_cci.h"**.
 
-The following example shows how to display error messages. In the example, the error code value (req) returned by :c:func:`cci_prepare` is **CCI_ER_DBMS**. -493 (server error code) is stored in **cci_error.err_code**
-and the error message, 'Syntax: Unknown class "notable". select * from notable' is stored in **cci_error.err_msg** of the database error buffer.
+The following example shows how to display error messages. In the example, the error code value (req) returned by :c:func:`cci_prepare` is **CCI_ER_DBMS**. -493 (server error code) is stored in **cci_error.err_code**
+and the error message, 'Syntax: Unknown class "notable". select * from notable' is stored in **cci_error.err_msg** of the database error buffer.
 
 .. code-block:: c
 
@@ -708,25 +708,25 @@ The following list shows CCI error codes. For CAS errors, see :ref:`cas-error`.
 | Error Code                               | Error Message                                                 | Note                                                                                                    |
 +==========================================+===============================================================+=========================================================================================================+
 | CCI_ER_DBMS                              | CUBRID DBMS Error                                             | Error codes returned by functions when an error occurs in server.                                       |
-|                                          |                                                               | The causes of the error can be checked with err_code and err_msg stored in the T_CCI_ERROR struct.      |
+|                                          |                                                               | The causes of the error can be checked with err_code and err_msg stored in the T_CCI_ERROR struct.      |
 +------------------------------------------+---------------------------------------------------------------+---------------------------------------------------------------------------------------------------------+
-| CCI_ER_CON_HANDLE                        | Invalid connection handle                                     |                                                                                                         |
+| CCI_ER_CON_HANDLE                        | Invalid connection handle                                     |                                                                                                         |
 +------------------------------------------+---------------------------------------------------------------+---------------------------------------------------------------------------------------------------------+
 | CCI_ER_NO_MORE_MEMORY                    | Memory allocation error                                       | Insufficient memory                                                                                     |
 +------------------------------------------+---------------------------------------------------------------+---------------------------------------------------------------------------------------------------------+
-| CCI_ER_COMMUNICATION                     | Cannot communicate with server                                |                                                                                                         |
+| CCI_ER_COMMUNICATION                     | Cannot communicate with server                                |                                                                                                         |
 +------------------------------------------+---------------------------------------------------------------+---------------------------------------------------------------------------------------------------------+
-| CCI_ER_NO_MORE_DATA                      | Invalid cursor position                                       |                                                                                                         |
+| CCI_ER_NO_MORE_DATA                      | Invalid cursor position                                       |                                                                                                         |
 +------------------------------------------+---------------------------------------------------------------+---------------------------------------------------------------------------------------------------------+
-| CCI_ER_TRAN_TYPE                         | Unknown transaction type                                      |                                                                                                         |
+| CCI_ER_TRAN_TYPE                         | Unknown transaction type                                      |                                                                                                         |
 +------------------------------------------+---------------------------------------------------------------+---------------------------------------------------------------------------------------------------------+
-| CCI_ER_STRING_PARAM                      | Invalid string argument                                       | An error occurred when sql_stmt is NULL in :c:func:`cci_prepare`, and :c:func:`cci_prepare_and_execute` |
+| CCI_ER_STRING_PARAM                      | Invalid string argument                                       | An error occurred when sql_stmt is NULL in :c:func:`cci_prepare`, and :c:func:`cci_prepare_and_execute` |
 +------------------------------------------+---------------------------------------------------------------+---------------------------------------------------------------------------------------------------------+
 | CCI_ER_TYPE_CONVERSION                   | Type conversion error                                         | Cannot convert the given value into an actual data type.                                                |
 +------------------------------------------+---------------------------------------------------------------+---------------------------------------------------------------------------------------------------------+
 | CCI_ER_BIND_INDEX                        | Parameter index is out of range                               | Index that binds data is not valid.                                                                     |
 +------------------------------------------+---------------------------------------------------------------+---------------------------------------------------------------------------------------------------------+
-| CCI_ER_ATYPE                             | Invalid T_CCI_A_TYPE value                                    |                                                                                                         |
+| CCI_ER_ATYPE                             | Invalid T_CCI_A_TYPE value                                    |                                                                                                         |
 +------------------------------------------+---------------------------------------------------------------+---------------------------------------------------------------------------------------------------------+
 | CCI_ER_NOT_BIND                          |                                                               | Not available                                                                                           |
 +------------------------------------------+---------------------------------------------------------------+---------------------------------------------------------------------------------------------------------+
@@ -754,9 +754,9 @@ The following list shows CCI error codes. For CAS errors, see :ref:`cas-error`.
 +------------------------------------------+---------------------------------------------------------------+---------------------------------------------------------------------------------------------------------+
 | CCI_ER_OID_CMD                           | Invalid T_CCI_OID_CMD value                                   |                                                                                                         |
 +------------------------------------------+---------------------------------------------------------------+---------------------------------------------------------------------------------------------------------+
-| CCI_ER_BIND_ARRAY_SIZE                   | Array binding size is not specified                           |                                                                                                         |
+| CCI_ER_BIND_ARRAY_SIZE                   | Array binding size is not specified                           |                                                                                                         |
 +------------------------------------------+---------------------------------------------------------------+---------------------------------------------------------------------------------------------------------+
-| CCI_ER_ISOLATION_LEVEL                   | Unknown transaction isolation level                           |                                                                                                         |
+| CCI_ER_ISOLATION_LEVEL                   | Unknown transaction isolation level                           |                                                                                                         |
 +------------------------------------------+---------------------------------------------------------------+---------------------------------------------------------------------------------------------------------+
 | CCI_ER_SET_INDEX                         | Invalid set index                                             | Invalid index is specified when a set element in the T_CCI_SET struct is retrieved.                     |
 +------------------------------------------+---------------------------------------------------------------+---------------------------------------------------------------------------------------------------------+
@@ -766,29 +766,29 @@ The following list shows CCI error codes. For CAS errors, see :ref:`cas-error`.
 +------------------------------------------+---------------------------------------------------------------+---------------------------------------------------------------------------------------------------------+
 | CCI_ER_INVALID_URL                       | Invalid url string                                            |                                                                                                         |
 +------------------------------------------+---------------------------------------------------------------+---------------------------------------------------------------------------------------------------------+
-| CCI_ER_INVALID_LOB_READ_POS              | Invalid lob read position                                     |                                                                                                         |
+| CCI_ER_INVALID_LOB_READ_POS              | Invalid lob read position                                     |                                                                                                         |
 +------------------------------------------+---------------------------------------------------------------+---------------------------------------------------------------------------------------------------------+
-| CCI_ER_INVALID_LOB_HANDLE                | Invalid lob handle                                            |                                                                                                         |
+| CCI_ER_INVALID_LOB_HANDLE                | Invalid lob handle                                            |                                                                                                         |
 +------------------------------------------+---------------------------------------------------------------+---------------------------------------------------------------------------------------------------------+
-| CCI_ER_NO_PROPERTY                       | Could not find a property                                     |                                                                                                         |
+| CCI_ER_NO_PROPERTY                       | Could not find a property                                     |                                                                                                         |
 +------------------------------------------+---------------------------------------------------------------+---------------------------------------------------------------------------------------------------------+
-| CCI_ER_PROPERTY_TYPE                     | Invalid property type                                         |                                                                                                         |
+| CCI_ER_PROPERTY_TYPE                     | Invalid property type                                         |                                                                                                         |
 +------------------------------------------+---------------------------------------------------------------+---------------------------------------------------------------------------------------------------------+
-| CCI_ER_INVALID_DATASOURCE                | Invalid CCI datasource                                        |                                                                                                         |
+| CCI_ER_INVALID_DATASOURCE                | Invalid CCI datasource                                        |                                                                                                         |
 +------------------------------------------+---------------------------------------------------------------+---------------------------------------------------------------------------------------------------------+
-| CCI_ER_DATASOURCE_TIMEOUT                | All connections are used                                      |                                                                                                         |
+| CCI_ER_DATASOURCE_TIMEOUT                | All connections are used                                      |                                                                                                         |
 +------------------------------------------+---------------------------------------------------------------+---------------------------------------------------------------------------------------------------------+
-| CCI_ER_DATASOURCE_TIMEDWAIT              | pthread_cond_timedwait error                                  |                                                                                                         |
+| CCI_ER_DATASOURCE_TIMEDWAIT              | pthread_cond_timedwait error                                  |                                                                                                         |
 +------------------------------------------+---------------------------------------------------------------+---------------------------------------------------------------------------------------------------------+
-| CCI_ER_LOGIN_TIMEOUT                     | Connection timed out                                          |                                                                                                         |
+| CCI_ER_LOGIN_TIMEOUT                     | Connection timed out                                          |                                                                                                         |
 +------------------------------------------+---------------------------------------------------------------+---------------------------------------------------------------------------------------------------------+
-| CCI_ER_QUERY_TIMEOUT                     | Request timed out                                             |                                                                                                         |
+| CCI_ER_QUERY_TIMEOUT                     | Request timed out                                             |                                                                                                         |
 +------------------------------------------+---------------------------------------------------------------+---------------------------------------------------------------------------------------------------------+
-| CCI_ER_RESULT_SET_CLOSED                 |                                                               |                                                                                                         |
+| CCI_ER_RESULT_SET_CLOSED                 |                                                               |                                                                                                         |
 +------------------------------------------+---------------------------------------------------------------+---------------------------------------------------------------------------------------------------------+
-| CCI_ER_INVALID_HOLDABILITY               | Invalid holdability mode. The only accepted values are 0 or 1 |                                                                                                         |
+| CCI_ER_INVALID_HOLDABILITY               | Invalid holdability mode. The only accepted values are 0 or 1 |                                                                                                         |
 +------------------------------------------+---------------------------------------------------------------+---------------------------------------------------------------------------------------------------------+
-| CCI_ER_NOT_UPDATABLE                     | Request handle is not updatable                               |                                                                                                         |
+| CCI_ER_NOT_UPDATABLE                     | Request handle is not updatable                               |                                                                                                         |
 +------------------------------------------+---------------------------------------------------------------+---------------------------------------------------------------------------------------------------------+
 | CCI_ER_INVALID_ARGS                      | Invalid argument                                              |                                                                                                         |
 +------------------------------------------+---------------------------------------------------------------+---------------------------------------------------------------------------------------------------------+
@@ -797,7 +797,7 @@ The following list shows CCI error codes. For CAS errors, see :ref:`cas-error`.
 
 **C Type Definition**
 
- The following shows the structs used in CCI API functions.
+ The following shows the structs used in CCI API functions.
 
 +--------------------------+----------+-----------------------------------------+--------------------------------------------------+
 | Name                     | Type     | Member                                  | Description                                      |
@@ -824,7 +824,7 @@ The following list shows CCI error codes. For CAS errors, see :ref:`cas-error`.
 |                          |          +-----------------------------------------+                                                  |
 |                          |          | short ms                                |                                                  |
 +--------------------------+----------+-----------------------------------------+--------------------------------------------------+
-| **T_CCI_SET**            | void*    |                                         | Representation of set type                       |
+| **T_CCI_SET**            | void*    |                                         | Representation of set type                       |
 +--------------------------+----------+-----------------------------------------+--------------------------------------------------+
 | **T_CCI_COL_INFO**       | struct   | **T_CCI_U_TYPE**                        | Representation of column information for the     |
 |                          |          | type                                    | **SELECT**                                       |
@@ -972,7 +972,7 @@ The following list shows CCI error codes. For CAS errors, see :ref:`cas-error`.
 |                          |          +-----------------------------------------+                                                  |
 |                          |          | **CCI_SCH_CROSS_REFERENCE**             |                                                  |
 +--------------------------+----------+-----------------------------------------+--------------------------------------------------+
-| **T_CCI_CUBRID_STMT**    | enum     | **CUBRID_STMT_ALTER_CLASS**             |                                                  |
+| **T_CCI_CUBRID_STMT**    | enum     | **CUBRID_STMT_ALTER_CLASS**             |                                                  |
 |                          |          +-----------------------------------------+                                                  |
 |                          |          | **CUBRID_STMT_ALTER_SERIAL**            |                                                  |
 |                          |          +-----------------------------------------+                                                  |
@@ -1068,7 +1068,7 @@ The following list shows CCI error codes. For CAS errors, see :ref:`cas-error`.
 |                          |          +-----------------------------------------+                                                  |
 |                          |          | **CCI_CURSOR_LAST**                     |                                                  |
 +--------------------------+----------+-----------------------------------------+--------------------------------------------------+
-| **T_CCI_TRAN_ISOLATION** | enum     | **TRAN_COMMIT_CLASS_UNCOMMIT_INSTANCE** |                                                  |
+| **T_CCI_TRAN_ISOLATION** | enum     | **TRAN_COMMIT_CLASS_UNCOMMIT_INSTANCE** |                                                  |
 |                          |          +-----------------------------------------+                                                  |
 |                          |          | **TRAN_COMMIT_CLASS_COMMIT_INSTANCE**   |                                                  |
 |                          |          +-----------------------------------------+                                                  |
@@ -1142,7 +1142,7 @@ Make sure that the *demodb* database and the broker are running before you execu
 
 **Building**
 
-With the program source and the Makefile prepared, executing **make** will create an executable file named *test*. If you use a static library, there is no need to deploy additional files and the execution will be faster. However, it increases the program size and memory usage. If you use a dynamic library, there will be some performance overhead but the program size and memory usage can be optimized.
+With the program source and the Makefile prepared, executing **make** will create an executable file named *test*. If you use a static library, there is no need to deploy additional files and the execution will be faster. However, it increases the program size and memory usage. If you use a dynamic library, there will be some performance overhead but the program size and memory usage can be optimized.
 
 The code below a command line that makes a test program build by using a dynamic library instead of using **make** on Linux. ::
 

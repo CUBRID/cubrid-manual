@@ -231,7 +231,7 @@ CUBRID uses following directories and files to set the locales.
 
 *   **$CUBRID/locales/data/unicodedata.txt** file: Text file containing information about each Unicode codepoint regarding casing, decomposition, normalization etc. CUBRID uses this to determine casing. For more information, see  http://www.ksu.ru/eng/departments/ktk/test/perl/lib/unicode/UCDFF301.html .
 
-*   **$CUBRID/locales/data/ldml** directory: common_collations.xml and XML files, name with the convention cubrid_<*locale_name*>.xml. common_collations.xml file contains shared collation information in all locale files, and each cubrid_<*locale_name*>.xml file contains a locale information for the supported language.
+*   **$CUBRID/locales/data/ldml** directory: common_collations.xml and XML files, name with the convention cubrid_<*locale_name*>.xml. common_collations.xml file contains shared collation information in all locale files, and each cubrid_<*locale_name*>.xml file contains a locale information for the supported language.
 
 *   **$CUBRID/locales/data/codepages** directory: contains codepage console conversion for single byte codepages(8859-1.txt , 8859-15.txt, 8859-9.txt) and codepage console conversion for double byte codepages(CP1258.txt , CP923.txt, CP936.txt , CP949.txt).
 
@@ -338,7 +338,7 @@ Usage can be displayed by running **make_locale.sh -h** (**make_locale /h** in W
 *   *options*
 
     *   **-t**: Selects 32bit or 64bit (default value: **32**).
-    *   **-m**: Selects release or debug. In general, release is selected (default value: release). The debug mode is provided for developers who would like to write the locale library themselves. Selects release or debug. In general, release is selected (default value: release). The debug mode is provided for developers who would like to write the locale library themselves.  
+    *   **-m**: Selects release or debug. In general, release is selected (default value: release). The debug mode is provided for developers who would like to write the locale library themselves. Selects release or debug. In general, release is selected (default value: release). The debug mode is provided for developers who would like to write the locale library themselves.  
 
 *   *locale*: The locale name of the library to build. If *locale* is not specified, the build includes data from all configured locales. In this case, library file is stored in **$CUBRID/lib** directory with the name of **libcubrid_all_locales.so** (**.dll** for Windows).
 
@@ -367,7 +367,7 @@ The first choice is recommended. In this scenario, some data may be shared among
 
     The processing in **make_locale.sh(.bat)** script
 
-    #.   Reads the **.ldml** file corresponding to a language, along with some other installed common data files like **$CUBRID/locales/data/ducet.txt**, **$CUBRID/locales/data/unicodedata.txt**, and  **$CUBRID/locales/data/codepages/*.txt**
+    #.   Reads the **.ldml** file corresponding to a language, along with some other installed common data files like **$CUBRID/locales/data/ducet.txt**, **$CUBRID/locales/data/unicodedata.txt**, and  **$CUBRID/locales/data/codepages/*.txt**
     #.   After processing of raw data, it writes in a temporary **$CUBRID/locales/loclib/locale.c** file C constants values and arrays consisting of locales data.
     #.   The temporary file **locale.c** is passed to the platform compiler to build a **.dll/.so** file. This step assumes that the machines has an installed C/C++ compiler and linker. Currently, only the MS Visual Studio for Windows and gcc for Linux compilers are supported.
     #.   Temporary files are removed.
@@ -491,7 +491,7 @@ Once the database is created a locale setting which was given to the database ca
 Step 5 (optional): Manually Verifying the Locale File
 -----------------------------------------------------
 
-The contents of locales libraries  may be displayed in human readable form using the **dumplocale** CUBRID utility.
+The contents of locales libraries  may be displayed in human readable form using the **dumplocale** CUBRID utility.
 Execute **cubrid dumplocale -h** to output the usage. The used syntax is as follows.
 
 ::
@@ -725,7 +725,7 @@ If the result of an expression is a character data type, gets the collation and 
 
 .. note:: \
 
-    In CUBRID, collations are supported for a number of languages, including European and Asian. In addition to the different alphabets, some of these languages may require the definition of expansions or contractions for some characters or character groups. Most of these aspects have been put together by the Unicode Consortium into The Unicode Standard (up to version 6.1.0 in 2012). Most of the information is stored in the DUCET file `http://www.unicode.org/Public/UCA/latest/allkeys.txt <http://www.unicode.org/Public/UCA/latest/allkeys.txt>`_ which contains all characters required by most languages.
+    In CUBRID, collations are supported for a number of languages, including European and Asian. In addition to the different alphabets, some of these languages may require the definition of expansions or contractions for some characters or character groups. Most of these aspects have been put together by the Unicode Consortium into The Unicode Standard (up to version 6.1.0 in 2012). Most of the information is stored in the DUCET file `http://www.unicode.org/Public/UCA/latest/allkeys.txt <http://www.unicode.org/Public/UCA/latest/allkeys.txt>`_ which contains all characters required by most languages.
 
     Most of the codepoints represented in DUCET, are in range 0 - FFFF, but codepoints beyond this range are included. However, CUBRID will ignore the latest ones, and use only the codepoints in range 0 - FFFF (or a lower value, if configured).
 
@@ -733,11 +733,11 @@ If the result of an expression is a character data type, gets the collation and 
 
     In DUCET, a character is represented on a single line, in the form: ::
 
-        < codepoint_or_multiple_codepoints >   ; [.W1.W2.W3.W4][....].... # < readable text explanation of the symbol/character >
+        < codepoint_or_multiple_codepoints >   ; [.W1.W2.W3.W4][....].... # < readable text explanation of the symbol/character >
 
     A Korean character kiyeok is represented as follows: ::
 
-        1100  ; [.313B.0020.0002.1100] # HANGUL CHOSEONG KIYEOK
+        1100  ; [.313B.0020.0002.1100] # HANGUL CHOSEONG KIYEOK
 
     For example, 1100 is a codepoint, [.313B.0020.0002.1100] is one collation element, 313B is the weight of Level 1, 0020 is the weight of Level 2, 0002 is the weight of Level 3, and 1100 is the weight of Level 4.
 
@@ -775,9 +775,9 @@ Charset Conversion
 
 When **collation** / **charset** modifiers or normal collation inference requires it, character conversion may occur. Conversions are not reversible. Generally, charset conversion is character transcoding (the bytes representing a character in one charset are replaced with other bytes representing the same character but in the destination charset).
 
-However, in CUBRID, to keep backward compatibility, there is one exception: conversion from UTF-8 or EUC-KR to ISO-8859-1 charset is a simple data stream re-interpretations (this is a trade-off since most Unicode characters do not have ISO-8859-1 correspondents, and transcoding would cause many losses). ASCII characters are not affected by conversions: bytes in range 00-7F are encodings of the same characters in both ISO-8859-1  and UTF-8 character sets.
+However, in CUBRID, to keep backward compatibility, there is one exception: conversion from UTF-8 or EUC-KR to ISO-8859-1 charset is a simple data stream re-interpretations (this is a trade-off since most Unicode characters do not have ISO-8859-1 correspondents, and transcoding would cause many losses). ASCII characters are not affected by conversions: bytes in range 00-7F are encodings of the same characters in both ISO-8859-1  and UTF-8 character sets.
  
-With any conversion, losses may occur. The most complete charset is UTF-8 (and since it encodes Unicode, one expects that all character can be encoded). However, during conversion from ISO-8859-1 to UTF-8 some "losses" occur: bytes  range 80-A0 are not valid ISO-8859-1 characters but may appear in strings. After conversion to UTF-8 this characters are replaced with '?'.
+With any conversion, losses may occur. The most complete charset is UTF-8 (and since it encodes Unicode, one expects that all character can be encoded). However, during conversion from ISO-8859-1 to UTF-8 some "losses" occur: bytes  range 80-A0 are not valid ISO-8859-1 characters but may appear in strings. After conversion to UTF-8 this characters are replaced with '?'.
 
 Rules for conversion of values from one charset to another:
 
@@ -1383,7 +1383,7 @@ Expansions refer to codepoints which have more than one collation element. Enabl
 
 **Collation without Expansion**
 
-    In a collation without expansions, each codepoint is treated independently. Based on the strength of the collation, the alphabet may or may not be fully sorted. A collation algorithm will sort the codepoints by comparing the weights in a set of levels, and then will generate a single value, representing the weight of the codepoint. String comparison will be rather straight-forward. Comparing two strings in an expansion-free collation means comparing codepoint by codepoint using the computed weight  values.
+    In a collation without expansions, each codepoint is treated independently. Based on the strength of the collation, the alphabet may or may not be fully sorted. A collation algorithm will sort the codepoints by comparing the weights in a set of levels, and then will generate a single value, representing the weight of the codepoint. String comparison will be rather straight-forward. Comparing two strings in an expansion-free collation means comparing codepoint by codepoint using the computed weight  values.
 
 **Collation with Expansion**
 

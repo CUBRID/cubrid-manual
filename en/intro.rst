@@ -103,7 +103,7 @@ To get more information on the above, see :ref:`managing-archive-logs`.
 
 **Background Archive Log**
 
-Background archive log is a volume used in the background with log archiving temporarily before creating archive logs. It is created as the same volume size as active log and stored.
+Background archive log is a volume used in the background with log archiving temporarily before creating archive logs. It is created as the same volume size as active log and stored.
 
 Temporary Volume
 ^^^^^^^^^^^^^^^^
@@ -267,5 +267,5 @@ For the relational data model, it is not allowed that a single column has multip
 
 **Inheritance**
 
-Inheritance is a concept to reuse columns and methods of a super class (table) in those of a sub class. CUBRID supports reusability through inheritance. By using inheritance provided by CUBRID, you can create a super class with some common columns and then create a sub class inherited from the super class with some unique columns added. In this way, you can create a database model which can minimize the number of columns.
+Inheritance is a concept to reuse columns and methods of a super class (table) in those of a sub class. CUBRID supports reusability through inheritance. By using inheritance provided by CUBRID, you can create a super class with some common columns and then create a sub class inherited from the super class with some unique columns added. In this way, you can create a database model which can minimize the number of columns.
 

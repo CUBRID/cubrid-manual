@@ -84,7 +84,7 @@ All numeric data types can be used for arithmetic operations. The result type of
 |              |              | p                   |              |              |
 |              |              | and                 |              |              |
 |              |              | s                   |              |              |
-|              |              | are also converted) |              |              |
+|              |              | are also converted) |              |              |
 +--------------+--------------+---------------------+--------------+--------------+
 | **FLOAT**    |   FLOAT      |   DOUBLE            |   FLOAT      |   DOUBLE     |
 +--------------+--------------+---------------------+--------------+--------------+
@@ -93,7 +93,7 @@ All numeric data types can be used for arithmetic operations. The result type of
 
 Note that the result type of the operation does not change if all operands are of the same data type but type casting occurs exceptionally in division operations. An error occurs when a denominator, i.e. a divisor, is 0.
 
-The following table shows the total number of digits (*p*) and the number of digits after the decimal point (*s*) of the operation results when all operands are of the **NUMERIC** type. 
+The following table shows the total number of digits (*p*) and the number of digits after the decimal point (*s*) of the operation results when all operands are of the **NUMERIC** type. 
 
 **Result of NUMERIC Type Operation**
 
@@ -289,13 +289,13 @@ The following table shows operations allowed for each operand type, and their re
 | **DATETIME**  | X                                          | A subtraction is allowed.                  | A subtraction is allowed.                  | A subtraction is allowed.                  | An addition and a subtraction are allowed. |
 |               |                                            | **BIGINT**                                 | **BIGINT**                                 | **BIGINT**                                 | **DATETIME**                               |
 +---------------+--------------------------------------------+--------------------------------------------+--------------------------------------------+--------------------------------------------+--------------------------------------------+
-| **INT**       | An addition and a subtraction are allowed. | An addition and a subtraction are allowed. | An addition and a subtraction are allowed. | An addition and a subtraction are allowed. | All operations are allowed.                |
+| **INT**       | An addition and a subtraction are allowed. | An addition and a subtraction are allowed. | An addition and a subtraction are allowed. | An addition and a subtraction are allowed. | All operations are allowed.                |
 |               | **TIME**                                   | **DATE**                                   | **TIMESTAMP**                              | **DATETIME**                               |                                            |
 +---------------+--------------------------------------------+--------------------------------------------+--------------------------------------------+--------------------------------------------+--------------------------------------------+
 
 .. note:: 
 
-    If any of the date/time arguments contains **NULL**,  **NULL** is returned.
+    If any of the date/time arguments contains **NULL**,  **NULL** is returned.
 
 **Example**
 

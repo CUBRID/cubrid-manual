@@ -140,7 +140,7 @@ Delete records from a database as follows:
 
 **Working with Associations**
 
-One method to add cities to a country would be to select the *Country* and assign the country code to a new  *City* object.
+One method to add cities to a country would be to select the *Country* and assign the country code to a new  *City* object.
 
 .. code-block:: ruby
 
@@ -207,7 +207,7 @@ CUBRID-supported column types are **:string**, **:text**, **:integer**, **:float
 
 **Managing table columns**
 
-You can add, update, delete columns by using features from **ActiveRecord::Migration**.
+You can add, update, delete columns by using features from **ActiveRecord::Migration**.
 
 .. code-block:: ruby
 

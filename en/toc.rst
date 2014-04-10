@@ -15,7 +15,7 @@ The contents of the CUBRID Database Management System (CUBRID DBMS) product manu
 
 *   :doc:`sql/index`: This chapter describes SQL syntaxes such as data types, functions and operators, data retrieval or table manipulation. The chapter also provides SQL syntaxes used for indexes, triggers, partitioning, serial and user information changes, etc.
 
-*   :doc:`admin/index`: This chapter provides instructions on how to create, drop, back up, restore and migrate a database, configuring globalization, and executing CUBRID HA and CUBRID SHARD. Also it includes instructions on how to use the  **cubrid** utility, which starts and stops the server, broker, and CUBRID Manager server, etc. Also, this chapter provides instructions on setting system parameters that may influence the performance. It provides information on how to use the configuration file for the server and broker, and describes the meaning of each parameter.
+*   :doc:`admin/index`: This chapter provides instructions on how to create, drop, back up, restore and migrate a database, configuring globalization, and executing CUBRID HA and CUBRID SHARD. Also it includes instructions on how to use the  **cubrid** utility, which starts and stops the server, broker, and CUBRID Manager server, etc. Also, this chapter provides instructions on setting system parameters that may influence the performance. It provides information on how to use the configuration file for the server and broker, and describes the meaning of each parameter.
 
 *   :doc:`api/index`: The "Performance Tuning" chapter provides instructions on setting system parameters that may influence the performance. This chapter provides information on how to use the configuration file for the server and broker, and describes the meaning of each parameter.
 
@@ -31,9 +31,9 @@ CUBRID is an object-relational database management system (ORDBMS), which suppor
 +=========================+===================+
 | table                   | class, table      |
 +-------------------------+-------------------+
-| column                  | attribute, column |
+| column                  | attribute, column |
 +-------------------------+-------------------+
-| record                  | instance, record  |
+| record                  | instance, record  |
 +-------------------------+-------------------+
 | data type               | domain, data type |
 +-------------------------+-------------------+
@@ -52,7 +52,7 @@ The following table provides conventions on definitions used in the CUBRID Datab
 |                                      |                                                                                                                                                         | *stringVariableName* |
 +--------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+
 | **Boldface**                         | **Boldface**                                                                                                                                            | **fetch**            |
-|                                      | type represents names such as the member function name, class name, constants, CUBRID keyword or names such as other required characters.               | ( ) member function  |
+|                                      | type represents names such as the member function name, class name, constants, CUBRID keyword or names such as other required characters.               | ( ) member function  |
 +--------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+
 | Constant Width                       | Constant Width type represents segments of code example or describes a command's execution and results.                                                 | csql database_name   |
 +--------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+
@@ -62,11 +62,11 @@ The following table provides conventions on definitions used in the CUBRID Datab
 |                                      |                                                                                                                                                         | *const_list*         |
 |                                      |                                                                                                                                                         | '}'}                 |
 +--------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+
-| Brackets ([ ])                       | Brackets ([ ]) represents optional parameters or keywords.                                                                                              | [                    |
+| Brackets ([ ])                       | Brackets ([ ]) represents optional parameters or keywords.                                                                                              | [                    |
 |                                      |                                                                                                                                                         | **ONLY**             |
 |                                      |                                                                                                                                                         | ]                    |
 +--------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+
-| Vertical bar ( | )                   | Vertical bar (|) represents that one or another option can be specified.                                                                                | [                    |
+| Vertical bar ( | )                   | Vertical bar (|) represents that one or another option can be specified.                                                                                | [                    |
 |                                      |                                                                                                                                                         | **COLUMN**           |
 |                                      |                                                                                                                                                         | |                    |
 |                                      |                                                                                                                                                         | **ATTRIBUTE**        |

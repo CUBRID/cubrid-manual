@@ -58,7 +58,7 @@ The **SELECT** statement specifies columns that you want to retrieve from a tabl
 *   *qualifier*: A qualifier. When omitted, it is set to **ALL**.
 
     *   **ALL**: Retrieves all records of the table.
-    *   **DISTINCT**: Retrieves only records with unique values without allowing duplicates. **DISTINCT**, **DISTINCTROW**, and **UNIQUE** are used interchangeably.
+    *   **DISTINCT**: Retrieves only records with unique values without allowing duplicates. **DISTINCT**, **DISTINCTROW**, and **UNIQUE** are used interchangeably.
 
 *   <*select_expressions*>:
 
@@ -213,7 +213,7 @@ Each instance in the derived table is created from the result of the subquery in
 *   The number of *column_name* and the number of columns created by the *subquery* must be identical.
 *   *derived_table_name* can be omitted.
 
-The following example shows how to retrieve the sum of the number of gold (*gold*) medals won by Korea and that of silver medals won by Japan. This example shows a way of getting an intermediate result of the subquery and processing it as a single result, by using a derived table. The query returns the sum of the *gold* values whose *nation_code* is 'KOR' and the *silver* values whose *nation_code* column is 'JPN'.
+The following example shows how to retrieve the sum of the number of gold (*gold*) medals won by Korea and that of silver medals won by Japan. This example shows a way of getting an intermediate result of the subquery and processing it as a single result, by using a derived table. The query returns the sum of the *gold* values whose *nation_code* is 'KOR' and the *silver* values whose *nation_code* column is 'JPN'.
 
 .. code-block:: sql
 
@@ -312,7 +312,7 @@ By SQL standard, you cannot specify a column (hidden column) not defined in the 
 
 *   [**ASC** | **DESC**]: Specifies the **ASC** or **DESC** sorting option after the columns specified in the **GROUP BY** clause. If the sorting option is not specified, the default value is **ASC**.
 
-*   <*search_condition*>: Specifies the search condition in the **HAVING** clause. In the **HAVING** clause you can refer to the hidden columns not specified in the **GROUP BY** clause as well as to columns and aliases specified in the **GROUP BY** clause and columns used in aggregate functions.
+*   <*search_condition*>: Specifies the search condition in the **HAVING** clause. In the **HAVING** clause you can refer to the hidden columns not specified in the **GROUP BY** clause as well as to columns and aliases specified in the **GROUP BY** clause and columns used in aggregate functions.
 
 *   **WITH ROLLUP**: If you specify the **WITH ROLLUP** modifier in the **GROUP BY** clause, the aggregate information of the result value of each GROUPed BY column is displayed for each group, and the total of all result rows is displayed at the last row. When a **WITH ROLLUP** modifier is defined in the **GROUP BY** clause, the result value for all rows of the group is additionally displayed. In other words, total aggregation is made for the value aggregated by group. When there are two columns for Group By, the former is considered as a large unit and the latter is considered as a small unit, so the total aggregation row for the small unit and the total aggregation row for the large unit are added. For example, you can check the aggregation of the sales result per department and salesperson through one query.
 
@@ -572,7 +572,7 @@ LIMIT Clause
 
 The **LIMIT** clause can be used to limit the number of records displayed. You can specify a very big integer for *row_count* to display to the last row, starting from a specific row. The **LIMIT** clause can be used as a prepared statement. In this case, the bind parameter (?) can be used instead of an argument.
 
-**INST_NUM** () and **ROWNUM** cannot be included in the **WHERE** clause in a query that contains the **LIMIT** clause. Also, **LIMIT** cannot be used together with **HAVING GROUPBY_NUM** (). 
+**INST_NUM** () and **ROWNUM** cannot be included in the **WHERE** clause in a query that contains the **LIMIT** clause. Also, **LIMIT** cannot be used together with **HAVING GROUPBY_NUM** (). 
 
 ::
 
@@ -708,7 +708,7 @@ CUBRID does not support full outer joins; it supports only left and right joins.
 
 Join conditions of an outer join are specified in a different way from those of an inner join. In an inner join, join conditions can be expressed in the **WHERE** clause; in an outer join, they appear after the **ON** keyword within the **FROM** clause. Other retrieval conditions can be used in the **WHERE** or **ON** clause, but the retrieval result depends on whether the condition is used in the **WHERE** or **ON** clause.
 
-The table execution order is fixed according to the order specified in the **FROM** clause. Therefore, when using an outer join, you should create a query statement in consideration of the table order. It is recommended to use standard statements using { **LEFT** | **RIGHT** } [ **OUTER** ] **JOIN**, because using an Oracle-style join query statements by specifying an outer join operator **(+)** in the **WHERE** clause, even if possible, might lead the execution result or plan in an unwanted direction.
+The table execution order is fixed according to the order specified in the **FROM** clause. Therefore, when using an outer join, you should create a query statement in consideration of the table order. It is recommended to use standard statements using { **LEFT** | **RIGHT** } [ **OUTER** ] **JOIN**, because using an Oracle-style join query statements by specifying an outer join operator **(+)** in the **WHERE** clause, even if possible, might lead the execution result or plan in an unwanted direction.
 
 The following example shows how to retrieve the years and host countries of the Olympic Games since 1950 where a world record has been set, but including the Olympic Games where any world records haven't been set in the result. This example can be expressed in the following right outer join query. In this example, all instances whose values of the *host_year* column in the *history* table are not greater than 1950 are also retrieved. All instances of *host_nation* are included because this is a right outer join. *host_year* that does not have a value is represented as **NULL**.
 

@@ -1471,11 +1471,11 @@ STDDEV, STDDEV_POP
 .. function:: STDDEV( [ DISTINCT | DISTINCTROW | UNIQUE | ALL] expression )
 .. function:: STDDEV_POP( [ DISTINCT | DISTINCTROW | UNIQUE | ALL] expression )
 
-    The functions **STDDEV** and **STDDEV_POP** are used interchangeably and they are used as an aggregate function or an analytic function. They return a standard variance of the values calculated for all rows. The **STDDEV_POP** function is a standard of the SQL:1999. Only one *expression* is specified as a parameter. If the **DISTINCT** or **UNIQUE** keyword is inserted before the expression, they calculate the sample standard variance after deleting duplicates; if keyword is omitted or **ALL**, they it calculate the sample standard variance for all values.
+    The functions **STDDEV** and **STDDEV_POP** are used interchangeably and they are used as an aggregate function or an analytic function. They return a standard variance of the values calculated for all rows. The **STDDEV_POP** function is a standard of the SQL:1999. Only one *expression* is specified as a parameter. If the **DISTINCT** or **UNIQUE** keyword is inserted before the expression, they calculate the sample standard variance after deleting duplicates; if keyword is omitted or **ALL**, they it calculate the sample standard variance for all values.
 
     :param expression: Specifies an expression that returns a numeric value.
     :param ALL: Calculates the standard variance for all data (default).
-    :param DISTINCT,DISTINCTROW,UNIQUE: Calculates the standard variance without duplicates.
+    :param DISTINCT,DISTINCTROW,UNIQUE: Calculates the standard variance without duplicates.
     :rtype: DOUBLE
 
 The return value is the same with the square root of its variance (the return value of :func:`VAR_POP` and it is a **DOUBLE** type. If there are no rows that can be used for calculating a result, **NULL** is returned.
@@ -1486,7 +1486,7 @@ The following is a formula that is applied to the function.
 
 .. image:: /images/stddev_pop.jpg
 
-.. note:: In CUBRID 2008 R3.1 or earlier, the **STDDEV** function worked the same as the :func:`STDDEV_SAMP`.
+.. note:: In CUBRID 2008 R3.1 or earlier, the **STDDEV** function worked the same as the :func:`STDDEV_SAMP`.
 
 The following example shows how to output the population standard variance of all students for all subjects.
 
@@ -1545,8 +1545,8 @@ STDDEV_SAMP
     The **STDDEV_SAMP** function is used as an aggregate function or an analytic function. It calculates the sample standard variance. Only one *expression* is specified as a parameter. If the **DISTINCT** or **UNIQUE** keyword is inserted before the expression, it calculates the sample standard variance after deleting duplicates; if a keyword is omitted or **ALL**, it calculates the sample standard variance for all values.
 
     :param expression: An expression that returns a numeric value
-    :param ALL: Used to calculate the standard variance for all values. It is the default value.
-    :param DISTINCT,DISTINCTROW,UNIQUE: Used to calculate the standard variance for the unique values without duplicates.
+    :param ALL: Used to calculate the standard variance for all values. It is the default value.
+    :param DISTINCT,DISTINCTROW,UNIQUE: Used to calculate the standard variance for the unique values without duplicates.
     :rtype: DOUBLE
 
 The return value is the same as the square root of its sample variance (:func:`VAR_SAMP`) and it is a **DOUBLE** type. If there are no rows that can be used for calculating a result, **NULL** is returned.
@@ -1557,7 +1557,7 @@ The following are the formulas applied to the function.
 
 .. image:: /images/stddev_samp.jpg
 
-The following example shows how to output the sample standard variance of all students for all subjects.
+The following example shows how to output the sample standard variance of all students for all subjects.
 
 .. code-block:: sql
 
@@ -1611,7 +1611,7 @@ SUM
 
 .. function:: SUM ( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
 
-    The **SUM** function is used as an aggregate function or an analytic function. It returns the sum of expressions of all rows. Only one *expression* is specified as a parameter. You can get the sum without duplicates by inserting the **DISTINCT** or **UNIQUE** keyword in front of the expression, or get the sum of all values by omitting the keyword or by using **ALL**.
+    The **SUM** function is used as an aggregate function or an analytic function. It returns the sum of expressions of all rows. Only one *expression* is specified as a parameter. You can get the sum without duplicates by inserting the **DISTINCT** or **UNIQUE** keyword in front of the expression, or get the sum of all values by omitting the keyword or by using **ALL**.
 
     :param expression: Specifies an expression that returns a numeric value.
     :param ALL: Gets the sum for all data (default).
@@ -1777,7 +1777,7 @@ The following are the formulas applied to the function.
 
 .. image:: /images/var_samp.jpg
 
-The following example shows how to output the sample variance of all students for all subjects.
+The following example shows how to output the sample variance of all students for all subjects.
 
 .. code-block:: sql
 

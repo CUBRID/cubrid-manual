@@ -88,7 +88,7 @@ GROUPBY_NUM
 
     :rtype: INT
 
-The following example shows how to retrieve the fastest record in the previous five Olympic Games from the *history* table in the  *demodb* database.
+The following example shows how to retrieve the fastest record in the previous five Olympic Games from the *history* table in the  *demodb* database.
 
 .. code-block:: sql
 

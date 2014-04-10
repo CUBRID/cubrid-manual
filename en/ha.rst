@@ -29,7 +29,7 @@ A node is a logical unit that makes up CUBRID HA. It can become one of the follo
 
 *   **Replica node** : A node that has the same information as a master node. Changes made in the master node are automatically reflected to the replica node. It provides the read service using a standby server, and no failover will occur when the master node fails.
 
-The CUBRID HA group consists of the nodes described above. You can configure the members of this group by using the **ha_node_list** and **ha_replica_list** in the **cubrid_ha.conf** file. Nodes in a group have the same information. They exchange status checking messages periodically and a failover will occurs when the master node fails.
+The CUBRID HA group consists of the nodes described above. You can configure the members of this group by using the **ha_node_list** and **ha_replica_list** in the **cubrid_ha.conf** file. Nodes in a group have the same information. They exchange status checking messages periodically and a failover will occurs when the master node fails.
 
 A node includes the master process (cub_master), the database server process (cub_server), the replication log copy process (copylogdb), the replication log reflection process (applylogdb), etc.
 
@@ -59,7 +59,7 @@ Servers
 
 Here, the word "server" is a logical representation of database server processes. Depending on its status, a server can be either an active server or a standby server.
 
-*   **Active server** : A server that belongs to a master node; the status is active. An active server provides all services, including read, write, etc. to the user.
+*   **Active server** : A server that belongs to a master node; the status is active. An active server provides all services, including read, write, etc. to the user.
 *   **Standby server** : A standby server that belongs to a non-master node; the status is standby. A standby server provides only the read service to the user.
 
 The server status changes based on the status of the node. You can use the :ref:`cubrid-changemode` utility to verify server status. The maintenance mode exists for operational convenience and you can change it by using the **cubrid changemode** utility.
@@ -408,8 +408,8 @@ Verify that action is properly applied to standby server of the slave node after
         [nodeB]$ csql -u dba testdb@localhost -l -c "select * from abc;"
         === <Result of SELECT Command in Line 1> ===
         <00001> a: 1
-                b: 1
-                c: 1
+                b: 1
+                c: 1
         [nodeB]$
 
 .. _quick-broker-config:
@@ -636,7 +636,7 @@ If a firewall exists in the service environment, the firewall must be configured
 
 **ha_ping_hosts** is a parameter used to configure the host which verifies whether or not a failover occurs due to unstable network when a failover has started in a slave node. The default is **NULL**. A comma(,) or colon(:) is used to separate individual host names.
 
-The host name of the member nodes specified in this parameter can be replaced with the IP. When a host name is used, the name must be registered in **/etc/hosts**.
+The host name of the member nodes specified in this parameter can be replaced with the IP. When a host name is used, the name must be registered in **/etc/hosts**.
 
 CUBRID checks hosts specified in **ha_ping_hosts** every hour; if there is a problem on a host, "ping check" is paused temporarily and checks every 5 minutes if the host is normalized or not.
 
@@ -677,7 +677,7 @@ To prevent wasting needless disk space, it is recommended to keep this value as 
 
 **ha_applylogdb_ignore_error_list**
 
-**ha_applylogdb_ignore_error_list** is a parameter used to configure for proceeding replication in CUBRID HA process by ignoring an error occurrence. The error codes to be ignored are separated by a comma (,). This value has a high priority. Therefore, when this value is the same as the value of the **ha_applylogdb_retry_error_list** parameter or the error code of "List of Retry Errors," the values of the **ha_applylogdb_retry_error_list** parameter or the error code of "List of Retry Errors" are ignored and the tasks that cause the error are not retried. For "List of Retry Errors," see the description of **ha_applylogdb_retry_error_list** below.
+**ha_applylogdb_ignore_error_list** is a parameter used to configure for proceeding replication in CUBRID HA process by ignoring an error occurrence. The error codes to be ignored are separated by a comma (,). This value has a high priority. Therefore, when this value is the same as the value of the **ha_applylogdb_retry_error_list** parameter or the error code of "List of Retry Errors," the values of the **ha_applylogdb_retry_error_list** parameter or the error code of "List of Retry Errors" are ignored and the tasks that cause the error are not retried. For "List of Retry Errors," see the description of **ha_applylogdb_retry_error_list** below.
 
 **ha_applylogdb_retry_error_list**
 
@@ -962,8 +962,8 @@ The **databases.txt** file has information on the order of servers for the CAS o
 
 The following example shows how to configure **databases.txt**. ::
 
-    #db-name    vol-path        db-host     log-path     lob-base-path
-    testdb       /home/cubrid/DB/testdb nodeA:nodeB   /home/cubrid/DB/testdb/log  file:/home/cubrid/DB/testdb/lob
+    #db-name    vol-path        db-host     log-path     lob-base-path
+    testdb       /home/cubrid/DB/testdb nodeA:nodeB   /home/cubrid/DB/testdb/log  file:/home/cubrid/DB/testdb/lob
 
 .. _ha-jdbc-conf:
 
@@ -1433,7 +1433,7 @@ The following shows the [options] used on **cubrid applyinfo**.
 
 .. option:: -r, --remote-host-name=HOSTNAME
 
-    Configures the name of a target node in which transaction logs are copied. Using this option will output the information of active logs (Active Info.) of a target node.
+    Configures the name of a target node in which transaction logs are copied. Using this option will output the information of active logs (Active Info.) of a target node.
     
 .. option:: -a, --applied-info
 
@@ -1524,7 +1524,7 @@ The items shown by each status are as follows:
 
 *   Active Info.
 
-    *   DB name: Name of a database whose node was configured in the **-r** option.
+    *   DB name: Name of a database whose node was configured in the **-r** option.
     *   DB creation time: Database creation time of a node that is configured in the **-r** option.
     *   EOF LSA: The last information of pageid and offset of a database transaction log of a node that is configured in the **-r** option. There will be a delay in copying logs as much as difference between the EOF LSA value of "Copied Active Info." and this value.
     
@@ -1670,7 +1670,7 @@ There are four possible structures for CUBRID HA: The default structure, multipl
 | Load Balancing Structure          | 1:1:N                  | Several replica nodes are added in the basic structure. Read service load can be distributed, and the HA load is reduced,             |
 |                                   |                        | comparing to a multiple-slave node structure. Note that replica nodes do not failover.                                                |
 +-----------------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------+
-| Multiple-Standby Server Structure | 1:1:0                  | Basically, this structure is the same as the basic structure. However, several slave nodes are installed on a single physical server. |
+| Multiple-Standby Server Structure | 1:1:0                  | Basically, this structure is the same as the basic structure. However, several slave nodes are installed on a single physical server. |
 +-----------------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------+
 
 In the following description, it is assumed that there is no data in the testdb database on each node. To build HA feature as replicating database, see :ref:`rebuilding-replication`.
@@ -1704,8 +1704,8 @@ You can configure each node in the basic structure of HA as shown below:
 
 For the **databases.txt** file of a broker node, it is necessary to configure the list of hosts configured as HA in **db-host** according to their priority. The following example shows the **databases.txt** file. ::
 
-    #db-name    vol-path                  db-host       log-path                   lob-base-path
-    testdb     /home/cubrid/DB/testdb     nodeA:nodeB   /home/cubrid/DB/testdb/log file:/home/cubrid/DB/testdb/lob
+    #db-name    vol-path                  db-host       log-path                   lob-base-path
+    testdb     /home/cubrid/DB/testdb     nodeA:nodeB   /home/cubrid/DB/testdb/log file:/home/cubrid/DB/testdb/lob
 
 The **cubrid_broker.conf** file can be set in a variety of ways according to configuration of the broker. It can also be configured as separate equipment with the **databases.txt** file.
 
@@ -1760,8 +1760,8 @@ You can configure each node in the basic structure of HA as shown below:
 
 You must enter the list of hosts configured in HA in order of priority in the **databases.txt** file of a broker node. The following is an example of the **databases.txt** file. ::
 
-    #db-name   vol-path                   db-host             log-path                   lob-base-path
-    testdb     /home/cubrid/DB/testdb     nodeA:nodeB:nodeC   /home/cubrid/DB/testdb/log file:/home/cubrid/DB/testdb/lob
+    #db-name   vol-path                   db-host             log-path                   lob-base-path
+    testdb     /home/cubrid/DB/testdb     nodeA:nodeB:nodeC   /home/cubrid/DB/testdb/log file:/home/cubrid/DB/testdb/lob
 
 The **cubrid_broker.conf** file can be set in a variety of ways according to configuration of the broker. It can also be configured as separate equipment with the **databases.txt** file. In this example, the RW broker is configured in *node A*, *node B*, and *node C*.
 
@@ -1825,7 +1825,7 @@ You can configure each node in load balancing structure as shown below:
     *   The following example shows how to configure **cubrid_ha.conf**: ::
 
             ha_port_id=59901
-            ha_node_list=cubrid@nodeA:nodeB 
+            ha_node_list=cubrid@nodeA:nodeB 
             ha_replica_list=cubrid@nodeC:nodeD:nodeE
             ha_db_list=testdb
 
@@ -1868,8 +1868,8 @@ You must enter the list of DB server hosts in the order so that each broker can 
 
 The following is an example of the **databases.txt** file in *node A* and *node B*. ::
 
-    #db-name    vol-path                  db-host       log-path             lob-base-path
-    testdb     /home/cubrid/DB/testdb   nodeA:nodeB   /home/cubrid/DB/testdb/log file:/home/cubrid/CUBRID/testdb/lob
+    #db-name    vol-path                  db-host       log-path             lob-base-path
+    testdb     /home/cubrid/DB/testdb   nodeA:nodeB   /home/cubrid/DB/testdb/log file:/home/cubrid/CUBRID/testdb/lob
 
 The following is an example of the **databases.txt** file in *node C*, *node D* and *node E*. ::
 
@@ -2110,8 +2110,8 @@ Using the above instructions, build a new slave node by following these steps, i
     
         ::
 
-            #db-name    vol-path        db-host     log-path     lob-base-path
-            testdb       /home/cubrid/DB/testdb nodeA:nodeB   /home/cubrid/DB/testdb/log  file:/home/cubrid/DB/testdb/lob
+            #db-name    vol-path        db-host     log-path     lob-base-path
+            testdb       /home/cubrid/DB/testdb nodeA:nodeB   /home/cubrid/DB/testdb/log  file:/home/cubrid/DB/testdb/lob
 
     *   Set locale library as identical for both the master node and the slave node.
     
@@ -2222,7 +2222,7 @@ You can perform the following operations without stopping and restarting nodes i
 | Failure broker server replacement            | It can be replaced without restarting the broker when   | The connection to a broker replaced at a client can be made by rcTime which is configured in URL string.           |
 |                                              | a failure occurs.                                       |                                                                                                                    |
 +----------------------------------------------+---------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
-| DB server expansion                          | You can execute **cubrid heartbeat reload** in each     | Starts or stops the **copylogdb/applylogdb**                                                                       |
+| DB server expansion                          | You can execute **cubrid heartbeat reload** in each     | Starts or stops the **copylogdb/applylogdb**                                                                       |
 |                                              | node after configuration change (ha_node_list,          | processes which were added or deleted by loading changed configuration information.                                |
 |                                              | ha_replica_list) without restarting the previously      |                                                                                                                    |
 |                                              | configured CUBRID HA group.                             |                                                                                                                    |
@@ -2233,15 +2233,15 @@ You can perform the following operations without stopping and restarting nodes i
 
 **When Failover Occurs**
 
-You must stop nodes in CUBRID HA group and complete operation before performing the following operations. 
+You must stop nodes in CUBRID HA group and complete operation before performing the following operations. 
 
 +----------------------------------------------+---------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
 |   General Operation                          |   Scenario                                              |   Consideration                                                                                                    |
 +==============================================+=========================================================+====================================================================================================================+
-| DB server configuration change               | A node whose configuration is changed is restarted when |                                                                                                                    |
+| DB server configuration change               | A node whose configuration is changed is restarted when |                                                                                                                    |
 |                                              | the configuration in  **cubrid.conf** is changed.       |                                                                                                                    |
 +----------------------------------------------+---------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
-| Change broker configuration, add broker      | A broker whose configuration is changed is restarted    |                                                                                                                    |
+| Change broker configuration, add broker      | A broker whose configuration is changed is restarted    |                                                                                                                    |
 | , and delete broker                          | when the configuration in **cubrid_broker.conf**        |                                                                                                                    |
 |                                              | is changed.                                             |                                                                                                                    |
 +----------------------------------------------+---------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
@@ -2252,7 +2252,7 @@ You must stop nodes in CUBRID HA group and complete operation before performing 
 Operation Scenario during Read Service
 --------------------------------------
 
-The operation scenario written in this page is only applied to read service. It is required to allow read service only or dynamically change mode configuration of broker to Read Only. There can be two types of operation scenarios in which failover occurs or it does not occur.
+The operation scenario written in this page is only applied to read service. It is required to allow read service only or dynamically change mode configuration of broker to Read Only. There can be two types of operation scenarios in which failover occurs or it does not occur.
 
 **When Failover Does Not Occur**
 
@@ -2273,7 +2273,7 @@ You can perform the following operations without stopping and restarting nodes i
 
 **When Failover Occurs**
 
-You must stop nodes in CUBRID HA group and complete operation before performing the following operations. 
+You must stop nodes in CUBRID HA group and complete operation before performing the following operations. 
 
 +----------------------------------------------+---------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
 |   General Operation                          |   Scenario                                              |   Consideration                                                                                                    |
@@ -2642,11 +2642,11 @@ The replication log reflection process reads, analyzes, and reflects the replica
 |       | replication log. class: ?, key: ?, internal          |              |                                                     | reconfigure the HA replication.                                      |
 |       | error: ?.                                            |              |                                                     |                                                                      |
 +-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| -1033 | log applier: Failed to reflect the Update            | error        | Fails to reflect UPDATE replication.                | Check the consistency of the replication. If it is inconsistent,     |
+| -1033 | log applier: Failed to reflect the Update            | error        | Fails to reflect UPDATE replication.                | Check the consistency of the replication. If it is inconsistent,     |
 |       | replication log. class: ?, key: ?, internal          |              |                                                     | reconfigure the HA replication.                                      |
 |       | error: ?.                                            |              |                                                     |                                                                      |
 +-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| -1034 | log applier: Failed to reflect the Delete            | error        | Fails to reflect DELETE replication.                | Check the consistency of the replication. If it is inconsistent,     |
+| -1034 | log applier: Failed to reflect the Delete            | error        | Fails to reflect DELETE replication.                | Check the consistency of the replication. If it is inconsistent,     |
 |       | replication log. class: ?, key: ?, internal          |              |                                                     | reconfigure the HA replication.                                      |
 |       | error: ?.                                            |              |                                                     |                                                                      |
 +-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
@@ -2677,7 +2677,7 @@ The error messages that can be found in this stage are as follows:
 Rebuilding Replication
 ----------------------
 
-Replication rebuilding is required in CUBRID HA when data in the CUBRID HA group is inconsistent because of multiple failures in multiple-slave node structure, or because of a generic error. Rebuilding replications in CUBRID HA is perform done through a **ha_make_slavedb.sh** script. With the **cubrid applyinfo** utility, you can check the replication progress; however replication inconsistency is not detected. If you want to determine whether replication is inconsistent correctly, you must examine data of the master and slave nodes yourself.
+Replication rebuilding is required in CUBRID HA when data in the CUBRID HA group is inconsistent because of multiple failures in multiple-slave node structure, or because of a generic error. Rebuilding replications in CUBRID HA is perform done through a **ha_make_slavedb.sh** script. With the **cubrid applyinfo** utility, you can check the replication progress; however replication inconsistency is not detected. If you want to determine whether replication is inconsistent correctly, you must examine data of the master and slave nodes yourself.
 
 For rebuilding replications, the following environment must be the same in master, slave and replica nodes.
 
@@ -2698,7 +2698,7 @@ ha_make_slavedb.sh Script
 
 To rebuild replications, use the **ha_make_slavedb.sh** script. This script is located in **$CUBRID/share/scripts/ha**. Before rebuilding replications, the following items must be configured for the environment of the user. This script is supported since the version 2008 R2.2 Patch 9 and its configuration is different from 2008 R4.1 Patch 2 or earlier. This document describes it in CUBRID 2008 R4.1 Patch 2 or later.
 
-*   **target_host** : The host name of the source node (master node in general) for rebuilding replication. It should be registered in **/etc/hosts**. A slave node can rebuild replication by using the master node or the replica node as the source. A replica node can rebuild replication by using the slave node or another replica node as the source.
+*   **target_host** : The host name of the source node (master node in general) for rebuilding replication. It should be registered in **/etc/hosts**. A slave node can rebuild replication by using the master node or the replica node as the source. A replica node can rebuild replication by using the slave node or another replica node as the source.
 
     ..  아래 내용은 복제 재구축 스크립트 변경 전까지는 불필요
 
@@ -2853,7 +2853,7 @@ If you find an error or quit the step by pressing "n" during executing each step
          
            continue ? ([y]es / [n]o / [s]kip) : y
 
-    Enter the password of a Linux account of the HA node and the password of **DBA**, the CUBRID database account. If you have not changed the password of **DBA** after installing CUBRID, press the <Enter> key without entering the password of **DBA**. 
+    Enter the password of a Linux account of the HA node and the password of **DBA**, the CUBRID database account. If you have not changed the password of **DBA** after installing CUBRID, press the <Enter> key without entering the password of **DBA**. 
 
     ::
     
@@ -3254,7 +3254,7 @@ If you find an error or quit the step by pressing "n" during executing each step
          
            continue ? ([y]es / [n]o / [s]kip) : y
    
-    Enter the password of a Linux account of the HA node and the password of **DBA**, the CUBRID database account. If you have not changed the password of **DBA** after installing CUBRID, press the <Enter> key without entering the password of **DBA**. 
+    Enter the password of a Linux account of the HA node and the password of **DBA**, the CUBRID database account. If you have not changed the password of **DBA** after installing CUBRID, press the <Enter> key without entering the password of **DBA**. 
    
     ::
     
@@ -3609,7 +3609,7 @@ If you find an error or quit the step by pressing "n" during executing each step
          
            continue ? ([y]es / [n]o / [s]kip) : y
    
-    Enter the password of a Linux account of the HA node and the password of **DBA**, the CUBRID database account. If you have not changed the password of **DBA** after installing CUBRID, press the <Enter> key without entering the password of **DBA**. 
+    Enter the password of a Linux account of the HA node and the password of **DBA**, the CUBRID database account. If you have not changed the password of **DBA** after installing CUBRID, press the <Enter> key without entering the password of **DBA**. 
    
     ::
     
@@ -3994,7 +3994,7 @@ If you find an error or quit the step by pressing "n" during executing each step
 
            continue ? ([y]es / [n]o / [s]kip) : y
 
-    Enter the password of a Linux account of the HA node and the password of **DBA**, the CUBRID database account. If you have not changed the password of **DBA** after installing CUBRID, press the <Enter> key without entering the password of **DBA**. 
+    Enter the password of a Linux account of the HA node and the password of **DBA**, the CUBRID database account. If you have not changed the password of **DBA** after installing CUBRID, press the <Enter> key without entering the password of **DBA**. 
    
     ::
     

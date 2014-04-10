@@ -2,7 +2,7 @@
 BIT Functions and Operators
 ***************************
 
-Bitwise Operator
+Bitwise Operator
 ================
 
 A **Bitwise** operator performs operations in bits, and can be used in arithmetic operations. An integer type is specified as the operand and the **BIT** type cannot be specified. An integer of **BIGINT** type (64-bit integer) is returned as a result of the operation. If one or more operands are **NULL**, **NULL** is returned.
@@ -32,7 +32,7 @@ BIT_AND
 
 .. function:: BIT_AND (expr)
 
-    As an aggregate function, it performs **AND** operations in bits on every bit of *expr*. The return value is a **BIGINT** type. If there is no row that satisfies the expression, **NULL** is returned. 
+    As an aggregate function, it performs **AND** operations in bits on every bit of *expr*. The return value is a **BIGINT** type. If there is no row that satisfies the expression, **NULL** is returned. 
 
     :param expr: An expression of integer type
     :rtype: BIGINT
@@ -54,7 +54,7 @@ BIT_OR
 
 .. function:: BIT_OR (expr)
 
-    As an aggregate function, it performs **OR** operations in bits on every bit of *expr*. The return value is a **BIGINT** type. If there is no row that satisfies the expression, **NULL** is returned. 
+    As an aggregate function, it performs **OR** operations in bits on every bit of *expr*. The return value is a **BIGINT** type. If there is no row that satisfies the expression, **NULL** is returned. 
 
     :param expr: An expression of integer type
     :rtype: BIGINT

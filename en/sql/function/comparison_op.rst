@@ -55,7 +55,7 @@ The comparison operators compare the operand on the left and on the right, and t
 
     *   *numeric value* : The Boolean operator can be performed for all numeric values and any types of comparison operator can be used. When two different numeric types are compared, the system implicitly performs type casting. For example, when an **INTEGER** value is compared with a **DECIMAL** value, the system first casts **INTEGER** to **DECIMAL** before it performs comparison. When you compare a **FLOAT** value, you must specify the range instead of an exact value because the processing of **FLOAT** is dependent on the system.
 
-    *   *date-time value* : If two date-time values with the same type are compared, the order is determined in time order. That is, when comparing two date-time values, the earlier date is considered to be smaller than the later date. You cannot compare date-time values with different type by using a comparison operator; therefore, you must explicitly convert it. However, comparison operation can be performed between DATE, TIMESTAMP, and DATETIME because they are implicitly converted.
+    *   *date-time value* : If two date-time values with the same type are compared, the order is determined in time order. That is, when comparing two date-time values, the earlier date is considered to be smaller than the later date. You cannot compare date-time values with different type by using a comparison operator; therefore, you must explicitly convert it. However, comparison operation can be performed between DATE, TIMESTAMP, and DATETIME because they are implicitly converted.
 
     *   *collection value* : When comparing two LISTs (SEQUENCE), comparison is performed between the two elements by user-specified order when LIST was created. Comparison including SET and MULTISET is overloaded to an appropriate operator. You can perform comparison operations on SET, MULTISET, LIST, or SEQUENCE by using a containment operator explained later in this chapter. For details, see :doc:`containment_op`.
 
@@ -78,7 +78,7 @@ The following table shows the comparison operators supported by CUBRID and their
 |                         | **NULL**                                                                                                           |                |                  |
 |                         | .                                                                                                                  |                |                  |
 +-------------------------+--------------------------------------------------------------------------------------------------------------------+----------------+------------------+
-| **<>, !=**              | The value of left operand is not equal to that of right operand. If any operand value is                           | 1<>2           | 1                |
+| **<>, !=**              | The value of left operand is not equal to that of right operand. If any operand value is                           | 1<>2           | 1                |
 |                         | **NULL**                                                                                                           |                |                  |
 |                         | ,                                                                                                                  |                |                  |
 |                         | **NULL**                                                                                                           |                |                  |
@@ -116,7 +116,7 @@ The following table shows the comparison operators supported by CUBRID and their
 |                         | **NULL**                                                                                                           |                |                  |
 |                         | ).                                                                                                                 |                |                  |
 +-------------------------+--------------------------------------------------------------------------------------------------------------------+----------------+------------------+
-| **IS NOT**              | Compares whether the value of the left operand is the same as boolean value of the right. The boolean value may be | 1 IS NOT FALSE | 1                |
+| **IS NOT**              | Compares whether the value of the left operand is the same as boolean value of the right. The boolean value may be | 1 IS NOT FALSE | 1                |
 | *boolean_value*         | **TRUE**                                                                                                           |                |                  |
 |                         | ,                                                                                                                  |                |                  |
 |                         | **FALSE**                                                                                                          |                |                  |
@@ -130,15 +130,15 @@ The following are the examples which use comparison operators.
 .. code-block:: sql
 
     SELECT (1 <> 0); -- 1 is displayed because it is TRUE.
-    SELECT (1 != 0); -- 1 is displayed because it is TRUE.  
+    SELECT (1 != 0); -- 1 is displayed because it is TRUE.  
     SELECT (0.01 = '0.01'); -- An error occurs because a numeric data type is compared with a character string type.
     SELECT (1 = NULL); -- NULL is displayed.
-    SELECT (1 <=> NULL); -- 0 is displayed because it is FALSE. 
-    SELECT (1.000 = 1); -- 1 is displayed because it is TRUE.
-    SELECT ('cubrid' = 'CUBRID'); -- 0 is displayed because it is case sensitive.
-    SELECT ('cubrid' = 'cubrid'); -- 1 is displayed because it is TRUE.
-    SELECT (SYSTIMESTAMP = CAST(SYSDATETIME AS TIMESTAMP)); -- 1 is displayed after casting the type explicitly and then performing comparison operator. 
-    SELECT (SYSTIMESTAMP = SYSDATETIME); --0 is displayed after casting the type implicitly and then performing comparison operator. 
+    SELECT (1 <=> NULL); -- 0 is displayed because it is FALSE. 
+    SELECT (1.000 = 1); -- 1 is displayed because it is TRUE.
+    SELECT ('cubrid' = 'CUBRID'); -- 0 is displayed because it is case sensitive.
+    SELECT ('cubrid' = 'cubrid'); -- 1 is displayed because it is TRUE.
+    SELECT (SYSTIMESTAMP = CAST(SYSDATETIME AS TIMESTAMP)); -- 1 is displayed after casting the type explicitly and then performing comparison operator. 
+    SELECT (SYSTIMESTAMP = SYSDATETIME); --0 is displayed after casting the type implicitly and then performing comparison operator. 
     SELECT (SYSTIMESTAMP <> NULL); -- NULL is returned without performing comparison operator.
     SELECT (SYSTIMESTAMP IS NOT NULL); -- 1 is returned because it is not NULL.
     

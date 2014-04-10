@@ -48,7 +48,7 @@ If you want to increase or decrease the click counter without specifying **INCR*
     
         SELECT content, INCR(read_count) + 1 FROM board WHERE id = 1;
 
-    *   If the defined maximum value of the type is exceeded, the **INCR** function initializes the column value to 0. Likewise, the column value is also initialized to 0 when the **DECR** function applies to the minimum value. 
+    *   If the defined maximum value of the type is exceeded, the **INCR** function initializes the column value to 0. Likewise, the column value is also initialized to 0 when the **DECR** function applies to the minimum value. 
 
     *   Data inconsistency can occur because the **INCR/DECR** functions are executed regardless of **UPDATE** trigger. The following example shows the database inconsistency in that situation.
 

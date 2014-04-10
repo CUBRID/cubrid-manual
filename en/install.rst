@@ -254,7 +254,7 @@ If you have installed CUBRID with RPM package, "cubrid" script is added to the /
 
 **Installing CUBRID Interfaces**
 
-You can see the latest information on interface modules such as CCI, JDBC, PHP, ODBC, OLE DB, ADO.NET, Ruby, Python and Node.js and install them by downloading files from `http://www.cubrid.org/wiki_apis <http://www.cubrid.org/wiki_apis>`_ .
+You can see the latest information on interface modules such as CCI, JDBC, PHP, ODBC, OLE DB, ADO.NET, Ruby, Python and Node.js and install them by downloading files from `http://www.cubrid.org/wiki_apis <http://www.cubrid.org/wiki_apis>`_ .
 
 A simple description on each driver can be found on :doc:`/api/index`.
 
@@ -343,7 +343,7 @@ You can change configuration such as service ports to meet the user environment 
 
 **Installing CUBRID Interfaces**
 
-You can see the latest information on interface modules such as JDBC, PHP, ODBC, and OLE DB and install them by downloading files from `http://www.cubrid.org/wiki_apis`.
+You can see the latest information on interface modules such as JDBC, PHP, ODBC, and OLE DB and install them by downloading files from `http://www.cubrid.org/wiki_apis`.
 
 A simple description on each driver can be found on :doc:`/api/index`.
 

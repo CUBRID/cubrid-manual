@@ -336,7 +336,7 @@ DataTable Support
 The `DataTable <http://msdn.microsoft.com/en-us/library/system.data.datatable.aspx>`_ is a central object in the ADO.NET library and CUBRID ADO.NET Data Provider support the following features.
 
 *   `DataTable <http://msdn.microsoft.com/en-us/library/system.data.datatable.aspx>`_ populate
-*   Built-in commands: **INSERT**, **UPDATE**, and  **DELETE**
+*   Built-in commands: **INSERT**, **UPDATE**, and  **DELETE**
 *   Column metadata/attributes
 *   `DataSet <http://msdn.microsoft.com/en-us/library/system.data.dataset.aspx>`_, `DataView <http://msdn.microsoft.com/en-us/library/system.data.dataview.aspx>`_ inter-connection
 

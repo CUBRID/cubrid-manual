@@ -41,9 +41,9 @@ If **PECL** package has been installed on your system, the installation of CUBRI
     
 #.  Edit the configuration file.
     
-    If you are using CentOS 6.0 and later or Fedora 15 and later, create a file named **cubrid.ini**, enter a command line **extension=cubrid.so**, and store the fine in the **/etc/php.d** directory.
+    If you are using CentOS 6.0 and later or Fedora 15 and later, create a file named **cubrid.ini**, enter a command line **extension=cubrid.so**, and store the fine in the **/etc/php.d** directory.
     
-    If you are using earlier versions of CentOS 6.0 or Fedora 15, edit the **php.ini** file (default location: **/etc/php5/apache2/** or **/etc/**) and add the following two command lines at the end of the file. 
+    If you are using earlier versions of CentOS 6.0 or Fedora 15, edit the **php.ini** file (default location: **/etc/php5/apache2/** or **/etc/**) and add the following two command lines at the end of the file. 
     
     ::
     
@@ -131,16 +131,16 @@ Before you install CUBRID PHP driver, make sure that paths of PHP and CUBRID are
 #.  Agree with the BSD license terms and click the [Next] button.
 #.  Choose where you would like to install this CUBRID PHP API Installer and click the [Next] button. You should choose a new folder for this installer like **C:\\Program Files\\CUBRID PHP API**.
     
-#.  Give a folder name and click the [Install] button. If you fail installation, you should probably receive an error message. In this case, see "Configuring the environment" below.
+#.  Give a folder name and click the [Install] button. If you fail installation, you should probably receive an error message. In this case, see "Configuring the environment" below.
     
 #.  If no error message is displayed, this should install the CUBRID PHP extension and update your **php.ini** file. Click [Finish] to close the installer.
-#.  For changes to take place, restart your web server and execute the phpinfo() to confirm CUBRID has successfully been installed.
+#.  For changes to take place, restart your web server and execute the phpinfo() to confirm CUBRID has successfully been installed.
 
     .. image:: /images/image56.png
 
 **Configuring the environment**
 
-If you have received an error messages, follow the steps below; if you can see CUBRID in phpinfo(), you do not need to look further. By default, when you install CUBRID, it automatically adds its installation directory to the **Path** system environment variable. To verify the variable have been correctly configured, launch the command prompt ([Start] > [Programs] > [Accessories] > [Command Prompt]) and enter the following commands one by one.
+If you have received an error messages, follow the steps below; if you can see CUBRID in phpinfo(), you do not need to look further. By default, when you install CUBRID, it automatically adds its installation directory to the **Path** system environment variable. To verify the variable have been correctly configured, launch the command prompt ([Start] > [Programs] > [Accessories] > [Command Prompt]) and enter the following commands one by one.
 
 #.  Enter command below in the command prompt as follows. ::
     
@@ -171,9 +171,9 @@ If you cannot get the result like above, it is highly likely that your PHP and C
 
 **Downloading and Installing Compiled CUBRID PHP Driver**
 
-First, download CUBRID PHP/PDO driver of which versions match the versions of your operating system and PHP installed from http://www.cubrid.org/?mid=downloads&item=php_driver&os=windows&php=detect&driver=detect .
+First, download CUBRID PHP/PDO driver of which versions match the versions of your operating system and PHP installed from http://www.cubrid.org/?mid=downloads&item=php_driver&os=windows&php=detect&driver=detect .
 
-After you download the driver, you will see the **php_cubrid.dll** file for CUBRID PHP driver or the **php_pdo_cubrid.dll** file for CUBRID PDO driver. Follow the steps below to install it.
+After you download the driver, you will see the **php_cubrid.dll** file for CUBRID PHP driver or the **php_pdo_cubrid.dll** file for CUBRID PDO driver. Follow the steps below to install it.
 
 #.  Copy this driver to the default PHP extensions directory (usually located at **C:\\Program Files\\PHP\\ext**).
 #.  Set your system environment. Check if the environment variable **PHPRC** is **C:\\Program Files\\PHP** and system variable path is added with **%PHPRC%** and **%PHPRC\\ext**.
@@ -209,7 +209,7 @@ In this section, we will introduce the way of building CUBRID PHP driver for Lin
 #.  Download the CUBRID PHP driver, extract it, and enter the directory. ::
     
         $> tar zxvf php-<version>.tar.gz (or tar jxvf php-<version>.tar.bz2)
-        $> cd php-<version>/ext 
+        $> cd php-<version>/ext 
     
 #.  Run **phpize**. For more information about getting **phpize**, see :ref:`Remark <phpize-remark>`. ::
     
@@ -323,7 +323,7 @@ In the [Property Pages] dialog box, select [General] under the [C/C++] tree node
     
 #.  You need to make PHP recognize the **php_cubrid.dll** file as an extension. To do this:
     
-    *   Create a new folder named **cubrid** where PHP has been installed and copy the  **php_cubrid.dll** file to the **cubrid** folder. You can also put the **php_cubrid.dll** file in **%PHPRC%\\ext** if this directory exists.
+    *   Create a new folder named **cubrid** where PHP has been installed and copy the  **php_cubrid.dll** file to the **cubrid** folder. You can also put the **php_cubrid.dll** file in **%PHPRC%\\ext** if this directory exists.
     
     *   In the php.ini file, enter the path of the **php_cubrid.dll** file as an extension_dir variable value and enter **php_cubrid.dll** as an extension value.
 
@@ -341,7 +341,7 @@ You can configure the default settings without using this SDK; however, there is
 
   .. image:: /images/image61.jpg
 
-*   PHP 5.2/5.3 source code: Remember to get the source that matches your binary version. After you extract the PHP 5.3 source code, add the **%PHP5_SRC%** system environment variable and set its value to the path of PHP 5.3 source code. In the [Project Settings] dialog box of VC6 project, you can find **$(PHP5_SRC)** in [Additional include directories] of the [C/C++] tab.
+*   PHP 5.2/5.3 source code: Remember to get the source that matches your binary version. After you extract the PHP 5.3 source code, add the **%PHP5_SRC%** system environment variable and set its value to the path of PHP 5.3 source code. In the [Project Settings] dialog box of VC6 project, you can find **$(PHP5_SRC)** in [Additional include directories] of the [C/C++] tab.
 
   .. image:: /images/image62.jpg
 
@@ -417,7 +417,7 @@ There is no official Apache for 64-bit Windows either. Instead, you can use IIS 
     
     .. image:: /images/image68.png
     
-#.  Run the **configure** command to configure the PHP project.
+#.  Run the **configure** command to configure the PHP project.
     
     .. image:: /images/image69.png
     
@@ -461,8 +461,8 @@ PHP Programming
 Connecting to a Database
 ------------------------
 
-The first step of database applications is to use `cubrid_connect <http://www.php.net/manual/en/function.cubrid-connect.php>`_ () or `cubrid_connect_with_url <http://www.php.net/manual/en/function.cubrid-connect-with-url.php>`_ () function which provides database connection. Once `cubrid_connect <http://www.php.net/manual/en/function.cubrid-connect.php>`_ () or `cubrid_connect_with_url <http://www.php.net/manual/en/function.cubrid-connect-with-url.php>`_ () function is executed successfully, you can use any functions available in the database. It is very important to call the `cubrid_disconnect <http://www.php.net/manual/en/function.cubrid-disconnect.php>`_ () function before applications are terminated. The `cubrid_disconnect <http://www.php.net/manual/en/function.cubrid-disconnect.php>`_ () function terminates the current transaction as well as the connection handle and all request handles created by the
-`cubrid_connect <http://www.php.net/manual/en/function.cubrid-connect.php>`_ () function.
+The first step of database applications is to use `cubrid_connect <http://www.php.net/manual/en/function.cubrid-connect.php>`_ () or `cubrid_connect_with_url <http://www.php.net/manual/en/function.cubrid-connect-with-url.php>`_ () function which provides database connection. Once `cubrid_connect <http://www.php.net/manual/en/function.cubrid-connect.php>`_ () or `cubrid_connect_with_url <http://www.php.net/manual/en/function.cubrid-connect-with-url.php>`_ () function is executed successfully, you can use any functions available in the database. It is very important to call the `cubrid_disconnect <http://www.php.net/manual/en/function.cubrid-disconnect.php>`_ () function before applications are terminated. The `cubrid_disconnect <http://www.php.net/manual/en/function.cubrid-disconnect.php>`_ () function terminates the current transaction as well as the connection handle and all request handles created by the
+`cubrid_connect <http://www.php.net/manual/en/function.cubrid-connect.php>`_ () function.
 
 .. note:: 
 
@@ -476,7 +476,7 @@ CUBRID PHP supports transaction and auto-commit mode. Auto-commit mode means tha
 
 The default value of auto-commit mode upon application startup is configured by the **CCI_DEFAULT_AUTOCOMMIT** (broker parameter). If the broker parameter value is not configured, the default value is set to **ON**. 
 
-If you set auto-commit mode to **OFF** in the `cubrid_set_autocommit <http://www.php.net/manual/en/function.cubrid-set-autocommit.php>`_ () function, you can handle transactions by specifying a proper function; to commit transactions, use the `cubrid_commit <http://www.php.net/manual/en/function.cubrid-commit.php>`_ () function and to roll back transactions, use the `cubrid_rollback <http://www.php.net/manual/en/function.cubrid-rollback.php>`_ () function. If you use the `cubrid_disconnect <http://www.php.net/manual/en/function.cubrid-disconnect.php>`_ () function, transactions will be disconnected and jobs which have not been committed will be rolled back.
+If you set auto-commit mode to **OFF** in the `cubrid_set_autocommit <http://www.php.net/manual/en/function.cubrid-set-autocommit.php>`_ () function, you can handle transactions by specifying a proper function; to commit transactions, use the `cubrid_commit <http://www.php.net/manual/en/function.cubrid-commit.php>`_ () function and to roll back transactions, use the `cubrid_rollback <http://www.php.net/manual/en/function.cubrid-rollback.php>`_ () function. If you use the `cubrid_disconnect <http://www.php.net/manual/en/function.cubrid-disconnect.php>`_ () function, transactions will be disconnected and jobs which have not been committed will be rolled back.
 
 Processing Queries
 ------------------
@@ -618,7 +618,7 @@ The attribute values of an instance can be updated by using OIDs. To update a si
 
 **Using Collections**
 
-You can use the collection data types through PHP array data types or functions that support array data types. The following example shows how to fetch query result by using the `cubrid_fetch <http://www.php.net/manual/en/function.cubrid-fetch.php>`_ () function.
+You can use the collection data types through PHP array data types or functions that support array data types. The following example shows how to fetch query result by using the `cubrid_fetch <http://www.php.net/manual/en/function.cubrid-fetch.php>`_ () function.
 
 .. code-block:: php
 

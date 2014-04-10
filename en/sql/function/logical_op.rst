@@ -39,7 +39,7 @@ The following table shows the logical operators.
 | ,                    | **FALSE**                                                                                | a             |
 | **!**                | , it returns                                                                             |               |
 |                      | **TRUE**                                                                                 |               |
-|                      | . If it is                                                                               |               |
+|                      | . If it is                                                                               |               |
 |                      | **TRUE**                                                                                 |               |
 |                      | , returns                                                                                |               |
 |                      | **FALSE**                                                                                |               |

@@ -16,7 +16,7 @@ The **cubrid** utilities provide features that can be used to comprehensively ma
 
 The service management utilities are as follows:
 
-*   Service utility : Operates and manages the master process.
+*   Service utility : Operates and manages the master process.
 
     *   cubrid service
 
@@ -24,11 +24,11 @@ The service management utilities are as follows:
 
     *   cubrid server
 
-*   Broker utility : Operates and manages the broker process and application server (CAS) process.
+*   Broker utility : Operates and manages the broker process and application server (CAS) process.
 
     *   cubrid broker
 
-*   Manager utility : Operates and manages the manager server process.
+*   Manager utility : Operates and manages the manager server process.
 
     *   cubrid manager
 

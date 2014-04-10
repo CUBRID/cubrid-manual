@@ -8,7 +8,7 @@ CUBRID Environment Variables
 
 *   **CUBRID**: The default environment variable that designates the location where the CUBRID is installed. This variable must be set accurately since all programs included in the CUBRID system uses this environment variable as reference.
 
-*   **CUBRID_DATABASES**: The environment variable that designates the location of the **databases.txt** file. The CUBRID system stores the absolute path of database volumes in the **$CUBRID_DATABASES/databases.txt** file. See :ref:`databases-txt-file`.
+*   **CUBRID_DATABASES**: The environment variable that designates the location of the **databases.txt** file. The CUBRID system stores the absolute path of database volumes in the **$CUBRID_DATABASES/databases.txt** file. See :ref:`databases-txt-file`.
 
 *   **CUBRID_MSG_LANG**: The environment variable that specifies usage messages and error messages in CUBRID. The initial value upon start is not defined. If it is not defined, it follows the configured locale when :ref:`creating-database`.
 
@@ -118,7 +118,7 @@ Language & Charset Setting
 The language and the charset that will be used in the CUBRID DBMS is specified after the database name when DB is created(e.g. cubrid createdb testdb ko_KR.utf8). The following are examples of values that can currently be set as a language and a charset.
 
 *   **en_US.iso88591**: English ISO-88591 encoding(.iso88591 can be omitted)
-*   **ko_KR.euckr**: Korean EUC-KR encoding
+*   **ko_KR.euckr**: Korean EUC-KR encoding
 *   **ko_KR.utf8**: Korean UTF-8 encoding(.utf8 can be omitted)
 *   **de_DE.utf8**: German UTF-8 encoding
 *   **es_ES.utf8**: Spanish UTF-8 encoding

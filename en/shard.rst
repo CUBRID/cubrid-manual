@@ -192,7 +192,7 @@ Ex) When the query is performed in shard DB #3, queries students whose value of 
 
         *   When the shard_key is a string
 
-            Default hash function (shard_key) = shard_key[0] mod  SHARD_KEY_MODULAR parameter (default value 256)
+            Default hash function (shard_key) = shard_key[0] mod  SHARD_KEY_MODULAR parameter (default value 256)
 
     .. note::
 
@@ -332,11 +332,11 @@ Set **shard_key.txt**, the shard DB mapping configuration file, for the shard ke
 ::
 
     [%shard_key]
-    #min    max     shard_id
-    0       63      0
-    64      127     1
-    128     191     2
-    192     255     3
+    #min    max     shard_id
+    0       63      0
+    64      127     1
+    128     191     2
+    192     255     3
 
 **shard_connection.txt**
 
@@ -612,13 +612,13 @@ The basic example and format of a shard connection configuration file are as fol
 When the backend shard DB is CUBRID, the format of the connection configuration file is as follows: ::
 
     # CUBRID
-    # shard-id      real-db-name            connection-info
-    # shard identifier( >0 )        The real name of backend shard DB    host name
+    # shard-id      real-db-name            connection-info
+    # shard identifier( >0 )        The real name of backend shard DB    host name
 
-    0           shard_db_1          host1
-    1           shard_db_2          host2
-    2           shard_db_3          host3
-    3           shard_db_4          host4
+    0           shard_db_1          host1
+    1           shard_db_2          host2
+    2           shard_db_3          host3
+    3           shard_db_4          host4
 
 For CUBRID, a separate backend shard DB port number is not specified in the above configuration file, but the **CUBRID_PORT_ID** parameter in the **cubrid.conf** file is used. The **cubrid.conf** file is by default located in the **$CUBRID/conf**. ::
 
@@ -634,13 +634,13 @@ For CUBRID, a separate backend shard DB port number is not specified in the abov
 When the backend shard DB is MySQL, the format of the connection configuration file is as follows: ::
 
     # mysql
-    # shard-id      real-db-name            connection-info
-    # shard identifier (>0 )        Actual name of each backend shard DB    Host name: port number
+    # shard-id      real-db-name            connection-info
+    # shard identifier (>0 )        Actual name of each backend shard DB    Host name: port number
 
-    0           shard_db_1          host1:1234
-    1           shard_db_2          host2:1234
-    2           shard_db_3          host3:1234
-    3           shard_db_4          host4:1234
+    0           shard_db_1          host1:1234
+    1           shard_db_2          host2:1234
+    2           shard_db_3          host3:1234
+    3           shard_db_4          host4:1234
 
 .. _shard-key-configuration-file:
 
@@ -883,10 +883,10 @@ SHARD PROXY Log
 
 ::
 
-    10.24.18.67 - - 1340243427.828 1340243427.828 2012/06/21 10:50:27 ~ 2012/06/21 10:50:27 23377 - -1 shard1     shard1
-    10.24.18.67 - - 1340243427.858 1340243427.858 2012/06/21 10:50:27 ~ 2012/06/21 10:50:27 23377 - -1 shard1     shard1
-    10.24.18.67 - - 1340243446.791 1340243446.791 2012/06/21 10:50:46 ~ 2012/06/21 10:50:46 23377 - -1 shard1     shard1
-    10.24.18.67 - - 1340243446.821 1340243446.821 2012/06/21 10:50:46 ~ 2012/06/21 10:50:46 23377 - -1 shard1     shard1
+    10.24.18.67 - - 1340243427.828 1340243427.828 2012/06/21 10:50:27 ~ 2012/06/21 10:50:27 23377 - -1 shard1     shard1
+    10.24.18.67 - - 1340243427.858 1340243427.858 2012/06/21 10:50:27 ~ 2012/06/21 10:50:27 23377 - -1 shard1     shard1
+    10.24.18.67 - - 1340243446.791 1340243446.791 2012/06/21 10:50:46 ~ 2012/06/21 10:50:46 23377 - -1 shard1     shard1
+    10.24.18.67 - - 1340243446.821 1340243446.821 2012/06/21 10:50:46 ~ 2012/06/21 10:50:46 23377 - -1 shard1     shard1
 
 **Proxy Log**
 

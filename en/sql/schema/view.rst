@@ -93,8 +93,8 @@ A virtual table is updatable if it satisfies the following conditions:
     .. note:: In versions lower than CUBRID 10.0, you cannot update a view which is created with a **JOIN** syntax.
     
 *   The **DISTINCT** or **UNIQUE** statement should not be included.
-*   The **GROUP BY... HAVING** statement should not be included.
-*   Aggregate functions such as **SUM** or **AVG** should not be included.
+*   The **GROUP BY... HAVING** statement should not be included.
+*   Aggregate functions such as **SUM** or **AVG** should not be included.
 *   The entire query must consist of queries that can be updated by **UNION ALL**, not by **UNION**. However, the table should exist only in one of the queries that constitute **UNION ALL**.
 *   If a record is inserted into a view created by using the **UNION ALL** statement, the system determines into which table the record will be inserted. This cannot be done by the user. To control this, the user must manually insert the row or create a separate view for insertion.
 
@@ -286,4 +286,4 @@ The following example shows how to rename a view name to *game_2004*.
 
 .. code-block:: sql
 
-    RENAME VIEW game_2004 AS info_2004;
+    RENAME VIEW game_2004 AS info_2004;

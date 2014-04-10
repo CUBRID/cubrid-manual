@@ -11,7 +11,7 @@ The purposes of loading/unloading databases are as follows:
 
 ::
 
-    cubrid unloaddb [options] database_name
+    cubrid unloaddb [options] database_name
 
 **cubrid unloaddb** utility creates the following files:
 
@@ -41,11 +41,11 @@ The following is [options] used in **cubrid unloaddb**.
 
     This option can be used together with the **--input-class-only** option that creates the schema file related to only those tables included in the input file. ::
 
-        cubrid unloaddb --input-class-only -i table_list.txt demodb
+        cubrid unloaddb --input-class-only -i table_list.txt demodb
 
     This option can be used together with the **--include-reference** option that creates the object reference as well.    ::
 
-        cubrid unloaddb --include-reference -i table_list.txt demodb
+        cubrid unloaddb --include-reference -i table_list.txt demodb
 
 .. option:: --include-reference
 
@@ -63,19 +63,19 @@ The following is [options] used in **cubrid unloaddb**.
 
     This option allows you to assign hash memory to store records of the database to be unloaded. If the **--estimated-size** option is not specified, the number of records of the database is determined based on recent statistics information. This option can be used if the recent statistics information has not been updated or if a large amount of hash memory needs to be assigned. Therefore, if the number given as the argument for the option is too small, the unload performance deteriorates due to hash conflicts. ::
 
-        cubrid unloaddb --estimated-size=1000 demodb
+        cubrid unloaddb --estimated-size=1000 demodb
 
 .. option:: --cached-pages=NUMBER
 
     The **--cached-pages** option specifies the number of pages of tables to be cached in the memory. Each page is 4,096 bytes. The administrator can configure the number of pages taking into account the memory size and speed. If this option is not specified, the default value is 100 pages. ::
 
-        cubrid unloaddb --cached-pages 500 demodb
+        cubrid unloaddb --cached-pages 500 demodb
 
 .. option:: -O, --output-path=PATH
 
     This option specifies the directory in which to create schema and object files. If this is not specified, files are created in the current directory. ::
 
-        cubrid unloaddb -O ./CUBRID/Databases/demodb demodb
+        cubrid unloaddb -O ./CUBRID/Databases/demodb demodb
 
     If the specified directory does not exist, the following error message will be displayed. ::
 
@@ -85,19 +85,19 @@ The following is [options] used in **cubrid unloaddb**.
 
     This option specifies that only the schema file will be created from amongst all the output files which can be created by the unload operation.    ::
     
-        cubrid unloaddb -s demodb
+        cubrid unloaddb -s demodb
 
 .. option:: -d, --data-only
 
     This option specifies that only the data file will be created from amongst all of the output files which can be created by the unload operation. ::
 
-        cubrid unloaddb -d demodb
+        cubrid unloaddb -d demodb
 
 .. option:: --output-prefix=PREFIX
 
     This option specifies the prefix for the names of schema and object files created by the unload operation. Once the example is executed, the schema file name becomes *abcd_schema* and the object file name becomes *abcd_objects*. If the **--output-prefix** option is not specified, the name of the database to be unloaded is used as the prefix. ::
 
-        cubrid unloaddb --output-prefix abcd demodb
+        cubrid unloaddb --output-prefix abcd demodb
 
 .. option:: --hash-file
     
@@ -281,7 +281,7 @@ The following table shows [options] available with the **cubrid loaddb** utility
 
     The following example shows a file that details errors.
 
-    *  The warning errors from 24 to 33 indicating DB volume space is insufficient are not ignored by configuring +DEFAULT.
+    *  The warning errors from 24 to 33 indicating DB volume space is insufficient are not ignored by configuring +DEFAULT.
     
     *  The error code 2 is not ignored because +2 has been specified later, even when -2 has been specified first.
     
@@ -455,7 +455,7 @@ The following steps describes migration scenario that can be applied while the e
 
 #. Store the existing CUBRID configuration files
 
-    Store the configurations files such as **cubrid.conf**, **cubrid_broker.conf** and **cm.conf ** in the **CUBRID/conf** directory. The purpose of this step is to conveniently apply parameter values for the existing CUBRID database environment to the new one.
+    Store the configurations files such as **cubrid.conf**, **cubrid_broker.conf** and **cm.conf ** in the **CUBRID/conf** directory. The purpose of this step is to conveniently apply parameter values for the existing CUBRID database environment to the new one.
 
 #. Install a new version of CUBRID
 

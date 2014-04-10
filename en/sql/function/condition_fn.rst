@@ -242,11 +242,11 @@ The **IN** compares to determine whether the single data value on the left is in
 IS NULL
 =======
 
-The **IS NULL** compares to determine whether the expression specified on the left is **NULL**, and if it is **NULL**, returns **TRUE** and it can be used in the conditional expression. If **NOT** comes before the **NULL** keyword, the result of a **NOT** operation on the result of the **IS NULL** operation is returned.
+The **IS NULL** compares to determine whether the expression specified on the left is **NULL**, and if it is **NULL**, returns **TRUE** and it can be used in the conditional expression. If **NOT** comes before the **NULL** keyword, the result of a **NOT** operation on the result of the **IS NULL** operation is returned.
 
     expression IS [ NOT ] NULL
 
-*   *expression* : A single-value column, path expression (ex.: *tbl_name.col_name*), constant value or arithmetic function that produces a single value can be used. 
+*   *expression* : A single-value column, path expression (ex.: *tbl_name.col_name*), constant value or arithmetic function that produces a single value can be used. 
 
 .. code-block:: sql
 
@@ -291,7 +291,7 @@ LIKE
 
 The **LIKE** compares patterns between character string data, and returns **TRUE** if a character string whose pattern matches the search word is found. Pattern comparison target types are **CHAR**, **VARCHAR** and **STRING**. The **LIKE** search cannot be performed on an **BIT** type. If **NOT** comes before the **LIKE** keyword, the result of a **NOT** operation on the result of the **LIKE** operation is returned.
 
-A wild card string corresponding to any character or character string can be included in the search word on the right of the **LIKE** operator. % (percent) and _ (underscore) can be used. .% corresponds to any character string whose length is 0 or greater, and _ corresponds to one character. An escape character is a character that is used to search for a wild card character itself, and can be specified by the user as another character (**NULL**, alphabet, or number whose length is 1. See below for an example of using a character string that includes wild card or escape characters. ::
+A wild card string corresponding to any character or character string can be included in the search word on the right of the **LIKE** operator. % (percent) and _ (underscore) can be used. .% corresponds to any character string whose length is 0 or greater, and _ corresponds to one character. An escape character is a character that is used to search for a wild card character itself, and can be specified by the user as another character (**NULL**, alphabet, or number whose length is 1. See below for an example of using a character string that includes wild card or escape characters. ::
 
     expression [ NOT ] LIKE pattern [ ESCAPE char ]
 
@@ -401,7 +401,7 @@ The difference between **REGEXP** and **LIKE** are as follows:
 
     0
 
-In the syntax below, if *expression* matches *pattern*, 1 is returned; otherwise, 0 is returned. If either *expression* or *pattern* is **NULL**, **NULL** is returned.
+In the syntax below, if *expression* matches *pattern*, 1 is returned; otherwise, 0 is returned. If either *expression* or *pattern* is **NULL**, **NULL** is returned.
 
 The second syntax has the same meaning as the third syntax, which both syntaxes are using **NOT**.
 
@@ -586,7 +586,7 @@ The second syntax has the same meaning as the third syntax, which both syntaxes 
 CASE
 ====
 
-The **CASE** expression uses the SQL statement to perform an **IF** ... **THEN** statement. When a result of comparison expression specified in a **WHEN** clause is true, a value specified in **THEN** clause is returned. A value specified in an **ELSE** clause is returned otherwise. If no **ELSE** clause exists, **NULL** is returned. ::
+The **CASE** expression uses the SQL statement to perform an **IF** ... **THEN** statement. When a result of comparison expression specified in a **WHEN** clause is true, a value specified in **THEN** clause is returned. A value specified in an **ELSE** clause is returned otherwise. If no **ELSE** clause exists, **NULL** is returned. ::
 
     CASE control_expression simple_when_list
     [ else_clause ]
@@ -615,7 +615,7 @@ The data type for a value returned by the **CASE** expression is determined base
 *   If data types for result specified in the **THEN** statement are all same, a value with the data type is returned.
 *   If data types can be convertible to common data type even though they are not all same, a value with the data type is returned.
 *   If any of values for *result* is a variable length string, a value data type is a variable length string. If values for *result* are all a fixed length string, the longest character string or bit string is returned.
-*   If any of values for result is an approximate numeric data type, a value with a numeric data type is returned. The number of digits after the decimal point is determined  to display all significant figures.
+*   If any of values for result is an approximate numeric data type, a value with a numeric data type is returned. The number of digits after the decimal point is determined  to display all significant figures.
 
 .. code-block:: sql
 
@@ -929,7 +929,7 @@ Operation is performed by converting the type of every argument into that with t
 *   **SHORT** < **INT** < **BIGINT** < **NUMERIC** < **FLOAT** < **DOUBLE**
 *   **DATE** < **TIMESTAMP** < **DATETIME**
 
-For example, if a type of a is **INT** and b is **BIGINT**, then **IFNULL** (a, b) returns a **BIGINT** type. If a type of a is **INTEGER** and b is **TIMESTAMP**, then **IFNULL** (a, b) returns a **VARCHAR** type.
+For example, if a type of a is **INT** and b is **BIGINT**, then **IFNULL** (a, b) returns a **BIGINT** type. If a type of a is **INTEGER** and b is **TIMESTAMP**, then **IFNULL** (a, b) returns a **VARCHAR** type.
 
 **IFNULL** (*a*, *b*) or **NVL** (*a*, *b*) has the same meaning as the **CASE** expression below. ::
 
@@ -1008,7 +1008,7 @@ LEAST
 
     Therefore, more than one expression that is specified as parameters must be of the type that can be compared with each other. If the types of the specified parameters are identical, so are the types of the return values; if they are different, the type of the return value becomes a convertible common data type.
 
-    That is, the **LEAST** function compares the values of column 1, column 2 and column 3 in the same row and returns the smallest value while the :func:`MIN` compares the values of column in all result rows and returns the smallest value. 
+    That is, the **LEAST** function compares the values of column 1, column 2 and column 3 in the same row and returns the smallest value while the :func:`MIN` compares the values of column in all result rows and returns the smallest value. 
 
     :param expression: Specifies more than one expression. Their types must be comparable each other. One of the arguments is **NULL**, **NULL** is returned.
     :rtype: same as that of the argument
@@ -1041,7 +1041,7 @@ NULLIF
     :param expr2: expression to be compared with *expr1*
     :rtype: type of *expr1*
 
-**NULLIF** (*a*, *b*) is the same of the **CASE** expression. ::
+**NULLIF** (*a*, *b*) is the same of the **CASE** expression. ::
 
     CASE
     WHEN a = b THEN NULL
@@ -1116,7 +1116,7 @@ Operation is performed by converting the type of every argument into that with t
 *   **SHORT** < **INT** < **BIGINT** < **NUMERIC** < **FLOAT** < **DOUBLE**
 *   **DATE** < **TIMESTAMP** < **DATETIME**
 
-For example, if a type of a is **INT**, b, **BIGINT**, and c, **SHORT**, then **NVL2** (a, b, c) returns a **BIGINT** type. If a type of a is **INTEGER**, b, **DOUBLE**, and c, **TIMESTAMP**, then **NVL2** (a, b, c) returns a **VARCHAR** type.
+For example, if a type of a is **INT**, b, **BIGINT**, and c, **SHORT**, then **NVL2** (a, b, c) returns a **BIGINT** type. If a type of a is **INTEGER**, b, **DOUBLE**, and c, **TIMESTAMP**, then **NVL2** (a, b, c) returns a **VARCHAR** type.
 
 .. code-block:: sql
 

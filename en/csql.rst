@@ -95,7 +95,7 @@ The following example shows how to access the **demodb** database on the remote 
 CSQL Options
 ------------
 
-To display the option list in the prompt, execute the **csql** utilities without specifying the database name as follows: ::
+To display the option list in the prompt, execute the **csql** utilities without specifying the database name as follows: ::
 
     $ csql
     A database-name is missing.
@@ -152,13 +152,13 @@ To display the option list in the prompt, execute the **csql** utilities withou
 
 .. option:: -u, --user=ARG
 
-    The following example shows how to specify the name of the user that will connect to the specified database with the **-u** option. If the **-u** option is not specified, **PUBLIC** that has the lowest level of authorization will be specified as a user. If the user name is not valid, an error message is displayed and the **csql** utility is terminated. If there is a password for the user name you specify, you will be prompted to enter the password. ::
+    The following example shows how to specify the name of the user that will connect to the specified database with the **-u** option. If the **-u** option is not specified, **PUBLIC** that has the lowest level of authorization will be specified as a user. If the user name is not valid, an error message is displayed and the **csql** utility is terminated. If there is a password for the user name you specify, you will be prompted to enter the password. ::
 
         csql -u DBA demodb
 
 .. option:: -p, --password=ARG
 
-    The following example shows how to enter the password of the user specified with the **-p** option. Especially since there is no prompt to enter a password for the user you specify in a batch mode, you must enter the password using the **-p** option. When you enter an incorrect password, an error message is displayed and the **csql** utility is terminated. ::
+    The following example shows how to enter the password of the user specified with the **-p** option. Especially since there is no prompt to enter a password for the user you specify in a batch mode, you must enter the password using the **-p** option. When you enter an incorrect password, an error message is displayed and the **csql** utility is terminated. ::
 
         csql -u DBA -p *** demodb
 
@@ -170,13 +170,13 @@ To display the option list in the prompt, execute the **csql** utilities withou
 
 .. option:: -c, --command=ARG
 
-    The following example shows how to execute more than one SQL statement from the shell with the **-c** option. Multiple statements are separated by semicolons (;). ::
+    The following example shows how to execute more than one SQL statement from the shell with the **-c** option. Multiple statements are separated by semicolons (;). ::
 
         csql -c "select * from olympic;select * from stadium" demodb
 
 .. option:: -l, --line-output
 
-    With **-l** option, you can display the values of SELECT lists by line. If **-l** option is omitted, all SELECT lists of the result record are displayed in one line. ::
+    With **-l** option, you can display the values of SELECT lists by line. If **-l** option is omitted, all SELECT lists of the result record are displayed in one line. ::
 
         csql -l demodb
 
@@ -211,13 +211,13 @@ To display the option list in the prompt, execute the **csql** utilities withou
 
 .. option:: --no-auto-commit
 
-    The following example shows how to stop the auto-commit mode with the **--no-auto-commit** option. If you don't configure **--no-auto-commit** option, the CSQL Interpreter runs in an auto-commit mode by default, and the SQL statement is committed automatically at every execution. Executing the **;AUtocommit** session command after starting the CSQL Interpreter will also have the same result. ::
+    The following example shows how to stop the auto-commit mode with the **--no-auto-commit** option. If you don't configure **--no-auto-commit** option, the CSQL Interpreter runs in an auto-commit mode by default, and the SQL statement is committed automatically at every execution. Executing the **;AUtocommit** session command after starting the CSQL Interpreter will also have the same result. ::
 
         csql --no-auto-commit demodb
 
 .. option:: --no-pager
 
-    The following example shows how to display the execution results by the CSQL Interpreter at once instead of page-by-page with the **--no-pager** option. The results will be output page-by-page if **--no-pager** option is not specified. ::
+    The following example shows how to display the execution results by the CSQL Interpreter at once instead of page-by-page with the **--no-pager** option. The results will be output page-by-page if **--no-pager** option is not specified. ::
 
         csql --no-pager demodb
 
@@ -357,7 +357,7 @@ The keyboard commands used on the **less** are as follows.
 This command changes the current working directory where the CSQL Interpreter is running to the specified directory. If you don't specify the path, the directory will be changed to the home directory. ::
 
     csql> ;cd /home1/DBA/CUBRID
-    Current directory changed to  /home1/DBA/CUBRID.
+    Current directory changed to  /home1/DBA/CUBRID.
 
 **Exiting the CSQL Interpreter (;EXit)**
 
@@ -380,13 +380,13 @@ The **;List** session command lists the contents of the query buffer that have b
 
 **Executing SQL statements (;RUn)**
 
-This command executes SQL statements in the query buffer. Unlike the **;Xrun** session command described below, the buffer will not be cleared even after the query execution. ::
+This command executes SQL statements in the query buffer. Unlike the **;Xrun** session command described below, the buffer will not be cleared even after the query execution. ::
 
     csql> ;run
 
 **Clearing the query buffer after executing the SQL statement (;Xrun)**
 
-This command executes SQL statements in the query buffer. The buffer will be cleared after the query execution. ::
+This command executes SQL statements in the query buffer. The buffer will be cleared after the query execution. ::
 
     csql> ;xrun
 
@@ -445,17 +445,17 @@ A command that tries to reconnect to the target database in a CSQL session. Note
 
 **Displaying the current date (;DATE)**
 
-The **;DATE** command displays the current date and time in the CSQL Interpreter. ::
+The **;DATE** command displays the current date and time in the CSQL Interpreter. ::
 
     csql> ;date
-         Tue July 29 18:58:12 KST 2008
+         Tue July 29 18:58:12 KST 2008
 
 **Displaying the database information (;DATAbase)**
 
-This command displays the database name and host name where the CSQL Interpreter is working. If the database is running, the HA mode (one of those following: active, standby, or maintenance) will be displayed as well.  ::
+This command displays the database name and host name where the CSQL Interpreter is working. If the database is running, the HA mode (one of those following: active, standby, or maintenance) will be displayed as well.  ::
 
     csql> ;database
-         demodb@cubridhost (active)
+         demodb@cubridhost (active)
 
 **Displaying schema information of a class (;SChema)**
 
@@ -476,7 +476,7 @@ The **;SChema** session command displays schema information of the specified tab
 
 **Displaying the trigger (;TRigger)**
 
-This command searches and displays the trigger specified. If there is no trigger name specified, all the triggers defined will be displayed. ::
+This command searches and displays the trigger specified. If there is no trigger name specified, all the triggers defined will be displayed. ::
 
     csql> ;trigger
     === <Help: All Triggers> ===
@@ -484,7 +484,7 @@ This command searches and displays the trigger specified. If there is no trigger
 
 **Checking the parameter value(;Get)**
 
-You can check the parameter value currently set in the CSQL Interpreter using the **;Get** session command. An error occurs if the parameter name specified is incorrect. ::
+You can check the parameter value currently set in the CSQL Interpreter using the **;Get** session command. An error occurs if the parameter name specified is incorrect. ::
 
     csql> ;get isolation_level
     === Get Param Input ===
@@ -568,7 +568,7 @@ The command format is as follows.
     
 **Displaying information (;Info)**
 
-The **;Info** session command allows you to check information such as schema, triggers, the working environment, locks and statistics. ::
+The **;Info** session command allows you to check information such as schema, triggers, the working environment, locks and statistics. ::
 
     csql> ;info lock
     *** Lock Table Dump ***
@@ -702,7 +702,7 @@ If this value is set to ON, it makes the record display in several lines by colu
     
 **Displaying query history (;HISTORYList)**
 
-This command displays the list that contains previously executed commands (input) and their history numbers. ::
+This command displays the list that contains previously executed commands (input) and their history numbers. ::
 
     csql> ;historylist
     ----< 1 >----
@@ -712,13 +712,13 @@ This command displays the list that contains previously executed commands (input
 
 **Reading input with the specified history number into the buffer (;HISTORYRead)**
 
-You can use **;HISTORYRead** session command to read input with history number in the **;HISTORYList** list into the command buffer. You can enter **;run** or **;xrun** directly because it has the same effect as when you enter SQL statements directly. ::
+You can use **;HISTORYRead** session command to read input with history number in the **;HISTORYList** list into the command buffer. You can enter **;run** or **;xrun** directly because it has the same effect as when you enter SQL statements directly. ::
 
     csql> ;historyread 1
 
 **Calling the default editor (;EDIT)**
 
-This command calls the specified editor. The default editor is **vi** on Linux **Notepad** on Windows environment. Use **;EDITOR_Cmd** command to specify a different editor. ::
+This command calls the specified editor. The default editor is **vi** on Linux **Notepad** on Windows environment. Use **;EDITOR_Cmd** command to specify a different editor. ::
 
     csql> ;edit
 

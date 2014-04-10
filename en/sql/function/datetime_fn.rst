@@ -16,9 +16,9 @@ ADDDATE, DATE_ADD
 
     Therefore, to return value of **DATETIME** type, you should convert the value of first argument by using the **CAST** function. Even though the date resulting from the operation exceeds the last day of the month, the function returns a valid **DATE** value considering the last date of the month.
 
-    If every input argument value of date and time is 0, the return value is determined by the **return_null_on_function_errors** system parameter; if it is set to yes, then **NULL** is returned; if it is set to no, an error is returned. The default value is **no**.
+    If every input argument value of date and time is 0, the return value is determined by the **return_null_on_function_errors** system parameter; if it is set to yes, then **NULL** is returned; if it is set to no, an error is returned. The default value is **no**.
 
-    If the calculated value is between '0000-00-00 00:00:00' and '0001-01-01 00:00:00', a value having 0 for all arguments is returned in **DATE** or **DATETIME** type. Note that operation in JDBC program is determined by the configuration of zeroDateTimeBehavior, connection URL property. For more information about JDBC connection URL, please refer :ref:`jdbc-connection-conf`\ .
+    If the calculated value is between '0000-00-00 00:00:00' and '0001-01-01 00:00:00', a value having 0 for all arguments is returned in **DATE** or **DATETIME** type. Note that operation in JDBC program is determined by the configuration of zeroDateTimeBehavior, connection URL property. For more information about JDBC connection URL, please refer :ref:`jdbc-connection-conf`\ .
 
     :param date: It is a **DATE**, **TIMETIME**, or **TIMESTAMP** expression that represents the start date. If an invalid **DATE** value such as '2006-07-00' is specified, an error is returned.
     :param expr: It represents the interval value to be added to the start date. If a negative number is specified next to the **INTERVAL** keyword, the interval value is subtracted from the start date.
@@ -171,7 +171,7 @@ ADD_MONTHS
     The **ADD_MONTHS** function adds a *month* value to the expression *date_argument* of **DATE** type, and it returns a **DATE** type value. If the day (*dd*) of the value specified as an argument exists within the month of the result value of the operation, it returns the given day (*dd*); otherwise returns the last day of the given month (*dd*). If the result value of the operation exceeds the expression range of the **DATE** type, it returns an error.
 
     :param date_argument: Specifies an expression of **DATE** type. To specify a **TIMESTAMP** or **DATETIME** value, an explicit casting to **DATE** type is required. If the value is **NULL**, **NULL** is returned.
-    :param month: Specifies the number of the months to be added to the *date_argument*. Both positive and negative values can be specified. If the given value is not an integer type, conversion to an integer type by an implicit casting (rounding to the first place after the decimal point) is performed. If the value is **NULL**, **NULL** is returned.
+    :param month: Specifies the number of the months to be added to the *date_argument*. Both positive and negative values can be specified. If the given value is not an integer type, conversion to an integer type by an implicit casting (rounding to the first place after the decimal point) is performed. If the value is **NULL**, **NULL** is returned.
 
 .. code-block:: sql
 
@@ -399,7 +399,7 @@ DATEDIFF
 
     The **DATEDIFF** function returns the difference between two arguments as an integer representing the number of days. Arguments that can be specified are **DATE**, **TIMESTAMP** and **DATETIME** types and its return value is only **INTEGER** type.
 
-    If every input argument value of date and time is 0, the return value is determined by the **return_null_on_function_errors** system parameter; if it is set to yes, then **NULL** is returned; if it is set to no, an error is returned. The default value is **no**.
+    If every input argument value of date and time is 0, the return value is determined by the **return_null_on_function_errors** system parameter; if it is set to yes, then **NULL** is returned; if it is set to no, an error is returned. The default value is **no**.
 
     :param date1,date2: Specifies the types that include date (**DATE**, **TIMESTAMP** or **DATETIME**) type or string that represents the value of corresponding type. If invalid string is specified, an error is returned.
     :rtype: INT
@@ -433,7 +433,7 @@ DATE_SUB, SUBDATE
 
     If every input argument value of date and time is 0, the return value is determined by the **return_null_on_function_errors** system parameter; if it is set to yes, then **NULL** is returned; if it is set to no, an error is returned. The default value is **no**.
 
-    If the calculated value is between '0000-00-00 00:00:00' and '0001-01-01 00:00:00', a value having 0 for all arguments is returned in **DATE** or **DATETIME** type. Note that operation in JDBC program is determined by the configuration of zeroDateTimeBehavior, connection URL property (see :ref:`jdbc-connection-conf` for details).
+    If the calculated value is between '0000-00-00 00:00:00' and '0001-01-01 00:00:00', a value having 0 for all arguments is returned in **DATE** or **DATETIME** type. Note that operation in JDBC program is determined by the configuration of zeroDateTimeBehavior, connection URL property (see :ref:`jdbc-connection-conf` for details).
 
     :param date: It is a **DATE** or **TIMESTAMP** expression that represents the start date. If an invalid **DATE** value such as '2006-07-00' is specified, **NULL** is returned.
     :param expr: It represents the interval value to be subtracted from the start date. If a negative number is specified next to the **INTERVAL** keyword, the interval value is added to the start date.
@@ -485,7 +485,7 @@ DAY, DAYOFMONTH
 .. function:: DAY (date)
 .. function:: DAYOFMONTH (date)
 
-    The function **DAY** or **DAYOFMONTH** returns day in the range of 1 to 31 from the specified parameter. You can specify the **DATE**, **TIMESTAMP** or **DATETIME** type; the value is returned in **INTEGER** type. 
+    The function **DAY** or **DAYOFMONTH** returns day in the range of 1 to 31 from the specified parameter. You can specify the **DATE**, **TIMESTAMP** or **DATETIME** type; the value is returned in **INTEGER** type. 
     
     0 is not allowed in the argument value corresponding to year, month, and day; however, if 0 is inputted in every argument value corresponding to year, month, and day, 0 is returned as an exception.
 
@@ -527,9 +527,9 @@ DAYOFWEEK
 
 .. function:: DAYOFWEEK (date)
 
-    The **DAYOFWEEK** function returns a day in the range of 1 to 7 (1: Sunday, 2: Monday, ..., 7: Saturday) from the specified parameters. The day index is same as the ODBC standards. You can specify the **DATE**, **TIMESTAMP** or **DATETIME** type; the value is returned in **INTEGER** type.
+    The **DAYOFWEEK** function returns a day in the range of 1 to 7 (1: Sunday, 2: Monday, ..., 7: Saturday) from the specified parameters. The day index is same as the ODBC standards. You can specify the **DATE**, **TIMESTAMP** or **DATETIME** type; the value is returned in **INTEGER** type.
 
-    If every input argument value of year, month, and day is 0, the return value is determined by the **return_null_on_function_errors** system parameter; if it is set to yes, then **NULL** is returned; if it is set to no, an error is returned. The default value is **no**.
+    If every input argument value of year, month, and day is 0, the return value is determined by the **return_null_on_function_errors** system parameter; if it is set to yes, then **NULL** is returned; if it is set to no, an error is returned. The default value is **no**.
 
     :param date: Date
     :rtype: INT
@@ -567,9 +567,9 @@ DAYOFYEAR
 
 .. function:: DAYOFYEAR (date)
 
-    The **DAYOFYEAR** function returns the day of a year in the range of 1 to 366. You can specify the **DATE**, **TIMESTAMP** or **DATETIME** types; the value is returned in **INTEGER** type.
+    The **DAYOFYEAR** function returns the day of a year in the range of 1 to 366. You can specify the **DATE**, **TIMESTAMP** or **DATETIME** types; the value is returned in **INTEGER** type.
 
-    If every input argument value of year, month, and day is 0, the return value is determined by the **return_null_on_function_errors** system parameter; if it is set to yes, then **NULL** is returned; if it is set to no, an error is returned. The default value is **no**.
+    If every input argument value of year, month, and day is 0, the return value is determined by the **return_null_on_function_errors** system parameter; if it is set to yes, then **NULL** is returned; if it is set to no, an error is returned. The default value is **no**.
 
     :param date: Date
     :rtype: INT
@@ -716,9 +716,9 @@ FROM_UNIXTIME
 
     The **FROM_UNIXTIME** function returns the string of the specified format in **VARCHAR** type if the argument *format* is specified; if the argument *format* is omitted, it returns a value of **TIMESTAMP** type. Specify the arguement *unix_timestamp* as an **INTEGER** type that corresponds to the UNIX timestamp. The returned value is displayed in the current time zone.
     
-    It displays the result according to the format that you specified, and the date/time format, *format* follows the Date/Time Format 2 table of :func:`DATE_FORMAT`.
+    It displays the result according to the format that you specified, and the date/time format, *format* follows the Date/Time Format 2 table of :func:`DATE_FORMAT`.
 
-    The relation is not one of one-to-one correspondence between **TIMESTAMP** and UNIX timestamp so if you use :func:`UNIX_TIMESTAMP` or **FROM_UNIXTIME** function, partial value could be lost. For details, see :func:`UNIX_TIMESTAMP`.
+    The relation is not one of one-to-one correspondence between **TIMESTAMP** and UNIX timestamp so if you use :func:`UNIX_TIMESTAMP` or **FROM_UNIXTIME** function, partial value could be lost. For details, see :func:`UNIX_TIMESTAMP`.
 
     0 is not allowed in the argument value corresponding to year, month, and day; however, if 0 is inputted in every argument value corresponding to date and time, string where 0 is specified for every date and time value is returned. Note that operation in JDBC program is determined by the configuration of zeroDateTimeBehavior, connection URL property (see :ref:`jdbc-connection-conf` for details).
 
@@ -823,9 +823,9 @@ LAST_DAY
 
     The **LAST_DAY** function returns the last day of the given month as **DATE** type.
 
-    If every input argument value of year, month, and day is 0, the return value is determined by the **return_null_on_function_errors** system parameter; if it is set to yes, then **NULL** is returned; if it is set to no, an error is returned. The default value is **no**.
+    If every input argument value of year, month, and day is 0, the return value is determined by the **return_null_on_function_errors** system parameter; if it is set to yes, then **NULL** is returned; if it is set to no, an error is returned. The default value is **no**.
 
-    :param date_argument: Specifies an expression of **DATE** type. To specify a **TIMESTAMP** or **DATETIME** value, explicit casting to **DATE** is required. If the value is **NULL**, **NULL** is returned.
+    :param date_argument: Specifies an expression of **DATE** type. To specify a **TIMESTAMP** or **DATETIME** value, explicit casting to **DATE** is required. If the value is **NULL**, **NULL** is returned.
     :rtype: DATE
 
 .. code-block:: sql
@@ -868,7 +868,7 @@ MAKEDATE
     If every value specified in *year* and *dayofyear* is 0, the return value is determined by the **return_null_on_function_errors** system parameter; if it is set to yes, then **NULL** is returned; if it is set to no, an error is returned. The default value is **no**.
 
     :param year: Year in the range of 1 to 9999
-    :param dayofyear: If you input a value in the range of 0 to 99 in the argument, it is handled as an exception; *dayofyear* must be equal to or less than 3,615,902 and the return value of MAKEDATE(100, 3615902) is 9999/12/31.
+    :param dayofyear: If you input a value in the range of 0 to 99 in the argument, it is handled as an exception; *dayofyear* must be equal to or less than 3,615,902 and the return value of MAKEDATE(100, 3615902) is 9999/12/31.
     :rtype: DATE
 
 .. code-block:: sql
@@ -1068,7 +1068,7 @@ MONTHS_BETWEEN
 
     The **MONTHS_BETWEEN** function returns the difference between the given **DATE** value. The return value is **DOUBLE** type. An integer value is returned if the two dates specified as arguments are identical or are the last day of the given month; otherwise, a value obtained by dividing the day difference by 31 is returned.
 
-    :param date_argument: Specifies an expression of **DATE** type. To specify a **TIMESTAMP** or **DATETIME** value, explicit casting to **DATE** is required. If the value is **NULL**, **NULL** is returned.
+    :param date_argument: Specifies an expression of **DATE** type. To specify a **TIMESTAMP** or **DATETIME** value, explicit casting to **DATE** is required. If the value is **NULL**, **NULL** is returned.
     :rtype: DOUBLE
 
 .. code-block:: sql
@@ -1733,7 +1733,7 @@ WEEK
     :param mode: Value in the range of 0 to 7
     :rtype: INT
     
-You can omit the second argument, *mode* and must input a value in the range of 0 to 7. You can set that a week starts from Sunday or Monday and the range of the return value is from 0 to 53 or 1 to 53 with this value. If you omit the *mode*, the system parameter, **default_week_format** value(default: 0) will be used. The *mode* value means as follows:
+You can omit the second argument, *mode* and must input a value in the range of 0 to 7. You can set that a week starts from Sunday or Monday and the range of the return value is from 0 to 53 or 1 to 53 with this value. If you omit the *mode*, the system parameter, **default_week_format** value(default: 0) will be used. The *mode* value means as follows:
 
 +----------+---------------------------+-----------+-------------------------------------------------------------------+
 | mode     | Start Day of the Week     | Range     | The First Week of the Year                                        |
@@ -1844,7 +1844,7 @@ YEAR
 
 .. function:: YEAR (date)
 
-    The **YEAR** function returns the year in the range of 1 to 9,999 from the specified parameter. You can specify **DATE**, **TIMESTAMP** or **DATETIME** type; the value is returned in  **INTEGER** type.
+    The **YEAR** function returns the year in the range of 1 to 9,999 from the specified parameter. You can specify **DATE**, **TIMESTAMP** or **DATETIME** type; the value is returned in  **INTEGER** type.
 
     :param date: Date
     :rtype: INT

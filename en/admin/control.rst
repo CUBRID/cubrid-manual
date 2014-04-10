@@ -69,7 +69,7 @@ To use the CUBRID Manager, the Manager server must be running where database ser
 
 One of the following can be specified in *command*: **start**, **stop**, or **status**; **start** is used to run services; **stop** is used to stop services; **status** is used to check status.
 
-Controlling CUBRID HA
+Controlling CUBRID HA
 ---------------------
 
 The following **cubrid heartbeat** utility syntax shows how to use CUBRID HA. One of the following can be specified in *command*: 
@@ -125,7 +125,7 @@ In the Windows environment, the code below is normally executed only if a user w
     @ cubrid master start
     ++ cubrid master start: success
 
-The following message is returned if master process is already running. 
+The following message is returned if master process is already running. 
 
 ::
 
@@ -134,7 +134,7 @@ The following message is returned if master process is already running.
     @ cubrid master start
     ++ cubrid master is running.
 
-The following message is returned if master process fails to run. The example shows that service fails to start due to conflicts of the **cubrid_port_id** parameter value specified in the cubrid.conf file. In such a case, you can resolve the problem by changing the port. If it fails to start even though no port is occupied by process, delete /tmp/CUBRID1523 file and then restart the process. ::
+The following message is returned if master process fails to run. The example shows that service fails to start due to conflicts of the **cubrid_port_id** parameter value specified in the cubrid.conf file. In such a case, you can resolve the problem by changing the port. If it fails to start even though no port is occupied by process, delete /tmp/CUBRID1523 file and then restart the process. ::
 
     % cubrid service start
     
@@ -279,7 +279,7 @@ The following example shows how to check the status of master process and databa
     @ cubrid manager server status
     ++ cubrid manager server is not running.
     
-The following message is returned if master process has stopped.
+The following message is returned if master process has stopped.
 
 ::
 
@@ -375,7 +375,7 @@ If you start *demodb* server while master process has stopped, master process au
 
     ++ cubrid server start: success
 
-The following message is returned while *demodb* server is running.
+The following message is returned while *demodb* server is running.
 
 ::
 
@@ -400,7 +400,7 @@ The following example shows how to stop *demodb* server.
     This may take several minutes. Please wait.
     ++ cubrid server stop: success
 
-The following message is returned while *demodb* server has stopped. 
+The following message is returned while *demodb* server has stopped. 
 
 ::
 
@@ -839,7 +839,7 @@ Enter the command below to stop the broker. SHARD feature is stopped when the br
     @ cubrid broker stop
     ++ cubrid broker stop: success
 
-The following message is returned if the broker has stopped. 
+The following message is returned if the broker has stopped. 
 
 ::
 
@@ -947,7 +947,7 @@ If you do not specify options or arguments, the status of all brokers is display
 *   % query_editor: The broker name
 *   ID: Serial number of CAS within the broker
 *   PID: CAS process ID within the broker
-*   QPS:  The number of queries processed per second
+*   QPS:  The number of queries processed per second
 *   LQS: The number of long-duration queries processed per second
 *   PSIZE: Size of CAS
 *   STATUS: The current status of CAS (BUSY, IDLE, CLIENT_WAIT, CLOSE_WAIT)
@@ -1055,7 +1055,7 @@ The following views information of server/database accessed by broker, the last 
 Meaning of each column in code above is as follows:
 
 *   LAST ACCESS TIME: Time when CAS runs or the latest time when an application client accesses CAS
-*   DB: Name of a database which CAS accesses most recently    
+*   DB: Name of a database which CAS accesses most recently    
 *   HOST: Name of a which CAS accesses most recently
 *   LAST CONNECT TIME: Most recent time when CAS accesses a database
 *   CLIENT IP: IP of an application clients currently being connected to an application server(CAS). If no application client is connected, 0.0.0.0 is displayed.
@@ -1085,7 +1085,7 @@ Meaning of added columns in code above is as follows:
 *   AS(B): The number of CAS in the status of Busy
 *   AS(Ns-W): The number of CAS that the client belongs to has been waited for N seconds.
 *   AS(Ns-B): The number of CAS that the client belongs to has been Busy for N seconds.
-*   CANCELED: The number of queries have canceled by user interruption since the broker starts (if it is used with the **-l** *N* option, it specifies the number of accumulations for *N* seconds).
+*   CANCELED: The number of queries have canceled by user interruption since the broker starts (if it is used with the **-l** *N* option, it specifies the number of accumulations for *N* seconds).
 
 Use the **-m** option to display SHARD status and statistics information. For details on the parameter of **cubrid_broker.conf**, see :ref:`broker-configuration`. 
 
@@ -1346,7 +1346,7 @@ Limiting Broker Access
 
 To limit the client applications accessing the broker, set to **ON** for the **ACCESS_ CONTROL** parameter in the **cubrid_broker.conf** file, and enter a name of the file in which the users and the list of databases and IP addresses allowed to access the **ACCESS_CONTROL_FILE** parameter value are written. 
 The default value of the **ACCESS_CONTROL** broker parameter is **OFF**. 
-The **ACCESS_CONTROL** and **ACCESS_CONTROL_FILE** parameters must be written under [broker] which common parameters are specified.
+The **ACCESS_CONTROL** and **ACCESS_CONTROL_FILE** parameters must be written under [broker] which common parameters are specified.
 
 The format of **ACCESS_CONTROL_FILE** is as follows: 
 
@@ -1414,9 +1414,9 @@ The brokers specified above are QUERY_EDITOR, BROKER2, BROKER3, and BROKER4.
 
 The QUERY_EDITOR broker only allows the following application access requests.
 
-*   When a user logging into *dbname1* with a *dbuser1* account connects from IPs registered in READIP.txt
+*   When a user logging into *dbname1* with a *dbuser1* account connects from IPs registered in READIP.txt
 *   When a user logging into *dbname1* with a *dbuser2* account connects from IPs registered in WRITEIP1.txt and WRITEIP2.txt
-*   When a user logging into every database with a **DBA** account connects from IPs registered in READIP.txt, WRITEIP1.txt, and WRITEIP2.txt
+*   When a user logging into every database with a **DBA** account connects from IPs registered in READIP.txt, WRITEIP1.txt, and WRITEIP2.txt
 
 The following example shows how to specify the IPs allowed in ip_list_file.  
 
@@ -1502,7 +1502,7 @@ Enter the code below to run *broker1* only. Note that *broker1* should have alre
 
     % cubrid broker on broker1
 
-The following message is returned if *broker1* has not been configured in the shared memory. 
+The following message is returned if *broker1* has not been configured in the shared memory. 
 
 ::
 
@@ -1540,7 +1540,7 @@ The syntax for the **broker_changer** utility, which is used to change broker pa
 
 ::
 
-    broker_changer broker_name [cas_id] parameters value
+    broker_changer broker_name [cas_id] parameters value
 
 Enter the following to configure the **SQL_LOG** parameter to **ON** so that SQL logs can be written to the currently running broker. Such dynamic parameter change is effective only while the broker is running. 
 
@@ -2113,7 +2113,7 @@ The following logs are the results of executing the broker_log_top utility; logs
     query_editor_5.sql.log
 
     --Executing broker_log_top on Windows
-    % broker_log_top -F "11/11" -T "11/12" -t query_editor_1.sql.log query_editor_2.sql.log query_editor_3.sql.log query_editor_4.sql.log query_editor_5.sql.log
+    % broker_log_top -F "11/11" -T "11/12" -t query_editor_1.sql.log query_editor_2.sql.log query_editor_3.sql.log query_editor_4.sql.log query_editor_5.sql.log
 
 The **log.top.q** and **log.top.res** files are generated in the same directory where the analyzed logs are stored when executing the example above; 
 In the **log.top.q** file, you can see each SQL statement, and its line number. In the **log.top.res** file, you can see the minimum execution time, the maximum execution time, the average execution time, and the number of execution queries for each SQL statement. 
@@ -2408,21 +2408,21 @@ If there is only one message, they are the same, but if there are two messages, 
 +--------------------------------------------------+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------+
 | CAS_ER_NUM_BIND(-10007)                          |  Invalid parameter binding value argument / Parameter binding error | The number of data to be bound does not match with the number of data to be transferred.                             |
 +--------------------------------------------------+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| CAS_ER_UNKNOWN_U_TYPE(-10008)                    |  Invalid T_CCI_U_TYPE value / Parameter binding error               |                                                                                                                      |
+| CAS_ER_UNKNOWN_U_TYPE(-10008)                    |  Invalid T_CCI_U_TYPE value / Parameter binding error               |                                                                                                                      |
 +--------------------------------------------------+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| CAS_ER_DB_VALUE(-10009)                          |  Cannot make DB_VALUE                                               |                                                                                                                      |
+| CAS_ER_DB_VALUE(-10009)                          |  Cannot make DB_VALUE                                               |                                                                                                                      |
 +--------------------------------------------------+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| CAS_ER_TYPE_CONVERSION(-10010)                   |  Type conversion error                                              |                                                                                                                      |
+| CAS_ER_TYPE_CONVERSION(-10010)                   |  Type conversion error                                              |                                                                                                                      |
 +--------------------------------------------------+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------+
 | CAS_ER_PARAM_NAME(-10011)                        |  Invalid T_CCI_DB_PARAM value / Invalid database parameter name     | The name of the system parameter is not valid.                                                                       |
 +--------------------------------------------------+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| CAS_ER_NO_MORE_DATA(-10012)                      |  Invalid cursor position / No more data                             |                                                                                                                      |
+| CAS_ER_NO_MORE_DATA(-10012)                      |  Invalid cursor position / No more data                             |                                                                                                                      |
 +--------------------------------------------------+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| CAS_ER_OBJECT(-10013)                            |  Invalid oid / Object is not valid                                  |                                                                                                                      |
+| CAS_ER_OBJECT(-10013)                            |  Invalid oid / Object is not valid                                  |                                                                                                                      |
 +--------------------------------------------------+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| CAS_ER_OPEN_FILE(-10014)                         |  Cannot open file / File open error                                 |                                                                                                                      |
+| CAS_ER_OPEN_FILE(-10014)                         |  Cannot open file / File open error                                 |                                                                                                                      |
 +--------------------------------------------------+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| CAS_ER_SCHEMA_TYPE(-10015)                       |  Invalid T_CCI_SCH_TYPE value / Invalid schema type                 |                                                                                                                      |
+| CAS_ER_SCHEMA_TYPE(-10015)                       |  Invalid T_CCI_SCH_TYPE value / Invalid schema type                 |                                                                                                                      |
 +--------------------------------------------------+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------+
 | CAS_ER_VERSION(-10016)                           |  Version mismatch                                                   | The DB server version does not compatible with the client (CAS) version.                                             |
 +--------------------------------------------------+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------+
@@ -2430,30 +2430,30 @@ If there is only one message, they are the same, but if there are two messages, 
 +--------------------------------------------------+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------+
 | CAS_ER_NOT_AUTHORIZED_CLIENT(-10018)             |  Authorization error                                                | Access is denied.                                                                                                    |
 +--------------------------------------------------+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| CAS_ER_QUERY_CANCEL(-10019)                      |  Cannot cancel the query                                            |                                                                                                                      |
+| CAS_ER_QUERY_CANCEL(-10019)                      |  Cannot cancel the query                                            |                                                                                                                      |
 +--------------------------------------------------+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| CAS_ER_NOT_COLLECTION(-10020)                    |  The attribute domain must be the set type                          |                                                                                                                      |
+| CAS_ER_NOT_COLLECTION(-10020)                    |  The attribute domain must be the set type                          |                                                                                                                      |
 +--------------------------------------------------+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| CAS_ER_COLLECTION_DOMAIN(-10021)                 |  Heterogeneous set is not supported /                               |                                                                                                                      |
-|                                                  |  The domain of a set must be the same data type                     |                                                                                                                      |
+| CAS_ER_COLLECTION_DOMAIN(-10021)                 |  Heterogeneous set is not supported /                               |                                                                                                                      |
+|                                                  |  The domain of a set must be the same data type                     |                                                                                                                      |
 +--------------------------------------------------+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| CAS_ER_NO_MORE_RESULT_SET(-10022)                |  No More Result                                                     |                                                                                                                      |
+| CAS_ER_NO_MORE_RESULT_SET(-10022)                |  No More Result                                                     |                                                                                                                      |
 +--------------------------------------------------+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| CAS_ER_INVALID_CALL_STMT(-10023)                 |  Illegal CALL statement                                             |                                                                                                                      |
+| CAS_ER_INVALID_CALL_STMT(-10023)                 |  Illegal CALL statement                                             |                                                                                                                      |
 +--------------------------------------------------+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| CAS_ER_STMT_POOLING(-10024)                      |  Invalid plan                                                       |                                                                                                                      |
+| CAS_ER_STMT_POOLING(-10024)                      |  Invalid plan                                                       |                                                                                                                      |
 +--------------------------------------------------+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| CAS_ER_DBSERVER_DISCONNECTED(-10025)             |  Cannot communicate with DB Server                                  |                                                                                                                      |
+| CAS_ER_DBSERVER_DISCONNECTED(-10025)             |  Cannot communicate with DB Server                                  |                                                                                                                      |
 +--------------------------------------------------+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| CAS_ER_MAX_PREPARED_STMT_COUNT_EXCEEDED(-10026)  |  Cannot prepare more than MAX_PREPARED_STMT_COUNT statements        |                                                                                                                      |
+| CAS_ER_MAX_PREPARED_STMT_COUNT_EXCEEDED(-10026)  |  Cannot prepare more than MAX_PREPARED_STMT_COUNT statements        |                                                                                                                      |
 +--------------------------------------------------+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| CAS_ER_HOLDABLE_NOT_ALLOWED(-10027)              |  Holdable results may not be updatable or sensitive                 |                                                                                                                      |
+| CAS_ER_HOLDABLE_NOT_ALLOWED(-10027)              |  Holdable results may not be updatable or sensitive                 |                                                                                                                      |
 +--------------------------------------------------+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| CAS_ER_HOLDABLE_NOT_ALLOWED_KEEP_CON_OFF(-10028) |  Holdable results are not allowed while KEEP_CONNECTION is off      |                                                                                                                      |
+| CAS_ER_HOLDABLE_NOT_ALLOWED_KEEP_CON_OFF(-10028) |  Holdable results are not allowed while KEEP_CONNECTION is off      |                                                                                                                      |
 +--------------------------------------------------+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| CAS_ER_NOT_IMPLEMENTED(-10100)                   |  None / Attempt to use a not supported service                      |                                                                                                                      |
+| CAS_ER_NOT_IMPLEMENTED(-10100)                   |  None / Attempt to use a not supported service                      |                                                                                                                      |
 +--------------------------------------------------+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| CAS_ER_IS(-10200)                                |  None / Authentication failure                                      |                                                                                                                      |
+| CAS_ER_IS(-10200)                                |  None / Authentication failure                                      |                                                                                                                      |
 +--------------------------------------------------+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------+
 
 .. _cubrid-manager-server:
@@ -2470,7 +2470,7 @@ The following example shows how to start the CUBRID Manager server.
 
     % cubrid manager start
 
-The following message is returned if the CUBRID Manager server is already running. 
+The following message is returned if the CUBRID Manager server is already running. 
 
 ::
 
@@ -2566,8 +2566,8 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
     *   CM user authority: Includes the following information.
 
         *   The permission to configure broker
-        *   The permission to create a database. For now, this authority is only given to the **admin** user.
-        *   The permission to monitor status
+        *   The permission to create a database. For now, this authority is only given to the **admin** user.
+        *   The permission to monitor status
 
     *   Database information: A database that a CM user can use
     *   CM user password
@@ -2603,9 +2603,9 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
         
     .. option:: -c, --dbcreate AUTHORITY
 
-        Specifies the authority to create a database which will be granted to a new CM user.
+        Specifies the authority to create a database which will be granted to a new CM user.
 
-        You can use **none** (default) and **admin** as *AUTHORITY*.
+        You can use **none** (default) and **admin** as *AUTHORITY*.
 
         The following example shows how to create a CM user whose name is *testcm* and password is *testcmpwd* and then configure database creation authority to admin.  ::
 
@@ -2700,7 +2700,7 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
         
         ::
         
-            cm_admin changeuserauth -b monitor testcm    
+            cm_admin changeuserauth -b monitor testcm    
         
     .. option:: -c, --dbcreate
 
@@ -2711,7 +2711,7 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
 
         ::
 
-            cm_admin changeuserauth -c admin testcm
+            cm_admin changeuserauth -c admin testcm
 
     .. option:: -m, --monitor 
 
@@ -2722,7 +2722,7 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
 
         ::
 
-            cm_admin changeuserauth -m admin testcm
+            cm_admin changeuserauth -m admin testcm
 
 **Changing the CM User Password**
 

@@ -100,7 +100,7 @@ The following example shows how to grant the **SELECT**, **INSERT**, **UPDATE** 
 
 .. code-block:: sql
 
-    GRANT SELECT, INSERT, UPDATE, DELETE ON nation, athlete TO  brown, jones;
+    GRANT SELECT, INSERT, UPDATE, DELETE ON nation, athlete TO  brown, jones;
 
 The following example shows how to grant every authorization on the *tbl1* and *tbl2* tables to all users(public).
 
@@ -142,7 +142,7 @@ The following example shows how to grant **SELECT**, **INSERT**, **UPDATE** and 
 
     GRANT SELECT, INSERT, UPDATE, DELETE ON nation, athlete TO smith, jones;
 
-The following example shows how to execute the **REVOKE** statement; this allows *jones* to have only **SELECT** authorization. If *jones* has granted authorization to another user, the user is also allowed to execute **SELECT** only.
+The following example shows how to execute the **REVOKE** statement; this allows *jones* to have only **SELECT** authorization. If *jones* has granted authorization to another user, the user is also allowed to execute **SELECT** only.
 
 .. code-block:: sql
 

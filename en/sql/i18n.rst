@@ -1069,9 +1069,9 @@ The following shows converting two parameters with different collation to one co
 
     ::
     
-       coercibility( ?:0 )   coercibility(@v1)   collation( ?:1 )      collation(@v1)          ?:2 =@v1
-    ===================================================================================================
-                        11                  11  'utf8_en_ci'          'utf8_bin'                      1
+           coercibility( ?:0 )   coercibility(@v1)   collation( ?:1 )      collation(@v1)          ?:2 =@v1
+        ===================================================================================================
+                            11                  11  'utf8_en_ci'          'utf8_bin'                      1
 
     .. code-block:: sql
 
@@ -1082,9 +1082,9 @@ The following shows converting two parameters with different collation to one co
 
     ::
     
-       coercibility( ?:0 )   coercibility(@v1)   collation( ?:1 )      collation(@v1)          ?:2 =@v1
-    ===================================================================================================
-                        11                  11  'utf8_en_cs'          'utf8_bin'                      0
+           coercibility( ?:0 )   coercibility(@v1)   collation( ?:1 )      collation(@v1)          ?:2 =@v1
+        ===================================================================================================
+                            11                  11  'utf8_en_cs'          'utf8_bin'                      0
 
     However, if collations of @v1 and 'A' are different as below and the two collations are different, an error occurs.
 

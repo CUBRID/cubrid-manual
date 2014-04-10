@@ -1219,7 +1219,11 @@ In front of the constant string, the charset introducer and the **COLLATE** modi
 
 The default charset and collation of the constant string is determined based on the current database connected (the **SET NAMES** statement executed last or the default value). 
 
-*   When the string charset introducer is specified and the **COLLATE** modifier is omitted, the default collation (binary collation) of corresponding charset is set. 
+*   When the string charset introducer is specified and the **COLLATE** modifier is omitted, the collation is:
+
+    *   if the charset introducer is the same as client charset (from a previous SET NAMES), then the client collation is applied.
+    *   if the charset introducer does not match the client charset, then the binary collation(one of euckr_bin, iso88591_bin and utf8_bin) corresponding to charset introducer is applied.
+
 *   When the charset introducer is omitted and the **COLLATE** modifier is specified, the character is determined based on collation.
 
 The following example shows how to specify the charset introducer and the **COLLATE** modifier.

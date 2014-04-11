@@ -145,7 +145,7 @@ The user-defined variables are not case-sensitive. The user-defined variable typ
 
        typeof(@v1)         typeof(@v2)         typeof(@v3)         typeof(@v4)
     ======================================================================================
-      'integer'           'bigint'            'character (-1)'     'character varying (10)'
+      'integer'           'bigint'            'character (-1)'    'character varying (1073741823)
 
 The user-defined variables can be changed when you define values.
 
@@ -160,7 +160,7 @@ The user-defined variables can be changed when you define values.
 
       @v := 1                typeof(@v1)          @v1 := '1'             typeof(@v1)
     ======================================================================================
-      1                     'integer'             '1'                   'character (-1)'
+      1                     'integer'             '1'                    'character (-1)'
 
 ::
 
@@ -188,7 +188,7 @@ The following example shows how to define the variable a and assign a value 1 to
     SET @a = 1;
     SELECT @a;
 
-::     
+::
 
       @a
     ======================
@@ -206,7 +206,7 @@ The following example shows how to count the number of rows in the **SELECT** st
     SELECT @a := @a+1 AS row_no, i FROM t;
 
 ::
-    
+
       row_no                          i
      ===================================
       1                               2
@@ -224,9 +224,9 @@ The following example shows how to use the user-defined variable as the input of
      
     PREPARE stmt FROM 'SELECT i FROM t WHERE i < ?';
     EXECUTE stmt USING @a;
- 
+
 ::
- 
+
                 i
     =============
                 2

@@ -40,54 +40,54 @@ A trigger is created by defining a trigger target, condition and action to be pe
     CREATE TRIGGER trigger_name
     [ STATUS { ACTIVE | INACTIVE } ]
     [ PRIORITY key ]
-    event_time event_type[ event_target ]
+    <event_time> <event_type> [<event_target>]
     [ IF condition ]
-    EXECUTE [ AFTER | DEFERRED ] action [ ; ]
+    EXECUTE [ AFTER | DEFERRED ] action ;
      
-    event_time:
-       • BEFORE
-       • AFTER
-       • DEFERRED
+    <event_time> ::=
+        BEFORE |
+        AFTER  |
+        DEFERRED
      
-    event_type: 
-       • INSERT
-       • STATEMENT INSERT 
-       • UPDATE
-       • STATEMENT UPDATE 
-       • DELETE
-       • STATEMENT DELETE
-       • ROLLBACK
-       • COMMIT
+    <event_type> ::=
+        INSERT |
+        STATEMENT INSERT |
+        UPDATE |
+        STATEMENT UPDATE |
+        DELETE |
+        STATEMENT DELETE |
+        ROLLBACK |
+        COMMIT
      
-    event_target: 
-       • ON table_name
-       • ON table_name [ (column_name) ]
+    <event_target> ::=
+        ON table_name |
+        ON table_name [ (column_name) ]
      
-    condition: 
-       • expression
+    <condition> ::=
+        expression
      
-    action: 
-       • REJECT    
-       • INVALIDATE TRANSACTION 
-         •  PRINT message_string
-         •  INSERT statement
-         •  UPDATE statement
-         •  DELETE statement 
+    <action> ::=
+        REJECT |
+        INVALIDATE TRANSACTION |
+        PRINT message_string |
+        INSERT statement |
+        UPDATE statement |
+        DELETE statement
 
-*   *trigger_name * : Specifies the name of the trigger to be defined.
+*   *trigger_name* : Specifies the name of the trigger to be defined.
 *   [ **STATUS** { **ACTIVE** | **INACTIVE** } ]: Defines the state of the trigger (if not defined, the default value is **ACTIVE**).
 
     *   If **ACTIVE** state is specified, the trigger is executed every time the corresponding event occurs.
     *   If **INACTIVE** state is specified, the trigger is not executed even when the corresponding event occurs. The state of the trigger can be modified. For details, see :ref:`alter-trigger` section.
-    
+
 *   [ **PRIORITY** *key* ]: Specifies a trigger priority if multiple triggers are called for an event. *key* must be a floating point value that is not negative. If the priority is not defined, the lowest priority 0 is assigned. Triggers having the same priority are executed in a random order. The priority of triggers can be modified. For details, see :ref:`alter-trigger` section.
 
-*   *event_time* : Specifies the point of time when the conditions and actions are executed. **BEFORE**, **AFTER** or **DEFERRED** can be specified. For details, see the :ref:`trigger-event-time` section.
-*   *event_type* : Trigger types are divided into a user trigger and a table trigger. For details, see the :ref:`trigger-event-type` section.
-*   *event_target* : An event target is used to specify the target for the trigger to be called. For details, see the :ref:`trigger-event-target` section.
+*   *event_time*: Specifies the point of time when the conditions and actions are executed. **BEFORE**, **AFTER** or **DEFERRED** can be specified. For details, see the :ref:`trigger-event-time` section.
+*   *event_type*: Trigger types are divided into a user trigger and a table trigger. For details, see the :ref:`trigger-event-type` section.
+*   *event_target*: An event target is used to specify the target for the trigger to be called. For details, see the :ref:`trigger-event-target` section.
 
-*   *condition* : Specifies the trigger condition. For details, see the :ref:`trigger-condition` section.
-*   *action* : Specifies the trigger action. For details, see the :ref:`trigger-action` section.
+*   *condition*: Specifies the trigger condition. For details, see the :ref:`trigger-condition` section.
+*   *action*: Specifies the trigger action. For details, see the :ref:`trigger-action` section.
 
 The following example shows how to create a trigger that rejects the update if the number of medals won is smaller than 0 when an instance of the *participant* table is updated.
 As shown below, the update is rejected if you try to change the number of gold (*gold*) medals that Korea won in the 2004 Olympic Games to a negative number.
@@ -101,7 +101,7 @@ As shown below, the update is rejected if you try to change the number of gold (
      
     UPDATE participant SET gold = -5 WHERE nation_code = 'KOR'
     AND host_year = 2004;
-     
+
 ::
 
     ERROR: The operation has been rejected by trigger "medal_trigger".
@@ -113,9 +113,9 @@ Event Time
 
 Specifies the point of time when trigger conditions and actions are executed. The types of event time are **BEFORE**, **AFTER** and **DEFERRED**.
 
-*   **BEFORE** : Checks the condition before the event is processed.
-*   **AFTER** : Checks the condition after the event is processed.
-*   **DEFERRED** : Checks the condition at the end of the transaction for the event. If you specify **DEFERRED**, you cannot use **COMMIT** or **ROLLBACK** as the event type.
+*   **BEFORE**: Checks the condition before the event is processed.
+*   **AFTER**: Checks the condition after the event is processed.
+*   **DEFERRED**: Checks the condition at the end of the transaction for the event. If you specify **DEFERRED**, you cannot use **COMMIT** or **ROLLBACK** as the event type.
 
 Trigger Type
 ------------
@@ -262,24 +262,25 @@ As shown in the table below, the use of correlation names is further restricted 
 +============+============+=======================+
 | **INSERT** | **new**    | **obj**               |
 +------------+------------+-----------------------+
-| **UPDATE** | **obj**    | obj                   |
-|            | **new**    | old (AFTER)           |
+| **UPDATE** | **obj**    | **obj**               |
+|            |            |                       |
+|            | **new**    | **old** (AFTER)       |
 +------------+------------+-----------------------+
-| **DELETE** | **obj**    | NA                    |
+| **DELETE** | **obj**    | N/A                   |
 +------------+------------+-----------------------+
 
-+----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Correlation Name     | Representative Attribute Value                                                                                                                                  |
-+======================+=================================================================================================================================================================+
-| **obj**              | Refers to the current attribute value of an instance. This can be used to access attribute values before an instance is updated or deleted.                     |
-|                      | It is also used to access attribute values after an instance has been updated or inserted.                                                                      |
-+----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **new**              | Refers to the attribute value proposed by an insert or update operation.                                                                                        |
-|                      | The new value can be accessed only before the instance is actually inserted or updated.                                                                         |
-+----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **old**              | Refers to the attribute value that existed prior to the completion of an update operation. This value is maintained only while the trigger is being performed.  |
-|                      | Once the trigger is completed, the **old** values get lost.                                                                                                     |
-+----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------+
++------------------+-----------------------------------------------------------------------------------------------------------------------+
+| Correlation Name | Representative Attribute Value                                                                                        |
++==================+=======================================================================================================================+
+| **obj**          | Refers to the current attribute value of an instance. This can be used to access attribute values before an instance  |
+|                  | is updated or deleted. It is also used to access attribute values after an instance has been updated or inserted.     |
++------------------+-----------------------------------------------------------------------------------------------------------------------+
+| **new**          | Refers to the attribute value proposed by an insert or update operation.                                              |
+|                  | The new value can be accessed only before the instance is actually inserted or updated.                               |
++------------------+-----------------------------------------------------------------------------------------------------------------------+
+| **old**          | Refers to the attribute value that existed prior to the completion of an update operation. This value is maintained   |
+|                  |  only while the trigger is being performed. Once the trigger is completed, the **old** values get lost.               |
++------------------+-----------------------------------------------------------------------------------------------------------------------+
 
 .. _trigger-action:
 
@@ -290,14 +291,14 @@ A trigger action describes what to be performed if the trigger condition is true
 
 The following is a list of actions that can be used for trigger definitions.
 
-*   **REJECT** : Discards the operation that initiated the trigger and keeps the former state of the database, if the condition is not true. Once the operation is performed, **REJECT** is allowed only when the action time is **BEFORE** because the operation cannot be rejected. Therefore, you must not use **REJECT** if the action time is **AFTER** or **DERERRED**.
+*   **REJECT**: Discards the operation that initiated the trigger and keeps the former state of the database, if the condition is not true. Once the operation is performed, **REJECT** is allowed only when the action time is **BEFORE** because the operation cannot be rejected. Therefore, you must not use **REJECT** if the action time is **AFTER** or **DERERRED**.
 
-*   **INVALIDATE TRANSACTION** : Allows the event operation that called the trigger, but does not allow the transaction that contains the commit to be executed. You must cancel the transaction by using the **ROLLBACK** statement if it is not valid. Such action is used to protect the database from having invalid data after a data-changing event happens.
+*   **INVALIDATE TRANSACTION**: Allows the event operation that called the trigger, but does not allow the transaction that contains the commit to be executed. You must cancel the transaction by using the **ROLLBACK** statement if it is not valid. Such action is used to protect the database from having invalid data after a data-changing event happens.
 
-*   **PRINT** : Displays trigger actions on the terminal screen in text messages, and can be used during developments or tests. The results of event operations are not rejected or discarded.
-*   **INSERT** : Inserts one or more new instances to the table.
-*   **UPDATE** : Updates one or more column values in the table.
-*   **DELETE** : Deletes one or more instances from the table.
+*   **PRINT**: Displays trigger actions on the terminal screen in text messages, and can be used during developments or tests. The results of event operations are not rejected or discarded.
+*   **INSERT**: Inserts one or more new instances to the table.
+*   **UPDATE**: Updates one or more column values in the table.
+*   **DELETE**: Deletes one or more instances from the table.
 
 The following example shows how to define an action when a trigger is created. The *medal_trig* trigger defines **REJECT** in its action. **REJECT** can be specified only when the action time is **BEFORE**.
 
@@ -320,17 +321,15 @@ ALTER TRIGGER
 
 In the trigger definition, **STATUS** and **PRIORITY** options can be changed by using the **ALTER** statement. If you need to alter other parts of the trigger (event targets or conditional expressions), you must delete and then re-create the trigger. ::
 
-    ALTER TRIGGER trigger_name  trigger_option [ ; ]
+    ALTER TRIGGER trigger_name <trigger_option> ;
 
-    trigger_option :
-    • STATUS { ACTIVE | INACTIVE }
-    • PRIORITY key
+    <trigger_option> ::=
+        STATUS { ACTIVE | INACTIVE } |
+        PRIORITY key
 
-*   *trigger_name* : Specifies the name of the trigger to be changed.
-*   *trigger_option* :
-
-    *   **STATUS** { **ACTIVE** | **INACTIVE** } : Changes the status of the trigger.
-    *   **PRIORITY** *key* : Changes the priority.
+*   *trigger_name*: Specifies the name of the trigger to be changed.
+*   **STATUS** { **ACTIVE** | **INACTIVE** }: Changes the status of the trigger.
+*   **PRIORITY** *key*: Changes the priority.
 
 The following example shows how to create the medal_trig trigger and then change its state to **INACTIVE** and its priority to 0.7.
 
@@ -356,9 +355,9 @@ DROP TRIGGER
 
 You can drop a trigger by using the **DROP TRIGGER** statement. ::
 
-    DROP TRIGGER trigger_name [ ; ] 
+    DROP TRIGGER trigger_name ; 
 
-*   *trigger_name* : Specifies the name of the trigger to be dropped.
+*   *trigger_name*: Specifies the name of the trigger to be dropped.
 
 The following example shows how to drop the medal_trig trigger.
 
@@ -400,16 +399,14 @@ Executing Deferred Condition and Action
 
 Executes the deferred condition or action of a trigger immediately. ::
 
-    EXECUTE DEFERRED TRIGGER trigger_identifier [ ; ]
+    EXECUTE DEFERRED TRIGGER <trigger_identifier> ;
 
-    trigger_identifier :
-    • trigger_name
-    • ALL TRIGGERS
+    <trigger_identifier> ::=
+        trigger_name |
+        ALL TRIGGERS
 
-*   *trigger_identifier* :
-
-    *   *trigger_name* : Executes the deferred action of the trigger when a trigger name is specified.
-    *   **ALL TRIGGERS** : Executes all currently deferred actions.
+*   *trigger_name*: Executes the deferred action of the trigger when a trigger name is specified.
+*   **ALL TRIGGERS**: Executes all currently deferred actions.
 
 Dropping Deferred Condition and Action
 --------------------------------------
@@ -418,14 +415,12 @@ Drops the deferred condition and action of a trigger. ::
 
     DROP DEFERRED TRIGGER trigger_identifier [ ; ]
 
-    trigger_option :
-    • trigger_name
-    • ALL TRIGGERS
+    <trigger_identifier> ::=
+        trigger_name |
+        ALL TRIGGERS
 
-*   *trigger_option* :
-
-    *   *trigger_name* : Cancels the deferred action of the trigger when a trigger name is specified.
-    *   **ALL TRIGGERS** : Cancels currently deferred actions.
+*   *trigger_name* : Cancels the deferred action of the trigger when a trigger name is specified.
+*   **ALL TRIGGERS** : Cancels currently deferred actions.
 
 Granting Trigger Authorization
 ------------------------------
@@ -517,16 +512,14 @@ Viewing Trigger Execution Log
 
 You can view the execution log of the trigger from a terminal by using the **SET TRIGGER TRACE** statement. ::
 
-    SET TRIGGER TRACE switch [ ; ]
+    SET TRIGGER TRACE <switch> ;
 
-    switch:
-    • ON
-    • OFF
+    <switch> ::=
+        ON |
+        OFF
 
-*   *switch* :
-
-    *   **ON** : Executes **TRACE** until the switch is set to **OFF** or the current database session terminates.
-    *   **OFF** : Stops the **TRACE**.
+*   **ON**: Executes **TRACE** until the switch is set to **OFF** or the current database session terminates.
+*   **OFF**: Stops the **TRACE**.
 
 The following example shows how to execute the **TRACE** and the *loop_tgr* trigger to view the trigger execution logs. To identify the trace for each condition and action executed when the trigger is called, a message is displayed on the terminal. The following message appears 15 times because the *loop_tgr* trigger is executed until the *gold* value becomes 0.
 
@@ -545,12 +538,9 @@ Limiting Nested Trigger
 
 With the **MAXIMUM DEPTH** keyword of the **SET TRIGGER** statement, you can limit the number of triggers to be initiated at each step. By doing so, you can prevent a recursively called trigger from falling into an infinite loop. ::
 
-    SET TRIGGER [ MAXIMUM ] DEPTH count [ ; ]
+    SET TRIGGER [ MAXIMUM ] DEPTH count ;
 
-    count:
-    • unsigned_integer_literal
-
-*   *unsigned_integer_literal* : A positive integer value that specifies the number of times that a trigger can recursively start another trigger or itself. If the number of triggers reaches the maximum depth, the database request stops(aborts) and the transaction is marked as invalid. The specified **DEPTH** applies to all other triggers except the current session. The maximum value is 32.
+*   *count*: A positive integer value that specifies the number of times that a trigger can recursively start another trigger or itself. If the number of triggers reaches the maximum depth, the database request stops(aborts) and the transaction is marked as invalid. The specified **DEPTH** applies to all other triggers except the current session. The maximum value is 32.
 
 The following example shows how to configure the maximum number of times of recursive trigger calling to 10. This applies to all triggers that start subsequently. In this example, the *gold* column value is updated to 15, so the trigger is called 16 times in total. This exceeds the currently set maximum depth and the following error message occurs.
 

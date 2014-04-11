@@ -98,8 +98,8 @@ You can insert a new record into a table in a database by using the **INSERT** s
 
 In **INSERT ... SET** syntax, the evaluation of an assignment expression is performed from left to right. If the column value is not specified, then the default value is assigned. If there is no default value, **NULL** is assigned.
  
-::
-         
+.. code-block:: sql
+
     CREATE TABLE tbl (a INT, b INT, c INT);
     INSERT INTO tbl SET a=1, b=a+1, c=b+2;
     SELECT * FROM tbl;
@@ -122,9 +122,9 @@ In the above example, a's value will be **NULL** since b's value is not specifie
 .. code-block:: sql
     
     SELECT * FROM tbl2;
-    
-::
 
+::
+    
             a            b            c
     ===================================
          NULL            1            3
@@ -142,7 +142,7 @@ In the above example, a's value will be 11 since b's value is not specified yet 
     SELECT * FROM tbl3;
     
 ::
- 
+
             a            b            c
     ===================================
            11            1            3
@@ -236,8 +236,8 @@ With ON DUPLICATE KEY UPDATE, "affected rows" value per row will be 1 if a new r
 .. code-block:: sql
     
     --insert duplicated value with specifying ON DUPLICATED KEY UPDATE clause
-    INSERT INTO a_tbl3 VALUES(2, 'bbb', '222-2222')
-    ON DUPLICATE KEY UPDATE phone = '222-2222';
+    INSERT INTO a_tbl3 VALUES(2, 'ggg', '222-2222')
+    ON DUPLICATE KEY UPDATE name='ggg', phone = '222-2222';
      
     SELECT * FROM a_tbl3 WHERE id=2;
     

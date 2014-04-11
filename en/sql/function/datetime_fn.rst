@@ -940,7 +940,7 @@ MAKETIME
     :param min: Integers representing the minutes in the range of 0 to 59
     :param sec: Integers representing the minutes in the range of 0 to 59
     :rtype: DATETIME
-    
+
 .. code-block:: sql
 
     SELECT MAKETIME(13,34,4);
@@ -1015,7 +1015,7 @@ MONTH
 .. function:: MONTH (date)
 
     The **MONTH** function returns the month in the range of 1 to 12 from specified argument. You can specify the **DATE**, **TIMESTAMP** or **DATETIME** type; the value is returned in **INTEGER** type. 
-    
+
     0 is not allowed in the argument value corresponding to year, month, and day; however, if 0 is inputted in every argument value corresponding to date, 0 is returned as an exception.
 
     :param date: Date
@@ -1479,7 +1479,7 @@ TIMESTAMP
 .. function:: TIMESTAMP (date [,time])
 
     The **TIMESTAMP** function converts a **DATE** or **TIMESTAMP** type expression to **DATETIME** type.
-    
+
     If the **DATE** format string ('*YYYY-MM-DD*' or '*MM/DD/YYYY*') or **TIMESTAMP** format string ('*YYYY-MM-DD HH:MI:SS*' or '*HH:MI:SS MM/DD/ YYYY*') is specified as the first argument, the function returns it as **DATETIME**.
 
     If the **TIME** format string ('*HH:MI:SS*') is specified as the second, the function adds it to the first argument and returns the result as a **DATETIME** type. If the second argument is not specified, **12:00:00.000 AM** is specified by default.
@@ -1592,7 +1592,7 @@ TRUNC
     :param date: The value of **DATE**, **TIMESTAMP** or **DATETIME**
     :param fmt: Specifies the format for the truncating unit. If omitted, "dd" is default.
     :rtype: DATE
-    
+
     The format and its unit and the return value are as follows:
     
     +-------------------+----------+-----------------------------------------------------------------------+
@@ -1732,7 +1732,7 @@ WEEK
     :param date: Date
     :param mode: Value in the range of 0 to 7
     :rtype: INT
-    
+
 You can omit the second argument, *mode* and must input a value in the range of 0 to 7. You can set that a week starts from Sunday or Monday and the range of the return value is from 0 to 53 or 1 to 53 with this value. If you omit the *mode*, the system parameter, **default_week_format** value(default: 0) will be used. The *mode* value means as follows:
 
 +----------+---------------------------+-----------+-------------------------------------------------------------------+

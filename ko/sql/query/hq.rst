@@ -14,7 +14,7 @@
     hierarchical_clause :
         [START WITH condition] CONNECT BY [NOCYCLE] condition
         | CONNECT BY [NOCYCLE] condition [START WITH condition]
-    
+
 START WITH 절
 =============
 
@@ -221,7 +221,7 @@ LEVEL
     ORDER BY id;
 
 ::
-    
+
     id  mgrid       name        level
     =========================================
     3   1           Jonas       2
@@ -236,7 +236,7 @@ LEVEL
     SELECT LEVEL FROM db_root CONNECT BY LEVEL <= 10;
 
 ::
-    
+
             level
     =============
                 1
@@ -435,7 +435,7 @@ SYS_CONNECT_BY_PATH
 테이블이 생성되었다면, 아래와 같이 **UNION ALL** 을 이용하여 계층 구조를 가지는 전체 데이터와 **LEVEL** 값을 조회할 수 있다.
 
 .. code-block:: sql
-    
+
     CREATE TABLE tree_table (ID int PRIMARY KEY, ParentID int, name VARCHAR(128));
     
     INSERT INTO tree_table VALUES (1,NULL,'Kim');
@@ -497,7 +497,7 @@ SYS_CONNECT_BY_PATH
     FROM tree_table
     START WITH ParentID IS NULL
     CONNECT BY ParentID=PRIOR ID;
-    
+
 ::
 
                ID     ParentID  name                        level
@@ -513,7 +513,6 @@ SYS_CONNECT_BY_PATH
                 4            1  'Smith'                         2
                 7            4  'Brown'                         3
                 8            4  'Lin'                           3
-
 
 루프로 인한 오류를 발생시키지 않으려면 다음과 같이 **NOCYCLE** 을 명시할 수 있다.
 

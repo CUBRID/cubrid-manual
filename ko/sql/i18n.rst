@@ -127,7 +127,7 @@ CUBRID에서 콜레이션은 문자셋을 포함한다. 예를 들어, "utf8_en_
         
     *   bin/binary: 정렬 순서가 코드포인트의 순서와 똑같음. 메모리의 바이트 순서를 비교하면 거의 같은 결과가 나오는데, 공백 문자와 EUC의 더블 바이트 패딩 문자는 "bin" 콜레이션에서 항상 0으로 정렬된다. LDML 파일에는 bin 콜레이션을 설정하는 방법이 없는데(bin 콜레이션은 이미 내장되어 있음), LDML 파일에서 다음을 설정하면 비슷하게 적용된다: strength="quaternary" 또는 strength="identical"
 
-    *   ai: 악센트 구분 안 함. 예를 들어,  'Á'는 'A'와 같은 순서이다. 이는 또한 대소문자를 구분하지 않는다. LDML 파일에서 다음을 설정하면 적용됨: strength="primary"
+    *   ai: 악센트 구분 안 함. 예를 들어,  'Á'는 'A'와 같은 순서이다. 이는 또한 대소문자를 구분하지 않는다. LDML 파일에서 (strength="primary")를 설정하면 적용된다.
         
     *   uca:  UCA(Unicode Collation Algorithm) 기반 콜레이션을 의미함. 내장된 변형 콜레이션과 구별하기 위해서만 사용된다. 즉, 모든 LDML 콜레이션은 UCA를 기반으로 하지만 짧은 이름을 유지하기 위해 "_uca"가 생략되며, 예외적으로 'utf8_ko_cs_uca', 'utf8_tr_cs_uca' 이 두 개의 콜레이션만 내장된 'utf8_ko_cs', 'utf8_tr_cs' 콜레이션과 구별하기 위해 사용된다.
         
@@ -1034,7 +1034,7 @@ CHARSET과 COLLATE 수정자
     ::
     
         ERROR: '+' requires arguments with compatible collations.
-        
+
     다음 예제에서는 s2와 s3가 같은 콜레이션이므로 '+' 표현식이 utf8_tr_cs이 되고, s1은 칼럼이므로 표현식보다 낮은 변환도를 갖기 때문에 비교 연산은 utf8_en_cs 콜레이션을 사용해서 수행된다.
 
     .. code-block:: sql
@@ -1056,7 +1056,7 @@ CHARSET과 COLLATE 수정자
 *   **세션 변수와(또는) 호스트 변수의 콜레이션 변환**
 
     콜레이션 변환도가 11(세션 변수, 호스트 변수)이고 문자셋이 동일한 피연산자끼리 비교하는 경우 바이너리가 아닌(non-binary) 콜레이션으로 변환된다.
-    
+
     .. code-block:: sql
     
         SET NAMES utf8;
@@ -1066,7 +1066,7 @@ CHARSET과 COLLATE 수정자
         EXECUTE stmt USING 'A', 'A', 'A';
     
     @v1과 'A'를 비교하면 @v1은 바이너리가 아닌 콜레이션인 utf8_en_ci로 변환되어 @v1과 'A'가 서로 동일하게 되므로, 아래처럼 "? = @v1"의 결과는 1이 된다.
-    
+
     ::
     
            coercibility( ?:0 )   coercibility(@v1)   collation( ?:1 )      collation(@v1)          ?:2 =@v1
@@ -1096,7 +1096,7 @@ CHARSET과 COLLATE 수정자
         PREPARE stmt FROM 'SELECT COERCIBILITY(?), COERCIBILITY(@v1), COLLATION(?), COLLATION(@v1), ? = @v1';
         SET NAMES utf8 COLLATE utf8_en_cs;
         EXECUTE stmt USING 'A', 'A', 'A';
-    
+
     ::
     
         ERROR: Context requires compatible collations.
@@ -1223,7 +1223,7 @@ SET NAMES 문
 
     *   문자셋 소개자가 클라이언트 문자셋(SET NAMES로 지정)과 동일하면 클라이언트 콜레이션이 적용된다.
     *   문자셋 소개자가 클라이언트 문자셋과 동일하지 않으면 문자셋 소개자와 동일한 바이너리 콜레이션(euckr_bin, iso88591_bin, utf8_bin 중 하나)이 적용된다.
-    
+
 *   문자셋 소개자를 생략하고 **COLLATE** 수정자를 지정하면, 문자셋은 콜레이션에 따라 적용된다.
 
 다음은 문자셋 소개자와 **COLLATE** 수정자를 지정하는 예제이다.
@@ -1439,17 +1439,21 @@ http://www.unicode.org/Public/UCA/latest/allkeys.txt\ 의 DUCET에도 축약에 
 
         수준 1의 첫 번째 과정에서 가중치 0x15A3과 0x15A3이 비교된다. 두 번째 과정에서 가중치 0x0000은 비교가 생략되고, 0x1770과 0x1770이  비교된다. 여기까지 문자열이 동일하므로 수준 2 가중치로 계속 비교하게 되는데, 첫 번째 과정에서 0x0020을 0x0020과 비교하고 두 번째 과정에서 0x0020을 0x0047과 비교하여 "Ar" < "Är"이라는 결과를 생성한다. 이 예제를 통해 확장이 있는 콜레이션을 사용할 때 어떻게 문자열 비교가 수행되는지 살펴보았다.
 
-        이제 콜레이션 설정을 독일어 콜레이션으로 변경하여 같은 문자열에 대해 다른 순서로 정렬되는 과정을 살펴보자. 독일어에서 "Ä"는 문자 그룹 "AE"로 해석된다. 이 예에 해당하는 코드포인트와 콜레이션 원소들은 다음과 같다. ::
+        이제 콜레이션 설정을 독일어 콜레이션으로 변경하여 같은 문자열에 대해 다른 순서로 정렬되는 과정을 살펴보자. 독일어에서 "Ä"는 문자 그룹 "AE"로 해석된다. 이 예에 해당하는 코드포인트와 콜레이션 원소들은 다음과 같다. 
+
+        ::
 
             0041  ; [.15A3.0020.0008.0041] # LATIN CAPITAL LETTER A
             0045  ; [.15FF.0020.0008.0045] # LATIN CAPITAL LETTER E
             0072  ; [.1770.0020.0002.0072] # LATIN SMALL LETTER R
             00C4  ; [.15A3.0020.0008.0041][.15FF.0020.0008.0045] # LATIN CAPITAL LETTER A WITH DIAERESIS; EXPANSION
 
-        문자열 "Ar"과 "Är"을 비교할 때 확장이 있는 콜레이션을 사용하면, 두 문자열에 있는 문자들의 콜레이션 원소 리스트를 결합한 후 비교하는 과정이 포함된다. ::
+        문자열 "Ar"과 "Är"을 비교할 때 확장이 있는 콜레이션을 사용하면, 두 문자열에 있는 문자들의 콜레이션 원소 리스트를 결합한 후 비교하는 과정이 포함된다.
 
-            Ar      [.15A3.0020.0008.0041][.1770.0020.0002.0072]
-            Är      [.15A3.0020.0008.0041][.15FF.0020.0008.0045][.1770.0020.0002.0072]
+        ::
+
+            Ar [.15A3.0020.0008.0041][.1770.0020.0002.0072]
+            Är [.15A3.0020.0008.0041][.15FF.0020.0008.0045][.1770.0020.0002.0072]
 
         첫 번째 과정에서 수준 1의 가중치 0x15A3과 0x15A3를 비교한다. 그리고 나서 0x1770과 0x15FF를 비교하여 "Ar" > "Är"이라는 결과가 나오는데, 이는 앞의 예제와는 전혀 다른 결과이다.
 
@@ -1477,7 +1481,7 @@ http://www.unicode.org/Public/UCA/latest/allkeys.txt\ 의 DUCET에도 축약에 
     INSERT INTO t VALUES ('È','È');
 
     -- the first returns 1, while the second does 2
-    SELECT OCTET_LENGTH (s_iso), OCTET_LENGTH (s_utf8) FROM t;
+    SELECT OCTET_LENGTH(s_iso), OCTET_LENGTH(s_utf8) FROM t;
 
 위의 예는 콘솔(또는 응용 클라이언트)에서 iso88591 문자셋으로 질의를 입력해야 한다.
 
@@ -1526,7 +1530,7 @@ CUBRID가 지원하는 3 가지 문자셋에 대한 변환 규칙은 다음과 �
 
 콜레이션 설정으로 인한 영향
 ---------------------------
-        
+
 LIKE 조건 최적화
 ^^^^^^^^^^^^^^^^
 
@@ -1700,8 +1704,8 @@ LDML 파일을 생성한 이후, <*language*> 부분이 CUBRID 설정 파일인 
 
 make_locale 스크립트는 새로 추가되는 로캘을 컴파일하고 그 데이터를 CUBRID 로캘 라이브러리($CUBRID/lib/에 있는 로캘)에 추가하는데 사용된다.
 
-LDML 파일은 UTF-8로 인코딩된다. 
-같은 LDML 파일에는 하나의 로캘 정보만 기록할 수 있다.
+LDML 파일은 UTF-8로 인코딩되며, 같은 LDML 파일에는 하나의 로캘 정보만 기록할 수 있다.
+
 LDML 파일에 새로운 로캘을 추가하려면 다음이 요구된다.
 
 *   캘린더 정보를 명시한다(CUBRID 날짜 포맷, 월 및 요일 이름의 다양한 포맷, 오전/오후에 대한 이름). CUBRID는 캘린더 정보를 명시하기 위해 그레고리력만 지원한다(일반적인 LDML은 CUBRID가 지원하지 않는 다른 캘린더 타입을 지원한다).
@@ -1734,7 +1738,7 @@ LDML 숫자 정보
 *   <symbols> 태그는 정수와 소수 분할 기호 문자와 자릿수 구분 기호 문자를 정의한다. CUBRID는 이 기호들에 대해 ASCII 기호만을 기대하며, 공백 문자는 허용하지 않는다. CUBRID는 3개의 숫자를 그룹지어 자릿수를 구분한다.
 
 .. below is commented out.
-.. *     The <currency> tag defines the three letter ISO 4217 code (http://en.wikipedia.org/wiki/ISO_4217) for default currency of the locale. Only one currency for locale is allowed. Setting the currency, instructs CUBRID how to interpret conversions were MONETARY data type is implied (:func:`TO_NUMBER`).
+..  *   The <currency> tag defines the three letter ISO 4217 code (http://en.wikipedia.org/wiki/ISO_4217) for default currency of the locale. Only one currency for locale is allowed. Setting the currency, instructs CUBRID how to interpret conversions were MONETARY data type is implied (:func:`TO_NUMBER`).
 
 ..  CUBRID supports a limited number of currencies.
 
@@ -1790,17 +1794,19 @@ LDML 숫자 정보
     | RSD                    |     serbian dinar    |
     +------------------------+----------------------+
 
-
 LDML 알파벳
 -----------
 
 LDML 알파벳은 로캘의 알파벳에 대한 대소문자 규칙을 정의한다.
 'CUBRIDAlphabetMode' 속성은 문자에 대한 데이터의 기본 원본(primary source)을 정의한다. 일반적으로 이 속성은 "UNICODEDATAFILE"로 지정되어야 하는데, 이 값은 CUBRID가 유니코드 데이터 파일($CUBRID/locales/data/unicodedata.txt)을 사용한다는 의미이다.
+
 이 파일은 수정되어서는 안 되며, 특정 문자에 대한 변경은 LDML 파일에서 이루어져야 한다. 이러한 값이 설정되어 있는 경우, 코드포인트 65535까지의 모든 유니코드 문자가 대소문자 정보를 가지고 로딩된다.
 'CUBRIDAlphabetMode'에 대해 허용된 다른 값은 "ASCII"로, ASCII 문자만이 소문자, 대문자 또는 대소문자 구분을 하지 않는 문자열 비교 함수에서 사용될 수 있다.
+
 "ASCII"는 CUBRID가 모든 UTF-8 (4바이트) 인코딩 문자를 지원하는 기능에 영향을 주는 것이 아니라, 특정 문자가 대소문자를 구분하는 기능에 포함되지 않도록 제한할 뿐이다.
 
 대소문자 구분 규칙은 선택적이며 문자 정보(UNICODEDATAFILE 또는 ASCII)의 기본 원본 중 가장 우선적으로 적용된다.
+
 CUBRID는 대문자 규칙(<u> 태그) 정의와 소문자 규칙(<l> 태그) 정의를 허용한다.
 대문자 규칙과 소문자 규칙 각각은 원본-대상(<s> = source, <d> destination)의 쌍으로 된 구성을 설정한다.
 예를 들어, 다음은 문자 "A"의 소문자가 "aa"(2개의 "a" 문자)가 되도록 정의한다.
@@ -1829,6 +1835,7 @@ CSQL 입출력 시 변환은 양방향으로 동작하지만, 설정된 코드�
 
 'windows_codepage'는 CUBRID가 콘솔 변환을 자동으로 활성화하는 Windows 코드페이지에 대한 값이다.
 'linux_charset'은 UNIX 계열 시스템의 LANG 환경 변수에서 문자셋 부분과 동일한 값이다. Linux 콘솔에서는 원래의 CUBRID 문자셋을 사용하기를 권장한다.
+
 'file' 속성은 'type' 속성의 값이 "ISO"와 "DBCS"인 경우에만 요구되며 번역 정보($CUBRID/locales/data/codepages/)를 포함하는 파일이다.
 
 LDML 콜레이션
@@ -1837,7 +1844,7 @@ LDML 콜레이션
 콜레이션을 설정하는 것은 CUBRID에서 LDML 로캘을 추가할 때 가장 복잡한 작업이다.
 UTF-8 코드셋을 가진 콜레이션만 설정될 수 있다.
 CUBRID는 축약과 확장을 포함하는 UCA(Unicode Collation Algorithm, http://www.unicode.org/reports/tr10/)에 의해 명시된 대부분의 구성을 설정하는 것을 허용하지만, 콜레이션에 대한 속성은 대부분 'settings' 속성을 통해 제어된다.
- 
+
 LDML 파일은 여러 개의 콜레이션을 포함할 수 있다. 콜레이션은 'include' 태그를 사용하여 외부 파일에 의해 포함될 수 있다. 'collations' 태그의 'validSubLocales' 속성은 외부 파일에 의한 외부 콜레이션이 포함될 때 로캘 컴파일을 제어하도록 허용하는 필터이다. 이 속성의 값은 로캘의 리스트 혹은 "*"이 될 수 있으며, "*"을 사용하면 서브트리에 있는 콜레이션이 모든 로캘에 추가된다.
 
 하나의 콜레이션은 'collation' 태그와 서브트리를 사용하여 정의된다. 'type' 속성은 콜레이션에 대한 이름을 나타내므로 CUBRID에 추가될 것이다.
@@ -1846,10 +1853,10 @@ LDML 파일은 여러 개의 콜레이션을 포함할 수 있다. 콜레이션�
 *   'id'는 CUBRID에서 사용되는 (내부의) 숫자 식별자이다. 32부터 255까지의 정수이며 선택적이지만, 할당되지 않은 값의 명시적인 설정을 강력히 권장한다. :ref:`collation-naming-rules`\ 을 참고한다.
 *   'strength'는 문자열 비교 방법의 척도이다. :ref:`collation-properties`\ 을 참고한다. 허용되는 값은 다음과 같다.
 
-    *    "quaternary": 서로 같은 문자이나 다른 그래픽 기호이면 다르게 비교되지만, 다른 유니코드 코드포인트가 같게 비교될 수 있다.
-    *    "tertiary": 서로 같은 문자의 그래픽 심볼은 동일하며, 대소문자를 구분하는 콜레이션이다.
-    *    "secondary": 대소문자 구분 없는 콜레이션이며, 액센트가 있는 문자 사이의 비교 결과가 다르다.
-    *    "primary": 액센트는 무시되며, 모든 문자는 기본(base) 문자로 비교된다.
+    *   "quaternary": 서로 같은 문자이나 다른 그래픽 기호이면 다르게 비교되지만, 다른 유니코드 코드포인트가 같게 비교될 수 있다.
+    *   "tertiary": 서로 같은 문자의 그래픽 심볼은 동일하며, 대소문자를 구분하는 콜레이션이다.
+    *   "secondary": 대소문자 구분 없는 콜레이션이며, 액센트가 있는 문자 사이의 비교 결과가 다르다.
+    *   "primary": 액센트는 무시되며, 모든 문자는 기본(base) 문자로 비교된다.
 
 *   'caseLevel':  'strength' 값이 "tertiary" 보다 작은 값을 가지는 콜레이션에 대해 대소문자 구분 있는 비교를 가능하게 하는 특별한 설정. 유효한 값은 "on" 또는 "off"이다.
 *   'caseFirst': 대소문자 순서. 유효한 값은 "lower", "upper" 그리고 "off"이다. "upper" 값은 대문자가 같은 문자의 소문자보다 앞선다는 의미이다.
@@ -1864,6 +1871,7 @@ LDML 파일은 여러 개의 콜레이션을 포함할 수 있다. 콜레이션�
 
 'cubridrules' 태그는 선택적이며 코드포인트 또는 코드포인트의 범위에 대한 가중치를 명시적으로 설정하는데 사용될 수 있다. 'cubridrules'는 DUCET 파일로부터 기본(primary) 콜레이션을 로딩한 후 '<rules>' 태그에 정의된 UCA 규칙이 적용되기 전에 적용된다.
 각 규칙은 '<set>' 태그로 닫힌다. 규칙이 하나의 유니코드 코드포인트만을 언급하는 경우, 코드포인트의 16진수 값을 포함하는 '<scp>' 태그가 제공된다.
+
 모든 사용 가능한 CUBRID 콜레이션은 다음과 같은 CUBRID 규칙을 포함한다.
 
     .. code-block:: xml

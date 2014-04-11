@@ -31,7 +31,7 @@ If the **PRIMARY KEY** constraint is defined in the table and this is referred b
                 3
                 13
                 23
-     
+
 .. code-block:: sql
 
     --AUTO_INCREMENT column value increases from the initial value after truncating the table

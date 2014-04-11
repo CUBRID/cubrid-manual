@@ -19,10 +19,10 @@ MERGE
      
     <merge_insert_clause> ::=
     WHEN NOT MATCHED THEN INSERT [(<attributes_list>)] VALUES (<expr_list>) [WHERE <insert_condition>]
-    
+
     <merge_hint> ::=
     /*+ [ USE_UPDATE_IDX (<update_index_list>) ] [ USE_INSERT_IDX (<insert_index_list>) ] */
-    
+
 *   <*target*>: 갱신하거나 삽입할 대상 테이블. 여러 개의 테이블 또는 뷰가 될 수 있다.
 *   <*source*>: 데이터를 가져올 원본 테이블. 여러 개의 테이블 또는 뷰가 될 수 있으며, 부질의(subquery)도 가능하다.
 *   <*join_condition*>: 갱신할 조건을 명시한다.
@@ -45,10 +45,10 @@ MERGE
     *   <*merge_update_clause*>만 지정하거나 <*merge_update_clause*>와 함께 지정할 수 있다. 둘 다 명시한다면 순서는 바뀌어도 된다.
 
 *   <*merge_hint*>: **MERGE** 문의 인덱스 힌트
- 
+
     *   **USE_UPDATE_IDX** (<*update_index_list*>): **MERGE** 문의 **UPDATE** 절에서 사용되는 인덱스 힌트. *update_index_list*\ 에 **UPDATE** 절을 수행할 때 사용할 인덱스 이름을 나열한다. <*join_condition*>과 <*update_condition*>에 해당 힌트가 적용된다.
     *   **USE_INSERT_IDX** (<*insert_index_list*>): **MERGE** 문의 **INSERT** 절에서 사용되는 인덱스 힌트. *insert_index_list*\ 에 **INSERT** 절을 수행할 때 사용할 인덱스 이름을 나열한다. <*join_condition*>에 해당 힌트가 적용된다.
-    
+
 **MERGE** 문을 실행하기 위해서는 원본 테이블에 대해 **SELECT** 권한을 가져야 하며, 대상 테이블에 대해 **UPDATE** 절이 포함되어 있으면 **UPDATE** 권한, **DELETE** 절이 포함되어 있으면 **DELETE** 권한, **INSERT** 절이 포함되어 있으면 **INSERT** 권한을 가져야 한다. 
 
 다음은 *source_table*\ 의 값을 *target_table*\ 에 합치는 예이다.

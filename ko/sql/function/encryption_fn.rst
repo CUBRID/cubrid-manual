@@ -10,13 +10,11 @@
     .. function:: AES_ENCRYPT(string,key_string)
 
         **AES_ENCRYPT** 함수와 **AES_DECRYPT** 함수는 공식 AES(Advanced Encryption Standard) 알고리즘(Rijndael 암호에 기반함)을 사용하는 데이터의 암호화와 복호화를 가능하게 한다. AES_ENCRYPT() 함수는 128 비트 키로 인코딩되며 문자열을 암호화하여 바이너리 열을 반환한다.
-        
+
         :param string: 암호화할 대상 문자열
         :param key_string: 키 문자열
         :rtype: STRING 
 
-
-        
     AES는 블럭 단위의 알고리즘이므로 일정하지 않은 길의의 문자열을 인코딩하기 위해 패딩(padding)이 사용되며, 결과 문자열의 길이가 AES/ECB/PKCS7의 공식을 사용하여 계산될 수 있다.
 
     반환되는 값은 바이너리 문자열이므로, 화면에는 비정상적으로 출력될 수 있다.
@@ -55,7 +53,7 @@
                aes_decrypt( aes_encrypt('cubrid', 'encr_key'), 'encr_key')
             ======================
               'cubrid'
-        
+
 MD5
 ===
 
@@ -141,7 +139,7 @@ SHA2
     :rtype: STRING
 
 인자 중 하나 이상이 NULL 이거나 허용된 해시 길이가 아니면 NULL을 반환한다. 정상 범위의 인자를 입력한 경우 원하는 비트 수를 포함하는 해시 값을 반환한다.
-    
+
 .. code-block:: sql
 
     SELECT SHA2('cubrid', 256);

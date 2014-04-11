@@ -1089,7 +1089,6 @@ NTILE
     :param expression: 버킷의 개수. 숫자 값을 반환하는 임의의 연산식을 지정한다. 
     :rtype: INT
     
-    
 **NTILE** 함수는 주어진 버킷 개수로 행의 개수를 균등하게 나누어 버킷 번호를 부여한다. 즉, NTILE 함수는 equi-height histogram을 생성해준다. 각 버킷에 있는 행의 개수는 최대 1개까지 차이가 생길 수 있다. 나머지 값(행의 개수를 버킷 개수로 나눈 나머지)이 각 버킷에 대해 1번 버킷부터 하나씩 배포된다.
 
 반면에 :func:`WIDTH_BUCKET` 함수는 주어진 버킷 개수로 주어진 범위를 균등하게 나누어 버킷 번호를 부여한다. 즉, 버킷마다 각 범위의 넓이는 균등하다.
@@ -1477,7 +1476,7 @@ STDDEV, STDDEV_POP
     :param ALL: 모든 값에 대해 표준 편차를 구하기 위해 사용되며, 기본값이다.
     :param DISTINCT,DISTINCTROW,UNIQUE: 중복이 제거된 유일한 값에 대해서만 표준 편차를 구하기 위해 사용된다.
     :rtype: DOUBLE
-    
+
 리턴 값은 :func:`VAR_POP` 리턴 값의 제곱근과 같으며 **DOUBLE** 타입이다. 결과 계산에 사용할 행이 없으면 **NULL** 을 반환한다.
 
 다음은 함수에 적용된 공식이다.
@@ -1548,7 +1547,7 @@ STDDEV_SAMP
     :param ALL: 모든 값에 대해 표준 편차를 구하기 위해 사용되며, 기본값이다.
     :param DISTINCT,DISTINCTROW,UNIQUE: 중복이 제거된 유일한 값에 대해서만 표준 편차를 구하기 위해 사용된다.
     :rtype: DOUBLE
-    
+
 리턴 값은 :func:`VAR_SAMP` 리턴 값의 제곱근과 같으며 **DOUBLE** 타입이다. 결과 계산에 사용할 행이 없으면 **NULL** 을 반환한다.
 
 다음은 함수에 적용된 공식이다.
@@ -1702,7 +1701,7 @@ VARIANCE, VAR_POP
     :param ALL: 모든 값에 대해 모분산을 구하기 위해 사용되며, 기본값이다.
     :param DISTINCT,DISTINCTROW,UNIQUE: 중복이 제거된 유일한 값에 대해서만 모분산을 구하기 위해 사용된다.
     :rtype: DOUBLE
-    
+
 리턴 값은 **DOUBLE** 타입이며, 결과 계산에 사용할 행이 없으면 **NULL** 을 반환한다.
 
 다음은 함수에 적용된 공식이다.
@@ -1770,7 +1769,7 @@ VAR_SAMP
     :param ALL: 모든 값에 대해 표본 분산을 구하기 위해 사용되며, 기본값이다.
     :param DISTINCT,DISTINCTROW,UNIQUE: 중복이 제거된 유일한 값에 대해서만 표본 분산을 구하기 위해 사용된다.
     :rtype: DOUBLE
-    
+
 리턴 값은 **DOUBLE** 타입이며, 결과 계산에 사용할 행이 없으면 **NULL** 을 반환한다.
 
 다음은 함수에 적용된 공식이다.

@@ -37,9 +37,10 @@
 
 분할 키에는 다음과 같은 제약 사항이 적용된다.
 
-* 분할 키는 분할 테이블에서 하나의 칼럼만을 사용해야 한다.
-* :doc:`집계 함수 및 분석 함수<function/analysis_fn>`, :doc:`논리 연산자<function/logical_op>`, :doc:`비교 연산자 <function/comparison_op>`\ 는 분할 키 표현식에 사용할 수 없다.
-* 다음 함수 및 표현식은 분할 키 표현식에서 허용되지 않는다.
+*   분할 키는 분할 테이블에서 하나의 칼럼만을 사용해야 한다.
+*   :doc:`집계 함수 및 분석 함수<function/analysis_fn>`, :doc:`논리 연산자<function/logical_op>`, :doc:`비교 연산자 <function/comparison_op>`\ 는 분할 키 표현식에 사용할 수 없다.
+*   다음 함수 및 표현식은 분할 키 표현식에서 허용되지 않는다.
+
     *   :ref:`CASE <case-expr>` 
     *   :func:`CHARSET` 
     *   :func:`CHR` 
@@ -365,7 +366,7 @@ CUBRID 9.0 이전 버전에서 분할 프루닝은 질의 컴파일 단계에서
     *   분할 재구성을 수행하는 동안, 새로 분할된 스키마에 맞춰 분할 간에 데이터를 이동한다. 재구성되는 분할의 크기에 따라 시간이 많이 소요될 수 있으므로 주의 깊게 해당 작업을 계획할 필요가 있다.
     *   **REORGANIZE PARTITION** 절은 분할 방법을 바꾸기 위해 사용할 수 없다. 예를 들어, 영역 분할 테이블을 해시 분할 테이블로 바꿀 수 없다.
     *   분할을 재구성한 후에 최소한 하나의 분할이 존재해야 한다.
-    
+
 .. _add-partitions:
 
 분할 추가
@@ -555,21 +556,21 @@ CUBRID 9.0 이전 버전에서 분할 프루닝은 질의 컴파일 단계에서
 
 .. code-block:: sql
     
-	CREATE TABLE t(i INTEGER, j INTEGER k INTEGER)
-	PARTITION BY HASH(i) PARTITIONS 5;
-	
-	-- pk_t_i is global because it is a primary key
-	ALTER TABLE t ADD CONSTRAINT pk_t_i PRIMARY KEY(i);
-	
-	-- i_t_j and i_t_j_k are local indexes
-	CREATE INDEX i_t_j ON t(j);
-	CREATE INDEX i_t_j_k ON t(j, k);
-	
-	-- u_t_i_j is a local index because the partitioning key (i) is part of the index definition
-	CREATE UNIQUE INDEX u_t_i_j ON t(i, j);
-	
-	-- u_t_j_k is a global index because the partitioning key (i) is not part of the index definition
-	CREATE UNIQUE INDEX u_t_j_k ON t(j, k);
+    CREATE TABLE t(i INTEGER, j INTEGER k INTEGER)
+    PARTITION BY HASH(i) PARTITIONS 5;
+    
+    -- pk_t_i is global because it is a primary key
+    ALTER TABLE t ADD CONSTRAINT pk_t_i PRIMARY KEY(i);
+    
+    -- i_t_j and i_t_j_k are local indexes
+    CREATE INDEX i_t_j ON t(j);
+    CREATE INDEX i_t_j_k ON t(j, k);
+    
+    -- u_t_i_j is a local index because the partitioning key (i) is part of the index definition
+    CREATE UNIQUE INDEX u_t_i_j ON t(i, j);
+    
+    -- u_t_j_k is a global index because the partitioning key (i) is not part of the index definition
+    CREATE UNIQUE INDEX u_t_j_k ON t(j, k);
 
 가능한 한 최대로 로컬 인덱스를 정의하는 것이 성능상 중요하다. 시스템은 글로벌 인덱스를 사용하여 여러 개의 분할을 함께 스캔할 수 있도록 인덱스 스캔을 최적화하지는 않는다. 글로벌 인덱스 스캔 시에 프루닝되지 않은 각 분할에 대해 별개의 인덱스 스캔이 수행된다. 글로벌 인덱스를 통해 각 분할을 접근하는 과정에서 다른 분할에 속한 데이터 또한 디스크에서 읽게 되기 때문에 로컬 인덱스 스캔보다 좋지 못한 성능을 보인다. **INSERT** 문도 또한 로컬 인덱스가 더 작기 때문에 로컬 인덱스에서 더 나은 성능을 보인다.
 
@@ -590,18 +591,19 @@ CUBRID 9.0 버전부터는 **ALTER** 문의 **ANALYZE PARTITION** 절은 더 이
 
 분할 테이블에 다음과 같은 제약 사항이 존재한다.
 
-* 한 테이블이 가질 수 있는 최대 분할 개수는 1,024이다.
+*   한 테이블이 가질 수 있는 최대 분할 개수는 1,024이다.
 
-* 분할들은 상속(inheritance) 관계의 일부가 될 수 없다. 클래스는 분할을 상속할 수 없으며, 분할은 다른 클래스를 상속할 수 없다. 
+*   분할들은 상속(inheritance) 관계의 일부가 될 수 없다. 클래스는 분할을 상속할 수 없으며, 분할은 다른 클래스를 상속할 수 없다. 
 
-* 다음 질의 최적화는 분할 테이블에서 수행되지 않는다.
+*   다음 질의 최적화는 분할 테이블에서 수행되지 않는다.
+
     *   ORDER BY 절 최적화(:ref:`order-by-skip-optimization` 참고)
     *   GROUP BY 절 최적화(:ref:`group-by-skip-optimization` 참고)
     *   다중 키 범위 최적화(:ref:`multi-key-range-opt` 참고)
     *   INDEX JOIN
 
     .. 7583: 분할 테이블에서 인덱스 스킵 스캔이 수행됨
-    
+
 분할 키와 문자셋, 콜레이션
 --------------------------
 
@@ -618,7 +620,7 @@ CUBRID 9.0 버전부터는 **ALTER** 문의 **ANALYZE PARTITION** 절은 더 이
 ::
 
     ERROR: Invalid codeset '_iso88591' for partition value. Expecting '_utf8' codeset.
-    
+
 분할 키에서 비교 작업을 수행할 때 분할 테이블에 정의된 콜레이션을 사용한다. 다음 예제에서  utf8_en_ci 콜레이션의 'test'는 'TEST'와 같으므로 오류를 반환한다.
 
 .. code-block:: sql

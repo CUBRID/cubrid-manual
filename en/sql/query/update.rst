@@ -51,6 +51,8 @@ The following example shows how to update one table.
                 5  NULL                  '000-0000'
                 7  NULL                  '777-7777'
      
+.. code-block:: sql
+
     UPDATE a_tbl5 SET name='yyy', phone='999-9999' WHERE name IS NULL LIMIT 3;
     SELECT * FROM a_tbl5;
      

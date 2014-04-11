@@ -26,27 +26,25 @@ Updates that occurred in the database are not permanently stored until the **COM
 
 All locks obtained by the transaction are released after the transaction is committed. ::
 
-    COMMIT [ WORK ]
-
-The database transaction in the following example consists of three **UPDATE** statements and changes three column values of seats from the stadium. To compare the results, check the current values and names before the update is made. Since, by default, csql runs in an autocommit mode, the following example is executed after setting the autocommit mode to off.
+    COMMIT [WORK];
 
 .. code-block:: sql
 
-    ;autocommit off
-    AUTOCOMMIT IS OFF
+    -- ;autocommit off
+    -- AUTOCOMMIT IS OFF
     
     SELECT name, seats
     FROM stadium WHERE code IN (30138, 30139, 30140);
-    
-::
-    
-       name                        seats
-    ==================================
-        'Athens Olympic Tennis Centre'         3200
-        'Goudi Olympic Hall'         5000
-        'Vouliagmeni Olympic Centre'         3400
 
-Let each **UPDATE** statement have the current seats of each stadium. To verify whether the command is correctly executed, you can retrieve the columns related to the seats table.
+::
+
+        name                                seats
+    =============================================
+        'Athens Olympic Tennis Centre'      3200
+        'Goudi Olympic Hall'                5000
+        'Vouliagmeni Olympic Centre'        3400
+
+The following **UPDATE** statement changes three column values of seats from the stadium. To compare the results, check the current values and names before the update is done. Since csql runs in an autocommit mode by default, the following example is executed after setting the autocommit mode to off.
 
 .. code-block:: sql
 
@@ -64,11 +62,11 @@ Let each **UPDATE** statement have the current seats of each stadium. To verify 
         'Goudi Olympic Hall'                6000
         'Vouliagmeni Olympic Centre'        4400
 
-If the update is properly done, the changes can be semi-permanently fixed. In this time, use the **COMMIT WORK**  as below:
+If the update is properly done, the changes can be permanently fixed. In this time, use the **COMMIT WORK** as below:
 
 .. code-block:: sql
 
-    COMMIT WORK;
+    COMMIT [WORK];
 
 .. note:: In CUBRID, an auto-commit mode is set by default for transaction management.
 
@@ -83,7 +81,7 @@ Transaction Rollback
 
 The **ROLLBACK WORK** statement removes all updates to the database since the last transaction. The **WORK** keyword can be omitted. By using this statement, you can cancel incorrect or unnecessary updates before they are permanently applied to the database. All locks obtained during the transaction are released. ::
 
-    ROLLBACK [ WORK ]
+    ROLLBACK [WORK];
 
 The following example shows two commands that modify the definition and the row of the same table.
 
@@ -134,7 +132,7 @@ Savepoints are useful because intermediate steps can be created and named to con
 
 If you make *mark* all the same value when you specify multiple savepoints in a single transaction, only the latest savepoint appears in the partial rollback. The previous savepoints remain hidden until the rollback to the latest savepoint is performed and then appears when the latest savepoint disappears after being used. ::
 
-    ROLLBACK [ WORK ] [ TO [ SAVEPOINT ] mark ] [ ; ]
+    ROLLBACK [WORK] [TO [SAVEPOINT] mark] ;
     mark:
     _ a SQL identifier
     _ a host variable (starting with :)
@@ -213,7 +211,7 @@ The default setting for applications that were developed based on CCI is to hold
 
     * Note that versions lower than CUBRID 9.0 do not support cursor holdability. The default setting of those versions is to close all cursors at commit.
     * CUBRID currently does not support ResultSet.HOLD_CURSORS_OVER_COMMIT in java.sql.XAConnection interface.
-    
+
 **Cursor-related Operation at Transaction Commit**
 
 When a transaction is committed, all statements and result sets that are closed are released even if you have set cursor holdability. After that, when the result sets are used for another transaction, some or all of the result sets should be closed as required.
@@ -247,7 +245,7 @@ When the connection between an application and the CAS is closed, all result set
 .. warning:: Usage of memory will increase in the status of result set opened. Thus, you should close the result set after completion.
 
 .. note:: Note that CUBRID versions lower than 9.0 do not support cursor holdability and the cursor is automatically closed when a transaction is committed. Therefore, the recordset of the **SELECT** query result is not kept.
-    
+
 .. _database-concurrency:
 
 Database Concurrency
@@ -264,10 +262,10 @@ You can set an isolation level by using the :ref:`set-transaction-isolation-leve
 The read operations that allow interference between transactions with isolation levels are as follows:
 
 *   **Dirty read** : A transaction T2 can read D' before a transaction T1 updates data D to D' and commits it.
-*   **Non-repeatable read** (unrepeatable read) : A transaction T1 can read other value, if a transaction T2 updates data and commits while data is retrieved in the transaction T2 multiple times.
-*   **Phantom read** : A transaction T1 can read E, if a transaction T2 inserts new record E and commits while data is retrieved in the transaction T1 multiple times.
+*   **Non-repeatable read** : A transaction T1 can read other value, if a transaction T2 updates data while data is retrieved in the transaction T2 multiple times.
+*   **Phantom read** : A transaction T1 can read E, if a transaction T2 inserts new record E while data is retrieved in the transaction T1 multiple times.
 
-The default value of CUBRID isolation level is :ref:`isolation-level-3` (3).
+The default value of CUBRID isolation level is :ref:`isolation-level-3`.
 
 **Isolation Levels Provided by CUBRID**
 
@@ -300,7 +298,7 @@ The default value of CUBRID isolation level is :ref:`isolation-level-3` (3).
 Lock Protocol
 =============
 
-In the two-phase locking protocol followed by CUBRID, a transaction obtains a shared lock before it reads an object, and an exclusive lock before it updates the object so that conflicting operations are not executed simultaneously. If transaction T1 requires a lock, CUBRID checks if the requested lock conflicts with the existing one. If it does, transaction T1 enters a standby state and delays the lock. If another transaction T2 releases the lock, transaction T1 resumes and obtains it. Once the lock is released, the transaction do not require any more new locks.
+In the two-phase locking protocol used by CUBRID, a transaction obtains a shared lock before it reads an object, and an exclusive lock before it updates the object so that conflicting operations are not executed simultaneously. If transaction T1 requires a lock, CUBRID checks if the requested lock conflicts with the existing one. If it does, transaction T1 enters a standby state and delays the lock. If another transaction T2 releases the lock, transaction T1 resumes and obtains it. Once the lock is released, the transaction do not require anymore new locks.
 
 Granularity Locking
 -------------------
@@ -324,22 +322,24 @@ CUBRID determines the lock mode depending on the type of operation to be perform
     
     It can be obtained by multiple transactions for the same object. Transaction T1 obtains the shared lock first before it performs the read operation on a certain object, and releases it immediately after it completes the operation even before transaction T1 is committed. At this time, transaction T2 and T3 can perform the read operation on the object concurrently, but not the update operation.
 
-    .. note:: If an isolation level is REPEATABLE READ(2), it keeps shared locks until a transaction T1 is committed.
+    .. note::
+
+        If an isolation level is REPEATABLE READ(2), it keeps shared locks until a transaction T1 is committed.
 
 *   **Exclusive lock (exclusive lock, X_LOCK)**
 
     This lock is obtained before the update operation is executed on the object. 
-    
+
     It can only be obtained by one transaction. Transaction T1 obtains the exclusive lock first before it performs the update operation on a certain object X, and does not release it until transaction T1 is committed even after the update operation is completed. Therefore, transaction T2 and T3 cannot perform the read operation as well on X before transaction T1 releases the exclusive lock.
 
 *   **Update lock (update lock, U_LOCK)**
-    
+
     This lock is obtained when the read operation is executed in the expression before the update operation is performed.
-    
+
     For example, when an UPDATE statement combined with a **WHERE** clause is executed, execute the operation by obtaining the update lock for each row and the exclusive lock only for the result rows that satisfy the condition when performing index search or full scan search in the **WHERE** clause. The update lock is converted to an exclusive lock when the actual update operation is performed. It can be called a quasi-exclusive lock because it does not allow read lock on the same object for another transaction.
 
 *   **Intent lock**
-    
+
     This lock is set inherently in a higher-level object than a certain object to protect the lock on the object of a certain level.
     
     For example, when a shared lock is requested for a certain row, prevent a situation from occurring in which the table is locked by another transaction by setting the intent shared lock as well on the table at the higher level in hierarchy. Therefore, the intent lock is not set on rows at the lowest level, but is set on higher-level objects. The types of intent locks are as follows:
@@ -349,21 +349,20 @@ CUBRID determines the lock mode depending on the type of operation to be perform
         If the intent shared lock is set on the table, which is the higher-level object, as a result of the shared lock set on a certain row, another transaction cannot perform operations such as changing the schema of the table (e.g. adding a column or changing the table name) or updating all rows. However updating some rows or viewing all rows is allowed.
 
     *   **Intent exclusive lock (IX_LOCK)**
-    
+
         If the intent exclusive lock is set on the table, which is the higher-level object, as a result of the exclusive lock set on a certain row, another transaction cannot perform operations such as changing the schema of the table, updating or viewing all rows. However updating some rows is allowed.
 
     *   **Shared with intent exclusive lock(SIX_LOCK)**
 
         This lock is set on the higher-level object inherently to protect the shared lock set on all objects at the lower hierarchical level and the intent exclusive lock on some object at the lower hierarchical level.
-    
+
         Once the shared intent exclusive lock is set on a table, another transaction cannot change the schema of the table, update all/some rows or view all rows. However, viewing some rows is allowed.
 
-**Key Lock**
+*   **Key Lock**
 
     A key lock is acquired when doing SELECT, INSERT, UPDATE or DELETE operation about a record with a unique key.
-    
     However, to acquire a key lock, a unique key must exist on the WHERE condition's column.
-    
+
     For example, if you INSERT a value, X_LOCK is acquired to this value and NS_LOCK is acuquired to the next key of this value.
     
     If you UPDATE/DELETE a value, NX_LOCKs are acquired at the closest smaller key than the defined minimum range and at the closest larger key than the defined maximum range.
@@ -377,7 +376,9 @@ CUBRID determines the lock mode depending on the type of operation to be perform
         When you perform an UPDATE or a DELETE operation on rows that a unique key exists, acquire next and previous key lock to protect the range that affect their task. 
     
 *   **Schema Lock**
-        
+
+    A shcema lock is acquired when executing DDL work.
+
     *   **Schema stability lock, SCH-S**
 
         This lock is acquired during compiling a query and it guarantees that the schema which is included in this query is not changed.
@@ -389,7 +390,7 @@ CUBRID determines the lock mode depending on the type of operation to be perform
     Some DDL operation like ALTER, CREATE INDEX does not acquire SCH-M lock directly. For example, CUBRID operates type checking about filtering expression when you create a filtered index; during this term, the lock which is kept to the target table is SCH-S like other type checking operations. The method has a strength to increase the concurrency by allowing other transaction's operation during DDL operation's compilation.
     
     However, it also has a weakness not to avoid a deadlock when DDL operations are operated at the same table at the same time. A deadlock case by SCH-S lock is as follows.
-   
+
     +---------------------------------------------------------------+---------------------------------------------------------------+
     | T1                                                            | T2                                                            |
     +===============================================================+===============================================================+
@@ -498,7 +499,7 @@ The below shows that INSERTed data sets X_LOCK to a row and NS_LOCK to a key whe
 |                                                         |                                                         |                                                                            |
 |                                                         |   SELECT * FROM tbl WHERE a <= 20;                      |                                                                            |
 +---------------------------------------------------------+---------------------------------------------------------+----------------------------------------------------------------------------+
-|                                                         | 인터럽트(ctrl-C)로 작업 취소                            |                                                                            |
+|                                                         | The operation is canceled by an interrupt(Ctrl-C)       |                                                                            |
 +---------------------------------------------------------+---------------------------------------------------------+----------------------------------------------------------------------------+
 |                                                         | ::                                                      | Allow. S_LOCK which is bigger than 25 of T2 is asked, so it's not          |
 |                                                         |                                                         |  related to a key lock.                                                    |
@@ -664,7 +665,7 @@ The below is an example that T1 waits a lock until T2 commits updated data when 
 Transaction Deadlock
 --------------------
 
-A deadlock  is a state in which two or more transactions wait at once for another transaction's lock to be released. CUBRID resolves the problem by rolling back one of the transactions because transactions in a deadlock state will hinder the work of another transaction. The transaction to be rolled back is usually the transaction which has made the least updates; it is usually the one that started more recently. As soon as a transaction is rolled back, the lock held by the transaction is released and other transactions in a deadlock are permitted to proceed.
+A deadlock is a state in which two or more transactions wait at once for another transaction's lock to be released. CUBRID resolves the problem by rolling back one of the transactions because transactions in a deadlock state will hinder the work of another transaction. The transaction to be rolled back is usually the transaction which has made the least updates; it is usually the one that started more recently. As soon as a transaction is rolled back, the lock held by the transaction is released and other transactions in a deadlock are permitted to proceed.
 
 It is impossible to predict such deadlocks, but it is recommended that you reduce the range to which lock is applied by setting the index, shortening the transaction, or setting the transaction isolation level as low in order to decrease such occurrences.
 
@@ -778,7 +779,7 @@ In the following error log file, (1) indicates a table name which causes deadloc
 Transaction Lock Timeout
 ------------------------
 
-CUBRID provides the  lock timeout feature, which sets the waiting time for the lock until the transaction lock setting is allowed.
+CUBRID provides the lock timeout feature, which sets the waiting time for the lock until the transaction lock setting is allowed.
 
 If the lock is allowed within the lock timeout, CUBRID rolls back the transaction and outputs an error message when the timeout has passed. If a transaction deadlock occurs within the lock timeout, CUBRID rolls back the transaction whose waiting time is closest to the timeout.
 
@@ -795,13 +796,13 @@ The system parameter **lock_timeout** in the **$CUBRID/conf/cubrid.conf** file o
 
 *   **INFINITE** : Wait indefinitely until the transaction lock is allowed. Has the same effect as setting the system parameter **lock_timeout** to -1.
 *   **OFF** : Do not wait for the lock, but roll back the transaction and display an error message. Has the same effect as setting the system parameter **lock_timeout** to 0.
-*   *unsigned_integer* : Set in seconds. Wait for the transaction lock for the specified time period.  
+*   *unsigned_integer* : Set in seconds. Wait for the transaction lock for the specified time period.
 *   *variable* : A variable can be specified. Wait for the transaction lock for the value stored by the variable.
 
 **Example 1** ::
 
     vi $CUBRID/conf/cubrid.conf
-    ...    
+    ...
     lock_timeout = 10s
     ...
 
@@ -829,7 +830,7 @@ The following message is displayed if lock timeout occurs in a transaction that 
 
     Your transaction (index 2, user1@host1|9808) timed out waiting on IX_LOCK lock on class tbl. You are waiting for
     user(s) user1@host1|csql(9807), user1@host1|csql(9805) to finish.
-    
+
 *   Your transaction(index 2 ...): This means that the index of the transaction that was rolled back due to timeout while waiting for the lock is 2. The transaction index is a number that is sequentially assigned when the client connects to the database server. You can also check this number by executing the **cubrid lockdb** utility.
 
 *   (... user1\@host1|9808): *cub_user* is the login ID of the client and the part after @ is the name of the host where the client was running. The part after| is the process ID (PID) of the client.
@@ -878,7 +879,7 @@ You can set the level of transaction isolation by using **isolation_level** and 
     isolation_level = 3
     ...
      
-    or
+    -- or
      
     isolation_level = "TRAN_COMMIT_CLASS_UNCOMMIT_INSTANCE"
 
@@ -904,10 +905,10 @@ The following table shows the isolation levels from 1 to 6. It consists of table
 | (or CURSOR STABILITY) (4)                                 | Transaction T1 may experience R read (non-repeatable read) that was updated and committed by another transaction T2 when it is repeatedly retrieving the record R.                  |
 +-----------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | REPEATABLE READ CLASS with READ UNCOMMITTED INSTANCES (3) | Default isolation level.                                                                                                                                                            |
-|                                                           | Another transaction T2 cannot update the schema of table A  while transaction T1 is viewing table A.                                                                                |
+|                                                           | Another transaction T2 cannot update the schema of table A while transaction T1 is viewing table A.                                                                                 |
 |                                                           | Transaction T1 may experience R' read (dirty read) for the record that was updated but not committed by another transaction T2.                                                     |
 +-----------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| READ COMMITTED CLASS with READ COMMITTED INSTANCES (2)    | Transaction T1 may experience A' read (non-repeatable read) for the table that was updated and committed by another transaction  T2 while it is viewing table A repeatedly.         |
+| READ COMMITTED CLASS with READ COMMITTED INSTANCES (2)    | Transaction T1 may experience A' read (non-repeatable read) for the table that was updated and committed by another transaction T2 while it is viewing table A repeatedly.          |
 |                                                           | Transaction T1 may experience R' read (non-repeatable read) for the record that was updated and committed by another transaction T2 while it is retrieving the record R repeatedly. |
 +-----------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | READ COMMITTED CLASS with READ UNCOMMITTED INSTANCES (1)  | Transaction T1 may experience A' read (non-repeatable read) for the table that was updated and committed by another transaction T2 while it is repeatedly viewing table A.          |

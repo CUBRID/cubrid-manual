@@ -131,14 +131,14 @@ INSERT
   
  
 .. code-block:: sql
-         
+    
     CREATE TABLE tbl3 (a INT, b INT default 10, c INT);
     INSERT INTO tbl3 SET a=b+1, b=1, c=b+2;
  
 위의 예에서 칼럼 a의 값을 할당할 때, b의 값이 아직 정해지지 않았으며 b의 기본값이 10이므로 a의 값은 11이 된다.
    
 .. code-block:: sql
-    
+
     SELECT * FROM tbl3;
     
 ::

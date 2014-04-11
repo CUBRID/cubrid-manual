@@ -8,43 +8,21 @@ The following table shows the logical operators.
 
 **Logical Operators**
 
-+----------------------+------------------------------------------------------------------------------------------+---------------+
-| Logical Operator     | Description                                                                              | Condition     |
-+======================+==========================================================================================+===============+
-| **AND**              | If all operands are                                                                      | a             |
-| ,                    | **TRUE**                                                                                 | **AND**       |
-| **&&**               | , it returns                                                                             | b             |
-|                      | **TRUE**                                                                                 |               |
-|                      | .                                                                                        |               |
-+----------------------+------------------------------------------------------------------------------------------+---------------+
-| **OR, ||**           | If none of operands is                                                                   | a             |
-|                      | **NULL**                                                                                 | **OR**        |
-|                      | and one or more operands are                                                             | b             |
-|                      | **TRUE**                                                                                 |               |
-|                      | , it returns                                                                             |               |
-|                      | **TRUE**                                                                                 |               |
-|                      | . If                                                                                     |               |
-|                      | **pipes_as_concat**                                                                      |               |
-|                      | is no that is a parameter related to SQL statements, a double pipe symbol can be used as |               |
-|                      | **OR**                                                                                   |               |
-|                      | operator.                                                                                |               |
-+----------------------+------------------------------------------------------------------------------------------+---------------+
-| **XOR**              | If none of operand is                                                                    | a             |
-|                      | **NULL**                                                                                 | **XOR**       |
-|                      | and each of operand has a different value, it returns                                    | b             |
-|                      | **TRUE**                                                                                 |               |
-|                      | .                                                                                        |               |
-+----------------------+------------------------------------------------------------------------------------------+---------------+
-| **NOT**              | A unary operator. If a operand is                                                        | **NOT**       |
-| ,                    | **FALSE**                                                                                | a             |
-| **!**                | , it returns                                                                             |               |
-|                      | **TRUE**                                                                                 |               |
-|                      | . If it is                                                                               |               |
-|                      | **TRUE**                                                                                 |               |
-|                      | , returns                                                                                |               |
-|                      | **FALSE**                                                                                |               |
-|                      | .                                                                                        |               |
-+----------------------+------------------------------------------------------------------------------------------+---------------+
++------------------+-----------------------------------------------------------------------------------+---------------+
+| Logical Operator | Description                                                                       | Condition     |
++==================+===================================================================================+===============+
+| **AND**, **&&**  | If all operands are **TRUE**, it returns **TRUE**.                                | a **AND** b   |
++------------------+-----------------------------------------------------------------------------------+---------------+
+| **OR, ||**       | If none of operands is **NULL** and one or more operands are **TRUE**,            | a **OR** b    |
+|                  | it returns **TRUE**. If **pipes_as_concat** is no that is a parameter related to  |               |
+|                  | SQL statements, a double pipe symbol can be used as **OR** operator.              |               |
++------------------+-----------------------------------------------------------------------------------+---------------+
+| **XOR**          | If none of operand is **NULL** and each of operand has a different value,         | a **XOR** b   |
+|                  | it returns **TRUE**.                                                              |               |
++------------------+-----------------------------------------------------------------------------------+---------------+
+| **NOT**, **!**   | A unary operator. If a operand is **FALSE** , it returns **TRUE**.                | **NOT** a     |
+|                  | If it is **TRUE** , returns **FALSE**.                                            |               |
++------------------+-----------------------------------------------------------------------------------+---------------+
 
 **Truth Table of Logical Operators**
 

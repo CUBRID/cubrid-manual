@@ -22,21 +22,21 @@ CSQL 언어는 클래스 메서드와 인스턴스 메서드 두 가지 타입�
 
 **CALL** 문은 데이터베이스에 정의된 메서드를 호출하기 위해 사용된다. 클래스 메서드, 인스턴스 메서드 모두 **CALL** 문으로 호출이 가능하다. **CALL** 문으로 시스템에 정의된 메서드를 호출하는 예는 :ref:`authorization-method` 를 참고한다. ::
 
-    CALL method_call [ ; ]
+    CALL <method_call> ;
 
-    method_call :
-    • method_name ( [ arg_value [ {, arg_value }_ ] ] ) ON call_target [ to_variable ]
-    • method_name ( call_target [, arg_value [ {, arg_value }_ ] ] ) [ to_variable ]
+    <method_call> ::=
+        method_name ([arg_value [{, arg_value } ...]]) ON call_target [to_variable] |
+        method_name (call_target [, arg_value [{, arg_value} ...]] ) [to_variable]
 
-    arg_value :
-    • any CSQL expression
+        arg_value ::=
+            any CSQL expression
 
-    call_target :
-    • an object-valued expression
+        call_target ::=
+            an object-valued expression
 
-    to_variable :
-    • INTO variable
-    • TO variable
+        to_variable ::=
+            INTO variable |
+            TO variable
 
 *   *method_name* 은 클래스에 정의된 메서드의 이름이거나, 시스템에 정의된 메서드의 이름이다. 메서드는 하나 혹은 그 이상의 인수 값을 필요로 한다. 메서드에 인수가 없으면 빈 괄호를 사용해야 한다.
 

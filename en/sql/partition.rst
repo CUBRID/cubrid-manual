@@ -37,9 +37,10 @@ The partitioning key is an expression which is used by the partitioning method t
 
 The following restrictions apply to the partitioning key:
 
-* The partitioning key must use exactly one column from the partitioned table.
-* :doc:`Aggregate functions, analytic functions<function/analysis_fn>`, :doc:`logical operators<function/logical_op>` and :doc:`comparison operators<function/comparison_op>` are not allowed in the partitioning key expression.
-* The following functions and expressions are not allowed in the partitioning key expression:  
+*   The partitioning key must use exactly one column from the partitioned table.
+*   :doc:`Aggregate functions, analytic functions<function/analysis_fn>`, :doc:`logical operators<function/logical_op>` and :doc:`comparison operators<function/comparison_op>` are not allowed in the partitioning key expression.
+*   The following functions and expressions are not allowed in the partitioning key expression:
+
     *   :ref:`CASE <case-expr>` 
     *   :func:`CHARSET` 
     *   :func:`CHR` 
@@ -403,7 +404,7 @@ Partitions can be dropped from a partitioned table by using the **DROP PARTITION
 
     ALTER {TABLE | CLASS} table_name
     DROP PARTITION partition_name_list
-    
+
 *   *table_name* : Specifies the name of the partitioned table.
 *   *partition_name_list* : Specifies the names of the partitions to be dropped, separated by comma(,).
 
@@ -581,7 +582,7 @@ Notes on Partitioning
 Partitioned tables normally behave like regular tables. However there are some notes that should be taken into consideration in order to fully benefit from partitioning a table.
 
 Statistics on Partitioning Tables
-------------------------------------
+---------------------------------
 
 Since CUBRID 9.0, the clause **ANALYZE PARTITION** of the **ALTER** statement has been deprecated. Since partition pruning happens during query execution, this statement will not produce any useful results. Since 9.0, CUBRID keeps separated statistics on each partition. The statistics on the partitioned table are computed as a mean value of the statistics of the table partitions. This is done to optimize the usual case in which, for a query, all partitions are pruned except one. 
 
@@ -590,9 +591,12 @@ Restrictions on Partitioned Tables
 
 The following restrictions apply to partitioned tables:
 
-* The maximum number of partitions which can be defined on a table is 1,024.
-* Partitions cannot be a part of the inheritance chain. Classes cannot inherit a partition and partitions cannot inherit other classes than the partitioned class (which it inherits by default).
-* The following query optimizations are not performed on partitioned tables:
+*   The maximum number of partitions which can be defined on a table is 1,024.
+
+*   Partitions cannot be a part of the inheritance chain. Classes cannot inherit a partition and partitions cannot inherit other classes than the partitioned class (which it inherits by default).
+
+*   The following query optimizations are not performed on partitioned tables:
+
     *   ORDER BY skip (for details, see :ref:`order-by-skip-optimization`)
     *   GROUP BY skip (for details, see :ref:`group-by-skip-optimization`)
     *   Multi-key range optimization (for details, see :ref:`multi-key-range-opt`)
@@ -614,7 +618,7 @@ Partitioning keys and partition definition must have the same character set. The
 ::
 
     ERROR: Invalid codeset '_iso88591' for partition value. Expecting '_utf8' codeset.
-        
+
 CUBRID uses the collation defined on the table when performing comparisons on the partitioning key. The following example will return an error because, for utf8_en_ci collation 'test' equals 'TEST'.
 
 .. code-block:: sql
@@ -628,7 +632,7 @@ CUBRID uses the collation defined on the table when performing comparisons on th
 ::
 
     ERROR: Partition definition is duplicated. 'p1'
- 
+
 .. CUBRIDSUS-10161 : below constraints of 9.1 was removed from 9.2. (below will be commented)
 
     For hash-partitioned tables, the collation of the partitioning key must be binary. 

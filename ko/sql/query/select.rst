@@ -532,7 +532,7 @@ ORDER BY 절
         FROM t1 
         GROUP BY a, b;  -- Q1
 
-    위의 SELECT 질의를 수행할 때 "GROUP BY a, b"는 
+    위의 SELECT 질의를 수행할 때 "GROUP BY a, b"는
 
     *   9.2 이하 버전에서 "GROUP BY a, NVL(b, 2)"(별칭 이름 b)로 해석되며, 아래 Q2와 동일한 결과를 출력한다.
 
@@ -847,7 +847,7 @@ CUBRID는 외부 조인 중 왼쪽 외부 조인과 오른쪽 외부 조인만 �
      
     SELECT DISTINCT h.host_year, o.host_nation 
     FROM history h, olympic o;
-     
+
 ::
 
         host_year  host_nation

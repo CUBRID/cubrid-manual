@@ -59,22 +59,22 @@ CUBRID에서 **CAST** 연산자를 사용한 명시적인 타입 변환에 대�
 
 * **데이터 타입 키**
 
-  *   **EN** : 정확한 수치(**INTEGER**, **SMALLINT**, **BIGINT**, **NUMERIC**, **DECIMAL**)
-  *   **AN** : 근사값 수치(**FLOAT/REAL**, **DOUBLE**)
-  *   **VC** : 가변 길이 문자열(**VARCHAR** (*n*))
-  *   **FC** : 고정 길이 문자열(**CHAR** (*n*))
-  *   **VB** : 가변 길이 비트열(**BIT VARYING** (*n*))
-  *   **FB** : 고정 길이 비트열(**BIT** (*n*))
-  *   **ENUM** : **ENUM** 타입
-  *   **BLOB** : DB 외부에 저장하는 바이너리 데이터(**BLOB**)
-  *   **CLOB** : DB 외부에 저장하는 문자열 데이터(**CLOB**)
-  *   **D** : **DATE**
-  *   **T** : **TIME**
-  *   **DT** : **DATETIME**
-  *   **UT** : **TIMESTAMP**
-  *   **S** : **SET**
-  *   **MS** : **MULTISET**
-  *   **SQ** : **LIST** (= **SEQUENCE**)
+  *   **EN**: 정확한 수치(**INTEGER**, **SMALLINT**, **BIGINT**, **NUMERIC**, **DECIMAL**)
+  *   **AN**: 근사값 수치(**FLOAT/REAL**, **DOUBLE**)
+  *   **VC**: 가변 길이 문자열(**VARCHAR** (*n*))
+  *   **FC**: 고정 길이 문자열(**CHAR** (*n*))
+  *   **VB**: 가변 길이 비트열(**BIT VARYING** (*n*))
+  *   **FB**: 고정 길이 비트열(**BIT** (*n*))
+  *   **ENUM**: **ENUM** 타입
+  *   **BLOB**: DB 외부에 저장하는 바이너리 데이터(**BLOB**)
+  *   **CLOB**: DB 외부에 저장하는 문자열 데이터(**CLOB**)
+  *   **D**: **DATE**
+  *   **T**: **TIME**
+  *   **DT**: **DATETIME**
+  *   **UT**: **TIMESTAMP**
+  *   **S**: **SET**
+  *   **MS**: **MULTISET**
+  *   **SQ**: **LIST** (= **SEQUENCE**)
 
 .. code-block:: sql
 
@@ -233,7 +233,7 @@ CUBRID에서 **CAST** 연산자를 사용한 명시적인 타입 변환에 대�
     =================================
       X'1a00'
 
-.. note:: 
+.. note::
 
     *   **CAST** 변환은 같은 문자셋을 가지는 데이터 타입끼리만 허용된다.
     *   근사치 데이터 타입(FLOAT, DOUBLE)이 정수형으로 변환되는 경우, 소수점 아래 자리가 반올림 처리된다.
@@ -427,7 +427,7 @@ FORMAT
     :param x: 수치 값을 반환하는 임의의 연산식이다.
     :param dec: 소수점 이하 자릿수
     :rtype: STRING
-    
+
 자릿수 구분 기호와 소수점 기호는 지정한 언어에 맞는 형식으로 출력한다. 이때 언어는 **intl_number_lang** 시스템 파라미터에 지정한 언어가 적용되며, **intl_number_lang** 값이 지정되지 않으면 DB 생성 시 지정한 언어가 적용된다.
 
 예를 들어 언어가 "de_DE"나 "fr_FR"과 같은 유럽 국가의 언어이면 "."를 숫자의 자릿수 구분 기호로 해석하고 ","를 소수점 기호로 해석한다(:ref:`언어별 숫자의 기본 출력 <tochar-default-number-format>` 참고).
@@ -468,7 +468,7 @@ STR_TO_DATE
     :param string: 모든 문자열 타입이 지정될 수 있다.
     :param format: 문자열 해석을 위한 형식을 지정한다. %를 포함하는 문자열을 형식 지정자(specifier)로 사용한다. :func:`DATE_FORMAT` 함수의 :ref:`날짜/시간 형식 2 <datetime-format2>` 표를 참고한다.
     :rtype: DATETIME, DATE, TIME
-    
+
 지정할 *format* 인자는 :func:`DATE_FORMAT` 함수의 :ref:`날짜/시간 형식 2 <datetime-format2>` 표를 참고한다.
 
 *string*\ 에 유효하지 않은 날짜/시간 값이 포함되거나, *format*\ 에 지정된 형식 지정자를 적용하여 문자열을 해석할 수 없으면 에러를 리턴한다.
@@ -546,7 +546,7 @@ STR_TO_DATE
       10/03/2009
 
 .. note::
- 
+
     *   문자셋이 ISO-8859-1인 경우 "en_US" 외에 시스템 파라미터 **intl_date_lang**\ 에 의해 변경할 수 있는 언어는 "ko_KR"과 "tr_TR"뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 :func:`TO_CHAR`\ 의 :ref:`Note <tochar-remark>`\ 를 참고한다.
 
 TIME_FORMAT
@@ -559,7 +559,7 @@ TIME_FORMAT
     :param time: **TIME** 형식(*HH*:*MI*:*SS*)을 포함하는 문자열, **TIME**\ 을 포함하는 날짜/시간 타입(**TIME**, **TIMESTAMP**, **DATETIME**) 값을 지정할 수 있다.
     :param format: 문자열 해석을 위한 형식을 지정한다. %를 포함하는 문자열을 형식 지정자(specifier)로 사용한다. :func:`DATE_FORMAT` 함수의 :ref:`날짜/시간 형식 2 <datetime-format2>` 표를 참고한다.
     :rtype: STRING
-    
+
 *format* 인자가 지정되면 지정된 언어에 맞는 형식으로 날짜를 출력한다. 이때 언어는 **intl_date_lang** 시스템 파라미터에 지정한 언어가 적용된다. **intl_date_lang** 값이 지정되지 않으면 DB 생성 시 지정한 언어가 적용된다.
 
 예를 들어 언어가 "de_DE"일 때 *format* 이 "%h:%i:%s %p"인 경우 "08:46:53 PM"인 시간을 "08:46:53 Nachm."으로 출력한다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 에러를 반환한다.
@@ -891,7 +891,7 @@ TO_CHAR(date_time)
                to_char(timestamp '2009-10-04 22:23:00', 'Day Month yyyy', 'de_DE')
             ======================
               'Sonntag   Oktober 2009'
-  
+
     *   첫번째 인자가 zerodate이고 두번째 인자에 'Month', 'Day'와 같은 리터럴 형식이 지정되면 TO_CHAR 함수는 NULL을 반환한다.
     
         .. code-block:: sql
@@ -903,7 +903,7 @@ TO_CHAR(date_time)
             NULL
 
 TO_CHAR(number)
-================
+===============
 
 .. function:: TO_CHAR(number[, format[, number_lang_string_literal ] ])
 
@@ -1098,7 +1098,7 @@ TO_DATE
     :param format: 날짜 타입으로 변환할 값의 형식을 지정하며, :ref:`날짜/시간 형식 1 <datetime-format1>` 표를 참고한다. 값이 **NULL**\ 이면 결과로 **NULL**\ 이 반환된다.
     :param date_lang_string_literal: 입력 값에 적용할 언어를 지정한다.
     :rtype: DATE
-    
+
 *format* 인자가 지정되면 지정한 언어에 맞는 형식으로 *string* 을 해석한다. 이때 언어는 *date_lang_string_literal* 인자에 의해 정해진다. *date_lang_string_literal* 인자가 생략되면 **intl_date_lang** 시스템 파라미터에 지정한 언어가 적용되며, **intl_date_lang** 값의 설정이 생략되면 DB 생성 시 지정한 언어가 적용된다. 
 
 예를 들어 언어가 "de_DE"일 때 *string* 이 "12.mai.2012"이고 *format* 이 "DD.mon.YYYY"인 경우 "2012년 5월 12일"로 해석한다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 에러를 반환한다.
@@ -1189,7 +1189,7 @@ TO_DATETIME
     :param format: DATETIME 타입으로 변환할 값의 형식을 지정하며, :ref:`날짜/시간 형식 1 <datetime-format1>`\을 참고한다. 값이 **NULL** 이면 결과로 **NULL** 이 반환된다.
     :param date_lang_string_literal: 입력 값에 적용할 언어를 지정한다.
     :rtype: DATETIME
-    
+
 *format* 인자가 지정되면 지정한 언어에 맞는 형식으로 *string* 을 해석한다. 
 
 예를 들어 언어가 "de_DE"일 때 *string*\ 이 "12/mai/2012 12:10:00 Nachm."이고 *format*\ 이 "DD/MON/YYYY HH:MI:SS AM"인 경우 "2012년 5월 12일 오후 12시 10분 0초"로 해석한다. 이때 언어는 *date_lang_string_literal* 인자에 의해 정해진다. *date_lang_string_literal* 인자가 생략되면 **intl_date_lang** 시스템 파라미터에 지정한 언어가 적용되며, **intl_date_lang** 값의 설정이 생략되면 DB 생성 시 지정한 언어가 적용된다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 에러를 반환한다. 
@@ -1272,7 +1272,9 @@ TO_NUMBER
     :param format: 숫자로 반환할 값의 형식을 지정하며, :ref:`숫자 형식 <tochar-number-format>` 표를 참고한다. 생략되면 NUMERIC(38,0) 값이 리턴된다.
     :rtype: NUMERIC
 
-*format* 인자가 지정되면 지정한 언어에 맞는 형식으로 *string* 을 해석한다. 이때 언어는 **intl_number_lang** 시스템 파라미터에 지정한 언어가 적용되며, **intl_number_lang** 값의 설정이 생략되면 DB 생성 시 지정한 언어가 적용된다. 예를 들어 언어가 "de_DE"나 "fr_FR"과 같은 유럽 국가의 언어이면 "."를 숫자의 자릿수 구분 기호로 해석하고 ","를 소수점 기호로 해석한다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 에러를 반환한다.
+*format* 인자가 지정되면 지정한 언어에 맞는 형식으로 *string* 을 해석한다. 이때 언어는 **intl_number_lang** 시스템 파라미터에 지정한 언어가 적용되며, **intl_number_lang** 값의 설정이 생략되면 DB 생성 시 지정한 언어가 적용된다.
+
+예를 들어 언어가 "de_DE"나 "fr_FR"과 같은 유럽 국가의 언어이면 "."를 숫자의 자릿수 구분 기호로 해석하고 ","를 소수점 기호로 해석한다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 에러를 반환한다.
 
 *format* 인자가 생략되면 **intl_number_lang**\ 에 의해 설정된 언어의 기본 출력 형식을 따라 *string* 을 해석한다(:ref:`언어별 숫자의 기본 출력 <tochar-default-number-format>` 표 참고). **intl_number_lang**\ 이 설정되지 않으면 DB 생성 시 지정한 언어가 적용된다.
 
@@ -1329,7 +1331,7 @@ TO_NUMBER
     SELECT TO_NUMBER('12.345,67','99.999,999');
 
 ::
-    
+
        to_number('12.345,67', '99.999,999')
     ======================
       12345.670

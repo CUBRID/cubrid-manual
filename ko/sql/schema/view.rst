@@ -29,8 +29,6 @@ CREATE VIEW
 *   **AS** *<select_statement>*: 유효한 **SELECT** 문이 명시되어야 한다. 이를 기반으로 뷰가 생성된다.
 *   **WITH CHECK OPTION**: 이 옵션이 명시되면 *<select_statement>* 내 **WHERE** 절에 명시된 조건식을 만족하는 경우에만 업데이트 또는 삽입이 가능하다. 조건식을 위반하는 가상 테이블에 대한 갱신을 허용하지 않기 위해서 사용한다.
 
-**예제**
-
 .. code-block:: sql
 
     CREATE TABLE a_tbl(
@@ -122,8 +120,6 @@ ADD QUERY 절
 *   *view_name*: 질의를 추가할 뷰의 이름 명시한다.
 *   <*select_statement*>: 추가할 질의를 명시한다.
 
-**예제**
-
 .. code-block:: sql
 
     SELECT * FROM b_view;
@@ -165,8 +161,6 @@ AS SELECT 절
 *   *view_name*: 변경할 가상 테이블의 이름을 명시한다.
 *   <*select_statement*>: 가상 테이블 생성 시 정의된 **SELECT** 문을 대체할 새로운 질의문을 명시한다.
 
-**예제**
-
 .. code-block:: sql
 
     ALTER VIEW b_view AS SELECT * FROM a_tbl WHERE phone IS NOT NULL;
@@ -187,12 +181,10 @@ CHANGE QUERY 절
 
     ALTER [VIEW | VCLASS] view_name
     CHANGE QUERY [integer] <select_statement> ;
-    
+
 *   *view_name*: 변경할 뷰의 이름을 명시한다.
 *   *integer*: 변경할 질의의 번호를 명시한다. 기본값은 1이다.
 *   <*select_statement*>: 질의 번호가 *integer* 인 질의를 대치할 새로운 질의를 명시한다.
-
-**예제**
 
 .. code-block:: sql
 
@@ -238,8 +230,6 @@ DROP QUERY 절
 
 **ALTER VIEW** 문의 **DROP QUERY** 예약어를 이용하여 뷰 질의 명세부에 정의된 질의를 삭제할 수 있다.
 
-**예제**
-
 .. code-block:: sql
 
     ALTER VIEW b_view DROP QUERY 2,3;
@@ -264,8 +254,6 @@ DROP VIEW
 
 *   *view_name* : 삭제하려는 뷰의 이름을 지정한다.
 
-**예제**
-
 .. code-block:: sql
 
     DROP VIEW b_view;
@@ -279,8 +267,6 @@ RENAME VIEW
 
 *   *old_view_name* : 변경할 뷰의 이름을 지정한다.
 *   *new_view_name* : 뷰의 새로운 이름을 지정한다.
-
-**예제**
 
 다음은 *game_2004* 뷰의 이름을 *info_2004* 로 변경하는 예제이다.
 

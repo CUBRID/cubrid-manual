@@ -260,21 +260,23 @@ Invariants of a database schema are a property of the schema that must be preser
 
 *   **Invariant of name**
 
-    means that all classes in the class hierarchy and all attributes in a class must have unique names. That is, attempts to create classes with the same name or to create attributes or methods with the same name in a single class are not allowed. Invariant of name is redefined by the 'rename' qualifier. The 'rename' qualifier allows the name of an attribute or method to be changed.
+    means that all classes in the class hierarchy and all attributes in a class must have unique names. That is, attempts to create classes with the same name or to create attributes or methods with the same name in a single class are not allowed. 
+
+Invariant of name is redefined by the 'RENAME' qualifier. The 'RENAME' qualifier allows the name of an attribute or method to be changed.
 
 *   **Invariant of inheritance**
 
     means that a class must inherit all attributes and methods from all super classes. This invariant can be distinguished with three qualifiers: source, conflict and domain. The names of inherited attributes and methods can be modified. For default or shared value attributes, the default or shared value can be modified. Invariant of inheritance means that such changes will be propagated to all classes that inherit these attributes and methods.
 
-    *   A **source qualifier** 
+    *   **source qualifier** 
     
         means that if class *C* inherits sub classes of class *S*, only one of the sub class attributes (methods) inherited from class *S* can be inherited to class *C*. That is, if an attribute (method) defined in class *S* is inherited by other classes, it is in effect a single attribute (method), even though it exists in many sub classes. Therefore, if a class multiply inherits from classes that have attributes (methods) of the same source, only one appearance of the attribute (method) is inherited.
 
-    *   A **conflict qualifier** 
+    *   **conflict qualifier** 
     
         means that if class *C* inherits from two or more classes that have attributes (methods) with the same name but of different sources, it can inherit more than one class. To inherit attributes (methods) with the same name, you must change their names so as not to violate the invariant of name.
 
-    *   A **domain qualifier** 
+    *   **domain qualifier** 
     
         means that a domain of an inherited attribute can be converted to the domain's sub class.
 
@@ -285,7 +287,9 @@ Invariants of a database schema are a property of the schema that must be preser
 Rule for Schema Changes
 -----------------------
 
-The Invariants of a Schema section has described the characteristics of schema that must be preserved all the time. There are some methods for changing schemas, and all these methods must be able to preserve the invariants of a schema. For example, suppose that in a class which has a single super class, the relationship with the super class is to be removed. If the relationship with the super class is removed, the class becomes a direct sub class of the object class, or the removal attempt will be rejected if the user specified that the class should have at least one super class. To have some rules for selecting one of the methods for changing schemas, even though such selection seems arbitrary, will be definitely useful to users and database designers.
+The Invariants of a Schema section has described the characteristics of schema that must be preserved all the time. 
+
+There are some methods for changing schemas, and all these methods must be able to preserve the invariants of a schema. For example, suppose that in a class which has a single super class, the relationship with the super class is to be removed. If the relationship with the super class is removed, the class becomes a direct sub class of the object class, or the removal attempt will be rejected if the user specified that the class should have at least one super class. To have some rules for selecting one of the methods for changing schemas, even though such selection seems arbitrary, will be definitely useful to users and database designers.
 
 The following three types of rules apply: conflict-resolution rules, domain-change rule and class-hierarchy rule.
 
@@ -330,23 +334,23 @@ Seven conflict-resolution rules reinforce the invariant of inheritance. Most sch
 *   **Rule 4**: The user can make any changes except the ones in Case 3 and 4. In addition, the resolution of sub class conflicts cannot cause changes in the super class.
     
     The philosophy of Rule 4 is that "an inheritance is a privilege that sub class has obtained from a super class, so changes in a sub class cannot affect the super class." Rule 4 means that the name of the attribute (method) included in the super class cannot be changed to resolve conflicts between class *C* and super classes. Rule 4 has an exception in cases where the schema change causes conflicts in Case 3 and 4.
-    
+
     *   For example, suppose that class *A* is the super class of class *B*, and class B has the playing_date attribute of **DATE** type. If an attribute of **STRING** type named *playing_date* is added to class *A*, it conflicts with the *playing_date* attribute in class *B*. This is what happens in Case 4. The precise way to resolve such conflict is for the user to specify that class *B* must inherit the *playing_date* attribute of class *A*. If a method refers to the attribute, the user of class *B* needs to modify the method properly so that the appropriate *playing_date* attribute will be referenced. Schema change of class *A* is not allowed because the schema falls into an inconsistent state if the user of class *B* does not describe an explicit statement to resolve the conflict occurring from the schema change.
-    
+
     .. image:: /images/image7.png
 
 *   **Rule 5**: If a conflict occurs due to a schema change of the super class, the original resolution is maintained as long as the change does not violate the rules. However, if the original resolution becomes invalid due to the schema change, the system will apply another resolution.
 
     Rule 5 is for cases where a conflict is caused to a conflict-free class or where the original resolution becomes invalid.
-    
+
     This is the case where the name or domain of an attribute (method) is modified or a super class is deleted when the attribute (method) is added to the super class or the one inherited from the super class is deleted. The philosophy of Rule 5 coincides with that of Rule 4. That is, the user can change the class freely without considering what effects the sub class that inherits from the given class will have on the inherited attribute (method).
-    
+
     When you change the schema of class *C*, if you decide to inherit an attribute of the class due to an earlier conflict with another class, this may cause attribute (method) loss of class *C*. Instead, you must inherit one of the attributes (methods) that caused conflicts earlier.
-    
+
     The schema change of the super class can cause a conflict between the attribute (method) of the super class and the (locally declared or inherited) attribute (method) of class *C*. In this case, the system resolves the conflict automatically by applying Rule 2 or 3 and may inform the user.
-    
+
     Rule 5 cannot be applied to cases where a new conflict occurs due to the addition or deletion of the relationship with the super class. The addition/deletion of a super class must be limited to within the class. That is, the user must provide an explicit resolution.
-    
+
 *   **Rule 6**: Changes of attributes or methods are propagated only to sub classes without conflicts.
 
     This rule limits the application of Rule 5 and the invariant of inheritance. Conflicts can be detected and resolved by applying Rule 2 and 3.

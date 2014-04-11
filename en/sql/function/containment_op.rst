@@ -83,8 +83,6 @@ The following table shows than possibility of operation by operand and type conv
 |                     |                    | **MULTISET**)      | operators.                   |
 +---------------------+--------------------+--------------------+------------------------------+
 
-**Example**
-
 .. code-block:: sql
 
     --empty set is a subset of any set
@@ -211,8 +209,6 @@ The **SETEQ** operator returns **TRUE** if the first operand is the same as the 
 
     collection_operand SETEQ collection_operand
 
-**Example**
-
 .. code-block:: sql
 
     --creating a table with SET type address column and LIST type zip_code column
@@ -258,8 +254,6 @@ The **SETNEQ** operator returns **TRUE** (1) if a first operand is different fro
 
     collection_operand SETNEQ collection_operand
 
-**Example**
-
 .. code-block:: sql
 
     --selecting rows when two collection_operands are not same in the WEHRE clause
@@ -300,8 +294,6 @@ SUPERSET
 The **SUPERSET** operator returns **TRUE** (1) when a second operand is a proper subset of a first operand; that is, the first one is larger than the second one. If two operands are identical, **FALSE** (0) is returned. Note that **SUPERSET** is not supported if all operands are **LIST** type. ::
 
     collection_operand SUPERSET collection_operand
-
-**Example**
 
 .. code-block:: sql
 
@@ -346,8 +338,6 @@ SUPERSETEQ
 The **SUPERSETEQ** operator returns **TRUE** (1) when a second operand is a subset of a first operand; that is, the first one is identical to or larger than the second one. Note that **SUPERSETEQ** is not supported if an operand is **LIST** type. ::
 
     collection_operand SUPERSETEQ collection_operand
-
-**Example**
 
 .. code-block:: sql
 
@@ -395,8 +385,6 @@ The **SUBSET** operator returns **TRUE** (1) if the second operand contains all 
 
     collection_operand SUBSET collection_operand
 
-**Example**
-
 .. code-block:: sql
 
     --selecting rows when the first operand is a subset of the second operand and they are not same
@@ -431,8 +419,6 @@ SUBSETEQ
 The **SUBSETEQ** operator returns **TRUE** (1) when a first operand is a subset of a second operand; that is, the second one is identical to or larger than the first one. Note that **SUBSETEQ** is not supported if an operand is **LIST** type. ::
 
     collection_operand SUBSETEQ collection_operand
-
-**Example **
 
 .. code-block:: sql
 

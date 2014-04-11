@@ -29,8 +29,6 @@ Use **CREATE VIEW** statement to create a view. For how to write view name, see 
 *   **AS** *<select_statement>*: A valid **SELECT** statement must be specified. A view is created based on this.
 *   **WITH CHECK OPTION**: If this option is specified, the update or insert operation is possible only when the condition specified in the **WHERE** clause of the *select_statement* is satisfied. Therefore, this option is used to disallow the update of a virtual table that violates the condition.
 
-**Example**
-
 .. code-block:: sql
 
     CREATE TABLE a_tbl(
@@ -122,8 +120,6 @@ You can add a new query to a query specification by using the **ADD QUERY** clau
 *   *view_name*: Specifies the name of a view where the query to be added.
 *   <*select_statement*>: Specifies the query to be added.
 
-**Example**
-
 .. code-block:: sql
 
     SELECT * FROM b_view;
@@ -161,11 +157,9 @@ AS SELECT Clause
 You can change the **SELECT** query defined in the virtual table by using the **AS SELECT** clause in the **ALTER VIEW** statement. This function is working like the **CREATE OR REPLACE** statement. You can also change the query by specifying the query number 1 in the **CHANGE QUERY** clause of the **ALTER VIEW** statement. ::
 
     ALTER [VIEW | VCLASS] view_name AS <select_statement> ;
-    
+
 *   *view_name*: Specifies the name of a view to be modified.
 *   <*select_statement*>: Specifies the new query statement to replace the **SELECT** statement defined when a view is created.
-
-**Example**
 
 .. code-block:: sql
 
@@ -191,8 +185,6 @@ You can change the query defined in the query specification by using the **CHANG
 *   *view_name*: Specifies the name of a view to be modified.
 *   *integer*: Specifies the number value of the query to be modified. The default value is 1.
 *   <*select_statement*>: Specifies the new query statement to replace the query whose query number is *integer*.
-
-**Example**
 
 .. code-block:: sql
 
@@ -238,8 +230,6 @@ DROP QUERY Clause
 
 You can drop a query defined in the query specification by using the **DROP QUERY** of the **ALTER VIEW** statement.
 
-**Example**
-
 .. code-block:: sql
 
     ALTER VIEW b_view DROP QUERY 2,3;
@@ -261,10 +251,8 @@ DROP VIEW
 You can drop a view by using the **DROP VIEW** clause. The way to drop a view is the same as to drop a regular table.  If you also specify IF EXISTS clause, no error will be happened even if a target view does not exist. ::
 
     DROP [VIEW | VCLASS] [IF EXISTS] view_name [{ ,view_name , ... }] ;
-    
-*   *view_name* : Specifies the name of a view to be dropped.
 
-**Example**
+*   *view_name* : Specifies the name of a view to be dropped.
 
 .. code-block:: sql
 
@@ -276,11 +264,9 @@ RENAME VIEW
 You can change the view name by using the **RENAME VIEW** statement. ::
 
     RENAME [VIEW | VCLASS] old_view_name {AS | TO} new_view_name[, old_view_name {AS | TO} new_view_name, ...] ;
-    
+
 *   *old_view_name* : Specifies the name of a view to be modified.
 *   *new_view_name* : Specifies the new name of a view.
-
-**Example**
 
 The following example shows how to rename a view name to *game_2004*.
 

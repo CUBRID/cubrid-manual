@@ -10,6 +10,8 @@ Table Definition
 
 To create a table, use the **CREATE TABLE** statement. 
 
+.. CUBRIDSUS-12366: from 10.0, create table if not exists ...
+
 ::
 
     CREATE {TABLE | CLASS} [IF NOT EXISTS] table_name
@@ -71,11 +73,11 @@ To create a table, use the **CREATE TABLE** statement.
         <resolution> ::= [CLASS] {column_name} OF superclass_name [AS alias]
 
 *   IF NOT EXISTS: If an identically named table already exists, a new table will not be created without an error.
-*   *table_name* : Specifies the name of the table to be created (maximum: 254 bytes).
-*   *column_name* : Specifies the name of the column to be created (maximum: 254 bytes).
-*   *column_type* : Specifies the data type of the column.
-*   [**SHARED** *value* | **DEFAULT** *value*] : Specifies the initial value of the column.
-*   *column_constraint* : Specifies the constraint of the column. Available constraints are **NOT NULL**, **UNIQUE**, **PRIMARY KEY** and **FOREIGN KEY** (see :ref:`constraint-definition` For details).
+*   *table_name*: Specifies the name of the table to be created (maximum: 254 bytes).
+*   *column_name*: Specifies the name of the column to be created (maximum: 254 bytes).
+*   *column_type*: Specifies the data type of the column.
+*   [**SHARED** *value* | **DEFAULT** *value*]: Specifies the initial value of the column.
+*   *column_constraint*: Specifies the constraint of the column. Available constraints are **NOT NULL**, **UNIQUE**, **PRIMARY KEY** and **FOREIGN KEY** (see :ref:`constraint-definition` For details).
 *   <default_or_shared_or_ai>: only one of DEFAULT, SHARED, AUTO_INCREMENT can be used.
     When AUTO_INCREMENT is specified, "(seed, increment)" and "AUTO_INCREMENT = initial_value" cannot be defined at the same time.
     
@@ -116,7 +118,7 @@ A column is a set of data values of a particular simple type, one for each row o
             AUTO_INCREMENT [(seed, increment)]
      
         <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition>}
-        
+
 Column Name
 ^^^^^^^^^^^
 
@@ -383,7 +385,7 @@ In the following example, the second INSERT statement fails because the value of
 ::
 
     ERROR: Operation would have caused one or more unique constraint violations.
- 
+
 In the following example, if a **UNIQUE** constraint is defined on several columns, this ensures the uniqueness of the values in all the columns.
 
 .. code-block:: sql
@@ -448,11 +450,13 @@ A foreign key is a column or a set of columns that references the primary key in
             ON DELETE <referential_action>
 
             <referential_action> ::= CASCADE | RESTRICT | NO ACTION  | SET NULL
-        
+
 *   *constraint_name*: Specifies the name of the table to be created.
 *   *foreign_key_name*: Specifies a name of the **FOREIGN KEY** constraint. You can skip the name specification. However, if you specify this value, *constraint_name* will be ignored, and the specified value will be used.
+
 *   <column_name_comma_list1>: Specifies the name of the column to be defined as a foreign key after the **FOREIGN KEY** keyword. The column number of foreign keys defined and primary keys must be same.
 *   *referenced_table_name*: Specifies the name of the table to be referenced.
+
 *   <column_name_comma_list2>: Specifies the name of the referred primary key column after the **FOREIGN KEY** keyword.
 *   *referential_triggered_action* : Specifies the trigger action that responds to a certain operation in order to maintain referential integrity. **ON UPDATE** or **ON DELETE** can be specified. Each action can be defined multiple times, and the definition order is not significant.
 
@@ -586,13 +590,13 @@ If you specify the **REUSE_OID** option when creating a table, the OID is also d
 
 .. code-block:: sql
 
-    --creating table with REUSE_OID option specified
+    -- creating table with REUSE_OID option specified
     CREATE TABLE reuse_tbl (a INT PRIMARY KEY) REUSE_OID;
     INSERT INTO reuse_tbl VALUES (1);
     INSERT INTO reuse_tbl VALUES (2);
     INSERT INTO reuse_tbl VALUES (3);
      
-    --an error occurs when column type is a OID reusable table itself
+    -- an error occurs when column type is a OID reusable table itself
     CREATE TABLE tbl_1 ( a reuse_tbl);
 
 ::
@@ -707,7 +711,7 @@ You can create a new table that contains the result records of the **SELECT** st
 
 ::
 
-    CREATE {TABLE | CLASS} <table_name> [( <column_definition> [,<table_constraint>]... )] [REPLACE] AS <select_statement>;
+    CREATE {TABLE | CLASS} <table_name> [(<column_definition> [,<table_constraint>], ...)] [REPLACE] AS <select_statement>;
 
 *   *table_name*: A name of the table to be created.
 *   *column_definition*: Defines a column. If it is omitted, the column schema of **SELECT** statement is replicated; however, the constraint or the **AUTO_INCREMENT** attribute is not replicated.
@@ -814,6 +818,8 @@ ALTER TABLE
 
 You can modify the structure of a table by using the **ALTER** statement. You can perform operations on the target table such as adding/deleting columns, creating/deleting indexes, and type casting existing columns as well as changing table names, column names and constraints. You can also change the initial value of **AUTO_INCREMENT**. **TABLE** and **CLASS** are used interchangeably **VIEW** and **VCLASS**, and **COLUMN** and **ATTRIBUTE** as well.
 
+.. CUBRIDSUS-6568: from 10.0, alter table rename constraint is supported.
+
 ::
 
     ALTER [<class_type>] <table_name> <alter_clause> ;
@@ -868,7 +874,7 @@ You can modify the structure of a table by using the **ALTER** statement. You ca
                 QUERY [<unsigned_integer_literal>] <select_statement> |
                 <column_name> DEFAULT <value_specification>
              
-            <resolution> ::= {column_name} OF <superclass_name> [AS alias]
+            <resolution> ::= column_name OF <superclass_name> [AS alias]
 
             <index_col_name> ::= column_name [(length)] [ASC | DESC]
 
@@ -911,9 +917,9 @@ You can add a new column by using the **ADD COLUMN** clause. You can specify the
 
                         <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
 
-*   *table_name* : Specifies the name of a table that has a column to be added.
-*   *column_definition* : Specifies the name(max 254 bytes), data type, and constraints of a column to be added.
-*   **AFTER** *oid_column_name* : Specifies the name of an existing column before the column to be added.
+*   *table_name*: Specifies the name of a table that has a column to be added.
+*   *column_definition*: Specifies the name(max 254 bytes), data type, and constraints of a column to be added.
+*   **AFTER** *oid_column_name*: Specifies the name of an existing column before the column to be added.
 
 .. code-block:: sql
 
@@ -1148,7 +1154,7 @@ AUTO_INCREMENT Clause
 The **AUTO_INCREMENT** clause can change the initial value of the increment value that is currently defined. However, there should be only one **AUTO_INCREMENT** column defined. ::
 
     ALTER TABLE table_name AUTO_INCREMENT = initial_value ;
-    
+
 *   *table_name* : Table name
 *   *initial_value* : Initial value to alter
 
@@ -1536,14 +1542,14 @@ You can delete a column in a table by using the **DROP COLUMN** clause. You can 
 
     ALTER [TABLE | CLASS | VCLASS | VIEW] table_name
     DROP [COLUMN | ATTRIBUTE] column_name, ... ;
-    
+
 *   *table_name* : Specifies the name of a table that has a column to be deleted.
 *   *column_ name* : Specifies the name of a column to be deleted. Multiple columns can be specified by separating them with commas (,).
 
 .. code-block:: sql
 
     ALTER TABLE a_tbl DROP COLUMN age1,age2,age3;
-    
+
 DROP CONSTRAINT Clause
 ----------------------
 
@@ -1553,7 +1559,7 @@ You can drop the constraints pre-defined for the table, such as **UNIQUE**, **PR
     DROP CONSTRAINT constraint_name ;
 
 *   *table_name* : Specifies the name of a table that has a constraint to be dropped.
-*   *constraint_name*: Specifies the name of a constraint to be dropped.
+*   *constraint_name* : Specifies the name of a constraint to be dropped.
 
 .. code-block:: sql
 
@@ -1635,7 +1641,7 @@ You can drop an existing table by the **DROP** statement. Multiple tables can be
             <single_table_spec> ::= 
                 |[ONLY] table_name 
                 | ALL table_name [( EXCEPT table_name, ... )] 
-                
+
 *   *table_name* : Specifies the name of the table to be dropped. You can delete multiple tables simultaneously by separating them with commas.
 *   If a super class name is specified after the **ONLY** keyword, only the super class, not the sub classes inheriting from it, is deleted. If a super class name is specified after the **ALL** keyword, the super classes as well as the sub classes inheriting from it are all deleted. You can specify the list of sub classes not to be deleted after the **EXCEPT** keyword.
 *   If sub classes that inherit from the super class specified after the **ALL** keyword are specified after the **EXCEPT** keyword, they are not deleted.
@@ -1672,7 +1678,7 @@ The below shows to drop a_parent table which b_child table refers. A foreign key
         CONSTRAINT fk_parent_id FOREIGN KEY(parent_id) REFERENCES a_parent(id) ON DELETE CASCADE ON UPDATE RESTRICT 
     ); 
 
-    DROP TABLE a_parent CASCADE CONSTRAINTS;     
+    DROP TABLE a_parent CASCADE CONSTRAINTS;
 
 RENAME TABLE
 ============

@@ -126,7 +126,7 @@ The collation name in CUBRID follows the conversion: ::
     *   cs: case sensitive; By default all collations are case sensitive. In LDML, can be obtained using at least: strength="tertiary".
 
     *   bin/binary: it means that the sorting order under such collation is almost the same with the order of codepoints; If memory (byte) comparison is used, then almost the same result is obtained. Space character and EUC double-byte padding character are always sorted as zero in "bin" collation. No collations with such setting are currently configured in LDML (they are already available as built-in), but a similar one can be obtained using the maximum setting strength="quaternary" or strength="identical".
-            
+
     *   ai: accent insensitive; this means that 'Á' is sorted the same as 'A'. Due to particularities of the UCA based algorithms, an accent insensitive collation is also a case insensitive collation. In LDML, can be obtained using: strength="primary".
         
     *   uca: this signals a UCA based collation; this is used only to differentiate such collations from similar built-in variants. All LDML collations are based on UCA, but in order to keep shorter names only two collations ( 'utf8_ko_cs_uca' , 'utf8_tr_cs_uca' ) have this description in their names, in order to differentiate them from 'utf8_ko_cs' and 'utf8_tr_cs' collations.
@@ -149,8 +149,8 @@ The name of collation influences the internal numeric id of the collation. For i
 *   32 - 46: LDML collations having "gen" as "language" part
 *   47 - 255: the rest of LDML collations
 
-If you want to include all locales into the database which CUBRID provide, first, copy cubrid_locales.all.txt of $CUBRID/conf directory into cubrid_locales.txt and next, run make_locale script(in extension, Linux is .sh, Windows is .bat). 
-For more details on make_locale script, see :ref:`locale-compilation`.
+If you want to include all locales into the database which CUBRID provide, first, copy cubrid_locales.all.txt of $CUBRID/conf directory into cubrid_locales.txt and next, run make_locale script(in extension, Linux is .sh, Windows is .bat). For more details on make_locale script, see :ref:`locale-compilation`.
+
 If you want to include the newly added locale information into the existing database, run "cubrid synccolldb <dbname>". For more information, see :ref:`synccolldb`.
 
 If you include all locales defined in LDML files, CUBRID has the following collations.
@@ -1028,9 +1028,9 @@ The following shows converting two parameters with different collation to one co
             s2 STRING COLLATE utf8_tr_cs, 
             s3 STRING COLLATE utf8_en_ci
         );
-        
+
         SELECT s1, s2 FROM t WHERE s1 > s2 + s3;
-        
+
     ::
     
         ERROR: '+' requires arguments with compatible collations.
@@ -1361,14 +1361,14 @@ For more details, see :ref:`unicode_input_normalization <unicode_input_normaliza
 The main use case is with both enabled (**unicode_input_normalization**,  **unicode_output_normalization**): this ensures that a string from a client knowing only decomposed Unicode is still properly handled by CUBRID. A second use case is with **unicode_input_normalization** = yes and **unicode_output_normalization** = no, for a client able to handle both types of Unicode writing.
 
 .. _collation-cont-exp:
-    
+
 Contraction and Expansion of Collation
 --------------------------------------
 
 CUBRID supports contraction and expansion for collation. Contraction and expansion are available for UTF-8 charset collation. You can see the contraction and expansion of collation in the collation setting in the LDML file. Using contraction and expansion affects the size of locale data (shared library) and server performance.
 
 .. _contraction:
-    
+
 Contraction
 ^^^^^^^^^^^
 
@@ -1439,14 +1439,18 @@ Expansions refer to codepoints which have more than one collation element. Enabl
 
         It is rather obvious that on the first pass, for level 1 weights, 0x15A3 will be compared with 0x15A3. In the second iteration, the 0x0000 weight will be skipped, and 0x1770 will be compared with 0x1770. Since the strings are declared identical so far, the comparison will continue on the level 2 weights, first comparing 0x0020 with 0x0020, then 0x0020 with 0x0047, yielding "Ar" < "Är". The example above was meant to show how strings comparison is done when using a collation with expansion support.
 
-        Let us change the collation settings, and show how one may obtain a different order for the same strings when using a collation for German, where "Ä" is supposed to be interpreted as the character group "AE". The codepoints and collation elements of the characters involved in this example are as follows. ::
+        Let us change the collation settings, and show how one may obtain a different order for the same strings when using a collation for German, where "Ä" is supposed to be interpreted as the character group "AE". The codepoints and collation elements of the characters involved in this example are as follows. 
+
+        ::
 
             0041  ; [.15A3.0020.0008.0041] # LATIN CAPITAL LETTER A
             0045  ; [.15FF.0020.0008.0045] # LATIN CAPITAL LETTER E
             0072  ; [.1770.0020.0002.0072] # LATIN SMALL LETTER R
             00C4  ; [.15A3.0020.0008.0041][.15FF.0020.0008.0045] # LATIN CAPITAL LETTER A WITH DIAERESIS; EXPANSION
 
-        When comparing the strings "Är" and "Ar", the algorithm for string comparison when using a collation with expansion support will involve comparing the simulated concatenation of collation element lists for the characters in the two strings. ::
+        When comparing the strings "Är" and "Ar", the algorithm for string comparison when using a collation with expansion support will involve comparing the simulated concatenation of collation element lists for the characters in the two strings.
+
+        ::
 
             Ar [.15A3.0020.0008.0041][.1770.0020.0002.0072]
             Är [.15A3.0020.0008.0041][.15FF.0020.0008.0045][.1770.0020.0002.0072]
@@ -1474,7 +1478,7 @@ Charset information is required for functions which use character primitives. Th
     
     CREATE TABLE t (s_iso STRING CHARSET iso88591, s_utf8 STRING CHARSET utf8);
     SET NAMES iso88591;
-    INSERT INTO t VALUES('È','È');
+    INSERT INTO t VALUES ('È','È');
 
     -- the first returns 1, while the second does 2
     SELECT OCTET_LENGTH(s_iso), OCTET_LENGTH(s_utf8) FROM t;
@@ -1700,15 +1704,14 @@ Note that the order in this file is the order of generating (compiling) locale l
 
 The make_locale script must be used to compile the new added locale and add its data into the CUBRID locales library (locale in $CUBRID/lib/).
 
-The LDML file is expected in UTF-8 encoding.
-It is not possible to add more than one locale into the same LDML file.
-Adding a new locale in LDML file requires:
+The LDML file is expected in UTF-8 encoding, and it is not possible to add more than one locale into the same LDML file.
 
-*   to specify calendar information (CUBRID date formats, name of months and week days in various forms, names for AM/PM day periods). CUBRID supports only Gregorian calendar (generic LDML specifies other calendar types which are not supported by CUBRID).
-*   to specify number settings (digit grouping symbols)
+Adding a new locale in LDML file requires:
 
 ..  "and currency" is removed because MONETARY is deprecated.
 
+*   to specify calendar information (CUBRID date formats, name of months and week days in various forms, names for AM/PM day periods). CUBRID supports only Gregorian calendar (generic LDML specifies other calendar types which are not supported by CUBRID).
+*   to specify number settings (digit grouping symbols)
 *   providing an alphabet (set of rules for how letters are upper-cased and lower-cased)
 
     *   optionally, some collations can be added
@@ -1734,10 +1737,10 @@ CUBRID checks only the maximum allowed size in bytes; the size in characters is 
 LDML Numbers information
 ------------------------
 
-*    The <symbols> tag defines the characters used as symbols for splitting decimal part from integer part in numbers and for grouping the digits. CUBRID expects only ASCII characters for these symbols. Empty of space character is not allowed. CUBRID performs grouping for 3 digits.
+*   The <symbols> tag defines the characters used as symbols for splitting decimal part from integer part in numbers and for grouping the digits. CUBRID expects only ASCII characters for these symbols. Empty of space character is not allowed. CUBRID performs grouping for 3 digits.
 
-
-..    *     The <currency> tag defines the three letter ISO 4217 code (http://en.wikipedia.org/wiki/ISO_4217) for default currency of the locale. Only one currency for locale is allowed. Setting the currency, instructs CUBRID how to interpret conversions were MONETARY data type is implied (:func:`TO_NUMBER`).
+.. below is commented out.
+..  *   The <currency> tag defines the three letter ISO 4217 code (http://en.wikipedia.org/wiki/ISO_4217) for default currency of the locale. Only one currency for locale is allowed. Setting the currency, instructs CUBRID how to interpret conversions were MONETARY data type is implied (:func:`TO_NUMBER`).
 
 ..  CUBRID supports a limited number of currencies.
 
@@ -1798,13 +1801,15 @@ LDML Alphabet
 
 These allow to define casing rules for alphabet of the locale.
 The 'CUBRIDAlphabetMode' attribute defines the primary source of data for characters. Normally, this should be set to "UNICODEDATAFILE", values which instructs CUBRID to use the Unicode data file ($CUBRID/locales/data/unicodedata.txt).
+
 This file must not be modified, any customization on certain characters should be done in LDML file. If such value is configured, all Unicode characters up to codepoint 65535 are loaded with casing information.
 The other allowed value for `CUBRIDAlphabetMode` is "ASCII" which will lead to only ASCII character can be lower case, upper case or case-insenstive compare in matching functions.
+
 This does not affect CUBRID's ability to support all UTF-8 4 bytes encoded Unicode characters, it just limits the casing ability for characters not included.
 
 The casing rules are optional and apply on top of the primary source of character information (UNICODEDATAFILE or ASCII).
-CUBRID allows to define upper casing rules (<u> tag) and lower casing rules (<l> tag).
-Each of upper and lower casing rules set consists for pairs of source-destination (<s> = source, <d> destination).
+
+CUBRID allows to define upper casing rules (<u> tag) and lower casing rules (<l> tag).Each of upper and lower casing rules set consists for pairs of source-destination (<s> = source, <d> destination).
 For instance, the following defines a rule that each character "A" is lower cased to "aa" (two character "a").
 
     .. code-block:: xml
@@ -1831,6 +1836,7 @@ The 'type' attribute defines the conversion scheme. The allowed values are:
 
 The 'windows_codepage' is the value for Windows codepage which CUBRID automatically activates console conversion.
 The 'linux_charset' is corresponding value for charset part in LANG environment variable from UNIX system. It is recommended to use native CUBRID charset in Linux console.
+
 The 'file' attribute is required only for "ISO" and "DBCS" values of 'type' attribute and is the file containing the translation information ($CUBRID/locales/data/codepages/).
 
 LDML Collation
@@ -1866,6 +1872,7 @@ The main data for a collation is loaded from the DUCET file. After this step, th
 
 The 'cubridrules' tag is optional and can be used to explicitely set weight values for a codepoint or a range of codepoints. The cubridrules apply after loading the primary collation data from DUCET file and before applying the UCA rules (from '<rules>' tag).
 Each of these rule is enclosed in '<set>' tag. If the rule refers to only one Unicode codepoint, then a '<scp>' tag is provided which contains the hexadecimal value of codepoint.
+
 All available CUBRID collations contain this cubrid-rule:
 
     .. code-block:: xml

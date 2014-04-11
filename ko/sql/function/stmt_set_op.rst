@@ -9,18 +9,20 @@ UNION, DIFFERENCE, INTERSECTION
 
 ::
 
-    query_term statement_set_operator [qualifier] query_term
-    [{statement_set_operator [qualifier] query_term}];  
+    query_term statement_set_operator [qualifier] <query_term>
+    [{statement_set_operator [qualifier] <query_term>}];  
      
-    query_term :
-    *   query_specification
-    *   subquery
+        <query_term> ::=
+            query_specification
+            subquery
      
-    qualifier :
+*   *qualifier*
+
     *   DISTINCT, DISTINCTROW 또는 UNIQUE(결과로 반환되는 인스턴스가 서로 다르다는 것을 보장)
     *   ALL (모든 인스턴스가 반환, 중복 허용)
      
-    statement_set_operator :
+*   *statement_set_operator*
+
     *   UNION (합집합)
     *   DIFFERENCE (차집합)
     *   INTERSECT | INTERSECTION (교집합)

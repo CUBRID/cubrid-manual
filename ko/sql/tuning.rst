@@ -19,7 +19,7 @@
 
 *   **WITH FULLSCAN**: 지정된 테이블의 전체 데이터를 가지고 통계 정보를 업데이트한다. 생략 시 샘플링한 데이터를 가지고 통계 정보를 업데이트한다. 
 *   **ALL CLASSES**: 모든 테이블의 통계 정보를 업데이트한다. 
-*   **CATALOG CLASSES**: 카탈로그 테이블에 대한 통계 정보를 업데이트한다. 
+*   **CATALOG CLASSES**: 카탈로그 테이블에 대한 통계 정보를 업데이트한다.
 
 .. code-block:: sql 
   
@@ -37,7 +37,7 @@
     UPDATE STATISTICS ON CATALOG CLASSES WITH FULLSCAN; 
 
 통계 정보 갱신 시작과 종료 시 서버 에러 로그에 NOTIFICATION 메시지를 출력하며, 이를 통해 통계 정보 갱신에 걸리는 시간을 확인할 수 있다.
-    
+
 ::
     
     Time: 05/07/13 15:06:25.052 - NOTIFICATION *** file ../../src/storage/statistics_sr.c, line 123  CODE = -1114 Tran = 1, CLIENT = testhost:csql(21060), EID = 4
@@ -91,7 +91,7 @@ CSQL 인터프리터의 세션 명령어로 지정한 테이블의 통계 정보
 
 CUBRID SQL 질의에 대한 실행 계획(query plan)을 보기 위해서는 다음의 방법을 사용할 수 있다.
 
-*   CUBRID 매니저 또는 CUBRID 쿼리 브라우저에서 플랜 보기 버튼을 누른다. CUBRID 매니저 또는 CUBRID 쿼리 브라우저의 사용 방법에 대해서는 `CUBRID 매니저 매뉴얼 <http://www.cubrid.org/wiki_tools/entry/cubrid-manager-manual_kr>`_ 또는 `CUBRID 쿼리 브라우저 매뉴얼 <http://www.cubrid.org/wiki_tools/entry/cubrid-query-browser-manual_kr>`_\ 을 참고한다. 
+*   CUBRID 매니저 또는 CUBRID 쿼리 브라우저에서 플랜 보기 버튼을 누른다. CUBRID 매니저 또는 CUBRID 쿼리 브라우저의 사용 방법에 대해서는 `CUBRID 매니저 매뉴얼 <http://www.cubrid.org/wiki_tools/entry/cubrid-manager-manual_kr>`_ 또는 `CUBRID 쿼리 브라우저 매뉴얼 <http://www.cubrid.org/wiki_tools/entry/cubrid-query-browser-manual_kr>`_\ 을 참고한다.
 
     .. image:: /images/query_plan_on_CM.png
 
@@ -535,9 +535,9 @@ SQL 힌트
 
 SQL 힌트는 주석에 더하기 기호(+)를 함께 사용하여 지정한다. 힌트를 사용하는 방법은 :doc:`comment` 절에 소개된 바와 같이 세 가지 방식이 있다. 따라서 SQL 힌트도 다음과 같이 세 가지 방식으로 사용할 수 있다.
 
-* /\*+ hint \*/
-* --+ hint
-* //+ hint
+*  /\*+ hint \*/
+*   --+ hint
+*   //+ hint
 
 힌트 주석은 반드시 키워드 **SELECT**, **UPDATE** or **DELETE** 등의 예약어 다음에 나타나야 하고, 더하기 기호(+)가 주석에서 첫 번째 문자로 시작되어야 한다. 여러 개의 힌트를 지정할 때는 공백이 구분자로 사용된다. 여러 개의 힌트를 지정할 때는 공백이 구분자로 사용된다.
 
@@ -830,7 +830,7 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
     인덱스를 구성하는 칼럼이 WHERE 절의 조건에 포함되어 있지 않더라도 필터링된 인덱스를 사용한다.
 
     아래 질의에서는 my_filter_index의 인덱스를 구성하는 칼럼이 WHERE 조건에 포함되어 있지 않으므로, "USE INDEX" 구문으로는 인덱스를 사용할 수 없다.
-        
+
     .. code-block:: sql
         
         SELECT * 
@@ -1375,6 +1375,7 @@ ORDER BY 절 최적화
                 2            6            6
 
 .. note::
+
     :func:`CAST` 연산자 등을 통해 ORDER BY 절의 칼럼이 타입 변환되더라도, 타입 변환 이전의 정렬 순서와 타입 변환 이후의 정렬 순서가 같다면 ORDER BY 절 최적화가 수행된다.
     
         +----------------+----------------+
@@ -1460,7 +1461,7 @@ ORDER BY 절 최적화
     LIMIT 3;
 
 ::
-    
+
     Query plan:
      Index scan(di di, i_di_i, (di.i range (0 gt_inf max) and inst_num() range (min inf_le 3)) (covers) (desc_index))
      
@@ -1629,7 +1630,7 @@ GROUP BY 절 최적화
             RAND(CAST(UNIX_TIMESTAMP() AS INT)) MOD 100000
         FROM db_class a, db_class b, db_class c, db_class d LIMIT 20000;
     CREATE INDEX idx ON tab(k1, k2, k3);
- 
+
 위의 테이블과 인덱스를 생성했을 때 다음의 예는 k1, k2 칼럼으로 **GROUP BY**\를 수행하며 k3로 집계 함수를 수행하므로 tab(k1, k2, k3)로 구성된 인덱스가 사용되고 별도의 정렬 과정이 필요 없다. 또한 **SELECT** 리스트에 있는 k1, k2, k3 칼럼이 모두 tab(k1, k2, k3)로 구성된 인덱스 내에 존재하므로 커버링 인덱스가 적용된다.
     
 .. code-block:: sql
@@ -1768,7 +1769,7 @@ GROUP BY 절 최적화
 
 JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서는 다음과 같은 조건을 만족해야 한다.
 
-*    **ORDER BY** 절에 존재하는 칼럼들은 하나의 테이블에만 존재하는 칼럼들이며, 이 테이블은 단일 테이블 질의에서 다중 키 범위 최적화에 의해 요구되는 조건을 모두 만족해야 한다. 이 테이블을 정렬 테이블(sort table)이라고 하자. 
+*   **ORDER BY** 절에 존재하는 칼럼들은 하나의 테이블에만 존재하는 칼럼들이며, 이 테이블은 단일 테이블 질의에서 다중 키 범위 최적화에 의해 요구되는 조건을 모두 만족해야 한다. 이 테이블을 정렬 테이블(sort table)이라고 하자. 
 *   정렬 테이블과 외부 테이블들(outer tables) 간의 JOIN 조건에 명시된 정렬 테이블의 칼럼들은 모두 인덱스에 포함되어야 한다. 즉, 데이터 필터링 조건이 없어야 한다. 
 *   정렬 테이블과 내부 테이블들(inner tables) 간의 JOIN 조건에 명시된 정렬 테이블의 칼럼들은 범위 조건이 아닌 조건으로 WHERE 절에 포함되어야 한다. 
 
@@ -1868,7 +1869,7 @@ JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서�
 .. code-block:: sql
 
     SELECT a, b FROM tbl GROUP BY a;
-    
+
 칼럼 a에 대한 조건이 없으므로 부분 키를 사용할 수 없다. 그러나 다음과 같이 부분 키의 조건이 명시되면 느슨한 인덱스 스캔이 적용될 수 있다.
 
 .. code-block:: sql
@@ -2017,7 +2018,6 @@ JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서�
      Sort(distinct)
         Index scan(tbl1 tbl1, idx, [(tbl1.k2> ?:0 )] (covers) (loose index scan on prefix 2))
 
-    
 다음은 느슨한 인덱스 스캔이 적용되지 않는 경우이다.
 
 .. code-block:: sql
@@ -2127,8 +2127,7 @@ IMS는 결과 행의 개수가 아닌 결과의 실제 크기를 고려함에 �
 SORT-LIMIT 최적화
 -----------------
 
-SORT-LIMIT 최적화는 ORDER BY 절과 LIMIT 절을 명시한 질의에 적용되는 최적화이다. 
-이 최적화는 조인하는 동안의 카디널리티(cardinality)를 줄이기 위해 질의 계획에서 가능한 빨리 LIMIT 연산자를 평가하고자 한다. 
+SORT-LIMIT 최적화는 ORDER BY 절과 LIMIT 절을 명시한 질의에 적용되는 최적화이다. 이 최적화는 조인하는 동안의 카디널리티(cardinality)를 줄이기 위해 질의 계획에서 가능한 빨리 LIMIT 연산자를 평가하고자 한다. 
 
 다음 조건이 만족될 때 SORT-LIMIT 계획이 고려될 수 있다.
 

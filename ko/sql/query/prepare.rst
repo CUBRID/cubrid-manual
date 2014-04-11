@@ -146,7 +146,7 @@ SET
        typeof(@v1)         typeof(@v2)         typeof(@v3)         typeof(@v4)
     ======================================================================================
       'integer'           'bigint'            'character (-1)'    'character varying (1073741823)
-  
+
 사용자 정의 변수의 타입은 사용자가 값을 지정할 때 바뀔 수 있다.
 
 .. code-block:: sql
@@ -160,8 +160,8 @@ SET
 
       @v := 1                typeof(@v1)          @v1 := '1'             typeof(@v1)
     ======================================================================================
-      1                     'integer'            '1'                    'character (-1)'
-  
+      1                     'integer'             '1'                    'character (-1)'
+
 ::
 
     <set_statement>
@@ -189,11 +189,11 @@ SET
     SELECT @a;
 
 ::
-    
+
       @a
     ======================
       1
-  
+
 사용자 정의 변수를 사용하여 **SELECT** 문에서 행의 개수를 카운트한다.
 
 .. code-block:: sql
@@ -204,7 +204,7 @@ SET
     SET @a = 0;
      
     SELECT @a := @a+1 AS row_no, i FROM t;
-     
+
 ::
 
       row_no                          i
@@ -224,7 +224,7 @@ SET
      
     PREPARE stmt FROM 'SELECT i FROM t WHERE i < ?';
     EXECUTE stmt USING @a;
-     
+
 ::
 
                 i

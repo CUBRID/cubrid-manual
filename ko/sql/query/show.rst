@@ -104,7 +104,7 @@ SHOW COLUMNS
 ::
 
     SHOW [FULL] COLUMNS {FROM | IN} tbl_name [LIKE 'pattern' | WHERE expr];
-    
+
 **FULL** 키워드가 사용되면 Collation 정보를 추가로 출력한다.
 
 **SHOW FIELDS** 는 **SHOW COLUMNS** 와 같은 구문이다.
@@ -710,7 +710,7 @@ Smallest_lsa_at_last_checkpoint     VARCHAR(64)
     SHOW LOG HEADER OF 'demodb_lgat';
 
 ::
-    
+
     <00001> Volume_id                      : -2
             Magic_symbol                   : 'CUBRID/LogActive'
             Magic_symbol_location          : 16

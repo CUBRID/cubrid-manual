@@ -39,7 +39,7 @@ You can create a serial object in the database by using the **CREATE SERIAL** st
 
 *   **CYCLE**\ : Specifies that the serial will be generated continuously after reaching the maximum or minimum value. When a serial in ascending order reaches the maximum value, the minimum value is created as the next value; when a serial in descending order reaches the minimum value, the maximum value is created as the next value.
 
-*   **NOCYCLE**\ : Specifies that the serial will not be generated any more after reaching the maximum or minimum value. The default value is **NOCYCLE**.
+*   **NOCYCLE**\ : Specifies that the serial will not be generated anymore after reaching the maximum or minimum value. The default value is **NOCYCLE**.
 
 *   **CACHE**\ : Stores as many serials as the number specified by "cached_num" in the cache to improve the performance of the serials and fetches a serial value when one is requested. If all cached values are used up, as many serials as "cached_num" are fetched again from the disk to the memory. If the database server stops accidently, all cached serial values are deleted. For this reason, the serial values before and after the restart of the database server may be discontinuous. Because the transaction rollback does not affect the cached serial values, the request for the next serial will return the next value of the value used (or fetched) lastly when the transaction is rolled back. The "cached_num" after the **CACHE** keyword cannot be omitted. If the "cached_num" is equal to or smaller than 1, the serial cache is not applied.
 
@@ -58,7 +58,7 @@ You can create a serial object in the database by using the **CREATE SERIAL** st
      
     --selecting serial information from the db_serial class
     SELECT * FROM db_serial;
-     
+
 ::
 
       name            current_val      increment_val         max_val         min_val         cyclic      started       cached_num        att_name
@@ -77,7 +77,7 @@ The following example shows how to create the *athlete_idx* table to store athle
     INSERT INTO athlete_idx VALUES (order_no.CURRENT_VALUE, 'Lee');
     
     SELECT * FROM athlete_idx;
-     
+
 ::
 
              code  name
@@ -115,7 +115,7 @@ With the **ALTER SERIAL** statement, you can update the increment of the serial 
 
 *   **CYCLE** : Specifies that the serial will be generated continuously after reaching the maximum or minimum value. If the ascending serial reaches the maximum value, the minimum value is generated as the next value. If the descending serial reaches the minimum value, the maximum value is generated as the next value.
 
-*   **NOCYCLE** : Specifies that the serial will not be generated any more after reaching the maximum or minimum value. The default is **NOCYCLE**.
+*   **NOCYCLE** : Specifies that the serial will not be generated anymore after reaching the maximum or minimum value. The default is **NOCYCLE**.
 
 *   **CACHE** : Stores as many serials as the number specified by *integer* in the cache to improve the performance of the serials and fetches a serial value when one is requested. The *integer* after the **CACHE** keyword cannot be omitted. If a number equal to or smaller than 1 is specified, the serial cache is not applied.
 
@@ -135,7 +135,7 @@ With the **ALTER SERIAL** statement, you can update the increment of the serial 
 .. warning::
 
      In CUBRID 2008 R1.x version, the serial value can be modified by updating the db_serial table, a system catalog. However, in CUBRID 2008 R2.0 version or above, the modification of the db_serial table is not allowed but use of the **ALTER SERIAL** statement is allowed. Therefore, if an **ALTER SERIAL** statement is included in the data exported (unloaddb) from CUBRID 2008 R2.0 or above, it is not allowed to import (loaddb) the data in CUBRID 2008 R1.x or below.
-    
+
 .. warning::
 
     When you get the value of **NEXT_VALUE** after running **ALTER SERIAL**, in the version lower than CUBRID 9.0, the next value of the initial value was returned. From CUBRID 9.0, the setting value of **ALTER_SERIAL** is returned.

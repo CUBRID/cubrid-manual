@@ -71,11 +71,11 @@ CREATE TABLE
         <resolution> ::= [CLASS] {column_name} OF superclass_name [AS alias]
 
 *   **IF NOT EXISTS**: 생성하려는 테이블이 존재하는 경우 에러 없이 테이블을 생성하지 않는다. 
-*   *table_name* : 생성할 테이블의 이름을 지정한다(최대 254바이트).
-*   *column_name* : 생성할 칼럼의 이름을 지정한다(최대 254바이트).
-*   *column_type* : 칼럼의 데이터 타입을 지정한다.
-*   [**SHARED** *value* | **DEFAULT** *value*] : 칼럼의 초기값을 지정한다.
-*   *column_constraint* : 칼럼의 제약 조건을 지정하며 제약 조건의 종류에는 **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** 가 있다(자세한 내용은 :ref:`constraint-definition` 참조).
+*   *table_name*: 생성할 테이블의 이름을 지정한다(최대 254바이트).
+*   *column_name*: 생성할 칼럼의 이름을 지정한다(최대 254바이트).
+*   *column_type*: 칼럼의 데이터 타입을 지정한다.
+*   [**SHARED** *value* | **DEFAULT** *value*]: 칼럼의 초기값을 지정한다.
+*   *column_constraint*: 칼럼의 제약 조건을 지정하며 제약 조건의 종류에는 **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** 가 있다(자세한 내용은 :ref:`constraint-definition` 참조).
 *   <*default_or_shared_or_ai*>: DEFAULT, SHARED, AUTO_INCREMENT 중 하나만 사용될 수 있다.
     AUTO_INCREMENT이 지정될 때 "(seed, increment)"와 "AUTO_INCREMENT = initial_value"는 동시에 정의될 수 없다.
 
@@ -102,9 +102,9 @@ CREATE TABLE
 ::
 
     <column_definition> ::= 
-        column_name <data_type> [[<default_or_shared_or_ai>] | [ <column_constraint> ]] ...
+        column_name <data_type> [[<default_or_shared_or_ai>] | [<column_constraint>]] ...
     
-        <data_type> ::= <column_type> [ <charset_modifier_clause> ] [ <collation_modifier_clause> ]
+        <data_type> ::= <column_type> [<charset_modifier_clause>] [<collation_modifier_clause>]
 
             <charset_modifier_clause> ::= {CHARACTER_SET|CHARSET} {<char_string_literal>|<identifier>}
 
@@ -115,7 +115,7 @@ CREATE TABLE
             DEFAULT <value_specification>  |
             AUTO_INCREMENT [(seed, increment)]
      
-        <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition> }
+        <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition>}
 
 칼럼 이름
 ^^^^^^^^^
@@ -229,9 +229,9 @@ CREATE TABLE
 
 ::
 
-    CREATE TABLE table_name (id int AUTO_INCREMENT [(seed, increment)] ) ;
-    
-    CREATE TABLE table_name (id int AUTO_INCREMENT) AUTO_INCREMENT = seed ;
+    CREATE TABLE table_name (id INT AUTO_INCREMENT[(seed, increment)]);
+
+    CREATE TABLE table_name (id INT AUTO_INCREMENT) AUTO_INCREMENT = seed ;
 
 *   *seed* : 번호가 시작하는 초기값이다. 모든 정수가 허용되며 기본값은 **1** 이다.
 *   *increment* : 행마다 증가되는 증가값이다. 양의 정수만 허용되며 기본값은 **1** 이다.
@@ -260,7 +260,7 @@ CREATE TABLE
      
 .. code-block:: sql
 
-    CREATE TABLE tbl (id int AUTO_INCREMENT, val string) AUTO_INCREMENT = 3;
+    CREATE TABLE tbl (id INT AUTO_INCREMENT, val string) AUTO_INCREMENT = 3;
     INSERT INTO tbl VALUES (NULL, 'cubrid');
      
     SELECT * FROM tbl;
@@ -273,7 +273,7 @@ CREATE TABLE
      
 .. code-block:: sql
 
-    CREATE TABLE t (id int AUTO_INCREMENT, id2 int AUTO_INCREMENT) AUTO_INCREMENT = 5;
+    CREATE TABLE t (id INT AUTO_INCREMENT, id2 int AUTO_INCREMENT) AUTO_INCREMENT = 5;
     
 ::
     
@@ -281,7 +281,7 @@ CREATE TABLE
      
 .. code-block:: sql
 
-    CREATE TABLE t (i int AUTO_INCREMENT(100, 2)) AUTO_INCREMENT = 3;
+    CREATE TABLE t (i INT AUTO_INCREMENT(100, 2)) AUTO_INCREMENT = 3;
     
 ::
 
@@ -295,12 +295,12 @@ CREATE TABLE
     *   자동 증가 특성이 정의된 칼럼에 **SHARED** 또는 **DEFAULT** 속성을 설정할 수 없다.
     *   초기값 및 자동 증가 특성에 의해 증가된 최종 값은 해당 타입에서 허용되는 최소/최대값을 넘을 수 없다.
     *   자동 증가 특성은 순환되지 않으므로 타입의 최대값을 넘어갈 경우 오류가 발생하며, 이에 대한 롤백이 일어나지 않는다. 따라서 이와 같은 경우 해당 칼럼을 삭제 후 다시 생성해야 한다. 
-    
+
         예를 들어, 아래와 같이 테이블을 생성했다면, A의 최대값은 32767이다. 32767이 넘어가는 경우 에러가 발생하므로, 초기 테이블 생성시에 칼럼 A의 최대값이 해당 타입의 최대값을 넘지 않는다는 것을 감안해야 한다.
 
         .. code-block:: sql
           
-            CREATE TABLE tb1(A SMALLINT AUTO_INCREMENT, B CHAR (5));
+            CREATE TABLE tb1(A SMALLINT AUTO_INCREMENT, B CHAR(5));
 
 .. _constraint-definition:
 
@@ -342,13 +342,13 @@ NOT NULL 제약
 
 .. code-block:: sql
 
-    CREATE TABLE const_tbl1 (id INT NOT NULL, INDEX i_index (id ASC), phone VARCHAR);
+    CREATE TABLE const_tbl1(id INT NOT NULL, INDEX i_index(id ASC), phone VARCHAR);
      
-    CREATE TABLE const_tbl2 (id INT NOT NULL PRIMARY KEY, phone VARCHAR);
-    INSERT INTO const_tbl2 VALUES (NULL, '000-0000');
+    CREATE TABLE const_tbl2(id INT NOT NULL PRIMARY KEY, phone VARCHAR);
+    INSERT INTO const_tbl2 VALUES (NULL,'000-0000');
 
 ::
-    
+
     Putting value 'null' into attribute 'id' returned: Attribute "id" cannot be made NULL.
 
 UNIQUE 제약
@@ -537,7 +537,7 @@ KEY 또는 INDEX
 
 .. code-block:: sql
 
-    CREATE TABLE const_tbl4  (id INT, phone VARCHAR, KEY i_key (id DESC, phone ASC));
+    CREATE TABLE const_tbl4(id INT, phone VARCHAR, KEY i_key(id DESC, phone ASC));
 
 .. note:: CUBRID 9.0 미만 버전에서는 인덱스 이름을 생략할 수 있었으나, CUBRID 9.0 버전부터는 인덱스 이름을 생략할 수 없다.
 
@@ -550,21 +550,21 @@ KEY 또는 INDEX
 
 .. code-block:: sql
 
-    CREATE TABLE const_tbl (
+    CREATE TABLE const_tbl(
         id VARCHAR,
         name VARCHAR,
-        CONSTRAINT UNIQUE INDEX (id DESC, name ASC)
+        CONSTRAINT UNIQUE INDEX(id DESC, name ASC)
     );
      
-    INSERT INTO const_tbl VALUES ('1000', 'john'), ('1000','johnny'), ('1000', 'jone');
-    INSERT INTO const_tbl VALUES ('1001', 'johnny'), ('1001','john'), ('1001', 'jone');
+    INSERT INTO const_tbl VALUES('1000', 'john'), ('1000','johnny'), ('1000', 'jone');
+    INSERT INTO const_tbl VALUES('1001', 'johnny'), ('1001','john'), ('1001', 'jone');
      
     SELECT * FROM const_tbl WHERE id > '100';
     
 ::
 
       id    name    
-    ===========================================
+    =================
       1001     john     
       1001     johnny     
       1001     jone     
@@ -594,17 +594,17 @@ OID(Object Identifier)는 볼륨 번호, 페이지 번호, 슬롯 번호와 같�
      
     -- an error occurs when column type is a OID reusable table itself
     CREATE TABLE tbl_1 ( a reuse_tbl);
-     
-::
 
+::
+    
     ERROR: The class 'reuse_tbl' is marked as REUSE_OID and is non-referable. Non-referable classes can't be the domain of an attribute and their instances' OIDs cannot be returned.
-     
+
 테이블의 콜레이션과 같이 지정하는 경우 REUSE_OID를 콜레이션 앞 또는 뒤에 지정할 수 있다. 
      
 .. code-block:: sql
     
-    CREATE TABLE t3(a VARCHAR (20)) REUSE_OID COLLATE euckr_bin;
-    CREATE TABLE t4(a VARCHAR (20)) COLLATE euckr_bin REUSE_OID;
+    CREATE TABLE t3(a VARCHAR(20)) REUSE_OID COLLATE euckr_bin;
+    CREATE TABLE t4(a VARCHAR(20)) COLLATE euckr_bin REUSE_OID;
 
 .. note::
 
@@ -631,7 +631,7 @@ CREATE TABLE LIKE
 ::
 
     CREATE {TABLE | CLASS} <new_table_name> LIKE <source_table_name>;
-    
+
 *   *new_table_name*: 새로 생성할 테이블 이름이다.
 *   *source_table_name*: 데이터베이스에 이미 존재하는 원본 테이블 이름이다. **CREATE TABLE ... LIKE** 문에서 아래의 테이블은 원본 테이블로 지정될 수 없다.
         *   분할 테이블
@@ -809,6 +809,8 @@ CREATE TABLE AS SELECT
         2            3
         3            3
 
+.. CUBRIDSUS-6568: from 10.0, alter table rename constraint is supported.
+
 ALTER TABLE
 ===========
 
@@ -911,9 +913,9 @@ ADD COLUMN 절
 
                         <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
 
-*   *table_name* : 칼럼을 추가할 테이블의 이름을 지정한다.
-*   *column_definition* : 새로 추가할 칼럼의 이름(최대 254 바이트), 데이터 타입, 제약 조건을 정의한다.
-*   **AFTER** *old_column_name* : 새로 추가할 칼럼 앞에 위치하는 기존 칼럼 이름을 명시한다.
+*   *table_name*: 칼럼을 추가할 테이블의 이름을 지정한다.
+*   *column_definition*: 새로 추가할 칼럼의 이름(최대 254 바이트), 데이터 타입, 제약 조건을 정의한다.
+*   **AFTER** *old_column_name*: 새로 추가할 칼럼 앞에 위치하는 기존 칼럼 이름을 명시한다.
 
 .. code-block:: sql
 
@@ -1200,7 +1202,6 @@ CHANGE/MODIFY 절
               | MODIFY [COLUMN | CLASS ATTRIBUTE] col_name column_definition
                          [FIRST | AFTER col_name]
 
-
 *   *tbl_name*: 변경할 칼럼이 속한 테이블의 이름을 지정한다.
 *   *old_col_name*: 기존 칼럼의 이름을 지정한다.
 *   *new_col_name*: 변경할 칼럼의 이름을 지정한다.
@@ -1364,7 +1365,7 @@ CHANGE/MODIFY 절
 
     *  변경할 칼럼에 **NOT NULL** 제약 조건이 지정되지 않으면 기존 테이블에 존재하더라도 새 테이블에서 제거된다.
     *  변경할 칼럼에 **NOT NULL** 제약 조건이 지정되면 시스템 파라미터 **alter_table_change_type_strict** 의 설정에 따라 결과가 달라진다.
-    
+
         *   **alter_table_change_type_strict** 가 yes이면 해당 칼럼의 값을 검사하여 **NULL** 이 존재하면 오류가 발생하고 변경을 수행하지 않는다.
         *   **alter_table_change_type_strict** 가 no이면 존재하는 모든 **NULL** 값을 변경할 타입의 고정 기본값(hard default value)으로 변경한다.
 

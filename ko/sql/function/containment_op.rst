@@ -83,8 +83,6 @@
 |                     |           | 타입으로 변환됨) | 에러 발생               |
 +---------------------+-----------+------------------+-------------------------+
 
-**예제**
-
 .. code-block:: sql
 
     --empty set is a subset of any set
@@ -211,8 +209,6 @@ SETEQ
 
     collection_operand SETEQ collection_operand
 
-**예제**
-
 .. code-block:: sql
 
     --creating a table with SET type address column and LIST type zip_code column
@@ -257,8 +253,6 @@ SETNEQ
 **SETNEQ** 연산자는 첫 번째 피연산자와 두 번째 피연산자가 동일하지 않은 경우에 **TRUE** (1)을 반환한다. 모든 컬렉션 타입에 대해 비교 연산을 수행할 수 있다. ::
 
     collection_operand SETNEQ collection_operand
-    
-**예제**
 
 .. code-block:: sql
 
@@ -301,8 +295,6 @@ SUPERSET
 
     collection_operand SUPERSET collection_operand
 
-**예제**
-
 .. code-block:: sql
 
     --selecting rows when the first operand is a superset of the second operand and they are not same
@@ -316,7 +308,7 @@ SUPERSET
                 5  'Kim       '          {'city', 'country', 'state', 'street'}  {1, 2, 3, 4}
                 6  'Smith     '          {'city', 'country', 'state', 'street'}  {1, 2, 3, 5}
                 7  'Brown     '          {'city', 'country', 'state', 'street'}  {} 
-     
+
 .. code-block:: sql
 
     --SUPERSET operator cannot be used for comparison between LIST and LIST type values
@@ -347,13 +339,12 @@ SUPERSETEQ
 
     collection_operand SUPERSETEQ collection_operand
 
-**예제**
 
 .. code-block:: sql
 
     --selecting rows when the first operand is a superset of the second operand
     SELECT id, name, address, zip_code FROM contain_tbl WHERE address SUPERSETEQ {'country','state','city'};
-     
+
 ::
 
                id  name                  address               zip_code
@@ -395,8 +386,6 @@ SUBSET
 
     collection_operand SUBSET collection_operand
 
-**예제**
-
 .. code-block:: sql
 
     --selecting rows when the first operand is a subset of the second operand and they are not same
@@ -432,8 +421,6 @@ SUBSETEQ
 
     collection_operand SUBSETEQ collection_operand
 
-**예제**
-
 .. code-block:: sql
 
     --selecting rows when the first operand is a subset of the second operand
@@ -446,7 +433,7 @@ SUBSETEQ
                 1  'Kim       '          {'country', 'state'}  {1, 2, 3}
                 2  'Moy       '          {'country', 'state'}  {3, 2, 1}
                 3  'Jones     '          {'city', 'country', 'state'}  {1, 2, 3, 4}
-     
+
 .. code-block:: sql
 
     --SUBSETEQ operator cannot be used for comparison between LIST and LIST type values
@@ -455,12 +442,12 @@ SUBSETEQ
 ::
 
     ERROR: ' subseteq ' operator is not defined on types sequence and sequence.
-     
+
 .. code-block:: sql
 
     --Comparing operands with a SUBSETEQ operator after casting LIST type as SET type
     SELECT id, name, address, zip_code FROM contain_tbl WHERE zip_code SUBSETEQ (CAST ({1,2,3} AS SET));
-    
+
 ::
 
                id  name                  address               zip_code

@@ -324,6 +324,7 @@ EXP
 .. function:: EXP( x )
 
     The **EXP** function returns e x (the base of natural logarithm) raised to a power. When you input the string which cannot be transformed into the number, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
+
     :param x: An operator which returns a numeric value
     :rtype: DOUBLE
 
@@ -387,7 +388,7 @@ HEX
 
     :param n: A string or a number
     :rtype: STRING
-    
+
 .. code-block:: sql
 
     SELECT HEX('ab'), HEX(128), CONV(HEX(128), 16, 10);
@@ -404,7 +405,7 @@ LN
 .. function:: LN ( x )
 
     The **LN** function returns the natural log value (base = e) of an antilogarithm *x*. The return value is a **DOUBLE** type. If the antilogarithm is 0 or a negative number, an error is returned. When you input the string which cannot be transformed into the number, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
-    
+
     :param x: An expression that returns a positive number
     :rtype: DOUBLE
 
@@ -708,14 +709,14 @@ ROUND
      round(34567.34567, -3)   round(-34567.34567, -3)
     ============================================
       35000.00000           -35000.00000
-      
+
 SIGN
 ====
 
 .. function:: SIGN (number_operand)
 
     The **SIGN** function returns the sign of a given number. It returns 1 for a positive value, -1 for a negative value, and 0 for zero. When you input the string which cannot be transformed into the number, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
-    
+
     :param number_operand: An operator which returns a numeric value
     :rtype: INT
 

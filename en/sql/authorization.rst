@@ -29,8 +29,8 @@ Managing User
     
     ALTER USER user_name PASSWORD password;
 
-*   *user_name* : Specifies the user name to create, delete or change.
-*   *password* : Specifies the user password to create or change.
+*   *user_name*: Specifies the user name to create, delete or change.
+*   *password*: Specifies the user password to create or change.
 
 The following example shows how to create a user (*Fred*), change a password, and delete the user.
 
@@ -73,18 +73,19 @@ In CUBRID, the smallest grant unit of authorization is a table. You must grant a
 
 You don't need to grant authorization individually because the members of the granted group have the same authorization. The access to the (virtual) table created by a **PUBLIC** user is allowed to all users. You can grant access authorization to a user by using the **GRANT** statement. ::
 
-    GRANT operation [ { ,operation }_ ] ON table_name [ { ,table_name }_ ]
-    TO user [ { ,user }_ ] [ WITH GRANT OPTION ] [ ; ]
+    GRANT operation [ { ,operation } ... ] ON table_name [ { ,table_name } ... ]
+    TO user [ { ,user } ... ] [ WITH GRANT OPTION ] ; 
 
 * *operation*: Specifies an operation that can be used when granting authorization. The following table shows operations.
-    * **SELECT**: Allows to read the table definitions and retrieve records. The most general type of permissions.
-    * **INSERT**: Allows to create records in the table.
-    * **UPDATE**: Allows to modify the records already existing in the table.
-    * **DELETE**: Allows to delete records in the table.
-    * **ALTER**: Allows to modify the table definition, rename or delete the table.
-    * **INDEX**: Allows to call table methods or instance methods.
-    * **EXECUTE**: Allows to call table methods or instance methods.
-    * **ALL PRIVILEGES**: Includes all permissions described above.
+
+    *   **SELECT**: Allows to read the table definitions and retrieve records. The most general type of permissions.
+    *   **INSERT**: Allows to create records in the table.
+    *   **UPDATE**: Allows to modify the records already existing in the table.
+    *   **DELETE**: Allows to delete records in the table.
+    *   **ALTER**: Allows to modify the table definition, rename or delete the table.
+    *   **INDEX**: Allows to call table methods or instance methods.
+    *   **EXECUTE**: Allows to call table methods or instance methods.
+    *   **ALL PRIVILEGES**: Includes all permissions described above.
 
 * *table_name*: Specifies the name of a table or virtual table to be granted.
 * *user*: Specifies the name of a user (group) to be granted. Enter the login name of the database user or **PUBLIC**, a system-defined user. If **PUBLIC** is specified, all database users are granted with the permission.
@@ -129,12 +130,12 @@ You can revoke authorization using the **REVOKE** statement. The authorization g
 
 If the authorization (**WITH GRANT OPTION**) is revoked from the grantor, the authorization granted to the grantee by that grantor is also revoked. ::
 
-    REVOKE operation [ { , operation }_ ] ON table_name [ { , class_name }_ ]
-    FROM user [ { , user }_ ] [ ; ]
+    REVOKE operation [ { , operation } ... ] ON table_name [ { , class_name } ... ]
+    FROM user [ { , user } ... ] ;
 
-*   *operation* : Indicates an operation that can be used when granting authorization (see **Syntax** in :ref:`granting-authorization` for details).
-*   *table_name* : Specifies the name of the table or virtual table to be granted.
-*   *user* : Specifies the name of the user (group) to be granted.
+*   *operation*: Indicates an operation that can be used when granting authorization (see **Syntax** in :ref:`granting-authorization` for details).
+*   *table_name*: Specifies the name of the table or virtual table to be granted.
+*   *user*: Specifies the name of the user (group) to be granted.
 
 The following example shows how to grant **SELECT**, **INSERT**, **UPDATE** and **DELETE** authorization to *smith* and *jones* so that they can perform on the *nation* and *athlete* tables.
 
@@ -163,8 +164,8 @@ Database Administrator (**DBA**) or a member of the **DBA** group can change the
 
     ALTER [TABLE | CLASS | VIEW | VCLASS | TRIGGER | PROCEDURE | FUNCTION] name OWNER TO user_id;
 
-*   *name* : The name of schema object of which owner is to be changed
-*   *user_id* : User ID
+*   *name*: The name of schema object of which owner is to be changed
+*   *user_id*: User ID
 
 .. code-block:: sql
 
@@ -260,7 +261,7 @@ The second statement outputs the value stored in the variable x. In this query s
     CALL find_user('dba') ON CLASS db_user to x;
     
 ::
-    
+
     Result
     ======================
     db_user

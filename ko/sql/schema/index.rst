@@ -11,7 +11,7 @@ CREATE INDEX
 
 ::
 
-    CREATE [ UNIQUE ] INDEX index_name ON table_name <index_col_desc> ;
+    CREATE [UNIQUE] INDEX index_name ON table_name <index_col_desc> ;
      
         <index_col_desc> ::=
             ( column_name [ASC | DESC] [ {, column_name [ASC | DESC]} ...] ) [ WHERE <filter_predicate> ]
@@ -19,15 +19,19 @@ CREATE INDEX
 
 *   **UNIQUE**: 유일한 값을 갖는 고유 인덱스를 생성한다.
 *   *index_name*: 생성하려는 인덱스의 이름을 명시한다. 인덱스 이름은 테이블 안에서 고유한 값이어야 한다.
+
 *   *table_name*: 인덱스를 생성할 테이블의 이름을 명시한다.
 *   *column_name*: 인덱스를 적용할 칼럼의 이름을 명시한다. 다중 칼럼 인덱스를 생성할 경우 둘 이상의 칼럼 이름을 명시한다.
 *   **ASC** | **DESC**: 칼럼의 정렬 방향을 설정한다.
-*   <*filter_predicate*>: 필터링된 인덱스를 만드는 조건을 명시한다. 칼럼과 상수 간 비교 조건이 여러 개인 경우 **AND** 로 연결된 경우에만 필터가 될 수 있다.
-*   *function_name* (*argument_list*): 함수 기반 인덱스를 만드는 조건을 명시한다.
 
-.. warning::
+*   <*filter_predicate*>: 필터링된 인덱스를 만드는 조건을 명시한다. 칼럼과 상수 간 비교 조건이 여러 개인 경우 **AND** 로 연결된 경우에만 필터가 될 수 있다. 이와 관련하여 :ref:`filtered-index`\ 를 반드시 참고한다.
+*   *function_name* (*argument_list*): 함수 기반 인덱스를 만드는 조건을 명시한다. 이와 관련하여 :ref:`function-index`\ 를 반드시 참고한다.
 
-    CUBRID 9.0 미만 버전에서는 인덱스 이름을 생략할 수 있었으나, CUBRID 9.0 버전부터는 인덱스 이름을 생략할 수 없다.
+..  note::
+
+    *   CUBRID 9.0 버전부터는 인덱스 이름을 생략할 수 없다.
+
+    *   prefix 인덱스 기능은 제거될 예정(deprecated)이므로, 더 이상 사용을 권장하지 않는다.
 
 다음은 내림차순으로 정렬된 인덱스를 생성하는 예제이다.
 
@@ -42,7 +46,7 @@ CREATE INDEX
     CREATE INDEX name_nation_idx ON athlete(name, nation_code);
 
 .. _alter-index:
-    
+
 ALTER INDEX
 ===========
 
@@ -53,7 +57,7 @@ ALTER INDEX
 ::
 
     ALTER INDEX index_name ON table_name REBUILD ;
-     
+
 *   *index_name*: 재생성하려는 인덱스의 이름을 명시한다. 인덱스 이름은 테이블 안에서 고유한 값이어야 한다.
 *   *table_name*: 인덱스를 재생성할 테이블의 이름을 명시한다.
 *   **REBUILD**: 이미 생성된 것과 같은 구조의 인덱스를 재생성한다. 
@@ -68,7 +72,7 @@ ALTER INDEX
 
     *   prefix 인덱스 기능은 제거될 예정(deprecated)이므로, 더 이상 사용을 권장하지 않는다.
     
-다음은 인덱스를 재생성하는 여러 가지 방법을 보여주는 예제이다.
+다음은 인덱스를 재생성하는 구문이다.
 
 .. code-block:: sql
 
@@ -88,7 +92,7 @@ ALTER INDEX 문이 아닌 :ref:`rename-index`\ 을 이용해서도 인덱스 이
 .. code-block:: sql 
 
     ALTER INDEX i_game_medal ON game RENAME TO i_new_game_medal; 
-    
+
 DROP INDEX
 ==========
 
@@ -102,7 +106,7 @@ DROP INDEX
 *   *table_name*: 삭제할 인덱스가 지정된 테이블 이름을 지정한다.
 
 .. warning::
- 
+
     CUBRID 10.0 버전부터는 테이블 이름을 생략할 수 없다.
 
 다음은 인덱스를 삭제하는 예제이다.

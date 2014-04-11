@@ -9,7 +9,7 @@ INCR, DECR
 .. function:: DECR (column)
 
     **INCR** 함수는 **SELECT** 절에 포함되어 인자로 주어진 칼럼의 값을 1 증가시켜 주는 기능을 한다. **DECR** 함수는 해당 칼럼의 값을 1 감소시킨다.
-    
+
     :param column: SMALLINT, INT 또는 BIGINT 타입의 칼럼 이름
     :rtype: SMALLINT, INT 또는 BIGINT 
 
@@ -82,7 +82,7 @@ INCR, DECR
     SELECT content, INCR(read_count) FROM board WHERE id = 1;
 
 ::
-    
+
       content                read_count
     ===================================
       'text...'                       0

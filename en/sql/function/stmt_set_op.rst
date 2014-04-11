@@ -9,18 +9,20 @@ Statement set operators are used to get union, difference or intersection on the
 
 ::
 
-    query_term statement_set_operator [qualifier] query_term
-    [{statement_set_operator [qualifier] query_term}];  
+    query_term statement_set_operator [qualifier] <query_term>
+    [{statement_set_operator [qualifier] <query_term>}];  
      
-    query_term :
-    *   query_specification
-    *   subquery
+        <query_term> ::=
+            query_specification
+            subquery
      
-    qualifier :
+*   *qualifier*
+
     *   DISTINCT, DISTINCTROW or UNIQUE(A returned instance is a distinct value.)
     *   ALL (All instances are returned. Duplicates are allowed.)
      
-    statement_set_operator :
+*   *statement_set_operator*
+
     *   UNION (union)
     *   DIFFERENCE (difference)
     *   INTERSECT | INTERSECTION (intersection)

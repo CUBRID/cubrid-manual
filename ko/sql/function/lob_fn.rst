@@ -7,7 +7,7 @@ BIT_TO_BLOB
 
 .. function:: BIT_TO_BLOB ( blob_type_column_or_value )
 
-    **BIT**, **VARYING BIT** 타입을 **BLOB** 타입으로 변환한다.           
+    **BIT**, **VARYING BIT** 타입을 **BLOB** 타입으로 변환한다.
 
     :param blob_type_column_or_value: 변환 대상 칼럼 또는 값
     :rtype: BLOB
@@ -32,13 +32,14 @@ BLOB_FROM_FILE
 
 BLOB_LENGTH
 ===========
+
 .. function:: BLOB_LENGTH ( blob_column )                                            
  
     **BLOB** 파일에 저장된 **LOB** 데이터의 길이를 바이트 단위로 반환한다. 
     
     :param clob_column: 길이를 구하고자 하는 BLOB 타입의 칼럼
     :rtype: INT
-    
+
 BLOB_TO_BIT
 ===========
 
@@ -58,7 +59,7 @@ CHAR_TO_BLOB
 
     :param char_type_column_or_value: 변환 대상 칼럼 또는 값
     :rtype: BLOB
- 
+
 CHAR_TO_CLOB
 ============
 
@@ -80,6 +81,7 @@ CLOB_FROM_FILE
     :rtype: CLOB
 
 file_pathname을 상대 경로로 명시한 경우, 상위 경로는 프로세스의 현재 작업 디렉터리가 된다. 
+
 이 함수가 호출된 구문에 대해서는 실행 계획을 캐싱하지 않는다.
 
 .. code-block:: sql
@@ -99,7 +101,7 @@ CLOB_LENGTH
     
     :param clob_column: 길이를 구하고자 하는 **CLOB** 타입의 칼럼
     :rtype: INT
- 
+
 CLOB_TO_CHAR
 ============
 

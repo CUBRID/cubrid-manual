@@ -18,9 +18,7 @@ Statistics for tables and indexes enables queries of the database system to proc
     UPDATE STATISTICS ON CATALOG CLASSES [WITH FULLSCAN]; 
 
 *   **WITH FULLSCAN**: It updates the statistics with all the data in the specified table. If this is omitted, it updates the statistics with sampling data.
-
 *   **ALL CLASSES**: If the **ALL CLASSES** keyword is specified, the statistics on all the tables existing in the database are updated.
-
 *   **CATALOG CLASSES**: It updates the statistics of the catalog tables.
 
 .. code-block:: sql 
@@ -53,7 +51,9 @@ When starting and ending an update of statistics information, NOTIFICATION messa
 Checking Statistics Information
 ===============================
 
-You can check the statistics Information with the session command of the CSQL Interpreter. ::
+You can check the statistics Information with the session command of the CSQL Interpreter.
+
+::
 
     csql> ;info stats table_name
 
@@ -120,10 +120,10 @@ To view a query plan for a CUBRID SQL query, you can use following methods.
     
     *   514: Performs query optimization and outputs the detailed query plan. However, the query is not executed. This value works for displaying more detailed query plan than the value 258 by internally interpreting the value as 512+2.
 
-    .. note:: If you configure the optimization level as not executing the query like 2, 258, or 514, all queries(not only SELECT, but also INSERT, UPDATE, DELETE, REPLACE, TRIGGER, SERIAL, etc.) are not executed.   
+    .. note:: If you configure the optimization level as not executing the query like 2, 258, or 514, all queries(not only SELECT, but also INSERT, UPDATE, DELETE, REPLACE, TRIGGER, SERIAL, etc.) are not executed.
 
 The CUBRID query optimizer determines whether to perform query optimization and output the query plan by referencing the optimization level value set by the user. 
-    
+
 The following shows the result which ran the query after inputting ";plan simple" or "SET OPTIMIZATION LEVEL 257;" in CSQL.
 
 .. code-block:: sql
@@ -146,7 +146,7 @@ The following shows the result which ran the query after inputting ";plan simple
 *   Sort(distinct): Perform DISTINCT.
 *   Nested-loop join: Join method is Nested-loop.
 *   Index scan: Perform index-scan by using pk_olympic_host_year index about olympic table. At that time, the condition which used this index is "o.host_year > ?".
-    
+
 The following shows the result which ran the query after inputting ";plan detail" or "SET OPTIMIZATION LEVEL 513;" in CSQL.
 
 .. code-block:: sql
@@ -504,7 +504,9 @@ For how to set the trace on automatically, see :ref:`Set SQL trace <set-autotrac
 Using SQL Hint
 ==============
 
-Using hints can affect the performance of query execution. You can allow the query optimizer to create more efficient execution plan by referring the SQL HINT. The SQL HINTs related tale join and index are provided by CUBRID. ::
+Using hints can affect the performance of query execution. You can allow the query optimizer to create more efficient execution plan by referring the SQL HINT. The SQL HINTs related tale join and index are provided by CUBRID. 
+
+::
 
     { SELECT | UPDATE | DELETE } /*+ <hint> [ { <hint> } ... ] */ ...;
 
@@ -533,9 +535,9 @@ Using hints can affect the performance of query execution. You can allow the que
 
 SQL hints are specified by using a plus sign(+) to comments. To use a hint, there are three styles as being introduced on :doc:`comment`. Therefore, also SQL hint can be used as three styles.
 
-* /\*+ hint \*/
-* --+ hint
-* //+ hint
+*  /\*+ hint \*/
+*   --+ hint
+*   //+ hint
 
 The hint comment must appear after the keyword such as **SELECT**, **UPDATE** or **DELETE**, and the comment must begin with a plus sign (+), following the comment delimiter.  When you specify several hints, they are  separated by blanks.
 
@@ -711,7 +713,7 @@ Below two queries do the same behavior and they always don't use *athlete2_idx2*
     FROM athlete2 
     WHERE gender='M' AND nation_code='USA'
     USING INDEX athlete2_idx2(-);
-    
+
 Below query always do the sequential scan.
 
 .. code-block:: sql
@@ -771,7 +773,7 @@ When executing a query with the index hint syntax, the query optimizer considers
     USING INDEX tab1.idx1;
 
 The above query select the scan method of table *tab1* after comparing the cost between the sequential scan of the table *tab1* and the index scan of the index *idx1*, and select the scan method of table *tab2* after comparing the cost between the sequential scan of the table *tab2* and the index scan of the indexes *idx3*, *idx4*, *idx5*.
-    
+
 Special Indexes
 ===============
 
@@ -798,7 +800,7 @@ The filtered index is used to sort, search, or operate a well-defined partials s
 If you want to apply the filtered index, that filtered index must be specified by **USE INDEX** syntax or **FORCE INDEX** syntax.
 
 *   When a filtered index is specified by **USING INDEX** clause or **USE INDEX** syntax: 
-    
+
     If columns of which the index consists are not included on the conditions of WHERE clause, the filtered index is not used.
 
     .. code-block:: sql
@@ -824,11 +826,11 @@ If you want to apply the filtered index, that filtered index must be specified b
         WHERE postDate>'2010-01-01' AND deleted=0;
     
 *   When a filtered index is specified by **USING INDEX** <index_name>(+) clause or **FORCE INDEX** syntax:
- 
+
     Even if a column of which the index consists is not included on the condition of WHERE clause, the filtered index is used.
 
     On the below query, my_filter_index cannot be used by "USE INDEX" syntax because a column of which my_filter_index consists is not included on the WHERE condition.
-    
+
     .. code-block:: sql
         
         SELECT * 
@@ -937,11 +939,11 @@ The following cases are not allowed as filtering conditions.
         ' or ' is not allowed in a filter expression for index.
 
 *   In case of including functions like :func:`INCR`, :func:`DECR` functions, which modify the data of a table.
-    
+
 *   In case of Serial-related functions and including pseudo columns.
-    
+
 *   In case of including aggregate functions such as :func:`MIN`, :func:`MAX`, :func:`STDDEV`
-    
+
 *   In case of using the types where indexes cannot be created
 
     -   The operators and functions where an argument is the **SET** type
@@ -1226,7 +1228,7 @@ The following example shows that the index is used as a covering index because c
         'abcd '
 
     As you can see in the above comparison result, the value in the **VARCHAR** type retrieved from the index will appear with the following empty string truncated when the covering index has been applied.
-    
+
 .. note:: If covering index optimization is available to be applied, the I/O performance can be improved because the disk I/O is decreased. But if you don't want covering index optimization in a special condition, specify a **NO_COVERING_IDX** hint to the query. For how to add a query, refer :ref:`sql-hint`.
 
 .. _order-by-skip-optimization:
@@ -1373,6 +1375,7 @@ The following example shows that *i* column exists, **ORDER BY** is executed by 
                 2            6            6
 
 .. note::
+
     Even if the type of a column in the ORDER BY clause is converted by using :func:`CAST`, ORDER BY optimization is executed when the sorting order is the same as before.
     
         +---------------------------------+
@@ -1456,7 +1459,7 @@ If you add **USE_DESC_IDX** hint to the above query, a different result will be 
     FROM di 
     WHERE i > 0 
     LIMIT 3;
-     
+
 ::
 
     Query plan:
@@ -1762,7 +1765,7 @@ Queries with multiple joined tables can also support Multiple Key Ranges Optimiz
     AND key_filter_terms
     AND join_terms
     ORDER BY col_(p) [ASC|DESC], col_(p+1) [ASC|DESC], ... col_(p+k-1) [ASC|DESC]
-    FOR ordbynum_pred | LIMIT n;
+    LIMIT n;
 
 If queries with multiple joined tables can support Multiple Key Ranges Optimization, below conditions should be satisfied:
 
@@ -1872,7 +1875,6 @@ CUBRID cannot use a subkey because there is no condition for the column a. Howev
 .. code-block:: sql
 
     SELECT a, b FROM tbl WHERE a > 10 GROUP BY a;
-
 
 As follows, a subkey can be used when the grouped column is on the first and the WHERE-condition column is on the following position; therefore, also in this case, loose index scan can be applied.
 
@@ -2124,49 +2126,51 @@ Note that IMS considers the actual size of the result and not the count of tuple
 
 SORT-LIMIT optimization
 -----------------------
- 
-The SORT-LIMIT optimization applies to queries specifying ORDER BY and LIMIT clauses. The idea behind it is to evaluate the LIMIT operator as soon as possible in the query plan in order to benefit from the reduced cardinality during joins. A SORT-LIMIT plan can be generated when the following conditions are met:
- 
+
+The SORT-LIMIT optimization applies to queries specifying ORDER BY and LIMIT clauses. The idea behind it is to evaluate the LIMIT operator as soon as possible in the query plan in order to benefit from the reduced cardinality during joins. 
+
+A SORT-LIMIT plan can be generated when the following conditions are met:
+
 *   All tables referenced in the ORDER BY clause belong to the SORT-LIMIT plan.
 *   A table belonging to a SORT-LIMIT plan is either:
- 
+
     *   The owner of a foreign key from a fk->pk join
     *   The left side of a LEFT JOIN.
     *   The right side of a RIGHT JOIN.
- 
+
 *   LIMIT rows should be specified as less rows than the value of **sort_limit_max_count** system parameter(default: 1000). 
 *   Query does not have cross joins.
 *   Query joins at least two relations.
 *   Query does not have a GROUP BY clause.
 *   Query does not specify DISTINCT.
 *   ORDER BY expressions can be evaluated during scan.
- 
+
     For example, the below query cannot apply SORT-LIMIT plan because SUM cannot be evaluated during scan.
 
     .. code-block:: sql
     
-         SELECT SUM(u.i) FROM u, t where u.i = t.i ORDER BY 1 LIMIT 5;
+        SELECT SUM(u.i) FROM u, t where u.i = t.i ORDER BY 1 LIMIT 5;
 
 The below is an example of planning SORT-LIMIT.
- 
+
 .. code-block:: sql
- 
+
     CREATE TABLE t(i int PRIMARY KEY, j int, k int);
     CREATE TABLE u(i int, j int, k int);
     ALTER TABLE u ADD constraint fk_t_u_i FOREIGN KEY(i) REFERENCES t(i);
     CREATE INDEX i_u_j ON u(j); 
- 
+
     INSERT INTO t SELECT ROWNUM, ROWNUM, ROWNUM FROM _DB_CLASS a, _DB_CLASS b LIMIT 1000; 
     INSERT INTO u SELECT 1+(ROWNUM % 1000), RANDOM(1000), RANDOM(1000) FROM _DB_CLASS a, _DB_CLASS b, _DB_CLASS c LIMIT 5000; 
- 
+
     SELECT /*+ RECOMPILE */ * FROM u, t WHERE u.i = t.i AND u.j > 10 ORDER BY u.j LIMIT 5; 
- 
+
 The above SELECT query's plan is printed out as below; we can see "(sort limit)".
- 
+
 ::
- 
+
     Query plan:
- 
+
     idx-join (inner join)
         outer: temp(sort limit)
                    subplan: iscan

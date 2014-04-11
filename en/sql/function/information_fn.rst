@@ -7,7 +7,7 @@ CHARSET
 
 .. function:: CHARSET(expr)
 
-    This function returns the character set of *expr* .
+    This function returns the character set of *expr*.
     
     :param expr: Target expression to get the character set.
     
@@ -40,7 +40,7 @@ CHARSET
     
 COERCIBILITY
 ============
-        
+
 .. function:: COERCIBILITY(expr)
     
     This function returns the collation coercibility level of *expr*. The collation coercibility level determines which collation or charset should be used when each column(expression) has different collation or charset. For more details, please refer :ref:`Collation Coercibility <collation-coercibility>`.
@@ -164,7 +164,7 @@ DATABASE, SCHEMA
 DEFAULT
 =======
 
-.. function:: DEFAULT (column_name)
+.. function:: DEFAULT(column_name)
 .. c:macro:: DEFAULT
 
 The **DEFAULT** and the **DEFAULT** function returns a default value defined for a column. If a default value is not specified for the column, **NULL** or an error is output. **DEFAULT** has no parameter, however, the **DEFAULT** function uses the column name as the input parameter. **DEFAULT** can be used for the input data of the **INSERT** statement and the **SET** clause of the **UPDATE** statement and the **DEFAULT** function can be used anywhere.
@@ -328,10 +328,6 @@ The value returned by the **LAST_INSERT_ID** function has the following characte
 
 *   The latest **LAST_INSERT_ID** value which was INSERTed successfully will be maintained. If it fails to INSERT, there is no change for **LAST_INSERT_ID**\() value, but **AUTO_INCREMENT** value is internally increased. Therefore, **LAST_INSERT_ID**\() value after the next **INSERT** statement's success reflects the internally increased **AUTO_INCREMENT** value.
 
-    .. note::
-
-        In the version of CUBRID 2008 R4.x or before, when **INSERT** statement is failed, **AUTO_INCREMENT** value will be internally increased and there is a change for **LAST_INSERT_ID**\() value.
-
     .. code-block:: sql
 
         CREATE TABLE tbl(a INT PRIMARY KEY AUTO_INCREMENT, b INT UNIQUE);
@@ -358,7 +354,7 @@ The value returned by the **LAST_INSERT_ID** function has the following characte
     
         1
 
-        -- In 2008 R4.4 or before, above value is 3.
+        -- In 2008 R4.x or before, above value is 3.
 
     .. code-block:: sql
 
@@ -416,7 +412,7 @@ The value returned by the **LAST_INSERT_ID** function has the following characte
     ::
     
         3
-        
+
 *   **LAST_INSERT_ID**\ () value used from the inside of a trigger cannot be identified from the outside of the trigger.
 
 *   **LAST_INSERT_ID**\ is independently kept by a session of each application.
@@ -547,7 +543,7 @@ ROW_COUNT
        row_count()
     ===============
                   4
-                  
+
 USER, SYSTEM_USER
 =================
 
@@ -615,4 +611,3 @@ VERSION
        version()
     =====================
       '9.1.0.0203'
-

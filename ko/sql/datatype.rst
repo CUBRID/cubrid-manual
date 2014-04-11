@@ -72,7 +72,7 @@ CUBRID는 수치형 데이터 타입에 대해 UNSIGNED 타입을 지원하지 �
         ERROR: Data overflow on data type integer.
 
     위와 같은 경우 어느 한 쪽의 타입을 **BIGINT**\ 로 명시하면, **BIGINT**\ 로 결과 값을 결정하고, 정상적인 결과를 출력한다.
-        
+
     .. code-block:: sql
     
         SELECT CAST(100000000 AS BIGINT)*1000000;
@@ -206,7 +206,7 @@ DOUBLE, DOUBLE PRECISION
 .. note:: MONETARY 타입은 제거될 예정이며(deprecated), 더 이상 사용을 권장하지 않는다.
 
 .. _date-time-type:
-    
+
 날짜/시간 데이터 타입
 =====================
 
@@ -395,15 +395,15 @@ DATETIME
     
         YYYY-MM-DD HH:MI:SS[.msec] [AM|PM]
         HH:MI:SS[.msec] [AM|PM] YYYY-MM-DD
-    
+
         MM/DD/YYYY HH:MI:SS[.msec] [AM|PM]
         HH:MI:SS[.msec] [AM|PM] MM/DD/YYYY
-        
+
 *   **TIMESTAMP** 타입 ::
-    
+
         YYYY-MM-DD HH:MI:SS [AM|PM]
         HH:MI:SS [AM|PM] YYYY-MM-DD
-    
+
         MM/DD/YYYY HH:MI:SS [AM|PM]
         HH:MI:SS [AM|PM] MM/DD/YYYY
     
@@ -525,7 +525,7 @@ DATETIME
     ::
 
         YYYYMMDDHHMISS[.msec]
-        
+
     *   201104200910.359 : 2020년 11월 4일 오후 8시 9분 10.359초
     *   20110420091000.359 : 2011년 4월 20일 오전 9시 10분 0.359초
 
@@ -541,7 +541,7 @@ DATETIME
     ::
 
         [hour]:min[:sec[.msec]] [am|pm] month/day[/[year]]
-        
+
     *   09:10:15.359 am 04/20/2011 : 2011년 4월 20일 오전 9시 10분 15.359초
     *   \:10 04/20 : 올해 4월 20일 오전 12시 10분
 
@@ -565,49 +565,49 @@ DATETIME
     값 사이를 구분하는 구분자의 규칙은 다음과 같다.
 
     *   **TIME** 문자열은 시간 구분자로 항상 하나의 콜론(:)을 사용해야 한다.
-    
+
     *   **DATE** 와 **DATETIME** 문자열은 구분자 없이 연속된 숫자로 나타낼 수 있고, **DATETIME** 문자열은 시간과 날짜를 공백으로 구분할 수 있다.
-    
+
     *   입력 문자열 안에서 구분자들은 동일해야 한다.
-    
+
     *   시간-날짜 순서의 문자열은 시간 구분자로 콜론(:)만 사용할 수 있으며, 날짜 구분자로는 하이픈(-)이나 빗금(/)만 사용할 수 있다. 날짜 입력 시 하이픈을 사용하는 경우 yyyy-mm-dd 순으로 입력하며, 빗금(/)을 사용하는 경우 mm/dd/yyyy 순으로 입력한다.
 
     날짜 부분의 문자열에는 다음 규칙이 적용된다.
 
     *   연도는 구문이 허용하는 한 생략할 수 있다.
-    
+
     *   연도를 두 자리로 입력하면 1970년~2069년 범위의 연도를 나타낸다. 즉, YY<70 이면 2000+YY으로 처리하고, YY>=70이면 1900+YY으로 처리한다. 한 자리나 세 자리, 네 자리 숫자로 연도를 입력하면 해당 숫자 그대로를 나타낸다.
-    
+
     *   문자열 앞뒤의 공백과 뒤의 문자열은 무시된다. **DATETIME**, **TIME** 문자열을 위한 am/pm 지정자는 시간 값의 일부로 인식하지만, 공백이 아닌 문자가 뒤에 붙으면 am/pm 지정자로 인식되지 않는다.
 
     CUBRID의 **TIMESTAMP** 타입은 **DATE** 타입과 **TIME** 타입으로 구성되고, **DATETIME** 타입은 **DATE** 타입과 **TIME** 타입에 밀리초(milliseconds)가 더해져서 구성된다. 입력 문자열은 날짜(**DATE** 문자열), 시간(**TIME** 문자열), 혹은 둘 다(**DATETIME** 문자열) 포함할 수 있다. 특정 타입의 데이터를 보유한 문자열은 다른 타입으로도 변환될 수 있으며 다음과 같은 규칙이 적용된다.
 
     *   **DATE** 문자열을 **DATETIME** 타입으로 변환하면 시간 값은 '00:00:00'이 된다.
-    
+
     *   **TIME** 문자열을 **DATETIME** 타입으로 변환하면 콜론(:)이 날짜 구분자로 인식되어 **TIME** 문자열이 날짜를 나타내는 문자열로 인식되고, 시간 값은 '00:00:00'이 된다.
-    
+
     *   **DATETIME** 문자열을 **DATE** 타입으로 변환하면 결과값에서 시간 부분은 무시되지만, 시간 입력값의 형식은 유효해야 한다.
-    
+
     *   **DATETIME** 문자열을 **TIME** 타입으로 변환할 수 있지만, 다음과 같은 규칙이 적용된다.
-    
+
         *   문자열에 있는 날짜와 시간은 최소한 하나의 공백에 의해 구분되어야 한다.
-        
+
         *   결과값에서 날짜 부분은 무시되지만, 날짜 입력값의 형식이 유효해야 한다.
-        
+
         *   날짜 부분의 연도가 4자리 이상이거나(0으로 시작할 수 있음), 시간 부분이 최소한 시와 분([H]H:[M]M)을 포함해야 한다. 그렇지 않으면 날짜 부분이 [MM]SS 포맷의 **TIME** 타입으로 인식되고, 뒤이어 나오는 문자열은 무시된다.
-        
+
     *   **DATETIME** 문자열의 각 단위(년, 월, 일, 시, 분, 초) 중 하나가 999999보다 크면, 숫자가 아닌 것으로 인식하여 해당 단위가 포함된 문자열이 무시된다. 예를 들어 '2009-10-21 20:9943:10'은 분 단위의 값이 범위를 벗어나므로 에러가 발생한다. 그러나 '2009-10-21 20:1000123:10'이 입력되면 '2009'를 MMSS 포맷의 **TIME** 타입으로 인식하여 **TIME**'00:20:09'를 반환한다.
-    
+
     *   시간-날짜 순서의 문자열을 **TIME** 타입으로 변환하면 문자열의 날짜 부분은 무시되지만, 날짜 부분의 형식은 유효해야 한다.
-    
+
     *   시간 부분이 있는 모든 입력 문자열은 변환 시 [*msec*] 을 허용하지만, **DATETIME** 타입만 그 값을 유지한다. **DATE**, **TIMESTAMP**, **TIME** 와 같은 타입으로 변환하면 *msec* 값을 버린다.
-    
+
     *   **DATETIME**, **TIME** 문자열에서의 모든 변환은 시간 값 뒤에 나오는 영문 로캘(locale) 또는 서버의 현재 로캘로 쓰여진 am/pm 지정자를 허용한다.
 
     .. code-block:: sql
 
         SELECT CAST('420' AS DATE);
-        
+
     ::
          
            cast('420' as date)
@@ -617,7 +617,7 @@ DATETIME
     .. code-block:: sql
 
         SELECT CAST('91015' AS TIME);
-        
+
     ::
          
            cast('91015' as time)
@@ -627,9 +627,9 @@ DATETIME
     .. code-block:: sql
 
         SELECT CAST('110420091035.359' AS DATETIME);
-        
+
     ::
-         
+
            cast('110420091035.359' as datetime)
         =======================================
           09:10:35.359 AM 04/20/2011
@@ -637,9 +637,9 @@ DATETIME
     .. code-block:: sql
 
         SELECT CAST('110420091035.359' AS TIMESTAMP);
-        
+
     ::
-         
+
            cast('110420091035.359' as timestamp)
         ========================================
           09:10:35 AM 04/20/2011
@@ -656,7 +656,7 @@ DATETIME
 
     B'1010'
     0b1010
-    
+
 16진수 형식은 대문자 **X** 뒤에 0-9 그리고 A-F 문자로 이루어진 문자열을 붙이거나 **0x** 뒤에 값을 붙여 표현한다. 예를 들어, 아래는 앞에서 2진수로 표현한 것과 같은 값을 16진수로 나타낸 것이다. ::
 
     X'a'
@@ -738,7 +738,7 @@ BIT VARYING(n)
     INSERT INTO bitvar_tbl(a2) VALUES (0xaaa);
 
 ::
-    
+
     ERROR: Data overflow coercing X'aaa' to type bit varying.
 
 .. _char-data-type:
@@ -852,7 +852,7 @@ VARCHAR(n) 또는 CHAR VARYING(n)
     VARCHAR에 'p '를 저장하면 'p'가 된다(n이 생략되면 최대 길이는 기본값인 1,073,741,823로 지정되고, 저장 시 나머지 부분은 공백 문자로 채워지지 않음).
 
 *   이 타입의 칼럼에 **DEFAULT** 속성이 지정될 수 있다.
-    
+
 STRING
 ------
 
@@ -1017,18 +1017,20 @@ ESCAPE 절에서는 백슬래시가 이스케이프 문자로 간주되기 때�
 .. code-block:: sql
 
     SELECT a FROM t1 WHERE a LIKE 'aaa#%' ESCAPE '#';
-      
+
 ENUM 데이터 타입
 ================
 
-**ENUM** 타입은 열거형 문자열 상수들의 중복 없는 순서 집합으로 구성되어 있는 타입이다. 열거형 칼럼을 생성하는 구문은 다음과 같다. ::
+**ENUM** 타입은 열거형 문자열 상수들의 중복 없는 순서 집합으로 구성되어 있는 타입이다. 열거형 칼럼을 생성하는 구문은 다음과 같다. 
 
-    <enum_type>
-        : ENUM '(' <char_string_literal_list> ')'
-        
-    <char_string_literal_list>
-        : <char_string_literal_list> ',' CHAR_STRING
-        | CHAR_STRING
+::
+
+    <enum_type> ::=
+        ENUM '(' <char_string_literal_list> ')'
+
+    <char_string_literal_list> ::=
+        <char_string_literal_list> ',' CHAR_STRING |
+        CHAR_STRING
 
 다음은 **ENUM** 칼럼을 정의하는 예이다.
 
@@ -1051,7 +1053,7 @@ ENUM 데이터 타입
     'blue'          3
     'green'         4
     =========       ============
-    
+
 **ENUM** 타입 값의 집합은 512 개보다 많은 원소를 가질 수 없으며, 집합의 각 원소는 고유해야 한다. 각 **ENUM** 타입 값에 대해 해당 색인만 저장하기 때문에, **ENUM** 타입은 2 바이트의 저장 공간을 사용한다. 문자열 값이 아니라 해당 색인만 저장함으로써 저장 공간을 줄일 수 있으며 이로 인한 성능 이점도 얻을 수 있다.
 
 **ENUM** 타입을 사용할 때 열거형 값과 값의 색인 둘 다 활용할 수 있다. 예를 들어, **ENUM** 타입 칼럼에 값을 삽입할 때 사용자는 **ENUM** 타입의 값 또는 색인을 사용할 수 있다. 
@@ -1069,7 +1071,7 @@ ENUM 데이터 타입
 
     -- the first result column has ENUM type, the second has INTEGER type and the third has VARCHAR type
     SELECT color, color + 0, CONCAT(color, '') FROM tbl;
-     
+
 ::
 
       color                     color+0   concat(color, '')
@@ -1148,7 +1150,7 @@ ENUM 타입 비교
 
       color
     ======================
-      'red'    
+      'red'
 
 다음 질의는 변환 오류를 반환하지는 않지만 어떠한 결과도 반환하지 않는다.
 
@@ -1191,7 +1193,7 @@ ENUM 타입 비교
 ::
 
     ERROR: Cannot coerce value of domain "enum" to domain "date".
-      
+
 ENUM 타입 정렬
 --------------
 
@@ -1305,7 +1307,7 @@ ENUM 타입 정렬
     }
     
     cci_get_data (req, idx, CCI_A_TYPE_STR, &data, 1);
-        
+
 .. _blob-clob:
 
 BLOB/CLOB 데이터 타입
@@ -1396,9 +1398,9 @@ CLOB
 
 **UPDATE** 문을 사용하여 **LOB** 칼럼 값을 변경하는 경우, 새로운 값이 **NULL** 인지에 따라 다음과 같이 동작하면서 칼럼 값을 변경한다.
 
-*   **LOB** 타입 칼럼 값을 **NULL** 이 아닌 값으로 변경하는 경우: **LOB** 칼럼에 이미 외부 파일을 참조하는 locator 가 저장되어 있다면, 해당 파일을 삭제한다. 그리고 새로운 파일을 생성하여 NULL이 아닌 값을 저장한 후, **LOB** 칼럼 값에 새로운 파일에 대한 locator를 저장한다.
+*   **LOB** 타입 칼럼 값을 **NULL** 이 아닌 값으로 변경하는 경우: **LOB** 칼럼에 이미 외부 파일을 참조하는 Locator 가 저장되어 있다면, 해당 파일을 삭제한다. 그리고 새로운 파일을 생성하여 NULL이 아닌 값을 저장한 후, **LOB** 칼럼 값에 새로운 파일에 대한 locator를 저장한다.
 
-*   **LOB** 타입 칼럼 값을 **NULL** 로 변경하는 경우: LOB 칼럼에 이미 외부 파일을 참조하는 locator 가 저장되어 있다면, 해당 파일을 삭제한다. 그리고 **LOB** 칼럼 값에 **NULL**\ 을 바로 저장한다.
+*   **LOB** 타입 칼럼 값을 **NULL** 로 변경하는 경우: LOB 칼럼에 이미 외부 파일을 참조하는 Locator 가 저장되어 있다면, 해당 파일을 삭제한다. 그리고 **LOB** 칼럼 값에 **NULL**\ 을 바로 저장한다.
 
 .. code-block:: sql
 
@@ -1437,9 +1439,9 @@ CLOB
 
 *   **GROUP BY** 절, **ORDER BY** 절에 **LOB** 칼럼을 명시할 수 없다.
 
-*   비교 연산자, 관계 연산자, **IN**, **NOT IN** 연산자를 사용하여 **LOB** 칼럼을 비교할 수 없다. 단, **IS NULL** 조건식을 사용하여 **LOB** 칼럼 값(locator)이 **NULL** 인지 비교할 수 있다. 즉, 칼럼 값이 **NULL**\ 이면 **TRUE**\ 를 반환하는데, 칼럼 값이 **NULL**\ 인 경우는 **LOB** 데이터를 저장하는 파일이 존재하지 않는다는 의미이다.
+*   비교 연산자, 관계 연산자, **IN**, **NOT IN** 연산자를 사용하여 **LOB** 칼럼을 비교할 수 없다. 단, **IS NULL** 조건식을 사용하여 **LOB** 칼럼 값(Locator)이 **NULL** 인지 비교할 수 있다. 즉, 칼럼 값이 **NULL**\ 이면 **TRUE**\ 를 반환하는데, 칼럼 값이 **NULL**\ 인 경우는 **LOB** 데이터를 저장하는 파일이 존재하지 않는다는 의미이다.
 
-*   **LOB** 칼럼을 생성하고 데이터를 입력한 이후 **LOB** 데이터 파일을 삭제하면, **LOB** 칼럼 값(locator)이 유효하지 않은 파일을 참조하는 상태가 된다. 이처럼 **LOB** locator와 **LOB** 데이터 파일이 매칭되지 않는 칼럼에 대해 :func:`CLOB_TO_CHAR`, :func:`BLOB_TO_BIT`, :func:`CLOB_LENGTH`, :func:`BLOB_LENGTH` 함수를 사용하면 **NULL**\ 을 출력한다.
+*   **LOB** 칼럼을 생성하고 데이터를 입력한 이후 **LOB** 데이터 파일을 삭제하면, **LOB** 칼럼 값(Locator)이 유효하지 않은 파일을 참조하는 상태가 된다. 이처럼 **LOB** locator와 **LOB** 데이터 파일이 매칭되지 않는 칼럼에 대해 :func:`CLOB_TO_CHAR`, :func:`BLOB_TO_BIT`, :func:`CLOB_LENGTH`, :func:`BLOB_LENGTH` 함수를 사용하면 **NULL**\ 을 출력한다.
 
 .. code-block:: sql
 
@@ -1528,9 +1530,9 @@ CLOB
 * :func:`CLOB_FROM_FILE` 
 * :func:`BLOB_FROM_FILE` 
 * :func:`CLOB_LENGTH` 
-* :func:`BLOB_LENGTH` 
+* :func:`BLOB_LENGTH`
 
-.. note:: " <*blob_or_clob_column*> **IS NULL** ": **IS NULL** 조건식을 사용하여 **LOB** 칼럼 값(Locator)이 **NULL** 인지 비교하고, **NULL** 이면  **TRUE** 를 반환한다.     
+.. note:: " <*blob_or_clob_column*> **IS NULL** ": **IS NULL** 조건식을 사용하여 **LOB** 칼럼 값(Locator)이 **NULL** 인지 비교하고, **NULL** 이면  **TRUE** 를 반환한다.
 
 .. _lob-storage:
 
@@ -1541,7 +1543,7 @@ CLOB
 
     # 현재 작업 디렉터리에 image_db 볼륨이 생성되고 LOB 데이터 파일이 저장된다.
     % cubrid createdb image_db en_US
-    
+
     # 로컬 파일 시스템 내 "/home1/data1" 경로에 LOB 데이터 파일이 저장된다.
     % cubrid createdb --lob-base-path="file:/home1/data1" image_db en_US
 
@@ -1656,13 +1658,13 @@ CLOB
     +--------------+-----+----------+------+
     | **LIST**     | Yes | Yes      | \-   |
     +--------------+-----+----------+------+
-    
+
 컬렉션 타입은 콜레이션을 지원하지 않는다. 따라서 다음과 같은 질의는 오류를 반환한다. 
-    
+
 .. code-block:: sql
 
         CREATE TABLE tbl (str SET (string) COLLATE utf8_en_ci);
-        
+
 ::
 
         Syntax error: unexpected 'COLLATE', expecting ',' or ')'
@@ -1815,7 +1817,7 @@ CUBRID가 수행하는 묵시적 타입 변환은 다음과 같다.
 
     **숫자가 TIME 또는 TIMESTAMP로 변환될 때 제약 조건**
 
-    *   NUMERIC을 제외한 모든 숫자 타입은 TIME 타입으로 변환될 수 있는데, 이 때 TIME은 입력 숫자를 86400초(하루)로 나눈 나머지 값을 초로 계산하여 시간을 표현한다.
+    *   NUMERIC을 제외한 모든 숫자 타입은 TIME 타입으로 변환될 수 있는데, 이 때 TIME은 입력 숫자를 86,400초(하루)로 나눈 나머지 값을 초로 계산한 값이다.
 
     *   NUMERIC을 포함한 모든 숫자 타입은 TIMESTAMP 타입으로 변환될 수 있는데, 이 때 입력 숫자 값은 최대 2147483647을 초과할 수 없다.
 
@@ -1873,7 +1875,7 @@ INSERT와 UPDATE
                 i
     =============
               123
-          
+
 함수
 ^^^^
 
@@ -1888,13 +1890,16 @@ INSERT와 UPDATE
                mod('123', '2')
     ==========================
          1.000000000000000e+00
-     
+
 함수는 인자로 여러 타입의 값을 입력받을 수 있는데, 함수에서 지정하지 않은 타입의 값이 전달되면 다음의 우선순위에 따라 타입이 변환된다.
 
-*   날짜/시간 타입( **DATETIME** > **TIMESTAMP** > **DATE** > **TIME** )
-*   근사치 수치형 타입( **DOUBLE** > **FLOAT** )
-*   정확한 수치형 타입( **NUMERIC** > **BIGINT** > **INT** > **SHORT** )
-*   문자열 타입( **CHAR** > **VARCHAR** )
+*   날짜/시간 타입 ( **DATETIME** > **TIMESTAMP** > **DATE** > **TIME** )
+
+*   근사치 수치형 타입 ( **DOUBLE** > **FLOAT** )
+
+*   정확한 수치형 타입 ( **NUMERIC** > **BIGINT** > **INT** > **SHORT** )
+
+*   문자열 타입 ( **CHAR** > **VARCHAR** )
 
 비교 연산
 ^^^^^^^^^
@@ -1949,7 +1954,7 @@ operand2가 집합인 연산자( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**,
         INSERT INTO t1 VALUES(1,'1'),(2,'2'),(3,'3'),(4,'4'), (12,'12');
          
         SELECT i FROM t1 WHERE i < '11.3';
-         
+
     ::
 
                     i
@@ -1962,7 +1967,7 @@ operand2가 집합인 연산자( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**,
     .. code-block:: sql
 
         SELECT ('2' <= 11);
-         
+
     ::
 
           ('2'<=11)
@@ -1976,7 +1981,7 @@ operand2가 집합인 연산자( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**,
     .. code-block:: sql
 
         SELECT ('2010-01-01' < date'2010-02-02');
-    
+
     ::
     
            ('2010-01-01'<date '2010-02-02')
@@ -1988,7 +1993,7 @@ operand2가 집합인 연산자( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**,
         SELECT (date'2010-02-02' >= '2010-01-01');
 
     ::
-        
+
           (date '2010-02-02'>='2010-01-01')
         ===================================
                                         1
@@ -2007,7 +2012,7 @@ operand2가 집합인 연산자( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**,
                s
         ===================
              '1'
-     
+
 *   **문자열 타입 칼럼과 수치형 타입 값 피연산자**
 
     수치형 타입 값이 문자열 타입으로 변환된다.
@@ -2090,7 +2095,7 @@ operand2가 집합인 연산자( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**,
                     2
                     3
                     4
-                
+
 *   **문자열 타입과 날짜/시간 타입 피연산자**
 
     문자열 타입 피연산자가 날짜/시간 타입으로 변환된다.
@@ -2116,7 +2121,7 @@ operand2가 집합인 연산자( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**,
           s
         ================
          '01/01/1998'
-           
+
     해당 타입으로 변환할 수 없으면 오류를 반환한다.
 
 산술 연산
@@ -2149,10 +2154,11 @@ operand2가 집합인 연산자( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**,
     날짜/시간 타입과 문자열 타입이 피연산자이면, '+'와 '-' 연산자만 허용한다. '+' 연산자가 사용되면 다음 규칙이 적용된다.
 
     *   문자열 타입은 인터벌(interval) 값을 지닌 **BIGINT** 로 변환된다. 인터벌은 날짜/시간 타입 피연산자의 가장 작은 단위를 의미하며, 각 타입의 인터벌 값은 다음과 같다.
+
         *   **DATE** : 일수(days)
         *   **TIME**, **TIMESTAMP** : 초수(seconds)
         *   **DATETIME** : 밀리초수(milliseconds)
-     
+
     *   부동소수점수는 반올림된다.
 
     *   결과 타입은 날짜/시간 타입 피연산자의 타입이다.
@@ -2160,7 +2166,7 @@ operand2가 집합인 연산자( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**,
     .. code-block:: sql
 
         SELECT date'2002-01-01' + '10';
-         
+
     ::
 
           date '2002-01-01'+'10'
@@ -2176,7 +2182,7 @@ operand2가 집합인 연산자( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**,
     .. code-block:: sql
 
         SELECT date'2002-01-01'-'2001-01-01';
-         
+
     ::
 
           date '2002-01-01'-'2001-01-01'
@@ -2184,7 +2190,7 @@ operand2가 집합인 연산자( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**,
                             31536000000
          
         -- this causes an error
-         
+
     .. code-block:: sql
 
         SELECT date'2002-01-01'-'10';
@@ -2203,13 +2209,13 @@ operand2가 집합인 연산자( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**,
     .. code-block:: sql
 
         SELECT 4 + '5.2';
-         
+
     ::
 
                         4+'5.2'
         ==========================
           9.199999999999999e+00
-      
+
     CUBRID 2008 R3.1 이하 버전과 달리, 날짜/시간 형태의 문자열, 즉 '2010-09-15'와 같은 문자열은 날짜/시간 타입으로 변환되지 않는다. 날짜/시간 타입을 갖는 리터럴 (date'2010-09-15')은 덧셈, 뺄셈 연산에 사용할 수 있다.
 
     .. code-block:: sql
@@ -2229,7 +2235,7 @@ operand2가 집합인 연산자( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**,
           date '2002-01-01'+1
         =====================
           01/02/2002
-      
+
 *   **문자열 타입 피연산자**
 
     두 문자열을 곱하거나 나누거나 빼면 숫자로 변환되며, 결과로 **DOUBLE** 타입의 값을 반환한다.
@@ -2239,11 +2245,11 @@ operand2가 집합인 연산자( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**,
         SELECT '3'*'2';
         
     ::
-         
+
                              '3'*'2'
         ============================
                6.000000000000000e+00
-           
+
     '+' 연산자의 동작은 **cubrid.conf** 의 시스템 파라미터인 **plus_as_concat**\ 을 어떻게 설정하느냐에 따라 결정된다. 자세한 내용은 :ref:`stmt-type-parameters`\ 를 참고한다.
 
     *   **plus_as_concat** 값이 yes(기본값)이면 두 개의 문자열을 연결한 값을 반환한다.
@@ -2251,9 +2257,9 @@ operand2가 집합인 연산자( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**,
         .. code-block:: sql
 
             SELECT '1'+'1';
-            
+
         ::
-             
+
                            '1'+'1'
             ======================
                               '11'
@@ -2263,9 +2269,9 @@ operand2가 집합인 연산자( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**,
         .. code-block:: sql
 
             SELECT '1'+'1';
-            
+        
         ::
-             
+        
                                '1'+'1'
             ==========================
                  2.000000000000000e+00

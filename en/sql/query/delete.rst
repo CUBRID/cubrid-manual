@@ -77,7 +77,7 @@ Below tables are created to explain **DELETE JOIN**.
 The below queries delete rows after joining multiple tables. They show the same result.
 
 .. code-block:: sql
-    
+
     -- Below four queries show the same result.
     --  <DELETE multiple tables FROM ...>
      

@@ -35,7 +35,7 @@ BLOB_LENGTH
 
 .. function:: BLOB_LENGTH ( blob_column )                                            
  
-        The length of **LOB** data stored in **BLOB** file is returned.
+    The length of **LOB** data stored in **BLOB** file is returned.
     
     :param clob_column: The column to get the length of **BLOB**
     :rtype: INT
@@ -80,7 +80,9 @@ CLOB_FROM_FILE
     :param file_pathname: the path on the server which DB clients like CAS or CSQL are started
     :rtype: CLOB
 
-If you specify the *file_pathname* as the relative path, the parent path will be the current working directory. For the statement including this function, the query plan is not cached.
+If you specify the *file_pathname* as the relative path, the parent path will be the current working directory. 
+
+For the statement including this function, the query plan is not cached.
 
 .. code-block:: sql
 
@@ -99,7 +101,7 @@ CLOB_LENGTH
     
     :param clob_column: The column to get the length of **CLOB**
     :rtype: INT
-    
+
 CLOB_TO_CHAR
 ============
 
@@ -110,5 +112,3 @@ CLOB_TO_CHAR
     :param clob_type_column: Target column to convert
     :param charset: The character set of string to convert. It can be utf8, euckr or iso88591.
     :rtype: STRING
-
-

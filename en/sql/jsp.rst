@@ -145,6 +145,8 @@ Create a CUBRID stored function and publish the Java class as shown below.
     AS LANGUAGE JAVA 
     NAME 'SpCubrid.HelloCubrid() return java.lang.String';
 
+.. CREATE OR REPLACE FUNCTION is allowed from 10.0: CUBRIDSUS-6542
+
 Or with **OR REPLACE** syntax, you can replace the current stored function/procedure or create the new stored function/procedure.
 
 .. code-block:: java
@@ -183,7 +185,7 @@ or
 .. code-block:: java
 
     cubrid.jdbc.driver.CUBRIDDriver.getDefaultConnection();
-    
+
 If you connect to the database using the JDBC driver as shown above, the transaction in the Java stored function/procedure is ignored. That is, database operations executed in the Java stored function/procedure belong to the transaction that called the Java stored function/procedure. In the following example, **conn.commit()** method of the **Athlete** class is ignored.
 
 .. code-block:: java
@@ -274,6 +276,7 @@ To load a compiled Java or JAR (Java Archive) file into CUBRID, use the **loadja
 *   *database-name*: The name of the database where the Java file is to be loaded.
 *   *java-class-file*: The name of the Java class or jar file to be loaded.
 *   [*option*]
+
     *   **-y**: Automatically overwrites a class file with the same name, if any. The default value is **no**. If you load the file without specifying the **-y** option, you will be prompted to ask if you want to overwrite the class file with the same name (if any).
 
 Loaded Java Class Publish
@@ -287,6 +290,8 @@ Call Specifications
 To use a Java stored function/procedure in CUBRID, you must write call specifications. With call specifications, Java function names, parameter types, return values and their types can be accessed by SQL statements or Java applications. To write call specifications, use **CREATE FUNCTION** or **CREATE PROCEDURE** statement. Java stored function/procedure names are not case sensitive. The maximum number of characters a Java stored function/procedure can have is 254 bytes. The maximum number of parameters a Java stored function/procedure can have is 64. 
 
 If there is a return value, it is a function; if not, it is a procedure.
+
+.. CREATE OR REPLACE FUNCTION is allowed from 10.0: CUBRIDSUS-6542
 
 ::
 
@@ -395,9 +400,9 @@ A Java stored function/procedure can be deleted only by the user who published i
 
 .. code-block:: sql
 
-    DROP FUNCTION hello[, sp_int]
-    DROP PROCEDURE Athlete_Add
-    
+    DROP FUNCTION hello, sp_int;
+    DROP PROCEDURE Athlete_Add;
+
 Java Stored Function/Procedure Call
 ===================================
 
@@ -482,7 +487,7 @@ Create a phone class in the CUBRID database.
     CREATE TABLE phone(
          name VARCHAR(20),
          phoneno VARCHAR(20)
-    )
+    );
 
 Compile the following **PhoneNumber.java** file, load the Java class file into CUBRID, and publish it.
 
@@ -554,7 +559,7 @@ Retrieve the phone class after executing the program above; the following result
 
 .. code-block:: sql
 
-    SELECT * from phone;
+    SELECT * FROM phone;
     
 ::
 
@@ -607,7 +612,7 @@ In CUBRID, you must use **CURSOR** as the data type when you declare a Java stor
 
 .. code-block:: sql
 
-    CREATE FUNCTION rset() RETURN CURSOR AS LANGUAGE java
+    CREATE FUNCTION rset() RETURN CURSOR AS LANGUAGE JAVA
     NAME 'JavaSP2.TResultSet() return java.sql.ResultSet'
 
 Before the Java file returns **java.sql.ResultSet**, it is required to cast to the **CUBRIDResultSet** class and then to call the **setReturnable** () method.

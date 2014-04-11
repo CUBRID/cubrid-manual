@@ -245,7 +245,7 @@ The following example shows *nation_code*, *host_year* and *gold* records whose 
       'CHN'                2004         32
       'DEN'                1996          4
       'ESP'                1992         13
-    
+
 .. _where-clause:
 
 WHERE Clause
@@ -665,7 +665,7 @@ An outer join is divided into a left outer join which outputs all rows of the le
 
     *   {**LEFT** | **RIGHT**} [**OUTER**] **JOIN**: **LEFT** is used for a left outer join query, and **RIGHT** is for a right outer join query.
 
-    *   **STRAIGHT_JOIN**: (작성중)
+    *   **STRAIGHT_JOIN**: (on changing)
    
 *   <*join_table_specification2*>
 
@@ -835,7 +835,7 @@ Cross Join
 
 The cross join is a cartesian product, meaning that it is a combination of two tables, without any condition. For the cross join, the **CROSS JOIN** keyword can be omitted. When it is omitted, the table is separated by a comma (,).
 
-The following example shows how to write cross join. The following two queries will output the same results.
+The following example shows how to write cross join.
 
 .. code-block:: sql
 
@@ -844,7 +844,9 @@ The following example shows how to write cross join. The following two queries w
      
     SELECT DISTINCT h.host_year, o.host_nation 
     FROM history h, olympic o;
-     
+
+The above two queries output the same results.
+
 ::
 
         host_year  host_nation
@@ -944,33 +946,12 @@ Running the above query is the same as running the below query, and they display
                 1            1            1            1
              NULL         NULL            2            2
 
-(번역)
+(on changing)
 
 STRAIGHT_JOIN
 -------------
-(작성중): CUBRIDSUS-12814
+CUBRIDSUS-12814
 
-**STRAIGHT_JOIN**\이 SELECT 리스트에서 사용되는 경우. 
-
-**STRAIGHT_JOIN**\ 은 **INNER JOIN**\ 과 같은 동작을 수행한다. 다만, 질의 최적화기가 항상 중첩된 루프 조인(nested loop join)을 선택하여 왼쪽 테이블을 외부 테이블(outer table)로, 그리고 오른쪽 테이블을 내부 테이블(inner table)로 결정한다. **INNER JOIN** 구문에서 **USE_NL** 힌트를 사용하는 것과 마찬가지로 동작하므로 **USE_MERGE**\ 와 같은 힌트는 무시된다.
-
-다음은 **STRAIGHT_JOIN**\ 을 수행하는 예이다.
-
-.. code-block:: sql
-    
-    SELECT /*+ RECOMPILE*/ * 
-    FROM t1 STRAIGHT_JOIN t2 ON t1.a=t2.a;
-
-위의 질의는 아래의 질의를 수행하는 것과 동일하며, 같은 결과를 출력한다.
-
-.. code-block:: sql
-
-    SELECT /*+ RECOMPILE USE_NL*/ * 
-    FROM t1 INNER JOIN t2 ON t1.a=t2.a;
-
-::
-
-    (수행 결과)
 
 
 Subquery

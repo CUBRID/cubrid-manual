@@ -60,7 +60,7 @@ CREATE SERIAL
     SELECT * FROM db_serial;
 
 ::
-    
+
       name            current_val      increment_val         max_val         min_val         cyclic      started       cached_num        att_name
     ====================================================================================================================================================
     'order_no'      10006            2                     20000           10000                0            1                3            NULL
@@ -79,7 +79,7 @@ CREATE SERIAL
     SELECT * FROM athlete_idx;
 
 ::
-    
+
              code  name
     ===================================
             10000  'Park'
@@ -139,7 +139,7 @@ ALTER SERIAL
 .. warning::
 
     **ALTER SERIAL** 이후 첫번째 **NEXT_VALUE** 값을 구하면 CUBRID 9.0 미만 버전에서는 **ALTER SERIAL** 로 설정한 초기값의 다음 값을 반환했으나, CUBRID 9.0 이상 버전에서는 **ALTER_SERIAL** 의 설정값을 반환한다.
-    
+
     ::
     
         CREATE SERIAL s1;
@@ -159,7 +159,7 @@ DROP SERIAL
 
 ::
 
-    DROP SERIAL [ IF EXISTS ] serial_identifier ; 
+    DROP SERIAL [ IF EXISTS ] serial_identifier ;
 
 *   *serial_identifier*\ : 삭제할 시리얼의 이름을 지정한다.
 
@@ -169,7 +169,7 @@ DROP SERIAL
 
     DROP SERIAL order_no;
     DROP SERIAL IF EXISTS order_no;
-    
+
 시리얼 사용
 ===========
 
@@ -180,7 +180,7 @@ DROP SERIAL
 
     serial_identifier.CURRENT_VALUE
     serial_identifier.NEXT_VALUE
-    
+
 *   *serial_identifier*.\ **CURRENT_VALUE**\ : 시리얼의 현재 값을 반환한다.
 *   *serial_identifier*.\ **NEXT_VALUE**\ : 시리얼 값을 증가시키고 그 값을 반환한다.
 
@@ -220,7 +220,7 @@ DROP SERIAL
     :param serial_name: 시리얼 이름
     :param number: 얻고자 하는 시리얼 개수
     :rtype:  NUMERIC(38,0)
-    
+
 **SERIAL_CURRENT_VALUE** 함수는 현재의 시리얼 값을 반환하며, *serial_name*.\ **current_value** 와 동일한 값을 반환한다.
 
 **SERIAL_NEXT_VALUE** 함수는 현재의 시리얼 값에서 지정한 개수의 시리얼 간격만큼 증가시킨 값을 반환한다. 시리얼 간격은 **CREATE SERIAL ... INCREMENT BY** 절로 지정한 값을 따른다. **SERIAL_NEXT_VALUE** (*serial_name*, 1)은 *serial_name*.\ **next_value** 와 동일한 값을 반환한다.

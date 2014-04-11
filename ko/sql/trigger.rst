@@ -13,23 +13,23 @@ CREATE TRIGGER
 트리거 정의로 다양하고 강력한 기능을 만들 수 있다. 트리거를 생성하기 전에 다음과 같은 정의 사항을 고려해야 한다.
 
 *   **트리거의 조건 영역 표현식이 데이터베이스에 예측할 수 없는 결과(side effect)를 가져오지는 않는가?**
-    
+
     SQL 문을 예측이 가능한 범위 내에서 사용해야 한다.
-    
+
 *   **트리거의 실행 영역이 트리거의 이벤트 대상으로 주어진 테이블을 변경하지는 않는가?**
-    
+
     이러한 유형의 설계가 트리거의 정의에서 사용이 금지되어 있지는 않지만, 무한 루프로 빠지는 트리거가 만들어질 수 있어 주의해서 사용해야 한다. 트리거 실행 영역이 이벤트 대상 테이블을 수정할 때, 같은 트리거가 다시 불려질 수 있다. 또한 **WHERE** 절을 포함하는 문장에 의해 트리거가 발생하면, 해당 트리거는 **WHERE** 절에 의해 수행되는 테이블에는 일반적으로 부작용이 없다.
-    
+
 *   **트리거가 불필요한 오버헤드를 만들어 내고 있지는 않는가?**
-    
+
     원하는 동작이 소스 내에서 조금 더 효과적으로 표현될 수 있다면 직접 소스 내에서 구현하도록 한다.
-    
+
 *   **트리거가 재귀적으로 실행되고 있지는 않는가?**
-    
+
     트리거의 실행 영역이 트리거를 부르고 이 트리거가 다시 처음 트리거를 부르면 재귀 루프(recursive loop)가 데이터베이스에 만들어진다. 재귀 루프가 만들어지면, 트리거가 정확히 수행되지 않거나 진행 중인 루프를 단절하기 위해 현재 세션을 강제로 종료해야 할 수도 있다.
-    
+
 *   **트리거의 정의는 유일한가?**
-    
+
     동일한 테이블에서 정의된 트리거나, 동일한 실행 영역에서 시작된 트리거는 복구할 수 없는 에러의 원인이 된다. 동일한 테이블에 있는 트리거는 다른 트리거 이벤트를 가져야 한다. 또한, 트리거의 우선순위는 명시적으로 정의되어 있거나 모호하지 않아야 한다.
 
 트리거 정의 구문
@@ -40,54 +40,54 @@ CREATE TRIGGER
     CREATE TRIGGER trigger_name
     [ STATUS { ACTIVE | INACTIVE } ]
     [ PRIORITY key ]
-    event_time event_type[ event_target ]
+    <event_time> <event_type> [<event_target>]
     [ IF condition ]
-    EXECUTE [ AFTER | DEFERRED ] action [ ; ]
+    EXECUTE [ AFTER | DEFERRED ] action ;
      
-    event_time:
-       • BEFORE
-       • AFTER
-       • DEFERRED
+    <event_time> ::=
+        BEFORE |
+        AFTER  |
+        DEFERRED
      
-    event_type: 
-       • INSERT
-       • STATEMENT INSERT 
-       • UPDATE
-       • STATEMENT UPDATE 
-       • DELETE
-       • STATEMENT DELETE
-       • ROLLBACK
-       • COMMIT
+    <event_type> ::=
+        INSERT |
+        STATEMENT INSERT |
+        UPDATE |
+        STATEMENT UPDATE |
+        DELETE |
+        STATEMENT DELETE |
+        ROLLBACK |
+        COMMIT
      
-    event_target: 
-       • ON table_name
-       • ON table_name [ (column_name) ]
+    <event_target> ::=
+        ON table_name |
+        ON table_name [ (column_name) ]
      
-    condition: 
-       • expression
+    <condition> ::=
+        expression
      
-    action: 
-       • REJECT    
-       • INVALIDATE TRANSACTION 
-         •  PRINT message_string
-         •  INSERT statement
-         •  UPDATE statement
-         •  DELETE statement 
+    <action> ::=
+        REJECT |
+        INVALIDATE TRANSACTION |
+        PRINT message_string |
+        INSERT statement |
+        UPDATE statement |
+        DELETE statement
 
-*   *trigger_name* : 정의하려는 트리거의 이름을 지정한다.
-*   [ **STATUS** { **ACTIVE** | **INACTIVE** } ] : 트리거의 상태를 정의한다(정의하지 않을 경우 기본값은 **ACTIVE** ).
+*   *trigger_name*: 정의하려는 트리거의 이름을 지정한다.
+*   [ **STATUS** { **ACTIVE** | **INACTIVE** } ]: 트리거의 상태를 정의한다(정의하지 않을 경우 기본값은 **ACTIVE** ).
 
     *   **ACTIVE** 상태인 경우 관련 이벤트가 발생할 때마다 트리거를 실행한다.
     *   **INACTIVE** 상태인 경우 관련 이벤트가 발생하여도 트리거를 실행하지 않는다. 트리거의 활성 여부는 변경할 수 있다. 자세한 내용은 :ref:`alter-trigger` 을 참조한다.
 
-*   [ **PRIORITY** *key* ] : 하나의 이벤트에 대해서 다수의 트리거가 불려질 경우 실행되는 우선순위를 부여한다. *key* 값은 반드시 음수가 아닌 부동 소수점 값이어야 한다. 우선순위를 정의하지 않을 경우 가장 낮은 우선순위인 0을 할당한다. 같은 우선순위를 가지는 트리거는 임의의 순서로 실행된다. 트리거의 우선순위는 변경할 수 있다. 자세한 내용은 :ref:`alter-trigger` 을 참조한다.
+*   [ **PRIORITY** *key* ]: 하나의 이벤트에 대해서 다수의 트리거가 불려질 경우 실행되는 우선순위를 부여한다. *key* 값은 반드시 음수가 아닌 부동 소수점 값이어야 한다. 우선순위를 정의하지 않을 경우 가장 낮은 우선순위인 0을 할당한다. 같은 우선순위를 가지는 트리거는 임의의 순서로 실행된다. 트리거의 우선순위는 변경할 수 있다. 자세한 내용은 :ref:`alter-trigger` 을 참조한다.
 
-*   *event_time* : 트리거의 조건 영역과 실행 영역이 실행되는 시점을 지정하며 **BEFORE**, **AFTER**, **DEFERRED** 가 있다. 자세한 내용은 :ref:`trigger-event-time` 을 참조한다.
-*   *event_type* : 트리거 타입은 사용자 트리거와 테이블 트리거로 나뉜다. 자세한 내용은 :ref:`trigger-event-type` 을 참조한다.
-*   *event_target* : 이벤트 대상은 트리거가 호출되기 위한 대상을 지정할 때 쓰인다. 자세한 내용은 :ref:`trigger-event-target` 을 참조한다.
+*   <*event_time*>: 트리거의 조건 영역과 실행 영역이 실행되는 시점을 지정하며 **BEFORE**, **AFTER**, **DEFERRED** 가 있다. 자세한 내용은 :ref:`trigger-event-time` 을 참조한다.
+*   <*event_type*>: 트리거 타입은 사용자 트리거와 테이블 트리거로 나뉜다. 자세한 내용은 :ref:`trigger-event-type` 을 참조한다.
+*   <*event_target*>: 이벤트 대상은 트리거가 호출되기 위한 대상을 지정할 때 쓰인다. 자세한 내용은 :ref:`trigger-event-target` 을 참조한다.
 
-*   *condition* : 트리거의 조건영역을 지정한다. 자세한 내용은 :ref:`trigger-condition` 을 참조한다.
-*   *action* : 트리거의 실행영역을 지정한다. 자세한 내용은 :ref:`trigger-action` 을 참조한다.
+*   <*condition*>: 트리거의 조건영역을 지정한다. 자세한 내용은 :ref:`trigger-condition` 을 참조한다.
+*   <*action*>: 트리거의 실행영역을 지정한다. 자세한 내용은 :ref:`trigger-action` 을 참조한다.
 
 다음은 *participant* 테이블의 레코드를 갱신할 때 획득 메달의 개수가 0보다 작을 경우 갱신을 거절하는 트리거를 생성하는 예제이다.
 2004년도 올림픽에 한국이 획득한 금메달의 개수를 음수로 갱신할 경우 갱신이 거절되는 것을 알 수 있다.
@@ -103,7 +103,7 @@ CREATE TRIGGER
     AND host_year = 2004;
 
 ::
-    
+
     ERROR: The operation has been rejected by trigger "medal_trigger".
 
 .. _trigger-event-time:
@@ -113,9 +113,9 @@ CREATE TRIGGER
 
 트리거의 조건 영역과 실행 영역이 실행되는 시점을 지정한다. 이벤트 시점의 종류에는 **BEFORE**, **AFTER**, **DEFERRED** 가 있다.
 
-*   **BEFORE** : 이벤트가 처리되기 이전에 조건을 검사한다.
-*   **AFTER** : 이벤트가 처리된 후에 조건을 검사한다.
-*   **DEFERRED** : 이벤트에 대한 트랜잭션의 끝에서 조건을 검사한다. **DEFERRED** 로 지정할 경우 이벤트 타입에 **COMMIT** 이나 **ROLLBACK** 을 사용할 수 없다.
+*   **BEFORE**: 이벤트가 처리되기 이전에 조건을 검사한다.
+*   **AFTER**: 이벤트가 처리된 후에 조건을 검사한다.
+*   **DEFERRED**: 이벤트에 대한 트랜잭션의 끝에서 조건을 검사한다. **DEFERRED** 로 지정할 경우 이벤트 타입에 **COMMIT** 이나 **ROLLBACK** 을 사용할 수 없다.
 
 트리거 타입
 -----------
@@ -143,13 +143,13 @@ CREATE TRIGGER
     *   **UPDATE**
     *   **DELETE**
 
-*   문장이벤트(statement event) : 이벤트 타입을 문장 이벤트로 정의하면 주어진 문장(이벤트)에 의해 영향을 받는 객체(인스턴스)가 많더라도, 트리거는 문장이 시작할 때 한 번만 불려지게 된다. 문장 이벤트의 종류는 다음과 같다.
+*   문장이벤트(statement event): 이벤트 타입을 문장 이벤트로 정의하면 주어진 문장(이벤트)에 의해 영향을 받는 객체(인스턴스)가 많더라도, 트리거는 문장이 시작할 때 한 번만 불려지게 된다. 문장 이벤트의 종류는 다음과 같다.
 
     *   **STATEMENT INSERT**
     *   **STATEMENT UPDATE**
     *   **STATEMENT DELETE**
 
-*   기타 이벤트 : **COMMIT** 과 **ROLLBACK** 은 개별적인 인스턴스에는 적용할 수 없다.
+*   기타 이벤트: **COMMIT** 과 **ROLLBACK** 은 개별적인 인스턴스에는 적용할 수 없다.
 
     *   **COMMIT**
     *   **ROLLBACK**
@@ -165,7 +165,7 @@ CREATE TRIGGER
     EXECUTE INSERT INTO update_logs VALUES (obj.event_code, obj.score, SYSDATETIME);
 
 만약 *score* 칼럼의 첫 번째 인스턴스가 갱신되기 전에 트리거가 한 번만 호출되게 하려면, 아래의 예와 같이 **STATEMENT UPDATE** 형식을 사용한다.
-    
+
 다음은 문장 이벤트를 사용하는 예제이다. 문장 이벤트를 지정하면 갱신의 영향을 받는 인스턴스가 많더라도, 첫 번째 인스턴스가 갱신되기 전에 트리거가 한 번만 불려지게 된다.
 
 .. code-block:: sql
@@ -173,7 +173,7 @@ CREATE TRIGGER
     CREATE TRIGGER example
     BEFORE STATEMENT UPDATE ON history(score)
     EXECUTE PRINT 'There was an update on history table';
-    
+
 .. note::
 
     *   이벤트 타입으로 인스턴스 이벤트와 문장 이벤트를 지정할 경우에는 반드시 이벤트 대상을 명시해야 한다.
@@ -262,10 +262,11 @@ CREATE TRIGGER
 +============+============+=======================+
 | **INSERT** | **new**    | **obj**               |
 +------------+------------+-----------------------+
-| **UPDATE** | **obj**    | obj                   |
-|            | **new**    | old (AFTER)           |
+| **UPDATE** | **obj**    | **obj**               |
+|            |            |                       |
+|            | **new**    | **old** (AFTER)       |
 +------------+------------+-----------------------+
-| **DELETE** | **obj**    | NA                    |
+| **DELETE** | **obj**    | N/A                   |
 +------------+------------+-----------------------+
 
 +---------+-------------------------------------------------------------------------------------------------------------+
@@ -290,14 +291,14 @@ CREATE TRIGGER
 
 아래 목록은 트리거를 정의할 때 사용할 수 있는 실행 영역의 목록이다.
 
-*   **REJECT** : 트리거에서 조건 영역이 참이 아닌 경우 트리거를 발동시킨 연산은 거절되고 데이터베이스의 이전 상태를 그대로 유지한다. 연산이 수행된 후에는 거절할 수 없기 때문에 **REJECT** 는 실행 시점이 **BEFORE** 일 때만 허용된다. 따라서 실행 시점이 **AFTER** 나 **DERERRED** 인 경우 **REJECT** 를 사용해서는 안 된다.
+*   **REJECT**: 트리거에서 조건 영역이 참이 아닌 경우 트리거를 발동시킨 연산은 거절되고 데이터베이스의 이전 상태를 그대로 유지한다. 연산이 수행된 후에는 거절할 수 없기 때문에 **REJECT** 는 실행 시점이 **BEFORE** 일 때만 허용된다. 따라서 실행 시점이 **AFTER** 나 **DERERRED** 인 경우 **REJECT** 를 사용해서는 안 된다.
 
-*   **INVALIDATE TRANSACTION** : 트리거를 부른 이벤트 연산은 수행되지만, 커밋을 포함하고 있는 트랜잭션은 수행되지 않도록 한다. 트랜잭션이 유효하지 않으면 반드시 **ROLLBACK** 문으로 취소시켜야 한다. 이러한 실행은 데이터를 변경하는 이벤트가 발생한 후에 유효하지 않은 데이터를 가지는 것으로부터 데이터베이스를 보호하기 위해 사용된다.
+*   **INVALIDATE TRANSACTION**: 트리거를 부른 이벤트 연산은 수행되지만, 커밋을 포함하고 있는 트랜잭션은 수행되지 않도록 한다. 트랜잭션이 유효하지 않으면 반드시 **ROLLBACK** 문으로 취소시켜야 한다. 이러한 실행은 데이터를 변경하는 이벤트가 발생한 후에 유효하지 않은 데이터를 가지는 것으로부터 데이터베이스를 보호하기 위해 사용된다.
 
-*   **PRINT** : 터미널 화면에 텍스트 메시지로 트리거 활동을 가시적으로 보여주기 때문에 트리거의 개발이나 시험하는 도중에 사용될 수 있다. 이벤트 연산의 결과를 거절하거나 무효화시키지는 않는다.
-*   **INSERT** : 테이블에 하나 혹은 그 이상의 새로운 인스턴스를 추가한다.
-*   **UPDATE** : 테이블에 있는 하나 혹은 그 이상의 칼럼 값을 변경한다.
-*   **DELETE** : 테이블로부터 하나 혹은 그 이상의 인스턴스를 제거한다.
+*   **PRINT**: 터미널 화면에 텍스트 메시지로 트리거 활동을 가시적으로 보여주기 때문에 트리거의 개발이나 시험하는 도중에 사용될 수 있다. 이벤트 연산의 결과를 거절하거나 무효화시키지는 않는다.
+*   **INSERT**: 테이블에 하나 혹은 그 이상의 새로운 인스턴스를 추가한다.
+*   **UPDATE**: 테이블에 있는 하나 혹은 그 이상의 칼럼 값을 변경한다.
+*   **DELETE**: 테이블로부터 하나 혹은 그 이상의 인스턴스를 제거한다.
 
 다음은 트리거 생성 시에 실행영역의 정의 방법을 보여주는 예제이다. *medal_trig* 트리거는 실행 영역에 **REJECT** 를 지정하였다. **REJECT** 는 실행 시점이 **BEFORE** 일 때만 지정 가능하다.
 
@@ -320,17 +321,15 @@ ALTER TRIGGER
 
 트리거 정의에서 **STATUS** 와 **PRIORITY** 옵션에 대해 **ALTER** 구문을 이용하여 변경할 수 있다. 만약 트리거의 다른 부분에 대해 변경(이벤트 대상 또는 조건 표현식)이 필요하면, 트리거를 삭제한 후 재생성해야 한다. ::
 
-    ALTER TRIGGER trigger_name  trigger_option [ ; ]
+    ALTER TRIGGER trigger_name <trigger_option> ;
 
-    trigger_option :
-    • STATUS { ACTIVE | INACTIVE }
-    • PRIORITY key
+    <trigger_option> ::=
+        STATUS { ACTIVE | INACTIVE } |
+        PRIORITY key
 
-* *trigger_name* : 변경할 트리거의 이름을 지정한다.
-* *trigger_option* :
-
-    *   **STATUS** { **ACTIVE** | **INACTIVE** } : 트리거의 상태를 변경한다.
-    *   **PRIORITY** *key* : 우선순위를 변경한다.
+*   *trigger_name*: 변경할 트리거의 이름을 지정한다.
+*   **STATUS** { **ACTIVE** | **INACTIVE** }: 트리거의 상태를 변경한다.
+*   **PRIORITY** *key*: 우선순위를 변경한다.
 
 다음은 medal_trig 트리거를 생성하고 트리거의 상태를 **INACTIVE** 로, 우선순위를 0.7로 변경하는 예제이다.
 
@@ -356,9 +355,9 @@ DROP TRIGGER
 
 **DROP TRIGGER** 구문을 이용하여 트리거를 삭제한다. ::
 
-    DROP TRIGGER trigger_name [ ; ] 
+    DROP TRIGGER trigger_name ; 
 
-*   *trigger_name* : 삭제할 트리거의 이름을 지정한다.
+*   *trigger_name*: 삭제할 트리거의 이름을 지정한다.
 
 다음은 medal_trig 트리거를 삭제하는 예제이다.
 
@@ -376,10 +375,10 @@ RENAME TRIGGER
 
 트리거의 이름은 **RENAME** 구문의 **TRIGGER** 예약어를 이용해서 변경한다. ::
 
-    RENAME TRIGGER old_trigger_name AS new_trigger_name [ ; ]
+    RENAME TRIGGER old_trigger_name AS new_trigger_name ;
 
-*   *old_trigger_name* : 트리거의 현재 이름을 입력한다.
-*   *new_trigger_name* : 변경할 트리거의 이름을 지정한다.
+*   *old_trigger_name*: 트리거의 현재 이름을 입력한다.
+*   *new_trigger_name*: 변경할 트리거의 이름을 지정한다.
 
 .. code-block:: sql
 
@@ -400,32 +399,28 @@ RENAME TRIGGER
 
 지연된 트리거의 조건 영역이나 실행 영역을 즉시 실행시킨다. ::
 
-    EXECUTE DEFERRED TRIGGER trigger_identifier [ ; ]
+    EXECUTE DEFERRED TRIGGER <trigger_identifier> ;
 
-    trigger_identifier :
-    • trigger_name
-    • ALL TRIGGERS
+    <trigger_identifier> ::=
+        trigger_name |
+        ALL TRIGGERS
 
-* *trigger_identifier* :
-
-    *   *trigger_name* : 트리거의 이름을 지정하면 지정된 트리거의 지연된 활동이 실행된다.
-    *   **ALL TRIGGERS** : 현재 모든 지연된 활동이 실행된다.
+*   *trigger_name*: 트리거의 이름을 지정하면 지정된 트리거의 지연된 활동이 실행된다.
+*   **ALL TRIGGERS**: 현재 모든 지연된 활동이 실행된다.
 
 지연된 영역 취소
 ----------------
 
 지연된 트리거의 조건 영역과 실행 영역을 취소한다. ::
 
-    DROP DEFERRED TRIGGER trigger_identifier [ ; ]
+    DROP DEFERRED TRIGGER <trigger_identifier> ;
 
-    trigger_option :
-    • trigger_name
-    • ALL TRIGGERS
+    <trigger_identifier> ::=
+        trigger_name |
+        ALL TRIGGERS
 
-* *trigger_option* :
-
-    *   *trigger_name* : 트리거의 이름을 지정하면 지정된 트리거의 지연된 활동이 취소된다.
-    *   **ALL TRIGGERS** : 현재 모든 지연된 활동이 취소된다.
+*   *trigger_name*: 트리거의 이름을 지정하면 지정된 트리거의 지연된 활동이 취소된다.
+*   **ALL TRIGGERS**: 현재 모든 지연된 활동이 취소된다.
 
 트리거 권한 부여
 ----------------
@@ -475,7 +470,7 @@ CUBRID에서는 **REPLACE** 문과 **INSERT ... ON DUPLICATE KEY UPDATE** 문 �
     INSERT INTO with_trigger VALUES (11) ON DUPLICATE KEY UPDATE id=22;
      
     SELECT * FROM trigger_actions;
-    
+
 ::
     
               va
@@ -511,22 +506,20 @@ CUBRID에서는 **REPLACE** 문과 **INSERT ... ON DUPLICATE KEY UPDATE** 문 �
     EXECUTE UPDATE participant
             SET gold = new.gold - 1
             WHERE nation_code = obj.nation_code AND host_year = obj.host_year;
-        
+
 트리거 실행 로그 보기
 ---------------------
 
 **SET TRIGGER TRACE** 문을 이용하여 터미널에서 트리거의 실행 로그를 볼 수 있다. ::
 
-    SET TRIGGER TRACE switch [ ; ]
+    SET TRIGGER TRACE <switch> ;
 
-    switch:
-    • ON
-    • OFF
+    <switch> ::=
+        ON |
+        OFF
 
-* *switch* :
-
-    *   **ON** : **TRACE** 가 작동되며 **OFF** 하거나 현재 데이터베이스 세션을 종료할 때까지 계속 유지된다.
-    *   **OFF** : **TRACE** 의 작동을 멈춘다.
+*   **ON**: **TRACE** 가 작동되며 **OFF** 하거나 현재 데이터베이스 세션을 종료할 때까지 계속 유지된다.
+*   **OFF**: **TRACE** 의 작동을 멈춘다.
 
 다음 예제는 트리거의 실행 로그를 보기 위해 **TRACE** 를 작동시키고 *loop_trg* 트리거를 작동시키는 예제이다. 트리거가 호출될 때 수행된 각각의 조건 영역과 실행 영역에 대한 추적을 식별하기 위한 메시지가 터미널에 나타난다. *loop_trg* 트리거는 *gold* 값이 0이 될 때까지 실행되므로 예제에서는 아래의 메세지가 15번 나타난다.
 
@@ -545,12 +538,9 @@ CUBRID에서는 **REPLACE** 문과 **INSERT ... ON DUPLICATE KEY UPDATE** 문 �
 
 **SET TRIGGER** 문의 **MAXIMUM DEPTH** 키워드를 이용하여 단계적으로 발동되는 트리거 수를 제한할 수 있다. 이를 이용하면 재귀적으로 호출되는 트리거가 무한루프에 빠지는 것을 막을 수 있다. ::
 
-    SET TRIGGER [ MAXIMUM ] DEPTH count [ ; ]
+    SET TRIGGER [ MAXIMUM ] DEPTH count ;
 
-    count:
-    • unsigned_integer_literal
-
-*   *unsigned_integer_literal* : 양의 정수값으로 트리거가 다른 트리거나 자신을 재귀적으로 발동할 수 있는 횟수를 지정한다. 트리거의 수가 최대 깊이에 도달하면 데이터베이스 요청은 중단되고 트랜잭션은 유효하지 않은 것처럼 표시된다. 설정된 **DEPTH** 는 현재 세션을 제외한 나머지 모든 트리거에 적용된다. 최대값은 32이다.
+*   *count*: 양의 정수값으로 트리거가 다른 트리거나 자신을 재귀적으로 발동할 수 있는 횟수를 지정한다. 트리거의 수가 최대 깊이에 도달하면 데이터베이스 요청은 중단되고 트랜잭션은 유효하지 않은 것처럼 표시된다. 설정된 **DEPTH** 는 현재 세션을 제외한 나머지 모든 트리거에 적용된다. 최대값은 32이다.
 
 다음은 재귀적 트리거 호출의 최대 값을 10으로 설정하는 예제이다. 이는 이후에 발동하는 모든 트리거에 적용된다. 이 예제에서 *gold* 칼럼에 대한 값은 15로 갱신되어 트리거는 총 16번 불려지게 된다. 이는 현재 설정된 최대 깊이를 초과하게 되고 아래와 같은 에러 메시지가 발생한다.
 
@@ -579,7 +569,7 @@ CUBRID에서는 **REPLACE** 문과 **INSERT ... ON DUPLICATE KEY UPDATE** 문 �
     IF new.gold < 0 OR new.silver < 0 OR new.bronze < 0
     EXECUTE REJECT;
 
-국가코드가 'BLA'인 나라의 금메달(*gold*) 수를 업데이트 할 때, *medal_trigger* 트리거가 발동한다. 금메달 수가 음수인 경우를 허용하지 않도록 트리거를 생성하였으므로, 업데이트를 허용하지 않는다.
+국가 코드가 'BLA'인 나라의 금메달(*gold*) 수를 업데이트 할 때, *medal_trigger* 트리거가 발동한다. 금메달 수가 음수인 경우를 허용하지 않도록 트리거를 생성하였으므로, 업데이트를 허용하지 않는다.
 
 .. code-block:: sql
 

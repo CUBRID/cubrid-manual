@@ -23,5 +23,3 @@
     information_fn.rst
     encryption_fn.rst
     condition_fn.rst
-
-    

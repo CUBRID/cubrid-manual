@@ -306,7 +306,7 @@ Whether to detect the escape characters of the LIKE conditional expression is de
 .. note::
 
     *   To execute string comparison operation for data entered in the multibyte charset environment such as UTF-8, the parameter setting (**single_byte_compare** = yes) which compares strings by 1 byte should be added to the **cubrid.conf** file for a successful search result. 
-    
+
     *   Versions after CUBRID 9.0 support Unicode charset, so the **single_byte_compare** parameter is no longer used.
 
 .. code-block:: sql
@@ -368,7 +368,7 @@ The difference between **REGEXP** and **LIKE** are as follows:
 *  The **REGEXP** operator succeeds if the pattern matches anywhere in the value. To match the entire value, you should use "^" at the beginning and "$" at the end.
 *  The **LIKE** operator is case sensitive, but patterns of regular expressions in **REGEXP** is not case sensitive. To enable case sensitive, you should use **REGEXP BINARY** statement.
 *  **REGEXP**, **REGEXP BINARY** works as ASCII encoding without considering the collation of operands.
-    
+
 .. code-block:: sql
     
     SELECT ('a' collate utf8_en_ci REGEXP BINARY 'A' collate utf8_en_ci); 

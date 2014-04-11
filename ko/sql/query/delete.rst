@@ -75,7 +75,7 @@ DELETE
     INSERT INTO c_tbl VALUES(1,'111-1111'), (2,'222-2222'), (10, '333-3333'), (11, NULL), (12, NULL);
 
 다음 질의들은 여러 개의 테이블들을 조인한 후 삭제를 수행하며, 모두 같은 결과를 보여준다.
-    
+
 .. code-block:: sql
 
     -- Below four queries show the same result.

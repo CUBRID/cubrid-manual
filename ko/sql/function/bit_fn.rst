@@ -93,7 +93,7 @@ BIT_COUNT
 =========
 
 .. function:: BIT_COUNT (expr)
- 
+
     *expr* 의 모든 비트 중 1로 설정된 비트의 개수를 반환하는 함수이며, 집계 함수는 아니다.
 
     :param expr: 정수 타입의 임의의 연산식이다.

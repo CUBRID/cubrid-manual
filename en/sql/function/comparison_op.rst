@@ -65,65 +65,36 @@ The following table shows the comparison operators supported by CUBRID and their
 
 **Comparison Operators**
 
-+-------------------------+--------------------------------------------------------------------------------------------------------------------+----------------+------------------+
-| Comparison Operator     | Description                                                                                                        | Predicate      | Return Value     |
-+=========================+====================================================================================================================+================+==================+
-| **=**                   | A general equal sign. It compares whether the values of the left and right operands are the same. Returns          | 1=2            | 0                |
-|                         | **NULL**                                                                                                           | 1=NULL         | NULL             |
-|                         | if one or more operands are NULL.                                                                                  |                |                  |
-+-------------------------+--------------------------------------------------------------------------------------------------------------------+----------------+------------------+
-| **<=>**                 | A NULL-safe equal sign. It compares whether the values of the left and right operands are the same including       | 1<=>2          | 0                |
-|                         | **NULL**                                                                                                           | 1<=> NULL      | 0                |
-|                         | . Returns 1 if both operands are                                                                                   |                |                  |
-|                         | **NULL**                                                                                                           |                |                  |
-|                         | .                                                                                                                  |                |                  |
-+-------------------------+--------------------------------------------------------------------------------------------------------------------+----------------+------------------+
-| **<>, !=**              | The value of left operand is not equal to that of right operand. If any operand value is                           | 1<>2           | 1                |
-|                         | **NULL**                                                                                                           |                |                  |
-|                         | ,                                                                                                                  |                |                  |
-|                         | **NULL**                                                                                                           |                |                  |
-|                         | is returned.                                                                                                       |                |                  |
-+-------------------------+--------------------------------------------------------------------------------------------------------------------+----------------+------------------+
-| **>**                   | The value of left operand is greater than that of right operand. If any operand value is                           | 1>2            | 0                |
-|                         | **NULL**                                                                                                           |                |                  |
-|                         | ,                                                                                                                  |                |                  |
-|                         | **NULL**                                                                                                           |                |                  |
-|                         | is returned.                                                                                                       |                |                  |
-+-------------------------+--------------------------------------------------------------------------------------------------------------------+----------------+------------------+
-| **<**                   | The value of left operand is less than that of right operand. If any operand value is                              | 1<2            | 1                |
-|                         | **NULL**                                                                                                           |                |                  |
-|                         | ,                                                                                                                  |                |                  |
-|                         | **NULL**                                                                                                           |                |                  |
-|                         | is returned.                                                                                                       |                |                  |
-+-------------------------+--------------------------------------------------------------------------------------------------------------------+----------------+------------------+
-| **>=**                  | The value of left operand is greater than or equal to that of right operand. If any operand value is               | 1>=2           | 0                |
-|                         | **NULL**                                                                                                           |                |                  |
-|                         | ,                                                                                                                  |                |                  |
-|                         | **NULL**                                                                                                           |                |                  |
-|                         | is returned.                                                                                                       |                |                  |
-+-------------------------+--------------------------------------------------------------------------------------------------------------------+----------------+------------------+
-| **<=**                  | The value of left operand is less than or equal to that of right operand. If any operand value is                  | 1<=2           | 1                |
-|                         | **NULL**                                                                                                           |                |                  |
-|                         | ,                                                                                                                  |                |                  |
-|                         | **NULL**                                                                                                           |                |                  |
-|                         | is returned.                                                                                                       |                |                  |
-+-------------------------+--------------------------------------------------------------------------------------------------------------------+----------------+------------------+
-| **IS**                  | Compares whether the value of the left operand is the same as boolean value of the right. The boolean value may be | 1 IS FALSE     | 0                |
-| *boolean_value*         | **TRUE**                                                                                                           |                |                  |
-|                         | ,                                                                                                                  |                |                  |
-|                         | **FALSE**                                                                                                          |                |                  |
-|                         | (or                                                                                                                |                |                  |
-|                         | **NULL**                                                                                                           |                |                  |
-|                         | ).                                                                                                                 |                |                  |
-+-------------------------+--------------------------------------------------------------------------------------------------------------------+----------------+------------------+
-| **IS NOT**              | Compares whether the value of the left operand is the same as boolean value of the right. The boolean value may be | 1 IS NOT FALSE | 1                |
-| *boolean_value*         | **TRUE**                                                                                                           |                |                  |
-|                         | ,                                                                                                                  |                |                  |
-|                         | **FALSE**                                                                                                          |                |                  |
-|                         | (or                                                                                                                |                |                  |
-|                         | **NULL**                                                                                                           |                |                  |
-|                         | ).                                                                                                                 |                |                  |
-+-------------------------+--------------------------------------------------------------------------------------------------------------------+----------------+------------------+
++-------------------------+---------------------------------------------------------------------------------------------+----------------+----------------+
+| Comparison Operator     | Description                                                                                 | Predicate      | Return Value   |
++=========================+=============================================================================================+================+================+
+| **=**                   | A general equal sign. It compares whether the values of the left and right operands         | 1=2            | 0              |
+|                         | are the same. Returns **NULL**  if one or more operands are NULL.                           | 1=NULL         | NULL           |
++-------------------------+---------------------------------------------------------------------------------------------+----------------+----------------+
+| **<=>**                 | A NULL-safe equal sign. It compares whether the values of the left and right operands       | 1<=>2          | 0              |
+|                         | are the same including **NULL**. Returns 1 if both operands are **NULL**.                   | 1<=> NULL      | 0              |
++-------------------------+---------------------------------------------------------------------------------------------+----------------+----------------+
+| **<>, !=**              | The value of left operand is not equal to that of right operand.                            | 1<>2           | 1              |
+|                         | If any operand value is **NULL**, **NULL** is returned.                                     |                |                |
++-------------------------+---------------------------------------------------------------------------------------------+----------------+----------------+
+| **>**                   | The value of left operand is greater than that of right operand.                            | 1>2            | 0              |
+|                         | If any operand value is **NULL**, **NULL** is returned.                                     |                |                |
++-------------------------+---------------------------------------------------------------------------------------------+----------------+----------------+
+| **<**                   | The value of left operand is less than that of right operand.                               | 1<2            | 1              |
+|                         | If any operand value is **NULL**, **NULL** is returned.                                     |                |                |
++-------------------------+---------------------------------------------------------------------------------------------+----------------+----------------+
+| **>=**                  | The value of left operand is greater than or equal to that of right operand.                | 1>=2           | 0              |
+|                         | If any operand value is **NULL**, **NULL** is returned.                                     |                |                |
++-------------------------+---------------------------------------------------------------------------------------------+----------------+----------------+
+| **<=**                  | The value of left operand is less than or equal to that of right operand.                   | 1<=2           | 1              |
+|                         | If any operand value is  **NULL**, **NULL** is returned.                                    |                |                |
++-------------------------+---------------------------------------------------------------------------------------------+----------------+----------------+
+| **IS**                  | Compares whether the value of the left operand is the same as boolean value of the right.   | 1 IS FALSE     | 0              |
+| *boolean_value*         | The boolean value may be **TRUE**, **FALSE** (or **NULL**).                                 |                |                |
++-------------------------+---------------------------------------------------------------------------------------------+----------------+----------------+
+| **IS NOT**              | Compares whether the value of the left operand is the same as boolean value of the right.   | 1 IS NOT FALSE | 1              |
+| *boolean_value*         | The boolean value may be **TRUE**, **FALSE** (or **NULL**).                                 |                |                |
++-------------------------+---------------------------------------------------------------------------------------------+----------------+----------------+
 
 The following are the examples which use comparison operators.
 

@@ -62,7 +62,6 @@ On the above table, two types on the same cell are identical types but it always
 
         1.550000e+01
 
-    
     This is an example of overflow error occurred when adding two integer values, the following can be an **INTEGER** type value for the result.
     
     .. code-block:: sql
@@ -73,7 +72,7 @@ On the above table, two types on the same cell are identical types but it always
         ERROR: Data overflow on data type integer.
 
     In the above case, if you specify one of two integers as the **BIGINT** type, it will determine the result value into the **BIGINT** type, and then output the normal result.    
-    
+
     .. code-block:: sql
     
         SELECT CAST(100000000 AS BIGINT)*1000000;
@@ -82,7 +81,7 @@ On the above table, two types on the same cell are identical types but it always
     
         100000000000000
     
-    .. warning:: 
+    .. warning::
 
         Earlier version than CUBRID 2008 R2.0, the input constant value exceeds **INTEGER**, it is handled as **NUMERIC**. However, 2008 R2.0 or later versions, it is handled as **BIGINT** .
 
@@ -126,7 +125,7 @@ The **BIGINT** data type is used to represent big integers. The value range is a
 *   If a real number is entered for a **BIG** type, the number is rounded to zero decimal place and the integer value is stored.
 *   Based on the precision and the range of representation, the following order is applied.
 
-    **SMALLINT** ⊂ **INTEGER** ⊂ **BIGINT** ⊂ **NUMERIC** 
+    **SMALLINT** ??**INTEGER** ??**BIGINT** ??**NUMERIC** 
     
 *   **DEFAULT** constraint can be specified in a column of this type.
 
@@ -143,7 +142,7 @@ NUMERIC/DECIMAL
 **NUMERIC** or **DECIMAL** data types are used to represent fixed-point numbers. As an option, the total number of digits (precision) and the number of digits after the decimal point (scale) can be specified for definition. The minimum value for the precision *p* is 1. When the precision *p* is omitted, you cannot enter data whose integer part exceeds 15 digits because the default value is 15. If the scale *s* is omitted, an integer rounded to the first digit after the decimal point is returned because the default value is 0. ::
 
     NUMERIC [(p[, s])]
-    
+
 *   Precision must be equal to or greater than scale.
 *   Precision must be equal to or greater than the number of integer digits + scale.
 *   **NUMERIC**, **DECIMAL**, and **DEC** are used interchangeably.
@@ -204,7 +203,7 @@ The precision *p* is not specified. The data specified as this data type is repr
     If you specify 1234.56789 as DOUBLE, 1234.56789 is stored and 1.234567890000000e+03 is displayed.
     If you specify 9007199254740993 as DOUBLE, 9007199254740992 is stored and 9.007199254740992e+15 is displayed.
 
-.. note:: MONETARY type is deprecated, and it is not recommended any more.
+.. note:: MONETARY type is deprecated, and it is not recommended anymore.
 
 .. _date-time-type:
 
@@ -314,7 +313,7 @@ The **TIMESTAMP** data type is used to represent a data value in which the date 
  
     timestamp'hh:mi[:ss] [am|pm] mm/dd[/yyyy]'
     timestamp'hh:mi[:ss] [am|pm] [yyyy-]mm-dd'
-     
+
     timestamp'mm/dd[/yyyy] hh:mi[:ss] [am|pm]'
     timestamp'[yyyy-]mm-dd hh:mi[:ss] [am|pm]'
 
@@ -396,15 +395,15 @@ Also, in :func:`TO_DATE`, :func:`TO_TIME`, :func:`TO_DATETIME`, :func:`TO_TIMEST
     
         YYYY-MM-DD HH:MI:SS[.msec] [AM|PM]
         HH:MI:SS[.msec] [AM|PM] YYYY-MM-DD
-        
+
         MM/DD/YYYY HH:MI:SS[.msec] [AM|PM]
         HH:MI:SS[.msec] [AM|PM] MM/DD/YYYY
-    
+
 *   **TIMESTAMP** Type ::
 
         YYYY-MM-DD HH:MI:SS [AM|PM]
         HH:MI:SS [AM|PM] YYYY-MM-DD
-        
+
         MM/DD/YYYY HH:MI:SS [AM|PM]
         HH:MI:SS [AM|PM] MM/DD/YYYY
     
@@ -418,7 +417,7 @@ Available Format for Strings in Date/Time Type
     ::
 
         [year sep] month sep day
-        
+
     *   2011-04-20: April 20th, 2011
     *   04-20: April 20th of this year
 
@@ -531,11 +530,11 @@ Available Format for Strings in Date/Time Type
     *   20110420091000.359: April 20th, 2011, 9 hours 10 minutes 0.359 seconds AM
 
 **Available Time-Date String Format**
- 
+
     ::
 
         [hour]:min[:sec[.msec]] [am|pm] [year-]month-day
-        
+
     *   09:10:15.359 am 2011-04-20: April 20th, 2011, 9 hours 10 minutes 15.359 seconds AM
     *   \:10 04-20: April 20th of this year, 12 hours 10 minutes AM
 
@@ -608,7 +607,7 @@ Available Format for Strings in Date/Time Type
     .. code-block:: sql
 
         SELECT CAST('420' AS DATE);
-         
+
     ::
 
            cast('420' as date)
@@ -618,7 +617,7 @@ Available Format for Strings in Date/Time Type
     .. code-block:: sql
 
         SELECT CAST('91015' AS TIME);
-         
+
     ::
 
            cast('91015' as time)
@@ -628,7 +627,7 @@ Available Format for Strings in Date/Time Type
     .. code-block:: sql
 
         SELECT CAST('110420091035.359' AS DATETIME);
-         
+
     ::
 
            cast('110420091035.359' as datetime)
@@ -638,7 +637,7 @@ Available Format for Strings in Date/Time Type
     .. code-block:: sql
 
         SELECT CAST('110420091035.359' AS TIMESTAMP);
-         
+
     ::
 
            cast('110420091035.359' as timestamp)
@@ -733,11 +732,11 @@ A variable-length bit string is represented as **BIT VARYING** (*n*), where *n* 
       X'a'                  X'a'
       X'aa'                 X'aa'
       X'aaa'                NULL
-     
+
 .. code-block:: sql
 
     INSERT INTO bitvar_tbl(a2) VALUES (0xaaa);
-     
+
 ::
 
     ERROR: Data overflow coercing X'aaa' to type bit varying.
@@ -769,16 +768,16 @@ The following are the rules that are applied when using the character string typ
 
 *   If you want to include a single quote as part of a character string, enter two single quotes in a row. For example, the character string on the left is stored as the one on the right. ::
 
-    ''abcde''fghij'            'abcde'fghij
+    ''abcde''fghij'       'abcde'fghij
 
 *   The maximum size of the token for all the character strings is 16 KB.
 
-To enter the language of a specific country, we recommend that you to specify the locale when creating DB, then you can change locale by the introducer **CHARSET**(or **COLLATE** modifier). For more information, see :doc:`/sql/i18n`.
+*   To enter the language of a specific country, we recommend that you to specify the locale when creating DB, then you can change locale by the introducer **CHARSET**(or **COLLATE** modifier). For more information, see :doc:`/sql/i18n`.
 
 **Length**
- 
+
     Specify the number of a character string.
-    
+
     When the length of the character string entered exceeds the length specified, the excess characters are truncated.
 
     For a fixed-length character string type such as **CHAR**, the length is fixed at the declared length. Therefore, the right part (trailing space) of the character string is filled with space characters when the string is stored. For a variable-length character string type such as **VARCHAR**, only the entered character string is stored, and the space is not filled with space characters.
@@ -861,12 +860,12 @@ STRING
 
 NCHAR(n)
 --------
+
 **NCHAR** (*n*) is the same with **CHAR** (*n*).
 
 .. note::
 
-    This type had been used to input the data for the languages except English 
-    before CUBRID 9.0 version. However, from 9.0, as the charset and the collation by the locale setting are supported, this type remained only for the syntax compatibility. Therefore, if you create a new schema, it is recommended to use **CHAR** instead of this type.
+    This type had been used to input the data for the languages except English before CUBRID 9.0 version. However, from 9.0, as the charset and the collation by the locale setting are supported, this type remained only for the syntax compatibility. Therefore, if you create a new schema, it is recommended to use **CHAR** instead of this type.
 
 NCHAR VARYING(n)
 ----------------
@@ -1026,7 +1025,7 @@ The **ENUM** type is  a data type consisting of an ordered set of distinct const
 
     <enum_type>
         : ENUM '(' <char_string_literal_list> ')'
-    
+
     <char_string_literal_list>
         : <char_string_literal_list> ',' CHAR_STRING
         | CHAR_STRING
@@ -1038,9 +1037,9 @@ The following example shows the definition of an **ENUM** column.
     CREATE TABLE tbl (
         color ENUM ('red', 'yellow', 'blue', 'green')
     );
-    
+
 *   **DEFAULT** constraint can be specified in a column of this type.
-    
+
 An index is associated to each element of the enum set, according to the order in which elements are defined in the enum type. For example, the *color* column can have one of the following values (assuming that the column allows NULL values) :
 
     =========       ============
@@ -1072,11 +1071,11 @@ When used in expressions, the **ENUM** type behaves either as a **CHAR** type or
     SELECT color, color + 0, CONCAT(color, '') FROM tbl;
 
 ::
-    
+
       color                     color+0   concat(color, '')
     =========================================================
       'yellow'                        2  'yellow'
-      'red'                           1  'red' 
+      'red'                           1  'red'
 
 When used in type contexts other than **CHAR** or numbers, the enum is coerced to that type using either the index or the enum value. The table below shows which part of an **ENUM** type is used in the coercion:
 
@@ -1192,9 +1191,9 @@ In the following queries the **ENUM** type will be converted to the type of the 
 ::
 
     ERROR: Cannot coerce value of domain "enum" to domain "date".
-    
+
 ENUM Type Ordering
---------------------
+------------------
 
 Values of the **ENUM** type are ordered by value index, not by enum value. When defining a column with **ENUM** type, users also define the ordering of the enum values.
 
@@ -1227,7 +1226,7 @@ To order the values stored in an **ENUM** type column as **CHAR** values, users 
       'yellow'
 
 Notes
--------
+-----
 
 The **ENUM** type is not a reusable type. If several columns require the same set of values, an **ENUM** type must be defined for each one. When comparing two columns of **ENUM** type, the comparison is performed as if the columns were coerced to **CHAR** type even if the two **ENUM** types define the same set of values.
 
@@ -1329,7 +1328,7 @@ An External **LOB** type is data to process Large Object, such as text or images
 When storing LOB data in external storage, the following naming convention will be applied: ::
 
     {table_name}_{unique_name}
-   
+
 *   *table_name* : It is inserted as a prefix and able to store the **LOB** data of many tables in one external storage.
 *   *unique_name* : The random name created by the DB server.
 
@@ -1482,7 +1481,7 @@ When you get a **LOB** type column, the data stored in a file to which the colum
      
 .. code-block:: sql
 
-    SELECT CLOB_TO_CHAR(content) FROM doc_t ORDER BY CLOB_TO_CHAR(content)
+    SELECT CLOB_TO_CHAR(content) FROM doc_t ORDER BY CLOB_TO_CHAR(content);
      
 ::
 
@@ -1529,10 +1528,10 @@ These are the functions for BLOB/CLOB types. For more details, refer :doc:`/sql/
 * :func:`CLOB_FROM_FILE` 
 * :func:`BLOB_FROM_FILE` 
 * :func:`CLOB_LENGTH` 
-* :func:`BLOB_LENGTH`                        
+* :func:`BLOB_LENGTH`
 
 .. note:: " <*blob_or_clob_column* **IS NULL** ": using **IS NULL** condition, it compares the value of **LOB** column(Locator) if it's **NULL** or not. If it's **NULL**, this condition returns **TRUE**.
-    
+
 .. _lob-storage:
 
 To create and manage LOB storage
@@ -1569,8 +1568,8 @@ To expand or change the **lob-base-path** of the database, change its **lob-base
     # You can change to a new directory from the lob-base-path of databases.txt file.
     % cat $CUBRID_DATABASES/databases.txt
 
-    #db-name         vol-path             db-host         log-path         lob-base-path    
-    image_db         /home1/data1         localhost       /home1/data1     file:/home1/data2
+    #db-name     vol-path           db-host       log-path              lob-base-path
+    image_db     /home1/data1       localhost     /home1/data1          file:/home1/data2
 
 Backup/recovery for data files of **LOB** type columns are not supported, while those for meta data(Locator) are supported.
 
@@ -1665,7 +1664,7 @@ Collection Types do not support collations. Therefore, Below query returns error
         CREATE TABLE tbl (str SET (string) COLLATE utf8_en_ci);
 
 ::
-        
+
         Syntax error: unexpected 'COLLATE', expecting ',' or ')'
 
 SET
@@ -1791,17 +1790,17 @@ The implicit type conversion executed by CUBRID is as follows:
     +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
     | **TIMESTAMP** | O            | O        | O        | \-            |            |           |             |            |
     +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
-    | **DOUBLE**    |              |          |          |               | \-         | O         | O           | O          |
+    | **DOUBLE**    |              |          | O        | O             | \-         | O         | O           | O          |
     +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
-    | **FLOAT**     |              |          |          |               | O          | \-        | O           | O          |
+    | **FLOAT**     |              |          | O        | O             | O          | \-        | O           | O          |
     +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
-    | **NUMERIC**   |              |          |          |               | O          | O         | \-          | O          |
+    | **NUMERIC**   |              |          |          | O             | O          | O         | \-          | O          |
     +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
-    | **BIGINT**    |              |          |          |               | O          | O         | O           | \-         |
+    | **BIGINT**    |              |          | O        | O             | O          | O         | O           | \-         |
     +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
-    | **INT**       |              |          |          | O             | O          | O         | O           | O          |
+    | **INT**       |              |          | O        | O             | O          | O         | O           | O          |
     +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
-    | **SHORT**     |              |          |          |               | O          | O         | O           | O          |
+    | **SHORT**     |              |          | O        | O             | O          | O         | O           | O          |
     +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
     | **BIT**       |              |          |          |               |            |           |             |            |
     +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
@@ -1811,6 +1810,14 @@ The implicit type conversion executed by CUBRID is as follows:
     +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
     | **VARCHAR**   | O            | O        | O        | O             | O          | O         | O           | O          |
     +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
+
+.. _number-2-time:
+
+    **Limitations when numeric value is changed as TIME or TIMESTAMP**
+
+    *   All numeric types except for NUMERIC type can be converted into TIME type; at this time, it represents a value of the remainder which is calcuated by dividing the input number into 86,400 seconds(1 day), and the remainder is calculated as seconds.
+
+    *   All numeric types including NUMERIC can be converted into TIMESTAMP type; at this time, the input number cannot exceed 2,147,483,647 as the maximum.
 
 **Implicit Type Conversion Table 2**
 
@@ -1885,8 +1892,11 @@ If the parameter value entered in the function can be converted to the specified
 You can enter multiple type values in the function. If the type value not specified in the function is delivered, the type will be converted depending on the following priority order.
 
 *   Date/Time Type ( **DATETIME** > **TIMESTAMP** > **DATE** > **TIME** )
+
 *   Approximate Numeric Type ( **DOUBLE** > **FLOAT** )
+
 *   Exact Numeric Type ( **NUMERIC** > **BIGINT** > **INT** > **SHORT** )
+
 *   String Type ( **CHAR** > **VARCHAR** )
 
 Comparison Operation
@@ -1901,7 +1911,7 @@ The following are the conversion rules according to an operand type of the compa
 |                   +-------------------+----------------------------------------------+----------------+
 |                   | String Type       | Converts operand2 to **DOUBLE**              | NUMERIC        |
 |                   +-------------------+----------------------------------------------+----------------+
-|                   | Date/Time Type    | None                                         | N/A            |
+|                   | Date/Time Type    | Converts operand1 to Date/Time               | TIME/TIMESTAMP |
 +-------------------+-------------------+----------------------------------------------+----------------+
 | String Type       | Numeric Type      | Converts operand1 to **DOUBLE**              | NUMERIC        |
 |                   +-------------------+----------------------------------------------+----------------+
@@ -1909,16 +1919,16 @@ The following are the conversion rules according to an operand type of the compa
 |                   +-------------------+----------------------------------------------+----------------+
 |                   | Date/Time Type    | Converts operand1 to date/time type          | Date/Time      |
 +-------------------+-------------------+----------------------------------------------+----------------+
-| Date/Time Type    | Numeric Type      | None                                         | N/A            |
+| Date/Time Type    | Numeric Type      | Converts operand2 to Date/Time               | TIME/TIMESTAMP |
 |                   +-------------------+----------------------------------------------+----------------+
 |                   | String Type       | Converts operand2 to date/time type          | Date/Time      |
 |                   +-------------------+----------------------------------------------+----------------+
 |                   | Date/Time Type    | Converts it to the type with higher priority | Date/Time      |
 +-------------------+-------------------+----------------------------------------------+----------------+
 
-The following are the exceptions in the conversion rules for comparison operators:
+When Date/Time type and numeric type are compared, see :ref:`Limitations when numeric value is changed as TIME or TIMESTAMP <number-2-time>` of the above table.
 
-*   COLUMN <operator> value
+There are exceptions when operand1 is string type and operand2 is a value.
 
 +-------------------+-------------------+--------------------------------------+----------------+
 | operand1 Type     | operand2 Type     | Conversion                           | Comparison     |
@@ -1930,6 +1940,8 @@ The following are the exceptions in the conversion rules for comparison operator
 
 If operand2 is a set operator( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**, **< ALL**, **< ANY**, **<= ALL**, **<= ANY**, **>= ALL**, **>= ANY** ), the exception above is not applied.
 
+The following is examples of implicit type conversion in comparison operations.
+
 *   **Numeric Type & String Type Operands**
 
     The string type operand will be converted to **DOUBLE**.
@@ -1940,7 +1952,7 @@ If operand2 is a set operator( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**, *
         INSERT INTO t1 VALUES(1,'1'),(2,'2'),(3,'3'),(4,'4'), (12,'12');
          
         SELECT i FROM t1 WHERE i < '11.3';
-    
+
     ::
 
                     i
@@ -1951,11 +1963,11 @@ If operand2 is a set operator( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**, *
                     4
          
     .. code-block:: sql
-    
+
         SELECT ('2' <= 11);
-        
+
     ::
-         
+
              ('2'<11)
         =============
                     1
@@ -1967,7 +1979,7 @@ If operand2 is a set operator( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**, *
     .. code-block:: sql
 
         SELECT ('2010-01-01' < date'2010-02-02');
-        
+
     ::
     
            ('2010-01-01'<date '2010-02-02')
@@ -1977,9 +1989,9 @@ If operand2 is a set operator( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**, *
     .. code-block:: sql
 
         SELECT (date'2010-02-02' >= '2010-01-01');
-        
+
     ::
-         
+
           (date '2010-02-02'>='2010-01-01')
         ===================================
                                         1
@@ -1992,9 +2004,9 @@ If operand2 is a set operator( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**, *
 
         PREPARE s FROM 'SELECT s FROM t1 WHERE s < ?';
         EXECUTE s USING 11;
-        
+
     ::
-    
+
                s
         ===================
              '1'
@@ -2006,7 +2018,7 @@ If operand2 is a set operator( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**, *
     .. code-block:: sql
 
         SELECT s FROM t1 WHERE s > 11;
-        
+
     ::
     
                s
@@ -2019,7 +2031,7 @@ If operand2 is a set operator( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**, *
     .. code-block:: sql
 
         SELECT s FROM t1 WHERE s BETWEEN 11 AND 33;
-        
+
     ::
     
                 s
@@ -2097,7 +2109,7 @@ Range Operation
           '01/01/1998'
           '01/01/1999'
           '01/01/2000'
-         
+
     .. code-block:: sql
 
         SELECT s FROM t2 WHERE s <= ALL {date'02/02/1998',date'01/01/2000'};
@@ -2154,7 +2166,7 @@ Arithmetic Operation
         SELECT date'2002-01-01' + '10';
     
     ::
-    
+
           date '2002-01-01'+'10'
         ======================
           01/11/2002
@@ -2162,26 +2174,27 @@ Arithmetic Operation
     If the date/time type and a string type are operands and the '-' operator is used, they will be applied according to the following rules.
 
     *   If the date/time type operands are **DATE**, **DATETIME** and **TIMESTAMP**, the string will be converted to **DATETIME**; if the date/time operand is **TIME**, the string is converted to **TIME**.
+
     *   The result type is always **BIGINT**.
 
     .. code-block:: sql
 
         SELECT date'2002-01-01'-'2001-01-01';
-        
+
     ::
-    
+
           date '2002-01-01'-'2001-01-01'
         ================================
                             31536000000
          
         -- this causes an error
-        
+
     .. code-block:: sql
-         
+
         SELECT date'2002-01-01'-'10';
          
     ::
-    
+
          ERROR: Cannot coerce '10' to type datetime.    
      
 *   **Numeric Type & String Type Operands**
@@ -2194,9 +2207,9 @@ Arithmetic Operation
     .. code-block:: sql
 
         SELECT 4 + '5.2';
-        
+
     ::
-         
+
                         4+'5.2'
         ==========================
           9.199999999999999e+00
@@ -2230,7 +2243,7 @@ Arithmetic Operation
         SELECT '3'*'2';
         
     ::
-    
+
                              '3'*'2'
         ============================
                6.000000000000000e+00
@@ -2242,9 +2255,9 @@ Arithmetic Operation
         .. code-block:: sql
 
             SELECT '1'+'1';
-        
+
         ::
-    
+
                            '1'+'1'
             ======================
                               '11'

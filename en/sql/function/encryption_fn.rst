@@ -14,7 +14,6 @@ Encryption Function
         :param string: target string to be encrypted
         :param key_string: key string
         :rtype: STRING 
-        
 
     Because AES is a block-level algorithm, padding is used to encode uneven length strings and so the result string length may be calculated using AES/ECB/PKCS7 formula.
 
@@ -54,7 +53,7 @@ Encryption Function
                aes_decrypt( aes_encrypt('cubrid', 'encr_key'), 'encr_key')
             ======================
               'cubrid'
-          
+
 MD5
 ===
 
@@ -110,12 +109,12 @@ The return value is a **VARCHAR** (32) type and if an input parameter is **NULL*
 SHA1
 ====
 
-.. function:: SHA1(str)
+.. function:: SHA1(string)
 
     The **SHA1** function calculates an SHA-1 160-bit checksum for the string, as described in RFC 3174 (Secure Hash Algorithm).
 
     :param string: target string to be encrypted
-    :rtype: STRING    
+    :rtype: STRING
 
 The value is returned as a string of 40 hex digits, or NULL if the argument is NULL. 
 
@@ -132,13 +131,12 @@ The value is returned as a string of 40 hex digits, or NULL if the argument is N
 SHA2
 ====
 
-.. function:: SHA2(str, hash_length) 
-
+.. function:: SHA2(string, hash_length) 
 
     The **SHA2** function calculates the SHA-2 family of hash functions (SHA-224, SHA-256, SHA-384, and SHA-512). The first argument is the cleartext string to be hashed. The second argument indicates the desired bit length of the result, which must have a value of 224, 256, 384, 512, or 0 (which is equivalent to 256). 
-    
+
     :param string: target string to be encrypted
-    :rtype: STRING    
+    :rtype: STRING
     
 If either argument is NULL or the hash length is not one of the permitted values, the return value is NULL. Otherwise, the function result is a hash value containing the desired number of bits.
 

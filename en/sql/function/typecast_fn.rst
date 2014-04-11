@@ -12,7 +12,7 @@ CAST
     :param cast_operand: Declares the value to cast to a different data type.
     :param cast_target: Specifies the type to cast to.
     :rtype: cast_target
-    
+
 Depending on the situation, data type can be automatically converted without suing the **CAST** operator. For details, see :ref:`implicit-type-conversion`.
 
 See :ref:`cast-string-to-datetime` regarding to convert the string of date/time type into date/time type.
@@ -59,22 +59,22 @@ The following table shows a summary of explicit type conversions (casts) using t
 
 * **Data Type Key**
 
-  *   **EN** : Exact numeric data type (**INTEGER**, **SMALLINT**, **BIGINT**, **NUMERIC**, **DECIMAL**)
-  *   **AN** : Approximate numeric data type (**FLOAT/REAL**, **DOUBLE**)
-  *   **VC** : Variable-length character string (**VARCHAR** (*n*))
-  *   **FC** : Fixed-length character string (**CHAR** (*n*))
-  *   **VB** : Variable-length bit string (**BIT VARYING** (*n*))
-  *   **FB** : Fixed-length bit string (**BIT** (*n*))
-  *   **ENUM** : **ENUM** type
-  *   **BLOB** : Binary data that is stored outside DB
-  *   **CLOB** : String data that is stored inside DB
-  *   **D** : **DATE**
-  *   **T** : **TIME**
-  *   **DT** : **DATETIME**
-  *   **UT** : **TIMESTAMP**
-  *   **S** : **SET**
-  *   **MS** : **MULTISET**
-  *   **SQ** : **LIST** (= **SEQUENCE**)
+  *   **EN**: Exact numeric data type (**INTEGER**, **SMALLINT**, **BIGINT**, **NUMERIC**, **DECIMAL**)
+  *   **AN**: Approximate numeric data type (**FLOAT/REAL**, **DOUBLE**)
+  *   **VC**: Variable-length character string (**VARCHAR** (*n*))
+  *   **FC**: Fixed-length character string (**CHAR** (*n*))
+  *   **VB**: Variable-length bit string (**BIT VARYING** (*n*))
+  *   **FB**: Fixed-length bit string (**BIT** (*n*))
+  *   **ENUM**: **ENUM** type
+  *   **BLOB**: Binary data that is stored outside DB
+  *   **CLOB**: String data that is stored inside DB
+  *   **D**: **DATE**
+  *   **T**: **TIME**
+  *   **DT**: **DATETIME**
+  *   **UT**: **TIMESTAMP**
+  *   **S**: **SET**
+  *   **MS**: **MULTISET**
+  *   **SQ**: **LIST** (= **SEQUENCE**)
 
 .. code-block:: sql
 
@@ -245,7 +245,7 @@ The following table shows a summary of explicit type conversions (casts) using t
 
 DATE_FORMAT
 ===========
-    
+
 .. function:: DATE_FORMAT (date, format)
 
     The **DATE_FORMAT** function converts the value of strings with **DATE** format ('*YYYY*-*MM*-*DD*' or '*MM*/*DD*/*YYYY*') or that of date/time data type (**DATE**, **TIMESTAMP**, **DATETIME**) to specified date/time format and then return the value with the **VARCHAR** data type. For the format parameter to assign, refer to :ref:`Date/Time Format 2 <datetime-format2>` table of the :func:`DATE_FORMAT`. The :ref:`Date/Time Format 2 <datetime-format2>` table is used in :func:`DATE_FORMAT`, :func:`TIME_FORMAT`, and :func:`STR_TO_DATE` functions.
@@ -331,7 +331,7 @@ In the following :ref:`Date/Time Format 2 <datetime-format2>` table, the month/d
 +------------------+-------------------------------------------------------------------------------------------------------------------+
 | %Y               | Year, four-digit number (0001, ... , 9999)                                                                        |
 +------------------+-------------------------------------------------------------------------------------------------------------------+
-| %y               | Year, two-digit number (00, 01, ... ,  99)                                                                        |
+| %y               | Year, two-digit number (00, 01, ... , 99)                                                                         |
 +------------------+-------------------------------------------------------------------------------------------------------------------+
 | %%               | Output the special character "%" as a string                                                                      |
 +------------------+-------------------------------------------------------------------------------------------------------------------+
@@ -808,7 +808,7 @@ The following example shows the query executed by setting the language and chars
      to_char(b, 'DD, DY , MON, YYYY')
     ======================
     '20, TUE , AUG, 2013'
-    
+
 .. code-block:: sql
 
     SELECT TO_CHAR(c, 'HH24:MI, DD, MONTH, YYYY') FROM datetime_tbl;
@@ -838,7 +838,7 @@ The following example shows the query executed by setting the language and chars
      to_char(timestamp '2009-10-04 22:23:00', 'Day Month yyyy')
     ======================
     'Sunday    October   2009'
-    
+
 The following example shows an additional language parameter given to the **TO_CHAR** function in the database created above. When the charset is ISO-8859-1, setting the language parameter of the **TO_CHAR** function to "tr_TR" or "ko_KR" is allowed, but the other languages are not allowed. To use all languages by setting the language parameter of **TO_CHAR**, the charset when creating DB should be UTF-8.
 
 .. code-block:: sql
@@ -891,7 +891,7 @@ The following example shows an additional language parameter given to the **TO_C
                to_char(timestamp '2009-10-04 22:23:00', 'Day Month yyyy', 'de_DE')
             ======================
               'Sonntag   Oktober 2009'
-              
+
     *   If the first argument is zerodate and the second argument has a literal like 'Month', 'Day', then  TO_CHAR function returns NULL.
     
         .. code-block:: sql
@@ -1272,7 +1272,7 @@ TO_NUMBER
     :param format: Specifies a format of return value to be converted as **NUMBER** type. See :ref:`Number Format <tochar-number-format>`. If it is omitted, NUMERIC(38,0) value is returned.
     :rtype: NUMERIC
 
-When the *format* argument is assigned, the string is interpreted according to the specified language. At this time, the language is specified by the **intl_number_lang** system parameter. If the value of **intl_number_lang** is not set, the language specified when creating DB is applied. 
+When the *format* argument is assigned, the string is interpreted according to the specified language. At this time, the language is specified by the **intl_number_lang** system parameter. If the value of **intl_number_lang** is not set, the language specified when creating DB is applied.
 
 For example, when the language is one of the European languages, such as "de_DE" and "fr_FR", "." is interpreted as the cipher identifier and "," as the decimal point symbol. When the format parameter specified does not correspond to the given string, an error is returned.
 
@@ -1329,7 +1329,7 @@ The following example shows command execution on the database by setting the val
 
     SET SYSTEM PARAMETERS 'intl_number_lang="de_DE"';
     SELECT TO_NUMBER('12.345,67','99.999,999');
-    
+
 ::
 
        to_number('12.345,67', '99.999,999')
@@ -1356,7 +1356,6 @@ For example, when a language is "de_DE" and *string* is "10:23:00 Nachm.", and *
 When the *format* argument is omitted, *string* is interpreted as the CUBRID default format(refer :ref:`cast-to-datetime-recommend`) and if it fails, *string* is interpreted as the language format (see the table :ref:`Default Output Format of Language <tochar-default-datetime-format>` in the :func:`TO_CHAR`) by **intl_date_lang**. If the value of **intl_date_lang** is not set, the language is applied by the language specified when creating DB.
 
 For example, when a language is "de_DE", the acceptable strings for **TIME** type are "HH:MI:SS AM", CUBRID default format and "HH24:MI:SS", "de_DE" default format.
-
 
 .. note:: The **CUBRID_DATE_LANG** environment used in earlier version of CUBRID 9.0 is no longer supported.
 
@@ -1393,7 +1392,7 @@ The following example shows execution of the database by setting the value of sy
 ::
 
      to_time('13:10:30', 'HH24:MI:SS')
-    =============================================
+    ==================================
       01:10:30 PM
      
 .. code-block:: sql
@@ -1446,7 +1445,6 @@ TO_TIMESTAMP
 When the *format* argument is specified, the *string* is interpreted according to the specified language. The language is set by *date_lang_string_literal* argument. If *date_lang_string_literal* argument is not set, the language is specified by the **intl_date_lang** system parameter; if the value of **intl_date_lang** is not set, the language specified when creating DB is applied. 
 
 For example, when a language is "de_DE" and *string* is "12/mai/2012 12:10:00 Nachm.", and *format* is "DD/MON/YYYY HH:MI:SS AM", it is interpreted as May 12th, 2012, 12:10:00 AM. When the *format* parameter specified does not correspond to the given string, an error is returned.
-
 
 When the *format* argument is omitted, *string* is interpreted as the CUBRID default format(refer :ref:`cast-to-datetime-recommend`) and if it fails, *string* is interpreted as the language format (see the table :ref:`Default Output Format of Language <tochar-default-datetime-format>` in the :func:`TO_CHAR`) by **intl_date_lang**. If the value of **intl_date_lang** is not set, the language is applied by the language specified when creating DB.
 

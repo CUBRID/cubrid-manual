@@ -97,14 +97,14 @@ Hierarchical Query Execution
 Hierarchical Query for Table Join
 ---------------------------------
 
-The table joins are evaluated first using the join conditions, if any. The conditions found in the **WHERE** clause are classified as join conditions or filtering conditions. All the conditions in the **FROM** clause are classified as join conditions. Only the join conditions are evaluated; the filtering conditions are kept for later evaluation. We recommended placing all join conditions in the **FROM** clause only so that conditions that are intended for joins are not mistakenly classified as filtering conditions.
+When target table is joined in **SELECT** statement, **WHERE** clause can include not only searching conditions but also joining conditions. At this time, CUBRID applies the joining conditions in **WHERE** clause at first, then conditions in **CONNECT BY** caluse; at last, the left searching conditions.
+
+When specifying joining conditions and searching conditions together in **WHERE** clause, joining conditions can be applied as searching conditions even if there was no intention; so the operating order can be different; therefore, we recommend that you specify the table joining conditions in **FROM** clause, not in **WHERE** conditions.
 
 Query Results
 -------------
 
-The resulting rows of the table joins are filtered according to the **START WITH** condition to obtain the root nodes for the hierarchy. If no **START WITH** condition is specified, then all the rows resulting from the table joins will be considered as root nodes.
-
-After the root nodes are obtained, CUBRID will select the child rows for the root nodes. These are all nodes from the table joins that respect the **CONNECT BY** condition. This step will be repeated for the child nodes to determine their child nodes and so on until no more child nodes can be added.
+The resulting rows of the table joins are filtered according to the **START WITH** condition to obtain the root nodes for the hierarchy. If no **START WITH** condition is specified, then all the rows resulting from the table joins will be considered as root nodes. After the root nodes are obtained, CUBRID will select the child rows for the root nodes. These are all nodes from the table joins that respect the **CONNECT BY** condition. This step will be repeated for the child nodes to determine their child nodes and so on until no more child nodes can be added.
 
 In addition, CUBRID evaluates the **CONNECT BY** clause first and all the rows of the resulting hierarchy tress by using the filtering condition in the **WHERE** clause.
 
@@ -144,7 +144,7 @@ The example illustrates how joins can be used in **CONNECT BY** queries. The joi
     7   Brown       Assistant   3
     
 Ordering Data with the Hierarchical Query
-=========================================
+-----------------------------------------
 
 The **ORDER SIBLINGS BY** clause will cause the ordering of the rows while preserving the hierarchy ordering so that the child nodes with the same parent will be stored according to the column list. ::
 
@@ -175,7 +175,7 @@ The result with hierarchical query shows parent and child nodes in a row accordi
     4            1  'Smith'                      1974            2
     3            1  'Jonas'                      1976            2
 
-The following example shows how to display information about seniors and subordinates in a company in the order of joining.?For the same level, the employee ID numbers are assigned in the order of joining. *id* indicates employee ID numbers (parent and child nodes) and *mgrid* indicates the employee ID numbers of their seniors.
+The following example shows how to display information about seniors and subordinates in a company in the order of joining. For the same level, the employee ID numbers are assigned in the order of joining. *id* indicates employee ID numbers (parent and child nodes) and *mgrid* indicates the employee ID numbers of their seniors.
 
 .. code-block:: sql
 
@@ -197,7 +197,7 @@ The following example shows how to display information about seniors and subordi
     5   2           Verma       2
     6   2           Foster      2
     7   6           Brown       3
-    
+
 Pseudo Columns for Hierarchical Query
 =====================================
 
@@ -219,7 +219,7 @@ The following example shows how to retrieve the **LEVEL** value to check level o
     START WITH mgrid IS NULL
     CONNECT BY PRIOR id=mgrid
     ORDER BY id;
-     
+
 ::
 
     id  mgrid       name        level
@@ -234,7 +234,7 @@ The following example shows how to add **LEVEL** conditions after the **CONNECT 
 .. code-block:: sql
 
     SELECT LEVEL FROM db_root CONNECT BY LEVEL <= 10;
-     
+
 ::
 
             level
@@ -575,6 +575,8 @@ The belows shows to output dates of March, 2013(201303) with a hierarchical quer
 Performance of Hierarchical Query
 =================================
 
-Although this form is shorter and clearer, please keep in mind that it has its limitations regarding speed. If the result of the query contains all the rows of the table, the **CONNECT BY** form might be slower as it has to do additional processing (such as cycle detection, pseudo-column bookkeeping and others). However, if the result of the query only contains a part of the table rows, the **CONNECT BY** form might be faster.
+Although this form is shorter and clearer, please keep in mind that it has its limitations regarding speed.
+
+If the result of the query contains all the rows of the table, the **CONNECT BY** form might be slower as it has to do additional processing (such as cycle detection, pseudo-column bookkeeping and others). However, if the result of the query only contains a part of the table rows, the **CONNECT BY** form might be faster.
 
 For example, if we have a table with 20,000 records and we want to retrieve a sub-tree of roughly 1,000 records, a **SELECT** statement with a **START WITH ... CONNECT BY** clause will run up to 30% faster than an equivalent **UNION ALL** with **SELECT** statements.

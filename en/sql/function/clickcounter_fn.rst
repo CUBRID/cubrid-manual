@@ -80,7 +80,7 @@ The following example shows how to increment the value of the 'read_count' colum
 .. code-block:: sql
 
     SELECT content, INCR(read_count) FROM board WHERE id = 1;
-    
+
 ::
 
       content                read_count

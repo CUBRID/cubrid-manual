@@ -21,8 +21,8 @@ If **pipes_as_concat** that is a parameter related to SQL statement is set to **
             character string
             NULL
 
-*   *concat_operand1* : Left string after concatenation. String or bit string can be specified.
-*   *concat_operand2* : Right string after concatenation. String or bit string can be specified.
+*   <*concat_operand1*>: Left string after concatenation. String or bit string can be specified.
+*   <*concat_operand2*>: Right string after concatenation. String or bit string can be specified.
 
 .. code-block:: sql
 
@@ -251,7 +251,7 @@ CHAR_LENGTH, CHARACTER_LENGTH, LENGTHB, LENGTH
 CHR
 ===
 
-.. function:: CHR (number_operand  [USING charset_name])
+.. function:: CHR (number_operand [USING charset_name])
 
     The **CHR** function returns a character that corresponds to the return value of the expression specified as an argument. When you input the code value within invalid ranges, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
 
@@ -268,7 +268,7 @@ CHR
        chr(68)|| chr(68-2)
     ======================
       'DB'
-            
+
 If you want to get a multibyte character with the **CHR** function, input a number with the valid range of the charset.
 
 .. code-block:: sql
@@ -741,7 +741,7 @@ LCASE, LOWER
 .. function:: LCASE (string)
 .. function:: LOWER (string)
 
-    The functions **LCASE** and **LOWER** are used interchangeably. They convert uppercase characters included in string to lowercase characters. Note that these functions may not work properly in character sets which are not supported by CUBRID. For details on the character sets supported by CUBRID, see :ref:`char-data-type`.
+    The functions **LCASE** and **LOWER** are used interchangeably. They convert uppercase characters included in string to lowercase characters.
 
     :param string: Specifies the string in which uppercase characters are to be converted to lowercase. If the value is **NULL**, **NULL** is returned.
     :rtype: STRING
@@ -776,29 +776,29 @@ LCASE, LOWER
     ======================
       'cubrid'
 
-Note that the **LOWER** function may not work properly by specified collation. For example, when you try to change character Ă used in Romanian as lower character, this function works as follows by collation.
+Note that the **LOWER** function may not work properly by specified collation. For example, when you try to change character ? used in Romanian as lower character, this function works as follows by collation.
 
-If collation is utf8_bin, Ă is not changed.
+If collation is utf8_bin, this character is not changed.
 
 .. code-block:: sql
     
     SET NAMES utf8 COLLATE utf8_bin;
-    SELECT LOWER('Ă');
-    
-       lower(_utf8'Ă')
-    ======================
-      'Ă'
+    SELECT LOWER('?');
 
-If collation is utf8_ro_RO, Ă can be changed.
+       lower(_utf8'?')
+    ======================
+      '?'
+
+If collation is utf8_ro_RO, '?' can be changed.
 
 .. code-block:: sql
 
     SET NAMES utf8 COLLATE utf8_ro_cs;
-    SELECT LOWER('Ă');
+    SELECT LOWER('?');
     
-       lower(_utf8'Ă' COLLATE utf8_ro_cs)
+       lower(_utf8'?' COLLATE utf8_ro_cs)
     ======================
-      'ă'
+      '?'
 
 For supporting collations in CUBRID, see :ref:`cubrid-all-collation`.
 
@@ -2011,28 +2011,28 @@ UCASE, UPPER
     ======================
       'CUBRID'
 
-Note that the **UPPER** function may not work properly by specified collation. For example, when you try to change character ă used in Romanian as upper character, this function works as follows by collation.
+Note that the **UPPER** function may not work properly by specified collation. For example, when you try to change character '?' used in Romanian as upper character, this function works as follows by collation.
 
-If collation is utf8_bin, ă is not changed.
+If collation is utf8_bin, it is not changed.
 
 .. code-block:: sql
     
     SET NAMES utf8 COLLATE utf8_bin;
-    SELECT UPPER('ă');
+    SELECT UPPER('?');
     
-       upper(_utf8'ă')
+       upper(_utf8'?')
     ======================
-      'ă'
+      '?'
 
-If collation is utf8_ro_RO, ă can be changed.
+If collation is utf8_ro_RO, '?' can be changed.
 
 .. code-block:: sql
 
     SET NAMES utf8 COLLATE utf8_ro_cs;
-    SELECT UPPER('ă');
+    SELECT UPPER('?');
     
-       upper(_utf8'ă' COLLATE utf8_ro_cs)
+       upper(_utf8'?' COLLATE utf8_ro_cs)
     ======================
-      'Ă'
-
-For supporting collations in CUBRID, see :ref:`cubrid-all-collation`.
+      '?'
+   
+CUBRID가 지원하는 콜레이션에 관한 상세한 설명은 :ref:`cubrid-all-collation`\ 을 참고한다.

@@ -69,6 +69,8 @@ UPDATE
                 6  'eee'                 '000-0000'
                 7  NULL                  '777-7777'
      
+.. code-block:: sql
+
     -- using triggers, that the order in which the rows are updated is modified by the ORDER BY clause.
      
     CREATE TABLE t (i INT,d INT);

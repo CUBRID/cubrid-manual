@@ -132,7 +132,7 @@ Java 소스 작성 및 컴파일
 
 컴파일된 Java 클래스를 CUBRID로 로딩한다. ::
 
-    loadjava demodb SpCubrid.class
+    % loadjava demodb SpCubrid.class
 
 로딩한 Java 클래스 등록
 -----------------------
@@ -144,6 +144,8 @@ Java 소스 작성 및 컴파일
     CREATE FUNCTION hello() RETURN STRING 
     AS LANGUAGE JAVA 
     NAME 'SpCubrid.HelloCubrid() return java.lang.String';
+
+.. CREATE OR REPLACE FUNCTION is allowed from 10.0: CUBRIDSUS-6542
 
 또는 **OR REPLACE** 구문을 사용하여 현재의 저장 함수/프로시저를 대체 혹은 새로 생성하는 문장을 작성할 수 있다.
 
@@ -161,7 +163,7 @@ Java 저장 함수/프로시저 호출
 .. code-block:: sql
 
     CALL hello() INTO :Hello;
-    
+
 ::
 
       Result
@@ -274,6 +276,7 @@ loadjava 유틸리티
 *   *database-name*: Java 파일을 로드하려고 하는 데이터베이스 이름
 *   *java-class-file*: 로드하려는 Java 클래스 파일 이름 또는 jar 파일 이름
 *   [*option*]
+
     *   **-y**: 이름이 같은 클래스 파일이 존재하면 자동으로 덮어쓰기 한다. 기본값은 **no** 이다. 만약 **-y** 옵션을 명시하지 않고 로드할 때 이름이 같은 클래스 파일이 존재하면 덮어쓰기를 할 것인지 묻는다.
 
 로딩한 Java 클래스 등록
@@ -288,6 +291,8 @@ CUBRID에서 Java 저장 함수/프로시저를 사용하기 위해서는 Call S
 
 리턴 값이 있으면 함수, 없으면 프로시저로 구분한다.
 
+.. CREATE OR REPLACE FUNCTION is allowed from 10.0: CUBRIDSUS-6542
+
 ::
 
     CREATE [OR REPLACE] FUNCTION function_name[(param[, param]...)] RETURN sql_type
@@ -300,7 +305,7 @@ CUBRID에서 Java 저장 함수/프로시저를 사용하기 위해서는 Call S
 
     parameter_name [IN|OUT|IN OUT|INOUT] sql_type
        (default IN)
-   
+
 Java 저장 함수/프로시저의 인자를 **OUT** 으로 설정한 경우 길이가 1인 1차원 배열로 전달된다. 그러므로 Java 메서드는 배열의 첫번째 공간에 전달할 값을 저장해야 한다.
 
 .. code-block:: sql
@@ -428,7 +433,7 @@ CUBRID에서는 Java 저장 함수/프로시저를 같은 **CALL** 문을 이용
     CALL deposit();
     
 ::
-    
+
     ERROR: Stored procedure/function 'deposit' does not exist.
 
 .. code-block:: sql
@@ -591,7 +596,7 @@ Java 저장 함수/프로시저의 리턴 값과 IN/OUT의 데이터 타입에 �
 
     CREATE FUNCTION typestring() RETURN CHAR(5) AS LANGUAGE JAVA
     NAME 'JavaSP1.typestring() return java.lang.String';
-   
+
     CALL typestring();
     
 ::
@@ -599,7 +604,7 @@ Java 저장 함수/프로시저의 리턴 값과 IN/OUT의 데이터 타입에 �
       Result
     ======================
       ' 1234567890'
-  
+
 Java 저장 프로시저에서의 java.sql.ResultSet 반환
 ------------------------------------------------
 

@@ -2,12 +2,9 @@
 Comment
 *******
 
-
 There are 3 types of comments. One is a SQL-style which starts with '--', the other is C++ style starts with '//'. Both regards the entire line starts with the comment symbols is a comment line. The C style starts with '/\*' and ends with '\*/'
 
 The following are examples of comments.
-
-**Example**
 
 * How to use -- ::
 

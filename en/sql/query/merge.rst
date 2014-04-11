@@ -50,7 +50,7 @@ The **MERGE** statement is used to select rows from one or more sources and to u
     *   **USE_INSERT_IDX** (<*insert_index_list*>): Index hint used in **INSERT** clause of **MERGE** statement. Index names are listed on the *insert_index_list* when **INSERT** clause is run. This hint is applied to <*join_condition*>.
 
 To execute the **MERGE** statement, the **SELECT** authorization for the source table should be granted. When the **UPDATE** clause is included in the target table, the **UPDATE** authorization should be granted. When the **DELETE** clause is included in the target table, the **DELETE** should be granted. When the **INSERT** clause is included in the target table, the **INSERT** should be granted. 
-    
+
 The following example shows how to merge the value of *source_table* to *target_table*.
 
 .. code-block:: sql
@@ -96,7 +96,7 @@ The following example shows how to use the **MERGE** statement to arrange the re
 .. code-block:: sql
 
     CREATE TABLE bonus (std_id INT, addscore INT);
-    CREATE INDEX i_bonus_std_id on bonus (std_id);
+    CREATE INDEX i_bonus_std_id ON bonus (std_id);
      
     INSERT INTO bonus VALUES (1,10);
     INSERT INTO bonus VALUES (2,10);
@@ -136,7 +136,7 @@ The following example shows how to use the **MERGE** statement to arrange the re
     INSERT (t.std_id, t.addscore) VALUES (s.std_id, 10 + s.score * 0.1) WHERE s.score <= 30;
      
     SELECT * FROM bonus ORDER BY 1;
-    
+
 ::
     
     std_id     addscore
@@ -174,4 +174,5 @@ The following shows how to use index hints in **MERGE** statement.
     MERGE /*+ RECOMPILE USE_UPDATE_IDX(i_s_ij) USE_INSERT_IDX(i_t_ij, i_t_i) */
     INTO target t USING source s ON t.i=s.i 
     WHEN MATCHED THEN UPDATE SET t.j=s.j WHERE s.i <> 1
-    WHEN NOT MATCHED THEN INSERT VALUES (i,j);      
+    WHEN NOT MATCHED THEN INSERT VALUES (i,j);
+     

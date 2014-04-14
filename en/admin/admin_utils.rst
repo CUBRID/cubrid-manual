@@ -739,13 +739,13 @@ The following shows [options] available with the **cubrid installdb** utility.
 
 .. option::-F, --file-path=PATH
 
-    This option registers the directory path of a database volume to **databases.txt** by using the **-F** option. If this option is not specified, the path of a current directory is registered as default. ::
+    This option registers the absolute directory path of a database volume to **databases.txt** by using the **-F** option. If this option is not specified, the path of a current directory is registered as default. ::
 
         cubrid installdb -F /home/cubrid/CUBRID/databases/testdb testdb
 
 .. option:: -L, --log-path=PATH
 
-    This option registers the directory path of a database log volume to **databases.txt** by using the **-L** option. If this option is not specified, the directory path of a volume is registered. ::
+    This option registers the absolute directory path of a database log volume to **databases.txt** by using the **-L** option. If this option is not specified, the directory path of a volume is registered. ::
 
         cubrid installdb -L /home/cubrid/CUBRID/databases/logs/testdb testdb
 
@@ -833,7 +833,7 @@ The following shows [options] available with the **cubrid spacedb** utility.
 
     This option aggregates total_pages, used_pages and free_pages by DATA, INDEX, GENERIC, TEMP and TEMP TEMP, and outputs them. ::
 
-        $ cubrid spacedb –s testdb
+        $ cubrid spacedb -s testdb
 
         Summarized space description for database 'testdb' with pagesize 16.0K. (log pagesize: 16.0K)
 

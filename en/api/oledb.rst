@@ -49,7 +49,7 @@ Using Data Link Properties Dialog Box
 
 To access this dialog box in Visual Studio .NET, select Connect to Database from the Tools menu or click the Connect to Database icon in Server Explorer. 
 
-*   you must install Visual Studio first, click “Connect to Database”
+*   you must install Visual Studio first, click “Connect to Database"
 
     .. image:: /images/oledb_1_connect.jpg
 

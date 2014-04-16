@@ -880,7 +880,7 @@ The following [options] are available with the **cubrid broker status** utility.
 
 .. option:: -b
 
-    Displays the status information of a broker but does not display information on broker application server. the name of a broker is displayed until 20 characters; if the length is over 20, by adding "..." after the name.
+    Displays the status information of a broker but does not display information on broker application server.
 
 .. option:: -q
 
@@ -955,7 +955,7 @@ If you do not specify options or arguments, the status of all brokers is display
 
 .. note:: 
 
-    ID column which is displayed when checking the SHARD status shows the composition of " (serial number of proxy) – (serial number of shard DB) – (serial number of CAS accessing shard DB)"
+    ID column which is displayed when checking the SHARD status shows the composition of " (serial number of proxy) - (serial number of shard DB) - (serial number of CAS accessing shard DB)"
 
 ::
 

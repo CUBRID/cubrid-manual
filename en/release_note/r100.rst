@@ -520,7 +520,7 @@ If you don't start the command prompt window with administrative privileges and 
 The procedures for starting the command prompt window as an administrator in Windows Vista and higher are as follows:
 
 * Right-click [Start > All Programs > Accessories > Command Prompt].
-* When [Execute as an administrator (A)] is selected, a dialog box to verify the privilege escalation is activated. Click “YES” to start with administrative privileges.
+* When [Execute as an administrator (A)] is selected, a dialog box to verify the privilege escalation is activated. Click “YES" to start with administrative privileges.
     
 A manager server process-related error occurs in the execution of the CUBRID source after its build(CUBRIDSUS-3553)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

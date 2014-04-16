@@ -530,8 +530,8 @@ CUBRID PHP는 트랜잭션과 자동 커밋 모드를 지원한다. 자동 커�
     if($req) {
         cubrid_move_cursor($req, 20, CUBRID_CURSOR_CURRENT)
         while ($row = cubrid_fetch($req, CUBRID_ASSOC)) {
-            echo $row["host_year"].” “;
-            echo $row["host_city"].”\n”;
+            echo $row["host_year"]." ";
+            echo $row["host_city"]."\n";
         }
     }
 

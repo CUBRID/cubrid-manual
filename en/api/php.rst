@@ -215,7 +215,7 @@ In this section, we will introduce the way of building CUBRID PHP driver for Lin
     
         cubrid-php> /usr/bin/phpize
     
-#.  Configure the project. It is recommended to execute **./configure –h** so that you can check the configuration options (we assume that Apache 2 has been installed in **/usr/local**). ::
+#.  Configure the project. It is recommended to execute **./configure -h** so that you can check the configuration options (we assume that Apache 2 has been installed in **/usr/local**). ::
     
         cubrid-php>./configure --with-cubrid --with-php-config=/usr/local/bin/php-config
     
@@ -535,8 +535,8 @@ The `cubrid_move_cursor <http://www.php.net/manual/en/function.cubrid-move-curso
     if($req) {
         cubrid_move_cursor($req, 20, CUBRID_CURSOR_CURRENT)
         while ($row = cubrid_fetch($req, CUBRID_ASSOC)) {
-            echo $row["host_year"].” “;
-            echo $row["host_city"].”\n”;
+            echo $row["host_year"]." ";
+            echo $row["host_city"]."\n";
         }
     }
 

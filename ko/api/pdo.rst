@@ -352,7 +352,7 @@ UPDATE 실행
     M - Man
     B - Bronze
     S - Silver
-    G – Gold
+    G - Gold
 
 prepare와 bind
 --------------

@@ -154,7 +154,7 @@ The below is an example of building the CUBRID source.
 ::
 
     ./autogen.sh
-    ./configure –prefix=$CUBRID --enable-systemtap --enable-64bit
+    ./configure -prefix=$CUBRID --enable-systemtap --enable-64bit
     make
     make install
 

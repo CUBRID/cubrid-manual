@@ -154,7 +154,7 @@ CUBRID 소스를 빌드하여 SystemTap을 사용하려면, "./configure"를 실
 ::
 
     ./autogen.sh
-    ./configure –prefix=$CUBRID --enable-systemtap --enable-64bit
+    ./configure -prefix=$CUBRID --enable-systemtap --enable-64bit
     make
     make install
 

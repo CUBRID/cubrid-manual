@@ -256,7 +256,7 @@ The following table shows options available with the **cubrid restoredb** utilit
 
 .. option:: --list
 
-    This option displays information on backup files of a database; restoration procedure is not performed. This option is available even if the database is working, from CUBRID 9.3. 
+    This option displays information on backup files of a database; restoration procedure is not performed. This option is available even if the database is working, from CUBRID 9.3.
     
     ::
 
@@ -438,7 +438,7 @@ Suppose that *demodb* is backed up in the /home/cubrid/db/demodb directory on se
     Unlike a general scenario where a backup and restore are performed on the same server, in a scenario where backup files are restored using a different server, you need to add the location information on database restore in the database location file (**databases.txt**) on server *B*. In the diagram above, it is supposed that *demodb* is restored in the /home/cubrid/data/demodb directory on server *B* (hostname: pmlinux); edit the location information file accordingly and create the directory on server *B*.
 
     Put the database location information in one single line. Separate each item with a space. The line should be written in [database name]. [data volume path] [host name] [log volume path] format; that is, write the location information of *demodb* as follows: ::
-    
+
         demodb /home/cubrid/data/demodb pmlinux /home/cubrid/data/demodb
 
 #.  Transferring backup/log files to server B

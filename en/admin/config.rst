@@ -86,7 +86,7 @@ CUBRID consists of the database server, the broker and the CUBRID Manager. The n
     You can change the parameters that are capable of changing dynamically the setting value through the **SET SYSTEM PARAMETERS** statement or a session command of the CSQL Interpreter, **;set** while running the DB. If you are a DBA, you can change parameters regardless of the applied classification. However, if you are not a DBA, you can only change "client" or "client/server" parameters.
 
     On the below table, if "Applied" is "server parameter", that parameter's applied scope is global. If  "Applied" is "client parameter" or "client/server parameter",  that parameter's applied scope is session.
-  
+
     *   If "Dynamic Change" is "available" and "Applied" is "server parameter", that parameter's changed value is applied to DB server. Then applications use the changed value of the parameter until the DB server is restarted.
  
     *   If "Dynamic Change" is "available" and "Applied" is "client parameter" or "client/server parameter", that parameter's changed value is applied only to that DB session. In other words, the changed value is only applied to the applications which requested to change that value. For example, if **block_ddl_statement** parameter's value is changed into **no**, then only the application who requested to change cannot use DDL statements.
@@ -282,11 +282,13 @@ CUBRID consists of the database server, the broker and the CUBRID Manager. The n
 
 .. _lpg:
     
-*   log_page_size: A log volume page size specified by **--log-page-size** option when you are :ref:`creating database<creating-database>`. Default: 16KB. log page related parameter's value is rounded off by page unit. For example, the value of checkpoint_every_size is divided by 16KB and its decimal point is dropped, then it is multiplied by 16KB.
+*   log_page_size: A log volume page size specified by **--log-page-size** option when you are :ref:`creating database<creating-database>`. Default: 16KB. log page related parameter's value is rounded off by page unit. 
+    For example, the value of checkpoint_every_size is divided by 16KB and its decimal point is dropped, then it is multiplied by 16KB.
 
 .. _dpg:
 
-*   log_page_size: A DB volume page size specified by **--db-page-size** option when you are :ref:`creating database<creating-database>`. Default: 16KB. DB page related parameter's value is rounded off by page unit. For example, the value of data_buffer_size is divided by 16KB and its decimal point is dropped, then it is multiplied by 16KB.
+*   log_page_size: A DB volume page size specified by **--db-page-size** option when you are :ref:`creating database<creating-database>`. Default: 16KB. DB page related parameter's value is rounded off by page unit. 
+    For example, the value of data_buffer_size is divided by 16KB and its decimal point is dropped, then it is multiplied by 16KB.
 
 **Section by Parameter**
 
@@ -516,7 +518,7 @@ The following are parameters related to the memory used by the database server o
 **sort_buffer_size**
 
     **sort_buffer_size** is a parameter to configure the size of buffer to be used when a query is processing sorting. The server assigns one sort buffer for each client's sorting-request, and releases the assigned buffer memory when sorting is complete. 
-    
+
     You can set a unit as B, K, M, G or T, which stand for bytes, kilobytes (KB), megabytes (MB), gigabytes (GB), and terabytes (TB) respectively. If you omit the unit, bytes will be applied. The default value is 128 * :ref:`db_page_size <dpg>` (**2M** when db_page_size is 16K), and the minimum value is 1 * :ref:`db_page_size <dpg>` (**16K** when db_page_size is 16K).
     
 **temp_file_memory_size_in_pages**
@@ -710,7 +712,7 @@ The following are parameters related to processing error messages recorded by CU
 
         call_stack_dump_on_error= no
         call_stack_dump_activation_list=-115,-116
-    
+
     The following example shows how to make error numbers -115, -116 and "DEFAULT" error numbers, perform call-stack dump. ::
 
         call_stack_dump_on_error= no
@@ -719,7 +721,7 @@ The following are parameters related to processing error messages recorded by CU
 **call_stack_dump_deactivation_list**
 
     **call_stack_dump_deactivation_list** is a parameter to configure a certain error number for which a call stack is not to be dumped when you configure that a call stack will be dumped for any errors. Therefore, the **call_stack_dump_deactivation_list** parameter is effective only when **call_stack_dump_on_error** is set to **yes**.
-    
+
     The following example shows how to configure the parameter so that call stacks will be dumped for any errors, except the ones whose numbers are -115 and -116. ::
 
         call_stack_dump_on_error= yes
@@ -735,7 +737,7 @@ The following are parameters related to processing error messages recorded by CU
 
 **error_log_level**
 
-    **error_log_level** is a server parameter to configure an error message to be stored based on severity. There are five different levels which ranges from **NOTIFICATION** (lowest level), to **FATAL** (highest level). The inclusion relation in messages is **FATAL** ⊂ **ERROR** ⊂ **SYNTAX** ⊂ **WARNING** ⊂ **NOTIFICATION**\ . The default is **SYNTAX**. If severity of error is **SYNTAX**, error messages with **SYNTAX**, **ERROR**, and FATAL levels are stored in the log file.
+    **error_log_level** is a server parameter to configure an error message to be stored based on severity. There are five different levels which ranges from **NOTIFICATION** (lowest level), to **FATAL** (highest level). The inclusion relation in messages is **FATAL** < **ERROR** < **SYNTAX** < **WARNING** < **NOTIFICATION**. The default is **SYNTAX**. If severity of error is **SYNTAX**, error messages with **SYNTAX**, **ERROR**, and FATAL levels are stored in the log file.
 
 **error_log_warning**
 
@@ -945,7 +947,7 @@ The example of written information is as below.
 
 **sync_on_flush_size**
 
-    **sync_on_flush_size** is a parameter to configure the interval in pages between after data and log pages are flushed from buffer and before they are synchronized with FILE I/O of operating system. The default value is 200 * :ref:`db_page_size <dpg>` (**3.125M** when db_page_size is 16K)이다. That is, the CUBRID Server performs synchronization with the FILE I/O of the operating system whenever 200 pages have been flushed. This is also a parameter related to I/O load.
+    **sync_on_flush_size** is a parameter to configure the interval in pages between after data and log pages are flushed from buffer and before they are synchronized with FILE I/O of operating system. The default value is 200 * :ref:`db_page_size <dpg>` (**3.125M** when db_page_size is 16K). That is, the CUBRID Server performs synchronization with the FILE I/O of the operating system whenever 200 pages have been flushed. This is also a parameter related to I/O load.
 
 .. _transaction-parameters:
 

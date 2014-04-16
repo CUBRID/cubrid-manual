@@ -353,7 +353,7 @@ NOTIFICATION 메시지를 출력하려면 cubrid.conf의 error_log_level 파라�
     ..... 
     Time: 06/14/13 21:29:05.170 - NOTIFICATION *** file ../../src/transaction/log_recovery.c, line 843 CODE = -1129 Tran = -1, EID = 4 
     Log recovery is finished.
-    
+
 복구 정책과 절차
 ----------------
 
@@ -448,7 +448,7 @@ NOTIFICATION 메시지를 출력하려면 cubrid.conf의 error_log_level 파라�
 #.  B 서버에서 복구
 
     *B* 서버로 전송한 백업 파일, 백업 정보 파일, 활성 로그 파일, 보관 로그 파일이 있는 디렉터리에서 **cubrid restoredb** 유틸리티를 호출하여 데이터베이스 복구 작업을 수행한다. **-u** 옵션에 의해 **databases.txt** 에 지정된 디렉터리 경로에 *demodb* 가 복구된다. ::
-    
+
         cubrid restoredb -u demodb
 
     만약, 다른 위치에서 **cubrid restoredb** 유틸리티를 호출하려면, 다음과 같이 **-B** 옵션을 이용하여 백업 파일이 위치하는 디렉터리 경로를 지정해야 한다. ::

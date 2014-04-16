@@ -9,24 +9,24 @@ You can update the column value of a record stored in the target table or view t
 ::
 
     <UPDATE single table>
-    UPDATE table_name|view_name SET column_name = {expr | DEFAULT} [, column_name = {expr | DEFAULT} ...]
-        [WHERE search_condition]
-        [ORDER BY {col_name | expr}]
+    UPDATE table_name|view_name SET column_name = {<expr> | DEFAULT} [, column_name = {<expr> | DEFAULT} ...]
+        [WHERE <search_condition>]
+        [ORDER BY {col_name | <expr>}]
         [LIMIT row_count]
      
     <UPDATE multiple tables>
-    UPDATE <table_specifications> SET column_name = {expr | DEFAULT} [, column_name = {expr | DEFAULT} ...]
-        [WHERE search_condition]
+    UPDATE <table_specifications> SET column_name = {<expr> | DEFAULT} [, column_name = {<expr> | DEFAULT} ...]
+        [WHERE <search_condition>]
 
 *   <*table_specifications*>: You can specify the statement such as **FROM** clause of the **SELECT** statement and one or more tables can be specified.
 
 *   *column_name*: Specifies the column name to be updated. Columns for one or more tables can be specified.
 
-*   *expr* | **DEFAULT**: Specifies a new value for the column and expression or **DEFAULT** keyword can be specified as a value. The **SELECT** statement returning result record also can be specified.
+*   <*expr*> | **DEFAULT**: Specifies a new value for the column and expression or **DEFAULT** keyword can be specified as a value. The **SELECT** statement returning result record also can be specified.
 
-*   *search_condition*: Update only data that meets the *search_condition* if conditions are specified in the :ref:`where-clause`.
+*   <*search_condition*>: Update only data that meets the <*search_condition*> if conditions are specified in the :ref:`where-clause`.
 
-*   *col_name* | *expr*: Specifies base column to be updated.
+*   *col_name* | <*expr*>: Specifies base column to be updated.
 
 *   *row_count*: Specifies the number of records to be updated after the :ref:`limit-clause`. An integer greater than 0 can be specified.
 

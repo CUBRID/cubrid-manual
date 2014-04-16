@@ -430,7 +430,7 @@ DATE_SUB, SUBDATE
 .. function:: SUBDATE(date, days)
 
     **DATE_SUB** ()와 **SUBDATE** ()는 동일하며, 특정 **DATE** 값에 대해 뺄셈 또는 덧셈을 실행한다. 리턴 값은 **DATE** 타입 또는 **DATETIME** 타입이다. 연산 결과의 날짜가 해당 월의 마지막 날짜를 초과하면, 해당 월의 말일을 적용하여 유효한 **DATE** 값을 반환한다.
-    
+
     입력 인자의 날짜와 시간 값이 모두 0이면 시스템 파라미터 **return_null_on_function_errors** 의 값에 따라 다른 값을 반환한다. **return_null_on_function_errors** 가 yes이면 **NULL** 을 반환하고 no이면 에러를 반환하며, 기본값은 **no** 이다.
 
     계산 결과가 '0000-00-00 00:00:00'과 '0001-01-01 00:00:00' 사이이면, 날짜와 시간 값이 모두 0인 **DATE** 또는 **DATETIME** 타입의 값을 반환한다. 그러나 JDBC 프로그램에서는 연결 URL 속성인 zeroDateTimeBehavior의 설정에 따라 동작이 달라진다("API 레퍼런스 > JDBC API > JDBC 프로그래밍 > 연결 설정" 참고).
@@ -479,8 +479,8 @@ DATE_SUB, SUBDATE
     ==============================
      '12:00:00.000 AM 00/00/0000'
 
-DAY,DAYOFMONTH
-==============
+DAY, DAYOFMONTH
+===============
 
 .. function:: DAY (date)
 .. function:: DAYOFMONTH (date)
@@ -1642,7 +1642,7 @@ TRUNC
     
 .. code-block:: sql
 
-   // It returns the date of Sunday of the week which includes date'2012-12-26'
+    // It returns the date of Sunday of the week which includes date'2012-12-26'
     SELECT TRUNC(datetime'2012-12-26 12:10:10', 'day');
 
 ::

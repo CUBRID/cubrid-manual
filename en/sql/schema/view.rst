@@ -89,7 +89,7 @@ A virtual table is updatable if it satisfies the following conditions:
 *   A **JOIN** syntax can be included.
 
     .. note:: In versions lower than CUBRID 10.0, you cannot update a view which is created with a **JOIN** syntax.
-    
+
 *   The **DISTINCT** or **UNIQUE** statement should not be included.
 *   The **GROUP BY... HAVING** statement should not be included.
 *   Aggregate functions such as **SUM** or **AVG** should not be included.

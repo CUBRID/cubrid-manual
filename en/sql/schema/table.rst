@@ -80,7 +80,7 @@ To create a table, use the **CREATE TABLE** statement.
 *   *column_constraint*: Specifies the constraint of the column. Available constraints are **NOT NULL**, **UNIQUE**, **PRIMARY KEY** and **FOREIGN KEY** (see :ref:`constraint-definition` For details).
 *   <default_or_shared_or_ai>: only one of DEFAULT, SHARED, AUTO_INCREMENT can be used.
     When AUTO_INCREMENT is specified, "(seed, increment)" and "AUTO_INCREMENT = initial_value" cannot be defined at the same time.
-    
+
 .. code-block:: sql
 
     CREATE TABLE olympic2 (

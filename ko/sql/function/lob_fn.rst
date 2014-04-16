@@ -107,7 +107,7 @@ CLOB_TO_CHAR
 
 .. function:: CLOB_TO_CHAR ( clob_type_column [USING charset] )
 
-    **CLOB** 타입을 **VARCHAR** 타입으로 변환한다.           
+    **CLOB** 타입을 **VARCHAR** 타입으로 변환한다.
 
     :param clob_type_column: 변환 대상 칼럼
     :param charset: 변환할 문자열의 문자셋. utf8, euckr, iso88591이 올 수 있다.

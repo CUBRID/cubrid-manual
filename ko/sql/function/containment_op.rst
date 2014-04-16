@@ -6,30 +6,30 @@
 
 ::
 
-    collection_operand  containment_operator  collection_operand
+    <collection_operand> <containment_operator> <collection_operand>
      
-    collection_operand:
-    • set
-    • multiset
-    • sequence(또는 list)
-    • subquery
-    • NULL
+        <collection_operand> ::=
+            <set> |
+            <multiset> |
+            <sequence> (또는 <list>) |
+            <subquery> |
+            NULL
      
-    containment_operator:
-    • SETEQ
-    • SETNEQ
-    • SUPERSET
-    • SUBSET
-    • SUPERSETEQ
-    • SUBSETEQ
+        <containment_operator> ::=
+            SETEQ |
+            SETNEQ |
+            SUPERSET |
+            SUBSET |
+            SUPERSETEQ |
+            SUBSETEQ
 
-*   *collection_operand* : 피연산자로 지정될 수 있는 수식은 하나의 집합 값 속성(SET-valued attribute)이거나, 집합 연산자(SET operator)를 지닌 산술 수식(arithmetic expression)이거나, 중괄호로 둘러싸인 집합 값이다. 이때, 중괄호로 둘러싸인 집합 값은 타입을 명시하지 않을 경우 기본적으로 **LIST** 타입으로 처리한다.
+*   <*collection_operand*>: 피연산자로 지정될 수 있는 수식은 하나의 집합 값 속성(SET-valued attribute)이거나, 집합 연산자(SET operator)를 지닌 산술 수식(arithmetic expression)이거나, 중괄호로 둘러싸인 집합 값이다. 이때, 중괄호로 둘러싸인 집합 값은 타입을 명시하지 않을 경우 기본적으로 **LIST** 타입으로 처리한다.
 
     피연산자로 부질의가 지정될 수 있으며, 컬렉션 타입이 아닌 칼럼을 조회하는 경우에는 **SET** (*subquery*)과 같이 해당 부질의에 컬렉션 타입 키워드를 붙여야 한다. 부질의에서 조회하는 칼럼은 하나의 집합만 결과로 반환해야 나머지 피연산자 집합과 비교할 수 있다.
 
     컬렉션 원소의 타입이 오브젝트이면, 오브젝트의 내용이 아닌 객체 식별자(OID, object identifier)에 대해 비교한다. 예를 들어, 같은 속성 값을 갖고 OID가 다른 두 오브젝트는 서로 다른 것으로 간주한다.
 
-    *   **NULL** : 비교 대상이 되는 피연산자 중 어느 하나가 **NULL** 인 경우, **NULL** 이 반환된다.
+    *   **NULL**: 비교 대상이 되는 피연산자 중 어느 하나가 **NULL** 인 경우, **NULL** 이 반환된다.
 
 다음은 CUBRID가 지원하는 포함 연산자에 관한 설명 및 리턴 값을 나타낸 표이다.
 
@@ -338,7 +338,6 @@ SUPERSETEQ
 **SUPERSETEQ** 연산자는 첫 번째 피연산자가 두 번째 피연산자의 모든 원소를 포함하거나 서로 동일한 경우, 즉 두 번째 피연산자가 첫 번째 피연산자의 부분집합인 경우 **TRUE** (1)를 반환한다. 단, 피연산자가 모두 **LIST** 타입인 경우에는 **SUPERSETEQ** 연산을 지원하지 않는다. ::
 
     collection_operand SUPERSETEQ collection_operand
-
 
 .. code-block:: sql
 

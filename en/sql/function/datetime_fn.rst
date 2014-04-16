@@ -1167,7 +1167,7 @@ ROUND
     :param date: The value of **DATE**, **TIMESTAMP** or **DATETIME**
     :param fmt: Specifies the format for the truncating unit. If omitted, "dd" is default.
     :rtype: DATE
-    
+
     The format and its unit and the return value are as follows:
     
     +-------------------+----------+-----------------------------------------------------------------------+
@@ -1643,8 +1643,8 @@ TRUNC
     
 .. code-block:: sql
 
-   // It returns the date of Sunday of the week which includes date'2012-12-26'
-   SELECT TRUNC(datetime'2012-12-26 12:10:10', 'day');
+    // It returns the date of Sunday of the week which includes date'2012-12-26'
+    SELECT TRUNC(datetime'2012-12-26 12:10:10', 'day');
 
 ::
 
@@ -1658,7 +1658,7 @@ UNIX_TIMESTAMP
 .. function:: UNIX_TIMESTAMP ( [date] )
 
     The argument of the **UNIX_TIMESTAMP** function can be omitted. If it is omitted, the function returns the interval between '1970-01-01 00:00:00' UTC and the current system date/time in seconds as **INTEGER** type. If the date argument is specified, the function returns the interval between '1970-01-01 00:00:00' UTC and the specified date/time in seconds. 
-    
+
     0 is not allowed in the argument value corresponding to year, month, and day; however, if 0 is inputted in every argument value corresponding to date and time, 0 is returned as an exception.
 
     :param date: **DATE** type, **TIMESTAMP** type, **DATE** format string ('*YYYY*-*MM*-*DD*' or '*MM*/*DD*/*YYYY*'), **TIMESTAMP** format string ('*YYYY*-*MM*-*DD* *HH*:*MI*:*SS*', '*HH*:*MI*:*SS* *MM*/*DD*/*YYYY*') or '*YYYYMMDD*' format string can be specified.

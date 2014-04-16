@@ -4,17 +4,23 @@ PREPARED STATEMENT
 
 In general, the prepared statement is executed through the interface functions of JDBC, PHP, or ODBC; it can also be executed in the SQL level. The following SQL statements are provided for execution of prepared statement.
 
-* Prepare the SQL statement to execute. ::
+*   Prepare the SQL statement to execute. 
 
-    PREPARE stmt_name FROM preparable_stmt
+    ::
 
-* Execute the prepared statement. ::
+        PREPARE stmt_name FROM preparable_stmt
 
-    EXECUTE stmt_name [USING value [, value] ...]
+*   Execute the prepared statement. 
 
-* Drop the prepared statement. ::
+    ::
 
-    {DEALLOCATE | DROP} PREPARE stmt_name
+        EXECUTE stmt_name [USING value [, value] ...]
+
+*   Drop the prepared statement. 
+
+    ::
+
+        {DEALLOCATE | DROP} PREPARE stmt_name
 
 .. note::
 

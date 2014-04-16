@@ -9,16 +9,16 @@ To compute union, difference or intersection of collections types (**SET**, **MU
 
 ::
 
-    value_expression  set_arithmetic_operator value_expression
+    <value_expression>  <set_arithmetic_operator> <value_expression>
      
-    value_expression :
-    • collection value
-    • NULL
+        <value_expression> ::=
+            collection_value |
+            NULL
      
-    set_arithmetic_operator :
-    • + (union)
-    • - (difference)
-    • * (intersection)
+        <set_arithmetic_operator> ::=
+            + (union) |
+            - (difference) |
+            * (intersection)
 
 The following table shows a result data type by the operator if collection type is an operand.
 

@@ -9,16 +9,16 @@ SET, MULTISET, LIST
 
 ::
 
-    value_expression  set_arithmetic_operator value_expression
+    <value_expression>  <set_arithmetic_operator> <value_expression>
      
-    value_expression :
-    • collection value
-    • NULL
+        <value_expression> ::=
+            collection_value |
+            NULL
      
-    set_arithmetic_operator :
-    • + (합집합)
-    • - (차집합)
-    • * (교집합)
+        <set_arithmetic_operator> ::=
+            + (합집합) |
+            - (차집합) |
+            * (교집합)
 
 다음은 컬렉션 타입이 피연산자인 경우, 연산별 결과 데이터 타입을 나타낸 표이다.
 

@@ -9,36 +9,36 @@ For arithmetic operators, there are binary operators for addition, subtraction, 
 
 ::
 
-    expression  mathematical_operator  expression 
+    <expression>  <mathematical_operator>  <expression>
      
-    expression :
-    •  bit string
-    •  character string
-    •  numeric value
-    •  date-time value
-    •  collection value
-    •  NULL
+        <expression> ::=
+            bit_string |
+            character_string |
+            numeric_value |
+            date-time_value |
+            collection_value |
+            NULL
      
-    mathematical_operator :
-    •  set_arithmetic_operator
-    •  arithmetic_operator
+        <mathematical_operator> ::=
+            <set_arithmetic_operator> |
+            <arithmetic_operator>
      
-    arithmetic_operator :
-    •  +
-    •  -
-    •  *
-    •  /, DIV
-    •  %, MOD
+            <arithmetic_operator> ::=
+                + |
+                - |
+                * |
+                { / | DIV } |
+                { % | MOD }
      
-    set_arithmetic_operator :
-    • UNION           (Union)
-    • DIFFERENCE      (Difference)
-    • INTERSECT | INTERSECTION    (Intersection)
+            <set_arithmetic_operator> ::=
+                UNION |
+                DIFFERENCE |
+                { INTERSECT | INTERSECTION }
 
-*   *expression* : Declares the mathematical operation to be calculated.
-*   *mathematical_operator* : A operator that performs an operation the arithmetic and the set operators are applicable.
-*   *set_arithmetic_operator* : A set arithmetic operator that performs operations such as union, difference and intersection on collection type operands.
-*   *arithmetic_operator* : An operator to perform the four fundamental arithmetic operations.
+*   <*expression*>: Declares the mathematical operation to be calculated.
+*   <*mathematical_operator*>: A operator that performs an operation the arithmetic and the set operators are applicable.
+*   <*set_arithmetic_operator*>: A set arithmetic operator that performs operations such as union, difference and intersection on collection type operands.
+*   <*arithmetic_operator*>: An operator to perform the four fundamental arithmetic operations.
 
 The following table shows the arithmetic operators supported by CUBRID and their return values.
 

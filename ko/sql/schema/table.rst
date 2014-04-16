@@ -451,6 +451,7 @@ FOREIGN KEY 제약
 
 *   *constraint_name*: 제약 조건의 이름을 지정한다.
 *   *foreign_key_name*: **FOREIGN KEY** 제약 조건의 이름을 지정한다. 생략할 수 있으며, 이 값을 지정하면 *constraint_name*\ 을 무시하고 이 이름을 사용한다.
+
 *   <column_name_comma_list1>: **FOREIGN KEY** 키워드 뒤에 외래키로 정의하고자 하는 칼럼 이름을 명시한다. 정의되는 외래키의 칼럼 개수는 참조되는 기본키의 칼럼 개수와 동일해야 한다.
 *   *referenced_table_name*: 참조되는 테이블의 이름을 지정한다.
 *   <column_name_comma_list2>: **REFERENCES** 키워드 뒤에 참조되는 기본키 칼럼 이름을 지정한다.

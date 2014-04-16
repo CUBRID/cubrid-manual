@@ -9,36 +9,36 @@
 
 ::
 
-    expression  mathematical_operator  expression 
+    <expression>  <mathematical_operator>  <expression>
      
-    expression :
-    •  bit string
-    •  character string
-    •  numeric value
-    •  date-time value
-    •  collection value
-    •  NULL
+        <expression> ::=
+            bit_string |
+            character_string |
+            numeric_value |
+            date-time_value |
+            collection_value |
+            NULL
      
-    mathematical_operator :
-    •  set_arithmetic_operator
-    •  arithmetic_operator
+        <mathematical_operator> ::=
+            <set_arithmetic_operator> |
+            <arithmetic_operator>
      
-    arithmetic_operator :
-    •  +
-    •  -
-    •  *
-    •  /, DIV
-    •  %, MOD
+            <arithmetic_operator> ::=
+                + |
+                - |
+                * |
+                { / | DIV } |
+                { % | MOD }
      
-    set_arithmetic_operator :
-    • UNION           (합집합)
-    • DIFFERENCE      (차집합)
-    • INTERSECT | INTERSECTION    (교집합)
+            <set_arithmetic_operator> ::=
+                UNION |
+                DIFFERENCE |
+                { INTERSECT | INTERSECTION }
 
-*   *expression* : 연산을 수행할 수식을 선언한다.
-*   *mathematical_operator* : 수학적 연산을 지정하는 연산자로서, 산술 연산자와 집합 연산자가 있다.
-*   *set_arithmetic_operator* : 컬렉션 타입의 피연산자에 대해 합집합, 차집합, 교집합을 수행하는 집합 산술 연산자이다.
-*   *arithmetic_operator* : 사칙 연산을 수행하기 위한 연산자이다.
+*   <*expression*>: 연산을 수행할 수식을 선언한다.
+*   <*mathematical_operator*>: 수학적 연산을 지정하는 연산자로서, 산술 연산자와 집합 연산자가 있다.
+*   <*set_arithmetic_operator*>: 컬렉션 타입의 피연산자에 대해 합집합, 차집합, 교집합을 수행하는 집합 산술 연산자이다.
+*   <*arithmetic_operator*>: 사칙 연산을 수행하기 위한 연산자이다.
 
 다음은 CUBRID가 지원하는 산술 연산자의 설명 및 리턴 값을 나타낸 표이다.
 

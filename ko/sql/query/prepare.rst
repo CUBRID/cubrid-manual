@@ -4,17 +4,23 @@ PREPARED STATEMENT
 
 prepared statement 기능은 보통 JDBC, PHP, ODBC 등의 인터페이스 함수를 통해서 사용할 수 있는데, SQL 레벨에서도 직접 수행할 수 있다. prepared statement 사용을 위해 다음의 SQL 문을 제공한다.
 
-* 실행하고자 하는 SQL 문을 준비한다. ::
+*   실행하고자 하는 SQL 문을 준비한다. 
 
-    PREPARE stmt_name FROM preparable_stmt
+    ::
 
-* prepared statement를 실행한다. ::
+        PREPARE stmt_name FROM preparable_stmt
 
-    EXECUTE stmt_name [USING value [, value] ...]
+*   prepared statement를 실행한다. 
 
-* prepared statement를 해제한다. ::
+    ::
 
-    {DEALLOCATE | DROP} PREPARE stmt_name
+        EXECUTE stmt_name [USING value [, value] ...]
+
+*   prepared statement를 해제한다. 
+
+    ::
+
+        {DEALLOCATE | DROP} PREPARE stmt_name
 
 .. note::
 

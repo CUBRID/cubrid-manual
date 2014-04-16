@@ -8,58 +8,58 @@
 
 ::
 
-    expression  comparison_operator  expression
+    <expression> <comparison_operator> <expression>
      
-    expression :
-    • bit string
-    • character string
-    • numeric value
-    • date-time value
-    • collection value
-    • NULL
+        <expression> ::=
+            bit_string |
+            character_string |
+            numeric_value |
+            date-time_value |
+            collection_value |
+            NULL
      
-    comparison_operator :
-    =
-    | <=>
-    | <>
-    | !=
-    | >
-    | <
-    | >=
-    | <=
+        <comparison_operator> ::=
+            = |
+            <=> |
+            <> |
+            != |
+            > |
+            < |
+            >= |
+            <=
 
 **구문 2**
 
 ::
 
-    expression IS [NOT] boolean_value
+    <expression> IS [NOT] <boolean_value>
      
-    expression :
-    • bit string
-    • character string
-    • numeric value
-    • date-time value
-    • collection value
-    • NULL
+        <expression> ::=
+            bit_string |
+            character_string |
+            numeric_value |
+            date-time_value |
+            collection_value |
+            NULL
      
-    boolean_value :
-    < UNKNOWN | NULL>
-    | TRUE
-    | FALSE
+    <boolean_value> ::=
+        { UNKNOWN | NULL } |
+        TRUE |
+        FALSE
 
-*   *expression* : 비교할 수식을 선언한다.
+*   <*expression*>: 비교할 수식을 선언한다.
 
-    *   *bit string* : 비트열에 대하여 불리언(boolean) 연산을 수행할 수 있으며, 모든 비교 연산자를 비트열을 비교하는데 사용할 수 있다. 길이가 같지 않은 두 수식을 비교할 때는 길이가 짧은 비트열의 오른쪽 끝에 0이 추가된다.
+    *   <*bit_string*>: 비트열에 대하여 불리언(boolean) 연산을 수행할 수 있으며, 모든 비교 연산자를 비트열을 비교하는데 사용할 수 있다. 길이가 같지 않은 두 수식을 비교할 때는 길이가 짧은 비트열의 오른쪽 끝에 0이 추가된다.
 
-    *   *character string* : 비교 연산자를 통해 비교할 두 문자열은 같은 문자셋을 가져야 한다. 문자 코드와 연관된 정렬 체계(collation)에 의해 비교 순서가 결정된다. 서로 다른 길이의 문자열을 비교할 때는, 비교 전에 길이가 긴 문자열의 길이와 같아지도록 길이가 짧은 문자열 뒤에 공백을 추가한다.
+    *   <*character_string*>: 비교 연산자를 통해 비교할 두 문자열은 같은 문자셋을 가져야 한다. 문자 코드와 연관된 정렬 체계(collation)에 의해 비교 순서가 결정된다. 서로 다른 길이의 문자열을 비교할 때는, 비교 전에 길이가 긴 문자열의 길이와 같아지도록 길이가 짧은 문자열 뒤에 공백을 추가한다.
 
-    *   *numeric value* : 모든 숫자 값에 대해 불리언(Boolean)을 수행할 수 있으며, 모든 비교 연산자를 이용하여 비교 연산을 수행할 수 있다. 서로 다른 숫자 타입을 비교할 때에는 시스템이 묵시적으로 타입을 변환한다. 예를 들어, **INTEGER** 값을 **DECIMAL** 값과 비교할 때 시스템은 먼저 **INTEGER** 를 **DECIMAL** 로 변환한 후 비교한다. **FLOAT** 에 대해서 비교할 때에는 **FLOAT** 는 시스템 종속적으로 처리되므로 정확한 값이 아니라 범위를 지정해야 한다.
+    *   <*numeric_value*>: 모든 숫자 값에 대해 불리언(Boolean)을 수행할 수 있으며, 모든 비교 연산자를 이용하여 비교 연산을 수행할 수 있다. 서로 다른 숫자 타입을 비교할 때에는 시스템이 묵시적으로 타입을 변환한다. 예를 들어, **INTEGER** 값을 **DECIMAL** 값과 비교할 때 시스템은 먼저 **INTEGER** 를 **DECIMAL** 로 변환한 후 비교한다. **FLOAT** 에 대해서 비교할 때에는 **FLOAT** 는 시스템 종속적으로 처리되므로 정확한 값이 아니라 범위를 지정해야 한다.
 
-    *   *date-time value* : 날짜/시간 값을 같은 타입 간에 비교할 때에 값의 순서는 연대기 순으로 결정된다. 즉, 두 개의 날짜와 시간 값을 비교할 때, 이전 날짜가 나중 날짜보다 작은 것으로 간주된다. 서로 다른 타입의 날짜/시간 값에 대한 비교 연산은 허용되지 않으므로 명시적 타입 변환이 필요하지만, **DATE**, **TIMESTAMP**, **DATETIME** 타입 간에는 묵시적 타입 변환이 수행되어 비교 연산이 가능하다.
+    *   <*date-time_value*>: 날짜/시간 값을 같은 타입 간에 비교할 때에 값의 순서는 연대기 순으로 결정된다. 즉, 두 개의 날짜와 시간 값을 비교할 때, 이전 날짜가 나중 날짜보다 작은 것으로 간주된다. 서로 다른 타입의 날짜/시간 값에 대한 비교 연산은 허용되지 않으므로 명시적 타입 변환이 필요하지만, **DATE**, **TIMESTAMP**, **DATETIME** 타입 간에는 묵시적 타입 변환이 수행되어 비교 연산이 가능하다.
 
-    *   *collection value* : 두 **LIST** (= **SEQUENCE** )를 비교할 때에는 **LIST** 가 생성되었을 때 사용자가 명시한 순서대로 원소 간의 비교가 이루어진다. **SET** 과 **MULTISET** 을 포함하는 비교는 적절한 집합 연산자로 오버로딩 된다. **SET**, **MULTISET**, **LIST** 또는 **SEQUENCE** 에 대한 비교 연산은 이 장의 뒷부분에서 설명하는 포함 연산자를 이용하여 수행할 수 있다. 자세한 정보는 :doc:`containment_op` 를 참조한다.
+    *   <*collection_value*>: 두 **LIST** (= **SEQUENCE** )를 비교할 때에는 **LIST** 가 생성되었을 때 사용자가 명시한 순서대로 원소 간의 비교가 이루어진다. **SET** 과 **MULTISET** 을 포함하는 비교는 적절한 집합 연산자로 오버로딩 된다. **SET**, **MULTISET**, **LIST** 또는 **SEQUENCE** 에 대한 비교 연산은 이 장의 뒷부분에서 설명하는 포함 연산자를 이용하여 수행할 수 있다. 자세한 정보는 :doc:`containment_op` 를 참조한다.
 
-    *   **NULL** : **NULL** 값은 모든 데이터 타입의 값 범위 내에 포함되지 않는다. 따라서, **NULL** 값의 비교는 주어진 값이 **NULL** 값인지 아닌지에 대한 비교만 가능하다. **NULL** 값이 다른 데이터 타입으로 할당될 때 묵시적인 타입 변경은 일어나지 않는다. 예를 들어, **INTEGER** 타입의 칼럼이 **NULL** 값을 가지고 있고 부동 소수점 타입과 비교할 때, 비교하기 전에 **NULL** 값을 **FLOAT** 형으로 변환하지 않는다. **NULL** 값에 대한 비교 연산은 결과를 반환하지 않는다.
+    *   **NULL**: **NULL** 값은 모든 데이터 타입의 값 범위 내에 포함되지 않는다. 따라서, **NULL** 값의 비교는 주어진 값이 **NULL** 값인지 아닌지에 대한 비교만 가능하다. **NULL** 값이 다른 데이터 타입으로 할당될 때 묵시적인 타입 변경은 일어나지 않는다. 예를 들어, **INTEGER** 타입의 칼럼이 **NULL** 값을 가지고 있고 부동 소수점 타입과 비교할 때, 비교하기 전에 **NULL** 값을 **FLOAT** 형으로 변환하지 않는다. **NULL** 값에 대한 비교 연산은 결과를 반환하지 않는다.
 
 다음은 CUBRID에서 지원되는 비교 연산자의 설명 및 리턴 값을 나타낸 표이다.
 

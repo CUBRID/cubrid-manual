@@ -6,30 +6,30 @@ Containment operators are used to check the containment relationship by performi
 
 ::
 
-    collection_operand  containment_operator  collection_operand
+    <collection_operand> <containment_operator> <collection_operand>
      
-    collection_operand:
-    • set
-    • multiset
-    • sequence(or list)
-    • subquery
-    • NULL
+        <collection_operand> ::=
+            <set> |
+            <multiset> |
+            <sequence> (or <list>) |
+            <subquery> |
+            NULL
      
-    containment_operator:
-    • SETEQ
-    • SETNEQ
-    • SUPERSET
-    • SUBSET
-    • SUPERSETEQ
-    • SUBSETEQ
+        <containment_operator> ::=
+            SETEQ |
+            SETNEQ |
+            SUPERSET |
+            SUBSET |
+            SUPERSETEQ |
+            SUBSETEQ
 
-*   *collection_operand* : This expression that can be specified as an operand is a single SET-valued attribute, an arithmetic expression containing a SET operator or a SET value enclosed in braces. If the type is not specified, the SET value enclosed in braces is treated as a **LIST** type by default.
+*   <*collection_operand*>: This expression that can be specified as an operand is a single SET-valued attribute, an arithmetic expression containing a SET operator or a SET value enclosed in braces. If the type is not specified, the SET value enclosed in braces is treated as a **LIST** type by default.
 
     Subqueries can be specified as operands. If a column which is not a collection type is searched, a collection data type keyword is required for the subquery like **SET** (*subquery*). The column retrieved by a subquery must return a single set so that it can be compared with the set of the other operands.
 
     If the element type of collection is an object, the OIDs, not its contents, are compared. For example, two objects with different OIDs are considered to be different even though they have the same attribute values.
 
-    *   **NULL** : Any of operands to be compared is **NULL**, **NULL** is returned.
+    *   **NULL**: Any of operands to be compared is **NULL**, **NULL** is returned.
 
 The description and return values about the containment operators supported by CUBRID are as follows:
 
@@ -308,7 +308,7 @@ The **SUPERSET** operator returns **TRUE** (1) when a second operand is a proper
                 5  'Kim       '          {'city', 'country', 'state', 'street'}  {1, 2, 3, 4}
                 6  'Smith     '          {'city', 'country', 'state', 'street'}  {1, 2, 3, 5}
                 7  'Brown     '          {'city', 'country', 'state', 'street'}  {} 
-     
+
 .. code-block:: sql
 
     --SUPERSET operator cannot be used for comparison between LIST and LIST type values
@@ -343,7 +343,7 @@ The **SUPERSETEQ** operator returns **TRUE** (1) when a second operand is a subs
 
     --selecting rows when the first operand is a superset of the second operand
     SELECT id, name, address, zip_code FROM contain_tbl WHERE address SUPERSETEQ {'country','state','city'};
-     
+
 ::
 
                id  name                  address               zip_code
@@ -432,7 +432,7 @@ The **SUBSETEQ** operator returns **TRUE** (1) when a first operand is a subset 
                 1  'Kim       '          {'country', 'state'}  {1, 2, 3}
                 2  'Moy       '          {'country', 'state'}  {3, 2, 1}
                 3  'Jones     '          {'city', 'country', 'state'}  {1, 2, 3, 4}
-     
+
 .. code-block:: sql
 
     --SUBSETEQ operator cannot be used for comparison between LIST and LIST type values
@@ -441,12 +441,12 @@ The **SUBSETEQ** operator returns **TRUE** (1) when a first operand is a subset 
 ::
 
     ERROR: ' subseteq ' operator is not defined on types sequence and sequence.
-     
+
 .. code-block:: sql
 
     --Comparing operands with a SUBSETEQ operator after casting LIST type as SET type
     SELECT id, name, address, zip_code FROM contain_tbl WHERE zip_code SUBSETEQ (CAST ({1,2,3} AS SET));
-    
+
 ::
 
                id  name                  address               zip_code

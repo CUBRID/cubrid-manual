@@ -9,24 +9,24 @@ UPDATE
 ::
 
     <UPDATE single table>
-    UPDATE table_name|view_name SET column_name = {expr | DEFAULT} [, column_name = {expr | DEFAULT} ...]
-        [WHERE search_condition]
-        [ORDER BY {col_name | expr}]
+    UPDATE table_name|view_name SET column_name = {<expr> | DEFAULT} [, column_name = {<expr> | DEFAULT} ...]
+        [WHERE <search_condition>]
+        [ORDER BY {col_name | <expr>}]
         [LIMIT row_count]
      
     <UPDATE multiple tables>
-    UPDATE <table_specifications> SET column_name = {expr | DEFAULT} [, column_name = {expr | DEFAULT} ...]
-        [WHERE search_condition]
+    UPDATE <table_specifications> SET column_name = {<expr> | DEFAULT} [, column_name = {<expr> | DEFAULT} ...]
+        [WHERE <search_condition>]
 
 *   <*table_specifications*> : **SELECT** 문의 **FROM** 절과 같은 형태의 구문을 지정할 수 있으며, 하나 이상의 테이블을 지정할 수 있다.
 
 *   *column_name*: 업데이트할 칼럼 이름을 지정한다. 하나 이상의 테이블에 대한 칼럼들을 지정할 수 있다.
 
-*   *expr* | **DEFAULT**: 해당 칼럼의 새로운 값을 지정하며, 표현식 또는 **DEFAULT** 키워드를 값으로 지정할 수 있다. 단일 결과 레코드를 반환하는 **SELECT** 질의를 지정할 수도 있다.
+*   <*expr*> | **DEFAULT**: 해당 칼럼의 새로운 값을 지정하며, 표현식 또는 **DEFAULT** 키워드를 값으로 지정할 수 있다. 단일 결과 레코드를 반환하는 **SELECT** 질의를 지정할 수도 있다.
 
-*   *search_condition*: :ref:`where-clause`\ 에 조건식을 명시하면, 조건식을 만족하는 레코드에 대해서만 칼럼 값을 업데이트한다.
+*   <*search_condition*>: :ref:`where-clause`\ 에 조건식을 명시하면, 조건식을 만족하는 레코드에 대해서만 칼럼 값을 업데이트한다.
 
-*   *col_name* | *expr*: 업데이트할 순서의 기준이 되는 칼럼을 지정한다.
+*   *col_name* | <*expr*>: 업데이트할 순서의 기준이 되는 칼럼을 지정한다.
 
 *   *row_count*: :ref:`limit-clause`\ 에 업데이트할 레코드 수를 명시하며, 0보다 큰 정수를 지정할 수 있다.
 

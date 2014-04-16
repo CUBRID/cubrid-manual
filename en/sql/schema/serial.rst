@@ -23,27 +23,27 @@ You can create a serial object in the database by using the **CREATE SERIAL** st
     [ MAXVALUE max | NOMAXVALUE ]
     [ CACHE cached_num | NOCACHE ]
 
-*   *serial_identifier*\ : Specifies the name of the serial to be generated(maximum: 254 bytes).
+*   *serial_identifier*: Specifies the name of the serial to be generated(maximum: 254 bytes).
 
-*   **START WITH** *initial*\ : Specifies the initial value of serial. The range of this value is between -1,000,000,000,000,000,000,000,000,000,000,000,000(-10^36) and    9,999,999,999,999,999,999,999,999,999,999,999,999(10^37-1). The default value of ascending serial is 1 and that of descending serial is -1.
+*   **START WITH** *initial*: Specifies the initial value of serial. The range of this value is between -1,000,000,000,000,000,000,000,000,000,000,000,000(-10^36) and    9,999,999,999,999,999,999,999,999,999,999,999,999(10^37-1). The default value of ascending serial is 1 and that of descending serial is -1.
 
-*   **INCREMENT BY** *interval*\ : Specifies the increment of the serial. You can specify any integer between -9,999,999,999,999,999,999,999,999,999,999,999,999(-10^37+1) and  9,999,999,999,999,999,999,999,999,999,999,999,999(10^37-1) except zero at *interval*. The absolute value of the *interval* must be smaller than the difference between **MAXVALUE** and **MINVALUE**. If a negative number is specified, the serial is in descending order otherwise, it is in ascending order. The default value is **1**.
+*   **INCREMENT BY** *interval*: Specifies the increment of the serial. You can specify any integer between -9,999,999,999,999,999,999,999,999,999,999,999,999(-10^37+1) and  9,999,999,999,999,999,999,999,999,999,999,999,999(10^37-1) except zero at *interval*. The absolute value of the *interval* must be smaller than the difference between **MAXVALUE** and **MINVALUE**. If a negative number is specified, the serial is in descending order otherwise, it is in ascending order. The default value is **1**.
 
-*   **MINVALUE**\ : Specifies the minimum value of the serial. The range of this value is between -1,000,000,000,000,000,000,000,000,000,000,000,000(-10^36) and  9,999,999,999,999,999,999,999,999,999,999,999,999(10^37-1). **MINVALUE** must be smaller than or equal to the initial value and smaller than the maximum value.
+*   **MINVALUE**: Specifies the minimum value of the serial. The range of this value is between -1,000,000,000,000,000,000,000,000,000,000,000,000(-10^36) and  9,999,999,999,999,999,999,999,999,999,999,999,999(10^37-1). **MINVALUE** must be smaller than or equal to the initial value and smaller than the maximum value.
 
-*   **NOMINVALUE**\ : 1 is set automatically as a minimum value for the ascending serial, -1,000,000,000,000,000,000,000,000,000,000,000,000(-10^36) for the descending serial.
+*   **NOMINVALUE**: 1 is set automatically as a minimum value for the ascending serial, -1,000,000,000,000,000,000,000,000,000,000,000,000(-10^36) for the descending serial.
 
-*   **MAXVALUE**\ : Specifies the maximum number of the serial. The range of this value is between -999,999,999,999,999,999,999,999,999,999,999,999(-10^36+1) and  10,000,000,000,000,000,000,000,000,000,000,000,000(10^37). **MAXVALUE** must be greater than or equal to the initial value and greater than the minimum value.
+*   **MAXVALUE**: Specifies the maximum number of the serial. The range of this value is between -999,999,999,999,999,999,999,999,999,999,999,999(-10^36+1) and  10,000,000,000,000,000,000,000,000,000,000,000,000(10^37). **MAXVALUE** must be greater than or equal to the initial value and greater than the minimum value.
 
-*   **NOMAXVALUE**\ : 10,000,000,000,000,000,000,000,000,000,000,000,000(10^37) is set automatically as a maximum value for the ascending serial, -1 for the descending serial.
+*   **NOMAXVALUE**: 10,000,000,000,000,000,000,000,000,000,000,000,000(10^37) is set automatically as a maximum value for the ascending serial, -1 for the descending serial.
 
-*   **CYCLE**\ : Specifies that the serial will be generated continuously after reaching the maximum or minimum value. When a serial in ascending order reaches the maximum value, the minimum value is created as the next value; when a serial in descending order reaches the minimum value, the maximum value is created as the next value.
+*   **CYCLE**: Specifies that the serial will be generated continuously after reaching the maximum or minimum value. When a serial in ascending order reaches the maximum value, the minimum value is created as the next value; when a serial in descending order reaches the minimum value, the maximum value is created as the next value.
 
-*   **NOCYCLE**\ : Specifies that the serial will not be generated anymore after reaching the maximum or minimum value. The default value is **NOCYCLE**.
+*   **NOCYCLE**: Specifies that the serial will not be generated anymore after reaching the maximum or minimum value. The default value is **NOCYCLE**.
 
-*   **CACHE**\ : Stores as many serials as the number specified by "cached_num" in the cache to improve the performance of the serials and fetches a serial value when one is requested. If all cached values are used up, as many serials as "cached_num" are fetched again from the disk to the memory. If the database server stops accidently, all cached serial values are deleted. For this reason, the serial values before and after the restart of the database server may be discontinuous. Because the transaction rollback does not affect the cached serial values, the request for the next serial will return the next value of the value used (or fetched) lastly when the transaction is rolled back. The "cached_num" after the **CACHE** keyword cannot be omitted. If the "cached_num" is equal to or smaller than 1, the serial cache is not applied.
+*   **CACHE**: Stores as many serials as the number specified by "cached_num" in the cache to improve the performance of the serials and fetches a serial value when one is requested. If all cached values are used up, as many serials as "cached_num" are fetched again from the disk to the memory. If the database server stops accidently, all cached serial values are deleted. For this reason, the serial values before and after the restart of the database server may be discontinuous. Because the transaction rollback does not affect the cached serial values, the request for the next serial will return the next value of the value used (or fetched) lastly when the transaction is rolled back. The "cached_num" after the **CACHE** keyword cannot be omitted. If the "cached_num" is equal to or smaller than 1, the serial cache is not applied.
 
-*   **NOCACHE**\ : Specifies that the serial cache is not used, and serial value is updated for each time.
+*   **NOCACHE**: Specifies that the serial cache is not used, and serial value is updated for each time.
 
 .. code-block:: sql
 
@@ -161,7 +161,7 @@ If you also specify **IF EXISTS** clause, no error will be happened even if a ta
 
     DROP SERIAL [ IF EXISTS ] serial_identifier ;
 
-*   *serial_identifier*\ : Specifies the name of the serial to be dropped.
+*   *serial_identifier*: Specifies the name of the serial to be dropped.
 
 The following example shows how to drop the *order_no* serial.
 
@@ -181,8 +181,8 @@ You can access and update a serial by serial name and a pseudocolumn pair. ::
     serial_identifier.CURRENT_VALUE
     serial_identifier.NEXT_VALUE
 
-*   *serial_identifier*.\ **CURRENT_VALUE**\ : Returns the current serial value.
-*   *serial_identifier*.\ **NEXT_VALUE**\ : Increments the serial value and returns the result.
+*   *serial_identifier*.\ **CURRENT_VALUE**: Returns the current serial value.
+*   *serial_identifier*.\ **NEXT_VALUE**: Increments the serial value and returns the result.
 
 The following example shows how to create a table *athlete_idx* where athlete numbers and names are stored and how to create the instances by using a serial *order_no*.
 

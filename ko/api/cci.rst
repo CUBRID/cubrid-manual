@@ -40,12 +40,19 @@ CCI를 이용하는 응용 프로그램은 기본적으로 CAS와 연결하기, 
 기본적인 작성 순서는 다음과 같으며, prepared statement 사용을 위해서는 변수에 데이터를 바인딩하는 작업이 추가된다. 이를 예제 1 및 예제 2에 구현하였다.
 
 *   데이터베이스 연결 핸들 열기(관련 함수: :c:func:`cci_connect`, :c:func:`cci_connect_with_url`)
+
 *   prepared statement를 위한 요청 핸들 얻기 (관련 함수: :c:func:`cci_prepare`)
+
 *   prepared statement에 데이터 바인딩하기(관련 함수: :c:func:`cci_bind_param`)
+
 *   prepared statement 실행하기(관련 함수: :c:func:`cci_execute`)
+
 *   실행 결과 처리하기(관련 함수: :c:func:`cci_cursor`, :c:func:`cci_fetch`, :c:func:`cci_get_data`, :c:func:`cci_get_result_info`)
+
 *   요청 핸들 닫기(관련 함수: :c:func:`cci_close_req_handle`)
+
 *   데이터베이스 연결 핸들 닫기(관련 함수: :c:func:`cci_disconnect`)
+
 *   데이터베이스 연결 풀 사용하기(관련 함수: :c:func:`cci_property_create`, :c:func:`cci_property_destroy`, :c:func:`cci_property_set`, :c:func:`cci_datasource_create`, :c:func:`cci_datasource_destroy`, :c:func:`cci_datasource_borrow`, :c:func:`cci_datasource_release`, :c:func:`cci_datasource_change_property`)
 
 .. note::
@@ -587,7 +594,7 @@ CCI 응용 프로그램에서 다음 함수를 사용하여 **LOB** 데이터를
     con = cci_connect ("localhost", 33000, "image_db", "PUBLIC", "");
     if (con < 0)
     {
-      goto handle_error;
+        goto handle_error;
     }
     req = cci_prepare (con, "select content from doc_t", 0 /*flag*/, &error);
     if (req< 0)
@@ -604,7 +611,7 @@ CCI 응용 프로그램에서 다음 함수를 사용하여 **LOB** 데이터를
             break;
         }
         res = cci_fetch (req, &error);
-        
+     
         /* Fetching CLOB Locator */
         res = cci_get_data (req, 1 /* colume index */, CCI_A_TYPE_BLOB,
         (void *)&blob /* BLOB handle */, &ind /* NULL indicator */);
@@ -679,11 +686,11 @@ CCI API 함수는 에러 발생 시 반환 값이 음수인 CCI 에러 코드 �
         //getting a connection handle for a connection with a server
         con = cci_connect ("localhost", 33000, "demodb", "dba", "");
         if (con < 0)
-            {
+        {
             printf ("cannot connect to database\n");
             return 1;
-            }
-        
+        }
+     
         //preparing the SQL statement
         req = cci_prepare (con, query, 0, &err_buf);
         if (req < 0)
@@ -1095,8 +1102,6 @@ CCI API 함수는 에러 발생 시 반환 값이 음수인 CCI 에러 코드 �
 
 CCI 예제 프로그램
 =================
-
-**예제 설명**
 
 예제 프로그램은 CUBRID 설치 과정에서 기본적으로 배포되는 데이터베이스인 *demodb* 를 활용하여 CCI를 사용하는 응용 프로그램을 간단하게 작성한 것이다. 예제를 통하여 CAS와 연결하기, 질의 준비, 질의 수행, 응답 처리, 연결 끊기 등의 과정을 따라한다. 예제는 Linux 기반의 동적 링크를 적용하는 방법으로 작성되었다.
 

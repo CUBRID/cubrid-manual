@@ -13,7 +13,7 @@ CUBRID PHP 드라이버는 CCI API를 기반으로 작성되었으므로, CCI AP
 PHP 설치 및 설정
 ================
 
-가장 쉽고 빠르게 응용 프로그램을 시스템에 설치하려면 Ubuntu에 CUBRID와 Apache, PHP를 설치한다. 설치 방법은 http://www.cubrid.org/wiki_apis/entry/install-cubrid-with-apache-and-php-on-ubuntu 를 참고한다.
+가장 쉽고 빠르게 응용 프로그램을 시스템에 설치하려면 Ubuntu에 CUBRID와 Apache, PHP를 설치한다. 설치 방법은 http://www.cubrid.org/wiki_apis/entry/install-cubrid-with-apache-and-php-on-ubuntu\ 를 참고한다.
 
 Linux
 -----
@@ -27,7 +27,7 @@ Linux
 **PECL을 이용한 설치**
 
 **PECL** 이 설치되어 있다면, **PECL** 이 소스코드 다운로드 및 컴파일을 수행하므로 다음과 같이 간단하게 CUBRID PHP 드라이버를 설치할 수 있다.
-**PECL** 이 설치되어있지 않다면 http://www.cubrid.org/wiki_apis/entry/installing-cubrid-php-driver-using-pecl 을 참고하여 PECL을 설치한다.
+**PECL** 이 설치되어있지 않다면 http://www.cubrid.org/wiki_apis/entry/installing-cubrid-php-driver-using-pecl\ 을 참고하여 PECL을 설치한다.
 
 #.  다음과 같은 명령어를 입력하여 CUBRID PHP 드라이버 최신 버전을 설치한다. 
 
@@ -44,7 +44,7 @@ Linux
 #.  설정 파일을 수정한다.
 
     CentOS 6.0 이상 버전이나 Fedora 15 이상 버전을 사용한다면 **cubrid.ini** 파일을 생성하고 내용에 **extension=cubrid.so** 를 입력하여 **/etc/php.d** 디렉터리에 저장한다.
-    
+
     다른 운영체제를 사용한다면 **php.ini** 파일 끝에 다음 두 줄의 내용을 추가한다. **php.ini** 파일의 기본 위치는 **/etc/php5/apache2** 또는 **/etc** 이다. 
     
     ::
@@ -130,18 +130,18 @@ CUBRID PHP 드라이버를 설치하기 전에 PHP와 CUBRID의 경로가 시스
     http://www.cubrid.org/?mid=downloads&item=php_driver&os=windows
     
 #.  CUBRID PHP API Installer를 실행하고 [다음]을 클릭하여 설치를 진행한다.
-    
+
 #.  BSD 라이선스 조항에 동의하고 [다음]을 클릭한다.
-    
+
 #.  CUBRID PHP API Installer를 설치할 경로를 지정하고 [다음]을 클릭한다. PHP를 설치한 경로가 아니라 예를 들면 **C:\\Program Files\\CUBRID PHP API** 와 같은 새로운 경로를 입력해야 한다.
-    
+
 #.  Windows [시작] 메뉴의 폴더 이름을 지정하고 [설치]를 클릭한다. 설치에 실패하면 아래의 **환경 변수 설정** 을 참고한다.
     
 #.  설치를 마치면 [마침]을 클릭한다.
     
 #.  변경 내용을 반영하기 위해서 웹 서버를 재시작한다. 제대로 설치되었는지 확인하려면 phpinfo()를 실행한다.
 
-   .. image:: /images/image56.png
+    .. image:: /images/image56.png
 
 **시스템 환경 변수 설정**
 
@@ -295,9 +295,9 @@ VC9 버전을 컴파일하려면 Visual C++ 2008이 필요하다. 하지만 VC9 
 *   Visual Studio 2008: makefile을 잘 다룰 수 있는 사용자라면, Visual Studio 2008 대신에 무료인 Visual C++ Express Edition이나 Windows SDK v6.1에 포함된 VC++ 9 컴파일러를 사용할 수 있다. Windows에서 CUBRID PHP VC9 드라이버를 사용하려면 Visual C++ 2008 Redistributable Package가 설치되어 있어야 한다.
 
 *   PHP 5.3 바이너리: VC9 x86 Non Thread Safe 또는 VC9 x86 Thread Safe를 사용할 수 있다. 시스템 환경 변수 **%PHPRC%** 가 제대로 정의되어 있어야 한다. VC9 프로젝트 속성에서 [Linker] > [General]을 선택하면 [Additional Library Directories]에서 **$(PHPRC)** 가 사용되는 것을 볼 수 있다.
-    
+
     .. image:: /images/image57.png
-    
+
 *   PHP 5.3 소스코드: 바이너리 버전에 맞는 소스코드를 다운로드해야 한다. PHP 5.3 소스코드를 다운로드한 후 압축 해제하고, 시스템 환경 변수 **%PHP5_SRC%** 를 추가하여 PHP 5.3 소스코드의 경로를 값으로 설정한다. VC9 프로젝트 속성에서 [C/C++] > [General]을 선택하면 [Additional Library Directories]에서 **$(PHP5_SRC)** 가 사용되는 것을 볼 수 있다.
 
     .. image:: /images/image58.png
@@ -322,26 +322,26 @@ VC9 버전을 컴파일하려면 Visual C++ 2008이 필요하다. 하지만 VC9 
     
 #.  **php_cubrid.dll** 파일을 빌드한 후에는 PHP가 **php_cubrid.dll** 파일을 PHP 확장으로 인식하도록 다음 작업을 수행한다.
 
-   * PHP를 설치한 폴더에 **cubrid** 폴더를 생성하고 해당 폴더에 **php_cubrid.dll** 파일을 복사한다. **%PHPRC%\\ext** 디렉터리가 있다면 이 디렉터리에 **php_cubrid.dll** 파일을 복사해도 된다.
-   * In **php.ini** 파일의 **extension_dir** 변수의 값으로 **php_cubrid.dll** 파일의 경로를 입력하고, **extension** 변수의 값으로 **php_cubrid.dll** 을 입력한다.
+    *   PHP를 설치한 폴더에 **cubrid** 폴더를 생성하고 해당 폴더에 **php_cubrid.dll** 파일을 복사한다. **%PHPRC%\\ext** 디렉터리가 있다면 이 디렉터리에 **php_cubrid.dll** 파일을 복사해도 된다.
+    *   In **php.ini** 파일의 **extension_dir** 변수의 값으로 **php_cubrid.dll** 파일의 경로를 입력하고, **extension** 변수의 값으로 **php_cubrid.dll** 을 입력한다.
 
 **VC6을 이용하여 PHP 5.2/5.3용 CUBRID PHP 드라이버 빌드**
 
 **환경 설정**
 
 *   CUBRID: CUBRID를 설치한다. 시스템에 환경 변수 **%CUBRID%** 가 정의되어 있는지 확인한다.
-    
+
 *   Visual C++ 6.0 SP6
-    
+
 *   Windows Server Feb. 2003 SDK: 모든 공식 릴리스와 스냅숏은 Visual C++ 6.0 SP6와 Windows Server Feb. 2003 SDK로 빌드되므로, 이 SDK를 사용하는 것을 권장한다. 이 SDK를 사용하지 않고 VC6의 기본 설정을 사용할 수도 있지만 드라이버를 빌드할 때 오류가 발생할 수 있으며, 오류를 직접 수정해야 한다.
-    
+
 *   PHP 5.2/5.3 바이너리: VC6 x86 Non Thread Safe 또는 VC6 x86 Thread Safe를 사용할 수 있다. 시스템 환경 변수 **%PHPRC%** 가 제대로 정의되어 있어야 한다. VC6 프로젝트의 [Project Settings]을 열면 [Link] 탭의 [Additional library path]에서 **$(PHPRC)** 가 사용되는 것을 볼 수 있다.
-    
+
     .. image:: /images/image61.png
-    
+
 *   PHP 5.2/5.3 소스코드: 바이너리 버전에 맞는 소스코드를 다운로드해야 한다. PHP 소스코드를 다운로드한 후 압축 해제하고, 시스템 환경 변수 **%PHP5_SRC%** 를 추가하여 PHP 소스코드의 경로를 값으로 설정한다. VC6 프로젝트의 [Project Settings]을 열면 [C/C++] 탭의 [Additional include directories]에서 **$(PHP5_SRC)** 가 사용되는 것을 볼 수 있다.
 
-  .. image:: /images/image62.png
+    .. image:: /images/image62.png
 
 *   CUBRID PHP 드라이버 소스코드: http://www.cubrid.org/?mid=downloads&item=php_driver 에서 CUBRID 버전에 맞는 CUBRID PHP 드라이버의 소스코드를 다운로드한다.
 
@@ -444,7 +444,7 @@ http://www.apachelounge.com/에서는 VC9 x86 버전 Apache만 있고 공식 Win
     **New** 를 선택하면 [New Project Platform] 대화 상자가 나타난다. **x64** 를 선택하고 [OK]를 클릭한다.
     
     .. image:: /images/image75.png
-    
+
 #.  [php_cubrid Property Pages] 대화 상자에서 [C/C++] > [Preprocessor]를 선택하고, [Preprocessor Definitions]에서 **_USE_32BIT_TIME_T** 를 삭제한 후 [OK]를 클릭한다.
     
     .. image:: /images/image76.png
@@ -540,23 +540,23 @@ CUBRID PHP는 트랜잭션과 자동 커밋 모드를 지원한다. 자동 커�
 `cubrid_fetch <http://www.php.net/manual/en/function.cubrid-fetch.php>`_ () 함수의 결과에는 세가지 종류의 배열 타입 중 하나가 사용된다. `cubrid_fetch <http://www.php.net/manual/en/function.cubrid-fetch.php>`_ () 함수가 호출될 때 배열의 타입을 결정할 수 있다. 그 중 하나인 연관배열은 문자열 색인을 사용한다. 두 번째로 수치배열은 숫자 순서 색인을 사용한다. 마지막 배열은 연관배열과 수치배열을 둘 다 포함한다.
 
 *   수치배열
-    
+
     .. code-block:: php
     
         while (list($id, $name) = cubrid_fetch($req, CUBRID_NUM)) {
             echo $id;
             echo $name;
         }
-    
+
 *   연관배열
-    
+
     .. code-block:: php
     
         while ($row = cubrid_fetch($req, CUBRID_ASSOC)) {
             echo $row["id"];
             echo $row["name"];
         }
-    
+
 **카탈로그 연산**
 
 클래스, 가상 클래스, 속성, 메서드, 트리거, 제약 조건 등 데이터베이스의 스키마 정보는 `cubrid_schema <http://www.php.net/manual/en/function.cubrid-schema.php>`_ () 함수를 호출하여 얻을 수 있다. `cubrid_schema <http://www.php.net/manual/en/function.cubrid-schema.php>`_ () 함수의 리턴 값은 2차원 배열이다.
@@ -597,7 +597,9 @@ CUBRID PHP는 트랜잭션과 자동 커밋 모드를 지원한다. 자동 커�
 
 OID를 사용하여 인스턴스의 모든 속성, 지정한 속성 또는 한 속성의 값을 얻을 수 있다.
 
-만약 `cubrid_get <http://www.php.net/manual/en/function.cubrid-get.php>`_ () 함수에 속성을 명시하지 않으면 모든 속성의 값을 반환한다(a). 만약 배열 데이터 타입으로 속성을 명시하면 지정한 속성 값이 들어있는 배열은 연관배열로 반환된다(b). 만약 문자열 타입으로 한 속성을 명시하면 속성의 값이 반환된다(c).
+만약 `cubrid_get <http://www.php.net/manual/en/function.cubrid-get.php>`_ () 함수에 속성을 명시하지 않으면 모든 속성의 값을 반환한다(a). 
+만약 배열 데이터 타입으로 속성을 명시하면 지정한 속성 값이 들어있는 배열은 연관배열로 반환된다(b). 
+만약 문자열 타입으로 한 속성을 명시하면 속성의 값이 반환된다(c).
 
 .. code-block:: php
 

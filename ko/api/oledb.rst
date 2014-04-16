@@ -23,7 +23,7 @@ OLE DB 설치 및 설정
 CUBRID를 이용하는 응용 프로그램을 개발하려면 CUBRID OLE DB 공급자 드라이버( **CUBRIDProvider.dll** )가 필요하다. 드라이버 파일을 얻으려면 다음 중 하나를 수행한다.
 
 *   **드라이버 설치하기**: CUBRID OLED DB Data Provider Installer의 .exe 파일을  http://ftp.cubrid.org/CUBRID_Drivers/OLEDB_Driver/ 또는 http://www.cubrid.org/?mid=downloads&item=oledb_driver 위치에서 내려받아 실행한다. OLE DB 드라이버 9.1.0.p1 이상 버전(CUBRID 서버 2008 R4.1부터 이 드라이버 사용 가능)부터는 다운받은 파일을 실행하면 32비트와 64비트 둘 다 설치된다.
-    
+
     .. image:: /images/oledb_install.jpg
 
     *   설치된 디렉터리에는 다음 파일이 존재한다.
@@ -52,7 +52,7 @@ Visual Studio .NET에서 대화 상자에 접근하기 위해, "도구" 메뉴�
 *   먼저 Visual Studio를 설치한 후, "데이터베이스 연결"을 클릭한다.
 
     .. image:: /images/oledb_1_connect.jpg
-    
+
 *   Data source로 <other>를 선택하고, Data Provider로 .Net Framework Data Provider for OLE DB를 선택한다. 그리고 나서 "계속" 버튼을 클릭한다.
 
     .. image:: /images/oledb_2_select.jpg
@@ -68,11 +68,11 @@ Visual Studio .NET에서 대화 상자에 접근하기 위해, "도구" 메뉴�
    .. image:: /images/oledb_4_confconn.jpg
 
 또는 윈도 탐색기에서 universal data link(.udl) 파일을 더블 클릭하여 해당 대화 상자를 열 수 있다.
-   
+
 *   먼저 임의의 텍스트 파일을 만들고 확장자를 .udl로 변경한다(1.txt -> 1.udl). 다음으로, 1.udl을 클릭하면 아래의 대화 상자가 팝업된다.
 
     이 때, 공급자(Provider)를 CUBRID OLE DB Provider로 변경한다.
-    
+
    .. image:: /images/oledb_confbox.jpg
 
 *   문자셋 설정
@@ -157,6 +157,4 @@ Microsoft의 .NET 환경에서 CUBRID OLE DB Provider를 이용하여 프로그�
 OLE DB API
 ==========
 
-OLE DB API에 대한 자세한 내용은 Micorosoft OLE DB 문서(
-http://msdn.microsoft.com/en-us/library/ms722784%28VS.85%29.aspx
-)를 참고한다.
+OLE DB API에 대한 자세한 내용은 Micorosoft OLE DB 문서( http://msdn.microsoft.com/en-us/library/ms722784%28VS.85%29.aspx )를 참고한다.

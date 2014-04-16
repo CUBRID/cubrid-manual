@@ -40,12 +40,19 @@ The default value of auto-commit mode can be configured by using :ref:`CCI_DEFAU
 General process for writing applications is as follows. For using the prepared statement, additional step binding data to a variable is required; the examples 1 and 2 show the way to implement this.
 
 *   Opening a database connection handle (related functions: :c:func:`cci_connect`, :c:func:`cci_connect_with_url`)
+
 *   Getting the request handle for the prepared statement (related function: :c:func:`cci_prepare`)
+
 *   Binding data to the prepared statement (related function: :c:func:`cci_bind_param`)
+
 *   Executing the prepared statement (related function: :c:func:`cci_execute`)
+
 *   Processing the execution result (related functions: :c:func:`cci_cursor`, :c:func:`cci_fetch`, :c:func:`cci_get_data`, :c:func:`cci_get_result_info`)
+
 *   Closing the request handle (related function: :c:func:`cci_close_req_handle`)
+
 *   Closing the database connection handle (related function: :c:func:`cci_disconnect`)
+
 *   Using database connection pool (related functions: :c:func:`cci_property_create`, :c:func:`cci_property_destroy`, :c:func:`cci_property_set`, :c:func:`cci_datasource_create`, :c:func:`cci_datasource_destroy`, :c:func:`cci_datasource_borrow`, :c:func:`cci_datasource_release`, :c:func:`cci_datasource_change_property`)
 
 .. note::
@@ -686,7 +693,7 @@ and the error message, 'Syntax: Unknown class "notable". select * from notable' 
         }
      
         //preparing the SQL statement
-        req = cci_prepare (con, query, 0, & err_buf);
+        req = cci_prepare (con, query, 0, &err_buf);
         if (req < 0)
         {
             if (req == CCI_ER_DBMS)

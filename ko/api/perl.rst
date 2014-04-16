@@ -6,13 +6,11 @@ Perl 드라이버
 
 CUBRID Perl 드라이버는 CCI API를 기반으로 작성되었으므로, CCI API 및 CCI에 적용되는 **CCI_DEFAULT_AUTOCOMMIT** 과 같은 설정 파라미터에 영향을 받는다.
 
-별도로 Perl 드라이버를 다운로드하거나 Perl 드라이버에 대한 최신 정보를 확인하려면
-http://www.cubrid.org/wiki_apis/entry/cubrid-perl-driver 
-에 접속한다.
+별도로 Perl 드라이버를 다운로드하거나 Perl 드라이버에 대한 최신 정보를 확인하려면 http://www.cubrid.org/wiki_apis/entry/cubrid-perl-driver\에 접속한다.
 
-.. note:: 
+.. note::
 
-    * 스레드 기반 프로그램에서 데이터베이스 연결은 각 스레드마다 독립적으로 사용해야 한다.
+    *   스레드 기반 프로그램에서 데이터베이스 연결은 각 스레드마다 독립적으로 사용해야 한다.
     *   자동 커밋 모드에서 SELECT 문 수행 이후 모든 결과 셋이 fetch되지 않으면 커밋이 되지 않는다. 따라서, 자동 커밋 모드라 하더라도 프로그램 내에서 결과 셋에 대한 fetch 도중 어떠한 오류가 발생한다면 반드시 커밋 또는 롤백을 수행하여 트랜잭션을 종료 처리하도록 한다. 
 
 Perl 설치 및 설정
@@ -60,8 +58,7 @@ Windows에서는 **make** 대신 **nmake** 또는 **dmake** 를 사용해야 할
 
 Perl API
 ========
+
 CUBRID Perl 드라이버는 현재에는 기본 기능만을 제공하고 있다. LOB 타입이나 칼럼 정보 확인 등의 기능은 현재 지원하지 않는다.
 
-CUBRID Perl 드라이버 API에 대한 자세한 내용은
-http://search.cpan.org/~cubrid/ 
-를 참고한다.
+CUBRID Perl 드라이버 API에 대한 자세한 내용은 http://search.cpan.org/~cubrid/\ 를 참고한다.

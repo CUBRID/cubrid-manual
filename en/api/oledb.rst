@@ -64,7 +64,7 @@ To access this dialog box in Visual Studio .NET, select Connect to Database from
 *   Fill in the information, and click Test Connection button, if driver connect database successful, success dialog will pop up.
 
     More information can found in msdn: http://msdn.microsoft.com/en-us/library/79t8s5dk(v=vs.71).aspx
-   
+
      .. image:: /images/oledb_4_confconn.jpg
 
 Or you also can open this dialog box by double-clicking a universal data link (.udl) file in Windows Explorer, and in a variety of other ways, including programmatically.
@@ -84,7 +84,7 @@ Or you also can open this dialog box by double-clicking a universal data link (.
 *   Setting isolation level
 
     In the below string, "Autocommit Isolation Levels=256;" is the part of setting isolation level. This feature is only supported in the driver version 9.1.0.p2 or later; if you do not specify this in the connection string, 4096 is the default value.
-    
+
     ::
     
         "Provider=CUBRIDProvider;Data Source=demodb;Location=10.34.64.104;User ID=dba;Password=;Port=30000;Fetch Size=100;Charset=utf-8;Autocommit Isolation Levels=256;"

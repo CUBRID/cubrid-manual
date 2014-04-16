@@ -10,9 +10,9 @@ To download Perl driver or get the latest information, click http://www.cubrid.o
 
 .. note::
 
-    * The database connection in thread-based programming must be used independently each other.
-    * In autocommit mode, the transaction is not committed if all results are not fetched after running the SELECT statement. Therefore, although in autocommit mode, you should end the transaction by executing COMMIT or ROLLBACK if some error occurs during fetching for the resultset. 
-    
+    *   The database connection in thread-based programming must be used independently each other.
+    *   In autocommit mode, the transaction is not committed if all results are not fetched after running the SELECT statement. Therefore, although in autocommit mode, you should end the transaction by executing COMMIT or ROLLBACK if some error occurs during fetching for the resultset. 
+
 Installing and Configuring Perl
 ===============================
 

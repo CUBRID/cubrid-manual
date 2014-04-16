@@ -84,7 +84,7 @@ The following is [options] used in **cubrid unloaddb**.
 .. option:: -s, --schema-only
 
     This option specifies that only the schema file will be created from amongst all the output files which can be created by the unload operation.    ::
-    
+
         cubrid unloaddb -s demodb
 
 .. option:: -d, --data-only
@@ -132,7 +132,7 @@ The following is [options] used in **cubrid unloaddb**.
         cubrid unloaddb --datafile-per-class demodb
 
 .. _load-db:
-        
+
 Loading Database
 ----------------
 
@@ -282,11 +282,11 @@ The following table shows [options] available with the **cubrid loaddb** utility
     The following example shows a file that details errors.
 
     *  The warning errors from 24 to 33 indicating DB volume space is insufficient are not ignored by configuring +DEFAULT.
-    
+
     *  The error code 2 is not ignored because +2 has been specified later, even when -2 has been specified first.
-    
+
     *  -670 has been specified to ignore the error code 670, which is a unique violation error.
-    
+
     *  #-115 has been processed as a comment since # is added. ::
 
         vi error_file
@@ -468,7 +468,7 @@ The following steps describes migration scenario that can be applied while the e
 #. Load the new database
 
     Create a database by using the **cubrid createdb** utility and then load the data which had previously been unloaded into the new database by using the **cubrid loaddb** utility. Please refer :ref:`creating-database` for creating a database and :ref:`load-db` for loading a database.
-    
+
 #. Back up the new database
 
     Once the data has been successfully loaded into the new database, back up the database created for the new version of CUBRID by using the **cubrid backupdb** utility. The reason for this step is because you cannot restore the data backed up in the existing version of CUBRID when using the new version. For details on backing up the database, see :ref:`db-backup` .

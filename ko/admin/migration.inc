@@ -29,7 +29,7 @@
 .. option:: -i, --input-class-file=FILE
 
     인수로 지정된 입력 파일에 지정된 클래스만을 대상으로 데이터베이스를 언로드한다. ::
-    
+
         cubrid unloaddb -i table_list.txt demodb
 
     다음은 입력 파일 table_list.txt의 예이다. ::
@@ -80,7 +80,7 @@
     지정된 디렉터리가 존재하지 않는 경우 다음과 같은 에러 메시지가 출력된다. ::
 
         unloaddb: No such file or directory.
-    
+
 .. option:: -s, --schema-only
 
     언로드 작업을 통해 생성되는 출력 파일 중 스키마 파일만 생성되도록 지정하는 옵션이다. ::
@@ -98,7 +98,7 @@
     언로드 작업에 의해 생성되는 스키마 파일과 객체 파일의 이름 앞에 붙는 prefix를 지정하기 위한 옵션이다. 예제를 수행하면 스키마 파일명은 *abcd_schema* 가 되고, 객체 파일명은 *abcd_objects* 가 된다. 만약, **--output-prefix** 옵션을 지정하지 않으면 언로드할 데이터베이스 이름이 prefix로 사용된다. ::
 
         cubrid unloaddb --output-prefix abcd demodb
-        
+
 .. option:: --hash-file=FILE
 
     해시 파일의 이름을 지정한다.    
@@ -130,7 +130,7 @@
     언로드 작업으로 생성되는 데이터 파일을 각 테이블별로 생성되도록 지정하는 옵션이다. 파일 이름은 *<데이터베이스 이름>_<테이블 이름>*\ **_objects** 로 생성된다. 단, 객체 타입의 칼럼 값은 모두 **NULL** 로 언로드되며, 언로드된 파일에는 %id class_name class_id 부분이 작성되지 않는다. 자세한 내용은 :ref:`howtowrite-loadfile` 을 참고한다. ::
 
         cubrid unloaddb --datafile-per-class demodb
-    
+
 .. _load-db:
 
 데이터베이스 가져오기(load)
@@ -442,7 +442,7 @@ CUBRID에서는 주석은 두 개의 연속된 하이픈(--)을 이용하여 처
 #. 기존 CUBRID 서비스 종료
 
    **cubrid service stop** 을 실행하여 기존 CUBRID로 운영되는 모든 서비스 프로세스를 종료한 후, CUBRID 관련 프로세스들이 모두 정상 종료되었는지 확인한다.
-    
+
    CUBRID 관련 프로세스들이 모두 정상 종료되었는지 확인하려면, Linux에서는 **ps -ef|grep cub_**\ 를 실행한다. cub_로 시작하는 프로세스가 없으면 정상적으로 종료된 것이다. Windows에서는 <Ctrl + Alt + Delete> 키를 누른 후 [작업 관리자 시작]을 선택한다. [프로세스] 탭에 cub_로 시작하는 프로세스가 없으면 정상적으로 종료된 것이다. CUBRID 서비스 종료 후에도 관련 프로세스가 존재하면 Linux에서는 **kill** 명령으로 강제 종료한 후 **ipcs -m** 명령으로 CUBRID 브로커가 사용 중이던 공유 메모리를 확인하고 삭제한다. Windows에서는 작업 관리자의 [프로세스] 탭에서 해당 이미지 이름을 마우스 오른쪽 버튼으로 클릭하고 [프로세스 끝내기]를 선택하여 강제 종료한다.
 
 #. 기존 데이터베이스 백업
@@ -476,4 +476,3 @@ CUBRID에서는 주석은 두 개의 연속된 하이픈(--)을 이용하여 처
 .. warning:: 
 
     같은 버전이라 하더라도 백업 및 복구 시 32비트 데이터베이스 볼륨과 64비트 데이터베이스 볼륨 간에는 상호 호환을 보장하지 않는다. 따라서 32비트 CUBRID에서 백업한 데이터베이스를 64비트 CUBRID에서 복구하거나, 이와 반대로 작업하는 것을 권장하지 않는다.
-

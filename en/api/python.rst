@@ -104,7 +104,7 @@ This sample program will show steps that you need to perform in order to connect
 **Connecting to demodb from Python**
 
 #.  Open a new Python console and enter the command line below to import CUBRID Python driver. 
-    
+
     .. code-block:: python
     
         import CUBRIDdb
@@ -113,16 +113,17 @@ This sample program will show steps that you need to perform in order to connect
     
     .. code-block:: python
     
-            conn = CUBRIDdb.connect('CUBRID:localhost:30000:demodb', 'public')
-    
-For the *demodb* database, it is not required to enter any password. In a real-world scenario, you will have to provide the password to successfully connect. The syntax to use the `connect <http://packages.python.org/CUBRID-Python/_cubrid-module.html#connect>`_ () function is as follows: ::
+        conn = CUBRIDdb.connect('CUBRID:localhost:30000:demodb', 'public')
+
+For the *demodb* database, it is not required to enter any password. In a real-world scenario, you will have to provide the password to successfully connect. 
+The syntax to use the `connect <http://packages.python.org/CUBRID-Python/_cubrid-module.html#connect>`_ () function is as follows: ::
 
     connect (url[,user[password]])
 
 If the database has not started and you try to connect to it, you will receive an error such as this: ::
 
     Traceback (most recent call last):
-      File "tutorial.py", line 3, in ‹module›
+      File "tutorial.py", line 3, in <module>
         con = CUBRIDdb.connect('CUBRID:localhost:33000:demodb','public')
       File "/usr/local/lib/python2.6/site-packages/CUBRIDdb/__init__.py", line 48, in Connect
         return Connection(*args, **kwargs)
@@ -133,7 +134,7 @@ If the database has not started and you try to connect to it, you will receive a
 If you provide wrong credentials, you will receive an error such as this: ::
 
     Traceback (most recent call last):
-      File "tutorial.py", line 3, in ‹module›
+      File "tutorial.py", line 3, in <module>
         con = CUBRIDdb.connect('CUBRID:localhost:33000:demodb','a','b')
       File "/usr/local/lib/python2.6/site-packages/CUBRIDdb/__init__.py", line 48, in Connect
         return Connection(*args, **kwargs)

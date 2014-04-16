@@ -13,8 +13,7 @@ To download PHP driver or get the latest information, click http://www.cubrid.or
 Installing and Configuring PHP
 ==============================
 
-The easiest and fastest way to get all applications installed on your system is to install CUBRID, Apache web server, PHP, and CUBRID PHP driver at the same time. For details, see
-http://www.cubrid.org/wiki_apis/entry/install-cubrid-with-apache-and-php-on-ubuntu .
+The easiest and fastest way to get all applications installed on your system is to install CUBRID, Apache web server, PHP, and CUBRID PHP driver at the same time. For details, see http://www.cubrid.org/wiki_apis/entry/install-cubrid-with-apache-and-php-on-ubuntu .
 
 For Linux
 ---------
@@ -27,12 +26,15 @@ For Linux
 
 **Installing CUBRID PHP Driver using PECL**
 
-If **PECL** package has been installed on your system, the installation of CUBRID PHP driver is straightforward. **PECL** will download and compile the driver for you. If you do not have **PECL** installed, follow the instructions at http://www.cubrid.org/wiki_apis/entry/installing-cubrid-php-driver-using-pecl to get it installed.
+If **PECL** package has been installed on your system, the installation of CUBRID PHP driver is straightforward. **PECL** will download and compile the driver for you. 
+If you do not have **PECL** installed, follow the instructions at http://www.cubrid.org/wiki_apis/entry/installing-cubrid-php-driver-using-pecl to get it installed.
 
-#.  Enter the following command to install the latest version of CUBRID PHP driver. ::
-    
+#.  Enter the following command to install the latest version of CUBRID PHP driver.
+
+    ::
+
         sudo pecl install cubrid
-    
+
     If you need earlier versions of the driver, you can install exact versions as follows: ::
     
         sudo pecl install cubrid-8.3.0.0005
@@ -40,16 +42,16 @@ If **PECL** package has been installed on your system, the installation of CUBRI
     During the installation, you will be prompted to enter **CUBRID base install dir autodetect :**. Just to make sure your installation goes smoothly, enter the full path to the directory where you have installed CUBRID. For example, if CUBRID has been installed at **/home/cubridtest/CUBRID**, then enter **/home/cubridtest/CUBRID**.
     
 #.  Edit the configuration file.
-    
+
     If you are using CentOS 6.0 and later or Fedora 15 and later, create a file named **cubrid.ini**, enter a command line **extension=cubrid.so**, and store the fine in the **/etc/php.d** directory.
-    
+
     If you are using earlier versions of CentOS 6.0 or Fedora 15, edit the **php.ini** file (default location: **/etc/php5/apache2/** or **/etc/**) and add the following two command lines at the end of the file. 
     
     ::
-    
+
         [CUBRID]
         extension=cubrid.so
-    
+
 #.  Restart the web server to apply changes.
 
 **Installing using apt-get on Ubuntu**
@@ -128,12 +130,15 @@ Before you install CUBRID PHP driver, make sure that paths of PHP and CUBRID are
     http://www.cubrid.org/?mid=downloads&item=php_driver&os=windows
     
 #.  To install the PHP extension, run the installer. Once the installer starts, click the [Next] button.
+
 #.  Agree with the BSD license terms and click the [Next] button.
+
 #.  Choose where you would like to install this CUBRID PHP API Installer and click the [Next] button. You should choose a new folder for this installer like **C:\\Program Files\\CUBRID PHP API**.
     
 #.  Give a folder name and click the [Install] button. If you fail installation, you should probably receive an error message. In this case, see "Configuring the environment" below.
     
 #.  If no error message is displayed, this should install the CUBRID PHP extension and update your **php.ini** file. Click [Finish] to close the installer.
+
 #.  For changes to take place, restart your web server and execute the phpinfo() to confirm CUBRID has successfully been installed.
 
     .. image:: /images/image56.png
@@ -249,12 +254,10 @@ In this section, we will introduce the way of building CUBRID PHP driver for Lin
     +============+============+
     | Version    | 9.0.0.XXXX |
     +------------+------------+
-    
+
 .. _phpize-remark:
 
 **Remark**
-
-What is **phpize** ? Where can I get it?
 
 **phpize** is a shell script to prepare the PHP extension for compiling. You can get it when you install PHP because it is automatically installed with PHP installation, in general. If it you do not have **phpize** installed on your system, you can get it by following the steps below.
 
@@ -272,9 +275,7 @@ What is **phpize** ? Where can I get it?
 For Windows
 -----------
 
-In this section, we will introduce three ways of building CUBRID PHP driver for Windows.
-
-If you have no idea which version you choose, read the following contents first.
+In this section, we will introduce three ways of building CUBRID PHP driver for Windows. If you have no idea which version you choose, read the following contents first.
 
 *   If you are using PHP with Apache 1 or Apache 2, you should use the VC6 versions of PHP.
 *   If you are using PHP with IIS, you should use the VC9 versions of PHP.
@@ -291,17 +292,13 @@ The VC9 versions require you to have the Microsoft 2008 C++ Runtime (x86) or the
 
 *   Visual Studio 2008: You can alternately use the free Visual C++ Express Edition or the Visual C++ 9 compiler included in the Windows SDK v6.1 if you are familiar with a makefile. Make sure that you have the Microsoft Visual C++ Redistributable Package installed on your system to use CUBRID PHP VC9 driver.
 
-*   PHP 5.3 binaries: You can install VC9 x86 Non Thread Safe or VC9 x86 Thread Safe. Make sure that the **%PHPRC%** system environment variable is correctly set.
+*   PHP 5.3 binaries: You can install VC9 x86 Non Thread Safe or VC9 x86 Thread Safe. Make sure that the **%PHPRC%** system environment variable is correctly set. In the [Property Pages] dialog box, select [General] under the [Linker] tree node. You can see **$(PHPRC)** in [Additional Library Directories].
 
-In the [Property Pages] dialog box, select [General] under the [Linker] tree node. You can see **$(PHPRC)** in [Additional Library Directories].
+    .. image:: /images/image57.jpg
 
-  .. image:: /images/image57.jpg
+*   PHP 5.3 source code: Remember to get the source code that matches your binary version. After you extract the PHP 5.3 source code, add the **%PHP5_SRC%** system environment variable and set its value to the path of PHP 5.3 source code. In the [Property Pages] dialog box, select [General] under the [C/C++] tree node. You can see **$(PHP5_SRC)** in [Additional Include Directories].
 
-*   PHP 5.3 source code: Remember to get the source code that matches your binary version. After you extract the PHP 5.3 source code, add the **%PHP5_SRC%** system environment variable and set its value to the path of PHP 5.3 source code.
-
-In the [Property Pages] dialog box, select [General] under the [C/C++] tree node. You can see **$(PHP5_SRC)** in [Additional Include Directories].
-
-  .. image:: /images/image58.jpg
+    .. image:: /images/image58.jpg
 
 *   CUBRID PHP driver source code: You can download CUBRID PHP driver source code of which the version is the same as the version of CUBRID that have been installed on your system. You can get it from http://www.cubrid.org/?mid=downloads&item=php_driver .
 
@@ -322,9 +319,9 @@ In the [Property Pages] dialog box, select [General] under the [C/C++] tree node
 #.  After you complete the properties modification, click the [OK] button and press the <F7> key to compile the driver. Then, we have the **php_cubrid.dll** file built.
     
 #.  You need to make PHP recognize the **php_cubrid.dll** file as an extension. To do this:
-    
+
     *   Create a new folder named **cubrid** where PHP has been installed and copy the  **php_cubrid.dll** file to the **cubrid** folder. You can also put the **php_cubrid.dll** file in **%PHPRC%\\ext** if this directory exists.
-    
+
     *   In the php.ini file, enter the path of the **php_cubrid.dll** file as an extension_dir variable value and enter **php_cubrid.dll** as an extension value.
 
 **Building CUBRID PHP Driver with VC6 for PHP 5.2/5.3**
@@ -332,18 +329,18 @@ In the [Property Pages] dialog box, select [General] under the [C/C++] tree node
 **Configuring the environment**
 
 *   CUBRID: Install CUBRID. Make sure that the environment variable **%CUBRID%** is defined in your system.
-*   Visual C++ 6.0 SP6
-*   Windows Server Feb. 2003 SDK: It is recommended to use Windows Server Feb. 2008 SDK because every official release and snapshot are compiled with Visual C++ 6.0 SP6 and Windows Server Feb. 2003 SDK.
 
-You can configure the default settings without using this SDK; however, there is possibility that an error would occur while building the driver. In this case, you should fix the error yourself.
+*   Visual C++ 6.0 SP6
+
+*   Windows Server Feb. 2003 SDK: It is recommended to use Windows Server Feb. 2008 SDK because every official release and snapshot are compiled with Visual C++ 6.0 SP6 and Windows Server Feb. 2003 SDK. You can configure the default settings without using this SDK; however, there is possibility that an error would occur while building the driver. In this case, you should fix the error yourself.
 
 *   PHP 5.3/5.2 binaries: You can install VC6 x86 Non Thread Safe or VC6 x86 Thread Safe. Make sure that the value of the **%PHPRC%** system environment variable is correctly set. In the [Project Settings] dialog box, you can find **$(PHPRC)** in [Additional library path] of the [Link] tab.
 
-  .. image:: /images/image61.jpg
+    .. image:: /images/image61.jpg
 
 *   PHP 5.2/5.3 source code: Remember to get the source that matches your binary version. After you extract the PHP 5.3 source code, add the **%PHP5_SRC%** system environment variable and set its value to the path of PHP 5.3 source code. In the [Project Settings] dialog box of VC6 project, you can find **$(PHP5_SRC)** in [Additional include directories] of the [C/C++] tab.
 
-  .. image:: /images/image62.jpg
+    .. image:: /images/image62.jpg
 
 *   CUBRID PHP driver source code: You can download CUBRID PHP driver source code of which the version is the same as the version of CUBRID that has been installed on your system. You can get it from http://www.cubrid.org/?mid=downloads&item=php_driver .
 
@@ -446,9 +443,7 @@ There is no official Apache for 64-bit Windows either. Instead, you can use IIS 
     *   In the [New Project Platform] dialog box, select **x64** option in the [New platform] dropdown list.
     
     .. image:: /images/image75.png
-    
-    *   Click [OK] and close the [Configuration Manager].
-    
+
 #.  In the [Property Pages] dialog box, select [Preprocessor] under the [C/C++] tree node. In [Preprocessor Definitions], delete **_USE_32BIT_TIME_T** and click [OK] to close the dialog box.
     
     .. image:: /images/image76.png
@@ -461,8 +456,7 @@ PHP Programming
 Connecting to a Database
 ------------------------
 
-The first step of database applications is to use `cubrid_connect <http://www.php.net/manual/en/function.cubrid-connect.php>`_ () or `cubrid_connect_with_url <http://www.php.net/manual/en/function.cubrid-connect-with-url.php>`_ () function which provides database connection. Once `cubrid_connect <http://www.php.net/manual/en/function.cubrid-connect.php>`_ () or `cubrid_connect_with_url <http://www.php.net/manual/en/function.cubrid-connect-with-url.php>`_ () function is executed successfully, you can use any functions available in the database. It is very important to call the `cubrid_disconnect <http://www.php.net/manual/en/function.cubrid-disconnect.php>`_ () function before applications are terminated. The `cubrid_disconnect <http://www.php.net/manual/en/function.cubrid-disconnect.php>`_ () function terminates the current transaction as well as the connection handle and all request handles created by the
-`cubrid_connect <http://www.php.net/manual/en/function.cubrid-connect.php>`_ () function.
+The first step of database applications is to use `cubrid_connect <http://www.php.net/manual/en/function.cubrid-connect.php>`_ () or `cubrid_connect_with_url <http://www.php.net/manual/en/function.cubrid-connect-with-url.php>`_ () function which provides database connection. Once `cubrid_connect <http://www.php.net/manual/en/function.cubrid-connect.php>`_ () or `cubrid_connect_with_url <http://www.php.net/manual/en/function.cubrid-connect-with-url.php>`_ () function is executed successfully, you can use any functions available in the database. It is very important to call the `cubrid_disconnect <http://www.php.net/manual/en/function.cubrid-disconnect.php>`_ () function before applications are terminated. The `cubrid_disconnect <http://www.php.net/manual/en/function.cubrid-disconnect.php>`_ () function terminates the current transaction as well as the connection handle and all request handles created by the `cubrid_connect <http://www.php.net/manual/en/function.cubrid-connect.php>`_ () function.
 
 .. note:: 
 
@@ -546,21 +540,21 @@ One of the following three types of arrays is used in the result of the `cubrid_
 
 *   Numeric array
 
-  .. code-block:: php
-
-    while (list($id, $name) = cubrid_fetch($req, CUBRID_NUM)) {
-        echo $id;
-        echo $name;
-    }
+    .. code-block:: php
+    
+        while (list($id, $name) = cubrid_fetch($req, CUBRID_NUM)) {
+            echo $id;
+            echo $name;
+        }
 
 *   Associative array
 
-  .. code-block:: php
-
-    while ($row = cubrid_fetch($req, CUBRID_ASSOC)) {
-        echo $row["id"];
-        echo $row["name"];
-    }
+    .. code-block:: php
+    
+        while ($row = cubrid_fetch($req, CUBRID_ASSOC)) {
+            echo $row["id"];
+            echo $row["name"];
+        }
 
 **Catalog Operations**
 
@@ -580,8 +574,7 @@ The `cubrid_schema <http://www.php.net/manual/en/function.cubrid-schema.php>`_ (
 
 **Error Handling**
 
-When an error occurs, most of PHP interfaces display error messages and return false or -1. The `cubrid_error_msg <http://www.php.net/manual/en/function.cubrid-error-msg.php>`_ (),
-`cubrid_error_code <http://www.php.net/manual/en/function.cubrid-error-code.php>`_ () and `cubrid_error_code_facility <http://www.php.net/manual/en/function.cubrid-error-code-facility.php>`_ () functions are used to check error messages, error codes, and error facility codes.
+When an error occurs, most of PHP interfaces display error messages and return false or -1. The `cubrid_error_msg <http://www.php.net/manual/en/function.cubrid-error-msg.php>`_ (), `cubrid_error_code <http://www.php.net/manual/en/function.cubrid-error-code.php>`_ () and `cubrid_error_code_facility <http://www.php.net/manual/en/function.cubrid-error-code-facility.php>`_ () functions are used to check error messages, error codes, and error facility codes.
 
 The return value of the `cubrid_error_code_facility <http://www.php.net/manual/en/function.cubrid-error-code-facility.php>`_ () function is one of the following (**CUBRID_FACILITY_DBMS** (DBMS error), **CUBRID_FACILITY_CAS** (CAS server error), **CUBRID_FACILITY_CCI** (CCI error), or **CUBRID_FACILITY_CLIENT** (PHP module error).
 
@@ -601,7 +594,11 @@ The OID value in the currently updated f record by using the `cubrid_current_oid
         cubrid_close_request($req);
     }
 
-Values in every attribute, specified attributes, or a single attribute of an instance can be obtained by using OIDs. If any attributes are not specified in the `cubrid_get <http://www.php.net/manual/en/function.cubrid-get.php>`_ () function, values in every attribute are returned (a). If attributes is specified in the array data type, the array containing the specified attribute value is returned in the associative array (b). If a single attribute it is specified in the string type, a value of the attributed is returned (c).
+Values in every attribute, specified attributes, or a single attribute of an instance can be obtained by using OIDs. 
+
+If any attributes are not specified in the `cubrid_get <http://www.php.net/manual/en/function.cubrid-get.php>`_ () function, values in every attribute are returned (a). 
+If attributes is specified in the array data type, the array containing the specified attribute value is returned in the associative array (b). 
+If a single attribute it is specified in the string type, a value of the attributed is returned (c).
 
 .. code-block:: php
 

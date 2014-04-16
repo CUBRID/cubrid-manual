@@ -57,7 +57,7 @@ You can check the statistics Information with the session command of the CSQL In
 
     csql> ;info stats table_name
 
-*   *table_name* : Table name to check the statistics Information
+*   *table_name*: Table name to check the statistics Information
 
 The following shows the statistical information of *t1* table in CSQL interpreter.
 
@@ -518,6 +518,8 @@ Using hints can affect the performance of query execution. You can allow the que
     USE_MERGE [ (<spec_name_comma_list>) ] |
     ORDERED |
     USE_DESC_IDX |
+    INDEX_SS [ (<spec_name_comma_list>) ] |
+    INDEX_LS |
     NO_DESC_IDX |
     NO_COVERING_IDX |
     NO_MULTI_RANGE_OPT |
@@ -548,6 +550,8 @@ The following hints can be specified in UPDATE, DELETE and SELECT statements.
 *   **ORDERED**: Related to a table join, the query optimizer create a join execution plan with this hint, based on the order of tables specified in the FROM clause. The left table in the FROM clause becomes the outer table; the right one becomes the inner table.
 *   **USE_IDX**: Related to an index, the query optimizer creates an index join execution plan corresponding to a specified table with this hint.
 *   **USE_DESC_IDX**: This is a hint for the scan in descending index. For more information, see :ref:`index-descending-scan`.
+*   **INDEX_SS**: Consider the query plan of index skip scan. For more information, see :ref:`index-skip-scan`.
+*   **INDEX_LS**: Consider the query plan of loose index scan. For more information, see :ref:`loose-index-scan`.
 *   **NO_DESC_IDX**: This is a hint not to use the descending index.
 *   **NO_COVERING_IDX**: This is a hint not to use the covering index. For details, see :ref:`covering-index`.
 *   **NO_MULTI_RANGE_OPT**: This is a hint not to use the multi-key range optimization. For details, see :ref:`multi-key-range-opt`.
@@ -1780,15 +1784,45 @@ If queries with multiple joined tables can support Multiple Key Ranges Optimizat
 Index Skip Scan
 ---------------
 
-Index Skip Scan (also known as ISS) is an optimization method that allows ignoring the first column of an index when the first column of the index is not included in the condition but the following column is included in the condition (in most cases, =).
+Index Skip Scan (here after ISS) is an optimization method that allows ignoring the first column of an index when the first column of the index is not included in the condition but the following column is included in the condition (in most cases, =).
 
-ISS is applied when **INDEX_SS** is input as a hint and the below cases are satisfied.
+Applying ISS is considered when **INDEX_SS** for specific tables is specified through a query hint and the below cases are satisfied.
 
 1.  The query condition should be specified from the second column of the composite index.
 2.  The used index should not be a filtered index.
 3.  The first column of an index should not be a range filter or key filter.
 4.  A hierarchical query is not supported.
 5.  A query which an aggregate function is included is not supported.
+
+In a **INDEX_SS** hint, a list of table to consider applying ISS, can be input; if a list of table is omitted, applying ISS for all tables can be considered.
+
+.. code-block:: sql
+
+    CREATE TABLE t1 (id INT PRIMARY KEY, a INT, b INT, c INT);
+    CREATE TABLE t2 (id INT PRIMARY KEY, a INT, b INT, c INT);
+    CREATE INDEX i_t1_ac ON t1(a,c);
+    CREATE INDEX i_t2_ac ON t2(a,c);
+
+    INSERT INTO t1 SELECT rownum, rownum, rownum, rownum 
+    FROM db_class x1, db_class x2, db_class LIMIT 10000;
+    
+    INSERT INTO t2 SELECT id, a%5, b, c FROM t1;
+
+
+    SELECT /*+ INDEX_SS */ * 
+    FROM t1, t2 
+    WHERE t1.b<5 AND t1.c<5 AND t2.c<5 
+    USING INDEX i_t1_ac, i_t2_ac limit 1;
+    
+    SELECT /*+ INDEX_SS(t1) */ * 
+    FROM t1, t2 
+    WHERE t1.b<5 AND t1.c<5 AND t2.c<5 
+    USING INDEX i_t1_ac, i_t2_ac LIMIT 1;
+    
+    SELECT /*+ INDEX_SS(t1, t2) */ * 
+    FROM t1, t2 
+    WHERE t1.b<5 AND t1.c<5 AND t2.c<5 
+    USING INDEX i_t1_ac, i_t2_ac LIMIT 1;
 
 Generally, ISS should consider several columns (C1, C2, ..., Cn). Here, a query has the conditions for the consecutive columns and the conditions are started from the second column (C2) of the index.
 
@@ -1868,19 +1902,19 @@ When you run the below query regarding the above table,
 
 .. code-block:: sql
 
-    SELECT a, b FROM tbl GROUP BY a;
+    SELECT /*+ INDEX_LS */ a, b FROM tbl GROUP BY a;
 
 CUBRID cannot use a subkey because there is no condition for the column a. However, if the condition of the subkey is specified as follows, loose index scan can be applied.
 
 .. code-block:: sql
 
-    SELECT a, b FROM tbl WHERE a > 10 GROUP BY a;
+    SELECT /*+ INDEX_LS */ a, b FROM tbl WHERE a > 10 GROUP BY a;
 
 As follows, a subkey can be used when the grouped column is on the first and the WHERE-condition column is on the following position; therefore, also in this case, loose index scan can be applied.
 
 .. code-block:: sql
 
-    SELECT a, b FROM tbl WHERE b > 10 GROUP BY a;
+    SELECT /*+ INDEX_LS */ a, b FROM tbl WHERE b > 10 GROUP BY a;
 
 The following shows the cases when loose index scan optimization is applied.
 

@@ -1983,7 +1983,7 @@ SHARD = ON 인 경우, CUBRID proxy의 로그 디렉터리는 **SHARD_PROXY_LOG_
 SQL 로그 관리
 ^^^^^^^^^^^^^
 
-SQL 로그 파일은 응용 클라이언트가 요청하는 SQL을 기록하며, *<broker_name>_<app_server_num>*.sql.log라는 이름으로 저장된다. SQL 로그는 **SQL_LOG** 파라미터 값이  ON인 경우에 설치 디렉터리의 log/broker/sql_log 디렉터리에 생성된다. 이 때, 생성되는 SQL 로그 파일의 크기는 **SQL_LOG_MAX_SIZE** 파라미터의 설정값을 초과할 수 없으므로 주의한다. CUBRID는 SQL 로그를 관리하기 위한 유틸리티로서 **broker_log_top**, **broker_log_converter**, **broker_log_runner** 를 제공하며, 이 유틸리티는 SQL 로그가 존재하는 디렉터리에서 실행해야 한다.
+SQL 로그 파일은 응용 클라이언트가 요청하는 SQL을 기록하며, *<broker_name>_<app_server_num>*.sql.log라는 이름으로 저장된다. SQL 로그는 **SQL_LOG** 파라미터 값이  ON인 경우에 설치 디렉터리의 log/broker/sql_log 디렉터리에 생성된다. 이 때, 생성되는 SQL 로그 파일의 크기는 **SQL_LOG_MAX_SIZE** 파라미터의 설정값을 초과할 수 없으므로 주의한다. CUBRID는 SQL 로그를 관리하기 위한 유틸리티로서 **broker_log_top**, **cubrid_replay** 를 제공하며, 이 유틸리티는 SQL 로그가 존재하는 디렉터리에서 실행해야 한다.
 
 다음은 SQL 로그 파일의 예제와 설명이다.
 
@@ -2141,149 +2141,6 @@ broker_log_top
     [Q3]        35.548    25.650    30.599    2 (0)
     [Q4]        30.469     0.001     0.103 1050 (0)
 
-.. _broker_log_converter:
-
-broker_log_converter
-""""""""""""""""""""
-
-설치 디렉터리의 log/broker/sql_log 디렉터리에 생성된 SQL 로그 파일에 기록된 질의를 별도의 입력 파일로 저장하기 위하여 **broker_log_converter** 유틸리티를 실행한다. **broker_log_converter** 유틸리티의 구문은 다음과 같다.
-
-::
-
-    broker_log_converter [option] SQL_log_file output_file
-
-*   *SQL_log_file*: $CUBRID/log/broker/sql_log 디렉터리 이하에 존재하는 SQL 로그 파일. 응용 프로그램에서 드라이버를 통해 질의를 전달하는 경우에만 SQL 로그가 저장되며, CSQL 인터프리터에서 질의하는 경우에는 해당 위치에 SQL 로그가 저장되지 않는다.
-*   *output_file*: **broker_log_runner**\ 의 입력 포맷에 맞게 출력되는 파일
-
-**broker_log_converter**\에서 사용하는 [option]은 다음과 같다.
-
-.. program:: broker_log_converter
-
-.. option:: -i
-    
-    질의문 앞에 QUERY_ID 커멘트를 출력
-    
-QUERY_ID 커멘트가 있으면 **broker_log_runner**\를 사용하여 **output_file**\ 의 질의들을 재현할 때 해당 QUERY_ID 정보가 브로커의 SQL 로그($CUBRID/log/broker/sql_log에 위치)에 출력되므로 추적이 용이하다.
-
-다음 예제는 query_editor_1.sql.log 파일에 저장된 질의를 query_convert.in 파일로 변경한다.
-
-::
-
-    % cd CUBRID/log/broker/sql_log
-    % broker_log_converter query_editor_1.sql.log query_convert.in
-
-.. _broker_log_runner:
-
-broker_log_runner
-"""""""""""""""""
-
-**broker_log_converter** 유틸리티에 의해 생성된 질의 파일에 저장된 질의를 재실행하기 위하여 **broker_log_runner** 유틸리티를 실행한다.
-
-**broker_log_runner** 유틸리티의 구문은 다음과 같다. 
-
-::
-
-    broker_log_runner -I broker_host -P broker_port -d dbname [options] exec_script_file 
-    
-*   *broker_host*: CUBRID 브로커의 IP주소 또는 호스트 이름
-*   *broker_port*: CUBRID 브로커의 포트 번호
-*   *dbname*: 질의를 실행할 데이터베이스 이름
-*   *exec_script_file*: 수행할 질의가 저장된 파일 이름
-
-**broker_log_runner**\ 에서 사용하는 [options]는 다음과 같다.
-
-.. program:: broker_log_runner
-
-.. option:: -u NAME
-
-    데이터베이스 사용자 이름 지정(기본값: public)
-    
-.. option:: -p PASSWORD
-
-    데이터베이스 암호 지정
-
-.. option:: -t NUMBER    
-
-    스레드의 개수 지정(기본값: 1)
-    
-.. option:: -r COUNT
-
-    질의가 수행될 횟수 지정(기본값: 1)
-    
-.. option:: -o FILE
-
-    수행 결과를 저장할 파일 이름 지정
-
-.. option:: -Q
-
-    **-o** 옵션에서 지정한 FILE에 질의 계획을 포함하여 저장
-
-.. option:: -s
-    
-    각 질의 당 "cubrid statdump" 명령에 의한 정보를 출력. :ref:`statdump` 참고.
-    
-.. option:: -a
-
-    자동 커밋 모드 ON으로 수행
-    
-다음 예제는 query_convert.in 파일에 저장된 질의를 *demodb* 에서 재실행하며, 브로커 IP가 192.168.1.10이고, 브로커 포트는 30000인 환경임을 가정한다.
-    
-::
-
-    % broker_log_runner -I 192.168.1.10  -P 30000 -d demodb -t 2 query_convert.in
-    broker_ip = 192.168.1.10
-    broker_port = 30000
-    num_thread = 2
-    repeat = 1
-    dbname = demodb
-    dbuser = public
-    dbpasswd =
-    exec_time : 0.001
-    exec_time : 0.000
-    0.000500 0.000500 
-
-다음 예제는 질의 실행 없이 result 파일에 질의 계획만 저장한다.
-    
-::
-    
-    % broker_log_runner -I 192.168.1.10 -P 30000 -d demodb -o result -Q query_convert.in
-    ...
-    %cat result.0
-    -------------- query -----------------
-    SELECT * FROM athlete where code=10099;
-    cci_prepare exec_time : 0.000
-    cci_execute_exec_time : 0.000
-    cci_execute:1
-    ---------- query plan --------------
-    Join graph segments (f indicates final):
-    seg[0]: [0]
-    seg[1]: code[0] (f)
-    seg[2]: name[0] (f)
-    seg[3]: gender[0] (f)
-    seg[4]: nation_code[0] (f)
-    seg[5]: event[0] (f)
-    Join graph nodes:
-    node[0]: athlete athlete(6677/107) (sargs 0)
-    Join graph terms:
-    term[0]: (athlete.code=10099) (sel 0.000149768) (sarg term) (not-join eligible) (indexable code[0]) (loc 0)
-
-    Query plan:
-
-    iscan
-        class: athlete node[0]
-        index: pk_athlete_code term[0]
-        cost:  0 card 1
-
-    Query stmt:
-
-    select athlete.code, athlete.[name], athlete.gender, athlete.nation_code, athlete.event from athlete athlete where (athlete.code=  :0 )
-
-    ---------- query result --------------
-    10099|Andersson Magnus|M|SWE|Handball|
-    -- 1 rows ----------------------------
-
-    cci_end_tran exec_time : 0.000
-
 .. _cubrid_replay:
 
 cubrid_replay 
@@ -2380,6 +2237,8 @@ cubrid_replay
 *   EXEC TIME: (재생 시간 / SQL 로그에서의 수행 시간 / 두 수행 시간의 차이) 
 *   SQL: 브로커의 SQL 로그에 존재하는 원본 SQL 
 *   REWRITE SQL: **-r** 옵션이 지정되어 UPDATE 또는 DELETE 문에서 변환된 SELECT 문
+
+.. note:: broker_log_runner는 9.3 버전부터 제거될 예정(deprecated)이므로, cubrid_replay를 대신 사용하도록 한다.
 
 .. _cas-error:
         

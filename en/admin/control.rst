@@ -1983,7 +1983,7 @@ The following example and description show an error log:
 Managing the SQL Log
 ^^^^^^^^^^^^^^^^^^^^
 
-The SQL log file records SQL statements requested by the application client and is stored with the name of *<broker_name>_<app_server_num>*. sql.log. The SQL log is generated in the log/broker/sql_log directory when the SQL_LOG parameter is set to ON. Note that the size of the SQL log file to be generated cannot exceed the value set for the SQL_LOG_MAX_SIZE parameter. CUBRID offers the **broker_log_top**, **broker_log_converter**, and **broker_log_runner** utilities to manage SQL logs. Each utility should be executed in a directory where the corresponding SQL log exists.
+The SQL log file records SQL statements requested by the application client and is stored with the name of *<broker_name>_<app_server_num>*. sql.log. The SQL log is generated in the log/broker/sql_log directory when the SQL_LOG parameter is set to ON. Note that the size of the SQL log file to be generated cannot exceed the value set for the SQL_LOG_MAX_SIZE parameter. CUBRID offers the **broker_log_top** and **cubrid_replay** utilities to manage SQL logs. Each utility should be executed in a directory where the corresponding SQL log exists.
 
 The following examples and descriptions show SQL log files: 
 
@@ -2141,149 +2141,6 @@ In the **log.top.q** file, you can see each SQL statement, and its line number. 
     [Q3]        35.548    25.650    30.599    2 (0)
     [Q4]        30.469     0.001     0.103 1050 (0)
 
-.. _broker_log_converter:
-
-broker_log_converter
-""""""""""""""""""""
-
-To store SQL logs created in log/broker/sql_log under the installation directory to a separate file, the **broker_log_converter** utility is executed. The syntax of the **broker_log_converter** utility is as follows. The example shows how to store queries in the query_editor_1.sql.log file to the query_convert.in file. 
-
-::
-
-    broker_log_converter [option] SQL_log_file output_file
-
-* *SQL_log_file*: SQL log file located in $CUBRID/log/broker/sql_log directory. It only saves SQL log when the application sends a query through only a driver, and does not save SQL log when the query is executed through CSQL interpreter.
-* *output_file*: an output file which the input format is followed by **broker_log_runner**
-
-The following is the [option] used in **broker_log_converter**.
-
-.. program:: broker_log_converter
-
-.. option:: -i
-    
-    It prints QUERY_ID comment in front of the query.
-
-If QUERY_ID comment exists on the query, tracing a query is easier since QUERY_ID information is printed to the SQL log(located in $CUBRID/log/broker/sql_log) of the broker when replaying the queries of **output_file**.
-
-The following example shows how to convert the query in the query_editor_1.sql.log file into the query_convert.in file. 
-
-::
-
-    % cd CUBRID/log/broker/sql_log
-    % broker_log_converter query_editor_1.sql.log query_convert.in
-
-.. _broker_log_runner:
-
-broker_log_runner
-"""""""""""""""""
-
-To re-execute queries stored in the query file which has been created by the **broker_log_converter** utility, execute the **broker_log_runner** utility.
-
-The syntax of the **broker_log_runner** utility is as follows: 
-
-::
-
-    broker_log_runner -I broker_host -P broker_port -d dbname [options] exec_script_file 
-    
-*   *broker_host*: IP address or host name of the CUBRID broker
-*   *broker_port*: Port number of the CUBRID broker
-*   *dbname*: Name of the database against which queries are to be executed  
-*   *exec_script_file*: Name of the file where execution results are to be stored.
-
-The following is [options] used in **broker_log_runner**.
-
-.. program:: broker_log_runner
-
-.. option:: -u NAME
-
-    Database user name (default: **PUBLIC**)
-    
-.. option:: -p PASSWORD
-
-    Database password
-    
-.. option:: -t NUMBER    
-
-    The number of threads(default: 1)
-    
-.. option:: -r COUNT
-
-    The number of times that the query is to be executed (default value: 1)
-
-.. option:: -o FILE
-
-    Name of the file where execution results are to be stored 
-    
-.. option:: -Q
-    
-    Stores the query plan in the FILE specified in the **-o** option.
-
-.. option:: -s
-    
-    Prints the information by the "cubrid statdump" command per each query. See :ref:`statdump`.
-    
-.. option:: -a
-
-    Sets autocommit mode as ON.
-    
-The following example re-executes the queries saved on *query_convert.in* on *demodb*, and it assumes that the broker IP is specified in 192.168.1.10, and broker port is specified in 30000. 
-
-::
-
-    % broker_log_runner -I 192.168.1.10  -P 30000 -d demodb -t 2 query_convert.in
-    broker_ip = 192.168.1.10
-    broker_port = 30000
-    num_thread = 2
-    repeat = 1
-    dbname = demodb
-    dbuser = public
-    dbpasswd =
-    exec_time : 0.001
-    exec_time : 0.000
-    0.000500 0.000500
-
-The following example saves the query plan only without running the query. 
-
-::
-    
-    % broker_log_runner -I 192.168.1.10 -P 30000 -d demodb -o result -Q query_convert.in
-    ... 
-    %cat result.0
-    -------------- query -----------------
-    SELECT * FROM athlete where code=10099;
-    cci_prepare exec_time : 0.000
-    cci_execute_exec_time : 0.000
-    cci_execute:1
-    ---------- query plan --------------
-    Join graph segments (f indicates final):
-    seg[0]: [0]
-    seg[1]: code[0] (f)
-    seg[2]: name[0] (f)
-    seg[3]: gender[0] (f)
-    seg[4]: nation_code[0] (f)
-    seg[5]: event[0] (f)
-    Join graph nodes:
-    node[0]: athlete athlete(6677/107) (sargs 0)
-    Join graph terms:
-    term[0]: (athlete.code=10099) (sel 0.000149768) (sarg term) (not-join eligible) (indexable code[0]) (loc 0)
-
-    Query plan:
-
-    iscan
-        class: athlete node[0]
-        index: pk_athlete_code term[0]
-        cost:  0 card 1
-
-    Query stmt:
-
-    select athlete.code, athlete.[name], athlete.gender, athlete.nation_code, athlete.event from athlete athlete where (athlete.code=  :0 )
-
-    ---------- query result --------------
-    10099|Andersson Magnus|M|SWE|Handball|
-    -- 1 rows ----------------------------
-
-    cci_end_tran exec_time : 0.000
-
 .. _cubrid_replay:
 
 cubrid_replay 
@@ -2380,6 +2237,8 @@ In the *output.txt* file, SQLs that the replayed SQL execution time is slower th
 *   EXEC TIME: (replay time / execution time in the SQL log / difference between the two execution times) 
 *   SQL: The original SQL which exists in the SQL log of the broker
 *   REWRITE SQL: Transformed SELECT queries from UPDATE/DELETE queries by **-r** option.
+
+.. note:: broker_log_runner is deprecated from 9.3. Therefore, instead of broker_log_runner, use cubrid_replay.
 
 .. _cas-error:
         

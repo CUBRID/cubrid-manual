@@ -667,7 +667,7 @@ For details, see :ref:`log-multiplexing`.
 
 To prevent wasting needless disk space, it is recommended to keep this value as 1, the default.
 
-.. 아래 내용은 복제 재구축 스크립트의 동작 방식이 변경되기 전까지는 틀린 내용이므로 제거. 물론 수동으로 구축한다면 복제로그를 사용할 수는 있음.
+.. ?�래 ?�용?� 복제 ?�구�??�크립트???�작 방식??변경되�??�까지???��??�용?��?�??�거. 물론 ?�동?�로 구축?�다�?복제로그�??�용???�는 ?�음.
 
     If :ref:`rebuilding-replication` is needed by using the slave node or the replica node as a source, a newly added replication log files during rebuilding a replication should not be deleted by specifying **ha_copy_log_max_archives**. Therefore, the value of **ha_copy_log_max_archives** should be specified moderately largely. Except for this case, we recommend you to keep this value as the default value, 1, to prevent wasting disk space
 
@@ -833,7 +833,7 @@ The SQL log format is as follows.
     *   See :ref:`TRIGGER_ACTION <TRIGGER_ACTION>` for turning off the triggers with a broker configuration.
     *   See :option:`csql --no-trigger-action` for tunning off the triggers when you run CSQL.
     
-.. unique key update 문 중복 적용 시 발생하는 unique 에러 문제에 대해서는 아직 선별 전이므로 warning에 반영 보류. [보류]
+.. unique key update �?중복 ?�용 ??발생?�는 unique ?�러 문제???�?�서???�직 ?�별 ?�이므�?warning??반영 보류. [보류]
 
 **ha_sql_log_max_size_in_mbytes**
 
@@ -2700,10 +2700,6 @@ To rebuild replications, use the **ha_make_slavedb.sh** script. This script is l
 
 *   **target_host** : The host name of the source node (master node in general) for rebuilding replication. It should be registered in **/etc/hosts**. A slave node can rebuild replication by using the master node or the replica node as the source. A replica node can rebuild replication by using the slave node or another replica node as the source.
 
-    ..  아래 내용은 복제 재구축 스크립트 변경 전까지는 불필요
-
-        If you want rebuild replication by using the slave node or the replica node as the source, moderately large value of :ref:`ha_copy_log_max_archives <ha_copy_log_max_archives>` parameter in cubrid_ha.conf should be specified.
-
 *   **repl_log_home** : Specifies the home directory of the replication log of the master node. It is usually the same as **$CUBRID_DATABASES**. You must enter an absolute path and should not use a symbolic link. You also cannot use a slash (/) after the path.
 
 The following are optional items:
@@ -2819,12 +2815,12 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
         
 .. note:: scp command is used when you run **ha_make_slavedb.sh**; to skip a password request when you run scp, you should configure a personal key to the target node, and a public key to the source node. For details, see the usage of ssh-keygen in Linux.
 
-    #.  Run **ssh-keygen -t rsa** in the target node and check if .ssh/id_rsa and .ssh/id_rsa.pub files are created on the Linux user's home directory.
+    #.  Run **ssh-keygen -t rsa** in the source node and check if .ssh/id_rsa and .ssh/id_rsa.pub files are created on the Linux user's home directory.
     
-    #.  Copy id_rsa.pub file of the target node into the /.ssh directory under the Linux user's home directory; change a file name as authorized_keys.
+    #.  Copy id_rsa.pub file of the source node into the /.ssh directory under the Linux user's home directory; change a file name as authorized_keys.
 
-    #.  Change the modes of authorized_keys file as 640, .ssh directory as 700
-    
+    #.  Change the modes of authorized_keys file as 640, .ssh directory as 700 in the target node.
+
         ::
         
             chmod 640 authorized_keys; cd ..; chmod 700 .ssh

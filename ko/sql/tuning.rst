@@ -359,7 +359,94 @@ SQL에 대한 성능 분석을 위해서는 질의 프로파일링(profiling) �
     SHOW TRACE;
     
 다음은 SQL 트레이스를 ON으로 설정하고 질의를 수행한 후, 해당 질의에 대해 트레이스 결과를 출력하는 예이다.
- 
+
+::
+
+    csql> SET TRACE ON;
+    csql> SELECT /*+ RECOMPILE */ o.host_year, o.host_nation, o.host_city, SUM(p.gold) 
+            FROM OLYMPIC o, PARTICIPANT p  
+            WHERE o.host_year = p.host_year AND p.gold > 20
+            GROUP BY o.host_nation;
+    csql> SHOW TRACE;
+
+::
+
+    === <Result of SELECT Command in Line 2> ===
+
+      trace
+    ======================
+      '
+    Query Plan:
+      SORT (group by)
+        NESTED LOOPS (inner join)
+          TABLE SCAN (o)
+          INDEX SCAN (p.fk_participant_host_year) (key range: o.host_year=p.host_year)
+
+      rewritten query: select o.host_year, o.host_nation, o.host_city, sum(p.gold) from OLYMPIC o, PARTICIPANT p where o.host_year=p.host_year and (p.gold> ?:0 ) group by o.host_nation
+
+    Trace Statistics:
+      SELECT (time: 1, fetch: 975, ioread: 2)
+        SCAN (table: olympic), (heap time: 0, fetch: 26, ioread: 0, readrows: 25, rows: 25)
+          SCAN (index: participant.fk_participant_host_year), (btree time: 1, fetch: 941, ioread: 2, readkeys: 5, filteredkeys: 5, rows: 916) (lookup time: 0, rows: 14)
+        GROUPBY (time: 0, sort: true, page: 0, ioread: 0, rows: 5)
+    ' 
+
+위에서 "Trace Statistics:" 이하가 트레이스 결과를 출력한 것이며 트레이스 결과의 각 항목을 설명하면 다음과 같다.
+
+*   **SELECT** (time: 1, fetch: 975, ioread: 2): SELECT 질의에 대한 전체 통계이다. 
+    
+    time: 4 => 전체 질의 시간 4ms 소요. 
+    
+    fetch: 975 => 페이지에 대해 975회 fetch(개수가 아닌 접근 회수임. 같은 페이지를 다시 fetch하더라도 회수가 증가함). 
+    
+    ioread: 2회 디스크 접근.
+
+    fetch 회수와 ioread 회수는 질의를 재실행하면 질의 결과의 일부를 버퍼에서 가져오게 되면서 줄어들 수 있다.
+       
+    *   **SCAN** (table: olympic), (heap time: 0, fetch: 26, ioread: 0, readrows: 25, rows: 25): olympic 테이블에 대한 힙 스캔 통계이다.
+        
+        heap time: 0 => 소요 시간은 1ms 미만. millisecond보다 작은 값은 버림하기 때문에 1ms 미만의 소요 시간은 0으로 표시된다.
+        
+        fetch: 26 => 페이지를 fetch한 회수는 26건.
+        
+        ioread: 0 => 디스크에 접근한 회수는 0.
+        
+        readrows: 25 => 스캔 시 읽은 행의 개수는 25.
+        
+        rows: 25 => 결과 행의 개수는 25.
+    
+        *   **SCAN** (index: participant.fk_participant_host_year), (btree time: 1, fetch: 941, ioread: 2, readkeys: 5, filteredkeys: 5, rows: 916) (lookup time: 0, rows: 14): participant.fk_participant_host_year 인덱스에 대한 인덱스 스캔 통계이다.
+            
+            btree time: 1 => 소요 시간은 1ms.
+            
+            fetch: 941 => 페이지를 fetch한 회수는 941. 
+            
+            ioread: 2 => 디스크에 접근한 회수는 2회.
+            
+            readkeys: 5 => 읽은 키의 개수는 5.
+            
+            filteredkeys: 5 => 키 필터가 적용된 키의 개수는 5.
+            
+            rows: 916 => 스캔한 행 개수는 916.
+          
+            lookup time: 0 => 인덱스 스캔 후 데이터에 접근하는데 소요된 시간은 1ms 미만.
+            
+            rows: 14 => 데이터 필터까지 적용한 이후의 행 개수로, 이 질의문에서는 데이터 필터인 "p.gold > 20"을 적용했을 때 행의 개수는 14.
+
+    *   **GROUPBY** (time: 0, sort: true, page: 0, ioread: 0, rows: 5): group by에 대한 통계이다.
+        
+            time: 0 => group by 적용 시 소요된 시간은 1ms 미만.
+            
+            sort: true => 정렬이 적용되므로 true.
+            
+            page: 0 => 정렬에 사용된 임시 페이지 개수가 0.
+            
+            ioread: 0 => 디스크 접근에 소요된 시간은 1ms 미만.
+            
+            rows: 5 => group by에 대한 결과 행의 개수는 5개.
+
+다음은 3개의 테이블을 조인한 예이다.
+
 ::
  
     csql> SET TRACE ON;
@@ -389,8 +476,6 @@ SQL에 대한 성능 분석을 위해서는 질의 프로파일링(profiling) �
             SCAN (index: nation.pk_nation_code), (btree time: 0, fetch: 76, ioread: 0, readkeys: 38, filteredkeys: 38, rows: 38) (lookup time: 0, rows: 38)
         GROUPBY (time: 0, sort: true, page: 0, ioread: 0, rows: 5)
     '
-
-위에서 "Trace Statistics:" 이하가 트레이스 결과를 출력한 것이다.
 
 다음은 트레이스 항목에 대한 설명이다.
 

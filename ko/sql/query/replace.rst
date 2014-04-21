@@ -43,6 +43,8 @@ REPLACE
                 3  'ccc'                 '333-3333'
                 6  'eee'                 '000-0000'
      
+.. code-block:: sql
+
     --insert duplicated value violating UNIQUE constraint
     REPLACE INTO a_tbl4 VALUES(1, 'aaa', '111-1111'),(2, 'bbb', '222-2222');
     REPLACE INTO a_tbl4 SET id=6, name='fff', phone=DEFAULT;

@@ -2778,22 +2778,21 @@ ha_make_slavedb.sh 스크립트
         
 .. note:: **ha_make_slavedb.sh** 스크립트를 수행할 때 scp 명령을 사용하게 되는데, scp 수행 시 암호 요청 과정을 생략하려면 다음과 같이 scp의 개인키를 대상 노드에, 공개키를 원본 노드에 설정하면 된다. 보다 자세한 내용은 Linux의 ssh-keygen 사용법을 참고한다.
 
-    #.  대상 노드에 **ssh-keygen -t rsa** 를 실행하여 리눅스 사용자 계정의 홈 디렉터리 이하에 .ssh/id_rsa와 .ssh/id_rsa.pub 파일이 생성되었음을 확인한다.
+    #.  원본 노드에서 **ssh-keygen -t rsa** 를 실행하여 리눅스 사용자 계정의 홈 디렉터리 이하에 .ssh/id_rsa와 .ssh/id_rsa.pub 파일이 생성되었음을 확인한다.
 
-    #.  대상 노드의 id_rsa.pub을 원본 노드 Linux 사용자 계정의 홈 디렉터리/.ssh 디렉터리 이하에 authorized_keys라는 파일명으로 복사한다.
-
+    #.  원본 노드의 id_rsa.pub을 대상 노드 Linux 사용자 계정의 홈 디렉터리/.ssh 디렉터리 이하에 authorized_keys라는 파일명으로 복사한다.
+    
     #.  authorized_keys 파일의 속성을 640, .ssh 디렉터리의 속성을 700으로 수정한다.
 
         ::
         
             chmod 640 authorized_keys; cd ..; chmod 700 .ssh
 
-    #.  테스트를 통해 암호 요청 없이 파일이 복사되는지 확인한다. 
+    #.  테스트를 통해 암호 요청 없이 파일이 복사되는지 확인한다.
     
         ::
         
             scp test.txt cubrid_usr@:/home/cubrid_usr/.
-    
     
 **ha_make_slavedb.sh** 스크립트를 각 단계의 순서대로 실행하는 도중 오류가 발생하거나 n을 입력하여 실행을 중단한 이후에 재실행할 경우, 그 이전까지 실행에 성공한 단계에 대해서는 s를 입력하여 다음 단계로 넘어가도 된다.
 

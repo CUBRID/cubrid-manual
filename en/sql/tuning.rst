@@ -359,7 +359,94 @@ As below, if you run **SHOW TRACE** syntax, the trace result is shown.
     SHOW TRACE;
     
 Below is an example that prints out the query tracing result after setting SQL trace ON.
- 
+
+::
+
+    csql> SET TRACE ON;
+    csql> SELECT /*+ RECOMPILE */ o.host_year, o.host_nation, o.host_city, SUM(p.gold) 
+            FROM OLYMPIC o, PARTICIPANT p  
+            WHERE o.host_year = p.host_year AND p.gold > 20
+            GROUP BY o.host_nation;
+    csql> SHOW TRACE;
+
+::
+
+    === <Result of SELECT Command in Line 2> ===
+
+      trace
+    ======================
+      '
+    Query Plan:
+      SORT (group by)
+        NESTED LOOPS (inner join)
+          TABLE SCAN (o)
+          INDEX SCAN (p.fk_participant_host_year) (key range: o.host_year=p.host_year)
+
+      rewritten query: select o.host_year, o.host_nation, o.host_city, sum(p.gold) from OLYMPIC o, PARTICIPANT p where o.host_year=p.host_year and (p.gold> ?:0 ) group by o.host_nation
+
+    Trace Statistics:
+      SELECT (time: 1, fetch: 975, ioread: 2)
+        SCAN (table: olympic), (heap time: 0, fetch: 26, ioread: 0, readrows: 25, rows: 25)
+          SCAN (index: participant.fk_participant_host_year), (btree time: 1, fetch: 941, ioread: 2, readkeys: 5, filteredkeys: 5, rows: 916) (lookup time: 0, rows: 14)
+        GROUPBY (time: 0, sort: true, page: 0, ioread: 0, rows: 5)
+    ' 
+
+In the above example, under lines of "Trace Statistics:" are the result of tracing. Each items of tracing result are as below.
+
+*   **SELECT** (time: 1, fetch: 975, ioread: 2): Total statistics regarding SELECT query.
+    
+    time: 4 => Total query time took 4ms. 
+    
+    fetch: 975 => 975 times were fetched regarding pages. (not the number of pages, but the count of accessing pages. even if the same pages are fetched, the count is increased.).
+    
+    ioread: disk accessed 2 times.
+
+    If the query is rerun, fetching count and ioread count can be shrinken because some of query result are read from buffer.
+       
+    *   **SCAN** (table: olympic), (heap time: 0, fetch: 26, ioread: 0, readrows: 25, rows: 25): heap scan statistics for the olympic table.
+        
+        heap time: 0 => It took less than 1ms. CUBRID rounds off a value less than millisecond, so a time value less than 1ms is displayed as 0.
+        
+        fetch: 26 => page fetching count is 26.
+        
+        ioread: 0 => disk accessing count is 0.
+        
+        readrows: 25 => the number of rows read when scanning is 25.
+        
+        rows: 25 => the number of rows in result is 25.
+    
+        *   **SCAN** (index: participant.fk_participant_host_year), (btree time: 1, fetch: 941, ioread: 2, readkeys: 5, filteredkeys: 5, rows: 916) (lookup time: 0, rows: 14): index scanning statistics regarding participant.fk_participant_host_year index
+            
+            btree time: 1 => It took 1ms.
+            
+            fetch: 941 => page fetching count is 941. 
+            
+            ioread: 2 => disk accessing count is 2.
+            
+            readkeys: 5 => the number of keys read is 5.
+            
+            filteredkeys: 5 => the number of keys which the key filter is applied is 5.
+            
+            rows: 916 => the number of rows scanning is 916.
+          
+            lookup time: 0 => It took less than 1ms when accessing data after index scan.
+            
+            rows: 14 => the number of rows after applying data filter; in the query, the number of rows is 14 when data filter "p.gold > 20" is applied.
+
+    *   **GROUPBY** (time: 0, sort: true, page: 0, ioread: 0, rows: 5): group by statistics.
+        
+            time: 0 => It took less than 1ms when "group by" is applied.
+            
+            sort: true => It's true because sorting is applied.
+            
+            page: 0 => the number or temporary pages used in sorting is 0.
+            
+            ioread: 0 => It took less than 1ms to access disk.
+            
+            rows: 5 => the number of result rows regarding "group by" is 5.
+
+The following is an example to join 3 tables.
+
 ::
  
     csql> SET TRACE ON;
@@ -390,9 +477,7 @@ Below is an example that prints out the query tracing result after setting SQL t
         GROUPBY (time: 0, sort: true, page: 0, ioread: 0, rows: 5)
     '
 
-On the above, later lines of "Trace Statistics:" are the output of the query trace. 
-
-The following are the items of trace statistics.
+The following are the explanation regarding items of trace statistics.
 
 **SELECT**
  

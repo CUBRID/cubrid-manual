@@ -667,7 +667,7 @@ For details, see :ref:`log-multiplexing`.
 
 To prevent wasting needless disk space, it is recommended to keep this value as 1, the default.
 
-.. ?„ë˜ ?´ìš©?€ ë³µì œ ?¬êµ¬ì¶??¤í¬ë¦½íŠ¸???™ì‘ ë°©ì‹??ë³€ê²½ë˜ê¸??„ê¹Œì§€???€ë¦??´ìš©?´ë?ë¡??œê±°. ë¬¼ë¡  ?˜ë™?¼ë¡œ êµ¬ì¶•?œë‹¤ë©?ë³µì œë¡œê·¸ë¥??¬ìš©???˜ëŠ” ?ˆìŒ.
+.. below contents are wrong until the behavior of replication rebuilding script is changed; for sure, if you rebuilds it in manual, you can use the replicated logs.
 
     If :ref:`rebuilding-replication` is needed by using the slave node or the replica node as a source, a newly added replication log files during rebuilding a replication should not be deleted by specifying **ha_copy_log_max_archives**. Therefore, the value of **ha_copy_log_max_archives** should be specified moderately largely. Except for this case, we recommend you to keep this value as the default value, 1, to prevent wasting disk space
 
@@ -833,7 +833,7 @@ The SQL log format is as follows.
     *   See :ref:`TRIGGER_ACTION <TRIGGER_ACTION>` for turning off the triggers with a broker configuration.
     *   See :option:`csql --no-trigger-action` for tunning off the triggers when you run CSQL.
     
-.. unique key update ë¬?ì¤‘ë³µ ?ìš© ??ë°œìƒ?˜ëŠ” unique ?ëŸ¬ ë¬¸ì œ???€?´ì„œ???„ì§ ? ë³„ ?„ì´ë¯€ë¡?warning??ë°˜ì˜ ë³´ë¥˜. [ë³´ë¥˜]
+.. regarding unique error problem when "unique key update" is duplicated, it is before selected; so thisi is postponed to apply to "warning".
 
 **ha_sql_log_max_size_in_mbytes**
 

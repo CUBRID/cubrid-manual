@@ -12,7 +12,7 @@ Cautions during upgrade
 
 **Checking New Reserved Words**
 
-*   You can check whether reserved words are being used or not by applying the CUBRID 9.2 reserved word detection script, check_reserved.sql, which is distributed through the CUBRID installation package or http://ftp.cubrid.org/CUBRID_Engine/9.2.0/Linux/. If the reserved words are being used as identifiers, the identifiers must be modified. See :doc:`sql/identifier`.
+*   You can check whether reserved words are being used or not by applying the CUBRID 9.3 reserved word detection script, check_reserved.sql, which is distributed through the CUBRID installation package or http://ftp.cubrid.org/CUBRID_Engine/9.3.0/Linux/. If the reserved words are being used as identifiers, the identifiers must be modified. See :doc:`sql/identifier`.
 
 **Configuring environment variables of CUBRID_MSG_LANG**
 
@@ -29,8 +29,9 @@ Cautions during upgrade
 
 **DB migration**
 
-*   Since the DB volume of CUBRID 9.1 is not compatible with the DB volume of CUBRID 9.2, it should be migrated with migrate_91_to_92 utility. For more detail procedure, see :ref:`migration-from-91`.
-*   Since the DB volume of CUBRID 9.0 Beta, 2008 R4.x or earlier version is not compatible with the DB volume of CUBRID 9.2, it should be migrated with cubrid unloaddb/loaddb utility. For more detail procedure, see :ref:`migration-from-41`.
+*   Since the DB volume of CUBRID 9.3 is compatible with the DB volume of CUBRID 9.2, DB migration is needless.
+*   Since the DB volume of CUBRID 9.3 is not compatible with the DB volume of CUBRID 9.1, it should be migrated with migrate_91_to_92 utility. For more detail procedure, see :ref:`migration-from-91`.
+*   Since the DB volume of CUBRID 9.0 Beta, 2008 R4.x or earlier version is not compatible with the DB volume of CUBRID 9.3, it should be migrated with cubrid unloaddb/loaddb utility. For more detail procedure, see :ref:`migration-from-41`.
 *   CUBRID 2008 R3.1 and later don't support GLO and the LOB type replaces the GLO feature. For this reason, applications or schemas that use GLO must be modified to be compatible with LOB.
 
 .. note::
@@ -46,12 +47,27 @@ Cautions during upgrade
 
 *   A user who uses Java stored function/procedure should run loadjava command to load Java classes into CUBRID. See :doc:`/sql/jsp`.
 
-.. _up-from-91:
-
-Upgrading From CUBRID 9.1 To CUBRID 9.2
+Upgrading from CUBRID 9.2 to CUBRID 9.3
 ---------------------------------------
 
-Users who are using versions CUBRID 9.1 should install 9.2 in the same directory and modify parameter values in the previous environment configuration file.
+Users who are using versions CUBRID 9.2 should install 9.3 in the same directory and modify parameter values in the previous environment configuration file.
+
+DB migration
+^^^^^^^^^^^^
+
+Since the DB volume of CUBRID 9.3 is compatible with the DB volume of CUBRID 9.2, DB migration is needless.
+
+Parameter configuration
+^^^^^^^^^^^^^^^^^^^^^^^
+
+*   The minimum size of log_buffer_size is changed from 48KB(3*1page, 16KB=1page) into 2MB(128*1page, 16KB=1page); therefore, this value should be larger than the changed minimum size.
+
+.. _up-from-91:
+
+Upgrading from CUBRID 9.1 to CUBRID 9.3
+---------------------------------------
+
+Users who are using versions CUBRID 9.1 should install 9.3 in the same directory and modify parameter values in the previous environment configuration file.
 
 .. _migration-from-91:
 
@@ -149,21 +165,21 @@ Parameter configuration
         
         For charset, locale and collation setting, see :doc:`/sql/i18n`.
 
-For more details, see :ref:`changed-config100`.
+For more details, see :ref:`changed-config92`.
 
 .. _up-from-41:
 
-Upgrading From CUBRID 2008 R4.1/R4.3 To CUBRID 9.2
+Upgrading From CUBRID 2008 R4.1/R4.3 To CUBRID 9.3
 --------------------------------------------------
 
-Users who are using versions CUBRID 2008 R4.1 or R4.3 should install 9.2 in the different directory and modify parameter values in the existing environment configuration file.
+Users who are using versions CUBRID 2008 R4.1 or R4.3 should install 9.3 in the different directory and modify parameter values in the existing environment configuration file.
 
 .. _migration-from-41:
 
 DB migration
 ^^^^^^^^^^^^
 
-The following table shows how to perform the migration using the reserved word detection script, check_reserved.sql, which is separately distributed from http://ftp.cubrid.org/CUBRID_Engine/9.2.0/Linux/ and the cubrid unloaddb/loaddb utilities. See :ref:`unload-load`)
+The following table shows how to perform the migration using the reserved word detection script, check_reserved.sql, which is separately distributed from http://ftp.cubrid.org/CUBRID_Engine/9.3.0/Linux/ and the cubrid unloaddb/loaddb utilities. See :ref:`unload-load`)
 
 +------------------------------------+-----------------------------------------------+-----------------------------------------------+
 | Step                               | Linux Environment                             | Windows Environment                           |
@@ -224,7 +240,7 @@ The following table shows how to perform the migration using the reserved word d
 
 (\*): The user which uses CUBRID 2008 R4.x or before should be cautious for determining a locale(language and charset). For example, when the user which used the language as ko_KR(Korean) and the charset as utf8 processes DB migration, the locale should be set as "cubrid createdb testdb ko_KR.utf8". If the locale is not built-in locale, you should run make_locale(.sh) command first. For more details, see :ref:`locale-setting`. 
 
-*   You should be careful about the change of the space for storing about the multibyte character. For example, in 2008 R4.3, CHAR(6) means CHAR type with 6 bytes size, but in 9.2, CHAR(6) means CHAR type with 6 characters. In utf8 charset, Korean uses 3 bytes per 1 character, so CHAR(6) has 18 bytes. Therefore, more disk space is required. 
+*   You should be careful about the change of the space for storing about the multibyte character. For example, in 2008 R4.3, CHAR(6) means CHAR type with 6 bytes size, but in 9.3, CHAR(6) means CHAR type with 6 characters. In utf8 charset, Korean uses 3 bytes per 1 character, so CHAR(6) has 18 bytes. Therefore, more disk space is required. 
 
 *   If you used utf8 charset in CUBRID 2008 R4.x or before, you should set the charset as utf8 when you run "cubrid createdb". If not, retrieval queries or string functions are unable to work properly.
 
@@ -270,28 +286,26 @@ Parameter configuration
 **Environment variable**
 
 *   CUBRID_LANG is removed; now the language and the charset of database is set when creating DB, and CUBRID_MSG_LANG is used for configuring the charset of messages for utilities and errors.
-    
+
     .. warning::
 
         When you create database, the language and the charset of database should be specified. It affects the length of string type, string comparison operation, etc. The specified charset when creating database cannot be changed later, so you should be careful when specifying it.
         
         For charset, locale and collation setting, see :doc:`/sql/i18n`.
 
-For more details, see :ref:`changed-config100`.
+For more details, see :ref:`changed-config92`.
 
 .. _up-from-40:
 
-Upgrading From CUBRID 2008 R4.0 or Earlier Versions To CUBRID 9.2
+Upgrading From CUBRID 2008 R4.0 or Earlier Versions To CUBRID 9.3
 -----------------------------------------------------------------
 
-Users who are using versions CUBRID 2008 R4.0 or earlier should install 9.2 in the different directory and modify parameter values in the existing environment configuration file.
+Users who are using versions CUBRID 2008 R4.0 or earlier should install 9.3 in the different directory and modify parameter values in the existing environment configuration file.
 
 DB migration
 ^^^^^^^^^^^^
 
 Do the same procedures with :ref:`migration-from-41` in :ref:`up-from-41`. If you use GLO classes, you must modify applications and schema in order to use BLOB or CLOB types, since GLO classes are not supported in 2008 R3.1. If this modification is not easy, it is not recommended to perform the migration.
-
-.. _glo-users-migration:
 
 Parameter configuration
 ^^^^^^^^^^^^^^^^^^^^^^^
@@ -304,7 +318,6 @@ Parameter configuration
 *   lock_timeout_message_type should be deleted since this parameter is no longer used.
 *   Because the default value of thread_stacksize has been changed from 100K to 1M, it is recommended that users who have not configured this value check memory usage of CUBRID-associative processes.
 *   Because the minimum value of data_buffer_size has been changed from 64K to 16M, users who have configured this value less than 16M must change the value equal to or greater than 16M.
-
 *   In the following parameters, the old parameters will be deprecated and the new parameters are recommended to use. the value in the parenthesis is the unit of the value when the unit is omitted, and the new parameters can specify the unit after the value. For details, see each parameter's explanation in :doc:`/admin/config`
 
     +-----------------------------------------+-----------------------------------------+
@@ -320,7 +333,7 @@ Parameter configuration
     +-----------------------------------------+-----------------------------------------+
     | sync_on_nflush(page_count)              | sync_on_flush_size(byte)                |
     +-----------------------------------------+-----------------------------------------+
-    
+
 **cubrid_broker.conf**
 
 *   In KEEP_CONNECTION parameter, OFF value should be changed as ON or AUTO since OFF setting value is no longer used. 
@@ -336,21 +349,21 @@ Parameter configuration
 **Environment variable**
 
 *   CUBRID_LANG is removed; now the language and the charset of database is set when creating DB, and CUBRID_MSG_LANG is used for configuring the charset of messages for utilities and errors.
-    
+
     .. warning::
 
         When you create database, the language and the charset of database should be specified. It affects the length of string type, string comparison operation, etc. The specified charset when creating database cannot be changed later, so you should be careful when specifying it.
         
         For charset, locale and collation setting, see :doc:`/sql/i18n`.
-    
-For more details, see :ref:`changed-config100`.
+
+For more details, see :ref:`changed-config92`.
 
 .. _ha-db-migration:
 
 Database Migration under HA Environment
 =======================================
 
-HA migration from CUBRID 2008 R2.2 or higher to CUBRID 9.2
+HA migration from CUBRID 2008 R2.2 or higher to CUBRID 9.3
 ----------------------------------------------------------
 
 In the scenario described below, the current service is stopped to perform an upgrade in an environment in which a broker, a master DB and a slave DB are operating on different servers.
@@ -390,7 +403,7 @@ In the scenario described below, the current service is stopped to perform an up
 |                                                      |   % cubrid broker start                                                                                   |
 +------------------------------------------------------+-----------------------------------------------------------------------------------------------------------+
 
-HA Migration from CUBRID 2008 R2.0/R2.1 to CUBRID 9.2
+HA Migration from CUBRID 2008 R2.0/R2.1 to CUBRID 9.3
 -----------------------------------------------------
 
 If you are using the HA feature of CUBRID 2008 R2.0 or 2008 R2.1, you must upgrade the server version, migrate the database, set up a new HA environment, and then change the Linux Heartbeat auto start setting used in 2008 R2.0 or 2008 R2.1. If the Linux Heartbeat package is not needed, delete it.

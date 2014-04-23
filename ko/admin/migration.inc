@@ -13,7 +13,7 @@
 
     cubrid unloaddb [options] database_name
 
-**cubrid unloaddb**  가 생성하는 파일은 다음과 같다.
+**cubrid unloaddb**\ 가 생성하는 파일은 다음과 같다.
 
 *   스키마 파일(*database-name*\ **_schema**): 해당 데이터베이스에 정의된 스키마 정보를 포함하는 파일이다.
 *   객체 파일(*database-name*\ **_objects**): 해당 데이터베이스에 포함된 인스턴스 정보를 포함하는 파일이다.
@@ -87,12 +87,12 @@
 
         cubrid unloaddb -s demodb
 
-.. option:: -d, --data-only    
+.. option:: -d, --data-only
 
     언로드 작업을 통해 생성되는 출력 파일 중 데이터 파일만 생성되도록 지정하는 옵션이다. ::
 
         cubrid unloaddb -d demodb
-        
+
 .. option:: --output-prefix=PREFIX
 
     언로드 작업에 의해 생성되는 스키마 파일과 객체 파일의 이름 앞에 붙는 prefix를 지정하기 위한 옵션이다. 예제를 수행하면 스키마 파일명은 *abcd_schema* 가 되고, 객체 파일명은 *abcd_objects* 가 된다. 만약, **--output-prefix** 옵션을 지정하지 않으면 언로드할 데이터베이스 이름이 prefix로 사용된다. ::
@@ -101,7 +101,7 @@
 
 .. option:: --hash-file=FILE
 
-    해시 파일의 이름을 지정한다.    
+    해시 파일의 이름을 지정한다.
     
 .. option:: -v, --verbose
 
@@ -122,9 +122,9 @@
 .. option:: -C, --CS-mode
 
     클라이언트/서버 모드에서 데이터베이스를 언로드한다. ::
-    
+
         cubrid unloaddb -C demodb
-    
+
 .. option:: --datafile-per-class
 
     언로드 작업으로 생성되는 데이터 파일을 각 테이블별로 생성되도록 지정하는 옵션이다. 파일 이름은 *<데이터베이스 이름>_<테이블 이름>*\ **_objects** 로 생성된다. 단, 객체 타입의 칼럼 값은 모두 **NULL** 로 언로드되며, 언로드된 파일에는 %id class_name class_id 부분이 작성되지 않는다. 자세한 내용은 :ref:`howtowrite-loadfile` 을 참고한다. ::
@@ -306,7 +306,7 @@
 .. warning::
 
     **--no-logging** 옵션을 사용하면 **loaddb** 를 수행하면서 트랜잭션 로그를 저장하지 않으므로 데이터 파일을 빠르게 로드할 수 있다. 그러나 로드 도중 파일 형식이 잘못되거나 시스템이 다운되는 등의 문제가 발생했을 때 데이터를 복구할 수 없으므로 데이터베이스를 새로 구축해야 한다. 즉, 데이터를 복구할 필요가 없는 새로운 데이터베이스를 구축하는 경우를 제외하고는 사용하지 않도록 주의한다. 이 옵션을 사용하면 고유 위반 등의 오류를 검사하지 않아 기본 키에 값이 중복되는 경우 등이 발생할 수 있으므로, 사용 시 이러한 문제를 반드시 감안해야 한다.
-    
+
 .. _howtowrite-loadfile:
 
 가져오기용 파일 작성 방법

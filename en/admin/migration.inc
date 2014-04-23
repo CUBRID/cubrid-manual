@@ -99,7 +99,7 @@ The following is [options] used in **cubrid unloaddb**.
 
         cubrid unloaddb --output-prefix abcd demodb
 
-.. option:: --hash-file
+.. option:: --hash-file=FILE
     
     This option specifies the name of the hash file.
 
@@ -213,7 +213,7 @@ The following table shows [options] available with the **cubrid loaddb** utility
     The following is a command that does not update the statistics information of newdb after loading demodb_objects. It is useful especially when small data is loaded to a relatively big database; you can improve the load performance by using this command. ::
 
         cubrid loaddb --no-statistics -d demodb_objects newdb
-        
+
 .. option:: -s, --schema-file=FILE[:LINE]
 
     This option loads the schema information defined in the schema file, from the LINE-th. On the following example, demodb_schema is a file created by the unload operation and contains the schema information of the unloaded database. You can load the actual records after loading the schema information first by using the **-s** option. ::

@@ -63,8 +63,8 @@ The database management utilities are as follows:
 
 *   Unloading and Loading database
 
-    *   cubrid loaddb
     *   cubrid unloaddb
+    *   cubrid loaddb
     
 *   Checking and compacting database space
 
@@ -95,7 +95,6 @@ The database management utilities are as follows:
     *   cubrid applyinfo
 
 *   Compiling/Outputting locale
- 
 
     *   cubrid genlocale
     *   cubrid dumplocale

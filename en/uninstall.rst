@@ -58,7 +58,6 @@ If you have installed CUBRID in RPM package, you can uninstall CUBRID by "rpm" c
         $ cubrid deletedb testdb1
         $ cubrid deletedb testdb2
 
-
 *   Remove CUBRID engine.
 
     ::
@@ -77,7 +76,6 @@ If you have installed CUBRID in RPM package, you can uninstall CUBRID by "rpm" c
     
         cd /etc/init.d
         rm cubrid
-
 
 Uninstalling CUBRID in Windows
 ------------------------------

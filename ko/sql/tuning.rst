@@ -1882,6 +1882,16 @@ JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서�
 **INDEX_SS** 힌트에는 인덱스 스킵 스캔의 적용을 고려할 테이블 리스트를 입력할 수 있으며,
 테이블 리스트가 생략되는 경우 모든 테이블에 대해 인덱스 스킵 스캔 적용이 고려된다.
 
+::
+
+    /*+ INDEX_SS */
+    /*+ INDEX_SS(tbl1) */
+    /*+ INDEX_SS(tbl1, tbl2) */
+
+.. note::
+
+    "INDEX_SS"를 입력하면 모든 테이블에 ISS 힌트가 적용되지만, "INDEX_SS()"를 입력하면 힌트가 무시된다.
+
 .. code-block:: sql
 
     CREATE TABLE t1 (id INT PRIMARY KEY, a INT, b INT, c INT);

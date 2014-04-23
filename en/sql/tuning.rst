@@ -1881,6 +1881,16 @@ Applying ISS is considered when **INDEX_SS** for specific tables is specified th
 
 In a **INDEX_SS** hint, a list of table to consider applying ISS, can be input; if a list of table is omitted, applying ISS for all tables can be considered.
 
+::
+
+    /*+ INDEX_SS */
+    /*+ INDEX_SS(tbl1) */
+    /*+ INDEX_SS(tbl1, tbl2) */
+
+.. note::
+
+    When "INDEX_SS" is input, the ISS hint is applied to all tables; when "INDEX_SS()" is input, this hint is ignored.
+
 .. code-block:: sql
 
     CREATE TABLE t1 (id INT PRIMARY KEY, a INT, b INT, c INT);

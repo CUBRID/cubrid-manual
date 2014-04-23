@@ -125,7 +125,7 @@ CSQL 시작 옵션
 **옵션**
 
 .. program:: csql
-    
+
 .. option:: -S, --SA-mode
 
     **-S** 옵션을 이용하여 독립 모드로 데이터베이스에 접속하여 **csql**\ 을 실행한다. 데이터베이스를 독점적으로 사용하고자 할 때 **-S** 옵션을 이용한다. **csql**\ 이 독립 모드로 실행중이면 또 다른 **csql** 또는 유틸리티의 사용이 불가능하다. **-S** 옵션과 **-C** 옵션을 둘 다 생략하면 **-C** 옵션으로 동작한다. ::
@@ -230,12 +230,11 @@ CSQL 시작 옵션
 .. option::  --sysadm
 
     이 옵션은 **-u dba**\와 같이 사용해야 하며, 시스템 관리자 모드로 실행하고자 할 때 지정한다.
-    
+
     ::
 
-        csql -u dba --sysadm demodb          
-        
-        
+        csql -u dba --sysadm demodb
+
 .. option::  --write-on-standby
 
     이 옵션은 시스템 관리자 모드 옵션(**--sysadm--**)과 함께 사용해야 한다. 이 옵션으로 CSQL을 실행한 dba는 standby 상태의 DB 즉, 슬레이브 DB 또는 레플리카 DB에 쓰기 작업을 수행할 수 있다.
@@ -243,7 +242,7 @@ CSQL 시작 옵션
     :: 
 
          csql --sysadm --write-on-standby -u dba testdb@localhost 
-         
+
 .. option::  --no-trigger-action
 
     이 옵션을 지정하면 해당 CSQL에서 수행되는 질의문의 트리거는 동작하지 않는다.
@@ -448,14 +447,14 @@ CSQL 세션 내에서 대상 데이터베이스에 재접속을 시도하는 명
 
     csql> ;date
          Tue July 29 18:58:12 KST 2008
- 
+
 **대상 데이터베이스 정보 출력(;DATAbase)**
 
 CSQL 인터프리터에서 작업 중인 데이터베이스 이름 및 호스트 이름을 출력한다. 만약, 대상 데이터베이스가 HA모드로 동작 중이라면 현재 HA모드(active, standby, 또는 maintenance)도 함께 출력될 것이다. ::
 
     csql> ;database
          demodb@cubridhost (active)
-     
+
 **지정한 테이블의 스키마 정보 출력(;SChema)**
 
 **;SChema** 세션 명령어로 지정한 테이블의 스키마 정보를 확인할 수 있다. 해당 테이블의 이름, 칼럼 명, 제약 사항 등의 정보가 출력된다. ::
@@ -496,14 +495,16 @@ CSQL 인터프리터에서 작업 중인 데이터베이스 이름 및 호스트
     csql> ;set block_ddl_statement=1
     === Set Param Input ===
     block_ddl_statement=1
-     
+
     -- dba 계정으로 실행한 csql에서 log_max_archives 값을 동적으로 변경
     csql> ;set log_max_archives=5
 
 **문자열 타입과 비트 타입 칼럼의 출력 길이 지정(;STring-width)** 
 
 문자열 타입과 비트 타입 칼럼의 출력 길이를 제한하기 위해서 사용할 수 있다. 
-;ST 뒤에 값을 주지 않으면 현재의 출력 길이를 보여준다. 값이 0이면, 해당 칼럼의 값을 모두 출력한다. 값이 0보다 크다면, 해당 길이만큼 칼럼의 값을 출력한다. ::
+;ST 뒤에 값을 주지 않으면 현재의 출력 길이를 보여준다. 값이 0이면, 해당 칼럼의 값을 모두 출력한다. 값이 0보다 크다면, 해당 길이만큼 칼럼의 값을 출력한다.
+
+::
 
     csql> SELECT name FROM NATION WHERE NAME LIKE 'Ar%';
       'Arab Republic of Egypt'
@@ -520,7 +521,7 @@ CSQL 인터프리터에서 작업 중인 데이터베이스 이름 및 호스트
 
     csql> ;string-width
     STRING-WIDTH : 5
- 
+
 **지정한 칼럼의 출력 길이 지정(;COLumn-width)**
 
 타입과 상관없이 특정 칼럼의 출력 길이를 제한하기 위해서 사용할 수 있다. 
@@ -538,14 +539,14 @@ CSQL 인터프리터에서 작업 중인 데이터베이스 이름 및 호스트
 
 **;PLan** 세션 명령어는 질의 실행 계획 보기의 수준을 설정한다. 수준은 **simple**, **detail**, **off** 로 지정한다. 각 설정값의 의미는 다음과 같다.
 
-* **off** : 질의 실행 계획을 출력하지 않음
-* **simple** : 질의 실행 계획을 단순하게 출력함. (OPT LEVEL=257)
-* **detail** : 질의 실행 계획을 자세하게 출력함. (OPT LEVEL=513)
+*   **off**: 질의 실행 계획을 출력하지 않음
+*   **simple**: 질의 실행 계획을 단순하게 출력함. (OPT LEVEL=257)
+*   **detail**: 질의 실행 계획을 자세하게 출력함. (OPT LEVEL=513)
 
 .. _set-autotrace:
  
 **SQL 트레이스 설정(;trace)**
- 
+
 질의 결과를 출력할 때 SQL 트레이스 결과를 항상 함께 출력할 것인지 여부를 설정한다. 
 이 명령을 사용하여 SQL 트레이스를 ON으로 설정하면, "**SHOW TRACE**" 구문을 실행하지 않아도 질의 결과를 출력한 다음에 질의 프로파일링(profiling) 결과를 자동으로 출력한다.
  
@@ -583,8 +584,8 @@ CSQL 인터프리터에서 작업 중인 데이터베이스 이름 및 호스트
 
 **;.Hist** 세션 명령어는 CSQL에서 질의 실행 통계 정보의 수집을 시작하기 위한 CSQL 세션 명령어로서, 이 정보는 "**;.Hist on**"이  입력된 이후부터 현재 연결된 CSQL에 대해서만 수집된다. 다음은 이 세션 명령어의 **;.Hist** 세션 명령어의 옵션으로 **on**, **off**\ 를 제공하며, 각 옵션의 의미는 다음과 같다.
 
-* **on** : 해당 연결에 대한 서버 실행 통계 정보 수집을 시작.
-* **off** : 서버 실행 통계 정보 수집을 종료.
+*   **on**: 해당 연결에 대한 서버 실행 통계 정보 수집을 시작.
+*   **off**: 서버 실행 통계 정보 수집을 종료.
 
 단, **cubrid.conf** 파일에서 관련 파라미터(**communication_histogram**)를 **yes**\ 로 설정하거나, csql에서 ";se communication_histogram=yes"를 실행해야만 이 명령어를 사용할 수 있다.
 

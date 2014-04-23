@@ -2,8 +2,8 @@
 CSQL Interpreter
 ****************
 
-
 To execute SQL statements in CUBRID, you need to use either a Graphical User Interface(GUI)-based `CUBRID Query Browser <http://www.cubrid.org/wiki_tools/entry/cubrid-query-browser>`_ or a console-based CSQL Interpreter.
+
 CSQL is an application that allows users to use SQL statements through a command-driven interface. This section briefly explains how to use the CSQL Interpreter and associated commands.
 
 .. _csql-intro:
@@ -73,7 +73,7 @@ Using CSQL (Syntax)
 Execute the CSQL Interpreter using the **csql** utility. You can set options as needed. To set the options, specify the name of the database to connect to as a parameter. The following is a **csql** utility statement to access the database on a local server: ::
 
     csql [options] database_name
-    
+
 **Connecting to Remote Host**
 
 The following is a **csql** utility syntax to access the database on a remote host: ::
@@ -121,7 +121,7 @@ To display the option list in the prompt, execute the **csql** utilities without
           --no-trigger-action      disable trigger action
 
     For additional information, see http://www.cubrid.org
-    
+
 **Options**
 
 .. program:: csql
@@ -230,12 +230,11 @@ To display the option list in the prompt, execute the **csql** utilities without
 .. option::  --sysadm
 
     This option should be used together with **-u dba**. It is specified when you want to run CSQL in a system administrator's mode.
-   
+
     ::
 
-        csql -u dba --sysadm demodb          
-        
-        
+        csql -u dba --sysadm demodb
+
 .. option::  --write-on-standby
 
     This option should be used together with a system administrator's mode option(**--sysadm--**). dba which run CSQL with this option can execute write-operation to the standby DB(slave DB or replica DB).
@@ -326,7 +325,7 @@ When you register pager command as more, the query result shows by page and wait
     csql>;pager more
     
 When you register pager command as cat, the query result shows all in one display without paging. ::
-     
+
     csql>;pager cat
 
 When you redirect the output with a file, the total query result will be written on the file. ::
@@ -350,7 +349,6 @@ The keyboard commands used on the **less** are as follows.
 * N: find the previous string
 
 * q: quit the paging mode.
-    
     
 **Changing the current working directory (;CD)**
 
@@ -403,7 +401,7 @@ This command rolls back the current transaction. Like a commit command (**;COmmi
 
     csql> ;rollback
     Execute OK. (0.000166 sec)
-    
+
 **Setting the auto-commit mode (;AUtocommit)**
 
 This command sets auto-commit mode to **ON** or **OFF**. If any value is not specified, current configured value is applied by default. The default value is **ON**. ::
@@ -505,7 +503,9 @@ You can use the **;Set** session command to set a specific parameter value. Note
 
 You can use the **;STring-width** command to set the output width of character string or BIT string.
 
-**;string-width** session command without a length shows the current setting length. When it is set to 0, the columns will be displayed as it is. If it sets greater than 0, the string typed columns will be displayed with the specified length. ::
+**;string-width** session command without a length shows the current setting length. When it is set to 0, the columns will be displayed as it is. If it sets greater than 0, the string typed columns will be displayed with the specified length. 
+
+::
 
     csql> SELECT name FROM NATION WHERE NAME LIKE 'Ar%';
       'Arab Republic of Egypt'
@@ -540,9 +540,9 @@ If you don't give a value after **;COL** command, it shows the current setting l
 
 You can use the **;PLan** session command to set the view level of executing query plan the level is composed of **simple**, **detail**, and **off**. Each command refers to the following:
 
-*   **off** : Not displaying the query execution plan
-*   **simple** : Displaying the query execution plan in simple version (OPT LEVEL=257)
-*   **detail** : Displaying the query execution plan in detailed version (OPT LEVEL=513)
+*   **off**: Not displaying the query execution plan
+*   **simple**: Displaying the query execution plan in simple version (OPT LEVEL=257)
+*   **detail**: Displaying the query execution plan in detailed version (OPT LEVEL=513)
 
 .. _set-autotrace:
  
@@ -585,8 +585,8 @@ The **;Info** session command allows you to check information such as schema, tr
 
 This command is a CSQL session command for starting to collect the statistics information in CSQL. The information is collected only for the currently connected CSQL after "**;.Hist on**" command is entered. Following options are provided for this session command.
 
-*   **on** : Starts collecting statistics information for the current connection.
-*   **off** : Stops collecting statistics information of server.
+*   **on**: Starts collecting statistics information for the current connection.
+*   **off**: Stops collecting statistics information of server.
 
 This command is executable while the **communication_histogram** parameter in the **cubrid.conf** file is set to **yes**. You can also view this information by using the **cubrid statdump** utility. 
 
@@ -594,7 +594,7 @@ After running "**;.Hist on**", the execution commands such as **;.dump_hist** or
 
 As a reference, you should use **cubrid statdump** utility to check all queries' statistics information of a database server.
 
-This example shows the server statistics information for current connection. For information on dumped specific items or **cubrid statdump** command, see :ref:`statdump`. 
+This example shows the server statistics information for current connection. For information on dumped specific items or **cubrid statdump** command, see :ref:`statdump`.
 
 ::
 
@@ -681,7 +681,7 @@ The **SELECT** query includes the time of outputting the fetched records. Theref
 
 **Displaying a column of result record in one line(;LINe-output)**
 
-If this value is set to ON, it makes the record display in several lines by column unit. The default value is OFF, which makes one record display in one line. ::
+If this value is set to ON, it makes the record display in several lines by column. The default value is OFF, which makes one record display in one line. ::
 
     csql> ;line-output ON
     csql> select * from athlete;
@@ -699,7 +699,7 @@ If this value is set to ON, it makes the record display in several lines by colu
             nation_code: 'AUS'
             event      : 'Rowing'
     ...
-    
+
 **Displaying query history (;HISTORYList)**
 
 This command displays the list that contains previously executed commands (input) and their history numbers. ::

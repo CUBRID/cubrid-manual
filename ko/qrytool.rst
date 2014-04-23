@@ -29,47 +29,47 @@ CSQL 인터프리터는 셸에서 다음과 같이 시작할 수 있다. 처음 
        can precede the prefix. Capitalized characters represent the minimum
        abbreviation that you need to enter to execute the specified command.
 
-       ;REAd   [<file-name>]        - read a file into command buffer.
-       ;Write  [<file-name>]        - (over)write command buffer into a file.
-       ;APpend [<file-name>]        - append command buffer into a file.
-       ;PRINT                       - print command buffer.
-       ;SHELL                       - invoke shell.
-       ;CD                          - change current working directory.
-       ;EXit                        - exit program.
+       ;REAd   [<file-name>]       - read a file into command buffer.
+       ;Write  [<file-name>]       - (over)write command buffer into a file.
+       ;APpend [<file-name>]       - append command buffer into a file.
+       ;PRINT                      - print command buffer.
+       ;SHELL                      - invoke shell.
+       ;CD                         - change current working directory.
+       ;EXit                       - exit program.
 
-       ;CLear                       - clear command buffer.
-       ;EDIT                        - invoke system editor with command buffer.
-       ;LISt                        - display the content of command buffer.
+       ;CLear                      - clear command buffer.
+       ;EDIT                       - invoke system editor with command buffer.
+       ;LISt                       - display the content of command buffer.
 
-       ;RUn                         - execute sql in command buffer.
-       ;Xrun                        - execute sql in command buffer,
-                                      and clear the command buffer.
-       ;COmmit                      - commit the current transaction.
-       ;ROllback                    - roll back the current transaction.
-       ;AUtocommit [ON|OFF]         - enable/disable auto commit mode.
-       ;REStart                     - restart database.
+       ;RUn                        - execute sql in command buffer.
+       ;Xrun                       - execute sql in command buffer,
+                                     and clear the command buffer.
+       ;COmmit                     - commit the current transaction.
+       ;ROllback                   - roll back the current transaction.
+       ;AUtocommit [ON|OFF]        - enable/disable auto commit mode.
+       ;REStart                    - restart database.
 
-       ;SHELL_Cmd  [shell-cmd]      - set default shell, editor, print and pager
-       ;EDITOR_Cmd [editor-cmd]       command to new one, or display the current
-       ;PRINT_Cmd  [print-cmd]        one, respectively.
-       ;PAger_cmd  [pager-cmd]      
+       ;SHELL_Cmd  [shell-cmd]     - set default shell, editor, print and pager
+       ;EDITOR_Cmd [editor-cmd]      command to new one, or display the current
+       ;PRINT_Cmd  [print-cmd]       one, respectively.
+       ;PAger_cmd  [pager-cmd]
 
-       ;DATE                        - display the local time, date.
-       ;DATAbase                    - display the name of database being accessed.
-       ;SChema class-name           - display schema information of a class.
-       ;SYntax [sql-cmd-name]       - display syntax of a command.
-       ;TRigger [`*'|trigger-name]  - display trigger definition.
-       ;Get system_parameter        - get the value of a system parameter.
-       ;SEt system_parameter=value  - set the value of a system parameter.
-       ;PLan [simple/detail/off]    - show query execution plan.
-       ;Info <command>              - display internal information.
-       ;TIme [ON/OFF]               - enable/disable to display the query
-                                      execution time.
-       ;LINe-output [ON/OFF]        - enable/disable to display each value in a line
-       ;HISTORYList                 - display list of the executed queries.
-       ;HISTORYRead <history_num>   - read entry on the history number into command buffer.
-       ;TRAce [ON/OFF] [text/json]  - enable/disable sql auto trace.
-       ;HElp                        - display this help message.
+       ;DATE                       - display the local time, date.
+       ;DATAbase                   - display the name of database being accessed.
+       ;SChema class-name          - display schema information of a class.
+       ;SYntax [sql-cmd-name]      - display syntax of a command.
+       ;TRigger [`*'|trigger-name] - display trigger definition.
+       ;Get system_parameter       - get the value of a system parameter.
+       ;SEt system_parameter=value - set the value of a system parameter.
+       ;PLan [simple/detail/off]   - show query execution plan.
+       ;Info <command>             - display internal information.
+       ;TIme [ON/OFF]              - enable/disable to display the query
+                                     execution time.
+       ;LINe-output [ON/OFF]       - enable/disable to display each value in a line
+       ;HISTORYList                - display list of the executed queries.
+       ;HISTORYRead <history_num>  - read entry on the history number into command buffer.
+       ;TRAce [ON/OFF] [text/json] - enable/disable sql auto trace.
+       ;HElp                       - display this help message.
 
 **CSQL에서 SQL 실행**
 
@@ -146,24 +146,24 @@ CUBRID 웹 매니저로 SQL 실행하기
 
 CUBRID 2008 R4.3 이상 버전부터는 설치 패키지에 웹 매니저가 포함되어 있으므로, DB 엔진 파일을 설치한 이후 즉시 웹 매니저를 사용할 수 있다.
 
-#. CUBRID Service를 시작한다. CUBRID Manager 서버가 구동되어야 웹 매니저가 정상 동작한다. CUBRID 매니저 서버의 실행 및 설정에 대한 자세한 내용은 :ref:`cubrid-manager-server`\ 를 참고한다. 
+#.  CUBRID Service를 시작한다. CUBRID Manager 서버가 구동되어야 웹 매니저가 정상 동작한다. CUBRID 매니저 서버의 실행 및 설정에 대한 자세한 내용은 :ref:`cubrid-manager-server`\ 를 참고한다. 
 
     ::
 
         C:\CUBRID>cubrid service start
         ++ cubrid service is running.
-        
-#. 웹 브라우저 주소창에 https://localhost:8282/  로 접속한다. 기본 TCP 포트는 8282(HTTPS/SSL)를 사용하며, $CUBRID/conf/cm_ext.conf 파일을 편집하여 포트를 변경할 수 있다. 이때, http가 아니라 https로 입력해야만 하므로 주의한다.
 
-#. 먼저 호스트 로그인을 수행한다. 호스트 접속을 위해서 1차로 CM 서버 사용자(=호스트 사용자) 인증을 수행하며, 기본 사용자 이름/암호는 admin/admin이다.
+#.  웹 브라우저 주소창에 https://localhost:8282/  로 접속한다. 기본 TCP 포트는 8282(HTTPS/SSL)를 사용하며, $CUBRID/conf/cm_ext.conf 파일을 편집하여 포트를 변경할 수 있다. 이때, http가 아니라 https로 입력해야만 하므로 주의한다.
 
+#.  먼저 호스트 로그인을 수행한다. 호스트 접속을 위해서 1차로 CM 서버 사용자(=호스트 사용자) 인증을 수행하며, 기본 사용자 이름/암호는 admin/admin이다.
+    
     .. image:: /images/gs_manager_login.png
 
-#. DB 서버에 접속한다. 왼쪽 트리에서 해당 호스트 내에 생성된 데이터베이스 목록을 확인할 수 있으며, 접속하고자 하는 DB를 클릭하고 DB 사용자 인증을 수행한다. 기본 사용자 이름은 dba이며 암호는 없다.
-
+#.  DB 서버에 접속한다. 왼쪽 트리에서 해당 호스트 내에 생성된 데이터베이스 목록을 확인할 수 있으며, 접속하고자 하는 DB를 클릭하고 DB 사용자 인증을 수행한다. 기본 사용자 이름은 dba이며 암호는 없다.
+    
     .. image:: /images/gs_manager_db.png
-
-#. 접속한 DB에서 SQL을 실행하고, 결과를 확인한다. 왼쪽에는 접속한 데이터베이스에 존재하는 테이블 목록이 출력되고, SQL 탭에서 질의를 작성, 실행하고 결과를 확인할 수 있다.
+    
+#.  접속한 DB에서 SQL을 실행하고, 결과를 확인한다. 왼쪽에는 접속한 데이터베이스에 존재하는 테이블 목록이 출력되고, SQL 탭에서 질의를 작성, 실행하고 결과를 확인할 수 있다.
 
     .. image:: /images/gs_manager_screen.png
 
@@ -174,23 +174,23 @@ CUBRID Manager 클라이언트로 SQL 실행하기
 
 CUBRID 매니저는 별도로 다운로드 한 후 실행해야 하는 클라이언트 도구이며, JRE 혹은 JDK 1.6 이상 버전에서 실행되는 Java 애플리케이션이다.
 
-#. CUBRID 매니저 최신 파일을 다운로드한 후 설치한다. CUBRID 매니저는 CUBRID 엔진 버전 2008 R2.2 이상부터 호환된다. 또한, 자동 업데이트 기능을 지원하므로 주기적으로 최신 버전을 유지하는 것이 좋다. 
-   (CUBRID FTP: http://ftp.cubrid.org/CUBRID_Tools/CUBRID_Manager )
+#.  CUBRID 매니저 최신 파일을 다운로드한 후 설치한다. CUBRID 매니저는 CUBRID 엔진 버전 2008 R2.2 이상부터 호환된다. 또한, 자동 업데이트 기능을 지원하므로 주기적으로 최신 버전을 유지하는 것이 좋다. 
+    (CUBRID FTP: http://ftp.cubrid.org/CUBRID_Tools/CUBRID_Manager )
 
-#. 서버에서 CUBRID Service를 시작한다. CUBRID Manager 서버가 구동되어야 CUBRID 매니저 클라이언트가 접속할 수 있다. CUBRID 매니저 서버의 실행 및 설정에 대한 자세한 내용은 :ref:`cubrid-manager-server` 를 참고한다.
+#.  서버에서 CUBRID Service를 시작한다. CUBRID Manager 서버가 구동되어야 CUBRID 매니저 클라이언트가 접속할 수 있다. CUBRID 매니저 서버의 실행 및 설정에 대한 자세한 내용은 :ref:`cubrid-manager-server` 를 참고한다.
 
     ::
 
         C:\CUBRID>cubrid service start
         ++ cubrid service is running.
     
-#. CUBRID Manager를 설치한 후 [파일 > 호스트 추가] 메뉴에서 호스트 정보를 등록한다. 호스트 등록 시에는 호스트 주소, 연결 포트(기본: 8001), CM 사용자 및 비밀번호를 입력해야 하며, 해당 서버의 엔진과 버전이 동일한 JDBC 드라이버를 설치해야 한다(자동 드라이버 검색/자동 업데이트 지원).
+#.  CUBRID Manager를 설치한 후 [파일 > 호스트 추가] 메뉴에서 호스트 정보를 등록한다. 호스트 등록 시에는 호스트 주소, 연결 포트(기본: 8001), CM 사용자 및 비밀번호를 입력해야 하며, 해당 서버의 엔진과 버전이 동일한 JDBC 드라이버를 설치해야 한다(자동 드라이버 검색/자동 업데이트 지원).
 
-#. 왼쪽에 노드 트리에서 호스트를 선택하고 CM 사용자(=호스트 사용자) 인증을 수행한다. 기본 사용자 계정은 admin/admin이다.
+#.  왼쪽에 노드 트리에서 호스트를 선택하고 CM 사용자(=호스트 사용자) 인증을 수행한다. 기본 사용자 계정은 admin/admin이다.
 
-#. 데이터베이스 노드에서 마우스 우클릭을 하여 새로운 데이터베이스를 생성하거나, 호스트 노드 하위에 있는 기존 데이터베이스를 선택하여 접속을 시도한다. 이때에는 DB 사용자 인증을 수행한다. 기본 사용자 이름은 dba이며 암호는 없다.
-
-#. 접속한 DB에서 SQL을 실행하고, 결과를 확인한다. 왼쪽에는 호스트, 데이터베이스, 테이블 목록이 출력되고, 오른쪽에는 질의 편집기와 질의 결과 창이 있다. [SQL 실행 이력] 탭에서는 DB별로 실행 성공한 SQL 리스트를 재사용할 수 있으며, [질의 다중 실행] 탭에서 결과 비교를 위한 DB를 추가하여 여러 데이터베이스에서 결과값을 쉽게 비교할 수 있다.
+#.  데이터베이스 노드에서 마우스 우클릭을 하여 새로운 데이터베이스를 생성하거나, 호스트 노드 하위에 있는 기존 데이터베이스를 선택하여 접속을 시도한다. 이때에는 DB 사용자 인증을 수행한다. 기본 사용자 이름은 dba이며 암호는 없다.
+    
+#.  접속한 DB에서 SQL을 실행하고, 결과를 확인한다. 왼쪽에는 호스트, 데이터베이스, 테이블 목록이 출력되고, 오른쪽에는 질의 편집기와 질의 결과 창이 있다. [SQL 실행 이력] 탭에서는 DB별로 실행 성공한 SQL 리스트를 재사용할 수 있으며, [질의 다중 실행] 탭에서 결과 비교를 위한 DB를 추가하여 여러 데이터베이스에서 결과값을 쉽게 비교할 수 있다.
 
     .. image:: /images/gs_manager_sql.png
 
@@ -201,24 +201,24 @@ CUBRID 쿼리 브라우저로 SQL 실행하기
 
 CUBRID 쿼리 브라우저는 SQL 실행에만 중점을 둔 개발 도구로, CUBRID 매니저의 기능을 경량화한 도구이다. CUBRID 쿼리 브라우저가 CUBRID 매니저와 다른 점은 다음과 같다.
 
-
-* CUBRID 매니저 서버를 경유하지 않고 오직 JDBC만으로 통신한다.
-
-* 따라서 DB/브로커 운영 및 모니터링 기능이 지원되지 않는다.
-
-* 따라서 오직 DB 사용자 로그인만 수행하고 CM 사용자(=호스트 사용자) 로그인 과정이 필요 없다.
-
-* 서버 측 CUBRID 매니저 서버 구동이 필요 없다.
+*   CUBRID 매니저 서버를 경유하지 않고 오직 JDBC만으로 통신한다.
+    
+*   따라서 DB/브로커 운영 및 모니터링 기능이 지원되지 않는다.
+    
+*   따라서 오직 DB 사용자 로그인만 수행하고 CM 사용자(=호스트 사용자) 로그인 과정이 필요 없다.
+    
+*   서버 측 CUBRID 매니저 서버 구동이 필요 없다.
 
 CUBRID 쿼리 브라우저 역시 별도로 다운로드한 후 실행해야 하는 클라이언트 도구이며, JRE 혹은 JDK 1.6 이상 버전에서 실행되는 Java 애플리케이션이다.
 
-#. CUBRID 쿼리 브라우저 최신 파일을 다운로드한 후 설치한다. 서버 측과 동일한 JDBC 드라이버만 추가하면 어느 버전의 엔진과도 호환된다. 또한, 자동 업데이트 기능을 지원하므로 주기적으로 최신 버전을 유지하는 것이 좋다. (CUBRID FTP: http://ftp.cubrid.org/CUBRID_Tools/CUBRID_Query_Browser )
+#.  CUBRID 쿼리 브라우저 최신 파일을 다운로드한 후 설치한다. 서버 측과 동일한 JDBC 드라이버만 추가하면 어느 버전의 엔진과도 호환된다. 또한, 자동 업데이트 기능을 지원하므로 주기적으로 최신 버전을 유지하는 것이 좋다. 
+    (CUBRID FTP: http://ftp.cubrid.org/CUBRID_Tools/CUBRID_Query_Browser )
 
-#. CUBRID 쿼리 브라우저를 설치한 후 [파일 > 연결 정보 등록] 메뉴에서 데이터베이스 접속 정보를 등록한다. 이때, 브로커 주소, 브로커 연결 포트(기본: 33,000), DB 사용자 및 비밀번호를 입력해야 하며, 해당 서버의 엔진과 버전이 동일한 JDBC 드라이버를 설치해야 한다(자동 드라이버 검색/자동 업데이트 지원).
-
-#. 데이터베이스를 선택하여 접속을 시도한다. 이때에는 DB 사용자 인증을 수행한다. 기본 사용자 이름은 dba이며 암호는 없다.
-
-#. 접속한 DB에서 SQL을 실행하고, 결과를 확인한다. 왼쪽에는 호스트, 데이터베이스, 테이블 목록이 출력되고, 오른쪽에는 질의 편집기와 질의 결과 창이 있다. [SQL 실행 이력] 탭에서는 DB별로 실행 성공한 SQL 리스트를 재사용할 수 있으며, [질의 다중 실행] 탭에서 결과 비교를 위한 DB를 추가하여 여러 데이터베이스에서 결과값을 쉽게 비교할 수 있다.
+#.  CUBRID 쿼리 브라우저를 설치한 후 [파일 > 연결 정보 등록] 메뉴에서 데이터베이스 접속 정보를 등록한다. 이때, 브로커 주소, 브로커 연결 포트(기본: 33,000), DB 사용자 및 비밀번호를 입력해야 하며, 해당 서버의 엔진과 버전이 동일한 JDBC 드라이버를 설치해야 한다(자동 드라이버 검색/자동 업데이트 지원).
+    
+#.  데이터베이스를 선택하여 접속을 시도한다. 이때에는 DB 사용자 인증을 수행한다. 기본 사용자 이름은 dba이며 암호는 없다.
+    
+#.  접속한 DB에서 SQL을 실행하고, 결과를 확인한다. 왼쪽에는 호스트, 데이터베이스, 테이블 목록이 출력되고, 오른쪽에는 질의 편집기와 질의 결과 창이 있다. [SQL 실행 이력] 탭에서는 DB별로 실행 성공한 SQL 리스트를 재사용할 수 있으며, [질의 다중 실행] 탭에서 결과 비교를 위한 DB를 추가하여 여러 데이터베이스에서 결과값을 쉽게 비교할 수 있다.
 
     .. image:: /images/gs_manager_qb.png
 
@@ -227,21 +227,22 @@ CUBRID 쿼리 브라우저 역시 별도로 다운로드한 후 실행해야 하
 CUBRID 마이그레이션 툴킷으로 스키마/데이터 이전하기
 ---------------------------------------------------
 
-CUBRID 마이그레이션 툴킷은 소스 데이터베이스(MySQL, Oracle, CUBRID)에서 타겟 데이터베이스(CUBRID)로 데이터 및 스키마를 이전하는 도구이다. 역시 JRE 혹은 JDK 1.6 이상 버전에서 실행되는 Java 애플리케이션이며, 별도로 다운받아야 한다 (CUBRID FTP: http://ftp.cubrid.org/CUBRID_Tools/CUBRID_Migration_Toolkit )
+CUBRID 마이그레이션 툴킷은 소스 데이터베이스(MySQL, Oracle, CUBRID)에서 타겟 데이터베이스(CUBRID)로 데이터 및 스키마를 이전하는 도구이다. 역시 JRE 혹은 JDK 1.6 이상 버전에서 실행되는 Java 애플리케이션이며, 별도로 다운받아야 한다. 
+(CUBRID FTP: http://ftp.cubrid.org/CUBRID_Tools/CUBRID_Migration_Toolkit )
 
 DB를 CUBRID로 전환하는 경우, 장비를 이전하는 경우, 운영 DB로부터 일부 스키마와 일부 데이터를 이전하고자 하는 경우, CUBRID 버전 업그레이드를 하는 경우, 배치 작업을 수행하는 경우 유용하다. 주요 기능은 다음과 같다.
 
-* 전체/일부 스키마 및 데이터 마이그레이션 지원
-
-* 여러 개의 SQL을 실행하여 원하는 결과 데이터만 마이그레이션 가능
-
-* JDBC를 통한 온라인 마이그레이션 지원하여 운영 중단 없이 실행 가능
-
-* CSV, SQL, CUBRID loaddb 포맷으로 출력 후 오프라인 마이그레이션 가능
-
-* 마이그레이션 실행 스크립트를 추출하여 타겟 서버에서 직접 실행 가능
-
-* 마이그레이션 실행 스크립트를 재사용할 수 있어 배치 작업 시간 단축
+*   전체/일부 스키마 및 데이터 마이그레이션 지원
+    
+*   여러 개의 SQL을 실행하여 원하는 결과 데이터만 마이그레이션 가능
+    
+*   JDBC를 통한 온라인 마이그레이션 지원하여 운영 중단 없이 실행 가능
+    
+*   CSV, SQL, CUBRID loaddb 포맷으로 출력 후 오프라인 마이그레이션 가능
+    
+*   마이그레이션 실행 스크립트를 추출하여 타겟 서버에서 직접 실행 가능
+    
+*   마이그레이션 실행 스크립트를 재사용할 수 있어 배치 작업 시간 단축
 
 .. image:: /images/gs_manager_migration.png
 
@@ -252,27 +253,26 @@ DB를 CUBRID로 전환하는 경우, 장비를 이전하는 경우, 운영 DB로
 
 CUBRID가 지원하는 드라이버는 다음과 같다.
 
-* :doc:`CUBRID JDBC 드라이버 <api/jdbc>` (`다운로드 <http://www.cubrid.org/?mid=downloads&item=jdbc_driver>`_)
-
-* :doc:`CUBRID CCI 드라이버 <api/cci>` (`다운로드 <http://www.cubrid.org?mid=downloads&item=cci_driver>`_)
-
-* :doc:`CUBRID PHP 드라이버 <api/php>` (`다운로드 <http://www.cubrid.org/?mid=downloads&item=php_driver&driver_type=phpdr>`_)
-
-* :doc:`CUBRID PDO 드라이버 <api/pdo>` (`다운로드 <http://www.cubrid.org/?mid=downloads&item=php_driver&driver_type=pdo>`_)
-
-* :doc:`CUBRID ODBC 드라이버 <api/odbc>` (`다운로드 <http://www.cubrid.org/?mid=downloads&item=odbc_driver>`_)
-
-* :doc:`CUBRID OLE DB 드라이버 <api/oledb>` (`다운로드 <http://www.cubrid.org/?mid=downloads&item=oledb_driver>`_)
-
-* :doc:`CUBRID ADO.NET 드라이버 <api/adodotnet>` (`다운로드 <http://www.cubrid.org/?mid=downloads&item=ado_dot_net_driver>`_)
-
-* :doc:`CUBRID Perl 드라이버 <api/perl>` (`다운로드 <http://www.cubrid.org/?mid=downloads&item=perl_driver>`_)
-
-* :doc:`CUBRID Python 드라이버 <api/python>` (`다운로드 <http://www.cubrid.org/?mid=downloads&item=python_driver>`_)
-
-* :doc:`CUBRID Ruby 드라이버 <api/ruby>` (`다운로드 <http://www.cubrid.org/?mid=downloads&item=ruby_driver>`_)
-
-* :doc:`CUBRID Node.js 드라이버 <api/node_js>` (`다운로드 <http://www.cubrid.org/?mid=downloads&item=nodejs_driver>`_)
-
+*   :doc:`CUBRID JDBC 드라이버 <api/jdbc>` (`다운로드 <http://www.cubrid.org/?mid=downloads&item=jdbc_driver>`_)
+    
+*   :doc:`CUBRID CCI 드라이버 <api/cci>` (`다운로드 <http://www.cubrid.org?mid=downloads&item=cci_driver>`_)
+    
+*   :doc:`CUBRID PHP 드라이버 <api/php>` (`다운로드 <http://www.cubrid.org/?mid=downloads&item=php_driver&driver_type=phpdr>`_)
+    
+*   :doc:`CUBRID PDO 드라이버 <api/pdo>` (`다운로드 <http://www.cubrid.org/?mid=downloads&item=php_driver&driver_type=pdo>`_)
+    
+*   :doc:`CUBRID ODBC 드라이버 <api/odbc>` (`다운로드 <http://www.cubrid.org/?mid=downloads&item=odbc_driver>`_)
+    
+*   :doc:`CUBRID OLE DB 드라이버 <api/oledb>` (`다운로드 <http://www.cubrid.org/?mid=downloads&item=oledb_driver>`_)
+    
+*   :doc:`CUBRID ADO.NET 드라이버 <api/adodotnet>` (`다운로드 <http://www.cubrid.org/?mid=downloads&item=ado_dot_net_driver>`_)
+    
+*   :doc:`CUBRID Perl 드라이버 <api/perl>` (`다운로드 <http://www.cubrid.org/?mid=downloads&item=perl_driver>`_)
+    
+*   :doc:`CUBRID Python 드라이버 <api/python>` (`다운로드 <http://www.cubrid.org/?mid=downloads&item=python_driver>`_)
+    
+*   :doc:`CUBRID Ruby 드라이버 <api/ruby>` (`다운로드 <http://www.cubrid.org/?mid=downloads&item=ruby_driver>`_)
+    
+*   :doc:`CUBRID Node.js 드라이버 <api/node_js>` (`다운로드 <http://www.cubrid.org/?mid=downloads&item=nodejs_driver>`_)
 
 위 드라이버 중 JDBC, ODBC, CCI 드라이버는 CUBRID를 설치할 때 자동으로 다운로드되므로 따로 다운로드하지 않아도 된다.

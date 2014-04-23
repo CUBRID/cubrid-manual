@@ -188,11 +188,15 @@ Ex) When the query is performed in shard DB #3, queries students whose value of 
 
         *   When the shard_key is an integer
 
-            Default hash function (shard_key) = shard_key mod SHARD_KEY_MODULAR parameter (default value 256)
+            ::
+
+                Default hash function (shard_key) = shard_key mod SHARD_KEY_MODULAR parameter (default value 256)
 
         *   When the shard_key is a string
 
-            Default hash function (shard_key) = shard_key[0] mod  SHARD_KEY_MODULAR parameter (default value 256)
+            ::
+
+                Default hash function (shard_key) = shard_key[0] mod  SHARD_KEY_MODULAR parameter (default value 256)
 
     .. note::
 
@@ -205,7 +209,6 @@ Ex) When the query is performed in shard DB #3, queries students whose value of 
     .. image:: /images/image46.png
 
     *   Receives the query execution result from the shard DB #1 and then returns it to the requested application.
-        
         
 .. note::
 
@@ -267,10 +270,10 @@ As shown in the example above, after each shard DB node creates a shard DB and a
 
     sh> # Creating CUBRID SHARD DB
     sh> cubrid createdb shard1 en_US
-    
+
     sh> # Creating CUBRID SHARD user account
     sh> csql -S -u dba shard1 -c "create user shard password 'shard123'"
-    
+
     sh> # Starting CUBRID SHARD DB
     sh> cubrid server start shard1
 
@@ -570,7 +573,7 @@ cubrid_broker.conf
 The **cubrid_broker.conf** file is used for setting the CUBRID SHARD feature. Refer **cubrid_broker.conf.shard** when configuring **cubrid_broker.conf**. For details of **cubrid_broker.conf**, see :ref:`broker-configuration`.
 
 **Specifying the target shard DB** 
-  
+
 You can specify the target shard DB by **APPL_SERVER** parameter. There is no need to specify when you use CUBRID, but if you use MySQL, this value should be set. For how to configure, see :ref:`APPL_SERVER <appl_server>`. 
 
 .. _shard-connection-file:
@@ -665,7 +668,7 @@ The example and format of a shard key configuration file are as follows: ::
     160     191     1
     192     223     2
     224     255     3
-     
+
 *   [%shard_key_name]: Specifies the name of the shard key.
 *   min: The minimum value range of the shard key hash results.
 *   max: The maximum range of the shard key hash results.
@@ -684,7 +687,7 @@ The example and format of a shard key configuration file are as follows: ::
 .. _setting-user-defined-hash-function:
 
 Setting User-Defined Hash Function
-----------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To select a shard that will perform queries, the CUBRID SHARD uses the results of hashing the shard key and the metadata configuration information. For this, users can use the default hash function or define a hash function.
 
@@ -694,11 +697,15 @@ When the **SHARD_KEY_LIBRARY_NAME** and **SHARD_KEY_FUNCTION_NAME** parameters o
 
 *   When the shard_key is an integer
 
-    Default hash function (shard_key) = shard_key mod SHARD_KEY_MODULAR parameter (default value: 256)
+    ::
+
+        Default hash function (shard_key) = shard_key mod SHARD_KEY_MODULAR parameter (default value: 256)
 
 *   When the shard_key is a string
 
-    Default hash function (shard_key) = shard_key[0] mod SHARD_KEY_MODULAR parameter (default value: 256)
+    ::
+
+        Default hash function (shard_key) = shard_key[0] mod SHARD_KEY_MODULAR parameter (default value: 256)
 
 **Setting User-Defined Hash Function**
 
@@ -772,8 +779,8 @@ The CUBRID SHARD can hash the shard key by using the user-defined hash function,
         fn_shard_key_udf (const char *shard_key, T_SHARD_U_TYPE type,
                           const void *value, int value_len)
         {
-           unsigned int ival;
-           unsigned char c;
+          unsigned int ival;
+          unsigned char c;
         
           if (value == NULL)
             {
@@ -844,7 +851,7 @@ The CUBRID SHARD can hash the shard key by using the user-defined hash function,
         [%student_no]
         SHARD_KEY_LIBRARY_NAME =$CUBRID/conf/shard_key_udf.so
         SHARD_KEY_FUNCTION_NAME =fn_shard_key_udf
-        
+
     .. note:: 
     
         *   When you define a user's hash function in the application, 16bit(short), 32bit(int) and 64bit(INT64) integer can be used as the value of shard key.
@@ -901,7 +908,7 @@ SHARD PROXY Log
     06/21 10:50:46.822 [SRD] ../../src/broker/shard_proxy_io.c(2517): New client connected. client(client_id:3, is_busy:Y, fd:50, ctx_cid:3, ctx_uid:4).
     06/21 10:50:46.825 [DBG] ../../src/broker/shard_proxy_io.c(3298): Shard status. (num_cas_in_tran=1, shard_id=2).
     06/21 10:50:46.827 [DBG] ../../src/broker/shard_proxy_io.c(3385): Shard status. (num_cas_in_tran=0, shard_id=2).
-        
+
 **Proxy Log Level**
 
 *   Parameter: **SHARD_PROXY_LOG**

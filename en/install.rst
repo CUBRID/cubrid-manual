@@ -110,7 +110,9 @@ Check the following before installing CUBRID for Linux.
     
 **Installing CUBRID**
 
-The installation program consists of shell scripts that contain binary; thus it can be installed automatically. The following example shows how to install CUBRID with the "CUBRID-10.0.0.0201-linux.x86_64.sh" file on the Linux. ::
+The installation program consists of shell scripts that contain binary; thus it can be installed automatically. The following example shows how to install CUBRID with the "CUBRID-10.0.0.0201-linux.x86_64.sh" file on the Linux. 
+
+::
 
     $ sh CUBRID-10.0.0.0201-linux.x86_64.sh
     Do you agree to the above license terms? (yes or no) : yes
@@ -171,7 +173,7 @@ When rpm is executed, CUBRID is installed in the "cubrid" home directory (/opt/c
     *   **RPM and dependency**
     
         You must check RPM dependency when installing with RPM. If you ignore (--nodeps) dependency, it may not be executed. 
-        
+
     *   **cubrid account and DB exists even if you remove RPM package**
         
         Even if you remove RPM, user accounts and databases that are created after installing, you must remove it manually, if needed.
@@ -301,7 +303,6 @@ You should check the below before installing CUBRID for Windows.
 
     CUBRID Service is automatically started when the system is rebooted. If you want to stop the  when the system is rebooted, change the "Start parameters" of "CUBRIDService" as "Stop"; "Control Panel > Administrative Tools > Services" and double-clicking "CUBRIDService", then pop-up window will be shown.
 
-
 **Checklist After Installation**
 
 *   Whether the start of CUBRID Service Tray or not
@@ -310,7 +311,7 @@ You should check the below before installing CUBRID for Windows.
 
     *   Check if Task Scheduler is started in [Start button] > [Control panel] > [Administrative Tools] > [Services]; if not, start Task Scheduler.
     *   Check if CUBRID Service Tray is registered in [Start button] > [All Programs] > [Startup]; if not, register CUBRID Service Tray.
-    
+
 **Upgrading CUBRID**
 
 To install a new version of CUBRID in an environment in which a previous version has already been installed, select [CUBRID Service Tray] > [Exit] from the menu to stop currently running services, and then remove the previous version of CUBRID. Note that when you are prompted with "Do you want to delete all the existing version of databases and the configuration files?" you must select "No" to protect the existing databases.

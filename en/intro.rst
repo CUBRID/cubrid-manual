@@ -2,7 +2,9 @@
 Introduction to CUBRID
 **********************
 
-This chapter explains the architecture and features of CUBRID. CUBRID is an object-relational database management system (DBMS) consisting of the database server, the broker, and the CUBRID Manager. It is optimized for Internet data services, and provides various user-friendly features.
+This chapter explains the architecture and features of CUBRID. 
+CUBRID is an object-relational database management system (DBMS) consisting of the database server, the broker, and the CUBRID Manager. 
+It is optimized for Internet data services, and provides various user-friendly features.
 
 This chapter covers the following topics:
 
@@ -67,7 +69,6 @@ The examples of queries that can use permanent temp volume or temporary temp vol
 *    Queries including a subquery
 *    Queries executing sort-merge join
 *    Queries including the **CREATE INDEX** statement
-
 
 When executing the queries above, the temp volume is used after exhausting the memory space (the space size is determined by the system parameter **temp_file_memory_size_in_pages** specified in **cubrid.conf**) assigned to store **SELECT** results or sort the data. The order in which the storage space is used to store the results of query processing and sorting is as follows: When the current storage space is exhausted, the next storage space is used.
 
@@ -191,7 +192,7 @@ CUBRID provides various Application Programming Interfaces (APIs). The following
 
 All interface modules access the database server through the broker. The broker is a middleware that allows various application clients to connect to the database server. When it receives a request from an interface module, it calls a native C API provided by the database server's client library.
 
-You can find the latest information on interface modules; visit the Web site at `http://www.cubrid.org/wiki_apis <http://www.cubrid.org/wiki_apis>`_ .
+You can find the latest information on interface modules; visit the Web site at http://www.cubrid.org/wiki_apis\.
 
 CUBRID Characteristics
 ======================
@@ -257,15 +258,15 @@ To address this issue, CUBRID introduces the new concept of the Click Counter th
 
 **Extending the Relational Data Model**
 
-**Collection**
+*   **Collection**
 
-For the relational data model, it is not allowed that a single column has multiple values. In CUBRID, however, you can create a column with several values. For this purpose, collection data types are provided in CUBRID. The collection data type is mainly divided into **SET**, **MULTISET** and **LIST**; the types are distinguished by duplicated availability and order.
+    For the relational data model, it is not allowed that a single column has multiple values. In CUBRID, however, you can create a column with several values. For this purpose, collection data types are provided in CUBRID. The collection data type is mainly divided into **SET**, **MULTISET** and **LIST**; the types are distinguished by duplicated availability and order.
 
-*   **SET**: A collection type that does not allow the duplication of elements. Elements are stored without duplication after being sorted regardless of their order of entry.
-*   **MULTISET**: A collection type that allows the duplication of elements. The order of entry is not considered.
-*   **LIST**: A collection type that allows the duplication of elements. Unlike with **SET** and **MULTISET**, the order of entry is maintained.
+    *   **SET**: A collection type that does not allow the duplication of elements. Elements are stored without duplication after being sorted regardless of their order of entry.
+    *   **MULTISET**: A collection type that allows the duplication of elements. The order of entry is not considered.
+    *   **LIST**: A collection type that allows the duplication of elements. Unlike with **SET** and **MULTISET**, the order of entry is maintained.
 
-**Inheritance**
+*   **Inheritance**
 
 Inheritance is a concept to reuse columns and methods of a super class (table) in those of a sub class. CUBRID supports reusability through inheritance. By using inheritance provided by CUBRID, you can create a super class with some common columns and then create a sub class inherited from the super class with some unique columns added. In this way, you can create a database model which can minimize the number of columns.
 

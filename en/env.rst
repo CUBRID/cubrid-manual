@@ -10,9 +10,7 @@ CUBRID Environment Variables
 
 *   **CUBRID_DATABASES**: The environment variable that designates the location of the **databases.txt** file. The CUBRID system stores the absolute path of database volumes in the **$CUBRID_DATABASES/databases.txt** file. See :ref:`databases-txt-file`.
 
-*   **CUBRID_MSG_LANG**: The environment variable that specifies usage messages and error messages in CUBRID. The initial value upon start is not defined. If it is not defined, it follows the configured locale when :ref:`creating-database`.
-
-If character set is omitted after **en_US**, ISO-8859-1(.iso88591) will be specified by default. For more information, see :ref:`language-setting`. 
+*   **CUBRID_MSG_LANG**: The environment variable that specifies usage messages and error messages in CUBRID. The initial value upon start is not defined. If it is not defined, it follows the configured locale when :ref:`creating-database`. For more information, see :ref:`language-setting`. 
 
 .. note:: 
 
@@ -26,19 +24,19 @@ If character set is omitted after **en_US**, ISO-8859-1(.iso88591) will be speci
 *   Since the maximum length of the UNIX socket path is 108, when a path longer than 108 is entered in **$CUBRID_TMP**, an error is displayed. 
 
     ::
-    
+
         $ export CUBRID_TMP=/home1/testusr/cubrid=/tmp/123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789
         $ cubrid server start apricot
-    
+
         The $CUBRID_TMP is too long. (/home1/testusr/cubrid=/tmp/123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789)
-    
+
 *   When the relative path is entered, an error is displayed. 
 
     ::
-    
+
         $ export CUBRID_TMP=./var 
-        $ cubrid server start apricot
-    
+        $ cubrid server start testdb
+
         The $CUBRID_TMP should be an absolute path. (./var)
 
 **CUBRID_TMP** can be used to avoid the following problems that can occur at the default path of the UNIX domain socket that CUBRID uses.
@@ -48,7 +46,7 @@ If character set is omitted after **en_US**, ISO-8859-1(.iso88591) will be speci
 
 The above mentioned environment variables are set when the CUBRID is installed. However, the following commands can be used to verify the setting.
 
-*   For Linux : 
+*   Linux
 
     ::
 
@@ -57,7 +55,7 @@ The above mentioned environment variables are set when the CUBRID is installed. 
         % printenv CUBRID_MSG_LANG
         % printenv CUBRID TMP
 
-*   In Windows : 
+*   Windows
 
     ::
 
@@ -72,10 +70,10 @@ OS Environment and Java Environment Variables
 
 *   Path: In the Windows environment, the **%CUBRID%\\bin**, which is a directory that contains CUBRID system's execution file, must be included in the **Path** environment variable.
 
-*   JAVA_HOME: To use the Java stored procedure in the CUBRID system, the Java Virtual Machine (JVM) version 1.6 or later must be installed, and the **JAVA_HOME** environment variable must designate the concerned directory.
-    See the :ref:`jsp-environment-configuration`.
+*   JAVA_HOME: To use the Java stored procedure in the CUBRID system, the Java Virtual Machine (JVM) version 1.6 or later must be installed, and the **JAVA_HOME** environment variable must designate the concerned directory. See the :ref:`jsp-environment-configuration`.
 
-**Configuring the Environment Variable**
+Configuring the Environment Variable
+------------------------------------
 
 **For Windows**
 
@@ -85,8 +83,9 @@ If the CUBRID system has been installed on Windows, then the installation progra
 
 **For Linux**
 
-If the CUBRID system has been installed on Linux, the installation program automatically creates the **.cubrid.sh** or **.cubrid.csh** file and makes configurations so that the files are automatically called from the installation account's
-shell log-in script. The following is the contents of . **cubrid.sh** environment variable configuration that was created in an environment that uses sh, bash, etc. ::
+If the CUBRID system has been installed on Linux, the installation program automatically creates the **.cubrid.sh** or **.cubrid.csh** file and makes configurations so that the files are automatically called from the installation account's shell log-in script. The following is the contents of . **cubrid.sh** environment variable configuration that was created in an environment that uses sh, bash, etc. 
+
+::
 
     CUBRID=/home1/cub_user/CUBRID
     CUBRID_DATABASES=/home1/cub_user/CUBRID/databases
@@ -174,10 +173,10 @@ If you use CUBRID for Windows at the broker machine or the DB server machine, al
 |               |               |               |                |                                                     | Windows: Program         |                        |
 |               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
 |               | Client        | cub_server    | ECHO(7)        | ECHO(7)                                             | Open                     | Periodical connection  |
-|               | machine       |               |                |                                                     |                          |                        |
+|               | machine(*)    |               |                |                                                     |                          |                        |
 |               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
 |               | Server        | CAS, CSQL     | ECHO(7)        | ECHO(7)                                             | Open                     | Periodical connection  |
-|               | machine       |               |                |                                                     |                          |                        |
+|               | machine(**)   |               |                |                                                     |                          |                        |
 +---------------+---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
 | HA used       | cub_broker    | application   | BROKER_PORT    | Not supported                                       | Open                     | One-time connection    |
 |               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
@@ -196,10 +195,10 @@ If you use CUBRID for Windows at the broker machine or the DB server machine, al
 |               | cub_server    | CAS           | cubrid_port_id | Not supported                                       | Open                     | Keep connected         |
 |               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
 |               | Client        | cub_server    | ECHO(7)        | Not supported                                       | Open                     | Periodical connection  |
-|               | machine       |               |                |                                                     |                          |                        |
+|               | machine(*)    |               |                |                                                     |                          |                        |
 |               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
 |               | Server        | CAS, CSQL,    | ECHO(7)        | Not supported                                       | Open                     | Periodical connection  |
-|               | machine       | copylogdb,    |                |                                                     |                          |                        |
+|               | machine(**)   | copylogdb,    |                |                                                     |                          |                        |
 |               |               | applylogdb    |                |                                                     |                          |                        |
 +---------------+---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
 | SHARD used    | cub_broker    | application   | BROKER_PORT    | Not supported                                       | Open                     | One-time connection    |
@@ -212,7 +211,11 @@ If you use CUBRID for Windows at the broker machine or the DB server machine, al
 | used          | Web Manager   | application   | 8282           | 8282                                                | Open                     |                        |
 |               | server        |               |                |                                                     |                          |                        |
 +---------------+---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
-    
+
+(*): The machine which has the CAS, CSQL, copylogdb, or applylogdb process
+
+(**): The machine which has the cub_server
+
 The detailed description on each classification is given as follows.
 
 .. _cubrid-basic-ports:
@@ -241,7 +244,7 @@ The following table summarizes the ports required for each OS, based on the list
 | Server        | CAS, CSQL     | ECHO(7)        | ECHO(7)                                             | Open                     | Periodical connection  |
 | machine(**)   |               |                |                                                     |                          |                        |
 +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
-    
+
 (*): The machine which has the CAS or CSQL process
 
 (**): The machine which has the cub_server
@@ -263,7 +266,7 @@ The relation of connection between processes is as follows:
 *   CAS: The broker application server process. It relays the application and the cub_server.
 *   cub_master: The master process. It selects the cub_server to connect with the CAS.
 *   cub_server: The database server process
-    
+
 The symbols of relation between processes and the meaning are as follows:
 
 *   \- : Indicates that the connection is made only once for the initial.
@@ -276,11 +279,11 @@ The connection process between the application and the DB is as follows:
 #.  The application tries to connect to the cub_broker through the broker port (BROKER_PORT) set in the cubrid_broker.conf.
 #.  The cub_broker selects a connectable CAS.
 #.  The application and CAS are connected.
-    
+
     In Linux, BROKER_PORT, which is used as an application, is connected to CAS through the Unix domain socket. In Windows, since the Unix domain socket cannot be used, an application and CAS are connected through a port of which the number is the sum of the corresponding CAS ID and the APPL_SERVER_PORT value set in the cubrid_broker.conf. If the APPL_SERVER_PORT value has not been set, the port value connected to the first CAS is BROKER_PORT + 1.
-    
+
     For example, if the BROKER_PORT is 33000 and the APPL_SERVER_PORT value has not been set in Windows, the ports used between the application and CAS are as follows:
-        
+
     *   The port used to connect the application to the CAS(1): 33001
     *   The port used to connect the application to the CAS(2): 33002
     *   The port used to connect the application to the CAS(3): 33003
@@ -370,6 +373,8 @@ On the master node, the applylogdb and the copylogdb run for the case that the m
 Ports for CUBRID SHARD
 ----------------------
 
+CUBRID SHARD is supported only on Linux.
+
 The following table summarizes the ports required for each OS, based on the listening processes. Each port on the listener should be opened.
 
 +-------------------+--------------+----------------+--------------------------+------------------------+
@@ -387,7 +392,7 @@ The connection process between the application and the server for the CUBRID SHA
 #.  The cub_broker selects the connectable cub_proxy. 
     
 #.  The application and the cub_proxy are connected. The number of the cub_proxy are determined by SHARD_NUM_PROXY of the cubrid_broker.conf.
-    
+
     In Linux, the application is connected to the cub_proxy through the Unix domain socket. In Windows, the application is connected to the cub_proxy through the port calculated based on BROKER_PORT and SHARD_NUM_PROXY set in the cubrid_broker.conf of each cub_proxy as the Unix domain socket cannot be used.
     
     For example, in Linux, if BROKER_PORT is 45000 and SHARD_NUM_PROXY is 3, only one port is used: 45000.
@@ -397,7 +402,7 @@ The connection process between the application and the server for the CUBRID SHA
     *   The port used to connect the application to the cub_proxy(3): 45000, the port used to connect the CAS to the cub_proxy(3): None
 
 #.  The CAS and the cub_proxy have already been connected when starting the CUBRID SHARD (cubrid broker start). In addition, the processes are always in one machine, requiring no remote access.
-    
+
     When the CAS is connected to the cub_proxy, the Unix domain socket is used in Linux. Multiple CASes can be connected to one cub_proxy. The minimum number and the maximum number of the CAS are determined by MIN_NUM_APPL_SERVER and MAX_NUM_APPL_SERVER of the cubrid_broker.conf. The maximum number of CASes which can be connected to one  cub_proxy simultaneously is determined based on SHARD_MAX_CLIENTS of the cubrid_broker.conf.
 
 .. _cwm-cm-ports:

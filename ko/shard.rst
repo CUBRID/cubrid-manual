@@ -99,23 +99,22 @@ CUBRID SHARD는 SQL 힌트 구문에 포함된 힌트와 설정 정보를 이용
 *   **shard key** : shard DB를 식별할 수 있는 칼럼. 일반적으로 shard DB 내의 모든 혹은 대부분의 테이블에 존재하는 칼럼으로서, DB 내에서 유일한 값을 갖는다.
 *   **shard id** : shard를 논리적으로 구분할 수 있는 식별자. 예를 들어, 하나의 DB가 4개의 shard DB로 분할되면 4개의 shard id가 존재한다.
 
-힌트와 설정 정보를 이용한 자세한 질의 처리 절차는 :ref:`shard SQL 힌트를 이용하여 질의가 수행되는 일반적인 절차 <using-shard-hint>`\ 
-를 참고한다.
+힌트와 설정 정보를 이용한 자세한 질의 처리 절차는 :ref:`shard SQL 힌트를 이용하여 질의가 수행되는 일반적인 절차 <using-shard-hint>`\ 를 참고한다.
 
 .. note::
 
     *   하나의 질의 안에 두 개 이상의 shard 힌트가 존재할 경우 서로 같은 shard를 가리키면 정상 처리하고, 다른 shard를 가리키면 오류 처리한다. 
     
         ::
-    
+
             SELECT * FROM student WHERE shard_key = /*+ shard_key */ 250 OR shard_key = /*+ shard_key */ 22;
-    
+
         위와 같은 경우 250과 22가 같은 shard를 가리키면 정상 처리, 다른 shard를 가리키면 오류 처리한다.
-    
+
     *   여러 개의 값을 바인딩하는 배열로 질의를 일괄 처리하는 드라이버 함수(예: JDBC의 PreparedStatement.executeBatch, CCI의 cci_execute_array)에서 여러 개의 질의 중 하나라도 다른 shard에 접근하는 질의가 있으면 모두 오류 처리한다. 
-    
+
     *   shard 환경에서 한번에 여러 문장을 실행하는 함수(예: JDBC의 Statement.executeBatch, CCI의 cci_execute_batch)는 추후 지원할 예정이다.
-        
+
 **shard_key 힌트**
 
 **shard_key** 힌트는 바인드 변수나 리터럴 값의 위치를 지정하기 위한 힌트로서, 반드시 바인드 변수나 리터럴 값의 앞에 위치해야 한다.
@@ -163,6 +162,7 @@ CUBRID SHARD는 SQL 힌트 구문에 포함된 힌트와 설정 정보를 이용
     .. image:: /images/image42.png
 
     *   응용 프로그램은 JDBC 인터페이스를 통해 CUBRID SHARD로 질의 처리를 요청하며, 실제로 질의가 수행될 shard DB를 지정하기 위해 SQL 구문 내에 **shard_key** 힌트를 추가한다.
+
     *   SQL 힌트는 SQL 구문 내에서 위 예에서와 마찬가지로 shard key로 설정된 칼럼의 바인드 또는 리터럴 값 바로 앞에 위치해야 한다.
 
     바인드 변수에 설정된 shard SQL 힌트는 다음과 같다.
@@ -180,21 +180,24 @@ CUBRID SHARD는 SQL 힌트 구문에 포함된 힌트와 설정 정보를 이용
     .. image:: /images/image45.png
 
     *   사용자로부터 수신한 SQL 질의를 내부에서 처리하기 위한 형태로 다시 작성된다(query rewrite).
-
     *   사용자가 요청한 SQL 구문과 힌트를 이용하여 실제 질의를 수행한 shard DB를 선택한다.
 
         *   바인드 변수에 SQL 힌트가 설정된 경우, execute 시 shard_key 바인드 변수에 대입된 값을 해시한 결과와 설정 정보를 이용하여 실제 질의가 수행될 shard DB를 선택한다.
 
         *   해시 함수는 사용자가 별도로 지정할 수 있으며, 지정하지 않은 경우 기본 내장된 해시 함수를 이용하여 shard_key 값을 해싱한다. 기본 내장된 해시 함수는 다음과 같다.
 
-        *   shard_key가 정수인 경우 ::
+        *   shard_key가 정수인 경우 
+
+            ::
 
                 기본 해시 함수(shard_key) = shard_key mod SHARD_KEY_MODULAR 파라미터(기본값 256)
-       
-        *   shard_key가 문자열인 경우 ::
+
+        *   shard_key가 문자열인 경우
+
+            ::
 
                 기본 해시 함수(shard_key) = shard_key[0] mod  SHARD_KEY_MODULAR 파라미터(기본값 256)
-    
+
     .. note::
 
         shard_key 바인드 변수의 값이 100인 경우, "기본 hash 함수(shard_key) = 100 % 256 = 100"이므로, 설정에 의해 해시 결과 100에 해당하는 shard DB #1이 선택되며, 선택된 shard DB #1으로 사용자 요청을 전달하게 된다.
@@ -210,7 +213,7 @@ CUBRID SHARD는 SQL 힌트 구문에 포함된 힌트와 설정 정보를 이용
 .. note::
 
     여러 개의 값을 바인딩하는 배열로 질의를 일괄 처리하는 드라이버 함수(예: JDBC의 executeBatch, CCI의 cci_execute_array, cci_execute_batch)에서 다른 shard에 접근하는 값이 존재하면 오류 처리한다.
-    
+
 다양한 DBMS 사용 가능
 ---------------------
 
@@ -273,7 +276,6 @@ CUBRID SHARD는 CUBRID와 MySQL에서 사용할 수 있다.
 
     sh> # CUBRID SHARD DB 시작
     sh> cubrid server start shard1
-
 
 shard 설정 변경
 ---------------
@@ -531,7 +533,7 @@ CUBRID SHARD 기능을 사용하려면 아래와 같이 브로커를 구동한�
                    130  'name_130'                     12
                    131  'name_131'                     13
                    ...
-                   
+
 *   shard #3 
 
     ::
@@ -571,7 +573,7 @@ cubrid_broker.conf
 **cubrid_broker.conf** 는 CUBRID SHARD 기능을 설정할 때 사용한다. 설정 시 **cubrid_broker.conf.shard**\ 를 참고하며, **cubrid_broker.conf**\ 에 대한 자세한 내용은 :ref:`broker-configuration`\ 을 참고한다.
 
 **대상 shard DB 설정** 
-  
+
 **APPL_SERVER** 파라미터에 의해 대상 shard DB를 설정할 수 있다. CUBRID를 사용하는 경우는 별도의 설정이 필요없지만, MySQL을 사용하고자 하는 경우 이 값을 반드시 설정해야 한다. 설정 방법은 :ref:`APPL_SERVER <appl_server>`\ 를 참고한다. 
 
 .. _shard-connection-file:
@@ -676,11 +678,11 @@ shard key 설정 파일의 예와 형식은 다음과 같다. ::
 
 .. warning::
 
-   *   shard key의 min은 항상 0부터 시작해야 한다.
-   *   max는 최대 255까지 설정해야 한다.
-   *   min~max 사이에는 빈 값이 존재하면 안 된다.
-   *   내장 해시 함수를 사용하는 경우 **SHARD_KEY_MODULAR** 파라미터 값(최소 1, 최대 256)을 초과할 수 없다.
-   *   shard key 해시 결과는 0 ~ (**SHARD_KEY_MODULAR** - 1)의 범위에 반드시 포함되어야 한다.
+    *   shard key의 min은 항상 0부터 시작해야 한다.
+    *   max는 최대 255까지 설정해야 한다.
+    *   min~max 사이에는 빈 값이 존재하면 안 된다.
+    *   내장 해시 함수를 사용하는 경우 **SHARD_KEY_MODULAR** 파라미터 값(최소 1, 최대 256)을 초과할 수 없다.
+    *   shard key 해시 결과는 0 ~ (**SHARD_KEY_MODULAR** - 1)의 범위에 반드시 포함되어야 한다.
 
 .. _setting-user-defined-hash-function:
 
@@ -850,7 +852,6 @@ CUBRID SHARD는 기본 내장된 해시 함수 외에 사용자 정의 해시 �
         SHARD_KEY_LIBRARY_NAME =$CUBRID/conf/shard_key_udf.so
         SHARD_KEY_FUNCTION_NAME =fn_shard_key_udf
 
-        
     .. note:: 
     
         *   응용 프로그램에서 사용자 해시 함수를 정의할 때 shard key의 입력 값으로 16bit(short), 32bit(int), 64bit(INT64) integer를 사용할 수 있다.

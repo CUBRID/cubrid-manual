@@ -92,8 +92,6 @@ The database management utilities are as follows:
 *   Changing HA mode, replicating/applying logs 
 
     *   cubrid changemode
-    *   cubrid copylogdb
-    *   cubrid applylogdb
     *   cubrid applyinfo
 
 *   Compiling/Outputting locale

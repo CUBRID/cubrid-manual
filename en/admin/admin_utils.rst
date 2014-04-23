@@ -1861,10 +1861,6 @@ Changing HA Mode, Copying/Applying Logs
 
 **cubrid changemode** utility prints or changes the HA mode.
 
-**cubrid copylogdb** utility multiplies transaction logs to build the HA environment. This can be executed by **cubrid heartbeat** utility.
-
-**cubrid applylogdb** utility reads and applies the replicated logs from the transaction logs to build HA environment. This can be executed by **cubrid heartbeat** utility.
-
 **cubrid applyinfo** utility prints the information of applied transaction logs in the HA environment.
 
 For more details, see :ref:`cubrid-service-util`.

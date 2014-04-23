@@ -94,8 +94,6 @@
  
 
     *   cubrid changemode
-    *   cubrid copylogdb
-    *   cubrid applylogdb
     *   cubrid applyinfo
 
 *   로캘 컴파일/출력

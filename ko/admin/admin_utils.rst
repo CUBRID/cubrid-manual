@@ -1861,10 +1861,6 @@ HA 모드 변경, 로그 복제/반영
 
 **cubrid changemode** 유틸리티는 서버의 HA 모드 출력 또는 변경하는 유틸리티이다. 
 
-**cubrid copylogdb** 유틸리티는 HA 구성을 위해 트랜잭션 로그를 다중화하는 유틸리티이다. 이 유틸리티는 cubrid heartbeat 유틸리티를 이용하여 실행된다.
-
-**cubrid applylogdb** 유틸리티는 HA 구성을 위해 트랜잭션 로그에서 복제 로그를 읽고 적용하는 유틸리티이다. 이 유틸리티는 cubrid heartbeat 유틸리티를 이용하여 실행된다.
-
 **cubrid applyinfo** 유틸리티는 HA 환경에서 트랜잭션 로그 반영 정보를 확인하는 유틸리티이다.
 
 자세한 사용법은 :ref:`cubrid-service-util` 을 참고한다.

@@ -1983,7 +1983,7 @@ SHARD = ON 인 경우, CUBRID proxy의 로그 디렉터리는 **SHARD_PROXY_LOG_
 SQL 로그 관리
 ^^^^^^^^^^^^^
 
-SQL 로그 파일은 응용 클라이언트가 요청하는 SQL을 기록하며, *<broker_name>_<app_server_num>*.sql.log라는 이름으로 저장된다. SQL 로그는 **SQL_LOG** 파라미터 값이  ON인 경우에 설치 디렉터리의 log/broker/sql_log 디렉터리에 생성된다. 이 때, 생성되는 SQL 로그 파일의 크기는 **SQL_LOG_MAX_SIZE** 파라미터의 설정값을 초과할 수 없으므로 주의한다. CUBRID는 SQL 로그를 관리하기 위한 유틸리티로서 **broker_log_top**, **cubrid_replay** 를 제공하며, 이 유틸리티는 SQL 로그가 존재하는 디렉터리에서 실행해야 한다.
+SQL 로그 파일은 응용 클라이언트가 요청하는 SQL을 기록하며, *<broker_name>_<app_server_num>*.sql.log라는 이름으로 저장된다. SQL 로그는 **SQL_LOG** 파라미터 값이  ON인 경우에 설치 디렉터리의 log/broker/sql_log 디렉터리에 생성된다. 이 때, 생성되는 SQL 로그 파일의 크기는 **SQL_LOG_MAX_SIZE** 파라미터의 설정값을 초과할 수 없으므로 주의한다. CUBRID는 SQL 로그를 관리하기 위한 유틸리티로서 **broker_log_top**, **cubrid_replay**\ 를 제공하며, 이 유틸리티는 SQL 로그가 존재하는 디렉터리에서 실행해야 한다.
 
 다음은 SQL 로그 파일의 예제와 설명이다.
 
@@ -2353,10 +2353,10 @@ CUBRID 매니저 서버 로그
 
 CUBRID 매니저 서버와 관련된 로그는 설치 디렉터리의 log/manager 디렉터리에 저장되며, 매니저 서버 프로세스에 따라 다음과 같이 네 종류의 로그 파일로 저장된다.
 
-*   cub_auto.access.log: 서버에 로그인, 로그 아웃을 정상적으로 수행한 클라이언트의 접속 로그
-*   cub_auto.error.log: 서버에 로그인, 로그 아웃을 실패한 클라이언트의 접속 로그
-*   cub_js.access.log: 매니저 서버에 의해 처리된 작업에 관한 로그
-*   cub_js.error.log: 매니저 서버에 의해 작업 처리 도중 발생한 에러에 관한 로그
+*   auto_backupdb.log: 매니저 클라이언트에서 예약된 백업 자동화 작업에 관한 로그 
+*   auto_execquery.log: 매니저 클라이언트에서 예약된 쿼리 자동화 작업에 관한 로그
+*   cub_js.access.log: 매니저 서버에 성공한 로그인과 작업에 대한 로그
+*   cub_js.error.log: 매니저 서버에 실패한 로그인과 작업에 관한 로그
 
 CUBRID 매니저 서버 환경 설정
 ----------------------------
@@ -2368,9 +2368,7 @@ CUBRID 매니저 서버의 환경 설정 파일에서 주석은 "#"으로 처리
 
 **cm_port**
 
-    CUBRID 매니저 서버와 클라이언트 사이의 통신 포트를 설정하는 매개 변수로, 기본값은 **8001**
-    로 설정된다.
-    **cm_port**\는 **cub_auto**\가 사용하는 포트이며, **cm_js**\는 자동으로 **cm_port**\로 설정한 값보다 1만큼 큰 값을 사용한다. 예를 들어, **cm_port**\가 8001로 설정된 경우 **cub_auto**\는 8001 포트를 사용하고, **cub_js**\는 8002 포트를 사용한다. 따라서 방화벽이 설정된 환경에서 CUBRID 매니저를 구동하려면 반드시 실제로 사용되는 두 개의 포트를 열어야 한다.
+    CUBRID 매니저 서버와 클라이언트 사이의 통신 포트를 설정하는 매개 변수로, 기본값은 **8001**\로 설정된다.
 
 **monitor_interval**
 
@@ -2384,19 +2382,33 @@ CUBRID 매니저 서버의 환경 설정 파일에서 주석은 "#"으로 처리
 
     서버의 진단 항목 중 **slow_query** 항목을 설정할 경우 몇 초 이상을 늦은 질의로 판별할지 결정하는 매개 변수로, 기본 값은 **10**\이다. 서버에서 수행된 질의 수행 시간이 매개 변수 설정 값보다 큰 경우, **slow_query**\의 개수가 증가한다.
 
-**cm_target**
+**support_web_manager**
 
-    브로커와 데이터베이스 서버가 분리된 구조에서 매니저의 메뉴를 해당 서비스에 맞게 출력할 목적으로 지원되는 매개 변수이다. 기본값은 브로커와 데이터베이스 서버가 같이 설치되어 있는 환경을 의미하며, 다음과 같이 설정할 수 있다.
+    **support_web_manager**\는 CUBRID 웹 매니저를 사용하기 위해 설정한다. 기본값은 NO 이다.
+ 
+**web_manager_path**
 
-    *   **cm_target broker, server**: 브로커와 데이터베이스 서버가 같이 있을 경우
-    *   **cm_target broker**: 브로커만 있을 경우
-    *   **cm_target server**: 데이터베이스 서버만 있을 경우
+    **web_manager_path**\는 CUBRID 웹 매니저가 설치된 경로를 지정한다. 지정하지 않을 경우 {CUBRID 설치 경로}/share/webmanager 이다.
+ 
+**auto_job_timeout**
 
-    브로커만 설정하면 매니저에서 브로커 관련 메뉴만 출력되고, 데이터베이스 서버만 설정하면 서버 관련 메뉴만 출력된다.
+    **auto_job_timeout**\는 작업 자동화(cub_auto)의 작업이 유지되기 위한 최대 시간이다. 기본값은 43,200 (12 시간)이다.
+ 
+**mon_cub_auto**
 
-    탐색 트리에서 호스트를 마우스 오른쪽 버튼 클릭하고 [속성]을 선택하면, 설정된 정보를 [호스트 정보]에서 확인할 수 있다.
+    **mon_cub_auto**\는 cub_auto가 종료되면 자동으로 재시작할 것인지 설정한다. 기본값은 NO 이다.
+ 
+**token_active_time**
 
-    .. image:: /images/image10.png
+    **token_active_time**\는 로그인된 세션의 최대 유지 시간을 설정한다. 기본값은 7200 (2 시간)이다.
+ 
+**support_mon_statistic**
+
+    **support_mon_statistic**\는 누적 모니터링을 사용할 것인지 설정한다. 기본값은 NO 이다.
+ 
+**cm_process_monitor_interval**
+
+    **cm_process_monitor_interval**\는 모니터링 정보 수집 주기이다. 기본값과 최소값은 5 (5 분)이다.
 
 CUBRID 매니저 사용자 관리 콘솔
 ------------------------------

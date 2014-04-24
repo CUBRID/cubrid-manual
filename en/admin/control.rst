@@ -2353,10 +2353,10 @@ CUBRID Manager Server Log
 
 The logs of CUBRID Manager server are stored in the log/manager directory under the installation directory. There are four types of log files depending on server process of CUBRID Manager.
 
-*   cub_auto.access.log: Access log of a client that has successfully logged into and out of the CUBRID Manager server
-*   cub_auto.error.log: Access log of a client that failed to log into or out of the CUBRID Manager Server
-*   cub_js.access.log: Job log processed by the CUBRID Manager server
-*   cub_js.error.log: Error log that occurred while the CUBRID Manager server has been processing jobs
+*   auto_backupdb.log: Backup log about the backup-automated jobs which was reserved by the CUBRID Manager Client
+*   auto_execquery.log: Execution log about the query-automated jobs which was reserved by the CUBRID Manager Client
+*   cub_js.access.log: Access log regarding the successful logins and tasks in CUBRID Manager Server.
+*   cub_js.error.log: Access log regarding the failed logins and tasks in CUBRID Manager Server.
 
 Configuring CUBRID Manager Server
 ---------------------------------
@@ -2368,9 +2368,7 @@ This page describes parameters that are specified in the **cm.conf** file.
 
 **cm_port**
 
-    **cm_port** is a parameter used to configure a communication port for the connection between the CUBRID Manager server and the client.
-    The default value is **8001** . It is used by **cub_auto** and **cm_js** automatically adds 1 to the value specified by **cub_auto** . For example, if **cm_port**
-    is set to 8001, **cub_auto** uses the port 8001, and **cub_js** uses 8002. Therefore, to run the CUBRID Manager in an environment where a firewall has been installed, you must open two ports which will be actually used.
+    **cm_port** is a parameter used to configure a communication port for the connection between the CUBRID Manager server and the client. The default value is **8001** .
 
 **monitor_interval**
 
@@ -2384,19 +2382,33 @@ This page describes parameters that are specified in the **cm.conf** file.
 
     **server_long_query_time** is a parameter used to configure delay reference time in seconds when configuring **slow_query** which is one of server diagnostics items. The default value is **10** . If the execution time of the query performed on the server exceeds this parameter value, the number of the **slow_query** parameters will increase.
 
-**cm_target**
+**support_web_manager**
 
-    **cm_target** is a parameter used to display appropriate menus of the CUBRID Manager depending on the service being provided where the broker and the database server have been separated. The default value means the environment where both broker and database server have been installed. You can set required values as follows:
+    **support_web_manager** is a parameter used to configure starting CUBRID Web Manager or not. The default value is NO.
+ 
+**web_manager_path**
 
-    *   **cm_target broker, server**: Both broker and database server exist.
-    *   **cm_target broker**: Only broker exists.
-    *   **cm_target server**: Only database server exists.
+    **web_manager_path** is a parameter used to configure a path of CUBRID Web Manager. The default value is {CUBRID installed path}/share/webmanager.
+ 
+**auto_job_timeout**
 
-    If you set broker only, broker-related menus will be shown; if you set database server only, server-related menus will be displayed.
+    **auto_job_timeout** is a parameter used to configure timeout of auto job for cub_auto. The default value is 43200 (12 hour).
+ 
+**mon_cub_auto**
 
-    If you right-click the host in the navigation tree and then select [Properties], you can check the setting information under [Host Information].
+    **mon_cub_auto** is a parameter used to allow cub_js to restart cub_auto process when cub_auto is not running or not. The default value is NO.
+ 
+**token_active_time**
 
-    .. image:: /images/image10.jpg
+    **token_active_time** is a parameter used to configure timeout of token. The default value is 7200 (2 hour).
+ 
+**support_mon_statistic**
+
+    **support_mon_statistic** is a parameter used to configure monitoring statistic of system or not. The default value is NO.
+ 
+**cm_process_monitor_interval**
+
+    **cm_process_monitor_interval** is an interval time for collecting statistics. The default and the minimum value is 5 (5 minutes).
 
 CUBRID Manager User Management Console
 --------------------------------------

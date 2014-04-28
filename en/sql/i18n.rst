@@ -911,33 +911,52 @@ Below table shows the collation coercibility about arguments of the expression
 
 .. _collation-coercibility:
 
-+------------------------+------------------------------------------------------------------------------------------------+
-| Collation Coercibility | Arguments of the Expression(Operands)                                                          |
-+========================+================================================================================================+
-| 0                      | Operand having **COLLATE** modifier                                                            |
-+------------------------+------------------------------------------------------------------------------------------------+
-| 1                      | **Columns** with non-binary collation                                                          |
-+------------------------+------------------------------------------------------------------------------------------------+
-| 2                      | **Columns** with binary collation and ISO-8859-1 charset(iso88591_bin)                         |
-+------------------------+------------------------------------------------------------------------------------------------+
-| 3                      | **Columns** with binary collation, except having ISO-8859-1 charset                            |
-+------------------------+------------------------------------------------------------------------------------------------+
-| 4                      | **SELECT values**, **Expression** With non-binary collation                                    |
-+------------------------+------------------------------------------------------------------------------------------------+
-| 5                      | **SELECT values**, **Expression** With binary collation and ISO-8859-1 charset(iso88591_bin)   |
-+------------------------+------------------------------------------------------------------------------------------------+
-| 6                      | **SELECT values**, **Expression** With binary collation, except having ISO-8859-1 charset      |
-+------------------------+------------------------------------------------------------------------------------------------+
-| 7                      | **Special functions** (:func:`SYSTEM_USER`, :func:`DATABASE`, :func:`SCHEMA`, :func:`VERSION`) |
-+------------------------+------------------------------------------------------------------------------------------------+
-| 8                      | **Constants(string literals)**  With non-binary collation                                      |
-+------------------------+------------------------------------------------------------------------------------------------+
-| 9                      | **Constants(string literals)**  With binary collation and ISO-8859-1 charset (iso88591_bin)    |
-+------------------------+------------------------------------------------------------------------------------------------+
-| 10                     | **Constants(string literals)**  With binary collation, except having ISO-8859-1 charset        |
-+------------------------+------------------------------------------------------------------------------------------------+
-| 11                     | host variables, session variables                                                              |
-+------------------------+------------------------------------------------------------------------------------------------+
++------------------------+------------------------------------------------------------------------------------------------------+
+| Collation Coercibility | Arguments of the Expression(Operands)                                                                |
++========================+======================================================================================================+
+| -1                     | As an expression which has arguments with only host variables, this coercibility cannot be           |
+|                        | determined before the execution step.                                                                |
++------------------------+------------------------------------------------------------------------------------------------------+
+| 0                      | Operand having **COLLATE** modifier                                                                  |
++------------------------+------------------------------------------------------------------------------------------------------+
+| 1                      | **Columns** with non-binary collation                                                                |
++------------------------+------------------------------------------------------------------------------------------------------+
+| 2                      | **Columns** with binary collation and ISO-8859-1 charset(iso88591_bin)                               |
++------------------------+------------------------------------------------------------------------------------------------------+
+| 3                      | **Columns** with binary collation, except having ISO-8859-1 charset                                  |
++------------------------+------------------------------------------------------------------------------------------------------+
+| 4                      | **SELECT values**, **Expression** With non-binary collation                                          |
++------------------------+------------------------------------------------------------------------------------------------------+
+| 5                      | **SELECT values**, **Expression** With binary collation and ISO-8859-1 charset(iso88591_bin)         |
++------------------------+------------------------------------------------------------------------------------------------------+
+| 6                      | **SELECT values**, **Expression** With binary collation, except having ISO-8859-1 charset            |
++------------------------+------------------------------------------------------------------------------------------------------+
+| 7                      | **Special functions** (:func:`SYSTEM_USER`, :func:`DATABASE`, :func:`SCHEMA`, :func:`VERSION`)       |
++------------------------+------------------------------------------------------------------------------------------------------+
+| 8                      | **Constants(string literals)**  With non-binary collation                                            |
++------------------------+------------------------------------------------------------------------------------------------------+
+| 9                      | **Constants(string literals)**  With binary collation and ISO-8859-1 charset (iso88591_bin)          |
++------------------------+------------------------------------------------------------------------------------------------------+
+| 10                     | **Constants(string literals)**  With binary collation, except having ISO-8859-1 charset              |
++------------------------+------------------------------------------------------------------------------------------------------+
+| 11                     | host variables, session variables                                                                    |
++------------------------+------------------------------------------------------------------------------------------------------+
+
+Regarding an expression which has arguments with only host variables, (e.g. UPPER(?) as the below) this coercibility can be determined on the execution step. That is, the coercibility like this expression cannot be determined on the parsing step; therefore, COERCIBILITY function returns -1.
+
+.. code-block:: sql
+
+    SET NAMES utf8
+    PREPARE st FROM 'SELECT COLLATION(UPPER(?)) col1, COERCIBILITY(UPPER(?)) col2';
+    EXECUTE st USING 'a', 'a';
+
+::
+
+    
+      col1                         col2
+    ===================================
+      'utf8_bin'                     -1
+
 
 The following shows converting two parameters with different collation to one collation.
 

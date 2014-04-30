@@ -14,12 +14,12 @@ When attributes are inherited from more than one super class, it is possible tha
 
 Conflicts during inheritance and their resolutions will be covered in the `Resolving Class Conflicts <#syntax_syntax_table_conflict_int_5489>`_ section.
 
-**Remark**
+.. note::
 
-The following cautions must be observed during inheritance:
+    The following cautions must be observed during inheritance:
 
-*   The class name must be unique in the database. An error occurs if you create a class that inherits another class that does not exist.
-*   The name of a method/attribute must be unique within a class. The name cannot contain spaces, and cannot be a reserved keyword of CUBRID. Alphabets as well as '_', '#', '%' are allowed in the class name, but the first character cannot be '_'. Class names are not case-sensitive. A class name will be stored in the system after being converted to lowercase characters.
+    *   The class name must be unique in the database. An error occurs if you create a class that inherits another class that does not exist.
+    *   The name of a method/attribute must be unique within a class. The name cannot contain spaces, and cannot be a reserved keyword of CUBRID. Alphabets as well as '_', '#', '%' are allowed in the class name, but the first character cannot be '_'. Class names are not case-sensitive. A class name will be stored in the system after being converted to lowercase characters.
 
 .. note:: A super class name can begin with the user name so that the owner of the class can be easily identified.
 
@@ -153,7 +153,8 @@ What will be discussed concerning conflicts is applied commonly to both attribut
 Superclass Conflict
 -------------------
 
-**Adding a super class**
+Adding a super class
+^^^^^^^^^^^^^^^^^^^^
 
 The **INHERIT** clause of the **ALTER CLASS** statement is optional, but must be used when a conflict occurs due to class changes. You can specify more than one resolution after the **INHERIT** clause.
 
@@ -175,7 +176,8 @@ The following example shows in which the *name* attribute of the *stadium* class
     ALTER CLASS soccer_stadium
     INHERIT name OF event AS purpose;
 
-**Deleting a super class**
+Deleting a super class
+^^^^^^^^^^^^^^^^^^^^^^
 
 A name conflict may occur again if a super class that explicitly inherited an attribute or method is dropped by using the **INHERIT**. In this case, you must specify the attribute or method to be explicitly inherited when dropping the super class.
 
@@ -193,7 +195,8 @@ A name conflict may occur again if a super class that explicitly inherited an at
 
 The above example shows how to create the *a_b_c* class by inheriting *a_tbl*, *b_tbl* and *c_tbl* classes, and delete the *b_tbl* class from the super class. Because *a* and *b* are explicitly inherited from the *b_tbl* class, you must resolve their name conflicts before deleting it from the super class. However, *a* does not need to be specified explicitly because it exists only in the *a_tbl* class except for the *b_tbl* class to be deleted.
 
-**Compatible Domains**
+Compatible Domains
+^^^^^^^^^^^^^^^^^^
 
 If the conflicting attributes do not have compatible domains, the class hierarchy cannot be created.
 
@@ -208,7 +211,8 @@ Any changes in a class will be automatically propagated to all sub classes. If a
 
 Sub class conflicts can occur due to operations such as adding a super class, or creating/deleting a method or an attribute. Any changes in a class will affect all sub classes. Since changes are automatically propagated, harmless changes can even cause side effects in sub classes.
 
-**Adding Attributes and Methods**
+Adding Attributes and Methods
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The simplest sub class conflict occurs when an attribute is added. A sub class conflict occurs if an attribute added to a super class has the same name as one already inherited by another super class. In such cases, CUBRID will automatically resolve the problem. That is, the added attribute will not be inherited to all sub classes that have already inherited the attribute with the same name.
 
@@ -221,7 +225,8 @@ The following example shows how to add an attribute to the *event* class. The su
 
 If the *event* class is dropped from the *soccer_stadium* super class, the *cost* attribute of the *stadium* class will be inherited automatically.
 
-**Dropping Attributes and Methods**
+Dropping Attributes and Methods
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When an attribute is dropped from a class, any resolution specifiers which refer to the attribute by using the **INHERIT** clause are also removed. If a conflict occurs due to the deletion of an attribute, the system will determine a new inheritance hierarchy. If you don't like the inheritance hierarchy determined by the system, you can determine it by using the **INHERIT** clause of the **ALTER** statement. The following example shows such conflict.
 
@@ -254,35 +259,39 @@ Schema Invariant
 
 Invariants of a database schema are a property of the schema that must be preserved consistently (before and after the schema change). There are four types of invariants: invariants of class hierarchy, name, inheritance and consistency.
 
-*   **Invariant of class hierarchy**
+Invariant of class hierarchy
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    has a single root and defines a class hierarchy as a Directed Acyclic Graph (DAG) where all connected classes have a single direction. That is, all classes except the root have one or more super classes, and cannot become their own super classes. The root of DAG is "object," a system-defined class.
+has a single root and defines a class hierarchy as a Directed Acyclic Graph (DAG) where all connected classes have a single direction. That is, all classes except the root have one or more super classes, and cannot become their own super classes. The root of DAG is "object," a system-defined class.
 
-*   **Invariant of name**
+Invariant of name
+^^^^^^^^^^^^^^^^^
 
-    means that all classes in the class hierarchy and all attributes in a class must have unique names. That is, attempts to create classes with the same name or to create attributes or methods with the same name in a single class are not allowed. 
+means that all classes in the class hierarchy and all attributes in a class must have unique names. That is, attempts to create classes with the same name or to create attributes or methods with the same name in a single class are not allowed. 
 
 Invariant of name is redefined by the 'RENAME' qualifier. The 'RENAME' qualifier allows the name of an attribute or method to be changed.
 
-*   **Invariant of inheritance**
+Invariant of inheritance
+^^^^^^^^^^^^^^^^^^^^^^^^
 
-    means that a class must inherit all attributes and methods from all super classes. This invariant can be distinguished with three qualifiers: source, conflict and domain. The names of inherited attributes and methods can be modified. For default or shared value attributes, the default or shared value can be modified. Invariant of inheritance means that such changes will be propagated to all classes that inherit these attributes and methods.
+means that a class must inherit all attributes and methods from all super classes. This invariant can be distinguished with three qualifiers: source, conflict and domain. The names of inherited attributes and methods can be modified. For default or shared value attributes, the default or shared value can be modified. Invariant of inheritance means that such changes will be propagated to all classes that inherit these attributes and methods.
 
-    *   **source qualifier** 
-    
-        means that if class *C* inherits sub classes of class *S*, only one of the sub class attributes (methods) inherited from class *S* can be inherited to class *C*. That is, if an attribute (method) defined in class *S* is inherited by other classes, it is in effect a single attribute (method), even though it exists in many sub classes. Therefore, if a class multiply inherits from classes that have attributes (methods) of the same source, only one appearance of the attribute (method) is inherited.
+*   **source qualifier** 
 
-    *   **conflict qualifier** 
-    
-        means that if class *C* inherits from two or more classes that have attributes (methods) with the same name but of different sources, it can inherit more than one class. To inherit attributes (methods) with the same name, you must change their names so as not to violate the invariant of name.
+    means that if class *C* inherits sub classes of class *S*, only one of the sub class attributes (methods) inherited from class *S* can be inherited to class *C*. That is, if an attribute (method) defined in class *S* is inherited by other classes, it is in effect a single attribute (method), even though it exists in many sub classes. Therefore, if a class multiply inherits from classes that have attributes (methods) of the same source, only one appearance of the attribute (method) is inherited.
 
-    *   **domain qualifier** 
-    
-        means that a domain of an inherited attribute can be converted to the domain's sub class.
+*   **conflict qualifier** 
 
-*   **Invariant of consistency**
+    means that if class *C* inherits from two or more classes that have attributes (methods) with the same name but of different sources, it can inherit more than one class. To inherit attributes (methods) with the same name, you must change their names so as not to violate the invariant of name.
 
-    means that the database schema must always follow the invariants of a schema and all rules except when it is being changed.
+*   **domain qualifier** 
+
+    means that a domain of an inherited attribute can be converted to the domain's sub class.
+
+Invariant of consistency
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+means that the database schema must always follow the invariants of a schema and all rules except when it is being changed.
 
 Rule for Schema Changes
 -----------------------
@@ -295,7 +304,8 @@ The following three types of rules apply: conflict-resolution rules, domain-chan
 
 Seven conflict-resolution rules reinforce the invariant of inheritance. Most schema change rules are needed because of name conflicts. A domain-change rule reinforces a domain resolution of the invariant of inheritance. A class-hierarchy rule reinforces the invariant of class hierarchy.
 
-**Conflict-Resolution Rules**
+Conflict-Resolution Rules
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 *   **Rule 1**: If an attribute (method) name of class *C* and an attribute name of the super class *S* conflict with each other (that is, their names are same), the attribute of class *C* is used. The attribute of *S* is not inherited.
 
@@ -357,7 +367,8 @@ Seven conflict-resolution rules reinforce the invariant of inheritance. Most sch
 
 *   **Rule 7**: Class *C* can be dropped even when an attribute of class *R* uses class *C* as a domain. In this case, the domain of the attribute that uses class *C* as a domain can be changed to *object*.
 
-**Domain-Change Rules**
+Domain-Change Rules
+^^^^^^^^^^^^^^^^^^^
 
 *   **Rule 8**: If the domain of an attribute of class *C* is changed from *D* to a super class of *D*, the new domain is less generic than the corresponding domain in the super class from which class *C* inherited the attribute. The following example explains the principle of this rule.
     
@@ -365,6 +376,7 @@ Seven conflict-resolution rules reinforce the invariant of inheritance. Most sch
     
     .. image:: /images/image8.png
 
-**Class-Hierarchy Rules**
+Class-Hierarchy Rules
+^^^^^^^^^^^^^^^^^^^^^
 
 *   **Rule 9**: A class without a super class becomes a direct sub class of object. The class-hierarchy rule defines characteristics of classes without super classes. If you create a class without a super class, object becomes the super class. If you delete the super class *S*, which is a unique super class of class *C*, class *C* becomes a direct sub class of object.

@@ -25,21 +25,21 @@ The **CALL** statement is used to call a method defined in the database. Both cl
     CALL <method_call> ;
 
     <method_call> ::=
-        method_name ([arg_value [{, arg_value } ...]]) ON call_target [to_variable] |
-        method_name (call_target [, arg_value [{, arg_value} ...]] ) [to_variable]
+        method_name ([<arg_value> [{, <arg_value> } ...]]) ON <call_target> [<to_variable>] |
+        method_name (<call_target> [, <arg_value> [{, <arg_value>} ...]] ) [<to_variable>]
 
-        arg_value ::=
+        <arg_value> ::=
             any CSQL expression
 
-        call_target ::=
+        <call_target> ::=
             an object-valued expression
 
-        to_variable ::=
+        <to_variable> ::=
             INTO variable |
             TO variable
 
 *   The *method_name* is either the method name defined in the table or the system-defined method name. A method requires one or more parameters. If there is no parameter for the method, a set of blank parentheses must be used.
 
-*   *call_target* can use an object-valued expression that contains a class name, a variable, another method call (which returns an object). To call a class method for a class object, you must place the **CLASS** keyword before the *call_target*. In this case, the table name must be the name of the class where the table method is defined. To call a record method, you must specify the expression representing the record object. You can optionally store the value returned by the table or record method in the *to_variable*. This returned variable value can be used in the **CALL** statement just like the *call_target* or *arg_value* parameter.
+*   <*call_target*> can use an object-valued expression that contains a class name, a variable, another method call (which returns an object). To call a class method for a class object, you must place the **CLASS** keyword before the <*call_target*>. In this case, the table name must be the name of the class where the table method is defined. To call a record method, you must specify the expression representing the record object. You can optionally store the value returned by the table or record method in the <*to_variable*>. This returned variable value can be used in the **CALL** statement just like the <*call_target*> or <*arg_value*> parameter.
 
-*   Calling nested methods is possible when other *method_call* is the *call_target* of the method or given as one of the *arg_value* parameters. 
+*   Calling nested methods is possible when other *method_call* is the <*call_target*> of the method or given as one of the <*arg_value*> parameters. 

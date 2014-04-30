@@ -134,10 +134,10 @@ JDBC 프로그래밍
                  | logSlowQueries=<bool_type>&slowQueryThresholdMillis=<millisecond>
                  | useLazyConnection=<bool_type>
                  
-    <alternative_hosts> ::=
-    <standby_broker1_host>:<port> [,<standby_broker2_host>:<port>]
-    <behavior_type> ::= exception | round | convertToNull
-    <bool_type> ::= true | false
+        <alternative_hosts> ::=
+        <standby_broker1_host>:<port> [,<standby_broker2_host>:<port>]
+        <behavior_type> ::= exception | round | convertToNull
+        <bool_type> ::= true | false
 
 *   *host*: CUBRID 브로커가 동작하고 있는 서버의 IP 주소 또는 호스트 이름
 *   *port*: CUBRID 브로커의 포트 번호(기본값: 33000)
@@ -146,35 +146,37 @@ JDBC 프로그래밍
 *   *user-id*: 데이터베이스에 접속할 사용자 ID이다. 기본적으로 데이터베이스에는 **dba** 와 **public** 두 개의 사용자가 존재한다. 빈 문자열("")을 입력하면 **public** 사용자로 데이터베이스에 접속한다.
 *   *password*: 데이터베이스에 접속할 사용자의 암호이다. 해당 사용자에 암호가 설정되어 있지 않으면, 빈 문자열("")을 입력한다.
 
-*   **altHosts**: HA 환경에서 장애 시 fail-over할 하나 이상의 standby 브로커의 호스트 IP와 접속 포트이다.
+*   <*property*>:
 
-    .. note:: 메인 호스트와 **altHosts** 브로커들의 **ACCESS_MODE**\ 설정에 **RW**\ 와 **RO**\ 가 섞여 있다 하더라도, 응용 프로그램은 **ACCESS_MODE**\ 와 무관하게 접속 대상 호스트를 결정한다. 따라서 사용자는 접속 대상 브로커의 **ACCESS_MODE**\ 를 감안해서 메인 호스트와 **altHosts**\ 를 정해야 한다.
+    *   **altHosts**: HA 환경에서 장애 시 fail-over할 하나 이상의 standby 브로커의 호스트 IP와 접속 포트이다.
 
-*   **rcTime**: 첫 번째로 접속했던 브로커에 장애가 발생한 이후 altHosts 에 명시한 브로커로 접속한다(failover). 이후, rcTime만큼 시간이 경과할 때마다 원래의 브로커에 재접속을 시도한다(기본값 600초). 입력 방법은 아래 URL 예제를 참고한다.
-*   **loadBalance**: 이 값이 true면 응용 프로그램이 메인 호스트와 altHosts에 지정한 호스트들에 랜덤한 순서로 연결한다(기본값: false). 
+        .. note:: 메인 호스트와 **altHosts** 브로커들의 **ACCESS_MODE**\ 설정에 **RW**\ 와 **RO**\ 가 섞여 있다 하더라도, 응용 프로그램은 **ACCESS_MODE**\ 와 무관하게 접속 대상 호스트를 결정한다. 따라서 사용자는 접속 대상 브로커의 **ACCESS_MODE**\ 를 감안해서 메인 호스트와 **altHosts**\ 를 정해야 한다.
 
-*   **connectTimeout**: 데이터베이스 접속에 대한 타임아웃 시간을 초 단위로 설정한다.  기본값은 30초이다. 이 값이 0인 경우 무한 대기를 의미한다. 이 값은 최초 접속 이후 내부적인 재접속이 발생하는 경우에도 적용된다. **DriverManger.setLoginTimeout** () 메서드로 설정할 수도 있으나, 연결 URL에 이 값을 설정하면 메서드로 설정한 값은 무시된다.
+    *   **rcTime**: 첫 번째로 접속했던 브로커에 장애가 발생한 이후 altHosts 에 명시한 브로커로 접속한다(failover). 이후, rcTime만큼 시간이 경과할 때마다 원래의 브로커에 재접속을 시도한다(기본값 600초). 입력 방법은 아래 URL 예제를 참고한다.
+    *   **loadBalance**: 이 값이 true면 응용 프로그램이 메인 호스트와 altHosts에 지정한 호스트들에 랜덤한 순서로 연결한다(기본값: false). 
 
-*   **queryTimeout**: 질의 수행에 대한 타임아웃 시간을 초 단위로 설정한다(기본값: 0, 무제한). 최대값은 2,000,000이다. 이 값은 **DriverManger.setQueryTimeout** () 메서드에 의해 변경될 수 있다.  executeBatch() 메서드를 수행하는 경우 한 개의 질의에 대한 타임아웃이 아닌 한 번의 메서드 호출에 대한 타임아웃이 적용된다.
+    *   **connectTimeout**: 데이터베이스 접속에 대한 타임아웃 시간을 초 단위로 설정한다.  기본값은 30초이다. 이 값이 0인 경우 무한 대기를 의미한다. 이 값은 최초 접속 이후 내부적인 재접속이 발생하는 경우에도 적용된다. **DriverManger.setLoginTimeout** () 메서드로 설정할 수도 있으나, 연결 URL에 이 값을 설정하면 메서드로 설정한 값은 무시된다.
 
-    .. note:: executeBatch() 메서드를 수행하는 경우 한 개의 질의에 대한 타임아웃이 아닌 한 번의 메서드 호출에 대한 타임아웃이 적용된다.
+    *   **queryTimeout**: 질의 수행에 대한 타임아웃 시간을 초 단위로 설정한다(기본값: 0, 무제한). 최대값은 2,000,000이다. 이 값은 **DriverManger.setQueryTimeout** () 메서드에 의해 변경될 수 있다.  executeBatch() 메서드를 수행하는 경우 한 개의 질의에 대한 타임아웃이 아닌 한 번의 메서드 호출에 대한 타임아웃이 적용된다.
 
-*   **charSet**: 접속하고자 하는 DB의 문자셋(charSet)이다.
-*   **zeroDateTimeBehavior**: JDBC에서는 java.sql.Date 형 객체에 날짜와 시간 값이 모두 0인 값을 허용하지 않으므로 이 값을 출력해야 할 때 어떻게 처리할 것인지를 정하는 속성. 기본 동작은 **exception** 이다. 날짜와 시간 값이 모두 0인 값에 대한 설명은 :ref:`date-time-type` 을 참고한다.
+        .. note:: executeBatch() 메서드를 수행하는 경우 한 개의 질의에 대한 타임아웃이 아닌 한 번의 메서드 호출에 대한 타임아웃이 적용된다.
 
-    설정값에 따른 동작은 다음과 같다.
+    *   **charSet**: 접속하고자 하는 DB의 문자셋(charSet)이다.
+    *   **zeroDateTimeBehavior**: JDBC에서는 java.sql.Date 형 객체에 날짜와 시간 값이 모두 0인 값을 허용하지 않으므로 이 값을 출력해야 할 때 어떻게 처리할 것인지를 정하는 속성. 기본 동작은 **exception** 이다. 날짜와 시간 값이 모두 0인 값에 대한 설명은 :ref:`date-time-type` 을 참고한다.
 
-    *   **exception**: 기본 동작. SQLException 예외로 처리한다.
-    *   **round**: 반환할 타입의 최소값으로 변환한다. 단, TIMESTAMP 타입은 '1970-01-01 00:00:00'(GST)를 반환한다.
-    *   **convertToNull**: **NULL** 로 변환한다.
+        설정값에 따른 동작은 다음과 같다.
 
-*   **logFile**: 디버깅용 로그 파일 이름(기본값: cubrid_jdbc.log). 별도의 경로 설정이 없으면 응용 프로그램을 실행하는 위치에 저장된다.
-*   **logOnException**: 디버깅용 예외 처리 로깅 여부(기본값: false)
-*   **logSlowQueries**: 디버깅용 슬로우 쿼리 로깅 여부(기본값: false)
+        *   **exception**: 기본 동작. SQLException 예외로 처리한다.
+        *   **round**: 반환할 타입의 최소값으로 변환한다. 단, TIMESTAMP 타입은 '1970-01-01 00:00:00'(GST)를 반환한다.
+        *   **convertToNull**: **NULL** 로 변환한다.
 
-    *   **slowQueryThresholdMillis**: 디버깅용 슬로우 쿼리 로깅 시 슬로우 쿼리 제한 시간(기본값: 60000). 단위는 밀리 초이다.
+    *   **logFile**: 디버깅용 로그 파일 이름(기본값: cubrid_jdbc.log). 별도의 경로 설정이 없으면 응용 프로그램을 실행하는 위치에 저장된다.
+    *   **logOnException**: 디버깅용 예외 처리 로깅 여부(기본값: false)
+    *   **logSlowQueries**: 디버깅용 슬로우 쿼리 로깅 여부(기본값: false)
 
-*   **useLazyConnection**: 이 값이 true이면 사용자의 연결 요청 시 브로커 연결 없이 성공을 반환(기본값: false)하고, prepare나 execute 등의 함수를 호출할 때 브로커에 연결한다. 이 값을 true로 설정하면 많은 응용 클라이언트가 동시에 재시작되면서 연결 풀(connection pool)을 생성할 때 접속이 지연되거나 실패하는 현상을 피할 수 있다. 
+        *   **slowQueryThresholdMillis**: 디버깅용 슬로우 쿼리 로깅 시 슬로우 쿼리 제한 시간(기본값: 60000). 단위는 밀리 초이다.
+
+    *   **useLazyConnection**: 이 값이 true이면 사용자의 연결 요청 시 브로커 연결 없이 성공을 반환(기본값: false)하고, prepare나 execute 등의 함수를 호출할 때 브로커에 연결한다. 이 값을 true로 설정하면 많은 응용 클라이언트가 동시에 재시작되면서 연결 풀(connection pool)을 생성할 때 접속이 지연되거나 실패하는 현상을 피할 수 있다. 
 
 **예제 1** ::
 

@@ -74,7 +74,7 @@ A trigger is created by defining a trigger target, condition and action to be pe
         UPDATE statement |
         DELETE statement
 
-*   *trigger_name* : Specifies the name of the trigger to be defined.
+*   *trigger_name*: Specifies the name of the trigger to be defined.
 *   [ **STATUS** { **ACTIVE** | **INACTIVE** } ]: Defines the state of the trigger (if not defined, the default value is **ACTIVE**).
 
     *   If **ACTIVE** state is specified, the trigger is executed every time the corresponding event occurs.
@@ -82,12 +82,12 @@ A trigger is created by defining a trigger target, condition and action to be pe
 
 *   [ **PRIORITY** *key* ]: Specifies a trigger priority if multiple triggers are called for an event. *key* must be a floating point value that is not negative. If the priority is not defined, the lowest priority 0 is assigned. Triggers having the same priority are executed in a random order. The priority of triggers can be modified. For details, see :ref:`alter-trigger` section.
 
-*   *event_time*: Specifies the point of time when the conditions and actions are executed. **BEFORE**, **AFTER** or **DEFERRED** can be specified. For details, see the :ref:`trigger-event-time` section.
-*   *event_type*: Trigger types are divided into a user trigger and a table trigger. For details, see the :ref:`trigger-event-type` section.
-*   *event_target*: An event target is used to specify the target for the trigger to be called. For details, see the :ref:`trigger-event-target` section.
+*   <*event_time*>: Specifies the point of time when the conditions and actions are executed. **BEFORE**, **AFTER** or **DEFERRED** can be specified. For details, see the :ref:`trigger-event-time` section.
+*   <*event_type*>: Trigger types are divided into a user trigger and a table trigger. For details, see the :ref:`trigger-event-type` section.
+*   <*event_target*>: An event target is used to specify the target for the trigger to be called. For details, see the :ref:`trigger-event-target` section.
 
-*   *condition*: Specifies the trigger condition. For details, see the :ref:`trigger-condition` section.
-*   *action*: Specifies the trigger action. For details, see the :ref:`trigger-action` section.
+*   <*condition*>: Specifies the trigger condition. For details, see the :ref:`trigger-condition` section.
+*   <*action*>: Specifies the trigger action. For details, see the :ref:`trigger-action` section.
 
 The following example shows how to create a trigger that rejects the update if the number of medals won is smaller than 0 when an instance of the *participant* table is updated.
 As shown below, the update is rejected if you try to change the number of gold (*gold*) medals that Korea won in the 2004 Olympic Games to a negative number.

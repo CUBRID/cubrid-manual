@@ -26,8 +26,8 @@ CREATE VIEW
 
 *   *view_name*: 생성하려는 뷰의 이름을 지정한다. 뷰의 이름은 데이터베이스 내에서 고유해야 한다.
 *   *view_column_name*: 생성하려는 뷰의 칼럼 이름을 지정한다.
-*   **AS** *<select_statement>*: 유효한 **SELECT** 문이 명시되어야 한다. 이를 기반으로 뷰가 생성된다.
-*   **WITH CHECK OPTION**: 이 옵션이 명시되면 *<select_statement>* 내 **WHERE** 절에 명시된 조건식을 만족하는 경우에만 업데이트 또는 삽입이 가능하다. 조건식을 위반하는 가상 테이블에 대한 갱신을 허용하지 않기 위해서 사용한다.
+*   **AS** <*select_statement*>: 유효한 **SELECT** 문이 명시되어야 한다. 이를 기반으로 뷰가 생성된다.
+*   **WITH CHECK OPTION**: 이 옵션이 명시되면 <*select_statement*> 내 **WHERE** 절에 명시된 조건식을 만족하는 경우에만 업데이트 또는 삽입이 가능하다. 조건식을 위반하는 가상 테이블에 대한 갱신을 허용하지 않기 위해서 사용한다.
 
 .. code-block:: sql
 

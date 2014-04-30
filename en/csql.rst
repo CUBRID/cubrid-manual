@@ -221,7 +221,7 @@ To display the option list in the prompt, execute the **csql** utilities without
 
         csql --no-pager demodb
 
-.. option:: --no single-line
+.. option:: --no-single-line
 
     The following example shows how to keep storing multiple SQL statements and execute them at once with the **;xr** or **;r** session command. If you do not specify this option, SQL statements are executed without **;xr** or **;r** session command. ::
 

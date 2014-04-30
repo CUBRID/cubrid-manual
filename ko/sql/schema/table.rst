@@ -75,7 +75,7 @@ CREATE TABLE
 *   *column_name*: 생성할 칼럼의 이름을 지정한다(최대 254바이트).
 *   *column_type*: 칼럼의 데이터 타입을 지정한다.
 *   [**SHARED** *value* | **DEFAULT** *value*]: 칼럼의 초기값을 지정한다.
-*   *column_constraint*: 칼럼의 제약 조건을 지정하며 제약 조건의 종류에는 **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** 가 있다(자세한 내용은 :ref:`constraint-definition` 참조).
+*   <*column_constraint*>: 칼럼의 제약 조건을 지정하며 제약 조건의 종류에는 **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** 가 있다. 자세한 내용은 :ref:`constraint-definition`\을 참고한다.
 *   <*default_or_shared_or_ai*>: DEFAULT, SHARED, AUTO_INCREMENT 중 하나만 사용될 수 있다.
     AUTO_INCREMENT이 지정될 때 "(seed, increment)"와 "AUTO_INCREMENT = initial_value"는 동시에 정의될 수 없다.
 
@@ -441,7 +441,7 @@ FOREIGN KEY 제약
 
 외래키(foreign key)란 참조 관계에 있는 다른 테이블의 기본키를 참조하는 칼럼 또는 칼럼들의 집합을 말한다. 외래키와 참조되는 기본키는 동일한 데이터 타입을 가져야 한다. 외래키가 기본키를 참조함에 따라 연관되는 두 테이블 사이에는 일관성이 유지되는데, 이를 참조 무결성(referential integrity)이라 한다. ::
 
-    [CONSTRAINT < constraint_name >] FOREIGN KEY [<foreign_key_name>] (<column_name_comma_list1>) REFERENCES [referenced_table_name] (<column_name_comma_list2>) [<referential_triggered_action> ...]
+    [CONSTRAINT constraint_name] FOREIGN KEY [foreign_key_name] (<column_name_comma_list1>) REFERENCES [referenced_table_name] (<column_name_comma_list2>) [<referential_triggered_action> ...]
      
         <referential_triggered_action> ::=
             ON UPDATE <referential_action> |
@@ -452,15 +452,15 @@ FOREIGN KEY 제약
 *   *constraint_name*: 제약 조건의 이름을 지정한다.
 *   *foreign_key_name*: **FOREIGN KEY** 제약 조건의 이름을 지정한다. 생략할 수 있으며, 이 값을 지정하면 *constraint_name*\ 을 무시하고 이 이름을 사용한다.
 
-*   <column_name_comma_list1>: **FOREIGN KEY** 키워드 뒤에 외래키로 정의하고자 하는 칼럼 이름을 명시한다. 정의되는 외래키의 칼럼 개수는 참조되는 기본키의 칼럼 개수와 동일해야 한다.
+*   <*column_name_comma_list1*>: **FOREIGN KEY** 키워드 뒤에 외래키로 정의하고자 하는 칼럼 이름을 명시한다. 정의되는 외래키의 칼럼 개수는 참조되는 기본키의 칼럼 개수와 동일해야 한다.
 *   *referenced_table_name*: 참조되는 테이블의 이름을 지정한다.
-*   <column_name_comma_list2>: **REFERENCES** 키워드 뒤에 참조되는 기본키 칼럼 이름을 지정한다.
-*   *referential_triggered_action*: 참조 무결성이 유지되도록 특정 연산에 따라 대응하는 트리거 동작을 정의하는 것이며, **ON UPDATE**, **ON DELETE**\ 가 올 수 있다. 각각의 동작은 중복하여 정의 가능하며, 정의 순서는 무관하다.
+*   <*column_name_comma_list2*>: **REFERENCES** 키워드 뒤에 참조되는 기본키 칼럼 이름을 지정한다.
+*   <*referential_triggered_action*>: 참조 무결성이 유지되도록 특정 연산에 따라 대응하는 트리거 동작을 정의하는 것이며, **ON UPDATE**, **ON DELETE**\ 가 올 수 있다. 각각의 동작은 중복하여 정의 가능하며, 정의 순서는 무관하다.
 
     *   **ON UPDATE**: 외래키가 참조하는 기본키 값을 갱신하려 할 때 수행할 작업을 정의한다. 사용자는 **NO ACTION**, **RESTRICT**, **SET NULL** 중 하나의 옵션을 지정할 수 있으며, 기본은 **RESTRICT**\ 이다.
     *   **ON DELETE**: 외래키가 참조하는 기본키 값을 삭제하려 할 때 수행할 작업을 정의한다. 사용자는 **NO ACTION**, **RESTRICT**, **CASCADE**, **SET NULL** 중 하나의 옵션을 지정할 수 있으며, 기본은 **RESTRICT**\ 이다.
 
-*   *referential_ action*: 기본키 값이 삭제 또는 갱신될 때 이를 참조하는 외래키의 값을 유지할 것인지 또는 변경할 것인지 지정할 수 있다.
+*   <*referential_action*>: 기본키 값이 삭제 또는 갱신될 때 이를 참조하는 외래키의 값을 유지할 것인지 또는 변경할 것인지 지정할 수 있다.
 
     *   **CASCADE**: 기본키가 삭제되면 외래키도 삭제한다. **ON DELETE** 연산에 대해서만 지원된다.
     *   **RESTRICT**: 기본키 값이 삭제되거나 업데이트되지 않도록 제한한다. 삭제 또는 업데이트를 시도하는 트랜잭션은 롤백된다.
@@ -708,12 +708,12 @@ CREATE TABLE AS SELECT
 
 ::
 
-    CREATE {TABLE | CLASS} <table_name> [(<column_definition> [,<table_constraint>], ...)] [REPLACE] AS <select_statement>;
+    CREATE {TABLE | CLASS} table_name [(<column_definition> [,<table_constraint>], ...)] [REPLACE] AS <select_statement>;
 
 *   *table_name*: 새로 생성할 테이블 이름이다.
-*   *column_definition*, *table_constraint*: 칼럼을 정의한다. 생략하면 **SELECT** 문의 칼럼 스키마가 복제된다. **SELECT** 문의 칼럼 제약 조건이나 **AUTO_INCREMENT** 속성은 복제되지 않는다.
-*   *table_constraint*: 테이블 제약 조건을 정의한다.
-*   *select_statement*: 데이터베이스에 이미 존재하는 원본 테이블을 대상으로 하는 **SELECT** 문이다.
+*   <*column_definition*>, <*table_constraint*>: 칼럼을 정의한다. 생략하면 **SELECT** 문의 칼럼 스키마가 복제된다. **SELECT** 문의 칼럼 제약 조건이나 **AUTO_INCREMENT** 속성은 복제되지 않는다.
+*   <*table_constraint*>: 테이블 제약 조건을 정의한다.
+*   <*select_statement*>: 데이터베이스에 이미 존재하는 원본 테이블을 대상으로 하는 **SELECT** 문이다.
 
 .. code-block:: sql
 
@@ -915,7 +915,7 @@ ADD COLUMN 절
                         <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
 
 *   *table_name*: 칼럼을 추가할 테이블의 이름을 지정한다.
-*   *column_definition*: 새로 추가할 칼럼의 이름(최대 254 바이트), 데이터 타입, 제약 조건을 정의한다.
+*   <*column_definition*>: 새로 추가할 칼럼의 이름(최대 254 바이트), 데이터 타입, 제약 조건을 정의한다.
 *   **AFTER** *old_column_name*: 새로 추가할 칼럼 앞에 위치하는 기존 칼럼 이름을 명시한다.
 
 .. code-block:: sql
@@ -1019,7 +1019,7 @@ ADD CONSTRAINT 절
                 <referential_constraint>
             }
      
-            <referential_constraint> ::= FOREIGN KEY [<foreign_key_name>](column_name, ...) <referential_definition>
+            <referential_constraint> ::= FOREIGN KEY [foreign_key_name](column_name, ...) <referential_definition>
          
                 <referential_definition> ::=
                     REFERENCES [referenced_table_name] (column_name, ...) [<referential_triggered_action> ...]

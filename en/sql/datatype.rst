@@ -69,6 +69,7 @@ On the above table, two types on the same cell are identical types but it always
         SELECT 100000000*1000000;
         
     ::
+    
         ERROR: Data overflow on data type integer.
 
     In the above case, if you specify one of two integers as the **BIGINT** type, it will determine the result value into the **BIGINT** type, and then output the normal result.    

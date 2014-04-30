@@ -974,131 +974,131 @@ On the above example, if you use "USING INDEX idx_open_bugs" clause or "USE INDE
 
     Even though the conditions of creating filtered indexes does not match the query conditions,  if you execute queries by specifying indexes with index hint syntax, CUBRID performs a query by choosing a specified index. Therefore, query results can be different with the given searching conditions.
 
-**Constraints**
+.. note:: **Constraints**
 
-Only generic indexes are allowed as filtered indexes. For example, the filtered unique index is not allowed. Also, it is not allowed that columns which compose an index are all NULLable.
-For example, below is not allowed because Author is NULLable.
-
-.. code-block:: sql
-
-    CREATE INDEX idx_open_bugs ON bugs (Author) WHERE Closed = 0;
-
-::
-    
-    ERROR: before ' ; '
-    Invalid filter expression (bugs.Closed=0) for index.
-    
-However, below is allowed because Author is NULLable, but CreationDate is not NULLable.
-
-.. code-block:: sql
-    
-    CREATE INDEX idx_open_bugs ON bugs (Author, CreationDate) WHERE Closed = 0;
-
-The following cases are not allowed as filtering conditions.
-
-*   Functions, which output different results with the same input, such as date/time function or random function
+    Only generic indexes are allowed as filtered indexes. For example, the filtered unique index is not allowed. Also, it is not allowed that columns which compose an index are all NULLable.
+    For example, below is not allowed because Author is NULLable.
 
     .. code-block:: sql
 
-        CREATE INDEX idx ON bugs(creationdate) WHERE creationdate > SYS_DATETIME;
+        CREATE INDEX idx_open_bugs ON bugs (Author) WHERE Closed = 0;
 
     ::
-
-        ERROR: before ' ; '
-        'sys_datetime ' is not allowed in a filter expression for index.
-
-    .. code-block:: sql
-
-        CREATE INDEX idx ON bugs(bugID) WHERE bugID > RAND();
-
-    ::
-    
-        ERROR: before ' ; '
-        'rand ' is not allowed in a filter expression for index.
-    
-*   In case of using the **OR** operator
-
-    .. code-block:: sql
-
-        CREATE INDEX IDX ON bugs (bugID) WHERE bugID > 10 OR bugID = 3;
-    
-    ::     
-         
-        ERROR: before ' ; '
-        ' or ' is not allowed in a filter expression for index.
-
-*   In case of including functions like :func:`INCR`, :func:`DECR` functions, which modify the data of a table.
-
-*   In case of Serial-related functions and including pseudo columns.
-
-*   In case of including aggregate functions such as :func:`MIN`, :func:`MAX`, :func:`STDDEV`
-
-*   In case of using the types where indexes cannot be created
-
-    -   The operators and functions where an argument is the **SET** type
-    -   The functions to use LOB file(:func:`CHAR_TO_BLOB`, :func:`CHAR_TO_CLOB`, :func:`BIT_TO_BLOB`, :func:`BLOB_FROM_FILE`, :func:`CLOB_FROM_FILE`)
-
-*   The **IS NULL** operator can be used only when at least one column of an index is not NULL.
-
-    .. code-block:: sql
-    
-        CREATE TABLE t (a INT, b INT);
         
-        -- IS NULL cannot be used with expressions
-        CREATE INDEX idx ON t (a) WHERE (not a) IS NULL;
-
-    ::
-    
         ERROR: before ' ; '
-        Invalid filter expression (( not t.a<>0) is null ) for index.
-         
-    .. code-block:: sql
-
-        CREATE INDEX idx ON t (a) WHERE (a+1) IS NULL;
+        Invalid filter expression (bugs.Closed=0) for index.
         
-    ::
-    
-        ERROR: before ' ; '
-        Invalid filter expression ((t.a+1) is null ) for index.
-
-    .. code-block:: sql
-         
-        -- At least one attribute must not be used with IS NULL
-        CREATE INDEX idx ON t(a,b) WHERE a IS NULL ;
-        
-    ::
-    
-        ERROR: before '  ; '
-        Invalid filter expression (t.a is null ) for index.
+    However, below is allowed because Author is NULLable, but CreationDate is not NULLable.
 
     .. code-block:: sql
         
-        CREATE INDEX idx ON t(a,b) WHERE a IS NULL and b IS NULL;
+        CREATE INDEX idx_open_bugs ON bugs (Author, CreationDate) WHERE Closed = 0;
+
+    The following cases are not allowed as filtering conditions.
+
+    *   Functions, which output different results with the same input, such as date/time function or random function
+
+        .. code-block:: sql
+
+            CREATE INDEX idx ON bugs(creationdate) WHERE creationdate > SYS_DATETIME;
+
+        ::
+
+            ERROR: before ' ; '
+            'sys_datetime ' is not allowed in a filter expression for index.
+
+        .. code-block:: sql
+
+            CREATE INDEX idx ON bugs(bugID) WHERE bugID > RAND();
+
+        ::
         
-    ::
-    
-        ERROR: before ' ; '
-        Invalid filter expression (t.a is null  and t.b is null ) for index.
-
-    .. code-block:: sql
+            ERROR: before ' ; '
+            'rand ' is not allowed in a filter expression for index.
         
-        CREATE INDEX idx ON t(a,b) WHERE a IS NULL and b IS NOT NULL;
+    *   In case of using the **OR** operator
 
-*   Index Skip Scan (ISS) is not allowed for the filtered indexes.
-*   The length of condition string used for the filtered index is limited to 128 characters.
+        .. code-block:: sql
 
-    .. code-block:: sql
+            CREATE INDEX IDX ON bugs (bugID) WHERE bugID > 10 OR bugID = 3;
+        
+        ::     
+             
+            ERROR: before ' ; '
+            ' or ' is not allowed in a filter expression for index.
 
-        CREATE TABLE t(VeryLongColumnNameOfTypeInteger INT);
+    *   In case of including functions like :func:`INCR`, :func:`DECR` functions, which modify the data of a table.
+
+    *   In case of Serial-related functions and including pseudo columns.
+
+    *   In case of including aggregate functions such as :func:`MIN`, :func:`MAX`, :func:`STDDEV`
+
+    *   In case of using the types where indexes cannot be created
+
+        -   The operators and functions where an argument is the **SET** type
+        -   The functions to use LOB file(:func:`CHAR_TO_BLOB`, :func:`CHAR_TO_CLOB`, :func:`BIT_TO_BLOB`, :func:`BLOB_FROM_FILE`, :func:`CLOB_FROM_FILE`)
+
+    *   The **IS NULL** operator can be used only when at least one column of an index is not NULL.
+
+        .. code-block:: sql
+        
+            CREATE TABLE t (a INT, b INT);
             
-        CREATE INDEX idx ON t(VeryLongColumnNameOfTypeInteger) 
-        WHERE VeryLongColumnNameOfTypeInteger > 3 AND VeryLongColumnNameOfTypeInteger < 10 AND 
-        SQRT(VeryLongColumnNameOfTypeInteger) < 3 AND SQRT(VeryLongColumnNameOfTypeInteger) < 10;
+            -- IS NULL cannot be used with expressions
+            CREATE INDEX idx ON t (a) WHERE (not a) IS NULL;
+
+        ::
         
-    ::
-    
-        ERROR: before ' ; '
-        The maximum length of filter predicate string must be 128.
+            ERROR: before ' ; '
+            Invalid filter expression (( not t.a<>0) is null ) for index.
+             
+        .. code-block:: sql
+
+            CREATE INDEX idx ON t (a) WHERE (a+1) IS NULL;
+            
+        ::
+        
+            ERROR: before ' ; '
+            Invalid filter expression ((t.a+1) is null ) for index.
+
+        .. code-block:: sql
+             
+            -- At least one attribute must not be used with IS NULL
+            CREATE INDEX idx ON t(a,b) WHERE a IS NULL ;
+            
+        ::
+        
+            ERROR: before '  ; '
+            Invalid filter expression (t.a is null ) for index.
+
+        .. code-block:: sql
+            
+            CREATE INDEX idx ON t(a,b) WHERE a IS NULL and b IS NULL;
+            
+        ::
+        
+            ERROR: before ' ; '
+            Invalid filter expression (t.a is null  and t.b is null ) for index.
+
+        .. code-block:: sql
+            
+            CREATE INDEX idx ON t(a,b) WHERE a IS NULL and b IS NOT NULL;
+
+    *   Index Skip Scan (ISS) is not allowed for the filtered indexes.
+    *   The length of condition string used for the filtered index is limited to 128 characters.
+
+        .. code-block:: sql
+
+            CREATE TABLE t(VeryLongColumnNameOfTypeInteger INT);
+                
+            CREATE INDEX idx ON t(VeryLongColumnNameOfTypeInteger) 
+            WHERE VeryLongColumnNameOfTypeInteger > 3 AND VeryLongColumnNameOfTypeInteger < 10 AND 
+            SQRT(VeryLongColumnNameOfTypeInteger) < 3 AND SQRT(VeryLongColumnNameOfTypeInteger) < 10;
+            
+        ::
+        
+            ERROR: before ' ; '
+            The maximum length of filter predicate string must be 128.
 
 .. _function-index:
 

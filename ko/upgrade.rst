@@ -60,6 +60,8 @@ DB 마이그레이션
 파라미터  설정
 ^^^^^^^^^^^^^^
 
+**cubrid.conf**
+
 *   log_buffer_size 최소값이 48KB(3*1page, 16KB=1page)에서 2MB(128*1page, 16KB=1page)로 변경되었으므로, 이 값을 설정한 경우 변경된 최소값보다 크게 설정해야 한다.
 
 .. _up-from-91:
@@ -124,6 +126,7 @@ CUBRID 9.1에서 DB를 마이그레이션하는 경우는 "migrate_91_to_92 <db_
 
 **cubrid.conf**
 
+*   log_buffer_size 최소값이 48KB(3*1page, 16KB=1page)에서 2MB(128*1page, 16KB=1page)로 변경되었으므로, 이 값을 설정한 경우 변경된 최소값보다 크게 설정해야 한다.
 *   sort_buffer_size의 최대 크기를 2G로 제한했으므로 이 값보다 크게 설정하지 않아야 한다.
 *   다음 파라미터 중 기존 파라미터들은 더 이상 사용하지 않을 예정(deprecated)이며, 앞으로 신규 파라미터의 사용을 권장한다. 괄호 안의 값은 단위 생략 시 기본 적용되는 단위이며, 신규 파라미터들은 단위 지정이 가능하다. 자세한 내용은 :doc:`/admin/config`\ 의 각 파라미터 설명을 참고한다.
 
@@ -235,6 +238,7 @@ DB 마이그레이션
 
 **cubrid.conf**
 
+*   log_buffer_size 최소값이 48KB(3*1page, 16KB=1page)에서 2MB(128*1page, 16KB=1page)로 변경되었으므로, 이 값을 설정한 경우 변경된 최소값보다 크게 설정해야 한다.
 *   sort_buffer_size의 최대 크기를 2G로 제한했으므로 이 값보다 크게 설정하지 않아야 한다.
 *   single_byte_compare 파라미터는 더 이상 사용하지 않으므로 삭제해야 한다.
 *   intl_mbs_support 파라미터는 더 이상 사용하지 않으므로 삭제해야 한다.
@@ -296,6 +300,7 @@ DB 마이그레이션
 
 **cubrid.conf**
 
+*   log_buffer_size 최소값이 48KB(3*1page, 16KB=1page)에서 2MB(128*1page, 16KB=1page)로 변경되었으므로, 이 값을 설정한 경우 변경된 최소값보다 크게 설정해야 한다.
 *   sort_buffer_size의 최대 크기를 2G로 제한했으므로 이 값보다 크게 설정하지 않아야 한다.
 *   single_byte_compare 파라미터는 더 이상 사용하지 않으므로 삭제해야 한다.
 *   intl_mbs_support 파라미터는 더 이상 사용하지 않으므로 삭제해야 한다.

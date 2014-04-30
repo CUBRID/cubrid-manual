@@ -262,7 +262,7 @@ The following queries explain how pruning is performed on the *olympic2* table f
     FROM olympic2 
     WHERE YEAR(opening_date) != 2008;
 
-In versions older than CUBRID 9.0, partition pruning was performed during query compilation stage. Starting with CUBRID 9.0, partition pruning is performed during the query execution stage. Executing partition pruning during query execution allows CUBRID to apply this optimization on much more complex queries. However, pruning information is not displayed in query plans anymore (since query planning happens before query execution and this information is not available at that time).
+.. note:: In versions older than CUBRID 9.0, partition pruning was performed during query compilation stage. Starting with CUBRID 9.0, partition pruning is performed during the query execution stage, because executing partition pruning during query execution allows CUBRID to apply this optimization on much more complex queries. However, pruning information is not displayed in query planning stage anymore, since query planning happens before query execution and this information is not available at that time.
 
 Users can also access partitions directly (independent of the partitioned table) either by using the table name assigned by CUBRID to a partition or by using the *table PARTITION (name)* clause:
 
@@ -406,7 +406,7 @@ Partitions can be dropped from a partitioned table by using the **DROP PARTITION
     DROP PARTITION partition_name_list
 
 *   *table_name* : Specifies the name of the partitioned table.
-*   *partition_name_list* : Specifies the names of the partitions to be dropped, separated by comma(,).
+*   <*partition_name_list*> : Specifies the names of the partitions to be dropped, separated by comma(,).
 
 The following example shows how to drop the *before_2000* partition in the :ref:`participant2<range-participant2-table>` table.
 

@@ -30,8 +30,6 @@ cubrid 관리 유틸리티의 사용법(구문)은 다음과 같다. ::
         unloaddb [option] <database-name>  --- 데이터 및 스키마 내보내기(언로드)
         paramdump [option] <database-name>  --- 데이터베이스의 설정된 파라미터 값 확인
         changemode [option] <database-name>  --- 서버의 HA 모드 출력 또는 변경
-        copylogdb [option] <database-name>  --- HA 구성을 위해 트랜잭션 로그를 다중화하는 도구
-        applylogdb [option] <database-name>  --- HA 구성을 위해 트랜잭션 로그에서 복제 로그를 읽고 적용하는 도구
         applyinfo [option] <database-name>   --- HA 환경에서 트랜잭션 로그 반영 정보를 확인하는 도구
         synccolldb [option] <database-name>  --- DB 콜레이션을 시스템 콜레이션에 맞게 변경하는 도구
         genlocale [option] <database-name>  --- 사용하고자 하는 로캘 정보를 컴파일하는 도구
@@ -341,7 +339,7 @@ CUBRID 데이터베이스의 볼륨은 크게 영구적 볼륨, 일시적 볼륨
     다음 예제는 그룹 *sedan*\에 *grandeur*\와 *sonata*\가, 그룹 *suv*\에 *tuscan*\이, 그룹 *hatchback*\에 *i30*\가 포함되는 것을 정의하는 사용자 정보 파일이다. 사용자 정보 파일명은 user_info.txt로 예시한다. ::
 
         --
-        --    사용자 정보 파일의 예1
+        --  사용자 정보 파일의 예 1
         --
         USER sedan
         USER suv
@@ -354,7 +352,7 @@ CUBRID 데이터베이스의 볼륨은 크게 영구적 볼륨, 일시적 볼륨
     위 예제와 동일한 사용자 관계를 정의하는 파일이다. 다만, 아래 예제에서는 **MEMBERS**\ 절을 이용하였다. ::
 
         --
-        -- 사용자 정보 파일의 예2
+        -- 사용자 정보 파일의 예 2
         --
         USER grandeur
         USER sonata
@@ -870,22 +868,24 @@ CUBRID의 볼륨은 데이터 저장, 인덱스 저장, 임시 결과 저장 등
 
         LOB space description file:/home1/cubrid/lob
 
-**-p**\ 와 **-s**\ 를 함께 사용하는 경우, 요약 정보를 출력할 때 사용 중인 디스크 공간을 data_size, index_size, temp_size로 구분하여 출력한다.
+.. note::
 
-::
+    **-p**\ 와 **-s**\ 를 함께 사용하는 경우, 요약 정보를 출력할 때 사용 중인 디스크 공간을 data_size, index_size, temp_size로 구분하여 출력한다.
 
-    $ cubrid spacedb -s -p testdb
-    Summarized space description for database 'testdb' with pagesize 16.0K. (log pagesize: 16.0K)
+    ::
 
-    Purpose     total_size   used_size   free_size   data_size  index_size   temp_size  volume_count
-    -------------------------------------------------------------------------------------------------
-          DATA      20.0 M       0.5 M      19.5 M       0.4 M       0.0 M       0.0 M          1
-         INDEX      20.0 M       0.4 M      19.6 M       0.0 M       0.4 M       0.0 M          1
-       GENERIC      20.0 M       3.0 M      17.0 M       2.1 M       0.9 M       0.0 M          1
-          TEMP      40.0 M       0.5 M      39.5 M       0.0 M       0.0 M       0.4 M          2
-     TEMP TEMP       0.0 M       0.0 M       0.0 M       0.0 M       0.0 M       0.0 M          0
-    -------------------------------------------------------------------------------------------------
-         TOTAL     100.0 M       4.4 M      95.6 M       2.5 M       1.2 M       0.4 M          5
+        $ cubrid spacedb -s -p testdb
+        Summarized space description for database 'testdb' with pagesize 16.0K. (log pagesize: 16.0K)
+
+        Purpose     total_size   used_size   free_size   data_size  index_size   temp_size  volume_count
+        -------------------------------------------------------------------------------------------------
+              DATA      20.0 M       0.5 M      19.5 M       0.4 M       0.0 M       0.0 M          1
+             INDEX      20.0 M       0.4 M      19.6 M       0.0 M       0.4 M       0.0 M          1
+           GENERIC      20.0 M       3.0 M      17.0 M       2.1 M       0.9 M       0.0 M          1
+              TEMP      40.0 M       0.5 M      39.5 M       0.0 M       0.0 M       0.4 M          2
+         TEMP TEMP       0.0 M       0.0 M       0.0 M       0.0 M       0.0 M       0.0 M          0
+        -------------------------------------------------------------------------------------------------
+             TOTAL     100.0 M       4.4 M      95.6 M       2.5 M       1.2 M       0.4 M          5
 
 사용 공간 정리
 --------------

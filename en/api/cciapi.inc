@@ -2450,7 +2450,9 @@ CCI API Reference
     
     .. code-block:: sql
         
-        csql> CREATE PROCEDURE test_out(x OUT STRING)
+        -- csql> 
+        
+        CREATE PROCEDURE test_out(x OUT STRING)
         AS LANGUAGE JAVA
         NAME 'SpCubrid.outTest(java.lang.String[] o)';
         

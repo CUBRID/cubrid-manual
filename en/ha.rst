@@ -2070,7 +2070,7 @@ Using the above instructions, build a new slave node by following these steps, i
 
         [nodeA]$ cubrid service stop
 
-#. Set the master node HA and the slave node HA.
+#.  Set the master node HA and the slave node HA.
 
     *   Set the **$CUBRID/conf/cubrid.conf** as identical for both the master node and the slave node. 
     
@@ -3097,14 +3097,13 @@ If you find an error or quit the step by pressing "n" during executing each step
 
 15. At this step, the result of building the slave node is printed to check whether it was successful or not.
 
-    ::
+    .. code-block:: none
 
         ##### step 15 ##################################################################
         #
         #  completed
         #
         ################################################################################
-        .
 
 Operate the below process when you complete to run **ha_make_slavedb.sh** script.
         
@@ -3365,7 +3364,7 @@ If you find an error or quit the step by pressing "n" during executing each step
 
            continue ? ([y]es / [n]o / [s]kip) : y
 
-7. At this step, copy the database backup of the slave node to the replica node. Enter y to the question. 
+7.  At this step, copy the database backup of the slave node to the replica node. Enter y to the question. 
            
     ::       
            
@@ -3438,7 +3437,7 @@ If you find an error or quit the step by pressing "n" during executing each step
 
 11. At this step, the result of building the replica node is printed to check whether it was successful or not.
 
-    ::
+    .. code-block:: none
 
         ##### step 11 ##################################################################
         #
@@ -3815,9 +3814,11 @@ If you find an error or quit the step by pressing "n" during executing each step
         #
         ################################################################################
 
+           continue ? ([y]es / [n]o / [s]kip) : y
+
 13. At this step, the result of building the replica node is printed to check whether it was successful or not.
 
-    ::
+    .. code-block:: none
 
         ##### step 13 ##################################################################
         #
@@ -4084,7 +4085,8 @@ If you find an error or quit the step by pressing "n" during executing each step
 
            continue ? ([y]es / [n]o / [s]kip) : y
 
-6. At this step, stop replication of a master node. Enter y to the question.
+6.  At this step, stop replication of a master node. Enter y to the question.
+
     ::
 
         ##### step 6 ###################################################################
@@ -4220,7 +4222,7 @@ If you find an error or quit the step by pressing "n" during executing each step
 
 14. At this step, the result of building the slave node is printed to check whether it was successful or not.
 
-    ::
+    .. code-block:: none
    
         ##### step 14 ##################################################################
         #

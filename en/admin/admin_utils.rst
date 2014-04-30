@@ -870,22 +870,24 @@ The following shows [options] available with the **cubrid spacedb** utility.
 
         LOB space description file:/home1/cubrid/lob
 
-If you use **-p** and **-s** together, the summarized information of the used space will be separated as data_size, index_size and temp_size.
+.. note::
 
-::
+    If you use **-p** and **-s** together, the summarized information of the used space will be separated as data_size, index_size and temp_size.
 
-    $ cubrid spacedb -s -p testdb
-    Summarized space description for database 'testdb' with pagesize 16.0K. (log pagesize: 16.0K)
+    ::
 
-    Purpose     total_size   used_size   free_size   data_size  index_size   temp_size  volume_count
-    -------------------------------------------------------------------------------------------------
-          DATA      20.0 M       0.5 M      19.5 M       0.4 M       0.0 M       0.0 M          1
-         INDEX      20.0 M       0.4 M      19.6 M       0.0 M       0.4 M       0.0 M          1
-       GENERIC      20.0 M       3.0 M      17.0 M       2.1 M       0.9 M       0.0 M          1
-          TEMP      40.0 M       0.5 M      39.5 M       0.0 M       0.0 M       0.4 M          2
-     TEMP TEMP       0.0 M       0.0 M       0.0 M       0.0 M       0.0 M       0.0 M          0
-    -------------------------------------------------------------------------------------------------
-         TOTAL     100.0 M       4.4 M      95.6 M       2.5 M       1.2 M       0.4 M          5
+        $ cubrid spacedb -s -p testdb
+        Summarized space description for database 'testdb' with pagesize 16.0K. (log pagesize: 16.0K)
+
+        Purpose     total_size   used_size   free_size   data_size  index_size   temp_size  volume_count
+        -------------------------------------------------------------------------------------------------
+              DATA      20.0 M       0.5 M      19.5 M       0.4 M       0.0 M       0.0 M          1
+             INDEX      20.0 M       0.4 M      19.6 M       0.0 M       0.4 M       0.0 M          1
+           GENERIC      20.0 M       3.0 M      17.0 M       2.1 M       0.9 M       0.0 M          1
+              TEMP      40.0 M       0.5 M      39.5 M       0.0 M       0.0 M       0.4 M          2
+         TEMP TEMP       0.0 M       0.0 M       0.0 M       0.0 M       0.0 M       0.0 M          0
+        -------------------------------------------------------------------------------------------------
+             TOTAL     100.0 M       4.4 M      95.6 M       2.5 M       1.2 M       0.4 M          5
 
 Compacting Used Space
 ---------------------

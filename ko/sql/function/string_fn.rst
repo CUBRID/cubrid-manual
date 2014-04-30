@@ -36,7 +36,7 @@ SQL 구문 관련 파라미터인 **pipes_as_concat** 파라미터(기본값: ye
      
 .. code-block:: sql
 
-    SELECT 'cubrid' || ',' || B'0010' ||B'0000' ||B'0000' ||B'1000';;
+    SELECT 'cubrid' || ',' || B'0010' ||B'0000' ||B'0000' ||B'1000';
     
 ::
 

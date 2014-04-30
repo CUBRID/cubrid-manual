@@ -154,7 +154,6 @@ This method can be used for the case that it is difficult to specify a specific 
 *   Add "%CUBRID%\\bin\\cub_master.exe" to open all ports for cub_master.
 *   Add "%CUBRID%\\bin\\cub_server.exe" to open all ports for cub_server.
 *   Add "%CUBRID%\\bin\\cub_cmserver.exe" to open all ports for the CUBRID Manager.
-*   Add "%CUBRID%\\bin\\cub_cmhttpd.exe" to open all ports for the CUBRID Web Manager.
     
 If you use CUBRID for Linux at the broker machine or the DB server machine, all of Linux ports should be opened. 
 If you use CUBRID for Windows at the broker machine or the DB server machine, all of Linux ports should be opened or the related processes should be added to the program list allowed for the Windows firewall.
@@ -178,7 +177,7 @@ If you use CUBRID for Windows at the broker machine or the DB server machine, al
 |               | Server        | CAS, CSQL     | ECHO(7)        | ECHO(7)                                             | Open                     | Periodical connection  |
 |               | machine(**)   |               |                |                                                     |                          |                        |
 +---------------+---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
-| HA used       | cub_broker    | application   | BROKER_PORT    | Not supported                                       | Open                     | One-time connection    |
+| HA use        | cub_broker    | application   | BROKER_PORT    | Not supported                                       | Open                     | One-time connection    |
 |               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
 |               | CAS           | application   | BROKER_PORT    | Not supported                                       | Open                     | Keep connected         |
 |               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
@@ -201,15 +200,15 @@ If you use CUBRID for Windows at the broker machine or the DB server machine, al
 |               | machine(**)   | copylogdb,    |                |                                                     |                          |                        |
 |               |               | applylogdb    |                |                                                     |                          |                        |
 +---------------+---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
-| SHARD used    | cub_broker    | application   | BROKER_PORT    | Not supported                                       | Open                     | One-time connection    |
+| SHARD use     | cub_broker    | application   | BROKER_PORT    | Not supported                                       | Open                     | One-time connection    |
 |               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
 |               | cub_proxy     | application   | BROKER_PORT    | Not supported                                       | Open                     | Keep connected         |
 +---------------+---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
-| Manager,      | Manager       | application   | 8001, 8002     | 8001, 8002                                          | Open                     |                        |
+| Manager use   | Manager       | application   | 8001           | 8001                                                | Open                     |                        |
 |               | server        |               |                |                                                     |                          |                        |
-| Web Manager   +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
-| used          | Web Manager   | application   | 8282           | 8282                                                | Open                     |                        |
-|               | server        |               |                |                                                     |                          |                        |
++---------------+---------------+               |                |                                                     |                          |                        |
+| Web Manager   | Web Manager   |               |                |                                                     |                          |                        |
+| use           | server        |               |                |                                                     |                          |                        |
 +---------------+---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
 
 (*): The machine which has the CAS, CSQL, copylogdb, or applylogdb process
@@ -415,10 +414,9 @@ The following table summarizes the ports, based on the listening processes, used
 +--------------------------+--------------+----------------+--------------------------+
 | Listener                 | Requester    | Port           | Firewall Port Setting    |
 +==========================+==============+================+==========================+
-| Manager server           | application  | 8001, 8002     | Open                     |
-+--------------------------+--------------+----------------+--------------------------+
-| Web Manager server       | application  | 8282           | Open                     |
+| Manager server,          | application  | 8001           | Open                     |
+| Web Manager server       |              |                |                          |
 +--------------------------+--------------+----------------+--------------------------+
 
-*   The port used when the CUBRID Manager client accesses the CUBRID Manager server process is **cm_port** and **cm_port** + 1 of the cm.conf. The default value of the **cm_port** is 8001.
-*   The port used when the CUBRID Web Manager client accesses the CUBRID Web Manager server process is **listen** of the cm_ext.conf. The default value of the port is 8282.
+*   The port used when the CUBRID Manager client accesses the CUBRID Manager server process is **cm_port** of the cm.conf. The default value is 8001.
+*   The port used when the CUBRID Web Manager client accesses the CUBRID Web Manager server process is also **cm_port** of the cm.conf.

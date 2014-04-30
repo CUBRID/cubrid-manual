@@ -161,25 +161,25 @@ Aggregate vs. Analytic
 
 Most aggregate functions can use **DISTINCT**, **UNIQUE** constraints. For the **GROUP BY ... HAVING** clause, see :ref:`group-by-clause`.
 
-**Analytic function** calculates the aggregate value based on the result of rows. The analytic function is different from the aggregate function since it can return one or more rows based on the groups specified by the *partition_clause* after the **OVER** clause (when this clause is omitted, all rows are regarded as a group).
+**Analytic function** calculates the aggregate value based on the result of rows. The analytic function is different from the aggregate function since it can return one or more rows based on the groups specified by the <*partition_by_clause*> after the **OVER** clause (when this clause is omitted, all rows are regarded as a group).
 
 The analytic function is used along with a new analytic clause, **OVER**, for the existing aggregate functions to allow a variety of statistics for a group of specific rows. ::
 
-    function_name ( [argument_list ] ) OVER (<analytic_clause>)
+    function_name ([<argument_list>]) OVER (<analytic_clause>)
      
     <analytic_clause>::=
-         [ <partition_clause> ] [ <order_by_clause> ]
+         [<partition_by_clause>] [<order_by_clause>]
         
-    <partition_clause>::=
-        PARTITION BY value_expr [, value_expr ]...
+    <partition_by_clause>::=
+        PARTITION BY value_expr[, value_expr]...
      
     <order_by_clause>::=
-        ORDER BY { expr | position | column_alias } [ ASC | DESC ]
-            [, { expr | position | column_alias } [ ASC | DESC ] ] ...
+        ORDER BY { expression | position | column_alias } [ ASC | DESC ]
+            [, { expression | position | column_alias } [ ASC | DESC ] ] ...
 
-*   <*partition_clause*> : Groups based on one or more *value_expr*. It uses the **PARTITION BY** clause to partition the query result.
+*   <*partition_by_clause*>: Groups based on one or more *value_expr*. It uses the **PARTITION BY** clause to partition the query result.
 
-*   <*order_by_clause*> : defines the data sorting method in the partition made by <*partition_clause*>. The result can be sorted with several keys. When <*partition_clause*> is omitted, the data is sorted within the overall result sets. Based on the sorting order, the function is applied to the column values of accumulated records, including the previous values.
+*   <*order_by_clause*>: defines the data sorting method in the partition made by <*partition_by_clause*>. The result can be sorted with several keys. When <*partition_by_clause*> is omitted, the data is sorted within the overall result sets. Based on the sorting order, the function is applied to the column values of accumulated records, including the previous values.
 
 The behavior of a query with the expression of ORDER BY/PARTITION BY clause which is used together after the OVER clause is as follows.
 
@@ -190,7 +190,8 @@ The behavior of a query with the expression of ORDER BY/PARTITION BY clause whic
 AVG
 ===
 
-.. function:: AVG ( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
+.. function:: AVG ([ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression)
+.. function:: AVG ([ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression) OVER (<analytic_clause>)
 
     The **AVG** function is used as an aggregate function or an analytic function. It calculates the arithmetic average of the value of an expression representing all rows. Only one *expression* is specified as a parameter. You can get the average without duplicates by using the **DISTINCT** or **UNIQUE** keyword in front of the expression or the average of all values by omitting the keyword or by using **ALL**.
 
@@ -205,7 +206,7 @@ The following example shows how to retrieve the average number of gold medals th
 
     SELECT AVG(gold)
     FROM participant
-    WHERE nation_code = 'KOR'; 
+    WHERE nation_code = 'KOR';
     
 ::
 
@@ -218,7 +219,7 @@ The following example shows how to output the number of gold medals by year and 
 .. code-block:: sql
 
     SELECT host_year, nation_code, gold,
-    AVG(gold) OVER (PARTITION BY nation_code ORDER BY host_year) avg_gold
+        AVG(gold) OVER (PARTITION BY nation_code ORDER BY host_year) avg_gold
     FROM participant WHERE nation_code like 'AU%';
      
 ::
@@ -261,7 +262,10 @@ The following example is removing the "ORDER BY host_year" clause under the **OV
 COUNT
 =====
 
-.. function:: COUNT ( * | [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
+.. function:: COUNT (*)
+.. function:: COUNT (*) OVER (<analytic_clause>)
+.. function:: COUNT ([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression)
+.. function:: COUNT ([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression) OVER (<analytic_clause>)
 
     The **COUNT** function is used as an aggregate function or an analytic function. It returns the number of rows returned by a query. If an asterisk (*) is specified, the number of all rows satisfying the condition (including the rows with the **NULL** value) is returned. If the **DISTINCT** or **UNIQUE** keyword is specified in front of the expression, only the number of rows that have a unique value (excluding the rows with the **NULL** value) is returned after duplicates have been removed. Therefore, the value returned is always an integer and **NULL** is never returned.
 
@@ -319,8 +323,8 @@ The following example shows how to output the number of players whose nation_cod
 CUME_DIST
 =========
 
-.. function:: CUME_DIST(expression[, expression] ...) WITHIN GROUP (order_by_clause)
-.. function:: CUME_DIST() OVER ([partition_clause] order_by_clause)
+.. function:: CUME_DIST(expression[, expression] ...) WITHIN GROUP (<order_by_clause>)
+.. function:: CUME_DIST() OVER ([<partition_by_clause>] <order_by_clause>)
 
     **CUME_DIST** function is used as an aggregate function or an analytic function. It returns the value of cumulated distribution about the specified value within the group. The range of a return value by CUME_DIST is 0> and 1<=. The return value of **CUME_DIST** about the same input argument is evaluated as the same cumulated distribution value.
 
@@ -334,7 +338,7 @@ CUME_DIST
 
 If it is used as an aggregate function, **CUME_DIST** sorts the data by the order specified in **ORDER BY** clause; then it returns the relative position of a hypothetical row in the rows of aggregate group. At this time, the position is calculated as if a hypothetical row is newly inserted. That is, **CUME_DIST** returns ("cumulated RANK of a hypothetical row" + 1)/("the number of total rows in an aggregate group").
 
-If it is used as an analytic function, **CUME_DIST** returns the relative position in the value of the group after sorting each row(**ORDER BY**) with each partitioned group(**PARTITION BY**). The relative position is that the number of rows which have values less than or equal to the input argument is divided by the number of total rows within the group(rows grouped by the partition_clause or the total rows). That is, it returns (cumulated RANK of a certain row)/(the number or rows within the group). For example, the number of rows which has the RANK 1 is 2, **CUME_DUST** values of the first and the second rows will be "2/10 = 0.2".
+If it is used as an analytic function, **CUME_DIST** returns the relative position in the value of the group after sorting each row(**ORDER BY**) with each partitioned group(**PARTITION BY**). The relative position is that the number of rows which have values less than or equal to the input argument is divided by the number of total rows within the group(rows grouped by the partition_by_clause or the total rows). That is, it returns (cumulated RANK of a certain row)/(the number or rows within the group). For example, the number of rows which has the RANK 1 is 2, **CUME_DUST** values of the first and the second rows will be "2/10 = 0.2".
 
 The following is a schema and data to use in the example of this function.
 
@@ -450,12 +454,12 @@ The row that *id* is 5, is located at the fifth on the total 10 rows, and the va
 DENSE_RANK
 ==========
 
-.. function:: DENSE_RANK() OVER ( [partition_by_clause] [order_by_clause] )
+.. function:: DENSE_RANK() OVER ([<partition_by_clause>] <order_by_clause>)
 
     **DENSE_RANK** function is used as an analytic function only. The rank of the value in the column value group made by the **PARTITION BY** clause is calculated and output as **INTEGER**. Even when there is the same rank, 1 is added to the next rank value. For example, when there are three rows of Rank 13, the next rank is 14, not 16. On the contrary, the :func:`RANK` function calculates the next rank by adding the number of same ranks.
 
     :rtype: INT
-    
+
 The following example shows output of the number of Olympic gold medals of each country and the rank of the countries by year: The number of the same rank is ignored and the next rank is calculated by adding 1 to the rank.
 
 .. code-block:: sql
@@ -520,7 +524,7 @@ The following example shows output of the number of Olympic gold medals of each 
 FIRST_VALUE
 ===========
 
-.. function:: FIRST_VALUE(expression) [{RESPECT|IGNORE} NULLS] OVER ([partition_clause] order_by_clause)
+.. function:: FIRST_VALUE(expression) [{RESPECT|IGNORE} NULLS] OVER (<analytic_clause>)
 
     **FIRST_VALUE** function is used as an analytic function only. It returns **NULL** if the first value in the set is null. But, if you specify **IGNORE NULLS**, the first value will be returned as excluding null or **NULL** will be returned if all values are null.
 
@@ -610,7 +614,7 @@ The following is an example to specify **IGNORE NULLS**.
 GROUP_CONCAT
 ============
 
-.. function:: GROUP_CONCAT([DISTINCT] {col | expression} [ORDER BY {col | unsigned_int} [ASC | DESC]] [SEPARATOR str_val])
+.. function:: GROUP_CONCAT([DISTINCT] expression [ORDER BY {column | unsigned_int} [ASC | DESC]] [SEPARATOR str_val])
 
     The **GROUP_CONCAT** function is used as an aggregate function only. It connects the values that are not **NULL** in the group and returns the character string in the **VARCHAR** type. If there are no rows of query result or there are only **NULL** values, **NULL** will be returned.
 
@@ -671,7 +675,7 @@ To use the **GROUP_CONCAT** function, you must meet the following conditions.
 LAG
 ===
 
-.. function:: LAG (expression[, offset[, default]]) OVER ( [partition_by_clause] [order_by_clause] )
+.. function:: LAG(expression[, offset[, default]]) OVER ([<partition_by_clause>] <order_by_clause>)
     
     **LAG** is an analytic function that returns the *expression* value from a previous row, before *offset* that comes before the current row. It can be used to access several rows simultaneously without making any self join.
     
@@ -716,7 +720,7 @@ On the contrary, :func:`LEAD` function returns the expression value from a subse
 LAST_VALUE
 ==========
 
-.. function:: LAST_VALUE(expression) [{RESPECT|IGNORE} NULLS] OVER ([partition_clause] order_by_clause)
+.. function:: LAST_VALUE(expression) [{RESPECT|IGNORE} NULLS] OVER (<analytic_clause>)
 
     **LAST_VALUE** function is used as an analytic function only. It returns **NULL** if the last value in the set is null. But, if you specify **IGNORE NULLS**, the last value will be returned as excluding null or **NULL** will be returned if all values are null.
 
@@ -783,7 +787,7 @@ The following is a query and a result to run **LAST_VALUE** function.
 LEAD
 ====
     
-.. function:: LEAD (expression, offset, default) OVER ( [partition_by_clause] [order_by_clause] )
+.. function:: LEAD(expression, offset, default) OVER ([<partition_by_clause>] <order_by_clause>)
 
     **LEAD** is an analytic function that returns the *expression* value from a subsequent row, after *offset* that follows the current row. It can be used to access several rows simultaneously without making any self join.
 
@@ -865,7 +869,8 @@ If a WHERE condition is enclosed in parentheses, the values of next_title and pr
 MAX
 ===
 
-.. function:: MAX ( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
+.. function:: MAX([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression)
+.. function:: MAX([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression) OVER (<analytic_clause>)
 
     The **MAX** function is used as an aggregate function or an analytic function. It gets the greatest value of expressions of all rows. Only one *expression* is specified. For expressions that return character strings, the string that appears later in alphabetical order becomes the maximum value; for those that return numbers, the greatest value becomes the maximum value.
 
@@ -891,7 +896,7 @@ The following example shows how to output the number of gold medals by year and 
 .. code-block:: sql
 
     SELECT host_year, nation_code, gold,
-    MAX(gold) OVER (PARTITION BY nation_code) mx_gold
+        MAX(gold) OVER (PARTITION BY nation_code) mx_gold
     FROM participant 
     WHERE nation_code LIKE 'AU%' 
     ORDER BY nation_code, host_year;
@@ -915,7 +920,7 @@ MEDIAN
 ======
 
 .. function:: MEDIAN(expression)
-.. function:: MEDIAN(expression) OVER ([partition_clause] order_by_clause)
+.. function:: MEDIAN(expression) OVER ([<partition_by_clause>])
 
     **MEDIAN** function is used as an aggregate function or an analytic function. It returns the median value. The median value is the value which is located on the middle between the minimum value and the maximum value.
     
@@ -967,7 +972,8 @@ The following is an example to be used as an analytic function. It returns the m
 MIN
 ===
 
-.. function:: MIN ( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
+.. function:: MIN([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression)
+.. function:: MIN([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression) OVER (<analytic_clause>)
 
     The **MIN** function is used as an aggregate function or an analytic function. It gets the smallest value of expressions of all rows. Only one *expression* is specified. For expressions that return character strings, the string that appears earlier in alphabetical order becomes the minimum value; for those that return numbers, the smallest value becomes the minimum value.
 
@@ -1011,11 +1017,10 @@ The following example shows how to output the number of gold medals by year and 
              2000  'AUT'                           2            0
              2004  'AUT'                           2            0
 
-
 NTH_VALUE
 =========
 
-.. function:: NTH_VALUE(expression, N) [{RESPECT|IGNORE} NULLS] OVER ([partition_clause] order_by_clause)
+.. function:: NTH_VALUE(expression, N) [{RESPECT|IGNORE} NULLS] OVER (<analytic_clause>)
 
     NTH_VALUE is used as an analytic function only. It returns an *expression* value of *N*\ -th row in the set of sorted values. 
 
@@ -1077,15 +1082,15 @@ The following is a query and results to run **NTH_VALUE** function by the value 
 
     ::
 
-        SQL1: LAST_VALUE(itemno) OVER(PARTITION BY groupid ORDER BY itemno) AS ret_val 
-        SQL2: LAST_VALUE(itemno) OVER(PARTITION BY groupid ORDER BY itemno NULLS FIRST) AS ret_val
+        SQL1: NTH_VALUE(itemno) OVER(PARTITION BY groupid ORDER BY itemno) AS ret_val 
+        SQL2: NTH_VALUE(itemno) OVER(PARTITION BY groupid ORDER BY itemno NULLS FIRST) AS ret_val
 
 NTILE
 =====
 
-.. function:: NTILE(expression) OVER ([partition_by_clause] [order_by_clause])
+.. function:: NTILE(expression) OVER ([<partition_by_clause>] <order_by_clause>)
 
-     **NTILE** is an analytic function. It divides an ordered data set into a number of buckets indicated by the input parameter value and assigns the appropriate bucket number from 1 to each row.
+    **NTILE** is an analytic function. It divides an ordered data set into a number of buckets indicated by the input parameter value and assigns the appropriate bucket number from 1 to each row.
 
     :param expression: the number of buckets. It specifies a certain expression which returns a number value. 
     :rtype: INT
@@ -1161,8 +1166,8 @@ The NTILE function equally divides the grade based on the number of rows, regard
 PERCENT_RANK
 ============
 
-.. function:: PERCENT_RANK(expression[, expression] ...) WITHIN GROUP (order_by_clause)
-.. function:: PERCENT_RANK() OVER ([partition_clause] order_by_clause)
+.. function:: PERCENT_RANK(expression[, expression] ...) WITHIN GROUP (<order_by_clause>)
+.. function:: PERCENT_RANK() OVER ([<partition_by_clause>] <order_by_clause>)
 
     **PERCENT_RANK** function is used as an aggregate function or an analytic function. It returns the relative position of the row in the group as a ranking percent. It is similar to **CUME_DIST** function(returns cumulated distribution value). The range of this function is from 0 to 1. The first value of **PERCENT_RANK** is always 0.
 
@@ -1331,7 +1336,7 @@ A row whose *id* is 5 is located at the fifth in the 10 rows whose *grade* is 1,
 RANK
 ====
 
-.. function:: RANK() OVER ( [partition_by_clause] [order_by_clause] )
+.. function:: RANK() OVER ([<partition_by_clause>] <order_by_clause>)
 
    **RANK** function is used as an analytic function only. The rank of the value in the column value group made by the **PARTITION BY** clause is calculated and output as **INTEGER**. When there is another identical rank, the next rank is the number adding the number of the same ranks. For example, when there are three rows of Rank 13, the next rank is 16, not 14. On the contrary, the :func:`DENSE_RANK` function calculates the next rank by adding 1 to the rank.
 
@@ -1401,7 +1406,7 @@ The following example shows output of the number of Olympic gold medals of each 
 ROW_NUMBER
 ==========
 
-.. function:: ROW_NUMBER() OVER ( [partition_by_clause] [order_by_clause] )
+.. function:: ROW_NUMBER() OVER ([<partition_by_clause>] <order_by_clause>)
 
     **ROW_NUMBER** function is used as an analytic function only. The rank of a row is one plus the number of distinct ranks that come before the row in question by using the **PARTITION BY** clause and outputs as **INTEGER**.
 
@@ -1468,8 +1473,10 @@ The following example shows output of the serial number according to the number 
 STDDEV, STDDEV_POP
 ==================
 
-.. function:: STDDEV( [ DISTINCT | DISTINCTROW | UNIQUE | ALL] expression )
-.. function:: STDDEV_POP( [ DISTINCT | DISTINCTROW | UNIQUE | ALL] expression )
+.. function:: STDDEV([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression)
+.. function:: STDDEV_POP([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression)
+.. function:: STDDEV([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression) OVER (<analytic_clause>)
+.. function:: STDDEV_POP([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression) OVER (<analytic_clause>)
 
     The functions **STDDEV** and **STDDEV_POP** are used interchangeably and they are used as an aggregate function or an analytic function. They return a standard variance of the values calculated for all rows. The **STDDEV_POP** function is a standard of the SQL:1999. Only one *expression* is specified as a parameter. If the **DISTINCT** or **UNIQUE** keyword is inserted before the expression, they calculate the sample standard variance after deleting duplicates; if keyword is omitted or **ALL**, they it calculate the sample standard variance for all values.
 
@@ -1540,7 +1547,8 @@ The following example shows how to output the score and population standard vari
 STDDEV_SAMP
 ===========
 
-.. function:: STDDEV_SAMP( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
+.. function:: STDDEV_SAMP([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression)
+.. function:: STDDEV_SAMP([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression) OVER (<analytic_clause>)
 
     The **STDDEV_SAMP** function is used as an aggregate function or an analytic function. It calculates the sample standard variance. Only one *expression* is specified as a parameter. If the **DISTINCT** or **UNIQUE** keyword is inserted before the expression, it calculates the sample standard variance after deleting duplicates; if a keyword is omitted or **ALL**, it calculates the sample standard variance for all values.
 
@@ -1610,6 +1618,7 @@ SUM
 ===
 
 .. function:: SUM ( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
+.. function:: SUM ( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression ) OVER (<analytic_clause>)
 
     The **SUM** function is used as an aggregate function or an analytic function. It returns the sum of expressions of all rows. Only one *expression* is specified as a parameter. You can get the sum without duplicates by inserting the **DISTINCT** or **UNIQUE** keyword in front of the expression, or get the sum of all values by omitting the keyword or by using **ALL**.
 
@@ -1693,8 +1702,10 @@ The following example is removing the "ORDER BY host_year" clause under the **OV
 VARIANCE, VAR_POP
 =================
 
-.. function:: VAR_POP( [ DISTINCT | UNIQUE | ALL] expression )
-.. function:: VARIANCE( [ DISTINCT | UNIQUE | ALL] expression )
+.. function:: VARIANCE([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression)
+.. function:: VAR_POP([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression)
+.. function:: VARIANCE([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression) OVER (<analytic_clause>)
+.. function:: VAR_POP([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression) OVER (<analytic_clause>)
 
     The functions **VARPOP** and **VARIANCE** are used interchangeably and they are used as an aggregate function or an analytic function. They return a variance of expression values for all rows. Only one *expression* is specified as a parameter. If the **DISTINCT** or **UNIQUE** keyword is inserted before the expression, they calculate the population variance after deleting duplicates; if the keyword is omitted or **ALL**, they calculate the sample population variance for all values.
 
@@ -1762,7 +1773,8 @@ The following example shows how to output the score and population variance of a
 VAR_SAMP
 ========
 
-.. function:: VAR_SAMP( [ DISTINCT | UNIQUE | ALL] expression )
+.. function:: VAR_SAMP([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression)
+.. function:: VAR_SAMP([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression) OVER (<analytic_clause>)
 
     The **VAR_SAMP** function is used as an aggregate function or an analytic function. It returns the sample variance. The denominator is the number of all rows - 1. Only one *expression* is specified as a parameter. If the **DISTINCT** or **UNIQUE** keyword is inserted before the expression, it calculates the sample variance after deleting duplicates and if the keyword is omitted or **ALL**, it calculates the sample variance for all values.
 

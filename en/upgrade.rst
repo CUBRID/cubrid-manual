@@ -60,6 +60,8 @@ Since the DB volume of CUBRID 9.3 is compatible with the DB volume of CUBRID 9.2
 Parameter configuration
 ^^^^^^^^^^^^^^^^^^^^^^^
 
+**cubrid.conf**
+
 *   The minimum size of log_buffer_size is changed from 48KB(3*1page, 16KB=1page) into 2MB(128*1page, 16KB=1page); therefore, this value should be larger than the changed minimum size.
 
 .. _up-from-91:
@@ -130,6 +132,7 @@ Parameter configuration
 
 **cubrid.conf**
 
+*   The minimum size of log_buffer_size is changed from 48KB(3*1page, 16KB=1page) into 2MB(128*1page, 16KB=1page); therefore, this value should be larger than the changed minimum size.
 *   The value of sort_buffer_size should be configured as 2G or less since the maximum value of sort_buffer_size is 2G.
 *   In the following parameters, the old parameters will be deprecated and the new parameters are recommended to use. the value in the parenthesis is the unit of the value when the unit is omitted, and the new parameters can specify the unit after the value. For details, see each parameter's explanation in :doc:`/admin/config`
 
@@ -251,6 +254,7 @@ Parameter configuration
 
 **cubrid.conf**
 
+*   The minimum size of log_buffer_size is changed from 48KB(3*1page, 16KB=1page) into 2MB(128*1page, 16KB=1page); therefore, this value should be larger than the changed minimum size.
 *   The value of sort_buffer_size should be configured as 2G or less since the maximum value of sort_buffer_size is 2G.
 *   single_byte_compare should be deleted since this parameter is no longer used.
 *   intl_mbs_support should be deleted since this parameter is no longer used.
@@ -312,6 +316,7 @@ Parameter configuration
 
 **cubrid.conf**
 
+*   The minimum size of log_buffer_size is changed from 48KB(3*1page, 16KB=1page) into 2MB(128*1page, 16KB=1page); therefore, this value should be larger than the changed minimum size.
 *   The value of sort_buffer_size should be configured as 2G or less since the maximum value of sort_buffer_size is 2G.
 *   single_byte_compare should be deleted since this parameter is no longer used.
 *   intl_mbs_support should be deleted since this parameter is no longer used.

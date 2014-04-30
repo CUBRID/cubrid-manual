@@ -77,8 +77,8 @@ To create a table, use the **CREATE TABLE** statement.
 *   *column_name*: Specifies the name of the column to be created (maximum: 254 bytes).
 *   *column_type*: Specifies the data type of the column.
 *   [**SHARED** *value* | **DEFAULT** *value*]: Specifies the initial value of the column.
-*   *column_constraint*: Specifies the constraint of the column. Available constraints are **NOT NULL**, **UNIQUE**, **PRIMARY KEY** and **FOREIGN KEY** (see :ref:`constraint-definition` For details).
-*   <default_or_shared_or_ai>: only one of DEFAULT, SHARED, AUTO_INCREMENT can be used.
+*   <*column_constraint*>: Specifies the constraint of the column. Available constraints are **NOT NULL**, **UNIQUE**, **PRIMARY KEY** and **FOREIGN KEY**. For details, see :ref:`constraint-definition`.
+*   <*default_or_shared_or_ai*>: only one of DEFAULT, SHARED, AUTO_INCREMENT can be used.
     When AUTO_INCREMENT is specified, "(seed, increment)" and "AUTO_INCREMENT = initial_value" cannot be defined at the same time.
 
 .. code-block:: sql
@@ -443,7 +443,7 @@ FOREIGN KEY Constraint
 
 A foreign key is a column or a set of columns that references the primary key in other tables in order to maintain reference relationship. The foreign key and the referenced primary key must have the same data type. Consistency between two tables is maintained by the foreign key referencing the primary key, which is called referential integrity. ::
 
-    [CONSTRAINT < constraint_name >] FOREIGN KEY [<foreign_key_name>] (<column_name_comma_list1>) REFERENCES [referenced_table_name] (<column_name_comma_list2>) [<referential_triggered_action> ...]
+    [CONSTRAINT constraint_name] FOREIGN KEY [foreign_key_name] (<column_name_comma_list1>) REFERENCES [referenced_table_name] (<column_name_comma_list2>) [<referential_triggered_action> ...]
      
         <referential_triggered_action> ::=
             ON UPDATE <referential_action> |
@@ -454,21 +454,21 @@ A foreign key is a column or a set of columns that references the primary key in
 *   *constraint_name*: Specifies the name of the table to be created.
 *   *foreign_key_name*: Specifies a name of the **FOREIGN KEY** constraint. You can skip the name specification. However, if you specify this value, *constraint_name* will be ignored, and the specified value will be used.
 
-*   <column_name_comma_list1>: Specifies the name of the column to be defined as a foreign key after the **FOREIGN KEY** keyword. The column number of foreign keys defined and primary keys must be same.
+*   <*column_name_comma_list1*>: Specifies the name of the column to be defined as a foreign key after the **FOREIGN KEY** keyword. The column number of foreign keys defined and primary keys must be same.
 *   *referenced_table_name*: Specifies the name of the table to be referenced.
 
-*   <column_name_comma_list2>: Specifies the name of the referred primary key column after the **FOREIGN KEY** keyword.
-*   *referential_triggered_action* : Specifies the trigger action that responds to a certain operation in order to maintain referential integrity. **ON UPDATE** or **ON DELETE** can be specified. Each action can be defined multiple times, and the definition order is not significant.
+*   <*column_name_comma_list2*>: Specifies the name of the referred primary key column after the **FOREIGN KEY** keyword.
+*   <*referential_triggered_action*>: Specifies the trigger action that responds to a certain operation in order to maintain referential integrity. **ON UPDATE** or **ON DELETE** can be specified. Each action can be defined multiple times, and the definition order is not significant.
 
-    *   **ON UPDATE** : Defines the action to be performed when attempting to update the primary key referenced by the foreign key. You can use either **NO ACTION**, **RESTRICT**, or **SET NULL** option. The default is **RESTRICT**.
-    *   **ON DELETE** : Defines the action to be performed when attempting to delete the primary key referenced by the foreign key. You can use **NO ACTION**, **RESTRICT**, **CASCADE**, or **SET NULL** option. The default is **RESTRICT**.
+    *   **ON UPDATE**: Defines the action to be performed when attempting to update the primary key referenced by the foreign key. You can use either **NO ACTION**, **RESTRICT**, or **SET NULL** option. The default is **RESTRICT**.
+    *   **ON DELETE**: Defines the action to be performed when attempting to delete the primary key referenced by the foreign key. You can use **NO ACTION**, **RESTRICT**, **CASCADE**, or **SET NULL** option. The default is **RESTRICT**.
 
-*   *referential_ action* : You can define an option that determines whether to maintain the value of the foreign key when the primary key value is deleted or updated.
+*   <*referential_action*>: You can define an option that determines whether to maintain the value of the foreign key when the primary key value is deleted or updated.
 
-    *   **CASCADE** : If the primary key is deleted, the foreign key is deleted as well. This option is supported only for the **ON DELETE** operation.
-    *   **RESTRICT** : Prevents the value of the primary key from being deleted or updated, and rolls back any transaction that has been attempted.
-    *   **SET NULL** : When a specific record is being deleted or updated, the column value of the foreign key is updated to **NULL**.
-    *   **NO ACTION** : Its behavior is the same as that of the **RESTRICT** option.
+    *   **CASCADE**: If the primary key is deleted, the foreign key is deleted as well. This option is supported only for the **ON DELETE** operation.
+    *   **RESTRICT**: Prevents the value of the primary key from being deleted or updated, and rolls back any transaction that has been attempted.
+    *   **SET NULL**: When a specific record is being deleted or updated, the column value of the foreign key is updated to **NULL**.
+    *   **NO ACTION**: Its behavior is the same as that of the **RESTRICT** option.
 
 .. code-block:: sql
 
@@ -711,12 +711,12 @@ You can create a new table that contains the result records of the **SELECT** st
 
 ::
 
-    CREATE {TABLE | CLASS} <table_name> [(<column_definition> [,<table_constraint>], ...)] [REPLACE] AS <select_statement>;
+    CREATE {TABLE | CLASS} table_name [(<column_definition> [,<table_constraint>], ...)] [REPLACE] AS <select_statement>;
 
 *   *table_name*: A name of the table to be created.
-*   *column_definition*: Defines a column. If it is omitted, the column schema of **SELECT** statement is replicated; however, the constraint or the **AUTO_INCREMENT** attribute is not replicated.
-*   *table_constraint*: Defines table constraint.
-*   *select_statement*: A **SELECT** statement targeting a source table that already exists in the database.
+*   <*column_definition*>: Defines a column. If it is omitted, the column schema of **SELECT** statement is replicated; however, the constraint or the **AUTO_INCREMENT** attribute is not replicated.
+*   <*table_constraint*>: Defines table constraint.
+*   <*select_statement*>: A **SELECT** statement targeting a source table that already exists in the database.
 
 .. code-block:: sql
 
@@ -918,7 +918,7 @@ You can add a new column by using the **ADD COLUMN** clause. You can specify the
                         <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
 
 *   *table_name*: Specifies the name of a table that has a column to be added.
-*   *column_definition*: Specifies the name(max 254 bytes), data type, and constraints of a column to be added.
+*   <*column_definition*>: Specifies the name(max 254 bytes), data type, and constraints of a column to be added.
 *   **AFTER** *oid_column_name*: Specifies the name of an existing column before the column to be added.
 
 .. code-block:: sql
@@ -1022,7 +1022,7 @@ By default, the index created when you add **PRIMARY KEY** constraints is create
                 <referential_constraint>
             }
      
-            <referential_constraint> ::= FOREIGN KEY [<foreign_key_name>](column_name, ...) <referential_definition>
+            <referential_constraint> ::= FOREIGN KEY [foreign_key_name](column_name, ...) <referential_definition>
          
                 <referential_definition> ::=
                     REFERENCES [referenced_table_name] (column_name, ...) [<referential_triggered_action> ...]
@@ -1033,10 +1033,10 @@ By default, the index created when you add **PRIMARY KEY** constraints is create
 
                         <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
 
-*   *table_name* : Specifies the name of a table that has a constraint to be added.
-*   *constraint_name* : Specifies the name of a constraint to be added, or it can be omitted. If omitted, a name is automatically assigned(maximum: 254 bytes).
-*   *foreign_key_name* : Specifies a name of the **FOREIGN KEY** constraint. You can skip the name specification. However, if you specify this value, *constraint_name* will be ignored, and the specified value will be used.
-*   *column_constraint* : Defines a constraint for the specified column. For details, see :ref:`constraint-definition`.
+*   *table_name*: Specifies the name of a table that has a constraint to be added.
+*   *constraint_name*: Specifies the name of a constraint to be added, or it can be omitted. If omitted, a name is automatically assigned(maximum: 254 bytes).
+*   *foreign_key_name*: Specifies a name of the **FOREIGN KEY** constraint. You can skip the name specification. However, if you specify this value, *constraint_name* will be ignored, and the specified value will be used.
+*   <*table_constraint*>: Defines a constraint for the specified table. For details, see :ref:`constraint-definition`.
 
 .. code-block:: sql
 

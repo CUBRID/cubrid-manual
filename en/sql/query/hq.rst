@@ -535,8 +535,10 @@ The belows shows to output dates of March, 2013(201303) with a hierarchical quer
         )
         CONNECT BY LEVEL <= LAST_DAY(base_month) - base_month + 1
     );
-    
-      h_date
+
+::
+
+    h_date
     ======================
       '20130301'
       '20130302'

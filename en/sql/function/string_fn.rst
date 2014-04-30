@@ -36,7 +36,7 @@ If **pipes_as_concat** that is a parameter related to SQL statement is set to **
      
 .. code-block:: sql
 
-    SELECT 'cubrid' || ',' || B'0010' ||B'0000' ||B'0000' ||B'1000';;
+    SELECT 'cubrid' || ',' || B'0010' ||B'0000' ||B'0000' ||B'1000';
     
 ::
 
@@ -2024,7 +2024,7 @@ If collation is utf8_bin, it is not changed.
     ======================
       '?'
 
-If collation is utf8_ro_RO, '?' can be changed.
+If collation is utf8_ro_RO, this can be changed.
 
 .. code-block:: sql
 
@@ -2034,5 +2034,5 @@ If collation is utf8_ro_RO, '?' can be changed.
        upper(_utf8'?' COLLATE utf8_ro_cs)
     ======================
       '?'
-   
-CUBRID가 지원하는 콜레이션에 관한 상세한 설명은 :ref:`cubrid-all-collation`\ 을 참고한다.
+
+Regarding collations which CUBRID supports, see :ref:`cubrid-all-collation`.

@@ -23,22 +23,22 @@ For arithmetic operators, there are binary operators for addition, subtraction, 
             <set_arithmetic_operator> |
             <arithmetic_operator>
      
-            <arithmetic_operator> ::=
-                + |
-                - |
-                * |
-                { / | DIV } |
-                { % | MOD }
-     
-            <set_arithmetic_operator> ::=
-                UNION |
-                DIFFERENCE |
-                { INTERSECT | INTERSECTION }
+                <arithmetic_operator> ::=
+                    + |
+                    - |
+                    * |
+                    { / | DIV } |
+                    { % | MOD }
+         
+                <set_arithmetic_operator> ::=
+                    UNION |
+                    DIFFERENCE |
+                    { INTERSECT | INTERSECTION }
 
 *   <*expression*>: Declares the mathematical operation to be calculated.
 *   <*mathematical_operator*>: A operator that performs an operation the arithmetic and the set operators are applicable.
-*   <*set_arithmetic_operator*>: A set arithmetic operator that performs operations such as union, difference and intersection on collection type operands.
-*   <*arithmetic_operator*>: An operator to perform the four fundamental arithmetic operations.
+    *   <*set_arithmetic_operator*>: A set arithmetic operator that performs operations such as union, difference and intersection on collection type operands.
+    *   <*arithmetic_operator*>: An operator to perform the four fundamental arithmetic operations.
 
 The following table shows the arithmetic operators supported by CUBRID and their return values.
 
@@ -74,21 +74,16 @@ All numeric data types can be used for arithmetic operations. The result type of
 +--------------+--------------+---------------------+--------------+--------------+
 |              | INT          | NUMERIC             | FLOAT        | DOUBLE       |
 +==============+==============+=====================+==============+==============+
-| **INT**      | INT          |   NUMERIC           |   FLOAT      |   DOUBLE     |
-|              | (            |                     |              |              |
+| **INT**      | INT or       | NUMERIC             | FLOAT        | DOUBLE       |
 |              | BIGINT       |                     |              |              |
-|              | )            |                     |              |              |
 +--------------+--------------+---------------------+--------------+--------------+
-| **NUMERIC**  |   NUMERIC    | NUMERIC             |   DOUBLE     |   DOUBLE     |
-|              |              | (                   |              |              |
-|              |              | p                   |              |              |
-|              |              | and                 |              |              |
-|              |              | s                   |              |              |
-|              |              | are also converted) |              |              |
+| **NUMERIC**  | NUMERIC      | NUMERIC             | DOUBLE       | DOUBLE       |
+|              |              | (p and s are also   |              |              |
+|              |              | converted)          |              |              |
 +--------------+--------------+---------------------+--------------+--------------+
-| **FLOAT**    |   FLOAT      |   DOUBLE            |   FLOAT      |   DOUBLE     |
+| **FLOAT**    | FLOAT        | DOUBLE              | FLOAT        | DOUBLE       |
 +--------------+--------------+---------------------+--------------+--------------+
-| **DOUBLE**   |   DOUBLE     |   DOUBLE            |   DOUBLE     |   DOUBLE     |
+| **DOUBLE**   | DOUBLE       | DOUBLE              | DOUBLE       | DOUBLE       |
 +--------------+--------------+---------------------+--------------+--------------+
 
 Note that the result type of the operation does not change if all operands are of the same data type but type casting occurs exceptionally in division operations. An error occurs when a denominator, i.e. a divisor, is 0.

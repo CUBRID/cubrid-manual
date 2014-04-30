@@ -2716,7 +2716,7 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
 
         The following example shows how to update user ID information to *uid* in the *testdb* database which belongs to a CM user named *testcm* . 
 
-::
+        ::
 
             cm_admin changedbinfo -u uid testcm testdb
 
@@ -2726,7 +2726,7 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
 
         The following example shows how to update host IP information to *10.34.63.132* in the *testdb* database which belongs to a CM user named *testcm* . 
 
-::
+        ::
 
             cm_admin changedbinfo -h 10.34.63.132 testcm testdb
 
@@ -2734,6 +2734,8 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
 
         Specifies the port number of a broker used when clients access a database.
 
-        The following example shows how to update broker port information to *33000* in the *testdb* database which belongs to a CM user named *testcm* . ::
+        The following example shows how to update broker port information to *33000* in the *testdb* database which belongs to a CM user named *testcm* .
+        
+        ::
 
             cm_admin changedbinfo -p 33000 testcm testdb

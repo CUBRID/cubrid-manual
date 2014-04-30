@@ -37,9 +37,10 @@ You can insert a new record into a table in a database by using the **INSERT** s
 .. code-block:: sql
 
     CREATE TABLE a_tbl1(
-    id INT UNIQUE,
-    name VARCHAR,
-    phone VARCHAR DEFAULT '000-0000');
+        id INT UNIQUE,
+        name VARCHAR,
+        phone VARCHAR DEFAULT '000-0000'
+    );
      
     --insert default values with DEFAULT keyword before VALUES
     INSERT INTO a_tbl1 DEFAULT VALUES;

@@ -974,131 +974,131 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
 
     필터링된 인덱스 생성 조건과 질의 조건이 부합되지 않음에도 불구하고 인덱스 힌트 구문으로 인덱스를 명시하여 질의를 수행하면 명시된 인덱스를 선택하여 수행하므로, 주어진 검색 조건에 부합하지 않는 질의 결과를 출력할 수 있음에 주의한다.
 
-**제약 사항**
+.. note:: **제약 사항**
 
-필터링된 인덱스는 일반 인덱스만 허용한다. 예를 들어, 필터링된 유일한(unique) 인덱스는 허용하지 않는다. 또한, 필터링된 인덱스를 구성하는 칼럼 값이 모두 NULL이 가능한 경우는 허용하지 않는다. 
-예를 들어, 아래의 경우는 Author 값이 NULL일 수 있으므로 허용하지 않는다.
-
-.. code-block:: sql
-
-    CREATE INDEX idx_open_bugs ON bugs (Author) WHERE Closed = 0;
-
-::
-    
-    ERROR: before ' ; '
-    Invalid filter expression (bugs.Closed=0) for index.
-    
-하지만 아래의 경우는 Author 값이 NULL이더라도 CreationDate 값이 NULL일 수 없으므로 허용한다.
-
-.. code-block:: sql
-    
-    CREATE INDEX idx_open_bugs ON bugs (Author, CreationDate) WHERE Closed = 0;
-
-다음은 인덱스 필터 조건으로 허용하지 않는 경우이다.
-
-*   날짜/시간 함수 또는 랜덤 함수와 같이 입력이 같은데 결과가 매번 다른 함수
+    필터링된 인덱스는 일반 인덱스만 허용한다. 예를 들어, 필터링된 유일한(unique) 인덱스는 허용하지 않는다. 또한, 필터링된 인덱스를 구성하는 칼럼 값이 모두 NULL이 가능한 경우는 허용하지 않는다. 
+    예를 들어, 아래의 경우는 Author 값이 NULL일 수 있으므로 허용하지 않는다.
 
     .. code-block:: sql
 
-        CREATE INDEX idx ON bugs(creationdate) WHERE creationdate > SYS_DATETIME;
+        CREATE INDEX idx_open_bugs ON bugs (Author) WHERE Closed = 0;
 
     ::
-
-        ERROR: before ' ; '
-        'sys_datetime ' is not allowed in a filter expression for index.
-
-    .. code-block:: sql
-
-        CREATE INDEX idx ON bugs(bugID) WHERE bugID > RAND();
-
-    ::
-    
-        ERROR: before ' ; '
-        'rand ' is not allowed in a filter expression for index.
-    
-*   **OR** 연산자를 사용하는 경우
-
-    .. code-block:: sql
-
-        CREATE INDEX IDX ON bugs (bugID) WHERE bugID > 10 OR bugID = 3;
-    
-    ::     
-         
-        ERROR: before ' ; '
-        ' or ' is not allowed in a filter expression for index.
-
-*   :func:`INCR`, :func:`DECR` 함수와 같이 테이블의 데이터를 수정하는 함수를 포함한 경우
-
-*   시리얼 관련 함수와 의사 칼럼을 포함한 경우
-
-*   :func:`MIN`, :func:`MAX`, :func:`STDDEV` 등 집계 함수를 포함한 경우
-
-*   인덱스를 생성할 수 없는 타입을 사용하는 함수
-
-    -   SET 타입을 인자로 받는 연산자와 함수
-    -   LOB 파일을 생성하는 함수 (:func:`CHAR_TO_BLOB`, :func:`CHAR_TO_CLOB`, :func:`BIT_TO_BLOB`, :func:`BLOB_FROM_FILE`, :func:`CLOB_FROM_FILE`)
-
-*   **IS NULL** 연산자는 인덱스를 구성하는 칼럼들 중 적어도 하나가 **NULL** 이 아닐 경우에만 사용 가능
-
-    .. code-block:: sql
-    
-        CREATE TABLE t (a INT, b INT);
         
-        -- IS NULL cannot be used with expressions
-        CREATE INDEX idx ON t (a) WHERE (not a) IS NULL;
-
-    ::
-    
         ERROR: before ' ; '
-        Invalid filter expression (( not t.a<>0) is null ) for index.
-         
-    .. code-block:: sql
-
-        CREATE INDEX idx ON t (a) WHERE (a+1) IS NULL;
+        Invalid filter expression (bugs.Closed=0) for index.
         
-    ::
-    
-        ERROR: before ' ; '
-        Invalid filter expression ((t.a+1) is null ) for index.
-
-    .. code-block:: sql
-         
-        -- At least one attribute must not be used with IS NULL
-        CREATE INDEX idx ON t(a,b) WHERE a IS NULL ;
-        
-    ::
-    
-        ERROR: before '  ; '
-        Invalid filter expression (t.a is null ) for index.
+    하지만 아래의 경우는 Author 값이 NULL이더라도 CreationDate 값이 NULL일 수 없으므로 허용한다.
 
     .. code-block:: sql
         
-        CREATE INDEX idx ON t(a,b) WHERE a IS NULL and b IS NULL;
+        CREATE INDEX idx_open_bugs ON bugs (Author, CreationDate) WHERE Closed = 0;
+
+    다음은 인덱스 필터 조건으로 허용하지 않는 경우이다.
+
+    *   날짜/시간 함수 또는 랜덤 함수와 같이 입력이 같은데 결과가 매번 다른 함수
+
+        .. code-block:: sql
+
+            CREATE INDEX idx ON bugs(creationdate) WHERE creationdate > SYS_DATETIME;
+
+        ::
+
+            ERROR: before ' ; '
+            'sys_datetime ' is not allowed in a filter expression for index.
+
+        .. code-block:: sql
+
+            CREATE INDEX idx ON bugs(bugID) WHERE bugID > RAND();
+
+        ::
         
-    ::
-    
-        ERROR: before ' ; '
-        Invalid filter expression (t.a is null  and t.b is null ) for index.
-
-    .. code-block:: sql
+            ERROR: before ' ; '
+            'rand ' is not allowed in a filter expression for index.
         
-        CREATE INDEX idx ON t(a,b) WHERE a IS NULL and b IS NOT NULL;
+    *   **OR** 연산자를 사용하는 경우
 
-*   필터링된 인덱스에 대한 인덱스 스킵 스캔(ISS)은 지원되지 않는다.
-*   필터링된 인덱스에서 사용되는 조건 문자열의 길이는 128자로 제한한다.
+        .. code-block:: sql
 
-    .. code-block:: sql
+            CREATE INDEX IDX ON bugs (bugID) WHERE bugID > 10 OR bugID = 3;
+        
+        ::     
+             
+            ERROR: before ' ; '
+            ' or ' is not allowed in a filter expression for index.
 
-        CREATE TABLE t(VeryLongColumnNameOfTypeInteger INT);
+    *   :func:`INCR`, :func:`DECR` 함수와 같이 테이블의 데이터를 수정하는 함수를 포함한 경우
+
+    *   시리얼 관련 함수와 의사 칼럼을 포함한 경우
+
+    *   :func:`MIN`, :func:`MAX`, :func:`STDDEV` 등 집계 함수를 포함한 경우
+
+    *   인덱스를 생성할 수 없는 타입을 사용하는 함수
+
+        -   SET 타입을 인자로 받는 연산자와 함수
+        -   LOB 파일을 생성하는 함수 (:func:`CHAR_TO_BLOB`, :func:`CHAR_TO_CLOB`, :func:`BIT_TO_BLOB`, :func:`BLOB_FROM_FILE`, :func:`CLOB_FROM_FILE`)
+
+    *   **IS NULL** 연산자는 인덱스를 구성하는 칼럼들 중 적어도 하나가 **NULL** 이 아닐 경우에만 사용 가능
+
+        .. code-block:: sql
+        
+            CREATE TABLE t (a INT, b INT);
             
-        CREATE INDEX idx ON t(VeryLongColumnNameOfTypeInteger) 
-        WHERE VeryLongColumnNameOfTypeInteger > 3 AND VeryLongColumnNameOfTypeInteger < 10 AND 
-        SQRT(VeryLongColumnNameOfTypeInteger) < 3 AND SQRT(VeryLongColumnNameOfTypeInteger) < 10;
+            -- IS NULL cannot be used with expressions
+            CREATE INDEX idx ON t (a) WHERE (not a) IS NULL;
+
+        ::
         
-    ::
-    
-        ERROR: before ' ; '
-        The maximum length of filter predicate string must be 128.
+            ERROR: before ' ; '
+            Invalid filter expression (( not t.a<>0) is null ) for index.
+             
+        .. code-block:: sql
+
+            CREATE INDEX idx ON t (a) WHERE (a+1) IS NULL;
+            
+        ::
+        
+            ERROR: before ' ; '
+            Invalid filter expression ((t.a+1) is null ) for index.
+
+        .. code-block:: sql
+             
+            -- At least one attribute must not be used with IS NULL
+            CREATE INDEX idx ON t(a,b) WHERE a IS NULL ;
+            
+        ::
+        
+            ERROR: before '  ; '
+            Invalid filter expression (t.a is null ) for index.
+
+        .. code-block:: sql
+            
+            CREATE INDEX idx ON t(a,b) WHERE a IS NULL and b IS NULL;
+            
+        ::
+        
+            ERROR: before ' ; '
+            Invalid filter expression (t.a is null  and t.b is null ) for index.
+
+        .. code-block:: sql
+            
+            CREATE INDEX idx ON t(a,b) WHERE a IS NULL and b IS NOT NULL;
+
+    *   필터링된 인덱스에 대한 인덱스 스킵 스캔(ISS)은 지원되지 않는다.
+    *   필터링된 인덱스에서 사용되는 조건 문자열의 길이는 128자로 제한한다.
+
+        .. code-block:: sql
+
+            CREATE TABLE t(VeryLongColumnNameOfTypeInteger INT);
+                
+            CREATE INDEX idx ON t(VeryLongColumnNameOfTypeInteger) 
+            WHERE VeryLongColumnNameOfTypeInteger > 3 AND VeryLongColumnNameOfTypeInteger < 10 AND 
+            SQRT(VeryLongColumnNameOfTypeInteger) < 3 AND SQRT(VeryLongColumnNameOfTypeInteger) < 10;
+            
+        ::
+        
+            ERROR: before ' ; '
+            The maximum length of filter predicate string must be 128.
 
 .. _function-index:
 

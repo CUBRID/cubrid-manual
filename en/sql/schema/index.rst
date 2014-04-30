@@ -5,7 +5,7 @@ Index
 CREATE INDEX
 ============
 
-Creates an index to a specified table by using the **CREATE INDEX** statement. For how to write index name, :doc:`/sql/identifier`.
+Creates an index to a specified table by using the **CREATE INDEX** statement. Regarding writing index name, see :doc:`/sql/identifier`.
 
 For how to use indexes on the **SELECT** statement like Using SQL Hint, Descending Index, Covering Index, Index Skip Scan, **ORDER BY** Optimization and **GROUP BY** Optimization, and how to create Filtered Index and Function-based Index, see :doc:`/sql/tuning`.
 

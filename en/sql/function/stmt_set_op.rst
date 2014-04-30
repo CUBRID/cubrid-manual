@@ -31,22 +31,22 @@ The following table shows statement set operators supported by CUBRID.
 
 **Statement Set Operators**
 
-+----------------------------+-----------------------------+---------------------------------------------------------+
-| Statement Set Operator     | Description                 | Note                                                    |
-+============================+=============================+=========================================================+
-| **UNION**                  | Union                       | Outputs all instance results containing duplicates with |
-|                            | Duplicates are not allowed. | **UNION ALL**                                           |
-+----------------------------+-----------------------------+---------------------------------------------------------+
-| **DIFFERENCE**             | Difference                  | Same as the                                             |
-|                            | Duplicates are not allowed. | **EXCEPT** operator.                                    |
-|                            |                             | Outputs all instance results containing duplicates with |
-|                            |                             | **DIFFERENCE ALL**.                                     |
-+----------------------------+-----------------------------+---------------------------------------------------------+
-| **INTERSECTION**           | Intersection                | Same as the                                             |
-|                            | Duplicates are not allowed. | **INTERSECTION** operator.                              |
-|                            |                             | Outputs all instance results containing duplicates with |
-|                            |                             | **INTERSECTION ALL**.                                   |
-+----------------------------+-----------------------------+---------------------------------------------------------+
++------------------------+-----------------------------+---------------------------------------------------------+
+| Statement Set Operator | Description                 | Note                                                    |
++========================+=============================+=========================================================+
+| **UNION**              | Union                       | Outputs all instance results containing duplicates with |
+|                        | Duplicates are not allowed. | **UNION ALL**                                           |
++------------------------+-----------------------------+---------------------------------------------------------+
+| **DIFFERENCE**         | Difference                  | Same as the                                             |
+|                        | Duplicates are not allowed. | **EXCEPT** operator.                                    |
+|                        |                             | Outputs all instance results containing duplicates with |
+|                        |                             | **DIFFERENCE ALL**.                                     |
++------------------------+-----------------------------+---------------------------------------------------------+
+| **INTERSECTION**       | Intersection                | Same as the                                             |
+|                        | Duplicates are not allowed. | **INTERSECTION** operator.                              |
+|                        |                             | Outputs all instance results containing duplicates with |
+|                        |                             | **INTERSECTION ALL**.                                   |
++------------------------+-----------------------------+---------------------------------------------------------+
 
 The following are the examples which execute queries with statement set operators.
 

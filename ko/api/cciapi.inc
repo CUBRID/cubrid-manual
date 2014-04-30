@@ -2423,7 +2423,7 @@ CCI API 레퍼런스
     
     자바 저장 프로시저로 등록할 클래스를 구현하고 컴파일한다.
     
-    ::
+    .. code-block:: java
     
         public class SpCubrid{
             public static void outTest(String[] o) {
@@ -2441,15 +2441,17 @@ CCI API 레퍼런스
         
     로딩한 Java 클래스를 등록한다.
     
-    ::
+    .. code-block:: sql
         
-        csql> CREATE PROCEDURE test_out(x OUT STRING)
+        -- csql> 
+        
+        CREATE PROCEDURE test_out(x OUT STRING)
         AS LANGUAGE JAVA
         NAME 'SpCubrid.outTest(java.lang.String[] o)';
         
     CCI 응용 프로그램에서 cci_prepare 함수의 플래그에 CCI_PREPARE_CALL을 지정하고, cci_register_out_param 함수로 아웃 바인드 파라미터 위치를 지정한 후 실행 결과를 페치하여 가져온다. 
     
-    ::
+    .. code-block:: c
 
         // On Linux, compile with "gcc -g -o jsp jsp.c -I$CUBRID/include/ -L$CUBRID/lib/ -lcascci -lpthread"
         

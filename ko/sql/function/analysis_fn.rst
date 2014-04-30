@@ -161,25 +161,25 @@
 
 대부분의 집계 함수는 **DISTINCT**, **UNIQUE** 제약 조건을 사용할 수 있다. **GROUP BY ... HAVING** 절에 대해서는 :ref:`group-by-clause` 을 참고한다.
 
-**분석 함수(analytic functions)**\ 는 행들의 결과에 기반하여 집계 값을 계산한다. 분석 함수는 **OVER** 절 뒤의 *partition_clause* 에 의해 지정된 그룹들(이 절이 생략되면 모든 행을 하나의 그룹으로 봄)을 기준으로 한 개 이상의 행을 반환할 수 있다는 점에서 집계 함수와 다르다.
+**분석 함수(analytic functions)**\ 는 행들의 결과에 기반하여 집계 값을 계산한다. 분석 함수는 **OVER** 절 뒤의 <*partition_by_clause*>\에 의해 지정된 그룹들(이 절이 생략되면 모든 행을 하나의 그룹으로 봄)을 기준으로 한 개 이상의 행을 반환할 수 있다는 점에서 집계 함수와 다르다.
 
 분석 함수는 특정 행 집합에 대해 다양한 통계를 허용하기 위해 기존의 집계 함수들 일부에 **OVER** 라는 새로운 분석 절이 함께 사용된다. ::
 
-    function_name ( [argument_list ] ) OVER (<analytic_clause>)
+    function_name ([<argument_list>]) OVER (<analytic_clause>)
      
     <analytic_clause>::=
-         [ <partition_clause> ] [ <order_by_clause> ]
+         [<partition_by_clause>] [<order_by_clause>]
         
-    <partition_clause>::=
-        PARTITION BY value_expr [, value_expr ]...
+    <partition_by_clause>::=
+        PARTITION BY value_expr[, value_expr]...
      
     <order_by_clause>::=
-        ORDER BY { expr | position | column_alias } [ ASC | DESC ]
-            [, { expr | position | column_alias } [ ASC | DESC ] ] ...
+        ORDER BY { expression | position | column_alias } [ ASC | DESC ]
+            [, { expression | position | column_alias } [ ASC | DESC ] ] ...
 
-*   <*partition_clause*> : 하나 이상의 *value_expr* 에 기반한 그룹들로, 질의 결과를 분할하기 위해 **PARTITION BY** 절을 사용한다.
+*   <*partition_by_clause*>: 하나 이상의 *value_expr* 에 기반한 그룹들로, 질의 결과를 분할하기 위해 **PARTITION BY** 절을 사용한다.
 
-*   <*order_by_clause*> : <*partition_clause*>에 의한 분할(partition) 내에서 데이터의 정렬 방식을 명시한다. 여러 개의 키로 정렬할 수 있다. <*partition_clause*>가 생략될 경우 전체 결과 셋 내에서 데이터를 정렬한다. 정렬된 순서에 의해 이전 값을 포함하여 누적한 레코드의 컬럼 값을 대상으로 함수를 적용하여 계산한다.
+*   <*order_by_clause*>: <*partition_by_clause*>에 의한 분할(partition) 내에서 데이터의 정렬 방식을 명시한다. 여러 개의 키로 정렬할 수 있다. <*partition_by_clause*>가 생략될 경우 전체 결과 셋 내에서 데이터를 정렬한다. 정렬된 순서에 의해 이전 값을 포함하여 누적한 레코드의 컬럼 값을 대상으로 함수를 적용하여 계산한다.
 
 분석 함수의 OVER 절 뒤에 함께 사용되는  ORDER BY/PARTITION BY 절의 표현식에 따른 동작 방식은 다음과 같다.
 
@@ -190,7 +190,8 @@
 AVG
 ===
 
-.. function:: AVG ( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
+.. function:: AVG ([ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression)
+.. function:: AVG ([ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression) OVER (<analytic_clause>)
 
     **AVG** 함수는 집계 함수 또는 분석 함수로 사용되며, 모든 행에 대한 연산식 값의 산술 평균을 구한다. 하나의 연산식 *expression* 만 인자로 지정되며, 연산식 앞에 **DISTINCT** 또는 **UNIQUE** 키워드를 포함시키면 연산식 값 중 중복을 제거한 후 평균을 구하고, 키워드가 생략되거나 **ALL** 인 경우에는 모든 값에 대해서 평균을 구한다.
 
@@ -203,7 +204,7 @@ AVG
 
 .. code-block:: sql
 
-    SELECT AVG (gold)
+    SELECT AVG(gold)
     FROM participant
     WHERE nation_code = 'KOR';
     
@@ -212,13 +213,13 @@ AVG
                      avg(gold)
     ==========================
          9.600000000000000e+00
- 
+
 다음은 *demodb* 에서 nation_code가 'AU'로 시작하는 국가에 대해 연도 별로 획득한 금메달 수와 해당 연도까지의 금메달 누적에 대한 평균 합계를 출력하는 예제이다.
 
 .. code-block:: sql
 
     SELECT host_year, nation_code, gold,
-        AVG (gold) OVER (PARTITION BY nation_code ORDER BY host_year) avg_gold
+        AVG(gold) OVER (PARTITION BY nation_code ORDER BY host_year) avg_gold
     FROM participant WHERE nation_code like 'AU%';
      
 ::
@@ -240,7 +241,7 @@ AVG
 
 .. code-block:: sql
 
-    SELECT host_year, nation_code, gold, AVG (gold) OVER (PARTITION BY nation_code) avg_gold
+    SELECT host_year, nation_code, gold, AVG(gold) OVER (PARTITION BY nation_code) avg_gold
     FROM participant WHERE nation_code LIKE 'AU%';
      
 ::
@@ -261,7 +262,10 @@ AVG
 COUNT
 =====
 
-.. function:: COUNT ( * | [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
+.. function:: COUNT (*)
+.. function:: COUNT (*) OVER (<analytic_clause>)
+.. function:: COUNT ([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression)
+.. function:: COUNT ([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression) OVER (<analytic_clause>)
 
     **COUNT** 함수는 집계 함수 또는 분석 함수로 사용되며,  질의문이 반환하는 결과 행들의 개수를 반환한다. 별표(*)를 지정하면 조건을 만족하는 모든 행(**NULL** 값을 가지는 행 포함)의 개수를 반환하며, **DISTINCT** 또는 **UNIQUE** 키워드를 연산식 앞에 지정하면 중복을 제거한 후 유일한 값을 가지는 행(**NULL** 값을 가지는 행은 포함하지 않음)의 개수만 반환한다. 따라서, 반환되는 값은 항상 정수이며, **NULL** 은 반환되지 않는다.
 
@@ -319,8 +323,8 @@ COUNT
 CUME_DIST
 =========
 
-.. function:: CUME_DIST(expression[, expression] ...) WITHIN GROUP (order_by_clause)
-.. function:: CUME_DIST() OVER ([partition_clause] order_by_clause)
+.. function:: CUME_DIST(expression[, expression] ...) WITHIN GROUP (<order_by_clause>)
+.. function:: CUME_DIST() OVER ([<partition_by_clause>] <order_by_clause>)
 
     **CUME_DIST** 함수는 집계 함수 또는 분석 함수로 사용되며, 그룹의 값 내에서 명시한 값의 누적 분포 값을 반환한다. **CUME_DIST**\ 에 의해 반환되는 값의 범위는 0보다 크고 1보다 작거나 같다. 같은 값의 입력 인자에 대한 **CUME_DIST** 함수의 반환 값은 항상 같은 누적 분포 값으로 평가된다.
 
@@ -334,7 +338,7 @@ CUME_DIST
 
 집계 함수인 경우, **CUME_DIST** 함수는 **ORDER BY** 절에 명시된 순서로 정렬한 후, 집계 그룹에 있는 행에서 가상(hypothetical) 행의 상대적인 위치를 반환한다. 이때, 가상 행이 새로 입력되는 것으로 간주하고 위치를 계산한다. 즉, ("어떤 행의 누적된 RANK" + 1)/("집계 그룹 전체 행의 개수" + 1)을 반환한다.
 
-분석 함수인 경우, **PARTITION BY**\ 에 의해 나누어진 그룹별로 각 행을 **ORDER BY** 절에 명시된 순서로 정렬한 후 그룹 내 값의 상대적인 위치를 반환한다. 상대적인 위치는 입력 인자 값보다 작거나 같은 값을 가진 행의 개수를 그룹 내 총 행(*partition_clause*\ 에 의해 그룹핑된 행 또는 전체 행)의 개수로 나눈 것이다. 즉, (어떤 행의 누적된 RANK)/(그룹 내 행의 개수)를 반환한다. 예를 들어, 전체 10개의 행 중에서 RANK가 1인 행의 개수가 2개이면 첫번째 행과 두번째 행의 **CUME_DUST** 값은 "2/10 = 0.2"가 된다. 
+분석 함수인 경우, **PARTITION BY**\ 에 의해 나누어진 그룹별로 각 행을 **ORDER BY** 절에 명시된 순서로 정렬한 후 그룹 내 값의 상대적인 위치를 반환한다. 상대적인 위치는 입력 인자 값보다 작거나 같은 값을 가진 행의 개수를 그룹 내 총 행(*partition_by_clause*\ 에 의해 그룹핑된 행 또는 전체 행)의 개수로 나눈 것이다. 즉, (어떤 행의 누적된 RANK)/(그룹 내 행의 개수)를 반환한다. 예를 들어, 전체 10개의 행 중에서 RANK가 1인 행의 개수가 2개이면 첫번째 행과 두번째 행의 **CUME_DUST** 값은 "2/10 = 0.2"가 된다. 
 
 다음은 이 함수의 예에서 사용될 스키마 및 데이터이다.
 
@@ -450,7 +454,7 @@ id가 5인 행은 *grade*\ 가 1인 10개의 행 중에서 다섯번째에 위�
 DENSE_RANK
 ==========
 
-.. function:: DENSE_RANK() OVER ( [partition_by_clause] [order_by_clause] )
+.. function:: DENSE_RANK() OVER ([<partition_by_clause>] <order_by_clause>)
 
     **DENSE_RANK** 함수는 분석 함수로만 사용되며, **PARTITION BY** 절에 의한 칼럼 값의 그룹에서 값의 순위를 계산하여 **INTEGER** 로 출력한다. 공동 순위가 존재해도 그 다음 순위는 1을 더한다. 예를 들어, 13위에 해당하는 행이 3개여도 그 다음 행의 순위는 16위가 아니라 14위가 된다. 반면, :func:`RANK` 함수는 이와 달리 공동 순위의 개수만큼을 더해 다음 순위의 값을 계산한다.
 
@@ -520,7 +524,7 @@ DENSE_RANK
 FIRST_VALUE
 ===========
 
-.. function:: FIRST_VALUE(expression) [{RESPECT|IGNORE} NULLS] OVER ([partition_clause] order_by_clause)
+.. function:: FIRST_VALUE(expression) [{RESPECT|IGNORE} NULLS] OVER (<analytic_clause>)
 
     **FIRST_VALUE** 함수는 분석 함수로만 사용되며, 정렬된 값 집합에서 첫번째 값을 반환한다. 집합 내의 첫번째 값이 null이면 함수는 **NULL**\ 을 반환한다. 그러나, **IGNORE NULLS**\ 를 명시하면 집합 내에서 null이 아닌 첫번째 값을 반환하거나, 모든 값이 null인 경우 **NULL**\ 을 반환한다.
 
@@ -610,7 +614,7 @@ FIRST_VALUE
 GROUP_CONCAT
 ============
 
-.. function:: GROUP_CONCAT( [DISTINCT] expression [ORDER BY {col | unsigned_int} [ASC | DESC]] [SEPARATOR str_val] )
+.. function:: GROUP_CONCAT([DISTINCT] expression [ORDER BY {column | unsigned_int} [ASC | DESC]] [SEPARATOR str_val])
 
     **GROUP_CONCAT** 함수는 집계 함수로만 사용되며,  그룹에서 **NULL** 이 아닌 값들을 연결하여 결과 문자열을 **VARCHAR** 타입으로 반환한다. 질의 결과 행이 없거나 **NULL** 값만 있으면 **NULL** 을 반환한다. 
     
@@ -671,7 +675,7 @@ GROUP_CONCAT
 LAG
 ===
 
-.. function:: LAG (expression[, offset[, default]]) OVER ( [partition_by_clause] [order_by_clause] )
+.. function:: LAG(expression[, offset[, default]]) OVER ([<partition_by_clause>] <order_by_clause>)
     
     **LAG** 함수는 분석 함수로만 사용되며 현재 행을 기준으로 *offset* 이전 행의 *expression* 값을 반환한다. 한 행에 자체 조인(self join) 없이 동시에 여러 개의 행에 접근하고 싶을 때 사용할 수 있다.
     
@@ -716,7 +720,7 @@ LAG
 LAST_VALUE
 ==========
 
-.. function:: LAST_VALUE(expression) [{RESPECT|IGNORE} NULLS] OVER ([partition_clause] order_by_clause)
+.. function:: LAST_VALUE(expression) [{RESPECT|IGNORE} NULLS] OVER (<analytic_clause>)
 
     LAST_VALUE 함수는 분석 함수로만 사용되며, 정렬된 값 집합에서 마지막 값을 반환한다. 집합 내의 마지막 값이 null이면 함수는 NULL을 반환한다. 그러나, IGNORE NULLS를 명시하면 집합 내에서 null이 아닌 마지막 값을 반환하거나, 모든 값이 null인 경우 NULL을 반환한다.
 
@@ -783,7 +787,7 @@ LAST_VALUE 함수는 현재 행을 기준으로 계산된다. 즉, 아직 바인
 LEAD
 ====
     
-.. function:: LEAD (expression, offset, default) OVER ( [partition_by_clause] [order_by_clause] )
+.. function:: LEAD(expression, offset, default) OVER ([<partition_by_clause>] <order_by_clause>)
 
     **LEAD** 함수는 분석 함수로만 사용되며, 현재 행을 기준으로 *offset* 이후 행의 *expression* 값을 반환한다. 한 행에 자체 조인(self join) 없이 동시에 여러 개의 행에 접근하고 싶을 때 사용할 수 있다.
 
@@ -865,7 +869,8 @@ WHERE 조건이 괄호 안에 있으면 하나의 행만 선택되고, 이전 �
 MAX
 ===
 
-.. function:: MAX ( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
+.. function:: MAX([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression)
+.. function:: MAX([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression) OVER (<analytic_clause>)
 
     **MAX** 함수는 집계 함수 또는 분석 함수로 사용되며,  모든 행에 대하여 연산식 값 중 최대 값을 구한다. 하나의 연산식 *expression* 만 인자로 지정된다. 문자열을 반환하는 연산식에 대해서는 사전 순서를 기준으로 뒤에 나오는 문자열이 최대 값이 되고, 수치를 반환하는 연산식에 대해서는 크기가 가장 큰 값이 최대 값이다.
 
@@ -915,7 +920,7 @@ MEDIAN
 ======
 
 .. function:: MEDIAN(expression)
-.. function:: MEDIAN(expression) OVER ([partition_clause])
+.. function:: MEDIAN(expression) OVER ([<partition_by_clause>])
 
     **MEDIAN** 함수는 집계 함수 또는 분석 함수로 사용되며, 중앙값(median value)을 반환한다. 중앙값은 데이터의 최소값과 최대값의 중앙에 위치하게 되는 값을 말한다.
     
@@ -967,7 +972,8 @@ MEDIAN
 MIN
 ===
 
-.. function:: MIN ( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
+.. function:: MIN([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression)
+.. function:: MIN([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression) OVER (<analytic_clause>)
 
     **MIN** 함수는 집계 함수 또는 분석 함수로 사용되며,  모든 행에 대하여 연산식 값 중 최소 값을 구한다. 하나의 연산식 *expression* 만 인자로 지정된다. 문자열을 반환하는 연산식에 대해서는 사전 순서를 기준으로 앞에 나오는 문자열이 최소 값이 되고, 수치를 반환하는 연산식에 대해서는 크기가 가장 작은 값이 최소 값이다.
 
@@ -1014,7 +1020,7 @@ MIN
 NTH_VALUE
 =========
 
-.. function:: NTH_VALUE(expression, N) [{RESPECT|IGNORE} NULLS] OVER ([partition_clause] order_by_clause)
+.. function:: NTH_VALUE(expression, N) [{RESPECT|IGNORE} NULLS] OVER (<analytic_clause>)
 
     **NTH_VALUE** 함수는 분석 함수로만 사용되며, 정렬된 값 집합에서 *N*\ 번째 행의 *expression* 값을 반환한다. 
 
@@ -1082,7 +1088,7 @@ NTH_VALUE
 NTILE
 =====
 
-.. function:: NTILE(expression) OVER ([partition_by_clause] [order_by_clause])
+.. function:: NTILE(expression) OVER ([<partition_by_clause>] <order_by_clause>)
 
     **NTILE** 함수는 분석 함수로만 사용되며, 순차적인 데이터 집합을 입력 인자 값에 의해 일련의 버킷으로 나누며, 각 행에 적당한 버킷 번호를 1부터 할당한다.
 
@@ -1160,8 +1166,8 @@ NTINE 함수는 점수의 범위와는 무관하게 행의 개수를 기준으�
 PERCENT_RANK
 ============
 
-.. function:: PERCENT_RANK(expression[, expression] ...) WITHIN GROUP (order_by_clause)
-.. function:: PERCENT_RANK() OVER ([partition_clause] order_by_clause)
+.. function:: PERCENT_RANK(expression[, expression] ...) WITHIN GROUP (<order_by_clause>)
+.. function:: PERCENT_RANK() OVER ([<partition_by_clause>] <order_by_clause>)
 
     PERCENT_RANK 함수는 집계 함수 또는 분석 함수로 사용되며, 그룹에서 행의 상대적인 위치를 순위 퍼센트로 반환한다. CUME_DIST 함수(누적 분포 값을 반환)와 유사하다. PERCENT_RANK가 반환하는 값의 범위는 0부터 1까지이다. PERCENT_RANK의 첫번째 값은 항상 0이다. 
 
@@ -1211,10 +1217,10 @@ VAL                  RANK()               DENSE_RANK()         CUME_DIST()      
     INSERT INTO test_tbl VALUES (100), (200), (200), (300), (400);
     
 
-    SELECT cume_dist(100) WITHIN GROUP (ORDER BY val) AS cume FROM test_tbl;
+    SELECT CUME_DIST(100) WITHIN GROUP (ORDER BY val) AS cume FROM test_tbl;
     SELECT PERCENT_RANK(100) WITHIN GROUP (ORDER BY val) AS pct_rnk FROM test_tbl;
 
-    SELECT cume_dist() OVER (ORDER BY val) AS cume FROM test_tbl;
+    SELECT CUME_DIST() OVER (ORDER BY val) AS cume FROM test_tbl;
     SELECT PERCENT_RANK() OVER (ORDER BY val) AS pct_rnk FROM test_tbl;
 
 다음은 아래에서 보여줄 질의에서 사용된 스키마 및 데이터이다.
@@ -1330,7 +1336,7 @@ id가 5인 행은 *grade*\ 가 1인 10개의 행 중에서 다섯번째에 위�
 RANK
 ====
 
-.. function:: RANK() OVER ( [partition_by_clause] [order_by_clause] )
+.. function:: RANK() OVER ([<partition_by_clause>] <order_by_clause>)
 
     RANK 함수는 분석 함수로만 사용되며, **PARTITION BY** 절에 의한 칼럼 값의 그룹에서 값의 순위를 계산하여 **INTEGER** 로 출력한다. 공동 순위가 존재하면 그 다음 순위는 공동 순위의 개수를 더한 숫자이다. 예를 들어, 13위에 해당하는 행이 3개이면 그 다음 행의 순위는 14위가 아니라 16위가 된다. 반면, :func:`DENSE_RANK` 함수는 이와 달리 순위에 1을 더해 다음 순위의 값을 계산한다.
 
@@ -1400,7 +1406,7 @@ RANK
 ROW_NUMBER
 ==========
 
-.. function:: ROW_NUMBER() OVER ( [partition_by_clause] [order_by_clause] )
+.. function:: ROW_NUMBER() OVER ([<partition_by_clause>] <order_by_clause>)
 
     **ROW_NUMBER** 함수는 분석 함수로만 사용되며, **PARTITION BY** 절에 의한 칼럼 값의 그룹에서 각 행에 고유한 일련번호를 1부터 순서대로 부여하여 **INTEGER** 로 출력한다.
 
@@ -1467,8 +1473,10 @@ ROW_NUMBER
 STDDEV, STDDEV_POP
 ==================
 
-.. function:: STDDEV( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
-.. function:: STDDEV_POP( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
+.. function:: STDDEV([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression)
+.. function:: STDDEV_POP([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression)
+.. function:: STDDEV([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression) OVER (<analytic_clause>)
+.. function:: STDDEV_POP([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression) OVER (<analytic_clause>)
 
     **STDDEV** 함수와 **STDDEV_POP** 함수는 동일하며, 이 함수는 집계 함수 또는 분석 함수로 사용된다. 이 함수는 모든 행에 대한 연산식 값들에 대한 표준편차, 즉 모표준 편차를 반환한다. **STDDEV_POP** 함수가 SQL:1999 표준이다. 하나의 연산식 *expression* 만 인자로 지정되며, 연산식 앞에 **DISTINCT** 또는 **UNIQUE** 키워드를 포함시키면 연산식 값 중 중복을 제거한 후, 모표준 편차를 구하고, 키워드가 생략되거나 **ALL** 인 경우에는 모든 값에 대해 모표준 편차를 구한다.
 
@@ -1539,7 +1547,8 @@ STDDEV, STDDEV_POP
 STDDEV_SAMP
 ===========
 
-.. function:: STDDEV_SAMP( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
+.. function:: STDDEV_SAMP([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression)
+.. function:: STDDEV_SAMP([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression) OVER (<analytic_clause>)
 
     **STDDEV_SAMP** 함수는 집계 함수 또는 분석 함수로 사용되며, 표본 표준편차를 구한다. 하나의 연산식 *expression* 만 인자로 지정되며, 연산식 앞에 **DISTINCT** 또는 **UNIQUE** 키워드를 포함시키면 연산식 값 중 중복을 제거한 후, 표본 표준편차를 구하고, 키워드가 생략되거나 **ALL** 인 경우에는 모든 값에 대해 표본 표준편차를 구한다.
 
@@ -1609,6 +1618,7 @@ SUM
 ===
 
 .. function:: SUM ( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
+.. function:: SUM ( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression ) OVER (<analytic_clause>)
 
     **SUM** 함수는 집계 함수 또는 분석 함수로 사용되며, 모든 행에 대한 연산식 값들의 합계를 반환한다. 하나의 연산식 *expression* 만 인자로 지정되며, 연산식 앞에 **DISTINCT** 또는 **UNIQUE** 키워드를 포함시키면 연산식 값 중 중복을 제거한 후 합계를 구하고, 키워드가 생략되거나 **ALL** 인 경우에는 모든 값에 대해 합계를 구한다. 단일 값 수식을 **SUM** 함수의 입력으로 사용할 수 있다.
 
@@ -1692,8 +1702,10 @@ SUM
 VARIANCE, VAR_POP
 =================
 
-.. function:: VARIANCE( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
-.. function:: VAR_POP( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
+.. function:: VARIANCE([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression)
+.. function:: VAR_POP([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression)
+.. function:: VARIANCE([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression) OVER (<analytic_clause>)
+.. function:: VAR_POP([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression) OVER (<analytic_clause>)
 
     **VARIANCE** 함수와 **VAR_POP** 함수는 동일하며, 집계 함수 또는 분석 함수로 사용된다. 이 함수는 모든 행에 대한 연산식 값들에 대한 분산, 즉 모분산을 반환한다. 분모는 모든 행의 개수이다. 하나의 연산식 *expression* 만 인자로 지정되며, 연산식 앞에 **DISTINCT** 또는 **UNIQUE** 키워드를 포함시키면 연산식 값 중 중복을 제거한 후, 모분산을 구하고, 키워드가 생략되거나 **ALL** 인 경우에는 모든 값에 대해 모분산을 구한다.
 
@@ -1761,7 +1773,8 @@ VARIANCE, VAR_POP
 VAR_SAMP
 ========
 
-.. function:: VAR_SAMP( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
+.. function:: VAR_SAMP([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression)
+.. function:: VAR_SAMP([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression) OVER (<analytic_clause>)
 
     **VAR_SAMP** 함수는 집계 함수 또는 분석 함수로 사용되며, 표본 분산을 반환한다. 분모는 모든 행의 개수 - 1이다. 하나의 *expression*\ 만 인자로 지정되며, *expression* 앞에 **DISTINCT** 또는 **UNIQUE** 키워드를 포함시키면 연산식 값 중 중복을 제거한 후, 표본 분산을 구하고, 키워드가 생략되거나 **ALL** 인 경우에는 모든 값에 대해 표본 분산을 구한다.
 

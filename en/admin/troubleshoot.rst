@@ -255,8 +255,8 @@ The following describes the error messages when copylogdb or applylogdb process 
 
 *   When copylogdb process is the cause
 
-+===============================================================+==================================================================================================+
-| Cause	                                                        | Error message                                                                                    |
++---------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
+| Cause                                                         | Error message                                                                                    |
 +===============================================================+==================================================================================================+
 | A log not copied yet is already deleted from the target node. | log writer: failed to get log page(s) starting from page id 80.                                  |
 +---------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
@@ -265,8 +265,8 @@ The following describes the error messages when copylogdb or applylogdb process 
 
 *   When applylogdb process is the cause
 
-+===============================================================+==================================================================================================+
-| Cause	                                                        | Error message                                                                                    |
++---------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
+| Cause                                                         | Error message                                                                                    |
 +===============================================================+==================================================================================================+
 | Archive logs including logs to apply in replication           | Internal error: unable to find log page 81 in log archives.                                      |
 | are already deleted.                                          |                                                                                                  |
@@ -287,5 +287,5 @@ How to fix when a Failure on HA start
 Status                                                            How to fix                                                         
 ================================================================= ==================================================================================================
 When the source node, the cause of failure, is in master status.  Rebuild replication.
-When the source node, the cause of failure, is in slave status.	  Initialize replicated logs and db_ha_apply_info catalog then restart.
+When the source node, the cause of failure, is in slave status.   Initialize replicated logs and db_ha_apply_info catalog then restart.
 ================================================================= ==================================================================================================

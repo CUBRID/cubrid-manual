@@ -134,10 +134,10 @@ The **DriverManager** is an interface for managing the JDBC driver. It is used t
                  | logSlowQueries=<bool_type>&slowQueryThresholdMillis=<millisecond>
                  | useLazyConnection=<bool_type>
                  
-    <alternative_hosts> ::=
-    <standby_broker1_host>:<port> [,<standby_broker2_host>:<port>]
-    <behavior_type> ::= exception | round | convertToNull
-    <bool_type> ::= true | false
+        <alternative_hosts> ::=
+        <standby_broker1_host>:<port> [,<standby_broker2_host>:<port>]
+        <behavior_type> ::= exception | round | convertToNull
+        <bool_type> ::= true | false
 
 *   *host*: IP address or host name where the CUBRID broker is running
 *   *port*: The CUBRID broker port number (default value: 33,000)
@@ -146,35 +146,37 @@ The **DriverManager** is an interface for managing the JDBC driver. It is used t
 *   *user-id*: The user ID which is connected to a database. There are two types of users in a database by default: **DBA** and **PUBLIC**. If an empty string ("") is entered, a database is connected by the **PUBLIC** user.
 *   *password*: The password of a user who is to be connected to a database. If no password is set, enter an empty string ("").
 
-*   **altHosts**: The host IP addresses and connection ports of one or more stand by brokers which will perform failover in the HA environment.
+*   <*property*>:
 
-    .. note:: Even if there are **RW** and **RO** together in *ACCESS_MODE** setting of brokers of main host and **altHosts**, application decides the target host to access without the relation for the setting of **ACCESS_MODE**. Therefore, you should define the main host and **altHosts** as considering **ACCESS_MODE** of target brokers.
+    *   **altHosts**: The host IP addresses and connection ports of one or more stand by brokers which will perform failover in the HA environment.
 
-*   **rcTime**: Interval time (in seconds) to try to connect active brokers during failover in the HA environment. See the below URL example.
-*   **loadBalance**: If this value is true, the application tries to connect with main host and altHosts in random order(default value: false). 
+        .. note:: Even if there are **RW** and **RO** together in *ACCESS_MODE** setting of brokers of main host and **altHosts**, application decides the target host to access without the relation for the setting of **ACCESS_MODE**. Therefore, you should define the main host and **altHosts** as considering **ACCESS_MODE** of target brokers.
 
-*   **connectTimeout**: Timeout value (in seconds) for database connection. The default value is 30 seconds. If this value is 0, it means infinite waiting. This value is also applied when internal reconnection occurs after the initial connection. The **DriverManger.setLoginTimeout** () method can be used to configure it; however, the value configured in this method will be ignored if a value is configured in the connection URL.
+    *   **rcTime**: Interval time (in seconds) to try to connect active brokers during failover in the HA environment. See the below URL example.
+    *   **loadBalance**: If this value is true, the application tries to connect with main host and altHosts in random order(default value: false). 
 
-*   **queryTimeout**: Timeout value (in seconds) for query execution (default value: 0, infinite). The maximum value is 2,000,000. This value can be changed by the **DriverManger.setQueryTimeout** () method. 
+    *   **connectTimeout**: Timeout value (in seconds) for database connection. The default value is 30 seconds. If this value is 0, it means infinite waiting. This value is also applied when internal reconnection occurs after the initial connection. The **DriverManger.setLoginTimeout** () method can be used to configure it; however, the value configured in this method will be ignored if a value is configured in the connection URL.
 
-    .. note:: When you run executeBatch() method, the query timeout is applied in one method call, not in one query.
+    *   **queryTimeout**: Timeout value (in seconds) for query execution (default value: 0, infinite). The maximum value is 2,000,000. This value can be changed by the **DriverManger.setQueryTimeout** () method. 
 
-*   **charSet**: The character set of a database to be connected
-*   **zeroDateTimeBehavior**: The property used to determine the way to handle an output value; because JDBC does not allow a value having zero for both date and time regardless of date and time in the object with the **java.sql.Date** type. For information about the value having zero for both date and date, see :ref:`date-time-type`.
+        .. note:: When you run executeBatch() method, the query timeout is applied in one method call, not in one query.
 
-    The default operation is **exception**. The operation for each configuration is as follows:
+    *   **charSet**: The character set of a database to be connected
+    *   **zeroDateTimeBehavior**: The property used to determine the way to handle an output value; because JDBC does not allow a value having zero for both date and time regardless of date and time in the object with the **java.sql.Date** type. For information about the value having zero for both date and date, see :ref:`date-time-type`.
 
-    *   **exception**: Default operation. It is handled as an SQLException exception.
-    *   **round**: Converts to the minimum value allowed for a type to be returned. Exceptionally, when the value's type is TIMESTAMP, this value is rounded as '1970-01-01 00:00:00'(GST). (yyyy-mm-dd hh24:mi:ss)
-    *   **convertToNull**: Converts to **NULL**.
+        The default operation is **exception**. The operation for each configuration is as follows:
 
-*   **logFile**: The name of a log file for debugging (default value: cubrid_jdbc.log). If a path is not configured, it is stored the location where applications are running.
-*   **logOnException**: Whether to log exception handling for debugging (default value: false)
-*   **logSlowQueries**: Whether to log slow queries for debugging (default value: false)
+        *   **exception**: Default operation. It is handled as an SQLException exception.
+        *   **round**: Converts to the minimum value allowed for a type to be returned. Exceptionally, when the value's type is TIMESTAMP, this value is rounded as '1970-01-01 00:00:00'(GST). (yyyy-mm-dd hh24:mi:ss)
+        *   **convertToNull**: Converts to **NULL**.
 
-    *   **slowQueryThresholdMillis**: Timeout value (in milliseconds) of slow queries (default value: 60,000).
+    *   **logFile**: The name of a log file for debugging (default value: cubrid_jdbc.log). If a path is not configured, it is stored the location where applications are running.
+    *   **logOnException**: Whether to log exception handling for debugging (default value: false)
+    *   **logSlowQueries**: Whether to log slow queries for debugging (default value: false)
 
-*   **useLazyConnection**: If this is true, it returns success without connecting to the broker when user requests the connection, and it connects to the broker after calling prepare or execute function(default: false). If this value is true, it can prevent from access delay or failure as many application clients restart simultaniously and create connection pools.
+        *   **slowQueryThresholdMillis**: Timeout value (in milliseconds) of slow queries (default value: 60,000).
+
+    *   **useLazyConnection**: If this is true, it returns success without connecting to the broker when user requests the connection, and it connects to the broker after calling prepare or execute function(default: false). If this value is true, it can prevent from access delay or failure as many application clients restart simultaniously and create connection pools.
 
 **Example 1** ::
 
@@ -1302,7 +1304,6 @@ The following example shows how to execute the **SELECT** statement by connectin
             ResultSet rs = null;
            
             try {
-                // CUBRID에 Connect
                 Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
                 conn = DriverManager.getConnection("jdbc:cubrid:localhost:33000:demodb:::","dba","");
                
@@ -1345,7 +1346,6 @@ The following example shows how to execute the **INSERT** statement by connectin
            Statement stmt = null;
            
            try {
-               // CUBRID에 Connect
                Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
                conn = DriverManager.getConnection("jdbc:cubrid:localhost:33000:demodb:::","dba","");
                String sql = "insert into olympic(host_year, host_nation, host_city, opening_date, closing_date) values (2008, 'China', 'Beijing', to_date('08-08-2008','mm-dd-yyyy'), to_date('08-24-2008','mm-dd-yyyy'))";

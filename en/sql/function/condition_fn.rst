@@ -702,7 +702,7 @@ Comparison Functions
 COALESCE
 ========
 
-.. function:: COALESCE ( expression [, expression ] ... )
+.. function:: COALESCE(expression [, expression ] ...)
 
     The **COALESCE** function has more than one expression as an argument. If the first argument is non-**NULL**, the corresponding value is returned if it is **NULL**, the second argument is returned. If all expressions which have an argument are **NULL**, **NULL** is returned. Therefore, this function is generally used to replace **NULL** with other default value.
 
@@ -755,7 +755,7 @@ For example, if a type of a is **INT**, b, **BIGINT**, c, **SHORT**, and d, **FL
 DECODE
 ======
 
-.. function:: DECODE( expression, search, result [, search, result]* [, default] )
+.. function:: DECODE(expression, search, result [, search, result]* [, default])
 
     As well as a **CASE** expression, the **DECODE** function performs the same functionality as the **IF** ... **THEN** ... **ELSE** statement. It compares the *expression* argument with *search* argument, and returns the *result* corresponding to *search* that has the same value. It returns *default* if there is no *search* with the same value, and returns **NULL** if *default* is omitted. An expression argument and a search argument to be comparable should be same or convertible each other. The number of digits after the decimal point is determined to display all significant figures including valid number of all *result*.
 
@@ -764,7 +764,7 @@ DECODE
     :param default: the value to be retuned when no match is found 
     :rtype: determined with the type of *result* and *default*
 
-**DECODE** (*a*, *b*, *c*, *d*, *e, f*) has the same meaning as the **CASE** expression below. ::
+**DECODE**(*a*, *b*, *c*, *d*, *e, f*) has the same meaning as the **CASE** expression below. ::
 
     CASE WHEN a = b THEN c
     WHEN a = d THEN e
@@ -825,7 +825,7 @@ DECODE
 GREATEST
 ========
 
-.. function:: GREATEST( expression [, expression]* )
+.. function:: GREATEST(expression [, expression] ...)
 
     The **GREATEST** function compares more than one expression specified as parameters and returns the greatest value. If only one expression has been specified, the expression is returned because there is no expression to be compared with.
 
@@ -857,7 +857,7 @@ The following example shows how to retrieve the number of every medals and the h
 IF
 ==
 
-.. function:: IF ( expression1, expression2, expression3 )
+.. function:: IF(expression1, expression2, expression3)
 
     The **IF** function returns *expression2* if the value of the arithmetic expression specified as the first parameter is **TRUE**, or *expression3* if the value is **FALSE** or **NULL**. *expression2* and *expression3* which are returned as a result must be the same or of a convertible common type. If one is explicitly **NULL**, the result of the function follows the type of the non-**NULL** parameter.
 
@@ -866,7 +866,7 @@ IF
     :param expression3: the value to be returned when *expression1* is not true
     :rtype: type of *expression2* or *expression3*
 
-**IF** (*a*, *b*, *c*) has the same meaning as the **CASE** expression in the following example: ::
+**IF**(*a*, *b*, *c*) has the same meaning as the **CASE** expression in the following example: ::
 
     CASE WHEN a IS TRUE THEN b
     ELSE c
@@ -913,8 +913,8 @@ IF
 IFNULL, NVL
 ===========
 
-.. function:: IFNULL ( expr1, expr2 )
-.. function:: NVL ( expr1, expr2 )
+.. function:: IFNULL(expr1, expr2)
+.. function:: NVL(expr1, expr2)
 
     The **IFNULL** function is working like the **NVL** function; however, only the **NVL** function supports collection type as well. The **IFNULL** function (which has two arguments) returns *expr1* if the value of the first expression is not **NULL** or returns *expr2*, otherwise.
 
@@ -931,7 +931,7 @@ Operation is performed by converting the type of every argument into that with t
 
 For example, if a type of a is **INT** and b is **BIGINT**, then **IFNULL** (a, b) returns a **BIGINT** type. If a type of a is **INTEGER** and b is **TIMESTAMP**, then **IFNULL** (a, b) returns a **VARCHAR** type.
 
-**IFNULL** (*a*, *b*) or **NVL** (*a*, *b*) has the same meaning as the **CASE** expression below. ::
+**IFNULL**(*a*, *b*) or **NVL**(*a*, *b*) has the same meaning as the **CASE** expression below. ::
 
     CASE WHEN a IS NULL THEN b
     ELSE a
@@ -981,7 +981,7 @@ For example, if a type of a is **INT** and b is **BIGINT**, then **IFNULL** (a, 
 ISNULL
 ======
 
-.. function:: ISNULL (expression)
+.. function:: ISNULL(expression)
 
     The **ISNULL** function performs a comparison to determine if the result of the expression specified as an argument is **NULL**. The function returns 1 if it is **NULL** or 0 otherwise. You can check if a certain value is **NULL**. This function is working like the **ISNULL** expression.
 
@@ -1002,7 +1002,7 @@ ISNULL
 LEAST
 =====
 
-.. function:: LEAST( expression [, expression]* )
+.. function:: LEAST(expression [, expression] ...)
 
     The **LEAST** function compares more than one expression specified as parameters and returns the smallest value. If only one expression has been specified, the expression is returned because there is no expression to be compared with.
 
@@ -1033,7 +1033,7 @@ The following example shows how to retrieve the number of every medals and the l
 NULLIF
 ======
 
-.. function:: NULLIF (expr1, expr2)
+.. function:: NULLIF(expr1, expr2)
 
     The **NULLIF** function returns **NULL** if the two expressions specified as the parameters are identical, and returns the first parameter value otherwise.
 
@@ -1100,7 +1100,7 @@ NULLIF
 NVL2
 ====
 
-.. function:: NVL2 ( expr1, expr2, expr3 )
+.. function:: NVL2(expr1, expr2, expr3)
 
     Three parameters are specified for the **NVL2** function. The second expression (*expr2*) is returned if the first expression (*expr1*) is not **NULL**; the third expression (*expr3*) is returned if it is **NULL**.
 

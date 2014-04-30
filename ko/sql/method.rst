@@ -25,21 +25,21 @@ CSQL 언어는 클래스 메서드와 인스턴스 메서드 두 가지 타입�
     CALL <method_call> ;
 
     <method_call> ::=
-        method_name ([arg_value [{, arg_value } ...]]) ON call_target [to_variable] |
-        method_name (call_target [, arg_value [{, arg_value} ...]] ) [to_variable]
+        method_name ([<arg_value> [{, <arg_value> } ...]]) ON <call_target> [<to_variable>] |
+        method_name (<call_target> [, <arg_value> [{, <arg_value>} ...]] ) [<to_variable>]
 
-        arg_value ::=
+        <arg_value> ::=
             any CSQL expression
 
-        call_target ::=
+        <call_target> ::=
             an object-valued expression
 
-        to_variable ::=
+        <to_variable> ::=
             INTO variable |
             TO variable
 
-*   *method_name* 은 클래스에 정의된 메서드의 이름이거나, 시스템에 정의된 메서드의 이름이다. 메서드는 하나 혹은 그 이상의 인수 값을 필요로 한다. 메서드에 인수가 없으면 빈 괄호를 사용해야 한다.
+*   *method_name*\ 은 클래스에 정의된 메서드의 이름이거나, 시스템에 정의된 메서드의 이름이다. 메서드는 하나 혹은 그 이상의 인수 값을 필요로 한다. 메서드에 인수가 없으면 빈 괄호를 사용해야 한다.
 
-*   *call_target* 은 클래스 이름, 변수, 혹은 또 다른 메서드 호출(객체를 반환하는)을 포함하는 객체 값의 표현식(object-valued expression)이다. 만약 클래스 객체에서 동작하는 클래스 메서드를 호출하려면, *call_target* 앞에 반드시 **CLASS** 키워드가 있어야 한다. 이 경우 클래스 이름은 클래스 메서드가 정의된 클래스의 이름이어야 한다. 만약 인스턴스 메서드를 호출하려면, 인스턴스 객체를 나타내는 식을 지정해야 한다. 클래스 메서드나 인스턴스 메서드에 의해 반환되는 값은 선택적으로 *to_variable* 에 저장할 수 있다. 이 반환 변수의 값은 *call_target* 이나 *arg_value* 파라미터처럼 **CALL** 문 내에 사용될 수 있다.
+*   <*call_target*>\ 은 클래스 이름, 변수, 혹은 또 다른 메서드 호출(객체를 반환하는)을 포함하는 객체 값의 표현식(object-valued expression)이다. 만약 클래스 객체에서 동작하는 클래스 메서드를 호출하려면, <*call_target*> 앞에 반드시 **CLASS** 키워드가 있어야 한다. 이 경우 클래스 이름은 클래스 메서드가 정의된 클래스의 이름이어야 한다. 만약 인스턴스 메서드를 호출하려면, 인스턴스 객체를 나타내는 식을 지정해야 한다. 클래스 메서드나 인스턴스 메서드에 의해 반환되는 값은 선택적으로 <*to_variable*>\ 에 저장할 수 있다. 이 반환 변수의 값은 <*call_target*>\ 이나 <*arg_value*> 파라미터처럼 **CALL** 문 내에 사용될 수 있다.
 
-*   중첩된 메서드 호출은 다른 *method_call* 이 메서드의 *call_target* 이거나 *arg_value* 인수의 하나로 주어질 때 성립된다.
+*   중첩된 메서드 호출은 다른 *method_call*\ 이 메서드의 <*call_target*> 이거나 <*arg_value*> 인수의 하나로 주어질 때 성립된다.

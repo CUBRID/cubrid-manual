@@ -61,4 +61,4 @@ Perl API
 
 CUBRID Perl 드라이버는 현재에는 기본 기능만을 제공하고 있다. LOB 타입이나 칼럼 정보 확인 등의 기능은 현재 지원하지 않는다.
 
-CUBRID Perl 드라이버 API에 대한 자세한 내용은 http://search.cpan.org/~cubrid/\ 를 참고한다.
+CUBRID Perl API는 http://ftp.cubrid.org/CUBRID_Docs/Drivers/Perl/\ 을 참고한다.

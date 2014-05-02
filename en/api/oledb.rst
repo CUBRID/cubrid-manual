@@ -158,3 +158,5 @@ OLE DB API
 ==========
 
 For more information about OLE DB API, see Micorosoft OLE DB documentation at  http://msdn.microsoft.com/en-us/library/ms722784%28vs.85%29.aspx .
+
+For more information about CUBRID OLE DB, see http://ftp.cubrid.org/CUBRID_Docs/Drivers/OLEDB/.

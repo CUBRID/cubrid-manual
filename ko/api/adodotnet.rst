@@ -4,9 +4,7 @@ ADO.NET 드라이버
 
 ADO.NET은 .NET 개발자에게 데이터 액세스 서비스를 제공하는 클래스 집합이다. ADO.NET은 분산된 데이터를 분산된 데이터 공유 응용 프로그램을 개발할 때 사용할 수 있는 다양한 구성 요소를 제공한다. 또한 관계형, XML 및 응용 프로그램 데이터에 대한 액세스를 제공하는 .NET Framework의 핵심 부분이다. ADO.NET은 응용 프로그램, 도구, 언어 또는 웹 브라우저에서 사용되는 중간 계층 비즈니스 개체 및 프런트 엔드 데이터베이스 클라이언트 개발을 비롯하여 다양한 개발 요구 사항을 지원한다.
 
-별도로 ADO.NET 드라이버를 다운로드하거나 ADO.NET 드라이버에 대한 최신 정보를 확인하려면
-`http://www.cubrid.org/wiki_apis/entry/cubrid-ado-net-driver <http://www.cubrid.org/wiki_apis/entry/cubrid-ado-net-driver>`_
-에 접속한다.
+별도로 ADO.NET 드라이버를 다운로드하거나 ADO.NET 드라이버에 대한 최신 정보를 확인하려면 http://www.cubrid.org/wiki_apis/entry/cubrid-ado-net-driver\에 접속한다.
 
 ADO.NET 설치 및 설정
 ====================
@@ -15,31 +13,34 @@ ADO.NET 설치 및 설정
 
 *   Windows(Windows Vista 또는 Windows 7 권장)
 *   .NET 프레임워크 2.0 이상(4.0 이상 권장):
-*   Microsoft Visual Studio Express edition(
-    `http://www.microsoft.com/visualstudio/en-us/products/2010-editions/visual-csharp-express <http://www.microsoft.com/visualstudio/en-us/products/2010-editions/visual-csharp-express>`_
+*   Microsoft Visual Studio Express edition(     http://www.microsoft.com/visualstudio/en-us/products/2010-editions/visual-csharp-express )
 
 **설치 및 설정**
 
 CUBRID를 사용하는 .NET 응용 프로그램을 개발하려면 CUBRID ADO.NET Data Provider(Cubrid.Data.dll)가 필요하다. CUBRID ADO.NET Data Provider를 설치하려면 다음 중 하나를 수행한다.
 
-* CUBRID ADO.NET Data Provider Installer를 다음 주소에서 다운로드하여 실행한다.
+*   CUBRID ADO.NET Data Provider Installer를 다음 주소에서 다운로드하여 실행한다.
 
-  `http://www.cubrid.org/?mid=downloads&item=ado_dot_net_driver <http://www.cubrid.org/?mid=downloads&item=ado_dot_net_driver>`_
+    http://www.cubrid.org/?mid=downloads&item=ado_dot_net_driver
 
-* 소스코드에서 직접 빌드한다. 소스코드는 다음 SVN 저장소에서 체크아웃할 수 있다. CUBRID 버전이 9.0.0이라면 *<CUBRID 버전>* 에는 9.0.0을 입력한다. ::
+*   소스코드에서 직접 빌드한다. 소스코드는 다음 SVN 저장소에서 체크아웃할 수 있다. CUBRID 버전이 9.0.0이라면 <*CUBRID-version*> 에는 9.0.0을 입력한다. 
 
-    http://svn.cubrid.org/cubridapis/adodotnet/branches/RB-<CUBRID 버전>/Data/Source
+    ::
+
+        http://svn.cubrid.org/cubridapis/adodotnet/branches/RB-<CUBRID-version>/Data/Source
 
 CUBRID .NET Data Provider는 full-managed .NET 코드로 작성되어 CUBRID 라이브러리 파일에 의존하지 않는다. 따라서 CUBRID를 설치하거나 CUBRID 파일을 다운로드하지 않아도 CUBRID .NET Data Provider를 사용할 수 있다.
 
 CUBRID ADO.NET Data Provider를 가장 간단하게 설치하는 방법은 CUBRID ADO.NET Data Provider Installer를 실행하는 것이다. 기본 설정(x86)으로 설치하면 **Program Files\\CUBRID\\CUBRID ADO.NET Data Provider 8.4.1** 디렉터리에 설치된다.
 
-드라이버를 GAC(`http://en.wikipedia.org/wiki/Global_Assembly_Cache <http://en.wikipedia.org/wiki/global_assembly_cache>`_ 에 설치할 수도 있다. 드라이버를 GAC에 설치하는 가장 좋은 방법은 tlbimp(`http://msdn.microsoft.com/en-us/library/tt0cf3sx%28v=vs.80%29.aspx <http://msdn.microsoft.com/en-us/library/tt0cf3sx%28v=vs.80%29.aspx>`_)를 사용하는 것이다. 필요한 네임스페이스는 다음과 같이 import한다.
+드라이버를 GAC( http://en.wikipedia.org/wiki/Global_Assembly_Cache )에 설치할 수도 있다. 드라이버를 GAC에 설치하는 가장 좋은 방법은 tlbimp(  http://msdn.microsoft.com/en-us/library/tt0cf3sx%28v=vs.80%29.aspx )를 사용하는 것이다. 필요한 네임스페이스는 다음과 같이 import한다.
 
 .. image:: /images/image88.png
 
 ADO.NET 프로그래밍
 ==================
+
+CUBRID ADO.NET API 문서는 http://ftp.cubrid.org/CUBRID_Docs/Drivers/ADO.NET/\를 참고한다.
 
 단순 질의/조회
 --------------
@@ -69,7 +70,7 @@ CUBRID 데이터베이스의 테이블에서 값을 조회하는 간단한 코�
 Get...() 메서드의 파라미터로 0부터 시작하는 숫자를 입력하여 칼럼에서 조회할 칼럼 데이터의 인덱스 위치를 지정한다.
 
 특정 CUBRID 데이터 타입의 데이터를 조회하려면 `DbDataReader <http://msdn.microsoft.com/en-us/library/system.data.common.dbdatareader.aspx>`_ 인터페이스 대신 다음과 같이
-`CUBRIDDataReader <http://www.cubrid.org/manual/api/ado.net/8.4.1/html/4d0a4cd3-4ac2-07d9-67db-097a8eb850ef.htm>`_ 를 사용해야 한다.
+CUBRIDDataReader를 사용해야 한다.
 
 .. code-block:: c#
 
@@ -90,9 +91,7 @@ Get...() 메서드의 파라미터로 0부터 시작하는 숫자를 입력하�
 batch 명령어
 ------------
 
-CUBRID ADO.NET Data Provider를 사용하면 하나의 batch에서 데이터 서비스에 하나 이상의 질의를 실행할 수 있다. batch에 대한 자세한 내용은
-`http://msdn.microsoft.com/en-us/library/dd744839%28v=vs.90%29.aspx <http://msdn.microsoft.com/en-us/library/dd744839%28v=vs.90%29.aspx>`_
-를 참고한다.
+CUBRID ADO.NET Data Provider를 사용하면 하나의 batch에서 데이터 서비스에 하나 이상의 질의를 실행할 수 있다. batch에 대한 자세한 내용은 http://msdn.microsoft.com/en-us/library/dd744839%28v=vs.90%29.aspx\를 참고한다.
 
 예를 들면 다음과 같은 코드를 작성할 수 있다.
 
@@ -122,7 +121,7 @@ CUBRID ADO.NET Data Provider를 사용하면 하나의 batch에서 데이터 서
 
     ConnectionString = "server=<server address>;database=<database name>;port=<port number to use for connection to broker>;user=<user name>;password=<user password>;"
 
-**port** 를 제외한 모든 파라미터는 반드시 값을 입력해야 한다. **port** 값을 입력하지 않았을 때의 기본값은 **30000** 이다.
+**port**\ 를 제외한 모든 파라미터는 반드시 값을 입력해야 한다. **port** 값을 입력하지 않았을 때의 기본값은 **30000** 이다.
 
 연결 옵션에 따른 연결 문자열의 예는 다음과 같다.
 
@@ -138,7 +137,7 @@ CUBRID ADO.NET Data Provider를 사용하면 하나의 batch에서 데이터 서
 
     ConnectionString = "server=10.50.99.1;database=demodb;port=30000;user=dba;password=secret"
 
-연결 문자열은 `CUBRIDConnectionStringBuilder <http://www.cubrid.org/manual/api/ado.net/8.4.1/html/a093b61e-d064-4f4e-b007-73bc601c564c.htm>`_ 클래스를 사용하여 다음과 같이 생성할 수도 있다.
+연결 문자열은 CUBRIDConnectionStringBuilder 클래스를 사용하여 다음과 같이 생성할 수도 있다.
 
 .. code-block:: c#
 
@@ -263,8 +262,7 @@ CUBRID 메타데이터 지원
 ----------------------
 
 CUBRID ADO.NET Data Provider는 데이터베이스 메타데이터를 지원하는 메서드를 제공한다. 메타데이터를 지원하는 메서드는
-`CUBRIDSchemaProvider <http://www.cubrid.org/manual/api/ado.net/8.4.1/html/d5aac1e7-a7e6-4b37-6d49-7fcf1502436e.htm>`_
-클래스에 구현되어 있다.
+CUBRIDSchemaProvider 클래스에 구현되어 있다.
 
 .. code-block:: c#
 
@@ -496,7 +494,7 @@ NHibernate
 ----------
 
 CUBRID ADO.NET Data Provider를 사용하면 NHibernate에서 CUBRID 데이터베이스를 사용할 수 있다. 이에 대한 자세한 내용은
-http://www.cubrid.org/wiki_apis/entry/cubrid-nhibernate-tutorial\ 을 참고한다.
+http://www.cubrid.org/wiki_apis/entry/cubrid-nhibernate-support\ 를 참고한다.
 
 Java 저장 프로시저
 ------------------
@@ -507,4 +505,4 @@ http://www.cubrid.org/wiki_apis/entry/how-to-calling-java-stored-functionprocedu
 ADO.NET API
 ===========
 
-ADO.NET API에 대한 자세한 내용은 CUBRID ADO.NET Driver 문서( http://www.cubrid.org/manual/api/ado.net/8.4.1/Index.html )를 참고한다.
+http://ftp.cubrid.org/CUBRID_Docs/Drivers/ADO.NET/\을 참고한다.

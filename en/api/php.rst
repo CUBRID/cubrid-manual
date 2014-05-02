@@ -634,7 +634,6 @@ You can get values of collection attributes. The example shows how to get values
        echo $tel."\n";
     }
 
-
 You can directly update values of collection types by using cubrid_set_add() or cubrid_set_drop() function.
 
 .. code-block:: php
@@ -651,73 +650,4 @@ You can directly update values of collection types by using cubrid_set_add() or 
 PHP API
 =======
 
-For more information about PHP API, see PHP CUBRID Functions document at http://www.php.net/manual/en/ref.cubrid.php .
-
-*   `cubrid_bind <http://www.php.net/manual/en/function.cubrid-bind.php>`_
-*   `cubrid_close_prepare <http://www.php.net/manual/en/function.cubrid-close-prepare.php>`_
-*   `cubrid_close_request <http://www.php.net/manual/en/function.cubrid-close-request.php>`_
-*   `cubrid_col_get <http://www.php.net/manual/en/function.cubrid-col-get.php>`_
-*   `cubrid_col_size <http://www.php.net/manual/en/function.cubrid-col-size.php>`_
-*   `cubrid_column_names <http://www.php.net/manual/en/function.cubrid-column-names.php>`_
-*   `cubrid_column_types <http://www.php.net/manual/en/function.cubrid-column-types.php>`_
-*   `cubrid_commit <http://www.php.net/manual/en/function.cubrid-commit.php>`_
-*   `cubrid_connect_with_url <http://www.php.net/manual/en/function.cubrid-connect-with-url.php>`_
-*   `cubrid_connect <http://www.php.net/manual/en/function.cubrid-connect.php>`_
-*   `cubrid_current_oid <http://www.php.net/manual/en/function.cubrid-current-oid.php>`_
-*   `cubrid_disconnect <http://www.php.net/manual/en/function.cubrid-disconnect.php>`_
-*   `cubrid_drop <http://www.php.net/manual/en/function.cubrid-drop.php>`_
-*   `cubrid_error_code_facility <http://www.php.net/manual/en/function.cubrid-error-code-facility.php>`_
-*   `cubrid_error_code <http://www.php.net/manual/en/function.cubrid-error-code.php>`_
-*   `cubrid_error_msg <http://www.php.net/manual/en/function.cubrid-error-msg.php>`_
-*   `cubrid_execute <http://www.php.net/manual/en/function.cubrid-execute.php>`_
-*   `cubrid_fetch <http://www.php.net/manual/en/function.cubrid-fetch.php>`_
-*   `cubrid_free_result <http://www.php.net/manual/en/function.cubrid-free-result.php>`_
-*   `cubrid_get_autocommit <http://www.php.net/manual/en/function.cubrid-get-autocommit.php>`_
-*   `cubrid_get_charset <http://www.php.net/manual/en/function.cubrid-get-charset.php>`_
-*   `cubrid_get_class_name <http://www.php.net/manual/en/function.cubrid-get-class-name.php>`_
-*   `cubrid_get_client_info <http://www.php.net/manual/en/function.cubrid-get-client-info.php>`_
-*   `cubrid_get_db_parameter <http://www.php.net/manual/en/function.cubrid-get-db-parameter.php>`_
-*   `cubrid_get_query_timeout <http://www.php.net/manual/en/function.cubrid-get-query-timeout.php>`_
-*   `cubrid_get_server_info <http://www.php.net/manual/en/function.cubrid-get-server-info.php>`_
-*   `cubrid_get <http://www.php.net/manual/en/function.cubrid-get.php>`_
-*   `cubrid_insert_id <http://www.php.net/manual/en/function.cubrid-insert-id.php>`_
-*   `cubrid_is_instance <http://www.php.net/manual/en/function.cubrid-is-instance.php>`_
-*   `cubrid_lob_close <http://www.php.net/manual/en/function.cubrid-lob-close.php>`_
-*   `cubrid_lob_export <http://www.php.net/manual/en/function.cubrid-lob-export.php>`_
-*   `cubrid_lob_get <http://www.php.net/manual/en/function.cubrid-lob-get.php>`_
-*   `cubrid_lob_send <http://www.php.net/manual/en/function.cubrid-lob-send.php>`_
-*   `cubrid_lob_size <http://www.php.net/manual/en/function.cubrid-lob-size.php>`_
-*   `cubrid_lob2_bind <http://www.php.net/manual/en/function.cubrid-lob2-bind.php>`_
-*   `cubrid_lob2_close <http://www.php.net/manual/en/function.cubrid-lob2-close.php>`_
-*   `cubrid_lob2_export <http://www.php.net/manual/en/function.cubrid-lob2-export.php>`_
-*   `cubrid_lob2_import <http://www.php.net/manual/en/function.cubrid-lob2-import.php>`_
-*   `cubrid_lob2_new <http://www.php.net/manual/en/function.cubrid-lob2-new.php>`_
-*   `cubrid_lob2_read <http://www.php.net/manual/en/function.cubrid-lob2-read.php>`_
-*   `cubrid_lob2_seek64 <http://www.php.net/manual/en/function.cubrid-lob2-seek64.php>`_
-*   `cubrid_lob2_seek <http://www.php.net/manual/en/function.cubrid-lob2-seek.php>`_
-*   `cubrid_lob2_size64 <http://www.php.net/manual/en/function.cubrid-lob2-size64.php>`_
-*   `cubrid_lob2_size <http://www.php.net/manual/en/function.cubrid-lob2-size.php>`_
-*   `cubrid_lob2_tell64 <http://www.php.net/manual/en/function.cubrid-lob2-tell64.php>`_
-*   `cubrid_lob2_tell <http://www.php.net/manual/en/function.cubrid-lob2-tell.php>`_
-*   `cubrid_lob2_write <http://www.php.net/manual/en/function.cubrid-lob2-write.php>`_
-*   `cubrid_lock_read <http://www.php.net/manual/en/function.cubrid-lock-read.php>`_
-*   `cubrid_lock_write <http://www.php.net/manual/en/function.cubrid-lock-write.php>`_
-*   `cubrid_move_cursor <http://www.php.net/manual/en/function.cubrid-move-cursor.php>`_
-*   `cubrid_next_result <http://www.php.net/manual/en/function.cubrid-next-result.php>`_
-*   `cubrid_num_cols <http://www.php.net/manual/en/function.cubrid-num-cols.php>`_
-*   `cubrid_num_rows <http://www.php.net/manual/en/function.cubrid-num-rows.php>`_
-*   `cubrid_pconnect_with_url <http://www.php.net/manual/en/function.cubrid-pconnect-with-url.php>`_
-*   `cubrid_pconnect <http://www.php.net/manual/en/function.cubrid-pconnect.php>`_
-*   `cubrid_prepare <http://www.php.net/manual/en/function.cubrid-prepare.php>`_
-*   `cubrid_put <http://www.php.net/manual/en/function.cubrid-put.php>`_
-*   `cubrid_rollback <http://www.php.net/manual/en/function.cubrid-rollback.php>`_
-*   `cubrid_schema <http://www.php.net/manual/en/function.cubrid-schema.php>`_
-*   `cubrid_seq_drop <http://www.php.net/manual/en/function.cubrid-seq-drop.php>`_
-*   `cubrid_seq_insert <http://www.php.net/manual/en/function.cubrid-seq-insert.php>`_
-*   `cubrid_seq_put <http://www.php.net/manual/en/function.cubrid-seq-put.php>`_
-*   `cubrid_set_add <http://www.php.net/manual/en/function.cubrid-set-add.php>`_
-*   `cubrid_set_autocommit <http://www.php.net/manual/en/function.cubrid-set-autocommit.php>`_
-*   `cubrid_set_db_parameter <http://www.php.net/manual/en/function.cubrid-set-db-parameter.php>`_
-*   `cubrid_set_drop <http://www.php.net/manual/en/function.cubrid-set-drop.php>`_
-*   `cubrid_set_query_timeout <http://www.php.net/manual/en/function.cubrid-set-query-timeout.php>`_
-*   `cubrid_version <http://www.php.net/manual/en/function.cubrid-version.php>`_
+See http://ftp.cubrid.org/CUBRID_Docs/Drivers/.

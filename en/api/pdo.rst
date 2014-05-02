@@ -65,15 +65,14 @@ Windows
 
 **Downloading and Installing Compiled CUBRID PDO Driver**
 
-First, download CUBRID PHP/PDO driver of which versions match the versions of your operating system and PHP installed at
-http://www.cubrid.org/?mid=downloads&item=php_driver&os=windows&ostype=any&php=any&driver_type=pdo.
+First, download CUBRID PHP/PDO driver of which versions match the versions of your operating system and PHP installed at http://www.cubrid.org/?mid=downloads&item=php_driver&os=windows&ostype=any&php=any&driver_type=pdo.
 
 After you download the driver, you will see the **php_cubrid.dll** file for CUBRID PHP driver or the **php_pdo_cubrid.dll** file for CUBRID PDO driver. Follow the steps below to install it.
 
 #.  Copy this driver to the default PHP extensions directory (usually located at **C:\\Program Files\\PHP\\ext**).
-    
+
 #.  Set your system environment. Check if the environment variable **PHPRC** is **C:\\Program Files\\PHP** and system variable path is added with **%PHPRC%** and **%PHPRC%\\ext**.
-    
+
 #.  Edit **php.ini** (**C:\\Program Files\\PHP\\php.ini**) and add the following two lines at the end of the **php.ini** file. 
 
     ::
@@ -82,11 +81,11 @@ After you download the driver, you will see the **php_cubrid.dll** file for CUBR
         extension=php_pdo_cubrid.dll
 
     For CUBRID PHP driver, add command lines below. 
-       
+
     ::
 
-        [PHP_CUBRID]
-        extension = php_cubrid.dll
+        [PHP_PDO_CUBRID]
+        extension = php_pdo_cubrid.dll
 
 #.  Restart your web server to apply changes.
 
@@ -492,7 +491,7 @@ The output of the script is as follows: ::
 CUBRID PDO Extensions
 ---------------------
 
-In CUBRID, the `PDO::cubrid_schema <http://kr.php.net/manual/en/pdo.cubrid-schema.php>`_ () function is offered as an extension; the function is used to retrieve the database schema and metadata information. Below is an example script that returns information about primary key for the *nation* table by using the `PDO::cubrid_schema <http://kr.php.net/manual/en/pdo.cubrid-schema.php>`_ () function.
+In CUBRID, the PDO::cubrid_schema() function is offered as an extension; the function is used to retrieve the database schema and metadata information. Below is an example script that returns information about primary key for the *nation* table by using this function.
 
 .. code-block:: php
 
@@ -522,5 +521,4 @@ PDO API
 
 For more information about PHP Data Objects (PDO) API, see http://docs.php.net/manual/en/book.pdo.php. The API provided by CUBRID PDO driver is as follows:
 
-*   `PDO_CUBRID DSN <http://www.php.net/manual/en/ref.pdo-cubrid.connection.php>`_
-*   `PDO::cubrid_schema <http://www.php.net/manual/en/pdo.cubrid-schema.php>`_
+For more information about CUBRID PDO API provides, see http://ftp.cubrid.org/CUBRID_Docs/Drivers/PDO/.

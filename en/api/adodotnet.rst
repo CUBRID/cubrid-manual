@@ -2,12 +2,9 @@
 ADO.NET Driver
 **************
 
-ADO.NET Overview
-================
-
 ADO.NET is a set of classes that expose data access services to the .NET programmer. ADO.NET provides a rich set of components for creating distributed, data-sharing applications. It is an integral part of the .NET Framework, providing access to relational, XML, and application data. ADO.NET supports a variety of development needs, including the creation of front-end database clients and middle-tier business objects used by applications, tools, languages, or Internet browsers.
 
-To download ADO.NET driver or get the latest information, click http://www.cubrid.org/wiki_apis/entry/cubrid-ado-net-driver .
+To download ADO.NET driver or get the latest information, click http://www.cubrid.org/wiki_apis/entry/cubrid-ado-net-driver\.
 
 Installing and Configuring ADO.NET
 ==================================
@@ -34,7 +31,7 @@ The CUBRID .NET Data Provider is 100% full-managed .NET code and it does not rel
 
 The easiest way to install CUBRID ADO.NET Data Provider is to use the official installer. If you choose to install using the default option (x86), the driver will be installed in the **Program Files\\CUBRID\\CUBRID ADO.NET Data Provider 8.4.1** directory.
 
-You can also choose to install the driver in GAC ( http://en.wikipedia.org/wiki/global_assembly_cache ). The best way to install the driver is to use the tlbimp ( http://msdn.microsoft.com/en-us/library/tt0cf3sx%28v=vs.80%29.aspx ) tool. See the below to import the required namespaces.
+You can also choose to install the driver in GAC ( http://en.wikipedia.org/wiki/Global_Assembly_Cache ). The best way to install the driver is to use the tlbimp ( http://msdn.microsoft.com/en-us/library/tt0cf3sx%28v=vs.80%29.aspx ) tool. See the below to import the required namespaces.
 
 .. image:: /images/image88.png
 
@@ -494,7 +491,7 @@ The following list displays the error code and messages shown up when using CUBR
 NHibernate
 ----------
 
-CUBRID will be accessed from NHibernate using CUBRID ADO.NET Data Provider. For more information, see http://www.cubrid.org/wiki_apis/entry/cubrid-nhibernate-tutorial.
+CUBRID will be accessed from NHibernate using CUBRID ADO.NET Data Provider. For more information, see http://www.cubrid.org/wiki_apis/entry/cubrid-nhibernate-support.
 
 Java Stored Procedure
 ---------------------
@@ -504,4 +501,4 @@ For how to call Java stored procedure in .NET, see http://www.cubrid.org/wiki_ap
 ADO.NET API
 ===========
 
-For more information about ADO.NET API, see CUBRID ADO.NET Driver documentation ( http://www.cubrid.org/manual/api/ado.net/8.4.1/Index.html ).
+See http://ftp.cubrid.org/CUBRID_Docs/Drivers/ADO.NET/.

@@ -7,8 +7,7 @@ JDBC Driver
 JDBC Overview
 =============
 
-CUBRID JDBC driver (**cubrid_jdbc.jar**) implements an interface to enable access from applications in Java to CUBRID database server. CUBRID JDBC driver is installed in the <
-*directory where CUBRID is installed*>/**jdbc** directory. The driver has been developed based on the JDBC 2.0 specification and the default driver provided is complied with JDK 1.6.
+CUBRID JDBC driver (**cubrid_jdbc.jar**) implements an interface to enable access from applications in Java to CUBRID database server. CUBRID JDBC driver is installed in the <*directory where CUBRID is installed*>/**jdbc** directory. The driver has been developed based on the JDBC 2.0 specification and the default driver provided is complied with JDK 1.6.
 
 To download JDBC driver or get the latest information, please visit http://www.cubrid.org/wiki_apis/entry/cubrid-jdbc-driver\ .
 
@@ -46,7 +45,7 @@ Use the **Class.forName** (*driver-class-name*) method to register CUBRID JDBC d
                e.printStackTrace();
            }
            ...
-       
+
 Installing and Configuring JDBC
 ===============================
 
@@ -115,7 +114,9 @@ JDBC Programming
 Configuration Connection
 ------------------------
 
-The **DriverManager** is an interface for managing the JDBC driver. It is used to select a driver and create new database connection. If CUBRID JDBC driver is registered, you can connect a database by calling the **DriverManager.getConnection** (*db-url*, *user-id*, *password*) method. The **getConnection** method returns the **Connection** object and it is used to execute queries and commands, and commit and roll back transactions. The syntax below shows the *db-url* argument for configuring connection. ::
+The **DriverManager** is an interface for managing the JDBC driver. It is used to select a driver and create new database connection. If CUBRID JDBC driver is registered, you can connect a database by calling the **DriverManager.getConnection** (*db-url*, *user-id*, *password*) method. 
+
+The **getConnection** method returns the **Connection** object and it is used to execute queries and commands, and commit and roll back transactions. The syntax below shows the *db-url* argument for configuring connection. ::
 
     jdbc:cubrid:<host>:<port>:<db-name>:[user-id]:[password]:[?<property> [& <property>]]
      
@@ -203,7 +204,7 @@ The **DriverManager** is an interface for managing the JDBC driver. It is used t
      
     --connection URL string when properties(altHosts,rcTime, charSet) specified for HA
     URL=jdbc:CUBRID:192.168.0.1:33000:demodb:public::?altHosts=192.168.0.2:33000,192.168.0.3:33000&rcTime=600&charSet=utf-8
-    
+
 **Example 2**
 
 .. code-block:: java
@@ -408,7 +409,8 @@ Using Object Identifiers (OIDs) and Collections
 
 In addition to the methods defined in the JDBC specification, CUBRID JDBC driver provides methods that handle OIDs and collections (set, multiset, and sequence).
 
-To use these methods, you must import **cubrid.sql.*;** as well as the CUBRID JDBC driver classes which are imported by default. Furthermore, you should convert to not the  **ResultSet** class, which is provided by the standard JDBC API) but the **CUBRIDResultSet** class to get result.
+To use these methods, you must import **cubrid.sql.*;** as well as the CUBRID JDBC driver classes which are imported by default. 
+Furthermore, you should convert to not the  **ResultSet** class, which is provided by the standard JDBC API) but the **CUBRIDResultSet** class to get result.
 
 .. code-block:: java
 
@@ -685,7 +687,8 @@ Auto increment is recognized as automatically created keys in the JDBC programs.
 
             Statement.execute(sql statement, Statement.RETURN_GENERATED_KEYS);
 
-*   Get the **ResultSet** object containing automatically created key values by calling the **PreparedStatement.getGeneratedKeys** or **Statement.getGeneratedKeys** method. Note that the data type of the automatically created keys in **ResultSet** is **DECIMAL** regardless of the data type of the given domain.
+*   Get the **ResultSet** object containing automatically created key values by calling the **PreparedStatement.getGeneratedKeys** or **Statement.getGeneratedKeys** method. 
+    Note that the data type of the automatically created keys in **ResultSet** is **DECIMAL** regardless of the data type of the given domain.
 
 **Example**
 
@@ -1030,7 +1033,8 @@ To connect to CUBRID, load the JDBC driver by using the **forName** () method of
 
 **Connecting to Database**
 
-After loading the JDBC driver, use the **getConnection** () method of the **DriverManager** to connect to the database. To create a **Connection** object, you must specify information such as the URL which indicates the location of a database, user name, password, etc. For more information, see :ref:`jdbc-connection-conf`.
+After loading the JDBC driver, use the **getConnection** () method of the **DriverManager** to connect to the database. 
+To create a **Connection** object, you must specify information such as the URL which indicates the location of a database, user name, password, etc. For more information, see :ref:`jdbc-connection-conf`.
 
 .. code-block:: java
 
@@ -1055,7 +1059,6 @@ For details about CUBRIDDataSource, see :ref:`jdbc-conn-datasource`.
 **Connecting to a DataSource Object**
 
 The following is an example to execute SELECT statements in multiple threads; they connect to DB with the setURL of CUBRIDDataSource, which is a DataSource implemented in CUBRID.
-
 Codes are separated with DataSourceMT.java and DataSourceExample.java.
  
 *   DataSourceMT.java includes a main() function. After a CUBRIDDataSource object is created and a setURL method is called to connect to DB, multiple threads run DataSourceExample.test method.
@@ -1374,32 +1377,30 @@ The following table shows the JDBC standard and extended interface supported by 
 
 **Supported JDBC Interface by CUBRID**
 
-+-----------------------------------------------+----------------------------------+---------------------------------------------------------+
-| JDBC Standard Interface                       | JDBC Extended Interface          | Supported                                               |
-+===============================================+==================================+=========================================================+
-| java.sql.Blob                                 | java.sql.CUBRIDPreparedStatement | Supported                                               |
-| java.sql.CallableStatement                    | java.sql.CUBRIDResultSet         |                                                         |
-| java.sql.Clob                                 | java.sql.CUBRIDResultSetMetaData |                                                         |
-| java.sql.Connection                           | CUBRIDOID                        |                                                         |
-| java.sql.DatabaseMetaData                     |                                  |                                                         |
-| java.sql.Driver                               |                                  |                                                         |
-| java.sql.PreparedStatement                    |                                  |                                                         |
-| java.sql.ResultSet java.sql.ResultSetMetaData |                                  |                                                         |
-+-----------------------------------------------+----------------------------------+---------------------------------------------------------+
-| java.sql.Statement                            | java.sql.CUBRIDStatement         | The getGeneratedKeys() method of JDBC 3.0 is supported. |
-+-----------------------------------------------+----------------------------------+---------------------------------------------------------+
-| java.sql.DriverManager                        |                                  | Supported                                               |
-+-----------------------------------------------+----------------------------------+---------------------------------------------------------+
-| Java.sql.SQLException                         | Java.sql.CUBRIDException         | Supported                                               |
-+-----------------------------------------------+----------------------------------+---------------------------------------------------------+
-| java.sql.Array                                |                                  | Not Supported                                           |
-| java.sql.ParameterMetaData                    |                                  |                                                         |
-| java.sql.Ref                                  |                                  |                                                         |
-| java.sql.Savepoint                            |                                  |                                                         |
-| java.sql.SQLData                              |                                  |                                                         |
-| java.sql.SQLInput                             |                                  |                                                         |
-| java.sql.Struct                               |                                  |                                                         |
-+-----------------------------------------------+----------------------------------+---------------------------------------------------------+
+=========================== ================================= =========================================================
+JDBC Standard Interface     JDBC Extended Interface            Supported                                               
+=========================== ================================= =========================================================
+java.sql.Blob                                                  Supported                                               
+java.sql.CallableStatement                                     Supported                                               
+java.sql.Clob                                                  Supported                                               
+java.sql.Connection                                            Supported                                               
+java.sql.DatabaseMetaData                                      Supported                                               
+java.sql.Driver                                                Supported                                               
+java.sql.PreparedStatement  java.sql.CUBRIDPreparedStatement   Supported                                               
+java.sql.ResultSet          java.sql.CUBRIDResultSet           Supported                                               
+java.sql.ResultSetMetaData  java.sql.CUBRIDResultSetMetaData   Supported                                               
+N/A                         CUBRIDOID                          Supported                                               
+java.sql.Statement          java.sql.CUBRIDStatement           The getGeneratedKeys() method of JDBC 3.0 is supported. 
+java.sql.DriverManager                                         Supported                                               
+Java.sql.SQLException       Java.sql.CUBRIDException           Supported                                               
+java.sql.Array                                                 Not Supported                                           
+java.sql.ParameterMetaData                                     Not Supported                                           
+java.sql.Ref                                                   Not Supported                                           
+java.sql.Savepoint                                             Not Supported                                           
+java.sql.SQLData                                               Not Supported                                           
+java.sql.SQLInput                                              Not Supported                                           
+java.sql.Struct                                                Not Supported                                           
+=========================== ================================= =========================================================
 
 .. note::
 

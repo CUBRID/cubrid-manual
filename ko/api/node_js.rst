@@ -15,10 +15,10 @@ Node.js는 다음의 특징을 가지고 있다.
 보다 자세한 사항은 http://nodejs.org/ 를 참고한다.
 
 CUBRRID Node.js 드라이버를 다운로드하거나 CUBRID Node.js 드라이버에 대한 최신 정보는 아래 사이트에서 확인할 수 있다.
- 
-* 프로젝트 소개: http://www.cubrid.org/wiki_apis/entry/cubrid-node-js-driver
-* 소스코드 메인 저장소: https://github.com/CUBRID/node-cubrid 
- 
+
+*   프로젝트 소개: http://www.cubrid.org/wiki_apis/entry/cubrid-node-js-driver
+*   소스코드 메인 저장소: https://github.com/CUBRID/node-cubrid 
+
 Node.js 설치
 ============
 
@@ -42,10 +42,12 @@ CUBRID Node.js 프로그래밍
 
 연결
 ----
+
 * `Node.js 드라이버로 CUBRID에 연결하기 <http://www.cubrid.org/wiki_apis/entry/connecting-to-cubrid-through-node-js-driver>`_
 
 예제
 ----
+
 * `CUBRID Node.js API를 사용하는 일반적인 예제 <http://www.cubrid.org/blog/cubrid-appstools/common-uses-of-cubrid-nodejs-api-with-examples/>`_
 * `CUBRID Node.js Driver를 사용하여 질의 수행하기 <http://www.cubrid.org/wiki_apis/entry/executing-queries-with-cubrid-node-js-driver>`_
 * `이벤트를 사용하는 예제 <https://github.com/CUBRID/node-cubrid#usage>`_
@@ -55,5 +57,5 @@ CUBRID Node.js 프로그래밍
 
 CUBRID Node.js API
 ==================
-* `CUBRID Node.js 1.1 문서 <http://www.cubrid.org/manual/api/node.js/1.1/index.html>`_
-* `CUBRID Node.js 1.0 문서 <http://www.cubrid.org/manual/api/node.js/1.0/index.html>`_
+
+http://ftp.cubrid.org/CUBRID_Docs/Drivers/Node.js/\를 참고한다.

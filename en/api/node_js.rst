@@ -16,9 +16,8 @@ For more details, see http://nodejs.org/.
 
 If you want to download CUBRRID Node.js driver or find the recent information, see the following sites:
 
-* Introducing project: http://www.cubrid.org/wiki_apis/entry/cubrid-node-js-driver
-* source code main repository: https://github.com/CUBRID/node-cubrid
-
+*   Introducing project: http://www.cubrid.org/wiki_apis/entry/cubrid-node-js-driver
+*   source code main repository: https://github.com/CUBRID/node-cubrid
 
 Installing Node.js 
 ==================
@@ -43,10 +42,12 @@ CUBRID Node.js Programming
 
 Connection
 ----------
+
 * `Connecting to CUBRID through Node.js Driver <http://www.cubrid.org/wiki_apis/entry/connecting-to-cubrid-through-node-js-driver>`_
 
 Examples
 --------
+
 * `Common uses of CUBRID Node.js API with examples <http://www.cubrid.org/blog/cubrid-appstools/common-uses-of-cubrid-nodejs-api-with-examples/>`_
 * `Executing Queries with CUBRID Node.js Driver <http://www.cubrid.org/wiki_apis/entry/executing-queries-with-cubrid-node-js-driver>`_
 * `Example using events <https://github.com/CUBRID/node-cubrid#usage>`_
@@ -56,5 +57,5 @@ Examples
 
 CUBRID Node.js API
 ==================
-* `CUBRID Node.js 1.1 documentation  <http://www.cubrid.org/manual/api/node.js/1.1/index.html>`_
-* `CUBRID Node.js 1.0 documentation <http://www.cubrid.org/manual/api/node.js/1.0/index.html>`_
+
+See http://ftp.cubrid.org/CUBRID_Docs/Drivers/Node.js/.

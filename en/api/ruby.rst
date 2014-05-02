@@ -228,7 +228,7 @@ You can add, update, delete columns by using features from **ActiveRecord::Migra
 
 You can use **ActiveRecord::SchemaDumper.dump** to dump information for currently used schema. This is done into a platform independent format that is understood by Ruby ActiveRecord.
 
-Note that if you are using custom column types database specific (**:bigint**, **:bit**), this may work.
+Note that if you are using custom column types database specific (**:bigint**, **:bit**), this may not work.
 
 **Obtaining Server Capabilities**
 
@@ -240,7 +240,6 @@ You can get database information extracted from the current connections as in th
     puts "SQL statement maximum length : " + ActiveRecord::Base.connection.sql_query_length.to_s
     puts "Quoting : '''test'''         : " + ActiveRecord::Base.connection.quote("'''test'''")
     
-
 **Creating a schema**
 
 Due to the way CUBRID is functioning, you cannot programmatically create a schema as in the following example:
@@ -254,46 +253,4 @@ Due to the way CUBRID is functioning, you cannot programmatically create a schem
 Ruby API
 ========
 
-For more information about CUBRID Ruby API, see CUBRID Ruby API Documentation ( http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#ruby_api ).
-
-*   `Connection Class <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#connection_class>`_
-
-    *   `Data Constants <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#data_constants>`_
-    *   `auto_commit= <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#auto_commit.3d>`_
-    *   `auto_commit? <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#auto_commit.3f>`_
-    *   `connect <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#connect>`_
-    *   `close <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#close>`_
-    *   `commit <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#commit>`_
-    *   `rollback <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#rollback>`_
-    *   `glo_new <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#glo_new>`_
-    *   `query <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#query>`_
-    *   `prepare <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#prepare>`_
-    *   `to_s <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#to_s>`_
-    *   `server_version <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#server_version>`_
-
-*   `Statement Class <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#statement_class>`_
-
-    *   `Data Types <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#data_types>`_
-    *   `affected_rows <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#affected_rows>`_
-    *   `bind <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#bind>`_
-    *   `close <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#close_2>`_
-    *   `column_info <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#column_info>`_
-    *   `each <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#each>`_
-    *   `each_hash <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#each_hash>`_
-    *   `execute <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#execute>`_
-    *   `fetch <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#fetch>`_
-    *   `fetch_hash <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#fetch_hash>`_
-    *   `get_oid <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#get_oid>`_
-
-*   `Oid Class <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#oid_class>`_
-
-    *   `[](col_name) <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#.5b.5d.28col_name.29>`_
-    *   `[]=(col_name, obj) <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#.5b.5d.3d.28col_name.2c_obj.29>`_
-    *   `drop <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#drop>`_
-    *   `each <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#each_2>`_
-    *   `lock <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#lock>`_
-    *   `refresh <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#refresh>`_
-    *   `save <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#save>`_
-    *   `table <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#table>`_
-    *   `to_hash <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#to_hash>`_
-    *   `to_s <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#to_s_2>`_
+See http://ftp.cubrid.org/CUBRID_Docs/Drivers/Ruby/.

@@ -61,4 +61,4 @@ Perl API
 
 Currently, CUBRID Perl driver provides only basic features and does not support LOB type and column information verification.
 
-If you want to get details about CUBRID Perl driver API, see http://search.cpan.org/~cubrid/.
+If you want to get details about CUBRID Perl driver API, see http://ftp.cubrid.org/CUBRID_Docs/Drivers/Perl/.

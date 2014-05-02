@@ -76,17 +76,17 @@ PDO 드라이버를 다운로드하면 **php_cubrid.dll** 파일을 볼 수 있�
 #.  **php.ini** ( **C:\\Program Files\\PHP\\php.ini** ) 파일을 열어 끝에 다음 두 줄을 추가한다. 
 
     ::
-    
+
         [PHP_CUBRID]
         extension=php_cubrid.dll
-    
+
     PDO 드라이버의 경우에는 다음 내용을 추가한다. 
-        
+
     ::
-    
+
         [PHP_PDO_CUBRID]
         extension = php_pdo_cubrid.dll
-    
+
 #.  웹 서버를 재시작한다.
 
 PDO 프로그래밍
@@ -190,7 +190,6 @@ CUBRID PDO 드라이버 확인
     }
     ?>
 
-
 위 스크립트는 다음과 같이 설치된 PDO 드라이버를 출력한다. ::
 
     PDO Drivers available:
@@ -231,7 +230,6 @@ CUBRID 연결
     }
     ?>
 
-
 연결에 성공하면 다음과 같은 스크립트가 출력된다. ::
 
     PDO connect string: cubrid:dbname=demodb;host=localhost;port=30000
@@ -243,9 +241,7 @@ SELECT 실행
 PDO에서 SQL 질의를 수행하려면 질의나 응용 프로그램의 성격에 따라 다음 중 하나의 방법을 사용할 수 있다.
 
 *   `query <http://docs.php.net/manual/en/pdo.exec.php>`_ () 함수 사용
-
 *   prepared statements( `prepare <http://docs.php.net/manual/en/pdo.prepare.php>`_ ()/ `execute <http://docs.php.net/manual/en/pdostatement.execute.php>`_ ()) 함수 사용
-
 *   `exec <http://docs.php.net/manual/en/pdo.exec.php>`_ () 함수 사용
 
 다음 예제에서는 가장 간단한 `query <http://docs.php.net/manual/en/pdo.exec.php>`_ () 함수를 사용한다. 리턴 값은 PDOStatement 객체인 resultset에서 $rs["column_name"]와 같이 칼럼 이름을 이용하여 얻을 수 있다.
@@ -360,7 +356,6 @@ prepare와 bind
 prepared statement는 PDO가 제공하는 유용한 기능 중 하나로, 사용하면 다음과 같은 이점이 있다.
 
 *   SQL prepared statement는 다양한 파라미터와 함께 여러 번 실행되어도 한 번만 파싱하면 된다. 따라서 여러 번 실행되는 SQL문에 prepared statement를 사용하면 CUBRID 응용 프로그램의 성능을 높일 수 있다.
-
 *   수동으로 파라미터를 이스케이프할 필요가 없으므로 SQL 인젝션 공격을 방지할 수 있다(그러나 SQL 질의의 다른 부분이 이스케이프되지 않은 입력으로 구성된다면 SQL 인젝션을 완전히 막을 수는 없다).
 
 다음은 prepared statement를 이용하여 데이터를 조회하는 예이다.
@@ -496,7 +491,7 @@ PDO::getAttribute() 사용
 CUBRID PDO 확장
 ---------------
 
-CUBRID PDO 확장은 데이터베이스 스키마와 메타데이터 정보를 조회하는 데 사용할 수 있는 `PDO::cubrid_schema <http://kr.php.net/manual/en/pdo.cubrid-schema.php>`_ () 함수를 제공한다. 다음은 `PDO::cubrid_schema <http://kr.php.net/manual/en/pdo.cubrid-schema.php>`_ () 함수를 이용하여 *nation* 테이블의 기본키를 반환하는 스크립트이다.
+CUBRID PDO 확장은 데이터베이스 스키마와 메타데이터 정보를 조회하는 데 사용할 수 있는 PDO::cubrid_schema() 함수를 제공한다. 다음은 이 함수를 이용하여 *nation* 테이블의 기본키를 반환하는 스크립트이다.
 
 .. code-block:: php
 
@@ -524,7 +519,6 @@ CUBRID PDO 확장은 데이터베이스 스키마와 메타데이터 정보를 �
 PDO API
 =======
 
-PDO API에 대한 자세한 내용은 http://docs.php.net/manual/en/book.pdo.php\ 를 참고한다. CUBRID PDO 드라이버가 제공하는 API는 다음과 같다.
+PDO API와 관련하여 http://kr.php.net/manual/en/book.pdo.php\를 참고한다.
 
-*   `PDO_CUBRID DSN <http://www.php.net/manual/en/ref.pdo-cubrid.connection.php>`_
-*   `PDO::cubrid_schema <http://www.php.net/manual/en/pdo.cubrid-schema.php>`_
+CUBRID PDO 드라이버가 제공하는 PDO API는 http://ftp.cubrid.org/CUBRID_Docs/Drivers/PDO/\를 참고한다.

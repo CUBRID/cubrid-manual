@@ -57,7 +57,6 @@ Ruby 예제 프로그램
         CONSTRAINT pk_cities_id PRIMARY KEY(id)
     );
 
-
 **라이브러리 로드**
 
 예제 프로그램으로 *tutorial.rb* 라는 파일을 생성하고 다음과 같은 기본 설정을 작성한다.
@@ -100,7 +99,6 @@ Ruby 예제 프로그램
     Country.create(:code => 'ITA', :name => 'Italy', :record_date => Time.now)
     Country.create(:code => 'SPN', :name => 'Spain')
 
-
 **데이터베이스에서 레코드 조회**
 
 다음과 같이 데이터베이스에서 레코드를 조회한다.
@@ -116,7 +114,6 @@ Ruby 예제 프로그램
     Country.find_each do |country|
      pp(country)
     end
-
 
 **데이터베이스 레코드 갱신**
 
@@ -229,7 +226,9 @@ CUBRID에서 지원하는 칼럼 타입은 **:string**, **:text**, **:integer**,
 
 **데이터베이스 스키마 덤프**
 
-**ActiveRecord::SchemaDumper.dump** 를 사용하여 현재 사용 중인 스키마의 정보를 덤프할 수 있다. 덤프된 스키마 정보는 플랫폼과 상관없이 사용할 수 있는 형식으로 저장되며 Ruby ActiveRecord에서도 사용할 수 있다. 단, **:bigint**, **:bit** 등과 같이 특정 데이터베이스에서 사용되는 커스텀 칼럼 타입을 사용한다면 제대로 동작하지 않을 수 있다.
+**ActiveRecord::SchemaDumper.dump** 를 사용하여 현재 사용 중인 스키마의 정보를 덤프할 수 있다. 덤프된 스키마 정보는 플랫폼과 상관없이 사용할 수 있는 형식으로 저장되며 Ruby ActiveRecord에서도 사용할 수 있다. 
+
+단, **:bigint**, **:bit** 등과 같이 특정 데이터베이스에서 사용되는 커스텀 칼럼 타입을 사용한다면 제대로 동작하지 않을 수 있다.
 
 **서버 용량 정보 획득**
 
@@ -254,47 +253,4 @@ CUBRID에서는 데이터베이스 생성을 **cubrid create** 유틸리티 명�
 Ruby API
 ========
 
-Ruby API에 대한 자세한 내용은 CUBRID Ruby API Documentation(
-http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#ruby_api 
-)을 참고한다.
-
-*   `Connection Class <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#connection_class>`_
-
-    *   `Data Constants <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#data_constants>`_
-    *   `auto_commit= <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#auto_commit.3d>`_
-    *   `auto_commit? <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#auto_commit.3f>`_
-    *   `connect <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#connect>`_
-    *   `close <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#close>`_
-    *   `commit <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#commit>`_
-    *   `rollback <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#rollback>`_
-    *   `query <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#query>`_
-    *   `prepare <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#prepare>`_
-    *   `to_s <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#to_s>`_
-    *   `server_version <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#server_version>`_
-
-*   `Statement Class <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#statement_class>`_
-
-    *   `Data Types <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#data_types>`_
-    *   `affected_rows <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#affected_rows>`_
-    *   `bind <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#bind>`_
-    *   `close <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#close_2>`_
-    *   `column_info <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#column_info>`_
-    *   `each <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#each>`_
-    *   `each_hash <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#each_hash>`_
-    *   `execute <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#execute>`_
-    *   `fetch <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#fetch>`_
-    *   `fetch_hash <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#fetch_hash>`_
-    *   `get_oid <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#get_oid>`_
-
-*   `Oid Class <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#oid_class>`_
-
-    *   `[](col_name) <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#.5b.5d.28col_name.29>`_
-    *   `[]=(col_name, obj) <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#.5b.5d.3d.28col_name.2c_obj.29>`_
-    *   `drop <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#drop>`_
-    *   `each <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#each_2>`_
-    *   `lock <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#lock>`_
-    *   `refresh <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#refresh>`_
-    *   `save <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#save>`_
-    *   `table <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#table>`_
-    *   `to_hash <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#to_hash>`_
-    *   `to_s <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#to_s_2>`_
+http://ftp.cubrid.org/CUBRID_Docs/Drivers/Ruby/\ 를 참고한다.

@@ -149,11 +149,7 @@ In the virtual directory where the ASP sample program runs, right-click "Default
 
 In the picture above, if you select **(All Unassigned)** from the [IP Address] dropdown list under [Web Site Identification], it is recognized as localhost. If you want to see the sample program through a specific IP address, make an IP address recognize a directory as a virtual directory and register the IP address in the registration information.
 
-The following example shows that an IP address is configured as localhost.
-
-**Example**
-
-The following example shows how to create cubrid.asp and store it in a virtual directory. ::
+Create the below code as cubrid.asp and store it in a virtual directory. ::
 
     <HTML>
         <HEAD>

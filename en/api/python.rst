@@ -253,4 +253,4 @@ Python API
 
 Python Database API is composed of connect() module class, Connection object, Cursor object, and many other auxiliary functions. For more information, see Python DB API 2.0 Official Documentation at  http://www.python.org/dev/peps/pep-0249/.
 
-You can find the information about CUBRID Python API at http://packages.python.org/CUBRID-Python/.
+You can find the information about CUBRID Python API at http://ftp.cubrid.org/CUBRID_Docs/Drivers/Python/.

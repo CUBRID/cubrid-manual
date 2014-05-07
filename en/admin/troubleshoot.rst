@@ -14,7 +14,7 @@ When a specific error occurs, generally you can check SQL logs of broker applica
 
 One SQL log file is generated per each CAS; it is hard to find an SQL log in which an error occurred because SQL log files are many when CAS processes are many. However, SQL log file name includes CAS ID in the end part, you can find easily if you know the CAS ID in which an error occurred.
 
-.. note:: SQL log file name in a CAS is <broker_name>_<app_server_num>.sql.log(refer :ref:`broker-logs`); <app_server_num> is CAS ID.
+.. note:: SQL log file name in a CAS is <broker_name>_<app_server_num>.sql.log(see :ref:`broker-logs`); <app_server_num> is CAS ID.
 
 Function getting CAS information
 --------------------------------
@@ -81,7 +81,7 @@ There are examples of each application log when a slow query occurs.
 
 Slow query information in an application and in a broker is stored in each file when the setting is as following.
      
-*   The slow query information in application is stored in application log file when the value of **logSlowQueries** property in the connection URL is set to **yes** and the value of **slowQueryThresholdMillis** is set; it is stored to the application logfile specified with the **logFile** property(refer :func:`cci_connect_with_url`, :ref:`jdbc-connection-conf`).
+*   The slow query information in application is stored in application log file when the value of **logSlowQueries** property in the connection URL is set to **yes** and the value of **slowQueryThresholdMillis** is set; it is stored to the application logfile specified with the **logFile** property (see :func:`cci_connect_with_url` and :ref:`jdbc-connection-conf`).
 
 *   The slow query information in broker is stored in the $CUBRID/log/broker/sql_log directory when **SLOW_LOG** of :ref:`broker-configuration` is set to ON and **LONG_QUERY_TIME** is set.
 

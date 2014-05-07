@@ -226,7 +226,7 @@ You can specify whether a trigger action is to be performed by defining a condit
 
 *   If a trigger condition is omitted, the trigger becomes an unconditional trigger, which refers to that the trigger action is performed whenever it is called.
 
-The following example shows how to use a correlation name in an expression within a condition. If the event type is **INSERT**, **UPDATE** or **DELETE**, the expression in the condition can reference the correlation names **obj**, **new** or **old** to access a specific column. This example prefixes **obj** to the column name in the trigger condition to show that the *example* trigger tests the condition based on the current value of the *record* column.
+The following example shows how to use a correlation name in an expression within a condition. If the event type is **INSERT**, **UPDATE** or **DELETE**, the expression in the condition can refer to the correlation names **obj**, **new** or **old** to access a specific column. This example prefixes **obj** to the column name in the trigger condition to show that the *example* trigger tests the condition based on the current value of the *record* column.
 
 .. code-block:: sql
 

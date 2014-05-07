@@ -183,7 +183,7 @@ The **cubrid createdb** utility creates databases and initializes them with the 
 
 *   *database_name*: Specifies a unique name for the database to be created, without including the path name to the directory where the database will be created. If the specified database name is the same as that of an existing database name, CUBRID halts creation of the database to protect existing files.
 
-*   *locale_name*: A locale name to use in the database should be input. For a locale name which can be used in CUBRID, refer :ref:`locale-selection`.
+*   *locale_name*: A locale name to use in the database should be input. For a locale name which can be used in CUBRID, refer to :ref:`locale-selection`.
 
 *   *charset*: A characterset to use in the database should be input. A character set which can be used in CUBRID is iso88591, euckr or utf8.
     
@@ -945,7 +945,7 @@ The following options can be used in client/server mode only.
 
 .. option:: -d, --delete-old-repr
 
-    You can delete an existing table representation (schema structure) from catalog with this option. Generally you'd better keep the existing table representation because schema updating cost will be saved when you keep the status as referring the past schema for the old records.
+    You can delete an existing table representation (schema structure) from catalog with this option. Generally you'd better keep the existing table representation because schema updating cost will be saved when you keep the status as referring to the past schema for the old records.
 
 .. option:: -I, --Instance-lock-timeout=NUMBER 
 

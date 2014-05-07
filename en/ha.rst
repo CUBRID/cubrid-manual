@@ -2762,7 +2762,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
     
         [nodeB]$ cubrid heartbeat stop
 
-#.  If you newly build *nodeB*, configure **cubrid.conf**, **cubrid_ha.conf**, **cubrid_broker.conf** and **databases.txt** of *nodeA* and *nodeB*, by referring :ref:`ha-configuration`.
+#.  If you newly build *nodeB*, configure **cubrid.conf**, **cubrid_ha.conf**, **cubrid_broker.conf** and **databases.txt** of *nodeA* and *nodeB*, by referring to :ref:`ha-configuration`.
 
     *   Configure parameters in cubrid.conf about *nodeA* and *nodeB*.
 
@@ -3157,7 +3157,7 @@ Operate the below process when you complete to run **ha_make_slavedb.sh** script
         Copylogdb testdb@nodeA:/home/cubrid_usr/CUBRID/databases/testdb_nodeA (pid 26829, state registered)
         Server testdb (pid 26617, state registered_and_standby)
 
-Set a broker as referring :ref:`ha-cubrid-broker-conf`\ and start the broker with **cubrid broker restart** command.
+Set a broker as referring to :ref:`ha-cubrid-broker-conf` and start the broker with **cubrid broker restart** command.
 
 Building Replica from Slave
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -3182,7 +3182,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
         [nodeC]$ cubrid heartbeat stop
         [nodeC]$ cubrid service stop
 
-#.  If you newly build *nodeC*, configure **cubrid.conf**, **cubrid_ha.conf**, **cubrid_broker.conf** and **databases.txt** of *nodeA*, *nodeB* and *nodeC*, by referring :ref:`ha-configuration`.
+#.  If you newly build *nodeC*, configure **cubrid.conf**, **cubrid_ha.conf**, **cubrid_broker.conf** and **databases.txt** of *nodeA*, *nodeB* and *nodeC*, by referring to :ref:`ha-configuration`.
 
     *   Configure a parameter in **cubrid.conf** about *nodeC*.
     
@@ -3485,7 +3485,7 @@ Operate the below process when you complete to run **ha_make_slavedb.sh** script
 
         This may take a long time depending on the amount of recovery works to do.
 
-        CUBRID 10.0
+        CUBRID 9.3
 
         ++ cubrid server start: success
         @ copylogdb start
@@ -3511,7 +3511,7 @@ Operate the below process when you complete to run **ha_make_slavedb.sh** script
            Copylogdb testdb@nodeA:/home1/cubrid_usr/CUBRID/databases/testdb_nodeA (pid 5810, state registered)
            Server testdb (pid 5590, state registered_and_standby)
 
-*   Set a broker as referring :ref:`ha-cubrid-broker-conf`\ and start the broker with **cubrid broker restart** command.
+*   Set a broker as referring to :ref:`ha-cubrid-broker-conf` and start the broker with **cubrid broker restart** command.
 
 Building Replica from Replica
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -3537,7 +3537,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
         [nodeD]$ cubrid heartbeat stop
         [nodeD]$ cubrid service stop
 
-#.  If you newly build *nodeD*, configure **cubrid.conf**, **cubrid_ha.conf**, **cubrid_broker.conf** and **databases.txt** of *nodeA*, *nodeB*, *nodeC* and *nodeD*, by referring :ref:`ha-configuration`.
+#.  If you newly build *nodeD*, configure **cubrid.conf**, **cubrid_ha.conf**, **cubrid_broker.conf** and **databases.txt** of *nodeA*, *nodeB*, *nodeC* and *nodeD*, by referring to :ref:`ha-configuration`.
 
     *   Configure a parameter in **cubrid.conf** about *nodeC* and *nodeD*.
     
@@ -3896,7 +3896,7 @@ Operate the below process when you complete to run **ha_make_slavedb.sh** script
            Copylogdb testdb@nodeA:/home1/cubrid_usr/CUBRID/databases/testdb_nodeA (pid 5810, state registered)
            Server testdb (pid 5590, state registered_and_standby)
 
-*   Set a broker as referring :ref:`ha-cubrid-broker-conf`\ and start the broker with **cubrid broker restart** command.
+*   Set a broker as referring to :ref:`ha-cubrid-broker-conf` and start the broker with **cubrid broker restart** command.
 
 Building Slave from Replica
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -3923,7 +3923,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
         [nodeB]$ cubrid heartbeat stop
         [nodeB]$ cubrid service stop
         
-#.  If you newly build *nodeB*, configure **cubrid.conf**, **cubrid_ha.conf**, **cubrid_broker.conf** and **databases.txt** of *nodeA*, *nodeB*, *nodeC* and *nodeD*, by referring :ref:`ha-configuration`.
+#.  If you newly build *nodeB*, configure **cubrid.conf**, **cubrid_ha.conf**, **cubrid_broker.conf** and **databases.txt** of *nodeA*, *nodeB*, *nodeC* and *nodeD*, by referring to :ref:`ha-configuration`.
 
     *   Configure a parameter in **cubrid.conf** about *nodeB*.
 
@@ -4274,4 +4274,4 @@ Operate the below process when you complete to run **ha_make_slavedb.sh** script
            Copylogdb testdb@nodeA:/home1/cubrid/CUBRID/databases/testdb_nodeA (pid 27453, state registered)
            Server testdb (pid 27228, state registered_and_standby)
     
-Set a broker as referring :ref:`ha-cubrid-broker-conf`\ and start the broker with **cubrid broker restart** command.
+Set a broker as referring to :ref:`ha-cubrid-broker-conf` and start the broker with **cubrid broker restart** command.

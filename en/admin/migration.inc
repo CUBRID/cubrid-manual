@@ -467,7 +467,7 @@ The following steps describes migration scenario that can be applied while the e
 
 #. Load the new database
 
-    Create a database by using the **cubrid createdb** utility and then load the data which had previously been unloaded into the new database by using the **cubrid loaddb** utility. Please refer :ref:`creating-database` for creating a database and :ref:`load-db` for loading a database.
+    Create a database by using the **cubrid createdb** utility and then load the data which had previously been unloaded into the new database by using the **cubrid loaddb** utility. Please see :ref:`creating-database` for creating a database and :ref:`load-db` for loading a database.
 
 #. Back up the new database
 

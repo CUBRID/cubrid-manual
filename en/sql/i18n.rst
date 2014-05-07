@@ -326,7 +326,7 @@ Step 2: Compiling Locale
 Once the requirements described above are met, the locales can be compiled. 
 
 Regarding the embedded locales in CUBRID, they can be used without compiling user locale library, so they can be used by skipping the step 2. But there are differences between the embedded locale and the library locale.
-Regarding this, refer :ref:`Built-in Locale and Library Locale <built-in-locale-limit>`.
+Regarding this, see :ref:`Built-in Locale and Library Locale <built-in-locale-limit>`.
 
 To compile the locale libraries, one must use the **make_locale** (**.bat** for Windows **.sh** for Linux) utility script from command console. The file is delivered in **CUBRID/bin** folder so it should be resolved by PATH environment variable. Here **$CUBRID, $PATH** are the environment variables of Linux, **%CUBRID%**, **%PATH%** are the environment variables of Windows.
 
@@ -362,7 +362,7 @@ The first choice is recommended. In this scenario, some data may be shared among
 
 .. warning:: **Limitations and Rules**
 
-    *   Do not change the contents of **$CUBRID/conf/cubrid_locales.txt** after locales generation; Once generated the locales libraries, the contents of **$CUBRID/conf/cubrid_locales.txt** should not change (order of languages within file must also be preserved). During locale compiling, the generic collation use as default locale the first one in which is referenced; changing the order may cause different results with casing for such collation (utf8_gen_*).
+    *   Do not change the contents of **$CUBRID/conf/cubrid_locales.txt** after locales generation; once the locales libraries are generated, the contents of **$CUBRID/conf/cubrid_locales.txt** should not be changed (order of languages within the file must also be preserved). During locale compiling, the generic collation uses the first one as default locale; changing the order may cause different results with casing for such collation (utf8_gen_*).
     *   Do not change the contents for **$CUBRID/locales/data/*.txt** files.
 
 .. note:: **Procedure of Executing make_locale.sh(.bat) Script**
@@ -592,7 +592,7 @@ Synchronization of Database Collations with System Collations
 -------------------------------------------------------------
 
 CUBRID's normal operation requires that the system collation and the database collation must be the same.
-The system locale means that the locale which include built-in locales and library locales created through cubrid_locales.txt(refer :ref:`locale-setting`), and it includes the system collation information. The database collation information is stored on the **_db_collation** system catalog table.
+The system locale means that the locale which include built-in locales and library locales created through cubrid_locales.txt (see :ref:`locale-setting`), and it includes the system collation information. The database collation information is stored on the **_db_collation** system catalog table.
 
 **cubrid synccolldb** utility checks if the database collation is the same with the system collation, and synchronize into the system collation if they are different. However, note that this utility doesn't transform the data itself stored on the database.
 
@@ -705,7 +705,7 @@ Recreate the dropped foreign key. ::
 
     $ csql -S -u dba xdb
     
-    ALTER TABLE emp ADD CONSTRAINT FOREIGN KEY fk_emp_depname(depname) references dept(depname);
+    ALTER TABLE emp ADD CONSTRAINT FOREIGN KEY fk_emp_depname(depname) REFERENCES dept(depname);
 
 .. note::
 

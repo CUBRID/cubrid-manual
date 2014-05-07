@@ -2253,7 +2253,7 @@ CCI API Reference
     ============================= =========== =============================================== ==========================================================================================================
     user                          string                                                      DB user name.
     password                      string                                                      DB user password.
-    url                           string                                                      Connection URL. For specifying connection URL string, refer :c:func:`cci_connect_with_url`.
+    url                           string                                                      Connection URL. For specifying connection URL string, see :c:func:`cci_connect_with_url`.
     pool_size                     int         10                                              Maximum number of connections which a connection pool can have.
     max_pool_size                 int         pool_size                                       Total number of connections to create when creating an initial datasource. maximum value is INT_MAX.
     max_wait                      msec        1000                                            Maximum waiting time to get connection.

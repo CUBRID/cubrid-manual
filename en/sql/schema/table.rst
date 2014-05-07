@@ -472,7 +472,7 @@ A foreign key is a column or a set of columns that references the primary key in
 
 .. code-block:: sql
 
-    -- creating two tables where one is referencing the other
+    -- creating two tables where one is referring to the other
     CREATE TABLE a_tbl (
         id INT NOT NULL DEFAULT 0 PRIMARY KEY,
         phone VARCHAR(10)
@@ -623,7 +623,7 @@ If you specify REUSE_OID together with the collation of table, it can be placed 
 Charset and Collation
 ^^^^^^^^^^^^^^^^^^^^^
 
-The charset and collation of the table can be designated in **CREATE TABLE** statement. Please refer :ref:`collation-charset-string` for details.
+The charset and collation of the table can be designated in **CREATE TABLE** statement. Please see :ref:`collation-charset-string` for details.
 
 CREATE TABLE LIKE
 -----------------

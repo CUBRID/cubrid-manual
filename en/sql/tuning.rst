@@ -122,7 +122,7 @@ To view a query plan for a CUBRID SQL query, you can use following methods.
 
     .. note:: If you configure the optimization level as not executing the query like 2, 258, or 514, all queries(not only SELECT, but also INSERT, UPDATE, DELETE, REPLACE, TRIGGER, SERIAL, etc.) are not executed.
 
-The CUBRID query optimizer determines whether to perform query optimization and output the query plan by referencing the optimization level value set by the user. 
+The CUBRID query optimizer determines whether to perform query optimization and output the query plan by referring to the optimization level value set by the user. 
 
 The following shows the result which ran the query after inputting ";plan simple" or "SET OPTIMIZATION LEVEL 257;" in CSQL.
 

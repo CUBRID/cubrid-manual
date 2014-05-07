@@ -26,9 +26,9 @@ The following table shows a summary of explicit type conversions (casts) using t
 +----------------+--------+--------+--------+--------+--------+--------+----------+----------+----------+-------+-------+--------+--------+-------+--------+--------+
 | **AN**         | Yes    | Yes    | Yes    | Yes    | No     | No     | No       | No       | No       | No    | No    | No     | No     | No    | No     | No     |
 +----------------+--------+--------+--------+--------+--------+--------+----------+----------+----------+-------+-------+--------+--------+-------+--------+--------+
-| **VC**         | Yes    | Yes    | Yes*   | Yes*   | Yes    | Yes    | Yes      | Yes      | Yes      | Yes   | Yes   | Yes    | Yes    | No    | No     | No     |
+| **VC**         | Yes    | Yes    | Yes(*) | Yes(*) | Yes    | Yes    | Yes      | Yes      | Yes      | Yes   | Yes   | Yes    | Yes    | No    | No     | No     |
 +----------------+--------+--------+--------+--------+--------+--------+----------+----------+----------+-------+-------+--------+--------+-------+--------+--------+
-| **FC**         | Yes    | Yes    | Yes*   | Yes*   | Yes    | Yes    | Yes      | Yes      | Yes      | Yes   | Yes   | Yes    | Yes    | No    | No     | No     |
+| **FC**         | Yes    | Yes    | Yes(*) | Yes(*) | Yes    | Yes    | Yes      | Yes      | Yes      | Yes   | Yes   | Yes    | Yes    | No    | No     | No     |
 +----------------+--------+--------+--------+--------+--------+--------+----------+----------+----------+-------+-------+--------+--------+-------+--------+--------+
 | **VB**         | No     | No     | Yes    | Yes    | Yes    | Yes    | No       | Yes      | Yes      | No    | No    | No     | No     | No    | No     | No     |
 +----------------+--------+--------+--------+--------+--------+--------+----------+----------+----------+-------+-------+--------+--------+-------+--------+--------+
@@ -55,7 +55,7 @@ The following table shows a summary of explicit type conversions (casts) using t
 | **SQ**         | No     | No     | No     | No     | No     | No     | No       | No       | No       | No    | No    | No     | No     | Yes   | Yes    | Yes    |
 +----------------+--------+--------+--------+--------+--------+--------+----------+----------+----------+-------+-------+--------+--------+-------+--------+--------+
 
-* The **CAST** operation is allowed only when the value expression and the data type to be cast have the same character set.
+(*): The **CAST** operation is allowed only when the value expression and the data type to be cast have the same character set.
 
 * **Data Type Key**
 
@@ -415,7 +415,7 @@ The following example shows the case when the system parameter **intl_date_lang*
 
 .. note::
 
-    *   When the charset is ISO-8859-1, the language that can be changed by the system parameter **intl_date_lang** is "ko_KR" and "tr_TR" except "en_US". If the charset is UTF-8, it can be changed to any language supported by CUBRID. For details, see :ref:`Note <tochar-remark>` in the :func:`TO_CHAR`).
+    When the charset is ISO-8859-1, the language that can be changed by the system parameter **intl_date_lang** is "ko_KR" and "tr_TR" except "en_US". If the charset is UTF-8, it can be changed to any language supported by CUBRID. For details, see :ref:`Note <tochar-remark>` in the :func:`TO_CHAR`).
 
 FORMAT
 ======
@@ -477,7 +477,7 @@ When the *format* argument is assigned, the *string* is interpreted according to
 
 For example, when the language is "de_DE" and the *format* is "%d %M %Y", the string "3 Oktober 2009" is interpreted as the **DATE** type of "2009-10-03". If the *format* argument does not correspond to the given *string*, an error is returned.
 
-0 is not allowed in the argument value corresponding to year, month, and day; however, if 0 is inputted in every argument value corresponding to date and time, the value of **DATE** or **DATETIME** type that has 0 for every date and time value is returned as an exception. Note that operation in JDBC program is determined by the configuration of zeroDateTimeBehavior, connection URL property. For more information about zeroDateTimeBehavior, please refer :ref:`jdbc-connection-conf`.
+0 is not allowed in the argument value corresponding to year, month, and day; however, if 0 is inputted in every argument value corresponding to date and time, the value of **DATE** or **DATETIME** type that has 0 for every date and time value is returned as an exception. Note that operation in JDBC program is determined by the configuration of zeroDateTimeBehavior, connection URL property. For more information about zeroDateTimeBehavior, please see :ref:`jdbc-connection-conf`.
 
 The following example shows the case when the system parameter **intl_date_lang** is "en_US".
 
@@ -547,7 +547,7 @@ The following example shows the case when the system parameter **intl_date_lang*
 
 .. note::
 
-    *   When the charset is ISO-8859-1, the language that can be changed by the system parameter **intl_date_lang** is "ko_KR" and "tr_TR" except "en_US". If the charset is UTF-8, it can be changed to any language supported by CUBRID. For details, see :ref:`Note <tochar-remark>` in the :func:`TO_CHAR`).
+    When the charset is ISO-8859-1, the language that can be changed by the system parameter **intl_date_lang** is "ko_KR" and "tr_TR" except "en_US". If the charset is UTF-8, it can be changed to any language supported by CUBRID. For details, see :ref:`Note <tochar-remark>` in the :func:`TO_CHAR`).
 
 TIME_FORMAT
 ===========
@@ -612,7 +612,7 @@ The following example shows the case when the system parameter **intl_date_lang*
 
 .. note::
 
-    *   When the charset is ISO-8859-1, the language that can be changed by the system parameter **intl_date_lang** is "ko_KR" and "tr_TR" except "en_US". If the charset is UTF-8, it can be changed to any language supported by CUBRID. For details, see :ref:`Note <tochar-remark>` in the :func:`TO_CHAR`).
+    When the charset is ISO-8859-1, the language that can be changed by the system parameter **intl_date_lang** is "ko_KR" and "tr_TR" except "en_US". If the charset is UTF-8, it can be changed to any language supported by CUBRID. For details, see :ref:`Note <tochar-remark>` in the :func:`TO_CHAR`).
 
 TO_CHAR(date_time)
 ==================
@@ -751,7 +751,7 @@ When the *format* argument is omitted, the *date_time* is output as a string acc
 +--------------+------------------------------+-------------+
 | **am**       | am                           | 오전        |
 +--------------+------------------------------+-------------+
-| **A.M.**     | A.M.                         | 오전        |
+| **A.M.**     | A.M.                         | 오후        |
 +--------------+------------------------------+-------------+
 | **A.m.**     | A.m.                         | 오전        |
 +--------------+------------------------------+-------------+
@@ -1103,7 +1103,7 @@ When the *format* argument is specified, the *string* is interpreted according t
 
 For example, when a language is "de_DE" and *string* is "12.mai.2012", and *format* is "DD.mon.YYYY", it is interpreted as May 12th, 2012.When the *format* parameter specified does not correspond to the given *string*, an error is returned.
 
-When the *format* argument is omitted, *string* is interpreted as the CUBRID default format(refer :ref:`cast-to-datetime-recommend`) and if it fails, *string* is interpreted as the language format (see the table :ref:`Default Output Format of Language <tochar-default-datetime-format>` in the :func:`TO_CHAR`) by **intl_date_lang**. If the value of **intl_date_lang** is not set, the language is applied by the language specified when creating DB.
+When the *format* argument is omitted, *string* is interpreted as the CUBRID default format (refer to :ref:`cast-to-datetime-recommend`) and if it fails, *string* is interpreted as the language format (see the table :ref:`Default Output Format of Language <tochar-default-datetime-format>` in the :func:`TO_CHAR`) by **intl_date_lang**. If the value of **intl_date_lang** is not set, the language is applied by the language specified when creating DB.
 
 For example, when a language is "de_DE", the acceptable strings for **DATE** type are "MM/DD/YYYY", CUBRID default format and "DD.MM.YYYY", "de_DE" default format.
 
@@ -1176,7 +1176,7 @@ The following example shows the query executed when the system parameter **intl_
 
 .. note::
 
-    *   When the charset is ISO-8859-1, the language that can be changed by the system parameter **intl_date_lang** is "ko_KR" and "tr_TR" except "en_US". If the charset is UTF-8, it can be changed to any language supported by CUBRID. For details, see :ref:`Note <tochar-remark>` in the :func:`TO_CHAR`).
+    When the charset is ISO-8859-1, the language that can be changed by the system parameter **intl_date_lang** is "ko_KR" and "tr_TR" except "en_US". If the charset is UTF-8, it can be changed to any language supported by CUBRID. For details, see :ref:`Note <tochar-remark>` in the :func:`TO_CHAR`).
 
 TO_DATETIME
 ===========
@@ -1194,7 +1194,7 @@ When the *format* argument is specified, the *string* is interpreted according t
 
 For example, when a language is "de_DE" and *string* is "12/mai/2012 12:10:00 Nachm."  and *format* is "DD/MON/YYYY HH:MI:SS AM", it is interpreted as May 12th, 2012 12:10:00 PM. At this time, the language is set by *date_lang_string_literal* argument. If *date_lang_string_literal* argument is not set, the language is specified by the **intl_date_lang** system parameter; if the value of **intl_date_lang** is not set, the language is specified by the language specified when creating DB. When the *format* parameter specified does not correspond to the given *string*, an error is returned.
 
-When the *format* argument is omitted, *string* is interpreted as the CUBRID default format(refer :ref:`cast-to-datetime-recommend`) and if it fails, *string* is interpreted as the language format (see the table :ref:`Default Output Format of Language <tochar-default-datetime-format>` in the :func:`TO_CHAR`) by **intl_date_lang**. If the value of **intl_date_lang** is not set, the language is applied by the language specified when creating DB.
+When the *format* argument is omitted, *string* is interpreted as the CUBRID default format (refer to :ref:`cast-to-datetime-recommend`) and if it fails, *string* is interpreted as the language format (see the table :ref:`Default Output Format of Language <tochar-default-datetime-format>` in the :func:`TO_CHAR`) by **intl_date_lang**. If the value of **intl_date_lang** is not set, the language is applied by the language specified when creating DB.
 
 For example, when a language is "de_DE", the acceptable strings for **DATETIME** type are "HH:MI:SS.FF AM MM/DD/YYYY", CUBRID default format and "HH24:MI:SS.FF DD.MM.YYYY", "de_DE" default format.
 
@@ -1259,7 +1259,7 @@ The following example shows the case when the system parameter **intl_date_lang*
 
 .. note::
 
-    *   When the charset is ISO-8859-1, the language that can be changed in **TO_DATETIME** function is "ko_KR" and "tr_TR" except "en_US". If the charset is UTF-8, it can be changed to any language supported by CUBRID. For details, see :ref:`Note <tochar-remark>` in the :func:`TO_CHAR`.
+    When the charset is ISO-8859-1, the language that can be changed in **TO_DATETIME** function is "ko_KR" and "tr_TR" except "en_US". If the charset is UTF-8, it can be changed to any language supported by CUBRID. For details, see :ref:`Note <tochar-remark>` in the :func:`TO_CHAR`.
 
 TO_NUMBER
 =========
@@ -1353,7 +1353,7 @@ When the *format* parameter does not correspond to the given *string*, an error 
 
 For example, when a language is "de_DE" and *string* is "10:23:00 Nachm.", and *format* is "HH/MI/SS/AM, it is interpreted as 10:23:00 PM.
 
-When the *format* argument is omitted, *string* is interpreted as the CUBRID default format(refer :ref:`cast-to-datetime-recommend`) and if it fails, *string* is interpreted as the language format (see the table :ref:`Default Output Format of Language <tochar-default-datetime-format>` in the :func:`TO_CHAR`) by **intl_date_lang**. If the value of **intl_date_lang** is not set, the language is applied by the language specified when creating DB.
+When the *format* argument is omitted, *string* is interpreted as the CUBRID default format (refer to :ref:`cast-to-datetime-recommend`) and if it fails, *string* is interpreted as the language format (see the table :ref:`Default Output Format of Language <tochar-default-datetime-format>` in the :func:`TO_CHAR`) by **intl_date_lang**. If the value of **intl_date_lang** is not set, the language is applied by the language specified when creating DB.
 
 For example, when a language is "de_DE", the acceptable strings for **TIME** type are "HH:MI:SS AM", CUBRID default format and "HH24:MI:SS", "de_DE" default format.
 
@@ -1428,7 +1428,7 @@ The following example shows the case when the system parameter **intl_date_lang*
 
 .. note::
 
-    *   When the charset is ISO-8859-1, the language that can be changed by the system parameter **intl_date_lang** is "ko_KR" and "tr_TR" except "en_US". If the charset is UTF-8, it can be changed to any language supported by CUBRID. For details, see :ref:`Note <tochar-remark>` in the :func:`TO_CHAR`).
+    When the charset is ISO-8859-1, the language that can be changed by the system parameter **intl_date_lang** is "ko_KR" and "tr_TR" except "en_US". If the charset is UTF-8, it can be changed to any language supported by CUBRID. For details, see :ref:`Note <tochar-remark>` in the :func:`TO_CHAR`).
 
 TO_TIMESTAMP
 ============
@@ -1446,7 +1446,7 @@ When the *format* argument is specified, the *string* is interpreted according t
 
 For example, when a language is "de_DE" and *string* is "12/mai/2012 12:10:00 Nachm.", and *format* is "DD/MON/YYYY HH:MI:SS AM", it is interpreted as May 12th, 2012, 12:10:00 AM. When the *format* parameter specified does not correspond to the given string, an error is returned.
 
-When the *format* argument is omitted, *string* is interpreted as the CUBRID default format(refer :ref:`cast-to-datetime-recommend`) and if it fails, *string* is interpreted as the language format (see the table :ref:`Default Output Format of Language <tochar-default-datetime-format>` in the :func:`TO_CHAR`) by **intl_date_lang**. If the value of **intl_date_lang** is not set, the language is applied by the language specified when creating DB.
+When the *format* argument is omitted, *string* is interpreted as the CUBRID default format(refer to :ref:`cast-to-datetime-recommend`) and if it fails, *string* is interpreted as the language format (see the table :ref:`Default Output Format of Language <tochar-default-datetime-format>` in the :func:`TO_CHAR`) by **intl_date_lang**. If the value of **intl_date_lang** is not set, the language is applied by the language specified when creating DB.
 
 For example, when a language is "de_DE", the acceptable strings for **TIMESTAMP** type are "HH:MI:SS AM MM/DD/YYYY", CUBRID default format and "HH24:MI:SS DD.MM.YYYY", "de_DE" default format.
 
@@ -1511,4 +1511,4 @@ The following example shows the case when the system parameter **intl_date_lang*
 
 .. note::
 
-    *   When the charset is ISO-8859-1, the language that can be changed by the system parameter **intl_date_lang** is "ko_KR" and "tr_TR" except "en_US". If the charset is UTF-8, it can be changed to any language supported by CUBRID. For details, see :ref:`Note <tochar-remark>` in the :func:`TO_CHAR`).
+    When the charset is ISO-8859-1, the language that can be changed by the system parameter **intl_date_lang** is "ko_KR" and "tr_TR" except "en_US". If the charset is UTF-8, it can be changed to any language supported by CUBRID. For details, see :ref:`Note <tochar-remark>` in the :func:`TO_CHAR`).

@@ -2161,7 +2161,7 @@ Logging
 SHARD
 ^^^^^
 
-To use SHARD feature, configure the below parameters in **cubrid_broker.conf** as referring **cubrid_broker.conf.shard**.
+To use SHARD feature, configure the below parameters in **cubrid_broker.conf** as referring to **cubrid_broker.conf.shard**.
 
 **SHARD**
 

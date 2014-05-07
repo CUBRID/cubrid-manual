@@ -282,7 +282,7 @@ Changing the shard Configurations
 
 **cubrid_broker.conf**
 
-Change **cubrid_broker.conf** as shown below by referring **cubrid_broker.conf.shard**:
+Change **cubrid_broker.conf** as shown below by referring to **cubrid_broker.conf.shard**:
 
 .. warning:: The port number and the shared memory identifier should be appropriately changed to the value which has not been assigned by the system.
 
@@ -570,7 +570,7 @@ To use the CUBRID SHARD feature, the parameters needed to run SHARD related proc
 cubrid_broker.conf
 ^^^^^^^^^^^^^^^^^^
 
-The **cubrid_broker.conf** file is used for setting the CUBRID SHARD feature. Refer **cubrid_broker.conf.shard** when configuring **cubrid_broker.conf**. For details of **cubrid_broker.conf**, see :ref:`broker-configuration`.
+The **cubrid_broker.conf** file is used for setting the CUBRID SHARD feature. Refer to **cubrid_broker.conf.shard** when configuring **cubrid_broker.conf**. For details of **cubrid_broker.conf**, see :ref:`broker-configuration`.
 
 **Specifying the target shard DB** 
 

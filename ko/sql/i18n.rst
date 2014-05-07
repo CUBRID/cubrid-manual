@@ -362,7 +362,7 @@ CUBRID에 내장된 로캘을 사용한다면 사용자 로캘 라이브러리�
 
 .. warning:: **제약 사항 및 규칙**
 
-    *   일단 로캘 라이브러리가 생성된 후에는 **$CUBRID/conf/cubrid_locales.txt** 파일을 변경하면 안 된다. 다시 말해서, 이 파일에서 명시된 언어들의 순서를 포함하여 어떤 내용도 변경해서는 안 된다. 로캘이 컴파일되고 나면, 일반 콜레이션(generic collation)은 기본 로캘로 **cubrid_locales.txt**\에 존재하는 첫번째 로캘을 사용한다. 따라서 순서를 바꾸면 해당 콜레이션(utf8_gen_*)에 대한 대소문자 변환 결과가 달라질 수 있다.
+    *   일단 로캘 라이브러리가 생성된 후에는 **$CUBRID/conf/cubrid_locales.txt** 파일을 변경하면 안 된다. 다시 말해서, 이 파일에서 명시된 언어들의 순서를 포함하여 어떤 내용도 변경해서는 안 된다. 로캘이 컴파일되고 나면, 일반 콜레이션(generic collation)은 **cubrid_locales.txt**\에 존재하는 첫번째 로캘을 기본 로캘로 사용한다. 따라서 순서를 바꾸면 해당 콜레이션(utf8_gen_*)에 대한 대소문자 변환 결과가 달라질 수 있다.
     *   **$CUBRID/locales/data/*.txt** 파일들은 변경되어서는 안 된다.
 
 .. note:: **make_locale.sh(.bat) 스크립트 수행 절차**
@@ -705,7 +705,7 @@ DROP된 외래 키를 다시 생성한다. ::
 
     $ csql -S -u dba xdb
     
-    ALTER TABLE emp ADD CONSTRAINT FOREIGN KEY fk_emp_depname(depname) references dept(depname);
+    ALTER TABLE emp ADD CONSTRAINT FOREIGN KEY fk_emp_depname(depname) REFERENCES dept(depname);
 
 .. note::
 

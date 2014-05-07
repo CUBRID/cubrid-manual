@@ -43,7 +43,7 @@ COERCIBILITY
 
 .. function:: COERCIBILITY(expr)
     
-    This function returns the collation coercibility level of *expr*. The collation coercibility level determines which collation or charset should be used when each column(expression) has different collation or charset. For more details, please refer :ref:`Collation Coercibility <collation-coercibility>`.
+    This function returns the collation coercibility level of *expr*. The collation coercibility level determines which collation or charset should be used when each column(expression) has different collation or charset. For more details, please see :ref:`Collation Coercibility <collation-coercibility>`.
 
     :param expr: Target expression to get the collation coercibility level.
 

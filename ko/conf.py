@@ -12,6 +12,7 @@
 # serve to show the default.
 
 import sys, os
+import cloud_sptheme as csp
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -28,7 +29,8 @@ import sys, os
 extensions = []
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+# change this and layout.html in this directory for using naver analytics.
+templates_path = ['_templates_org']
 
 # The suffix of source filenames.
 source_suffix = '.rst'
@@ -41,7 +43,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'CUBRID'
-copyright = u'2013, Search Solution Corporation'
+copyright = u'2014, Search Solution Corporation'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -91,7 +93,10 @@ pygments_style = 'sphinx'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'default' # 3
+
+html_theme = 'cloud'
+
+#html_theme = 'default' # 3
 #html_theme = 'nature'
 #html_theme = 'sphinxdoc' # 2
 #html_theme = 'haiku'   # 2
@@ -103,10 +108,15 @@ html_theme = 'default' # 3
 # documentation.
 #html_theme_options = {}
 html_theme_options = {
-	"rightsidebar": "true",
-	"stickysidebar": "true",
-	"codebgcolor": "#E8E8E8"
+    "roottarget": "index",
+    "codebgcolor": "#E8E8E8"
 }
+
+#html_theme_options = {
+#	"rightsidebar": "true",
+#	"stickysidebar": "true",
+#	"codebgcolor": "#E8E8E8"
+#}
 #	"codebgcolor": "#E8E8E8",
 #   "sidebarbgcolor": "#F4F7FA",
 #   "relbarbgcolor": "#424242",
@@ -119,6 +129,7 @@ html_theme_options = {
 
 # Add any paths that contain custom themes here, relative to this directory.
 #html_theme_path = []
+html_theme_path = [csp.get_theme_dir()]
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".

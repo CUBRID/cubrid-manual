@@ -147,6 +147,8 @@ Running SQL with CUBRID Web Manager
 
 Because CUBRID 2008 R4.3 or higher version includes Web Manager on the installation package, you can use the Web Manager instantly after the installation of CUBRID DBMS.
 
+#.  Configure the value of **support_web_manager** in cm.conf as "YES".
+
 #.  Start CUBRID Service. Web Manager works normally only when CUBRID Manager server is started. For more information, see :ref:`cubrid-manager-server`. 
 
     ::
@@ -154,7 +156,7 @@ Because CUBRID 2008 R4.3 or higher version includes Web Manager on the installat
         C:\CUBRID>cubrid service start
         ++ cubrid service is running.
 
-#.  Access to https://localhost:8282/ which is written on the address bar. The default TCP port is 8282 (HTTPS/SSL) and it is possible to change by editing the cm_ext.conf file at $CUBRID/conf/. Note that the header of address is not http, but https.
+#.  Access to https://localhost:8001/ which is written on the address bar. Note that the header of address is not http, but https.
     
 #.  First, log-in to the host. To access to the host, you should perform the CUBRID Manager server user (=the host user)'s authentication primarily. The default user ID/password is admin/admin.
 
@@ -254,26 +256,26 @@ Drivers
 
 The drivers supported by CUBRID are as follows:
 
-*   :doc:`CUBRID JDBC driver <api/jdbc>` (`Downloads <http://www.cubrid.org/?mid=downloads&item=jdbc_driver>`_)
+*   :doc:`CUBRID JDBC driver <api/jdbc>` (`Downloads JDBC <http://www.cubrid.org/?mid=downloads&item=jdbc_driver>`_)
 
-*   :doc:`CUBRID CCI driver <api/cci>` (`Downloads <http://www.cubrid.org?mid=downloads&item=cci_driver>`_)
+*   :doc:`CUBRID CCI driver <api/cci>` (`Downloads CCI <http://www.cubrid.org?mid=downloads&item=cci_driver>`_)
 
-*   :doc:`CUBRID PHP driver <api/php>` (`Downloads <http://www.cubrid.org/?mid=downloads&item=php_driver&driver_type=phpdr>`_)
+*   :doc:`CUBRID PHP driver <api/php>` (`Downloads PHP <http://www.cubrid.org/?mid=downloads&item=php_driver&driver_type=phpdr>`_)
 
-*   :doc:`CUBRID PDO driver <api/pdo>` (`Downloads <http://www.cubrid.org/?mid=downloads&item=php_driver&driver_type=pdo>`_)
+*   :doc:`CUBRID PDO driver <api/pdo>` (`Downloads PDO <http://www.cubrid.org/?mid=downloads&item=php_driver&driver_type=pdo>`_)
 
-*   :doc:`CUBRID ODBC driver <api/odbc>` (`Downloads <http://www.cubrid.org/?mid=downloads&item=odbc_driver>`_)
+*   :doc:`CUBRID ODBC driver <api/odbc>` (`Downloads ODBC <http://www.cubrid.org/?mid=downloads&item=odbc_driver>`_)
 
-*   :doc:`CUBRID OLE DB driver <api/oledb>` (`Downloads <http://www.cubrid.org/?mid=downloads&item=oledb_driver>`_)
+*   :doc:`CUBRID OLE DB driver <api/oledb>` (`Downloads OLE DB <http://www.cubrid.org/?mid=downloads&item=oledb_driver>`_)
 
-*   :doc:`CUBRID ADO.NET driver <api/adodotnet>` (`Downloads <http://www.cubrid.org/?mid=downloads&item=ado_dot_net_driver>`_)
+*   :doc:`CUBRID ADO.NET driver <api/adodotnet>` (`Downloads ADO.NET <http://www.cubrid.org/?mid=downloads&item=ado_dot_net_driver>`_)
 
-*   :doc:`CUBRID Perl driver <api/perl>` (`Downloads <http://www.cubrid.org/?mid=downloads&item=perl_driver>`_)
+*   :doc:`CUBRID Perl driver <api/perl>` (`Downloads Perl <http://www.cubrid.org/?mid=downloads&item=perl_driver>`_)
 
-*   :doc:`CUBRID Python driver <api/python>` (`Downloads <http://www.cubrid.org/?mid=downloads&item=python_driver>`_)
+*   :doc:`CUBRID Python driver <api/python>` (`Downloads Python <http://www.cubrid.org/?mid=downloads&item=python_driver>`_)
 
-*   :doc:`CUBRID Ruby driver <api/ruby>` (`Downloads <http://www.cubrid.org/?mid=downloads&item=ruby_driver>`_)
+*   :doc:`CUBRID Ruby driver <api/ruby>` (`Downloads Ruby <http://www.cubrid.org/?mid=downloads&item=ruby_driver>`_)
 
-*   :doc:`CUBRID Node.js driver <api/node_js>` (`Downloads <http://www.cubrid.org/?mid=downloads&item=nodejs_driver>`_)
+*   :doc:`CUBRID Node.js driver <api/node_js>` (`Downloads Node.js <http://www.cubrid.org/?mid=downloads&item=nodejs_driver>`_)
 
-Among above drivers, JDBC, ODBC and CCI drivers are automatically downloaded while CUBRID is being installed. Thus, you do not have to download them manually.
+Among above drivers, JDBC and CCI drivers are automatically downloaded while CUBRID is being installed. Thus, you do not have to download them manually.

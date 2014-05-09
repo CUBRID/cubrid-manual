@@ -146,6 +146,8 @@ CUBRID 웹 매니저로 SQL 실행하기
 
 CUBRID 2008 R4.3 이상 버전부터는 설치 패키지에 웹 매니저가 포함되어 있으므로, DB 엔진 파일을 설치한 이후 즉시 웹 매니저를 사용할 수 있다.
 
+#. cm.conf의 **support_web_manager**\를 "YES"로 설정한다.
+
 #.  CUBRID Service를 시작한다. CUBRID Manager 서버가 구동되어야 웹 매니저가 정상 동작한다. CUBRID 매니저 서버의 실행 및 설정에 대한 자세한 내용은 :ref:`cubrid-manager-server`\ 를 참고한다. 
 
     ::
@@ -153,7 +155,7 @@ CUBRID 2008 R4.3 이상 버전부터는 설치 패키지에 웹 매니저가 포
         C:\CUBRID>cubrid service start
         ++ cubrid service is running.
 
-#.  웹 브라우저 주소창에 https://localhost:8282/  로 접속한다. 기본 TCP 포트는 8282(HTTPS/SSL)를 사용하며, $CUBRID/conf/cm_ext.conf 파일을 편집하여 포트를 변경할 수 있다. 이때, http가 아니라 https로 입력해야만 하므로 주의한다.
+#.  웹 브라우저 주소창에 https://localhost:8001/\로 접속한다. 이때, http가 아니라 https로 입력해야 함에 주의한다.
 
 #.  먼저 호스트 로그인을 수행한다. 호스트 접속을 위해서 1차로 CM 서버 사용자(=호스트 사용자) 인증을 수행하며, 기본 사용자 이름/암호는 admin/admin이다.
     
@@ -253,26 +255,26 @@ DB를 CUBRID로 전환하는 경우, 장비를 이전하는 경우, 운영 DB로
 
 CUBRID가 지원하는 드라이버는 다음과 같다.
 
-*   :doc:`CUBRID JDBC 드라이버 <api/jdbc>` (`다운로드 <http://www.cubrid.org/?mid=downloads&item=jdbc_driver>`_)
+*   :doc:`CUBRID JDBC 드라이버 <api/jdbc>` (`다운로드 JDBC <http://www.cubrid.org/?mid=downloads&item=jdbc_driver>`_)
     
-*   :doc:`CUBRID CCI 드라이버 <api/cci>` (`다운로드 <http://www.cubrid.org?mid=downloads&item=cci_driver>`_)
+*   :doc:`CUBRID CCI 드라이버 <api/cci>` (`다운로드 CCI <http://www.cubrid.org?mid=downloads&item=cci_driver>`_)
     
-*   :doc:`CUBRID PHP 드라이버 <api/php>` (`다운로드 <http://www.cubrid.org/?mid=downloads&item=php_driver&driver_type=phpdr>`_)
+*   :doc:`CUBRID PHP 드라이버 <api/php>` (`다운로드 PHP <http://www.cubrid.org/?mid=downloads&item=php_driver&driver_type=phpdr>`_)
     
-*   :doc:`CUBRID PDO 드라이버 <api/pdo>` (`다운로드 <http://www.cubrid.org/?mid=downloads&item=php_driver&driver_type=pdo>`_)
+*   :doc:`CUBRID PDO 드라이버 <api/pdo>` (`다운로드 PDO <http://www.cubrid.org/?mid=downloads&item=php_driver&driver_type=pdo>`_)
     
-*   :doc:`CUBRID ODBC 드라이버 <api/odbc>` (`다운로드 <http://www.cubrid.org/?mid=downloads&item=odbc_driver>`_)
+*   :doc:`CUBRID ODBC 드라이버 <api/odbc>` (`다운로드 ODBC <http://www.cubrid.org/?mid=downloads&item=odbc_driver>`_)
     
-*   :doc:`CUBRID OLE DB 드라이버 <api/oledb>` (`다운로드 <http://www.cubrid.org/?mid=downloads&item=oledb_driver>`_)
+*   :doc:`CUBRID OLE DB 드라이버 <api/oledb>` (`다운로드 OLE DB <http://www.cubrid.org/?mid=downloads&item=oledb_driver>`_)
     
-*   :doc:`CUBRID ADO.NET 드라이버 <api/adodotnet>` (`다운로드 <http://www.cubrid.org/?mid=downloads&item=ado_dot_net_driver>`_)
+*   :doc:`CUBRID ADO.NET 드라이버 <api/adodotnet>` (`다운로드 ADO.NET <http://www.cubrid.org/?mid=downloads&item=ado_dot_net_driver>`_)
     
-*   :doc:`CUBRID Perl 드라이버 <api/perl>` (`다운로드 <http://www.cubrid.org/?mid=downloads&item=perl_driver>`_)
+*   :doc:`CUBRID Perl 드라이버 <api/perl>` (`다운로드 Perl <http://www.cubrid.org/?mid=downloads&item=perl_driver>`_)
     
-*   :doc:`CUBRID Python 드라이버 <api/python>` (`다운로드 <http://www.cubrid.org/?mid=downloads&item=python_driver>`_)
+*   :doc:`CUBRID Python 드라이버 <api/python>` (`다운로드 Python <http://www.cubrid.org/?mid=downloads&item=python_driver>`_)
     
-*   :doc:`CUBRID Ruby 드라이버 <api/ruby>` (`다운로드 <http://www.cubrid.org/?mid=downloads&item=ruby_driver>`_)
+*   :doc:`CUBRID Ruby 드라이버 <api/ruby>` (`다운로드 Ruby <http://www.cubrid.org/?mid=downloads&item=ruby_driver>`_)
     
-*   :doc:`CUBRID Node.js 드라이버 <api/node_js>` (`다운로드 <http://www.cubrid.org/?mid=downloads&item=nodejs_driver>`_)
+*   :doc:`CUBRID Node.js 드라이버 <api/node_js>` (`다운로드 Node.js <http://www.cubrid.org/?mid=downloads&item=nodejs_driver>`_)
 
-위 드라이버 중 JDBC, ODBC, CCI 드라이버는 CUBRID를 설치할 때 자동으로 다운로드되므로 따로 다운로드하지 않아도 된다.
+위 드라이버 중 JDBC, CCI 드라이버는 CUBRID를 설치할 때 자동으로 다운로드되므로 따로 다운로드하지 않아도 된다.

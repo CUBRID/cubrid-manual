@@ -94,9 +94,9 @@ pygments_style = 'sphinx'
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 
-html_theme = 'cloud'
+html_theme = 'default' # 3
 
-#html_theme = 'default' # 3
+#html_theme = 'cloud'
 #html_theme = 'nature'
 #html_theme = 'sphinxdoc' # 2
 #html_theme = 'haiku'   # 2
@@ -107,16 +107,13 @@ html_theme = 'cloud'
 # further.  For a list of options available for each theme, see the
 # documentation.
 #html_theme_options = {}
-html_theme_options = {
-    "roottarget": "index",
-    "codebgcolor": "#E8E8E8"
-}
 
-#html_theme_options = {
-#	"rightsidebar": "true",
-#	"stickysidebar": "true",
-#	"codebgcolor": "#E8E8E8"
-#}
+# html theme for default
+html_theme_options = {
+	"rightsidebar": "true",
+	"stickysidebar": "true",
+	"codebgcolor": "#E8E8E8"
+}
 #	"codebgcolor": "#E8E8E8",
 #   "sidebarbgcolor": "#F4F7FA",
 #   "relbarbgcolor": "#424242",
@@ -127,9 +124,18 @@ html_theme_options = {
 #   "footerbgcolor":  "#424242",
 #   "footertextcolor": "#F2F2F2"
 
+
+# html theme for cloud
+#html_theme_options = {
+#    "roottarget": "index",
+#    "codebgcolor": "#E8E8E8"
+#}
+
 # Add any paths that contain custom themes here, relative to this directory.
-#html_theme_path = []
-html_theme_path = [csp.get_theme_dir()]
+html_theme_path = []
+
+#html theme path for cloud
+#html_theme_path = [csp.get_theme_dir()]
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".

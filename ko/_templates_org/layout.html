@@ -1,5 +1,8 @@
 {% extends "!layout.html" %}
-
+{% block rootrellink %}
+    <li><a href="http://www.cubrid.org/?act=IS&search_target=title_content&mid=home_page&site=cubridorg&page=1&language=korean">Site Search</a>&nbsp;|</li>
+    {{ super() }}
+{% endblock %}
 {%- block extrahead %} 
     <!-- naver analytics begin-->
     

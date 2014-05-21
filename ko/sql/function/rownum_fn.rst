@@ -155,4 +155,3 @@ LIMIT 절과 ROWNUM 비교
       'Hackett Grant'       '14:43.0'
 
 .. note:: **LIMIT** 절처럼 정렬된 결과 행들의 개수를 제한하는 목적으로 사용되는 **FOR ORDERBY_NUM()** 구문은 제거될 예정(deprecated)이므로, 더 이상 사용을 권장하지 않는다.
-

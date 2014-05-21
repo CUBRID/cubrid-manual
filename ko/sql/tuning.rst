@@ -256,7 +256,11 @@ CSQL에서 ";plan detail" 명령 입력 또는 "SET OPTIMIZATION LEVEL 513;"을 
 
 *   card: 카디널리티(cardinality)를 의미하며, 선택될 것으로 예측되는 행의 개수이다.
     
-다음은 USE_MERGE 힌트를 명시하여 m-join(정렬 병합 조인, sort merge join)을 수행하는 경우의 예이다. 일반적으로 정렬 병합 조인은 outer 테이블과 inner 테이블을 정렬하여 병합하는 것이 인덱스를 사용하여 중첩 루프 조인(nested loop join)을 수행하는 것보다 유리하다고 판단될 때 사용되며, 조인되는 두 테이블 모두 행의 개수가 매우 많은 경우 유리할 수 있다. 대부분의 경우 정렬 병합 조인을 수행하지 않는 것이 바람직하다.
+다음은 USE_MERGE 힌트를 명시하여 m-join(정렬 병합 조인, sort merge join)이 적용되는 경우의 예이다. 일반적으로 정렬 병합 조인은 outer 테이블과 inner 테이블을 정렬하여 병합하는 것이 인덱스를 사용하여 중첩 루프 조인(nested loop join)을 수행하는 것보다 유리하다고 판단될 때만 사용해야 하며, 조인되는 두 테이블 모두 행의 개수가 매우 많은 경우 유리할 수 있다. 대부분의 경우 정렬 병합 조인을 수행하지 않는 것이 바람직하다.
+
+.. note::
+
+    9.3 버전부터 질의문에 USE_MERGE 힌트를 명시하거나 cubrid.conf의 **optimizer_enable_merge_join** 값을 yes로 설정해야 정렬 병합 조인의 적용이 고려된다.
 
 .. CUBRIDSUS-13186: merge join은 스펙아웃될 예정임. 현재는 USE_MERGE 힌트를 제공해야만 적용됨.
 
@@ -268,7 +272,7 @@ CSQL에서 ";plan detail" 명령 입력 또는 "SET OPTIMIZATION LEVEL 513;"을 
     SELECT /*+ RECOMPILE USE_MERGE*/  DISTINCT h.host_year, o.host_nation
     FROM history h LEFT OUTER JOIN olympic o ON h.host_year = o.host_year AND o.host_year > 1950;
     
-:: 
+::
 
     Query plan:
     
@@ -516,7 +520,7 @@ SQL에 대한 성능 분석을 위해서는 질의 프로파일링(profiling) �
 
 *   key range: 키의 범위
 *   covered: 커버링 인덱스 적용 여부(true/false)
-*   loose: 느슨한 인덱스 스캔 적용 여부(true/false)
+*   loose: loose index scan 적용 여부(true/false)
 *   hash: 집계 함수에서 투플 정렬 시 해시 집계 방식 적용 여부(true/false). :ref:`NO_HASH_AGGREGATE <no-hash-aggregate>` 힌트를 참고한다.
 
 위의 예는 JSON 형식으로도 출력할 수 있다.
@@ -635,8 +639,8 @@ SELECT, UPDATE, DELETE 문에는 다음 힌트가 지정될 수 있다.
 *   **ORDERED**: 테이블 조인과 관련한 힌트로서, 질의 최적화기는 **FROM** 절에 명시된 테이블의 순서대로 조인하는 실행 계획을 만든다. **FROM** 절에서 왼쪽 테이블은 조인의 외부 테이블이 되고, 오른쪽 테이블은 내부 테이블이 된다.
 *   **USE_IDX**: 인덱스 관련한 힌트로서, 질의 최적화기는 명시된 테이블에 대해 인덱스 조인 실행 계획을 만든다.
 *   **USE_DESC_IDX**: 내림차순 스캔을 위한 힌트이다. 자세한 내용은 :ref:`index-descending-scan`\ 을 참고한다.
-*   **INDEX_SS**: 인덱스 스킵 스캔 실행 계획을 고려한다. 자세한 내용은 :ref:`index-skip-scan`\을 참고한다.
-*   **INDEX_LS**: 느슨한 인덱스 스캔 실행 계획을 고려한다. 자세한 내용은 :ref:`loose-index-scan`\을 참고한다.
+*   **INDEX_SS**: index skip scan 실행 계획을 고려한다. 자세한 내용은 :ref:`index-skip-scan`\을 참고한다.
+*   **INDEX_LS**: loose index scan 실행 계획을 고려한다. 자세한 내용은 :ref:`loose-index-scan`\을 참고한다.
 *   **NO_DESC_IDX**: 내림차순 스캔을 사용하지 않도록 하는 힌트이다.
 *   **NO_COVERING_IDX**: 커버링 인덱스 기능을 사용하지 않도록 하는 힌트이다. 자세한 내용은 :ref:`covering-index` 를 참고한다.
 *   **NO_MULTI_RANGE_OPT**: 다중 키 범위 최적화 기능을 사용하지 않도록 하는 힌트이다. 자세한 내용은 :ref:`multi-key-range-opt` 를 참고한다.
@@ -1084,7 +1088,7 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
             
             CREATE INDEX idx ON t(a,b) WHERE a IS NULL and b IS NOT NULL;
 
-    *   필터링된 인덱스에 대한 인덱스 스킵 스캔(ISS)은 지원되지 않는다.
+    *   필터링된 인덱스에 대한 index skip scan(ISS)은 지원되지 않는다.
     *   필터링된 인덱스에서 사용되는 조건 문자열의 길이는 128자로 제한한다.
 
         .. code-block:: sql
@@ -1724,7 +1728,7 @@ GROUP BY 절 최적화
     
 .. code-block:: sql
 
-    SELECT /*+ RECOMPILE */ k1, k2, SUM(DISTINCT k3)
+    SELECT /*+ RECOMPILE INDEX_SS */ k1, k2, SUM(DISTINCT k3)
     FROM tab 
     WHERE k2 > -1 GROUP BY k1, k2;
 
@@ -1748,7 +1752,7 @@ GROUP BY 절 최적화
     
 .. code-block:: sql
     
-    SELECT /*+ RECOMPILE */ k1, k2, stddev_samp(v)  
+    SELECT /*+ RECOMPILE INDEX_SS */ k1, k2, stddev_samp(v)  
     FROM tab 
     WHERE k2 > -1 GROUP BY k1, k2;
 
@@ -1866,12 +1870,12 @@ JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서�
 
 .. _index-skip-scan:
 
-인덱스 스킵 스캔
+Index Skip Scan
 ----------------
 
-인덱스 스킵 스캔(index skip scan, 이하 ISS)은 인덱스의 첫 번째 칼럼이 조건에 명시되지 않아도 뒤따라오는 칼럼이 조건(주로 =)에 명시되면 해당 인덱스를 활용하여 질의를 처리하는 최적화 방식이다. 
+Index Skip Scan(이하 ISS)은 인덱스의 첫 번째 칼럼이 조건에 명시되지 않아도 뒤따라오는 칼럼이 조건(주로 =)에 명시되면 해당 인덱스를 활용하여 질의를 처리하는 최적화 방식이다. 
 
-질의문 힌트를 통해 특정 테이블에 대한 **INDEX_SS**\가 입력되고 다음의 경우를 만족할 때 인덱스 스킵 스캔 적용이 고려된다. 
+질의문 힌트를 통해 특정 테이블에 대한 **INDEX_SS**\가 입력되고 다음의 경우를 만족할 때 ISS의 적용이 고려된다. 
 
 1.  복합 인덱스의 두번째 칼럼부터 조건에 명시된다.
 2.  사용되는 인덱스가 필터링된 인덱스가 아니어야 한다.
@@ -1879,8 +1883,8 @@ JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서�
 4.  계층 질의는 지원하지 않는다.
 5.  집계 함수가 포함된 경우는 지원하지 않는다.
 
-**INDEX_SS** 힌트에는 인덱스 스킵 스캔의 적용을 고려할 테이블 리스트를 입력할 수 있으며,
-테이블 리스트가 생략되는 경우 모든 테이블에 대해 인덱스 스킵 스캔 적용이 고려된다.
+**INDEX_SS** 힌트에는 ISS의 적용을 고려할 테이블 리스트를 입력할 수 있으며,
+테이블 리스트가 생략되는 경우 모든 테이블에 대해 ISS의 적용이 고려된다.
 
 ::
 
@@ -1977,20 +1981,20 @@ JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서�
 
 .. _loose-index-scan:
 
-느슨한 인덱스 스캔(loose index scan)
-------------------------------------
+Loose Index Scan
+----------------
 
-**GROUP BY** 절 또는 **DISTINCT**\의 칼럼이 인덱스 부분 키(subkey)를 포함할 때, 느슨한 인덱스 스캔은 부분 키를 구성하는 칼럼 각각의 고유(unique) 값에 대해 동적으로 범위를 조정하여 B-트리 검색을 시작한다. 따라서 B-트리의 스캔 영역을 상당 부분 줄일 수 있다.
+**GROUP BY** 절 또는 **DISTINCT**\의 칼럼이 인덱스 부분 키(subkey)를 포함할 때, loose index scan은 부분 키를 구성하는 칼럼 각각의 고유(unique) 값에 대해 동적으로 범위를 조정하여 B-트리 검색을 시작한다. 따라서 B-트리의 스캔 영역을 상당 부분 줄일 수 있다.
 
-느슨한 인덱스 스캔은 그룹핑되는 칼럼의 카디널리티가 전체 데이터량이 비해 매우 작을 때 적용하는 것이 유리하다.
+Loose index scan은 그룹핑되는 칼럼의 카디널리티가 전체 데이터량이 비해 매우 작을 때 적용하는 것이 유리하다.
 
-질의문 힌트를 통해 **INDEX_LS**\가 입력되고 다음의 경우를 만족할 때 느슨한 인덱스 스캔 적용이 고려된다. 
+질의문 힌트를 통해 **INDEX_LS**\가 입력되고 다음의 경우에 loose index scan의 적용이 고려된다.
 
-1.  인덱스가 SELECT 리스트의 모든 부분을 커버해야 한다. 즉, 커버링 인덱스가 적용되어야 한다.
-2.  DISTINCT 또는 GROUP BY가 인덱스 부분 키(인덱스의 앞부분)를 포함해야 한다. 
-3.  부분 키(subkey)를 탐색할 수 있는 조건이 명시되어야 한다.
-4.  집계 함수를 사용하는 경우, 해당 함수의 입력 인자가 DISTINCT를 반드시 포함해야 한다. 단, MIN/MAX 함수는 예외이다. 또한 MIN/MAX 함수는 동일 칼럼을 참조한다.
-5.  COUNT(*)가 사용되어선 안 된다.
+1.  인덱스가 SELECT 리스트의 모든 부분을 커버하는 경우. 즉, 커버링 인덱스가 적용되는 경우
+2.  SELECT DISTINCT, SELECT ... GROUP BY 또는 단일 투플 SELECT 문인 경우
+3.  MIN/MAX 함수를 제외한 모든 집계 함수가 DISTINCT를 포함하는 경우
+4.  COUNT(*)가 사용되어선 안 됨
+5.  부분 키(subkey)의 카디널리티(고유 값의 개수)가 전체 인덱스의 카디널리티보다 100배 작은 경우
 
 부분 키는 복합 인덱스(composite index)에서 앞 쪽 부분에 해당하는 것으로, 예를 들어 INDEX(a, b, c, d)로 구성되어 있는 경우 (a), (a, b) 또는 (a, b, c)가 부분 키에 해당한다. 
 
@@ -2000,19 +2004,19 @@ JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서�
 
     SELECT /*+ INDEX_LS */ a, b FROM tbl GROUP BY a;
 
-칼럼 a에 대한 조건이 없으므로 부분 키를 사용할 수 없다. 그러나 다음과 같이 부분 키의 조건이 명시되면 느슨한 인덱스 스캔이 적용될 수 있다.
+칼럼 a에 대한 조건이 없으므로 부분 키를 사용할 수 없다. 그러나 다음과 같이 부분 키의 조건이 명시되면 loose index scan이 적용될 수 있다.
 
 .. code-block:: sql
 
     SELECT /*+ INDEX_LS */ a, b FROM tbl WHERE a > 10 GROUP BY a;
 
-다음과 같이 그룹핑 칼럼이 앞에, WHERE 조건 칼럼이 뒤에 오는 경우에도 부분 키를 사용할 수 있으므로 느슨한 인덱스 스캔이 적용될 수 있다.
+다음과 같이 그룹핑 칼럼이 앞에, WHERE 조건 칼럼이 뒤에 오는 경우에도 부분 키를 사용할 수 있으므로 loose index scan이 적용될 수 있다.
 
 .. code-block:: sql
 
     SELECT /*+ INDEX_LS */ a, b FROM tbl WHERE b > 10 GROUP BY a;
 
-다음은 느슨한 인덱스 스캔이 적용되는 예이다.
+다음은 loose index scan이 적용되는 예이다.
 
 .. code-block:: sql
 
@@ -2148,7 +2152,7 @@ JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서�
      Sort(distinct)
         Index scan(tbl1 tbl1, idx, [(tbl1.k2> ?:0 )] (covers) (loose index scan on prefix 2))
 
-다음은 느슨한 인덱스 스캔이 적용되지 않는 경우이다.
+다음은 loose index scan이 적용되지 않는 경우이다.
 
 .. code-block:: sql
 

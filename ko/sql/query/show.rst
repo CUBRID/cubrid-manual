@@ -395,7 +395,7 @@ SHOW ACCESS STATUS
 ================== 
   
 **SHOW ACCESS STATUS** 문은 데이터베이스 계정에 대한 로그인 정보를 출력한다. 이 명령은 데이터베이스 계정이 DBA인 사용자만 사용할 수 있다. 
-  
+
 :: 
   
     SHOW ACCESS STATUS [LIKE 'pattern' | WHERE expr] ; 
@@ -423,6 +423,10 @@ program_name        VARCHAR(32) 클라이언트 프로그램 이름(broker_cub_c
     ============================================================================= 
       'DBA' 08:19:31.000 PM 02/10/2014 127.0.0.1 'csql' 
       'PUBLIC' NULL NULL NULL
+
+.. note::
+
+    SHOW ACCESS STATUS가 보여주는 로그인 정보는 데이터베이스가 재시작되면 초기화되며, HA 환경에서 복제되지 않으므로 각 노드마다 다른 결과를 보여준다.
 
 .. _show-exec-statistics-statement:
 

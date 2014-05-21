@@ -172,10 +172,10 @@ For more details, see :ref:`changed-config92`.
 
 .. _up-from-41:
 
-Upgrading From CUBRID 2008 R4.1/R4.3 To CUBRID 9.3
---------------------------------------------------
+Upgrading From CUBRID 2008 R4.1/R4.3/R4.4 To CUBRID 9.3
+-------------------------------------------------------
 
-Users who are using versions CUBRID 2008 R4.1 or R4.3 should install 9.3 in the different directory and modify parameter values in the existing environment configuration file.
+Users who are using a version of CUBRID 2008 R4.1, R4.3 or R4.4 should install 9.3 in the different directory and modify parameter values in the existing environment configuration file.
 
 .. _migration-from-41:
 

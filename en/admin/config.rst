@@ -263,6 +263,8 @@ CUBRID consists of the database server, the broker and the CUBRID Manager. The n
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     |                               | multi_range_optimization_limit      | server parameter        | int      | 100                            | available       |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
+    |                               | optimizer_enable_merge_join         | client parameter        | bool     | no                             | available       |
+    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     |                               | pthread_scope_process               | server parameter        | bool     | yes                            |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     |                               | server                              | server parameter        | string   |                                |                 |
@@ -1545,6 +1547,8 @@ The following are other parameters. The type and value range for each parameter 
 +--------------------------------+--------+----------------+----------------+----------------+
 | multi_range_optimization_limit | int    | 100            | 0              | 10,000         |
 +--------------------------------+--------+----------------+----------------+----------------+
+| optimizer_enable_merge_join    | bool   | no             |                |                |
++--------------------------------+--------+----------------+----------------+----------------+
 | pthread_scope_process          | bool   | yes            |                |                |
 +--------------------------------+--------+----------------+----------------+----------------+
 | server                         | string |                |                |                |
@@ -1609,6 +1613,10 @@ The following are other parameters. The type and value range for each parameter 
     For example, if a value for this parameter is set to 50, LIMIT 10 means that it is within the value specified by this parameter, so that the values that meet the conditions will be sorted to produce the result. If LIMIT is 60, it means that it exceeds the parameter configuration value, so that it gets and sorts out all values that meet the conditions.
 
     Depending on the setting value, the differences are made between collecting the result with on-the-fly sorting of the intermediate values and sorting the result values after collecting them, and the bigger value could make more unfavorable performance.
+
+**optimizer_enable_merge_join**
+
+    **optimizer_enable_merge_join** is a parameter to specify whether to include sort merge join plan as a candidate of query plans or not. The default is **no**. Regarding sort merge join, see :ref:`sql-hint`.
 
 **pthread_scope_process**
 
@@ -1945,7 +1953,11 @@ Access
 
 **REPLICA_ONLY**
   
-    If a value of **REPLICA_ONLY** is **ON**, CAS is connected only to replicas. The default is **OFF**. Even though the value of **REPLICA_ONLY** is **ON**, when a value of **ACCESS_MODE** is  **RW**, it is possible to write to the replica DB.
+    If a value of **REPLICA_ONLY** is **ON**, CAS is connected only to replicas. The default is **OFF**. Even though the value of **REPLICA_ONLY** is **ON**, when a value of **ACCESS_MODE** is  **RW**, it is possible to write directly to the replica DB. However, the data to be written directly to the replica DB are not replicated.
+    
+    .. note::
+    
+        Please note that replication mismatch occurs when you write the data directly to the replica DB.
 
 Broker App. Server(CAS)
 ^^^^^^^^^^^^^^^^^^^^^^^

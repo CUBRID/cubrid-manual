@@ -258,6 +258,10 @@ The following show the meaning for each term which is printed as a query plan.
     
 The following is an example of performing m-join(sort merge join) as specifying USE_MERGE hint. In general, sort merge join is used when sorting and merging an outer table and an inner table is judged as having an advantage than performing nested loop join. In most cases, it is desired that you do not perform sort merge join.
 
+.. note::
+
+    From 9.3 version, if USE_MERGE hint is not specified or the **optimizer_enable_merge_join** parameter of cubrid.conf is not specified as yes, sort merge join will not be considered to be applied.
+
 .. CUBRIDSUS-13186: merge join will be deprecated
 
 .. code-block:: sql
@@ -589,7 +593,7 @@ For how to set the trace on automatically, see :ref:`Set SQL trace <set-autotrac
 Using SQL Hint
 ==============
 
-Using hints can affect the performance of query execution. You can allow the query optimizer to create more efficient execution plan by referring the SQL HINT. The SQL HINTs related tale join and index are provided by CUBRID. 
+Using hints can affect the performance of query execution. You can allow the query optimizer to create more efficient execution plan by referring to the SQL HINT. The SQL HINTs related tale join and index are provided by CUBRID. 
 
 ::
 
@@ -1318,7 +1322,7 @@ The following example shows that the index is used as a covering index because c
 
     As you can see in the above comparison result, the value in the **VARCHAR** type retrieved from the index will appear with the following empty string truncated when the covering index has been applied.
 
-.. note:: If covering index optimization is available to be applied, the I/O performance can be improved because the disk I/O is decreased. But if you don't want covering index optimization in a special condition, specify a **NO_COVERING_IDX** hint to the query. For how to add a query, refer :ref:`sql-hint`.
+.. note:: If covering index optimization is available to be applied, the I/O performance can be improved because the disk I/O is decreased. But if you don't want covering index optimization in a special condition, specify a **NO_COVERING_IDX** hint to the query. For how to add a query, see :ref:`sql-hint`.
 
 .. _order-by-skip-optimization:
 
@@ -1335,7 +1339,7 @@ The index including all columns in the **ORDER BY** clause is referred to as the
     ORDER BY col1, col2;
 
 *   The index consisting of *tab* (*col1*, *col2*) is an ordered index.
-*   The index consisting of *tab* (*col1*, *col2*, *col3*) is also an ordered index. This is because the *col3*, which is not referred by the **ORDER BY** clause comes after *col1* and *col2* .
+*   The index consisting of *tab* (*col1*, *col2*, *col3*) is also an ordered index. This is because the *col3*, which is not referred to by the **ORDER BY** clause, comes after *col1* and *col2* .
 *   The index consisting of *tab* (*col1*) is not an ordered index.
 *   You can use the index consisting of *tab* (*col3*, *col1*, *col2*) or *tab* (*col1*, *col3*, *col2*) for optimization. This is because *col3* is not located at the back of the columns in the **ORDER BY** clause.
 
@@ -1601,7 +1605,7 @@ The columns in the **GROUP BY** clause must exist in front side of the column fo
     GROUP BY col1,col2;
 
 *   You can use the index consisting of tab(col1, col2) for optimization.
-*   The index consisting of tab(col1, col2, col3) can be used because col3 no referred by **GROUP BY** comes after col1 and col2.
+*   The index consisting of tab(col1, col2, col3) can be used because col3 which is not referred to by **GROUP BY** comes after col1 and col2.
 *   You cannot use the index consisting of tab(col1) for optimization.
 *   You also cannot use the index consisting of tab(col3, col1, col2) or tab(col1, col3, col2), because col3 is not located at the back of the column in the **GROUP BY** clause.
 
@@ -1724,7 +1728,7 @@ If you create tables and indexes of the above, the following example runs the **
     
 .. code-block:: sql
 
-    SELECT /*+ RECOMPILE */ k1, k2, SUM(DISTINCT k3)
+    SELECT /*+ RECOMPILE INDEX_SS */ k1, k2, SUM(DISTINCT k3)
     FROM tab 
     WHERE k2 > -1 GROUP BY k1, k2;
 
@@ -1748,7 +1752,7 @@ The following example performs **GROUP BY** clause with k1, k2 columns; therefor
     
 .. code-block:: sql
     
-    SELECT /*+ RECOMPILE */ k1, k2, stddev_samp(v)  
+    SELECT /*+ RECOMPILE INDEX_SS */ k1, k2, stddev_samp(v)  
     FROM tab 
     WHERE k2 > -1 GROUP BY k1, k2;
 
@@ -1983,13 +1987,13 @@ When **GROUP BY** clause or **DISTINCT** column includes a subkey of a index, lo
 
 Applying loose index scan is advantageous when the cardinality of the grouped column is very small, compared to the total data amount.
 
-Loose index scan optimization is applied when **INDEX_LS** is input as a hint and the below cases are satisfied.
+Loose index scan optimization is considered to be applied when **INDEX_LS** is input as a hint and the below cases are satisfied:
 
-1.  When an index covers all SELECT list, that is, covered index is applied.
-2.  SELECT DISTINCT, SELECT ... GROUP BY statement or SELECT statement with a single tuple.
-3.  If you use an aggregate function, it is necessary that an input argument of the function always includes DISTINCT. However, MIN / MAX function exception.
-4.  COUNT(*) should not be used.
-5.  When cardinality of the used subkey is 100 times smaller than that of the entire index.
+1.  when an index covers all SELECT list, that is, covered index is applied.
+2.  when the statement is SELECT DISTINCT, SELECT ... GROUP BY statement or a single tuple SELECT.
+3.  all aggregate functions (with the exception of MIN/MAX) must have DISTINCT input
+4.  COUNT(*) should not be used
+5.  when cardinality of the used subkey is 100 times smaller than the cardinality of the whole index 
 
 a subkey is a prefix part in a composite index; e.g. when there is INDEX(a, b, c, d), (a), (a, b) or (a, b, c) belongs to the subkey.
 
@@ -2260,7 +2264,7 @@ The SORT-LIMIT optimization applies to queries specifying ORDER BY and LIMIT cla
 
 A SORT-LIMIT plan can be generated when the following conditions are met:
 
-*   All tables referenced in the ORDER BY clause belong to the SORT-LIMIT plan.
+*   All referred tables in the ORDER BY clause belong to the SORT-LIMIT plan.
 *   A table belonging to a SORT-LIMIT plan is either:
 
     *   The owner of a foreign key from a fk->pk join

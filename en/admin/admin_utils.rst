@@ -1303,6 +1303,8 @@ The following shows [options] available with the **cubrid statdump** utility.
     | Buffer hit rate  | Data_page_buffer_hit_ratio               | Hit Ratio of page buffers                                                              |
     |                  |                                          | (Num_data_page_fetches - Num_data_page_ioreads)*100 / Num_data_page_fetches            |
     +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
+    | HA               | Time_ha_replication_delay                | Replication latency time (sec.)                                                        |
+    +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
 
 .. option:: -o, --output-file=FILE
 

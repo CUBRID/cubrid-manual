@@ -2321,6 +2321,8 @@ Detection of Replication Mismatch
 
 Replication mismatch between replication nodes, indicating that data of the master node and the slave node is not identical, can be detected to some degree by the following process. However, please note that there is no more accurate way to detect a replication mismatch than by directly comparing the data of the master node to the data of the slave node. If it is determined that there has been a replication mismatch, you should rebuild the database of the master node to the slave node (see :ref:`rebuilding-replication`.)
 
+*   Execute **cubrid statdump** command and check **Time_ha_replication_delay**. When this value is bigger, replication latency can be larger; the bigger latency time shows the possibility of the larger replication mismatch.
+
 *   On the slave node, execute **cubrid applyinfo** to check the "Fail count" value. If the "Fail count" is 0, it can be determined that no transaction has failed in replication (see :ref:`cubrid-applyinfo`.) ::
 
         [nodeB]$ cubrid applyinfo -L /home/cubrid/DB/testdb_nodeA -r nodeA -a testdb

@@ -54,7 +54,9 @@ Compatibility
 
 *   CUBRID Manager guarantees backward compatibility with the servers using CUBRID 2008 R2.2 or higher and uses the CUBRID JDBC driver that matches each server version. However, you must use a CUBRID Manager that is higher than CUBRID servers in version in order to utilize all the features of CUBRID Manager. The CUBRID JDBC driver is included in the $CUBRID/jdbc directory when CUBRID is installed($CUBRID on Linux, %CUBRID% on Windows).
 
-*   The bit version of CUBRID Manager must be identical to the bit version of JRE. For example, if a 64-bit DB server uses CUBRID Manager 32-bit version, JRE or JDK 32-bit version should be installed.
+*   The bit version of CUBRID Manager must be identical to the bit version of JRE.
+
+    For example, if a 64-bit DB server uses CUBRID Manager 32-bit version, JRE or JDK 32-bit version should be installed.
 
 *   Drivers for 2008 R2.2 and higher versions are included in CUBRID Manager by default, which you can download separately from the http://www.cubrid.org Website.
 
@@ -187,47 +189,6 @@ When rpm is executed, CUBRID is installed in the "cubrid" home directory (/opt/c
     *   **In /etc/hosts file, check if a host name and an IP address mapping is normal**
 
         If a host name and an IP address is abnormally mapped, you cannot start DB server. Therefore, you should check if they are normally mapped.
-        
-**Installing CUBRID on Fedora/CentOS**
-
-To install CUBRID using the yum command, you should know where the CUBRID package is located. Choose appropriate location based on your operating system.
-
-*   `http://www.cubrid.org/yum_repository <http://www.cubrid.org/yum_repository>`_
-
-For example, if you are using Fedora 16, execute the command below. In the example, fc16 refers to Fedora 16. ::
-
-    $ rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/9.0.0/cubridrepo-9.0.0-1.fc16.noarch.rpm
-
-If you are using CentOS 6.2, execute the command below. In this example, el6.2 refers to CentOS. ::
-
-    $ rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/9.0.0/cubridrepo-9.0.0-1.el6.2.noarch.rpm
-
-You can install the CUBRID package you have desired based on the command you execute. To install the latest version, execute the command below. ::
-
-    $ yum install cubrid
-
-To install the earlier version, you should include version information in the command. ::
-
-    $ yum install cubrid-8.4.3
-
-After installation is complete, configure environment variables including installation path of CUBRID and then apply them to system.
-
-**Installing CUBRID on Ubuntu**
-
-To install CUBRID using the apt-get command on Ubuntu, add the CUBRID storage first and then update the apt index. ::
-
-    $ sudo add-apt-repository ppa:cubrid/cubrid
-    $ sudo apt-get update
-
-To install the latest version, execute the command below. ::
-
-    $ sudo apt-get install cubrid
-
-To install the earlier version, you should include version information in the command. ::
-
-    $ sudo apt-get install cubrid-8.4.3
-
-After installation is complete, configure environment variables including installation path of CUBRID and then apply them to system.
 
 **Upgrading CUBRID**
 
@@ -248,12 +209,6 @@ For more information on upgrading a database from a previous version to a new ve
 
 You can modify the environment such as service ports etc. edit the parameters of a configuration file located in the **$CUBRID/conf** directory. See :ref:`Installing-and-Running-on-Windows` for more information.
 
-**Starting CUBRID automatically when starting a system on Linux**
-
-If you have installed CUBRID with SH package, it includes "cubrid" script on the $CUBRID/share/init.d directory. Change **$CUBRID_USER** environment variable in this script as a Linux account which installed CUBRID; if you register this script to /etc/init.d directory, CUBRID can be started automatically when Linux system is started by using a **service** command or a **chkconfig** command.
-
-If you have installed CUBRID with RPM package, "cubrid" script is added to the /etc/init.d directory. But you need to change **$CUBRID_USER** environment variable into "cubrid" account.        
-
 **Installing CUBRID Interfaces**
 
 You can see the latest information on interface modules such as CCI, JDBC, PHP, ODBC, OLE DB, ADO.NET, Ruby, Python and Node.js and install them by downloading files from `http://www.cubrid.org/wiki_apis <http://www.cubrid.org/wiki_apis>`_ .
@@ -264,7 +219,7 @@ A simple description on each driver can be found on :doc:`/api/index`.
 
 You can see the latest information on tools such as CUBRID Manager and CUBRID Query Browser and install them by downloading files from `http://www.cubrid.org/wiki_tools <http://www.cubrid.org/wiki_tools>`_ .
 
-CUBRID Web Manager is started when the CUBRID is installed, and you can see this by accessing to https://localhost:8282/ .
+CUBRID Web Manager is also installed when the CUBRID is installed. For more details, see `CUBRID Web Manager Manual <http://www.cubrid.org/wiki_tools/entry/cubrid-web-manager-manual>`_ .
 
 .. _Installing-and-Running-on-Windows:
 
@@ -289,7 +244,7 @@ You should check the below before installing CUBRID for Windows.
 
 **Step 2: Selecting Setup Type**
 
-*   **Server and Driver Installation** : CUBRID Server, CSQL (a command line tool), interface drivers (JDBC, C API) are all installed.
+*   **Server and Driver Installation** : All of CUBRID Server, CSQL (a command line tool) and interface drivers (JDBC, C API) are installed.
 
 **Step 3: Creating a sample database**
     
@@ -324,12 +279,15 @@ You can change configuration such as service ports to meet the user environment 
 
 *   **cm.conf**
     
-    A configuration file for CUBRID Manager. The port that the Manager server process uses is called  **cm_port** and its default value is **8001** . Two ports are used and the port number is determined by the **cm_port** parameter. If 8001 is specified, 8001 and 8002 (configured number plus 1) ports will be used. For details, see `CUBRID Manager Manual <http://www.cubrid.org/wiki_tools/entry/cubrid-manager-manual>`_ .
+    A configuration file for CUBRID Manager. The port that the Manager server process uses is called  **cm_port** and its default value is **8001** . For details, see `CUBRID Manager Manual <http://www.cubrid.org/wiki_tools/entry/cubrid-manager-manual>`_ .
+
+    To start CUBRID Web Manager, firstly you should set the value of **support_web_manager** parameter as "YES", then restart CUBRID Manager Server. To use CUBRID Web Manager, access "https://localhost:8001".
+
+    ::
     
-*   **cm_ext.conf**
-    
-    A configuration file for CUBRID Web Manager. **listen** is the port to be used in the web manager server process, and its default value is **8282**. For more details, see `CUBRID Web Manager Manual <http://www.cubrid.org/wiki_tools/entry/cubrid-web-manager-manual>`_ .
-    
+        $ cubrid manager stop
+        $ cubrid manager start
+
 *   **cubrid.conf**
     
     A configuration file for server. You can use it to configure the following values: database memory, the number threads based on the number of concurrent users, communication port between broker and server, etc.  The port that a master process uses is called cubrid_port_id and its default value is 1523. For details, see :ref:`cubrid-conf-default-parameters`.
@@ -352,7 +310,7 @@ A simple description on each driver can be found on :doc:`/api/index`.
 
 You can see the latest information on tools such as CUBRID Manager and CUBRID Query Browser and install them by downloading files from `http://www.cubrid.org/wiki_tools`.
 
-CUBRID Web Manager is started when the CUBRID is installed, and you can see this by accessing to https://localhost:8282/.
+CUBRID Web Manager is installed when CUBRID is installed. For more details, see `CUBRID Web Manager Manual <http://www.cubrid.org/wiki_tools/entry/cubrid-web-manager-manual>`_ .
 
 Installing with a Compressed Package
 ------------------------------------

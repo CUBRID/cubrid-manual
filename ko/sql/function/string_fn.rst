@@ -2034,5 +2034,5 @@ UCASE, UPPER
        upper(_utf8'ă' COLLATE utf8_ro_cs)
     ======================
       'Ă'
-   
+
 CUBRID가 지원하는 콜레이션에 관한 상세한 설명은 :ref:`cubrid-all-collation`\ 을 참고한다.

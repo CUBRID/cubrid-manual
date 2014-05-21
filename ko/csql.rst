@@ -237,12 +237,16 @@ CSQL 시작 옵션
 
 .. option::  --write-on-standby
 
-    이 옵션은 시스템 관리자 모드 옵션(**--sysadm--**)과 함께 사용해야 한다. 이 옵션으로 CSQL을 실행한 dba는 standby 상태의 DB 즉, 슬레이브 DB 또는 레플리카 DB에 쓰기 작업을 수행할 수 있다.
+    이 옵션은 시스템 관리자 모드 옵션(**--sysadm--**)과 함께 사용해야 한다. 이 옵션으로 CSQL을 실행한 dba는 standby 상태의 DB 즉, 슬레이브 DB 또는 레플리카 DB에 직접 접속하여 쓰기 작업을 수행할 수 있다. 단, 레플리카에 직접 쓰는 데이터는 복제되지 않는다.
     
     :: 
 
          csql --sysadm --write-on-standby -u dba testdb@localhost 
 
+    .. note::
+    
+        레플리카에 직접 데이터를 쓰는 경우 복제 불일치가 발생함에 주의해야 한다.
+        
 .. option::  --no-trigger-action
 
     이 옵션을 지정하면 해당 CSQL에서 수행되는 질의문의 트리거는 동작하지 않는다.

@@ -191,45 +191,6 @@ RPM을 실행하면 CUBRID는 "cubrid" 홈 디렉터리(/opt/cubrid)에 설치�
 
         호스트 이름과 이에 맞는 IP 주소가 비정상적으로 매핑되어 있으면 DB 서버를 구동할 수 없으므로, 정상적으로 매핑되어 있는지 확인한다.
 
-**Fedora/CentOS에서 CUBRID 설치**
-
-yum 명령어를 사용하여 CUBRID를 설치하려면, CUBRID 패키지의 위치를 알아야 한다. 운영체제에 따라 다음 주소로 이동하여 자신의 운영체제에 맞는 파일을 선택한다.    `http://www.cubrid.org/yum_repository <http://www.cubrid.org/yum_repository>`_
-
-예를 들어, 운영체제가 Fedora 16이면 다음과 같은 명령을 실행한다. fc16은 Fedora 16을 의미한다. ::
-
-    $ rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/9.0.0/cubridrepo-9.0.0-1.fc16.noarch.rpm
-
-운영체제가 CentOS 6.2이면 다음과 같은 명령을 실행한다. el6.2는 CentOS 6.2를 의미한다. ::
-
-    $ rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/9.0.0/cubridrepo-9.0.0-1.el6.2.noarch.rpm
-
-위의 명령을 실행하면 원하는 CUBRID 패키지를 설치할 수 있다. CUBRID 최신 버전을 설치하려면 다음 명령을 실행한다. ::
-
-    $ yum install cubrid
-
-이전 버전을 설치하려면 다음과 같이 명령에 버전을 포함해야 한다. ::
-
-    $ yum install cubrid-8.4.3
-
-설치를 완료하면 CUBRID 경로를 포함한 환경 변수들을 설정하고, 이를 시스템에 적용한다.
-
-**Ubuntu에서 CUBRID 설치**
-
-Ubuntu에서 apt-get 명령어를 사용하여 CUBRID를 설치하려면, 먼저 CUBRID 저장소를 추가하고, apt 인덱스를 업데이트한다. ::
-
-    $ sudo add-apt-repository ppa:cubrid/cubrid
-    $ sudo apt-get update
-
-CUBRID 최신 버전을 설치하려면 다음 명령을 실행한다. ::
-
-    $ sudo apt-get install cubrid
-
-이전 버전을 설치하려면 다음과 같이 명령에 버전을 포함해야 한다. ::
-
-    $ sudo apt-get install cubrid-8.4.3
-
-설치를 완료하면 CUBRID 경로를 포함한 환경 변수들을 설정하고, 이를 시스템에 적용한다.
-
 **CUBRID 업그레이드**
 
 다른 버전의 CUBRID가 설치된 디렉터리를 CUBRID를 설치할 디렉터리로 지정하면, 해당 디렉터리가 존재하는 것을 알리고 덮어쓸 것인지 확인한다. **no** 를 입력하면 설치가 중단된다. ::
@@ -260,7 +221,7 @@ CCI, JDBC, PHP, ODBC, OLE DB, ADO.NET, Ruby, Python, Node.js 등의 인터페이
 
 CUBRID 매니저, CUBRID 쿼리 브라우저 등의 도구는 `http://www.cubrid.org/wiki_tools <http://www.cubrid.org/wiki_tools>`_\ 에서 최신 정보를 확인할 수 있고 관련 파일을 내려받아 설치할 수 있다.
 
-CUBRID 웹매니저는 CUBRID 설치 시 구동되며 `https://localhost:8282/ <https://localhost:8282/>`_\ 에서 확인할 수 있다.
+CUBRID 웹매니저는 CUBRID 설치 시 같이 설치된다. 자세한 설명은 `CUBRID 웹 매니저 매뉴얼 <http://www.cubrid.org/wiki_tools/entry/cubrid-web-manager-manual>`_\ 을 참고한다.
     
 .. _Installing-and-Running-on-Windows:
 
@@ -320,11 +281,14 @@ Windows 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항
 
 *   **cm.conf**
 
-    CUBRID 매니저용 설정 파일이다. **cm_port** 는 매니저 서버 프로세스가 사용하는 포트로 기본값은 **8001** 이며, 설정된 포트와 설정된 포트 번호+1 두 개의 포트가 사용된다. 즉, 8001 포트를 설정하면 8001, 8002 두 개의 포트가 사용된다. 자세한 내용은 `CUBRID 매니저 매뉴얼 <http://www.cubrid.org/wiki_tools/entry/cubrid-manager-manual_kr>`_\ 을 참고한다.
+    CUBRID 매니저용 설정 파일이다. **cm_port** 는 매니저 서버 프로세스, 웹 매니저 서버 프로세스가 사용하는 포트로 기본값은 **8001** 이다. 자세한 내용은 `CUBRID 매니저 매뉴얼 <http://www.cubrid.org/wiki_tools/entry/cubrid-manager-manual_kr>`_\과 `CUBRID 웹 매니저 매뉴얼 <http://www.cubrid.org/wiki_tools/entry/cubrid-web-manager-manual>`_\ 을 참고한다.
 
-*   **cm_ext.conf**
+    CUBRID 웹매니저를 구동하려면 **support_web_manager**\를 "YES"로 설정한 후 매니저 서버를 재구동해야 한다. CUBRID 웹 매니저를 사용하려면 "https://localhost:8001"에 접속한다.
+
+    ::
     
-    CUBRID 웹 매니저용 설정 파일이다. **listen**\은 웹 매니저 서버 프로세스가 사용하는 포트로 기본값은 **8282** 이다. 자세한 내용은 `CUBRID 웹 매니저 매뉴얼 <http://www.cubrid.org/wiki_tools/entry/cubrid-web-manager-manual>`_\ 을 참고한다.
+        $ cubrid manager stop
+        $ cubrid manager start
     
 *   **cubrid.conf**
 
@@ -348,7 +312,7 @@ JDBC, PHP, ODBC, OLE DB 등 인터페이스 모듈은 `http://www.cubrid.org/wik
 
 CUBRID 매니저, CUBRID 쿼리 브라우저 등의 도구는 `http://www.cubrid.org/wiki_tools <http://www.cubrid.org/wiki_tools>`_\ 에서 최신 정보를 확인할 수 있고 관련 파일을 내려받아 설치할 수 있다.
 
-CUBRID 웹매니저는 CUBRID 설치 시 구동되며 https://localhost:8282/\ 에서 확인할 수 있다.
+CUBRID 웹매니저는 CUBRID 설치 시 같이 설치된다. 자세한 설명은 `CUBRID 웹 매니저 매뉴얼 <http://www.cubrid.org/wiki_tools/entry/cubrid-web-manager-manual>`_\ 을 참고한다.
 
 압축 파일로 설치하기
 --------------------

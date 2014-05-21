@@ -237,11 +237,15 @@ To display the option list in the prompt, execute the **csql** utilities without
 
 .. option::  --write-on-standby
 
-    This option should be used together with a system administrator's mode option(**--sysadm--**). dba which run CSQL with this option can execute write-operation to the standby DB(slave DB or replica DB).
-    
+    This option should be used together with a system administrator's mode option(**--sysadm--**). dba which run CSQL with this option can write directly to the standby DB (slave DB or replica DB). However, the data to be written directly to the replica DB are not replicated.
+
     :: 
 
          csql --sysadm --write-on-standby -u dba testdb@localhost 
+    
+    .. note::
+    
+        Please note that replication mismatch occurs when you write the data directly to the replica DB.
 
 .. option::  --no-trigger-action
 

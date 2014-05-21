@@ -424,6 +424,10 @@ The following shows the result of running this statement.
       'DBA' 08:19:31.000 PM 02/10/2014 127.0.0.1 'csql' 
       'PUBLIC' NULL NULL NULL
 
+.. note::
+
+    The above login information which **SHOW ACCESS STATUS** shows is initialized when the database is restarted, and this query is not replication in HA environment; therefore, each node shows the different result.
+
 .. _show-exec-statistics-statement:
 
 SHOW EXEC STATISTICS

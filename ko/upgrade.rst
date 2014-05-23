@@ -12,7 +12,7 @@
 
 **새로 추가된 예약어 검사**
 
-*   CUBRID 설치 패키지에 포함 또는 http://ftp.cubrid.org/CUBRID_Engine/9.3.0/Linux/\ 에서 배포되는 CUBRID 9.3 버전용 예약어 검출 스크립트인 check_reserved.sql을 이용하여 예약어 사용 여부를 검사할 수 있으며, 예약어로 지정된 식별자를 사용하고 있을 경우 식별자를 수정해야 한다. :doc:`sql/identifier` 절을 참고한다.
+*   CUBRID 설치 패키지에 포함 또는 http://ftp.cubrid.org/CUBRID_Engine/9.3.0/\ 에서 배포되는 CUBRID 9.3 버전용 예약어 검출 스크립트인 check_reserved.sql을 이용하여 예약어 사용 여부를 검사할 수 있으며, 예약어로 지정된 식별자를 사용하고 있을 경우 식별자를 수정해야 한다. :doc:`sql/identifier` 절을 참고한다.
 
 **환경 변수 CUBRID_MSG_LANG 설정**
 

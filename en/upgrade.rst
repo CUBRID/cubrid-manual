@@ -12,7 +12,7 @@ Cautions during upgrade
 
 **Checking New Reserved Words**
 
-*   You can check whether reserved words are being used or not by applying the CUBRID 9.3 reserved word detection script, check_reserved.sql, which is distributed through the CUBRID installation package or http://ftp.cubrid.org/CUBRID_Engine/9.3.0/Linux/. If the reserved words are being used as identifiers, the identifiers must be modified. See :doc:`sql/identifier`.
+*   You can check whether reserved words are being used or not by applying the CUBRID 9.3 reserved word detection script, check_reserved.sql, which is distributed through the CUBRID installation package or http://ftp.cubrid.org/CUBRID_Engine/9.3.0//. If the reserved words are being used as identifiers, the identifiers must be modified. See :doc:`sql/identifier`.
 
 **Configuring environment variables of CUBRID_MSG_LANG**
 

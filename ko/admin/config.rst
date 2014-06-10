@@ -348,8 +348,8 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
          
         # The list of database servers in all by 'cubrid service start' command.
         # This property is effective only when the above 'service' property contains 'server' keyword.
-        #server=server, broker, manager
-         
+        #server=demodb,testdb
+        
         # Common section - properties for all databases
         # This section will be applied before other database specific sections.
         [common]

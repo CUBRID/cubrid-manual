@@ -787,7 +787,7 @@ The following is a query and a result to run **LAST_VALUE** function.
 LEAD
 ====
     
-.. function:: LEAD(expression, offset, default) OVER ([<partition_by_clause>] <order_by_clause>)
+.. function:: LEAD(expression, offset[, default]) OVER ([<partition_by_clause>] <order_by_clause>)
 
     **LEAD** is an analytic function that returns the *expression* value from a subsequent row, after *offset* that follows the current row. It can be used to access several rows simultaneously without making any self join.
 

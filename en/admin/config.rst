@@ -342,8 +342,8 @@ CUBRID consists of the database server, the broker and the CUBRID Manager. The n
          
         # The list of database servers in all by 'cubrid service start' command.
         # This property is effective only when the above 'service' property contains 'server' keyword.
-        #server=server, broker, manager
-         
+        #server=demodb,testdb
+        
         # Common section - properties for all databases
         # This section will be applied before other database specific sections.
         [common]

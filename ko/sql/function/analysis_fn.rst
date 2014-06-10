@@ -787,7 +787,7 @@ LAST_VALUE 함수는 현재 행을 기준으로 계산된다. 즉, 아직 바인
 LEAD
 ====
     
-.. function:: LEAD(expression, offset, default) OVER ([<partition_by_clause>] <order_by_clause>)
+.. function:: LEAD(expression, offset[, default]) OVER ([<partition_by_clause>] <order_by_clause>)
 
     **LEAD** 함수는 분석 함수로만 사용되며, 현재 행을 기준으로 *offset* 이후 행의 *expression* 값을 반환한다. 한 행에 자체 조인(self join) 없이 동시에 여러 개의 행에 접근하고 싶을 때 사용할 수 있다.
 

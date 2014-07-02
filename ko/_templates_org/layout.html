@@ -1,4 +1,36 @@
 {% extends "!layout.html" %}
+
+
+  {%- block sidebar2 %}
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+          {%- block sidebartoc %}
+          <h3><a href="{{ pathto(master_doc) }}">{{ _('Table Of Contents') }}</a></h3>
+          {{ toctree() }}
+          {%- endblock %}
+          {%- block sidebarsearch %}
+          <h3 style="margin-top: 1.5em;">{{ _('Search') }}</h3>
+          <form class="search" action="{{ pathto('search') }}" method="get">
+            <input type="text" name="q" size="18" />
+            <input type="submit" value="{{ _('Go') }}" />
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+          </form>
+          <p class="searchtip" style="font-size: 90%">
+            {{ _('Enter search terms or a module, class or function name.') }}
+          </p>
+          {%- endblock %}
+          
+        <!--
+          <h3 style="margin-top: 1.5em;">{{ _('Other Formats') }}</h3>
+           <a href="abc">
+           <img src="abc" style="width:150px">
+           </a>
+           <p>
+          -->
+        </div>
+    {% endblock %}
+
 {%- block extrahead %} 
     <!-- naver analytics begin-->
     
@@ -8,6 +40,6 @@
         wcs_add["wa"] = "195d9567225f24";
         wcs_do();
     </script>
-    
+
     <!-- naver analytics end-->
 {% endblock %}

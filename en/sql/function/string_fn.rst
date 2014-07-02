@@ -776,29 +776,29 @@ LCASE, LOWER
     ======================
       'cubrid'
 
-Note that the **LOWER** function may not work properly by specified collation. For example, when you try to change character ? used in Romanian as lower character, this function works as follows by collation.
+Note that the **LOWER** function may not work properly by specified collation. For example, when you try to change character Ă used in Romanian as lower character, this function works as follows by collation.
 
 If collation is utf8_bin, this character is not changed.
 
 .. code-block:: sql
     
     SET NAMES utf8 COLLATE utf8_bin;
-    SELECT LOWER('?');
+    SELECT LOWER('Ă');
 
-       lower(_utf8'?')
+       lower(_utf8'Ă')
     ======================
-      '?'
+      'Ă'
 
-If collation is utf8_ro_RO, '?' can be changed.
+If collation is utf8_ro_RO, 'Ă' can be changed.
 
 .. code-block:: sql
 
     SET NAMES utf8 COLLATE utf8_ro_cs;
-    SELECT LOWER('?');
+    SELECT LOWER('Ă');
     
-       lower(_utf8'?' COLLATE utf8_ro_cs)
+       lower(_utf8'Ă' COLLATE utf8_ro_cs)
     ======================
-      '?'
+      'ă'
 
 For supporting collations in CUBRID, see :ref:`cubrid-all-collation`.
 
@@ -1643,7 +1643,7 @@ SUBSTR
 
     .. note::
     
-        In the earlier versions of CUBRID, the starting position and string length are calculated in byte unit, not in character unit. Therefore, in a multi-byte character set, you must specify the parameter in consideration of the number of bytes representing a single character.
+        In the previous versions of CUBRID 9.0, the starting position and string length are calculated in byte unit, not in character unit; therefore, in a multi-byte character set, you must specify the parameter in consideration of the number of bytes representing a single character.
 
     :param string: Specifies the input character string. If the input value is **NULL**, **NULL** is returned.
     :param position: Specifies the position from where the string is to be extracted in bytes. Even though the position of the first character is specified as 1 or a negative number, it is considered as 1. If a value greater than the string length or **NULL** is specified, **NULL** is returned.
@@ -2011,28 +2011,28 @@ UCASE, UPPER
     ======================
       'CUBRID'
 
-Note that the **UPPER** function may not work properly by specified collation. For example, when you try to change character '?' used in Romanian as upper character, this function works as follows by collation.
+Note that the **UPPER** function may not work properly by specified collation. For example, when you try to change character 'ă' used in Romanian as upper character, this function works as follows by collation.
 
 If collation is utf8_bin, it is not changed.
 
 .. code-block:: sql
     
     SET NAMES utf8 COLLATE utf8_bin;
-    SELECT UPPER('?');
+    SELECT UPPER('ă');
     
-       upper(_utf8'?')
+       upper(_utf8'ă')
     ======================
-      '?'
+      'ă'
 
 If collation is utf8_ro_RO, this can be changed.
 
 .. code-block:: sql
 
     SET NAMES utf8 COLLATE utf8_ro_cs;
-    SELECT UPPER('?');
+    SELECT UPPER('ă');
     
-       upper(_utf8'?' COLLATE utf8_ro_cs)
+       upper(_utf8'ă' COLLATE utf8_ro_cs)
     ======================
-      '?'
+      'Ă'
 
 Regarding collations which CUBRID supports, see :ref:`cubrid-all-collation`.

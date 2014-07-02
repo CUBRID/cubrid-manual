@@ -1171,6 +1171,8 @@ AUTO_INCREMENT 절
 
 .. warning:: **AUTO_INCREMENT** 의 초기값 변경으로 인해 **PRIMARY KEY** 나 **UNIQUE** 와 같은 제약 조건에 위배되는 경우가 발생하지 않도록 주의한다.
 
+.. note:: **AUTO_INCREMENT** 칼럼의 타입을 변경하면 최대값도 변경된다. 예를 들어, INT 타입을 BIGINT 타입으로 변경하면 **AUTO_INCREMENT** 최대값이 INT의 최대값에서 BIGINT의 최대값으로 변경된다.
+
 .. _change-column:
 
 CHANGE/MODIFY 절

@@ -64,7 +64,7 @@ The **SELECT** statement specifies columns that you want to retrieve from a tabl
 
     *   \*: By using **SELECT** * statement, you can retrieve all columns from the table specified in the **FROM** clause.
 
-    *   *expression_comma_list*: *expression* can be a path expression (ex.: *tbl_name.col_name*), variable or table name. All general expressions including arithmetic operations can also be used. Use a comma (,) to separate each expression in the list. You can specify aliases by using the **AS** keyword for columns or expressions to be queried. Specified aliases are used as column names in **GROUP BY**, **HAVING**, **ORDER BY** and **FOR** clauses. The position index of a column is assigned based on the order in which the column was specified. The starting value is 1.
+    *   *expression_comma_list*: *expression* can be a path expression (ex.: *tbl_name.col_name*), variable or table name. All general expressions including arithmetic operations can also be used. Use a comma (,) to separate each expression in the list. You can specify aliases by using the **AS** keyword for columns or expressions to be queried. Specified aliases are used as column names in **GROUP BY**, **HAVING** and **ORDER BY** clauses. The position index of a column is assigned based on the order in which the column was specified. The starting value is 1.
 
         As **AVG**, **COUNT**, **MAX**, **MIN**, or **SUM**, an aggregate function that manipulates the retrieved data can also be used in the *expression*. 
 
@@ -165,7 +165,7 @@ The **FROM** clause specifies the table in which data is to be retrieved in the 
      
     <lock_hint> ::= READ UNCOMMITTED
 
-*   <*select_expressions*>: One or more columns or expressions to query is specified. Use * to query all columns in the table. You can also specify an alias for a column or an expression to be queried by using the AS keyword. This keyword can be used in **GROUP BY**, **HAVING**, **ORDER BY** and **FOR** clauses. The position index of the column is given according to the order in which the column was specified. The starting value is 1.
+*   <*select_expressions*>: One or more columns or expressions to query is specified. Use * to query all columns in the table. You can also specify an alias for a column or an expression to be queried by using the AS keyword. This keyword can be used in **GROUP BY**, **HAVING** and **ORDER BY** clauses. The position index of the column is given according to the order in which the column was specified. The starting value is 1.
 
 *   <*table_specification*>: At least one table name is specified after the **FROM** clause. Subqueries and derived tables can also be used in the **FROM** clause. For details on subquery derived tables, see :ref:`subquery-derived-table`.
 

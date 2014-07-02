@@ -2689,7 +2689,7 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
 
     The following example shows how to delete database information whose name is *testdb* from a CM user named *testcm*.
 
-::
+    ::
 
         cm_admin deldbinfo testcm testdb
 

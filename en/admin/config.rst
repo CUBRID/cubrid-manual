@@ -519,7 +519,7 @@ The following are parameters related to the memory used by the database server o
 
 **sort_buffer_size**
 
-    **sort_buffer_size** is a parameter to configure the size of buffer to be used when a query is processing sorting. The server assigns one sort buffer for each client's sorting-request, and releases the assigned buffer memory when sorting is complete. 
+    **sort_buffer_size** is a parameter to configure the size of buffer to be used when a query is processing sorting. The server assigns one sort buffer for each client's sorting-request, and releases the assigned buffer memory when sorting is complete. A sorting query includes not only SELECT sorting query, but also index-creating query.
 
     You can set a unit as B, K, M, G or T, which stand for bytes, kilobytes (KB), megabytes (MB), gigabytes (GB), and terabytes (TB) respectively. If you omit the unit, bytes will be applied. The default value is 128 * :ref:`db_page_size <dpg>` (**2M** when db_page_size is 16K), and the minimum value is 1 * :ref:`db_page_size <dpg>` (**16K** when db_page_size is 16K).
     

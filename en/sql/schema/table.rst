@@ -1174,6 +1174,8 @@ The **AUTO_INCREMENT** clause can change the initial value of the increment valu
 
 .. warning:: You must be careful not to violate constraints (such as a **PRIMARY KEY** or **UNIQUE**) due to changing the initial value of **AUTO_INCREMENT**.
 
+.. note:: If you change the type of **AUTO_INCREMENT** column, the maximum value is changed, too. For example, if you change INT to BIGINT, the maximum value of **AUTO_INCREMENT** is changed from the maximum INT into the maximum BIGINT.
+
 .. _change-column:
 
 CHANGE/MODIFY Clauses

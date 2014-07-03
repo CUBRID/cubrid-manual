@@ -1,13 +1,21 @@
 {% extends "!layout.html" %}
 
-
   {%- block sidebar2 %}
-      <div class="sphinxsidebar">
+    <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+
           {%- block sidebartoc %}
-          <h3><a href="{{ pathto(master_doc) }}">{{ _('Table Of Contents') }}</a></h3>
-          {{ toctree() }}
+              <h3><a href="{{ pathto(master_doc) }}">{{ _('Table Of Contents') }}</a></h3>
+              {{ toctree(maxdepth=3) }}
           {%- endblock %}
+          
+          {%- block sidebarrel %}
+          {%- include "relations.html" %}
+          {%- endblock %}
+          {%- block sidebarsourcelink %}
+          {%- include "sourcelink.html" %}
+          {%- endblock %}
+          
           {%- block sidebarsearch %}
           <h3 style="margin-top: 1.5em;">{{ _('Search') }}</h3>
           <form class="search" action="{{ pathto('search') }}" method="get">
@@ -20,16 +28,9 @@
             {{ _('Enter search terms or a module, class or function name.') }}
           </p>
           {%- endblock %}
-          
-        <!--
-          <h3 style="margin-top: 1.5em;">{{ _('Other Formats') }}</h3>
-           <a href="abc">
-           <img src="abc" style="width:150px">
-           </a>
-           <p>
-          -->
-        </div>
-    {% endblock %}
+       </div> 
+    </div>
+  {% endblock %}
 
 {%- block extrahead %} 
     <!-- naver analytics begin-->

@@ -187,6 +187,20 @@ The behavior of a query with the expression of ORDER BY/PARTITION BY clause whic
 * ORDER BY/PARTITION BY <constant> (ex: 1): Constant is considered as the column position of SELECT list.
 * ORDER BY/PARTITION BY <constant expression> (ex: 1+0): Constant is ignored and it is not used to do ordering/partitioning.
 
+Analytic functions which "ORDER BY" clause must be specified in OVER function
+=============================================================================
+
+The below functions require ordering; therefore, "ORDER BY" clause must be specified inside OVER function. In the case of omitting "ORDER BY" clause, please note that an error occurs or proper ordering is not guaranteed.
+
+*   :func:`CUME_DIST`
+*   :func:`DENSE_RANK`
+*   :func:`LAG`
+*   :func:`LEAD`
+*   :func:`NTILE`
+*   :func:`PERCENT_RANK`
+*   :func:`RANK`
+*   :func:`ROW_NUMBER`
+
 AVG
 ===
 

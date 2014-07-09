@@ -187,6 +187,20 @@
 * ORDER BY/PARTITION BY <상수> (예: 1): 상수는 SELECT 리스트의 칼럼 위치로 간주됨.
 * ORDER BY/PARTITION BY <상수 표현식> (예: 1+0): 상수 표현식은 무시되어, 정렬/분할(ordering/partitioning)에 사용되지 않음.
 
+OVER 함수 내에 "ORDER BY" 절을 명시해야 하는 분석 함수
+======================================================
+
+다음 분석 함수들은 순서가 필요하므로 OVER 함수 내에 "ORDER BY" 절을 명시해야 하는 분석 함수들이다. "ORDER BY" 절이 생략되는 경우 오류가 발생하거나 출력 결과에 대해 정확한 순서를 보장하지 않는다는 점에 주의한다.
+
+*   :func:`CUME_DIST`
+*   :func:`DENSE_RANK`
+*   :func:`LAG`
+*   :func:`LEAD`
+*   :func:`NTILE`
+*   :func:`PERCENT_RANK`
+*   :func:`RANK`
+*   :func:`ROW_NUMBER`
+
 AVG
 ===
 

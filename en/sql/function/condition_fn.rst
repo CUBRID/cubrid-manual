@@ -401,7 +401,7 @@ The difference between **REGEXP** and **LIKE** are as follows:
 
     0
 
-In the syntax below, if *expression* matches *pattern*, 1 is returned; otherwise, 0 is returned. If either *expression* or *pattern* is **NULL**, **NULL** is returned.
+In the below syntax, if *expression* matches *pattern*, 1 is returned; otherwise, 0 is returned. If either *expression* or *pattern* is **NULL**, **NULL** is returned.
 
 The second syntax has the same meaning as the third syntax, which both syntaxes are using **NOT**.
 

@@ -94,6 +94,17 @@ To create a table, use the **CREATE TABLE** statement.
         introduction     VARCHAR(1500)
     );
 
+.. note:: **A CHECK constraint in the table schema**
+
+    A CHECK constraint defined in the table schema is parsed, but ignored. The reason of being parsed is to support the compatibility when DB migration from other DBMS is done.
+    
+    .. code-block:: sql
+    
+        CREATE TABLE tbl (
+            id INT PRIMARY KEY,
+            CHECK (id > 0)
+        )
+
 .. _column-definition:
 
 Column Definition

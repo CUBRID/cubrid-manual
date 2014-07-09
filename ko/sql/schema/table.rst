@@ -92,6 +92,17 @@ CREATE TABLE
         introduction     VARCHAR(1500)
     );
 
+.. note:: **테이블 스키마의 CHECK 제약 조건**
+
+    테이블 스키마에 정의된 CHECK 제약 조건은 파싱되지만, 실제 동작은 무시된다. 파싱되는 이유는 타 DBMS로부터 마이그레이션을 진행하는 경우 호환성을 제공하기 위해서이다.
+    
+    .. code-block:: sql
+    
+        CREATE TABLE tbl (
+            id INT PRIMARY KEY,
+            CHECK (id > 0)
+        )
+
 .. _column-definition:
 
 칼럼 정의

@@ -1478,7 +1478,7 @@ CCI API 레퍼런스
     :param req_handle: (IN) 요청 핸들
     :param col_no: (IN) 칼럼 인덱스. 1부터 시작.
     :param type: (IN) *value* 변수의 데이터 타입(**T_CCI_A_TYPE** 에 정의된 타입을 사용)
-    :param value: (OUT) 데이터를 저장할 변수의 주소
+    :param value: (OUT) 데이터를 저장할 변수의 주소. *type*\이 CCI_A_TYPE_STR, CCI_A_TYPE_SET, CCI_A_TYPE_BLOB 또는 CCI_A_TYPE_CLOB이고 칼럼의 값이 NULL이면 value의 값도 NULL이다.
     :param indicator: (OUT) **NULL** indicator. (-1: **NULL**, >0: 문자열의 길이)
     
         *   *type* 이 **CCI_A_TYPE_STR** 인 경우: **NULL** 이면 -1을 반환하고, **NULL** 이 아니면 *value* 에 저장된 문자열의 바이트 길이를 반환

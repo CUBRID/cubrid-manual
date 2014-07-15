@@ -144,8 +144,8 @@ The **getConnection** method returns the **Connection** object and it is used to
 *   *port*: The CUBRID broker port number (default value: 33,000)
 *   *db-name*: The name of the database to connect
 
-*   *user-id*: The user ID which is connected to a database. There are two types of users in a database by default: **dba** and **public**. If this is NULL, it becomes <*db_user*> in *url*. If this is an empty string (""),  it becomes a **public** user.
-*   *password*: The password of a user who is to be connected to a database. If this is NULL, <*db_password*> in *url* is used. If this is an empty string (""), DB password becomes an empty string.
+*   *user-id*: The user ID which is connected to a database. There are two types of users in a database by default: **dba** and **public**. If this is NULL, it becomes <*db_user*> in *db-url*. If this is an empty string (""),  it becomes a **public** user.
+*   *password*: The password of a user who is to be connected to a database. If this is NULL, <*db_password*> in *db-url* is used. If this is an empty string (""), DB password becomes an empty string. You cannot include ':' in the password of the *db-url* string.
 
 *   <*property*>:
 

@@ -769,7 +769,7 @@ CCI API Reference
     *   *port*: A port number
     *   *db_name*: A name of the database
     *   *db_user*: A name of the database user
-    *   *db_password*: A database user password
+    *   *db_password*: A database user password. You cannot include ':' in the password of the *url* string.
 
     *   **altHosts** = *standby_broker1_host*, *standby_broker2_host*, ...: Specifies the broker information of the standby server, which is used for failover when it is impossible to connect to the active server. You can specify multiple brokers for failover, and the connection to the brokers is attempted in the order listed in **alhosts**.
     

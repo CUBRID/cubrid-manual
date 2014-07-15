@@ -694,7 +694,7 @@ CCI API 레퍼런스
     :param port: (IN) 브로커 포트( **$CUBRID/conf/cubrid_broker.conf** 파일에 설정된 포트를 사용)
     :param db_name: (IN) DB 이름
     :param db_user: (IN) DB 사용자 이름
-    :param db_passwd: (IN) DB 사용자 비밀번호
+    :param db_passwd: (IN) DB 사용자 암호
     :return: 연결 핸들 ID(성공), 에러 코드(실패)
 
         *   **CCI_ER_NO_MORE_MEMORY**
@@ -712,7 +712,7 @@ CCI API 레퍼런스
     :param port: (IN) 브로커 포트( **$CUBRID/conf/cubrid_broker.conf** 파일에 설정된 포트를 사용)
     :param db_name: (IN) DB 이름
     :param db_user: (IN) DB 사용자 이름
-    :param db_passwd: (IN) DB 사용자 비밀번호
+    :param db_passwd: (IN) DB 사용자 암호
     :param err_buf: (OUT) 에러 버퍼
     :return: 연결 핸들 ID(성공), 에러 코드(실패)
 
@@ -729,7 +729,7 @@ CCI API 레퍼런스
     
     :param url: (IN) 서버 연결 정보 문자 스트링
     :param db_user: (IN) DB 사용자 이름. NULL이면 *url* 의 <*db_user*>가 사용된다. 이 값이 빈 문자열("")이거나 *url* 내의 <*db_user*>가 정의되지 않은 경우 DB 사용자 이름은 **PUBLIC** 이 된다.
-    :param db_passwd: (IN) DB 사용자 비밀번호. NULL이면 *url* 의 <*db_password*>가 사용된다. *url* 내의 <*db_password*>가 정의되지 않은 경우 비밀번호는 NULL이 된다.
+    :param db_passwd: (IN) DB 사용자 암호. NULL이면 *url* 의 <*db_password*>가 사용된다. *url* 내의 <*db_password*>가 정의되지 않은 경우 암호는 NULL이 된다. 
     :return: 연결 핸들 ID(성공), 에러 코드(실패)
 
         *   **CCI_ER_NO_MORE_MEMORY**
@@ -768,7 +768,7 @@ CCI API 레퍼런스
     *   *port*: 포트 번호
     *   *db_name*: 데이터베이스 이름
     *   *db_user*: 데이터베이스 사용자 이름
-    *   *db_password*: 데이터베이스 사용자 비밀번호
+    *   *db_password*: 데이터베이스 사용자 암호. *url* 내의 암호에는 ':'를 포함할 수 없다.
 
     *   **altHosts** = *standby_broker1_host*, *standby_broker2_host*, ...: active 서버에 연결할 수 없는 경우, 그 다음으로 연결을 시도(failover)할 standby 서버의 브로커 정보를 나타낸다. failover할 브로커를 여러 개 지정할 수 있고, **altHosts** 에 나열한 순서대로 연결을 시도한다.
 
@@ -812,7 +812,7 @@ CCI API 레퍼런스
 
     :param url: (IN) 서버 연결 정보 문자 스트링
     :param db_user: (IN) 데이터베이스 사용자 이름. NULL 혹은 빈 문자열인 경우 *url* 의 <*db_user*>를 사용한다.
-    :param db_passwd: (IN) 데이터베이스 사용자 비밀번호. NULL 혹은 빈 문자열인 경우 *url* 의 <*db_password*>를 사용한다.
+    :param db_passwd: (IN) 데이터베이스 사용자 암호. NULL 혹은 빈 문자열인 경우 *url* 의 <*db_password*>를 사용한다.
     :param err_buf: (OUT) 에러 버퍼
     :return: 연결 핸들 ID(성공), 에러 코드(실패)
 

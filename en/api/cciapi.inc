@@ -729,9 +729,8 @@ CCI API Reference
     The **cci_connect_with_url** function connects a database by using connection information passed with a *url* argument. If broker's HA feature is used in CCI, you must specify the connection information of the standby broker server with altHosts property, which is used for the failover, in the *url* argument of this function. It returns the ID of a connection handle on success; it returns an error code on failure. For details about HA features of broker, see :ref:`duplexing-brokers`.
 
     :param url: (IN) A string that contains server connection information. 
-    :param db_user: (IN) Database user name. If it is NULL or an empty string, it becomes <*db_user*> in *url*. If both of this value and <*db_user*> in *url* are not specified, DB user name becomes **PUBLIC**.
-    :param db_passwd: (IN) Database user password. If it is NULL or an empty string, use <*db_password*> in *url*. If both of this value and <*db_password*> in *url* are not specified, DB password becomes NULL.
-
+    :param db_user: (IN) Database user name. If this is NULL, it becomes <*db_user*> in *url*. If this is an empty string("") or <*db_user*> in *url* is not specified, DB user name becomes **public**.
+    :param db_passwd: (IN) Database user password. If this is NULL, <*db_password*> in *url* is used. If <*db_password*> in *url* is not specified, DB password becomes NULL.
     :return: Success: Connection handle ID (int), Failure: Error code
 
         *   **CCI_ER_NO_MORE_MEMORY**

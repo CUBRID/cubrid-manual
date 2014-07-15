@@ -17,8 +17,14 @@ Statistics for tables and indexes enables queries of the database system to proc
   
     UPDATE STATISTICS ON CATALOG CLASSES [WITH FULLSCAN]; 
 
-*   **WITH FULLSCAN**: It updates the statistics with all the data in the specified table. If this is omitted, it updates the statistics with sampling data.
+*   **WITH FULLSCAN**: It updates the statistics with all the data in the specified table. If this is omitted, it updates the statistics with sampling data. Most cases are enough to update statistics with sampling data; it is recommended not to use WITH FULLSCAN because it can be a burden to the system.
+
+    .. note:: 
+
+        From 10.0 version, on the HA environment, UPDATE STATISTICS on the master node is replicated to the slave/replica node.
+
 *   **ALL CLASSES**: If the **ALL CLASSES** keyword is specified, the statistics on all the tables existing in the database are updated.
+
 *   **CATALOG CLASSES**: It updates the statistics of the catalog tables.
 
 .. code-block:: sql 

@@ -17,8 +17,14 @@
   
     UPDATE STATISTICS ON CATALOG CLASSES [WITH FULLSCAN]; 
 
-*   **WITH FULLSCAN**: 지정된 테이블의 전체 데이터를 가지고 통계 정보를 업데이트한다. 생략 시 샘플링한 데이터를 가지고 통계 정보를 업데이트한다. 
+*   **WITH FULLSCAN**: 지정된 테이블의 전체 데이터를 가지고 통계 정보를 업데이트한다. 생략 시 샘플링한 데이터를 가지고 통계 정보를 업데이트한다. 대부분 통계 정보 갱신은 샘플링 정보를 업데이트하는 것으로 충분하며, WITH FULLSCAN은 시스템에 부담을 줄 수 있으므로 가급적 사용을 자제할 것을 권장한다. 
+
+    .. note:: 
+
+        10.0 부터는 HA 환경의 마스터에서 수행한 UPDATE STATISTICS 문이 슬레이브/레플리카에 복제된다.
+        
 *   **ALL CLASSES**: 모든 테이블의 통계 정보를 업데이트한다. 
+
 *   **CATALOG CLASSES**: 카탈로그 테이블에 대한 통계 정보를 업데이트한다.
 
 .. code-block:: sql 

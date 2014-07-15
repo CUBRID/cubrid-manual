@@ -2002,10 +2002,6 @@ CUBRID HA synchronizes data among nodes within CUBRID HA groups based on replica
 
 Therefore, in CUBRID HA environment, it is not recommended to use method.
 
-**UPDATE STATISTICS Statement**
-
-The **UPDATE STATISTICS** statement which updates statistics is not replicated to the slave node.
-
 **Standalone Mode**
 
 The replication logs are not generated as for tasks performed in standalone mode. For this reason, data inconsistency among nodes within CUBRID HA groups may occur when performing tasks in standalone mode.
@@ -2039,6 +2035,16 @@ In a CUBRID HA environment, the meta data (Locator) of a **LOB** column is repli
 .. note::
 
     On previous version of CUBRID 9.1, using triggers in CUBRID HA can cause duplicate executions. This may cause data inconsistency among nodes within CUBRID HA groups. Therefore, you should not use triggers on the previous version of 9.1.
+
+
+.. note::
+
+    **UPDATE STATISTICS** 
+
+    From 10.0, UPDATE STATISTICS statement is replicated.
+     
+    In the previous version of 10.0, UPDATE STATISTICS statement is not replicated; therefore, as a separated operation, you should run this statement in the slave/replica node.
+    When you want to apply UPDATE STATISTICS on the slave/replica node in the previous version of 10.0, you should run this in the CSQL with --sysadm and --write_on_slave options.
 
 Operational Scenarios
 =====================

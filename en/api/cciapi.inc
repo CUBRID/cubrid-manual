@@ -1480,7 +1480,7 @@ CCI API Reference
     :param req_handle: (IN) Request handle
     :param col_no: (IN) One-based column index. It starts with 1.
     :param type: (IN) Data type (defined in the **T_CCI_A_TYPE**) of *value* variable
-    :param value: (OUT) Variable address for data to be stored. If *type* is CCI_A_TYPE_STR, CCI_A_TYPE_SET, CCI_A_TYPE_BLOB or CCI_A_TYPE_CLOB, and the value of a column is NULL, the *value* will be NULL, too.
+    :param value: (OUT) Variable address for data to be stored. If *type* is one of (CCI_A_TYPE_STR, CCI_A_TYPE_SET, CCI_A_TYPE_BLOB or CCI_A_TYPE_CLOB) and the value of a column is NULL, the *value* will be NULL, too.
     :param indicator: (OUT) **NULL** indicator. (-1 : **NULL**)
 
      *   If *type* is **CCI_A_TYPE_STR** : -1 is returned in case of **NULL**; the length of string stored in *value* is returned, otherwise.

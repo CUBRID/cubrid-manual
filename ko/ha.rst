@@ -1971,10 +1971,6 @@ CUBRID HA는 복제 로그를 기반으로 CUBRID HA 그룹 내의 노드 간 �
 
 따라서 CUBRID HA 환경에서는 메서드 사용을 권장하지 않는다.
 
-**UPDATE STATISTICS 문**
-
-통계 정보를 갱신하는 **UPDATE STATISTICS** 문은 슬레이브 노드에 복제되지 않는다.
-
 **stand-alone 모드**
 
 CUBRID의 stand-alone 모드에서 수행한 작업에 대해서는 복제 로그가 생성되지 않는다. 따라서 stand-alone 모드로 csql 등을 통해 작업 수행 시 CUBRID HA 그룹 내 노드 간 데이터 불일치가 발생할 수 있다.
@@ -2008,6 +2004,15 @@ CUBRID HA에서 **LOB** 칼럼 메타 데이터(Locator)는 복제되고, **LOB*
 .. note::
 
     9.1 이전 버전의 CUBRID HA 환경에서 트리거를 사용할 경우 마스터 노드에서 이미 수행된 트리거를 슬레이브 노드에서 중복 수행하므로 CUBRID HA 그룹 내의 노드 간 데이터 불일치가 발생할 수 있다. 따라서 9.1 이전 버전의 CUBRID HA 환경에서는 트리거를 사용하지 않도록 한다.
+
+.. note::
+
+    **UPDATE STATISTICS 문** 
+
+    10.0 부터는 UPDATE STATISTICS 문이 복제된다. 
+     
+    10.0 미만 버전에서는 UPDATE STATISTICS 문이 복제되지 않으므로 슬레이브/레플리카 노드에 별도로 수행해야 한다. 
+    10.0 미만 버전의 슬레이브/레플리카 노드에서 "UPDATE STATISTICS" 구문을 적용하려면 CSQL에서 --sysadm 옵션과 --write_on_slave 옵션을 추가한 후 이 구문을 수행해야 한다. 
 
 운영 시나리오
 =============

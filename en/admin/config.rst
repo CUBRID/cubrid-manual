@@ -1211,6 +1211,8 @@ The following are parameters related to SQL statements and data types supported 
 
         ERROR: Attributes exposed in aggregate queries must also appear in the group by clause.
 
+.. _oracle_style_empty_string:
+
 **oracle_style_empty_string**
 
     **oracle_style_empty_string** is a parameter used to improve compatibility with other DBMS (Database Management Systems); it specifies to process empty string and **NULL** as the same value. The default is **no**. If the **oracle_style_empty_string** parameter is set to no, the character string is processed as a valid string; if it is set to yes, according to each function, the empty string is processed as **NULL** or **NULL** is processed as the empty string.
@@ -1242,6 +1244,7 @@ The following are parameters related to SQL statements and data types supported 
             *   :func:`RPAD`
             *   :func:`RTRIM`
             *   :func:`SPACE`
+            *   :func:`STRCMP`
             *   :func:`SUBSTR`
             *   :func:`SUBSTRING`
             *   :func:`SUBSTRING_INDEX`
@@ -1253,32 +1256,18 @@ The following are parameters related to SQL statements and data types supported 
         *   Functions processing an empty string and NULL into an empty string when **oracle_style_empty_string=yes**.
         
             *   :func:`CONCAT`
-            *   :func:`GROUP_CONCAT`
             *   :func:`REPLACE`
 
             
     .. note::
     
-        :func:`REPLACE` function and :func:`GROUP_CONCAT` function have the different behavior in the previous versions of 10.0 when **oracle_style_empty_string=yes**.
+        :func:`REPLACE` function has the different behavior in the previous versions of 10.0 when **oracle_style_empty_string=yes**.
         
         .. code-block:: sql
         
             SELECT REPLACE ('abc', 'a', '');
         
         In the above query, the version of 10.0 or more return 'bc' because it processes the input of an empty string as an empty string; the previous version of 10.0 returns NULL because it processes the input of an empty string as NULL.
-        
-        .. code-block:: sql
-        
-            CREATE TABLE simple (a INT); 
-            INSERT INTO simple VALUES (1); 
-            INSERT INTO simple VALUES (1); 
-            INSERT INTO simple VALUES (NULL); 
-            INSERT INTO simple VALUES (2); 
-            INSERT INTO simple VALUES (3); 
-            
-            SELECT GROUP_CONCAT (a SEPARATOR '') FROM simple; 
-
-        In the above query, the version of 10.0 or more returns '1123'; the previous version of 10.0 returns NULL.
 
 **pipes_as_concat**
 

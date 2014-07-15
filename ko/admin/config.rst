@@ -1254,6 +1254,7 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
             *   :func:`RPAD`
             *   :func:`RTRIM`
             *   :func:`SPACE`
+            *   :func:`STRCMP`
             *   :func:`SUBSTR`
             *   :func:`SUBSTRING`
             *   :func:`SUBSTRING_INDEX`
@@ -1265,32 +1266,18 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
         *   **oracle_style_empty_string=yes**\일 때 빈 문자열, NULL을 빈 문자열로 처리하는 함수
         
             *   :func:`CONCAT`
-            *   :func:`GROUP_CONCAT`
             *   :func:`REPLACE`
 
             
     .. note::
     
-        :func:`REPLACE` 함수와 :func:`GROUP_CONCAT` 함수는 10.0 미만에서 **oracle_style_empty_string=yes**\일 때의 동작이 다르다.
+        :func:`REPLACE` 함수는 10.0 미만에서 **oracle_style_empty_string=yes**\일 때의 동작이 다르다.
         
         .. code-block:: sql
         
             SELECT REPLACE ('abc', 'a', '');
         
         위의 질의에 대해 10.0 이상 버전에서는 빈 문자열 입력을 빈 문자열로 처리하여 'bc'를 출력하지만, 10.0 미만 버전에서는 빈 문자열 입력을 NULL로 처리하여 NULL을 출력한다.
-        
-        .. code-block:: sql
-        
-            CREATE TABLE simple (a INT); 
-            INSERT INTO simple VALUES (1); 
-            INSERT INTO simple VALUES (1); 
-            INSERT INTO simple VALUES (NULL); 
-            INSERT INTO simple VALUES (2); 
-            INSERT INTO simple VALUES (3); 
-            
-            SELECT GROUP_CONCAT (a SEPARATOR '') FROM simple; 
-
-        위의 질의에 대해 10.0 이상 버전에서는 '1123'을, 10.0 미만 버전에서는 NULL을 출력한다.
 
 **pipes_as_concat**
 

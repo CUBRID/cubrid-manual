@@ -2,6 +2,10 @@
 문자열 함수와 연산자
 ********************
 
+.. note:: 
+
+    문자열 함수에서 **oracle_style_empty_string** 파라미터의 설정값이 yes이면 빈 문자열('')과 NULL을 구분하지 않고 함수에 따라 모두 NULL로 취급하거나, 모두 빈 문자열로 취급한다. 이와 관련한 자세한 설명은 :ref:`oracle_style_empty_string <oracle_style_empty_string>`\ 을 참고한다.
+
 병합 연산자
 ===========
 

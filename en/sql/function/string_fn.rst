@@ -2,6 +2,10 @@
 String Functions and Operators
 ******************************
 
+.. note:: 
+
+    In the string functions, if the value of **oracle_style_empty_string** parameter is yes, CUBRID does not separate an empty string and NULL; according to each function, CUBRID regards all of them as NULL or an empty string. For the detail description, see :ref:`oracle_style_empty_string <oracle_style_empty_string>`.
+
 Concatenation Operator
 ======================
 

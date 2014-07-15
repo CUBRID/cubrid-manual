@@ -1221,9 +1221,76 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
 
         ERROR: Attributes exposed in aggregate queries must also appear in the group by clause.
 
+.. _oracle_style_empty_string:
+
 **oracle_style_empty_string**
 
-    **oracle_style_empty_string**\ 은 다른 DBMS(Database Management System)와의 호환성을 향상시키기 위한 파라미터로 빈 문자열(empty string)을 Oracle DBMS와 마찬가지로 **NULL**\ 로 처리할 것인지 지정한다. **oracle_style_empty_string** 파라미터를 no로 설정하면 빈 문자열을 유효한 문자열로 처리하고, yes로 설정하면 Oracle DBMS와 마찬가지로 빈 문자열을 **NULL**\ 로 처리한다.
+    **oracle_style_empty_string**\ 은 다른 DBMS(Database Management System)와의 호환성을 향상시키기 위한 파라미터로, 빈 문자열(empty string)과 **NULL**\을 같은 값으로 처리하도록 지정한다. 기본값은 **no**\이다. **oracle_style_empty_string** 파라미터를 no로 설정하면 빈 문자열을 유효한 문자열로 처리하고, yes로 설정하면 함수에 따라 빈 문자열을 **NULL**\ 로 처리하거나, **NULL**\을 빈 문자열로 처리한다.
+    
+    .. note:: 
+
+        이하에 언급된 함수들을 제외한 나머지 함수들은 **oracle_style_empty_string** 파라미터의 영향을 받지 않는다.
+        
+        *   **oracle_style_empty_string=yes**\일 때 빈 문자열, NULL을 NULL로 처리하는 함수
+
+            *   :func:`ASCII`
+            *   :func:`CONCAT_WS`
+            *   :func:`ELT`
+            *   :func:`FIELD`
+            *   :func:`FIND_IN_SET`
+            *   :func:`FROM_BASE64`
+            *   :func:`INSERT`
+            *   :func:`INSTR`
+            *   :func:`LOWER`
+            *   :func:`LEFT`
+            *   :func:`LOCATE`
+            *   :func:`LPAD`
+            *   :func:`LTRIM`
+            *   :func:`MID`
+            *   :func:`POSITION`
+            *   :func:`REPEAT`
+            *   :func:`REVERSE`
+            *   :func:`RIGHT`
+            *   :func:`RPAD`
+            *   :func:`RTRIM`
+            *   :func:`SPACE`
+            *   :func:`SUBSTR`
+            *   :func:`SUBSTRING`
+            *   :func:`SUBSTRING_INDEX`
+            *   :func:`TO_BASE64`
+            *   :func:`TRANSLATE`
+            *   :func:`TRIM`
+            *   :func:`UPPER`
+            
+        *   **oracle_style_empty_string=yes**\일 때 빈 문자열, NULL을 빈 문자열로 처리하는 함수
+        
+            *   :func:`CONCAT`
+            *   :func:`GROUP_CONCAT`
+            *   :func:`REPLACE`
+
+            
+    .. note::
+    
+        :func:`REPLACE` 함수와 :func:`GROUP_CONCAT` 함수는 10.0 미만에서 **oracle_style_empty_string=yes**\일 때의 동작이 다르다.
+        
+        .. code-block:: sql
+        
+            SELECT REPLACE ('abc', 'a', '');
+        
+        위의 질의에 대해 10.0 이상 버전에서는 빈 문자열 입력을 빈 문자열로 처리하여 'bc'를 출력하지만, 10.0 미만 버전에서는 빈 문자열 입력을 NULL로 처리하여 NULL을 출력한다.
+        
+        .. code-block:: sql
+        
+            CREATE TABLE simple (a INT); 
+            INSERT INTO simple VALUES (1); 
+            INSERT INTO simple VALUES (1); 
+            INSERT INTO simple VALUES (NULL); 
+            INSERT INTO simple VALUES (2); 
+            INSERT INTO simple VALUES (3); 
+            
+            SELECT GROUP_CONCAT (a SEPARATOR '') FROM simple; 
+
+        위의 질의에 대해 10.0 이상 버전에서는 '1123'을, 10.0 미만 버전에서는 NULL을 출력한다.
 
 **pipes_as_concat**
 

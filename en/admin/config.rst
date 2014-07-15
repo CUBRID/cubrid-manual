@@ -80,207 +80,217 @@ CUBRID consists of the database server, the broker and the CUBRID Manager. The n
 
 **Database Server System Parameters**
 
-    The following are database server system parameters that can be used in the **cubrid.conf** configuration file. On the following table, "Applied" column's "client parameter" means that they are applied to CAS, CSQL, **cubrid** utilities. Its "server parameter" means that they are applied to the DB server process.
+    The following are database server system parameters that can be used in the **cubrid.conf** configuration file. On the following table, "Applied" column's "client parameter" means that they are applied to CAS, CSQL, **cubrid** utilities. Its "server parameter" means that they are applied to the DB server(cub_server) process.
     For the scope of **client** and **server parameters**, see :ref:`scope-server-conf`.
 
-    You can change the parameters that are capable of changing dynamically the setting value through the **SET SYSTEM PARAMETERS** statement or a session command of the CSQL Interpreter, **;set** while running the DB. If you are a DBA, you can change parameters regardless of the applied classification. However, if you are not a DBA, you can only change "client" or "client/server" parameters.
+    You can change the parameters that are capable of changing dynamically the setting value through the **SET SYSTEM PARAMETERS** statement or a session command of the CSQL Interpreter, **;set** while running the DB. If you are a DBA, you can change parameters regardless of the applied classification. However, if you are not a DBA, you can only change "session" parameters. (on the below table, a parameter of which "session" item's value is O.)
 
-    On the below table, if "Applied" is "server parameter", that parameter's applied scope is global. If  "Applied" is "client parameter" or "client/server parameter",  that parameter's applied scope is session.
+    On the below table, if "Applied" is "server parameter", that parameter affects to cub_server process; If "client parameter", that parameter affects to CAS, CSQL or "cubrid" utilities which run on client/server mode (--CS-mode). "Client/server parameter" affects to all of cub_server, CAS, CSQL and "cubrid" utilities.
+    
+    "Dynamic Change" and "Session or not" are marked on the below table. The affected range of the parameter which "Dynamic Change" is "available" depends on "Applied" and "Session" items.
 
     *   If "Dynamic Change" is "available" and "Applied" is "server parameter", that parameter's changed value is applied to DB server. Then applications use the changed value of the parameter until the DB server is restarted.
  
-    *   If "Dynamic Change" is "available" and "Applied" is "client parameter" or "client/server parameter", that parameter's changed value is applied only to that DB session. In other words, the changed value is only applied to the applications which requested to change that value. For example, if **block_ddl_statement** parameter's value is changed into **no**, then only the application who requested to change cannot use DDL statements.
+    *   If "Dynamic Change" is "available" and "Applied" is "client parameter", this belongs to the "session" parameter and that parameter's changed value is applied only to that DB session. In other words, the changed value is only applied to the application which requested to change that value. For example, if **block_ddl_statement** parameter's value is changed into **yes**, then only the application requested to change that parameter cannot use DDL statements.
+
+    *   If "Dynamic Change" is "available", "Applied" is "client parameter" and;
     
-    +-------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    | Category                      | Parameter Name                      | Applied                 | Type     | Default Value                  | Dynamic Change  |
-    +===============================+=====================================+=========================+==========+================================+=================+
-    | :ref:`connection-parameters`  | cubrid_port_id                      | client parameter        | int      | 1,523                          |                 |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | check_peer_alive                    | client/server parameter | string   | both                           | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | db_hosts                            | client parameter        | string   | NULL                           | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | max_clients                         | server parameter        | int      | 100                            |                 |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | tcp_keepalive                       | client/server parameter | bool     | yes                            |                 |
-    +-------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    | :ref:`memory-parameters`      | data_buffer_size                    | server parameter        | byte     | 32,768 *                       |                 |
-    |                               |                                     |                         |          | :ref:`db_page_size <dpg>`      |                 |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | index_scan_oid_buffer_size          | server parameter        | byte     | 4 *                            |                 |
-    |                               |                                     |                         |          | :ref:`db_page_size <dpg>`      |                 |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | max_agg_hash_size                   | server parameter        | byte     | 2,097,152(2M)                  |                 |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | sort_buffer_size                    | server parameter        | byte     | 128 *                          |                 |
-    |                               |                                     |                         |          | :ref:`db_page_size <dpg>`      |                 |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | temp_file_memory_size_in_pages      | server parameter        | int      | 4                              |                 |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | thread_stacksize                    | server parameter        | byte     | 1,048,576                      |                 |
-    +-------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    | :ref:`disk-parameters`        | db_volume_size                      | server parameter        | byte     | 512M                           |                 |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | dont_reuse_heap_file                | server parameter        | bool     | no                             |                 |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | generic_vol_prealloc_size           | server parameter        | byte     | 50M                            |                 |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | log_volume_size                     | server parameter        | byte     | 512M                           |                 |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | temp_file_max_size_in_pages         | server parameter        | int      | -1                             |                 |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | temp_volume_path                    | server parameter        | string   | NULL                           |                 |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | unfill_factor                       | server parameter        | float    | 0.1                            |                 |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | volume_extension_path               | server parameter        | string   | NULL                           |                 |
-    +-------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    | :ref:`error-parameters`       | call_stack_dump_activation_list     | client/server parameter | string   | DEFAULT                        | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | call_stack_dump_deactivation_list   | client/server parameter | string   | NULL                           | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | call_stack_dump_on_error            | client/server parameter | bool     | no                             | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | error_log                           | client/server parameter | string   | cub_client.err, cub_server.err |                 |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | error_log_level                     | client/server parameter | string   | SYNTAX                         | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | error_log_warning                   | client/server parameter | bool     | no                             | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | error_log_size                      | client/server parameter | int      | 8,000,000                      | available       |
-    +-------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    | :ref:`lock-parameters`        | deadlock_detection_interval_in_secs | server parameter        | float    | 1.0                            | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | isolation_level                     | client parameter        | int      | 3                              | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | lock_escalation                     | server parameter        | int      | 100,000                        |                 |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | lock_timeout                        | client parameter        | msec     | -1                             | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | rollback_on_lock_escalation         | server parameter        | bool     | no                             | available       |
-    +-------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    | :ref:`logging-parameters`     | adaptive_flush_control              | server parameter        | bool     | yes                            | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | background_archiving                | server parameter        | bool     | yes                            | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | checkpoint_every_size               | server parameter        | byte     | 10,000 *                       |                 |
-    |                               |                                     |                         |          | :ref:`log_page_size <lpg>`     |                 |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | checkpoint_interval                 | server parameter        | msec     | 6min                           | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | force_remove_log_archives           | server parameter        | bool     | yes                            | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | log_buffer_size                     | server parameter        | byte     | 128 *                          |                 |
-    |                               |                                     |                         |          | :ref:`log_page_size <lpg>`     |                 |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | log_max_archives                    | server parameter        | int      | INT_MAX                        | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | log_trace_flush_time                | server parameter        | msec     | 0                              | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | max_flush_size_per_second           | server parameter        | byte     | 10,000 *                       | available       |
-    |                               |                                     |                         |          | :ref:`db_page_size <dpg>`      |                 |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | sync_on_flush_size                  | server parameter        | byte     | 200 *                          | available       |
-    |                               |                                     |                         |          | :ref:`db_page_size <dpg>`      |                 |
-    +-------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    | :ref:`transaction-parameters` | async_commit                        | server parameter        | bool     | no                             |                 |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | group_commit_interval_in_msecs      | server parameter        | msec     | 0                              | available       |
-    +-------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    | :ref:`stmt-type-parameters`   | add_column_update_hard_default      | client/server parameter | bool     | no                             | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | alter_table_change_type_strict      | client/server parameter | bool     | no                             | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | ansi_quotes                         | client parameter        | bool     | yes                            |                 |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | block_ddl_statement                 | client parameter        | bool     | no                             | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | block_nowhere_statement             | client parameter        | bool     | no                             | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | compat_numeric_division_scale       | client/server parameter | bool     | no                             | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | default_week_format                 | client/server parameter | int      | 0                              | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | group_concat_max_len                | server parameter        | byte     | 1,024                          | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | intl_check_input_string             | client parameter        | bool     | no                             | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | intl_collation                      | client parameter        | string   |                                | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | intl_date_lang                      | client parameter        | string   |                                | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | intl_number_lang                    | client parameter        | string   |                                | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | no_backslash_escapes                | client parameter        | bool     | yes                            |                 |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | only_full_group_by                  | client parameter        | bool     | no                             | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | oracle_style_empty_string           | client parameter        | bool     | no                             |                 |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | pipes_as_concat                     | client parameter        | bool     | yes                            |                 |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | plus_as_concat                      | client parameter        | bool     | yes                            |                 |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | require_like_escape_character       | client parameter        | bool     | no                             |                 |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | return_null_on_function_errors      | client/server parameter | bool     | no                             | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | string_max_size_bytes               | client/server parameter | byte     | 1,048,576                      | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | unicode_input_normalization         | client parameter        | bool     | no                             | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | unicode_output_normalization        | client parameter        | bool     | no                             | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | update_use_attribute_references     | client parameter        | bool     | no                             | available       |
-    +-------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    | :ref:`plan-cache-parameters`  | max_plan_cache_entries              | client/server parameter | int      | 1,000                          |                 |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | max_filter_pred_cache_entries       | client/server parameter | int      | 1,000                          |                 |
-    +-------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    | :ref:`utility-parameters`     | backup_volume_max_size_bytes        | server parameter        | byte     | 0                              |                 |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | communication_histogram             | client parameter        | bool     | no                             | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | compactdb_page_reclaim_only         | server parameter        | int      | 0                              |                 |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | csql_history_num                    | client parameter        | int      | 50                             | available       |
-    +-------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    | :ref:`ha-parameters`          | ha_mode                             | server parameter        | string   | off                            |                 |
-    +-------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    | :ref:`other-parameters`       | access_ip_control                   | server parameter        | bool     | no                             |                 |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | access_ip_control_file              | server parameter        | string   |                                |                 |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | agg_hash_respect_order              | client parameter        | bool     | yes                            | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | auto_restart_server                 | server parameter        | bool     | yes                            | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | index_scan_in_oid_order             | client parameter        | bool     | no                             | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | index_unfill_factor                 | server parameter        | float    | 0.05                           |                 |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | java_stored_procedure               | server parameter        | bool     | no                             |                 |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | multi_range_optimization_limit      | server parameter        | int      | 100                            | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | optimizer_enable_merge_join         | client parameter        | bool     | no                             | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | pthread_scope_process               | server parameter        | bool     | yes                            |                 |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | server                              | server parameter        | string   |                                |                 |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | service                             | server parameter        | string   |                                |                 |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | session_state_timeout               | server parameter        | sec      | 21,600                         |                 |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | sort_limit_max_count                | client parameter        | int      | 1,000                          | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | sql_trace_slow                      | server parameter        | msec     | -1                             | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | sql_trace_execution_plan            | server parameter        | bool     | no                             | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | use_orderby_sort_limit              | server parameter        | bool     | yes                            | available       |
-    +-------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
+        *   this belongs to the "session" parameter, that parameter's changed value is applied only to that DB session. In other words, the changed value is only applied to the application requested to change that value. For example, if **add_column_update_hard_default** parameter's value is changed into **yes**, then only the application requested to change that parameter lets the newly added column with NOT NULL constraint have hard default value.
+        
+        *   this does not belong to the "session" parameter, the values of "client" side and "server" side are changed. For example, **error_log_level** parameter is applied to each of "server" side and "client" side; if this value is changed from "ERROR" into "WARNING", this is applied only to "server" (cub_server process) and "client" (CAS or CSQL) which requested to change this value. Other "clients" keeps the value of "ERROR".
+
+    .. note:: If you want to change the value of a parameter permanently, restart all of DB server and broker after changing configuration values of cubrid.conf.
+    
+    +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    | Category                      | Parameter Name                      | Applied                 | Session | Type     | Default Value                  | Dynamic Change        |
+    +===============================+=====================================+=========================+=========+==========+================================+=======================+
+    | :ref:`connection-parameters`  | cubrid_port_id                      | client parameter        |         | int      | 1,523                          |                       |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | check_peer_alive                    | client/server parameter | O       | string   | both                           | available             |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | db_hosts                            | client parameter        | O       | string   | NULL                           | available             |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | max_clients                         | server parameter        |         | int      | 100                            |                       |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | tcp_keepalive                       | client/server parameter |         | bool     | yes                            |                       |
+    +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    | :ref:`memory-parameters`      | data_buffer_size                    | server parameter        |         | byte     | 32,768 *                       |                       |
+    |                               |                                     |                         |         |          | :ref:`db_page_size <dpg>`      |                       |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | index_scan_oid_buffer_size          | server parameter        |         | byte     | 4 *                            |                       |
+    |                               |                                     |                         |         |          | :ref:`db_page_size <dpg>`      |                       |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | max_agg_hash_size                   | server parameter        |         | byte     | 2,097,152(2M)                  |                       |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | sort_buffer_size                    | server parameter        |         | byte     | 128 *                          |                       |
+    |                               |                                     |                         |         |          | :ref:`db_page_size <dpg>`      |                       |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | temp_file_memory_size_in_pages      | server parameter        |         | int      | 4                              |                       |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | thread_stacksize                    | server parameter        |         | byte     | 1,048,576                      |                       |
+    +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    | :ref:`disk-parameters`        | db_volume_size                      | server parameter        |         | byte     | 512M                           |                       |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | dont_reuse_heap_file                | server parameter        |         | bool     | no                             |                       |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | generic_vol_prealloc_size           | server parameter        |         | byte     | 50M                            |                       |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | log_volume_size                     | server parameter        |         | byte     | 512M                           |                       |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | temp_file_max_size_in_pages         | server parameter        |         | int      | -1                             |                       |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | temp_volume_path                    | server parameter        |         | string   | NULL                           |                       |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | unfill_factor                       | server parameter        |         | float    | 0.1                            |                       |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | volume_extension_path               | server parameter        |         | string   | NULL                           |                       |
+    +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    | :ref:`error-parameters`       | call_stack_dump_activation_list     | client/server parameter |         | string   | DEFAULT                        | only available to DBA |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | call_stack_dump_deactivation_list   | client/server parameter |         | string   | NULL                           | only available to DBA |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | call_stack_dump_on_error            | client/server parameter |         | bool     | no                             | only available to DBA |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | error_log                           | client/server parameter |         | string   | cub_client.err, cub_server.err |                       |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | error_log_level                     | client/server parameter |         | string   | SYNTAX                         | only available to DBA |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | error_log_warning                   | client/server parameter |         | bool     | no                             | only available to DBA |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | error_log_size                      | client/server parameter |         | int      | 8,000,000                      | only available to DBA |
+    +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    | :ref:`lock-parameters`        | deadlock_detection_interval_in_secs | server parameter        |         | float    | 1.0                            | only available to DBA |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | isolation_level                     | client parameter        | O       | int      | 3                              | available             |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | lock_escalation                     | server parameter        |         | int      | 100,000                        |                       |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | lock_timeout                        | client parameter        | O       | msec     | -1                             | available             |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | rollback_on_lock_escalation         | server parameter        |         | bool     | no                             | only available to DBA |
+    +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    | :ref:`logging-parameters`     | adaptive_flush_control              | server parameter        |         | bool     | yes                            | only available to DBA |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | background_archiving                | server parameter        |         | bool     | yes                            | only available to DBA |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | checkpoint_every_size               | server parameter        |         | byte     | 10,000 *                       |                       |
+    |                               |                                     |                         |         |          | :ref:`log_page_size <lpg>`     |                       |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | checkpoint_interval                 | server parameter        |         | msec     | 6min                           | only available to DBA |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | force_remove_log_archives           | server parameter        |         | bool     | yes                            | only available to DBA |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | log_buffer_size                     | server parameter        |         | byte     | 128 *                          |                       |
+    |                               |                                     |                         |         |          | :ref:`log_page_size <lpg>`     |                       |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | log_max_archives                    | server parameter        |         | int      | INT_MAX                        | only available to DBA |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | log_trace_flush_time                | server parameter        |         | msec     | 0                              | only available to DBA |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | max_flush_size_per_second           | server parameter        |         | byte     | 10,000 *                       | only available to DBA |
+    |                               |                                     |                         |         |          | :ref:`db_page_size <dpg>`      |                       |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | sync_on_flush_size                  | server parameter        |         | byte     | 200 *                          | only available to DBA |
+    |                               |                                     |                         |         |          | :ref:`db_page_size <dpg>`      |                       |
+    +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    | :ref:`transaction-parameters` | async_commit                        | server parameter        |         | bool     | no                             |                       |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | group_commit_interval_in_msecs      | server parameter        |         | msec     | 0                              | only available to DBA |
+    +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    | :ref:`stmt-type-parameters`   | add_column_update_hard_default      | client/server parameter | O       | bool     | no                             | available             |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | alter_table_change_type_strict      | client/server parameter | O       | bool     | no                             | available             |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | ansi_quotes                         | client parameter        |         | bool     | yes                            |                       |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | block_ddl_statement                 | client parameter        | O       | bool     | no                             | available             |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | block_nowhere_statement             | client parameter        | O       | bool     | no                             | available             |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | compat_numeric_division_scale       | client/server parameter | O       | bool     | no                             | available             |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | default_week_format                 | client/server parameter | O       | int      | 0                              | available             |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | group_concat_max_len                | server parameter        | O       | byte     | 1,024                          | only available to DBA |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | intl_check_input_string             | client parameter        | O       | bool     | no                             | available             |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | intl_collation                      | client parameter        | O       | string   |                                | available             |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | intl_date_lang                      | client parameter        | O       | string   |                                | available             |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | intl_number_lang                    | client parameter        | O       | string   |                                | available             |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | no_backslash_escapes                | client parameter        |         | bool     | yes                            |                       |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | only_full_group_by                  | client parameter        | O       | bool     | no                             | available             |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | oracle_style_empty_string           | client parameter        |         | bool     | no                             |                       |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | pipes_as_concat                     | client parameter        |         | bool     | yes                            |                       |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | plus_as_concat                      | client parameter        |         | bool     | yes                            |                       |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | require_like_escape_character       | client parameter        |         | bool     | no                             |                       |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | return_null_on_function_errors      | client/server parameter | O       | bool     | no                             | available             |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | string_max_size_bytes               | client/server parameter | O       | byte     | 1,048,576                      | available             |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | unicode_input_normalization         | client parameter        | O       | bool     | no                             | available             |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | unicode_output_normalization        | client parameter        | O       | bool     | no                             | available             |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | update_use_attribute_references     | client parameter        | O       | bool     | no                             | available             |
+    +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    | :ref:`plan-cache-parameters`  | max_plan_cache_entries              | client/server parameter |         | int      | 1,000                          |                       |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | max_filter_pred_cache_entries       | client/server parameter |         | int      | 1,000                          |                       |
+    +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    | :ref:`utility-parameters`     | backup_volume_max_size_bytes        | server parameter        |         | byte     | 0                              |                       |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | communication_histogram             | client parameter        | O       | bool     | no                             | available             |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | compactdb_page_reclaim_only         | server parameter        |         | int      | 0                              |                       |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | csql_history_num                    | client parameter        | O       | int      | 50                             | available             |
+    +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    | :ref:`ha-parameters`          | ha_mode                             | server parameter        |         | string   | off                            |                       |
+    +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    | :ref:`other-parameters`       | access_ip_control                   | server parameter        |         | bool     | no                             |                       |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | access_ip_control_file              | server parameter        |         | string   |                                |                       |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | agg_hash_respect_order              | client parameter        | O       | bool     | yes                            | available             |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | auto_restart_server                 | server parameter        | O       | bool     | yes                            | only available to DBA |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | index_scan_in_oid_order             | client parameter        | O       | bool     | no                             | available             |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | index_unfill_factor                 | server parameter        |         | float    | 0.05                           |                       |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | java_stored_procedure               | server parameter        |         | bool     | no                             |                       |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | multi_range_optimization_limit      | server parameter        | O       | int      | 100                            | only available to DBA |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | optimizer_enable_merge_join         | client parameter        | O       | bool     | no                             | available             |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | pthread_scope_process               | server parameter        |         | bool     | yes                            |                       |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | server                              | server parameter        |         | string   |                                |                       |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | service                             | server parameter        |         | string   |                                |                       |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | session_state_timeout               | server parameter        |         | sec      | 21,600                         |                       |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | sort_limit_max_count                | client parameter        | O       | int      | 1,000                          | available             |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | sql_trace_slow                      | server parameter        | O       | msec     | -1                             | only available to DBA |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | sql_trace_execution_plan            | server parameter        | O       | bool     | no                             | only available to DBA |
+    |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+    |                               | use_orderby_sort_limit              | server parameter        | O       | bool     | yes                            | only available to DBA |
+    +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 
 .. _lpg:
     

@@ -100,7 +100,7 @@ SystemTap script defines a specific event, that is, the behavior when a marker o
 
 SystemTap script is able to have several probes; a handler of the probe is called as probe body.
 
-SystemTap script accepts the insertion of the probing code without recompliing codes and gives more flexibility for handlers. Events are executed as triggers as handlers can be run. Handler can write data and be specified as the action to print out the data.
+SystemTap script accepts the insertion of the probing code without recompiling codes and gives more flexibility for handlers. Events are executed as triggers as handlers can be run. Handler can write data and be specified as the action to print out the data.
 
 For CUBRID's markers, see :ref:`cubrid-marker`.
 

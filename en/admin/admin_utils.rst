@@ -1770,6 +1770,35 @@ The following shows [options] available with the **cubrid checkdb** utility.
          
              t10
 
+.. option:: --check-file-tracker 
+
+    Check about all pages of all files in file-trackers.
+
+.. option:: --check-heap 
+
+    Check about all heap-files. 
+
+.. option:: --check-catalog 
+
+    Check the consistency about catalog information.
+
+.. option:: --check-btree 
+
+    Check the validity about all B-tree indexes.
+
+.. option:: --check-class-name 
+
+    Check the identical between the hash table of a class name and the class information(oid) brought from a heap file. 
+
+.. option:: --check-btree-entries 
+
+    Check the consistency of all B-tree entries.
+
+.. option:: -I, --index-name=INDEX_NAME
+
+    Check if the index specified with this option about checking table. If you use this option, there is no heap validation check.
+    Only one table and one index are permitted when you use this option; if you don't input a table name or input two tables, an error occurs.
+
 Dumping Internal Database Information
 -------------------------------------
 

@@ -1768,6 +1768,35 @@ Object type이 Class, 즉 테이블인 경우 Nsubgranules가 출력되는데 �
          
              t10
 
+.. option:: --check-file-tracker 
+
+    파일 트랙커(tracker)의 모든 파일의 페이지에 검사를 수행한다. 
+
+.. option:: --check-heap 
+
+    모든 힙 파일에 대해 검사를 수행한다. 
+
+.. option:: --check-catalog 
+
+    카탈로그 정보에 대한 일관성 검사를 수행한다.
+
+.. option:: --check-btree 
+
+    모든 B-트리 인덱스에 대한 유효 검사를 수행한다. 
+
+.. option:: --check-class-name 
+
+    클래스 이름 해시 테이블과 힙 파일로 부터 가져온 클래스 정보(class oid)의 일치 여부 검사를 수행한다. 
+
+.. option:: --check-btree-entries 
+
+    모든 B-트리 영역(entry)의 일관성 검사를 수행한다. 
+
+.. option:: -I, --index-name=INDEX_NAME
+
+    검사 대상 테이블에 대해 해당 옵션으로 명시한 인덱스가 유효한지 검사한다. 이 옵션을 사용하면 힙 파일에 대한 유효 검사는 하지 않는다. 
+    이 옵션을 사용할 때는 하나의 테이블과 하나의 인덱스만을 허용하며, 테이블 이름을 입력하지 않거나 두 개 이상의 테이블 이름을 입력하면 에러를 반환한다. 
+
 데이터베이스 내부 정보 출력
 ---------------------------
 

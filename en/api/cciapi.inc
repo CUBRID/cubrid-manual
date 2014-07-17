@@ -729,8 +729,8 @@ CCI API Reference
     The **cci_connect_with_url** function connects a database by using connection information passed with a *url* argument. If broker's HA feature is used in CCI, you must specify the connection information of the standby broker server with altHosts property, which is used for the failover, in the *url* argument of this function. It returns the ID of a connection handle on success; it returns an error code on failure. For details about HA features of broker, see :ref:`duplexing-brokers`.
 
     :param url: (IN) A string that contains server connection information. 
-    :param db_user: (IN) Database user name. If this is NULL, it becomes <*db_user*> in *url*. If this is an empty string("") or <*db_user*> in *url* is not specified, DB user name becomes **public**.
-    :param db_passwd: (IN) Database user password. If this is NULL, <*db_password*> in *url* is used. If <*db_password*> in *url* is not specified, DB password becomes NULL.
+    :param db_user: (IN) Database user name. If this is NULL, it becomes <*db_user*> in *url*. If this is an empty string ("") or <*db_user*> in *url* is not specified, DB user name becomes **PUBLIC**.
+    :param db_passwd: (IN) Database user password. If this is NULL, <*db_password*> in *url* is used. If <*db_password*> in *url* is not specified, DB password becomes an empty string ("").
     :return: Success: Connection handle ID (int), Failure: Error code
 
         *   **CCI_ER_NO_MORE_MEMORY**
@@ -811,20 +811,7 @@ CCI API Reference
 
     The **cci_connect_with_url_ex** function returns **CCI_ER_DBMS** error and checks the error details in the database error buffer (*err_buf*) at the same time. In that point, it is different from :c:func:`cci_connect_with_url` and the others are the same as the :c:func:`cci_connect_with_url` function. 
     
-    :param url: (IN) A string that contains server connection information
-    :param db_user: (IN) Database user name. If it is NULL or an empty string, use <*db_user*> in *url*.
-    :param db_passwd: (IN) Database user password. If it is NULL or an empty string, use <*db_password*> in *url*.
     :param err_buf: Database error buffer    
-    :return: Success: Connection handle ID (int), Failure: Error code
-
-        *   **CCI_ER_NO_MORE_MEMORY**
-        *   **CCI_ER_HOSTNAME**
-        *   **CCI_ER_INVALID_URL**
-        *   **CCI_ER_CON_HANDLE**
-        *   **CCI_ER_CONNECT**
-        *   **CCI_ER_DBMS**
-        *   **CCI_ER_COMMUNICATION**
-        *   **CCI_ER_LOGIN_TIMEOUT**
 
 .. c:function:: int cci_cursor(int req_handle, int offset, T_CCI_CURSOR_POS origin, T_CCI_ERROR *err_buf)
 

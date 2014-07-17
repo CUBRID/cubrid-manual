@@ -729,7 +729,7 @@ CCI API 레퍼런스
     
     :param url: (IN) 서버 연결 정보 문자 스트링
     :param db_user: (IN) DB 사용자 이름. NULL이면 *url* 의 <*db_user*>가 사용된다. 이 값이 빈 문자열("")이거나 *url* 내의 <*db_user*>가 정의되지 않은 경우 DB 사용자 이름은 **PUBLIC** 이 된다.
-    :param db_passwd: (IN) DB 사용자 암호. NULL이면 *url* 의 <*db_password*>가 사용된다. *url* 내의 <*db_password*>가 정의되지 않은 경우 암호는 NULL이 된다. 
+    :param db_passwd: (IN) DB 사용자 암호. NULL이면 *url* 의 <*db_password*>가 사용된다. *url* 내의 <*db_password*>가 정의되지 않은 경우 암호는 빈 문자열("")이 된다. 
     :return: 연결 핸들 ID(성공), 에러 코드(실패)
 
         *   **CCI_ER_NO_MORE_MEMORY**
@@ -810,20 +810,7 @@ CCI API 레퍼런스
 
     **CCI_ER_DBMS** 에러를 반환하면 세부 에러 내용을 데이터베이스 에러 버퍼(*err_buf*)를 통해 확인할 수 있다는 점만 :c:func:`cci_connect_with_url`\ 과 다르고 나머지는 동일하다.
 
-    :param url: (IN) 서버 연결 정보 문자 스트링
-    :param db_user: (IN) 데이터베이스 사용자 이름. NULL 혹은 빈 문자열인 경우 *url* 의 <*db_user*>를 사용한다.
-    :param db_passwd: (IN) 데이터베이스 사용자 암호. NULL 혹은 빈 문자열인 경우 *url* 의 <*db_password*>를 사용한다.
     :param err_buf: (OUT) 에러 버퍼
-    :return: 연결 핸들 ID(성공), 에러 코드(실패)
-
-        *   **CCI_ER_NO_MORE_MEMORY**
-        *   **CCI_ER_HOSTNAME**
-        *   **CCI_ER_INVALID_URL**
-        *   **CCI_ER_CON_HANDLE**
-        *   **CCI_ER_CONNECT**
-        *   **CCI_ER_DBMS**
-        *   **CCI_ER_COMMUNICATION**
-        *   **CCI_ER_LOGIN_TIMEOUT**
 
 .. c:function:: int cci_cursor(int req_handle, int offset, T_CCI_CURSOR_POS origin, T_CCI_ERROR *err_buf)
 

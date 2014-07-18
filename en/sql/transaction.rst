@@ -320,11 +320,13 @@ CUBRID determines the lock mode depending on the type of operation to be perform
 
     This lock is obtained before the read operation is executed on the object. 
     
-    It can be obtained by multiple transactions for the same object. Transaction T1 obtains the shared lock first before it performs the read operation on a certain object, and releases it immediately after it completes the operation even before transaction T1 is committed. At this time, transaction T2 and T3 can perform the read operation on the object concurrently, but not the update operation.
+    It can be obtained by multiple transactions for the same object. At this time, transaction T2 and T3 can perform the read operation on the object concurrently, but not the update operation.
 
     .. note::
 
-        If an isolation level is REPEATABLE READ(2), it keeps shared locks until a transaction T1 is committed.
+        *   Transaction T1 obtains the shared lock first before it performs the read operation on a certain object, and releases it immediately after it completes the operation even before transaction T1 is committed.
+        
+        *   If an isolation level is REPEATABLE READ(2), it keeps shared locks until a transaction T1 is committed.
 
 *   **Exclusive lock (exclusive lock, X_LOCK)**
 

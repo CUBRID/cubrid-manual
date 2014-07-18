@@ -16,7 +16,6 @@ The advantages of using Java stored functions/procedures are as follows:
 .. note::
 
     *   The other languages except Java do not support stored function/procedure. In CUBRID, only Java can implement stored function/procedure.
-    *   Java stored function/procedure is executed in the Java Virtual Machine, not in DB engine; therefore, there is no strength in the performance.
 
 .. _jsp-environment-configuration:
 

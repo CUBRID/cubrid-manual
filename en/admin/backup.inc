@@ -1,7 +1,7 @@
 .. _db-backup:
 
-Database Backup
-===============
+backupdb
+--------s
 
 A database backup is the procedure of storing CUBRID database volumes, control files and log files, and it is executed by using the **cubrid backupdb** utility or the CUBRID Manager. **DBA** must regularly back up the database so that the database can be properly restored in the case of storage media or file errors. The restore environment must have the same operating system and the same version of CUBRID as the backup environment. For such a reason, you must perform a backup in a new environment immediately after migrating a database to a new version.
 
@@ -107,7 +107,7 @@ The following table shows options available with the **cubrid backupdb** utility
         cubrid backupdb --sleep-msecs=5 demodb
 
 Backup Strategy and Method
---------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The following must be considered before performing a backup:
 
@@ -183,7 +183,7 @@ A parallel or multi-thread backup is a method of performing as many backups as t
 To perform a parallel backup, use the **cubrid backupdb -t** | **--thread-count** command.
 
 Managing Backup Files
----------------------
+^^^^^^^^^^^^^^^^^^^^^
 
 One or more backup files can be created in sequence based on the size of the database to be backed up. A unit number is given sequentially (000, 001-0xx) to the extension of each backup file based in the order of creation.
 
@@ -213,7 +213,7 @@ During the backup process, if there is not enough space on the disk to store the
 .. _managing-archive-logs:
 
 Managing Archive Logs
----------------------
+^^^^^^^^^^^^^^^^^^^^^
 
 You must not delete archive logs by using the file deletion command such as rm or del by yourself; the archive logs should be deleted by system configuration or the **cubrid backupdb** utility. In the following three cases, archive logs can be deleted.
 
@@ -227,8 +227,8 @@ If you want to delete logs as much as possible while operating a database, confi
 
 .. _db-restore:
 
-Restoring Database
-==================
+restoredb
+---------
 
 A database restore is the procedure of restoring the database to its state at a certain point in time by using the backup files, active logs and archive logs which have been created in an environment of the same CUBRID version. To perform a database restore, use the **cubrid restoredb** utility or the CUBRID Manager.
 
@@ -355,7 +355,7 @@ To print out the NOTIFICATION message, error_log_level parameter in cubrid.conf 
     Log recovery is finished.
 
 Restoring Strategy and Procedure
---------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You must consider the following before restoring databases.
 
@@ -417,7 +417,7 @@ The following procedure shows how to perform backup and restoration described in
 +-----------------+----------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------+
 
 Restoring Database to Different Server
---------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The following shows how to back up *demodb* on server *A* and restore it on server *B* with the backed up files.
 

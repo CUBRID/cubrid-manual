@@ -1,14 +1,16 @@
-*********************
-Administrator's Guide
-*********************
+*****************
+CUBRID Management
+*****************
 
-The "Administrator's Guide" provides the database administrators (**DBA**) with details on how to operate the CUBRID system. 
+This chapter describes how the database administrators (**DBA**) operates the CUBRID system.
 
 *   It includes instructions on how to use the **cubrid** utility, which starts and stops various processes of the CUBRID server, the broker and manager server.
 
 *   It includes instructions on the following: database management tasks (creating and deleting databases, adding volume, etc.), migration tasks (moving database to a different location or making changes so that it fits the system's version), and making back-ups and rollbacks of the database in case of failures.
 
 *   It includes instructions on the system configuration.
+
+*   It includes how to use SystemTap, which can monitors and traces the operating processes dynamically.
    
 *   It includes instructions on troubleshooting.
 
@@ -113,7 +115,8 @@ See :ref:`cubrid-utilities` for details.
     :maxdepth: 3
 
     control.rst
+    db_manage.rst
     admin_utils.rst
     config.rst
-    troubleshoot.rst
     systemtap.rst
+    troubleshoot.rst

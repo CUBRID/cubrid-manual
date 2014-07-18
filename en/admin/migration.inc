@@ -1,7 +1,7 @@
 .. _unload-db:
     
-Unloading Database
-------------------
+unloaddb
+--------
 
 The purposes of loading/unloading databases are as follows:
 
@@ -133,8 +133,8 @@ The following is [options] used in **cubrid unloaddb**.
 
 .. _load-db:
 
-Loading Database
-----------------
+loaddb
+------
 
 You can load a database by using the **cubrid loaddb** utility in the following situations:
 
@@ -310,126 +310,121 @@ The following table shows [options] available with the **cubrid loaddb** utility
 .. _howtowrite-loadfile:
 
 How to Write Files to Load Database
------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You can add mass data to the database more rapidly by writing the object input file used in the **cubrid loaddb** utility. An object input file is a text file in simple table form that consists of comments and command/data lines.
 
 Comment
-^^^^^^^
++++++++
 
 In CUBRID, a comment is represented by two hyphens (--). ::
 
     -- This is a comment!
 
 Command Line
-^^^^^^^^^^^^
+++++++++++++
 
 A command line begins with a percent character (%) and consists of **%class** and **%id** commands; the former defines classes, and the latter defines aliases and identifiers used for class identification.
 
 .. _assign-id-to-class:
 
-Assigning an Identifier to a Class
-++++++++++++++++++++++++++++++++++
+*   Assigning an Identifier to a Class
 
-You can assign an identifier to class reference relations by using the **%id** command. ::
+    You can assign an identifier to class reference relations by using the **%id** command. ::
 
-    %id class_name class_id
-    class_name:
-        identifier
-    class_id:
-        integer
+        %id class_name class_id
+        class_name:
+            identifier
+        class_id:
+            integer
 
-The *class_name* specified by the **%id** command is the class name defined in the database, and *class_id* is the numeric identifier which is assigned for object reference.
+    The *class_name* specified by the **%id** command is the class name defined in the database, and *class_id* is the numeric identifier which is assigned for object reference.
 
-::
+    ::
 
-    %id employee 2
-    %id office 22
-    %id project 23
-    %id phone 24
+        %id employee 2
+        %id office 22
+        %id project 23
+        %id phone 24
 
-Specifying the Class and Attribute
-++++++++++++++++++++++++++++++++++
+*   Specifying the Class and Attribute
 
-You can specify the classes (tables) and attributes (columns) upon loading data by using the **%class** command. The data line should be written based on the order of attributes specified. When a class name is provided by using the **-t** option while executing the **cubrid loaddb** utility, you don't have to specify the class and attribute in the data file. However, the order of writing data must comply with the order of the attribute defined when creating a class. ::
+    You can specify the classes (tables) and attributes (columns) upon loading data by using the **%class** command. The data line should be written based on the order of attributes specified. When a class name is provided by using the **-t** option while executing the **cubrid loaddb** utility, you don't have to specify the class and attribute in the data file. However, the order of writing data must comply with the order of the attribute defined when creating a class. ::
 
-    %class class_name ( attr_name [attr_name... ] )
+        %class class_name ( attr_name [attr_name... ] )
 
-The schema must be pre-defined in the database to be loaded.
+    The schema must be pre-defined in the database to be loaded.
 
-The *class_name* specified by the **%class** command is the class name defined in the database and the *attr_name* is the name of the attribute defined.
+    The *class_name* specified by the **%class** command is the class name defined in the database and the *attr_name* is the name of the attribute defined.
 
-The following example shows how to specify a class and three attributes by using the **%class** command to enter data into a class named *employee*. Three pieces of data should be entered on the data lines after the **%class** command. For this, see :ref:`conf-reference-relation` . ::
+    The following example shows how to specify a class and three attributes by using the **%class** command to enter data into a class named *employee*. Three pieces of data should be entered on the data lines after the **%class** command. For this, see :ref:`Configuring Reference Relation <conf-reference-relation>`. ::
 
-    %class employee (name age department)
+        %class employee (name age department)
 
 Data Line
-^^^^^^^^^
++++++++++
 
 A data line comes after the **%class** command line. Data loaded must have the same type as the class attributes specified by the **%class** command. The data loading operation stops if these two types are different.
 
 Data for each attribute must be separated by at least one space and be basically written as a single line. However, if the data to be loaded takes more than one line, you should specify the plus sign (+) at the end of the first data line to enter data continuously on the following line. Note that no space is allowed between the last character of the data and the plus sign.
 
-Loading an Instance
-+++++++++++++++++++
+*   Loading an Instance
 
-As shown below, you can load an instance that has the same type as the specified class attribute. Each piece of data is separated by at least one space.
+    As shown below, you can load an instance that has the same type as the specified class attribute. Each piece of data is separated by at least one space.
 
-::
+    ::
 
-    %class employee (name)
-    'jordan' 
-    'james'  
-    'garnett'
-    'malone'
+        %class employee (name)
+        'jordan' 
+        'james'  
+        'garnett'
+        'malone'
 
-Assigning an Instance Number
-++++++++++++++++++++++++++++
+*   Assigning an Instance Number
 
-You can assign a number to a given instance at the beginning of the data line. An instance number is a unique positive number in the specified class. Spaces are not allowed between the number and the colon (:). Assigning an instance number is used to configure the reference relation for later.
+    You can assign a number to a given instance at the beginning of the data line. An instance number is a unique positive number in the specified class. Spaces are not allowed between the number and the colon (:). Assigning an instance number is used to configure the reference relation for later.
 
-::
+    ::
 
-    %class employee (name)
-    1: 'jordan' 
-    2: 'james'  
-    3: 'garnett' 
-    4: 'malone' 
+        %class employee (name)
+        1: 'jordan' 
+        2: 'james'  
+        3: 'garnett' 
+        4: 'malone' 
 
 .. _conf-reference-relation:
     
-Configuring Reference Relation
-++++++++++++++++++++++++++++++
+*   Configuring Reference Relation
 
-You can configure the object reference relation by specifying the reference class after an "at sign (**@**)" and the instance number after the "vertical line (|)." ::
+    You can configure the object reference relation by specifying the reference class after an "at sign (**@**)" and the instance number after the "vertical line (|)." ::
 
-    @class_ref | instance_no
-    class_ref:
-         class_name
-         class_id
+        @class_ref | instance_no
+        class_ref:
+             class_name
+             class_id
 
-Specify a class name or a class id after the **@** sign, and an instance number after a vertical line (|). Spaces are not allowed before and after a vertical line (|).
+    Specify a class name or a class id after the **@** sign, and an instance number after a vertical line (|). Spaces are not allowed before and after a vertical line (|).
 
-The following example shows how to load class instances into the *paycheck* class. The *name* attribute references an instance of the *employee* class. As in the last line, data is loaded as **NULL** if you configure the reference relation by using an instance number not specified earlier. ::
+    The following example shows how to load class instances into the *paycheck* class. The *name* attribute references an instance of the *employee* class. As in the last line, data is loaded as **NULL** if you configure the reference relation by using an instance number not specified earlier. ::
 
-    %class paycheck(name department salary)
-    @employee|1   'planning'   8000000   
-    @employee|2   'planning'   6000000  
-    @employee|3   'sales'   5000000  
-    @employee|4   'development'   4000000
-    @employee|5   'development'   5000000
+        %class paycheck(name department salary)
+        @employee|1   'planning'   8000000   
+        @employee|2   'planning'   6000000  
+        @employee|3   'sales'   5000000  
+        @employee|4   'development'   4000000
+        @employee|5   'development'   5000000
 
-Since the id 21 was assigned to the *employee* class by using the **%id** command in the :ref:`assign-id-to-class` section, the above example can be written as follows: ::
+    Since the id 21 was assigned to the *employee* class by using the **%id** command in the :ref:`Assigning an Identifier to a Class <assign-id-to-class>` section, the above example can be written as follows: ::
 
-    %class paycheck(name department salary)
-    @21|1   'planning'   8000000   
-    @21|2   'planning'   6000000  
-    @21|3   'sales'   5000000  
-    @21|4   'development'   4000000
-    @21|5   'development'   5000000
+        %class paycheck(name department salary)
+        @21|1   'planning'   8000000   
+        @21|2   'planning'   6000000  
+        @21|3   'sales'   5000000  
+        @21|4   'development'   4000000
+        @21|5   'development'   5000000
 
 Migrating Database
-------------------
+^^^^^^^^^^^^^^^^^^
 
 To use a new version of CUBRID database, you may need to migrate an existing data to a new one. For this purpose, you can use the "Export to an ASCII text file" and "Import from an ASCII text file" features provided by CUBRID. 
 

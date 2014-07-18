@@ -168,7 +168,7 @@ Parameter configuration
         
         For charset, locale and collation setting, see :doc:`/sql/i18n`.
 
-For more details, see :ref:`changed-config92`.
+For more details, see :ref:`changed-config100`.
 
 .. _up-from-41:
 
@@ -182,7 +182,7 @@ Users who are using a version of CUBRID 2008 R4.1, R4.3 or R4.4 should install 9
 DB migration
 ^^^^^^^^^^^^
 
-The following table shows how to perform the migration using the reserved word detection script, check_reserved.sql, which is separately distributed from http://ftp.cubrid.org/CUBRID_Engine/9.3.0/Linux/ and the cubrid unloaddb/loaddb utilities. See :ref:`unload-load`)
+The following table shows how to perform the migration using the reserved word detection script, check_reserved.sql, which is separately distributed from http://ftp.cubrid.org/CUBRID_Engine/9.3.0/Linux/ and the cubrid unloaddb/loaddb utilities. (See :ref:`unload-db` and :ref:`load-db`)
 
 +------------------------------------+-----------------------------------------------+-----------------------------------------------+
 | Step                               | Linux Environment                             | Windows Environment                           |
@@ -297,7 +297,7 @@ Parameter configuration
         
         For charset, locale and collation setting, see :doc:`/sql/i18n`.
 
-For more details, see :ref:`changed-config92`.
+For more details, see :ref:`changed-config100`.
 
 .. _up-from-40:
 
@@ -361,7 +361,7 @@ Parameter configuration
         
         For charset, locale and collation setting, see :doc:`/sql/i18n`.
 
-For more details, see :ref:`changed-config92`.
+For more details, see :ref:`changed-config100`.
 
 .. _ha-db-migration:
 

@@ -1,7 +1,7 @@
 .. _cubrid-utilities:
 
-cubrid Management Utilities
-===========================
+cubrid Utilities
+================
 
 The following shows how to use the cubrid management utilities. ::
 
@@ -42,128 +42,10 @@ cubrid Utility Logging
  
 CUBRID supports logging feature for the execution result of **cubrid** utilities; for details, see :ref:`cubrid-utility-logging`.
 
-Database Users
-==============
-
-A CUBRID database user can have members with the same authorization. If authorization **A** is granted to a user, the same authorization is also granted to all members belonging to the user. A database user and its members are called a "group."; a user who has no members is called a "user."
-
-CUBRID provides **DBA** and **PUBLIC** users by default.
-
-*   **DBA** can access every object in the database, that is, it has authorization at the highest level. Only **DBA** has sufficient authorization to add, alter and delete the database users.
-
-*   All users including **DBA** are members of **PUBLIC**. Therefore, all database users have the authorization granted to **PUBLIC** . For example, if authorization **B** is added to **PUBLIC** group, all database members will automatically have the **B** authorization.
-
-.. _databases-txt-file:
-
-databases.txt File
-==================
-
-CUBRID stores information on the locations of all existing databases in the **databases.txt** file. This file is called the "database location file." A database location file is used when CUBRID executes utilities for creating, renaming, deleting or replicating databases; it is also used when CUBRID runs each database. By default, this file is located in the **databases** directory under the installation directory. The directory is located through the environment variable **CUBRID_DATABASES**. 
-
-::
-
-    db_name db_directory server_host logfile_directory
-
-The format of each line of a database location file is the same as defined by the above syntax; it contains information on the database name, database path, server host and the path to the log files. The following example shows how to check the contents of a database location file.
-
-::
-
-    % more databases.txt
-
-    dist_testdb /home1/user/CUBRID/bin d85007 /home1/user/CUBRID/bin
-    dist_demodb /home1/user/CUBRID/bin d85007 /home1/user/CUBRID/bin
-    testdb /home1/user/CUBRID/databases/testdb d85007 /home1/user/CUBRID/databases/testdb
-    demodb /home1/user/CUBRID/databases/demodb d85007 /home1/user/CUBRID/databases/demodb
-
-By default, the database location file is stored in the **databases** directory under the installation directory. You can change the default directory by modifying the value of the **CUBRID_DATABASES** environment variable. The path to  the database location file must be valid so that the **cubrid** utility for database management can access the file properly. You must enter the directory path correctly and check if you have write permission on the file. The following example shows how to check the value configured in the **CUBRID_DATABASES** environment variable.
-
-::
-
-    % set | grep CUBRID_DATABASES
-    CUBRID_DATABASES=/home1/user/CUBRID/databases
-
-An error occurs if an invalid directory path is set in the **CUBRID_DATABASES** environment variable. If the directory path is valid but the database location file does not exist, a new location information file is created. If the **CUBRID_DATABASES** environment variable has not been configured at all, CUBRID retrieves the location information file in the current working directory.
-
-.. _db-create-add-delete:
-
-Creating Database, Adding Volume, Deleting Database
-===================================================
-
-The volumes of CUBRID database are classified as permanent volume, temporary volume and backup volume.
-
-*   In the permanent volumes,
-
-    *   there are generic, data, index and temp volumes in database volumes.
-    *   there are an active log, an archiving log and a background archiving log in log volumes.
-    
-*   In temporary volume, there is a temporary temp volume.
-
-For more details on volumes, see :ref:`database-volume-structure`.
-
-The following is an example of files related to the database when testdb database is operated.
-
-+----------------+-------+-----------------+----------------+------------------------------------------------------------------------------------------------------+
-| File name      | Size  | Type            | Classification | Description                                                                                          |
-+================+=======+=================+================+======================================================================================================+
-| testdb         | 40MB  | generic         | Database       | The firstly created volume when DB is created. This is used as **generic** volume and includes       |
-|                |       |                 | volume         | the meta information of DB. The file size is 40M because "cubrid createdb" is executed after         |
-|                |       |                 |                | db_volume_size in cubrid.conf is specified as 40M                                                    |
-|                |       |                 |                | or the option of "cubrid createdb", --db-volume-size is specified as 40M.                            |
-+----------------+-------+-----------------+                +------------------------------------------------------------------------------------------------------+
-| testdb_x001    | 40MB  | one of generic, |                | Automatically created **generic** file or a file created by the user's command for adding a volume.  |
-|                |       | data, index and |                | The size of **generic** file which was automatically created became 40MB because DB was started      |
-|                |       | temp            |                | after specifying db_volume_size in cubrid.conf as 40M.                                               |
-+----------------+-------+-----------------+                +------------------------------------------------------------------------------------------------------+
-| testdb_x002    | 40MB  | one of generic, |                | Automatically created **generic** file or a file created by the user's command for adding a volume.  |
-|                |       | data, index and |                |                                                                                                      |
-|                |       | temp            |                |                                                                                                      |
-+----------------+-------+-----------------+                +------------------------------------------------------------------------------------------------------+
-| testdb_x003    | 40MB  | one of generic, |                | Automatically created **generic** file or a file created by the user's command for adding a volume.  |
-|                |       | data, index and |                |                                                                                                      |
-|                |       | temp            |                |                                                                                                      |
-+----------------+-------+-----------------+                +------------------------------------------------------------------------------------------------------+
-| testdb_x004    | 40MB  | one of generic, |                | Automatically created **generic** file or a file created by the user's command for adding a volume.  |
-|                |       | data, index and |                |                                                                                                      |
-|                |       | temp            |                |                                                                                                      |
-+----------------+-------+-----------------+                +------------------------------------------------------------------------------------------------------+
-| testdb_x005    | 40MB  | one of generic, |                | Automatically created **generic** file or a file created by the user's command for adding a volume.  |
-|                |       | data, index and |                |                                                                                                      |
-|                |       | temp            |                |                                                                                                      |
-+----------------+-------+-----------------+                +------------------------------------------------------------------------------------------------------+
-| testdb_x006    | 2GB   | one of generic, |                | Automatically created **generic** file or a file created by the user's command for adding a volume.  |
-|                |       | data, index and |                | The size became 2GB because DB was restarted after specifying db_volume_size in cubrid.conf as 2G or |
-|                |       | temp            |                | the option of "cubrid addvoldb", --db-volume-size is specified as 2G.                                |
-+----------------+-------+-----------------+----------------+------------------------------------------------------------------------------------------------------+
-| testdb_t32766  | 360MB | temporary temp  | None           | a file created temporarily when the space of **temp** volume is insufficient during running          |
-|                |       |                 |                | the **temp** volume required query(e.g.: sorting, scanning, index creation).                         |
-|                |       |                 |                | This is removed when DB is restarted. But, this should not be deleted arbitrarily.                   |
-+----------------+-------+-----------------+----------------+------------------------------------------------------------------------------------------------------+
-| testdb_lgar_t  | 40MB  | background      | Log            | A log file which is related to the background archiving feature.                                     |
-|                |       | archiving       | volume         | This is used when storing the archiving log.                                                         |
-+----------------+-------+-----------------+                +------------------------------------------------------------------------------------------------------+
-| testdb_lgar224 | 40MB  | archiving       |                | Archiving logs are continuously archived and the files ending with three digits are created.         |
-|                |       |                 |                | At this time, archiving logs from 001~223 seem to be removed normally by "cubrid backupdb" -r option |
-|                |       |                 |                | or the setting of log_max_archives in cubrid.conf. When archiving logs are removed, you can see the  |
-|                |       |                 |                | removed archiving log numbers in the REMOVE section of lginf file. See :ref:`managing-archive-logs`. |
-+----------------+-------+-----------------+                +------------------------------------------------------------------------------------------------------+
-| testdb_lgat    | 40MB  | active          |                | Active log file                                                                                      |
-+----------------+-------+-----------------+----------------+------------------------------------------------------------------------------------------------------+
-
-*   Database volume file
-
-    *   In the above, testdb, testdb_x001 ~ testdb_x006 are classified as the database volume files.
-    *   File size is determined by "db_volume_size" in cubrid.conf or the "--db-volume-size" option of "cubrid createdb" and "cubrid addvoldb".
-    *  The type of an automatically created volume is always **generic**.
-    
-*   Log volume file
-
-    *   In the above, testdb_lgar_t, testdb_lgar22 and testdb_lgat are classified as the log volume files.
-    *   File size is determined by "log_volume_size" in cubrid.conf or the "--log-volume-size" option of "cubrid createdb".
-
 .. _creating-database:
 
-Creating Database
------------------
+createdb
+--------
 
 The **cubrid createdb** utility creates databases and initializes them with the built-in CUBRID system tables. It can also define initial users to be authorized in the database and specify the locations of the logs and databases. In general, the **cubrid createdb** utility is used only by DBA. 
 
@@ -405,8 +287,8 @@ The following example shows how to create a database, classify volume usage, and
 
 .. _adding-database-volume:
 
-Adding Database Volume
-----------------------
+addvoldb
+--------
 
 When the total free space size of the **generic** volumes has become smaller than the size which is specified at the system parameter **generic_vol_prealloc_size** (default: 50M) in :ref:`disk-parameters`, **generic** volume is added automatically. Automatically adding a volume is done when a new page is required; The volume is not expanded when only a SELECT queries are executed.
 
@@ -500,8 +382,10 @@ The following shows [options] available with the **cubrid addvoldb** utility.
     
         cubrid addvoldb -C --db-volume-size=2G --max-writesize-in-sec=1M testdb
 
-Deleting Database
------------------
+.. _deleting-database:
+
+deletedb
+--------
 
 The **cubrid deletedb** utility is used to delete a database. You must use the **cubrid deletedb** utility to delete a database, instead of using the file deletion commands of the operating system; a database consists of a few interdependent files. 
 
@@ -536,11 +420,8 @@ The following shows [options] available with the **cubrid deletedb** utility.
     
         cubrid deletedb -d testdb
 
-Renaming Database, Altering Host, Copying/Moving Database, Registering Database
-===============================================================================
-        
-Renaming Database
------------------
+renamedb
+--------
 
 The **cubrid renamedb** utility renames a database. The names of information volumes, log volumes and control files are also renamed to conform to the new database one.
 
@@ -600,8 +481,8 @@ The following shows [options] available with the **cubrid deletedb** utility.
 
         cubrid renamedb -d testdb testdb_1
 
-Renaming Database Host
-----------------------
+alterdbhost
+-----------
 
 The **cubrid alterdbhost** utility sets or changes the host name of the specified database. It changes the host name set in the **databases.txt** file. ::
 
@@ -619,8 +500,8 @@ The following shows the option available with the **cubrid alterdbhost** utility
 
     The *-h* option specifies the host name to be changed. When this option is omitted, specifies the host name to localhost.
 
-Copying/Moving Database
------------------------
+copydb
+------
 
 The **cubrid copydb** utility copy or move a database to another location. As arguments, source and target name of database must be given. A target database name must be different from a source database name. When the target name argument is specified, the location of target database name is registered in the **databases.txt** file. 
 
@@ -710,8 +591,8 @@ The following shows [options] available with the **cubrid copydb** utility.
 
         cubrid copydb -B /home/usr/CUBRID/databases/new_lob demodb new_demodb
 
-Registering Database
---------------------
+installdb
+---------
 
 The **cubrid installdb** utility is used to register the information of a newly installed database to **databases.txt**, which stores database location information. The execution of this utility does not affect the operation of the database to be registered. 
 
@@ -751,22 +632,12 @@ The following shows [options] available with the **cubrid installdb** utility.
 
 .. include:: backup.inc
 
-.. _unload-load:
-
-Unloading and Loading Database
-==============================
-
-To use a new version of CUBRID database, you may need to migrate an existing data to a new one. For this purpose, you can use the "Export to an ASCII text file" and "Import from an ASCII text file" features provided by CUBRID.
-
 .. include:: migration.inc
-
-Checking and Compacting Database Space
-======================================
 
 .. _spacedb:
 
-Checking Used Space
--------------------
+spacedb
+-------
 
 The **cubrid spacedb** utility is used to check how much space of database volumes is being used. 
 It shows a brief description of all permanent data volumes in the database. Information returned by the **cubrid spacedb** utility includes the ID, name, purpose and total/free space of each volume. You can also check the total number of volumes and used/unused database pages. 
@@ -889,8 +760,8 @@ The following shows [options] available with the **cubrid spacedb** utility.
         -------------------------------------------------------------------------------------------------
              TOTAL     100.0 M       4.4 M      95.6 M       2.5 M       1.2 M       0.4 M          5
 
-Compacting Used Space
----------------------
+compactdb
+---------
 
 The **cubrid compactdb** utility is used to secure unused space of the database volume. In case the database server is not running (offline), you can perform the job in standalone mode. In case the database server is running, you can perform it in client-server mode.
 
@@ -955,11 +826,8 @@ The following options can be used in client/server mode only.
 
     You can specify a value of instance lock timeout with this option. The default value is 10 (seconds), the minimum value is 1, and the maximum value is 10. The less option value is specified, the more operation speeds up. However, the number of tables that can be processed becomes smaller, and vice versa. 
 
-Updating Statistics and Checking Query Plan
-===========================================
-
-Updating Statistics
--------------------
+optimizedb
+----------
 
 Updates statistical information such as the number of objects, the number of pages to access, and the distribution of attribute values. ::
 
@@ -985,8 +853,8 @@ The following example shows how to update the query statistics information of al
 
     cubrid optimizedb testdb
 
-Checking the Query Plan Cache
------------------------------
+plandump
+--------
 
 The **cubrid plandump** utility is used to display information on the query plans stored (cached) on the server. ::
 
@@ -1020,8 +888,8 @@ The following shows [options] available with the **cubrid plandump** utility.
 
 .. _statdump:
 
-Dumping Statistics Information of Server
-----------------------------------------
+statdump
+--------
 
 **cubrid statdump** utility checks statistics information processed by the CUBRID database server. The statistics information mainly consists of the following: File I/O, Page buffer, Logs, Transactions, Concurrency/Lock, Index, and Network request.
 
@@ -1344,13 +1212,10 @@ The following shows [options] available with the **cubrid statdump** utility.
 
     Each status information consists of 64-bit INTEGER data and the corresponding statistics information can be lost if the accumulated value exceeds the limit.
 
-Checking Lock, Checking Transaction, Killing Transaction
-========================================================
-
 .. _lockdb:
 
-Checking Lock Status
---------------------
+lockdb
+------
 
 The **cubrid lockdb** utility is used to check the information on the lock being used by the current transaction in the database. ::
 
@@ -1474,8 +1339,8 @@ When the object type is a class (table), Nsubgranules is displayed, which is the
     
 .. _tranlist:
 
-Checking Transaction
---------------------
+tranlist
+--------
 
 The **cubrid tranlist** is used to check the transaction information of the target database. Only DBA or DBA group can use this utility. ::
 
@@ -1607,8 +1472,8 @@ The following shows [options] available with the **cubrid tranlist** utility.
 
 .. _killtran:
 
-Killing Transactions
---------------------
+killtran
+--------
 
 The **cubrid killtran** is used to check transactions or abort specific transaction. Only a DBA can execute this utility. ::
 
@@ -1697,11 +1562,8 @@ The following shows [options] available with the **cubrid killtran** utility.
 
         cubrid killtran -f -i 1 demodb
 
-Diagnosing database and dumping parameter
-=========================================
-
-Checking Database Consistency
------------------------------
+checkdb
+-------
 
 The **cubrid checkdb** utility is used to check the consistency of a database. You can use **cubrid checkdb** to identify data structures that are different from indexes by checking the internal physical consistency of the data and log volumes. If the **cubrid checkdb** utility reveals any inconsistencies, you must try automatic repair by using the --**repair** option.
 
@@ -1799,8 +1661,8 @@ The following shows [options] available with the **cubrid checkdb** utility.
     Check if the index specified with this option about checking table. If you use this option, there is no heap validation check.
     Only one table and one index are permitted when you use this option; if you don't input a table name or input two tables, an error occurs.
 
-Dumping Internal Database Information
--------------------------------------
+diagdb
+------
 
 You can check various pieces of internal information on the database with the **cubrid diagdb** utility. Information provided by **cubrid diagdb** is helpful in diagnosing the current status of the database or figuring out a problem. ::
 
@@ -1848,8 +1710,8 @@ The following shows [options] available with the **cubrid diagdb** utility.
     | 9    | Displays heap information.           |
     +------+--------------------------------------+
 
-Dumping Parameters Used in Server/Client
-----------------------------------------
+paramdump
+---------
 
 The **cubrid paramdump** utility outputs parameter information used in the server/client process. ::
 
@@ -1889,8 +1751,8 @@ The following shows [options] available with the **cubrid paramdump** utility.
 
         cubrid paramdump -C demodb
 
-Changing HA Mode, Copying/Applying Logs
-=======================================
+HA Commands
+-----------
 
 **cubrid changemode** utility prints or changes the HA mode.
 
@@ -1898,8 +1760,8 @@ Changing HA Mode, Copying/Applying Logs
 
 For more details, see :ref:`cubrid-service-util`.
 
-Compiling/Dumping Locale
-========================
+Locale Commands
+---------------
 
 **cubrid genlocale** utility compiles the locale information to use. This utility is executed in the **make_locale.sh** script ( **.bat** for Windows).
 

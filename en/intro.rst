@@ -40,7 +40,7 @@ The following diagram illustrates the CUBRID database volume structure. As you c
 
 .. image:: /images/image2.png
 
-For commands to create, add or delete the database volume, see :ref:`db-create-add-delete`.
+For commands to create, add or delete the database volume, see :ref:`creating-database`, :ref:`adding-database-volume` and :ref:`deleting-database`.
 
 Permanent Volume
 ^^^^^^^^^^^^^^^^

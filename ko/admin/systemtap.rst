@@ -478,7 +478,7 @@ I/O 액세스는 RDBMS의 주요 병목(bottleneck)이며, I/O 성능을 모니�
     
 .. function:: sort_end (nr_rows, status)
 
-    이 마커는 정력 연산이 완료될 때 발동된다.
+    이 마커는 정렬 연산이 완료될 때 발동된다.
 
     :param nr_rows: 정렬되는 행의 개수
     :param status: 연산이 성공적으로 종료되었는지 여부

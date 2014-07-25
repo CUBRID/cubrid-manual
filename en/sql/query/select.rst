@@ -60,7 +60,7 @@ The **SELECT** statement specifies columns that you want to retrieve from a tabl
     *   **ALL**: Retrieves all records of the table.
     *   **DISTINCT**: Retrieves only records with unique values without allowing duplicates. **DISTINCT**, **DISTINCTROW**, and **UNIQUE** are used interchangeably.
 
-*   <*select_expressions*>:
+*   <*select_expressions*>
 
     *   \*: By using **SELECT** * statement, you can retrieve all columns from the table specified in the **FROM** clause.
 

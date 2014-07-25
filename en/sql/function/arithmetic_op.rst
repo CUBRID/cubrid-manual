@@ -37,6 +37,7 @@ For arithmetic operators, there are binary operators for addition, subtraction, 
 
 *   <*expression*>: Declares the mathematical operation to be calculated.
 *   <*mathematical_operator*>: A operator that performs an operation the arithmetic and the set operators are applicable.
+
     *   <*set_arithmetic_operator*>: A set arithmetic operator that performs operations such as union, difference and intersection on collection type operands.
     *   <*arithmetic_operator*>: An operator to perform the four fundamental arithmetic operations.
 

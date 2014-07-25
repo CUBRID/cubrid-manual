@@ -284,7 +284,9 @@ createdb
     cubrid addvoldb -S -p temp -n cubriddb_TEMP01 cubriddb --db-volume-size=512M cubriddb
 
 .. _adding-database-volume:    
-    
+
+.. _addvoldb:
+
 addvoldb
 --------
 
@@ -381,6 +383,8 @@ CUBRID의 볼륨은 데이터 저장, 인덱스 저장, 임시 결과 저장 등
         cubrid addvoldb -C --db-volume-size=2G --max-writesize-in-sec=1M testdb
 
 .. _deleting-database:
+
+.. _deletedb:
 
 deletedb
 --------
@@ -758,12 +762,39 @@ spacedb
         -------------------------------------------------------------------------------------------------
              TOTAL     100.0 M       4.4 M      95.6 M       2.5 M       1.2 M       0.4 M          5
 
+.. _compactdb:
+
 compactdb
 ---------
 
 **cubrid compactdb** 유틸리티는 데이터베이스 볼륨 중에 사용되지 않는 공간을 확보하기 위해서 사용된다. 데이터베이스 서버가 정지된 경우(offline)에는 독립 모드(stand-alone mode)로, 데이터베이스가 구동 중인 경우(online)에는 클라이언트 서버 모드(client-server mode)로 공간 정리 작업을 수행할 수 있다.
 
-**cubrid compactdb** 유틸리티는 삭제된 객체들의 OID와 클래스 변경에 의해 점유되고 있는 공간을 확보한다. 객체를 삭제하면 삭제된 객체를 참조하는 다른 객체가 있을 수 있기 때문에 삭제된 객체에 대한 OID는 바로 사용 가능한 빈 공간이 될 수 없다.
+.. note::
+
+    **cubrid compactdb** 유틸리티는 삭제된 객체들의 OID와 클래스 변경에 의해 점유되고 있는 공간을 확보한다. 객체를 삭제하면 삭제된 객체를 참조하는 다른 객체가 있을 수 있기 때문에 삭제된 객체에 대한 OID는 바로 사용 가능한 빈 공간이 될 수 없다.
+    
+    따라서 OID 재사용을 위해 테이블 생성 시에는 아래 예와 같이 REUSE_OID 옵션을 사용할 것을 권장한다.
+    
+    .. code-block:: sql
+    
+        CREATE TABLE tbl REUSE_OID
+        (
+            id INT PRIMARY KEY, 
+            b VARCHAR
+        );
+    
+    단, REUSE_OID 옵션을 사용한 테이블은 다른 테이블이 참조할 수 없다. 즉, 다른 테이블의 타입으로 사용될 수 없다.
+    
+    .. code-block:: sql
+    
+        CREATE TABLE reuse_tbl (a INT PRIMARY KEY) REUSE_OID;
+        CREATE TABLE tbl_1 ( a reuse_tbl);
+    
+    ::
+    
+        ERROR: The class 'reuse_tbl' is marked as REUSE_OID and is non-referable. Non-referable classes can't be the domain of an attribute and their instances' OIDs cannot be returned.
+ 
+    REUSE_OID에 대한 자세한 설명은 :ref:`reuse-oid`\를 참고한다.
 
 **cubrid compactdb** 유틸리티를 수행하면 삭제된 객체에 대한 참조를 **NULL**\ 로 표시하는데, 이렇게 **NULL**\ 로 표시된 공간은 OID가 재사용할 수 있는 공간임을 의미한다. ::
 
@@ -820,9 +851,9 @@ compactdb
 
     인스턴스 잠금 타임아웃 값을 지정할 수 있다. 기본값은 **2** (초)이며, 최소 값은 1, 최대 값은 10이다. 설정된 시간동안 잠금 인스턴스를 대기하므로, 옵션 값이 작을수록 작업 속도는 향상될 수 있으나 처리 가능한 인스턴스 개수가 적어진다. 반면, 옵션 값이 클수록 작업 속도는 저하되나 더 많은 인스턴스에 대해 작업을 수행할 수 있다.
 
-.. option::-c, --class-lock-timeout=NUMBER
+.. option:: -c, --class-lock-timeout=NUMBER
 
-    클래스 잠금 타임아웃 값을 지정할 수 있다. 기본값은 **10**(초)이며, 최소값은 1, 최대 값은 10이다. 설정된 시간동안 잠금 테이블을 대기하므로, 옵션 값이 작을수록 작업 속도는 향상될 수 있으나 처리 가능한 테이블 개수가 적어진다. 반면, 옵션 값이 클수록 작업 속도는 저하되나 더 많은 테이블에 대해 작업을 수행할 수 있다.
+    클래스 잠금 타임아웃 값을 지정할 수 있다. 기본값은 **10** (초)이며, 최소값은 1, 최대 값은 10이다. 설정된 시간동안 잠금 테이블을 대기하므로, 옵션 값이 작을수록 작업 속도는 향상될 수 있으나 처리 가능한 테이블 개수가 적어진다. 반면, 옵션 값이 클수록 작업 속도는 저하되나 더 많은 테이블에 대해 작업을 수행할 수 있다.
 
 optimizedb
 ----------
@@ -1559,6 +1590,8 @@ killtran
     중지할 트랜잭션을 확인하는 프롬프트를 생략한다. ::
 
         cubrid killtran -f -i 1 demodb
+
+.. _checkdb:
 
 checkdb
 -------

@@ -23,16 +23,16 @@ CUBRID 10.0 is the version which stabilized and improved CUBRID 9.2.
 
 CUBRID 10.0's DB volume is not compatible with CUBRID 9.2. Therefore, if you use CUBRID 9.2 or less, you must **migrate the database**. Regarding this, see :doc:`/upgrade`.
 
-Improvement of Administrative Convenience
------------------------------------------
+Administrative Convenience Improvement
+--------------------------------------
 
 
 Additions in SQL functions and statements
 -----------------------------------------
 
 
-Improvement of Performance
---------------------------
+Performance Improvement
+-----------------------
 
 
 Stabilization in HA replication
@@ -48,8 +48,8 @@ Globalization
 -------------
 
     
-Behavioral Changes
-------------------
+Behavior Changes
+----------------
 
 
 Configuration
@@ -62,6 +62,7 @@ Installation
 
 Driver Compatibility
 --------------------
+
 *   The JDBC and CCI driver of CUBRID 10.0 are compatible with the DB server of CUBRID 9.1, 9.2, 2008 R4.1, R4.3 or R4.4.
 
 Not only the above issues, but also many issues for stability are fixed. For more details on changes, see the following. Users of previous versions should check the :ref:`changed-behaviors100` and :ref:`new-cautions100` sections.

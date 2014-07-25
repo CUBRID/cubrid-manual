@@ -42,7 +42,9 @@ On the Windows environment, you can start or stop a service as follows:
 
     .. image:: /images/image5.png
 
-*   In the system tray, right-click the CUBRID Service Tray. To start CUBRID, select [Service Start]; to stop it, select [Service Stop]. Selecting [Service Start] or [Service Stop] menu would be like executing cubrid service start or cubrid service stop in a command prompt; this command runs or stops the processes configured in service parameters of cubrid.conf.
+*   In the system tray, right-click the CUBRID Service Tray. To start CUBRID, select [Service Start]; to stop it, select [Service Stop].
+
+    Selecting [Service Start] or [Service Stop] menu would be like executing cubrid service start or cubrid service stop in a command prompt; this command runs or stops the processes configured in service parameters of cubrid.conf.
 
 *   If you click [Exit] while CUBRID is running, all the services and process in the server stop.
 

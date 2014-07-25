@@ -1,7 +1,7 @@
-.. _db-backup:
+.. _backupdb:
 
 backupdb
---------s
+--------
 
 A database backup is the procedure of storing CUBRID database volumes, control files and log files, and it is executed by using the **cubrid backupdb** utility or the CUBRID Manager. **DBA** must regularly back up the database so that the database can be properly restored in the case of storage media or file errors. The restore environment must have the same operating system and the same version of CUBRID as the backup environment. For such a reason, you must perform a backup in a new environment immediately after migrating a database to a new version.
 
@@ -225,7 +225,7 @@ You must not delete archive logs by using the file deletion command such as rm o
 
 If you want to delete logs as much as possible while operating a database, configure the value of **log_max_archives** to a small value or 0 and configure the value of **force_remove_log_archives** to yes. Note that in an HA environment, if the value of **force_remove_log_archives** is yes, archive logs that have not replicated in a slave node are deleted, which can cause replication errors. Therefore, it is recommended that you configure it to no. Although the value of **force_remove_log_archives** is set to no, files that are complete for replication can be deleted by HA management process.
 
-.. _db-restore:
+.. _restoredb:
 
 restoredb
 ---------
@@ -429,7 +429,7 @@ Suppose that *demodb* is backed up in the /home/cubrid/db/demodb directory on se
 
 #.  Backing up on server A
 
-    Back up *demodb* on server *A*. If a backup has been performed earlier, you can perform an incremental backup for data only that have changed since the last backup. The directory where the backup files are created, if not specified in the **-D** option, is created by default in the location where the log volume is stored. The following is a backup command with recommended options. For details on the options, see :ref:`db-backup` . ::
+    Back up *demodb* on server *A*. If a backup has been performed earlier, you can perform an incremental backup for data only that have changed since the last backup. The directory where the backup files are created, if not specified in the **-D** option, is created by default in the location where the log volume is stored. The following is a backup command with recommended options. For details on the options, see :ref:`backupdb` . ::
 
         cubrid backupdb -z demodb
 

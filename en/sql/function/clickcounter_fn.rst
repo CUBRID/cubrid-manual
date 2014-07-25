@@ -34,9 +34,9 @@ If you want to increase or decrease the click counter without specifying **INCR*
 
     *   The **INCR/DECR** functions apply only to top-level **SELECT** statements. **SUB** **SELECT** statements such as **INSERT** ... **SELECT** ... statement and **UPDATE** table **SET** col = **SELECT** ... statement are not supported. The following example shows where the **INCR** function is not allowed.
 
-      .. code-block:: sql
+        .. code-block:: sql
     
-        SELECT b.content, INCR(b.read_count) FROM (SELECT * FROM board WHERE id = 1) AS b
+            SELECT b.content, INCR(b.read_count) FROM (SELECT * FROM board WHERE id = 1) AS b
 
     *   If the **SELECT** statement with **INCR/DECR** functions returns more than one row as a result, it is treated as an error. The final result where only one row exists is valid.
 
@@ -44,18 +44,18 @@ If you want to increase or decrease the click counter without specifying **INCR*
 
     *   When the **INCR** function is called, the value to be returned will be the current value, while the value to be stored will be the current value + 1. Execute the following statement to select the value to be stored as a result :
 
-      .. code-block:: sql
+        .. code-block:: sql
     
-        SELECT content, INCR(read_count) + 1 FROM board WHERE id = 1;
+            SELECT content, INCR(read_count) + 1 FROM board WHERE id = 1;
 
     *   If the defined maximum value of the type is exceeded, the **INCR** function initializes the column value to 0. Likewise, the column value is also initialized to 0 when the **DECR** function applies to the minimum value. 
 
     *   Data inconsistency can occur because the **INCR/DECR** functions are executed regardless of **UPDATE** trigger. The following example shows the database inconsistency in that situation.
 
-      .. code-block:: sql
+        .. code-block:: sql
 
-        CREATE TRIGGER event_tr BEFORE UPDATE ON event EXECUTE REJECT;
-        SELECT INCR(players) FROM event WHERE gender='M';
+            CREATE TRIGGER event_tr BEFORE UPDATE ON event EXECUTE REJECT;
+            SELECT INCR(players) FROM event WHERE gender='M';
 
     *   The **INCR** / **DECR** functions returns an error in the write-protected broker mode such as slave mode of HA configuration, CSQL Interpreter (csql -r) of read-only, Read Only or Standby Only mode(ACCESS_MODE=RO or SO in cubrid_broker.conf).
 

@@ -12,6 +12,7 @@ CUBRID는 **DBA**\와 **PUBLIC**\이라는 사용자를 기본으로 제공한�
 
 *   **DBA**\를 포함한 모든 사용자는 **PUBLIC**\ 의 멤버가 되므로 모든 데이터베이스 사용자는 **PUBLIC**\에 부여된 권한을 가진다. 예를 들어, **PUBLIC** 사용자에 권한 **B**\를 추가하면 데이터베이스의 모든 사용자에게 일괄적으로 권한 **B**\가 부여된다.
 
+사용자의 추가, 권한 부여에 대한 자세한 내용은 :doc:`/sql/authorization`\ 을 참고한다.
 
 .. _databases-txt-file:
 
@@ -120,3 +121,20 @@ CUBRID 데이터베이스의 볼륨은 크게 영구적 볼륨, 일시적 볼륨
     *   위의 예에서 testdb_lgar_t, testdb_lgar224, testdb_lgat가 로그 볼륨 파일에 해당된다.
     *   "cubrid createdb" 명령 수행 시 "--log-volume-size" 옵션에 의해 크기가 정해진다.  
 
+볼륨 관리와 관련된 명령어는 다음을 참고한다. 
+
+*   볼륨 추가: :ref:`addvoldb`
+*   볼륨 삭제: :ref:`deletedb`
+*   상태 확인: :ref:`checkdb`
+
+공간 확인 및 확보와 관련된 명령어는 다음을 참고한다.
+
+*   공간 확인: :ref:`spacedb`
+*   공간 확보: :ref:`compactdb`
+
+백업/복구 및 언로드/로드와 관련된 명령어는 다음을 참고한다.
+
+*   백업: :ref:`backupdb`
+*   복구: :ref:`restoredb`
+*   언로드: :ref:`unloaddb`
+*   로드: :ref:`loaddb`

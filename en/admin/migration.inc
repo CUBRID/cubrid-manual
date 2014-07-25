@@ -442,7 +442,7 @@ The following steps describes migration scenario that can be applied while the e
 
 #. Back up the existing database
 
-    Perform backup of the existing version of the database by using the **cubrid backupdb** utility. The purpose of this step is to safeguard against failures that might occur during the database unload/load operations. For details on the database backup, see :ref:`db-backup`.
+    Perform backup of the existing version of the database by using the **cubrid backupdb** utility. The purpose of this step is to safeguard against failures that might occur during the database unload/load operations. For details on the database backup, see :ref:`backupdb`.
 
 #. Unload the existing database
 
@@ -466,7 +466,7 @@ The following steps describes migration scenario that can be applied while the e
 
 #. Back up the new database
 
-    Once the data has been successfully loaded into the new database, back up the database created for the new version of CUBRID by using the **cubrid backupdb** utility. The reason for this step is because you cannot restore the data backed up in the existing version of CUBRID when using the new version. For details on backing up the database, see :ref:`db-backup` .
+    Once the data has been successfully loaded into the new database, back up the database created for the new version of CUBRID by using the **cubrid backupdb** utility. The reason for this step is because you cannot restore the data backed up in the existing version of CUBRID when using the new version. For details on backing up the database, see :ref:`backupdb` .
 
 .. warning:: 
 

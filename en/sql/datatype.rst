@@ -773,7 +773,7 @@ The following are the rules that are applied when using the character string typ
 
 *   The maximum size of the token for all the character strings is 16 KB.
 
-*   To enter the language of a specific country, we recommend that you to specify the locale when creating DB, then you can change locale by the introducer **CHARSET**(or **COLLATE** modifier). For more information, see :doc:`/sql/i18n`.
+*   To enter the language of a specific country, we recommend that you to specify the locale when creating DB, then you can change locale by the introducer **CHARSET** (or **COLLATE** modifier). For more information, see :doc:`/sql/i18n`.
 
 **Length**
 
@@ -884,7 +884,7 @@ Escape Special Characters
 
 CUBRID supports two kinds of methods to escape special characters. One is using quotes and the other is using backslash (\\).
 
-* Escape with Quotes
+*   Escape with Quotes
 
     If you set **no** for the system parameter **ansi_quotes** in the **cubrid.conf** file, you can use both double quotes (") and singe quotes (') to wrap strings. 
     The default value for the **ansi_quotes** parameter is **yes**, and you can use only single quotes to wrap the string. 
@@ -894,7 +894,7 @@ CUBRID supports two kinds of methods to escape special characters. One is using 
     *   You don't need to escape the single quotes included in the string wrapped in double quotes. (when **ansi_quotes** = **no**)
     *   You don't need to escape the double quotes included in the string wrapped in single quotes.
 
-* Escape with Backslash
+*   Escape with Backslash
 
     You can use escape using backslash (\\) only if you set no for the system parameter **no_backslash_escapes** in the **cubrid.conf** file. The default value for the **no_backslash_escapes** parameter is **yes**. If the value of **no_backslash_escapes** is **no**, the following are the special characters.
 

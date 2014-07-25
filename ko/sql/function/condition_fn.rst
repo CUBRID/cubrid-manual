@@ -1,3 +1,7 @@
+:tocdepth: 3
+
+.. contents::
+
 ***********
 비교 연산식
 ***********
@@ -764,7 +768,7 @@ DECODE
     :param default: 매치가 발견되지 않았을 때 반환할 값
     :rtype: *result*\ 와 *default*\ 의 타입에 따라 결정됨
 
-**DECODE**(*a*, *b*, *c*, *d*, *e*, *f*)는 다음의 **CASE** 조건식과 같은 의미를 가진다. ::
+**DECODE**\(*a*, *b*, *c*, *d*, *e*, *f*)는 다음의 **CASE** 조건식과 같은 의미를 가진다. ::
 
     CASE WHEN a = b THEN c
     WHEN a = d THEN e
@@ -866,7 +870,7 @@ IF
     :param expression3: *expression1*\ 이 참이 아닐 때 반환할 값
     :rtype: *expression2* 또는 *expression3*\ 의 타입
 
-**IF**(*a*, *b*, *c*)는 다음의 **CASE** 연산식과 같은 의미를 가진다. ::
+**IF**\(*a*, *b*, *c*)는 다음의 **CASE** 연산식과 같은 의미를 가진다. ::
 
     CASE WHEN a IS TRUE THEN b
     ELSE c
@@ -931,7 +935,7 @@ IFNULL, NVL
 
 예를 들어 a의 타입이 **INT**, b의 타입이 **BIGINT** 이면 **IFNULL** (a, b)은 **BIGINT** 타입을 반환한다. 만약 a의 타입이 **INTEGER**, b의 타입이 **TIMESTAMP** 이면 **IFNULL** (a, b)은 **VARCHAR** 타입을 반환한다.
 
-**IFNULL**(*a*, *b*) 또는 **NVL**(*a*, *b*)는 다음의 **CASE** 조건식과 같은 의미를 가진다. ::
+**IFNULL**\(*a*, *b*) 또는 **NVL**\(*a*, *b*)는 다음의 **CASE** 조건식과 같은 의미를 가진다. ::
 
     CASE WHEN a IS NULL THEN b
     ELSE a

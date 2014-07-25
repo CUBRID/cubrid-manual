@@ -390,6 +390,7 @@ The following example shows how to add the *before_2012* and *last_one* partitio
     );
 
 .. note::
+
     *   For range-partitioned tables, range values for added partitions must be greater than the largest range value of the existing partitions.
     *   For range-partitioned tables, if the upper limit of the range of one of the existing partitions is specified by **MAXVALUE**, **ADD PARTITION** clause will always return an error (the :ref:`REORGANIZE PARTITION<reorganize-partitions>` clause should be used instead).
     *   The *ADD PARTITION* clause can only be used on already partitioned tables.

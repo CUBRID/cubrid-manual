@@ -434,10 +434,10 @@ The following are parameters related to the database server. The type and value 
 
     The values and the working methods are as follows.
 
-    *    **both**: As the server process accesses to the client process by ECHO(7) port, it checks if the client process works well. The client process also does the same thing to the server process(The default value).
-    *    **server_only**: Only the server process checks whether the client process works well.
-    *    **client_only**: Only the client process checks whether the server process works well.
-    *    **none**: None of the server and client processes check whether the other process works well.
+    *   **both**: As the server process accesses to the client process by ECHO(7) port, it checks if the client process works well. The client process also does the same thing to the server process(The default value).
+    *   **server_only**: Only the server process checks whether the client process works well.
+    *   **client_only**: Only the client process checks whether the server process works well.
+    *   **none**: None of the server and client processes check whether the other process works well.
 
     Specially, if ECHO(7) port is blocked by the firewall configuration, each process can mistake that the other process  was exited. Therefore, you should avoid this problem by setting this parameter's value as none.
 

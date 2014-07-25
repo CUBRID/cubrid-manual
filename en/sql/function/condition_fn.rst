@@ -764,7 +764,7 @@ DECODE
     :param default: the value to be retuned when no match is found 
     :rtype: determined with the type of *result* and *default*
 
-**DECODE**(*a*, *b*, *c*, *d*, *e, f*) has the same meaning as the **CASE** expression below. ::
+**DECODE**\(*a*, *b*, *c*, *d*, *e, f*) has the same meaning as the **CASE** expression below. ::
 
     CASE WHEN a = b THEN c
     WHEN a = d THEN e
@@ -866,7 +866,7 @@ IF
     :param expression3: the value to be returned when *expression1* is not true
     :rtype: type of *expression2* or *expression3*
 
-**IF**(*a*, *b*, *c*) has the same meaning as the **CASE** expression in the following example: ::
+**IF**\(*a*, *b*, *c*) has the same meaning as the **CASE** expression in the following example: ::
 
     CASE WHEN a IS TRUE THEN b
     ELSE c
@@ -931,7 +931,7 @@ Operation is performed by converting the type of every argument into that with t
 
 For example, if a type of a is **INT** and b is **BIGINT**, then **IFNULL** (a, b) returns a **BIGINT** type. If a type of a is **INTEGER** and b is **TIMESTAMP**, then **IFNULL** (a, b) returns a **VARCHAR** type.
 
-**IFNULL**(*a*, *b*) or **NVL**(*a*, *b*) has the same meaning as the **CASE** expression below. ::
+**IFNULL**\(*a*, *b*) or **NVL**\(*a*, *b*) has the same meaning as the **CASE** expression below. ::
 
     CASE WHEN a IS NULL THEN b
     ELSE a

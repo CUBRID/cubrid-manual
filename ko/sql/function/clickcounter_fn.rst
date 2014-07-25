@@ -28,36 +28,36 @@ INCR, DECR
 
 .. note::
 
-    * **INCR/DECR** 함수는 사용자 정의 트랜잭션과 별도로 시스템 내부에서 사용되는 top operation이 적용되어 트랜잭션의 **COMMIT/ROLLBACK** 과 상관없이 데이터베이스에 자동으로 적용된다.
+    *   **INCR/DECR** 함수는 사용자 정의 트랜잭션과 별도로 시스템 내부에서 사용되는 top operation이 적용되어 트랜잭션의 **COMMIT/ROLLBACK** 과 상관없이 데이터베이스에 자동으로 적용된다.
 
-    * 하나의 **SELECT** 문에 **INCR/DECR** 함수를 여러 개 사용할 경우, 해당 질의 내의 각각의 **INCR/DECR** 함수 중 하나라도 실패하면 모두 실패한다.
+    *   하나의 **SELECT** 문에 **INCR/DECR** 함수를 여러 개 사용할 경우, 해당 질의 내의 각각의 **INCR/DECR** 함수 중 하나라도 실패하면 모두 실패한다.
 
-    * **INCR/DECR** 함수는 최상위 **SELECT** 문에만 적용된다. **INSERT** ... **SELECT** ... 구문과 **UPDATE** table **SET** col = **SELECT** ... 등과 같은 **SUB SELECT**  문은 지원하지 않는다. 다음은 **INCR** 함수가 허용되지 않는 예이다.
+    *   **INCR/DECR** 함수는 최상위 **SELECT** 문에만 적용된다. **INSERT** ... **SELECT** ... 구문과 **UPDATE** table **SET** col = **SELECT** ... 등과 같은 **SUB SELECT**  문은 지원하지 않는다. 다음은 **INCR** 함수가 허용되지 않는 예이다.
 
-      .. code-block:: sql
+        .. code-block:: sql
     
-        SELECT b.content, INCR(b.read_count) FROM (SELECT * FROM board WHERE id = 1) AS b
+            SELECT b.content, INCR(b.read_count) FROM (SELECT * FROM board WHERE id = 1) AS b
 
-    * **INCR/DECR** 함수가 포함된 **SELECT** 문의 경우, 결과 행의 개수가 둘 이상이면 오류로 처리한다. 최종 결과가 하나인 경우에만 유효하다.
-
-    * **INCR/DECR** 함수는 숫자 타입에 대해서만 사용할 수 있다. 적용 가능한 타입은 **SMALLINT**, **INTEGER**, **BIGINT**\ 와 같은 정수형 데이터 타입으로 제한된다. 기타 타입에는 사용할 수 없다.
-
-    * **INCR** 함수 호출 시 결과 값은 현재 값이며, 저장 값은 현재 값 +1인 값이 저장된다. 결과를 저장값과 같은 값을 조회하고자 할 경우는 다음과 같이 수행한다.
-
-      .. code-block:: sql
+    *   **INCR/DECR** 함수가 포함된 **SELECT** 문의 경우, 결과 행의 개수가 둘 이상이면 오류로 처리한다. 최종 결과가 하나인 경우에만 유효하다.
     
-        SELECT content, INCR(read_count) + 1 FROM board WHERE id = 1;
+    *   **INCR/DECR** 함수는 숫자 타입에 대해서만 사용할 수 있다. 적용 가능한 타입은 **SMALLINT**, **INTEGER**, **BIGINT**\ 와 같은 정수형 데이터 타입으로 제한된다. 기타 타입에는 사용할 수 없다.
+    
+    *   **INCR** 함수 호출 시 결과 값은 현재 값이며, 저장 값은 현재 값 +1인 값이 저장된다. 결과를 저장값과 같은 값을 조회하고자 할 경우는 다음과 같이 수행한다.
 
-    * 정의된 타입의 최대값을 초과할 경우 **INCR** 함수는 해당 칼럼을 0으로 초기화 한다. 반대로 최소값에 **DECR** 함수가 적용되어도 0으로 초기화된다.
+        .. code-block:: sql
+    
+            SELECT content, INCR(read_count) + 1 FROM board WHERE id = 1;
 
-    * **INCR** / **DECR** 함수는 **UPDATE** 트리거와 무관하게 실행되므로 데이터 일관성이 보장되지 않을 수 있다. 다음은 **INCR** 함수가 **UPDATE** 트리거와 무관하게 실행되기 때문에 데이터베이스의 일관성이 위반되는 예이다.
+    *   정의된 타입의 최대값을 초과할 경우 **INCR** 함수는 해당 칼럼을 0으로 초기화 한다. 반대로 최소값에 **DECR** 함수가 적용되어도 0으로 초기화된다.
 
-      .. code-block:: sql
+    *   **INCR** / **DECR** 함수는 **UPDATE** 트리거와 무관하게 실행되므로 데이터 일관성이 보장되지 않을 수 있다. 다음은 **INCR** 함수가 **UPDATE** 트리거와 무관하게 실행되기 때문에 데이터베이스의 일관성이 위반되는 예이다.
 
-        CREATE TRIGGER event_tr BEFORE UPDATE ON event EXECUTE REJECT;
-        SELECT INCR(players) FROM event WHERE gender='M';
+        .. code-block:: sql
 
-    * **INCR** / **DECR** 함수는 HA 구성의 슬레이브 노드나 read-only 모드의 CSQL 인터프리터(csql -r) 또는 Read Only, Standby Only 모드처럼 쓰기가 금지된 모드(cubrid_broker.conf의 ACCESS_MODE=RO 또는 SO)의 브로커에서 사용 시 오류를 반환한다.
+            CREATE TRIGGER event_tr BEFORE UPDATE ON event EXECUTE REJECT;
+            SELECT INCR(players) FROM event WHERE gender='M';
+
+    *   **INCR** / **DECR** 함수는 HA 구성의 슬레이브 노드나 read-only 모드의 CSQL 인터프리터(csql -r) 또는 Read Only, Standby Only 모드처럼 쓰기가 금지된 모드(cubrid_broker.conf의 ACCESS_MODE=RO 또는 SO)의 브로커에서 사용 시 오류를 반환한다.
 
 **예제**
 

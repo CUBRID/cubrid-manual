@@ -1,4 +1,4 @@
-.. _db-backup:
+.. _backupdb:
 
 backupdb
 --------
@@ -219,13 +219,13 @@ backupdb
 
 *   HA 환경에서 **force_remove_log_archives** 를 no로 설정하고, **log_max_archives** 개수를 지정하면 복제 반영 후 자동으로 삭제된다.
 
-*   HA가 아닌 환경에서 **force_remove_log_archives** 를 yes(기본값)로 설정하고, **log_max_archives** 개수를 지정하면 자동으로 삭제된다.
+*   HA가 아닌 환경에서 **force_remove_log_archives**\를 yes(기본값)로 설정하고, **log_max_archives** 개수를 지정하면 자동으로 삭제된다.
 
 *   **cubrid backupdb -r** 옵션을 사용하여 명령을 실행하면 삭제된다. 하지만 HA 환경에서는 -r 옵션을 사용하면 안 된다.
 
-즉, 데이터베이스 운영 중에 보관 로그 볼륨을 가급적 남기고 싶지 않다면 **cubrid.conf**의 **log_max_archives** 값을 작은 값 또는 0으로 설정하고, **force_remove_log_archives** 값을 yes로 설정한다. 단, HA 환경에서 **force_remove_log_archives**\ 의 값이 yes이면 슬레이브 노드에 복제되지 않은 보관 로그가 삭제되어 복제가 잘못될 수 있으므로, no로 설정할 것을 권장한다. **force_remove_log_archives**\ 의 값이 no이더라도 복제 반영이 끝난 파일은 HA 관리 프로세스에 의해 삭제될 수 있다.
+즉, 데이터베이스 운영 중에 보관 로그 볼륨을 가급적 남기고 싶지 않다면 **cubrid.conf**\의 **log_max_archives** 값을 작은 값 또는 0으로 설정하고, **force_remove_log_archives** 값을 yes로 설정한다. 단, HA 환경에서 **force_remove_log_archives**\ 의 값이 yes이면 슬레이브 노드에 복제되지 않은 보관 로그가 삭제되어 복제가 잘못될 수 있으므로, no로 설정할 것을 권장한다. **force_remove_log_archives**\ 의 값이 no이더라도 복제 반영이 끝난 파일은 HA 관리 프로세스에 의해 삭제될 수 있다.
 
-.. _db-restore:
+.. _restoredb:
 
 restoredb
 ---------
@@ -293,7 +293,7 @@ restoredb
 
 .. option:: -B, --backup-file-path=PATH
 
-     백업 파일이 위치하는 디렉터리를 지정할 수 있다. 만약, 이 옵션이 지정되지 않으면 시스템은 데이터베이스 위치 정보 파일인 **databases.txt** 에 지정된 **log-path** 디렉터리에서 대상 데이터베이스를 백업했을 때 생성된 백업 정보 파일(*dbname* **_bkvinf**)을 검색하고, 백업 정보 파일에 지정된 디렉터리 경로에서 백업 파일을 찾는다. 그러나, 백업 정보 파일이 손상되거나 백업 파일의 위치 정보가 삭제된 경우라면 시스템이 백업 파일을 찾을 수 없으므로, 관리자가 **-B** 옵션을 이용하여 백업 파일이 위치하는 디렉터리 경로를 직접 지정해야 한다. ::
+    백업 파일이 위치하는 디렉터리를 지정할 수 있다. 만약, 이 옵션이 지정되지 않으면 시스템은 데이터베이스 위치 정보 파일인 **databases.txt** 에 지정된 **log-path** 디렉터리에서 대상 데이터베이스를 백업했을 때 생성된 백업 정보 파일(*dbname* **_bkvinf**)을 검색하고, 백업 정보 파일에 지정된 디렉터리 경로에서 백업 파일을 찾는다. 그러나, 백업 정보 파일이 손상되거나 백업 파일의 위치 정보가 삭제된 경우라면 시스템이 백업 파일을 찾을 수 없으므로, 관리자가 **-B** 옵션을 이용하여 백업 파일이 위치하는 디렉터리 경로를 직접 지정해야 한다. ::
 
         cubrid restoredb -B /home/cubrid/backup demodb
 
@@ -429,7 +429,7 @@ NOTIFICATION 메시지를 출력하려면 cubrid.conf의 error_log_level 파라�
 
 #.  A 서버에서 백업
 
-    *A* 서버에서 *demodb* 를 백업한다. 이전에 백업을 수행하였다면 이후 변경된 부분만 증분 백업을 수행할 수 있다. 백업 파일이 생성되는 디렉터리는 **-D** 옵션에 의해 지정하지 않으면, 기본적으로 로그 볼륨이 저장되는 위치에 생성된다. 다음은 권장되는 옵션을 사용한 백업 명령이며, 옵션에 관한 보다 자세한 내용은 :ref:`db-backup` 을 참조한다. ::
+    *A* 서버에서 *demodb* 를 백업한다. 이전에 백업을 수행하였다면 이후 변경된 부분만 증분 백업을 수행할 수 있다. 백업 파일이 생성되는 디렉터리는 **-D** 옵션에 의해 지정하지 않으면, 기본적으로 로그 볼륨이 저장되는 위치에 생성된다. 다음은 권장되는 옵션을 사용한 백업 명령이며, 옵션에 관한 보다 자세한 내용은 :ref:`backupdb`\를 참고한다. ::
 
         cubrid backupdb -z demodb
 

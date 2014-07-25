@@ -390,6 +390,7 @@
     );
 
 .. note::
+
     *   영역 분할 테이블에서 추가할 분할에 대한 영역 값은 기존 분할의 최대 영역 값보다 커야 한다.
     *   영역 분할 테이블에서 **MAXVALUE** 로 최대값이 설정되어 있으면 **ADD PARTITION** 절은 항상 오류를 반환한다. 이 경우에 대신 :ref:`REORGANIZE PARTITION<reorganize-partitions>` 절을 사용해야 한다.
     *   **ADD PARTITION** 절은 이미 존재하는 분할 테이블에 대해서만 사용할 수 있다.

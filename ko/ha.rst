@@ -1065,12 +1065,12 @@ HA 환경에서 브로커는 여러 개의 DB 서버 중 하나와 접속을 결
 
 브로커가 DB 서버에 접속할 때, 1차 연결을 먼저 시도하고 실패하면 2차 연결을 시도한다.
 
-*  1차 연결: DB 상태(active/standby)와 복제 지연 여부를 확인.
+*   1차 연결: DB 상태(active/standby)와 복제 지연 여부를 확인.
 
     1.  **PREFERRED_HOSTS**\ 에 명시된 순서로 접속을 시도한다. **ACCESS_MODE**\ 와 맞지 않는 상태의 DB 또는 복제 지연이 발생하는 DB에는 접속을 거부한다.
     2.  **CONNECT_ORDER**\ 의 값에 따라 **databases.txt**\에 명시된 순서 혹은 무작위로 접속을 시도한다. **ACCESS_MODE**\ 에 따라 DB 서버의 상태를 확인하며, **MAX_NUM_DELAYED_HOSTS_LOOKUP** 개수까지 복제 지연 여부도 확인한다.
 
-*  2차 연결: DB 상태(active/standby)와 복제 지연 여부를 무시. 단, SO 브로커는 항상 standby DB에만 접속 허용.
+*   2차 연결: DB 상태(active/standby)와 복제 지연 여부를 무시. 단, SO 브로커는 항상 standby DB에만 접속 허용.
 
     1.  **PREFERRED_HOSTS**\ 에 명시된 순서로 접속을 시도한다. DB 서버의 상태가 **ACCESS_MODE**\ 와 맞지 않거나 DB에서 복제 지연이 발생하더라도 접속을 허용한다. 단, SO 브로커는 절대로 active DB에 연결될 수 없다.
     2.  **CONNECT_ORDER**\ 의 값에 따라 **databases.txt**\에 명시된 순서 혹은 무작위로 접속을 시도한다. DB 서버의 상태 및 복제 지연 여부와 무관하게 접속이 가능하면 된다. 

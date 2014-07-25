@@ -176,7 +176,7 @@ CUBRID 2008 R4.1/R4.3/R4.4 버전 사용자는 CUBRID 9.3 버전을 별도의 �
 DB 마이그레이션
 ^^^^^^^^^^^^^^^
 
-아래는 cubrid unloaddb/loaddb 유틸리티와 http://ftp.cubrid.org/CUBRID_Engine/9.3.0/Linux/\ 에서 별도 배포되는 check_reserved.sql 예약어 검출 스크립트를 이용하여 마이그레이션을 수행하는 방법이다. (매뉴얼의 :ref:`unload-db`\와 :ref:`load-db` 참고)
+아래는 cubrid unloaddb/loaddb 유틸리티와 http://ftp.cubrid.org/CUBRID_Engine/9.3.0/Linux/\ 에서 별도 배포되는 check_reserved.sql 예약어 검출 스크립트를 이용하여 마이그레이션을 수행하는 방법이다. (매뉴얼의 :ref:`unloaddb`\와 :ref:`loaddb` 참고)
 
 +------------------------------------+---------------------------------------------+---------------------------------------------+
 | 단계                               | Linux 환경                                  | Windows 환경                                |

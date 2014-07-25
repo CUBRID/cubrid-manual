@@ -206,30 +206,30 @@ On the above output, the information which is related to the query plan is "Quer
 
 The following shows the explanation of the above items of "Query plan:".
 
-    *   temp(distinct): (distinct) means that CUBRID performs DISTINCT query. temp means that it saves the result to the temporary space.
+*   temp(distinct): (distinct) means that CUBRID performs DISTINCT query. temp means that it saves the result to the temporary space.
+
+    *   nl-join: "nl-join" means nested loop join.
+    *   (inner join): join type is "inner join".
     
-        *   nl-join: "nl-join" means nested loop join.
-        *   (inner join): join type is "inner join".
+        *   outer: iscan: performs iscan(index scan) in the outer table.
         
-            *   outer: iscan: performs iscan(index scan) in the outer table.
+            *   class: o node[1]: It uses o table. For details, see node[1] of "Join graph segments".
+            *   index: pk_olympic_host_year term[1]: use pk_olympic_host_year index and for details, see term[1] of "Join graph segments".
+            *   cost: a cost to perform this syntax.
             
-                *   class: o node[1]: It uses o table. For details, see node[1] of "Join graph segments".
-                *   index: pk_olympic_host_year term[1]: use pk_olympic_host_year index and for details, see term[1] of "Join graph segments".
-                *   cost: a cost to perform this syntax.
+                *   card: It means cardinality. Note that this is an approximate value.
                 
-                    *   card: It means cardinality. Note that this is an approximate value.
-                    
-            *   inner: sscan: It performs sscan(sequential scan) in the inner table.
-            
-                *   class: h node[0]: It uses h table. For details, see node[0] of "Join graph segments".
-                *   sargs: term[0]: sargs represent data filter(WHERE condition which does not use an index); it means that term[0] is the condition used as data filter.
-                *   cost: A cost to perform this syntax.
-                
-                    *   card: It means cardinality. Note that this is an approximate value.
-                    
-        *   cost: A cost to perform all syntaxes. It includes the previously performed cost.
+        *   inner: sscan: It performs sscan(sequential scan) in the inner table.
         
-            *   card: It means cardinality. Note that this is an approximate value.
+            *   class: h node[0]: It uses h table. For details, see node[0] of "Join graph segments".
+            *   sargs: term[0]: sargs represent data filter(WHERE condition which does not use an index); it means that term[0] is the condition used as data filter.
+            *   cost: A cost to perform this syntax.
+            
+                *   card: It means cardinality. Note that this is an approximate value.
+                
+    *   cost: A cost to perform all syntaxes. It includes the previously performed cost.
+    
+        *   card: It means cardinality. Note that this is an approximate value.
 
 **Query Plan Related Terms**
 
@@ -403,57 +403,46 @@ Below is an example that prints out the query tracing result after setting SQL t
 
 In the above example, under lines of "Trace Statistics:" are the result of tracing. Each items of tracing result are as below.
 
-*   **SELECT** (time: 1, fetch: 975, ioread: 2): Total statistics regarding SELECT query.
+*   **SELECT** (time: 1, fetch: 975, ioread: 2)
     
-    time: 4 => Total query time took 4ms. 
-    
-    fetch: 975 => 975 times were fetched regarding pages. (not the number of pages, but the count of accessing pages. even if the same pages are fetched, the count is increased.).
-    
-    ioread: disk accessed 2 times.
+    *   time: 4 => Total query time took 4ms. 
+    *   fetch: 975 => 975 times were fetched regarding pages. (not the number of pages, but the count of accessing pages. even if the same pages are fetched, the count is increased.).
+    *   ioread: disk accessed 2 times.
 
-    If the query is rerun, fetching count and ioread count can be shrinken because some of query result are read from buffer.
+    : Total statistics regarding SELECT query. If the query is rerun, fetching count and ioread count can be shrinken because some of query result are read from buffer.
        
-    *   **SCAN** (table: olympic), (heap time: 0, fetch: 26, ioread: 0, readrows: 25, rows: 25): heap scan statistics for the olympic table.
+    *   **SCAN** (table: olympic), (heap time: 0, fetch: 26, ioread: 0, readrows: 25, rows: 25)
         
-        heap time: 0 => It took less than 1ms. CUBRID rounds off a value less than millisecond, so a time value less than 1ms is displayed as 0.
-        
-        fetch: 26 => page fetching count is 26.
-        
-        ioread: 0 => disk accessing count is 0.
-        
-        readrows: 25 => the number of rows read when scanning is 25.
-        
-        rows: 25 => the number of rows in result is 25.
-    
-        *   **SCAN** (index: participant.fk_participant_host_year), (btree time: 1, fetch: 941, ioread: 2, readkeys: 5, filteredkeys: 5, rows: 916) (lookup time: 0, rows: 14): index scanning statistics regarding participant.fk_participant_host_year index
-            
-            btree time: 1 => It took 1ms.
-            
-            fetch: 941 => page fetching count is 941. 
-            
-            ioread: 2 => disk accessing count is 2.
-            
-            readkeys: 5 => the number of keys read is 5.
-            
-            filteredkeys: 5 => the number of keys which the key filter is applied is 5.
-            
-            rows: 916 => the number of rows scanning is 916.
-          
-            lookup time: 0 => It took less than 1ms when accessing data after index scan.
-            
-            rows: 14 => the number of rows after applying data filter; in the query, the number of rows is 14 when data filter "p.gold > 20" is applied.
+        *   heap time: 0 => It took less than 1ms. CUBRID rounds off a value less than millisecond, so a time value less than 1ms is displayed as 0.
+        *   fetch: 26 => page fetching count is 26.
+        *   ioread: 0 => disk accessing count is 0.
+        *   readrows: 25 => the number of rows read when scanning is 25.
+        *   rows: 25 => the number of rows in result is 25.
 
-    *   **GROUPBY** (time: 0, sort: true, page: 0, ioread: 0, rows: 5): group by statistics.
+        : Heap scan statistics for the olympic table.
         
-            time: 0 => It took less than 1ms when "group by" is applied.
+        *   **SCAN** (index: participant.fk_participant_host_year), (btree time: 1, fetch: 941, ioread: 2, readkeys: 5, filteredkeys: 5, rows: 916) (lookup time: 0, rows: 14)
             
-            sort: true => It's true because sorting is applied.
+            *   btree time: 1 => It took 1ms.
+            *   fetch: 941 => page fetching count is 941. 
+            *   ioread: 2 => disk accessing count is 2.
+            *   readkeys: 5 => the number of keys read is 5.
+            *   filteredkeys: 5 => the number of keys which the key filter is applied is 5.
+            *   rows: 916 => the number of rows scanning is 916.
+            *   lookup time: 0 => It took less than 1ms when accessing data after index scan.
+            *   rows: 14 => the number of rows after applying data filter; in the query, the number of rows is 14 when data filter "p.gold > 20" is applied.
+
+            : Index scanning statistics regarding participant.fk_participant_host_year index.
             
-            page: 0 => the number or temporary pages used in sorting is 0.
-            
-            ioread: 0 => It took less than 1ms to access disk.
-            
-            rows: 5 => the number of result rows regarding "group by" is 5.
+    *   **GROUPBY** (time: 0, sort: true, page: 0, ioread: 0, rows: 5)
+        
+        *   time: 0 => It took less than 1ms when "group by" is applied.
+        *   sort: true => It's true because sorting is applied.
+        *   page: 0 => the number or temporary pages used in sorting is 0.
+        *   ioread: 0 => It took less than 1ms to access disk.
+        *   rows: 5 => the number of result rows regarding "group by" is 5.
+        
+        : Group by statistics.
 
 The following is an example to join 3 tables.
 

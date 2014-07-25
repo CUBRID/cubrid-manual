@@ -244,8 +244,8 @@ CREATE TABLE
 
     CREATE TABLE table_name (id INT AUTO_INCREMENT) AUTO_INCREMENT = seed ;
 
-*   *seed* : 번호가 시작하는 초기값이다. 모든 정수가 허용되며 기본값은 **1** 이다.
-*   *increment* : 행마다 증가되는 증가값이다. 양의 정수만 허용되며 기본값은 **1** 이다.
+*   *seed*: 번호가 시작하는 초기값이다. 모든 정수가 허용되며 기본값은 **1** 이다.
+*   *increment*: 행마다 증가되는 증가값이다. 양의 정수만 허용되며 기본값은 **1** 이다.
 
 **CREATE TABLE** *table_name* (id int **AUTO_INCREMENT**) **AUTO_INCREMENT** = *seed*; 구문을 사용할 때에는 다음과 같은 제약 사항이 있다.
 
@@ -587,6 +587,8 @@ KEY 또는 INDEX
 테이블 옵션
 -----------
 
+.. _reuse-oid:
+
 REUSE_OID
 ^^^^^^^^^
 
@@ -646,9 +648,10 @@ CREATE TABLE LIKE
 
 *   *new_table_name*: 새로 생성할 테이블 이름이다.
 *   *source_table_name*: 데이터베이스에 이미 존재하는 원본 테이블 이름이다. **CREATE TABLE ... LIKE** 문에서 아래의 테이블은 원본 테이블로 지정될 수 없다.
-        *   분할 테이블
-        *   **AUTO_INCREMENT** 칼럼이 포함된 테이블
-        *   상속 또는 메서드를 사용하는 테이블
+
+    *   분할 테이블
+    *   **AUTO_INCREMENT** 칼럼이 포함된 테이블
+    *   상속 또는 메서드를 사용하는 테이블
 
 .. code-block:: sql
 
@@ -1062,9 +1065,9 @@ ADD INDEX 절
      
         <index_col_name> ::= column_name [(length)] [ ASC | DESC ]
 
-*   *table_name* : 변경하고자 하는 테이블의 이름을 지정한다.
-*   *index_name* : 인덱스의 이름을 지정한다(최대 254 바이트).
-*   *index_col_name* : 인덱스를 정의할 대상 칼럼을 지정하며, 이때 칼럼 옵션으로 **ASC** 또는 **DESC** 을 함께 지정할 수 있다.
+*   *table_name*: 변경하고자 하는 테이블의 이름을 지정한다.
+*   *index_name*: 인덱스의 이름을 지정한다(최대 254 바이트).
+*   *index_col_name*: 인덱스를 정의할 대상 칼럼을 지정하며, 이때 칼럼 옵션으로 **ASC** 또는 **DESC** 을 함께 지정할 수 있다.
 
 .. code-block:: sql
 
@@ -1100,9 +1103,9 @@ ALTER COLUMN ... SET DEFAULT 절
 
     ALTER [TABLE | CLASS] table_name ALTER [COLUMN] column_name SET DEFAULT value
 
-*   *table_name* : 기본값을 변경할 칼럼이 속한 테이블의 이름을 지정한다.
-*   *column_name* : 새로운 기본값을 적용할 칼럼의 이름을 지정한다.
-*   *value* : 새로운 기본값을 지정한다.
+*   *table_name*: 기본값을 변경할 칼럼이 속한 테이블의 이름을 지정한다.
+*   *column_name*: 새로운 기본값을 적용할 칼럼의 이름을 지정한다.
+*   *value*: 새로운 기본값을 지정한다.
 
 ::
 
@@ -1163,8 +1166,8 @@ AUTO_INCREMENT 절
 
     ALTER TABLE table_name AUTO_INCREMENT = initial_value ;
 
-*   *table_name* : 테이블 이름
-*   *initial_value* : 새로 변경할 초기값
+*   *table_name*: 테이블 이름
+*   *initial_value*: 새로 변경할 초기값
 
 .. code-block:: sql
 
@@ -1373,21 +1376,21 @@ CHANGE/MODIFY 절
 칼럼의 타입 변경에 따른 테이블 속성의 변경
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-*   타입 변경 : 시스템 파라미터 **alter_table_change_type_strict** 의 값이 no이면 다른 타입으로 값 변경을 허용하고, yes이면 허용하지 않는다. 기본값은 **no** 이며, **CAST** 연산자로 허용되는 모든 타입으로 변경이 허용된다. 객체 타입의 변경은 객체의 상위 클래스(테이블)에 의해서만 허용된다.
+*   타입 변경: 시스템 파라미터 **alter_table_change_type_strict** 의 값이 no이면 다른 타입으로 값 변경을 허용하고, yes이면 허용하지 않는다. 기본값은 **no** 이며, **CAST** 연산자로 허용되는 모든 타입으로 변경이 허용된다. 객체 타입의 변경은 객체의 상위 클래스(테이블)에 의해서만 허용된다.
 
 *   **NOT NULL**
 
-    *  변경할 칼럼에 **NOT NULL** 제약 조건이 지정되지 않으면 기존 테이블에 존재하더라도 새 테이블에서 제거된다.
-    *  변경할 칼럼에 **NOT NULL** 제약 조건이 지정되면 시스템 파라미터 **alter_table_change_type_strict** 의 설정에 따라 결과가 달라진다.
+    *   변경할 칼럼에 **NOT NULL** 제약 조건이 지정되지 않으면 기존 테이블에 존재하더라도 새 테이블에서 제거된다.
+    *   변경할 칼럼에 **NOT NULL** 제약 조건이 지정되면 시스템 파라미터 **alter_table_change_type_strict** 의 설정에 따라 결과가 달라진다.
 
         *   **alter_table_change_type_strict** 가 yes이면 해당 칼럼의 값을 검사하여 **NULL** 이 존재하면 오류가 발생하고 변경을 수행하지 않는다.
         *   **alter_table_change_type_strict** 가 no이면 존재하는 모든 **NULL** 값을 변경할 타입의 고정 기본값(hard default value)으로 변경한다.
 
-*   **DEFAULT** : 변경할 칼럼에 **DEFAULT** 속성이 지정되지 않으면 이 속성이 기존 테이블에 있더라도 새 테이블에서 제거된다.
+*   **DEFAULT**: 변경할 칼럼에 **DEFAULT** 속성이 지정되지 않으면 이 속성이 기존 테이블에 있더라도 새 테이블에서 제거된다.
 
-*   **AUTO_INCREMENT** : 변경할 칼럼에 **AUTO_INCREMENT** 속성이 지정되지 않으면 이 속성이 기존 테이블에 있더라도 새 테이블에서 제거된다.
+*   **AUTO_INCREMENT**: 변경할 칼럼에 **AUTO_INCREMENT** 속성이 지정되지 않으면 이 속성이 기존 테이블에 있더라도 새 테이블에서 제거된다.
 
-*   **FOREIGN KEY** : 참조되고 있거나 참조하고 있는 외래키(foreign key) 제약 조건을 지닌 칼럼은 변경할 수 없다.
+*   **FOREIGN KEY**: 참조되고 있거나 참조하고 있는 외래키(foreign key) 제약 조건을 지닌 칼럼은 변경할 수 없다.
 
 *   단일 칼럼 **PRIMARY KEY**
 
@@ -1395,7 +1398,7 @@ CHANGE/MODIFY 절
     *   변경할 칼럼에 **PRIMARY KEY** 제약 조건이 지정되었으나 기존 칼럼에는 존재하지 않으면 **PRIMARY KEY** 가 생성된다.
     *   기존 칼럼에는 **PRIMARY KEY** 제약 조건이 존재하나 변경할 칼럼에는 지정되지 않으면 **PRIMARY KEY** 는 유지된다.
 
-*   멀티 칼럼 **PRIMARY KEY** : 변경할 칼럼에 **PRIMARY KEY** 제약 조건이 지정되고 타입이 업그레이드되면 **PRIMARY KEY** 가 재생성된다.
+*   멀티 칼럼 **PRIMARY KEY**: 변경할 칼럼에 **PRIMARY KEY** 제약 조건이 지정되고 타입이 업그레이드되면 **PRIMARY KEY** 가 재생성된다.
 
 *   단일 칼럼 **UNIQUE KEY**
 
@@ -1403,19 +1406,19 @@ CHANGE/MODIFY 절
     *   기존 칼럼에 존재하고 변경할 칼럼에 지정되지 않으면 **UNIQUE KEY** 가 유지된다.
     *   기존 칼럼에 존재하지 않고 변경할 칼럼에 지정되면 **UNIQUE KEY** 가 생성된다.
 
-*   멀티 칼럼 **UNIQUE KEY** : 해당 칼럼의 타입이 변경되면 인덱스가 재생성된다.
+*   멀티 칼럼 **UNIQUE KEY**: 해당 칼럼의 타입이 변경되면 인덱스가 재생성된다.
 
-*   유일하지 않은(non-unique) 인덱스가 있는 칼럼 : 해당 칼럼의 타입이 변경되면 인덱스가 재생성된다.
+*   유일하지 않은(non-unique) 인덱스가 있는 칼럼: 해당 칼럼의 타입이 변경되면 인덱스가 재생성된다.
 
-*   파티션 기준 칼럼 : 테이블이 해당 칼럼에 의해 파티션되어 있으면, 칼럼을 변경할 수 없다. 파티션을 추가할 수 없다.
+*   파티션 기준 칼럼: 테이블이 해당 칼럼에 의해 파티션되어 있으면, 칼럼을 변경할 수 없다. 파티션을 추가할 수 없다.
 
-*   클래스 계층이 있는 테이블의 칼럼 : 하위 클래스가 없는 테이블만 변경할 수 있다. 상위 클래스에서 상속받은 하위 클래스는 변경할 수 없다. 상속받은 속성은 변경할 수 없다.
+*   클래스 계층이 있는 테이블의 칼럼: 하위 클래스가 없는 테이블만 변경할 수 있다. 상위 클래스에서 상속받은 하위 클래스는 변경할 수 없다. 상속받은 속성은 변경할 수 없다.
 
-*   트리거와 뷰 : 트리거와 뷰는 변경할 칼럼의 정의에 따라 변경되지 않으므로 사용자가 직접 재정의해야 한다.
+*   트리거와 뷰: 트리거와 뷰는 변경할 칼럼의 정의에 따라 변경되지 않으므로 사용자가 직접 재정의해야 한다.
 
-*   칼럼 순서 : 칼럼 순서를 변경할 수 있다.
+*   칼럼 순서: 칼럼 순서를 변경할 수 있다.
 
-*   이름 변경 : 이름이 충돌하지 않는 한 이름을 변경할 수 있다.
+*   이름 변경: 이름이 충돌하지 않는 한 이름을 변경할 수 있다.
 
 칼럼의 타입 변경에 따른 값의 변경
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1424,11 +1427,11 @@ CHANGE/MODIFY 절
 
 **alter_table_change_type_strict** 파라미터의 값이 no이면 상황에 따라 다음과 같이 동작한다. 
 
-*   숫자 또는 문자열을 숫자로 변환 중 오버플로우 발생 : 결과 타입의 부호에 따라 음수면 최소값, 양수면 최대값으로 정해지고 오버플로우가 발생한 레코드에 대한 경고 메시지가 로그에 기록된다. 문자열은 **DOUBLE** 타입으로 변환한 후 같은 법칙을 따른다.
+*   숫자 또는 문자열을 숫자로 변환 중 오버플로우 발생: 결과 타입의 부호에 따라 음수면 최소값, 양수면 최대값으로 정해지고 오버플로우가 발생한 레코드에 대한 경고 메시지가 로그에 기록된다. 문자열은 **DOUBLE** 타입으로 변환한 후 같은 법칙을 따른다.
 
-*   문자열을 더 짧은 문자열로 변환 : 레코드는 정의한 타입의 고정 기본값(hard default value)으로 업데이트되고 경고 메시지가 로그에 기록된다.
+*   문자열을 더 짧은 문자열로 변환: 레코드는 정의한 타입의 고정 기본값(hard default value)으로 업데이트되고 경고 메시지가 로그에 기록된다.
 
-*   그 밖의 이유로 인한 변환 실패 : 레코드는 정의한 타입의 고정 기본값(hard default value)으로 업데이트되고 경고 메시지가 로그에 기록된다.
+*   그 밖의 이유로 인한 변환 실패: 레코드는 정의한 타입의 고정 기본값(hard default value)으로 업데이트되고 경고 메시지가 로그에 기록된다.
 
 **alter_table_change_type_strict** 파라미터의 값이 yes이면 위의 모든 경우에 에러 메시지를 출력하고 변경 내용을 롤백한다.
 
@@ -1492,9 +1495,9 @@ RENAME COLUMN 절
     ALTER [TABLE | CLASS | VCLASS | VIEW] table_name
     RENAME [COLUMN | ATTRIBUTE] old_column_name { AS | TO } new_column_name
 
-*   *table_name* : 이름을 변경할 칼럼의 테이블 이름을 지정한다.
-*   *old_column_name* : 현재의 칼럼 이름을 지정한다.
-*   *new_column_name* : 새로운 칼럼 이름을 **AS** 키워드 뒤에 명시한다(최대 254 바이트).
+*   *table_name*: 이름을 변경할 칼럼의 테이블 이름을 지정한다.
+*   *old_column_name*: 현재의 칼럼 이름을 지정한다.
+*   *new_column_name*: 새로운 칼럼 이름을 **AS** 키워드 뒤에 명시한다(최대 254 바이트).
 
 .. code-block:: sql
 
@@ -1553,8 +1556,8 @@ DROP COLUMN 절
     ALTER [TABLE | CLASS | VCLASS | VIEW] table_name
     DROP [COLUMN | ATTRIBUTE] column_name, ... ;
 
-*   *table_name* : 삭제할 칼럼의 테이블 이름을 명시한다.
-*   *column_ name* : 삭제할 칼럼의 이름을 명시한다. 쉼표로 구분하여 여러 개의 칼럼을 지정할 수 있다.
+*   *table_name*: 삭제할 칼럼의 테이블 이름을 명시한다.
+*   *column_ name*: 삭제할 칼럼의 이름을 명시한다. 쉼표로 구분하여 여러 개의 칼럼을 지정할 수 있다.
 
 .. code-block:: sql
 
@@ -1568,8 +1571,8 @@ DROP CONSTRAINT 절
     ALTER [TABLE | CLASS] table_name
     DROP CONSTRAINT constraint_name ;
 
-*   *table_name* : 제약 조건을 삭제할 테이블의 이름을 지정한다.
-*   *constraint_name* : 삭제할 제약 조건의 이름을 지정한다.
+*   *table_name*: 제약 조건을 삭제할 테이블의 이름을 지정한다.
+*   *constraint_name*: 삭제할 제약 조건의 이름을 지정한다.
 
 .. code-block:: sql
 
@@ -1600,8 +1603,8 @@ DROP INDEX 절
 
     ALTER [TABLE | CLASS] table_name DROP INDEX index_name ;
 
-*   *table_name* : 제약 조건을 삭제할 테이블의 이름을 지정한다.
-*   *index_name* : 삭제할 인덱스의 이름을 지정한다.
+*   *table_name*: 제약 조건을 삭제할 테이블의 이름을 지정한다.
+*   *index_name*: 삭제할 인덱스의 이름을 지정한다.
 
 .. code-block:: sql
 
@@ -1614,7 +1617,7 @@ DROP PRIMARY KEY 절
 
     ALTER [TABLE | CLASS] table_name DROP PRIMARY KEY ;
 
-*   *table_name* : 기본키 제약 조건을 삭제할 테이블의 이름을 지정한다.
+*   *table_name*: 기본키 제약 조건을 삭제할 테이블의 이름을 지정한다.
 
 .. code-block:: sql
 
@@ -1627,8 +1630,8 @@ DROP FOREIGN KEY 절
 
     ALTER [TABLE | CLASS] table_name DROP FOREIGN KEY constraint_name ;
 
-*   *table_name* : 제약 조건을 삭제할 테이블의 이름을 지정한다.
-*   *constraint_name* : 삭제할 외래키 제약 조건의 이름을 지정한다.
+*   *table_name*: 제약 조건을 삭제할 테이블의 이름을 지정한다.
+*   *constraint_name*: 삭제할 외래키 제약 조건의 이름을 지정한다.
 
 .. code-block:: sql
 
@@ -1651,7 +1654,7 @@ DROP TABLE
                 |[ONLY] table_name 
                 | ALL table_name [( EXCEPT table_name, ... )] 
 
-*   *table_name* : 삭제할 테이블의 이름을 지정한다. 쉼표로 구분하여 여러 개의 테이블을 한 번에 삭제할 수 있다.
+*   *table_name*: 삭제할 테이블의 이름을 지정한다. 쉼표로 구분하여 여러 개의 테이블을 한 번에 삭제할 수 있다.
 *   **ONLY** 키워드 뒤에 수퍼클래스 이름이 명시되면, 해당 수퍼클래스만 삭제하고 이를 상속받는 서브클래스는 삭제하지 않는다.
 *   **ALL** 키워드 뒤에 수퍼클래스 이름이 지정되면, 해당 수퍼클래스 및 이를 상속받는 서브클래스를 모두 삭제한다.
 *   **EXCEPT** 키워드 뒤에 삭제하지 않을 서브클래스 리스트를 명시할 수 있다.
@@ -1696,8 +1699,8 @@ RENAME TABLE
 
     RENAME  [TABLE | CLASS] old_table_name {AS | TO} new_table_name [, old_table_name {AS | TO} new_table_name, ...] ;
 
-*   *old_table_name* : 변경할 테이블의 이름을 지정한다.
-*   *new_table_name* : 새로운 테이블 이름을 지정한다(최대 254 바이트).
+*   *old_table_name*: 변경할 테이블의 이름을 지정한다.
+*   *new_table_name*: 새로운 테이블 이름을 지정한다(최대 254 바이트).
 
 .. code-block:: sql
 

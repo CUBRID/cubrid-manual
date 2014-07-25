@@ -39,8 +39,8 @@ CCI API 레퍼런스
 
     가 사용될 수 있다.
     
-    *flag* 에 :c:type:`CCI_BIND_PTR`\ 이 설정되어 있을 경우 *value* 변수의 포인터만 복사하고(shallow copy) 값은 복사하지 않는다.
-    *flag* 가 설정되지 않는 경우 메모리를 할당하여 *value* 변수의 값을 복사(deep copy)한다. 만약 같은 메모리 버퍼를 이용하여 여러 개의 칼럼을 바인딩할 경우라면, :c:type:`CCI_BIND_PTR` *flag* 를 설정하지 않아야 한다.
+    *flag*\에 :c:type:`CCI_BIND_PTR`\ 이 설정되어 있을 경우 *value* 변수의 포인터만 복사하고(shallow copy) 값은 복사하지 않는다.
+    *flag*\가 설정되지 않는 경우 메모리를 할당하여 *value* 변수의 값을 복사(deep copy)한다. 만약 같은 메모리 버퍼를 이용하여 여러 개의 칼럼을 바인딩할 경우라면, :c:type:`CCI_BIND_PTR` *flag*\를 설정하지 않아야 한다.
 
     :c:type:`T_CCI_A_TYPE`\ 은 CCI 응용 프로그램 내에서 데이터 바인딩에 사용되는 C 언어의 타입을 의미하며, int, float 등의 primitive 타입과 :c:type:`T_CCI_BIT`, :c:type:`T_CCI_DATE` 등의 CCI 가 정의한 user-defined 타입으로 구성된다. 각 타입에 대한 식별자는 아래의 표와 같이 정의되어 있다.
 
@@ -1973,18 +1973,25 @@ CCI API 레퍼런스
     :param err_buf: (OUT) 에러 버퍼        
     :return: 
 
-      * **SELECT** : 결과 개수
-      * **INSERT**, **UPDATE** : 반영된 레코드 개수
-      * 기타 : 0
-      * 실패 : 에러 코드
+        *   **SELECT** : 결과 개수
+        *   **INSERT**, **UPDATE** : 반영된 레코드 개수
+        *   기타 : 0
+        *   실패 : 에러 코드
     
-        * **CCI_ER_REQ_HANDLE**
-        * **CCI_ER_DBMS**
-        * **CCI_ER_COMMUNICATION**
+            *   **CCI_ER_REQ_HANDLE**
+            *   **CCI_ER_DBMS**
+            *   **CCI_ER_COMMUNICATION**
 
     에러 코드가 **CAS_ER_NO_MORE_RESULT_SET** 일 경우 더 이상의 result set이 존재하지 않는다는 것을 의미한다.
 
 .. c:function:: int cci_oid(int conn_handle, T_CCI_OID_CMD cmd, char *oid_str, T_CCI_ERROR *err_buf)
+
+    `cmd` 인자의 값에 따라 다음 동작을 수행한다.
+    
+    *   CCI_OID_DROP : 해당 oid를 삭제한다.
+    *   CCI_OID_IS_INSTANCE : 해당 oid가 instance oid인지를 검사한다.
+    *   CCI_OID_LOCK_READ : 해당 oid에 대해 read lock 을 설정한다.
+    *   CCI_OID_LOCK_WRITE : 해당 oid에 대해 write lock을 설정한다.
 
     :param conn_handle: (IN) 연결 핸들
     :param cmd: (IN) CCI_OID_DROP, CCI_OID_IS_INSTANCE, CCI_OID_LOCK_READ, CCI_OID_LOCK_WRITE
@@ -1992,26 +1999,21 @@ CCI API 레퍼런스
     :param err_buf: (OUT) 에러 버퍼        
     :return: 
 
-      * CCI_OID_IS_INSTANCE
-      
-        *   0 : 인스턴스 아님
-        *   1 : 인스턴스
-        *   < 0 : 에러
-
-      * CCI_OID_DROP, CCI_OID_LOCK_READ, CCI_OID_LOCK_WRITE
-      
-        *   에러 코드(0: 성공)
+        *   `cmd`\가 CCI_OID_IS_INSTANCE인 경우
         
-        *   **CCI_ER_CON_HANDLE**
-        *   **CCI_ER_CONNECT**
-        *   **CCI_ER_OID_CMD**
-        *   **CCI_ER_OBJECT**
-        *   **CCI_ER_DBMS**
-    
-    * CCI_OID_DROP : 해당 oid를 삭제한다.
-    * CCI_OID_IS_INSTANCE : 해당 oid가 instance oid인지를 검사한다.
-    * CCI_OID_LOCK_READ : 해당 oid에 대해 read lock 을 설정한다.
-    * CCI_OID_LOCK_WRITE : 해당 oid에 대해 write lock을 설정한다.
+            *   0 : 인스턴스 아님
+            *   1 : 인스턴스
+            *   < 0 : 에러
+        
+        *   `cmd`\가 CCI_OID_DROP, CCI_OID_LOCK_READ 또는 CCI_OID_LOCK_WRITE인 경우
+      
+            에러 코드(0: 성공)
+        
+            *   **CCI_ER_CON_HANDLE**
+            *   **CCI_ER_CONNECT**
+            *   **CCI_ER_OID_CMD**
+            *   **CCI_ER_OBJECT**
+            *   **CCI_ER_DBMS**
 
 .. c:function:: int cci_oid_get(int conn_handle, char *oid_str, char **attr_name, T_CCI_ERROR *err_buf)
 
@@ -2298,11 +2300,11 @@ CCI API 레퍼런스
 
     DB 사용자 이름과 암호는 **user** 와 **password** 값을 직접 지정하거나 **url** 속성 내에서 **user** 와 **password** 값을 지정한다. 두 가지 경우가 같이 사용되는 경우 우선 순위는 다음과 같다.
     
-    * 둘 다 입력되면 직접 지정하는 값이 우선한다. 
-    * 둘 중 하나가 NULL이면 NULL이 아닌 값이 사용된다. 
-    * 둘 다 NULL이면 NULL 값으로 사용된다. 
-    * DB 사용자를 직접 지정한 값이 NULL이면 "public", 암호를 직접 지정한 값이 NULL이면 NULL로 설정된다.
-    * 암호를 직접 지정한 값이 NULL이면 URL의 설정을 따른다. 
+    *   둘 다 입력되면 직접 지정하는 값이 우선한다. 
+    *   둘 중 하나가 NULL이면 NULL이 아닌 값이 사용된다. 
+    *   둘 다 NULL이면 NULL 값으로 사용된다. 
+    *   DB 사용자를 직접 지정한 값이 NULL이면 "public", 암호를 직접 지정한 값이 NULL이면 NULL로 설정된다.
+    *   암호를 직접 지정한 값이 NULL이면 URL의 설정을 따른다. 
     
     다음 예제에서 DB 사용자 이름은 "dba", 암호는 "cubridpwd" 가 된다.
     
@@ -2863,7 +2865,7 @@ CCI API 레퍼런스
     *   class_name이 "항상 NULL"인 type은 테이블 이름에 대해 패턴 매칭을 지원하지 않는다.
     *   attr_name이 "항상 NULL"인 type은 칼럼 이름에 대해 패턴 매칭을 지원하지 않는다.
     *   패턴 *flag* 가 설정되지 않을 경우 주어진 테이블 이름 또는 칼럼 이름은 동등 조건(=) 매칭을 사용하므로 **NULL** 이 주어지면 결과는 없다. 
-    *   패턴 *flag* 가 설정되어 있을 경우 테이블 이름 또는 칼럼 이름이 **NULL** 이면 **LIKE** 절의 "%"와 동일한 결과, 즉 모든 테이블 또는 칼럼에 대한 결과를 얻는다.
+    *   패턴 *flag* 가 설정되어 있을 경우 테이블 이름 또는 칼럼 이름이 **NULL**\이면 **LIKE** 절의 "%"와 동일한 결과, 즉 모든 테이블 또는 칼럼에 대한 결과를 얻는다.
 
     .. note::
 

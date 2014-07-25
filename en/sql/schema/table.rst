@@ -649,6 +649,7 @@ You cannot create the column definition because the **CREATE TABLE ... LIKE** st
 
 * *new_table_name*: A table name to be created
 * *source_table_name*: The name of the original table that already exists in the database. The following tables cannot be specified as original tables in the **CREATE TABLE ??LIKE** statement.
+
     * Partition table
     * Table that contains an **AUTO_INCREMENT** column
     * Table that uses inheritance or methods

@@ -16,15 +16,15 @@ ROWNUM, INST_NUM
 
 **ROWNUM** 함수는 결과 타입이 정수형이고, **SELECT** 절과 **WHERE** 절과 같이 질의 내에 수식이 위치할 수 있는 모든 곳에 사용할 수 있다. 하지만, **ROWNUM** 함수 결과를 속성 또는 연관된 부질의(correlated subquery)와 비교하는 것은 허용되지 않는다.
 
-**참고 사항**
+.. note::
 
-*   **WHERE** 절에 명시된 **ROWNUM** 함수는 **INST_NUM()** 함수와 같은 의미를 가진다. **INST_NUM()** 함수는 스칼라(scalar) 함수이지만, **GROUPBY_NUM()** 함수는 집계 함수의 일종이다. **GROUP BY** 절을 가지는 **SELECT** 문에서는 **INST_NUM()** 대신에 **GROUPBY_NUM()** 을 사용해야 한다.
+    *   **WHERE** 절에 명시된 **ROWNUM** 함수는 **INST_NUM()** 함수와 같은 의미를 가진다. **INST_NUM()** 함수는 스칼라(scalar) 함수이지만, **GROUPBY_NUM()** 함수는 집계 함수의 일종이다. **GROUP BY** 절을 가지는 **SELECT** 문에서는 **INST_NUM()** 대신에 **GROUPBY_NUM()** 을 사용해야 한다.
 
-*   **ROWNUM** 함수는 각각의 **SELECT** 문장에 종속된다. 즉, **ROWNUM** 함수가 부질의에 쓰인 경우, 부질의를 수행하는 동안에 부질의 결과에 대하여 일련 번호를 반환한다. 내부적으로, **ROWNUM** 함수 결과는 조회된 레코드를 질의 결과 셋에 쓰기 직전에 생성된다. 이 순간에 질의 결과 셋의 레코드에 대한 일련 번호를 생성하는 카운터 값이 증가된다.
+    *   **ROWNUM** 함수는 각각의 **SELECT** 문장에 종속된다. 즉, **ROWNUM** 함수가 부질의에 쓰인 경우, 부질의를 수행하는 동안에 부질의 결과에 대하여 일련 번호를 반환한다. 내부적으로, **ROWNUM** 함수 결과는 조회된 레코드를 질의 결과 셋에 쓰기 직전에 생성된다. 이 순간에 질의 결과 셋의 레코드에 대한 일련 번호를 생성하는 카운터 값이 증가된다.
 
-*   **SELECT** 문에 **ORDER BY** 절이 포함된 경우 **WHERE** 절에 명시된 **ROWNUM** 함수의 값은 **ORDER BY** 절 처리를 위한 정렬 과정 전에 생성된다. **SELECT** 문에 **GROUP BY** 절이 포함된 경우에는 **HAVING** 절에 명시된 **GROUPBY_NUM()** 함수의 값은 질의 결과가 그룹화된 이후에 계산된다. **ORDER BY** 절에 의한 정렬 과정이 완료된 이후에 결과 레코드의 일련 번호를 얻어내기 위해서는 **ORDER BY** 절에 **LIMIT** 절을 사용해야 한다.
+    *   **SELECT** 문에 **ORDER BY** 절이 포함된 경우 **WHERE** 절에 명시된 **ROWNUM** 함수의 값은 **ORDER BY** 절 처리를 위한 정렬 과정 전에 생성된다. **SELECT** 문에 **GROUP BY** 절이 포함된 경우에는 **HAVING** 절에 명시된 **GROUPBY_NUM()** 함수의 값은 질의 결과가 그룹화된 이후에 계산된다. **ORDER BY** 절에 의한 정렬 과정이 완료된 이후에 결과 레코드의 일련 번호를 얻어내기 위해서는 **ORDER BY** 절에 **LIMIT** 절을 사용해야 한다.
 
-*   **ROWNUM** 함수는 **SELECT** 문 뿐만 아니라 **INSERT**, **DELETE**, **UPDATE** 와 같은 SQL 문에도 쓸 수 있다. 예를 들어, **INSERT INTO** *table_name* **SELECT** ... **FROM** ... **WHERE** ... 질의와 같이 한 테이블의 행(row) 중 일부를 조회하여 다른 테이블에 삽입하고자 할 때, **WHERE** 절에 **ROWNUM** 함수를 사용할 수 있다.
+    *   **ROWNUM** 함수는 **SELECT** 문 뿐만 아니라 **INSERT**, **DELETE**, **UPDATE** 와 같은 SQL 문에도 쓸 수 있다. 예를 들어, **INSERT INTO** *table_name* **SELECT** ... **FROM** ... **WHERE** ... 질의와 같이 한 테이블의 행(row) 중 일부를 조회하여 다른 테이블에 삽입하고자 할 때, **WHERE** 절에 **ROWNUM** 함수를 사용할 수 있다.
 
 다음은 *demodb* 에서 1988 올림픽에서 금메달 개수를 기준으로 4위권 국가 이름을 반환하는 예제이다.
 

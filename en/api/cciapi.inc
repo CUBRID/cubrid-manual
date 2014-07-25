@@ -1975,18 +1975,25 @@ CCI API Reference
     :param err_buf: (OUT) Database error buffer        
     :return: 
 
-      * **SELECT** : The number of results
-      * **INSERT**, **UPDATE** : The number of records reflected
-      * Others : 0
-      * Failure : Error code
+      *     **SELECT** : The number of results
+      *     **INSERT**, **UPDATE** : The number of records reflected
+      *     Others : 0
+      *     Failure : Error code
     
-        * **CCI_ER_REQ_HANDLE**
-        * **CCI_ER_DBMS**
-        * **CCI_ER_COMMUNICATION**
+            *   **CCI_ER_REQ_HANDLE**
+            *   **CCI_ER_DBMS**
+            *   **CCI_ER_COMMUNICATION**
 
     The error code **CAS_ER_NO_MORE_RESULT_SET** means that no more result set exists.
 
 .. c:function:: int cci_oid(int conn_handle, T_CCI_OID_CMD cmd, char *oid_str, T_CCI_ERROR *err_buf)
+
+    By the value of `cmd` argument, it executes the following behavior.
+
+    *   CCI_OID_DROP: Deletes the given oid.
+    *   CCI_OID_IS_INSTANCE: Checks whether the given oid is an instance oid.
+    *   CCI_OID_LOCK_READ: Sets read lock on the given oid.
+    *   CCI_OID_LOCK_WRITE: Sets write lock on the given oid.
 
     :param conn_handle: (IN) Connection handle
     :param cmd: (IN) CCI_OID_DROP, CCI_OID_IS_INSTANCE, CCI_OID_LOCK_READ, CCI_OID_LOCK_WRITE
@@ -1994,26 +2001,21 @@ CCI API Reference
     :param err_buf: (OUT) Database error buffer        
     :return: 
 
-      * CCI_OID_IS_INSTANCE
+        *   when `cmd` is CCI_OID_IS_INSTANCE
       
-        *   0 : Non-instance
-        *   1 : Instance
-        *   < 0 : error
+            *   0 : Non-instance
+            *   1 : Instance
+            *   < 0 : error
 
-      * CCI_OID_DROP, CCI_OID_LOCK_READ, CCI_OID_LOCK_WRITE
+        *   when `cmd` is CCI_OID_DROP, CCI_OID_LOCK_READ or CCI_OID_LOCK_WRITE
       
-        *   Error code (0: success)
+            Error code (0: success)
         
-        *   **CCI_ER_CON_HANDLE**
-        *   **CCI_ER_CONNECT**
-        *   **CCI_ER_OID_CMD**
-        *   **CCI_ER_OBJECT**
-        *   **CCI_ER_DBMS**
-
-    * CCI_OID_DROP: Deletes the given oid.
-    * CCI_OID_IS_INSTANCE: Checks whether the given oid is an instance oid.
-    * CCI_OID_LOCK_READ: Sets read lock on the given oid.
-    * CCI_OID_LOCK_WRITE: Sets write lock on the given oid.
+            *   **CCI_ER_CON_HANDLE**
+            *   **CCI_ER_CONNECT**
+            *   **CCI_ER_OID_CMD**
+            *   **CCI_ER_OBJECT**
+            *   **CCI_ER_DBMS**
 
 .. c:function:: int cci_oid_get(int conn_handle, char *oid_str, char **attr_name, T_CCI_ERROR *err_buf)
 
@@ -2304,11 +2306,11 @@ CCI API Reference
 
     The following shows how to work as the first priority if both are specified.
     
-    * If both are specified, the value of direct setting will be first.
-    * If one of them is NULL, the value which is not NULL is used.
-    * If both are NULL, they are used as NULL value.
-    * If the direct setting value of DB user is NULL then "public" is used, else if the direct setting value of the password is NULL then NULL is used.
-    * If the direct setting value of the password is NULL, it follows the setting of URL.
+    *   If both are specified, the value of direct setting will be first.
+    *   If one of them is NULL, the value which is not NULL is used.
+    *   If both are NULL, they are used as NULL value.
+    *   If the direct setting value of DB user is NULL then "public" is used, else if the direct setting value of the password is NULL then NULL is used.
+    *   If the direct setting value of the password is NULL, it follows the setting of URL.
     
     The following shows that the DB user's name becomes "dba" and the password becomes "cubridpwd".
     

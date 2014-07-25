@@ -1072,12 +1072,12 @@ Connection Process
 
 When a broker accesses DB server, it tries the primary connection; if it fails, it tries the secondary connection.
 
-*  The primary connection: Check the DB status(active/standby) and the delay of replication.
+*   The primary connection: Check the DB status(active/standby) and the delay of replication.
 
     1.  A broker tries to connect as the order specified by **PREFERRED_HOSTS**. The broker rejects connecting to the improper DB of which the status does not match with **ACCESS_MODE** or in which the replication is delayed.
     2.  By the **CONNECT_ORDER**, a broker tries to connect to the host in the order specified in **databases.txt** or the random order. The broker checks the DB status followed by the **ACCESS_MODE** and checks the replication-delayed host up to the number specified in **MAX_NUM_DELAYED_HOSTS_LOOKUP**.
 
-*  The secondary connection: Ignore the DB status(active/standby) and the delay of replication. However, SO broker always accepts to connect only to standby DB.
+*   The secondary connection: Ignore the DB status(active/standby) and the delay of replication. However, SO broker always accepts to connect only to standby DB.
 
     1.  A broker tries to connect as the order specified by **PREFERRED_HOSTS**. The broker accepts connecting to the improper DB of which status does not match with **ACCESS_MODE** or in which the replication is delayed. However, SO broker can never connect to active DB.
     2.  By the **CONNECT_ORDER**, a broker tries to connect to the host in the order specified in **databases.txt** or the random order. The broker ignores the DB status(active/standby) and the delay of replication; it is connected if possible.
@@ -1375,7 +1375,7 @@ prefetchlogdb
 **prefetchlogdb** utility performs the job to read the indexes of replicated logs and data pages which will be applied to a slave node or a replica node by **applylogdb** process in advance, and to load them into the database buffer.
 Therefore, if you start this utility, applied speed of replicated logs in **applylogdb** process is improved.
 
-To run **prefetchlogdb** process, the value of **ha_prefetchlogdb_enable** parameter in cubrid_ha.conf should be **yes**(Default: **no**).
+To run **prefetchlogdb** process, the value of **ha_prefetchlogdb_enable** parameter in cubrid_ha.conf should be **yes** (Default: **no**).
 If the value of **ha_prefetchlogdb_enable** parameter is yes, **prefetchlogdb** will be started together with **copylogdb** and **applylogdb** when **cubrid heartbeat start** command is executed.
 
 If you want to start/stop **prefetchlogdb** process only, do not specify the value of **ha_prefetchlogdb_enable** or specify this value as **no**. The usage is as follows.

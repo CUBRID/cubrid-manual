@@ -11,7 +11,7 @@ To recover all database pages, control files and the database to the state at th
 
 *   @\ *hostname*: It is omitted when you do backup in standalone mode. If you do backup on the HA environment, specify "@\ *hostname*" after the database name. *hostname* is a name specified in $CUBRID_DATABASES/databases.txt. If you want to setup a local server, you can specify it as "@localhost".
 
-The following table shows options available with the **cubrid backupdb** utility (options are case sensitive).
+The following shows options available with the **cubrid backupdb** utility (options are case sensitive).
 
 .. program:: backupdb
 

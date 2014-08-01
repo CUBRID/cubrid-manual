@@ -11,7 +11,7 @@ backupdb
 
 *   @\ *hostname*: 독립(Standalone) 모드 DB를 백업하는 경우 생략되며, HA 환경에서 백업하는 경우 데이터베이스 이름 뒤에 "@\ *hostname*"\ 을 지정한다. *hostname*\ 은 $CUBRID_DATABASES/databases.txt에 지정된 이름이다. 로컬 서버를 설정하려면 "@localhost"를 지정하면 된다.
     
-다음은 **cubrid backupdb** 유틸리티와 결합할 수 있는 옵션을 정리한 표이다. 대소문자가 구분됨을 주의한다.
+다음은 **cubrid backupdb** 유틸리티와 결합할 수 있는 옵션이다. 대소문자가 구분됨을 주의한다.
 
 .. program:: backupdb
 

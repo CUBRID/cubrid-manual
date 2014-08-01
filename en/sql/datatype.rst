@@ -752,7 +752,7 @@ CUBRID supports the following two types of character strings:
 *   Fixed-length character string: **CHAR** (*n*)
 *   Variable-length character string: **VARCHAR** (*n*)
 
-.. note:: From CUBRID 9.0 version, **NCHAR**, **NCHAR VARYING** is the same with **CHAR**, **VARCHAR**.
+.. note:: From CUBRID 9.0 version, **NCHAR** and **NCHAR VARYING** is no more supported. Instead, please use **CHAR** and **VARCHAR**.
 
 The following are the rules that are applied when using the character string types.
 
@@ -858,24 +858,6 @@ STRING
 ------
 
 **STRING** is a variable-length character string data type. **STRING** is the same as the VARCHAR with the length specified as the maximum value. That is, **STRING** and **VARCHAR** (1,073,741,823) have the same value.
-
-NCHAR(n)
---------
-
-**NCHAR** (*n*) is the same with **CHAR** (*n*).
-
-.. note::
-
-    This type had been used to input the data for the languages except English before CUBRID 9.0 version. However, from 9.0, as the charset and the collation by the locale setting are supported, this type remained only for the syntax compatibility. Therefore, if you create a new schema, it is recommended to use **CHAR** instead of this type.
-
-NCHAR VARYING(n)
-----------------
-
-**NCHAR VARYING** (*n*) is the same with **VARCHAR** (*n*).
-
-.. note::
-
-    This type had been used to input the data for the languages except English before CUBRID 9.0 version. However, from 9.0, as the charset and the collation by the locale setting are supported, this type remained only for the syntax compatibility. Therefore, if you create a new schema, it is recommended to use **VARCHAR** instead of this type.
 
 .. _escape-characters:
 

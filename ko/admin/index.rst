@@ -20,23 +20,23 @@ CUBRID 운영
 
 *   서비스 유틸리티: 마스터 프로세스를 구동 및 관리한다.
 
-    *   cubrid service
+    *   :ref:`cubrid service <control-cubrid-services>`
 
 *   서버 유틸리티: 서버 프로세스를 구동 및 관리한다.
 
-    *   cubrid server
-    
+    *   :ref:`cubrid server <control-cubrid-server>`
+
 *   브로커 유틸리티: 브로커 프로세스 및 응용서버(CAS) 프로세스를 구동 및 관리한다.
 
-    *   cubrid broker
-    
+    *   :ref:`cubrid broker <broker>`
+
 *   매니저 유틸리티: 매니저 서버 프로세스를 구동 및 관리한다.
 
-    *   cubrid manager
-    
+    *   :ref:`cubrid manager <cubrid-manager-server>`
+
 *   HA 유틸리티: HA 관련 프로세스를 구동 및 관리한다.
 
-    *   cubrid heartbeat
+    *   :ref:`cubrid heartbeat <cubrid-heartbeat>`
 
 자세한 설명은 :ref:`control-cubrid-processes` 절을 참조한다.
 
@@ -44,62 +44,62 @@ CUBRID 운영
 
 *   데이터베이스 생성, 볼륨 추가, 삭제 
 
-    *   cubrid createdb
-    *   cubrid addvoldb
-    *   cubrid deletedb
-    
+    *   :ref:`cubrid createdb <createdb>`
+    *   :ref:`cubrid addvoldb <addvoldb>`
+    *   :ref:`cubrid deletedb <deletedb>`
+
 *   데이터베이스 이름 변경, 호스트 변경, 복사/이동, 등록 
 
-    *   cubrid renamedb
-    *   cubrid alterdbhost
-    *   cubrid copydb
-    *   cubrid installdb
+    *   :ref:`cubrid renamedb <renamedb>`
+    *   :ref:`cubrid alterdbhost <alterdbhost>`
+    *   :ref:`cubrid copydb <copydb>`
+    *   :ref:`cubrid installdb <installdb>`
 
 *   데이터베이스 백업
 
-    *   cubrid backupdb
+    *   :ref:`cubrid backupdb <backupdb>`
 
 *   데이터베이스 복구
 
-    *   cubrid restoredb
+    *   :ref:`cubrid restoredb <restoredb>`
 
 *   내보내기와 가져오기
 
-    *   cubrid unloaddb
-    *   cubrid loaddb
+    *   :ref:`cubrid unloaddb <unloaddb>`
+    *   :ref:`cubrid loaddb <loaddb>`
     
 *   데이터베이스 공간 확인, 공간 정리 
 
-    *   cubrid spacedb
-    *   cubrid compactdb
-    
+    *   :ref:`cubrid spacedb <spacedb>`
+    *   :ref:`cubrid compactdb <compactdb>`
+
 *   통계 정보 갱신, 질의 계획 확인 
 
-    *   cubrid plandump
-    *   cubrid optimizedb
-    *   cubrid statdump
-    
+    *   :ref:`cubrid plandump <plandump>`
+    *   :ref:`cubrid optimizedb <optimizedb>`
+    *   :ref:`cubrid statdump <statdump>`
+
 *   잠금 확인, 트랜잭션 확인, 트랜잭션 제거 
 
-    *   cubrid lockdb
-    *   cubrid tranlist
-    *   cubrid killtran
+    *   :ref:`cubrid lockdb <lockdb>`
+    *   :ref:`cubrid tranlist <tranlist>`
+    *   :ref:`cubrid killtran <killtran>`
 
 *   데이터베이스 진단/파라미터 출력 
 
-    *   cubrid checkdb
-    *   cubrid diagdb
-    *   cubrid paramdump
+    *   :ref:`cubrid checkdb <checkdb>`
+    *   :ref:`cubrid diagdb <diagdb>`
+    *   :ref:`cubrid paramdump <paramdump>`
 
 *   HA 모드 변경,로그 복제/반영
 
-    *   cubrid changemode
-    *   cubrid applyinfo
+    *   :ref:`cubrid changemode <cubrid-changemode>`
+    *   :ref:`cubrid applyinfo <cubrid-applyinfo>`
 
 *   로캘 컴파일/출력
 
-    *   cubrid genlocale
-    *   cubrid dumplocale
+    *   :ref:`cubrid genlocale <locale-command>`
+    *   :ref:`cubrid dumplocale <dumplocale>`
 
 자세한 설명은 :ref:`cubrid-utilities` 를 참조한다.
 

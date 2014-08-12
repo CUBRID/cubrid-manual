@@ -491,6 +491,8 @@ When issuing the command "**cubrid createdb** <*db_name*>  <*locale_name.charset
 
 Once the database is created a locale setting which was given to the database cannot be changed. The charset and locale name are stored in "**db_root**" system catalog table.
 
+.. _dumplocale:
+
 Step 5 (optional): Manually Verifying the Locale File
 -----------------------------------------------------
 

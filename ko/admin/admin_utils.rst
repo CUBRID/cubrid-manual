@@ -42,6 +42,8 @@ CUBRID는 cubrid 유틸리티의 수행 결과에 대한 로깅 기능을 제공
 
 .. _creating-database:
 
+.. _createdb:
+
 createdb
 --------
 
@@ -422,6 +424,8 @@ deletedb
 
         cubrid deletedb -d testdb
 
+.. _renamedb:
+
 renamedb
 --------
 
@@ -483,6 +487,8 @@ renamedb
 
         cubrid renamedb -d testdb testdb_1
 
+.. _alterdbhost:
+
 alterdbhost
 -----------
 
@@ -501,6 +507,8 @@ alterdbhost
 .. option:: -h, --host=HOST
 
     뒤에 변경할 호스트 이름을 지정하며, 옵션을 생략하면 호스트 이름으로 localhost를 지정한다.
+
+.. _copydb:
 
 copydb
 ------
@@ -592,6 +600,8 @@ copydb
     **-B** 옵션을 사용하여 특정 디렉터리를 새로운 데이터베이스에 대한 **LOB** 파일 디렉터리 경로를 지정한다. 원본 데이터베이스에 있던 **LOB** 파일들은 사용자가 직접 이 디렉터리에 복사해야 한다. 이 옵션은 **--copy-lob-path** 옵션과 병행할 수 없다. ::
 
         cubrid copydb -B /home/usr/CUBRID/databases/new_lob demodb new_demodb
+
+.. _installdb:
 
 installdb
 ---------
@@ -855,6 +865,8 @@ compactdb
 
     클래스 잠금 타임아웃 값을 지정할 수 있다. 기본값은 **10** (초)이며, 최소값은 1, 최대 값은 10이다. 설정된 시간동안 잠금 테이블을 대기하므로, 옵션 값이 작을수록 작업 속도는 향상될 수 있으나 처리 가능한 테이블 개수가 적어진다. 반면, 옵션 값이 클수록 작업 속도는 저하되나 더 많은 테이블에 대해 작업을 수행할 수 있다.
 
+.. _optimizedb:
+
 optimizedb
 ----------
 
@@ -881,6 +893,8 @@ CUBRID의 질의 최적화기가 사용하는 테이블에 있는 객체들의 �
 다음은 대상 데이터베이스의 전체 클래스의 질의 통계 정보를 업데이트하는 명령이다. ::
 
     cubrid optimizedb testdb
+
+.. _plandump:
 
 plandump
 --------
@@ -1692,6 +1706,8 @@ checkdb
     검사 대상 테이블에 대해 해당 옵션으로 명시한 인덱스가 유효한지 검사한다. 이 옵션을 사용하면 힙 파일에 대한 유효 검사는 하지 않는다. 
     이 옵션을 사용할 때는 하나의 테이블과 하나의 인덱스만을 허용하며, 테이블 이름을 입력하지 않거나 두 개 이상의 테이블 이름을 입력하면 에러를 반환한다. 
 
+.. _diagdb:
+
 diagdb
 ------
 
@@ -1740,6 +1756,8 @@ diagdb
     +--------+------------------------------------+
     | 9      | 힙(heap) 정보를 출력한다.          |
     +--------+------------------------------------+
+
+.. _paramdump:
 
 paramdump
 ---------
@@ -1790,6 +1808,8 @@ HA 명령어
 **cubrid applyinfo** 유틸리티는 HA 환경에서 트랜잭션 로그 반영 정보를 확인하는 유틸리티이다.
 
 자세한 사용법은 :ref:`cubrid-service-util` 을 참고한다.
+
+.. _locale-command:
 
 로캘 명령어
 -----------

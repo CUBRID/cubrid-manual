@@ -20,23 +20,23 @@ The service management utilities are as follows:
 
 *   Service utility : Operates and manages the master process.
 
-    *   cubrid service
+    *   :ref:`cubrid service <control-cubrid-services>`
 
 *   Server utility : Operates and manages the server process.
 
-    *   cubrid server
+    *   :ref:`cubrid server <control-cubrid-server>`
 
 *   Broker utility : Operates and manages the broker process and application server (CAS) process.
 
-    *   cubrid broker
+    *   :ref:`cubrid broker <broker>`
 
 *   Manager utility : Operates and manages the manager server process.
 
-    *   cubrid manager
+    *   :ref:`cubrid manager <cubrid-manager-server>`
 
 *   HA utility : Operates and manages the HA-related processes.
 
-    *   cubrid heartbeat
+    *   :ref:`cubrid heartbeat <cubrid-heartbeat>`
 
 See :ref:`control-cubrid-processes` for details.
 
@@ -44,62 +44,62 @@ The database management utilities are as follows:
 
 *   Creating database, adding volume, and deleting database
 
-    *   cubrid createdb
-    *   cubrid addvoldb
-    *   cubrid deletedb
+    *   :ref:`cubrid createdb <createdb>`
+    *   :ref:`cubrid addvoldb <addvoldb>`
+    *   :ref:`cubrid deletedb <deletedb>`
 
 *   Renaming database, altering host, copying/moving database, and registering database
 
-    *   cubrid renamedb
-    *   cubrid alterdbhost
-    *   cubrid copydb
-    *   cubrid installdb
+    *   :ref:`cubrid renamedb <renamedb>`
+    *   :ref:`cubrid alterdbhost <alterdbhost>`
+    *   :ref:`cubrid copydb <copydb>`
+    *   :ref:`cubrid installdb <installdb>`
 
 *   Backing up database
 
-    *   cubrid backupdb
+    *   :ref:`cubrid backupdb <backupdb>`
 
 *   Restoring database
 
-    *   cubrid restoredb
+    *   :ref:`cubrid restoredb <restoredb>`
 
 *   Unloading and Loading database
 
-    *   cubrid unloaddb
-    *   cubrid loaddb
+    *   :ref:`cubrid unloaddb <unloaddb>`
+    *   :ref:`cubrid loaddb <loaddb>`
     
 *   Checking and compacting database space
 
-    *   cubrid spacedb
-    *   cubrid compactdb
+    *   :ref:`cubrid spacedb <spacedb>`
+    *   :ref:`cubrid compactdb <compactdb>`
 
 *   Updating statistics and checking query plan
 
-    *   cubrid plandump
-    *   cubrid optimizedb
-    *   cubrid statdump
+    *   :ref:`cubrid plandump <plandump>`
+    *   :ref:`cubrid optimizedb <optimizedb>`
+    *   :ref:`cubrid statdump <statdump>`
 
 *   Checking database lock, checking transaction and killing transaction
 
-    *   cubrid lockdb
-    *   cubrid tranlist
-    *   cubrid killtran
+    *   :ref:`cubrid lockdb <lockdb>`
+    *   :ref:`cubrid tranlist <tranlist>`
+    *   :ref:`cubrid killtran <killtran>`
 
 *   Diagnosing database and dumping parameter
 
-    *   cubrid checkdb
-    *   cubrid diagdb
-    *   cubrid paramdump
+    *   :ref:`cubrid checkdb <checkdb>`
+    *   :ref:`cubrid diagdb <diagdb>`
+    *   :ref:`cubrid paramdump <paramdump>`
 
 *   Changing HA mode, replicating/applying logs 
 
-    *   cubrid changemode
-    *   cubrid applyinfo
+    *   :ref:`cubrid changemode <cubrid-changemode>`
+    *   :ref:`cubrid applyinfo <cubrid-applyinfo>`
 
 *   Compiling/Outputting locale
 
-    *   cubrid genlocale
-    *   cubrid dumplocale
+    *   :ref:`cubrid genlocale <locale-command>`
+    *   :ref:`cubrid dumplocale <dumplocale>`
 
 See :ref:`cubrid-utilities` for details.
 

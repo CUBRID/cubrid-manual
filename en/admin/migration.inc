@@ -1,4 +1,4 @@
-.. _unload-db:
+.. _unloaddb:
     
 unloaddb
 --------
@@ -131,7 +131,7 @@ The following is [options] used in **cubrid unloaddb**.
 
         cubrid unloaddb --datafile-per-class demodb
 
-.. _load-db:
+.. _loaddb:
 
 loaddb
 ------
@@ -432,7 +432,7 @@ The following section explains migration steps using the **cubrid unloaddb** and
 
 **Recommended Scenario and Procedures**
 
-The following steps describes migration scenario that can be applied while the existing version of CUBRID is running. For database migration, you should use the **cubrid unloaddb** and **cubrid loaddb** utilities. For details, see :ref:`unload-db` and :ref:`load-db`.
+The following steps describes migration scenario that can be applied while the existing version of CUBRID is running. For database migration, you should use the **cubrid unloaddb** and **cubrid loaddb** utilities. For details, see :ref:`unloaddb` and :ref:`loaddb`.
 
 #. Stop the existing CUBRID service
 
@@ -446,7 +446,7 @@ The following steps describes migration scenario that can be applied while the e
 
 #. Unload the existing database
 
-    Unload the database created for the existing version of CUBRID by using the **cubrid unloaddb** utility. For details on unloading a database, see :ref:`unload-db` .
+    Unload the database created for the existing version of CUBRID by using the **cubrid unloaddb** utility. For details on unloading a database, see :ref:`unloaddb` .
 
 #. Store the existing CUBRID configuration files
 
@@ -462,7 +462,7 @@ The following steps describes migration scenario that can be applied while the e
 
 #. Load the new database
 
-    Create a database by using the **cubrid createdb** utility and then load the data which had previously been unloaded into the new database by using the **cubrid loaddb** utility. Please see :ref:`creating-database` for creating a database and :ref:`load-db` for loading a database.
+    Create a database by using the **cubrid createdb** utility and then load the data which had previously been unloaded into the new database by using the **cubrid loaddb** utility. Please see :ref:`creating-database` for creating a database and :ref:`loaddb` for loading a database.
 
 #. Back up the new database
 

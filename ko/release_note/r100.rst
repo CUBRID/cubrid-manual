@@ -26,6 +26,21 @@ CUBRID 10.0은 CUBRID 9.2 이하 버전과 데이터베이스 볼륨이 호환�
 운영 편의성 개선
 ----------------
 
+복제 동기화 잠금을 획득하지 못하는 경우의 에러 로그 레벨을 NOTIFICATION 에서 ERROR로 변경(CUBRIDSUS-14156)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+복제 동기화 잠금을 영구히 획득할 수 없어서 복제 반영이 멈춘 경우에도, 에러 로그 레벨에 따라서 에러 로그가 기록되지 않는 문제가 있다. 
+이 상황을 사용자가 감시할 수 있도록 해당 메시지에 대한 에러 로그 수준을 NOTIFICATION에서 ERROR로 변경했다. 
+해당 에러 메시지는 applylogdb의 에러 로그 파일($CUBRID/log/<db-name>@<local-node-name>_applylogdb_<db-name>_<remote-node-name>.err )에 출력된다. 
+
+:: 
+
+    Unable to mount disk volume "/home/cubrid/CUBRID/var/APPLYLOGDB/testdb". The database "testdb", to which the disk volume belongs, is in use by user - on process 13223 of host - since -. 
+  
+복제 동기화 잠금을 영구히 획득할 수 없는 경우는 아래와 같다. 
+
+*   기존 HA 그룹으로 구성되어 복제 반영 중이던 노드가 제거된 경우 
+*   기존 HA 그룹으로 구성되어 복제 반영 중이던 노드의 이름이 변경된 경우 
 
 SQL 함수 및 구문 추가
 ---------------------

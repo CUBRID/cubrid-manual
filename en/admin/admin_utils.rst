@@ -44,6 +44,8 @@ CUBRID supports logging feature for the execution result of **cubrid** utilities
 
 .. _creating-database:
 
+.. _createdb:
+
 createdb
 --------
 
@@ -287,6 +289,8 @@ The following example shows how to create a database, classify volume usage, and
 
 .. _adding-database-volume:
 
+.. _addvoldb:
+
 addvoldb
 --------
 
@@ -384,6 +388,8 @@ The following shows [options] available with the **cubrid addvoldb** utility.
 
 .. _deleting-database:
 
+.. _deletedb:
+
 deletedb
 --------
 
@@ -419,6 +425,8 @@ The following shows [options] available with the **cubrid deletedb** utility.
     This option deletes database volumes, backup volumes and backup information files simultaneously. If the -**d** option is not specified, backup volume and backup information files are not deleted. ::
     
         cubrid deletedb -d testdb
+
+.. _renamedb:
 
 renamedb
 --------
@@ -481,6 +489,8 @@ The following shows [options] available with the **cubrid deletedb** utility.
 
         cubrid renamedb -d testdb testdb_1
 
+.. _alterdbhost:
+
 alterdbhost
 -----------
 
@@ -499,6 +509,8 @@ The following shows the option available with the **cubrid alterdbhost** utility
 .. option:: -h, --host=HOST
 
     The *-h* option specifies the host name to be changed. When this option is omitted, specifies the host name to localhost.
+
+.. _copydb:
 
 copydb
 ------
@@ -590,6 +602,8 @@ The following shows [options] available with the **cubrid copydb** utility.
     If the **-B** option is specified, a specified directory is specified as for LOB files of a new database and a source database is copied. This option cannot be used with the **--copy-lob-path** option. ::
 
         cubrid copydb -B /home/usr/CUBRID/databases/new_lob demodb new_demodb
+
+.. _installdb:
 
 installdb
 ---------
@@ -760,6 +774,8 @@ The following shows [options] available with the **cubrid spacedb** utility.
         -------------------------------------------------------------------------------------------------
              TOTAL     100.0 M       4.4 M      95.6 M       2.5 M       1.2 M       0.4 M          5
 
+.. _compactdb:
+
 compactdb
 ---------
 
@@ -826,6 +842,8 @@ The following options can be used in client/server mode only.
 
     You can specify a value of instance lock timeout with this option. The default value is 10 (seconds), the minimum value is 1, and the maximum value is 10. The less option value is specified, the more operation speeds up. However, the number of tables that can be processed becomes smaller, and vice versa. 
 
+.. _optimizedb:
+
 optimizedb
 ----------
 
@@ -852,6 +870,8 @@ The following shows [option] available with the **cubrid optimizedb** utility.
 The following example shows how to update the query statistics information of all classes in the database. ::
 
     cubrid optimizedb testdb
+
+.. _plandump:
 
 plandump
 --------
@@ -1562,6 +1582,8 @@ The following shows [options] available with the **cubrid killtran** utility.
 
         cubrid killtran -f -i 1 demodb
 
+.. _checkdb:
+
 checkdb
 -------
 
@@ -1661,6 +1683,8 @@ The following shows [options] available with the **cubrid checkdb** utility.
     Check if the index specified with this option about checking table. If you use this option, there is no heap validation check.
     Only one table and one index are permitted when you use this option; if you don't input a table name or input two tables, an error occurs.
 
+.. _diagdb:
+
 diagdb
 ------
 
@@ -1709,6 +1733,8 @@ The following shows [options] available with the **cubrid diagdb** utility.
     +------+--------------------------------------+
     | 9    | Displays heap information.           |
     +------+--------------------------------------+
+
+.. _paramdump:
 
 paramdump
 ---------
@@ -1759,6 +1785,8 @@ HA Commands
 **cubrid applyinfo** utility prints the information of applied transaction logs in the HA environment.
 
 For more details, see :ref:`cubrid-service-util`.
+
+.. _locale-command:
 
 Locale Commands
 ---------------

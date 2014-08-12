@@ -23,3 +23,4 @@ Operators and Functions
     information_fn.rst
     encryption_fn.rst
     condition_fn.rst
+    other_fn.rst

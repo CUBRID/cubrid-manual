@@ -339,6 +339,8 @@ However, in Windows, some cubrid commands are executed through a service process
 
 And, in Windows, a process run through the service process cannot print out an error message; therefore, for error messages related to the service start, you should definitely check them in the cubrid_utility.log file.
 
+.. _control-cubrid-server:
+
 Database Server
 ===============
 

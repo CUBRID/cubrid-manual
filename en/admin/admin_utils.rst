@@ -1163,6 +1163,20 @@ The following shows [options] available with the **cubrid statdump** utility.
     |                  +------------------------------------------+----------------------------------------------------------------------------------------+
     |                  | Num_query_objfetches                     | The number of fetch objects                                                            |
     +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
+    | Heap             | Num_heap_stats_bestspace_entries         | The number of best pages which are saved on the "best page" list                       |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_heap_stats_bestspace_maxed           | The maximum number of best pages which can be saved on the "best page" list            |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_heap_stats_sync_bestspace            | The updated number of the "best page" list.                                            |
+    |                  |                                          |                                                                                        |
+    |                  |                                          | "Best pages" means that the data pages of which the free space is more than 30%        |
+    |                  |                                          | in the environment of multiple INSERTs and DELETEs. Only some information of these     |
+    |                  |                                          | pages are saved as the "best page" list. In the "best page" list, the information of   |
+    |                  |                                          | a million pages is saved at once. This list is searched when INSERTing a record, and   |
+    |                  |                                          | then this list is updated when there are no free space to store this record on         |
+    |                  |                                          | the pages. If there are still no free space to store this record even this list is     |
+    |                  |                                          | updated for several times, this recored is stored into a new page.                     |
+    +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
     | Network request  | Num_network_requests                     | The number of network requested                                                        |
     |                  |                                          |                                                                                        |
     +------------------+------------------------------------------+----------------------------------------------------------------------------------------+

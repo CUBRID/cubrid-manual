@@ -1435,3 +1435,44 @@ Avg_page_free_space                 VARCHAR(64)     페이지 당 평균 여유 
             Total_free_space     : '15.9K'
             Avg_num_page_key     : 0
             Avg_page_free_space  : '15.9K'
+
+SHOW CRITICAL SECTION
+=====================
+
+특정 데이터베이스의 전체 크리티컬 섹션 정보를 출력한다.
+
+.. code-block:: sql
+
+    SHOW CRITICAL SECTION;
+
+::
+
+    Index  Name                  Num_holders           Num_waiting_readers  Num_waiting_writers  Owner_thread_index  Owner_tran_index     Total_enter_count    Total_waiter_count  Waiting_promoter_thread_index  Max_waiting_msecs     Total_waiting_msecs 
+    ============================================================================================================================================================================================================================================================
+        0  'ER_LOG_FILE'         'none'                                  0                    0                NULL              NULL                   217                     0                           NULL  0.000                 0.000               
+        1  'ER_MSG_CACHE'        'none'                                  0                    0                NULL              NULL                     0                     0                           NULL  0.000                 0.000               
+        2  'WFG'                 'none'                                  0                    0                NULL              NULL                     0                     0                           NULL  0.000                 0.000               
+        3  'LOG'                 'none'                                  0                    0                NULL              NULL                    11                     0                           NULL  0.000                 0.000               
+        4  'LOCATOR_CLASSNAME_TABLE'  'none'                                  0                    0                NULL              NULL                    33                     0                           NULL  0.000                 0.000               
+        5  'FILE_NEWFILE'        'none'                                  0                    0                NULL              NULL                    12                     0                           NULL  0.000                 0.000               
+        6  'QPROC_QUERY_TABLE'   'none'                                  0                    0                NULL              NULL                     3                     0                           NULL  0.000                 0.000               
+        7  'QPROC_QFILE_PGCNT'   'none'                                  0                    0                NULL              NULL                     0                     0                           NULL  0.000                 0.000               
+        8  'QPROC_XASL_CACHE'    'none'                                  0                    0                NULL              NULL                     5                     0                           NULL  0.000                 0.000               
+        9  'QPROC_LIST_CACHE'    'none'                                  0                    0                NULL              NULL                     1                     0                           NULL  0.000                 0.000               
+        10  'BOOT_SR_DBPARM'      'none'                                  0                    0                NULL              NULL                     3                     0                           NULL  0.000                 0.000               
+        11  'DISK_REFRESH_GOODVOL'  'none'                                  0                    0                NULL              NULL                     6                     0                           NULL  0.000                 0.000               
+        12  'CNV_FMT_LEXER'       'none'                                  0                    0                NULL              NULL                     0                     0                           NULL  0.000                 0.000               
+        13  'HEAP_CHNGUESS'       'none'                                  0                    0                NULL              NULL                    10                     0                           NULL  0.000                 0.000               
+        14  'SPAGE_SAVESPACE'     'none'                                  0                    0                NULL              NULL                     1                     0                           NULL  0.000                 0.000               
+        15  'TRAN_TABLE'          'none'                                  0                    0                NULL              NULL                     7                     0                           NULL  0.000                 0.000               
+        16  'CT_OID_TABLE'        'none'                                  0                    0                NULL              NULL                     0                     0                           NULL  0.000                 0.000               
+        17  'SCANID_BITMAP'       'none'                                  0                    0                NULL              NULL                     0                     0                           NULL  0.000                 0.000               
+        18  'LOG_FLUSH'           'none'                                  0                    0                NULL              NULL                     0                     0                           NULL  0.000                 0.000               
+        19  'HA_SERVER_STATE'     'none'                                  0                    0                NULL              NULL                     2                     0                           NULL  0.000                 0.000               
+        20  'COMPACTDB_ONE_INSTANCE'  'none'                                  0                    0                NULL              NULL                     0                     0                           NULL  0.000                 0.000               
+        21  'SESSION_STATE'       'none'                                  0                    0                NULL              NULL                     3                     0                           NULL  0.000                 0.000               
+        22  'ACL'                 'none'                                  0                    0                NULL              NULL                     0                     0                           NULL  0.000                 0.000               
+        23  'QPROC_FILTER_PRED_CACHE'  'none'                                  0                    0                NULL              NULL                     1                     0                           NULL  0.000                 0.000               
+        24  'PARTITION_CACHE'     'none'                                  0                    0                NULL              NULL                     1                     0                           NULL  0.000                 0.000               
+        25  'EVENT_LOG_FILE'      'none'                                  0                    0                NULL              NULL                     0                     0                           NULL  0.000                 0.000               
+        26  'ACCESS_STATUS'       'none'                                  0                    0                NULL              NULL                     1                     0                           NULL  0.000                 0.000               

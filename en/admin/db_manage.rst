@@ -118,3 +118,29 @@ The following is an example of files related to the database when testdb databas
 
     *   In the above, testdb_lgar_t, testdb_lgar22 and testdb_lgat are classified as the log volume files.
     *   File size is determined by "log_volume_size" in cubrid.conf or the "--log-volume-size" option of "cubrid createdb".
+
+.. note::
+
+    Temp volume is a space where the intermediate and final results of query processing and sorting are temporarily stored; this is separated as temporary temp volume and permanent temp volume.
+
+    The examples of queries that can use permanent temp volume or temporary temp volume are as follows:
+
+    *   Queries creating the resultset like **SELECT**
+    *   Queries including **GROUP BY** or **ORDER BY**
+    *   Queries including a subquery
+    *   Queries executing sort-merge join
+    *   Queries including the **CREATE INDEX** statement
+
+    When executing the queries above, the temp volume is used after exhausting the memory space (the space size is determined by the system parameter **temp_file_memory_size_in_pages** specified in **cubrid.conf**) assigned to store **SELECT** results or sort the data. The order in which the storage space is used to store the results of query processing and sorting is as follows: when the current storage space is exhausted, the next storage space is used.
+
+    *   **temp_file_memory_size_in_pages** memory secured by the system parameter
+    *   Permanent temp volume
+    *   Temporary temp volume (for details, see the below)
+
+    To prevent the system from insufficient disk space (as the size of temporary temp volume is increased than expected because a query which requires a big-sized temp space is executed), we recommend that     you should;
+    
+    *   secure the expected permanent temp volume in advance and 
+    *   limit the size of the space used in the temporary temp volume when a query is executed.
+    
+    Permanent temp volume secures this space as running "cubrid addvoldb -p temp", and the maximum temporary temp space which is occupied during a query runs can be limited by the **temp_file_max_size_in_pages** (default is -1, which means infinite) parameter in **cubrid.conf**.
+    

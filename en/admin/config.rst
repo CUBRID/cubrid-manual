@@ -597,7 +597,11 @@ The following are disk-related parameters for defining database volumes and stor
 
 **temp_file_max_size_in_pages**
 
-    **temp_file_max_size_in_pages** is a parameter to configure the maximum number of pages to store temporary volumes in the disk, which are used for the execution of complex queries or sorting; the default value is **-1**. If this parameter is configured to the default value, unlimited number of temporary temp volumes are created and stored in the directory specified by the **temp_volume_path** parameter. If it is configured to 0, the administrator must create permanent temp volumes manually by using the **cubrid addvoldb** utility because temporary temp volumes are not created automatically.
+    **temp_file_max_size_in_pages** is a parameter to configure the maximum number of pages to store temporary temp volumes in the disk, which are used for sorting during a query execution or creating an index; the default value is **-1**. Because the storage size of an intermediate result and the storage size of a final result are measured separately, if one of them are bigger than the specified size in this parameter, this query's execution is canceled as this shows an error.
+    
+    If this parameter is configured to the default value, unlimited number of temporary temp volumes are created and stored in the directory specified by the **temp_volume_path** parameter. If it is configured to 0, the administrator must create permanent temp volumes manually by using the **cubrid addvoldb** utility because temporary temp volumes are not created automatically.
+    
+    The temp volume which is required for a query execution is separated as a temporary temp volume and a permanent temp volume. This parameter is applied only to the temporary temp volume. To prevent the system from insufficient disk space (as the size of temporary temp volume is increased than expected because a query which requires a big-sized temp space is executed), we recommend that you should secure the expected permanent temp volume in advance and limit the size of the space used in the temporary temp volume when a query is executed.
 
 **temp_volume_path**
 

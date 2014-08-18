@@ -419,14 +419,14 @@ This command executes the checkpoint within the CSQL session. This command can o
 
 **Checkpoint** is an operation of flushing all dirty pages within the current data buffer to disks. You can also change the checkpoint interval using a command (**;set** *parameter_name* value) to set the parameter values in the CSQL session. You can see the examples of the parameter related to the checkpoint execution interval (**checkpoint_interval** and **checkpoint_every_size**). For more information, see :ref:`logging-parameters`. ::
 
-    csql> ;checkpoint
+    sysadm> ;checkpoint
     Checkpoint has been issued.
 
 **Transaction Monitoring Or Termination (;Killtran)**
 
 This command checks the transaction status information or terminates a specific transaction in the CSQL session. This command prints out the status information of all transactions on the screen if a parameter is omitted it terminates the transaction if a specific transaction ID is specified for the parameter. It can only be executed when a DBA group member, who is specified for the custom option (**-u** *user_name*), connects to the CSQL Interpreter in system administrator mode (**--sysadm**). ::
 
-    csql> ;killtran
+    sysadm> ;killtran
     Tran index      User name      Host name      Process id      Program name
     -------------------------------------------------------------------------------
           1(+)            dba      myhost             664           cub_cas
@@ -435,7 +435,7 @@ This command checks the transaction status information or terminates a specific 
           4(+)            dba      myhost             696              csql
           5(+)         public      myhost            6944              csql
      
-    csql> ;killtran 3
+    sysadm> ;killtran 3
     The specified transaction has been killed.
 
 **Restarting database (;REStart)**

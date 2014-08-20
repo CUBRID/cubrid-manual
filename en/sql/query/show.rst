@@ -1439,7 +1439,32 @@ The following shows the examples of this syntax.
 SHOW CRITICAL SECTION
 =====================
 
-Total critical section information of a database is printed.
+Total critical section (hereafter CS) information of a database is output.
+
+.. code-block:: sql
+
+    SHOW CRITICAL SECTION;
+
+This query has the following columns:
+
+=================================== =============== ======================================================================================================================================
+Column name                         Type            Description
+=================================== =============== ======================================================================================================================================
+Index                               INT             The index of CS
+Name                                VARCHAR(32)     The name of CS
+Num_holders                         VARCHAR(16)     The number of CS holders. This has one of these values: 'N readers', '1 writer', 'none'
+Num_waiting_readers                 INT             The number of waiting readers
+Num_waiting_writers                 INT             The number of waiting writers
+Owner_thread_index                  INT             The thread index of CS owner writer, NULL if no owner
+Owner_tran_index                    INT             Transaction index of CS owner writer, NULL if no owner
+Total_enter_count                   BIGINT          Total count of enterers
+Total_waiter_count                  BIGINT          Total count of waiters   
+Waiting_promoter_thread_index       INT             The thread index of waiting promoter, NULL if no waiting promoter
+Max_waiting_msecs                   NUMERIC(10,3)   Maximum waiting time (millisecond)
+Total_waiting_msecs                 NUMERIC(10,3)   Total waiting time (millisecond)
+=================================== =============== ======================================================================================================================================
+
+The following shows the examples of this syntax.
 
 .. code-block:: sql
 

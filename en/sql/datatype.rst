@@ -1,7 +1,3 @@
-**********
-Data Types
-**********
-
 Numeric Types
 =============
 
@@ -769,7 +765,7 @@ The following are the rules that are applied when using the character string typ
 
 *   If you want to include a single quote as part of a character string, enter two single quotes in a row. For example, the character string on the left is stored as the one on the right. ::
 
-    ''abcde''fghij'       'abcde'fghij
+    '''abcde''fghij'       'abcde'fghij
 
 *   The maximum size of the token for all the character strings is 16 KB.
 

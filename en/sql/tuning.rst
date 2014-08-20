@@ -1,7 +1,3 @@
-******************
-Query Optimization
-******************
-
 Updating Statistics
 ===================
 

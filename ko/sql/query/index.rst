@@ -1,6 +1,6 @@
-*******************
-데이터 조회 및 조작
-*******************
+*************
+데이터 조작문
+*************
 
 .. toctree::
     :maxdepth: 2
@@ -14,4 +14,4 @@
     merge.rst
     truncate.rst
     prepare.rst
-    show.rst
+    do.rst

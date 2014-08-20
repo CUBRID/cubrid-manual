@@ -1,11 +1,11 @@
-***************************
-Database User Authorization
-***************************
+************************
+Database User Management
+************************
 
 Database User
 =============
 
-To create the user name, see :doc:`/sql/identifier`.
+To create the user name, see :doc:`identifier`.
 
 CUBRID has two types of users by default: **DBA** and **PUBLIC**. At initial installation of the product, no password is set.
 

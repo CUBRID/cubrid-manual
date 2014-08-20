@@ -1,9 +1,10 @@
+:tocdepth: 3
+
 ********************
 Arithmetic Operators
 ********************
 
-Arithmetic Operators
-====================
+.. contents::
 
 For arithmetic operators, there are binary operators for addition, subtraction, multiplication, or division, and unary operators to represent whether the number is positive or negative. The unary operators to represent the numbers' positive/negative status have higher priority over the binary operators.
 

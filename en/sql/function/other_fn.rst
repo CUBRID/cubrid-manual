@@ -1,10 +1,10 @@
 :tocdepth: 3
 
-.. contents::
-
 ***************
 Other functions
 ***************
+
+.. contents::
 
 SLEEP
 =====

@@ -1,6 +1,10 @@
+:tocdepth: 3
+
 *********************
 Information Functions
 *********************
+
+.. contents::
 
 CHARSET
 =======

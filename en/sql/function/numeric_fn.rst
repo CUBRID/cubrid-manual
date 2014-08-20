@@ -1,6 +1,10 @@
+:tocdepth: 3
+
 *****************
 Numeric Functions
 *****************
+
+.. contents::
 
 ABS
 ===

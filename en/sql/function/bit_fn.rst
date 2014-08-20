@@ -1,6 +1,10 @@
+:tocdepth: 3
+
 ***************************
 BIT Functions and Operators
 ***************************
+
+.. contents::
 
 Bitwise Operator
 ================

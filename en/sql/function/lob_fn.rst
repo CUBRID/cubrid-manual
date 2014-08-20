@@ -1,6 +1,10 @@
+:tocdepth: 3
+
 *************
 LOB Functions
 *************
+
+.. contents::
 
 BIT_TO_BLOB
 ===========

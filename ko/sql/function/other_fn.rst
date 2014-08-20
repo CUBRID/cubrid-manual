@@ -1,10 +1,10 @@
 :tocdepth: 3
 
-.. contents::
-
 *********
 기타 함수
 *********
+
+.. contents::
 
 SLEEP
 =====

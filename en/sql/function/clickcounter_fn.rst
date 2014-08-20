@@ -1,6 +1,10 @@
+:tocdepth: 3
+
 ***********************
 Click Counter Functions
 ***********************
+
+.. contents::
 
 INCR, DECR
 ==========

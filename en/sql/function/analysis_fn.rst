@@ -1,6 +1,10 @@
+:tocdepth: 3
+
 ****************************
 Aggregate/Analytic Functions
 ****************************
+
+.. contents::
 
 Overview
 ========

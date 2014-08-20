@@ -1,6 +1,10 @@
+:tocdepth: 3
+
 ********************
 Comparison Operators
 ********************
+
+.. contents::
 
 The comparison operators compare the operand on the left and on the right, and they return 1 or 0. The operands of comparison operations must have the same data type. Therefore, implicit type casting by the system or implicit type casting by the user is required.
 

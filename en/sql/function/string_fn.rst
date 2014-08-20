@@ -1,6 +1,10 @@
+:tocdepth: 3
+
 ******************************
 String Functions and Operators
 ******************************
+
+.. contents::
 
 .. note:: 
 

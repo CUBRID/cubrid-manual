@@ -1,6 +1,10 @@
+:tocdepth: 3
+
 ****************
 ROWNUM Functions
 ****************
+
+.. contents::
 
 ROWNUM, INST_NUM
 ================

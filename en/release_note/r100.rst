@@ -1,10 +1,10 @@
 :tocdepth: 3
 
-.. contents::
-
 ******************
 10.0 Release Notes
 ******************
+
+.. contents::
 
 Release Notes Information
 =========================

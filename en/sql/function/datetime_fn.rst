@@ -1,6 +1,10 @@
+:tocdepth: 3
+
 *********************************
 Date/Time Functions and Operators
 *********************************
+
+.. contents::
 
 ADDDATE, DATE_ADD
 =================

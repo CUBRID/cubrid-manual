@@ -1,10 +1,10 @@
 :tocdepth: 3
 
-.. contents::
-
 *********
 정보 함수
 *********
+
+.. contents::
 
 CHARSET
 =======

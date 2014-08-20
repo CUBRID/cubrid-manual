@@ -22,5 +22,6 @@
     rownum_fn.rst
     information_fn.rst
     encryption_fn.rst
+    condition_op.rst
     condition_fn.rst
     other_fn.rst

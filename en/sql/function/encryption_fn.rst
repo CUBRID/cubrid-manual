@@ -1,6 +1,10 @@
+:tocdepth: 3
+
 *******************
 Encryption Function
 *******************
+
+.. contents::
 
 MD5
 ===

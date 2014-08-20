@@ -1,6 +1,10 @@
+:tocdepth: 3
+
 *****************************************
 Data Type Casting Functions and Operators
 *****************************************
+
+.. contents::
 
 CAST
 ====

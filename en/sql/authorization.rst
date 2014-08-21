@@ -1,11 +1,11 @@
-************************
-Database User Management
-************************
+***************
+User Management
+***************
 
 Database User
 =============
 
-To create the user name, see :doc:`identifier`.
+To know the user name's writing rule, see :doc:`identifier`.
 
 CUBRID has two types of users by default: **DBA** and **PUBLIC**. At initial installation of the product, no password is set.
 
@@ -15,8 +15,8 @@ CUBRID has two types of users by default: **DBA** and **PUBLIC**. At initial ins
 
 .. _create-user:
 
-Managing User
-=============
+CREATE USER
+===========
 
 **DBA** and **DBA** members can create, drop and alter users by using SQL statements. At the initial installation, passwords for users are not configured. ::
 
@@ -66,8 +66,8 @@ The following example shows how to create the same groups as above but use the *
 
 .. _granting-authorization:
 
-Granting Authorization
-======================
+GRANT
+=====
 
 In CUBRID, the smallest grant unit of authorization is a table. You must grant appropriate authorization to other users (groups) before allowing them to access the table you created.
 
@@ -123,8 +123,8 @@ The following example shows how to grant retrieving authorization on the *record
     *   Before granting **SELECT**, **UPDATE**, **DELETE** and **INSERT** authorization for a virtual table, the owner of the virtual table must have **SELECT** and **GRANT** authorization for all the tables included in the query specification. The **DBA** user and the members of the **DBA** group are automatically granted all authorization for all tables.
     *   To execute the **TRUNCATE** statement, the **ALTER**, **INDEX**, and **DELETE** authorization is **required**.
 
-Revoking Authorization
-======================
+REVOKE
+======
 
 You can revoke authorization using the **REVOKE** statement. The authorization granted to a user can be revoked anytime. If more than one authorization is granted to a user, all or part of the authorization can be revoked. In addition, if authorization on multiple tables is granted to more than one user using one **GRANT** statement, the authorization can be selectively revoked for specific users and tables.
 
@@ -157,8 +157,8 @@ The following example shows how to execute the **REVOKE** statement revoking all
 
 .. _change-owner:
 
-Changing Owner
-==============
+ALTER ... OWNER
+===============
 
 Database Administrator (**DBA**) or a member of the **DBA** group can change the owner of table, view, trigger, and Java stored functions/procedures by using the following query. ::
 

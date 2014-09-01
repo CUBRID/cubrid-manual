@@ -9,40 +9,41 @@ CUBRID 서비스 제어
 ------------------
 
 CUBRID 설정 파일에 등록된 서비스를 제어하기 위한 **cubrid** 유틸리티 구문은 다음과 같다. 
-*command*\에 올 수 있는 명령어는 서비스 구동을 위한 **start**, 종료를 위한 **stop**, 재시작을 위한 **restart**, 상태 확인을 위한 **status** 중 하나이며, 추가로 입력해야 할 옵션이나 인수는 없다. 
 
 ::
 
     cubrid service <command>
+    
     <command>: {start|stop|restart|status}
+
+*   start: 서비스 구동
+*   stop: 서비스 종료
+*   restart: 서비스 재시작
+*   status: 서비스 상태 확인
+    
+추가로 입력해야 할 옵션이나 인수는 없다. 
 
 데이터베이스 서버 제어
 ----------------------
 
 데이터베이스 서버 프로세스를 제어하기 위한 **cubrid** 유틸리티 구문은 다음과 같다.
-<command>에 올 수 있는 명령어는 서버 프로세스 구동을 위한 **start**, 종료를 위한 **stop**, 재시작을 위한 **restart**, 상태 확인을 위한 **status**\ 가 있으며, **status**\ 를 제외한 명령어에는 데이터베이스 이름이 인수로 지정되어야 한다. 
 
 ::
 
     cubrid server <command> [database_name]
     <command>: {start|stop|restart|status}
-    
+
+*   start: 데이터베이스 서버 프로세스 구동
+*   stop: 데이터베이스 서버 프로세스 종료
+*   restart: 데이터베이스 서버 프로세스 재시작
+*  status: 데이터베이스 서버 프로세스 상태 확인
+ 
+**status**\ 를 제외한 명령어에는 데이터베이스 이름이 인수로 지정되어야 한다.
+
 브로커 제어
 -----------
 
 CUBRID 브로커 프로세스를 제어하기 위한 **cubrid** 유틸리티 구문은 다음과 같다.
-<command>로 올 수 있는 명령어는 
-브로커 프로세스 구동을 위한 **start** , 
-종료를 위한 **stop**, 
-재시작을 위한 **restart**, 
-상태 확인을 위한 **status**, 
-브로커 접속 제한을 위한 **acl**,
-명시한 브로커만 사용 가능하게 하거나 불가능하게 하는 **on/off**, 
-브로커 접속을 리셋하기 위한 **reset**,
-설정 정보 출력을 위한 **info**, 
-SHARD key를 가지고 SHARD ID(SHARD 데이터베이스 ID)를 얻는 **getid**\ 가 있다.
-
-또한, SHARD 기능은 브로커가 구동되고 cubrid_broker.conf의 SHARD라는 브로커 파라미터 값이 ON일 때만 사용할 수 있다.
 
 ::
 
@@ -57,6 +58,18 @@ SHARD key를 가지고 SHARD ID(SHARD 데이터베이스 ID)를 얻는 **getid**
                |info
                |getid -b <broker_name> [-f] shard_key
 
+*   start: 브로커 프로세스 구동
+*   stop: 브로커 프로세스 종료
+*   restart: 브로커 프로세스 재시작
+*   status: 브로커 상태 확인
+*   acl: 브로커 접속 제한
+*   on/off: 명시한 브로커만 사용 가능하게 하거나 불가능하게 함
+*   reset: 브로커 접속을 리셋함
+*   info: 브로커 설정 정보 출력
+*   getid: 입력한 SHARD key에 해당하는 SHARD ID(SHARD 데이터베이스 ID)를 출력함
+
+SHARD 기능은 브로커가 구동되고 cubrid_broker.conf의 SHARD라는 브로커 파라미터 값이 ON일 때만 사용할 수 있다.
+
 CUBRID 매니저 서버 제어
 -----------------------
 
@@ -67,18 +80,28 @@ CUBRID 매니저를 사용하기 위해서는 데이터베이스 서버가 실�
     cubrid manager <command>
     <command>: {start|stop|status}
 
-<command>로 올 수 있는 명령어는 매니저 서버 프로세스 구동을 위한 **start**, 종료를 위한 **stop**, 상태 확인을 위한 **status**\가 있다.
+*   start: 매니저 서버 프로세스 구동
+*   stop: 매니저 서버 프로세스 종료
+*   status: 매니저 서버 프로세스 상태 확인
 
 CUBRID HA 제어
 ---------------
 
 CUBRID HA 기능을 사용하기 위한 **cubrid heartbeat** 유틸리티 구문은 다음과 같다.
-<command>로 올 수 있는 명령어는 HA 관련 프로세스 구동을 위한 **start**, 종료를 위한 **stop**, copylogdb 프로세스를 시작 또는 정지하기 위한 **copylogdb**, applylogdb 프로세스를 시작 또는 정지하기 위한 **applylogdb**, HA 구성정보를 다시 읽어서 새로운 구성에 맞게 실행하기 위한 **reload**, HA 상태 정보를 확인하기 위한 **status**\ 가 있다. 자세한 내용은 :ref:`cubrid-heartbeat` 를 참고한다. 
 
 ::
 
     cubrid heartbeat <command>
     <command>: {start|stop|copylogdb|applylogdb|reload|status}
+
+*   start: HA 관련 프로세스 구동
+*   stop: HA 관련 프로세스  종료
+*   copylogdb: copylogdb 프로세스를 시작 또는 정지
+*   applylogdb: applylogdb 프로세스를 시작 또는 정지
+*   reload: HA 구성정보를 다시 읽어서 새로운 구성에 맞게 실행
+*   status: HA 상태 정보를 확인
+
+자세한 내용은 :ref:`cubrid-heartbeat`\ 를 참고한다. 
 
 .. _control-cubrid-services:
 

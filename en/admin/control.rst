@@ -8,41 +8,43 @@ CUBRID processes can be controlled by **cubrid** utility.
 Controlling CUBRID Service
 --------------------------
 
-The following **cubrid** utility syntax shows how to control services registered in the configuration file. One of the following can be specified in <command>: 
-**start**, **stop**, **restart**, or **status**; **start** is used to run services; **stop** is used to stop services; **restart** is used to restart services; **status** is used to check status. No additional options or arguments are required. 
+The following **cubrid** utility syntax shows how to control services registered in the configuration file. One of the following can be specified in <command>.
 
 ::
 
     cubrid service <command>
     <command>: {start|stop|restart|status}
 
+*   start: start services.
+*   stop: stop services.
+*   restart: restart services.
+*   status: check status.
+   
+No additional options or arguments are required. 
+
 Controlling Database Server
 ---------------------------
 
 The following **cubrid** utility syntax shows how to control database server process. 
-One of the following can be specified in <command>: **start** is used to run services; **stop** is used to stop services; **restart** is used to restart services; **status** is used to check status. Every command except **status** must have a database name as an argument. 
 
 ::
 
     cubrid server <command> [database_name]
     <command>: {start|stop|restart|status}
 
+One of the following can be specified in <command>: 
+
+*   start: start a database server process.
+*   stop: stop a database server process.
+*   restart: restart a database server process.
+*   status: check status of a database server process. 
+
+Every command except **status** must have a database name as an argument. 
+
 Controlling Broker
 ------------------
 
 The following **cubrid** utility syntax shows how to control CUBRID broker process. 
-One of the following can be specified in <command>: 
-**start** is used to run services; 
-**stop** is used to stop services; 
-**restart** is used to restart services; 
-**status** is used to check status;  
-**acl** is used to limit broker access; 
-**on**/**off** is used to enable/disable the specified broker; 
-**reset** is used to reset the connection to broker; 
-**info** is used to display the broker configuration information; 
-**getid** is used to get the SHARD ID(SHARD database ID) with SHARD key.
-
-And more, SHARD feature can be used only after the broker is started and "SHARD", the broker parameter, whose value in cubrid_broker.conf is set to ON.
 
 ::
 
@@ -57,6 +59,18 @@ And more, SHARD feature can be used only after the broker is started and "SHARD"
                |info
                |getid -b <broker_name> [-f] shard_key
 
+*   start: start broker processes.
+*   stop: stop broker processes. 
+*   restart: restart broker processes. 
+*   status: check status of broker processes.  
+*   acl: limit broker access.
+*   on/off: enable/disable the specified broker.
+*   reset: reset the connection to broker.
+*   info: display the broker configuration information.
+*   getid: get the SHARD ID(SHARD database ID) with SHARD key.
+
+And more, SHARD feature can be used only after the broker is started and "SHARD", the broker parameter, whose value in cubrid_broker.conf is set to ON.
+
 Controlling CUBRID Manager Server
 ---------------------------------
 
@@ -67,19 +81,29 @@ To use the CUBRID Manager, the Manager server must be running where database ser
     cubrid manager <command>
     <command>: {start|stop|status}
 
-One of the following can be specified in *command*: **start**, **stop**, or **status**; **start** is used to run services; **stop** is used to stop services; **status** is used to check status.
+*   start: start manager server processes.
+*   stop: stop manager server processes.
+*   status: check the status of manager processes.
 
 Controlling CUBRID HA
 ---------------------
 
-The following **cubrid heartbeat** utility syntax shows how to use CUBRID HA. One of the following can be specified in *command*: 
-**start**, **stop**, **copylogdb**, **applylogdb**, **reload** or **status**; **start** is used to run HA-related processes; **stop** is used to stop them; **copylogdb** is used to start or stop copylogdb process; **applylogdb** is used to start or stop applylogdb process; ; **reload** is used to reload information on HA configuration; **status** is used to check HA status. For details, see :ref:`cubrid-heartbeat`. 
+The following **cubrid heartbeat** utility syntax shows how to use CUBRID HA. One of the following can be specified in *command*.
 
 ::
 
     cubrid heartbeat <command>
     <command>: {start|stop|copylogdb|applylogdb|reload|status}
     
+*   start: start HA-related processes.
+*   stop: stop HA-related processes.
+*   copylogdb: start or stop copylogdb process.
+*   applylogdb: start or stop applylogdb process.
+*   reload: reload information on HA configuration.
+*   status: check HA status. 
+
+For details, see :ref:`cubrid-heartbeat`.
+
 .. _control-cubrid-services:
 
 CUBRID Services

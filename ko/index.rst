@@ -53,4 +53,5 @@ CUBRID 10.0 사용자 매뉴얼
     ha.rst
     shard.rst
     api/index.rst
+    cm/index.rst
     release_note/index.rst

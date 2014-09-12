@@ -41,6 +41,18 @@ Legal Identifiers
         " abc" " def"
         [position]
 
+    .. note::
+    
+        From 10.0 version, if a column name which is a reserved word is used together with a "table name (or alias).", you don't need to wrap up a column name with a double quotes.
+
+        .. code-block:: sql 
+
+            CREATE TABLE tbl ("int" int, "double" double); 
+
+            SELECT t.int FROM tbl t; 
+            
+        In the above SELECT query, "int" is a column name which is used together with "t.".
+
 Illegal Identifiers
 ===================
 

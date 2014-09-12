@@ -41,6 +41,18 @@
         "abc""def"
         [position]
 
+    .. note::
+    
+        10.0 버전부터는 예약어로 된 칼럼 이름이 "테이블 이름 (또는 별칭)."과 같이 사용되는 경우, 칼럼 이름을 겹따옴표로 감싸지 않아도 된다.
+
+        .. code-block:: sql 
+
+            CREATE TABLE tbl ("int" int, "double" double); 
+
+            SELECT t.int FROM tbl t; 
+
+        위의 SELECT 질의문에서 "int"가 "t."과 함께 쓰인 칼럼 이름이다.
+
 허용되지 않는 식별자
 ====================
 

@@ -7,11 +7,11 @@
 
 *   Windows 환경에서 실행
 
-    시작 - 모든 프로그램 - CUBRID - CUBRID Magnger를 선택한다.
+    "시작 > 모든 프로그램 > CUBRID > CUBRID Manager"를 선택한다.
     
 *   Linux 환경에서 실행
 
-    셸에서 다음 중 하나의 명령을 입력하여 CUBRID Manager를 실행할 수 있다.
+    셸(shell)에서 다음 명령을 입력하여 CUBRID Manager\ 를 실행할 수 있다.
 
     ::
     

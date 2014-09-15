@@ -899,9 +899,24 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
 
     특정 시간대에 **INSERT** / **UPDATE** 가 집중되는 서비스 환경에서는 **checkpoint_every_size** 파라미터의 설정값을 작게 설정하여 체크포인트 시점에 I/O 부하를 분산할 수 있다.
 
-    체크포인트는 특정 시점에 데이터 버퍼에 있는 모든 수정된 페이지를 데이터베이스 볼륨(디스크)에 기록하는 작업이며, 데이터베이스 장애 발생 시 최근 체크포인트 시점까지 데이터를 복구할 수 있다. 다만, 체크포인트 작업으로 인해 디스크로 저장되는 로그 파일의 양이 많을 경우 디스크 I/O가 발생하여 DB 운영에 영향을 끼칠 수 있으므로 체크포인트 주기를 적절하게 설정해야 한다.
+    체크포인트는 특정 시점에 데이터 버퍼에 있는 모든 수정된 페이지를 데이터베이스 볼륨(디스크)에 기록하는 작업이다. 체크포인트는 데이터베이스 장애 발생 이후 복구 시 체크포인트가 발생하기 이전의 트랜잭션 로그를 반영할 필요가 없게 하여 복구 시간을 단축시키는 효과가 있다.
+    다만, 체크포인트 작업으로 인해 디스크 I/O가 발생하여 DB 운영에 영향을 끼칠 수 있으므로 체크포인트 주기를 적절하게 설정해야 한다.
 
-    체크포인트 주기 설정과 관련된 파라미터는 **checkpoint_interval**\ 과 **checkpoint_every_size**\ 이며, **checkpoint_interval** 파라미터의 설정값이 경과된 시점 또는 로그 페이지 수가 **checkpoint_every_size** 파라미터의 설정값에 도달하는 시점마다 체크포인트 작업이 주기적으로 수행된다.
+    .. note::
+    
+        CUBRID에서 체크포인트는 4가지 방법으로 제공되는데, 다음의 2가지는 cubrid.conf의 설정에 의해 제공된다.
+        
+        *   **checkpoint_interval**: 체크포인트가 완료된 이후 이 파라미터의 설정값이 경과된 시간마다 체크포인트 작업이 주기적으로 수행된다.
+        *   **checkpoint_every_size**: 트랜잭션 로그 파일의 크기가 이 파라미터의 설정값에 도달하는 시점마다 체크포인트 작업이 주기적으로 수행된다.
+        
+        이상 두 개의 파라미터 조건 중 하나만 만족하면 체크포인트가 수행된다.
+        
+        다음의 2가지는 사용자의 명령으로 제공된다.
+        
+        *   CSQL 인터프리터를 "DBA" 사용자로 실행한 이후 ";checkpoint" 명령을 수행하면 체크포인트가 수행된다.
+        *   "" 질의문을 수행하면 체크포인트가 수행된다.
+        
+        참고로 체크포인트 수행 도중에 백업을 수행하면, 체크포인트가 종료될 때까지 백업 명령은 대기 상태가 된다.
 
 **checkpoint_interval**
 
@@ -944,28 +959,28 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
 
 **log_trace_flush_time** 
   
-이 파라미터에 설정한 시간보다 로그 플러싱 시간이 오래 걸리는 경우 해당 이벤트가 데이터베이스 서버 로그에 기록된다. 
+    이 파라미터에 설정한 시간보다 로그 플러싱 시간이 오래 걸리는 경우 해당 이벤트가 데이터베이스 서버 로그에 기록된다. 
 
-기록되는 정보의 예는 다음과 같다. 
-  
-:: 
-  
-    03/18/14 10:20:45.889 - LOG_FLUSH_THREAD_WAIT 
-      total flush count: 1 page(s) 
-      total flush time: 310 ms 
-      time waiting for log writer: 308 ms 
-      last log writer info 
-        client: DBA@cdbs037.cub|copylogdb(15312) 
-        time spent by log writer: 308 ms 
-  
-*   LOG_FLUSH_THREAD_WAIT: 이벤트 이름 
-*   total flush count: 이벤트 발생 당시 플러시(flush)한 페이지 수 
-*   total flush time: 총 플러시 소요 시간 
-*   time waiting for log writer: LFT(Log Flushing Thread)가 LWT(Log Writer Thread)를 대기한 시간 
-*   last log writer info 
-  
-    *   DBA@cdbs037.cub|copylogdb(15312): LFT를 대기하게 한 LWT와 관련된 copylogdb 정보 <사용자@호스트명|클라이언트명(pid)> 
-    *   time spent by log writer: LWT에서 측정한 LWT 소요 시간(일반적으로 time waiting for log writer와 동일)
+    기록되는 정보의 예는 다음과 같다. 
+      
+    :: 
+      
+        03/18/14 10:20:45.889 - LOG_FLUSH_THREAD_WAIT 
+          total flush count: 1 page(s) 
+          total flush time: 310 ms 
+          time waiting for log writer: 308 ms 
+          last log writer info 
+            client: DBA@cdbs037.cub|copylogdb(15312) 
+            time spent by log writer: 308 ms 
+      
+    *   LOG_FLUSH_THREAD_WAIT: 이벤트 이름 
+    *   total flush count: 이벤트 발생 당시 플러시(flush)한 페이지 수 
+    *   total flush time: 총 플러시 소요 시간 
+    *   time waiting for log writer: LFT(Log Flushing Thread)가 LWT(Log Writer Thread)를 대기한 시간 
+    *   last log writer info 
+      
+        *   DBA@cdbs037.cub|copylogdb(15312): LFT를 대기하게 한 LWT와 관련된 copylogdb 정보 <사용자@호스트명|클라이언트명(pid)> 
+        *   time spent by log writer: LWT에서 측정한 LWT 소요 시간(일반적으로 time waiting for log writer와 동일)
 
 **max_flush_size_per_second**
 

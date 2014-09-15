@@ -888,12 +888,27 @@ The following are parameters related to logs used for database backup and restor
 
     **checkpoint_every_size** is a parameter to configure checkpoint interval by log page. You can set a unit as B, K, M, G or T, which stands for bytes, kilobytes(KB), megabytes(MB), gigabytes(GB) or terabytes(TB) respectively. If you omit the unit, bytes will be applied. The default value is **10,000** * :ref:`log_page_size <lpg>` (**156.25M** when log_page_size is 16K).
    
-    You can distribute disk I/O overload at the checkpoint by specifying lower size in the **checkpoint_every_size** parameter, especially  in the environment where
+    You can distribute disk I/O overload at the checkpoint by specifying lower size in the **checkpoint_every_size** parameter, especially in the environment where
     **INSERT** / **UPDATE** are heavily loaded at a specific time.
 
-    Checkpoint is a job to record every modified page in data buffers to database volumes (disk) at a specific point. It can restore data back to the latest checkpoint if database failure occurs. It is important to choose efficient checkpoint interval because large increase of log files stored in a disk may affect database operation, causing unnecessary disk I/O.
-
-    The **checkpoint_interval** and **checkpoint_every_size** parameters are related to setting checkpoint cycle. The checkpoint is periodically executed whenever the time specified in **checkpoint_interval** parameter has elapsed or the number of log pages specified in **checkpoint_every_size** parameter has reached.
+    Checkpoint is a job to record every modified page in data buffers to database volumes (disk) at a specific point. Checkpoint can shrink a restore time after the database failure because this makes the transaction logs which have been generated previously than the checkpoint time needless when the restore is processed.
+    However, an efficient checkpoint interval should be properly considered because this job can occur a lot of disk I/O.
+    
+    .. note::
+    
+        There are three ways to run checkpoint in CUBRID. The following two ways are provided by the setting of cubrid.conf.
+        
+        *   **checkpoint_interval**: After the previous checkpoint is done, checkpoint is periodically processed at every time after the term of this parameter value.
+        *   **checkpoint_every_size**: Checkpoint is periodically processed at every time after the transaction log size of this parameter value.
+        
+        If one condition on the above parameters is satisfied, checkpoint is processed.
+        
+        The following two ways are provided by a user's command.
+        
+        *   If you run ";checkpoint" command in the CSQL interpreter, which is run with a "DBA" user, checkpoint is processed.
+        *   "" 질의문을 수행하면 체크포인트가 수행된다.
+                
+        As a reference, if you run backup command during checkpoint, backup command is waited until checkpoint is ended.
     
 **checkpoint_interval**
 
@@ -931,28 +946,28 @@ The following are parameters related to logs used for database backup and restor
 
 **log_trace_flush_time** 
   
-When the log flushing time takes more time than the time you set in this parameter, this event is recorded in the log of the database server.
+    When the log flushing time takes more time than the time you set in this parameter, this event is recorded in the log of the database server.
 
-The example of written information is as below.
-  
-:: 
-  
-    03/18/14 10:20:45.889 - LOG_FLUSH_THREAD_WAIT 
-      total flush count: 1 page(s) 
-      total flush time: 310 ms 
-      time waiting for log writer: 308 ms 
-      last log writer info 
-        client: DBA@cdbs037.cub|copylogdb(15312) 
-        time spent by log writer: 308 ms 
-  
-*   LOG_FLUSH_THREAD_WAIT: Event name
-*   total flush count: The number of flushed pages when the event occurs
-*   total flush time: Total spent time when the log is flushed
-*   time waiting for log writer: The time LFT(Log Flushing Thread) has been waiting for LWT(Log Writer Thread)
-*   last log writer info 
-  
-    *   DBA@cdbs037.cub|copylogdb(15312): copylogdb information related to LWT which let LFT wait <user@host_name|client_name(pid)> 
-    *   time spent by log writer: Time spend by LWT measured in LWT; in general, this value is the same as the value of "time waiting for log writer")
+    The example of written information is as below.
+      
+    :: 
+      
+        03/18/14 10:20:45.889 - LOG_FLUSH_THREAD_WAIT 
+          total flush count: 1 page(s) 
+          total flush time: 310 ms 
+          time waiting for log writer: 308 ms 
+          last log writer info 
+            client: DBA@cdbs037.cub|copylogdb(15312) 
+            time spent by log writer: 308 ms 
+      
+    *   LOG_FLUSH_THREAD_WAIT: Event name
+    *   total flush count: The number of flushed pages when the event occurs
+    *   total flush time: Total spent time when the log is flushed
+    *   time waiting for log writer: The time LFT(Log Flushing Thread) has been waiting for LWT(Log Writer Thread)
+    *   last log writer info 
+      
+        *   DBA@cdbs037.cub|copylogdb(15312): copylogdb information related to LWT which let LFT wait <user@host_name|client_name(pid)> 
+        *   time spent by log writer: Time spend by LWT measured in LWT; in general, this value is the same as the value of "time waiting for log writer")
 
 **max_flush_size_per_second**
 

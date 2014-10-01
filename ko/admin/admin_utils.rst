@@ -1363,11 +1363,11 @@ lockdb
         Tran_index = 1, Granted_mode = U_LOCK, Count = 3
         Blocked_mode = X_LOCK
                         Start_waiting_at = Fri May 3 14:44:31 2002
-                        Wait_for_nsecs = -1
+                        Wait_for_secs = -1
     LOCK WAITERS :
         Tran_index = 3, Blocked_mode = S_LOCK
                         Start_waiting_at = Fri May 3 14:45:14 2002
-                        Wait_for_nsecs = -1
+                        Wait_for_secs = -1
 
 Object type이 Index key of class, 즉 인덱스 키인 경우 테이블의 인덱스에 대한 잠금 정보를 출력한다.
 
@@ -1381,7 +1381,7 @@ Object type이 Index key of class, 즉 인덱스 키인 경우 테이블의 인�
     LOCK HOLDERS:
         Tran_index =   1, Granted_mode =  NX_LOCK, Count =   1
 
-Granted_mode는 현재 획득한 잠금의 모드를 의미하고 Blocked_mode는 차단된 잠금의 모드를 의미한다. Starting_waiting_at은 잠금을 요청한 시간을 의미하고 Wait_for_nsecs는 잠금을 기다리는 시간을 의미한다. Wait_for_nsecs의 값은 lock_timeout 시스템 파라미터에 의해 설정된다.
+Granted_mode는 현재 획득한 잠금의 모드를 의미하고 Blocked_mode는 차단된 잠금의 모드를 의미한다. Starting_waiting_at은 잠금을 요청한 시간을 의미하고 Wait_for_secs는 잠금을 기다리는 시간을 의미한다. Wait_for_secs의 값은 lock_timeout 시스템 파라미터에 의해 설정된다. 
 
 Object type이 Class, 즉 테이블인 경우 Nsubgranules가 출력되는데 이것은 해당 테이블 내의 특정 트랜잭션이 획득하고 있는 레코드 잠금과 키 잠금을 합한 개수이다.
 
@@ -1442,7 +1442,7 @@ tranlist
     *   Query time: 수행중인 질의의 총 수행 시간(단위: 초)
     *   Tran time: 현재 트랜잭션의 총 수행 시간(단위: 초)
     *   Wait for lock holder: 현재 트랜잭션이 락 대기중이면 해당 락을 소유하고 있는 트랜잭션의 리스트
-    *   SQL ID: SQL Text에 대한 ID. cubrid killtran 명령의 --kill-sql-id 옵션에서 사용될 수 있다.
+    *   SQL_ID: SQL Text에 대한 ID. cubrid killtran 명령의 --kill-sql-id 옵션에서 사용될 수 있다.
     *   SQL Text: 수행중인 질의문(최대 30자)
 
 "Tran index"에 보여지는 transaction 상태 메시지는 다음과 같다.

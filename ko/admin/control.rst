@@ -763,7 +763,9 @@ I/O 읽기를 많이 발생시킨 질의를 기록한다. cubrid.conf의 **sql_t
 
 *   **CUBRID/msg/en_US** (한글은 ko_KR.eucKR 혹은 ko_KR.utf8) **/cubrid.msg** 파일의 "$set 5 MSGCAT_SET_ERROR" 이하 메시지 그룹은 모두 서버 에러 메시지를 나타낸다.
 
-프로그램을 작성할 때는 에러 코드 번호를 직접 사용하는 것보다는 에러 코드 이름을 사용할 것을 권장한다. 예를 들어, 고유 키 위반 시 에러 코드 번호는 -670 혹은 -886이지만 이 번호보다는 **ER_BTREE_UNIQUE_FAILED** 혹은 **ER_UNIQUE_VIOLATION_WITHKEY**\을 사용하는 것이 프로그램 가독성을 높이기 때문이다. 
+CCI 드라이버를 사용하여 C로 프로그램을 작성할 때는 에러 코드 번호를 직접 사용하는 것보다는 에러 코드 이름을 사용할 것을 권장한다. 예를 들어, 고유 키 위반 시 에러 코드 번호는 -670 혹은 -886이지만 이 번호보다는 **ER_BTREE_UNIQUE_FAILED** 혹은 **ER_UNIQUE_VIOLATION_WITHKEY**\을 사용하는 것이 프로그램 가독성을 높이기 때문이다.
+
+하지만 JDBC 드라이버를 사용하여 JAVA로 프로그램을 작성할 때는 dbi.h 파일을 포함할 수 없으므로 에러 코드 번호를 직접 사용하도록 한다. JDBC의 경우 SQLException 클래스의 getErrorCode() 메서드를 통해 에러 번호를 얻을 수 있다.
 
 ::
 
@@ -791,9 +793,6 @@ I/O 읽기를 많이 발생시킨 질의를 기록한다. cubrid.conf의 **sql_t
     #define ER_LK_OBJECT_DL_TIMEOUT_CLASS_MSG           -967
     #define ER_LK_OBJECT_DL_TIMEOUT_CLASSOF_MSG         -968
     ...
-    #define ER_LK_DEADLOCK_CYCLE_DETECTED               -1021
-    #define ER_LK_DEADLOCK_SPECIFIC_INFO                -1083
-    ...
 
 몇 가지 서버 에러 코드 이름 및 에러 코드 번호, 에러 메시지를 살펴보면 다음과 같다.
 
@@ -819,10 +818,6 @@ I/O 읽기를 많이 발생시킨 질의를 기록한다. cubrid.conf의 **sql_t
 | ER_LK_OBJECT_DL_TIMEOUT_CLASS_MSG   | -967                  | Your transaction (index ?, ?@?\|?) timed out waiting on ? lock on class ? because of deadlock. You are waiting for user(s) ? to finish.                  |
 +-------------------------------------+-----------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
 | ER_LK_OBJECT_DL_TIMEOUT_CLASSOF_MSG | -968                  | Your transaction (index ?, ?@?\|?) timed out waiting on ? lock on instance ?\|?\|? of class ? because of deadlock. You are waiting for user(s) ? to      |
-+-------------------------------------+-----------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ER_LK_DEADLOCK_CYCLE_DETECTED       | -1021                 | A deadlock cycle is detected. ?.                                                                                                                         |
-+-------------------------------------+-----------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ER_LK_DEADLOCK_SPECIFIC_INFO        | -1083                 | Specific information about deadlock.                                                                                                                     |
 +-------------------------------------+-----------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 .. _broker:

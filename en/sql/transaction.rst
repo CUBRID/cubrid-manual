@@ -245,17 +245,19 @@ Like most commercial database systems, CUBRID adopts serializability, an element
 
 The transaction must ensure database concurrency, and each transaction must guarantee appropriate results. When multiple transactions are being executed at once, an event in transaction T1 should not affect an event in transaction T2. This means isolation. Transaction isolation level is the degree to which a transaction is separated from all other concurrent transactions. The higher isolation level means the lower interference from other transactions. The lower isolation level means the higher the concurrency. A database determines whether which lock is applied to tables and records based on these isolation levels. Therefore, can control the level of consistency and concurrency specific to a service by setting appropriate isolation level.
 
-You can set an isolation level by using the :ref:`set-transaction-isolation-level` statement or system parameters provided by CUBRID. For details, see :ref:`lock-parameters`.
-
 The read operations that allow interference between transactions with isolation levels are as follows:
 
 *   **Dirty read** : A transaction T2 can read D' before a transaction T1 updates data D to D' and commits it.
-*   **Non-repeatable read** : A transaction T1 can read other value, if a transaction T2 updates data while data is retrieved in the transaction T2 multiple times.
-*   **Phantom read** : A transaction T1 can read E, if a transaction T2 inserts new record E while data is retrieved in the transaction T1 multiple times.
+*   **Non-repeatable read** : A transaction T1 can read changed value, if a transaction T2 updates or deletes data and commits while data is retrieved in the transaction T1 multiple times.
+*   **Phantom read** : A transaction T1 can read E, if a transaction T2 inserts new record E and commits while data is retrieved in the transaction T1 multiple times.
 
 The default value of CUBRID isolation level is :ref:`isolation-level-3`.
 
 **Isolation Levels Provided by CUBRID**
+
+On the below table, the number wrapped with parenthesis right after the isolation level name is a number which can be used instead of the isolation level name when setting an isolation level.
+
+You can set an isolation level by using the :ref:`set-transaction-isolation-level` statement or system parameters provided by CUBRID. For details, see :ref:`lock-parameters`.
 
 (O: YES, X: NO)
 
@@ -312,9 +314,9 @@ CUBRID determines the lock mode depending on the type of operation to be perform
 
     .. note::
 
-        *   Transaction T1 obtains the shared lock first before it performs the read operation on a certain object, and releases it immediately after it completes the operation even before transaction T1 is committed.
+        *   If an isolation level is REPEATABLE COMMITTED(4), Transaction T1 obtains the shared lock first before it performs the read operation on a certain object, and releases it immediately after it completes the operation even before transaction T1 is committed; therefore, one of other transactions can do the update or delete operation to this object.
         
-        *   If an isolation level is REPEATABLE READ(2), it keeps shared locks until a transaction T1 is committed.
+        *   If an isolation level is REPEATABLE READ(5), it keeps shared locks until a transaction T1 is committed; therefore, one of other transactions cannot do the update or delete operation to this object.
 
 *   **Exclusive lock (exclusive lock, X_LOCK)**
 
@@ -324,7 +326,7 @@ CUBRID determines the lock mode depending on the type of operation to be perform
 
 *   **Update lock (update lock, U_LOCK)**
 
-    This lock is obtained when the read operation is executed in the expression before the update operation is performed.
+    This lock is obtained when the read operation is executed in the expression before the update operation is performed. That is, this is used in UPDATE ... WHERE statement or DELETE ... WHERE statement.
 
     For example, when an UPDATE statement combined with a **WHERE** clause is executed, execute the operation by obtaining the update lock for each row and the exclusive lock only for the result rows that satisfy the condition when performing index search or full scan search in the **WHERE** clause. The update lock is converted to an exclusive lock when the actual update operation is performed. It can be called a quasi-exclusive lock because it does not allow read lock on the same object for another transaction.
 
@@ -357,11 +359,11 @@ CUBRID determines the lock mode depending on the type of operation to be perform
     
     If you UPDATE/DELETE a value, NX_LOCKs are acquired at the closest smaller key than the defined minimum range and at the closest larger key than the defined maximum range.
     
-    *   **Next-key shared lock, NS**
+    *   **Next-key shared lock, NS_LOCK**
 
         When you perform an INSERT operation on a row that a unique key exists, acquire next key lock to protect the range that affect their task.
     
-    *   **Next-key exclusive lock, NX**
+    *   **Next-key exclusive lock, NX_LOCK**
     
         When you perform an UPDATE or a DELETE operation on rows that a unique key exists, acquire next and previous key lock to protect the range that affect their task. 
     
@@ -369,15 +371,15 @@ CUBRID determines the lock mode depending on the type of operation to be perform
 
     A shcema lock is acquired when executing DDL work.
 
-    *   **Schema stability lock, SCH-S**
+    *   **Schema stability lock, SCH_S_LOCK**
 
         This lock is acquired during compiling a query and it guarantees that the schema which is included in this query is not changed.
 
-    *   **Schema modification lock, SCH-M**
+    *   **Schema modification lock, SCH_M_LOCK**
 
         This lock is acquired during running DDL(ALTER/CREATE/DROP) and it protects that other transactions access the modified schema.
 
-    Some DDL operation like ALTER, CREATE INDEX does not acquire SCH-M lock directly. For example, CUBRID operates type checking about filtering expression when you create a filtered index; during this term, the lock which is kept to the target table is SCH-S like other type checking operations. The method has a strength to increase the concurrency by allowing other transaction's operation during DDL operation's compilation.
+    Some DDL operation like ALTER, CREATE INDEX does not acquire SCH_M_LOCK directly. For example, CUBRID operates type checking about filtering expression when you create a filtered index; during this term, the lock which is kept to the target table is SCH-S like other type checking operations. The method has a strength to increase the concurrency by allowing other transaction's operation during DDL operation's compilation.
     
     However, it also has a weakness not to avoid a deadlock when DDL operations are operated at the same table at the same time. A deadlock case by SCH-S lock is as follows.
 
@@ -396,6 +398,20 @@ CUBRID determines the lock mode depending on the type of operation to be perform
     +---------------------------------------------------------------+---------------------------------------------------------------+
     |                                                               | requesting SCH-M lock but waiting T1's SCH-S lock is released |
     +---------------------------------------------------------------+---------------------------------------------------------------+
+
+.. note:: This is a summarized description about locking.
+
+    *   There are row(instance), key, and schema(class) about objects of locking targets. The below shows the kinds of locks grouped by locking objects.
+
+        *   row locks: S_LOCK, X_LOCK, U_LOCK
+        
+        *   key locks: NS_LOCK, NX_LOCK
+        
+        *   schema locks: IX_LOCK, IS_LOCK, SIX_LOCK, SCH_S_LOCK, SCH_M_LOCK
+        
+    *   Row locks and schema locks affect each other.
+    
+    *   Key locks are not related to row locks or schema locks.
     
 The following table briefly shows the lock compatibility between the locks described above. Compatibility means that the lock requester can obtain a lock while the lock holder is keeping the lock obtained for a certain object.
 
@@ -495,15 +511,15 @@ The below shows that INSERTed data sets X_LOCK to a row and NS_LOCK to a key whe
 |                                                         |                                                         |  related to a key lock.                                                    |
 |                                                         |   SELECT * FROM tbl WHERE a > 25;                       |                                                                            |
 +---------------------------------------------------------+---------------------------------------------------------+----------------------------------------------------------------------------+
-|                                                         | ::                                                      | Allow. NS_LOCK is locked on a key 30, but T2 acquires U_LOCK and X_LOCK    |
-|                                                         |                                                         | about a row; and this is not related to T1's key lock. T2 also acquire     |
-|                                                         |   UPDATE tbl SET b=100 WHERE a > 25 AND a < 40;         | NX_LOCK about a key 30 and a key 50.                                       |
+|                                                         | ::                                                      | Allow. NS_LOCK is locked on a key 30, but T2 acquires U_LOCK and change    |
+|                                                         |                                                         | this into X_LOCK about a row; and this is not related to T1's key lock.    |
+|                                                         |   UPDATE tbl SET b=100 WHERE a > 25 AND a < 40;         | T2 also acquire NX_LOCK about a key 30 and a key 50.                       |
 +---------------------------------------------------------+---------------------------------------------------------+----------------------------------------------------------------------------+
 | ::                                                      |                                                         | T1's lock is released.                                                     |
 |                                                         |                                                         |                                                                            |
 |   COMMIT;                                               |                                                         |                                                                            |
 +---------------------------------------------------------+---------------------------------------------------------+----------------------------------------------------------------------------+
-| ::                                                      |                                                         | Wait. To INSERT a row 22 when T2 has NX_LOCKs on a key 20, 30 and 50       |
+| ::                                                      |                                                         | Wait. To INSERT a row 22 when T2 has NX_LOCKs on a key 30 and 50           |
 |                                                         |                                                         | , T1 has to get NS_LOCK on a key 30; therefore, T1 waits                   |
 |   INSERT INTO tbl VALUES (22, 22);                      |                                                         | T2's lock release.                                                         |
 +---------------------------------------------------------+---------------------------------------------------------+----------------------------------------------------------------------------+

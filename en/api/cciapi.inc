@@ -1816,8 +1816,7 @@ CCI API Reference
         col_info = cci_get_result_info (req, &stmt_type, &col_count);
         if (col_info == NULL)
         {
-          printf ("get_result_info error: %d, %s\n", cci_error.err_code,
-                  cci_error.err_msg);
+          printf ("get_result_info error\n");
           goto handle_error;
         }
         
@@ -2903,7 +2902,6 @@ CCI API Reference
         main ()
         {
           int conn = 0, req = 0, col_count = 0, res = 0, i, ind;
-          T_CCI_ERROR error;
           char *data, query_result_buffer[1024];
           T_CCI_ERROR cci_error;
           T_CCI_COL_INFO *col_info;
@@ -2915,7 +2913,7 @@ CCI API Reference
           // req = cci_schema_info(conn, CCI_SCH_ATTRIBUTE, "athlete", "code", 0, &cci_error);
           req =
             cci_schema_info (conn, CCI_SCH_ATTRIBUTE, "athlete", NULL,
-                             CCI_ATTR_NAME_PATTERN_MATCH, &error);
+                             CCI_ATTR_NAME_PATTERN_MATCH, &cci_error);
 
           if (req < 0)
           {
@@ -3070,7 +3068,7 @@ CCI API Reference
             col_info = cci_get_result_info (req, &stmt_type, &col_count);
             if (col_info == NULL)
             {
-                printf ("get_result_info error: %d, %s\n", cci_error.err_code, cci_error.err_msg);
+                printf ("get_result_info error\n");
                 goto handle_error;
             }
          

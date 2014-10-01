@@ -22,73 +22,73 @@ Table name, index name, view name, column name, user name etc. are included in i
 Legal Identifiers
 =================
 
-**Beginning with a Letter**
+.. rubric:: Beginning with a Letter
 
-    An identifier must begin with a letter. All other special characters except operator characters are allowed. The following are examples of legal identifiers. 
-    
-    ::
+An identifier must begin with a letter. All other special characters except operator characters are allowed. The following are examples of legal identifiers. 
 
-        a
-        a_b
-        ssn#
-        this_is_an_example_#
+::
 
-**Enclosing in Double Quotes, Square Brackets, or Backtick Symbol**
+    a
+    a_b
+    ssn#
+    this_is_an_example_#
 
-    Identifiers or reserved keywords shown as below are not allowed. However, if they are enclosed in double quotes, square brackets, or backtick symbol, they are allowed as an exception. Especially, the double quotations can be used as a symbol enclosing identifiers when the **ansi_quotes** parameter is set to **yes**. If this value is set to **no** double quotations are used as a symbol enclosing character strings. The following are examples of legal identifiers. 
-    
-    ::
+.. rubric:: Enclosing in Double Quotes, Square Brackets, or Backtick Symbol
 
-        " select"
-        " @lowcost"
-        " low cost"
-        " abc" " def"
-        [position]
+Identifiers or reserved keywords shown as below are not allowed. However, if they are enclosed in double quotes, square brackets, or backtick symbol, they are allowed as an exception. Especially, the double quotations can be used as a symbol enclosing identifiers when the **ansi_quotes** parameter is set to **yes**. If this value is set to **no** double quotations are used as a symbol enclosing character strings. The following are examples of legal identifiers. 
 
-    .. note::
-    
-        From 10.0 version, if a column name which is a reserved word is used together with a "table name (or alias).", you don't need to wrap up a column name with a double quotes.
+::
 
-        .. code-block:: sql 
+    " select"
+    " @lowcost"
+    " low cost"
+    " abc" " def"
+    [position]
 
-            CREATE TABLE tbl ("int" int, "double" double); 
+.. note::
 
-            SELECT t.int FROM tbl t; 
-            
-        In the above SELECT query, "int" is a column name which is used together with "t.".
+    From 10.0 version, if a column name which is a reserved word is used together with a "table name (or alias).", you don't need to wrap up a column name with a double quotes.
+
+    .. code-block:: sql 
+
+        CREATE TABLE tbl ("int" int, "double" double); 
+
+        SELECT t.int FROM tbl t; 
+        
+    In the above SELECT query, "int" is a column name which is used together with "t.".
 
 Illegal Identifiers
 ===================
 
-**Beginning with special characters or numbers**
+.. rubric:: Beginning with special characters or numbers
 
-    An identifier starting with a special character or a number is not allowed. As an exception, a underline (_) and a sharp symbol (#) are allowed for the first character. 
-    
-    ::
+An identifier starting with a special character or a number is not allowed. As an exception, a underline (_) and a sharp symbol (#) are allowed for the first character. 
 
-        _a
-        #ack
-        %nums
-        2fer
-        88abs
+::
 
-**An identifier containing a space**
+    _a
+    #ack
+    %nums
+    2fer
+    88abs
 
-    An identifier that a space within characters is not allowed. 
-    
-    ::
+.. rubric:: An identifier containing a space
 
-        col1 t1
+An identifier that a space within characters is not allowed. 
 
-**An identifier containing operator special characters**
+::
 
-    An identifier which contains operator special characters (+, -, \*, /, %, ||, !, < , > , =, \|, ^, & , ~ ) is not allowed. 
-    
-    ::
+    col1 t1
 
-        col+
-        col~
-        col& &
+.. rubric:: An identifier containing operator special characters
+
+An identifier which contains operator special characters (+, -, \*, /, %, ||, !, < , > , =, \|, ^, & , ~ ) is not allowed. 
+
+::
+
+    col+
+    col~
+    col& &
 
 The maximum length of an identifier name
 ========================================

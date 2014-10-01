@@ -14,7 +14,7 @@ CUBRID 환경 변수
 
 .. note:: 
 
-    *  CUBRID Manager 또는 Web Manager 사용자는 DB 서버 노드의 **CUBRID_MSG_LANG** 환경 변수를 en_US로 설정해야만 데이터베이스 관련 작업  이후 출력되는 메시지를 정상적으로 확인할 수 있다. 하지만, **CUBRID_MSG_LANG** 환경 변수가 en_US가 아닌 경우 메시지만 비정상적으로 출력될 뿐 작업은 정상적으로 실행된다.
+    *  CUBRID 매니저 또는 Web Manager 사용자는 DB 서버 노드의 **CUBRID_MSG_LANG** 환경 변수를 en_US로 설정해야만 데이터베이스 관련 작업  이후 출력되는 메시지를 정상적으로 확인할 수 있다. 하지만, **CUBRID_MSG_LANG** 환경 변수가 en_US가 아닌 경우 메시지만 비정상적으로 출력될 뿐 작업은 정상적으로 실행된다.
     *  변경한 **CUBRID_MSG_LANG**\ 을  적용하려면 DB 서버 노드의 CUBRID 시스템이 반드시 재시작(cubrid service stop; cubrid service start)되어야 한다.
 
 *   **CUBRID_TMP**: Linux용 CUBRID에서 cub_master 프로세스와 cub_broker 프로세스의 유닉스 도메인 소켓 파일을 저장하는 위치를 지정하는 환경 변수로, 지정하지 않으면 cub_master 프로세스는 **/tmp** 디렉터리에, cub_broker 프로세스는 **$CUBRID/var/CUBRID_SOCK** 디렉터리에 유닉스 도메인 소켓 파일을 저장한다(Windows용 CUBRID에서는 사용되지 않는다).
@@ -153,7 +153,7 @@ Windows에서 특정 포트를 지정하기 번거로운 경우에도 이 방법
 *   CAS에 대한 모든 포트를 개방하려면 "%CUBRID%\\bin\\cub_cas.exe"를 추가한다.
 *   cub_master에 대한 모든 포트를 개방하려면 "%CUBRID%\\bin\\cub_master.exe"를 추가한다.
 *   cub_server에 대한 모든 포트를 개방하려면 "%CUBRID%\\bin\\cub_server.exe"를 추가한다.
-*   CUBRID Manager에 대한 모든 포트를 개방하려면 "%CUBRID%\\bin\\cub_cmserver.exe"를 추가한다.
+*   CUBRID 매니저에 대한 모든 포트를 개방하려면 "%CUBRID%\\bin\\cub_cmserver.exe"를 추가한다.
     
 브로커 장비 또는 DB 서버 장비에서 Linux용 CUBRID를 사용한다면 Linux 포트가 모두 개방되어 있어야 한다.
 브로커 장비 또는 DB 서버 장비에서 Windows용 CUBRID를 사용한다면 Windows 포트가 모두 개방되어 있거나, 관련 프로세스들이 모두 Windows 방화벽에서 허용되는 목록에 추가되어 있어야 한다.
@@ -405,10 +405,10 @@ CUBRID SHARD는 Linux 환경에서만 지원한다.
 
 .. _cwm-cm-ports:
 
-CUBRID Web Manager, CUBRID Manager 서버 사용 포트
--------------------------------------------------
+CUBRID 웹 매니저, CUBRID 매니저 서버 사용 포트
+----------------------------------------------
 
-접속 요청을 기다리는(listening) 프로세스들을 기준으로 CUBRID Web Manager, CUBRID Manager 서버가 사용하는 포트는 다음과 같으며, 이들은 OS의 종류와 관계없이 동일하다.
+접속 요청을 기다리는(listening) 프로세스들을 기준으로 CUBRID 웹 매니저, CUBRID 매니저 서버가 사용하는 포트는 다음과 같으며, 이들은 OS의 종류와 관계없이 동일하다.
 
 +--------------------------+--------------+----------------+--------------------------+
 | listener                 | requester    | port           | 방화벽 존재 시 포트 설정 |
@@ -417,5 +417,5 @@ CUBRID Web Manager, CUBRID Manager 서버 사용 포트
 | Web Manager server       |              |                |                          |
 +--------------------------+--------------+----------------+--------------------------+
 
-*   CUBRID Manager 클라이언트가 CUBRID Manager 서버 프로세스에 접속할 때 사용하는 포트는 cm.conf의 **cm_port**\이며 기본값은 8001이다.
-*   CUBRID Web Manager 클라이언트가 CUBRID Web Manager 서버 프로세스에 접속할 때 사용하는 포트도 cm.conf의 **cm_port**\이다.
+*   CUBRID 매니저 클라이언트가 CUBRID 매니저 서버 프로세스에 접속할 때 사용하는 포트는 cm.conf의 **cm_port**\이며 기본값은 8001이다.
+*   CUBRID 웹 매니저 클라이언트가 CUBRID 웹 매니저 서버 프로세스에 접속할 때 사용하는 포트도 cm.conf의 **cm_port**\이다.

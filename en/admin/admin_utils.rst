@@ -1339,11 +1339,11 @@ The example below shows an object in which the object type is an instance of a c
         Tran_index = 1, Granted_mode = U_LOCK, Count = 3
         Blocked_mode = X_LOCK
                         Start_waiting_at = Fri May 3 14:44:31 2002
-                        Wait_for_nsecs = -1
+                        Wait_for_secs = -1
     LOCK WAITERS :
         Tran_index = 3, Blocked_mode = S_LOCK
                         Start_waiting_at = Fri May 3 14:45:14 2002
-                        Wait_for_nsecs = -1
+                        Wait_for_secs = -1
 
 It outputs the lock information on the index of the table when the object type is the Index key of class (index key).
 
@@ -1357,7 +1357,7 @@ It outputs the lock information on the index of the table when the object type i
     LOCK HOLDERS:
         Tran_index =   1, Granted_mode =  NX_LOCK, Count =   1
 
-Granted_mode refers to the mode of the obtained lock, and Blocked_mode refers to the mode of the blocked lock. Starting_waiting_at refers to the time at which the lock was requested, and Wait_for_nsecs refers to the waiting time of the lock. The value of Wait_for_nsecs is determined by lock_timeout, a system parameter.
+Granted_mode refers to the mode of the obtained lock, and Blocked_mode refers to the mode of the blocked lock. Starting_waiting_at refers to the time at which the lock was requested, and Wait_for_secs refers to the waiting time of the lock. The value of Wait_for_secs is determined by lock_timeout, a system parameter.
 
 When the object type is a class (table), Nsubgranules is displayed, which is the sum of the record locks and the key locks obtained by a specific transaction in the table.
 
@@ -1418,7 +1418,7 @@ Each column's meaning is as following.
     *   Query time : total execution time for the running query (unit: second)
     *   Tran time : total run time for the current transaction (unit: second)
     *   Wait for lock holder : the list of transactions which own the lock when the current transaction is waiting for a lock
-    *   SQL ID: an ID for SQL Text
+    *   SQL_ID: an ID for SQL Text
     *   SQL Text : running  SQL text (maximum 30 characters)
 
 Transaction status messages, which are shown on "Tran index", are as follows.

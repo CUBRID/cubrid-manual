@@ -764,7 +764,9 @@ Database server error processes use the server error code when an error has occu
 
 *   All message groups under "$set 5 MSGCAT_SET_ERROR" in the **CUBRID/msg/en_US (in Korean, ko_KR.eucKR** or **ko_KR.utf8)/cubrid.msg** $ file indicates the server error messages.
 
-When you write code, it is recommended to use the error code name rather than the error code number. For example, the error code number for violating the unique key is -670 or -886. However, users can easily recognize the error when it is written as **ER_BTREE_UNIQUE_FAILED** or **ER_UNIQUE_VIOLATION_WITHKEY** .
+When you write a C code with CCI driver, we recommend you to write a code with an error code name than with an error code number. For example, the error code number for violating the unique key is -670 or -886, but users can easily recognize the error when it is written as **ER_BTREE_UNIQUE_FAILED** or **ER_UNIQUE_VIOLATION_WITHKEY**\.
+
+However, when you write a JAVA code with JDBC driver, you have to use error code numbers because "dbi.h" file cannot be included into the JAVA code. For JDBC program, you can get an error number by using getErrorCode() method of SQLException class.
 
 ::
 
@@ -792,9 +794,6 @@ When you write code, it is recommended to use the error code name rather than th
     #define ER_LK_OBJECT_DL_TIMEOUT_CLASS_MSG           -967
     #define ER_LK_OBJECT_DL_TIMEOUT_CLASSOF_MSG         -968
     ...
-    #define ER_LK_DEADLOCK_CYCLE_DETECTED               -1021
-    #define ER_LK_DEADLOCK_SPECIFIC_INFO                -1083
-    ...
 
 The following are some of the server error code names, error code numbers, and error messages.
 
@@ -820,10 +819,6 @@ The following are some of the server error code names, error code numbers, and e
 | ER_LK_OBJECT_DL_TIMEOUT_CLASS_MSG   | -967                  | Your transaction (index ?, ?@?\|?) timed out waiting on ? lock on class ? because of deadlock. You are waiting for user(s) ? to finish.                  |
 +-------------------------------------+-----------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
 | ER_LK_OBJECT_DL_TIMEOUT_CLASSOF_MSG | -968                  | Your transaction (index ?, ?@?\|?) timed out waiting on ? lock on instance ?\|?\|? of class ? because of deadlock. You are waiting for user(s) ? to      |
-+-------------------------------------+-----------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ER_LK_DEADLOCK_CYCLE_DETECTED       | -1021                 | A deadlock cycle is detected. ?.                                                                                                                         |
-+-------------------------------------+-----------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ER_LK_DEADLOCK_SPECIFIC_INFO        | -1083                 | Specific information about deadlock.                                                                                                                     |
 +-------------------------------------+-----------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 .. _broker:

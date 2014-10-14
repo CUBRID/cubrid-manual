@@ -1966,8 +1966,24 @@ CCI API 레퍼런스
 
 .. c:function:: int cci_next_result(int req_handle, T_CCI_ERROR *err_buf)
 
-    :c:func:`cci_execute` 수행 시 **CCI_EXEC_QUERY_ALL** *flag*\ 가 설정된 경우 실행된 다음 질의의 결과를 가져온다. next_result에 의해 얻은 질의에 대한 정보는 :c:func:`cci_get_result_info`\ 를 통해서 얻을 수 있다. next_result가 성공적으로 수행될 경우 현재의 질의에 대한 정보로 수정된다.
+    :c:func:`cci_execute` 수행 시 **CCI_EXEC_QUERY_ALL** *flag*\ 가 설정되면 여러 개의 질의를 순서대로 수행할 수 있게 된다. 이때, 첫 번째 질의 결과는 :c:func:`cci_execute` 함수를 호출한 뒤에 가져오고, 두 번째 질의부터는 **cci_next_result** 함수를 호출할 때마다 질의를 작성한 순서대로 결과를 가져온다. 이때 얻은 질의 결과에 대한 칼럼 정보는 :c:func:`cci_execute` 함수 또는 **cci_next_result** 함수를 호출할 때마다 :c:func:`cci_get_result_info` 함수를 호출하면 된다.
+
+    즉, Q1, Q2, Q3 질의 여러 개를 한 번의 :c:`cci_prepare` 호출을 통해 수행할 경우 Q1의 결과는 :c:func:`cci_execute` 함수를 호출할 때 가져오며, Q2, Q3의 결과는 **cci_next_result** 함수를 각각 호출하여 가져온다. Q1, Q2, Q3의 질의 결과에 대한 칼럼 정보는 매번 :c:func:`cci_get_result_info` 함수를 호출하여 가져온다.
     
+    .. code-block:: c
+    
+        sql = "SELECT * FROM athlete; SELECT * FROM nation; SELECT * FROM game";
+        req = cci_prepare (con, sql, 0, &error);
+        ...
+        ret = cci_execute (req, CCI_EXEC_QUERY_ALL, 0, &error);
+        res_col_info = cci_get_result_info (req, &cmd_type, &col_count);
+        ...
+        ret = cci_next_result (req, &error);
+        res_col_info = cci_get_result_info (req, &cmd_type, &col_count);
+        ...
+        ret = cci_next_result (req, &error);
+        res_col_info = cci_get_result_info (req, &cmd_type, &col_count);
+
     :param req_handle: (IN) prepared statement에 대한 요청 핸들
     :param err_buf: (OUT) 에러 버퍼        
     :return: 
@@ -1981,7 +1997,7 @@ CCI API 레퍼런스
             *   **CCI_ER_DBMS**
             *   **CCI_ER_COMMUNICATION**
 
-    에러 코드가 **CAS_ER_NO_MORE_RESULT_SET** 일 경우 더 이상의 result set이 존재하지 않는다는 것을 의미한다.
+    에러 코드가 **CAS_ER_NO_MORE_RESULT_SET** 일 경우 더 이상의 결과 셋이 존재하지 않는다는 것을 의미한다.
 
 .. c:function:: int cci_oid(int conn_handle, T_CCI_OID_CMD cmd, char *oid_str, T_CCI_ERROR *err_buf)
 

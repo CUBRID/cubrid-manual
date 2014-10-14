@@ -77,22 +77,10 @@ ERwin에서 XML 파일은 File > Save As를 이용하여 저장할 수 있다. E
 
 *   볼륨 관련: 볼륨 추가
 
-OID 탐색기
-==========
-
-OID로 데이터를 탐색할 때 사용한다.
-
-해당 데이터베이스 또는 질의 편집기의 결과 창에서 마우스 오른쪽 버튼 클릭하고 "OID 탐색기"를 선택하여 실행할 수 있다. 이 기능은 데이터베이스 서버가 구동 중일 때에만 수행할 수 있으며, 서버가 구동하지 않을 때에는 해당 메뉴가 비활성화된다.
-
-
- : 단, REUSE_OID 쓰면 이 기능 사용 불가? => 아닌 거 같다. 실험해 볼 것.REUSE_OID 쓰는 테이블은 다른 테이블을 컬럼 타입으로 쓸 수 없다는 부분만.
- 왜냐면 테이블이 drop되고 재생성되면 기존의 테이블 레퍼런스가 다른 엉뚱한 테이블의 인스턴스를 가리킬 수 있으므로.
-
-
 매니저 로그
 ===========
 
-CUBRID 매니저 클라이언트를 수행 중에 발생한 오류 로그는 $CUBRID/cubridmanager/logs에 cubridmanager.log라는 파일로 생성된다.
+CUBRID 매니저 클라이언트를 수행 중에 발생한 오류 로그는 $CUBRID/cubridmanager/workspace/logs에 cubrid.txt라는 파일로 생성된다.
 
 사용자는 CUBRID 매니저 개선 및 오류 분석 시 해당 오류 로그와 현상을 CUBRID 매니저 개발 사이트 이슈로 등록하여 CUBRID 매니저 개선 활동에 참여할 수 있다.
 
@@ -105,12 +93,16 @@ CUBRID 매니저 클라이언트를 수행 중에 발생한 오류 로그는 $CU
 =============== =========================
 단축키          동작
 =============== =========================
-Ctrl+T          Open query editor
-Ctrl+W          Close the active query editor
-Ctrl+Shift+W    Close all query editors
-Alt+F           Open file menu
-F1              Open help document page
+Ctrl+T          질의 편집기를 열기
+Ctrl+W          활성화된 창을 닫기
+Ctrl+Shift+W    열려있는 모든 창을 닫기
 =============== =========================
+
+.. comment
+
+    Ctrl+T          Open query editor
+    Ctrl+W          Close an active window
+    Ctrl+Shift+W    Close all opened windows
 
 질의 편집기 단축키
 ------------------
@@ -118,38 +110,63 @@ F1              Open help document page
 =============== =========================
 단축키          동작
 =============== =========================
-F5              Run the queries
-F6              Show the query plan
-F7              Show the query history
-F8              Switch to multiple database query
-F11             Change query plan display model
-Ctrl+Shift+X    Change to upper letters(capitals)
-Ctrl+Shift+Y    Change to lower letters
-F5/Ctrl+Enter   Run the queries
-Ctrl+Shift+F    Format the selected queries
-Tab             Indent
-Shift+Tab       Outdent
-Ctrl+/          Add Comment
-Ctrl+/          Delete Comment
-Ctrl+Z          Undo
-Ctrl+Y          Redo
-Ctrl+F          Find/Replace
-Ctrl+C          Copy
-Ctrl+X          Cut
-Ctrl+V          Paste
-Ctrl+G          Go to line
+F5              질의를 수행하기
+F6              질의 계획 보기
+F7              질의 이력 보기
+F8              다중 질의 실행 모드로 변환하기
+F11             질의 출력 형식을 변경하기 (원본 출력, 트리 출력, 그래프 출력)
+Ctrl+Shift+X    드래그하여 선택한 문자열을 대문자로 변환하기
+Ctrl+Shift+Y    드래그하여 선택한 문자열을 소문자로 변환하기
+F5/Ctrl+Enter   질의를 수행하기
+Ctrl+Shift+F    선택한 질의 문자열을 포맷팅하기
+Tab             들여쓰기(인덴트)
+Shift+Tab       내어쓰기(아웃덴트)
+Ctrl+/          주석 달기
+Ctrl+/          주석 제거
+Ctrl+Z          이전으로 되돌리기
+Ctrl+Y          되돌린 것을 원복하기
+Ctrl+F          찾기/대체하기
+Ctrl+C          복사하기
+Ctrl+X          자르기
+Ctrl+V          붙이기
+Ctrl+G          특정 줄로 이동하기
 =============== =========================
 
-테이블/컬럼 설명 기능 사용
+.. comment
+
+    F5              Run the queries
+    F6              Show the query plan
+    F7              Show the query history
+    F8              Switch to multiple database query
+    F11             Change query plan display model
+    Ctrl+Shift+X    Change to upper letters(capitals)
+    Ctrl+Shift+Y    Change to lower letters
+    F5/Ctrl+Enter   Run the queries
+    Ctrl+Shift+F    Format the selected queries
+    Tab             Indent
+    Shift+Tab       Outdent
+    Ctrl+/          Add Comment
+    Ctrl+/          Delete Comment
+    Ctrl+Z          Undo
+    Ctrl+Y          Redo
+    Ctrl+F          Find/Replace
+    Ctrl+C          Copy
+    Ctrl+X          Cut
+    Ctrl+V          Paste
+    Ctrl+G          Go to line
+
+테이블/칼럼 설명 기능 사용
 ==========================
 
-테이블/컬럼 설명 기능은 UI를 이용하여 테이블을 생성하거나 편집할 때, 테이블/컬럼의 설명을 등록하여 각 테이블과 컬럼의 용도를 UI에서 쉽게 확인하고 관리하기 위해 지원한다.
+.. rubric:: 
+
+테이블/칼럼 설명 기능은 UI를 이용하여 테이블을 생성하거나 편집할 때, 테이블/칼럼의 설명을 등록하여 각 테이블과 칼럼의 용도를 UI에서 쉽게 확인하고 관리하기 위해 지원한다.
 
 .. image:: /images/cm-table-column-comment.png
 
-단, 이 기능은 CUBRID에서 기본 지원되는 기능이 아니며, CUBRID Manager, CUBRID Query Browser에서 자체 지원되는 기능이며 사용상 기능 한계가 있을 수 있습니다. 또한, 처음 사용시 설치를 해야 사용할 수 있는 기능이며, DBA 권한이 있을 경우만 생성 가능하다.
+단, 이 기능은 CUBRID에서 기본 지원되는 기능이 아니며, CUBRID 매니저에서 자체 지원되는 기능이므로 한계가 있을 수 있다. 또한, 처음 사용 시 테이블/칼럼 설명을 저장하는 별도의 테이블이 생성되어야 사용할 수 있는 기능이며, DBA 권한이 있을 경우에만 이 테이블을 생성할 수 있다.
 
-DBA 사용자일 경우 아래와 같이 안내후 _cub_schema_comments을 자동 생성합니다. 네비게이션에서는 일반 유저들이 이 테이블을 UI에서 편집하지 못하도록 시스템 테이블 영역에 출력이 됩니다만 실제 시스템 테이블은 아니다.
+DBA 사용자일 경우 아래와 같이 안내 후 _cub_schema_comments 테이블을 자동 생성한다. 탐색기 창에서는 일반 유저들이 이 테이블을 UI에서 편집하지 못하도록 시스템 테이블 영역에 출력이 되지만 실제 시스템 테이블은 아니다.
 
 .. image:: /images/cm-col-comment.png
 
@@ -162,62 +179,71 @@ DBA 권한이 없는 유저의 경우 아래와 같은 오류가 발생한다.
 .. image:: /images/cm-table-column-comment2.png
 
  
-테이블 설명과 컬럼 설명을 확인 가능하며 컬럼 설명은 아래의 컬럼 편집 UI 에서 편집 가능하다. 
+테이블 설명과 칼럼 설명을 확인 가능하며 칼럼 설명은 아래의 칼럼 편집 UI 에서 편집 가능하다. 
 
 .. image:: /images/cm-col-comment3.png
 
 HA 마법사
 =========
 
-본 기능은 대상 호스트가 Linux인 경우에만 사용할 수 있습니다. Linux에서만 CUBRID HA 구성이 가능하기 때문입니다.  
+Linux에서만 CUBRID HA 구성이 가능하기 때문에, 본 기능은 대상 호스트가 Linux인 경우에만 사용할 수 있다.
 
-선행 작업:  
+**선행 작업**
 
-1)  Linux 서버 2대를 확보하고, 각각 CUBRID 2008 R2.2 이상의 버전이 설치되어 있어야 합니다. 
+1)  Linux 서버 2대를 확보하고, 각각 CUBRID 2008 R2.2 이상의 버전이 설치되어 있어야 한다. 
 
-2)  각각의 서버에서 동일한 이름의 DB를 생성하세요. 
+2)  각각의 서버에서 동일한 이름의 DB를 생성한다. 
 
-3)  CUBRID Manager에서 각 마스터/슬레이브 DB에 로그인합니다. 
+3)  CUBRID 매니저에서 각 마스터/슬레이브 DB에 로그인한다. 
 
-4)  마스터 호스트 이름에 마우스를 대고 우클릭> HA 설정 마법사를 선택하십시오. 
+4)  마스터 호스트 이름에 마우스를 대고 우클릭> HA 설정 마법사를 선택한다.
 
-5)  왼쪽 마스터 설정 영역에서 마스터의 호스트이름을 적고, 하위 목록에서 마스터 DB를 선택합니다.  오른쪽 슬레이브 설정 영역에서 슬레이브 서버 선택, 호스트 이름 및 슬레이브 DB를 선택합니다.  
+5)  왼쪽 마스터 설정 영역에서 마스터의 호스트 이름을 적고, 하위 목록에서 마스터 DB를 선택한다.  오른쪽 슬레이브 설정 영역에서 슬레이브 서버 선택, 호스트 이름 및 슬레이브 DB를 선택한다.  
 
     .. image:: /images/cm-ha-1.jpg
 
-6)  cubrid.conf 파라미터를 설정합니다.
+6)  cubrid.conf 파라미터를 설정한다.
 
     .. image:: /images/cm-ha-2.jpg
 
-7)  cubrid_ha.conf 파라미터를 설정합니다.
+7)  cubrid_ha.conf 파라미터를 설정한다.
 
     .. image:: /images/cm-ha-3.jpg
 
-8)  파라미터 설정을 확인합니다.
+8)  파라미터 설정을 확인한다.
 
     .. image:: /images/cm-ha-4.jpg
 
-9)  HA 구성 적용을 위한 가이드를 실행합니다.
+9)  HA 구성 적용을 위한 가이드를 실행한다.
 
-    Step1,2)에서 출력된 대로 각 호스트에서  /etc/hosts 파일을 수정합니다. 
-    Step3) HA 서비스를 구동합니다.
+    Step1,2)에서 출력된 대로 각 호스트에서  /etc/hosts 파일을 수정한다. 
+    
+    Step 3) HA 서비스를 구동한다.
 
     .. image:: /images/cm-ha-7.jpg
 
-10) Add host info to /etc/hosts files both servers. The content is "host address" or "host name"
+10) 모든 서버의 /etc/hosts 파일에 호스트 정보를 추가한다. "호스트 주소" 또는 "호스트 이름"이 올 수 있다. 
 
-    (e.g. 10.34.64.149NC-PL-DEV001). (If host address is "localhost" or "127.0.0.1", please replace it by real address). 
+    (예. 10.34.64.149NC-PL-DEV001). 
 
-    Stop current service use command "cubrid service stop". 
+    .. warning:: 호스트 주소가 "localhost" or "127.0.0.1"이면 실제 주소로 대체해야 한다.
 
-    Start service use command "cubrid service start". 
+11) CUBRID 서비스를 구동한다.
 
-    Start heart beat use command "cubrid heartbeat start".
+    ::
     
+        $ cubrid service start
+    
+12) 콘솔에서 HA 기능을 구동한다.
+
+    ::
+    
+        $ cubrid heartbeat start
+
 HA 프로세스 상태 확인
 =====================
 
-Check HA server status use command “cubrid hb status”.
+콘솔에서 Check HA server status use command “cubrid hb status”.
 
 .. image:: /images/cm-ha-8.jpg
 
@@ -232,7 +258,7 @@ For more detail,  Please see :doc:`/ha`.
 
 테이블, 뷰, 시리얼, 트리거, 작업 자동화의 목록을 보면서 추가/편집을 할 수 있는 오브젝트 대시보드를 제공한다.
 
-왼쪽 네비게이션 트리에서 테이블/뷰/시리얼/트리거/작업 자동화 노드를 두번클릭하면 사용할 수 있다.
+왼쪽 탐색기 창의 트리에서 테이블/뷰/시리얼/트리거/작업 자동화 노드를 두 번 클릭하면 사용할 수 있다.
 
 .. image:: /images/cm-obj-dashboard1.png
 

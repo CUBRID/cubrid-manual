@@ -103,7 +103,7 @@ CURRENT_USER, USER
 
 .. c:macro:: USER
 
-    **CURRENT_USER**\ 와 **USER** 의사 컬럼(pseudo column)은 동일하며, 현재 데이터베이스에 로그인한 사용자의 이름을 문자열로 반환한다.
+    **CURRENT_USER**\ 와 **USER** 의사 칼럼(pseudo column)은 동일하며, 현재 데이터베이스에 로그인한 사용자의 이름을 문자열로 반환한다.
 
     기능이 비슷한 :func:`SYSTEM_USER` 함수와 :func:`USER` 함수는 사용자 이름을 호스트 이름과 함께 반환한다.
 

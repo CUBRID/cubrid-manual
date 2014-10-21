@@ -5,7 +5,7 @@
 DB 데이터 비교 마법사
 =====================
 
-HA 구성된 데이터베이스의 마이그레이션 및 복제후 데이터 정합성을 비교할 수 있습니다. Primary Key가 있는 테이블만 비교 대상이 됩니다.
+HA 환경으로 구성된 데이터베이스의 마이그레이션 및 복제후 데이터 정합성을 비교할 수 있다. Primary Key가 있는 테이블만 비교 대상이 된다.
 
 .. image:: /images/cm-data-compare.png
 
@@ -37,7 +37,7 @@ ERwin에서 XML 파일은 File > Save As를 이용하여 저장할 수 있다. E
 *   그룹: 그룹 노드를 표시한다.
 
 호스트 그룹 설정
------------------------
+----------------
 
 .. image:: /images/cm-set-hostgroup.png
  
@@ -49,20 +49,24 @@ ERwin에서 XML 파일은 File > Save As를 이용하여 저장할 수 있다. E
  
 
 호스트 그룹 추가/편집
------------------------
+---------------------
 
 "그룹 설정" 대화상자에서 "추가"를 클릭하면 새로운 그룹의 이름과 그 그룹에 속할 호스트를 입력할 수 있다.
 
-대화 상자의 왼쪽에 해당 호스트 그룹에 속하지 않은 호스트 목록이 보이고, 오른쪽에는 해당 호스트 그룹에 속한 호스트 목록이 보인다. ">" 버튼을 클릭하면 왼쪽 목록에서 선택한 호스트가 오른쪽으로 이동하고, ">>" 버튼을 클릭하면 왼쪽 목록의 모든 호스트가 오른쪽으로 이동한다. "<" 버튼을 클릭하면 오른쪽 목록에서 선택한 호스트가 왼쪽으로 이동하고, "<<" 버튼을 클릭하면 오른쪽 목록의 모든 호스트가 왼쪽으로 이동한다.
+*   대화 상자의 왼쪽에 해당 호스트 그룹에 속하지 않은 호스트 목록이 보이고, 오른쪽에는 해당 호스트 그룹에 속한 호스트 목록이 보인다. 
+
+*   ">" 버튼을 클릭하면 왼쪽 목록에서 선택한 호스트가 오른쪽으로 이동하고, ">>" 버튼을 클릭하면 왼쪽 목록의 모든 호스트가 오른쪽으로 이동한다. 
+
+*   "<" 버튼을 클릭하면 오른쪽 목록에서 선택한 호스트가 왼쪽으로 이동하고, "<<" 버튼을 클릭하면 오른쪽 목록의 모든 호스트가 왼쪽으로 이동한다.
  
 호스트 그룹 삭제
------------------------
+----------------
 
 "그룹 설정" 대화상자에서 삭제할 호스트 그룹을 선택하고 "삭제" 버튼을 클릭한다. "Default Group"은 삭제하거나 편집할 수 없으며, 아무 그룹에도 속하지 않는 호스트를 포함한다.
  
 
 끌어다 놓기
------------------------
+-----------
 
 여러 개의 호스트를 끌어다 다른 호스트 그룹으로 옮기거나 현재 그룹 내에서 호스트 노드의 표시 순서를 변경할 수 있다. 그룹 노드를 숨겼을 때에도 호스트 노드의 표시 순서를 변경할 수 있다.
 
@@ -164,7 +168,10 @@ Ctrl+G          특정 줄로 이동하기
 
 .. image:: /images/cm-table-column-comment.png
 
-단, 이 기능은 CUBRID에서 기본 지원되는 기능이 아니며, CUBRID 매니저에서 자체 지원되는 기능이므로 한계가 있을 수 있다. 또한, 처음 사용 시 테이블/칼럼 설명을 저장하는 별도의 테이블이 생성되어야 사용할 수 있는 기능이며, DBA 권한이 있을 경우에만 이 테이블을 생성할 수 있다.
+.. note:: 
+
+    *   이 기능은 CUBRID에서 기본 지원되는 기능이 아니며, CUBRID 매니저에서 자체 지원되는 기능이므로 한계가 있을 수 있다. 
+    *   처음 사용 시 테이블/칼럼 설명을 저장하는 별도의 테이블이 생성되어야 사용할 수 있는 기능이며, DBA 권한이 있을 경우에만 이 테이블을 생성할 수 있다.
 
 DBA 사용자일 경우 아래와 같이 안내 후 _cub_schema_comments 테이블을 자동 생성한다. 탐색기 창에서는 일반 유저들이 이 테이블을 UI에서 편집하지 못하도록 시스템 테이블 영역에 출력이 되지만 실제 시스템 테이블은 아니다.
 
@@ -179,7 +186,7 @@ DBA 권한이 없는 유저의 경우 아래와 같은 오류가 발생한다.
 .. image:: /images/cm-table-column-comment2.png
 
  
-테이블 설명과 칼럼 설명을 확인 가능하며 칼럼 설명은 아래의 칼럼 편집 UI 에서 편집 가능하다. 
+테이블 설명과 칼럼 설명을 확인 가능하며 칼럼 설명은 아래의 칼럼 편집 UI에서 편집 가능하다. 
 
 .. image:: /images/cm-col-comment3.png
 
@@ -214,9 +221,9 @@ Linux에서만 CUBRID HA 구성이 가능하기 때문에, 본 기능은 대상 
 
     .. image:: /images/cm-ha-4.jpg
 
-9)  HA 구성 적용을 위한 가이드를 실행한다.
+9)  HA 환경을 적용하기 위한 가이드를 실행한다.
 
-    Step1,2)에서 출력된 대로 각 호스트에서  /etc/hosts 파일을 수정한다. 
+    Step 1), 2)에서 출력된 대로 각 호스트에서  /etc/hosts 파일을 수정한다. 
     
     Step 3) HA 서비스를 구동한다.
 
@@ -243,15 +250,23 @@ Linux에서만 CUBRID HA 구성이 가능하기 때문에, 본 기능은 대상 
 HA 프로세스 상태 확인
 =====================
 
-콘솔에서 Check HA server status use command “cubrid hb status”.
+콘솔에서 "cubrid hb status" 명령을 실행하여 HA 상태를 확인한다.
 
-.. image:: /images/cm-ha-8.jpg
+::
 
-As shown in illustration: The master server is “NC-VM-PL-QA-34” and “NC-PL-DEV001” is slave server. 
+    [nodeA]$ cubrid heartbeat status
+    @ cubrid heartbeat list
+     HA-Node Info (current nodeA-node-name, state master)
+       Node nodeB-node-name (priority 2, state slave)
+       Node nodeA-node-name (priority 1, state master)
+     HA-Process Info (nodeA 9289, state nodeA)
+       Applylogdb testdb@localhost:/home1/cubrid1/DB/testdb_nodeB.cub (pid 9423, state registered)
+       Copylogdb testdb@nodeB-node-name:/home1/cubrid1/DB/testdb_nodeB.cub (pid 9418, state registered)
+       Server testdb (pid 9306, state registered_and_active)
 
-So far, the simple HA environment configure finished.  
+위 출력 결과에서 마스터 서버는 "nodeA"이고, 슬레이브 서버는 "nodeB"임을 알 수 있다.
 
-For more detail,  Please see :doc:`/ha`.
+여기까지 해서 간단한 HA 환경 구성이 완료되었다. 보다 자세한 사항은 :doc:`/ha`\를 참고한다.
 
 오브젝트 대시보드
 =================
@@ -277,7 +292,7 @@ SELECT, INSERT, UPDATE 문을 바로 질의 편집기에 입력할 수 있다.
 다중 호스트 설정 편집기
 =======================
 
-복수개의 호스트 설정 (cubrid.conf, broker.conf)을 동시에 비교하면서 편집할 수 있다.
+여러 개의 호스트 설정(cubrid.conf, cubrid_broker.conf)을 동시에 비교하면서 편집할 수 있다.
 
 .. image:: /images/cm-multihost.png
 

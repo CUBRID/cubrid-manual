@@ -1972,7 +1972,7 @@ CCI API Reference
 
     You can execute multiple queries in the written order when **CCI_EXEC_QUERY_ALL** *flag* is set on :c:func:`cci_execute`. At this time, CUBRID brings the first query's result after calling :c:func:`cci_execute`; CUBRID brings the second and the other queries' results after calling **cci_next_result** function. At this time, the column information about the query result can be brought by calling :c:func:`cci_get_result_info` function whenever :c:func:`cci_execute` function or **cci_next_result** function is called.
     
-    In other words, when you run Q1, Q2, and Q3 at once with calling :c:`cci_prepare` function, the result of Q1 is brought by calling :c:func:`cci_execute`; the result of Q2 or Q3 is brought by calling **cci_next_result**.
+    In other words, when you run Q1, Q2, and Q3 at once with calling :c:func:`cci_prepare` function, the result of Q1 is brought by calling :c:func:`cci_execute`; the result of Q2 or Q3 is brought by calling **cci_next_result**.
     The result of Q1, Q2 or Q3 is brought by calling :c:func:`cci_get_result_info` function for each time.
 
     .. code-block:: c

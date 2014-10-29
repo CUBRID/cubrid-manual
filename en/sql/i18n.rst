@@ -334,7 +334,7 @@ To create user defined locale shared libraries, two choices are available:
 
     ::
 
-        make_locale.sh                         # Build and pack all locales (32/release)
+        make_locale.sh -t64                        # Build and pack all locales (64/release)
 
 *   Creating one lib for each locale to be supported.
 

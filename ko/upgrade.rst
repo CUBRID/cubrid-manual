@@ -6,6 +6,10 @@
 업그레이드 시 주의 사항
 -----------------------
 
+**동작 변경**
+
+9.3 버전과의 동작 차이에 대해서는 릴리스 노트의 :ref:`changed-behaviors100`\을 반드시 참고한다.
+
 **기존 환경 설정 파일 보관**
 
 *   이전 버전의 $CUBRID/conf 디렉터리의 환경 설정 파일(cubrid.conf, cubrid_broker.conf, cm.conf)과 $CUBRID_DATABASES 디렉터리의 DB 위치 정보 파일(databases.txt)을 보관한다.
@@ -46,6 +50,7 @@
 **Java 저장 함수/프로시저**
 
 *   Java 저장 함수/프로시저 사용자는 loadjava 명령을 실행하여 Java 클래스를 CUBRID에 로딩해야 한다. :doc:`/sql/jsp`\ 를 참고한다.
+
 
 CUBRID 9.2에서 CUBRID 9.3으로 업그레이드하기
 --------------------------------------------

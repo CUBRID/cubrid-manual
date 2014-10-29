@@ -1968,7 +1968,7 @@ CCI API 레퍼런스
 
     :c:func:`cci_execute` 수행 시 **CCI_EXEC_QUERY_ALL** *flag*\ 가 설정되면 여러 개의 질의를 순서대로 수행할 수 있게 된다. 이때, 첫 번째 질의 결과는 :c:func:`cci_execute` 함수를 호출한 뒤에 가져오고, 두 번째 질의부터는 **cci_next_result** 함수를 호출할 때마다 질의를 작성한 순서대로 결과를 가져온다. 이때 얻은 질의 결과에 대한 칼럼 정보는 :c:func:`cci_execute` 함수 또는 **cci_next_result** 함수를 호출할 때마다 :c:func:`cci_get_result_info` 함수를 호출하면 된다.
 
-    즉, Q1, Q2, Q3 질의 여러 개를 한 번의 :c:`cci_prepare` 호출을 통해 수행할 경우 Q1의 결과는 :c:func:`cci_execute` 함수를 호출할 때 가져오며, Q2, Q3의 결과는 **cci_next_result** 함수를 각각 호출하여 가져온다. Q1, Q2, Q3의 질의 결과에 대한 칼럼 정보는 매번 :c:func:`cci_get_result_info` 함수를 호출하여 가져온다.
+    즉, Q1, Q2, Q3 질의 여러 개를 한 번의 :c:func:`cci_prepare` 호출을 통해 수행할 경우 Q1의 결과는 :c:func:`cci_execute` 함수를 호출할 때 가져오며, Q2, Q3의 결과는 **cci_next_result** 함수를 각각 호출하여 가져온다. Q1, Q2, Q3의 질의 결과에 대한 칼럼 정보는 매번 :c:func:`cci_get_result_info` 함수를 호출하여 가져온다.
     
     .. code-block:: c
     

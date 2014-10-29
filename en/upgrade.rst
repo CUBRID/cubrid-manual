@@ -6,6 +6,10 @@ Upgrade
 Cautions during upgrade
 -----------------------
 
+**Behavioral Changes**
+
+To see the behavioral changes from 9.3, please see :ref:`changed-behaviors100` in the release notes.
+
 **Saving the Existing Configuration File**
 
 *   Save the configuration files in the $CUBRID/conf directory (cubrid.conf, cubrid_broker.conf and cm.conf) and the DB location file (databases.txt) in the $CUBRID_DATABASES directory.

@@ -447,7 +447,7 @@ The **PROMOTE** clause of the **ALTER** statement promotes a partition of a part
 
 The partition **PROMOTE** statement is allowed only on range and list-partitioned tables. Since users do not control how data is distributed among hash partitions, promoting such a partition does not make sense.
 
-When the partition is promoted to a standalone table, this table inherits the data and local indexes only. The following constraints are not available on the promoted partition:
+When the partition is promoted to a standalone table, this table inherits the data and ordinary indexes only. The following constraints are not available on the promoted partition:
 
 *   Primary Key
 *   Foreign key

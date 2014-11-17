@@ -258,14 +258,14 @@ Enter code below to restart registered CUBRID service. You can verify that serve
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 9.2
+    CUBRID 10.0
 
     ++ cubrid server start: success
     @ cubrid server start: testdb
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 9.2
+    CUBRID 10.0
 
     ++ cubrid server start: success
     @ cubrid broker start

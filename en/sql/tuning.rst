@@ -967,7 +967,7 @@ On the above example, if you use "USING INDEX idx_open_bugs" clause or "USE INDE
     
 .. warning::
 
-    Even though the conditions of creating filtered indexes does not match the query conditions,  if you execute queries by specifying indexes with index hint syntax, CUBRID performs a query by choosing a specified index. Therefore, query results can be different with the given searching conditions.
+   If you execute queries by specifying indexes with index hint syntax even though the conditions of creating filtered indexes does not match the query conditions, CUBRID performs a query by choosing a specified index. Therefore, query results can be different with the given searching conditions.
 
 .. note:: **Constraints**
 

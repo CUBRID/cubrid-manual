@@ -26,6 +26,20 @@ unloaddb
 
 .. program:: unloaddb
 
+.. option:: -u, --user=ID
+
+    언로딩할 데이터베이스의 사용자 계정을 지정한다. 옵션을 지정하지 않으면 기본값은 **DBA**\가 된다.
+
+    ::
+
+        cubrid unloaddb -u dba -i table_list.txt demodb
+
+.. option:: -p, --password=PASS
+
+    언로딩할 데이터베이스의 사용자 암호를 지정한다. 옵션을 지정하지 않으면 빈 문자열을 입력한 것으로 간주한다. ::
+
+        cubrid unloaddb -u dba -p dba_pwd -i table_list.txt demodb
+
 .. option:: -i, --input-class-file=FILE
 
     인수로 지정된 입력 파일에 지정된 클래스만을 대상으로 데이터베이스를 언로드한다. ::

@@ -84,7 +84,7 @@ CUBRID consists of the database server, the broker and the CUBRID Manager. The n
 Database Server System Parameters
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The following are database server system parameters that can be used in the **cubrid.conf** configuration file. On the following table, "Applied" column's "client parameter" means that they are applied to CAS, CSQL, **cubrid** utilities. Its "server parameter" means that they are applied to the DB server(cub_server) process.
+The following are database server system parameters that can be used in the **cubrid.conf** configuration file. On the following table, "Applied" column's "client parameter" means that they are applied to CAS, CSQL, **cubrid** utilities. Its "server parameter" means that they are applied to the DB server (cub_server process).
 For the scope of **client** and **server parameters**, see :ref:`scope-server-conf`.
 
 You can change the parameters that are capable of changing dynamically the setting value through the **SET SYSTEM PARAMETERS** statement or a session command of the CSQL Interpreter, **;set** while running the DB. If you are a DBA, you can change parameters regardless of the applied classification. However, if you are not a DBA, you can only change "session" parameters. (on the below table, a parameter of which "session" item's value is O.)
@@ -149,21 +149,21 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | volume_extension_path               | server parameter        |         | string   | NULL                           |                       |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-| :ref:`error-parameters`       | call_stack_dump_activation_list     | client/server parameter |         | string   | DEFAULT                        | only available to DBA |
+| :ref:`error-parameters`       | call_stack_dump_activation_list     | client/server parameter |         | string   | DEFAULT                        | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | call_stack_dump_deactivation_list   | client/server parameter |         | string   | NULL                           | only available to DBA |
+|                               | call_stack_dump_deactivation_list   | client/server parameter |         | string   | NULL                           | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | call_stack_dump_on_error            | client/server parameter |         | bool     | no                             | only available to DBA |
+|                               | call_stack_dump_on_error            | client/server parameter |         | bool     | no                             | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | error_log                           | client/server parameter |         | string   | cub_client.err, cub_server.err |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | error_log_level                     | client/server parameter |         | string   | SYNTAX                         | only available to DBA |
+|                               | error_log_level                     | client/server parameter |         | string   | SYNTAX                         | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | error_log_warning                   | client/server parameter |         | bool     | no                             | only available to DBA |
+|                               | error_log_warning                   | client/server parameter |         | bool     | no                             | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | error_log_size                      | client/server parameter |         | int      | 8,000,000                      | only available to DBA |
+|                               | error_log_size                      | client/server parameter |         | int      | 8,000,000                      | DBA only              |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-| :ref:`lock-parameters`        | deadlock_detection_interval_in_secs | server parameter        |         | float    | 1.0                            | only available to DBA |
+| :ref:`lock-parameters`        | deadlock_detection_interval_in_secs | server parameter        |         | float    | 1.0                            | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | isolation_level                     | client parameter        | O       | int      | 3                              | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -171,35 +171,35 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | lock_timeout                        | client parameter        | O       | msec     | -1                             | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | rollback_on_lock_escalation         | server parameter        |         | bool     | no                             | only available to DBA |
+|                               | rollback_on_lock_escalation         | server parameter        |         | bool     | no                             | DBA only              |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-| :ref:`logging-parameters`     | adaptive_flush_control              | server parameter        |         | bool     | yes                            | only available to DBA |
+| :ref:`logging-parameters`     | adaptive_flush_control              | server parameter        |         | bool     | yes                            | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | background_archiving                | server parameter        |         | bool     | yes                            | only available to DBA |
+|                               | background_archiving                | server parameter        |         | bool     | yes                            | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | checkpoint_every_size               | server parameter        |         | byte     | 10,000 *                       |                       |
 |                               |                                     |                         |         |          | :ref:`log_page_size <lpg>`     |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | checkpoint_interval                 | server parameter        |         | msec     | 6min                           | only available to DBA |
+|                               | checkpoint_interval                 | server parameter        |         | msec     | 6min                           | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | force_remove_log_archives           | server parameter        |         | bool     | yes                            | only available to DBA |
+|                               | force_remove_log_archives           | server parameter        |         | bool     | yes                            | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | log_buffer_size                     | server parameter        |         | byte     | 128 *                          |                       |
 |                               |                                     |                         |         |          | :ref:`log_page_size <lpg>`     |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | log_max_archives                    | server parameter        |         | int      | INT_MAX                        | only available to DBA |
+|                               | log_max_archives                    | server parameter        |         | int      | INT_MAX                        | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | log_trace_flush_time                | server parameter        |         | msec     | 0                              | only available to DBA |
+|                               | log_trace_flush_time                | server parameter        |         | msec     | 0                              | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | max_flush_size_per_second           | server parameter        |         | byte     | 10,000 *                       | only available to DBA |
+|                               | max_flush_size_per_second           | server parameter        |         | byte     | 10,000 *                       | DBA only              |
 |                               |                                     |                         |         |          | :ref:`db_page_size <dpg>`      |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | sync_on_flush_size                  | server parameter        |         | byte     | 200 *                          | only available to DBA |
+|                               | sync_on_flush_size                  | server parameter        |         | byte     | 200 *                          | DBA only              |
 |                               |                                     |                         |         |          | :ref:`db_page_size <dpg>`      |                       |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 | :ref:`transaction-parameters` | async_commit                        | server parameter        |         | bool     | no                             |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | group_commit_interval_in_msecs      | server parameter        |         | msec     | 0                              | only available to DBA |
+|                               | group_commit_interval_in_msecs      | server parameter        |         | msec     | 0                              | DBA only              |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 | :ref:`stmt-type-parameters`   | add_column_update_hard_default      | client/server parameter | O       | bool     | no                             | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -215,7 +215,7 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | default_week_format                 | client/server parameter | O       | int      | 0                              | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | group_concat_max_len                | server parameter        | O       | byte     | 1,024                          | only available to DBA |
+|                               | group_concat_max_len                | server parameter        | O       | byte     | 1,024                          | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | intl_check_input_string             | client parameter        | O       | bool     | no                             | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -267,7 +267,7 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | agg_hash_respect_order              | client parameter        | O       | bool     | yes                            | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | auto_restart_server                 | server parameter        | O       | bool     | yes                            | only available to DBA |
+|                               | auto_restart_server                 | server parameter        | O       | bool     | yes                            | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | index_scan_in_oid_order             | client parameter        | O       | bool     | no                             | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -275,7 +275,7 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | java_stored_procedure               | server parameter        |         | bool     | no                             |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | multi_range_optimization_limit      | server parameter        | O       | int      | 100                            | only available to DBA |
+|                               | multi_range_optimization_limit      | server parameter        | O       | int      | 100                            | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | optimizer_enable_merge_join         | client parameter        | O       | bool     | no                             | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -289,15 +289,15 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | sort_limit_max_count                | client parameter        | O       | int      | 1,000                          | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | sql_trace_slow                      | server parameter        | O       | msec     | -1                             | only available to DBA |
+|                               | sql_trace_slow                      | server parameter        | O       | msec     | -1                             | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | sql_trace_execution_plan            | server parameter        | O       | bool     | no                             | only available to DBA |
+|                               | sql_trace_execution_plan            | server parameter        | O       | bool     | no                             | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | use_orderby_sort_limit              | server parameter        | O       | bool     | yes                            | only available to DBA |
+|                               | use_orderby_sort_limit              | server parameter        | O       | bool     | yes                            | DBA only              |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 
 .. _lpg:
-    
+
 *   log_page_size: A log volume page size specified by **--log-page-size** option when you are :ref:`creating database<creating-database>`. Default: 16KB. log page related parameter's value is rounded off by page unit. 
     For example, the value of checkpoint_every_size is divided by 16KB and its decimal point is dropped, then it is multiplied by 16KB.
 
@@ -546,6 +546,14 @@ The following are parameters related to the memory used by the database server o
     *   Required memory size = the number of temporary memory buffer pages (**temp_file_memory_size_in_pages** \* **page size**)
     *   The number of temporary memory buffer pages = the value of the **temp_file_memory_size_in_pages** parameter
     *   Page size = the value of the page size specified by the **-s** option of the **cubrid createdb** utility during the database creation
+
+    The spaces to store the temporary result are as follows.
+    
+    *   Cache buffer to store the temporary result (acquired by **temp_file_memory_size_in_pages** parameter)
+    *   Permanent temp volume
+    *   Temporary temp volume
+    
+    If the previous space is exhausted, then the next space is used as the following order: Cache buffer for storing temporary result -> Permanent temp volume -> Temporary temp volume.
 
 **thread_stacksize**
 
@@ -2155,7 +2163,7 @@ Transaction & Query
 
     .. warning::
 
-        In case of using ODBC in a 9.3 version, the setting of **CCI_DEFAULT_AUTOCOMMIT** is ignored and worked as **OFF**; therefore, you should set the autocommit on or off in the program directly.
+        In ODBC driver, the setting of **CCI_DEFAULT_AUTOCOMMIT** is ignored and worked as **ON**; therefore, you should set the autocommit on or off in the program directly.
 
 **LONG_QUERY_TIME**
 

@@ -29,7 +29,9 @@ CONNECT BY 절
 
 *   **PRIOR** : **CONNECT BY** 조건식은 한 쌍의 행에 대한 상-하 계층 관계(부모-자식 관계)를 정의하기 위한 것으로, 조건식 내에서 하나는 부모(parent)로 지정되고, 다른 하나는 자식(child)으로 지정된다. 이처럼 행 간의 부모-자식 간 계층 관계를 정의하기 위하여 **CONNECT BY** 조건식 내에 **PRIOR** 연산자를 이용하여 부모 행의 칼럼 값을 지정한다. 즉, 부모 행의 칼럼 값과 같은 칼럼 값을 가지는 모든 행은 자식 행이 된다.
 
-*   **NOCYCLE** : **CONNECT BY** 절의 조건식에 따른 계층 질의 결과는 루프를 포함할 수 있으며, 이것은 계층 트리를 생성할 때 무한 루프를 발생시키는 원인이 될 수 있다. 따라서, CUBRID는 루프를 발견하면 기본적으로 오류를 반환하고, 특수 연산자인 **NOCYCLE** 이 **CONNECT BY** 절에 명시된 경우에는 오류를 발생시키지 않고 해당 루프에 의해 검색된 결과를 출력한다. 만약, **CONNECT BY** 절에서 **NOCYCLE** 이 명시되지 않은 계층 질의문을 수행 중에 루프가 감지되는 경우, CUBRID는 오류를 반환하고 해당 질의문을 취소한다. 반면, **NOCYCLE** 이 명시된 계층 질의문에서 루프가 감지되는 경우, CUBRID는 오류를 반환하지는 않지만 루프가 감지된 행에 대해 **CONNECT_BY_ISCYCLE** 값을 1로 설정하고, 더 이상 계층 트리의 검색을 확장하지 않을 것이다.
+*   **NOCYCLE** : **CONNECT BY** 절의 조건식에 따른 계층 질의 결과는 루프를 포함할 수 있으며, 이것은 계층 트리를 생성할 때 무한 루프를 발생시키는 원인이 될 수 있다. 따라서, CUBRID는 루프를 발견하면 기본적으로 오류를 반환하고, 특수 연산자인 **NOCYCLE** 이 **CONNECT BY** 절에 명시된 경우에는 오류를 발생시키지 않고 해당 루프에 의해 검색된 결과를 출력한다. 
+
+    만약, **CONNECT BY** 절에서 **NOCYCLE** 이 명시되지 않은 계층 질의문을 수행 중에 루프가 감지되는 경우, CUBRID는 오류를 반환하고 해당 질의문을 취소한다. 반면, **NOCYCLE** 이 명시된 계층 질의문에서 루프가 감지되는 경우, CUBRID는 오류를 반환하지는 않지만 루프가 감지된 행에 대해 **CONNECT_BY_ISCYCLE** 값을 1로 설정하고, 더 이상 계층 트리의 검색을 확장하지 않을 것이다.
 
 다음은 계층 질의문을 수행하는 예제이다.
 
@@ -54,22 +56,22 @@ CONNECT BY 절
 
 ::
     
-    id  mgrid       name
-    ======================
-    1   null        Kim
-    2   null        Moy
-    3   1       Jonas
-    3   1       Jonas
-    4   1       Smith
-    4   1       Smith
-    5   2       Verma
-    5   2       Verma
-    6   2       Foster
-    6   2       Foster
-    7   6       Brown
-    7   6       Brown
-    7   6       Brown
-     
+       id        mgrid  name
+    ========================================
+        1         NULL  'Kim'
+        2         NULL  'Moy'
+        3            1  'Jonas'
+        3            1  'Jonas'
+        4            1  'Smith'
+        4            1  'Smith'
+        5            2  'Verma'
+        5            2  'Verma'
+        6            2  'Foster'
+        6            2  'Foster'
+        7            6  'Brown'
+        7            6  'Brown'
+        7            6  'Brown'
+
 .. code-block:: sql
 
     -- Executing a hierarchical query with START WITH clause
@@ -81,15 +83,16 @@ CONNECT BY 절
 
 ::
     
-    id  mgrid       name
-    =============================
-    1   null        Kim
-    2   null        Moy
-    3   1       Jonas
-    4   1       Smith
-    5   2       Verma
-    6   2       Foster
-    7   6       Brown
+       id        mgrid  name
+    ========================================
+        1         NULL  'Kim'
+        2         NULL  'Moy'
+        3            1  'Jonas'
+        4            1  'Smith'
+        5            2  'Verma'
+        6            2  'Foster'
+        7            6  'Brown'
+
 
 계층 질의 실행
 ==============
@@ -133,16 +136,16 @@ CONNECT BY 절
 
 ::
     
-    id  name        job     level
-    ================================================
-    1   Kim         Partner     1
-    2   Moy         Partner     1
-    3   Jonas       Developer   2
-    4   Smith       Developer   2
-    5   Verma       Sales Exec. 2
-    6   Foster      Sales Exec. 2
-    7   Brown       Assistant   3
-    
+       id  name                  job                         level
+    ==============================================================
+        1  'Kim'                 'Partner'                       1
+        2  'Moy'                 'Partner'                       1
+        3  'Jonas'               'Developer'                     2
+        4  'Smith'               'Developer'                     2
+        5  'Verma'               'Sales Exec.'                   2
+        6  'Foster'              'Sales Exec.'                   2
+        7  'Brown'               'Assistant'                     3
+
 계층 질의문에서의 데이터 정렬
 -----------------------------
 
@@ -165,15 +168,15 @@ CONNECT BY 절
 
 ::
     
-    id        mgrid  name                    birthyear        level
-    ==========================================================================
-    2         NULL  'Moy'                        1958            1
-    6            2  'Foster'                     1972            2
-    7            6  'Brown'                      1981            3
-    5            2  'Verma'                      1973            2
-    1         NULL  'Kim'                        1963            1
-    4            1  'Smith'                      1974            2
-    3            1  'Jonas'                      1976            2
+       id        mgrid  name                    birthyear        level
+    ==================================================================
+        2         NULL  'Moy'                        1958            1
+        6            2  'Foster'                     1972            2
+        7            6  'Brown'                      1981            3
+        5            2  'Verma'                      1973            2
+        1         NULL  'Kim'                        1963            1
+        4            1  'Smith'                      1974            2
+        3            1  'Jonas'                      1976            2
 
 다음은 상사와 그의 부하 직원을 출력하되, 같은 레벨 간에는 우선 입사한 순서로 정렬시키는 예제이다. *id* 는 입사한 순서로 부여된다. *id* 는 직원의 입사번호이며, *mgrid* 는 상사의 입사번호이다.
 
@@ -188,15 +191,16 @@ CONNECT BY 절
 
 ::
     
-    id  mgrid       name        level
-    ==================================
-    1   null        Kim         1
-    3   1           Jonas       2
-    4   1           Smith       2
-    2   null        Moy         1
-    5   2           Verma       2
-    6   2           Foster      2
-    7   6           Brown       3
+       id        mgrid  name                        level
+    =====================================================
+        1         NULL  'Kim'                           1
+        3            1  'Jonas'                         2
+        4            1  'Smith'                         2
+        2         NULL  'Moy'                           1
+        5            2  'Verma'                         2
+        6            2  'Foster'                        2
+        7            6  'Brown'                         3
+
 
 계층 질의 의사 칼럼
 ===================
@@ -222,12 +226,12 @@ LEVEL
 
 ::
 
-    id  mgrid       name        level
-    =========================================
-    3   1           Jonas       2
-    4   1           Smith       2
-    5   2           Verma       2
-    6   2           Foster      2
+       id        mgrid  name                        level
+    =====================================================
+        3            1  'Jonas'                         2
+        4            1  'Smith'                         2
+        5            2  'Verma'                         2
+        6            2  'Foster'                        2
 
 다음은 **CONNECT BY** 절 뒤에 **LEVEL** 조건을 추가한 예제이다.
 
@@ -270,15 +274,15 @@ CONNECT_BY_ISLEAF
      
 ::
 
-    id  mgrid       name        connect_by_isleaf
-    ===========================================================
-    1   null        Kim     0
-    2   null        Moy     0
-    3   1       Jonas       1
-    4   1       Smith       1
-    5   2       Verma       1
-    6   2       Foster      0
-    7   6       Brown       1
+      id        mgrid  name                  connect_by_isleaf
+    =============================================================
+       1         NULL  'Kim'                                 0
+       2         NULL  'Moy'                                 0
+       3            1  'Jonas'                               1
+       4            1  'Smith'                               1
+       5            2  'Verma'                               1
+       6            2  'Foster'                              0
+       7            6  'Brown'                               1
 
 CONNECT_BY_ISCYCLE
 ------------------
@@ -317,19 +321,19 @@ CONNECT_BY_ISCYCLE
      
 ::
 
-    id  mgrid       name        connect_by_iscycle
-    ==========================================================
-    1   null        Kim     0
-    2   11      Moy     0
-    3   1       Jonas       0
-    4   1       Smith       0
-    5   3       Verma       0
-    6   3       Foster      0
-    7   4       Brown       0
-    8   4       Lin     0
-    9   2       Edwin       0
-    10  9       Audrey      0
-    11  10      Stone       1
+    id        mgrid  name        connect_by_iscycle
+    ==================================================
+     1         NULL  'Kim'                        0
+     2           11  'Moy'                        0
+     3            1  'Jonas'                      0
+     4            1  'Smith'                      0
+     5            3  'Verma'                      0
+     6            3  'Foster'                     0
+     7            4  'Brown'                      0
+     8            4  'Lin'                        0
+     9            2  'Edwin'                      0
+    10            9  'Audrey'                     0
+    11           10  'Stone'                      1
 
 계층 질의 연산자
 ================
@@ -352,15 +356,15 @@ CONNECT_BY_ROOT
      
 ::
 
-    id  mgrid       name        connect_by_root id
-    ==========================================================
-    1   null        Kim     1
-    2   null        Moy     2
-    3   1       Jonas       1
-    4   1       Smith       1
-    5   2       Verma       2
-    6   2       Foster      2
-    7   6       Brown       2
+       id        mgrid  name                   connect_by_root id
+    =============================================================
+        1         NULL  'Kim'                                   1
+        2         NULL  'Moy'                                   2
+        3            1  'Jonas'                                 1
+        4            1  'Smith'                                 1
+        5            2  'Verma'                                 2
+        6            2  'Foster'                                2
+        7            6  'Brown'                                 2
 
 .. _prior-operator:
 
@@ -382,15 +386,15 @@ PRIOR
      
 ::
 
-    id  mgrid       name        prior_id
-    ========================================
-    1   null        Kim         null
-    2   null        Moy         null
-    3   1           Jonas       1
-    4   1           Smith       1
-    5   2           Verma       2
-    6   2           Foster      2
-    7   6           Brown       6
+       id        mgrid  name                     prior_id
+    =====================================================
+        1         NULL  'Kim'                        NULL
+        2         NULL  'Moy'                        NULL
+        3            1  'Jonas'                         1
+        4            1  'Smith'                         1
+        5            2  'Verma'                         2
+        6            2  'Foster'                        2
+        7            6  'Brown'                         6
 
 계층 질의 함수
 ==============
@@ -415,15 +419,15 @@ SYS_CONNECT_BY_PATH
      
 ::
 
-    id  mgrid       name        hierarchy
-    =================================================
-    1   null        Kim         /Kim
-    2   null        Moy         /Moy
-    3   1           Jonas       /Kim/Jonas
-    4   1           Smith       /Kim/Smith
-    5   2           Verma       /Moy/Verma
-    6   2           Foster      /Moy/Foster
-    7   6           Brown       /Moy/Foster/Brown
+       id        mgrid  name                  hierarchy
+    ==============================================================
+        1         NULL  'Kim'                 '/Kim'
+        2         NULL  'Moy'                 '/Moy'
+        3            1  'Jonas'               '/Kim/Jonas'
+        4            1  'Smith'               '/Kim/Smith'
+        5            2  'Verma'               '/Moy/Verma'
+        6            2  'Foster'              '/Moy/Foster'
+        7            6  'Brown'               '/Moy/Foster/Brown'
 
 계층 질의문 예
 ==============
@@ -474,18 +478,18 @@ SYS_CONNECT_BY_PATH
 
 ::
 
-               ID     ParentID  name                        Level
-    =============================================================
-                1         NULL  'Kim'                           1
-                2            1  'Moy'                           2
-                3            1  'Jonas'                         2
-                4            1  'Smith'                         2
-                9            2  'Edwin'                         3
-                5            3  'Verma'                         3
-                6            3  'Foster'                        3
-                7            4  'Brown'                         3
-                8            4  'Lin'                           3
-               10            9  'Audrey'                        4
+       ID     ParentID  name                        Level
+    =====================================================
+        1         NULL  'Kim'                           1
+        2            1  'Moy'                           2
+        3            1  'Jonas'                         2
+        4            1  'Smith'                         2
+        9            2  'Edwin'                         3
+        5            3  'Verma'                         3
+        6            3  'Foster'                        3
+        7            4  'Brown'                         3
+        8            4  'Lin'                           3
+       10            9  'Audrey'                        4
 
 계층 관계를 가지는 데이터의 레벨이 얼마나 될지 예측할 수 없으므로, 위 질의문은 새로운 행이 검색되지 않을 때까지 루프를 도는 저장 프로시저(stored procedure) 문으로 재작성할 수 있다. 
 
@@ -500,21 +504,21 @@ SYS_CONNECT_BY_PATH
 
 ::
 
-               ID     ParentID  name                        level
-    =============================================================
-                1         NULL  'Kim'                           1
-                2            1  'Moy'                           2
-                9            2  'Edwin'                         3
-               10            9  'Audrey'                        4
-               11           10  'Stone'                         5
-                3            1  'Jonas'                         2
-                5            3  'Verma'                         3
-                6            3  'Foster'                        3
-                4            1  'Smith'                         2
-                7            4  'Brown'                         3
-                8            4  'Lin'                           3
+       ID     ParentID  name                        level
+    =====================================================
+        1         NULL  'Kim'                           1
+        2            1  'Moy'                           2
+        9            2  'Edwin'                         3
+       10            9  'Audrey'                        4
+       11           10  'Stone'                         5
+        3            1  'Jonas'                         2
+        5            3  'Verma'                         3
+        6            3  'Foster'                        3
+        4            1  'Smith'                         2
+        7            4  'Brown'                         3
+        8            4  'Lin'                           3
 
-루프로 인한 오류를 발생시키지 않으려면 다음과 같이 **NOCYCLE** 을 명시할 수 있다.
+루프로 인한 오류를 발생시키지 않으려면 다음과 같이 **NOCYCLE**\을 명시할 수 있다. 아래의 질의 수행 시 루프가 발생하지 않으므로, 결과는 위와 동일하다.
 
 .. code-block:: sql
 
@@ -522,6 +526,38 @@ SYS_CONNECT_BY_PATH
     FROM tree_table
     START WITH ParentID IS NULL
     CONNECT BY NOCYCLE ParentID=PRIOR ID;
+
+계층 질의에 대한 루프 탐색 과정 중에 동일한 행이 발견되면, CUBRID는 그 질의를 루프가 있는 것으로 판단한다. 다음은 루프가 존재하는 예로, **NOCYCLE**\을 명시하여 루프가 존재하는 경우 추가 탐색을 종료하도록 했다.
+
+.. code-block:: sql
+
+    CREATE TABLE tbl(seq INT, id VARCHAR(10), parent VARCHAR(10));
+    
+    INSERT INTO tbl VALUES (1, 'a', null);
+    INSERT INTO tbl VALUES (2, 'b', 'a');
+    INSERT INTO tbl VALUES (3, 'b', 'c');
+    INSERT INTO tbl VALUES (4, 'c', 'b');
+    INSERT INTO tbl VALUES (5, 'c', 'b');
+    
+    SELECT seq, id, parent, LEVEL,
+      CONNECT_BY_ISCYCLE AS iscycle,
+      CAST(SYS_CONNECT_BY_PATH(id,'/') AS VARCHAR(10)) AS idpath
+    FROM tbl
+    START WITH PARENT is NULL
+    CONNECT BY NOCYCLE PARENT = PRIOR id;
+
+::
+
+        seq  id           parent       level      iscycle  idpath
+    =============================================================================
+          1  'a'          NULL             1            0  '/a'
+          2  'b'          'a'              2            0  '/a/b'
+          4  'c'          'b'              3            0  '/a/b/c'
+          3  'b'          'c'              4            1  '/a/b/c/b'
+          5  'c'          'b'              5            1  '/a/b/c/b/c'
+          5  'c'          'b'              3            0  '/a/b/c'
+          3  'b'          'c'              4            1  '/a/b/c/b'
+          4  'c'          'b'              5            1  '/a/b/c/b/c'
 
 다음은 계층 질의를 사용하여 2013년 3월(201303)의 날짜들을 출력하는 예제이다.
 

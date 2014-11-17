@@ -757,6 +757,17 @@ CAS, which is connected to the DB which has the lower priority because of the re
   
 See the above description of **ha_delay_limit**.
 
+**ha_delay_limit_delta** 
+  
+See the above description of **ha_delay_limit**.
+
+**ha_monitor_disk_failure_interval** 
+
+Judge the disk failure for each time which is set to the vaule of this parameter. The default is 30, and the unit is second.
+  
+*   If the value of **ha_copy_log_timeout** parameter is -1, the value of **ha_monitor_disk_failure_interval** parameter is ignored and the disk failure is not judged.
+*   If the value of **ha_monitor_disk_failure_interval** parameter is smaller than the value of **ha_copy_log_timeout** parameter, the disk failure is judged for each **ha_copy_log_timeout** + 20 seconds.
+
 **ha_unacceptable_proc_restart_timediff**
 
 When the abnormal status of a server process is kept, the server can be restarted infinitely; it is better to remove this kind of node from the HA components. Because the server is restarted within a short time when the abnormal status is continued, specify this term with this parameter to detect this situation. If the server is restarted within the specified term, CUBRID assumes that this server is abnormal and remove(demote) this node from the HA components.

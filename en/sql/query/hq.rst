@@ -29,7 +29,9 @@ CONNECT BY Clause
 
 *   **PRIOR** : The **CONNECT BY** condition is tested for a pair of rows. If it evaluates to true, the two rows satisfy the parent-child relationship of the hierarchy. We need to specify the columns that are used from the parent row and the columns that are used from the child row. We can use the **PRIOR** operator when applied to a column, which will refer to the value of the parent row for that column. If **PRIOR** is not used for a column, the value in the child row is used.
 
-*   **NOCYCLE** : In some cases, the resulting rows of the table joins may contain cycles, depending on the **CONNECT BY** condition. Because cycles cause an infinite loop in the result tree construction, CUBRID detects them and either returns an error doesn't expand the branches beyond the point where a cycle is found (if the **NOCYCLE** keyword is specified). This keyword may be specified after the **CONNECT BY** keywords. It makes CUBRID run a statement even if the processed data contains cycles. If a **CONNECT BY** statement causes a cycle at runtime and the **NOCYCLE** keyword is not specified, CUBRID will return an error and the statement will be canceled. When specifying the **NOCYCLE** keyword, if CUBRID detects a cycle while processing a hierarchy node, it will set the **CONNECT_BY_ISCYCLE** attribute for that node to the value of 1 and it will stop further expansion of that branch.
+*   **NOCYCLE** : In some cases, the resulting rows of the table joins may contain cycles, depending on the **CONNECT BY** condition. Because cycles cause an infinite loop in the result tree construction, CUBRID detects them and either returns an error doesn't expand the branches beyond the point where a cycle is found (if the **NOCYCLE** keyword is specified). This keyword may be specified after the **CONNECT BY** keywords. It makes CUBRID run a statement even if the processed data contains cycles.
+
+    If a **CONNECT BY** statement causes a cycle at runtime and the **NOCYCLE** keyword is not specified, CUBRID will return an error and the statement will be canceled. When specifying the **NOCYCLE** keyword, if CUBRID detects a cycle while processing a hierarchy node, it will set the **CONNECT_BY_ISCYCLE** attribute for that node to the value of 1 and it will stop further expansion of that branch.
 
 The following example shows how to execute hierarchical query.
 
@@ -54,22 +56,22 @@ The following example shows how to execute hierarchical query.
 
 ::
     
-    id  mgrid       name
-    ======================
-    1   null        Kim
-    2   null        Moy
-    3   1       Jonas
-    3   1       Jonas
-    4   1       Smith
-    4   1       Smith
-    5   2       Verma
-    5   2       Verma
-    6   2       Foster
-    6   2       Foster
-    7   6       Brown
-    7   6       Brown
-    7   6       Brown
-     
+       id        mgrid  name
+    ========================================
+        1         NULL  'Kim'
+        2         NULL  'Moy'
+        3            1  'Jonas'
+        3            1  'Jonas'
+        4            1  'Smith'
+        4            1  'Smith'
+        5            2  'Verma'
+        5            2  'Verma'
+        6            2  'Foster'
+        6            2  'Foster'
+        7            6  'Brown'
+        7            6  'Brown'
+        7            6  'Brown'
+
 .. code-block:: sql
 
     -- Executing a hierarchical query with START WITH clause
@@ -81,15 +83,16 @@ The following example shows how to execute hierarchical query.
 
 ::
     
-    id  mgrid       name
-    =============================
-    1   null        Kim
-    2   null        Moy
-    3   1       Jonas
-    4   1       Smith
-    5   2       Verma
-    6   2       Foster
-    7   6       Brown
+       id        mgrid  name
+    ========================================
+        1         NULL  'Kim'
+        2         NULL  'Moy'
+        3            1  'Jonas'
+        4            1  'Smith'
+        5            2  'Verma'
+        6            2  'Foster'
+        7            6  'Brown'
+
 
 Hierarchical Query Execution
 ============================
@@ -108,7 +111,7 @@ The resulting rows of the table joins are filtered according to the **START WITH
 
 In addition, CUBRID evaluates the **CONNECT BY** clause first and all the rows of the resulting hierarchy tress by using the filtering condition in the **WHERE** clause.
 
-The example illustrates how joins can be used in **CONNECT BY** queries. The joins are evaluated before the **CONNECT BY** condition and the join result will be the starting table on which the two clauses ( **START WITH** clause and **CONNECT BY** clause).
+The example illustrates how joins can be used in **CONNECT BY** queries.
 
 .. code-block:: sql
 
@@ -133,16 +136,16 @@ The example illustrates how joins can be used in **CONNECT BY** queries. The joi
 
 ::
     
-    id  name        job     level
-    ================================================
-    1   Kim         Partner     1
-    2   Moy         Partner     1
-    3   Jonas       Developer   2
-    4   Smith       Developer   2
-    5   Verma       Sales Exec. 2
-    6   Foster      Sales Exec. 2
-    7   Brown       Assistant   3
-    
+       id  name                  job                         level
+    ==============================================================
+        1  'Kim'                 'Partner'                       1
+        2  'Moy'                 'Partner'                       1
+        3  'Jonas'               'Developer'                     2
+        4  'Smith'               'Developer'                     2
+        5  'Verma'               'Sales Exec.'                   2
+        6  'Foster'              'Sales Exec.'                   2
+        7  'Brown'               'Assistant'                     3
+
 Ordering Data with the Hierarchical Query
 -----------------------------------------
 
@@ -165,15 +168,15 @@ The result with hierarchical query shows parent and child nodes in a row accordi
 
 ::
     
-    id        mgrid  name                    birthyear        level
-    ==========================================================================
-    2         NULL  'Moy'                        1958            1
-    6            2  'Foster'                     1972            2
-    7            6  'Brown'                      1981            3
-    5            2  'Verma'                      1973            2
-    1         NULL  'Kim'                        1963            1
-    4            1  'Smith'                      1974            2
-    3            1  'Jonas'                      1976            2
+       id        mgrid  name                    birthyear        level
+    ==================================================================
+        2         NULL  'Moy'                        1958            1
+        6            2  'Foster'                     1972            2
+        7            6  'Brown'                      1981            3
+        5            2  'Verma'                      1973            2
+        1         NULL  'Kim'                        1963            1
+        4            1  'Smith'                      1974            2
+        3            1  'Jonas'                      1976            2
 
 The following example shows how to display information about seniors and subordinates in a company in the order of joining. For the same level, the employee ID numbers are assigned in the order of joining. *id* indicates employee ID numbers (parent and child nodes) and *mgrid* indicates the employee ID numbers of their seniors.
 
@@ -188,15 +191,15 @@ The following example shows how to display information about seniors and subordi
 
 ::
     
-    id  mgrid       name        level
-    ==================================
-    1   null        Kim         1
-    3   1           Jonas       2
-    4   1           Smith       2
-    2   null        Moy         1
-    5   2           Verma       2
-    6   2           Foster      2
-    7   6           Brown       3
+       id        mgrid  name                        level
+    =====================================================
+        1         NULL  'Kim'                           1
+        3            1  'Jonas'                         2
+        4            1  'Smith'                         2
+        2         NULL  'Moy'                           1
+        5            2  'Verma'                         2
+        6            2  'Foster'                        2
+        7            6  'Brown'                         3
 
 Pseudo Columns for Hierarchical Query
 =====================================
@@ -222,12 +225,12 @@ The following example shows how to retrieve the **LEVEL** value to check level o
 
 ::
 
-    id  mgrid       name        level
-    =========================================
-    3   1           Jonas       2
-    4   1           Smith       2
-    5   2           Verma       2
-    6   2           Foster      2
+       id        mgrid  name                        level
+    =====================================================
+        3            1  'Jonas'                         2
+        4            1  'Smith'                         2
+        5            2  'Verma'                         2
+        6            2  'Foster'                        2
 
 The following example shows how to add **LEVEL** conditions after the **CONNECT BY** statement.
 
@@ -270,15 +273,15 @@ The following example shows how to retrieve the **CONNECT_BY_ISLEAF** value to c
      
 ::
 
-    id  mgrid       name        connect_by_isleaf
-    ===========================================================
-    1   null        Kim     0
-    2   null        Moy     0
-    3   1       Jonas       1
-    4   1       Smith       1
-    5   2       Verma       1
-    6   2       Foster      0
-    7   6       Brown       1
+      id        mgrid  name                  connect_by_isleaf
+    =============================================================
+       1         NULL  'Kim'                                 0
+       2         NULL  'Moy'                                 0
+       3            1  'Jonas'                               1
+       4            1  'Smith'                               1
+       5            2  'Verma'                               1
+       6            2  'Foster'                              0
+       7            6  'Brown'                               1
 
 CONNECT_BY_ISCYCLE
 ------------------
@@ -317,19 +320,19 @@ The following example shows how to retrieve the **CONNECT_BY_ISCYCE** value to c
      
 ::
 
-    id  mgrid       name        connect_by_iscycle
-    ==========================================================
-    1   null        Kim     0
-    2   11      Moy     0
-    3   1       Jonas       0
-    4   1       Smith       0
-    5   3       Verma       0
-    6   3       Foster      0
-    7   4       Brown       0
-    8   4       Lin     0
-    9   2       Edwin       0
-    10  9       Audrey      0
-    11  10      Stone       1
+    id        mgrid  name        connect_by_iscycle
+    ==================================================
+     1         NULL  'Kim'                        0
+     2           11  'Moy'                        0
+     3            1  'Jonas'                      0
+     4            1  'Smith'                      0
+     5            3  'Verma'                      0
+     6            3  'Foster'                     0
+     7            4  'Brown'                      0
+     8            4  'Lin'                        0
+     9            2  'Edwin'                      0
+    10            9  'Audrey'                     0
+    11           10  'Stone'                      1
 
 Operators for Hierarchical Query
 ================================
@@ -352,15 +355,15 @@ The following example shows how to retrieve the root row's *id* value.
      
 ::
 
-    id  mgrid       name        connect_by_root id
-    ==========================================================
-    1   null        Kim     1
-    2   null        Moy     2
-    3   1       Jonas       1
-    4   1       Smith       1
-    5   2       Verma       2
-    6   2       Foster      2
-    7   6       Brown       2
+       id        mgrid  name                   connect_by_root id
+    =============================================================
+        1         NULL  'Kim'                                   1
+        2         NULL  'Moy'                                   2
+        3            1  'Jonas'                                 1
+        4            1  'Smith'                                 1
+        5            2  'Verma'                                 2
+        6            2  'Foster'                                2
+        7            6  'Brown'                                 2
 
 .. _prior-operator:
 
@@ -382,15 +385,15 @@ The following example shows how to retrieve the parent row's *id* value.
      
 ::
 
-    id  mgrid       name        prior_id
-    ========================================
-    1   null        Kim         null
-    2   null        Moy         null
-    3   1           Jonas       1
-    4   1           Smith       1
-    5   2           Verma       2
-    6   2           Foster      2
-    7   6           Brown       6
+       id        mgrid  name                     prior_id
+    =====================================================
+        1         NULL  'Kim'                        NULL
+        2         NULL  'Moy'                        NULL
+        3            1  'Jonas'                         1
+        4            1  'Smith'                         1
+        5            2  'Verma'                         2
+        6            2  'Foster'                        2
+        7            6  'Brown'                         6
 
 Functions for Hierarchical Query
 ================================
@@ -415,15 +418,15 @@ The following example shows how to retrieve path from a root to the specified ro
      
 ::
 
-    id  mgrid       name        hierarchy
-    =================================================
-    1   null        Kim         /Kim
-    2   null        Moy         /Moy
-    3   1           Jonas       /Kim/Jonas
-    4   1           Smith       /Kim/Smith
-    5   2           Verma       /Moy/Verma
-    6   2           Foster      /Moy/Foster
-    7   6           Brown       /Moy/Foster/Brown
+       id        mgrid  name                  hierarchy
+    ==============================================================
+        1         NULL  'Kim'                 '/Kim'
+        2         NULL  'Moy'                 '/Moy'
+        3            1  'Jonas'               '/Kim/Jonas'
+        4            1  'Smith'               '/Kim/Smith'
+        5            2  'Verma'               '/Moy/Verma'
+        6            2  'Foster'              '/Moy/Foster'
+        7            6  'Brown'               '/Moy/Foster/Brown'
 
 Examples of Hierarchical Query
 ==============================
@@ -474,18 +477,18 @@ Once a table is create, you can get the entire data with hierarchical structure 
 
 ::
 
-               ID     ParentID  name                        Level
-    =============================================================
-                1         NULL  'Kim'                           1
-                2            1  'Moy'                           2
-                3            1  'Jonas'                         2
-                4            1  'Smith'                         2
-                9            2  'Edwin'                         3
-                5            3  'Verma'                         3
-                6            3  'Foster'                        3
-                7            4  'Brown'                         3
-                8            4  'Lin'                           3
-               10            9  'Audrey'                        4
+       ID     ParentID  name                        Level
+    =====================================================
+        1         NULL  'Kim'                           1
+        2            1  'Moy'                           2
+        3            1  'Jonas'                         2
+        4            1  'Smith'                         2
+        9            2  'Edwin'                         3
+        5            3  'Verma'                         3
+        6            3  'Foster'                        3
+        7            4  'Brown'                         3
+        8            4  'Lin'                           3
+       10            9  'Audrey'                        4
 
 Because you do not know how many levels exist in the data, you can rewrite the query above as a stored procedure that loops until no new row is retrieved.
 
@@ -500,19 +503,19 @@ However, the hierarchical structure should be checked every step while looping, 
 
 ::
 
-               ID     ParentID  name                        level
-    =============================================================
-                1         NULL  'Kim'                           1
-                2            1  'Moy'                           2
-                9            2  'Edwin'                         3
-               10            9  'Audrey'                        4
-               11           10  'Stone'                         5
-                3            1  'Jonas'                         2
-                5            3  'Verma'                         3
-                6            3  'Foster'                        3
-                4            1  'Smith'                         2
-                7            4  'Brown'                         3
-                8            4  'Lin'                           3
+       ID     ParentID  name                        level
+    =====================================================
+        1         NULL  'Kim'                           1
+        2            1  'Moy'                           2
+        9            2  'Edwin'                         3
+       10            9  'Audrey'                        4
+       11           10  'Stone'                         5
+        3            1  'Jonas'                         2
+        5            3  'Verma'                         3
+        6            3  'Foster'                        3
+        4            1  'Smith'                         2
+        7            4  'Brown'                         3
+        8            4  'Lin'                           3
 
 You can specify **NOCYCLE** to prevent an error from occurring as follows:
 
@@ -522,6 +525,38 @@ You can specify **NOCYCLE** to prevent an error from occurring as follows:
     FROM tree_table
     START WITH ParentID IS NULL
     CONNECT BY NOCYCLE ParentID=PRIOR ID;
+
+CUBRID judges that this hierarchical query has a loop if the same row is found during searching process on the query. The below is an example that the loop exists; we define **NOCYCLE** to end the additional searching process if a loop exists.
+
+.. code-block:: sql
+
+    CREATE TABLE tbl(seq INT, id VARCHAR(10), parent VARCHAR(10));
+    
+    INSERT INTO tbl VALUES (1, 'a', null);
+    INSERT INTO tbl VALUES (2, 'b', 'a');
+    INSERT INTO tbl VALUES (3, 'b', 'c');
+    INSERT INTO tbl VALUES (4, 'c', 'b');
+    INSERT INTO tbl VALUES (5, 'c', 'b');
+    
+    SELECT seq, id, parent, LEVEL,
+      CONNECT_BY_ISCYCLE AS iscycle,
+      CAST(SYS_CONNECT_BY_PATH(id,'/') AS VARCHAR(10)) AS idpath
+    FROM tbl
+    START WITH PARENT is NULL
+    CONNECT BY NOCYCLE PARENT = PRIOR id;
+
+::
+
+        seq  id           parent       level      iscycle  idpath
+    =============================================================================
+          1  'a'          NULL             1            0  '/a'
+          2  'b'          'a'              2            0  '/a/b'
+          4  'c'          'b'              3            0  '/a/b/c'
+          3  'b'          'c'              4            1  '/a/b/c/b'
+          5  'c'          'b'              5            1  '/a/b/c/b/c'
+          5  'c'          'b'              3            0  '/a/b/c'
+          3  'b'          'c'              4            1  '/a/b/c/b'
+          4  'c'          'b'              5            1  '/a/b/c/b/c'
 
 The belows shows to output dates of March, 2013(201303) with a hierarchical query.     
 

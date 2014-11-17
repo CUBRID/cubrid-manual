@@ -26,6 +26,22 @@ The following is [options] used in **cubrid unloaddb**.
 
 .. program:: unloaddb
 
+.. option:: -u, --user=ID
+
+    Specify a user account of a database to be unloaded. If this is not specified, the default is **DBA**.
+
+    ::
+
+        cubrid unloaddb -u dba -i table_list.txt demodb
+
+.. option:: -p, --password=PASS
+
+    Specifye a user's password of a database to be unloaded. If this is not specified, it is regarded as the empty string is entered.
+
+    ::
+
+        cubrid unloaddb -u dba -p dba_pwd -i table_list.txt demodb
+
 .. option:: -i, --input-class-file FILE
 
     This option specifies the name of the file which stored the names of classes to unload. ::

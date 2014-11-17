@@ -804,7 +804,7 @@ The following list shows CCI error codes. For CAS errors, see :ref:`cas-error`.
 
 **C Type Definition**
 
- The following shows the structs used in CCI API functions.
+The following shows the structs used in CCI API functions.
 
 +--------------------------+----------+-----------------------------------------+--------------------------------------------------+
 | Name                     | Type     | Member                                  | Description                                      |

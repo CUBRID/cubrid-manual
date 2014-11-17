@@ -312,7 +312,9 @@ By SQL standard, you cannot specify a column (hidden column) not defined in the 
 
 *   [**ASC** | **DESC**]: Specifies the **ASC** or **DESC** sorting option after the columns specified in the **GROUP BY** clause. If the sorting option is not specified, the default value is **ASC**.
 
-*   <*search_condition*>: Specifies the search condition in the **HAVING** clause. In the **HAVING** clause you can refer to the hidden columns not specified in the **GROUP BY** clause as well as to columns and aliases specified in the **GROUP BY** clause and columns used in aggregate functions.
+*   <*search_condition*>: Specifies the search condition in the **HAVING** clause. In the **HAVING** clause, you can refer to columns and aliases specified in the **GROUP BY** clause, or columns used in aggregate functions.
+
+    .. note:: Even the hidden columns not specified in the **GROUP BY** clause can be referred to, if the value of the **only_full_group_by** parameter is set to **yes**. At this time, the HAVING condition does not affect to the query result.
 
 *   **WITH ROLLUP**: If you specify the **WITH ROLLUP** modifier in the **GROUP BY** clause, the aggregate information of the result value of each GROUPed BY column is displayed for each group, and the total of all result rows is displayed at the last row. When a **WITH ROLLUP** modifier is defined in the **GROUP BY** clause, the result value for all rows of the group is additionally displayed. In other words, total aggregation is made for the value aggregated by group. When there are two columns for Group By, the former is considered as a large unit and the latter is considered as a small unit, so the total aggregation row for the small unit and the total aggregation row for the large unit are added. For example, you can check the aggregation of the sales result per department and salesperson through one query.
 

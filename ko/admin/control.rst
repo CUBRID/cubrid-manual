@@ -257,14 +257,14 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 9.2......
+    CUBRID 10.0
 
     ++ cubrid server start: success
     @ cubrid server start: testdb
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 9.2......
+    CUBRID 10.0
 
     ++ cubrid server start: success
     @ cubrid broker start

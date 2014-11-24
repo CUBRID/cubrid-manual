@@ -949,63 +949,71 @@ The following shows [options] available with the **cubrid statdump** utility.
     
         cubrid statdump -c demodb
 
-    The following outputs the values per every 5 seconds. ::
+    The following outputs the values per every 5 seconds. 
+    
+    ::
 
-        cubrid statdump -i 5 testdb
+        $ cubrid statdump -i 5 -c testdb
          
-        Thu March 07 23:10:08 KST 2014
-         
+
+                Fri November 21 15:58:06 KST 2014
+
          *** SERVER EXECUTION STATISTICS ***
         Num_file_creates              =          0
         Num_file_removes              =          0
         Num_file_ioreads              =          0
-        Num_file_iowrites             =          0
-        Num_file_iosynches            =          0
+        Num_file_iowrites             =       1386
+        Num_file_iosynches            =       1384
         Num_file_page_allocs          =          0
         Num_file_page_deallocs        =          0
-        Num_data_page_fetches         =          0
-        Num_data_page_dirties         =          0
+        Num_data_page_fetches         =        119
+        Num_data_page_dirties         =         70
         Num_data_page_ioreads         =          0
-        Num_data_page_iowrites        =          0
+        Num_data_page_iowrites        =          5
         Num_data_page_victims         =          0
         Num_data_page_iowrites_for_replacement =          0
+        Num_log_page_fetches          =         13
+        Num_log_page_fetch_ioreads    =          0
         Num_log_page_ioreads          =          0
-        Num_log_page_iowrites         =          0
-        Num_log_append_records        =          0
+        Num_log_page_iowrites         =       1374
+        Num_log_append_records        =       2798
         Num_log_archives              =          0
-        Num_log_start_checkpoints     =          0
-        Num_log_end_checkpoints       =          0
-        Num_log_wals                  =          0
+        Num_log_start_checkpoints     =          3
+        Num_log_end_checkpoints       =          3
+        Num_log_wals                  =          3
+        Num_log_page_iowrites_for_replacement =          0
         Num_page_locks_acquired       =          0
-        Num_object_locks_acquired     =          0
+        Num_object_locks_acquired     =          6
         Num_page_locks_converted      =          0
-        Num_object_locks_converted    =          0
+        Num_object_locks_converted    =          1
         Num_page_locks_re-requested   =          0
-        Num_object_locks_re-requested =          0
+        Num_object_locks_re-requested =         40
         Num_page_locks_waits          =          0
         Num_object_locks_waits        =          0
         Num_tran_commits              =          0
         Num_tran_rollbacks            =          0
         Num_tran_savepoints           =          0
-        Num_tran_start_topops         =          0
-        Num_tran_end_topops           =          0
-        Num_tran_interrupts           =          0
-        Num_btree_inserts             =          0
-        Num_btree_deletes             =          0
-        Num_btree_updates             =          0
+        Num_tran_start_topops         =         21
+        Num_tran_end_topops           =         21
+        Num_tran_interrupts           =          1
+        Num_btree_inserts             =          7
+        Num_btree_deletes             =          2
+        Num_btree_updates             =          3
         Num_btree_covered             =          0
-        Num_btree_noncovered          =          0
+        Num_btree_noncovered          =          3
         Num_btree_resumes             =          0
-        Num_btree_multirange_optimization =      0
+        Num_btree_multirange_optimization =          0
         Num_btree_splits              =          0
         Num_btree_merges              =          0
-        Num_query_selects             =          0
-        Num_query_inserts             =          0
+        Num_btree_get_stats           =          0
+        Num_heap_stats_sync_bestspace =          0
+        Num_query_selects             =          6
+        Num_query_inserts             =          3
         Num_query_deletes             =          0
-        Num_query_updates             =          0
+        Num_query_updates             =          4
         Num_query_sscans              =          0
-        Num_query_iscans              =          0
-        Num_query_lscans              =          0
+        Num_query_iscans              =         12
+        Num_query_lscans              =          6
         Num_query_setscans            =          0
         Num_query_methscans           =          0
         Num_query_nljoins             =          0
@@ -1014,19 +1022,19 @@ The following shows [options] available with the **cubrid statdump** utility.
         Num_query_holdable_cursors    =          0
         Num_sort_io_pages             =          0
         Num_sort_data_pages           =          0
-        Num_network_requests          =          1
-        Num_adaptive_flush_pages      =          0
-        Num_adaptive_flush_log_pages  =          0
-        Num_adaptive_flush_max_pages  =        900
-        Num_prior_lsa_list_size       =          0
+        Num_network_requests          =       1447
+        Num_adaptive_flush_pages      =          5
+        Num_adaptive_flush_log_pages  =       1381
+        Num_adaptive_flush_max_pages  =     245250
+        Num_prior_lsa_list_size       =          3
         Num_prior_lsa_list_maxed      =          0
-        Num_prior_lsa_list_removed    =          0
+        Num_prior_lsa_list_removed    =       1375
         Num_heap_stats_bestspace_entries =          0
         Num_heap_stats_bestspace_maxed =          0
         Time_ha_replication_delay     =          0
         Num_plan_cache_add            =          0
-        Num_plan_cache_lookup         =          0
-        Num_plan_cache_hit            =          0
+        Num_plan_cache_lookup         =         12
+        Num_plan_cache_hit            =         12
         Num_plan_cache_miss           =          0
         Num_plan_cache_full           =          0
         Num_plan_cache_delete         =          0
@@ -1034,9 +1042,71 @@ The following shows [options] available with the **cubrid statdump** utility.
         Num_plan_cache_query_string_hash_entries =          0
         Num_plan_cache_xasl_id_hash_entries =          0
         Num_plan_cache_class_oid_hash_entries =          0
-        
+        Num_vacuum_log_pages_vacuumed =          0
+        Num_vacuum_log_pages_to_vacuum =          0
+
          *** OTHER STATISTICS ***
-        Data_page_buffer_hit_ratio    =       0.00
+        Data_page_buffer_hit_ratio    =     100.00
+        Log_page_buffer_hit_ratio     =     100.00
+        Vacuum_data_page_buffer_hit_ratio =       0.00
+        Vacuum_page_efficiency_ratio  =       0.00
+        Vacuum_page_fetch_ratio       =       0.00
+        Data_page_fix_lock_acquire_time_msec =       0.00
+        Data_page_fix_hold_acquire_time_msec =       0.08
+        Data_page_fix_acquire_time_msec =       0.42
+        Data_page_allocate_time_ratio =      80.95
+        Num_data_page_fix_ext:
+        SYSTEM,PAGE_VOLHEADER,OLD_PAGE_IN_PB    ,WRITE,UNCOND_WAIT =          3
+        WORKER,PAGE_FTAB     ,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =          8
+        WORKER,PAGE_HEAP     ,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =         24
+        WORKER,PAGE_HEAP     ,OLD_PAGE_IN_PB    ,WRITE,COND        =          6
+        WORKER,PAGE_HEAP     ,OLD_PAGE_IN_PB    ,WRITE,UNCOND_WAIT =         16
+        WORKER,PAGE_VOLHEADER,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =          7
+        WORKER,PAGE_VOLBITMAP,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =          7
+        WORKER,PAGE_XASL     ,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =         12
+        WORKER,PAGE_CATALOG  ,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =          6
+        WORKER,PAGE_BTREE    ,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =         14
+        WORKER,PAGE_BTREE    ,OLD_PAGE_IN_PB    ,WRITE,UNCOND_WAIT =         16
+        Num_data_page_unfix_ext:
+        SYSTEM,PAGE_VOLHEADER,BUF_NON_DIRTY,HOLDER_DIRTY    ,WRITE =          3
+        WORKER,PAGE_FTAB     ,BUF_NON_DIRTY,HOLDER_NON_DIRTY,READ  =          8
+        WORKER,PAGE_HEAP     ,BUF_NON_DIRTY,HOLDER_NON_DIRTY,READ  =         15
+        WORKER,PAGE_HEAP     ,BUF_NON_DIRTY,HOLDER_DIRTY    ,WRITE =          2
+        WORKER,PAGE_HEAP     ,BUF_DIRTY    ,HOLDER_NON_DIRTY,READ  =          9
+        WORKER,PAGE_HEAP     ,BUF_DIRTY    ,HOLDER_DIRTY    ,WRITE =         20
+        WORKER,PAGE_VOLHEADER,BUF_DIRTY    ,HOLDER_NON_DIRTY,READ  =          7
+        WORKER,PAGE_VOLBITMAP,BUF_NON_DIRTY,HOLDER_NON_DIRTY,READ  =          7
+        WORKER,PAGE_XASL     ,BUF_NON_DIRTY,HOLDER_NON_DIRTY,READ  =         12
+        WORKER,PAGE_CATALOG  ,BUF_NON_DIRTY,HOLDER_NON_DIRTY,READ  =          6
+        WORKER,PAGE_BTREE    ,BUF_NON_DIRTY,HOLDER_NON_DIRTY,WRITE =          2
+        WORKER,PAGE_BTREE    ,BUF_NON_DIRTY,HOLDER_DIRTY    ,WRITE =          1
+        WORKER,PAGE_BTREE    ,BUF_DIRTY    ,HOLDER_NON_DIRTY,READ  =         14
+        WORKER,PAGE_BTREE    ,BUF_DIRTY    ,HOLDER_NON_DIRTY,WRITE =          3
+        WORKER,PAGE_BTREE    ,BUF_DIRTY    ,HOLDER_DIRTY    ,WRITE =         10
+        Time_data_page_lock_acquire_time:
+        Time_data_page_hold_acquire_time:
+        SYSTEM,PAGE_VOLHEADER,OLD_PAGE_IN_PB    ,WRITE =                4
+        WORKER,PAGE_FTAB     ,OLD_PAGE_IN_PB    ,READ  =                4
+        WORKER,PAGE_HEAP     ,OLD_PAGE_IN_PB    ,READ  =               18
+        WORKER,PAGE_HEAP     ,OLD_PAGE_IN_PB    ,WRITE =               14
+        WORKER,PAGE_VOLHEADER,OLD_PAGE_IN_PB    ,READ  =                6
+        WORKER,PAGE_VOLBITMAP,OLD_PAGE_IN_PB    ,READ  =                3
+        WORKER,PAGE_XASL     ,OLD_PAGE_IN_PB    ,READ  =               12
+        WORKER,PAGE_CATALOG  ,OLD_PAGE_IN_PB    ,READ  =                9
+        WORKER,PAGE_BTREE    ,OLD_PAGE_IN_PB    ,READ  =                8
+        WORKER,PAGE_BTREE    ,OLD_PAGE_IN_PB    ,WRITE =                9
+        Time_data_page_fix_acquire_time:
+        SYSTEM,PAGE_VOLHEADER,OLD_PAGE_IN_PB    ,WRITE,UNCOND_WAIT =               26
+        WORKER,PAGE_FTAB     ,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =               25
+        WORKER,PAGE_HEAP     ,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =               72
+        WORKER,PAGE_HEAP     ,OLD_PAGE_IN_PB    ,WRITE,COND        =               13
+        WORKER,PAGE_HEAP     ,OLD_PAGE_IN_PB    ,WRITE,UNCOND_WAIT =               44
+        WORKER,PAGE_VOLHEADER,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =               22
+        WORKER,PAGE_VOLBITMAP,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =               16
+        WORKER,PAGE_XASL     ,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =               85
+        WORKER,PAGE_CATALOG  ,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =               48
+        WORKER,PAGE_BTREE    ,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =               40
+        WORKER,PAGE_BTREE    ,OLD_PAGE_IN_PB    ,WRITE,UNCOND_WAIT =               37
 
     The following are the explanation about the above statistical information.
 
@@ -1074,11 +1144,21 @@ The following shows [options] available with the **cubrid statdump** utility.
     |                  | Num_adaptive_flush_max_pages             | The maximum number of pages allowed to flush from data and the log buffer              |
     |                  |                                          | to the disk                                                                            |
     |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_sort_io_pages                        | The number of pages fetched on the disk during sorting(more means less efficient)      |
+    |                  | Num_prior_lsa_list_size                  | Current size of the prior LSA(Log Sequence Address) list.                              |
+    |                  |                                          | CUBRID write the order of writing into the prior LSA list, before writing operation    |
+    |                  |                                          | from the log buffer to the disk; this list is used to raise up the concurrency         |
+    |                  |                                          | by reducing the waiting time of the transaction from writing to disk                   |
     |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_sort_data_pages                      | The number of pages found on the page buffer during sorting(more means more efficient) |
+    |                  | Num_prior_lsa_list_maxed                 | The count of the prior LSA list being reached at the maximum size.                     |
+    |                  |                                          | The maximum size of the prior LSA list is log_buffer_size * 2. If this value is big,   |
+    |                  |                                          | we can assume that log writing jobs happen a lot at the same time                      |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_prior_lsa_list_removed               | The count of LSA being moved from prior LSA list into log buffer.                      |
+    |                  |                                          | We can assume that the commits have happened at the similar count with this value      |
     +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
-    | Logs             | Num_log_page_ioreads                     | The number of log pages read                                                           |
+    | Logs             | Num_log_page_fetches                     | The number of fetched log pages                                                        |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_log_page_ioreads                     | The number of log pages read                                                           |
     |                  +------------------------------------------+----------------------------------------------------------------------------------------+
     |                  | Num_log_page_iowrites                    | The number of log pages stored                                                         |
     |                  +------------------------------------------+----------------------------------------------------------------------------------------+
@@ -1091,18 +1171,8 @@ The following shows [options] available with the **cubrid statdump** utility.
     |                  | Num_log_end_checkpoints                  | The number of ended checkpoints                                                        |
     |                  +------------------------------------------+----------------------------------------------------------------------------------------+
     |                  | Num_log_wals                             | Not used                                                                               |
-    +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
-    | Transactions     | Num_tran_commits                         | The number of commits                                                                  |
     |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_tran_rollbacks                       | The number of rollbacks                                                                |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_tran_savepoints                      | The number of savepoints                                                               |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_tran_start_topops                    | The number of top operations started                                                   |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_tran_end_topops                      | The number of top operations stopped                                                   |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_tran_interrupts                      | The number of interruptions                                                            |
+    |                  | Num_log_page_iowrites_for_replacement    | The number of log data pages discarded from log page buffer due to page replacements   |
     +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
     | Concurrency/lock | Num_page_locks_acquired                  | The number of locked pages acquired                                                    |
     |                  +------------------------------------------+----------------------------------------------------------------------------------------+
@@ -1119,6 +1189,18 @@ The following shows [options] available with the **cubrid statdump** utility.
     |                  | Num_page_locks_waits                     | The number of locked pages waited                                                      |
     |                  +------------------------------------------+----------------------------------------------------------------------------------------+
     |                  | Num_object_locks_waits                   | The number of locked objects waited                                                    |
+    +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
+    | Transactions     | Num_tran_commits                         | The number of commits                                                                  |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_tran_rollbacks                       | The number of rollbacks                                                                |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_tran_savepoints                      | The number of savepoints                                                               |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_tran_start_topops                    | The number of top operations started                                                   |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_tran_end_topops                      | The number of top operations stopped                                                   |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_tran_interrupts                      | The number of interruptions                                                            |
     +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
     | Index            | Num_btree_inserts                        | The number of nodes inserted                                                           |
     |                  +------------------------------------------+----------------------------------------------------------------------------------------+
@@ -1162,6 +1244,15 @@ The following shows [options] available with the **cubrid statdump** utility.
     |                  | Num_query_mjoins                         | The number of parallel joins                                                           |
     |                  +------------------------------------------+----------------------------------------------------------------------------------------+
     |                  | Num_query_objfetches                     | The number of fetch objects                                                            |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_query_holdable_cursors               | The number of holdable cursors in the current server.                                  |
+    +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
+    | Sort             | Num_sort_io_pages                        | The number of pages fetched on the disk during sorting(more means less efficient)      |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_sort_data_pages                      | The number of pages found on the page buffer during sorting(more means more efficient) |
+    +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
+    | Network request  | Num_network_requests                     | The number of network requested                                                        |
+    |                  |                                          |                                                                                        |
     +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
     | Heap             | Num_heap_stats_bestspace_entries         | The number of best pages which are saved on the "best page" list                       |
     |                  +------------------------------------------+----------------------------------------------------------------------------------------+
@@ -1176,9 +1267,6 @@ The following shows [options] available with the **cubrid statdump** utility.
     |                  |                                          | then this list is updated when there are no free space to store this record on         |
     |                  |                                          | the pages. If there are still no free space to store this record even this list is     |
     |                  |                                          | updated for several times, this recored is stored into a new page.                     |
-    +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
-    | Network request  | Num_network_requests                     | The number of network requested                                                        |
-    |                  |                                          |                                                                                        |
     +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
     | Query plan cache | Num_plan_cache_add                       | The number of newly added cache entry                                                  |
     |                  +------------------------------------------+----------------------------------------------------------------------------------------+
@@ -1202,10 +1290,52 @@ The following shows [options] available with the **cubrid statdump** utility.
     |                  +------------------------------------------+----------------------------------------------------------------------------------------+
     |                  | Num_plan_cache_class_oid_hash_entries    | The current entry number of class oid hash table                                       |
     +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
-    | Buffer hit rate  | Data_page_buffer_hit_ratio               | Hit Ratio of page buffers                                                              |
-    |                  |                                          | (Num_data_page_fetches - Num_data_page_ioreads)*100 / Num_data_page_fetches            |
-    +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
     | HA               | Time_ha_replication_delay                | Replication latency time (sec.)                                                        |
+    +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
+    | Vacuuming        | Num_vacuum_log_pages_vacuumed            | The number of data pages vacuumed by vacuum workers.                                   |
+    |                  |                                          | This counter is not update in real-time.                                               |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_vacuum_log_pages_to_vacuum           | The number of data pages to be vaccumed by vacuum workers                              |
+    +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
+    | Other            | Data_page_buffer_hit_ratio               | Hit ratio of data page buffers                                                         |
+    |                  |                                          | (Num_data_page_fetches - Num_data_page_ioreads)*100 / Num_data_page_fetches            |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Log_page_buffer_hit_ratio                | Hit ratio of log page buffers                                                          |
+    |                  |                                          | (Num_log_page_fetches - Num_log_page_fetch_ioreads)*100 / Num_log_page_fetches         |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Vacuum_data_page_buffer_hit_ratio        | Hit ratio of vacuuming data page buffers                                               |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Vacuum_page_efficiency_ratio             | Ratio between number of page unfix of vacuum with dirty flag and total number of       |
+    |                  |                                          | page unfix of vacuum. Ideally, the vacuum process performs only write operations since |
+    |                  |                                          | it cleans up all unused records. Even with an optimized vacuum process,                |
+    |                  |                                          | 100% eficiency is not possible.                                                        |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Vacuum_page_fetch_ratio                  | Ratio (percentage) of page unfix from vacuum module and total page unfix.              |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Data_page_fix_lock_acquire_time_msec     | Cumulated time to acquire page lock                                                    |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Data_page_fix_hold_acquire_time_msec     | Cumulated time to acquire page hold                                                    |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Data_page_fix_acquire_time_msec          | Cumulated time to acquire fix                                                          |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Data_page_allocate_time_ratio            | Ratio of cumulated time necessary for page allocation                                  |
+    |                  |                                          | (Data_page_fix_acquire_time_msec - Data_page_fix_hold_acquire_time_msec -              |
+    |                  |                                          | Data_page_fix_lock_acquire_time_msec)*100 / Data_page_fix_acquire_time_msec            |
+    |                  |                                          | Large values indicate the IO as main bottleneck, small value indicate concurrency as   |
+    |                  |                                          | main bottleneck (page hold and lock times).                                            |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_data_page_fix_ext:                   | The number of data page fix by module, page type, and if page is new old or if is      |
+    |                  |                                          | found in page buffer.                                                                  |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_data_page_unfix_ext:                 | The number of data page unfix by module, page type, and if page was dirtied or clean.  |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_data_page_lock_acquire_time:        | time to acquire page lock (partitioned by module,page type and mode, latch mode,       |
+    |                  |                                          | condition mode).                                                                       |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_data_page_hold_acquire_time:        | Time to acquire page hold (partitioned by module,page type and mode, latch mode).      |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_data_page_fix_acquire_time:         | Time to acquire page fix (partitioned by module,page type and mode, latch mode,        |
+    |                  |                                          | condition mode).                                                                       |
     +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
 
 .. option:: -o, --output-file=FILE

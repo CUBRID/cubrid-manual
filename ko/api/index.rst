@@ -8,7 +8,7 @@ API 레퍼런스
     :maxdepth: 2
 
     jdbc.rst
-    cci.rst
+    cci_index.rst
     php.rst
     pdo.rst
     odbc.rst

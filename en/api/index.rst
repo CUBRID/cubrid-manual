@@ -8,7 +8,7 @@ This chapter covers the following API:
     :maxdepth: 2
 
     jdbc.rst
-    cci.rst
+    cci_index.rst
     php.rst
     pdo.rst
     odbc.rst

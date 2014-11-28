@@ -13,11 +13,12 @@ CREATE SERIAL
 ::
 
     CREATE SERIAL serial_name
-    [ START WITH initial ]
-    [ INCREMENT BY interval ]
-    [ MINVALUE min | NOMINVALUE ]
-    [ MAXVALUE max | NOMAXVALUE ]
-    [ CACHE cached_num | NOCACHE ]
+    [START WITH initial]
+    [INCREMENT BY interval]
+    [MINVALUE min | NOMINVALUE]
+    [MAXVALUE max | NOMAXVALUE]
+    [CACHE cached_num | NOCACHE]
+    [COMMENT 'comment_string'];
 
 *   *serial_identifier*: 생성할 시리얼의 이름을 지정한다(최대 254 바이트).
 
@@ -40,6 +41,8 @@ CREATE SERIAL
 *   **CACHE**: 시리얼 성능을 향상시키기 위하여 *cached_num* 에 지정된 개수만큼의 시리얼을 캐시에 저장하고, 시리얼 값을 요청받으면 캐시된 시리얼 값을 가져온다. 또한, 메모리에 캐시된 시리얼을 전부 사용하게 되면, *cached_num* 개수 만큼의 시리얼을 디스크로부터 메모리로 다시 가져오며, 데이터베이스 서버가 중간에 종료되면 캐시된 시리얼 값들은 삭제된다. 따라서 데이터베이스 서버가 재시작되기 이전과 이후의 시리얼 값은 비연속적일 수 있다. 캐시된 시리얼은 트랜잭션 롤백되지 않으므로, 롤백을 수행하더라도 다음에 요청하는 시리얼은 이전에 최종 요청한 시리얼 값의 다음 값이 된다. **CACHE** 키워드 뒤에 *cached_num* 는 생략할 수 없으며, 1 이하의 숫자가 지정되면 시리얼 캐시가 적용되지 않는다.
 
 *   **NOCACHE**: 시리얼 캐시 기능을 사용하지 않으며, 매번 시리얼 값을 업데이트한다.
+
+*   *comment_string*: 시리얼의 커멘트를 지정한다.
 
 .. code-block:: sql
 
@@ -83,6 +86,25 @@ CREATE SERIAL
             10004  'Choo'
             10004  'Lee'
 
+시리얼의 커멘트
+---------------
+
+다음은 시리얼 생성 시 커멘트를 추가한다.
+
+.. code-block:: sql
+
+    CREATE SERIAL order_no 
+    START WITH 100 INCREMENT BY 2 MAXVALUE 200 
+    COMMENT 'from 100 to 200 by 2';
+
+시리얼의 커멘트를 확인하려면 다음의 구문을 실행한다.
+
+.. code-block:: sql
+
+    SELECT name, comment FROM db_serial;
+
+시리얼 커멘트의 변경은 ALTER SERIAL 문의 설명을 참고한다.
+
 ALTER SERIAL
 ============
 
@@ -91,11 +113,12 @@ ALTER SERIAL
 ::
 
     ALTER SERIAL serial_identifier
-    [ INCREMENT BY interval ]
-    [ START WITH initial_value ]
-    [ MINVALUE min | NOMINVALUE ]
-    [ MAXVALUE max | NOMAXVALUE ]
-    [ CACHE cached_num | NOCACHE ]
+    [INCREMENT BY interval]
+    [START WITH initial_value]
+    [MINVALUE min | NOMINVALUE]
+    [MAXVALUE max | NOMAXVALUE]
+    [CACHE cached_num | NOCACHE]
+    [COMMENT 'comment_string'];
 
 *   *serial_identifier*: 생성할 시리얼의 이름을 지정한다(최대 254 바이트).
 
@@ -118,6 +141,8 @@ ALTER SERIAL
 *   **CACHE**: 시리얼 성능을 향상시키기 위하여 *cached_num* 에 지정된 개수만큼의 시리얼을 캐시에 저장하고, 시리얼 값을 요청받으면 캐시된 시리얼 값을 가져온다. **CACHE** 키워드 뒤에 *cached_num* 는 생략할 수 없으며, 1 이하의 숫자가 지정되면 시리얼 캐시가 적용되지 않는다.
 
 *   **NOCACHE**: 시리얼 캐시 기능을 사용하지 않으며, 매번 시리얼 값이 업데이트된다. 
+
+*   *comment_string*: 시리얼의 커멘트를 지정한다.
 
 .. code-block:: sql
 
@@ -148,6 +173,12 @@ ALTER SERIAL
         SELECT s1.NEXTVAL;
         -- From 9.0, above query returns 10
         -- In the version less than 9.0, above query returns 11
+
+다음은 시리얼의 커멘트를 변경한다.
+
+.. code-block:: sql
+
+    ALTER SERIAL order_no COMMENT 'new comment';
 
 DROP SERIAL
 ===========

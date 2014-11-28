@@ -58,21 +58,22 @@
        ...
     )
     PARTITION BY RANGE ( <partitioning_key> ) (
-        PARTITION partition_name VALUES LESS THAN ( <range_value> ),
-        PARTITION partition_name VALUES LESS THAN ( <range_value> ),
+        PARTITION partition_name VALUES LESS THAN ( <range_value> ) [COMMENT 'comment_string'] ,
+        PARTITION partition_name VALUES LESS THAN ( <range_value> ) [COMMENT 'comment_string'] ,
         ... 
     )
     
     ALTER TABLE table_name 
     PARTITION BY RANGE ( <partitioning_key> ) (
-        PARTITION partition_name VALUES LESS THAN ( <range_value> ),
-        PARTITION partition_name VALUES LESS THAN ( <range_value> ),
+        PARTITION partition_name VALUES LESS THAN ( <range_value> ) [COMMENT 'comment_string'] ,
+        PARTITION partition_name VALUES LESS THAN ( <range_value> ) [COMMENT 'comment_string'] ,
         ... 
     )
 
 *   *partitioning_key*: :ref:`partitioning-key`\ 를 지정한다.
 *   *partition_name*: 분할 이름을 지정한다.
 *   *range_value*: 분할 키의 최대 값을 지정한다. *range_value* 보다 작은 분할 키 값을 가지는 레코드들은 모두 해당 분할에 저장된다.
+*   *comment_string*: 각 분할의 커멘트를 지정한다.
 
 다음은 올림픽 참가국 정보를 담은 *participant2* 테이블을 참가한 올림픽의 개최연도를 기준으로 2000년도 이전 참가국(*before_2000* 분할)과 2008년도 이전 참가국(*before_2008* 분할)로 나누는 영역 분할을 생성하는 예제이다. 
 
@@ -91,10 +92,24 @@
         PARTITION before_2000 VALUES LESS THAN (2000),
         PARTITION before_2008 VALUES LESS THAN (2008)
     );
-     
+
 분할을 생성할 때, 사용자가 제공한 영역을 가장 작은 값부터 가장 큰 값까지 정렬하고 정렬된 리스트에서 겹치지 않는 간격을 생성한다. 위 예에서 생성된 영역의 간격은 [-inf, 2000)와 [2000, 2008)이다. 분할에 대한 무제한의 최대값을 지정하고 싶으면 **MAXVALUE** 식별자를 사용한다.
 
 투플을 영역 분할 테이블에 삽입할 때, 시스템은 분할 키를 평가하여 해당 투플이 어느 분할 영역에 속하게 될 것인가를 식별한다. 분할 키 값이 **NULL**\ 이면, 해당 투플은 가장 작은 영역의 분할에 저장된다. 분할 키 값에 해당하는 영역이 없으면 오류를 반환한다. 또한 투플을 업데이트할 때도 새로운 분할 키 값에 해당하는 영역이 존재하지 않으면 오류를 반환한다. 
+
+다음은 각 분할에 커멘트를 추가하는 예제이다.
+
+.. code-block:: sql
+
+    CREATE TABLE tbl (a int, b int) PARTITION BY RANGE(a) (
+        PARTITION less_1000 VALUES LESS THAN (1000) COMMENT 'less 1000 comment', 
+        PARTITION less_2000 VALUES LESS THAN (2000) COMMENT 'less 2000 comment'
+    );
+
+    ALTER TABLE tbl PARTITION BY RANGE(a) (
+        PARTITION less_1000 VALUES LESS THAN (1000) COMMENT 'new partition comment');
+
+분할 커멘트를 확인하는 방법은 :ref:`show-partition-comment`\를 참고한다.
 
 .. _hash-partitioning:
 
@@ -145,21 +160,22 @@
       ...
     )
     PARTITION BY LIST ( <partitioning_key> ) (
-      PARTITION partition_name VALUES IN ( <values_list> ),
-      PARTITION partition_name VALUES IN ( <values_list> ),
+      PARTITION partition_name VALUES IN ( <values_list> ) [COMMENT 'comment_string'],
+      PARTITION partition_name VALUES IN ( <values_list> ) [COMMENT 'comment_string'],
       ... 
     )
     
     ALTER TABLE table_name
     PARTITION BY LIST ( <partitioning_key> ) (
-      PARTITION partition_name VALUES IN ( <values_list> ),
-      PARTITION partition_name VALUES IN ( <values_list> ),
+      PARTITION partition_name VALUES IN ( <values_list> ) [COMMENT 'comment_string'],
+      PARTITION partition_name VALUES IN ( <values_list> ) [COMMENT 'comment_string'],
       ... 
     )
 
 *   *partitioning_key* : :ref:`partitioning-key`\를 지정한다.
 *   *partition_name* : 분할 명을 지정한다.
 *   *partition_value_list* : 분할의 기준이 되는 값의 목록을 지정한다.
+*   *comment_string*: 각 분할의 커멘트를 지정한다.
 
 다음은 선수의 이름과 종목 정보를 담고 있는 *athlete2* 테이블을 생성하고 종목에 따른 리스트 분할을 정의하는 예제이다.
 
@@ -184,6 +200,40 @@
         PARTITION event2 VALUES IN ('Judo', 'Taekwondo', 'Boxing'),
         PARTITION event3 VALUES IN ('Football', 'Basketball', 'Baseball', NULL)
     );
+
+다음은 각 분할에 커멘트를 추가하는 예제이다.
+
+.. code-block:: sql
+
+    CREATE TABLE athlete2 (name VARCHAR (40), event VARCHAR (30))
+    PARTITION BY LIST (event) (
+        PARTITION event1 VALUES IN ('Swimming', 'Athletics') COMMENT 'G1',
+        PARTITION event2 VALUES IN ('Judo', 'Taekwondo', 'Boxing') COMMENT 'G2',
+        PARTITION event3 VALUES IN ('Football', 'Basketball', 'Baseball') COMMENT 'G3');
+
+    CREATE TABLE athlete3 (name VARCHAR (40), event VARCHAR (30));
+    ALTER TABLE athlete3 PARTITION BY LIST (event) (
+        PARTITION event1 VALUES IN ('Handball', 'Volleyball', 'Tennis') COMMENT 'G1');
+
+
+.. _show-partition-comment:
+
+분할 커멘트
+-----------
+
+분할 커멘트는 영역 분할과 리스트 분할에 대해서만 지정할 수 있으며, 해시 분할에서는 지정할 수 없다. 분할 커멘트는 다음 구문을 실행하여 확인할 수 있다.
+
+.. code-block:: sql
+
+    SHOW CREATE TABLE table_name;
+    SELECT class_name, partition_name, COMMENT FROM db_partition WHERE class_name ='table_name';
+
+또는 CSQL 인터프리터에서 테이블의 스키마를 출력하는 ;sc 명령으로 인덱스의 커멘트를 확인할 수 있다.
+
+::
+    $ csql -u dba demodb
+    
+    csql> ;sc tbl
 
 .. _partition-pruning:
 

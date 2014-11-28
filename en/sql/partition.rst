@@ -58,21 +58,22 @@ Tables can be partitioned by range by using the **PARTITION BY RANGE** clause in
        ...
     )
     PARTITION BY RANGE ( <partitioning_key> ) (
-        PARTITION partition_name VALUES LESS THAN ( <range_value> ),
-        PARTITION partition_name VALUES LESS THAN ( <range_value> ),
+        PARTITION partition_name VALUES LESS THAN ( <range_value> ) [COMMENT 'comment_string'] ,
+        PARTITION partition_name VALUES LESS THAN ( <range_value> ) [COMMENT 'comment_string'] ,
         ... 
     )
     
     ALTER TABLE table_name 
     PARTITION BY RANGE ( <partitioning_key> ) (
-        PARTITION partition_name VALUES LESS THAN ( <range_value> ),
-        PARTITION partition_name VALUES LESS THAN ( <range_value> ),
+        PARTITION partition_name VALUES LESS THAN ( <range_value> ) [COMMENT 'comment_string'] ,
+        PARTITION partition_name VALUES LESS THAN ( <range_value> ) [COMMENT 'comment_string'] ,
         ... 
     )
 
-*   *partitioning_key* : Specifies the :ref:`partitioning-key`.
-*   *partition_name* : Specifies the partition name.
-*   *range_value* : Specifies the upper limit of the partitioning key value. All tuples for which the evaluation of partitioning key is less than (but not equal to) the *range_value* will be stored in this partition. 
+*   *partitioning_key* : specifies the :ref:`partitioning-key`.
+*   *partition_name* : specifies the partition name.
+*   *range_value* : specifies the upper limit of the partitioning key value. All tuples for which the evaluation of partitioning key is less than (but not equal to) the *range_value* will be stored in this partition. 
+*   *comment_string*: specifies a comment for each partition.
 
 The following example shows how to create the *participant2* table which holds countries participating at the Olympics and partition this table into partitions holding participants before year 2000(*before_2000* partition) and participants before year 2008(*before_2008* partition):
 
@@ -91,10 +92,24 @@ The following example shows how to create the *participant2* table which holds c
         PARTITION before_2000 VALUES LESS THAN (2000),
         PARTITION before_2008 VALUES LESS THAN (2008)
     );
-     
+
 When creating partitions, CUBRID sorts the user supplied range values from smallest to largest and creates the non-overlapping intervals from the sorted list. The identifier **MAXVALUE** can be used to specify an infinite upper limit for a partition. In the example above, the created range intervals are [-inf, 2000) and [2000, 2008).
 
 When inserting a tuple into a range-partitioned table, CUBRID identifies the range to which the tuple belongs by evaluating the partitioning key. If the partitioning key value is **NULL**, the data is stored in the partition with the smallest specified range value. If there is no range which would accept the partitioning key value, CUBRID returns an error. CUBRID also returns an error when updating a tuple if the new value of the partitioning key does not belong to any of the defined ranges.
+
+The below is an example to add a comment for each partition.
+
+.. code-block:: sql
+
+    CREATE TABLE tbl (a int, b int) PARTITION BY RANGE(a) (
+        PARTITION less_1000 VALUES LESS THAN (1000) COMMENT 'less 1000 comment', 
+        PARTITION less_2000 VALUES LESS THAN (2000) COMMENT 'less 2000 comment'
+    );
+
+    ALTER TABLE tbl PARTITION BY RANGE(a) (
+        PARTITION less_1000 VALUES LESS THAN (1000) COMMENT 'new partition comment');
+
+To see a partition comment, refer to :ref:`show-partition-comment`.
 
 .. _hash-partitioning:
 
@@ -145,21 +160,22 @@ Tables can be partitioned by list by using the **PARTITION BY LIST** clause in *
       ...
     )
     PARTITION BY LIST ( <partitioning_key> ) (
-      PARTITION partition_name VALUES IN ( <values_list> ),
-      PARTITION partition_name VALUES IN ( <values_list> ),
+      PARTITION partition_name VALUES IN ( <values_list> ) [COMMENT 'comment_string'],
+      PARTITION partition_name VALUES IN ( <values_list> ) [COMMENT 'comment_string'],
       ... 
     )
     
     ALTER TABLE table_name
     PARTITION BY LIST ( <partitioning_key> ) (
-      PARTITION partition_name VALUES IN ( <values_list> ),
-      PARTITION partition_name VALUES IN ( <values_list> ),
+      PARTITION partition_name VALUES IN ( <values_list> ) [COMMENT 'comment_string'],
+      PARTITION partition_name VALUES IN ( <values_list> ) [COMMENT 'comment_string'],
       ... 
     )
 
-*   *partitioning_key* : Specifies the :ref:`partitioning-key`.
-*   *partition_name* : Specifies the partition name.
-*   *value_list* : Specifies the list of values for the partitioning key.
+*   *partitioning_key*: specifies the :ref:`partitioning-key`.
+*   *partition_name*: specifies the partition name.
+*   *value_list*: specifies the list of values for the partitioning key.
+*   *comment_string*: specifies a comment for each partition.
 
 The following example shows how to create the *athlete2* table with athlete names and sport events, and define list partitions based on event values.
 
@@ -184,6 +200,40 @@ When inserting a tuple into a list-partitioned table, the value of the partition
         PARTITION event2 VALUES IN ('Judo', 'Taekwondo', 'Boxing'),
         PARTITION event3 VALUES IN ('Football', 'Basketball', 'Baseball', NULL)
     );
+
+The below is examples of adding comments for each partition.
+
+.. code-block:: sql
+
+    CREATE TABLE athlete2 (name VARCHAR (40), event VARCHAR (30))
+    PARTITION BY LIST (event) (
+        PARTITION event1 VALUES IN ('Swimming', 'Athletics') COMMENT 'G1',
+        PARTITION event2 VALUES IN ('Judo', 'Taekwondo', 'Boxing') COMMENT 'G2',
+        PARTITION event3 VALUES IN ('Football', 'Basketball', 'Baseball') COMMENT 'G3');
+
+    CREATE TABLE athlete3 (name VARCHAR (40), event VARCHAR (30));
+    ALTER TABLE athlete3 PARTITION BY LIST (event) (
+        PARTITION event1 VALUES IN ('Handball', 'Volleyball', 'Tennis') COMMENT 'G1');
+
+
+.. _show-partition-comment:
+
+COMMENT of Partition
+--------------------
+
+A partition's comment can be written only for the range partition and the list partition. You cannot write the comment about the hash partition. The partition comment can be shown by running this syntax.
+
+.. code-block:: sql
+
+    SHOW CREATE TABLE table_name;
+    SELECT class_name, partition_name, COMMENT FROM db_partition WHERE class_name ='table_name';
+
+Or you can use CSQL interpreter by running ;sc command.
+
+::
+    $ csql -u dba demodb
+    
+    csql> ;sc tbl
 
 .. _partition-pruning:
 

@@ -42,7 +42,8 @@ CREATE TRIGGER
     [ PRIORITY key ]
     <event_time> <event_type> [<event_target>]
     [ IF condition ]
-    EXECUTE [ AFTER | DEFERRED ] action ;
+    EXECUTE [ AFTER | DEFERRED ] action 
+    [COMMENT 'trigger_comment'];
      
     <event_time> ::=
         BEFORE |
@@ -88,6 +89,7 @@ CREATE TRIGGER
 
 *   <*condition*>: 트리거의 조건영역을 지정한다. 자세한 내용은 :ref:`trigger-condition` 을 참조한다.
 *   <*action*>: 트리거의 실행영역을 지정한다. 자세한 내용은 :ref:`trigger-action` 을 참조한다.
+*   *trigger_comment*: 트리거의 커멘트를 지정한다.
 
 다음은 *participant* 테이블의 레코드를 갱신할 때 획득 메달의 개수가 0보다 작을 경우 갱신을 거절하는 트리거를 생성하는 예제이다.
 2004년도 올림픽에 한국이 획득한 금메달의 개수를 음수로 갱신할 경우 갱신이 거절되는 것을 알 수 있다.
@@ -314,12 +316,40 @@ CREATE TRIGGER
     *   **INSERT** 이벤트가 정의된 트리거의 실행 영역에 **INSERT** 를 사용할 때는 트리거가 무한 루프에 빠질 수 있으므로 주의해야 한다.
     *   **UPDATE** 이벤트가 정의된 트리거가 분할된 테이블에서 동작하는 경우, 정의된 분할이 깨지거나 의도하지 않은 오동작이 발생할 수 있으므로 주의해야 한다. 이를 방지하기 위해 CUBRID는 트리거가 동작중인 경우 분할 변경을 야기하는 **UPDATE** 가 실행되지 않도록 오류 처리한다. **UPDATE** 이벤트가 정의된 트리거의 실행 영역에 **UPDATE** 를 사용할 때는 무한 루프에 빠질 수 있으므로 주의해야 한다.
 
+트리거의 커멘트
+---------------
+
+트리의 커멘트를 다음과 같이 명시할 수 있다. 
+
+.. code-block:: sql
+
+    CREATE TRIGGER trg_ab BEFORE UPDATE on abc(c) EXECUTE UPDATE cube_ab SET sumc = sumc + 1
+    COMMENT 'test trigger comment';
+
+트리거의 커멘트는 다음 구문에서 확인할 수 있다.
+
+.. code-block:: sql
+
+	SELECT name, comment FROM db_trigger;
+	SELECT trigger_name, comment FROM db_trig;
+
+또는 CSQL 인터프리터에서 스키마를 출력하는 ;sc 명령으로 트리거의 커멘트를 확인할 수 있다.
+
+::
+    $ csql -u dba demodb
+    
+    csql> ;sc tbl
+
+트리거 커멘트의 변경은 아래의 **ALTER TRIGGER** 문을 참고한다.
+
 .. _alter-trigger:
 
 ALTER TRIGGER
 =============
 
-트리거 정의에서 **STATUS** 와 **PRIORITY** 옵션에 대해 **ALTER** 구문을 이용하여 변경할 수 있다. 만약 트리거의 다른 부분에 대해 변경(이벤트 대상 또는 조건 표현식)이 필요하면, 트리거를 삭제한 후 재생성해야 한다. ::
+트리거 정의에서 **STATUS** 와 **PRIORITY** 옵션에 대해 **ALTER** 구문을 이용하여 변경할 수 있다. 만약 트리거의 다른 부분에 대해 변경(이벤트 대상 또는 조건 표현식)이 필요하면, 트리거를 삭제한 후 재생성해야 한다. 
+
+::
 
     ALTER TRIGGER trigger_name <trigger_option> ;
 
@@ -349,6 +379,26 @@ ALTER TRIGGER
     *   같은 **ALTER TRIGGER** 문 내에서는 한 개의 *trigger_option* 만 기술할 수 있다.
     *   만약 테이블 트리거를 변경하려면, 해당 트리거의 소유자이거나, 해당 트리거가 있는 테이블에 대해 **ALTER** 권한이 부여되어 있어야 한다.
     *   사용자 트리거를 변경하기 위해서는 반드시 해당 트리거의 소유자여야 한다. *trigger_option* 에 대한 자세한 내용은 :ref:`create-trigger` 을 참조한다. **PRIORITY** 옵션과 같이 기술하는 key는 반드시 음이 아닌 부동 소수점 값(non-negative floating point value)이어야 한다.
+
+트리거 커멘트
+-------------
+
+트리거 커멘트는 **ALTER TRIGGER** 문을 실행하여 다음과 같이 변경할 수 있다.
+
+::
+
+    ALTER TRIGGER trigger_name [trigger_option] 
+    [COMMENT ‘comment_string’];
+
+*   *comment_string*: 트리거의 커멘트를 지정한다.
+
+트리거의 커멘트만 변경하는 경우 트리거 옵션(trigger_option)을 생략할 수 있다.
+
+*trigger_option*\은 위의 :ref:`alter-trigger` 구문을 참고한다.
+
+.. code-block:: sql
+
+    ALTER TRIGGER trg_ab COMMENT 'new trigger comment';
 
 DROP TRIGGER
 ============

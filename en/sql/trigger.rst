@@ -42,7 +42,8 @@ A trigger is created by defining a trigger target, condition and action to be pe
     [ PRIORITY key ]
     <event_time> <event_type> [<event_target>]
     [ IF condition ]
-    EXECUTE [ AFTER | DEFERRED ] action ;
+    EXECUTE [ AFTER | DEFERRED ] action 
+    [COMMENT 'trigger_comment'];
      
     <event_time> ::=
         BEFORE |
@@ -74,20 +75,21 @@ A trigger is created by defining a trigger target, condition and action to be pe
         UPDATE statement |
         DELETE statement
 
-*   *trigger_name*: Specifies the name of the trigger to be defined.
+*   *trigger_name*: specifies the name of the trigger to be defined.
 *   [ **STATUS** { **ACTIVE** | **INACTIVE** } ]: Defines the state of the trigger (if not defined, the default value is **ACTIVE**).
 
     *   If **ACTIVE** state is specified, the trigger is executed every time the corresponding event occurs.
     *   If **INACTIVE** state is specified, the trigger is not executed even when the corresponding event occurs. The state of the trigger can be modified. For details, see :ref:`alter-trigger` section.
 
-*   [ **PRIORITY** *key* ]: Specifies a trigger priority if multiple triggers are called for an event. *key* must be a floating point value that is not negative. If the priority is not defined, the lowest priority 0 is assigned. Triggers having the same priority are executed in a random order. The priority of triggers can be modified. For details, see :ref:`alter-trigger` section.
+*   [ **PRIORITY** *key* ]: specifies a trigger priority if multiple triggers are called for an event. *key* must be a floating point value that is not negative. If the priority is not defined, the lowest priority 0 is assigned. Triggers having the same priority are executed in a random order. The priority of triggers can be modified. For details, see :ref:`alter-trigger` section.
 
-*   <*event_time*>: Specifies the point of time when the conditions and actions are executed. **BEFORE**, **AFTER** or **DEFERRED** can be specified. For details, see the :ref:`trigger-event-time` section.
-*   <*event_type*>: Trigger types are divided into a user trigger and a table trigger. For details, see the :ref:`trigger-event-type` section.
+*   <*event_time*>: specifies the point of time when the conditions and actions are executed. **BEFORE**, **AFTER** or **DEFERRED** can be specified. For details, see the :ref:`trigger-event-time` section.
+*   <*event_type*>: trigger types are divided into a user trigger and a table trigger. For details, see the :ref:`trigger-event-type` section.
 *   <*event_target*>: An event target is used to specify the target for the trigger to be called. For details, see the :ref:`trigger-event-target` section.
 
-*   <*condition*>: Specifies the trigger condition. For details, see the :ref:`trigger-condition` section.
-*   <*action*>: Specifies the trigger action. For details, see the :ref:`trigger-action` section.
+*   <*condition*>: specifies the trigger condition. For details, see the :ref:`trigger-condition` section.
+*   <*action*>: specifies the trigger action. For details, see the :ref:`trigger-action` section.
+*   *trigger_comment*: specifies a trigger's comment.
 
 The following example shows how to create a trigger that rejects the update if the number of medals won is smaller than 0 when an instance of the *participant* table is updated.
 As shown below, the update is rejected if you try to change the number of gold (*gold*) medals that Korea won in the 2004 Olympic Games to a negative number.
@@ -113,9 +115,9 @@ Event Time
 
 Specifies the point of time when trigger conditions and actions are executed. The types of event time are **BEFORE**, **AFTER** and **DEFERRED**.
 
-*   **BEFORE**: Checks the condition before the event is processed.
-*   **AFTER**: Checks the condition after the event is processed.
-*   **DEFERRED**: Checks the condition at the end of the transaction for the event. If you specify **DEFERRED**, you cannot use **COMMIT** or **ROLLBACK** as the event type.
+*   **BEFORE**: checks the condition before the event is processed.
+*   **AFTER**: checks the condition after the event is processed.
+*   **DEFERRED**: checks the condition at the end of the transaction for the event. If you specify **DEFERRED**, you cannot use **COMMIT** or **ROLLBACK** as the event type.
 
 Trigger Type
 ------------
@@ -291,14 +293,14 @@ A trigger action describes what to be performed if the trigger condition is true
 
 The following is a list of actions that can be used for trigger definitions.
 
-*   **REJECT**: Discards the operation that initiated the trigger and keeps the former state of the database, if the condition is not true. Once the operation is performed, **REJECT** is allowed only when the action time is **BEFORE** because the operation cannot be rejected. Therefore, you must not use **REJECT** if the action time is **AFTER** or **DERERRED**.
+*   **REJECT**: discards the operation that initiated the trigger and keeps the former state of the database, if the condition is not true. Once the operation is performed, **REJECT** is allowed only when the action time is **BEFORE** because the operation cannot be rejected. Therefore, you must not use **REJECT** if the action time is **AFTER** or **DERERRED**.
 
-*   **INVALIDATE TRANSACTION**: Allows the event operation that called the trigger, but does not allow the transaction that contains the commit to be executed. You must cancel the transaction by using the **ROLLBACK** statement if it is not valid. Such action is used to protect the database from having invalid data after a data-changing event happens.
+*   **INVALIDATE TRANSACTION**: allows the event operation that called the trigger, but does not allow the transaction that contains the commit to be executed. You must cancel the transaction by using the **ROLLBACK** statement if it is not valid. Such action is used to protect the database from having invalid data after a data-changing event happens.
 
-*   **PRINT**: Displays trigger actions on the terminal screen in text messages, and can be used during developments or tests. The results of event operations are not rejected or discarded.
-*   **INSERT**: Inserts one or more new instances to the table.
-*   **UPDATE**: Updates one or more column values in the table.
-*   **DELETE**: Deletes one or more instances from the table.
+*   **PRINT**: displays trigger actions on the terminal screen in text messages, and can be used during developments or tests. The results of event operations are not rejected or discarded.
+*   **INSERT**: inserts one or more new instances to the table.
+*   **UPDATE**: updates one or more column values in the table.
+*   **DELETE**: deletes one or more instances from the table.
 
 The following example shows how to define an action when a trigger is created. The *medal_trig* trigger defines **REJECT** in its action. **REJECT** can be specified only when the action time is **BEFORE**.
 
@@ -314,12 +316,40 @@ The following example shows how to define an action when a trigger is created. T
     *   Trigger may fall into an infinite loop when you use **INSERT** in an action of a trigger where an **INSERT** event is defined.
     *   If a trigger where an **UPDATE** event is defined runs on a partitioned table, you must be careful because the defined partition can be broken or unintended malfunction may occur. To prevent such situation, CUBRID outputs an error so that the **UPDATE** causing changes to the running partition is not executed. Trigger may fall into an infinite loop when you use **UPDATE** in an action of a trigger where an **UPDATE** event is defined.
 
+Trigger's COMMENT
+-----------------
+
+You can specify a trigger's comment as follows.
+
+.. code-block:: sql
+
+    CREATE TRIGGER trg_ab BEFORE UPDATE on abc(c) EXECUTE UPDATE cube_ab SET sumc = sumc + 1
+    COMMENT 'test trigger comment';
+
+You can see a trigger's comment by running the below statement.
+
+.. code-block:: sql
+
+	SELECT name, comment FROM db_trigger;
+	SELECT trigger_name, comment FROM db_trig;
+
+Or you can see a trigger's comment with ;sc command which displays a schema in the CSQL interpreter.
+
+::
+    $ csql -u dba demodb
+    
+    csql> ;sc tbl
+
+To change the trigger's comment, refer to **ALTER TRIGGER** syntax on the below.
+
 .. _alter-trigger:
 
 ALTER TRIGGER
 =============
 
-In the trigger definition, **STATUS** and **PRIORITY** options can be changed by using the **ALTER** statement. If you need to alter other parts of the trigger (event targets or conditional expressions), you must delete and then re-create the trigger. ::
+In the trigger definition, **STATUS** and **PRIORITY** options can be changed by using the **ALTER** statement. If you need to alter other parts of the trigger (event targets or conditional expressions), you must delete and then re-create the trigger. 
+
+::
 
     ALTER TRIGGER trigger_name <trigger_option> ;
 
@@ -327,9 +357,9 @@ In the trigger definition, **STATUS** and **PRIORITY** options can be changed by
         STATUS { ACTIVE | INACTIVE } |
         PRIORITY key
 
-*   *trigger_name*: Specifies the name of the trigger to be changed.
-*   **STATUS** { **ACTIVE** | **INACTIVE** }: Changes the status of the trigger.
-*   **PRIORITY** *key*: Changes the priority.
+*   *trigger_name*: specifies the name of the trigger to be changed.
+*   **STATUS** { **ACTIVE** | **INACTIVE** }: changes the status of the trigger.
+*   **PRIORITY** *key*: changes the priority.
 
 The following example shows how to create the medal_trig trigger and then change its state to **INACTIVE** and its priority to 0.7.
 
@@ -350,6 +380,26 @@ The following example shows how to create the medal_trig trigger and then change
     *   To change a table trigger, you must be the trigger owner or granted the **ALTER** authorization on the table where the trigger belongs.
     *   A user trigger can only be changed by its owner. For details on *trigger_option*, see the :ref:`create-trigger` section. The key specified together with the **PRIORITY** option must be a non-negative floating point value.
 
+Trigger's COMMENT
+-----------------
+
+You can change a trigger's comment by running **ALTER TRIGGER** syntax as below.
+
+::
+
+    ALTER TRIGGER trigger_name [trigger_option] 
+    [COMMENT ‘comment_string’];
+
+*   *comment_string*: specifies a trigger's comment.
+
+If you want to change only trigger's comment, you can omit trigger options (*trigger_option*).
+
+For *trigger_option*, see :ref:`alter-trigger` on the above.
+
+.. code-block:: sql
+
+    ALTER TRIGGER trg_ab COMMENT 'new trigger comment';
+
 DROP TRIGGER
 ============
 
@@ -357,7 +407,7 @@ You can drop a trigger by using the **DROP TRIGGER** statement. ::
 
     DROP TRIGGER trigger_name ; 
 
-*   *trigger_name*: Specifies the name of the trigger to be dropped.
+*   *trigger_name*: specifies the name of the trigger to be dropped.
 
 The following example shows how to drop the medal_trig trigger.
 
@@ -377,8 +427,8 @@ You can change a trigger name by using the **TRIGGER** reserved word in the **RE
 
     RENAME TRIGGER old_trigger_name AS new_trigger_name [ ; ]
 
-*   *old_trigger_name* : Specifies the current name of the trigger.
-*   *new_trigger_name* : Specifies the name of the trigger to be modified.
+*   *old_trigger_name*: specifies the current name of the trigger.
+*   *new_trigger_name*: specifies the name of the trigger to be modified.
 
 .. code-block:: sql
 
@@ -405,8 +455,8 @@ Executes the deferred condition or action of a trigger immediately. ::
         trigger_name |
         ALL TRIGGERS
 
-*   *trigger_name*: Executes the deferred action of the trigger when a trigger name is specified.
-*   **ALL TRIGGERS**: Executes all currently deferred actions.
+*   *trigger_name*: executes the deferred action of the trigger when a trigger name is specified.
+*   **ALL TRIGGERS**: executes all currently deferred actions.
 
 Dropping Deferred Condition and Action
 --------------------------------------
@@ -518,8 +568,8 @@ You can view the execution log of the trigger from a terminal by using the **SET
         ON |
         OFF
 
-*   **ON**: Executes **TRACE** until the switch is set to **OFF** or the current database session terminates.
-*   **OFF**: Stops the **TRACE**.
+*   **ON**: executes **TRACE** until the switch is set to **OFF** or the current database session terminates.
+*   **OFF**: stops the **TRACE**.
 
 The following example shows how to execute the **TRACE** and the *loop_tgr* trigger to view the trigger execution logs. To identify the trace for each condition and action executed when the trigger is called, a message is displayed on the terminal. The following message appears 15 times because the *loop_tgr* trigger is executed until the *gold* value becomes 0.
 

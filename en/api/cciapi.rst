@@ -2166,8 +2166,10 @@ cci_is_holdable
     The **cci_is_holdable** function returns whether the request handle(req_handle) is holdable or not.
 
     :param req_handle: (IN) Request handle for the prepared statement
-    :return: 1 : holdable, 0 : not holdable
-
+    :return: 
+    
+        *   1: holdable
+        *   0: not holdable
         *   **CCI_ER_REQ_HANDLE**
 
     .. seealso:: 
@@ -2182,8 +2184,10 @@ cci_is_updatable
     The **cci_is_updatable** function checks the SQL statement executing :c:func:`cci_prepare` can make updatable result set (which means CCI_PREPARE_UPDATABLE is configured in *flag* when executing :c:func:`cci_prepare`).
 
     :param req_handle: (IN) Request handle for the prepared statement
-    :return: 1 : updatable, 0 : not updatable
-
+    :return: 
+    
+        *   1 : updatable
+        *   0 : not updatable
         *   **CCI_ER_REQ_HANDLE**
 
 cci_next_result

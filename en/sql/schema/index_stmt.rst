@@ -10,18 +10,21 @@ For how to use indexes on the **SELECT** statement like Using SQL Hint, Descendi
     CREATE [UNIQUE] INDEX index_name ON table_name <index_col_desc> ;
      
         <index_col_desc> ::=
-            ( column_name [ASC | DESC] [ {, column_name [ASC | DESC]} ...] ) [ WHERE <filter_predicate> ]
-            | (function_name (argument_list) )
+            { ( column_name [ASC | DESC] [ {, column_name [ASC | DESC]} ...] ) [ WHERE <filter_predicate> ] | 
+            (function_name (argument_list) ) } 
+                [COMMENT 'index_comment_string']
 
-*   **UNIQUE**: Creates an index with unique values.
-*   *index_name*: Specifies the name of the index to be created. The index name must be unique in the table.
+*   **UNIQUE**: creates an index with unique values.
+*   *index_name*: specifies the name of the index to be created. The index name must be unique in the table.
 
-*   *table_name*: Specifies the name of the table where the index is to be created.
-*   *column_name*: Specifies the name of the column where the index is to be applied. To create a composite index, specify two or more column names.
-*   **ASC** | **DESC**: Specifies the sorting order of columns. 
+*   *table_name*: specifies the name of the table where the index is to be created.
+*   *column_name*: specifies the name of the column where the index is to be applied. To create a composite index, specify two or more column names.
+*   **ASC** | **DESC**: specifies the sorting order of columns. 
 
-*   <*filter_predicate*>: Defines the conditions to create filtered indexes. When there are several comparison conditions between a column and a constant, filtering is available only when the conditions are connected by using **AND**. Regarding this, definitely watch :ref:`filtered-index`.
+*   <*filter_predicate*>: defines the conditions to create filtered indexes. When there are several comparison conditions between a column and a constant, filtering is available only when the conditions are connected by using **AND**. Regarding this, definitely watch :ref:`filtered-index`.
 *   *function_name* (*argument_list*): Defines the conditions to create function-based indexes. Regarding this, definitely watch :ref:`function-index`.
+
+*   *index_comment_string*: specifies a comment of an index.
 
 ..  note::
 
@@ -39,7 +42,37 @@ The following example shows how to create a multiple column index.
 
 .. code-block:: sql
 
-    CREATE INDEX name_nation_idx ON athlete(name, nation_code);
+    CREATE INDEX name_nation_idx ON athlete(name, nation_code) COMMENT 'index comment';
+
+COMMENT of Index
+----------------
+
+You can write a comment of an index as following.
+
+.. code-block:: sql
+
+    CREATE TABLE tbl (a int default 0, b int, c int);
+
+    CREATE INDEX i_tbl_b on tbl (b) COMMENT 'index comment for i_tbl_b';
+
+    CREATE TABLE tbl2 (a INT, index i_tbl_a (a) COMMENT 'index comment', b INT);
+
+    ALTER TABLE tbl2 ADD INDEX i_tbl2_b (b) COMMENT 'index comment b';
+
+A specified comment of an indexe can be shown by running these statements.
+
+::
+
+    SHOW CREATE TABLE table_name;
+    SELECT index_name, class_name, comment from db_index where class_name ='classname';
+    SHOW INDEX FROM table_name;
+
+Or you can see the index comments with ;sc command in the CSQL interpreter.
+
+::
+    $ csql -u dba demodb
+    
+    csql> ;sc tbl
 
 .. _alter-index:
 
@@ -54,9 +87,10 @@ The following is a syntax of rebuilding an index.
 
     ALTER INDEX index_name ON table_name REBUILD ;
 
-*   *index_name*: Specifies the name of the index to be recreated. The index name must be unique in the table.
-*   *table_name*: Specifies the name of the table where the index is recreated.
-*   **REBUILD**:  Recreate an index with the same structure as the one already created.
+*   *index_name*: specifies the name of the index to be recreated. The index name must be unique in the table.
+*   *table_name*: specifies the name of the table where the index is recreated.
+*   **REBUILD**:  recreate an index with the same structure as the one already created.
+*   *index_comment_string*: specifies a comment of an index.
 
 .. note::
 
@@ -73,21 +107,33 @@ The following is an example of recreating index.
 .. code-block:: sql
 
     CREATE INDEX i_game_medal ON game(medal);
-    ALTER INDEX i_game_medal ON game REBUILD;
+    ALTER INDEX i_game_medal ON game COMMENT 'rebuild index comment' REBUILD ;
+
+If you want to add or change a comment of the index without rebuilding an index, add a COMMENT syntax and remove a REBUILD keyword as following.
+
+::
+
+    ALTER INDEX index_name ON table_name COMMENT 'index_comment_string' ;
+
+The below is a syntax to only add or change a comment without rebuilding an index.
+
+.. code-block:: sql
+    
+    ALTER INDEX i_game_medal ON game COMMENT 'change index comment' ;
 
 The following is a syntax of renaming an index.
 
 :: 
 
-    ALTER INDEX old_index_name ON table_name RENAME TO new_index_name ;
+    ALTER INDEX old_index_name ON table_name RENAME TO new_index_name [COMMENT 'index_comment_string'] ;
 
 An index name can be changed by not only ALTER INDEX statement, but also :ref:`rename-index`.
 
-The following is an example of changing an index name:
+The following is an example of changing an index name.
 
 .. code-block:: sql 
 
-    ALTER INDEX i_game_medal ON game RENAME TO i_new_game_medal; 
+    ALTER INDEX i_game_medal ON game RENAME TO i_new_game_medal COMMENT 'rename index comment'; 
 
 DROP INDEX
 ==========
@@ -98,8 +144,8 @@ Use the **DROP INDEX** statement to drop an index. An index also can be dropped 
 
     DROP INDEX index_name ON table_name ;
 
-*   *index_name*: Specifies the name of the index to be dropped.
-*   *table_name*: Specifies the name of the table whose index is dropped.
+*   *index_name*: specifies the name of the index to be dropped.
+*   *table_name*: specifies the name of the table whose index is dropped.
 
 .. warning::
 

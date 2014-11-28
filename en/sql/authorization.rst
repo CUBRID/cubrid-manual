@@ -21,16 +21,18 @@ CREATE USER
 **DBA** and **DBA** members can create, drop and alter users by using SQL statements. At the initial installation, passwords for users are not configured. ::
 
     CREATE USER user_name
-    [ PASSWORD password ]
-    [ GROUPS user_name [ {, user_name } ... ] ]
-    [ MEMBERS user_name [ {, user_name } ... ] ] ;
+    [PASSWORD password]
+    [GROUPS user_name [{, user_name } ... ]]
+    [MEMBERS user_name [{, user_name } ... ]] 
+    [COMMENT 'comment_string'];
     
     DROP USER user_name;
     
     ALTER USER user_name PASSWORD password;
 
-*   *user_name*: Specifies the user name to create, delete or change.
-*   *password*: Specifies the user password to create or change.
+*   *user_name*: specifies the user name to create, delete or change.
+*   *password*: specifies the user password to create or change.
+*   *comment_string*: specifies a comment for the user.
 
 The following example shows how to create a user (*Fred*), change a password, and delete the user.
 
@@ -63,6 +65,27 @@ The following example shows how to create the same groups as above but use the *
     CREATE USER marketing MEMBERS smith, jones;
     CREATE USER design MEMBERS smith;
     CREATE USER company MEMBERS engineering, marketing, design;
+
+User's COMMENT
+--------------
+
+A comment for a user can be written as follows.
+
+.. code-block:: sql
+
+    CREATE USER designer GROUPS dbms, qa COMMENT 'user comment';
+
+A comment for a user can be changed as the following ALTER USER statement.
+
+.. code-block:: sql
+    
+    ALTER USER DESIGNER COMMENT 'new comment';
+    
+You can see a comment for a user with this syntax.
+
+.. code-block:: sql
+
+    SELECT name, comment FROM db_user;
 
 .. _granting-authorization:
 

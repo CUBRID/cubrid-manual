@@ -2186,8 +2186,10 @@ cci_is_holdable
     **cci_is_holdable** 함수는 요청 핸들의 연결 유지(holdable) 가능 여부를 리턴한다.
 
     :param req_handle: (IN) prepared statement에 대한 요청 핸들
-    :return: 1 : 연결 유지, 0 : 연결 유지 안 됨
-
+    :return: 
+    
+        *   1: 연결 유지
+        *   0: 연결 유지 안 됨
         *   **CCI_ER_REQ_HANDLE**
 
     .. seealso:: 
@@ -2202,8 +2204,10 @@ cci_is_updatable
     :c:func:`cci_prepare`\ 를 수행한 SQL 문이 업데이트 가능한 결과 셋을 만들 수 있는 질의인지(:c:func:`cci_prepare` 수행 시 *flag* 에 **CCI_PREPARE_UPDATABLE** 이 설정되었는지) 확인하는 함수이다. 업데이트 가능한 질의이면 1을 반환한다.
 
     :param req_handle: (IN) prepared statement에 대한 요청 핸들
-    :return: 1 : updatable, 0 : not updatable
-
+    :return: 
+    
+        *   1: 업데이트 가능
+        *   0: 업데이트 불가능
         *   **CCI_ER_REQ_HANDLE**
 
 cci_next_result

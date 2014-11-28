@@ -14,15 +14,14 @@ CREATE TABLE
     [AUTO_INCREMENT = initial_value]
     [CLASS ATTRIBUTE (<column_definition>, ...)]
     [INHERIT <resolution>, ...]
-    [REUSE_OID]
-    [CHARSET charset_name] [COLLATE collation_name] ;
+    [<table_options>]
 
         <subclass_definition> ::= {UNDER | AS SUBCLASS OF} table_name, ...
         
         <column_definition> ::= 
-            column_name <data_type> [[<default_or_shared_or_ai>] | [ <column_constraint> ]]
+            column_name <data_type> [{<default_or_shared_or_ai> | <column_constraint>}] [COMMENT 'column_comment_string']
         
-            <data_type> ::= <column_type> [ <charset_modifier_clause> ] [ <collation_modifier_clause> ]
+            <data_type> ::= <column_type> [<charset_modifier_clause>] [<collation_modifier_clause>]
 
                 <charset_modifier_clause> ::= {CHARACTER_SET|CHARSET} {<char_string_literal>|<identifier>}
 
@@ -51,7 +50,7 @@ CREATE TABLE
                 {KEY|INDEX} [constraint_name](column_name, ...) |
                 PRIMARY KEY (column_name, ...) |
                 <referential_constraint>
-            }
+            } COMMENT 'index_comment_string'
          
             <referential_constraint> ::= FOREIGN KEY [<foreign_key_name>](column_name, ...) <referential_definition>
          
@@ -65,6 +64,10 @@ CREATE TABLE
                         <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
      
         <resolution> ::= [CLASS] {column_name} OF superclass_name [AS alias]
+        <table_options> ::= <table_option> [[,] <table_option> ...] 
+            <table_option> ::= REUSE_OID | 
+                               COMMENT [=] 'table_comment_string' |
+                               [CHARSET charset_name] [COLLATE collation_name]
 
 *   **IF NOT EXISTS**: 생성하려는 테이블이 존재하는 경우 에러 없이 테이블을 생성하지 않는다. 
 *   *table_name*: 생성할 테이블의 이름을 지정한다(최대 254바이트).
@@ -74,6 +77,10 @@ CREATE TABLE
 *   <*column_constraint*>: 칼럼의 제약 조건을 지정하며 제약 조건의 종류에는 **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** 가 있다. 자세한 내용은 :ref:`constraint-definition`\을 참고한다.
 *   <*default_or_shared_or_ai*>: DEFAULT, SHARED, AUTO_INCREMENT 중 하나만 사용될 수 있다.
     AUTO_INCREMENT이 지정될 때 "(seed, increment)"와 "AUTO_INCREMENT = initial_value"는 동시에 정의될 수 없다.
+    
+*   *table_comment_string*: 테이블의 커멘트를 지정한다.
+*   *column_comment_string*: 칼럼의 커멘트를 지정한다.
+*   *index_comment_string*: 인덱스의 커멘트를 지정한다.
 
 .. code-block:: sql
 
@@ -87,6 +94,16 @@ CREATE TABLE
         slogan           VARCHAR(40),
         introduction     VARCHAR(1500)
     );
+
+다음은 ALTER 문을 사용하여 테이블 커멘트를 추가하는 예제이다.
+
+.. code-block:: sql
+    
+    ALTER TABLE olympic2 COMMENT = 'this is new comment for olympic2';
+
+다음은 테이블 생성 시 인덱스 커멘트를 포함하는 예제이다.
+
+    CREATE TABLE tbl (a INT, index i_t_a (a) COMMENT 'index comment');
 
 .. note:: **테이블 스키마의 CHECK 제약 조건**
 
@@ -109,7 +126,7 @@ CREATE TABLE
 ::
 
     <column_definition> ::= 
-        column_name <data_type> [[<default_or_shared_or_ai>] | [<column_constraint>]] ...
+        column_name <data_type> [[<default_or_shared_or_ai>] | [<column_constraint>]] ... [COMMENT 'comment_string']
     
         <data_type> ::= <column_type> [<charset_modifier_clause>] [<collation_modifier_clause>]
 
@@ -221,9 +238,9 @@ CREATE TABLE
 
 .. code-block:: sql
 
-    CREATE TABLE t (date1 DATE DEFAULT SYSDATE, date2 DATE DEFAULT SYSDATE);
-    CREATE TABLE t (date1 DATE DEFAULT SYSDATE,
-                    ts1   TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+    CREATE TABLE tbl (date1 DATE DEFAULT SYSDATE, date2 DATE DEFAULT SYSDATE);
+    CREATE TABLE tbl (date1 DATE DEFAULT SYSDATE,
+                      ts1   TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
 
 자동 증가 특성(AUTO INCREMENT)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -597,7 +614,7 @@ OID(Object Identifier)는 볼륨 번호, 페이지 번호, 슬롯 번호와 같�
 .. code-block:: sql
 
     -- creating table with REUSE_OID option specified
-    CREATE TABLE reuse_tbl (a INT PRIMARY KEY) REUSE_OID;
+    CREATE TABLE reuse_tbl (a INT PRIMARY KEY) REUSE_OID, COMMENT = 'reuse oid table';
     INSERT INTO reuse_tbl VALUES (1);
     INSERT INTO reuse_tbl VALUES (2);
     INSERT INTO reuse_tbl VALUES (3);
@@ -613,7 +630,7 @@ OID(Object Identifier)는 볼륨 번호, 페이지 번호, 슬롯 번호와 같�
      
 .. code-block:: sql
     
-    CREATE TABLE t3(a VARCHAR(20)) REUSE_OID COLLATE euckr_bin;
+    CREATE TABLE t3(a VARCHAR(20)) REUSE_OID, COMMENT = 'reuse oid table', COLLATE euckr_bin;
     CREATE TABLE t4(a VARCHAR(20)) COLLATE euckr_bin REUSE_OID;
 
 .. note::
@@ -630,6 +647,30 @@ OID(Object Identifier)는 볼륨 번호, 페이지 번호, 슬롯 번호와 같�
 ^^^^^^^^^^^^^^^^^
 
 해당 테이블에 적용할 문자셋과 콜레이션을 **CREATE TABLE** 문에 명시할 수 있다. 이에 관한 자세한 내용은 :ref:`collation-charset-string` 절을 참조하면 된다.
+
+테이블의 커멘트
+^^^^^^^^^^^^^^^
+
+테이블의 커멘트를 다음과 같이 명시할 수 있다. 
+
+.. code-block:: sql
+
+    CREATE TABLE tbl (a INT, b INT) COMMENT = 'this is comment for table tbl';
+
+테이블의 커멘트는 다음 구문에서 확인할 수 있다.
+
+::
+
+    SHOW CREATE TABLE table_name;
+    SELECT class_name, comment from db_class;
+    SELECT class_name, comment from _db_class;
+
+또는 CSQL 인터프리터에서 테이블의 스키마를 출력하는 ;sc 명령으로 테이블의 커멘트를 확인할 수 있다.
+
+::
+    $ csql -u dba demodb
+    
+    csql> ;sc tbl
 
 CREATE TABLE LIKE
 -----------------
@@ -718,10 +759,10 @@ CREATE TABLE AS SELECT
 
 ::
 
-    CREATE {TABLE | CLASS} table_name [(<column_definition> [,<table_constraint>], ...)] [REPLACE] AS <select_statement>;
+    CREATE {TABLE | CLASS} table_name [(<column_definition> [,<table_constraint>], ...)] [COMMENT [=] 'comment_string'] [REPLACE] AS <select_statement>;
 
 *   *table_name*: 새로 생성할 테이블 이름이다.
-*   <*column_definition*>, <*table_constraint*>: 칼럼을 정의한다. 생략하면 **SELECT** 문의 칼럼 스키마가 복제된다. **SELECT** 문의 칼럼 제약 조건이나 **AUTO_INCREMENT** 속성은 복제되지 않는다.
+*   <*column_definition*>: 칼럼을 정의한다. 생략하면 **SELECT** 문의 칼럼 스키마가 복제된다. **SELECT** 문의 칼럼 제약 조건이나 **AUTO_INCREMENT** 속성, 테이블/칼럼의 커멘트는 복제되지 않는다.
 *   <*table_constraint*>: 테이블 제약 조건을 정의한다.
 *   <*select_statement*>: 데이터베이스에 이미 존재하는 원본 테이블을 대상으로 하는 **SELECT** 문이다.
 
@@ -825,17 +866,15 @@ CREATE TABLE AS SELECT
 ALTER TABLE
 ===========
 
-**ALTER** 구문을 이용하여 테이블의 구조를 변경할 수 있다. 대상 테이블에 칼럼 추가/삭제, 인덱스 생성/삭제, 기존 칼럼의 타입 변경, 테이블 이름 변경, 칼럼 이름 변경 등을 수행하거나 테이블 제약 조건을 변경한다. 또한 **AUTO_INCREMENT** 의 초기값을 변경할 수 있다. **TABLE** 은 **CLASS** 와 동의어이고, **VIEW** 는 **VCLASS** 와 동의어이다. **COLUMN** 은 **ATTRIBUTE** 와 동의어이다. 
+**ALTER** 구문을 이용하여 테이블의 구조를 변경할 수 있다. 대상 테이블에 칼럼 추가/삭제, 인덱스 생성/삭제, 기존 칼럼의 타입 변경, 테이블 이름 변경, 칼럼 이름 변경 등을 수행하거나 테이블 제약 조건을 변경한다. 또한 **AUTO_INCREMENT** 의 초기값을 변경할 수 있다. **TABLE** 은 **CLASS** 와 동의어이다. **COLUMN** 은 **ATTRIBUTE** 와 동의어이다. 
 
 ::
 
-    ALTER [<class_type>] <table_name> <alter_clause> ;
-     
-        <class_type> ::= TABLE | CLASS | VCLASS | VIEW
+    ALTER [TABLE | CLASS] table_name <alter_clause> [, <alter_clause>] ... ;
      
         <alter_clause> ::= 
-            ADD <alter_add> [INHERIT <resolution>, ...] | 
-            ADD {KEY | INDEX} <index_name> (<index_col_name>) |
+            ADD <alter_add> [INHERIT <resolution>, ...]  | 
+            ADD {KEY | INDEX} <index_name> (<index_col_name>, ... ) [COMMENT 'index_comment_string'] |
             ALTER [COLUMN] column_name SET DEFAULT <value_specification> |
             DROP <alter_drop> [ INHERIT <resolution>, ... ] |
             DROP {KEY | INDEX} index_name |
@@ -843,8 +882,10 @@ ALTER TABLE
             DROP PRIMARY KEY |                   
             RENAME <alter_rename> [ INHERIT <resolution>, ... ] |
             CHANGE <alter_change> |
+            MODIFY <alter_modify> |            
             INHERIT <resolution>, ... |
-            AUTO_INCREMENT = <initial_value>
+            AUTO_INCREMENT = <initial_value> |
+            COMMENT [=] 'table_comment_string'
                            
             <alter_add> ::= 
                 [ATTRIBUTE|COLUMN] [(]<class_element>, ...[)] [FIRST|AFTER old_column_name] |
@@ -878,12 +919,26 @@ ALTER TABLE
                 }
                 
             <alter_change> ::= 
-                QUERY [<unsigned_integer_literal>] <select_statement> |
-                <column_name> DEFAULT <value_specification>
-             
-            <resolution> ::= column_name OF <superclass_name> [AS alias]
+                [COLUMN | CLASS ATTRIBUTE] old_col_name new_col_name <column_definition>
+                    [FIRST | AFTER col_name]
+
+            <alter_modify> ::= 
+                [COLUMN | CLASS ATTRIBUTE] col_name <column_definition>
+                    [FIRST | AFTER col_name2]
+                    
+            <table_option> ::=
+                CHANGE [COLUMN | CLASS ATTRIBUTE] old_col_name new_col_name <column_definition>
+                    [FIRST | AFTER col_name2]
+              | MODIFY [COLUMN | CLASS ATTRIBUTE] col_name <column_definition>
+                    [FIRST | AFTER col_name2]
+
+            <resolution> ::= column_name OF superclass_name [AS alias]
 
             <index_col_name> ::= column_name [(length)] [ASC | DESC]
+
+.. note::
+
+    칼럼의 커멘트는 <column_definition>에서 지정한다. <column_definition>은 위의 CREATE TABLE 구문을 참고한다.
 
 .. warning::
 
@@ -896,11 +951,11 @@ ADD COLUMN 절
 
 ::
 
-    ALTER [TABLE | CLASS | VCLASS | VIEW] table_name
-    ADD [COLUMN | ATTRIBUTE] [(] <column_definition> [)] [FIRST | AFTER old_column_name] ;
+    ALTER [TABLE | CLASS] table_name
+    ADD [COLUMN | ATTRIBUTE] [(] <column_definition> [FIRST | AFTER old_column_name] [)];
 
         <column_definition> ::= 
-            column_name <data_type> [[<default_or_shared_or_ai>] | [<column_constraint>]]
+            column_name <data_type> [[<default_or_shared_or_ai>] | [<column_constraint>]] [COMMENT 'comment_string']
         
             <data_type> ::= <column_type> [<charset_modifier_clause>] [<collation_modifier_clause>]
 
@@ -927,11 +982,12 @@ ADD COLUMN 절
 *   *table_name*: 칼럼을 추가할 테이블의 이름을 지정한다.
 *   <*column_definition*>: 새로 추가할 칼럼의 이름(최대 254 바이트), 데이터 타입, 제약 조건을 정의한다.
 *   **AFTER** *old_column_name*: 새로 추가할 칼럼 앞에 위치하는 기존 칼럼 이름을 명시한다.
+*   *comment_string*: 칼럼의 커멘트를 지정한다.
 
 .. code-block:: sql
 
     CREATE TABLE a_tbl;
-    ALTER TABLE a_tbl ADD COLUMN age INT DEFAULT 0 NOT NULL;
+    ALTER TABLE a_tbl ADD COLUMN age INT DEFAULT 0 NOT NULL COMMENT 'age comment';
     ALTER TABLE a_tbl ADD COLUMN name VARCHAR FIRST;
     ALTER TABLE a_tbl ADD COLUMN id INT NOT NULL AUTO_INCREMENT UNIQUE FIRST;
     INSERT INTO a_tbl(age) VALUES(20),(30),(40);
@@ -1039,7 +1095,7 @@ ADD CONSTRAINT 절
                         ON DELETE <referential_action> 
 
                         <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
-    
+
 *   *table_name*: 제약 조건을 추가할 테이블의 이름을 지정한다.
 *   *constraint_name*: 새로 추가할 제약 조건의 이름(최대 254 바이트)을 지정할 수 있으며, 생략할 수 있다. 생략하면 자동으로 부여된다.
 *   *foreign_key_name*: **FOREIGN KEY** 제약 조건의 이름을 지정할 수 있다. 생략할 수 있으며, 지정하면 *constraint_name*\ 을 무시하고 이 이름을 사용한다.
@@ -1092,12 +1148,20 @@ ADD INDEX 절
          INDEX i1 ON a_tbl (age)
          INDEX i2 ON a_tbl (phone DESC)
 
+다음은 ALTER 문으로 인덱스 추가 시 인덱스 커멘트를 포함하는 예제이다.
+
+.. code-block:: sql
+
+    ALTER TABLE tbl ADD index i_t_c (c) COMMENT 'index comment c';
+
 ALTER COLUMN ... SET DEFAULT 절
 -------------------------------
 
-**ALTER COLUMN** ... **SET DEFAULT** 절은 기본값이 없는 칼럼에 기본값을 지정하거나 기존의 기본값을 변경할 수 있다. :ref:`change-column`\ 을 이용하면, 단일 구문으로 여러 칼럼의 기본값을 변경할 수 있다. ::
+**ALTER COLUMN** ... **SET DEFAULT** 절은 기본값이 없는 칼럼에 기본값을 지정하거나 기존의 기본값을 변경할 수 있다. :ref:`change-column`\ 을 이용하면, 단일 구문으로 여러 칼럼의 기본값을 변경할 수 있다.
 
-    ALTER [TABLE | CLASS] table_name ALTER [COLUMN] column_name SET DEFAULT value
+::
+
+    ALTER [TABLE | CLASS] table_name ALTER [COLUMN] column_name SET DEFAULT value ;
 
 *   *table_name*: 기본값을 변경할 칼럼이 속한 테이블의 이름을 지정한다.
 *   *column_name*: 새로운 기본값을 적용할 칼럼의 이름을 지정한다.
@@ -1198,7 +1262,7 @@ CHANGE/MODIFY 절
 
 .. warning::
 
-    *   CUBRID 2008 R3.1 이하 버전에서 사용되었던 **ALTER TABLE** <table_name> **CHANGE** <column_name> **DEFAULT** <default_value> 구문은 더 이상 지원하지 않는다.
+    *   CUBRID 2008 R3.1 이하 버전에서 사용되었던 **ALTER TABLE** *table_name* **CHANGE** *column_name* **DEFAULT** *default_value* 구문은 더 이상 지원하지 않는다.
     *   숫자를 문자 타입으로 변환할 때, alter_table_change_type_strict=no이고 해당 문자열의 길이가 숫자의 길이보다 짧으면 변환되는 문자 타입의 길이에 맞추어 문자열이 잘린 상태로 저장된다. alter_table_change_type_strict=yes이면 오류를 발생한다.
     *   테이블의 칼럼 타입, 콜레이션 등 칼럼 속성을 변경하는 경우 변경된 속성이 변경 이전 테이블을 이용하여 생성한 뷰에 반영되지는 않는다. 따라서 테이블의 칼럼 속성을 변경하는 경우 뷰를 재생성할 것을 권장한다.
 
@@ -1210,15 +1274,15 @@ CHANGE/MODIFY 절
             <table_option>[, <table_option>, ...]
      
             <table_option> ::=
-                CHANGE [COLUMN | CLASS ATTRIBUTE] old_col_name new_col_name column_definition
+                CHANGE [COLUMN | CLASS ATTRIBUTE] old_col_name new_col_name <column_definition>
                          [FIRST | AFTER col_name]
-              | MODIFY [COLUMN | CLASS ATTRIBUTE] col_name column_definition
+              | MODIFY [COLUMN | CLASS ATTRIBUTE] col_name <column_definition>
                          [FIRST | AFTER col_name]
 
 *   *tbl_name*: 변경할 칼럼이 속한 테이블의 이름을 지정한다.
 *   *old_col_name*: 기존 칼럼의 이름을 지정한다.
 *   *new_col_name*: 변경할 칼럼의 이름을 지정한다.
-*   *column_definition*: 변경할 칼럼의 타입, 크기 및 속성을 지정한다.
+*   <*column_definition*>: 변경할 칼럼의 타입, 크기 및 속성, 커멘트를 지정한다.
 *   *col_name*: 변경할 칼럼이 어느 칼럼 뒤에 위치할지를 지정한다.
 *   **SKIP_UPDATE_NULL**: 이 힌트가 추가되면 NOT NULL 제약 조건을 추가할 때 기존의 NULL 값을 검사하지 않는다. :ref:`SKIP_UPDATE_NULL <skip-update-null>`\ 을 참고한다.
 
@@ -1480,6 +1544,30 @@ CHANGE/MODIFY 절
 +-----------+------------------+-----------------------------------------+
 | CLOB      | 무               |                                         |
 +-----------+------------------+-----------------------------------------+
+
+칼럼의 커멘트
+-------------
+
+칼럼의 커멘트는 ADD/MODIFY/CHANGE 구문 뒤에 위치하는 <*column_definition*>\에서 지정한다. <*column_definition*>은 위의 CREATE TABLE 구문을 참고한다.
+
+다음은 칼럼의 커멘트를 확인하는 구문이다.
+
+.. code-block:: sql
+
+    SHOW CREATE TABLE table_name;
+
+    SELECT attr_name, class_name, comment 
+    FROM db_attribute WHERE class_name ='classname';
+
+    SHOW FULL COLUMNS FROM table_name;
+
+CSQL 인터프리터에서 ";sc table_name" 명령으로도 확인할 수 있다.
+
+::
+
+    $ csql -u dba demodb
+    
+    csql> ;sc table_name
 
 .. _rename-column:
 

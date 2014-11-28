@@ -16,15 +16,14 @@ To create a table, use the **CREATE TABLE** statement.
     [AUTO_INCREMENT = initial_value]
     [CLASS ATTRIBUTE (<column_definition>, ...)]
     [INHERIT <resolution>, ...]
-    [REUSE_OID]
-    [CHARSET charset_name] [COLLATE collation_name] ;
+    [<table_options>]
 
         <subclass_definition> ::= {UNDER | AS SUBCLASS OF} table_name, ...
         
         <column_definition> ::= 
-            column_name <data_type> [[<default_or_shared_or_ai>] | [ <column_constraint> ]]
+            column_name <data_type> [{<default_or_shared_or_ai> | <column_constraint>}] [COMMENT 'column_comment_string']
         
-            <data_type> ::= <column_type> [ <charset_modifier_clause> ] [ <collation_modifier_clause> ]
+            <data_type> ::= <column_type> [<charset_modifier_clause>] [<collation_modifier_clause>]
 
                 <charset_modifier_clause> ::= {CHARACTER_SET|CHARSET} {<char_string_literal>|<identifier>}
 
@@ -53,7 +52,7 @@ To create a table, use the **CREATE TABLE** statement.
                 {KEY|INDEX} [constraint_name](column_name, ...) |
                 PRIMARY KEY (column_name, ...) |
                 <referential_constraint>
-            }
+            } COMMENT 'index_comment_string'
          
             <referential_constraint> ::= FOREIGN KEY [<foreign_key_name>](column_name, ...) <referential_definition>
          
@@ -67,15 +66,22 @@ To create a table, use the **CREATE TABLE** statement.
                         <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
      
         <resolution> ::= [CLASS] {column_name} OF superclass_name [AS alias]
+        <table_options> ::= <table_option> [[,] <table_option> ...] 
+            <table_option> ::= REUSE_OID | 
+                               COMMENT [=] 'table_comment_string' |
+                               [CHARSET charset_name] [COLLATE collation_name]
 
 *   IF NOT EXISTS: If an identically named table already exists, a new table will not be created without an error.
-*   *table_name*: Specifies the name of the table to be created (maximum: 254 bytes).
-*   *column_name*: Specifies the name of the column to be created (maximum: 254 bytes).
-*   *column_type*: Specifies the data type of the column.
-*   [**SHARED** *value* | **DEFAULT** *value*]: Specifies the initial value of the column.
-*   <*column_constraint*>: Specifies the constraint of the column. Available constraints are **NOT NULL**, **UNIQUE**, **PRIMARY KEY** and **FOREIGN KEY**. For details, see :ref:`constraint-definition`.
+*   *table_name*: specifies the name of the table to be created (maximum: 254 bytes).
+*   *column_name*: specifies the name of the column to be created (maximum: 254 bytes).
+*   *column_type*: specifies the data type of the column.
+*   [**SHARED** *value* | **DEFAULT** *value*]: specifies the initial value of the column.
+*   <*column_constraint*>: specifies the constraint of the column. Available constraints are **NOT NULL**, **UNIQUE**, **PRIMARY KEY** and **FOREIGN KEY**. For details, see :ref:`constraint-definition`.
 *   <*default_or_shared_or_ai*>: only one of DEFAULT, SHARED, AUTO_INCREMENT can be used.
     When AUTO_INCREMENT is specified, "(seed, increment)" and "AUTO_INCREMENT = initial_value" cannot be defined at the same time.
+*   *table_comment_string*: specifies a table's comment
+*   *column_comment_string*: specifies a column's comment.
+*   *index_comment_string*: specifies an index's comment.
 
 .. code-block:: sql
 
@@ -89,6 +95,16 @@ To create a table, use the **CREATE TABLE** statement.
         slogan           VARCHAR(40),
         introduction     VARCHAR(1500)
     );
+
+The below adds a comment of a table with ALTER statement.
+
+.. code-block:: sql
+    
+    ALTER TABLE olympic2 COMMENT = 'this is new comment for olympic2';
+
+The below includes an index comment when you create a table.
+
+    CREATE TABLE tbl (a INT, index i_t_a (a) COMMENT 'index comment');
 
 .. note:: **A CHECK constraint in the table schema**
 
@@ -111,7 +127,7 @@ A column is a set of data values of a particular simple type, one for each row o
 ::
 
     <column_definition> ::= 
-        column_name <data_type> [[<default_or_shared_or_ai>] | [<column_constraint>]] ...
+        column_name <data_type> [[<default_or_shared_or_ai>] | [<column_constraint>]] ... [COMMENT 'comment_string']
     
         <data_type> ::= <column_type> [<charset_modifier_clause>] [<collation_modifier_clause>]
 
@@ -223,9 +239,9 @@ The **DEFAULT** value of the pseudocolumn can be specified as one or more column
 
 .. code-block:: sql
 
-    CREATE TABLE t (date1 DATE DEFAULT SYSDATE, date2 DATE DEFAULT SYSDATE);
-    CREATE TABLE t (date1 DATE DEFAULT SYSDATE,
-                    ts1   TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+    CREATE TABLE tbl (date1 DATE DEFAULT SYSDATE, date2 DATE DEFAULT SYSDATE);
+    CREATE TABLE tbl (date1 DATE DEFAULT SYSDATE,
+                      ts1   TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
 
 AUTO INCREMENT
 ^^^^^^^^^^^^^^
@@ -463,7 +479,6 @@ A foreign key is a column or a set of columns that references the primary key in
 
 *   <*column_name_comma_list1*>: Specifies the name of the column to be defined as a foreign key after the **FOREIGN KEY** keyword. The column number of foreign keys defined and primary keys must be same.
 *   *referenced_table_name*: Specifies the name of the table to be referenced.
-
 *   <*column_name_comma_list2*>: Specifies the name of the referred primary key column after the **FOREIGN KEY** keyword.
 *   <*referential_triggered_action*>: Specifies the trigger action that responds to a certain operation in order to maintain referential integrity. **ON UPDATE** or **ON DELETE** can be specified. Each action can be defined multiple times, and the definition order is not significant.
 
@@ -586,6 +601,8 @@ You can specify options such as **ASC** or **DESC** after the column name when d
 Table Option
 ------------
 
+.. _reuse-oid:
+
 REUSE_OID
 ^^^^^^^^^
 
@@ -598,7 +615,7 @@ If you specify the **REUSE_OID** option when creating a table, the OID is also d
 .. code-block:: sql
 
     -- creating table with REUSE_OID option specified
-    CREATE TABLE reuse_tbl (a INT PRIMARY KEY) REUSE_OID;
+    CREATE TABLE reuse_tbl (a INT PRIMARY KEY) REUSE_OID, COMMENT = 'reuse oid table';
     INSERT INTO reuse_tbl VALUES (1);
     INSERT INTO reuse_tbl VALUES (2);
     INSERT INTO reuse_tbl VALUES (3);
@@ -614,7 +631,7 @@ If you specify REUSE_OID together with the collation of table, it can be placed 
      
 .. code-block:: sql
     
-    CREATE TABLE t3(a VARCHAR(20)) REUSE_OID COLLATE euckr_bin;
+    CREATE TABLE t3(a VARCHAR(20)) REUSE_OID, COMMENT = 'reuse oid table', COLLATE euckr_bin;
     CREATE TABLE t4(a VARCHAR(20)) COLLATE euckr_bin REUSE_OID;
 
 .. note::
@@ -632,6 +649,30 @@ Charset and Collation
 
 The charset and collation of the table can be designated in **CREATE TABLE** statement. Please see :ref:`collation-charset-string` for details.
 
+Table's COMMENT
+^^^^^^^^^^^^^^^
+
+You can write a table's comment as following.
+
+.. code-block:: sql
+
+    CREATE TABLE tbl (a INT, b INT) COMMENT = 'this is comment for table tbl';
+
+To see the table's comment, run the below syntax.
+
+::
+
+    SHOW CREATE TABLE table_name;
+    SELECT class_name, comment from db_class;
+    SELECT class_name, comment from _db_class;
+
+Or you can see the table's comment with ;sc command in the CSQL interpreter.
+
+::
+    $ csql -u dba demodb
+    
+    csql> ;sc tbl
+
 CREATE TABLE LIKE
 -----------------
 
@@ -644,7 +685,7 @@ You cannot create the column definition because the **CREATE TABLE ... LIKE** st
     CREATE {TABLE | CLASS} <new_table_name> LIKE <source_table_name>;
 
 * *new_table_name*: A table name to be created
-* *source_table_name*: The name of the original table that already exists in the database. The following tables cannot be specified as original tables in the **CREATE TABLE ??LIKE** statement.
+* *source_table_name*: The name of the original table that already exists in the database. The following tables cannot be specified as original tables in the **CREATE TABLE ... LIKE** statement.
 
     * Partition table
     * Table that contains an **AUTO_INCREMENT** column
@@ -721,10 +762,10 @@ You can create a new table that contains the result records of the **SELECT** st
 
     CREATE {TABLE | CLASS} table_name [(<column_definition> [,<table_constraint>], ...)] [REPLACE] AS <select_statement>;
 
-*   *table_name*: A name of the table to be created.
-*   <*column_definition*>: Defines a column. If it is omitted, the column schema of **SELECT** statement is replicated; however, the constraint or the **AUTO_INCREMENT** attribute is not replicated.
-*   <*table_constraint*>: Defines table constraint.
-*   <*select_statement*>: A **SELECT** statement targeting a source table that already exists in the database.
+*   *table_name*: a name of the table to be created.
+*   <*column_definition*>: defines a column. If this is omitted, the column schema of **SELECT** statement is replicated; however, the constraint or the **AUTO_INCREMENT** attribute is not replicated.
+*   <*table_constraint*>: defines table constraint.
+*   <*select_statement*>: a **SELECT** statement targeting a source table that already exists in the database.
 
 .. code-block:: sql
 
@@ -821,22 +862,20 @@ You can create a new table that contains the result records of the **SELECT** st
         2            3
         3            3
 
+.. CUBRIDSUS-6568: from 10.0, alter table rename constraint is supported.
+
 ALTER TABLE
 ===========
 
 You can modify the structure of a table by using the **ALTER** statement. You can perform operations on the target table such as adding/deleting columns, creating/deleting indexes, and type casting existing columns as well as changing table names, column names and constraints. You can also change the initial value of **AUTO_INCREMENT**. **TABLE** and **CLASS** are used interchangeably **VIEW** and **VCLASS**, and **COLUMN** and **ATTRIBUTE** as well.
 
-.. CUBRIDSUS-6568: from 10.0, alter table rename constraint is supported.
-
 ::
 
-    ALTER [<class_type>] <table_name> <alter_clause> ;
-     
-        <class_type> ::= TABLE | CLASS | VCLASS | VIEW
+    ALTER [TABLE | CLASS] table_name <alter_clause> [, <alter_clause>] ... ;
      
         <alter_clause> ::= 
-            ADD <alter_add> [INHERIT <resolution>, ...] | 
-            ADD {KEY | INDEX} <index_name> (<index_col_name>) |
+            ADD <alter_add> [INHERIT <resolution>, ...]  | 
+            ADD {KEY | INDEX} <index_name> (<index_col_name>, ... ) [COMMENT 'index_comment_string'] |
             ALTER [COLUMN] column_name SET DEFAULT <value_specification> |
             DROP <alter_drop> [ INHERIT <resolution>, ... ] |
             DROP {KEY | INDEX} index_name |
@@ -844,8 +883,10 @@ You can modify the structure of a table by using the **ALTER** statement. You ca
             DROP PRIMARY KEY |                   
             RENAME <alter_rename> [ INHERIT <resolution>, ... ] |
             CHANGE <alter_change> |
+            MODIFY <alter_modify> |            
             INHERIT <resolution>, ... |
-            AUTO_INCREMENT = <initial_value>
+            AUTO_INCREMENT = <initial_value> |
+            COMMENT [=] 'table_comment_string'
                            
             <alter_add> ::= 
                 [ATTRIBUTE|COLUMN] [(]<class_element>, ...[)] [FIRST|AFTER old_column_name] |
@@ -879,16 +920,30 @@ You can modify the structure of a table by using the **ALTER** statement. You ca
                 }
                 
             <alter_change> ::= 
-                QUERY [<unsigned_integer_literal>] <select_statement> |
-                <column_name> DEFAULT <value_specification>
-             
-            <resolution> ::= column_name OF <superclass_name> [AS alias]
+                [COLUMN | CLASS ATTRIBUTE] old_col_name new_col_name <column_definition>
+                    [FIRST | AFTER col_name]
+
+            <alter_modify> ::= 
+                [COLUMN | CLASS ATTRIBUTE] col_name <column_definition>
+                    [FIRST | AFTER col_name2]
+                    
+            <table_option> ::=
+                CHANGE [COLUMN | CLASS ATTRIBUTE] old_col_name new_col_name <column_definition>
+                    [FIRST | AFTER col_name2]
+              | MODIFY [COLUMN | CLASS ATTRIBUTE] col_name <column_definition>
+                    [FIRST | AFTER col_name2]
+
+            <resolution> ::= column_name OF superclass_name [AS alias]
 
             <index_col_name> ::= column_name [(length)] [ASC | DESC]
 
+.. note::
+
+    A column's comment is specified in <*column_definition*>. For <*column_definition*>, see the above CREATE TABLE syntax.
+
 .. warning::
 
-    The table name can be changed only by the table owner, **DBA** and **DBA** members. The other users must be granted to change the name by the owner or **DBA** (see :ref:`granting-authorization` For details on authorization).
+    The table's name can be changed only by the table owner, **DBA** and **DBA** members. The other users must be granted to change the name by the owner or **DBA** (see :ref:`granting-authorization` For details on authorization).
 
 ADD COLUMN Clause
 -----------------
@@ -897,11 +952,11 @@ You can add a new column by using the **ADD COLUMN** clause. You can specify the
 
 ::
 
-    ALTER [TABLE | CLASS | VCLASS | VIEW] table_name
-    ADD [COLUMN | ATTRIBUTE] [(] <column_definition> [)] [FIRST | AFTER old_column_name] ;
+    ALTER [TABLE | CLASS] table_name
+    ADD [COLUMN | ATTRIBUTE] [(] <column_definition> [FIRST | AFTER old_column_name] [)];
 
         <column_definition> ::= 
-            column_name <data_type> [[<default_or_shared_or_ai>] | [<column_constraint>]]
+            column_name <data_type> [[<default_or_shared_or_ai>] | [<column_constraint>]] [COMMENT 'comment_string']
         
             <data_type> ::= <column_type> [<charset_modifier_clause>] [<collation_modifier_clause>]
 
@@ -925,14 +980,15 @@ You can add a new column by using the **ADD COLUMN** clause. You can specify the
 
                         <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
 
-*   *table_name*: Specifies the name of a table that has a column to be added.
-*   <*column_definition*>: Specifies the name(max 254 bytes), data type, and constraints of a column to be added.
-*   **AFTER** *oid_column_name*: Specifies the name of an existing column before the column to be added.
+*   *table_name*: specifies the name of a table that has a column to be added.
+*   <*column_definition*>: specifies the name(max 254 bytes), data type, and constraints of a column to be added.
+*   **AFTER** *oid_column_name*: specifies the name of an existing column before the column to be added.
+*   *comment_string*: specifies a column's comment.
 
 .. code-block:: sql
 
     CREATE TABLE a_tbl;
-    ALTER TABLE a_tbl ADD COLUMN age INT DEFAULT 0 NOT NULL;
+    ALTER TABLE a_tbl ADD COLUMN age INT DEFAULT 0 NOT NULL COMMENT 'age comment';
     ALTER TABLE a_tbl ADD COLUMN name VARCHAR FIRST;
     ALTER TABLE a_tbl ADD COLUMN id INT NOT NULL AUTO_INCREMENT UNIQUE FIRST;
     INSERT INTO a_tbl(age) VALUES(20),(30),(40);
@@ -1093,12 +1149,20 @@ You can define the index attributes for a specific column by using the **ADD IND
          INDEX i1 ON a_tbl (age)
          INDEX i2 ON a_tbl (phone DESC)
 
+The below is an example to include an index's comment when you add an index with ALTER statement.
+
+.. code-block:: sql
+
+    ALTER TABLE tbl ADD index i_t_c (c) COMMENT 'index comment c';
+
 ALTER COLUMN ... SET DEFAULT Clause
 -----------------------------------
 
-You can specify a new default value for a column that has no default value or modify the existing default value by using the **ALTER COLUMN** ??**SET DEFAULT**. You can use the **CHANGE** clause to change the default value of multiple columns with a single statement. For details, see the :ref:`change-column`. ::
+You can specify a new default value for a column that has no default value or modify the existing default value by using the **ALTER COLUMN** ... **SET DEFAULT**. You can use the **CHANGE** clause to change the default value of multiple columns with a single statement. For details, see the :ref:`change-column`. 
 
-    ALTER [ TABLE | CLASS ] table_name ALTER [COLUMN] column_name SET DEFAULT value
+::
+
+    ALTER [TABLE | CLASS] table_name ALTER [COLUMN] column_name SET DEFAULT value ;
 
 *   *table_name* : Specifies the name of a table that has a column whose default value is to be modified.
 *   *column_name* : Specifies the name of a column whose default value is to be modified.
@@ -1199,7 +1263,7 @@ When you change data types using the **CHANGE** clause or the **MODIFY** clause,
 
 .. warning::
 
-    *   **ALTER TABLE** <table_name> **CHANGE** <column_name> **DEFAULT** <default_value> syntax supported in CUBRID 2008 R3.1 or earlier version is no longer supported.
+    *   **ALTER TABLE** *table_name* **CHANGE** *column_name* **DEFAULT** *default_value* syntax supported in CUBRID 2008 R3.1 or earlier version is no longer supported.
     *   When converting a number type to character type, if alter_table_change_type_strict=no and the length of the string is shorter than that of the number, the string is truncated and saved according to the length of the converted character type. If alter_table_change_type_strict=yes, it returns an error.
     *   If the column attributes like a type, a collation, etc. are changed, the changed attributes are not applied into the view created with the table before the change. Therefore, if you change the attributes of a table, it is recommended to recreate the related views.
 
@@ -1211,16 +1275,16 @@ When you change data types using the **CHANGE** clause or the **MODIFY** clause,
             <table_option>[, <table_option>, ...]
      
             <table_option> ::=
-                CHANGE [COLUMN | CLASS ATTRIBUTE] old_col_name new_col_name column_definition
+                CHANGE [COLUMN | CLASS ATTRIBUTE] old_col_name new_col_name <column_definition>
                          [FIRST | AFTER col_name]
-              | MODIFY [COLUMN | CLASS ATTRIBUTE] col_name column_definition
+              | MODIFY [COLUMN | CLASS ATTRIBUTE] col_name <column_definition>
                          [FIRST | AFTER col_name]
 
-*   *tbl_name*: Specifies the name of the table including the column to change.
-*   *old_col_name*: Specifies the existing column name.
-*   *new_col_name*: Specifies the column name to change
-*   *column_definition*: Specifies the type, size, and attribute of the column to change.
-*   *col_name*: Specifies the location where the column to change exists.
+*   *tbl_name*: specifies the name of the table including the column to change.
+*   *old_col_name*: specifies the existing column name.
+*   *new_col_name*: specifies the column name to change
+*   <*column_definition*>: specifies the type, the size, the attribute, and the comment of the column to be changed.
+*   *col_name*: specifies the location where the column to change exists.
 *   **SKIP_UPDATE_NULL**: If this hint is added, CUBRID does not check the previous NULLs even if NOT NULL constraint is added. See :ref:`SKIP_UPDATE_NULL <skip-update-null>`.
 
 .. code-block:: sql
@@ -1481,6 +1545,30 @@ The hard default value is a value that will be used when you add columns with th
 +-----------+-------------------------------------+-----------------------------------------+
 | CLOB      | No                                  |                                         |
 +-----------+-------------------------------------+-----------------------------------------+
+
+Column's COMMENT
+----------------
+
+A column's comment is specified in <*column_definition*>, which is located at the end of ADD/MODIFY/CHANGE syntax. To see the meaning of <*column_definition*>, refer to CREATE TABLE syntax on the above.
+
+The below is a syntax to show a column's comment.
+
+.. code-block:: sql
+
+    SHOW CREATE TABLE table_name;
+
+    SELECT attr_name, class_name, comment 
+    FROM db_attribute WHERE class_name ='classname';
+
+    SHOW FULL COLUMNS FROM table_name;
+
+You can see this comment with the ";sc table_name" command in the CSQL interpreter.
+
+::
+
+    $ csql -u dba demodb
+    
+    csql> ;sc table_name
 
 .. _rename-column:
 

@@ -13,13 +13,14 @@ You can create a serial object in the database by using the **CREATE SERIAL** st
 ::
 
     CREATE SERIAL serial_name
-    [ START WITH initial ]
-    [ INCREMENT BY interval ]
-    [ MINVALUE min | NOMINVALUE ]
-    [ MAXVALUE max | NOMAXVALUE ]
-    [ CACHE cached_num | NOCACHE ]
+    [START WITH initial]
+    [INCREMENT BY interval]
+    [MINVALUE min | NOMINVALUE]
+    [MAXVALUE max | NOMAXVALUE]
+    [CACHE cached_num | NOCACHE]
+    [COMMENT 'comment_string'];
 
-*   *serial_identifier*: Specifies the name of the serial to be generated(maximum: 254 bytes).
+*   *serial_identifier*: specifies the name of the serial to be generated(maximum: 254 bytes).
 
 *   **START WITH** *initial*: Specifies the initial value of serial. The range of this value is between -1,000,000,000,000,000,000,000,000,000,000,000,000(-10^36) and    9,999,999,999,999,999,999,999,999,999,999,999,999(10^37-1). The default value of ascending serial is 1 and that of descending serial is -1.
 
@@ -40,6 +41,8 @@ You can create a serial object in the database by using the **CREATE SERIAL** st
 *   **CACHE**: Stores as many serials as the number specified by "cached_num" in the cache to improve the performance of the serials and fetches a serial value when one is requested. If all cached values are used up, as many serials as "cached_num" are fetched again from the disk to the memory. If the database server stops accidently, all cached serial values are deleted. For this reason, the serial values before and after the restart of the database server may be discontinuous. Because the transaction rollback does not affect the cached serial values, the request for the next serial will return the next value of the value used (or fetched) lastly when the transaction is rolled back. The "cached_num" after the **CACHE** keyword cannot be omitted. If the "cached_num" is equal to or smaller than 1, the serial cache is not applied.
 
 *   **NOCACHE**: Specifies that the serial cache is not used, and serial value is updated for each time.
+
+*   *comment_string*: specifies a comment of a serial.
 
 .. code-block:: sql
 
@@ -83,39 +86,63 @@ The following example shows how to create the *athlete_idx* table to store athle
             10004  'Choo'
             10004  'Lee'
 
+COMMENT of Serial
+-----------------
+
+The below adds a comment when you create a serial.
+
+.. code-block:: sql
+
+    CREATE SERIAL order_no 
+    START WITH 100 INCREMENT BY 2 MAXVALUE 200 
+    COMMENT 'from 100 to 200 by 2';
+
+To see a comment of the serial, run the below syntax.
+
+.. code-block:: sql
+
+    SELECT name, comment FROM db_serial;
+
+To change a comment of a serial, see ALTER SERIAL syntax.
+
 ALTER SERIAL
 ============
 
-With the **ALTER SERIAL** statement, you can update the increment of the serial value, set or delete its initial or minimum/maximum values, and set its cycle attribute. ::
+With the **ALTER SERIAL** statement, you can update the increment of the serial value, set or delete its initial or minimum/maximum values, and set its cycle attribute. 
+
+::
 
     ALTER SERIAL serial_identifier
-    [ INCREMENT BY interval ]
-    [ START WITH initial_value ]
-    [ MINVALUE min | NOMINVALUE ]
-    [ MAXVALUE max | NOMAXVALUE ]
-    [ CACHE cached_num | NOCACHE ]
+    [INCREMENT BY interval]
+    [START WITH initial_value]
+    [MINVALUE min | NOMINVALUE]
+    [MAXVALUE max | NOMAXVALUE]
+    [CACHE cached_num | NOCACHE]
+    [COMMENT 'comment_string'];
 
-*   *serial_identifier* : Specifies the name of the serial to be created(maximum: 254 bytes).
+*   *serial_identifier*: specifies the name of the serial to be created(maximum: 254 bytes).
 
-*   **INCREMENT BY** *interval* : Specifies the increment of the serial. For the *interval*, you can specify any integer with 38 digits or less except zero. The absolute value of the *interval* must be smaller than the difference between **MAXVALUE** and **MINVALUE**. If a negative number is specified, the serial is in descending order; otherwise, it is in ascending order. The default value is **1**.
+*   **INCREMENT BY** *interval*: specifies the increment of the serial. For the *interval*, you can specify any integer with 38 digits or less except zero. The absolute value of the *interval* must be smaller than the difference between **MAXVALUE** and **MINVALUE**. If a negative number is specified, the serial is in descending order; otherwise, it is in ascending order. The default value is **1**.
 
-*   **START WITH** *initial_value* : Changes the initial value of Serial.
+*   **START WITH** *initial_value*: changes the initial value of Serial.
 
-*   **MINVALUE** : Specifies the minimum value of the serial with 38 digits or less. **MINVALUE** must be smaller than or equal to the initial value and smaller than the maximum value.
+*   **MINVALUE**: specifies the minimum value of the serial with 38 digits or less. **MINVALUE** must be smaller than or equal to the initial value and smaller than the maximum value.
 
-*   **NOMINVALUE** : 1 is set automatically as a minimum value for the ascending serial; -(10) 36 for the descending serial.
+*   **NOMINVALUE**: 1 is set automatically as a minimum value for the ascending serial; -(10) 36 for the descending serial.
 
-*   **MAXVALUE** : Specifies the maximum number of the serial with 38 digits or less. **MAXVALUE** must be larger than or equal to the initial value and greater than the minimum value.
+*   **MAXVALUE**: specifies the maximum number of the serial with 38 digits or less. **MAXVALUE** must be larger than or equal to the initial value and greater than the minimum value.
 
-*   **NOMAXVALUE** : (10) 37 is set automatically as a maximum value for the ascending serial; -1 for the descending serial.
+*   **NOMAXVALUE**: (10) 37 is set automatically as a maximum value for the ascending serial; -1 for the descending serial.
 
-*   **CYCLE** : Specifies that the serial will be generated continuously after reaching the maximum or minimum value. If the ascending serial reaches the maximum value, the minimum value is generated as the next value. If the descending serial reaches the minimum value, the maximum value is generated as the next value.
+*   **CYCLE**: specifies that the serial will be generated continuously after reaching the maximum or minimum value. If the ascending serial reaches the maximum value, the minimum value is generated as the next value. If the descending serial reaches the minimum value, the maximum value is generated as the next value.
 
-*   **NOCYCLE** : Specifies that the serial will not be generated anymore after reaching the maximum or minimum value. The default is **NOCYCLE**.
+*   **NOCYCLE**: specifies that the serial will not be generated anymore after reaching the maximum or minimum value. The default is **NOCYCLE**.
 
-*   **CACHE** : Stores as many serials as the number specified by *integer* in the cache to improve the performance of the serials and fetches a serial value when one is requested. The *integer* after the **CACHE** keyword cannot be omitted. If a number equal to or smaller than 1 is specified, the serial cache is not applied.
+*   **CACHE**: stores as many serials as the number specified by *integer* in the cache to improve the performance of the serials and fetches a serial value when one is requested. The *integer* after the **CACHE** keyword cannot be omitted. If a number equal to or smaller than 1 is specified, the serial cache is not applied.
 
-*   **NOCACHE** : It does not use the serial cache feature. The serial value is updated every time and a new serial value is fetched from the disk upon each request.
+*   **NOCACHE**: It does not use the serial cache feature. The serial value is updated every time and a new serial value is fetched from the disk upon each request.
+
+*   *comment_string*: specifies a comment of a serial.
 
 .. code-block:: sql
 
@@ -146,6 +173,12 @@ With the **ALTER SERIAL** statement, you can update the increment of the serial 
         SELECT s1.NEXTVAL;
         -- From 9.0, above query returns 10
         -- In the version less than 9.0, above query returns 11
+
+The below changes the comment of the serial.
+
+.. code-block:: sql
+
+    ALTER SERIAL order_no COMMENT 'new comment';
 
 DROP SERIAL
 ===========

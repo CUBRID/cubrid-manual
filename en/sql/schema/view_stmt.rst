@@ -9,30 +9,32 @@ Use **CREATE VIEW** statement to create a view. Regarding writing view name, see
 
     CREATE [OR REPLACE] {VIEW | VCLASS} view_name
     [<subclass_definition>]
-    [(view_column_name, ...)]
+    [(view_column_name [COMMENT 'column_comment_string'], ...)]    ===> 이부분에 대한 확인 및 수정이 필요함.
     [INHERIT <resolution>, ...]
     [AS <select_statement>]
-    [WITH CHECK OPTION] ;
+    [WITH CHECK OPTION] 
+    [COMENT [=] 'view_comment_string'];
                                     
         <subclass_definition> ::= {UNDER | AS SUBCLASS OF} table_name, ...
-     
-        <resolution> ::= [CLASS] {column_name} OF superclass_name [AS alias]
+        <resolution> ::= [CLASS | TABLE] {column_name} OF superclass_name [AS alias]
 
 *   **OR REPLACE**: If the keyword **OR REPLACE** is specified after **CREATE**, the existing view is replaced by a new one without displaying any error message, even when the *view_name* overlaps with the existing view name.
 
-*   *view_name*: Specifies the name of a view to be created. It must be unique in a database.
-*   *view_column_name*: Defines the column of a view.
+*   *view_name*: specifies the name of a view to be created. It must be unique in a database.
+*   *view_column_name*: defines the column of a view.
 *   **AS** <*select_statement*>: A valid **SELECT** statement must be specified. A view is created based on this.
 *   **WITH CHECK OPTION**: If this option is specified, the update or insert operation is possible only when the condition specified in the **WHERE** clause of the <*select_statement*> is satisfied. Therefore, this option is used to disallow the update of a virtual table that violates the condition.
+*   *view_comment_string*: specifies a view's comment.
+*   *column_comment_string*: specofies a column's comment.
 
 .. code-block:: sql
 
-    CREATE TABLE a_tbl(
-    id INT NOT NULL,
-    phone VARCHAR(10));
+    CREATE TABLE a_tbl (
+        id INT NOT NULL,
+        phone VARCHAR(10)
+    );
     INSERT INTO a_tbl VALUES(1,'111-1111'), (2,'222-2222'), (3, '333-3333'), (4, NULL), (5, NULL);
-     
-     
+    
     --creating a new view based on AS select_statement from a_tbl
     CREATE VIEW b_view AS SELECT * FROM a_tbl WHERE phone IS NOT NULL WITH CHECK OPTION;
     SELECT * FROM b_view;
@@ -58,7 +60,7 @@ Use **CREATE VIEW** statement to create a view. Regarding writing view name, see
 .. code-block:: sql
 
     --creating view which name is as same as existing view name
-    CREATE OR REPLACE VIEW b_view AS SELECT * FROM a_tbl ORDER BY id DESC;
+    CREATE OR REPLACE VIEW b_view AS SELECT * FROM a_tbl ORDER BY id DESC COMMENT 'changed view';
      
     --the existing view has been replaced as a new view by OR REPLACE keyword
     SELECT * FROM b_view;
@@ -99,6 +101,38 @@ Even when all rules above are satisfied, columns that contains following content
 
 Even though the column defined in the view is updatable, a view can be updated only when an appropriate update authorization is granted on the table included in the **FROM** clause. Also there must be an access authorization to a view. The way to grant an access authorization to a view is the same to grant an access authorization to a table. For details on granting authorization, see :ref:`granting-authorization`.
 
+View's COMMENT
+--------------
+
+You can specify a view's comment as follows.
+
+.. code-block:: sql
+
+    CREATE OR REPLACE VIEW b_view AS SELECT * FROM a_tbl ORDER BY id DESC COMMENT 'changed view';
+
+You can see the specified comment of a view by running this syntax.
+
+.. code-block:: sql
+
+    SHOW CREATE VIEW view_name;
+    SELECT vclass_name, comment from db_vclass;
+
+Or you can see the view's comment with ;sc command which displays the schema in the CSQL interpreter.
+
+::
+    $ csql -u dba demodb
+    
+    csql> ;sc b_view
+
+Also, you can add a comment for each column of the view.
+
+.. code-block:: sql
+
+    CREATE OR REPLACE VIEW b_view (a COMMENT 'a comment', b COMMENT 'b comment') 
+    AS SELECT * FROM a_tbl ORDER BY id DESC COMMENT 'view comment';
+    
+To see how to change a comment of a view, refer to ALTER VIEW syntax on the below.
+
 ALTER VIEW
 ==========
 
@@ -113,8 +147,8 @@ You can add a new query to a query specification by using the **ADD QUERY** clau
      
         <resolution> ::= {column_name} OF superclass_name [AS alias]
 
-*   *view_name*: Specifies the name of a view where the query to be added.
-*   <*select_statement*>: Specifies the query to be added.
+*   *view_name*: specifies the name of a view where the query to be added.
+*   <*select_statement*>: specifies the query to be added.
 
 .. code-block:: sql
 
@@ -154,8 +188,8 @@ You can change the **SELECT** query defined in the virtual table by using the **
 
     ALTER [VIEW | VCLASS] view_name AS <select_statement> ;
 
-*   *view_name*: Specifies the name of a view to be modified.
-*   <*select_statement*>: Specifies the new query statement to replace the **SELECT** statement defined when a view is created.
+*   *view_name*: specifies the name of a view to be modified.
+*   <*select_statement*>: specifies the new query statement to replace the **SELECT** statement defined when a view is created.
 
 .. code-block:: sql
 
@@ -178,9 +212,9 @@ You can change the query defined in the query specification by using the **CHANG
     ALTER [VIEW | VCLASS] view_name
     CHANGE QUERY [integer] <select_statement> ;
 
-*   *view_name*: Specifies the name of a view to be modified.
-*   *integer*: Specifies the number value of the query to be modified. The default value is 1.
-*   <*select_statement*>: Specifies the new query statement to replace the query whose query number is *integer*.
+*   *view_name*: specifies the name of a view to be modified.
+*   *integer*: specifies the number value of the query to be modified. The default value is 1.
+*   <*select_statement*>: specifies the new query statement to replace the query whose query number is *integer*.
 
 .. code-block:: sql
 
@@ -241,6 +275,19 @@ You can drop a query defined in the query specification by using the **DROP QUER
                 4  NULL
                 5  NULL
 
+COMMENT Clause
+--------------
+
+You can change a view's comment with **COMMENT** clause of **ALTER VIEW** syntax.
+
+::
+
+    ALTER [VIEW | VCLASS] view_name COMMENT [=] 'view_comment';
+
+.. code-block:: sql
+
+    ALTER VIEW b_view COMMENT = 'changed view comment';
+
 DROP VIEW
 =========
 
@@ -248,7 +295,7 @@ You can drop a view by using the **DROP VIEW** clause. The way to drop a view is
 
     DROP [VIEW | VCLASS] [IF EXISTS] view_name [{ ,view_name , ... }] ;
 
-*   *view_name* : Specifies the name of a view to be dropped.
+*   *view_name*: specifies the name of a view to be dropped.
 
 .. code-block:: sql
 
@@ -261,8 +308,8 @@ You can change the view name by using the **RENAME VIEW** statement. ::
 
     RENAME [VIEW | VCLASS] old_view_name {AS | TO} new_view_name[, old_view_name {AS | TO} new_view_name, ...] ;
 
-*   *old_view_name* : Specifies the name of a view to be modified.
-*   *new_view_name* : Specifies the new name of a view.
+*   *old_view_name*: specifies the name of a view to be modified.
+*   *new_view_name*: specifies the new name of a view.
 
 The following example shows how to rename a view name to *game_2004*.
 

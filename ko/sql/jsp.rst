@@ -294,16 +294,21 @@ CUBRID에서 Java 저장 함수/프로시저를 사용하기 위해서는 Call S
 
 ::
 
-    CREATE [OR REPLACE] FUNCTION function_name[(param[, param]...)] RETURN sql_type
+    CREATE [OR REPLACE] FUNCTION function_name[(param [COMMENT 'param_comment_string'] [, param [COMMENT 'param_comment_string']]...)] RETURN sql_type
     {IS | AS} LANGUAGE JAVA
-    NAME 'method_fullname (java_type_fullname[,java_type_fullname]...) [return java_type_fullname]';
+    NAME 'method_fullname (java_type_fullname [,java_type_fullname]...) [return java_type_fullname]'
+    COMMENT 'sp_comment';
 
-    CREATE [OR REPLACE] PROCEDURE procedure_name[(param[, param] ...)]
+    CREATE [OR REPLACE] PROCEDURE procedure_name[(param [COMMENT 'param_comment_string'][, param [COMMENT 'param_comment_string']] ...)]
     {IS | AS} LANGUAGE JAVA
-    NAME 'method_fullname (java_type_fullname[,java_type_fullname]...) [return java_type_fullname]';
+    NAME 'method_fullname (java_type_fullname [,java_type_fullname]...) [return java_type_fullname]';
+    COMMENT 'sp_comment_string';
 
     parameter_name [IN|OUT|IN OUT|INOUT] sql_type
        (default IN)
+
+*   *param_comment_string*: 인자 커멘트 문자열을 지정한다.
+*   *sp_comment_string*: 자바 저장 함수/프로시저의 커멘트 문자열을 지정한다.
 
 Java 저장 함수/프로시저의 인자를 **OUT** 으로 설정한 경우 길이가 1인 1차원 배열로 전달된다. 그러므로 Java 메서드는 배열의 첫번째 공간에 전달할 값을 저장해야 한다.
 
@@ -401,6 +406,38 @@ Java 저장 함수/프로시저의 삭제는 Java 저장 함수/프로시저를 
 
     DROP FUNCTION hello, sp_int;
     DROP PROCEDURE Athlete_Add;
+
+Java 저장 함수/프로시저의 커멘트
+--------------------------------
+
+저장 함수 또는 프로시저의 커멘트를 다음과 같이 제일 뒤에 지정할 수 있다. 
+
+.. code-block:: sql
+
+
+    CREATE FUNCTION Hello() RETURN VARCHAR
+    AS LANGUAGE JAVA
+    NAME 'SpCubrid.HelloCubrid() return java.lang.String'
+    COMMENT 'function comment';
+
+저장 함수의 인자 뒤에는 다음과 같이 지정할 수 있다.
+
+.. code-block:: sql
+
+    CREATE OR REPLACE FUNCTION test(i in number COMMENT 'arg i') 
+    RETURN NUMBER AS LANGUAGE JAVA NAME 'SpTest.testInt(int) return int' COMMENT 'function test';
+
+저장 함수 또는 프로시저의 커멘트는 다음 구문을 실행하여 확인할 수 있다.
+
+.. code-block:: sql
+
+    SELECT sp_name, comment FROM db_stored_procedure; 
+
+함수 인자의 커멘트는 다음 구문을 실행하여 확인할 수 있다.
+
+.. code-block:: sql
+          
+    SELECT sp_name, arg_name, comment FROM db_stored_procedure_args;
 
 Java 저장 함수/프로시저 호출
 ============================

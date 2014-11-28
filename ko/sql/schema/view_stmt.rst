@@ -1,22 +1,22 @@
 CREATE VIEW
 ===========
 
-뷰(가상 테이블)는 물리적으로 존재하지 않는 가상의 테이블이며, 기존의 테이블이나 뷰에 대한 질의문을 이용하여 뷰를 생성할 수 있다. **VIEW** 와 **VCLASS** 는 동의어로 사용된다.
+뷰(가상 테이블)는 물리적으로 존재하지 않는 가상의 테이블이며, 기존의 테이블이나 뷰에 대한 질의문을 이용하여 뷰를 생성할 수 있다. **VIEW** 와 **VCLASS** 는 동의어로 사용된다. 
 
-**CREATE VIEW** 문을 이용하여 뷰를 생성한다. 뷰 이름 작성 원칙은 :doc:`/sql/identifier` 를 참고한다.
+**CREATE VIEW** 문을 이용하여 뷰를 생성한다. 뷰 이름 작성 원칙은 :doc:`/sql/identifier`\ 를 참고한다.
 
 ::
 
     CREATE [OR REPLACE] {VIEW | VCLASS} view_name
     [<subclass_definition>]
-    [(view_column_name, ...)]
+    [(view_column_name [COMMENT 'column_comment_string'], ...)]    ===> 이부분에 대한 확인 및 수정이 필요함.
     [INHERIT <resolution>, ...]
     [AS <select_statement>]
-    [WITH CHECK OPTION] ;
+    [WITH CHECK OPTION] 
+    [COMENT [=] 'view_comment_string'];
                                     
         <subclass_definition> ::= {UNDER | AS SUBCLASS OF} table_name, ...
-     
-        <resolution> ::= [CLASS] {column_name} OF superclass_name [AS alias]
+        <resolution> ::= [CLASS | TABLE] {column_name} OF superclass_name [AS alias]
 
 *   **OR REPLACE**: **CREATE** 뒤에 **OR REPLACE** 키워드가 명시되면, *view_name* 이 기존의 뷰와 이름이 중복되더라도 에러를 출력하지 않고 기존의 뷰를 새로운 뷰로 대체한다.
 
@@ -24,15 +24,17 @@ CREATE VIEW
 *   *view_column_name*: 생성하려는 뷰의 칼럼 이름을 지정한다.
 *   **AS** <*select_statement*>: 유효한 **SELECT** 문이 명시되어야 한다. 이를 기반으로 뷰가 생성된다.
 *   **WITH CHECK OPTION**: 이 옵션이 명시되면 <*select_statement*> 내 **WHERE** 절에 명시된 조건식을 만족하는 경우에만 업데이트 또는 삽입이 가능하다. 조건식을 위반하는 가상 테이블에 대한 갱신을 허용하지 않기 위해서 사용한다.
+*   *view_comment_string*: 뷰의 커멘트를 지정한다.
+*   *column_comment_string*: 칼럼의 커멘트를 지정한다.
 
 .. code-block:: sql
 
-    CREATE TABLE a_tbl(
-    id INT NOT NULL,
-    phone VARCHAR(10));
+    CREATE TABLE a_tbl (
+        id INT NOT NULL,
+        phone VARCHAR(10)
+    );
     INSERT INTO a_tbl VALUES(1,'111-1111'), (2,'222-2222'), (3, '333-3333'), (4, NULL), (5, NULL);
-     
-     
+    
     --creating a new view based on AS select_statement from a_tbl
     CREATE VIEW b_view AS SELECT * FROM a_tbl WHERE phone IS NOT NULL WITH CHECK OPTION;
     SELECT * FROM b_view;
@@ -58,7 +60,7 @@ CREATE VIEW
 .. code-block:: sql
 
     --creating view which name is as same as existing view name
-    CREATE OR REPLACE VIEW b_view AS SELECT * FROM a_tbl ORDER BY id DESC;
+    CREATE OR REPLACE VIEW b_view AS SELECT * FROM a_tbl ORDER BY id DESC COMMENT 'changed view';
      
     --the existing view has been replaced as a new view by OR REPLACE keyword
     SELECT * FROM b_view;
@@ -98,6 +100,38 @@ CREATE VIEW
 *   산술 연산자가 포함된 숫자 타입의 칼럼
 
 뷰에 정의된 칼럼이 업데이트 가능하더라도 **FROM** 구문에 포함된 테이블에 대해 업데이트를 위한 적절한 권한이 있어야 하며 뷰에 대한 접근 권한이 있어야 한다. 뷰에 접근 권한을 부여하는 방법은 테이블에 접근 권한을 부여하는 방식과 동일하다. 권한 부여에 대한 자세한 내용은 :ref:`granting-authorization` 를 참조한다.
+
+뷰의 커멘트
+-----------
+
+뷰의 커멘트를 다음과 같이 명시할 수 있다. 
+
+.. code-block:: sql
+
+    CREATE OR REPLACE VIEW b_view AS SELECT * FROM a_tbl ORDER BY id DESC COMMENT 'changed view';
+
+명시된 뷰의 커멘트는 다음 구문에서 확인할 수 있다.
+
+.. code-block:: sql
+
+    SHOW CREATE VIEW view_name;
+    SELECT vclass_name, comment from db_vclass;
+
+또는 CSQL 인터프리터에서 스키마를 출력하는 ;sc 명령으로 뷰의 커멘트를 확인할 수 있다.
+
+::
+    $ csql -u dba demodb
+    
+    csql> ;sc b_view
+
+뷰의 각 칼럼에도 커멘트 추가가 가능하다.
+
+.. code-block:: sql
+
+    CREATE OR REPLACE VIEW b_view (a COMMENT 'a comment', b COMMENT 'b comment') 
+    AS SELECT * FROM a_tbl ORDER BY id DESC COMMENT 'view comment';
+    
+뷰 커멘트의 변경은 아래의 ALTER VIEW 구문을 참고한다.
 
 ALTER VIEW
 ==========
@@ -240,6 +274,19 @@ DROP QUERY 절
                 3  '333-3333'
                 4  NULL
                 5  NULL
+
+COMMENT 절
+----------
+
+**ALTER VIEW** 문의 **COMMENT** 절을 이용하여 뷰의 커멘트를 변경할 수 있다.
+
+::
+
+    ALTER [VIEW | VCLASS] view_name COMMENT [=] 'view_comment';
+
+.. code-block:: sql
+
+    ALTER VIEW b_view COMMENT = 'changed view comment';
 
 DROP VIEW
 =========

@@ -15,22 +15,24 @@ CUBRID는 기본적으로 **DBA**\ 와 **PUBLIC** 두 종류의 사용자를 제
 
 .. _create-user:
 
-CREATE USER
-===========
+CREATE/ALTER/DROP USER
+======================
 
 **DBA**\ 와 **DBA**\ 의 멤버는 SQL 문을 사용하여 사용자를 생성, 변경, 삭제할 수 있다. ::
 
     CREATE USER user_name
-    [ PASSWORD password ]
-    [ GROUPS user_name [ {, user_name } ... ] ]
-    [ MEMBERS user_name [ {, user_name } ... ] ] ;
-    
-    DROP USER user_name;
+    [PASSWORD password]
+    [GROUPS user_name [{, user_name } ... ]]
+    [MEMBERS user_name [{, user_name } ... ]] 
+    [COMMENT 'comment_string'];
     
     ALTER USER user_name PASSWORD password;
+    
+    DROP USER user_name;
 
 *   *user_name*: 생성, 삭제, 변경할 사용자 이름을 지정한다.
 *   *password*: 생성 혹은 변경할 사용자의 비밀번호를 지정한다.
+*   *comment_string*: 사용자에 대한 커멘트를 지정한다.
 
 다음은 사용자 *Fred*\ 를 생성하고 비밀번호를 변경한 후에 *Fred*\ 를 삭제하는 예제이다.
 
@@ -63,6 +65,27 @@ CREATE USER
     CREATE USER marketing MEMBERS smith, jones;
     CREATE USER design MEMBERS smith;
     CREATE USER company MEMBERS engineering, marketing, design;
+
+사용자의 커멘트
+---------------
+
+사용자에 대한 커멘트는 다음과 같이 지정한다.
+
+.. code-block:: sql
+
+    CREATE USER designer GROUPS dbms, qa COMMENT 'user comment';
+
+사용자에 대한 커멘트는 ALTER USER 문을 사용하여 다음과 같이 변경이 가능하다.
+
+.. code-block:: sql
+    
+    ALTER USER DESIGNER COMMENT 'new comment';
+    
+다음 구문으로 사용자에 대한 커멘트를 확인할 수 있다.
+
+.. code-block:: sql
+
+    SELECT name, comment FROM db_user;
 
 .. _granting-authorization:
 

@@ -12,7 +12,8 @@ CUBRID 매니저는 Java 실행 환경에서만 실행이 가능하기 때문에
     .. note::
     
         *   Java SE 7(2014년 9월 현재 기준)에 해당하는 JRE를 받아 설치한다.
-        *   64비트용 CUBRID 매니저를 사용하려면 JRE 역시 64bit용으로 설치되어야 한다.그러나 64비트용 CUBRID를 사용한다고 해서 CUBRID 매니저도 64비트용으로 설치할 필요는 없다.
+        *   64bit용 CUBRID 매니저를 사용하려면 JRE 역시 64bit용으로 설치되어야 한다.그러나 64비트용 CUBRID를 사용한다고 해서 CUBRID 매니저도 64bit용으로 설치할 필요는 없다.
+        *   간혹 시스템은 64bit이면서 32bit JRE를 설치해서 사용하는 경우가 있는데, 이러한 경우 CUBRID 매니저는 64bit를 설치한 후 CUBRID 매니저가 설치된 경로 아래에 64bit JRE를 jre 경로명으로 복사해 넣으면 시스템에 설치된 JRE의 영향을 받지 않고 CUBRID 매니저를 실행할 수 있다.
 
 CUBRID 매니저는 아래의 URL에서 받을 수 있다. 
 
@@ -22,7 +23,7 @@ CUBRID 매니저는 아래의 URL에서 받을 수 있다.
 ====
 
 *   Windows: 32/64bit OS에 해당하는 exe 파일을 다운로드 후 실행하여 설치한다.
-*   Linux: 32/64bit OS에 해당하는 tar.gz 파일을 다운로드하고 압축을 해제하여 cubridmanager를 실행하거나, sh 파일을 다운로드하여 console에서 실행하여 설치한다.
+*   Linux: 32/64bit OS에 해당하는 tar.gz 파일을 다운로드하고 압축을 해제하여 cubridmanager를 실행한다.
 *   Max: tar.gz 파일을 다운로드 하고 압축을 해제하여 cubridmanager.app을 실행한다.
 
 .. _upgrade-cm:

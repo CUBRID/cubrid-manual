@@ -1217,7 +1217,7 @@ cci_execute
 
     *   리턴 값은 첫 번째 질의에 대한 결과이다.
     *   어느 하나의 질의에서 에러가 발생할 경우 execute는 실패한 것으로 처리된다.
-    *   q1; q2; q3와 같이 구성된 질의에 대해서 q1을 성공하고 q2에서 에러가 발생해도 q1의 수행 결과는 유효하다. 즉, 에러가 발생했을 때 이전에 성공한 질의 수행에 대해서 롤백하지 않는다.
+    *   q1; q2; q3와 같이 구성된 질의에 대해서 q1을 성공하고 q2에서 에러가 발생해도 q1의 수행 결과는 유효하다. 즉, 에러가 발생했을 때, 앞서 성공한 질의 수행에 대해서 롤백하지 않는다.
     *   질의가 성공적으로 수행된 경우 두 번째 질의에 대한 결과는 :c:func:`cci_next_result`\ 를 통해서 얻을 수 있다.
 
     *max_col_size* 는 prepared statement의 칼럼이 **CHAR**, **VARCHAR**, **BIT**, **VARBIT** 일 경우 클라이언트로 전송되는 칼럼의 문자열 최대 길이를 결정하기 위한 값이며, 이 값이 0이면 전체 길이를 fetch한다.
@@ -1265,7 +1265,7 @@ cci_execute_array
 
     .. note :: 
     
-        *   2008 R4.3 이전 버전에서 자동 커밋이 ON인 경우 배열 내의 모든 질의가 수행된 이후에 커밋되었으나, 2008 R4.3부터는 질의 하나가 수행될 때마다 커밋된다.
+        *   2008 R4.3 미만 버전에서 자동 커밋이 ON인 경우 배열 내의 모든 질의가 수행된 이후에 커밋되었으나, 2008 R4.3부터는 질의 하나가 수행될 때마다 커밋된다.
         *   자동 커밋이 OFF일 때 질의문을 일괄 처리하는 cci_execute_array 함수에서 배열 내의 질의 일부에 일반적인 오류가 발생하는 경우, 이를 건너뛰고 다음 질의를 계속 수행한다. 그러나, 교착 상태가 발생하면 트랜잭션을 롤백하고 오류 처리한다.
 
     .. code-block:: c
@@ -1723,7 +1723,7 @@ cci_get_db_parameter
 
     :c:func:`cci_get_db_parameter`, :c:func:`cci_set_db_parameter`\ 에서 **CCI_PARAM_LOCK_TIMEOUT** 의 입출력 단위는 밀리초이다.
 
-    .. warning:: CUBRID 9.0 이전 버전에서 **CCI_PARAM_LOCK_TIMEOUT** 의 출력 단위는 초이므로 주의해야 한다.
+    .. warning:: CUBRID 9.0 미만 버전에서 **CCI_PARAM_LOCK_TIMEOUT** 의 출력 단위는 초이므로 주의해야 한다.
 
     **CCI_PARAM_MAX_STRING_LENGTH** 의 단위는 바이트이며, 브로커 파라미터 **MAX_STRING_LENGTH** 에 정의된 값을 가져온다.
 
@@ -1766,7 +1766,7 @@ cci_get_err_msg
                 goto handle_error;
             }
     
-        9.1 이전 버전에서는 CCI_ER_DBMS 에러가 발생했을 때만 err_buf에 에러 정보가 저장되므로 CCI_ER_DBMS에 따라 다음과 같이 분기하여 처리해야 했다.
+        9.1 미만 버전에서는 CCI_ER_DBMS 에러가 발생했을 때만 err_buf에 에러 정보가 저장되므로 CCI_ER_DBMS에 따라 다음과 같이 분기하여 처리해야 했다.
         
         .. code-block:: c
         

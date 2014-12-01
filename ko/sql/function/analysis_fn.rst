@@ -183,7 +183,7 @@
 
 *   <*partition_by_clause*>: 하나 이상의 *value_expr* 에 기반한 그룹들로, 질의 결과를 분할하기 위해 **PARTITION BY** 절을 사용한다.
 
-*   <*order_by_clause*>: <*partition_by_clause*>에 의한 분할(partition) 내에서 데이터의 정렬 방식을 명시한다. 여러 개의 키로 정렬할 수 있다. <*partition_by_clause*>가 생략될 경우 전체 결과 셋 내에서 데이터를 정렬한다. 정렬된 순서에 의해 이전 값을 포함하여 누적한 레코드의 칼럼 값을 대상으로 함수를 적용하여 계산한다.
+*   <*order_by_clause*>: <*partition_by_clause*>에 의한 분할(partition) 내에서 데이터의 정렬 방식을 명시한다. 여러 개의 키로 정렬할 수 있다. <*partition_by_clause*>가 생략될 경우 전체 결과 셋 내에서 데이터를 정렬한다. 정렬된 순서에 의해 앞의 값을 포함하여 누적한 레코드의 칼럼 값을 대상으로 함수를 적용하여 계산한다.
 
 분석 함수의 OVER 절 뒤에 함께 사용되는  ORDER BY/PARTITION BY 절의 표현식에 따른 동작 방식은 다음과 같다.
 
@@ -695,14 +695,14 @@ LAG
 
 .. function:: LAG(expression[, offset[, default]]) OVER ([<partition_by_clause>] <order_by_clause>)
     
-    **LAG** 함수는 분석 함수로만 사용되며 현재 행을 기준으로 *offset* 이전 행의 *expression* 값을 반환한다. 한 행에 자체 조인(self join) 없이 동시에 여러 개의 행에 접근하고 싶을 때 사용할 수 있다.
+    **LAG** 함수는 분석 함수로만 사용되며 현재 행을 기준으로 *offset* 앞 행의 *expression* 값을 반환한다. 한 행에 자체 조인(self join) 없이 동시에 여러 개의 행에 접근하고 싶을 때 사용할 수 있다.
     
     :param expression: 숫자 또는 문자열을 반환하는 칼럼 또는 연산식
     :param offset: 오프셋 위치를 나타내는 정수. 생략 시 기본값 1
-    :param default: 현재 위치에서 *offset* 이전에 위치한 *expression* 값이 NULL인 경우 출력하는 값. 기본값 NULL 
+    :param default: 현재 위치에서 *offset* 앞에 위치한 *expression* 값이 NULL인 경우 출력하는 값. 기본값 NULL 
     :rtype: NUMBER or STRING
     
-다음은 사번 순으로 정렬하여 같은 행에 이전 사번을 같이 출력하는 예이다.
+다음은 사번 순으로 정렬하여 같은 행에 앞의 사번을 같이 출력하는 예이다.
 
 ..  code-block:: sql
 
@@ -811,7 +811,7 @@ LEAD
 
     :param expression: 숫자 또는 문자열을 반환하는 칼럼 또는 연산식
     :param offset: 오프셋 위치를 나타내는 정수. 생략 시 기본값 1
-    :param default: 현재 위치에서 *offset* 이전에 위치한 *expression* 값이 NULL인 경우 출력하는 값. 기본값 NULL 
+    :param default: 현재 위치에서 *offset* 앞에 위치한 *expression* 값이 NULL인 경우 출력하는 값. 기본값 NULL 
     :rtype: NUMBER or STRING
 
 다음은 사번 순으로 정렬하여 같은 행에 다음 사번을 같이 출력하는 예이다.
@@ -839,7 +839,7 @@ LEAD
       'Peter'                     14006        23518
       'Ralph'                     23518         NULL
 
-다음은 tbl_board 테이블에서 현재 행을 기준으로 이전 행과 이후 행의 title을 같이 출력하는 예이다. 
+다음은 tbl_board 테이블에서 현재 행을 기준으로 앞의 행과 이후 행의 title을 같이 출력하는 예이다. 
 
 ..  code-block:: sql
 
@@ -864,8 +864,8 @@ LEAD
         6  'title 6'             'title 7'             'title 5'
         7  'title 7'             NULL                  'title 6'
 
-다음은 tbl_board 테이블에서 특정 행을 기준으로 이전 행과 이후 행의 타이틀을 같이 출력하는 예이다.
-WHERE 조건이 괄호 안에 있으면 하나의 행만 선택되고, 이전 행과 이후 행이 존재하지 않게 되어 next_title과 prev_title의 값이 NULL이 됨에 유의한다.
+다음은 tbl_board 테이블에서 특정 행을 기준으로 앞의 행과 이후 행의 타이틀을 같이 출력하는 예이다.
+WHERE 조건이 괄호 안에 있으면 하나의 행만 선택되고, 앞의 행과 이후 행이 존재하지 않게 되어 next_title과 prev_title의 값이 NULL이 됨에 유의한다.
     
 ..  code-block:: sql
 

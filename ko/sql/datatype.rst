@@ -1544,7 +1544,7 @@ CLOB
     
     LOB space description file:/home1/data1
 
-파일 저장소를 추가로 생성하려면 디스크 공간을 확보한 후 **databases.txt** 의 **lob-base-path** 를 증설한 디스크 위치로 변경한다. **databases.txt** 의 변경 내용을 반영하기 위하여 DB 서버를 재구동한다. 단, **databases.txt** 의 **lob-base-path** 를 변경하더라도 이전 저장소에 저장된 **LOB** 데이터는 접근 가능하다. ::
+파일 저장소를 추가로 생성하려면 디스크 공간을 확보한 후 **databases.txt** 의 **lob-base-path** 를 증설한 디스크 위치로 변경한다. **databases.txt** 의 변경 내용을 반영하기 위하여 DB 서버를 재구동한다. 단, **databases.txt** 의 **lob-base-path** 를 변경하더라도 예전 저장소에 저장된 **LOB** 데이터는 접근 가능하다. ::
 
     # You can change to a new directory from the lob-base-path of databases.txt file.
     % cat $CUBRID_DATABASES/databases.txt
@@ -1602,7 +1602,7 @@ CLOB
 
 .. warning::
 
-    CUBRID 2008 R3.0 이하 버전에서는 **glo** (Generalized Large Object) 클래스를 사용하여 Large Object를 처리했으나, CUBRID 2008 R3.1 버전부터는 **glo** 클래스를 제거하고 **BLOB** / **CLOB** 데이터 타입을 지원한다. 따라서, 이전 버전의 **glo** 클래스를 사용하는 환경에서는 CUBRID 버전 업그레이드를 수행할 때 DB 스키마 및 애플리케이션을 수정해야 한다.
+    CUBRID 2008 R3.0 이하 버전에서는 **glo** (Generalized Large Object) 클래스를 사용하여 Large Object를 처리했으나, CUBRID 2008 R3.1 버전부터는 **glo** 클래스를 제거하고 **BLOB** / **CLOB** 데이터 타입을 지원한다. 따라서, 2008 R3.0 미만 버전의 **glo** 클래스를 사용하는 환경에서는 CUBRID 버전 업그레이드를 수행할 때 DB 스키마 및 애플리케이션을 수정해야 한다.
 
 .. _collection-data-type:
 

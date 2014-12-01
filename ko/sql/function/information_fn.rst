@@ -389,7 +389,7 @@ LAST_INSERT_ID
     
         8
         
-*   **INSERT** 문이 실행에 성공한 경우, **LAST_INSERT_ID** () 값은 트랜잭션이 롤백되어도 이전의 **LAST_INSERT_ID** () 값으로 복구되지 않는다.
+*   **INSERT** 문이 실행에 성공한 경우, **LAST_INSERT_ID** () 값은 트랜잭션이 롤백되어도 예전의 **LAST_INSERT_ID** () 값으로 복구되지 않는다.
 
     .. code-block:: sql
 

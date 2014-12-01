@@ -317,7 +317,7 @@ SystemTap의 가장 유용한 기능은 마커를 사용자 소스 코드(CUBRID
     
 .. function:: idx_update_start(classname, index_name)
 
-    이 마커는 B-Tree에서 인덱스 노드를 갱신하기 이전에 발동된다.
+    이 마커는 B-Tree에서 인덱스 노드를 갱신하기 전에 발동된다.
 
     :param classname: 대상 인덱스의 테이블 이름
     :param index_name: 대상 인덱스 이름
@@ -332,14 +332,14 @@ SystemTap의 가장 유용한 기능은 마커를 사용자 소스 코드(CUBRID
     
 .. function:: idx_delete_start(classname, index_name)
 
-    이 마커는 B-Tree에서 인덱스 노드를 삭제하기 이전에 발동된다.
+    이 마커는 B-Tree에서 인덱스 노드를 삭제하기 전에 발동된다.
 
     :param classname: 대상 인덱스의 테이블 이름
     :param index_name: 대상 인덱스 이름
     
 .. function:: idx_delete_end(classname, index_name, status)
 
-    이 마커는 B-Tree에서 인덱스 노드를 삭제한 이후에 발동된다.
+    이 마커는 B-Tree에서 인덱스 노드를 삭제한 후에 발동된다.
 
     :param classname: 대상 인덱스의 테이블 이름
     :param index_name: 대상 인덱스 이름

@@ -19,7 +19,7 @@ CUBRID 데이터베이스 관리 시스템(Database Management System, DBMS) 매
 
 *   :doc:`api/index`: JDBC API, ODBC API, OLE DB API, PHP API 및 CCI API에 대해 설명한다.
 
-*   :doc:`release_note/index`: 이전 버전 대비 추가, 변경, 개선 및 버그 수정 등을 설명한다.
+*   :doc:`release_note/index`: 예전 버전 대비 추가, 변경, 개선 및 버그 수정 등을 설명한다.
 
 용어 정리
 ---------

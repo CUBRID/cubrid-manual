@@ -195,7 +195,7 @@ ON DUPLICATE KEY UPDATE 절
 .. note::
 
     *   **PRIMARY KEY**\ 와 **UNIQUE** 또는 다수의 **UNIQUE**\ 가 한 테이블에 같이 존재하는 경우, 둘 중 하나에 의해 제약 조건 위반이 발생할 수 있으므로 **ON DUPLICATE KEY UPDATE** 절의 사용을 권장하지 않는다. 
-    *   **INSERT**\ 에 실패하여 **UPDATE**\ 가 실행되더라도 한 번 증가한 **AUTO_INCREMENT** 값은 이전 값으로 롤백되지 않는다.
+    *   **INSERT**\ 에 실패하여 **UPDATE**\ 가 실행되더라도 한 번 증가한 **AUTO_INCREMENT** 값은 예전 값으로 롤백되지 않는다.
 
 ::
 

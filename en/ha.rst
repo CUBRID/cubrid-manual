@@ -247,7 +247,7 @@ Although **ASYNC** mode provides a better performance as it has almost no delay 
 
 .. note::
 
-    **SEMISYNC** mode which has existed from the previous versions operates in the same way as **SYNC** mode.
+    **SEMISYNC** mode is deprecated, and this operates in the same way as **SYNC** mode.
 
 Quick Start
 ===========

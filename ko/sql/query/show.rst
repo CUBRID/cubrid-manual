@@ -1,9 +1,16 @@
+:tocdepth: 3
+
 ****
 SHOW
 ****
 
+.. contents::
+
+외부 정보
+=========
+
 DESC, DESCRIBE
-==============
+--------------
 
 테이블의 칼럼 정보를 출력하며 **SHOW COLUMNS** 문과 같다. 보다 자세한 사항은 :ref:`show-columns-statement`\ 를 참고한다.
 
@@ -13,7 +20,7 @@ DESC, DESCRIBE
     DESCRIBE tbl_name;
     
 EXPLAIN
-=======
+-------
 
 테이블의 칼럼 정보를 출력하며 **SHOW COLUMNS** 문과 같다. 보다 자세한 사항은 :ref:`show-columns-statement`\ 를 참고한다.
 
@@ -24,7 +31,7 @@ EXPLAIN
 .. _show-tables-statement:
 
 SHOW TABLES
-===========
+-----------
 
 데이터베이스의 전체 테이블 이름 목록을 출력한다. 결과 칼럼의 이름은 *tables_in_<데이터베이스 이름>* 이 되며 하나의 칼럼을 지닌다. **LIKE** 절을 사용하면 이와 매칭되는 테이블 이름을 검색할 수 있으며, **WHERE** 절을 사용하면 좀더 일반적인 조건으로 테이블 이름을 검색할 수 있다. **SHOW FULL TABLES** 는 *table_type* 이라는 이름의 두 번째 칼럼을 함께 출력하며, 테이블은 **BASE TABLE**, 뷰는 **VIEW** 라는 값을 가진다. ::
 
@@ -97,7 +104,7 @@ SHOW TABLES
 .. _show-columns-statement:
 
 SHOW COLUMNS
-============
+------------
 
 테이블의 칼럼 정보를 출력한다. **LIKE** 절을 사용하면 이와 매칭되는 칼럼 이름을 검색할 수 있다. **WHERE** 절을 사용하면 "모든 **SHOW** 문에 대한 일반적인 고려 사항"과 같이 좀 더 일반적인 조건으로 칼럼 이름을 검색할 수 있다. 
 
@@ -105,7 +112,7 @@ SHOW COLUMNS
 
     SHOW [FULL] COLUMNS {FROM | IN} tbl_name [LIKE 'pattern' | WHERE expr];
 
-**FULL** 키워드가 사용되면 Collation 정보를 추가로 출력한다.
+**FULL** 키워드가 사용되면 콜레이션 정보를 추가로 출력한다.
 
 **SHOW FIELDS** 는 **SHOW COLUMNS** 와 같은 구문이다.
 
@@ -179,7 +186,7 @@ Extra                               VARCHAR         주어진 칼럼에 대해 �
 .. _show-index-statement:
 
 SHOW INDEX
-==========
+----------
 
 인덱스 정보를 출력한다. 
 
@@ -248,7 +255,7 @@ Func                                VARCHAR         함수 인덱스에서 사�
 .. _show-collation-statement:
  
 SHOW COLLATION
-==============
+--------------
 
 데이터베이스에서 지원하는 콜레이션 리스트를 출력한다. LIKE 절은 콜레이션 이름이 매칭되는 정보를 출력한다. 
 
@@ -314,10 +321,40 @@ Strength                            CHAR(1)         문자 간 비교를 위한 
       'utf8_ko_cs'          'utf8'                          7  'Yes'                 'No'                  'Not applicable'
       'utf8_ko_cs_uca'      'utf8'                        133  'No'                  'No'                  'Quaternary'
 
+SHOW TIMEZONE
+-------------
+
+현재 CUBRID에 설정된 타임 존 정보를 출력한다.
+
+::
+
+    SHOW [FULL] TIMEZONES [LIKE zone_name_filter | WHERE condition];
+
+FULL이 명시되지 않으면 타임 존의 영역 이름을 가진 하나의 칼럼을 출력한다. 칼럼의 이름은 timezone_region이다.
+
+FULL이 명시되면 4개의 칼럼을 가진 타임 존 정보를 출력한다.
+
+=================== =============== ===================================================
+칼럼 이름           타입            설명
+=================== =============== ===================================================
+timezone_region     VARCHAR(32)     타임 존 영역
+region_offset       VARCHAR(32)     일광 절약 시간을 고려하지 않은 타임 존 영역의 오프셋
+dst_offset          VARCHAR(32)     타임 존 영역에서 적용되는 일광 절약 시간 규칙을 고려한 오프셋
+dst_abbreviation    VARHCHAR(32)    일광 절약 시간 규칙이 적용된 지역의 약어
+=================== =============== ===================================================
+
+두 번째, 세 번째, 네 번째 칼럼은 SHOW 문이 실행될 때 날짜에 대해 출력되는 정보이다.
+
+타임 존 영역이 일광 절약 시간(daylight saving time) 규칙을 적용하지 않는다면, dst_offset과 dst_abbreviation 값은 NULL 값이 된다.
+ 
+현재의 날짜에 일광 절약 시간이 적용되지 않는다면 dst_offset 값은 0이 되고 dst_abbreviation 값은 빈 문자열이 된다.
+
+WHERE 조건 없는 LIKE 조건은 첫 번째 칼럼에 적용된다. WHERE 조건은 결과를 필터링하기 위해 사용될 수 있다.
+
 .. _show-grants-statement:
 
 SHOW GRANTS
-===========
+-----------
 
 데이터베이스의 사용자 계정에 부여된 권한을 출력한다. ::
 
@@ -342,7 +379,7 @@ SHOW GRANTS
 .. _show-create-table-statement:
 
 SHOW CREATE TABLE
-=================
+-----------------
 
 테이블 이름을 지정하면 해당 테이블의 **CREATE TABLE** 문을 출력한다. ::
 
@@ -366,7 +403,7 @@ SHOW CREATE TABLE
 .. _show-create-view-statement:
 
 SHOW CREATE VIEW
-================
+----------------
 
 뷰 이름을 지정하면 해당 **CREATE VIEW** 문을 출력한다. ::
 
@@ -392,7 +429,7 @@ SHOW CREATE VIEW
                        CURRENT_USER) AND  au.auth_type = 'SELECT')'
 
 SHOW ACCESS STATUS 
-================== 
+------------------ 
   
 **SHOW ACCESS STATUS** 문은 데이터베이스 계정에 대한 로그인 정보를 출력한다. 이 명령은 데이터베이스 계정이 DBA인 사용자만 사용할 수 있다. 
 
@@ -431,7 +468,7 @@ program_name        VARCHAR(32) 클라이언트 프로그램 이름(broker_cub_c
 .. _show-exec-statistics-statement:
 
 SHOW EXEC STATISTICS
-====================
+--------------------
 
 실행한 질의들의 실행 통계 정보를 출력한다.
 
@@ -538,8 +575,11 @@ SHOW EXEC STATISTICS
     'adaptive_flush_log_pages'              0
     'adaptive_flush_max_pages'              0
 
+내부 정보
+=========
+
 SHOW VOLUME HEADER
-==================
+------------------
 
 명시한 볼륨의 헤더 정보를 출력한다.
 
@@ -613,7 +653,7 @@ Remarks                             VARCHAR(64)
             Remarks                         : ''
 
 SHOW LOG HEADER
-===============
+---------------
 
 활성 로그(active log) 파일의 헤더 정보를 출력한다.
 
@@ -752,7 +792,7 @@ Smallest_lsa_at_last_checkpoint     VARCHAR(64)
             Smallest_lsa_at_last_checkpoint: '(66637|14280)'
 
 SHOW ARCHIVE LOG HEADER
-=======================
+-----------------------
 
 보관 로그(archive log) 파일의 헤더 정보를 출력한다.
 
@@ -794,7 +834,7 @@ Archive_num                         INT             보관 로그 번호
             Archive_num          : 1
 
 SHOW HEAP HEADER
-================
+----------------
 
 명시한 테이블의 헤더 페이지를 출력한다. 
 
@@ -983,7 +1023,7 @@ Estimates_full_search_vpid          VARCHAR(64)     포맷: '(volid|pageid)'
             Estimates_full_search_vpid    : '(0|960)'
 
 SHOW HEAP CAPACITY
-==================
+------------------
 
 명시한 테이블의 용량을 출력한다. 
 
@@ -1118,7 +1158,7 @@ Total_size_fixed_width_attrs                INT             고정 길이 칼럼
             Total_size_fixed_width_attrs            : 20
 
 SHOW SLOTTED PAGE HEADER
-========================
+------------------------
 
 명시한 슬롯 페이지의 헤더 정보를 출력한다.
 
@@ -1166,7 +1206,7 @@ Is_saving                           INT             이 페이지를 위해 베�
             Is_saving            : 0
 
 SHOW SLOTTED PAGE SLOTS
-========================
+-----------------------
 
 명시한 슬롯 페이지의 모든 슬롯 정보를 출력한다.
 
@@ -1220,7 +1260,7 @@ Waste                               INT             버릴 것인지 여부
             Waste    : 0
 
 SHOW INDEX HEADER
-=================
+-----------------
 
 특정 테이블 내 인덱스의 헤더 페이지 정보를 출력한다.
 
@@ -1322,7 +1362,7 @@ Key_type                            VARCHAR(32)     타입 이름
             Key_type     : 'character varying'
 
 SHOW INDEX CAPACITY
-===================
+-------------------
 
 테이블의 인덱스 용량 정보를 출력한다.
 
@@ -1437,7 +1477,7 @@ Avg_page_free_space                 VARCHAR(64)     페이지 당 평균 여유 
             Avg_page_free_space  : '15.9K'
 
 SHOW CRITICAL SECTION
-=====================
+---------------------
 
 특정 데이터베이스의 전체 크리티컬 섹션(critical section, 이하 CS) 정보를 출력한다.
 

@@ -619,9 +619,17 @@ The group name must be identical to the name specified in **ha_replica_list**. T
 
 This parameter can be modified dynamically. If you modify the value of this parameter, you must execute :ref:`cubrid heartbeat reload <cubrid-heartbeat>` to apply the changes.
 
+.. note::
+
+    The host name of the member nodes specified in this parameter cannot be replaced with the IP. You should use the host names which are registered in **/etc/hosts**. 
+
 **ha_db_list**
 
 **ha_db_list** is a parameter used to configure the name of the database that will run in CUBRID HA mode. The default is **NULL**. You can specify multiple databases by using a comma (,).
+
+.. note::
+
+    The host name of the member nodes specified in this parameter cannot be replaced with the IP. You should use the host names which are registered in **/etc/hosts**. 
 
 Access
 ^^^^^^

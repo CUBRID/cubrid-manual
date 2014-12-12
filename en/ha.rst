@@ -72,7 +72,7 @@ The server status changes based on the status of the node. You can use the :ref:
 *   **to-be-active** : The status in which a standby server will become active for reasons such as failover, etc. is to-be-active. In this status, servers prepare to become active by reflecting transaction logs from the existing master node to its own server. The node in this status can accept only SELECT query.
 *   Other : This status is internally used.
 
-When the node status is changed, on cub_master process log and cub_server process log, following error messages are saved. But, they are saved only when the value of **error_log_level** in cubrid.conf is **error** or less.
+When the node status is changed, on cub_master process log and cub_server process log, following error messages are saved. But, they are saved only when the value of **error_log_level** in **cubrid.conf** is **error** or less.
 
 *   The following log information of cub_master process is saved on **$CUBRID/log/**\ *<hostname>*\ **_master.err** file. ::
 
@@ -769,9 +769,17 @@ See the above description of **ha_delay_limit**.
   
 See the above description of **ha_delay_limit**.
 
+**ha_copy_log_timeout**
+
+This is the maximum value of the time in which a node's database server process (cub_server) waits a response from another node's replication-log-copy process (copylogdb). The default is 5(seconds). If this value is -1, this means to be infinite wait.
+
+**ha_copy_log_timeout**
+
+This is the maximum value of the time in which a node's database server process (cub_server) waits a response from another node's replication-log-copy process (copylogdb). The default is 5(seconds). If this value is -1, this means to be infinite wait.
+
 **ha_monitor_disk_failure_interval** 
 
-Judge the disk failure for each time which is set to the vaule of this parameter. The default is 30, and the unit is second.
+CUBRID judges the disk failure for each time which is set to the value of this parameter. The default is 30, and the unit is second.
   
 *   If the value of **ha_copy_log_timeout** parameter is -1, the value of **ha_monitor_disk_failure_interval** parameter is ignored and the disk failure is not judged.
 *   If the value of **ha_monitor_disk_failure_interval** parameter is smaller than the value of **ha_copy_log_timeout** parameter, the disk failure is judged for each **ha_copy_log_timeout** + 20 seconds.

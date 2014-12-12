@@ -1085,7 +1085,7 @@ cci_datasource_release
 
 .. c:function:: int cci_datasource_release (T_CCI_DATASOURCE *datasource, T_CCI_CONN conn, T_CCI_ERROR *err_buf)
 
-    The **cci_datasource_release** function returns CCI connection released in **T_CCI_DATASOURCE** struct. If you want to reuse the connection after calling this function, recall c:func:`cci_datasource_borrow`.
+    The **cci_datasource_release** function returns CCI connection released in **T_CCI_DATASOURCE** struct. If you want to reuse the connection after calling this function, recall :c:func:`cci_datasource_borrow`.
 
     :param datasource: (IN) **T_CCI_DATASOURCE** struct pointer which returns CCI connection
     :param conn: (IN) CCI connection handler identifier released
@@ -1931,7 +1931,7 @@ cci_query_info_free
 
 .. c:function:: int cci_query_info_free(char *out_buf)
 
-    Releases the result buffer memory allocated from the c:func:`cci_get_query_plan` function.
+    Releases the result buffer memory allocated from the :c:func:`cci_get_query_plan` function.
 
     :param req_handle: (IN) Request handle
     :param out_buf: (OUT) Result buffer pointer
@@ -2402,7 +2402,7 @@ cci_prepare
         *   **CCI_ER_LOGIN_TIMEOUT**
 
     **CCI_PREPARE_UPDATABLE**, **CCI_PREPARE_INCLUDE_OID**, **CCI_PREPARE_CALL** or **CCI_PREPARE_HOLDABLE** can be configured in *flag*. If **CCI_PREPARE_UPDATABLE** is configured, updatable resultset is created and **CCI_PREPARE_INCLUDE_OID** is automatically configured. **CCI_PREPARE_UPDATABLE** and **CCI_PREPARE_HOLDABLE** cannot be used simultaneously in *flag*.
-    If you want to call the Java Stored Procedure, specify **CCI_PREPARE_CALL** flag into the **cci_prepare** function. You can see an related example on c:func:`cci_register_out_param`.
+    If you want to call the Java Stored Procedure, specify **CCI_PREPARE_CALL** flag into the **cci_prepare** function. You can see an related example on :c:func:`cci_register_out_param`.
     
     The default value of whether to keep result set after commit is cursor holdability. Thus, if you want to configure **CCI_PREPARE_UPDATABLE** in *flag* of :c:func:`cci_prepare`, you should call :c:func:`cci_set_holdability` first before calling :c:func:`cci_prepare` so that cursor cannot be maintained.
 
@@ -2532,7 +2532,7 @@ cci_property_set
     
     If the number of prepared statements exceeds **max_open_prepared_statement** value, the oldest prepared statement is released from the statement pool. If you reuse it later, it is added to the statement pool again.
     
-    A number of connections which a connection pool can contain is changable by using c:func:`cci_datasource_change_property` function when it's required, but it cannot exceed **max_pool_size**. You can change this number when you want to handle the limitation of the number of connections. For example, usually set the number less than **max_pool_size**; raise the number when more connections are required than expected; shrink the number again when many connections are not required.
+    A number of connections which a connection pool can contain is changable by using :c:func:`cci_datasource_change_property` function when it's required, but it cannot exceed **max_pool_size**. You can change this number when you want to handle the limitation of the number of connections. For example, usually set the number less than **max_pool_size**; raise the number when more connections are required than expected; shrink the number again when many connections are not required.
     
     The number of connections which a connection pool can contain is limited until **pool_size**; it's maximum value is **max_pool_size**.
         

@@ -1099,7 +1099,7 @@ cci_datasource_release
 
 .. c:function:: int cci_datasource_release (T_CCI_DATASOURCE *datasource, T_CCI_CONN conn, T_CCI_ERROR *err_buf)
 
-    **T_CCI_DATASOURCE** 구조체에 사용을 끝낸 CCI 연결을 반환한다. 연결이 연결 풀에 반환된 이후 재사용하려면 반드시 c:func:`cci_datasource_borrow` 함수를 재호출해야 한다.
+    **T_CCI_DATASOURCE** 구조체에 사용을 끝낸 CCI 연결을 반환한다. 연결이 연결 풀에 반환된 이후 재사용하려면 반드시 :c:func:`cci_datasource_borrow` 함수를 재호출해야 한다.
 
     :param datasource: (IN) CCI 연결을 반환할 **T_CCI_DATASOURCE** 구조체 포인터
     :param conn: (IN) 사용을 끝낸 CCI 연결의 핸들 식별자
@@ -2553,7 +2553,7 @@ cci_property_set
     
     prepared statement의 개수가 **max_open_prepared_statement** 값을 초과하면 가장 오래된 prepared statement가 statement pool에서 해제되며, 추후 해제된 prepared statement가 재사용되면 다시 statement pool에 추가된다. 
     
-    하나의 연결 풀이 가질 수 있는 연결 개수는 필요 시 c:func:`cci_datasource_change_property`\ 를 통해 값을 변경할 수 있지만, max_pool_size를 초과할 수 없다. 연결 개수의 제한을 조절하고자 할 때 이 값을 변경할 수 있다. 예를 들어 평소에는 max_pool_size보다 작게 설정해서 사용하다가 기대 이상으로 많은 연결이 필요해질 때 값을 높이고, 많은 연결이 필요하지 않으면 값을 다시 줄인다.
+    하나의 연결 풀이 가질 수 있는 연결 개수는 필요 시 :c:func:`cci_datasource_change_property`\ 를 통해 값을 변경할 수 있지만, max_pool_size를 초과할 수 없다. 연결 개수의 제한을 조절하고자 할 때 이 값을 변경할 수 있다. 예를 들어 평소에는 max_pool_size보다 작게 설정해서 사용하다가 기대 이상으로 많은 연결이 필요해질 때 값을 높이고, 많은 연결이 필요하지 않으면 값을 다시 줄인다.
     
     연결 풀이 가질 수 있는 연결 개수는 pool_size까지 제한되는데, pool_size는 최대 max_pool_size까지 변경될 수 있다.
     

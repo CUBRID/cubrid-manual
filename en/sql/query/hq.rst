@@ -517,7 +517,7 @@ However, the hierarchical structure should be checked every step while looping, 
         7            4  'Brown'                         3
         8            4  'Lin'                           3
 
-You can specify **NOCYCLE** to prevent an error from occurring as follows:
+You can specify **NOCYCLE** to prevent an error from occurring as follows. When you run the following query, a loop does not appear; therefore, the result is the same as the above.
 
 .. code-block:: sql
 

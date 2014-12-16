@@ -363,7 +363,6 @@ General process for writing applications is as follows. For using the prepared s
         cci_property_set (ps, "pool_size", "10");
         cci_property_set (ps, "max_wait", "1200");
         cci_property_set (ps, "pool_prepared_statement", "true");
-        cci_property_set (ps, "default_autocommit", "false");
         cci_property_set (ps, "login_timeout", "300000");
         cci_property_set (ps, "query_timeout", "3000");
         

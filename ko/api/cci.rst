@@ -347,7 +347,7 @@ CCI를 이용하는 응용 프로그램은 기본적으로 CAS와 연결하기, 
         T_CCI_PROPERTIES *ps = NULL;
         T_CCI_DATASOURCE *ds = NULL;
         T_CCI_ERROR err;
-        T_CCI_CONN cons[20];
+        T_CCI_CONN cons;
         int rc = 1, i;
         
         ps = cci_property_create ();
@@ -364,8 +364,6 @@ CCI를 이용하는 응용 프로그램은 기본적으로 CAS와 연결하기, 
         cci_property_set (ps, "max_wait", "1200");
         cci_property_set (ps, "pool_prepared_statement", "true");
         cci_property_set (ps, "default_autocommit", "false");
-        cci_property_set (ps, "default_isolation", "TRAN_REP_CLASS_UNCOMMIT_INSTANCE");
-        cci_property_set (ps, "default_lock_timeout", "10");
         cci_property_set (ps, "login_timeout", "300000");
         cci_property_set (ps, "query_timeout", "3000");
         
@@ -380,8 +378,8 @@ CCI를 이용하는 응용 프로그램은 기본적으로 CAS와 연결하기, 
         
         for (i = 0; i < 3; i++)
         {
-            cons[i] = cci_datasource_borrow (ds, &err);
-            if (cons[i] < 0)
+            cons = cci_datasource_borrow (ds, &err);
+            if (cons < 0)
             {
                 fprintf (stderr,
                         "Could not borrow a connection from the data source.\n");
@@ -389,18 +387,9 @@ CCI를 이용하는 응용 프로그램은 기본적으로 CAS와 연결하기, 
                 continue;
             }
             // put working code here.
-            cci_work (cons[i]);
-        }
-        
-        sleep (1);
-        
-        for (i = 0; i < 3; i++)
-        {
-            if (cons[i] < 0)
-            {
-                continue;
-            }
-            cci_datasource_release (ds, cons[i], &err);
+            cci_work (cons);
+            cci_datasource_release (ds, cons, &err);
+
         }
         
     cci_pool_end:
@@ -472,6 +461,7 @@ CCI를 이용하는 응용 프로그램은 기본적으로 CAS와 연결하기, 
         cci_close_req_handle (req);
         return error;
     }
+
 
 라이브러리 적용
 ---------------

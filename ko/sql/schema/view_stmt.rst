@@ -9,7 +9,7 @@ CREATE VIEW
 
     CREATE [OR REPLACE] {VIEW | VCLASS} view_name
     [<subclass_definition>]
-    [(view_column_name [COMMENT 'column_comment_string'], ...)]    ===> 이부분에 대한 확인 및 수정이 필요함.
+    [(view_column_name [COMMENT 'column_comment_string'], ...)]
     [INHERIT <resolution>, ...]
     [AS <select_statement>]
     [WITH CHECK OPTION] 
@@ -55,8 +55,9 @@ CREATE VIEW
 ::
 
     ERROR: Check option exception on view b_view.
-     
-     
+
+다음은 기존 뷰의 정의를 갱신한다. 이와 함께 뷰에 커멘트를 추가하고 있다.
+
 .. code-block:: sql
 
     --creating view which name is as same as existing view name
@@ -74,6 +75,12 @@ CREATE VIEW
                 3  '333-3333'
                 2  '222-2222'
                 1  '111-1111'
+
+다음은 뷰의 칼럼에 커멘트를 추가한다.
+
+.. code-block:: sql
+
+    CREATE OR REPLACE VIEW b_view(a COMMENT 'column id', b COMMENT 'column phone') AS SELECT * FROM a_tbl ORDER BY id DESC;
 
 업데이트 가능한 VIEW의 생성 조건
 --------------------------------

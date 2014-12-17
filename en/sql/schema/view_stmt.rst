@@ -9,7 +9,7 @@ Use **CREATE VIEW** statement to create a view. Regarding writing view name, see
 
     CREATE [OR REPLACE] {VIEW | VCLASS} view_name
     [<subclass_definition>]
-    [(view_column_name [COMMENT 'column_comment_string'], ...)]    ===> 이부분에 대한 확인 및 수정이 필요함.
+    [(view_column_name [COMMENT 'column_comment_string'], ...)]
     [INHERIT <resolution>, ...]
     [AS <select_statement>]
     [WITH CHECK OPTION] 
@@ -55,8 +55,9 @@ Use **CREATE VIEW** statement to create a view. Regarding writing view name, see
 ::
 
     ERROR: Check option exception on view b_view.
-     
-     
+
+The below updates the old view's definition, In addition, this adds a view's comment.
+
 .. code-block:: sql
 
     --creating view which name is as same as existing view name
@@ -74,6 +75,12 @@ Use **CREATE VIEW** statement to create a view. Regarding writing view name, see
                 3  '333-3333'
                 2  '222-2222'
                 1  '111-1111'
+
+The below adds a comment to a view's columns.
+
+.. code-block:: sql
+
+    CREATE OR REPLACE VIEW b_view(a COMMENT 'column id', b COMMENT 'column phone') AS SELECT * FROM a_tbl ORDER BY id DESC;
 
 Condition for Creating Updatable VIEW
 -------------------------------------

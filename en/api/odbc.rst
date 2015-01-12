@@ -2,7 +2,7 @@
 ODBC Driver
 ***********
 
-CUBRID ODBC driver supports ODBC version 3.52. It also ODBC core and some parts of Level 1 and Level 2 API. Because CUBRID ODBC driver has been developed based on the ODBC Spec 3.x, backward compatibility is not completely ensured for programs written based on the ODBC Spec 2.x. Only 32-bit CUBRID is supported so you must install 32-bit CUBRID even on the 64-bit Windows environment. To verify the 32-bit CUBRID ODBC driver on the 64-bit Windows environment, execute **C:\\Windows\\SysWOW64\\odbcad32.exe**.
+CUBRID ODBC driver supports ODBC version 3.52. It also ODBC core and some parts of Level 1 and Level 2 API. Because CUBRID ODBC driver has been developed based on the ODBC Spec 3.x, backward compatibility is not completely ensured for programs written based on the ODBC Spec 2.x.
 
 CUBRID ODBC driver is written based on CCI API, but it's not affected by :ref:`CCI_DEFAULT_AUTOCOMMIT <cci_default_autocommit>` exceptionally.
 
@@ -52,18 +52,24 @@ The following table shows the data type mapping relationship between CUBRID and 
 | SET, MULTISET, SEQUENCE | SQL_VARCHAR(MAX_STRING_LENGTH) |
 +-------------------------+--------------------------------+
 
-Configuring and Environment ODBC and ASP
-========================================
+Configuring and Environment ODBC
+================================
 
 **Requirements**
 
-*   CUBRID 2008 R3.1 (8.3.1) or later (32-bit version)
+*   CUBRID 2008 R4.4 (8.4.4) or later (32-bit or 64-bit)
 
 **Configuring CUBRID ODBC Driver**
 
 CUBRID ODBC driver is automatically installed upon CUBRID installation. You can check whether it is properly installed in the [Control Panel] > [Administrative Tools] > [Data Source (ODBC)] > [Drivers] tab.
 
 .. image:: /images/image77.png
+
+**Choosing 32-bit ODBC driver on 64-bit Windows**
+
+To run 32-bit application, 32-bit ODBC driver is required. If you have to choose 32-bit ODBC driver on 64-bit Windows, run C:\WINDOWS\SysWOW64\odbcad32.exe .
+
+Microsoft Windows 64-bit platform support the environment to run 32-bit application on 64-bit environment, which is called WOW64 (Windows-32-on-Windows-64). This environment maintains its own copy of the registry that is only for 32-bit applications.
 
 **Configuring DNS**
 
@@ -108,31 +114,33 @@ Configuring Connection String
 
 When you are programming CUBRID ODBC, write the connection strings as follows:
 
-+--------------+----------------+-----------------------------------------------------------+
-| Category     | Example        | Description                                               |
-+==============+================+===========================================================+
-| Driver       | CUBRID Driver  | Driver name                                               |
-+--------------+----------------+-----------------------------------------------------------+
-| UID          | PUBLIC         | User ID                                                   |
-+--------------+----------------+-----------------------------------------------------------+
-| PWD          | xxx            | Password                                                  |
-+--------------+----------------+-----------------------------------------------------------+
-| FETCH_SIZE   | 100            | Fetch size                                                |
-+--------------+----------------+-----------------------------------------------------------+
-| PORT         | 33000          | The broker port number                                    |
-+--------------+----------------+-----------------------------------------------------------+
-| SERVER       | 127.0.0.1      | The IP address or the host name of a CUBRID broker server |
-+--------------+----------------+-----------------------------------------------------------+
-| DB_NAME      | demodb         | Database name                                             |
-+--------------+----------------+-----------------------------------------------------------+
-| DESCRIPTION  | cubrid_test    | Description                                               |
-+--------------+----------------+-----------------------------------------------------------+
-| CHARSET      | utf-8          | Character set                                             |
-+--------------+----------------+-----------------------------------------------------------+
++--------------+-----------------------+-----------------------------------------------------------+
+| Category     | Example               | Description                                               |
++==============+=======================+===========================================================+
+| Driver       | CUBRID Driver Unicode | Driver name                                               |
++--------------+-----------------------+-----------------------------------------------------------+
+| UID          | PUBLIC                | User ID                                                   |
++--------------+-----------------------+-----------------------------------------------------------+
+| PWD          | xxx                   | Password                                                  |
++--------------+-----------------------+-----------------------------------------------------------+
+| FETCH_SIZE   | 100                   | Fetch size                                                |
++--------------+-----------------------+-----------------------------------------------------------+
+| PORT         | 33000                 | The broker port number                                    |
++--------------+-----------------------+-----------------------------------------------------------+
+| SERVER       | 127.0.0.1             | The IP address or the host name of a CUBRID broker server |
++--------------+-----------------------+-----------------------------------------------------------+
+| DB_NAME      | demodb                | Database name                                             |
++--------------+-----------------------+-----------------------------------------------------------+
+| DESCRIPTION  | cubrid_test           | Description                                               |
++--------------+-----------------------+-----------------------------------------------------------+
+| CHARSET      | utf-8                 | Character set                                             |
++--------------+-----------------------+-----------------------------------------------------------+
 
 The following shows the result of using connection strings above. ::
 
-    "DRIVER=CUBRID Driver;UID=PUBLIC;PWD=xxx;FETCH_SIZE=100;PORT=33000;SERVER=127.0.0.1;DB_NAME=demodb;DESCRIPTION=cubrid_test;CHARSET=utf-8"
+    "DRIVER={CUBRID Driver Unicode};UID=PUBLIC;PWD=xxx;FETCH_SIZE=100;PORT=33000;SERVER=127.0.0.1;DB_NAME=demodb;DESCRIPTION=cubrid_test;CHARSET=utf-8"
+
+If you use UTF-8 unicode, install a driver for unicode and input the driver name in the connection string as "Driver={CUBRID Driver Unicode}". Unicode is only supported in 9.3.0.0002 or higher version of CUBRID ODBC driver.
 
 .. note::
 

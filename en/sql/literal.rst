@@ -27,6 +27,8 @@ There are two ways of writing a number; how to write an exact value and how to w
     
         +10.2345, -1.2345E-15
 
+.. _date-time-literal:
+
 Date/Time
 =========
 
@@ -60,6 +62,39 @@ However, the writing order of a string which indicates date or time.
     
         timestamp'1974-12-31 12:13:25 AM', timestamp'12/31/1974 12:13:25 AM'
         
+*   The literal of date/time with timezone type has the same format as the above, and add an offset or a region name which indicates a timezone information. 
+
+    *   Add datetimetz, datetimeltz, timetz, timeltz, timestamptz or timestampltz literal at the front of a string to represent each type's value.
+
+        ::
+        
+            datetimetz'10/15/1986 5:45:15.135 am +02:30:20';
+            datetimetz'10/15/1986 5:45:15.135 am +02:30';
+            datetimetz'10/15/1986 5:45:15.135 am +02';
+            datetimeltz'10/15/1986 5:45:15.135 am Europe/Bucharest'
+            timestampltz'10/15/1986 5:45:15 am Europe/Bucharest'
+            timestamptz'10/15/1986 5:45:15 am Europe/Bucharest'
+ 
+    *   The literal at the front of a string can be replaced with "<date/time type> WITH TIMEZONE" or <date/time type> WITH LOCAL TIME ZONE.
+
+        ::
+            DATETIME WITH TIMEZONE = datetimetz
+            DATETIME WITH LOCAL TIMEZONE = datetimeltz
+            TIME WITH TIMEZONE = timetz
+            TIME WITH LOCAL TIMEZONE = timeltz
+            TIMESTAMP WITH TIMEZONE = timestamptz
+            TIMESTAMP WITH LOCAL TIMEZONE = timestampltz
+    
+        ::
+        
+            DATETIME WITH TIME ZONE'10/15/1986 5:45:15.135 am +02';
+            DATETIME WITH LOCAL TIME ZONE'10/15/1986 5:45:15.135 am +02';
+
+    .. note::
+    
+        *   <date/time type> WITH LOCAL TIME ZONE: internally stores UTC time; it is converted as a local (current session) timezone when it is output.
+        *   <date/time type> WITH TIME ZONE: internally stores UTC time and timezone information (decided by a user or a session timezone) when this value is created.
+
 Bit String
 ==========
 

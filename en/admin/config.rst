@@ -45,7 +45,7 @@ The following parameter syntax rules are applied when configuring parameters in 
 Using SQL Statements
 ^^^^^^^^^^^^^^^^^^^^
 
-You can configure a parameter value by using SQL statements in the CSQL Interpreter or CUBRID Manager's Query Editor. Note that you cannot change every parameter. For updatable parameters, see :ref:`cubrid-conf-default-parameters`. ::
+You can configure a parameter value by using SQL statements in the CSQL Interpreter or CUBRID Manager's Query Editor. Note that you cannot change every parameter. For updatable parameters, see :ref:`cubrid-conf`. ::
 
     SET SYSTEM PARAMETERS 'parameter_name=value [{; name=value}...]'
 
@@ -60,7 +60,7 @@ The following example shows how to retrieve the result of an index scan in OID o
 Using Session Commands of the CSQL Interpreter
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-You can configure system parameter values by using session commands (;SET) in the CSQL Interpreter. Note that you cannot change every parameter. For updatable parameters, see :ref:`cubrid-conf-default-parameters`.
+You can configure system parameter values by using session commands (;SET) in the CSQL Interpreter. Note that you cannot change every parameter. For updatable parameters, see :ref:`cubrid-conf`.
 
 The following example shows how to configure the block_ddl_statement parameter to 1 so that execution of DDL statements is not allowed. ::
 
@@ -68,7 +68,7 @@ The following example shows how to configure the block_ddl_statement parameter t
     === Set Param Input ===
     block_ddl_statement=1
 
-.. _cubrid-conf-default-parameters:
+.. _cubrid-conf:
 
 cubrid.conf Configuration File and Default Parameters
 -----------------------------------------------------
@@ -246,6 +246,12 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               | unicode_output_normalization        | client parameter        | O       | bool     | no                             | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | update_use_attribute_references     | client parameter        | O       | bool     | no                             | available             |
++-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+| :ref:`timezone-parameters`    | server_timezone                     | server parameter        |         | string   | OS timezone                    | available             |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | timezone                            | client/server parameter | O       | string   | the value of server_timezone   | available             |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | tz_leap_second_support              | server parameter        |         | bool     | no                             | available             |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 | :ref:`plan-cache-parameters`  | max_plan_cache_entries              | client/server parameter |         | int      | 1,000                          |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -656,7 +662,7 @@ The following are parameters related to processing error messages recorded by CU
 
 **call_stack_dump_activation_list**
 
-    **call_stack_dump_activation_list** is a parameter to configure a certain error number for which a call stack is to be dumped as an exception even when you configure that a call stack will not be dumped for any errors. Therefore, the **call_stack_dump_activation_list** parameter is effective only when **call_stack_dump_on_error=no**.
+    **call_stack_dump_activation_list** is a parameter to configure a certain error number for which a call stack is to be dumped to a server error log (located in $CUBRID/log/server directory) as an exception even when you configure that a call stack will not be dumped for any errors. Therefore, the **call_stack_dump_activation_list** parameter is effective only when **call_stack_dump_on_error=no**.
     
     If this value is not configured, the default value is "DEFAULT" keyword. This keyword includes below errors. "DEFAULT" keyword can be used together with other error numbers.
 
@@ -1522,10 +1528,44 @@ The following are parameters related to SQL statements and data types supported 
       
         SELECT * FROM tbl; 
           
-    :: 
+    ::
       
         1, NULL
-        
+
+
+.. _timezone-parameters:
+
+Timezone Parameter
+------------------
+
+The following are the parameters related to timezone. The type and the value range for each parameter are as follows:
+
++-------------------------------+--------+-------------------+----------+----------+
+| Parameter Name                | Type   | Default           | Min      | Max      |
++===============================+========+===================+==========+==========+
+| server_timezone               | string | OS timezone       |          |          |
++-------------------------------+--------+-------------------+----------+----------+
+| timezone                      | string | server_timezone   |          |          |
++-------------------------------+--------+-------------------+----------+----------+
+| tz_leap_second_support        | bool   | no                |          |          |
++-------------------------------+--------+-------------------+----------+----------+
+
+*   **timezone**
+
+    Specifies a timezone for a session. The default is a value of **server_timezone**. This value can be specified by a timezone offset (e.g. +01:00, +02) or a timezone region name (e.g. Asia/Seoul). This value can be changed during operating database.
+
+*   **server_timezone**
+
+    Specifies a timezone for a servcer. The default is a OS timezone. To apply the changed value, database should be restarted.
+    
+*   **tz_leap_second_support**
+
+    Specifies to support a leap second or not as yes or no. The default is **no**. 
+    
+    A leap second is a one-second adjustment that is occasionally applied to Coordinated Universal Time (UTC) in order to keep its time of day close to the mean solar time.
+    
+    To apply the changed value, database should be restarted.
+
 .. _plan-cache-parameters:
 
 Query Plan Cache-Related Parameters

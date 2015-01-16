@@ -1,4 +1,4 @@
-은******
+******
 리터럴
 ******
 
@@ -27,6 +27,7 @@ CUBRID에서 리터럴(literal) 값을 작성하는 방법을 기술한다.
     
         +10.2345, -1.2345E-15
 
+.. _date-time-literal:
 
 날짜/시간
 =========
@@ -61,6 +62,39 @@ CUBRID에서 리터럴(literal) 값을 작성하는 방법을 기술한다.
     
         timestamp'1974-12-31 12:13:25 AM', timestamp'12/31/1974 12:13:25 AM'
         
+*   타임존을 포함하는 날짜/시간 타입의 리터럴은 위에서 설명한 것과 동일한 형식을 가지며, 뒤에 타임존 정보를 나타내는 오프셋 또는 지역 이름을 추가한다. 
+
+    *   문자열 앞에 datetimetz, datetimeltz, timetz, timeltz, timestamptz, timestampltz 리터럴을 추가하여 각 타입에 해당하는 값을 표기한다.
+
+        ::
+        
+            datetimetz'10/15/1986 5:45:15.135 am +02:30:20';
+            datetimetz'10/15/1986 5:45:15.135 am +02:30';
+            datetimetz'10/15/1986 5:45:15.135 am +02';
+            datetimeltz'10/15/1986 5:45:15.135 am Europe/Bucharest'
+            timestampltz'10/15/1986 5:45:15 am Europe/Bucharest'
+            timestamptz'10/15/1986 5:45:15 am Europe/Bucharest'
+ 
+    *   문자열 앞에 오는 리터럴은 <날짜/시간 타입> WITH TIMEZONE 또는 <날짜/시간 타입> WITH LOCAL TIME ZONE으로 대체할 수 있다.
+
+        ::
+            DATETIME WITH TIMEZONE = datetimetz
+            DATETIME WITH LOCAL TIMEZONE = datetimeltz
+            TIME WITH TIMEZONE = timetz
+            TIME WITH LOCAL TIMEZONE = timeltz
+            TIMESTAMP WITH TIMEZONE = timestamptz
+            TIMESTAMP WITH LOCAL TIMEZONE = timestampltz
+    
+        ::
+        
+            DATETIME WITH TIME ZONE'10/15/1986 5:45:15.135 am +02';
+            DATETIME WITH LOCAL TIME ZONE'10/15/1986 5:45:15.135 am +02';
+
+    .. note::
+    
+        *   <date/time type> WITH LOCAL TIME ZONE: 내부적으로 UTC 시간을 저장하며, 출력 시 로컬(현재의 세션) 타임존으로 변환된다.
+        *   <date/time type> WITH TIME ZONE: 내부적으로 UTC 시간과 생성 시 타임존 정보(사용자가 명시하거나 세션 타임존에 의해 결정됨)를 저장한다.
+
 비트열
 ======
 

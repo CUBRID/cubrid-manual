@@ -165,6 +165,28 @@ DATABASE, SCHEMA
     ============================================
       'demodb'              'demodb'
 
+DBTIMEZONE
+==========
+      
+.. function:: DBTIMEZONE()
+
+    Prints out a timezone of database server (offset or region name) as a string. (e.g. '-05:00', or 'Europe/Vienna').
+
+.. code-block:: sql
+
+    SELECT DBTIMEZONE();
+
+::
+    
+      dbtimezone
+    ======================
+      'Asia/Seoul'
+
+.. seealso:: 
+
+    :func:`SESSIONTIMEZONE`, :func:`FROM_TZ`, :func:`NEW_TIME`, :func:`TZ_OFFSET`
+
+
 DEFAULT
 =======
 
@@ -547,6 +569,27 @@ ROW_COUNT
        row_count()
     ===============
                   4
+
+SESSIONTIMEZONE
+===============
+
+.. function:: SESSIONTIMEZONE()
+
+    Prints out a timezone of session (offset or region name) as a string. (e.g. '-05:00', or 'Europe/Vienna').
+
+.. code-block:: sql
+
+    SELECT SESSIONTIMEZONE();
+
+::
+
+      sessiontimezone
+    ======================
+      'Asia/Seoul'
+
+.. seealso:: 
+
+    :func:`DBTIMEZONE`, :func:`FROM_TZ`, :func:`NEW_TIME`, :func:`TZ_OFFSET`
 
 USER, SYSTEM_USER
 =================

@@ -258,6 +258,8 @@ DOUBLE, DOUBLE PRECISION
 *   **DATE**, **DATETIME**, **TIMESTAMP** 타입을 반환하는 함수들은 날짜와 시간 값이 모두 0인 값을 반환할 수 있지만 JAVA 응용 프로그램에서는 이러한 값을 Date 객체에 저장할 수 없다. 따라서 연결 URL 문자열의 zeroDateTimeBehavior 속성(Property) 설정에 따라서 예외로 처리하거나 **NULL**\ 을 반환하거나 또는 최소값을 반환한다(이에 관한 자세한 내용은 :ref:`jdbc-connection-conf` 참고).
 *   시스템 파라미터 **intl_date_lang**\ 을 설정하면 :func:`TO_DATE`, :func:`TO_TIIME`, :func:`TO_DATETIME`, :func:`TO_TIMESTAMP`, :func:`DATE_FORMAT`, :func:`TIME_FORMAT`, :func:`TO_CHAR`, :func:`STR_TO_DATE` 함수의 입력 문자열 형식이 해당 로캘의 날짜 형식을 따른다. 자세한 내용은 :ref:`stmt-type-parameters`\ 과 각 함수의 설명을 참고한다.
 
+.. note:: 날짜/시간 타입 및 타임존이 있는 날짜/시간 타입의 리터럴에 대해서는 :ref:`date-time-literal`\을 참고한다.
+
 DATE
 ----
 
@@ -642,6 +644,8 @@ DATETIME
           09:10:35 AM 04/20/2011
 
 .. CUBRIDSUS-14182
+    
+    현재 timeltz가 offset을 허용하려면 timezone 파라미터 값 역시 오프셋으로 설정되어야 함. 버그로 수정 예정(?): 수정 여부에 따라 아래 설명을 바꿀 것.
 
 .. _timezone-type:
 
@@ -650,12 +654,40 @@ DATETIME
 
 타임존이 있는 날짜/시간 데이터 타입은 타임존을 명시하여 입력하거나 출력할 수 있는 날짜/시간 타입이다. 타임존을 설정하는 방법은 지역 이름을 명시하는 방법과 시간의 오프셋을 명시하는 방법이 있다.
 
-기존의 날짜/시간 타입 이름 뒤에 LTZ 또는 TZ가 붙어 있는 경우 타임존 정보를 포함하게 되는데, LTZ는 로컬 타임존을 의미하며, TZ는 타임존을 의미한다.
+.. note:: **시간 타입의 타임존을 명시할 때 제약 사항**
 
-*   LTZ 타입은 타임존 정보를 저장하지 않으며, 입/출력 시 로컬 타임존의 영항을 받는다. 기존의 타임존 없는 날짜/시간 타입과 절대값은 동일하다고 볼 수 있다.
+    TIMETZ, TIMELTZ의 경우 지역 이름을 사용하는 타임존을 허용하지 않는다.
 
-*   TZ 타임은 타임존 정보를 날짜/시간 데이터와 함께 저장하므로, 출력 시에도 입력한 타임존 정보를 그대로 출력할 수 있다. TZ 타입은 타임존을 저장하기 위해 4바이트가 추가로 필요하다.
+    .. code-block:: sql
+    
+        SELECT TIME_TO_SEC(timetz'8:19:34 AM America/Lima PET');
 
+    ::
+
+        Invalid time: '8:19:34 AM America/Lima PET'.
+
+    .. code-block:: sql
+
+        SELECT TIME_TO_SEC(timeltz'8:19:34 AM America/Lima PET');
+
+    ::
+
+        Invalid time: '8:19:34 AM America/Lima PET'.
+
+    오프셋 방식의 타임존은 TIMETZ에 한해서 허용한다.
+
+    ::
+
+        SELECT TIME_TO_SEC(timetz'8:19:34 +5:00');
+
+    ::
+
+        29974
+
+기존의 날짜/시간 타입 이름 뒤에 LTZ 또는 TZ가 붙어 있는 경우 타임존 정보를 고려하게 되는데, LTZ는 로컬 타임존을 의미하며, TZ는 타임존을 의미한다.
+
+*   LTZ 타입은 <date/time type> WITH LOCAL TIME ZONE으로도 표현이 가능하다. 내부적으로 UTC 시간을 저장하며, 출력 시 로컬(현재의 세션) 타임존으로 변환된다.
+*   TZ 타입은 <date/time type> WITH TIME ZONE으로도 표현이 가능하다. 내부적으로 UTC 시간과 생성 시 타임존 정보(사용자가 명시하거나 세션 타임존에 의해 결정됨)를 저장한다. TZ 타입은 타임존을 저장하기 위해 4바이트가 추가로 필요하다.
 
 타임존이 없는 타입과 비교하기 위해, 다음 표에는 타임존이 없는 타입과 타임존이 있는 타입을 함께 설명하였다.
 
@@ -681,27 +713,28 @@ DATETIME
 | TIMESTAMP     |  4        | 입력 값을 세션 타임존으로 해석하고 UTC로 저장함.                     |
 +---------------+-----------+----------------------------------------------------------------------+
 | TIMESTAMPLTZ  |  4        | 로컬 세션 타임존. UTC로 저장함. TIMESTAMP와 동일하나, 출력할         |
-|               |           | 때 기본적으로 타임존 지정자를 포함한다.                              |
+|               |           | 때 타임존 지정자를 포함한다.                                         |
 +---------------+-----------+----------------------------------------------------------------------+
 | TIMESTAMPTZ   |  8        | UTC와 타임존이 있는 타임스탬프. UTC로 저장함.                        |
 +---------------+-----------+----------------------------------------------------------------------+
 
-타임존이 있는 날짜/시간 데이터 타입의 최대값, 최소값, 범위와 해상도 등 나머지 특징들은 일반적인 날짜/시간 데이터 타입과 동일하다.
+타임존이 있는 날짜/시간 타입의 최대값, 최소값, 범위와 해상도 등 나머지 특징들은 일반적인 날짜/시간 타입의 특징과 동일하다.
 
 .. note::
 
-    *   CUBRID에서 TIMESTAMP는 1970년 1월 1일 UTC(UNIX epoch) 이후로 초 단위로 저장된다. 따라서 CUBRID TIMESTAMP는 항상 UTC에 상대적이다.
-        
-    *   어떤 DBMS의 TIMESTAMP는 오히려 CUBRID의 DATETIME과 비슷하다.
+    *   CUBRID에서 TIMESTAMP는 1970년 1월 1일 UTC(UNIX epoch) 이후로 초 단위로 저장된다.        
+    *   어떤 DBMS의 TIMESTAMP는 밀리초를 저장한다는 측면에서 CUBRID의 DATETIME과 비슷하다.
 
-타임존 관련 설정
-----------------
+타임존 타입을 사용하는 함수들의 예는 :doc:`function/datetime_fn`\의 예를 참고한다.
+
+타임존 설정
+-----------
 
 다음은 cubrid.conf 파일에서 설정하는 타임존 관련 파라미터들이다. 파라미터의 설정과 관련해서는 :ref:`cubrid-conf`\를 참고한다.
 
 *   **timezone**
 
-    세션에 대한 타임존을 설정하며, 기본값은 server_timezone의 값이다. 
+    세션에 대한 타임존을 설정하며, 기본값은 **server_timezone**\의 값이다. 
     
 *   **server_timezone**
 
@@ -711,41 +744,29 @@ DATETIME
 
     윤초(leap second)에 대한 지원 여부를 yes 또는 no로 설정하며, 기본값은 no이다.
 
-타임존 관련 함수
-----------------
+타임존 함수
+-----------
 
-*   **DBTIMEZONE**
+다음은 타임존과 관련된 함수들이다. 설명을 보려면 각 함수의 이름을 클릭한다.
 
-    데이터베이스 서버의 타임존(오프셋 또는 지리적 명칭)을 문자열로 출력한다(예: '-05:00', 또는 'Europe/Vienna').
-    
-*   **SESSIONTIMEZONE**
+*   :func:`DBTIMEZONE`
+*   :func:`SESSIONTIMEZONE`
+*   :func:`FROM_TZ`
+*   :func:`NEW_TIME`
+*   :func:`TZ_OFFSET`
 
-    세션의 타임존(오프셋 또는 지리적 명칭)을 문자열로 출력한다(예: '-05:00', 또는 'Europe/Vienna').
+타임존 타입들에 대한 변환 함수
+------------------------------
 
-*   **FROM_TZ**
+다음은 문자열에서 날짜/시간 타입 값으로 변환하거나 반대로 날짜/시간 타입 값에서 문자열로 변환하는 함수들이다. 
 
-    DATETIME 또는 TIME 값에 타임존 정보를 추가하여 타임존이 있는 타입으로 변환한다.
-    입력값의 타입은 DATETIME 또는 TIME 타입이며, 반환값의 타입은 DATETIMETZ 또는 TIMETZ 타입이다.
-    
-*   **NEW_TIME**
+*   :func:`DATE_FORMAT`
+*   :func:`STR_TO_DATE`
+*   :func:`TO_TIMESTAMP_TZ`
+*   :func:`TO_DATETIME_TZ`
+*   :func:`TO_TIME_TZ`
 
-    어떤 타임존에서 다른 타임존으로 날짜 값을 이동한다. 원본 및 대상의 입력 값은 DATETIME, TIME 타입의 값이며, 입력값과 동일한 타입의 값을 반환한다.
-
-*   **TZ_OFFSET**
-
-    주어진 타임존 오프셋 또는 타임존 이름(예: '-05:00' 또는 'Europe/Vienna')에 대한 UTC로부터 타임존 오프셋을 반환한다.
-
-타임존이 있는 데이터 타입들에 대한 변환 함수
---------------------------------------------
-
-다음은 문자열에서 날짜 타입으로 변환하거나 반대로 날짜 타입에서 문자열로 변환하는 함수들이다. 
-
-*   **DATE_FORMAT**
-*   **TO_CHAR**
-*   **STR_TO_DATE**
-*   **TO_TIMESTAMP_TZ**
-*   **TO_DATETIME_TZ**
-*   **TO_TIME_TZ**
+각 함수들의 사용 방법은 위 함수 이름을 클릭하여 각 함수의 설명을 참고한다.
 
 위의 함수들은 오프셋, 존, 일광 절약과 같은 타임존 부분이 요구된다.
 
@@ -754,24 +775,22 @@ DATETIME
 *   TZH: 타임존의 시간 오프셋
 *   TZM: 타임존의 분 오프셋
 
-다음 함수들은 위의 TZR, TZD, TZH, TZM과 같은 특정 문자열 토큰을 추가로 지원한다는 점을 제외하고는 기존의 TO_TIMESTAMP, TO_DATETIME, 그리고 TO_TIME 함수와 동일하다.
+위의 함수들 중 함수들은 위의 TZR, TZD, TZH, TZM과 같은 특정 문자열 토큰을 추가로 지원한다는 점을 제외하고는 기존의 TO_TIMESTAMP, TO_DATETIME, 그리고 TO_TIME 함수와 동일하다.
 
-*   **TO_TIMESTAMP_TZ**
-*   **TO_DATETIME_TZ**
-*   **TO_TIME_TZ**
+*   :func:`TO_TIMESTAMP_TZ`
+*   :func:`TO_DATETIME_TZ`
+*   :func:`TO_TIME_TZ`
 
-각 함수들의 사용법은 해당 함수의 설명을 참고한다.
-
-지역 이름은 IANA(Internet Assigned Numbers Authority) 타임존 데이터베이스에 있는 지역을 사용하는데, IANA 타임존에 대해서는 http://www.iana.org/time-zones\을 참고한다.
-
-시간의 오프셋을 이용한 타임존은 IANA 타임존 라이브러리 없이도 사용이 가능하지만, 지역을 명시하는 방법으로 타임존을 사용하려면 IANA 타임존 라이브러리가 반드시 필요하다.
+타임존의 지역 이름은 IANA(Internet Assigned Numbers Authority) 타임존 데이터베이스에 있는 지역을 사용하는데, IANA 타임존에 대해서는 http://www.iana.org/time-zones\을 참고한다.
 
 IANA 타임존
 -----------
 
 IANA(Internet Assigned Numbers Authority) 타임존 데이터베이스에는 수많은 세계 주변의 대표 장소에 대한 지역 시간의 역사를 표현하는 코드와 데이터가 들어 있다. 이 데이터베이스는 타임 존 경계, UTC 오프셋, 그리고 일광 절약 규칙에 대해  정치체에 의해 변경된 사항을 반영하기 위해 정기적으로 업데이트되고 있으며, 관리 절차는 `BCP 175: Procedures for Maintaining the Time Zone Database. <http://tools.ietf.org/html/rfc6557>`\에 설명되어 있다. 자세한 사항은 http://www.iana.org/time-zones\ 를 참고한다.
 
-CUBRID는 IANA 타임존을 지원하며, CUBRID 설치 패키지에 포함되어 있는 IANA 타임존 라이브러리를 그대로 사용할 수 있다. 최신 타임존으로 업데이트하고 싶은 경우 타임존 데이터를 업데이트하고, 타임존 라이브러리를 별도로 컴파일한 후 데이터베이스를 재구동해야 한다. 타임존 라이브러리의 컴파일을 참고한다.
+CUBRID는 IANA 타임존을 지원하며, CUBRID 설치 패키지에 포함되어 있는 IANA 타임존 라이브러리를 그대로 사용할 수 있다. 최신 타임존으로 업데이트하고 싶은 경우 타임존 데이터를 업데이트하고, 타임존 라이브러리를 컴파일한 후 데이터베이스를 재구동해야 한다. 
+
+타임존 라이브러리의 컴파일을 참고한다.
 
 비트열 데이터 타입
 ==================

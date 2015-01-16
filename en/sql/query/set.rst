@@ -2,7 +2,19 @@
 SET
 ***
 
-The **SET** statement is the syntax that specifies user-defined variables and the method that you can use to store values.
+The **SET** statement is the syntax that specifies a system parameter's value or user-defined variables.
+
+System Parameter
+================
+
+You can define a value of a system parameter with SQL syntax by CSQL interpreter or a query editor of CUBRID Manager. However, be cautious that updatable parameters are limited. For the information of updatable parameters, see :ref:`cubrid-conf`.
+
+::
+
+    SET SYSTEM PARAMETERS 'parameter_name=value [{; name=value}...]'
+
+User Variables
+==============
 
 You can create user-defined variables in two ways. One is to use the **SET** statement and the other is to use the assignment statement of user-defined variables within SQL statements. You can delete the user-defined variables that you defined with the **DEALLOCATE** or the **DROP** statements.
 
@@ -127,4 +139,3 @@ The following example shows how to delete the user-defined variable *a* and *use
     The user-defined variables that are defined by the **SET** statement start by connecting an application to a server and will be maintained until the application terminates the connection. The connection maintained during this period is called a session. When an application terminates the connection or when there are no requests for a certain period of time, the session will expire, and the user-defined variables will be deleted as a result. You can set the session time with the **session_state_timeout** parameter of **cubrid.conf**; the default value is **21600** seconds (=6 hours).
 
     The data managed by the session includes **PREPARE** statements, the user-defined variables, the last ID inserted (**LAST_INSERT_ID**) and the number of rows affected by the statement that you execute at the end (**ROW_COUNT**).
-

@@ -258,6 +258,8 @@ In general, zero is not allowed in **DATE**, **DATETIME**, and **TIMESTAMP** typ
 *   The functions that return **DATE**, **DATETIME**, and **TIMESTAMP** types can return a value of 0 for date and time. However, these values cannot be stored in Date objects in Java applications. Therefore, it will be processed with one of the following based on the configuration of zeroDateTimeBehavior, the connection URL property: being handled as an exception, returning **NULL**, or returning a minimum value (see :ref:`jdbc-connection-conf`).
 *   If the **intl_date_lang** system is configured, input string of :func:`TO_DATE`, :func:`TO_TIME`, :func:`TO_DATETIME`, :func:`TO_TIMESTAMP`, :func:`DATE_FORMAT`, :func:`TIME_FORMAT`, :func:`TO_CHAR` and :func:`STR_TO_DATE` functions follows the corresponding locale date format. For details, see :ref:`stmt-type-parameters` and the description of each function.
 
+.. note:: For literals of date/time types and date/time types with timezone, see :ref:`date-time-literal`.
+
 DATE
 ----
 
@@ -640,6 +642,158 @@ Available Format for Strings in Date/Time Type
            cast('110420091035.359' as timestamp)
         ========================================
           09:10:35 AM 04/20/2011
+
+.. CUBRIDSUS-14182
+
+.. _timezone-type:
+
+Date/Time Types with Timezone
+=============================
+
+Date/Time types with timezone are date/tiime types which can be input or output by specifying timezone. There are two ways of specifying timezone; specifying the name of local zone and specifying the offset of time.
+
+.. note:: **Limitations when you specify a timezone of date/time type**
+
+    TIMETZ and TIMELTZ do not allow a region name timezone.
+
+    .. code-block:: sql
+    
+        SELECT TIME_TO_SEC(timetz'8:19:34 AM America/Lima PET');
+
+    ::
+
+        Invalid time: '8:19:34 AM America/Lima PET'.
+
+    .. code-block:: sql
+
+        SELECT TIME_TO_SEC(timeltz'8:19:34 AM America/Lima PET');
+
+    ::
+
+        Invalid time: '8:19:34 AM America/Lima PET'.
+
+    Instead, an offset timezone is allowed to TIMETZ and TIMELTZ.
+
+    ::
+
+        SELECT TIME_TO_SEC(timetz'8:19:34 +5:00');
+
+    ::
+
+        29974
+
+Timezone information are considered in the Date/Time types if LTZ or TZ are followed after the existing Date/Time types; LTZ means local timezone, and TZ means timezone.
+
+*   LTZ type can be represented as <date/time type> WITH LOCAL TIME ZONE. This stores UTC time internally; when this value is output, this is  converted as a value of a local (current session) time zone.
+
+*   TZ type can be represented as <date/time type> WITH TIME ZONE. This stores UTC time and timezone information (decided by a user or session timezone) when this is created. TZ type requires 4 bytes more to store timezone information.
+
+This table describes date/time types to compare date/time types with timezone together.
+
+UTC in the table means Cordiated Universal Time.
+
++---------------+-----------+---------------------------------------------------------------------------+
+| Type          | Bytes     | Description                                                               |
++===============+===========+===========================================================================+
+| DATETIME      |  8        | Date + time including milliseconds. No timezone information.              |
++---------------+-----------+---------------------------------------------------------------------------+
+| DATETIMELTZ   |  8        | Date/time in the local session timezone. Store date/time as UTC.          |
++---------------+-----------+---------------------------------------------------------------------------+
+| DATETIMETZ    | 12        | Date/time + timezone information. Store date/time as UTC.                 |
++---------------+-----------+---------------------------------------------------------------------------+    
+| TIME          |  4        | Time. No timezone information.                                            |
++---------------+-----------+---------------------------------------------------------------------------+
+| TIMELTZ       |  4        | Time in the local timezone. Store time as UTC. If timezone region is      |
+|               |           | written as a place name, date is assumed as the same with CURRENT_DATE(). |
++---------------+-----------+---------------------------------------------------------------------------+
+| TIMETZ        |  8        | Time + timezone information. Store time as UTC. If timezone region is     | 
+|               |           | written as a place name, date is assumed as the same with CURRENT_DATE(). |
++---------------+-----------+---------------------------------------------------------------------------+
+| TIMESTAMP     |  4        | An input value is interpreted as session timezone, and stored as UTC.     |
++---------------+-----------+---------------------------------------------------------------------------+
+| TIMESTAMPLTZ  |  4        | Local session timezone. Stored as UTC. The same with TIMESTAMP, but this  |
+|               |           | includes timezone specifier when this value is printed out.               |
++---------------+-----------+---------------------------------------------------------------------------+
+| TIMESTAMPTZ   |  8        | Timestamp with UTC and timezone. Stored as UTC.                           |
++---------------+-----------+---------------------------------------------------------------------------+
+
+The other features of date/time types with timezone (e.g. maximum/minimum value, range, resolution) are the same with the features of general date/time types.
+
+.. note::
+
+    *   On CUBRID, TIMESTAMP is stored as second unit, after Jan. 1, 1970 UTC (UNIX epoch).
+    
+    *   Some DBMS's TIMESTAMP is similar to CUBRID's DATETIME as the respect of saving milliseconds.
+
+To see examples of functions using timezone types, see :doc:`function/datetime_fn`.
+
+Timezone Configuration
+----------------------
+
+The below shows the timezone related parameters configured in cubrid.conf. For parameter's configuration, see :ref:`cubrid-conf`.
+
+*   **timezone**
+
+    Specifies a timezone for a session. The default is a value of **server_timezone**. 
+    
+*   **server_timezone**
+
+    Specifies a timezone for a server. The default is a timezone of OS.
+    
+*   **tz_leap_second_support**
+
+    Sets for support for leap second as yes or no. The default is no.
+
+Timezone Function
+-----------------
+
+The following are timezone related functions. For each function's detail usage, click each function's name.
+
+*   :func:`DBTIMEZONE`
+*   :func:`SESSIONTIMEZONE`
+*   :func:`FROM_TZ`
+*   :func:`NEW_TIME`
+*   :func:`TZ_OFFSET`
+
+Conversion functions about types with timezone
+----------------------------------------------
+
+The following are functions converting a string to date/time typed value, or date/time typed value to a string
+
+*   :func:`DATE_FORMAT`
+*   :func:`TO_CHAR`
+*   :func:`STR_TO_DATE`
+*   :func:`TO_TIMESTAMP_TZ`
+*   :func:`TO_DATETIME_TZ`
+*   :func:`TO_TIME_TZ`
+
+For each function's usage, see the each function's explanation by clicking the function name.
+
+The above functions require for timezone parts such as offset, zone and daylight saving.
+
+*   TZR: time zone region information. e.g. US/Pacific.
+*   TZD:  daylight saving information. e.g. KST, KT
+*   TZH: time zone hour offset
+*   TZM: time zone minute offset
+
+On the above functions, the below three functions are the same as the existing TO_TIMESTAMP, TO_DATETIME and TO_TIME functions except that they support the above additional special string tokens.
+
+*   :func:`TO_TIMESTAMP_TZ`
+*   :func:`TO_DATETIME_TZ`
+*   :func:`TO_TIME_TZ`
+
+CUBRID uses the region name of timezone in the IANA(Internet Assigned Numbers Authority) timezone database region; for IANA timezone, see http://www.iana.org/time-zones.
+
+IANA timezone
+-------------
+
+In IANA(Internet Assigned Numbers Authority) timezone database, there are lots of codes and data which represent the history of localtime for many representative locations around the globe.
+
+This database is periodically updated to reflect changes made by political bodies to time zone boundaries, UTC offsets, and daylight-saving rules. Its management procedure is described in `BCP 175: Procedures for Maintaining the Time Zone Database. <http://tools.ietf.org/html/rfc6557>`. For more details, see http://www.iana.org/time-zones .
+
+CUBRID supports IANA timezone, and a user can use the IANA timezone library in the CUBRID installation package as it is. If you want to update as the recent timezone, update timezone first, compile timezone library, and restart the database. 
+
+Please see how to compile the timezone library.
 
 Bit Strings
 ===========

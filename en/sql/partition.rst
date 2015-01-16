@@ -93,7 +93,14 @@ The following example shows how to create the *participant2* table which holds c
         PARTITION before_2008 VALUES LESS THAN (2008)
     );
 
-When creating partitions, CUBRID sorts the user supplied range values from smallest to largest and creates the non-overlapping intervals from the sorted list. The identifier **MAXVALUE** can be used to specify an infinite upper limit for a partition. In the example above, the created range intervals are [-inf, 2000) and [2000, 2008).
+When creating partitions, CUBRID sorts the user supplied range values from smallest to largest and creates the non-overlapping intervals from the sorted list. In the above example, the created range intervals are [-inf, 2000) and [2000, 2008). The identifier **MAXVALUE** can be used to specify an infinite upper limit for a partition. 
+
+.. code-block:: sql
+
+    ALTER TABLE participant2 ADD PARTITION (
+      PARTITION before_2012 VALUES LESS THAN (2012),
+      PARTITION last_one VALUES LESS THAN MAXVALUE
+    );
 
 When inserting a tuple into a range-partitioned table, CUBRID identifies the range to which the tuple belongs by evaluating the partitioning key. If the partitioning key value is **NULL**, the data is stored in the partition with the smallest specified range value. If there is no range which would accept the partitioning key value, CUBRID returns an error. CUBRID also returns an error when updating a tuple if the new value of the partitioning key does not belong to any of the defined ranges.
 

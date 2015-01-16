@@ -18,7 +18,7 @@ CREATE VIEW
         <subclass_definition> ::= {UNDER | AS SUBCLASS OF} table_name, ...
         <resolution> ::= [CLASS | TABLE] {column_name} OF superclass_name [AS alias]
 
-*   **OR REPLACE**: **CREATE** 뒤에 **OR REPLACE** 키워드가 명시되면, *view_name* 이 기존의 뷰와 이름이 중복되더라도 에러를 출력하지 않고 기존의 뷰를 새로운 뷰로 대체한다.
+*   **OR REPLACE**: **CREATE** 뒤에 **OR REPLACE** 키워드가 명시되면, *view_name*\ 이 기존의 뷰와 이름이 중복되더라도 에러를 출력하지 않고 기존의 뷰를 새로운 뷰로 대체한다.
 
 *   *view_name*: 생성하려는 뷰의 이름을 지정한다. 뷰의 이름은 데이터베이스 내에서 고유해야 한다.
 *   *view_column_name*: 생성하려는 뷰의 칼럼 이름을 지정한다.

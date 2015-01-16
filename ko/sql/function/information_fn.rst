@@ -165,6 +165,27 @@ DATABASE, SCHEMA
     ============================================
       'demodb'              'demodb'
 
+DBTIMEZONE
+==========
+      
+.. function:: DBTIMEZONE()
+
+    데이터베이스 서버의 타임존(오프셋 또는 지명)을 문자열로 출력한다(예: '-05:00', 또는 'Europe/Vienna').
+
+.. code-block:: sql
+
+    SELECT DBTIMEZONE();
+
+::
+    
+      dbtimezone
+    ======================
+      'Asia/Seoul'
+
+.. seealso:: 
+
+    :func:`SESSIONTIMEZONE`, :func:`FROM_TZ`, :func:`NEW_TIME`, :func:`TZ_OFFSET`
+
 DEFAULT
 =======
 
@@ -547,6 +568,28 @@ ROW_COUNT
        row_count()
     ===============
                   4
+
+SESSIONTIMEZONE
+===============
+      
+.. function:: SESSIONTIMEZONE()
+
+    세션의 타임존(오프셋 또는 지명)을 문자열로 출력한다(예: '-05:00', 또는 'Europe/Vienna').
+
+
+.. code-block:: sql
+
+    SELECT SESSIONTIMEZONE();
+
+::
+
+      sessiontimezone
+    ======================
+      'Asia/Seoul'
+
+.. seealso:: 
+
+    :func:`DBTIMEZONE`, :func:`FROM_TZ`, :func:`NEW_TIME`, :func:`TZ_OFFSET`
 
 USER, SYSTEM_USER
 =================

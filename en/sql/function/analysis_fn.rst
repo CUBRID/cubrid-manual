@@ -382,7 +382,7 @@ The following is a schema and data to use in the example of this function.
            (85, 95, 'B', 2),
            (75, 80, 'D', 2), 
            (75, 85, 'D', 2),
-           (75, 70, 'c', 2), 
+           (75, 70, 'C', 2), 
            (65, 95, 'A', 2),
            (65, 95, 'A', 2), 
            (65, 95, 'A', 2);
@@ -421,7 +421,7 @@ The following is an example to be used as an analytic function; it returns the c
                 5           70           60  'A'                             1     4.000000000000000e-01
                 6           70           70  'A'                             1     4.500000000000000e-01
                 8           70           80  'C'                             1     5.000000000000000e-01
-               17           75           70  'c'                             2     5.500000000000000e-01
+               17           75           70  'C'                             2     5.500000000000000e-01
                15           75           80  'D'                             2     6.000000000000000e-01
                16           75           85  'D'                             2     6.500000000000000e-01
                10           75           90  'B'                             1     7.000000000000000e-01
@@ -457,7 +457,7 @@ The following is an example to be used as an analytic function; it returns the c
        18           65           95  'A'                             2     3.000000000000000e-01
        19           65           95  'A'                             2     3.000000000000000e-01
        20           65           95  'A'                             2     3.000000000000000e-01
-       17           75           70  'c'                             2     4.000000000000000e-01
+       17           75           70  'C'                             2     4.000000000000000e-01
        15           75           80  'D'                             2     5.000000000000000e-01
        16           75           85  'D'                             2     6.000000000000000e-01
        12           85           95  'B'                             2     8.000000000000000e-01
@@ -1265,7 +1265,7 @@ The following is a schema and data which will be used in the below.
            (85, 95, 'B', 2),
            (75, 80, 'D', 2), 
            (75, 85, 'D', 2),
-           (75, 70, 'c', 2), 
+           (75, 70, 'C', 2), 
            (65, 95, 'A', 2),
            (65, 95, 'A', 2), 
            (65, 95, 'A', 2);
@@ -1304,7 +1304,7 @@ The following is an example of analytic function. It returns the **PERCENT_RANK*
                 5           70           60  'A'                             1     3.684210526315789e-01
                 6           70           70  'A'                             1     4.210526315789473e-01
                 8           70           80  'C'                             1     4.736842105263158e-01
-               17           75           70  'c'                             2     5.263157894736842e-01
+               17           75           70  'C'                             2     5.263157894736842e-01
                15           75           80  'D'                             2     5.789473684210527e-01
                16           75           85  'D'                             2     6.315789473684210e-01
                10           75           90  'B'                             1     6.842105263157895e-01
@@ -1340,7 +1340,7 @@ The following is an example of analytic function. It returns the **PERCENT_RANK*
                18           65           95  'A'                             2     0.000000000000000e+00
                19           65           95  'A'                             2     0.000000000000000e+00
                20           65           95  'A'                             2     0.000000000000000e+00
-               17           75           70  'c'                             2     3.333333333333333e-01
+               17           75           70  'C'                             2     3.333333333333333e-01
                15           75           80  'D'                             2     4.444444444444444e-01
                16           75           85  'D'                             2     5.555555555555556e-01
                12           85           95  'B'                             2     6.666666666666666e-01
@@ -1350,6 +1350,188 @@ The following is an example of analytic function. It returns the **PERCENT_RANK*
 
 In the above result, the rows with *id* 1 are located at the first and the second in the 10 rows whose *grade* is 1, and the values of **PERCENT_RANK** will be (1-1)/(10-1)=0.
 A row whose *id* is 5 is located at the fifth in the 10 rows whose *grade* is 1, and the value of **PERCENT_RANK** will be (5-1)/(10-1)=0.44.
+
+PERCENTILE_CONT
+===============
+
+.. function:: PERCENTILE_CONT(expression1) WITHIN GROUP (ORDER BY expression2 [DESC | ASC]) [OVER (<partition_by_clause>)]
+
+    **PERCENTILE_CONT** is used as an aggregate or analytic function, and is a reverse distribution function to assume a continuous distribution model. This takes a percentile value and returns a interpolated value within a set of sorted values. NULLs are ignored when calculating.
+    
+    This function's input value is a number or a string which can be converted into a number, and the type of returned value is DOUBLE.
+    
+    :param expression1: Percentile value. This must be between 0 and 1.
+    :param expression2: The column names followed by an **ORDER BY** clause. The number of columns should be the same with the number of columns in *expression1*. 
+    :rtype: The same type with *expression1*.
+
+    .. seealso:: 
+    
+        :func:`PERCENTILE_DISC`, :ref:`PERCENTILE_DISC와 PERCENTILE_CONT <compare-pd-pc>`
+
+When this is an aggregate function, this sorts results by the order specified by the **ORDER BY** clause; then this returns an interpolation value belongs to the percentile value from the rows in the aggregate group.
+
+When this is an analytic function, this sorts each row divided by **PARTITION BY** clause, by the order specified by the **ORDER BY** clause; then this returns an interpolation value belongs to the percentile value from the rows in the group.
+
+.. _compare-pd-pc:
+
+.. note:: **Difference between PERCENTILE_CONT and PERCENTILE_DISC**
+
+    PERCENTILE_CONT and PERCENTILE_DISC can return different results. 
+    
+    PERCENTILE_CONT operates continuous interpolation; then it returns the calculated result.
+    
+    PERCENTILE_DISC returns a value from the set of aggregated values. 
+    
+    In the below examples, when a percentile value is 0.5 and the group has even items, PERCENTILE_CONT returns the average of the two values from the medium position; however, PERCENTILE_DISC returns the first value between the two values from the medium position. If the group has odd items, both of them returns the value of a centered item. 
+
+The below shows the schema and the data on the next examples.
+
+.. code-block:: sql
+
+    CREATE TABLE scores([id] INT PRIMARY KEY AUTO_INCREMENT, [math] INT, english INT, [class] CHAR);
+
+    INSERT INTO scores VALUES
+           (1, 30, 70, 'A'), 
+           (2, 40, 70, 'A'), 
+           (3, 60, 80, 'A'), 
+           (4, 70, 70, 'A'), 
+           (5, 72, 60, 'A') , 
+           (6, 77, 70, 'A') , 
+           (7, 80, 70, 'C') , 
+           (8, 70, 80, 'C'), 
+           (9, 85, 60, 'C'), 
+           (10, 78, 90, 'B'),
+           (11, 95, 90, 'D'), 
+           (12, 85, 95, 'B'), 
+           (13, 95, 90, 'B'), 
+           (14, 85, 95, 'B'),
+           (15, 75, 80, 'D'), 
+           (16, 75, 85, 'D'),
+           (17, 75, 70, 'C'), 
+           (18, 65, 95, 'C'),
+           (19, 65, 95, 'D'), 
+           (20, 65, 95, 'D');
+
+The below is an example of an aggregate function; it returns a median value for the *math* column.
+
+.. code-block:: sql
+
+    SELECT PERCENTILE_CONT(0.5) 
+    WITHIN GROUP(ORDER BY math) AS pcont
+    FROM scores; 
+
+::
+    
+    7.500000000000000e+01
+
+The below is an example of an analytic function; it returns a median value for the *math* column within the set grouped by which the values of *class* column are the same.
+
+.. code-block:: sql
+ 
+    SELECT math, [class], PERCENTILE_CONT(0.5) 
+    WITHIN GROUP(ORDER BY math)
+    OVER (PARTITION BY [class]) AS pcont
+    FROM scores; 
+
+::
+
+         math  class                 pcont
+    =====================================================
+           30  'A'                   6.500000000000000e+01
+           40  'A'                   6.500000000000000e+01
+           60  'A'                   6.500000000000000e+01
+           70  'A'                   6.500000000000000e+01
+           72  'A'                   6.500000000000000e+01
+           77  'A'                   6.500000000000000e+01
+           78  'B'                   8.500000000000000e+01
+           85  'B'                   8.500000000000000e+01
+           85  'B'                   8.500000000000000e+01
+           95  'B'                   8.500000000000000e+01
+           65  'C'                   7.500000000000000e+01
+           70  'C'                   7.500000000000000e+01
+           75  'C'                   7.500000000000000e+01
+           80  'C'                   7.500000000000000e+01
+           85  'C'                   7.500000000000000e+01
+           65  'D'                   7.500000000000000e+01
+           65  'D'                   7.500000000000000e+01
+           75  'D'                   7.500000000000000e+01
+           75  'D'                   7.500000000000000e+01
+           95  'D'                   7.500000000000000e+01
+
+In class 'A', the number of 'math' is totally 6; PERCENTILE_CONT assumes that continuous values exist from the discrete values; therefore, the median value is 65, an average of the 3rd value (60) and the 4th value (70). 
+
+PERCENTILE_CONT assumes the continuous value; therefore, it returns DOUBLE type value which can show the continuous representation.
+
+PERCENTILE_DISC
+===============
+
+.. function:: PERCENTILE_DISC(expression1) WITHIN GROUP (ORDER BY expression2 [DESC | ASC]) [OVER (<partition_by_clause>)]
+
+    **PERCENTILE_DISC** is used as an aggregate or analytic function, and is a reverse distribution function to assume a discrete distribution model. This takes a percentile value and returns a interpolated value within a set of sorted values. NULLs are ignored when calculating.
+    
+    This function's input value is a number or a string which can be converted into a number, and the type of returned value is the same as the type of input value.
+
+    :param expression1: Percentile value. This must be between 0 and 1.
+    :param expression2: The column names followed by an **ORDER BY** clause. The number of columns should be the same with the number of columns in *expression1*. 
+    :rtype: the same with the *expression1*\'s type.
+
+    .. seealso:: 
+    
+        :func:`PERCENTILE_CONT`, :ref:`PERCENTILE_DISC와 PERCENTILE_CONT <compare-pd-pc>`
+
+When this is an aggregate function, this sorts results by the order specified by the **ORDER BY** clause; then this returns an interpolation value located to the percentile value from the rows in the aggregate group.
+
+When this is an analytic function, this sorts each row divided by **PARTITION BY** clause, by the order specified by the **ORDER BY** clause; then this returns an interpolation value located to the percentile value from the rows in the group.
+
+The schema and the data used in this function's example are the same with them in :func:`PERCENTILE_CONT`.
+
+The below is an example of an aggregate function; it returns a median value for the *math* column.
+
+.. code-block:: sql
+
+    SELECT PERCENTILE_DISC(0.5) 
+    WITHIN GROUP(ORDER BY math) AS pdisc
+    FROM scores; 
+
+::
+    
+    7.500000000000000e+01
+
+The below is an example of an analytic function; it returns a median value for the *math* column within the set grouped by which the values of *class* column are the same.
+
+.. code-block:: sql
+ 
+    SELECT math, [class], PERCENTILE_DISC(0.5) 
+    WITHIN GROUP(ORDER BY math)
+    OVER (PARTITION BY [class]) AS pdisc
+    FROM scores; 
+
+::
+
+         math  class                 pdisc
+    =====================================================
+           30  'A'                   6.000000000000000e+01
+           40  'A'                   6.000000000000000e+01
+           60  'A'                   6.000000000000000e+01
+           70  'A'                   6.000000000000000e+01
+           72  'A'                   6.000000000000000e+01
+           77  'A'                   6.000000000000000e+01
+           78  'B'                   8.500000000000000e+01
+           85  'B'                   8.500000000000000e+01
+           85  'B'                   8.500000000000000e+01
+           95  'B'                   8.500000000000000e+01
+           65  'C'                   7.500000000000000e+01
+           70  'C'                   7.500000000000000e+01
+           75  'C'                   7.500000000000000e+01
+           80  'C'                   7.500000000000000e+01
+           85  'C'                   7.500000000000000e+01
+           65  'D'                   7.500000000000000e+01
+           65  'D'                   7.500000000000000e+01
+           75  'D'                   7.500000000000000e+01
+           75  'D'                   7.500000000000000e+01
+           95  'D'                   7.500000000000000e+01
+
+In class 'A', the number of 'math' is totally 6; PERCENTILE_DISC outputs the first one if the medium values are the two; therefore, the median value is 60, between the 3rd value (60) and the 4th value (70). 
 
 RANK
 ====

@@ -655,11 +655,11 @@ SELECT, UPDATE, DELETE 문에는 다음 힌트가 지정될 수 있다.
 
     .. code-block:: sql
     
-        SELECT /*+ ORDERED USE_NL(B) USE_NL(C) USE_MERGE(D) */ * 
-        FROM A INNER JOIN B ON A.col=B.col 
-        INNER JOIN C ON B.col=C.col INNER JOIN D  ON C.col=D.col;
+        SELECT /*+ ORDERED USE_NL(b) USE_NL(c) USE_MERGE(d) */ * 
+        FROM a INNER JOIN b ON a.col=b.col 
+        INNER JOIN c ON b.col=c.col INNER JOIN d ON c.col=d.col;
         
-    위와 같은 질의를 수행한다면 A와 B가 조인될 때는 **USE_NL**\ 이 적용되고 C가 조인될 때도 **USE_NL**\ 이 적용되며, D가 조인될 때는 **USE_MERGE**\ 가 적용된다.
+    위와 같은 질의를 수행한다면 테이블 a와 b가 조인될 때는 **USE_NL**\ 이 적용되고 테이블 c가 조인될 때도 **USE_NL**\ 이 적용되며, 테이블 d가 조인될 때는 **USE_MERGE**\ 가 적용된다.
 
     <*spec_name*>\ 이 주어지지 않고 **USE_NL**\ 과 **USE_MERGE**\ 가 함께 지정된 경우 주어진 힌트는 무시된다. 일부 경우에 질의 최적화기는 주어진 힌트에 따라 질의 실행 계획을 만들지 못할 수 있다. 예를 들어 오른쪽 외부 조인에 대해 **USE_NL**\ 을 지정한 경우 이 질의는 내부적으로 왼쪽 외부 조인 질의로 변환이 되어 조인 순서는 보장되지 않을 수 있다.
 
@@ -669,22 +669,47 @@ MERGE 문에는 다음과 같은 힌트를 사용할 수 있다.
 *   **USE_UPDATE_INDEX** (<*update_index_list*>): MERGE 문의 UPDATE 절에서 사용되는 인덱스 힌트. *update_index_list*\ 에 UPDATE 절을 수행할 때 사용할 인덱스 이름을 나열한다. MERGE 문의 <*join_condition*>과 <*update_condition*>에 해당 힌트가 적용된다.
 *   **RECOMPILE**: 위의 :ref:`RECOMPILE <recompile>`\ 을 참고한다.
 
-다음은 심권호 선수가 메달을 획득한 연도와 메달 종류를 구하는 예제이다. 단, *athlete* 테이블을 외부 테이블로 하고 *game* 테이블을 내부 테이블로 하는 중첩 루프 조인 실행 계획을 만들어야 한다. 다음과 같은 질의로 표현이 되는데, 질의최적화기는 *game* 테이블을 외부 테이블로 하고, *athlete* 테이블을 내부 테이블로 하는 중첩 루프 조인 실행 계획을 만든다.
+조인 시 사용하는 힌트의 경우 힌트 안에 조인할 테이블이나 뷰 이름을 명시할 수 있는데, 이때 테이블 이름/뷰 이름은 ","로 구분한다.
 
 .. code-block:: sql
 
+    SELECT /*+ USE_NL(a, b) */ * 
+    FROM a INNER JOIN b ON a.col=b.col;
+
+다음은 심권호 선수가 메달을 획득한 연도와 메달 종류를 구하는 예제이다. 다음과 같은 질의로 표현이 되는데, 질의최적화기는 *athlete* 테이블을 외부 테이블로 하고, *game* 테이블을 내부 테이블로 하는 중첩 루프 조인 실행 계획을 만든다.
+
+.. code-block:: sql
+
+    -- csql> ;plan_detail
+    
     SELECT /*+ USE_NL ORDERED  */ a.name, b.host_year, b.medal
     FROM athlete a, game b 
     WHERE a.name = 'Sim Kwon Ho' AND a.code = b.athlete_code;
 
 ::
 
-      name                    host_year  medal
-    =========================================================
-      'Sim Kwon Ho'                2000  'G'
-      'Sim Kwon Ho'                1996  'G'
-      
-    2 rows selected.
+    Query plan:
+
+    idx-join (inner join)
+        outer: sscan
+                   class: a node[0]
+                   sargs: term[1]
+                   cost:  44 card 7
+        inner: iscan
+                   class: b node[1]
+                   index: fk_game_athlete_code term[0]
+                   cost:  3 card 8653
+        cost:  73 card 9
+
+다음은 USE_NL 힌트 사용 시 사용하는 테이블을 명시하는 예이다.
+
+.. code-block:: sql
+
+    -- csql> ;plan_detail
+    
+    SELECT /*+ USE_NL(a,b)  */ a.name, b.host_year, b.medal
+    FROM athlete a, game b 
+    WHERE a.name = 'Sim Kwon Ho' AND a.code = b.athlete_code;
 
 .. _index-hint-syntax:
 

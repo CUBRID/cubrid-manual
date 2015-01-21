@@ -669,22 +669,47 @@ MERGE statement can have below hints.
 *   **USE_UPDATE_INDEX** (<*update_index_list*>): An index hint which is used in UPDATE clause of MERGE statement. Lists index names to *update_index_list* to use when executing UPDATE clause. This hint is applied to <*join_condition*> and <*update_condition*> of MERGE statement.
 *   **RECOMPILE**: See the above :ref:`RECOMPILE <recompile>`.
 
-The following example shows how to retrieve the years when Sim Kwon Ho won medals and the types of medals. Here, a nested loop join execution plan needs to be created which has the *athlete* table as an outer table and the *game* table as an inner table. It can be expressed by the following query. The query optimizer creates a nested loop join execution plan that has the *game* table as an outer table and the *athlete* table as an inner table.
+Table/view names to join can be specified to the joining hint; at this time, table/view names are separated by ",".
 
 .. code-block:: sql
 
+    SELECT /*+ USE_NL(a, b) */ * 
+    FROM a INNER JOIN b ON a.col=b.col;
+
+The following example shows how to retrieve the years when Sim Kwon Ho won medals and the types of medals. It can be expressed by the following query. The query optimizer creates a nested loop join execution plan that has the *athlete* table as an outer table and the *game* table as an inner table.
+
+.. code-block:: sql
+
+    -- csql> ;plan_detail
+    
     SELECT /*+ USE_NL ORDERED  */ a.name, b.host_year, b.medal
     FROM athlete a, game b 
     WHERE a.name = 'Sim Kwon Ho' AND a.code = b.athlete_code;
 
 ::
 
-      name                    host_year  medal
-    =========================================================
-      'Sim Kwon Ho'                2000  'G'
-      'Sim Kwon Ho'                1996  'G'
-      
-    2 rows selected.
+    Query plan:
+
+    idx-join (inner join)
+        outer: sscan
+                   class: a node[0]
+                   sargs: term[1]
+                   cost:  44 card 7
+        inner: iscan
+                   class: b node[1]
+                   index: fk_game_athlete_code term[0]
+                   cost:  3 card 8653
+        cost:  73 card 9
+
+The following example shows how to specify tables when using a USE_NL hint.
+
+.. code-block:: sql
+
+    -- csql> ;plan_detail
+    
+    SELECT /*+ USE_NL(a,b)  */ a.name, b.host_year, b.medal
+    FROM athlete a, game b 
+    WHERE a.name = 'Sim Kwon Ho' AND a.code = b.athlete_code;
 
 .. _index-hint-syntax:
 

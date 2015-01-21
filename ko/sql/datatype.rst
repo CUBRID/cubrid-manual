@@ -654,36 +654,6 @@ DATETIME
 
 타임존이 있는 날짜/시간 데이터 타입은 타임존을 명시하여 입력하거나 출력할 수 있는 날짜/시간 타입이다. 타임존을 설정하는 방법은 지역 이름을 명시하는 방법과 시간의 오프셋을 명시하는 방법이 있다.
 
-.. note:: **시간 타입의 타임존을 명시할 때 제약 사항**
-
-    TIMETZ, TIMELTZ의 경우 지역 이름을 사용하는 타임존을 허용하지 않는다.
-
-    .. code-block:: sql
-    
-        SELECT TIME_TO_SEC(timetz'8:19:34 AM America/Lima PET');
-
-    ::
-
-        Invalid time: '8:19:34 AM America/Lima PET'.
-
-    .. code-block:: sql
-
-        SELECT TIME_TO_SEC(timeltz'8:19:34 AM America/Lima PET');
-
-    ::
-
-        Invalid time: '8:19:34 AM America/Lima PET'.
-
-    오프셋 방식의 타임존은 TIMETZ에 한해서 허용한다.
-
-    ::
-
-        SELECT TIME_TO_SEC(timetz'8:19:34 +5:00');
-
-    ::
-
-        29974
-
 기존의 날짜/시간 타입 이름 뒤에 LTZ 또는 TZ가 붙어 있는 경우 타임존 정보를 고려하게 되는데, LTZ는 로컬 타임존을 의미하며, TZ는 타임존을 의미한다.
 
 *   LTZ 타입은 <date/time type> WITH LOCAL TIME ZONE으로도 표현이 가능하다. 내부적으로 UTC 시간을 저장하며, 출력 시 로컬(현재의 세션) 타임존으로 변환된다.
@@ -726,6 +696,45 @@ DATETIME
     *   어떤 DBMS의 TIMESTAMP는 밀리초를 저장한다는 측면에서 CUBRID의 DATETIME과 비슷하다.
 
 타임존 타입을 사용하는 함수들의 예는 :doc:`function/datetime_fn`\의 예를 참고한다.
+
+.. note:: **시간 타입의 타임존을 명시할 때 제약 사항**
+
+    TIMETZ, TIMELTZ의 경우 지역 이름을 사용하는 타임존을 허용하지 않으며, 오프셋 방식의 타임존만 허용한다.
+
+    .. code-block:: sql
+    
+        SELECT TIME_TO_SEC(timetz'8:19:34 AM America/Lima PET');
+
+    ::
+
+        Invalid time: '8:19:34 AM America/Lima PET'.
+
+    .. code-block:: sql
+
+        SELECT TIME_TO_SEC(timeltz'8:19:34 AM America/Lima PET');
+
+    ::
+
+        Invalid time: '8:19:34 AM America/Lima PET'.
+
+    오프셋 방식의 타임존은 다음과 같이 사용한다.
+
+    .. code-block:: sql
+
+        SELECT TIME_TO_SEC(timetz'8:19:34 +5:00');
+
+    ::
+
+        29974
+        
+    cubrid.conf의 server_timezone 파라미터의 값이 지역 이름으로 명시된 경우 TIMELTZ 타입에서는 오프셋 타임존도 사용할 수 없다.
+    
+    .. code-block:: sql
+
+        SELECT TIME_TO_SEC(timetlz'8:19:34 +5:00');
+    
+    ::
+        Invalid time: '8:19:34 +5:00'.
 
 타임존 설정
 -----------

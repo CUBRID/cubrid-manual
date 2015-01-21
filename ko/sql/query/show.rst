@@ -321,14 +321,14 @@ Strength                            CHAR(1)         문자 간 비교를 위한 
       'utf8_ko_cs'          'utf8'                          7  'Yes'                 'No'                  'Not applicable'
       'utf8_ko_cs_uca'      'utf8'                        133  'No'                  'No'                  'Quaternary'
 
-SHOW TIMEZONE
--------------
+SHOW TIMEZONES
+--------------
 
 현재 CUBRID에 설정된 타임 존 정보를 출력한다.
 
 ::
 
-    SHOW [FULL] TIMEZONES [LIKE zone_name_filter | WHERE condition];
+    SHOW [FULL] TIMEZONES;
 
 FULL이 명시되지 않으면 타임 존의 영역 이름을 가진 하나의 칼럼을 출력한다. 칼럼의 이름은 timezone_region이다.
 
@@ -339,17 +339,67 @@ FULL이 명시되면 4개의 칼럼을 가진 타임 존 정보를 출력한다.
 =================== =============== ===================================================
 timezone_region     VARCHAR(32)     타임 존 영역
 region_offset       VARCHAR(32)     일광 절약 시간을 고려하지 않은 타임 존 영역의 오프셋
-dst_offset          VARCHAR(32)     타임 존 영역에서 적용되는 일광 절약 시간 규칙을 고려한 오프셋
+dst_offset          VARCHAR(32)     타임 존 영역에 적용되는 일광 절약 시간 규칙을 고려한 오프셋
 dst_abbreviation    VARHCHAR(32)    일광 절약 시간 규칙이 적용된 지역의 약어
 =================== =============== ===================================================
 
-두 번째, 세 번째, 네 번째 칼럼은 SHOW 문이 실행될 때 날짜에 대해 출력되는 정보이다.
+두 번째, 세 번째, 네 번째 칼럼에서 출력되는 정보는 날짜에 관한 것이다.
 
 타임 존 영역이 일광 절약 시간(daylight saving time) 규칙을 적용하지 않는다면, dst_offset과 dst_abbreviation 값은 NULL 값이 된다.
  
 현재의 날짜에 일광 절약 시간이 적용되지 않는다면 dst_offset 값은 0이 되고 dst_abbreviation 값은 빈 문자열이 된다.
 
 WHERE 조건 없는 LIKE 조건은 첫 번째 칼럼에 적용된다. WHERE 조건은 결과를 필터링하기 위해 사용될 수 있다.
+
+.. code-block:: sql
+
+    SHOW TIMEZONES;
+
+::
+
+    timezone_region
+    ======================
+    'Africa/Abidjan'
+    'Africa/Accra'
+    'Africa/Addis_Ababa'
+    'Africa/Algiers'
+    'Africa/Asmara'
+    'Africa/Asmera'
+    ...
+    'US/Michigan'
+    'US/Mountain'
+    'US/Pacific'
+    'US/Samoa'
+    'UTC'
+    'Universal'
+    'W-SU'
+    'WET'
+    'Zulu'
+
+.. code-block:: sql
+
+    SHOW FULL TIMEZONES;
+
+::
+
+    timezone_region       region_offset         dst_offset            dst_abbreviation
+    ===================================================================================
+    'Africa/Abidjan'      '+00:00'              '+00:00'              'GMT'
+    'Africa/Accra'        '+00:00'              NULL                  NULL
+    'Africa/Addis_Ababa'  '+03:00'              '+00:00'              'EAT'
+    'Africa/Algiers'      '+01:00'              '+00:00'              'CET'
+    'Africa/Asmara'       '+03:00'              '+00:00'              'EAT'
+    'Africa/Asmera'       '+03:00'              '+00:00'              'EAT'
+    ...
+    'US/Michigan'         '-05:00'              '+00:00'              'EST'
+    'US/Mountain'         '-07:00'              '+00:00'              'MST'
+    'US/Pacific'          '-08:00'              '+00:00'              'PST'
+    'US/Samoa'            '-11:00'              '+00:00'              'SST'
+    'UTC'                 '+00:00'              '+00:00'              'UTC'
+    'Universal'           '+00:00'              '+00:00'              'UTC'
+    'W-SU'                '+04:00'              '+00:00'              'MSK'
+    'WET'                 '+00:00'              '+00:00'              'WET'
+    'Zulu'                '+00:00'              '+00:00'              'UTC'
 
 .. _show-grants-statement:
 

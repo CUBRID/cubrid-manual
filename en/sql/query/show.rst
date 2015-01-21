@@ -1,9 +1,16 @@
+:tocdepth: 3
+
 ****
 SHOW
 ****
 
+.. contents::
+
+External Information
+====================
+
 DESC, DESCRIBE
-==============
+--------------
 
 It shows the column information of a table, and it's like a **SHOW COLUMNS** statement. For more details, see :ref:`show-columns-statement`.
 
@@ -13,7 +20,7 @@ It shows the column information of a table, and it's like a **SHOW COLUMNS** sta
     DESCRIBE tbl_name;
     
 EXPLAIN
-=======
+-------
 
 It shows the column information of a table, and it's like a **SHOW COLUMNS** statement. For more details, see :ref:`show-columns-statement`.
 
@@ -24,7 +31,7 @@ It shows the column information of a table, and it's like a **SHOW COLUMNS** sta
 .. _show-tables-statement:
 
 SHOW TABLES
-===========
+-----------
 
 It shows the list of all table names within a database. The name of the result column will be *tables_in_<database name>* and it will have one column. If you use the **LIKE** clause, you can search the table names matching this and if you use the **WHERE** clause, you can search table names with more general terms. **SHOW FULL TABLES** displays the second column, *table_type* together. The table must have the value, **BASE TABLE** and the view has the value, **VIEW**. ::
 
@@ -97,7 +104,7 @@ The following shows the examples of this syntax.
 .. _show-columns-statement:
 
 SHOW COLUMNS
-============
+------------
 
 It shows the column information of a table. You can use the **LIKE** clause to search the column names matching it. If you use the **WHERE** clause, you can search column names with more general terms like, "General Considerations for All **SHOW** Statements.".
 
@@ -179,7 +186,7 @@ The following shows the examples of this syntax.
 .. _show-index-statement:
 
 SHOW INDEX
-==========
+----------
 
 It shows the index information. 
 
@@ -248,7 +255,7 @@ The following shows the examples of this syntax.
 .. _show-collation-statement:
  
 SHOW COLLATION
-==============
+--------------
 
 It lists collations supported by the database. If LIKE clause is present, it indicates which collation names to match. 
 
@@ -314,10 +321,90 @@ The following shows the examples of this syntax.
       'utf8_ko_cs'          'utf8'                          7  'Yes'                 'No'                  'Not applicable'
       'utf8_ko_cs_uca'      'utf8'                        133  'No'                  'No'                  'Quaternary'
 
+SHOW TIMEZONES
+--------------
+
+It shows the timezone information which the current CUBRID supports.
+
+::
+
+    SHOW [FULL] TIMEZONES;
+
+If FULL is not specified, one column which has timezone's region names is displayed. The name of this column is timezone_region.
+
+If FULL is specified, four columns which have timezone information are displayed.
+
+=================== =============== ===================================================
+Column name         Type            Description
+=================== =============== ===================================================
+timezone_region     VARCHAR(32)     Timezone region name
+region_offset       VARCHAR(32)     Offset of timezone which daylight saving time is not considered
+dst_offset          VARCHAR(32)     Offset which daylight saving time (applied to timezone region) is considered
+dst_abbreviation    VARHCHAR(32)    An abbreviation of a region which daylight saving time is applied
+=================== =============== ===================================================
+
+The information listed for the second, third and fourth columns is for the date.
+
+If a timezone region doesn't have daylight saving time rules at all then the dst_offset and dst_abbreviation columns will contain NULL values. 
+
+If at the current date, there aren't daylight saving time rules that apply, then dst_offset will be set to 0 and dst_abbreviation will be the empty string.
+
+The LIKE condition without the WHERE condition is applied on the first column. The WHERE condition may be used to filter the output.
+
+.. code-block:: sql
+
+    SHOW TIMEZONES;
+
+::
+
+    timezone_region
+    ======================
+    'Africa/Abidjan'
+    'Africa/Accra'
+    'Africa/Addis_Ababa'
+    'Africa/Algiers'
+    'Africa/Asmara'
+    'Africa/Asmera'
+    ...
+    'US/Michigan'
+    'US/Mountain'
+    'US/Pacific'
+    'US/Samoa'
+    'UTC'
+    'Universal'
+    'W-SU'
+    'WET'
+    'Zulu'
+
+.. code-block:: sql
+
+    SHOW FULL TIMEZONES;
+
+::
+
+    timezone_region       region_offset         dst_offset            dst_abbreviation
+    ===================================================================================
+    'Africa/Abidjan'      '+00:00'              '+00:00'              'GMT'
+    'Africa/Accra'        '+00:00'              NULL                  NULL
+    'Africa/Addis_Ababa'  '+03:00'              '+00:00'              'EAT'
+    'Africa/Algiers'      '+01:00'              '+00:00'              'CET'
+    'Africa/Asmara'       '+03:00'              '+00:00'              'EAT'
+    'Africa/Asmera'       '+03:00'              '+00:00'              'EAT'
+    ...
+    'US/Michigan'         '-05:00'              '+00:00'              'EST'
+    'US/Mountain'         '-07:00'              '+00:00'              'MST'
+    'US/Pacific'          '-08:00'              '+00:00'              'PST'
+    'US/Samoa'            '-11:00'              '+00:00'              'SST'
+    'UTC'                 '+00:00'              '+00:00'              'UTC'
+    'Universal'           '+00:00'              '+00:00'              'UTC'
+    'W-SU'                '+04:00'              '+00:00'              'MSK'
+    'WET'                 '+00:00'              '+00:00'              'WET'
+    'Zulu'                '+00:00'              '+00:00'              'UTC'
+
 .. _show-grants-statement:
 
 SHOW GRANTS
-===========
+-----------
 
 It shows the permissions associated with the database user accounts. ::
 
@@ -342,7 +429,7 @@ The following shows the examples of this syntax.
 .. _show-create-table-statement:
 
 SHOW CREATE TABLE
-=================
+-----------------
 
 When a table name is specified, It shows the **CREATE TABLE** statement of the table. ::
 
@@ -366,7 +453,7 @@ When a table name is specified, It shows the **CREATE TABLE** statement of the t
 .. _show-create-view-statement:
 
 SHOW CREATE VIEW
-================
+----------------
 
 It shows the corresponding **CREATE VIEW** statement if view name is specified. ::
 
@@ -392,7 +479,7 @@ The following shows the examples of this syntax.
                        CURRENT_USER) AND  au.auth_type = 'SELECT')'
 
 SHOW ACCESS STATUS 
-================== 
+------------------ 
   
 **SHOW ACCESS STATUS** statement displays login information regarding database accounts. Only database's DBA account can use this statement.
   
@@ -431,7 +518,7 @@ The following shows the result of running this statement.
 .. _show-exec-statistics-statement:
 
 SHOW EXEC STATISTICS
-====================
+--------------------
 
 It shows statistics information of executing query.
 
@@ -538,8 +625,11 @@ The following shows the examples of this syntax.
     'adaptive_flush_log_pages'              0
     'adaptive_flush_max_pages'              0
 
+Internal Information
+====================
+
 SHOW VOLUME HEADER
-==================
+------------------
 
 It shows the volume header of the specified volume in one row.
 
@@ -613,7 +703,7 @@ The following shows the examples of this syntax.
             Remarks                         : ''
 
 SHOW LOG HEADER
-===============
+---------------
 
 It shows the header information of an active log file.
 
@@ -752,7 +842,7 @@ The following shows the examples of this syntax.
             Smallest_lsa_at_last_checkpoint: '(66637|14280)'
 
 SHOW ARCHIVE LOG HEADER
-=======================
+-----------------------
 
 It shows the header information of an archive log file.
 
@@ -794,7 +884,7 @@ The following shows the examples of this syntax.
             Archive_num          : 1
 
 SHOW HEAP HEADER
-================
+----------------
 
 It shows shows the header page of the table. 
 
@@ -983,7 +1073,7 @@ The following shows the examples of this syntax.
             Estimates_full_search_vpid    : '(0|960)'
 
 SHOW HEAP CAPACITY
-==================
+------------------
 
 It shows the capacity of the table. 
 
@@ -1166,7 +1256,7 @@ The following shows the examples of this syntax.
             Is_saving            : 0
 
 SHOW SLOTTED PAGE SLOTS
-========================
+------------------------
 
 It shows the information of all slots in the specified slotted page.
 
@@ -1220,7 +1310,7 @@ The following shows the examples of this syntax.
             Waste    : 0
 
 SHOW INDEX HEADER
-=================
+-----------------
 
 It shows the index header page of the index of the table.
 
@@ -1322,7 +1412,7 @@ The following shows the examples of this syntax.
             Key_type     : 'character varying'
 
 SHOW INDEX CAPACITY
-===================
+-------------------
 
 It shows the index capacity of the index of the table.
 
@@ -1437,7 +1527,7 @@ The following shows the examples of this syntax.
             Avg_page_free_space  : '15.9K'
 
 SHOW CRITICAL SECTION
-=====================
+---------------------
 
 Total critical section (hereafter CS) information of a database is output.
 

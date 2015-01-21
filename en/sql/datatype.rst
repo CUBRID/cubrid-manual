@@ -652,36 +652,6 @@ Date/Time Types with Timezone
 
 Date/Time types with timezone are date/tiime types which can be input or output by specifying timezone. There are two ways of specifying timezone; specifying the name of local zone and specifying the offset of time.
 
-.. note:: **Limitations when you specify a timezone of date/time type**
-
-    TIMETZ and TIMELTZ do not allow a region name timezone.
-
-    .. code-block:: sql
-    
-        SELECT TIME_TO_SEC(timetz'8:19:34 AM America/Lima PET');
-
-    ::
-
-        Invalid time: '8:19:34 AM America/Lima PET'.
-
-    .. code-block:: sql
-
-        SELECT TIME_TO_SEC(timeltz'8:19:34 AM America/Lima PET');
-
-    ::
-
-        Invalid time: '8:19:34 AM America/Lima PET'.
-
-    Instead, an offset timezone is allowed to TIMETZ and TIMELTZ.
-
-    ::
-
-        SELECT TIME_TO_SEC(timetz'8:19:34 +5:00');
-
-    ::
-
-        29974
-
 Timezone information are considered in the Date/Time types if LTZ or TZ are followed after the existing Date/Time types; LTZ means local timezone, and TZ means timezone.
 
 *   LTZ type can be represented as <date/time type> WITH LOCAL TIME ZONE. This stores UTC time internally; when this value is output, this is  converted as a value of a local (current session) time zone.
@@ -726,6 +696,36 @@ The other features of date/time types with timezone (e.g. maximum/minimum value,
     *   Some DBMS's TIMESTAMP is similar to CUBRID's DATETIME as the respect of saving milliseconds.
 
 To see examples of functions using timezone types, see :doc:`function/datetime_fn`.
+
+.. note:: **Limitations when you specify a timezone of date/time type**
+
+    TIMETZ and TIMELTZ do not allow a region name timezone, but an offset timezone.
+
+    .. code-block:: sql
+    
+        SELECT TIME_TO_SEC(timetz'8:19:34 AM America/Lima PET');
+
+    ::
+
+        Invalid time: '8:19:34 AM America/Lima PET'.
+
+    .. code-block:: sql
+
+        SELECT TIME_TO_SEC(timeltz'8:19:34 AM America/Lima PET');
+
+    ::
+
+        Invalid time: '8:19:34 AM America/Lima PET'.
+
+    An offset timezone can be used like the below.
+
+    ::
+
+        SELECT TIME_TO_SEC(timetz'8:19:34 +5:00');
+
+    ::
+
+        29974
 
 Timezone Configuration
 ----------------------

@@ -1467,7 +1467,7 @@ PERCENTILE_DISC
 
 .. function:: PERCENTILE_DISC(expression1) WITHIN GROUP (ORDER BY expression2 [DESC | ASC]) [OVER (<partition_by_clause>)]
 
-    **PERCENTILE_DISC** 함수는 집계 함수 또는 분석 함수로 사용되며, 이산 분포(discrete distribution) 모델을 가정한 역 분포 함수이다. 백분위 값을 입력 받아 정렬된 값들 중 백분위에 속한 값을 반환한다. 계산 시 NULL 값은 무시된다.
+    **PERCENTILE_DISC** 함수는 집계 함수 또는 분석 함수로 사용되며, 이산 분포(discrete distribution) 모델을 가정한 역 분포 함수이다. 백분위 값을 입력 받아 정렬된 값들 중 백분위에 해당하는 이산 값(discrete value)을 반환한다. 계산 시 NULL 값은 무시된다.
     
     이 함수는 입력 인자로 숫자형 타입 또는 숫자로 변환될 수 있는 문자열이 사용되며, 반환 타입은 입력 값의 타입과 동일하다.
      

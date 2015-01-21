@@ -2230,6 +2230,8 @@ CUBRID 설치 시 생성되는 기본 브로커 설정 파일인 **cubrid_broker
 **MAX_PREPARED_STMT_COUNT**
 
     **MAX_PREPARED_STMT_COUNT**\ 은 사용자(응용 프로그램) 접속 당 허용하는 prepared statement의 개수를 제한하는 파라미터이다. 기본값은 **2,000**\ 이며 최소값은 1이다. 이 파라미터 값을 사용자가 적절히 지정함으로써, 응용 프로그램의 작성 실수로 인해 시스템이 허용하는 메모리를 초과하여 prepared statement 문을 생성하는 것을 사전에 방지할 수 있다.
+    
+    .. note:: **broker_changer** 명령을 이용하여 **MAX_PREPARED_STMT_COUNT**\의 값을 동적으로 변경하고자 하는 경우 이전의 설정 값보다 큰 값으로 설정하는 경우만 허용하며, 이전의 설정 값보다 작은 값으로 설정하는 것은 허용하지 않는다.
 
 **MAX_QUERY_TIMEOUT**
 

@@ -1366,7 +1366,7 @@ PERCENTILE_CONT
 
     .. seealso:: 
     
-        :func:`PERCENTILE_DISC`, :ref:`PERCENTILE_DISC와 PERCENTILE_CONT <compare-pd-pc>`
+        :func:`PERCENTILE_DISC`, :ref:`Difference between PERCENTILE_DISC and PERCENTILE_CONT <compare-pd-pc>`
 
 When this is an aggregate function, this sorts results by the order specified by the **ORDER BY** clause; then this returns an interpolation value belongs to the percentile value from the rows in the aggregate group.
 
@@ -1467,7 +1467,7 @@ PERCENTILE_DISC
 
 .. function:: PERCENTILE_DISC(expression1) WITHIN GROUP (ORDER BY expression2 [DESC | ASC]) [OVER (<partition_by_clause>)]
 
-    **PERCENTILE_DISC** is used as an aggregate or analytic function, and is a reverse distribution function to assume a discrete distribution model. This takes a percentile value and returns a interpolated value within a set of sorted values. NULLs are ignored when calculating.
+    **PERCENTILE_DISC** is used as an aggregate or analytic function, and is a reverse distribution function to assume a discrete distribution model. This takes a percentile value and returns a discrete value within a set of sorted values. NULLs are ignored when calculating.
     
     This function's input value is a number or a string which can be converted into a number, and the type of returned value is the same as the type of input value.
 

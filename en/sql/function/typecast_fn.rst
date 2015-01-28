@@ -321,7 +321,7 @@ In the following :ref:`Date/Time Format 2 <datetime-format2>` table, the month/d
 |                  | (Available to use in combination with %X)                                                                         |
 +------------------+-------------------------------------------------------------------------------------------------------------------+
 | %v               | Week, two-digit number, week number of the year with Monday being the first day (00, ... , 53)                    |
-|                  | (Available to use in combination with %X)                                                                         |
+|                  | (Available to use in combination with %x)                                                                         |
 +------------------+-------------------------------------------------------------------------------------------------------------------+
 | %W               | Weekday, English string (Sunday, ... , Saturday)                                                                  |
 +------------------+-------------------------------------------------------------------------------------------------------------------+
@@ -331,7 +331,7 @@ In the following :ref:`Date/Time Format 2 <datetime-format2>` table, the month/d
 |                  | (0000, ... , 9999) (Available to use in combination with %V)                                                      |
 +------------------+-------------------------------------------------------------------------------------------------------------------+
 | %x               | Year, four-digit number calculated as the week number with Monday being the first day of the week                 |
-|                  | (0000, ... , 9999) (Available to use in combination with %V)                                                      |
+|                  | (0000, ... , 9999) (Available to use in combination with %v)                                                      |
 +------------------+-------------------------------------------------------------------------------------------------------------------+
 | %Y               | Year, four-digit number (0001, ... , 9999)                                                                        |
 +------------------+-------------------------------------------------------------------------------------------------------------------+

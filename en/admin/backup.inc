@@ -441,20 +441,20 @@ Suppose that *demodb* is backed up in the /home/cubrid/db/demodb directory on se
 
         demodb /home/cubrid/data/demodb pmlinux /home/cubrid/data/demodb
 
-#.  Transferring backup/log files to server B
+#.  Transferring backup files to server B
 
-    For a restore, you must prepare a backup file (e.g. demodb_bk0v000) and a backup information file (e.g. demodb_bkvinf) of the database to be backed up. To restore the entire data up to the point of the last commit, you must prepare an active log (e.g. demodb_lgat) and an archive log (e.g. demodb_lgar000). Then, transfer the backup information, active log, and archive log files created on server *A* to server *B*. That is, the backup information, active log and archive log files must be located in a directory (e.g. /home/cubrid/temp) on server *B*.
+    For a restore, you must prepare backup files (e.g. demodb_bk0v000). That is, backup files must be located in a directory (e.g. /home/cubrid/temp) on server *B*.
 
 #.  Restoring the database on server B
 
-    Perform database restore by calling the **cubrid restoredb** utility from the directory into which the backup, backup information, active log and archive log files which were transferred to server *B* had been stored. With the **-u** option, *demodb* is restored in the directory path from the **databases.txt** file. ::
+    Perform database restore by calling the **cubrid restoredb** utility from the directory into which the backup files which were transferred to server *B* had been stored. With the **-u** option, *demodb* is restored in the directory path from the **databases.txt** file. 
+    
+    ::
 
         cubrid restoredb -u demodb
 
-    To call the **cubrid restoredb** utility from a different path, specify the directory path to the backup file by using the **-B** option as follows: ::
+    To call the **cubrid restoredb** utility from a different path, specify the directory path to the backup file by using the **-B** option as follows: 
+    
+    ::
 
         cubrid restoredb -u -B /home/cubrid/temp demodb
-
-#.  Backing up the restored database on server B
-
-    Once the restore of the target database is complete, run the database to check if it has been properly restored. For stable management of the restored database, it is recommended to restore the database again on the server *B* environment.

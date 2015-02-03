@@ -755,36 +755,112 @@ The following are timezone related functions. For each function's detail usage, 
 *   :func:`NEW_TIME`
 *   :func:`TZ_OFFSET`
 
-Conversion functions about types with timezone
-----------------------------------------------
+Functions which Use a Timezone Typed Value
+------------------------------------------
 
-The following are functions converting a string to date/time typed value, or date/time typed value to a string
+All functions which use DATETIME, TIMESTAMP or TIME typed value in their input value, can use timezone typed value.
+
+The below is an example of using timezone typed values, it works the same as the case without timezohne. Exceptionally, if the type name ends with LTZ, the output value of this type follows the local timezone's setting (timezone parameter).
+
+다음 예에서 숫자의 기본 단위는 DATETIME 타입의 최소 단위인 밀리초이다.
+
+On the below example, the default unit of a number is millisecond, which is the minimum unit of DATETIME type.
+
+.. code-block:: sql
+
+    SELECT datetimeltz '09/01/2009 03:30:30 pm' + 1;
+
+::
+
+    03:30:30.001 PM 09/01/2009 Asia/Seoul
+
+.. code-block:: sql
+
+    SELECT datetimeltz '09/01/2009 03:30:30 pm' - 1;
+
+::
+
+    03:30:29.999 PM 09/01/2009 Asia/Seoul
+
+On the below example, the default unit of a number is second, which is the minimum unit of TIMESTAMP type.
+
+.. code-block:: sql
+
+    SELECT timestamptz '09/01/2009 03:30:30 pm' + 1;
+    
+::
+
+    03:30:31 PM 09/01/2009 Asia/Seoul
+
+.. code-block:: sql
+
+    SELECT timestamptz '09/01/2009 03:30:30 pm' - 1;
+
+::
+
+    03:30:29 PM 09/01/2009 Asia/Seoul
+
+On the below example, the default unit of a number is second, which is the minimum unit of TIME type.
+
+.. code-block:: sql
+
+    SELECT timetz '03:30:30 pm' + 1;
+    
+    03:30:31 PM +09:00
+
+.. code-block:: sql
+
+    SELECT EXTRACT (hour from datetimetz'10/15/1986 5:45:15.135 am Europe/Bucharest');
+    
+    5
+
+A type which the name ends with LTZ follows the setting of local timezone. Therefore, if the value of timezone parameter is set to 'Asia/Seoul', EXTRACT function returns hour value of this timezone.
+
+.. code-block:: sql
+
+    -- csql> ;se timezone='Asia/Seoul'
+
+    SELECT EXTRACT (hour from datetimeltz'10/15/1986 5:45:15.135 am Europe/Bucharest');
+
+::
+
+    12
+
+.. **TIMELTZ는 timezone 파라미터 값이 지역 이름으로 설정된 경우 계산을 허용하지 않는다. (이거 나중에 바뀌나? 검토)
+
+    select timeltz '03:30:30 pm' + cast(1 as INTEGER) from db_root;
+    Invalid time: '03:30:30 pm'.
+
+Conversion Functions for Timezone types
+---------------------------------------
+
+The following are functions converting a string to a date/time typed value, or date/time typed value to a string; The value can include an information like an offset, a zone and a daylight saving.
 
 *   :func:`DATE_FORMAT`
-*   :func:`TO_CHAR`
 *   :func:`STR_TO_DATE`
-*   :func:`TO_TIMESTAMP_TZ`
+*   :func:`TO_CHAR`
 *   :func:`TO_DATETIME_TZ`
+*   :func:`TO_TIMESTAMP_TZ`
 *   :func:`TO_TIME_TZ`
 
 For each function's usage, see the each function's explanation by clicking the function name.
 
-The above functions require for timezone parts such as offset, zone and daylight saving.
+.. code-block:: sql
 
-*   TZR: time zone region information. e.g. US/Pacific.
-*   TZD:  daylight saving information. e.g. KST, KT
-*   TZH: time zone hour offset
-*   TZM: time zone minute offset
+    SELECT DATE_FORMAT(datetimetz'2012-02-02 10:10:10 Europe/Zurich CET', '%TZR %TZD %TZH %TZM');
+    SELECT STR_TO_DATE('2001-10-11 02:03:04 AM Europe/Bucharest EEST', '%Y-%m-%d %h:%i:%s %p %TZR %TZD');
+    SELECT TO_CHAR(datetimetz'2001-10-11 02:03:04 AM Europe/Bucharest EEST');
+    SELECT TO_DATETIME_TZ('2001-10-11 02:03:04 AM Europe/Bucharest EEST');
+    SELECT TO_TIMESTAMP_TZ('2001-10-11 02:03:04 AM Europe/Bucharest');
+    SELECT TO_TIME_TZ('02:03:04 +09:00');
 
-On the above functions, the below three functions are the same as the existing TO_TIMESTAMP, TO_DATETIME and TO_TIME functions except that they support the above additional special string tokens.
-
-*   :func:`TO_TIMESTAMP_TZ`
-*   :func:`TO_DATETIME_TZ`
-*   :func:`TO_TIME_TZ`
+.. note::
+    
+    :func:`TO_TIMESTAMP_TZ`, :func:`TO_DATETIME_TZ` and :func:`TO_TIME_TZ` functions do the same behaviors with :func:`TO_TIMESTAMP`, :func:`TO_DATETIME`, and :func:`TO_TIME` functions except that they can have TZR, TZD, TZH and TZM information in their date/time argument.
 
 CUBRID uses the region name of timezone in the IANA(Internet Assigned Numbers Authority) timezone database region; for IANA timezone, see http://www.iana.org/time-zones.
 
-IANA timezone
+IANA Timezone
 -------------
 
 In IANA(Internet Assigned Numbers Authority) timezone database, there are lots of codes and data which represent the history of localtime for many representative locations around the globe.
@@ -793,7 +869,7 @@ This database is periodically updated to reflect changes made by political bodie
 
 CUBRID supports IANA timezone, and a user can use the IANA timezone library in the CUBRID installation package as it is. If you want to update as the recent timezone, update timezone first, compile timezone library, and restart the database. 
 
-Please see how to compile the timezone library.
+Regarding this, see :ref:`timezone-compile`.
 
 Bit Strings
 ===========

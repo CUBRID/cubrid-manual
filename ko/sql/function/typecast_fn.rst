@@ -87,9 +87,7 @@ CUBRID에서 **CAST** 연산자를 사용한 명시적인 타입 변환에 대�
     
 ::
 
-      (1+ cast('1' as integer))
-    ===========================
-                              2
+    2
      
 .. code-block:: sql
 
@@ -107,9 +105,7 @@ CUBRID에서 **CAST** 연산자를 사용한 명시적인 타입 변환에 대�
     
 ::
 
-     (1+ cast('1234567890' as integer))
-    ====================================
-                              1234567891
+    1234567891
      
 .. code-block:: sql
 
@@ -118,9 +114,7 @@ CUBRID에서 **CAST** 연산자를 사용한 명시적인 타입 변환에 대�
     
 ::
 
-     (1+ cast('1234.567890' as integer))
-    ====================================
-      1236
+    1236
      
 .. code-block:: sql
 
@@ -129,9 +123,7 @@ CUBRID에서 **CAST** 연산자를 사용한 명시적인 타입 변환에 대�
     
 ::
 
-     ( cast('1234.567890' as char(5)))
-    ====================================
-      '1234.'
+    '1234.'
      
 .. code-block:: sql
 
@@ -149,9 +141,7 @@ CUBRID에서 **CAST** 연산자를 사용한 명시적인 타입 변환에 대�
     
 ::
 
-     ( cast(1234.567890 as char(11)))
-    ====================================
-      '1234.567890'
+    '1234.567890'
      
 .. code-block:: sql
 
@@ -160,9 +150,7 @@ CUBRID에서 **CAST** 연산자를 사용한 명시적인 타입 변환에 대�
     
 ::
 
-     ( cast(1234.567890 as varchar))
-    ====================================
-      '1234.567890'
+    '1234.567890'
      
 .. code-block:: sql
 
@@ -171,9 +159,7 @@ CUBRID에서 **CAST** 연산자를 사용한 명시적인 타입 변환에 대�
     
 ::
 
-     ( cast('2008-12-25 10:30:20' as timestamp))
-    =============================================
-      10:30:20 AM 12/25/2008
+    10:30:20 AM 12/25/2008
      
 .. code-block:: sql
 
@@ -181,9 +167,7 @@ CUBRID에서 **CAST** 연산자를 사용한 명시적인 타입 변환에 대�
     
 ::
 
-     ( cast('10:30:20' as time))
-    ==================================================
-      10:30:20 AM
+    10:30:20 AM
      
 .. code-block:: sql
 
@@ -192,9 +176,7 @@ CUBRID에서 **CAST** 연산자를 사용한 명시적인 타입 변환에 대�
     
 ::
 
-     ( cast('2008-12-25 10:30:20' as time))
-    ========================================
-      10:30:20 AM
+    10:30:20 AM
      
 .. code-block:: sql
 
@@ -203,9 +185,7 @@ CUBRID에서 **CAST** 연산자를 사용한 명시적인 타입 변환에 대�
     
 ::
 
-     ( cast(timestamp '2008-12-25 10:30:20' as time))
-    ==================================================
-      10:30:20 AM
+    10:30:20 AM
      
 .. code-block:: sql
 
@@ -213,8 +193,6 @@ CUBRID에서 **CAST** 연산자를 사용한 명시적인 타입 변환에 대�
     
 ::
 
-     cast('abcde' as blob)
-    ======================
     file:/home1/user1/db/tdb/lob/ces_743/ces_temp.00001283232024309172_1342
      
 .. code-block:: sql
@@ -223,9 +201,7 @@ CUBRID에서 **CAST** 연산자를 사용한 명시적인 타입 변환에 대�
     
 ::
 
-      cast(B'11010000' as varchar(10))
-    ====================================
-      'd0'
+    'd0'
      
 .. code-block:: sql
 
@@ -233,9 +209,7 @@ CUBRID에서 **CAST** 연산자를 사용한 명시적인 타입 변환에 대�
     
 ::
 
-     cast('1A' as bit(16))
-    =================================
-      X'1a00'
+    X'1a00'
 
 .. note::
 
@@ -252,9 +226,9 @@ DATE_FORMAT
 
 .. function:: DATE_FORMAT (date, format)
 
-    **DATE_FORMAT** 함수는 **DATE** 형식('*YYYY*-*MM*-*DD*' 또는 '*MM*/*DD*/*YYYY*')를 포함하는 문자열 또는 날짜/시간 타입(**DATE**, **TIMESTAMP**, **DATETIME**) 값을 지정된 날짜/시간 형식으로 변환하여 문자열로 출력하며, 리턴 값은 **VARCHAR** 타입이다. 지정할 *format* 인자는 아래의 :ref:`날짜/시간 형식 2 <datetime-format2>` 표를 참고한다. :ref:`날짜/시간 형식 2 <datetime-format2>` 표는 :func:`DATE_FORMAT` 함수, :func:`TIME_FORMAT` 함수, :func:`STR_TO_DATE` 함수에서 사용된다.
+    **DATE_FORMAT** 함수는 날짜를 포함하는 날짜/시간 타입 값을 지정된 날짜/시간 형식의 문자열로 출력하며, 리턴 값은 **VARCHAR** 타입이다. 지정할 *format* 인자는 아래의 :ref:`날짜/시간 형식 2 <datetime-format2>` 표를 참고한다. :ref:`날짜/시간 형식 2 <datetime-format2>` 표는 :func:`DATE_FORMAT` 함수, :func:`TIME_FORMAT` 함수, :func:`STR_TO_DATE` 함수에서 사용된다.
 
-    :param date: **DATE** 형식('*YYYY*-*MM*-*DD*' 또는 '*MM*/*DD*/*YYYY*')를 포함하는 문자열 또는 날짜/시간 타입(**DATE**, **TIMESTAMP**, **DATETIME**) 값이 지정될 수 있다.
+    :param date: DATE, TIMESTAMP, DATETIME, DATETIMETZ, DATETIMELTZ, TIMESTAMPTZ, 또는 TIMESTAMPLTZ 타입의 값
     :param format: 출력 형식을 지정한다. '%'로 시작하는 형식 지정자(specifier)를 사용한다.
     :rtype: STRING
 
@@ -341,85 +315,97 @@ DATE_FORMAT
 +--------------+--------------------------------------------------------------------------+
 | %x           | 형식 지정자로 쓰이지 않는 영문자 중 임의의 문자 x를 그대로 출력하는 경우 |
 +--------------+--------------------------------------------------------------------------+
+| %TZR         | 타임존 영역 정보(예: US/Pacific)                                         |
++--------------+--------------------------------------------------------------------------+
+| %TZD         | 일광 절약 정보(예: KST, KT, EET)                                         |
++--------------+--------------------------------------------------------------------------+
+| %TZH         | 타임존의 시간 오프셋(예: +09, -09)                                       |
++--------------+--------------------------------------------------------------------------+
+| %TZM         | 타임존의 분 오프셋  (예: +00, +30)                                       |
++--------------+--------------------------------------------------------------------------+
+
+.. note::
+
+    %TZR, %TZD, %TZH, %TZM은 타임존 타입에서만 사용 가능하다.
+    
+.. note:: **TZD 뒤에 숫자를 명시하는 포맷**
+
+    :ref:`TZD 뒤에 숫자를 명시하는 포맷 <tzd-and-a-following-number>`\을 참고한다.
 
 다음은 시스템 파라미터 **intl_date_lang** 의 값이 "en_US"인 경우의 예이다.
 
 .. code-block:: sql
 
-    SELECT DATE_FORMAT('2009-10-04 22:23:00', '%W %M %Y');
+    SELECT DATE_FORMAT(datetime'2009-10-04 22:23:00', '%W %M %Y');
     
 ::
 
-     date_format('2009-10-04 22:23:00', '%W %M %Y')
-    ======================
       'Sunday October 2009'
      
 .. code-block:: sql
 
-    SELECT DATE_FORMAT('2007-10-04 22:23:00', '%H:%i:%s');
+    SELECT DATE_FORMAT(datetime'2007-10-04 22:23:00', '%H:%i:%s');
     
 ::
 
-     date_format('2007-10-04 22:23:00', '%H:%i:%s')
-    ======================
-      '22:23:00'
+    '22:23:00'
      
 .. code-block:: sql
 
-    SELECT DATE_FORMAT('1900-10-04 22:23:00', '%D %y %a %d %m %b %j');
+    SELECT DATE_FORMAT(datetime'1900-10-04 22:23:00', '%D %y %a %d %m %b %j');
     
 ::
 
-     date_format('1900-10-04 22:23:00', '%D %y %a %d %m %b %j')
-    ======================
-      '4th 00 Thu 04 10 Oct 277'
+    '4th 00 Thu 04 10 Oct 277'
      
 .. code-block:: sql
 
-    SELECT DATE_FORMAT('1999-01-01', '%X %V');
+    SELECT DATE_FORMAT(date'1999-01-01', '%X %V');
     
 ::
 
-     date_format('1999-01-01', '%X %V')
-    ======================
-      '1998 52'
+    '1998 52'
 
 다음은 시스템 파라미터 **intl_date_lang** 의 값이 "de_DE"인 경우의 예이다.
 
 .. code-block:: sql
 
     SET SYSTEM PARAMETERS 'intl_date_lang="de_DE"';
-    SELECT DATE_FORMAT('2009-10-04 22:23:00', '%W %M %Y');
+    SELECT DATE_FORMAT(datetime'2009-10-04 22:23:00', '%W %M %Y');
     
 ::
 
-       date_format('2009-10-04 22:23:00', '%W %M %Y')
-    ======================
-      'Sonntag Oktober 2009'
+    'Sonntag Oktober 2009'
      
 .. code-block:: sql
 
-    SELECT DATE_FORMAT('2007-10-04 22:23:00', '%H:%i:%s %p');
+    SELECT DATE_FORMAT(datetime'2007-10-04 22:23:00', '%H:%i:%s %p');
     
 ::
 
-       date_format('2007-10-04 22:23:00', '%H:%i:%s %p')
-    ======================
-      '22:23:00 Nachm.'
+    '22:23:00 Nachm.'
      
 .. code-block:: sql
 
-    SELECT DATE_FORMAT('1900-10-04 22:23:00', '%D %y %a %d %m %b %j');
+    SELECT DATE_FORMAT(datetime'1900-10-04 22:23:00', '%D %y %a %d %m %b %j');
     
 ::
 
-       date_format('1900-10-04 22:23:00', '%D %y %a %d %m %b %j')
-    ======================
-      '4 00 Do. 04 10 Okt 277'
+    '4 00 Do. 04 10 Okt 277'
 
 .. note::
 
     문자셋이 ISO-8859-1인 경우 "en_US" 외에 시스템 파라미터 **intl_date_lang**\ 에 의해 변경할 수 있는 언어는 "ko_KR"과 "tr_TR"뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 :func:`TO_CHAR`\ 의 :ref:`Note <tochar-remark>`\ 를 참고한다.
+
+다음은 타임존 정보를 포함하는 DATETIMETZ 타입의 값을 원하는 형식에 맞게 문자열로 변환하여 출력하는 예제이다.
+
+.. code-block:: sql
+
+    SELECT DATE_FORMAT(datetimetz'2012-02-02 10:10:10 Europe/Zurich CET', '%TZR %TZD %TZH %TZM');
+
+::
+    'Europe/Zurich CET 01 00'
+
 
 FORMAT
 ======
@@ -445,9 +431,7 @@ FORMAT
     
 ::
 
-      format(12000.123456, 3)   format(12000.123456, 0)
-    ============================================
-      '12,000.123'          '12,000'
+    '12,000.123'          '12,000'
 
 다음은 시스템 파라미터 **intl_number_lang** 의 값을 "de_DE"로 설정하여 생성한 데이터베이스에서 실행한 예이다. 독일, 프랑스 등 유럽 국가 대부분의 숫자 출력 형식은 "."가 자릿수 구분 기호이고, ","가 소수점 기호이다.
 
@@ -458,20 +442,18 @@ FORMAT
     
 ::
 
-       format(12000.123456, 3)   format(12000.123456, 0)
-    ============================================
-      '12.000,123'          '12.000'
+    '12.000,123'          '12.000'
 
 STR_TO_DATE
 ===========
 
 .. function:: STR_TO_DATE (string, format)
 
-    **STR_TO_DATE** 함수는 인자로 주어진 문자열을 지정된 형식에 따라 해석하여 날짜/시간 값으로 변환하며, :func:`DATE_FORMAT` 함수와 반대로 동작한다. 리턴 값은 문자열에 포함된 날짜 또는 시간 부분에 따라 타입이 결정되며, **DATETIME**, **DATE**, **TIME** 타입 중 하나이다.
+    **STR_TO_DATE** 함수는 인자로 주어진 문자열을 지정된 형식에 따라 해석하여 날짜/시간 값으로 변환하며, :func:`DATE_FORMAT` 함수와 반대로 동작한다. 리턴 값은 문자열에 포함된 날짜 또는 시간 부분에 따라 타입이 결정된다.
     
-    :param string: 모든 문자열 타입이 지정될 수 있다.
+    :param string: 문자열
     :param format: 문자열 해석을 위한 형식을 지정한다. %를 포함하는 문자열을 형식 지정자(specifier)로 사용한다. :func:`DATE_FORMAT` 함수의 :ref:`날짜/시간 형식 2 <datetime-format2>` 표를 참고한다.
-    :rtype: DATETIME, DATE, TIME
+    :rtype: DATETIME, DATE, TIME, DATETIMETZ, TIMETZ
 
 지정할 *format* 인자는 :func:`DATE_FORMAT` 함수의 :ref:`날짜/시간 형식 2 <datetime-format2>` 표를 참고한다.
 
@@ -492,9 +474,7 @@ STR_TO_DATE
     
 ::
 
-     str_to_date('01,5,2013', '%d,%m,%Y')
-    =======================================
-      05/01/2013
+    05/01/2013
      
 .. code-block:: sql
 
@@ -502,9 +482,7 @@ STR_TO_DATE
     
 ::
 
-     str_to_date('May 1, 2013', '%M %d,%Y')
-    =========================================
-      05/01/2013
+    05/01/2013
      
 .. code-block:: sql
 
@@ -512,9 +490,7 @@ STR_TO_DATE
     
 ::
 
-     str_to_date('13:30:17', '%H:%i')
-    ========================================
-      01:30:00 PM
+    01:30:00 PM
      
 .. code-block:: sql
 
@@ -522,9 +498,7 @@ STR_TO_DATE
     
 ::
 
-     str_to_date('09:30:17 PM', '%r')
-    =======================================
-      09:30:17 PM
+    09:30:17 PM
      
 .. code-block:: sql
 
@@ -532,9 +506,7 @@ STR_TO_DATE
     
 ::
 
-     str_to_date('0,0,0000', '%d,%m,%Y')
-    ======================================
-      00/00/0000
+    00/00/0000
 
 다음은 시스템 파라미터 **intl_date_lang** 의 값이 "de_DE"인 경우의 예이다. 독일어 Oktober가 10월로 해석된다.
 
@@ -545,22 +517,41 @@ STR_TO_DATE
     
 ::
 
-       str_to_date('3 Oktober 2009', '%d %M %Y')
-    ============================================
-      10/03/2009
+    10/03/2009
 
 .. note::
 
     문자셋이 ISO-8859-1인 경우 "en_US" 외에 시스템 파라미터 **intl_date_lang**\ 에 의해 변경할 수 있는 언어는 "ko_KR"과 "tr_TR"뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 :func:`TO_CHAR`\ 의 :ref:`Note <tochar-remark>`\ 를 참고한다.
+
+다음은 타임존 정보를 포함하는 날짜/시간 문자열을 DATETIMETZ 타입으로 변환하는 예제이다.
+
+.. code-block:: sql
+
+    SELECT STR_TO_DATE('2001-10-11 02:03:04 AM Europe/Bucharest EEST', '%Y-%m-%d %h:%i:%s %p %TZR %TZD');
+
+::
+
+    02:03:04.000 AM 10/11/2001 Europe/Bucharest EEST
+    
+
+다음은 타임존 오프셋 정보를 포함하는 시간 문자열을 TIMETZ 타입의 값으로 변환하는 예제이다.
+
+.. code-block:: sql
+
+    SELECT STR_TO_DATE('13:30:17 +10','%H:%i:%s %TZH');
+
+::
+
+    01:30:17 PM +10:00
 
 TIME_FORMAT
 ===========
 
 .. function:: TIME_FORMAT (time, format)
 
-    **TIME_FORMAT** 함수는 **TIME** 형식(*HH*:*MI*:*SS*)을 포함하는 문자열 또는 **TIME**\ 을 포함하는 날짜/시간 타입(**TIME**, **TIMESTAMP**, **DATETIME**) 값을 지정된 시간 형식으로 변환하여 문자열로 출력하며, 리턴 값은 **VARCHAR** 타입이다.
+    **TIME_FORMAT** 함수는 시간을 포함하는 날짜/시간 타입 값을 지정된 시간 형식의 문자열로 출력하며, 리턴 값은 **VARCHAR** 타입이다.
 
-    :param time: **TIME** 형식(*HH*:*MI*:*SS*)을 포함하는 문자열, **TIME**\ 을 포함하는 날짜/시간 타입(**TIME**, **TIMESTAMP**, **DATETIME**) 값을 지정할 수 있다.
+    :param time: 시간을 포함하는 타입(TIME, TIMESTAMP, DATETIME, TIMETZ, TIMESTAMPTZ 또는 DATETIMETZ)의 값.
     :param format: 문자열 해석을 위한 형식을 지정한다. %를 포함하는 문자열을 형식 지정자(specifier)로 사용한다. :func:`DATE_FORMAT` 함수의 :ref:`날짜/시간 형식 2 <datetime-format2>` 표를 참고한다.
     :rtype: STRING
 
@@ -573,23 +564,19 @@ TIME_FORMAT
 .. code-block:: sql
 
     SET SYSTEM PARAMETERS 'intl_date_lang="en_US"';
-    SELECT TIME_FORMAT('22:23:00', '%H %i %s');
+    SELECT TIME_FORMAT(time'22:23:00', '%H %i %s');
     
 ::
 
-     time_format('22:23:00', '%H %i %s')
-    ======================
-      '22 23 00'
+    '22 23 00'
      
 .. code-block:: sql
 
-    SELECT TIME_FORMAT('23:59:00', '%H %h %i %s %f');
+    SELECT TIME_FORMAT(time'23:59:00', '%H %h %i %s %f');
     
 ::
 
-     time_format('23:59:00', '%H %h %i %s %f')
-    ======================
-      '23 11 59 00 000'
+    '23 11 59 00 000'
      
 .. code-block:: sql
 
@@ -597,9 +584,7 @@ TIME_FORMAT
     
 ::
 
-     SYS_TIME     time_format( SYS_TIME , '%p')
-    ===================================
-      08:46:53 PM  'PM'
+    08:46:53 PM  'PM'
 
 다음은 시스템 파라미터 **intl_date_lang** 의 값이 "de_DE"인 경우의 예이다.
 
@@ -610,26 +595,42 @@ TIME_FORMAT
      
 ::
 
-       SYS_TIME     time_format( SYS_TIME , '%p')
-    ===================================
-      08:46:53 PM  'Nachm.'
+    08:46:53 PM  'Nachm.'
 
 .. note::
 
     문자셋이 ISO-8859-1인 경우 "en_US" 외에 시스템 파라미터 **intl_date_lang**\ 에 의해 변경할 수 있는 언어는 "ko_KR"과 "tr_TR"뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 :func:`TO_CHAR`\ 의 :ref:`Note <tochar-remark>`\ 를 참고한다.
+
+다음은 타임존 정보를 포함하는 값을 명시한 포맷의 문자열로 출력하는 예이다. 
+
+.. code-block:: sql
+
+    SELECT TIME_FORMAT(datetimetz'2001-10-11 02:03:04 AM Europe/Bucharest EEST', '%h:%i:%s %p %TZR %TZD');
+
+::
+
+    '02:03:04 AM Europe/Bucharest EEST'
+
+.. code-block:: sql
+
+    SELECT TIME_FORMAT(timetz'13:30:17 +10','%H:%i:%s %TZH');
+
+::
+
+    '13:30:17 10'
 
 TO_CHAR(date_time) 
 ===================
 
 .. function:: TO_CHAR ( date_time [, format[, date_lang_string_literal ]] )
 
-    **TO_CHAR** (date_time) 함수는 날짜/시간 타입(**TIME**, **DATE**, **TIMESTAMP**, **DATETIME**) 값을 :ref:`날짜/시간 형식 1 <datetime-format1>` 표에 따라 문자열로 변환하여 이를 반환하며, 리턴 값의 타입은 **VARCHAR** 이다.
+    **TO_CHAR** (date_time) 함수는 날짜/시간 타입 값을 :ref:`날짜/시간 형식 1 <datetime-format1>` 표에 따라 문자열로 변환하여 이를 반환하며, 리턴 값의 타입은 **VARCHAR** 이다.
 
-    :param date_time: 날짜/시간 타입의 연산식을 지정한다. 값이 **NULL** 인 경우에는 **NULL** 이 반환된다.
-    :param format: 리턴 값의 형식을 지정한다. 값이 **NULL** 인 경우에는 **NULL** 이 반환된다.
+    :param date_time: 날짜/시간 타입(TIME, DATE, TIMESTAMP, DATETIME, DATETIMETZ, DATETIMELTZ, TIMESTAMPTZ, TIMESTAMPLTZ, TIMETZ, TIMELTZ)의 값.
+    :param format: 리턴 값의 형식
     :param date_lang_string_literal: 리턴 값에 적용할 언어를 지정한다.
     :rtype: STRING
-    
+
 *format* 인자가 지정되면 지정한 언어에 맞는 형식으로 *date_time* 을 출력한다. 자세한 형식은 :ref:`날짜/시간 형식 1 <datetime-format1>` 표를 참고하면 된다. 언어는 *date_lang_string_literal* 인자에 의해 정해진다. *date_lang_string_literal* 인자가 생략되면 **intl_date_lang** 시스템 파라미터에 지정한 언어가 적용되며, **intl_date_lang** 값이 지정되지 않으면 DB 생성 시 지정한 언어가 적용된다.
 
 예를 들어 언어가 "de_DE"일 때 *format*\ 이 "HH:MI:SS AM"인 경우 "08:46:53 PM"인 시간을 "08:46:53 Nachm."으로 출력한다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 에러를 반환한다.
@@ -717,6 +718,34 @@ TO_CHAR(date_time)
 +-----------------------+-----------------------------------------------+
 | \- / , . ; : "텍스트" | 구두점과 인용구는 그대로 결과에 표현됨        |
 +-----------------------+-----------------------------------------------+
+| **TZR**               | 타임존 영역 정보(예: US/Pacific)              |
++-----------------------+-----------------------------------------------+
+| **TZD**               | 일광 절약 정보(예: KST, KT, EET)              |
++-----------------------+-----------------------------------------------+
+| **TZH**               | 타임존의 시간 오프셋(예: +09, -09)            |
++-----------------------+-----------------------------------------------+
+| **TZM**               | 타임존의 분 오프셋  (예: 00, 30)              |
++-----------------------+-----------------------------------------------+
+
+.. note::
+
+    TZR, TZD, TZH, TZM은 타임존 타입에서만 사용 가능하다.
+
+..  _tzd-and-a-following-number:
+    
+.. note:: **TZD 뒤에 숫자를 명시하는 포맷**
+
+    TZD는 뒤에 숫자를 붙여서도 사용할 수 있다. TZD2~TZD11까지 사용할 수 있는데, 일반 문자를 문자열의 구분자로 사용하는 경우 숫자가 뒤따르는 포맷을 사용할 수 있다.
+    
+        .. code-block:: sql
+        
+            SELECT STR_TO_DATE('09:30:17 20140307XEESTXEurope/Bucharest','%h:%i:%s %Y%d%mX%TZD4X%TZR');
+        
+        ::
+        
+            09:30:17.000 AM 07/03/2014 Europe/Bucharest EEST
+
+        위와 같이 각각의 값을 구분하기 위한 구분자로 일반 문자인 'X'를 사용하는 경우, TZD 값은 길이가 변할 수 있는 값이므로 TZD의 값과 구분자를 구분하기에 모호하다. 이런 경우 TZD의 길이를 명시하여야 한다.
 
 **date_lang_string_literal 예**
 
@@ -809,8 +838,6 @@ TO_CHAR(date_time)
     
 ::
 
-     to_char(b, 'DD, DY , MON, YYYY')
-    ======================
     '20, TUE , AUG, 2013'
      
 .. code-block:: sql
@@ -819,8 +846,6 @@ TO_CHAR(date_time)
     
 ::
 
-     to_char(c, 'HH24:MI, DD, MONTH, YYYY')
-    ======================
     '17:00, 20, AUGUST   , 2013'
      
 .. code-block:: sql
@@ -829,8 +854,6 @@ TO_CHAR(date_time)
     
 ::
 
-     to_char(d, 'HH12:MI:SS:FF pm, YYYY-MM-DD-DAY')
-    ======================
     '05:00:58:358 pm, 2013-08-20-TUESDAY  '
      
 .. code-block:: sql
@@ -839,8 +862,6 @@ TO_CHAR(date_time)
     
 ::
 
-     to_char(timestamp '2009-10-04 22:23:00', 'Day Month yyyy')
-    ======================
     'Sunday    October   2009'
 
 다음은 위에서 생성한 데이터베이스에서 **TO_CHAR** 함수에 언어 인자를 별도로 부여한 예이다. 문자셋이 ISO-8859-1이면 **TO_CHAR** 함수의 언어 인자를 "tr_TR"과 "ko_KR"로 설정하는 것은 허용하나, 다른 언어는 허용하지 않는다. **TO_CHAR** 의 언어 인자로 모든 언어를 사용 가능하게 하려면 데이터베이스 생성 시 문자셋이 UTF8이어야 한다.
@@ -851,9 +872,7 @@ TO_CHAR(date_time)
     
 ::
 
-       to_char(timestamp '2009-10-04 22:23:00', 'Day Month yyyy', 'ko_KR')
-    ======================
-      'Iryoil    10wol 2009'
+    'Iryoil    10wol 2009'
      
 .. code-block:: sql
 
@@ -861,9 +880,7 @@ TO_CHAR(date_time)
     
 ::
 
-       to_char(timestamp '2009-10-04 22:23:00', 'Day Month yyyy', 'tr_TR')
-    ======================
-      'Pazar     Ekim    2009'
+    'Pazar     Ekim    2009'
 
 .. _tochar-remark:
 
@@ -892,9 +909,7 @@ TO_CHAR(date_time)
         
         ::
         
-               to_char(timestamp '2009-10-04 22:23:00', 'Day Month yyyy', 'de_DE')
-            ======================
-              'Sonntag   Oktober 2009'
+            'Sonntag   Oktober 2009'
 
     *   첫번째 인자가 zerodate이고 두번째 인자에 'Month', 'Day'와 같은 리터럴 형식이 지정되면 TO_CHAR 함수는 NULL을 반환한다.
     
@@ -905,6 +920,28 @@ TO_CHAR(date_time)
         ::
         
             NULL
+
+다음은 타임존 정보를 포함하는 날짜/시간 타입을 TO_CHAR 함수에서 출력하는 예이다.
+
+형식을 정의하지 않으면 아래와 같은 순서로 출력된다.
+
+.. code-block:: sql
+
+    SELECT TO_CHAR(datetimetz'2001-10-11 02:03:04 AM Europe/Bucharest EEST');
+
+::
+
+    '02:03:04.000 AM 10/11/2001 Europe/Bucharest EEST'
+
+형식을 정의하면 정의한 순서대로 출력된다.
+
+.. code-block:: sql
+
+    SELECT TO_CHAR(datetimetz'2001-10-11 02:03:04 AM Europe/Bucharest EEST', 'MM/DD/YYYY HH24:MI TZR TZD TZH TZM');
+
+::
+
+    '10/11/2001 02:03 Europe/Bucharest EEST +03 +00'
 
 TO_CHAR(number)
 ===============
@@ -991,9 +1028,7 @@ TO_CHAR(number)
     
 ::
 
-      to_char(12345, 'S999999')   to_char(12345, 'S099999')
-    ============================================
-      ' +12345'             '+012345'
+    ' +12345'             '+012345'
      
      
 .. code-block:: sql
@@ -1002,9 +1037,7 @@ TO_CHAR(number)
     
 ::
 
-      to_char(1234567, '9,999,999,999')
-    ======================
-      '    1,234,567'
+    '    1,234,567'
      
 .. code-block:: sql
 
@@ -1012,9 +1045,7 @@ TO_CHAR(number)
     
 ::
 
-      to_char(1234567, '9.999.999.999')
-    ======================
-      '#############'
+    '#############'
      
 .. code-block:: sql
 
@@ -1022,9 +1053,7 @@ TO_CHAR(number)
     
 ::
 
-      to_char(123.4567, '99')   to_char(123.4567, '999.99999')   to_char(123.4567, '99999.999')
-    ==================================================================
-      '##'                  '123.45670'           '  123.457'
+    '##'                  '123.45670'           '  123.457'
 
 다음은 시스템 파라미터 **intl_number_lang**\ 의 값을 "de_DE"로 설정하고 수행한 예이다. 독일, 프랑스 등 유럽 국가 대부분의 숫자 출력 형식은 "."가 자릿수 구분 기호이고, ","가 소수점 기호이다.
 
@@ -1037,9 +1066,7 @@ TO_CHAR(number)
 
 ::
     
-      to_char(12345, 'S999999')   to_char(12345, 'S099999')
-    ============================================
-      ' +12345'             '+012345'
+    ' +12345'             '+012345'
      
 .. code-block:: sql
      
@@ -1047,9 +1074,7 @@ TO_CHAR(number)
     
 ::
 
-      to_char(1234567, '9,999,999,999')
-    ======================
-      '#############'
+    '#############'
      
 .. code-block:: sql
      
@@ -1057,9 +1082,7 @@ TO_CHAR(number)
     
 ::
 
-      to_char(1234567, '9.999.999.999')
-    ======================
-      '    1.234.567'
+    '    1.234.567'
      
 .. code-block:: sql
 
@@ -1067,9 +1090,7 @@ TO_CHAR(number)
      
 ::
 
-      to_char(123.4567, '99')   to_char(123.4567, '999,99999')   to_char(123.4567, '99999,999')
-    ==================================================================
-      '##'                  '123,45670'           '  123,457'
+    '##'                  '123,45670'           '  123,457'
      
 .. code-block:: sql
 
@@ -1077,9 +1098,7 @@ TO_CHAR(number)
     
 ::
 
-     to_char(123.4567, '99', 'en_US')   to_char(123.4567, '999.99999', 'en_US')   to_char(123.4567, '99999.999', 'en_US')
-    ==========================================================
-      '##'                  '123.45670'           '  123.457'
+    '##'                  '123.45670'           '  123.457'
      
 .. code-block:: sql
 
@@ -1087,9 +1106,7 @@ TO_CHAR(number)
      
 ::
 
-      to_char(1.234567, '99.999EEEE', 'en_US')   to_char(1.234567, '99,999EEEE', 'de_DE')   to_char(123.4567)
-    ==================================================================
-      '1.235E+00'           '1,235E+00'           '123,4567'
+    '1.235E+00'           '1,235E+00'           '123,4567'
 
 TO_DATE
 =======
@@ -1098,8 +1115,8 @@ TO_DATE
 
     **TO_DATE** 함수는 인자로 지정된 날짜 형식을 기준으로 문자열을 해석하여, 이를 **DATE** 타입의 값으로 변환하여 반환한다. 날짜 형식은 :ref:`날짜/시간 형식 1 <datetime-format1>`\ 을 참고한다.
 
-    :param string: 문자열을 반환하는 임의의 연산식이다. 값이 NULL이면 결과로 NULL이 반환된다.
-    :param format: 날짜 타입으로 변환할 값의 형식을 지정하며, :ref:`날짜/시간 형식 1 <datetime-format1>` 표를 참고한다. 값이 **NULL**\ 이면 결과로 **NULL**\ 이 반환된다.
+    :param string: 문자열
+    :param format: **DATE** 타입으로 변환할 값의 형식을 지정하며, :ref:`날짜/시간 형식 1 <datetime-format1>` 표를 참고한다. 값이 **NULL**\ 이면 결과로 **NULL**\ 이 반환된다.
     :param date_lang_string_literal: 입력 값에 적용할 언어를 지정한다.
     :rtype: DATE
 
@@ -1121,9 +1138,7 @@ TO_DATE
     
 ::
 
-     to_date('12/25/2008')
-    ===============================================
-      12/25/2008
+    12/25/2008
      
 .. code-block:: sql
 
@@ -1131,9 +1146,7 @@ TO_DATE
     
 ::
 
-     to_date('25/12/2008', 'DD/MM/YYYY')
-    ===============================================
-      12/25/2008
+    12/25/2008
      
 .. code-block:: sql
 
@@ -1141,9 +1154,7 @@ TO_DATE
     
 ::
 
-     to_date('081225', 'YYMMDD')
-    ===============================================
-      12/25/2008
+    12/25/2008
      
 .. code-block:: sql
 
@@ -1151,9 +1162,7 @@ TO_DATE
     
 ::
 
-     to_date('2008-12-25', 'YYYY-MM-DD')
-    ====================================
-      12/25/2008
+    12/25/2008
 
 다음은 **intl_date_lang** 의 값이 "de_DE"일 때 **TO_DATE**\ 를 수행하는 예이다.
 
@@ -1164,9 +1173,7 @@ TO_DATE
     
 ::
 
-       to_date('25.12.2012')
-    ========================
-       12/25/2012
+    12/25/2012
      
 .. code-block:: sql
 
@@ -1174,9 +1181,7 @@ TO_DATE
     
 ::
 
-       to_date('12/mai/2012', 'dd/mon/yyyy', 'de_DE')
-    =================================================
-       05/12/2012
+    05/12/2012
 
 .. note::
 
@@ -1189,7 +1194,7 @@ TO_DATETIME
 
     **TO_DATETIME** 함수는 인자로 지정된 **DATETIME** 형식을 기준으로 문자열을 해석하여, 이를 **DATETIME** 타입의 값으로 변환하여 반환한다. **DATETIME** 형식은 :func:`TO_CHAR` 함수의 :ref:`날짜/시간 형식 1 <datetime-format1>`\ 을 참고한다.
 
-    :param string: 문자열을 반환하는 임의의 연산식이다. 값이 NULL이면 결과로 NULL이 반환된다.
+    :param string: 문자열
     :param format: DATETIME 타입으로 변환할 값의 형식을 지정하며, :ref:`날짜/시간 형식 1 <datetime-format1>`\을 참고한다. 값이 **NULL** 이면 결과로 **NULL** 이 반환된다.
     :param date_lang_string_literal: 입력 값에 적용할 언어를 지정한다.
     :rtype: DATETIME
@@ -1214,9 +1219,7 @@ TO_DATETIME
     
 ::
 
-     to_datetime('13:10:30 12/25/2008')
-    =====================================
-      01:10:30.000 PM 12/25/2008
+    01:10:30.000 PM 12/25/2008
      
 .. code-block:: sql
 
@@ -1224,9 +1227,7 @@ TO_DATETIME
     
 ::
 
-     to_datetime('08-Dec-25 13:10:30.999', 'YY-Mon-DD HH24:MI:SS.FF')
-    =====================================
-      01:10:30.999 PM 12/25/2008
+    01:10:30.999 PM 12/25/2008
      
 .. code-block:: sql
 
@@ -1234,9 +1235,7 @@ TO_DATETIME
     
 ::
 
-     to_datetime('DATE: 12-25-2008 TIME: 13:10:30.999', '"DATE:" MM-DD-YYYY "TIME:" HH24:MI:SS.FF')
-    =====================================
-      01:10:30.999 PM 12/25/2008
+    01:10:30.999 PM 12/25/2008
 
 다음은 **intl_date_lang** 의 값이 "de_DE"일 때 수행한 예이다.
 
@@ -1247,9 +1246,7 @@ TO_DATETIME
     
 ::
 
-       to_datetime('13:10:30.999 25.12.2012')
-    =========================================
-      01:10:30.999 PM 12/25/2012
+    01:10:30.999 PM 12/25/2012
      
 .. code-block:: sql
 
@@ -1257,13 +1254,28 @@ TO_DATETIME
     
 ::
 
-       to_datetime('12/mai/2012 12:10:00 Nachm.', 'DD/MON/YYYY HH:MI:SS AM', 'de_DE')
-    =================================================================================
-      12:10:00.000 PM 05/12/2012
+    12:10:00.000 PM 05/12/2012
 
 .. note::
 
     문자셋이 ISO-8859-1인 경우 "en_US" 외에 시스템 파라미터 **intl_date_lang**\ 에 의해 변경할 수 있는 언어는 "ko_KR"과 "tr_TR"뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 :func:`TO_CHAR`\ 의 :ref:`Note <tochar-remark>`\ 를 참고한다.
+
+TO_DATETIME_TZ
+==============
+
+.. function:: TO_DATETIME_TZ (string [,format [,date_lang_string_literal]])
+
+    **TO_DATETIME_TZ** 함수는 입력 문자열에 타임존 정보를 포함할 수 있다는 점을 제외하고는 :func:`TO_DATETIME` 함수와 동일하다.
+
+    :rtype: DATETIMETZ
+
+.. code-block:: sql
+
+    SELECT TO_DATETIME_TZ('13:10:30 Asia/Seoul 12/25/2008', 'HH24:MI:SS TZR MM/DD/YYYY');
+    
+::
+
+    01:10:30.000 PM 12/25/2008 Asia/Seoul
 
 TO_NUMBER
 =========
@@ -1293,9 +1305,7 @@ TO_NUMBER
     
 ::
 
-     to_number('-1234')
-    ============================================
-      -1234
+    -1234
      
 .. code-block:: sql
      
@@ -1303,9 +1313,7 @@ TO_NUMBER
     
 ::
 
-     to_number('12345', '999999')
-    ============================================
-      12345
+    12345
      
 .. code-block:: sql
      
@@ -1313,9 +1321,7 @@ TO_NUMBER
     
 ::
 
-     to_number('12,345.67', '99,999.999')
-    ======================
-      12345.670
+    12345.670
      
 .. code-block:: sql
      
@@ -1323,9 +1329,7 @@ TO_NUMBER
     
 ::
 
-     to_number('12345.67', '99999.999')
-    ============================================
-      12345.670
+    12345.670
 
 다음은 시스템 파라미터 **intl_number_lang** 의 값을 "de_DE"로 설정하여 실행한 예이다. 독일, 프랑스 등 유럽 국가에서는 숫자의 자릿수 구분 기호로 마침표가 사용되며, 소수점 기호로 쉼표가 사용된다.
 
@@ -1336,9 +1340,7 @@ TO_NUMBER
 
 ::
 
-       to_number('12.345,67', '99.999,999')
-    ======================
-      12345.670
+    12345.670
 
 TO_TIME
 =======
@@ -1374,9 +1376,7 @@ TO_TIME
     
 ::
 
-     to_time('13:10:30')
-    =============================================
-      01:10:30 PM
+    01:10:30 PM
      
 .. code-block:: sql
 
@@ -1384,9 +1384,7 @@ TO_TIME
     
 ::
 
-     to_time('HOUR: 13 MINUTE: 10 SECOND: 30', '"HOUR:" HH24 "MINUTE:" MI "SECOND:" SS')
-    ====================================================================================
-      01:10:30 PM
+    01:10:30 PM
      
 .. code-block:: sql
 
@@ -1394,9 +1392,7 @@ TO_TIME
     
 ::
 
-     to_time('13:10:30', 'HH24:MI:SS')
-    ==================================
-      01:10:30 PM
+    01:10:30 PM
      
 .. code-block:: sql
 
@@ -1415,9 +1411,7 @@ TO_TIME
     
 ::
 
-     to_time('13:10:30')
-    ======================
-      01:10:30 PM
+    01:10:30 PM
      
 .. code-block:: sql
 
@@ -1425,13 +1419,28 @@ TO_TIME
 
 ::
     
-     to_time('10:23:00 Nachm.', 'HH:MI:SS AM')
-    ==============================================
-      10:23:00 PM
+    10:23:00 PM
 
 .. note::
 
     문자셋이 ISO-8859-1인 경우 "en_US" 외에 시스템 파라미터 **intl_date_lang**\ 에 의해 변경할 수 있는 언어는 "ko_KR"과 "tr_TR"뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 :func:`TO_CHAR`\ 의 :ref:`Note <tochar-remark>`\ 를 참고한다.
+
+TO_TIME_TZ
+==========
+
+.. function:: TO_TIME_TZ(string [,format [,date_lang_string_literal]])
+
+    **TO_TIME_TZ** 함수는 입력 문자열에 타임존 정보를 포함할 수 있다는 점을 제외하고는 :func:`TO_TIME` 함수와 동일하다.
+
+    :rtype: TIMETZ
+
+.. code-block:: sql
+  
+    SELECT TO_TIME_TZ('13:10:30 +11', 'HH24:MI:SS TZH');
+    
+::
+
+    01:10:30 PM +11:00
 
 TO_TIMESTAMP
 ============
@@ -1465,9 +1474,7 @@ TO_TIMESTAMP
     
 ::
 
-     to_timestamp('13:10:30 12/25/2008')
-    ======================================
-      01:10:30 PM 12/25/2008
+    01:10:30 PM 12/25/2008
      
 .. code-block:: sql
 
@@ -1475,9 +1482,7 @@ TO_TIMESTAMP
     
 ::
 
-     to_timestamp('08-Dec-25 13:10:30', 'YY-Mon-DD HH24:MI:SS')
-    ======================================
-      01:10:30 PM 12/25/2008
+    01:10:30 PM 12/25/2008
      
 .. code-block:: sql
 
@@ -1485,9 +1490,7 @@ TO_TIMESTAMP
     
 ::
 
-     to_timestamp('YEAR: 2008 DATE: 12-25 TIME: 13:10:30', '"YEAR:" YYYY "DATE:" MM-DD "TIME:" HH24:MI:SS')
-    ======================================
-      01:10:30 PM 12/25/2008
+    01:10:30 PM 12/25/2008
 
 다음은 **intl_date_lang** 의 값이 "de_DE"일 때 수행한 예이다.
 
@@ -1498,9 +1501,7 @@ TO_TIMESTAMP
     
 ::
 
-       to_timestamp('13:10:30 25.12.2008')
-    ======================================
-      01:10:30 PM 12/25/2008
+    01:10:30 PM 12/25/2008
      
 .. code-block:: sql
 
@@ -1508,10 +1509,25 @@ TO_TIMESTAMP
     
 ::
 
-       to_timestamp('10:23:00 Nachm.', 'HH12:MI:SS AM')
-    ===================================================
-      10:23:00 PM 08/01/2012
+    10:23:00 PM 08/01/2012
 
 .. note::
 
     문자셋이 ISO-8859-1인 경우 "en_US" 외에 시스템 파라미터 **intl_date_lang**\ 에 의해 변경할 수 있는 언어는 "ko_KR"과 "tr_TR"뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 :func:`TO_CHAR`\ 의 :ref:`Note <tochar-remark>`\ 를 참고한다.
+
+TO_TIMESTAMP_TZ
+===============
+
+.. function:: TO_TIMESTAMP_TZ(string [, format [,date_lang_string_literal]])
+
+    **TO_TIMESTAMP_TZ** 함수는 입력 문자열에 타임존 정보를 포함할 수 있다는 점을 제외하고는 :func:`TO_TIMESTAMP` 함수와 동일하다.
+
+    :rtype: TIMESTAMPTZ
+
+ .. code-block:: sql
+
+    SELECT TO_TIMESTAMP_TZ('13:10:30 Asia/Seoul 12/25/2008', 'HH24:MI:SS TZR MM/DD/YYYY');
+    
+::
+
+    01:10:30 PM 12/25/2008 Asia/Seoul

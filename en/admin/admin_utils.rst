@@ -1123,14 +1123,14 @@ The following shows [options] available with the **cubrid statdump** utility.
     |                  +------------------------------------------+----------------------------------------------------------------------------------------+
     |                  | Num_file_iosynches                       | The number of file synchronization                                                     |
     +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
-    | Page buffer      | Num_data_page_fetches                    | The number of pages fetched                                                            |
+    | Page buffer      | Num_data_page_fetches                    | The number of fetched pages                                                            |
     |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_data_page_dirties                    | The number of duty pages                                                               |
+    |                  | Num_data_page_dirties                    | The number of dirty pages                                                              |
     |                  +------------------------------------------+----------------------------------------------------------------------------------------+
     |                  | Num_data_page_ioreads                    | The number of pages read from disk                                                     |
     |                  |                                          | (more means less efficient, it correlates with lower hit ratio)                        |
     |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_data_page_iowrites                   | The number of pages write from disk (more means less efficient)                        |
+    |                  | Num_data_page_iowrites                   | The number of pages write to disk (more means less efficient)                          |
     |                  +------------------------------------------+----------------------------------------------------------------------------------------+
     |                  | Num_data_page_victims                    | The number of times the flushing thread is wake up                                     |
     |                  |                                          | (NOT the number of victims or flushed pages)                                           |

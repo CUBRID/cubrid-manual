@@ -764,31 +764,106 @@ DATETIME
 *   :func:`NEW_TIME`
 *   :func:`TZ_OFFSET`
 
-타임존 타입들에 대한 변환 함수
+타임존 타입 값을 사용하는 함수
 ------------------------------
 
-다음은 문자열에서 날짜/시간 타입 값으로 변환하거나 반대로 날짜/시간 타입 값에서 문자열로 변환하는 함수들이다. 
+DATETIME, TIMESTAMP, TIME 타입의 값을 입력 값으로 사용하는 함수들은 모두 타임존 타입을 사용할 수 있다.
+
+다음은 타임존 타입 값을 사용하는 예인데, 타임존이 없는 경우와 동일하게 동작한다. 다만, LTZ로 끝나는 타입의 경우 출력 값은 로컬 타임존의 설정(timezone 파라미터)을 따른다.
+
+다음 예에서 숫자의 기본 단위는 DATETIME 타입의 최소 단위인 밀리초이다.
+
+.. code-block:: sql
+
+    SELECT datetimeltz '09/01/2009 03:30:30 pm' + 1;
+
+::
+
+    03:30:30.001 PM 09/01/2009 Asia/Seoul
+
+.. code-block:: sql
+
+    SELECT datetimeltz '09/01/2009 03:30:30 pm' - 1;
+
+::
+
+    03:30:29.999 PM 09/01/2009 Asia/Seoul
+
+다음 예에서 숫자의 기본 단위는 TIMESTAMP 타입의 최소 단위인 초이다.
+
+.. code-block:: sql
+
+    SELECT timestamptz '09/01/2009 03:30:30 pm' + 1;
+    
+::
+
+    03:30:31 PM 09/01/2009 Asia/Seoul
+
+.. code-block:: sql
+
+    SELECT timestamptz '09/01/2009 03:30:30 pm' - 1;
+
+::
+
+    03:30:29 PM 09/01/2009 Asia/Seoul
+
+다음 예에서 숫자의 기본 단위는 TIME 타입의 최소 단위인 초이다.
+
+.. code-block:: sql
+
+    SELECT timetz '03:30:30 pm' + 1;
+    
+    03:30:31 PM +09:00
+
+.. code-block:: sql
+
+    SELECT EXTRACT (hour from datetimetz'10/15/1986 5:45:15.135 am Europe/Bucharest');
+    
+    5
+
+이름이 LTZ로 끝나는 타입은 출력 시 로컬 타임존의 설정을 따른다. 따라서 아래 예와 같이 timezone 파라미터의 값이 'Asia/Seoul'로 설정되어 있다면 EXTRACT 함수는 해당 타임존의 시(hour)를 출력한다.
+
+.. code-block:: sql
+
+    -- csql> ;se timezone='Asia/Seoul'
+
+    SELECT EXTRACT (hour from datetimeltz'10/15/1986 5:45:15.135 am Europe/Bucharest');
+
+::
+
+    12
+
+.. **TIMELTZ는 timezone 파라미터 값이 지역 이름으로 설정된 경우 계산을 허용하지 않는다. (이거 나중에 바뀌나? 검토)
+
+    select timeltz '03:30:30 pm' + cast(1 as INTEGER) from db_root;
+    Invalid time: '03:30:30 pm'.
+
+타임존 타입 변환 함수
+---------------------
+
+다음은 문자열에서 날짜/시간 타입 값으로 변환하거나 반대로 날짜/시간 타입 값에서 문자열로 변환하는 함수들인데, 이들의 입력 값에는 오프셋, 존, 일광 절약과 같은 타임존 정보가 추가될 수 있다.
 
 *   :func:`DATE_FORMAT`
 *   :func:`STR_TO_DATE`
-*   :func:`TO_TIMESTAMP_TZ`
+*   :func:`TO_CHAR`
 *   :func:`TO_DATETIME_TZ`
+*   :func:`TO_TIMESTAMP_TZ`
 *   :func:`TO_TIME_TZ`
 
-각 함수들의 사용 방법은 위 함수 이름을 클릭하여 각 함수의 설명을 참고한다.
+각 함수들의 사용 방법은 함수 이름을 클릭하여 해당 함수의 설명을 참고한다.
 
-위의 함수들은 오프셋, 존, 일광 절약과 같은 타임존 부분이 요구된다.
+.. code-block:: sql
 
-*   TZR: 타임존 영역 정보. 예: US/Pacific.
-*   TZD: 일광 절약 정보. 예: KST, KT
-*   TZH: 타임존의 시간 오프셋
-*   TZM: 타임존의 분 오프셋
+    SELECT DATE_FORMAT(datetimetz'2012-02-02 10:10:10 Europe/Zurich CET', '%TZR %TZD %TZH %TZM');
+    SELECT STR_TO_DATE('2001-10-11 02:03:04 AM Europe/Bucharest EEST', '%Y-%m-%d %h:%i:%s %p %TZR %TZD');
+    SELECT TO_CHAR(datetimetz'2001-10-11 02:03:04 AM Europe/Bucharest EEST');
+    SELECT TO_DATETIME_TZ('2001-10-11 02:03:04 AM Europe/Bucharest EEST');
+    SELECT TO_TIMESTAMP_TZ('2001-10-11 02:03:04 AM Europe/Bucharest');
+    SELECT TO_TIME_TZ('02:03:04 +09:00');
 
-위의 함수들 중 함수들은 위의 TZR, TZD, TZH, TZM과 같은 특정 문자열 토큰을 추가로 지원한다는 점을 제외하고는 기존의 TO_TIMESTAMP, TO_DATETIME, 그리고 TO_TIME 함수와 동일하다.
-
-*   :func:`TO_TIMESTAMP_TZ`
-*   :func:`TO_DATETIME_TZ`
-*   :func:`TO_TIME_TZ`
+.. note::
+    
+    :func:`TO_TIMESTAMP_TZ`, :func:`TO_DATETIME_TZ`, :func:`TO_TIME_TZ` 함수들은 위의 TZR, TZD, TZH, TZM과 같은 정보를 추가할 수 있다는 점을 제외하고는 기존의 :func:`TO_TIMESTAMP`, :func:`TO_DATETIME`, 그리고 :func:`TO_TIME` 함수와 동일한 동작을 수행한다.
 
 타임존의 지역 이름은 IANA(Internet Assigned Numbers Authority) 타임존 데이터베이스에 있는 지역을 사용하는데, IANA 타임존에 대해서는 http://www.iana.org/time-zones\을 참고한다.
 
@@ -799,7 +874,7 @@ IANA(Internet Assigned Numbers Authority) 타임존 데이터베이스에는 수
 
 CUBRID는 IANA 타임존을 지원하며, CUBRID 설치 패키지에 포함되어 있는 IANA 타임존 라이브러리를 그대로 사용할 수 있다. 최신 타임존으로 업데이트하고 싶은 경우 타임존 데이터를 업데이트하고, 타임존 라이브러리를 컴파일한 후 데이터베이스를 재구동해야 한다. 
 
-타임존 라이브러리의 컴파일을 참고한다.
+이와 관련하여 :ref:`timezone-compile`\을 참고한다.
 
 비트열 데이터 타입
 ==================

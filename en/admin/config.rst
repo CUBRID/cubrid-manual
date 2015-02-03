@@ -165,7 +165,7 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 | :ref:`lock-parameters`        | deadlock_detection_interval_in_secs | server parameter        |         | float    | 1.0                            | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | isolation_level                     | client parameter        | O       | int      | 3                              | available             |
+|                               | isolation_level                     | client parameter        | O       | int      | 4                              | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | lock_escalation                     | server parameter        |         | int      | 100,000                        |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -795,7 +795,7 @@ The following are parameters related to concurrency control and locks of the dat
 +=====================================+========+=============+=============+=============+
 | deadlock_detection_interval_in_secs | float  | 1.0         | 0.1         |             |
 +-------------------------------------+--------+-------------+-------------+-------------+
-| isolation_level                     | int    | 3           | 1           | 6           |
+| isolation_level                     | int    | 4           | 4           | 6           |
 +-------------------------------------+--------+-------------+-------------+-------------+
 | lock_escalation                     | int    | 100,000     | 5           |             |
 +-------------------------------------+--------+-------------+-------------+-------------+
@@ -810,35 +810,34 @@ The following are parameters related to concurrency control and locks of the dat
 
 **isolation_level**
 
-    **isolation_level** is a parameter to configure the isolation level of a transaction. The higher the isolation level, the less concurrency and the less interruption by other concurrent transactions. The **isolation_level** parameter can be configured to an integer value from 1 to 6, which represent isolation levels, or character strings. The default value is **TRAN_REP_CLASS_UNCOMMIT_INSTANCE**. For details about each isolation level and parameter values, see :ref:`transaction-isolation-level` and the following table.
+    **isolation_level** is a parameter to configure the isolation level of a transaction. The higher the isolation level, the less concurrency and the less interruption by other concurrent transactions. The **isolation_level** parameter can be configured to an integer value from 4 to 6, which represent isolation levels, or character strings. The default value is **READ COMMITTED**. For details about each isolation level and parameter values, see :ref:`transaction-isolation-level` and the following table.
 
-    +--------------------------------------------------------------------------+-------------------------------------------------------------------------------------------+
-    | Isolation Level                                                          | isolation_level Parameter Value                                                           |
-    +==========================================================================+===========================================================================================+
-    | SERIALIZABLE                                                             | "TRAN_SERIALIZABLE" or 6                                                                  |
-    +--------------------------------------------------------------------------+-------------------------------------------------------------------------------------------+
-    | REPEATABLE READ CLASS with REPEATABLE READ INSTANCES                     | "TRAN_REP_CLASS_REP_INSTANCE" or "TRAN_REP_READ" or 5                                     |
-    +--------------------------------------------------------------------------+-------------------------------------------------------------------------------------------+
-    | REPEATABLE READ CLASS with READ COMMITTED INSTANCES(or CURSOR STABILITY) | "TRAN_REP_CLASS_COMMIT_INSTANCE" or "TRAN_READ_COMMITTED" or "TRAN_CURSOR_STABILITY" or 4 |
-    +--------------------------------------------------------------------------+-------------------------------------------------------------------------------------------+
-    | REPEATABLE READ CLASS with READ UNCOMMITTED INSTANCES                    | "TRAN_REP_CLASS_UNCOMMIT_INSTANCE" or "TRAN_READ_UNCOMMITTED" or 3                        |
-    +--------------------------------------------------------------------------+-------------------------------------------------------------------------------------------+
-    | READ COMMITTED CLASS with READ COMMITTED INSTANCES                       | "TRAN_COMMIT_CLASS_COMMIT_INSTANCE" or 2                                                  |
-    +--------------------------------------------------------------------------+-------------------------------------------------------------------------------------------+
-    | READ COMMITTED CLASS with READ UNCOMMITTED INSTANCES                     | "TRAN_COMMIT_CLASS_UNCOMMIT_INSTANCE" or 1                                                |
-    +--------------------------------------------------------------------------+-------------------------------------------------------------------------------------------+
+    +----------------------------+-------------------------------------------------------------------------------------------+
+    | Isolation Level            | isolation_level Parameter Value                                                           |
+    +============================+===========================================================================================+
+    | SERIALIZABLE               | "TRAN_SERIALIZABLE" or 6                                                                  |
+    +----------------------------+-------------------------------------------------------------------------------------------+
+    | REPEATABLE READ            | "TRAN_REP_CLASS_REP_INSTANCE" or "TRAN_REP_READ" or 5                                     |
+    +----------------------------+-------------------------------------------------------------------------------------------+
+    | READ COMMITTED             | "TRAN_REP_CLASS_COMMIT_INSTANCE" or "TRAN_READ_COMMITTED" or "TRAN_CURSOR_STABILITY" or 4 |
+    +----------------------------+-------------------------------------------------------------------------------------------+
+
 
     *   **TRAN_SERIALIZABLE** : This isolation level ensures the highest level of consistency. For details, see :ref:`isolation-level-6`.
 
-    *   **TRAN_REP_CLASS_REP_INSTANCE** : This isolation level can incur phantom read. For details, see :ref:`isolation-level-5`.
+    *   **TRAN_REP_READ** : This isolation level can incur phantom read. For details, see :ref:`isolation-level-5`.
 
-    *   **TRAN_REP_CLASS_COMMIT_INSTANCE** : This isolation level can incur unrepeatable read. For details, see :ref:`isolation-level-4`.
+    *   **TRAN_READ_COMMITTED** : This isolation level can incur unrepeatable read. For details, see :ref:`isolation-level-4`.
 
-    *   **TRAN_REP_CLASS_UNCOMMIT_INSTANCE** : This isolation level can incur dirty read. For details, see :ref:`isolation-level-3`.
+    .. note::
+    
+        9.3 or less version supports the below levels additionationally. From 10.0, concurrency can be guaranteed more because MVCC method is applied when multiple concurrent transactions are processed; therefore, the below isolation levels are not used anymore.
+        
+            *   **TRAN_REP_CLASS_UNCOMMIT_INSTANCE** : This isolation level can incur dirty read. For details, see :ref:`isolation-level-3`.
 
-    *   **TRAN_COMMIT_CLASS_COMMIT_INSTANCE** : This isolation level can incur unrepeatable read. It allows modification of table schema by current transactions while data is being retrieved. For details, see :ref:`isolation-level-2`.
+            *   **TRAN_COMMIT_CLASS_COMMIT_INSTANCE** : This isolation level can incur unrepeatable read. It allows modification of table schema by current transactions while data is being retrieved. For details, see :ref:`isolation-level-2`.
 
-    *   **TRAN_COMMIT_CLASS_UNCOMMIT_INSTANCE** : This isolation level can incur dirty read. It allows modification of table schema by current transactions while data is being retrieved. For details, see :ref:`isolation-level-1`.
+            *   **TRAN_COMMIT_CLASS_UNCOMMIT_INSTANCE** : This isolation level can incur dirty read. It allows modification of table schema by current transactions while data is being retrieved. For details, see :ref:`isolation-level-1`.
 
 **lock_escalation**
 
@@ -2207,8 +2206,8 @@ Transaction & Query
 
 **LONG_QUERY_TIME**
 
-    **LONG_QUERY_TIME** is a parameter to configure execution time of query which is evaluated as long-duration query. You can set a unit as ms, s, min or h, which stands for milliseconds, seconds, minutes or hours respectively. If you omit the unit, milliseconds(ms) will be applied. The default value is **60** (seconds) and the maximum value is 86,400(1 day).
-    
+    **LONG_QUERY_TIME** is a parameter to configure execution time of query which is evaluated as long-duration query. You can set a unit as ms, s, min or h, which stands for milliseconds, seconds, minutes or hours respectively. If you omit the unit, milliseconds(ms) will be applied. The default value is **60** (seconds) and the maximum value is 86,400(1 day). When you run a query and this query's running time takes more than the specified time, a value of LONG-Q, which is printed out from "cubrid broker status" command, is increased 1; this SQL is written to SLOW log file ($CUBRID/log/broker/sql_log/\*.slow.log) of CAS. See :ref:`SLOW_LOG <slow-log>`.
+
     This value can be valued in milliseconds with a decimal separator. For example, the value can be configured into 0.5 to configure 500 msec. 
     
     Note that if a parameter value is configured to 0, a long-duration query is not evaluated.
@@ -2285,6 +2284,8 @@ Logging
 **LOG_DIR**
 
     **LOG_DIR** is a parameter to configure the directory where SQL logs are stored. The default value is **log/broker/sql_log**. The file name of the SQL logs is *broker_name_id.sql.log*.
+
+.. _slow-log:
 
 **SLOW_LOG**
 

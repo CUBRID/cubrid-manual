@@ -314,7 +314,13 @@ Regarding this, see :ref:`Built-in Locale and Library Locale <built-in-locale-li
 
 To compile the locale libraries, one must use the **make_locale** (**.bat** for Windows **.sh** for Linux) utility script from command console. The file is delivered in **CUBRID/bin** folder so it should be resolved by PATH environment variable. Here **$CUBRID, $PATH** are the environment variables of Linux, **%CUBRID%**, **%PATH%** are the environment variables of Windows.
 
-Usage can be displayed by running **make_locale.sh -h** (**make_locale /h** in Windows. it requires Visual C++ 2005, 2008 or 2010 ). ::
+.. note::
+
+    To run a **make_locale** script in Windows, it requires Visual C++ 2005, 2008 or 2010.
+
+Usage can be displayed by running **make_locale.sh -h**. (**make_locale /h** in Windows.)  
+
+::
 
     make_locale.sh [options] [locale]
      
@@ -1628,6 +1634,85 @@ Viewing Collation Information
 To view the collation information, use :func:`CHARSET`, :func:`COLLATION` and :func:`COERCIBILITY` functions.
 
 The information of the database collation can be shown on db_collation system view or :ref:`show-collation-statement`.
+
+Timezone Setting
+================
+
+Timezone can be set by system parameters; a **timezone** parameter which is set on a session, and a **server_timezone** parameter which is set on a database server. For details, see  :ref:`timezone-parameters`.
+
+A **timezone** parameter is a parameter about a session. This setting value can be kept by session unit.
+
+::
+
+    SET SYSTEM PARAMETERS 'timezone=Asia/Seoul';
+
+If this value is not set, it follows **server_timezone**\'s  setting as default.
+
+A **server_timezone** parameter is a parameter about a database server.
+
+::
+
+    SET SYSTEM PARAMETERS 'server_timezone=Asia/Seoul';
+
+If this value is not set, it follows OS's setting.
+
+To use timezone information, timezone type should be used. For details, see :ref:`timezone-type`. 
+
+타임존을 지역 이름으로 설정하는 경우 별도의 타임존 라이브러리를 필요로 하는데, 큐브리드 설치 시 제공하는 라이브러리가 아닌 변경된 타임존 정보를 가진 라이브러리를 사용하려면, 타임존 정보를 변경한 후 직접 라이브러리를 컴파일해야 한다.
+When timezone is set by a region name, it requires a separate timezone library, To use an updated library which has a changed timezone information, not an installed timezone information, timezone library should be compiled after timezone information is changed.
+
+The following is an example to compile a timezone library after updating a timezone information through IANA (http://www.iana.org/time-zones).
+
+For details, see the following description.
+
+.. _timezone-library:
+
+Compiling Timezone Library
+--------------------------
+
+To use a timezone by specifying a timezone region name, timezone libarary is required. This is provided as default when CUBRID is installed. By the way, to update a timezone region information as a latest one, timezone library should be compiled after updating a recent code which can be downloaded in IANA (http://www.iana.org/time-zones).
+
+The following is a process to update timezone library as a recent one.
+
+At first, stop cubrid service and operate the following process.
+
+Windows
+^^^^^^^
+
+1.  Download the recent data from http://www.iana.org/time-zones .
+
+    Download the linked file in "Latest version"'s "Time Zone Data".
+
+2.  Decompress the compressed file to %CUBRID%/timezones/tzdata directory.
+
+3.  Run "%CUBRID%/bin/make_tz.bat".
+
+    libcubrid_timezones.dll is created at the %CUBRID%/lib directory.
+
+    ::
+
+        make_tz.bat  
+
+.. note::
+
+    To run **make_locale** script in Windows, one of Visual C++ 2005, 2008 or 2010 should be installed.
+    
+Linux
+^^^^^
+
+1.  Download the recent data from http://www.iana.org/time-zones .
+
+    Download the linked file in "Latest version"'s "Time Zone Data".
+
+2.  Decompress the compressed file to $CUBRID/timezones/tzdata directory.
+
+3.  Run "make_tz.sh -t <target_bit>". (<target_bit>: 64 if CUBRID is for 64bit, 32 if CUBRID is for 32bit)
+
+    libcubrid_timezones.so is created at the $CUBRID/lib directory.
+
+    ::
+    
+        make_tz.sh -t 64 
 
 .. _char-data-conf-guide:
 

@@ -8,6 +8,8 @@ If you want to know overall information about character data setting, see :ref:`
 
 If you want to know about charset, collation and locale, see :ref:`globalization-overview`.
 
+For timezone type and realted functions, see :ref:`timezone-type`. For timezone related system parameters, see :ref:`timezone-parameters`. If you want to update a timezone information as a new one, timezone library should be recompiled; for details, see :ref:`timezone-library`.
+
 If you want to apply the wanted locale to the database, you have to set the locale firstly, then create the database. Regarding this setting, see :ref:`locale-setting`.
 
 If you want to change the collation or charset specified on the database, specify :ref:`COLLATE modifier <charset-collate-modifier>` or :ref:`CHARSET modifier <charset-collate-modifier>` to the column, table, expression, and specify :ref:`COLLATE modifier <charset-collate-modifier>` or :ref:`charset-introducer` to the string literal. Regarding this setting, see :ref:`collation-setting`.

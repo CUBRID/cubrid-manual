@@ -72,6 +72,7 @@ CUBRID에서 리터럴(literal) 값을 작성하는 방법을 기술한다.
             datetimetz'10/15/1986 5:45:15.135 am +02:30';
             datetimetz'10/15/1986 5:45:15.135 am +02';
             datetimeltz'10/15/1986 5:45:15.135 am Europe/Bucharest'
+            datetimetz'2001-10-11 02:03:04 AM Europe/Bucharest EEST';
             timestampltz'10/15/1986 5:45:15 am Europe/Bucharest'
             timestamptz'10/15/1986 5:45:15 am Europe/Bucharest'
  

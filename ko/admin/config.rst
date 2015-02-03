@@ -165,7 +165,7 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------+
 | :ref:`lock-parameters`        | deadlock_detection_interval_in_secs | 서버                    |         | float    | 1.0                            | DBA만 가능      |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------+
-|                               | isolation_level                     | 클라이언트              | O       | int      | 3                              | 가능            |
+|                               | isolation_level                     | 클라이언트              | O       | int      | 4                              | 가능            |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------+
 |                               | lock_escalation                     | 서버                    |         | int      | 100,000                        |                 |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------+
@@ -802,7 +802,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 +=====================================+========+============+=============+=============+
 | deadlock_detection_interval_in_secs | float  | 1.0        | 0.1         |             |
 +-------------------------------------+--------+------------+-------------+-------------+
-| isolation_level                     | int    | 3          | 1           | 6           |
+| isolation_level                     | int    | 4          | 4           | 6           |
 +-------------------------------------+--------+------------+-------------+-------------+
 | lock_escalation                     | int    | 100,000    | 5           |             |
 +-------------------------------------+--------+------------+-------------+-------------+
@@ -817,41 +817,33 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
 **isolation_level**
 
-    **isolation_level**\ 은 트랜잭션의 격리 수준을 설정하기 위한 파라미터로 격리 수준이 높을수록 트랜잭션의 동시성이 적고 다른 동시성 트랜잭션에 의해 간섭받지 않는다. **isolation_level** 파라미터는 격리 수준을 의미하는 1에서 6까지의 정수값 또는 문자열로 설정하며, 기본값은 **TRAN_REP_CLASS_UNCOMMIT_INSTANCE**\ 이다. 각 격리 수준 및 파라미터 설정값에 대한 자세한 내용은 :ref:`transaction-isolation-level` 과 다음 표를 참조한다.
+    **isolation_level**\ 은 트랜잭션의 격리 수준을 설정하기 위한 파라미터로 격리 수준이 높을수록 트랜잭션의 동시성이 적고 다른 동시성 트랜잭션에 의해 간섭받지 않는다. **isolation_level** 파라미터는 격리 수준을 의미하는 4에서 6까지의 정수값 또는 문자열로 설정하며, 기본값은 **READ COMMITTED**\ 이다. 각 격리 수준 및 파라미터 설정값에 대한 자세한 내용은 :ref:`transaction-isolation-level` 과 다음 표를 참조한다.
 
     +----------------------------+-------------------------------------------------------------------------------------------+
     | 격리 수준                  | isolation_level 파라미터 설정값                                                           |
     +============================+===========================================================================================+
     | SERIALIZABLE               | "TRAN_SERIALIZABLE" or 6                                                                  |
     +----------------------------+-------------------------------------------------------------------------------------------+
-    | REPEATABLE READ CLASS with | "TRAN_REP_CLASS_REP_INSTANCE" or "TRAN_REP_READ" or 5                                     |
-    | REPEATABLE READ INSTANCES  |                                                                                           |
+    | REPEATABLE READ            | "TRAN_REP_CLASS_REP_INSTANCE" or "TRAN_REP_READ" or 5                                     |
     +----------------------------+-------------------------------------------------------------------------------------------+
-    | REPEATABLE READ CLASS with | "TRAN_REP_CLASS_COMMIT_INSTANCE" or "TRAN_READ_COMMITTED" or "TRAN_CURSOR_STABILITY" or 4 |
-    | READ COMMITTED INSTANCES   |                                                                                           |
-    | (or CURSOR STABILITY)      |                                                                                           |
-    +----------------------------+-------------------------------------------------------------------------------------------+
-    | REPEATABLE READ CLASS with | "TRAN_REP_CLASS_UNCOMMIT_INSTANCE" or "TRAN_READ_UNCOMMITTED" or 3                        |
-    | READ UNCOMMITTED INSTANCES |                                                                                           |
-    +----------------------------+-------------------------------------------------------------------------------------------+
-    | READ COMMITTED CLASS with  | "TRAN_COMMIT_CLASS_COMMIT_INSTANCE" or 2                                                  |
-    | READ COMMITTED INSTANCES   |                                                                                           |
-    +----------------------------+-------------------------------------------------------------------------------------------+
-    | READ COMMITTED CLASS with  | "TRAN_COMMIT_CLASS_UNCOMMIT_INSTANCE" or 1                                                |
-    | READ UNCOMMITTED INSTANCES |                                                                                           |
+    | READ COMMITTED             | "TRAN_REP_CLASS_COMMIT_INSTANCE" or "TRAN_READ_COMMITTED" or "TRAN_CURSOR_STABILITY" or 4 |
     +----------------------------+-------------------------------------------------------------------------------------------+
 
     *   **TRAN_SERIALIZABLE** : 가장 높은 수준의 일관성을 보장하는 격리 수준이며, :ref:`isolation-level-6` 을 참고한다.
 
-    *   **TRAN_REP_CLASS_REP_INSTANCE** : 유령 읽기(phantom read)가 발생될 수 있는 격리 수준이며, :ref:`isolation-level-5` 를 참고한다.
+    *   **TRAN_REP_READ** : 유령 읽기(phantom read)가 발생할 수 있는 격리 수준이며, :ref:`isolation-level-5` 를 참고한다.
 
-    *   **TRAN_REP_CLASS_COMMIT_INSTANCE** : 반복 불가능한 읽기(unrepeatable read)가 발생될 수 있는 격리 수준이며, :ref:`isolation-level-4` 를 참고한다.
+    *   **TRAN_READ_COMMITTED** : 반복 불가능한 읽기(unrepeatable read)가 발생할 수 있는 격리 수준이며, :ref:`isolation-level-4` 를 참고한다.
+    
+    .. note::
+    
+        9.3 이하 버전에서는 다음의 격리 수준을 추가로 지원한다. 10.0부터는 다량의 동시 트랜잭션 처리 시 MVCC 기법을 적용하여 격리 수준을 낮추지 않고도 동시성을 더 잘 보장할 수 있게 되었기 때문에, 아래의 낮은 격리 수준을 더 이상 사용하지 않게 되었다.
+        
+            *   **TRAN_REP_CLASS_UNCOMMIT_INSTANCE** : 더티 읽기(dirty read)가 발생될 수 있는 격리 수준이다.
 
-    *   **TRAN_REP_CLASS_UNCOMMIT_INSTANCE** : 더티 읽기(dirty read)가 발생될 수 있는 격리 수준이며, :ref:`isolation-level-3` 를 참고한다.
+            *   **TRAN_COMMIT_CLASS_COMMIT_INSTANCE** : 반복 불가능한 읽기(unrepeatable read)가 발생될 수 있고, 데이터 조회 중에 다른 트랜잭션에 의한 테이블 스키마의 변경이 허용되는 격리 수준이다.
 
-    *   **TRAN_COMMIT_CLASS_COMMIT_INSTANCE** : 반복 불가능한 읽기(unrepeatable read)가 발생될 수 있고, 데이터 조회 중에 다른 트랜잭션에 의한 테이블 스키마의 변경이 허용되는 격리 수준이며, :ref:`isolation-level-2` 를 참고한다.
-
-    *   **TRAN_COMMIT_CLASS_UNCOMMIT_INSTANCE** : 더티 읽기(dirty read)가 발생될 수 있고, 데이터 조회 중에 다른 트랜잭션에 의한 테이블 스키마의 변경이 허용되는 격리 수준이며, :ref:`isolation-level-1` 를 참고한다.
+            *   **TRAN_COMMIT_CLASS_UNCOMMIT_INSTANCE** : 더티 읽기(dirty read)가 발생될 수 있고, 데이터 조회 중에 다른 트랜잭션에 의한 테이블 스키마의 변경이 허용되는 격리 수준이다.
 
 **lock_escalation**
 
@@ -2211,7 +2203,7 @@ CUBRID 설치 시 생성되는 기본 브로커 설정 파일인 **cubrid_broker
 
 **LONG_QUERY_TIME**
 
-    **LONG_QUERY_TIME**\ 은 장기 실행 질의(long-duration query)로 판단될 질의 실행 시간을 설정하는 파라미터이다. 값 뒤에 ms, s, min, h의 단위 지정이 가능하며, 각각 milliseconds, seconds, minutes, hours를 의미한다. 단위가 생략되면 s로 지정된다. 기본값은 **60** (초)이고, 최대값은 86,400(하루)이다.
+    **LONG_QUERY_TIME**\ 은 장기 실행 질의(long-duration query)로 판단될 질의 실행 시간을 설정하는 파라미터이다. 값 뒤에 ms, s, min, h의 단위 지정이 가능하며, 각각 milliseconds, seconds, minutes, hours를 의미한다. 단위가 생략되면 s로 지정된다. 기본값은 **60** (초)이고, 최대값은 86,400(하루)이다. 어떤 질의를 수행할 때 이 값을 초과한 시간이 소요되는 경우, "cubrid broker status" 명령에서 출력하는 LONG-Q의 값이 하나 증가하고, 해당 SQL은 CAS의 SQL SLOW 로그 파일($CUBRID/log/broker/sql_log/\*.slow.log)에 기록된다. :ref:`SLOW_LOG <slow-log>` 파라미터를 참고한다. 
 
     소수점을 사용하여 밀리초(msec) 단위의 값을 설정할 수 있다. 예를 들어 500밀리초로 설정하려면 값을 0.5로 설정한다. 
     
@@ -2289,6 +2281,8 @@ CUBRID 설치 시 생성되는 기본 브로커 설정 파일인 **cubrid_broker
 **LOG_DIR**
                        
     **LOG_DIR**\ 은 SQL 로그가 저장되는 디렉터리를 지정하는 파라미터로, 기본값은 **log/broker/sql_log**\ 이다. SQL 로그가 기록되는 파일명은 *broker_name_id.sql.log*\ 이다.
+
+.. _slow-log:
 
 **SLOW_LOG**
 

@@ -8,6 +8,8 @@
 
 문자셋, 콜레이션, 로캘이 무엇인지 알고 싶다면 :ref:`globalization-overview`\ 를 참고한다.
 
+타임존 타입 및 관련 함수들은 :ref:`timezone-type`\을 참고한다. 타임존 관련 시스템 파라미터는 :ref:`timezone-parameters`\를 참고한다. 타임존 정보를 새로운 정보로 업데이트하고 싶은 경우 타임존 라이브러리를 재컴파일해야 되며, 이와 관련하여 :ref:`timezone-library`\를 참고한다.
+
 원하는 언어와 지역에 따른 로캘을 데이터베이스에 반영하고 싶으면 반드시 로캘을 먼저 설정한 후 데이터베이스를 생성해야만 한다. 이와 관련하여 :ref:`locale-setting`\ 을 참고한다.
 
 데이터베이스에 설정된 콜레이션 또는 문자셋을 변환하고 싶으면 해당 칼럼, 테이블, 표현식에 :ref:`COLLATE 수정자<charset-collate-modifier>` 또는 :ref:`CHARSET 수정자<charset-collate-modifier>`\ 를 지정하고, 문자열 상수에 :ref:`COLLATE 수정자<charset-collate-modifier>` 또는 :ref:`charset-introducer`\ 를 지정한다. 이와 관련하여 :ref:`collation-setting`\ 을 참고한다.

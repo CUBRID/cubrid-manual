@@ -1028,7 +1028,7 @@ The **VALUES** clause prints out the values of rows defined in the expression. I
 
 *   *expression* : An expression enclosed within parentheses stands for one row in a table.
 
-The **VALUES** clause can be used to express the **UNION** query, which consists of constant values in a simpler way. For example, the following query can be executed.
+The **VALUES** clause can be used to express the **UNION ALL** query, which consists of constant values in a simpler way. For example, the following query can be executed.
 
 .. code-block:: sql
 

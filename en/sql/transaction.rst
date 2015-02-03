@@ -251,7 +251,7 @@ The read operations that allow interference between transactions with isolation 
 *   **Non-repeatable read** : A transaction T1 can read changed value, if a transaction T2 updates or deletes data and commits while data is retrieved in the transaction T1 multiple times.
 *   **Phantom read** : A transaction T1 can read E, if a transaction T2 inserts new record E and commits while data is retrieved in the transaction T1 multiple times.
 
-The default value of CUBRID isolation level is :ref:`isolation-level-3`.
+The default value of CUBRID isolation level is :ref:`isolation-level-4`.
 
 **Isolation Levels Provided by CUBRID**
 
@@ -261,22 +261,16 @@ You can set an isolation level by using the :ref:`set-transaction-isolation-leve
 
 (O: YES, X: NO)
 
-+--------------------------------+-----------------------+--------+---------------+----------+------------------------+
-| CUBRID Isolation Level         | Other DBMS            | DIRTY  | UNREPEATABLE  | PHANTOM  | Schema Changes of the  |
-| (isolation_level)              | Isolation Level       | READ   | READ          | READ     | Table Being Retrieved  |
-+================================+=======================+========+===============+==========+========================+
-| :ref:`isolation-level-6` (6)   | SERIALIZABLE          | X      | X             | X        | X                      |
-+--------------------------------+-----------------------+--------+---------------+----------+------------------------+
-| :ref:`isolation-level-5` (5)   | REPEATABLE READ       | X      | X             | O        | X                      |
-+--------------------------------+-----------------------+--------+---------------+----------+------------------------+
-| :ref:`isolation-level-4` (4)   | READ COMMITTED        | X      | O             | O        | X                      |
-+--------------------------------+-----------------------+--------+---------------+----------+------------------------+
-| :ref:`isolation-level-3` (3)   | READ UNCOMMITTED      | O      | O             | O        | X                      |
-+--------------------------------+-----------------------+--------+---------------+----------+------------------------+
-| :ref:`isolation-level-2` (2)   |                       | X      | O             | O        | O                      |
-+--------------------------------+-----------------------+--------+---------------+----------+------------------------+
-| :ref:`isolation-level-1` (1)   |                       | O      | O             | O        | O                      |
-+--------------------------------+-----------------------+--------+---------------+----------+------------------------+
++--------------------------------+--------+---------------+----------+------------------------+
+| CUBRID Isolation Level         | DIRTY  | UNREPEATABLE  | PHANTOM  | Schema Changes of the  |
+| (isolation_level)              | READ   | READ          | READ     | Table Being Retrieved  |
++================================+========+===============+==========+========================+
+| :ref:`isolation-level-6` (6)   | X      | X             | X        | X                      |
++--------------------------------+--------+---------------+----------+------------------------+
+| :ref:`isolation-level-5` (5)   | X      | X             | O        | X                      |
++--------------------------------+--------+---------------+----------+------------------------+
+| :ref:`isolation-level-4` (4)   | X      | O             | O        | X                      |
++--------------------------------+--------+---------------+----------+------------------------+
 
 *   **READ UNCOMMITTED** allows dirty read, unrepeatable read and phantom read.
 *   **READ COMMITTED** does not allow dirty read but allows unrepeatable read and phantom read.
@@ -539,7 +533,7 @@ The below is an example that T1 waits a lock until T2 commits updated data when 
 |   csql> SET TRANSACTION ISOLATION LEVEL 4;                                    |   csql> SET TRANSACTION ISOLATION LEVEL 4;                                    |
 |                                                                               |                                                                               |
 |   Isolation level set to:                                                     |   Isolation level set to:                                                     |
-|   REPEATABLE READ SCHEMA, READ COMMITTED INSTANCES.                           |   REPEATABLE READ SCHEMA, READ COMMITTED INSTANCES.                           |
+|   READ COMMITTED                                                              |   READ COMMITTED                                                              |
 |                                                                               |                                                                               |
 |                                                                               | ::                                                                            |
 |                                                                               |                                                                               |
@@ -898,28 +892,18 @@ You can set the level of transaction isolation by using **isolation_level** and 
 The following table shows the isolation levels from 1 to 6. It consists of table schema (row) and isolation level. For the unsupported isolation level, see :ref:`unsupported-isolation-level`.
 
 **Levels of Isolation Supported by CUBRID**
-
-+-----------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Name                                                      | Description                                                                                                                                                                         |
-+===========================================================+=====================================================================================================================================================================================+
-| SERIALIZABLE (6)                                          | In this isolation level, problems concerning concurrency (e.g. dirty read, non-repeatable read, phantom read, etc.) do not occur.                                                   |
-+-----------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| REPEATABLE READ CLASS with REPEATABLE READ INSTANCES (5)  | Another transaction T2 cannot update the schema of table A while transaction T1 is viewing table A.                                                                                 |
-|                                                           | Transaction T1 may experience phantom read for the record R that was inserted by another transaction T2 when it is repeatedly retrieving a specific record.                         |
-+-----------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| REPEATABLE READ CLASS with READ COMMITTED INSTANCES       | Another transaction T2 cannot update the schema of table A while transaction T1 is viewing table A.                                                                                 |
-| (or CURSOR STABILITY) (4)                                 | Transaction T1 may experience R read (non-repeatable read) that was updated and committed by another transaction T2 when it is repeatedly retrieving the record R.                  |
-+-----------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| REPEATABLE READ CLASS with READ UNCOMMITTED INSTANCES (3) | Default isolation level.                                                                                                                                                            |
-|                                                           | Another transaction T2 cannot update the schema of table A while transaction T1 is viewing table A.                                                                                 |
-|                                                           | Transaction T1 may experience R' read (dirty read) for the record that was updated but not committed by another transaction T2.                                                     |
-+-----------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| READ COMMITTED CLASS with READ COMMITTED INSTANCES (2)    | Transaction T1 may experience A' read (non-repeatable read) for the table that was updated and committed by another transaction T2 while it is viewing table A repeatedly.          |
-|                                                           | Transaction T1 may experience R' read (non-repeatable read) for the record that was updated and committed by another transaction T2 while it is retrieving the record R repeatedly. |
-+-----------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| READ COMMITTED CLASS with READ UNCOMMITTED INSTANCES (1)  | Transaction T1 may experience A' read (non-repeatable read) for the table that was updated and committed by another transaction T2 while it is repeatedly viewing table A.          |
-|                                                           | Transaction T1 may experience R' read (dirty read) for the record that was updated but not committed by another transaction T2.                                                     |
-+-----------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
++-----------------------+
++-----------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Name                  | Description                                                                                                                                                                         |
++=======================+=====================================================================================================================================================================================+
+| SERIALIZABLE (6)      | In this isolation level, problems concerning concurrency (e.g. dirty read, non-repeatable read, phantom read, etc.) do not occur.                                                   |
++-----------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| REPEATABLE READ (5)   | Another transaction T2 cannot update the schema of table A while transaction T1 is viewing table A.                                                                                 |
+|                       | Transaction T1 may experience phantom read for the record R that was inserted by another transaction T2 when it is repeatedly retrieving a specific record.                         |
++-----------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| READ COMMITTED (4)    | Another transaction T2 cannot update the schema of table A while transaction T1 is viewing table A.                                                                                 |
+|                       | Transaction T1 may experience R read (non-repeatable read) that was updated and committed by another transaction T2 when it is repeatedly retrieving the record R.                  |
++-----------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 If the transaction level is changed in an application while a transaction is executed, the new level is applied to the rest of the transaction being executed. Therefore, some object locks that have already been obtained may be released during the transaction while the new isolation level is applied. For this reason, it is recommended that the transaction isolation level be modified when the transaction starts (after commit, rollback or system restart) because an isolation level which has already been set does not apply to the entire transaction, but can be changed during the transaction.
 
@@ -938,7 +922,7 @@ You can assign the current isolation level to *variable* by using the **GET TRAN
 
            Result
     =============
-      READ COMMITTED SCHEMA, READ UNCOMMITTED INSTANCES
+      READ COMMITTED
 
 .. _isolation-level-6:
 
@@ -1063,8 +1047,8 @@ The following example shows that another transaction cannot access the table or 
 
 .. _isolation-level-5:
 
-REPEATABLE READ CLASS with REPEATABLE READ INSTANCES
-----------------------------------------------------
+REPEATABLE READ
+---------------
 
 A relatively high isolation level (5). A dirty or non-repeatable read does not occur, but a phantom read may.
 
@@ -1078,7 +1062,7 @@ This isolation level follows a two-phase locking protocol.
 
 **Example**
 
-The following example shows that phantom read may occur because another transaction can add a new record while one transaction is performing the object read when the transaction level of the concurrent transactions is **REPEATABLE READ CLASS** with **REPEATABLE READ INSTANCES**.
+The following example shows that phantom read may occur because another transaction can add a new record while one transaction is performing the object read when the transaction level of the concurrent transactions is  **REPEATABLE READ**.
 
 +----------------------------------------------------------------------------+-----------------------------------------------------------------------------+
 | session 1                                                                  | session 2                                                                   |
@@ -1092,7 +1076,7 @@ The following example shows that phantom read may occur because another transact
 |   csql> SET TRANSACTION ISOLATION LEVEL 5;                                 |   csql> SET TRANSACTION ISOLATION LEVEL 5;                                  |
 |                                                                            |                                                                             |
 |   Isolation level set to:                                                  |   Isolation level set to:                                                   |
-|   REPEATABLE READ SCHEMA, REPEATABLE READ INSTANCES.                       |   REPEATABLE READ SCHEMA, REPEATABLE READ INSTANCES.                        |
+|   REPEATABLE READ                                                          |   REPEATABLE READ                                                           |
 +----------------------------------------------------------------------------+-----------------------------------------------------------------------------+
 | ::                                                                         |                                                                             |
 |                                                                            |                                                                             |
@@ -1196,8 +1180,8 @@ The following example shows that phantom read may occur because another transact
 
 .. _isolation-level-4:
 
-REPEATABLE READ CLASS with READ COMMITTED INSTANCES
----------------------------------------------------
+READ COMMITTED
+--------------
 
 A relatively low isolation level (4). A dirty read does not occur, but non-repeatable or phantom read may. That is, transaction T1 can read another value because insert or update by transaction T2 is allowed while transaction T1 is repeatedly retrieving one object.
 
@@ -1225,7 +1209,7 @@ The following example shows that a phantom or non-repeatable read may occur beca
 |   csql> SET TRANSACTION ISOLATION LEVEL 4;                              |   csql> SET TRANSACTION ISOLATION LEVEL 4;                                       |
 |                                                                         |                                                                                  |
 |   Isolation level set to:                                               |   Isolation level set to:                                                        |
-|   REPEATABLE READ SCHEMA, READ COMMITTED INSTANCES.                     |   REPEATABLE READ SCHEMA, READ COMMITTED INSTANCES.                              |
+|   READ COMMITTED                                                        |   READ COMMITTED                                                                 |
 +-------------------------------------------------------------------------+----------------------------------------------------------------------------------+
 | ::                                                                      |                                                                                  |
 |                                                                         |                                                                                  |
@@ -1327,408 +1311,6 @@ The following example shows that a phantom or non-repeatable read may occur beca
 |                                                                         |     1994  'FRA'           NULL                                                   |
 +-------------------------------------------------------------------------+----------------------------------------------------------------------------------+
 
-.. _isolation-level-3:
-
-REPEATABLE READ CLASS with READ UNCOMMITTED INSTANCES
------------------------------------------------------
-
-The default isolation of CUBRID (3). The concurrency level is high. A dirty, non-repeatable or phantom read may occur for the rows, but repeatable read is ensured for the table. That is, transaction T2 can read an object while transaction T1 is updating one.
-
-The following are the rules of this isolation level:
-
-*   Transaction T1 can read the record being updated by another transaction T2.
-*   Transaction T1 can update/insert record to the table being viewed by another transaction T2.
-*   Transaction T1 cannot change the schema of the table being viewed by another transaction T2.
-
-This isolation level follows a two-phase locking protocol for an exclusive and update lock. However, the shared lock on the rows is released immediately after it is retrieved. The intent lock on the table is released when the transaction ends to ensure repeatable reads.
-
-**Example**
-
-The following example shows that another transaction can read dirty data uncommitted by one transaction but repeatable reads are ensured for table schema update when the transaction level of the concurrent transactions is **REPEATABLE READ CLASS** with **READ UNCOMMITTED INSTANCES**.
-
-+---------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-| session 1                                                                 | session 2                                                                           |
-+===========================================================================+=====================================================================================+
-| ::                                                                        | ::                                                                                  |
-|                                                                           |                                                                                     |
-|   csql> ;autocommit off                                                   |   csql> ;autocommit off                                                             |
-|                                                                           |                                                                                     |
-|   AUTOCOMMIT IS OFF                                                       |   AUTOCOMMIT IS OFF                                                                 |
-|                                                                           |                                                                                     |
-|   csql> SET TRANSACTION ISOLATION LEVEL 3;                                |   csql> SET TRANSACTION ISOLATION LEVEL 3;                                          |
-|                                                                           |                                                                                     |
-|   Isolation level set to:                                                 |   Isolation level set to:                                                           |
-|   REPEATABLE READ SCHEMA, READ UNCOMMITTED INSTANCES.                     |   REPEATABLE READ SCHEMA, READ UNCOMMITTED INSTANCES.                               |
-+---------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-| ::                                                                        |                                                                                     |
-|                                                                           |                                                                                     |
-|   csql> CREATE TABLE isol3_tbl(host_year integer, nation_code char(3));   |                                                                                     |
-|   csql> CREATE UNIQUE INDEX on isol3_tbl(nation_code, host_year);         |                                                                                     |
-|                                                                           |                                                                                     |
-|   csql> INSERT INTO isol3_tbl VALUES (2008, 'AUS');                       |                                                                                     |
-|                                                                           |                                                                                     |
-|   csql> COMMIT;                                                           |                                                                                     |
-+---------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-|                                                                           | ::                                                                                  |
-|                                                                           |                                                                                     |
-|                                                                           |   csql> SELECT * FROM isol3_tbl;                                                    |
-|                                                                           |                                                                                     |
-|                                                                           |       host_year  nation_code                                                        |
-|                                                                           |   ===================================                                               |
-|                                                                           |            2008  'AUS'                                                              |
-+---------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-| ::                                                                        |                                                                                     |
-|                                                                           |                                                                                     |
-|   csql> INSERT INTO isol3_tbl VALUES (2004, 'AUS');                       |                                                                                     |
-|   csql> INSERT INTO isol3_tbl VALUES (2000, 'NED');                       |                                                                                     |
-|                                                                           |                                                                                     |
-|   /* able to insert new rows even if tran 2 uncommitted */                |                                                                                     |
-+---------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-|                                                                           | ::                                                                                  |
-|                                                                           |                                                                                     |
-|                                                                           |   csql> SELECT * FROM isol3_tbl;                                                    |
-|                                                                           |                                                                                     |
-|                                                                           |       host_year  nation_code                                                        |
-|                                                                           |   ===================================                                               |
-|                                                                           |            2008  'AUS'                                                              |
-|                                                                           |            2004  'AUS'                                                              |
-|                                                                           |            2000  'NED'                                                              |
-|                                                                           |                                                                                     |
-|                                                                           |   /* dirty read may occur so that tran_2 can select new rows                        |
-|                                                                           |      uncommitted by tran_1 */                                                       |
-+---------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-| ::                                                                        |                                                                                     |
-|                                                                           |                                                                                     |
-|   csql> ROLLBACK;                                                         |                                                                                     |
-+---------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-|                                                                           | ::                                                                                  |
-|                                                                           |                                                                                     |
-|                                                                           |   csql> SELECT * FROM isol3_tbl;                                                    |
-|                                                                           |                                                                                     |
-|                                                                           |       host_year  nation_code                                                        |
-|                                                                           |   ===================================                                               |
-|                                                                           |            2008  'AUS'                                                              |
-|                                                                           |                                                                                     |
-|                                                                           |   /* unrepeatable read may occur so that selected results are different */          |
-+---------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-| ::                                                                        |                                                                                     |
-|                                                                           |                                                                                     |
-|   csql> INSERT INTO isol3_tbl VALUES (1994, 'FRA');                       |                                                                                     |
-|                                                                           |                                                                                     |
-|   csql> DELETE FROM isol3_tbl                                             |                                                                                     |
-|   csql> WHERE nation_code = 'AUS' and                                     |                                                                                     |
-|   csql> host_year=2008;                                                   |                                                                                     |
-|                                                                           |                                                                                     |
-|   /* able to delete rows even if tran 2 uncommitted */                    |                                                                                     |
-+---------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-|                                                                           | ::                                                                                  |
-|                                                                           |                                                                                     |
-|                                                                           |   csql> SELECT * FROM isol3_tbl;                                                    |
-|                                                                           |                                                                                     |
-|                                                                           |       host_year  nation_code                                                        |
-|                                                                           |   ===================================                                               |
-|                                                                           |            1994  'FRA'                                                              |
-+---------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-| ::                                                                        |                                                                                     |
-|                                                                           |                                                                                     |
-|   csql> ALTER TABLE isol3_tbl ADD COLUMN gold INT;                        |                                                                                     |
-|                                                                           |                                                                                     |
-|   /* unable to alter the table schema until tran 2 committed */           |                                                                                     |
-+---------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-|                                                                           | ::                                                                                  |
-|                                                                           |                                                                                     |
-|                                                                           |   /* repeatable read is ensured while tran_1 is altering table schema */            |
-|                                                                           |                                                                                     |
-|                                                                           |   csql> SELECT * FROM isol3_tbl;                                                    |
-|                                                                           |                                                                                     |
-|                                                                           |       host_year  nation_code                                                        |
-|                                                                           |   ===================================                                               |
-|                                                                           |            1994  'FRA'                                                              |
-+---------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-|                                                                           | ::                                                                                  |
-|                                                                           |                                                                                     |
-|                                                                           |   csql> COMMIT;                                                                     |
-+---------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-|                                                                           | ::                                                                                  |
-|                                                                           |                                                                                     |
-|                                                                           |   csql> SELECT * FROM isol3_tbl;                                                    |
-+---------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-| ::                                                                        | ::                                                                                  |
-|                                                                           |                                                                                     |
-|   csql> COMMIT;                                                           |   host_year  nation_code  gold                                                      |
-|                                                                           |   ===================================                                               |
-|                                                                           |     1994  'FRA'           NULL                                                      |
-+---------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-
-.. note::
-
-    CUBRID flushes dirty data (or dirty records) in the client buffers to the database (server) such as the following situations. For details, see :ref:`dirty-record-flush`.
-
-.. _isolation-level-2:
-
-READ COMMITTED CLASS with READ COMMITTED INSTANCES
---------------------------------------------------
-
-A relatively low isolation level (2). A dirty read does not occur, but non-repeatable or phantom read may occur. That is, this level is similar to **REPEATABLE READ CLASS** with **READ COMMITTED INSTANCES** (level 4) described above, but works differently for table schema. Non-repeatable read due to a table schema update may occur because another transaction T2 can change the schema of the table being viewed by the transaction T1.
-
-The following are the rules of this isolation level:
-
-*   Transaction T1 cannot read the record being updated by another transaction T2.
-*   Transaction T1 can update/insert a record to the table being viewed by another transaction T2.
-*   Transaction T1 can change the schema of the table being viewed by another transaction T2.
-
-This isolation level follows a two-phase locking protocol for an exclusive lock. However, non-repeatable read may occur because the shared lock on the rows is released immediately after it is retrieved and the intent lock on the table is released immediately as well.
-
-**Example**
-
-The following example shows that phantom or non-repeatable read for the record as well as for the table schema may occur because another transaction can add or update a new record while one transaction is performing the object read when the transaction level of the concurrent transactions is **READ COMMITTED CLASS** with **READ COMMITTED INSTANCES**.
-
-+---------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
-| session 1                                                                       | session 2                                                                         |
-+=================================================================================+===================================================================================+
-| ::                                                                              | ::                                                                                |
-|                                                                                 |                                                                                   |
-|   csql> ;autocommit off                                                         |   csql> ;autocommit off                                                           |
-|                                                                                 |                                                                                   |
-|   AUTOCOMMIT IS OFF                                                             |   AUTOCOMMIT IS OFF                                                               |
-|                                                                                 |                                                                                   |
-|   csql> SET TRANSACTION ISOLATION LEVEL 2;                                      |   csql> SET TRANSACTION ISOLATION LEVEL 2;                                        |
-|                                                                                 |                                                                                   |
-|   Isolation level set to:                                                       |   Isolation level set to:                                                         |
-|   READ COMMITTED SCHEMA, READ COMMITTED INSTANCES.                              |   READ COMMITTED SCHEMA, READ COMMITTED INSTANCES.                                |
-+---------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
-| ::                                                                              |                                                                                   |
-|                                                                                 |                                                                                   |
-|   csql> CREATE TABLE isol2_tbl(host_year integer, nation_code char(3));         |                                                                                   |
-|   csql> CREATE UNIQUE INDEX on isol2_tbl(nation_code, host_year);               |                                                                                   |
-|                                                                                 |                                                                                   |
-|   csql> INSERT INTO isol2_tbl VALUES (2008, 'AUS');                             |                                                                                   |
-|                                                                                 |                                                                                   |
-|   csql> COMMIT;                                                                 |                                                                                   |
-+---------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
-|                                                                                 | ::                                                                                |
-|                                                                                 |                                                                                   |
-|                                                                                 |   csql> SELECT * FROM isol2_tbl;                                                  |
-|                                                                                 |                                                                                   |
-|                                                                                 |       host_year  nation_code                                                      |
-|                                                                                 |   ===================================                                             |
-|                                                                                 |            2008  'AUS'                                                            |
-+---------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
-| ::                                                                              |                                                                                   |
-|                                                                                 |                                                                                   |
-|   csql> INSERT INTO isol2_tbl VALUES (2004, 'AUS');                             |                                                                                   |
-|   csql> INSERT INTO isol2_tbl VALUES (2000, 'NED');                             |                                                                                   |
-|                                                                                 |                                                                                   |
-|   /* able to insert new rows even if tran 2 uncommitted */                      |                                                                                   |
-+---------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
-|                                                                                 | ::                                                                                |
-|                                                                                 |                                                                                   |
-|                                                                                 |   csql> SELECT * FROM isol2_tbl;                                                  |
-|                                                                                 |                                                                                   |
-|                                                                                 |   /* phantom read may occur when tran 1 committed */                              |
-+---------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
-| ::                                                                              | ::                                                                                |
-|                                                                                 |                                                                                   |
-|   csql> COMMIT;                                                                 |       host_year  nation_code                                                      |
-|                                                                                 |   ===================================                                             |
-|                                                                                 |            2008  'AUS'                                                            |
-|                                                                                 |            2004  'AUS'                                                            |
-|                                                                                 |            2000  'NED'                                                            |
-+---------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
-| ::                                                                              |                                                                                   |
-|                                                                                 |                                                                                   |
-|   csql> INSERT INTO isol2_tbl VALUES (1994, 'FRA');                             |                                                                                   |
-+---------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
-|                                                                                 | ::                                                                                |
-|                                                                                 |                                                                                   |
-|                                                                                 |   csql> SELECT * FROM isol2_tbl;                                                  |
-|                                                                                 |                                                                                   |
-|                                                                                 |   /* unrepeatable read may occur when tran 1 committed */                         |
-+---------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
-| ::                                                                              |                                                                                   |
-|                                                                                 |                                                                                   |
-|   csql> DELETE FROM isol2_tbl                                                   |                                                                                   |
-|   csql> WHERE nation_code = 'AUS' and                                           |                                                                                   |
-|   csql> host_year=2008;                                                         |                                                                                   |
-|                                                                                 |                                                                                   |
-|   /* able to delete rows even if tran 2 uncommitted */                          |                                                                                   |
-+---------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
-| ::                                                                              | ::                                                                                |
-|                                                                                 |                                                                                   |
-|   csql> COMMIT;                                                                 |       host_year  nation_code                                                      |
-|                                                                                 |   ===================================                                             |
-|                                                                                 |            2004  'AUS'                                                            |
-|                                                                                 |            2000  'NED'                                                            |
-|                                                                                 |            1994  'FRA'                                                            |
-+---------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
-| ::                                                                              |                                                                                   |
-|                                                                                 |                                                                                   |
-|   csql> ALTER TABLE isol2_tbl ADD COLUMN gold INT;                              |                                                                                   |
-|                                                                                 |                                                                                   |
-|   /* able to alter the table schema even if tran 2 is uncommitted yet*/         |                                                                                   |
-+---------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
-|                                                                                 | ::                                                                                |
-|                                                                                 |                                                                                   |
-|                                                                                 |   /* unrepeatable read may occur so that result shows different schema */         |
-|                                                                                 |                                                                                   |
-|                                                                                 |   csql> SELECT * FROM isol2_tbl;                                                  |
-+---------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
-| ::                                                                              | ::                                                                                |
-|                                                                                 |                                                                                   |
-|   csql> COMMIT;                                                                 |   host_year  nation_code  gold                                                    |
-|                                                                                 |   ===================================                                             |
-|                                                                                 |     2004  'AUS'           NULL                                                    |
-|                                                                                 |     2000  'NED'           NULL                                                    |
-|                                                                                 |     1994  'FRA'           NULL                                                    |
-+---------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
-
-.. _isolation-level-1:
-
-READ COMMITTED CLASS with READ UNCOMMITTED INSTANCES
-----------------------------------------------------
-
-The lowest isolation level (1). The concurrency level is the highest. A dirty, non-repeatable or phantom read may occur for the rows and a non-repeatable read may occur for the table as well. Similar to **REPEATABLE READ CLASS** with **READ UNCOMMITTED INSTANCES** (level 3) described above, but works differently for the table schema. That is, non-repeatable read due to table schema update may occur because another transaction T2 can change the schema of the table being viewed by the transaction T1.
-
-The following are the rules of this isolation level:
-
-*   Transaction T1 can read the record being updated by another transaction T2.
-*   Transaction T1 can update/insert record to the table being viewed by another transaction T2.
-*   Transaction T1 can change the schema of the table being viewed by another transaction T2.
-
-This isolation level follows a two-phase locking protocol for an exclusive and update lock. However, the shared lock on the rows is released immediately after it is retrieved. The intent lock on the table is released immediately after the retrieval as well.
-
-**Example**
-
-+---------------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-| session 1                                                                       | session 2                                                                           |
-+=================================================================================+=====================================================================================+
-| ::                                                                              | ::                                                                                  |
-|                                                                                 |                                                                                     |
-|   csql> ;autocommit off                                                         |   csql> ;autocommit off                                                             |
-|                                                                                 |                                                                                     |
-|   AUTOCOMMIT IS OFF                                                             |   AUTOCOMMIT IS OFF                                                                 |
-|                                                                                 |                                                                                     |
-|   csql> SET TRANSACTION ISOLATION LEVEL 1;                                      |   csql> SET TRANSACTION ISOLATION LEVEL 1;                                          |
-|                                                                                 |                                                                                     |
-|   Isolation level set to:                                                       |   Isolation level set to:                                                           |
-|   READ COMMITTED SCHEMA, READ UNCOMMITTED INSTANCES.                            |   READ COMMITTED SCHEMA, READ UNCOMMITTED INSTANCES.                                |
-+---------------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-| ::                                                                              |                                                                                     |
-|                                                                                 |                                                                                     |
-|   csql> CREATE TABLE isol1_tbl(host_year integer, nation_code char(3));         |                                                                                     |
-|   csql> CREATE UNIQUE INDEX on isol1_tbl(nation_code, host_year);               |                                                                                     |
-|                                                                                 |                                                                                     |
-|   csql> INSERT INTO isol1_tbl VALUES (2008, 'AUS');                             |                                                                                     |
-|                                                                                 |                                                                                     |
-|   csql> COMMIT;                                                                 |                                                                                     |
-+---------------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-|                                                                                 | ::                                                                                  |
-|                                                                                 |                                                                                     |
-|                                                                                 |   csql> SELECT * FROM isol1_tbl;                                                    |
-|                                                                                 |                                                                                     |
-|                                                                                 |       host_year  nation_code                                                        |
-|                                                                                 |   ===================================                                               |
-|                                                                                 |            2008  'AUS'                                                              |
-+---------------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-| ::                                                                              |                                                                                     |
-|                                                                                 |                                                                                     |
-|   csql> INSERT INTO isol1_tbl VALUES (2004, 'AUS');                             |                                                                                     |
-|   csql> INSERT INTO isol1_tbl VALUES (2000, 'NED');                             |                                                                                     |
-|                                                                                 |                                                                                     |
-|   /* able to insert new rows even if tran 2 uncommitted */                      |                                                                                     |
-+---------------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-|                                                                                 | ::                                                                                  |
-|                                                                                 |                                                                                     |
-|                                                                                 |   csql> SELECT * FROM isol1_tbl;                                                    |
-|                                                                                 |                                                                                     |
-|                                                                                 |       host_year  nation_code                                                        |
-|                                                                                 |   ===================================                                               |
-|                                                                                 |            2008  'AUS'                                                              |
-|                                                                                 |            2004  'AUS'                                                              |
-|                                                                                 |            2000  'NED'                                                              |
-|                                                                                 |                                                                                     |
-|                                                                                 |   /* dirty read may occur so that tran_2 can select new rows                        |
-|                                                                                 |      uncommitted by tran_1 */                                                       |
-+---------------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-| ::                                                                              |                                                                                     |
-|                                                                                 |                                                                                     |
-|   csql> ROLLBACK;                                                               |                                                                                     |
-+---------------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-|                                                                                 | ::                                                                                  |
-|                                                                                 |                                                                                     |
-|                                                                                 |   csql> SELECT * FROM isol1_tbl;                                                    |
-|                                                                                 |                                                                                     |
-|                                                                                 |       host_year  nation_code                                                        |
-|                                                                                 |   ===================================                                               |
-|                                                                                 |            2008  'AUS'                                                              |
-|                                                                                 |                                                                                     |
-|                                                                                 |   /* unrepeatable read may occur so that selected results are different */          |
-+---------------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-| ::                                                                              |                                                                                     |
-|                                                                                 |                                                                                     |
-|   csql> INSERT INTO isol1_tbl VALUES (1994, 'FRA');                             |                                                                                     |
-|                                                                                 |                                                                                     |
-|   csql> DELETE FROM isol1_tbl                                                   |                                                                                     |
-|   csql> WHERE nation_code = 'AUS' and                                           |                                                                                     |
-|   csql> host_year=2008;                                                         |                                                                                     |
-|                                                                                 |                                                                                     |
-|   /* able to delete rows while tran 2 is selecting rows*/                       |                                                                                     |
-+---------------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-|                                                                                 | ::                                                                                  |
-|                                                                                 |                                                                                     |
-|                                                                                 |   csql> SELECT * FROM isol1_tbl;                                                    |
-|                                                                                 |                                                                                     |
-|                                                                                 |       host_year  nation_code                                                        |
-|                                                                                 |   ===================================                                               |
-|                                                                                 |            1994  'FRA'                                                              |
-+---------------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-| ::                                                                              |                                                                                     |
-|                                                                                 |                                                                                     |
-|   csql> ALTER TABLE isol1_tbl ADD COLUMN gold INT;                              |                                                                                     |
-|                                                                                 |                                                                                     |
-|   /* able to alter the table schema even if tran 2 is uncommitted yet*/         |                                                                                     |
-+---------------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-|                                                                                 | ::                                                                                  |
-|                                                                                 |                                                                                     |
-|                                                                                 |   /* unrepeatable read may occur so that result shows different schema */           |
-|                                                                                 |                                                                                     |
-|                                                                                 |   csql> SELECT * FROM isol1_tbl;                                                    |
-+---------------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-| ::                                                                              | ::                                                                                  |
-|                                                                                 |                                                                                     |
-|   csql> COMMIT;                                                                 |   host_year  nation_code  gold                                                      |
-|                                                                                 |   ====================================                                              |
-|                                                                                 |     1994  'FRA'           NULL                                                      |
-+---------------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-
-UPDATE INCONSISTENCY
---------------------
-
-In this isolation level, uncommitted updates may be lost, which makes a transaction unrestorable (cannot be rolled back) because the data are committed before the end of the transaction. CUBRID does not support this isolation level because this can cause the updates made by the user to be lost.
-
-The following are the rules of this isolation level:
-
-*   A transaction does not overwrite an object being modified by another transaction.
-
-.. note:: A transaction can be restored in all supported isolation levels because updates are not committed before the end of the transaction.
-
-.. _unsupported-isolation-level:
-
-Combination of Unsupported Isolation Level
-------------------------------------------
-
-You can set customized isolation levels by using the **SET TRANSACTION ISOLATION LEVE** statement. However, combinations of isolation levels below are not supported. If they are used, a system error message is shown up and an isolation level closest to the one specified is chosen.
-
-The following are unsupported isolation levels. If table schema is changed while data is selected, unrepeatable read occurs; therefore, the combinations below are not supported.
-
-*   **READ COMMITTED CLASS** with **REPEATABLE READ INSTANCES**
-*   **READ UNCOMMITTED CLASS** with **REPEATABLE READ INSTANCES**
-
-Neither are isolation levels below supported because updating a row by a transaction is not allowed while table schema is changed by other transaction.
-
-*   **READ UNCOMMITTED CLASS** with **READ COMMITTED INSTANCES**
-*   **READ UNCOMMITTED CLASS** with **READ UNCOMMITTED INSTANCES**
-
 .. _dirty-record-flush:
 
 How to Handle Dirty Record
@@ -1771,4 +1353,3 @@ The user's intervention is somewhat needed to restart the database after media e
 .. note::
 
     To minimize the possibility of losing database updates, it is recommended to create a snapshot and store it in the backup media before it is deleted from the disk. The DBA can backup and restore the database by using the **cubrid backupdb** and **cubrid restoredb** utilities. For details on these utilities, see :ref:`backupdb`.
-

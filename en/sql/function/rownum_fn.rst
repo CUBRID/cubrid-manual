@@ -4,8 +4,6 @@
 ROWNUM Functions
 ****************
 
-.. contents::
-
 ROWNUM, INST_NUM
 ================
 
@@ -16,18 +14,24 @@ ROWNUM, INST_NUM
 
     :rtype: INT
 
-**ROWNUM** and **INST_NUM()** can be used in the **SELECT** statement, and **GROUPBY_NUM()** can be used in the **SELECT** statement with **GROUP BY** clauses. The **ROWNUM** function can be used to limit the number of result records of the query in several ways. For example, it can be used to search only the first 10 records or to return even or odd number records.
+**ROWNUM** and **INST_NUM()** can be used in the **SELECT** statement; **ORDERBY_NUM()** can be used in the **SELECT** statement with **ORDER BY** clauses, and **GROUPBY_NUM()** can be used in the **SELECT** statement with **GROUP BY** clauses. The **ROWNUM** function can be used to limit the number of result records of the query in several ways. For example, it can be used to search only the first 10 records or to return even or odd number records.
 
 The **ROWNUM** function has a result value as an integer, and can be used wherever an expression is valid such as the **SELECT** or **WHERE** clause. However, it is not allowed to compare the result of the **ROWNUM** function with the attribute or the correlated subquery.
 
 .. note::
 
-    *   The **ROWNUM** function specified in the **WHERE** clause works the same as the **INST_NUM()** function. Whereas **INST_NUM()** is a scalar function, **GROUPBY_NUM()** is a kind of an aggregate function. In a **SELECT** statement with a **GROUP BY** clause, **GROUPBY_NUM()** must be used instead of **INST_NUM()**.
-
+    *   The **ROWNUM** function specified in the **WHERE** clause works the same as the **INST_NUM()** function. 
+    
     *   The **ROWNUM** function belongs to each **SELECT** statement. That is, if a **ROWNUM** function is used in a subquery, it returns the sequence of the subquery result while it is being executed. Internally, the result of the **ROWNUM** function is generated right before the searched record is written to the query result set. At this moment, the counter value that generates the serial number of the result set records increases.
 
-    *   If an **ORDER BY** clause is included in the **SELECT** statement, the value of the **ROWNUM** function specified in the **WHERE** clause is generated before sorting for the **ORDER BY**  clause. If a **GROUP BY** clause is included in the **SELECT** statement, the value of the **GROUPBY_NUM()** function specified in the **HAVING** clause is calculated after the query results are grouped. After the sorting process is completed using the **ORDER BY** clause, you need to use the **LIMIT** clause in the **ORDER BY** clause in order to get a sequence of the result records.
+    *   If you want to add a sequence on the **SELECT** result; use **ROWNUM** when there is no sorting process; use **ORDERBY_NUM()** when there is an ORDER BY clause; use **GROUPBY_NUM()** function when there is a GROUP BY clause.
 
+    *   If an **ORDER BY** clause is included in the **SELECT** statement, the value of the **ORDERBY_NUM()** function specified in the **WHERE** clause is generated after sorting for the **ORDER BY** clause. 
+    
+    *   If a **GROUP BY** clause is included in the **SELECT** statement, the value of the **GROUPBY_NUM()** function specified in the **HAVING** clause is calculated after the query results are grouped.
+
+    *   For the purpose of limiting the sorted result rows, instead of **FOR ORDERBY_NUM()** or **HAVING GROUPBY_NUM()**, **LIMIT** clause can be used.
+    
     *   The **ROWNUM** function can also be used in SQL statements such as **INSERT**, **DELETE** and **UPDATE** in addition to the **SELECT** statement. For example, as in the query **INSERT INTO** *table_name* **SELECT** ... **FROM** ... **WHERE** ..., you can search for part of the row from one table and then insert it into another by using the **ROWNUM** function in the **WHERE** clause.
 
 The following example shows how to retrieve country names ranked first to fourth based on the number of gold (*gold*) medals in the 1988 Olympics in the *demodb* database.
@@ -48,7 +52,9 @@ The following example shows how to retrieve country names ranked first to fourth
       'GDR'
       'USA'
       'KOR'
-     
+
+LIMIT clause limits the sorted result rows; therefore, the below result is the same as the above.
+
 .. code-block:: sql
 
     --Limiting 4 rows using LIMIT
@@ -64,7 +70,9 @@ The following example shows how to retrieve country names ranked first to fourth
               155  'GDR'
               154  'USA'
               153  'KOR'
-     
+
+ROWNUM condition in the below limits before sorting; therefore, the result is different from the above.
+
 .. code-block:: sql
 
     --Unexpected results : ROWNUM operated before ORDER BY
@@ -80,6 +88,54 @@ The following example shows how to retrieve country names ranked first to fourth
                 2  'ZAM'
                 3  'ZAI'
                 4  'YMD'
+
+ORDERBY_NUM
+===========
+
+.. function:: ORDERBY_NUM ()
+
+    The **ORDERBY_NUM()** function is used with the **ROWNUM()** or **INST_NUM()** function to limit the number of result rows. The difference is that the **ORDERBY_NUM()** function is combined after the ORDER BY clause to give order to a result that has been already sorted. That is, when retrieving only some of the result rows by using **ROWNUM** in a condition clause of the **SELECT** statement that includes the **ORDER BY** clause, **ROWNUM** is applied first and then group sorting by **ORDER BY** is performed. On the other hand, when retrieving only some of the result rows by using the **ORDER_NUM()** function, **ROWNUM** is applied to the result of sorting by **ORDER BY**.
+
+    :rtype: INT
+
+The following example shows how to retrieve athlete names ranked 3rd to 5th and their records in the *history* table in the *demodb* database.
+
+.. code-block:: sql
+
+    --Ordering first and then limiting rows using FOR ORDERBY_NUM()
+    SELECT ORDERBY_NUM(), athlete, score FROM history
+    ORDER BY score FOR ORDERBY_NUM() BETWEEN 3 AND 5;
+    
+::
+
+        orderby_num()  athlete               score
+    ==============================================================
+                    3  'Luo Xuejuan'         '01:07.0'
+                    4  'Rodal Vebjorn'       '01:43.0'
+                    5  'Thorpe Ian'          '01:45.0'
+
+The following query using a LIMIT clause outputs the same result with the above query.
+
+.. code-block:: sql
+
+    SELECT ORDERBY_NUM(), athlete, score FROM history
+    ORDER BY score LIMIT 2, 3;
+
+The following query using ROWNUM limits the result rows before sorting; then ORDER BY sorting is operated.
+
+.. code-block:: sql
+
+    --Limiting rows first and then Ordering using ROWNUM
+    SELECT athlete, score FROM history
+    WHERE ROWNUM BETWEEN 3 AND 5 ORDER BY score;
+    
+::
+
+      athlete               score
+    ============================================
+      'Thorpe Ian'          '01:45.0'
+      'Thorpe Ian'          '03:41.0'
+      'Hackett Grant'       '14:43.0'
 
 GROUPBY_NUM
 ===========
@@ -97,19 +153,28 @@ The following example shows how to retrieve the fastest record in the previous f
 .. code-block:: sql
 
     --Group-ordering first and then limiting rows using GROUPBY_NUM()
-    SELECT host_year, MIN(score) FROM history  
+    SELECT  GROUPBY_NUM(), host_year, MIN(score) FROM history  
     GROUP BY host_year HAVING GROUPBY_NUM() BETWEEN 1 AND 5;
     
 ::
 
-        host_year  min(score)
-    ===================================
-             1968  '8.9'
-             1980  '01:53.0'
-             1984  '13:06.0'
-             1988  '01:58.0'
-             1992  '02:07.0'
-     
+        groupby_num()    host_year  min(score)
+    =====================================================
+                    1         1968  '8.9'
+                    2         1980  '01:53.0'
+                    3         1984  '13:06.0'
+                    4         1988  '01:58.0'
+                    5         1992  '02:07.0'
+
+The following query using a LIMIT clause outputs the same result with the above query.
+
+.. code-block:: sql
+
+    SELECT  GROUPBY_NUM(), host_year, MIN(score) FROM history  
+    GROUP BY host_year LIMIT 5;
+
+The following query using ROWNUM limits the result rows before grouping; then GROUP BY operation is performed.
+
 .. code-block:: sql
 
     --Limiting rows first and then Group-ordering using ROWNUM
@@ -122,40 +187,3 @@ The following example shows how to retrieve the fastest record in the previous f
     ===================================
              2000  '03:41.0'
              2004  '01:45.0'
-
-LIMIT vs. ROWNUM
-================
-
-**LIMIT** clause is used with the **ROWNUM** or **INST_NUM()** function to limit the number of result rows. The difference is that the **LIMIT** clause is combined after the ORDER BY clause to give order to a result that has been already sorted. That is, when retrieving only some of the result rows by using **ROWNUM** in a condition clause of the **SELECT** statement that includes the **ORDER BY** clause, **ROWNUM** is applied first and then group sorting by **ORDER BY** is performed. On the other hand, when retrieving only some of the result rows by using the **LIMIT** clause, **ROWNUM** is applied to the result of sorting by **ORDER BY**.
-
-The following example shows how to retrieve athlete names ranked 3rd to 5th and their records in the *history* table in the *demodb* database.
-
-.. code-block:: sql
-
-    --Ordering first and then limiting rows using LIMIT
-    SELECT athlete, score FROM history
-    ORDER BY score LIMIT 2, 3;
-    
-::
-
-      athlete               score
-    ============================================
-      'Luo Xuejuan'         '01:07.0'
-      'Rodal Vebjorn'       '01:43.0'
-      'Thorpe Ian'          '01:45.0'
-     
-.. code-block:: sql
-
-    --Limiting rows first and then Ordering using ROWNUM
-    SELECT athlete, score FROM history
-    WHERE ROWNUM BETWEEN 3 AND 5 ORDER BY score;
-    
-::
-
-      athlete               score
-    ============================================
-      'Thorpe Ian'          '01:45.0'
-      'Thorpe Ian'          '03:41.0'
-      'Hackett Grant'       '14:43.0'
-
-.. note:: **FOR ORDERBY_NUM()**, which limits the sorted results like **LIMIT** clause, will be deprecated; so this is not recommended anymore.

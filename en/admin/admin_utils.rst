@@ -30,8 +30,6 @@ The following shows how to use the cubrid management utilities. ::
         unloaddb [option] <database-name>  --- Unloading data and schema 
         paramdump [option] <database-name>  --- Checking out the parameter values configured in a database 
         changemode [option] <database-name>  --- Displaying or changing the server HA mode 
-        copylogdb [option] <database-name>  --- Multiplicating transaction logs to configure HA 
-        applylogdb [option] <database-name>  --- Reading and applying replication logs from transaction logs to configure HA 
         applyinfo [option] <database-name>   --- Displaying the status of being applied transaction log to the other node in HA replication environment
         synccolldb [option] <database-name>  --- Synchronizing the DB collation with the system collation
         genlocale [option] <database-name>  --- Compiling the locale information to use
@@ -781,7 +779,32 @@ compactdb
 
 The **cubrid compactdb** utility is used to secure unused space of the database volume. In case the database server is not running (offline), you can perform the job in standalone mode. In case the database server is running, you can perform it in client-server mode.
 
-The **cubrid compactdb** utility secures the space being taken by OIDs of deleted objects and by class changes. When an object is deleted, the space taken by its OID is not immediately freed because there might be other objects that refer to the deleted one. 
+.. note::
+
+    The **cubrid compactdb** utility secures the space being taken by OIDs of deleted objects and by class changes. When an object is deleted, the space taken by its OID is not immediately freed because there might be other objects that refer to the deleted one. 
+
+    Therefore, when you make a table to reuse OIDs, it is recommended to use a REUSE_OID option as below.
+    
+    .. code-block:: sql
+    
+        CREATE TABLE tbl REUSE_OID
+        (
+            id INT PRIMARY KEY, 
+            b VARCHAR
+        );
+    
+    However, a table with a REUSE_OID option cannot be referred by the other table. That is, this table cannot be used as a type of the other table.
+    
+    .. code-block:: sql
+    
+        CREATE TABLE reuse_tbl (a INT PRIMARY KEY) REUSE_OID;
+        CREATE TABLE tbl_1 ( a reuse_tbl);
+    
+    ::
+    
+        ERROR: The class 'reuse_tbl' is marked as REUSE_OID and is non-referable. Non-referable classes can't be the domain of an attribute and their instances' OIDs cannot be returned.
+ 
+    To see details of REUSE_OID, please refer to :ref:`reuse-oid`.
 
 Reference to the object deleted during compacting is displayed as **NULL**, which means this can be reused by OIDs. ::
 
@@ -1158,6 +1181,8 @@ The following shows [options] available with the **cubrid statdump** utility.
     +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
     | Logs             | Num_log_page_fetches                     | The number of fetched log pages                                                        |
     |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_log_page_fetch_ioreads               | The number of I/O reads of fetched log pages                                           |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
     |                  | Num_log_page_ioreads                     | The number of log pages read                                                           |
     |                  +------------------------------------------+----------------------------------------------------------------------------------------+
     |                  | Num_log_page_iowrites                    | The number of log pages stored                                                         |
@@ -1347,7 +1372,10 @@ The following shows [options] available with the **cubrid statdump** utility.
 .. option:: -c, --cumulative
 
     You can display the accumulated operation statistics information of the target database server by using the **-c** option. 
-    By combining this with the -i option, you can check the operation statistics information at a specified interval.  ::
+    
+    Num_data_page_fix_ext, Num_data_page_unfix_ext, Time_data_page_hold_acquire_time, Time_data_page_fix_acquire_time information can be output only when this option is specified; however, these informations will be omitted because they are for CUBRID Engine developers.
+
+    By combining this with the **-i** option, you can check the operation statistics information at a specified interval.  ::
 
         cubrid statdump -i 5 -c testdb
 
@@ -1536,7 +1564,7 @@ The following shows what information is displayed when you run "cubrid tranlist 
 
 In the above example, when each three transaction is running INSERT statement, UPDATE statement is tried to run in the other transaction. In the above, UPDATE statement with "Tran index" 4 waits for the transactions 3,2,1, which are found in "Wait for lock holder", to be ended.
 
-"SQL Text" is SQLs which are stored into the query plan cache; INSERT statements cannot be printed out on "cubrid tranlist" because it is not stored in the query plan cache.
+"SQL Text" is SQLs which are stored into the query plan cache; this is printed out as **empty** when this query's execution is terminated.
 
 Each column's meaning is as following.
 

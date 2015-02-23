@@ -298,6 +298,9 @@ cci_blob_write
         *   **CCI_ER_QUERY_TIMEOUT**
         *   **CCI_ER_USED_CONNECTION**
 
+cci_cancel
+----------
+
 .. c:function:: int cci_cancel(int conn_handle)
 
     Cancel the running query on the other thread. This function executes the same behavior as Statement.cancel() method in JAVA.
@@ -473,6 +476,9 @@ cci_blob_write
             return error_msg;
         }
 
+cci_clob_free
+-------------
+
 .. c:function:: int cci_clob_free(T_CCI_CLOB clob)
 
     The **cci_clob_free** function frees memory of **CLOB** struct.
@@ -502,6 +508,9 @@ cci_clob_new
         *   **CCI_ER_LOGIN_TIMEOUT**
         *   **CCI_ER_NO_MORE_MEMORY**
         *   **CCI_ER_USED_CONNECTION**
+
+cci_clob_read
+-------------
 
 .. c:function:: int cci_clob_read(int conn_handle, T_CCI_CLOB clob, long start_pos, int length, char *buf, T_CCI_ERROR* error_buf)
 
@@ -881,6 +890,9 @@ cci_connect_with_url
         --connection URL string when properties(logSlowQueries,slowQueryThresholdMills, logTraceApi, logTraceNetwork) are specified for interface debugging
         URL = "cci:cubrid:192.168.0.1:33000:demodb:::?logSlowQueries=true&slowQueryThresholdMillis=1000&logTraceApi=true&logTraceNetwork=true"
 
+cci_connect_with_url_ex
+-----------------------
+
 .. c:function:: int cci_connect_with_url_ex (char *url, char *db_user, char *db_password, T_CCI_ERROR * err_buf)
 
     The **cci_connect_with_url_ex** function returns **CCI_ER_DBMS** error and checks the error details in the database error buffer (*err_buf*) at the same time. In that point, it is different from :c:func:`cci_connect_with_url` and the others are the same as the :c:func:`cci_connect_with_url` function. 
@@ -916,6 +928,9 @@ cci_connect_with_url
          
         //the cursor moves to the previous record
         cci_cursor(req, -1, CCI_CURSOR_CURRENT, &err_buf);
+
+cci_cursor_update
+-----------------
 
 .. c:function:: int cci_cursor_update(int req_handle, int cursor_pos, int index, T_CCI_A_TYPE a_type, void *value, T_CCI_ERROR *err_buf)
 
@@ -1465,6 +1480,9 @@ cci_fetch
         *   **CCI_ER_DELETED_TUPLE**
         *   **CCI_ER_COMMUNICATION**
         *   **CCI_ER_NO_MORE_MEMORY**
+
+cci_fetch_buffer_clear
+----------------------
 
 .. c:function:: int cci_fetch_buffer_clear(int req_handle)
 
@@ -2318,6 +2336,9 @@ cci_oid_put
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_CONNECT**
 
+cci_oid_put2
+------------
+
 .. c:function:: int cci_oid_put2(int conn_handle, char *oidstr, char **attr_name, void **new_val, int *a_type, T_CCI_ERROR *err_buf)
 
     The **cci_oid_put2** function sets the *attr_name* attribute values of the given oid to *new_val*. The last value of *attr_name* must be **NULL**. To insert a **NULL** value, set the value of *new_val* [i] to **NULL**.
@@ -2475,6 +2496,9 @@ cci_property_destroy
         :c:func:`cci_datasource_create`,
         :c:func:`cci_datasource_destroy`,
         :c:func:`cci_datasource_release`
+
+cci_property_get
+----------------
 
 .. c:function:: char *cci_property_get (T_CCI_PROPERTIES * properties, char *key)
 
@@ -3490,6 +3514,9 @@ cci_set_autocommit
     .. note::
     
         **CCI_DEFAULT_AUTOCOMMIT**, a broker parameter configured in the **cubrid_broker.conf** file, determines whether it is in auto-commit mode upon program startup.
+
+cci_set_db_parameter
+---------------------
 
 .. c:function:: int cci_set_db_parameter(int conn_handle, T_CCI_DB_PARAM param_name, void* value, T_CCI_ERROR *err_buf)
 

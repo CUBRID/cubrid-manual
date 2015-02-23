@@ -898,6 +898,9 @@ cci_connect_with_url_ex
 
     :param err_buf: (OUT) 에러 버퍼
 
+cci_cursor
+----------
+
 .. c:function:: int cci_cursor(int req_handle, int offset, T_CCI_CURSOR_POS origin, T_CCI_ERROR *err_buf)
 
     :c:func:`cci_execute`\ 로 실행한 질의 결과 내의 특정 레코드에 접근하기 위하여 요청 핸들에 설정된 커서를 이동시킨다. 인자로 지정되는 *origin* 변수 값과 *offset* 값을 통해 커서의 위치가 이동되며, 이동할 커서의 위치가 유효하지 않을 경우 **CCI_ER_NO_MORE_DATA** 를 반환한다.

@@ -36,7 +36,7 @@ The following is [options] used in **cubrid unloaddb**.
 
 .. option:: -p, --password=PASS
 
-    Specifye a user's password of a database to be unloaded. If this is not specified, it is regarded as the empty string is entered.
+    Specify a user's password of a database to be unloaded. If this is not specified, it is regarded as the empty string is entered.
 
     ::
 
@@ -44,7 +44,7 @@ The following is [options] used in **cubrid unloaddb**.
 
 .. option:: -i, --input-class-file FILE
 
-    This option specifies the name of the file which stored the names of classes to unload. ::
+    Unload all schema and index of all tables; however, only the data of specified tables in this file are unloaded. ::
 
         cubrid unloaddb -i table_list.txt demodb
 
@@ -55,25 +55,21 @@ The following is [options] used in **cubrid unloaddb**.
         ..
         table_n
 
-    This option can be used together with the **--input-class-only** option that creates the schema file related to only those tables included in the input file. ::
+    If this option is used together with the **--input-class-only** option, it creates schema, index, and data files of tables only specified in the input file of **-i** option. ::
 
         cubrid unloaddb --input-class-only -i table_list.txt demodb
 
-    This option can be used together with the **--include-reference** option that creates the object reference as well.    ::
+    If this option is used together with the **--include-reference** option, it unloads the referenced tables as well. ::
 
         cubrid unloaddb --include-reference -i table_list.txt demodb
 
 .. option:: --include-reference
 
-    This option is used together with the **-i** option, and also creates the object reference.
+    This option is used together with the **-i** option, and also unloads the referenced tables.
 
 .. option:: --input-class-only
 
-    This option is used together with the **-i** option, and creates only the file of the schemas which are specified by the file of the **-i** option.
-
-.. option:: --lo-count=COUNT
-
-    This option specifies the number of large object (LO) data files to be created in a single. The default value is 0.
+    This option is used together with the **-i** option, and creates only a schema file of tables specified in the input file of **-i** option.
 
 .. option:: --estimated-size=NUMBER
 

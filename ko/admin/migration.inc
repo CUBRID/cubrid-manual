@@ -42,7 +42,7 @@ unloaddb
 
 .. option:: -i, --input-class-file=FILE
 
-    인수로 지정된 입력 파일에 지정된 클래스만을 대상으로 데이터베이스를 언로드한다. ::
+    모든 테이블의 스키마와 인덱스를 언로드하되, 파일에 명시된 테이블의 데이터만 언로드한다. ::
 
         cubrid unloaddb -i table_list.txt demodb
 
@@ -52,26 +52,22 @@ unloaddb
         table_2
         ..
         table_n
-
-    **-i** 옵션이 **--input-class-only** 와 결합되면, 입력 파일에 포함된 테이블에 관한 스키마 파일만 생성된다. ::
+    
+    **-i** 옵션이 **--input-class-only** 와 결합되면, **-i** 옵션의 입력 파일에서 지정된 테이블의 스키마, 인덱스, 데이터 파일만 언로드한다. ::
 
         cubrid unloaddb --input-class-only -i table_list.txt demodb
 
-    **-i** 옵션이 **--include-reference** 와 결합되면, 객체 참조도 함께 생성된다. ::
+    **-i** 옵션이 **--include-reference** 와 결합되면, 참조되는 테이블도 함께 언로드된다. ::
     
         cubrid unloaddb --include-reference -i table_list.txt demodb
 
 .. option:: --include-reference
 
-    **-i** 옵션과 함께 사용되며, 객체 참조도 함께 생성한다. 
+    **-i** 옵션과 함께 사용되며, 참조되는 테이블도 함께 언로드된다. 
 
 .. option:: --input-class-only
 
-    **-i** 옵션과 함께 사용되며, 입력 파일에 포함된 테이블에 관한 스키마 파일만 생성한다.
-
-.. option:: --lo-count=COUNT
-
-    한 디렉터리에 생성될 큰 객체(LO) 데이터 파일의 수를 설정한다(기본값: 0).
+    **-i** 옵션과 함께 사용되며, **-i** 옵션의 입력 파일에서 지정된 테이블의 스키마 파일만 생성한다.
 
 .. option:: --estimated-size=NUMBER
 

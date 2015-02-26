@@ -17,7 +17,7 @@ The following shows options available with the **cubrid backupdb** utility (opti
 
 .. option:: -D, --destination-path=PATH
 
-    The following shows how to use the **-D** option to store backup files in the specified directory. The backup file directory must be specified before performing this job. If the **-D** option is not specified, backup files are stored in the directory specified in the **databases.txt** file which stores database location information. ::
+    The following shows how to use the **-D** option to store backup files in the specified directory. The backup file directory must be specified before performing this job. If the **-D** option is not specified, backup files are stored in the log directory specified in the **databases.txt** file which stores database location information. ::
 
         cubrid backupdb -D /home/cubrid/backup demodb
 
@@ -443,7 +443,15 @@ Suppose that *demodb* is backed up in the /home/cubrid/db/demodb directory on se
 
 #.  Transferring backup files to server B
 
-    For a restore, you must prepare backup files (e.g. demodb_bk0v000). That is, backup files must be located in a directory (e.g. /home/cubrid/temp) on server *B*.
+    For a restore, you must prepare backup files. Therefore, transfer a backup file (e.g. demodb_bk0v000) from server *A* to server *B*. That is, a backup file must be located in a directory (e.g. /home/cubrid/temp) on server *B*.
+
+    .. note::
+    
+        If you want to restore until the current time after the backup, logs after backup, that is, an active log (e.g. demodb_lgat) and archive logs (e.g. demodb_lgar000) are additionally required to copy.
+
+        An active log and archive logs should be located to the log directory of the database to be restored; that is, the directory of log files specified in $CUBRID/databases/databases.txt. (e.g. $CUBRID/databases/demodb/log)
+
+        Also, if you want to apply the added logs after backup, archive logs should be copied before they are removed. By the way, the default of log_max_archives, which is a system parameter related to delete archive logs, is 0; therefore, archive logs after backup can be deleted. To prevent this situation, the value of log_max_archives should be big enough. See :ref:`log_max_archives <log_max_archives>`.
 
 #.  Restoring the database on server B
 

@@ -4,15 +4,15 @@ CUBRID Management
 
 This chapter describes how the database administrators (**DBA**) operates the CUBRID system.
 
-*   It includes instructions on how to use the **cubrid** utility, which starts and stops various processes of the CUBRID server, the broker and manager server.
+*   It includes instructions on how to use the **cubrid** utility, which starts and stops various processes of the CUBRID server, the broker and manager server. See :doc:`/admin/control`.
 
-*   It includes instructions on the following: database management tasks (creating and deleting databases, adding volume, etc.), migration tasks (moving database to a different location or making changes so that it fits the system's version), and making back-ups and rollbacks of the database in case of failures.
+*   It includes instructions on the following: database management tasks (creating and deleting databases, adding volume, etc.), migration tasks (moving database to a different location or making changes so that it fits the system's version), and making back-ups and rollbacks of the database in case of failures. See :doc:`/admin/admin_utils`.
 
-*   It includes instructions on the system configuration.
+*   It includes instructions on the system configuration. See :doc:`/admin/config`.
 
-*   It includes how to use SystemTap, which can monitors and traces the operating processes dynamically.
+*   It includes how to use SystemTap, which can monitors and traces the operating processes dynamically. See :doc:`/admin/systemtap`.
    
-*   It includes instructions on troubleshooting.
+*   It includes instructions on troubleshooting. See :doc:`/admin/troubleshoot`.
 
 The **cubrid** utilities provide features that can be used to comprehensively manage the CUBRID service. The CUBRID utilities are divided into the service management utility, which is used to manage the CUBRID service process, and the database management utility, which is used to manage the database.
 

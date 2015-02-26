@@ -645,6 +645,8 @@ Available Format for Strings in Date/Time Type
 
 .. CUBRIDSUS-14182
 
+
+
 .. _timezone-type:
 
 Date/Time Types with Timezone
@@ -652,47 +654,47 @@ Date/Time Types with Timezone
 
 Date/Time types with timezone are date/tiime types which can be input or output by specifying timezone. There are two ways of specifying timezone; specifying the name of local zone and specifying the offset of time.
 
-Timezone information are considered in the Date/Time types if LTZ or TZ are followed after the existing Date/Time types; LTZ means local timezone, and TZ means timezone.
-
-*   LTZ type can be represented as <date/time type> WITH LOCAL TIME ZONE. This stores UTC time internally; when this value is output, this is  converted as a value of a local (current session) time zone.
+Timezone information are considered in the Date/Time types if TZ or LTZ is followed after the existing Date/Time types; TZ means timezone, and LTZ means local timezone.
 
 *   TZ type can be represented as <date/time type> WITH TIME ZONE. This stores UTC time and timezone information (decided by a user or session timezone) when this is created. TZ type requires 4 bytes more to store timezone information.
+*   LTZ type can be represented as <date/time type> WITH LOCAL TIME ZONE. This stores UTC time internally; when this value is output, this is  converted as a value of a local (current session) time zone.
 
 This table describes date/time types to compare date/time types with timezone together.
 
-UTC in the table means Cordiated Universal Time.
+UTC in the table means Coordinated Universal Time.
 
-+---------------+-----------+---------------------------------------------------------------------------+
-| Type          | Bytes     | Description                                                               |
-+===============+===========+===========================================================================+
-| DATETIME      |  8        | Date + time including milliseconds. No timezone information.              |
-+---------------+-----------+---------------------------------------------------------------------------+
-| DATETIMELTZ   |  8        | Date/time in the local session timezone. Store date/time as UTC.          |
-+---------------+-----------+---------------------------------------------------------------------------+
-| DATETIMETZ    | 12        | Date/time + timezone information. Store date/time as UTC.                 |
-+---------------+-----------+---------------------------------------------------------------------------+    
-| TIME          |  4        | Time. No timezone information.                                            |
-+---------------+-----------+---------------------------------------------------------------------------+
-| TIMELTZ       |  4        | Time in the local timezone. Store time as UTC. If timezone region is      |
-|               |           | written as a place name, date is assumed as the same with CURRENT_DATE(). |
-+---------------+-----------+---------------------------------------------------------------------------+
-| TIMETZ        |  8        | Time + timezone information. Store time as UTC. If timezone region is     | 
-|               |           | written as a place name, date is assumed as the same with CURRENT_DATE(). |
-+---------------+-----------+---------------------------------------------------------------------------+
-| TIMESTAMP     |  4        | An input value is interpreted as session timezone, and stored as UTC.     |
-+---------------+-----------+---------------------------------------------------------------------------+
-| TIMESTAMPLTZ  |  4        | Local session timezone. Stored as UTC. The same with TIMESTAMP, but this  |
-|               |           | includes timezone specifier when this value is printed out.               |
-+---------------+-----------+---------------------------------------------------------------------------+
-| TIMESTAMPTZ   |  8        | Timestamp with UTC and timezone. Stored as UTC.                           |
-+---------------+-----------+---------------------------------------------------------------------------+
++-----------+----------------+-------------------------+-----------------------------------+--------------------------------------------+-----------------------------------------------------------------+
+| Category  | Type           | Input                   | Store                             | Output                                     | Description                                                     |
++===========+================+=========================+===================================+============================================+=================================================================+
+| DATE      | DATE           | Without timezone        | Input value                       | Absolute (the same as input)               | Date                                                            |
++-----------+----------------+-------------------------+-----------------------------------+--------------------------------------------+-----------------------------------------------------------------+
+| DATETIME  | DATETIME       | Without timezone        | Input value                       | Absolute (the same as input)               | Date/time including milliseconds                                |
+|           +----------------+-------------------------+-----------------------------------+--------------------------------------------+-----------------------------------------------------------------+
+|           | DATETIMETZ     | With timezone           | UTC + timezone(region or offset)  | Absolute (keep input timezone)             | Date/time + timezone                                            |
+|           +----------------+-------------------------+-----------------------------------+--------------------------------------------+-----------------------------------------------------------------+
+|           | DATETIMELTZ    | With timezone           | UTC                               | Relative (transformed by session timezone) | Date/time in the session timezone                               |
++-----------+----------------+-------------------------+-----------------------------------+--------------------------------------------+-----------------------------------------------------------------+
+| TIME      | TIME           | Without timezone        | Input value                       | Absolute (the same as input)               | Time                                                            |
+|           +----------------+-------------------------+-----------------------------------+--------------------------------------------+-----------------------------------------------------------------+
+|           | TIMETZ         | With timezone           | UTC + timezone(region or offset)  | Absolute (keep input timezone)             | Time + timezone. If timezone is written as                      |
+|           |                |                         |                                   |                                            | a region name, date is assumed as the same with CURRENT_DATE(). |
+|           +----------------+-------------------------+-----------------------------------+--------------------------------------------+-----------------------------------------------------------------+
+|           | TIMELTZ        | With timezone           | UTC                               | Relative (transformed by session timezone) | Time in the session timezone. If timezone is written as         |
+|           |                |                         |                                   |                                            | a region name, date is assumed as the same with CURRENT_DATE(). |
++-----------+----------------+-------------------------+-----------------------------------+--------------------------------------------+-----------------------------------------------------------------+
+| TIMESTAMP | TIMESTAMP      | Without timezone        | UTC                               | Relative (transformed by session timezone) | Input value is translated as a session timezone's value.        |
+|           +----------------+-------------------------+-----------------------------------+--------------------------------------------+-----------------------------------------------------------------+
+|           | TIMESTAMPTZ    | With timezone           | UTC + timezone(region or offset)  | Absolute (keep input timezone)             | UTC + timestamp with timezone                                   |
+|           +----------------+-------------------------+-----------------------------------+--------------------------------------------+-----------------------------------------------------------------+
+|           | TIMESTAMPLTZ   | With timezone           | UTC                               | Relative (transformed by session timezone) | Session timezone. Same as TIMESTAMP's value, but                |
+|           |                |                         |                                   |                                            | timezone specifier is output when this is printed out.          |
++-----------+----------------+-------------------------+-----------------------------------+--------------------------------------------+-----------------------------------------------------------------+
 
 The other features of date/time types with timezone (e.g. maximum/minimum value, range, resolution) are the same with the features of general date/time types.
 
 .. note::
 
     *   On CUBRID, TIMESTAMP is stored as second unit, after Jan. 1, 1970 UTC (UNIX epoch).
-    
     *   Some DBMS's TIMESTAMP is similar to CUBRID's DATETIME as the respect of saving milliseconds.
 
 To see examples of functions using timezone types, see :doc:`function/datetime_fn`.
@@ -727,6 +729,92 @@ To see examples of functions using timezone types, see :doc:`function/datetime_f
 
         29974
 
+    .. [번역] 아래 내용은 바뀔 수 있음. 
+
+    If the value of timezone parameter in cubrid.conf is specified as region name, offset timezone cannot be used in TIMELTZ type.
+    
+    .. code-block:: sql
+
+        SELECT TIME_TO_SEC(timetlz'8:19:34 +5:00');
+    
+    ::
+        Invalid time: '8:19:34 +5:00'.
+
+The following shows that the output values are different among TIME, TIMETZ and TIMELTZ when session timezone is changed.
+
+.. code-block:: sql
+
+    -- csql> ;se timezone="+09"
+
+    CREATE TABLE tbl (a TIME, b TIMETZ,  c TIMELTZ);
+
+    INSERT INTO tbl VALUES (time'12:30', timetz'12:30', timeltz'12:30');
+    SELECT * FROM tbl;
+
+::
+
+    12:30:00 PM  12:30:00 PM +09:00             12:30:00 PM +09:00
+
+.. code-block:: sql
+
+    -- csql> ;se timezone="+07"
+
+    SELECT * FROM tbl;
+
+::
+
+    12:30:00 PM  12:30:00 PM +09:00             10:30:00 AM +07:00
+
+The following shows that the output values are different among DATETIME, DATETIMETZ and DATETIMELTZ when session timezone is changed.
+
+.. code-block:: sql
+
+    --  csql> ;se timezone="+09"
+
+    CREATE TABLE tbl (a DATETIME, b DATETIMETZ,  c DATETIMELTZ);
+    INSERT INTO tbl VALUES (datetime'2015-02-24 12:30', datetimetz'2015-02-24 12:30', datetimeltz'2015-02-24 12:30');
+
+    SELECT * FROM tbl
+
+::
+
+    12:30:00.000 PM 02/24/2015     12:30:00.000 PM 02/24/2015 +09:00                12:30:00.000 PM 02/24/2015 +09:00
+
+.. code-block:: sql
+
+    -- csql> ;se timezone="+07"
+
+    SELECT * FROM tbl
+
+::
+
+    12:30:00.000 PM 02/24/2015     12:30:00.000 PM 02/24/2015 +09:00                10:30:00.000 AM 02/24/2015 +07:00
+
+The following shows that the output values are different among TIMESTAMP, TIMESTAMPTZ and TIMESTAMPLTZ when session timezone is changed.
+
+.. code-block:: sql
+
+    -- ;se timezone="+09"
+
+    CREATE TABLE tbl (a TIMESTAMP, b TIMESTAMPTZ,  c TIMESTAMPLTZ);
+    INSERT INTO tbl VALUES (timestamp'2015-02-24 12:30', timestamptz'2015-02-24 12:30', timestampltz'2015-02-24 12:30');
+
+    SELECT * FROM tbl;
+
+::
+
+    12:30:00 PM 02/24/2015     12:30:00 PM 02/24/2015 +09:00                12:30:00 PM 02/24/2015 +09:00
+
+.. code-block:: sql
+
+    -- csql> ;se timezone="+07"
+
+    SELECT * FROM tbl;
+    
+::
+
+    10:30:00 AM 02/24/2015     12:30:00 PM 02/24/2015 +09:00                10:30:00 AM 02/24/2015 +07:00
+
 Timezone Configuration
 ----------------------
 
@@ -755,8 +843,8 @@ The following are timezone related functions. For each function's detail usage, 
 *   :func:`NEW_TIME`
 *   :func:`TZ_OFFSET`
 
-Functions which Use a Timezone Typed Value
-------------------------------------------
+Functions with a Timezone Type
+------------------------------
 
 All functions which use DATETIME, TIMESTAMP or TIME typed value in their input value, can use timezone typed value.
 
@@ -831,7 +919,7 @@ A type which the name ends with LTZ follows the setting of local timezone. There
     select timeltz '03:30:30 pm' + cast(1 as INTEGER) from db_root;
     Invalid time: '03:30:30 pm'.
 
-Conversion Functions for Timezone types
+Conversion Functions for Timezone Types
 ---------------------------------------
 
 The following are functions converting a string to a date/time typed value, or date/time typed value to a string; The value can include an information like an offset, a zone and a daylight saving.
@@ -869,7 +957,7 @@ This database is periodically updated to reflect changes made by political bodie
 
 CUBRID supports IANA timezone, and a user can use the IANA timezone library in the CUBRID installation package as it is. If you want to update as the recent timezone, update timezone first, compile timezone library, and restart the database. 
 
-Regarding this, see :ref:`timezone-compile`.
+Regarding this, see :ref:`timezone-library`.
 
 Bit Strings
 ===========

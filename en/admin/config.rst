@@ -822,7 +822,6 @@ The following are parameters related to concurrency control and locks of the dat
     | READ COMMITTED             | "TRAN_REP_CLASS_COMMIT_INSTANCE" or "TRAN_READ_COMMITTED" or "TRAN_CURSOR_STABILITY" or 4 |
     +----------------------------+-------------------------------------------------------------------------------------------+
 
-
     *   **TRAN_SERIALIZABLE** : This isolation level ensures the highest level of consistency. For details, see :ref:`isolation-level-6`.
 
     *   **TRAN_REP_READ** : This isolation level can incur phantom read. For details, see :ref:`isolation-level-5`.
@@ -833,11 +832,11 @@ The following are parameters related to concurrency control and locks of the dat
     
         9.3 or less version supports the below levels additionationally. From 10.0, concurrency can be guaranteed more because MVCC method is applied when multiple concurrent transactions are processed; therefore, the below isolation levels are not used anymore.
         
-            *   **TRAN_REP_CLASS_UNCOMMIT_INSTANCE** : This isolation level can incur dirty read. For details, see :ref:`isolation-level-3`.
+            *   **TRAN_REP_CLASS_UNCOMMIT_INSTANCE** : This isolation level can incur dirty read.
+            
+            *   **TRAN_COMMIT_CLASS_COMMIT_INSTANCE** : This isolation level can incur unrepeatable read. It allows modification of table schema by current transactions while data is being retrieved.
 
-            *   **TRAN_COMMIT_CLASS_COMMIT_INSTANCE** : This isolation level can incur unrepeatable read. It allows modification of table schema by current transactions while data is being retrieved. For details, see :ref:`isolation-level-2`.
-
-            *   **TRAN_COMMIT_CLASS_UNCOMMIT_INSTANCE** : This isolation level can incur dirty read. It allows modification of table schema by current transactions while data is being retrieved. For details, see :ref:`isolation-level-1`.
+            *   **TRAN_COMMIT_CLASS_UNCOMMIT_INSTANCE** : This isolation level can incur dirty read. It allows modification of table schema by current transactions while data is being retrieved.
 
 **lock_escalation**
 
@@ -848,7 +847,6 @@ The following are parameters related to concurrency control and locks of the dat
     **lock_timeout** is a client parameter to configure the lock waiting time. If the lock is not permitted within the specified time period, the given transaction is canceled, and an error message is returned. If the parameter is configured to **-1**, which is the default value, the waiting time is infinite until the lock is permitted. If it is configured to 0, there is no waiting for locks.
 
     You can set a unit as s, min or h, which stands for seconds, minutes or hours respectively. If you omit the unit, milliseconds(ms) will be applied, and it is rounded up to seconds. For example, 1ms will be 1s, and 1001ms will be 2s.
-
 
 **rollback_on_lock_escalation**
   
@@ -907,8 +905,7 @@ The following are parameters related to logs used for database backup and restor
 
     **checkpoint_every_size** is a parameter to configure checkpoint interval by log page. You can set a unit as B, K, M, G or T, which stands for bytes, kilobytes(KB), megabytes(MB), gigabytes(GB) or terabytes(TB) respectively. If you omit the unit, bytes will be applied. The default value is **10,000** * :ref:`log_page_size <lpg>` (**156.25M** when log_page_size is 16K).
    
-    You can distribute disk I/O overload at the checkpoint by specifying lower size in the **checkpoint_every_size** parameter, especially in the environment where
-    **INSERT** / **UPDATE** are heavily loaded at a specific time.
+    You can distribute disk I/O overload at the checkpoint by specifying lower size in the **checkpoint_every_size** parameter, especially in the environment where **INSERT** / **UPDATE** are heavily loaded at a specific time.
 
     Checkpoint is a job to record every modified page in data buffers to database volumes (disk) at a specific point. Checkpoint can shrink a restore time after the database failure because this makes the transaction logs which have been generated previously than the checkpoint time needless when the restore is processed.
     However, an efficient checkpoint interval should be properly considered because this job can occur a lot of disk I/O.
@@ -925,7 +922,7 @@ The following are parameters related to logs used for database backup and restor
         The following two ways are provided by a user's command.
         
         *   If you run ";checkpoint" command in the CSQL interpreter, which is run with a "DBA" user, checkpoint is processed.
-        *   "" 질의문을 수행하면 체크포인트가 수행된다.
+        [번역]: 추후 변경될 부분. *   "" 질의문을 수행하면 체크포인트가 수행된다.
                 
         As a reference, if you run backup command during checkpoint, backup command is waited until checkpoint is ended.
     
@@ -937,7 +934,9 @@ The following are parameters related to logs used for database backup and restor
 
     **force_remove_log_archives** is a parameter to configure whether to allow the deletion of the files other than the recent log archive files whose number is specified by **log_max_archives**. The default value is **yes**.
 
-    If the value is set to yes, the files will be deleted other than the recent log archive files for which the number is specified by **log_max_archives**. If it is set to no, the log archive files will not be deleted. Exceptionally, if **ha_mode** is set to on, the files other than the log archive files required for the HA-related processes and the recent log archive files of which the number is specified by **log_max_archives** will be deleted.
+    If the value is set to yes, the files will be deleted other than the recent log archive files for which the number is specified by **log_max_archives**. 
+    
+    If it is set to no, the log archive files will not be deleted. Exceptionally, if **ha_mode** is set to on, the files other than the log archive files required for the HA-related processes and the recent log archive files of which the number is specified by **log_max_archives** will be deleted.
 
     For setting up the CUBRID HA environment, see :ref:`ha-configuration`.
     
@@ -947,13 +946,17 @@ The following are parameters related to logs used for database backup and restor
 
     If the value of the **log_buffer_size** parameter is large, performance can be improved (due to the decrease in disk I/O) in an environment where transactions are long and numerous. It is recommended to configure an appropriate value considering the memory size and operations of the system where CUBRID is installed.
 
-*   Required memory size = the size of log buffer (**log_buffer_size**)
+    *   Required memory size = the size of log buffer (**log_buffer_size**)
+
+.. _log_max_archives: 
 
 **log_max_archives**
 
     **log_max_archives** is a parameter to configure the maximum number of archive log files. The minimum value is 0 and default value is **INT_MAX** (2,147,483,647). Its operations can differ depending on the configuration of **force_remove_log_archives**. For example, when **log_max_archives** is 3 and **force_remove_log_archives** is **yes** in the cubrid.conf file, the most recent three archive log files are recorded and when a fourth archiving log file is generated, the oldest archive log file is automatically deleted; the information about the deleted archive logs are recorded in the ***_lginf** file.
 
-    However, if an active transaction still refers to an existing archive log file, the archive log file will not be deleted. That is, if a transaction starts at the point that the first archive log file is generated, and it is still active until the fifth archive log is generated, the first archive log file cannot be deleted.
+    However, if an active transaction still refers to an existing archive log file, the archive log file will not be deleted. That is, if a transaction starts at the point that the first archive log file is generated, and it is still active until the fifth archive log is generated, the first archive log file cannot be deleted
+
+    Also, if the information of archive logs is not applied to database volumes, these are not deleted. (Archive logs after which a checkpoint has occurred keep the information of modified pages of a data buffer; therefore, they are required to restore a database.)
 
     If you change the value of **log_max_archives** dynamically during database operation, changed value will be applied when a new log archive file is created. For example, if you change this value from 10 to 5, old 5 files will be deleted when a new log archive file is created.
     

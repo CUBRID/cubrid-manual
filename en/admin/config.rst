@@ -1859,9 +1859,7 @@ The following table shows the broker parameters available in the broker configur
 |                                 |                         +---------------------------------+--------+------------------------------+-----------+
 |                                 |                         | REPLICA_ONLY                    | string | OFF                          |           |
 |                                 +-------------------------+---------------------------------+--------+------------------------------+-----------+
-|                                 | Broker App. Server(CAS) | APPL_SERVER                     | string | CAS                          |           |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | APPL_SERVER_MAX_SIZE            | MB     | Windows 32bit: 40,           | available |
+|                                 | Broker App. Server(CAS) | APPL_SERVER_MAX_SIZE            | MB     | Windows 32bit: 40,           | available |
 |                                 |                         |                                 |        | Windows 64bit: 80,           |           |
 |                                 |                         |                                 |        | Linux: 0(max: 2,097,151)     |           |
 |                                 |                         +---------------------------------+--------+------------------------------+-----------+
@@ -2103,25 +2101,6 @@ Access
 
 Broker App. Server(CAS)
 ^^^^^^^^^^^^^^^^^^^^^^^
-
-.. _appl_server:
-
-**APPL_SERVER**
-
-    **APPL_SERVER** is a parameter to configure types of CAS generated and managed by the CUBRID broker. The default value is **CAS**.
-
-    In SHARD environment, it is used when you want to change the shard DB not CUBRID, but the other DB; if this value is **CAS**, CUBRID is used.
-    If you want to use MySQL as a shard DB, set one of below values.
-    
-    ========================== ==================================== 
-    APPL_SERVER setting value  Description
-    ========================== ==================================== 
-    CAS_MYSQL	               MySQL C Connector 6.1 is used
-    CAS_MYSQL51	               MySQL C Connector 5.1 is used
-    CAS_MYSQL61	               MySQL C Connector 6.1 is used
-    ========================== ==================================== 
-      
-    By the setting vaule, that version's MySQL library should be installed; you can download MySQL library MySQL in MySQL homepage(http://dev.mysql.com/downloads/connector/c). 
 
 **APPL_SERVER_MAX_SIZE**
 

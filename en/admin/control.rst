@@ -1660,11 +1660,11 @@ The following options are available with the **cubrid broker test** utility.
      
 .. option:: -u DB_USER 
 
-    Specifies the DB account of the test target. When this option is omitted, the value of SHARD_DB_USER parameter is used if the value of a SHARD parameter in cubrid_broker.conf is ON. If the value of a SHARD parameter is OFF, "public" is input in CUBRID, or "root" is input in MySQL.
+    Specifies the DB account of the test target. When this option is omitted, the value of SHARD_DB_USER parameter is used if the value of a SHARD parameter in cubrid_broker.conf is ON. If the value of a SHARD parameter is OFF, "public" is input.
      
 .. option:: -p DB_PASSWORD 
 
-    Specifies the DB password of the test target. When this option is omitted, the value of SHARD_DB_PASSWORD parameter is used if the value of a SHARD parameter in cubrid_broker.conf is ON. If the value of a SHARD parameter is OFF, an empty string("") is input in CUBRID and MySQL.
+    Specifies the DB password of the test target. When this option is omitted, the value of SHARD_DB_PASSWORD parameter is used if the value of a SHARD parameter in cubrid_broker.conf is ON. If the value of a SHARD parameter is OFF, an empty string("") is input.
      
 .. option:: -c QUERY 
 

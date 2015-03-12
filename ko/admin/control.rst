@@ -1659,11 +1659,11 @@ CUBRID SHARD ID 확인
      
 .. option:: -u DB_USER 
 
-    테스트 대상 DB 사용자 계정을 지정한다. 이 옵션이 생략될 때 cubrid_broker.conf의 SHARD 파라미터 값이 ON이면 SHARD_DB_USER 파라미터의 값이 사용된다. SHARD 파라미터의 값이 OFF이면 CUBRID에서는 "public"이, MySQL에서는 "root"가 입력된다. 
+    테스트 대상 DB 사용자 계정을 지정한다. 이 옵션이 생략될 때 cubrid_broker.conf의 SHARD 파라미터 값이 ON이면 SHARD_DB_USER 파라미터의 값이 사용된다. SHARD 파라미터의 값이 OFF이면 "public"이 입력된다. 
      
 .. option:: -p DB_PASSWORD 
 
-    테스트 대상 DB 사용자 계정의 암호를 지정한다. cubrid_broker.conf의 SHARD 파라미터 값이 ON일 때 이 옵션이 생략되면 SHARD_DB_PASSWORD 파라미터의 값이 사용된다. SHARD 파라미터의 값이 OFF이면 CUBRID, MySQL 둘 다 빈 문자열("")이 입력된다. 
+    테스트 대상 DB 사용자 계정의 암호를 지정한다. cubrid_broker.conf의 SHARD 파라미터 값이 ON일 때 이 옵션이 생략되면 SHARD_DB_PASSWORD 파라미터의 값이 사용된다. SHARD 파라미터의 값이 OFF이면 빈 문자열("")이 입력된다. 
      
 .. option:: -c QUERY 
 

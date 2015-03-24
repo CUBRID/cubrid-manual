@@ -152,7 +152,7 @@ The following example shows incremental backup. Let's example backup levels in d
 
 .. image:: /images/image11.png
 
-*   **Full backup (backup level 0)** : Backup level 0 is a full backup that includes all database pages. 
+*   **Full backup (backup level 0)** : Backup level 0 is a full backup that includes all database pages.
 
 The level of a backup which is attempted first on the database naturally becomes a 0 level. **DBA** must perform full backups regularly to prepare for restore situations. In the example, full backups were performed on December 31st and January 5th.
 
@@ -217,9 +217,18 @@ Managing Archive Logs
 
 You must not delete archive logs by using the file deletion command such as rm or del by yourself; the archive logs should be deleted by system configuration or the **cubrid backupdb** utility. In the following three cases, archive logs can be deleted.
 
-*   In an HA environment, configure the **force_remove_log_archives** values to no and archive logs are automatically deleted it by specifying the number of  the **log_max_archives** values (it will be deleted after replication is applied).
 
-*   In non-HA environment, configure the **force_remove_log_archives** value to yes and archive logs are automatically deleted it by specifying the number of **log_max_archives** values.
+*   In non-HA environment (ha_mode=off):
+
+    If you configure the **force_remove_log_archives** value to yes, archive logs are kept only the number specified in **log_max_archives** value; and the left logs are automatically deleted. However, if tehre is an active tranaction in the oldest archive log file, this file is not deleted until the transaction is completed.
+
+*   In an HA environment (ha_mode=on):
+
+    If you configure the **force_remove_log_archives** values to no and specify the number specfied in **log_max_archives** value, archive logs are automatically deleted after replication is applied.
+    
+    .. note::
+    
+        If you set **force_remove_log_archives** as yes when "ha_mode=on", unapplied archive logs can be deleted; therefore, this setting is not recommended. However, if keeping disk space is prior to keeping replication, set **force_remove_log_archives** as yes and set **log_max_archives** as a proper value.
 
 *   Use **cubrid backupdb -r** and run this command then archive logs are deleted; note that **-r** option should not be used in an HA environment.
 

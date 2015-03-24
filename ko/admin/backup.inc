@@ -217,13 +217,21 @@ backupdb
 
 운영체제의 파일 삭제 명령(rm, del)을 사용하여 보관 로그(archive log)를 임의로 삭제해서는 안 되며, 시스템의 설정, **cubrid backupdb** 유틸리티 또는 서버 프로세스에 의해 보관 로그가 삭제되어야 한다. 보관 로그가 삭제될 수 있는 경우는 다음의 3가지이다.
 
-*   HA 환경에서 **force_remove_log_archives** 를 no로 설정하고, **log_max_archives** 개수를 지정하면 복제 반영 후 자동으로 삭제된다.
+*   HA 환경이 아닌 경우(ha_mode=off)
 
-*   HA가 아닌 환경에서 **force_remove_log_archives**\를 yes(기본값)로 설정하고, **log_max_archives** 개수를 지정하면 자동으로 삭제된다.
+    **force_remove_log_archives**\ 를 yes(기본값)로 설정하면, 최대 **log_max_archives** 개수만큼만 보관 로그가 유지되고 나머지는 자동으로 삭제된다. 단, 가장 오래된 보관 로그 파일에 액티브한 트랜잭션이 있다면 이 트랜잭션이 종료될 때까지 해당 로그 파일이 삭제되지 않는다.
+
+*   HA 환경인 경우(ha_mode=on)
+
+    **force_remove_log_archives**\ 를 no로 설정하고, **log_max_archives** 개수를 지정하면 복제 반영 후 자동으로 삭제된다.
+    
+    .. note::
+    
+        ha_mode=on일 때 **force_remove_log_archives**\를 yes로 설정하면 복제 반영이 안 된 보관 로그가 삭제될 수 있으므로, 이를 권장하지는 않는다. 다만, 복제 재구축을 감수하더라도 마스터 노드의 디스크 여유 공간을 확보하는 것이 우선된다면 **force_remove_log_archives**\를 yes로 설정하고, **log_max_archives**\를 적당한 값으로 설정한다.
 
 *   **cubrid backupdb -r** 옵션을 사용하여 명령을 실행하면 삭제된다. 하지만 HA 환경에서는 -r 옵션을 사용하면 안 된다.
 
-즉, 데이터베이스 운영 중에 보관 로그 볼륨을 가급적 남기고 싶지 않다면 **cubrid.conf**\의 **log_max_archives** 값을 작은 값 또는 0으로 설정하고, **force_remove_log_archives** 값을 yes로 설정한다. 단, HA 환경에서 **force_remove_log_archives**\ 의 값이 yes이면 슬레이브 노드에 복제되지 않은 보관 로그가 삭제되어 복제가 잘못될 수 있으므로, no로 설정할 것을 권장한다. **force_remove_log_archives**\ 의 값이 no이더라도 복제 반영이 끝난 파일은 HA 관리 프로세스에 의해 삭제될 수 있다.
+즉, 데이터베이스 운영 중에 보관 로그 볼륨을 가급적 남기고 싶지 않다면 **cubrid.conf**의 **log_max_archives** 값을 작은 값 또는 0으로 설정하되, **force_remove_log_archives**\의 값은 HA 환경이면 가급적 no로 설정한다.
 
 .. _restoredb:
 

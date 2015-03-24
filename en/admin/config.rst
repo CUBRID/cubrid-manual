@@ -182,6 +182,8 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | checkpoint_interval                 | server parameter        |         | msec     | 6min                           | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | checkpoint_sleep_msecs              | server parameter        |         | msec     | 1                              | DBA only              |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | force_remove_log_archives           | server parameter        |         | bool     | yes                            | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | log_buffer_size                     | server parameter        |         | byte     | 128 *                          |                       |
@@ -193,6 +195,8 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | max_flush_size_per_second           | server parameter        |         | byte     | 10,000 *                       | DBA only              |
 |                               |                                     |                         |         |          | :ref:`db_page_size <dpg>`      |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | remove_log_archive_interval_in_secs | server parameter        |         | sec      | 0                              | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | sync_on_flush_size                  | server parameter        |         | byte     | 200 *                          | DBA only              |
 |                               |                                     |                         |         |          | :ref:`db_page_size <dpg>`      |                       |
@@ -865,37 +869,41 @@ Logging-Related Parameters
 
 The following are parameters related to logs used for database backup and restore. The types and value range for each parameter are as follows:
 
-+-------------------------------+--------+----------------------------+----------------------------+----------------------------+
-| Parameter Name                | Type   | Default                    | Min                        | Max                        |
-+===============================+========+============================+============================+============================+
-| adaptive_flush_control        | bool   | yes                        |                            |                            |
-+-------------------------------+--------+----------------------------+----------------------------+----------------------------+
-| background_archiving          | bool   | yes                        |                            |                            |
-+-------------------------------+--------+----------------------------+----------------------------+----------------------------+
-| checkpoint_every_size         | byte   | 10,000 *                   | 10  *                      |                            |
-|                               |        | :ref:`log_page_size <lpg>` | :ref:`log_page_size <lpg>` | :ref:`log_page_size <lpg>` |
-+-------------------------------+--------+----------------------------+----------------------------+----------------------------+
-| checkpoint_interval           | msec   | 6min                       | 1min                       | 35,791,394min              |
-+-------------------------------+--------+----------------------------+----------------------------+----------------------------+
-| force_remove_log_archives     | bool   | yes                        |                            |                            |
-+-------------------------------+--------+----------------------------+----------------------------+----------------------------+
-| log_buffer_size               | byte   | 128 *                      | 128 *                      | INT_MAX *                  |
-|                               |        | :ref:`log_page_size <lpg>` | :ref:`log_page_size <lpg>` | :ref:`log_page_size <lpg>` |
-+-------------------------------+--------+----------------------------+----------------------------+----------------------------+
-| log_max_archives              | int    | INT_MAX                    | 0                          | INT_MAX                    |
-+-------------------------------+--------+----------------------------+----------------------------+----------------------------+
-| log_trace_flush_time          | int    | 0                          | 0                          | INT_MAX                    |
-+-------------------------------+--------+----------------------------+----------------------------+----------------------------+
-| max_flush_size_per_second     | byte   | 10,000 *                   | 1 *                        | INT_MAX *                  |
-|                               |        | :ref:`db_page_size <dpg>`  | :ref:`db_page_size <dpg>`  | :ref:`db_page_size <dpg>`  |
-+-------------------------------+--------+----------------------------+----------------------------+----------------------------+
-| sync_on_flush_size            | byte   | 200 *                      | 1 *                        | INT_MAX *                  |
-|                               |        | :ref:`db_page_size <dpg>`  | :ref:`db_page_size <dpg>`  | :ref:`db_page_size <dpg>`  |
-+-------------------------------+--------+----------------------------+----------------------------+----------------------------+
++-------------------------------------+--------+----------------------------+----------------------------+----------------------------+
+| Parameter Name                      | Type   | Default                    | Min                        | Max                        |
++=====================================+========+============================+============================+============================+
+| adaptive_flush_control              | bool   | yes                        |                            |                            |
++-------------------------------------+--------+----------------------------+----------------------------+----------------------------+
+| background_archiving                | bool   | yes                        |                            |                            |
++-------------------------------------+--------+----------------------------+----------------------------+----------------------------+
+| checkpoint_every_size               | byte   | 10,000 *                   | 10  *                      |                            |
+|                                     |        | :ref:`log_page_size <lpg>` | :ref:`log_page_size <lpg>` | :ref:`log_page_size <lpg>` |
++-------------------------------------+--------+----------------------------+----------------------------+----------------------------+
+| checkpoint_interval                 | msec   | 6min                       | 1min                       | 35,791,394min              |
++-------------------------------------+--------+----------------------------+----------------------------+----------------------------+
+| checkpoint_sleep_msecs              | msec   | 1                          | 0                          |                            |
++-------------------------------------+--------+----------------------------+----------------------------+----------------------------+
+| force_remove_log_archives           | bool   | yes                        |                            |                            |
++-------------------------------------+--------+----------------------------+----------------------------+----------------------------+
+| log_buffer_size                     | byte   | 128 *                      | 128 *                      | INT_MAX *                  |
+|                                     |        | :ref:`log_page_size <lpg>` | :ref:`log_page_size <lpg>` | :ref:`log_page_size <lpg>` |
++-------------------------------------+--------+----------------------------+----------------------------+----------------------------+
+| log_max_archives                    | int    | INT_MAX                    | 0                          | INT_MAX                    |
++-------------------------------------+--------+----------------------------+----------------------------+----------------------------+
+| log_trace_flush_time                | int    | 0                          | 0                          | INT_MAX                    |
++-------------------------------------+--------+----------------------------+----------------------------+----------------------------+
+| max_flush_size_per_second           | byte   | 10,000 *                   | 1 *                        | INT_MAX *                  |
+|                                     |        | :ref:`db_page_size <dpg>`  | :ref:`db_page_size <dpg>`  | :ref:`db_page_size <dpg>`  |
++-------------------------------------+--------+----------------------------+----------------------------+----------------------------+
+| remove_log_archive_interval_in_secs | sec    | 0                          | 0                          |                            |
++-------------------------------------+--------+----------------------------+----------------------------+----------------------------+
+| sync_on_flush_size                  | byte   | 200 *                      | 1 *                        | INT_MAX *                  |
+|                                     |        | :ref:`db_page_size <dpg>`  | :ref:`db_page_size <dpg>`  | :ref:`db_page_size <dpg>`  |
++-------------------------------------+--------+----------------------------+----------------------------+----------------------------+
 
 **adaptive_flush_control**
 
-    **adaptive_flush_control** is a parameter used automatically to adjust the flush capacity at every 50 ms depending on the current status of the flushing operation. Its default value is **yes**. That is, this capacity is increased if a large number of **INSERT** or **UPDATE** operations are concentrated at a certain point of time and the number of flushed pages reaches the **max_flush_size_per_second** parameter value; and is decreased otherwise. In the same way, you can distribute the I/O load by adjusting the flush capacity on a regular basis depending on the workload.
+    **adaptive_flush_control** is a parameter used automatically to adjust the flush capacity at every 50 ms depending on the current status of the flushing operation. The default value is **yes**. That is, this capacity is increased if a large number of **INSERT** or **UPDATE** operations are concentrated at a certain point of time and the number of flushed pages reaches the **max_flush_size_per_second** parameter value; and is decreased otherwise. In the same way, you can distribute the I/O load by adjusting the flush capacity on a regular basis depending on the workload.
 
 **background_archiving**
 
@@ -925,17 +933,21 @@ The following are parameters related to logs used for database backup and restor
         [번역]: 추후 변경될 부분. *   "" 질의문을 수행하면 체크포인트가 수행된다.
                 
         As a reference, if you run backup command during checkpoint, backup command is waited until checkpoint is ended.
-    
+
 **checkpoint_interval**
 
-    **checkpoint_interval** is a parameter to configure execution period of checkpoint. You can set a unit as s, min or h, which stands for seconds, minutes or hours respectively. If you omit the unit, milliseconds(ms) will be applied, and it is rounded up to seconds. For example, 1ms will be 1s, and 1001ms will be 2s. The default value is **6min** and the minimum value is 1min.
+    **checkpoint_interval** is a parameter to configure execution period of checkpoint. You can set a unit as ms, s, min or h, which stands for milliseconds, seconds, minutes or hours respectively. If you omit the unit, milliseconds(ms) will be applied, and it is rounded up to seconds. For example, 1ms will be 1s, and 1001ms will be 2s. The default value is **6min** and the minimum value is 1min.
+
+**checkpoint_sleep_msecs**
+
+    **checkpoint_sleep_msecs** is a parameter to let the job which flushes a buffer's data into a disk process slowly. The default is 1 (millisecond).
 
 **force_remove_log_archives**
 
     **force_remove_log_archives** is a parameter to configure whether to allow the deletion of the files other than the recent log archive files whose number is specified by **log_max_archives**. The default value is **yes**.
 
     If the value is set to yes, the files will be deleted other than the recent log archive files for which the number is specified by **log_max_archives**. 
-    
+
     If it is set to no, the log archive files will not be deleted. Exceptionally, if **ha_mode** is set to on, the files other than the log archive files required for the HA-related processes and the recent log archive files of which the number is specified by **log_max_archives** will be deleted.
 
     For setting up the CUBRID HA environment, see :ref:`ha-configuration`.
@@ -954,7 +966,7 @@ The following are parameters related to logs used for database backup and restor
 
     **log_max_archives** is a parameter to configure the maximum number of archive log files. The minimum value is 0 and default value is **INT_MAX** (2,147,483,647). Its operations can differ depending on the configuration of **force_remove_log_archives**. For example, when **log_max_archives** is 3 and **force_remove_log_archives** is **yes** in the cubrid.conf file, the most recent three archive log files are recorded and when a fourth archiving log file is generated, the oldest archive log file is automatically deleted; the information about the deleted archive logs are recorded in the ***_lginf** file.
 
-    However, if an active transaction still refers to an existing archive log file, the archive log file will not be deleted. That is, if a transaction starts at the point that the first archive log file is generated, and it is still active until the fifth archive log is generated, the first archive log file cannot be deleted
+    However, if an active transaction still refers to an existing archive log file, the archive log file will not be deleted. That is, if a transaction starts at the point that the first archive log file is generated, and it is still active until the fifth archive log is generated, the first archive log file cannot be deleted.
 
     Also, if the information of archive logs is not applied to database volumes, these are not deleted. (Archive logs after which a checkpoint has occurred keep the information of modified pages of a data buffer; therefore, they are required to restore a database.)
 
@@ -997,6 +1009,12 @@ The following are parameters related to logs used for database backup and restor
     That is, you can prevent concentration of I/O load at a certain point of time by configuring this parameter to control the maximum flush capacity per second.
 
     If a large number of **INSERT** or **UPDATE** operations are concentrated at a certain point of time, and the flush capacity reaches the maximum capacity set by this parameter, only log pages are flushed to the disk, and data pages are no longer flushed. Therefore, you must set an appropriate value for this parameter considering the workload of the service environment.
+
+**remove_log_archive_interval_in_secs**
+
+    Archive logs which exceed the specified number in the **log_max_archives** are removed when checkpoint occurs. By the way, many archive logs can be removed at once frequently after being piled up when jobs such as data migration or big data batch processing are performed. If files are removed at once like these, I/O overhead of database server is rapidly risen; therefore, we need to decrease this burden.
+    
+    **remove_log_archive_interval_in_secs** parameter lets archive logs delete slowly to shrink this burden. The default is 0 (second). In the situations which jobs like big data batch processing occur frequently, it is recommended to set the deletion interval as a 60 seconds if the disk space is enough.
 
 **sync_on_flush_size**
 

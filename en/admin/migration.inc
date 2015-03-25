@@ -228,7 +228,11 @@ The following table shows [options] available with the **cubrid loaddb** utility
 
 .. option:: -s, --schema-file=FILE[:LINE]
 
-    This option loads the schema information defined in the schema file, from the LINE-th. On the following example, demodb_schema is a file created by the unload operation and contains the schema information of the unloaded database. You can load the actual records after loading the schema information first by using the **-s** option. ::
+    This option loads the schema information or the trigger information defined in the schema file or the trigger file, from the LINE-th. You can load the actual records after loading the schema information first by using the **-s** option.
+
+    On the following example, demodb_schema is a file created by the unload operation and contains the schema information of the unloaded database.
+    
+   ::
 
         cubrid loaddb -u dba -s demodb_schema newdb
 

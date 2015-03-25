@@ -52,7 +52,7 @@ unloaddb
         table_2
         ..
         table_n
-    
+
     **-i** 옵션이 **--input-class-only** 와 결합되면, **-i** 옵션의 입력 파일에서 지정된 테이블의 스키마, 인덱스, 데이터 파일만 언로드한다. ::
 
         cubrid unloaddb --input-class-only -i table_list.txt demodb
@@ -226,7 +226,9 @@ loaddb
 
 .. option:: -s, --schema-file=FILE[:LINE]
 
-    스키마 파일의 LINE번째부터 정의된 스키마 정보를 새로 생성한 newdb에 로딩하는 구문이다. 다음 예제에서 demodb_schema 파일은 언로드 작업에 의해 생성된 파일이며 언로드된 데이터베이스의 스키마 정보를 포함한다. **-s** 옵션을 이용하여 스키마 정보를 먼저 로딩한 후, 실제 레코드를 로딩할 수 있다. ::
+    스키마 파일 또는 트리거 파일의 LINE번째부터 정의된 스키마 정보 또는 트리거 정보를 새로 생성한 newdb에 로딩하는 구문이다. **-s** 옵션을 이용하여 스키마 정보를 먼저 로딩한 후, 실제 레코드를 로딩할 수 있다. 
+
+    다음 예제에서 demodb_schema 파일은 언로드 작업에 의해 생성된 파일이며 언로드된 데이터베이스의 스키마 정보를 포함한다. ::
 
         cubrid loaddb -u dba -s demodb_schema newdb
 

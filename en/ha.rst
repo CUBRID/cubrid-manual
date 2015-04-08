@@ -661,7 +661,7 @@ For details, see :ref:`log-multiplexing`.
 
 **ha_copy_log_base**
 
-**ha_copy_log_base** is a parameter used to configure the location of storing the transaction log copy. The default is **$CUBRID_DATABASES**/\ *<db_name>*/\ *<host_name>*.
+**ha_copy_log_base** is a parameter used to configure the location of storing the transaction log copy. The default is **$CUBRID_DATABASES**/\ *<db_name>*\_\ *<host_name>*.
 
 For details, see :ref:`log-multiplexing`.
 

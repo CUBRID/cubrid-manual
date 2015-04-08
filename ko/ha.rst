@@ -661,7 +661,7 @@ CUBRID는 1시간 주기로 **ha_ping_hosts**\에 명시된 호스트를 점검�
 
 **ha_copy_log_base**
 
-복제 로그를 저장할 위치를 지정한다. 기본값은 **$CUBRID_DATABASES**/\ *<db_name>*/\ *<host_name>*\ 이다.
+복제 로그를 저장할 위치를 지정한다. 기본값은 **$CUBRID_DATABASES**/\ *<db_name>*\_\ *<host_name>*\ 이다.
 
 자세한 내용은 :ref:`log-multiplexing`\ 를 참고한다.
 

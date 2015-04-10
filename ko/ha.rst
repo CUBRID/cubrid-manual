@@ -3140,17 +3140,17 @@ HA 서비스 운영 중 슬레이브를 새로 추가하려면 기존의 마스�
         
         ::
         
-            [nodeB]$ csql --sysadm --write-on-standby -u dba -S testdb 
+            [nodeB]$ csql --sysadm -u dba -S testdb 
             csql> DELETE FROM db_ha_apply_info;
             
         *nodeA*, *nodeC*\에서 *nodeB*\에 대한 db_ha_apply_info 정보를 삭제한다.
         
         ::
         
-            [nodeA]$ csql --sysadm --write-on-standby -u dba -S testdb 
+            [nodeA]$ csql --sysadm -u dba testdb@localhost 
             csql> DELETE FROM db_ha_apply_info WHERE copied_log_path-='/home/cubrid/DB/databases/testdb_nodeB'
 
-            [nodeC]$ csql --sysadm --write-on-standby -u dba -S testdb 
+            [nodeC]$ csql --sysadm --write-on-standby -u dba testdb@localhost 
             csql> DELETE FROM db_ha_apply_info WHERE copied_log_path-='/home/cubrid/DB/databases/testdb_nodeB'
 
     *   *nodeA* 백업
@@ -3211,7 +3211,7 @@ HA 서비스 운영 중 슬레이브를 새로 추가하려면 기존의 마스�
 
             ...
                 
-     아래 스크립트를 만든 후 이를 수행한다. 위의 출력 정보 중 "HA apply info"에서 첫 번째 숫자인 1426495463은 $db_creation에, 두 번째 숫자인 12922는 $pageid에, 세 번째 숫자인 16192는 $offset에 넣고, db_name에는 데이터베이스 이름인 testdb, master_host에는 마스터 노드의 호스트 이름인 nodeA를 넣는다.
+     아래 스크립트를 만든 후 이를 수행한다. 위의 출력 정보 중 "HA apply info"에서 첫 번째 숫자인 1426495463은 $db_creation에, 두 번째 숫자인 12922는 $pageid에, 세 번째 숫자인 16192는 $offset에 넣고, db_name에는 데이터베이스 이름인 testdb, master_host에는 마스터 노드의 호스트 이름인 *nodeA*\를 넣는다.
         
         ::
         
@@ -3257,8 +3257,8 @@ HA 서비스 운영 중 슬레이브를 새로 추가하려면 기존의 마스�
                         NULL \
                 )"
          
-         # Insert nodeA's HA info.
-         csql --sysadm --write-on-standby -u dba -c "$csql_cmd" -S testdb
+            # Insert nodeA's HA info.
+            csql --sysadm -u dba -c "$csql_cmd" -S testdb
             
         ::
         

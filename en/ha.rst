@@ -3184,10 +3184,10 @@ Now let's see the case of rebuilding a existing slave node during a service in a
         
         ::
         
-            [nodeA]$ csql --sysadm --write-on-standby -u dba -S testdb 
+            [nodeA]$ csql --sysadm -u dba testdb@localhost 
             csql> DELETE FROM db_ha_apply_info WHERE copied_log_path-='/home/cubrid/DB/databases/testdb_nodeB'
 
-            [nodeC]$ csql --sysadm --write-on-standby -u dba -S testdb 
+            [nodeC]$ csql --sysadm --write-on-standby -u dba testdb@localhost 
             csql> DELETE FROM db_ha_apply_info WHERE copied_log_path-='/home/cubrid/DB/databases/testdb_nodeB'
 
     *   Backup a database from *nodeA*.
@@ -3247,7 +3247,7 @@ Now let's see the case of rebuilding a existing slave node during a service in a
 
             ...
                 
-        Make the below script and run. At "HA apply info" on the above output, put the first number, 1426495463 into $db_creation, the second number, 12922 into $pageid, and the third number, 16192 into $offset; put testdb into db_name, the database name and nodeA into master_host, the master node's host name.
+        Make the below script and run. At "HA apply info" on the above output, put the first number, 1426495463 into $db_creation, the second number, 12922 into $pageid, and the third number, 16192 into $offset; put testdb into db_name, the database name and *nodeA* into master_host, the master node's host name.
         
         ::
         
@@ -3293,8 +3293,8 @@ Now let's see the case of rebuilding a existing slave node during a service in a
                         NULL \
                 )"
          
-         # Insert nodeA's HA info.
-         csql --sysadm --write-on-standby -u dba -c "$csql_cmd" -S testdb
+            # Insert nodeA's HA info.
+            csql --sysadm -u dba -c "$csql_cmd" -S testdb
             
         ::
         

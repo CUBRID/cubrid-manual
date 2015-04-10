@@ -3304,7 +3304,7 @@ Now let's see the case of rebuilding a existing slave node during a service in a
         
         ::
         
-            [nodeB]$ csql -u dba -S testdb@localhost
+            [nodeB]$ csql -u dba -S testdb
             
             csql> ;line on
             csql> SELECT * FROM db_ha_apply_info;

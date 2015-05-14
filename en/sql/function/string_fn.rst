@@ -1286,7 +1286,7 @@ REPLACE
 
     :param string: Specifies the original string. If the value is **NULL**, **NULL** is returned.
     :param search_string: Specifies the string to be searched. If the value is **NULL**, **NULL** is returned
-    :param search_string: Specifies the string to replace the *search_string*. If this value is omitted, *string* is returned with the *search_string* removed. If the value is **NULL**, **NULL** is returned.
+    :param replacement_string: Specifies the string to replace the *search_string*. If this value is omitted, *string* is returned with the *search_string* removed. If the value is **NULL**, **NULL** is returned.
     :rtype: STRING
 
 .. code-block:: sql

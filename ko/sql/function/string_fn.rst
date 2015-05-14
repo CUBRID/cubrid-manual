@@ -1286,7 +1286,7 @@ REPLACE
 
     :param string: 원본 문자열을 지정한다. 값이 **NULL** 이면 결과로 **NULL** 이 반환된다.
     :param search_string: 검색할 문자열을 지정한다. 값이 **NULL** 이면 결과로 **NULL** 이 반환된다.
-    :param search_string: *search_string* 을 대체할 문자열을 지정한다. 값이 생략되면 *string* 에서 *search_string* 을 제거하여 반환한다. 값이 **NULL** 이면 결과로 **NULL** 이 반환된다.
+    :param replacement_string: *search_string* 을 대체할 문자열을 지정한다. 값이 생략되면 *string* 에서 *search_string* 을 제거하여 반환한다. 값이 **NULL** 이면 결과로 **NULL** 이 반환된다.
     :rtype: STRING
 
 .. code-block:: sql

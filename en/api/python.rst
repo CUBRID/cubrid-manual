@@ -113,7 +113,7 @@ This sample program will show steps that you need to perform in order to connect
     
     .. code-block:: python
     
-        conn = CUBRIDdb.connect('CUBRID:localhost:30000:demodb', 'public')
+        conn = CUBRIDdb.connect('CUBRID:localhost:30000:dba::')
 
 For the *demodb* database, it is not required to enter any password. In a real-world scenario, you will have to provide the password to successfully connect. 
 The syntax to use the `connect <http://packages.python.org/CUBRID-Python/_cubrid-module.html#connect>`_ () function is as follows: ::
@@ -124,7 +124,7 @@ If the database has not started and you try to connect to it, you will receive a
 
     Traceback (most recent call last):
       File "tutorial.py", line 3, in <module>
-        con = CUBRIDdb.connect('CUBRID:localhost:33000:demodb','public')
+        conn = CUBRIDdb.connect('CUBRID:localhost:30000:dba::')
       File "/usr/local/lib/python2.6/site-packages/CUBRIDdb/__init__.py", line 48, in Connect
         return Connection(*args, **kwargs)
       File "/usr/local/lib/python2.6/site-packages/CUBRIDdb/connections.py", line 19, in __init__

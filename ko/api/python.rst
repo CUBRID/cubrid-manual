@@ -113,7 +113,7 @@ Python 예제 프로그램
     
     .. code-block:: python
     
-        conn = CUBRIDdb.connect('CUBRID:localhost:30000:demodb', 'public')
+        conn = CUBRIDdb.connect('CUBRID:localhost:30000:dba::')
 
 *demodb* 데이터베이스는 비밀번호가 필요하지 않으므로 비밀번호를 입력하지 않았다. 그러나 실제 데이터베이스에 연결할 때에는 비밀번호가 필요하다면 비밀번호를 입력해야 한다.
 `connect <http://packages.python.org/CUBRID-Python/_cubrid-module.html#connect>`_ () 함수의 구문은 다음과 같다. ::
@@ -124,7 +124,7 @@ Python 예제 프로그램
 
     Traceback (most recent call last):
       File "tutorial.py", line 3, in <module>
-        con = CUBRIDdb.connect('CUBRID:localhost:33000:demodb','public')
+        conn = CUBRIDdb.connect('CUBRID:localhost:30000:dba::')
       File "/usr/local/lib/python2.6/site-packages/CUBRIDdb/__init__.py", line 48, in Connect
         return Connection(*args, **kwargs)
       File "/usr/local/lib/python2.6/site-packages/CUBRIDdb/connections.py", line 19, in __init__

@@ -338,12 +338,12 @@ If FULL is specified, four columns which have timezone information are displayed
 Column name         Type            Description
 =================== =============== ===================================================
 timezone_region     VARCHAR(32)     Timezone region name
-region_offset       VARCHAR(32)     Offset of timezone which daylight saving time is not considered
-dst_offset          VARCHAR(32)     Offset which daylight saving time (applied to timezone region) is considered
-dst_abbreviation    VARHCHAR(32)    An abbreviation of a region which daylight saving time is applied
+region_offset       VARCHAR(32)     Offset of timezone (daylight saving time is not considered)
+dst_offset          VARCHAR(32)     Offset of daylight saving time (applied to timezone region) which is currently considered
+dst_abbreviation    VARCHAR(32)     An abbreviation of the daylight saving time which is currently applied for the region
 =================== =============== ===================================================
 
-The information listed for the second, third and fourth columns is for the date.
+The information listed for the second, third and fourth columns is for the current date and time.
 
 If a timezone region doesn't have daylight saving time rules at all then the dst_offset and dst_abbreviation columns will contain NULL values. 
 

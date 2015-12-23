@@ -109,7 +109,7 @@ The collation name in CUBRID follows the conversion: ::
         
     *   cs: case sensitive; By default all collations are case sensitive. In LDML, can be obtained using at least: strength="tertiary".
 
-    *   bin/binary: it means that the sorting order under such collation is almost the same with the order of codepoints; If memory (byte) comparison is used, then almost the same result is obtained. Space character and EUC double-byte padding character are always sorted as zero in "bin" collation. No collations with such setting are currently configured in LDML (they are already available as built-in), but a similar one can be obtained using the maximum setting strength="quaternary" or strength="identical".
+    *   bin: it means that the sorting order under such collation is almost the same with the order of codepoints; If memory (byte) comparison is used, then almost the same result is obtained. Space character and EUC double-byte padding character are always sorted as zero in "bin" collation. No collations with such setting are currently configured in LDML (they are already available as built-in), but a similar one can be obtained using the maximum setting strength="quaternary" or strength="identical".
 
     *   ai: accent insensitive; this means that 'Á' is sorted the same as 'A'. Due to particularities of the UCA based algorithms, an accent insensitive collation is also a case insensitive collation. In LDML, can be obtained using: strength="primary".
         
@@ -192,6 +192,8 @@ CUBRID Collation
 | utf8_tr_cs_uca    | tr_TR - Turkish, generic Unicode casing customized with Turkish rules | All Unicode codepoints in range 0000-FFFF |
 +-------------------+-----------------------------------------------------------------------+-------------------------------------------+
 | utf8_vi_cs        | vi_VN - Vietnamese, same as generic Unicode casing                    | All Unicode codepoints in range 0000-FFFF |
++-------------------+-----------------------------------------------------------------------+-------------------------------------------+
+| binary            | none (invariant to casing operations)                                 | any byte value (zero is nul-terminator)   |
 +-------------------+-----------------------------------------------------------------------+-------------------------------------------+
 
 The Turkish casing rules changes the casing for character i,I,ı,İ. The German casing rules changes the casing for ß.
@@ -776,22 +778,31 @@ With any conversion, losses may occur. The most complete charset is UTF-8 (and s
 
 Rules for conversion of values from one charset to another:
 
-+------------------------+-----------------------------------+-------------------------------+-------------------------------+
-| Source \\ Destination  | ISO-8859-1                        | UTF-8                         | EUC-KR                        |
-+========================+===================================+===============================+===============================+
-| **ISO-8859-1**         | No change                         | Byte conversion.              | Byte conversion.              |
-|                        |                                   | The byte size increases.      | Byte size increase.           |
-|                        |                                   | No loss of useful characters. | No loss of useful characters. |
-+------------------------+-----------------------------------+-------------------------------+-------------------------------+
-| **UTF-8**              | Byte reinterpretation.            | No change                     | Byte conversion.              |
-|                        | The byte size unchanged.          |                               | Byte size may decrease.       |
-|                        | Character length increases. 	     |                               | Expect loss of characters.    |
-+------------------------+-----------------------------------+-------------------------------+-------------------------------+
-| **EUC-KR**             | Byte reinterpretation.            | Byte conversion.              | No change                     |
-|                        | The byte size unchanged.          | Byte size may increase.       |                               |
-|                        | Character length increases        | No loss of useful characters. |                               |
-+------------------------+-----------------------------------+-------------------------------+-------------------------------+
++------------------------+-----------------------------------+-----------------------------------+-------------------------------+-------------------------------+
+| Source \\ Destination  | Binary                            | ISO-8859-1                        | UTF-8                         | EUC-KR                        |
++========================+===================================+===================================+===============================+===============================+
+| **Binary**             | No change                         | No change                         | No change.                    | No change.                    |
+|                        |                                   | The byte size unchanged.          | Validation per character.     | Validation per character.     |
+|                        |                                   | Character length unchanged.       | Invalid char replace with '?' | Invalid char replace with '?' |
++------------------------+-----------------------------------+-----------------------------------+-------------------------------+-------------------------------+
+| **ISO-8859-1**         | No change                         | No change                         | Byte conversion.              | Byte conversion.              |
+|                        |                                   |                                   | The byte size increases.      | Byte size increase.           |
+|                        |                                   |                                   | No loss of useful characters. | No loss of useful characters. |
++------------------------+-----------------------------------+-----------------------------------+-------------------------------+-------------------------------+
+| **UTF-8**              | No change.                        | Byte conversion.                  | No change                     | Byte conversion.              |
+|                        | The byte size unchanged.          | Byte size may decrease.           |                               | Byte size may decrease.       |
+|                        | Character length increases.       | Expect loss of characters.        |                               | Expect loss of characters.    |
++------------------------+-----------------------------------+-----------------------------------+-------------------------------+-------------------------------+
+| **EUC-KR**             | No change.                        | Byte conversion.                  | Byte conversion.              | No change                     |
+|                        | The byte size unchanged.          | Byte size may decrease.           | Byte size may increase.       |                               |
+|                        | Character length increases        | Expect loss of characters         | No loss of useful characters. |                               |
++------------------------+-----------------------------------+-----------------------------------+-------------------------------+-------------------------------+
 
+.. note::
+
+    Previous versions of CUBRID 9.x didn't supported binary charset. The ISO-8859-1 charset had the role of existing binary charset. Conversions from UTF-8 and EUC-KR charsets to ISO-8859-1 were performed by reinterpreting the byte content of source, not by character translation.
+
+	
 .. _collation-setting:
 
 Collation
@@ -812,16 +823,20 @@ The following is a query(SELECT * FROM db_collation WHERE is_builtin='Yes') on t
     6        'utf8_tr_cs'     'utf8'         'Yes'        'No'            0             'Not applicable'
     7        'utf8_ko_cs'     'utf8'         'Yes'        'No'            0             'Not applicable'
     8        'euckr_bin'      'euckr'        'Yes'        'No'            0             'Not applicable'
+    8        'binary'         'binary'       'Yes'        'No'            0             'Not applicable'
 
 Built-in collations are available without requiring additional user locale libraries.
 
 Each **collation** has an associated **charset**. For this reason, it is not allowed to set incompatible pair to **character** set and **collation**.
 
-When **COLLATE** modifier is specified without **CHARSET** modifier, then the default charset of collation is set. When **CHARSET** modifier is specified without **COLLATE** modifier, then the default collation is set. The default collation for character sets are the binary collation:
+When **COLLATE** modifier is specified without **CHARSET** modifier, then the default charset of collation is set. When **CHARSET** modifier is specified without **COLLATE** modifier, then the default collation is set. The default collation for character sets are the bin collation:
 
 *   ISO-8859-1: iso88591_bin
 *   UTF-8: utf8_bin
 *   EUC-KR: euckr_bin
+*   Binary: binary
+
+Binary is the name of both the collation and its associated charset.
 
 For more information on how to determine the collation among the expression parameters (operands) with different collations (and charsets), see :ref:`determine-collation-columns`.
 
@@ -900,7 +915,7 @@ Collation coercibility is used to determine the result collation of comparison e
 When an expression has various arguments with different collation, a common collation is computed based on each arguments collation and coercibility. The rules for collation inference are:
 
 #.   Arguments with higher coercibility are coerced (or casted) to collation of arguments with lower coercibility.
-#.   When arguments have different collation but same coercibility, the expression's collation cannot be resolved and an error is returned. However, when comparing two operands of which collation coercibility level is 11(session variable, host variable) and charset is the same, one of their collation is changed as non-binary collation if one of them is binary collation(utf8_bin, iso88591_bin, euckr_bin). See :ref:`Converting Collation of Session Variable and/or Host Variable <comparison-between-session-and-or-host-variables>`.
+#.   When arguments have different collation but same coercibility, the expression's collation cannot be resolved and an error is returned. However, when comparing two operands of which collation coercibility level is 11(session variable, host variable) and charset is the same, one of their collation is changed as non-bin collation if one of them is bin collation(utf8_bin, iso88591_bin, euckr_bin). See :ref:`Converting Collation of Session Variable and/or Host Variable <comparison-between-session-and-or-host-variables>`.
 
 Below table shows the collation coercibility about arguments of the expression
 
@@ -914,29 +929,34 @@ Below table shows the collation coercibility about arguments of the expression
 +------------------------+------------------------------------------------------------------------------------------------------+
 | 0                      | Operand having **COLLATE** modifier                                                                  |
 +------------------------+------------------------------------------------------------------------------------------------------+
-| 1                      | **Columns** with non-binary collation                                                                |
+| 1                      | **Columns** with non-binary and non-bin collation                                                    |
 +------------------------+------------------------------------------------------------------------------------------------------+
-| 2                      | **Columns** with binary collation and ISO-8859-1 charset(iso88591_bin)                               |
+| 2                      | **Columns** with binary collation and binary charset                                                 |
 +------------------------+------------------------------------------------------------------------------------------------------+
-| 3                      | **Columns** with binary collation, except having ISO-8859-1 charset                                  |
+| 3                      | **Columns** with bin collation (iso88591_bin, utf8_bin, euckr_bin)                                   |
 +------------------------+------------------------------------------------------------------------------------------------------+
-| 4                      | **SELECT values**, **Expression** With non-binary collation                                          |
+| 4                      | **SELECT values**, **Expression** With non-binary and non-bin collation                              |
 +------------------------+------------------------------------------------------------------------------------------------------+
-| 5                      | **SELECT values**, **Expression** With binary collation and ISO-8859-1 charset(iso88591_bin)         |
+| 5                      | **SELECT values**, **Expression** With binary collation and binary charset                           |
 +------------------------+------------------------------------------------------------------------------------------------------+
-| 6                      | **SELECT values**, **Expression** With binary collation, except having ISO-8859-1 charset            |
+| 6                      | **SELECT values**, **Expression** With bin collation (iso88591_bin, utf8_bin, euckr_bin)             |
 +------------------------+------------------------------------------------------------------------------------------------------+
 | 7                      | **Special functions** (:func:`SYSTEM_USER`, :func:`DATABASE`, :func:`SCHEMA`, :func:`VERSION`)       |
 +------------------------+------------------------------------------------------------------------------------------------------+
-| 8                      | **Constants(string literals)**  With non-binary collation                                            |
+| 8                      | **Constants(string literals)**  With non-binary and non-bin collation                                |
 +------------------------+------------------------------------------------------------------------------------------------------+
-| 9                      | **Constants(string literals)**  With binary collation and ISO-8859-1 charset (iso88591_bin)          |
+| 9                      | **Constants(string literals)**  With binary collation and binary charset                             |
 +------------------------+------------------------------------------------------------------------------------------------------+
-| 10                     | **Constants(string literals)**  With binary collation, except having ISO-8859-1 charset              |
+| 10                     | **Constants(string literals)**  With bin collation (iso88591_bin, utf8_bin, euckr_bin)               |
 +------------------------+------------------------------------------------------------------------------------------------------+
 | 11                     | host variables, session variables                                                                    |
 +------------------------+------------------------------------------------------------------------------------------------------+
 
+.. note::
+
+    In 9.x versions, the binary collation was not available. The iso85891_bin collation had the role of existing binary collation. Since version 10.0, the coercibility of columns with iso88591_bin was demoted from 2 to 3, that of expressions with iso88591_bin from 5 to 6, and of constants with iso88591_bin from 9 to 10.
+
+	
 Regarding an expression which has arguments with only host variables, (e.g. UPPER(?) as the below) this coercibility can be determined on the execution step. That is, the coercibility like this expression cannot be determined on the parsing step; therefore, COERCIBILITY function returns -1.
 
 .. code-block:: sql
@@ -963,7 +983,7 @@ The following shows converting two parameters with different collation to one co
 
         SELECT s1, s2 FROM t WHERE s1 > CAST (s2 AS STRING COLLATE utf8_en_cs);
 
-    Also, by **CAST** s2 to binary collation, the collation coercibility of CAST (6) is higher then coercibility of s1 (1).
+    Also, by **CAST** s2 to bin collation, the collation coercibility of CAST (6) is higher then coercibility of s1 (1).
 
     .. code-block:: sql
 
@@ -989,7 +1009,7 @@ The following shows converting two parameters with different collation to one co
 
         SELECT s1, s2 FROM t WHERE s1 > 'abc';
 
-*   **When a Column is Created with Binary Collation**
+*   **When a Column is Created with Bin Collation**
 
     .. code-block:: sql
 
@@ -999,7 +1019,7 @@ The following shows converting two parameters with different collation to one co
         );
         SELECT s1, s2 FROM t WHERE s1 > s2;
 
-    In this case, s2 column's coercibility is 6(binary collation) and s2 can be "fully convertible" to the collation of s1. utf8_en_cs is used.
+    In this case, s2 column's coercibility is 6(bin collation) and s2 can be "fully convertible" to the collation of s1. utf8_en_cs is used.
 
     .. code-block:: sql
 
@@ -1069,7 +1089,7 @@ The following shows converting two parameters with different collation to one co
 
 *   **Converting Collation of Session Variable and/or Host Variable**
 
-    When comparing the two operands of which collation coercibility level is 11(session variable, host variable) and charset is the same, one of their collation is changed as non-binary collation.
+    When comparing the two operands of which collation coercibility level is 11(session variable, host variable) and charset is the same, one of their collation is changed as non-bin collation.
 
     .. code-block:: sql
     
@@ -1079,7 +1099,7 @@ The following shows converting two parameters with different collation to one co
         SET NAMES utf8 COLLATE utf8_en_ci;
         EXECUTE stmt USING 'A', 'A', 'A';
     
-    When comparing  @v1 and 'A', @v1's collation will be changed as utf8_en_ci, non-binary collation; therefore, @v1's value and 'A' will be the same and the result of "? = @v1" will be 1 as below.
+    When comparing  @v1 and 'A', @v1's collation will be changed as utf8_en_ci, non-bin collation; therefore, @v1's value and 'A' will be the same and the result of "? = @v1" will be 1 as below.
 
     ::
     
@@ -1092,7 +1112,7 @@ The following shows converting two parameters with different collation to one co
         SET NAMES utf8 COLLATE utf8_en_cs;
         EXECUTE stmt USING 'A', 'A', 'A';
 
-    When comparing @v1 and 'A', @v1's collation will be changed as utf8_en_cs, non-binary collation; therefore, @v1's value and 'A' will be different and "? = @v1"'s result will be 0 as below.
+    When comparing @v1 and 'A', @v1's collation will be changed as utf8_en_cs, non-bin collation; therefore, @v1's value and 'A' will be different and "? = @v1"'s result will be 0 as below.
 
     ::
     
@@ -1195,7 +1215,7 @@ The **SET NAMES** statement changes the default client charset and the collation
 
     SET NAMES [ charset_name ] [ COLLATE collation_name]
 
-*   *charset_name*: Valid charset name is iso88591, utf8 and euckr.
+*   *charset_name*: Valid charset name is iso88591, utf8, euckr and binary.
 *   *collation_name*: Collation setting can be omitted and all available collations can be set. The collation should be compatible with the charset; otherwise, an error occurs. To find the available collation names, look up the **db_collation** catalog VIEW (see :ref:`collation-charset-column`).
 
 Specifying a collation with **SET NAMES** statement is the same as specifying a system parameter **intl_collation**. Therefore, the following two statements are the same behavior.
@@ -1211,7 +1231,7 @@ The following example shows how to create the string literal with the default ch
 
     SELECT 'a';
     
-The following example shows how to create the string literal with the utf8 charset and utf8_bin collation(the default collation is the binary collation of the charset)
+The following example shows how to create the string literal with the utf8 charset and utf8_bin collation(the default collation is the bin collation of the charset)
 
 .. code-block:: sql
     
@@ -1227,7 +1247,7 @@ In front of the constant string, the charset introducer and the **COLLATE** modi
 
     [charset_introducer]'constant-string' [ COLLATE collation_name ]
 
-*   *charset_introducer*: a charset name starting with an underscore (_), can be omitted. One of _utf8, _iso88591, and _euckr can be entered.
+*   *charset_introducer*: a charset name starting with an underscore (_), can be omitted. One of _utf8, _iso88591, _euckr and _binary can be entered.
 *   *constant-string*: a constant string value.
 *   *collation_name*: the name of a collation, which can be used in the system, can be omitted.
 
@@ -1236,7 +1256,7 @@ The default charset and collation of the constant string is determined based on 
 *   When the string charset introducer is specified and the **COLLATE** modifier is omitted, the collation is:
 
     *   if the charset introducer is the same as client charset (from a previous SET NAMES), then the client collation is applied.
-    *   if the charset introducer does not match the client charset, then the binary collation(one of euckr_bin, iso88591_bin and utf8_bin) corresponding to charset introducer is applied.
+    *   if the charset introducer does not match the client charset, then the bin collation(one of euckr_bin, iso88591_bin and utf8_bin) corresponding to charset introducer is applied.
 
 *   When the charset introducer is omitted and the **COLLATE** modifier is specified, the character is determined based on collation.
 
@@ -1265,7 +1285,7 @@ All string matching function(LIKE, REPLACE, INSTR, POSITION, LOCATE, SUBSTRING_I
 Charset and Collation of System Data
 ------------------------------------
 
-The system charset is taken from the locale specified when creating DB. The system collation is always the binary collation (<*charset*>_bin) of system charset. CUBRID supports three charset(iso88591, euckr, utf8), and accordingly three system collations(iso88591_bin, euckr_bin, utf8_bin).
+The system charset is taken from the locale specified when creating DB. The system collation is always the bin collation (<*charset*>_bin) of system charset. CUBRID supports three charset(iso88591, euckr, utf8), and accordingly three system collations(iso88591_bin, euckr_bin, utf8_bin).
 
 Impact of Charset Specified When Creating DB
 --------------------------------------------
@@ -1514,7 +1534,7 @@ For most collations, the default locale is obvious (is embedded in the name):
 *   utf8_tr_cs → tr_TR.utf8
 *   iso88591_en_ci → en_US (ISO-8859-1 charset)
 
-The binary collations have the following default locales:
+The bin collations have the following default locales:
 
 *   iso88591_bin → en_US (ISO-8859-1 charset)
 *   utf8_bin (en_US.utf8 - built-in locale - and handles ASCII characters only)
@@ -1627,6 +1647,8 @@ Summary of CUBRID Features for Each Collation
 +---------------------+---------------------------------------------+------------------------+
 | utf8_vi_cs          |  No                                         |  Yes                   |
 +---------------------+---------------------------------------------+------------------------+
+| binary              |  No                                         |  Yes                   |
++---------------------+---------------------------------------------+------------------------+
 
 Viewing Collation Information
 -----------------------------
@@ -1635,6 +1657,69 @@ To view the collation information, use :func:`CHARSET`, :func:`COLLATION` and :f
 
 The information of the database collation can be shown on db_collation system view or :ref:`show-collation-statement`.
 
+
+Using i18n characters with JDBC
+===============================
+
+CUBRID JDBC stores string type values received from server using String and CUBRIDBinaryString objects. String objects uses UTF-16 internally to store each character. It should be used to store any string DB value except those having binary charset. CUBRIDBinaryString uses byte array and should be used to store database string values of binary charset.
+The data buffer of each string value received from server is accompanied by the charset of the value from server. The charset is either the charset of column or expression's result or system charset for any other string without correspondent in database.
+
+.. note::
+
+    In previous versions, the connection charset was used to instantiate JDBC String objects from database values. 
+
+
+Create table with one column having UTF-8 charset and the other of binary charset:
+
+.. code-block:: sql
+
+    CREATE TABLE t1(col1 VARCHAR(10) CHARSET utf8, col2 VARCHAR(10) CHARSET binary);
+	
+
+Insert one row (the second column has random value bytes):
+	
+.. code-block:: java	
+	
+	Connection conn = getConn(null);
+	PreparedStatement st = conn.prepareStatement("insert into t1 values( ?, ? )");
+	byte[] b = new byte[]{(byte)161, (byte)224};
+	CUBRIDBinaryString cbs = new CUBRIDBinaryString(b);
+	String utf8_str = new String("abc");
+	st.setObject(1, utf8_str);
+	st.setObject(2, cbs);
+	st.executeUpdate();
+	
+
+Query the table and show contents (for binary string - we display a hex dump, for other charsets - the String value):
+	
+.. code-block:: java
+	
+	ResultSet rs = null;
+	Statement stmt = null;
+	rs = stmt.executeQuery("select col1, col2 from t1;");
+	ResultSetMetaData rsmd = null;
+	rsmd = rs.getMetaData();
+	int numberofColumn = rsmd.getColumnCount();
+	while (rs.next()) {
+		for (int j = 1; j <= numberofColumn; j++) {
+			String columnTypeName = rsmd.getColumnTypeName(j);
+			int columnType = rsmd.getColumnType(j);
+			if (((CUBRIDResultSetMetaData) rsmd).getColumnCharset(j).equals("BINARY")) {
+				// database string with binary charset
+				Object res;
+				byte[] byte_array = ((CUBRIDBinaryString) res).getBytes();
+				res = rs.getObject(j);
+				System.out.println(res.toString());
+			} else {
+				// database string with any other charset
+				String res;
+				res = rs.getString(j);
+				System.out.print(res);
+			}
+		}
+	}
+
+	
 Timezone Setting
 ================
 
@@ -1658,7 +1743,6 @@ If this value is not set, it follows OS's setting.
 
 To use timezone information, timezone type should be used. For details, see :ref:`timezone-type`. 
 
-타임존을 지역 이름으로 설정하는 경우 별도의 타임존 라이브러리를 필요로 하는데, 큐브리드 설치 시 제공하는 라이브러리가 아닌 변경된 타임존 정보를 가진 라이브러리를 사용하려면, 타임존 정보를 변경한 후 직접 라이브러리를 컴파일해야 한다.
 When timezone is set by a region name, it requires a separate timezone library, To use an updated library which has a changed timezone information, not an installed timezone information, timezone library should be compiled after timezone information is changed.
 
 The following is an example to compile a timezone library after updating a timezone information through IANA (http://www.iana.org/time-zones).
@@ -1744,14 +1828,14 @@ Choosing Charset
 ----------------
 
 *   Even if your text contains non-ASCII character, use utf8 or euckr charsets only if application requires character counting, inserting, replacing.
-*   For CHAR data, the main concern should storage requirement (4x or utf8, 3x for euckr).
+*   For CHAR data, the main concern should be storage requirement (4x or utf8, 3x for euckr).
 *   For both CHAR and VARCHAR data, there is some overhead when inserting/updating data: counting the precision (number of characters) of each instance is more consuming for non-ISO charsets.
 *   In queries, charset of expressions may be converted using :func:`CAST` operator.
 
 Choosing Collation
 ------------------
 
-*   If no collation dependent operations are performed (string searching, sorting, comparisons, casing), than choose binary collation for that charset
+*   If no collation dependent operations are performed (string searching, sorting, comparisons, casing), than choose bin collation for that charset or binary collation
 *   Collation may be easily overridden using :func:`CAST` operator, and :ref:`COLLATE modifier <charset-collate-modifier>` (in 9.1 version) if charset is unchanged between original charset of expression and the new collation.
 *   Collation controls also the casing rules of strings
 *   Collations with expansions are slower, but are more flexible and they perform whole-word sorting

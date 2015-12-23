@@ -452,7 +452,7 @@ STR_TO_DATE
 
     :param string: String.
     :param format: Specifies the format to interpret the character string. You should use character strings including % for the format specifiers. See :ref:`Date/Time Format 2 <datetime-format2>` table of :func:`DATE_FORMAT` function.
-    :rtype: DATETIME, DATE, TIME, DATETIMETZ, TIMETZ
+    :rtype: DATETIME, DATE, TIME, DATETIMETZ
 
 For the *format* argument to assign, see :ref:`Date/Time Format 2 <datetime-format2>`  table of the :func:`DATE_FORMAT`.
 
@@ -532,15 +532,6 @@ The following example shows which converts a date/time string with timezone info
 
     02:03:04.000 AM 10/11/2001 Europe/Bucharest EEST
 
-The following example converts a time string, which includes a timezone offset information, into TIMETZ type value.
-
-.. code-block:: sql
-
-    SELECT STR_TO_DATE('13:30:17 +10','%H:%i:%s %TZH');
-
-::
-
-    01:30:17 PM +10:00
 
 TIME_FORMAT
 ===========
@@ -549,7 +540,7 @@ TIME_FORMAT
 
     The **TIME_FORMAT** function converts the date/time data type value including time value into a string of specified date/time format, and returns the value with the **VARCHAR** data type.
 
-    :param time: A value of a type with time. (TIME, TIMESTAMP, DATETIME, TIMETZ, TIMESTAMPTZ or DATETIMETZ)
+    :param time: A value of a type with time. (TIME, TIMESTAMP, DATETIME, TIMESTAMPTZ or DATETIMETZ)
     :param format: Specifies the output format. Use a string that contains '%' as a specifier. See the table :ref:`Date/Time Format 2 <datetime-format2>` of :func:`DATE_FORMAT` function.
     :rtype: STRING
 
@@ -609,13 +600,6 @@ The following outputs the value with a timezone information into a specified for
 
     '02:03:04 AM Europe/Bucharest EEST'
 
-.. code-block:: sql
-
-    SELECT TIME_FORMAT(timetz'13:30:17 +10','%H:%i:%s %TZH');
-
-::
-
-    '13:30:17 10'
 
 TO_CHAR(date_time)
 ==================
@@ -624,7 +608,7 @@ TO_CHAR(date_time)
 
     The **TO_CHAR** (date_time) function converts the value of date/time types (**TIME**, **DATE**, **TIMESTAMP**, **DATETIME**) to a string depending on the table :ref:`Date/Time Format 1 <datetime-format1>` and then returns the value. The type of the return value is **VARCHAR**.
 
-    :param date_time: A value of date/time type. (TIME, DATE, TIMESTAMP, DATETIME, DATETIMETZ, DATETIMELTZ, TIMESTAMPTZ, TIMESTAMPLTZ, TIMETZ, TIMELTZ)
+    :param date_time: A value of date/time type. (TIME, DATE, TIMESTAMP, DATETIME, DATETIMETZ, DATETIMELTZ, TIMESTAMPTZ, TIMESTAMPLTZ)
     :param format: A format of return value.
     :param date_lang_string_literal: Specifies a language applied to a return value.
     :rtype: STRING
@@ -1422,22 +1406,6 @@ The following example shows the case when the system parameter **intl_date_lang*
 
     When the charset is ISO-8859-1, the language that can be changed by the system parameter **intl_date_lang** is "ko_KR" and "tr_TR" except "en_US". If the charset is UTF-8, it can be changed to any language supported by CUBRID. For details, see :ref:`Note <tochar-remark>` in the :func:`TO_CHAR`).
 
-TO_TIME_TZ
-==========
-
-.. function:: TO_TIME_TZ(string [,format [,date_lang_string_literal]])
-
-    **TO_TIME_TZ** function is the same as :func:`TO_TIME` function except that this function can include a timezone information on this input string.
-
-    :rtype: TIMETZ
-
-.. code-block:: sql
-  
-    SELECT TO_TIME_TZ('13:10:30 +11', 'HH24:MI:SS TZH');
-    
-::
-
-    01:10:30 PM +11:00
 
 TO_TIMESTAMP
 ============

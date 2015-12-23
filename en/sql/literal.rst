@@ -64,7 +64,7 @@ However, the writing order of a string which indicates date or time.
         
 *   The literal of date/time with timezone type has the same format as the above, and add an offset or a region name which indicates a timezone information. 
 
-    *   Add datetimetz, datetimeltz, timetz, timeltz, timestamptz or timestampltz literal at the front of a string to represent each type's value.
+    *   Add datetimetz, datetimeltz, timestamptz or timestampltz literal at the front of a string to represent each type's value.
 
         ::
         
@@ -81,8 +81,6 @@ However, the writing order of a string which indicates date or time.
         ::
             DATETIME WITH TIMEZONE = datetimetz
             DATETIME WITH LOCAL TIMEZONE = datetimeltz
-            TIME WITH TIMEZONE = timetz
-            TIME WITH LOCAL TIMEZONE = timeltz
             TIMESTAMP WITH TIMEZONE = timestamptz
             TIMESTAMP WITH LOCAL TIMEZONE = timestampltz
     

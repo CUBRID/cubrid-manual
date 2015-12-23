@@ -34,6 +34,8 @@ The following shows how to use the cubrid management utilities. ::
         synccolldb [option] <database-name>  --- Synchronizing the DB collation with the system collation
         genlocale [option] <database-name>  --- Compiling the locale information to use
         dumplocale [option] <database-name>   --- Printing human readable text for the compiled binary locale information
+	gen_tz [option] [<database-name>]  --- Generates C source file containing timezone data ready to be compiled into a shared library
+	dump_tz [option]  --- Displaying timezone related information
 
 cubrid Utility Logging
 ----------------------
@@ -1965,8 +1967,16 @@ Locale Commands
 
 **cubrid genlocale** utility compiles the locale information to use. This utility is executed in the **make_locale.sh** script ( **.bat** for Windows).
 
-**cubrid dumplocale** utility dumps the compiled binary locale file as a human-readable format on the console. It is better to save the output as a file by output redirection.
+**cubrid dumplocale** utility dumps the compiled binary locale (CUBRID locale library) file as a human-readable format on the console. It is better to save the output as a file by output redirection.
 
 **cubrid synccolldb** utility checks if the collations between database and locale library are consistent or not, and synchronize them.
 
 For more detailed usage, see :ref:`locale-setting`.
+
+
+Timezone Commands
+-----------------
+
+**cubrid gen_tz** utility compiles the IANA timezone information included in tzdata folder into a C source code. This utility is executed in the **make_tz.sh** script ( **.bat** for Windows).
+
+**cubrid dump_tz** utility dumps the compiled CUBRID timezone library file as a human-readable format on the console. It is better to save the output as a file by output redirection.

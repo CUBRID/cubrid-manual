@@ -209,18 +209,30 @@ Date/Time Types
 
 Date/time data types are used to represent the date or time (or both together). CUBRID supports the following data types:
 
-+---------------+-----------+---------------------------+---------------------------+---------------------------------------------------------------------+
-| Type          | bytes     | Min.                      | Max.                      | Note                                                                |
-+===============+===========+===========================+===========================+=====================================================================+
-| **DATE**      | 4         | 0001-01-01                | 9999-12-31                | As an exception, DATE '0000-00-00' format is allowed.               |
-+---------------+-----------+---------------------------+---------------------------+---------------------------------------------------------------------+
-| **TIME**      | 4         | 00:00:00                  | 23:59:59                  |                                                                     |
-+---------------+-----------+---------------------------+---------------------------+---------------------------------------------------------------------+
-| **TIMESTAMP** | 4         | 1970-01-01 00:00:01 (GMT) | 2038-01-19 03:14:07 (GMT) | As an exception, TIMESTAMP '0000-00-00 00:00:00' format is allowed. |
-|               |           | 1970-01-01 09:00:01 (KST) | 2038-01-19 12:14:07 (KST) |                                                                     |
-+---------------+-----------+---------------------------+---------------------------+---------------------------------------------------------------------+
-| **DATETIME**  | 8         | 0001-01-01 00:00:0.000    | 9999-12-31 23:59:59.999   | As an exception, DATETIME '0000-00-00 00:00:00' format is allowed.  |
-+---------------+-----------+---------------------------+---------------------------+---------------------------------------------------------------------+
++------------------+-----------+---------------------------+---------------------------+-----------------------------------------------------------------------+
+| Type             | bytes     | Min.                      | Max.                      | Note                                                                  |
++==================+===========+===========================+===========================+=======================================================================+
+| **DATE**         | 4         | 0001-01-01                | 9999-12-31                | As an exception, DATE '0000-00-00' format is allowed.                 |
++------------------+-----------+---------------------------+---------------------------+-----------------------------------------------------------------------+
+| **TIME**         | 4         | 00:00:00                  | 23:59:59                  |                                                                       |
++------------------+-----------+---------------------------+---------------------------+-----------------------------------------------------------------------+
+| **TIMESTAMP**    | 4         | 1970-01-01 00:00:01 (GMT) | 2038-01-19 03:14:07 (GMT) | As an exception, TIMESTAMP '0000-00-00 00:00:00' format is allowed.   |
+|                  |           | 1970-01-01 09:00:01 (KST) | 2038-01-19 12:14:07 (KST) |                                                                       |
++------------------+-----------+---------------------------+---------------------------+-----------------------------------------------------------------------+
+| **DATETIME**     | 8         | 0001-01-01 00:00:0.000    | 9999-12-31 23:59:59.999   | As an exception, DATETIME '0000-00-00 00:00:00' format is allowed.    |
++------------------+-----------+---------------------------+---------------------------+-----------------------------------------------------------------------+
+| **TIMESTAMPLTZ** | 4         | Depends on timezone       | Depends on timezone       | Timestamp with local timezone.                                        |
+|                  |           | 1970-01-01 00:00:01 (GMT) | 2038-01-19 03:14:07 (GMT) | As an exception, TIMESTAMPLTZ'0000-00-00 00:00:00' format is allowed. |
++------------------+-----------+---------------------------+---------------------------+-----------------------------------------------------------------------+
+| **TIMESTAMPTZ**  | 8         | Depends on timezone       | Depends on timezone       | Timestamp with timezone.                                              |
+|                  |           | 1970-01-01 00:00:01 (GMT) | 2038-01-19 03:14:07 (GMT) | As an exception, TIMESTAMPTZ '0000-00-00 00:00:00' format is allowed. |
++------------------+-----------+---------------------------+---------------------------+-----------------------------------------------------------------------+
+| **DATETIMELTZ**  | 8         | Depends on timezone       | Depends on timezone       | Datetime with local timezone.                                         |
+|                  |           | 0001-01-01 00:00:0.000 UTC| 9999-12-31 23:59:59.999   | As an exception, DATETIMELTZ '0000-00-00 00:00:00' format is allowed. |
++------------------+-----------+---------------------------+---------------------------+-----------------------------------------------------------------------+
+| **DATETIMETZ**   | 12        | Depends on timezone       | Depends on timezone       | Datetime with timezone.                                               |
+|                  |           | 0001-01-01 00:00:0.000 UTC| 9999-12-31 23:59:59.999   | As an exception, DATETIMETZ '0000-00-00 00:00:00' format is allowed.  |
++------------------+-----------+---------------------------+---------------------------+-----------------------------------------------------------------------+
 
 **Range and Resolution**
 
@@ -232,7 +244,12 @@ Date/time data types are used to represent the date or time (or both together). 
 
 *   The range of **TIMESTAMP** is between 1970-01-01 00:00:01 and 2038-01-19 03 03:14:07 (GMT). For KST (GMT+9), values from 1970-01-01 09:00:01 to 2038-01-19 12:14:07 can be stored. timestamp'1970-01-01 00:00:00' (GMT) is the same as timestamp'0000-00-00 00:00:00'.
 
+*   The range of **TIMESTAMPLTZ**, **TIMESTAMPTZ** varies with timezone, but the value converted to UTC should be between 1970-01-01 00:00:01 and 2038-01-19 03 03:14:07.
+
+*   The range of **DATETIMELTZ**, **DATETIMETZ** varies with timezone, but the value converted to UTC should be between 0001-01-01 00:00:0.000 and 9999-12-31 23:59:59.999. A value stored in database may no longer be valid if session timezone changes.
+
 *   The results of date, time and timestamp operations may depend on the rounding mode. In these cases, for Time and Timestamp, the most approximate second is used as the minimum resolution; for Date, the most approximate date is used as the minimum resolution.
+
 
 **Coercions**
 
@@ -257,6 +274,7 @@ In general, zero is not allowed in **DATE**, **DATETIME**, and **TIMESTAMP** typ
 *   Some functions in which the **DATE**, **DATETIME**, and **TIMESTAMP** types are specified as an argument return different value based on the **return_null_on_function_errors** system parameter if every input argument value for date and time is 0. If **return_null_on_function_errors** is yes, **NULL** is returned; if no, an error is returned. The default value is **no**.
 *   The functions that return **DATE**, **DATETIME**, and **TIMESTAMP** types can return a value of 0 for date and time. However, these values cannot be stored in Date objects in Java applications. Therefore, it will be processed with one of the following based on the configuration of zeroDateTimeBehavior, the connection URL property: being handled as an exception, returning **NULL**, or returning a minimum value (see :ref:`jdbc-connection-conf`).
 *   If the **intl_date_lang** system is configured, input string of :func:`TO_DATE`, :func:`TO_TIME`, :func:`TO_DATETIME`, :func:`TO_TIMESTAMP`, :func:`DATE_FORMAT`, :func:`TIME_FORMAT`, :func:`TO_CHAR` and :func:`STR_TO_DATE` functions follows the corresponding locale date format. For details, see :ref:`stmt-type-parameters` and the description of each function.
+*   Types with timezone follow the same conversion rules as their parent type.
 
 .. note:: For literals of date/time types and date/time types with timezone, see :ref:`date-time-literal`.
 
@@ -652,7 +670,7 @@ Available Format for Strings in Date/Time Type
 Date/Time Types with Timezone
 =============================
 
-Date/Time types with timezone are date/tiime types which can be input or output by specifying timezone. There are two ways of specifying timezone; specifying the name of local zone and specifying the offset of time.
+Date/Time types with timezone are date/time types which can be input or output by specifying timezone. There are two ways of specifying timezone; specifying the name of local zone and specifying the offset of time.
 
 Timezone information are considered in the Date/Time types if TZ or LTZ is followed after the existing Date/Time types; TZ means timezone, and LTZ means local timezone.
 
@@ -675,12 +693,6 @@ UTC in the table means Coordinated Universal Time.
 |           | DATETIMELTZ    | With timezone           | UTC                               | Relative (transformed by session timezone) | Date/time in the session timezone                               |
 +-----------+----------------+-------------------------+-----------------------------------+--------------------------------------------+-----------------------------------------------------------------+
 | TIME      | TIME           | Without timezone        | Input value                       | Absolute (the same as input)               | Time                                                            |
-|           +----------------+-------------------------+-----------------------------------+--------------------------------------------+-----------------------------------------------------------------+
-|           | TIMETZ         | With timezone           | UTC + timezone(region or offset)  | Absolute (keep input timezone)             | Time + timezone. If timezone is written as                      |
-|           |                |                         |                                   |                                            | a region name, date is assumed as the same with CURRENT_DATE(). |
-|           +----------------+-------------------------+-----------------------------------+--------------------------------------------+-----------------------------------------------------------------+
-|           | TIMELTZ        | With timezone           | UTC                               | Relative (transformed by session timezone) | Time in the session timezone. If timezone is written as         |
-|           |                |                         |                                   |                                            | a region name, date is assumed as the same with CURRENT_DATE(). |
 +-----------+----------------+-------------------------+-----------------------------------+--------------------------------------------+-----------------------------------------------------------------+
 | TIMESTAMP | TIMESTAMP      | Without timezone        | UTC                               | Relative (transformed by session timezone) | Input value is translated as a session timezone's value.        |
 |           +----------------+-------------------------+-----------------------------------+--------------------------------------------+-----------------------------------------------------------------+
@@ -698,72 +710,6 @@ The other features of date/time types with timezone (e.g. maximum/minimum value,
     *   Some DBMS's TIMESTAMP is similar to CUBRID's DATETIME as the respect of saving milliseconds.
 
 To see examples of functions using timezone types, see :doc:`function/datetime_fn`.
-
-.. note:: **Limitations when you specify a timezone of date/time type**
-
-    TIMETZ and TIMELTZ do not allow a region name timezone, but an offset timezone.
-
-    .. code-block:: sql
-    
-        SELECT TIME_TO_SEC(timetz'8:19:34 AM America/Lima PET');
-
-    ::
-
-        Invalid time: '8:19:34 AM America/Lima PET'.
-
-    .. code-block:: sql
-
-        SELECT TIME_TO_SEC(timeltz'8:19:34 AM America/Lima PET');
-
-    ::
-
-        Invalid time: '8:19:34 AM America/Lima PET'.
-
-    An offset timezone can be used like the below.
-
-    ::
-
-        SELECT TIME_TO_SEC(timetz'8:19:34 +5:00');
-
-    ::
-
-        29974
-
-    .. [번역] 아래 내용은 바뀔 수 있음. 
-
-    If the value of timezone parameter in cubrid.conf is specified as region name, offset timezone cannot be used in TIMELTZ type.
-    
-    .. code-block:: sql
-
-        SELECT TIME_TO_SEC(timetlz'8:19:34 +5:00');
-    
-    ::
-        Invalid time: '8:19:34 +5:00'.
-
-The following shows that the output values are different among TIME, TIMETZ and TIMELTZ when session timezone is changed.
-
-.. code-block:: sql
-
-    -- csql> ;se timezone="+09"
-
-    CREATE TABLE tbl (a TIME, b TIMETZ,  c TIMELTZ);
-
-    INSERT INTO tbl VALUES (time'12:30', timetz'12:30', timeltz'12:30');
-    SELECT * FROM tbl;
-
-::
-
-    12:30:00 PM  12:30:00 PM +09:00             12:30:00 PM +09:00
-
-.. code-block:: sql
-
-    -- csql> ;se timezone="+07"
-
-    SELECT * FROM tbl;
-
-::
-
-    12:30:00 PM  12:30:00 PM +09:00             10:30:00 AM +07:00
 
 The following shows that the output values are different among DATETIME, DATETIMETZ and DATETIMELTZ when session timezone is changed.
 
@@ -815,6 +761,78 @@ The following shows that the output values are different among TIMESTAMP, TIMEST
 
     10:30:00 AM 02/24/2015     12:30:00 PM 02/24/2015 +09:00                10:30:00 AM 02/24/2015 +07:00
 
+**Conversion from string to timestamp types**
+
+Conversion from string to timestamp/timestampltz/timestamptz are performed in context for creating timestamp objects from literals.
+
++----------------------------+-----------------------------+----------------------------+------------------------------+
+| From/to                    | Timestamp                   | Timestampltz               | Timestamptz                  |
++============================+=============================+============================+==============================+
+| String (without timezone)  | Interpret the date/time     | Interpret the date/time    | Interpret the date/time      |
+|                            | parts in session timezone.  | parts in session timezone. | parts in session timezone.   |
+|                            | Convert to UTC, encode and  | Convert to UTC, encode and | Convert to UTC, encode and   |
+|                            | store the Unix epoch.       | store the Unix epoch.      | store the Unix epoch and     |
+|                            |                             |                            | TZ_ID of session             |
++----------------------------+-----------------------------+----------------------------+------------------------------+
+| String (with timezone)     | Error (timezone part is not | Convert from value's       | Convert from value's         |
+|                            | supported for timestamp).   | timezone to UTC.           | timezone to UTC.             |
+|                            |                             | Encode and store the Unix  | Encode and store the Unix    |
+|                            |                             | epoch.                     | epoch and TZ_ID of value's   |
+|                            |                             |                            | timezone.                    |
++----------------------------+-----------------------------+----------------------------+------------------------------+
+
+**Conversion from string to datetime types**
+
+Conversion from string to datetime/datetimeltz/datetimetz are performed in context for creating datetime objects from literals.
+
++----------------------------+-----------------------------+----------------------------+------------------------------+
+| From/to                    | Datetime                    | Datetimeltz                | Datetimetz                   |
++============================+=============================+============================+==============================+
+| String (without timezone)  | Store the parsed values     | Interpret the date/time    | Interpret the date/time      |
+|                            | from string.                | parts in session timezone. | parts in session timezone.   |
+|                            |                             | Convert to UTC and store   | Convert to UTC and store the |
+|                            |                             | the new values.            | new values and TZ_ID of      |
+|                            |                             |                            | session                      |
++----------------------------+-----------------------------+----------------------------+------------------------------+
+| String (with timezone)     | Error (timezone part is not | Convert from value's       | Convert from value's         |
+|                            | supported for datetime).    | timezone to UTC.           | timezone to UTC.             |
+|                            |                             | Store the new values in    | Store the new values in UTC  |
+|                            |                             | UTC reference.             | reference TZ_ID of           |
+|                            |                             |                            | string's timezone.           |
++----------------------------+-----------------------------+----------------------------+------------------------------+
+
+
+**Conversion of datetime and timestamp types to string (printing of values)**
+
++----------------------------+-----------------------------+----------------------------+------------------------------+
+| From/to                    | String (timezone printing   | String (timezone force     | String (no requirement for   |
+|                            | not allowed)                | print)                     | timezone - free choice)      |
++============================+=============================+============================+==============================+
+| TIMESTAMP                  | Decode Unix epoch to        | Decode Unix epoch to       | Decode Unix epoch to session |
+|                            | session timezone and print  | session timezone and print | timezone and print.          |
+|                            |                             | with session timezone.     | Do not print timezone string |
++----------------------------+-----------------------------+----------------------------+------------------------------+
+| TIMESTAMPLTZ               | Decode Unix epoch to        | Decode Unix epoch to       | Decode Unix epoch to session |
+|                            | session timezone and print  | session timezone and print | timezone and print.          |
+|                            |                             | with session timezone.     | Print session timezone.      |
++----------------------------+-----------------------------+----------------------------+------------------------------+
+| TIMESTAMPTZ                | Decode Unix epoch to        | Decode Unix epoch to       | Decode Unix epoch to         |
+|                            | timezone from value and     | timezone from value and    | timezone from value and      |
+|                            | print it.                   | print it; print timezone   | print it; print timezone     |
+|                            |                             | from value.                | from value.                  |
++----------------------------+-----------------------------+----------------------------+------------------------------+
+| DATETIME                   | Print the stored values.    | Print the stored value and | Print the stored value.      |
+|                            |                             | session timezone.          | Do not print any timezone.   |
++----------------------------+-----------------------------+----------------------------+------------------------------+
+| DATETIMELTZ                | Convert from UTC to session | Convert from UTC to        | Convert from UTC to session  |
+|                            | timezone and print the new  | session timezone and print | timezone and print it.       |
+|                            | value.                      | it. Print session timezone | Print session timezone.      |
++----------------------------+-----------------------------+----------------------------+------------------------------+
+| DATETIMELTZ                | Convert from UTC to value's | Convert from UTC to        | Convert from UTC to value's  |
+|                            | timezone and print the new  | value's timezone and print | timezone and print it.       |
+|                            | value.                      | it. Print value's timezone | Print value's timezone.      |
++----------------------------+-----------------------------+----------------------------+------------------------------+
+
 Timezone Configuration
 ----------------------
 
@@ -848,9 +866,7 @@ Functions with a Timezone Type
 
 All functions which use DATETIME, TIMESTAMP or TIME typed value in their input value, can use timezone typed value.
 
-The below is an example of using timezone typed values, it works the same as the case without timezohne. Exceptionally, if the type name ends with LTZ, the output value of this type follows the local timezone's setting (timezone parameter).
-
-다음 예에서 숫자의 기본 단위는 DATETIME 타입의 최소 단위인 밀리초이다.
+The below is an example of using timezone typed values, it works the same as the case without timezone. Exceptionally, if the type name ends with LTZ, the output value of this type follows the local timezone's setting (timezone parameter).
 
 On the below example, the default unit of a number is millisecond, which is the minimum unit of DATETIME type.
 
@@ -888,14 +904,6 @@ On the below example, the default unit of a number is second, which is the minim
 
     03:30:29 PM 09/01/2009 Asia/Seoul
 
-On the below example, the default unit of a number is second, which is the minimum unit of TIME type.
-
-.. code-block:: sql
-
-    SELECT timetz '03:30:30 pm' + 1;
-    
-    03:30:31 PM +09:00
-
 .. code-block:: sql
 
     SELECT EXTRACT (hour from datetimetz'10/15/1986 5:45:15.135 am Europe/Bucharest');
@@ -914,10 +922,6 @@ A type which the name ends with LTZ follows the setting of local timezone. There
 
     12
 
-.. **TIMELTZ는 timezone 파라미터 값이 지역 이름으로 설정된 경우 계산을 허용하지 않는다. (이거 나중에 바뀌나? 검토)
-
-    select timeltz '03:30:30 pm' + cast(1 as INTEGER) from db_root;
-    Invalid time: '03:30:30 pm'.
 
 Conversion Functions for Timezone Types
 ---------------------------------------
@@ -929,7 +933,6 @@ The following are functions converting a string to a date/time typed value, or d
 *   :func:`TO_CHAR`
 *   :func:`TO_DATETIME_TZ`
 *   :func:`TO_TIMESTAMP_TZ`
-*   :func:`TO_TIME_TZ`
 
 For each function's usage, see the each function's explanation by clicking the function name.
 
@@ -940,11 +943,10 @@ For each function's usage, see the each function's explanation by clicking the f
     SELECT TO_CHAR(datetimetz'2001-10-11 02:03:04 AM Europe/Bucharest EEST');
     SELECT TO_DATETIME_TZ('2001-10-11 02:03:04 AM Europe/Bucharest EEST');
     SELECT TO_TIMESTAMP_TZ('2001-10-11 02:03:04 AM Europe/Bucharest');
-    SELECT TO_TIME_TZ('02:03:04 +09:00');
 
 .. note::
     
-    :func:`TO_TIMESTAMP_TZ`, :func:`TO_DATETIME_TZ` and :func:`TO_TIME_TZ` functions do the same behaviors with :func:`TO_TIMESTAMP`, :func:`TO_DATETIME`, and :func:`TO_TIME` functions except that they can have TZR, TZD, TZH and TZM information in their date/time argument.
+    :func:`TO_TIMESTAMP_TZ` and :func:`TO_DATETIME_TZ` functions do the same behaviours with :func:`TO_TIMESTAMP` and :func:`TO_DATETIME` functions except that they can have TZR, TZD, TZH and TZM information in their date/time argument.
 
 CUBRID uses the region name of timezone in the IANA(Internet Assigned Numbers Authority) timezone database region; for IANA timezone, see http://www.iana.org/time-zones.
 

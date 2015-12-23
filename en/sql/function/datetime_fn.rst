@@ -777,11 +777,11 @@ FROM_TZ
       
 .. function:: FROM_TZ(datetime, timezone_string)
 
-    Converts date/time type without timezone as date/time type with timezone by adding timezone to DATETIME/TIME typed value. Input value's type is DATETIME or TIME, and the result value's type is DATETIMETZ or TIMETZ.
+    Converts date/time type without timezone as date/time type with timezone by adding timezone to DATETIME typed value. Input value's type is DATETIME, and the result value's type is DATETIMETZ.
 
-    :param datetime: DATETIME 타입의 값 또는 TIME 타입의 값
-    :param timezone_string: 타임존 오프셋 또는 지역 이름을 나타내는 문자열. 예: '+05:00', 'Asia/Seoul'. 단, `datetime` 인자의 타입이 TIME 타입인 경우, 오프셋만 허용한다.
-    :rtype: DATETIMETZ 또는 TIMETZ
+    :param datetime: DATETIME
+    :param timezone_string: String representing a timezone name or and offset '+05:00', 'Asia/Seoul'.
+    :rtype: DATETIMETZ
     
 .. code-block:: sql
 
@@ -799,21 +799,6 @@ FROM_TZ
 
     11:59:59.000 PM 10/10/2014 +03:25:25
 
-..  code-block:: sql
-
-    SELECT FROM_TZ(time'23:59:59 PM', '+05');
-
-::
-
-    11:59:59 PM +05:00
-
-..  code-block:: sql
-
-    SELECT FROM_TZ(time'10:59:59 PM', '+9:00');
-
-::
-
-      10:59:59 PM +09:00
 
 For timezone related description, see :ref:`timezone-type`.
 

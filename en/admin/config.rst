@@ -304,6 +304,15 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               | sql_trace_execution_plan            | server parameter        | O       | bool     | no                             | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | use_orderby_sort_limit              | server parameter        | O       | bool     | yes                            | DBA only              |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | vacuum_prefetch_log_mode            | server parameter        |         | int      | 1                              | DBA only              |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | vacuum_prefetch_log_buffer_size     | server parameter        |         | int      | 3200 *                         | DBA only              |
+|                               |                                     |                         |         |          | :ref:`log_page_size <lpg>`     |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | data_buffer_neighbor_flush_pages    | server parameter        |         | int      | 8                              | DBA only              |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | data_buffer_neighbor_flush_nondirty | server parameter        |         | bool     | no                             | DBA only              |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 
 .. _lpg:
@@ -1685,45 +1694,53 @@ Other Parameters
 
 The following are other parameters. The type and value range for each parameter are as follows:
 
-+--------------------------------+--------+----------------+----------------+----------------+
-| Parameter Name                 | Type   | Default        | Min            | Max            |
-+================================+========+================+================+================+
-| access_ip_control              | bool   | no             |                |                |
-+--------------------------------+--------+----------------+----------------+----------------+
-| access_ip_control_file         | string |                |                |                |
-+--------------------------------+--------+----------------+----------------+----------------+
-| agg_hash_respect_order         | bool   | yes            |                |                |
-+--------------------------------+--------+----------------+----------------+----------------+
-| auto_restart_server            | bool   | yes            |                |                |
-+--------------------------------+--------+----------------+----------------+----------------+
-| index_scan_in_oid_order        | bool   | no             |                |                |
-+--------------------------------+--------+----------------+----------------+----------------+
-| index_unfill_factor            | float  | 0.05           | 0              | 0.5            |
-+--------------------------------+--------+----------------+----------------+----------------+
-| java_stored_procedure          | bool   | no             |                |                |
-+--------------------------------+--------+----------------+----------------+----------------+
-| multi_range_optimization_limit | int    | 100            | 0              | 10,000         |
-+--------------------------------+--------+----------------+----------------+----------------+
-| optimizer_enable_merge_join    | bool   | no             |                |                |
-+--------------------------------+--------+----------------+----------------+----------------+
-| pthread_scope_process          | bool   | yes            |                |                |
-+--------------------------------+--------+----------------+----------------+----------------+
-| server                         | string |                |                |                |
-+--------------------------------+--------+----------------+----------------+----------------+
-| service                        | string |                |                |                |
-+--------------------------------+--------+----------------+----------------+----------------+
-| session_state_timeout          | sec    | 21,600         | 60(1 minute)   | 31,536,000     |
-|                                |        | (6 hours)      |                | (1 year)       |
-+--------------------------------+--------+----------------+----------------+----------------+
-| sort_limit_max_count           | int    | 1000           | 0              | INT_MAX        |
-+--------------------------------+--------+----------------+----------------+----------------+
-| sql_trace_slow                 | msec   | -1(inf)        | 0              | 86,400,000     |
-|                                |        |                |                | (24 hours)     |
-+--------------------------------+--------+----------------+----------------+----------------+
-| sql_trace_execution_plan       | bool   | no             |                |                |
-+--------------------------------+--------+----------------+----------------+----------------+
-| use_orderby_sort_limit         | bool   | yes            |                |                |
-+--------------------------------+--------+----------------+----------------+----------------+
++-------------------------------------+--------+----------------+----------------+----------------+
+| Parameter Name                      | Type   | Default        | Min            | Max            |
++=====================================+========+================+================+================+
+| access_ip_control                   | bool   | no             |                |                |
++-------------------------------------+--------+----------------+----------------+----------------+
+| access_ip_control_file              | string |                |                |                |
++-------------------------------------+--------+----------------+----------------+----------------+
+| agg_hash_respect_order              | bool   | yes            |                |                |
++-------------------------------------+--------+----------------+----------------+----------------+
+| auto_restart_server                 | bool   | yes            |                |                |
++-------------------------------------+--------+----------------+----------------+----------------+
+| index_scan_in_oid_order             | bool   | no             |                |                |
++-------------------------------------+--------+----------------+----------------+----------------+
+| index_unfill_factor                 | float  | 0.05           | 0              | 0.5            |
++-------------------------------------+--------+----------------+----------------+----------------+
+| java_stored_procedure               | bool   | no             |                |                |
++-------------------------------------+--------+----------------+----------------+----------------+
+| multi_range_optimization_limit      | int    | 100            | 0              | 10,000         |
++-------------------------------------+--------+----------------+----------------+----------------+
+| optimizer_enable_merge_join         | bool   | no             |                |                |
++-------------------------------------+--------+----------------+----------------+----------------+
+| pthread_scope_process               | bool   | yes            |                |                |
++-------------------------------------+--------+----------------+----------------+----------------+
+| server                              | string |                |                |                |
++-------------------------------------+--------+----------------+----------------+----------------+
+| service                             | string |                |                |                |
++-------------------------------------+--------+----------------+----------------+----------------+
+| session_state_timeout               | sec    | 21,600         | 60(1 minute)   | 31,536,000     |
+|                                     |        | (6 hours)      |                | (1 year)       |
++-------------------------------------+--------+----------------+----------------+----------------+
+| sort_limit_max_count                | int    | 1000           | 0              | INT_MAX        |
++-------------------------------------+--------+----------------+----------------+----------------+
+| sql_trace_slow                      | msec   | -1(inf)        | 0              | 86,400,000     |
+|                                     |        |                |                | (24 hours)     |
++-------------------------------------+--------+----------------+----------------+----------------+
+| sql_trace_execution_plan            | bool   | no             |                |                |
++-------------------------------------+--------+----------------+----------------+----------------+
+| use_orderby_sort_limit              | bool   | yes            |                |                |
++-------------------------------------+--------+----------------+----------------+----------------+
+| vacuum_prefetch_log_mode            | int    | 1              | 0              | 1              |
++-------------------------------------+--------+----------------+----------------+----------------+
+| vacuum_prefetch_log_buffer_size     | int    | 50M            | 25M            | INT_MAX        |
++-------------------------------------+--------+----------------+----------------+----------------+
+| data_buffer_neighbor_flush_pages    | int    | 8              | 0              | 32             |
++-------------------------------------+--------+----------------+----------------+----------------+
+| data_buffer_neighbor_flush_nondirty | bool   | no             |                |                |
++-------------------------------------+--------+----------------+----------------+----------------+
 
 **access_ip_control**
 
@@ -1830,6 +1847,24 @@ The following are other parameters. The type and value range for each parameter 
 **use_orderby_sort_limit**
 
     **use_orderby_sort_limit** is a parameter to configure whether to keep the intermediate result of sorting and merging process in the statement including the **ORDER BY ... LIMIT** *row_count* clause as many as *row_count*. If it is set to **yes**, you can decrease unnecessary comparing and merging processes because as many as intermediate results will be kept as the value of *row_count*. The default value is **yes**.
+
+**vacuum_prefetch_log_mode**
+
+    **vacuum_prefetch_log_mode** is a parameter to configure the prefetch mode of log pages on behalf of vacuum.
+	
+	In mode 0, the vacuum master thread prefetch the required log pages in a shared buffer. In mode 1 (default), each vacuum worker prefetches the required log pages in its own buffer. Mode 0 also requires that **vacuum_prefetch_log_buffer_size** system parameter is configured, in mode 0 this parameter is ignored and each vacuum worker prefetches an entire vacuum log block (default 32 log pages).
+	
+**vacuum_prefetch_log_buffer_size**
+
+    **vacuum_prefetch_log_buffer_size** is a parameter to configure the log prefetch buffer size of vacuum (it is used only if **vacuum_prefetch_log_mode** is set to 0).
+
+**data_buffer_neighbor_flush_pages**
+    
+	**data_buffer_neighbor_flush_pages** is a parameter to control the number of neighbour pages to be flushed with background flush (victim candidates flushing). When is less or equal to 1, the neighbour flush feature is considered deactivated.
+
+**data_buffer_neighbor_flush_nondirty**
+    
+	**data_buffer_neighbor_flush_nondirty** is a parameter to control the flushing of non-dirty neighbour pages. When victim candidates pages are flushed, and neighbour flush is activated (**data_buffer_neighbor_flush_pages** is greater than 1), than single non-dirty pages which completes a chain of neighbour (dirty) pages are also flushed.
 
 .. _broker-configuration:
 

@@ -92,30 +92,6 @@ You can get various information from the server error log by setting  **error_lo
 
 .. 4957
 
-Detecting Inconsistency between Index and Data
-----------------------------------------------
-
-By the isolation level, we can say it is an error or we cannot be sure to say that when inconsistency between index and data is detected.
-
-When transaction allows UNCOMMITTED INSTANCE(the value of isolation_level in cubrid.conf is 1 or 3), index and data can be inconsistent for a fleeting moment. Therefore, if you want to print out this case, the value of **error_log_level** in cubrid.conf should be NOTIFICATION. Displayed messages are as follows.
-
-::
-
-    ----  database server error log
-    Time: 03/15/11 15:20:31.804 - NOTIFICATION *** CODE = -545, Tran = 1, CLIENT = cdbs034.cub:csql(3926), EID = 3
-    Internal error: INDEX u_foo_i ON CLASS foo (CLASS_OID: 0|550|8). Key and OID: 0|600|16 entry on B+tree: 0|209|590 is incorrect. The object does not exist.
-
-When transaction allows COMMITTED INSTANCE(the value of isolation_level in cubrid.conf is 2, 4 or more), index and data should not always be inconsistent. Therefore, if you want to print out this case, the value of **error_log_level** in cubrid.conf should be ERROR. Displayed messages are as follows.
-
-::
-
-    ----  database server error log
-    Time: 03/15/11 15:14:35.907 - ERROR *** ERROR CODE = -545, Tran = 1, CLIENT = cdbs034.cub:csql(3776), EID = 1
-    Internal error: INDEX u_foo_i ON CLASS foo (CLASS_OID: 0|550|8). Key and OID: 0|600|2 entry on B+tree: 0|209|590 is incorrect. The object does not exist.
-    
-    ---- client error log
-    ERROR: Internal error: INDEX u_foo_i ON CLASS foo (CLASS_OID: 0|550|8). Key and OID: 0|600|2 entry on B+tree: 0|209|590 is incorrect. The object does not exist.
-
 .. 10703 
 
 Detecting Overflow Keys or Overflow Pages

@@ -578,7 +578,7 @@ The **;Info** session command allows you to check information such as schema, tr
     *** Lock Table Dump ***
      Lock Escalation at = 100000, Run Deadlock interval = 1
     Transaction (index  0, unknown, unknown@unknown|-1)
-    Isolation REPEATABLE CLASSES AND READ UNCOMMITTED INSTANCES
+    Isolation COMMITTED READ
     State TRAN_ACTIVE
     Timeout_period -1
     ......

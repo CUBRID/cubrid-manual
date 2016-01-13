@@ -29,7 +29,7 @@ The **SELECT** statement specifies columns that you want to retrieve from a tabl
                                     ]
      
     <table_specification> ::=
-        <single_table_spec> [<correlation>] [WITH (<lock_hint>)] |
+        <single_table_spec> [<correlation>] |
         <metaclass_specification> [ <correlation> ] |
         <subquery> <correlation> |
         TABLE ( <expression> ) <correlation>
@@ -53,7 +53,6 @@ The **SELECT** statement specifies columns that you want to retrieve from a tabl
             NATURAL [ LEFT | RIGHT ] JOIN 
         } <table_specification>
     
-    <lock_hint> ::= READ UNCOMMITTED
 
 *   *qualifier*: A qualifier. When omitted, it is set to **ALL**.
 
@@ -151,7 +150,7 @@ The **FROM** clause specifies the table in which data is to be retrieved in the 
     <select_expressions> ::= * | <expression_comma_list> | *, <expression_comma_list>
      
     <table_specification> ::=
-        <single_table_spec> [<correlation>] [WITH (<lock_hint>)] |
+        <single_table_spec> [<correlation>] |
         <metaclass_specification> [<correlation>] |
         <subquery> <correlation> |
         TABLE (<expression>) <correlation>
@@ -163,13 +162,10 @@ The **FROM** clause specifies the table in which data is to be retrieved in the 
      
     <metaclass_specification> ::= CLASS <class_name>
      
-    <lock_hint> ::= READ UNCOMMITTED
 
 *   <*select_expressions*>: One or more columns or expressions to query is specified. Use * to query all columns in the table. You can also specify an alias for a column or an expression to be queried by using the AS keyword. This keyword can be used in **GROUP BY**, **HAVING** and **ORDER BY** clauses. The position index of the column is given according to the order in which the column was specified. The starting value is 1.
 
 *   <*table_specification*>: At least one table name is specified after the **FROM** clause. Subqueries and derived tables can also be used in the **FROM** clause. For details on subquery derived tables, see :ref:`subquery-derived-table`.
-
-*   <*lock_hint*>: You can set **READ UNCOMMITTED** for the table isolation level. **READ UNCOMMITTED** is a level where dirty reads are allowed; see :ref:`transaction-isolation-level` for details on the CUBRID transaction isolation level.
 
 .. code-block:: sql
 
@@ -644,7 +640,7 @@ An outer join is divided into a left outer join which outputs all rows of the le
         | { <join_table_specification> | <join_table_specification2> } ...]
 
     <table_specification> ::=
-        <single_table_spec> [<correlation>] [WITH (<lock_hint>)]|
+        <single_table_spec> [<correlation>] |
         <metaclass_specification> [<correlation>] |
         <subquery> <correlation> |
         TABLE (<expression>) <correlation>

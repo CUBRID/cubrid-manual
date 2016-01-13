@@ -1020,7 +1020,7 @@ cci_datasource_change_property
     ========================= =========== ============================== =========================================================================================================================
     default_autocommit        bool        true/false                     Whether auto-commit or not. The default is CCI_DEFAULT_AUTOCOMMIT in cubrid_broker.conf; the default of this is ON(true)
     default_lock_timeout      msec        number                         lock timeout                                                      
-    default_isolation         string      See the table of               isolation level. The default is isolation_level in cubrid.conf; the default of this is "TRAN_READ_UNCOMMITTED".
+    default_isolation         string      See the table of               isolation level. The default is isolation_level in cubrid.conf; the default of this is "READ COMMITTED".
                                           :c:func:`cci_property_set`                                                                     
     login_timeout             msec        number                         login timeout. The default is 0(infinite wait). It can also be used when you call prepare or execute functions; 
                                                                          at this time reconnection can happen.
@@ -2581,21 +2581,9 @@ cci_property_set
     +============================+=======================================+
     | SERIALIZABLE               | "TRAN_SERIALIZABLE"                   |
     +----------------------------+---------------------------------------+
-    | REPEATABLE READ CLASS with | "TRAN_REP_CLASS_REP_INSTANCE"         |
-    | REPEATABLE READ INSTANCES  | or "TRAN_REP_READ"                    |
+    | REPEATABLE READ            | "TRAN_REP_READ"                       |
     +----------------------------+---------------------------------------+
-    | REPEATABLE READ CLASS with | "TRAN_REP_CLASS_COMMIT_INSTANCE"      |
-    | READ COMMITTED INSTANCES   | or "TRAN_READ_COMMITTED"              |
-    |                            | or "TRAN_CURSOR_STABILITY"            |
-    +----------------------------+---------------------------------------+
-    | REPEATABLE READ CLASS with | "TRAN_REP_CLASS_UNCOMMIT_INSTANCE"    |
-    | READ UNCOMMITTED INSTANCES | or "TRAN_READ_UNCOMMITTED"            |
-    +----------------------------+---------------------------------------+
-    | READ COMMITTED CLASS with  | "TRAN_COMMIT_CLASS_COMMIT_INSTANCE"   |
-    | READ COMMITTED INSTANCES   |                                       |
-    +----------------------------+---------------------------------------+
-    | READ COMMITTED CLASS with  | "TRAN_COMMIT_CLASS_UNCOMMIT_INSTANCE" |
-    | READ UNCOMMITTED INSTANCES |                                       |
+    | READ COMMITTED             | "TRAN_READ_COMMITTED"                 |
     +----------------------------+---------------------------------------+
 
     DB user's name and password can be specified by the setting of **user** and **password** directly, or by the setting of **user** and **password** in **url**.

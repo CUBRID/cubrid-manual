@@ -1844,10 +1844,10 @@ The second section of the output of **cubrid lockdb** includes information on al
 ::
 
     Transaction (index 1, csql, dba@cubriddb|12854)
-    Isolation READ COMMITTED CLASSES AND READ UNCOMMITTED INSTANCES
-    Timeout_period -1
+    Isolation COMMITTED READ
+    Timeout_period : Infinite wait
 
-Here, the transaction index is 1, the program name is csql, the user ID is dba, the host name is cubriddb, the client process identifier is 12854, the isolation level is READ COMMITTED CLASSES AND READ UNCOMMITTED INSTANCES, and the lock timeout is unlimited.
+Here, the transaction index is 1, the program name is csql, the user ID is dba, the host name is cubriddb, the client process identifier is 12854, the isolation level is COMMITTED READ and the lock timeout is unlimited.
 
 A client for which transaction index is 0 is the internal system transaction. It can obtain the lock at a specific time, such as the processing of a checkpoint by a database. In most cases, however, this transaction will not obtain any locks.
 

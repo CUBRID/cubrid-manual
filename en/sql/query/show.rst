@@ -112,7 +112,7 @@ It shows the column information of a table. You can use the **LIKE** clause to s
 
     SHOW [FULL] COLUMNS {FROM | IN} tbl_name [LIKE 'pattern' | WHERE expr];
 
-If a **FULL** keyword is used, It shows the additional information, collation.
+If a **FULL** keyword is used, it shows the additional information, **collation** and **comment**.
 
 **SHOW FIELDS** is the same statement as **SHOW COLUMNS**.
 
@@ -174,14 +174,14 @@ The following shows the examples of this syntax.
     
 .. code-block:: sql
 
-    SHOW COLUMNS FROM athlete WHERE field LIKE '%c%';
+    SHOW FULL COLUMNS FROM athlete WHERE field LIKE '%c%';
     
 ::
 
-      Field                 Type                  Collation             Null      Key         Default               Extra
-    ====================================================================================================================================
-      'code'                'INTEGER'             NULL                  'NO'      'PRI'       NULL                  'auto_increment'
-      'nation_code'         'CHAR(3)'             'iso88591_bin'        'YES'     ''          NULL                  ''
+	  Field                 Type                  Collation             Null                  Key                   Default               Extra                 Comment             
+	================================================================================================================================================================================
+	  'code'                'INTEGER'             NULL                  'NO'                  'PRI'                 NULL                  'auto_increment'      NULL                
+	  'nation_code'         'CHAR(3)'             'iso88591_bin'        'YES'                 ''                    NULL                  ''                    NULL                
 
 .. _show-index-statement:
 
@@ -214,6 +214,7 @@ Packed                                              Shows how keys are packed. I
 Null                                VARCHAR         YES if a column can include **NULL**, NO if not.
 Index_type                          VARCHAR         Index to be used (currently, only the BTREE is supported.)
 Func                                VARCHAR         A function which is used in a function-based index
+Comment                             VARCHAR         Comment to describe the index
 =================================== =============== ======================================================================================================================================
 
 The following shows the examples of this syntax.
@@ -224,10 +225,13 @@ The following shows the examples of this syntax.
     
 ::
 
-       Table     Non_unique   Key_name       Seq_in_index  Column_name    Collation     Cardinality   Sub_part  Packed   Null   Index_type  Func
-    =============================================================================================================================================
-     'athlete'     0      'pk_athlete_code'     1          'code'           'A'           6677         NULL     NULL    'NO'      'BTREE'   NULL
-     
+	  Table                  Non_unique  Key_name              Seq_in_index  Column_name           Collation             Cardinality     Sub_part  Packed                Null        
+			  Index_type            Func                  Comment             
+	=================================================================================================================================================================================
+	==========================================================================
+	  'athlete'                       0  'pk_athlete_code'                1  'code'                'A'                          6677         NULL  NULL                  'NO'        
+			  'BTREE'               NULL                  NULL 
+
 .. code-block:: sql
 
     CREATE TABLE tbl1 (i1 INTEGER , i2 INTEGER NOT NULL, i3 INTEGER UNIQUE, s1 VARCHAR(10), s2 VARCHAR(10), s3 VARCHAR(10) UNIQUE);
@@ -241,17 +245,27 @@ The following shows the examples of this syntax.
     
 ::
 
-      Table  Non_unique  Key_name       Seq_in_index  Column_name  Collation  Cardinality     Sub_part  Packed  Null    Index_type   Func
-    =====================================================================================================================================
-      'tbl1'          1  'i_tbl1_i1'               1  'i1'         'D'                  0         NULL  NULL    'YES'   'BTREE'      NULL
-      'tbl1'          1  'i_tbl1_i1_s1'            1  'i1'         'A'                  0         NULL  NULL    'YES'   'BTREE'      NULL
-      'tbl1'          1  'i_tbl1_i1_s1'            2  's1'         'A'                  0         NULL  NULL    'YES'   'BTREE'      NULL
-      'tbl1'          0  'i_tbl1_i2_s2'            1  'i2'         'A'                  0         NULL  NULL    'NO'    'BTREE'      NULL
-      'tbl1'          0  'i_tbl1_i2_s2'            2  's2'         'A'                  0         NULL  NULL    'YES'   'BTREE'      NULL
-      'tbl1'          1  'i_tbl1_s1'               1  's1'         'A'                  0            7  NULL    'YES'   'BTREE'      NULL
-      'tbl1'          0  'u_tbl1_i3'               1  'i3'         'A'                  0         NULL  NULL    'YES'   'BTREE'      NULL
-      'tbl1'          0  'u_tbl1_s3'               1  's3'         'A'                  0         NULL  NULL    'YES'   'BTREE'      NULL
-
+	  Table                  Non_unique  Key_name              Seq_in_index  Column_name           Collation             Cardinality     Sub_part  Packed                Null        
+			  Index_type            Func                  Comment             
+	=================================================================================================================================================================================
+	==========================================================================
+	  'tbl1'                          1  'i_tbl1_i1'                      1  'i1'                  'D'                             0         NULL  NULL                  'YES'       
+			  'BTREE'               NULL                  NULL                
+	  'tbl1'                          1  'i_tbl1_i1_s1'                   1  'i1'                  'A'                             0         NULL  NULL                  'YES'       
+			  'BTREE'               NULL                  NULL                
+	  'tbl1'                          1  'i_tbl1_i1_s1'                   2  's1'                  'A'                             0         NULL  NULL                  'YES'       
+			  'BTREE'               NULL                  NULL                
+	  'tbl1'                          0  'i_tbl1_i2_s2'                   1  'i2'                  'A'                             0         NULL  NULL                  'NO'        
+			  'BTREE'               NULL                  NULL                
+	  'tbl1'                          0  'i_tbl1_i2_s2'                   2  's2'                  'A'                             0         NULL  NULL                  'YES'       
+			  'BTREE'               NULL                  NULL                
+	  'tbl1'                          1  'i_tbl1_s1'                      1  's1'                  'A'                             0            7  NULL                  'YES'       
+			  'BTREE'               NULL                  NULL                
+	  'tbl1'                          0  'u_tbl1_i3'                      1  'i3'                  'A'                             0         NULL  NULL                  'YES'       
+			  'BTREE'               NULL                  NULL                
+	  'tbl1'                          0  'u_tbl1_s3'                      1  's3'                  'A'                             0         NULL  NULL                  'YES'       
+			  'BTREE'               NULL                  NULL            
+		  
 .. _show-collation-statement:
  
 SHOW COLLATION
@@ -1332,8 +1346,6 @@ Column name                         Type            Description
 Table_name                          VARCHAR(256)    Table name
 Index_name                          VARCHAR(256)    Index name
 Btid                                VARCHAR(64)     BTID (volid|fileid|root_pageid)
-Prev_vpid                           VARCHAR(32)     VPID (volid|pageid)
-Next_vpid                           VARCHAR(32)     VPID (volid|pageid)
 Node_type                           VARCHAR(16)     'LEAF' or 'NON_LEAF'
 Max_key_len                         INT             Maximum key length for the subtree
 Num_oids                            INT             Number of OIDs stored in the Btree
@@ -1351,21 +1363,18 @@ The following shows the examples of this syntax.
 
     -- Prepare test environment
     CREATE TABLE tbl1(a INT, b VARCHAR(5));
-    CREATE INDEX index_a ON tbl1(a ASC);
-    CREATE INDEX index_b ON tbl1(b ASC);  
+    CREATE INDEX index_ab ON tbl1(a ASC, b DESC);
 
 ..  code-block:: sql
     
     -- csql> ;line on
-    SHOW INDEX HEADER OF tbl1.index_a;
+    SHOW INDEX HEADER OF tbl1.index_ab;
     
 ::
 
     <00001> Table_name   : 'tbl1'
             Index_name   : 'index_a'
             Btid         : '(0|378|950)'
-            Prev_vpid    : '(-1|-1)'
-            Next_vpid    : '(-1|-1)'
             Node_type    : 'LEAF'
             Max_key_len  : 0
             Num_oids     : -1
@@ -1374,42 +1383,8 @@ The following shows the examples of this syntax.
             Topclass_oid : '(0|469|4)'
             Unique       : 0
             Overflow_vfid: '(-1|-1)'
-            Key_type     : 'integer'
-
-.. code-block:: sql
-      
-    SHOW ALL INDEXES HEADER OF tbl1;
-    
-::
-
-    <00001> Table_name   : 'tbl1'
-            Index_name   : 'index_a'
-            Btid         : '(0|378|950)'
-            Prev_vpid    : '(-1|-1)'
-            Next_vpid    : '(-1|-1)'
-            Node_type    : 'LEAF'
-            Max_key_len  : 0
-            Num_oids     : -1
-            Num_nulls    : -1
-            Num_keys     : -1
-            Topclass_oid : '(0|469|4)'
-            Unique       : 0
-            Overflow_vfid: '(-1|-1)'
-            Key_type     : 'integer'
-    <00002> Table_name   : 'tbl1'
-            Index_name   : 'index_b'
-            Btid         : '(0|381|960)'
-            Prev_vpid    : '(-1|-1)'
-            Next_vpid    : '(-1|-1)'
-            Node_type    : 'LEAF'
-            Max_key_len  : 0
-            Num_oids     : -1
-            Num_nulls    : -1
-            Num_keys     : -1
-            Topclass_oid : '(0|469|4)'
-            Unique       : 0
-            Overflow_vfid: '(-1|-1)'
-            Key_type     : 'character varying'
+            Key_type     : 'midxkey(integer,character varying(5))'
+            Columns      : 'a,b DESC'
 
 SHOW INDEX CAPACITY
 -------------------
@@ -1526,14 +1501,14 @@ The following shows the examples of this syntax.
             Avg_num_page_key     : 0
             Avg_page_free_space  : '15.9K'
 
-SHOW CRITICAL SECTION
----------------------
+SHOW CRITICAL SECTIONS
+----------------------
 
-Total critical section (hereafter CS) information of a database is output.
+Total critical section (hereafter CS) information of a database is shown.
 
 .. code-block:: sql
 
-    SHOW CRITICAL SECTION;
+    SHOW CRITICAL SECTIONS;
 
 This query has the following columns:
 
@@ -1558,7 +1533,7 @@ The following shows the examples of this syntax.
 
 .. code-block:: sql
 
-    SHOW CRITICAL SECTION;
+    SHOW CRITICAL SECTIONS;
 
 ::
 

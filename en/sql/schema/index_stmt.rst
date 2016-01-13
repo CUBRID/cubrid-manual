@@ -61,7 +61,7 @@ You can write a comment of an index as following.
 
 A specified comment of an indexe can be shown by running these statements.
 
-::
+.. code-block:: sql
 
     SHOW CREATE TABLE table_name;
     SELECT index_name, class_name, comment from db_index where class_name ='classname';
@@ -69,7 +69,8 @@ A specified comment of an indexe can be shown by running these statements.
 
 Or you can see the index comments with ;sc command in the CSQL interpreter.
 
-::
+.. code-block:: sql
+
     $ csql -u dba demodb
     
     csql> ;sc tbl

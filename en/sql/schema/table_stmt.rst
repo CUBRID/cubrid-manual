@@ -570,9 +570,11 @@ KEY or INDEX
 Column Option
 -------------
 
-You can specify options such as **ASC** or **DESC** after the column name when defining **UNIQUE** or **INDEX** for a specific column. This keyword is specified as store the index value in ascending or descending order. ::
+You can specify options such as **ASC** or **DESC** after the column name when defining **UNIQUE** or **INDEX** for a specific column. This keyword is specified as store the index value in ascending or descending order. 
 
-    column_name [ASC|DESC]
+.. code-block:: sql
+
+    column_name [ASC | DESC]
 
 .. code-block:: sql
 
@@ -621,7 +623,7 @@ If you specify the **REUSE_OID** option when creating a table, the OID is also d
     INSERT INTO reuse_tbl VALUES (3);
      
     -- an error occurs when column type is a OID reusable table itself
-    CREATE TABLE tbl_1 ( a reuse_tbl);
+    CREATE TABLE tbl_1 (a reuse_tbl);
 
 ::
     
@@ -660,7 +662,7 @@ You can write a table's comment as following.
 
 To see the table's comment, run the below syntax.
 
-::
+.. code-block:: sql
 
     SHOW CREATE TABLE table_name;
     SELECT class_name, comment from db_class;
@@ -668,7 +670,8 @@ To see the table's comment, run the below syntax.
 
 Or you can see the table's comment with ;sc command in the CSQL interpreter.
 
-::
+.. code-block:: sql
+
     $ csql -u dba demodb
     
     csql> ;sc tbl

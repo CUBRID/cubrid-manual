@@ -237,7 +237,8 @@ A partition's comment can be written only for the range partition and the list p
 
 Or you can use CSQL interpreter by running ;sc command.
 
-::
+.. code-block:: sql
+
     $ csql -u dba demodb
     
     csql> ;sc tbl
@@ -532,7 +533,9 @@ The following example creates a partitioned table, inserts some tuples into it a
     
     INSERT INTO t VALUES(1), (2), (3), (4), (5), (6);
     
-Schema and data of table *t* are shown below::
+Schema and data of table *t* are shown below.
+
+.. code-block:: sql
 
     csql> ;schema t
     === <Help: Schema of a Class> ===
@@ -561,7 +564,9 @@ The following statement promotes partitions *p0* and *p2*:
 
     ALTER TABLE t PROMOTE PARTITION p0, p2;
 
-After promotion, table *t* has only one partition (*p1*) and contains the following data::
+After promotion, table *t* has only one partition (*p1*) and contains the following data.
+
+.. code-block:: sql
 
     csql> ;schema t
     === <Help: Schema of a Class> ===

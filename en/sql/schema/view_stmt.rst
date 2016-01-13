@@ -13,7 +13,7 @@ Use **CREATE VIEW** statement to create a view. Regarding writing view name, see
     [INHERIT <resolution>, ...]
     [AS <select_statement>]
     [WITH CHECK OPTION] 
-    [COMENT [=] 'view_comment_string'];
+    [COMMENT [=] 'view_comment_string'];
                                     
         <subclass_definition> ::= {UNDER | AS SUBCLASS OF} table_name, ...
         <resolution> ::= [CLASS | TABLE] {column_name} OF superclass_name [AS alias]
@@ -126,7 +126,8 @@ You can see the specified comment of a view by running this syntax.
 
 Or you can see the view's comment with ;sc command which displays the schema in the CSQL interpreter.
 
-::
+.. code-block:: sql
+
     $ csql -u dba demodb
     
     csql> ;sc b_view

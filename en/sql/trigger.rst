@@ -330,12 +330,13 @@ You can see a trigger's comment by running the below statement.
 
 .. code-block:: sql
 
-	SELECT name, comment FROM db_trigger;
-	SELECT trigger_name, comment FROM db_trig;
+    SELECT name, comment FROM db_trigger;
+    SELECT trigger_name, comment FROM db_trig;
 
 Or you can see a trigger's comment with ;sc command which displays a schema in the CSQL interpreter.
 
-::
+.. code-block:: sql
+
     $ csql -u dba demodb
     
     csql> ;sc tbl

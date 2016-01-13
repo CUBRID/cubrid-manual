@@ -44,6 +44,7 @@ The following restrictions apply to the partitioning key:
     *   :c:macro:`USER` 
     *   :ref:`PRIOR <prior-operator>` 
     *   :func:`WIDTH_BUCKET`
+*	The partitioning key needs to be present in the key of each unique index (including primary keys). For more information on this aspect, please see :ref:`here<index-partitions>`.
 
 .. _range-partitioning:
 
@@ -585,37 +586,39 @@ After promotion, table *t* has only one partition (*p1*) and contains the follow
                 3
                 4         
 
+.. _index-partitions:
+
 Indexes on Partitioned Tables
 =============================
 
-Indexes created on a partitioning table are either local or global indexes. Global Index store data from all partitions while, with local indexes, data for each partition is stored in a separate(local) index. When creating an index on a partitioned table, CUBRID decides whether that index will be local or global applying the following rules:
+All indexes created on a partitioning table are local indexes. With local indexes, data for each partition is stored in a separate(local) index. This increases concurrency on a partitioned table's indexes, since transactions accessing data from different partitions also access different, local, indexes.
 
-*   Primary keys are always global indexes.
-*   Foreign keys are always local indexes.
-*   All non-unique indexes are local.
-*   A unique index is local only if the partitioning key is part of the index definition.
+In order to ensure local unique indexes, the following restriction must be satisfied when creating unique indexes on partitions:
 
-The following examples show how CUBRID decides between local and global indexes:
+*  The partitioning key must be part of the all the unique indexes' definition.
+
+If this is not satisfied, CUBRID will return an error:
 
 .. code-block:: sql
     
-    CREATE TABLE t(i INTEGER, j INTEGER k INTEGER)
-    PARTITION BY HASH(i) PARTITIONS 5;
-    
-    -- pk_t_i is global because it is a primary key
-    ALTER TABLE t ADD CONSTRAINT pk_t_i PRIMARY KEY(i);
-    
-    -- i_t_j and i_t_j_k are local indexes
-    CREATE INDEX i_t_j ON t(j);
-    CREATE INDEX i_t_j_k ON t(j, k);
-    
-    -- u_t_i_j is a local index because the partitioning key (i) is part of the index definition
-    CREATE UNIQUE INDEX u_t_i_j ON t(i, j);
-    
-    -- u_t_j_k is a global index because the partitioning key (i) is not part of the index definition
-    CREATE UNIQUE INDEX u_t_j_k ON t(j, k);
+	csql> create table t( i int , j int) partition by hash (i) partitions 4;
+	Execute OK. (0.142929 sec) Committed.
 
-It is important to define local indexes wherever possible. CUBRID does not optimize index scans to be able to scan several partitions together using a global index. Instead, in a global index scan, for each partition that was not pruned a separate index scan is performed. This leads to poorer performance than scanning local indexes because data from other partitions is fetched from disk and then discarded (it belongs to another partition than the one being scanned at the moment). **INSERT** statements also show better performance on local indexes since these indexes are smaller.
+	1 command(s) successfully processed.
+	csql> create unique index idx on t(i);
+	Execute OK. (0.123776 sec) Committed.
+
+	1 command(s) successfully processed.
+	csql> create unique index idx2 on t(j);
+
+	In the command from line 1,
+
+	ERROR: Partition key attributes must be present in the index key.
+
+
+	0 command(s) successfully processed.
+
+It is important to understand the benefits of local indexes. In a global index scan, for each partition that was not pruned a separate index scan would have been performed. This leads to poorer performance than scanning local indexes because data from other partitions is fetched from disk and then discarded (it belongs to another partition than the one being scanned at the moment). **INSERT** statements also show better performance on local indexes since these indexes are smaller.
 
 .. _partitioning-notes:
 

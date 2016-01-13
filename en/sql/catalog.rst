@@ -64,7 +64,10 @@ Represents class information. An index for class_name is created.
 | inst_meth_count    | INTEGER                   | The number of instance methods                                                           |
 |                    |                           |                                                                                          |
 +--------------------+---------------------------+------------------------------------------------------------------------------------------+
-| calss_meth_count   | INTEGER                   | The number of class methods                                                              |
+| class_meth_count   | INTEGER                   | The number of class methods                                                              |
+|                    |                           |                                                                                          |
++--------------------+---------------------------+------------------------------------------------------------------------------------------+
+| collation_id       | INTEGER                   | Collation id                                                                             |
 |                    |                           |                                                                                          |
 +--------------------+---------------------------+------------------------------------------------------------------------------------------+
 | sub_classes        | SEQUENCE OF _db_class     | Class one level down                                                                     |
@@ -97,6 +100,12 @@ Represents class information. An index for class_name is created.
 | indexes            | SEQUENCE OF _db_index     | Index created in the class                                                               |
 |                    |                           |                                                                                          |
 +--------------------+---------------------------+------------------------------------------------------------------------------------------+
+| comment            | VARCHAR(2048)             | Comment to describe the class                                                            |
+|                    |                           |                                                                                          |
++--------------------+---------------------------+------------------------------------------------------------------------------------------+
+| partition          | SEQUENCE of _db_partition | Partition information                                                                    |
+|                    |                           |                                                                                          |
++--------------------+---------------------------+------------------------------------------------------------------------------------------+
 
 The following example shows how to retrieve all sub classes under the class owned by user '**PUBLIC**' (for the child class *female_event* in the result, see the example in :ref:`add-superclass`).
 
@@ -123,7 +132,7 @@ The following example shows how to retrieve all sub classes under the class owne
 _db_attribute
 -------------
 
-Represents attribute information. Indexes for class_of and attr_name are created.
+Represents attribute information. Indexes for class_of, attr_name and attr_type are created.
 
 +--------------------+------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------+
 |   Attribute Name   |   Data Type            |   Description                                                                                                                                               |
@@ -154,66 +163,68 @@ Represents attribute information. Indexes for class_of and attr_name are created
 +--------------------+------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | is_nullable        | INTEGER                | 0 if a not null constraint is configured, and 1 otherwise.                                                                                                  |
 +--------------------+------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| comment            | VARCHAR(1024)          | Comment to describe the attribute.                                                                                                                          |
++--------------------+------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 **Data Types Supported by CUBRID**
 
-+-------+-----------+-------+-----------+
-| Value | Meaning   | Value | Meaning   |
-+=======+===========+=======+===========+
-| 1     | INTEGER   | 20    | OID       |
-|       |           |       |           |
-+-------+-----------+-------+-----------+
-| 2     | FLOAT     | 22    | NUMERIC   |
-|       |           |       |           |
-+-------+-----------+-------+-----------+
-| 3     | DOUBLE    | 23    | BIT       |
-|       |           |       |           |
-+-------+-----------+-------+-----------+
-| 4     | STRING    | 24    | VARBIT    |
-|       |           |       |           |
-+-------+-----------+-------+-----------+
-| 5     | OBJECT    | 25    | CHAR      |
-|       |           |       |           |
-+-------+-----------+-------+-----------+
-| 6     | SET       | 31    | BIGINT    |
-|       |           |       |           |
-+-------+-----------+-------+-----------+
-| 7     | MULTISET  | 32    | DATETIME  |
-|       |           |       |           |
-+-------+-----------+-------+-----------+
-| 8     | SEQUENCE  | 33    | BLOB      |
-|       |           |       |           |
-+-------+-----------+-------+-----------+
-| 9     | ELO       | 34    | CLOB      |
-|       |           |       |           |
-+-------+-----------+-------+-----------+
-| 10    | TIME      | 35    | ENUM      |
-|       |           |       |           |
-+-------+-----------+-------+-----------+
-| 11    | TIMESTAMP |       |           |
-|       |           |       |           |
-+-------+-----------+-------+-----------+
-| 12    | DATE      |       |           |
-|       |           |       |           |
-+-------+-----------+-------+-----------+
-| 18    | SHORT     |       |           |
-|       |           |       |           |
-+-------+-----------+-------+-----------+
++-------+-----------+-------+--------------+
+| Value | Meaning   | Value | Meaning      |
++=======+===========+=======+==============+
+| 1     | INTEGER   | 22    | NUMERIC      |
+|       |           |       |              |
++-------+-----------+-------+--------------+
+| 2     | FLOAT     | 23    | BIT          |
+|       |           |       |              |
++-------+-----------+-------+--------------+
+| 3     | DOUBLE    | 24    | VARBIT       |
+|       |           |       |              |
++-------+-----------+-------+--------------+
+| 4     | STRING    | 25    | CHAR         |
+|       |           |       |              |
++-------+-----------+-------+--------------+
+| 5     | OBJECT    | 31    | BIGINT       |
+|       |           |       |              |
++-------+-----------+-------+--------------+
+| 6     | SET       | 32    | DATETIME     |
+|       |           |       |              |
++-------+-----------+-------+--------------+
+| 7     | MULTISET  | 33    | BLOB         |
+|       |           |       |              |
++-------+-----------+-------+--------------+
+| 8     | SEQUENCE  | 34    | CLOB         |
+|       |           |       |              |
++-------+-----------+-------+--------------+
+| 9     | ELO       | 35    | ENUM         |
+|       |           |       |              |
++-------+-----------+-------+--------------+
+| 10    | TIME      | 36    | TIMESTAMPTZ  |
+|       |           |       |              |
++-------+-----------+-------+--------------+
+| 11    | TIMESTAMP | 37    | TIMESTAMPLTZ |
+|       |           |       |              |
++-------+-----------+-------+--------------+
+| 12    | DATE      | 38    | DATETIMETZ   |
+|       |           |       |              |
++-------+-----------+-------+--------------+
+| 18    | SHORT     | 39    | DATETIMELTZ  |
+|       |           |       |              |
++-------+-----------+-------+--------------+
 
 **Character Sets Supported by CUBRID**
 
 +-----------+------------------------------+
 |   Value   |   Meaning                    |
-|           |                              |
 +===========+==============================+
 | 0         | US English - ASCII encoding  |
-|           |                              |
++-----------+------------------------------+
+| 2         | Binary                       |
 +-----------+------------------------------+
 | 3         | Latin 1 - ISO 8859 encoding  |
-|           |                              |
 +-----------+------------------------------+
 | 4         | KSC 5601 1990 - EUC encoding |
-|           |                              |
++-----------+------------------------------+
+| 5         | UTF8 - UTF8 encoding         |
 +-----------+------------------------------+
 
 The following example shows how to retrieve user classes (from_class_of.is_system_class = 0) among the ones owned by user '**PUBLIC**'.'
@@ -263,6 +274,12 @@ Represents domain information. An index for object_of is created.
 |                    |                        | if it is character data type. 0 otherwise.                                                              |
 |                    |                        |                                                                                                         |
 +--------------------+------------------------+---------------------------------------------------------------------------------------------------------+
+| collation_id       | INTEGER                | Collation id                                                                                            |
+|                    |                        |                                                                                                         |
++--------------------+------------------------+---------------------------------------------------------------------------------------------------------+
+| enumeration        | SEQUENCE OF STRING     | String printed enumeration type definition                                                              |
+|                    |                        |                                                                                                         |
++--------------------+------------------------+---------------------------------------------------------------------------------------------------------+
 | set_domains        | SEQUENCE OF _db_domain | Domain information about the data type of collection element if it is collection data type.             |
 |                    |                        | **NULL**                                                                                                |
 |                    |                        | otherwise.                                                                                              |
@@ -281,6 +298,31 @@ charset_name        CHARACTER VARYING(32)    Charset name
 default_collation   INTEGER                  Default collation ID
 char_size           INTEGER                  One character's byte size
 =================== ======================== ==========================
+
+_db_collation
+-------------
+
+The information on collation.
+
++--------------------+---------------+-----------------------------------------------------------------------------+
+|   Attribute Name   |   Data Type   |   Description                                                               |
++====================+===============+=============================================================================+
+| coll_id            | INTEGER       | Collation ID                                                                |
++--------------------+---------------+-----------------------------------------------------------------------------+
+| coll_name          | VARCHAR(32)   | Collation name                                                              |
++--------------------+---------------+-----------------------------------------------------------------------------+
+| charset_id         | INTEGER       | Charset ID                                                                  |
++--------------------+---------------+-----------------------------------------------------------------------------+
+| built_in           | INTEGER       | Built-in or not while installing the product (0: Not built-in, 1: Built-in) |
++--------------------+---------------+-----------------------------------------------------------------------------+
+| expansions         | INTEGER       | Expansion support (0: Not supported, 1: Supported)                          |
++--------------------+---------------+-----------------------------------------------------------------------------+
+| contractions       | INTEGER       | Contraction support (0: Not supported, 1: Supported)                        |
++--------------------+---------------+-----------------------------------------------------------------------------+
+| uca_strength       | INTEGER       | Weight strength                                                             |
++--------------------+---------------+-----------------------------------------------------------------------------+
+| checksum           | VARCHAR(32)   | Checksum of a collation file                                                |
++--------------------+---------------+-----------------------------------------------------------------------------+
 
 _db_method
 ----------
@@ -421,7 +463,9 @@ Represents index information. An index for class_of is created.
 +--------------------+---------------------------+------------------------------------------------+
 | filter_expression  | VARCHAR(255)              | The conditions of filtered indexes             |
 +--------------------+---------------------------+------------------------------------------------+
-| have_function      | INTEGER                   | 1 for a foreign key, and 0 otherwise.          |
+| have_function      | INTEGER                   | 1 for a function index, and 0 otherwise.       |
++--------------------+---------------------------+------------------------------------------------+
+| comment            | VARCHAR (1024)            | Comment to describe the index                  |
 +--------------------+---------------------------+------------------------------------------------+
 
 The following example shows how to retrieve names of indexes that belong to the class.
@@ -590,26 +634,28 @@ _db_partition
 
 Represents partition information. Indexes for class_of and pname are created.
 
-+--------------------+---------------+---------------------------------+
-|   Attribute Name   |   Data Type   |   Description                   |
-+====================+===============+=================================+
-| class_of           | _db_class     | OID of the parent class         |
-+--------------------+---------------+---------------------------------+
-| pname              | VARCHAR(255)  | Parent -                        |
-|                    |               | **NULL**                        |
-+--------------------+---------------+---------------------------------+
-| ptype              | INTEGER       | 0 - HASH                        |
-|                    |               | 1 - RANGE                       |
-|                    |               | 2 - LIST                        |
-+--------------------+---------------+---------------------------------+
-| pexpr              | VARCHAR(255)  | Parent only                     |
-+--------------------+---------------+---------------------------------+
-| pvalues            | SEQUENCE OF   | Parent - Column name, Hash size |
-|                    |               | RANGE - MIN/MAX value :         |
-|                    |               | - Infinite MIN/MAX is stored as |
-|                    |               | **NULL**                        |
-|                    |               | LIST - value list               |
-+--------------------+---------------+---------------------------------+
++--------------------+---------------+-----------------------------------+
+|   Attribute Name   |   Data Type   |   Description                     |
++====================+===============+===================================+
+| class_of           | _db_class     | OID of the parent class           |
++--------------------+---------------+-----------------------------------+
+| pname              | VARCHAR(255)  | Parent -                          |
+|                    |               | **NULL**                          |
++--------------------+---------------+-----------------------------------+
+| ptype              | INTEGER       | 0 - HASH                          |
+|                    |               | 1 - RANGE                         |
+|                    |               | 2 - LIST                          |
++--------------------+---------------+-----------------------------------+
+| pexpr              | VARCHAR(255)  | Parent only                       |
++--------------------+---------------+-----------------------------------+
+| pvalues            | SEQUENCE OF   | Parent - Column name, Hash size   |
+|                    |               | RANGE - MIN/MAX value :           |
+|                    |               | - Infinite MIN/MAX is stored as   |
+|                    |               | **NULL**                          |
+|                    |               | LIST - value list                 |
++--------------------+---------------+-----------------------------------+
+| comment            | VARCHAR(1024) | Comment to describe the partition |
++--------------------+---------------+-----------------------------------+
 
 _db_stored_procedure
 --------------------
@@ -636,50 +682,29 @@ Represents Java stored procedure information. An index for sp_name is created.
 +--------------------+---------------------------------------+-------------------------------------------+
 | owner              | db_user                               | Owner                                     |
 +--------------------+---------------------------------------+-------------------------------------------+
+| comment            | VARCHAR (1024)                        | Comment to describe the stored procedure  |
++--------------------+---------------------------------------+-------------------------------------------+
 
 _db_stored_procedure_args
 -------------------------
 
 Represents Java stored procedure argument information. An index for sp_name is created.
 
-+--------------------+---------------+---------------------------+
-|   Attribute Name   |   Data Type   |   Description             |
-+====================+===============+===========================+
-| sp_name            | VARCHAR(255)  | Stored procedure name     |
-+--------------------+---------------+---------------------------+
-| index_of           | INTEGER       | Order of the arguments    |
-+--------------------+---------------+---------------------------+
-| arg_name           | VARCHAR(255)  | Argument name             |
-+--------------------+---------------+---------------------------+
-| data_type          | INTEGER       | Data type of the argument |
-+--------------------+---------------+---------------------------+
-| mode               | INTEGER       | Mode (IN, OUT, INOUT)     |
-+--------------------+---------------+---------------------------+
-
-_db_collation
--------------
-
-The information on collation.
-
-+--------------------+---------------+-----------------------------------------------------------------------------+
-|   Attribute Name   |   Data Type   |   Description                                                               |
-+====================+===============+=============================================================================+
-| coll_id            | INTEGER       | Collation ID                                                                |
-+--------------------+---------------+-----------------------------------------------------------------------------+
-| coll_name          | VARCHAR(32)   | Collation name                                                              |
-+--------------------+---------------+-----------------------------------------------------------------------------+
-| charset_id         | INTEGER       | Charset ID                                                                  |
-+--------------------+---------------+-----------------------------------------------------------------------------+
-| built_in           | INTEGER       | Built-in or not while installing the product (0: Not built-in, 1: Built-in) |
-+--------------------+---------------+-----------------------------------------------------------------------------+
-| expansions         | INTEGER       | Expansion support (0: Not supported, 1: Supported)                          |
-+--------------------+---------------+-----------------------------------------------------------------------------+
-| contractions       | INTEGER       | Contraction support (0: Not supported, 1: Supported)                        |
-+--------------------+---------------+-----------------------------------------------------------------------------+
-| uca_strength       | INTEGER       | Weight strength                                                             |
-+--------------------+---------------+-----------------------------------------------------------------------------+
-| checksum           | VARCHAR(32)   | Checksum of a collation file                                                |
-+--------------------+---------------+-----------------------------------------------------------------------------+
++--------------------+----------------+----------------------------------+
+|   Attribute Name   |   Data Type    |   Description                    |
++====================+================+==================================+
+| sp_name            | VARCHAR(255)   | Stored procedure name            |
++--------------------+----------------+----------------------------------+
+| index_of           | INTEGER        | Order of the arguments           |
++--------------------+----------------+----------------------------------+
+| arg_name           | VARCHAR(255)   | Argument name                    |
++--------------------+----------------+----------------------------------+
+| data_type          | INTEGER        | Data type of the argument        |
++--------------------+----------------+----------------------------------+
+| mode               | INTEGER        | Mode (IN, OUT, INOUT)            |
++--------------------+----------------+----------------------------------+
+| comment            | VARCHAR (1024) | Comment to describe the argument |
++--------------------+----------------+----------------------------------+
 
 db_user
 -------
@@ -700,6 +725,8 @@ db_user
 | authorization      | db_authorization    | Information of the authorization owned by the user      |
 +--------------------+---------------------+---------------------------------------------------------+
 | triggers           | SEQUENCE OF object  | Triggers that occur due to user actions                 |
++--------------------+---------------------+---------------------------------------------------------+
+| comment            | VARCHAR (1024)      | Comment to describe the user                            |
 +--------------------+---------------------+---------------------------------------------------------+
 
 **Function Names**
@@ -763,6 +790,8 @@ db_trigger
 | action_definition      | VARCHAR(1073741823) | Execution statement to be triggered                                                                                                                        |
 +------------------------+---------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | action_time            | INTEGER             | 1 for BEFORE, 2 for AFTER, and 3 for DEFERRED.                                                                                                             |
++------------------------+---------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| comment                | VARCHAR (1024)      | Comment to describe the trigger                                                                                                                            |
 +------------------------+---------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 db_ha_apply_info
@@ -836,10 +865,8 @@ A table that stores the progress status every time the **applylogdb** utility ap
 | commit_counter       | BIGINT          | Number of times that applylogdb was committed                                                                                                      |
 +----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
 | fail_counter         | BIGINT          | Number of times that applylogdb failed to be inserted/updated/deleted/committed and to change the schema                                           |
-|                      |                 |                                                                                                                                                    |
 +----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
 | start_time           | DATETIME        | Time when the applylogdb process accessed the slave database                                                                                       |
-|                      |                 |                                                                                                                                                    |
 +----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
 
 System Catalog Virtual Class
@@ -867,6 +894,10 @@ Represents information of classes for which the current user has access authoriz
 +--------------------+---------------+----------------------------------------------------------+
 | is_reuse_oid_class | VARCHAR(3)    | 'YES' for a REUSE_OID class, and 'NO' otherwise.         |
 +--------------------+---------------+----------------------------------------------------------+
+| collation          | VARCHAR(32)   | Collation name                                           |
++--------------------+---------------+----------------------------------------------------------+
+| comment            | VARCHAR(2048) | Comment to describe the class                            |
++--------------------+---------------+----------------------------------------------------------+
 
 The following example shows how to retrieve classes owned by the current user.
 
@@ -890,8 +921,9 @@ The following example shows how to retrieve classes owned by the current user.
       'game'
       'record'
       'history'
-    'female_event'
+      'female_event'
 
+	  
 The following example shows how to retrieve virtual classes that can be accessed by the current user.
 
 .. code-block:: sql
@@ -994,6 +1026,8 @@ Represents SQL definition statements of virtual classes for which the current us
 +--------------------+---------------+-----------------------------------------------+
 | vclass_def         | VARCHAR(4096) | SQL definition statement of the virtual class |
 +--------------------+---------------+-----------------------------------------------+
+| comment            | VARCHAR(2048) | Comment to describe the virtual class         |
++--------------------+---------------+-----------------------------------------------+
 
 The following example shows how to retrieve SQL definition statements of the *db_class* virtual class.
 
@@ -1051,6 +1085,8 @@ Represents the attribute information of a class for which the current user has a
 |                   |               | as '{element 1, element 2, ... }'.                                                                            |
 +-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
 | is_nullable       | VARCHAR(3)    | 'NO' if a not null constraint is set, and 'YES' otherwise.                                                    |
++-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
+| comment           | VARCHAR(1024) | Comment to describe the attribute.                                                                            |
 +-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
 
 The following example shows how to retrieve attributes and data types of the *event* class.
@@ -1177,6 +1213,30 @@ charset_name        CHARACTER VARYING(32)    Charset name
 default_collation   CHARACTER VARYING(32)    Default collation name
 char_size           INTEGER                  One character's byte size
 =================== ======================== ==========================
+
+DB_COLLATION
+------------
+
+The information on collation.
+
++--------------------+---------------+-------------------------------------------------------------------------------+
+|   Attribute Name   |   Data Type   |   Description                                                                 |
++====================+===============+===============================================================================+
+| coll_id            | INTEGER       | Collation ID                                                                  |
++--------------------+---------------+-------------------------------------------------------------------------------+
+| coll_name          | VARCHAR(255)  | Collation name                                                                |
++--------------------+---------------+-------------------------------------------------------------------------------+
+| charset_name       | VARCHAR(255)  | Charset name                                                                  |
++--------------------+---------------+-------------------------------------------------------------------------------+
+| is_builtin         | VARCHAR(3)    | Built-in or not while installing the product(Yes, No)                         |
++--------------------+---------------+-------------------------------------------------------------------------------+
+| has_expansions     | VARCHAR(3)    | Having expansion or not(Yes, No)                                              |
++--------------------+---------------+-------------------------------------------------------------------------------+
+| contractions       | INTEGER       | Whether to include abbreviation                                               |
++--------------------+---------------+-------------------------------------------------------------------------------+
+| uca_strength       | VARCHAR(255)  | Weight strength                                                               |
+|                    |               | (Not applicable, Primary, Secondary, Tertiary, Quaternary, Identity, Unknown) |
++--------------------+---------------+-------------------------------------------------------------------------------+
 
 DB_METHOD
 ---------
@@ -1335,6 +1395,8 @@ Represents information of indexes created for the class for which the current us
 +--------------------+---------------+-------------------------------------------------+
 | have_function      | VARCHAR(3)    | 'YES' for function based and 'NO' otherwise.    |
 +--------------------+---------------+-------------------------------------------------+
+| comment            | VARCHAR(1024) | Comment to describe the index                   |
++--------------------+---------------+-------------------------------------------------+
 
 The following example shows how to retrieve index information of the class.
 
@@ -1471,31 +1533,35 @@ Represents information of a trigger that has the class for which the current use
 +--------------------+---------------+-------------------------------------------------------------------------------------------------------------------------------+
 | action_time        | INTEGER       | 1 for BEFORE, 2 for AFTER, and 3 for DEFERRED.                                                                                |
 +--------------------+---------------+-------------------------------------------------------------------------------------------------------------------------------+
+| comment            | VARCHAR(1024) | Comment to describe the trigger.                                                                                              |
++--------------------+---------------+-------------------------------------------------------------------------------------------------------------------------------+
 
 DB_PARTITION
 ------------
 
 Represents information of partitioned classes for which the current user has access authorization to a database.
 
-+----------------------+---------------+-------------------------+
-|   Attribute Name     |   Data Type   |   Description           |
-+======================+===============+=========================+
-| class_name           | VARCHAR(255)  | Class name              |
-+----------------------+---------------+-------------------------+
-| partition_name       | VARCHAR(255)  | Partition name          |
-+----------------------+---------------+-------------------------+
-| partition_class_name | VARCHAR(255)  | Partitioned class name  |
-+----------------------+---------------+-------------------------+
-| partition_type       | VARCHAR(32)   | Partition type          |
-|                      |               | (HASH, RANGE, LIST)     |
-+----------------------+---------------+-------------------------+
-| partition_expr       | VARCHAR(255)  | Partition expression    |
-+----------------------+---------------+-------------------------+
-| partition_values     | SEQUENCE OF   | RANGE - MIN/MAX value   |
-|                      |               | - For infinite MIN/MAX, |
-|                      |               | **NULL**                |
-|                      |               | LIST - value list       |
-+----------------------+---------------+-------------------------+
++----------------------+---------------+-----------------------------------+
+|   Attribute Name     |   Data Type   |   Description                     |
++======================+===============+===================================+
+| class_name           | VARCHAR(255)  | Class name                        |
++----------------------+---------------+-----------------------------------+
+| partition_name       | VARCHAR(255)  | Partition name                    |
++----------------------+---------------+-----------------------------------+
+| partition_class_name | VARCHAR(255)  | Partitioned class name            |
++----------------------+---------------+-----------------------------------+
+| partition_type       | VARCHAR(32)   | Partition type                    |
+|                      |               | (HASH, RANGE, LIST)               |
++----------------------+---------------+-----------------------------------+
+| partition_expr       | VARCHAR(255)  | Partition expression              |
++----------------------+---------------+-----------------------------------+
+| partition_values     | SEQUENCE OF   | RANGE - MIN/MAX value             |
+|                      |               | - For infinite MIN/MAX,           |
+|                      |               | **NULL**                          |
+|                      |               | LIST - value list                 |
++----------------------+---------------+-----------------------------------+
+| comment              | VARCHAR(1024) | Comment to describe the partition |
++----------------------+---------------+-----------------------------------+
 
 The following example shows how to retrieve the partition information currently configured for the :ref:`participant2 <range-participant2-table>` class.
 
@@ -1532,6 +1598,8 @@ Represents information of Java stored procedure for which the current user has a
 +--------------------+---------------+-----------------------------------------------+
 | owner              | VARCHAR(256)  | Owner                                         |
 +--------------------+---------------+-----------------------------------------------+
+| comment            | VARCHAR(1024) | Comment to describe the stored procedure      |
++--------------------+---------------+-----------------------------------------------+
 
 The following example shows how to retrieve Java stored procedures owned by the current user.
 
@@ -1552,19 +1620,21 @@ DB_STORED_PROCEDURE_ARGS
 
 Represents argument information of Java stored procedure for which the current user has access authorization to a database.
 
-+--------------------+---------------+---------------------------+
-|   Attribute Name   |   Data Type   |   Description             |
-+====================+===============+===========================+
-| sp_name            | VARCHAR(255)  | Stored procedure name     |
-+--------------------+---------------+---------------------------+
-| index_of           | INTEGER       | Order of the arguments    |
-+--------------------+---------------+---------------------------+
-| arg_name           | VARCHAR(256)  | Argument name             |
-+--------------------+---------------+---------------------------+
-| data_type          | VARCHAR(16)   | Data type of the argument |
-+--------------------+---------------+---------------------------+
-| mode               | VARCHAR(6)    | Mode (IN, OUT, INOUT)     |
-+--------------------+---------------+---------------------------+
++--------------------+---------------+----------------------------------+
+|   Attribute Name   |   Data Type   |   Description                    |
++====================+===============+==================================+
+| sp_name            | VARCHAR(255)  | Stored procedure name            |
++--------------------+---------------+----------------------------------+
+| index_of           | INTEGER       | Order of the arguments           |
++--------------------+---------------+----------------------------------+
+| arg_name           | VARCHAR(256)  | Argument name                    |
++--------------------+---------------+----------------------------------+
+| data_type          | VARCHAR(16)   | Data type of the argument        |
++--------------------+---------------+----------------------------------+
+| mode               | VARCHAR(6)    | Mode (IN, OUT, INOUT)            |
++--------------------+---------------+----------------------------------+
+| comment            | VARCHAR(1024) | Comment to describe the argument |
++--------------------+---------------+----------------------------------+
 
 The following example shows how to retrieve arguments the 'phone_info' Java stored procedure in the order of the arguments.
 
@@ -1582,29 +1652,7 @@ The following example shows how to retrieve arguments the 'phone_info' Java stor
                 0  'name'                'STRING'              'IN'
                 1  'phoneno'             'STRING'              'IN'
 
-DB_COLLATION
-------------
 
-The information on collation.
-
-+--------------------+---------------+-------------------------------------------------------------------------------+
-|   Attribute Name   |   Data Type   |   Description                                                                 |
-+====================+===============+===============================================================================+
-| coll_id            | INTEGER       | Collation ID                                                                  |
-+--------------------+---------------+-------------------------------------------------------------------------------+
-| coll_name          | VARCHAR(255)  | Collation name                                                                |
-+--------------------+---------------+-------------------------------------------------------------------------------+
-| charset_name       | VARCHAR(255)  | Charset name                                                                  |
-+--------------------+---------------+-------------------------------------------------------------------------------+
-| is_builtin         | VARCHAR(3)    | Built-in or not while installing the product(Yes, No)                         |
-+--------------------+---------------+-------------------------------------------------------------------------------+
-| has_expansions     | VARCHAR(3)    | Having expansion or not(Yes, No)                                              |
-+--------------------+---------------+-------------------------------------------------------------------------------+
-| contractions       | INTEGER       | Whether to include abbreviation                                               |
-+--------------------+---------------+-------------------------------------------------------------------------------+
-| uca_strength       | VARCHAR(255)  | Weight strength                                                               |
-|                    |               | (Not applicable, Primary, Secondary, Tertiary, Quaternary, Identity, Unknown) |
-+--------------------+---------------+-------------------------------------------------------------------------------+
 
 Catalog Class/Virtual Class Authorization
 =========================================
@@ -1614,11 +1662,6 @@ Catalog classes are created to be owned by **dba**. However, **dba** can only ex
 Although catalog virtual classes are created to be owned by **dba**, all users can perform the **SELECT** statement on catalog virtual classes. Of course, **UPDATE** / **DELETE** operations on catalog virtual classes are not allowed.
 
 Updating catalog classes/virtual classes is automatically performed by the system when users execute a DDL statement that creates/modifies/deletes a class/attribute/index/user/authorization.
-
-Consistency of Catalog Information
-==================================
-
-Catalog information is represented by the instance of a catalog class/virtual class. If such information is accessed at the **READ UNCOMMITTED INSTANCES** (**TRAN_REP_CLASS_UNCOMMIT_INSTANCE** or **TRAN_COMMIT_CLASS_UNCOMMIT_INSTANCE**) isolation level, incorrect values (values being changed) can be read. Therefore, to get correct catalog information, you must use the **SELECT** query on the catalog class/virtual class at the **READ COMMITTED INSTANCES** isolation level or higher.
 
 Querying on Catalog
 ===================

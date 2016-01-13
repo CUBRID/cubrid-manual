@@ -715,12 +715,12 @@ The following shows that the output values are different among DATETIME, DATETIM
 
 .. code-block:: sql
 
-    --  csql> ;se timezone="+09"
+    --  csql> ;set timezone="+09"
 
     CREATE TABLE tbl (a DATETIME, b DATETIMETZ,  c DATETIMELTZ);
     INSERT INTO tbl VALUES (datetime'2015-02-24 12:30', datetimetz'2015-02-24 12:30', datetimeltz'2015-02-24 12:30');
 
-    SELECT * FROM tbl
+    SELECT * FROM tbl;
 
 ::
 
@@ -728,9 +728,9 @@ The following shows that the output values are different among DATETIME, DATETIM
 
 .. code-block:: sql
 
-    -- csql> ;se timezone="+07"
+    -- csql> ;set timezone="+07"
 
-    SELECT * FROM tbl
+    SELECT * FROM tbl;
 
 ::
 
@@ -740,7 +740,7 @@ The following shows that the output values are different among TIMESTAMP, TIMEST
 
 .. code-block:: sql
 
-    -- ;se timezone="+09"
+    -- ;set timezone="+09"
 
     CREATE TABLE tbl (a TIMESTAMP, b TIMESTAMPTZ,  c TIMESTAMPLTZ);
     INSERT INTO tbl VALUES (timestamp'2015-02-24 12:30', timestamptz'2015-02-24 12:30', timestampltz'2015-02-24 12:30');
@@ -753,7 +753,7 @@ The following shows that the output values are different among TIMESTAMP, TIMEST
 
 .. code-block:: sql
 
-    -- csql> ;se timezone="+07"
+    -- csql> ;set timezone="+07"
 
     SELECT * FROM tbl;
     
@@ -914,7 +914,7 @@ A type which the name ends with LTZ follows the setting of local timezone. There
 
 .. code-block:: sql
 
-    -- csql> ;se timezone='Asia/Seoul'
+    -- csql> ;set timezone='Asia/Seoul'
 
     SELECT EXTRACT (hour from datetimeltz'10/15/1986 5:45:15.135 am Europe/Bucharest');
 
@@ -938,11 +938,11 @@ For each function's usage, see the each function's explanation by clicking the f
 
 .. code-block:: sql
 
-    SELECT DATE_FORMAT(datetimetz'2012-02-02 10:10:10 Europe/Zurich CET', '%TZR %TZD %TZH %TZM');
-    SELECT STR_TO_DATE('2001-10-11 02:03:04 AM Europe/Bucharest EEST', '%Y-%m-%d %h:%i:%s %p %TZR %TZD');
-    SELECT TO_CHAR(datetimetz'2001-10-11 02:03:04 AM Europe/Bucharest EEST');
-    SELECT TO_DATETIME_TZ('2001-10-11 02:03:04 AM Europe/Bucharest EEST');
-    SELECT TO_TIMESTAMP_TZ('2001-10-11 02:03:04 AM Europe/Bucharest');
+    SELECT DATE_FORMAT (datetimetz'2012-02-02 10:10:10 Europe/Zurich CET', '%TZR %TZD %TZH %TZM');
+    SELECT STR_TO_DATE ('2001-10-11 02:03:04 AM Europe/Bucharest EEST', '%Y-%m-%d %h:%i:%s %p %TZR %TZD');
+    SELECT TO_CHAR (datetimetz'2001-10-11 02:03:04 AM Europe/Bucharest EEST');
+    SELECT TO_DATETIME_TZ ('2001-10-11 02:03:04 AM Europe/Bucharest EEST');
+    SELECT TO_TIMESTAMP_TZ ('2001-10-11 02:03:04 AM Europe/Bucharest');
 
 .. note::
     
@@ -955,7 +955,7 @@ IANA Timezone
 
 In IANA(Internet Assigned Numbers Authority) timezone database, there are lots of codes and data which represent the history of localtime for many representative locations around the globe.
 
-This database is periodically updated to reflect changes made by political bodies to time zone boundaries, UTC offsets, and daylight-saving rules. Its management procedure is described in `BCP 175: Procedures for Maintaining the Time Zone Database. <http://tools.ietf.org/html/rfc6557>`. For more details, see http://www.iana.org/time-zones .
+This database is periodically updated to reflect changes made by political bodies to time zone boundaries, UTC offsets, and daylight-saving rules. Its management procedure is described in `BCP 175: Procedures for Maintaining the Time Zone Database <http://tools.ietf.org/html/rfc6557>`_. For more details, see http://www.iana.org/time-zones.
 
 CUBRID supports IANA timezone, and a user can use the IANA timezone library in the CUBRID installation package as it is. If you want to update as the recent timezone, update timezone first, compile timezone library, and restart the database. 
 

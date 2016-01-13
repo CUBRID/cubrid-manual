@@ -122,7 +122,7 @@ ADDTIME
 
 .. function:: ADDTIME(expr1, expr2)
 
-    The **ADDTIME** function adds or subtracts a value of specific time. The first argument is **DATE**, **DATETIME**, **TIMESTAMP**, or **TIME** type and the second argument is **TIME**, **DATETIME**, or **TIMESTAMP** type. Time should be include in the second argument, and the date of the second argument is ignored. The return type for each argument type is follows:
+    The **ADDTIME** function adds or subtracts a value of specific time. The first argument is **DATE**, **DATETIME**, **TIMESTAMP**, or **TIME** type and the second argument is **TIME**, **DATETIME**, or **TIMESTAMP** type. Time should be included in the second argument, and the date of the second argument is ignored. The return type for each argument type is follows:
 
     +-------------------------+------------------------------------------+-----------------+----------------------------------------------------------+
     | First Argument Type     | Second Argument Type                     | Return Type     | Note                                                     |
@@ -155,64 +155,7 @@ ADDTIME
 
     03:00:01 AM
 
-The following are examples of using timezone type values. For timezone related description, see :ref:`timezone-type`.
 
-.. code-block:: sql
-
-    SELECT ADDTIME(ADDDATE(date'04/12/2010', 20), timeltz'13:59:59');
-
-::
-
-    01:59:59.000 PM 05/02/2010
-
-
-.. code-block:: sql
-
-    SELECT ADDTIME(SUBDATE(date'04/12/2010', 20), timeltz'13:59:59');
-
-::
-
-    01:59:59.000 PM 03/23/2010
-
-.. code-block:: sql
-
-    SELECT ADDTIME(ADD_MONTHS(date'04/12/2010', -6), timeltz'13:59:59');
-
-::
-
-    01:59:59.000 PM 10/12/2009
-
-.. code-block:: sql
-
-    SELECT ADDTIME(date'2001-10-18', timeltz'13:59:59');
-
-::
-
-    01:59:59.000 PM 10/18/2001
-
-.. code-block:: sql
-
-    SELECT ADDTIME(LAST_DAY('1898-05-06'), timeltz'13:59:59');
-
-::
-
-    01:59:59.000 PM 05/31/1898
-
-.. code-block:: sql
-
-    SELECT ADDTIME(STR_TO_DATE('01,5,2015', '%m,%d,%y'), timeltz'13:59:59');
-
-::
-
-    01:59:59.000 PM 01/05/2020
-
-.. code-block:: sql
-
-    SELECT ADDTIME(TO_DATE('10/10/1010'), timeltz'13:59:59');
-
-::
-
-    01:59:59.000 PM 10/10/1010
 
 ADD_MONTHS
 ==========
@@ -250,39 +193,6 @@ ADD_MONTHS
 
       07/03/2010                                     07/03/2010
 
-CURDATE, CURRENT_DATE, SYS_DATE, SYSDATE
-========================================
-
-.. function:: CURDATE ()
-.. function:: CURRENT_DATE ()
-.. c:macro:: CURRENT_DATE
-.. c:macro:: SYS_DATE
-.. c:macro:: SYSDATE
-
-    **CURDATE** (), **CURRENT_DATE**, **CURRENT_DATE** (), **SYS_DATE** and **SYSDATE** are used interchangeably and they return the current date as the **DATE** type (*MM*/*DD*/*YYYY* or *YYYY*-*MM*-*DD*). The unit is day.
-
-    If input every argument value of year, month, and day is 0, the return value is determined by the **return_null_on_function_errors** system parameter; if it is set to yes, then **NULL** is returned; if it is set to no, an error is returned. The default value is **no**.
-
-    :rtype: DATE
-    
-.. code-block:: sql
-
-    --it returns the current date in DATE type
-    SELECT CURDATE(), CURRENT_DATE(), CURRENT_DATE, SYS_DATE, SYSDATE;
-     
-::
-
-      04/01/2010  04/01/2010  04/01/2010  04/01/2010  04/01/2010
-     
-.. code-block:: sql
-
-    --it returns the date 60 days added to the current date
-    SELECT CURDATE()+60;
-     
-::
-
-       05/31/2010
-
 The following are examples of using timezone type values. For timezone related description, see :ref:`timezone-type`.
 
 .. code-block:: sql
@@ -316,6 +226,39 @@ The following are examples of using timezone type values. For timezone related d
 ::
 
     11/11/2001
+
+CURDATE, CURRENT_DATE, SYS_DATE, SYSDATE
+========================================
+
+.. function:: CURDATE ()
+.. function:: CURRENT_DATE ()
+.. c:macro:: CURRENT_DATE
+.. c:macro:: SYS_DATE
+.. c:macro:: SYSDATE
+
+    **CURDATE** (), **CURRENT_DATE**, **CURRENT_DATE** (), **SYS_DATE** and **SYSDATE** are used interchangeably and they return the current date as the **DATE** type (*MM*/*DD*/*YYYY* or *YYYY*-*MM*-*DD*). The unit is day.
+
+    If input every argument value of year, month, and day is 0, the return value is determined by the **return_null_on_function_errors** system parameter; if it is set to yes, then **NULL** is returned; if it is set to no, an error is returned. The default value is **no**.
+
+    :rtype: DATE
+    
+.. code-block:: sql
+
+    --it returns the current date in DATE type
+    SELECT CURDATE(), CURRENT_DATE(), CURRENT_DATE, SYS_DATE, SYSDATE;
+     
+::
+
+      04/01/2010  04/01/2010  04/01/2010  04/01/2010  04/01/2010
+     
+.. code-block:: sql
+
+    --it returns the date 60 days added to the current date
+    SELECT CURDATE()+60;
+     
+::
+
+       05/31/2010
 
 CURRENT_DATETIME, NOW, SYS_DATETIME, SYSDATETIME
 ================================================

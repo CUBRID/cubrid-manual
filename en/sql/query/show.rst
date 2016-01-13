@@ -6,11 +6,8 @@ SHOW
 
 .. contents::
 
-External Information
-====================
-
 DESC, DESCRIBE
---------------
+==============
 
 It shows the column information of a table, and it's like a **SHOW COLUMNS** statement. For more details, see :ref:`show-columns-statement`.
 
@@ -20,7 +17,7 @@ It shows the column information of a table, and it's like a **SHOW COLUMNS** sta
     DESCRIBE tbl_name;
     
 EXPLAIN
--------
+=======
 
 It shows the column information of a table, and it's like a **SHOW COLUMNS** statement. For more details, see :ref:`show-columns-statement`.
 
@@ -31,7 +28,7 @@ It shows the column information of a table, and it's like a **SHOW COLUMNS** sta
 .. _show-tables-statement:
 
 SHOW TABLES
------------
+===========
 
 It shows the list of all table names within a database. The name of the result column will be *tables_in_<database name>* and it will have one column. If you use the **LIKE** clause, you can search the table names matching this and if you use the **WHERE** clause, you can search table names with more general terms. **SHOW FULL TABLES** displays the second column, *table_type* together. The table must have the value, **BASE TABLE** and the view has the value, **VIEW**. ::
 
@@ -104,7 +101,7 @@ The following shows the examples of this syntax.
 .. _show-columns-statement:
 
 SHOW COLUMNS
-------------
+============
 
 It shows the column information of a table. You can use the **LIKE** clause to search the column names matching it. If you use the **WHERE** clause, you can search column names with more general terms like, "General Considerations for All **SHOW** Statements.".
 
@@ -186,7 +183,7 @@ The following shows the examples of this syntax.
 .. _show-index-statement:
 
 SHOW INDEX
-----------
+==========
 
 It shows the index information. 
 
@@ -269,7 +266,7 @@ The following shows the examples of this syntax.
 .. _show-collation-statement:
  
 SHOW COLLATION
---------------
+==============
 
 It lists collations supported by the database. If LIKE clause is present, it indicates which collation names to match. 
 
@@ -336,7 +333,7 @@ The following shows the examples of this syntax.
       'utf8_ko_cs_uca'      'utf8'                        133  'No'                  'No'                  'Quaternary'
 
 SHOW TIMEZONES
---------------
+==============
 
 It shows the timezone information which the current CUBRID supports.
 
@@ -418,7 +415,7 @@ The LIKE condition without the WHERE condition is applied on the first column. T
 .. _show-grants-statement:
 
 SHOW GRANTS
------------
+===========
 
 It shows the permissions associated with the database user accounts. ::
 
@@ -443,7 +440,7 @@ The following shows the examples of this syntax.
 .. _show-create-table-statement:
 
 SHOW CREATE TABLE
------------------
+=================
 
 When a table name is specified, It shows the **CREATE TABLE** statement of the table. ::
 
@@ -467,7 +464,7 @@ When a table name is specified, It shows the **CREATE TABLE** statement of the t
 .. _show-create-view-statement:
 
 SHOW CREATE VIEW
-----------------
+================
 
 It shows the corresponding **CREATE VIEW** statement if view name is specified. ::
 
@@ -493,7 +490,7 @@ The following shows the examples of this syntax.
                        CURRENT_USER) AND  au.auth_type = 'SELECT')'
 
 SHOW ACCESS STATUS 
------------------- 
+================== 
   
 **SHOW ACCESS STATUS** statement displays login information regarding database accounts. Only database's DBA account can use this statement.
   
@@ -532,7 +529,7 @@ The following shows the result of running this statement.
 .. _show-exec-statistics-statement:
 
 SHOW EXEC STATISTICS
---------------------
+====================
 
 It shows statistics information of executing query.
 
@@ -639,8 +636,8 @@ The following shows the examples of this syntax.
     'adaptive_flush_log_pages'              0
     'adaptive_flush_max_pages'              0
 
-Internal Information
-====================
+Diagnostics
+===========
 
 SHOW VOLUME HEADER
 ------------------
@@ -1222,7 +1219,7 @@ The following shows the examples of this syntax.
             Total_size_fixed_width_attrs            : 20
 
 SHOW SLOTTED PAGE HEADER
-========================
+------------------------
 
 It shows the header information of specified slotted page.
 

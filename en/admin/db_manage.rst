@@ -59,7 +59,7 @@ The volumes of CUBRID database are classified as permanent volume, temporary vol
 
 For more details on volumes, see :ref:`database-volume-structure`.
 
-The following is an example of files related to the database when testdb database is operated.
+The following is an example of files related to the database when *testdb* database operates.
 
 +----------------+-------+-----------------+----------------+------------------------------------------------------------------------------------------------------+
 | File name      | Size  | Type            | Classification | Description                                                                                          |
@@ -70,30 +70,26 @@ The following is an example of files related to the database when testdb databas
 |                |       |                 |                | or the option of "cubrid createdb", --db-volume-size is specified as 40M.                            |
 +----------------+-------+-----------------+                +------------------------------------------------------------------------------------------------------+
 | testdb_x001    | 40MB  | one of generic, |                | Automatically created **generic** file or a file created by the user's command for adding a volume.  |
-|                |       | data, index and |                | The size of **generic** file which was automatically created became 40MB because DB was started      |
-|                |       | temp            |                | after specifying db_volume_size in cubrid.conf as 40M.                                               |
+|                |       | data and index  |                | The size of **generic** file which was automatically created became 40MB because DB was started      |
+|                |       |                 |                | after specifying db_volume_size in cubrid.conf as 40M.                                               |
 +----------------+-------+-----------------+                +------------------------------------------------------------------------------------------------------+
 | testdb_x002    | 40MB  | one of generic, |                | Automatically created **generic** file or a file created by the user's command for adding a volume.  |
-|                |       | data, index and |                |                                                                                                      |
-|                |       | temp            |                |                                                                                                      |
+|                |       | data and index  |                |                                                                                                      |
 +----------------+-------+-----------------+                +------------------------------------------------------------------------------------------------------+
 | testdb_x003    | 40MB  | one of generic, |                | Automatically created **generic** file or a file created by the user's command for adding a volume.  |
-|                |       | data, index and |                |                                                                                                      |
-|                |       | temp            |                |                                                                                                      |
+|                |       | data and index  |                |                                                                                                      |
 +----------------+-------+-----------------+                +------------------------------------------------------------------------------------------------------+
 | testdb_x004    | 40MB  | one of generic, |                | Automatically created **generic** file or a file created by the user's command for adding a volume.  |
-|                |       | data, index and |                |                                                                                                      |
-|                |       | temp            |                |                                                                                                      |
+|                |       | data and index  |                |                                                                                                      |
 +----------------+-------+-----------------+                +------------------------------------------------------------------------------------------------------+
 | testdb_x005    | 40MB  | one of generic, |                | Automatically created **generic** file or a file created by the user's command for adding a volume.  |
-|                |       | data, index and |                |                                                                                                      |
-|                |       | temp            |                |                                                                                                      |
+|                |       | data and index  |                |                                                                                                      |
 +----------------+-------+-----------------+                +------------------------------------------------------------------------------------------------------+
 | testdb_x006    | 2GB   | one of generic, |                | Automatically created **generic** file or a file created by the user's command for adding a volume.  |
-|                |       | data, index and |                | The size became 2GB because DB was restarted after specifying db_volume_size in cubrid.conf as 2G or |
-|                |       | temp            |                | the option of "cubrid addvoldb", --db-volume-size is specified as 2G.                                |
+|                |       | data and index  |                | The size became 2GB because DB was restarted after specifying db_volume_size in cubrid.conf as 2G or |
+|                |       |                 |                | the option of "cubrid addvoldb", --db-volume-size is specified as 2G.                                |
 +----------------+-------+-----------------+----------------+------------------------------------------------------------------------------------------------------+
-| testdb_t32766  | 360MB | temporary temp  | None           | a file created temporarily when the space of **temp** volume is insufficient during running          |
+| testdb_t32766  | 360MB | temporary temp  | Temp Volume    | a file created temporarily when the space of **temp** volume is insufficient during running          |
 |                |       |                 |                | the **temp** volume required query(e.g.: sorting, scanning, index creation).                         |
 |                |       |                 |                | This is removed when DB is restarted. But, this should not be deleted arbitrarily.                   |
 +----------------+-------+-----------------+----------------+------------------------------------------------------------------------------------------------------+
@@ -110,13 +106,13 @@ The following is an example of files related to the database when testdb databas
 
 *   Database volume file
 
-    *   In the above, testdb, testdb_x001 ~ testdb_x006 are classified as the database volume files.
+    *   In the above, *testdb*, *testdb_x001* ~ *testdb_x006* are classified as the database volume files.
     *   File size is determined by "db_volume_size" in cubrid.conf or the "--db-volume-size" option of "cubrid createdb" and "cubrid addvoldb".
     *  The type of an automatically created volume is always **generic**.
     
 *   Log volume file
 
-    *   In the above, testdb_lgar_t, testdb_lgar22 and testdb_lgat are classified as the log volume files.
+    *   In the above, *testdb_lgar_t*, *testdb_lgar224* and *testdb_lgat* are classified as the log volume files.
     *   File size is determined by "log_volume_size" in cubrid.conf or the "--log-volume-size" option of "cubrid createdb".
 
 .. note::

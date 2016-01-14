@@ -1401,8 +1401,8 @@ How to configure **cubrid.conf** file is shown below. ::
 
 .. _cubrid-applyinfo:
 
-cubrid applyinfo
-----------------
+applyinfo
+---------
 
 This utility is used to check the copied and applied status of replication logs by CUBRID HA. ::
 
@@ -2169,7 +2169,45 @@ This scenario delays the replication of the master node data in replica node, an
 Building Replication
 ====================
 
-In this writing, we will see various scenarios regarding adding a new node or removing a node during HA service.
+.. _cubrid-restoreslave:
+
+restoreslave
+------------
+
+**cubrid restoreslave** is the same as **cubrid restoredb** which restores a database from a backup but it includes several convenient features when rebuilding a slave or a replica. With **cubrid restoreslave**, user does not need to manually collect replication-related information from a backup output to create a replication catalog which is stored in **db_ha_apply_info**. It automatically reads any necessary information from a backup image and an active log and then it adds the relevant replication catalog into **db_ha_apply_info**. All you need to do is to provide two mandatory options: the state of the node where the backup image was created, and the hostname of the current master node. Please also refer :ref:`restoredb` for more details. ::
+
+    cubrid restoreslave [OPTION] database-name
+
+.. program:: restoreslave
+
+.. option:: -s, --source-state=STATE
+
+    You need to specify the state of the node where the backup image was created. STATE may be 'master', 'slave', or 'replica'
+    
+.. option:: -m, --master-host-name=NAME
+
+    You need to specify the hostname of the current master node.
+    
+.. option:: --list
+
+    This option displays information on backup files of a database; restoration procedure is not performed. For further information, see --list of :ref:`restoredb`
+    
+.. option:: -B, --backup-file-path=PATH
+
+    You can specify the directory where backup files are to be located by using the -B option. For further information, see -B of :ref:`restoredb`
+    
+.. option:: -o, --output-file=FILE
+
+    You can specify a filename to store output messages. For further information, see -o of :ref:`restoredb`
+    
+.. option:: -u, --use-database-location-path
+
+    This option restores a database to the path specified in the database location file(databases.txt). For further information, see -u of :ref:`restoredb`
+
+Example Scenarios of Building Replication
+-----------------------------------------
+
+In this section, we will see various scenarios regarding adding a new node or removing a node during HA service.
 
 .. note::
 
@@ -3357,7 +3395,7 @@ Detection of Replication Mismatch
 How to Detect Replication Mismatch
 ----------------------------------
 
-Replication mismatch between replication nodes, indicating that data of the master node and the slave node is not identical, can be detected to some degree by the following process. However, please note that there is no more accurate way to detect a replication mismatch than by directly comparing the data of the master node to the data of the slave node. If it is determined that there has been a replication mismatch, you should rebuild the database of the master node to the slave node (see :ref:`rebuilding-replication`.)
+Replication mismatch between replication nodes, indicating that data of the master node and the slave node is not identical, can be detected to some degree by the following process. You can also use :ref:`cubrid-checksumdb` utility to detect a replication inconsistency. However, please note that there is no more accurate way to detect a replication mismatch than by directly comparing the data of the master node to the data of the slave node. If it is determined that there has been a replication mismatch, you should rebuild the database of the master node to the slave node (see :ref:`rebuilding-replication`.)
 
 *   Execute **cubrid statdump** command and check **Time_ha_replication_delay**. When this value is bigger, replication latency can be larger; the bigger latency time shows the possibility of the larger replication mismatch.
 
@@ -3423,6 +3461,148 @@ Replication mismatch between replication nodes, indicating that data of the mast
 *   Check the error log message created by the copylogdb process and the applylogdb process (see the error message).
 
 *   Compare the number of records on the master database table to that on the slave database table.
+
+
+
+.. _cubrid-checksumdb:
+
+checksumdb
+----------
+
+**checksumdb** provides a simple way to check replication integrity. Basically, it divides each table from a master node into fixed-size chunks and then calculates CRC32 values. The calculation itself, not the calculated value, is then replicated through CUBRID HA. Consequently, by comparing CRC32 values calculated on master and slave nodes, **checksumdb** can report the replication integrity. Note that **checksumdb** might affect master's performance even though it is designed to minimize the performance degradation. ::
+
+        cubrid checksumdb [options] <database-name>@<hostname>
+
+.. program:: checksumdb
+
+*   *<hostname>* : When you initiates checksum calculation, you need to specify the hostname of a master node. When you need to get the result after the calculation is completed, specify the hostname of a node you want to check.
+
+.. option:: -c, --chunk-size=NUMBER
+
+    You can specify the number of rows to select for each CRC32 calculation. (default: 500 rows, minimum: 100 rows)
+
+.. option:: -s, --sleep=NUMBER
+
+    checksumdb sleeps the specified amount of time after calculating each chunk (default: 100 ms)
+    
+.. option:: -i, --include-class-file=FILE
+
+    You can specify tables to check the replication mismatch by specifying the -i FILE option. If it is not specified, entire tables will be checked. Empty string, tab, carriage return and comma are separators among table names in the file.
+    
+.. option:: -e, --exclude-class-file=FILE
+
+    You can specify tables to exclude from checking the replication mismatch by specifying the -e FILE option. Note that either -i or -e can be used, not both.
+    
+.. option:: -t, --timeout=NUMBER
+
+    You can specify a calculation timeout with this option. (default: 1000 ms) If the timeout is reached, the calculation will be cancelled and will be resumed after a short period of time.
+    
+.. option:: -n, --table-name=STRING
+
+    You can specify a table name to save checksum results. (default: db_ha_checksum)
+    
+.. option:: -r, --report-only
+
+    After checksum calculation is completed, you can get a report with this option.
+    
+.. option:: --resume
+
+    When checksum calculation is aborted, you can resume the calculation using this option.
+
+.. option:: --schema-only
+
+    When this option is given, checksumdb does not calculate CRC32 but only check schema of each table
+    
+.. option:: --cont-on-error
+    
+    Without this option, checksumdb halts on errors.
+
+The following example shows how to start checksumdb ::
+
+    cubrid checksumdb -c 100 -s 10 testdb@master
+
+When no replication mismatch found, ::
+
+    $ cubrid checksumdb -r testdb@slave
+    ================================================================
+     target DB: testdb@slave (state: standby)
+     report time: 2016-01-14 16:33:30
+     checksum table name: db_ha_checksum, db_ha_checksum_schema
+    ================================================================
+    
+    ------------------------
+     different table schema
+    ------------------------
+    NONE
+
+    ----------------------------------------------------------------
+    table name	diff chunk id	chunk lower bound
+    ----------------------------------------------------------------
+    NONE
+
+    --------------------------------------------------------------------------------------
+    table name	total # of chunks	# of diff chunks	total/avg/min/max time
+    --------------------------------------------------------------------------------------
+    t1              7                       0                       88 / 12 / 5 / 14 (ms)
+    t2              7                       0                       96 / 13 / 11 / 15 (ms)
+
+When there is a replication mismatch in table *t1*, ::
+
+    $ cubrid checksumdb -r testdb@slave
+    ================================================================
+     target DB: testdb@slave (state: standby)
+     report time: 2016-01-14 16:35:57
+     checksum table name: db_ha_checksum, db_ha_checksum_schema
+    ================================================================
+
+    ------------------------
+     different table schema
+    ------------------------
+    NONE
+
+    ----------------------------------------------------------------
+    table name	diff chunk id	chunk lower bound
+    ----------------------------------------------------------------
+    t1              0               (id>=1)
+    t1              1               (id>=100)
+    t1              4               (id>=397)
+
+    --------------------------------------------------------------------------------------
+    table name	total # of chunks	# of diff chunks	total/avg/min/max time
+    --------------------------------------------------------------------------------------
+    t1              7                       3                       86 / 12 / 5 / 14 (ms)
+    t2              7                       0                       93 / 13 / 11 / 15 (ms)
+
+When there is a schema mismatch in table *t1*, ::
+
+    $ cubrid checksumdb -r testdb@slave
+    ================================================================
+     target DB: testdb@slave (state: standby)
+     report time: 2016-01-14 16:40:56
+     checksum table name: db_ha_checksum, db_ha_checksum_schema
+    ================================================================
+
+    ------------------------
+     different table schema
+    ------------------------
+    <table name>
+    t1
+    <current schema - collected at 04:40:53.947 PM 01/14/2016>
+    CREATE TABLE [t1] ([id] INTEGER NOT NULL, [col1] CHARACTER VARYING(20), [col2] INTEGER, [col3] DATETIME, [col4] INTEGER,  CONSTRAINT [pk_t1_id] PRIMARY KEY  ([id])) COLLATE iso88591_bin
+    <schema from master>
+    CREATE TABLE [t1] ([id] INTEGER NOT NULL, [col1] CHARACTER VARYING(20), [col2] INTEGER, [col3] DATETIME,  CONSTRAINT [pk_t1_id] PRIMARY KEY  ([id])) COLLATE iso88591_bin
+
+    * Due to schema inconsistency, the checksum difference of the above table(s) may not be reported.
+    ----------------------------------------------------------------
+    table name	diff chunk id	chunk lower bound
+    ----------------------------------------------------------------
+    NONE
+
+    --------------------------------------------------------------------------------------
+    table name	total # of chunks	# of diff chunks	total/avg/min/max time
+    --------------------------------------------------------------------------------------
+    t1              7                       0                       95 / 13 / 11 / 16 (ms)
+    t2              7                       0                       94 / 13 / 11 / 15 (ms)
 
 .. _ha-error:
 
@@ -3747,9 +3927,9 @@ For the other cases, you should build manually. For the manual building scenario
 
 If the case is not for rebuilding but for newly building, configure cubrid.conf, cubrid_ha.conf, and databases.txt files as the same with master's.
 
-In the below description, first, we will look over the cases to use **ha_make_slavedb.sh script**, which is used to rebuilding replication.
+In the below description, first, we will look over the cases to use **ha_make_slavedb.sh** script, which is used to rebuilding replication.
 
-As a reference, you cannot use ha_make_slavedb.sh script when you want to build multiple slave nodes.
+As a reference, you cannot use **ha_make_slavedb.sh** script when you want to build multiple slave nodes.
 
 ha_make_slavedb.sh Script
 -------------------------

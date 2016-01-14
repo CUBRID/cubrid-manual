@@ -1354,7 +1354,7 @@ A row whose *id* is 5 is located at the fifth in the 10 rows whose *grade* is 1,
 PERCENTILE_CONT
 ===============
 
-.. function:: PERCENTILE_CONT(expression1) WITHIN GROUP (ORDER BY expression2 [DESC | ASC]) [OVER (<partition_by_clause>)]
+.. function:: PERCENTILE_CONT(expression1) WITHIN GROUP (ORDER BY expression2 [ASC | DESC]) [OVER (<partition_by_clause>)]
 
     **PERCENTILE_CONT** is used as an aggregate or analytic function, and is a reverse distribution function to assume a continuous distribution model. This takes a percentile value and returns a interpolated value within a set of sorted values. NULLs are ignored when calculating.
     
@@ -1362,11 +1362,11 @@ PERCENTILE_CONT
     
     :param expression1: Percentile value. This must be between 0 and 1.
     :param expression2: The column names followed by an **ORDER BY** clause. The number of columns should be the same with the number of columns in *expression1*. 
-    :rtype: The same type with *expression1*.
+    :rtype: **DOUBLE**
 
     .. seealso:: 
     
-        :func:`PERCENTILE_DISC`, :ref:`Difference between PERCENTILE_DISC and PERCENTILE_CONT <compare-pd-pc>`
+        :ref:`Difference between PERCENTILE_DISC and PERCENTILE_CONT <compare-pd-pc>`
 
 When this is an aggregate function, this sorts results by the order specified by the **ORDER BY** clause; then this returns an interpolation value belongs to the percentile value from the rows in the aggregate group.
 
@@ -1383,6 +1383,8 @@ When this is an analytic function, this sorts each row divided by **PARTITION BY
     PERCENTILE_DISC returns a value from the set of aggregated values. 
     
     In the below examples, when a percentile value is 0.5 and the group has even items, PERCENTILE_CONT returns the average of the two values from the medium position; however, PERCENTILE_DISC returns the first value between the two values from the medium position. If the group has odd items, both of them returns the value of a centered item. 
+
+In fact, the MEDIAN function is a particular case of PERCENTILE_CONT with the default of percentile value(0.5). Please also see :func:`MEDIAN` for more details.
 
 The below shows the schema and the data on the next examples.
 
@@ -1422,7 +1424,9 @@ The below is an example of an aggregate function; it returns a median value for 
 
 ::
     
-    7.500000000000000e+01
+      pcont               
+    ======================
+      7.500000000000000e+01
 
 The below is an example of an analytic function; it returns a median value for the *math* column within the set grouped by which the values of *class* column are the same.
 
@@ -1465,7 +1469,7 @@ PERCENTILE_CONT assumes the continuous value; therefore, it returns DOUBLE type 
 PERCENTILE_DISC
 ===============
 
-.. function:: PERCENTILE_DISC(expression1) WITHIN GROUP (ORDER BY expression2 [DESC | ASC]) [OVER (<partition_by_clause>)]
+.. function:: PERCENTILE_DISC(expression1) WITHIN GROUP (ORDER BY expression2 [ASC | DESC]) [OVER (<partition_by_clause>)]
 
     **PERCENTILE_DISC** is used as an aggregate or analytic function, and is a reverse distribution function to assume a discrete distribution model. This takes a percentile value and returns a discrete value within a set of sorted values. NULLs are ignored when calculating.
     
@@ -1473,11 +1477,11 @@ PERCENTILE_DISC
 
     :param expression1: Percentile value. This must be between 0 and 1.
     :param expression2: The column names followed by an **ORDER BY** clause. The number of columns should be the same with the number of columns in *expression1*. 
-    :rtype: the same with the *expression1*\'s type.
+    :rtype: the same with the *expression2*\'s type.
 
     .. seealso:: 
     
-        :func:`PERCENTILE_CONT`, :ref:`PERCENTILE_DISC와 PERCENTILE_CONT <compare-pd-pc>`
+        :ref:`Difference between PERCENTILE_DISC and PERCENTILE_CONT <compare-pd-pc>`
 
 When this is an aggregate function, this sorts results by the order specified by the **ORDER BY** clause; then this returns an interpolation value located to the percentile value from the rows in the aggregate group.
 
@@ -1495,7 +1499,9 @@ The below is an example of an aggregate function; it returns a median value for 
 
 ::
     
-    7.500000000000000e+01
+      pdisc               
+    ======================
+      75              
 
 The below is an example of an analytic function; it returns a median value for the *math* column within the set grouped by which the values of *class* column are the same.
 
@@ -1508,28 +1514,29 @@ The below is an example of an analytic function; it returns a median value for t
 
 ::
 
-         math  class                 pdisc
-    =====================================================
-           30  'A'                   6.000000000000000e+01
-           40  'A'                   6.000000000000000e+01
-           60  'A'                   6.000000000000000e+01
-           70  'A'                   6.000000000000000e+01
-           72  'A'                   6.000000000000000e+01
-           77  'A'                   6.000000000000000e+01
-           78  'B'                   8.500000000000000e+01
-           85  'B'                   8.500000000000000e+01
-           85  'B'                   8.500000000000000e+01
-           95  'B'                   8.500000000000000e+01
-           65  'C'                   7.500000000000000e+01
-           70  'C'                   7.500000000000000e+01
-           75  'C'                   7.500000000000000e+01
-           80  'C'                   7.500000000000000e+01
-           85  'C'                   7.500000000000000e+01
-           65  'D'                   7.500000000000000e+01
-           65  'D'                   7.500000000000000e+01
-           75  'D'                   7.500000000000000e+01
-           75  'D'                   7.500000000000000e+01
-           95  'D'                   7.500000000000000e+01
+         math  class                 pdisc               
+        =========================================================
+           30  'A'                   60                  
+           40  'A'                   60                  
+           60  'A'                   60                  
+           70  'A'                   60                  
+           72  'A'                   60                  
+           77  'A'                   60                  
+           78  'B'                   85                  
+           85  'B'                   85                  
+           85  'B'                   85                  
+           95  'B'                   85                  
+           65  'C'                   75                  
+           70  'C'                   75                  
+           75  'C'                   75                  
+           80  'C'                   75                  
+           85  'C'                   75                  
+           65  'D'                   75                  
+           65  'D'                   75                  
+           75  'D'                   75                  
+           75  'D'                   75                  
+           95  'D'                   75                  
+
 
 In class 'A', the number of 'math' is totally 6; PERCENTILE_DISC outputs the first one if the medium values are the two; therefore, the median value is 60, between the 3rd value (60) and the 4th value (70). 
 

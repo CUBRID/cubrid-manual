@@ -591,25 +591,25 @@ After promotion, table *t* has only one partition (*p1*) and contains the follow
 Indexes on Partitioned Tables
 =============================
 
-All indexes created on a partitioning table are local indexes. With local indexes, data for each partition is stored in a separate(local) index. This increases concurrency on a partitioned table's indexes, since transactions accessing data from different partitions also access different, local, indexes.
+All indexes created on a partitioning table are local indexes. With local indexes, data for each partition is stored in a separate(local) index. This increases concurrency on a partitioned table's indexes, since transactions access data from different partitions also do different, local, indexes.
 
 In order to ensure local unique indexes, the following restriction must be satisfied when creating unique indexes on partitions:
 
-*  The partitioning key must be part of the all the unique indexes' definition.
+*  The partitioning key must be part of the primary key's and the all the unique indexes' definition.
 
 If this is not satisfied, CUBRID will return an error:
 
 .. code-block:: sql
     
-	csql> create table t( i int , j int) partition by hash (i) partitions 4;
+	csql> CREATE TABLE t(i INT , j INT) PARTITION BY HASH (i) PARTITIONS 4;
 	Execute OK. (0.142929 sec) Committed.
 
 	1 command(s) successfully processed.
-	csql> create unique index idx on t(i);
+	csql> ALTER TABLE t ADD PRIMARY KEY (i);
 	Execute OK. (0.123776 sec) Committed.
 
 	1 command(s) successfully processed.
-	csql> create unique index idx2 on t(j);
+	csql> CREATE UNIQUE INDEX idx2 ON t(j);
 
 	In the command from line 1,
 

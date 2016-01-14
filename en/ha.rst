@@ -130,10 +130,10 @@ The following picture shows how a broker connects to the host through the **db-h
 
 .. image:: /images/image20.png
 
-The broker tries to connect as the order of B, C, A because db-host in databases.txt is "node B:node C:node A". At this time, "node B:node C:node A" specified in db-host is the real host names defined in the /etc/hosts file.
+The broker tries to connect as the order of *B*, *C*, *A* because db-host in databases.txt is "node B:node C:node A". At this time, "node B:node C:node A" specified in db-host is the real host names defined in the /etc/hosts file.
 
-*   Example 1.  node B is crashed, node C is in standby status, and node A is in active status. Therefore, at last, the broker connects to node A.
-*   Example 2.  node B is crashed, and node C is in active status. Therefore, at last, the broker connects to node C.
+*   Example 1.  *node B* is crashed, *node C* is in standby status, and *node A* is in active status. Therefore, at last, the broker connects to *node A*.
+*   Example 2.  *node B* is crashed, and *node C* is in active status. Therefore, at last, the broker connects to *node C*.
 
 **Read Only**
 
@@ -147,11 +147,11 @@ The following picture shows how a broker connects to the host through the **db-h
 
 .. image:: /images/image21.png
 
-The broker tries to connect as the order of A, B, C because db-host in databases.txt is "node A:node B:node C". At this time, "node A:node B:node C" specified in db-host is the real host names defined in the /etc/hosts file.
+The broker tries to connect as the order of *A*, *B*, *C* because db-host in databases.txt is "node A:node B:node C". At this time, "node A:node B:node C" specified in db-host is the real host names defined in the /etc/hosts file.
 
-*   Example 1.  node A is in active status, node B is in standby status. Therefore, at last, the broker connects to node B.
-*   Example 2.  node A is in active status, node B is crashed, and node C is in standby status. Therefore, at last, the broker connects to node C.
-*   Example 3.  node A is in active status, node B and node C are crashed. Therefore, at last, the broker connects to node A.
+*   Example 1.  *node A* is in active status, *node B* is in standby status. Therefore, at last, the broker connects to *node B*.
+*   Example 2.  *node A* is in active status, *node B* is crashed, and *node C* is in standby status. Therefore, at last, the broker connects to *node C*.
+*   Example 3.  *node A* is in active status, *node B* and *node C* are crashed. Therefore, at last, the broker connects to *node A*.
 
 **Standby Only**
 
@@ -163,11 +163,11 @@ The following picture shows how a broker connects to the host through the **db-h
 
 .. image:: /images/image22.png
 
-The broker tries to connect as the order of A, B, C because db-host in databases.txt is "node A:node B:node C". At this time, "node A:node B:node C" specified in db-host is the real host names defined in the /etc/hosts file.
+The broker tries to connect as the order of *A*, *B*, *C* because db-host in databases.txt is "node A:node B:node C". At this time, "node A:node B:node C" specified in db-host is the real host names defined in the /etc/hosts file.
 
-*   Example 1.  node A is in active status, node B is in standby status. Therefore, at last, the broker connects to node B.
-*   Example 2.  node A is in active status, node B is crashed, and node C is in standby status. Therefore, at last, the broker connects to node C.
-*   Example 3.  node A is in active status, node B and node C are crashed. Therefore, at last, the broker does not connect to any node. This is the difference with Read Only broker.
+*   Example 1.  *node A* is in active status, *node B* is in standby status. Therefore, at last, the broker connects to *node B*.
+*   Example 2.  *node A* is in active status, *node B* is crashed, and *node C* is in standby status. Therefore, at last, the broker connects to *node C*.
+*   Example 3.  *node A* is in active status, *node B* and *node C* are crashed. Therefore, at last, the broker does not connect to any node. This is the difference with Read Only broker.
 
 CUBRID HA Features
 ==================
@@ -202,11 +202,11 @@ To use the failover and failback functionalities of a broker, the **altHosts** a
 
 To set a broker, configure the **cubrid_broker.conf** file. To set the order of failovers of a database server, configure the **databases.txt** file. For more information, see :ref:`quick-broker-config`.
 
-The following is an example in which two Read Write (RW) brokers are configured. When the first connection broker of the application URL is set to *broker B1* and the second connection broker to *broker B2*, the application connects to *broker B2* when it cannot connect to *broker B1*. When broker B1 becomes available again, the application reconnects to *broker B1*.
+The following is an example in which two Read Write (RW) brokers are configured. When the first connection broker of the application URL is set to *broker B1* and the second connection broker to *broker B2*, the application connects to *broker B2* when it cannot connect to *broker B1*. When *broker B1* becomes available again, the application reconnects to *broker B1*.
 
 .. image:: /images/image25.png
 
-The following is an example in which the Read Write (RW) broker and the Read Only (RO) broker are configured in each piece of equipment of the master node and the slave node. First, the app1 and the app2 URL connect to *broker A1* (RW) and *broker B2* (RO), respectively. The second connection (altHosts) is made to *broker A2* (RO) and *broker B1* (RW). When equipment that includes *nodeA* fails, app1 and the app2 connect to the broker that includes *nodeB*.
+The following is an example in which the Read Write (RW) broker and the Read Only (RO) broker are configured in each piece of equipment of the master node and the slave node. First, the *app1* and the *app2* URL connect to *broker A1* (RW) and *broker B2* (RO), respectively. The second connection (altHosts) is made to *broker A2* (RO) and *broker B1* (RW). When equipment that includes *nodeA* fails, app1 and the app2 connect to the broker that includes *nodeB*.
 
 .. image:: /images/image26.png
 
@@ -783,25 +783,6 @@ CUBRID judges the disk failure for each time which is set to the value of this p
 When the abnormal status of a server process is kept, the server can be restarted infinitely; it is better to remove this kind of node from the HA components. Because the server is restarted within a short time when the abnormal status is continued, specify this term with this parameter to detect this situation. If the server is restarted within the specified term, CUBRID assumes that this server is abnormal and remove(demote) this node from the HA components.
 The default is 2min. If the unit is omitted, it is specified as milliseconds(msec).
 
-Prefetch Log 
-^^^^^^^^^^^^ 
-  
-The following parameters are used in **prefetchlogdb** utility.
-  
-**ha_prefetchlogdb_enable** 
-  
-Specifies whether CUBRID uses **prefetchlogdb** process or not. The default is **no**.
-  
-**ha_prefetchlogdb_max_thread_count** 
-  
-The maximum number of threads which perform prefetching. The default is **4**. The proper setting value is about "(Number of CPU core on the server)/2". 
-  
-If this value is large, CPU usage can be increased rapidly, if this is too small, also prefetching effect can be small.
-  
-**ha_prefetchlogdb_max_page_count** 
-  
-The number of pages which can be prefetched in maximum. The default is **1000**.
-
 SQL Logging
 ^^^^^^^^^^^
 
@@ -889,8 +870,8 @@ Access Order
 
 This parameter specifies whether the host-connecting order from a CAS is sequential or random. The host is configured from **db-host** of **$CUBRID_DATABASES/databases.txt**.
 
-The default is **SEQ**; CAS tries to connect in the order. When this vaule is **RANDOM**, CAS tries to connect at random.
-If **PREFERRED_HOSTS** parameter is specified, CAS tries to connect to the hosts configured in *PREFERRED_HOSTS** in the order, then use the value of **db-host** only when the connection by *PREFERRED_HOSTS** fails; and **CONNECT_ORDER** does not affects on the order of **PREFERRED_HOSTS**.
+The default is **SEQ**; CAS tries to connect in the order. When it is **RANDOM**, CAS tries to randomly connect.
+If **PREFERRED_HOSTS** parameter is given, CAS tries to connect to the hosts configured in **PREFERRED_HOSTS** with the order, then uses the value of **db-host** only when the connection by **PREFERRED_HOSTS** fails; and **CONNECT_ORDER** does not affects on the order of **PREFERRED_HOSTS**.
 
 If you concern that the connections are centralized into one DB, set this value as **RANDOM**.
 
@@ -931,37 +912,37 @@ Access Limitation
 
 When replication is delayed on all DB servers in the HA environment which specified multiple DB servers to **db-host** of **databases.txt**, CUBRID checks the replication-delayed servers until only the specified numbers in the **MAX_NUM_DELAYED_HOSTS_LOOKUP** parameter and decides the connection(checking the delay of replication is judged for the standby hosts; the delayed time is decided by the :ref:`ha_delay_limit <ha_delay_limit>` parameter). Also, **MAX_NUM_DELAYED_HOSTS_LOOKUP** is not applied to **PREFERRED_HOSTS**.
 
-For example, when **db-host** is specified as "host1:host2:host3:host4:host5" and "MAX_NUM_DELAYED_HOSTS_LOOKUP=2", if the status of them as follows,
+For example, when **db-host** is specified as "host1:host2:host3:host4:host5" and "MAX_NUM_DELAYED_HOSTS_LOOKUP=2", if the status of them as follows:
 
-*   host1: active status
-*   host2: standby status, replication is delayed
-*   host3: unable to access
-*   host4: standby status, replication is delayed
-*   host5: standby status, replication is not delayed
+*   *host1*: active status
+*   *host2*: standby status, replication is delayed
+*   *host3*: unable to access
+*   *host4*: standby status, replication is delayed
+*   *host5*: standby status, replication is not delayed
 
-then the broker tries to access the two hosts, hosts and host4 which their replications are delayed, then decides to access host4.
+then the broker tries to access the two hosts, *host2* and *host4* which their replications are delayed, then decides to access *host4*.
 
 The reason to behave like the above is that CUBRID assumes that the replication will be delayed to the other hosts if the replication of the number(specified by **MAX_NUM_DELAYED_HOSTS_LOOKUP**) of hosts are delayed; therefore, CUBRID decides to connect to the last hosts which CUBRID have tried to access, as CUBRID does not try to access for the left hosts. However, if **PREFERRED_HOSTS** is specified together, CUBRID tries to access to them first and then tries to access to the hosts of db-host list from the first.
 
-The step which the broker access CUBRID is divided into the primary connection and the secondary connection.
+The step which the broker accesses CUBRID is divided into the primary connection and the secondary connection.
 
 *   The primary connection: the step which the broker tries to access DB at first. 
 
     It checks the DB status(active/standby) and whether the replication is delayed or not. At this time, the broker checks DB's status if it's active or standby based on the **ACCESS_MODE** then decides the connection.
 
-*   The secondary connection: After the failure of the primary connection, the broker tries to connect from the failed position. At this time, the broker ignores the DB status(active/standby) and the delay of replication. However, SO broker alway accepts a connection only to a standby DB.
+*   The secondary connection: After the failure of the primary connection, the broker tries to connect from the failed position. At this time, the broker ignores the DB status(active/standby) and the delay of replication. However, **SO** broker always accepts a connection only to a standby DB.
 
-    At this time, the connection is decided if the DB is accessible, by ignoring the delay of replication and DB status(active/standby). However, the error can occur during the query execution. For example, If ACCESS_MODE of the broker is RW but the broker access standby DB, it occurs an error during INSERT operation. Regardless of the error, after it is connected to a standby DB and the transaction is executed, the broker retries the primary connection. However, SO broker can never connect to the active DB.
+    At this time, the connection is decided if the DB is accessible, by ignoring the delay of replication and DB status(active/standby). However, the error can occur during the query execution. For example, If **ACCESS_MODE** of the broker is **RW** but the broker accesses standby DB, it occurs an error during INSERT operation. Regardless of the error, after it is connected to a standby DB and the transaction is executed, the broker retries the primary connection. However, **SO** broker can never connect to the active DB.
 
-Depending on the value of **MAX_NUM_DELAYED_HOSTS_LOOKUP**, how the number of hosts, attempting to connect is limited as follows.
+Depending on the value of **MAX_NUM_DELAYED_HOSTS_LOOKUP**, how the number of hosts, attempting to connect is limited as follows:
 
 *   MAX_NUM_DELAYED_HOSTS_LOOKUP=-1
 
-    The same as you do not specify this parameter, which is the default value. In this case, at the primary step, the delay of replication and the DB status are checked to the end, then the connection is decided. At the secondary step, even if there is a replication, or even if that is not the expected DB status(active/standby), the broker connects to the last host which was accessible.
+    The same as you do not specify this parameter, which is the default value. In this case, at the primary step, the delay of replication and the DB status are checked to the end, then the connection is decided. At the second step, even if there is a replication, or even if that is not the expected DB status(active/standby), the broker connects to the last host which was accessible.
 
 *   MAX_NUM_DELAYED_HOSTS_LOOKUP=0
 
-    The secondary connection is processed after the connection is tried only to **PREFERRED_HOSTS** at the primary step; and at the secondary step, the broker tries to connect to a host even it is delayed in replication or it is not an expected DB status(active/standby). That is, because it is the secondary connection, RW broker can connect to a standby host and RO broker can connect to an active host. However, SO broker can never connect to the active DB.
+    The secondary connection is processed after the connection is tried only to **PREFERRED_HOSTS** at the primary step; and at the secondary step, the broker tries to connect to a host even it is delayed in replication or it is not an expected DB status(active/standby). That is, because it is the secondary connection, **RW** broker can connect to a standby host and **RO** broker can connect to an active host. However, **SO** broker can never connect to the active DB.
 
 *   MAX_NUM_DELAYED_HOSTS_LOOKUP=n(>0)
 
@@ -972,14 +953,14 @@ Reconnection
 
 **RECONNECT_TIME**
 
-When a broker tries to connect a DB server which are not in **PREFERRED_HOSTS**, RO broker tries to connect to active DB server, or a broker tries to connect to the replication-delayed DB server, if connecting time is over  **RECONNECT_TIME**\ (default: 10min), the broker tries to reconnect.
+When a broker tries to connect a DB server which are not in **PREFERRED_HOSTS**, **RO** broker tries to connect to active DB server, or a broker tries to connect to the replication-delayed DB server, if connecting time is over  **RECONNECT_TIME**\ (default: 10min), the broker tries to reconnect.
 
 See :ref:`RECONNECT_TIME <reconnect_time>` for further information.
 
 databases.txt
 -------------
 
-The **databases.txt** file has information on the order of servers for the CAS of a broker to connect. It is located in the **$CUBRID_DATABASES** (if not specified, $CUBRID/databases) directory; the information can be configured by using **db_hosts**. You can specify multiple nodes by using a colon (:). If "**CONNECT_ORDER**=**RANDOM**", the connection order is decided as randomly. But if **PREFERRED_HOSTS** is specified, the specified hosts have the first priority of the connection order.
+The **databases.txt** file has information on the order of servers for the CAS of a broker to connect. It is located in the **$CUBRID_DATABASES** (if not specified, $CUBRID/databases) directory; the information can be configured by using **db_hosts**. You can specify multiple nodes by using a colon (:). If "**CONNECT_ORDER=RANDOM**", the connection order is decided as randomly. But if **PREFERRED_HOSTS** is specified, the specified hosts have the first priority of the connection order.
 
 The following example shows how to configure **databases.txt**. ::
 
@@ -1022,7 +1003,7 @@ The following example shows how to configure CCI.
 PHP Configuration
 -----------------
 
-To use the functions of CUBRID HA in PHP, connect to the broker by using `cubrid_connect_with_url <http://www.php.net/manual/en/function.cubrid-connect-with-url.php>`_ , which is used to specify the connection information of the failover broker in the connection URL. The attribute specified for CUBRID HA is **altHosts**, the information on one or more broker nodes to be connected when a failover occurs.
+To use the functions of CUBRID HA in PHP, connect to the broker by using `cubrid_connect_with_url <http://www.php.net/manual/en/function.cubrid-connect-with-url.php>`_, which is used to specify the connection information of the failover broker in the connection URL. The attribute specified for CUBRID HA is **altHosts**, the information on one or more broker nodes to be connected when a failover occurs.
 
 The following example shows how to configure PHP.
 
@@ -1098,27 +1079,27 @@ When a broker accesses DB server, it tries the primary connection; if it fails, 
     1.  A broker tries to connect as the order specified by **PREFERRED_HOSTS**. The broker rejects connecting to the improper DB of which the status does not match with **ACCESS_MODE** or in which the replication is delayed.
     2.  By the **CONNECT_ORDER**, a broker tries to connect to the host in the order specified in **databases.txt** or the random order. The broker checks the DB status followed by the **ACCESS_MODE** and checks the replication-delayed host up to the number specified in **MAX_NUM_DELAYED_HOSTS_LOOKUP**.
 
-*   The secondary connection: Ignore the DB status(active/standby) and the delay of replication. However, SO broker always accepts to connect only to standby DB.
+*   The secondary connection: Ignore the DB status(active/standby) and the delay of replication. However, **SO** broker always accepts to connect only to standby DB.
 
-    1.  A broker tries to connect as the order specified by **PREFERRED_HOSTS**. The broker accepts connecting to the improper DB of which status does not match with **ACCESS_MODE** or in which the replication is delayed. However, SO broker can never connect to active DB.
+    1.  A broker tries to connect as the order specified by **PREFERRED_HOSTS**. The broker accepts connecting to the improper DB of which status does not match with **ACCESS_MODE** or in which the replication is delayed. However, **SO** broker can never connect to active DB.
     2.  By the **CONNECT_ORDER**, a broker tries to connect to the host in the order specified in **databases.txt** or the random order. The broker ignores the DB status(active/standby) and the delay of replication; it is connected if possible.
    
-Samples of Behaviors by Configuration
--------------------------------------
+Examples on Behaviours by Configuration
+---------------------------------------
 
 The following shows the example of configuration.
 
 **Host DB status**
 
-*   host1: active
-*   host2: standby, replication is delayed.
-*   host3: standby, replica, unable to access.
-*   host4: standby, replica, replication is delayed.
-*   host5: standby, replica, replication is delayed.
+*   *host1*: active
+*   *host2*: standby, replication is delayed.
+*   *host3*: standby, replica, unable to access.
+*   *host4*: standby, replica, replication is delayed.
+*   *host5*: standby, replica, replication is delayed.
 
-When the status of host DBs are as the above, the below shows samples of behaviors by the configuration.
+When the status of host DBs are as the above, the below shows samples of behaviours by the configuration.
 
-**Behaviors by configuration**
+**Behaviours by configuration**
 
 *   2-1, 2-2, 2-3: From 2, (+) is addition and (#) is modification.
 
@@ -1129,9 +1110,9 @@ When the status of host DBs are as the above, the below shows samples of behavio
 +=======+============================================+======================================================================================================+
 | 1     | * **ACCESS_MODE=RW**                       | At the primary connection try, a broker checks if DB status is active.                               |
 |       | * PREFERRED_HOSTS=host2:host3              |                                                                                                      |
-|       | * db-host=host1:host2:host3:host4:host5    | * host2 of PREFERRED_HOSTS is replication-delay and host3 is unable to access;                       |
+|       | * db-host=host1:host2:host3:host4:host5    | * *host2* of PREFERRED_HOSTS is replication-delay and *host3* is unable to access;                   |
 |       | * MAX_NUM_DELAYED_HOSTS_LOOKUP=-1          |   therefore, it tries to connect to db-host                                                          |
-|       | * CONNECT_ORDER=SEQ                        | * connection is established because host1 is on active status.                                       |
+|       | * CONNECT_ORDER=SEQ                        | * connection is established because *host1* is on active status.                                     |
 |       |                                            |                                                                                                      |
 |       |                                            | The broker tries to reconnect after the RECONNECT_TIME because it did not connect to                 |
 |       |                                            | PREFERRED_HOSTS.                                                                                     |
@@ -1143,45 +1124,45 @@ When the status of host DBs are as the above, the below shows samples of behavio
 |       |                                            |                                                                                                      |
 |       |                                            | At the secondary connection try, a broker ignores DB status and replication-delay.                   |
 |       |                                            |                                                                                                      |
-|       |                                            | * The last accessed host, host5 is successful to connect to a broker.                                |
+|       |                                            | * The last accessed host, *host5* is successful to connect to a broker.                              |
 |       |                                            |                                                                                                      |
 |       |                                            | Because the broker accessed the replication-delayed server, it tries to reconnect after              |
 |       |                                            | RECONNECT_TIME.                                                                                      |
 +-------+--------------------------------------------+------------------------------------------------------------------------------------------------------+
 | 2-1   | * (+)PREFERRED_HOSTS=host1:host3           | At the primary connection try, a broker checks if DB status is standby.                              |
 |       |                                            |                                                                                                      |
-|       |                                            | * In PREFERRED_HOSTS, host1 is active and host3 is unable to access;                                 |
+|       |                                            | * In PREFERRED_HOSTS, *host1* is active and *host3* is unable to access;                             |
 |       |                                            |   therefore, the broker tries to connect to db-host.                                                 |
 |       |                                            | * Because hosts of which DB status is standby are all replication-delayed or unable to access;       |
 |       |                                            |   therefore, it will be failed at the primary connection.                                            |
 |       |                                            |                                                                                                      |
 |       |                                            | At the secondary connection try, a broker ignores DB status and replication-delay.                   |
 |       |                                            |                                                                                                      |
-|       |                                            | * host1 in PREFERRED_HOSTS is active, but it is possible to access;                                  |
+|       |                                            | * *host1* in PREFERRED_HOSTS is active, but it is possible to access;                                |
 |       |                                            |   therefore, it is successful to connect to a broker.                                                |
 |       |                                            |                                                                                                      |
 |       |                                            | Because the broker accessed the active server, it tries to reconnect after RECONNECT_TIME.           |
 +-------+--------------------------------------------+------------------------------------------------------------------------------------------------------+
 | 2-2   | * (+)PREFERRED_HOSTS=host1:host3           | At the primary connection try, a broker checks if DB status is standby.                              |
 |       |                                            |                                                                                                      |
-|       | * (#)MAX_NUM_DELAYED_HOSTS_LOOKUP=0        | * In PREFERRED_HOSTS, host1 is active and host3 is unable to access.                                 |
+|       | * (#)MAX_NUM_DELAYED_HOSTS_LOOKUP=0        | * In PREFERRED_HOSTS, *host1* is active and *host3* is unable to access.                             |
 |       |                                            | * no tries to connect to db-host.                                                                    |
 |       |                                            |                                                                                                      |
 |       |                                            | At the secondary connection try, a broker ignores DB status and replication-delay.                   |
 |       |                                            |                                                                                                      |
-|       |                                            | * In PREFERRED_HOSTS, host1 is active, but it is possible to access;                                 |
+|       |                                            | * In PREFERRED_HOSTS, *host1* is active, but it is possible to access;                               |
 |       |                                            |   therefore, it is successful to connect to a broker.                                                |
 |       |                                            |                                                                                                      |
 |       |                                            | Because the broker accessed the active server, it tries to reconnect after RECONNECT_TIME.           |
 +-------+--------------------------------------------+------------------------------------------------------------------------------------------------------+
 | 2-3   | * (#)MAX_NUM_DELAYED_HOSTS_LOOKUP=2        | At the primary connection try, a broker checks if DB status is standby.                              |
 |       |                                            |                                                                                                      |
-|       |                                            | * It fails at the primary connection after checking that host2, host4 are replication-delayed        |
+|       |                                            | * It fails at the primary connection after checking that *host2*, *host4* are replication-delayed    |
 |       |                                            |   where DB status is standby.                                                                        |
 |       |                                            |                                                                                                      |
 |       |                                            | At the secondary connection try, a broker ignores DB status and replication-delay.                   |
 |       |                                            |                                                                                                      |
-|       |                                            | * The lastly accessed host4 is successful to connect to a broker.                                    |
+|       |                                            | * The lastly accessed *host4* is successful to connect to a broker.                                  |
 |       |                                            |                                                                                                      |
 |       |                                            | Because the broker accessed the replication-delayed server, it tries to reconnect after              |
 |       |                                            | RECONNECT_TIME.                                                                                      |
@@ -1194,52 +1175,52 @@ When the status of host DBs are as the above, the below shows samples of behavio
 |       | * CONNECT_ORDER=SEQ                        | At the secondary connection try, a broker checks if DB status is standby but ignores                 |
 |       |                                            | replication-delay.                                                                                   |
 |       |                                            |                                                                                                      |
-|       |                                            | * The lastly accessed host4 is successful to connect to a broker.                                    |
+|       |                                            | * The lastly accessed *host4* is successful to connect to a broker.                                  |
 |       |                                            |                                                                                                      |
 |       |                                            | Because the broker accessed the replication-delayed server, it tries to reconnect after              |
 |       |                                            | RECONNECT_TIME.                                                                                      |
 +-------+--------------------------------------------+------------------------------------------------------------------------------------------------------+
 | 3-1   | * (+)PREFERRED_HOSTS=host1:host3           | At the primary connection try, a broker checks if DB status is standby.                              |
 |       |                                            |                                                                                                      |
-|       |                                            | * In PREFERRED_HOSTS, host1 is active and host3 is unable to access; therefore, it tries to connect  |
-|       |                                            |   to db-host.                                                                                        |
+|       |                                            | * In PREFERRED_HOSTS, *host1* is active and *host3* is unable to access; therefore, it tries to      |
+|       |                                            |   connect to db-host.                                                                                |
 |       |                                            | * It fails at the primary connection because hosts of which status is standby are all                |
 |       |                                            |   replication-delayed or unable to access.                                                           |
 |       |                                            |                                                                                                      |
 |       |                                            | At the secondary connection try, a broker checks if DB status is standby but ignores                 |
 |       |                                            | replication-delay.                                                                                   |
 |       |                                            |                                                                                                      |
-|       |                                            | * In PREFERRED_HOSTS, host1 is active and host3 is unable to access; therefore, it tries to connect  |
-|       |                                            |   to db-host.                                                                                        |
-|       |                                            | * The first host of which DB status is standby is host2; therefore, it connects to host2.            |
+|       |                                            | * In PREFERRED_HOSTS, *host1* is active and *host3* is unable to access; therefore, it tries         |
+|       |                                            |   to connect to db-host.                                                                             |
+|       |                                            | * The first host of which DB status is standby is *host2*; therefore, it connects to *host2*.        |
 |       |                                            |                                                                                                      |
 |       |                                            | Because the broker accessed the replication-delayed server, it tries to reconnect after              |
 |       |                                            | RECONNECT_TIME.                                                                                      | 
 +-------+--------------------------------------------+------------------------------------------------------------------------------------------------------+
 | 3-2   | * PREFERRED_HOSTS=host1:host3              | At the primary connection try, a broker checks if DB status is standby.                              |
 |       |                                            |                                                                                                      |
-|       | * (#)MAX_NUM_DELAYED_HOSTS_LOOKUP=0        | * In PREFERRED_HOSTS, host1 is active and host3 is unable to access.                                 |
+|       | * (#)MAX_NUM_DELAYED_HOSTS_LOOKUP=0        | * In PREFERRED_HOSTS, *host1* is active and *host3* is unable to access.                             |
 |       |                                            | * It does not try to connect to db-host.                                                             |
 |       |                                            |                                                                                                      |
 |       |                                            | At the secondary connection try, a broker checks if DB status is standby but ignores                 |
 |       |                                            | replication-delay.                                                                                   |
 |       |                                            |                                                                                                      |
-|       |                                            | * In PREFERRED_HOSTS, host1 is active and host3 is unable to access; therefore, it tries to connect  |
-|       |                                            |   to db-host.                                                                                        |
-|       |                                            | * The first host of which DB status is standby is host2; therefore, it connects to host2.            |
+|       |                                            | * In PREFERRED_HOSTS, *host1* is active and *host3* is unable to access; therefore, it tries         |
+|       |                                            |   to connect to db-host.                                                                             |
+|       |                                            | * The first host of which DB status is standby is *host2*; therefore, it connects to *host2*.        |
 |       |                                            |                                                                                                      |
 |       |                                            | Because the broker accessed the replication-delayed server, it tries to reconnect after              |
 |       |                                            | RECONNECT_TIME.                                                                                      |
 +-------+--------------------------------------------+------------------------------------------------------------------------------------------------------+
 | 3-3   | * (#)MAX_NUM_DELAYED_HOSTS_LOOKUP=2        | At the primary connection try, a broker checks if DB status is standby.                              |
 |       |                                            |                                                                                                      |
-|       |                                            | * It fails at the primary connection after checking that host2, host4 are replication-delayed        |
+|       |                                            | * It fails at the primary connection after checking that *host2*, *host4* are replication-delayed    |
 |       |                                            |   where DB status is standby.                                                                        |
 |       |                                            |                                                                                                      |
 |       |                                            | At the secondary connection try, a broker checks if DB status is standby but ignores                 |
 |       |                                            | replication-delay.                                                                                   |
 |       |                                            |                                                                                                      |
-|       |                                            | * The lastly accessed host4 is successful to connect to a broker.                                    |
+|       |                                            | * The lastly accessed *host4* is successful to connect to a broker.                                  |
 |       |                                            |                                                                                                      |
 |       |                                            | Because the broker accessed the replication-delayed server, it tries to reconnect after              |
 |       |                                            | RECONNECT_TIME.                                                                                      |
@@ -1390,26 +1371,6 @@ This utility is used to output the information of CUBRID HA group and CUBRID HA 
        Server testdb (pid 2393, state registered_and_standby)
 
 .. note:: **act**, **deact**, and **deregister** commands which were used in versions lower than CUBRID 9.0 are no longer used.
-
-prefetchlogdb 
-^^^^^^^^^^^^^ 
-
-**prefetchlogdb** utility performs the job to read the indexes of replicated logs and data pages which will be applied to a slave node or a replica node by **applylogdb** process in advance, and to load them into the database buffer.
-Therefore, if you start this utility, applied speed of replicated logs in **applylogdb** process is improved.
-
-To run **prefetchlogdb** process, the value of **ha_prefetchlogdb_enable** parameter in cubrid_ha.conf should be **yes** (Default: **no**).
-If the value of **ha_prefetchlogdb_enable** parameter is yes, **prefetchlogdb** will be started together with **copylogdb** and **applylogdb** when **cubrid heartbeat start** command is executed.
-
-If you want to start/stop **prefetchlogdb** process only, do not specify the value of **ha_prefetchlogdb_enable** or specify this value as **no**. The usage is as follows.
-
-::
-
-    cubrid heartbeat prefetchlogdb [start/stop] database host 
-  
-* **start**: Start **prefetchlogdb** process
-* **stop**: Stop **prefetchlogdb** process 
-* *database*: Target database name to run **prefetchlogdb** process
-* *host*: Target host name to run **prefetchlogdb** process
 
 .. _cubrid-service-util:
 
@@ -3838,1543 +3799,3 @@ Once the script has been configured, execute the **ha_make_slavedb.sh** script i
     *   **Error while executing the rebuilding replication script**
     
         The rebuilding replication script is not automatically rolled back to its previous stage even when an error occurs during the execution. This is because the slave node cannot provide normal service before rebuilding replication script is executed. To return to the phase before rebuilding replication script is executed, you must back up the existing replication logs and **db_ha_apply_info** information which is internal catalog of the master and slave nodes before building replication is executed.
-
-.. _from-master-to-slave:
-
-Building Slave from Master
---------------------------
-
-The following example shows how to configure an original node for rebuilding replications as a master mode and rebuild a slave node from the master node. When you build this node newly, "Master:Slave" will be from 1:0 to 1:1.
-
-.. image:: /images/image37.png
-
-*   The host name of a master: *nodeA*
-*   The host name of a slave: *nodeB*
-
-Rebuilding replications can be performed while the system is running, however, to minimize replication delay, it is recommended to execute when there are just a few transactions per hour.
-
-Before starting to execute the **ha_make_slavedb.sh** script, run the following.
-
-#.  Stop the HA service of *nodeB*. If you build the slave node newly, this is not necessary.
-
-    ::
-    
-        [nodeB]$ cubrid heartbeat stop
-
-#.  If you newly build *nodeB*, configure **cubrid.conf**, **cubrid_ha.conf**, **cubrid_broker.conf** and **databases.txt** of *nodeA* and *nodeB*, by referring to :ref:`ha-configuration`.
-
-    *   Configure parameters in cubrid.conf about *nodeA* and *nodeB*.
-
-        ::
-        
-            ha_mode=on
-            force_remove_log_archives=no
-            
-    *   Apply **log_max_archives** to *nodeA* without restarting DB.
-
-        The below supposes that the number of archive logs which can store running transactions during slave building time as 10. Set "10" with "SET SYSTEM PARAMETERS" statement, and **log_max_archives** in **cubrid.conf** will not be changed because it's value will be used as the existing one after building/rebuilding *nodeB*.
-    
-        ::
-        
-            [nodeA]$ csql -u dba -c "SET SYSTEM PARAMETERS 'force_remove_log_archives=no'" testdb@localhost
-            [nodeA]$ csql -u dba -c "SET SYSTEM PARAMETERS 'log_max_archives=10'" testdb@localhost
-
-    *   Configure a parameter in **cubrid_ha.conf** about *nodeA*.
-    
-        If you start HA service on the master node after adding *nodeB* to **ha_node_list**, it is impossible to do write-operations in a master node until a slave node is started; therefore, add only *nodeA*.
-        
-        ::
-        
-            ha_node_list=cubrid@nodeA
-    
-    *   Configure **db-host** in **databases.txt**.
-    
-        ::
-        
-            nodeA:nodeB
-            
-        However, **db-host** in **databases.txt** is related to the access order to the database server by a broker; therefore, it is possible to change as you want.
-    
-#.  **ha_make_slavedb.sh** script should be configured in *nodeB*. In **target_host**, the source of the copied one, that is the master node's host name(*nodeA*) should be configured; in **repl_log_home**, the home directory of replication logs(default: **$CUBRID_DATABASES**) should be configured.
-
-    ::
-         
-        [nodeB]$ cd $CUBRID/share/scripts/ha
-        [nodeB]$ vi ha_make_slavedb.sh
-        target_host=nodeA
-
-#.  After configuration, **ha_make_slavedb.sh** script should be run on a slave node.
-
-    ::
-
-        [nodeB]$ cd $CUBRID/share/scripts/ha
-        [nodeB]$ ./ha_make_slavedb.sh
-
-.. _scp-setting:
-        
-.. note:: scp command is used when you run **ha_make_slavedb.sh**; to skip a password request when you run scp, you should configure a personal key to the target node, and a public key to the source node. For details, see the usage of ssh-keygen in Linux.
-
-    #.  Run **ssh-keygen -t rsa** in the source node and check if .ssh/id_rsa and .ssh/id_rsa.pub files are created on the Linux user's home directory.
-    
-    #.  Copy id_rsa.pub file of the source node into the /.ssh directory under the Linux user's home directory; change a file name as authorized_keys.
-
-    #.  Change the modes of authorized_keys file as 640, .ssh directory as 700 in the target node.
-
-        ::
-        
-            chmod 640 authorized_keys; cd ..; chmod 700 .ssh
-
-    #.  Check if it is possible to copy without password request.
-    
-        ::
-        
-            scp test.txt cubrid_usr@:/home/cubrid_usr/.
-
-If you find an error or quit the step by pressing "n" during executing each step of  **ha_make_slavedb.sh**, you should re-execute the script. When you re-execute the script, you can skip the succeeded step as pressing "n".
-   
-1.  At this step, enter the password of a Linux account and password of **DBA**, the CUBRID database account, for HA rebuilding replication. Enter y to the question.
- 
-    ::
-
-        ##### step 1 ###################################################################
-        #
-        # get HA/replica user password and DBA password
-        #
-        #  * warning !!!
-        #   - Because ha_make_slavedb.sh uses expect (ssh, scp) to control HA/replica node,
-        #     the script has to know these passwords.
-        #
-        ################################################################################
-         
-           continue ? ([y]es / [n]o / [s]kip) : y
-
-    Enter the password of a Linux account of the HA node and the password of **DBA**, the CUBRID database account. If you have not changed the password of **DBA** after installing CUBRID, press the <Enter> key without entering the password of **DBA**. 
-
-    ::
-    
-        HA/replica cubrid_usr's password :
-        HA/replica cubrid_usr's password :
-         
-        testdb's DBA password :
-        Retype testdb's DBA password :
-        
-2.  At this step, check whether the environment variables of the slave node are correct. Enter y to the question. 
-
-    ::
-
-        ##### step 2 ###################################################################
-        #
-        #  ha_make_slavedb.sh is the script for making slave database more easily
-        #
-        #  * environment
-        #   - db_name           : testdb
-        #
-        #   - master_host       : nodeA
-        #   - slave_host        : nodeB
-        #   - replica_hosts     :
-        #
-        #   - current_host      : nodeB
-        #   - current_state     : slave
-        #
-        #   - target_host       : nodeA
-        #   - target_state      : master
-        #
-        #   - repl_log_home     : /home/cubrid_usr/CUBRID/databases
-        #   - backup_dest_path  : /home/cubrid_usr/.ha/backup
-        #   - backup_option     :
-        #   - restore_option    :
-        #
-        #  * warning !!!
-        #   - environment on slave must be same as master
-        #   - database and replication log on slave will be deleted
-        #
-        ################################################################################
-         
-           continue ? ([y]es / [n]o / [s]kip) : y
-
-3.  At this step, copy the HA-related scripts of the slave node to the master node. Enter y to the question. Then the password will be asked if you did not set the public key with ssh-keygen when you sent a file with **scp** command. 
-
-    ::
-
-        ##### step 3 ###################################################################
-        #
-        #  copy scripts to master node
-        #
-        #  * details
-        #   - scp scripts to '~/.ha' on nodeA(master).
-        #
-        ################################################################################
-         
-           continue ? ([y]es / [n]o / [s]kip) : y
-         
-4.  At this step, copy the HA-related scripts to the replica node. In this scenario, there is no replica node; therefore, you can skip this step and go to the next step by entering. 
-
-    ::
-
-        ##### step 4 #####################################
-        #
-        #  copy scripts to replication node
-        #
-        #  * details
-        #   - scp scripts to '~/.ha' on replication node.
-        #
-        ##################################################
-         
-           continue ? ([y]es / [n]o / [s]kip) : y
-         
-        There is no replication server to copy scripts to.
-
-5.  At this step, check whether the environment variables of all nodes are correct. Enter y to the question. 
-
-    If **expect** command is not installed('yum install expect' in root account), this step can occur an error.
-    
-    ::
-
-        ##### step 5 ###################################################################
-        #
-        #  check environment of all ha nodes
-        #
-        #  * details
-        #   - test $CUBRID == /home1/cubrid_usr/CUBRID
-        #   - test $CUBRID_DATABASES == /home1/cubrid_usr/CUBRID/database
-        #   - test -d /home1/cubrid_usr/CUBRID/database/testdb
-        #
-        ################################################################################
-         
-           continue ? ([y]es / [n]o / [s]kip) : y
-
-6.  At this step, stop replication of the master node. Enter y to the question. 
-
-    ::
-
-        ##### step 6 ###################################################################
-        #
-        #  suspend copylogdb/applylogdb on master if running
-        #
-        #  * details
-        #   - deregister copylogdb/applylogdb on nodeA(master).
-        #
-        ################################################################################
-        
-            continue ? ([y]es / [n]o / [s]kip) : y
-
-7.  At this step, delete the old replication log from the slave node and initialize the HA meta information table of the master node. Enter y to the question. 
-
-    ::
-
-        ##### step 7 ###################################################################
-        #
-        #  remove old copy log of slave and init db_ha_apply_info on master
-        #
-        #  * details
-        #   - remove old copy log of slave
-        #   - init db_ha_apply_info on master
-        #
-        ################################################################################
-         
-           continue ? ([y]es / [n]o / [s]kip) : y
-
-8.  At this step, initialize the HA meta information table of replica node. In this scenario, there is no replica node; therefore, you can skip this step and go to the next step by entering s. 
-
-    ::
-
-        ##### step 8 ###################################################################
-        #
-        #  remove old copy log of slave and init db_ha_apply_info on replications
-        #
-        #  * details
-        #   - remove old copy log of slave
-        #   - init db_ha_apply_info on replications
-        #
-        ################################################################################
-         
-           continue ? ([y]es / [n]o / [s]kip) : y
-         
-        There is no replication server to init ha_info
-
-9.  At this step, create a backup volume from the master node (**target_host**) for HA replication rebuilding. You can skip this step and go to the next step by entering s if there is an existing backup volume. There are some constraints for rebuilding replication by using the existing backup volume, which are as follows:
-
-    *   The archive logs, including the transaction being executed during backup, must be in the master node (**target_host**); this means that a backup volume created long ago cannot be used.
-
-    *   The backup status information file must be created by using the **-o** option during backup. At this time, the path must be identical to the path of the backup volume file. The file name must be *db_name*\ **.bkup.output** format. If the file name is not identical with the format, change the file name according to the format before executing the script.
-
-    *   The path of the existing backup volume and the status information file must be specified in the **backup_dest_path** parameter in the script. In other words, specify the absolute path of the directory containing the backup volume on the master node (**target_host**) to this parameter.
-
-    ::
-
-        ##### step 9 ###################################################################
-        #
-        #  online backup database  on master
-        #
-        #  * details
-        #   - run 'cubrid backupdb -C -D ... -o ... testdb@localhost' on master
-        #
-        ################################################################################
-         
-           continue ? ([y]es / [n]o / [s]kip) : y
-
-10. At this step, copy the database backup of the master node to the slave node. Enter y to the question. 
-
-    ::
-
-        ##### step 10 ###################################################################
-        #
-        #  copy testdb databases backup to current host
-        #
-        #  * details
-        #   - scp databases.txt from target host if there's no testdb info on current host
-        #   - remove old database and replication log if exists
-        #   - make new database volume and replication path
-        #   - scp  database backup to current host
-        #
-        ################################################################################
-         
-           continue ? ([y]es / [n]o / [s]kip) : y
-
-11. At this step, restore the copied database backup to the slave node. Enter y to the question. 
-
-    ::
-
-        ##### step 11 ###################################################################
-        #
-        #  restore database testdb on current host
-        #
-        #  * details
-        #   - cubrid restoredb -B ... testdb current host
-        #
-        ################################################################################
-         
-           continue ? ([y]es / [n]o / [s]kip) : y
-
-12. At this step, configure the HA meta information table value of the slave node. Enter y to the question. 
-
-    ::
-
-        ##### step 12 ###################################################################
-        #
-        #  set db_ha_apply_info on slave
-        #
-        #  * details
-        #   - insert db_ha_apply_info on slave
-        #
-        ################################################################################
-         
-           continue ? ([y]es / [n]o / [s]kip) : y
-         
-13. At this step, initialize the replication log of the master node and then copy the archive logs of the master node to the slave node. Enter y to the question. 
-
-    ::
-
-        ##### step 13 ###################################################################
-        #
-        #  make initial replication active log on master, and copy archive logs from
-        #  master
-        #
-        #  * details
-        #   - remove old replication log on master if exist
-        #   - start copylogdb to make replication active log
-        #   - copy archive logs from master
-        #
-        ################################################################################
-         
-           continue ? ([y]es / [n]o / [s]kip) : y
-         
-14. At this step, restart replication of the master node. Enter y to the question. 
-
-    ::
-
-        ##### step 14 ###################################################################
-        #
-        #  restart copylogdb/applylogdb on master
-        #
-        #  * details
-        #   - restart copylogdb/applylogdb
-        #
-        ################################################################################
-         
-           continue ? ([y]es / [n]o / [s]kip) : y
-
-15. At this step, the result of building the slave node is printed to check whether it was successful or not.
-
-    .. code-block:: none
-
-        ##### step 15 ##################################################################
-        #
-        #  completed
-        #
-        ################################################################################
-
-Operate the below process when you complete to run **ha_make_slavedb.sh** script.
-        
-*   If you build a slave node newly, add *nodeB* to **ha_node_list** of a master node and a slave node. 
-
-    *   Set "ha_node_list=cubrid\@nodeA:nodeB" in **cubrid_ha.conf** of a master and a slave.
-    *   In a master, reload **ha_node_list** by executing **cubrid heartbeat reload** command.
-    *   As the following, reconfigure **log_max_archives**, the number of archive logs in a master as the specified value in **cubrid.conf**.
-
-        ::
-        
-            $ csql --sysadm -u dba -c "SET SYSTEM PARAMETERS 'log_max_archives=0'" testdb@localhost
-    
-*   Check the HA status on a slave node, then start HA service with **cubrid heartbeat start** command.
-
-    ::
-
-        [NodeB]$ cubrid heartbeat status
-        @ cubrid heartbeat status
-        ++ cubrid master is not running.
-        
-        [NodeB]$ cubrid heartbeat start
-        @ cubrid heartbeat start
-        @ cubrid master start
-        ++ cubrid master start: success
-        
-        @ HA processes start
-        @ cubrid server start: testdb
-        
-        This may take a long time depending on the amount of recovery works to do.
-        
-        CUBRID 10.0
-        
-        ++ cubrid server start: success
-        @ copylogdb start
-        ++ copylogdb start: success
-        @ applylogdb start
-        ++ applylogdb start: success
-        ++ HA processes start: success
-        ++ cubrid heartbeat start: success
-        
-        [nodeB]$ cubrid heartbeat status
-        @ cubrid heartbeat status
-        
-        HA-Node Info (current nodeB, state slave)
-        Node nodeB (priority 2, state slave)
-        Node nodeA (priority 1, state master)
-        
-        HA-Process Info (master 26611, state slave)
-        Applylogdb testdb@nodeA:/home/cubrid_usr/CUBRID/databases/testdb_nodeA (pid 26831, state registered)
-        Copylogdb testdb@nodeA:/home/cubrid_usr/CUBRID/databases/testdb_nodeA (pid 26829, state registered)
-        Server testdb (pid 26617, state registered_and_standby)
-
-Set a broker as referring to :ref:`ha-cubrid-broker-conf` and start the broker with **cubrid broker restart** command.
-
-.. _from-slave-to-replica:
-
-Building Replica from Slave
----------------------------
-
-The below is an example to build newly or rebuild a replica node from a slave node; at this time, the source node for replication rebuilding would be slave node.
-When you build this node newly, "Master:Slave:Replica" will be from 1:1:0 to 1:1:1.
-
-.. image:: /images/s2r.png
-
-*   A host name of a master: *nodeA*
-*   A host name of a slave: *nodeB*
-*   A host name of a replica: *nodeC*
-
-Rebuilding replications can be performed while the system is running, however, to minimize replication delay, it is recommended to execute when there are just a few transactions per hour.
-
-Before starting to execute the **ha_make_slavedb.sh** script, run the following.
-
-#.  Stop the HA service of *nodeC*. If you build the *nodeC* newly, this is not necessary.
-
-    ::
-
-        [nodeC]$ cubrid heartbeat stop
-        [nodeC]$ cubrid service stop
-
-#.  If you newly build *nodeC*, configure **cubrid.conf**, **cubrid_ha.conf**, **cubrid_broker.conf** and **databases.txt** of *nodeA*, *nodeB* and *nodeC*, by referring to :ref:`ha-configuration`.
-
-    *   Configure a parameter in **cubrid.conf** about *nodeC*.
-    
-        ::
-        
-            ha_mode=replica
-            
-    *   Configure parameters in **cubrid_ha.conf** about all nodes.
-
-        ::
-        
-            ha_node_list=cubrid@nodeA:nodeB
-            ha_replica_list=cubrid@nodeC
-            
-    *   Configure **db-host** in **databases.txt** about all nodes.
-    
-        ::
-        
-            nodeA:nodeB:nodeC
-            
-        However, **db-host** in **databases.txt** is related to the access order to the database server by a broker; therefore, it is possible to change as you want.
-
-#.  Apply the changed value of **log_max_archives** to *nodeB* without restarting DB.
-
-    The below supposes that the number of archive logs which can store running transactions during replica building time as 10. Set "10" with "SET SYSTEM PARAMETERS" statement, and **log_max_archives** in **cubrid.conf** will not be changed because it's value will be used as the existing one after building/rebuilding of *nodeC*.
-    
-    ::
-    
-        [nodeB]$ csql -u dba -c "SET SYSTEM PARAMETERS 'force_remove_log_archives=no'" testdb@localhost
-        [nodeB]$ csql -u dba -c "SET SYSTEM PARAMETERS 'log_max_archives=10'" testdb@localhost
-
-#.  **ha_make_slavedb.sh** script should be configured in *nodeC*. In **target_host**, the source of the copied one, that is *nodeB* should be configured; in **repl_log_home**, the home directory of replication logs(default: **$CUBRID_DATABASES**) should be configured.
-
-    ::
-         
-        [nodeC]$ cd $CUBRID/share/scripts/ha
-        [nodeC]$ vi ha_make_slavedb.sh
-        target_host=nodeB
-
-#.  After configuration, **ha_make_slavedb.sh** script should be run on *nodeC*.
-
-    ::
-
-        [nodeC]$ cd $CUBRID/share/scripts/ha
-        [nodeC]$ ./ha_make_slavedb.sh
-
-.. note::   scp command is used when you run **ha_make_slavedb.sh**; to skip a password request when you run scp, you should configure a personal key to the replica node to build(*nodeC*), and a public key to the slave node(*nodeB*), the source of the replication. For details, see ref:`scp setting <scp-setting>`.
-
-If you find an error or quit the step by pressing "n" during executing each step of  **ha_make_slavedb.sh**, you should re-execute the script. When you re-execute the script, you can skip the succeeded step as pressing "n".
-
-1.  At this step, enter the password of a Linux account and password of **DBA**, the CUBRID database account, for HA rebuilding replication. Enter y to the question.
-
-    ::
-
-        ##### step 1 ###################################################################
-        #
-        # get HA/replica user password and DBA password
-        #
-        #  * warning !!!
-        #   - Because ha_make_slavedb.sh uses expect (ssh, scp) to control HA/replica node,
-        #     the script has to know these passwords.
-        #
-        ################################################################################
-         
-           continue ? ([y]es / [n]o / [s]kip) : y
-   
-    Enter the password of a Linux account of the HA node and the password of **DBA**, the CUBRID database account. If you have not changed the password of **DBA** after installing CUBRID, press the <Enter> key without entering the password of **DBA**. 
-   
-    ::
-    
-        HA/replica cubrid_usr's password :
-        HA/replica cubrid_usr's password :
-         
-        testdb's DBA password :
-        Retype testdb's DBA password :
-
-2.  At this step, check whether the environment variables of the replica node are correct. Enter y to the question. 
-
-    ::
-
-        ##### step 2 ###################################################################
-        #
-        #  ha_make_slavedb.sh is the script for making slave database more easily
-        #
-        #  * environment
-        #   - db_name           : testdb
-        #
-        #   - master_host       : nodeA
-        #   - slave_host        : nodeB
-        #   - replica_hosts     : nodeC
-        #
-        #   - current_host      : nodeC
-        #   - current_state     : replica
-        #
-        #   - target_host       : nodeB
-        #   - target_state      : slave
-        #
-        #   - repl_log_home     : /home/cubrid_usr/CUBRID/databases
-        #   - backup_dest_path  : /home/cubrid_usr/.ha/backup
-        #   - backup_option     :
-        #   - restore_option    :
-        #
-        #  * warning !!!
-        #   - environment on slave must be same as master
-        #   - database and replication log on slave will be deleted
-        #
-        ################################################################################
-     
-           continue ? ([y]es / [n]o / [s]kip) : y
-
-3.  At this step, copy the HA-related scripts of the replica node to the master node. Enter y to the question. Then the password will be asked if you did not set the public key with ssh-keygen when you sent a file with **scp** command. 
-
-    ::
-
-        ##### step 3 ###################################################################
-        #
-        #  copy scripts to master node
-        #
-        #  * details
-        #   - scp scripts to '~/.ha' on nodeA(master).
-        #
-        ################################################################################
-         
-           continue ? ([y]es / [n]o / [s]kip) : y
-
-4.  At this step, copy the HA-related scripts of the replica node to the slave node.
-
-    ::
-
-        ##### step 4 #####################################
-        #
-        #  copy scripts to slave node
-        #
-        #  * details
-        #   - scp scripts to '~/.ha' on nodeB().
-        #
-        ##################################################
-         
-           continue ? ([y]es / [n]o / [s]kip) : y
-         
-5.  At this step, check whether the environment variables of all nodes are correct. Enter y to the question. 
-
-    If **expect** command is not installed('yum install expect' in root account), this step can occur an error.
-
-    ::
-
-        ##### step 5 ###################################################################
-        #
-        #  check environment of all ha nodes
-        #
-        #  * details
-        #   - test $CUBRID == /home1/cubrid_usr/CUBRID
-        #   - test $CUBRID_DATABASES == /home1/cubrid_usr/CUBRID/database
-        #   - test -d /home1/cubrid_usr/CUBRID/database/testdb
-        #
-        ################################################################################
-         
-           continue ? ([y]es / [n]o / [s]kip) : y
-           
-6.  At this step, create backup volumes from a slave node(**target_host**) to rebuild HA replication; if you already have backup volumes which was created before, you can skip this step by entering "s". To rebuild replication with previous backup volumes, there are some constraints as follows.
-   
-    *   Archive logs created after starting backup, replication logs for the transactions after replication rebuilding must exist within a slave node(**target_host**); that is, backup volumes created a long time ago cannot be used).
-
-    *   Backup status information files should be left with "-o" option when doing backup. At this time, a stored path should be the same with the path of backup volume files. The file name should be the format such as *db_name*\ **.bkup.output**; if the file name is not this format, you should change it before running the script.
-
-    
-    *   The path of existing backup volumes and status informatin files should be specified in **backup_dest_path** parameter of the script. That is, the absolute path of the directory with backup volumes which exists in a slave node(**target_host**) is specified to this parameter.
-
-    ::
-    
-        ##### step 6 ###################################################################
-        #
-        #  online backup database on slave
-        #
-        #  * details
-        #   - run 'cubrid backupdb -C -D ... -o ... testdb@localhost' on slave
-        #
-        ################################################################################
-
-           continue ? ([y]es / [n]o / [s]kip) : y
-
-7.  At this step, copy the database backup of the slave node to the replica node. Enter y to the question. 
-           
-    ::       
-           
-        ##### step 7 ###################################################################
-        #
-        #  copy testdb databases backup to current host
-        #
-        #  * details
-        #   - scp databases.txt from target host if there's no testdb info on current host
-        #   - remove old database and replication log if exist
-        #   - make new database volume and replication path
-        #   - scp  database backup to current host
-        #
-        ################################################################################
-
-           continue ? ([y]es / [n]o / [s]kip) : y
-
-       
-8.  At this step, restore the copied database backup to the replica node. Enter y to the question. 
-
-    ::
-
-        ##### step 8 ###################################################################
-        #
-        #  restore database testdb on current host
-        #
-        #  * details
-        #   - cubrid restoredb -B ... testdb current host
-        #
-        ################################################################################
-
-           continue ? ([y]es / [n]o / [s]kip) : y
-
-9.  At this step, configure the HA meta information table value of the replica node. Enter y to the question. 
-
-    ::
-
-        ##### step 9 ###################################################################
-        #
-        #  make initial replication active log on master, and copy archive logs from
-        #  master
-        #
-        #  * details
-        #   - remove old replication log on master if exist
-        #   - start copylogdb to make replication active log
-        #   - copy archive logs from master
-        #
-        ################################################################################
-
-           continue ? ([y]es / [n]o / [s]kip) : y
-   
-
-10. At this step, initialize the replication log of the slave node and then copy the archive logs of the slave node to the replica node. Enter y to the question. 
-
-    ::
-       
-        ##### step 10 ###################################################################
-        #
-        #  make initial replication active log on slave, and copy archive logs from
-        #  slave
-        #
-        #  * details
-        #   - remove old replication log on slave if exists
-        #   - start copylogdb to make replication active log
-        #   - copy archive logs from slave
-        #
-        ################################################################################
-
-           continue ? ([y]es / [n]o / [s]kip) : y
-
-11. At this step, the result of building the replica node is printed to check whether it was successful or not.
-
-    .. code-block:: none
-
-        ##### step 11 ##################################################################
-        #
-        #  completed
-        #
-        ################################################################################
-        
-        
-Operate the below process when you complete to run **ha_make_slavedb.sh** script.
-
-*   When you build a replica node newly, apply **ha_node_list** and **ha_replica_list** of **cubrid_ha.conf** which were changed in *nodeA* and *nodeB*.
-
-    ::
-    
-        [nodeA]$ cubrid heartbeat reload
-        
-    ::
-    
-        [nodeB]$ cubrid heartbeat reload
-    
-*   In a slave node, reconfigure the **log_max_archives** parameter as the specified value.
-
-    ::
-    
-        $ csql -u dba -c "SET SYSTEM PARAMETERS 'log_max_archives=0'" testdb@localhost
-
-*   Check the HA status on a replica node, then start HA service with **cubrid heartbeat start** command.
-
-    ::
-    
-        [nodeC]$ cubrid hb status
-        @ cubrid heartbeat status
-
-         HA-Node Info (current nodeC, state unknown)
-
-
-         HA-Process Info (master 5214, state unknown)
-
-        [nodeC]$ cubrid hb start
-        @ cubrid heartbeat start
-        @ cubrid master start
-        ++ cubrid master is running.
-        @ HA processes start
-        @ cubrid server start: testdb
-
-        This may take a long time depending on the amount of recovery works to do.
-
-        CUBRID 9.3
-
-        ++ cubrid server start: success
-        @ copylogdb start
-        ++ copylogdb start: success
-        @ applylogdb start
-        ++ applylogdb start: success
-        ++ HA processes start: success
-        ++ cubrid heartbeat start: success
-        
-        [nodeC]$ cubrid hb status
-        @ cubrid heartbeat status
-
-         HA-Node Info (current nodeC, state replica)
-           Node nodeC (priority 32767, state replica)
-           Node nodeB (priority 2, state slave)
-           Node nodeA (priority 1, state master)
-
-
-         HA-Process Info (master 5214, state slave)
-           Applylogdb testdb@nodeB:/home1/cubrid_usr/CUBRID/databases/testdb_nodeB (pid 5816, state registered)
-           Applylogdb testdb@nodeA:/home1/cubrid_usr/CUBRID/databases/testdb_nodeA (pid 5814, state registered)
-           Copylogdb testdb@nodeB:/home1/cubrid_usr/CUBRID/databases/testdb_nodeB (pid 5812, state registered)
-           Copylogdb testdb@nodeA:/home1/cubrid_usr/CUBRID/databases/testdb_nodeA (pid 5810, state registered)
-           Server testdb (pid 5590, state registered_and_standby)
-
-*   Set a broker as referring to :ref:`ha-cubrid-broker-conf` and start the broker with **cubrid broker restart** command.
-
-Building Replica from Replica
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-The below is an example to build newly or rebuild a replica node from a replica node; at this time, the source node for replication rebuilding would be replica node.
-When you build this node newly, "Master:Slave:Replica" will be from 1:1:1 to 1:1:2.
-
-.. image:: /images/r2r.png
-
-*   A host name of a master: *nodeA*
-*   A host name of a slave: *nodeB*
-*   A host name of a replica: *nodeC*
-*   A host name of a replica: *nodeD*
-
-Rebuilding replications can be performed while the system is running, however, to minimize replication delay, it is recommended to execute when there are just a few transactions per hour.
-
-Before starting to execute the **ha_make_slavedb.sh** script, run the following.
-
-#.  Stop the HA service of *nodeD*. If you build the *nodeD* newly, this is not necessary.
-
-    ::
-
-        [nodeD]$ cubrid heartbeat stop
-        [nodeD]$ cubrid service stop
-
-#.  If you newly build *nodeD*, configure **cubrid.conf**, **cubrid_ha.conf**, **cubrid_broker.conf** and **databases.txt** of *nodeA*, *nodeB*, *nodeC* and *nodeD*, by referring to :ref:`ha-configuration`.
-
-    *   Configure a parameter in **cubrid.conf** about *nodeC* and *nodeD*.
-    
-        ::
-        
-            ha_mode=replica
-            
-    *   Configure parameters in **cubrid_ha.conf** about all nodes.
-    
-        ::
-        
-            ha_node_list=cubrid@nodeA:nodeB
-            ha_replica_list=cubrid@nodeC:nodeD
-            
-    *   Configure **db-host** in **databases.txt** about all nodes.
-    
-        ::
-        
-            nodeA:nodeB:nodeC:nodeD
-            
-        However, **db-host** in **databases.txt** is related to the access order to the database server by a broker; therefore, it is possible to change as you want.
-
-#.  Apply the changed value of **log_max_archives** to *nodeC* without restarting DB.
-
-    The below supposes that the number of archive logs which can store running transactions during replica building time as 10. Set "10" with "SET SYSTEM PARAMETERS" statement, and **log_max_archives** in **cubrid.conf** will not be changed because it's value will be used as the existing one after building/rebuilding of *nodeD*.
-    
-    ::
-    
-        [nodeC]$ csql -u dba -c "SET SYSTEM PARAMETERS 'force_remove_log_archives=no'" testdb@localhost
-        [nodeC]$ csql -u dba -c "SET SYSTEM PARAMETERS 'log_max_archives=10'" testdb@localhost
-
-#.  **ha_make_slavedb.sh** script should be configured in *nodeD*. In **target_host**, the source of the copied one, that is *nodeC* should be configured; in **repl_log_home**, the home directory of replication logs(default: **$CUBRID_DATABASES**) should be configured.
-
-    ::
-         
-        [nodeD]$ cd $CUBRID/share/scripts/ha
-        [nodeD]$ vi ha_make_slavedb.sh
-        target_host=nodeC
-        
-#.  After configuration, **ha_make_slavedb.sh** script should be run on *nodeD*.
-
-    ::
-
-        [nodeD]$ cd $CUBRID/share/scripts/ha
-        [nodeD]$ ./ha_make_slavedb.sh
-
-.. note::   scp command is used when you run **ha_make_slavedb.sh**; to skip a password request when you run scp, you should configure a personal key to the replica node, which is replication target(*nodeD*), and a public key to the other replica node, which is replication source(*nodeC*). For details, see ref:`scp setting <scp-setting>`.
-
-If you find an error or quit the step by pressing "n" during executing each step of  **ha_make_slavedb.sh**, you should re-execute the script. When you re-execute the script, you can skip the succeeded step as pressing "n".
-
-1.  At this step, enter the password of a Linux account and password of **DBA**, the CUBRID database account, for HA rebuilding replication. Enter y to the question.
-
-    ::
-
-        ##### step 1 ###################################################################
-        #
-        # get HA/replica user password and DBA password
-        #
-        #  * warning !!!
-        #   - Because ha_make_slavedb.sh uses expect (ssh, scp) to control HA/replica node,
-        #     the script has to know these passwords.
-        #
-        ################################################################################
-         
-           continue ? ([y]es / [n]o / [s]kip) : y
-   
-    Enter the password of a Linux account of the HA node and the password of **DBA**, the CUBRID database account. If you have not changed the password of **DBA** after installing CUBRID, press the <Enter> key without entering the password of **DBA**. 
-   
-    ::
-    
-        HA/replica cubrid_usr's password :
-        HA/replica cubrid_usr's password :
-         
-        testdb's DBA password :
-        Retype testdb's DBA password :
-
-2.  At this step, check whether the environment variables of the replica node are correct. Enter y to the question. 
-
-    ::
-
-        ##### step 2 ###################################################################
-        #
-        #  ha_make_slavedb.sh is the script for making slave database more easily
-        #
-        #  * environment
-        #   - db_name           : testdb
-        #
-        #   - master_host       : nodeA
-        #   - slave_host        : nodeB
-        #   - replica_hosts     : nodeC nodeD
-        #
-        #   - current_host      : nodeD
-        #   - current_state     : replica
-        #
-        #   - target_host       : nodeC
-        #   - target_state      : replica
-        #
-        #   - repl_log_home     : /home/cubrid_usr/CUBRID/databases
-        #   - backup_dest_path  : /home/cubrid_usr/.ha/backup
-        #   - backup_option     :
-        #   - restore_option    :
-        #
-        #  * warning !!!
-        #   - environment on slave must be same as master
-        #   - database and replication log on slave will be deleted
-        #
-        ################################################################################
-     
-           continue ? ([y]es / [n]o / [s]kip) : y
-
-3.  At this step, copy the HA-related scripts of the replica node to the master node. Enter y to the question. Then the password will be asked if you did not set the public key with ssh-keygen when you sent a file with **scp** command. 
-
-    ::
-
-        ##### step 3 ###################################################################
-        #
-        #  copy scripts to master node
-        #
-        #  * details
-        #   - scp scripts to '~/.ha' on nodeA(master).
-        #
-        ################################################################################
-         
-           continue ? ([y]es / [n]o / [s]kip) : y
-
-4.  At this step, copy the HA-related scripts of the replica node to the slave node.
-
-    ::
-
-        ##### step 4 #####################################
-        #
-        #  copy scripts to slave node
-        #
-        #  * details
-        #   - scp scripts to '~/.ha' on nodeB().
-        #
-        ##################################################
-         
-           continue ? ([y]es / [n]o / [s]kip) : y
-
-5.  At this step, copy the HA-related scripts of one replica node to the other replica node.
-
-    ::
-    
-        ##### step 5 ###################################################################
-        #
-        #  copy scripts to target node
-        #
-        #  * details
-        #   - scp scripts to '~/.ha' on nodeC(replica).
-        #
-        ################################################################################
-
-           continue ? ([y]es / [n]o / [s]kip) : y
-
-           
-6.  At this step, check whether the environment variables of all nodes are correct. Enter y to the question. 
-
-    If **expect** command is not installed('yum install expect' in root account), this step can occur an error.
-
-    ::
-
-        ##### step 6 ###################################################################
-        #
-        #  check environment of all ha nodes
-        #
-        #  * details
-        #   - test $CUBRID == /home1/cubrid_usr/CUBRID
-        #   - test $CUBRID_DATABASES == /home1/cubrid_usr/CUBRID/database
-        #   - test -d /home1/cubrid_usr/CUBRID/database/testdb
-        #
-        ################################################################################
-         
-           continue ? ([y]es / [n]o / [s]kip) : y
-   
-7.  At this step, create backup volumes from a source node(**target_host**) to rebuild HA replication; if you already have backup volumes which was created before, you can skip this step by entering "s". To rebuild replication with previous backup volumes, there are some constraints as follows.
-   
-    *   Archive logs created after starting backup, replication logs for the transactions after replication rebuilding must exist within a source replica node(**target_host**); that is, backup volumes created a long time ago cannot be used).
- 
-    *   Backup status information files should be left with "-o" option when doing backup. At this time, a stored path should be the same with the path of backup volume files. The file name should be the format such as *db_name*\ **.bkup.output**; if the file name is not this format, you should change it before running the script.
-    
-    *   The path of existing backup volumes and status informatin files should be specified in **backup_dest_path** parameter of the script. That is, the absolute path of the directory with backup volumes which exists in a source node(**target_host**) is specified to this parameter.
-    
-    ::
-    
-        ##### step 7 ###################################################################
-        #
-        #  online backup database  on replica
-        #
-        #  * details
-        #   - run 'cubrid backupdb -C -D ... -o ... testdb@localhost' on replica
-        #
-        ################################################################################
-
-           continue ? ([y]es / [n]o / [s]kip) : y
-
-8. At this step, copy the database backup of the source replica node to the target replica node. Enter y to the question. 
-           
-    ::       
-           
-        ##### step 8 ###################################################################
-        #
-        #  copy testdb databases backup to current host
-        #
-        #  * details
-        #   - scp databases.txt from target host if there's no testdb info on current host
-        #   - remove old database and replication log if exist
-        #   - make new database volume and replication path
-        #   - scp  database backup to current host
-        #
-        ################################################################################
-
-           continue ? ([y]es / [n]o / [s]kip) : y
-
-       
-9.  At this step, restore the copied database backup to the target replica node. Enter y to the question. 
-
-    ::
-
-        ##### step 9 ###################################################################
-        #
-        #  restore database testdb on current host
-        #
-        #  * details
-        #   - cubrid restoredb -B ... testdb current host
-        #
-        ################################################################################
-
-           continue ? ([y]es / [n]o / [s]kip) : y
-
-10. At this step, stop replication of a source replica node. Enter y to the question.
-
-    ::
-           
-        ##### step 10 ###################################################################
-        #
-        #  suspend copylogdb/applylogdb on target server if running
-        #
-        #  * details
-        #   - deregister copylogdb/applylogdb on nodeC(replica).
-        #
-        ################################################################################
-
-           continue ? ([y]es / [n]o / [s]kip) : y
-
-11. At this step, initialize the replication log of the source replica node and then archive logs of the source replica node to the target replica node. Enter y to the question.
-
-    ::
-       
-        ##### step 11 ###################################################################
-        #
-        #  make initial replication active log on target, and copy archive logs from
-        #  target
-        #
-        #  * details
-        #   - remove old replication log on target if exists
-        #   - start copylogdb to make replication active log
-        #   - copy archive logs from target
-        #
-        ################################################################################
-
-           continue ? ([y]es / [n]o / [s]kip) : y
-
-12. At this step, restart replication of the source replica node. Enter y to the question. 
-
-    ::
-
-        ##### step 12 ###################################################################
-        #
-        #  restart copylogdb/applylogdb on target
-        #
-        #  * details
-        #   - restart copylogdb/applylogdb
-        #
-        ################################################################################
-
-           continue ? ([y]es / [n]o / [s]kip) : y
-
-13. At this step, the result of building the replica node is printed to check whether it was successful or not.
-
-    .. code-block:: none
-
-        ##### step 13 ##################################################################
-        #
-        #  completed
-        #
-        ################################################################################
-
-Operate the below process when you complete to run **ha_make_slavedb.sh** script.
-
-*   When you build *nodeD* newly, apply **ha_node_list** and **ha_replica_list** of **cubrid_ha.conf** which were changed in *nodeA*, *nodeB* and *nodeC*.
-
-    ::
-    
-        [nodeA]$ cubrid heartbeat reload
-        
-    ::
-    
-        [nodeB]$ cubrid heartbeat reload
-
-    ::
-    
-        [nodeC]$ cubrid heartbeat reload
-        
-*   In *nodeC*, reconfigure the **log_max_archives** parameter as the specified value.
-
-    ::
-    
-        [nodeC]$ csql -u dba -c "SET SYSTEM PARAMETERS 'log_max_archives=0'" testdb@localhost
-
-*   Check the HA status at *nodeD*, then start HA service with **cubrid heartbeat start** command.
-
-    ::
-    
-        [nodeD]$ cubrid hb status
-        @ cubrid heartbeat status
-
-         HA-Node Info (current nodeD, state unknown)
-
-
-         HA-Process Info (master 5214, state unknown)
-
-        [nodeD]$ cubrid hb start
-        @ cubrid heartbeat start
-        @ cubrid master start
-        ++ cubrid master is running.
-        @ HA processes start
-        @ cubrid server start: testdb
-
-        This may take a long time depending on the amount of recovery works to do.
-
-        CUBRID 10.0
-
-        ++ cubrid server start: success
-        @ copylogdb start
-        ++ copylogdb start: success
-        @ applylogdb start
-        ++ applylogdb start: success
-        ++ HA processes start: success
-        ++ cubrid heartbeat start: success
-        
-        [nodeD]$ cubrid hb status
-        @ cubrid heartbeat status
-
-         HA-Node Info (current nodeD, state replica)
-           Node nodeD (priority 32767, state replica)
-           Node nodeC (priority 32767, state replica)
-           Node nodeB (priority 2, state slave)
-           Node nodeA (priority 1, state master)
-
-
-         HA-Process Info (master 5214, state slave)
-           Applylogdb testdb@nodeB:/home1/cubrid_usr/CUBRID/databases/testdb_nodeB (pid 5816, state registered)
-           Applylogdb testdb@nodeA:/home1/cubrid_usr/CUBRID/databases/testdb_nodeA (pid 5814, state registered)
-           Copylogdb testdb@nodeB:/home1/cubrid_usr/CUBRID/databases/testdb_nodeB (pid 5812, state registered)
-           Copylogdb testdb@nodeA:/home1/cubrid_usr/CUBRID/databases/testdb_nodeA (pid 5810, state registered)
-           Server testdb (pid 5590, state registered_and_standby)
-
-*   Set a broker as referring to :ref:`ha-cubrid-broker-conf` and start the broker with **cubrid broker restart** command.
-
-.. _from-replica-to-slave:
-
-Building Slave from Replica
----------------------------
-
-The below is an example to build newly or rebuild a slave node from a replica node; at this time, the source node for replication rebuilding would be replica node. 
-When you build this node newly, "Master:Slave:Replica" will be from 1:0:2 to 1:1:2.
-When you use **ha_make_slavedb.sh** script, a slave node after rebuilding should exist only one.
-
-.. image:: /images/r2s.png
-
-*   A host name of a master: *nodeA*
-*   A host name of a slave: *nodeB*
-*   A host name of a replica: *nodeC*
-*   A host name of a replica: *nodeD*
-
-Rebuilding replications can be performed while the system is running, however, to minimize replication delay, it is recommended to execute when there are just a few transactions per hour.
-
-Before starting to execute the **ha_make_slavedb.sh** script, run the following.
-
-#.  Stop the HA service of *nodeB*. If you build the *nodeB* newly, this is not necessary.
-
-    ::
-
-        [nodeB]$ cubrid heartbeat stop
-        [nodeB]$ cubrid service stop
-        
-#.  If you newly build *nodeB*, configure **cubrid.conf**, **cubrid_ha.conf**, **cubrid_broker.conf** and **databases.txt** of *nodeA*, *nodeB*, *nodeC* and *nodeD*, by referring to :ref:`ha-configuration`.
-
-    *   Configure a parameter in **cubrid.conf** about *nodeB*.
-
-        ::
-        
-            ha_mode=on
-            
-    *   Configure parameters in **cubrid_ha.conf** about all nodes.
-
-        ::
-        
-            ha_node_list=cubrid@nodeA:nodeB
-            ha_replica_list=cubrid@nodeC:nodeD
-            
-    *   Configure **db-host** in **databases.txt** about all nodes.
-    
-        ::
-        
-            nodeA:nodeB:nodeC:nodeD
-            
-        However, **db-host** in **databases.txt** is related to the access order to the database server by a broker; therefore, it is possible to change as you want.
-
-#.  Apply the changed value of **log_max_archives** to *nodeC* without restarting DB.
-
-    The below supposes that the number of archive logs which can store running transactions during replica building time as 10. Set "10" with "SET SYSTEM PARAMETERS" statement, and **log_max_archives** in **cubrid.conf** will not be changed because it's value will be used as the existing one after building/rebuilding of *nodeB*.
-    
-    ::
-    
-        [nodeC]$ csql -u dba -c "SET SYSTEM PARAMETERS 'force_remove_log_archives=no'" testdb@localhost
-        [nodeC]$ csql -u dba -c "SET SYSTEM PARAMETERS 'log_max_archives=10'" testdb@localhost
-
-#.  **ha_make_slavedb.sh** script should be configured in *nodeB*. In **target_host**, the source of the copied one, that is *nodeB* should be configured; in **repl_log_home**, the home directory of replication logs(default: **$CUBRID_DATABASES**) should be configured.
-
-    ::
-         
-        [nodeB]$ cd $CUBRID/share/scripts/ha
-        [nodeB]$ vi ha_make_slavedb.sh
-        target_host=nodeC
-
-#.  After configuration, **ha_make_slavedb.sh** script should be run on *nodeB*.
-
-    ::
-
-        [nodeB]$ cd $CUBRID/share/scripts/ha
-        [nodeB]$ ./ha_make_slavedb.sh
-
-.. note::   scp command is used when you run **ha_make_slavedb.sh**; to skip a password request when you run scp, you should configure a personal key to the replica node, which is replication target(*nodeB*), and a public key to the other replica node, which is replication source(*nodeC*). For details, see ref:`scp setting <scp-setting>`.
-
-If you find an error or quit the step by pressing "n" during executing each step of  **ha_make_slavedb.sh**, you should re-execute the script. When you re-execute the script, you can skip the succeeded step as pressing "n".
-
-
-1.  At this step, enter the password of a Linux account and password of **DBA**, the CUBRID database account, for HA rebuilding replication. Enter y to the question.
-
-    ::
-
-        ##### step 1 ###################################################################
-        #
-        # get HA/replica user password and DBA password
-        #
-        #  * warning !!!
-        #   - Because ha_make_slavedb.sh uses expect (ssh, scp) to control HA/replica node,
-        #     the script has to know these passwords.
-        #
-        ################################################################################
-
-           continue ? ([y]es / [n]o / [s]kip) : y
-
-    Enter the password of a Linux account of the HA node and the password of **DBA**, the CUBRID database account. If you have not changed the password of **DBA** after installing CUBRID, press the <Enter> key without entering the password of **DBA**. 
-   
-    ::
-    
-        HA/replica cubrid_usr's password :
-        HA/replica cubrid_usr's password :
-         
-        testdb's DBA password :
-        Retype testdb's DBA password :
-    
-2.  At this step, check whether the environment variables of the slave node are correct. Enter y to the question. 
-
-    ::    
-
-        ##### step 2 ###################################################################
-        #
-        #  ha_make_slavedb.sh is the script for making slave database more easily
-        #
-        #  * environment
-        #   - db_name           : testdb
-        #
-        #   - master_host       : dhtest001.ncl
-        #   - slave_host        : test-dhlee002.ncl
-        #   - replica_hosts     : test-dhlee004.ncl test-dhlee005.ncl
-        #
-        #   - current_host      : test-dhlee002.ncl
-        #   - current_state     : slave
-        #
-        #   - target_host       : test-dhlee004.ncl
-        #   - target_state      : replica
-        #
-        #   - repl_log_home     : /home1/cubrid/CUBRID/databases
-        #   - backup_dest_path  : /home1/cubrid/.ha/backup
-        #   - backup_option     :
-        #   - restore_option    :
-        #
-        #  * warning !!!
-        #   - environment on slave must be same as master
-        #   - database and replication log on slave will be deleted
-        #
-        ################################################################################
-
-            continue ? ([y]es / [n]o / [s]kip) : y
-
-3.  At this step, copy the HA-related scripts of the slave node to the master node. Enter y to the question. Then the password will be asked if you did not set the public key with ssh-keygen when you sent a file with **scp** command. 
-
-    ::
-
-        ##### step 3 ###################################################################
-        #
-        #  copy scripts to master node
-        #
-        #  * details
-        #   - scp scripts to '~/.ha' on dhtest001.ncl(master).
-        #
-        ################################################################################
-
-           continue ? ([y]es / [n]o / [s]kip) : y
-
-4.  At this step, copy the HA-related scripts to the replica node.
-
-    ::   
-
-
-        ##### step 4 ###################################################################
-        #
-        #  copy scripts to replication node
-        #
-        #  * details
-        #   - scp scripts to '~/.ha' on replication node.
-        #
-        ################################################################################
-
-           continue ? ([y]es / [n]o / [s]kip) : y
-
-5.  At this step, check whether the environment variables of all nodes are correct. Enter y to the question. 
-
-    If **expect** command is not installed('yum install expect' in root account), this step can occur an error.
-
-    ::
-
-        ##### step 5 ###################################################################
-        #
-        #  check environment of all ha nodes
-        #
-        #  * details
-        #   - test $CUBRID == /home1/cubrid/CUBRID
-        #   - test $CUBRID_DATABASES == /home1/cubrid/CUBRID/databases
-        #   - test -d /home1/cubrid/CUBRID/databases
-        #
-        ################################################################################
-
-           continue ? ([y]es / [n]o / [s]kip) : y
-
-6.  At this step, stop replication of a master node. Enter y to the question.
-
-    ::
-
-        ##### step 6 ###################################################################
-        #
-        #  suspend copylogdb/applylogdb on master if running
-        #
-        #  * details
-        #   - deregister copylogdb/applylogdb on dhtest001.ncl(master).
-        #
-        ################################################################################
-
-           continue ? ([y]es / [n]o / [s]kip) : y
-
-7.  At this step, delete the old replication log from the slave node and initialize the HA meta information table of the master node. Enter y to the question. 
-
-
-    ::
-
-        ##### step 7 ###################################################################
-        #
-        #  remove old copy log of slave and init db_ha_apply_info on master
-        #
-        #  * details
-        #   - remove old copy log of slave
-        #   - init db_ha_apply_info on master
-        #
-        ################################################################################
-
-           continue ? ([y]es / [n]o / [s]kip) : y
-
-8.  At this step, initialize the HA meta information table of replica node. In this scenario, there is no replica node; therefore, you can skip this step and go to the next step by entering s. 
-
-    ::
-    
-        ##### step 8 ###################################################################
-        #
-        #  remove old copy log of slave and init db_ha_apply_info on replications
-        #
-        #  * details
-        #   - remove old copy log of slave
-        #   - init db_ha_apply_info on replications
-        #
-        ################################################################################
-
-           continue ? ([y]es / [n]o / [s]kip) : y
-
-9.  At this step, create a backup volume from the replica node (**target_host**) for HA replication rebuilding. You can skip this step and go to the next step by entering s if there is an existing backup volume. There are some constraints for rebuilding replication by using the existing backup volume, which are as follows:
-
-    *   The archive logs, including the transaction being executed during backup, must be in the replica node (**target_host**); this means that a backup volume created long ago cannot be used.
-
-    *   The backup status information file must be created by using the **-o** option during backup. At this time, the path must be identical to the path of the backup volume file. The file name must be *db_name*\ **.bkup.output** format. If the file name is not identical with the format, change the file name according to the format before executing the script.
-
-    *   The path of the existing backup volume and the status information file must be specified in the **backup_dest_path** parameter in the script. In other words, specify the absolute path of the directory containing the backup volume on the replica node (**target_host**) to this parameter.
-
-    ::
-   
-        ##### step 9 ###################################################################
-        #
-        #  online backup database  on replica
-        #
-        #  * details
-        #   - run 'cubrid backupdb -C -D ... -o ... testdb@localhost' on replica
-        #
-        ################################################################################
-
-           continue ? ([y]es / [n]o / [s]kip) : y
-
-10. At this step, copy the database backup of the replica node to the slave node. Enter y to the question. 
-
-    ::
-    
-        ##### step 10 ###################################################################
-        #
-        #  copy testdb databases backup to current host
-        #
-        #  * details
-        #   - scp databases.txt from target host if there's no testdb info on current host
-        #   - remove old database and replication log if exist
-        #   - make new database volume and replication path
-        #   - scp  database backup to current host
-        #
-        ################################################################################
-
-           continue ? ([y]es / [n]o / [s]kip) : y
-
-11. At this step, restore the copied database backup to the slave node. Enter y to the question. 
-
-    ::
-    
-        ##### step 11 ###################################################################
-        #
-        #  restore database testdb on current host
-        #
-        #  * details
-        #   - cubrid restoredb -B ... testdb current host
-        #
-        ################################################################################
-
-           continue ? ([y]es / [n]o / [s]kip) : y
-
-12. At this step, initialize the replication log of the master node and then copy the storage log of the master node to the slave node. Enter y to the question. 
-
-    ::
-
-        ##### step 12 ###################################################################
-        #
-        #  make initial replication active log on master, and copy archive logs from
-        #  master
-        #
-        #  * details
-        #   - remove old replication log on master if exist
-        #   - start copylogdb to make replication active log
-        #   - copy archive logs from master
-        #
-        ################################################################################
-
-           continue ? ([y]es / [n]o / [s]kip) : y
-
-13. At this step, restart replication of the master node. Enter y to the question. 
-
-    ::
-
-        ##### step 13 ###################################################################
-        #
-        #  restart copylogdb/applylogdb on master
-        #
-        #  * details
-        #   - restart copylogdb/applylogdb
-        #
-        ################################################################################
-
-           continue ? ([y]es / [n]o / [s]kip) : y
-
-14. At this step, the result of building the slave node is printed to check whether it was successful or not.
-
-    .. code-block:: none
-   
-        ##### step 14 ##################################################################
-        #
-        #  completed
-        #
-        ################################################################################
-
-Operate the below process when you complete to run **ha_make_slavedb.sh** script.
-        
-*   Check the HA status on a slave node, then start HA service with **cubrid heartbeat start** command.
-
-    ::
-
-        [NodeB]$ cubrid heartbeat status
-        @ cubrid heartbeat status
-        ++ cubrid master is not running.
-
-        [NodeB]$ cubrid heartbeat start
-        @ cubrid heartbeat start
-        @ cubrid master start
-        ++ cubrid master start: success
-        @ HA processes start
-        @ cubrid server start: testdb
-
-        This may take a long time depending on the amount of recovery works to do.
-
-        CUBRID 10.0
-
-        ++ cubrid server start: success
-        @ copylogdb start
-        ++ copylogdb start: success
-        @ applylogdb start
-        ++ applylogdb start: success
-        ++ HA processes start: success
-        ++ cubrid heartbeat start: success
-        
-        [NodeB]$ cubrid hb status
-        @ cubrid heartbeat status
-
-         HA-Node Info (current test-dhlee002.ncl, state slave)
-           Node nodeD (priority 32767, state replica)
-           Node nodeC (priority 32767, state replica)
-           Node nodeB(priority 2, state slave)
-           Node nodeA (priority 1, state master)
-
-
-         HA-Process Info (master 27221, state slave)
-           Applylogdb testdb@nodeA:/home1/cubrid/CUBRID/databases/testdb_nodeA (pid 27455, state registered)
-           Copylogdb testdb@nodeA:/home1/cubrid/CUBRID/databases/testdb_nodeA (pid 27453, state registered)
-           Server testdb (pid 27228, state registered_and_standby)
-    
-Set a broker as referring to :ref:`ha-cubrid-broker-conf` and start the broker with **cubrid broker restart** command.

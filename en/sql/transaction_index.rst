@@ -8,6 +8,8 @@ In multi-user environment, controlling access and update is essential to protect
 
 To control parallel operations on the same data, data must be locked during transaction, and unacceptable access to the data by another transaction must be blocked until the end of the transaction. In addition, any updates to a certain class must not be seen by other users before they are committed. If updates are not committed, all queries entered after the last commit or rollback of the update can be invalidated.
 
+CUBRID uses Multiversion Concurrency Control to optimize data access. Data being modified is not overwritten, old data is instead marked as deleted and a newer version is added elsewhere. Other transactions can continue to read the old version without locking it. Each transaction sees its own snapshot of the database that is defined at the start of transaction or statement execution. Furthermore, the snapshot is only affected by own changes and remains consistent throughout the execution.
+
 All examples introduced here were executed by csql.
 
 .. toctree::

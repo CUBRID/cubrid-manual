@@ -295,31 +295,17 @@ MVCC maintains multiple versions for each database row. Each version is marked b
 
 When a transaction T1 inserts a new row, it creates its first version and sets its unique identifier MVCCID1 as insert id. The MVCCID is stored as meta-data in record header:
 
-*   TODO: Find a format for these representations:
-
-+-----------------+---------+-------------+
-| OTHER META-DATA | MVCCID1 | RECORD DATA |
-+-----------------+---------+-------------+
+.. image:: /images/transaction_inserted_record.png
 
 Until T1 commits, other transactions should not see this row. The MVCCID helpes identifying the authors of database changes and place them on a timeline, so others can know if the change is valid or not. In this case, anyone checking this row find the MVCCID1, find out that the owner is still active, hence the row must be (still) invisible.
 
 After T1 commits, a new transaction T2 finds the row and decides to remove it. T2 does not remove this version, allowing others to access it, instead it gets an exclusive lock, to prevent others from changing it, and marks the version as deleted. It adds another MVCCID so others can identify the deleter:
 
-+-----------------+---------+---------+-------------+
-| OTHER META-DATA | MVCCID1 | MVCCID2 | RECORD DATA |
-+-----------------+---------+---------+-------------+
+.. image:: /images/transaction_deleted_record.png
 
 If T2 decides instead to update one of the record values, it must create a new version. Both versions are marked with transaction MVCCID, old version for delete and new version for insert. Old version also stores a link to the location of new version, and the row representations looks like this:
 
-+-----------------+---------+---------+----------------------+------------+
-| OTHER META-DATA | MVCCID1 | MVCCID2 | NEW VERSION LOCATION |RECORD DATA |
-+-----------------+---------+---------+----------------------+------------+
-
-=>
-
-+-----------------+---------+-------------+
-| OTHER META-DATA | MVCCID2 | RECORD DATA |
-+-----------------+---------+-------------+
+.. image:: /images/transaction_updated_record.png
 
 Currently, only T2 can see second row version, while all other transaction will continue to access the first version. The property of a version to be seen or not be seen by running transactions is called visibility. The visibility property is relative to each transaction, some can consider it true, whereas others can consider it false.
 

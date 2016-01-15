@@ -241,16 +241,16 @@ Database Concurrency
 
 If there are multiple users with read and write authorization to a database, possibility exists that more than one user will access the database simultaneously. Controlling access and update in multi-user environment is essential to protect database integrity and ensure that users and transactions should have accurate and consistent data. Without appropriate control, data could be updated incorrectly in the wrong order.
 
-The transaction must ensure database concurrency, and each transaction must guarantee appropriate results. When multiple transactions are being executed at once, an event in transaction T1 should not affect an event in transaction T2. This means isolation. Transaction isolation level is the degree to which a transaction is separated from all other concurrent transactions. The higher isolation level means the lower interference from other transactions. The lower isolation level means the higher the concurrency. A database determines whether which lock is applied to tables and records based on these isolation levels. Therefore, can control the level of consistency and concurrency specific to a service by setting appropriate isolation level.
+The transaction must ensure database concurrency, and each transaction must guarantee appropriate results. When multiple transactions are being executed at once, an event in transaction *T1* should not affect an event in transaction *T2*. This means isolation. Transaction isolation level is the degree to which a transaction is separated from all other concurrent transactions. The higher isolation level means the lower interference from other transactions. The lower isolation level means the higher the concurrency. A database determines whether which lock is applied to tables and records based on these isolation levels. Therefore, can control the level of consistency and concurrency specific to a service by setting appropriate isolation level.
 
 The read operations that allow interference between transactions with isolation levels are as follows:
 
-*   **Dirty read** : A transaction T2 can read D' before a transaction T1 updates data D to D' and commits it.
-*   **Non-repeatable read** : A transaction T1 can read changed value, if a transaction T2 updates or deletes data and commits while data is retrieved in the transaction T1 multiple times.
-*   **Phantom read** : A transaction T1 can read E, if a transaction T2 inserts new record E and commits while data is retrieved in the transaction T1 multiple times.
+*   **Dirty read** : A transaction *T2* can read *D'* before a transaction *T1* updates data *D* to *D'* and commits it.
+*   **Non-repeatable read** : A transaction *T1* can read changed value, if a transaction *T2* updates or deletes data and commits while data is retrieved in the transaction *T1* multiple times.
+*   **Phantom read** : A transaction *T1* can read *E*, if a transaction *T2* inserts new record *E* and commits while data is retrieved in the transaction *T1* multiple times.
 
-(O: YES, X: NO)
 Based on these interferences, the SQL standard defines four levels of transaction isolation:
+
 *   **READ UNCOMMITTED** allows dirty read, unrepeatable read and phantom read.
 *   **READ COMMITTED** does not allow dirty read but allows unrepeatable read and phantom read.
 *   **REPEATABLE READ** does not allow dirty read and unrepeatable read but allows phantom read.
@@ -282,38 +282,38 @@ The default value of CUBRID isolation level is :ref:`isolation-level-4`.
 Multiversion Concurrency Control
 ================================
 
-CUBRID previous versions managed isolation levels using the well known two phase locking protocol. In this protocol, a transaction obtains a shared lock before it reads an object, and an exclusive lock before it updates the object so that conflicting operations are not executed simultaneously. If transaction T1 requires a lock, the system checks if the requested lock conflicts with the existing one. If it does, transaction T1 enters a standby state and delays the lock. If another transaction T2 releases the lock, transaction T1 resumes and obtains it. Once the lock is released, the transaction do not require anymore new locks.
+CUBRID previous versions managed isolation levels using the well known two phase locking protocol. In this protocol, a transaction obtains a shared lock before it reads an object, and an exclusive lock before it updates the object so that conflicting operations are not executed simultaneously. If transaction *T1* requires a lock, the system checks if the requested lock conflicts with the existing one. If it does, transaction *T1* enters a standby state and delays the lock. If another transaction *T2* releases the lock, transaction *T1* resumes and obtains it. Once the lock is released, the transaction do not require any new locks.
 
 CUBRID 10.0 replaced the two phase locking protocol with a Multiversion Concurrency Control (MVCC) protocol. Unlike two phase locking, MVCC does not block readers to access objects being modified by concurrent transactions. MVCC duplicates rows, creating multiple versions on each update. Never blocking readers is important for workloads involving mostly value reads from the database, commonly used in read-world scenarios. Exclusive locks are still required before updating objects.
 
-MVCC is also known for providing point in time consistent view of the database and for being particularly adept at implementing true snapshot isolation with less performance costs than other methods of concurrency.
+MVCC is also known for providing point in time consistent view of the database and for being particularly adept at implementing true **snapshot isolation** with less performance costs than other methods of concurrency.
 
 Versioning, visibility and snapshot
 -----------------------------------
 
 MVCC maintains multiple versions for each database row. Each version is marked by its inserter and deleter with MVCCID's - unique identifiers for writer transactions. These markers are useful to identify the author of a change and to place the change on a timeline.
 
-When a transaction T1 inserts a new row, it creates its first version and sets its unique identifier MVCCID1 as insert id. The MVCCID is stored as meta-data in record header:
+When a transaction *T1* inserts a new row, it creates its first version and sets its unique identifier *MVCCID1* as insert id. The MVCCID is stored as meta-data in record header:
 
 .. image:: /images/transaction_inserted_record.png
 
-Until T1 commits, other transactions should not see this row. The MVCCID helpes identifying the authors of database changes and place them on a timeline, so others can know if the change is valid or not. In this case, anyone checking this row find the MVCCID1, find out that the owner is still active, hence the row must be (still) invisible.
+Until *T1* commits, other transactions should not see this row. The MVCCID helps identifying the authors of database changes and place them on a time line, so others can know if the change is valid or not. In this case, anyone checking this row find the *MVCCID1*, find out that the owner is still active, hence the row must be (still) invisible.
 
-After T1 commits, a new transaction T2 finds the row and decides to remove it. T2 does not remove this version, allowing others to access it, instead it gets an exclusive lock, to prevent others from changing it, and marks the version as deleted. It adds another MVCCID so others can identify the deleter:
+After *T1* commits, a new transaction *T2* finds the row and decides to remove it. *T2* does not remove this version, allowing others to access it, instead it gets an exclusive lock, to prevent others from changing it, and marks the version as deleted. It adds another MVCCID so others can identify the deleter:
 
 .. image:: /images/transaction_deleted_record.png
 
-If T2 decides instead to update one of the record values, it must create a new version. Both versions are marked with transaction MVCCID, old version for delete and new version for insert. Old version also stores a link to the location of new version, and the row representations looks like this:
+If *T2* decides instead to update one of the record values, it must create a new version. Both versions are marked with transaction MVCCID, old version for delete and new version for insert. Old version also stores a link to the location of new version, and the row representations looks like this:
 
 .. image:: /images/transaction_updated_record.png
 
-Currently, only T2 can see second row version, while all other transaction will continue to access the first version. The property of a version to be seen or not be seen by running transactions is called visibility. The visibility property is relative to each transaction, some can consider it true, whereas others can consider it false.
+Currently, only *T2* can see second row version, while all other transaction will continue to access the first version. The property of a version to be seen or not to be seen by running transactions is called **visibility**. The visibility property is relative to each transaction, some can consider it true, whereas others can consider it false.
 
-A transaction T3 that starts after T2 executes row update, but before T2 commits, will not be able to see its new version, not even after T2 commits. The visibility of one version towards T3 depends on the state of its inserter and deleter when T3 started and preserves its status for the lifetime of T3.
+A transaction *T3* that starts after *T2* executes row update, but before *T2* commits, will not be able to see its new version, not even after *T2* commits. The visibility of one version towards *T3* depends on the state of its inserter and deleter when *T3* started and preserves its status for the lifetime of *T3*.
 
-As a matter of fact, the visibility of all versions in database towards on transaction does not depend on the changes that occur after transaction is started. Moreover, any new version added is also ignored. Consequently, the set of all visible versions in the database remains unchanged and form the snapshot of the transaction. Hence, snapshot isolation is provided by MVCC and it is a guarantee that all read queries made in a transaction see a consistent view of the database.
+As a matter of fact, the visibility of all versions in database towards on transaction does not depend on the changes that occur after transaction is started. Moreover, any new version added is also ignored. Consequently, the set of all visible versions in the database remains unchanged and form the snapshot of the transaction. Hence, **snapshot isolation** is provided by MVCC and it is a guarantee that all read queries made in a transaction see a consistent view of the database.
 
-In CUBRID 10.0, snapshot is a filter of all invalid MVCCID's. An MVCCID is invalid if it is not committed before the snapshot is taken. To avoid updating the snapshot filter whenever a new transaction start, the snapshot is defined using two border MVCCID's: the lowest active MVCCID and the highest committed MVCCID. Only a list of active MVCCID values between the border is saved. Any transaction starting after snapshot is guaranteed to have an MVCCID bigger than highest committed and is automatically considered invalid. Any MVCCID below lowest active must be committed and is automatically considered valid.
+In CUBRID 10.0, **snapshot** is a filter of all invalid MVCCID's. An MVCCID is invalid if it is not committed before the snapshot is taken. To avoid updating the snapshot filter whenever a new transaction starts, the snapshot is defined using two border MVCCID's: the lowest active MVCCID and the highest committed MVCCID. Only a list of active MVCCID values between the border is saved. Any transaction starting after snapshot is guaranteed to have an MVCCID bigger than highest committed and is automatically considered invalid. Any MVCCID below lowest active must be committed and is automatically considered valid.
 
 The snapshot filter algorithm that decides a version visibility queries the MVCCID markers used for insert and delete:
 
@@ -334,35 +334,35 @@ Table explained:
 *   **Invalid insert MVCCID, invalid delete MVCCID:** Inserter did not commit before snapshot, and record is not deleted or delete was also not committed, hence version is not visible.
 *   **Invalid insert MVCCID, valid delete MVCCID:** Inserter did not commit and deleter did - impossible case. If deleter is not the same as inserter, it could not see the version, and if it is, both insert and delete MVCCID must be valid or invalid.
 
-Let's how snapshot works (REPEATABLE READ(5) isolation will be used to keep same snapshot during entire transaction):
+Let's see how snapshot works (**REPEATABLE READ** isolation will be used to keep same snapshot during entire transaction):
 
 **Example 1: Inserting a new row**
 
 +-------------------------------------------------------------------+-----------------------------------------------------------------------------------+
 | session 1                                                         | session 2                                                                         |
 +===================================================================+===================================================================================+
-| ::                                                                | ::                                                                                |
+| .. code-block:: sql                                               | .. code-block:: sql                                                               |
 |                                                                   |                                                                                   |
 |   csql> ;autocommit off                                           |   csql> ;autocommit off                                                           |
 |                                                                   |                                                                                   |
 |   AUTOCOMMIT IS OFF                                               |   AUTOCOMMIT IS OFF                                                               |
 |                                                                   |                                                                                   |
-|   csql> set transaction isolation level 5;                        |   csql> set transaction isolation level 5;                                        |
+|   csql> set transaction isolation level REPEATABLE READ;          |   csql> set transaction isolation level REPEATABLE READ;                          |
 |                                                                   |                                                                                   |
 |   Isolation level set to:                                         |   Isolation level set to:                                                         |
-|   REAPATABLE READ                                                 |   REAPATABLE READ                                                                 |
+|   REPEATABLE READ                                                 |   REPEATABLE READ                                                                 |
 |                                                                   |                                                                                   |
 +-------------------------------------------------------------------+-----------------------------------------------------------------------------------+
-| ::                                                                |                                                                                   |
+| .. code-block:: sql                                               |                                                                                   |
 |                                                                   |                                                                                   |
-|   CREATE TABLE tbl(host_year integer, nation_code char(3));       |                                                                                   |
-|   COMMIT WORK;                                                    |                                                                                   |
+|   csql> CREATE TABLE tbl(host_year integer, nation_code char(3)); |                                                                                   |
+|   csql> COMMIT WORK;                                              |                                                                                   |
 |                                                                   |                                                                                   |
 +-------------------------------------------------------------------+-----------------------------------------------------------------------------------+
-| ::                                                                |                                                                                   |
+| .. code-block:: sql                                               |                                                                                   |
 |                                                                   |                                                                                   |
 |   -- insert a row without committing                              |                                                                                   |
-|   INSERT INTO tbl VALUES (2008, 'AUS');                           |                                                                                   |
+|   csql> INSERT INTO tbl VALUES (2008, 'AUS');                     |                                                                                   |
 |                                                                   |                                                                                   |
 |   -- current transaction sees its own changes                     |                                                                                   |
 |   csql> SELECT * FROM tbl;                                        |                                                                                   |
@@ -372,7 +372,7 @@ Let's how snapshot works (REPEATABLE READ(5) isolation will be used to keep same
 |            2008  'AUS'                                            |                                                                                   |
 |                                                                   |                                                                                   |
 +-------------------------------------------------------------------+-----------------------------------------------------------------------------------+
-|                                                                   | ::                                                                                |
+|                                                                   | .. code-block:: sql                                                               |
 |                                                                   |                                                                                   |
 |                                                                   |   -- this snapshot should not see uncommitted row                                 |
 |                                                                   |   csql> SELECT * FROM tbl;                                                        |
@@ -380,12 +380,12 @@ Let's how snapshot works (REPEATABLE READ(5) isolation will be used to keep same
 |                                                                   |   There are no results.                                                           |
 |                                                                   |                                                                                   |
 +-------------------------------------------------------------------+-----------------------------------------------------------------------------------+
-| ::                                                                |                                                                                   |
+| .. code-block:: sql                                               |                                                                                   |
 |                                                                   |                                                                                   |
-|   COMMIT WORK;                                                    |                                                                                   |
+|   csql> COMMIT WORK;                                              |                                                                                   |
 |                                                                   |                                                                                   |
 +-------------------------------------------------------------------+-----------------------------------------------------------------------------------+
-|                                                                   | ::                                                                                |
+|                                                                   | .. code-block:: sql                                                               |
 |                                                                   |                                                                                   |
 |                                                                   |   -- even though inserter did commit, this snapshot still can't see the row       |
 |                                                                   |   csql> SELECT * FROM tbl;                                                        |
@@ -393,7 +393,7 @@ Let's how snapshot works (REPEATABLE READ(5) isolation will be used to keep same
 |                                                                   |   There are no results.                                                           |
 |                                                                   |                                                                                   |
 |                                                                   |   -- commit to start a new transaction with a new snapshot                        |
-|                                                                   |   COMMIT WORK;                                                                    |
+|                                                                   |   csql> COMMIT WORK;                                                              |
 |                                                                   |                                                                                   |
 |                                                                   |   -- the new snapshot should see committed row                                    |
 |                                                                   |   csql> SELECT * FROM tbl;                                                        |
@@ -409,29 +409,29 @@ Let's how snapshot works (REPEATABLE READ(5) isolation will be used to keep same
 +-------------------------------------------------------------------+-----------------------------------------------------------------------------------+
 | session 1                                                         | session 2                                                                         |
 +===================================================================+===================================================================================+
-| ::                                                                | ::                                                                                |
+| .. code-block:: sql                                               | .. code-block:: sql                                                               |
 |                                                                   |                                                                                   |
 |   csql> ;autocommit off                                           |   csql> ;autocommit off                                                           |
 |                                                                   |                                                                                   |
 |   AUTOCOMMIT IS OFF                                               |   AUTOCOMMIT IS OFF                                                               |
 |                                                                   |                                                                                   |
-|   csql> set transaction isolation level 5;                        |   csql> set transaction isolation level 5;                                        |
+|   csql> set transaction isolation level REPEATABLE READ;          |   csql> set transaction isolation level REPEATABLE READ;                          |
 |                                                                   |                                                                                   |
 |   Isolation level set to:                                         |   Isolation level set to:                                                         |
-|   REAPATABLE READ                                                 |   REAPATABLE READ                                                                 |
+|   REPEATABLE READ                                                 |   REPEATABLE READ                                                                 |
 |                                                                   |                                                                                   |
 +-------------------------------------------------------------------+-----------------------------------------------------------------------------------+
-| ::                                                                |                                                                                   |
+| .. code-block:: sql                                               |                                                                                   |
 |                                                                   |                                                                                   |
-|   CREATE TABLE tbl(host_year integer, nation_code char(3));       |                                                                                   |
-|   INSERT INTO tbl VALUES (2008, 'AUS');                           |                                                                                   |
-|   COMMIT WORK;                                                    |                                                                                   |
+|   csql> CREATE TABLE tbl(host_year integer, nation_code char(3)); |                                                                                   |
+|   csql> INSERT INTO tbl VALUES (2008, 'AUS');                     |                                                                                   |
+|   csql> COMMIT WORK;                                              |                                                                                   |
 |                                                                   |                                                                                   |
 +-------------------------------------------------------------------+-----------------------------------------------------------------------------------+
-| ::                                                                |                                                                                   |
+| .. code-block:: sql                                               |                                                                                   |
 |                                                                   |                                                                                   |
 |   -- delete the row without committing                            |                                                                                   |
-|   DELETE FROM tbl WHERE nation_code = 'AUS';                      |                                                                                   |
+|   csql> DELETE FROM tbl WHERE nation_code = 'AUS';                |                                                                                   |
 |                                                                   |                                                                                   |
 |   -- this transaction sees its own changes                        |                                                                                   |
 |   csql> SELECT * FROM tbl;                                        |                                                                                   |
@@ -439,7 +439,7 @@ Let's how snapshot works (REPEATABLE READ(5) isolation will be used to keep same
 |   There are no results.                                           |                                                                                   |
 |                                                                   |                                                                                   |
 +-------------------------------------------------------------------+-----------------------------------------------------------------------------------+
-|                                                                   | ::                                                                                |
+|                                                                   | .. code-block:: sql                                                               |
 |                                                                   |                                                                                   |
 |                                                                   |   -- delete was not committed, so the row is visible to this snapshot             |
 |                                                                   |   csql> SELECT * FROM tbl;                                                        |
@@ -449,12 +449,12 @@ Let's how snapshot works (REPEATABLE READ(5) isolation will be used to keep same
 |                                                                   |            2008  'AUS'                                                            |
 |                                                                   |                                                                                   |
 +-------------------------------------------------------------------+-----------------------------------------------------------------------------------+
-| ::                                                                |                                                                                   |
+| .. code-block:: sql                                               |                                                                                   |
 |                                                                   |                                                                                   |
-|   COMMIT WORK;                                                    |                                                                                   |
+|   csql> COMMIT WORK;                                              |                                                                                   |
 |                                                                   |                                                                                   |
 +-------------------------------------------------------------------+-----------------------------------------------------------------------------------+
-|                                                                   | ::                                                                                |
+|                                                                   | .. code-block:: sql                                                               |
 |                                                                   |                                                                                   |
 |                                                                   |   -- delete was committed, but the row is still visible to this snapshot          |
 |                                                                   |   csql> SELECT * FROM tbl;                                                        |
@@ -464,7 +464,7 @@ Let's how snapshot works (REPEATABLE READ(5) isolation will be used to keep same
 |                                                                   |            2008  'AUS'                                                            |
 |                                                                   |                                                                                   |
 |                                                                   |   -- commit to start a new transaction with a new snapshot                        |
-|                                                                   |   COMMIT WORK;                                                                    |
+|                                                                   |   csql> COMMIT WORK;                                                              |
 |                                                                   |                                                                                   |
 |                                                                   |   -- the new snapshot can no longer see deleted row                               |
 |                                                                   |   csql> SELECT * FROM tbl;                                                        |
@@ -478,29 +478,29 @@ Let's how snapshot works (REPEATABLE READ(5) isolation will be used to keep same
 +-------------------------------------------------------------------+-----------------------------------------------------------------------------------+
 | session 1                                                         | session 2                                                                         |
 +===================================================================+===================================================================================+
-| ::                                                                | ::                                                                                |
+| .. code-block:: sql                                               | .. code-block:: sql                                                               |
 |                                                                   |                                                                                   |
 |   csql> ;autocommit off                                           |   csql> ;autocommit off                                                           |
 |                                                                   |                                                                                   |
 |   AUTOCOMMIT IS OFF                                               |   AUTOCOMMIT IS OFF                                                               |
 |                                                                   |                                                                                   |
-|   csql> set transaction isolation level 5;                        |   csql> set transaction isolation level 5;                                        |
+|   csql> set transaction isolation level REPEATABLE READ;          |   csql> set transaction isolation level REPEATABLE READ;                          |
 |                                                                   |                                                                                   |
 |   Isolation level set to:                                         |   Isolation level set to:                                                         |
-|   REAPATABLE READ                                                 |   REAPATABLE READ                                                                 |
+|   REPEATABLE READ                                                 |   REPEATABLE READ                                                                 |
 |                                                                   |                                                                                   |
 +-------------------------------------------------------------------+-----------------------------------------------------------------------------------+
-| ::                                                                |                                                                                   |
+| .. code-block:: sql                                               |                                                                                   |
 |                                                                   |                                                                                   |
-|   CREATE TABLE tbl(host_year integer, nation_code char(3));       |                                                                                   |
-|   INSERT INTO tbl VALUES (2008, 'AUS');                           |                                                                                   |
-|   COMMIT WORK;                                                    |                                                                                   |
+|   csql> CREATE TABLE tbl(host_year integer, nation_code char(3)); |                                                                                   |
+|   csql> INSERT INTO tbl VALUES (2008, 'AUS');                     |                                                                                   |
+|   csql> COMMIT WORK;                                              |                                                                                   |
 |                                                                   |                                                                                   |
 +-------------------------------------------------------------------+-----------------------------------------------------------------------------------+
-| ::                                                                |                                                                                   |
+| .. code-block:: sql                                               |                                                                                   |
 |                                                                   |                                                                                   |
 |   -- delete the row without committing                            |                                                                                   |
-|   UPDATE tbl SET host_year = 2012 WHERE nation_code = 'AUS';      |                                                                                   |
+|   csql> UPDATE tbl SET host_year = 2012 WHERE nation_code = 'AUS';|                                                                                   |
 |                                                                   |                                                                                   |
 |   -- this transaction sees new version, host_year = 2012          |                                                                                   |
 |   csql> SELECT * FROM tbl;                                        |                                                                                   |
@@ -510,7 +510,7 @@ Let's how snapshot works (REPEATABLE READ(5) isolation will be used to keep same
 |            2012  'AUS'                                            |                                                                                   |
 |                                                                   |                                                                                   |
 +-------------------------------------------------------------------+-----------------------------------------------------------------------------------+
-|                                                                   | ::                                                                                |
+|                                                                   | .. code-block:: sql                                                               |
 |                                                                   |                                                                                   |
 |                                                                   |   -- update was not committed, so this snapshot sees old version                  |
 |                                                                   |   csql> SELECT * FROM tbl;                                                        |
@@ -520,12 +520,12 @@ Let's how snapshot works (REPEATABLE READ(5) isolation will be used to keep same
 |                                                                   |            2008  'AUS'                                                            |
 |                                                                   |                                                                                   |
 +-------------------------------------------------------------------+-----------------------------------------------------------------------------------+
-| ::                                                                |                                                                                   |
+| .. code-block:: sql                                               |                                                                                   |
 |                                                                   |                                                                                   |
-|   COMMIT WORK;                                                    |                                                                                   |
+|   csql> COMMIT WORK;                                              |                                                                                   |
 |                                                                   |                                                                                   |
 +-------------------------------------------------------------------+-----------------------------------------------------------------------------------+
-|                                                                   | ::                                                                                |
+|                                                                   | .. code-block:: sql                                                               |
 |                                                                   |                                                                                   |
 |                                                                   |   -- update was committed, but this snapshot still sees old version               |
 |                                                                   |   csql> SELECT * FROM tbl;                                                        |
@@ -535,7 +535,7 @@ Let's how snapshot works (REPEATABLE READ(5) isolation will be used to keep same
 |                                                                   |            2008  'AUS'                                                            |
 |                                                                   |                                                                                   |
 |                                                                   |   -- commit to start a new transaction with a new snapshot                        |
-|                                                                   |   COMMIT WORK;                                                                    |
+|                                                                   |   csql> COMMIT WORK;                                                              |
 |                                                                   |                                                                                   |
 |                                                                   |   -- the new snapshot can see new version, host_year = 2012                       |
 |                                                                   |   csql> SELECT * FROM tbl;                                                        |
@@ -546,21 +546,21 @@ Let's how snapshot works (REPEATABLE READ(5) isolation will be used to keep same
 |                                                                   |                                                                                   |
 +-------------------------------------------------------------------+-----------------------------------------------------------------------------------+
 
-**Example 4: Different versions can be visible to different transactions** - same table, REPEATABLE READ isolation level.
+**Example 4: Different versions can be visible to different transactions** 
 
 +-------------------------------------------------------------------+----------------------------------------+----------------------------------------+
 | session 1                                                         | session 2                              | session 3                              |
 +===================================================================+========================================+========================================+
-| ::                                                                |                                        |                                        |
+| .. code-block:: sql                                               |                                        |                                        |
 |                                                                   |                                        |                                        |
-|   INSERT INTO tbl VALUES (2008, 'AUS');                           |                                        |                                        |
-|   COMMIT WORK;                                                    |                                        |                                        |
+|   csql> INSERT INTO tbl VALUES (2008, 'AUS');                     |                                        |                                        |
+|   csql> COMMIT WORK;                                              |                                        |                                        |
 |                                                                   |                                        |                                        |
 +-------------------------------------------------------------------+----------------------------------------+----------------------------------------+
-| ::                                                                | ::                                     |                                        |
+| .. code-block:: sql                                               | .. code-block:: sql                    |                                        |
 |                                                                   |                                        |                                        |
 |   -- update row                                                   |                                        |                                        |
-|   UPDATE tbl SET host_year = 2012 WHERE nation_code = 'AUS';      |                                        |                                        |
+|   csql> UPDATE tbl SET host_year = 2012 WHERE nation_code = 'AUS';|                                        |                                        |
 |                                                                   |                                        |                                        |
 |   csql> SELECT * FROM tbl;                                        |   csql> SELECT * FROM tbl;             |                                        |
 |                                                                   |                                        |                                        |
@@ -569,11 +569,14 @@ Let's how snapshot works (REPEATABLE READ(5) isolation will be used to keep same
 |            2012  'AUS'                                            |            2008  'AUS'                 |                                        |
 |                                                                   |                                        |                                        |
 +-------------------------------------------------------------------+----------------------------------------+----------------------------------------+
-| ::                                                                | ::                                     | ::                                     |
+| .. code-block:: sql                                               |                                        |                                        |
 |                                                                   |                                        |                                        |
-|   COMMIT WORK;                                                    |                                        |                                        |
+|   csql> COMMIT WORK;                                              |                                        |                                        |
 |                                                                   |                                        |                                        |
-|   UPDATE tbl SET host_year = 2016 WHERE nation_code = 'AUS';      |                                        |                                        |
++-------------------------------------------------------------------+----------------------------------------+----------------------------------------+
+| .. code-block:: sql                                               |  .. code-block:: sql                   |  .. code-block:: sql                   |
+|                                                                   |                                        |                                        |
+|   csql> UPDATE tbl SET host_year = 2016 WHERE nation_code = 'AUS';|                                        |                                        |
 |                                                                   |                                        |                                        |
 |   csql> SELECT * FROM tbl;                                        |   csql> SELECT * FROM tbl;             |   csql> SELECT * FROM tbl;             |
 |                                                                   |                                        |                                        |
@@ -587,7 +590,7 @@ Let's how snapshot works (REPEATABLE READ(5) isolation will be used to keep same
 VACUUM
 ------
 
-Creating new versions for each update and keeping old versions on delete could lead to unlimited database size growth, definately a major issue for a database. Therefore, a clean up system is necessary, to remove obsolete data and reclaim the occupied space for reuse.
+Creating new versions for each update and keeping old versions on delete could lead to unlimited database size growth, definitely a major issue for a database. Therefore, a clean up system is necessary, to remove obsolete data and reclaim the occupied space for reuse.
 
 Each row version goes through same stages:
 
@@ -598,29 +601,29 @@ Each row version goes through same stages:
   5. invisible to all active transactions.
   6. removed from database.
   
-The role of clean the clean up system is to get versions from stage 5 to 6. This system is called VACUUM in CUBRID.
+The role of the clean up system is to get versions from stage 5 to 6. This system is called **VACUUM** in CUBRID.
 
-VACUUM system was developed with the guidance of three principles:
+**VACUUM** system was developed with the guidance of three principles:
 
-*   VACUUM must be correct and complete. VACUUM should never remove data still visible to some and it should not miss any obsolete data.
-*   VACUUM must be discreet. Since clean-up process changes database content, there may be some interference in the activity of live transactions, but it must be kept to the minimum possible.
-*   VACUUM must be fast and efficient. If VACUUM is too slow and if it starts lagging, the database state can deteriorate, thus the overall performance can be affected.
+*   **VACUUM** must be correct and complete. **VACUUM** should never remove data still visible to some and it should not miss any obsolete data.
+*   **VACUUM** must be discreet. Since clean-up process changes database content, there may be some interference in the activity of live transactions, but it must be kept to the minimum possible.
+*   **VACUUM** must be fast and efficient. If **VACUUM** is too slow and if it starts lagging, the database state can deteriorate, thus the overall performance can be affected.
 
-With these principles in mind, VACUUM implementation uses existing recovery logging, because:
+With these principles in mind, **VACUUM** implementation uses existing recovery logging, because:
 
-*   The address is kept among recovery data for both heap and index changes. This allows VACUUM go directly to target, rather than scanning the database.
+*   The address is kept among recovery data for both heap and index changes. This allows **VACUUM** go directly to target, rather than scanning the database.
 *   Processing log data rarely interferes with the work of active workers.
 
-Log recovery was adapted to VACUUM needs by adding MVCCID information to logged data. VACUUM can decide based on MVCCID if the log entry is ready to be processed. MVCCID's that are still visible to active transactions cannot be processed. In due time, each MVCCID becomes old enough and all changes using the MVCCID become invisible.
+Log recovery was adapted to **VACUUM** needs by adding MVCCID information to logged data. **VACUUM** can decide based on MVCCID if the log entry is ready to be processed. MVCCID's that are still visible to active transactions cannot be processed. In due time, each MVCCID becomes old enough and all changes using the MVCCID become invisible.
 
-Each transaction keeps the oldest MVCCID it considers active. The oldest MVCCID considered active by all running transactions is determined by the smallest oldest MVCCID of all transactions. Anything below this value is invisible and VACUUM can clean.
+Each transaction keeps the oldest MVCCID it considers active. The oldest MVCCID considered active by all running transactions is determined by the smallest oldest MVCCID of all transactions. Anything below this value is invisible and **VACUUM** can clean.
 
 VACUUM Parallel Execution
 +++++++++++++++++++++++++
 
-According to the third principle of VACUUM it must be fast and it should not fall behind active workers. It is obvious that one thread cannot handle all the VACUUM work if system workload is heavy, thus it had to be parallelized.
+According to the third principle of **VACUUM** it must be fast and it should not fall behind active workers. It is obvious that one thread cannot handle all the **VACUUM** works if system workload is heavy, thus it had to be parallelized.
 
-To achieve parallelization, the log data was split into fixed size blocks. Each block generates one vacuum job, when the time is right (the most recent MVCCID can be vacuumed, which means all logged operations in the block can be vacuumed). Vacuum jobs are picked up by multiple VACUUM Workers that clean the database based on relevant log entries found in the log block. The tracking of log blocks and generating vacuum jobs is done by the VACUUM Master.
+To achieve parallelization, the log data was split into fixed size blocks. Each block generates one vacuum job, when the time is right (the most recent MVCCID can be vacuumed, which means all logged operations in the block can be vacuumed). Vacuum jobs are picked up by multiple **VACUUM Workers** that clean the database based on relevant log entries found in the log block. The tracking of log blocks and generating vacuum jobs is done by the **VACUUM Master**.
 
 VACUUM Data
 +++++++++++
@@ -629,29 +632,29 @@ Aggregated data on log blocks is stored in vacuum data file. Since the vacuum jo
 
 After a job has been successfully executed, the aggregated data on the processed log block is removed.
 
-Aggregated log block data is not added directly to vacuum data. A latch-free buffer is used to avoid synchronizing active working threads (which generate the log blocks and their aggregated data) with the vacuum system. VACUUM Master wakes up periodically, dump everything in buffer to vacuum data, removes data already process and generates new jobs (if available).
+Aggregated log block data is not added directly to vacuum data. A latch-free buffer is used to avoid synchronizing active working threads (which generate the log blocks and their aggregated data) with the vacuum system. **VACUUM Master** wakes up periodically, dumps everything in buffer to vacuum data, removes data already process and generates new jobs (if available).
 
 Tracking dropped files
 ++++++++++++++++++++++
 
-When a transaction drops a table or an index, it usually locks the affected table(s) and prevents others from accessing it. Opposed to active workers, VACUUM Workers are not allowed to use locking system, for two reasons: interference with active workers must be kept to the minimum, and VACUUM system is never supposed to stop as long as it has data to clean. Moreover, VACUUM is not allowed to skip any data that needs cleaning. This has two consequences:
+When a transaction drops a table or an index, it usually locks the affected table(s) and prevents others from accessing it. Opposed to active workers, **VACUUM** Workers are not allowed to use locking system, for two reasons: interference with active workers must be kept to the minimum, and **VACUUM** system is never supposed to stop as long as it has data to clean. Moreover, **VACUUM** is not allowed to skip any data that needs cleaning. This has two consequences:
 
-  1. VACUUM doesn't stop from cleaning a file belonging to a dropped table or a dropped index until the dropper commits. Even if a transaction drops a table, its file is not immediately destroyed and it can still be accessed. The actual destruction is postponed until after commit.
-  2. Before the actual file destruction, VACUUM system must be notified. The dropper sends a notification to VACUUM system and then waits for the confirmation. VACUUM works on very short iterations and it checks for new dropped files frequently, so the dropper has doesn't have to wait a long time.
+  1. **VACUUM** doesn't stop from cleaning a file belonging to a dropped table or a dropped index until the dropper commits. Even if a transaction drops a table, its file is not immediately destroyed and it can still be accessed. The actual destruction is postponed until after commit.
+  2. Before the actual file destruction, **VACUUM** system must be notified. The dropper sends a notification to **VACUUM** system and then waits for the confirmation. **VACUUM** works on very short iterations and it checks for new dropped files frequently, so the dropper doesn't have to wait for a long time.
   
-After a file is dropped, VACUUM will ignore all found log entries that belong to the file. The file identifier, paired with an MVCCID that marks the moment of drop, is stored in a persistent file until VACUUM decides it is safe to remove it (the decision is based on the smallest MVCCID not yet vacuumed).
+After a file is dropped, **VACUUM** will ignore all found log entries that belong to the file. The file identifier, paired with an MVCCID that marks the moment of drop, is stored in a persistent file until **VACUUM** decides it is safe to remove it (the decision is based on the smallest MVCCID not yet vacuumed).
 
 .. _lock-protocol:
 
 Lock Protocol
 =============
 
-In the two-phase locking protocol, a transaction obtains a shared lock before it reads an object, and an exclusive lock before it updates the object so that conflicting operations are not executed simultaneously. The MVCC locking protocol, which is now used by CUBRID, does not require shared locks before reading rows (however intent shared lock on table object is still used to read its rows). If transaction T1 requires a lock, CUBRID checks if the requested lock conflicts with the existing one. If it does, transaction T1 enters a standby state and delays the lock. If another transaction T2 releases the lock, transaction T1 resumes and obtains it. Once the lock is released, the transaction do not require anymore new locks.
+In the two-phase locking protocol, a transaction obtains a shared lock before it reads an object, and an exclusive lock before it updates the object so that conflicting operations are not executed simultaneously. The MVCC locking protocol, which is now used by CUBRID, does not require shared locks before reading rows (however intent shared lock on table object is still used to read its rows). If transaction *T1* requires a lock, CUBRID checks if the requested lock conflicts with the existing one. If it does, transaction *T1* enters a standby state and delays the lock. If another transaction *T2* releases the lock, transaction *T1* resumes and obtains it. Once the lock is released, the transaction do not acquire any new locks.
 
 Granularity Locking
 -------------------
 
-CUBRID uses a granularity locking protocol to decrease the number of locks. In the granularity locking protocol, a database can be modeled as a hierarchy of lockable units: row lock, table lock and database lock. Bigger locks have more granular locks.
+CUBRID uses a granularity locking protocol to decrease the number of locks. In the granularity locking protocol, a database can be modelled as a hierarchy of lockable units: row lock, table lock and database lock. Coarser locks have more granular locks.
 
 If the locking granularities overlap, effects of a finer granularity are propagated in order to prevent conflicts. That is, if a shared lock is required on an instance of a table, an intent shared lock will be set on the table. If an exclusive lock is required on an instance of a table, an intent exclusive lock will be set on the table. An intent shared lock on a table means that a shared lock can be set on an instance of the table. An intent exclusive lock on a table means that a shared/exclusive lock can be set on an instance of the table. That is, if an intent shared lock on a table is allowed in one transaction, another transaction cannot obtain an exclusive lock on the table (for example, to add a new column). However, the second transaction may obtain a shared lock on the table. If an intent exclusive lock on the table is allowed in one transaction, another transaction cannot obtain a shared lock on the table (for example, a query on an instance of the tables cannot be executed because it is being changed).
 
@@ -668,7 +671,7 @@ CUBRID determines the lock mode depending on the type of operation to be perform
 
     This lock is obtained before the read operation is executed on the object. 
     
-    It can be obtained by multiple transactions for the same object. At this time, transaction T2 and T3 can perform the read operation on the object concurrently, but not the update operation.
+    It can be obtained by multiple transactions for the same object. At this time, transaction *T2* and *T3* can perform the read operation on the object concurrently, but not the update operation.
 
     .. note::
 
@@ -678,7 +681,7 @@ CUBRID determines the lock mode depending on the type of operation to be perform
 
     This lock is obtained before the update operation is executed on the object. 
 
-    It can only be obtained by one transaction. Transaction T1 obtains the exclusive lock first before it performs the update operation on a certain object X, and does not release it until transaction T1 is committed even after the update operation is completed. Therefore, transaction T2 and T3 cannot perform the read operation as well on X before transaction T1 releases the exclusive lock.
+    It can only be obtained by one transaction. Transaction *T1* obtains the exclusive lock first before it performs the update operation on a certain object *X*, and does not release it until transaction *T1* is committed even after the update operation is completed. Therefore, transaction *T2* and *T3* cannot perform the read operation as well on *X* before transaction *T1* releases the exclusive lock.
 
 *   **Intent lock**
 
@@ -710,43 +713,45 @@ CUBRID determines the lock mode depending on the type of operation to be perform
 
     *   **Schema modification lock, SCH_M_LOCK**
 
-        This lock is acquired during running DDL(ALTER/CREATE/DROP) and it protects that other transactions access the modified schema.
+        This lock is acquired during running DDL(**ALTER**/**CREATE**/**DROP**) and it protects that other transactions access the modified schema.
 
-    Some DDL operation like ALTER, CREATE INDEX does not acquire SCH_M_LOCK directly. For example, CUBRID operates type checking about filtering expression when you create a filtered index; during this term, the lock which is kept to the target table is SCH-S like other type checking operations. The method has a strength to increase the concurrency by allowing other transaction's operation during DDL operation's compilation.
+    Some DDL operation like **ALTER**, **CREATE INDEX** does not acquire **SCH_M_LOCK** directly. For example, CUBRID operates type checking about filtering expression when you create a filtered index; during this term, the lock which is kept to the target table is **SCH_S_LOCK** like other type checking operations. The method has a strength to increase the concurrency by allowing other transaction's operation during DDL operation's compilation.
     
-    However, it also has a weakness not to avoid a deadlock when DDL operations are operated at the same table at the same time. A deadlock case by SCH-S lock is as follows.
+    However, it also has a weakness not to avoid a deadlock when DDL operations are operated at the same table at the same time. A deadlock case by **SCH_S_LOCK** is as follows.
 
     +---------------------------------------------------------------+---------------------------------------------------------------+
     | T1                                                            | T2                                                            |
     +===============================================================+===============================================================+
-    | ::                                                            | ::                                                            |
+    | .. code-block:: sql                                           | .. code-block :: sql                                          |
     |                                                               |                                                               |
-    |  CREATE INDEX i_t_i on t( i ) WHERE i > 0                     |   CREATE INDEX i_t_j on t(j) WHERE j > 0                      |
+    |  CREATE INDEX i_t_i on t(i) WHERE i > 0;                      |   CREATE INDEX i_t_j on t(j) WHERE j > 0;                     |
     +---------------------------------------------------------------+---------------------------------------------------------------+
-    | SCH-S lock during checking types of "i > 0" case.             |                                                               |
+    | SCH_S_LOCK during checking types of "i > 0" case.             |                                                               |
     +---------------------------------------------------------------+---------------------------------------------------------------+
-    |                                                               | SCH-S lock during checking types of "j > 0" case."j > 0"      |
+    |                                                               | SCH_S_LOCK during checking types of "j > 0" case."j > 0"      |
     +---------------------------------------------------------------+---------------------------------------------------------------+
-    | requesting SCH-M lock but waiting T2's SCH-S lock is released |                                                               |
+    | requesting SCH_M_LOCK but waiting T2's SCH_S_LOCK is released |                                                               |
     +---------------------------------------------------------------+---------------------------------------------------------------+
-    |                                                               | requesting SCH-M lock but waiting T1's SCH-S lock is released |
+    |                                                               | requesting SCH_M_LOCK but waiting T1's SCH_S_LOCK is released |
     +---------------------------------------------------------------+---------------------------------------------------------------+
 
 .. note:: This is a summarized description about locking.
 
     *   There are row(instance) and schema(class) about objects of locking targets. The locks grouped by the type of objects they're used:
 
-        *   row locks: S_LOCK, X_LOCK
+        *   row locks: **S_LOCK**, **X_LOCK**
         
-        *   schema locks: IX_LOCK, IS_LOCK, SIX_LOCK, SCH_S_LOCK, SCH_M_LOCK
+        *   intention/schema locks: **IX_LOCK**, **IS_LOCK**, **SIX_LOCK**, **SCH_S_LOCK**, **SCH_M_LOCK**
         
-    *   Row locks and schema locks affect each other.
+    *   Row locks and intention/schema locks affect each other.
     
 The following table briefly shows the lock compatibility between the locks described above. Compatibility means that the lock requester can obtain a lock while the lock holder is keeping the lock obtained for a certain object.
 
 **Lock Compatibility**
 
-(O: TRUE, X: FALSE, -: N/A)
+*   **NULL**\: The status that any lock exists.
+
+(O: TRUE, X: FALSE)
 
 +----------------------------------+-----------------------------------------------------------------------------------------------+
 |                                  | **Lock holder**                                                                               |
@@ -771,9 +776,9 @@ The following table briefly shows the lock compatibility between the locks descr
 |                      | **SCH-M** | O         | X         | X         | X         | X         | X         | X         | X         |
 +----------------------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+
 
-*   **NULL**\: The status that any lock exists.
-
 **Lock Transformation Table**
+
+*   **NULL**\: The status that any lock exists.
 
 +----------------------------------+-----------------------------------------------------------------------------------------------+
 |                                  | **Granted lock mode**                                                                         |
@@ -809,114 +814,114 @@ For next example REPEATABLE READ(5) isolation will be used and it will prove tha
 +---------------------------------------------------------+---------------------------------------------------------+----------------------------------------------------------------------------+
 | T1                                                      | T2                                                      | Description                                                                |
 +=========================================================+=========================================================+============================================================================+
-| ::                                                      | ::                                                      | AUTOCOMMIT OFF and REAPATABLE READ                                         |
+| .. code-block :: sql                                    | .. code-block :: sql                                    | AUTOCOMMIT OFF and REPEATABLE READ                                         |
 |                                                         |                                                         |                                                                            |
 |   csql> ;au off                                         |   csql> ;au off                                         |                                                                            |
-|   SET TRANSACTION ISOLATION LEVEL 5;                    |   SET TRANSACTION ISOLATION LEVEL 5;                    |                                                                            |
+|   csql> SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;|   csql> SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;|                                                                            |
 +---------------------------------------------------------+---------------------------------------------------------+----------------------------------------------------------------------------+
-| ::                                                      |                                                         |                                                                            |
+| .. code-block :: sql                                    |                                                         |                                                                            |
 |                                                         |                                                         |                                                                            |
-|   CREATE TABLE tbl(a INT PRIMARY KEY,                   |                                                         |                                                                            |
-|                    b INT);                              |                                                         |                                                                            |
-|   INSERT INTO tbl                                       |                                                         |                                                                            |
-|     VALUES (10, 10),                                    |                                                         |                                                                            |
-|            (30, 30),                                    |                                                         |                                                                            |
-|            (50, 50),                                    |                                                         |                                                                            |
-|            (70, 70);                                    |                                                         |                                                                            |
-|   COMMIT;                                               |                                                         |                                                                            |
+|   csql> CREATE TABLE tbl(a INT PRIMARY KEY, b INT);     |                                                         |                                                                            |
+|                                                         |                                                         |                                                                            |
+|   csql> INSERT INTO tbl                                 |                                                         |                                                                            |
+|         VALUES (10, 10),                                |                                                         |                                                                            |
+|                (30, 30),                                |                                                         |                                                                            |
+|                (50, 50),                                |                                                         |                                                                            |
+|                (70, 70);                                |                                                         |                                                                            |
+|   csql> COMMIT;                                         |                                                         |                                                                            |
 +---------------------------------------------------------+---------------------------------------------------------+----------------------------------------------------------------------------+
-| ::                                                      |                                                         | First version of row where a = 10 is locked and updated. A new version     |
-|                                                         |                                                         | where row has a = 90 is created and also locked.                           |
-|   UPDATE tbl SET a = 90 WHERE a = 10;                   |                                                         |                                                                            |
-|                                                         |                                                         | | cubrid lockdb:                                                           |
+| .. code-block :: sql                                    |                                                         | First version of row where a = 10 is locked and updated. A new version     |
+|                                                         |                                                         | where row has a = 90 is created and also locked. ::                        |
+|   csql> UPDATE tbl SET a = 90 WHERE a = 10;             |                                                         |                                                                            |
+|                                                         |                                                         |   cubrid lockdb:                                                           |
 |                                                         |                                                         |                                                                            |
-|                                                         |                                                         | | OID =  0|   623|   4                                                     |
-|                                                         |                                                         | | Object type: Class = tbl.                                                |
-|                                                         |                                                         | | Total mode of holders =   IX_LOCK,                                       |
-|                                                         |                                                         | |      Total mode of waiters = NULL_LOCK.                                  |
-|                                                         |                                                         | | Num holders=  1, Num blocked-holders=  0,                                |
-|                                                         |                                                         | |     Num waiters=  0                                                      |
-|                                                         |                                                         | | LOCK HOLDERS:                                                            |
-|                                                         |                                                         | |     Tran_index =   1, Granted_mode =  IX_LOCK                            |
+|                                                         |                                                         |   OID =  0|   623|   4                                                     |
+|                                                         |                                                         |   Object type: Class = tbl.                                                |
+|                                                         |                                                         |   Total mode of holders =   IX_LOCK,                                       |
+|                                                         |                                                         |        Total mode of waiters = NULL_LOCK.                                  |
+|                                                         |                                                         |   Num holders=  1, Num blocked-holders=  0,                                |
+|                                                         |                                                         |       Num waiters=  0                                                      |
+|                                                         |                                                         |   LOCK HOLDERS:                                                            |
+|                                                         |                                                         |       Tran_index =   1, Granted_mode =  IX_LOCK                            |
 |                                                         |                                                         |                                                                            |
-|                                                         |                                                         | | OID =  0|   650|   5                                                     |
-|                                                         |                                                         | | Object type: Instance of class ( 0|   623|   4) = tbl.                   |
-|                                                         |                                                         | | MVCC info: insert ID = 5, delete ID = missing.                           |
-|                                                         |                                                         | | Total mode of holders =    X_LOCK,                                       |
-|                                                         |                                                         | |     Total mode of waiters = NULL_LOCK.                                   |
-|                                                         |                                                         | | Num holders=  1, Num blocked-holders=  0,                                |
-|                                                         |                                                         | |     Num waiters=  0                                                      |
-|                                                         |                                                         | | LOCK HOLDERS:                                                            |
-|                                                         |                                                         | |     Tran_index =   1, Granted_mode =   X_LOCK                            |
+|                                                         |                                                         |   OID =  0|   650|   5                                                     |
+|                                                         |                                                         |   Object type: Instance of class ( 0|   623|   4) = tbl.                   |
+|                                                         |                                                         |   MVCC info: insert ID = 5, delete ID = missing.                           |
+|                                                         |                                                         |   Total mode of holders =    X_LOCK,                                       |
+|                                                         |                                                         |       Total mode of waiters = NULL_LOCK.                                   |
+|                                                         |                                                         |   Num holders=  1, Num blocked-holders=  0,                                |
+|                                                         |                                                         |       Num waiters=  0                                                      |
+|                                                         |                                                         |   LOCK HOLDERS:                                                            |
+|                                                         |                                                         |       Tran_index =   1, Granted_mode =   X_LOCK                            |
 |                                                         |                                                         |                                                                            |
-|                                                         |                                                         | | OID =  0|   650|   1                                                     |
-|                                                         |                                                         | | Object type: Instance of class ( 0|   623|   4) = tbl.                   |
-|                                                         |                                                         | | MVCC info: insert ID = 4, delete ID = 5.                                 |
-|                                                         |                                                         | | Total mode of holders =    X_LOCK,                                       |
-|                                                         |                                                         | |     Total mode of waiters = NULL_LOCK.                                   |
-|                                                         |                                                         | | Num holders=  1, Num blocked-holders=  0,                                |
-|                                                         |                                                         | |     Num waiters=  0                                                      |
-|                                                         |                                                         | | LOCK HOLDERS:                                                            |
-|                                                         |                                                         | |     Tran_index =   1, Granted_mode =   X_LOCK                            |
+|                                                         |                                                         |   OID =  0|   650|   1                                                     |
+|                                                         |                                                         |   Object type: Instance of class ( 0|   623|   4) = tbl.                   |
+|                                                         |                                                         |   MVCC info: insert ID = 4, delete ID = 5.                                 |
+|                                                         |                                                         |   Total mode of holders =    X_LOCK,                                       |
+|                                                         |                                                         |       Total mode of waiters = NULL_LOCK.                                   |
+|                                                         |                                                         |   Num holders=  1, Num blocked-holders=  0,                                |
+|                                                         |                                                         |       Num waiters=  0                                                      |
+|                                                         |                                                         |   LOCK HOLDERS:                                                            |
+|                                                         |                                                         |       Tran_index =   1, Granted_mode =   X_LOCK                            |
 +---------------------------------------------------------+---------------------------------------------------------+----------------------------------------------------------------------------+
-|                                                         | ::                                                      | Transaction T2 reads all rows where a <= 20. Since T1 did not commit its   |
-|                                                         |                                                         | update, T2 will continue to see the row with a = 10 and will not lock it.  |
-|                                                         |   SELECT * FROM tbl WHERE a <= 20;                      |                                                                            |
-|                                                         |                                                         | | cubrid lockdb:                                                           |
+|                                                         | .. code-block :: sql                                    | Transaction T2 reads all rows where a <= 20. Since T1 did not commit its   |
+|                                                         |                                                         | update, T2 will continue to see the row with a = 10 and will not lock it.::|
+|                                                         |   csql> SELECT * FROM tbl WHERE a <= 20;                |                                                                            |
+|                                                         |                                                         |   cubrid lockdb:                                                           |
 |                                                         |                                                         |                                                                            |
-|                                                         |               a            b                            | | OID =  0|   623|   4                                                     |
-|                                                         |    ==========================                           | | Object type: Class = tbl.                                                |
-|                                                         |               10           10                           | | Total mode of holders =   IX_LOCK,                                       |
-|                                                         |                                                         | |     Total mode of waiters = NULL_LOCK.                                   |
-|                                                         |                                                         | | Num holders=  2, Num blocked-holders=  0,                                |
-|                                                         |                                                         | |     Num waiters=  0                                                      |
-|                                                         |                                                         | | LOCK HOLDERS:                                                            |
-|                                                         |                                                         | |     Tran_index =   1, Granted_mode =  IX_LOCK                            |
-|                                                         |                                                         | |     Tran_index =   2, Granted_mode =  IS_LOCK                            |
+|                                                         |               a            b                            |   OID =  0|   623|   4                                                     |
+|                                                         |    ==========================                           |   Object type: Class = tbl.                                                |
+|                                                         |               10           10                           |   Total mode of holders =   IX_LOCK,                                       |
+|                                                         |                                                         |       Total mode of waiters = NULL_LOCK.                                   |
+|                                                         |                                                         |   Num holders=  2, Num blocked-holders=  0,                                |
+|                                                         |                                                         |       Num waiters=  0                                                      |
+|                                                         |                                                         |   LOCK HOLDERS:                                                            |
+|                                                         |                                                         |       Tran_index =   1, Granted_mode =  IX_LOCK                            |
+|                                                         |                                                         |       Tran_index =   2, Granted_mode =  IS_LOCK                            |
 +---------------------------------------------------------+---------------------------------------------------------+----------------------------------------------------------------------------+
-|                                                         | ::                                                      | Transaction T2 now tries to update all rows having a <= 20. This means     |
+|                                                         | .. code-block :: sql                                    | Transaction T2 now tries to update all rows having a <= 20. This means     |
 |                                                         |                                                         | T2 will upgrade its lock on class to IX_LOCK and will also try to update   |
 |                                                         |                                                         | the row = 10 by first locking it. However, T1 has locked it already, so    |
-|                                                         |   UPDATE tbl                                            | T2 will be blocked.                                                        |
-|                                                         |     SET a = a + 100                                     |                                                                            |
-|                                                         |     WHERE a <= 20;                                      |                                                                            |
+|                                                         |   csql> UPDATE tbl                                      | T2 will be blocked. ::                                                     |
+|                                                         |         SET a = a + 100                                 |                                                                            |
+|                                                         |         WHERE a <= 20;                                  |                                                                            |
 |                                                         |                                                         |                                                                            |
-|                                                         |                                                         | | cubrid lockdb:                                                           |
-|                                                         |                                                         | | OID =  0|   623|   4                                                     |
-|                                                         |                                                         | | Object type: Class = tbl.                                                |
-|                                                         |                                                         | | Total mode of holders =   IX_LOCK,                                       |
-|                                                         |                                                         | |     Total mode of waiters = NULL_LOCK.                                   |
-|                                                         |                                                         | | Num holders=  2, Num blocked-holders=  0,                                |
-|                                                         |                                                         | |     Num waiters=  0                                                      |
-|                                                         |                                                         | | LOCK HOLDERS:                                                            |
-|                                                         |                                                         | |     Tran_index =   1, Granted_mode =  IX_LOCK                            |
-|                                                         |                                                         | |     Tran_index =   2, Granted_mode =  IX_LOCK                            |
+|                                                         |                                                         |   cubrid lockdb:                                                           |
+|                                                         |                                                         |   OID =  0|   623|   4                                                     |
+|                                                         |                                                         |   Object type: Class = tbl.                                                |
+|                                                         |                                                         |   Total mode of holders =   IX_LOCK,                                       |
+|                                                         |                                                         |       Total mode of waiters = NULL_LOCK.                                   |
+|                                                         |                                                         |   Num holders=  2, Num blocked-holders=  0,                                |
+|                                                         |                                                         |       Num waiters=  0                                                      |
+|                                                         |                                                         |   LOCK HOLDERS:                                                            |
+|                                                         |                                                         |       Tran_index =   1, Granted_mode =  IX_LOCK                            |
+|                                                         |                                                         |       Tran_index =   2, Granted_mode =  IX_LOCK                            |
 |                                                         |                                                         |                                                                            |
-|                                                         |                                                         | | OID =  0|   650|   5                                                     |
-|                                                         |                                                         | | Object type: Instance of class ( 0|   623|   4) = tbl.                   |
-|                                                         |                                                         | | MVCC info: insert ID = 5, delete ID = missing.                           |
-|                                                         |                                                         | | Total mode of holders =   X_LOCK,                                        |
-|                                                         |                                                         | |     Total mode of waiters = NULL_LOCK.                                   |
-|                                                         |                                                         | | Num holders=  1, Num blocked-holders=  0,                                |
-|                                                         |                                                         | |     Num waiters=  0                                                      |
-|                                                         |                                                         | | LOCK HOLDERS:                                                            |
-|                                                         |                                                         | |     Tran_index =   1, Granted_mode =   X_LOCK                            |
+|                                                         |                                                         |   OID =  0|   650|   5                                                     |
+|                                                         |                                                         |   Object type: Instance of class ( 0|   623|   4) = tbl.                   |
+|                                                         |                                                         |   MVCC info: insert ID = 5, delete ID = missing.                           |
+|                                                         |                                                         |   Total mode of holders =   X_LOCK,                                        |
+|                                                         |                                                         |       Total mode of waiters = NULL_LOCK.                                   |
+|                                                         |                                                         |   Num holders=  1, Num blocked-holders=  0,                                |
+|                                                         |                                                         |       Num waiters=  0                                                      |
+|                                                         |                                                         |   LOCK HOLDERS:                                                            |
+|                                                         |                                                         |       Tran_index =   1, Granted_mode =   X_LOCK                            |
 |                                                         |                                                         |                                                                            |
-|                                                         |                                                         | | OID =  0|   650|   1                                                     |
-|                                                         |                                                         | | Object type: Instance of class ( 0|   623|   4) = tbl.                   |
-|                                                         |                                                         | | MVCC info: insert ID = 4, delete ID = 5.                                 |
-|                                                         |                                                         | | Total mode of holders =    X_LOCK,                                       |
-|                                                         |                                                         | |     Total mode of waiters =    X_LOCK.                                   |
-|                                                         |                                                         | | Num holders=  1, Num blocked-holders=  0,                                |
-|                                                         |                                                         | |     Num waiters=  1                                                      |
-|                                                         |                                                         | | LOCK HOLDERS:                                                            |
-|                                                         |                                                         | |     Tran_index =   1, Granted_mode =   X_LOCK                            |
-|                                                         |                                                         | | LOCK WAITERS:                                                            |
-|                                                         |                                                         | |     Tran_index =   2, Blocked_mode =   X_LOCK                            |
+|                                                         |                                                         |   OID =  0|   650|   1                                                     |
+|                                                         |                                                         |   Object type: Instance of class ( 0|   623|   4) = tbl.                   |
+|                                                         |                                                         |   MVCC info: insert ID = 4, delete ID = 5.                                 |
+|                                                         |                                                         |   Total mode of holders =    X_LOCK,                                       |
+|                                                         |                                                         |       Total mode of waiters =    X_LOCK.                                   |
+|                                                         |                                                         |   Num holders=  1, Num blocked-holders=  0,                                |
+|                                                         |                                                         |       Num waiters=  1                                                      |
+|                                                         |                                                         |   LOCK HOLDERS:                                                            |
+|                                                         |                                                         |       Tran_index =   1, Granted_mode =   X_LOCK                            |
+|                                                         |                                                         |   LOCK WAITERS:                                                            |
+|                                                         |                                                         |       Tran_index =   2, Blocked_mode =   X_LOCK                            |
 +---------------------------------------------------------+---------------------------------------------------------+----------------------------------------------------------------------------+
-| ::                                                      |                                                         | T1's locks are released.                                                   |
+| .. code-block :: sql                                    |                                                         | T1's locks are released.                                                   |
 |                                                         |                                                         |                                                                            |
-|   COMMIT;                                               |                                                         |                                                                            |
+|   csql> COMMIT;                                         |                                                         |                                                                            |
 +---------------------------------------------------------+---------------------------------------------------------+----------------------------------------------------------------------------+
 |                                                         | ::                                                      | T2 is unblocked and will try to update the object T1 already updated.      |
 |                                                         |                                                         | This is however not allowed in REPEATABLE READ isolation level and an      |
@@ -929,73 +934,73 @@ Locking to protect unique constraint
 
 Two phase locking protocol in older CUBRID versions used index key locks to protect unique constraints and higher isolation restrictions. In CUBRID 10.0, key locking was removed. Isolation level restrictions are solved by MVCC snapshot, however unique constraint still needed some type of protection.
 
-With MVCC, unique index can keep multiple versions at the same time, similarly to rows, each visible to different transactions. One is the last version, while the other versions are kept temporarily until they become invisible and can be removed by VACUUM. The rule to protect unique constraint is that all transactions trying to modify a key has to lock key's last existing version.
+With MVCC, unique index can keep multiple versions at the same time, similarly to rows, each visible to different transactions. One is the last version, while the other versions are kept temporarily until they become invisible and can be removed by **VACUUM**. The rule to protect unique constraint is that all transactions trying to modify a key has to lock key's last existing version.
 
-The below example uses REPEATABLE READ isolation to show the way locking prevents unique constraint violations.
+The below example uses **REPEATABLE READ** isolation to show the way locking prevents unique constraint violations.
 
 +---------------------------------------------------------+---------------------------------------------------------+----------------------------------------------------------------------------+
 | T1                                                      | T2                                                      | Description                                                                |
 +=========================================================+=========================================================+============================================================================+
-| ::                                                      | ::                                                      | AUTOCOMMIT OFF and REAPATABLE READ                                         |
+| .. code-block :: sql                                    | .. code-block :: sql                                    | AUTOCOMMIT OFF and REPEATABLE READ                                         |
 |                                                         |                                                         |                                                                            |
 |   csql> ;au off                                         |   csql> ;au off                                         |                                                                            |
-|   SET TRANSACTION ISOLATION LEVEL 5;                    |   SET TRANSACTION ISOLATION LEVEL 5;                    |                                                                            |
+|   csql> SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;|   csql> SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;|                                                                            |
 +---------------------------------------------------------+---------------------------------------------------------+----------------------------------------------------------------------------+
-| ::                                                      |                                                         |                                                                            |
+| .. code-block :: sql                                    |                                                         |                                                                            |
 |                                                         |                                                         |                                                                            |
-|   CREATE TABLE tbl(a INT PRIMARY KEY,                   |                                                         |                                                                            |
-|                     b INT);                             |                                                         |                                                                            |
-|   INSERT INTO tbl                                       |                                                         |                                                                            |
-|     VALUES (10, 10),                                    |                                                         |                                                                            |
-|            (30, 30),                                    |                                                         |                                                                            |
-|            (50, 50),                                    |                                                         |                                                                            |
-|            (70, 70);                                    |                                                         |                                                                            |
-|   COMMIT;                                               |                                                         |                                                                            |
+|   csql> CREATE TABLE tbl(a INT PRIMARY KEY, b INT);     |                                                         |                                                                            |
+|                                                         |                                                         |                                                                            |
+|   csql> INSERT INTO tbl                                 |                                                         |                                                                            |
+|         VALUES (10, 10),                                |                                                         |                                                                            |
+|                (30, 30),                                |                                                         |                                                                            |
+|                (50, 50),                                |                                                         |                                                                            |
+|                (70, 70);                                |                                                         |                                                                            |
+|   csql> COMMIT;                                         |                                                         |                                                                            |
 +---------------------------------------------------------+---------------------------------------------------------+----------------------------------------------------------------------------+
-| ::                                                      |                                                         | T1 inserts a new row into table and also locks it. The key 20 is therefore |
+| .. code-block :: sql                                    |                                                         | T1 inserts a new row into table and also locks it. The key 20 is therefore |
 |                                                         |                                                         | protected.                                                                 |
-|   INSERT INTO tbl VALUES (20, 20);                      |                                                         |                                                                            |
+|   csql> INSERT INTO tbl VALUES (20, 20);                |                                                         |                                                                            |
 +---------------------------------------------------------+---------------------------------------------------------+----------------------------------------------------------------------------+
-|                                                         | ::                                                      | T2 also inserts a new row into table and locks it. However, when it tries  |
+|                                                         | .. code-block :: sql                                    | T2 also inserts a new row into table and locks it. However, when it tries  |
 |                                                         |                                                         | to insert it in primary key, it discovers key 20 already exists. T2 has    |
 |                                                         |    INSERT INTO tbl VALUES (20, 120);                    | to lock existing object, that T1 inserted, and is blocked until T1         |
-|                                                         |                                                         | commits.                                                                   |
+|                                                         |                                                         | commits. ::                                                                |
 |                                                         |                                                         |                                                                            |
-|                                                         |                                                         | | cubrid lockdb:                                                           |
+|                                                         |                                                         |   cubrid lockdb:                                                           |
 |                                                         |                                                         |                                                                            |
-|                                                         |                                                         | | OID =  0|   623|   4                                                     |
-|                                                         |                                                         | | Object type: Class = tbl.                                                |
-|                                                         |                                                         | | Total mode of holders =   IX_LOCK,                                       |
-|                                                         |                                                         | |     Total mode of waiters = NULL_LOCK.                                   |
-|                                                         |                                                         | | Num holders=  2, Num blocked-holders=  0,                                |
-|                                                         |                                                         | |     Num waiters=  0                                                      |
-|                                                         |                                                         | | LOCK HOLDERS:                                                            |
-|                                                         |                                                         | |     Tran_index =   1, Granted_mode =  IX_LOCK                            |
-|                                                         |                                                         | |     Tran_index =   2, Granted_mode =  IX_LOCK                            |
+|                                                         |                                                         |   OID =  0|   623|   4                                                     |
+|                                                         |                                                         |   Object type: Class = tbl.                                                |
+|                                                         |                                                         |   Total mode of holders =   IX_LOCK,                                       |
+|                                                         |                                                         |       Total mode of waiters = NULL_LOCK.                                   |
+|                                                         |                                                         |   Num holders=  2, Num blocked-holders=  0,                                |
+|                                                         |                                                         |       Num waiters=  0                                                      |
+|                                                         |                                                         |   LOCK HOLDERS:                                                            |
+|                                                         |                                                         |       Tran_index =   1, Granted_mode =  IX_LOCK                            |
+|                                                         |                                                         |       Tran_index =   2, Granted_mode =  IX_LOCK                            |
 |                                                         |                                                         |                                                                            |
-|                                                         |                                                         | | OID =  0|   650|   5                                                     |
-|                                                         |                                                         | | Object type: Instance of class ( 0|   623|   4) = tbl.                   |
-|                                                         |                                                         | | MVCC info: insert ID = 5, delete ID = missing.                           |
-|                                                         |                                                         | | Total mode of holders =   X_LOCK,                                        |
-|                                                         |                                                         | |     Total mode of waiters =    X_LOCK.                                   |
-|                                                         |                                                         | | Num holders=  1, Num blocked-holders=  0,                                |
-|                                                         |                                                         | |     Num waiters=  1                                                      |
-|                                                         |                                                         | | LOCK HOLDERS:                                                            |
-|                                                         |                                                         | |     Tran_index =   1, Granted_mode =   X_LOCK                            |
-|                                                         |                                                         | | LOCK WAITERS:                                                            |
-|                                                         |                                                         | |     Tran_index =   1, Blocked_mode =   X_LOCK                            |
+|                                                         |                                                         |   OID =  0|   650|   5                                                     |
+|                                                         |                                                         |   Object type: Instance of class ( 0|   623|   4) = tbl.                   |
+|                                                         |                                                         |   MVCC info: insert ID = 5, delete ID = missing.                           |
+|                                                         |                                                         |   Total mode of holders =   X_LOCK,                                        |
+|                                                         |                                                         |       Total mode of waiters =    X_LOCK.                                   |
+|                                                         |                                                         |   Num holders=  1, Num blocked-holders=  0,                                |
+|                                                         |                                                         |       Num waiters=  1                                                      |
+|                                                         |                                                         |   LOCK HOLDERS:                                                            |
+|                                                         |                                                         |       Tran_index =   1, Granted_mode =   X_LOCK                            |
+|                                                         |                                                         |   LOCK WAITERS:                                                            |
+|                                                         |                                                         |       Tran_index =   1, Blocked_mode =   X_LOCK                            |
 |                                                         |                                                         |                                                                            |
-|                                                         |                                                         | | OID =  0|   650|   6                                                     |
-|                                                         |                                                         | | Object type: Instance of class ( 0|   623|   4) = tbl.                   |
-|                                                         |                                                         | | MVCC info: insert ID = 6, delete ID = missing.                           |
-|                                                         |                                                         | | Total mode of holders =    X_LOCK,                                       |
-|                                                         |                                                         | |     Total mode of waiters = NULL_LOCK.                                   |
-|                                                         |                                                         | | Num holders=  1, Num blocked-holders=  0,                                |
-|                                                         |                                                         | |     Num waiters=  0                                                      |
-|                                                         |                                                         | | LOCK HOLDERS:                                                            |
-|                                                         |                                                         | |     Tran_index =   2, Granted_mode =   X_LOCK                            |
+|                                                         |                                                         |   OID =  0|   650|   6                                                     |
+|                                                         |                                                         |   Object type: Instance of class ( 0|   623|   4) = tbl.                   |
+|                                                         |                                                         |   MVCC info: insert ID = 6, delete ID = missing.                           |
+|                                                         |                                                         |   Total mode of holders =    X_LOCK,                                       |
+|                                                         |                                                         |       Total mode of waiters = NULL_LOCK.                                   |
+|                                                         |                                                         |   Num holders=  1, Num blocked-holders=  0,                                |
+|                                                         |                                                         |       Num waiters=  0                                                      |
+|                                                         |                                                         |   LOCK HOLDERS:                                                            |
+|                                                         |                                                         |       Tran_index =   2, Granted_mode =   X_LOCK                            |
 +---------------------------------------------------------+---------------------------------------------------------+----------------------------------------------------------------------------+
-| ::                                                      |                                                         | T1's locks are released.                                                   |
+| .. code-block :: sql                                    |                                                         | T1's locks are released.                                                   |
 |                                                         |                                                         |                                                                            |
 |   COMMIT;                                               |                                                         |                                                                            |
 +---------------------------------------------------------+---------------------------------------------------------+----------------------------------------------------------------------------+
@@ -1017,7 +1022,7 @@ It is impossible to predict such deadlocks, but it is recommended that you reduc
 
 Note that if you configure the value of **error_log_level**, which indicates the severity level, to NOTIFICATION, information on lock is stored in error log file of server upon deadlock occurrences.
 
-Compared to older versions, CUBRID 10.0 no longer uses index key locking to read and write in index, thus deadlock occurrences have been reduced greatly. Another reason that deadlocks do not occur as often is that reading a range in index could lock many objects with high isolation levels in previous CUBRID versions, whereas CUBRID 10.0 uses no locks.
+Compared to older versions, CUBRID 10.0 no longer uses index key locking to read and write in index, thus deadlock occurrences have been greatly reduced. Another reason that deadlocks do not occur as often is that reading a range in index could lock many objects with high isolation levels in previous CUBRID versions, whereas CUBRID 10.0 uses no locks.
 
 However, deadlocks are still possible when two transaction update same objects, but in a different order.
 
@@ -1026,21 +1031,21 @@ However, deadlocks are still possible when two transaction update same objects, 
 +----------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------+
 | session 1                                                                                          | session 2                                                                                          |
 +====================================================================================================+====================================================================================================+
-| ::                                                                                                 | ::                                                                                                 |
+| .. code-block :: sql                                                                               | .. code-block :: sql                                                                               |
 |                                                                                                    |                                                                                                    |
 |   csql> ;autocommit off                                                                            |   csql> ;autocommit off                                                                            |
 |                                                                                                    |                                                                                                    |
 |   AUTOCOMMIT IS OFF                                                                                |   AUTOCOMMIT IS OFF                                                                                |
 |                                                                                                    |                                                                                                    |
-|   csql> set transaction isolation level 5;                                                         |   csql> set transaction isolation level 5;                                                         |
+|   csql> set transaction isolation level REPEATABLE READ;                                           |   csql> set transaction isolation level REPEATABLE READ;                                           |
 |                                                                                                    |                                                                                                    |
 |   Isolation level set to:                                                                          |   Isolation level set to:                                                                          |
 |   REPEATABLE READ                                                                                  |   REPEATABLE READ                                                                                  |
 +----------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------+
-| ::                                                                                                 |                                                                                                    |
+| .. code-block :: sql                                                                               |                                                                                                    |
 |                                                                                                    |                                                                                                    |
-|   csql> CREATE TABLE lock_tbl(host_year integer,                                                   |                                                                                                    |
-|                               nation_code char(3));                                                |                                                                                                    |
+|   csql> CREATE TABLE lock_tbl(host_year INTEGER,                                                   |                                                                                                    |
+|                               nation_code CHAR(3));                                                |                                                                                                    |
 |   csql> INSERT INTO lock_tbl VALUES (2004, 'KOR');                                                 |                                                                                                    |
 |   csql> INSERT INTO lock_tbl VALUES (2004, 'USA');                                                 |                                                                                                    |
 |   csql> INSERT INTO lock_tbl VALUES (2004, 'GER');                                                 |                                                                                                    |
@@ -1048,7 +1053,7 @@ However, deadlocks are still possible when two transaction update same objects, 
 |   csql> COMMIT;                                                                                    |                                                                                                    |
 |                                                                                                    |                                                                                                    |
 +----------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------+
-| ::                                                                                                 | ::                                                                                                 |
+| .. code-block :: sql                                                                               | .. code-block :: sql                                                                               |
 |                                                                                                    |                                                                                                    |
 |   csql> DELETE FROM lock_tbl WHERE nation_code = 'KOR';                                            |   csql> DELETE FROM lock_tbl WHERE nation_code = 'GER';                                            |
 |                                                                                                    |                                                                                                    |
@@ -1056,16 +1061,16 @@ However, deadlocks are still possible when two transaction update same objects, 
 |    * and they do not block each-other.                                                             |                                                                                                    |
 |    */                                                                                              |                                                                                                    |
 +----------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------+
-| ::                                                                                                 |                                                                                                    |
+| .. code-block :: sql                                                                               |                                                                                                    |
 |                                                                                                    |                                                                                                    |
 |   csql> DELETE FROM lock_tbl WHERE host_year=2008;                                                 |                                                                                                    |
 |                                                                                                    |                                                                                                    |
 |   /* T1 want's to modify a row locked by T2 and is blocked */                                      |                                                                                                    |
 |                                                                                                    |                                                                                                    |
 +----------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------+
-|                                                                                                    | ::                                                                                                 |
+|                                                                                                    | .. code-block :: sql                                                                               |
 |                                                                                                    |                                                                                                    |
-|                                                                                                    |   csql> DELETE FROM lock_tbl WHERE host_year = 2004                                                |
+|                                                                                                    |   csql> DELETE FROM lock_tbl WHERE host_year = 2004;                                               |
 |                                                                                                    |                                                                                                    |
 |                                                                                                    |   /* T2 now want to delete the row blocked by T1                                                   |
 |                                                                                                    |    * and a deadlock is created.                                                                    |
@@ -1144,7 +1149,7 @@ The following message is displayed if lock timeout occurs in a transaction that 
 
 *   user1@host1|csql(9807), user1@host1|csql(9805): Another transactions waiting for termination to lock **IX_LOCK**
 
-That is, the above lock error message can be interpreted as meaning that "Because another client is holding **X_LOCK** on a specific row in the *participant* table, transaction 3 which running on the host *cdbs006.cub* waited for the lock and was rolled back as the timeout has passed". If you want to check the lock information of the transaction specified in the error message, you can do so by using the **cubrid lockdb** utility to search for the OID value (ex: 0|636|34) of a specific row where the **X_LOCK** is set currently to find the transaction ID currently holding the lock, the client program name and the process ID (PID). For details, see :ref:`lockdb`. You can also check the transaction lock information in the CUBRID Manager.
+That is, the above lock error message can be interpreted as meaning that "Because another client is holding **X_LOCK** on a specific row in the *participant* table, transaction 3 which running on the host *host1* waited for the lock and the timeout has passed". If you want to check the lock information of the transaction specified in the error message, you can do so by using the **cubrid lockdb** utility to search for the OID value (ex: 0|636|34) of a specific row where the **X_LOCK** is set currently to find the transaction ID currently holding the lock, the client program name and the process ID (PID). For details, see :ref:`lockdb`. You can also check the transaction lock information in the CUBRID Manager.
 
 You can organize the transactions by checking uncommitted queries through the SQL log after checking the transaction lock information in the manner described above. For information on checking the SQL log, see :ref:`broker-logs`.
 
@@ -1155,7 +1160,7 @@ Also, you can forcefully stop problematic transactions by using the **cubrid kil
 Transaction Isolation Level
 ===========================
 
-The transaction isolation level is determined based on how much interference occurs. The more isolation means the less interference from other transactions and more serializable. The less isolation means the more interference from other transactions and higher level of concurrency. You can control the level of consistency and concurrency specific to a service by setting appropriate isolation level.
+The transaction isolation level is determined based on how much interference occurs. The higher isolation means the less interference from other transactions and more serializable. The lower isolation means the more interference from other transactions and higher level of concurrency. You can control the level of consistency and concurrency specific to a service by setting appropriate isolation level.
 
 .. note:: A transaction can be restored in all supported isolation levels because updates are not committed before the end of the transaction.
 
@@ -1164,14 +1169,14 @@ The transaction isolation level is determined based on how much interference occ
 SET TRANSACTION ISOLATION LEVEL
 -------------------------------
 
-You can set the level of transaction isolation by using **isolation_level** and the **SET TRANSACTION** statement in the **$CUBRID/conf/cubrid.conf**. The level of **REPEATABLE READ CLASS** and **READ COMMITTED INSTANCES** are set by default, which indicates the level 4 through level 4 to 6 (levels 1 to 3 were used by older versions of CUBRID and are now obsolete). For details, see :ref:`database-concurrency`. ::
+You can set the level of transaction isolation by using **isolation_level** and the **SET TRANSACTION** statement in the **$CUBRID/conf/cubrid.conf**. The level of **READ COMMITTED** is set by default, which indicates the level 4 through level 4 to 6 (levels 1 to 3 were used by older versions of CUBRID and are now obsolete). For details, see :ref:`database-concurrency`. ::
 
     SET TRANSACTION ISOLATION LEVEL isolation_level_spec ;
     
     isolation_level_spec:
         SERIALIZABLE | 6
-        REPEATABLE READ SCHEMA, REPETABLE READ INSTANCES | 5
-        REPEATABLE READ SCHEMA, READ COMMITTED INSTANCES | CURSOR STABILITY | 4
+        REPETABLE READ | 5
+        READ COMMITTED | CURSOR STABILITY | 4
 
 **Example 1** ::
 
@@ -1205,12 +1210,12 @@ You can set the level of transaction isolation by using **isolation_level** and 
 | SERIALIZABLE (6)      | Temporarily disabled - details in :ref:`isolation-level-6`                                                                                                                          |
 +-----------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
-If the transaction level is changed in an application while a transaction is executed, the new level is applied to the rest of the transaction being executed. Therefore, some object locks that have already been obtained may be released during the transaction while the new isolation level is applied. For this reason, it is recommended that the transaction isolation level be modified when the transaction starts (after commit, rollback or system restart) because an isolation level which has already been set does not apply to the entire transaction, but can be changed during the transaction.
+If the transaction level is changed in an application while a transaction is executed, the new level is applied to the rest of the transaction being executed. It is recommended that to modify the transaction isolation level when a transaction starts (after commit, rollback or system restart) because an isolation level which has already been set does not apply to the entire transaction, but can be changed during the transaction.
 
 GET TRANSACTION ISOLATION LEVEL
 -------------------------------
 
-You can assign the current isolation level to *variable* by using the **GET TRANSACTION** statement. The following is a statement that verifies the isolation level. ::
+You can assign the current isolation level to *variable* by using the **GET TRANSACTION ISOLATION LEVEL** statement. The following is a statement that verifies the isolation level. ::
 
     GET TRANSACTION ISOLATION LEVEL [ { INTO | TO } variable ] [ ; ]
 
@@ -1226,42 +1231,42 @@ You can assign the current isolation level to *variable* by using the **GET TRAN
       
 .. _isolation-level-4:
 
-READ COMMITTED
---------------
+READ COMMITTED Isolation Level
+------------------------------
 
-A relatively low isolation level (4). A dirty read does not occur, but non-repeatable or phantom read may. That is, transaction T1 can read another value because insert or update by transaction T2 is allowed while transaction T1 is repeatedly retrieving one object.
+A relatively low isolation level (4). A dirty read does not occur, but non-repeatable or phantom read may. That is, transaction *T1* can read another value because insert or update by transaction *T2* is allowed while transaction *T1* is repeatedly retrieving one object.
 
 The following are the rules of this isolation level:
 
-*   Transaction T1 cannot read or modify the record inserted by another transaction T2. The record is instead ignored.
-*   Transaction T1 can read the record being updated by another transaction T2 and it sees the record's last committed version (but it cannot see uncommitted versions).
-*   Transaction T1 cannot modify the record being updated by another transaction T2. T1 waits for T2 to commit and it re-evaluates record values. If the re-evaluation test is passed, T1 modifies the record, otherwise it ignores it.
-*   Transaction T1 can modify the record being viewed by another transaction T2.
-*   Transaction T1 can update/insert record to the table being viewed by another transaction T2.
-*   Transaction T1 cannot change the schema of the table being viewed by another transaction T2.
-*   Transaction T1 creates a new snapshot with each executed statement, thus phantom or non-repeatable read may occur.
+*   Transaction *T1* cannot read or modify the record inserted by another transaction *T2*. The record is instead ignored.
+*   Transaction *T1* can read the record being updated by another transaction *T2* and it sees the record's last committed version (but it cannot see uncommitted versions).
+*   Transaction *T1* cannot modify the record being updated by another transaction *T2*. *T1* waits for *T2* to commit and it re-evaluates record values. If the re-evaluation test is passed, *T1* modifies the record, otherwise it ignores it.
+*   Transaction *T1* can modify the record being viewed by another transaction *T2*.
+*   Transaction *T1* can update/insert record to the table being viewed by another transaction *T2*.
+*   Transaction *T1* cannot change the schema of the table being viewed by another transaction *T2*.
+*   Transaction *T1* creates a new snapshot with each executed statement, thus phantom or non-repeatable read may occur.
 
 This isolation level follows MVCC locking protocol for an exclusive lock. A shared lock on a row is not required; however, an intent lock on a table is released when a transaction terminates to ensure repeatable read on the schema.
 
 **Example**
 
-The following example shows that a phantom or non-repeatable read may occur because another transaction can add or update a record while one transaction is performing the object read but repeatable read for the table schema update is ensured when the transaction level of the concurrent transactions is **REPEATABLE READ CLASS** with **READ COMMITTED INSTANCES**.
+The following example shows that a phantom or non-repeatable read may occur because another transaction can add or update a record while one transaction is performing the object read but repeatable read for the table schema update is ensured when the transaction level of the concurrent transactions is **READ COMMITTED**.
 
 +-------------------------------------------------------------------------+----------------------------------------------------------------------------------+
 | session 1                                                               | session 2                                                                        |
 +=========================================================================+==================================================================================+
-| ::                                                                      | ::                                                                               |
+| .. code-block :: sql                                                    | .. code-block :: sql                                                             |
 |                                                                         |                                                                                  |
 |   csql> ;autocommit off                                                 |   csql> ;autocommit off                                                          |
 |                                                                         |                                                                                  |
 |   AUTOCOMMIT IS OFF                                                     |   AUTOCOMMIT IS OFF                                                              |
 |                                                                         |                                                                                  |
-|   csql> SET TRANSACTION ISOLATION LEVEL 4;                              |   csql> SET TRANSACTION ISOLATION LEVEL 4;                                       |
+|   csql> SET TRANSACTION ISOLATION LEVEL READ COMMITTED;                 |   csql> SET TRANSACTION ISOLATION LEVEL READ COMMITTED;                          |
 |                                                                         |                                                                                  |
 |   Isolation level set to:                                               |   Isolation level set to:                                                        |
 |   READ COMMITTED                                                        |   READ COMMITTED                                                                 |
 +-------------------------------------------------------------------------+----------------------------------------------------------------------------------+
-| ::                                                                      |                                                                                  |
+| .. code-block :: sql                                                    |                                                                                  |
 |                                                                         |                                                                                  |
 |   csql> CREATE TABLE isol4_tbl(host_year integer, nation_code char(3)); |                                                                                  |
 |                                                                         |                                                                                  |
@@ -1269,7 +1274,7 @@ The following example shows that a phantom or non-repeatable read may occur beca
 |                                                                         |                                                                                  |
 |   csql> COMMIT;                                                         |                                                                                  |
 +-------------------------------------------------------------------------+----------------------------------------------------------------------------------+
-|                                                                         | ::                                                                               |
+|                                                                         | .. code-block :: sql                                                             |
 |                                                                         |                                                                                  |
 |                                                                         |   csql> SELECT * FROM isol4_tbl;                                                 |
 |                                                                         |                                                                                  |
@@ -1277,13 +1282,13 @@ The following example shows that a phantom or non-repeatable read may occur beca
 |                                                                         |   ===================================                                            |
 |                                                                         |            2008  'AUS'                                                           |
 +-------------------------------------------------------------------------+----------------------------------------------------------------------------------+
-| ::                                                                      |                                                                                  |
+| .. code-block :: sql                                                    |                                                                                  |
 |                                                                         |                                                                                  |
 |   csql> INSERT INTO isol4_tbl VALUES (2004, 'AUS');                     |                                                                                  |
 |   csql> INSERT INTO isol4_tbl VALUES (2000, 'NED');                     |                                                                                  |
 |   csql> COMMIT;                                                         |                                                                                  |
 +-------------------------------------------------------------------------+----------------------------------------------------------------------------------+
-|                                                                         | ::                                                                               |
+|                                                                         | .. code-block :: sql                                                             |
 |                                                                         |                                                                                  |
 |                                                                         |   /* phantom read occurs because tran 1 committed */                             |
 |                                                                         |   csql> SELECT * FROM isol4_tbl;                                                 |
@@ -1294,14 +1299,14 @@ The following example shows that a phantom or non-repeatable read may occur beca
 |                                                                         |            2004  'AUS'                                                           |
 |                                                                         |            2000  'NED'                                                           |
 +-------------------------------------------------------------------------+----------------------------------------------------------------------------------+
-| ::                                                                      |                                                                                  |
+| .. code-block :: sql                                                    |                                                                                  |
 |                                                                         |                                                                                  |
 |   csql> UPDATE isol4_tbl                                                |                                                                                  |
 |   csql> SET nation_code = 'KOR'                                         |                                                                                  | 
 |   csql> WHERE host_year = 2008;                                         |                                                                                  |
 |   csql> COMMIT;                                                         |                                                                                  |
 +-------------------------------------------------------------------------+----------------------------------------------------------------------------------+
-|                                                                         | ::                                                                               |
+|                                                                         | .. code-block :: sql                                                             |
 |                                                                         |                                                                                  |
 |                                                                         |   /* unrepeatable read occurs because tran 1 committed */                        |
 |                                                                         |   csql> SELECT * FROM isol4_tbl;                                                 |
@@ -1312,13 +1317,13 @@ The following example shows that a phantom or non-repeatable read may occur beca
 |                                                                         |            2004  'AUS'                                                           |
 |                                                                         |            2000  'NED'                                                           |
 +-------------------------------------------------------------------------+----------------------------------------------------------------------------------+
-| ::                                                                      |                                                                                  |
+| .. code-block :: sql                                                    |                                                                                  |
 |                                                                         |                                                                                  |
 |   csql> ALTER TABLE isol4_tbl ADD COLUMN gold INT;                      |                                                                                  |
 |                                                                         |                                                                                  |
 |   /* unable to alter the table schema until tran 2 committed */         |                                                                                  |
 +-------------------------------------------------------------------------+----------------------------------------------------------------------------------+
-|                                                                         | ::                                                                               |
+|                                                                         | .. code-block :: sql                                                             |
 |                                                                         |                                                                                  |
 |                                                                         |   /* repeatable read is ensured while                                            |
 |                                                                         |    * tran_1 is altering table schema                                             |
@@ -1332,19 +1337,23 @@ The following example shows that a phantom or non-repeatable read may occur beca
 |                                                                         |            2004  'AUS'                                                           |
 |                                                                         |            2000  'NED'                                                           |
 +-------------------------------------------------------------------------+----------------------------------------------------------------------------------+
-|                                                                         | ::                                                                               |
+|                                                                         | .. code-block :: sql                                                             |
 |                                                                         |                                                                                  |
 |                                                                         |   csql> COMMIT;                                                                  |
 +-------------------------------------------------------------------------+----------------------------------------------------------------------------------+
-|                                                                         | ::                                                                               |
+|                                                                         | .. code-block :: sql                                                             |
 |                                                                         |                                                                                  |
 |                                                                         |   csql> SELECT * FROM isol4_tbl;                                                 |
 |                                                                         |                                                                                  |
 |                                                                         |   /* unable to access the table until tran_1 committed */                        |
 +-------------------------------------------------------------------------+----------------------------------------------------------------------------------+
-| ::                                                                      | ::                                                                               |
+| .. code-block :: sql                                                    |                                                                                  |
 |                                                                         |                                                                                  |
-|   csql> COMMIT;                                                         |   host_year  nation_code  gold                                                   |
+|   csql> COMMIT;                                                         |                                                                                  |
++-------------------------------------------------------------------------+----------------------------------------------------------------------------------+
+|                                                                         | .. code-block :: sql                                                             |
+|                                                                         |                                                                                  |
+|                                                                         |   host_year  nation_code  gold                                                   |
 |                                                                         |   ===================================                                            |
 |                                                                         |     2008  'KOR'           NULL                                                   |
 |                                                                         |     2004  'AUS'           NULL                                                   |
@@ -1354,14 +1363,14 @@ The following example shows that a phantom or non-repeatable read may occur beca
 READ COMMITTED UPDATE RE-EVALUATION
 +++++++++++++++++++++++++++++++++++
 
-READ COMMITTED isolation treats concurrent row updates differently than higher isolation levels. In higher isolation levels, if T2 tries to modify a row already updated by concurrent transaction T1, it is blocked until T1 commits and rollbacks, and if T1 commits, T2 aborts its statement execution, throwing serialization error. Under READ COMMITTED isolation, after T1 commits, T2 does not immediately abort its statement execution and re-evaluates the new version, which is not considered committed and would not violate any restrictions for this isolation. If the predicate used to select previous version is still true for the new version, T2 goes ahead and modifies the new version. If the predicate is no longer true, T2 just ignores the record as if the predicate was never satisfied.
+**READ COMMITTED** isolation treats concurrent row updates differently than higher isolation levels. In higher isolation levels, if *T2* tries to modify a row already updated by concurrent transaction *T1*, it is blocked until *T1* commits and rollbacks, and if *T1* commits, *T2* aborts its statement execution, throwing serialization error. Under **READ COMMITTED** isolation, after *T1* commits, *T2* does not immediately abort its statement execution and re-evaluates the new version, which is not considered committed and would not violate any restrictions for this isolation. If the predicate used to select previous version is still true for the new version, *T2* goes ahead and modifies the new version. If the predicate is no longer true, *T2* just ignores the record as if the predicate was never satisfied.
 
 *Example:*
 
 +-------------------------------------------------------------------------+----------------------------------------------------------------------------------+
 | session 1                                                               | session 2                                                                        |
 +=========================================================================+==================================================================================+
-| ::                                                                      | ::                                                                               |
+| .. code-block :: sql                                                    | .. code-block :: sql                                                             |
 |                                                                         |                                                                                  |
 |   csql> ;autocommit off                                                 |   csql> ;autocommit off                                                          |
 |                                                                         |                                                                                  |
@@ -1372,7 +1381,7 @@ READ COMMITTED isolation treats concurrent row updates differently than higher i
 |   Isolation level set to:                                               |   Isolation level set to:                                                        |
 |   READ COMMITTED                                                        |   READ COMMITTED                                                                 |
 +-------------------------------------------------------------------------+----------------------------------------------------------------------------------+
-| ::                                                                      |                                                                                  |
+| .. code-block :: sql                                                    |                                                                                  |
 |                                                                         |                                                                                  |
 |   csql> CREATE TABLE isol4_tbl(host_year integer, nation_code char(3)); |                                                                                  |
 |   csql> INSERT INTO isol4_tbl VALUES (2000, 'KOR');                     |                                                                                  |
@@ -1382,7 +1391,7 @@ READ COMMITTED isolation treats concurrent row updates differently than higher i
 |   csql> COMMIT;                                                         |                                                                                  |
 |                                                                         |                                                                                  |
 +-------------------------------------------------------------------------+----------------------------------------------------------------------------------+
-| ::                                                                      |                                                                                  |
+| .. code-block :: sql                                                    |                                                                                  |
 |                                                                         |                                                                                  |
 |   csql> UPDATE isol4_tbl                                                |                                                                                  |
 |   csql> SET host_year = host_year - 4                                   |                                                                                  |
@@ -1392,7 +1401,7 @@ READ COMMITTED isolation treats concurrent row updates differently than higher i
 |   /* T1 locks and modifies (2008, 'GER') to (2004, 'GER') */            |                                                                                  |
 |                                                                         |                                                                                  |
 +-------------------------------------------------------------------------+----------------------------------------------------------------------------------+
-|                                                                         | ::                                                                               |
+|                                                                         | .. code-block :: sql                                                             |
 |                                                                         |                                                                                  |
 |                                                                         |   csql> UPDATE isol4_tbl                                                         |
 |                                                                         |   csql> SET host_year = host_year + 4                                            |
@@ -1406,11 +1415,15 @@ READ COMMITTED isolation treats concurrent row updates differently than higher i
 |                                                                         |    */                                                                            |
 |                                                                         |                                                                                  |
 +-------------------------------------------------------------------------+----------------------------------------------------------------------------------+
-| ::                                                                      |                                                                                  |
+| .. code-block :: sql                                                    |                                                                                  |
 |                                                                         |                                                                                  |
-|   csql> COMMIT;                                                         | ::                                                                               |
+|   csql> COMMIT;                                                         |                                                                                  |
 |                                                                         |                                                                                  |
-|   /* T1 releases locks on modified rows. */                             |   /* T2 is unblocked and will do the next steps:                                 |
+|   /* T1 releases locks on modified rows. */                             |                                                                                  |
++-------------------------------------------------------------------------+----------------------------------------------------------------------------------+
+|                                                                         | .. code-block :: sql                                                             |
+|                                                                         |                                                                                  |
+|                                                                         |   /* T2 is unblocked and will do the next steps:                                 |
 |                                                                         |    *                                                                             |
 |                                                                         |    *   T2 finds (2004, 'GER') has a new version (2000, 'GER')                    |
 |                                                                         |    *   that doesn't satisfy predicate anymore.                                   |
@@ -1422,7 +1435,7 @@ READ COMMITTED isolation treats concurrent row updates differently than higher i
 |                                                                         |    */                                                                            |
 |                                                                         |                                                                                  |
 +-------------------------------------------------------------------------+----------------------------------------------------------------------------------+
-|                                                                         | ::                                                                               |
+|                                                                         | .. code-block :: sql                                                             |
 |                                                                         |                                                                                  |
 |                                                                         |   csql> SELECT * FROM isol4_tbl;                                                 |
 |                                                                         |                                                                                  |
@@ -1437,31 +1450,31 @@ READ COMMITTED isolation treats concurrent row updates differently than higher i
          
 .. _isolation-level-5:
 
-REPEATABLE READ
----------------
+REPEATABLE READ Isolation Level
+-------------------------------
 
-A relatively high isolation level (5). Dirty, non-repeatable, and phantom reads do not occur due to snapshot isolation. However, it's still not truly serializable, transaction execution cannot be defined *as if there were no other transactions running* at the same time. More complex anomalies, like write skews, that a serializable snapshot isolation level should not allow still occur.
+A relatively high isolation level (5). Dirty, non-repeatable, and phantom reads do not occur due to **snapshot isolation**. However, it's still not truly **serializable**, transaction execution cannot be defined *as if there were no other transactions running* at the same time. More complex anomalies, like write skews, that a **serializable snapshot isolation** level should not allow still occur.
 
-In a write skew anomaly, two transactions concurrently read overlapping data sets and make disjoint updates on the overlapped data set, neither having seen the update performed by the other. In a serializable system, such anomaly would be impossible, since one transation must occur first and second transactions should see first's updates.
+In a write skew anomaly, two transactions concurrently read overlapping data sets and make disjoint updates on the overlapped data set, neither having seen the update performed by the other. In a serializable system, such anomaly would be impossible, since one transaction must occur first and the second transaction should see the update of the first transaction.
 
 The following are the rules of this isolation level:
 
-*   Transaction T1 cannot read or modify the record inserted by another transaction T2. The record is instead ignored.
-*   Transaction T1 can read the record being updated by another transaction T2 and it will see the record's last committed version.
-*   Transaction T1 cannot modify the record being updated by another transaction T2.
-*   Transaction T1 can modify the record being viewed by another transaction T2.
-*   Transaction T1 can update/insert record to the table being viewed by another transaction T2.
-*   Transaction T1 cannot change the schema of the table being viewed by another transaction T2.
-*   Transaction T1 creates a unique snapshot valid throughout the entire duration of the transaction.
+*   Transaction *T1* cannot read or modify the record inserted by another transaction *T2*. The record is instead ignored.
+*   Transaction *T1* can read the record being updated by another transaction *T2* and it will see the record's last committed version.
+*   Transaction *T1* cannot modify the record being updated by another transaction *T2*.
+*   Transaction *T1* can modify the record being viewed by another transaction *T2*.
+*   Transaction *T1* can update/insert record to the table being viewed by another transaction *T2*.
+*   Transaction *T1* cannot change the schema of the table being viewed by another transaction *T2*.
+*   Transaction *T1* creates a unique snapshot valid throughout the entire duration of the transaction.
 
 **Example**
 
-The following example shows that non-repeatable and phantom reads may not occur because of snapshot isolation. However, write skews are possible, which means the isolation level is not serializable.
+The following example shows that non-repeatable and phantom reads may not occur because of **snapshot isolation**. However, write skews are possible, which means the isolation level is not **serializable**.
 
 +----------------------------------------------------------------------------+-----------------------------------------------------------------------------+
 | session 1                                                                  | session 2                                                                   |
 +============================================================================+=============================================================================+
-| ::                                                                         | ::                                                                          |
+| .. code-block :: sql                                                       | .. code-block :: sql                                                        |
 |                                                                            |                                                                             |
 |   csql> ;autocommit off                                                    |   csql> ;autocommit off                                                     |
 |                                                                            |                                                                             |
@@ -1472,7 +1485,7 @@ The following example shows that non-repeatable and phantom reads may not occur 
 |   Isolation level set to:                                                  |   Isolation level set to:                                                   |
 |   REPEATABLE READ                                                          |   REPEATABLE READ                                                           |
 +----------------------------------------------------------------------------+-----------------------------------------------------------------------------+
-| ::                                                                         |                                                                             |
+| .. code-block :: sql                                                       |                                                                             |
 |                                                                            |                                                                             |
 |   csql> CREATE TABLE isol5_tbl(host_year integer, nation_code char(3));    |                                                                             |
 |   csql> CREATE UNIQUE INDEX isol5_u_idx                                    |                                                                             |
@@ -1483,7 +1496,7 @@ The following example shows that non-repeatable and phantom reads may not occur 
 |   csql> COMMIT;                                                            |                                                                             |
 |                                                                            |                                                                             |
 +----------------------------------------------------------------------------+-----------------------------------------------------------------------------+
-|                                                                            | ::                                                                          |
+|                                                                            | .. code-block :: sql                                                        |
 |                                                                            |                                                                             |
 |                                                                            |   csql> SELECT * FROM isol5_tbl WHERE nation_code='AUS';                    |
 |                                                                            |                                                                             |
@@ -1492,7 +1505,7 @@ The following example shows that non-repeatable and phantom reads may not occur 
 |                                                                            |            2004  'AUS'                                                      |
 |                                                                            |            2008  'AUS'                                                      |
 +----------------------------------------------------------------------------+-----------------------------------------------------------------------------+
-| ::                                                                         |                                                                             |
+| .. code-block :: sql                                                       |                                                                             |
 |                                                                            |                                                                             |
 |   csql> INSERT INTO isol5_tbl VALUES (2004, 'KOR');                        |                                                                             |
 |   csql> INSERT INTO isol5_tbl VALUES (2000, 'AUS');                        |                                                                             |
@@ -1501,7 +1514,7 @@ The following example shows that non-repeatable and phantom reads may not occur 
 |   csql> COMMIT;                                                            |                                                                             |
 |                                                                            |                                                                             |
 +----------------------------------------------------------------------------+-----------------------------------------------------------------------------+
-|                                                                            | ::                                                                          |
+|                                                                            | .. code-block :: sql                                                        |
 |                                                                            |                                                                             |
 |                                                                            |   csql> SELECT * FROM isol5_tbl WHERE nation_code='AUS';                    |
 |                                                                            |                                                                             |
@@ -1512,7 +1525,7 @@ The following example shows that non-repeatable and phantom reads may not occur 
 |                                                                            |            2004  'AUS'                                                      |
 |                                                                            |            2008  'AUS'                                                      |
 +----------------------------------------------------------------------------+-----------------------------------------------------------------------------+
-| ::                                                                         |                                                                             |
+| .. code-block :: sql                                                       |                                                                             |
 |                                                                            |                                                                             |
 |   csql> UPDATE isol5_tbl                                                   |                                                                             |
 |   csql> SET host_year = 2012                                               |                                                                             |
@@ -1523,7 +1536,7 @@ The following example shows that non-repeatable and phantom reads may not occur 
 |   csql> COMMIT;                                                            |                                                                             |
 |                                                                            |                                                                             |
 +----------------------------------------------------------------------------+-----------------------------------------------------------------------------+
-|                                                                            | ::                                                                          |
+|                                                                            | .. code-block :: sql                                                        |
 |                                                                            |                                                                             |
 |                                                                            |   csql> SELECT * FROM isol5_tbl WHERE nation_code = 'AUS';                  |
 |                                                                            |                                                                             |
@@ -1534,12 +1547,12 @@ The following example shows that non-repeatable and phantom reads may not occur 
 |                                                                            |            2004  'AUS'                                                      |
 |                                                                            |            2008  'AUS'                                                      |
 +----------------------------------------------------------------------------+-----------------------------------------------------------------------------+
-|                                                                            | ::                                                                          |
+|                                                                            | .. code-block :: sql                                                        |
 |                                                                            |                                                                             |
 |                                                                            |   csql> COMMIT;                                                             |
 |                                                                            |                                                                             |
 +----------------------------------------------------------------------------+-----------------------------------------------------------------------------+
-| ::                                                                         | ::                                                                          |
+| .. code-block :: sql                                                       | .. code-block :: sql                                                        |
 |                                                                            |                                                                             |
 |   csql> SELECT * FROM isol5_tbl WHERE host_year >= 2004;                   |   csql> SELECT * FROM isol5_tbl WHERE nation_code = 'AUS';                  |
 |                                                                            |                                                                             |
@@ -1556,7 +1569,7 @@ The following example shows that non-repeatable and phantom reads may not occur 
 |                                                                            |                                                                             |
 |   csql> COMMIT;                                                            |   csql> COMMIT;                                                             |
 +----------------------------------------------------------------------------+-----------------------------------------------------------------------------+
-| ::                                                                                                                                                       |
+| .. code-block :: sql                                                                                                                                     |
 |                                                                                                                                                          |
 |   /* T1 and T2 first have selected each 3 throws and rows (2004, 'AUS'), (2012, 'AUS') overlapped.                                                       |
 |    * Then T1 modified (2004, 'AUS'), while T2 modified (2012, 'AUS'), without blocking each other.                                                       |
@@ -1564,7 +1577,7 @@ The following example shows that non-repeatable and phantom reads may not occur 
 |    */                                                                                                                                                    |
 |                                                                                                                                                          |
 +----------------------------------------------------------------------------+-----------------------------------------------------------------------------+
-|                                                                            | ::                                                                          |
+|                                                                            | .. code-block :: sql                                                        |
 |                                                                            |                                                                             |
 |                                                                            |   csql> SELECT * FROM isol5_tbl WHERE nation_code = 'AUS';                  |
 |                                                                            |                                                                             |
@@ -1573,13 +1586,13 @@ The following example shows that non-repeatable and phantom reads may not occur 
 |                                                                            |            2000  'AUS'                                                      |
 |                                                                            |                                                                             |
 +----------------------------------------------------------------------------+-----------------------------------------------------------------------------+
-| ::                                                                         |                                                                             |
+| .. code-block :: sql                                                       |                                                                             |
 |                                                                            |                                                                             |
 |   csql> ALTER TABLE isol5_tbl ADD COLUMN gold INT;                         |                                                                             |
 |                                                                            |                                                                             |
 |   /* unable to alter the table schema until tran 2 committed */            |                                                                             |
 +----------------------------------------------------------------------------+-----------------------------------------------------------------------------+
-|                                                                            | ::                                                                          |
+|                                                                            | .. code-block :: sql                                                        |
 |                                                                            |                                                                             |
 |                                                                            |   /* repeatable read is ensured while tran_1 is altering                    |
 |                                                                            |    * table schema                                                           |
@@ -1591,31 +1604,37 @@ The following example shows that non-repeatable and phantom reads may not occur 
 |                                                                            |   ===================================                                       |
 |                                                                            |            2000  'AUS'                                                      |
 +----------------------------------------------------------------------------+-----------------------------------------------------------------------------+
-|                                                                            | ::                                                                          |
+|                                                                            | .. code-block :: sql                                                        |
 |                                                                            |                                                                             |
 |                                                                            |   csql> COMMIT;                                                             |
 +----------------------------------------------------------------------------+-----------------------------------------------------------------------------+
-|                                                                            | ::                                                                          |
+|                                                                            | .. code-block :: sql                                                        |
 |                                                                            |                                                                             |
 |                                                                            |   csql> SELECT * FROM isol5_tbl WHERE nation_code = 'AUS';                  |
 |                                                                            |                                                                             |
 |                                                                            |   /* unable to access the table until tran_1 committed */                   |
 +----------------------------------------------------------------------------+-----------------------------------------------------------------------------+
-| ::                                                                         | ::                                                                          |
+| .. code-block :: sql                                                       |                                                                             |
 |                                                                            |                                                                             |
-|   csql> COMMIT;                                                            |   host_year  nation_code  gold                                              |
+|   csql> COMMIT;                                                            |                                                                             |
+|                                                                            |                                                                             |
+|                                                                            |                                                                             |
++----------------------------------------------------------------------------+-----------------------------------------------------------------------------+
+|                                                                            | .. code-block :: sql                                                        |
+|                                                                            |                                                                             |
+|                                                                            |   host_year  nation_code  gold                                              |
 |                                                                            |   ===================================                                       |
 |                                                                            |     2000  'AUS'           NULL                                              |
 +----------------------------------------------------------------------------+-----------------------------------------------------------------------------+
 
 .. _isolation-level-6:
 
-SERIALIZABLE
-------------
+SERIALIZABLE Isolation Level
+----------------------------
 
-CUBRID 10.0 SERIALIZABLE isolation level is identical to REPEATABLE READ isolation level. As explained in :ref:`isolation-level-5` section, even though SNAPSHOT isolation ensures non-repeatable read and phantom read anomalies do not happen, write skew anomalies are still possible. To protect against write skew, index key locks for read may be used. Alternatively, there are many works that describe complex systems to provide SERIALIZABLE SNAPSHOT ISOLATION, by aborting transactions with the potential of creating an isolation conflict. One such system will be provided in a future CUBRID version.
+CUBRID 10.0 **SERIALIZABLE** isolation level is identical to **REPEATABLE READ** isolation level. As explained in :ref:`isolation-level-5` section, even though **SNAPSHOT** isolation ensures non-repeatable read and phantom read anomalies do not happen, write skew anomalies are still possible. To protect against write skew, index key locks for read may be used. Alternatively, there are many works that describe complex systems to provide **SERIALIZABLE SNAPSHOT ISOLATION**, by aborting transactions with the potential of creating an isolation conflict. One such system will be provided in a future CUBRID version.
 
-The keyword was not removed for backward compatibility reasons, but remember, it is similar to REPEATABLE READ.
+The keyword was not removed for backward compatibility reasons, but remember, it is similar to **REPEATABLE READ**.
 
 .. _dirty-record-flush:
 

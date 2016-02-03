@@ -861,7 +861,6 @@ CREATE TABLE AS SELECT
         2            3
         3            3
 
-.. CUBRIDSUS-6568: from 10.0, alter table rename constraint is supported.
 
 ALTER TABLE
 ===========
@@ -912,10 +911,6 @@ ALTER TABLE
                 {
                     old_column_name AS new_column_name |
                     FUNCTION OF column_name AS function_name
-                } |
-                [CONSTRAINT | {INDEX|KEY}]
-                {
-                    old_name {AS|TO} new_name
                 }
                 
             <alter_change> ::= 
@@ -1587,50 +1582,6 @@ RENAME COLUMN 절
 
     CREATE TABLE a_tbl (id INT, name VARCHAR(50));
     ALTER TABLE a_tbl RENAME COLUMN name AS name1;
-
-.. _rename-index: 
-
-RENAME INDEX/CONSTRAINT 절 
--------------------------- 
-
-:: 
-     
-    ALTER TABLE table_name 
-    RENAME [CONSTRAINT | {INDEX|KEY}] old_name {AS|TO} new_name ;
-
-*   CONSTRAINT: UNIQUE, PRIMARY KEY, FOREIGN KEY
-*   INDEX 또는 KEY: INDEX (기능적으로 :ref:`alter-index` 문에서 인덱스 이름을 변경하는 것과 같다.) 
-
-*   *old_name*: 기존의 인덱스 또는 제약조건(constraint) 이름 
-*   *new_name*: 새로운 인덱스 또는 제약조건(constraint) 이름
-
-.. note::
-
-    *   상속 테이블의 인덱스 또는 제약조건(constraint) 이름은 변경할 수 없다. 
-    *   분할 테이블에 속한 인덱스 또는 제약조건(constraint) 이름은 변경할 수 없다.
-
-::
-
-    CREATE TABLE a_tbl (
-        id INT NOT NULL DEFAULT 0 PRIMARY KEY,
-        phone VARCHAR(10),
-        name VARCHAR(50),
-        INDEX i_id_name(id, name)
-    );
-    
-    ALTER TABLE a_tbl RENAME INDEX i_id_name  AS i_in;
-    
-    DROP TABLE a_tbl;
-    CREATE TABLE a_tbl ( 
-        id INT NOT NULL DEFAULT 0,
-        phone VARCHAR(10),
-        name VARCHAR(50),
-        CONSTRAINT c_u UNIQUE KEY (name), 
-        CONSTRAINT pk_id PRIMARY KEY (id)
-    );
-    
-    ALTER TABLE a_tbl RENAME CONSTRAINT c_u AS c_unique_name;
-    ALTER TABLE a_tbl RENAME CONSTRAINT pk_id AS primary_key_id;
 
 DROP COLUMN 절
 --------------

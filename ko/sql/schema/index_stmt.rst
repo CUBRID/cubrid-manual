@@ -82,7 +82,7 @@ CREATE INDEX
 ALTER INDEX
 ===========
 
-**ALTER INDEX** 문을 사용하여 인덱스를 재생성하거나 인덱스 이름을 변경한다. 인덱스 재성성은 인덱스를 제거하고 재생성하는 작업이다. 
+**ALTER INDEX** 문을 사용하여 인덱스를 재생성하거나 인덱스의 커맨트를 생성하거나 변경한다. 인덱스 재성성은 인덱스를 제거하고 재생성하는 작업이다. 
 
 다음은 인덱스를 재생성하는 구문이다.
 
@@ -123,20 +123,6 @@ ALTER INDEX
 .. code-block:: sql
     
     ALTER INDEX i_game_medal ON game COMMENT 'change index comment' ;
-
-다음은 인덱스 이름을 변경하는 구문이다.
-
-:: 
-
-    ALTER INDEX old_index_name ON table_name RENAME TO new_index_name [COMMENT 'index_comment_string'] ;
-
-ALTER INDEX 문이 아닌 :ref:`rename-index`\ 을 이용해서도 인덱스 이름을 바꿀 수도 있다. 
-
-다음은 인덱스 이름을 변경하는 예제이다. 
-
-.. code-block:: sql 
-
-    ALTER INDEX i_game_medal ON game RENAME TO i_new_game_medal COMMENT 'rename index comment'; 
 
 DROP INDEX
 ==========

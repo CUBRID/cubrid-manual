@@ -865,7 +865,6 @@ You can create a new table that contains the result records of the **SELECT** st
         2            3
         3            3
 
-.. CUBRIDSUS-6568: from 10.0, alter table rename constraint is supported.
 
 ALTER TABLE
 ===========
@@ -916,10 +915,6 @@ You can modify the structure of a table by using the **ALTER** statement. You ca
                 {
                     old_column_name AS new_column_name |
                     FUNCTION OF column_name AS function_name
-                } |
-                [CONSTRAINT | {INDEX|KEY}]
-                {
-                    old_name {AS|TO} new_name
                 }
                 
             <alter_change> ::= 
@@ -1591,50 +1586,6 @@ You can change the name of the column by using the **RENAME COLUMN** clause. ::
 
     CREATE TABLE a_tbl (id INT, name VARCHAR(50));
     ALTER TABLE a_tbl RENAME COLUMN name AS name1;
-
-.. _rename-index: 
-
-RENAME INDEX/CONSTRAINT Clause 
------------------------------- 
-
-:: 
-     
-    ALTER TABLE table_name 
-    RENAME {CONSTRAINT | {INDEX|KEY}} old_name {AS|TO} new_name ;
-
-*   CONSTRAINT: UNIQUE, PRIMARY KEY, FOREIGN KEY
-*   INDEX or KEY: INDEX (Functionally, this is the same as changing an index name in :ref:`alter-index`) 
-
-*   *old_name*: old name of an index or a constraint
-*   *new_name*: new name of an index or a constraint
-
-.. note::
-
-    *   The name of an index or a constraint in an inherited table cannot be changed.
-    *   The name of an index or a constraint which belongs to a partitioning table.
-
-::
-
-    CREATE TABLE a_tbl (
-        id INT NOT NULL DEFAULT 0 PRIMARY KEY,
-        phone VARCHAR(10),
-        name VARCHAR(50),
-        INDEX i_id_name(id, name)
-    );
-    
-    ALTER TABLE a_tbl RENAME INDEX i_id_name  AS i_in;
-    
-    DROP TABLE a_tbl;
-    CREATE TABLE a_tbl ( 
-        id INT NOT NULL DEFAULT 0,
-        phone VARCHAR(10),
-        name VARCHAR(50),
-        CONSTRAINT c_u UNIQUE KEY (name), 
-        CONSTRAINT pk_id PRIMARY KEY (id)
-    );
-    
-    ALTER TABLE a_tbl RENAME CONSTRAINT c_u AS c_unique_name;
-    ALTER TABLE a_tbl RENAME CONSTRAINT pk_id AS primary_key_id;
 
 DROP COLUMN Clause
 ------------------

@@ -80,13 +80,13 @@ Or you can see the index comments with ;sc command in the CSQL interpreter.
 ALTER INDEX
 ===========
 
-The **ALTER INDEX** statement rebuilds an index or renames an index name. Rebuilding an index is a job which drops and recreates an index.
+The **ALTER INDEX** statement rebuilds an index or adds/changes the comment of an index. Rebuilding an index is a job which drops and recreates an index.
 
 The following is a syntax of rebuilding an index.
 
 ::
 
-    ALTER INDEX index_name ON table_name REBUILD ;
+    ALTER INDEX index_name ON table_name REBUILD;
 
 *   *index_name*: specifies the name of the index to be recreated. The index name must be unique in the table.
 *   *table_name*: specifies the name of the table where the index is recreated.
@@ -128,13 +128,6 @@ The following is a syntax of renaming an index.
 
     ALTER INDEX old_index_name ON table_name RENAME TO new_index_name [COMMENT 'index_comment_string'] ;
 
-An index name can be changed by not only ALTER INDEX statement, but also :ref:`rename-index`.
-
-The following is an example of changing an index name.
-
-.. code-block:: sql 
-
-    ALTER INDEX i_game_medal ON game RENAME TO i_new_game_medal COMMENT 'rename index comment'; 
 
 DROP INDEX
 ==========

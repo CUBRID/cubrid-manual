@@ -1079,9 +1079,7 @@ The **FOR UPDATE** clause can be used in **SELECT** statements for locking rows 
          
 * <*spec_name_comma_list*>: A list of table/view names referenced from the FROM clause.
 
-Only table/view referenced in <*spec_name_comma_list*> will be locked. If the <*spec_name_comma_list*> is missing but **FOR UPDATE** is present then we assume that all tables/views from the FROM clause of the SELECT statement are referenced. 
-
-The locks which have been acquired by **FOR UPDATE** clause are released in the **UPDATE/DELETE** statement. When **SELECT .. FOR UPDATE** is being executed, the locks on keys aren't acquired.
+Only table/view referenced in <*spec_name_comma_list*> will be locked. If the <*spec_name_comma_list*> is missing but **FOR UPDATE** is present then we assume that all tables/views from the FROM clause of the SELECT statement are referenced. Rows are locked using X_LOCK.
 
 .. note:: Restrictions
 

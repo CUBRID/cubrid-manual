@@ -333,7 +333,7 @@ Usage can be displayed by running **make_locale.sh -h**. (**make_locale /h** in 
     
 *   *options*
 
-    *   **-t**: Selects 32bit or 64bit (default value: **32**).
+    *   **-t**: Selects 32bit or 64bit (default value: **64**).
     *   **-m**: Selects release or debug. In general, release is selected (default value: release). The debug mode is provided for developers who would like to write the locale library themselves. Selects release or debug. In general, release is selected (default value: release). The debug mode is provided for developers who would like to write the locale library themselves.  
 
 *   *locale*: The locale name of the library to build. If *locale* is not specified, the build includes data from all configured locales. In this case, library file is stored in **$CUBRID/lib** directory with the name of **libcubrid_all_locales.so** (**.dll** for Windows).

@@ -339,11 +339,13 @@ It shows the timezone information which the current CUBRID supports.
 
 ::
 
-    SHOW [FULL] TIMEZONES;
+    SHOW [FULL] TIMEZONES [ LIKE 'pattern' ];
 
 If FULL is not specified, one column which has timezone's region names is displayed. The name of this column is timezone_region.
 
 If FULL is specified, four columns which have timezone information are displayed.
+
+If LIKE clause is present, it indicates which timezone_region names to match.
 
 =================== =============== ===================================================
 Column name         Type            Description
@@ -412,6 +414,18 @@ The LIKE condition without the WHERE condition is applied on the first column. T
     'WET'                 '+00:00'              '+00:00'              'WET'
     'Zulu'                '+00:00'              '+00:00'              'UTC'
 
+
+.. code-block:: sql
+
+    SHOW FULL TIMEZONES LIKE '%Paris%';
+
+::
+    
+   timezone_region       region_offset         dst_offset            dst_abbreviation
+   ========================================================================================
+   'Europe/Paris'        '+01:00'              '+00:00'              'CET'
+
+	
 .. _show-grants-statement:
 
 SHOW GRANTS

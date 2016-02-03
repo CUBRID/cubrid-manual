@@ -774,9 +774,7 @@ Charset Conversion
 
 When **collation** / **charset** modifiers or normal collation inference requires it, character conversion may occur. Conversions are not reversible. Generally, charset conversion is character transcoding (the bytes representing a character in one charset are replaced with other bytes representing the same character but in the destination charset).
 
-However, in CUBRID, to keep backward compatibility, there is one exception: conversion from UTF-8 or EUC-KR to ISO-8859-1 charset is a simple data stream re-interpretations (this is a trade-off since most Unicode characters do not have ISO-8859-1 correspondents, and transcoding would cause many losses). ASCII characters are not affected by conversions: bytes in range 00-7F are encodings of the same characters in both ISO-8859-1  and UTF-8 character sets.
- 
-With any conversion, losses may occur. The most complete charset is UTF-8 (and since it encodes Unicode, one expects that all character can be encoded). However, during conversion from ISO-8859-1 to UTF-8 some "losses" occur: bytes  range 80-A0 are not valid ISO-8859-1 characters but may appear in strings. After conversion to UTF-8 this characters are replaced with '?'.
+With any conversion, losses may occur. If a character from cannot be encoded in destination charset, it is replace with a '?' character. This also applies to conversions from binary charset to any other charset. The widest character support is with UTF-8 charset, and since it encodes Unicode, one expects that all character can be encoded. However, during conversion from ISO-8859-1 to UTF-8 some "losses" occur: bytes range 80-A0 are not valid ISO-8859-1 characters but may appear in strings. After conversion to UTF-8 these characters are replaced with '?'.
 
 Rules for conversion of values from one charset to another:
 

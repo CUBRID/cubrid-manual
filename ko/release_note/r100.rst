@@ -120,16 +120,6 @@ CREATE PROCECURE/FUNCTION 문에서 "OR REPLACE" 구문을 사용할 수 있게 
 
     ERROR: syntax error, unexpected AS, expecting ')' 
 
-인덱스 이름 변경이 가능하도록 수정(CUBRIDSUS-6568)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-ALTER INDEX 문 또는 ALTER TABLE ... RENAME CONSTRAINT 문을 사용하여 인덱스 이름 변경이 가능하도록 수정했다. 
-
-.. code-block:: sql 
-
-    ALTER INDEX old_name ON table_name RENAME TO new_name; 
-    ALTER TABLE table_name RENAME {CONSTRAINT|INDEX|KEY} old_name {AS|TO} new_name; 
-
 "UPDATE tbl SET a=1, b=a" 수행 시 b의 값이 1이 될 수 있도록 수정(CUBRIDSUS-8202)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

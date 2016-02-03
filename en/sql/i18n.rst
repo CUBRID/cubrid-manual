@@ -200,6 +200,8 @@ The Turkish casing rules changes the casing for character i,I,ı,İ. The German 
 
 On the above collations, 9 collations like iso88591_bin, iso88591_en_cs, iso88591_en_ci, utf8_bin, euckr_bin, utf8_en_cs, utf8_en_ci, utf8_tr_cs and utf8_ko_cs, are built in the CUBRID before running make_locale script.
 
+If a collation is included in more than one locale (.ldml) file, the locale for casing (default locale of collation) is the locale in which it is first included. The order of loading is the locales order from $CUBRID/conf/cubrid_locales.txt. The above locale casing for collations utf8_gen, utf8_gen_ci, utf8_gen_ai_ci, assumes the default order (alphabetical) in cubrid_locales.txt, so the default locale for all generic LDML collations is de_DE (German).
+
 Files For Locale Setting
 ------------------------
 

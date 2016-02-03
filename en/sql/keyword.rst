@@ -19,6 +19,8 @@ The following keywords are previously reserved as a command, a function name or 
 +--------------------+------------------+----------------------+
 | BEFORE             | BETWEEN          | BIGINT               |
 +--------------------+------------------+----------------------+
+| BINARY             |                  |                      |
++--------------------+------------------+----------------------+
 | BIT                | BIT_LENGTH       | BLOB                 |
 +--------------------+------------------+----------------------+
 | BOOLEAN            | BOTH             | BREADTH              |

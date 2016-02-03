@@ -975,6 +975,20 @@ Regarding an expression which has arguments with only host variables, (e.g. UPPE
       'utf8_bin'                     -1
 
 
+For expressions having all arguments with coercibility 11 and with different collations, the common collation is resolved at run-time (this is an exception from the coercibility value-based rule for inference which would require to raise an error).
+
+.. code-block:: sql
+
+    PREPARE st1 FROM 'SELECT INSERT(?,2,2,?)';
+    EXECUTE st1 USING _utf8'abcd', _binary'ef';
+
+::
+
+     insert( ?:0 , 2, 2,  ?:1 )
+    ======================
+     'aefd'
+
+
 The following shows converting two parameters with different collation to one collation.
 
 *   **Converting into the Wanted Collation**

@@ -634,6 +634,26 @@ After a job has been successfully executed, the aggregated data on the processed
 
 Aggregated log block data is not added directly to vacuum data. A latch-free buffer is used to avoid synchronizing active working threads (which generate the log blocks and their aggregated data) with the vacuum system. **VACUUM Master** wakes up periodically, dumps everything in buffer to vacuum data, removes data already process and generates new jobs (if available).
 
+VACUUM jobs
++++++++++++
+
+Vacuum job execution steps:
+
+  * **Log pre-fetch**. Vacuum master or workers pre-fetch log pages to be processed by the job.
+  * **Repeat for each log record**:
+
+    * **Read** log record.
+    * **Check dropped file.** If the log record points to dropped file, proceed to next log record.
+    * **Execute index vacuum and collect heap OID's**
+
+      * If log record belongs to index, execute vacuum immediately.
+      * If log record belongs to heap, collect OID to be vacuumed later.
+    
+  * **Execute heap vacuum** based on collected OID's.
+  * **Complete job.** Mark the job as completed in vacuum data.
+  
+Several measures were taken to ease log page reading and to optimize vacuum execution.
+
 Tracking dropped files
 ++++++++++++++++++++++
 

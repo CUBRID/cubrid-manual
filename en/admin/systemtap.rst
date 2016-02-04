@@ -204,13 +204,12 @@ We might be interested in gathering information helpful for an analysis related 
     :param connection_id: an integer containing the connection ID.
     :param user: The username used by this connection.
     
-.. function:: conn_end(connection_id, user, status)
+.. function:: conn_end(connection_id, user)
 
     This marker is triggered when the query execution process on the server has ended.
     
     :param connection_id: an integer containing the connection ID.
     :param user: The username used by this connection.
-    :param status: The status of the connection at closing time. (Error, timeout, successfully ended etc.)
 
 Query markers
 -------------

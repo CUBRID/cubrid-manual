@@ -1077,15 +1077,15 @@ The **FOR UPDATE** clause can be used in **SELECT** statements for locking rows 
         <spec_name_comma_list> ::= <spec_name> [, <spec_name>, ... ]
             <spec_name> ::= table_name | view_name 
          
-* <*spec_name_comma_list*>: A list of table/view names referenced from the FROM clause.
+* <*spec_name_comma_list*>: A list of table/view names referenced from the **FROM** clause.
 
-Only table/view referenced in <*spec_name_comma_list*> will be locked. If the <*spec_name_comma_list*> is missing but **FOR UPDATE** is present then we assume that all tables/views from the FROM clause of the SELECT statement are referenced. Rows are locked using X_LOCK.
+Only table/view referenced in <*spec_name_comma_list*> will be locked. If the <*spec_name_comma_list*> is missing but **FOR UPDATE** is present then we assume that all tables/views from the **FROM** clause of the **SELECT** statement are referenced. Rows are locked using **X_LOCK**.
 
 .. note:: Restrictions
 
-    *   It CAN'T be used in subqueries (but it CAN reference subqueries). 
-    *   It can't be used in a statement that has GROUP BY, DISTINCT or aggregate functions. 
-    *   It can't reference **UNION**\s. 
+    *   It cannot be used in subqueries (but it can reference subqueries). 
+    *   It cannot be used in a statement that has **GROUP BY**, **DISTINCT** or aggregate functions. 
+    *   It cannot reference **UNION**\s. 
 
 The following shows how to use **SELECT ... FOR UPDATE** statements.
 

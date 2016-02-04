@@ -1862,9 +1862,9 @@ The third section of the output of the **cubrid lockdb** includes the contents o
     Object lock Table:
         Current number of objects which are locked = 2001
 
-**cubrid lockdb** outputs the OID, object type and table name of each object that obtained lock. In addition, it outputs the number of transactions that hold lock for the object (Num holders), the number of transactions (Num blocked-holders) that hold lock but are blocked since it could not convert the lock to the upper lock (e.g., conversion from SCH_S_LOCK to SCH_M_LOCK), and the number of different transactions that are waiting for the lock of the object (Num waiters). It also outputs the list of client transactions that hold lock, blocked client transactions and waiting client transactions. For rows, but not class, MVCC information is also shown.
+**cubrid lockdb** outputs the OID, object type and table name of each object that obtained lock. In addition, it outputs the number of transactions that hold lock for the object (*Num holders*), the number of transactions (*Num blocked-holders*) that hold lock but are blocked since it could not convert the lock to the upper lock (e.g., conversion from **SCH_S_LOCK** to **SCH_M_LOCK**), and the number of different transactions that are waiting for the lock of the object (*Num waiters*). It also outputs the list of client transactions that hold lock, blocked client transactions and waiting client transactions. For rows, but not class, MVCC information is also shown.
 
-The example below shows an object in which the object type is a class, that will be blocked because the class OID( 0| 62| 5) that has IX_LOCK for transaction 1 and SCH_S_LOCK for transaction 2 cannot be converted into SCH_M_LOCK. It also shows that transaction 3 is blocked because transaction 2 is waiting for SCH_M_LOCK even when transaction 3 is only waiting for SCH_S_LOCK.
+The example below shows an object in which the object type is a class, that will be blocked because the class OID( 0| 62| 5 ) that has **IX_LOCK** for transaction 1 and **SCH_S_LOCK** for transaction 2 cannot be converted into **SCH_M_LOCK**. It also shows that transaction 3 is blocked because transaction 2 is waiting for **SCH_M_LOCK** even when transaction 3 is only waiting for **SCH_S_LOCK**.
 
 ::
 
@@ -1883,7 +1883,7 @@ The example below shows an object in which the object type is a class, that will
                         Start_waiting_at = Wed Feb 3 14:45:14 2016
                         Wait_for_secs = -1
                         
-The next example shows an instance of class, object OID( 2| 50| 1), that was inserted by transaction 1 which holds X_LOCK on the object. The class has a unique index and the key of inserted instance is about to be modified by transaction 2, which is blocked until transaction 1 is completed.
+The next example shows an instance of class, object OID( 2| 50| 1 ), that was inserted by transaction 1 which holds **X_LOCK** on the object. The class has a unique index and the key of inserted instance is about to be modified by transaction 2, which is blocked until transaction 1 is completed.
 
 ::
 
@@ -1898,9 +1898,9 @@ The next example shows an instance of class, object OID( 2| 50| 1), that was ins
                           Start_waiting_at = Wed Feb 3 14:45:14 2016
                           Wait_for_secs = -1
 
-Granted_mode refers to the mode of the obtained lock, and Blocked_mode refers to the mode of the blocked lock. Starting_waiting_at refers to the time at which the lock was requested, and Wait_for_secs refers to the waiting time of the lock. The value of Wait_for_secs is determined by lock_timeout, a system parameter.
+*Granted_mode* refers to the mode of the obtained lock, and *Blocked_mode* refers to the mode of the blocked lock. *Starting_waiting_at refers* to the time at which the lock was requested, and *Wait_for_secs* refers to the waiting time of the lock. The value of *Wait_for_secs* is determined by **lock_timeout**, a system parameter.
 
-When the object type is a class (table), Nsubgranules is displayed, which is the sum of the record locks and the key locks obtained by a specific transaction in the table.
+When the object type is a class (table), *Nsubgranules* is displayed, which is the sum of the record locks and the key locks obtained by a specific transaction in the table.
 
 ::
 

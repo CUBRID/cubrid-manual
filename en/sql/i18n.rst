@@ -316,7 +316,7 @@ Once the requirements described above are met, the locales can be compiled.
 Regarding the embedded locales in CUBRID, they can be used without compiling user locale library, so they can be used by skipping the step 2. But there are differences between the embedded locale and the library locale.
 Regarding this, see :ref:`Built-in Locale and Library Locale <built-in-locale-limit>`.
 
-To compile the locale libraries, one must use the **make_locale** (**.bat** for Windows **.sh** for Linux) utility script from command console. The file is delivered in **CUBRID/bin** folder so it should be resolved by PATH environment variable. Here **$CUBRID, $PATH** are the environment variables of Linux, **%CUBRID%**, **%PATH%** are the environment variables of Windows.
+To compile the locale libraries, one must use the **make_locale** (**.bat** for Windows and **.sh** for Linux) utility script from command console. The file is delivered in **$CUBRID/bin** folder so it should be resolved by **$PATH** environment variable. Here **$CUBRID, $PATH** are the environment variables of Linux, **%CUBRID%**, **%PATH%** are the environment variables of Windows.
 
 .. note::
 
@@ -774,7 +774,7 @@ Charset Conversion
 
 When **collation** / **charset** modifiers or normal collation inference requires it, character conversion may occur. Conversions are not reversible. Generally, charset conversion is character transcoding (the bytes representing a character in one charset are replaced with other bytes representing the same character but in the destination charset).
 
-With any conversion, losses may occur. If a character from cannot be encoded in destination charset, it is replace with a '?' character. This also applies to conversions from binary charset to any other charset. The widest character support is with UTF-8 charset, and since it encodes Unicode, one expects that all character can be encoded. However, during conversion from ISO-8859-1 to UTF-8 some "losses" occur: bytes range 80-A0 are not valid ISO-8859-1 characters but may appear in strings. After conversion to UTF-8 these characters are replaced with '?'.
+With any conversion, losses may occur. If a character from source charset cannot be encoded in destination charset, it is replaced with a '?' character. This also applies to conversions from binary charset to any other charset. The widest character support is with UTF-8 charset, and since it encodes Unicode, one expects that all character can be encoded. However, during conversion from ISO-8859-1 to UTF-8 some "losses" occur: bytes range 80-A0 are not valid ISO-8859-1 characters but may appear in strings. After conversion to UTF-8 these characters are replaced with '?'.
 
 Rules for conversion of values from one charset to another:
 
@@ -823,7 +823,7 @@ The following is a query(SELECT * FROM db_collation WHERE is_builtin='Yes') on t
     6        'utf8_tr_cs'     'utf8'         'Yes'        'No'            0             'Not applicable'
     7        'utf8_ko_cs'     'utf8'         'Yes'        'No'            0             'Not applicable'
     8        'euckr_bin'      'euckr'        'Yes'        'No'            0             'Not applicable'
-    8        'binary'         'binary'       'Yes'        'No'            0             'Not applicable'
+    9        'binary'         'binary'       'Yes'        'No'            0             'Not applicable'
 
 Built-in collations are available without requiring additional user locale libraries.
 

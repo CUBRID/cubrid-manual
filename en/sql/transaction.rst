@@ -639,18 +639,18 @@ VACUUM jobs
 
 Vacuum job execution steps:
 
-  * **Log pre-fetch**. Vacuum master or workers pre-fetch log pages to be processed by the job.
-  * **Repeat for each log record**:
-
-    * **Read** log record.
-    * **Check dropped file.** If the log record points to dropped file, proceed to next log record.
-    * **Execute index vacuum and collect heap OID's**
-
+  1. **Log pre-fetch**. Vacuum master or workers pre-fetch log pages to be processed by the job.
+  2. **Repeat for each log record**:
+  
+    1. **Read** log record.
+    2. **Check dropped file.** If the log record points to dropped file, proceed to next log record.
+    3. **Execute index vacuum and collect heap OID's**
+    
       * If log record belongs to index, execute vacuum immediately.
       * If log record belongs to heap, collect OID to be vacuumed later.
     
-  * **Execute heap vacuum** based on collected OID's.
-  * **Complete job.** Mark the job as completed in vacuum data.
+  3. **Execute heap vacuum** based on collected OID's.
+  4. **Complete job.** Mark the job as completed in vacuum data.
   
 Several measures were taken to ease log page reading and to optimize vacuum execution.
 

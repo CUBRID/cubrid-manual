@@ -236,7 +236,9 @@ CURDATE, CURRENT_DATE, SYS_DATE, SYSDATE
 .. c:macro:: SYS_DATE
 .. c:macro:: SYSDATE
 
-    **CURDATE** (), **CURRENT_DATE**, **CURRENT_DATE** (), **SYS_DATE** and **SYSDATE** are used interchangeably and they return the current date as the **DATE** type (*MM*/*DD*/*YYYY* or *YYYY*-*MM*-*DD*). The unit is day.
+    **CURDATE** (), **CURRENT_DATE** and **CURRENT_DATE** () are used interchangeably and they return the current date of session as the **DATE** type (*MM*/*DD*/*YYYY* or *YYYY*-*MM*-*DD*). The unit is day.
+	
+    **SYS_DATE** and **SYSDATE** are used interchangeably and they return the current date of server as the **DATE** type (*MM*/*DD*/*YYYY* or *YYYY*-*MM*-*DD*). The unit is day.
 
     If input every argument value of year, month, and day is 0, the return value is determined by the **return_null_on_function_errors** system parameter; if it is set to yes, then **NULL** is returned; if it is set to no, an error is returned. The default value is **no**.
 
@@ -269,7 +271,9 @@ CURRENT_DATETIME, NOW, SYS_DATETIME, SYSDATETIME
 .. c:macro:: SYS_DATETIME
 .. c:macro:: SYSDATETIME
 
-    **CURRENT_DATETIME**, **CURRENT_DATETIME** (), **NOW** (), **SYS_DATETIME** and **SYSDATETIME** are used interchangeably, and they return the current date and time in **DATETIME** type. The unit is millisecond.
+    **CURRENT_DATETIME**, **CURRENT_DATETIME** () and **NOW** () are used interchangeably, and they return the current date and time of session in **DATETIME** type. The unit is millisecond.
+	
+    **SYS_DATETIME** and **SYSDATETIME** are used interchangeably, and they return the current date and time of server in **DATETIME** type. The unit is millisecond.
 
     :rtype: DATETIME
     
@@ -280,7 +284,7 @@ CURRENT_DATETIME, NOW, SYS_DATETIME, SYSDATETIME
      
 ::
 
-    04:08:09.829 PM 02/04/2010     04:08:09.829 PM 02/04/2010
+    01:25:44.160 AM 02/05/2016     06:25:44.160 PM 02/04/2016
      
 .. code-block:: sql
 
@@ -289,7 +293,7 @@ CURRENT_DATETIME, NOW, SYS_DATETIME, SYSDATETIME
     
 ::
 
-    '2010-02-04 04:08'
+    '2016-02-04 07:25'
 
 CURTIME, CURRENT_TIME, SYS_TIME, SYSTIME
 ========================================
@@ -300,7 +304,9 @@ CURTIME, CURRENT_TIME, SYS_TIME, SYSTIME
 .. c:macro:: SYS_TIME
 .. c:macro:: SYSTIME
 
-    **CURTIME** (), **CURRENT_TIME**, **CURRENT_TIME** (), **SYS_TIME** and **SYSTIME** are used interchangeably and they return the current time as **TIME** type (*HH*:*MI*:*SS*). The unit is second.
+    **CURTIME** (), **CURRENT_TIME** and **CURRENT_TIME** () are used interchangeably and they return the current time of session as **TIME** type (*HH*:*MI*:*SS*). The unit is second.
+
+	**SYS_TIME** and **SYSTIME** are used interchangeably and they return the current time of server as **TIME** type (*HH*:*MI*:*SS*). The unit is second.
 
     :rtype: TIME
     
@@ -311,16 +317,16 @@ CURTIME, CURRENT_TIME, SYS_TIME, SYSTIME
     
 ::
 
-    04:37:34 PM  04:37:34 PM  04:37:34 PM  04:37:34 PM  04:37:34 PM
+    01:26:28 AM     01:26:28 AM     01:26:28 AM     06:26:28 PM  06:26:28 PM
      
 .. code-block:: sql
 
-    --it returns the time value 1 hour added to the current sys_time
+    --it returns the time value 1 hour added to the current time
     SELECT CURTIME()+3600;
     
 ::
 
-    05:37:34 PM
+    02:26:38 AM
 
 CURRENT_TIMESTAMP, SYS_TIMESTAMP, SYSTIMESTAMP, LOCALTIME, LOCALTIMESTAMP
 =========================================================================
@@ -334,27 +340,29 @@ CURRENT_TIMESTAMP, SYS_TIMESTAMP, SYSTIMESTAMP, LOCALTIME, LOCALTIMESTAMP
 .. c:macro:: LOCALTIMESTAMP
 .. function:: LOCALTIMESTAMP ()
 
-    **CURRENT_TIMESTAMP**, **CURRENT_TIMESTAMP** (), **SYS_TIMESTAMP**, **SYSTIMESTAMP**, **LOCALTIME**, **LOCALTIME** (), **LOCALTIMESTAMP** and **LOCALTIMESTAMP** () are used interchangeably and they return the current date and time as **TIMESTAMP** type. The unit is second.
+    **CURRENT_TIMESTAMP**, **CURRENT_TIMESTAMP** (), **LOCALTIME**, **LOCALTIME** (), **LOCALTIMESTAMP** and **LOCALTIMESTAMP** () are used interchangeably and they return the current date and time of session as **TIMESTAMP** type. The unit is second.
+	
+	**SYS_TIMESTAMP** and **SYSTIMESTAMP** are used interchangeably and they return the current date and time of server as **TIMESTAMP** type. The unit is second.
 
     :rtype: TIMESTAMP
     
 .. code-block:: sql
 
-    --it returns the current date and time in TIMESTAMP type
+    --it returns the current date and time in TIMESTAMP type of session and server timezones.
     SELECT LOCALTIME, SYS_TIMESTAMP;
     
 ::
 
-    07:00:48 PM 04/01/2010     07:00:48 PM 04/01/2010
+    01:21:58 AM 02/05/2016     06:21:58 PM 02/04/2016
      
 .. code-block:: sql
 
-    --it returns the timestamp value 1 hour added to the current sys_timestamp value
+    --it returns the timestamp value 1 hour added to the current timestamp value
     SELECT CURRENT_TIMESTAMP()+3600;
     
 ::
     
-    08:02:42 PM 04/01/2010
+    02:22:28 AM 02/05/2016
 
 DATE
 ====

@@ -1,8 +1,8 @@
 :tocdepth: 3
 
-*****************
-Numeric Functions
-*****************
+******************************
+Numeric/Mathematical Functions
+******************************
 
 .. contents::
 
@@ -210,6 +210,26 @@ COT
       cot(1)                   cot(-1)   cot(0)
     ==========================================================================
       6.420926159343306e-01    -6.420926159343306e-01  NULL
+
+CRC32
+=====
+
+.. function:: CRC32 ( string )
+
+    The **CRC32** function returns a cyclic redundancy check value as 32-bit integer. When NULL is given as input, it returns NULL. 
+
+    :param string: An expression that returns a string value
+    :rtype: INTEGER
+
+.. code-block:: sql
+
+    SELECT CRC32('cubrid');
+
+::
+    
+       crc32('cubrid')
+    ==================
+             908740081
 
 DEGREES
 =======

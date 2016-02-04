@@ -45,6 +45,7 @@ The following restrictions apply to the partitioning key:
     *   :ref:`PRIOR <prior-operator>` 
     *   :func:`WIDTH_BUCKET`
 *	The partitioning key needs to be present in the key of each unique index (including primary keys). For more information on this aspect, please see :ref:`here<index-partitions>`.
+*	The partitioning expression's length must not exceed 1024 bytes.
 
 .. _range-partitioning:
 

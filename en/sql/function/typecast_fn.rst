@@ -653,6 +653,35 @@ When the *format* argument is omitted, the *date_time* is output as a string acc
 | ro_RO | 'DD.MM.YYYY'   | 'HH24:MI:SS'  | 'HH24:MI:SS DD.MM.YYYY'   | 'HH24:MI:SS.FF DD.MM.YYYY'   |
 +-------+----------------+---------------+---------------------------+------------------------------+
 
+
++-------+----------------------------------+------------------------------+
+| LANG  | DATETIME WITH TIME ZONE          | TIMESTAMP WITH TIME ZONE     |
++=======+==================================+==============================+
+| en_US | 'HH:MI:SS.FF AM MM/DD/YYYY TZR'  | 'HH:MI:SS AM MM/DD/YYYY TZR' |
++-------+----------------------------------+------------------------------+
+| de_DE | 'HH24:MI:SS.FF DD.MM.YYYY TZR'   | 'HH24:MI:SS DD.MM.YYYY TZR'  |
++-------+----------------------------------+------------------------------+
+| es_ES | 'HH24:MI:SS.FF DD/MM/YYYY TZR'   | 'HH24:MI:SS DD/MM/YYYY TZR'  |
++-------+----------------------------------+------------------------------+
+| fr_FR | 'HH24:MI:SS.FF DD/MM/YYYY TZR'   | 'HH24:MI:SS DD/MM/YYYY TZR'  |
++-------+----------------------------------+------------------------------+
+| it_IT | 'HH24:MI:SS.FF DD/MM/YYYY TZR'   | 'HH24:MI:SS DD/MM/YYYY TZR'  |
++-------+----------------------------------+------------------------------+
+| ja_JP | 'HH24:MI:SS.FF YYYY/MM/DD TZR'   | 'HH24:MI:SS YYYY/MM/DD TZR'  |
++-------+----------------------------------+------------------------------+
+| km_KH | 'HH24:MI:SS.FF DD/MM/YYYY TZR'   | 'HH24:MI:SS DD/MM/YYYY TZR'  |
++-------+----------------------------------+------------------------------+
+| ko_KR | 'HH24:MI:SS.FF YYYY.MM.DD TZR'   | 'HH24:MI:SS YYYY.MM.DD TZR'  |
++-------+----------------------------------+------------------------------+
+| tr_TR | 'HH24:MI:SS.FF DD.MM.YYYY TZR'   | 'HH24:MI:SS DD.MM.YYYY TZR'  |
++-------+----------------------------------+------------------------------+
+| vi_VN | 'HH24:MI:SS.FF DD/MM/YYYY TZR'   | 'HH24:MI:SS DD/MM/YYYY TZR'  |
++-------+----------------------------------+------------------------------+
+| zh_CN | 'HH24:MI:SS.FF YYYY-MM-DD TZR'   | 'HH24:MI:SS YYYY-MM-DD TZR'  |
++-------+----------------------------------+------------------------------+
+| ro_RO | 'HH24:MI:SS.FF DD.MM.YYYY TZR'   | 'HH24:MI:SS DD.MM.YYYY TZR'  |
++-------+----------------------------------+------------------------------+
+
 .. _datetime-format1:
 
 **Date/Time Format 1**

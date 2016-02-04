@@ -114,6 +114,8 @@ CSQL 시작 옵션
       -c, --command=ARG            CSQL-commands
       -l, --line-output            display each value in a line
       -r, --read-only              read-only mode
+      -t, --plain-output           display results in a script-friendly format (only works with -c and -i)
+      -N, --skip-column-names      do not display column names in results (only works with -c and -i)
           --string-width           display each column which is a string type in this width
           --no-auto-commit         disable auto commit mode execution
           --no-pager               do not use pager
@@ -202,6 +204,45 @@ CSQL 시작 옵션
 
 
         1 rows selected. (0.006433 sec) Committed.
+
+ 
+.. option:: -t, --plain-output
+ 
+    스크립트에서 사용이 용이하도록 칼럼 이름과 데이터만 출력한다. **-c** 또는 **-i** 옵션과 함께 사용할 때만 유효하다. 각 칼럼의 이름과 데이터는 탭으로 구분하며, 내용에 포함된 줄바꿈, 탭, 백슬래시는 각각 \n, \t, \\으로 대체한다. 단, **-l** 옵션이 있는 경우에는 이 옵션이 무시된다. 
+    ::
+    
+        $ csql testdb@localhost -c "select * from test_tbl" -t
+ 
+        col1 col2 col3
+        string1 12:16:10.090 PM 10/23/2014
+        string2 12:16:10.090 PM 10/23/2014
+        string3 12:16:10.090 PM 10/23/2014
+        string4 12:16:10.090 PM 10/23/2014
+        string5 12:16:10.090 PM 10/23/2014
+        string6 12:16:10.090 PM 10/23/2014
+        string7 12:16:10.090 PM 10/23/2014
+        string8 12:16:10.090 PM 10/23/2014
+        string9 12:16:10.090 PM 10/23/2014
+        string10 12:16:10.090 PM 10/23/2014
+ 
+.. option:: -N, --skip-column-names
+ 
+    결과 출력 시 칼럼 이름을 출력하지 않는다. **-c** 또는 **-i** 옵션과 함께 사용할 때만 유효하며, 보통 **-t** 옵션과 함께 사용된다. 단, **-l** 옵션이 있는 경우에는 이 옵션이 무시된다.
+ 
+    ::
+ 
+        $ csql testdb@localhost -c "select * from test_tbl" -t -N
+ 
+        string1 12:16:10.090 PM 10/23/2014
+        string2 12:16:10.090 PM 10/23/2014
+        string3 12:16:10.090 PM 10/23/2014
+        string4 12:16:10.090 PM 10/23/2014
+        string5 12:16:10.090 PM 10/23/2014
+        string6 12:16:10.090 PM 10/23/2014
+        string7 12:16:10.090 PM 10/23/2014
+        string8 12:16:10.090 PM 10/23/2014
+        string9 12:16:10.090 PM 10/23/2014
+        string10 12:16:10.090 PM 10/23/2014
 
 .. option:: -r, --read-only
 

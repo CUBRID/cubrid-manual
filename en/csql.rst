@@ -114,6 +114,8 @@ To display the option list in the prompt, execute the **csql** utilities without
       -c, --command=ARG            CSQL-commands
       -l, --line-output            display each value in a line
       -r, --read-only              read-only mode
+      -t, --plain-output           display results in a script-friendly format (only works with -c and -i)
+      -N, --skip-column-names      do not display column names in results (only works with -c and -i)
           --string-width           display each column which is a string type in this width
           --no-auto-commit         disable auto commit mode execution
           --no-pager               do not use pager
@@ -208,6 +210,45 @@ To display the option list in the prompt, execute the **csql** utilities without
     You can connect to the read-only database with the **-r** option. Retrieving data is only allowed in the read-only database; creating databases and entering data are not allowed. ::
 
         csql -r demodb
+
+.. option:: -t, --plain-output
+
+    It only shows column names and values and works with **-c** or **-i** option. Each column and value is separated by a tab and a new line, a tab and a backslash which are included in results are replaced by '\n', '\t' and '\\' for each. This option is ignored when it is given with **-l** option. 
+    
+    ::
+    
+        $ csql testdb@localhost -c "select * from test_tbl" -t
+ 
+        col1 col2 col3
+        string1 12:16:10.090 PM 10/23/2014
+        string2 12:16:10.090 PM 10/23/2014
+        string3 12:16:10.090 PM 10/23/2014
+        string4 12:16:10.090 PM 10/23/2014
+        string5 12:16:10.090 PM 10/23/2014
+        string6 12:16:10.090 PM 10/23/2014
+        string7 12:16:10.090 PM 10/23/2014
+        string8 12:16:10.090 PM 10/23/2014
+        string9 12:16:10.090 PM 10/23/2014
+        string10 12:16:10.090 PM 10/23/2014
+ 
+.. option:: -N, --skip-column-names
+ 
+    It will hide column names from the results. It only works with **-c** or **-i** option and is usually used with **-t** option. This option is ignored when it is given with **-l** option. 
+ 
+    ::
+ 
+        $ csql testdb@localhost -c "select * from test_tbl" -t -N
+ 
+        string1 12:16:10.090 PM 10/23/2014
+        string2 12:16:10.090 PM 10/23/2014
+        string3 12:16:10.090 PM 10/23/2014
+        string4 12:16:10.090 PM 10/23/2014
+        string5 12:16:10.090 PM 10/23/2014
+        string6 12:16:10.090 PM 10/23/2014
+        string7 12:16:10.090 PM 10/23/2014
+        string8 12:16:10.090 PM 10/23/2014
+        string9 12:16:10.090 PM 10/23/2014
+        string10 12:16:10.090 PM 10/23/2014
 
 .. option:: --no-auto-commit
 

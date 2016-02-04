@@ -1831,7 +1831,45 @@ In Windows:
 	::
 
          make_tz.bat /extend basic
-		
+
+Usage of timezone data types with JDBC
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+JDBC CUBRID driver is completely dependent on CUBRID server for timezone information. Although, Java and CUBRID uses the same primary source of information for timezone (IANA), the names of regions and timezone information should be considered as incompatible.
+
+All CUBRID data types having timezone are mapped to CUBRIDTimestamptz Java objects.
+
+Using JDBC to insert value with timezone:
+
+    .. code-block:: java
+
+         String datetime = "2000-01-01 01:02:03.123";
+         String timezone = "Europe/Kiev";
+         CUBRIDTimestamptz dt_tz = CUBRIDTimestamptz.valueOf(datetime, false, timezone);
+         PreparedStatement  pstmt = conn.prepareStatement("insert into t values(?)");
+         pstmt.setObject(1, ts);
+         pstmt.executeUpdate();
+
+Using JDBC to retrieve value with timezone:
+    
+	.. code-block:: sql
+	
+         String sql = "select * from tz";
+         Statement stmt = conn.createStatement();
+         ResultSet rs = stmt.executeQuery(sql);
+         CUBRIDTimestamptz object1 = (CUBRIDTimestamptz) rs.getObject(1);
+         System.out.println("object: " + object1.toString());
+
+
+Internally, CUBRID JDBC stores the date/time parts of CUBRIDTimestamptz object into a 'long' value (inheritanted through Date object) which holds the number of milliseconds elapsed since 1st January 1970 (Unix epoch). 
+The internal encoding is performed in UTC time reference, which is different from Timestamp objects which uses local timezone. For this reason, a CUBRIDTimestamptz object created with the same timezone as Java local timezone will not hold the same internal epoch value. In order to provide the Unix epoch, the getUnixTime() method may be used:
+
+	.. code-block:: sql
+	
+         String datetime = "2000-01-01 01:02:03.123";
+         String timezone = "Asia/Seoul";
+         CUBRIDTimestamptz dt_tz = CUBRIDTimestamptz.valueOf(datetime, false, timezone);
+         System.out.println("dt_tz.getTime: " + dt_tz.getTime());
+         System.out.println("dt_tz.getUnixTime: " + dt_tz. getUnixTime ());
 
 
 .. _char-data-conf-guide:

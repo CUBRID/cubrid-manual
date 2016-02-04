@@ -759,17 +759,9 @@ CAS, which is connected to the DB which has the lower priority because of the re
   
 See the above description of **ha_delay_limit**.
 
-**ha_delay_limit_delta** 
-  
-See the above description of **ha_delay_limit**.
-
 **ha_copy_log_timeout**
 
-This is the maximum value of the time in which a node's database server process (cub_server) waits a response from another node's replication-log-copy process (copylogdb). The default is 5(seconds). If this value is -1, this means to be infinite wait.
-
-**ha_copy_log_timeout**
-
-This is the maximum value of the time in which a node's database server process (cub_server) waits a response from another node's replication-log-copy process (copylogdb). The default is 5(seconds). If this value is -1, this means to be infinite wait.
+This is the maximum value of the time in which a node's database server process (cub_server) waits a response from another node's replication-log-copy process (copylogdb). The default is 5(seconds). If this value is -1, this means to be infinite wait. It only works with **SYNC** log copy mode(**ha_copy_sync_mode**) parameter. 
 
 **ha_monitor_disk_failure_interval** 
 

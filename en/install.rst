@@ -11,9 +11,9 @@ The platforms supported by CUBRID and hardware/software requirements for the ins
 +---------------------------------------------------------------------+------------------+---------------------+--------------------------------------+
 | Supported Platforms                                                 | Required Memory  | Required Disk Space | Required Software                    |
 +=====================================================================+==================+=====================+======================================+
-| * Windows 32/64 Bit XP, 2003, Vista, Windows 7                      | 1GB or more      | 2GB or more(\*)     | JRE/JDK 1.6 or higher                |
+| * Windows 32/64 Bit Windows 7                                       | 1GB or more      | 2GB or more(\*)     | JRE/JDK 1.6 or higher                |
 |                                                                     |                  |                     | (Required when Java Stored Procedure |
-| * Linux family 32/64 Bit(Linux kernel 2.4, glibc 2.3.4 or higher)   |                  |                     | is required)                         |
+| * Linux family 64 Bit(Linux kernel 2.4, glibc 2.3.4 or higher)      |                  |                     | is required)                         |
 +---------------------------------------------------------------------+------------------+---------------------+--------------------------------------+
 
 (\*): Requires a 500 MB of free disk space on the initial installation; requires approximately 1.5 GB of free disk space with a database creating with default options.
@@ -24,27 +24,12 @@ Including CUBRID Query Browser, a variety of drivers such as PHP, ODBC and OLE D
 
 For more information on the CUBRID engine, tools, and drivers, see http://www.cubrid.org.
 
-.. note:: 
-  
-    If you install CUBRID SH package by using ksh in AIX OS, it fails with the following error. 
-  
-    :: 
-  
-        0403-065 An incomplete or invalid multibyte character encountered. 
-  
-    Therefore, it is recommended to use ksh93 or bash instead of ksh.
-    
-    ::
-  
-        $ ksh93 ./CUBRID-10.0.0.0146-AIX-ppc64.sh 
-        $ bash ./CUBRID-10.0.0.0146-AIX-ppc64.sh 
-
 Compatibility
 -------------
 
 **Application Compatibility**
 
-*   Applications that use JDBC, PHP or CCI APIs from 2008 R4.1 or higher version of CUBRID can access the CUBRID 10.0 database. However, you must link the CUBRID 10.0 library or use the driver to use the added/improved features of JDBC, PHP or CCI interfaces.
+*   Applications that use JDBC, PHP or CCI APIs from 2008 R4.1 or higher version of CUBRID can access the CUBRID 10.0 database. However, you must link the CUBRID 10.0 library or use the driver to use the added/improved features of JDBC, PHP or CCI interfaces. In order to use :ref:`timezone-type` which are introduced as 10.0, users should upgrade drivers. 
 
 *   Note that query results may differ from those given in the earlier version because new reserved words have been added, and the specifications for some queries have been changed.
 
@@ -60,7 +45,7 @@ Compatibility
 
 *   Drivers for 2008 R2.2 and higher versions are included in CUBRID Manager by default, which you can download separately from the http://www.cubrid.org Website.
 
-.. note:: Old version user should upgrade all of driver, broker, DB server; Data migration should be done because its DB volume is not compatible with 10.0 version.
+.. note:: Old version users should upgrade all of driver, broker, DB server; Data migration should be done because its DB volume is not compatible with 10.0 version.
     For upgrade and data migration, see :doc:`/upgrade`.
 
 **Interoperability between CUBRID DB server and broker**
@@ -73,7 +58,7 @@ Compatibility
 
     For example, the 64-bit DB server for Linux is interoperable with the 64-bit broker server for Windows, but it is not interoperable with a 32-bit broker server.
 
-    For the relation between DB server and broker, see :doc:`intro`.For CUBRID SHARD, see :doc:`shard`.
+    For the relation between DB server and broker, see :doc:`intro`.
 
 .. _Installing-and-Running-on-Linux:
 
@@ -93,12 +78,12 @@ Check the following before installing CUBRID for Linux.
     
 *   64-bit or 32-bit
     
-    CUBRID supports both 32-bit and 64-bit Linux. You can check the version as follows: ::
+    As 10.0, CUBRID supports only 64-bit Linux. You can check the version as follows: ::
     
         % uname -a
         Linux host_name 2.6.18-53.1.14.el5xen #1 SMP Wed Mar 5 12:08:17 EST 2008 x86_64 x86_64 x86_64 GNU/Linux
     
-    Make sure to install the CUBRID 32-bit version on 32-bit Linux and the CUBRID 64-bit version on 64-bit Linux. 
+    Make sure to install the CUBRID 64-bit version on 64-bit Linux. 
     
 *   The libraries that should be added.
     
@@ -112,11 +97,11 @@ Check the following before installing CUBRID for Linux.
     
 **Installing CUBRID**
 
-The installation program consists of shell scripts that contain binary; thus it can be installed automatically. The following example shows how to install CUBRID with the "CUBRID-10.0.0.0201-linux.x86_64.sh" file on the Linux. 
+The installation program consists of shell scripts that contain binary; thus it can be installed automatically. The following example shows how to install CUBRID with the "CUBRID-10.0.0.1376-linux.x86_64.sh" file on the Linux. 
 
 ::
 
-    $ sh CUBRID-10.0.0.0201-linux.x86_64.sh
+    $ sh CUBRID-10.0.0.1376-linux.x86_64.sh
     Do you agree to the above license terms? (yes or no) : yes
     Do you want to install this software(CUBRID) to the default(/home1/cub_user/CUBRID) directory? (yes or no) [Default: yes] : yes
     Install CUBRID to '/home1/cub_user/CUBRID' ...
@@ -133,7 +118,7 @@ The installation program consists of shell scripts that contain binary; thus it 
     $ . /home1/cub_user/.cubrid.sh
     $ cubrid service start
 
-As shown in the example above, after installing the downloaded file (CUBRID-10.0.0.0201-linux.x86_64.sh), the CUBRID related environment variables must be set in order to use the CUBRID database. Such setting has been made automatically when logging in the concerned terminal. Therefore there is no need to re-set after the first installation. ::
+As shown in the example above, after installing the downloaded file (CUBRID-10.0.0.1376-linux.x86_64.sh), the CUBRID related environment variables must be set in order to use the CUBRID database. Such setting has been made automatically when logging in the concerned terminal. Therefore there is no need to re-set after the first installation. ::
 
     $ . /home1/cub_user/.cubrid.sh
 
@@ -164,7 +149,7 @@ When you want to check whether CUBRID Manager server and CUBRID broker works wel
 
 You can install CUBRID by using rpm file that is created on CentOS 5. The way of installing and uninstalling CUBRID is the same as that of using general rpm utility. While CUBRID is being installed, a new system group (cubrid) and a user account (cubrid) are created. After installation is complete, you should log in with a cubrid user account to start a CUBRID service.::
 
-    $ rpm -Uvh cubrid-10.0.0.0201-el5.x86_64.rpm
+    $ rpm -Uvh cubrid-10.0.0.1376-el5.x86_64.rpm
 
 When rpm is executed, CUBRID is installed in the "cubrid" home directory (/opt/cubrid) and related configuration file (cubrid.[c]sh) is installed in the /etc/profile.d directory. Note that *demodb* is not automatically installed. Therefore, you must executed /opt/cubrid/demo/make_cubrid_demo.sh with "cubrid" Linux ID. When installation is complete, enter the code below to start CUBRID with "cubrid" Linux ID. ::
 
@@ -329,14 +314,14 @@ Check the following before installing CUBRID for Linux.
     
         %rpm -q glibc
     
-*   64-bit or 32-bit
+*   64-bit 
     
-    CUBRID supports both 32-bit and 64-bit Linux. You can check the version as follows: ::
+    As 10.0, CUBRID supports only 64-bit Linux. You can check the version as follows: ::
     
         % uname -a
         Linux host_name 2.6.18-53.1.14.el5xen #1 SMP Wed Mar 5 12:08:17 EST 2008 x86_64 x86_64 x86_64 GNU/Linux
     
-    Make sure to install the CUBRID 32-bit version on 32-bit Linux and the CUBRID 64-bit version on 64-bit Linux. 
+    Make sure to install the CUBRID 64-bit version on 64-bit Linux. 
     
 *   The libraries that should be added.
     

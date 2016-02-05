@@ -169,7 +169,7 @@ When rpm is executed, CUBRID is installed in the "cubrid" home directory (/opt/c
     
         When you use SH package to install CUBRID, the cubrid script will be included in the $CUBRID/share/init.d directory. In this file, you can find the environment variable, **CUBRID_USER**. You should change this variable to the Linux account with which CUBRID has been installed and register it in /etc/init.d, then you can use service or chkconfig command to run CUBRID automatically when the Linux system is started.
 
-        When you use RPM package to install CUBRID, the cubrid script will be included in /etc/init.d. But you still need to change the environment variable in "cubrid" script file, $CUBRID_USER into "cubrid" account.
+        When you use RPM package to install CUBRID, the cubrid script will be included in /etc/init.d. But you still need to change the environment variable, $CUBRID_USER from "cubrid" script file.
 
     *   **In /etc/hosts file, check if a host name and an IP address mapping is normal**
 

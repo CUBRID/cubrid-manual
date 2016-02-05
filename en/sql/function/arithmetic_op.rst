@@ -370,3 +370,66 @@ The following table shows operations allowed for each operand type, and their re
      timestamp '09/01/2009 03:30:30 pm'-timestamp '08/31/2009 03:30:30 pm'
     =======================================
       86400
+
+
+Behavior related to timezone parameters
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+TIMESTAMP and TIMESTAMP WITH LOCAL TIME ZONE data types stores internally UNIX epoch values (number of secons elapsed from 1970). When leap second is used (tz_leap_second_support is set to yes, see :ref:`timezone-parameters`), they may contain virtual date-time values.
+
+.. code-block:: sql
+
+    Virtual date-time       Unix timestamp
+    2008-12-31 23:59:58  -> 79399951
+    2008-12-31 23:59:59  -> 79399952
+    2008-12-31 23:59:60  -> 79399953    -> not real date (introduced by leap second)
+    2009-01-01 00:00:00  -> 79399954
+    2009-01-01 00:00:01  -> 79399955
+
+
+Arithmetic operations with TIMESTAMP and TIMESTAMPLTZ values are performed directly on Unix epoch values. Unix epoch values coresponding to non-exising date/time values are allowed. For this reason, the comparison:
+
+.. code-block:: sql
+
+    SELECT TIMESTAMPLTZ'2008-12-31 23:59:59 UTC'=TIMESTAMPLTZ'2008-12-31 23:59:59 UTC'+1;
+
+::
+
+    timestampltz '2008-12-31 23:59:59 UTC'=timestampltz '2008-12-31 23:59:59 UTC'+1
+    =================================================================================
+                                                                                0   
+
+is equivalent to comparing the Unix timestamps : 79399952 and 79399953. But when same values are used as TIMESTAMPTZ, there is equality:
+
+.. code-block:: sql
+
+    SELECT TIMESTAMPTZ'2008-12-31 23:59:59 UTC'=TIMESTAMPTZ'2008-12-31 23:59:59 UTC'+1;
+
+::
+
+    timestamptz '2008-12-31 23:59:59 UTC'=timestamptz '2008-12-31 23:59:59 UTC'+1
+    ===============================================================================
+                                                                                1
+                                                                                
+
+The inconsistency arise at display :
+
+.. code-block:: sql
+
+    SELECT TIMESTAMPLTZ'2008-12-31 23:59:59 UTC'+1;
+
+::
+
+    timestampltz '2008-12-31 23:59:59 UTC'+1
+    =============================================
+    11:59:59 PM 12/31/2008 Etc/UTC UTC
+
+
+Since '2008-12-31 23:59:60 UTC' corresponding to Unix timestamp value 79399953 is not a real date, the immediately preceding value is used. Internally, it is equivalent to the value ('2008-12-31 23:59:60 UTC').
+
+TIMESTAMP WITH TIME ZONE data type contains both a UNIX timestamp and a timezone identifier. Arithmetic on TIMESTAMPTZ is also performed on UNIX timestamp part value, but is followed by an automatic adjusting operation. The presence of timezone identifier (which includes region, offset and daylight saving), requires the TIMESTAMPTZ object to be a valid date-time. The operation timestamptz'2008-12-31 23:59:59 UTC'+1 implies an automatic validation-conversion: instead of (79399953, UTC) which is not a valid date-time the value is automatically converted to (79399952,UTC) which coresponds to '2008-12-31 23:59:59 UTC'.
+
+After each arithmetic operation implying DATETIMETZ and TIMESTAMPTZ, CUBRID performs an automatic adjustment of result value which involves:
+  - adjusting the timezone identifier : adding a number of seconds to a date with timezone may lead to change of internally stored offset rule, daylight saving rule, hence the timezone identifier must be updated
+  - adjusting the Unix timestamp (only for TIMESTAMPTZ): virtual date-time values (when leap-second is enabled) are always converted to the immediately preceding Unix timestamp value.
+

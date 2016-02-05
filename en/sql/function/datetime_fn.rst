@@ -2152,6 +2152,16 @@ UNIX_TIMESTAMP
        unix_timestamp('0000-00-00 00:00:00')
     ========================================
                                            0
+                                           
+
+.. code-block:: sql
+
+     -- when used without argument, it returns the exact value at the moment of execution of each occurence
+     SELECT  UNIX_TIMESTAMP(), SLEEP(1), UNIX_TIMESTAMP();
+
+       unix_timestamp()     sleep(1)   unix_timestamp()
+    ===================================================
+             1454661297            0         1454661298                                        
 
 UTC_DATE
 ========

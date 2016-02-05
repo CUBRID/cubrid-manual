@@ -200,10 +200,6 @@ If you use CUBRID for Windows at the broker machine or the DB server machine, al
 |               | machine(**)   | copylogdb,    |                |                                                     |                          |                        |
 |               |               | applylogdb    |                |                                                     |                          |                        |
 +---------------+---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
-| SHARD use     | cub_broker    | application   | BROKER_PORT    | Not supported                                       | Open                     | One-time connection    |
-|               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
-|               | cub_proxy     | application   | BROKER_PORT    | Not supported                                       | Open                     | Keep connected         |
-+---------------+---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
 | Manager use   | Manager       | application   | 8001           | 8001                                                | Open                     |                        |
 |               | server        |               |                |                                                     |                          |                        |
 +---------------+---------------+               |                |                                                     |                          |                        |
@@ -366,43 +362,6 @@ The connection process between the application and the DB is identical with :ref
 #.  The applylogdb(slave) sends a request for connecting with the slave DB to the cub_master(slave) through the port set in the cubrid_port_id of the cubrid.conf on the slave node. Finally, the applylogdb(slave) is connected with the cub_server(slave).
 
 On the master node, the applylogdb and the copylogdb run for the case that the master node is switched to the slave node.
-
-.. _cubrid-shard-ports:
-
-Ports for CUBRID SHARD
-----------------------
-
-CUBRID SHARD is supported only on Linux.
-
-The following table summarizes the ports required for each OS, based on the listening processes. Each port on the listener should be opened.
-
-+-------------------+--------------+----------------+--------------------------+------------------------+
-| Listener          | requester    | Linux port     | Firewall Port Setting    | Description            |
-+===================+==============+================+==========================+========================+
-| cub_broker        | application  | BROKER_PORT    | Open                     | One-time connection    |
-+-------------------+--------------+----------------+--------------------------+------------------------+
-| cub_proxy         | application  | BROKER_PORT    | Open                     | Keep connected         |
-+-------------------+--------------+----------------+--------------------------+------------------------+
-
-The connection process between the application and the server for the CUBRID SHARD configuration is as follows. The CAS and the cub_proxy have already been connected when starting the CUBRID SHARD (cubrid broker start).
-
-#.  The application tries to connect with the cub_broker through the BROKER_PORT set in the cubrid_broker.conf.
-    
-#.  The cub_broker selects the connectable cub_proxy. 
-    
-#.  The application and the cub_proxy are connected. The number of the cub_proxy are determined by SHARD_NUM_PROXY of the cubrid_broker.conf.
-
-    In Linux, the application is connected to the cub_proxy through the Unix domain socket. In Windows, the application is connected to the cub_proxy through the port calculated based on BROKER_PORT and SHARD_NUM_PROXY set in the cubrid_broker.conf of each cub_proxy as the Unix domain socket cannot be used.
-    
-    For example, in Linux, if BROKER_PORT is 45000 and SHARD_NUM_PROXY is 3, only one port is used: 45000.
-    
-    *   The port used to connect the application to the cub_proxy(1): 45000, the port used to connect the CAS to the cub_proxy(1): None
-    *   The port used to connect the application to the cub_proxy(2): 45000, the port used to connect the CAS to the cub_proxy(2): None
-    *   The port used to connect the application to the cub_proxy(3): 45000, the port used to connect the CAS to the cub_proxy(3): None
-
-#.  The CAS and the cub_proxy have already been connected when starting the CUBRID SHARD (cubrid broker start). In addition, the processes are always in one machine, requiring no remote access.
-
-    When the CAS is connected to the cub_proxy, the Unix domain socket is used in Linux. Multiple CASes can be connected to one cub_proxy. The minimum number and the maximum number of the CAS are determined by MIN_NUM_APPL_SERVER and MAX_NUM_APPL_SERVER of the cubrid_broker.conf. The maximum number of CASes which can be connected to one  cub_proxy simultaneously is determined based on SHARD_MAX_CLIENTS of the cubrid_broker.conf.
 
 .. _cwm-cm-ports:
 

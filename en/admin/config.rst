@@ -1593,7 +1593,7 @@ The following are the parameters related to timezone. The type and the value ran
     Specifies a timezone for a server. The default is a OS timezone. To apply the changed value, database should be restarted.
     The timezone of operating system is read depending on the operating system and information found in operating system configuration files:
 	
-     - on Windows, the API tzset() function and tzname[0] variable are used to retrieve an Windows style timezone name. This name is translated into IANA/CUBRID style name using the CUBRID mapping data (the mapping file is %CUBRID%\timezones\tzdata\windowsZones.xml).
+     - on Windows, the API tzset() function and tzname[0] variable are used to retrieve an Windows style timezone name. This name is translated into IANA/CUBRID style name using the CUBRID mapping data (the mapping file is %CUBRID%\\timezones\\tzdata\\windowsZones.xml).
      - on Linux, CUBRID attempts to read and parse the file "/etc/sysconfig/clock". If this file is not available, then the value of link "/etc/localtime" is read and used.
      - on AIX, the value of "TZ" operating system environment variable is used.
 	 

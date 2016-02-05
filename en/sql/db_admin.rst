@@ -7,4 +7,5 @@ Database Administration
 
     authorization.rst
     query/set.rst
+    query/kill.rst
     query/show.rst

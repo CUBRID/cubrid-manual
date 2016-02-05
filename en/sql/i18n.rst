@@ -570,7 +570,7 @@ It is highly recommended to redirect the console output to a file, as it can be 
 Step 6: Starting CUBRID-Related Processes
 -----------------------------------------
 
-All CUBRID-related processes should be started in an identical environmental setting. The CUBRID server, the broker, CAS, and CSQL should use the locale binary file of an identical version. Also CUBRID HA, CUBRID Shard should use the same setting. For example, in the CUBRID HA, master server, slave server and replica server should use the same environmental variable setting.
+All CUBRID-related processes should be started in an identical environmental setting. The CUBRID server, the broker, CAS, and CSQL should use the locale binary file of an identical version. Also CUBRID HA should use the same setting. For example, in the CUBRID HA, master server, slave server and replica server should use the same environmental variable setting.
 
 There is no check on the compatibility of the locale used by server and CAS (client) process, so the user should make sure the LDML files used are the same.
 

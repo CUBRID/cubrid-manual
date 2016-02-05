@@ -58,7 +58,7 @@ Represents class information. An index for class_name is created.
 | class_attr_count   | INTEGER                   | The number of class attributes                                                           |
 |                    |                           |                                                                                          |
 +--------------------+---------------------------+------------------------------------------------------------------------------------------+
-| shard_attr_count   | INTEGER                   | The number of shared attributes                                                          |
+| shared_attr_count  | INTEGER                   | The number of shared attributes                                                          |
 |                    |                           |                                                                                          |
 +--------------------+---------------------------+------------------------------------------------------------------------------------------+
 | inst_meth_count    | INTEGER                   | The number of instance methods                                                           |

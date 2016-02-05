@@ -1275,8 +1275,12 @@ Even though only the **cubrid heartbeat copylogdb start** command has succeeded,
 
 How to use this utility is as shown below. ::
 
-    $ cubrid heartbeat copylogdb <start|stop> db_name peer_node
+    $ cubrid heartbeat copylogdb <start|stop> [ -h <host-name> ] db_name peer_node
 
+::
+
+    <host-name>: the name of the remote host where copylogdb command will be executed 
+    
 When *nodeB* is a node to run a command and *nodeA* is *peer_node*, you can run the command as follows.
     
 ::
@@ -1295,7 +1299,12 @@ Even though only the **cubrid heartbeat copylogdb start** command has succeeded,
 
 How to use this utility is as shown below. ::
 
-    $ cubrid heartbeat applylogdb <start|stop> db_name peer_node
+    $ cubrid heartbeat applylogdb <start|stop> [ -h <host-name> ] db_name peer_node
+
+::
+
+    <host-name>: the name of the remote host where appplylogdb command will be executed 
+    
 
 When *nodeB* is a node to run a command and *nodeA* is *peer_node*, you can run the command as follows.
     
@@ -1346,6 +1355,15 @@ This utility is used to stop in batch HA processes(copylogdb/applylogdb) related
 
 status
 ^^^^^^
+
+::
+
+    $ cubrid heartbeat status [-v] [ -h <host-name> ]
+
+::
+
+    <host-name>: the name of the remote host where status command will be executed 
+    
 
 This utility is used to output the information of CUBRID HA group and CUBRID HA components. How to use this utility is as shown below. ::
 

@@ -227,142 +227,241 @@ The following are examples of using timezone type values. For timezone related d
 
     11/11/2001
 
-CURDATE, CURRENT_DATE, SYS_DATE, SYSDATE
-========================================
+CURDATE, CURRENT_DATE
+=====================
 
 .. function:: CURDATE ()
 .. function:: CURRENT_DATE ()
 .. c:macro:: CURRENT_DATE
-.. c:macro:: SYS_DATE
-.. c:macro:: SYSDATE
 
     **CURDATE** (), **CURRENT_DATE** and **CURRENT_DATE** () are used interchangeably and they return the current date of session as the **DATE** type (*MM*/*DD*/*YYYY* or *YYYY*-*MM*-*DD*). The unit is day.
+    When the time zone of the current session is same as that of server, these functions are same as :c:macro:`SYS_DATE`, :c:macro:`SYSDATE`. Please refer :c:macro:`SYS_DATE`, :c:macro:`SYSDATE` and the following examples to find a difference and :func:`DBTIMEZONE`, :func:`SESSIONTIMEZONE` for details of the functions.
     
-    **SYS_DATE** and **SYSDATE** are used interchangeably and they return the current date of server as the **DATE** type (*MM*/*DD*/*YYYY* or *YYYY*-*MM*-*DD*). The unit is day.
-
     If input every argument value of year, month, and day is 0, the return value is determined by the **return_null_on_function_errors** system parameter; if it is set to yes, then **NULL** is returned; if it is set to no, an error is returned. The default value is **no**.
 
     :rtype: DATE
     
 .. code-block:: sql
 
-    --it returns the current date in DATE type
-    SELECT CURDATE(), CURRENT_DATE(), CURRENT_DATE, SYS_DATE, SYSDATE;
-     
-::
+    SELECT DBTIMEZONE(), SESSIONTIMEZONE();
 
-      04/01/2010  04/01/2010  04/01/2010  04/01/2010  04/01/2010
-     
+      dbtimezone            sessiontimezone     
+    ============================================
+      'Asia/Seoul'          'Asia/Seoul'        
+
+    -- it returns the current date in DATE type
+    
+    SELECT CURDATE(), CURRENT_DATE(), CURRENT_DATE, SYS_DATE, SYSDATE;
+
+       CURRENT_DATE    CURRENT_DATE    CURRENT_DATE    SYS_DATE    SYS_DATE 
+    ========================================================================
+      02/05/2016      02/05/2016      02/05/2016      02/05/2016  02/05/2016
+
 .. code-block:: sql
 
-    --it returns the date 60 days added to the current date
+    -- it returns the date 60 days added to the current date
+    
     SELECT CURDATE()+60;
-     
-::
 
-       05/31/2010
+       CURRENT_DATE +60
+    ===================
+      04/05/2016    
 
-CURRENT_DATETIME, NOW, SYS_DATETIME, SYSDATETIME
-================================================
+
+.. code-block:: sql
+
+    -- change session time from 'Asia/Seoul' to 'America/Los_Angeles'
+    
+    SET TIME ZONE 'America/Los_Angeles';
+
+    SELECT DBTIMEZONE(), SESSIONTIMEZONE();
+
+      dbtimezone            sessiontimezone     
+    ============================================
+      'Asia/Seoul'          'America/Los_Angeles'
+
+    -- Note that CURDATE() and SYS_DATE returns different results
+    
+    SELECT CURDATE(), CURRENT_DATE(), CURRENT_DATE, SYS_DATE, SYSDATE;
+
+       CURRENT_DATE    CURRENT_DATE    CURRENT_DATE    SYS_DATE    SYS_DATE 
+    ========================================================================
+      02/04/2016      02/04/2016      02/04/2016      02/05/2016  02/05/2016
+
+.. warning::
+    
+    As 10.0, **CURDATE** (), **CURRENT_DATE**, **CURRENT_DATE** () are different from **SYS_DATE** and **SYSDATE**. They are synonym for 9.x and lower. 
+    
+CURRENT_DATETIME, NOW
+=====================
 
 .. function:: CURRENT_DATETIME ()
 .. c:macro:: CURRENT_DATETIME
 .. function:: NOW ()
-.. c:macro:: SYS_DATETIME
-.. c:macro:: SYSDATETIME
 
     **CURRENT_DATETIME**, **CURRENT_DATETIME** () and **NOW** () are used interchangeably, and they return the current date and time of session in **DATETIME** type. The unit is millisecond.
+    When the time zone of the current session is same as that of server, these functions are same as :c:macro:`SYS_DATETIME`, :c:macro:`SYSDATETIME`. Please also refer :c:macro:`SYS_DATETIME`, :c:macro:`SYSDATETIME` to find a difference and :func:`DBTIMEZONE`, :func:`SESSIONTIMEZONE` for details of the functions.
     
-    **SYS_DATETIME** and **SYSDATETIME** are used interchangeably, and they return the current date and time of server in **DATETIME** type. The unit is millisecond.
-
     :rtype: DATETIME
     
 .. code-block:: sql
 
-    --it returns the current date and time in DATETIME type
-    SELECT NOW(), SYS_DATETIME;
-     
-::
+    SELECT DBTIMEZONE(), SESSIONTIMEZONE();
 
-    01:25:44.160 AM 02/05/2016     06:25:44.160 PM 02/04/2016
-     
+      dbtimezone            sessiontimezone     
+    ============================================
+      'Asia/Seoul'          'Asia/Seoul'        
+
+    -- it returns the current date and time in DATETIME type
+
+    SELECT NOW(), SYS_DATETIME;                                                                                                                                                
+
+       CURRENT_DATETIME               SYS_DATETIME                
+    ==============================================================
+      04:05:09.292 PM 02/05/2016     04:05:09.292 PM 02/05/2016   
+
 .. code-block:: sql
 
-    --it returns the timestamp value 1 hour added to the current sys_datetime value
-    SELECT TO_CHAR(SYSDATETIME+3600*1000, 'YYYY-MM-DD HH:MI');
+    -- it returns the timestamp value 1 hour added to the current sys_datetime value
     
-::
+    SELECT TO_CHAR(SYSDATETIME+3600*1000, 'YYYY-MM-DD HH24:MI');
 
-    '2016-02-04 07:25'
+       to_char( SYS_DATETIME +3600*1000, 'YYYY-MM-DD HH24:MI')
+    ======================
+      '2016-02-05 17:05'  
 
-CURTIME, CURRENT_TIME, SYS_TIME, SYSTIME
-========================================
+.. code-block:: sql
+
+    -- change session time from 'Asia/Seoul' to 'America/Los_Angeles'
+    
+    set time zone 'America/Los_Angeles';
+
+    SELECT DBTIMEZONE(), SESSIONTIMEZONE();
+
+      dbtimezone            sessiontimezone     
+    ============================================
+      'Asia/Seoul'          'America/Los_Angeles'
+
+    -- Note that NOW() and SYS_DATETIME return different results
+    
+    SELECT NOW(), SYS_DATETIME;
+
+       CURRENT_DATETIME               SYS_DATETIME                
+    ==============================================================
+      11:08:57.041 PM 02/04/2016     04:08:57.041 PM 02/05/2016   
+  
+.. warning::
+
+    As 10.0, **CURRENT_DATETIME** (), **NOW** () are different from **SYS_DATEIME**, **SYSDATETIME**. They are synonym for 9.x and lower. 
+    
+CURTIME, CURRENT_TIME
+=====================
 
 .. function:: CURTIME ()
 .. c:macro:: CURRENT_TIME
 .. function:: CURRENT_TIME ()
-.. c:macro:: SYS_TIME
-.. c:macro:: SYSTIME
 
     **CURTIME** (), **CURRENT_TIME** and **CURRENT_TIME** () are used interchangeably and they return the current time of session as **TIME** type (*HH*:*MI*:*SS*). The unit is second.
-
-    **SYS_TIME** and **SYSTIME** are used interchangeably and they return the current time of server as **TIME** type (*HH*:*MI*:*SS*). The unit is second.
-
+    When the time zone of the current session is same as that of server, these functions are same as :c:macro:`SYS_TIME`, :c:macro:`SYSTIME`. Please also refer :c:macro:`SYS_TIME`, :c:macro:`SYSTIME` to find a difference and :func:`DBTIMEZONE`, :func:`SESSIONTIMEZONE` for details of the functions.
+    
     :rtype: TIME
     
 .. code-block:: sql
 
-    --it returns the current time in TIME type
-    SELECT CURTIME(), CURRENT_TIME(), CURRENT_TIME, SYS_TIME, SYSTIME;
-    
-::
+    SELECT DBTIMEZONE(), SESSIONTIMEZONE();
 
-    01:26:28 AM     01:26:28 AM     01:26:28 AM     06:26:28 PM  06:26:28 PM
-     
+      dbtimezone            sessiontimezone     
+    ============================================
+      'Asia/Seoul'          'Asia/Seoul'        
+
+    -- it returns the current time in TIME type
+    
+    SELECT CURTIME(), CURRENT_TIME(), CURRENT_TIME, SYS_TIME, SYSTIME;
+
+       CURRENT_TIME    CURRENT_TIME    CURRENT_TIME    SYS_TIME     SYS_TIME  
+    ==========================================================================
+      04:22:54 PM     04:22:54 PM     04:22:54 PM     04:22:54 PM  04:22:54 PM
+
+
 .. code-block:: sql
 
-    --it returns the time value 1 hour added to the current time
-    SELECT CURTIME()+3600;
+    -- change session time from 'Asia/Seoul' to 'America/Los_Angeles'
     
-::
+    SET TIME ZONE 'AMERICA/LOS_ANGELES';
 
-    02:26:38 AM
+    SELECT DBTIMEZONE(), SESSIONTIMEZONE();
 
-CURRENT_TIMESTAMP, SYS_TIMESTAMP, SYSTIMESTAMP, LOCALTIME, LOCALTIMESTAMP
-=========================================================================
+      dbtimezone            sessiontimezone     
+    ============================================
+      'Asia/Seoul'          'America/Los_Angeles'
+
+    -- Note that CURTIME() and SYS_TIME return different results
+    
+    SELECT CURTIME(), CURRENT_TIME(), CURRENT_TIME, SYS_TIME, SYSTIME;
+
+       CURRENT_TIME    CURRENT_TIME    CURRENT_TIME    SYS_TIME     SYS_TIME  
+    ==========================================================================
+      11:23:16 PM     11:23:16 PM     11:23:16 PM     04:23:16 PM  04:23:16 PM
+
+.. warning::
+
+    As 10.0, **CURTIME** (), **CURRENT_TIME** () are different from **SYS_TIME**, **SYSTIME**.  They are synonym for 9.x and lower. 
+
+CURRENT_TIMESTAMP, LOCALTIME, LOCALTIMESTAMP
+============================================
 
 .. c:macro:: CURRENT_TIMESTAMP
 .. function:: CURRENT_TIMESTAMP ()
-.. c:macro:: SYS_TIMESTAMP
-.. c:macro:: SYSTIMESTAMP
 .. c:macro:: LOCALTIME
 .. function:: LOCALTIME ()
 .. c:macro:: LOCALTIMESTAMP
 .. function:: LOCALTIMESTAMP ()
 
     **CURRENT_TIMESTAMP**, **CURRENT_TIMESTAMP** (), **LOCALTIME**, **LOCALTIME** (), **LOCALTIMESTAMP** and **LOCALTIMESTAMP** () are used interchangeably and they return the current date and time of session as **TIMESTAMP** type. The unit is second.
+    When the time zone of the current session is same as that of server, these functions are same as :c:macro:`SYS_TIMESTAMP`, :c:macro:`SYSTIMESTAMP`.  Please also refer :c:macro:`SYS_TIMESTAMP`, :c:macro:`SYSTIMESTAMP` to find a difference and :func:`DBTIMEZONE`, :func:`SESSIONTIMEZONE` for details of the functions.
     
-    **SYS_TIMESTAMP** and **SYSTIMESTAMP** are used interchangeably and they return the current date and time of server as **TIMESTAMP** type. The unit is second.
-
     :rtype: TIMESTAMP
     
 .. code-block:: sql
 
-    --it returns the current date and time in TIMESTAMP type of session and server timezones.
+    SELECT DBTIMEZONE(), SESSIONTIMEZONE();
+
+      dbtimezone            sessiontimezone     
+    ============================================
+      'Asia/Seoul'          'Asia/Seoul'        
+
+    -- it returns the current date and time in TIMESTAMP type of session and server timezones.
+    
     SELECT LOCALTIME, SYS_TIMESTAMP;
-    
-::
 
-    01:21:58 AM 02/05/2016     06:21:58 PM 02/04/2016
-     
+       CURRENT_TIMESTAMP          SYS_TIMESTAMP           
+    ======================================================
+      04:34:16 PM 02/05/2016     04:34:16 PM 02/05/2016   
+
 .. code-block:: sql
+ 
+    -- change session time from 'Asia/Seoul' to 'America/Los_Angeles'
+    
+    SET TIME ZONE 'America/Los_Angeles';
 
-    --it returns the timestamp value 1 hour added to the current timestamp value
-    SELECT CURRENT_TIMESTAMP()+3600;
+    SELECT DBTIMEZONE(), SESSIONTIMEZONE();                                                                                                                                    
+
+      dbtimezone            sessiontimezone     
+    ============================================
+      'Asia/Seoul'          'America/Los_Angeles'
+
+    -- Note that LOCALTIME() and SYS_TIMESTAMP return different results
     
-::
-    
-    02:22:28 AM 02/05/2016
+    SELECT LOCALTIME, SYS_TIMESTAMP;                                                                                                                                           
+
+       CURRENT_TIMESTAMP          SYS_TIMESTAMP           
+    ======================================================
+      11:34:37 PM 02/04/2016     04:34:37 PM 02/05/2016   
+
+.. warning::
+
+    As 10.0, **CURRENT_TIMESTAMP**, **CURRENT_TIMESTAMP** (), **LOCALTIME**, **LOCALTIME** (), **LOCALTIMESTAMP** and **LOCALTIMESTAMP** () are different from **SYS_TIMESTAMP** (), **SYSTIMESTAMP**.  They are synonym for 9.x and lower. 
+
 
 DATE
 ====
@@ -1403,6 +1502,234 @@ SECOND
     =====================================
                                        56
 
+SYS_DATE, SYSDATE
+=================
+
+.. c:macro:: SYS_DATE
+.. c:macro:: SYSDATE
+
+    **SYS_DATE** and **SYSDATE** are used interchangeably and they return the current date of server as the **DATE** type (*MM*/*DD*/*YYYY* or *YYYY*-*MM*-*DD*). The unit is day.  
+    When the time zone of the current session is same as that of server, these functions are same as :func:`CURDATE`, :func:`CURRENT_DATE` and :c:macro:`CURRENT_DATE`. Please also refer :func:`CURDATE`, :func:`CURRENT_DATE` to find a difference and :func:`DBTIMEZONE`, :func:`SESSIONTIMEZONE` for details of the functions. 
+
+    If input every argument value of year, month, and day is 0, the return value is determined by the **return_null_on_function_errors** system parameter; if it is set to yes, then **NULL** is returned; if it is set to no, an error is returned. The default value is **no**.
+
+    :rtype: DATE
+    
+.. code-block:: sql
+
+    SELECT DBTIMEZONE(), SESSIONTIMEZONE();
+
+      dbtimezone            sessiontimezone     
+    ============================================
+      'Asia/Seoul'          'Asia/Seoul'        
+
+    -- it returns the current date in DATE type
+    
+    SELECT CURDATE(), CURRENT_DATE(), CURRENT_DATE, SYS_DATE, SYSDATE;
+
+       CURRENT_DATE    CURRENT_DATE    CURRENT_DATE    SYS_DATE    SYS_DATE 
+    ========================================================================
+      02/05/2016      02/05/2016      02/05/2016      02/05/2016  02/05/2016
+
+.. code-block:: sql
+
+    -- it returns the date 60 days added to the current date
+    
+    SELECT CURDATE()+60;
+
+       CURRENT_DATE +60
+    ===================
+      04/05/2016    
+
+
+.. code-block:: sql
+
+    -- change session time from 'Asia/Seoul' to 'America/Los_Angeles'
+    
+    SET TIME ZONE 'America/Los_Angeles';
+
+    SELECT DBTIMEZONE(), SESSIONTIMEZONE();
+
+      dbtimezone            sessiontimezone     
+    ============================================
+      'Asia/Seoul'          'America/Los_Angeles'
+
+    -- Note that CURDATE() and SYS_DATE returns different results
+    
+    SELECT CURDATE(), CURRENT_DATE(), CURRENT_DATE, SYS_DATE, SYSDATE;
+
+       CURRENT_DATE    CURRENT_DATE    CURRENT_DATE    SYS_DATE    SYS_DATE 
+    ========================================================================
+      02/04/2016      02/04/2016      02/04/2016      02/05/2016  02/05/2016
+
+.. warning::
+    
+    As 10.0, **SYS_DATE** and **SYSDATE** are different from **CURDATE** (), **CURRENT_DATE**, **CURRENT_DATE** (). They are synonym for 9.x and lower. 
+
+SYS_DATETIME, SYSDATETIME
+=========================
+
+.. c:macro:: SYS_DATETIME
+.. c:macro:: SYSDATETIME
+
+    **SYS_DATETIME** and **SYSDATETIME** are used interchangeably, and they return the current date and time of server in **DATETIME** type. The unit is millisecond.
+    When the time zone of the current session is same as that of server, these functions are same as :func:`CURRENT_DATETIME`, :c:macro:`CURRENT_DATETIME`, :func:`NOW`. Please also refer :func:`CURRENT_DATETIME`, :func:`NOW` to find a difference and :func:`DBTIMEZONE`, :func:`SESSIONTIMEZONE` for details of the functions.
+
+    :rtype: DATETIME
+    
+.. code-block:: sql
+
+    SELECT DBTIMEZONE(), SESSIONTIMEZONE();
+
+      dbtimezone            sessiontimezone     
+    ============================================
+      'Asia/Seoul'          'Asia/Seoul'        
+
+    -- it returns the current date and time in DATETIME type
+
+    SELECT NOW(), SYS_DATETIME;                                                                                                                                                
+
+       CURRENT_DATETIME               SYS_DATETIME                
+    ==============================================================
+      04:05:09.292 PM 02/05/2016     04:05:09.292 PM 02/05/2016   
+
+.. code-block:: sql
+
+    -- it returns the timestamp value 1 hour added to the current sys_datetime value
+    
+    SELECT TO_CHAR(SYSDATETIME+3600*1000, 'YYYY-MM-DD HH24:MI');
+
+       to_char( SYS_DATETIME +3600*1000, 'YYYY-MM-DD HH24:MI')
+    ======================
+      '2016-02-05 17:05'  
+
+.. code-block:: sql
+
+    -- change session time from 'Asia/Seoul' to 'America/Los_Angeles'
+    
+    SET TIME ZONE 'America/Los_Angeles';
+
+    SELECT DBTIMEZONE(), SESSIONTIMEZONE();
+
+      dbtimezone            sessiontimezone     
+    ============================================
+      'Asia/Seoul'          'America/Los_Angeles'
+
+    -- Note that NOW() and SYS_DATETIME return different results
+    
+    SELECT NOW(), SYS_DATETIME;
+
+       CURRENT_DATETIME               SYS_DATETIME                
+    ==============================================================
+      11:08:57.041 PM 02/04/2016     04:08:57.041 PM 02/05/2016   
+  
+.. warning::
+
+    As 10.0, **SYS_DATEIME**, **SYSDATETIME** are different from **CURRENT_DATETIME** (), **NOW** (). They are synonym for 9.x and lower. 
+    
+SYS_TIME, SYSTIME
+=================
+
+.. c:macro:: SYS_TIME
+.. c:macro:: SYSTIME
+
+    **SYS_TIME** and **SYSTIME** are used interchangeably and they return the current time of server as **TIME** type (*HH*:*MI*:*SS*). The unit is second.
+    When the time zone of the current session is same as that of server, these functions are same as :func:`CURTIME`, :c:macro:`CURRENT_TIME`, :func:`CURRENT_TIME`. Please also refer :func:`CURTIME`, :func:`CURRENT_TIME` to find a difference and :func:`DBTIMEZONE`, :func:`SESSIONTIMEZONE` for details of the functions.
+    
+    :rtype: TIME
+    
+.. code-block:: sql
+
+    select dbtimezone(), sessiontimezone();
+
+      dbtimezone            sessiontimezone     
+    ============================================
+      'Asia/Seoul'          'Asia/Seoul'        
+
+    -- it returns the current time in TIME type
+    
+    SELECT CURTIME(), CURRENT_TIME(), CURRENT_TIME, SYS_TIME, SYSTIME;
+
+       CURRENT_TIME    CURRENT_TIME    CURRENT_TIME    SYS_TIME     SYS_TIME  
+    ==========================================================================
+      04:22:54 PM     04:22:54 PM     04:22:54 PM     04:22:54 PM  04:22:54 PM
+
+
+.. code-block:: sql
+
+    -- change session time from 'Asia/Seoul' to 'America/Los_Angeles'
+    
+    SET TIME ZONE 'America/Los_Angeles';
+
+    select dbtimezone(), sessiontimezone();
+
+      dbtimezone            sessiontimezone     
+    ============================================
+      'Asia/Seoul'          'America/Los_Angeles'
+
+    -- Note that CURTIME() and SYS_TIME return different results
+    
+    SELECT CURTIME(), CURRENT_TIME(), CURRENT_TIME, SYS_TIME, SYSTIME;
+
+       CURRENT_TIME    CURRENT_TIME    CURRENT_TIME    SYS_TIME     SYS_TIME  
+    ==========================================================================
+      11:23:16 PM     11:23:16 PM     11:23:16 PM     04:23:16 PM  04:23:16 PM
+
+.. warning::
+
+    As 10.0, **SYS_TIME**, **SYSTIME** are different from **CURTIME** (), **CURRENT_TIME** ().  They are synonym for 9.x and lower. 
+    
+SYS_TIMESTAMP, SYSTIMESTAMP
+===========================
+
+.. c:macro:: SYS_TIMESTAMP
+.. c:macro:: SYSTIMESTAMP
+
+    **SYS_TIMESTAMP** and **SYSTIMESTAMP** are used interchangeably and they return the current date and time of server as **TIMESTAMP** type. The unit is second.
+    When the time zone of the current session is same as that of server, these functions are same as :c:macro:`CURRENT_TIMESTAMP`, :func:`CURRENT_TIMESTAMP`, :c:macro:`LOCALTIME`, :func:`LOCALTIME`, :c:macro:`LOCALTIMESTAMP`, :func:`LOCALTIMESTAMP`. Please also refer :c:macro:`CURRENT_TIMESTAMP`, :func:`CURRENT_TIMESTAMP`, :c:macro:`LOCALTIME`, :func:`LOCALTIME`, :c:macro:`LOCALTIMESTAMP`, :func:`LOCALTIMESTAMP` to find a difference and :func:`DBTIMEZONE`, :func:`SESSIONTIMEZONE` for details of the functions.
+    
+    :rtype: TIMESTAMP
+    
+.. code-block:: sql
+
+    SELECT DBTIMEZONE(), SESSIONTIMEZONE();
+
+      dbtimezone            sessiontimezone     
+    ============================================
+      'Asia/Seoul'          'Asia/Seoul'        
+
+    -- it returns the current date and time in TIMESTAMP type of session and server timezones.
+    
+    SELECT LOCALTIME, SYS_TIMESTAMP;
+
+       CURRENT_TIMESTAMP          SYS_TIMESTAMP           
+    ======================================================
+      04:34:16 PM 02/05/2016     04:34:16 PM 02/05/2016   
+
+.. code-block:: sql
+ 
+    -- change session time from 'Asia/Seoul' to 'America/Los_Angeles'
+    
+    SET TIME ZONE 'America/Los_Angeles';
+
+    SELECT DBTIMEZONE(), SESSIONTIMEZONE();                                                                                                                                    
+
+      dbtimezone            sessiontimezone     
+    ============================================
+      'Asia/Seoul'          'America/Los_Angeles'
+
+    -- Note that LOCALTIME() and SYS_TIMESTAMP return different results
+    
+    SELECT LOCALTIME, SYS_TIMESTAMP;                                                                                                                                           
+
+       CURRENT_TIMESTAMP          SYS_TIMESTAMP           
+    ======================================================
+      11:34:37 PM 02/04/2016     04:34:37 PM 02/05/2016   
+
+.. warning::
+
+    As 10.0, **SYS_TIMESTAMP** (), **SYSTIMESTAMP** are different from **CURRENT_TIMESTAMP**, **CURRENT_TIMESTAMP** (), **LOCALTIME**, **LOCALTIME** (), **LOCALTIMESTAMP** and **LOCALTIMESTAMP** ().  They are synonym for 9.x and lower. 
+
 TIME
 ====
 
@@ -1799,11 +2126,11 @@ UNIX_TIMESTAMP
 
     The argument of the **UNIX_TIMESTAMP** function can be omitted. If it is omitted, the function returns the interval between '1970-01-01 00:00:00' UTC and the current system date/time in seconds as **INTEGER** type. If the date argument is specified, the function returns the interval between '1970-01-01 00:00:00' UTC and the specified date/time in seconds. 
 
-    0 is not allowed in the argument value corresponding to year, month, and day; however, if 0 is inputted in every argument value corresponding to date and time, 0 is returned as an exception.
+    0 is not allowed in the argument value corresponding to year, month, and day; however, if 0 is given in every argument value corresponding to date and time, 0 is returned as an exception.
 
     Argument of DATETIME type is considered in session timezone.
 
-    :param date: **DATE** type, **TIMESTAMP** type, **TIMESTAMPTZ** type, **TIMESTAMPLTZ** type, **DATETIME** type,**DATETIMETZ** type, **DATETIMELTZ** type, **DATE** format string ('*YYYY*-*MM*-*DD*' or '*MM*/*DD*/*YYYY*'), **TIMESTAMP** format string ('*YYYY*-*MM*-*DD* *HH*:*MI*:*SS*', '*HH*:*MI*:*SS* *MM*/*DD*/*YYYY*') or '*YYYYMMDD*' format string can be specified.
+    :param date: **DATE** type, **TIMESTAMP** type, **TIMESTAMPTZ** type, **TIMESTAMPLTZ** type, **DATETIME** type, **DATETIMETZ** type, **DATETIMELTZ** type, **DATE** format string ('*YYYY*-*MM*-*DD*' or '*MM*/*DD*/*YYYY*'), **TIMESTAMP** format string ('*YYYY*-*MM*-*DD* *HH*:*MI*:*SS*', '*HH*:*MI*:*SS* *MM*/*DD*/*YYYY*') or '*YYYYMMDD*' format string can be specified.
     :rtype: INT
 
 .. code-block:: sql

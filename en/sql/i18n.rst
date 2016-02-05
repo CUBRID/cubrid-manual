@@ -1781,11 +1781,11 @@ Windows
 
     Download the linked file in "Latest version"'s "Time Zone Data".
 
-2.  Decompress the compressed file to %CUBRID%/timezones/tzdata directory.
+2.  Decompress the compressed file to **%CUBRID%/timezones/tzdata** directory.
 
-3.  Run "%CUBRID%/bin/make_tz.bat".
+3.  Run **%CUBRID%/bin/make_tz.bat**.
 
-    libcubrid_timezones.dll is created at the %CUBRID%/lib directory.
+    **libcubrid_timezones.dll** is created at the **%CUBRID%/lib** directory.
 
     ::
 
@@ -1802,15 +1802,15 @@ Linux
 
     Download the linked file in "Latest version"'s "Time Zone Data".
 
-2.  Decompress the compressed file to $CUBRID/timezones/tzdata directory.
+2.  Decompress the compressed file to **$CUBRID/timezones/tzdata** directory.
 
-3.  Run "make_tz.sh -t <target_bit>". (<target_bit>: 64 if CUBRID is for 64bit, 32 if CUBRID is for 32bit)
+3.  Run **make_tz.sh**. 
 
-    libcubrid_timezones.so is created at the $CUBRID/lib directory.
+    **libcubrid_timezones.so** is created at the **$CUBRID/lib** directory.
 
     ::
     
-        make_tz.sh -t 64
+        make_tz.sh
 
 		
 Timezone library and database compatibility
@@ -1823,7 +1823,7 @@ In Linux:
 
     ::
 
-        make_tz.sh -t 64 -g extend -d basic
+        make_tz.sh -g extend -d basic
 	
 
 In Windows:
@@ -1836,7 +1836,7 @@ Usage of timezone data types with JDBC
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 JDBC CUBRID driver is completely dependent on CUBRID server for timezone information. Although, Java and CUBRID uses the same primary source of information for timezone (IANA), the names of regions and timezone information should be considered as incompatible.
 
-All CUBRID data types having timezone are mapped to CUBRIDTimestamptz Java objects.
+All CUBRID data types having timezone are mapped to **CUBRIDTimestamptz** Java objects.
 
 Using JDBC to insert value with timezone:
 
@@ -1851,7 +1851,7 @@ Using JDBC to insert value with timezone:
 
 Using JDBC to retrieve value with timezone:
     
-	.. code-block:: sql
+	.. code-block:: java
 	
          String sql = "select * from tz";
          Statement stmt = conn.createStatement();
@@ -1860,16 +1860,16 @@ Using JDBC to retrieve value with timezone:
          System.out.println("object: " + object1.toString());
 
 
-Internally, CUBRID JDBC stores the date/time parts of CUBRIDTimestamptz object into a 'long' value (inheritanted through Date object) which holds the number of milliseconds elapsed since 1st January 1970 (Unix epoch). 
-The internal encoding is performed in UTC time reference, which is different from Timestamp objects which uses local timezone. For this reason, a CUBRIDTimestamptz object created with the same timezone as Java local timezone will not hold the same internal epoch value. In order to provide the Unix epoch, the getUnixTime() method may be used:
+Internally, CUBRID JDBC stores the date/time parts of **CUBRIDTimestamptz** object into a 'long' value (inheritanted through Date object) which holds the number of milliseconds elapsed since 1st January 1970 (Unix epoch). 
+The internal encoding is performed in UTC time reference, which is different from Timestamp objects which uses local timezone. For this reason, a **CUBRIDTimestamptz** object created with the same timezone as Java local timezone will not hold the same internal epoch value. In order to provide the Unix epoch, the **getUnixTime()** method may be used:
 
-	.. code-block:: sql
+	.. code-block:: java
 	
          String datetime = "2000-01-01 01:02:03.123";
          String timezone = "Asia/Seoul";
          CUBRIDTimestamptz dt_tz = CUBRIDTimestamptz.valueOf(datetime, false, timezone);
          System.out.println("dt_tz.getTime: " + dt_tz.getTime());
-         System.out.println("dt_tz.getUnixTime: " + dt_tz. getUnixTime ());
+         System.out.println("dt_tz.getUnixTime: " + dt_tz.getUnixTime ());
 
 
 .. _char-data-conf-guide:
@@ -1948,12 +1948,12 @@ The LDML files format used by CUBRID are derived from generic Unicode Locale Dat
 The tags and attributes which are specific only to CUBRID can be easily identified (they contain a "cubrid" into the naming).
 
 The best approach to add a new locale is to copy existing LDML file and tweak various setting until desired results are obtained.
-The filename must be formatted like cubrid_<*language*>.xml and be placed in the folder $CUBRID/locales/data/ldml.
+The filename must be formatted like cubrid_<*language*>.xml and be placed in the folder **$CUBRID/locales/data/ldml**.
 The <*language*> part should be a ASCII string (normally five characters) in IETF format (http://en.wikipedia.org/wiki/BCP_47).
-After creating the LDML file, the <*language*> part string must be added into CUBRID configuration file $CUBRID/conf/cubrid_locales.txt.
+After creating the LDML file, the <*language*> part string must be added into CUBRID configuration file **$CUBRID/conf/cubrid_locales.txt**.
 Note that the order in this file is the order of generating (compiling) locale library and loading locales at start-up.
 
-The make_locale script must be used to compile the new added locale and add its data into the CUBRID locales library (locale in $CUBRID/lib/).
+The **make_locale** script must be used to compile the new added locale and add its data into the CUBRID locales library (locale in $CUBRID/lib/).
 
 The LDML file is expected in UTF-8 encoding, and it is not possible to add more than one locale into the same LDML file.
 
@@ -1971,7 +1971,7 @@ Adding a new locale in LDML file requires:
 LDML Calendar Information
 -------------------------
 
-*   The first part consists in providing default CUBRID formats for DATE, DATETIME, TIME, TIMESTAMP, DATETIME WITH TIME ZONE and TIMESTAMP WITH TIME ZONE data type conversion to/from string. This formats are used by functions :func:`TO_DATE`, :func:`TO_TIME`, :func:`TO_DATETIME`, :func:`TO_TIMESTAMP`, :func:`TO_CHAR`, :func:`TO_DATETIME_TZ`, :func:`TO_TIMESTAMP_TZ`. The formats elements allowed depend on data type and are the ones used for :func:`TO_CHAR` function (:ref:`Date/Time Format 1 <datetime-format1>`). Only ASCII characters are allowed in the format strings. The allowed size are 30 bytes (characters) for DATE and TIME formats, 48 characters for DATETIME and  TIMESTAMP formats and 70 characters for DATETIME WITH TIME ZONE and TIMESTAMP WITH TIME ZONE.
+*   The first part consists in providing default CUBRID formats for **DATE**, **DATETIME**, **TIME**, **TIMESTAMP**, **DATETIME WITH TIME ZONE** and **TIMESTAMP WITH TIME ZONE** data type conversion to/from string. This formats are used by functions :func:`TO_DATE`, :func:`TO_TIME`, :func:`TO_DATETIME`, :func:`TO_TIMESTAMP`, :func:`TO_CHAR`, :func:`TO_DATETIME_TZ`, :func:`TO_TIMESTAMP_TZ`. The formats elements allowed depend on data type and are the ones used for :func:`TO_CHAR` function (:ref:`Date/Time Format 1 <datetime-format1>`). Only ASCII characters are allowed in the format strings. The allowed size are 30 bytes (characters) for **DATE** and **TIME** formats, 48 characters for **DATETIME** and **TIMESTAMP** formats and 70 characters for **DATETIME WITH TIME ZONE** and **TIMESTAMP WITH TIME ZONE**.
 *   The <months> requires to specify the names for months in both long form and abbreviated form. The allowed size are 15 (or 60 bytes) for abbreviated form and 25 characters (or 100 bytes) for normal form.
 *   The <days> requires week day names in both long and abbreviated form. The allowed size are 10 characters (or 40 bytes) for abbreviated form and 15 characters (or 60 bytes) for full day name.
 
@@ -2051,7 +2051,7 @@ LDML Alphabet
 -------------
 
 These allow to define casing rules for alphabet of the locale.
-The 'CUBRIDAlphabetMode' attribute defines the primary source of data for characters. Normally, this should be set to "UNICODEDATAFILE", values which instructs CUBRID to use the Unicode data file ($CUBRID/locales/data/unicodedata.txt).
+The 'CUBRIDAlphabetMode' attribute defines the primary source of data for characters. Normally, this should be set to "UNICODEDATAFILE", values which instructs CUBRID to use the Unicode data file (**$CUBRID/locales/data/unicodedata.txt**).
 
 This file must not be modified, any customization on certain characters should be done in LDML file. If such value is configured, all Unicode characters up to codepoint 65535 are loaded with casing information.
 The other allowed value for `CUBRIDAlphabetMode` is "ASCII" which will lead to only ASCII character can be lower case, upper case or case-insenstive compare in matching functions.
@@ -2060,7 +2060,7 @@ This does not affect CUBRID's ability to support all UTF-8 4 bytes encoded Unico
 
 The casing rules are optional and apply on top of the primary source of character information (UNICODEDATAFILE or ASCII).
 
-CUBRID allows to define upper casing rules (<u> tag) and lower casing rules (<l> tag).Each of upper and lower casing rules set consists for pairs of source-destination (<s> = source, <d> destination).
+CUBRID allows to define upper casing rules (<u> tag) and lower casing rules (<l> tag).Each of upper and lower casing rules set consists for pairs of source-destination (<s> = source, <d> = destination).
 For instance, the following defines a rule that each character "A" is lower cased to "aa" (two character "a").
 
     .. code-block:: xml

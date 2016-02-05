@@ -13,6 +13,12 @@ You can define a value of a system parameter with SQL syntax by CSQL interpreter
 
     SET SYSTEM PARAMETERS 'parameter_name=value [{; name=value}...]'
 
+**DEFAULT** for *value* will reset the parameter to its default value with an exception of **call_stack_dump_activation_list** parameter. 
+
+.. code-block:: sql
+
+    SET SYSTEM PARAMETERS 'lock_timeout=DEFAULT';
+    
 User Variables
 ==============
 

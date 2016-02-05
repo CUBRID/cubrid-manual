@@ -1365,7 +1365,8 @@ Num_keys                            INT             Number of unique keys in the
 Topclass_oid                        VARCHAR(64)     Topclass oid or NULL OID (non unique index)(volid|pageid|slotid)
 Unique                              INT             Unique or non-unique
 Overflow_vfid                       VARCHAR(32)     VFID (volid|fileid)
-Key_type                            VARCHAR(32)     Type name
+Key_type                            VARCHAR(256)    Type name
+Columns                             VARCHAR(256)    the list of columns which consists of the index
 =================================== =============== ======================================================================================================================================
 
 The following shows the examples of this syntax.

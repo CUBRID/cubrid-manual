@@ -775,8 +775,12 @@ Backup_info_level1                  VARCHAR(128)    detail information of backup
 Backup_info_level2                  VARCHAR(128)    detail information of backup level 2. currently only backup start-time is used
 Ha_server_state                     VARCHAR(32)     current ha state, one of flowing value: na, idle, active, to-be-active, standby, to-be-standby, maintenance, dead
 Ha_file                             VARCHAR(32)     ha replication status, one of following value: clear, archived, sync
-Eof_lsa                             VARCHAR(64)     
-Smallest_lsa_at_last_checkpoint     VARCHAR(64)     
+Eof_lsa                             VARCHAR(64)     EOF LSA
+Smallest_lsa_at_last_checkpoint     VARCHAR(64)     The smallest LSA of the last checkpoint, can be NULL LSA
+Next_mvcc_id                        BIGINT          The next MVCCID will be used for the next transaction
+Mvcc_op_log_lsa                     VARCHAR(32)     The LSA used to link log entries for MVCC operation
+Last_block_oldest_mvcc_id           BIGINT          Used to find the oldest MVCCID in a block of log data, can be NULL
+Last_block_newest_mvcc_id           BIGINT          Used to find the newest MVCCID in a block of log data, Can be NULL
 =================================== =============== ======================================================================================================================================
 
 The following shows the examples of this syntax.
@@ -787,42 +791,47 @@ The following shows the examples of this syntax.
     SHOW LOG HEADER;
     
 ::
-
     <00001> Volume_id                      : -2
             Magic_symbol                   : 'CUBRID/LogActive'
             Magic_symbol_location          : 16
-            Creation_time                  : 04:42:28.000 PM 12/11/2013
+            Creation_time                  : 05:27:05.000 PM 02/05/2016
             Release                        : '10.0.0'
-            Compatibility_disk_version     : '9.2'
+            Compatibility_disk_version     : '10'
             Db_page_size                   : 16384
             Log_page_size                  : 16384
             Shutdown                       : 0
-            Next_trans_id                  : 607149
-            Num_avg_trans                  : 0
-            Num_avg_locks                  : 0
+            Next_trans_id                  : 17
+            Num_avg_trans                  : 3
+            Num_avg_locks                  : 30
             Num_active_log_pages           : 1279
-            Db_charset                     : 5
-            First_active_log_page          : 66508
-            Current_append                 : '(66637|14672)'
-            Checkpoint                     : '(66637|14280)'
-            Next_archive_page_id           : 66456
-            Active_physical_page_id        : 1228
-            Next_archive_num               : 52
-            Last_archive_num_for_syscrashes: 52
+            Db_charset                     : 3
+            First_active_log_page          : 0
+            Current_append                 : '(102|5776)'
+            Checkpoint                     : '(101|7936)'
+            Next_archive_page_id           : 0
+            Active_physical_page_id        : 1
+            Next_archive_num               : 0
+            Last_archive_num_for_syscrashes: -1
             Last_deleted_archive_num       : -1
-            Backup_lsa_level0              : '(66636|5240)'
+            Backup_lsa_level0              : '(-1|-1)'
             Backup_lsa_level1              : '(-1|-1)'
             Backup_lsa_level2              : '(-1|-1)'
-            Log_prefix                     : 'demodb'
+            Log_prefix                     : 'mvccdb'
             Has_logging_been_skipped       : 0
             Perm_status                    : 'LOG_PSTAT_CLEAR'
-            Backup_info_level0             : 'time: Mon Dec 16 14:33:17 2013'
-            Backup_info_level1             : 'time: none'
-            Backup_info_level2             : 'time: none'
+            Backup_info_level0             : 'time: N/A'
+            Backup_info_level1             : 'time: N/A'
+            Backup_info_level2             : 'time: N/A'
             Ha_server_state                : 'idle'
-            Ha_file                        : 'unknown'
-            Eof_lsa                        : '(66637|14672)'
-            Smallest_lsa_at_last_checkpoint: '(66637|14280)'
+            Ha_file                        : 'UNKNOWN'
+            Eof_lsa                        : '(102|5776)'
+            Smallest_lsa_at_last_checkpoint: '(101|7936)'
+            Next_mvcc_id                   : 6
+            Mvcc_op_log_lsa                : '(102|5488)'
+            Last_block_oldest_mvcc_id      : 4
+            Last_block_newest_mvcc_id      : 5
+
+
 
 .. code-block:: sql
             
@@ -833,38 +842,43 @@ The following shows the examples of this syntax.
     <00001> Volume_id                      : -2
             Magic_symbol                   : 'CUBRID/LogActive'
             Magic_symbol_location          : 16
-            Creation_time                  : 04:42:28.000 PM 12/11/2013
+            Creation_time                  : 05:27:05.000 PM 02/05/2016
             Release                        : '10.0.0'
-            Compatibility_disk_version     : '9.2'
+            Compatibility_disk_version     : '10'
             Db_page_size                   : 16384
             Log_page_size                  : 16384
             Shutdown                       : 0
-            Next_trans_id                  : 607146
-            Num_avg_trans                  : 0
-            Num_avg_locks                  : 0
+            Next_trans_id                  : 15
+            Num_avg_trans                  : 3
+            Num_avg_locks                  : 30
             Num_active_log_pages           : 1279
-            Db_charset                     : 5
-            First_active_log_page          : 66508
-            Current_append                 : '(66637|14280)'
-            Checkpoint                     : '(66637|14280)'
-            Next_archive_page_id           : 66456
-            Active_physical_page_id        : 1228
-            Next_archive_num               : 52
-            Last_archive_num_for_syscrashes: 52
+            Db_charset                     : 3
+            First_active_log_page          : 0
+            Current_append                 : '(101|8016)'
+            Checkpoint                     : '(101|7936)'
+            Next_archive_page_id           : 0
+            Active_physical_page_id        : 1
+            Next_archive_num               : 0
+            Last_archive_num_for_syscrashes: -1
             Last_deleted_archive_num       : -1
-            Backup_lsa_level0              : '(66636|5240)'
+            Backup_lsa_level0              : '(-1|-1)'
             Backup_lsa_level1              : '(-1|-1)'
             Backup_lsa_level2              : '(-1|-1)'
-            Log_prefix                     : 'demodb'
+            Log_prefix                     : 'mvccdb'
             Has_logging_been_skipped       : 0
             Perm_status                    : 'LOG_PSTAT_CLEAR'
-            Backup_info_level0             : 'time: Mon Dec 16 14:33:17 2013'
-            Backup_info_level1             : 'time: none'
-            Backup_info_level2             : 'time: none'
+            Backup_info_level0             : 'time: N/A'
+            Backup_info_level1             : 'time: N/A'
+            Backup_info_level2             : 'time: N/A'
             Ha_server_state                : 'idle'
-            Ha_file                        : 'unknown'
-            Eof_lsa                        : '(66637|14280)'
-            Smallest_lsa_at_last_checkpoint: '(66637|14280)'
+            Ha_file                        : 'UNKNOWN'
+            Eof_lsa                        : '(101|8016)'
+            Smallest_lsa_at_last_checkpoint: '(101|7936)'
+            Next_mvcc_id                   : 4
+            Mvcc_op_log_lsa                : '(-1|-1)'
+            Last_block_oldest_mvcc_id      : NULL
+            Last_block_newest_mvcc_id      : NULL
+
 
 SHOW ARCHIVE LOG HEADER
 -----------------------
@@ -1257,6 +1271,7 @@ Contiguous_free_area                INT             Contiguous free space on pag
 Free_space_offset                   INT             Byte offset from the beginning of the page to the first free byte area on the page
 Need_update_best_hint               INT             True if saving is need for recovery (undo)
 Is_saving                           INT             True if we should update best pages hint for this page.
+Flags                               INT             Flag value of the page
 =================================== =============== ======================================================================================================================================
 
 The following shows the examples of this syntax.
@@ -1279,6 +1294,7 @@ The following shows the examples of this syntax.
             Free_space_offset    : 460
             Need_update_best_hint: 1
             Is_saving            : 0
+            Flags                : 0
 
 SHOW SLOTTED PAGE SLOTS
 ------------------------

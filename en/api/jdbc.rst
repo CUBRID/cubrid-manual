@@ -869,6 +869,23 @@ You can get the **LOB** type data in the following ways.
 
     If a string longer than defined max length is inserted (**INSERT**) or updated (**UPDATE**), the string will be truncated.
 
+setBoolean
+----------
+
+prepareStatement.setBoolean(1, true) will set
+    * 1 for numeric types
+    * '1' for string types
+    
+prepareStatement.setBooelan(1, false) will set 
+    * 0 for numeric types
+    * '0' for string types
+    
+.. note:: Behavior of legacy versions
+    
+    prepareStatement.setBoolean(1, true) set
+        * as 2008 R4.1, 9.0, 1 of BIT(1) type
+        * as 2008 R4.3, 2008 R4.4, 9.1, 9.2, 9.3, -128 of SHORT type
+        
 .. _jdbc-error-codes:
 
 JDBC Error Codes and Error Messages

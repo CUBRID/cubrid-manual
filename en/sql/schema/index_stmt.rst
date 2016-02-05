@@ -31,6 +31,10 @@ For how to use indexes on the **SELECT** statement like Using SQL Hint, Descendi
     *   From CUBRID 9.0, the index name should not be omitted.
 
     *   Prefix index feature is deprecated, so it is not recommended anymore.
+    
+    *   The session and server timezone (:ref:`timezone-parameters`) should not be changed if database contains indexes or function index on columns of type TIMESTAMP, TIMESTAMP WITH LOCAL TIME ZONE or DATETIME WITH LOCAL TIME ZONE.
+    
+    *   The leap second support parameter (:ref:`timezone-parameters`) should not be changed if database contains indexes or function index on columns of type TIMESTAMP or TIMESTAMP WITH LOCAL TIME ZONE. 
 
 The following example shows how to create a descending index.
 

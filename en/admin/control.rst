@@ -637,17 +637,19 @@ When lock timeout occurs, queries of a waiter and a blocker are written on the e
  
 ::
  
-    06/13/13 20:56:18.650 - LOCK_TIMEOUT
+    02/02/16 20:56:18.650 - LOCK_TIMEOUT
     waiter:
       client: public@testhost|csql(21529)
-      lock:   NX_LOCK (oid=-532|540|16386, table=y, index=pk_y_a)
-      sql: update [y] [y] set [a]=400 where ([y].[a]= ?:0 ) using index [y].[pk_y_a](+)
+      lock:    X_LOCK (oid=0|650|3, table=t)
+      sql: update [t] [t] set [t].[a]= ?:0  where [t].[a]= ?:1
+      bind: 2
       bind: 1
  
     blocker:
       client: public@testhost|csql(21541)
-      lock:   NX_LOCK (oid=-532|540|16386, table=y, index=pk_y_a)
-      sql: update [y] [y] set [a]=100 where ([y].[a]= ?:0 ) using index [y].[pk_y_a](+)
+      lock:    X_LOCK (oid=0|650|3, table=t)
+      sql: update [t] [t] set [t].[a]= ?:0  where [t].[a]= ?:1
+      bind: 3
       bind: 1
       
 *   waiter: a waiting client to acquire locks.
@@ -670,56 +672,54 @@ When a deadlock occurs, lock information of that transaction is written into the
  
 ::
  
-    06/13/13 20:56:17.638 - DEADLOCK
+    02/02/16 20:56:17.638 - DEADLOCK
     client: public@testhost|csql(21541)
     hold:
-      lock:   NX_LOCK (oid=-532|540|16385, table=y, index=pk_y_a)
-      sql: update [y] [y] set [a]=100 where ([y].[a]= ?:0 ) using index [y].[pk_y_a](+)
+      lock:    X_LOCK (oid=0|650|5, table=t)
+      sql: update [t] [t] set [t].[a]= ?:0  where [t].[a]= ?:1 
+      bind: 3
       bind: 1
  
-      lock:   NX_LOCK (oid=-532|540|16386, table=y, index=pk_y_a)
-      sql: update [y] [y] set [a]=100 where ([y].[a]= ?:0 ) using index [y].[pk_y_a](+)
-      bind: 1
- 
-      lock:    X_LOCK (oid=0|540|1, table=y)
-      sql: update [y] [y] set [a]=100 where ([y].[a]= ?:0 ) using index [y].[pk_y_a](+)
+      lock:    X_LOCK (oid=0|650|3, table=t)
+      sql: update [t] [t] set [t].[a]= ?:0  where [t].[a]= ?:1 
+      bind: 3
       bind: 1
  
     wait:
-      lock:   NX_LOCK (oid=-532|540|16390, table=y, index=pk_y_a)
-      sql: update [y] [y] set [a]=300 where ([y].[a]= ?:0 ) using index [y].[pk_y_a](+)
+      lock:    X_LOCK (oid=0|650|4, table=t)
+      sql: update [t] [t] set [t].[a]= ?:0  where [t].[a]= ?:1 
       bind: 5
+      bind: 2
  
     client: public@testhost|csql(21529)
     hold:
-      lock:   NX_LOCK (oid=-532|540|16389, table=y, index=pk_y_a)
-      sql: update [y] [y] set [a]=200 where ([y].[a]= ?:0 ) using index [y].[pk_y_a](+)
-      bind: 5
+      lock:    X_LOCK (oid=0|650|6, table=t)
+      sql: update [t] [t] set [t].[a]= ?:0  where [t].[a]= ?:1 
+      bind: 4
+      bind: 2
  
-      lock:   NX_LOCK (oid=-532|540|16390, table=y, index=pk_y_a)
-      sql: update [y] [y] set [a]=200 where ([y].[a]= ?:0 ) using index [y].[pk_y_a](+)
-      bind: 5
- 
-      lock:    X_LOCK (oid=0|540|5, table=y)
-      sql: update [y] [y] set [a]=200 where ([y].[a]= ?:0 ) using index [y].[pk_y_a](+)
-      bind: 5
+      lock:    X_LOCK (oid=0|650|4, table=t)
+      sql: update [t] [t] set [t].[a]= ?:0  where [t].[a]= ?:1 
+      bind: 4
+      bind: 2
  
     wait:
-      lock:   NX_LOCK (oid=-532|540|16386, table=y, index=pk_y_a)
-      sql: update [y] [y] set [a]=400 where ([y].[a]= ?:0 ) using index [y].[pk_y_a](+)
+      lock:    X_LOCK (oid=0|650|3, table=t)
+      sql: update [t] [t] set [t].[a]= ?:0  where [t].[a]= ?:1 
+      bind: 6
       bind: 1
  
 *   client: <DB user>@<application client host name>|<process name>(<process ID>)
 
     *   hold: an object which is acquiring a lock
     
-        *   lock: lock type, table and index names
+        *   lock: lock type, table name
         *   sql: SQL which is acquiring locks
         *   bind: binding value
         
     *   wait: an object which is waiting a lock
     
-        *   lock: lock type, table and index names
+        *   lock: lock type, table name
         *   sql: SQL which is waiting a lock
         *   bind: binding value
  

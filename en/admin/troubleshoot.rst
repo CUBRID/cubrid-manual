@@ -134,24 +134,17 @@ Detecting a Deadlock
 
 If a deadlock occurs when **error_log_level** in cubrid.conf is NOTIFICATION, locks related information is written to the server error log.
 
-In the following error log file information, (1) indicates a table name which caused a deadlock, (2) indicates an index name
-
 ::
 
-    demodb_20111102_1811.err
+    demodb_20160202_1811.err
     
           ...
           
-         OID = -532| 520| 1
-    (1) Object type: Index key of class ( 0| 417| 7) = tbl.
-         BTID = 0| 123| 530
-    (2) Index Name : i_tbl_col1
-         Total mode of holders = NS_LOCK, Total mode of waiters = NULL_LOCK.
-         Num holders= 1, Num blocked-holders= 0, Num waiters= 0
-         LOCK HOLDERS:
-        Tran_index = 2, Granted_mode = NS_LOCK, Count = 1
-        ...
+    Your transaction (index 1, public@testhost|csql(21541)) timed out waiting on    X_LOCK lock on instance 0|650|3 of class t because of deadlock. You are waiting for user(s) public@testhost|csql(21529) to finish.
+    
+          ...
 
+          
 Detecting the change of HA status
 ================================= 
   

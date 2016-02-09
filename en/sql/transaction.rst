@@ -735,9 +735,9 @@ CUBRID determines the lock mode depending on the type of operation to be perform
 
         This lock is acquired during running DDL(**ALTER**/**CREATE**/**DROP**) and it protects that other transactions access the modified schema.
 
-    Some DDL operation like **ALTER**, **CREATE INDEX** does not acquire **SCH_M_LOCK** directly. For example, CUBRID operates type checking about filtering expression when you create a filtered index; during this term, the lock which is kept to the target table is **SCH_S_LOCK** like other type checking operations. The method has a strength to increase the concurrency by allowing other transaction's operation during DDL operation's compilation.
+    Some DDL operations like **ALTER**, **CREATE INDEX** do not acquire **SCH_M_LOCK** directly. For example, CUBRID operates type checking about filtering expression when you create a filtered index; during this term, the lock which is kept to the target table is **SCH_S_LOCK** like other type checking operations. The lock is then upgraded to **SIX_LOCK** (other transactions are prevented from modifying target table rows, but they can continue reading them), and finally **SCH_M_LOCK** is requested to change the table schema. The method has a strength to increase the concurrency by allowing other transaction's operation during DDL operation's compilation and execution.
     
-    However, it also has a weakness not to avoid a deadlock when DDL operations are operated at the same table at the same time. A deadlock case by **SCH_S_LOCK** is as follows.
+    However, it also has a weakness not to avoid a deadlock when DDL operations are operated at the same table at the same time. A deadlock case by loading indexes is as follows.
 
     +---------------------------------------------------------------+---------------------------------------------------------------+
     | T1                                                            | T2                                                            |
@@ -750,9 +750,11 @@ CUBRID determines the lock mode depending on the type of operation to be perform
     +---------------------------------------------------------------+---------------------------------------------------------------+
     |                                                               | SCH_S_LOCK during checking types of "j > 0" case."j > 0"      |
     +---------------------------------------------------------------+---------------------------------------------------------------+
-    | requesting SCH_M_LOCK but waiting T2's SCH_S_LOCK is released |                                                               |
+    | SIX_LOCK during index loading.                                |                                                               |
     +---------------------------------------------------------------+---------------------------------------------------------------+
-    |                                                               | requesting SCH_M_LOCK but waiting T1's SCH_S_LOCK is released |
+    |                                                               | requesting SIX_LOCK but waiting T1's SIX_LOCK is released     |
+    +---------------------------------------------------------------+---------------------------------------------------------------+
+    | requesting SCH_M_LOCK but waiting T2's SCH_S_LOCK is released |                                                               |
     +---------------------------------------------------------------+---------------------------------------------------------------+
 
 .. note:: This is a summarized description about locking.

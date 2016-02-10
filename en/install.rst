@@ -196,15 +196,15 @@ You can modify the environment such as service ports etc. edit the parameters of
 
 **Installing CUBRID Interfaces**
 
-You can see the latest information on interface modules such as CCI, JDBC, PHP, ODBC, OLE DB, ADO.NET, Ruby, Python and Node.js and install them by downloading files from `http://www.cubrid.org/wiki_apis <http://www.cubrid.org/wiki_apis>`_ .
+You can see the latest information on interface modules such as CCI, JDBC, PHP, ODBC, OLE DB, ADO.NET, Ruby, Python and Node.js and install them by downloading files from http://www.cubrid.org/wiki_apis.
 
 A simple description on each driver can be found on :doc:`/api/index`.
 
 **Installing CUBRID Tools**
 
-You can see the latest information on tools such as CUBRID Manager and CUBRID Query Browser and install them by downloading files from `http://www.cubrid.org/wiki_tools <http://www.cubrid.org/wiki_tools>`_ .
+You can see the latest information on tools such as CUBRID Manager and CUBRID Query Browser and install them by downloading files from http://www.cubrid.org/wiki_tools.
 
-CUBRID Web Manager is also installed when the CUBRID is installed. For more details, see `CUBRID Web Manager Manual <http://www.cubrid.org/wiki_tools/entry/cubrid-web-manager-manual>`_ .
+CUBRID Web Manager is also installed when the CUBRID is installed. For more details, see `CUBRID Web Manager Manual <http://www.cubrid.org/wiki_tools/entry/cubrid-web-manager-manual>`_.
 
 .. _Installing-and-Running-on-Windows:
 
@@ -264,7 +264,7 @@ You can change configuration such as service ports to meet the user environment 
 
 *   **cm.conf**
     
-    A configuration file for CUBRID Manager. The port that the Manager server process uses is called  **cm_port** and its default value is **8001** . For details, see `CUBRID Manager Manual <http://www.cubrid.org/wiki_tools/entry/cubrid-manager-manual>`_ .
+    A configuration file for CUBRID Manager. The port that the Manager server process uses is called  **cm_port** and its default value is **8001**. For details, see `CUBRID Manager Manual <http://www.cubrid.org/wiki_tools/entry/cubrid-manager-manual>`_. 
 
     To start CUBRID Web Manager, firstly you should set the value of **support_web_manager** parameter as "YES", then restart CUBRID Manager Server. To use CUBRID Web Manager, access "https://localhost:8001".
 
@@ -283,17 +283,17 @@ You can change configuration such as service ports to meet the user environment 
     For example, if the value of **APPL_SERVER_PORT** is 35000 and the maximum number of CASes by **MAX_NUM_APPL_SERVER** is 50, then listening ports on CASes are 35000, 35001, ..., 35049.
     For more details, see :ref:`parameter-by-broker`. 
 
-    The **CCI_DEFAULT_AUTOCOMMIT** broker parameter is supported since 2008 R4.0. The default value in the version is **OFF** and it is later changed to **ON** .  Therefore, users who have upgraded from 2008 R4.0 to 2008 R4.1 or later versions should change this value to **OFF** or configure the auto-commit mode to **OFF** .
+    The **CCI_DEFAULT_AUTOCOMMIT** broker parameter is supported since 2008 R4.0. The default value in the version is **OFF** and it is later changed to **ON**.  Therefore, users who have upgraded from 2008 R4.0 to 2008 R4.1 or later versions should change this value to **OFF** or configure the auto-commit mode to **OFF**.
 
 **Installing CUBRID Interfaces**
 
-You can see the latest information on interface modules such as JDBC, PHP, ODBC, and OLE DB and install them by downloading files from `http://www.cubrid.org/wiki_apis`.
+You can see the latest information on interface modules such as JDBC, PHP, ODBC, and OLE DB and install them by downloading files from `<http://www.cubrid.org/wiki_apis>`_.
 
 A simple description on each driver can be found on :doc:`/api/index`.
 
 **Installing CUBRID Tools**
 
-You can see the latest information on tools such as CUBRID Manager and CUBRID Query Browser and install them by downloading files from `http://www.cubrid.org/wiki_tools`.
+You can see the latest information on tools such as CUBRID Manager and CUBRID Query Browser and install them by downloading files from `<http://www.cubrid.org/wiki_tools>`_.
 
 CUBRID Web Manager is installed when CUBRID is installed. For more details, see `CUBRID Web Manager Manual <http://www.cubrid.org/wiki_tools/entry/cubrid-web-manager-manual>`_ .
 

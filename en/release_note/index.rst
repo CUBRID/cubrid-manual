@@ -5,7 +5,7 @@ Release Notes
 .. toctree::
     :maxdepth: 2
     
-    r100.rst
+    r10_0.rst
 
 General Information
 ===================
@@ -16,7 +16,7 @@ Revision history
 +----------------+--------------------------------------+
 | Revision Date  | Description                          |
 +================+======================================+
-| X. 2014        | CUBRID 10.0 Release (10.0.0.XXXX)    |
+| Feb. 2016      | CUBRID 10.0 Release (10.0.0.1376)    |
 +----------------+--------------------------------------+
 
 Bug Reports and User Feedback

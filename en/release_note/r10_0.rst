@@ -39,8 +39,11 @@ Driver Compatibility
 --------------------
 
 *   The JDBC and CCI driver of CUBRID 10.0 are compatible with the DB server of CUBRID 9.1, 9.2, 2008 R4.1, R4.3 or R4.4.
+*   To upgrade drivers are highly recommended.
 
-Not only the above issues, but also many issues for stability are fixed. For more details on changes, see the following. Users of previous versions should check the :ref:`changed-behaviors100` and :ref:`new-cautions100` sections.
+We strongly recommend to also upgrade your drivers to use CUBRID 10.0. Some new features, especially for TIMEZONE data types are only supported with 10.0 drivers. 
+
+For more details on changes, see the following. Users of previous versions should check the :ref:`changed-behaviors100` and :ref:`new-cautions100` sections.
 
 
 

@@ -569,7 +569,9 @@ KEY 또는 INDEX
 칼럼 옵션
 ---------
 
-특정 칼럼에 **UNIQUE** 또는 **INDEX** 를 정의할 때, 해당 칼럼 이름 뒤에 **ASC** 또는 **DESC** 옵션을 명시할 수 있다. 이 키워드는 오름차순 또는 내림차순 인덱스 값 저장을 위해 명시된다. ::
+특정 칼럼에 **UNIQUE** 또는 **INDEX** 를 정의할 때, 해당 칼럼 이름 뒤에 **ASC** 또는 **DESC** 옵션을 명시할 수 있다. 이 키워드는 오름차순 또는 내림차순 인덱스 값 저장을 위해 명시된다. 
+
+.. code-block:: sql
 
     column_name [ASC | DESC]
 
@@ -620,7 +622,7 @@ OID(Object Identifier)는 볼륨 번호, 페이지 번호, 슬롯 번호와 같�
     INSERT INTO reuse_tbl VALUES (3);
      
     -- an error occurs when column type is a OID reusable table itself
-    CREATE TABLE tbl_1 ( a reuse_tbl);
+    CREATE TABLE tbl_1 (a reuse_tbl);
 
 ::
     
@@ -659,7 +661,8 @@ OID(Object Identifier)는 볼륨 번호, 페이지 번호, 슬롯 번호와 같�
 
 테이블의 커멘트는 다음 구문에서 확인할 수 있다.
 
-::
+
+.. code-block:: sql
 
     SHOW CREATE TABLE table_name;
     SELECT class_name, comment from db_class;
@@ -667,7 +670,8 @@ OID(Object Identifier)는 볼륨 번호, 페이지 번호, 슬롯 번호와 같�
 
 또는 CSQL 인터프리터에서 테이블의 스키마를 출력하는 ;sc 명령으로 테이블의 커멘트를 확인할 수 있다.
 
-::
+.. code-block:: sql
+
     $ csql -u dba demodb
     
     csql> ;sc tbl

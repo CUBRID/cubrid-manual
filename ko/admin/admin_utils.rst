@@ -34,6 +34,8 @@ cubrid 유틸리티의 사용법(구문)은 다음과 같다. ::
         synccolldb [option] <database-name>  --- DB 콜레이션을 시스템 콜레이션에 맞게 변경하는 도구
         genlocale [option] <database-name>  --- 사용하고자 하는 로캘 정보를 컴파일하는 도구
         dumplocale [option] <database-name>   --- 컴파일된 바이너리 로캘 정보를 사람이 읽을 수 있는 텍스트로 출력하는 도구
+        gen_tz [option] [<database-name>]  --- 공유 라이브러리로 컴파일된 타임존 데이타를 포함한 C 소스 파일을 생성한다.
+        dump_tz [option]  --- 타임존 관련 정보를 표시한다.
 
 cubrid 유틸리티 로깅
 --------------------
@@ -979,26 +981,36 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
         $ cubrid statdump -i 5 -c testdb
          
 
-                Fri November 21 15:58:06 KST 2014
+        Thu January 07 16:46:05 GTB Standard Time 2016 
 
          *** SERVER EXECUTION STATISTICS ***
         Num_file_creates              =          0
         Num_file_removes              =          0
         Num_file_ioreads              =          0
-        Num_file_iowrites             =       1386
-        Num_file_iosynches            =       1384
+        Num_file_iowrites             =          2
+        Num_file_iosynches            =          2
         Num_file_page_allocs          =          0
         Num_file_page_deallocs        =          0
-        Num_data_page_fetches         =        119
-        Num_data_page_dirties         =         70
+        Num_data_page_fetches         =       1742 
+        Num_data_page_dirties         =         60
         Num_data_page_ioreads         =          0
-        Num_data_page_iowrites        =          5
+        Num_data_page_iowrites        =          0
         Num_data_page_victims         =          0
         Num_data_page_iowrites_for_replacement =          0
-        Num_log_page_fetches          =         13
+        Num_data_page_hash_anchor_waits =          0
+        Time_data_page_hash_anchor_wait =          0
+        Num_data_page_fixed           =          0
+        Num_data_page_dirty           =         15
+        Num_data_page_lru1            =          0
+        Num_data_page_lru2            =          0
+        Num_data_page_ain             =        128
+        Num_data_page_avoid_dealloc   =          0
+        Num_data_page_avoid_victim    =          0
+        Num_data_page_victim_cand     =          0
+        Num_log_page_fetches          =          0
         Num_log_page_fetch_ioreads    =          0
-        Num_log_page_ioreads          =          0
-        Num_log_page_iowrites         =       1374
+        Num_log_page_ioreads          =          2
+        Num_log_page_iowrites         =         45
         Num_log_append_records        =       2798
         Num_log_archives              =          0
         Num_log_start_checkpoints     =          3
@@ -1006,131 +1018,257 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
         Num_log_wals                  =          3
         Num_log_page_iowrites_for_replacement =          0
         Num_page_locks_acquired       =          0
-        Num_object_locks_acquired     =          6
+        Num_object_locks_acquired     =         65
         Num_page_locks_converted      =          0
-        Num_object_locks_converted    =          1
+        Num_object_locks_converted    =         10 
         Num_page_locks_re-requested   =          0
-        Num_object_locks_re-requested =         40
+        Num_object_locks_re-requested =         46
         Num_page_locks_waits          =          0
         Num_object_locks_waits        =          0
-        Num_tran_commits              =          0
-        Num_tran_rollbacks            =          0
-        Num_tran_savepoints           =          0
-        Num_tran_start_topops         =         21
-        Num_tran_end_topops           =         21
-        Num_tran_interrupts           =          1
-        Num_btree_inserts             =          7
-        Num_btree_deletes             =          2
-        Num_btree_updates             =          3
+        Num_object_locks_time_waited_usec =          0
+        Num_tran_commits              =          3
+        Num_tran_rollbacks            =          1
+        Num_tran_savepoints           =          2
+        Num_tran_start_topops         =          6
+        Num_tran_end_topops           =          6
+        Num_tran_interrupts           =          0
+        Num_btree_inserts             =          3
+        Num_btree_deletes             =          0
+        Num_btree_updates             =          0
         Num_btree_covered             =          0
-        Num_btree_noncovered          =          3
+        Num_btree_noncovered          =          0
         Num_btree_resumes             =          0
         Num_btree_multirange_optimization =          0
         Num_btree_splits              =          0
         Num_btree_merges              =          0
         Num_btree_get_stats           =          0
         Num_heap_stats_sync_bestspace =          0
-        Num_query_selects             =          6
-        Num_query_inserts             =          3
+        Num_query_selects             =          2
+        Num_query_inserts             =          0
         Num_query_deletes             =          0
-        Num_query_updates             =          4
-        Num_query_sscans              =          0
-        Num_query_iscans              =         12
-        Num_query_lscans              =          6
+        Num_query_updates             =          2
+        Num_query_sscans              =          2
+        Num_query_iscans              =          0
+        Num_query_lscans              =          1
         Num_query_setscans            =          0
         Num_query_methscans           =          0
-        Num_query_nljoins             =          0
+        Num_query_nljoins             =          1
         Num_query_mjoins              =          0
         Num_query_objfetches          =          0
         Num_query_holdable_cursors    =          0
         Num_sort_io_pages             =          0
         Num_sort_data_pages           =          0
-        Num_network_requests          =       1447
-        Num_adaptive_flush_pages      =          5
-        Num_adaptive_flush_log_pages  =       1381
-        Num_adaptive_flush_max_pages  =     245250
-        Num_prior_lsa_list_size       =          3
+        Num_network_requests          =         79 
+        Num_adaptive_flush_pages      =          0
+        Num_adaptive_flush_log_pages  =          2
+        Num_adaptive_flush_max_pages  =     116610 
+        Num_prior_lsa_list_size       =          5
         Num_prior_lsa_list_maxed      =          0
-        Num_prior_lsa_list_removed    =       1375
-        Num_heap_stats_bestspace_entries =          0
+        Num_prior_lsa_list_removed    =          2 
+        Num_heap_stats_bestspace_entries =       5
         Num_heap_stats_bestspace_maxed =          0
         Time_ha_replication_delay     =          0
-        Num_plan_cache_add            =          0
-        Num_plan_cache_lookup         =         12
-        Num_plan_cache_hit            =         12
-        Num_plan_cache_miss           =          0
+        Num_plan_cache_add            =          1
+        Num_plan_cache_lookup         =          2
+        Num_plan_cache_hit            =          0
+        Num_plan_cache_miss           =          2
         Num_plan_cache_full           =          0
         Num_plan_cache_delete         =          0
         Num_plan_cache_invalid_xasl_id =          0
-        Num_plan_cache_query_string_hash_entries =          0
-        Num_plan_cache_xasl_id_hash_entries =          0
-        Num_plan_cache_class_oid_hash_entries =          0
+        Num_plan_cache_query_string_hash_entries =          5
+        Num_plan_cache_xasl_id_hash_entries =          5
+        Num_plan_cache_class_oid_hash_entries =          10
         Num_vacuum_log_pages_vacuumed =          0
         Num_vacuum_log_pages_to_vacuum =          0
+        Num_vacuum_prefetch_requests_log_pages =          0
+        Num_vacuum_prefetch_hits_log_pages =          0
+        Num_heap_home_inserts         =          0
+        Num_heap_big_inserts          =          0
+        Num_heap_assign_inserts       =          4
+        Num_heap_home_deletes         =          0
+        Num_heap_home_mvcc_deletes    =          0
+        Num_heap_home_to_rel_deletes  =          0
+        Num_heap_home_to_big_deletes  =          0
+        Num_heap_rel_deletes          =          0
+        Num_heap_rel_mvcc_deletes     =          0
+        Num_heap_rel_to_home_deletes  =          0
+        Num_heap_rel_to_big_deletes   =          0
+        Num_heap_rel_to_rel_deletes   =          0
+        Num_heap_big_deletes          =          0
+        Num_heap_big_mvcc_deletes     =          0
+        Num_heap_new_ver_inserts      =          0
+        Num_heap_home_updates         =          6
+        Num_heap_home_to_rel_updates  =          0
+        Num_heap_home_to_big_updates  =          0
+        Num_heap_rel_updates          =          0
+        Num_heap_rel_to_home_updates  =          0
+        Num_heap_rel_to_rel_updates   =          0
+        Num_heap_rel_to_big_updates   =          0
+        Num_heap_big_updates          =          0
+        Num_heap_home_vacuums         =          0
+        Num_heap_big_vacuums          =          0
+        Num_heap_rel_vacuums          =          0
+        Num_heap_insid_vacuums        =          0
+        Num_heap_remove_vacuums       =          0
+        Num_heap_next_ver_vacuums     =          0
+        Time_heap_insert_prepare      =       1962
+        Time_heap_insert_execute      =      10007
+        Time_heap_insert_log          =         44
+        Time_heap_delete_prepare      =          0
+        Time_heap_delete_execute      =          0
+        Time_heap_delete_log          =          0
+        Time_heap_update_prepare      =        497
+        Time_heap_update_execute      =        972
+        Time_heap_update_log          =        267
+        Time_heap_vacuum_prepare      =          0
+        Time_heap_vacuum_execute      =          0
+        Time_heap_vacuum_log          =          0
+        Num_bt_find_unique            =          2
+        Num_btrange_search            =          0
+        Num_bt_insert_obj             =          3
+        Num_bt_delete_obj             =          0
+        Num_bt_mvcc_delete            =          0
+        Num_bt_mark_delete            =          0
+        Num_bt_update_sk_cnt          =          0
+        Num_bt_undo_insert            =          0
+        Num_bt_undo_delete            =          0
+        Num_bt_undo_mvcc_delete       =          0
+        Num_bt_undo_update_sk         =          0
+        Num_bt_vacuum                 =          0
+        Num_bt_vacuum_insid           =          0
+        Num_bt_vacuum_update_sk       =          0
+        Num_bt_fix_ovf_oids_cnt       =          0
+        Num_bt_unique_rlocks_cnt      =          0
+        Num_bt_unique_wlocks_cnt      =          0
+        Time_bt_find_unique           =         17
+        Time_bt_range_search          =          0
+        Time_bt_insert                =       1845
+        Time_bt_delete                =          0
+        Time_bt_mvcc_delete           =          0
+        Time_bt_mark_delete           =          0
+        Time_bt_update_sk             =          0
+        Time_bt_undo_insert           =          0
+        Time_bt_undo_delete           =          0
+        Time_bt_undo_mvcc_delete      =          0
+        Time_bt_undo_update_sk        =          0
+        Time_bt_vacuum                =          0
+        Time_bt_vacuum_insid          =          0
+        Time_bt_vacuum_update_sk      =          0
+        Time_bt_traverse              =       1616
+        Time_bt_find_unique_traverse  =        716
+        Time_bt_range_search_traverse =          0
+        Time_bt_insert_traverse       =        900
+        Time_bt_delete_traverse       =          0
+        Time_bt_mvcc_delete_traverse  =          0
+        Time_bt_mark_delete_traverse  =          0
+        Time_bt_update_sk_traverse    =          0
+        Time_bt_undo_insert_traverse  =          0
+        Time_bt_undo_delete_traverse  =          0
+        Time_bt_undo_mvcc_delete_traverse =          0
+        Time_bt_undo_update_sk_traverse =          0
+        Time_bt_vacuum_traverse       =          0
+        Time_bt_vacuum_insid_traverse =          0
+        Time_bt_vacuum_update_sk_traverse =          0
+        Time_bt_fix_ovf_oids          =          0
+        Time_bt_unique_rlocks         =          0
+        Time_bt_unique_wlocks         =          0
+        Time_vacuum_master            =     152858
+        Time_vacuum_worker_process_log =          0
+        Time_vacuum_worker_execute    =          0
 
          *** OTHER STATISTICS ***
         Data_page_buffer_hit_ratio    =     100.00
-        Log_page_buffer_hit_ratio     =     100.00
+        Log_page_buffer_hit_ratio     =       0.00
         Vacuum_data_page_buffer_hit_ratio =       0.00
         Vacuum_page_efficiency_ratio  =       0.00
         Vacuum_page_fetch_ratio       =       0.00
         Data_page_fix_lock_acquire_time_msec =       0.00
-        Data_page_fix_hold_acquire_time_msec =       0.08
-        Data_page_fix_acquire_time_msec =       0.42
-        Data_page_allocate_time_ratio =      80.95
+        Data_page_fix_hold_acquire_time_msec =       0.00
+        Data_page_fix_acquire_time_msec =      11.80
+        Data_page_allocate_time_ratio =     100.00
+        Data_page_total_promote_success =       3.00
+        Data_page_total_promote_fail  =       0.00
+        Data_page_total_promote_time_msec =       0.00
         Num_data_page_fix_ext:
-        SYSTEM,PAGE_VOLHEADER,OLD_PAGE_IN_PB    ,WRITE,UNCOND_WAIT =          3
-        WORKER,PAGE_FTAB     ,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =          8
-        WORKER,PAGE_HEAP     ,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =         24
-        WORKER,PAGE_HEAP     ,OLD_PAGE_IN_PB    ,WRITE,COND        =          6
-        WORKER,PAGE_HEAP     ,OLD_PAGE_IN_PB    ,WRITE,UNCOND_WAIT =         16
-        WORKER,PAGE_VOLHEADER,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =          7
-        WORKER,PAGE_VOLBITMAP,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =          7
-        WORKER,PAGE_XASL     ,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =         12
-        WORKER,PAGE_CATALOG  ,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =          6
-        WORKER,PAGE_BTREE    ,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =         14
-        WORKER,PAGE_BTREE    ,OLD_PAGE_IN_PB    ,WRITE,UNCOND_WAIT =         16
+        WORKER,PAGE_FTAB     ,OLD_PAGE_IN_PB    ,READ ,UNCOND      =         17
+        WORKER,PAGE_FTAB     ,OLD_PAGE_IN_PB    ,WRITE,UNCOND      =          2
+        WORKER,PAGE_HEAP     ,OLD_PAGE_IN_PB    ,READ ,COND        =        194
+        WORKER,PAGE_HEAP     ,OLD_PAGE_IN_PB    ,READ ,UNCOND      =          9
+        WORKER,PAGE_HEAP     ,OLD_PAGE_IN_PB    ,WRITE,COND        =         18
+        WORKER,PAGE_HEAP     ,OLD_PAGE_IN_PB    ,WRITE,UNCOND      =          2
+        WORKER,PAGE_VOLHEADER,OLD_PAGE_IN_PB    ,READ ,COND        =          8
+        WORKER,PAGE_VOLHEADER,OLD_PAGE_IN_PB    ,READ ,UNCOND      =        914
+        WORKER,PAGE_VOLBITMAP,OLD_PAGE_IN_PB    ,READ ,COND        =          4
+        WORKER,PAGE_VOLBITMAP,OLD_PAGE_IN_PB    ,READ ,UNCOND      =        457
+        WORKER,PAGE_XASL     ,OLD_PAGE_IN_PB    ,READ ,UNCOND      =          2
+        WORKER,PAGE_XASL     ,OLD_PAGE_IN_PB    ,WRITE,UNCOND      =          1
+        WORKER,PAGE_CATALOG  ,OLD_PAGE_IN_PB    ,READ ,UNCOND      =         75
+        WORKER,PAGE_CATALOG  ,OLD_PAGE_IN_PB    ,WRITE,UNCOND      =         10
+        WORKER,PAGE_BTREE_R  ,OLD_PAGE_IN_PB    ,READ ,UNCOND      =         29
+        Num_data_page_promote_ext:
+        WORKER,PAGE_BTREE_R  ,SHARED_READER,READ ,SUCCESS =          3
+        Num_data_page_promote_time_ext:
+        WORKER,PAGE_BTREE_R  ,SHARED_READER,READ ,SUCCESS =          3
         Num_data_page_unfix_ext:
-        SYSTEM,PAGE_VOLHEADER,BUF_NON_DIRTY,HOLDER_DIRTY    ,WRITE =          3
-        WORKER,PAGE_FTAB     ,BUF_NON_DIRTY,HOLDER_NON_DIRTY,READ  =          8
-        WORKER,PAGE_HEAP     ,BUF_NON_DIRTY,HOLDER_NON_DIRTY,READ  =         15
-        WORKER,PAGE_HEAP     ,BUF_NON_DIRTY,HOLDER_DIRTY    ,WRITE =          2
-        WORKER,PAGE_HEAP     ,BUF_DIRTY    ,HOLDER_NON_DIRTY,READ  =          9
-        WORKER,PAGE_HEAP     ,BUF_DIRTY    ,HOLDER_DIRTY    ,WRITE =         20
-        WORKER,PAGE_VOLHEADER,BUF_DIRTY    ,HOLDER_NON_DIRTY,READ  =          7
-        WORKER,PAGE_VOLBITMAP,BUF_NON_DIRTY,HOLDER_NON_DIRTY,READ  =          7
-        WORKER,PAGE_XASL     ,BUF_NON_DIRTY,HOLDER_NON_DIRTY,READ  =         12
-        WORKER,PAGE_CATALOG  ,BUF_NON_DIRTY,HOLDER_NON_DIRTY,READ  =          6
-        WORKER,PAGE_BTREE    ,BUF_NON_DIRTY,HOLDER_NON_DIRTY,WRITE =          2
-        WORKER,PAGE_BTREE    ,BUF_NON_DIRTY,HOLDER_DIRTY    ,WRITE =          1
-        WORKER,PAGE_BTREE    ,BUF_DIRTY    ,HOLDER_NON_DIRTY,READ  =         14
-        WORKER,PAGE_BTREE    ,BUF_DIRTY    ,HOLDER_NON_DIRTY,WRITE =          3
-        WORKER,PAGE_BTREE    ,BUF_DIRTY    ,HOLDER_DIRTY    ,WRITE =         10
+        WORKER,PAGE_FTAB     ,BUF_NON_DIRTY,HOLDER_NON_DIRTY,READ  =         16
+        WORKER,PAGE_FTAB     ,BUF_NON_DIRTY,HOLDER_DIRTY    ,WRITE =          2
+        WORKER,PAGE_FTAB     ,BUF_DIRTY    ,HOLDER_NON_DIRTY,READ  =          1
+        WORKER,PAGE_HEAP     ,BUF_NON_DIRTY,HOLDER_NON_DIRTY,READ  =        185
+        WORKER,PAGE_HEAP     ,BUF_NON_DIRTY,HOLDER_DIRTY    ,WRITE =          9
+        WORKER,PAGE_HEAP     ,BUF_NON_DIRTY,HOLDER_DIRTY    ,MIXED =          2
+        WORKER,PAGE_HEAP     ,BUF_DIRTY    ,HOLDER_NON_DIRTY,READ  =         14
+        WORKER,PAGE_HEAP     ,BUF_DIRTY    ,HOLDER_NON_DIRTY,WRITE =          4
+        WORKER,PAGE_HEAP     ,BUF_DIRTY    ,HOLDER_DIRTY    ,WRITE =          3
+        WORKER,PAGE_HEAP     ,BUF_DIRTY    ,HOLDER_DIRTY    ,MIXED =          6
+        WORKER,PAGE_VOLHEADER,BUF_NON_DIRTY,HOLDER_NON_DIRTY,READ  =         14
+        WORKER,PAGE_VOLHEADER,BUF_DIRTY    ,HOLDER_NON_DIRTY,READ  =        908
+        WORKER,PAGE_VOLBITMAP,BUF_NON_DIRTY,HOLDER_NON_DIRTY,READ  =        461
+        WORKER,PAGE_XASL     ,BUF_NON_DIRTY,HOLDER_DIRTY    ,WRITE =          1
+        WORKER,PAGE_XASL     ,BUF_DIRTY    ,HOLDER_NON_DIRTY,READ  =          2
+        WORKER,PAGE_CATALOG  ,BUF_NON_DIRTY,HOLDER_NON_DIRTY,READ  =         47
+        WORKER,PAGE_CATALOG  ,BUF_NON_DIRTY,HOLDER_DIRTY    ,WRITE =          1
+        WORKER,PAGE_CATALOG  ,BUF_DIRTY    ,HOLDER_NON_DIRTY,READ  =         28
+        WORKER,PAGE_CATALOG  ,BUF_DIRTY    ,HOLDER_NON_DIRTY,WRITE =          1
+        WORKER,PAGE_CATALOG  ,BUF_DIRTY    ,HOLDER_DIRTY    ,WRITE =          8
+        WORKER,PAGE_BTREE_R  ,BUF_NON_DIRTY,HOLDER_NON_DIRTY,READ  =         18
+        WORKER,PAGE_BTREE_R  ,BUF_NON_DIRTY,HOLDER_DIRTY    ,MIXED =          3
+        WORKER,PAGE_BTREE_R  ,BUF_DIRTY    ,HOLDER_NON_DIRTY,READ  =          8
         Time_data_page_lock_acquire_time:
         Time_data_page_hold_acquire_time:
-        SYSTEM,PAGE_VOLHEADER,OLD_PAGE_IN_PB    ,WRITE =                4
-        WORKER,PAGE_FTAB     ,OLD_PAGE_IN_PB    ,READ  =                4
-        WORKER,PAGE_HEAP     ,OLD_PAGE_IN_PB    ,READ  =               18
-        WORKER,PAGE_HEAP     ,OLD_PAGE_IN_PB    ,WRITE =               14
-        WORKER,PAGE_VOLHEADER,OLD_PAGE_IN_PB    ,READ  =                6
-        WORKER,PAGE_VOLBITMAP,OLD_PAGE_IN_PB    ,READ  =                3
-        WORKER,PAGE_XASL     ,OLD_PAGE_IN_PB    ,READ  =               12
-        WORKER,PAGE_CATALOG  ,OLD_PAGE_IN_PB    ,READ  =                9
-        WORKER,PAGE_BTREE    ,OLD_PAGE_IN_PB    ,READ  =                8
-        WORKER,PAGE_BTREE    ,OLD_PAGE_IN_PB    ,WRITE =                9
-        Time_data_page_fix_acquire_time:
-        SYSTEM,PAGE_VOLHEADER,OLD_PAGE_IN_PB    ,WRITE,UNCOND_WAIT =               26
-        WORKER,PAGE_FTAB     ,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =               25
-        WORKER,PAGE_HEAP     ,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =               72
-        WORKER,PAGE_HEAP     ,OLD_PAGE_IN_PB    ,WRITE,COND        =               13
-        WORKER,PAGE_HEAP     ,OLD_PAGE_IN_PB    ,WRITE,UNCOND_WAIT =               44
-        WORKER,PAGE_VOLHEADER,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =               22
-        WORKER,PAGE_VOLBITMAP,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =               16
-        WORKER,PAGE_XASL     ,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =               85
-        WORKER,PAGE_CATALOG  ,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =               48
-        WORKER,PAGE_BTREE    ,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =               40
-        WORKER,PAGE_BTREE    ,OLD_PAGE_IN_PB    ,WRITE,UNCOND_WAIT =               37
-
+	Time_data_page_fix_acquire_time:
+        WORKER,PAGE_FTAB     ,OLD_PAGE_IN_PB    ,READ ,UNCOND      =               65
+        WORKER,PAGE_FTAB     ,OLD_PAGE_IN_PB    ,WRITE,UNCOND      =               12
+        WORKER,PAGE_HEAP     ,OLD_PAGE_IN_PB    ,READ ,COND        =              617
+        WORKER,PAGE_HEAP     ,OLD_PAGE_IN_PB    ,READ ,UNCOND      =               42
+        WORKER,PAGE_HEAP     ,OLD_PAGE_IN_PB    ,WRITE,COND        =               81
+        WORKER,PAGE_HEAP     ,OLD_PAGE_IN_PB    ,WRITE,UNCOND      =                9
+        WORKER,PAGE_VOLHEADER,OLD_PAGE_IN_PB    ,READ ,COND        =               36
+        WORKER,PAGE_VOLHEADER,OLD_PAGE_IN_PB    ,READ ,UNCOND      =             3277
+        WORKER,PAGE_VOLBITMAP,OLD_PAGE_IN_PB    ,READ ,COND        =               18
+        WORKER,PAGE_VOLBITMAP,OLD_PAGE_IN_PB    ,READ ,UNCOND      =             1533
+        WORKER,PAGE_XASL     ,OLD_PAGE_IN_PB    ,READ ,UNCOND      =                5
+        WORKER,PAGE_XASL     ,OLD_PAGE_IN_PB    ,WRITE,UNCOND      =             5644
+        WORKER,PAGE_CATALOG  ,OLD_PAGE_IN_PB    ,READ ,UNCOND      =              260
+        WORKER,PAGE_CATALOG  ,OLD_PAGE_IN_PB    ,WRITE,UNCOND      =               43
+        WORKER,PAGE_BTREE_R  ,OLD_PAGE_IN_PB    ,READ ,UNCOND      =              164
+        Num_mvcc_snapshot_ext:
+        DELETE  ,INS_VACUUMED      ,VISIBLE   =                7
+        DIRTY   ,INS_VACUUMED      ,VISIBLE   =                3
+        DIRTY   ,INS_CURR          ,VISIBLE   =                2
+        SNAPSHOT,INS_VACUUMED      ,VISIBLE   =               87
+        SNAPSHOT,DELETED_COMMITED  ,INVISIBLE =                1
+        Time_obj_lock_acquire_time:
+        Time_get_snapshot_acquire_time:
+        WORKER =               14
+        Count_get_snapshot_retry:
+        WORKER =               11
+        Time_tran_complete_time:
+        WORKER =               19
+        Time_get_oldest_mvcc_acquire_time:
+        SYSTEM =           112110
+        Count_get_oldest_mvcc_retry:
+        WORKER =                1
+       
     다음은 위의 데이터베이스 서버 실행 통계 정보에 대한 설명이다.
 
     +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
@@ -1159,6 +1297,26 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
     |                  |                                          | (내려 쓰기되는 페이지의 또는 희생자(victim)의 개수가 아님)                             |
     |                  +------------------------------------------+----------------------------------------------------------------------------------------+
     |                  | Num_data_page_iowrites_for_replacement   | 후보로 선정되어 디스크로 쓰여진 데이터 페이지 수                                       |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_data_page_hash_anchor_waits          | The number of instances any hash anchor had to wait for mutex acquisition              |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_data_page_hash_anchor_wait          | The total time in microseconds any hash anchor had to wait for mutex acquisition       |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_data_page_fixed                      | 데이타 버퍼의 고정 페이지 수 (snapshot counter)                                        |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_data_page_dirty                      | 데이타 버퍼의 dirty page 수  (snapshot counter)                                        |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_data_page_lru1                       | 데이타 버퍼의 LRU1 수     (snapshot counter)                                           |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_data_page_lru2                       | 데이타 버퍼의 LRU2 수     (snapshot counter)                                           |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_data_page_ain                        | 데이타 버퍼의 AIN 존 수   (snapshot counter)                                           |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_data_page_avoid_dealloc              | 데이타 버퍼의 avoid_dealloc_cnt 가 0보다 큰 페이지 수 (snapshot counter)               |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_data_page_avoid_victim               | 데이타 버퍼의 avoid_victim 플래그 세트를 가지고 있는 페이지 수 (snapshot counter)      |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_data_page_victim_cand                | 데이타 버퍼의 victim 후보 페이지 수 (snapshot counter)                                 |
     |                  +------------------------------------------+----------------------------------------------------------------------------------------+
     |                  | Num_adaptive_flush_pages                 | 데이터 버퍼로부터 디스크로 내려 쓰기(flush)한 데이터 페이지 수                         |
     |                  +------------------------------------------+----------------------------------------------------------------------------------------+
@@ -1214,6 +1372,8 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
     |                  | Num_page_locks_waits                     | 잠금을 대기하는 페이지 개수                                                            |
     |                  +------------------------------------------+----------------------------------------------------------------------------------------+
     |                  | Num_object_locks_waits                   | 잠금을 대기하는 오브젝트 개수                                                          |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_object_locks_time_waited_usec        | The time in microseconds spent on waiting for all object locks                         |    
     +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
     | 트랜잭션         | Num_tran_commits                         | 커밋한 횟수                                                                            |
     | 관련             +------------------------------------------+----------------------------------------------------------------------------------------+
@@ -1245,6 +1405,104 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
     |                  | Num_btree_splits                         | B-tree 노드 분할 연산 회수                                                             |
     |                  +------------------------------------------+----------------------------------------------------------------------------------------+
     |                  | Num_btree_merges                         | B-tree 노드 합병 연산 회수                                                             |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_bt_find_unique                       | B-tree 노드 'find-unique' 연산 횟수                                                    |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_btrange_search                       | B-tree 노드 'range-search' 연산 횟수                                                   |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_bt_insert_obj                        | B-tree 노드 'insert object' 연산 횟수                                                  |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_bt_delete_obj                        | B-tree 노드 'physical delete object' 연산 횟수                                         |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_bt_mvcc_delete                       | B-tree 노드 'mvcc delete' 연산 횟수                                                    |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_bt_mark_delete                       | B-tree 노드 'mark delete' 연산 횟수                                                    |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_bt_update_sk_cnt                     | B-tree 노드 'update same key' 연산 횟수                                                |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_bt_undo_insert                       | B-tree 노드 'undo insert' 연산 횟수                                                    |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_bt_undo_delete                       | B-tree 노드 'undo physical delete' 연산 횟수                                           |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_bt_undo_mvcc_delete                  | B-tree 노드 'undo mvcc delete' 연산 횟수                                               |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_bt_undo_update_sk                    | B-tree 노드 'undo update samekey' 연산 횟수                                            |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_bt_vacuum                            | B-tree 노드 'vacuum deleted object' 연산 횟수                                          |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_bt_vacuum_insid                      | B-tree 노드 'vacumm insert id' 연산 횟수The                                            |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_bt_vacuum_update_sk                  | B-tree 노드 'vacumm update samekey' 연산 횟수                                          |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_bt_fix_ovf_oids_cnt                  | B-tree 노드 오버플로우 페이지 수정                                                     |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_bt_unique_rlocks_cnt                 | 유니크 인덱스에 대한 블록된  읽기 수                                                   |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_bt_unique_wlocks_cnt                 | 유니크 인덱스에 대한 블록된 쓰기  수                                                   |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_bt_find_unique                      | B-tree 노드의 'find-unique' 연산에 걸린 시간                                           |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_bt_range_search                     | B-tree 노드의 'ranage search' 연산에 걸린 시간                                         |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_bt_insert                           | B-tree 노드의 'insert object' 연산에 걸린 시간                                         |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_bt_delete                           | B-tree 노드의 'physical delete' 연산에 걸린 시간                                       |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_bt_mvcc_delete                      | B-tree 노드의 'mvcc delete' 연산에 걸린 시간                                           |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_bt_mark_delete                      | B-tree 노드의 'mark delete' 연산에 걸린 시간                                           |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_bt_update_sk                        | B-tree 노드의 'update same key' 연산에 걸린 시간                                       |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_bt_undo_insert                      | B-tree 노드의 'undo insert' 연산에 걸린 시간                                           |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_bt_undo_delete                      | B-tree 노드의 'undo physical delete' 연산에 걸린 시간                                  |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_bt_undo_mvcc_delete                 | B-tree 노드의 'undo mvcc delete' 연산에 걸린 시간                                      |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_bt_undo_update_sk                   | B-tree 노드의 'undo update same key' 연산에 걸린 시간                                  |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_bt_vacuum                           | B-tree 노드의 'vacuum deleted object' 연산에 걸린 시간                                 |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_bt_vacuum_insid                     | B-tree 노드의 'vacuum insert id' 연산에 걸린 시간Time                                  |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_bt_vacuum_update_sk                 | B-tree 노드의 'vacuum update same key' 연산에 걸린 시간                                |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_bt_traverse                         | B-tree 노드의 'traverse' 연산에 걸린 시간                                              |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_bt_find_unique_traverse             | B-tree 노드의 'find unique traverse' 연산에 걸린 시간                                  |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_bt_range_search_traverse            | B-tree 노드의 'range search traverse' 연산에 걸린 시간                                 |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_bt_insert_traverse                  | B-tree 노드의 'insert travers' 연산에 걸린 시간                                        |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_bt_delete_traverse                  | B-tree 노드의 'physical delete travers' 연산에 걸린 시간                               |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_bt_mvcc_delete_traverse             | B-tree 노드의 'mvcc delete traverse' 연산에 걸린 시간                                  |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_bt_mark_delete_traverse             | B-tree 노드의 'mark delete traverse' 연산에 걸린 시간                                  |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_bt_update_sk_traverse               | B-tree 노드의 'update same key traverse' 연산에 걸린 시간                              |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_bt_undo_insert_traverse             | B-tree 노드의 'undo insert traverse' 연산에 걸린 시간Time                              |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_bt_undo_delete_traverse             | B-tree 노드의 'undo delete traverse' 연산에 걸린 시간Time                              |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_bt_undo_mvcc_delete_traverse        | B-tree 노드의 'undo mvcc delete traverse' 연산에 걸린 시간                             |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_bt_undo_update_sk_traverse          | B-tree 노드의 'undo update sk traverse' 연산에 걸린 시간                               |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_bt_vacuum_traverse                  | B-tree 노드의 'vacumm traverse ' 연산에 걸린 시간                                      |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_bt_vacuum_insid_traverse            | B-tree 노드의 'vacuum insid traverse' 연산에 걸린 시간                                 |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_bt_vacuum_update_sk_traverse        | B-tree 노드의 'vacuum update sk traverse' 연산에 걸린 시간                             |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_bt_fix_ovf_oids                     | B-tree 노드의  오퍼플로우 페이지 수정에 걸린 시간                                      |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_bt_unique_rlocks                    | 유니크 인덱스에 대한 블록된 읽기에 걸린 시간                                           |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_bt_unique_wlocks                    | 유니크 인덱스에 대한 블록된 쓰기에 걸린 시간                                           |
     +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
     | 쿼리 관련        | Num_query_selects                        | SELECT 쿼리의 수행 횟수                                                                |
     |                  +------------------------------------------+----------------------------------------------------------------------------------------+
@@ -1275,6 +1533,7 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
     | 정렬 관련        | Num_sort_io_pages                        | 정렬하는 동안 디스크에서 페치한 페이지 개수(이 값이 클수록 덜 효율적임)                |
     |                  +------------------------------------------+----------------------------------------------------------------------------------------+
     |                  | Num_sort_data_pages                      | 정렬하는 동안 페이지 버퍼에서 발견된 페이지 개수(이 값이 클수록 더 효율적임)           |
+
     +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
     | 네트워크         | Num_network_requests                     | 네트워크 요청 횟수                                                                     |
     | 요청 관련        |                                          |                                                                                        |
@@ -1292,6 +1551,88 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
     |                  |                                          | "베스트 페이지 목록"을 갱신함. 수 차례 목록을 갱신해도 해당 목록에서 여유 공간을 가진  |
     |                  |                                          | 페이지가 여전히 없으면 새 페이지에 레코드를 저장함.                                    |
     |                  |                                          |                                                                                        |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_heap_home_inserts                    | HOME 타입 레코드 힙에 대한 insert 수                                                   |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_heap_big_inserts                     | BIG 타입 레코드 힙에 대한 insert 수                                                    |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_heap_assign_inserts                  | ASSIGN 타입 레코드 힙에 대한 insert 수                                                 |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_heap_home_deletes                    | MVCC 모드가 아닌 HOME 타입 레코드에 대한 delete 수                                     |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_heap_home_mvcc_deletes               | MVCC 모드 HOME 타입 레코드로부터 delete 수                                             |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_heap_home_to_rel_deletes             | MVCC 모드 HOME 타입 레코드로부터 RELOCATION 타입 레코드의 delete 수                    |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_heap_home_to_big_deletes             | MVCC 모드 HOME 타입 레코드로부터 BIG 타입 레코드의 delete 수                           |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_heap_rel_deletes                     | MVCC 모드가 아닌 RELOCATION 타입 레코드에 대한 delete 수                               |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_heap_rel_mvcc_deletes                | MVCC 모드 RELOCATION 타입 레코드로부터 delete 수                                       |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_heap_rel_to_home_deletes             | MVCC 모드 RELOCATION 타입 레코드로부터 HOME 타입 레코드의 delete 수                    |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_heap_rel_to_big_deletes              | MVCC 모드 RELOCATION 타입 레코드로부터 BIG 타입 레코드의 delete 수                     |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_heap_rel_to_rel_deletes              | MVCC 모드 RELOCATION 타입 레코드로부터 RELOCATION 타입 레코드의 delete 수              |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_heap_big_deletes                     | MVCC 모드가 아닌 BIG 타입 레코드에 대한 delete 수                                      |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_heap_big_mvcc_deletes                | MVCC 모드 BIG 타입 레코드로부터 HOME 타입 레코드의 mvcc  delete 수                     |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_heap_new_ver_inserts                 | MVCC 모드에서 같은 객체에 대한 새로운 버전의 insert 수                                 |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_heap_home_updates                    | MVCC 모드가 아닌 HEAP HOME 타입 레코드에서 update 수                                   |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_heap_home_to_rel_updates             | MVCC 모드가 아닌  HOME 타입 레코드로부터 RELOCATION 타입 레코드의 update 수            |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_heap_home_to_big_updates             | MVCC 모드가 아닌 HOME 타입 레코드로부터 BIG 타입 레코드의 update  수                   |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_heap_rel_updates                     | MVCC 모드가 아닌 RELOCATION 타입 레코드의 update 수                                    |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_heap_rel_to_home_updates             | MVCC 모드가 아닌  RELOCATION 타입 레코드로부터 HOME 타입 레코드의 update 수            |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_heap_rel_to_rel_updates              | MVCC 모드가 아닌  RELOCATION 타입 레코드로부터 RELOCATION 타입 레코드의 update 수      |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_heap_rel_to_big_updates              | MVCC 모드가 아닌  RELOCATION 타입 레코드로부터 BIG 타입 레코드의 update 수             |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_heap_big_updates                     | MVCC 모드가 아닌 HEAP BIG 타입 레코드에서 update 수                                    |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_heap_home_vacuums                    | HOME 타입 레코드의 vacuumed HEAP 수                                                    |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_heap_big_vacuums                     | BIG 타입 레코드의 vacuumed HEAP 수                                                     |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_heap_rel_vacuums                     | RELOCATION 타입 레코드의 vacuumed HEAP 수                                              |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_heap_insid_vacuums                   | 새롭게 추가된 vacuumed heap 의 수                                                      |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_heap_remove_vacuums                  | 버전정보를 제거하고 다음 버전정보를 보관하지 않는 vacuum 연산의 수                     |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_heap_next_ver_vacuums                | 버전정보를 제거하고 다음 버전정보를 보관하는 vacuum 연산의 수                          |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_heap_insert_prepare                 | 힙 insert 연산을 준비하는 시간                                                         |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_heap_insert_execute                 | 힙 insert 연산을 실행하는 시간                                                         |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_heap_insert_log                     | 힙 insert 연산을 기록하는 시간                                                         |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_heap_delete_prepare                 | 힙 delete 연산을 준비하는 시간                                                         |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_heap_delete_execute                 | 힙 delete 연산을 실행하는 시간                                                         |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_heap_delete_log                     | 힙 delete 연산을 기록하는 시간                                                         |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_heap_update_prepare                 | 힙 update 연산을 준비하는 시간                                                         |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_heap_update_execute                 | 힙 update 연산을 실행하는 시간                                                         |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_heap_update_log                     | 힙 update 연산을 기록하는 시간                                                         |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_heap_vacuum_prepare                 | 힙 vacuum 연산을 준비하는 시간                                                         |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_heap_vacuum_execute                 | 힙 vacuum 연산을 실행하는 시간                                                         |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_heap_vacuum_log                     | 힙 vacuum 연산을 기록하는 시간                                                         |
     +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
     | 질의 계획        | Num_plan_cache_add                       | 캐시 엔트리(entry)가 새로 추가된 횟수                                                  |
     | 캐시 관련        +------------------------------------------+----------------------------------------------------------------------------------------+
@@ -1321,6 +1662,16 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
     | 관련             |                                          | 실시간으로 업데이트되지 않음.                                                          |
     |                  +------------------------------------------+----------------------------------------------------------------------------------------+
     |                  | Num_vacuum_log_pages_to_vacuum           | vacuum 작업자에 의해 정리될(to be vacuumed) 로그 페이지의 개수                         |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_vacuum_prefetch_requests_log_pages   | vacuum 로그 페이지 prefetch 요청 수                                                    |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_vacuum_prefetch_hits_log_pages       | vacuum 로그 페이지 prefetch hit 수                                                     |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_vacuum_master                       | vacuum 마스터 쓰레드의 사용시간                                                        |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_vacuum_worker_process_log           | vacuum 로그 워커 쓰레드의 사용시간                                                     |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_vacuum_worker_execute               | vacuum 워커 쓰레드의 실행 시간                                                         |    
     +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
     | 기타             | Data_page_buffer_hit_ratio               | 데이터 페이지 버퍼의 히트율                                                            |
     |                  |                                          | (Num_data_page_fetches - Num_data_page_ioreads)*100 / Num_data_page_fetches            |
@@ -1349,6 +1700,12 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
     |                  |                                          | 이 값이 클수록 I/O가 주요 병목의 원인이며, 작을수록 동시성 처리가 주요 병목의 원인임   |
     |                  |                                          |                                                                                        |
     |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Data_page_total_promote_success          | latch promote 가 성공한 누적 수                                                        |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Data_page_total_promote_fail             | latch promote 가 실패한 누적 수                                                        |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Data_page_total_promote_time_msec        | latch promote 의 누적 시간                                                             |    
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
     |                  | Num_data_page_fix_ext:                   | 모듈, 페이지 타입, 그리고 페이지 버퍼에서 발견된 페이지 타입의 신구 여부에 따른        |
     |                  |                                          | 페이지 픽스 개수.                                                                      |
     |                  +------------------------------------------+----------------------------------------------------------------------------------------+
@@ -1361,7 +1718,29 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
     |                  +------------------------------------------+----------------------------------------------------------------------------------------+
     |                  | Time_data_page_fix_acquire_time:         | 모듈, 페이지 타입, 페이지 모드, 래치 모드, 그리고 컨디션 모드에 따른 페이지 픽스(fix)  |
     |                  |                                          | 획득 시간.                                                                             |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Num_mvcc_snapshot_ext:                   | 스냅 샷 유효성 검사 기능의 수                                                          |
+    |                  |                                          | (스냅 샷 유형, 레코드 유형, 유효성 검사시 시정 결과에 의해 분할)                       |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_obj_lock_acquire_time:              | 객체 잠금 획득하는 데 필요한시간  (모듈잠금 타입으로 파티션됨 )                        |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_get_snapshot_acquire_time:          | 스냅 샷 유효성 검사 기능에 필요한 시간 (partitioned by snapshot type,                  |
+    |                  |                                          | record type, visibility result upon validation).                                       |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Count_get_snapshot_retry:                | The number of retries to acquire MVCC snapshot (partitioned by module)                 |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_tran_complete_time:                 | 스냅샷 무효화 및  MVCCID 트랜잭션 커밋/롤백 시간                                       |
+    |                  |                                          | (partitioned by module)                                                                |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Time_get_oldest_mvcc_acquire_time:       | 가장 오랜된 MVCCID 를 획득 소용 시간  (partitioned by module)                          |
+    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
+    |                  | Count_get_oldest_mvcc_retry:             | 가장 오래된 MVCCID 를 획득하는 재시도 횟수   (partitioned by module)                   |    
     +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
+
+.. Note::  
+
+    (*) : These statistics measure the non-MVCC operations or MVCC operations which are performed in-place (decided internally)
+
 
 .. option:: -o, --output-file=FILE
 
@@ -1464,8 +1843,8 @@ lockdb
 ::
 
     Transaction (index 1, csql, dba@cubriddb|12854)
-    Isolation READ COMMITTED CLASSES AND READ UNCOMMITTED INSTANCES
-    Timeout_period -1
+    Isolation COMMITTED READ
+    Timeout_period : Infinite wait
 
 위에서 트랜잭션 인덱스는 1이고, 프로그램 이름은 csql, 사용자 이름은 dba, 호스트 이름은 cubriddb, 클라이언트 프로세스 식별자는 12854, 격리 수준은 READ COMMITTED CLASSES AND READ UNCOMMITTED INSTANCES, 그리고 잠금 타임아웃은 무제한이다.
 
@@ -1482,9 +1861,9 @@ lockdb
     Object lock Table:
         Current number of ojbects which are locked = 2001
 
-**cubrid lockdb**\는 잠금을 획득한 각각의 객체에 대한 객체의 OID와 Object type, 테이블 이름을 출력한다. 추가적으로 객체에 대해서 잠금을 보유하고 있는 트랜잭션의 개수(Num holders), 잠금을 보유하고 있지만 상위 잠금으로 변환(예를 들어 U_LOCK에서 X_LOCK으로 잠금 변환)하지 못해 차단된 트랜잭션의 개수(Num blocked-holders), 객체의 잠금을 기다리는 다른 트랜잭션의 개수(Num waiters)가 출력된다. 그리고 잠금을 보유하고 있는 클라이언트 트랜잭션, 차단된 클라이언트 트랜잭션, 기다리는 클라이언트 트랜잭션의 리스트가 출력된다.
+**cubrid lockdb** 는 잠금을 획득한 각각의 객체에 대한 객체의 OID와 Object type, 테이블 이름을 출력한다. 추가적으로 객체에 대해서 잠금을 보유하고 있는 트랜잭션의 개수(Num holders), 잠금을 보유하고 있지만 상위 잠금으로 변환(예를 들어 **SCH_S_LOCK** 에서 **SCH_M_LOCK** 으로 잠금 변환)하지 못해 차단된 트랜잭션의 개수(Num blocked-holders), 객체의 잠금을 기다리는 다른 트랜잭션의 개수(*Num waiters*)가 출력된다. 그리고 잠금을 보유하고 있는 클라이언트 트랜잭션, 차단된 클라이언트 트랜잭션, 기다리는 클라이언트 트랜잭션의 리스트가 출력된다. Class에 대해서는 아니지만 Row에 관해서 MVCC정보 역시 출력된다. 
 
-다음 예는 Object type이 instance of class, 즉 레코드인 경우, OID( 2| 50| 1)인 객체에 대해서 트랜잭션 2가 S_LOCK을 가지고 있고, 트랜잭션 1이 U_LOCK을 획득하고 있지만 트랜잭션 2가 S_LOCK을 획득하고 있기 때문에 X_LOCK으로 변환하지 못해 차단되었음을 보여준다. 그리고 트랜잭션 3은 S_LOCK을 대기하고 있지만 트랜잭션 2가 X_LOCK을 대기하고 있기 때문에 차단되었음을 보여준다.
+다음 예는 Object type이 instance of class, 즉 레코드인 경우, OID( O| 62| 5)인 객체에 대해서 트랜잭션 2가 **IX_LOCK** 을 가지고 있고, 트랜잭션 1이 **SCH_S_LOCK** 을 획득하고 있지만 트랜잭션 2가 **SCH_M_LOCK** 을 획득하고 있기 때문에 **SCH_M_LOCK** 으로 변환하지 못해 차단되었음을 보여준다. 그리고 트랜잭션 3은 **SCH_S_LOCK** 을 대기하고 있지만 트랜잭션 2가 **SCH_M_LOCK** 을 대기하고 있기 때문에 차단되었음을 보여준다.
 
 ::
 
@@ -1503,21 +1882,24 @@ lockdb
                         Start_waiting_at = Fri May 3 14:45:14 2002
                         Wait_for_secs = -1
 
-Object type이 Index key of class, 즉 인덱스 키인 경우 테이블의 인덱스에 대한 잠금 정보를 출력한다.
+다음 예는 **X_LOCK** 을 보유한 트랜잭션 1에 의해서 삽입된 객체 아이디가 ( 2 | 50 | 1)인 클래스의 인스턴스를 보여준다.  트랙잰션 1이 끝날때까지 차단된 트랜잭션 2 에 의해서 수정된 이 클래스는 유일한 인덱스와 키 값을 가진다.
 
 ::
 
-    OID = -662|   572|-32512
-    Object type: Index key of class ( 0|   319|  10) = athlete.
-    Index name: pk_athlete_code
-    Total mode of holders =   NX_LOCK, Total mode of waiters = NULL_LOCK.
-    Num holders=  1, Num blocked-holders=  0, Num waiters=  0
-    LOCK HOLDERS:
-        Tran_index =   1, Granted_mode =  NX_LOCK, Count =   1
+   OID = 2| 50| 1
+    Object type: instance of class ( 0| 62| 5) = athlete.
+    MVCC info: insert ID = 6, delete ID = missing.
+    Num holders = 1, Num blocked-holders= 1, Num waiters = 1
+    LOCK HOLDERS :
+        Tran_index =   1, Granted_mode =   X_LOCK, Count =   1
+    LOCK WAITERS :
+        Tran_index =   2, Blocked_mode = X_LOCK
+                          Start_waiting_at = Wed Feb 3 14:45:14 2016
+                          Wait_for_secs = -1
 
-Granted_mode는 현재 획득한 잠금의 모드를 의미하고 Blocked_mode는 차단된 잠금의 모드를 의미한다. Starting_waiting_at은 잠금을 요청한 시간을 의미하고 Wait_for_secs는 잠금을 기다리는 시간을 의미한다. Wait_for_secs의 값은 lock_timeout 시스템 파라미터에 의해 설정된다. 
+*Granted_mode* 는 현재 획득한 잠금의 모드를 의미하고 *Blocked_mode* 는 차단된 잠금의 모드를 의미한다. *Starting_waiting_at* 은 잠금을 요청한 시간을 의미하고 *Wait_for_secs* 는 잠금을 기다리는 시간을 의미한다. *Wait_for_secs* 의 값은 **lock_timeout** 시스템 파라미터에 의해 설정된다. 
 
-Object type이 Class, 즉 테이블인 경우 Nsubgranules가 출력되는데 이것은 해당 테이블 내의 특정 트랜잭션이 획득하고 있는 레코드 잠금과 키 잠금을 합한 개수이다.
+Object type이 Class, 즉 테이블인 경우 *Nsubgranules* 가 출력되는데 이것은 해당 테이블 내의 특정 트랜잭션이 획득하고 있는 레코드 잠금과 키 잠금을 합한 개수이다.
 
 ::
 
@@ -1970,3 +2352,10 @@ HA 명령어
 **cubrid synccolldb** 유틸리티는 데이터베이스와 로캘 라이브러리 사이의 콜레이션 불일치 여부를 체크하고, 불일치하는 경우 동기화한다.
 
 자세한 사용법은 :ref:`locale-setting` 을 참고한다.
+
+타임존 명령어
+-----------------
+
+**cubrid gen_tz** 유틸리티는 C 소스 코드에 tzdata 폴더에 포함 된 IANA 시간대 정보를 컴파일한다. 이 유틸리티는 ** make_tz.sh ** 스크립트 (**.bat**  Windows 용)에서 실행됩니다.
+
+**cubrid dump_tz** 유틸리티는 콘솔에 사람이 읽을 수있는 형식으로 컴파일 된 CUBRID 시간대 라이브러리 파일을 덤프한다. 파일로 출력을 재지정하여 저장하는 것이 좋다.

@@ -13,7 +13,7 @@ CREATE VIEW
     [INHERIT <resolution>, ...]
     [AS <select_statement>]
     [WITH CHECK OPTION] 
-    [COMENT [=] 'view_comment_string'];
+    [COMMENT [=] 'view_comment_string'];
                                     
         <subclass_definition> ::= {UNDER | AS SUBCLASS OF} table_name, ...
         <resolution> ::= [CLASS | TABLE] {column_name} OF superclass_name [AS alias]
@@ -126,7 +126,8 @@ CREATE VIEW
 
 또는 CSQL 인터프리터에서 스키마를 출력하는 ;sc 명령으로 뷰의 커멘트를 확인할 수 있다.
 
-::
+.. code-block:: sql
+
     $ csql -u dba demodb
     
     csql> ;sc b_view

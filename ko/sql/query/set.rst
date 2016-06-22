@@ -13,6 +13,13 @@ SQL 문을 이용하여 CSQL 인터프리터나 CUBRID 매니저의 질의 편�
 
     SET SYSTEM PARAMETERS 'parameter_name=value [{; name=value}...]'
 
+*value*에  **DEFAULT** 를 사용하면 **call_stack_dump_activation_list** 변수의 예외를 포함하여 해당 변수의 값을 그 변수의 기본값으로 재 설정한다.
+
+.. code-block:: sql
+
+    SET SYSTEM PARAMETERS 'lock_timeout=DEFAULT';
+
+
 사용자 변수
 ===========
 

@@ -32,6 +32,10 @@ CREATE INDEX
 
     *   prefix 인덱스 기능은 제거될 예정(deprecated)이므로, 더 이상 사용을 권장하지 않는다.
 
+    *   The session and server timezone (:ref:`timezone-parameters`) should not be changed if database contains indexes or function index on columns of type TIMESTAMP, TIMESTAMP WITH LOCAL TIME ZONE or DATETIME WITH LOCAL TIME ZONE.
+    
+    *   The leap second support parameter (:ref:`timezone-parameters`) should not be changed if database contains indexes or function index on columns of type TIMESTAMP or TIMESTAMP WITH LOCAL TIME ZONE. 
+
 다음은 내림차순으로 정렬된 인덱스를 생성하는 예제이다.
 
 .. code-block:: sql
@@ -61,7 +65,7 @@ CREATE INDEX
 
 지정된 인덱스의 커멘트는 다음 구문에서 확인할 수 있다.
 
-::
+.. code-block:: sql
 
     SHOW CREATE TABLE table_name;
     
@@ -72,7 +76,8 @@ CREATE INDEX
 
 또는 CSQL 인터프리터에서 테이블의 스키마를 출력하는 ;sc 명령으로 인덱스의 커멘트를 확인할 수 있다.
 
-::
+.. code-block:: sql
+
     $ csql -u dba demodb
     
     csql> ;sc tbl
@@ -88,7 +93,7 @@ ALTER INDEX
 
 ::
 
-    ALTER INDEX index_name ON table_name [COMMENT 'index_comment_string'] REBUILD ;
+    ALTER INDEX index_name ON table_name REBUILD;
 
 *   *index_name*: 재생성하려는 인덱스의 이름을 명시한다. 인덱스 이름은 테이블 안에서 고유한 값이어야 한다.
 *   *table_name*: 인덱스를 재생성할 테이블의 이름을 명시한다.
@@ -123,6 +128,12 @@ ALTER INDEX
 .. code-block:: sql
     
     ALTER INDEX i_game_medal ON game COMMENT 'change index comment' ;
+
+다음은 인덱스 이름을 바꾸는 구문이다. 
+
+:: 
+
+    ALTER INDEX old_index_name ON table_name RENAME TO new_index_name [COMMENT 'index_comment_string'] ;
 
 DROP INDEX
 ==========

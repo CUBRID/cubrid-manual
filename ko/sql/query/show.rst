@@ -6,11 +6,9 @@ SHOW
 
 .. contents::
 
-일반 정보
-=========
 
 DESC, DESCRIBE
---------------
+==============
 
 테이블의 칼럼 정보를 출력하며 **SHOW COLUMNS** 문과 같다. 보다 자세한 사항은 :ref:`show-columns-statement`\ 를 참고한다.
 
@@ -20,7 +18,7 @@ DESC, DESCRIBE
     DESCRIBE tbl_name;
     
 EXPLAIN
--------
+=======
 
 테이블의 칼럼 정보를 출력하며 **SHOW COLUMNS** 문과 같다. 보다 자세한 사항은 :ref:`show-columns-statement`\ 를 참고한다.
 
@@ -31,7 +29,7 @@ EXPLAIN
 .. _show-tables-statement:
 
 SHOW TABLES
------------
+===========
 
 데이터베이스의 전체 테이블 이름 목록을 출력한다. 결과 칼럼의 이름은 *tables_in_<데이터베이스 이름>* 이 되며 하나의 칼럼을 지닌다. **LIKE** 절을 사용하면 이와 매칭되는 테이블 이름을 검색할 수 있으며, **WHERE** 절을 사용하면 좀더 일반적인 조건으로 테이블 이름을 검색할 수 있다. **SHOW FULL TABLES** 는 *table_type* 이라는 이름의 두 번째 칼럼을 함께 출력하며, 테이블은 **BASE TABLE**, 뷰는 **VIEW** 라는 값을 가진다. ::
 
@@ -104,7 +102,7 @@ SHOW TABLES
 .. _show-columns-statement:
 
 SHOW COLUMNS
-------------
+============
 
 테이블의 칼럼 정보를 출력한다. **LIKE** 절을 사용하면 이와 매칭되는 칼럼 이름을 검색할 수 있다. **WHERE** 절을 사용하면 "모든 **SHOW** 문에 대한 일반적인 고려 사항"과 같이 좀 더 일반적인 조건으로 칼럼 이름을 검색할 수 있다. 
 
@@ -178,15 +176,16 @@ Extra                               VARCHAR         주어진 칼럼에 대해 �
     
 ::
 
-      Field                 Type                  Collation             Null      Key         Default               Extra
-    ====================================================================================================================================
-      'code'                'INTEGER'             NULL                  'NO'      'PRI'       NULL                  'auto_increment'
-      'nation_code'         'CHAR(3)'             'iso88591_bin'        'YES'     ''          NULL                  ''
+      Field                 Type                  Collation             Null                  Key                   Default               Extra                 Comment             
+     ================================================================================================================================================================================
+     'code'                'INTEGER'             NULL                  'NO'                  'PRI'                 NULL                  'auto_increment'      NULL                
+     'nation_code'         'CHAR(3)'             'iso88591_bin'        'YES'                 ''                    NULL                  ''                    NULL                
+
 
 .. _show-index-statement:
 
 SHOW INDEX
-----------
+==========
 
 인덱스 정보를 출력한다. 
 
@@ -214,6 +213,7 @@ Packed                                              키가 어떻게 팩되었�
 Null                                VARCHAR         칼럼이 **NULL** 을 포함할 수 있으면 YES, 그렇지 않으면 NO.
 Index_type                          VARCHAR         사용되는 인덱스(현재 BTREE만 지원한다).
 Func                                VARCHAR         함수 인덱스에서 사용되는 함수
+Comment                             VARCHAR         Comment to describe the index
 =================================== =============== ======================================================================================================================================
 
 다음은 이 구문을 수행한 예이다.
@@ -224,10 +224,14 @@ Func                                VARCHAR         함수 인덱스에서 사�
     
 ::
 
-       Table     Non_unique   Key_name       Seq_in_index  Column_name    Collation     Cardinality   Sub_part  Packed   Null   Index_type  Func
-    =============================================================================================================================================
-     'athlete'     0      'pk_athlete_code'     1          'code'           'A'           6677         NULL     NULL    'NO'      'BTREE'   NULL
-     
+          Table                  Non_unique  Key_name              Seq_in_index  Column_name           Collation             Cardinality     Sub_part  Packed                Null        
+                          Index_type            Func                  Comment
+        =================================================================================================================================================================================
+        ==========================================================================
+          'athlete'                       0  'pk_athlete_code'                1  'code'                'A'                          6677         NULL  NULL                  'NO'
+                          'BTREE'               NULL                  NULL
+
+
 .. code-block:: sql
 
     CREATE TABLE tbl1 (i1 INTEGER , i2 INTEGER NOT NULL, i3 INTEGER UNIQUE, s1 VARCHAR(10), s2 VARCHAR(10), s3 VARCHAR(10) UNIQUE);
@@ -241,21 +245,31 @@ Func                                VARCHAR         함수 인덱스에서 사�
     
 ::
 
-      Table  Non_unique  Key_name       Seq_in_index  Column_name  Collation  Cardinality     Sub_part  Packed  Null    Index_type   Func
-    =====================================================================================================================================
-      'tbl1'          1  'i_tbl1_i1'               1  'i1'         'D'                  0         NULL  NULL    'YES'   'BTREE'      NULL
-      'tbl1'          1  'i_tbl1_i1_s1'            1  'i1'         'A'                  0         NULL  NULL    'YES'   'BTREE'      NULL
-      'tbl1'          1  'i_tbl1_i1_s1'            2  's1'         'A'                  0         NULL  NULL    'YES'   'BTREE'      NULL
-      'tbl1'          0  'i_tbl1_i2_s2'            1  'i2'         'A'                  0         NULL  NULL    'NO'    'BTREE'      NULL
-      'tbl1'          0  'i_tbl1_i2_s2'            2  's2'         'A'                  0         NULL  NULL    'YES'   'BTREE'      NULL
-      'tbl1'          1  'i_tbl1_s1'               1  's1'         'A'                  0            7  NULL    'YES'   'BTREE'      NULL
-      'tbl1'          0  'u_tbl1_i3'               1  'i3'         'A'                  0         NULL  NULL    'YES'   'BTREE'      NULL
-      'tbl1'          0  'u_tbl1_s3'               1  's3'         'A'                  0         NULL  NULL    'YES'   'BTREE'      NULL
+          Table                  Non_unique  Key_name              Seq_in_index  Column_name           Collation             Cardinality     Sub_part  Packed                Null        
+                          Index_type            Func                  Comment
+        =================================================================================================================================================================================
+        ==========================================================================
+          'tbl1'                          1  'i_tbl1_i1'                      1  'i1'                  'D'                             0         NULL  NULL                  'YES'
+                          'BTREE'               NULL                  NULL
+          'tbl1'                          1  'i_tbl1_i1_s1'                   1  'i1'                  'A'                             0         NULL  NULL                  'YES'
+                          'BTREE'               NULL                  NULL
+          'tbl1'                          1  'i_tbl1_i1_s1'                   2  's1'                  'A'                             0         NULL  NULL                  'YES'
+                          'BTREE'               NULL                  NULL
+          'tbl1'                          0  'i_tbl1_i2_s2'                   1  'i2'                  'A'                             0         NULL  NULL                  'NO'
+                          'BTREE'               NULL                  NULL
+          'tbl1'                          0  'i_tbl1_i2_s2'                   2  's2'                  'A'                             0         NULL  NULL                  'YES'
+                          'BTREE'               NULL                  NULL
+          'tbl1'                          1  'i_tbl1_s1'                      1  's1'                  'A'                             0            7  NULL                  'YES'
+                          'BTREE'               NULL                  NULL
+          'tbl1'                          0  'u_tbl1_i3'                      1  'i3'                  'A'                             0         NULL  NULL                  'YES'
+                          'BTREE'               NULL                  NULL
+          'tbl1'                          0  'u_tbl1_s3'                      1  's3'                  'A'                             0         NULL  NULL                  'YES'
+                          'BTREE'               NULL                  NULL
 
 .. _show-collation-statement:
  
 SHOW COLLATION
---------------
+==============
 
 데이터베이스에서 지원하는 콜레이션 리스트를 출력한다. LIKE 절은 콜레이션 이름이 매칭되는 정보를 출력한다. 
 
@@ -322,17 +336,19 @@ Strength                            CHAR(1)         문자 간 비교를 위한 
       'utf8_ko_cs_uca'      'utf8'                        133  'No'                  'No'                  'Quaternary'
 
 SHOW TIMEZONES
---------------
+==============
 
 현재 CUBRID에 설정된 타임 존 정보를 출력한다.
 
 ::
 
-    SHOW [FULL] TIMEZONES;
+    SHOW [FULL] TIMEZONES [ LIKE 'pattern' ];
 
 FULL이 명시되지 않으면 타임 존의 영역 이름을 가진 하나의 칼럼을 출력한다. 칼럼의 이름은 timezone_region이다.
 
 FULL이 명시되면 4개의 칼럼을 가진 타임 존 정보를 출력한다.
+
+If LIKE clause is present, it indicates which timezone_region names to match.
 
 =================== =============== ===================================================
 칼럼 이름           타입            설명
@@ -340,10 +356,10 @@ FULL이 명시되면 4개의 칼럼을 가진 타임 존 정보를 출력한다.
 timezone_region     VARCHAR(32)     타임 존 영역
 region_offset       VARCHAR(32)     일광 절약 시간을 고려하지 않은 타임 존 영역의 오프셋
 dst_offset          VARCHAR(32)     타임 존 영역에 적용되는 일광 절약 시간 규칙을 고려한 오프셋
-dst_abbreviation    VARHCHAR(32)    일광 절약 시간 규칙이 적용된 지역의 약어
+dst_abbreviation    VARCHAR(32)     일광 절약 시간 규칙이 적용된 지역의 약어
 =================== =============== ===================================================
 
-두 번째, 세 번째, 네 번째 칼럼에서 출력되는 정보는 날짜에 관한 것이다.
+두 번째, 세 번째, 네 번째 칼럼에서 출력되는 정보는 현재 날짜와 시간에 관한 것이다.
 
 타임 존 영역이 일광 절약 시간(daylight saving time) 규칙을 적용하지 않는다면, dst_offset과 dst_abbreviation 값은 NULL 값이 된다.
  
@@ -378,7 +394,7 @@ WHERE 조건 없는 LIKE 조건은 첫 번째 칼럼에 적용된다. WHERE 조�
 
 .. code-block:: sql
 
-    SHOW FULL TIMEZONES;
+    SHOW [FULL] TIMEZONES [ LIKE 'pattern' ];
 
 ::
 
@@ -401,10 +417,23 @@ WHERE 조건 없는 LIKE 조건은 첫 번째 칼럼에 적용된다. WHERE 조�
     'WET'                 '+00:00'              '+00:00'              'WET'
     'Zulu'                '+00:00'              '+00:00'              'UTC'
 
+
+.. code-block:: sql
+
+    SHOW FULL TIMEZONES LIKE '%Paris%';
+
+::
+    
+   timezone_region       region_offset         dst_offset            dst_abbreviation
+   ========================================================================================
+   'Europe/Paris'        '+01:00'              '+00:00'              'CET'
+
+       
+
 .. _show-grants-statement:
 
 SHOW GRANTS
------------
+===========
 
 데이터베이스의 사용자 계정에 부여된 권한을 출력한다. ::
 
@@ -429,7 +458,7 @@ SHOW GRANTS
 .. _show-create-table-statement:
 
 SHOW CREATE TABLE
------------------
+=================
 
 테이블 이름을 지정하면 해당 테이블의 **CREATE TABLE** 문을 출력한다. ::
 
@@ -453,7 +482,7 @@ SHOW CREATE TABLE
 .. _show-create-view-statement:
 
 SHOW CREATE VIEW
-----------------
+================
 
 뷰 이름을 지정하면 해당 **CREATE VIEW** 문을 출력한다. ::
 
@@ -479,8 +508,8 @@ SHOW CREATE VIEW
                        CURRENT_USER) AND  au.auth_type = 'SELECT')'
 
 SHOW ACCESS STATUS 
------------------- 
-  
+==================
+ 
 **SHOW ACCESS STATUS** 문은 데이터베이스 계정에 대한 로그인 정보를 출력한다. 이 명령은 데이터베이스 계정이 DBA인 사용자만 사용할 수 있다. 
 
 :: 
@@ -518,7 +547,7 @@ program_name        VARCHAR(32) 클라이언트 프로그램 이름(broker_cub_c
 .. _show-exec-statistics-statement:
 
 SHOW EXEC STATISTICS
---------------------
+====================
 
 실행한 질의들의 실행 통계 정보를 출력한다.
 
@@ -625,8 +654,8 @@ SHOW EXEC STATISTICS
     'adaptive_flush_log_pages'              0
     'adaptive_flush_max_pages'              0
 
-시스템 정보
-===========
+진단
+====
 
 SHOW VOLUME HEADER
 ------------------
@@ -750,8 +779,13 @@ Backup_info_level1                  VARCHAR(128)    백업 수준 1의 상세 �
 Backup_info_level2                  VARCHAR(128)    백업 수준 2의 상세 정보. 현재는 백업 시작 시간만 저장됨
 Ha_server_state                     VARCHAR(32)     HA 서버 상태. 다음 값 중 하나: na, idle, active, to-be-active, standby, to-be-standby,  maintenance, dead
 Ha_file                             VARCHAR(32)     HA 복제 상태. 다음 값 중 하나: clear, archived, sync
-Eof_lsa                             VARCHAR(64)     
-Smallest_lsa_at_last_checkpoint     VARCHAR(64)     
+Eof_lsa                             VARCHAR(64)     EOF LSA
+Smallest_lsa_at_last_checkpoint     VARCHAR(64)     The smallest LSA of the last checkpoint, can be NULL LSA
+Next_mvcc_id                        BIGINT          The next MVCCID will be used for the next transaction
+Mvcc_op_log_lsa                     VARCHAR(32)     The LSA used to link log entries for MVCC operation
+Last_block_oldest_mvcc_id           BIGINT          Used to find the oldest MVCCID in a block of log data, can be NULL
+Last_block_newest_mvcc_id           BIGINT          Used to find the newest MVCCID in a block of log data, Can be NULL
+
 =================================== =============== ======================================================================================================================================
 
 다음은 이 구문을 수행한 예이다.
@@ -766,38 +800,42 @@ Smallest_lsa_at_last_checkpoint     VARCHAR(64)
     <00001> Volume_id                      : -2
             Magic_symbol                   : 'CUBRID/LogActive'
             Magic_symbol_location          : 16
-            Creation_time                  : 04:42:28.000 PM 12/11/2013
+            Creation_time                  : 05:27:05.000 PM 02/05/2016
             Release                        : '10.0.0'
-            Compatibility_disk_version     : '9.2'
+            Compatibility_disk_version     : '10'
             Db_page_size                   : 16384
             Log_page_size                  : 16384
             Shutdown                       : 0
-            Next_trans_id                  : 607149
-            Num_avg_trans                  : 0
-            Num_avg_locks                  : 0
+            Next_trans_id                  : 17
+            Num_avg_trans                  : 3
+            Num_avg_locks                  : 30
             Num_active_log_pages           : 1279
-            Db_charset                     : 5
-            First_active_log_page          : 66508
-            Current_append                 : '(66637|14672)'
-            Checkpoint                     : '(66637|14280)'
-            Next_archive_page_id           : 66456
-            Active_physical_page_id        : 1228
-            Next_archive_num               : 52
-            Last_archive_num_for_syscrashes: 52
+            Db_charset                     : 3
+            First_active_log_page          : 0
+            Current_append                 : '(102|5776)'
+            Checkpoint                     : '(101|7936)'
+            Next_archive_page_id           : 0
+            Active_physical_page_id        : 1
+            Next_archive_num               : 0
+            Last_archive_num_for_syscrashes: -1
             Last_deleted_archive_num       : -1
-            Backup_lsa_level0              : '(66636|5240)'
+            Backup_lsa_level0              : '(-1|-1)'
             Backup_lsa_level1              : '(-1|-1)'
             Backup_lsa_level2              : '(-1|-1)'
-            Log_prefix                     : 'demodb'
+            Log_prefix                     : 'mvccdb'
             Has_logging_been_skipped       : 0
             Perm_status                    : 'LOG_PSTAT_CLEAR'
-            Backup_info_level0             : 'time: Mon Dec 16 14:33:17 2013'
-            Backup_info_level1             : 'time: none'
-            Backup_info_level2             : 'time: none'
+            Backup_info_level0             : 'time: N/A'
+            Backup_info_level1             : 'time: N/A'
+            Backup_info_level2             : 'time: N/A'
             Ha_server_state                : 'idle'
-            Ha_file                        : 'unknown'
-            Eof_lsa                        : '(66637|14672)'
-            Smallest_lsa_at_last_checkpoint: '(66637|14280)'
+            Ha_file                        : 'UNKNOWN'
+            Eof_lsa                        : '(102|5776)'
+            Smallest_lsa_at_last_checkpoint: '(101|7936)'
+            Next_mvcc_id                   : 6
+            Mvcc_op_log_lsa                : '(102|5488)'
+            Last_block_oldest_mvcc_id      : 4
+            Last_block_newest_mvcc_id      : 5
 
 .. code-block:: sql
             
@@ -808,39 +846,52 @@ Smallest_lsa_at_last_checkpoint     VARCHAR(64)
     <00001> Volume_id                      : -2
             Magic_symbol                   : 'CUBRID/LogActive'
             Magic_symbol_location          : 16
-            Creation_time                  : 04:42:28.000 PM 12/11/2013
+            Creation_time                  : 05:27:05.000 PM 02/05/2016
             Release                        : '10.0.0'
-            Compatibility_disk_version     : '9.2'
+            Compatibility_disk_version     : '10'
             Db_page_size                   : 16384
             Log_page_size                  : 16384
             Shutdown                       : 0
-            Next_trans_id                  : 607146
-            Num_avg_trans                  : 0
-            Num_avg_locks                  : 0
+            Next_trans_id                  : 15
+            Num_avg_trans                  : 3
+            Num_avg_locks                  : 30
             Num_active_log_pages           : 1279
-            Db_charset                     : 5
-            First_active_log_page          : 66508
-            Current_append                 : '(66637|14280)'
-            Checkpoint                     : '(66637|14280)'
-            Next_archive_page_id           : 66456
-            Active_physical_page_id        : 1228
-            Next_archive_num               : 52
-            Last_archive_num_for_syscrashes: 52
+            Db_charset                     : 3
+            First_active_log_page          : 0
+            Current_append                 : '(101|8016)'
+            Checkpoint                     : '(101|7936)'
+            Next_archive_page_id           : 0
+            Active_physical_page_id        : 1
+            Next_archive_num               : 0
+            Last_archive_num_for_syscrashes: -1
+            Db_charset                     : 3
+            First_active_log_page          : 0
+            Current_append                 : '(101|8016)'
+            Checkpoint                     : '(101|7936)'
+            Next_archive_page_id           : 0
+            Active_physical_page_id        : 1
+            Next_archive_num               : 0
+            Last_archive_num_for_syscrashes: -1
             Last_deleted_archive_num       : -1
-            Backup_lsa_level0              : '(66636|5240)'
+            Backup_lsa_level0              : '(-1|-1)'
             Backup_lsa_level1              : '(-1|-1)'
             Backup_lsa_level2              : '(-1|-1)'
-            Log_prefix                     : 'demodb'
+            Log_prefix                     : 'mvccdb'
             Has_logging_been_skipped       : 0
             Perm_status                    : 'LOG_PSTAT_CLEAR'
-            Backup_info_level0             : 'time: Mon Dec 16 14:33:17 2013'
-            Backup_info_level1             : 'time: none'
-            Backup_info_level2             : 'time: none'
+            Backup_info_level0             : 'time: N/A'
+            Backup_info_level1             : 'time: N/A'
+            Backup_info_level2             : 'time: N/A'
             Ha_server_state                : 'idle'
-            Ha_file                        : 'unknown'
-            Eof_lsa                        : '(66637|14280)'
-            Smallest_lsa_at_last_checkpoint: '(66637|14280)'
+            Ha_file                        : 'UNKNOWN'
+            Eof_lsa                        : '(101|8016)'
+            Smallest_lsa_at_last_checkpoint: '(101|7936)'
+            Next_mvcc_id                   : 4
+            Mvcc_op_log_lsa                : '(-1|-1)'
+            Last_block_oldest_mvcc_id      : NULL
+            Last_block_newest_mvcc_id      : NULL
 
+            
 SHOW ARCHIVE LOG HEADER
 -----------------------
 
@@ -1232,6 +1283,7 @@ Contiguous_free_area                INT             페이지 내 연속된 여�
 Free_space_offset                   INT             페이지의 처음부터 페이지 내 첫번째 여유 공간 바이트 영역까지의 바이트 오프셋
 Need_update_best_hint               INT             undo 복구를 위해 저장이 필요하면 true
 Is_saving                           INT             이 페이지를 위해 베스트 페이지를 업데이트해야 되면 true
+Flags                               INT             Flag value of the page
 =================================== =============== ======================================================================================================================================
 
 다음은 이 구문을 수행한 예이다.
@@ -1254,6 +1306,7 @@ Is_saving                           INT             이 페이지를 위해 베�
             Free_space_offset    : 460
             Need_update_best_hint: 1
             Is_saving            : 0
+            Flags                : 0
 
 SHOW SLOTTED PAGE SLOTS
 -----------------------
@@ -1332,8 +1385,6 @@ ALL 키워드를 사용하고 인덱스 이름을 생략하면 해당 테이블�
 Table_name                          VARCHAR(256)    테이블 이름
 Index_name                          VARCHAR(256)    인덱스 이름
 Btid                                VARCHAR(64)     BTID (volid|fileid|root_pageid)
-Prev_vpid                           VARCHAR(32)     VPID (volid|pageid)
-Next_vpid                           VARCHAR(32)     VPID (volid|pageid)
 Node_type                           VARCHAR(16)     'LEAF' 또는 'NON_LEAF'
 Max_key_len                         INT             서브트리에 대한 최대 키 길이
 Num_oids                            INT             B-트리에 저장된 OID의 개수
@@ -1342,7 +1393,8 @@ Num_keys                            INT             B-트리에 존재하는 고
 Topclass_oid                        VARCHAR(64)     탑클래스 OID 또는 NULL OID(비고유 인덱스)(volid|pageid|slotid)
 Unique                              INT             고유 또는 비고유
 Overflow_vfid                       VARCHAR(32)     VFID (volid|fileid)
-Key_type                            VARCHAR(32)     타입 이름
+Key_type                            VARCHAR(256)     타입 이름
+Columns                             VARCHAR(256)    the list of columns which consists of the index
 =================================== =============== ======================================================================================================================================
 
 다음은 이 구문을 수행한 예이다.
@@ -1351,21 +1403,18 @@ Key_type                            VARCHAR(32)     타입 이름
 
     -- Prepare test environment
     CREATE TABLE tbl1(a INT, b VARCHAR(5));
-    CREATE INDEX index_a ON tbl1(a ASC);
-    CREATE INDEX index_b ON tbl1(b ASC);  
+    CREATE INDEX index_ab ON tbl1(a ASC, b DESC);
 
 ..  code-block:: sql
     
     -- csql> ;line on
-    SHOW INDEX HEADER OF tbl1.index_a;
+    SHOW INDEX HEADER OF tbl1.index_ab;
     
 ::
 
     <00001> Table_name   : 'tbl1'
             Index_name   : 'index_a'
             Btid         : '(0|378|950)'
-            Prev_vpid    : '(-1|-1)'
-            Next_vpid    : '(-1|-1)'
             Node_type    : 'LEAF'
             Max_key_len  : 0
             Num_oids     : -1
@@ -1374,42 +1423,8 @@ Key_type                            VARCHAR(32)     타입 이름
             Topclass_oid : '(0|469|4)'
             Unique       : 0
             Overflow_vfid: '(-1|-1)'
-            Key_type     : 'integer'
-
-.. code-block:: sql
-      
-    SHOW ALL INDEXES HEADER OF tbl1;
-    
-::
-
-    <00001> Table_name   : 'tbl1'
-            Index_name   : 'index_a'
-            Btid         : '(0|378|950)'
-            Prev_vpid    : '(-1|-1)'
-            Next_vpid    : '(-1|-1)'
-            Node_type    : 'LEAF'
-            Max_key_len  : 0
-            Num_oids     : -1
-            Num_nulls    : -1
-            Num_keys     : -1
-            Topclass_oid : '(0|469|4)'
-            Unique       : 0
-            Overflow_vfid: '(-1|-1)'
-            Key_type     : 'integer'
-    <00002> Table_name   : 'tbl1'
-            Index_name   : 'index_b'
-            Btid         : '(0|381|960)'
-            Prev_vpid    : '(-1|-1)'
-            Next_vpid    : '(-1|-1)'
-            Node_type    : 'LEAF'
-            Max_key_len  : 0
-            Num_oids     : -1
-            Num_nulls    : -1
-            Num_keys     : -1
-            Topclass_oid : '(0|469|4)'
-            Unique       : 0
-            Overflow_vfid: '(-1|-1)'
-            Key_type     : 'character varying'
+            Key_type     : 'midxkey(integer,character varying(5))'
+            Columns      : 'a,b DESC'
 
 SHOW INDEX CAPACITY
 -------------------
@@ -1526,14 +1541,14 @@ Avg_page_free_space                 VARCHAR(64)     페이지 당 평균 여유 
             Avg_num_page_key     : 0
             Avg_page_free_space  : '15.9K'
 
-SHOW CRITICAL SECTION
----------------------
+SHOW CRITICAL SECTIONS
+----------------------
 
 특정 데이터베이스의 전체 크리티컬 섹션(critical section, 이하 CS) 정보를 출력한다.
 
 .. code-block:: sql
 
-    SHOW CRITICAL SECTION;
+    SHOW CRITICAL SECTIONS;
 
 해당 구문은 다음의 칼럼을 출력한다.
 
@@ -1558,7 +1573,7 @@ Total_waiting_msecs                 NUMERIC(10,3)   전체 대기 시간(밀리�
 
 .. code-block:: sql
 
-    SHOW CRITICAL SECTION;
+    SHOW CRITICAL SECTIONS;
 
 ::
 
@@ -1590,4 +1605,266 @@ Total_waiting_msecs                 NUMERIC(10,3)   전체 대기 시간(밀리�
         23  'QPROC_FILTER_PRED_CACHE'  'none'                                  0                    0                NULL              NULL                     1                     0                           NULL  0.000                 0.000               
         24  'PARTITION_CACHE'     'none'                                  0                    0                NULL              NULL                     1                     0                           NULL  0.000                 0.000               
         25  'EVENT_LOG_FILE'      'none'                                  0                    0                NULL              NULL                     0                     0                           NULL  0.000                 0.000               
-        26  'ACCESS_STATUS'       'none'                                  0                    0                NULL              NULL                     1                     0                           NULL  0.000                 0.000               
+        26  'ACCESS_STATUS'       'none'                                  0                    0                NULL              NULL                     1                     0                           NULL  0.000                 0.000              
+
+SHOW TRANSACTION TABLES
+-----------------------
+
+이 명령은 트랜잭션 기술자들의 내부 정보를 보여주는데 이것은 각 트랜잭션을 관리하기 위한 내부 데이터 구조이다. 이것은 유효한 트랜잭션들 만을 보여주고 따라서 결과는 어떤 트랜잭션 기술자의 일관된 스냅샷이 아닐 수도 있다.
+
+.. code-block:: sql
+
+    SHOW { TRAN | TRANSACTION } TABLES [ WHERE EXPR ];
+
+이 질의는 다음의 컬럼들을 출력한다:
+
+======================== =============== ==============================================================================================================================================================
+Column name              Type            Description
+======================== =============== ==============================================================================================================================================================
+Tran_index               INT             Index on the transaction table or NULL for unassigned transaction descriptor slot
+Tran_id                  INT             Transaction Identifier
+Is_loose_end             INT             0 for Ordinary transactions, 1 for loose-end transactions
+State                    VARCHAR(64)     State of the transaction. Either one of the followings:
+                                         'TRAN_RECOVERY', 'TRAN_ACTIVE', 'TRAN_UNACTIVE_COMMITTED', 'TRAN_UNACTIVE_WILL_COMMIT', 'TRAN_UNACTIVE_COMMITTED_WITH_POSTPONE', 
+                                         'TRAN_UNACTIVE_ABORTED', 'TRAN_UNACTIVE_UNILATERALLY_ABORTED', 'TRAN_UNACTIVE_2PC_PREPARE', 'TRAN_UNACTIVE_2PC_COLLECTING_PARTICIPANT_VOTES',
+                                         'TRAN_UNACTIVE_2PC_ABORT_DECISION', 'TRAN_UNACTIVE_2PC_COMMIT_DECISION', 'TRAN_UNACTIVE_COMMITTED_INFORMING_PARTICIPANTS', 
+                                         'TRAN_UNACTIVE_ABORTED_INFORMING_PARTICIPANTS','TRAN_STATE_UNKNOWN'
+Isolation                VARCHAR(64)     Isolation level of the transaction. Either one of the followings: 'SERIALIZABLE', 'REPEATABLE READ', 'COMMITTED READ', 'TRAN_UNKNOWN_ISOLATION'
+Wait_msecs               INT             Wait until this number of milliseconds for locks.
+Head_lsa                 VARCHAR(64)     First log address of transaction.
+Tail_lsa                 VARCHAR(64)     Last log record address of transaction.
+Undo_next_lsa            VARCHAR(64)     Next log record address of transaction for UNDO purposes.
+Postpone_next_lsa        VARCHAR(64)     Next address of a postpone record to be executed.
+Savepoint_lsa            VARCHAR(64)     Address of last save-point.
+Topop_lsa                VARCHAR(64)     Address of last top operation.
+Tail_top_result_lsa      VARCHAR(64)     Address of last partial abort/commit.
+Client_id                INT             Unique identifier of client application bind to transaction.
+Client_type              VARCHAR(40)     Type of the client. Either one of the followings: 'SYSTEM_INTERNAL', 'DEFAULT', 'CSQL', 'READ_ONLY_CSQL', 'BROKER', 'READ_ONLY_BROKER', 'SLAVE_ONLY_BROKER',
+                                         'ADMIN_UTILITY', 'ADMIN_CSQL', 'LOG_COPIER', 'LOG_APPLIER', 'RW_BROKER_REPLICA_ONLY', 'RO_BROKER_REPLICA_ONLY', 'SO_BROKER_REPLICA_ONLY', 
+                                         'ADMIN_CSQL_WOS', 'UNKNOWN'
+Client_info              VARCHAR(256)    General information of client application.
+Client_db_user           VARCHAR(40)     Current login database account from client application.
+Client_program           VARCHAR(256)    Program name of client application.
+Client_login_user        VARCHAR(16)     Current login user of OS which running the client application.
+Client_host              VARCHAR(64)     Host name of client application.
+Client_pid               INT             Process id of client application.
+Topop_depth              INT             Depth of nested top operation.
+Num_unique_btrees        INT             Number of unique btrees contained in unique_stat_info array.
+Max_unique_btrees        INT             Size of unique_stat_info_array.
+Interrupt                INT             The flag of whether or not interrupt current transaction. 0 for No, 1 for Yes.
+Num_transient_classnames INT             Number of transient classnames by this transaction.
+Repl_max_records         INT             Capacity of replication record array.
+Repl_records             VARCHAR(20)     Replication record buffer array, display address pointer as 0x12345678 or NULL for 0x00000000.
+Repl_current_index       INT             Current position of replication record in the array.
+Repl_append_index        INT             Current position of appended record in the array.
+Repl_flush_marked_index  INT             Index of flush marked replication record at first.
+Repl_insert_lsa          VARCHAR(64)     Insert Replication target LSA.
+Repl_update_lsa          VARCHAR(64)     Update Replication target LSA.
+First_save_entry         VARCHAR(20)     First save entry for the transaction, display address pointer as 0x12345678 or NULL for 0x00000000.
+Tran_unique_stats        VARCHAR(20)     Local statistical info for multiple row. display address pointer as 0x12345678 or NULL for 0x00000000.
+Modified_class_list      VARCHAR(20)     List of dirty classes, display address pointer as 0x12345678 or NULL for 0x00000000.
+Num_new_files            INT             Number of new files created.
+Num_new_temp_files       INT             Number of new temp files created.
+Waiting_for_res          VARCHAR(20)     Waiting resource. Just display address pointer as 0x12345678 or NULL for 0x00000000.
+Has_deadlock_priority    INT             Whether or not have deadlock priority. 0 for No, 1 for Yes.
+Suppress_replication     INT             Suppress writing replication logs when flag is set.
+Query_timeout            DATETIME        A query should be executed before query_timeout time or NULL for waiting until query complete.
+Query_start_time         DATETIME        Current query start time or NULL for query completed.
+Tran_start_time          DATETIME        Current transaction start time or NULL for transaction completed.
+Xasl_id                  VARCHAR(64)     vpid:(volid|pageid),vfid:(volid|pageid) or NULL for query completed.
+Disable_modifications    INT             Disable modification if greater than zero.
+Abort_reason             VARCHAR(40)     Reason of transaction aborted. Either one of the followings: 'NORMAL', 'ABORT_DUE_TO_DEADLOCK', 'ABORT_DUE_ROLLBACK_ON_ESCALATION'
+======================== =============== ==============================================================================================================================================================
+
+다음은 이 구문을 수행한 예이다.
+
+.. code-block:: sql
+
+    SHOW TRAN TABLES WHERE CLIENT_TYPE = 'CSQL';
+
+::
+
+        === <Result of SELECT Command in Line 1> ===
+
+        <00001> Tran_index              : 1
+                Tran_id                 : 58
+                Is_loose_end            : 0
+                State                   : 'ACTIVE'
+                Isolation               : 'COMMITTED READ'
+                Wait_msecs              : -1
+                Head_lsa                : '(-1|-1)'
+                Tail_lsa                : '(-1|-1)'
+                Undo_next_lsa           : '(-1|-1)'
+                Postpone_next_lsa       : '(-1|-1)'
+                Savepoint_lsa           : '(-1|-1)'
+                Topop_lsa               : '(-1|-1)'
+                Tail_top_result_lsa     : '(-1|-1)'
+                Client_id               : 108
+                Client_type             : 'CSQL'
+                Client_info             : ''
+                Client_db_user          : 'PUBLIC'
+                Client_program          : 'csql'
+                Client_login_user       : 'cubrid'
+                Client_host             : 'cubrid001'
+                Client_pid              : 13190
+                Topop_depth             : 0
+                Num_unique_btrees       : 0
+                Max_unique_btrees       : 0
+                Interrupt               : 0
+                Num_transient_classnames: 0
+                Repl_max_records        : 0
+                Repl_records            : NULL
+                Repl_current_index      : 0
+                Repl_append_index       : -1
+                Repl_flush_marked_index : -1
+                Repl_insert_lsa         : '(-1|-1)'
+                Repl_update_lsa         : '(-1|-1)'
+                First_save_entry        : NULL
+                Tran_unique_stats       : NULL
+                Modified_class_list     : NULL
+                Num_new_files           : 1
+                Num_new_temp_files      : 0
+                Waiting_for_res         : NULL
+                Has_deadlock_priority   : 0
+                Suppress_replication    : 0
+                Query_timeout           : NULL
+                Query_start_time        : 03:10:11.425 PM 02/04/2016
+                Tran_start_time         : 03:10:11.425 PM 02/04/2016
+                Xasl_id                 : 'vpid: (32766|50), vfid: (32766|43)'
+                Disable_modifications   : 0
+                Abort_reason            : 'NORMAL'
+
+SHOW THREADS
+------------
+
+각 스래드의 내부 정보를 보여준다. 결과는 "Index" 컬럼에 대해서 오름차순으로 정렬되며 스래드 개체들의 일관된 스냅샷이 아닐 수도 있다.
+SA MODE일 때에 이 문은 아무 결과도 보여주지 않는다.
+
+.. code-block:: sql
+
+    SHOW THREADS [ WHERE EXPR ];
+
+이 질의는 다음의 컬럼들을 출력한다:
+
+=========================== =============== ==============================================================================================================================================================
+Column name                 Type            Description
+=========================== =============== ==============================================================================================================================================================
+Index                       INT             Thread entry index.
+Jobq_index                  INT             Job queue index only for worker threads. NULL for non-worker threads.
+Thread_id                   BIGINT          Thread id.
+Tran_index                  INT             Transaction index to which this thread belongs. If no related tran index, NULL.
+Type                        VARCHAR(8)      Thread type. Either one of the followings: 'MASTER', 'SERVER', 'WORKER', 'DAEMON', 'VACUUM_MASTER', 'VACUUM_WORKER', 'NONE', 'UNKNOWN'.
+Status                      VARCHAR(8)      Thread status. Either one of the followings: 'DEAD', 'FREE', 'RUN', 'WAIT', 'CHECK'.
+Resume_status               VARCHAR(32)     Resume status. Either one of the followings: 'RESUME_NONE', 'RESUME_DUE_TO_INTERRUPT', 'RESUME_DUE_TO_SHUTDOWN', 'PGBUF_SUSPENDED', 'PGBUF_RESUMED', 
+                                            'JOB_QUEUE_SUSPENDED', 'JOB_QUEUE_RESUMED', 'CSECT_READER_SUSPENDED', 'CSECT_READER_RESUMED', 'CSECT_WRITER_SUSPENDED', 'CSECT_WRITER_RESUMED',
+                                            'CSECT_PROMOTER_SUSPENDED', 'CSECT_PROMOTER_RESUMED', 'CSS_QUEUE_SUSPENDED', 'CSS_QUEUE_RESUMED', 'QMGR_ACTIVE_QRY_SUSPENDED', 'QMGR_ACTIVE_QRY_RESUMED',
+                                            'QMGR_MEMBUF_PAGE_SUSPENDED', 'QMGR_MEMBUF_PAGE_RESUMED', 'HEAP_CLSREPR_SUSPENDED', 'HEAP_CLSREPR_RESUMED', 'LOCK_SUSPENDED', 'LOCK_RESUMED', 
+                                            'LOGWR_SUSPENDED', 'LOGWR_RESUMED'
+Net_request                 VARCHAR(64)     The net request name in net_requests array, such as: 'LC_ASSIGN_OID'. If not request name, shows NULL
+Conn_client_id              INT             Client id whom this thread is responding, if no client id, shows NULL
+Conn_request_id             INT             Request id which this thread is processing, if no request id, shows NULL
+Conn_index                  INT             Connection index, if not connection index, shows NULL
+Last_error_code             INT             Last error code
+Last_error_msg              VARCHAR(256)    Last error message, if message length is more than 256, it will be truncated, If no error message, shows NULL
+Private_heap_id             VARCHAR(20)     The address of id of thread private memory allocator, such as: 0x12345678. If no related heap id, shows NULL.
+Query_entry                 VARCHAR(20)     The address of the QMGR_QUERY_ENTRY*, such as: 0x12345678, if no related QMGR_QUERY_ENTRY, shows NULL.
+Interrupted                 INT             0 or 1, is this request/transaction interrupted
+Shutdown                    INT             0 or 1, is server going down?
+Check_interrupt             INT             0 or 1
+Check_page_validation       INT             0 or 1
+Wait_for_latch_promote      INT             0 or 1, whether this thread is waiting for latch promotion.
+Lockwait_blocked_mode       VARCHAR(24)     Lockwait blocked mode. Either one of the followings: 'NULL_LOCK', 'IS_LOCK', 'S_LOCK', 'IS_LOCK', 'IX_LOCK', 'SIX_LOCK', 'X_LOCK', 'SCH_M_LOCK', 'UNKNOWN'
+Lockwait_start_time         DATETIME        Start blocked time, if not in blocked state, shows NULL
+Lockwait_msecs              INT             Time in milliseconds, if not in blocked state, shows NULL
+Lockwait_state              VARCHAR(24)     The lock wait state such as: 'SUSPENDED', 'RESUMED', 'RESUMED_ABORTED_FIRST', 'RESUMED_ABORTED_OTHER', 'RESUMED_DEADLOCK_TIMEOUT', 'RESUMED_TIMEOUT', 
+                                            'RESUMED_INTERRUPT'. If not in blocked state, shows NULL
+Next_wait_thread_index      INT             The next wait thread index, if not exist, shows NULL
+Next_tran_wait_thread_index INT             The next wait thread index in lock manager, if not exist, shows NULL
+Next_worker_thread_index    INT             The next worker thread index in css_Job_queue.worker_thrd_list, if not exist, shows NULL
+=========================== =============== ==============================================================================================================================================================
+
+다음은 이 구문을 수행한 예이다.
+
+.. code-block:: sql
+
+    SHOW THREADS WHERE RESUME_STATUS != 'RESUME_NONE' AND STATUS != 'FREE';
+
+::
+
+    === <Result of SELECT Command in Line 1> ===
+    <00001> Index                      : 183
+            Jobq_index                 : 3
+            Thread_id                  : 140077788813056
+            Tran_index                 : 3
+            Type                       : 'WORKER'
+            Status                     : 'RUN'
+            Resume_status              : 'JOB_QUEUE_RESUMED'
+            Net_request                : 'QM_QUERY_EXECUTE'
+            Conn_client_id             : 108
+            Conn_request_id            : 196635
+            Conn_index                 : 3
+            Last_error_code            : 0
+            Last_error_msg             : NULL
+            Private_heap_id            : '0x02b3de80'
+            Query_entry                : '0x7f6638004cb0'
+            Interrupted                : 0
+            Shutdown                   : 0
+            Check_interrupt            : 1
+            Check_page_validation      : 1
+            Wait_for_latch_promote     : 0
+            Lockwait_blocked_mode      : NULL
+            Lockwait_start_time        : NULL
+            Lockwait_msecs             : NULL
+            Lockwait_state             : NULL
+            Next_wait_thread_index     : NULL
+            Next_tran_wait_thread_index: NULL
+            Next_worker_thread_index   : NULL
+    <00002> Index                      : 192
+            Jobq_index                 : 2
+            Thread_id                  : 140077779339008
+            Tran_index                 : 2
+            Type                       : 'WORKER'
+            Status                     : 'WAIT'
+            Resume_status              : 'LOCK_SUSPENDED'
+            Net_request                : 'LC_FIND_LOCKHINT_CLASSOIDS'
+            Conn_client_id             : 107
+            Conn_request_id            : 131097
+            Conn_index                 : 2
+            Last_error_code            : 0
+            Last_error_msg             : NULL
+            Private_heap_id            : '0x02bcdf10'
+            Query_entry                : NULL
+            Interrupted                : 0
+            Shutdown                   : 0
+            Check_interrupt            : 1
+            Check_page_validation      : 1
+            Wait_for_latch_promote     : 0
+            Lockwait_blocked_mode      : 'SCH_S_LOCK'
+            Lockwait_start_time        : 10:47:45.000 AM 02/03/2016
+            Lockwait_msecs             : -1
+            Lockwait_state             : 'SUSPENDED'
+            Next_wait_thread_index     : NULL
+            Next_tran_wait_thread_index: NULL
+            Next_worker_thread_index   : NULL
+            
+SHOW JOB QUEUES
+---------------
+
+작업 큐의 상태를 보여준다. SA MODE일 때에 이 문은 아무 결과도 보여주지 않는다.
+
+.. code-block:: sql
+
+    SHOW JOB QUEUES;
+
+이 질의는 다음의 컬럼들을 출력한다:
+
+=========================== =============== =======================================================
+Column name                 Type            Description
+=========================== =============== =======================================================
+Jobq_index                  INT             The index of job queue
+Num_total_workers           INT             Total number of work threads of the queue
+Num_busy_workers            INT             The number of busy worker threads of the queue
+Num_connection_workers      INT             The number of connection worker threads of the queue
+=========================== =============== =======================================================
+
+

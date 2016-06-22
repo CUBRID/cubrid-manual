@@ -200,11 +200,8 @@ Windows에서 특정 포트를 지정하기 번거로운 경우에도 이 방법
 |               | 장비(**)     | copylogdb,    |                |                                                     |                          |              |
 |               |              | applylogdb    |                |                                                     |                          |              |
 +---------------+--------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-| SHARD 사용    | cub_broker   | application   | BROKER_PORT    | 미지원                                              | 개방                     | 일회성 연결  |
-|               +--------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-|               | cub_proxy    | application   | BROKER_PORT    | 미지원                                              | 개방                     | 연결 유지    |
-+---------------+--------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-| Manager 사용  | Manager 서버 | application   | 8001           | 8001                                                | 개방                     |              |
+| Manager 사용  | Manager      | application   | 8001           | 8001                                                | 개방                     |              |
+|               | 서버         |               |                |                                                     |                          |              |
 +---------------+--------------+               |                |                                                     |                          |              |
 | Web Manager   | Web Manager  |               |                |                                                     |                          |              |
 | 사용          | 서버         |               |                |                                                     |                          |              |
@@ -365,43 +362,6 @@ master 노드에서 slave 노드로의 복제 과정 파악이 용이하게 하�
 #.  applylogdb(slave)는 slave 노드에 있는 cubrid.conf의 cubrid_port_id에 설정된 포트를 통해 cub_master(slave)에게 slave DB로의 연결을 요청하여, 최종적으로 cub_server(slave)와 연결하게 된다.
 
 master 노드에서도 applylogdb와 copylogdb가 동작하는데, master 노드가 절체로 인해 slave 노드로 변경될 때를 대비하기 위함이다.
-
-.. _cubrid-shard-ports:
-
-CUBRID SHARD 사용 포트
-----------------------
-
-CUBRID SHARD는 Linux 환경에서만 지원한다.
-
-접속 요청을 기다리는(listening) 프로세스들을 기준으로 각 OS 별로 필요한 포트를 정리하면 다음과 같으며, 각 포트는 listener 쪽에서 개방되어야 한다.
-
-+---------------+--------------+----------------+--------------------------+--------------+
-| listener      | requester    | Linux port     | 방화벽 포트 설정         | 설명         |
-+===============+==============+================+==========================+==============+
-| cub_broker    | application  | BROKER_PORT    | 개방(open)               | 일회성 연결  |
-+---------------+--------------+----------------+--------------------------+--------------+
-| cub_proxy     | application  | BROKER_PORT    | 개방                     | 연결 유지    |
-+---------------+--------------+----------------+--------------------------+--------------+
-
-다음은 CUBRID SHARD 구성에서 application과 CUBRID SHARD 사이의 연결 과정에 대해 나열한 것이다. CAS와 cub_proxy는 CUBRID SHARD를 구동(cubrid broker start)하는 시점에 이미 연결된 상태이다.
-
-#.  application이 cubrid_broker.conf에 설정된 BROKER_PORT를 통해 cub_broker에 연결을 시도한다.
-    
-#.  cub_broker는 연결 가능한 cub_proxy를 선택한다. 
-    
-#.  application과 cub_proxy가 연결된다. cub_proxy의 개수는 cubrid_broker.conf의 SHARD_NUM_PROXY에 의해 설정된다.
-
-    Linux에서는 application이 유닉스 도메인 소켓을 통해 cub_proxy와 연결된다. Windows에서는 유닉스 도메인 소켓을 사용할 수 없으므로 각 cub_proxy마다 cubrid_broker.conf에 설정된 BROKER_PORT와 SHARD_NUM_PROXY를 가지고 계산된 포트를 통해 연결된다.
-    
-    예를 들어 Linux에서 BROKER_PORT가 45000이고 SHARD_NUM_PROXY가 3일 때 사용하는 포트는 45000 하나면 된다.
-    
-    *   application이 cub_proxy(1)과 접속하는 포트: 45000, CAS가 cub_proxy(1)과 접속하는 포트 : 없음
-    *   application이 cub_proxy(2)와 접속하는 포트: 45000, CAS가 cub_proxy(2)와 접속하는 포트 : 없음
-    *   application이 cub_proxy(3)과 접속하는 포트: 45000, CAS가 cub_proxy(3)와 접속하는 포트 : 없음
-
-#. CAS와 cub_proxy는 CUBRID SHARD를 구동(cubrid broker start)하는 시점에 이미 연결된 상태이다. 또한, 각 프로세스는 항상 한 장비 내에 존재하므로 원격 접속이 불필요하다.
-
-   CAS가 cub_proxy로 연결할 때 Linux에서는 유닉스 도메인 소켓을 사용한다. cub_proxy 하나 당 여러 개의 CAS가 연결될 수 있다. CAS의 최소, 최대 개수는 cubrid_broker.conf의 MIN_NUM_APPL_SERVER, MAX_NUM_APPL_SERVER에 의해 설정된다. cub_proxy 하나가 동시에 연결 가능한 CAS의 최대 개수는 cubrid_broker.conf의 SHARD_MAX_CLIENTS에 의해 설정된다.
 
 .. _cwm-cm-ports:
 

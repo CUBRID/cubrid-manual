@@ -29,7 +29,7 @@ SELECT
                                     ]
      
     <table_specification> ::=
-        <single_table_spec> [<correlation>] [WITH (<lock_hint>)] |
+        <single_table_spec> [<correlation>] |
         <metaclass_specification> [ <correlation> ] |
         <subquery> <correlation> |
         TABLE ( <expression> ) <correlation>
@@ -53,7 +53,6 @@ SELECT
             NATURAL [ LEFT | RIGHT ] JOIN 
         } <table_specification>
     
-    <lock_hint> ::= READ UNCOMMITTED
 
 *   *qualifier*: 한정어. 생략이 가능하며 지정하지 않을 경우에는 **ALL** 로 지정된다.
 
@@ -151,7 +150,7 @@ FROM 절
     <select_expressions> ::= * | <expression_comma_list> | *, <expression_comma_list>
      
     <table_specification> ::=
-        <single_table_spec> [<correlation>] [WITH (<lock_hint>)] |
+        <single_table_spec> [<correlation>] |
         <metaclass_specification> [<correlation>] |
         <subquery> <correlation> |
         TABLE (<expression>) <correlation>
@@ -163,13 +162,11 @@ FROM 절
      
     <metaclass_specification> ::= CLASS <class_name>
      
-    <lock_hint> ::= READ UNCOMMITTED
 
 *   <*select_expressions*>: 조회하고자 하는 칼럼 또는 연산식을 하나 이상 지정할 수 있으며, 테이블 내 모든 칼럼을 조회할 때에는 * 를 지정한다. 조회하고자 하는 칼럼 또는 연산식에 대해 **AS** 키워드를 사용하여 별칭(alias)를 지정할 수 있으며, 지정된 별칭은 칼럼 이름으로 사용되어 **GROUP BY**, **HAVING**, **ORDER BY** 절 내에서 사용될 수 있다. 칼럼의 위치 인덱스(position)는 칼럼이 명시된 순서대로 부여되며, 시작 값은 1이다.
 
 *   <*table_specification*>: **FROM** 절 뒤에 하나 이상의 테이블 이름이 명시되며, 부질의와 유도 테이블도 지정될 수 있다. 부질의 유도 테이블에 대한 설명은 :ref:`subquery-derived-table`\ 을 참고한다.
 
-*   <*lock_hint*> : 해당 테이블에 대한 격리 수준(isolation level)을 **READ UNCOMMITTED** 수준으로 설정할 수 있다. **READ UNCOMMITTED**\은 오손 읽기(dirty read)가 발생할 수 있는 격리 수준으로서, CUBRID 트랜잭션의 격리 수준에 관한 자세한 설명은 :ref:`transaction-isolation-level`\ 을 참고한다.
 
 .. code-block:: sql
 
@@ -644,7 +641,7 @@ LIMIT 절
         | { <join_table_specification> | <join_table_specification2> } ...]
 
     <table_specification> ::=
-        <single_table_spec> [<correlation>] [WITH (<lock_hint>)]|
+        <single_table_spec> [<correlation>] |
         <metaclass_specification> [<correlation>] |
         <subquery> <correlation> |
         TABLE (<expression>) <correlation>
@@ -1099,17 +1096,17 @@ FOR UPDATE
         <spec_name_comma_list> ::= <spec_name> [, <spec_name>, ... ]
             <spec_name> ::= table_name | view_name 
          
-* <*spec_name_comma_list*>: FROM 절에서 참조하는 테이블/뷰들의 목록
+* <*spec_name_comma_list*>: **FROM** 절에서 참조하는 테이블/뷰들의 목록
 
-<*spec_name_comma_list*>에서 참조되는 테이블/뷰에만 잠금이 적용된다. FOR UPDATE 절에 <*spec_name_comma_list*>가 명시되지 않는 경우, FROM 절의 모든 테이블/뷰가 잠금 대상인 것으로 간주한다. 
+* <*spec_name_comma_list*>에서 참조되는 테이블/뷰에만 잠금이 적용된다. FOR UPDATE 절에 <*spec_name_comma_list*>가 명시되지 않는 경우, **FROM** 절의 모든 테이블/뷰가 잠금 대상인 것으로 간주한다. 
 
 **FOR UPDATE** 절에서 잠금된 행들은 **UPDATE/DELETE** 문에서 잠금이 해제된다. **SELECT .. FOR UPDATE** 문 수행 시 키 잠금은 획득되지 않는다. 
 
 .. note:: 제약 사항 
 
     *   부질의 안에서 **FOR UPDATE** 절을 사용할 수 없다. 단, **FOR UPDATE** 절이 부질의를 참조할 수는 있다. 
-    *   **GROUP BY, DISTINCT** 또는 집계 함수를 가진 질의문에서 사용할 수 없다. 
-    *   **UNION**\을 참조할 수 없다. 
+    *   **GROUP BY**, **DISTINCT** 또는 집계 함수를 가진 질의문에서 사용할 수 없다. 
+    *   **UNION** 을 참조할 수 없다. 
 
 다음은 **SELECT ... FOR UPDATE** 문을 사용하는 예이다. 
 

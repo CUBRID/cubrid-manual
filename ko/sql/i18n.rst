@@ -108,9 +108,9 @@ CUBRID에서 콜레이션은 문자셋을 포함한다. 예를 들어, "utf8_en_
     *   ci: 대소문자 구분 안 함. LDML 파일에서 다음을 설정하면 적용된다: strength="secondary" caseLevel="off" caseFirst="off"
 
     *   cs: 대소문자 구분. 기본적으로 모든 콜레이션은 대소문자를 구분한다. LDML 파일에서 다음을 설정하면 적용된다: strength="tertiary"
-        
-    *   bin/binary: 정렬 순서가 코드포인트의 순서와 똑같음. 메모리의 바이트 순서를 비교하면 거의 같은 결과가 나오는데, 공백 문자와 EUC의 더블 바이트 패딩 문자는 "bin" 콜레이션에서 항상 0으로 정렬된다. LDML 파일에는 bin 콜레이션을 설정하는 방법이 없는데(bin 콜레이션은 이미 내장되어 있음), LDML 파일에서 다음을 설정하면 비슷하게 적용된다: strength="quaternary" 또는 strength="identical"
-
+ 
+    *   bin: 정렬 순서가 코드포인트의 순서와 똑같음. 메모리의 바이트 순서를 비교하면 거의 같은 결과가 나오는데, 공백 문자와 EUC의 더블 바이트 패딩 문자는 "bin" 콜레이션에서 항상 0으로 정렬된다. LDML 파일에는 bin 콜레이션을 설정하는 방법이 없는데(bin 콜레이션은 이미 내장되어 있음), LDML 파일에서 다음을 설정하면 비슷하게 적용된다: strength="quaternary" 또는 strength="identical"
+       
     *   ai: 악센트 구분 안 함. 예를 들어,  'Á'는 'A'와 같은 순서이다. 이는 또한 대소문자를 구분하지 않는다. LDML 파일에서 (strength="primary")를 설정하면 적용된다.
         
     *   uca:  UCA(Unicode Collation Algorithm) 기반 콜레이션을 의미함. 내장된 변형 콜레이션과 구별하기 위해서만 사용된다. 즉, 모든 LDML 콜레이션은 UCA를 기반으로 하지만 짧은 이름을 유지하기 위해 "_uca"가 생략되며, 예외적으로 'utf8_ko_cs_uca', 'utf8_tr_cs_uca' 이 두 개의 콜레이션만 내장된 'utf8_ko_cs', 'utf8_tr_cs' 콜레이션과 구별하기 위해 사용된다.
@@ -193,10 +193,14 @@ CUBRID 콜레이션
 +-------------------+-----------------------------------------------------------------------+-------------------------------------------+
 | utf8_vi_cs        | vi_VN - 베트남어, 일반적인 유니코드 대소문자 규칙과 동일              | 0000-FFFF 범위의 모든 유니코드 코드포인트 |
 +-------------------+-----------------------------------------------------------------------+-------------------------------------------+
+| binary            | none (invariant to casing operations)                                 | any byte value (null-terminator는 0)      |
++-------------------+-----------------------------------------------------------------------+-------------------------------------------+
 
 터키어의 대소문자 규칙은 i,I,ı,İ 에 대해 대소문자를 바꾼다. 독일어 대소문자 규칙은 ß에 대해 대소문자를 바꾼다.
 
 위에서 iso88591_bin, iso88591_en_cs, iso88591_en_ci, utf8_bin, euckr_bin, utf8_en_cs, utf8_en_ci, utf8_tr_cs, utf8_ko_cs와 같은 9개의 콜레이션은 CUBRID에 기본적으로 내장되어 있다.
+
+콜레이션이 하나 이상의 로캘(.ldml)에 포함되어 있는 경우, 캐싱을 위한 로캘(콜레이션의 기본 로캘)은 처음으로 포함된 로캘이 된다. 로캘의 로딩 순서는 $CUBRID/conf/cubrid_locales.txt에서 가져온다. 위의 콜레이션들을 위한 로캘, utf8_gen, utf8_gen_ci, utf8_gen_ai_ci은 cubrid_locales.txt에 있는 기본 순서(알파벳순)를 가정한다, 따라서 모든 일반적인 LDML 콜레이션의 기본 로캘은 de_DE(German)이다.
 
 로캘 저장 위치
 --------------
@@ -566,7 +570,7 @@ ISO-8859-1 문자셋에서 한국어와 터키어의 월, 요일
 6단계: CUBRID 관련 프로세스 시작
 --------------------------------
 
-모든 CUBRID 관련 프로세스는 같은 환경 설정을 통해 구동되어야 한다. CUBRID 서버, 브로커, CAS, CSQL 등은 같은 버전의 로캘 바이너리 파일을 사용해야 한다. CUBRID HA, CUBRID SHARD 구성 시에도 마찬가지이다. 예를 들어, CUBRID HA 구성에서 마스터 서버, 슬레이브 서버와 레플리카 서버 등은 환경 설정이 모두 같아야 한다.
+모든 CUBRID 관련 프로세스는 같은 환경 설정을 통해 구동되어야 한다. CUBRID 서버, 브로커, CAS, CSQL 등은 같은 버전의 로캘 바이너리 파일을 사용해야 한다. CUBRID HA 구성 시에도 마찬가지이다. 예를 들어, CUBRID HA 구성에서 마스터 서버, 슬레이브 서버와 레플리카 서버 등은 환경 설정이 모두 같아야 한다.
 
 서버 프로세스와 CAS 프로세스에 의해 사용되는 로캘의 호환성 여부를 시스템이 자동으로 검사하지 않기 때문에, 두 프로세스 간에 LDML 파일들이 똑같다는 것을 보장해야 한다.
 
@@ -776,21 +780,29 @@ DROP된 외래 키를 다시 생성한다. ::
 
 한 문자에서 다른 문자로 변환되는 규칙은 다음과 같다.
 
-+------------------------+-----------------------------------+-------------------------------+-------------------------------+
-| Source \\ Destination  | ISO-8859-1                        | UTF-8                         | EUC-KR                        |
-+========================+===================================+===============================+===============================+
-| **ISO-8859-1**         | 변환 없음                         | 바이트 변환.                  | 바이트 변환.                  |
-|                        |                                   | 바이트 크기가 증가됨.         | 바이트 크기가 증가됨.         |
-|                        |                                   | 사용 가능한 문자 손실은 없음. | 사용 가능한 문자 손실은 없음. |
-+------------------------+-----------------------------------+-------------------------------+-------------------------------+
-| **UTF-8**              | 바이트 재해석.                    | 변환 없음.                    | 바이트 변환.                  |
-|                        | 바이트 크기는 변화 없음.          |                               | 바이트 크기가 감소될 수 있음. |
-|                        | 문자 길이는 증가함.               |                               | 문자 손실이 예상됨.           |
-+------------------------+-----------------------------------+-------------------------------+-------------------------------+
-| **EUC-KR**             | 바이트 재해석.                    | 바이트 변환.                  | 변환 없음.                    |
-|                        | 바이트 크기는 변화 없음.          | 바이트 크기가 증가될 수 있음. |                               |
-|                        | 문자 길이는 증가함.               | 사용 가능한 문자 손실은 없음. |                               |
-+------------------------+-----------------------------------+-------------------------------+-------------------------------+
++------------------------+-----------------------------------+-----------------------------------+-------------------------------+-------------------------------+
+| Source \\ Destination  | Binary                            | ISO-8859-1                        | UTF-8                         | EUC-KR                        |
++========================+===================================+===================================+===============================+===============================+
+| **Binary**             | 변환 없음                         | 변환 없음                         | 변환 없음.                    | 변환 없음.                    |
+|                        |                                   |                                   | 문자당 유효성 검증.           | 문자당 유효성 검증.           |
+|                        |                                   |                                   | 유효하지 않은 문자 '?'로 대체 | 유효하지 않은 문자 '?'로 대체 |
++------------------------+-----------------------------------+-----------------------------------+-------------------------------+-------------------------------+
+| **ISO-8859-1**         | 변환 없음                         | 변환 없음                         | 바이트 변환.                  | 바이트 변환.                  |
+|                        |                                   |                                   | 바이트 크기가 증가됨.         | 바이트 크기가 증가됨.         |
+|                        |                                   |                                   | 사용 가능한 문자 손실은 없음. | 사용 가능한 문자 손실은 없음. |
++------------------------+-----------------------------------+-----------------------------------+-------------------------------+-------------------------------+
+| **UTF-8**              | 변환 없음.                        | 바이트 재해석.                    | 변환 없음                     | 바이트 변환.                  |
+|                        | 바이트 크기는 변화 없음.          | 바이트 크기가 감소될 수 있음.     |                               | 바이트 크기가 감소될 수 있음. |
+|                        | 문자 길이는 증가함.               | 문자 손실이 예상됨.               |                               | 문자 손실이 예상됨.           |
++------------------------+-----------------------------------+-----------------------------------+-------------------------------+-------------------------------+
+| **EUC-KR**             | 변환 없음.                        | 바이트 변환.                      | 바이트 변환.                  | 변환 없음                     |
+|                        | 바이트 크기는 변화 없음.          | 바이트 크기가 감소될 수 있음.     | 바이트 크기가 증가될 수 있음. |                               |
+|                        | 문자 길이는 증가함.               | 문자 손실이 예상됨.               | 사용 가능한 문자 손실은 없음. |                               |
++------------------------+-----------------------------------+-----------------------------------+-------------------------------+-------------------------------+
+
+.. note::
+
+    CUBRID 9 버전 이전에는 binary 문자셋을 지원하지 않았다. ISO-8859-1 문자셋이 binary 문자셋 역할을 했다. UTF-8과 EUC-KR 문자셋을 ISO-8859-1로의 변환은 문자의 변환이 아닌 원소스의 바이트 내용을 다시 해석함으로써 수행되었다.
 
 .. _collation-setting:
 
@@ -812,6 +824,7 @@ DROP된 외래 키를 다시 생성한다. ::
     6        'utf8_tr_cs'     'utf8'         'Yes'        'No'            0             'Not applicable'
     7        'utf8_ko_cs'     'utf8'         'Yes'        'No'            0             'Not applicable'
     8        'euckr_bin'      'euckr'        'Yes'        'No'            0             'Not applicable'
+    9        'binary'         'binary'       'Yes'        'No'            0             'Not applicable'
 
 내장된 콜레이션은 사용자 로캘 라이브러리의 추가 없이 사용 가능하며, 각 콜레이션은 관련 문자셋을 가지고 있기 때문에 문자셋과 콜레이션이 호환되도록 지정해야 한다.
 
@@ -822,6 +835,9 @@ DROP된 외래 키를 다시 생성한다. ::
 *   ISO-8859-1: iso88591_bin
 *   UTF-8: utf8_bin
 *   EUC-KR: euckr_bin
+*   Binary: binary
+
+Binary는 콜레이션과 또 이와 관련된 문자셋 모두의 명명이다.
 
 서로 다른 콜레이션(과 문자셋)을 가진 표현식 인자(피연산자)를 가질 때 어떤 콜레이션을 사용할지 결정하는 방법에 대해서는 :ref:`determine-collation-columns` 을 참고한다.
 
@@ -936,6 +952,11 @@ CHARSET과 COLLATE 수정자
 | 11                     | 호스트 변수, 사용자 정의 변수                                                                        |
 +------------------------+------------------------------------------------------------------------------------------------------+
 
+.. note::
+
+    9.x 버전에서는 바이너리 콜레이션을 이용할 수 없다. iso85891_bin 콜레이션이 바이너리 콜레이션 역할을 한다. 10.0 버전부터 iso85891_bin 콜레이션을 갖는 컬럼들의 변환도는 2에서 3으로 변경되었다. 또한, iso85891_bin 콜레이션 갖는 표현식과 상수의 변환도가 각각 5에서 6으로 9에서 10으로 변환되었다.
+
+
 호스트 변수만을 인자로 가지는 표현식(예: 아래의 UPPER(?))에 대해서는 실행 단계에서 콜레이션 변환도를 결정할 수 있다. 즉, 파싱 단계에서는 이러한 표현식의 콜레이션 변환도를 결정할 수 없으므로 COERCIBILITY 함수는 -1을 반환한다.
 
 .. code-block:: sql
@@ -950,7 +971,22 @@ CHARSET과 COLLATE 수정자
       col1                         col2
     ===================================
       'utf8_bin'                     -1
+      
 
+모든 인수가 커시빌리티 11과 서로 다른 콜레이션을 가진 수식에서, 공통 콜레이션은 실행시점에 결정된다 (이것은 추론을 위한 커시빌리티 값 기반의 한 예외인데 이러한 것은 오류를 밸생시키기 위해서 필요하다).
+
+.. code-block:: sql
+
+    PREPARE st1 FROM 'SELECT INSERT(?,2,2,?)';
+    EXECUTE st1 USING _utf8'abcd', _binary'ef';
+
+::
+
+     insert( ?:0 , 2, 2,  ?:1 )
+    ======================
+     'aefd'
+
+     
 콜레이션이 서로 다른 두 개의 인자가 하나의 콜레이션으로 변환되는 경우를 살펴보면 다음과 같다.
 
 *   **원하는 콜레이션을 지정하여 변환**
@@ -1193,7 +1229,7 @@ SET NAMES 문
 
     SET NAMES [charset_name] [COLLATE collation_name]
 
-*   *charset_name*: 유효한 문자셋 이름은 iso88591, utf8 그리고 euckr이다.
+*   *charset_name*: 유효한 문자셋 이름은 iso88591, utf8,euckr 그리고 binary이다.
 *   *collation_name*: 콜레이션 지정은 생략할 수 있으며, 모든 가능한 콜레이션이 설정될 수 있다. 콜레이션과 문자셋은 호환되어야 하며, 그렇지 않으면 오류가 발생한다. 사용 가능한 콜레이션 이름은 **db_collation** 카탈로그 뷰를 검색하여 확인할 수 있다.  (:ref:`collation-charset-column` 참고) 
 
 **SET NAMES** 문으로 콜레이션을 지정하는 것은 시스템 파라미터 intl_collation을 지정하는 것과 같다. 따라서, 다음 두 문장은 같은 동작을 수행한다.
@@ -1225,7 +1261,7 @@ SET NAMES 문
 
     [charset_introducer]'constant-string' [COLLATE collation_name]
 
-*   *charset_introducer*: 언더바(_)를 앞에 붙인 문자셋 이름으로 생략할 수 있다. _utf8, _iso88591, _euckr 중 하나를 입력할 수 있다.
+*   *charset_introducer*: 언더바(_)를 앞에 붙인 문자셋 이름으로 생략할 수 있다. _utf8, _iso88591, _euckr, _binary 중 하나를 입력할 수 있다.
 *   *constant-string*: 상수 문자열 값이다.
 *   *collation_name*: 시스템에서 사용 가능한 콜레이션 이름으로 생략할 수 있다.
 
@@ -1625,13 +1661,78 @@ LIKE 조건 최적화
 +---------------------+---------------------------------------------+------------------------+
 | utf8_vi_cs          |  No                                         |  Yes                   |
 +---------------------+---------------------------------------------+------------------------+
+| binary              |  No                                         |  Yes                   |
++---------------------+---------------------------------------------+------------------------+
 
 콜레이션 정보 보기
 ------------------
 
 콜레이션 정보를 보려면 :func:`CHARSET`, :func:`COLLATION` 및 :func:`COERCIBILITY` 정보 함수를 사용한다.
 
-데이터베이스 콜레이션 정보는 **db_collation** 시스템 뷰 또는 :ref:`show-collation-statement`\ 을 통해 확인할 수 있다. 
+데이터베이스 콜레이션 정보는 **db_collation** 시스템 뷰 또는 :ref:`show-collation-statement`\ 을 통해 확인할 수 있다.
+
+
+JDBC에서 i18n 문자 사용
+===============================
+
+CUBRID JDBC는 서버에서 전달된 문자열(string) 타입 값을 String, CUBRIDBinaryString 객체를 이용해서 저장한다. String 객체는 각 문자를 저장하기 위해서 UTF-16을 사용한다. 따라서, 바이너리 문자셋을 제외하고는 어떤 문자열 DB 값도 저장하는데 사용될 수 있다. CUBRIDBinaryString 객체는 바이트 배열을 사용한다. 따라서 바이너리 문자셋의 문자열 값들을 저장하는데 사용될 수 있다.
+서버에서 받은 각 문자열 값의 데이터 버퍼는 서버에서 값의 문자셋이 무엇인지를 알 수 있게 한다. 문자셋은 컬럼 또는 표현식 결과의 문자셋이거나 또는 데이터베이스에 대응되는 문자셋이 없는 문자열들은 시스템의 문자셋이다.
+
+.. note::
+
+    이전 버전에서는, 연결 문자셋이 데이터베이스 값을 갖는 JDBC String 객체에 사용되었다.
+
+
+한 컬럼은 UTF-8 문자셋을 가지고 다른 컬럼들은 바이너리 문자셋을 갖는 테이블 생성:
+
+.. code-block:: sql
+
+    CREATE TABLE t1(col1 VARCHAR(10) CHARSET utf8, col2 VARCHAR(10) CHARSET binary);
+        
+        
+한 레코드 입력 (두번째 컬럼은 랜덤 값):
+
+.. code-block:: java    
+
+        Connection conn = getConn(null);
+        PreparedStatement st = conn.prepareStatement("insert into t1 values( ?, ? )");
+        byte[] b = new byte[]{(byte)161, (byte)224};
+        CUBRIDBinaryString cbs = new CUBRIDBinaryString(b);
+        String utf8_str = new String("abc");
+        st.setObject(1, utf8_str);
+        st.setObject(2, cbs);
+        st.executeUpdate();
+
+테이블 조회 및 결과 보기 (바이너리 문자열 - hex 덤프, 다른 문자셋 - 문자열):
+
+.. code-block:: java
+
+        ResultSet rs = null;
+        Statement stmt = null;
+        rs = stmt.executeQuery("select col1, col2 from t1;");
+        ResultSetMetaData rsmd = null;
+        rsmd = rs.getMetaData();
+        int numberofColumn = rsmd.getColumnCount();
+        while (rs.next()) {
+                for (int j = 1; j <= numberofColumn; j++) {
+                        String columnTypeName = rsmd.getColumnTypeName(j);
+                        int columnType = rsmd.getColumnType(j);
+                        if (((CUBRIDResultSetMetaData) rsmd).getColumnCharset(j).equals("BINARY")) {
+                                // database string with binary charset
+                                Object res;
+                                byte[] byte_array = ((CUBRIDBinaryString) res).getBytes();
+                                res = rs.getObject(j);
+                                System.out.println(res.toString());
+                        } else {
+                                // database string with any other charset
+                                String res;
+                                res = rs.getString(j);
+                                System.out.print(res);
+                        }
+                }
+        }
+
+
 
 타임존 설정
 ===========
@@ -1697,19 +1798,79 @@ Windows
 Linux
 ^^^^^
 
-1.  http://www.iana.org/time-zones 에서 최신의 타임존 데이터를 내려받는다.
+1.  Download the recent data from http://www.iana.org/time-zones 에서 최신의 타임존 데이터를 내려 받는다.
 
-    "Latest version"의 "Time Zone Data"에 링크된 파일을 $CUBRID/timezones 이하에 받는다.
+    Download the linked file in "Latest version"'의 "Time Zone Data"에 링크된 파일을 다운로드 한다.
 
-2.  $CUBRID/timezones/tzdata 디렉터리 이하에 압축 파일을 푼다.
+2.  압축된 파일을 **$CUBRID/timezones/tzdata** directory에 푼다.
 
-3.  "make_tz.sh -t <target_bit>"를 실행한다. <target_bit>에는 CUBRID가 64비트용이면 64로, 32비트용이면 32로 설정한다.
+3.  **make_tz.sh** 를 실행한다.
 
-    $CUBRID/lib 이하에 libcubrid_timezones.so가 생성된다.
+    **$CUBRID/lib** 디렉터리에 **libcubrid_timezones.so** 파일이 생성된다.
 
     ::
-    
-        make_tz.sh -t 64 
+
+        make_tz.sh
+
+
+타임존 라이브러리와 데이터베이스 호환성
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+CUBRID가 생성한 타임존 라이브러리는 타임존 데이터에 MD5 체크섬을 포함하고 있다. 이 해쉬는 이 라이브러리에 의해서 생성된 모든 데이터베이스에 저장되어있다. 구체적으로 **db_root** 시스템 테이블의 **timezone_checksum** 컬럼에 있다. 타임존 라이브러리가 변경되거나 (새로운 타임존 데이터와 같이 재 컴파일) 체크섬이 변경된 경우에 CUBRID server나 기타 어떤 CUBRID 도구도 기존의 데이터베이스를 이용하여 시작할 수 없다.
+이러한 비 호환성을 피하기 위해서, make_tz 도구의 인수를 확장하기 위한 옵션이 사용된다. 이 옵션이 주어지면, 데이터베이스의 **timezone_checksum** 값도 새로운 타임존 라이브러리의 새로운 MD5 체크섬으로 변경된다.
+
+In Linux:
+
+    ::
+
+        make_tz.sh -g extend -d basic
+
+
+In Windows:
+
+        ::
+
+         make_tz.bat /extend basic
+         
+JDBC에서 타임존 데이터 타입의 사용
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+JDBC CUBRID 드라이버는 타임존 정보에 대해서 CUBRID server에 완전히 종속된다. JDBC CUBRID driver is completely dependent on CUBRID server for timezone information. Java와 CUBRID가 같은 주 출처의 타임존 정보 (IAM)을 사용할지라도 지역의 이름과 타임존 정보들이 서로 호환되지 않는 것으로 고려되어야 한다. 
+
+타임존을 갖는 모든 CUBRID 데이터 타입은 **CUBRIDTimestamptz** Java 오브젝트에 매핑된다.
+
+JDBC를 이용하여 타임존과 같이 값을 입력:
+
+    .. code-block:: java
+
+         String datetime = "2000-01-01 01:02:03.123";
+         String timezone = "Europe/Kiev";
+         CUBRIDTimestamptz dt_tz = CUBRIDTimestamptz.valueOf(datetime, false, timezone);
+         PreparedStatement  pstmt = conn.prepareStatement("insert into t values(?)");
+         pstmt.setObject(1, ts);
+         pstmt.executeUpdate();
+
+타임존이 있는 값을 JDBC로 검색:
+
+        .. code-block:: java
+
+         String sql = "select * from tz";
+         Statement stmt = conn.createStatement();
+         ResultSet rs = stmt.executeQuery(sql);
+         CUBRIDTimestamptz object1 = (CUBRIDTimestamptz) rs.getObject(1);
+         System.out.println("object: " + object1.toString());
+
+
+내부적으로, CUBRID JDBC는 **CUBRIDTimestamptz** 오브젝트의 날짜/시간 부분을 1970년 1월 1일 부터 경과된 millisecond를 'long' 값 (Date 오브젝트에서 상속된)의 형태로 저장한다. (Unix 시간)
+내부적인 암호화는 UTC 시간 참조로 수행되는데, 이것은 지역 타임존을 사용하는 타임스탬프 오브젝트와 다르다. 이런 이유로 해서, Java 지역 타임존과 같은 타임존으로 생성되는 **CUBRIDTimestamptz** 오브젝트는 내부적으로 처리되는 시간과 같은 시간을 유지하지는 않는다. Unix 시간을 제공하기 위해서는 **getUnixTime()** 메서드가 사용될 것이다:
+
+        .. code-block:: java
+
+         String datetime = "2000-01-01 01:02:03.123";
+         String timezone = "Asia/Seoul";
+         CUBRIDTimestamptz dt_tz = CUBRIDTimestamptz.valueOf(datetime, false, timezone);
+         System.out.println("dt_tz.getTime: " + dt_tz.getTime());
+         System.out.println("dt_tz.getUnixTime: " + dt_tz.getUnixTime ());
+
 
 .. _char-data-conf-guide:
 
@@ -1787,16 +1948,18 @@ CUBRID에서 사용되는 LDML 파일 포맷은 Unicode Locale Data Markup Langu
 CUBRID에만 명시되는 태그와 속성은 이름에 "cubrid"를 포함하고 있기 때문에 쉽게 구별할 수 있다.
 
 새로운 로캘을 추가하는 가장 좋은 방법은 기존의 LDML 파일을 복사해서 원하는 결과가 나올 때까지 설정을 바꾸는 것이다.
-파일 이름은 "cubrid_<*language*>.xml"과 같이 주어져야 하며 $CUBRID/locales/data/ldml 디렉터리에 위치한다.
+파일 이름은 "cubrid_<*language*>.xml"과 같이 주어져야 하며 **$CUBRID/locales/data/ldml** 디렉터리에 위치한다.
 <*language*> 부분은 IETF 포맷(http://en.wikipedia.org/wiki/BCP_47)에 있는 ASCII 문자열(보통 5개 문자)이어야 한다.
-LDML 파일을 생성한 이후, <*language*> 부분이 CUBRID 설정 파일인 $CUBRID/conf/cubrid_locales.txt\ 에 추가되어야 한다.
+LDML 파일을 생성한 이후, <*language*> 부분이 CUBRID 설정 파일인 **$CUBRID/conf/cubrid_locales.txt** 에 추가되어야 한다.
 이 파일에 기록된 언어의 순서가 로캘 라이브러리를 생성(컴파일)하고 구동 시 로캘을 읽는 순서임에 유의한다.
 
-make_locale 스크립트는 새로 추가되는 로캘을 컴파일하고 그 데이터를 CUBRID 로캘 라이브러리($CUBRID/lib/에 있는 로캘)에 추가하는데 사용된다.
+**make_locale** 스크립트는 새로 추가되는 로캘을 컴파일하고 그 데이터를 CUBRID 로캘 라이브러리($CUBRID/lib/에 있는 로캘)에 추가하는데 사용된다.
 
 LDML 파일은 UTF-8로 인코딩되며, 같은 LDML 파일에는 하나의 로캘 정보만 기록할 수 있다.
 
 LDML 파일에 새로운 로캘을 추가하려면 다음이 요구된다.
+
+..  MONETARY가 없어질 것이기 때문에 "and currency"가 삭제 되었다.
 
 *   캘린더 정보를 명시한다(CUBRID 날짜 포맷, 월 및 요일 이름의 다양한 포맷, 오전/오후에 대한 이름). CUBRID는 캘린더 정보를 명시하기 위해 그레고리력만 지원한다(일반적인 LDML은 CUBRID가 지원하지 않는 다른 캘린더 타입을 지원한다).
 *   숫자 설정을 명시한다(자릿수 구분 기호)
@@ -1897,8 +2060,7 @@ LDML 알파벳은 로캘의 알파벳에 대한 대소문자 규칙을 정의한
 
 대소문자 구분 규칙은 선택적이며 문자 정보(UNICODEDATAFILE 또는 ASCII)의 기본 원본 중 가장 우선적으로 적용된다.
 
-CUBRID는 대문자 규칙(<u> 태그) 정의와 소문자 규칙(<l> 태그) 정의를 허용한다.
-대문자 규칙과 소문자 규칙 각각은 원본-대상(<s> = source, <d> destination)의 쌍으로 된 구성을 설정한다.
+CUBRID는 대문자 규칙(<u> 태그) 정의와 소문자 규칙(<l> 태그) 정의를 허용한다. 대문자 규칙과 소문자 규칙 각각은 원본-대상(<s> = source, <d> destination)의 쌍으로 된 구성을 설정한다.
 예를 들어, 다음은 문자 "A"의 소문자가 "aa"(2개의 "a" 문자)가 되도록 정의한다.
 
     .. code-block:: xml

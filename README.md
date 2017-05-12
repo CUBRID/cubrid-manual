@@ -12,7 +12,14 @@ Documentation for CUBRID RDBMS
     
 3. How to build manual
 
-   1) Install sphinx package by following the instruction of sphinx_install.txt
+   1) Install sphinx package and theme
+      a) Install python
+      b) Install pip by running command:
+         python get-pip.py
+      c) Install sphinx
+         pip install sphinx
+      d) Install read the docs theme
+         pip install sphinx_rtd_theme
    2) go to the manual directory (cd ko for Korean; or cd en for English)
    3) make html
    4) now you can see the built html files

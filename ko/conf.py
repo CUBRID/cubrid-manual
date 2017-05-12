@@ -12,6 +12,7 @@
 # serve to show the default.
 
 import sys, os
+import sphinx_rtd_theme
 # import cloud_sptheme as csp
 
 # If extensions (or modules to document with autodoc) are in another directory,
@@ -94,7 +95,7 @@ pygments_style = 'sphinx'
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 
-html_theme = 'default' # 3
+html_theme = 'sphinx_rtd_theme' # 3
 
 #html_theme = 'cloud'
 #html_theme = 'nature'
@@ -110,9 +111,8 @@ html_theme = 'default' # 3
 
 # html theme for default
 html_theme_options = {
-	"rightsidebar": "true",
-	"stickysidebar": "true",
-	"codebgcolor": "#E8E8E8"
+	"collapse_navigation": False,
+	"display_version": False
 }
 #	"codebgcolor": "#E8E8E8",
 #   "sidebarbgcolor": "#F4F7FA",
@@ -132,7 +132,7 @@ html_theme_options = {
 #}
 
 # Add any paths that contain custom themes here, relative to this directory.
-html_theme_path = []
+html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
 #html theme path for cloud
 #html_theme_path = [csp.get_theme_dir()]

@@ -4,19 +4,19 @@ CTE
 
 Common Table Expressions (CTEs) are temporary tables (list of results) associated with a statement. A CTE can be referenced multiple times within the statement, and is visible only within the statement scope. It enables better separation of statement logic and may enhance execution performance. Moreover, recursive CTEs can be used to generate a hierarchical statement based on parent-child relationships, being able to reproduce CONNECT BY statements and other more complex queries. 
 
-A CTE is introduced using the WITH clause. A list of sub-queries is expected, and final query which uses the sub-queries. Each sub-query (table expression) has a name and a query definition. A table expression may refer another table expression.
+A CTE is introduced using the WITH clause. A list of sub-queries is expected, and final query which uses the sub-queries. Each sub-query (table expression) has a name and a query definition. A table expression may refer another table expression which previously defined in the same statement.
 The general syntax is: ::
 
     WITH
-      [RECURSIVE <recursive_cte_name> [ (<recursive_arguments>) ] AS <recursive_sub-query>]
-      <cte_name1> [ (<arguments1>) ] AS <sub-query1>
-      <cte_name2> [ (<arguments2>) ] AS <sub-query2>
+      [RECURSIVE <recursive_cte_name> [ (<recursive_column_names>) ] AS <recursive_sub-query>]
+      <cte_name1> [ (<cte1_column_names>) ] AS <sub-query1>
+      <cte_name2> [ (<cte2_column_names>) ] AS <sub-query2>
       ...
     <final_query>
     
 
 *  *recursive_cte_name*, *cte_name1*, *cte_name2* :  identifiers for the table expressions (sub-queries)
-*  *recursive_arguments*, *arguments1*, *arguments2* : identifiers for the columns of the results of each table expression
+*  *recursive_column_names*, *cte1_column_names*, *cte2_column_names* : identifiers for the columns of the results of each table expression
 *  *sub-query1*, *sub-query2* : sub-queries which define each table expression. 
 *  *final_query* : query using table expression previously defined. 
 
@@ -81,6 +81,57 @@ A sub-query may be referenced by other sub-query:
                 3
 
 
+CTE column names
+================
+
+The column names of each CTE result may be specified after the CTE name. The number of elements in the CTE column list must match the number of columns in the CTE sub-query.
+
+.. code-block:: sql
+
+    WITH
+     cte1(c_of_cte, c_of_cte_100) AS (SELECT c, c+100 FROM t1)
+    SELECT c_of_cte, c_of_cte_100 FROM cte1;
+    
+    WITH
+     cte1(c_of_cte, c_of_cte_100) AS (SELECT c, c+100 FROM t1)
+    SELECT c_of_cte FROM cte1; 
+
+::
+
+         c_of_cte  c_of_cte_100
+    ===========================
+                1           101
+                2           102
+
+         c_of_cte
+    =============
+                1
+                2
+
+If no column names are given in the CTE, the column names are extracted from the first inner select list of the CTE. This means that expressions will be named according to their original text.
+
+.. code-block:: sql
+
+    WITH
+     cte1 AS (SELECT c, c+100 FROM t1)
+    SELECT * FROM cte1;
+    
+    WITH
+     cte1(c_of_cte, c_of_cte_100) AS (SELECT c, c+100 FROM t1)
+    SELECT c_of_cte FROM cte1; 
+
+::
+
+                c     t1.c+100
+    ==========================
+                1          101
+                2          102
+
+         c_of_cte
+    =============
+                1
+                2
+                    
 RECURSIVE clause
 ================
 
@@ -107,7 +158,7 @@ The recursive part should be defined in such way, that no cycle will be generate
                 5
                 5
 
-Recursive CTEs may fall into an infinite loop. CUBRID means to avoid such case is by setting the system parameter **cte_max_recursions**. Its default value is 2000 recursive iterations, maximum is 1000000 and minimum 2.
+Recursive CTEs may fall into an infinite loop. To avoid such case, set the system parameter **cte_max_recursions** to a desired threshold. Its default value is 2000 recursive iterations, maximum is 1000000 and minimum 2.
 
 .. code-block:: sql
 
@@ -121,3 +172,6 @@ Recursive CTEs may fall into an infinite loop. CUBRID means to avoid such case i
     In the command from line 3,
     Maximum recursions 3 reached executing CTE.
 
+.. warning::
+
+    *   Depending on the complexity of the CTE sub-queries, the result set can grow very large for sub-queries which produces large amount of data. Even the default value of **cte_max_recursions** may not be enough to avoid starvation of disk space.

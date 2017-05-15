@@ -223,6 +223,8 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | compat_numeric_division_scale       | client/server parameter | O       | bool     | no                             | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | cte_max_recursions                  | client/server parameter | O       | int      | 2000                           | available             |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | default_week_format                 | client/server parameter | O       | int      | 0                              | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | group_concat_max_len                | server parameter        | O       | byte     | 1,024                          | DBA only              |
@@ -1079,6 +1081,8 @@ The following are parameters related to SQL statements and data types supported 
 +---------------------------------+--------+------------+------------+------------+
 | compat_numeric_division_scale   | bool   | no         |            |            |
 +---------------------------------+--------+------------+------------+------------+
+| cte_max_recursions              | int    | 2000       | 2          | 1,000,000  |
++---------------------------------+--------+------------+------------+------------+
 | default_week_format             | int    | 0          |            |            |
 +---------------------------------+--------+------------+------------+------------+
 | group_concat_max_len            | byte   | 1,024      | 4          | 33,554,432 |
@@ -1172,6 +1176,10 @@ The following are parameters related to SQL statements and data types supported 
 **compat_numeric_division_scale**
 
     **compat_numeric_division_scale** is a parameter to configure the scale to be displayed in the result (quotient) of a division operation. If the parameter is set to no, the scale of the quotient is 9 if it is set to yes, the scale is determined by that of the operand. The default value is **no**.
+
+**cte_max_recursions**
+
+    **cte_max_recursions** is a parameter to limit the maximum number of iterations when executing the recursive part of the CTE (Common Table Expressions) statement. This avoids infinite loop and potential issues produced by the size of temporary lists.
 
 **default_week_format**
 

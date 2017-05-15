@@ -80,6 +80,39 @@ A sub-query may be referenced by other sub-query:
                 2
                 3
 
+Error will be prompted if:
+ * More than one CTE uses the same identifier name.
+ * using nested WITH clauses.
+ 
+.. code-block:: sql
+
+    WITH
+     cte1 AS (VALUES (2), (3)),
+     cte1 AS (SELECT c FROM t1)
+    SELECT c FROM cte1, cte2;
+
+::
+
+    before '
+        SELECT c FROM cte1, cte2;
+    '
+    CTE name ambiguity, there are more than one CTEs with the same name: 'cte1'.
+    
+.. code-block:: sql
+
+    WITH
+     cte1 AS (VALUES (2), (3)),
+     cte2 AS (    WITH
+                    cte3 AS (SELECT 1 FROM db_root)
+                SELECT * FROM cte4 )
+    SELECT c FROM cte1, cte2;
+
+::
+
+    before '
+        SELECT c FROM cte1, cte2;
+    '
+    Nested WITH clauses are not supported.
 
 CTE column names
 ================
@@ -175,3 +208,26 @@ Recursive CTEs may fall into an infinite loop. To avoid such case, set the syste
 .. warning::
 
     *   Depending on the complexity of the CTE sub-queries, the result set can grow very large for sub-queries which produces large amount of data. Even the default value of **cte_max_recursions** may not be enough to avoid starvation of disk space.
+
+The execution algorithm of a recursive CTE may be summarized as:
+ * execute the non recursive part of CTE and add its results to then final result set
+ * execute the recursive part using the result set obtained by the non recursive part, add its results to the final result set and memorize the start and end of the current iteration within the result set.
+ * repeat the non recursive part execution using the result set from previous iteration and add its results to the final result set
+ * if a recursive iteration produces no results, then stop
+ * if the configured maximum number of iterations is reached, also stop
+ 
+The recursive CTE must be referenced directly in the **FROM** clause, referencing it in sub-query will prompt an error:
+
+.. code-block:: sql
+
+    WITH
+     RECURSIVE cte1(x) AS SELECT c FROM t1 UNION ALL SELECT * from ( SELECT cte1.x + 1 FROM cte1 WHERE cte1.x < 5)
+    SELECT * FROM cte1;
+
+::
+
+    before '
+    SELECT * FROM cte1;
+    '
+    Recursive CTE 'cte1' must be referenced directly in its recursive query.
+     

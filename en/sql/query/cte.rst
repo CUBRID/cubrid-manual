@@ -18,67 +18,54 @@ The general syntax is: ::
 *  *recursive_cte_name*, *cte_name1*, *cte_name2* :  identifiers for the table expressions (sub-queries)
 *  *recursive_column_names*, *cte1_column_names*, *cte2_column_names* : identifiers for the columns of the results of each table expression
 *  *sub-query1*, *sub-query2* : sub-queries which define each table expression. 
-*  *final_query* : query using table expression previously defined. 
+*  *final_query* : query using table expression previously defined. Usually, the **FROM** clause of this will contain the CTEs identifiers.
 
-Simplest usage is to unify/difference/intersect result list of table expressions:
+Simplest usage is to combine result lists of table expressions:
 
 .. code-block:: sql
 
-    CREATE TABLE t1 (c INT);
-    INSERT INTO t1 VALUES (1),(2);
+    CREATE TABLE products (id INTEGER PRIMARY KEY, parent_id INTEGER, item VARCHAR(100), price INTEGER );
+    INSERT INTO products VALUES (1, -1, 'Drone', 2000);
+    INSERT INTO products VALUES (2, 1, 'Blade', 10);
+    INSERT INTO products VALUES (3, 1, 'Brushless motor', 20);
+    INSERT INTO products VALUES (4, 1, 'Frame', 50);
+    INSERT INTO products VALUES (5, -1, 'Car', 20000);
+    INSERT INTO products VALUES (6, 5, 'Wheel', 100);
+    INSERT INTO products VALUES (7, 5, 'Engine', 4000);
+    INSERT INTO products VALUES (8, 5, 'Frame', 4700);
     
     WITH
-     cte2 AS (VALUES (2), (3)),
-     cte1 AS (SELECT c FROM t1)
-    SELECT c FROM cte1 UNION ALL SELECT * FROM cte2;
-    
-    WITH
-     cte2 AS (VALUES (2), (3)),
-     cte1 AS (SELECT c FROM t1)
-    SELECT c FROM cte1 DIFFERENCE SELECT * FROM cte2;
-    
-    WITH
-     cte2 AS (VALUES (2), (3)),
-     cte1 AS (SELECT c FROM t1)
-    SELECT c FROM cte1 INTERSECT SELECT * FROM cte2;    
+     of_drones AS (SELECT item, 'drones' FROM products WHERE parent_id = 1),
+     of_cars AS (SELECT item, 'cars' FROM products WHERE parent_id = 5)
+    SELECT * FROM of_drones UNION ALL SELECT * FROM of_cars ORDER BY 1;
 
 ::
 
-                c
-    =============
-                1
-                2
-                2
-                3
-                
-                c
-    =============
-                1
-
-                c
-    =============
-                2               
+      item                  'drones'
+    ============================================
+      'Blade'               'drones'
+      'Brushless motor'     'drones'
+      'Car'                 'cars'
+      'Drone'               'drones'
+      'Engine'              'cars'
+      'Frame'               'drones'
+      'Frame'               'cars'
+      'Wheel'               'cars'            
             
-A sub-query may be referenced by other sub-query:
+A sub-query of one CTE may be referenced by other sub-query of another CTE (the referenced CTE needs to be defined before):
 
 .. code-block:: sql
 
-    CREATE TABLE t1 (c INT);
-    INSERT INTO t1 VALUES (1),(2);
-
     WITH
-     cte2 AS (VALUES (2), (3)),
-     cte1 AS (SELECT c FROM t1 UNION ALL SELECT * FROM cte2)
-    SELECT c FROM cte1;
+     of_drones AS (SELECT item FROM products WHERE parent_id = 1),
+     filter_common_with_cars AS (SELECT * FROM of_drones INTERSECT SELECT item FROM products WHERE parent_id = 5)
+    SELECT * FROM filter_common_with_cars ORDER BY 1;
 
 ::
 
-                c
-    =============
-                1
-                2
-                2
-                3
+      item
+    ======================
+      'Frame'
 
 Error will be prompted if:
  * More than one CTE uses the same identifier name.
@@ -87,30 +74,31 @@ Error will be prompted if:
 .. code-block:: sql
 
     WITH
-     cte1 AS (VALUES (2), (3)),
-     cte1 AS (SELECT c FROM t1)
-    SELECT c FROM cte1, cte2;
+     my_cte AS (SELECT item FROM products WHERE parent_id = 1),
+     my_cte AS (SELECT * FROM my_cte INTERSECT SELECT item FROM products WHERE parent_id = 5)
+    SELECT * FROM my_cte ORDER BY 1;
 
 ::
 
     before '
-        SELECT c FROM cte1, cte2;
+        SELECT * FROM my_cte ORDER BY 1;
     '
-    CTE name ambiguity, there are more than one CTEs with the same name: 'cte1'.
+    CTE name ambiguity, there are more than one CTEs with the same name: 'my_cte'.
     
 .. code-block:: sql
 
     WITH
-     cte1 AS (VALUES (2), (3)),
-     cte2 AS (    WITH
-                    cte3 AS (SELECT 1 FROM db_root)
-                SELECT * FROM cte4 )
-    SELECT c FROM cte1, cte2;
+     of_drones AS (SELECT item FROM products WHERE parent_id = 1),
+     of_cars1 AS (WITH 
+                    of_cars2 AS (SELECT item FROM products WHERE parent_id = 5)
+                  SELECT * FROM of_cars2
+                  )
+    SELECT * FROM of_drones, of_cars1 ORDER BY 1;
 
 ::
 
     before '
-        SELECT c FROM cte1, cte2;
+        SELECT * FROM of_drones, of_cars1 ORDER BY 1;
     '
     Nested WITH clauses are not supported.
 
@@ -122,48 +110,47 @@ The column names of each CTE result may be specified after the CTE name. The num
 .. code-block:: sql
 
     WITH
-     cte1(c_of_cte, c_of_cte_100) AS (SELECT c, c+100 FROM t1)
-    SELECT c_of_cte, c_of_cte_100 FROM cte1;
+     of_drones (product_name, product_type, price) AS (SELECT item, 'drones', price FROM products WHERE parent_id = 1),
+     of_cars  (product_name, product_type, price) AS (SELECT item, 'cars', price FROM products WHERE parent_id = 5)
+    SELECT * FROM of_drones UNION ALL SELECT * FROM of_cars ORDER BY product_type, price;
     
     WITH
-     cte1(c_of_cte, c_of_cte_100) AS (SELECT c, c+100 FROM t1)
-    SELECT c_of_cte FROM cte1; 
+     of_drones (product_name, product_type, price) AS (SELECT item, 'drones' as type, MAX(price) FROM products WHERE parent_id = 1 GROUP BY type),
+     of_cars  (product_name, product_type, price) AS (SELECT item, 'cars'  as type, MAX (price) FROM products WHERE parent_id = 5 GROUP BY type)
+    SELECT * FROM of_drones UNION ALL SELECT * FROM of_cars ORDER BY product_type, price;
 
 ::
 
-         c_of_cte  c_of_cte_100
-    ===========================
-                1           101
-                2           102
+      product_name          product_type                price
+    =========================================================
+      'Wheel'               'cars'                        100
+      'Engine'              'cars'                       4000
+      'Frame'               'cars'                       4700
+      'Blade'               'drones'                       10
+      'Brushless motor'     'drones'                       20
+      'Frame'               'drones'                       50
 
-         c_of_cte
-    =============
-                1
-                2
+     product_name          product_type                price
+    ========================================================
+     'Wheel'               'cars'                       4700
+     'Blade'               'drones'                       50
 
-If no column names are given in the CTE, the column names are extracted from the first inner select list of the CTE. This means that expressions will be named according to their original text.
+If no column names are given in the CTE, the column names are extracted from the first inner select list of the CTE. The expressions result columns will be named according to their original text.
 
 .. code-block:: sql
 
     WITH
-     cte1 AS (SELECT c, c+100 FROM t1)
-    SELECT * FROM cte1;
+     of_drones AS (SELECT item, 'drones', MAX(price) FROM products WHERE parent_id = 1 GROUP BY 2),
+     of_cars  AS (SELECT item, 'cars', MAX (price) FROM products WHERE parent_id = 5 GROUP BY 2)
+    SELECT * FROM of_drones UNION ALL SELECT * FROM of_cars ORDER BY 1;
     
-    WITH
-     cte1(c_of_cte, c_of_cte_100) AS (SELECT c, c+100 FROM t1)
-    SELECT c_of_cte FROM cte1; 
-
 ::
 
-                c     t1.c+100
-    ==========================
-                1          101
-                2          102
+     item                  'drones'              max(products.price)
+    ================================================================
+     'Blade'               'drones'                               50
+     'Wheel'               'cars'                               4700
 
-         c_of_cte
-    =============
-                1
-                2
                     
 RECURSIVE clause
 ================
@@ -174,36 +161,68 @@ The recursive part should be defined in such way, that no cycle will be generate
 .. code-block:: sql
 
     WITH
-      RECURSIVE cte1(x) AS (SELECT c FROM t1 UNION ALL SELECT cte1.x + 1 FROM cte1 WHERE cte1.x < 5)
-    SELECT * FROM cte1;
+     RECURSIVE cars (id, parent_id, item, price) AS (
+                        SELECT id, parent_id, item, price 
+                            FROM products WHERE item LIKE 'Car%' 
+                        UNION ALL 
+                        SELECT p.id, p.parent_id, p.item, p.price 
+                            FROM products p 
+                        INNER JOIN cars rec_cars ON p.parent_id = rec_cars.id)
+    SELECT item, price FROM cars ORDER BY 1;
 
 ::
 
-                x
-    =============
-                1
-                2
-                2
-                3
-                3
-                4
-                4
-                5
-                5
+      item                        price
+    ===================================
+      'Car'                       20000
+      'Engine'                     4000
+      'Frame'                      4700
+      'Wheel'                       100
+
+Using CTE in DDLs (UPDATE or DELETE data):
+      
+.. code-block:: sql
+
+    UPDATE products SET price = 
+        (WITH
+         RECURSIVE cars (id, parent_id, item, price) AS (
+                            SELECT id, parent_id, item, price 
+                                FROM products  WHERE item LIKE 'Car%' 
+                            UNION ALL 
+                            SELECT p.id, p.parent_id, p.item, p.price 
+                                FROM products p 
+                            INNER JOIN cars rec_cars ON p.parent_id = rec_cars.id)
+        SELECT SUM(price) - MAX(price) FROM cars ORDER BY 1) 
+    WHERE item='Car';    
+
+    select item, price from products where item='Car';
+
+::
+    
+      item                        price
+    ===================================
+      'Car'                        8800 
+  
 
 Recursive CTEs may fall into an infinite loop. To avoid such case, set the system parameter **cte_max_recursions** to a desired threshold. Its default value is 2000 recursive iterations, maximum is 1000000 and minimum 2.
 
 .. code-block:: sql
 
-    SET SYSTEM PARAMETERS 'cte_max_recursions=3';
+    SET SYSTEM PARAMETERS 'cte_max_recursions=2';
     WITH
-      RECURSIVE cte1(x) AS (SELECT c FROM t1 UNION ALL SELECT cte1.x + 1 FROM cte1 WHERE cte1.x < 5)
-    SELECT * FROM cte1;
+     RECURSIVE cars (id, parent_id, item, price) AS (
+                        SELECT id, parent_id, item, price 
+                            FROM products  WHERE item LIKE 'Car%' 
+                        UNION ALL 
+                        SELECT p.id, p.parent_id, p.item, p.price 
+                            FROM products p 
+                        INNER JOIN cars rec_cars ON p.parent_id = rec_cars.id)
+    SELECT item, price FROM cars ORDER BY 1;
 
 ::
 
-    In the command from line 3,
-    Maximum recursions 3 reached executing CTE.
+    In the command from line 9,
+    Maximum recursions 2 reached executing CTE.
 
 .. warning::
 

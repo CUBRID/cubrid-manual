@@ -45,40 +45,21 @@ For commands to create, add or delete the database volume, see :ref:`creating-da
 Permanent Volume
 ^^^^^^^^^^^^^^^^
 
-Permanent volume is a database volume that exists permanently once it is created. Its types include generic, data, temp, index, control, active log and archive log.
+**Data Volumes**
 
-**Generic Volume**
+Permanent data volumes are database volumes that exists permanently once they are created.
 
-For efficient management, the volume type to be added to the database can be specified as one of the following: data, temp or index. If the volume type is not specified, it is specified as a generic volume and it stores data and index. 
-However, schema is stored only on the generic volume; there is no specific volume type for storing schema.
+It usually stores data that needs to be persistent after database restart or crash. The possible types of permanent data are:
 
-It is specified as the generic volume when a volume is automatically increased.
+*   Tables (rows and multimedia data) are internally stored into heap files and heap overflow files, one file for each table.
+*   Indexes (keys and multimedia data) are internally stored into b-tree files and b-tree overflow files, one file for each index.
+*   System data is internally stored into several types of files: file tracker, vacuum data, dropped files tracker, and class names hash.
 
-**Data Volume**
+User can specifically assign some permanent data volumes to store temporary data. These volumes are permanent in the sense that they are never destroyed, but behave similarly to :ref:`temporary-volumes`.
 
-Data volume is a space for storing data such as instances, tables and multimedia data.
+.. note::
 
-**Temp Volume**
-
-Temp volume is a space where the intermediate and final results of query processing and sorting are temporarily stored. It is also called the permanent temp volume to distinguish it from the temporary temp volume that will be described below. The temp volume is a permanently-occupied space, meaning that data in the space is temporary stored and later destroyed. Therefore, when CUBRID restarts, the data in the temp volume space is initialized and the related log information is removed.
-
-The examples of queries that can use permanent temp volume or temporary temp volume are as follows:
-
-*   Queries creating the resultset like **SELECT**
-*    Queries including **GROUP BY** or **ORDER BY**
-*    Queries including a subquery
-*    Queries executing sort-merge join
-*    Queries including the **CREATE INDEX** statement
-
-When executing the queries above, the temp volume is used after exhausting the memory space (the space size is determined by the system parameter **temp_file_memory_size_in_pages** specified in **cubrid.conf**) assigned to store **SELECT** results or sort the data. The order in which the storage space is used to store the results of query processing and sorting is as follows: When the current storage space is exhausted, the next storage space is used.
-
-*   **temp_file_memory_size_in_pages** memory secured by the system parameter
-*   Permanent temp volume
-*   Temporary temp volume (for details, see the below)
-
-**Index Volume**
-
-Index volume is a space that holds the index information for query processing or integrity constraint checks.
+    If you have used older CUBRID version, you may know that we used to have several types of permanent data volumes: **generic**, **data** and **index**. This classification is deprecated, and although these options are still allowed for **cubrid createdb** and **cubrid addvoldb** commands, the created volumes will be no different and they will store any type of permanent data. The volume purpose is only classified into permanent data and temporary data.
 
 **Control File**
 
@@ -106,24 +87,43 @@ To get more information on the above, see :ref:`managing-archive-logs`.
 
 Background archive log is a volume used in the background with log archiving temporarily before creating archive logs. It is created as the same volume size as active log and stored.
 
+.. _temporary-volumes:
+
 Temporary Volume
 ^^^^^^^^^^^^^^^^
 
-Temporary volume has the opposite meaning to the permanent volume. That is, the temporary volume is a storage created only when the accumulated data exceeds the space specified by the user as the permanent volume. The temporary volume is destroyed when the server process terminates. One of such volumes created or destroyed temporarily is the temporary temp volume.
+Temporary data volume has the opposite meaning to the permanent volume. That is, the temporary volume is a storage file created temporarily which gets destroyed when the server process terminates. These volumes are used to store intermediate and final results of query processing and sorting.
 
-**Temporary Temp Volume**
+These files provide space to store intermediary and final results of queries. Based on the size of required temporary data, it will be first stored in memory (the space size is determined by the system parameter **temp_file_memory_size_in_pages** specified in **cubrid.conf**). Exceeding data has to be stored on disk.
 
-Temporary temp volume is a temporary volume created temporarily by the system after exhausting the space specified as the permanent temp volume, whereas the temporary volume belongs to the permanent volume with the permanent space specified. Because cost to create a temporary temp volume is high, **DBA** should assign an appropriate size of volume depending on situation to enhance performance.
+Database will usually create and use temporary volumes to allocate disk space for temporary data. They user may however assign permanent database volumes with the purpose of storing temporary data using by running **cubrid addvoldb -p temp** command. If such volumes exist, they will have priority over temporary volumes when disk space is allocated for temporary data.
 
-**DBA** should consider space where temporary temp volume can be created when creating a database. Once temporary temp volume is created, it is maintained until a database restarts and its size cannot be reduced. It is recommended to make temporary temp volume automatically delete by restarting a database if its size is too big.
+The examples of queries that can use temporary data are as follows:
 
-*   **File name of the temporary temp volume**: The file name of the temporary temp volume of CUBRID has the format of *db_name*\ **_t**\ *num*, where *db_name* is the database name and *num* is the volume identifier. The volume identifier is decremented by 1 from 32766.
+*   Queries creating the resultset like **SELECT**
+*   Queries including **GROUP BY** or **ORDER BY**
+*   Queries including a subquery
+*   Queries executing sort-merge join
+*   Queries including the **CREATE INDEX** statement
 
-*   **Configuring the temporary temp volume size**: The number of temporary temp volumes to be created is determined by the system depending on the space size needed for processing transactions. However, users can limit the temporary temp volume size by configuring the **temp_file_max_size_in_pages** parameter value in the system parameter configuration file (**cubrid.conf**). The default value is -1, which means it can be created as long as free space is available. If the **temp_file_max_size_in_pages** parameter value is configured to 0, the temporary temp volume will not be created even after exhausting the permanent temp volume.
+To have complete control on the disk space used for temporary data and to prevent it from consuming all system disk space, our recommendation is to:
 
-*   **Configuring storing location of the temporary temp volume**: By default, the temporary temp volume is created where the first database volume was created. However, you can specify a different directory to store the temporary temp volume by configuring the **temp_volume_path** parameter value.
+*   create permanent database volumes in advance to secure the required space for temporary data
+*   limit the size of the space used in the temporary volumes when a queries are executed by setting **temp_file_max_size_in_pages** parameter in **cubrid.conf** (there is no limit by default).
 
-*   **Deleting the temporary temp volume**: The temporary temp volume exists temporarily only while the database is running. Therefore, you must not delete the temporary temp volume when running servers. The temporary temp volume is deleted if database servers are normally terminated while it is deleted when the servers restart if database servers are abnormally terminated.
+Once temporary temp volume is created, it is maintained until a database restarts and its size cannot be reduced. It is recommended to make temporary temp volume automatically delete by restarting a database if its size is too big.
+
+*   **File name of the temporary volumes**: The file name format of a temporary volume is *db_name*\ **_t**\ *num*, where *db_name* is the database name and *num* is the volume identifier. The volume identifier is decremented by 1 from 32766.
+
+*   **Configuring the temporary volume size**: The number of temporary volumes to be created is determined by the system depending on the space size needed for processing transactions. However, users can limit the total temporary volume size by configuring the **temp_file_max_size_in_pages** parameter value in the system parameter configuration file (**cubrid.conf**). The default value is -1, which means it can be created as long as free space is available. If the **temp_file_max_size_in_pages** parameter value is configured to 0, no temporary volumes will be created, and the system will have to rely exclusively on permanent volumes assigned for temporary data.
+
+*   **Configuring storing location of temporary volumes**: By default, temporary volumes are created where the first database volume was created. However, you can specify a different directory to store temporary volumes by configuring the **temp_volume_path** parameter value.
+
+*   **Deleting temporary volumes**: Temporary volumes exist only while the database is running. Therefore, you must not delete the temporary volumes when running servers. They are deleted when database servers are normally terminated. When database servers are  abnormally terminated, temporary volumes are deleted on servers restart.
+
+.. note::
+
+    Normally, permanent volumes are used to store permanent data, and temporary volumes are used to store temporary data. You can assign permanent volumes to store temporary data, but temporary volumes will never store permanent data!
 
 Backup Volume
 ^^^^^^^^^^^^^

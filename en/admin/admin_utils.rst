@@ -83,7 +83,7 @@ The following shows [options] available with the **cubrid** **createdb** utility
 
 .. option:: --db-volume-size=SIZE
 
-    This option specifies the size of the database volume that will be created first. The default value is  the value of the system parameter **db_volume_size**, and the minimum value is 20M. You can set units as K, M, G and T, which stand for kilobytes (KB), megabytes (MB), gigabytes (GB), and terabytes (TB) respectively. If you omit the unit, bytes will be applied.
+    This option specifies the size of the database volume that will be created first. The default value is the value of the system parameter **db_volume_size**. You can set units as K, M, G and T, which stand for kilobytes (KB), megabytes (MB), gigabytes (GB), and terabytes (TB) respectively; if you omit the unit, bytes will be applied. The size of the database will be always rounded up to the next multiple of the size of 64 disk sectors; the actual size is determined by the database page size and can be either 16M, 32M or 64M.
 
     The following example shows how to create a database named *testdb* and assign 512 MB to its first volume. ::
 
@@ -99,7 +99,7 @@ The following shows [options] available with the **cubrid** **createdb** utility
 
 .. option:: --log-volume-size=SIZE
 
-    This option  specifies the size of the database log volume. The default value is the same as database volume size, and the minimum value is 20M. You can set units as K, M, G and T, which stand for kilobytes (KB), megabytes (MB), gigabytes (GB), and terabytes (TB) respectively. If you omit the unit, bytes will be applied. 
+    This option  specifies the size of the database log volume. The default value is the same as database volume size, and the minimum value is 20M. You can set units as K, M, G and T, which stand for kilobytes (KB), megabytes (MB), gigabytes (GB), and terabytes (TB) respectively. If you omit the unit, bytes will be applied.
 
     The following example shows how to create a database named *testdb* and assign 256 MB to its log volume. ::
 
@@ -176,24 +176,21 @@ The following shows [options] available with the **cubrid** **createdb** utility
         #xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
         # NAME volname COMMENTS volcmnts PURPOSE volpurp NPAGES volnpgs
         NAME data_v1 COMMENTS "data information volume" PURPOSE data NPAGES 1000
-        NAME data_v2 COMMENTS "data information volume" PURPOSE data NPAGES 1000
-        NAME data_v3 PURPOSE data NPAGES 1000
-        NAME index_v1 COMMENTS "index information volume" PURPOSE index NPAGES 500
+        NAME data_v2 COMMENTS "data information volume" NPAGES 1000
         NAME temp_v1 COMMENTS "temporary information volume" PURPOSE temp NPAGES 500
-        NAME generic_v1 COMMENTS "generic information volume" PURPOSE generic NPAGES 500
         #xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
     As shown in the example, the specification of each volume consists following. ::
 
-        NAME volname COMMENTS volcmnts PURPOSE volpurp NPAGES volnpgs
+        [NAME volname] [COMMENTS volcmnts] [PURPOSE volpurp] NPAGES volnpgs
 
     *   *volname*: The name of the volume to be created. It must follow the UNIX file name conventions and be a simple name not including the directory path. The specification of a volume name can be omitted. If it is, the "database name to be created by the system_volume identifier" becomes the volume name.
 
     *   *volcmnts*: Comment to be written in the volume header. It contains information on the additional volume to be created. The specification of the comment on a volume can also be omitted.
 
-    *   *volpurp*: It must be one of the following types: **data**, **index**, **temp**, or **generic** based on the purpose of storing volumes. The specification of the purpose of a volume can be omitted in which case the default value is **generic**.
+    *   *volpurp*: The purpose for which the volume will be used. It can be either permanent data (default option) or temporary. *For backward compatibilty, all old keywords, data, index, temp, or generic are accepted. temp stands for temporary data purpose, while the rest stand for permanent data purpose*.
 
-    *   *volnpgs*: The number of pages of the additional volume to be created. The specification of the number of pages of the volume cannot be omitted; it must be specified.
+    *   *volnpgs*: The number of pages of the additional volume to be created. The specification of the number of pages of the volume cannot be omitted; it must be specified. The actual volume size is rounded up to the next multiple of **64 sectors**.
 
 .. option:: --user-definition-file=FILE
 
@@ -275,17 +272,15 @@ The following shows [options] available with the **cubrid** **createdb** utility
 
 .. note::
 
-    *   **temp_file_max_size_in_pages** is a parameter used to configure the maximum number of pages assigned to store the temporary temp volume - used for complicated queries or storing arrays - on the disk. While the default value is **-1**, the temporary temp volume may be increased up to the amount of extra space on the disk specified by the **temp_volume_path** parameter. If the value is 0, the temporary temp volume cannot be created. In this case, the permanent temp volume should be added by using the :ref:`cubrid addvoldb <adding-database-volume>` utility. For the efficient management of the volume, it is recommended to add a volume for each usage. 
+    *   **temp_file_max_size_in_pages** is a parameter used to configure the maximum size of temporary volumes - used for complicated queries or storing arrays - on the disk. With the default value **-1**, the temporary volumes size is only limited by the capacity of the disk specified by the **temp_volume_path** parameter. If the value is 0, no temporary volumes can be created. In this case, a permanent volume with temporary data purpose should be added by using the :ref:`cubrid addvoldb <adding-database-volume>` utility. For an efficient storage management, it is recommended to use the latter approach.
         
-    *   By using the :ref:`cubrid spacedb <spacedb>` utility, you can check the reaming space of each volume. By using the :ref:`cubrid addvoldb <adding-database-volume>` utility, you can add more volumes as needed while managing the database. When adding a volume while managing the database, you are advised to do so when there is less system load. Once the assigned volume for a usage is completely in use, a **generic** volume will be created, so it is suggested to add extra volume for a usage that is expected to require more space.
+    *   By using the :ref:`cubrid spacedb <spacedb>` utility, you can check the remaining space of each volume. By using the :ref:`cubrid addvoldb <adding-database-volume>` utility, you can add more volumes as needed while managing the database. You are advised to do add more volumes when there is less system load. When all preassigned volumes are completely in use, the database system automatically creates new volumes.
 
-The following example shows how to create a database, classify volume usage, and add volumes such as **data**, **index**, and **temp**. ::
+The following example shows how to create a database, with additional volumes, including one for temporary data purpose. ::
 
     cubrid createdb --db-volume-size=512M --log-volume-size=256M cubriddb en_US
-    cubrid addvoldb -S -p data -n cubriddb_DATA01 --db-volume-size=512M cubriddb
-    cubrid addvoldb -S -p data -n cubriddb_DATA02 --db-volume-size=512M cubriddb
-    cubrid addvoldb -S -p index -n cubriddb_INDEX01 cubriddb --db-volume-size=512M cubriddb
-    cubrid addvoldb -S -p temp -n cubriddb_TEMP01 cubriddb --db-volume-size=512M cubriddb
+    cubrid addvoldb -S -n cubriddb_DATA01 --db-volume-size=512M cubriddb
+    cubrid addvoldb -S -p temp -n cubriddb_TEMP01 --db-volume-size=512M cubriddb
 
 .. _adding-database-volume:
 
@@ -294,13 +289,9 @@ The following example shows how to create a database, classify volume usage, and
 addvoldb
 --------
 
-When the total free space size of the **generic** volumes has become smaller than the size which is specified at the system parameter **generic_vol_prealloc_size** (default: 50M) in :ref:`disk-parameters`, **generic** volume is added automatically. Automatically adding a volume is done when a new page is required; The volume is not expanded when only a SELECT queries are executed.
+If you want to micromanage CUBRID storage volumes, addvoldb is the tool for you. You can finely tune each file name, path, purpose, and size. The database system can handle all storage by itself, but it uses default values to configure each new volume.
 
-CUBRID volumes are separated by the purpose of the usage such as data storage, index storage, temporary result storage; **generic** volume can be used for data and index storage.
-
-For the each type(purpose) of volumes, see :ref:`database-volume-structure`.
-
-In comparison, the command for adding a database volume manually is as follows.
+The command for manually adding a database volume is as follows.
 
 ::
 
@@ -312,13 +303,11 @@ In comparison, the command for adding a database volume manually is as follows.
     
 *   *database_name*: Specifies the name of the database to which a volume is to be added without including the path name to the directory where the database is to be created.
 
-The following example shows how to create a database, classify volume usage, and add volumes such as **data**, **index**, and **temp**. ::
+The following example shows how to create a database, with additional multi-purpose volumes. ::
 
     cubrid createdb --db-volume-size=512M --log-volume-size=256M cubriddb en_US
-    cubrid addvoldb -S -p data -n cubriddb_DATA01 --db-volume-size=512M cubriddb
-    cubrid addvoldb -S -p data -n cubriddb_DATA02 --db-volume-size=512M cubriddb
-    cubrid addvoldb -S -p index -n cubriddb_INDEX01 cubriddb --db-volume-size=512M cubriddb
-    cubrid addvoldb -S -p temp -n cubriddb_TEMP01 cubriddb --db-volume-size=512M cubriddb
+    cubrid addvoldb -S -n cubriddb_DATA01 --db-volume-size=512M cubriddb
+    cubrid addvoldb -S -p temp -n cubriddb_TEMP01 --db-volume-size=512M cubriddb
 
 The following shows [options] available with the **cubrid addvoldb** utility.
 
@@ -326,46 +315,52 @@ The following shows [options] available with the **cubrid addvoldb** utility.
 
 .. option:: --db-volume-size=SIZE
 
-    **--db-volume-size** is an option that specifies the size of the volume to be added to a specified database. If the **--db-volume-size** option is omitted, the value of the system parameter **db_volume_size** is used by default. You can set units as K, M, G and T, which stand for kilobytes (KB), megabytes (MB), gigabytes (GB), and terabytes (TB) respectively. If you omit the unit, bytes will be applied.
+    **--db-volume-size** is an option that specifies the size of the volume to be added to a specified database. If the **--db-volume-size** option is omitted, the value of the system parameter **db_volume_size** is used by default. You can set units as K, M, G and T, which stand for kilobytes (KB), megabytes (MB), gigabytes (GB), and terabytes (TB) respectively. If you omit the unit, bytes will be applied. The size of the database will be always rounded up to the next multiple of the size of 64 disk sectors; the actual size is determined by the database page size and can be either 16M, 32M or 64M.
 
     The following example shows how to add a volume for which 256 MB are assigned to the *testdb* database. ::
 
-        cubrid addvoldb -p data --db-volume-size=256M testdb
+        cubrid addvoldb --db-volume-size=256M testdb
 
 .. option:: -n, --volume-name=NAME
 
     This option specifies the name of the volume to be added to a specified database. The volume name must follow the file name protocol of the operating system and be a simple one without including the directory path or spaces. 
     If the **-n** option is omitted, the name of the volume to be added is configured by the system automatically as "database name_volume identifier". For example, if the database name is *testdb*, the volume name *testdb_x001* is automatically configured.
     
-    The following example shows how to add a volume for which 256 MB are assigned to the *testdb* database in standalone mode. The volume name *testdb_v1* will be created. ::
+    The following example shows how to specify a different name, *testdb_v1*, to newly added volume. ::
 
-        cubrid addvoldb -S -n testdb_v1 --db-volume-size=256M testdb
+        cubrid addvoldb -n testdb_v1 testdb
 
 .. option::  -F, --file-path=PATH
 
     This option specifies the directory path where the volume to be added will be stored. If the **-F** option is omitted, the value of the system parameter **volume_extension_path** is used by default.
 
-    The following example shows how to add a volume for which 256 MB are assigned to the *testdb* database in standalone mode. The added volume is created in the /dbtemp/addvol directory. Because the **-n** option is not specified for the volume name, the volume name *testdb_x001* will be created. ::
+    The following example shows how to add a volume in the */dbtemp/addvol* directory. Since the **-n** option is not specified for the volume name, the volume name *testdb_x001* will be created. ::
 
-        cubrid addvoldb -S -F /dbtemp/addvol/ --db-volume-size=256M testdb
+        cubrid addvoldb -F /dbtemp/addvol/ testdb
 
 .. option:: --comment COMMENT
 
     This option facilitates to retrieve information on the added volume by adding such information in the form of comments. It is recommended that the contents of a comment include the name of **DBA** who adds the volume, or the purpose of adding the volume. The comment must be enclosed in double quotes.  
     
-    The following example shows how to add a volume for which 256 MB are assigned to the *testdb* database in standalone mode and inserts a comment about the volume. ::
+    The following example shows how to add a volume and inserts a comment with additional information. ::
 
-        cubrid addvoldb -S --comment "data volume added_cheolsoo kim" --db-volume-size=256M testdb
+        cubrid addvoldb --comment "Data volume added by cheolsoo kim because permanent data space was almost depleted." testdb
 
 .. option:: -p, --purpose=PURPOSE
 
-    This option specifies the purpose of the volume to be added. The reason for specifying the purpose of the volume is to improve the I/O performance by storing volumes separately on different disk drives according to their purpose. 
-    Parameter values that can be used for the **-p** option are **data**, **index**, **temp** and **generic**. The default value is **generic**. For the purpose of each volume, see :ref:`database-volume-structure`.
+    This option specifies the purpose of the volume to be added. The purpose defines the type of files that will be stored in added volume:
+    
+    * **PERMANENT DATA** to store table rows, indexes and system files.
+    * **TEMPORARY DATA** to store intermediate and final results of query processing and sorting.
+    
+    If not specified, the purpose of the volume is by default considered **PERMANENT DATA**. The following example shows how to change it to temporary. ::
+    
+        cubrid addvoldb -p temp testdb
 
-    The following example shows how to add a volume for which 256 MB are assigned to the *testdb* database in standalone mode. ::
-
-        cubrid addvoldb -S -p index --db-volume-size=256M testdb
-
+    *PERMANENT DATA volumes used to be classified as generic, data and index. The design of volumes has been changed, and since then the classification no longer exists. In order to avoid invalidating your old scripts, we chose to keep the keywords as valid options, but their effect will be the same. The only remaining option value with a real effect is temp.*
+        
+    For detailed information on each purpose, see :ref:`database-volume-structure`.
+    
 .. option:: -S, --SA-mode
 
     This option accesses the database in standalone mode without running the server process. This option has no parameter. If the **-S** option is not specified, the system assumes to be in client/server mode. ::

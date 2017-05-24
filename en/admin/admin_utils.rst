@@ -649,7 +649,7 @@ spacedb
 -------
 
 The **cubrid spacedb** utility is used to check how much space of database volumes is being used. 
-It shows a brief description of all permanent data volumes in the database. Information returned by the **cubrid spacedb** utility includes the ID, name, purpose and total/free space of each volume. You can also check the total number of volumes and used/unused database pages. 
+The tool can show brief aggregated information on database space usage, or detailed descriptions of all volumes and files in use, based on its options. Information returned by the **cubrid spacedb** utility includes the volume ID's, names, purpose and total/free space of each volume.
 
 ::
 
@@ -689,85 +689,52 @@ The following shows [options] available with the **cubrid spacedb** utility.
     This option specifies the size unit of the space information of the database to be one of PAGE, M(MB), G(GB), T(TB), H(print-friendly). The default value is **H**. 
     If you set the value to H, the unit is automatically determined as follows: M if 1 MB = DB size < 1024 MB, G if 1 GB = DB size < 1024 GB. ::
 
-        $ cubrid spacedb --size-unit=M testdb
         $ cubrid spacedb --size-unit=H testdb
-
+        
         Space description for database 'testdb' with pagesize 16.0K. (log pagesize: 16.0K)
 
-        Volid  Purpose    total_size   free_size  Vol Name
+        type                purpose            volume_count         used_size           free_size           total_size
+        PERMANENT           PERMANENT DATA                2            61.0 M             963.0 M                1.0 G
+        PERMANENT           TEMPORARY DATA                1            12.0 M             500.0 M              512.0 M
+        TEMPORARY           TEMPORARY DATA                1            40.0 M              88.0 M              128.0 M
+        -                   -                             4           113.0 M               1.5 G                1.6 G
 
-            0   GENERIC       20.0 M      17.0 M  /home1/cubrid/testdb
-            1      DATA       20.0 M      19.5 M  /home1/cubrid/testdb_x001
-            2     INDEX       20.0 M      19.6 M  /home1/cubrid/testdb_x002
-            3      TEMP       20.0 M      19.6 M  /home1/cubrid/testdb_x003
-            4      TEMP       20.0 M      19.9 M  /home1/cubrid/testdb_x004
-        -------------------------------------------------------------------------------
-            5                100.0 M      95.6 M
-        Space description for temporary volumes for database 'testdb' with pagesize 16.0K.
-
-        Volid  Purpose    total_size   free_size  Vol Name
+        Space description for all volumes:
+        volid               type                purpose             used_size           free_size           total_size         volume_name
+            0               PERMANENT           PERMANENT DATA         60.0 M             452.0 M              512.0 M         /home1/cubrid/testdb
+            1               PERMANENT           PERMANENT DATA          1.0 M             511.0 M              512.0 M         /home1/cubrid/testdb_x001
+            2               PERMANENT           TEMPORARY DATA         12.0 M             500.0 M              512.0 M         /home1/cubrid/testdb_x002
+        32766               TEMPORARY           TEMPORARY DATA         40.0 M              88.0 M              128.0 M         /home1/cubrid/testdb_t32766
 
         LOB space description file:/home1/cubrid/lob
 
 .. option:: -s, --summarize
 
-    This option aggregates total_pages, used_pages and free_pages by DATA, INDEX, GENERIC, TEMP and TEMP TEMP, and outputs them. ::
+    This option aggregates volume count, used size, free size and total size by volume types and purposes. There are three classes of volumes: permanent volumes with permanent data, permanent volumes with temporary data and temporary volume with temporary data; no temporary volumes with permanent data. Last row shows the total values for all types of volumes. ::
 
         $ cubrid spacedb -s testdb
 
-        Summarized space description for database 'testdb' with pagesize 16.0K. (log pagesize: 16.0K)
+        Space description for database 'testdb' with pagesize 16.0K. (log pagesize: 16.0K)
 
-        Purpose     total_size   used_size   free_size  volume_count
-        -------------------------------------------------------------
-              DATA      20.0 M       0.5 M      19.5 M          1
-             INDEX      20.0 M       0.4 M      19.6 M          1
-           GENERIC      20.0 M       3.0 M      17.0 M          1
-              TEMP      40.0 M       0.5 M      39.5 M          2
-         TEMP TEMP       0.0 M       0.0 M       0.0 M          0
-        -------------------------------------------------------------
-             TOTAL     100.0 M       4.4 M      95.6 M          5
+        type                purpose            volume_count         used_size           free_size           total_size
+        PERMANENT           PERMANENT DATA                2            61.0 M             963.0 M                1.0 G
+        PERMANENT           TEMPORARY DATA                1            12.0 M             500.0 M              512.0 M
+        TEMPORARY           TEMPORARY DATA                1            40.0 M              88.0 M              128.0 M
+        -                   -                             4           113.0 M               1.5 G                1.6 G
 
 .. option:: -p, --purpose
 
-    This option separates the used space as data_size, index_size and temp_size, and outputs them.
-
-    ::
+    This option shows detailed information on the purpose of stored data. The information includes number of files, used size, size of file tables, reserved sectors size and total size. ::
     
         Space description for database 'testdb' with pagesize 16.0K. (log pagesize: 16.0K)
 
-        Volid  Purpose    total_size   free_size   data_size  index_size   temp_size  Vol Name
-
-            0   GENERIC       20.0 M      17.0 M       2.1 M       0.9 M       0.0 M  /home1/cubrid/testdb
-            1      DATA       20.0 M      19.5 M       0.4 M       0.0 M       0.0 M  /home1/cubrid/testdb_x001
-            2     INDEX       20.0 M      19.6 M       0.0 M       0.4 M       0.0 M  /home1/cubrid/testdb_x002
-            3      TEMP       20.0 M      19.6 M       0.0 M       0.0 M       0.3 M  /home1/cubrid/testdb_x003
-            4      TEMP       20.0 M      19.9 M       0.0 M       0.0 M       0.1 M  /home1/cubrid/testdb_x004
-        ----------------------------------------------------------------------------------------------------
-            5                100.0 M      95.6 M       2.5 M       1.2 M       0.4 M
-        Space description for temporary volumes for database 'testdb' with pagesize 16.0K.
-
-        Volid  Purpose    total_size   free_size   data_size  index_size   temp_size  Vol Name
-
-        LOB space description file:/home1/cubrid/lob
-
-.. note::
-
-    If you use **-p** and **-s** together, the summarized information of the used space will be separated as data_size, index_size and temp_size.
-
-    ::
-
-        $ cubrid spacedb -s -p testdb
-        Summarized space description for database 'testdb' with pagesize 16.0K. (log pagesize: 16.0K)
-
-        Purpose     total_size   used_size   free_size   data_size  index_size   temp_size  volume_count
-        -------------------------------------------------------------------------------------------------
-              DATA      20.0 M       0.5 M      19.5 M       0.4 M       0.0 M       0.0 M          1
-             INDEX      20.0 M       0.4 M      19.6 M       0.0 M       0.4 M       0.0 M          1
-           GENERIC      20.0 M       3.0 M      17.0 M       2.1 M       0.9 M       0.0 M          1
-              TEMP      40.0 M       0.5 M      39.5 M       0.0 M       0.0 M       0.4 M          2
-         TEMP TEMP       0.0 M       0.0 M       0.0 M       0.0 M       0.0 M       0.0 M          0
-        -------------------------------------------------------------------------------------------------
-             TOTAL     100.0 M       4.4 M      95.6 M       2.5 M       1.2 M       0.4 M          5
+        Detailed space description for files:
+        data_type           file_count           used_size          file_table_size     reserved_size       total_size
+        INDEX                       17               0.3 M                    0.3 M            16.5 M           17.0 M
+        HEAP                        28               7.6 M                    0.4 M            26.0 M           34.0 M
+        SYSTEM                       8               0.4 M                    0.1 M             7.5 M            8.0 M
+        TEMP                        10               0.0 M                    0.2 M            49.8 M           50.0 M
+        -                           63               8.2 M                    1.0 M            99.8 M          109.0 M
 
 .. _compactdb:
 

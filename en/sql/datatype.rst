@@ -238,7 +238,7 @@ Date/time data types are used to represent the date or time (or both together). 
 
 *   By default, the range of a time value is represented by the 24-hour system. Dates follow the Gregorian calendar. An error occurs if a value that does not meet these two constraints is entered as a date or time.
 
-*   The range of year in  **DATE** is 0001 - 9999 AD.
+*   The range of year in **DATE** is 0001 - 9999 AD.
 
 *   From the CUBRID 2008 R3.0 version, if time value is represented with two-digit numbers, a number from 00 to 69 is converted into a number from 2000 to 2069; a number from 70 to 99 is converted into a number from 1970 to 1999. In earlier than CUBRID 2008 R3.0 version, if time value is represented with two-digit numbers, a number from 01 to 99 is converted into a number from 0001 to 0099.
 
@@ -2127,9 +2127,9 @@ The implicit type conversion executed by CUBRID is as follows:
 
     **Limitations when numeric value is changed as TIME or TIMESTAMP (TIMESTAMPLTZ, TIMESTAMPTZ)**
 
-    *   All numeric types except for NUMERIC type can be converted into TIME type; at this time, it represents a value of the remainder which is calculated by dividing the input number into 86,400 seconds(1 day), and the remainder is calculated as seconds.
+    *   All numeric types except for **NUMERIC** type can be converted into **TIME** type; at this time, it represents a value of the remainder which is calculated by dividing the input number into 86,400 seconds(1 day), and the remainder is calculated as seconds.
 
-    *   All numeric types including NUMERIC can be converted into TIMESTAMP, TIMESTAMPLTZ, TIMESTAMPTZ types ; at this time, the input number cannot exceed 2,147,483,647 as the maximum.
+    *   All numeric types including **NUMERIC** can be converted into **TIMESTAMP**, **TIMESTAMPLTZ**, **TIMESTAMPTZ** types ; at this time, the input number cannot exceed 2,147,483,647 as the maximum.
 
 **Implicit Type Conversion Table 2**
 
@@ -2237,11 +2237,11 @@ The following are the conversion rules according to an operand type of the compa
 |                   +-------------------+----------------------------------------------+----------------+
 |                   | String Type       | None                                         | String         |
 |                   +-------------------+----------------------------------------------+----------------+
-|                   | Date/Time Type    | Converts operand1 to date/time type          | Date/Time      |
+|                   | Date/Time Type    | Converts operand1 to Date/Time type          | Date/Time      |
 +-------------------+-------------------+----------------------------------------------+----------------+
 | Date/Time Type    | Numeric Type      | Converts operand2 to Date/Time               | TIME/TIMESTAMP |
 |                   +-------------------+----------------------------------------------+----------------+
-|                   | String Type       | Converts operand2 to date/time type          | Date/Time      |
+|                   | String Type       | Converts operand2 to Date/Time type          | Date/Time      |
 |                   +-------------------+----------------------------------------------+----------------+
 |                   | Date/Time Type    | Converts it to the type with higher priority | Date/Time      |
 +-------------------+-------------------+----------------------------------------------+----------------+
@@ -2534,7 +2534,7 @@ Arithmetic Operation
         ==========================
           9.199999999999999e+00
 
-    Unlike CUBRID 2008 R3.1 and the earlier versions, the string in the date/time format, that is, the string such as '2010-09-15' is not converted to the date/time type. You can use a literal (DATE'2010-09-15') with the date/time type for addition and subtraction operations.
+    Unlike CUBRID 2008 R3.1 and the earlier versions, the string in the date/time format, that is, the string such as '2010-09-15' is not converted to the date/time type. You can use a literal DATE'2010-09-15' with the date/time type for addition and subtraction operations.
 
     .. code-block:: sql
 

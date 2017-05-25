@@ -146,30 +146,30 @@ Fifth
 
 9) links
 
-9.1) function link
+    9.1) function link
 
-```
-    :func:`func_name`
-```
+    ```
+        :func:`func_name`
+    ```
 
-9.2) footnote link
+    9.2) footnote link
 
-```
-    [#f1]_
-```
+    ```
+        [#f1]_
+    ```
 
-9.3) internal link
+    9.3) internal link
 
-```
-    .. _link_position:
+    ```
+        .. _link_position:
 
-    :ref:`link_positon` or :ref:`title <link_positon>`
+        :ref:`link_positon` or :ref:`title <link_positon>`
     
-    :doc:`doc_path_name`
-```
+        :doc:`doc_path_name`
+    ```
 
-9.4)external link
+    9.4) external link
 
-```
-    `title <http address>`_
-```    
+    ```
+        `title <http address>`_
+    ```    

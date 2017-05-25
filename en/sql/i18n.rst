@@ -1828,7 +1828,15 @@ The extend feature should be used when you decide to use a different version of 
     could not be ensured in the first phase when the new timezone library was generated. This situation can occur 
     when an offset rule or a daylight saving rule changes.
   
-    When you run make_tz with the extend option all the databases on your machine are updated together with the MD5 checksum.
+When you run make_tz with the extend option all the databases in your database directory file (databases.txt) are updated together with the MD5 checksum.
+There are some corner cases:
+    
+-   There is the situation when multiple users share the same CUBRID installation and an extend is done by one of them. If that user doesn't have access
+    rights on the files that contain the databases of the other users, those databases will not be updated. After that, if a different user for whom 
+    the update wasn't made will try to do an extend on his databases, he will not be able to do this because the checksum of the library will be 
+    different from then one in his databases.
+-   Also, if the CUBRID_DATABASES environment variable has a different value for some users, they will have different databases.txt files.
+    In this situation, currently, the update of all the databases at once will not be possible.
 
 In Linux:
 

@@ -1322,12 +1322,12 @@ The ISO-8859-1 charset contains only 255 characters, so the primitives are able 
 
 The UTF-8 charset is a special case: There are built-in variants of UTF-8 locales (like en_US.utf8, tr_TR.utf8 and ko_KR.utf8) and LDML locales. 
 
-The built-in variant implement only the characters specific to the locale (ASCII characters for en_US.utf8 and ko_KR.utf8, ASCII + Turkish glyphs [#f1]_ for tr_TR.utf8). This means that while all UTF-8 characters encoded on maximum 4 bytes are still supported and accepted as identifiers, most of them are not handled as letters, and treated as any normal Unicode character by casing primitives. For instance, character "È" (Unicode codepoint 00C8) is allowed, but an identifier containing it will not be normalized to "è" (lower case). 
+The built-in variant implement only the characters specific to the locale (ASCII characters for en_US.utf8 and ko_KR.utf8, ASCII + Turkish glyphs [#f1]_ for tr_TR.utf8). This means that while all UTF-8 characters encoded on maximum 4 bytes are still supported and accepted as identifiers, most of them are not handled as letters, and treated as any normal Unicode character by casing primitives. For instance, character "È" (Unicode codepoint 00C8) is allowed, but an identifier containing it will not be normalized to "è" (lower case).
 
 .. code-block:: sql
 
     CREATE TABLE ÈABC;
-    
+
 Therefore, after running above query, it will have a table name with "Èabc" into the system table, **_db_class**.
 
 Using a LDML locale (built-in variants can also be overridden with a LDML variant), extends the supported Unicode characters up to codepoint FFFF. For instance, if the locale is set by es_ES.utf8 when creating DB and the corresponding locale library is loaded, the previous statement will create a table with the name "èabc".
@@ -1816,21 +1816,52 @@ Linux
 Timezone library and database compatibility
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The timezone library build by CUBRID includes an MD5 checksum of the timezone data it contains. This hash is stored in all databases which are created with that library, into column **timezone_checksum** of **db_root** system table. If timezone library is changed (recompiled with newer timezone data) and the checksum changes, the CUBRID server, nor any other CUBRID tool cannot be started with existing databases.
+The timezone library built by CUBRID includes an MD5 checksum of the timezone data it contains. This hash is stored in all databases which are created with that library, into column **timezone_checksum** of **db_root** system table. If timezone library is changed (recompiled with newer timezone data) and the checksum changes, the CUBRID server, nor any other CUBRID tool cannot be started with existing databases.
 To avoid such incompatibility, one option is to use /extend argument of the make_tz tool. When this option is provided, the **timezone_checksum** value of database is also changed with the new MD5 checksum of the new timezone library.
+The extend feature should be used when you decide to use a different version of timezone library from the IANA site. It does two things:
+
+-   It generates a new library by merging the old timezone data with the new timezone data. 
+    After the merge, all the timezone regions that aren't present in the new timezone database are kept in order to ensure backward compatibility 
+    with the data in the database tables.
+ 
+-   The second thing that it does is to update the timezone data in the tables in the situation when backward compatibility 
+    could not be ensured in the first phase when the new timezone library was generated. This situation can occur 
+    when an offset rule or a daylight saving rule changes.
+  
+When you run make_tz with the extend option all the databases in your database directory file (databases.txt) are updated together with the MD5 checksum.
+There are some corner cases:
+    
+-   There is the situation when multiple users share the same CUBRID installation and an extend is done by one of them. If that user doesn't have access
+    rights on the files that contain the databases of the other users, those databases will not be updated. After that, if a different user for whom 
+    the update wasn't made will try to do an extend on his or her databases, he or she will not be able to do this because the checksum of the library will be 
+    different from the one in his or her databases.
+-   Also, if the CUBRID_DATABASES environment variable has a different value for some users, they will have different databases.txt files.
+    In this situation, currently, the update of all the databases at once will not be possible.
+    
+There would be two solutions for this with the current implementation:
+
+-   Each user grants access to the folders that contain his or her databases and also the CUBRID_DATABASES variable must have the same value.
+-   If this is is not possible, then we can do the following for each user except the last one:
+
+    -   Backup the current timezone library and the databases.txt file
+    -   Delete from the databases.txt file all the databases except for the ones of the current user
+    -   Run the extend
+    -   Restore the databases.txt file and the timezone library
+
+For the last user the single difference is that only the databases.txt file should be backed up and restored.
 
 In Linux:
 
     ::
 
-        make_tz.sh -g extend -d basic
+        make_tz.sh -g extend
 	
 
 In Windows:
 
 	::
 
-         make_tz.bat /extend basic
+         make_tz.bat /extend
 
 Usage of timezone data types with JDBC
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

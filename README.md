@@ -2,31 +2,51 @@
 Documentation for CUBRID RDBMS
 
 1. Extension of original files of this manual 
+
+   ```
     *.rst
     *.inc
+   ```
 
 2. Precaution to edit files.
 
-    Please don't use tab character. Change your editor setting that "change tab as spaces". 
-    1 tab should be 4 spaces.
+    Please don't use tab character. Change your editor setting that "change tab as spaces". 1 tab should be 4 spaces.
     
 3. How to build manual
 
-   1) Install sphinx package and theme
-      a) Install python
-      b) Install pip by running command:
+   1. Install sphinx package and theme
+      1. Install python
+      1. Install pip by running command:
+
+         ```
          python get-pip.py
-      c) Install sphinx
+         ```
+
+      1. Install sphinx
+
+         ```
          pip install sphinx
-      d) Install read the docs theme
+         ```
+
+      1. Install read the docs theme
+
+         ```
          pip install sphinx_rtd_theme
-   2) go to the manual directory (cd ko for Korean; or cd en for English)
-   3) make html
-   4) now you can see the built html files
+         ```
+
+   1. go to the manual directory (cd ko for Korean; or cd en for English)
+   1. make html
+   1. now you can see the built html files from _built/
 
 4. Make commands
-    make html: make html files.
-    make clean: clean built files.
+
+    ```
+    make clean
+    ```
+
+    ```
+    make html
+    ```
 
 5. Mainly used tags on sphinx document(.rst file).
 
@@ -64,7 +84,7 @@ Fifth
 3) escaping with \
 
 ```
-*italic text*\ _  will be "italic text_" : blank is ignored.
+*italic text*\_  will be "italic text_" : blank is ignored.
 ```
 
 4) dot list
@@ -125,6 +145,7 @@ Fifth
 ```
 
 9) links
+
 9.1) function link
 
 ```

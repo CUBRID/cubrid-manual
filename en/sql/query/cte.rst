@@ -24,7 +24,7 @@ Simplest usage is to combine result lists of table expressions:
 
 .. code-block:: sql
 
-    CREATE TABLE products (id INTEGER PRIMARY KEY, parent_id INTEGER, item VARCHAR(100), price INTEGER );
+    CREATE TABLE products (id INTEGER PRIMARY KEY, parent_id INTEGER, item VARCHAR(100), price INTEGER);
     INSERT INTO products VALUES (1, -1, 'Drone', 2000);
     INSERT INTO products VALUES (2, 1, 'Blade', 10);
     INSERT INTO products VALUES (3, 1, 'Brushless motor', 20);
@@ -111,12 +111,12 @@ The column names of each CTE result may be specified after the CTE name. The num
 
     WITH
      of_drones (product_name, product_type, price) AS (SELECT item, 'drones', price FROM products WHERE parent_id = 1),
-     of_cars  (product_name, product_type, price) AS (SELECT item, 'cars', price FROM products WHERE parent_id = 5)
+     of_cars (product_name, product_type, price) AS (SELECT item, 'cars', price FROM products WHERE parent_id = 5)
     SELECT * FROM of_drones UNION ALL SELECT * FROM of_cars ORDER BY product_type, price;
     
     WITH
      of_drones (product_name, product_type, price) AS (SELECT item, 'drones' as type, MAX(price) FROM products WHERE parent_id = 1 GROUP BY type),
-     of_cars  (product_name, product_type, price) AS (SELECT item, 'cars'  as type, MAX (price) FROM products WHERE parent_id = 5 GROUP BY type)
+     of_cars (product_name, product_type, price) AS (SELECT item, 'cars'  as type, MAX (price) FROM products WHERE parent_id = 5 GROUP BY type)
     SELECT * FROM of_drones UNION ALL SELECT * FROM of_cars ORDER BY product_type, price;
 
 ::
@@ -141,7 +141,7 @@ If no column names are given in the CTE, the column names are extracted from the
 
     WITH
      of_drones AS (SELECT item, 'drones', MAX(price) FROM products WHERE parent_id = 1 GROUP BY 2),
-     of_cars  AS (SELECT item, 'cars', MAX (price) FROM products WHERE parent_id = 5 GROUP BY 2)
+     of_cars AS (SELECT item, 'cars', MAX (price) FROM products WHERE parent_id = 5 GROUP BY 2)
     SELECT * FROM of_drones UNION ALL SELECT * FROM of_cars ORDER BY 1;
     
 ::
@@ -240,7 +240,7 @@ The recursive CTE must be referenced directly in the **FROM** clause, referencin
 .. code-block:: sql
 
     WITH
-     RECURSIVE cte1(x) AS SELECT c FROM t1 UNION ALL SELECT * from ( SELECT cte1.x + 1 FROM cte1 WHERE cte1.x < 5)
+     RECURSIVE cte1(x) AS SELECT c FROM t1 UNION ALL SELECT * FROM (SELECT cte1.x + 1 FROM cte1 WHERE cte1.x < 5)
     SELECT * FROM cte1;
 
 ::

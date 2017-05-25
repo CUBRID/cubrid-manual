@@ -52,7 +52,7 @@ Documentation for CUBRID RDBMS
 
    Basically, indent is very important when you use tags. For details, see http://sphinx-doc.org/
 
-    1) Titles
+    1. Titles
     
     ```
     *****
@@ -72,7 +72,7 @@ Documentation for CUBRID RDBMS
     +++++
     ```
     
-    2) bold & italic
+    2. bold & italic
     
     ```
     **bold text**
@@ -80,20 +80,20 @@ Documentation for CUBRID RDBMS
     *italic text*
     ```
     
-    3) escaping with \
+    3. escaping with \
     
     ```
     *italic text*\_  will be "italic text_" : blank is ignored.
     ```
     
-    4) dot list
+    4. dot list
     
     ```
     *   text
     -   text
     ```
     
-    5) boxes
+    5. boxes
     
     ```
     ::
@@ -119,7 +119,7 @@ Documentation for CUBRID RDBMS
         warning this.
     ```
     
-    6) footnote
+    6. footnote
     
     ```
     .. rubric:: Footnotes
@@ -127,13 +127,13 @@ Documentation for CUBRID RDBMS
     .. [#f1] word: explanation
     ```
         
-    7) function
+    7. function
     
     ```
     .. function:: function_name (arg1, arg2)
     ```
     
-    8) option
+    8. option
     
     ```
     .. program:: program_name
@@ -143,21 +143,21 @@ Documentation for CUBRID RDBMS
         explanation
     ```
     
-    9) links
+    9. links
     
-        9.1) function link
+        1. function link
     
         ```
             :func:`func_name`
         ```
     
-        9.2) footnote link
+        1. footnote link
     
         ```
             [#f1]_
         ```
     
-        9.3) internal link
+        1. internal link
     
         ```
             .. _link_position:
@@ -167,7 +167,7 @@ Documentation for CUBRID RDBMS
             :doc:`doc_path_name`
         ```
     
-        9.4) external link
+        1. external link
     
         ```
             `title <http address>`_

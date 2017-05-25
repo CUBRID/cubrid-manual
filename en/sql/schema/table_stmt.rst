@@ -173,7 +173,7 @@ The pseudocolumn allows for the **DEFAULT** value as follows.
 +===============================+===============+
 | SYS_TIMESTAMP                 | TIMESTAMP     |
 +-------------------------------+---------------+
-| UNIX_TIMESTAMP()              | TIMESTAMP     |
+| UNIX_TIMESTAMP()              | INTEGER       |
 +-------------------------------+---------------+
 | CURRENT_TIMESTAMP             | TIMESTAMP     |
 +-------------------------------+---------------+

@@ -1833,10 +1833,22 @@ There are some corner cases:
     
 -   There is the situation when multiple users share the same CUBRID installation and an extend is done by one of them. If that user doesn't have access
     rights on the files that contain the databases of the other users, those databases will not be updated. After that, if a different user for whom 
-    the update wasn't made will try to do an extend on his databases, he will not be able to do this because the checksum of the library will be 
-    different from then one in his databases.
+    the update wasn't made will try to do an extend on his or hers databases, he or she will not be able to do this because the checksum of the library will be 
+    different from the one in his or hers databases.
 -   Also, if the CUBRID_DATABASES environment variable has a different value for some users, they will have different databases.txt files.
     In this situation, currently, the update of all the databases at once will not be possible.
+    
+There would be two solutions for this with the current implementation:
+
+-   Each user grants access to the folders that contain his or hers databases and also the CUBRID_DATABASES variable must have the same value.
+-   If this is is not possible, then we can do the following for each user except the last one:
+
+    -   Backup the current timezone library and the databases.txt file
+    -   Delete from the databases.txt file all the databases except for the ones of the current user
+    -   Run the extend
+    -   Restore the databases.txt file and the timezone library
+
+For the last user the single difference is that only the databases.txt file should be backed up and restored.
 
 In Linux:
 

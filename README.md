@@ -147,28 +147,28 @@ Documentation for CUBRID RDBMS
     
         1. function link
     
-        ```
-            :func:`func_name`
-        ```
+           ```
+               :func:`func_name`
+           ```
     
         1. footnote link
     
-        ```
-            [#f1]_
-        ```
+           ```
+               [#f1]_
+           ```
     
         1. internal link
     
-        ```
-            .. _link_position:
+           ```
+               .. _link_position:
     
-            :ref:`link_positon` or :ref:`title <link_positon>`
+               :ref:`link_positon` or :ref:`title <link_positon>`
         
-            :doc:`doc_path_name`
-        ```
+               :doc:`doc_path_name`
+           ```
     
         1. external link
     
-        ```
-            `title <http address>`_
-        ```    
+           ```
+               `title <http address>`_
+           ```    

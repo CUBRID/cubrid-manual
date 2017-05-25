@@ -204,7 +204,7 @@ Using CTE in DDLs (**UPDATE** or **DELETE** data):
       'Car'                        8800 
   
 
-Recursiven CTEs may fall into an infinite loop. To avoid such case, set the system parameter **cte_max_recursions** to a desired threshold. Its default value is 2000 recursive iterations, maximum is 1000000 and minimum 2.
+Recursive CTEs may fall into an infinite loop. To avoid such case, set the system parameter **cte_max_recursions** to a desired threshold. Its default value is 2000 recursive iterations, maximum is 1000000 and minimum 2.
 
 .. code-block:: sql
 
@@ -249,5 +249,4 @@ The recursive CTE must be referenced directly in the **FROM** clause, referencin
     SELECT * FROM cte1;
     '
     Recursive CTE 'cte1' must be referenced directly in its recursive query.
-
 

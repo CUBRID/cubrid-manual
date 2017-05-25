@@ -1968,8 +1968,8 @@ The following shows [options] available with the **cubrid statdump** utility.
     |                  | Num_data_page_skipped_flush_need_wal     | Accumulator    | | The number of BCB's that flush thread skipped because it required   |
     |                  |                                          |                | | log data pages be flushed first                                     |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | | Num_data_page_skipped_\                | Accumulator    | | The number of BCB's that flush thread skipped because they have     |
-    |                  | | \flush_already_flushed                 |                | | been flushed already                                                |
+    |                  | | Num_data_page_skipped\                 | Accumulator    | | The number of BCB's that flush thread skipped because they have     |
+    |                  | | \_flush_already_flushed                |                | | been flushed already                                                |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
     |                  | Num_data_page_skipped_flush_fixed_or_hot | Accumulator    | | The number of BCB's that flush thread skipped because they are fixed|
     |                  |                                          |                | | or have been fixed since collected.                                 |
@@ -2014,11 +2014,11 @@ The following shows [options] available with the **cubrid statdump** utility.
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
     |                  | Num_victim_assign_direct_adjust_lru      | Acumulator     | The number of direct victims assigned when BCB falls to LRU zone 3    |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | | Num_victim_assign_direct_adjust_lru_\  | Acumulator     | | The number of BCB's falling to LRU zone 3 **not** assigned as direct|
-    |                  | | \to_vacuum                             |                | | victims because a vacuum thread is expected to access it            |
+    |                  | | Num_victim_assign_direct_adjust_lru\   | Acumulator     | | The number of BCB's falling to LRU zone 3 **not** assigned as direct|
+    |                  | | \_to_vacuum                            |                | | victims because a vacuum thread is expected to access it            |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | | Num_victim_assign_direct_search_\|     | Acumulator     | | The number of direct victims assigned by flush thread while         |
-    |                  | | \for_flush                             |                | | collecting BCB sets for flush                                       |
+    |                  | | Num_victim_assign_direct_search\       | Acumulator     | | The number of direct victims assigned by flush thread while         |
+    |                  | | \_for_flush                            |                | | collecting BCB sets for flush                                       |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
     |                  | Num_victim_shared_lru_success            | Acumulator     | The number of successful victim searches in shared LRU lists          |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+

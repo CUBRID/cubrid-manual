@@ -15,3 +15,4 @@ Data Manipulation Statements
     truncate.rst
     prepare.rst
     do.rst
+    cte.rst

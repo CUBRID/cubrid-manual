@@ -576,8 +576,15 @@ The **LIMIT** clause can be used to limit the number of records displayed. You c
 
     LIMIT {[offset,] row_count | row_count [OFFSET offset]}
 
-*   *offset*: Specifies the offset value of the starting row to be displayed. The offset value of the starting row of the result set is 0; it can be omitted and the default value is **0**.
-*   *row_count*: Specifies the number of records to be displayed. You can specify an integer greater than 0.
+    <offset> ::= <limit_expression>
+    <row_count> ::= <limit_expression>
+
+    <limit_expression> ::= <limit_term> | <limit_expression> + <limit_term> | <limit_expression> - <limit_term>
+    <limit_term> ::= <limit_factor> | <limit_term> * <limit_factor> | <limit_term> / <limit_factor>
+    <limit_factor> ::= <unsigned int> | <input_hostvar> | ( <limit_expression> )
+
+*   *offset*: Specifies the offset of the starting row to be displayed. The offset of the starting row of the result set is 0; it can be omitted and the default value is **0**. It can be one of unsigned int, an host variable or a simple expression.
+*   *row_count*: Specifies the number of records to be displayed. It can be one of unsigned integer, an host variable or a simple expression.
 
 .. code-block:: sql
 
@@ -585,6 +592,8 @@ The **LIMIT** clause can be used to limit the number of records displayed. You c
     PREPARE stmt FROM 'SELECT * FROM sales_tbl LIMIT ?, ?';
     EXECUTE stmt USING 0, 10;
      
+.. code-block:: sql
+
     -- selecting rows with LIMIT clause
     SELECT * 
     FROM sales_tbl
@@ -621,6 +630,14 @@ The **LIMIT** clause can be used to limit the number of records displayed. You c
               201  'Laura'                         2           500
               301  'Max'                           1           300
 
+.. code-block:: sql
+
+    -- LIMIT clause allows simple expressions for both offset and row_count
+    SELECT * 
+    FROM sales_tbl 
+    WHERE sales_amount > 100 
+    LIMIT ? * ?, (? * ?) + ?;
+    
 .. _join-query:
               
 Join Query

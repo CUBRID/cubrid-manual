@@ -143,8 +143,6 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | dont_reuse_heap_file                | server parameter        |         | bool     | no                             |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | generic_vol_prealloc_size           | server parameter        |         | byte     | 50M                            |                       |
-|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | log_volume_size                     | server parameter        |         | byte     | 512M                           |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | temp_file_max_size_in_pages         | server parameter        |         | int      | -1                             |                       |
@@ -192,7 +190,7 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | force_remove_log_archives           | server parameter        |         | bool     | yes                            | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | log_buffer_size                     | server parameter        |         | byte     | 128 *                          |                       |
+|                               | log_buffer_size                     | server parameter        |         | byte     | 16k *                          |                       |
 |                               |                                     |                         |         |          | :ref:`log_page_size <lpg>`     |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | log_max_archives                    | server parameter        |         | int      | INT_MAX                        | DBA only              |
@@ -396,7 +394,7 @@ The following is the content of the **cubrid.conf** file. ::
     data_buffer_size=512M
      
     # Size of log buffer are using K, M, G, T unit
-    log_buffer_size=4M
+    log_buffer_size=256M
      
     # Size of sort buffer are using K, M, G, T unit
     # The sort buffer should be allocated per thread.
@@ -419,7 +417,7 @@ If you want to set **data_buffer_size** as 128M and **max_clients** as 10 only o
     [common]
      
     data_buffer_size=512M
-    log_buffer_size=4M
+    log_buffer_size=256M
     sort_buffer_size=2M
     max_clients=100
      
@@ -575,10 +573,10 @@ The following are parameters related to the memory used by the database server o
     The spaces to store the temporary result are as follows.
     
     *   Cache buffer to store the temporary result (acquired by **temp_file_memory_size_in_pages** parameter)
-    *   Permanent temp volume
-    *   Temporary temp volume
+    *   Permanent volumes with the purpose of storing temporary data.
+    *   Temporary volumes
     
-    If the previous space is exhausted, then the next space is used as the following order: Cache buffer for storing temporary result -> Permanent temp volume -> Temporary temp volume.
+    If the previous space is exhausted, then the next space is used as the following order: Cache buffer for storing temporary result -> Permanent volumes -> Temporary volumes.
 
 **thread_stacksize**
 
@@ -594,11 +592,9 @@ The following are disk-related parameters for defining database volumes and stor
 +---------------------------------+--------+----------+----------+----------+
 | Parameter Name                  | Type   | Default  | Min      | Max      |
 +=================================+========+==========+==========+==========+
-| db_volume_size                  | byte   | 512M     | 20M      | 20G      |
+| db_volume_size                  | byte   | 512M     | 0        | 20G      |
 +---------------------------------+--------+----------+----------+----------+
 | dont_reuse_heap_file            | bool   | no       |          |          |
-+---------------------------------+--------+----------+----------+----------+
-| generic_vol_prealloc_size       | byte   | 50M      | 0        | 20G      |
 +---------------------------------+--------+----------+----------+----------+
 | log_volume_size                 | byte   | 512M     | 20M      | 4G       |
 +---------------------------------+--------+----------+----------+----------+
@@ -616,19 +612,15 @@ The following are disk-related parameters for defining database volumes and stor
     **db_volume_size** is a parameter to configure the following values. You can set a unit as B, K, M, G or T, which stand for bytes, kilobytes (KB), megabytes (MB), gigabytes (GB), and terabytes (TB) respectively. If you omit the unit, bytes will be applied. The default value is **512M**.
 
     *   The default database volume size when **cubrid createdb** and **cubrid addvoldb** utility is used without **--db-volume-size** option.
-    *   The default size of **generic** volume that is added automatically when database volume is full.
+    *   The default size of volume that is added automatically when database is full.
+
+.. note::
+
+    The actual volume size will always be rounded up to a multiple of the size of 64 sectors. Sector size depends on pages, therefore 64 sectors size will be either 16M, 32M or 64M.
 
 **dont_reuse_heap_file**
 
     **dont_reuse_heap_file** is a parameter to configure whether or not heap files, which are deleted when deleting the table (DROP TABLE), are to be reused when creating a new table (CREATE TABLE). If this parameter is set to no, the deleted heap files can be reused; if it is set to yes, the deleted heap files are not used when creating a new table. The default value is **no**.
-
-**generic_vol_prealloc_size**
-
-    Specifies the size of free space which the **generic** volume should always keep. If the free space size is lower than a specified size, the free space will be additionally expanded.
-
-    Checking the free space is done only when there is a new page request for the **generic**, **data** or **index** volume.
-
-    You can set a unit as B, K, M, G or T, which stand for bytes, kilobytes (KB), megabytes (MB), gigabytes (GB), and terabytes (TB) respectively. If you omit the unit, bytes will be applied. The default value is **50M**. The minimum value is 0 and the maximum value is 20G.
 
 **log_volume_size**
 
@@ -636,15 +628,15 @@ The following are disk-related parameters for defining database volumes and stor
 
 **temp_file_max_size_in_pages**
 
-    **temp_file_max_size_in_pages** is a parameter to configure the maximum number of pages to store temporary temp volumes in the disk, which are used for sorting during a query execution or creating an index; the default value is **-1**. Because the storage size of an intermediate result and the storage size of a final result are measured separately, if one of them are bigger than the specified size in this parameter, this query's execution is canceled as this shows an error.
+    **temp_file_max_size_in_pages** is a parameter to configure the maximum number of pages to which temporary volumes can be extended. By default, this value is **-1**, which means that temporary volumes can occupy an unlimited disk space. A positive value will set a limit to these values (exceeding it may show an error and cancel some big queries).
     
-    If this parameter is configured to the default value, unlimited number of temporary temp volumes are created and stored in the directory specified by the **temp_volume_path** parameter. If it is configured to 0, the administrator must create permanent temp volumes manually by using the **cubrid addvoldb** utility because temporary temp volumes are not created automatically.
+    If the parameter is configured to **0**, temporary volumes are not created automatically; the administrator must create permanent volumes with the purpose of storing temporary data by using the **cubrid addvoldb** utility.
     
-    The temp volume which is required for a query execution is separated as a temporary temp volume and a permanent temp volume. This parameter is applied only to the temporary temp volume. To prevent the system from insufficient disk space (as the size of temporary temp volume is increased than expected because a query which requires a big-sized temp space is executed), we recommend that you should secure the expected permanent temp volume in advance and limit the size of the space used in the temporary temp volume when a query is executed.
+    For more details see :ref:`temporary-volumes`
 
 **temp_volume_path**
 
-    **temp_volume_path** is a parameter to configure the directory in which to create temporary temp volumes used for the execution of complex queries or sorting. The default value is the volume location configured during the database creation.
+    **temp_volume_path** is a parameter to configure the directory in which to create temporary volumes used for the execution of complex queries or sorting. The default value is the volume location configured during the database creation.
 
 **unfill_factor**
 
@@ -863,7 +855,7 @@ The following are parameters related to concurrency control and locks of the dat
 
 **lock_timeout**
 
-    **lock_timeout** is a client parameter to configure the lock waiting time. If the lock is not permitted within the specified time period, the given transaction is canceled, and an error message is returned. If the parameter is configured to **-1**, which is the default value, the waiting time is infinite until the lock is permitted. If it is configured to 0, there is no waiting for locks.
+    **lock_timeout** is a client parameter to configure the lock waiting time. If the lock is not permitted within the specified time period, the given transaction is canceled, and an error message is returned. If the parameter is configured to **-1**, which is the default value, the waiting time is infinite until the lock is permitted. If it is configured to **0**, there is no waiting for locks.
 
     You can set a unit as s, min or h, which stands for seconds, minutes or hours respectively. If you omit the unit, milliseconds(ms) will be applied, and it is rounded up to seconds. For example, 1ms will be 1s, and 1001ms will be 2s.
 
@@ -900,7 +892,7 @@ The following are parameters related to logs used for database backup and restor
 +-------------------------------------+--------+----------------------------+----------------------------+----------------------------+
 | force_remove_log_archives           | bool   | yes                        |                            |                            |
 +-------------------------------------+--------+----------------------------+----------------------------+----------------------------+
-| log_buffer_size                     | byte   | 128 *                      | 128 *                      | INT_MAX *                  |
+| log_buffer_size                     | byte   | 16k *                      | 128 *                      | INT_MAX *                  |
 |                                     |        | :ref:`log_page_size <lpg>` | :ref:`log_page_size <lpg>` | :ref:`log_page_size <lpg>` |
 +-------------------------------------+--------+----------------------------+----------------------------+----------------------------+
 | log_max_archives                    | int    | INT_MAX                    | 0                          | INT_MAX                    |
@@ -968,9 +960,9 @@ The following are parameters related to logs used for database backup and restor
     
 **log_buffer_size**
 
-    **log_buffer_size** is a parameter to configure the size of log buffer to be cached in the memory. You can set a unit as B, K, M, G or T, which stands for bytes, kilobytes(KB), megabytes(MB), gigabytes(GB) or terabytes(TB) respectively. If you omit the unit, bytes will be applied. The default value is 128 * :ref:`log_page_size <dpg>` (**2M** when log_page_size is 16K).
+    **log_buffer_size** is a parameter to configure the size of log buffer to be cached in the memory. You can set a unit as B, K, M, G or T, which stands for bytes, kilobytes(KB), megabytes(MB), gigabytes(GB) or terabytes(TB) respectively. If you omit the unit, bytes will be applied. The default value is 16k * :ref:`log_page_size <dpg>` (**256M** when log_page_size is 16K).
 
-    If the value of the **log_buffer_size** parameter is large, performance can be improved (due to the decrease in disk I/O) in an environment where transactions are long and numerous. It is recommended to configure an appropriate value considering the memory size and operations of the system where CUBRID is installed.
+    If the value of the **log_buffer_size** parameter is large, performance can be improved (due to the decrease in disk I/O) in an environment where transactions are long and numerous. Moreover, CUBRID Multiversion Concurrency Control system relies on log to access previous row versions and to vacuum invisible versions from database. It is recommended to configure an appropriate value considering the memory size and operations of the system where CUBRID is installed.
 
     *   Required memory size = the size of log buffer (**log_buffer_size**)
 
@@ -1659,7 +1651,7 @@ The following are parameters related to utilities used in CUBRID. The type and v
     **backup_volume_max_size_bytes** is a parameter to configure the size of the backup volume file created by the **cubrid backupdb** utility in byte unit. 
     You can set a unit as B, K, M, G or T, which stands for bytes, kilobytes(KB), megabytes(MB), gigabytes(GB) or terabytes(TB) respectively. If you omit the unit, bytes will be applied. The default value is **0**, and the minimum value is 32K.    
     
-    If the parameter is configured to 0, which is the default value, the created backup volume is not partitioned; if it is configured to a value larger than 0, the backup volume is partitioned as much as it is specified size.
+    If the parameter is configured to **0**, which is the default value, the created backup volume is not partitioned; if it is configured to a value larger than 0, the backup volume is partitioned as much as it is specified size.
     
 **communication_histogram**
 
@@ -2220,7 +2212,7 @@ Transaction & Query
 
     This value can be valued in milliseconds with a decimal separator. For example, the value can be configured into 0.5 to configure 500 msec. 
     
-    Note that if a parameter value is configured to 0, a long-duration query is not evaluated.
+    Note that if a parameter value is configured to **0**, a long-duration query is not evaluated.
 
 **LONG_TRANSACTION_TIME**
 
@@ -2228,7 +2220,7 @@ Transaction & Query
     
     This value can be valued in milliseconds with a decimal separator. For example, the value can be configured into 0.5 to configure 500 msec. 
     
-    Note that if a parameter value is configured to 0, a long-duration transaction is not evaluated.
+    Note that if a parameter value is configured to **0**, a long-duration transaction is not evaluated.
 
 .. _max-prepared-stmt-count:
 

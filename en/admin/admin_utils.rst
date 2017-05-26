@@ -2715,6 +2715,16 @@ The following shows [options] available with the **cubrid diagdb** utility.
     +------+--------------------------------------+
     | 9    | Displays heap information.           |
     +------+--------------------------------------+
+    
+.. option:: -o, --output-file=FILE
+
+    The **-o** option is used to store information of the parameters used in the server/client process of the database into a specified file. The file is created in the current directory. If the **-o** option is not specified, the message is displayed on a console screen. ::
+    
+        cubrid diagdb -d8 -o logdump_output demodb
+
+.. option:: --emergency
+
+    Add **--emergency** to skip recovery. **This option is to be used ONLY for debugging purpose**. 
 
 .. _paramdump:
 

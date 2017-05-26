@@ -564,9 +564,9 @@ The following shows [options] available with the **cubrid copydb** utility.
 
         # volid   source_fullvolname   dest_fullvolname
         0 /usr/databases/demodb        /drive1/usr/databases/new_demodb
-        1 /usr/databases/demodb_data1  /drive1/usr/databases/new_demodb new_data1
-        2 /usr/databases/ext/demodb index1 /drive2//usr/databases/new_demodb new_index1
-        3 /usr/ databases/ext/demodb index2  /drive2/usr/databases/new_demodb new_index2
+        1 /usr/databases/demodb_data1  /drive1/usr/databases/new_demodb_data1
+        2 /usr/databases/ext/demodb_ext1 /drive2//usr/databases/new_demodb_ext1
+        3 /usr/databases/ext/demodb_ext2  /drive2/usr/databases/new_demodb_ext2
 
     *   *volid*: An integer that is used to identify each volume. It can be checked in the database volume control file (**database_name_vinf**).
 

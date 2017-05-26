@@ -2358,6 +2358,13 @@ For more detailed usage, see :ref:`locale-setting`.
 Timezone Commands
 -----------------
 
-**cubrid gen_tz** utility compiles the IANA timezone information included in tzdata folder into a C source code. This utility is executed in the **make_tz.sh** script ( **.bat** for Windows).
+**cubrid gen_tz** utility has two modes:
 
+-   new mode when it compiles the IANA timezone data stored in the tzdata folder into a C source code file.
+    This file is then converted into a .so shared library for Linux or .dll library for Windows using the make_tz.sh (Linux) / make_tz.bat (Windows) scripts.
+-   extend mode is similar to new but is used when you want to update your timezone data to a different version and ensure backward compatibility
+    with the old data. It is always used with a database name argument. In some situations, when it is impossible to ensure backward compatibility
+    just by merging the two versions of timezone data, an update of the data in the tables of the database is done.
+    It is executed using make_tz.sh -g extend for Linux and make_tz.bat /extend (Windows).
+    
 **cubrid dump_tz** utility dumps the compiled CUBRID timezone library file as a human-readable format on the console. It is better to save the output as a file by output redirection.

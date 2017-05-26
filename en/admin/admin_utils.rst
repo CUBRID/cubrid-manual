@@ -2113,20 +2113,103 @@ The following shows [options] available with the **cubrid statdump** utility.
     
         cubrid statdump -s data testdb
 
-        *** SERVER EXECUTION STATISTICS ***
-        Num_data_page_fetches         =        135
+         *** SERVER EXECUTION STATISTICS ***
+        Num_data_page_fetches         =          0
         Num_data_page_dirties         =          0
         Num_data_page_ioreads         =          0
         Num_data_page_iowrites        =          0
-        Num_data_page_victims         =          0
-        Num_data_page_iowrites_for_replacement =          0
-         
-         *** OTHER STATISTICS ***
-        Data_page_buffer_hit_ratio    =     100.00
+        Num_data_page_flushed         =          0
+        Num_data_page_private_quota   =        327
+        Num_data_page_private_count   =        898
+        Num_data_page_fixed           =          1
+        Num_data_page_dirty           =          3
+        Num_data_page_lru1            =        857
+        Num_data_page_lru2            =        873
+        Num_data_page_lru3            =        898
+        Num_data_page_victim_candidate =        898
+        Num_sort_data_pages           =          0
+        Vacuum_data_page_buffer_hit_ratio =       0.00
+        Num_data_page_hash_anchor_waits =          0
+        Time_data_page_hash_anchor_wait =          0
+        Num_data_page_writes          =          0
+        Num_data_page_dirty_to_post_flush =          0
+        Num_data_page_skipped_flush   =          0
+        Num_data_page_skipped_flush_need_wal =          0
+        Num_data_page_skipped_flush_already_flushed =          0
+        Num_data_page_skipped_flush_fixed_or_hot =          0
+        Num_data_page_avoid_dealloc   =          0
+        Num_data_page_avoid_victim    =          0
+        Num_data_page_fix_ext:
+        Num_data_page_promote_ext:
+        Num_data_page_promote_time_ext:
+        Num_data_page_unfix_ext:
+        Time_data_page_lock_acquire_time:
+        Time_data_page_hold_acquire_time:
+        Time_data_page_fix_acquire_time:
+
 
 .. note::
 
-    Each status information consists of 64-bit INTEGER data and the corresponding statistics information can be lost if the accumulated value exceeds the limit.
+    Each status information consists of 64-bit INTEGER data and the corresponding statistics information can be lost if the accumulated value exceeds the limit (highly unlikely though).
+    
+.. note::
+
+    Some sets of perfmance statistics are activated/deactivated by **extended_statistics_activation** system parameter. Each set is represented by a value power of two. To be activated, it needs to be present in the base-2 representation of the system parameter. This is the lists of sets that can be manipulated:
+
+    
+      ========= ===================================== =========== ====================================================================
+      Value     Name                                  Active      Description
+                                                      Default                
+      ========= ===================================== =========== ====================================================================
+      **1**     **Detailed b-tree pages**             Yes         | Classifies b-tree pages into 3 categories: root, non-leaf and leaf
+                                                                  | Affected statistics:
+                                                                  | - Num_data_page_fix_ext
+                                                                  | - Time_data_page_lock_acquire_time
+                                                                  | - Time_data_page_hold_acquire_time
+                                                                  | - Time_data_page_fix_acquire_time
+                                                                  | - Num_data_page_promote_ext
+                                                                  | - Num_data_page_promote_time_ext
+                                                                  | - Num_data_page_unfix_ext
+      **2**     **MVCC Snapshot**                     Yes         | Activates statistics collection for MVCC snapshot:
+                                                                  | - Num_mvcc_snapshot_ext
+      **4**     **Time locks**                        Yes         | Activate statistics collection for timing lock waits:
+                                                                  | - Num_object_locks_time_waited_usec
+      **8**     **Hash anchor waits**                 Yes         | Activate statistics collection for hash anchor waits:
+                                                                  | - Num_data_page_hash_anchor_waits
+                                                                  | - Time_data_page_hash_anchor_wait
+      **16**    **Extended victimization**            No          | Activate statistics collection for extended page buffer I/O and
+                                                                  | victimization module:
+                                                                  | - Num_data_page_writes
+                                                                  | - flush_collect_per_page
+                                                                  | - flush_flush_per_page
+                                                                  | - Num_data_page_skipped_flush_already_flushed
+                                                                  | - Num_data_page_skipped_flush_need_wal
+                                                                  | - Num_data_page_skipped_flush_fixed_or_hot
+                                                                  | - Num_data_page_dirty_to_post_flush
+                                                                  | - Num_alloc_bcb_prioritize_vacuum
+                                                                  | - Num_victim_assign_direct_vacuum_void
+                                                                  | - Num_victim_assign_direct_vacuum_lru
+                                                                  | - Num_victim_assign_direct_flush
+                                                                  | - Num_victim_assign_direct_panic
+                                                                  | - Num_victim_assign_direct_adjust_lru
+                                                                  | - Num_victim_assign_direct_adjust_lru_to_vacuum
+                                                                  | - Num_victim_assign_direct_search_for_flush
+                                                                  | - Num_victim_shared_lru_success
+                                                                  | - Num_victim_own_private_lru_success
+                                                                  | - Num_victim_other_private_lru_success
+                                                                  | - Num_victim_shared_lru_fail
+                                                                  | - Num_victim_own_private_lru_fail
+                                                                  | - Num_victim_other_private_lru_fail
+                                                                  | - Num_victim_get_from_lru
+                                                                  | - Num_victim_get_from_lru_was_empty
+                                                                  | - Num_victim_get_from_lru_fail
+                                                                  | - Num_victim_get_from_lru_bad_hint
+                                                                  | - Num_lfcq_prv_get_total_calls
+                                                                  | - Num_lfcq_prv_get_empty
+                                                                  | - Num_lfcq_prv_get_big
+                                                                  | - Num_lfcq_shr_get_total_calls
+                                                                  | - Num_lfcq_shr_get_empty
+      ========= ===================================== =========== ====================================================================
 
 .. _lockdb:
 

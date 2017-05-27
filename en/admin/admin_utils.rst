@@ -2724,7 +2724,7 @@ The following shows [options] available with the **cubrid diagdb** utility.
 
 .. option:: --emergency
 
-    Add **--emergency** to skip recovery. **This option is to be used ONLY for debugging purpose**. 
+    Use **--emergency** option to suppress recovery. **This option is meant ONLY for debugging, if there are recovery issues. It is recommended to backup your database before using this option.**
 
 .. _paramdump:
 

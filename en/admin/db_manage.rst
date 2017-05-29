@@ -17,7 +17,7 @@ CUBRID provides **DBA** and **PUBLIC** users by default.
 databases.txt File
 ------------------
 
-CUBRID stores information on the locations of all existing databases in the **databases.txt** file. This file is called the "database location file." A database location file is used when CUBRID executes utilities for creating, renaming, deleting or replicating databases; it is also used when CUBRID runs each database. By default, this file is located in the **databases** directory under the installation directory. The directory is located through the environment variable **CUBRID_DATABASES**. 
+CUBRID stores information on the locations of all existing databases in the **databases.txt** file. This file is called the "database location file". A database location file is used when CUBRID executes utilities for creating, renaming, deleting or replicating databases; it is also used when CUBRID runs each database. By default, this file is located in the **databases** directory under the installation directory. The directory is located through the environment variable **CUBRID_DATABASES**. 
 
 ::
 
@@ -55,7 +55,7 @@ The volumes of CUBRID database are classified as permanent volume, temporary vol
     *   there are data volumes, that usually store permanent data, but can also store temporary data.
     *   there are log volumes, that can be further classified as: one active log, archive logs and one background archiving log.
     
-*   In the temporary volumes only temporary data is stored.
+*   In the temporary volumes, only temporary data is stored.
 
 For more details on volumes, see :ref:`database-volume-structure`.
 
@@ -72,7 +72,7 @@ The following is an example of files related to the database when *testdb* datab
 | testdb_perm    | 512MB | | permanent     |                | | Manually added volume using **cubrid addvoldb** utility                                            |
 |                |       | | data          |                | | This volume stores permanent data (system, heap and index files).                                  |
 +----------------+-------+-----------------+                +------------------------------------------------------------------------------------------------------+
-| testdb_temp    | 512MB | | temporary     |                | | Manually added volume using cubrid addvoldb utility                                                |
+| testdb_temp    | 512MB | | temporary     |                | | Manually added volume using **cubrid addvoldb** utility                                            |
 |                |       | | data          |                | | This volume stores temporary data (query results, list files, sort files, join object hashes).     |
 +----------------+-------+-----------------+                +------------------------------------------------------------------------------------------------------+
 | testdb_x003    | 512MB | | permanent     |                | | Automatically created when database requires more space.                                           |
@@ -88,7 +88,7 @@ The following is an example of files related to the database when *testdb* datab
 |                |       | | data          |                | | This volume stores permanent data (system, heap and index files).                                  |
 |                |       |                 |                | | The size of volume is not maximized (yet).                                                         |
 +----------------+-------+-----------------+----------------+------------------------------------------------------------------------------------------------------+
-| testdb_t32766  | 512MB | | temporary d   | | Temporary    | | Automatically created when database requires more space.                                           |
+| testdb_t32766  | 512MB | | temporary     | | Temporary    | | Automatically created when database requires more space.                                           |
 |                |       | | data          | | Volume       | | This volume stores temporary data (query results, list files, sort files, join object hashes).     |
 +----------------+-------+-----------------+----------------+------------------------------------------------------------------------------------------------------+
 | testdb_lgar_t  | 512MB | | background    | | Log          | | A log file which is related to the background archiving feature.                                   |
@@ -117,7 +117,7 @@ The following is an example of files related to the database when *testdb* datab
 *   Log volume file
 
     *   In the above, *testdb_lgar_t*, *testdb_lgar224* and *testdb_lgat* are classified as the log volume files.
-    *   File size is determined by **log_volume_size** in **cubrid.conf** or the **--log-volume-size** option of "cubrid createdb**.
+    *   File size is determined by **log_volume_size** in **cubrid.conf** or the **--log-volume-size** option of **cubrid createdb**.
 
 .. note::
 
@@ -125,18 +125,18 @@ The following is an example of files related to the database when *testdb* datab
 
     Intermediate and final results of query processing and sorting need only temporary storage. Based on the size of required temporary data, it will be first stored in memory (the space size is determined by the system parameter **temp_file_memory_size_in_pages** specified in **cubrid.conf**). Exceeding data has to be stored on disk.
 
-    Database will usually create and use temporary volumes to allocate disk space for temporary data. They user may however assign permanent database volumes with the purpose of storing temporary data using by running **cubrid addvoldb -p temp** command. If such volumes exist, they will have priority over temporary volumes when disk space is allocated for temporary data.
+    Database will usually create and use temporary volumes to allocate disk space for temporary data. Administrator may however assign permanent database volumes with the purpose of storing temporary data using by running **cubrid addvoldb -p temp** command. If such volumes exist, they will have priority over temporary volumes when disk space is allocated for temporary data.
 
     The examples of queries that can use temporary data are as follows:
 
-    *   Queries creating the resultset like **SELECT**
-    *   Queries including **GROUP BY** or **ORDER BY**
-    *   Queries including a subquery
-    *   Queries executing sort-merge join
-    *   Queries including the **CREATE INDEX** statement
+       *   Queries creating the resultset like **SELECT**
+       *   Queries including **GROUP BY** or **ORDER BY**
+       *   Queries including a subquery
+       *   Queries executing sort-merge join
+       *   Queries including the **CREATE INDEX** statement
 
     To have complete control on the disk space used for temporary data and to prevent it from consuming all system disk space, our recommendation is to:
     
-    *   create permanent database volumes in advance to secure the required space for temporary data
-    *   limit the size of the space used in the temporary volumes when a queries are executed by setting **temp_file_max_size_in_pages** parameter in **cubrid.conf** (there is no limit by default).
+       *   create permanent database volumes in advance to secure the required space for temporary data
+       *   limit the size of the space used in the temporary volumes when a queries are executed by setting **temp_file_max_size_in_pages** parameter in **cubrid.conf** (there is no limit by default).
     

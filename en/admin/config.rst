@@ -323,12 +323,12 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 
 .. _lpg:
 
-*   log_page_size: A log volume page size specified by **--log-page-size** option when you are :ref:`creating database<creating-database>`. Default: 16KB. log page related parameter's value is rounded off by page unit. 
+*   **log_page_size**: A log volume page size specified by **--log-page-size** option when you are :ref:`creating database<creating-database>`. Default: 16KB. log page related parameter's value is rounded off by page unit. 
     For example, the value of checkpoint_every_size is divided by 16KB and its decimal point is dropped, then it is multiplied by 16KB.
 
 .. _dpg:
 
-*   log_page_size: A DB volume page size specified by **--db-page-size** option when you are :ref:`creating database<creating-database>`. Default: 16KB. DB page related parameter's value is rounded off by page unit. 
+*   **db_page_size**: A DB volume page size specified by **--db-page-size** option when you are :ref:`creating database<creating-database>`. Default: 16KB. DB page related parameter's value is rounded off by page unit. 
     For example, the value of data_buffer_size is divided by 16KB and its decimal point is dropped, then it is multiplied by 16KB.
 
 Section by Parameter
@@ -778,7 +778,7 @@ The following are parameters related to processing error messages recorded by CU
 
 **call_stack_dump_on_error**
 
-    **call_stack_dump_on_error** is a parameter to configure whether or not to dump a call stack when an error occurs in the database server. If this parameter is set to no, a call stack for any errors is not dumped. If it is set to yes, a call stack for all errors is dumped. The default value is **no**.
+    **call_stack_dump_on_error** is a parameter to configure whether or not to dump a call stack when an error occurs in the database server. If this parameter is set to **no**, a call stack for any errors is not dumped. If it is set to **yes**, a call stack for all errors is dumped. The default value is **no**.
 
 **error_log**
 
@@ -786,11 +786,11 @@ The following are parameters related to processing error messages recorded by CU
 
 **error_log_level**
 
-    **error_log_level** is a server parameter to configure an error message to be stored based on severity. There are five different levels which ranges from **NOTIFICATION** (lowest level), to **FATAL** (highest level). The inclusion relation in messages is **FATAL** < **ERROR** < **SYNTAX** < **WARNING** < **NOTIFICATION**. The default is **SYNTAX**. If severity of error is **SYNTAX**, error messages with **SYNTAX**, **ERROR**, and FATAL levels are stored in the log file.
+    **error_log_level** is a server parameter to configure an error message to be stored based on severity. There are five different levels which ranges from **NOTIFICATION** (lowest level), to **FATAL** (highest level). The inclusion relation in messages is **FATAL** < **ERROR** < **SYNTAX** < **WARNING** < **NOTIFICATION**. The default is **SYNTAX**. If severity of error is **NOTIFICATION**, error messages with **NOTIFICATION**, **SYNTAX**, **ERROR** and **FATAL** levels are stored in the log file.
 
 **error_log_warning**
 
-    **error_log_warning** is a parameter to configure whether or not error messages with a severity level of **WARNING** are to be displayed. Its default value is no. Therefore, only error messages with levels other than **WARNING** will be stored even though **error_log_level** is set to **NOTIFICATION**. For this reason, you must set **error_log_warning** to **yes** to store WARNING messages to an error log file.
+    **error_log_warning** is a parameter to configure whether or not error messages with a severity level of **WARNING** are to be displayed. Its default value is **no**. For this reason, you must set **error_log_warning** to **yes** to store **WARNING** messages to an error log file.
 
 **error_log_size**
 
@@ -948,15 +948,15 @@ The following are parameters related to logs used for database backup and restor
 
 **checkpoint_sleep_msecs**
 
-    **checkpoint_sleep_msecs** is a parameter to let the job which flushes a buffer's data into a disk process slowly. The default is 1 (millisecond).
+    **checkpoint_sleep_msecs** is a parameter to let the job which flushes a buffer's data into a disk process slowly. The default is **1** (millisecond).
 
 **force_remove_log_archives**
 
     **force_remove_log_archives** is a parameter to configure whether to allow the deletion of the files other than the recent log archive files whose number is specified by **log_max_archives**. The default value is **yes**.
 
-    If the value is set to yes, the files will be deleted other than the recent log archive files for which the number is specified by **log_max_archives**. 
+    If the value is set to **yes**, the files will be deleted other than the recent log archive files for which the number is specified by **log_max_archives**. 
 
-    If it is set to no, the log archive files will not be deleted. Exceptionally, if **ha_mode** is set to on, the files other than the log archive files required for the HA-related processes and the recent log archive files of which the number is specified by **log_max_archives** will be deleted.
+    If it is set to **no**, the log archive files will not be deleted. Exceptionally, if **ha_mode** is set to **on**, the files other than the log archive files required for the HA-related processes and the recent log archive files of which the number is specified by **log_max_archives** will be deleted.
 
     For setting up the CUBRID HA environment, see :ref:`ha-configuration`.
     
@@ -1022,7 +1022,7 @@ The following are parameters related to logs used for database backup and restor
 
     Archive logs which exceed the specified number in the **log_max_archives** are removed when checkpoint occurs. By the way, many archive logs can be removed at once frequently after being piled up when jobs such as data migration or big data batch processing are performed. If files are removed at once like these, I/O overhead of database server is rapidly risen; therefore, we need to decrease this burden.
     
-    **remove_log_archive_interval_in_secs** parameter lets archive logs delete slowly to shrink this burden. The default is 0 (second). In the situations which jobs like big data batch processing occur frequently, it is recommended to set the deletion interval as a 60 seconds if the disk space is enough.
+    **remove_log_archive_interval_in_secs** parameter lets archive logs delete slowly to shrink this burden. The default is **0** (second). In the situations which jobs like big data batch processing occur frequently, it is recommended to set the deletion interval as a 60 seconds if the disk space is enough.
 
 **sync_on_flush_size**
 
@@ -1045,7 +1045,7 @@ The following are parameters for improving transaction commit performance. The t
 
 **async_commit**
 
-    **async_commit** is a parameter used to activate the asynchronous commit functionality. If the parameter is set to no, which is the default value, the asynchronous commit is not performed; if it is set to yes, the asynchronous commit is executed. The asynchronous commit is a functionality that improves commit performance by completing the commit for the client before commit logs are flushed on the disk and having the log flush thread (LFT) perform log flushing in the background. Note that already committed transactions cannot be restored if a failure occurs on the database server before log flushing is performed.
+    **async_commit** is a parameter used to activate the asynchronous commit functionality. If the parameter is set to **no**, which is the default value, the asynchronous commit is not performed; if it is set to **yes**, the asynchronous commit is executed. The asynchronous commit is a functionality that improves commit performance by completing the commit for the client before commit logs are flushed on the disk and having the log flush thread (LFT) perform log flushing in the background. Note that already committed transactions cannot be restored if a failure occurs on the database server before log flushing is performed.
 
 **group_commit_interval_in_msecs**
 
@@ -1147,7 +1147,7 @@ The following are parameters related to SQL statements and data types supported 
 
 **alter_table_change_type_strict**
 
-    **alter_table_change_type_strict** is a parameter to configure whether or not to allow the conversion of column values according to the type change, and the default value is **no**. If a value for this parameter is set to no, the value may be changed when you change the column types or when you add **NOT NULL** constraints; if it is set to yes, the value is not changed. For details, see CHANGE Clause in the :ref:`change-column`.
+    **alter_table_change_type_strict** is a parameter to configure whether or not to allow the conversion of column values according to the type change, and the default value is **no**. If a value for this parameter is set to **no**, the value may be changed when you change the column types or when you add **NOT NULL** constraints; if it is set to **yes**, the value is not changed. For details, see CHANGE Clause in the :ref:`change-column`.
 
 **ansi_quotes**
 
@@ -1157,17 +1157,17 @@ The following are parameters related to SQL statements and data types supported 
 
 **block_ddl_statement**
 
-    **block_ddl_statement** is a parameter used to limit the execution of DDL (Data Definition Language) statements by the client. If the parameter is set to no, the given client is allowed to execute DDL statements. If it is set to yes, the client is not permitted to execute DDL statements. The default value is **no**.
+    **block_ddl_statement** is a parameter used to limit the execution of DDL (Data Definition Language) statements by the client. If the parameter is set to **no**, the given client is allowed to execute DDL statements. If it is set to **yes**, the client is not permitted to execute DDL statements. The default value is **no**.
 
 .. _block_nowhere_statement:
 
 **block_nowhere_statement**
 
-    **block_nowhere_statement** is a parameter used to limit the execution of **UPDATE** / **DELETE** statements without a condition clause (**WHERE**) by the client. If the parameter is set to no, the given client is allowed to execute **UPDATE** / **DELETE** statements without a condition clause. If it is set to yes, the client is not permitted to execute **UPDATE** / **DELETE** statements without a condition clause. The default value is **no**.
+    **block_nowhere_statement** is a parameter used to limit the execution of **UPDATE** / **DELETE** statements without a condition clause (**WHERE**) by the client. If the parameter is set to **no**, the given client is allowed to execute **UPDATE** / **DELETE** statements without a condition clause. If it is set to **yes**, the client is not permitted to execute **UPDATE** / **DELETE** statements without a condition clause. The default value is **no**.
 
 **compat_numeric_division_scale**
 
-    **compat_numeric_division_scale** is a parameter to configure the scale to be displayed in the result (quotient) of a division operation. If the parameter is set to no, the scale of the quotient is 9 if it is set to yes, the scale is determined by that of the operand. The default value is **no**.
+    **compat_numeric_division_scale** is a parameter to configure the scale to be displayed in the result (quotient) of a division operation. If the parameter is set to **no**, the scale of the quotient is 9, if it is set to **yes**, the scale is determined by that of the operand. The default value is **no**.
 
 **cte_max_recursions**
 
@@ -1179,7 +1179,7 @@ The following are parameters related to SQL statements and data types supported 
 
 **intl_check_input_string**
 
-    **intl_check_input_string** is a parameter to determine whether or not to check that string entered is correctly corresponded to character set used. The default value is **no**. If this value is no and character set is UTF-8 and incorrect data is enter which violate UTF-8 byte sequence, it can show abnormal behavior or database server and applications can be terminated abnormally. However, if it is guaranteed this problem does not happen, it has advantage in performance not to do it.
+    **intl_check_input_string** is a parameter to determine whether or not to check that string entered is correctly corresponded to character set used. The default value is **no**. If this value is **no** and character set is UTF-8 and incorrect data is enter which violate UTF-8 byte sequence, it can show abnormal behavior or database server and applications can be terminated abnormally. However, if it is guaranteed this problem does not happen, it has advantage in performance not to do it.
 
     UTF-8 and EUC-KR can be checked; ISO-8859-1 is one-byte encoding so it does not have to be checked because every byte is valid.
 
@@ -1272,7 +1272,7 @@ The following are parameters related to SQL statements and data types supported 
 
 **no_backslash_escapes**
 
-    **no_backslash_escapes** is a parameter to configure whether or not to use backslash (\\) as an escape character, and the default value is **yes**. If a value for this parameter is set to no, backslash (\\) will be used as an escape character; if it is set to yes, backslash (\\) will be used as a normal character. For example, if this value is set to no, "\\n" means a newline character. For details, see :ref:`escape-characters`.
+    **no_backslash_escapes** is a parameter to configure whether or not to use backslash (\\) as an escape character, and the default value is **yes**. If a value for this parameter is set to **no**, backslash (\\) will be used as an escape character; if it is set to **yes**, backslash (\\) will be used as a normal character. For example, if this value is set to **no**, "\\n" means a newline character. For details, see :ref:`escape-characters`.
 
 **only_full_group_by**
 
@@ -1288,7 +1288,7 @@ The following are parameters related to SQL statements and data types supported 
 
 **oracle_style_empty_string**
 
-    **oracle_style_empty_string** is a parameter used to improve compatibility with other DBMS (Database Management Systems); it specifies to process empty string and **NULL** as the same value. The default is **no**. If the **oracle_style_empty_string** parameter is set to no, the character string is processed as a valid string; if it is set to yes, according to each function, the empty string is processed as **NULL** or **NULL** is processed as the empty string.
+    **oracle_style_empty_string** is a parameter used to improve compatibility with other DBMS (Database Management Systems); it specifies to process empty string and **NULL** as the same value. The default is **no**. If the **oracle_style_empty_string** parameter is set to **no**, the character string is processed as a valid string; if it is set to **yes**, according to each function, the empty string is processed as **NULL** or **NULL** is processed as the empty string.
 
     .. note:: 
 
@@ -1344,11 +1344,11 @@ The following are parameters related to SQL statements and data types supported 
 
 **pipes_as_concat**
 
-    **pipes_as_concat** is a parameter to configure how to handle a double pipe symbol. The default value is **yes**. If this parameter value is set to **yes**, a double pipe symbol is handled as a concatenation operator if no, it is handled as the **OR** operator.
+    **pipes_as_concat** is a parameter to configure how to handle a double pipe symbol. The default value is **yes**. If this parameter value is set to **yes**, a double pipe symbol is handled as a concatenation operator if **no**, it is handled as the **OR** operator.
 
 **plus_as_concat**
 
-    **plus_as_concat** is a parameter to configure the plus (+) operator, and the default value is **yes**. If a value for this parameter is set to yes, the plus (+) operator will be interpreted as a concatenation operator; if it is set to no, the operator will be interpreted as a numeric operator.
+    **plus_as_concat** is a parameter to configure the plus (+) operator, and the default value is **yes**. If a value for this parameter is set to **yes**, the plus (+) operator will be interpreted as a concatenation operator; if it is set to **no**, the operator will be interpreted as a numeric operator.
 
     .. code-block:: sql
 
@@ -1392,11 +1392,11 @@ The following are parameters related to SQL statements and data types supported 
 
 **require_like_escape_character**
 
-    **require_like_escape_character** is parameter to configure whether or not to use an ESCAPE character in the **LIKE** clause, and the default value is **no**. If a value for this parameter is set to yes and a value for **no_backslash_escapes** is set to no, backslash (\\) will be used as an ESCAPE character in the strings of the LIKE clause, otherwise you should specify an ESCAPE character by using the **LIKE ... ESCAPE** clause. For details, see :ref:`like-expr`.
+    **require_like_escape_character** is parameter to configure whether or not to use an ESCAPE character in the **LIKE** clause, and the default value is **no**. If a value for this parameter is set to **yes** and a value for **no_backslash_escapes** is set to **no**, backslash (\\) will be used as an ESCAPE character in the strings of the LIKE clause, otherwise you should specify an ESCAPE character by using the **LIKE ... ESCAPE** clause. For details, see :ref:`like-expr`.
 
 **return_null_on_function_errors**
 
-    **return_null_on_function_errors** is a parameter used to define actions when errors occur in some SQL functions, and the default value is **no**. If a value for this parameter is set to yes, **NULL** is returned; if it is set to no, an error is returned when the error occurs in functions, and the related message is displayed.
+    **return_null_on_function_errors** is a parameter used to define actions when errors occur in some SQL functions, and the default value is **no**. If a value for this parameter is set to **yes**, **NULL** is returned; if it is set to **no**, an error is returned when the error occurs in functions, and the related message is displayed.
 
     The following SQL functions are affected by this system parameter.
 

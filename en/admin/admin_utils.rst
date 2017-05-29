@@ -373,9 +373,9 @@ The following shows [options] available with the **cubrid addvoldb** utility.
 
         cubrid addvoldb -C --db-volume-size=256M testdb
 
-.. option:: --max_writesize-in-sec=SIZE
+.. option:: --max-writesize-in-sec=SIZE
 
-    The --max_writesize-in-sec is used to limit the impact of  system operating when you add a volume to the database. This can limit the maximum writing size per second. The unit of this option is K(kilobytes) and M(megabytes). The minimum value is 160K. If you set this value as less than 160K, it is changed as 160K. It can be used only in client/server mode.
+    The **--max-writesize-in-sec** is used to limit the impact of  system operating when you add a volume to the database. This can limit the maximum writing size per second. The unit of this option is K(kilobytes) and M(megabytes). The minimum value is 160K. If you set this value as less than 160K, it is changed as 160K. It can be used only in client/server mode.
     
     The below is an example to limit the writing size of the 2GB volume as 1MB. Consuming time will be about 35 minutes(= (2048MB/1MB) /60 sec.). ::
     
@@ -1882,7 +1882,7 @@ The following shows [options] available with the **cubrid statdump** utility.
     |                  |                                          |                | | - successful/failed promotion                                       |
     +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
     | Page buffer      | Num_unfix_void_to_private_top            | Accumulator    | Unfix newly loaded data page and add to top of private LRU list       |
-    | | unfix          +------------------------------------------+----------------------------------------------------------------------------------------+
+    | | unfix          +------------------------------------------+----------------+-----------------------------------------------------------------------+
     |                  | Num_unfix_void_to_private_mid            | Accumulator    | Unfix newly loaded data page and add to middle of private LRU list    |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
     |                  | Num_unfix_void_to_shared_mid             | Accumulator    | Unfix newly loaded data page and add to middle of shared LRU list     |
@@ -1986,7 +1986,7 @@ The following shows [options] available with the **cubrid statdump** utility.
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
     |                  | ..alloc_bcb_cond_wait_low_prio           | Counter/timer  | The number and duration of direct victim waits in low-priority queue  |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_alloc_bcb_prioritize_vacuum          | Acumulator     | The number of vacuum direct victim waits in high-priority queue       |
+    |                  | Num_alloc_bcb_prioritize_vacuum          | Accumulator    | The number of vacuum direct victim waits in high-priority queue       |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
     |                  | Num_alloc_bcb_wait_threads_high_priority | Snapshot       | The current number of direct victim waiters in high-priority queue    |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
@@ -1995,70 +1995,70 @@ The following shows [options] available with the **cubrid statdump** utility.
     |                  | Num_flushed_bcbs_wait_for_direct_victim  | Snapshot       | | The current number of BCB's waiting for post-flush thread to process|
     |                  |                                          |                | | them and assign directly.                                           |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_victim_use_invalid_bcb               | Acumulator     | The number of BCB's allocated from invalid list                       |
+    |                  | Num_victim_use_invalid_bcb               | Accumulator    | The number of BCB's allocated from invalid list                       |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_data_page_avoid_victim               | Acumulator     | | The number of BCB's that cannot be victimized because they are      |
+    |                  | Num_data_page_avoid_victim               | Accumulator    | | The number of BCB's that cannot be victimized because they are      |
     |                  |                                          |                | | in process of being flushed to disk                                 |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_victim_assign_direct_vacuum_void     | Acumulator     | The number of direct victims assigned from void zone by vacuum worker |
+    |                  | Num_victim_assign_direct_vacuum_void     | Accumulator    | The number of direct victims assigned from void zone by vacuum worker |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_victim_assign_direct_vacuum_lru      | Acumulator     | The number of direct victims assigned from LRU zone 3 by vacuum worker|
+    |                  | Num_victim_assign_direct_vacuum_lru      | Accumulator    | The number of direct victims assigned from LRU zone 3 by vacuum worker|
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_victim_assign_direct_flush           | Acumulator     | The number of direct victims assigned by flush thread                 |
+    |                  | Num_victim_assign_direct_flush           | Accumulator    | The number of direct victims assigned by flush thread                 |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_victim_assign_direct_panic           | Acumulator     | | The number of direct victims assigned by panicked LRU searches.     |
+    |                  | Num_victim_assign_direct_panic           | Accumulator    | | The number of direct victims assigned by panicked LRU searches.     |
     |                  |                                          |                | | If there are a lot of waiters for victims, threads that found other |
     |                  |                                          |                | | victims while searching LRU list, will also try to assign more      |
     |                  |                                          |                | | directly.                                                           |
     |                  |                                          |                | | Page buffer maintenance thread assignments are also counted here    |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_victim_assign_direct_adjust_lru      | Acumulator     | The number of direct victims assigned when BCB falls to LRU zone 3    |
+    |                  | Num_victim_assign_direct_adjust_lru      | Accumulator    | The number of direct victims assigned when BCB falls to LRU zone 3    |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | | Num_victim_assign_direct_adjust_lru\   | Acumulator     | | The number of BCB's falling to LRU zone 3 **not** assigned as direct|
+    |                  | | Num_victim_assign_direct_adjust_lru\   | Accumulator    | | The number of BCB's falling to LRU zone 3 **not** assigned as direct|
     |                  | | \_to_vacuum                            |                | | victims because a vacuum thread is expected to access it            |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | | Num_victim_assign_direct_search\       | Acumulator     | | The number of direct victims assigned by flush thread while         |
+    |                  | | Num_victim_assign_direct_search\       | Accumulator    | | The number of direct victims assigned by flush thread while         |
     |                  | | \_for_flush                            |                | | collecting BCB sets for flush                                       |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_victim_shared_lru_success            | Acumulator     | The number of successful victim searches in shared LRU lists          |
+    |                  | Num_victim_shared_lru_success            | Accumulator    | The number of successful victim searches in shared LRU lists          |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_victim_own_private_lru_success       | Acumulator     | The number of successful victim searches in own private LRU lists     |
+    |                  | Num_victim_own_private_lru_success       | Accumulator    | The number of successful victim searches in own private LRU lists     |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_victim_other_private_lru_success     | Acumulator     | The number of successful victim searches in other private LRU lists   |
+    |                  | Num_victim_other_private_lru_success     | Accumulator    | The number of successful victim searches in other private LRU lists   |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_victim_shared_lru_fail               | Acumulator     | The number of failed victim searches in shared LRU lists              |
+    |                  | Num_victim_shared_lru_fail               | Accumulator    | The number of failed victim searches in shared LRU lists              |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_victim_own_private_lru_fail          | Acumulator     | The number of failed victim searches in own private LRU lists         |
+    |                  | Num_victim_own_private_lru_fail          | Accumulator    | The number of failed victim searches in own private LRU lists         |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_victim_other_private_lru_fail        | Acumulator     | The number of failed victim searches in other private LRU lists       |
+    |                  | Num_victim_other_private_lru_fail        | Accumulator    | The number of failed victim searches in other private LRU lists       |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_victim_all_lru_fail                  | Acumulator     | | The number of unlucky streaks to find victims in the sequence:      |
+    |                  | Num_victim_all_lru_fail                  | Accumulator    | | The number of unlucky streaks to find victims in the sequence:      |
     |                  |                                          |                | | 1. Own private LRU list (if over quota)                             |
     |                  |                                          |                | | 2. Other private LRU list (if own private is over quota)            |
     |                  |                                          |                | | 3. Shared LRU list                                                  |
     |                  |                                          |                | | (this is simplified explanation, see *pgbuf_get_victim* function)   |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_victim_get_from_lru                  | Acumulator     | The total number of victim searches in any LRU list                   |
+    |                  | Num_victim_get_from_lru                  | Accumulator    | The total number of victim searches in any LRU list                   |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_victim_get_from_lru_was_empty        | Acumulator     | | The number of victim searches in any LRU list that stop             |
+    |                  | Num_victim_get_from_lru_was_empty        | Accumulator    | | The number of victim searches in any LRU list that stop             |
     |                  |                                          |                | | immediately because candidate count is zero                         |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_victim_get_from_lru_fail             | Acumulator     | | The number of failed victim searches in any LRU list although the   |
+    |                  | Num_victim_get_from_lru_fail             | Accumulator    | | The number of failed victim searches in any LRU list although the   |
     |                  |                                          |                | | candidate count was not zero                                        |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_victim_get_from_lru_bad_hint         | Acumulator     | | The number of failed victim searches in any LRU list because victim |
+    |                  | Num_victim_get_from_lru_bad_hint         | Accumulator    | | The number of failed victim searches in any LRU list because victim |
     |                  |                                          |                | | was wrong                                                           |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_lfcq_prv_get_total_calls             | Acumulator     | The number of victim searches in non-zero candidate private LRUs queue|
+    |                  | Num_lfcq_prv_get_total_calls             | Accumulator    | The number of victim searches in non-zero candidate private LRUs queue|
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_lfcq_prv_get_empty                   | Acumulator     | The number of times non-zero candidate private LRUs queue was empty   |
+    |                  | Num_lfcq_prv_get_empty                   | Accumulator    | The number of times non-zero candidate private LRUs queue was empty   |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_lfcq_prv_get_big                     | Acumulator     | | The number of victim searches in only very big non-zero candidate   | 
+    |                  | Num_lfcq_prv_get_big                     | Accumulator    | | The number of victim searches in only very big non-zero candidate   | 
     |                  |                                          |                | | private LRUs queue (in this context, very big means way over quota) |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_lfcq_shr_get_total_calls             | Acumulator     | The number of victim searches in non-zero candidate shared LRUs queue |
+    |                  | Num_lfcq_shr_get_total_calls             | Accumulator    | The number of victim searches in non-zero candidate shared LRUs queue |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_lfcq_shr_get_empty                   | Acumulator     | The number of times non-zero candidate shared LRUs queue was empty    |
+    |                  | Num_lfcq_shr_get_empty                   | Accumulator    | The number of times non-zero candidate shared LRUs queue was empty    |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
     |                  | Num_lfcq_big_private_lists               | Snapshot       | The current number of very big non-zero candidate private LRU lists   |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
@@ -2797,11 +2797,11 @@ Timezone Commands
 
 **cubrid gen_tz** utility has two modes:
 
--   new mode when it compiles the IANA timezone data stored in the tzdata folder into a C source code file.
-    This file is then converted into a .so shared library for Linux or .dll library for Windows using the make_tz.sh (Linux) / make_tz.bat (Windows) scripts.
--   extend mode is similar to new but is used when you want to update your timezone data to a different version and ensure backward compatibility
+-   **new** mode when it compiles the IANA timezone data stored in the tzdata folder into a C source code file.
+    This file is then converted into a .so shared library for Linux or .dll library for Windows using the **make_tz.sh** (Linux) / **make_tz.bat** (Windows) scripts.
+-   **extend** mode is similar to new but is used when you want to update your timezone data to a different version and ensure backward compatibility
     with the old data. It is always used with a database name argument. In some situations, when it is impossible to ensure backward compatibility
     just by merging the two versions of timezone data, an update of the data in the tables of the database is done.
-    It is executed using make_tz.sh -g extend for Linux and make_tz.bat /extend (Windows).
+    It is executed using **make_tz.sh -g extend** for Linux and **make_tz.bat /extend** for Windows.
     
 **cubrid dump_tz** utility dumps the compiled CUBRID timezone library file as a human-readable format on the console. It is better to save the output as a file by output redirection.

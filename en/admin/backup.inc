@@ -353,8 +353,6 @@ The following table shows options available with the **cubrid restoredb** utilit
 
 NOTIFICATION messages, log recovery starting time and ending time are written into the server error log file or the restoredb error log file when database server is started or backup volume is restored; so you can check the elapsed time of these operations. In this message, the number of log records to be applied(redo) and the number of log pages are written together.
 
-To print out the NOTIFICATION message, error_log_level parameter in cubrid.conf should be specified as NOTIFICATION.
-    
 :: 
   
     Time: 06/14/13 21:29:04.059 - NOTIFICATION *** file ../../src/transaction/log_recovery.c, line 748 CODE = -1128 Tran = -1, EID = 1 

@@ -25,13 +25,13 @@ The following shell command can be used to start the CUBRID service and the *dem
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 9.2
+    CUBRID 10.1
 
     ++ cubrid server start: success
 
     @ cubrid server status
 
-    Server demodb (rel 9.2, pid 31322)
+    Server demodb (rel 10.1, pid 31322)
 
 CUBRIDService or CUBRID Service Tray
 ------------------------------------

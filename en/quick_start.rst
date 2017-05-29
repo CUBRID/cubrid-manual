@@ -55,7 +55,7 @@ On the Windows environment, you can start or stop a service as follows:
 Creating Databases
 ------------------
 
-You can create databases by using the **cubrid createdb** utility and execute it where database volumes and log volumes are located. If you do not specify additional options such as **--db-volume-size** or **--log-volume-size**, 1.5 GB volume files are created by default (generic volume is set to 512 MB, active log is set to 512 MB, and background archive log is set to 512 MB). ::
+You can create databases by using the **cubrid createdb** utility and execute it where database volumes and log volumes are located. If you do not specify additional options such as **--db-volume-size** or **--log-volume-size**, 1.5 GB volume files are created by default (data volume is set to 512 MB, active log is set to 512 MB, and background archive log is set to 512 MB). ::
 
     % cd testdb
     % cubrid createdb testdb en_US
@@ -67,9 +67,9 @@ You can create databases by using the **cubrid createdb** utility and execute it
     -rw------- 1 cubrid dbms       176 Jan 11 15:04 testdb_lginf
     -rw------- 1 cubrid dbms       183 Jan 11 15:04 testdb_vinf
 
-In the above, *testdb* represents a generic volume file, testdb_lgar_t represents a background archive log file, testdb_lgat represents an active log file, testdb_lginf represents a log information file, and testdb_vinf represents a volume information file.
+In the above, *testdb* represents a data volume file, testdb_lgar_t represents a background archive log file, testdb_lgat represents an active log file, testdb_lginf represents a log information file, and testdb_vinf represents a volume information file.
 
-For details on volumes, see :ref:`database-volume-structure` . For details on creating volumes, see :ref:`creating-database`. It is recommended to classify and add volumes based on its purpose by using the **cubrid addvoldb** utility. For details, see :ref:`adding-database-volume`.
+For details on volumes, see :ref:`database-volume-structure` . For details on creating volumes, see :ref:`creating-database`. It is recommended to classify and add volumes based on purpose by using the **cubrid addvoldb** utility. For details, see :ref:`adding-database-volume`.
 
 Starting Database
 -----------------

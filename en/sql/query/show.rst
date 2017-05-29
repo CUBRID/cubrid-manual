@@ -601,12 +601,12 @@ The following shows the examples of this syntax.
     'data_page_dirties'                     34
     'data_page_ioreads'                     6
     'data_page_iowrites'                    0
-    'data_page_victims'                     0
-    'data_page_iowrites_for_replacement'    0
     'log_page_ioreads'                      0
     'log_page_iowrites'                     0
     'log_append_records'                    0
-    'log_checkpoints'                       0
+    'log_archives'                          0
+    'log_start_checkpoints'                 0
+    'log_end_checkpoints'                   0
     'log_wals'                              0
     'page_locks_acquired'                   13
     'object_locks_acquired'                 9
@@ -641,14 +641,18 @@ The following shows the examples of this syntax.
     'query_nljoins'                         2
     'query_mjoins'                          0
     'query_objfetches'                      0
+    'query_holdable_cursors'                0
+    'sort_io_pages'                         0
+    'sort_data_pages'                       0
     'network_requests'                      88
     'adaptive_flush_pages'                  0
     'adaptive_flush_log_pages'              0
     'adaptive_flush_max_pages'              0
-    'network_requests'                      88
-    'adaptive_flush_pages'                  0
-    'adaptive_flush_log_pages'              0
-    'adaptive_flush_max_pages'              0
+    'prior_lsa_list_size'                   0
+    'prior_lsa_list_maxed'                  0
+    'prior_lsa_list_removed'                0
+    'heap_stats_bestspace_entries'          0
+    'heap_stats_bestspace_maxed'            0
 
 Diagnostics
 ===========
@@ -670,27 +674,26 @@ Column name                         Type            Description
 Volume_id                           INT             Volume identifier
 Magic_symbol                        VARCHAR(100)    Magic value for for a volume file
 Io_page_size                        INT             Size of DB volume
-Purpose                             VARCHAR(32)     Volume purposes, purposes type: DATA, INDEX, GENERIC, TEMP TEMP, TEMP
+Purpose                             VARCHAR(32)     Volume purposes, 'Permanent data purpose' or 'Temporary data purpose'
+Type                                VARCHAR(32)     Volume type, 'Permanent Volume' or 'Temporary Volume'
 Sector_size_in_pages                INT             Size of sector in pages
 Num_total_sectors                   INT             Total number of sectors
 Num_free_sectors                    INT             Number of free sectors
+Num_max_sectors                     INT             Maximum number of sectors
 Hint_alloc_sector                   INT             Hint for next sector to be allocated
-Num_total_pages                     INT             Total number of pages
-Num_free_pages                      INT             Number of free pages
 Sector_alloc_table_size_in_pages    INT             Size of sector allocation table in page
 Sector_alloc_table_first_page       INT             First page of sector allocation table
 Page_alloc_table_size_in_pages      INT             Size of page allocation table in page
 Page_alloc_table_first_page         INT             First page of page allocation table
 Last_system_page                    INT             Last system page
 Creation_time                       DATETIME        Database creation time
-Num_max_pages                       INT             max page count of this volume, this is not equal to the total_pages,if this volume is auto extended
-Num_used_data_pages                 INT             allocated pages for DATA purpose
-Num_used_index_pages                INT             allocated pages for INDEX purpose
+Db_charset                          INT             Charset number of database
 Checkpoint_lsa                      VARCHAR(64)     Lowest log sequence address to start the recovery process of this volume
 Boot_hfid                           VARCHAR(64)     System Heap file for booting purposes and multi volumes
 Full_name                           VARCHAR(255)    The full path of volume
+Next_volume_id                      INT             Next volume identifier
 Next_vol_full_name                  VARCHAR(255)    The full path of next volume
-Remarks                             VARCHAR(64)     
+Remarks                             VARCHAR(64)     Volume remarks
 =================================== =============== ======================================================================================================================================
 
 The following shows the examples of this syntax.
@@ -705,25 +708,22 @@ The following shows the examples of this syntax.
     <00001> Volume_id                       : 0
             Magic_symbol                    : 'MAGIC SYMBOL = CUBRID/Volume at disk location = 32'
             Io_page_size                    : 16384
-            Purpose                         : 'Permanent GENERIC Volume'
-            Sector_size_in_pages            : 10
-            Num_total_sectors               : 640
-            Num_free_sectors                : 550
-            Hint_alloc_sector               : 94
-            Num_total_pages                 : 6400
-            Num_free_pages                  : 6025
+            Purpose                         : 'Permanent data purpose'
+            Type                            : 'Permanent Volume'
+            Sector_size_in_pages            : 64
+            Num_total_sectors               : 512
+            Num_free_sectors                : 459
+            Num_max_sectors                 : 512
+            Hint_alloc_sector               : 0
             Sector_alloc_table_size_in_pages: 1
             Sector_alloc_table_first_page   : 1
-            Page_alloc_table_size_in_pages  : 1
-            Page_alloc_table_first_page     : 2
-            Last_system_page                : 2
-            Creation_time                   : 06:09:27.000 PM 02/27/2014
-            Num_max_pages                   : 6400
-            Num_used_data_pages             : 192
-            Num_used_index_pages            : 180
+            Last_system_page                : 1
+            Creation_time                   : 09:46:41.000 PM 05/23/2017
+            Db_charset                      : 3
             Checkpoint_lsa                  : '(0|12832)'
             Boot_hfid                       : '(0|41|50)'
             Full_name                       : '/home1/brightest/CUBRID/databases/demodb/demodb'
+            Next_volume_id                  : -1
             Next_vol_full_name              : ''
             Remarks                         : ''
 
@@ -743,6 +743,7 @@ This query has the following columns:
 =================================== =============== ======================================================================================================================================
 Column name                         Type            Description
 =================================== =============== ======================================================================================================================================
+Volume_id                           INT             Volume identifier
 Magic_symbol                        VARCHAR(32)     Magic value for log file
 Magic_symbol_location               INT             Magic symbol location from log page
 Creation_time                       DATETIME        Database creation time
@@ -755,7 +756,7 @@ Next_trans_id                       INT             Next transaction identifier
 Num_avg_trans                       INT             Number of average transactions
 Num_avg_locks                       INT             Average number of object locks
 Num_active_log_pages                INT             Number of pages in the active log portion
-Db_charset                          INT             charset number of database
+Db_charset                          INT             Charset number of database
 First_active_log_page               BIGINT          Logical pageid at physical location 1 in active log
 Current_append                      VARCHAR(64)     Current append location
 Checkpoint                          VARCHAR(64)     Lowest log sequence address to start the recovery process
@@ -780,7 +781,7 @@ Smallest_lsa_at_last_checkpoint     VARCHAR(64)     The smallest LSA of the last
 Next_mvcc_id                        BIGINT          The next MVCCID will be used for the next transaction
 Mvcc_op_log_lsa                     VARCHAR(32)     The LSA used to link log entries for MVCC operation
 Last_block_oldest_mvcc_id           BIGINT          Used to find the oldest MVCCID in a block of log data, can be NULL
-Last_block_newest_mvcc_id           BIGINT          Used to find the newest MVCCID in a block of log data, Can be NULL
+Last_block_newest_mvcc_id           BIGINT          Used to find the newest MVCCID in a block of log data, can be NULL
 =================================== =============== ======================================================================================================================================
 
 The following shows the examples of this syntax.
@@ -791,10 +792,11 @@ The following shows the examples of this syntax.
     SHOW LOG HEADER;
     
 ::
+
     <00001> Volume_id                      : -2
             Magic_symbol                   : 'CUBRID/LogActive'
             Magic_symbol_location          : 16
-            Creation_time                  : 05:27:05.000 PM 02/05/2016
+            Creation_time                  : 09:46:41.000 PM 05/23/2017
             Release                        : '10.0.0'
             Compatibility_disk_version     : '10'
             Db_page_size                   : 16384
@@ -842,7 +844,7 @@ The following shows the examples of this syntax.
     <00001> Volume_id                      : -2
             Magic_symbol                   : 'CUBRID/LogActive'
             Magic_symbol_location          : 16
-            Creation_time                  : 05:27:05.000 PM 02/05/2016
+            Creation_time                  : 09:46:41.000 PM 05/23/2017
             Release                        : '10.0.0'
             Compatibility_disk_version     : '10'
             Db_page_size                   : 16384
@@ -1373,7 +1375,7 @@ Column name                         Type            Description
 Table_name                          VARCHAR(256)    Table name
 Index_name                          VARCHAR(256)    Index name
 Btid                                VARCHAR(64)     BTID (volid|fileid|root_pageid)
-Node_type                           VARCHAR(16)     'LEAF' or 'NON_LEAF'
+Node_level                          INT             Node level (1 for LEAF, 2 or more for NON_LEAF)
 Max_key_len                         INT             Maximum key length for the subtree
 Num_oids                            INT             Number of OIDs stored in the Btree
 Num_nulls                           INT             Number of NULLs (they aren't stored)
@@ -1565,35 +1567,27 @@ The following shows the examples of this syntax.
 
 ::
 
-    Index  Name                  Num_holders           Num_waiting_readers  Num_waiting_writers  Owner_thread_index  Owner_tran_index     Total_enter_count    Total_waiter_count  Waiting_promoter_thread_index  Max_waiting_msecs     Total_waiting_msecs 
+    Index  Name                       Num_holders           Num_waiting_readers  Num_waiting_writers  Owner_thread_index  Owner_tran_index     Total_enter_count    Total_waiter_count  Waiting_promoter_thread_index  Max_waiting_msecs     Total_waiting_msecs 
     ============================================================================================================================================================================================================================================================
-        0  'ER_LOG_FILE'         'none'                                  0                    0                NULL              NULL                   217                     0                           NULL  0.000                 0.000               
-        1  'ER_MSG_CACHE'        'none'                                  0                    0                NULL              NULL                     0                     0                           NULL  0.000                 0.000               
-        2  'WFG'                 'none'                                  0                    0                NULL              NULL                     0                     0                           NULL  0.000                 0.000               
-        3  'LOG'                 'none'                                  0                    0                NULL              NULL                    11                     0                           NULL  0.000                 0.000               
-        4  'LOCATOR_CLASSNAME_TABLE'  'none'                                  0                    0                NULL              NULL                    33                     0                           NULL  0.000                 0.000               
-        5  'FILE_NEWFILE'        'none'                                  0                    0                NULL              NULL                    12                     0                           NULL  0.000                 0.000               
-        6  'QPROC_QUERY_TABLE'   'none'                                  0                    0                NULL              NULL                     3                     0                           NULL  0.000                 0.000               
-        7  'QPROC_QFILE_PGCNT'   'none'                                  0                    0                NULL              NULL                     0                     0                           NULL  0.000                 0.000               
-        8  'QPROC_XASL_CACHE'    'none'                                  0                    0                NULL              NULL                     5                     0                           NULL  0.000                 0.000               
-        9  'QPROC_LIST_CACHE'    'none'                                  0                    0                NULL              NULL                     1                     0                           NULL  0.000                 0.000               
-        10  'BOOT_SR_DBPARM'      'none'                                  0                    0                NULL              NULL                     3                     0                           NULL  0.000                 0.000               
-        11  'DISK_REFRESH_GOODVOL'  'none'                                  0                    0                NULL              NULL                     6                     0                           NULL  0.000                 0.000               
-        12  'CNV_FMT_LEXER'       'none'                                  0                    0                NULL              NULL                     0                     0                           NULL  0.000                 0.000               
-        13  'HEAP_CHNGUESS'       'none'                                  0                    0                NULL              NULL                    10                     0                           NULL  0.000                 0.000               
-        14  'SPAGE_SAVESPACE'     'none'                                  0                    0                NULL              NULL                     1                     0                           NULL  0.000                 0.000               
-        15  'TRAN_TABLE'          'none'                                  0                    0                NULL              NULL                     7                     0                           NULL  0.000                 0.000               
-        16  'CT_OID_TABLE'        'none'                                  0                    0                NULL              NULL                     0                     0                           NULL  0.000                 0.000               
-        17  'SCANID_BITMAP'       'none'                                  0                    0                NULL              NULL                     0                     0                           NULL  0.000                 0.000               
-        18  'LOG_FLUSH'           'none'                                  0                    0                NULL              NULL                     0                     0                           NULL  0.000                 0.000               
-        19  'HA_SERVER_STATE'     'none'                                  0                    0                NULL              NULL                     2                     0                           NULL  0.000                 0.000               
-        20  'COMPACTDB_ONE_INSTANCE'  'none'                                  0                    0                NULL              NULL                     0                     0                           NULL  0.000                 0.000               
-        21  'SESSION_STATE'       'none'                                  0                    0                NULL              NULL                     3                     0                           NULL  0.000                 0.000               
-        22  'ACL'                 'none'                                  0                    0                NULL              NULL                     0                     0                           NULL  0.000                 0.000               
-        23  'QPROC_FILTER_PRED_CACHE'  'none'                                  0                    0                NULL              NULL                     1                     0                           NULL  0.000                 0.000               
-        24  'PARTITION_CACHE'     'none'                                  0                    0                NULL              NULL                     1                     0                           NULL  0.000                 0.000               
-        25  'EVENT_LOG_FILE'      'none'                                  0                    0                NULL              NULL                     0                     0                           NULL  0.000                 0.000               
-        26  'ACCESS_STATUS'       'none'                                  0                    0                NULL              NULL                     1                     0                           NULL  0.000                 0.000               
+        0  'ER_LOG_FILE'              'none'                                  0                    0                NULL              NULL                   217                     0                           NULL  0.000                 0.000               
+        1  'ER_MSG_CACHE'             'none'                                  0                    0                NULL              NULL                     0                     0                           NULL  0.000                 0.000               
+        2  'WFG'                      'none'                                  0                    0                NULL              NULL                     0                     0                           NULL  0.000                 0.000               
+        3  'LOG'                      'none'                                  0                    0                NULL              NULL                    11                     0                           NULL  0.000                 0.000               
+        4  'LOCATOR_CLASSNAME_TABLE'  'none'                                  0                    0                NULL              NULL                    33                     0                           NULL  0.000                 0.000          
+        5  'QPROC_QUERY_TABLE'        'none'                                  0                    0                NULL              NULL                     3                     0                           NULL  0.000                 0.000               
+        6  'QPROC_LIST_CACHE'         'none'                                  0                    0                NULL              NULL                     1                     0                           NULL  0.000                 0.000               
+        7   'DISK_CHECK'              'none'                                  0                    0                NULL              NULL                     3                     0                           NULL  0.000                 0.000               
+        8  'CNV_FMT_LEXER'            'none'                                  0                    0                NULL              NULL                     0                     0                           NULL  0.000                 0.000               
+        9  'HEAP_CHNGUESS'            'none'                                  0                    0                NULL              NULL                    10                     0                           NULL  0.000                 0.000               
+        10  'TRAN_TABLE'              'none'                                  0                    0                NULL              NULL                     7                     0                           NULL  0.000                 0.000               
+        11  'CT_OID_TABLE'            'none'                                  0                    0                NULL              NULL                     0                     0                           NULL  0.000                 0.000               
+        12  'HA_SERVER_STATE'         'none'                                  0                    0                NULL              NULL                     2                     0                           NULL  0.000                 0.000               
+        13  'COMPACTDB_ONE_INSTANCE'  'none'                                  0                    0                NULL              NULL                     0                     0                           NULL  0.000                 0.000           
+        14  'ACL'                     'none'                                  0                    0                NULL              NULL                     0                     0                           NULL  0.000                 0.000                    
+        15  'PARTITION_CACHE'         'none'                                  0                    0                NULL              NULL                     1                     0                           NULL  0.000                 0.000               
+        16  'EVENT_LOG_FILE'          'none'                                  0                    0                NULL              NULL                     0                     0                           NULL  0.000                 0.000               
+        17  'LOG_ARCHIVE'             'none'                                  0                    0                NULL              NULL                     0                     0                           NULL  0.000                 0.000               
+        18  'ACCESS_STATUS'           'none'                                  0                    0                NULL              NULL                     1                     0                           NULL  0.000                 0.000               
 
 SHOW TRANSACTION TABLES
 -----------------------
@@ -1651,8 +1645,7 @@ Repl_update_lsa          VARCHAR(64)     Update Replication target LSA.
 First_save_entry         VARCHAR(20)     First save entry for the transaction, display address pointer as 0x12345678 or NULL for 0x00000000.
 Tran_unique_stats        VARCHAR(20)     Local statistical info for multiple row. display address pointer as 0x12345678 or NULL for 0x00000000.
 Modified_class_list      VARCHAR(20)     List of dirty classes, display address pointer as 0x12345678 or NULL for 0x00000000.
-Num_new_files            INT             Number of new files created.
-Num_new_temp_files       INT             Number of new temp files created.
+Num_temp_files           INT             Number of temporary files.
 Waiting_for_res          VARCHAR(20)     Waiting resource. Just display address pointer as 0x12345678 or NULL for 0x00000000.
 Has_deadlock_priority    INT             Whether or not have deadlock priority. 0 for No, 1 for Yes.
 Suppress_replication     INT             Suppress writing replication logs when flag is set.
@@ -1710,8 +1703,7 @@ The following shows the examples of the statement.
                 First_save_entry        : NULL
                 Tran_unique_stats       : NULL
                 Modified_class_list     : NULL
-                Num_new_files           : 1
-                Num_new_temp_files      : 0
+                Num_temp_files          : 0
                 Waiting_for_res         : NULL
                 Has_deadlock_priority   : 0
                 Suppress_replication    : 0
@@ -1759,7 +1751,6 @@ Query_entry                 VARCHAR(20)     The address of the QMGR_QUERY_ENTRY*
 Interrupted                 INT             0 or 1, is this request/transaction interrupted
 Shutdown                    INT             0 or 1, is server going down?
 Check_interrupt             INT             0 or 1
-Check_page_validation       INT             0 or 1
 Wait_for_latch_promote      INT             0 or 1, whether this thread is waiting for latch promotion.
 Lockwait_blocked_mode       VARCHAR(24)     Lockwait blocked mode. Either one of the followings: 'NULL_LOCK', 'IS_LOCK', 'S_LOCK', 'IS_LOCK', 'IX_LOCK', 'SIX_LOCK', 'X_LOCK', 'SCH_M_LOCK', 'UNKNOWN'
 Lockwait_start_time         DATETIME        Start blocked time, if not in blocked state, shows NULL
@@ -1798,7 +1789,6 @@ The following shows the examples of the statement.
             Interrupted                : 0
             Shutdown                   : 0
             Check_interrupt            : 1
-            Check_page_validation      : 1
             Wait_for_latch_promote     : 0
             Lockwait_blocked_mode      : NULL
             Lockwait_start_time        : NULL
@@ -1825,7 +1815,6 @@ The following shows the examples of the statement.
             Interrupted                : 0
             Shutdown                   : 0
             Check_interrupt            : 1
-            Check_page_validation      : 1
             Wait_for_latch_promote     : 0
             Lockwait_blocked_mode      : 'SCH_S_LOCK'
             Lockwait_start_time        : 10:47:45.000 AM 02/03/2016

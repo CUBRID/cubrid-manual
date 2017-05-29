@@ -729,7 +729,7 @@ For more details on locks, see :ref:`lockdb` and :ref:`lock-protocol`.
 
 **TEMP_VOLUME_EXPAND**
  
-When a temporary temp volume is expanded, this time is written to the event log. By this log, you can check what transaction brought the expansion of a temporary temp volume.
+When a temporary volumes are expanded, this time is written to the event log. By this log, you can check what transaction brought the expansion of a temporary volumes.
  
 ::
   
@@ -741,11 +741,11 @@ When a temporary temp volume is expanded, this time is written to the event log.
       pages: 24399
  
 *   client: <DB user>@<application client host name>|<process name>(<process ID>)
-*   sql: SQL which requires a temporary temp volume. All INSERT statement except for INSERT ... SELECT syntax, and DDL statement are not delivered to the DB server, so it is shown as EMPTY
+*   sql: SQL which requires a more space for temporary data. All INSERT statement except for INSERT ... SELECT syntax, and DDL statement are not delivered to the DB server, so it is shown as EMPTY
     SELECT, UPDATE and DELETE statements are shown on this item
 *   bind: binding value
-*   time: a required time to create a temporary temp volume(ms)
-*   pages: a required number of pages to create a temporary temp volume
+*   time: the required time to create a temporary volume(ms)
+*   pages: the number of available pages within new temporary volume.
 
 .. _database-server-error:
 

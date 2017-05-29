@@ -99,7 +99,7 @@ To display the option list in the prompt, execute the **csql** utilities without
 
     $ csql
     A database-name is missing.
-    interactive SQL utility, version 9.1
+    interactive SQL utility, version 10.1
     usage: csql [OPTION] database-name[@host]
 
     valid options:

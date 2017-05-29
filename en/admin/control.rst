@@ -173,13 +173,13 @@ After registering service as explained in :ref:`control-cubrid-services`, enter 
     @ cubrid server start: demodb
 
     This may take a long time depending on the amount of restore works to do.
-    CUBRID 9.2
+    CUBRID 10.1
 
     ++ cubrid server start: success
     @ cubrid server start: testdb
 
     This may take a long time depending on the amount of recovery works to do.
-    CUBRID 9.2
+    CUBRID 10.1
 
     ++ cubrid server start: success
     @ cubrid broker start
@@ -280,8 +280,8 @@ The following example shows how to check the status of master process and databa
     ++ cubrid master is running.
     @ cubrid server status
 
-    Server testdb (rel 9.2, pid 31059)
-    Server demodb (rel 9.2, pid 30950)
+    Server testdb (rel 10.1, pid 31059)
+    Server demodb (rel 10.1, pid 30950)
 
     @ cubrid broker status
     % query_editor
@@ -316,7 +316,7 @@ CUBRID supports a logging feature about cubrid utility's running result.
  
 **Logging contents**
  
-The following contents are written to the $CUBRID/log/cubrid_utility.log file.
+The following contents are written to the **$CUBRID/log/cubrid_utility.log** file.
  
 *   All commands through cubrid utilities: only usage, version and parsing errors are not logged.
     
@@ -326,7 +326,7 @@ The following contents are written to the $CUBRID/log/cubrid_utility.log file.
  
 **Log file size** 
  
-A size of cubrid_utility.log file is expanded by the size specified by **error_log_size** parameter in  cubrid.conf; if this size is enlarged as the specified size, it is backed up as the cubrid_utility.log.bak file. 
+A size of **cubrid_utility.log** file is expanded by the size specified by **error_log_size** parameter in **cubrid.conf**; if this size is enlarged as the specified size, it is backed up as the **cubrid_utility.log.bak** file. 
 
 **Log format**
  
@@ -348,7 +348,7 @@ The following is an example of printing the log file.
     13-11-19 15:27:31.671 (17868) cubrid service stop
     13-11-19 15:27:34.909 (17868) SUCCESS
  
-However, in Windows, some cubrid commands are executed through a service process; therefore, a duplicated information can be displayed again.
+However, in Windows, some **cubrid** commands are executed through a service process; therefore, a duplicated information can be displayed again.
  
 ::
  
@@ -357,7 +357,7 @@ However, in Windows, some cubrid commands are executed through a service process
     13-11-13 17:17:56.027 ( 7848) SUCCESS
     13-11-13 17:17:57.136 ( 3820) SUCCESS
 
-And, in Windows, a process run through the service process cannot print out an error message; therefore, for error messages related to the service start, you should definitely check them in the cubrid_utility.log file.
+And, in Windows, a process run through the service process cannot print out an error message; therefore, for error messages related to the service start, you should definitely check them in the **cubrid_utility.log** file.
 
 .. _control-cubrid-server:
 
@@ -377,7 +377,7 @@ The following example shows how to run *demodb* server.
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 9.2
+    CUBRID 10.1
 
     ++ cubrid server start: success
     
@@ -393,7 +393,7 @@ If you start *demodb* server while master process has stopped, master process au
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 9.2
+    CUBRID 10.1
 
     ++ cubrid server start: success
 
@@ -450,7 +450,7 @@ The following example shows how to restart *demodb* server. *demodb* server that
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 9.2
+    CUBRID 10.1
 
     ++ cubrid server start: success
 
@@ -464,8 +464,8 @@ The following example shows how to check the status of a database server. Names 
     % cubrid server status
     
     @ cubrid server status
-    Server testdb (rel 9.2, pid 24465)
-    Server demodb (rel 9.2, pid 24342)
+    Server testdb (rel 10.1, pid 24465)
+    Server demodb (rel 10.1, pid 24342)
 
 The following example shows the message when master process has stopped. 
 
@@ -553,7 +553,7 @@ The following log is created in the file of a server error log if an IP address 
     Time: 10/29/10 17:32:42.360 - ERROR *** ERROR CODE = -1022, Tran = 0, CLIENT = (unknown):(unknown)(-1), EID = 2
     Address(10.24.18.66) is not authorized.
 
-An error log of the database server is saved into $CUBRID/log/server directory, and the format of the file name is  <db_name>_<yyyymmdd>_<hhmi>.err. The extension is ".err".
+An error log of the database server is saved into **$CUBRID/log/server** directory, and the format of the file name is *<db_name>_<yyyymmdd>_<hhmi>.err*. The extension is ".err".
  
 ::
  
@@ -570,9 +570,9 @@ Event Log
  
 If an event which affects on the query performance occurs, this is saved into the event log.
 
-The events which are saved on the event log are SLOW_QUERY, MANY_IOREADS, LOCK_TIMEOUT, DEADLOCK and TEMP_VOLUME_EXPAND.
+The events which are saved on the event log are *SLOW_QUERY*, *MANY_IOREADS*, *LOCK_TIMEOUT*, *DEADLOCK* and *TEMP_VOLUME_EXPAND*.
 
-This log file is saved into the $CUBRID/log/server directory, and the format of the file name is  <db_name>_<yyyymmdd>_<hhmi>.event. The extension is ".event".
+This log file is saved into the **$CUBRID/log/server** directory, and the format of the file name is *<db_name>_<yyyymmdd>_<hhmi>.event*. The extension is ".event".
  
 ::
  

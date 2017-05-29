@@ -1554,7 +1554,7 @@ The bin collations have the following default locales:
 *   utf8_bin (en_US.utf8 - built-in locale - and handles ASCII characters only)
 *   euckr_bin (ko_KR.euckr - built-in locale - and handles ASCII characters only)
 
-There are some generic collations available in LDML. These collations have as default locale, the locale in which they are first found. The order of loading is the locales order from $CUBRID/conf/cubrid_locales.txt. Assuming the default order (alphabetical), the default locale for all generic LDML collations is de_DE (German).
+There are some generic collations available in LDML. These collations have as default locale, the locale in which they are first found. The order of loading is the locales order from **$CUBRID/conf/cubrid_locales.txt**. Assuming the default order (alphabetical), the default locale for all generic LDML collations is de_DE (German).
 
 Charset conversion
 ^^^^^^^^^^^^^^^^^^
@@ -1817,7 +1817,7 @@ Timezone library and database compatibility
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The timezone library built by CUBRID includes an MD5 checksum of the timezone data it contains. This hash is stored in all databases which are created with that library, into column **timezone_checksum** of **db_root** system table. If timezone library is changed (recompiled with newer timezone data) and the checksum changes, the CUBRID server, nor any other CUBRID tool cannot be started with existing databases.
-To avoid such incompatibility, one option is to use /extend argument of the make_tz tool. When this option is provided, the **timezone_checksum** value of database is also changed with the new MD5 checksum of the new timezone library.
+To avoid such incompatibility, one option is to use **extend** argument of the **make_tz** tool. When this option is provided, the **timezone_checksum** value of database is also changed with the new MD5 checksum of the new timezone library.
 The extend feature should be used when you decide to use a different version of timezone library from the IANA site. It does two things:
 
 -   It generates a new library by merging the old timezone data with the new timezone data. 
@@ -1828,27 +1828,27 @@ The extend feature should be used when you decide to use a different version of 
     could not be ensured in the first phase when the new timezone library was generated. This situation can occur 
     when an offset rule or a daylight saving rule changes.
   
-When you run make_tz with the extend option all the databases in your database directory file (databases.txt) are updated together with the MD5 checksum.
+When you run **make_tz** with the extend option all the databases in your database directory file (**databases.txt**) are updated together with the MD5 checksum.
 There are some corner cases:
     
--   There is the situation when multiple users share the same CUBRID installation and an extend is done by one of them. If that user doesn't have access
+-   There is the situation when multiple users share the same **CUBRID** installation and an extend is done by one of them. If that user doesn't have access
     rights on the files that contain the databases of the other users, those databases will not be updated. After that, if a different user for whom 
     the update wasn't made will try to do an extend on his or her databases, he or she will not be able to do this because the checksum of the library will be 
     different from the one in his or her databases.
--   Also, if the CUBRID_DATABASES environment variable has a different value for some users, they will have different databases.txt files.
+-   Also, if the **CUBRID_DATABASES** environment variable has a different value for some users, they will have different **databases.txt** files.
     In this situation, currently, the update of all the databases at once will not be possible.
     
 There would be two solutions for this with the current implementation:
 
--   Each user grants access to the folders that contain his or her databases and also the CUBRID_DATABASES variable must have the same value.
+-   Each user grants access to the folders that contain his or her databases and also the **CUBRID_DATABASES** variable must have the same value.
 -   If this is is not possible, then we can do the following for each user except the last one:
 
-    -   Backup the current timezone library and the databases.txt file
-    -   Delete from the databases.txt file all the databases except for the ones of the current user
+    -   Backup the current timezone library and the **databases.txt** file
+    -   Delete from the **databases.txt** file all the databases except for the ones of the current user
     -   Run the extend
-    -   Restore the databases.txt file and the timezone library
+    -   Restore the **databases.txt** file and the timezone library
 
-For the last user the single difference is that only the databases.txt file should be backed up and restored.
+For the last user the single difference is that only the **databases.txt** file should be backed up and restored.
 
 In Linux:
 
@@ -1984,7 +1984,7 @@ The <*language*> part should be a ASCII string (normally five characters) in IET
 After creating the LDML file, the <*language*> part string must be added into CUBRID configuration file **$CUBRID/conf/cubrid_locales.txt**.
 Note that the order in this file is the order of generating (compiling) locale library and loading locales at start-up.
 
-The **make_locale** script must be used to compile the new added locale and add its data into the CUBRID locales library (locale in $CUBRID/lib/).
+The **make_locale** script must be used to compile the new added locale and add its data into the CUBRID locales library (locale in **$CUBRID/lib/**).
 
 The LDML file is expected in UTF-8 encoding, and it is not possible to add more than one locale into the same LDML file.
 
@@ -2117,9 +2117,9 @@ The 'type' attribute defines the conversion scheme. The allowed values are:
 *   DBCS: Double Byte Code-Set; it is a generic scheme in which the destination codepage is a double byte charset
 
 The 'windows_codepage' is the value for Windows codepage which CUBRID automatically activates console conversion.
-The 'linux_charset' is corresponding value for charset part in LANG environment variable from UNIX system. It is recommended to use native CUBRID charset in Linux console.
+The 'linux_charset' is corresponding value for charset part in **LANG** environment variable from UNIX system. It is recommended to use native CUBRID charset in Linux console.
 
-The 'file' attribute is required only for "ISO" and "DBCS" values of 'type' attribute and is the file containing the translation information ($CUBRID/locales/data/codepages/).
+The 'file' attribute is required only for "ISO" and "DBCS" values of 'type' attribute and is the file containing the translation information (**$CUBRID/locales/data/codepages/**).
 
 LDML Collation
 --------------

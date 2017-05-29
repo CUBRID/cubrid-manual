@@ -145,7 +145,7 @@ Building CUBRID source
 
 SystemTap can be used only on Linux.
 
-To use SystemTap by building CUBRID source, "--enable-systemtap" option should be specified when executing "./configure". 
+To use SystemTap by building CUBRID source, **ENABLE_SYSTEMTAP** is **ON** which is set by default.
 
 This option is already included in the release build, a user not building the CUBRID source but installing CUBRID with the installation package can also use SystemTap script.
 
@@ -153,10 +153,7 @@ The below is an example of building the CUBRID source.
 
 ::
 
-    ./autogen.sh
-    ./configure -prefix=$CUBRID --enable-systemtap --enable-64bit
-    make
-    make install
+    build.sh -m release
 
 Running SystemTap script
 ------------------------
@@ -197,10 +194,8 @@ We might be interested in gathering information helpful for an analysis related 
 
 .. function:: conn_start(connection_id, user)
 
-     This marker is triggered after the query execution has begun.
+    This marker is triggered when the query execution process on the server has begun.
 
-    :param query_string: string representing the query to be executed.
-    :param query_id: Query identifier.
     :param connection_id: an integer containing the connection ID.
     :param user: The username used by this connection.
     
@@ -279,19 +274,6 @@ Operations involving the storage engine are critical and probing updates in a ta
     :param table: Target table of the operation
     :param status: Value showing whether the operation ended with success or not
     
-.. function:: obj_read_start(table)
-
-    This marker is triggered before an object is read.
-
-    :param table: Target table of the operation
-    
-.. function:: obj_read_end(table, status)
-
-    This marker is triggered after an object has been read.
-    
-    :param table: Target table of the operation
-    :param status: Value showing whether the operation ended with success or not
-
 Index operation markers
 -----------------------
 
@@ -344,21 +326,6 @@ Indexes and their misuse can be the cause of many problems in a system and the p
     :param index_name: Target index_name of the operation
     :param status: Value showing whether the operation ended with success or not
     
-.. function:: idx_read_start(classname, index_name)
-
-    This marker is triggered before an indexed object is read.
-
-    :param classname: Name of the class having the target index
-    :param index_name: Target index_name of the operation
-    
-.. function:: idx_read_end(classname, index_name, status)
-
-    This marker is triggered after an indexed object is read.
-
-    :param classname: Name of the class having the target index
-    :param index_name: Target index_name of the operation
-    :param status: Value showing whether the operation ended with success or not
-
 Locking markers
 ---------------
 
@@ -389,14 +356,13 @@ Markers that involve locking events are perhaps the most important for global mo
     :param table: Table holding the object
     :param type: Lock type (X_LOCK, S_LOCK etc.)
     
-.. function:: lock_release_end(OID, table, type, status)
+.. function:: lock_release_end(OID, table, type)
 
     This marker is triggered after a lock release operation has been completed.
 
     :param OID: Target object of the lock request
     :param table: Table holding the object
     :param type: Lock type(X_LOCK, S_LOCK etc)
-    :param status: Value showing whether the operation ended with success or not
     
 Transaction markers
 -------------------

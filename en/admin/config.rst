@@ -161,11 +161,11 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | error_log                           | client/server parameter |         | string   | cub_client.err, cub_server.err |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | error_log_level                     | client/server parameter |         | string   | SYNTAX                         | DBA only              |
+|                               | error_log_level                     | client/server parameter |         | string   | NOTIFICATION                   | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | error_log_warning                   | client/server parameter |         | bool     | no                             | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | error_log_size                      | client/server parameter |         | int      | 8,000,000                      | DBA only              |
+|                               | error_log_size                      | client/server parameter |         | int      | 512M                           | DBA only              |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 | :ref:`lock-parameters`        | deadlock_detection_interval_in_secs | server parameter        |         | float    | 1.0                            | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -181,7 +181,7 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | background_archiving                | server parameter        |         | bool     | yes                            | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | checkpoint_every_size               | server parameter        |         | byte     | 10,000 *                       |                       |
+|                               | checkpoint_every_size               | server parameter        |         | byte     | 100,000 *                      |                       |
 |                               |                                     |                         |         |          | :ref:`log_page_size <lpg>`     |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | checkpoint_interval                 | server parameter        |         | msec     | 6min                           | DBA only              |
@@ -264,6 +264,10 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               | tz_leap_second_support              | server parameter        |         | bool     | no                             | available             |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 | :ref:`plan-cache-parameters`  | max_plan_cache_entries              | client/server parameter |         | int      | 1,000                          |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | max_plan_cache_clones               | server parameter        |         | int      | 1,000                          |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | xasl_cache_time_threshold_in_minutes| client/server parameter |         | int      | 360                            |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | max_filter_pred_cache_entries       | client/server parameter |         | int      | 1,000                          |                       |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -500,7 +504,7 @@ The following are parameters related to the database server. The type and value 
 
     .. note::
         
-        In Linux system, max_clients parameter is related to "ulimit -n" command, which specifies the maximum number of file descriptors which a process can use. File descriptor includes not only a file, but also a network socket. Therefore, the number of "ulimit -n" should be larger than the number of max_clients.
+        In Linux system, max_clients parameter is related to "ulimit -n" command, which specifies the maximum number of file descriptors which a process can use. File descriptor includes not only a file, but also a network socket. Therefore, the number of "ulimit -n" should be greater than the number of max_clients.
 
 **tcp_keepalive** 
   
@@ -622,11 +626,11 @@ The following are disk-related parameters for defining database volumes and stor
 
 **dont_reuse_heap_file**
 
-    **dont_reuse_heap_file** is a parameter to configure whether or not heap files, which are deleted when deleting the table (DROP TABLE), are to be reused when creating a new table (CREATE TABLE). If this parameter is set to no, the deleted heap files can be reused; if it is set to yes, the deleted heap files are not used when creating a new table. The default value is **no**.
+    **dont_reuse_heap_file** is a parameter to configure whether or not heap files, which are deleted when deleting the table (**DROP TABLE**), are to be reused when creating a new table (**CREATE TABLE**). If this parameter is set to no, the deleted heap files can be reused; if it is set to yes, the deleted heap files are not used when creating a new table. The default value is **no**.
 
 **log_volume_size**
 
-    **log_volume_size** is a parameter to configure the default size of log volume file when the **cubrid createdb** utility is used without --log-volume-size option. You can set a unit as B, K, M, G or T, which stand for bytes, kilobytes (KB), megabytes (MB), gigabytes (GB) and terabytes (TB) respectively. If you omit the unit, bytes will be applied. The default value is **512M**.
+    **log_volume_size** is a parameter to configure the default size of log volume file when the **cubrid createdb** utility is used without **--log-volume-size** option. You can set a unit as B, K, M, G or T, which stand for bytes, kilobytes (KB), megabytes (MB), gigabytes (GB) and terabytes (TB) respectively. If you omit the unit, bytes will be applied. The default value is **512M**.
 
 **temp_file_max_size_in_pages**
 
@@ -666,11 +670,11 @@ The following are parameters related to processing error messages recorded by CU
 +-----------------------------------+----------+--------------------------------+
 | error_log                         | string   | cub_client.err, cub_server.err |
 +-----------------------------------+----------+--------------------------------+
-| error_log_level                   | string   | SYNTAX                         |
+| error_log_level                   | string   | NOTIFICATION                   |
 +-----------------------------------+----------+--------------------------------+
 | error_log_warning                 | bool     | no                             |
 +-----------------------------------+----------+--------------------------------+
-| error_log_size                    | int      | 8,000,000                      |
+| error_log_size                    | int      | 512M                           |
 +-----------------------------------+----------+--------------------------------+
 
 **call_stack_dump_activation_list**
@@ -786,7 +790,7 @@ The following are parameters related to processing error messages recorded by CU
 
 **error_log_level**
 
-    **error_log_level** is a server parameter to configure an error message to be stored based on severity. There are five different levels which ranges from **NOTIFICATION** (lowest level), to **FATAL** (highest level). The inclusion relation in messages is **FATAL** < **ERROR** < **SYNTAX** < **WARNING** < **NOTIFICATION**. The default is **SYNTAX**. If severity of error is **NOTIFICATION**, error messages with **NOTIFICATION**, **SYNTAX**, **ERROR** and **FATAL** levels are stored in the log file.
+    **error_log_level** is a server parameter to configure an error message to be stored based on severity. There are five different levels which range from **WARNING** (lowest level), to **FATAL** (highest level). The inclusion relation in messages is **FATAL** < **ERROR** < **SYNTAX** < **NOTIFICATION** < **WARNING**. The default is **NOTIFICATION**. If severity of error is **NOTIFICATION**, error messages with **NOTIFICATION**, **SYNTAX**, **ERROR** and **FATAL** levels are written to the log file.
 
 **error_log_warning**
 
@@ -794,7 +798,7 @@ The following are parameters related to processing error messages recorded by CU
 
 **error_log_size**
 
-    **error_log_size** is a parameter to configure the maximum number of lines per an error log file. The default value is **8,000,000**. If it reaches up the specified number, the *<database_name>_<date>_<time>.err.bak* file is created. 
+    **error_log_size** is a parameter to configure the maximum number of lines per an error log file. The default value is **512M**. If it reaches up to the specified number, the *<database_name>_<date>_<time>.err.bak* file is created. 
 
 .. _lock-parameters:
 
@@ -1188,7 +1192,7 @@ The following are parameters related to SQL statements and data types supported 
     **group_concat_max_len** is a parameter used to limit the return value size of the :func:`GROUP_CONCAT` function.
     You can set a unit as B, K, M, G or T, which stands for bytes, kilobytes(KB), megabytes(MB), gigabytes(GB) or terabytes(TB) respectively. If you omit the unit, bytes will be applied. The default value is **1,024**. The minimum value is 4 and the maximum value is 33,554,432 bytes. 
     
-    This function is affected by **string_max_size_bytes** parameter; if the value of **group_concat_max_len** is larger than the value **string_max_size_bytes** and the result size of **GROUP_CONCAT** exceeds the value of **string_max_size_bytes**, an error occurs.
+    This function is affected by **string_max_size_bytes** parameter; if the value of **group_concat_max_len** is greater than the value **string_max_size_bytes** and the result size of **GROUP_CONCAT** exceeds the value of **string_max_size_bytes**, an error occurs.
 
 **intl_check_input_string**
 
@@ -1620,7 +1624,7 @@ The following are parameters related to the query plan cache functionality. The 
 +===============================+========+==========+==========+==========+
 | max_plan_cache_entries        | int    | 1,000    |          |          |
 +-------------------------------+--------+----------+----------+----------+
-| max_filter_pred_cache_entries | in     | 1,000    |          |          |
+| max_filter_pred_cache_entries | int    | 1,000    |          |          |
 +-------------------------------+--------+----------+----------+----------+
 
 **max_plan_cache_entries**
@@ -1659,7 +1663,7 @@ The following are parameters related to utilities used in CUBRID. The type and v
     **backup_volume_max_size_bytes** is a parameter to configure the size of the backup volume file created by the **cubrid backupdb** utility in byte unit. 
     You can set a unit as B, K, M, G or T, which stands for bytes, kilobytes(KB), megabytes(MB), gigabytes(GB) or terabytes(TB) respectively. If you omit the unit, bytes will be applied. The default value is **0**, and the minimum value is 32K.    
     
-    If the parameter is configured to **0**, which is the default value, the created backup volume is not partitioned; if it is configured to a value larger than 0, the backup volume is partitioned as much as it is specified size.
+    If the parameter is configured to **0**, which is the default value, the created backup volume is not partitioned; if it is configured to a value greater than 0, the backup volume is partitioned as much as it is specified size.
     
 **communication_histogram**
 
@@ -2087,7 +2091,7 @@ Access
     
 **ENABLE_MONITOR_HANG**
 
-    **ENABLE_MONITOR_HANG** is a parameter to configure whether to block the access from the application to the broker or not, when more than a certain ratio of CASes on that broker are hung. If the **ENABLE_MONITOR_HANG** parameter value is **ON**, blocking feature is processed. The default value is **OFF**. If its **OFF**, don't do the behavior.
+    **ENABLE_MONITOR_HANG** is a parameter to configure whether to block the access from the application to the broker or not, when more than a certain ratio of CASes on that broker are hung. If the **ENABLE_MONITOR_HANG** parameter value is **ON**, blocking feature is processed. The default value is **OFF**. If it is **OFF**, don't do the behavior.
     
     The broker process judges the CAS as hung if the hanging status of the CAS keeps more than one minute, then block the access from applications to that broker; it brings the behavior which the applications try to access to the alternative hosts(altHosts) configured by the connection URL.
 
@@ -2270,7 +2274,7 @@ Transaction & Query
 
 **TRIGGER_ACTION**
 
-    Turn on or off of the trigger's action about the broker which specified this parameter. Specify ON or OFF as a value; The default is **ON**. 
+    Turn on or off of the trigger's action about the broker which specified this parameter. Specify **ON** or **OFF** as a value; The default is **ON**. 
 
 Logging
 ^^^^^^^
@@ -2281,11 +2285,11 @@ Logging
 
 **ACCESS_LOG_DIR** 
      
-    **ACCESS_LOG_DIR** specifies the directory for broker access logging files(ACCESS_LOB) to be created. The default is **log/broker**. 
+    **ACCESS_LOG_DIR** specifies the directory for broker access logging files(**ACCESS_LOG**) to be created. The default is **log/broker**. 
 
 **ACCESS_LOG_MAX_SIZE**
 
-    **ACCESS_LOG_MAX_SIZE** specifies the maximum size of broker access logging files(ACCESS_LOG); if a broker access logging file is bigger than a specified size, this file is backed up into  the name of *broker_name*\ **.access.**\ *YYYYMMDDHHMISS*, then logging messages are written to the new file(`broker_name`.\ **access**). The default is 10M and the maximum is 2G. It can be dynamically changed during operating a broker.
+    **ACCESS_LOG_MAX_SIZE** specifies the maximum size of broker access logging files(**ACCESS_LOG**); if a broker access logging file is bigger than a specified size, this file is backed up into  the name of *broker_name*\ **.access.**\ *YYYYMMDDHHMISS*, then logging messages are written to the new file(`broker_name`.\ **access**). The default is 10M and the maximum is 2G. It can be dynamically changed during operating a broker.
 
 **ERROR_LOG_DIR**
 

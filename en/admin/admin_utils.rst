@@ -908,7 +908,7 @@ You can also use CSQL's session commands to check the statistics information onl
 
 *   **cubrid**: An integrated utility for the CUBRID service and database management.
 
-*   **installdb**: A command that dumps the statistics information on the database server execution.
+*   **statdump**: A command that dumps the statistics information on the database server execution.
 
 *   *database_name*: The name of database which has the statistics data to be dumped.
 
@@ -2230,7 +2230,7 @@ The following example shows how to display lock information of the *testdb* data
 
     cubrid lockdb testdb
 
-The following shows [options] available with the **cubrid statdump** utility.
+The following shows [options] available with the **cubrid lockdb** utility.
     
 .. program:: lockdb
 

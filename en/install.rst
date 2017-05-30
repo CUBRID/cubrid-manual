@@ -29,7 +29,7 @@ Compatibility
 
 **Application Compatibility**
 
-*   Applications that use JDBC, PHP or CCI APIs from 2008 R4.1 or higher version of CUBRID can access the CUBRID 10.0 database. However, you must link the CUBRID 10.0 library or use the driver to use the added/improved features of JDBC, PHP or CCI interfaces. In order to use :ref:`timezone-type` which are introduced as 10.0, users should upgrade drivers. 
+*   Applications that use JDBC, PHP or CCI APIs from 2008 R4.1 or higher version of CUBRID can access the CUBRID 10.1 database. However, you must link the CUBRID 10.1 library or use the driver to use the added/improved features of JDBC, PHP or CCI interfaces. In order to use :ref:`timezone-type` which are introduced as 10.0, users should upgrade drivers. 
 
 *   Note that query results may differ from those given in the earlier version because new reserved words have been added, and the specifications for some queries have been changed.
 
@@ -45,7 +45,7 @@ Compatibility
 
 *   Drivers for 2008 R2.2 and higher versions are included in CUBRID Manager by default, which you can download separately from the http://www.cubrid.org Website.
 
-.. note:: Old version users should upgrade all of driver, broker, DB server; Data migration should be done because its DB volume is not compatible with 10.0 version.
+.. note:: Old version users should upgrade all of driver, broker, DB server; Data migration should be done because its DB volume is not compatible with 10.1 version.
     For upgrade and data migration, see :doc:`/upgrade`.
 
 **Interoperability between CUBRID DB server and broker**
@@ -97,16 +97,16 @@ Check the following before installing CUBRID for Linux.
     
 **Installing CUBRID**
 
-The installation program consists of shell scripts that contain binary; thus it can be installed automatically. The following example shows how to install CUBRID with the "CUBRID-10.0.0.1376-linux.x86_64.sh" file on the Linux. 
+The installation program consists of shell scripts that contain binary; thus it can be installed automatically. The following example shows how to install CUBRID with the "CUBRID-10.1.0.7595-d652d64-Linux.x86_64.sh" file on the Linux. 
 
 ::
 
-    $ sh CUBRID-10.0.0.1376-linux.x86_64.sh
+    $ sh CUBRID-10.1.0.7595-d652d64-Linux.x86_64.sh
     Do you agree to the above license terms? (yes or no) : yes
     Do you want to install this software(CUBRID) to the default(/home1/cub_user/CUBRID) directory? (yes or no) [Default: yes] : yes
     Install CUBRID to '/home1/cub_user/CUBRID' ...
     In case a different version of the CUBRID product is being used in other machines, 
-    please note that the CUBRID 10.0 servers are only compatible with the CUBRID 10.0 clients and vice versa.
+    please note that the CUBRID 10.1 servers are only compatible with the CUBRID 10.1 clients and vice versa.
     Do you want to continue? (yes or no) [Default: yes] : yes
     Copying old .cubrid.sh to .cubrid.sh.bak ...
 
@@ -118,7 +118,7 @@ The installation program consists of shell scripts that contain binary; thus it 
     $ . /home1/cub_user/.cubrid.sh
     $ cubrid service start
 
-As shown in the example above, after installing the downloaded file (CUBRID-10.0.0.1376-linux.x86_64.sh), the CUBRID related environment variables must be set in order to use the CUBRID database. Such setting has been made automatically when logging in the concerned terminal. Therefore there is no need to re-set after the first installation. ::
+As shown in the example above, after installing the downloaded file (CUBRID-10.1.0.7595-d652d64-Linux.x86_64.sh), the CUBRID related environment variables must be set in order to use the CUBRID database. Such setting has been made automatically when logging in the concerned terminal. Therefore there is no need to re-set after the first installation. ::
 
     $ . /home1/cub_user/.cubrid.sh
 
@@ -149,7 +149,7 @@ When you want to check whether CUBRID Manager server and CUBRID broker works wel
 
 You can install CUBRID by using rpm file that is created on CentOS 5. The way of installing and uninstalling CUBRID is the same as that of using general rpm utility. While CUBRID is being installed, a new system group (cubrid) and a user account (cubrid) are created. After installation is complete, you should log in with a cubrid user account to start a CUBRID service.::
 
-    $ rpm -Uvh cubrid-10.0.0.1376-el5.x86_64.rpm
+    $ rpm -Uvh cubrid-10.1.0.7595-d652d64-Linux.x86_64.rpm
 
 When rpm is executed, CUBRID is installed in the "cubrid" home directory (/opt/cubrid) and related configuration file (cubrid.[c]sh) is installed in the /etc/profile.d directory. Note that *demodb* is not automatically installed. Therefore, you must executed /opt/cubrid/demo/make_cubrid_demo.sh with "cubrid" Linux ID. When installation is complete, enter the code below to start CUBRID with "cubrid" Linux ID. ::
 
@@ -215,27 +215,19 @@ Installing and Running CUBRID on Windows
 
 You should check the below before installing CUBRID for Windows.
 
-*   64-bit or not
+*   64-bit or 32-bit
     
     CUBRID supports both 32-bit and 64-bit Windows. You can check the version by selecting [My Computer] > [System Properties]. Make sure to install the CUBRID 32-bit version on 32-bit Windows and the CUBRID 64-bit version on 64-bit Windows.
-
-*   Run with administrative privilege
-
-    If you want to install CUBRID on Windows Vista or higher, execute the installation file with administrative privileges. On the popup menu after clicking right mouse button on the CUBRID installation file, choose [Execute as an administrator (A)].
 
 **Installation Process**
     
 **Step 1: Specifying the directory to install**
 
-**Step 2: Selecting Setup Type**
-
-*   **Server and Driver Installation** : All of CUBRID Server, CSQL (a command line tool) and interface drivers (JDBC, C API) are installed.
-
-**Step 3: Creating a sample database**
+**Step 2: Creating a sample database**
     
-    To create a sample database, it requires 300MB disk space. 
+    To create a sample database, it requires about 300MB disk space. 
 
-**Step 4: Completing the installation**
+**Step 3: Completing the installation**
 
     CUBRID Service Tray appears on the right bottom.
 
@@ -341,13 +333,13 @@ Check the following before installing CUBRID for Linux.
 
         ::
         
-            tar xvfz CUBRID-10.0.0.0181-linux.x86_64.tar.gz /home1/cub_user/
+            tar xvfz CUBRID-10.1.0.7595-d652d64-Linux.x86_64.tar.gz /home1/cub_user/
 
         CUBRID directory is created under /home1/cub_user/ and files are created under CUBRID directory.
 
     **Specifying Environment Variables**
 
-    #.  Add below environment variables to a shell script which is run automatically and located under the home direcoty of a user.
+    #.  Add below environment variables to a shell script which is run automatically and located under the home directory of a user.
     
         The below is an example to add environemt variables to .bash_profile when you run on the bash shell.
 
@@ -356,13 +348,13 @@ Check the following before installing CUBRID for Linux.
             export CUBRID=/home1/cub_user/CUBRID
             export CUBRID_DATABASES=$CUBRID/databases
             
-    #.  Add CUBRID JDBC library file name to the CLASSPATH environment variable.
+    #.  Add CUBRID JDBC library file name to the **CLASSPATH** environment variable.
     
         ::
         
             export CLASSPATH=$CUBRID/jdbc/cubrid_jdbc.jar:$CLASSPATH
             
-    #.  Add CUBRID bin directory to PATH environment variables.
+    #.  Add CUBRID bin directory to **PATH** environment variables.
       
         ::
         
@@ -377,15 +369,15 @@ Check the following before installing CUBRID for Linux.
             cd $CUBRID_DATABASES
             mkdir testdb
             cd testdb
-            cubrid createdb --db-volume-size=100M --log-volume-size=100M testdb en_US
+            cubrid createdb --db-volume-size=128M --log-volume-size=128M testdb en_US
 
     **Auto-starting when Booting**
 
-    *   "cubrid" script is included in the $CUBRID/share/init.d directory. Change the value of **$CUBRID_USER** environment variable into the Linux accout which installed CUBRID and register this script to /etc/init.d; then you can start automatically by using "service" or "chkconfig" command.
+    *   "cubrid" script is included in the **$CUBRID/share/init.d** directory. Change the value of **$CUBRID_USER** environment variable into the Linux accout which installed CUBRID and register this script to **/etc/init.d**; then you can start automatically by using "service" or "chkconfig" command.
             
     **Auto-starting DB**    
 
-    *   To start DB automatically when you booting a system, change the below in  $CUBRID/conf/cubrid.conf.
+    *   To start DB automatically when you booting a system, change the below in **$CUBRID/conf/cubrid.conf**.
 
         ::
             
@@ -429,13 +421,13 @@ Check below list before installing CUBRID database of Windows version.
             CUBRID = C:\CUBRID
             CUBRID_DATABASES = %CUBRID%\databases
             
-    #.  Add CUBRID JDBC library name to CLASSPATH system variable.
+    #.  Add CUBRID JDBC library name to **CLASSPATH** system variable.
     
         ::
         
             %CUBRID%\jdbc\cubrid_jdbc.jar       
             
-    #.  Add CUBRID bin directory to Path system variable.
+    #.  Add CUBRID bin directory to **Path** system variable.
       
         ::
         
@@ -450,7 +442,7 @@ Check below list before installing CUBRID database of Windows version.
             cd C:\CUBRID\databases
             md testdb
             cd testdb
-            c:\CUBRID\databases\testdb>cubrid createdb --db-volume-size=100M --log-volume-size=100M testdb en_US
+            c:\CUBRID\databases\testdb>cubrid createdb --db-volume-size=128M --log-volume-size=128M testdb en_US
     
     **Auto-starting when Booting**
     
@@ -470,7 +462,7 @@ Check below list before installing CUBRID database of Windows version.
             
     **Auto-starting DB**    
 
-    *   To start DB when booting on Windows, change below in C:\\CUBRID\conf\\cubrid.conf.
+    *   To start DB when booting on Windows, change below in C:\\CUBRID\\conf\\cubrid.conf.
 
         ::
             

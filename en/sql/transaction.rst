@@ -297,19 +297,32 @@ MVCC maintains multiple versions for each database row. Each version is marked b
 
 When a transaction *T1* inserts a new row, it creates its first version and sets its unique identifier *MVCCID1* as insert id. The MVCCID is stored as meta-data in record header:
 
-.. image:: /images/transaction_inserted_record.png
++------------------+-------------+---------------+
+| OTHER META-DATA  | MVCCID1     | RECORD DATA   |
++------------------+-------------+---------------+
 
 Until *T1* commits, other transactions should not see this row. The MVCCID helps identifying the authors of database changes and place them on a time line, so others can know if the change is valid or not. In this case, anyone checking this row find the *MVCCID1*, find out that the owner is still active, hence the row must be (still) invisible.
 
 After *T1* commits, a new transaction *T2* finds the row and decides to remove it. *T2* does not remove this version, allowing others to access it, instead it gets an exclusive lock, to prevent others from changing it, and marks the version as deleted. It adds another MVCCID so others can identify the deleter:
 
-.. image:: /images/transaction_deleted_record.png
++------------------+-------------+---------------+---------------+
+| OTHER META-DATA  | MVCCID1     | MVCCID2       | RECORD DATA   |
++------------------+-------------+---------------+---------------+
 
-If *T2* decides instead to update one of the record values, it must create a new version. Both versions are marked with transaction MVCCID, old version for delete and new version for insert. Old version also stores a link to the location of new version, and the row representations looks like this:
+If *T2* decides instead to update one of the record values, it must update the row to a new version and store the old version. The existing row keeps the MVCCID for insert and delete (if any), updates the content to the new value and appends a link to the log entry containing the old version. The row representations looks like this:
 
-.. image:: /images/transaction_updated_record.png
++------------------+-------------+---------------+-------------------+---------------+
+| OTHER META-DATA  | MVCCID1     | MVCCID2       | PREV_VERSION_LSA  |  RECORD DATA  |
++------------------+-------------+---------------+-------------------+---------------+
 
-Currently, only *T2* can see second row version, while all other transaction will continue to access the first version. The property of a version to be seen or not to be seen by running transactions is called **visibility**. The visibility property is relative to each transaction, some can consider it true, whereas others can consider it false.
+
+Other transactions may need to walk the log chain of previous version LSA of multiple log record until one record satisfies the visibility condition.
+
+    .. note::
+
+        *   Previous version used the heap (another OID) to store the old and new version of the updated rows. In fact, old version was the the row which remained unchanged, which was appended with and OID link to new version. Both new version and old version were locate in the heap.
+
+Currently, only *T2* can see the updated row, while other transactions will access the row version contained on the log page and accessible through the LSA obtained from heap row. The property of a version to be seen or not to be seen by running transactions is called **visibility**. The visibility property is relative to each transaction, some can consider it true, whereas others can consider it false.
 
 A transaction *T3* that starts after *T2* executes row update, but before *T2* commits, will not be able to see its new version, not even after *T2* commits. The visibility of one version towards *T3* depends on the state of its inserter and deleter when *T3* started and preserves its status for the lifetime of *T3*.
 

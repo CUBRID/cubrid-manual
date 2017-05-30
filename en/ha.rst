@@ -493,8 +493,6 @@ HA or Not
 *   **on** : CUBRID HA is used. Failover is supported for its node.
 *   **replica** : CUBRID HA is used. Failover is not supported for its node.
 
-The **ha_mode** parameter can be re-configured in the **[@<database>]** section; however, only **off** can be entered in the case. An error is returned if a value other than **off** is entered in the **[@<database>]** section.
-
 If **ha_mode** is **on**, the CUBRID HA values are configured by reading **cubrid_ha.conf**.
 
 This parameter cannot be modified dynamically. To modify the value of this parameter, you must restart it.

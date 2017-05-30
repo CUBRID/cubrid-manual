@@ -99,8 +99,8 @@ Later, remove the *s_name* column by entering the **ALTER TABLE** again and modi
 
 .. code-block:: sql
 
-    ALTER TABLE code DROP s_name;
-    INSERT INTO code (f_name) VALUES ('Diamond');
+    ALTER TABLE code2 DROP s_name;
+    INSERT INTO code2 (f_name) VALUES ('Diamond');
 
     COMMIT WORK;
 
@@ -113,24 +113,26 @@ A savepoint can be created at a certain point of the transaction, and multiple s
 
 Savepoints are useful because intermediate steps can be created and named to control long and complicated utilities. For example, if you use a savepoint during the update operation, you don't need to perform all statements again when you made a mistake. ::
 
-    SAVEPOINT mark;
-    mark:
-    _ a SQL identifier
-    _ a host variable (starting with :)
+    SAVEPOINT <mark>;
+
+    <mark> :
+      - a SQL identifier
+      - a host variable (starting with :)
 
 If you make *mark* all the same value when you specify multiple savepoints in a single transaction, only the latest savepoint appears in the partial rollback. The previous savepoints remain hidden until the rollback to the latest savepoint is performed and then appears when the latest savepoint disappears after being used. ::
 
-    ROLLBACK [WORK] [TO [SAVEPOINT] mark] ;
-    mark:
-    _ a SQL identifier
-    _ a host variable (starting with :)
+    ROLLBACK [WORK] [TO [SAVEPOINT] <mark>];
+
+    <mark>:
+      - a SQL identifier
+      - a host variable (starting with :)
 
 Previously, the **ROLLBACK WORK** statement canceled all database changes added since the latest transaction. The **ROLLBACK WORK** statement is also used for the partial rollback that rolls back the transaction changes after the specified savepoint.
 
 If *mark* value is not given, the transaction terminates canceling all changes including all savepoints created in the transaction. If *mark* value is given, changes after the specified savepoint are canceled and the ones before it are remained.
 
 The below example shows how to rollback a part of a transaction.
-Firstly, specify savepoints SP1, SP2.
+Firstly, specify savepoints *SP1*, *SP2*.
 
 .. code-block:: sql
 
@@ -161,8 +163,8 @@ In the example above, the name change of the *athlete2* table is rolled back by 
     SELECT * FROM athlete2;
     ROLLBACK WORK TO SP2;
 
-In the example above, deleting 'Lim Jin-Suk' is discarded by rollback work to SP2 command.
-The following example shows how to roll back to SP1.
+In the example above, deleting 'Lim Jin-Suk' is discarded by rollback work to *SP2* command.
+The following example shows how to roll back to *SP1*.
 
 .. code-block:: sql
 

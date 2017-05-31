@@ -604,10 +604,10 @@ The command format is as follows.
  
     ;trace {on | off} [{text | json}]
  
-*   on: set on SQL trace.
-*   off: set off SQL trace.
-*   text: print out as a general TEXT format. If you omit OUTPUT clause, TEXT format is specified.
-*   json: print out as a JSON format.
+*   **on**: set on SQL trace.
+*   **off**: set off SQL trace.
+*   **text**: print out as a general TEXT format. If you omit OUTPUT clause, TEXT format is specified.
+*   **json**: print out as a JSON format.
 
 .. note:: CSQL interpreter which is run in the standalone mode(use -S option) does not support SQL trace feature.
     

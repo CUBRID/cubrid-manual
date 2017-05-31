@@ -566,8 +566,22 @@ Let's see how snapshot works (**REPEATABLE READ** isolation will be used to keep
 +-------------------------------------------------------------------+----------------------------------------+----------------------------------------+
 | session 1                                                         | session 2                              | session 3                              |
 +===================================================================+========================================+========================================+
+| .. code-block:: sql                                               | .. code-block:: sql                    | .. code-block:: sql                    |
+|                                                                   |                                        |                                        |
+|   csql> ;autocommit off                                           |   csql> ;autocommit off                |   csql> ;autocommit off                |
+|                                                                   |                                        |                                        |
+|   AUTOCOMMIT IS OFF                                               |   AUTOCOMMIT IS OFF                    |   AUTOCOMMIT IS OFF                    |
+|                                                                   |                                        |                                        |
+|   csql> set transaction isolation level REPEATABLE READ;          |   csql> set transaction isolation level|   csql> set transaction isolation level|
+|                                                                   |   REPEATABLE READ;                     |   REPEATABLE READ;                     |
+|                                                                   |                                        |                                        |
+|   Isolation level set to:                                         |   Isolation level set to:              |   Isolation level set to:              |
+|   REPEATABLE READ                                                 |   REPEATABLE READ                      |   REPEATABLE READ                      |
+|                                                                   |                                        |                                        |
++-------------------------------------------------------------------+---------------------------------------------------------------------------------+
 | .. code-block:: sql                                               |                                        |                                        |
 |                                                                   |                                        |                                        |
+|   csql> CREATE TABLE tbl(host_year integer, nation_code char(3)); |                                        |                                        |
 |   csql> INSERT INTO tbl VALUES (2008, 'AUS');                     |                                        |                                        |
 |   csql> COMMIT WORK;                                              |                                        |                                        |
 |                                                                   |                                        |                                        |

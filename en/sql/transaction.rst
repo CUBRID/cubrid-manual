@@ -311,16 +311,27 @@ After *T1* commits, a new transaction *T2* finds the row and decides to remove i
 
 If *T2* decides instead to update one of the record values, it must update the row to a new version and store the old version. The existing row keeps the MVCCID for insert and delete (if any), updates the content to the new value and appends a link to the log entry containing the old version. The row representations looks like this:
 
-+------------------+-------------+---------------+-------------------+---------------+
-| OTHER META-DATA  | MVCCID1     | MVCCID2       | PREV_VERSION_LSA  |  RECORD DATA  |
-+------------------+-------------+---------------+-------------------+---------------+
+HEAP file contains a single row identified by an OID:
 
++------------------+-------------+---------------+--------------------+---------------+
+| OTHER META-DATA  | MVCCID_INS1 | MVCCID_DEL1   | PREV_VERSION_LSA1  |  RECORD DATA  |
++------------------+-------------+---------------+--------------------+---------------+
 
-Other transactions may need to walk the log chain of previous version LSA of multiple log record until one record satisfies the visibility condition.
+LOG file has a chain of log entries, the undo part of each contains the original heap record before modification:
+
++----------------------+------------------+-------------+---------------+--------------------+---------------+
+| LOG ENTRY META-DATA  | OTHER META-DATA  | MVCCID_INS2 | MVCCID_DEL2   | PREV_VERSION_LSA2  |  RECORD DATA  |
++----------------------+------------------+-------------+---------------+--------------------+---------------+
+
++----------------------+------------------+-------------+---------------+--------------------+---------------+
+| LOG ENTRY META-DATA  | OTHER META-DATA  | MVCCID_INS3 | MVCCID_DEL3   | NULL               |  RECORD DATA  |
++----------------------+------------------+-------------+---------------+--------------------+---------------+
+
+Other transactions may need to walk the log chain of previous version LSA of multiple log record until one record satisfies the visibility condition, determined by the values of insert and delete MVCCID of each record.
 
     .. note::
 
-        *   Previous version used the heap (another OID) to store the old and new version of the updated rows. In fact, old version was the the row which remained unchanged, which was appended with and OID link to new version. Both new version and old version were locate in the heap.
+        *   Previous version used the heap (another OID) to store the old and new version of the updated rows. In fact, old version was the the row which remained unchanged, which was appended with and OID link to the new version. Both new version and old version were located in the heap.
 
 Currently, only *T2* can see the updated row, while other transactions will access the row version contained on the log page and accessible through the LSA obtained from heap row. The property of a version to be seen or not to be seen by running transactions is called **visibility**. The visibility property is relative to each transaction, some can consider it true, whereas others can consider it false.
 
@@ -572,13 +583,13 @@ Let's see how snapshot works (**REPEATABLE READ** isolation will be used to keep
 |                                                                   |                                        |                                        |
 |   AUTOCOMMIT IS OFF                                               |   AUTOCOMMIT IS OFF                    |   AUTOCOMMIT IS OFF                    |
 |                                                                   |                                        |                                        |
-|   csql> set transaction isolation level REPEATABLE READ;          |   csql> set transaction isolation level|   csql> set transaction isolation level|
-|                                                                   |   REPEATABLE READ;                     |   REPEATABLE READ;                     |
+|   csql> set transaction isolation level REPEATABLE READ;          |   csql> set transaction isolation      |   csql> set transaction isolation      |
+|                                                                   |   level REPEATABLE READ;               |   level REPEATABLE READ;               |
 |                                                                   |                                        |                                        |
 |   Isolation level set to:                                         |   Isolation level set to:              |   Isolation level set to:              |
 |   REPEATABLE READ                                                 |   REPEATABLE READ                      |   REPEATABLE READ                      |
 |                                                                   |                                        |                                        |
-+-------------------------------------------------------------------+---------------------------------------------------------------------------------+
++-------------------------------------------------------------------+----------------------------------------+----------------------------------------+
 | .. code-block:: sql                                               |                                        |                                        |
 |                                                                   |                                        |                                        |
 |   csql> CREATE TABLE tbl(host_year integer, nation_code char(3)); |                                        |                                        |

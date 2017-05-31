@@ -554,7 +554,7 @@ The following shows [options] available with the **cubrid copydb** utility.
 
         cubrid copydb -E home/usr/CUBRID/databases/extvols demodb new_demodb
 
-.. option:: -i, --control_file=FILE
+.. option:: -i, --control-file=FILE
 
     The **-i** option specifies an input file where a new directory path information and a source volume are stored to copy or move multiple volumes into a different directory, respectively. This option cannot be used with the **-E** option. An input file named copy_path is specified in the example below. ::
 

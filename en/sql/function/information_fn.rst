@@ -222,6 +222,8 @@ If any of constraints is not defined or the **UNIQUE** constraint is defined for
 
     In version lower than CUBRID 9.0, the value at the time of CREATE TABLE has been saved when the value of the DATE, DATETIME, TIME, TIMESTAMP column has been specified as SYS_DATE, SYS_DATETIME, SYS_TIME, SYS_TIMESTAMP while creating a table. Therefore, to enter the value at the time of data INSERT in version lower than CUBRID 9.0, the function should be entered to the VALUES clause of the INSERT syntax.
     
+.. _disk_size:
+	
 DISK_SIZE
 =========
 
@@ -244,7 +246,7 @@ DISK_SIZE
                       7              4
                       
 
-The size depends on the actual content of value, string compression is also taken into account:
+The size depends on the actual content of value, :ref:`string compression<string_compression>` is also taken into account:
     
 .. code-block:: sql
 

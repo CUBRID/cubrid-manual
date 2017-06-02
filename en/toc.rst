@@ -104,7 +104,7 @@ Rules for version naming and string since CUBRID 10.1 are as follows:
 *  Version string: M.m.p.build_number (Major version, Minor version, Patch version, Build number)
    10.1.0.7595-d652d64
 
-   Build number consists of two parts which is separated by a hyphen. The former is the number of changes from the base revision, which monotonically increases. The later is the SHA-1 hash of the build built.
+   Build number consists of two parts which are separated by a hyphen. The former is the number of changes from the base revision, which monotonically increases. The later is the SHA-1 hash of the build built.
    
 Rules for version naming and string since CUBRID 9.0 are as follows:
 

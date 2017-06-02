@@ -1119,6 +1119,12 @@ The following are the rules that are applied when using the character string typ
 
     For example, when you extract a column value from a **CHAR** (5) data type and insert it into a column with a **CHAR** (10) data type, the data type is automatically coerced to **CHAR** (10). If you want to coerce a character string explicitly, use the **CAST** operator (See :func:`CAST`).
 
+**String compression**
+	
+	Variable character type values (VARCHAR(n)) may be compressed before being stored in database (heap file, index file or list file). Compression is attempted if size in bytes is at least 255 bytes (this value is predefined and cannot be changed). If the compression is not efficient (compressed value size is equal or greater than the original uncompressed value), the value is stored uncompressed. Compression is activated by default and may be disabled by setting the system parameter  :ref:`enable_string_compression<enable_string_compression>`.
+	String compression uses the LZO1X algorithm. 
+	
+	
 CHAR(n)
 -------
 

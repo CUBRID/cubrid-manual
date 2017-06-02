@@ -733,6 +733,7 @@ db_user
 
 *   **set_password** ()
 *   **set_password_encoded** ()
+*   **set_password_encoded_sha1** ()
 *   **add_member** ()
 *   **drop_member** ()
 *   **print_authorizations** ()

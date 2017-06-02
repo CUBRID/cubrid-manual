@@ -497,9 +497,7 @@ A foreign key is a column or a set of columns that references the primary key in
 
     [CONSTRAINT constraint_name] FOREIGN KEY [foreign_key_name] (<column_name_comma_list1>) REFERENCES [referenced_table_name] (<column_name_comma_list2>) [<referential_triggered_action> ...]
      
-        <referential_triggered_action> ::=
-            ON UPDATE <referential_action> |
-            ON DELETE <referential_action>
+        <referential_triggered_action> ::= ON UPDATE <referential_action> | ON DELETE <referential_action>
 
             <referential_action> ::= CASCADE | RESTRICT | NO ACTION  | SET NULL
 
@@ -521,6 +519,8 @@ A foreign key is a column or a set of columns that references the primary key in
     *   **SET NULL**: When a specific record is being deleted or updated, the column value of the foreign key is updated to **NULL**.
     *   **NO ACTION**: Its behavior is the same as that of the **RESTRICT** option.
 
+For each row R1 of the referencing table, there should be some row R2 of the referenced table such that the value of each referencing column in R1 is either **NULL** or is equal to the value of the corresponding referenced column in R2.
+
 .. code-block:: sql
 
     -- creating two tables where one is referring to the other
@@ -530,7 +530,7 @@ A foreign key is a column or a set of columns that references the primary key in
     );
      
     CREATE TABLE b_tbl (
-        ID INT NOT NULL,
+        id INT NOT NULL,
         name VARCHAR (10) NOT NULL,
         CONSTRAINT pk_id PRIMARY KEY (id),
         CONSTRAINT fk_id FOREIGN KEY (id) REFERENCES a_tbl (id)

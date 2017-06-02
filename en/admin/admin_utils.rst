@@ -122,7 +122,7 @@ The following shows [options] available with the **cubrid** **createdb** utility
 
         cubrid createdb --comment "a new database for study" testdb en_US
 
-.. option:: -F, --file_path=PATH
+.. option:: -F, --file-path=PATH
 
     The **-F** option specifies an absolute path to a directory where the new database will be created. If the **-F** option is not specified, the new database is created in the current working directory.
 
@@ -130,7 +130,7 @@ The following shows [options] available with the **cubrid** **createdb** utility
 
         cubrid createdb -F "/dbtemp/new_db/" testdb en_US
 
-.. option:: -L, --log_path=PATH
+.. option:: -L, --log-path=PATH
 
     The **-L** option specifies an absolute path to the directory where database log files are created. If the **-L** option is not specified, log files are created in the directory specified by the **-F** option. 
     If neither **-F** nor **-L** option is specified, database log files are created in the current working directory.

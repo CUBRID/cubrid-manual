@@ -309,15 +309,15 @@ After *T1* commits, a new transaction *T2* finds the row and decides to remove i
 | OTHER META-DATA  | MVCCID1     | MVCCID2       | RECORD DATA   |
 +------------------+-------------+---------------+---------------+
 
-If *T2* decides instead to update one of the record values, it must update the row to a new version and store the old version. The existing row keeps the MVCCID for insert and delete (if any), updates the content to the new value and appends a link to the log entry containing the old version. The row representations looks like this:
+If *T2* decides instead to update one of the record values, it must update the row to a new version and store the old version. The existing row is replaced with the transaction's insert MVCCID, and stripped of any delete MVCCID, then updates the data content to the new value and appends a link to the log entry containing the old version. The row representations looks like this:
 
 HEAP file contains a single row identified by an OID:
 
-+------------------+-------------+---------------+--------------------+---------------+
-| OTHER META-DATA  | MVCCID_INS1 | MVCCID_DEL1   | PREV_VERSION_LSA1  |  RECORD DATA  |
-+------------------+-------------+---------------+--------------------+---------------+
++------------------+-------------+--------------------+---------------+
+| OTHER META-DATA  | MVCCID_INS1 | PREV_VERSION_LSA1  |  RECORD DATA  |
++------------------+-------------+--------------------+---------------+
 
-LOG file has a chain of log entries, the undo part of each contains the original heap record before modification:
+LOG file has a chain of log entries, the undo part of each log entry contains the original heap record before modification:
 
 +----------------------+------------------+-------------+---------------+--------------------+---------------+
 | LOG ENTRY META-DATA  | OTHER META-DATA  | MVCCID_INS2 | MVCCID_DEL2   | PREV_VERSION_LSA2  |  RECORD DATA  |

@@ -309,7 +309,7 @@ After *T1* commits, a new transaction *T2* finds the row and decides to remove i
 | OTHER META-DATA  | MVCCID1     | MVCCID2       | RECORD DATA   |
 +------------------+-------------+---------------+---------------+
 
-If *T2* decides instead to update one of the record values, it must update the row to a new version and store the old version. The existing row is replaced with the transaction's insert MVCCID, and stripped of any delete MVCCID, then updates the data content to the new value and appends a link to the log entry containing the old version. The row representations looks like this:
+If *T2* decides instead to update one of the record values, it must update the row to a new version and store the old version in log. The new row consists of new data, transaction MVCCID as insert MVCCID and the address of log entry storing previous version. The row representations looks like this:
 
 HEAP file contains a single row identified by an OID:
 
@@ -319,13 +319,13 @@ HEAP file contains a single row identified by an OID:
 
 LOG file has a chain of log entries, the undo part of each log entry contains the original heap record before modification:
 
-+----------------------+------------------+-------------+---------------+--------------------+---------------+
-| LOG ENTRY META-DATA  | OTHER META-DATA  | MVCCID_INS2 | MVCCID_DEL2   | PREV_VERSION_LSA2  |  RECORD DATA  |
-+----------------------+------------------+-------------+---------------+--------------------+---------------+
++----------------------+------------------+-------------+--------------------+---------------+
+| LOG ENTRY META-DATA  | OTHER META-DATA  | MVCCID_INS2 | PREV_VERSION_LSA2  |  RECORD DATA  |
++----------------------+------------------+-------------+--------------------+---------------+
 
-+----------------------+------------------+-------------+---------------+--------------------+---------------+
-| LOG ENTRY META-DATA  | OTHER META-DATA  | MVCCID_INS3 | MVCCID_DEL3   | NULL               |  RECORD DATA  |
-+----------------------+------------------+-------------+---------------+--------------------+---------------+
++----------------------+------------------+-------------+--------------------+---------------+
+| LOG ENTRY META-DATA  | OTHER META-DATA  | MVCCID_INS3 | NULL               |  RECORD DATA  |
++----------------------+------------------+-------------+--------------------+---------------+
 
 Other transactions may need to walk the log chain of previous version LSA of multiple log record until one record satisfies the visibility condition, determined by the values of insert and delete MVCCID of each record.
 
@@ -341,24 +341,25 @@ As a matter of fact, the visibility of all versions in database towards on trans
 
 In CUBRID 10.0, **snapshot** is a filter of all invalid MVCCID's. An MVCCID is invalid if it is not committed before the snapshot is taken. To avoid updating the snapshot filter whenever a new transaction starts, the snapshot is defined using two border MVCCID's: the lowest active MVCCID and the highest committed MVCCID. Only a list of active MVCCID values between the border is saved. Any transaction starting after snapshot is guaranteed to have an MVCCID bigger than highest committed and is automatically considered invalid. Any MVCCID below lowest active must be committed and is automatically considered valid.
 
-The snapshot filter algorithm that decides a version visibility queries the MVCCID markers used for insert and delete:
+The snapshot filter algorithm that decides a version visibility queries the MVCCID markers used for insert and delete. The snapshot starts by checking the *last version* stored in heap and, based on result, it can either fetch version from heap, fetch older version from log or can ignore row:
 
-+--------------------------------------+-----------------------------------------------------+
-|                                      | Delete MVCCID                                       |
-|                                      +--------------------------+--------------------------+
-|                                      | Valid                    | Invalid                  |
-+--------------------+-----------------+--------------------------+--------------------------+
-| Insert MVCCID      | Valid           | Not visible              | Visible                  |
-|                    +-----------------+--------------------------+--------------------------+
-|                    | Invalid         | Impossible               | Not visible              |
-+--------------------+-----------------+--------------------------+--------------------------+
++--------------------+--------------------------+---------------------+--------------------------------------------------------+
+| Insert MVCCID      | Previous version LSA     | Delete MVCCID       | Snapshot test result                                   |
++====================+==========================+=====================+========================================================+
+| Not visible        | NULL                     | None or not visible | | Version is too *new* and is not visible              |
+|                    |                          |                     | | Row has no previous version, so it is ignored        |
+|                    +--------------------------+---------------------+--------------------------------------------------------+
+|                    | LSA                      | None or not visible | | Version is too *new* and is not visible              |
+|                    |                          |                     | | Row has previous version and snapshot must check it  |
++--------------------+--------------------------+---------------------+--------------------------------------------------------+
+| None or visible    | LSA or NULL              | None or not visible | | Version is visible and its data is fetched           |
+|                    |                          |                     | | It does not matter if row has previous versions      |
+|                    |                          +---------------------+--------------------------------------------------------+
+|                    |                          | Visible             | | Version is too old, was deleted and is not visible   |
+|                    |                          |                     | | It does not matter if row has previous versions      |
++--------------------+--------------------------+---------------------+--------------------------------------------------------+
 
-Table explained:
-
-*   **Valid insert MVCCID, valid delete MVCCID:** Version was inserted and deleted (and both committed) before snapshot, hence it is not visible.
-*   **Valid insert MVCCID, invalid delete MVCCID:** Version was inserted and committed, but it was not deleted or it was recently deleted, hence it is visible.
-*   **Invalid insert MVCCID, invalid delete MVCCID:** Inserter did not commit before snapshot, and record is not deleted or delete was also not committed, hence version is not visible.
-*   **Invalid insert MVCCID, valid delete MVCCID:** Inserter did not commit and deleter did - impossible case. If deleter is not the same as inserter, it could not see the version, and if it is, both insert and delete MVCCID must be valid or invalid.
+If version is too new, but it has a previous version stored in log, the same checks are repeated on previous version. The checks stop when no previous versions are found (the entire row chain is too new for this transaction), or when a visible version is found.
 
 Let's see how snapshot works (**REPEATABLE READ** isolation will be used to keep same snapshot during entire transaction):
 

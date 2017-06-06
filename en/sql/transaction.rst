@@ -297,19 +297,43 @@ MVCC maintains multiple versions for each database row. Each version is marked b
 
 When a transaction *T1* inserts a new row, it creates its first version and sets its unique identifier *MVCCID1* as insert id. The MVCCID is stored as meta-data in record header:
 
-.. image:: /images/transaction_inserted_record.png
++------------------+-------------+---------------+
+| OTHER META-DATA  | MVCCID1     | RECORD DATA   |
++------------------+-------------+---------------+
 
 Until *T1* commits, other transactions should not see this row. The MVCCID helps identifying the authors of database changes and place them on a time line, so others can know if the change is valid or not. In this case, anyone checking this row find the *MVCCID1*, find out that the owner is still active, hence the row must be (still) invisible.
 
 After *T1* commits, a new transaction *T2* finds the row and decides to remove it. *T2* does not remove this version, allowing others to access it, instead it gets an exclusive lock, to prevent others from changing it, and marks the version as deleted. It adds another MVCCID so others can identify the deleter:
 
-.. image:: /images/transaction_deleted_record.png
++------------------+-------------+---------------+---------------+
+| OTHER META-DATA  | MVCCID1     | MVCCID2       | RECORD DATA   |
++------------------+-------------+---------------+---------------+
 
-If *T2* decides instead to update one of the record values, it must create a new version. Both versions are marked with transaction MVCCID, old version for delete and new version for insert. Old version also stores a link to the location of new version, and the row representations looks like this:
+If *T2* decides instead to update one of the record values, it must update the row to a new version and store the old version in log. The new row consists of new data, transaction MVCCID as insert MVCCID and the address of log entry storing previous version. The row representations looks like this:
 
-.. image:: /images/transaction_updated_record.png
+HEAP file contains a single row identified by an OID:
 
-Currently, only *T2* can see second row version, while all other transaction will continue to access the first version. The property of a version to be seen or not to be seen by running transactions is called **visibility**. The visibility property is relative to each transaction, some can consider it true, whereas others can consider it false.
++------------------+-------------+--------------------+---------------+
+| OTHER META-DATA  | MVCCID_INS1 | PREV_VERSION_LSA1  |  RECORD DATA  |
++------------------+-------------+--------------------+---------------+
+
+LOG file has a chain of log entries, the undo part of each log entry contains the original heap record before modification:
+
++----------------------+------------------+-------------+--------------------+---------------+
+| LOG ENTRY META-DATA  | OTHER META-DATA  | MVCCID_INS2 | PREV_VERSION_LSA2  |  RECORD DATA  |
++----------------------+------------------+-------------+--------------------+---------------+
+
++----------------------+------------------+-------------+--------------------+---------------+
+| LOG ENTRY META-DATA  | OTHER META-DATA  | MVCCID_INS3 | NULL               |  RECORD DATA  |
++----------------------+------------------+-------------+--------------------+---------------+
+
+Other transactions may need to walk the log chain of previous version LSA of multiple log record until one record satisfies the visibility condition, determined by the values of insert and delete MVCCID of each record.
+
+    .. note::
+
+        *   Previous version used the heap (another OID) to store the old and new version of the updated rows. In fact, old version was the the row which remained unchanged, which was appended with and OID link to the new version. Both new version and old version were located in the heap.
+
+Currently, only *T2* can see the updated row, while other transactions will access the row version contained on the log page and accessible through the LSA obtained from heap row. The property of a version to be seen or not to be seen by running transactions is called **visibility**. The visibility property is relative to each transaction, some can consider it true, whereas others can consider it false.
 
 A transaction *T3* that starts after *T2* executes row update, but before *T2* commits, will not be able to see its new version, not even after *T2* commits. The visibility of one version towards *T3* depends on the state of its inserter and deleter when *T3* started and preserves its status for the lifetime of *T3*.
 
@@ -317,24 +341,25 @@ As a matter of fact, the visibility of all versions in database towards on trans
 
 In CUBRID 10.0, **snapshot** is a filter of all invalid MVCCID's. An MVCCID is invalid if it is not committed before the snapshot is taken. To avoid updating the snapshot filter whenever a new transaction starts, the snapshot is defined using two border MVCCID's: the lowest active MVCCID and the highest committed MVCCID. Only a list of active MVCCID values between the border is saved. Any transaction starting after snapshot is guaranteed to have an MVCCID bigger than highest committed and is automatically considered invalid. Any MVCCID below lowest active must be committed and is automatically considered valid.
 
-The snapshot filter algorithm that decides a version visibility queries the MVCCID markers used for insert and delete:
+The snapshot filter algorithm that decides a version visibility queries the MVCCID markers used for insert and delete. The snapshot starts by checking the *last version* stored in heap and, based on result, it can either fetch version from heap, fetch older version from log or can ignore row:
 
-+--------------------------------------+-----------------------------------------------------+
-|                                      | Delete MVCCID                                       |
-|                                      +--------------------------+--------------------------+
-|                                      | Valid                    | Invalid                  |
-+--------------------+-----------------+--------------------------+--------------------------+
-| Insert MVCCID      | Valid           | Not visible              | Visible                  |
-|                    +-----------------+--------------------------+--------------------------+
-|                    | Invalid         | Impossible               | Not visible              |
-+--------------------+-----------------+--------------------------+--------------------------+
++--------------------+--------------------------+---------------------+--------------------------------------------------------+
+| Insert MVCCID      | Previous version LSA     | Delete MVCCID       | Snapshot test result                                   |
++====================+==========================+=====================+========================================================+
+| Not visible        | NULL                     | None or not visible | | Version is too *new* and is not visible              |
+|                    |                          |                     | | Row has no previous version, so it is ignored        |
+|                    +--------------------------+---------------------+--------------------------------------------------------+
+|                    | LSA                      | None or not visible | | Version is too *new* and is not visible              |
+|                    |                          |                     | | Row has previous version and snapshot must check it  |
++--------------------+--------------------------+---------------------+--------------------------------------------------------+
+| None or visible    | LSA or NULL              | None or not visible | | Version is visible and its data is fetched           |
+|                    |                          |                     | | It does not matter if row has previous versions      |
+|                    |                          +---------------------+--------------------------------------------------------+
+|                    |                          | Visible             | | Version is too old, was deleted and is not visible   |
+|                    |                          |                     | | It does not matter if row has previous versions      |
++--------------------+--------------------------+---------------------+--------------------------------------------------------+
 
-Table explained:
-
-*   **Valid insert MVCCID, valid delete MVCCID:** Version was inserted and deleted (and both committed) before snapshot, hence it is not visible.
-*   **Valid insert MVCCID, invalid delete MVCCID:** Version was inserted and committed, but it was not deleted or it was recently deleted, hence it is visible.
-*   **Invalid insert MVCCID, invalid delete MVCCID:** Inserter did not commit before snapshot, and record is not deleted or delete was also not committed, hence version is not visible.
-*   **Invalid insert MVCCID, valid delete MVCCID:** Inserter did not commit and deleter did - impossible case. If deleter is not the same as inserter, it could not see the version, and if it is, both insert and delete MVCCID must be valid or invalid.
+If version is too new, but it has a previous version stored in log, the same checks are repeated on previous version. The checks stop when no previous versions are found (the entire row chain is too new for this transaction), or when a visible version is found.
 
 Let's see how snapshot works (**REPEATABLE READ** isolation will be used to keep same snapshot during entire transaction):
 
@@ -553,8 +578,22 @@ Let's see how snapshot works (**REPEATABLE READ** isolation will be used to keep
 +-------------------------------------------------------------------+----------------------------------------+----------------------------------------+
 | session 1                                                         | session 2                              | session 3                              |
 +===================================================================+========================================+========================================+
+| .. code-block:: sql                                               | .. code-block:: sql                    | .. code-block:: sql                    |
+|                                                                   |                                        |                                        |
+|   csql> ;autocommit off                                           |   csql> ;autocommit off                |   csql> ;autocommit off                |
+|                                                                   |                                        |                                        |
+|   AUTOCOMMIT IS OFF                                               |   AUTOCOMMIT IS OFF                    |   AUTOCOMMIT IS OFF                    |
+|                                                                   |                                        |                                        |
+|   csql> set transaction isolation level REPEATABLE READ;          |   csql> set transaction isolation      |   csql> set transaction isolation      |
+|                                                                   |   level REPEATABLE READ;               |   level REPEATABLE READ;               |
+|                                                                   |                                        |                                        |
+|   Isolation level set to:                                         |   Isolation level set to:              |   Isolation level set to:              |
+|   REPEATABLE READ                                                 |   REPEATABLE READ                      |   REPEATABLE READ                      |
+|                                                                   |                                        |                                        |
++-------------------------------------------------------------------+----------------------------------------+----------------------------------------+
 | .. code-block:: sql                                               |                                        |                                        |
 |                                                                   |                                        |                                        |
+|   csql> CREATE TABLE tbl(host_year integer, nation_code char(3)); |                                        |                                        |
 |   csql> INSERT INTO tbl VALUES (2008, 'AUS');                     |                                        |                                        |
 |   csql> COMMIT WORK;                                              |                                        |                                        |
 |                                                                   |                                        |                                        |

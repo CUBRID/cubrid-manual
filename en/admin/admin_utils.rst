@@ -188,7 +188,11 @@ The following shows [options] available with the **cubrid** **createdb** utility
 
     *   *volcmnts*: Comment to be written in the volume header. It contains information on the additional volume to be created. The specification of the comment on a volume can also be omitted.
 
-    *   *volpurp*: The purpose for which the volume will be used. It can be either permanent data (default option) or temporary. *For backward compatibility, all old keywords, data, index, temp, or generic are accepted. temp stands for temporary data purpose, while the rest stand for permanent data purpose*.
+    *   *volpurp*: The purpose for which the volume will be used. It can be either permanent data (default option) or temporary. 
+
+	.. note:: 
+		For backward compatibility, all old keywords, **data**, **index**, **temp**, or **generic** are accepted. **temp** stands for temporary data purpose, while the rest stand for permanent data purpose.
+
 
     *   *volnpgs*: The number of pages of the additional volume to be created. The specification of the number of pages of the volume cannot be omitted; it must be specified. The actual volume size is rounded up to the next multiple of **64 sectors**.
 
@@ -357,9 +361,11 @@ The following shows [options] available with the **cubrid addvoldb** utility.
     
         cubrid addvoldb -p temp testdb
 
-    *PERMANENT DATA volumes used to be classified as generic, data and index. The design of volumes has been changed, and since then the classification no longer exists. In order to avoid invalidating your old scripts, we chose to keep the keywords as valid options, but their effect will be the same. The only remaining option value with a real effect is temp.*
+    .. note::
+
+	    PERMANENT DATA volumes used to be classified as generic, data and index. The design of volumes has been changed, and since then the classification no longer exists. In order to avoid invalidating your old scripts, we chose to keep the keywords as valid options, but their effect will be the same. The only remaining option value with a real effect is temp.
         
-    For detailed information on each purpose, see :ref:`database-volume-structure`.
+	    For detailed information on each purpose, see :ref:`database-volume-structure`.
     
 .. option:: -S, --SA-mode
 
@@ -440,7 +446,7 @@ In contrast, the **cubrid alterdbhost** utility configures or changes the host n
 
 *   *dest_database_name*: The new name of the database. It must not be the same as that of an existing database. The path name to the directory where the database is to be created must not be included.
 
-The following shows [options] available with the **cubrid deletedb** utility.
+The following shows [options] available with the **cubrid renamedb** utility.
 
 .. program:: renamedb
 

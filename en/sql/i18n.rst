@@ -599,7 +599,7 @@ The user should do this operations before the synchronization. These operations 
 *   Change collation using ALTER TABLE .. MODIFY statement.  
 *   Remove any views, indexes, triggers or partitions containing the collation.
 
-Run synchrization with **cubrid synccolldb**. After then, do the following operations.
+Run synchronization with **cubrid synccolldb**. After then, do the following operations.
 
 *   Recreate views, indexes, triggers, or partitions
 *   Update application statements to use new collations
@@ -642,7 +642,7 @@ Next, create the database. ::
 
 Create a schema. At this time, specify the needed collation in each table. ::
 
-    $ csql -S -udba xdb -i in.sql
+    $ csql -S -u dba xdb -i in.sql
 
 .. code-block:: sql    
 
@@ -2006,7 +2006,7 @@ LDML Calendar Information
 *   The <months> requires to specify the names for months in both long form and abbreviated form. The allowed size are 15 (or 60 bytes) for abbreviated form and 25 characters (or 100 bytes) for normal form.
 *   The <days> requires week day names in both long and abbreviated form. The allowed size are 10 characters (or 40 bytes) for abbreviated form and 15 characters (or 60 bytes) for full day name.
 
-    *   The <dayperiods> sub-tree requires to define the string for AM/PM format varints (according to type attribute). The allowed size is 10 characters (or 40 bytes).
+    *   The <dayperiods> sub-tree requires to define the string for AM/PM format variants (according to type attribute). The allowed size is 10 characters (or 40 bytes).
 
 The months and week-days names (in both long and abbreviated form) must be specified in Camel case format (first letter upper case, the rest in lower case).
 CUBRID checks only the maximum allowed size in bytes; the size in characters is computed only for full-width UTF-8 characters (4 bytes), so it would be possible to set a month name having 100 ASCII-only characters (the 25 characters limit is when each character from month name is encoded on 4 bytes in UTF-8).
@@ -2085,7 +2085,7 @@ These allow to define casing rules for alphabet of the locale.
 The 'CUBRIDAlphabetMode' attribute defines the primary source of data for characters. Normally, this should be set to "UNICODEDATAFILE", values which instructs CUBRID to use the Unicode data file (**$CUBRID/locales/data/unicodedata.txt**).
 
 This file must not be modified, any customization on certain characters should be done in LDML file. If such value is configured, all Unicode characters up to codepoint 65535 are loaded with casing information.
-The other allowed value for `CUBRIDAlphabetMode` is "ASCII" which will lead to only ASCII character can be lower case, upper case or case-insenstive compare in matching functions.
+The other allowed value for `CUBRIDAlphabetMode` is "ASCII" which will lead to only ASCII character can be lower case, upper case or case-insensitive compare in matching functions.
 
 This does not affect CUBRID's ability to support all UTF-8 4 bytes encoded Unicode characters, it just limits the casing ability for characters not included.
 
@@ -2152,7 +2152,7 @@ The 'settings' tag defines the properties of the collation:
 
 The main data for a collation is loaded from the DUCET file. After this step, the collation may be customized using "tailoring rules". These are the "<rules>" (LDML) and "<cubridrules>" (CUBRID specific).
 
-The 'cubridrules' tag is optional and can be used to explicitely set weight values for a codepoint or a range of codepoints. The cubridrules apply after loading the primary collation data from DUCET file and before applying the UCA rules (from '<rules>' tag).
+The 'cubridrules' tag is optional and can be used to explicitly set weight values for a codepoint or a range of codepoints. The cubridrules apply after loading the primary collation data from DUCET file and before applying the UCA rules (from '<rules>' tag).
 Each of these rule is enclosed in '<set>' tag. If the rule refers to only one Unicode codepoint, then a '<scp>' tag is provided which contains the hexadecimal value of codepoint.
 
 All available CUBRID collations contain this cubrid-rule:

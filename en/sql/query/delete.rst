@@ -21,7 +21,7 @@ You can delete records in the table by using the **DELETE** statement. You can s
 
 *   *search_condition*: Deletes only data that meets *search_condition* by using :ref:`where-clause`. If it is specified, all data in the specified tables will be deleted.
 
-*   *row_count*: Specifies the number of records to be deleted in the :ref:`limit-clause`. It can be one of unsigned integer, an host variable or a simple expression.
+*   *row_count*: Specifies the number of records to be deleted in the :ref:`limit-clause`. It can be one of unsigned integer, a host variable or a simple expression.
 
 When a table to delete records is only one, :ref:`limit-clause` can be specified. You can limit the number of records by specifying the :ref:`limit-clause`.  If the number of records satisfying the :ref:`where-clause` exceeds *row_count*, only the number of records specified in *row_count* will be deleted.
 

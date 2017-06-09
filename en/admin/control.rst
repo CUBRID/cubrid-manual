@@ -756,7 +756,7 @@ Database server error processes use the server error code when an error has occu
 
 **Checking the Database Server Error Codes**
 
-*   Every data definition statement starting with **#define ER_** in the **$CUBRID/include/dbi.h** file indicate the serer error codes.
+*   Every data definition statement starting with **#define ER_** in the **$CUBRID/include/dbi.h** file indicate the server error codes.
 
 *   All message groups under "$set 5 MSGCAT_SET_ERROR" in the **CUBRID/msg/en_US (in Korean, ko_KR.eucKR** or **ko_KR.utf8)/cubrid.msg** $ file indicates the server error messages.
 
@@ -1563,7 +1563,7 @@ The following is [options] used in **cubrid_replay**.
   
     $ cubrid_replay -I testhost -P 33000 -d testdb -u dba -r testdb_1_11_1.sql.log.bak output.txt 
   
-If you run the above command, the summary of execution result is displayed on th console.
+If you run the above command, the summary of execution result is displayed on the console.
   
 :: 
      

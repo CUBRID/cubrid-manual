@@ -100,7 +100,7 @@ Hierarchical Query Execution
 Hierarchical Query for Table Join
 ---------------------------------
 
-When target table is joined in **SELECT** statement, **WHERE** clause can include not only searching conditions but also joining conditions. At this time, CUBRID applies the joining conditions in **WHERE** clause at first, then conditions in **CONNECT BY** caluse; at last, the left searching conditions.
+When target table is joined in **SELECT** statement, **WHERE** clause can include not only searching conditions but also joining conditions. At this time, CUBRID applies the joining conditions in **WHERE** clause at first, then conditions in **CONNECT BY** clause; at last, the left searching conditions.
 
 When specifying joining conditions and searching conditions together in **WHERE** clause, joining conditions can be applied as searching conditions even if there was no intention; so the operating order can be different; therefore, we recommend that you specify the table joining conditions in **FROM** clause, not in **WHERE** conditions.
 
@@ -558,7 +558,7 @@ CUBRID judges that this hierarchical query has a loop if the same row is found d
           3  'b'          'c'              4            1  '/a/b/c/b'
           4  'c'          'b'              5            1  '/a/b/c/b/c'
 
-The belows shows to output dates of March, 2013(201303) with a hierarchical query.     
+The below shows to output dates of March, 2013(201303) with a hierarchical query.     
 
 .. code-block:: sql
 

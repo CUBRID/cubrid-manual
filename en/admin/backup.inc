@@ -220,11 +220,11 @@ You must not delete archive logs by using the file deletion command such as rm o
 
 *   In non-HA environment (ha_mode=off):
 
-    If you configure the **force_remove_log_archives** value to yes, archive logs are kept only the number specified in **log_max_archives** value; and the left logs are automatically deleted. However, if tehre is an active tranaction in the oldest archive log file, this file is not deleted until the transaction is completed.
+    If you configure the **force_remove_log_archives** value to yes, archive logs are kept only the number specified in **log_max_archives** value; and the left logs are automatically deleted. However, if there is an active tranaction in the oldest archive log file, this file is not deleted until the transaction is completed.
 
 *   In an HA environment (ha_mode=on):
 
-    If you configure the **force_remove_log_archives** values to no and specify the number specfied in **log_max_archives** value, archive logs are automatically deleted after replication is applied.
+    If you configure the **force_remove_log_archives** values to no and specify the number specified in **log_max_archives** value, archive logs are automatically deleted after replication is applied.
     
     .. note::
     
@@ -241,7 +241,7 @@ restoredb
 
 A database restore is the procedure of restoring the database to its state at a certain point in time by using the backup files, active logs and archive logs which have been created in an environment of the same CUBRID version. To perform a database restore, use the **cubrid restoredb** utility or the CUBRID Manager.
 
-The **cubrid restoredb** utility (restordb.exe on Windows) restores the database from the database backup by using the information written to all the active and archive logs since the execution of the last backup. ::
+The **cubrid restoredb** utility restores the database from the database backup by using the information written to all the active and archive logs since the execution of the last backup. ::
 
     cubrid restoredb [options] database_name
 

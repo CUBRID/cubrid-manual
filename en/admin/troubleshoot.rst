@@ -117,7 +117,7 @@ When overflow keys or overflow pages occur, **NOTIFICATION** messages are writte
 Detecting log recovery time
 ---------------------------
 
-When DB sever is started or backuped volume is restored, you can check the duration of the log recovery by printing out the **NOTIFICATION** messages, the starting time and the ending time of the log recovery, to the server error log or an error log file of restoredb. In these messages, the number of logs and the number of log pages to redo are written together.
+When DB sever is started or backup volume is restored, you can check the duration of the log recovery by printing out the **NOTIFICATION** messages, the starting time and the ending time of the log recovery, to the server error log or an error log file of restoredb. In these messages, the number of logs and the number of log pages to redo are written together.
 
 :: 
   
@@ -245,7 +245,7 @@ The following describes the error messages when **copylogdb** or **applylogdb** 
 | DB creation time in the current replication logs.             |                                                                                                  |
 | That is, it's not the previous log to be being applied.       |                                                                                                  |
 +---------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
-| Diffent database locale.                                      | Locale initialization: Active log file(/home1/cubrid/DB/tdb01_cdbs037.cub/tdb01_lgat) charset    |
+| Different database locale.                                    | Locale initialization: Active log file(/home1/cubrid/DB/tdb01_cdbs037.cub/tdb01_lgat) charset    |
 |                                                               | is not valid (iso88591), expecting utf8.                                                         |
 +---------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
 

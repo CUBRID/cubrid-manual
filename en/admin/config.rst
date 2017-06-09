@@ -25,7 +25,7 @@ System parameters for the database server, which can be set in the **cubrid.conf
 
 .. note:: **Location of cubrid.conf File and How It Works**
 
-    The **cubrid.conf** file ls localted on the **$CUBRID/conf** directory. For setting by database, it divides into a section in the **cubrid.conf** file.
+    The **cubrid.conf** file is located on the **$CUBRID/conf** directory. For setting by database, it divides into a section in the **cubrid.conf** file.
 
 Changing Database Server Configuration
 --------------------------------------
@@ -49,7 +49,7 @@ You can configure a parameter value by using SQL statements in the CSQL Interpre
 
     SET SYSTEM PARAMETERS 'parameter_name=value [{; name=value}...]'
 
-*parameter_name* is the name of a client parameter whose value is editable. In this syntax, value is the value of the given parameter. You can change multiple parameter values by separating them with semicolons (;). You must take caution when you apply changes of parameter values.
+*parameter_name* is the name of a client parameter whose value is editable. In this syntax, *value* is the value of the given parameter. You can change multiple parameter values by separating them with a semicolon(;). You should be careful when you change a parameter.
 
 The following example shows how to retrieve the result of an index scan in OID order and configure the number of queries to be stored in the history of the CSQL Interpreter to 70.
 
@@ -847,7 +847,7 @@ The following are parameters related to concurrency control and locks of the dat
 
     .. note::
     
-        9.3 or less version supports the below levels additionationally. From 10.0, concurrency can be guaranteed more because MVCC method is applied when multiple concurrent transactions are processed; therefore, the below isolation levels are not used anymore.
+        9.3 or less version supports the below levels additionally. From 10.0, concurrency can be guaranteed more because MVCC method is applied when multiple concurrent transactions are processed; therefore, the below isolation levels are not used anymore.
         
             *   **TRAN_REP_CLASS_UNCOMMIT_INSTANCE** : This isolation level can incur dirty read.
             
@@ -1509,7 +1509,7 @@ The following are parameters related to SQL statements and data types supported 
 
     In general, unicode text can be stored in "fully composed" or "fully decomposed". When character 'Ä' has 00C4 (if it is encoded in UTF-8, it becomes 2 bytes of C3 84) which is only one code point. In "fully decomposed" mode, it has two code points/characters. It is 0041 (character "A") and 0308(COMBINING DIAERESIS). In case of UTF-8 encoding, it becomes 3 bytes of 41 CC 88.
 
-    CUBRID can work with fully composed unicode. For clients which have fully decomposed texts, configure the value of **unicode_input_normalization** to yes so that it can be converted to fully composed mode; and then it can be reverted to fully decomposed mode. For normalization of unicode encapsulation of CUBRID, compatibility equivalence is not applied. In general, normalization of unicode is not possible to revert after composition, CUBRID supports revert for characters an many as possible, and it applies normalization of unicode encapsulation. The characteristics of CUBRID normalization are as follows:
+    CUBRID can work with fully composed unicode. For clients which have fully decomposed texts, configure the value of **unicode_input_normalization** to yes so that it can be converted to fully composed mode; and then it can be reverted to fully decomposed mode. For normalization of unicode encapsulation of CUBRID, compatibility equivalence is not applied. In general, normalization of unicode is not possible to revert after composition, CUBRID supports revert for characters as many as possible, and it applies normalization of unicode encapsulation. The characteristics of CUBRID normalization are as follows:
 
     *   In case of language specific, normalization does not depend on locale. 
     
@@ -1877,11 +1877,11 @@ The following are other parameters. The type and value range for each parameter 
 
 **data_buffer_neighbor_flush_pages**
     
-	**data_buffer_neighbor_flush_pages** is a parameter to control the number of neighbour pages to be flushed with background flush (victim candidates flushing). When is less or equal to 1, the neighbour flush feature is considered deactivated.
+	**data_buffer_neighbor_flush_pages** is a parameter to control the number of neighbor pages to be flushed with background flush (victim candidates flushing). When is less or equal to 1, the neighbor flush feature is considered deactivated.
 
 **data_buffer_neighbor_flush_nondirty**
     
-	**data_buffer_neighbor_flush_nondirty** is a parameter to control the flushing of non-dirty neighbour pages. When victim candidates pages are flushed, and neighbour flush is activated (**data_buffer_neighbor_flush_pages** is greater than 1), than single non-dirty pages which completes a chain of neighbour (dirty) pages are also flushed.
+	**data_buffer_neighbor_flush_nondirty** is a parameter to control the flushing of non-dirty neighbor pages. When victim candidates pages are flushed, and neighbor flush is activated (**data_buffer_neighbor_flush_pages** is greater than 1), than single non-dirty pages which completes a chain of neighbor (dirty) pages are also flushed.
 
 .. _broker-configuration:
 

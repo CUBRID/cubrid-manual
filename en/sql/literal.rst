@@ -132,7 +132,7 @@ Character string is written as wrapped in single quotes.
 
     For details, see :ref:`escape-characters`.
 
-*   Charset introducer can be located in front of a string, and COLLATE modifier can be localted after a string.
+*   Charset introducer can be located in front of a string, and COLLATE modifier can be located after a string.
 
     For details, see :ref:`charset-introducer`.
 

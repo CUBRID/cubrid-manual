@@ -38,7 +38,7 @@ You can create a serial object in the database by using the **CREATE SERIAL** st
 
 *   **NOCYCLE**: Specifies that the serial will not be generated anymore after reaching the maximum or minimum value. The default value is **NOCYCLE**.
 
-*   **CACHE**: Stores as many serials as the number specified by "cached_num" in the cache to improve the performance of the serials and fetches a serial value when one is requested. If all cached values are used up, as many serials as "cached_num" are fetched again from the disk to the memory. If the database server stops accidently, all cached serial values are deleted. For this reason, the serial values before and after the restart of the database server may be discontinuous. Because the transaction rollback does not affect the cached serial values, the request for the next serial will return the next value of the value used (or fetched) lastly when the transaction is rolled back. The "cached_num" after the **CACHE** keyword cannot be omitted. If the "cached_num" is equal to or smaller than 1, the serial cache is not applied.
+*   **CACHE**: Stores as many serials as the number specified by "cached_num" in the cache to improve the performance of the serials and fetches a serial value when one is requested. If all cached values are used up, as many serials as "cached_num" are fetched again from the disk to the memory. If the database server stops accidentally, all cached serial values are deleted. For this reason, the serial values before and after the restart of the database server may be discontinuous. Because the transaction rollback does not affect the cached serial values, the request for the next serial will return the next value of the value used (or fetched) lastly when the transaction is rolled back. The "cached_num" after the **CACHE** keyword cannot be omitted. If the "cached_num" is equal to or smaller than 1, the serial cache is not applied.
 
 *   **NOCACHE**: Specifies that the serial cache is not used, and serial value is updated for each time.
 
@@ -271,7 +271,7 @@ For example, if you create a serial starting 101 and increasing by 1 and call **
      
 .. code-block:: sql
 
-    -- At first, the first serial value starts with the initial serial value, 10000. So the l0'th serial value will be 10009.
+    -- At first, the first serial value starts with the initial serial value, 10000. So the l0th serial value will be 10009.
     SELECT SERIAL_NEXT_VALUE(order_no, 10);
     
 ::

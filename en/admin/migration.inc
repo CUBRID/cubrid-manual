@@ -123,7 +123,7 @@ The following is [options] used in **cubrid unloaddb**.
 
 .. option:: --use-delimiter
 
-    This option writes the double quot(") on the beginning and end of an identifier. The default is not to write the double quot(").
+    This option writes the double quote(") on the beginning and end of an identifier. The default is not to write the double quote(").
     
 .. option:: -S, --SA-mode
 

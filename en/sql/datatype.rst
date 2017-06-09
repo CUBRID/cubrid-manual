@@ -946,7 +946,7 @@ For each function's usage, see the each function's explanation by clicking the f
 
 .. note::
     
-    :func:`TO_TIMESTAMP_TZ` and :func:`TO_DATETIME_TZ` functions do the same behaviours with :func:`TO_TIMESTAMP` and :func:`TO_DATETIME` functions except that they can have TZR, TZD, TZH and TZM information in their date/time argument.
+    :func:`TO_TIMESTAMP_TZ` and :func:`TO_DATETIME_TZ` functions do the same behaviors with :func:`TO_TIMESTAMP` and :func:`TO_DATETIME` functions except that they can have TZR, TZD, TZH and TZM information in their date/time argument.
 
 CUBRID uses the region name of timezone in the IANA(Internet Assigned Numbers Authority) timezone database region; for IANA timezone, see http://www.iana.org/time-zones.
 

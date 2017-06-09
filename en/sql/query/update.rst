@@ -28,7 +28,7 @@ You can update the column value of a record stored in the target table or view t
 
 *   *col_name* | <*expr*>: Specifies base column to be updated.
 
-*   *row_count*: Specifies the number of records to be updated after the :ref:`limit-clause`. It can be one of unsigned integer, an host variable or a simple expression.
+*   *row_count*: Specifies the number of records to be updated after the :ref:`limit-clause`. It can be one of unsigned integer, a host variable or a simple expression.
 
 In case of only one table is to be updated, you can specify :ref:`order-by-clause` or :ref:`limit-clause`. You can also limit the number of records to be updated in the :ref:`limit-clause`. You can use the update with the :ref:`order-by-clause` if you want to maintain the execution order or lock order of triggers. 
 

@@ -1764,7 +1764,7 @@ You can drop an existing table by the **DROP** statement. Multiple tables can be
 *   If a super class name is specified after the **ONLY** keyword, only the super class, not the sub classes inheriting from it, is deleted. If a super class name is specified after the **ALL** keyword, the super classes as well as the sub classes inheriting from it are all deleted. You can specify the list of sub classes not to be deleted after the **EXCEPT** keyword.
 *   If sub classes that inherit from the super class specified after the **ALL** keyword are specified after the **EXCEPT** keyword, they are not deleted.
 *   Specifies the list of subclasses which are not to be deleted after the **EXCEPT** keyword.
-*	**CASCADE CONSTRAINTS**: The table is dropped and also forein keys of other tables which refer this table are dropped.
+*	**CASCADE CONSTRAINTS**: The table is dropped and also foreign keys of other tables which refer this table are dropped.
 
 .. code-block:: sql
 

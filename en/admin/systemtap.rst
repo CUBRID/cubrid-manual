@@ -33,7 +33,7 @@ Checking Installation
         stapusr:x:156:cubrid
         stapdev:x:158:cubrid
 
-3.  To check if SystemTap is runable, simply run the below command.
+3.  To check if SystemTap is runnable, simply run the below command.
 
     ::
 
@@ -70,7 +70,7 @@ The below is an example to install SystemTap in CentOS 6.3. Checking version and
         $ sudo yum remove systemtap-devel
         $ sudo yum remove systemtap
 
-3.  Installl the RPM distributed package of SystemTap 2.2 or higher. You can find the RPM distributed package in http://rpmfind.net/linux/rpm2html/.
+3.  Install the RPM distributed package of SystemTap 2.2 or higher. You can find the RPM distributed package in http://rpmfind.net/linux/rpm2html/.
 
     ::
 

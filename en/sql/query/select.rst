@@ -583,8 +583,8 @@ The **LIMIT** clause can be used to limit the number of records displayed. You c
     <limit_term> ::= <limit_factor> | <limit_term> * <limit_factor> | <limit_term> / <limit_factor>
     <limit_factor> ::= <unsigned int> | <input_hostvar> | ( <limit_expression> )
 
-*   *offset*: Specifies the offset of the starting row to be displayed. The offset of the starting row of the result set is 0; it can be omitted and the default value is **0**. It can be one of unsigned int, an host variable or a simple expression.
-*   *row_count*: Specifies the number of records to be displayed. It can be one of unsigned integer, an host variable or a simple expression.
+*   *offset*: Specifies the offset of the starting row to be displayed. The offset of the starting row of the result set is 0; it can be omitted and the default value is **0**. It can be one of unsigned int, a host variable or a simple expression.
+*   *row_count*: Specifies the number of records to be displayed. It can be one of unsigned integer, a host variable or a simple expression.
 
 .. code-block:: sql
 

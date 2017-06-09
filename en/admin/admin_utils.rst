@@ -188,7 +188,7 @@ The following shows [options] available with the **cubrid** **createdb** utility
 
     *   *volcmnts*: Comment to be written in the volume header. It contains information on the additional volume to be created. The specification of the comment on a volume can also be omitted.
 
-    *   *volpurp*: The purpose for which the volume will be used. It can be either permanent data (default option) or temporary. *For backward compatibilty, all old keywords, data, index, temp, or generic are accepted. temp stands for temporary data purpose, while the rest stand for permanent data purpose*.
+    *   *volpurp*: The purpose for which the volume will be used. It can be either permanent data (default option) or temporary. *For backward compatibility, all old keywords, data, index, temp, or generic are accepted. temp stands for temporary data purpose, while the rest stand for permanent data purpose*.
 
     *   *volnpgs*: The number of pages of the additional volume to be created. The specification of the number of pages of the volume cannot be omitted; it must be specified. The actual volume size is rounded up to the next multiple of **64 sectors**.
 
@@ -1430,10 +1430,10 @@ The following shows [options] available with the **cubrid statdump** utility.
     
     There are several types of statistic, based on how they are collected:
     
-    *  Accumulator: The stat values are incremented whenever the trackeed action happens.
+    *  Accumulator: The stat values are incremented whenever the tracked action happens.
     *  Counter/timer: The stat tracks both the number and the duration of an action. Also biggest and average duration are tracked.
     *  Snapshot: The stat is peeked from database.
-    *  Complex: The stat tracks multiple values for an action, separated by various attibutes.
+    *  Complex: The stat tracks multiple values for an action, separated by various attributes.
 
     Most statistics are accumulators (they are incremented when an action happens). Other statistics can be counter/timers (they track both number of actions and their duration), some are peeked from database (snapshot) and some are computed based on other values. Lastly, there are several complex statistics which track detailed information on some operations.
 
@@ -1793,7 +1793,7 @@ The following shows [options] available with the **cubrid statdump** utility.
     +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
     | Vacuuming        | Num_vacuum_log_pages_vacuumed            | Accumulator    | The number of log data pages processed by vacuum workers.             |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_vacuum_log_pages_to_vacuum           | Accumulator    | | The number of log data pages to be vaccumed by vacuum workers.      |
+    |                  | Num_vacuum_log_pages_to_vacuum           | Accumulator    | | The number of log data pages to be vacuumed by vacuum workers.      |
     |                  |                                          |                | | (if value is much bigger than Num_vacuum_log_pages_vacuumed,        |
     |                  |                                          |                | | it means vacuum system lags behind)                                 |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
@@ -1814,7 +1814,7 @@ The following shows [options] available with the **cubrid statdump** utility.
     |                  | Vacuum_page_efficiency_ratio             | Computed       | | Ratio between number of page unfix of vacuum with dirty flag and    |
     |                  |                                          |                | | total number of page unfix of vacuum. Ideally, the vacuum process   |
     |                  |                                          |                | | performsonly write operations since it cleans up all unused records.|
-    |                  |                                          |                | | Even with an optimized vacuum process, 100% eficiency is not        |
+    |                  |                                          |                | | Even with an optimized vacuum process, 100% efficiency is not       |
     |                  |                                          |                | | possible.                                                           |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
     |                  | Vacuum_page_fetch_ratio                  | Computed       | Ratio (percentage) of page unfix from vacuum module versus total.     |
@@ -1975,7 +1975,7 @@ The following shows [options] available with the **cubrid statdump** utility.
     |                  |                                          |                | | or have been fixed since collected.                                 |
     +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
     | | Page buffer    | ..alloc_bcb                              | Counter/timer  | | The number and duration of BCB allocation to store new data page.   |
-    | | victimzation   |                                          |                | | When a database is just started, the page buffer has available      |
+    | | victimization  |                                          |                | | When a database is just started, the page buffer has available      |
     |                  |                                          |                | | BCB's ready to be picked. However, once page buffer becomes full    |
     |                  |                                          |                | | all BCB's are in use, one must be victimized. The time tracked here |
     |                  |                                          |                | | includes BCB victimization and loading from disk.                   |
@@ -2154,7 +2154,7 @@ The following shows [options] available with the **cubrid statdump** utility.
     
 .. note::
 
-    Some sets of perfmance statistics are activated/deactivated by **extended_statistics_activation** system parameter. Each set is represented by a value power of two. To be activated, it needs to be present in the base-2 representation of the system parameter. This is the lists of sets that can be manipulated:
+    Some sets of performance statistics are activated/deactivated by **extended_statistics_activation** system parameter. Each set is represented by a value power of two. To be activated, it needs to be present in the base-2 representation of the system parameter. This is the lists of sets that can be manipulated:
 
     
       ========= ===================================== =========== ====================================================================

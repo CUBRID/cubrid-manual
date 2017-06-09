@@ -25,7 +25,7 @@ Use **CREATE VIEW** statement to create a view. Regarding writing view name, see
 *   **AS** <*select_statement*>: A valid **SELECT** statement must be specified. A view is created based on this.
 *   **WITH CHECK OPTION**: If this option is specified, the update or insert operation is possible only when the condition specified in the **WHERE** clause of the <*select_statement*> is satisfied. Therefore, this option is used to disallow the update of a virtual table that violates the condition.
 *   *view_comment_string*: specifies a view's comment.
-*   *column_comment_string*: specofies a column's comment.
+*   *column_comment_string*: specifies a column's comment.
 
 .. code-block:: sql
 

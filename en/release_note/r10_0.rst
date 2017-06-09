@@ -177,7 +177,7 @@ Improvements and Bug fixes
 * fixed cci_get_class_num_objs function to also work for a view (CUBRIDSUS-7734)
 * fixed checkdb to consider a record that does not satisfy a filter index predicate (CUBRIDSUS-13686)
 * fixed CHR function with binary charset (CUBRIDSUS-17783)
-* fixed collation in domain of an host variable which was set to default one, disregarding the collation of actual value or collation inferred (CUBRIDSUS-14787)
+* fixed collation in domain of a host variable which was set to default one, disregarding the collation of actual value or collation inferred (CUBRIDSUS-14787)
 * fixed collation setting in ENUM type (CUBRIDSUS-16702)
 * fixed deadlock between DDLs by acquiring SCH_M_LOCK from beginning when executes ALTER, DROP table (CUBRIDSUS-13540)
 * fixed incorrect error message when a copylogdb starts twice (CUBRIDSUS-12043)

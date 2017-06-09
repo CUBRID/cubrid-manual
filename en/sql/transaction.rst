@@ -1490,7 +1490,7 @@ READ COMMITTED UPDATE RE-EVALUATION
 |                                                                         |    *                                                                             |
 |                                                                         |    *   T2 finds (2004, 'GER') has a new version (2000, 'GER')                    |
 |                                                                         |    *   that doesn't satisfy predicate anymore.                                   |
-|                                                                         |    *   T2 releases the lock on object and ingores it.                            |
+|                                                                         |    *   T2 releases the lock on object and ignores it.                            |
 |                                                                         |    *                                                                             |
 |                                                                         |    *   T2 finds (2008, 'GER') has a new version (2004, 'GER')                    |
 |                                                                         |    *   that still satisfies the predicate.                                       |
@@ -1581,7 +1581,7 @@ The following example shows that non-repeatable and phantom reads may not occur 
 |                                                                            |                                                                             |
 |                                                                            |   csql> SELECT * FROM isol5_tbl WHERE nation_code='AUS';                    |
 |                                                                            |                                                                             |
-|                                                                            |   /* phantom read connot occur due to snapshot isolation */                 |
+|                                                                            |   /* phantom read cannot occur due to snapshot isolation */                 |
 |                                                                            |                                                                             |
 |                                                                            |       host_year  nation_code                                                |
 |                                                                            |   ===================================                                       |

@@ -1,9 +1,9 @@
 Updating Statistics
 ===================
 
-Statistics for tables and indexes enables queries of the database system to process efficiently. Statistics are updated automatically when DDL statements such as CREATE TABLE, CREATE/DROP INDEX are executed. However, since it is not automatically updated when DML statements such as INSERT and DELETE is performed, it is necessary to update the statistics by **UPDATE STATISTICS** statement(See :ref:`info-stats`).
+Statistics for tables and indexes enables queries of the database system to process efficiently. Statistics are updated automatically when DDL statements such as **CREATE TABLE**, **CREATE**, **DROP INDEX** are executed. However, since it is not automatically updated when DML statements such as **INSERT** and **DELETE** is performed, it is necessary to update the statistics by **UPDATE STATISTICS** statement(See :ref:`info-stats`).
 
-**UPDATE STATISTICS** statement is recommended only when a mass of INSERT or DELETE statements make the big difference between the statistics and the actual information.
+**UPDATE STATISTICS** statement is recommended only when a mass of **INSERT** or **DELETE** statements make the big difference between the statistics and the actual information.
 
 ::
 
@@ -13,11 +13,11 @@ Statistics for tables and indexes enables queries of the database system to proc
   
     UPDATE STATISTICS ON CATALOG CLASSES [WITH FULLSCAN]; 
 
-*   **WITH FULLSCAN**: It updates the statistics with all the data in the specified table. If this is omitted, it updates the statistics with sampling data. Most cases are enough to update statistics with sampling data; it is recommended not to use WITH FULLSCAN because it can be a burden to the system.
+*   **WITH FULLSCAN**: It updates the statistics with all the data in the specified table. If this is omitted, it updates the statistics with sampling data. Most cases are enough to update statistics with sampling data; it is recommended not to use **WITH FULLSCAN** because it can be a burden to the system.
 
     .. note:: 
 
-        From 10.0 version, on the HA environment, UPDATE STATISTICS on the master node is replicated to the slave/replica node.
+        From 10.0 version, on the HA environment, **UPDATE STATISTICS** on the master node is replicated to the slave/replica node.
 
 *   **ALL CLASSES**: If the **ALL CLASSES** keyword is specified, the statistics on all the tables existing in the database are updated.
 
@@ -345,7 +345,7 @@ Query Profiling
 If the performance analysis of SQL is required, you can use query profiling feature.
 To use query profiling, specify SQL trace with **SET TRACE ON** syntax; to print out the profiling result, run **SHOW TRACE** syntax.
  
-And if you want to always include the query plan when you run **SHOW TRACE**, you need to add /\*+ RECOMPLIE \*/ hint on the query.
+And if you want to always include the query plan when you run **SHOW TRACE**, you need to add /\*+ RECOMPILE \*/ hint on the query.
 
 The format of **SET TRACE ON** syntax is as follows.
  
@@ -623,11 +623,11 @@ SQL hints are specified by using a plus sign(+) to comments. To use a hint, ther
 
 The hint comment must appear after the keyword such as **SELECT**, **UPDATE** or **DELETE**, and the comment must begin with a plus sign (+), following the comment delimiter.  When you specify several hints, they are  separated by blanks.
 
-The following hints can be specified in UPDATE, DELETE and SELECT statements.
+The following hints can be specified in **UPDATE**, **DELETE** and **SELECT** statements.
 
 *   **USE_NL**: Related to a table join, the query optimizer creates a nested loop join execution plan with this hint.
 *   **USE_MERGE**: Related to a table join, the query optimizer creates a sort merge join execution plan with this hint.
-*   **ORDERED**: Related to a table join, the query optimizer create a join execution plan with this hint, based on the order of tables specified in the FROM clause. The left table in the FROM clause becomes the outer table; the right one becomes the inner table.
+*   **ORDERED**: Related to a table join, the query optimizer create a join execution plan with this hint, based on the order of tables specified in the **FROM** clause. The left table in the **FROM** clause becomes the outer table; the right one becomes the inner table.
 *   **USE_IDX**: Related to an index, the query optimizer creates an index join execution plan corresponding to a specified table with this hint.
 *   **USE_DESC_IDX**: This is a hint for the scan in descending index. For more information, see :ref:`index-descending-scan`.
 *   **INDEX_SS**: Consider the query plan of index skip scan. For more information, see :ref:`index-skip-scan`.
@@ -665,8 +665,8 @@ The following hints can be specified in UPDATE, DELETE and SELECT statements.
 
 MERGE statement can have below hints.
 
-*   **USE_INSERT_INDEX** (<*insert_index_list*>): An index hint which is used in INSERT clause of MERGE statement. Lists index names to *insert_index_list* to use when executing INSERT clause. This hint is applied to  <*join_condition*> of MERGE statement.
-*   **USE_UPDATE_INDEX** (<*update_index_list*>): An index hint which is used in UPDATE clause of MERGE statement. Lists index names to *update_index_list* to use when executing UPDATE clause. This hint is applied to <*join_condition*> and <*update_condition*> of MERGE statement.
+*   **USE_INSERT_INDEX** (<*insert_index_list*>): An index hint which is used in **INSERT** clause of **MERGE** statement. Lists index names to *insert_index_list* to use when executing **INSERT** clause. This hint is applied to  <*join_condition*> of **MERGE** statement.
+*   **USE_UPDATE_INDEX** (<*update_index_list*>): An index hint which is used in **UPDATE** clause of **MERGE** statement. Lists index names to *update_index_list* to use when executing **UPDATE** clause. This hint is applied to <*join_condition*> and <*update_condition*> of **MERGE** statement.
 *   **RECOMPILE**: See the above :ref:`RECOMPILE <recompile>`.
 
 Table/view names to join can be specified to the joining hint; at this time, table/view names are separated by ",".
@@ -676,7 +676,7 @@ Table/view names to join can be specified to the joining hint; at this time, tab
     SELECT /*+ USE_NL(a, b) */ * 
     FROM a INNER JOIN b ON a.col=b.col;
 
-The following example shows how to retrieve the years when Sim Kwon Ho won medals and the types of medals. It can be expressed by the following query. The query optimizer creates a nested loop join execution plan that has the *athlete* table as an outer table and the *game* table as an inner table.
+The following example shows how to retrieve the years when *'Sim Kwon Ho'* won medals and the types of medals. It can be expressed by the following query. The query optimizer creates a nested loop join execution plan that has the *athlete* table as an outer table and the *game* table as an inner table.
 
 .. code-block:: sql
 
@@ -701,7 +701,7 @@ The following example shows how to retrieve the years when Sim Kwon Ho won medal
                    cost:  3 card 8653
         cost:  73 card 9
 
-The following example shows how to specify tables when using a USE_NL hint.
+The following example shows how to specify tables when using a **USE_NL** hint.
 
 .. code-block:: sql
 
@@ -716,7 +716,7 @@ The following example shows how to specify tables when using a USE_NL hint.
 Index Hint
 ==========
 
-The index hint syntax allows the query processor to select a proper index by specifying the index in the query. You can specify the index hint by USING INDEX clause or by {USE|FORCE|IGNORE} INDEX syntax after "FROM table" clause.
+The index hint syntax allows the query processor to select a proper index by specifying the index in the query. You can specify the index hint by **USING INDEX** clause or by { **USE** | **FORCE** | **IGNORE** } **INDEX** syntax after "**FROM** table" clause.
 
 USING INDEX
 -----------
@@ -767,7 +767,7 @@ Index hints can be specified through **USE**, **FORCE**, **IGNORE INDEX** syntax
 *    **FORCE INDEX** ( <*index_spec*> ): Specified indexes are chosen as the first priority.
 *    **IGNORE INDEX** ( <*index_spec*> ): Specified indexes are excluded from the choice.
 
-USE, FORCE, IGNORE INDEX syntax is automatically rewritten as the proper USING INDEX syntax by the system.
+**USE**, **FORCE**, **IGNORE** **INDEX** syntax is automatically rewritten as the proper **USING INDEX** syntax by the system.
 
 Examples of index hint
 ----------------------
@@ -910,7 +910,7 @@ If you want to apply the filtered index, that filtered index must be specified b
 
 *   When a filtered index is specified by **USING INDEX** clause or **USE INDEX** syntax: 
 
-    If columns of which the index consists are not included on the conditions of WHERE clause, the filtered index is not used.
+    If columns of which the index consists are not included on the conditions of **WHERE** clause, the filtered index is not used.
 
     .. code-block:: sql
 
@@ -926,7 +926,7 @@ If you want to apply the filtered index, that filtered index must be specified b
    
         CREATE INDEX my_filter_index ON blogtopic(postDate) WHERE deleted=0;
 
-    On the below query, postDate, a column of which my_filter_index consists, is included on the conditions of WHERE condition. Therefore, this index can be used by "USE INDEX" syntax.
+    On the below query, *postDate*, a column of which *my_filter_index* consists, is included on the conditions of **WHERE** condition. Therefore, this index can be used by **USE INDEX** clause.
         
     .. code-block:: sql
         
@@ -936,9 +936,9 @@ If you want to apply the filtered index, that filtered index must be specified b
     
 *   When a filtered index is specified by **USING INDEX** <index_name>(+) clause or **FORCE INDEX** syntax:
 
-    Even if a column of which the index consists is not included on the condition of WHERE clause, the filtered index is used.
+    Even if a column of which the index consists is not included on the condition of **WHERE** clause, the filtered index is used.
 
-    On the below query, my_filter_index cannot be used by "USE INDEX" syntax because a column of which my_filter_index consists is not included on the WHERE condition.
+    On the below query, *my_filter_index* cannot be used by **"USE INDEX"** syntax because a column of which *my_filter_index* consists is not included on the **WHERE** condition.
 
     .. code-block:: sql
         
@@ -946,7 +946,7 @@ If you want to apply the filtered index, that filtered index must be specified b
         FROM blogtopic USE INDEX (my_filter_index)
         WHERE author = 'David' AND deleted=0;
 
-    Therefore, to use my_filter_index, it should be forced by "FORCE INDEX".
+    Therefore, to use *my_filter_index*, it should be forced by **"FORCE INDEX"**.
     
     .. code-block:: sql
         
@@ -988,7 +988,7 @@ To process queries that are interested in open bugs, specify the index as an ind
     FROM bugs FORCE INDEX (idx_open_bugs)
     WHERE CreationDate > CURRENT_DATE - 10 AND Closed = 0;
 
-On the above example, if you use "USING INDEX idx_open_bugs" clause or "USE INDEX (idx_open_bugs)" syntax, a query is processed without using the idx_open_bugs index.
+On the above example, if you use "**USING INDEX** *idx_open_bugs*" or "**USE INDEX** (*idx_open_bugs*)", a query is processed without using the *idx_open_bugs* index.
     
 .. warning::
 
@@ -1058,7 +1058,7 @@ On the above example, if you use "USING INDEX idx_open_bugs" clause or "USE INDE
         -   The operators and functions where an argument is the **SET** type
         -   The functions to use LOB file(:func:`CHAR_TO_BLOB`, :func:`CHAR_TO_CLOB`, :func:`BIT_TO_BLOB`, :func:`BLOB_FROM_FILE`, :func:`CLOB_FROM_FILE`)
 
-    *   The **IS NULL** operator can be used only when at least one column of an index is not NULL.
+    *   The **IS NULL** operator can be used only when at least one column of an index is not **NULL**.
 
         .. code-block:: sql
         
@@ -1485,9 +1485,9 @@ The following example shows that *i* column exists, **ORDER BY** is executed by 
 
 .. note::
 
-    Even if the type of a column in the ORDER BY clause is converted by using :func:`CAST`, ORDER BY optimization is executed when the sorting order is the same as before.
+    Even if the type of a column in the **ORDER BY** clause is converted by using :func:`CAST`, **ORDER BY** optimization is executed when the sorting order is the same as before.
     
-        +---------------------------------+
+        +----------------+----------------+
         | Before         | After          |
         +================+================+
         | numeric type   | numeric type   |
@@ -1580,7 +1580,7 @@ If you add **USE_DESC_IDX** hint to the above query, a different result will be 
                 5
                 5
 
-The following example requires descending order by **ORDER BY** clause. In this case, there is no **USE_DESC_IDX** but do the descending scan.
+The following example requires descending **ORDER BY** clause. In this case, there is no **USE_DESC_IDX** but do the descending scan.
 
 .. code-block:: sql
 
@@ -1620,10 +1620,10 @@ The columns in the **GROUP BY** clause must exist in front side of the column fo
     WHERE col1 > 0 
     GROUP BY col1,col2;
 
-*   You can use the index consisting of tab(col1, col2) for optimization.
-*   The index consisting of tab(col1, col2, col3) can be used because col3 which is not referred to by **GROUP BY** comes after col1 and col2.
-*   You cannot use the index consisting of tab(col1) for optimization.
-*   You also cannot use the index consisting of tab(col3, col1, col2) or tab(col1, col3, col2), because col3 is not located at the back of the column in the **GROUP BY** clause.
+*   You can use the index consisting of *tab* ( *col1*, *col2* ) for optimization.
+*   The index consisting of *tab* ( *col1*, *col2*, *col3* ) can be used because *col3* which is not referred to by **GROUP BY** comes after *col1* and *col2*.
+*   You cannot use the index consisting of *tab* ( *col1* ) for optimization.
+*   You also cannot use the index consisting of *tab* ( *col3*, *col1*, *col2* ) or *tab* ( *col1*, *col3*, *col2* ), because *col3* is not located at the back of the column in the **GROUP BY** clause.
 
 You can use the index if the column condition is a constant although the column consisting of the index doesn't exist in the **GROUP BY** clause.
 
@@ -1634,7 +1634,7 @@ You can use the index if the column condition is a constant although the column 
     WHERE col2=val 
     GROUP BY col1,col3;
 
-If there is any index that consists of tab(col1, col2, col3) in the above example, use the index for optimizing **GROUP BY**.
+If there is any index that consists of *tab* ( *col1*, *col2*, *col3* ) in the above example, use the index for optimizing **GROUP BY**.
 
 Row sorting by **GROUP BY** is not required, because you can get the result as the requested order on the index scan.
 
@@ -1661,7 +1661,7 @@ If there is an index made of **GROUP BY** columns even when using aggregate func
 
     UPDATE STATISTICS on tab;
 
-The following example shows that indexes consisting of tab(j,k) are used and no separate sorting process is required because **GROUP BY** is executed by j and k columns.
+The following example shows that indexes consisting of *tab* ( *j*, *k* ) are used and no separate sorting process is required because **GROUP BY** is executed by *j* and *k* columns.
 
 .. code-block:: sql
 
@@ -1694,7 +1694,7 @@ The following example shows that indexes consisting of tab(j,k) are used and no 
                 1            5            5
                 2            6            6
 
-The following example shows that an index consisting of tab(j,k) is used and no separate sorting process is required while **GROUP BY** is executed by j and k columns, no condition exists for j, and j column has **NOT NULL** attribute.
+The following example shows that an index consisting of *tab* ( *j*, *k* ) is used and no separate sorting process is required while **GROUP BY** is executed by *j* and *k* columns, no condition exists for *j*, and *j* column has **NOT NULL** attribute.
 
 .. code-block:: sql
 
@@ -1740,7 +1740,7 @@ The following example shows that an index consisting of tab(j,k) is used and no 
         FROM db_class a, db_class b, db_class c, db_class d LIMIT 20000;
     CREATE INDEX idx ON tab(k1, k2, k3);
 
-If you create tables and indexes of the above, the following example runs the **GROUP BY** with k1, k2 columns and performs an aggregate function in k3; therefore, the index which consists of tab(k1, k2, k3) is used and no sort processing is required. In addition, because all columns of k1, k2, k3 of ** SELECT ** list are present in the index configured in the tab(k1, k2, k3), covering index is applied.
+If you create tables and indexes of the above, the following example runs the **GROUP BY** with *k1*, *k2* columns and performs an aggregate function in *k3*; therefore, the index which consists of *tab* (*k1*, *k2*, *k3*) is used and no sort processing is required. In addition, because all columns of *k1*, *k2*, *k3* of **SELECT** list are present in the index configured in the *tab* (*k1*, *k2*, *k3*), covering index is applied.
     
 .. code-block:: sql
 
@@ -1764,7 +1764,7 @@ If you create tables and indexes of the above, the following example runs the **
 
     /* ---> skip GROUP BY */
 
-The following example performs **GROUP BY** clause with k1, k2 columns; therefore, the index composed with tab(k1, k2, k3) is used and no sort processing is required. However, v column in the **SELECT** list is not present in the index composed of tab(k1, k2, k3); therefore, it does not apply covering index.
+The following example performs **GROUP BY** clause with *k1*, *k2* columns; therefore, the index composed with *tab* (*k1*, *k2*, *k3*) is used and no sort processing is required. However, *v* column in the **SELECT** list is not present in the index composed of *tab* (*k1*, *k2*, *k3*); therefore, it does not apply covering index.
     
 .. code-block:: sql
     
@@ -1793,7 +1793,7 @@ The following example performs **GROUP BY** clause with k1, k2 columns; therefor
 Multiple Key Ranges Optimization
 --------------------------------
 
-Optimizing the LIMIT clause is crucial for performance because the most queries have limit filter. A representative optimization of this case is Multiple Key Ranges Optimization.
+Optimizing the **LIMIT** clause is crucial for performance because the most queries have limit filter. A representative optimization of this case is Multiple Key Ranges Optimization.
 
 Multiple Key Ranges Optimization generate the query result with Top N Sorting to scan only some key ranges in an index rather than doing a full index scan. Top N Sorting always keeps the best N tuples sorted rather than selecting all tuples and then sorting. Therefore, it shows the outstanding performance. 
 
@@ -2005,10 +2005,10 @@ Applying loose index scan is advantageous when the cardinality of the grouped co
 
 Loose index scan optimization is considered to be applied when **INDEX_LS** is input as a hint and the below cases are satisfied:
 
-1.  when an index covers all SELECT list, that is, covered index is applied.
-2.  when the statement is SELECT DISTINCT, SELECT ... GROUP BY statement or a single tuple SELECT.
-3.  all aggregate functions (with the exception of MIN/MAX) must have DISTINCT input
-4.  COUNT(*) should not be used
+1.  when an index covers all **SELECT** list, that is, covered index is applied.
+2.  when the statement is **SELECT DISTINCT**, **SELECT** ... **GROUP BY** statement or a single tuple **SELECT**.
+3.  all aggregate functions (with the exception of **MIN**/**MAX**) must have **DISTINCT** input
+4.  **COUNT(*)** should not be used
 5.  when cardinality of the used subkey is 100 times smaller than the cardinality of the whole index 
 
 a subkey is a prefix part in a composite index; e.g. when there is INDEX(a, b, c, d), (a), (a, b) or (a, b, c) belongs to the subkey.
@@ -2262,39 +2262,39 @@ The following shows the cases when loose index scan optimization is not applied.
 In Memory Sort
 --------------
  
-The "in memory sort(IMS)" feature is an optimization applied to the LIMIT queries specifying ORDER BY. Normally, when executing a query which specifies ORDER BY and LIMIT clauses, CUBRID generates the full sorted result set and then applies the LIMIT operator to this result set. With the IMS optimization, instead of generating the whole result set, CUBRID uses an in-memory binary heap in which only tuples satisfying the ORDER BY and LIMIT clauses are allowed. This optimization improves performance by eliminating the need for a full unordered result set.
+The "in memory sort(IMS)" feature is an optimization applied to the **LIMIT** queries specifying **ORDER BY**. Normally, when executing a query which specifies **ORDER BY** and **LIMIT** clauses, CUBRID generates the full sorted result set and then applies the **LIMIT** operator to this result set. With the IMS optimization, instead of generating the whole result set, CUBRID uses an in-memory binary heap in which only tuples satisfying the **ORDER BY** and **LIMIT** clauses are allowed. This optimization improves performance by eliminating the need for a full unordered result set.
  
 Whether this optimization is applied or not is not transparent to users. CUBRID decides to use in memory sort in the following situation:
  
-*   The query specifies ORDER BY and LIMIT clauses.
-*   The size of the final result (after applying the LIMIT clause) is less than the amount of memory used by external sort (see **sort_buffer_size** in :ref:`memory-parameters`).
+*   The query specifies **ORDER BY** and **LIMIT** clauses.
+*   The size of the final result (after applying the **LIMIT** clause) is less than the amount of memory used by external sort (see **sort_buffer_size** in :ref:`memory-parameters`).
  
-Note that IMS considers the actual size of the result and not the count of tuples the result contains. For example, for the default sort buffer size (two megabytes), this optimization will be applied for a LIMIT value of 524,288 tuples consisting of one 4 byte INTEGER type but only for ~2,048 tuples of CHAR(1024) values. This optimization is not applied to queries requiring DISTINCT ordered result sets.
+Note that IMS considers the actual size of the result and not the count of tuples the result contains. For example, for the default sort buffer size (two megabytes), this optimization will be applied for a **LIMIT** value of 524,288 tuples consisting of one 4 byte **INTEGER** type but only for ~2,048 tuples of **CHAR** (1024) values. This optimization is not applied to queries requiring **DISTINCT** ordered result sets.
 
 .. _sort-limit-optimization:
 
 SORT-LIMIT optimization
 -----------------------
 
-The SORT-LIMIT optimization applies to queries specifying ORDER BY and LIMIT clauses. The idea behind it is to evaluate the LIMIT operator as soon as possible in the query plan in order to benefit from the reduced cardinality during joins. 
+The SORT-LIMIT optimization applies to queries specifying **ORDER BY** and **LIMIT** clauses. The idea behind it is to evaluate the **LIMIT** operator as soon as possible in the query plan in order to benefit from the reduced cardinality during joins. 
 
 A SORT-LIMIT plan can be generated when the following conditions are met:
 
-*   All referred tables in the ORDER BY clause belong to the SORT-LIMIT plan.
+*   All referred tables in the **ORDER BY** clause belong to the SORT-LIMIT plan.
 *   A table belonging to a SORT-LIMIT plan is either:
 
     *   The owner of a foreign key from a fk->pk join
-    *   The left side of a LEFT JOIN.
-    *   The right side of a RIGHT JOIN.
+    *   The left side of a **LEFT JOIN**.
+    *   The right side of a **RIGHT JOIN**.
 
-*   LIMIT rows should be specified as less rows than the value of **sort_limit_max_count** system parameter(default: 1000). 
+*   **LIMIT** rows should be specified as less rows than the value of **sort_limit_max_count** system parameter(default: 1000). 
 *   Query does not have cross joins.
 *   Query joins at least two relations.
-*   Query does not have a GROUP BY clause.
-*   Query does not specify DISTINCT.
-*   ORDER BY expressions can be evaluated during scan.
+*   Query does not have a **GROUP BY** clause.
+*   Query does not specify **DISTINCT**.
+*   **ORDER BY** expressions can be evaluated during scan.
 
-    For example, the below query cannot apply SORT-LIMIT plan because SUM cannot be evaluated during scan.
+    For example, the below query cannot apply SORT-LIMIT plan because **SUM** cannot be evaluated during scan.
 
     .. code-block:: sql
     
@@ -2314,7 +2314,7 @@ The below is an example of planning SORT-LIMIT.
 
     SELECT /*+ RECOMPILE */ * FROM u, t WHERE u.i = t.i AND u.j > 10 ORDER BY u.j LIMIT 5; 
 
-The above SELECT query's plan is printed out as below; we can see "(sort limit)".
+The above **SELECT** query's plan is printed out as below; we can see "(sort limit)".
 
 ::
 

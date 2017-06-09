@@ -11,7 +11,7 @@ The main topics covered in this chapter are as follows:
     *   Identifier: Describes how to write, the identifier, string allowed to be used as a name of a table, index, and column.
     *   Reserved words: Lists reserved words in CUBRID. To use a reserved word as an identifier, enclose the identifier by using double quotes, backticks (`), or brackets ([]).
     *   Comment
-    *   LIteral: Describes how to write constant values.
+    *   Literal: Describes how to write constant values.
     
 *   Data types: Describes the data types, the format to store data.
 

@@ -21,7 +21,7 @@ For how to use indexes on the **SELECT** statement like Using SQL Hint, Descendi
 *   *column_name*: specifies the name of the column where the index is to be applied. To create a composite index, specify two or more column names.
 *   **ASC** | **DESC**: specifies the sorting order of columns. 
 
-*   <*filter_predicate*>: defines the conditions to create filtered indexes. When there are several comparison conditions between a column and a constant, filtering is available only when the conditions are connected by using **AND**. Regarding this, definitely watch :ref:`filtered-index`.
+*   <*filter_predicate*>: defines the conditions to create filtered indexes. When there are several comparison conditions between a column and a constant, filtering is available only when the conditions are connected by using **AND**. Refer to :ref:`filtered-index` for more details.
 *   *function_name* (*argument_list*): Defines the conditions to create function-based indexes. Regarding this, definitely watch :ref:`function-index`.
 
 *   *index_comment_string*: specifies a comment of an index.
@@ -63,7 +63,7 @@ You can write a comment of an index as following.
 
     ALTER TABLE tbl2 ADD INDEX i_tbl2_b (b) COMMENT 'index comment b';
 
-A specified comment of an indexe can be shown by running these statements.
+A specified comment of an index can be shown by running these statements.
 
 .. code-block:: sql
 
@@ -114,7 +114,7 @@ The following is an example of recreating index.
     CREATE INDEX i_game_medal ON game(medal);
     ALTER INDEX i_game_medal ON game COMMENT 'rebuild index comment' REBUILD ;
 
-If you want to add or change a comment of the index without rebuilding an index, add a COMMENT syntax and remove a REBUILD keyword as following.
+If you want to add or change a comment of the index without rebuilding an index, add a **COMMENT** clause and remove **REBUILD** keyword as follows:
 
 ::
 

@@ -289,6 +289,8 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | auto_restart_server                 | server parameter        | O       | bool     | yes                            | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | enable_string_compression           | client/server parameter |         | bool     | yes                            |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | index_scan_in_oid_order             | client parameter        | O       | bool     | no                             | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | index_unfill_factor                 | server parameter        |         | float    | 0.05                           |                       |
@@ -1722,6 +1724,8 @@ The following are other parameters. The type and value range for each parameter 
 +-------------------------------------+--------+----------------+----------------+----------------+
 | auto_restart_server                 | bool   | yes            |                |                |
 +-------------------------------------+--------+----------------+----------------+----------------+
+| enable_string_compression           | bool   | yes            |                |                |
++-------------------------------------+--------+----------------+----------------+----------------+
 | index_scan_in_oid_order             | bool   | no             |                |                |
 +-------------------------------------+--------+----------------+----------------+----------------+
 | index_unfill_factor                 | float  | 0.05           | 0              | 0.5            |
@@ -1778,6 +1782,12 @@ The following are other parameters. The type and value range for each parameter 
 **auto_restart_server**
 
     **auto_restart_server** is a parameter to configure whether to restart the process when it stops due to fatal errors being occurred in database server process. If **auto_restart_server** value is set to **yes**, the server process automatically restarts when it has stopped due to errors; it does not restart in case it stops by following normal process (by using **STOP** command).
+	
+.. _enable_string_compression:
+	
+**enable_string_compression**
+
+    **enable_string_compression** is a parameter to configure whether string compression should be used when storing variable string type value into heap, index or list. If **enable_string_compression** value is set to **yes**, and the string is at least 255 bytes in size and the compressed string requires less size than original string, then the string is stored in compressed form.
 
 **index_scan_in_oid_order**
 

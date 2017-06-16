@@ -21,6 +21,8 @@ Overview
 
 CUBRID 10.1 is a significant upgrade and stable version of CUBRID 10.0. 
 
+.. TODO: UPDATE WITH DETAILS.
+
 CUBRID 10.1
 
 * is a significantly improved version.
@@ -60,7 +62,7 @@ New Cautions
 ------------
 
 The database volume of CUBRID 10.1 is not compatible with that of CUBRID 10.0 and earlier versions. 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Existing Cautions
 -----------------

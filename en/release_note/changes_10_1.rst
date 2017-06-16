@@ -347,7 +347,7 @@ Bug Fixes
 * `[435] <https://github.com/CUBRID/cubrid/pull/435>`_ `[CBRD-20855] <http://jira.cubrid.org/browse/CBRD-20855>`_ fixes type resolution of timestamp(date,number), timestamp(timestamp,number) functions  
 * `[434] <https://github.com/CUBRID/cubrid/pull/434>`_ `[CBRD-20818] <http://jira.cubrid.org/browse/CBRD-20818>`_ changed lower limit for db_volume_size to 0  
 * `[433] <https://github.com/CUBRID/cubrid/pull/433>`_ `[CBRD-20835] <http://jira.cubrid.org/browse/CBRD-20835>`_ Extend condition to differentiate entity specs from derived table/cte  
-* `[432] <https://github.com/CUBRID/cubrid/pull/432>`_ `[CBRD-20841] <http://jira.cubrid.org/browse/CBRD-20841>`_ fix memory leaks of db_to_... and ..._to_char functions  
+* `[432] <https://github.com/CUBRID/cubrid/pull/432>`_ `[CBRD-20841] <http://jira.cubrid.org/browse/CBRD-20841>`_ fix memory leaks of db_to\_... and ..._to_char functions  
 * `[431] <https://github.com/CUBRID/cubrid/pull/431>`_ `[CBRD-20819] <http://jira.cubrid.org/browse/CBRD-20819>`_ Avoid name binding lookup of group by column outside current scope, level 0  
 * `[430] <https://github.com/CUBRID/cubrid/pull/430>`_ `[CBRD-20813] <http://jira.cubrid.org/browse/CBRD-20813>`_ core is dumped by 'cubrid createdb'  
 * `[429] <https://github.com/CUBRID/cubrid/pull/429>`_ `[CBRD-20825] <http://jira.cubrid.org/browse/CBRD-20825>`_ fixed type resolution of DAYOFYEAR (and other functions)  
@@ -662,7 +662,7 @@ Other Changes
 * `[726] <https://github.com/CUBRID/cubrid/pull/726>`_ `[CBRD-20146] <http://jira.cubrid.org/browse/CBRD-20146>`_ beautify layout  
 * `[712] <https://github.com/CUBRID/cubrid/pull/712>`_ `[CBRD-20573] <http://jira.cubrid.org/browse/CBRD-20573>`_ change disk compatibility number, remove obsoleted recovery indexes  
 * `[705] <https://github.com/CUBRID/cubrid/pull/705>`_ `[CBRD-20146] <http://jira.cubrid.org/browse/CBRD-20146>`_ fix warnings  
-* `[704] <https://github.com/CUBRID/cubrid/pull/704>`_ `[CBRD-20145] <http://jira.cubrid.org/browse/CBRD-20145>`_ remove "Time_" prefix from heap counter/timers  
+* `[704] <https://github.com/CUBRID/cubrid/pull/704>`_ `[CBRD-20145] <http://jira.cubrid.org/browse/CBRD-20145>`_ remove Time\_ prefix from heap counter/timers  
 * `[675] <https://github.com/CUBRID/cubrid/pull/675>`_ `[CBRD-21212] <http://jira.cubrid.org/browse/CBRD-21212>`_ remove deleted options of make_tz.sh  
 * `[624] <https://github.com/CUBRID/cubrid/pull/624>`_ `[CBRD-20146] <http://jira.cubrid.org/browse/CBRD-20146>`_ refactor catalog_get_representation  
 * `[617] <https://github.com/CUBRID/cubrid/pull/617>`_ `[CBRD-20692] <http://jira.cubrid.org/browse/CBRD-20692>`_ fix typo of extend logging  

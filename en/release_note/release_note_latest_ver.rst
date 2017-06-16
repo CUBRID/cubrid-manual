@@ -28,6 +28,7 @@ CUBRID 10.1
 * is a significantly improved version.
 * is more reliable, faster and scalable.
 * fixes a large number of critical bugs.
+* includes useful SQL extensions: CTE(Common Table Expressions) and others
 * includes huge scale of code refactoring.
 
 All the users of CUBRID 10.0 should upgrade to CUBRID 10.1. We also recommend upgrading CUBRID 9.x and earlier versions to CUBRID 10.1.

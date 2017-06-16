@@ -5,7 +5,7 @@ Release Notes
 .. toctree::
     :maxdepth: 2
     
-    r10_0.rst
+    release_note_latest_ver.rst
 
 General Information
 ===================
@@ -16,7 +16,7 @@ Revision history
 +----------------+--------------------------------------+
 | Revision Date  | Description                          |
 +================+======================================+
-| Feb. 2016      | CUBRID 10.0 Release (10.0.0.1376)    |
+| June 2017      | CUBRID 10.1 Release (10.1.0.XXXX)    |
 +----------------+--------------------------------------+
 
 Bug Reports and User Feedback
@@ -27,11 +27,11 @@ CUBRID welcomes your active participation in bug reporting and looks forward to 
 +---------------+-----------------------------------------------------------------------+
 | Document      | Description                                                           |
 +===============+=======================================================================+
-| Bug Report    | CUBRID Bug Bash: http://jira.cubrid.org                               |
+| Bug Report    | CUBRID Issue Tracker: http://jira.cubrid.org/browse                   |
 +---------------+-----------------------------------------------------------------------+
-| User Feedback | CUBRID Open Source Project: http://www.cubrid.org/forum               |
+| User Feedback | CUBRID Open Source Project: https://github.com/CUBRID/cubrid          |
 |               |                                                                       |
-|               | CUBRID Website: http://www.cubrid.org/                                |
+|               | CUBRID Website: http://www.cubrid.org                                 |
 +---------------+-----------------------------------------------------------------------+
 
 License
@@ -48,7 +48,7 @@ Regarding CUBRID Tool, see http://www.cubrid.org/wiki_tools\ .
 
 Regarding CUBRID Drivers, see http://www.cubrid.org/wiki_apis\ . 
 
-Regarding the recent CUBRID sources, see http://svn.cubrid.org/\ .
+Regarding the recent CUBRID sources, visit https://github.com/CUBRID/cubrid and https://github.com/CUBRID\ .
 
 Note on Drivers
 ---------------

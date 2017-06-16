@@ -76,6 +76,9 @@ Enhancements
 Bug Fixes
 ---------
 
+* `[750] <https://github.com/CUBRID/cubrid/pull/750>`_ `[CBRD-21415] <http://jira.cubrid.org/browse/CBRD-21415>`_ fix recovery for file_tracker_unregister crash
+* `[749] <https://github.com/CUBRID/cubrid/pull/749>`_ `[CBRD-21414] <http://jira.cubrid.org/browse/CBRD-21414>`_ corrects error handling of checking dropped file to create a new file
+* `[748] <https://github.com/CUBRID/cubrid/pull/748>`_ `[CBRD-21416] <http://jira.cubrid.org/browse/CBRD-21416>`_ corrects error handling of catalog_update to remove the current repr
 * `[747] <https://github.com/CUBRID/cubrid/pull/747>`_ `[CBRD-21412] <http://jira.cubrid.org/browse/CBRD-21412>`_ xbtree_load_index: fix for null btid  
 * `[746] <https://github.com/CUBRID/cubrid/pull/746>`_ `[CBRD-21406] <http://jira.cubrid.org/browse/CBRD-21406>`_ deletes a bad assertion: locator_update_force  
 * `[745] <https://github.com/CUBRID/cubrid/pull/745>`_ `[CBRD-21408] <http://jira.cubrid.org/browse/CBRD-21408>`_ fixes memory leak: xbtree_load_index  

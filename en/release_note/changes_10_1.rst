@@ -76,6 +76,12 @@ Enhancements
 Bug Fixes
 ---------
 
+* `[756] <https://github.com/CUBRID/cubrid/pull/756>`_ `[CBRD-21436] <http://jira.cubrid.org/browse/CBRD-21436>`_ fixes memory leak of db_date_add_sub_interval_expr: zero date leaked trimed_expr
+* `[755] <https://github.com/CUBRID/cubrid/pull/755>`_ `[CBRD-21430] <http://jira.cubrid.org/browse/CBRD-21430>`_ fixes bad assertion of slocator_force to consider communication error
+* `[754] <https://github.com/CUBRID/cubrid/pull/754>`_ `[CBRD-21427] <http://jira.cubrid.org/browse/CBRD-21427>`_ Fix timezone session value during recovery
+* `[753] <https://github.com/CUBRID/cubrid/pull/753>`_ `[CBRD-21426] <http://jira.cubrid.org/browse/CBRD-21426>`_ clear errors during file_header_sanity_check
+* `[752] <https://github.com/CUBRID/cubrid/pull/752>`_ `[CBRD-21431] <http://jira.cubrid.org/browse/CBRD-21431>`_ Fix prepared statements on multi-column indexes with like clause
+* `[751] <https://github.com/CUBRID/cubrid/pull/751>`_ `[CBRD-21425] <http://jira.cubrid.org/browse/CBRD-21425>`_ handling interrupt when find split point
 * `[750] <https://github.com/CUBRID/cubrid/pull/750>`_ `[CBRD-21415] <http://jira.cubrid.org/browse/CBRD-21415>`_ fix recovery for file_tracker_unregister crash
 * `[749] <https://github.com/CUBRID/cubrid/pull/749>`_ `[CBRD-21414] <http://jira.cubrid.org/browse/CBRD-21414>`_ corrects error handling of checking dropped file to create a new file
 * `[748] <https://github.com/CUBRID/cubrid/pull/748>`_ `[CBRD-21416] <http://jira.cubrid.org/browse/CBRD-21416>`_ corrects error handling of catalog_update to remove the current repr

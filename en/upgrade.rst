@@ -6,9 +6,9 @@ Upgrade
 Cautions during upgrade
 -----------------------
 
-**Behavioral Changes**
+**Changes**
 
-To see the behavioral changes from CUBRID 10.1, please see :ref:`changed-behaviors100` in the release notes.
+Please confirm :ref:`10_1_changes` in the release notes.
 
 **Saving the Existing Configuration File**
 
@@ -313,8 +313,6 @@ Parameter configuration
         When you create database, the language and the charset of database should be specified. It affects the length of string type, string comparison operation, etc. The specified charset when creating database cannot be changed later, so you should be careful when specifying it.
         
         For charset, locale and collation setting, see :doc:`/sql/i18n`.
-
-For more details, see :ref:`changed-config100`.
 
 .. _ha-db-migration:
 

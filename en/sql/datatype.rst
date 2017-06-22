@@ -994,7 +994,7 @@ BIT(n)
 
 Fixed-length binary or hexadecimal bit strings are represented as **BIT** (*n*), where *n* is the maximum number of bits. If *n* is not specified, the length is set to 1. If *n* is not specified, the length is set to 1. The bit string is filled with 8-bit unit from the left side. For example, the value of B'1' is the same as the value of B'10000000'. Therefore, it is recommended to declare a length by 8-bit unit, and input a value by 8-bit unit.
 
-.. note:: If you input B'1' to the BIT(4) column, it is printed out X'8' on CSQL, X'80' on CUBRID Manager, Query Browser or application program.
+.. note:: If you input B'1' to the BIT(4) column, it is printed out X'8' on CSQL, X'80' on CUBRID Manager or application program.
 
 *   *n* must be a number greater than 0.
 *   If the length of the string exceeds *n*, it is truncated and filled with 0s.
@@ -1025,7 +1025,7 @@ BIT VARYING(n)
 
 A variable-length bit string is represented as **BIT VARYING** (*n*), where *n* is the maximum number of bits. If *n* is not specified, the length is set to 1,073,741,823 (maximum value). *n* is the maximum number of bits. If *n* is not specified, the maximum length is set to 1,073,741,823. The bit string is filled with 8-bit values from the left side. For example, the value of B'1' is the same as the value of B'10000000'. Therefore, it is recommended to declare a length by 8-bit unit, and input a value by 8-bit unit.
 
-.. note:: If you input B'1' to the BIT VARYING(4) column, it is printed out X'8' on CSQL, X'80' on CUBRID Manager, Query Browser or application program.
+.. note:: If you input B'1' to the BIT VARYING(4) column, it is printed out X'8' on CSQL, X'80' on CUBRID Manager or application program.
 
 *   If the length of the string exceeds *n*, it is truncated and filled with 0s.
 *   The remainder of the string is not filled with 0s even if a bit string smaller than *n* is stored.

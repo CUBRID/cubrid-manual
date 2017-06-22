@@ -44,9 +44,9 @@ Additional Information
 
 Regarding CUBRID upgrade and migration, see :doc:`/upgrade`.
 
-Regarding CUBRID Tool, see http://www.cubrid.org/wiki_tools\ .
+.. FIXME: Regarding CUBRID Tool, see http://www.cubrid.org/wiki_tools\ .
 
-Regarding CUBRID Drivers, see http://www.cubrid.org/wiki_apis\ . 
+.. FIXME: Regarding CUBRID Drivers, see http://www.cubrid.org/wiki_apis\ . 
 
 Regarding the recent CUBRID sources, visit https://github.com/CUBRID/cubrid and https://github.com/CUBRID\ .
 

@@ -14,7 +14,7 @@ CUBRID Environment Variables
 
 .. note:: 
 
-    *   A user of CUBRID Manager or CUBRID Query Browser should specify **CUBRID_MSG_LANG**, an environment variable of DB server node into **en_US** to print out messages normally after running database related features. However, database related features are run normally and just the output messages are broken when **CUBRID_MSG_LANG** is not **en_US**.
+    *   A user of CUBRID Manager should specify **CUBRID_MSG_LANG**, an environment variable of DB server node into **en_US** to print out messages normally after running database related features. However, database related features are run normally and just the output messages are broken when **CUBRID_MSG_LANG** is not **en_US**.
     *   To apply the changed **CUBRID_MSG_LANG**, CUBRID system of DB server node should be restarted(cubrid service stop, cubrid service start).
 
 *   **CUBRID_TMP**: The environment variable that specifies the location where the cub_master process and the cub_broker process store the UNIX domain socket file in CUBRID for Linux. If it is not specified, the cub_master process stores the UNIX domain socket file under the **/tmp** directory and the cub_broker process stores the UNIX domain socket file under the **$CUBRID/var/CUBRID_SOCK** directory (not used in CUBRID for Windows).
@@ -202,9 +202,6 @@ If you use CUBRID for Windows at the broker machine or the DB server machine, al
 +---------------+---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
 | Manager use   | Manager       | application   | 8001           | 8001                                                | Open                     |                        |
 |               | server        |               |                |                                                     |                          |                        |
-+---------------+---------------+               |                |                                                     |                          |                        |
-| Web Manager   | Web Manager   |               |                |                                                     |                          |                        |
-| use           | server        |               |                |                                                     |                          |                        |
 +---------------+---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
 
 (*): The machine which has the CAS, CSQL, copylogdb, or applylogdb process
@@ -365,17 +362,15 @@ On the master node, the applylogdb and the copylogdb run for the case that the m
 
 .. _cwm-cm-ports:
 
-Ports for CUBRID Web Manager and CUBRID Manager Server
-------------------------------------------------------
+Ports for CUBRID Manager Server
+-------------------------------
 
-The following table summarizes the ports, based on the listening processes, used for the CUBRID Web Manager and the CUBRID Manager server. The ports are identical regardless of the OS type.
+The following table summarizes the ports, based on the listening processes, used for CUBRID Manager server. The ports are identical regardless of the OS type.
 
 +--------------------------+--------------+----------------+--------------------------+
 | Listener                 | Requester    | Port           | Firewall Port Setting    |
 +==========================+==============+================+==========================+
-| Manager server,          | application  | 8001           | Open                     |
-| Web Manager server       |              |                |                          |
+| Manager server           | application  | 8001           | Open                     |
 +--------------------------+--------------+----------------+--------------------------+
 
 *   The port used when the CUBRID Manager client accesses the CUBRID Manager server process is **cm_port** of the cm.conf. The default value is 8001.
-*   The port used when the CUBRID Web Manager client accesses the CUBRID Web Manager server process is also **cm_port** of the cm.conf.

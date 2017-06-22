@@ -8,7 +8,7 @@ CUBRID ODBC driver is written based on CCI API, but it's not affected by :ref:`C
 
 .. note:: ODBC is not affected by CCI_DEFAULT_AUTOCOMMIT is from 9.3 version. In the previous versions, you should set CCI_DEFAULT_AUTOCOMMIT as OFF.
 
-To download ODBC driver or get the latest information, click http://www.cubrid.org/wiki_apis/entry/cubrid-odbc-driver.
+.. FIXME: To download ODBC driver or get the latest information, click http://www.cubrid.org/wiki_apis/entry/cubrid-odbc-driver.
 
 **Data Type Mapping Between CUBRID and ODBC**
 

@@ -15,7 +15,7 @@ In particular, having a CUBRID PDO driver means that any application that uses P
 
 CUBRID PDO driver is based on CCI API so affected by CCI configurations such as **CCI_DEFAULT_AUTOCOMMIT**.
 
-To download PDO driver or get the latest information, click http://www.cubrid.org/wiki_apis/entry/cubrid-pdo-driver .
+.. FIXME: To download PDO driver or get the latest information, click http://www.cubrid.org/wiki_apis/entry/cubrid-pdo-driver .
 
 Installing and Configuring PDO
 ==============================
@@ -31,7 +31,9 @@ Linux
 
 **Installing CUBRID PHP Driver using PECL**
 
-If **PECL** package has been installed on your system, the installation of CUBRID PDO driver is straightforward. **PECL** will download and compile the driver for you. If you do not have **PECL** installed, follow the instructions at http://www.cubrid.org/wiki_apis/entry/installing-cubrid-php-driver-using-pecl to get it installed.
+If **PECL** package has been installed on your system, the installation of CUBRID PDO driver is straightforward. **PECL** will download and compile the driver for you. 
+
+.. FIXME: If you do not have **PECL** installed, follow the instructions at http://www.cubrid.org/wiki_apis/entry/installing-cubrid-php-driver-using-pecl to get it installed.
 
 #.  Enter the following command to install the latest version of CUBRID PDO driver. ::
     

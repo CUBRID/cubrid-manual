@@ -2,7 +2,7 @@
 CSQL Interpreter
 ****************
 
-To execute SQL statements in CUBRID, you need to use either a Graphical User Interface(GUI)-based `CUBRID Query Browser <http://www.cubrid.org/wiki_tools/entry/cubrid-query-browser>`_ or a console-based CSQL Interpreter.
+To execute SQL statements in CUBRID, you need to use either a Graphical User Interface(GUI)-based CUBRID Manager or a console-based CSQL Interpreter.
 
 CSQL is an application that allows users to use SQL statements through a command-driven interface. This section briefly explains how to use the CSQL Interpreter and associated commands.
 

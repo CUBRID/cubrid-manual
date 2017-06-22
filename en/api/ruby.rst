@@ -6,7 +6,7 @@ CUBRID Ruby driver implements the interface to enable access from applications i
 
 CUBRID Ruby driver is written based on CCI API so affected by CCI configurations such as **CCI_DEFAULT_AUTOCOMMIT**.
 
-To download Ruby driver or get the latest information, click http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-driver.
+.. FIXME: To download Ruby driver or get the latest information, click http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-driver.
 
 Installing and Configuring Ruby
 ===============================
@@ -29,9 +29,9 @@ Enter the command line below to install the latest version of CUBRID Ruby driver
 
     gem install cubrid
 
-.. note:: 
+.. FIXME: .. note:: 
 
-    If you do not have RubyInstaller, see http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-driver-installation-instructions .
+.. FIXME:     If you do not have RubyInstaller, see http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-driver-installation-instructions .
 
 Ruby Sample Program
 ===================

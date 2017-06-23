@@ -6,7 +6,7 @@ Perl Driver
 
 CUBRID Perl driver is written based on CCI API so affected by CCI configurations such as **CCI_DEFAULT_AUTOCOMMIT**.
 
-To download Perl driver or get the latest information, click http://www.cubrid.org/wiki_apis/entry/cubrid-perl-driver . 
+.. FIXME: To download Perl driver or get the latest information, click http://www.cubrid.org/wiki_apis/entry/cubrid-perl-driver . 
 
 .. note::
 

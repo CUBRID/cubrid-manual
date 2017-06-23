@@ -1747,14 +1747,6 @@ This page describes parameters that are specified in the **cm.conf** file.
 
     **server_long_query_time** is a parameter used to configure delay reference time in seconds when configuring **slow_query** which is one of server diagnostics items. The default value is **10** . If the execution time of the query performed on the server exceeds this parameter value, the number of the **slow_query** parameters will increase.
 
-**support_web_manager**
-
-    **support_web_manager** is a parameter used to configure starting CUBRID Web Manager or not. The default value is NO.
- 
-**web_manager_path**
-
-    **web_manager_path** is a parameter used to configure a path of CUBRID Web Manager. The default value is {CUBRID installed path}/share/webmanager.
- 
 **auto_job_timeout**
 
     **auto_job_timeout** is a parameter used to configure timeout of auto job for cub_auto. The default value is 43200 (12 hour).

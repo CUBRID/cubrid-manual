@@ -6,7 +6,7 @@ Python Driver
 
 CUBRID Python driver is written based on CCI API so affected by CCI configurations such as **CCI_DEFAULT_AUTOCOMMIT**.
 
-If you want to download Python driver or get the latest information, click http://www.cubrid.org/wiki_apis/entry/cubrid-python-driver .
+.. FIXME: If you want to download Python driver or get the latest information, click http://www.cubrid.org/wiki_apis/entry/cubrid-python-driver .
 
 Installing and Configuring Python
 =================================
@@ -40,7 +40,9 @@ There are three ways to install CUBRID Python driver on Linux, UNIX, and UNIX-li
 
 **Building CUBRID Python Driver from Source Code (Linux)**
 
-To install CUBRID Python driver by compiling source code, you should have Python Development Package installed on your system. If you do not have the package, follow the instructions stated at http://www.cubrid.org/wiki_apis/entry/install-python-development-package .
+To install CUBRID Python driver by compiling source code, you should have Python Development Package installed on your system. 
+
+.. FIXME: If you do not have the package, follow the instructions stated at http://www.cubrid.org/wiki_apis/entry/install-python-development-package .
 
 #.  Download the source code from http://www.cubrid.org/?mid=downloads&item=python_driver.
 

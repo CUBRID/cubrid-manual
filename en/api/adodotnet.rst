@@ -4,7 +4,7 @@ ADO.NET Driver
 
 ADO.NET is a set of classes that expose data access services to the .NET programmer. ADO.NET provides a rich set of components for creating distributed, data-sharing applications. It is an integral part of the .NET Framework, providing access to relational, XML, and application data. ADO.NET supports a variety of development needs, including the creation of front-end database clients and middle-tier business objects used by applications, tools, languages, or Internet browsers.
 
-To download ADO.NET driver or get the latest information, click http://www.cubrid.org/wiki_apis/entry/cubrid-ado-net-driver\.
+.. FIXME: To download ADO.NET driver or get the latest information, click http://www.cubrid.org/wiki_apis/entry/cubrid-ado-net-driver\.
 
 Installing and Configuring ADO.NET
 ==================================
@@ -488,15 +488,15 @@ The following list displays the error code and messages shown up when using CUBR
 | 23             | ER_UNKNOWN             | "Error"                                                               |
 +----------------+------------------------+-----------------------------------------------------------------------+
 
-NHibernate
-----------
+.. FIXME: NHibernate
+.. FIXME: ----------
 
-CUBRID will be accessed from NHibernate using CUBRID ADO.NET Data Provider. For more information, see http://www.cubrid.org/wiki_apis/entry/cubrid-nhibernate-support.
+.. FIXME: CUBRID will be accessed from NHibernate using CUBRID ADO.NET Data Provider. For more information, see http://www.cubrid.org/wiki_apis/entry/cubrid-nhibernate-support.
 
-Java Stored Procedure
----------------------
+.. FIXME: Java Stored Procedure
+.. FIXME: ---------------------
 
-For how to call Java stored procedure in .NET, see http://www.cubrid.org/wiki_apis/entry/how-to-calling-java-stored-functionprocedurec.
+.. FIXME: For how to call Java stored procedure in .NET, see http://www.cubrid.org/wiki_apis/entry/how-to-calling-java-stored-functionprocedurec.
 
 ADO.NET API
 ===========

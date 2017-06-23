@@ -44,7 +44,7 @@
     </div>
   {% endblock %}
 
-{%- block extrahead %} 
+{%- block extrahead %}
     <!-- naver analytics begin-->
     
     <script type="text/javascript" src="http://wcs.naver.net/wcslog.js"></script>
@@ -55,4 +55,31 @@
     </script>
 
     <!-- naver analytics end-->
+    
+    <!-- meta-tags -->
+    <meta property="og:title" content="{{ title }} &mdash; {{ docstitle }}"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:site" content="{{ title }} &mdash; {{ docstitle }}"/>
+      {% set has_meta_keywords = false %}
+      {% set has_meta_description = false %}
+      {% if meta is defined %}
+        {%if 'custom-meta-keywords' in meta.viewkeys() %}
+    <meta name="keywords" content="{{ meta.get('custom-meta-keywords') }}" />
+    <meta property="og:keywords" content="{{ meta.get('custom-meta-keywords') }}" />
+          {% set has_meta_keywords = true %}
+        {% endif %}
+        {%if 'custom-meta-description' in meta.viewkeys() %}
+    <meta name="description" content="{{ meta.get('custom-meta-description') }}" />
+    <meta property="og:description" content="{{ meta.get('custom-meta-description') }}" />
+          {% set has_meta_description = true %}
+        {% endif %}
+      {% endif %}
+      {% if not has_meta_keywords %}
+    <meta name="keywords" content="{{ title }}, {{ docstitle }}" />
+    <meta property="og:keywords" content="{{ title }}, {{ docstitle }}" />
+      {% endif %}
+      {% if not has_meta_description %}
+    <meta name="description" content="{{ title }} &mdash; {{ docstitle }}"/>
+    <meta property="og:description" content="{{ title }} &mdash; {{ docstitle }}"/>
+      {% endif %}
 {% endblock %}

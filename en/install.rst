@@ -16,7 +16,7 @@ The platforms supported by CUBRID and hardware/software requirements for the ins
 | * Linux family 64 Bit(Linux kernel 2.4, glibc 2.3.4 or higher)      |                  |                     | is required)                         |
 +---------------------------------------------------------------------+------------------+---------------------+--------------------------------------+
 
-(\*): Requires a 500 MB of free disk space on the initial installation; requires approximately 1.5 GB of free disk space with a database creating with default options.
+(\*): Requires a 500MB of free disk space on the initial installation; requires approximately 1.5GB of free disk space with a database creating with default options.
 
 Beginning with 2008 R4.0, CUBRID Manager Client is not automatically installed when installing the CUBRID package. For this reason, if you require CUBRID Manager you must install it separately. The CUBRID can be downloaded from http://ftp.cubrid.org.
 
@@ -97,11 +97,11 @@ Check the following before installing CUBRID for Linux.
     
 **Installing CUBRID**
 
-The installation program consists of shell scripts that contain binary; thus it can be installed automatically. The following example shows how to install CUBRID with the "CUBRID-10.1.0.7595-d652d64-Linux.x86_64.sh" file on the Linux. 
+The installation program consists of shell scripts that contain binary; thus it can be installed automatically. The following example shows how to install CUBRID with the "CUBRID-10.1.0.7637-0a1052b-Linux.x86_64.sh" file on the Linux. 
 
 ::
 
-    $ sh CUBRID-10.1.0.7595-d652d64-Linux.x86_64.sh
+    $ sh CUBRID-10.1.0.7637-0a1052b-Linux.x86_64.sh
     Do you agree to the above license terms? (yes or no) : yes
     Do you want to install this software(CUBRID) to the default(/home1/cub_user/CUBRID) directory? (yes or no) [Default: yes] : yes
     Install CUBRID to '/home1/cub_user/CUBRID' ...
@@ -118,7 +118,7 @@ The installation program consists of shell scripts that contain binary; thus it 
     $ . /home1/cub_user/.cubrid.sh
     $ cubrid service start
 
-As shown in the example above, after installing the downloaded file (CUBRID-10.1.0.7595-d652d64-Linux.x86_64.sh), the CUBRID related environment variables must be set in order to use the CUBRID database. Such setting has been made automatically when logging in the concerned terminal. Therefore there is no need to re-set after the first installation. ::
+As shown in the example above, after installing the downloaded file (CUBRID-10.1.0.7637-0a1052b-Linux.x86_64.sh), the CUBRID related environment variables must be set in order to use the CUBRID database. Such setting has been made automatically when logging in the concerned terminal. Therefore there is no need to re-set after the first installation. ::
 
     $ . /home1/cub_user/.cubrid.sh
 
@@ -149,7 +149,7 @@ When you want to check whether CUBRID Manager server and CUBRID broker works wel
 
 You can install CUBRID by using rpm file that is created on CentOS 5. The way of installing and uninstalling CUBRID is the same as that of using general rpm utility. While CUBRID is being installed, a new system group (cubrid) and a user account (cubrid) are created. After installation is complete, you should log in with a cubrid user account to start a CUBRID service.::
 
-    $ rpm -Uvh cubrid-10.1.0.7595-d652d64-Linux.x86_64.rpm
+    $ rpm -Uvh cubrid-10.1.0.7637-0a1052b-Linux.x86_64.rpm
 
 When rpm is executed, CUBRID is installed in the "cubrid" home directory (/opt/cubrid) and related configuration file (cubrid.[c]sh) is installed in the /etc/profile.d directory. Note that *demodb* is not automatically installed. Therefore, you must executed /opt/cubrid/demo/make_cubrid_demo.sh with "cubrid" Linux ID. When installation is complete, enter the code below to start CUBRID with "cubrid" Linux ID. ::
 
@@ -221,13 +221,15 @@ You should check the below before installing CUBRID for Windows.
     
     CUBRID supports both 32-bit and 64-bit Windows. You can check the version by selecting [My Computer] > [System Properties]. Make sure to install the CUBRID 32-bit version on 32-bit Windows and the CUBRID 64-bit version on 64-bit Windows.
 
+    .. warning:: 10.1 would be the last release of 32-bit Windows. Later releases will only provide 64-bit version.
+
 **Installation Process**
     
 **Step 1: Specifying the directory to install**
 
 **Step 2: Creating a sample database**
     
-    To create a sample database, it requires about 300MB disk space. 
+    To create a sample database, it requires about 1.5GB disk space. 
 
 **Step 3: Completing the installation**
 
@@ -332,15 +334,17 @@ Check the following before installing CUBRID for Linux.
 
         ::
         
-            tar xvfz CUBRID-10.1.0.7595-d652d64-Linux.x86_64.tar.gz /home1/cub_user/
+            tar xvfz CUBRID-10.1.0.7637-0a1052b-Linux.x86_64.tar.gz /home1/cub_user/
 
-        CUBRID directory is created under /home1/cub_user/ and files are created under CUBRID directory.
+        CUBRID directory is created under /home1/cub_user/ and files are created under CUBRID directory. 
 
     **Specifying Environment Variables**
 
     #.  Add below environment variables to a shell script which is run automatically and located under the home directory of a user.
     
-        The below is an example to add environemt variables to .bash_profile when you run on the bash shell.
+        You may have to create a directory for **$CUBRID_DATABASES**. You can designate any directory you have enough permission.
+
+        The below is an example to add environment variables to .bash_profile when you run on the bash shell.
 
         ::
         
@@ -372,7 +376,7 @@ Check the following before installing CUBRID for Linux.
 
     **Auto-starting when Booting**
 
-    *   "cubrid" script is included in the **$CUBRID/share/init.d** directory. Change the value of **$CUBRID_USER** environment variable into the Linux accout which installed CUBRID and register this script to **/etc/init.d**; then you can start automatically by using "service" or "chkconfig" command.
+    *   "cubrid" script is included in the **$CUBRID/share/init.d** directory. Change the value of **$CUBRID_USER** environment variable into the Linux account which installed CUBRID and register this script to **/etc/init.d**; then you can start automatically by using "service" or "chkconfig" command.
             
     **Auto-starting DB**    
 
@@ -400,6 +404,8 @@ Check below list before installing CUBRID database of Windows version.
 
     CUBRID supports both 32-bit and 64-bit Windows. You can check the version by selecting [My Computer] > [System Properties]. Make sure to install the CUBRID 32-bit version on 32-bit Windows and the CUBRID 64-bit version on 64-bit Windows.
     
+    .. warning:: 10.1 would be the last release of 32-bit Windows. Later releases will only provide 64-bit version.
+
 **Installation Process**
 
     **Specifying the Directory to Install**
@@ -409,6 +415,7 @@ Check below list before installing CUBRID database of Windows version.
         ::
         
             C:\CUBRID
+    *   You may have to create a directory for **$CUBRID_DATABASES**. You can designate any directory you have enough permission.
 
     **Specifying Environment Variables**
 
@@ -434,7 +441,7 @@ Check below list before installing CUBRID database of Windows version.
                 
     **Creating DB**
         
-    *   Run **cmd** command and open the colsole; move to the directory to create DB and create DB.
+    *   Run **cmd** command and open the console; move to the directory to create DB and create DB.
 
         ::
         

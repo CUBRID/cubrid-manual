@@ -1,3 +1,7 @@
+
+:meta-keywords: cubrid jdbc driver, cubrid jdbc api, jdbc programming, jdbc sample
+:meta-description: CUBRID JDBC driver (cubrid_jdbc.jar) implements an interface to enable access from applications in Java to CUBRID database server.
+
 ***********
 JDBC Driver
 ***********

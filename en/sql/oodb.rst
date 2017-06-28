@@ -1,3 +1,7 @@
+
+:meta-keywords: cubrid class, cubrid hierarchy, cubrid superclass, cubrid subclass
+:meta-description: Classes in CUBRID database can have class hierarchy. Attributes and methods can be inherited through such hierarchy.
+
 *****************
 Class Inheritance
 *****************

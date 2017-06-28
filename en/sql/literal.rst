@@ -1,3 +1,7 @@
+
+:meta-keywords: cubrid number, cubrid date time, cubrid string, cubrid character, cubrid collection, cubrid null, database literal
+:meta-description: This section describes how to write a literal value in CUBRID.
+
 *******
 Literal
 *******

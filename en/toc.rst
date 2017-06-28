@@ -1,3 +1,7 @@
+
+:meta-keywords: cubrid introduction, cubrid glossary, cubrid manual conventions, cubrid versions
+:meta-description: The contents of the CUBRID Database Management System (CUBRID DBMS) product manual, Glossary, Manual Conventions, Version Name and Version String Conventions.
+
 ======================
 Introduction to Manual
 ======================

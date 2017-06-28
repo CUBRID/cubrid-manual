@@ -1,3 +1,7 @@
+
+:meta-keywords: merge statement
+:meta-description: The MERGE statement is used to select rows from one or more sources and to update or to insert the rows onto one table or view.
+
 *****
 MERGE
 *****

@@ -1,3 +1,7 @@
+
+:meta-keywords: configure cubrid, cubrid port, cubrid language, cubrid environment, cubrid settings
+:meta-description: The following environment variables need to be set in order to use the CUBRID. The necessary environment variables are automatically set when the CUBRID system is installed or can be changed, as needed, by the user.
+
 Configuring Environment Variables
 =================================
 

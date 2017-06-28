@@ -1,9 +1,13 @@
+
+:meta-keywords: CCI driver, database c driver, cubrid cci, cubrid c driver
+:meta-description: CUBRID CCI (C Client Interface) driver implements an interface to enable access from C-based application to CUBRID database server through broker. It is also used as back-end infrastructure for creating tools (PHP, ODBC, etc.) which use the CAS application servers.
+
 .. _cci-overview:
 
 CCI Overview
 ============
 
-CUBRID CCI (CCI Client Interface) driver implements an interface to enable access from C-based application to CUBRID database server through broker. It is also used as back-end infrastructure for creating tools (PHP, ODBC, etc.) which use the CAS application servers. In this environment, the CUBRID broker sends queries received from applications to a database and transfers the result to applications.
+CUBRID CCI (C Client Interface) driver implements an interface to enable access from C-based application to CUBRID database server through broker. It is also used as back-end infrastructure for creating tools (PHP, ODBC, etc.) which use the CAS application servers. In this environment, the CUBRID broker sends queries received from applications to a database and transfers the result to applications.
 
 It is automatically installed upon CUBRID installation and can be found in the **$CUBRID/lib** directory. A header file as well as library files is required to use the driver.
 

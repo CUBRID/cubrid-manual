@@ -1,3 +1,7 @@
+
+:meta-keywords: cubrid authorization, cubrid dba, cubrid user
+:meta-description: CUBRID has two types of users by default: DBA and PUBLIC. DBA and DBA members can create, drop and alter users by using SQL statements.
+
 ***************
 User Management
 ***************

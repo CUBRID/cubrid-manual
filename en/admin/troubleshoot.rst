@@ -1,3 +1,7 @@
+
+:meta-keywords: cubrid logging, slow query, error log, deadlock detect, cubrid fail-over, cubrid fail-back
+:meta-description: Troubleshoot CUBRID database and High Availability nodes by consulting logs.
+
 ***************
 Troubleshooting
 ***************

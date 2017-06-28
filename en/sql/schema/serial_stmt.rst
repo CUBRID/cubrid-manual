@@ -1,3 +1,11 @@
+
+:meta-keywords: serial definition, create serial, alter serial, drop serial
+:meta-description: Define serials in CUBRID database using create serial, alter serial and drop serial statements.
+
+****************************
+SERIAL DEFINITION STATEMENTS
+****************************
+
 CREATE SERIAL
 =============
 

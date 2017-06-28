@@ -1,3 +1,6 @@
+
+:meta-keywords: prepare statement, execute prepared, deallocate prepare, drop prepare
+
 ******************
 PREPARED STATEMENT
 ******************

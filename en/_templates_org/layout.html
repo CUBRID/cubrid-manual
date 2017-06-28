@@ -60,11 +60,11 @@
       {% set my_keys = title + ', ' + docstitle %}
       {% set my_desc = title + ' &mdash; ' + docstitle + '.' %}
       {% if meta is defined %}
-        {% if 'custom-meta-keywords' in meta.viewkeys() %}
-          {% set my_keys = my_keys + ', ' + meta.get('custom-meta-keywords') %}
+        {% if 'meta-keywords' in meta.viewkeys() %}
+          {% set my_keys = my_keys + ', ' + meta.get('meta-keywords') %}
         {% endif %}
-        {%if 'custom-meta-description' in meta.viewkeys() %}
-          {% set my_desc = my_desc + ' ' + meta.get('custom-meta-description') %}
+        {%if 'meta-description' in meta.viewkeys() %}
+          {% set my_desc = my_desc + ' ' + meta.get('meta-description') %}
         {% endif %}
       {% endif %}
       <!-- keywords & description -->

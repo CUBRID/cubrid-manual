@@ -626,7 +626,7 @@ The following are disk-related parameters for defining database volumes and stor
 
 .. note::
 
-    The actual volume size will always be rounded up to a multiple of the size of 64 sectors. Sector size depends on pages, therefore 64 sectors size will be either 16M, 32M or 64M.
+    The actual volume size will always be rounded up to a multiple of the size of 64 sectors. Sector size depends on page size, therefore 64 sectors size is 16M, 32M or 64M for page size 4k, 8k or 16k respectively.
 
 **dont_reuse_heap_file**
 

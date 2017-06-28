@@ -282,7 +282,7 @@ The following shows [options] available with the **cubrid** **createdb** utility
 
     *   **temp_file_max_size_in_pages** is a parameter used to configure the maximum size of temporary volumes - used for complicated queries or storing arrays - on the disk. With the default value **-1**, the temporary volumes size is only limited by the capacity of the disk specified by the **temp_volume_path** parameter. If the value is 0, no temporary volumes can be created. In this case, a permanent volume with temporary data purpose should be added by using the :ref:`cubrid addvoldb <adding-database-volume>` utility. For an efficient storage management, it is recommended to use the latter approach.
         
-    *   By using the :ref:`cubrid spacedb <spacedb>` utility, you can check the remaining space of each volume. By using the :ref:`cubrid addvoldb <adding-database-volume>` utility, you can add more volumes as needed while managing the database. You are advised to do add more volumes when there is less system load. When all preassigned volumes are completely in use, the database system automatically creates new volumes.
+    *   By using the :ref:`cubrid spacedb <spacedb>` utility, you can check the remaining space of each volume. By using the :ref:`cubrid addvoldb <adding-database-volume>` utility, you can add more volumes as needed while managing the database. You are advised to add more volumes when there is less system load. When all preassigned volumes are completely in use, the database system automatically creates new volumes.
 
 The following example shows how to create a database, with additional volumes, including one for temporary data purpose. ::
 

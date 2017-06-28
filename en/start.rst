@@ -12,13 +12,13 @@ CUBRID provides various tools for you to use easily through GUI. You can downloa
 
 If you use the following tools which CUBRID provides, you can use CUBRID features easily through GUI.
 
-*   `CUBRID Query Browser <http://www.cubrid.org/wiki_tools/entry/cubrid-query-browser>`_
+*   CUBRID Manager 
 
-*   `CUBRID Manager <http://www.cubrid.org/wiki_tools/entry/cubrid-manager>`_
+*   CUBRID Migration Toolkit 
 
-*   `CUBRID Web Manager <http://www.cubrid.org/wiki_tools/entry/cubrid-web-manager>`_
+.. FIXME: *   `CUBRID Manager <http://www.cubrid.org/wiki_tools/entry/cubrid-manager>`_
 
-*   `CUBRID Migration Toolkit <http://www.cubrid.org/wiki_tools/entry/cubrid-migration-toolkit>`_
+.. FIXME: *   `CUBRID Migration Toolkit <http://www.cubrid.org/wiki_tools/entry/cubrid-migration-toolkit>`_
 
 CUBRID also provides various drivers such as JDBC, CCI, PHP, PDO, ODBC, OLE DB, ADO.NET, Perl, Python, and Ruby (see API Reference).
 

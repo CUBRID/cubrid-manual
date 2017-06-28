@@ -27,11 +27,9 @@ CUBRID is an object-relational database management system (DBMS) consisting of t
 
 *   The broker is a CUBRID-specific middleware that relays the communication between the database server and external applications. It provides functions including connection pooling, monitoring, and log tracing and analysis.
 
-*   The CUBRID Manager is a GUI tool that allows users to remotely manage the database and the broker. It also provides the Query Editor, a convenient tool that allows users to execute SQL queries on the database server. For more information about CUBRID Manager, see http://www.cubrid.org/wiki_tools/entry/cubrid-manager.
+*   The CUBRID Manager is a GUI tool that allows users to remotely manage the database and the broker. It also provides the Query Editor, a convenient tool that allows users to execute SQL queries on the database server. 
 
-.. note::
-
-    CUBRID Query Browser is a light version of CUBRID Manager and provides only the features which application developers require: the database management and query editor features. For more details on CUBRID Query Browser, see http://www.cubrid.org/wiki_tools/entry/cubrid-query-browser .
+.. FIXME: For more information about CUBRID Manager, see http://www.cubrid.org/wiki_tools/entry/cubrid-manager.
 
 .. image:: /images/image1.png
 
@@ -196,7 +194,7 @@ CUBRID provides various Application Programming Interfaces (APIs). The following
 
 All interface modules access the database server through the broker. The broker is a middleware that allows various application clients to connect to the database server. When it receives a request from an interface module, it calls a native C API provided by the database server's client library.
 
-You can find the latest information on interface modules; visit the Web site at http://www.cubrid.org/wiki_apis\.
+.. FIXME: You can find the latest information on interface modules; visit the Web site at http://www.cubrid.org/wiki_apis\.
 
 CUBRID Characteristics
 ======================

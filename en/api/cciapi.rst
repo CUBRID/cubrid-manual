@@ -1725,7 +1725,9 @@ cci_get_db_parameter
     +---------------------------------+--------------+----------+
     | **CCI_PARAM_MAX_STRING_LENGTH** | int \*       | get only |
     +---------------------------------+--------------+----------+
-
+    | **CCI_PARAM_AUTO_COMMIT**       | int \*       | get only |
+    +---------------------------------+--------------+----------+  
+    
     In :c:func:`cci_get_db_parameter` and :c:func:`cci_set_db_parameter`, the input/output unit of **CCI_PARAM_LOCK_TIMEOUT** is milliseconds.
 
     .. warning:: In the earlier version of CUBRID 9.0, you should be careful that the output unit of **CCI_PARAM_LOCK_TIMEOUT** is second.

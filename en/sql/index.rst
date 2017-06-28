@@ -37,7 +37,7 @@ The main topics covered in this chapter are as follows:
 
 *   Class Inheritance: Describes how to inherit the attribute from the parent to the child table (class).
 
-*   Database Adminstration: Describes about user management, SET and SHOW statements.
+*   Database Administration: Describes about user management, SET and SHOW statements.
 
 *   System Catalog: Describes the CUBRID system catalog, the internal information of the CUBRID database.
 

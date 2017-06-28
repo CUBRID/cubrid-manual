@@ -97,7 +97,7 @@ Viewing Query Plan
 
 To view a query plan for a CUBRID SQL query, you can use following methods.
 
-*   Press "show plan" button on CUBRID Manager or CUBRID Query Browser. For how to use CUBRID Manager or CUBRID Query Browser, see `CUBRID Manager Manual <http://www.cubrid.org/wiki_tools/entry/cubrid-manager-manual>`_ or `CUBRID Query Browser Manual <http://www.cubrid.org/wiki_tools/entry/cubrid-query-browser-manual>`_.
+*   Press "show plan" button on CUBRID Manager. 
 
     .. image:: /images/query_plan_on_CM.png
 

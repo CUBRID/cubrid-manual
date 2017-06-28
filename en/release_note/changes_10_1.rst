@@ -77,6 +77,15 @@ Enhancements
 Bug Fixes
 ---------
 
+* `[777] <https://github.com/CUBRID/cubrid/pull/777>`_ `[CBRD-21454] <http://jira.cubrid.org/browse/CBRD-21454>`_ error was not propagated
+* `[776] <https://github.com/CUBRID/cubrid/pull/776>`_ `[CBRD-21455] <http://jira.cubrid.org/browse/CBRD-21455>`_ isolate file_header_sanity_check not to propagate error from/to the caller
+* `[775] <https://github.com/CUBRID/cubrid/pull/775>`_ `[CBRD-21451] <http://jira.cubrid.org/browse/CBRD-21451>`_ fixes to commit sysop of extending existing volume
+* `[774] <https://github.com/CUBRID/cubrid/pull/774>`_ `[CBRD-21450] <http://jira.cubrid.org/browse/CBRD-21450>`_ fixes memory leak: lob_info_list of update/delete
+* `[773] <https://github.com/CUBRID/cubrid/pull/773>`_ `[CBRD-21453] <http://jira.cubrid.org/browse/CBRD-21453>`_ fixed assert when free wait queue entry
+* `[772] <https://github.com/CUBRID/cubrid/pull/772>`_ `[CBRD-20146] <http://jira.cubrid.org/browse/CBRD-20146>`_ error to connect master was not handled
+* `[764] <https://github.com/CUBRID/cubrid/pull/764>`_ `[CBRD-21443] <http://jira.cubrid.org/browse/CBRD-21443>`_ fix script of sh package to create env files correctly
+* `[762] <https://github.com/CUBRID/cubrid/pull/762>`_ `[CBRD-21441] <http://jira.cubrid.org/browse/CBRD-21441>`_ fixed safe guard of btree_key_record_check_no_visible to expect an error
+* `[761] <https://github.com/CUBRID/cubrid/pull/761>`_ `[CBRD-21442] <http://jira.cubrid.org/browse/CBRD-21442>`_ no need to check dropped file to reuse heap for SA_MODE
 * `[760] <https://github.com/CUBRID/cubrid/pull/760>`_ `[CBRD-21428] <http://jira.cubrid.org/browse/CBRD-21428>`_ don't reuse heaps considered dropped by vacuum
 * `[759] <https://github.com/CUBRID/cubrid/pull/759>`_ `[CBRD-21439] <http://jira.cubrid.org/browse/CBRD-21439>`_ fix script of sh package for dash shell
 * `[757] <https://github.com/CUBRID/cubrid/pull/757>`_ `[CBRD-21438] <http://jira.cubrid.org/browse/CBRD-21438>`_ error from heap_scancache_start_internal was ignored

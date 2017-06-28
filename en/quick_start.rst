@@ -1,3 +1,7 @@
+
+:custom-meta-keywords: cubrid service, cubrid shell, cubrid create database, cubrid start database
+:custom-meta-description: CUBRID quick start guide. How to launch CUBRID service, create and start a database.
+
 Starting the CUBRID Service
 ===========================
 

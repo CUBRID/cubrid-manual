@@ -1,3 +1,7 @@
+
+:custom-meta-keywords: update statement, update multiple table
+:custom-meta-description: You can update the column value of a record stored in the target table or view to a new one by using the UPDATE statement.
+
 ******
 UPDATE
 ******

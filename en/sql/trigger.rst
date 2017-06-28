@@ -1,3 +1,7 @@
+
+:custom-meta-keywords: cubrid trigger, database trigger, trigger condition, trigger action, trigger debugging, trigger example
+:custom-meta-description: CUBRID trigger definition, manipulation and mechanics.
+
 *******
 Trigger
 *******

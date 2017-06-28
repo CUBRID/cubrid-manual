@@ -1,3 +1,7 @@
+
+:custom-meta-keywords: cubrid node.js driver, cubrid node.js api, cubrid node.js programming
+:custom-meta-description: CUBRID Node.js driver is developed in 100% JavaScript and does not require specific platform compilation.
+
 **************
 Node.js Driver
 **************

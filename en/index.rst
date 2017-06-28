@@ -1,10 +1,11 @@
-.. _reference-index:
-   
+
 :custom-meta-keywords: CUBRID manual, database manual, CUBRID introduction, manual database administrators, manual database developers, manual connectors, manual drivers
-:custom-meta-description: CUBRID 10.1 User Manual. Quick Reference Table and Table of Contents.
+:custom-meta-description: Quick Reference Table and Table of Contents.
+
+.. _reference-index:
 
 #######################
-CUBRID 10.0 User Manual
+CUBRID 10.1 User Manual
 #######################
 
 Topic Quick Reference Table

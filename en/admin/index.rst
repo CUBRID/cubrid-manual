@@ -1,3 +1,7 @@
+
+:custom-meta-keywords: cubrid administrator, cubrid dba, cubrid tools, cubrid utilities, cubrid services, cubrid processes, cubrid config, cubrid troubleshoot
+:custom-meta-description: This manual chapter covers everything needed by database administratorsL how to use cubrid utilities, how to monitor cubrid systems, how to troubleshoot and how to fix problems.
+
 *****************
 CUBRID Management
 *****************

@@ -1,3 +1,7 @@
+
+:custom-meta-keywords: cubrid odbc driver, cubrid odbc api, asp sample
+:custom-meta-description: CUBRID ODBC driver supports ODBC version 3.52. It also ODBC core and some parts of Level 1 and Level 2 API. CUBRID ODBC driver is written based on CCI API.
+
 ***********
 ODBC Driver
 ***********

@@ -1,3 +1,7 @@
+
+:custom-meta-keywords: upgrade cubrid, migrate cubrid, HA migration
+:custom-meta-description: Upgrading/Migrating CUBRID Database Engine from old versions to new versions.
+
 .. _upgrade:
 
 Upgrade

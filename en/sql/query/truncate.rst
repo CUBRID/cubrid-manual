@@ -1,3 +1,7 @@
+
+:custom-meta-keywords: truncate statement
+:custom-meta-description: You can delete all records in the specified table by using the TRUNCATE statement.
+
 ********
 TRUNCATE
 ********

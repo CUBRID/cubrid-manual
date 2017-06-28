@@ -1,3 +1,7 @@
+
+:custom-meta-keywords: cubrid databases.txt, cubrid users, cubrid volume
+:custom-meta-description: How to manage CUBRID Databases, Users and Volumes.
+
 Database Management
 ===================
 

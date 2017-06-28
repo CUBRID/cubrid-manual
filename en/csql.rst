@@ -1,3 +1,7 @@
+
+:custom-meta-keywords: csql, cubrid csql, cubrid commands, executing csql, csql options
+:custom-meta-description: CUBRID CSQL is an application that allows users to use SQL statements through a command-driven interface. This section briefly explains how to use the CSQL Interpreter and associated commands.
+
 ****************
 CSQL Interpreter
 ****************

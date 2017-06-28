@@ -1,3 +1,6 @@
+
+:custom-meta-keywords: show statement, show tables, show columns, show index, show cllation, show timezones, show grants
+
 :tocdepth: 3
 
 ****

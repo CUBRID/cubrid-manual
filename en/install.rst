@@ -1,3 +1,7 @@
+
+:custom-meta-keywords: cubrid install, cubrid compatibility, cubrid service, cubrid manager, run cubrid
+:custom-meta-description: CUBRID supported platforms, hardware and software requirements, how to install and run CUBRID engine and CUBRID manager.
+
 .. _install-execute:
 
 Installing and Running CUBRID

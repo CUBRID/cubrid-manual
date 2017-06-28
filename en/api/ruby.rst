@@ -1,3 +1,7 @@
+
+:custom-meta-keywords: cubrid ruby driver, cubrid ruby api, ruby sample
+:custom-meta-description: CUBRID Ruby driver implements the interface to enable access from applications in Ruby to CUBRID database server and official one is available as a RubyGem package. CUBRID Ruby driver is written based on CCI API.
+
 ***********
 Ruby Driver
 ***********

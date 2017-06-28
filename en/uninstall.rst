@@ -1,3 +1,7 @@
+
+:custom-meta-keywords: uninstall cubrid linux, uninstall cubrid windows.
+:custom-meta-description: Uninstalling CUBRID in Linux and Windows.
+
 .. _uninstall:
 
 Uninstalling CUBRID

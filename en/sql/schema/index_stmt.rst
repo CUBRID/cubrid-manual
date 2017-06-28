@@ -1,3 +1,11 @@
+
+:custom-meta-keywords: index definition, unique index, create index, alter index, drop index
+:custom-meta-description: Define table indexes using create index, alter index, drop index statements.
+
+***************************
+INDEX DEFINITION STATEMENTS
+***************************
+
 CREATE INDEX
 ============
 

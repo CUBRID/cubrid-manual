@@ -1,3 +1,7 @@
+
+:custom-meta-keywords: cubrid php driver, cubrid php api
+:custom-meta-description: CUBRID PHP driver implements an interface to enable access from application in PHP to CUBRID database. CUBRID PHP driver is written based on CCI API.
+
 **********
 PHP Driver
 **********

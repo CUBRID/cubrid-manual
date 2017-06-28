@@ -1,3 +1,7 @@
+
+:custom-meta-keywords: cubrid reserved, cubrid keywords
+:custom-meta-description: Table with all CUBRID reserved keywords.
+
 **************
 Reserved Words
 **************

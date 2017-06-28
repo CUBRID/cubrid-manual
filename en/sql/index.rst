@@ -1,3 +1,7 @@
+
+:custom-meta-keywords: cubrid sql, database sql, cubrid statements
+:custom-meta-description: This chapter describes SQL syntax such as data types, functions and operators, data retrieval or table manipulation. You can also find SQL statements used for index, trigger, partition, serial and changing user information.
+
 **********
 CUBRID SQL
 **********

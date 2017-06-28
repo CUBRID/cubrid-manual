@@ -1,3 +1,7 @@
+
+:custom-meta-keywords: cubrid tools, cubrid gui, cubrid drivers.
+:custom-meta-description: Chapter contains useful information on starting CUBRID. It covers CSQL Interpreter, Management Tools and GUI Tools, and CUBRID drivers.
+
 ***************
 Getting Started
 ***************

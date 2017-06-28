@@ -1,3 +1,6 @@
+
+:custom-meta-keywords: cubrid ascii, cubrid concatenation, cubrid lower, cubrid upper, cubrid chr, cubrid find_in_set, cubrid repeat, cubrid replace, cubrid substr
+
 :tocdepth: 3
 
 ******************************

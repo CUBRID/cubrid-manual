@@ -1,3 +1,7 @@
+
+:custom-meta-keywords: cubrid configure, cubrid conf, cubrid parameters, cubrid settings, cubrid.conf, cubrid default parameters
+:custom-meta-description: How to configure CUBRID database behavior. Set system parameters for Connection, Memory, Disk, Concurrency/Lock, Logging, Transaction Processing, Query Execution, Utilities and High Availability.
+
 *****************
 System Parameters
 *****************

@@ -1,3 +1,7 @@
+
+:custom-meta-keywords: cubrid pdo driver, cubrid php data objects, cubrid pdo api, pdo programming, pdo sample
+:custom-meta-description: The official CUBRID PHP Data Objects (PDO) driver is available as a PECL package and it implements the PDO interface to enable access from PDO to CUBRID.PDO is available with PHP 5.1. CUBRID PDO driver is based on CCI API.
+
 **********
 PDO Driver
 **********

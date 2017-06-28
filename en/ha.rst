@@ -1,3 +1,7 @@
+
+:custom-meta-keywords: high availability, cubrid node, cubrid replication, cubrid slave, database replication, database slave
+:custom-meta-description: CUBRID HA is an implementation of High Availability. CUBRID HA ensures database synchronization among multiple servers when providing service. When an unexpected failure occurs in the system which is operating services, this feature minimizes the service down time by allowing the other system to carry out the service automatically.
+
 *********
 CUBRID HA
 *********

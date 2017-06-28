@@ -1,3 +1,7 @@
+
+:custom-meta-keywords: cubrid any, cubrid some, cubrid all, cubrid between, cubrid exists, cubrid in, cubrid like, cubrid regexp, cubrid rlike, cubrid case clause
+:custom-meta-description: A comparison expression is an expression that is included in the WHERE clause of the SELECT, UPDATE and DELETE statements, and in the HAVING clause of the SELECT statement.
+
 *********************
 Comparison Expression
 *********************

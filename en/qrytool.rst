@@ -1,3 +1,7 @@
+
+:custom-meta-keywords: cubrid query, csql interpreter, running sql, cubrid management tools, cubrid manager, query browser, migration toolkit
+:custom-meta-description: CSQL Interpreter, Management Tools, CUBRID Manager and Query Browser, Migrating schema/data with CUBRID Migration Toolkit.
+
 Query Tools
 ===========
 

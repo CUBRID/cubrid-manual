@@ -1,5 +1,5 @@
 
-:meta-keywords: table definition, create table, drop table, alter table, colum definition, constraint definition, create table like, create table as select, rename table
+:meta-keywords: table definition, create table, drop table, alter table, column definition, constraint definition, create table like, create table as select, rename table
 :meta-description: Define tables in CUBRID database using create table, alter table, drop table and rename table statements.
 
 ***************************

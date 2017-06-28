@@ -1,6 +1,6 @@
 
 :meta-keywords: view definition, create view, drop view, alter view, rename view, create view with check, create updatable view
-:meta-description: Define views in CUBRID database using create view, alter voew, drop view and rename view statements.
+:meta-description: Define views in CUBRID database using create view, alter view, drop view and rename view statements.
 
 **************************
 VIEW DEFINITION STATEMENTS

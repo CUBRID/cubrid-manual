@@ -1,5 +1,5 @@
 
-:meta-keywords: install systemtap, systemtap marker, systemtap probe, systemtap event, systemtap script, connection markers, query markers, object operation markers, index oepration markers, locking markers, transaction markers, I/O markers
+:meta-keywords: install systemtap, systemtap marker, systemtap probe, systemtap event, systemtap script, connection markers, query markers, object operation markers, index operation markers, locking markers, transaction markers, I/O markers
 :meta-description: SystemTap is a tool that can be used to dynamically monitor and track the process of running, to find and diagnose performance bottlenecks; learn how to use CUBRID markers in SystemTap scripts.
 
 *********

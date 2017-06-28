@@ -1,6 +1,6 @@
 
-:custom-meta-keywords: start with clause, connect by clause, hierarchical pseudo column, hierarchical query example, hierarchical query function
-:custom-meta-description: Hierarchical Query is used to obtain a set of data organized in a hierarchy. The START WITH ... CONNECT BY clause is used in combination with the SELECT clause in the following form.
+:meta-keywords: start with clause, connect by clause, hierarchical pseudo column, hierarchical query example, hierarchical query function
+:meta-description: Hierarchical Query is used to obtain a set of data organized in a hierarchy. The START WITH ... CONNECT BY clause is used in combination with the SELECT clause in the following form.
 
 ******************
 Hierarchical Query

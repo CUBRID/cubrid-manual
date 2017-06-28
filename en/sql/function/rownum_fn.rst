@@ -1,5 +1,5 @@
 
-:custom-meta-keywords: rownum, inst_num, orderby_num, groupby_num
+:meta-keywords: rownum, inst_num, orderby_num, groupby_num
 
 :tocdepth: 3
 

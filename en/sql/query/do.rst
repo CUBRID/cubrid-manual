@@ -1,6 +1,6 @@
 
-:custom-meta-keywords: do statement
-:custom-meta-description: The DO statement executes the specified expression, but does not return the result.
+:meta-keywords: do statement
+:meta-description: The DO statement executes the specified expression, but does not return the result.
 
 **
 DO

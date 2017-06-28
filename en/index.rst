@@ -1,6 +1,6 @@
 
-:custom-meta-keywords: CUBRID manual, database manual, CUBRID introduction, manual database administrators, manual database developers, manual connectors, manual drivers
-:custom-meta-description: Quick Reference Table and Table of Contents.
+:meta-keywords: CUBRID manual, database manual, CUBRID introduction, manual database administrators, manual database developers, manual connectors, manual drivers
+:meta-description: Quick Reference Table and Table of Contents.
 
 .. _reference-index:
 

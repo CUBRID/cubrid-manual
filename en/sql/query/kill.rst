@@ -1,6 +1,6 @@
 
-:custom-meta-keywords: kill statement
-:custom-meta-description: The KILL statement terminates transactions with an option TRANSACTION or QUERY modifier.
+:meta-keywords: kill statement
+:meta-description: The KILL statement terminates transactions with an option TRANSACTION or QUERY modifier.
 
 ****
 KILL

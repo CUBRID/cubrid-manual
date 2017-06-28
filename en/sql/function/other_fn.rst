@@ -1,5 +1,5 @@
 
-:custom-meta-keywords: cubrid sleep, cubrid sys_guid
+:meta-keywords: cubrid sleep, cubrid sys_guid
 
 :tocdepth: 3
 

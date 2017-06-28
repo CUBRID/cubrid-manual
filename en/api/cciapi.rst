@@ -1,6 +1,6 @@
 
-:custom-meta-keywords: CCI driver, CCI api, cubrid cci
-:custom-meta-description: CUBRID CCI API Reference for your C-based back-end application.
+:meta-keywords: CCI driver, CCI api, cubrid cci
+:meta-description: CUBRID CCI API Reference for your C-based back-end application.
 
 CCI API Reference
 =================

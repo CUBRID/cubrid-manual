@@ -1,6 +1,6 @@
 
-:custom-meta-keywords: cubrid update statistics, cubrid check statistics, query plan, query profiling, sql hint, cubrid index hint, cubrid special index, cubrid using index
-:custom-meta-description: How to optimize query execution in CUBRID database.
+:meta-keywords: cubrid update statistics, cubrid check statistics, query plan, query profiling, sql hint, cubrid index hint, cubrid special index, cubrid using index
+:meta-description: How to optimize query execution in CUBRID database.
 
 Updating Statistics
 ===================

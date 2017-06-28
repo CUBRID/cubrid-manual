@@ -1,6 +1,6 @@
 
-:custom-meta-keywords: select statement, select from clause, select where clause, group by, having clause, limit clause, join query, subquery, select for update
-:custom-meta-description: The SELECT statement specifies columns that you want to retrieve from a table.
+:meta-keywords: select statement, select from clause, select where clause, group by, having clause, limit clause, join query, subquery, select for update
+:meta-description: The SELECT statement specifies columns that you want to retrieve from a table.
 
 ******
 SELECT

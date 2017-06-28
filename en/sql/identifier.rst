@@ -1,6 +1,6 @@
 
-:custom-meta-keywords: cubrid identifier guideline, cubrid legal identifier, database identifier
-:custom-meta-description: CUBRID Identifiers can be table names, index names, view names, column names, user names etc.
+:meta-keywords: cubrid identifier guideline, cubrid legal identifier, database identifier
+:meta-description: CUBRID Identifiers can be table names, index names, view names, column names, user names etc.
 
 **********
 Identifier

@@ -1,6 +1,6 @@
 
-:custom-meta-keywords: cubrid oledb driver, cubrid ole db driver, cubrid oledb api, cubrid ole db api, oledb programming
-:custom-meta-description: CUBRID OLE DB driver is based on CCI API and provides an interface over .NET Framework using the Component Object Model (COM).
+:meta-keywords: cubrid oledb driver, cubrid ole db driver, cubrid oledb api, cubrid ole db api, oledb programming
+:meta-description: CUBRID OLE DB driver is based on CCI API and provides an interface over .NET Framework using the Component Object Model (COM).
 
 *************
 OLE DB Driver

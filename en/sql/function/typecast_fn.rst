@@ -1,5 +1,5 @@
 
-:custom-meta-keywords: cubrid cast, cubrid type cast, cubrid date_format, cubrid to_char, cubrid to_date, cubrid to_datetime, cubrid to_datetime_tz, cubrid to_time, cubrid to_timestamp, cubrid to_timestamp_tz
+:meta-keywords: cubrid cast, cubrid type cast, cubrid date_format, cubrid to_char, cubrid to_date, cubrid to_datetime, cubrid to_datetime_tz, cubrid to_time, cubrid to_timestamp, cubrid to_timestamp_tz
 
 :tocdepth: 3
 

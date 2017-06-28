@@ -1,6 +1,6 @@
 
-:custom-meta-keywords: cubrid perl driver, cubrid perl api
-:custom-meta-description: DBD::cubrid is a CUBRID Perl driver that implements Perl5 Database Interface (DBI) to enable access to CUBRID database server. It provides full API support. CUBRID Perl driver is written based on CCI API.
+:meta-keywords: cubrid perl driver, cubrid perl api
+:meta-description: DBD::cubrid is a CUBRID Perl driver that implements Perl5 Database Interface (DBI) to enable access to CUBRID database server. It provides full API support. CUBRID Perl driver is written based on CCI API.
 
 ***********
 Perl Driver

@@ -1,5 +1,5 @@
 
-:custom-meta-keywords: prepare statement, execute prepared, deallocate prepare, drop prepare
+:meta-keywords: prepare statement, execute prepared, deallocate prepare, drop prepare
 
 ******************
 PREPARED STATEMENT

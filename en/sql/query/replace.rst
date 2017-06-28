@@ -1,6 +1,6 @@
 
-:custom-meta-keywords: replace statement
-:custom-meta-description: The REPLACE statement works like INSERT, but the difference is that it inserts a new record after deleting the existing record without displaying the error when a duplicate value is to be inserted into a column for which PRIMARY KEY or UNIQUE constraints have defined.
+:meta-keywords: replace statement
+:meta-description: The REPLACE statement works like INSERT, but the difference is that it inserts a new record after deleting the existing record without displaying the error when a duplicate value is to be inserted into a column for which PRIMARY KEY or UNIQUE constraints have defined.
 
 *******
 REPLACE

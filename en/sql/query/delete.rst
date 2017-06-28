@@ -1,6 +1,6 @@
 
-:custom-meta-keywords: delete statement
-:custom-meta-description: You can delete records in the table by using the DELETE statement.
+:meta-keywords: delete statement
+:meta-description: You can delete records in the table by using the DELETE statement.
 
 ******
 DELETE

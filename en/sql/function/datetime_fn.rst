@@ -1,5 +1,5 @@
 
-:custom-meta-keywords: cubrid date, cubrid time, cubrid datetime, datetime functions, datetime operators
+:meta-keywords: cubrid date, cubrid time, cubrid datetime, datetime functions, datetime operators
 
 :tocdepth: 3
 

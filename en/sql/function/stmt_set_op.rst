@@ -1,6 +1,6 @@
 
-:custom-meta-keywords: union statement, difference statement, intersection statement
-:custom-meta-description: Statement set operators are used to get union, difference or intersection on the result of more than one query statement specified as an operand.
+:meta-keywords: union statement, difference statement, intersection statement
+:meta-description: Statement set operators are used to get union, difference or intersection on the result of more than one query statement specified as an operand.
 
 ***********************
 Statement Set Operators

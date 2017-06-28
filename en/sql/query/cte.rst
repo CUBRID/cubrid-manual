@@ -1,6 +1,6 @@
 
-:custom-meta-keywords: common table expression, recursive query, recursive cte
-:custom-meta-description: Common Table Expressions (CTEs) are temporary tables (list of results) associated with a statement.
+:meta-keywords: common table expression, recursive query, recursive cte
+:meta-description: Common Table Expressions (CTEs) are temporary tables (list of results) associated with a statement.
 
 ***
 CTE

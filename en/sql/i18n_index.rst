@@ -1,6 +1,6 @@
 
-:custom-meta-keywords: cubrid localization, cubrid locale, cubrid internationalization, cubrid timezone, cubrid i18n, cubrid ldml
-:custom-meta-description: Globalization includes internationalization and localization. Internationalization can be applied to various languages and regions. Localization fits the language and culture in a specific area as appending the language-specific components. CUBRID supports multilingual collations including Europe and Asia to facilitate the localization.
+:meta-keywords: cubrid localization, cubrid locale, cubrid internationalization, cubrid timezone, cubrid i18n, cubrid ldml
+:meta-description: Globalization includes internationalization and localization. Internationalization can be applied to various languages and regions. Localization fits the language and culture in a specific area as appending the language-specific components. CUBRID supports multilingual collations including Europe and Asia to facilitate the localization.
 
 *************
 Globalization

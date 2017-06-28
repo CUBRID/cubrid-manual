@@ -1,6 +1,6 @@
 
-:custom-meta-keywords: cubrid syntax, database syntax
-:custom-meta-description: Syntax rules for writing SQL queries in CUBRID database
+:meta-keywords: cubrid syntax, database syntax
+:meta-description: Syntax rules for writing SQL queries in CUBRID database
 
 *************
 Writing Rules

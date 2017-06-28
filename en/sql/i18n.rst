@@ -1,6 +1,6 @@
 
-:custom-meta-keywords: cubrid strings, charset, codeset, collation, cubrid locale
-:custom-meta-description: Globalization includes internationalization and localization. Internationalization can be applied to various languages and regions. Localization fits the language and culture in a specific area as appending the language-specific components. CUBRID supports multilingual collations including Europe and Asia to facilitate the localization.
+:meta-keywords: cubrid strings, charset, codeset, collation, cubrid locale
+:meta-description: Globalization includes internationalization and localization. Internationalization can be applied to various languages and regions. Localization fits the language and culture in a specific area as appending the language-specific components. CUBRID supports multilingual collations including Europe and Asia to facilitate the localization.
 
 .. _globalization-overview:
 

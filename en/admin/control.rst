@@ -1,6 +1,6 @@
 
-:custom-meta-keywords: cubrid server process, cub_server, cubrid broker, cubrid cas, cubrid manager server, cubrid HA, cubrid services, cubrid logging, cubrid errors, cubrid server access, cubrid status, cubrid manager
-:custom-meta-description: How to control and check CUBRID services and processes (server, broker), logging files, access, errors, and CUBRID Manager.
+:meta-keywords: cubrid server process, cub_server, cubrid broker, cubrid cas, cubrid manager server, cubrid HA, cubrid services, cubrid logging, cubrid errors, cubrid server access, cubrid status, cubrid manager
+:meta-description: How to control and check CUBRID services and processes (server, broker), logging files, access, errors, and CUBRID Manager.
 
 .. _control-cubrid-processes:
 

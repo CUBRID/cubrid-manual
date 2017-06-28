@@ -1,5 +1,5 @@
 
-:custom-meta-keywords: cubrid charset, cubrid coercibility, cubrid collation, cubrid current_user, cubrid default, cubrid last_insert_id, cubrid row_count
+:meta-keywords: cubrid charset, cubrid coercibility, cubrid collation, cubrid current_user, cubrid default, cubrid last_insert_id, cubrid row_count
 
 :tocdepth: 3
 

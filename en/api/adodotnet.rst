@@ -1,6 +1,6 @@
 
-:custom-meta-keywords: ADO.NET driver, adonet driver, cubrid ADO.NET
-:custom-meta-description: How to install, configure and user CUBRID ADO.NET driver.
+:meta-keywords: ADO.NET driver, adonet driver, cubrid ADO.NET
+:meta-description: How to install, configure and user CUBRID ADO.NET driver.
 
 **************
 ADO.NET Driver

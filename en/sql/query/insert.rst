@@ -1,6 +1,6 @@
 
-:custom-meta-keywords: insert statement, insert set, insert select, on duplicate key update, odku
-:custom-meta-description: You can insert a new record into a table in a database by using the INSERT statement. CUBRID supports INSERT ... VALUES, INSERT ... SET and INSERT ... SELECT statements.
+:meta-keywords: insert statement, insert set, insert select, on duplicate key update, odku
+:meta-description: You can insert a new record into a table in a database by using the INSERT statement. CUBRID supports INSERT ... VALUES, INSERT ... SET and INSERT ... SELECT statements.
 
 ******
 INSERT

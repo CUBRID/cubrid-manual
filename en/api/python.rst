@@ -1,6 +1,6 @@
 
-:custom-meta-keywords: cubrid python driver, cubrid python api, database python driver, python database sample
-:custom-meta-description: CUBRIDdb is a Python extension package that implements Python Database API 2.0 compliant support for CUBRID. CUBRID Python driver is written based on CCI API.
+:meta-keywords: cubrid python driver, cubrid python api, database python driver, python database sample
+:meta-description: CUBRIDdb is a Python extension package that implements Python Database API 2.0 compliant support for CUBRID. CUBRID Python driver is written based on CCI API.
 
 *************
 Python Driver

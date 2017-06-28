@@ -1,5 +1,5 @@
 
-:custom-meta-keywords: cubrid set, cubrid multiset, cubrid list, cubrid sequence, cubrid collection type
+:meta-keywords: cubrid set, cubrid multiset, cubrid list, cubrid sequence, cubrid collection type
 
 ************************
 Set Arithmetic Operators

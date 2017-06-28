@@ -1,6 +1,6 @@
 
-:custom-meta-keywords: cubrid catalog
-:custom-meta-description: With CUBRID you can easily obtain schema information using SQL statements on system catalog virtual classes.
+:meta-keywords: cubrid catalog
+:meta-description: With CUBRID you can easily obtain schema information using SQL statements on system catalog virtual classes.
 
 **************
 System Catalog

@@ -1,6 +1,6 @@
 
-:custom-meta-keywords: call statement, cubrid method type
-:custom-meta-description: The methods are written in C with built-in functions of CUBRID database system, and are called by the CALL statement.
+:meta-keywords: call statement, cubrid method type
+:meta-description: The methods are written in C with built-in functions of CUBRID database system, and are called by the CALL statement.
 
 ******
 Method

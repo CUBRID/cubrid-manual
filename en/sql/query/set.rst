@@ -1,6 +1,6 @@
 
-:custom-meta-keywords: set statement, set system parameter, set user variable
-:custom-meta-description: The SET statement is the syntax that specifies a system parameter's value or user-defined variables.
+:meta-keywords: set statement, set system parameter, set user variable
+:meta-description: The SET statement is the syntax that specifies a system parameter's value or user-defined variables.
 
 ***
 SET

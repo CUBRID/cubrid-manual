@@ -1,6 +1,6 @@
 
-:custom-meta-keywords: cubrid type cast
-:custom-meta-description: CUBRID Arithmetic Operations and Type Casting of Numeric and DATE/TIME Data Types
+:meta-keywords: cubrid type cast
+:meta-description: CUBRID Arithmetic Operations and Type Casting of Numeric and DATE/TIME Data Types
 
 :tocdepth: 3
 

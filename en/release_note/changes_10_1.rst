@@ -77,7 +77,10 @@ Enhancements
 Bug Fixes
 ---------
 
-* `[777] <https://github.com/CUBRID/cubrid/pull/777>`_ `[CBRD-21454] <http://jira.cubrid.org/browse/CBRD-21454>`_ error was not propagated
+* `[781] <https://github.com/CUBRID/cubrid/pull/781>`_ `[CBRD-21477] <http://jira.cubrid.org/browse/CBRD-21477>`_ fix disk format rollback (not recovery)
+* `[780] <https://github.com/CUBRID/cubrid/pull/780>`_ `[CBRD-21467] <http://jira.cubrid.org/browse/CBRD-21467>`_ removed incorrect assertion: heap_upgdate_bigone
+* `[779] <https://github.com/CUBRID/cubrid/pull/779>`_ `[CBRD-21470] <http://jira.cubrid.org/browse/CBRD-21470>`_ fixed to hold directory lock until the end of system operation
+* `[778] <https://github.com/CUBRID/cubrid/pull/778>`_ `[CBRD-20146] <http://jira.cubrid.org/browse/CBRD-20146>`_ fixes bad comparisons
 * `[776] <https://github.com/CUBRID/cubrid/pull/776>`_ `[CBRD-21455] <http://jira.cubrid.org/browse/CBRD-21455>`_ isolate file_header_sanity_check not to propagate error from/to the caller
 * `[775] <https://github.com/CUBRID/cubrid/pull/775>`_ `[CBRD-21451] <http://jira.cubrid.org/browse/CBRD-21451>`_ fixes to commit sysop of extending existing volume
 * `[774] <https://github.com/CUBRID/cubrid/pull/774>`_ `[CBRD-21450] <http://jira.cubrid.org/browse/CBRD-21450>`_ fixes memory leak: lob_info_list of update/delete

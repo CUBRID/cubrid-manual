@@ -77,6 +77,10 @@ Enhancements
 Bug Fixes
 ---------
 
+* `[785] <https://github.com/CUBRID/cubrid/pull/785>`_ `[CBRD-21484] <http://jira.cubrid.org/browse/CBRD-21484>`_ uses IX_LOCK checking index files to skip immature indexes
+* `[784] <https://github.com/CUBRID/cubrid/pull/784>`_ `[CBRD-21483] <http://jira.cubrid.org/browse/CBRD-21483>`_ disk_rv_undo_format reset volume purpose
+* `[783] <https://github.com/CUBRID/cubrid/pull/783>`_ `[CBRD-21482] <http://jira.cubrid.org/browse/CBRD-21482>`_ don't interrupt btree_verify_node
+* `[782] <https://github.com/CUBRID/cubrid/pull/782>`_ `[CBRD-21479] <http://jira.cubrid.org/browse/CBRD-21479>`_ Fix collation of max_string special value
 * `[781] <https://github.com/CUBRID/cubrid/pull/781>`_ `[CBRD-21477] <http://jira.cubrid.org/browse/CBRD-21477>`_ fix disk format rollback (not recovery)
 * `[780] <https://github.com/CUBRID/cubrid/pull/780>`_ `[CBRD-21467] <http://jira.cubrid.org/browse/CBRD-21467>`_ removed incorrect assertion: heap_upgdate_bigone
 * `[779] <https://github.com/CUBRID/cubrid/pull/779>`_ `[CBRD-21470] <http://jira.cubrid.org/browse/CBRD-21470>`_ fixed to hold directory lock until the end of system operation

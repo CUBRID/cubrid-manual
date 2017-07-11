@@ -77,6 +77,7 @@ Enhancements
 Bug Fixes
 ---------
 
+* `[787] <https://github.com/CUBRID/cubrid/pull/787>`_ `[CBRD-21488] <http://jira.cubrid.org/browse/CBRD-21488>`_ fix deadlock: don't latch page after locking class repr
 * `[785] <https://github.com/CUBRID/cubrid/pull/785>`_ `[CBRD-21484] <http://jira.cubrid.org/browse/CBRD-21484>`_ uses IX_LOCK checking index files to skip immature indexes
 * `[784] <https://github.com/CUBRID/cubrid/pull/784>`_ `[CBRD-21483] <http://jira.cubrid.org/browse/CBRD-21483>`_ disk_rv_undo_format reset volume purpose
 * `[783] <https://github.com/CUBRID/cubrid/pull/783>`_ `[CBRD-21482] <http://jira.cubrid.org/browse/CBRD-21482>`_ don't interrupt btree_verify_node

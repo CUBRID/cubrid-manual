@@ -9,7 +9,8 @@
 Release Notes Information
 =========================
 
-This document includes information on CUBRID 10.1(Build No., 10.1.0.XXXX-XXXXXXX). 
+This document includes information on CUBRID 10.1(Build Number: 10.1.0.7662-c04ad7f).
+
 CUBRID 10.1 includes all of the fixed errors and improved features that were detected in the CUBRID 10.0 and were applied to the previous versions.
 
 For CUBRID 10.0, please find http://www.cubrid.org/manual/en/10.0/release_note/index.html.
@@ -30,6 +31,14 @@ CUBRID 10.1
 * fixes a large number of critical bugs.
 * includes useful SQL extensions: CTE(Common Table Expressions) and others
 * includes huge scale of code refactoring.
+
+CUBRID 10.1 is **faster**. It has almost doubled the optimum workloads of TPC-C benchmark since CUBRID 9.3. In parallel, we also followed and improved results for sysbench (157%: 10.0, 128%: 9.3), YCSB workload A (126%: 10.0, 163%: 9.3), YCSB workload B (119%: 10.0, 147%: 9.3) and TPC-W (126%: 10.0, 370%: 9.3). CUBRID 10.1 also significantly improves replication performance.
+
+CUBRID 10.1 is **stronger** by rewritting the entire storage engine. As a result, large databases loading is three times faster, while other basic operations for very large databases, it can't be even compared with previous versions.
+
+CUBRID 10.1 is also **better**, bringing new features. Common Table Expressions is old wish fulfilled by CUBRID 10.1; developers may finally write complex queries easier and clearer, recursive queries included.
+
+CUBRID 10.1 is more **stable** too. It has fixed over 1000+ issues as CUBRID 10.1 and 5000+ from CUBRID 10.0, which is more than the total issue numbers fixed in all CUBRID 9.x versions.
 
 All the users of CUBRID 10.0 should upgrade to CUBRID 10.1. We also recommend upgrading CUBRID 9.x and earlier versions to CUBRID 10.1.
 The database volume of CUBRID 10.1 is not compatible with that of CUBRID 10.0 and earlier versions. Therefore, if you use CUBRID 10.0 or earlier, you must **migrate your databases**. Regarding this, see :doc:`/upgrade`.

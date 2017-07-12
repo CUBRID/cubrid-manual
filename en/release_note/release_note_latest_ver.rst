@@ -9,7 +9,7 @@
 Release Notes Information
 =========================
 
-This document includes information on CUBRID 10.1(Build Number: 10.1.0.7662-c04ad7f).
+This document includes information on CUBRID 10.1(Build Number: 10.1.0.7663-1ca0ab8).
 
 CUBRID 10.1 includes all of the fixed errors and improved features that were detected in the CUBRID 10.0 and were applied to the previous versions.
 

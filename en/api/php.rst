@@ -28,7 +28,8 @@ For Linux
 
 *   Operating system: 32-bit or 64-bit Linux
 *   Web server: Apache
-*   PHP: 5.2 or 5.3 (http://php.net/downloads.php)
+*   PHP: version 5.x, or version 7.x (http://php.net/downloads.php)
+*	We refer to the latest PHP versions 5.6.x and 7.1.x as a convenience.
 
 **Installing CUBRID PHP Driver using PECL**
 
@@ -44,7 +45,7 @@ If **PECL** package has been installed on your system, the installation of CUBRI
 
     If you need earlier versions of the driver, you can install exact versions as follows: ::
     
-        sudo pecl install cubrid-8.3.0.0005
+        sudo pecl install cubrid-10.1.0.0002
     
     During the installation, you will be prompted to enter **CUBRID base install dir autodetect :**. Just to make sure your installation goes smoothly, enter the full path to the directory where you have installed CUBRID. For example, if CUBRID has been installed at **/home/cubridtest/CUBRID**, then enter **/home/cubridtest/CUBRID**.
     
@@ -65,7 +66,13 @@ If **PECL** package has been installed on your system, the installation of CUBRI
 
 #.  If you do not have PHP itself installed, install it using the following command; if you have PHP installed on your system, skip this step. ::
     
-        sudo apt-get install php5
+        sudo apt-get install php5		
+        
+        or for PHP version 7		
+        sudo add-apt-repository ppa:ondrej/php
+        sudo apt-get update
+        sudo apt-get install php7.1
+	
     
 #.  To install CUBRID PHP driver using **apt-get**, we need to add CUBRID's repository so that Ubuntu knows where to download the packages from and tell the operating system to update its indexes. ::
     
@@ -78,9 +85,9 @@ If **PECL** package has been installed on your system, the installation of CUBRI
     
     To install earlier versions, indicate the version as: ::
     
-        sudo apt-get install php5-cubrid-8.3.1
+        sudo apt-get install php5-cubrid-9.3.1
     
-    This will copy the **cubrid.so** driver to **/usr/lib/php5/2009*** and add the following configuration lines to **/etc/php5/apache2/php.ini**. ::
+    This will copy the **cubrid.so** driver to **/usr/local/lib/php/*** and add the following configuration lines to **/etc/php.ini**. ::
     
         [PHP_CUBRID]
         extension=cubrid.so
@@ -98,11 +105,11 @@ If **PECL** package has been installed on your system, the installation of CUBRI
     
 #.  Choose CUBRID version. You will be given a list of links for your particular version. For example, the following link is provided for Fedora 16 where fc16 means this operating system version. ::
     
-        rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/9.0.0/cubridrepo-9.0.0-1.fc16.noarch.rpm
+        rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/10.1.0/cubridrepo-10.1.0-1.fc16.noarch.rpm
     
     For CentOS, el6.2 means CentOS version 6.2. ::
     
-        rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/9.0.0/cubridrepo-9.0.0-1.el6.2.noarch.rpm
+        rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/10.1.0/cubridrepo-10.1.0-1.el6.2.noarch.rpm
     
     Executing this command will tell **Yum** where to look for CUBRID package.
     
@@ -119,10 +126,10 @@ For Windows
 
 **Requirements**
 
-*   CUBRID: 2008 R3.0 (8.3.0) or later
+*   CUBRID: 9.3.x or later
 *   Operating system: 32-bit or 64 bit Windows
 *   Web server: Apache or IIS
-*   PHP: 5.2 or 5.3 (http://windows.php.net/download/)
+*   PHP: 5.6.x or 7.1.x (http://windows.php.net/download/)
 
 **Using CUBRID PHP Driver Installer**
 
@@ -160,17 +167,22 @@ If you have received an error messages, follow the steps below; if you can see C
     
     You can see the PHP version like below if it is properly configured. ::
     
+		PHP 5.6.30 (cli) (built: Jun 13 2017 16:16:30)
+		or for version 7.1.x
+		PHP 7.1.7 (cli) (built: Aug  3 2017 10:59:35) ( NTS )
+		
         C:\Users\Administrator>php --version
-        PHP 5.2.9 <cli> <built: Feb 25 2009 15:52:24>
+        PHP 5.6.30 (cli) (built: Jan 18 2017 19:47:28)
     
 #.  Enter command as follows. ::
     
-        php --version
+        cubrid --version
     
     You can see the CUBRID version like below if it is properly configured. ::
     
         C:\Users\Administrator>cubrid --version
-        cubrid <cubrid utilities> R2.1
+        cubrid.exe (CUBRID utilities)
+		CUBRID 9.3 (9.3.8.0003) (64bit release build for Windows_NT) (Apr 11 2017 11:54:08)
 
 If you cannot get the result like above, it is highly likely that your PHP and CUBRID installations went wrong. Try to reinstall them and recheck again. If the path is not automatically specified even after you complete reinstallation, you can do it manually.
 
@@ -212,7 +224,7 @@ In this section, we will introduce the way of building CUBRID PHP driver for Lin
 **Configuring the environment**
 
 *   CUBRID: Install CUBRID. Make sure the environment variable **%CUBRID%** is defined in your system.
-*   PHP 5.3 source code: You can download PHP source code from http://php.net/downloads.php .
+*   PHP 5.6.x or 7.1.x source code: You can download PHP source code from http://php.net/downloads.php .
 *   Apache 2: It can be used to test PHP.
 *   CUBRID PHP driver source code: You can download the source code from http://www.cubrid.org/?mid=downloads&item=php_driver . Make sure that the version you download is the same as the version of CUBRID which has been installed on your system.
 
@@ -256,11 +268,11 @@ In this section, we will introduce the way of building CUBRID PHP driver for Lin
     
 #.  Use web browser to visit http://localhost/test.php. If you can see the following result, it means that installation is successfully completed.
     
-    +------------+------------+
-    | CUBRID     |   Value    |
-    +============+============+
-    | Version    | 9.0.0.XXXX |
-    +------------+------------+
+    +------------+-------------+
+    | CUBRID     |   Value     |
+    +============+=============+
+    | Version    | 10.1.0.XXXX |
+    +------------+-------------+
 
 .. _phpize-remark:
 
@@ -284,26 +296,33 @@ For Windows
 
 In this section, we will introduce three ways of building CUBRID PHP driver for Windows. If you have no idea which version you choose, read the following contents first.
 
-*   If you are using PHP with Apache 1 or Apache 2, you should use the VC6 versions of PHP.
-*   If you are using PHP with IIS, you should use the VC9 versions of PHP.
+If you are using PHP as module with Apache builds from apache.org (not recommended) you need to use the older VC6 versions of PHP compiled with the legacy Visual Studio 6 compiler. Do NOT use VC11+ versions of PHP with the apache.org binaries.
 
-VC6 versions are compiled with the legacy Visual Studio 6 compiler; VC9 versions are compiled with the Visual Studio 2008 compiler. The VC9 versions have more improvements in performance and stability.
+With Apache you have to use the Thread Safe (TS) versions of PHP.
 
-The VC9 versions require you to have the Microsoft 2008 C++ Runtime (x86) or the Microsoft 2008 C++ Runtime (x64) installed. Do not use VC9 versions with binaries provided by the Apache Software Foundation ( http://www.apache.org/ ).
+*	If you are using PHP version 5.5.x or later, you should use the VC11 versions (Visual Studio 2012)
+*	If you are using PHP version 7.1.x or later, you should use the VC14 versions (Visual Studio 2015)
 
-**Building CUBRID PHP Driver with VC9 for PHP 5.3**
+VC11 and VC14 versions are compiled with the Visual Studio 2012 and 2015 compiler respectively. The VC11 or VC14 versions have more improvements in performance and stability.
+
+More recent versions of PHP are built with VC11, VC14 (Visual Studio 2012 or 2015 compiler respectively) and include improvements in performance and stability.
+
+*	The VC11 builds require to have the Visual C++ Redistributable for Visual Studio 2012 x86 or x64 installed
+*	The VC14 builds require to have the Visual C++ Redistributable for Visual Studio 2015 x86 or x64 installed
+
+**Building CUBRID PHP Driver with VC11 for PHP 5.6.x**
 
 **Configuring the environment**
 
 *   CUBRID: Install CUBRID. Make sure the environment variable **%CUBRID%** is defined in your system.
 
-*   Visual Studio 2008: You can alternately use the free Visual C++ Express Edition or the Visual C++ 9 compiler included in the Windows SDK v6.1 if you are familiar with a makefile. Make sure that you have the Microsoft Visual C++ Redistributable Package installed on your system to use CUBRID PHP VC9 driver.
+*   Visual Studio 2012: You can alternately use the free Visual C++ Express Edition or the Visual C++ 11 compiler included in the Windows SDK if you are familiar with a makefile. Make sure that you have the Microsoft Visual C++ Redistributable Package installed on your system to use CUBRID PHP VC11 driver.
 
-*   PHP 5.3 binaries: You can install VC9 x86 Non Thread Safe or VC9 x86 Thread Safe. Make sure that the **%PHPRC%** system environment variable is correctly set. In the [Property Pages] dialog box, select [General] under the [Linker] tree node. You can see **$(PHPRC)** in [Additional Library Directories].
+*   PHP 5.6.x binaries: You can install VC11 x86 Non Thread Safe or VC11 x86 Thread Safe. Make sure that the **%PHPRC%** system environment variable is correctly set. In the [Property Pages] dialog box, select [General] under the [Linker] tree node. You can see **$(PHPRC)** in [Additional Library Directories].
 
     .. image:: /images/image57.jpg
 
-*   PHP 5.3 source code: Remember to get the source code that matches your binary version. After you extract the PHP 5.3 source code, add the **%PHP5_SRC%** system environment variable and set its value to the path of PHP 5.3 source code. In the [Property Pages] dialog box, select [General] under the [C/C++] tree node. You can see **$(PHP5_SRC)** in [Additional Include Directories].
+*   PHP 5.6.x source code: Remember to get the source code that matches your binary version. After you extract the PHP 5.6.x source code, add the **%PHP5_SRC%** system environment variable and set its value to the path of PHP 5.6.x source code. In the [Property Pages] dialog box, select [General] under the [C/C++] tree node. You can see **$(PHP5_SRC)** in [Additional Include Directories].
 
     .. image:: /images/image58.jpg
 
@@ -311,9 +330,9 @@ The VC9 versions require you to have the Microsoft 2008 C++ Runtime (x86) or the
 
 .. note::
 
-    You do not need to build PHP 5.3 from source code but configuring a project is required. If you do not make configuration settings, you will get the message that a header file (**config.w32.h**) cannot be found. Read https://wiki.php.net/internals/windows/stepbystepbuild to get more detailed information.
+    You do not need to build PHP 5.6.x from source code but configuring a project is required. If you do not make configuration settings, you will get the message that a header file (**config.w32.h**) cannot be found. Read https://wiki.php.net/internals/windows/stepbystepbuild to get more detailed information.
 
-**Building CUBRID PHP driver with VC9 for PHP 5.3**
+**Building CUBRID PHP driver**
 
 #.  Open the **php_cubrid.vcproj** file under the **\\win** directory. In the [Solution Explorer] pane, right-click on the **php_cubrid** (project name) and select [Properties].
     
@@ -331,21 +350,19 @@ The VC9 versions require you to have the Microsoft 2008 C++ Runtime (x86) or the
 
     *   In the php.ini file, enter the path of the **php_cubrid.dll** file as an extension_dir variable value and enter **php_cubrid.dll** as an extension value.
 
-**Building CUBRID PHP Driver with VC6 for PHP 5.2/5.3**
+**Building CUBRID PHP Driver with VC14 for PHP 7.1.x**
 
 **Configuring the environment**
 
 *   CUBRID: Install CUBRID. Make sure that the environment variable **%CUBRID%** is defined in your system.
 
-*   Visual C++ 6.0 SP6
+*   Visual Studio 2015: You can alternately use the free Visual C++ Express Edition or the Visual C++ 14 compiler included in the Windows SDK if you are familiar with a makefile. Make sure that you have the Microsoft Visual C++ Redistributable Package installed on your system to use CUBRID PHP VC14 driver.
 
-*   Windows Server Feb. 2003 SDK: It is recommended to use Windows Server Feb. 2008 SDK because every official release and snapshot are compiled with Visual C++ 6.0 SP6 and Windows Server Feb. 2003 SDK. You can configure the default settings without using this SDK; however, there is possibility that an error would occur while building the driver. In this case, you should fix the error yourself.
-
-*   PHP 5.3/5.2 binaries: You can install VC6 x86 Non Thread Safe or VC6 x86 Thread Safe. Make sure that the value of the **%PHPRC%** system environment variable is correctly set. In the [Project Settings] dialog box, you can find **$(PHPRC)** in [Additional library path] of the [Link] tab.
+*   PHP 7.1.x binaries: You can install VC14 x86 Non Thread Safe or VC14 x86 Thread Safe. Make sure that the value of the **%PHPRC%** system environment variable is correctly set. In the [Project Settings] dialog box, you can find **$(PHPRC)** in [Additional library path] of the [Link] tab.
 
     .. image:: /images/image61.jpg
 
-*   PHP 5.2/5.3 source code: Remember to get the source that matches your binary version. After you extract the PHP 5.3 source code, add the **%PHP5_SRC%** system environment variable and set its value to the path of PHP 5.3 source code. In the [Project Settings] dialog box of VC6 project, you can find **$(PHP5_SRC)** in [Additional include directories] of the [C/C++] tab.
+*   PHP 7.1.x source code: Remember to get the source that matches your binary version. After you extract the PHP 7.1.x source code, add the **%PHP7_SRC%** system environment variable and set its value to the path of PHP 7.1.x source code. In the [Project Settings] dialog box of VC11 project, you can find **$(PHP7_SRC)** in [Additional include directories] of the [C/C++] tab.
 
     .. image:: /images/image62.jpg
 
@@ -353,7 +370,7 @@ The VC9 versions require you to have the Microsoft 2008 C++ Runtime (x86) or the
 
 .. note::
 
-    If you build CUBRID PHP driver with PHP 5.3 source code, you need to make some configuration settings for PHP 5.3 on Windows. If you do not make these settings, you will get the message that a header file (**config.w32.h**) cannot be found. Read https://wiki.php.net/internals/windows/stepbystepbuild to get more detailed information.
+    If you build CUBRID PHP driver with PHP 7.1.x source code, you need to make some configuration settings for PHP 7.1.x on Windows. If you do not make these settings, you will get the message that a header file (**config.w32.h**) cannot be found. Read https://wiki.php.net/internals/windows/stepbystepbuild to get more detailed information.
 
 **Building CUBRID PHP driver**
 
@@ -377,35 +394,51 @@ The VC9 versions require you to have the Microsoft 2008 C++ Runtime (x86) or the
 
 **PHP for 64-bit Windows**
 
-We do not provide 64-bit Windows CUBRID PHP driver, mainly because there is no official 64-bit Windows PHP at windows.php.net (only x86 versions are available). But sometimes you need 64-bit Windows binaries for PHP. In that case you can build it from source codes. Best of all, some guys have already done this (see http://www.anindya.com/). Here, we will not describe how to build x64 PHP itself.
+*   PHP 5.6.x binaries: You can install VC11 x64 Non Thread Safe or VC11 x64 Thread Safe. Make sure that the **%PHPRC%** system environment variable is correctly set. In the [Property Pages] dialog box, select [General] under the [Linker] tree node. You can see **$(PHPRC)** in [Additional Library Directories].
 
-You can find the supported compilers to build PHP on Windows at https://wiki.php.net/internals/windows/compiler . You can see that both VC++ 8 (2005) and VC++ 9 (2008 SP1 only) can be used to build 64-bit PHP. Earlier versions of Visual C++ 2005, the Windows Server Fed. 2003 SDK was the only way to build 64-bit Windows applications.
+    .. image:: /images/image57.jpg
+
+*   PHP 5.6.x source code: Remember to get the source code that matches your binary version. After you extract the PHP 5.6.x source code, add the **%PHP5_SRC%** system environment variable and set its value to the path of PHP 5.6.x source code. In the [Property Pages] dialog box, select [General] under the [C/C++] tree node. You can see **$(PHP5_SRC)** in [Additional Include Directories].
+
+    .. image:: /images/image58.jpg
+
+*   PHP 7.1.x binaries: You can install VC14 x64 Non Thread Safe or VC14 x64 Thread Safe. Make sure that the **%PHPRC%** system environment variable is correctly set. In the [Property Pages] dialog box, select [General] under the [Linker] tree node. You can see **$(PHPRC)** in [Additional Library Directories].
+
+    .. image:: /images/image57.jpg
+
+*   PHP 7.1.x source code: Remember to get the source code that matches your binary version. After you extract the PHP 7.1.x source code, add the **%PHP7_SRC%** system environment variable and set its value to the path of PHP 7.1.x source code. In the [Property Pages] dialog box, select [General] under the [C/C++] tree node. You can see **$(PHP7_SRC)** in [Additional Include Directories].
+
+    .. image:: /images/image58.jpg
+
+* You can find the supported compilers to build PHP on Windows at https://wiki.php.net/internals/windows/compiler . You can see that both Visual C++ 11 (2012) and Visual C++ 14 (2015) can be used to build 64-bit PHP.
 
 **Apache for 64-bit Windows**
 
-There is no official Apache for 64-bit Windows either. Instead, you can use IIS as your Windows Web Server on 64-bit Windows. If you really need VC9 x64 versions of Apache, you can find it at http://www.anindya.com/ .
+* Apache Lounge has provided up-to-date Windows binaries including 64bit version. You can download the latest apache 2.2.34 64bit version on the following link.
+
+ https://www.apachelounge.com/download/win64/binaries/httpd-2.2.34-win64.zip
 
 **Configuring the environment**
 
 *   CUBRID for 64-bit Windows: You can install the latest version of CUBRID for 64-bit Windows. Make sure the environment variable **%CUBRID%** is defined in your system.
 
-*   Visual Studio 2008: You can alternately use the free Visual C++ Express Edition or the Visual C++ 9 compiler in the Windows SDK v6.1 if you are familiar with a makefile.
+*   Visual Studio 2012 or 2015: You can alternately use the free Visual C++ Express Edition or the Visual C++ compiler in the Windows SDK if you are familiar with a makefile.
 
-*   SDK 6.1: If you are using VC9, you need Microsoft Windows SDK for Windows Server 2008 and .NET Framework 3.5 (also known as the SDK 6.1).
+*   PHP 5.6.x or 7.1.x binaries for 64-bit Windows: You can build your own VC11 or VC14 x64 PHP. Both x64 Non Thread Safe and x64 Thread Safe are available. After you have installed it, check if the value of system environment variable **%PHPRC%** is correctly set.
 
-*   PHP 5.3 binaries for 64-bit Windows: You can build your own VC9 x64 PHP with SDK 6.1 or you can get it at http://www.anindya.com . Both VC9 x64 Non Thread Safe and VC9 x64 Thread Safe are available. After you have installed it, check if the value of system environment variable **%PHPRC%** is correctly set.
+*   PHP 5.6.x source: Remember to get the src package that matches your binary version. After you extract the PHP 5.6.x src, add system environment variable **%PHP5_SRC%** and set its value to the path of PHP 5.6.x source code. In the VC11 [Property Pages] dialog box, select [General] under the [C/C++] tree node. You can see **$(PHP5_SRC)** in [Additional Include Directories].
 
-*   PHP 5.3 source code: Remember to get the src package that matches your binary version. After you extract the PHP 5.3 src, add system environment variable **%PHP5_SRC%** and set its value to the path of PHP 5.3 source code. In the VC9 [Property Pages] dialog box, select [General] under the [C/C++] tree node. You can see **$(PHP5_SRC)** in [Additional Include Directories].
+*   PHP 7.1.x source: Remember to get the src package that matches your binary version. After you extract the PHP 7.1.x src, add system environment variable **%PHP7_SRC%** and set its value to the path of PHP 7.1.s source code. In the VC14 [Property Pages] dialog box, select [General] under the [C/C++] tree node. You can see **$(PHP7_SRC)** in [Additional Include Directories].
 
 *   CUBRID PHP driver source code: You can download CUBRID PHP driver source code of which the version is the same as the version of CUBRID that is installed on your system. You can get it from http://www.cubrid.org/?mid=downloads&item=php_driver .
 
 .. note::
 
-    You do not need to build PHP 5.3 from source code; however, configuring a project is required. If you do not make configuration settings, you will get the message that a header file (**config.w32.h**) cannot be found. Read `https://wiki.php.net/internals/windows/stepbystepbuild <https://wiki.php.net/internals/windows/stepbystepbuild>`_ to get more detailed information.
+    You do not need to build PHP 5.6.x or 7.1.x from source code; however, configuring a project is required. If you do not make configuration settings, you will get the message that a header file (**config.w32.h**) cannot be found. Read `https://wiki.php.net/internals/windows/stepbystepbuild <https://wiki.php.net/internals/windows/stepbystepbuild>`_ to get more detailed information.
 
-**Configuring PHP 5.3**
+**Configuring PHP 5.6.x or 7.1.x**
 
-#.  After you have installed SDK 6.1, click the [CMD Shell] shortcut under the [Microsoft Windows SDK v6.1] folder (Windows Start menu).
+#.  After you have installed SDK 6.1 or 8.1 later, click the [CMD Shell] shortcut under the [Microsoft Windows SDK v.x] folder (Windows Start menu).
     
     .. image:: /images/image65.png
     
@@ -413,7 +446,7 @@ There is no official Apache for 64-bit Windows either. Instead, you can use IIS 
     
     .. image:: /images/image66.png
     
-#.  Enter PHP 5.3 source code directory in the command prompt and run **buildconf** to generate the **configure.js** file.
+#.  Enter PHP 5.6.x or 7.1.x source code directory in the command prompt and run **buildconf** to generate the **configure.js** file.
     
     .. image:: /images/image67.png
     

@@ -1,3 +1,7 @@
+
+:meta-keywords: CUBRID bitwise operator, cubrid bit_and, cubrid bit_or, cubrid bit_xor, cubrid bit_count
+:meta-description: A Bitwise operator performs operations in bits, and can be used in arithmetic operations.
+
 :tocdepth: 3
 
 ******************

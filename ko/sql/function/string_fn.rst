@@ -1,3 +1,6 @@
+
+:meta-keywords: cubrid ascii, cubrid concatenation, cubrid lower, cubrid upper, cubrid chr, cubrid find_in_set, cubrid repeat, cubrid replace, cubrid substr
+      
 :tocdepth: 3
 
 ********************
@@ -1082,6 +1085,8 @@ MID
       mid(a, -6, 4)         substr(a, -6, 4)      substring(a from -6 for 4)
     ==================================================================
       'eabc'                'eabc'                '1234'
+
+.. _octet_length:
 
 OCTET_LENGTH
 ============

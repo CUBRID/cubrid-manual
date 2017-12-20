@@ -1,3 +1,7 @@
+
+:meta-keywords: cubrid node.js driver, cubrid node.js api, cubrid node.js programming
+:meta-description: CUBRID Node.js driver is developed in 100% JavaScript and does not require specific platform compilation.
+
 ****************
 Node.js 드라이버
 ****************
@@ -14,10 +18,11 @@ Node.js는 다음의 특징을 가지고 있다.
 
 보다 자세한 사항은 http://nodejs.org/ 를 참고한다.
 
-CUBRRID Node.js 드라이버를 다운로드하거나 CUBRID Node.js 드라이버에 대한 최신 정보는 아래 사이트에서 확인할 수 있다.
+큐브리드 Node.js 드라이버를 다운로그하거나 최신의 정보를 찾고자 할 때는 아래의 사이트를 참고한다. 
 
-*   프로젝트 소개: http://www.cubrid.org/wiki_apis/entry/cubrid-node-js-driver
-*   소스코드 메인 저장소: https://github.com/CUBRID/node-cubrid 
+.. FIXME: *   Introducing project: http://www.cubrid.org/wiki_apis/entry/cubrid-node-js-driver
+
+*   소스코드 메인 저장소: https://github.com/CUBRID/node-cubrid
 
 Node.js 설치
 ============
@@ -40,16 +45,18 @@ CUBRID Node.js 드라이버는 먼저 http://nodejs.org/download/에서 node.js�
 CUBRID Node.js 프로그래밍
 =========================
 
-연결
-----
+.. FIXME: 연결
+.. FIXME: ----
 
-* `Node.js 드라이버로 CUBRID에 연결하기 <http://www.cubrid.org/wiki_apis/entry/connecting-to-cubrid-through-node-js-driver>`_
+.. FIXME: * `Node.js 드라이버로 CUBRID에 연결하기 <http://www.cubrid.org/wiki_apis/entry/connecting-to-cubrid-through-node-js-driver>`_
 
 예제
 ----
 
-* `CUBRID Node.js API를 사용하는 일반적인 예제 <http://www.cubrid.org/blog/cubrid-appstools/common-uses-of-cubrid-nodejs-api-with-examples/>`_
-* `CUBRID Node.js Driver를 사용하여 질의 수행하기 <http://www.cubrid.org/wiki_apis/entry/executing-queries-with-cubrid-node-js-driver>`_
+.. FIXME: The following blog is missing
+.. FIXME: * `CUBRID Node.js API를 사용하는 일반적인 예제 <http://www.cubrid.org/blog/cubrid-appstools/common-uses-of-cubrid-nodejs-api-with-examples/>`_
+.. FIXME: * `CUBRID Node.js Driver를 사용하여 질의 수행하기 <http://www.cubrid.org/wiki_apis/entry/executing-queries-with-cubrid-node-js-driver>`_
+
 * `이벤트를 사용하는 예제 <https://github.com/CUBRID/node-cubrid#usage>`_
 * `비동기 Node.js 모듈 기반의 예제 <https://github.com/CUBRID/node-cubrid#usage>`_
 * `간단한 콜백 스타일 예제 <https://github.com/CUBRID/node-cubrid#usage>`_

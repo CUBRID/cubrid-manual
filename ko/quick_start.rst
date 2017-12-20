@@ -1,3 +1,7 @@
+
+:meta-keywords: cubrid service, cubrid shell, cubrid create database, cubrid start database
+:meta-description: CUBRID quick start guide. How to launch CUBRID service, create and start a database.
+
 CUBRID 서비스 시작
 ==================
 
@@ -25,13 +29,13 @@ Linux 환경 또는 Windows 환경에서 아래와 같은 셸 명령어로 CUBRI
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 9.2
+    CUBRID 10.1 
 
     ++ cubrid server start: success
 
     @ cubrid server status
 
-    Server demodb (rel 9.2, pid 31322)
+    Server demodb (rel 10.1, pid 31322)
 
 CUBRIDService 또는 CUBRID Service Tray
 --------------------------------------
@@ -56,8 +60,7 @@ Windows 환경에서는 다음과 같은 방법으로 CUBRID 서비스를 시작
 데이터베이스 생성
 -----------------
 
-데이터베이스 볼륨 및 로그 볼륨이 위치할 디렉터리에서 **cubrid createdb** 유틸리티를 실행하여 데이터베이스를 생성할 수 있다.
-**--db-volume-size**, **--log-volume-size** 와 같은 별도의 옵션을 지정하지 않으면 기본적으로 범용 볼륨(generic volume) 512MB, 활성 로그(active log) 512MB, 백그라운드 보관 로그(background archive log) 512MB, 총 1.5GB의 볼륨 파일이 생성된다. ::
+데이터베이스 볼륨 및 로그 볼륨이 위치할 디렉터리에서 **cubrid createdb** 유틸리티를 실행하여 데이터베이스를 생성할 수 있다. **--db-volume-size** 또는 **--log-volume-size** 와 같은 추가 옵션을 지정하지 않으면 기본적으로 1.5GB 크기의 볼륨 파일이 생성된다(데이터 볼륨 512MB, 활성 로그 512MB, 백그라운드 보관 로그 512MB로 설정됨). ::
 
     % cd testdb
     % cubrid createdb testdb en_US
@@ -69,10 +72,9 @@ Windows 환경에서는 다음과 같은 방법으로 CUBRID 서비스를 시작
     -rw------- 1 cubrid dbms       176 Jan 11 15:04 testdb_lginf
     -rw------- 1 cubrid dbms       183 Jan 11 15:04 testdb_vinf
 
-위에서 testdb는 범용 볼륨 파일, testdb_lgar_t는 백그라운드 보관 로그 파일, testdb_lgat는 활성 로그 파일, testdb_lginf는 로그 정보 파일, testdb_vinf는 볼륨 정보 파일이다.
+위에서 *testdb* 는 데이터 볼륨 파일을, testdb_lgar_t는 백그라운드 보관 로그 파일을, testdb_lgat는 활성 로그 파일을, testdb_lginf는 로그 정보 파일을, 그리고 testdb_vinf는 볼륨 정보 파일을 나타낸다.
 
-볼륨에 대한 자세한 정보는 :ref:`database-volume-structure` 를 참고하고, 볼륨 생성에 대한 자세한 정보는
-:ref:`creating-database` 을 참고한다. 볼륨을 생성할 때에는 **cubrid addvoldb** 유틸리티를 이용하여 용도별로 볼륨을 추가하는 것을 권장하며, 이에 대한 자세한 정보는 :ref:`adding-database-volume` 를 참고한다.
+볼륨에 대한 자세한 내용은 :ref:`database-volume-structure` 를, 볼륨 생성에 대한 자세한 내용은 :ref:`creating-database` 를 참고한다. **cubrid addvoldb** 유틸리티를 사용해 용도에 따라 볼륨을 분류해 추가하도록 권장한다. 자세한 내용은 :ref:`adding-database-volume` 을 참고한다.
 
 데이터베이스 시작
 -----------------

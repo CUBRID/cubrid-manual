@@ -1,3 +1,7 @@
+
+:meta-keywords: cubrid introduction, cubrid glossary, cubrid manual conventions, cubrid versions
+:meta-description: The contents of the CUBRID Database Management System (CUBRID DBMS) product manual, Glossary, Manual Conventions, Version Name and Version String Conventions.
+
 ===========
 매뉴얼 소개
 ===========
@@ -15,11 +19,11 @@ CUBRID 데이터베이스 관리 시스템(Database Management System, DBMS) 매
 
 *   :doc:`sql/index`: 데이터 타입, 함수와 연산자, 데이터 조회나 테이블 조작 등, CUBRID에서 사용할 수 있는 SQL 구문에 대해 설명한다. 인덱스나 트리거, 분할, 시리얼 및 사용자 정보 변경 등의 작업을 위한 SQL 구문도 찾아볼 수 있다.
 
-*   :doc:`admin/index`: 데이터베이스 생성 및 삭제, 백업 및 복구, 마이그레이션, 다국어 설정, CUBRID HA, CUBRID SHARD 등을 수행하는 방법을 설명한다. CUBRID 서버, 브로커 및 매니저 서버 등의 구동과 정지 등을 수행하는 **cubrid** 유틸리티의 사용법도 포함되어 있다. 또한, 성능에 영향을 미칠 수 있는 시스템 파라미터의 설정 방법을 설명한다. 서버, 브로커 각각의 설정 파일 사용법과 개별 파라미터의 의미를 설명한다.
+*   :doc:`admin/index`: 데이터베이스를 생성, 삭제, 백업, 복구 및 마이그레이션하는 방법, 다국어(globalization)를 설정하는 방법 및 CUBRID HA를 수행하는 방법에 대해 설명한다. 또한 서버, 브로커 및 CUBRID Manager 서버 등을 구동하고 종료시키는 **cubrid** 유틸리티의 사용법에 대한 설명도 포함한다. 또한 이 장에서는 성능에 영향을 미칠 수 있는 시스템 파라미터를 설정하는 방법도 설명한다. 서버와 브로커에서 사용하는 설정 파일과 각 파라미터에 대해서도 설명한다.
 
 *   :doc:`api/index`: JDBC API, ODBC API, OLE DB API, PHP API 및 CCI API에 대해 설명한다.
 
-*   :doc:`release_note/index`: 예전 버전 대비 추가, 변경, 개선 및 버그 수정 등을 설명한다.
+*   :doc:`release_note/index`: 이전 버전 대비 추가, 변경, 개선 및 버그 수정 등을 설명한다.
 
 용어 정리
 ---------
@@ -101,21 +105,33 @@ CUBRID는 상속의 개념을 사용하는 객체 관계형 데이터베이스 �
 |                    |                                                         |                      |
 +--------------------+---------------------------------------------------------+----------------------+
 
-버전 명 및 버전 스트링 규약
----------------------------
+버전명 및 버전 문자열 규약
+--------------------------
 
-CUBRID 9.0 이상 버전의 버전 명 및 버전 스트링은 다음과 같이 표기한다.
+CUBRID 10.1 이후의 버전명 및 버전 문자열은 다음과 같이 표기한다. :
 
-*   버전 명: CUBRID x.x Patch x (major 버전, minor 버전, patch 버전을 표기)
-    예: CUBRID 9.2 Patch 1
+*  버전명: CUBRID M.m Patch p (Major 버전, Minor 버전, Patch 버전(필요한 경우) 표기)
+   CUBRID 10.1 Patch 1 (줄여서 CUBRID 10.1 P1로 표기)
 
-*   버전 스트링: x.x.x.x (major 버전, minor 버전, patch 버전, build 번호를 표기)
-    예: 9.2.1.0012
+*  버전 문자열: M.m.p.build_number (Major 버전, Minor 버전, Patch 버전, 빌드 번호 표기)
+   10.1.0.7595-d652d64
 
-CUBRID 9.0 미만 버전의 버전 명과 버전 스트링은 다음과 같이 표기한다.
+   빌드 번호는 하이픈으로 구분되는 두 부분으로 구성된다. 앞 부분은 기본 리비전에서 변경된 횟수를 나타내며 일정하게 증가한다. 뒤 부분은 빌드된 버전의 SHA-1 해시 값이다.
 
-*   버전 명: CUBRID 2008 Rx.x Patch x (major 버전은 2008, minor 버전, patch 버전, build 번호 일부를 표기)
-    예: CUBRID 2008 R4.1 Patch 1
+CUBRID 9.0 이후 10.0 이전의 버전명 및 버전 문자열은 다음과 같이 표기한다. :
 
-*   버전 스트링: 8.x.x.x (major 버전, minor 버전, patch 버전, build 번호를 표기)
-    예: 8.4.1.1001
+*  버전명: CUBRID M.m Patch p (Major 버전, Minor 버전, Patch 버전(필요한 경우) 표기)
+   CUBRID 9.2 Patch 1 (줄여서 CUBRID 9.2 P1로 표기)
+
+*  버전 문자열: M.m.p.build_number (Major 버전, Minor 버전, Patch 버전, 빌드 번호 표기)
+   9.2.1.0012
+
+CUBRID 9.0 이전의 버전명 및 버전 문자열은 다음과 같이 표기한다. :
+
+*  버전명: CUBRID 2008 RM.m Patch p (Major 버전은 2008, Minor 버전, Patch 버전, 빌드 번호 일부 표기)
+   CUBRID 2008 R4.1 Patch 1
+
+*  버전 문자열: 8.m.p.build_number (Major 버전, Minor 버전, Patch 버전, 빌드 번호 표기)
+   8.4.1.1001
+
+

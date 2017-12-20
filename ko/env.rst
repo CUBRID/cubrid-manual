@@ -1,3 +1,7 @@
+
+:meta-keywords: configure cubrid, cubrid port, cubrid language, cubrid environment, cubrid settings
+:meta-description: The following environment variables need to be set in order to use the CUBRID. The necessary environment variables are automatically set when the CUBRID system is installed or can be changed, as needed, by the user.
+
 환경 변수 설정
 ==============
 
@@ -14,8 +18,8 @@ CUBRID 환경 변수
 
 .. note:: 
 
-    *  CUBRID 매니저 또는 Web Manager 사용자는 DB 서버 노드의 **CUBRID_MSG_LANG** 환경 변수를 en_US로 설정해야만 데이터베이스 관련 작업  이후 출력되는 메시지를 정상적으로 확인할 수 있다. 하지만, **CUBRID_MSG_LANG** 환경 변수가 en_US가 아닌 경우 메시지만 비정상적으로 출력될 뿐 작업은 정상적으로 실행된다.
-    *  변경한 **CUBRID_MSG_LANG**\ 을  적용하려면 DB 서버 노드의 CUBRID 시스템이 반드시 재시작(cubrid service stop; cubrid service start)되어야 한다.
+    *  CUBRID Manager 사용자는 DB 서버 노드의 **CUBRID_MSG_LANG** 환경 변수를 **en_US** 로 설정해야만 데이터베이스 관련 작업 이후 출력되는 메시지를 정상적으로 확인할 수 있다.  **CUBRID_MSG_LANG** 환경 변수가 **en_US** 가 아닌 경우 메시지는 비정상적으로 출력되지만 데이터베이스의 작업은 정상적으로 실행된다.
+    *  변경한 **CUBRID_MSG_LANG** 을  적용하려면 DB 서버 노드의 CUBRID 시스템이 반드시 재시작(cubrid service stop; cubrid service start)되어야 한다.
 
 *   **CUBRID_TMP**: Linux용 CUBRID에서 cub_master 프로세스와 cub_broker 프로세스의 유닉스 도메인 소켓 파일을 저장하는 위치를 지정하는 환경 변수로, 지정하지 않으면 cub_master 프로세스는 **/tmp** 디렉터리에, cub_broker 프로세스는 **$CUBRID/var/CUBRID_SOCK** 디렉터리에 유닉스 도메인 소켓 파일을 저장한다(Windows용 CUBRID에서는 사용되지 않는다).
 
@@ -39,10 +43,10 @@ CUBRID 환경 변수
 
         The $CUBRID_TMP should be an absolute path. (./var)
 
-**CUBRID_TMP**\ 는 CUBRID가 사용하는 유닉스 도메인 소켓의 기본 경로에서 발생할 수 있는 다음 문제를 회피하기 위해 사용할 수 있다.
+**CUBRID_TMP** 는 CUBRID가 사용하는 유닉스 도메인 소켓의 기본 경로에서 발생할 수 있는 다음 문제를 회피하기 위해 사용할 수 있다.
 
-*   **/tmp**\ 는 주로 Linux에서 임시 파일을 저장하는 공간으로, 시스템 관리자가 이 공간을 주기적으로 임의 삭제하는 경우 유닉스 도메인 소켓까지 삭제될 수 있다. 이러한 경우 **$CUBRID_TMP**\ 를 **/tmp** 가 아닌 다른 경로로 설정한다.
-*   유닉스 도메인 소켓 파일의 경로 최대 길이는 108인데, CUBRID의 설치 경로가 길어서 cub_broker용 유닉스 도메인 소켓 파일을 저장하는 **$CUBRID/var/CUBRID_SOCK** 경로의 길이가 108을 넘는 경우 브로커를 구동할 수 없다. 따라서 **$CUBRID_TMP**\ 를 108이 넘지 않는 경로로 설정해야 한다.
+*   **/tmp** 는 주로 Linux에서 임시 파일을 저장하는 공간으로, 시스템 관리자가 이 공간을 주기적으로 임의 삭제하는 경우 유닉스 도메인 소켓까지 삭제될 수 있다. 이러한 경우 **$CUBRID_TMP** 를 **/tmp** 가 아닌 다른 경로로 설정한다.
+*   유닉스 도메인 소켓 파일의 경로 최대 길이는 108인데, CUBRID의 설치 경로가 길어서 cub_broker용 유닉스 도메인 소켓 파일을 저장하는 **$CUBRID/var/CUBRID_SOCK** 경로의 길이가 108을 넘는 경우 브로커를 구동할 수 없다. 따라서 **$CUBRID_TMP** 를 108이 넘지 않는 경로로 설정해야 한다.
 
 이들 환경변수는 CUBRID를 설치하면서 이미 설정되었으나, 설정을 확인하기 위해서는 다음 명령을 사용할 수 있다.
 
@@ -64,13 +68,13 @@ CUBRID 환경 변수
 OS 환경 변수 및 Java 환경 변수
 ------------------------------
 
-*   **PATH**: Linux 환경에서 PATH 환경 변수에는 CUBRID 시스템의 실행 파일이 있는 디렉터리인 $CUBRID/bin이 포함되어 있어야 한다.
+*   PATH: Linux 환경에서 PATH 환경 변수에는 CUBRID 시스템의 실행 파일이 있는 디렉터리인 **$CUBRID/bin** 이 포함되어 있어야 한다.
 
-*   **LD_LIBRARY_PATH**: Linux 환경에서는 LD_LIBRARY_PATH (혹은 SHLIB_PATH나 LIBPATH) 환경 변수에 CUBRID 시스템의 동적 라이브러리 파일(libjvm.so)이 있는 디렉터리인 $CUBRID/lib이 포함되어 있어야 한다.
+*   LD_LIBRARY_PATH: Linux 환경에서는 **LD_LIBRARY_PATH** (혹은 **SHLIB_PATH** 나 **LIBPATH**) 환경 변수에 CUBRID 시스템의 동적 라이브러리 파일(libjvm.so)이 있는 디렉터리인 **$CUBRID/lib** 이 포함되어 있어야 한다.
 
-*   **Path** : Windows 환경에서 Path 환경 변수에는 CUBRID 시스템의 실행 파일이 있는 디렉터리인 %CUBRID%\\bin이 포함되어 있어야 한다.
+*   Path: Windows 환경에서 Path 환경 변수에는 CUBRID 시스템의 실행 파일이 있는 디렉터리인 **%CUBRID%\\bin** 이 포함되어 있어야 한다.
 
-*   **JAVA_HOME**: CUBRID 시스템에서 자바 저장 프로시저 기능을 사용하기 위해서는 Java Runtime Environment (JRE) 1.6 이상 버전이 설치되어야 하고 JAVA_HOME 환경 변수에 해당 디렉터리가 지정되어야 한다. :ref:`jsp-environment-configuration` 을 참고한다.
+*   JAVA_HOME: CUBRID 시스템에서 자바 저장 프로시저 기능을 사용하기 위해서는 Java Runtime Environment (JRE) 1.6 이상 버전이 설치되어야 하고 **JAVA_HOME** 환경 변수에 해당 디렉터리가 지정되어야 한다. :ref:`jsp-environment-configuration` 을 참고한다.
 
 환경 변수 설정
 --------------
@@ -200,14 +204,8 @@ Windows에서 특정 포트를 지정하기 번거로운 경우에도 이 방법
 |               | 장비(**)     | copylogdb,    |                |                                                     |                          |              |
 |               |              | applylogdb    |                |                                                     |                          |              |
 +---------------+--------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-| SHARD 사용    | cub_broker   | application   | BROKER_PORT    | 미지원                                              | 개방                     | 일회성 연결  |
-|               +--------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-|               | cub_proxy    | application   | BROKER_PORT    | 미지원                                              | 개방                     | 연결 유지    |
-+---------------+--------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-| Manager 사용  | Manager 서버 | application   | 8001           | 8001                                                | 개방                     |              |
-+---------------+--------------+               |                |                                                     |                          |              |
-| Web Manager   | Web Manager  |               |                |                                                     |                          |              |
-| 사용          | 서버         |               |                |                                                     |                          |              |
+| Manager 사용  | Manager      | application   | 8001           | 8001                                                | 개방                     |              |
+|               | 서버         |               |                |                                                     |                          |              |
 +---------------+--------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
 
 (*): CAS, CSQL, copylogdb, 또는 applylogdb 프로세스가 존재하는 장비
@@ -364,58 +362,19 @@ master 노드에서 slave 노드로의 복제 과정 파악이 용이하게 하�
 #.  copylogdb(slave)는 slave 노드에 있는 cubrid.conf의 cubrid_port_id에 설정된 포트를 통해 cub_master(master)에게 master DB로의 연결을 요청하여, 최종적으로 cub_server(master)와 연결하게 된다.
 #.  applylogdb(slave)는 slave 노드에 있는 cubrid.conf의 cubrid_port_id에 설정된 포트를 통해 cub_master(slave)에게 slave DB로의 연결을 요청하여, 최종적으로 cub_server(slave)와 연결하게 된다.
 
-master 노드에서도 applylogdb와 copylogdb가 동작하는데, master 노드가 절체로 인해 slave 노드로 변경될 때를 대비하기 위함이다.
-
-.. _cubrid-shard-ports:
-
-CUBRID SHARD 사용 포트
-----------------------
-
-CUBRID SHARD는 Linux 환경에서만 지원한다.
-
-접속 요청을 기다리는(listening) 프로세스들을 기준으로 각 OS 별로 필요한 포트를 정리하면 다음과 같으며, 각 포트는 listener 쪽에서 개방되어야 한다.
-
-+---------------+--------------+----------------+--------------------------+--------------+
-| listener      | requester    | Linux port     | 방화벽 포트 설정         | 설명         |
-+===============+==============+================+==========================+==============+
-| cub_broker    | application  | BROKER_PORT    | 개방(open)               | 일회성 연결  |
-+---------------+--------------+----------------+--------------------------+--------------+
-| cub_proxy     | application  | BROKER_PORT    | 개방                     | 연결 유지    |
-+---------------+--------------+----------------+--------------------------+--------------+
-
-다음은 CUBRID SHARD 구성에서 application과 CUBRID SHARD 사이의 연결 과정에 대해 나열한 것이다. CAS와 cub_proxy는 CUBRID SHARD를 구동(cubrid broker start)하는 시점에 이미 연결된 상태이다.
-
-#.  application이 cubrid_broker.conf에 설정된 BROKER_PORT를 통해 cub_broker에 연결을 시도한다.
-    
-#.  cub_broker는 연결 가능한 cub_proxy를 선택한다. 
-    
-#.  application과 cub_proxy가 연결된다. cub_proxy의 개수는 cubrid_broker.conf의 SHARD_NUM_PROXY에 의해 설정된다.
-
-    Linux에서는 application이 유닉스 도메인 소켓을 통해 cub_proxy와 연결된다. Windows에서는 유닉스 도메인 소켓을 사용할 수 없으므로 각 cub_proxy마다 cubrid_broker.conf에 설정된 BROKER_PORT와 SHARD_NUM_PROXY를 가지고 계산된 포트를 통해 연결된다.
-    
-    예를 들어 Linux에서 BROKER_PORT가 45000이고 SHARD_NUM_PROXY가 3일 때 사용하는 포트는 45000 하나면 된다.
-    
-    *   application이 cub_proxy(1)과 접속하는 포트: 45000, CAS가 cub_proxy(1)과 접속하는 포트 : 없음
-    *   application이 cub_proxy(2)와 접속하는 포트: 45000, CAS가 cub_proxy(2)와 접속하는 포트 : 없음
-    *   application이 cub_proxy(3)과 접속하는 포트: 45000, CAS가 cub_proxy(3)와 접속하는 포트 : 없음
-
-#. CAS와 cub_proxy는 CUBRID SHARD를 구동(cubrid broker start)하는 시점에 이미 연결된 상태이다. 또한, 각 프로세스는 항상 한 장비 내에 존재하므로 원격 접속이 불필요하다.
-
-   CAS가 cub_proxy로 연결할 때 Linux에서는 유닉스 도메인 소켓을 사용한다. cub_proxy 하나 당 여러 개의 CAS가 연결될 수 있다. CAS의 최소, 최대 개수는 cubrid_broker.conf의 MIN_NUM_APPL_SERVER, MAX_NUM_APPL_SERVER에 의해 설정된다. cub_proxy 하나가 동시에 연결 가능한 CAS의 최대 개수는 cubrid_broker.conf의 SHARD_MAX_CLIENTS에 의해 설정된다.
+master 노드에서도 applylogdb와 copylogdb가 동작하는데, master 노드가 절체(failover)로 인해 slave 노드로 변경될 때를 대비하기 위함이다.
 
 .. _cwm-cm-ports:
 
-CUBRID 웹 매니저, CUBRID 매니저 서버 사용 포트
-----------------------------------------------
+CUBRID 매니저 서버 사용 포트
+----------------------------
 
-접속 요청을 기다리는(listening) 프로세스들을 기준으로 CUBRID 웹 매니저, CUBRID 매니저 서버가 사용하는 포트는 다음과 같으며, 이들은 OS의 종류와 관계없이 동일하다.
+다음 표는 접속 요청을 기다리는(listening) 프로세스들을 기준으로 CUBRID Manager 서버가 사용하는 포트이며, 이것은 OS의 종류와 상관없이 동일하다.
 
 +--------------------------+--------------+----------------+--------------------------+
 | listener                 | requester    | port           | 방화벽 존재 시 포트 설정 |
 +==========================+==============+================+==========================+
-| Manager server,          | application  | 8001           | 개방(open)               |
-| Web Manager server       |              |                |                          |
+| Manager server           | application  | 8001           | 개방(open)               |
 +--------------------------+--------------+----------------+--------------------------+
 
 *   CUBRID 매니저 클라이언트가 CUBRID 매니저 서버 프로세스에 접속할 때 사용하는 포트는 cm.conf의 **cm_port**\이며 기본값은 8001이다.
-*   CUBRID 웹 매니저 클라이언트가 CUBRID 웹 매니저 서버 프로세스에 접속할 때 사용하는 포트도 cm.conf의 **cm_port**\이다.

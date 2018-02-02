@@ -9,7 +9,7 @@
 Release Notes Information
 =========================
 
-This document includes information on CUBRID 10.1(Build Number: 10.1.0.7663-1ca0ab8).
+This document includes information on CUBRID 10.1 Patch 1(Build Number: 10.1.1.7691-47d2437).
 
 CUBRID 10.1 includes all of the fixed errors and improved features that were detected in the CUBRID 10.0 and were applied to the previous versions.
 
@@ -21,6 +21,7 @@ Overview
 ========
 
 CUBRID 10.1 is a significant upgrade and stable version of CUBRID 10.0. 
+CUBRID 10.1 Patch 1 fixes many critical bugs of 10.1. All users of CUBRID 10.1 should upgrade to 10.1 Patch 1.
 
 .. TODO: UPDATE WITH DETAILS.
 
@@ -54,6 +55,14 @@ Driver Compatibility
 We strongly recommend to also upgrade your drivers to use CUBRID 10.1. Some new features, especially for TIMEZONE data types are only supported with 10.0 and higher drivers. 
 
 For more details on changes, see the :ref:`10_1_changes`. Users of previous versions should check the :ref:`10_1_changes` and :ref:`10_1_new_cautions` sections.
+
+.. _10_1_p1_changes:
+
+10.1 Patch 1 Changes 
+====================
+
+.. include:: changes_10_1_patch.rst 
+
 
 .. _10_1_changes:
 

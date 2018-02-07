@@ -21,7 +21,8 @@ Overview
 ========
 
 CUBRID 10.1 is a significant upgrade and stable version of CUBRID 10.0. 
-CUBRID 10.1 Patch 1 fixes many critical bugs of 10.1. All users of CUBRID 10.1 should upgrade to 10.1 Patch 1.
+
+CUBRID 10.1 Patch 1 includes many critical fixes of 10.1. All users of CUBRID 10.1 are kindly requested to upgrade to 10.1 Patch 1.
 
 .. TODO: UPDATE WITH DETAILS.
 

@@ -1,0 +1,156 @@
+:meta-keywords: cubrid json
+
+:tocdepth: 3
+
+*********************************
+JSON functions and operators
+*********************************
+
+.. contents::
+
+JSON_ARRAY
+===================================
+
+.. function:: JSON_ARRAY (val1.., valn)
+
+  The **JSON_ARRAY** function creates a json array containing the given val arguments.
+
+.. code-block:: sql
+
+    SELECT JSON_ARRAY(1, '1', json '{"a":4}', json '[1,2,3]');
+::
+
+      json_array(1, '1', json '{"a":4}', json '[1,2,3]')
+    ======================
+      [1,"1",{"a":4},[1,2,3]]
+
+JSON_OBJECT
+===================================
+
+.. function:: JSON_ARRAY (string1 key1, val1 val1.., stringn keyn, valn valn)
+
+  The **JSON_OBJECT** function creates a json object containing the given key value pairs given as arguments.
+
+.. code-block:: sql
+
+    SELECT JSON_OBJECT('a', 1, 'b', '1', 'c', json '{"a":4}', 'd', json '[1,2,3]');
+::
+
+      json_object('a', 1, 'b', '1', 'c', json '{"a":4}', 'd', json '[1,2,3]')
+    ======================
+      {"a":1,"b":"1","c":{"a":4},"d":[1,2,3]}
+
+JSON_DEPTH
+===================================
+
+.. function:: JSON_DEPTH (json_doc)
+
+  The **JSON_DEPTH** function returns the maximum depth of the json. Any json element of an array or of an object increseases depth by one. Depth count starts at 1. Returns NULL if argument is NULL.
+
+.. code-block:: sql
+
+    SELECT JSON_DEPTH('[{"a":4}, 2]');
+::
+
+      json_depth('[{"a":4}, 2]')
+    ======================
+      3
+
+JSON_LENGTH
+===================================
+
+.. function:: JSON_LENGTH (json_doc, [json path])
+
+  The **JSON_LENGTH** function returns the length of the json element at the given path. If no path argument is given, the returned value is the length of the root json element. Returns NULL if any argument is NULL.
+
+.. code-block:: sql
+
+    SELECT JSON_LENGTH('[{"a":4}, 2]');
+::
+
+      json_length('[{"a":4}, 2]')
+    ======================
+      2
+
+JSON_VALID
+===================================
+
+.. function:: JSON_VALID (val)
+
+  The **JSON_VALID** function returns 1 if the given val argument is a json or would be castable to json, 0 otherwise. Returns NULL if argument is NULL.
+
+.. code-block:: sql
+
+    SELECT JSON_VALID('[{"a":4}, 2]');
+    1
+    SELECT JSON_VALID('{"222":');
+    0
+::
+
+JSON_TYPE
+===================================
+
+.. function:: JSON_TYPE (json_val)
+
+  The **JSON_TYPE** function returns the type of the json_val argument as a string.
+
+.. code-block:: sql
+
+    SELECT JSON_TYPE ('[{"a":4}, 2]');
+    'JSON_ARRAY'
+    SELECT JSON_TYPE ('{"a":4}');
+    'JSON_OBJECT'
+    SELECT JSON_TYPE ('"aaa"');
+    'STRING'
+::
+
+JSON_QUOTE
+===================================
+
+.. function:: JSON_QUOTE (str)
+
+  Escapes quotes and special characters and surrounds the resulting string in quotes. Returns result as a json_string.
+
+.. code-block:: sql
+
+    SELECT JSON_QUOTE ('simple');
+::
+
+      json_unquote('simple')
+    ======================
+      '"simple"'
+
+.. code-block:: sql
+
+    SELECT JSON_QUOTE ('"');
+::
+
+      json_unquote('"')
+    ======================
+      '"\""'
+
+JSON_UNQUOTE
+===================================
+
+.. function:: JSON_UNQUOTE (json_val)
+
+  Unquotes a json_value's json string and returns the resulting string.
+  //TODO: NO_BACKSLASH_ESCAPES, escape explainations 
+
+.. code-block:: sql
+
+    SELECT JSON_UNQUOTE ('"\\u0032"');
+::
+
+      json_unquote('"\u0032"')
+    ======================
+      '2'
+
+.. code-block:: sql
+
+    SELECT JSON_UNQUOTE ('"\\""');
+::
+
+      json_unquote('"\""')
+    ======================
+      '"'

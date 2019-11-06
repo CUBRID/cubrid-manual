@@ -106,9 +106,8 @@ The following is an example of files related to the database when *testdb* datab
 +----------------+-------+-----------------+                +------------------------------------------------------------------------------------------------------+
 | testdb_lgat    | 512MB | | active        |                | | Active log file                                                                                    |
 +----------------+-------+-----------------+----------------+------------------------------------------------------------------------------------------------------+
-| testdb_dwb     |  1MB  | | double write  | | Data         | | Automatically created when database requires more space.                                           |
+| testdb_dwb     |  1MB  | | double write  | | Data         | Double write buffer storage file, where flushed pages are written first.                             |
 |                |       | | buffer        | | Recovery     | | This volume stores permanent data (system, heap and index files).                                  |
-|                |       |                 |                | | The size of volume is not maximized (yet).                                                         |
 +----------------+-------+-----------------+----------------+------------------------------------------------------------------------------------------------------+
 
 *   Database volume file

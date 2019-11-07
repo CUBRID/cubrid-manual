@@ -64,8 +64,10 @@ JSON_KEYS
 
 .. function:: JSON_KEYS (json_doc [ , json path])
 
-  The **JSON _KEYS** function returns a json array of all the object keys of the json object at the given path. Json null is returned if the path addresses a json element that is not a json object.
-  If no argument is given, the keys are gathered from the root path ('$'). Returns NULL if json_doc argument is NULL.
+  The **JSON_KEYS** function returns a json array of all the object keys of the json object at the given path.
+  Json null is returned if the path addresses a json element that is not a json object.
+  If json path argument is missing, the keys are gathered from json root element.
+  An error occurs if json path does not exist. Returns NULL if json_doc argument is NULL.
 
 .. code-block:: sql
 
@@ -99,7 +101,9 @@ JSON_DEPTH
 
 .. function:: JSON_DEPTH (json_doc)
 
-  The **JSON_DEPTH** function returns the maximum depth of the json. Depth count starts at 1. The depth level is increased by one by non-empty json arrays or by non-empty json objects. Returns NULL if argument is NULL.
+  The **JSON_DEPTH** function returns the maximum depth of the json.
+  Depth count starts at 1. The depth level is increased by one by non-empty json arrays or by non-empty json objects.
+  Returns NULL if argument is NULL.
 
 .. code-block:: sql
 
@@ -135,7 +139,9 @@ JSON_LENGTH
 
 .. function:: JSON_LENGTH (json_doc [, json path])
 
-  The **JSON_LENGTH** function returns the length of the json element at the given path. If no path argument is given, the returned value is the length of the root json element. Returns NULL if any argument is NULL or if no element exists at the given path.
+  The **JSON_LENGTH** function returns the length of the json element at the given path.
+  If no path argument is given, the returned value is the length of the root json element.
+  Returns NULL if any argument is NULL or if no element exists at the given path.
 
 .. code-block:: sql
 
@@ -178,7 +184,8 @@ JSON_VALID
 
 .. function:: JSON_VALID (val)
 
-  The **JSON_VALID** function returns 1 if the given val argument is a valid json_doc, 0 otherwise. Returns NULL if argument is NULL.
+  The **JSON_VALID** function returns 1 if the given val argument is a valid json_doc, 0 otherwise.
+  Returns NULL if argument is NULL.
 
 .. code-block:: sql
 
@@ -209,6 +216,7 @@ JSON_QUOTE
 .. function:: JSON_QUOTE (str)
 
   Escapes quotes and special characters and surrounds the resulting string in quotes. Returns result as a json_string.
+  Returns NULL if str argument is NULL.
 
 .. code-block:: sql
 
@@ -234,6 +242,7 @@ JSON_UNQUOTE
 .. function:: JSON_UNQUOTE (json_doc)
 
   Unquotes a json_value's json string and returns the resulting string.
+  Returns NULL if json_doc argument is NULL.
   //TODO: NO_BACKSLASH_ESCAPES, escape explainations 
 
 .. code-block:: sql
@@ -259,7 +268,8 @@ JSON_PRETTY
 
 .. function:: JSON_PRETTY (json_doc)
 
-  Returns a string containing the json_doc pretty-printed. Returns NULL if json_doc argument is NULL.
+  Returns a string containing the json_doc pretty-printed.
+  Returns NULL if json_doc argument is NULL.
 
 .. code-block:: sql
 

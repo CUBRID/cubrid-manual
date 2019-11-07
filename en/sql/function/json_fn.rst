@@ -59,6 +59,41 @@ JSON_OBJECT
     ======================
       {"a":1,"b":"1","c":{"a":4},"d":[1,2,3]}
 
+JSON_KEYS
+===================================
+
+.. function:: JSON_KEYS (json_doc [ , json path])
+
+  The **JSON _KEYS** function returns a json array of all the object keys of the json object at the given path. Json null is returned if the path addresses a json element that is not a json object.
+  If no argument is given, the keys are gathered from the root path ('$'). Returns NULL if json_doc argument is NULL.
+
+.. code-block:: sql
+
+    SELECT JSON_KEYS('{}');
+::
+
+      json_keys('{}')
+    ======================
+      []
+
+.. code-block:: sql
+
+    SELECT JSON_KEYS('"non-object"');
+::
+
+      json_keys('"non-object"')
+    ======================
+      null
+
+.. code-block:: sql
+
+    SELECT JSON_KEYS('{"a":1, "b":2, "c":{"d":1}}');
+::
+
+      json_keys('{"a":1, "b":2, "c":{"d":1}}')
+    ======================
+      ["a","b","c"]
+
 JSON_DEPTH
 ===================================
 
@@ -196,7 +231,7 @@ JSON_QUOTE
 JSON_UNQUOTE
 ===================================
 
-.. function:: JSON_UNQUOTE (json_val)
+.. function:: JSON_UNQUOTE (json_doc)
 
   Unquotes a json_value's json string and returns the resulting string.
   //TODO: NO_BACKSLASH_ESCAPES, escape explainations 

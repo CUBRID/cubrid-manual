@@ -149,7 +149,7 @@ JSON_VALID
 
     SELECT JSON_VALID('[{"a":4}, 2]');
     1
-    SELECT JSON_VALID('{"222":');
+    SELECT JSON_VALID('{"wrong json object":');
     0
 
 JSON_TYPE

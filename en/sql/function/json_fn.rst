@@ -253,3 +253,33 @@ JSON_UNQUOTE
       json_unquote('"\""')
     ======================
       '"'
+
+JSON_PRETTY
+===================================
+
+.. function:: JSON_PRETTY (json_doc)
+
+  Returns a string containing the json_doc pretty-printed. Returns NULL if json_doc argument is NULL.
+
+.. code-block:: sql
+
+    SELECT JSON_PRETTY('[{"a":"val1", "b":"val2", "c": [1, "elem2", 3, 4, {"key":"val"}]}]');
+::
+
+      json_pretty('[{"a":"val1", "b":"val2", "c": [1, "elem2", 3, 4, {"key":"val"}]}]')
+    ======================
+      '[
+      {
+        "a": "val1",
+        "b": "val2",
+        "c": [
+          1,
+          "elem2",
+          3,
+          4,
+          {
+            "key": "val"
+          }
+        ]
+      }
+    ]'

@@ -2079,7 +2079,7 @@ JSON_ARRAYAGG
 JSON_OBJECTAGG
 ===================================
 
-.. function:: JSON_OBJECTYAGG (key_str, json_val expr)
+.. function:: JSON_OBJECTYAGG (key, json_val expr)
 
   Creates a json object out of the (key, json_val) expressions gathered from each row evaluation.
 

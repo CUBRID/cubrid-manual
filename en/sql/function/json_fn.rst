@@ -12,7 +12,7 @@ JSON functions
 JSON_ARRAY
 ===================================
 
-.. function:: JSON_ARRAY ([val1 [, val2] ...])
+.. function:: JSON_ARRAY ([val1 [ , val2] ...])
 
   The **JSON_ARRAY** function returns a json array containing the given list (possibly empty) of values.
 
@@ -37,7 +37,7 @@ JSON_ARRAY
 JSON_OBJECT
 ===================================
 
-.. function:: JSON_OBJECT ([key1, val1[ , key2, val2] ...])
+.. function:: JSON_OBJECT ([key1, val1 [ , key2, val2] ...])
 
   The **JSON_OBJECT** function returns a json object containing the given list (possibly empty) of key-value pairs.
 
@@ -137,7 +137,7 @@ JSON_DEPTH
 JSON_LENGTH
 ===================================
 
-.. function:: JSON_LENGTH (json_doc [, json path])
+.. function:: JSON_LENGTH (json_doc [ , json path])
 
   The **JSON_LENGTH** function returns the length of the json element at the given path.
   If no path argument is given, the returned value is the length of the root json element.

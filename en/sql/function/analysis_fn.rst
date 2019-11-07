@@ -2051,9 +2051,9 @@ The following example shows how to output the score and sample variance of all s
 JSON_ARRAYAGG
 ===================================
 
-.. function:: JSON_ARRAYAGG (json_val expr)
+.. function:: JSON_ARRAYAGG (json_val)
 
-  Aggregate function that builds a json array out of the evaluated rows. Raises an error if a
+  Aggregate function that builds a json array out of the evaluated rows.
 
 .. code-block:: sql
 
@@ -2081,7 +2081,7 @@ JSON_OBJECTAGG
 
 .. function:: JSON_OBJECTYAGG (key_str, json_val expr)
 
-  Creates a json object out of the (key_str, json_val) expressions gathered from each row evaluation.
+  Creates a json object out of the (key, json_val) expressions gathered from each row evaluation.
 
 .. code-block:: sql
 

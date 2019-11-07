@@ -1,9 +1,10 @@
-:meta-keywords: cubrid json
+:meta-keywords: cubrid json, json functions
+:meta-description: CUBRID functions that create, query and modify JSON data.
 
 :tocdepth: 3
 
 *********************************
-JSON functions and operators
+JSON functions
 *********************************
 
 .. contents::
@@ -11,9 +12,18 @@ JSON functions and operators
 JSON_ARRAY
 ===================================
 
-.. function:: JSON_ARRAY (val1.., valn)
+.. function:: JSON_ARRAY ([val1 [, val2] ...])
 
-  The **JSON_ARRAY** function creates a json array containing the given val arguments.
+  The **JSON_ARRAY** function returns a json array containing the given list (possibly empty) of values.
+
+.. code-block:: sql
+
+    SELECT JSON_ARRAY();
+::
+
+      json_array()
+    ======================
+      []
 
 .. code-block:: sql
 
@@ -27,9 +37,18 @@ JSON_ARRAY
 JSON_OBJECT
 ===================================
 
-.. function:: JSON_ARRAY (string1 key1, val1 val1.., stringn keyn, valn valn)
+.. function:: JSON_OBJECT ([key1, val1[ , key2, val2] ...])
 
-  The **JSON_OBJECT** function creates a json object containing the given key value pairs given as arguments.
+  The **JSON_OBJECT** function returns a json object containing the given list (possibly empty) of key-value pairs.
+
+.. code-block:: sql
+
+    SELECT JSON_OBJECT();
+::
+
+      json_object()
+    ======================
+      {}
 
 .. code-block:: sql
 
@@ -45,7 +64,16 @@ JSON_DEPTH
 
 .. function:: JSON_DEPTH (json_doc)
 
-  The **JSON_DEPTH** function returns the maximum depth of the json. Any json element of an array or of an object increseases depth by one. Depth count starts at 1. Returns NULL if argument is NULL.
+  The **JSON_DEPTH** function returns the maximum depth of the json. Depth count starts at 1. The depth level is increased by one by non-empty json arrays or by non-empty json objects. Returns NULL if argument is NULL.
+
+.. code-block:: sql
+
+    SELECT JSON_DEPTH('"scalar"');
+::
+
+      json_depth('"scalar"')
+    ======================
+      1
 
 .. code-block:: sql
 
@@ -56,19 +84,57 @@ JSON_DEPTH
     ======================
       3
 
-JSON_LENGTH
-===================================
-
-.. function:: JSON_LENGTH (json_doc, [json path])
-
-  The **JSON_LENGTH** function returns the length of the json element at the given path. If no path argument is given, the returned value is the length of the root json element. Returns NULL if any argument is NULL.
+  Example of a deeper json:
 
 .. code-block:: sql
 
-    SELECT JSON_LENGTH('[{"a":4}, 2]');
+    SELECT JSON_DEPTH('[{"a":[1,2,3,{"k":[4,5]}]},2,3,4,5,6,7]');
 ::
 
-      json_length('[{"a":4}, 2]')
+      json_depth('[{"a":[1,2,3,{"k":[4,5]}]},2,3,4,5,6,7]')
+    ======================
+      6
+
+JSON_LENGTH
+===================================
+
+.. function:: JSON_LENGTH (json_doc [, json path])
+
+  The **JSON_LENGTH** function returns the length of the json element at the given path. If no path argument is given, the returned value is the length of the root json element. Returns NULL if any argument is NULL or if no element exists at the given path.
+
+.. code-block:: sql
+
+    SELECT JSON_LENGTH('"scalar"');
+::
+
+      json_length('"scalar"')
+    ======================
+      1
+
+.. code-block:: sql
+
+    SELECT JSON_LENGTH('[{"a":4}, 2]', '$.a');
+::
+
+      json_length('[{"a":4}, 2]', '$.a')
+    ======================
+      NULL
+
+.. code-block:: sql
+
+    SELECT JSON_LENGTH('[2, {"a":4, "b":4, "c":4}]', '$[1]');
+::
+
+      json_length('[2, {"a":4, "b":4, "c":4}]', '$[1]')
+    ======================
+      3
+
+.. code-block:: sql
+
+    SELECT JSON_LENGTH('[{"a":[1,2,3,{"k":[4,5,6,7,8]}]},2]');
+::
+
+      json_length('[{"a":[1,2,3,{"k":[4,5,6,7,8]}]},2]')
     ======================
       2
 
@@ -85,14 +151,13 @@ JSON_VALID
     1
     SELECT JSON_VALID('{"222":');
     0
-::
 
 JSON_TYPE
 ===================================
 
-.. function:: JSON_TYPE (json_val)
+.. function:: JSON_TYPE (json_doc)
 
-  The **JSON_TYPE** function returns the type of the json_val argument as a string.
+  The **JSON_TYPE** function returns the type of the json_doc argument as a string.
 
 .. code-block:: sql
 
@@ -102,7 +167,6 @@ JSON_TYPE
     'JSON_OBJECT'
     SELECT JSON_TYPE ('"aaa"');
     'STRING'
-::
 
 JSON_QUOTE
 ===================================

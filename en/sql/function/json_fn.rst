@@ -1,4 +1,4 @@
-:meta-keywords: cubrid json, json functions
+:meta-keywords: cubrid json, json functions, database json
 :meta-description: CUBRID functions that create, query and modify JSON data.
 
 :tocdepth: 3
@@ -143,7 +143,7 @@ JSON_VALID
 
 .. function:: JSON_VALID (val)
 
-  The **JSON_VALID** function returns 1 if the given val argument is a json or would be castable to json, 0 otherwise. Returns NULL if argument is NULL.
+  The **JSON_VALID** function returns 1 if the given val argument is a valid json_doc, 0 otherwise. Returns NULL if argument is NULL.
 
 .. code-block:: sql
 

@@ -243,7 +243,6 @@ JSON_UNQUOTE
 
   Unquotes a json_value's json string and returns the resulting string.
   Returns NULL if json_doc argument is NULL.
-  //TODO: NO_BACKSLASH_ESCAPES, escape explainations 
 
 .. code-block:: sql
 

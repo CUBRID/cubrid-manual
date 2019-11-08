@@ -123,7 +123,7 @@ JSON_DEPTH
     ======================
       3
 
-  Example of a deeper json:
+Example of a deeper json:
 
 .. code-block:: sql
 
@@ -300,6 +300,7 @@ JSON_SEARCH
 
   Returns a json array of json paths or a single json path which contain json strings matching the given search_str.
   The matching is performed by applying the LIKE operator on internal json strings and search_str. Same rules apply for the escape_char and search_str of JSON_SEARCH as for their counter-parts from the LIKE operator.
+  For further description of LIKE-related arguments rules refer to :ref:`like-expr`.
 
   Using 'one' as one/all argument will cause the json_search to stop after the first match is found.
   On the other hand, 'all' will force json_search to gather all paths matching the given search_str.
@@ -334,8 +335,9 @@ JSON_SEARCH
     ======================
       "["$.a[0]","$.b"]"
 
-  Wildcards can be used to define path filters as more general formats.
-  Accepting only json paths that start with object key identifier:
+Wildcards can be used to define path filters as more general formats.
+Accepting only json paths that start with object key identifier:
+
 .. code-block:: sql
 
     SELECT JSON_SEARCH('{"a":["a","b"],"b":"a","c":"a"}', 'all', 'a', NULL, '$.*');
@@ -345,7 +347,8 @@ JSON_SEARCH
     ======================
       "["$.a[0]","$.b","$.c"]"
 
-  Accepting only json paths that start with object key identifier and follow immediately with a json array index will filter out '$.b', '$.d.e[0]' matches:
+Accepting only json paths that start with object key identifier and follow immediately with a json array index will filter out '$.b', '$.d.e[0]' matches:
+
 .. code-block:: sql
 
     SELECT JSON_SEARCH('{"a":["a","b"],"b":"a","c":["a"], "d":{"e":["a"]}}', 'all', 'a', NULL, '$.*[*]');
@@ -354,10 +357,11 @@ JSON_SEARCH
       json_search('{"a":["a","b"],"b":"a","c":["a"], "d":{"e":["a"]}}', 'all', 'a', null, '$.*[*]')
     ======================
       "["$.a[0]","$.c[0]"]"
+::
 
-  
+Accepting any paths that contain json array indexes will filter out '$.b'
+
 .. code-block:: sql
-    Accepting any paths that contain json array indexes will filter out '$.b'
 
     SELECT JSON_SEARCH('{"a":["a","b"],"b":"a","c":["a"], "d":{"e":["a"]}}', 'all', 'a', NULL, '$**[*]');
 ::

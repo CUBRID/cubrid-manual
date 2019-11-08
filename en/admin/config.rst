@@ -158,6 +158,8 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               | unfill_factor                       | server parameter        |         | float    | 0.1                            |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | volume_extension_path               | server parameter        |         | string   | NULL                           |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | todo: dwb params                    | server parameter        |         | string   | NULL                           |                       |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 | :ref:`error-parameters`       | call_stack_dump_activation_list     | client/server parameter |         | string   | DEFAULT                        | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -603,23 +605,29 @@ Disk-Related Parameters
 
 The following are disk-related parameters for defining database volumes and storing files. The type and value range for each parameter are as follows:
 
-+---------------------------------+--------+----------+----------+----------+
-| Parameter Name                  | Type   | Default  | Min      | Max      |
-+=================================+========+==========+==========+==========+
-| db_volume_size                  | byte   | 512M     | 0        | 20G      |
-+---------------------------------+--------+----------+----------+----------+
-| dont_reuse_heap_file            | bool   | no       |          |          |
-+---------------------------------+--------+----------+----------+----------+
-| log_volume_size                 | byte   | 512M     | 20M      | 4G       |
-+---------------------------------+--------+----------+----------+----------+
-| temp_file_max_size_in_pages     | int    | -1       |          |          |
-+---------------------------------+--------+----------+----------+----------+
-| temp_volume_path                | string | NULL     |          |          |
-+---------------------------------+--------+----------+----------+----------+
-| unfill_factor                   | float  | 0.1      | 0.0      | 0.3      |
-+---------------------------------+--------+----------+----------+----------+
-| volume_extension_path           | string | NULL     |          |          |
-+---------------------------------+--------+----------+----------+----------+
++------------------------------------------+--------+----------+----------+----------+
+| Parameter Name                           | Type   | Default  | Min      | Max      |
++==========================================+========+==========+==========+==========+
+| db_volume_size                           | byte   | 512M     | 0        | 20G      |
++------------------------------------------+--------+----------+----------+----------+
+| dont_reuse_heap_file                     | bool   | no       |          |          |
++------------------------------------------+--------+----------+----------+----------+
+| log_volume_size                          | byte   | 512M     | 20M      | 4G       |
++------------------------------------------+--------+----------+----------+----------+
+| temp_file_max_size_in_pages              | int    | -1       |          |          |
++------------------------------------------+--------+----------+----------+----------+
+| temp_volume_path                         | string | NULL     |          |          |
++------------------------------------------+--------+----------+----------+----------+
+| unfill_factor                            | float  | 0.1      | 0.0      | 0.3      |
++------------------------------------------+--------+----------+----------+----------+
+| volume_extension_path                    | string | NULL     |          |          |
++------------------------------------------+--------+----------+----------+----------+
+| double_write_buffer_size                 | byte   | 2M       | 0        | 32M      |
++------------------------------------------+--------+----------+----------+----------+
+| double_write_buffer_blocks               | int    | 2        | 0        | 32       |
++------------------------------------------+--------+----------+----------+----------+
+| double_write_buffer_enable_flush_thread  | bool   | yes      |          |          |
++------------------------------------------+--------+----------+----------+----------+
 
 **db_volume_size**
 
@@ -659,6 +667,18 @@ The following are disk-related parameters for defining database volumes and stor
 **volume_extension_path**
 
     **volume_extension_path** is a parameter to configure the directory where automatically extended volumes are to be created. The default value is the volume location configured during the database creation.
+
+**double_write_buffer_size**
+
+    **double_write_buffer_size** is a parameter to configure the size of double writer buffer and file.
+
+**double_write_buffer_blocks**
+
+    **double_write_buffer_blocks** to be discussed. its default size is 2 and it is probably the only value that we tested; it may be useful to increase, but decreasing it to 1 may be problematic (what happens with new page flushes while dwb is flushed to disk?).
+
+**double_write_buffer_enable_flush_thread**
+
+  **double_write_buffer_enable_flush_thread** to be discussed. I am not sure how it works and what happens if it is disabled online.
 
 .. _error-parameters:
 

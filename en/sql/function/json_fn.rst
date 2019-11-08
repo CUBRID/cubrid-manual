@@ -292,3 +292,76 @@ JSON_PRETTY
         ]
       }
     ]'
+
+JSON_SEARCH
+===================================
+
+.. function:: JSON_SEARCH (json_doc, one/all, search_str [, escape_char [, json path] ...])
+
+  Returns a json array of json paths or a single json path which contain json strings matching the given search_str.
+  The matching is performed by applying the LIKE operator on internal json strings and search_str. Same rules apply for the escape_char and search_str of JSON_SEARCH as for their counter-parts from the LIKE operator.
+
+  Using 'one' as one/all argument will cause the json_search to stop after the first match is found.
+  On the other hand, 'all' will force json_search to gather all paths matching the given search_str.
+
+  The given json paths determine filters on the returned paths, the resulting json paths's prefixes need to match at least one given json path argument.
+  If no json path argument is given, json_search will execute the search starting from the root element.
+
+.. code-block:: sql
+
+    SELECT JSON_SEARCH('{"a":["a","b"],"b":"a","c":"a"}', 'one', 'a');
+::
+
+      json_search('{"a":["a","b"],"b":"a","c":"a"}', 'one', 'a')
+    ======================
+      "$.a[0]"
+
+.. code-block:: sql
+
+    SELECT JSON_SEARCH('{"a":["a","b"],"b":"a","c":"a"}', 'all', 'a');
+::
+
+      json_search('{"a":["a","b"],"b":"a","c":"a"}', 'all', 'a')
+    ======================
+      "["$.a[0]","$.b","$.c"]"
+
+.. code-block:: sql
+
+    SELECT JSON_SEARCH('{"a":["a","b"],"b":"a","c":"a"}', 'all', 'a', NULL, '$.a', '$.b');
+::
+
+      json_search('{"a":["a","b"],"b":"a","c":"a"}', 'all', 'a', null, '$.a', '$.b')
+    ======================
+      "["$.a[0]","$.b"]"
+
+  Wildcards can be used to define path filters as more general formats.
+  Accepting only json paths that start with object key identifier:
+.. code-block:: sql
+
+    SELECT JSON_SEARCH('{"a":["a","b"],"b":"a","c":"a"}', 'all', 'a', NULL, '$.*');
+::
+
+      json_search('{"a":["a","b"],"b":"a","c":"a"}', 'all', 'a', null, '$.*')
+    ======================
+      "["$.a[0]","$.b","$.c"]"
+
+  Accepting only json paths that start with object key identifier and follow immediately with a json array index will filter out '$.b', '$.d.e[0]' matches:
+.. code-block:: sql
+
+    SELECT JSON_SEARCH('{"a":["a","b"],"b":"a","c":["a"], "d":{"e":["a"]}}', 'all', 'a', NULL, '$.*[*]');
+::
+
+      json_search('{"a":["a","b"],"b":"a","c":["a"], "d":{"e":["a"]}}', 'all', 'a', null, '$.*[*]')
+    ======================
+      "["$.a[0]","$.c[0]"]"
+
+  
+.. code-block:: sql
+    Accepting any paths that contain json array indexes will filter out '$.b'
+
+    SELECT JSON_SEARCH('{"a":["a","b"],"b":"a","c":["a"], "d":{"e":["a"]}}', 'all', 'a', NULL, '$**[*]');
+::
+
+      json_search('{"a":["a","b"],"b":"a","c":["a"], "d":{"e":["a"]}}', 'all', 'a', null, '$**[*]')
+    ======================
+      "["$.a[0]","$.c[0]","$.d.e[0]"]"

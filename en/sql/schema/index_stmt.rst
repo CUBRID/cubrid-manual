@@ -20,6 +20,7 @@ For how to use indexes on the **SELECT** statement like Using SQL Hint, Descendi
         <index_col_desc> ::=
             { ( column_name [ASC | DESC] [ {, column_name [ASC | DESC]} ...] ) [ WHERE <filter_predicate> ] | 
             (function_name (argument_list) ) } 
+                [WITH ONLINE [PARALLEL parallel_count]]
                 [COMMENT 'index_comment_string']
 
 *   **UNIQUE**: creates an index with unique values.
@@ -32,6 +33,8 @@ For how to use indexes on the **SELECT** statement like Using SQL Hint, Descendi
 *   <*filter_predicate*>: defines the conditions to create filtered indexes. When there are several comparison conditions between a column and a constant, filtering is available only when the conditions are connected by using **AND**. Refer to :ref:`filtered-index` for more details.
 *   *function_name* (*argument_list*): Defines the conditions to create function-based indexes. Regarding this, definitely watch :ref:`function-index`.
 
+*   **WITH ONLINE**: creates the index while allowing changes of table data from other transactions. If **PARALLEL** is not specified, the index is created using the transaction thread. <*parallel_count*> is the number of threads to be used for creating the index and it must be a integer between 1 and 16.
+
 *   *index_comment_string*: specifies a comment of an index.
 
 ..  note::
@@ -43,6 +46,8 @@ For how to use indexes on the **SELECT** statement like Using SQL Hint, Descendi
     *   The session and server timezone (:ref:`timezone-parameters`) should not be changed if database contains indexes or function index on columns of type TIMESTAMP, TIMESTAMP WITH LOCAL TIME ZONE or DATETIME WITH LOCAL TIME ZONE.
     
     *   The leap second support parameter (:ref:`timezone-parameters`) should not be changed if database contains indexes or function index on columns of type TIMESTAMP or TIMESTAMP WITH LOCAL TIME ZONE. 
+    
+    *   The number of threads from PARALLEL option applies only to index loading step. The heap scan step is performed by the transaction thread (single thread). During this process, the rows are collected into batches; when a batch is full (reached 16M in size), it is dispatched to a index loading thread (or pushed in the queue), the collecting process continues. Batch size computing consists of index key size and the OID size (8 bytes).
 
 The following example shows how to create a descending index.
 
@@ -86,6 +91,19 @@ Or you can see the index comments with ;sc command in the CSQL interpreter.
     $ csql -u dba demodb
     
     csql> ;sc tbl
+
+Online index creation
+---------------------
+
+You can create the index while still allowing other transactions to insert or update the table.
+
+.. code-block:: sql
+
+    CREATE TABLE tbl (a int, b int, c int);
+
+    CREATE INDEX i_tbl_b on tbl (b) WITH ONLINE;
+
+    CREATE INDEX i_tbl_b on tbl (b) WITH ONLINE PARALLEL 10;	
 
 .. _alter-index:
 

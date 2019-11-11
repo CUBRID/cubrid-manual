@@ -1450,7 +1450,7 @@ The following shows [options] available with the **cubrid statdump** utility.
     **File I/O**
 
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    | Stat name                                | Stat type      |  Description                                                          |
+    | **Stat name**                            | **Stat type**  |  **Description**                                                      |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
     | Num_file_removes                         | Accumulator    | The number of files removed                                           |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
@@ -1472,7 +1472,7 @@ The following shows [options] available with the **cubrid statdump** utility.
     **Page Buffer**
 
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    | Stat name                                | Stat type      |  Description                                                          |
+    | **Stat name**                            | **Stat type**  |  **Description**                                                      |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
     | Num_data_page_fetches                    | Accumulator    | The number of fetched pages                                           |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
@@ -1500,48 +1500,55 @@ The following shows [options] available with the **cubrid statdump** utility.
     | Num_data_page_victim_candidate           | Snapshot       | | The number of victim candidate pages in data buffer                 |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
 
+    **Logs**
+
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | **Stat name**                            | **Stat type**  |  **Description**                                                      |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_log_page_fetches                     | Accumulator    | The number of fetched log pages                                       |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_log_page_ioreads                     | Accumulator    | The number of log pages read                                          |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_log_page_iowrites                    | Accumulator    | The number of log pages stored                                        |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_log_append_records                   | Accumulator    | The number of log records appended                                    |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_log_archives                         | Accumulator    | The number of logs archived                                           |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_log_start_checkpoints                | Accumulator    | The number of started checkpoints                                     |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_log_end_checkpoints                  | Accumulator    | The number of ended checkpoints                                       |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_log_wals                             | Accumulator    | The number of log flushes requested to write a data page.             |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_log_page_iowrites_for_replacement    | Accumulator    | | The number of log data pages written to disk due to replacements    |
+    |                                          |                | | (should be zero)                                                    |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_log_page_replacements                | Accumulator    | The number of log data pages discarded due to replacements            |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_prior_lsa_list_size                  | Accumulator    | | Current size of the prior LSA(Log Sequence Address) list.           |
+    |                                          |                | | CUBRID write the order of writing into the prior LSA list, before   |
+    |                                          |                | | writing operation from the log buffer to the disk; this list is     |
+    |                                          |                | | used to raise up the concurrency by reducing the waiting time of    |
+    |                                          |                | | the transaction from writing to disk                                |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_prior_lsa_list_maxed                 | Accumulator    | | The count of the prior LSA list being reached at the maximum size.  |
+    |                                          |                | | The maximum size of the prior LSA list is log_buffer_size * 2.      |
+    |                                          |                | | If this value is big, we can assume that log writing jobs happen a  |
+    |                                          |                | | lot at the same time                                                |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_prior_lsa_list_removed               | Accumulator    | | The count of LSA being moved from prior LSA list into log buffer.   |
+    |                                          |                | | We can assume that the commits have happened at the similar count   |
+    |                                          |                | | with this value                                                     |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Log_page_buffer_hit_ratio                | Computed       | | Hit ratio of log page buffers                                       |
+    |                                          |                | | (Num_log_page_fetches - Num_log_page_fetch_ioreads)*100             |
+    |                                          |                | | / Num_log_page_fetches                                              |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+
+
     +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
     | Category         | Item                                     | Stat type      |  Description                                                          |
-    +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
-    | Logs             | Num_log_page_fetches                     | Accumulator    | The number of fetched log pages                                       |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_log_page_ioreads                     | Accumulator    | The number of log pages read                                          |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_log_page_iowrites                    | Accumulator    | The number of log pages stored                                        |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_log_append_records                   | Accumulator    | The number of log records appended                                    |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_log_archives                         | Accumulator    | The number of logs archived                                           |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_log_start_checkpoints                | Accumulator    | The number of started checkpoints                                     |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_log_end_checkpoints                  | Accumulator    | The number of ended checkpoints                                       |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_log_wals                             | Accumulator    | The number of log flushes requested to write a data page.             |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_log_page_iowrites_for_replacement    | Accumulator    | | The number of log data pages written to disk due to replacements    |
-    |                  |                                          |                | | (should be zero)                                                    |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_log_page_replacements                | Accumulator    | The number of log data pages discarded due to replacements            |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_prior_lsa_list_size                  | Accumulator    | | Current size of the prior LSA(Log Sequence Address) list.           |
-    |                  |                                          |                | | CUBRID write the order of writing into the prior LSA list, before   |
-    |                  |                                          |                | | writing operation from the log buffer to the disk; this list is     |
-    |                  |                                          |                | | used to raise up the concurrency by reducing the waiting time of    |
-    |                  |                                          |                | | the transaction from writing to disk                                |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_prior_lsa_list_maxed                 | Accumulator    | | The count of the prior LSA list being reached at the maximum size.  |
-    |                  |                                          |                | | The maximum size of the prior LSA list is log_buffer_size * 2.      |
-    |                  |                                          |                | | If this value is big, we can assume that log writing jobs happen a  |
-    |                  |                                          |                | | lot at the same time                                                |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_prior_lsa_list_removed               | Accumulator    | | The count of LSA being moved from prior LSA list into log buffer.   |
-    |                  |                                          |                | | We can assume that the commits have happened at the similar count   |
-    |                  |                                          |                | | with this value                                                     |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Log_page_buffer_hit_ratio                | Computed       | | Hit ratio of log page buffers                                       |
-    |                  |                                          |                | | (Num_log_page_fetches - Num_log_page_fetch_ioreads)*100             |
-    |                  |                                          |                | | / Num_log_page_fetches                                              |
     +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
     | Concurrency/lock | Num_page_locks_acquired                  | Accumulator    | The number of locked pages acquired                                   |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
@@ -1562,7 +1569,7 @@ The following shows [options] available with the **cubrid statdump** utility.
     |                  | Num_object_locks_time_waited_usec        | Accumulator    | The time in microseconds spent on waiting for all object locks        |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
     |                  | Time_obj_lock_acquire_time               | Complex        | Time consumer for locking objects classified by lock mode             |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
     | Transactions     | Num_tran_commits                         | Accumulator    | The number of commits                                                 |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
     |                  | Num_tran_rollbacks                       | Accumulator    | The number of rollbacks                                               |

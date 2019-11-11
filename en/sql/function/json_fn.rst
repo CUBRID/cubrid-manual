@@ -524,7 +524,7 @@ JSON_CONTAINS
 
   The **JSON_CONTAINS** function verifies whether the doc2 is contained inside the doc1 at the optionally specified path.
   A json element contains another json element if the following recursive rules are satisfied:
-- A json scalar contains another json scalar if they have the same type (their JSON_TYPE () is equal) and are equal. As an exception, json integer can be compared and equal to json double (even if their JSON_TYPE () evaluation are different).
+- A json scalar contains another json scalar if they have the same type (their JSON_TYPE () are equal) and are equal. As an exception, json integer can be compared and equal to json double (even if their JSON_TYPE () evaluation are different).
 - A json array contains a json scalar or a json object if any of json array's elements contains the json_nonarray.
 - A json array contains another json array if all the second json array's elements are contained in the first json array.
 - A json object contains another json object if, for every (key2, value2) pair in the second object, there exists a (key1, value1) pair in the first object with key1=key2 and value2 contained in value1.

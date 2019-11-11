@@ -373,13 +373,13 @@ Accepting any paths that contain json array indexes will filter out '$.b'
 JSON_EXTRACT
 ===================================
 
-.. function:: JSON_EXTRACT (json_doc, json path [ , json path] ...)
+.. function:: JSON_EXTRACT (json_doc, json path [, json path] ...)
 
   Returns json elements from the json_doc, that are addressed by the given paths.
-  If json path argments contain wildcards, all elements that are addressed by a path compatible with the wildcards-containg json path are gathered in a resulting json array. 
+  If json path arguments contain wildcards, all elements that are addressed by a path compatible with the wildcards-containg json path are gathered in a resulting json array. 
   A single json element is returned if no wildcards are used in the given json paths and a single element is found, otherwise the json elements found are wrapped in a json array.
-  Raises an error if a json path is NULL.  
-  Returns NULL if no elements are found or if json_doc arguments is invalid.
+  Raises an error if a json path is NULL or invalid or if json_doc argument is invalid.
+  Returns NULL if no elements are found or if json_doc is NULL.
 
 .. code-block:: sql
 
@@ -433,16 +433,16 @@ The following json path will match all json paths that end with a json array ind
 ->
 ===================================
 
-.. function:: -> (json_doc column, json path)
+.. function:: json_doc -> json path
 
-  Alias operator for JSON_EXTRACT with 2 arguments and the json_doc argument being a column.
-  Raises an error if a json path is NULL.
-  Returns NULL if it applied on a NULL json_doc argument.
+  Alias operator for JSON_EXTRACT with 2 arguments, having the json_doc argument constrained to be a column.
+  Raises an error if the json path is NULL or invalid.
+  Returns NULL if it is applied on a NULL json_doc argument.
 
 .. code-block:: sql
 
     CREATE TABLE tj (a json);
-    INSERT INTO tj values ('{"a":1}'), ('{"a":2}'), ('{"a":2}'), (NULL);
+    INSERT INTO tj values ('{"a":1}'), ('{"a":2}'), ('{"a":3}'), (NULL);
 
     SELECT a->'$.a' from tj;
 ::
@@ -457,16 +457,16 @@ The following json path will match all json paths that end with a json array ind
 ->>
 ===================================
 
-.. function:: ->> (json_doc column, json path)
+.. function:: json_doc ->> json path
 
-  Alias for JSON_UNQUOTE(column->json path). Operator can be applied only on json_doc arguments that are columns.
+  Alias for JSON_UNQUOTE(json_doc->json path). Operator can be applied only on json_doc arguments that are columns.
   Raises an error if a json path is NULL.
-  Returns NULL if it applied on a NULL json_doc argument.
+  Returns NULL if it is applied on a NULL json_doc argument.
 
 .. code-block:: sql
 
     CREATE TABLE tj (a json);
-    INSERT INTO tj values ('{"a":1}'), ('{"a":2}'), ('{"a":2}'), (NULL);
+    INSERT INTO tj values ('{"a":1}'), ('{"a":2}'), ('{"a":3}'), (NULL);
 
     SELECT a->>'$.a' from tj;
 ::

@@ -460,7 +460,7 @@ The following json path will match all json paths that end with a json array ind
 .. function:: json_doc ->> json path
 
   Alias for JSON_UNQUOTE(json_doc->json path). Operator can be applied only on json_doc arguments that are columns.
-  Raises an error if a json path is NULL.
+  Raises an error if the json path is NULL or invalid.
   Returns NULL if it is applied on a NULL json_doc argument.
 
 .. code-block:: sql

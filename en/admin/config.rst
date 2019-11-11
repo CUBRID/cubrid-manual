@@ -666,7 +666,7 @@ The following are disk-related parameters for defining database volumes and stor
 
 **double_write_buffer_size**
 
-    **double_write_buffer_size** is a parameter to configure the memory and disk size of double writer buffer. If set to zero, double write buffer protection against partial I/O writes is disabled. It is enabled by default and its size is 2M.
+    **double_write_buffer_size** is a parameter to configure the memory and disk size of double writer buffer. Double write buffer protection against partial I/O writes can be disabled by setting this size to zero. By default, it is enabled and its size is 2M.
 
 .. _error-parameters:
 

@@ -1727,115 +1727,121 @@ The following shows [options] available with the **cubrid statdump** utility.
     |                                          |                |                                                                       |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
 
+    **Heap**
+
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | **Stat name**                            | **Stat type**  |  **Description**                                                      |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_heap_stats_bestspace_entries         | Accumulator    | The number of best pages which are saved on the "best page" list      |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_heap_stats_bestspace_maxed           | Accumulator    | The maximum number of pages which can be saved on the "best page" list|
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_heap_stats_sync_bestspace            | Accumulator    | | The updated number of the "best page" list.                         |
+    |                                          |                |                                                                       |
+    |                                          |                | | "Best pages" means that the data pages of which the free space is   |
+    |                                          |                | | more than 30% in the environment of multiple INSERTs and DELETEs.   |
+    |                                          |                | | Only some information of these pages are saved as the "best page"   |
+    |                                          |                | | list. In the "best page" list, the information of a million pages is|
+    |                                          |                | | saved at once. This list is searched when INSERTing a record, and   |
+    |                                          |                | | then this list is updated when there are no free space to store this|
+    |                                          |                | | record on the pages. If there are still no free space to store this |
+    |                                          |                | | record even this list is updated for several times, this recored is |
+    |                                          |                | | stored into a new page.                                             |
+    |                                          |                |                                                                       |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_heap_home_inserts                    | Accumulator    | The number of inserts in heap HOME type records                       |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_heap_big_inserts                     | Accumulator    | The number of inserts in heap BIG type records                        |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_heap_assign_inserts                  | Accumulator    | The number of inserts in heap ASSIGN type records                     |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_heap_home_deletes                    | Accumulator    | The number of deletes from heap HOME type records in non-MVCC mode    |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_heap_home_mvcc_deletes               | Accumulator    | The number of deletes from heap HOME type records in MVCC mode        |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_heap_home_to_rel_deletes             | Accumulator    | | The number of deletes from heap HOME to RELOCATION type records in  |
+    |                                          |                | | MVCC mode                                                           |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_heap_home_to_big_deletes             | Accumulator    | The number of deletes from heap HOME to BIG type records in MVCC mode |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_heap_rel_deletes                     | Accumulator    | | The number of deletes from heap RELOCATION type records in non-MVCC |
+    |                                          |                | | mode                                                                |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_heap_rel_mvcc_deletes                | Accumulator    | The number of deletes from heap RELOCATION type records in MVCC mode  |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_heap_rel_to_home_deletes             | Accumulator    | | The number of deletes from heap RELOCATION to HOME type records in  |
+    |                                          |                | | MVCC mode                                                           |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_heap_rel_to_big_deletes              | Accumulator    | | The number of deletes from heap RELOCATION to BIG type records in   |
+    |                                          |                | | MVCC mode                                                           |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_heap_rel_to_rel_deletes              | Accumulator    | | The number of deletes from heap RELOCATION to RELOCATION type       |
+    |                                          |                | | records in MVCC mode                                                |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_heap_big_deletes                     | Accumulator    | The number of deletes from heap BIG type records in non-MVCC mode     |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_heap_big_mvcc_deletes                | Accumulator    | The number of deletes from heap BIG type records in MVCC mode         |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_heap_home_updates                    | Accumulator    | | The number of updates in place of heap HOME type records in         |
+    |                                          |                | | non-MVCC mode(*)                                                    |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_heap_home_to_rel_updates             | Accumulator    | | The number of updates of heap HOME to RELOCATION type records in    |
+    |                                          |                | | non-MVCC mode(*)                                                    |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_heap_home_to_big_updates             | Accumulator    | | The number of updates of heap HOME to BIG type records in non-MVCC  |
+    |                                          |                | | mode(*)                                                             |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_heap_rel_updates                     | Accumulator    | | The number of updates of heap RELOCATION type records in non-MVCC   |
+    |                                          |                | | mode(*)                                                             |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_heap_rel_to_home_updates             | Accumulator    | | The number of updates of heap RELOCATION to HOME type records in    |
+    |                                          |                | | non-MVCC mode(*)                                                    |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_heap_rel_to_rel_updates              | Accumulator    | | The number of updates of heap RELOCATION to RELOCATION type records |
+    |                                          |                | | in non-MVCC mode(*)                                                 |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_heap_rel_to_big_updates              | Accumulator    | | The number of updates of heap RELOCATION to BIG type records in     |
+    |                                          |                | | non-MVCC mode(*)                                                    |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_heap_big_updates                     | Accumulator    | The number of updates of heap BIG type records in non-MVCC mode(*)    |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_heap_home_vacuums                    | Accumulator    | The number of vacuumed heap HOME type records                         |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_heap_big_vacuums                     | Accumulator    | The number of vacuumed heap BIG type records                          |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_heap_rel_vacuums                     | Accumulator    | The number of vacuumed heap RELOCATION type records                   |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_heap_insid_vacuums                   | Accumulator    | The number of vacuumed heap newly inserted records                    |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_heap_remove_vacuums                  | Accumulator    | The number of vacuum operations that remove heap records              |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..heap_insert_prepare                    | Counter/timer  | The number and duration of preparing heap insert operation            |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..heap_insert_execute                    | Counter/timer  | The number and duration of executing heap insert operation            |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..heap_insert_log                        | Counter/timer  | The number and duration of logging heap insert operation              |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..heap_delete_prepare                    | Counter/timer  | The number and duration of preparing heap delete operation            |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..heap_delete_execute                    | Counter/timer  | The number and duration of executing heap delete operation            |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..heap_delete_log                        | Counter/timer  | The number and duration of logging heap delete operation              |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..heap_update_prepare                    | Counter/timer  | The number and duration of preparing heap update operation            |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..heap_update_execute                    | Counter/timer  | The number and duration of executing heap update operation            |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..heap_update_log                        | Counter/timer  | The number and duration of logging heap update operation              |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..heap_vacuum_prepare                    | Counter/timer  | The number and duration of preparing heap vacuum operation            |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..heap_vacuum_execute                    | Counter/timer  | The number and duration of executing heap vacuum operation            |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..heap_vacuum_log                        | Counter/timer  | The number and duration of logging heap vacuum operation              |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+
     +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
     | Category         | Item                                     | Stat type      |  Description                                                          |
-    +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
-    | Heap             | Num_heap_stats_bestspace_entries         | Accumulator    | The number of best pages which are saved on the "best page" list      |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_heap_stats_bestspace_maxed           | Accumulator    | The maximum number of pages which can be saved on the "best page" list|
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_heap_stats_sync_bestspace            | Accumulator    | | The updated number of the "best page" list.                         |
-    |                  |                                          |                |                                                                       |
-    |                  |                                          |                | | "Best pages" means that the data pages of which the free space is   |
-    |                  |                                          |                | | more than 30% in the environment of multiple INSERTs and DELETEs.   |
-    |                  |                                          |                | | Only some information of these pages are saved as the "best page"   |
-    |                  |                                          |                | | list. In the "best page" list, the information of a million pages is|
-    |                  |                                          |                | | saved at once. This list is searched when INSERTing a record, and   |
-    |                  |                                          |                | | then this list is updated when there are no free space to store this|
-    |                  |                                          |                | | record on the pages. If there are still no free space to store this |
-    |                  |                                          |                | | record even this list is updated for several times, this recored is |
-    |                  |                                          |                | | stored into a new page.                                             |
-    |                  |                                          |                |                                                                       |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_heap_home_inserts                    | Accumulator    | The number of inserts in heap HOME type records                       |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_heap_big_inserts                     | Accumulator    | The number of inserts in heap BIG type records                        |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_heap_assign_inserts                  | Accumulator    | The number of inserts in heap ASSIGN type records                     |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_heap_home_deletes                    | Accumulator    | The number of deletes from heap HOME type records in non-MVCC mode    |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_heap_home_mvcc_deletes               | Accumulator    | The number of deletes from heap HOME type records in MVCC mode        |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_heap_home_to_rel_deletes             | Accumulator    | | The number of deletes from heap HOME to RELOCATION type records in  |
-    |                  |                                          |                | | MVCC mode                                                           |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_heap_home_to_big_deletes             | Accumulator    | The number of deletes from heap HOME to BIG type records in MVCC mode |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_heap_rel_deletes                     | Accumulator    | | The number of deletes from heap RELOCATION type records in non-MVCC |
-    |                  |                                          |                | | mode                                                                |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_heap_rel_mvcc_deletes                | Accumulator    | The number of deletes from heap RELOCATION type records in MVCC mode  |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_heap_rel_to_home_deletes             | Accumulator    | | The number of deletes from heap RELOCATION to HOME type records in  |
-    |                  |                                          |                | | MVCC mode                                                           |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_heap_rel_to_big_deletes              | Accumulator    | | The number of deletes from heap RELOCATION to BIG type records in   |
-    |                  |                                          |                | | MVCC mode                                                           |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_heap_rel_to_rel_deletes              | Accumulator    | | The number of deletes from heap RELOCATION to RELOCATION type       |
-    |                  |                                          |                | | records in MVCC mode                                                |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_heap_big_deletes                     | Accumulator    | The number of deletes from heap BIG type records in non-MVCC mode     |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_heap_big_mvcc_deletes                | Accumulator    | The number of deletes from heap BIG type records in MVCC mode         |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_heap_home_updates                    | Accumulator    | | The number of updates in place of heap HOME type records in         |
-    |                  |                                          |                | | non-MVCC mode(*)                                                    |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_heap_home_to_rel_updates             | Accumulator    | | The number of updates of heap HOME to RELOCATION type records in    |
-    |                  |                                          |                | | non-MVCC mode(*)                                                    |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_heap_home_to_big_updates             | Accumulator    | | The number of updates of heap HOME to BIG type records in non-MVCC  |
-    |                  |                                          |                | | mode(*)                                                             |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_heap_rel_updates                     | Accumulator    | | The number of updates of heap RELOCATION type records in non-MVCC   |
-    |                  |                                          |                | | mode(*)                                                             |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_heap_rel_to_home_updates             | Accumulator    | | The number of updates of heap RELOCATION to HOME type records in    |
-    |                  |                                          |                | | non-MVCC mode(*)                                                    |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_heap_rel_to_rel_updates              | Accumulator    | | The number of updates of heap RELOCATION to RELOCATION type records |
-    |                  |                                          |                | | in non-MVCC mode(*)                                                 |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_heap_rel_to_big_updates              | Accumulator    | | The number of updates of heap RELOCATION to BIG type records in     |
-    |                  |                                          |                | | non-MVCC mode(*)                                                    |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_heap_big_updates                     | Accumulator    | The number of updates of heap BIG type records in non-MVCC mode(*)    |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_heap_home_vacuums                    | Accumulator    | The number of vacuumed heap HOME type records                         |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_heap_big_vacuums                     | Accumulator    | The number of vacuumed heap BIG type records                          |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_heap_rel_vacuums                     | Accumulator    | The number of vacuumed heap RELOCATION type records                   |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_heap_insid_vacuums                   | Accumulator    | The number of vacuumed heap newly inserted records                    |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_heap_remove_vacuums                  | Accumulator    | The number of vacuum operations that remove heap records              |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | ..heap_insert_prepare                    | Counter/timer  | The number and duration of preparing heap insert operation            |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | ..heap_insert_execute                    | Counter/timer  | The number and duration of executing heap insert operation            |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | ..heap_insert_log                        | Counter/timer  | The number and duration of logging heap insert operation              |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | ..heap_delete_prepare                    | Counter/timer  | The number and duration of preparing heap delete operation            |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | ..heap_delete_execute                    | Counter/timer  | The number and duration of executing heap delete operation            |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | ..heap_delete_log                        | Counter/timer  | The number and duration of logging heap delete operation              |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | ..heap_update_prepare                    | Counter/timer  | The number and duration of preparing heap update operation            |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | ..heap_update_execute                    | Counter/timer  | The number and duration of executing heap update operation            |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | ..heap_update_log                        | Counter/timer  | The number and duration of logging heap update operation              |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | ..heap_vacuum_prepare                    | Counter/timer  | The number and duration of preparing heap vacuum operation            |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | ..heap_vacuum_execute                    | Counter/timer  | The number and duration of executing heap vacuum operation            |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | ..heap_vacuum_log                        | Counter/timer  | The number and duration of logging heap vacuum operation              |
     +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
     | Query plan cache | Num_plan_cache_add                       | Accumulator    | The number of entries added to query cache                            |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+

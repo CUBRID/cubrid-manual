@@ -376,7 +376,7 @@ JSON_EXTRACT
 .. function:: JSON_EXTRACT (json_doc, json path [, json path] ...)
 
   Returns json elements from the json_doc, that are addressed by the given paths.
-  If json path arguments contain wildcards, all elements that are addressed by a path compatible with the wildcards-containg json path are gathered in a resulting json array. 
+  If json path arguments contain wildcards, all elements that are addressed by a path compatible with the wildcards-containing json path are gathered in a resulting json array. 
   A single json element is returned if no wildcards are used in the given json paths and a single element is found, otherwise the json elements found are wrapped in a json array.
   Raises an error if a json path is NULL or invalid or if json_doc argument is invalid.
   Returns NULL if no elements are found or if json_doc is NULL.

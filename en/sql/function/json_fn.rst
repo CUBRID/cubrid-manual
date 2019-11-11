@@ -477,3 +477,115 @@ The following json path will match all json paths that end with a json array ind
       '2'
       '3'
       NULL
+
+JSON_CONTAINS_PATH
+===================================
+
+.. function:: JSON_CONTAINS_PATH (json_doc, one/all, json path [, json path] ...)
+
+  The **JSON_CONTAINS_PATH** function verifies whether the the given paths exist inside the json_doc.
+  1 is returned with one/all argument given as 'all' only if all given paths exist inside the json_doc, 0 is returned otherwise. In case one/all argument is 'one', 1 is returned if at least one json path exists inside the json_doc, 0 otherwise.
+  Returns NULL if any argument is NULL.
+  An error occurs if any argument is invalid.
+
+.. code-block:: sql
+
+    SELECT JSON_CONTAINS_PATH ('[{"0":0},1,"2",{"three":3}]', 'all', '$[0]', '$[0]."0"', '$[1]', '$[2]', '$[3]') ;
+::
+
+      json_contains_path('[{"0":0},1,"2",{"three":3}]', 'all', '$[0]', '$[0]."0"', '$[1]', '$[2]', '$[3]')
+    ======================================================================================================
+                                                                                                         1
+
+.. code-block:: sql
+
+    SELECT JSON_CONTAINS_PATH ('[{"0":0},1,"2",{"three":3}]', 'all', '$[0]', '$[0]."0"', '$[1]', '$[2]', '$[3]', '$.inexistent');
+::
+
+      json_contains_path('[{"0":0},1,"2",{"three":3}]', 'all', '$[0]', '$[0]."0"', '$[1]', '$[2]', '$[3]', '$.inexistent')
+    ======================================================================================================================
+                                                                                                                         0
+
+The JSON_CONTAINS_PATH function supports wildcards inside json paths.
+
+.. code-block:: sql
+
+    SELECT JSON_CONTAINS_PATH ('[{"0":0},1,"2",{"three":3}]', 'one', '$.inexistent', '$[*]."three"');
+::
+
+      json_contains_path('[{"0":0},1,"2",{"three":3}]', 'one', '$[*]."three"')
+    ==========================================================================
+                                                                             1
+
+JSON_CONTAINS
+===================================
+
+.. function:: JSON_CONTAINS (json_doc doc1, json_doc doc2 [, json path])
+
+  The **JSON_CONTAINS** function verifies whether the doc2 is contained inside the doc1 at the optionally specified path.
+  A json element contains another json element if the following recursive rules are satisfied:
+- A json scalar contains another json scalar if they have the same type (their JSON_TYPE () is equal) and are equal. As an exception, json integer can be compared and equal to json double (even if their JSON_TYPE () evaluation are different).
+- A json array contains a json scalar or a json object if any of json array's elements contains the json_nonarray.
+- A json array contains another json array if all the second json array's elements are contained in the first json array.
+- A json object contains another json object if, for every (key2, value2) pair in the second object, there exists a (key1, value1) pair in the first object with key1=key2 and value2 contained in value1.
+  Otherwise the json element is not contained.
+
+  Returns whether doc2 is contained in root json element of doc1 if no json path argument is given.
+  Returns NULL if any argument is NULL.
+  An error occurs if any argument is invalid.
+
+.. code-block:: sql
+
+    SELECT JSON_CONTAINS ('"simple"','"simple"');
+::
+
+      json_contains('"simple"', '"simple"')
+    =======================================
+                                          1
+
+.. code-block:: sql
+
+    SELECT JSON_CONTAINS ('["not important", "important"]','"important"');
+::
+
+      json_contains('["not important", "important"]', '"important"')
+    ================================================================
+                                                                   1
+
+.. code-block:: sql
+
+    SELECT JSON_CONTAINS ('["not important", "important1", ["not important", "important2"]]','["important1", "important2"]');
+::
+
+      json_contains('["not important", "important1", ["not important", "important2"]]', '["important1", "important2"]')
+    ===================================================================================================================
+                                                                                                                      1
+
+.. code-block:: sql
+
+    SELECT JSON_CONTAINS ('{"k1":["not important", "important1"], "k2": ["not important", "important2"]}','{"k1":"important1", "k2":"important2"}');
+::
+
+      json_contains('{"k1":["not important", "important1"], "k2": ["not important", "important2"]}', '{"k1":"important1", "k2":"important2"}')
+    ==========================================================================================================================================
+                                                                                                                                             1
+
+Note that json objects do not check containment the same way json array do. It is impossible to have a json element that is not a descendent of a json object contained in a sub-element of a json object.
+
+.. code-block:: sql
+
+    SELECT JSON_CONTAINS ('["not important", "important1", ["not important", {"k":"important2"}]]','["important1", "important2"]');
+::
+
+      json_contains('["not important", "important1", ["not important", {"k":"important2"}]]', '["important1", "important2"]')
+    =========================================================================================================================
+                                                                                                                            0
+
+.. code-block:: sql
+
+    SELECT JSON_CONTAINS ('["not important", "important1", ["not important", {"k_neccessary":["important2"]}]]','["important1", {"k_neccessary":"important2"}]');
+::
+
+      json_contains('["not important", "important1", ["not important", {"k_neccessary":["important2"]}]]', '["important1", {"k_neccessary":"important2"}]')
+    =====================================================================================================================================================
+                                                                                                                                                        1

@@ -127,8 +127,10 @@ The following is an example of files related to the database when *testdb* datab
     *   File size is determined by **log_volume_size** in **cubrid.conf** or the **--log-volume-size** option of **cubrid createdb**.
 
 *   Double write buffer file
-    *   Double write buffer file is a storage area used to protect against I/O errors (partial writes). Every data page write is first written into the buffer and then flushed to its location in the permanent data volumes.
-    *   TODO: details on double write buffer configurations.
+    *   Double write buffer file is a storage area used to protect against I/O errors (partial writes).
+    *   Every data page write is first written into the buffer and then flushed to its location in the permanent data volumes.
+    *   During database reboot, partially written page is detected and replaced with the counterpart page in double write buffer.
+    *   The file size is determined by **double_write_buffer_size** in **cubrid.conf**. If set to zero, no file is created and double write buffer is disabled.
 
 .. note::
 

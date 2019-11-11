@@ -159,7 +159,7 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | volume_extension_path               | server parameter        |         | string   | NULL                           |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | todo: dwb params                    | server parameter        |         | string   | NULL                           |                       |
+|                               | double_write_buffer_size            | server parameter        |         | byte     | 2M                             |                       |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 | :ref:`error-parameters`       | call_stack_dump_activation_list     | client/server parameter |         | string   | DEFAULT                        | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -624,10 +624,6 @@ The following are disk-related parameters for defining database volumes and stor
 +------------------------------------------+--------+----------+----------+----------+
 | double_write_buffer_size                 | byte   | 2M       | 0        | 32M      |
 +------------------------------------------+--------+----------+----------+----------+
-| double_write_buffer_blocks               | int    | 2        | 0        | 32       |
-+------------------------------------------+--------+----------+----------+----------+
-| double_write_buffer_enable_flush_thread  | bool   | yes      |          |          |
-+------------------------------------------+--------+----------+----------+----------+
 
 **db_volume_size**
 
@@ -670,15 +666,7 @@ The following are disk-related parameters for defining database volumes and stor
 
 **double_write_buffer_size**
 
-    **double_write_buffer_size** is a parameter to configure the size of double writer buffer and file.
-
-**double_write_buffer_blocks**
-
-    **double_write_buffer_blocks** to be discussed. its default size is 2 and it is probably the only value that we tested; it may be useful to increase, but decreasing it to 1 may be problematic (what happens with new page flushes while dwb is flushed to disk?).
-
-**double_write_buffer_enable_flush_thread**
-
-  **double_write_buffer_enable_flush_thread** to be discussed. I am not sure how it works and what happens if it is disabled online.
+    **double_write_buffer_size** is a parameter to configure the memory and disk size of double writer buffer. If set to zero, double write buffer protection against partial I/O writes is disabled. It is enabled by default and its size is 2M.
 
 .. _error-parameters:
 

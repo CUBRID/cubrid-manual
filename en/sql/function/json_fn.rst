@@ -369,3 +369,111 @@ Accepting any paths that contain json array indexes will filter out '$.b'
       json_search('{"a":["a","b"],"b":"a","c":["a"], "d":{"e":["a"]}}', 'all', 'a', null, '$**[*]')
     ======================
       "["$.a[0]","$.c[0]","$.d.e[0]"]"
+
+JSON_EXTRACT
+===================================
+
+.. function:: JSON_EXTRACT (json_doc, json path [, json path] ...)
+
+  Returns json elements from the json_doc, that are addressed by the given paths.
+  If json path arguments contain wildcards, all elements that are addressed by a path compatible with the wildcards-containing json path are gathered in a resulting json array. 
+  A single json element is returned if no wildcards are used in the given json paths and a single element is found, otherwise the json elements found are wrapped in a json array.
+  Raises an error if a json path is NULL or invalid or if json_doc argument is invalid.
+  Returns NULL if no elements are found or if json_doc is NULL.
+
+.. code-block:: sql
+
+    SELECT JSON_EXTRACT('{"a":["a","b"],"b":"a","c":["a"], "d":{"e":["a"]}}', '$.a');
+::
+
+      json_extract('{"a":["a","b"],"b":"a","c":["a"], "d":{"e":["a"]}}', '$.a')
+    ======================
+      "["a","b"]" -- at '$.a' we have the json array ["a","b"] 
+
+.. code-block:: sql
+
+    SELECT JSON_EXTRACT('{"a":["a","b"],"b":"a","c":["a"], "d":{"e":["a"]}}', '$.a[*]');
+::
+
+      json_extract('{"a":["a","b"],"b":"a","c":["a"], "d":{"e":["a"]}}', '$.a[*]')
+    ======================
+      "["a","b"]" -- '$.a[0]' and '$.a[1]' wrapped in a json array, forming ["a","b"] 
+
+Changing '.a' from previous query with '.*' wildcards will also match '$.c[0]'. This will match any json path that is exactly an object key identifier followed by an array index.
+
+.. code-block:: sql
+
+    SELECT JSON_EXTRACT('{"a":["a","b"],"b":"a","c":["a"], "d":{"e":["a"]}}', '$.*[*]');
+::
+
+      json_extract('{"a":["a","b"],"b":"a","c":["a"], "d":{"e":["a"]}}', '$.*[*]')
+    ======================
+      "["a","b","a"]"
+
+The following json path will match all json paths that end with a json array index (matches all previous matched paths and, in addition, '$.d.e[0]') :
+
+.. code-block:: sql
+
+    SELECT JSON_EXTRACT('{"a":["a","b"],"b":"a","c":["a"], "d":{"e":["a"]}}', '$**[*]');
+::
+
+      json_extract('{"a":["a","b"],"b":"a","c":["a"], "d":{"e":["a"]}}', '$**[*]')
+    ======================
+      "["a","b","a","a"]"
+
+.. code-block:: sql
+
+    SELECT JSON_EXTRACT('{"a":["a","b"],"b":"a","c":["a"], "d":{"e":["a"]}}', '$.d**[*]');
+::
+
+      json_extract('{"a":["a","b"],"b":"a","c":["a"], "d":{"e":["a"]}}', '$d**[*]')
+    ======================
+      "["a"]" -- '$.d.e[0]' is the only path matching the given argument path family - paths that start with '.d' and end with an array index
+
+->
+===================================
+
+.. function:: json_doc -> json path
+
+  Alias operator for JSON_EXTRACT with 2 arguments, having the json_doc argument constrained to be a column.
+  Raises an error if the json path is NULL or invalid.
+  Returns NULL if it is applied on a NULL json_doc argument.
+
+.. code-block:: sql
+
+    CREATE TABLE tj (a json);
+    INSERT INTO tj values ('{"a":1}'), ('{"a":2}'), ('{"a":3}'), (NULL);
+
+    SELECT a->'$.a' from tj;
+::
+
+      json_extract(a, '$.a')
+    ======================
+      1
+      2
+      3
+      NULL
+
+->>
+===================================
+
+.. function:: json_doc ->> json path
+
+  Alias for JSON_UNQUOTE(json_doc->json path). Operator can be applied only on json_doc arguments that are columns.
+  Raises an error if the json path is NULL or invalid.
+  Returns NULL if it is applied on a NULL json_doc argument.
+
+.. code-block:: sql
+
+    CREATE TABLE tj (a json);
+    INSERT INTO tj values ('{"a":1}'), ('{"a":2}'), ('{"a":3}'), (NULL);
+
+    SELECT a->>'$.a' from tj;
+::
+
+      json_unquote(json_extract(a, '$.a'))
+    ======================
+      '1'
+      '2'
+      '3'
+      NULL

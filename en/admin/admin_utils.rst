@@ -1447,9 +1447,10 @@ The following shows [options] available with the **cubrid statdump** utility.
 
     Most statistics are accumulators (they are incremented when an action happens). Other statistics can be counter/timers (they track both number of actions and their duration), some are peeked from database (snapshot) and some are computed based on other values. Lastly, there are several complex statistics which track detailed information on some operations.
 
+    **File I/O**
 
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    | **File I/O**                             | Stat type      |  Description                                                          |
+    | Stat name                                | Stat type      |  Description                                                          |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
     | Num_file_removes                         | Accumulator    | The number of files removed                                           |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+

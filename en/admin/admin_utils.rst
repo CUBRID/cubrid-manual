@@ -1840,323 +1840,367 @@ The following shows [options] available with the **cubrid statdump** utility.
     | ..heap_vacuum_log                        | Counter/timer  | The number and duration of logging heap vacuum operation              |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
 
-    +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
-    | Category         | Item                                     | Stat type      |  Description                                                          |
-    +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
-    | Query plan cache | Num_plan_cache_add                       | Accumulator    | The number of entries added to query cache                            |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_plan_cache_lookup                    | Accumulator    | The number of lookups in query cache                                  |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_plan_cache_hit                       | Accumulator    | The number of hits in query cache                                     |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_plan_cache_miss                      | Accumulator    | The number of misses in query cache                                   |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_plan_cache_full                      | Accumulator    | The number of times query cache becomes full                          |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_plan_cache_delete                    | Accumulator    | The number of entries deleted from query cache                        |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_plan_cache_invalid_xasl_id           | Accumulator    | The number of failed attempts of retrieving entries by XASL ID.       |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_plan_cache_entries                   | Snapshot       | The current number of entires in query cache                          |
-    +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
-    | HA               | Time_ha_replication_delay                | Accumulator    | Replication latency time (sec.)                                       |
-    +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
-    | Vacuuming        | Num_vacuum_log_pages_vacuumed            | Accumulator    | The number of log data pages processed by vacuum workers.             |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_vacuum_log_pages_to_vacuum           | Accumulator    | | The number of log data pages to be vacuumed by vacuum workers.      |
-    |                  |                                          |                | | (if value is much bigger than Num_vacuum_log_pages_vacuumed,        |
-    |                  |                                          |                | | it means vacuum system lags behind)                                 |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_vacuum_prefetch_requests_log_pages   | Accumulator    | The number of requests to prefetch buffer for log pages from vacuum   |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_vacuum_prefetch_hits_log_pages       | Accumulator    | The number of hits to prefetch buffer for log pages from vacuum       |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | ..vacuum_master                          | Counter/timer  | The number and duration of vacuum master iterations.                  |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | ..vacuum_job                             | Counter/timer  | The number and duration of vacuum jobs                                |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | ..vacuum_worker_process_log              | Counter/timer  | The number and duration of process log tasks                          |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | ..vacuum_worker_execute                  | Counter/timer  | The number and duration of execute vacuum tasks                       |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Vacuum_data_page_buffer_hit_ratio        | Computed       | Hit ratio of vacuuming data page buffers                              |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Vacuum_page_efficiency_ratio             | Computed       | | Ratio between number of page unfix of vacuum with dirty flag and    |
-    |                  |                                          |                | | total number of page unfix of vacuum. Ideally, the vacuum process   |
-    |                  |                                          |                | | performsonly write operations since it cleans up all unused records.|
-    |                  |                                          |                | | Even with an optimized vacuum process, 100% efficiency is not       |
-    |                  |                                          |                | | possible.                                                           |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Vacuum_page_fetch_ratio                  | Computed       | Ratio (percentage) of page unfix from vacuum module versus total.     |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_data_page_avoid_dealloc              | Snapshot       | The number of data pages that cannot be deallocated by vacuum         |
-    +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
-    | Page buffer fix  | Data_page_fix_lock_acquire_time_msec     | Computed       | Time waiting for other transaction to load page from disk             |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Data_page_fix_hold_acquire_time_msec     | Computed       | Time to obtain page latch                                             |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Data_page_fix_acquire_time_msec          | Computed       | Total time to fix page                                                |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Data_page_allocate_time_ratio            | Computed       | | Ratio of time necessary for page loading from disk versus the total |
-    |                  |                                          |                | | time of fixing a page                                               |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Data_page_total_promote_success          | Computed       | Number of successful page latch promotions from shared to exclusive   |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Data_page_total_promote_fail             | Computed       | Number of failed page latch promotions                                |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Data_page_total_promote_time_msec        | Computed       | Time for promoting page latches                                       |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_data_page_hash_anchor_waits          | Accumulator    | Number of waits on page buffer hash bucket                            |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Time_data_page_hash_anchor_wait          | Accumulator    | Total wait time on page buffer hash bucket                            |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_data_page_fix_ext                    | Complex        | | Number of data page fixes classified by:                            |
-    |                  |                                          |                | | - module (system, worker, vacuum)                                   |
-    |                  |                                          |                | | - page type                                                         |
-    |                  |                                          |                | | - page fetch/found mode                                             |
-    |                  |                                          |                | | - page latch mode                                                   |
-    |                  |                                          |                | | - page latch condition                                              |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Time_data_page_lock_acquire_time         | Complex        | | Time consumed waiting for other thread to load data page from disk: |
-    |                  |                                          |                | | - module (system, worker, vacuum)                                   |
-    |                  |                                          |                | | - page type                                                         |
-    |                  |                                          |                | | - page fetch/found mode                                             |
-    |                  |                                          |                | | - page latch mode                                                   |
-    |                  |                                          |                | | - page latch condition                                              |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Time_data_page_hold_acquire_time         | Complex        | | Time consumed waiting for data page latch:                          |
-    |                  |                                          |                | | - module (system, worker, vacuum)                                   |
-    |                  |                                          |                | | - page type                                                         |
-    |                  |                                          |                | | - page fetch/found mode                                             |
-    |                  |                                          |                | | - page latch mode                                                   |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Time_data_page_fix_acquire_time          | Complex        | | Time consumed fixing data page:                                     |
-    |                  |                                          |                | | - module (system, worker, vacuum)                                   |
-    |                  |                                          |                | | - page type                                                         |
-    |                  |                                          |                | | - page fetch/found mode                                             |
-    |                  |                                          |                | | - page latch mode                                                   |
-    |                  |                                          |                | | - page latch condition                                              |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_data_page_promote_ext                | Complex        | | Number of data page promotions classified by:                       |
-    |                  |                                          |                | | - module (system, worker, vacuum)                                   |
-    |                  |                                          |                | | - page type                                                         |
-    |                  |                                          |                | | - promote latch condition                                           |
-    |                  |                                          |                | | - holder latch mode                                                 |
-    |                  |                                          |                | | - successful/failed promotion                                       |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_data_page_promote_time_ext           | Complex        | | Time consumed for data page promotions classified by:               |
-    |                  |                                          |                | | - module (system, worker, vacuum)                                   |
-    |                  |                                          |                | | - page type                                                         |
-    |                  |                                          |                | | - promote latch condition                                           |
-    |                  |                                          |                | | - holder latch mode                                                 |
-    |                  |                                          |                | | - successful/failed promotion                                       |
-    +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
-    | Page buffer      | Num_unfix_void_to_private_top            | Accumulator    | Unfix newly loaded data page and add to top of private LRU list       |
-    | | unfix          +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_unfix_void_to_private_mid            | Accumulator    | Unfix newly loaded data page and add to middle of private LRU list    |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_unfix_void_to_shared_mid             | Accumulator    | Unfix newly loaded data page and add to middle of shared LRU list     |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_unfix_lru1_private_to_shared_mid     | Accumulator    | Unfix data page and move from zone 1 of private list to shared middle |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_unfix_lru2_private_to_shared_mid     | Accumulator    | Unfix data page and move from zone 2 of private list to shared middle |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_unfix_lru3_private_to_shared_mid     | Accumulator    | Unfix data page and move from zone 3 of private list to shared middle |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_unfix_lru2_private_keep              | Accumulator    | Unfix data page and keep it in zone 2 of private list                 |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_unfix_lru2_shared_keep               | Accumulator    | Unfix data page and keep it in zone 2 of shared  list                 |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_unfix_lru2_private_to_top            | Accumulator    | Unfix data page and boost it from zone 2 of private list to its top   |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_unfix_lru2_shared_to_top             | Accumulator    | Unfix data page and boost it from zone 2 of shared list to its top    |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_unfix_lru3_private_to_top            | Accumulator    | Unfix data page and boost it from zone 3 of private list to its top   |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_unfix_lru3_shared_to_top             | Accumulator    | Unfix data page and boost it from zone 3 of shared list to its top    |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_unfix_lru1_private_keep              | Accumulator    | Unfix data page and keep it in zone 1 of private list                 |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_unfix_lru2_shared_keep               | Accumulator    | Unfix data page and keep it in zone 2 of shared  list                 |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_unfix_void_to_private_mid_vacuum     | Accumulator    | | Unfix newly loaded data page and add to middle of private LRU list  |
-    |                  |                                          |                | | (vacuum thread)                                                     |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_unfix_lru1_any_keep_vacuum           | Accumulator    | | Unfix data page and keep it in zone 1 of private/shared list        |
-    |                  |                                          |                | | (vacuum thread)                                                     |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_unfix_lru2_any_keep_vacuum           | Accumulator    | | Unfix data page and keep it in zone 2 of private/shared list        |
-    |                  |                                          |                | | (vacuum thread)                                                     |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_unfix_lru3_any_keep_vacuum           | Accumulator    | | Unfix data page and keep it in zone 3 of private/shared list        |
-    |                  |                                          |                | | (vacuum thread)                                                     |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_unfix_void_aout_found                | Accumulator    | Newly loaded data page was found in AOUT list                         |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_unfix_void_aout_not_found            | Accumulator    | Newly loaded data page was not found in AOUT list                     |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_unfix_void_aout_found_vacuum         | Accumulator    | Newly loaded data page was found in AOUT list (vacuum thread)         |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_unfix_void_aout_not_found_vacuum     | Accumulator    | Newly loaded data page was not found in AOUT list (vacuum thread)     |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_data_page_unfix_ext                  | Complex        | | Number of data page unfixes classified by:                          |
-    |                  |                                          |                | | - module (system, worker, vacuum)                                   |
-    |                  |                                          |                | | - page type                                                         |
-    |                  |                                          |                | | - dirty or not                                                      |
-    |                  |                                          |                | | - dirtied by holder or not                                          |
-    |                  |                                          |                | | - holder latch mode                                                 |
-    +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
-    | Page buffer I/O  | Data_page_buffer_hit_ratio               | Computed       | | Hit ratio of data page buffers                                      |
-    |                  |                                          |                | | (Num_data_page_fetches - Num_data_page_ioreads)*100                 |
-    |                  |                                          |                | | / Num_data_page_fetches                                             |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_adaptive_flush_pages                 | Accumulator    | The number of data pages requested from adaptive flush controller.    |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_adaptive_flush_log_pages             | Accumulator    | The number of log data pages requested from adaptive flush controller |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_adaptive_flush_max_pages             | Accumulator    | The total number of page tokens assigned by adaptive flush controller |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | ..compensate_flush                       | Counter/timer  | | The number and duration of flush compensations force by adaptive    |
-    |                  |                                          |                | | flush controller                                                    |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | ..flush_collect                          | Counter/timer  | The number and duration of flush thread collecting BCB sets           |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | ..flush_flush                            | Counter/timer  | The number and duration of flush thread flushing BCB sets             |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | ..flush_sleep                            | Counter/timer  | The number and duration of flush thread pauses                        |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | ..flush_collect_per_page                 | Counter/timer  | The number and duration of flush thread collecting one BCB            |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | ..flush_flush_per_page                   | Counter/timer  | The number and duration of flush thread flushing one BCB              |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_data_page_writes                     | Accumulator    | The total number of data pages flushed to disk                        |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_data_page_dirty_to_post_flush        | Accumulator    | Number of flushed pages sent to post-flush thread for processing      |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_data_page_skipped_flush              | Accumulator    | The total number of BCB's that flush thread skipped                   |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_data_page_skipped_flush_need_wal     | Accumulator    | | The number of BCB's that flush thread skipped because it required   |
-    |                  |                                          |                | | log data pages be flushed first                                     |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | | Num_data_page_skipped\                 | Accumulator    | | The number of BCB's that flush thread skipped because they have     |
-    |                  | | \_flush_already_flushed                |                | | been flushed already                                                |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_data_page_skipped_flush_fixed_or_hot | Accumulator    | | The number of BCB's that flush thread skipped because they are fixed|
-    |                  |                                          |                | | or have been fixed since collected.                                 |
-    +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
-    | | Page buffer    | ..alloc_bcb                              | Counter/timer  | | The number and duration of BCB allocation to store new data page.   |
-    | | victimization  |                                          |                | | When a database is just started, the page buffer has available      |
-    |                  |                                          |                | | BCB's ready to be picked. However, once page buffer becomes full    |
-    |                  |                                          |                | | all BCB's are in use, one must be victimized. The time tracked here |
-    |                  |                                          |                | | includes BCB victimization and loading from disk.                   |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | ..alloc_bcb_search_victim                | Counter/timer  | The number and duration of searches through all LRU lists for victims |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | ..alloc_bcb_cond_wait_high_prio          | Counter/timer  | The number and duration of direct victim waits in high-priority queue |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | ..alloc_bcb_cond_wait_low_prio           | Counter/timer  | The number and duration of direct victim waits in low-priority queue  |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_alloc_bcb_prioritize_vacuum          | Accumulator    | The number of vacuum direct victim waits in high-priority queue       |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_alloc_bcb_wait_threads_high_priority | Snapshot       | The current number of direct victim waiters in high-priority queue    |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_alloc_bcb_wait_threads_low_priority  | Snapshot       | The current number of direct victim waiters in low-priority queue     |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_flushed_bcbs_wait_for_direct_victim  | Snapshot       | | The current number of BCB's waiting for post-flush thread to process|
-    |                  |                                          |                | | them and assign directly.                                           |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_victim_use_invalid_bcb               | Accumulator    | The number of BCB's allocated from invalid list                       |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_data_page_avoid_victim               | Accumulator    | | The number of BCB's that cannot be victimized because they are      |
-    |                  |                                          |                | | in process of being flushed to disk                                 |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_victim_assign_direct_vacuum_void     | Accumulator    | The number of direct victims assigned from void zone by vacuum worker |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_victim_assign_direct_vacuum_lru      | Accumulator    | The number of direct victims assigned from LRU zone 3 by vacuum worker|
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_victim_assign_direct_flush           | Accumulator    | The number of direct victims assigned by flush thread                 |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_victim_assign_direct_panic           | Accumulator    | | The number of direct victims assigned by panicked LRU searches.     |
-    |                  |                                          |                | | If there are a lot of waiters for victims, threads that found other |
-    |                  |                                          |                | | victims while searching LRU list, will also try to assign more      |
-    |                  |                                          |                | | directly.                                                           |
-    |                  |                                          |                | | Page buffer maintenance thread assignments are also counted here    |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_victim_assign_direct_adjust_lru      | Accumulator    | The number of direct victims assigned when BCB falls to LRU zone 3    |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | | Num_victim_assign_direct_adjust_lru\   | Accumulator    | | The number of BCB's falling to LRU zone 3 **not** assigned as direct|
-    |                  | | \_to_vacuum                            |                | | victims because a vacuum thread is expected to access it            |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | | Num_victim_assign_direct_search\       | Accumulator    | | The number of direct victims assigned by flush thread while         |
-    |                  | | \_for_flush                            |                | | collecting BCB sets for flush                                       |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_victim_shared_lru_success            | Accumulator    | The number of successful victim searches in shared LRU lists          |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_victim_own_private_lru_success       | Accumulator    | The number of successful victim searches in own private LRU lists     |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_victim_other_private_lru_success     | Accumulator    | The number of successful victim searches in other private LRU lists   |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_victim_shared_lru_fail               | Accumulator    | The number of failed victim searches in shared LRU lists              |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_victim_own_private_lru_fail          | Accumulator    | The number of failed victim searches in own private LRU lists         |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_victim_other_private_lru_fail        | Accumulator    | The number of failed victim searches in other private LRU lists       |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_victim_all_lru_fail                  | Accumulator    | | The number of unlucky streaks to find victims in the sequence:      |
-    |                  |                                          |                | | 1. Own private LRU list (if over quota)                             |
-    |                  |                                          |                | | 2. Other private LRU list (if own private is over quota)            |
-    |                  |                                          |                | | 3. Shared LRU list                                                  |
-    |                  |                                          |                | | (this is simplified explanation, see *pgbuf_get_victim* function)   |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_victim_get_from_lru                  | Accumulator    | The total number of victim searches in any LRU list                   |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_victim_get_from_lru_was_empty        | Accumulator    | | The number of victim searches in any LRU list that stop             |
-    |                  |                                          |                | | immediately because candidate count is zero                         |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_victim_get_from_lru_fail             | Accumulator    | | The number of failed victim searches in any LRU list although the   |
-    |                  |                                          |                | | candidate count was not zero                                        |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_victim_get_from_lru_bad_hint         | Accumulator    | | The number of failed victim searches in any LRU list because victim |
-    |                  |                                          |                | | was wrong                                                           |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_lfcq_prv_get_total_calls             | Accumulator    | The number of victim searches in non-zero candidate private LRUs queue|
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_lfcq_prv_get_empty                   | Accumulator    | The number of times non-zero candidate private LRUs queue was empty   |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_lfcq_prv_get_big                     | Accumulator    | | The number of victim searches in only very big non-zero candidate   | 
-    |                  |                                          |                | | private LRUs queue (in this context, very big means way over quota) |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_lfcq_shr_get_total_calls             | Accumulator    | The number of victim searches in non-zero candidate shared LRUs queue |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_lfcq_shr_get_empty                   | Accumulator    | The number of times non-zero candidate shared LRUs queue was empty    |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_lfcq_big_private_lists               | Snapshot       | The current number of very big non-zero candidate private LRU lists   |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_lfcq_private_lists                   | Snapshot       | The current number of non-zero candidate private LRU lists            |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_lfcq_shared_lists                    | Snapshot       | The current number of non-zero candidate shared LRU lists             |
-    +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
-    | MVCC snapshot    | Time_get_snapshot_acquire_time:          | Accumulator    | Total time consumed by all transactions to get a snapshot             |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Count_get_snapshot_retry:                | Accumulator    | The number of retries to acquire MVCC snapshot                        |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Time_tran_complete_time:                 | Accumulator    | Time spent to invalidate snapshot and MVCCID on commit/rollback       |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Time_get_oldest_mvcc_acquire_time:       | Accumulator    | Time spend to acquire "global oldest MVCC ID"                         |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Count_get_oldest_mvcc_retry:             | Accumulator    | The number of retries to acquire "global oldest MVCC ID"              |
-    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    |                  | Num_mvcc_snapshot_ext                    | Complex        | | Number of data page fixes classified by:                            |
-    |                  |                                          |                | | - snapshot type                                                     |
-    |                  |                                          |                | | - insert/delete MVCCID's status                                     |
-    |                  |                                          |                | | - visible/invisible                                                 |
-    +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
+    **Query plan cache**
 
-.. Note::  
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | **Stat name**                            | **Stat type**  |  **Description**                                                      |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_plan_cache_add                       | Accumulator    | The number of entries added to query cache                            |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_plan_cache_lookup                    | Accumulator    | The number of lookups in query cache                                  |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_plan_cache_hit                       | Accumulator    | The number of hits in query cache                                     |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_plan_cache_miss                      | Accumulator    | The number of misses in query cache                                   |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_plan_cache_full                      | Accumulator    | The number of times query cache becomes full                          |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_plan_cache_delete                    | Accumulator    | The number of entries deleted from query cache                        |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_plan_cache_invalid_xasl_id           | Accumulator    | The number of failed attempts of retrieving entries by XASL ID.       |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_plan_cache_entries                   | Snapshot       | The current number of entires in query cache                          |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+
+    **High Availibility**
+
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | **Stat name**                            | **Stat type**  |  **Description**                                                      |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Time_ha_replication_delay                | Accumulator    | Replication latency time (sec.)                                       |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+
+    **Vacuuming**
+
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | **Stat name**                            | **Stat type**  |  **Description**                                                      |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_vacuum_log_pages_vacuumed            | Accumulator    | The number of log data pages processed by vacuum workers.             |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_vacuum_log_pages_to_vacuum           | Accumulator    | | The number of log data pages to be vacuumed by vacuum workers.      |
+    |                                          |                | | (if value is much bigger than Num_vacuum_log_pages_vacuumed,        |
+    |                                          |                | | it means vacuum system lags behind)                                 |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_vacuum_prefetch_requests_log_pages   | Accumulator    | The number of requests to prefetch buffer for log pages from vacuum   |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_vacuum_prefetch_hits_log_pages       | Accumulator    | The number of hits to prefetch buffer for log pages from vacuum       |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..vacuum_master                          | Counter/timer  | The number and duration of vacuum master iterations.                  |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..vacuum_job                             | Counter/timer  | The number and duration of vacuum jobs                                |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..vacuum_worker_process_log              | Counter/timer  | The number and duration of process log tasks                          |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..vacuum_worker_execute                  | Counter/timer  | The number and duration of execute vacuum tasks                       |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Vacuum_data_page_buffer_hit_ratio        | Computed       | Hit ratio of vacuuming data page buffers                              |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Vacuum_page_efficiency_ratio             | Computed       | | Ratio between number of page unfix of vacuum with dirty flag and    |
+    |                                          |                | | total number of page unfix of vacuum. Ideally, the vacuum process   |
+    |                                          |                | | performsonly write operations since it cleans up all unused records.|
+    |                                          |                | | Even with an optimized vacuum process, 100% efficiency is not       |
+    |                                          |                | | possible.                                                           |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Vacuum_page_fetch_ratio                  | Computed       | Ratio (percentage) of page unfix from vacuum module versus total.     |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_data_page_avoid_dealloc              | Snapshot       | The number of data pages that cannot be deallocated by vacuum         |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+
+    **Page buffer fix**
+
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | **Stat name**                            | **Stat type**  |  **Description**                                                      |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Data_page_fix_lock_acquire_time_msec     | Computed       | Time waiting for other transaction to load page from disk             |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Data_page_fix_hold_acquire_time_msec     | Computed       | Time to obtain page latch                                             |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Data_page_fix_acquire_time_msec          | Computed       | Total time to fix page                                                |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Data_page_allocate_time_ratio            | Computed       | | Ratio of time necessary for page loading from disk versus the total |
+    |                                          |                | | time of fixing a page                                               |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Data_page_total_promote_success          | Computed       | Number of successful page latch promotions from shared to exclusive   |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Data_page_total_promote_fail             | Computed       | Number of failed page latch promotions                                |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Data_page_total_promote_time_msec        | Computed       | Time for promoting page latches                                       |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_data_page_hash_anchor_waits          | Accumulator    | Number of waits on page buffer hash bucket                            |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Time_data_page_hash_anchor_wait          | Accumulator    | Total wait time on page buffer hash bucket                            |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_data_page_fix_ext                    | Complex        | | Number of data page fixes classified by:                            |
+    |                                          |                | | - module (system, worker, vacuum)                                   |
+    |                                          |                | | - page type                                                         |
+    |                                          |                | | - page fetch/found mode                                             |
+    |                                          |                | | - page latch mode                                                   |
+    |                                          |                | | - page latch condition                                              |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Time_data_page_lock_acquire_time         | Complex        | | Time consumed waiting for other thread to load data page from disk: |
+    |                                          |                | | - module (system, worker, vacuum)                                   |
+    |                                          |                | | - page type                                                         |
+    |                                          |                | | - page fetch/found mode                                             |
+    |                                          |                | | - page latch mode                                                   |
+    |                                          |                | | - page latch condition                                              |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Time_data_page_hold_acquire_time         | Complex        | | Time consumed waiting for data page latch:                          |
+    |                                          |                | | - module (system, worker, vacuum)                                   |
+    |                                          |                | | - page type                                                         |
+    |                                          |                | | - page fetch/found mode                                             |
+    |                                          |                | | - page latch mode                                                   |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Time_data_page_fix_acquire_time          | Complex        | | Time consumed fixing data page:                                     |
+    |                                          |                | | - module (system, worker, vacuum)                                   |
+    |                                          |                | | - page type                                                         |
+    |                                          |                | | - page fetch/found mode                                             |
+    |                                          |                | | - page latch mode                                                   |
+    |                                          |                | | - page latch condition                                              |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_data_page_promote_ext                | Complex        | | Number of data page promotions classified by:                       |
+    |                                          |                | | - module (system, worker, vacuum)                                   |
+    |                                          |                | | - page type                                                         |
+    |                                          |                | | - promote latch condition                                           |
+    |                                          |                | | - holder latch mode                                                 |
+    |                                          |                | | - successful/failed promotion                                       |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_data_page_promote_time_ext           | Complex        | | Time consumed for data page promotions classified by:               |
+    |                                          |                | | - module (system, worker, vacuum)                                   |
+    |                                          |                | | - page type                                                         |
+    |                                          |                | | - promote latch condition                                           |
+    |                                          |                | | - holder latch mode                                                 |
+    |                                          |                | | - successful/failed promotion                                       |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+
+    **Page buffer unfix**
+
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | **Stat name**                            | **Stat type**  |  **Description**                                                      |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_unfix_void_to_private_top            | Accumulator    | Unfix newly loaded data page and add to top of private LRU list       |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_unfix_void_to_private_mid            | Accumulator    | Unfix newly loaded data page and add to middle of private LRU list    |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_unfix_void_to_shared_mid             | Accumulator    | Unfix newly loaded data page and add to middle of shared LRU list     |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_unfix_lru1_private_to_shared_mid     | Accumulator    | Unfix data page and move from zone 1 of private list to shared middle |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_unfix_lru2_private_to_shared_mid     | Accumulator    | Unfix data page and move from zone 2 of private list to shared middle |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_unfix_lru3_private_to_shared_mid     | Accumulator    | Unfix data page and move from zone 3 of private list to shared middle |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_unfix_lru2_private_keep              | Accumulator    | Unfix data page and keep it in zone 2 of private list                 |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_unfix_lru2_shared_keep               | Accumulator    | Unfix data page and keep it in zone 2 of shared  list                 |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_unfix_lru2_private_to_top            | Accumulator    | Unfix data page and boost it from zone 2 of private list to its top   |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_unfix_lru2_shared_to_top             | Accumulator    | Unfix data page and boost it from zone 2 of shared list to its top    |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_unfix_lru3_private_to_top            | Accumulator    | Unfix data page and boost it from zone 3 of private list to its top   |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_unfix_lru3_shared_to_top             | Accumulator    | Unfix data page and boost it from zone 3 of shared list to its top    |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_unfix_lru1_private_keep              | Accumulator    | Unfix data page and keep it in zone 1 of private list                 |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_unfix_lru2_shared_keep               | Accumulator    | Unfix data page and keep it in zone 2 of shared  list                 |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_unfix_void_to_private_mid_vacuum     | Accumulator    | | Unfix newly loaded data page and add to middle of private LRU list  |
+    |                                          |                | | (vacuum thread)                                                     |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_unfix_lru1_any_keep_vacuum           | Accumulator    | | Unfix data page and keep it in zone 1 of private/shared list        |
+    |                                          |                | | (vacuum thread)                                                     |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_unfix_lru2_any_keep_vacuum           | Accumulator    | | Unfix data page and keep it in zone 2 of private/shared list        |
+    |                                          |                | | (vacuum thread)                                                     |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_unfix_lru3_any_keep_vacuum           | Accumulator    | | Unfix data page and keep it in zone 3 of private/shared list        |
+    |                                          |                | | (vacuum thread)                                                     |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_unfix_void_aout_found                | Accumulator    | Newly loaded data page was found in AOUT list                         |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_unfix_void_aout_not_found            | Accumulator    | Newly loaded data page was not found in AOUT list                     |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_unfix_void_aout_found_vacuum         | Accumulator    | Newly loaded data page was found in AOUT list (vacuum thread)         |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_unfix_void_aout_not_found_vacuum     | Accumulator    | Newly loaded data page was not found in AOUT list (vacuum thread)     |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_data_page_unfix_ext                  | Complex        | | Number of data page unfixes classified by:                          |
+    |                                          |                | | - module (system, worker, vacuum)                                   |
+    |                                          |                | | - page type                                                         |
+    |                                          |                | | - dirty or not                                                      |
+    |                                          |                | | - dirtied by holder or not                                          |
+    |                                          |                | | - holder latch mode                                                 |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+
+    **Page buffer I/O**
+
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | **Stat name**                            | **Stat type**  |  **Description**                                                      |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Data_page_buffer_hit_ratio               | Computed       | | Hit ratio of data page buffers                                      |
+    |                                          |                | | (Num_data_page_fetches - Num_data_page_ioreads)*100                 |
+    |                                          |                | | / Num_data_page_fetches                                             |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_adaptive_flush_pages                 | Accumulator    | The number of data pages requested from adaptive flush controller.    |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_adaptive_flush_log_pages             | Accumulator    | The number of log data pages requested from adaptive flush controller |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_adaptive_flush_max_pages             | Accumulator    | The total number of page tokens assigned by adaptive flush controller |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..compensate_flush                       | Counter/timer  | | The number and duration of flush compensations force by adaptive    |
+    |                                          |                | | flush controller                                                    |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..flush_collect                          | Counter/timer  | The number and duration of flush thread collecting BCB sets           |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..flush_flush                            | Counter/timer  | The number and duration of flush thread flushing BCB sets             |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..flush_sleep                            | Counter/timer  | The number and duration of flush thread pauses                        |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..flush_collect_per_page                 | Counter/timer  | The number and duration of flush thread collecting one BCB            |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..flush_flush_per_page                   | Counter/timer  | The number and duration of flush thread flushing one BCB              |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_data_page_writes                     | Accumulator    | The total number of data pages flushed to disk                        |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_data_page_dirty_to_post_flush        | Accumulator    | Number of flushed pages sent to post-flush thread for processing      |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_data_page_skipped_flush              | Accumulator    | The total number of BCB's that flush thread skipped                   |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_data_page_skipped_flush_need_wal     | Accumulator    | | The number of BCB's that flush thread skipped because it required   |
+    |                                          |                | | log data pages be flushed first                                     |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | | Num_data_page_skipped\                 | Accumulator    | | The number of BCB's that flush thread skipped because they have     |
+    | | \_flush_already_flushed                |                | | been flushed already                                                |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_data_page_skipped_flush_fixed_or_hot | Accumulator    | | The number of BCB's that flush thread skipped because they are fixed|
+    |                                          |                | | or have been fixed since collected.                                 |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+
+    **Page buffer victimization**
+
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | **Stat name**                            | **Stat type**  |  **Description**                                                      |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..alloc_bcb                              | Counter/timer  | | The number and duration of BCB allocation to store new data page.   |
+    |                                          |                | | When a database is just started, the page buffer has available      |
+    |                                          |                | | BCB's ready to be picked. However, once page buffer becomes full    |
+    |                                          |                | | all BCB's are in use, one must be victimized. The time tracked here |
+    |                                          |                | | includes BCB victimization and loading from disk.                   |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..alloc_bcb_search_victim                | Counter/timer  | The number and duration of searches through all LRU lists for victims |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..alloc_bcb_cond_wait_high_prio          | Counter/timer  | The number and duration of direct victim waits in high-priority queue |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..alloc_bcb_cond_wait_low_prio           | Counter/timer  | The number and duration of direct victim waits in low-priority queue  |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_alloc_bcb_prioritize_vacuum          | Accumulator    | The number of vacuum direct victim waits in high-priority queue       |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_alloc_bcb_wait_threads_high_priority | Snapshot       | The current number of direct victim waiters in high-priority queue    |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_alloc_bcb_wait_threads_low_priority  | Snapshot       | The current number of direct victim waiters in low-priority queue     |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_flushed_bcbs_wait_for_direct_victim  | Snapshot       | | The current number of BCB's waiting for post-flush thread to process|
+    |                                          |                | | them and assign directly.                                           |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_victim_use_invalid_bcb               | Accumulator    | The number of BCB's allocated from invalid list                       |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_data_page_avoid_victim               | Accumulator    | | The number of BCB's that cannot be victimized because they are      |
+    |                                          |                | | in process of being flushed to disk                                 |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_victim_assign_direct_vacuum_void     | Accumulator    | The number of direct victims assigned from void zone by vacuum worker |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_victim_assign_direct_vacuum_lru      | Accumulator    | The number of direct victims assigned from LRU zone 3 by vacuum worker|
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_victim_assign_direct_flush           | Accumulator    | The number of direct victims assigned by flush thread                 |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_victim_assign_direct_panic           | Accumulator    | | The number of direct victims assigned by panicked LRU searches.     |
+    |                                          |                | | If there are a lot of waiters for victims, threads that found other |
+    |                                          |                | | victims while searching LRU list, will also try to assign more      |
+    |                                          |                | | directly.                                                           |
+    |                                          |                | | Page buffer maintenance thread assignments are also counted here    |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_victim_assign_direct_adjust_lru      | Accumulator    | The number of direct victims assigned when BCB falls to LRU zone 3    |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | | Num_victim_assign_direct_adjust_lru\   | Accumulator    | | The number of BCB's falling to LRU zone 3 **not** assigned as direct|
+    | | \_to_vacuum                            |                | | victims because a vacuum thread is expected to access it            |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | | Num_victim_assign_direct_search\       | Accumulator    | | The number of direct victims assigned by flush thread while         |
+    | | \_for_flush                            |                | | collecting BCB sets for flush                                       |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_victim_shared_lru_success            | Accumulator    | The number of successful victim searches in shared LRU lists          |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_victim_own_private_lru_success       | Accumulator    | The number of successful victim searches in own private LRU lists     |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_victim_other_private_lru_success     | Accumulator    | The number of successful victim searches in other private LRU lists   |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_victim_shared_lru_fail               | Accumulator    | The number of failed victim searches in shared LRU lists              |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_victim_own_private_lru_fail          | Accumulator    | The number of failed victim searches in own private LRU lists         |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_victim_other_private_lru_fail        | Accumulator    | The number of failed victim searches in other private LRU lists       |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_victim_all_lru_fail                  | Accumulator    | | The number of unlucky streaks to find victims in the sequence:      |
+    |                                          |                | | 1. Own private LRU list (if over quota)                             |
+    |                                          |                | | 2. Other private LRU list (if own private is over quota)            |
+    |                                          |                | | 3. Shared LRU list                                                  |
+    |                                          |                | | (this is simplified explanation, see *pgbuf_get_victim* function)   |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_victim_get_from_lru                  | Accumulator    | The total number of victim searches in any LRU list                   |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_victim_get_from_lru_was_empty        | Accumulator    | | The number of victim searches in any LRU list that stop             |
+    |                                          |                | | immediately because candidate count is zero                         |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_victim_get_from_lru_fail             | Accumulator    | | The number of failed victim searches in any LRU list although the   |
+    |                                          |                | | candidate count was not zero                                        |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_victim_get_from_lru_bad_hint         | Accumulator    | | The number of failed victim searches in any LRU list because victim |
+    |                                          |                | | was wrong                                                           |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_lfcq_prv_get_total_calls             | Accumulator    | The number of victim searches in non-zero candidate private LRUs queue|
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_lfcq_prv_get_empty                   | Accumulator    | The number of times non-zero candidate private LRUs queue was empty   |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_lfcq_prv_get_big                     | Accumulator    | | The number of victim searches in only very big non-zero candidate   |
+    |                                          |                | | private LRUs queue (in this context, very big means way over quota) |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_lfcq_shr_get_total_calls             | Accumulator    | The number of victim searches in non-zero candidate shared LRUs queue |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_lfcq_shr_get_empty                   | Accumulator    | The number of times non-zero candidate shared LRUs queue was empty    |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_lfcq_big_private_lists               | Snapshot       | The current number of very big non-zero candidate private LRU lists   |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_lfcq_private_lists                   | Snapshot       | The current number of non-zero candidate private LRU lists            |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_lfcq_shared_lists                    | Snapshot       | The current number of non-zero candidate shared LRU lists             |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+
+    **MVCC Snapshot**
+
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | **Stat name**                            | **Stat type**  |  **Description**                                                      |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Time_get_snapshot_acquire_time:          | Accumulator    | Total time consumed by all transactions to get a snapshot             |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Count_get_snapshot_retry:                | Accumulator    | The number of retries to acquire MVCC snapshot                        |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Time_tran_complete_time:                 | Accumulator    | Time spent to invalidate snapshot and MVCCID on commit/rollback       |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Time_get_oldest_mvcc_acquire_time:       | Accumulator    | Time spend to acquire "global oldest MVCC ID"                         |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Count_get_oldest_mvcc_retry:             | Accumulator    | The number of retries to acquire "global oldest MVCC ID"              |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_mvcc_snapshot_ext                    | Complex        | | Number of data page fixes classified by:                            |
+    |                                          |                | | - snapshot type                                                     |
+    |                                          |                | | - insert/delete MVCCID's status                                     |
+    |                                          |                | | - visible/invisible                                                 |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+
+.. Note::
 
     (*) : These statistics measure the non-MVCC operations or MVCC operations which are performed in-place (decided internally)
 
-    
+
 .. option:: -o, --output-file=FILE
 
     **-o** options is used to store statistics information of server processing for the database to a specified file.  ::
@@ -2165,8 +2209,8 @@ The following shows [options] available with the **cubrid statdump** utility.
 
 .. option:: -c, --cumulative
 
-    You can display the accumulated operation statistics information of the target database server by using the **-c** option. 
-    
+    You can display the accumulated operation statistics information of the target database server by using the **-c** option.
+
     Num_data_page_fix_ext, Num_data_page_unfix_ext, Time_data_page_hold_acquire_time, Time_data_page_fix_acquire_time information can be output only when this option is specified; however, these informations will be omitted because they are for CUBRID Engine developers.
 
     By combining this with the **-i** option, you can check the operation statistics information at a specified interval.  ::
@@ -2175,12 +2219,12 @@ The following shows [options] available with the **cubrid statdump** utility.
 
 .. option:: -s, --substr=STRING
 
-    You can display statistics about items, the names of which include the specified string by using **-s** option. 
+    You can display statistics about items, the names of which include the specified string by using **-s** option.
 
     The following example shows how to display statistics about items, the names of which include "data".
 
     ::
-    
+
         cubrid statdump -s data testdb
 
          *** SERVER EXECUTION STATISTICS ***

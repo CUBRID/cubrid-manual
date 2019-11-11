@@ -1701,6 +1701,18 @@ The following shows [options] available with the **cubrid statdump** utility.
     |                  | Num_tran_end_topops                      | Accumulator    | The number of top operations stopped                                  |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
     |                  | Num_tran_interrupts                      | Accumulator    | The number of interruptions                                           |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_tran_postpone_cache_hits             | Accumulator    | The number of cache hits when executing transaction postpone ops      |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_tran_postpone_cache_miss             | Accumulator    | | The number of cache misses when executing transaction postpone ops  |
+    |                  |                                          |                | | Cache misses may degrade performance of transaction commits and     |
+    |                  |                                          |                | | may impact all log operations                                       |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_tran_topop_postpone_cache_hits       | Accumulator    | The number of cache hits when executing top operations postpone ops   |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_tran_topop_postpone_cache_miss       | Accumulator    | | The number of cache misses when executing top operations postpone   |
+    |                  |                                          |                | | Cache misses may degrade performance of top operations commits and  |
+    |                  |                                          |                | | may impact all log operations                                       |
     +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
     | Index            | Num_btree_inserts                        | Accumulator    | The number of nodes inserted                                          |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+

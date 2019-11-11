@@ -1934,6 +1934,82 @@ The following shows [options] available with the **cubrid statdump** utility.
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
     |                  | ..heap_vacuum_log                        | Counter/timer  | The number and duration of logging heap vacuum operation              |
     +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | | Load Index     | Num_btree_online_inserts                 | Accumulator    | The number of insert operations during online index loading           |
+    | | Online         +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_btree_online_inserts_same_page_hold  | Accumulator    | The number of successful batched inserts in same leaf page            |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_btree_covered                        | Accumulator    | | The number of cases in which an index includes all data upon query  |
+    |                  |                                          |                | | execution                                                           |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_btree_noncovered                     | Accumulator    | | The number of cases in which an index includes some or no data upon |
+    |                  |                                          |                | | query execution                                                     |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_btree_resumes                        | Accumulator    | | The exceeding number of index scan specified due to too many        |
+    |                  |                                          |                | | results                                                             |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_btree_multirange_optimization        | Accumulator    | | The number of executions on multi-range optimization for the        |
+    |                  |                                          |                | | WHERE ... IN ... LIMIT condition query statement                    |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_btree_splits                         | Accumulator    | The number of B-tree split-operations                                 |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_btree_merges                         | Accumulator    | The number of B-tree merge-operations                                 |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_btree_get_stats                      | Accumulator    | The number of B-tree get stat calls                                   |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_leaf                                | Counter/timer  | The number and duration of all operations in index leaves             |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_find_unique                         | Counter/timer  | The number and duration of B-tree 'find-unique' operations            |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..btrange_search                         | Counter/timer  | The number and duration of B-tree 'range-search' operations           |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_insert_obj                          | Counter/timer  | The number and duration of B-tree 'insert object' operations          |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_delete_obj                          | Counter/timer  | The number and duration of B-tree 'physical delete object' operations |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_mvcc_delete                         | Counter/timer  | The number and duration of B-tree 'mvcc delete' operations            |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_mark_delete                         | Counter/timer  | The number and duration of B-tree mark delete operations              |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_undo_insert                         | Counter/timer  | The number and duration of B-tree 'undo insert' operations            |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_undo_delete                         | Counter/timer  | The number and duration of B-tree 'undo physical delete' operations   |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_undo_mvcc_delete                    | Counter/timer  | The number and duration of B-tree 'undo mvcc delete' operations       |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_vacuum                              | Counter/timer  | The number and duration of B-tree vacuum deleted object operations    |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_vacuum_insid                        | Counter/timer  | The number and duration of vacuum operations on B-tree 'insert id'    |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_fix_ovf_oids                        | Counter/timer  | The number and duration of B-tree overflow page fixes                 |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_unique_rlocks                       | Counter/timer  | The number and duration of blocked read locks on unique indexes       |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_unique_wlocks                       | Counter/timer  | The number and duration of blocked write locks on unique indexes      |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_traverse                            | Counter/timer  | The number and duration of B-tree traverse                            |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_find_unique_traverse                | Counter/timer  | The number and duration of B-tree traverse for 'find unique'          |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_range_search_traverse               | Counter/timer  | The number and duration of B-tree traverse for 'range search'         |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_insert_traverse                     | Counter/timer  | The number and duration of B-tree traverse for 'insert'               |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_delete_traverse                     | Counter/timer  | The number and duration of B-tree traverse for 'physical delete'      |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_mvcc_delete_traverse                | Counter/timer  | The number and duration of B-tree traverse for 'mvcc delete'          |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_mark_delete_traverse                | Counter/timer  | The number and duration of B-tree traverse for 'mark delete'          |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_undo_insert_traverse                | Counter/timer  | The number and duration of B-tree traverse for 'undo physical insert' |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_undo_delete_traverse                | Counter/timer  | The number and duration of B-tree traverse for 'undo physical delete' |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_undo_mvcc_delete_traverse           | Counter/timer  | The number and duration of B-tree traverse for 'undo delete'          |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_vacuum_traverse                     | Counter/timer  | The number and duration of B-tree traverse for vacuum deleted object  |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_vacuum_insid_traverse               | Counter/timer  | The number and duration of B-tree traverse for vacuum 'insert id'     |
+    +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
     | Query plan cache | Num_plan_cache_add                       | Accumulator    | The number of entries added to query cache                            |
     |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
     |                  | Num_plan_cache_lookup                    | Accumulator    | The number of lookups in query cache                                  |

@@ -570,7 +570,7 @@ JSON_CONTAINS
     ==========================================================================================================================================
                                                                                                                                              1
 
-Note that json objects do not check containment the same way json array do. It is impossible to have a json element that is not a descendent of a json object contained in a sub-element of a json object.
+Note that json objects do not check containment the same way json arrays do. It is impossible to have a json element that is not a descendent of a json object contained in a sub-element of a json object.
 
 .. code-block:: sql
 

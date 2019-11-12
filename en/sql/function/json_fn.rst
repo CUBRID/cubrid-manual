@@ -647,7 +647,7 @@ The merging of 2 json docuemnts is performed after the following rules, recursiv
 
   - All (key, value) pairs from the first object that have no corresponding (key, value) pairs in the second object.
   - All (key, value) pairs from the second object that have no corresponding (key, value) pairs in the first object, having values not null.
-  - All (key, value) pairs with same keys that exist in both objects, the second object's pair having the value not null. The values of these pairs become the results of the merging operations performed according to their json type merging rules.
+  - One (key, value) pair for each (key, value) pair in the first object that has a corresponding non-null valued pair in the second object. The values of these pairs become the results of merging operations performed on the values of the 2 (key, value) pairs from the first and second object.
 
 The JSON_MERGE_PATCH of k>=3 json documents is equivalent to JSON_MERGE_PATCH applied on first k-1 arguments and then applying a JSON_MERGE_PATCH on the result of the first JSON_MERGE_PATCH and the kth argument. 
 
@@ -699,9 +699,9 @@ JSON_MERGE_PRESERVE
   The merging of 2 json docuemnts is performed after the following rules, recursively:
   
 - when 2 json arrays are merged, they are concatenated.
-- when 2 json objects are merged, all pairs are kept that do not have a corresponding pair in the other json object. The pairs, that have a corresponding pair in the other json object are combined in a pair with the same key and with the two values being merged according to their json type merging rules.
 - when 2 non-array (scalar/object) json elements are merged and at most one of them is a json object, they are wrapped as singletons and merged as 2 json arrays.
 - when a non-array json element is merged with a json array, the non-array is wrapped as a singleton json array and then merged with the json array according to json array merging rules.
+- when 2 json objects are merged, all pairs are kept that do not have a corresponding pair in the other json object. The pairs, that have a corresponding pair in the other json object are combined in a pair with the same key and with the two values being merged according to their json type merging rules.
 
   The JSON_MERGE_PRESERVE operation on k>=3 json documents is equivalent to JSON_MERGE_PRESERVE applied on first k-1 arguments and then applying a JSON_MERGE_PRESERVE on the result of the first JSON_MERGE_PRESERVER and the kth argument.
 

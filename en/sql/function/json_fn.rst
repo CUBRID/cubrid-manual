@@ -514,7 +514,7 @@ JSON_CONTAINS_PATH
 
 .. function:: JSON_CONTAINS_PATH (json_doc, one/all, json path [, json path] ...)
 
-  The **JSON_CONTAINS_PATH** function verifies whether the the given paths exist inside the json_doc.
+  The **JSON_CONTAINS_PATH** function verifies whether the given paths exist inside the json_doc.
   When one/all argument is 'all', all given paths must exist to return 1. Returns 0 otherwise.
   When one/all argument is 'one', it returns 1 if any given path exists. Returns 0 otherwise.
   Returns NULL if any argument is NULL.

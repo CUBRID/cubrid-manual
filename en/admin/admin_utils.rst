@@ -1674,6 +1674,45 @@ The following shows [options] available with the **cubrid statdump** utility.
     | ..bt_vacuum_insid_traverse               | Counter/timer  | The number and duration of B-tree traverse for vacuum 'insert id'     |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
 
+    **Load Index Online**
+
+    +----------------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | **Stat name**                                      | **Stat type**  |  **Description**                                                      |
+    +----------------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_btree_online_inserts                           | Accumulator    | The number of key inserts by index loader                             |
+    +----------------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_btree_online_inserts_same_page_hold            | Accumulator    | The number of successive inserts by index loader in same leaf page    |
+    +----------------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_btree_online_inserts_reject_no_more_keys       | Accumulator    | The number of same leaf rejected inserts due to no more keys          |
+    +----------------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_btree_online_inserts_reject_max_key_len        | Accumulator    | The number of same leaf rejected inserts because of key length        |
+    +----------------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_btree_online_inserts_reject_no_space           | Accumulator    | The number of same leaf rejected inserts because of not enough space  |
+    +----------------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_btree_online_release_latch                     | Accumulator    | The number of same leaf rejected inserts to allow others latch page   |
+    +----------------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_btree_online_inserts_reject_key_not_in_range1  | Accumulator    | | The number of same leaf rejected inserts because key is smaller     |
+    |                                                    |                | | than parents boundaries                                             |
+    +----------------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_btree_online_inserts_reject_key_not_in_range2  | Accumulator    | | The number of same leaf rejected inserts because key is greater     |
+    |                                                    |                | | than parents boundaries                                             |
+    +----------------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_btree_online_inserts_reject_key_not_in_range3  | Accumulator    | | The number of same leaf rejected inserts because key failed quick   |
+    |                                                    |                | | min/max check                                                       |
+    +----------------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_btree_online_inserts_reject_key_not_in_range4  | Accumulator    | | The number of same leaf rejected inserts because key doesn't belong |
+    |                                                    |                | | to current leaf page                                                |
+    +----------------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..btree_online                                     | Counter/timer  | The number and duration of B-tree online index loading                |
+    +----------------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..btree_online_insert_task                         | Counter/timer  | The number and duration of batch insert tasks by index loader         |
+    +----------------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..btree_online_prepare_task                        | Counter/timer  | The number and duration of preparing (sorting) index loader tasks     |
+    +----------------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..btree_online_insert_same_leaf                    | Counter/timer  | | The number and duration of leaf pages processed by index loader     |
+    |                                                    |                | | (multiple keys may be inserted while a leaf page is processed)      |
+    +----------------------------------------------------+----------------+-----------------------------------------------------------------------+
+
     **Query**
 
     +------------------------------------------+----------------+-----------------------------------------------------------------------+

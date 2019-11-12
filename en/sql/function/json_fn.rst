@@ -523,6 +523,7 @@ JSON_CONTAINS_PATH
 .. code-block:: sql
 
     SELECT JSON_CONTAINS_PATH ('[{"0":0},1,"2",{"three":3}]', 'all', '$[0]', '$[0]."0"', '$[1]', '$[2]', '$[3]') ;
+
 ::
 
       json_contains_path('[{"0":0},1,"2",{"three":3}]', 'all', '$[0]', '$[0]."0"', '$[1]', '$[2]', '$[3]')
@@ -532,6 +533,7 @@ JSON_CONTAINS_PATH
 .. code-block:: sql
 
     SELECT JSON_CONTAINS_PATH ('[{"0":0},1,"2",{"three":3}]', 'all', '$[0]', '$[0]."0"', '$[1]', '$[2]', '$[3]', '$.inexistent');
+
 ::
 
       json_contains_path('[{"0":0},1,"2",{"three":3}]', 'all', '$[0]', '$[0]."0"', '$[1]', '$[2]', '$[3]', '$.inexistent')
@@ -543,6 +545,7 @@ The JSON_CONTAINS_PATH function supports wildcards inside json paths.
 .. code-block:: sql
 
     SELECT JSON_CONTAINS_PATH ('[{"0":0},1,"2",{"three":3}]', 'one', '$.inexistent', '$[*]."three"');
+
 ::
 
       json_contains_path('[{"0":0},1,"2",{"three":3}]', 'one', '$[*]."three"')
@@ -556,6 +559,7 @@ JSON_CONTAINS
 
   The **JSON_CONTAINS** function verifies whether the doc2 is contained inside the doc1 at the optionally specified path.
   A json element contains another json element if the following recursive rules are satisfied:
+
 - A json scalar contains another json scalar if they have the same type (their JSON_TYPE () are equal) and are equal. As an exception, json integer can be compared and equal to json double (even if their JSON_TYPE () evaluation are different).
 - A json array contains a json scalar or a json object if any of json array's elements contains the json_nonarray.
 - A json array contains another json array if all the second json array's elements are contained in the first json array.
@@ -569,6 +573,7 @@ JSON_CONTAINS
 .. code-block:: sql
 
     SELECT JSON_CONTAINS ('"simple"','"simple"');
+
 ::
 
       json_contains('"simple"', '"simple"')
@@ -578,6 +583,7 @@ JSON_CONTAINS
 .. code-block:: sql
 
     SELECT JSON_CONTAINS ('["a", "b"]','"b"');
+
 ::
 
       json_contains('["a", "b"]', '"b"')
@@ -587,6 +593,7 @@ JSON_CONTAINS
 .. code-block:: sql
 
     SELECT JSON_CONTAINS ('["a", "b1", ["a", "b2"]]','["b1", "b2"]');
+
 ::
 
       json_contains('["a", "b1", ["a", "b2"]]','["b1", "b2"]')
@@ -596,6 +603,7 @@ JSON_CONTAINS
 .. code-block:: sql
 
     SELECT JSON_CONTAINS ('{"k1":["a", "b1"], "k2": ["a", "b2"]}','{"k1":"b1", "k2":"b2"}');
+
 ::
 
       json_contains('{"k1":["a", "b1"], "k2": ["a", "b2"]}','{"k1":"b1", "k2":"b2"}')
@@ -607,6 +615,7 @@ Note that json objects do not check containment the same way json arrays do. It 
 .. code-block:: sql
 
     SELECT JSON_CONTAINS ('["a", "b1", ["a", {"k":"b2"}]]','["b1", "b2"]');
+
 ::
 
       json_contains('["a", "b1", ["a", {"k":"b2"}]]','["b1", "b2"]')
@@ -616,6 +625,7 @@ Note that json objects do not check containment the same way json arrays do. It 
 .. code-block:: sql
 
     SELECT JSON_CONTAINS ('["a", "b1", ["a", {"k":["b2"]}]]','["b1", {"k":"b2"}]');
+
 ::
 
       json_contains('["a", "b1", ["a", {"k":["b2"]}]]','["b1", {"k":"b2"}]')

@@ -545,47 +545,47 @@ JSON_CONTAINS
 
 .. code-block:: sql
 
-    SELECT JSON_CONTAINS ('["not important", "important"]','"important"');
+    SELECT JSON_CONTAINS ('["a", "b"]','"b"');
 ::
 
-      json_contains('["not important", "important"]', '"important"')
-    ================================================================
-                                                                   1
+      json_contains('["a", "b"]', '"b"')
+    ====================================
+                                       1
 
 .. code-block:: sql
 
-    SELECT JSON_CONTAINS ('["not important", "important1", ["not important", "important2"]]','["important1", "important2"]');
+    SELECT JSON_CONTAINS ('["a", "b1", ["a", "b2"]]','["b1", "b2"]');
 ::
 
-      json_contains('["not important", "important1", ["not important", "important2"]]', '["important1", "important2"]')
-    ===================================================================================================================
-                                                                                                                      1
+      json_contains('["a", "b1", ["a", "b2"]]','["b1", "b2"]')
+    ==========================================================
+                                                             1
 
 .. code-block:: sql
 
-    SELECT JSON_CONTAINS ('{"k1":["not important", "important1"], "k2": ["not important", "important2"]}','{"k1":"important1", "k2":"important2"}');
+    SELECT JSON_CONTAINS ('{"k1":["a", "b1"], "k2": ["a", "b2"]}','{"k1":"b1", "k2":"b2"}');
 ::
 
-      json_contains('{"k1":["not important", "important1"], "k2": ["not important", "important2"]}', '{"k1":"important1", "k2":"important2"}')
-    ==========================================================================================================================================
-                                                                                                                                             1
+      json_contains('{"k1":["a", "b1"], "k2": ["a", "b2"]}','{"k1":"b1", "k2":"b2"}')
+    =================================================================================
+                                                                                    1
 
 Note that json objects do not check containment the same way json arrays do. It is impossible to have a json element that is not a descendent of a json object contained in a sub-element of a json object.
 
 .. code-block:: sql
 
-    SELECT JSON_CONTAINS ('["not important", "important1", ["not important", {"k":"important2"}]]','["important1", "important2"]');
+    SELECT JSON_CONTAINS ('["a", "b1", ["a", {"k":"b2"}]]','["b1", "b2"]');
 ::
 
-      json_contains('["not important", "important1", ["not important", {"k":"important2"}]]', '["important1", "important2"]')
-    =========================================================================================================================
-                                                                                                                            0
+      json_contains('["a", "b1", ["a", {"k":"b2"}]]','["b1", "b2"]')
+    ================================================================
+                                                                   0
 
 .. code-block:: sql
 
-    SELECT JSON_CONTAINS ('["not important", "important1", ["not important", {"k_neccessary":["important2"]}]]','["important1", {"k_neccessary":"important2"}]');
+    SELECT JSON_CONTAINS ('["a", "b1", ["a", {"k":["b2"]}]]','["b1", {"k":"b2"}]');
 ::
 
-      json_contains('["not important", "important1", ["not important", {"k_neccessary":["important2"]}]]', '["important1", {"k_neccessary":"important2"}]')
-    =====================================================================================================================================================
-                                                                                                                                                        1
+      json_contains('["a", "b1", ["a", {"k":["b2"]}]]','["b1", {"k":"b2"}]')
+    ========================================================================
+                                                                           1

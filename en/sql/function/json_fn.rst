@@ -482,17 +482,17 @@ JSON_MERGE_PATCH
 ===================================
 
 .. function:: JSON_MERGE_PATCH (json_doc, json_doc [, json_doc] ...)
-The **JSON_MERGE_PATCH** function merges 2 or more json docs and returns the resulting merged json. **JSON_MERGE_PATCH** differs from **JSON_MERGE_PRESERVE** in that it will keep the second merging argument when encountering conflicts. **JSON_MERGE_PATCH** is compliant with 
+The **JSON_MERGE_PATCH** function merges 2 or more json docs and returns the resulting merged json. **JSON_MERGE_PATCH** differs from **JSON_MERGE_PRESERVE** in that it will take the second argument when encountering merging conflicts. **JSON_MERGE_PATCH** is compliant with 
 `RFC 7396 <https://tools.ietf.org/html/rfc7396/>`_.
 
 The merging of 2 json docuemnts is performed after the following rules, recursively:
 
-- when first argument is not an object, the result of the merge is the second object. As an exception, when the second argument is an object the result of the merge is the merge of the second argument with an empty object.
+- when first argument is not an object, the result of the merge is the second object. As an exception, when the second argument is an object, the result of the merge is the merge result of the second argument with an empty object.
 - when 2 objects are merged, the resulting object consists of the following (key, value) pairs:
 
   - All (key, value) pairs from the first object that have no corresponding (key, value) pairs in the second object.
   - All (key, value) pairs from the second object that have no corresponding (key, value) pairs in the first object, having values not null.
-  - All (key, value) pairs with same keys that exist in both objects, the second object's pair having the value not null. The values of these pairs are the results of the merging operation performed according to their json type merging rules.
+  - All (key, value) pairs with same keys that exist in both objects, the second object's pair having the value not null. The values of these pairs become the results of the merging operations performed according to their json type merging rules.
 
 The JSON_MERGE_PATCH of k>=3 json documents is equivalent to JSON_MERGE_PATCH applied on first k-1 arguments and then applying a JSON_MERGE_PATCH on the result of the first JSON_MERGE_PATCH and the kth argument. 
 
@@ -520,7 +520,7 @@ The exception to the merge-patching, when the first argument is non-object and t
     ======================
       {}
 
-Objects merging example, exemplifying the described possiblities:
+Objects merging example, exemplifying the described object merging rules:
 
 .. code-block:: sql
 

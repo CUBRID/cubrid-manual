@@ -522,7 +522,7 @@ JSON_CONTAINS_PATH
 
 .. code-block:: sql
 
-    SELECT JSON_CONTAINS_PATH ('[{"0":0},1,"2",{"three":3}]', 'all', '$[0]', '$[0]."0"', '$[1]', '$[2]', '$[3]') ;
+    SELECT JSON_CONTAINS_PATH ('[{"0":0},1,"2",{"three":3}]', 'all', '$[0]', '$[0]."0"', '$[1]', '$[2]', '$[3]');
 
 ::
 
@@ -548,7 +548,7 @@ The JSON_CONTAINS_PATH function supports wildcards inside json paths.
 
 ::
 
-      json_contains_path('[{"0":0},1,"2",{"three":3}]', 'one', '$[*]."three"')
+     json_contains_path('[{"0":0},1,"2",{"three":3}]', 'one', '$.inexistent', '$[*]."three"')
     ==========================================================================
                                                                              1
 

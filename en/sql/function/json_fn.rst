@@ -19,6 +19,7 @@ JSON_ARRAY
 .. code-block:: sql
 
     SELECT JSON_ARRAY();
+
 ::
 
       json_array()
@@ -28,6 +29,7 @@ JSON_ARRAY
 .. code-block:: sql
 
     SELECT JSON_ARRAY(1, '1', json '{"a":4}', json '[1,2,3]');
+
 ::
 
       json_array(1, '1', json '{"a":4}', json '[1,2,3]')
@@ -44,6 +46,7 @@ JSON_OBJECT
 .. code-block:: sql
 
     SELECT JSON_OBJECT();
+
 ::
 
       json_object()
@@ -53,6 +56,7 @@ JSON_OBJECT
 .. code-block:: sql
 
     SELECT JSON_OBJECT('a', 1, 'b', '1', 'c', json '{"a":4}', 'd', json '[1,2,3]');
+
 ::
 
       json_object('a', 1, 'b', '1', 'c', json '{"a":4}', 'd', json '[1,2,3]')
@@ -72,6 +76,7 @@ JSON_KEYS
 .. code-block:: sql
 
     SELECT JSON_KEYS('{}');
+
 ::
 
       json_keys('{}')
@@ -81,6 +86,7 @@ JSON_KEYS
 .. code-block:: sql
 
     SELECT JSON_KEYS('"non-object"');
+
 ::
 
       json_keys('"non-object"')
@@ -90,6 +96,7 @@ JSON_KEYS
 .. code-block:: sql
 
     SELECT JSON_KEYS('{"a":1, "b":2, "c":{"d":1}}');
+
 ::
 
       json_keys('{"a":1, "b":2, "c":{"d":1}}')
@@ -108,6 +115,7 @@ JSON_DEPTH
 .. code-block:: sql
 
     SELECT JSON_DEPTH('"scalar"');
+
 ::
 
       json_depth('"scalar"')
@@ -117,6 +125,7 @@ JSON_DEPTH
 .. code-block:: sql
 
     SELECT JSON_DEPTH('[{"a":4}, 2]');
+
 ::
 
       json_depth('[{"a":4}, 2]')
@@ -128,6 +137,7 @@ Example of a deeper json:
 .. code-block:: sql
 
     SELECT JSON_DEPTH('[{"a":[1,2,3,{"k":[4,5]}]},2,3,4,5,6,7]');
+
 ::
 
       json_depth('[{"a":[1,2,3,{"k":[4,5]}]},2,3,4,5,6,7]')
@@ -146,6 +156,7 @@ JSON_LENGTH
 .. code-block:: sql
 
     SELECT JSON_LENGTH('"scalar"');
+
 ::
 
       json_length('"scalar"')
@@ -155,6 +166,7 @@ JSON_LENGTH
 .. code-block:: sql
 
     SELECT JSON_LENGTH('[{"a":4}, 2]', '$.a');
+
 ::
 
       json_length('[{"a":4}, 2]', '$.a')
@@ -164,6 +176,7 @@ JSON_LENGTH
 .. code-block:: sql
 
     SELECT JSON_LENGTH('[2, {"a":4, "b":4, "c":4}]', '$[1]');
+
 ::
 
       json_length('[2, {"a":4, "b":4, "c":4}]', '$[1]')
@@ -173,6 +186,7 @@ JSON_LENGTH
 .. code-block:: sql
 
     SELECT JSON_LENGTH('[{"a":[1,2,3,{"k":[4,5,6,7,8]}]},2]');
+
 ::
 
       json_length('[{"a":[1,2,3,{"k":[4,5,6,7,8]}]},2]')
@@ -221,6 +235,7 @@ JSON_QUOTE
 .. code-block:: sql
 
     SELECT JSON_QUOTE ('simple');
+
 ::
 
       json_unquote('simple')
@@ -230,6 +245,7 @@ JSON_QUOTE
 .. code-block:: sql
 
     SELECT JSON_QUOTE ('"');
+
 ::
 
       json_unquote('"')
@@ -247,6 +263,7 @@ JSON_UNQUOTE
 .. code-block:: sql
 
     SELECT JSON_UNQUOTE ('"\\u0032"');
+
 ::
 
       json_unquote('"\u0032"')
@@ -256,6 +273,7 @@ JSON_UNQUOTE
 .. code-block:: sql
 
     SELECT JSON_UNQUOTE ('"\\""');
+
 ::
 
       json_unquote('"\""')
@@ -273,6 +291,7 @@ JSON_PRETTY
 .. code-block:: sql
 
     SELECT JSON_PRETTY('[{"a":"val1", "b":"val2", "c": [1, "elem2", 3, 4, {"key":"val"}]}]');
+
 ::
 
       json_pretty('[{"a":"val1", "b":"val2", "c": [1, "elem2", 3, 4, {"key":"val"}]}]')
@@ -311,6 +330,7 @@ JSON_SEARCH
 .. code-block:: sql
 
     SELECT JSON_SEARCH('{"a":["a","b"],"b":"a","c":"a"}', 'one', 'a');
+
 ::
 
       json_search('{"a":["a","b"],"b":"a","c":"a"}', 'one', 'a')
@@ -320,6 +340,7 @@ JSON_SEARCH
 .. code-block:: sql
 
     SELECT JSON_SEARCH('{"a":["a","b"],"b":"a","c":"a"}', 'all', 'a');
+
 ::
 
       json_search('{"a":["a","b"],"b":"a","c":"a"}', 'all', 'a')
@@ -329,6 +350,7 @@ JSON_SEARCH
 .. code-block:: sql
 
     SELECT JSON_SEARCH('{"a":["a","b"],"b":"a","c":"a"}', 'all', 'a', NULL, '$.a', '$.b');
+
 ::
 
       json_search('{"a":["a","b"],"b":"a","c":"a"}', 'all', 'a', null, '$.a', '$.b')
@@ -341,6 +363,7 @@ Accepting only json paths that start with object key identifier:
 .. code-block:: sql
 
     SELECT JSON_SEARCH('{"a":["a","b"],"b":"a","c":"a"}', 'all', 'a', NULL, '$.*');
+
 ::
 
       json_search('{"a":["a","b"],"b":"a","c":"a"}', 'all', 'a', null, '$.*')
@@ -352,18 +375,19 @@ Accepting only json paths that start with object key identifier and follow immed
 .. code-block:: sql
 
     SELECT JSON_SEARCH('{"a":["a","b"],"b":"a","c":["a"], "d":{"e":["a"]}}', 'all', 'a', NULL, '$.*[*]');
+
 ::
 
       json_search('{"a":["a","b"],"b":"a","c":["a"], "d":{"e":["a"]}}', 'all', 'a', null, '$.*[*]')
     ======================
       "["$.a[0]","$.c[0]"]"
-::
 
 Accepting any paths that contain json array indexes will filter out '$.b'
 
 .. code-block:: sql
 
     SELECT JSON_SEARCH('{"a":["a","b"],"b":"a","c":["a"], "d":{"e":["a"]}}', 'all', 'a', NULL, '$**[*]');
+
 ::
 
       json_search('{"a":["a","b"],"b":"a","c":["a"], "d":{"e":["a"]}}', 'all', 'a', null, '$**[*]')
@@ -384,6 +408,7 @@ JSON_EXTRACT
 .. code-block:: sql
 
     SELECT JSON_EXTRACT('{"a":["a","b"],"b":"a","c":["a"], "d":{"e":["a"]}}', '$.a');
+
 ::
 
       json_extract('{"a":["a","b"],"b":"a","c":["a"], "d":{"e":["a"]}}', '$.a')
@@ -393,6 +418,7 @@ JSON_EXTRACT
 .. code-block:: sql
 
     SELECT JSON_EXTRACT('{"a":["a","b"],"b":"a","c":["a"], "d":{"e":["a"]}}', '$.a[*]');
+
 ::
 
       json_extract('{"a":["a","b"],"b":"a","c":["a"], "d":{"e":["a"]}}', '$.a[*]')
@@ -404,6 +430,7 @@ Changing '.a' from previous query with '.*' wildcards will also match '$.c[0]'. 
 .. code-block:: sql
 
     SELECT JSON_EXTRACT('{"a":["a","b"],"b":"a","c":["a"], "d":{"e":["a"]}}', '$.*[*]');
+
 ::
 
       json_extract('{"a":["a","b"],"b":"a","c":["a"], "d":{"e":["a"]}}', '$.*[*]')
@@ -415,6 +442,7 @@ The following json path will match all json paths that end with a json array ind
 .. code-block:: sql
 
     SELECT JSON_EXTRACT('{"a":["a","b"],"b":"a","c":["a"], "d":{"e":["a"]}}', '$**[*]');
+
 ::
 
       json_extract('{"a":["a","b"],"b":"a","c":["a"], "d":{"e":["a"]}}', '$**[*]')
@@ -424,6 +452,7 @@ The following json path will match all json paths that end with a json array ind
 .. code-block:: sql
 
     SELECT JSON_EXTRACT('{"a":["a","b"],"b":"a","c":["a"], "d":{"e":["a"]}}', '$.d**[*]');
+
 ::
 
       json_extract('{"a":["a","b"],"b":"a","c":["a"], "d":{"e":["a"]}}', '$d**[*]')
@@ -445,6 +474,7 @@ The following json path will match all json paths that end with a json array ind
     INSERT INTO tj values ('{"a":1}'), ('{"a":2}'), ('{"a":3}'), (NULL);
 
     SELECT a->'$.a' from tj;
+
 ::
 
       json_extract(a, '$.a')
@@ -469,6 +499,7 @@ The following json path will match all json paths that end with a json array ind
     INSERT INTO tj values ('{"a":1}'), ('{"a":2}'), ('{"a":3}'), (NULL);
 
     SELECT a->>'$.a' from tj;
+
 ::
 
       json_unquote(json_extract(a, '$.a'))
@@ -477,3 +508,126 @@ The following json path will match all json paths that end with a json array ind
       '2'
       '3'
       NULL
+
+JSON_CONTAINS_PATH
+===================================
+
+.. function:: JSON_CONTAINS_PATH (json_doc, one/all, json path [, json path] ...)
+
+  The **JSON_CONTAINS_PATH** function verifies whether the given paths exist inside the json_doc.
+  When one/all argument is 'all', all given paths must exist to return 1. Returns 0 otherwise.
+  When one/all argument is 'one', it returns 1 if any given path exists. Returns 0 otherwise.
+  Returns NULL if any argument is NULL.
+  An error occurs if any argument is invalid.
+
+.. code-block:: sql
+
+    SELECT JSON_CONTAINS_PATH ('[{"0":0},1,"2",{"three":3}]', 'all', '$[0]', '$[0]."0"', '$[1]', '$[2]', '$[3]');
+
+::
+
+      json_contains_path('[{"0":0},1,"2",{"three":3}]', 'all', '$[0]', '$[0]."0"', '$[1]', '$[2]', '$[3]')
+    ======================================================================================================
+                                                                                                         1
+
+.. code-block:: sql
+
+    SELECT JSON_CONTAINS_PATH ('[{"0":0},1,"2",{"three":3}]', 'all', '$[0]', '$[0]."0"', '$[1]', '$[2]', '$[3]', '$.inexistent');
+
+::
+
+      json_contains_path('[{"0":0},1,"2",{"three":3}]', 'all', '$[0]', '$[0]."0"', '$[1]', '$[2]', '$[3]', '$.inexistent')
+    ======================================================================================================================
+                                                                                                                         0
+
+The JSON_CONTAINS_PATH function supports wildcards inside json paths.
+
+.. code-block:: sql
+
+    SELECT JSON_CONTAINS_PATH ('[{"0":0},1,"2",{"three":3}]', 'one', '$.inexistent', '$[*]."three"');
+
+::
+
+     json_contains_path('[{"0":0},1,"2",{"three":3}]', 'one', '$.inexistent', '$[*]."three"')
+    ==========================================================================
+                                                                             1
+
+JSON_CONTAINS
+===================================
+
+.. function:: JSON_CONTAINS (json_doc doc1, json_doc doc2 [, json path])
+
+  The **JSON_CONTAINS** function verifies whether the doc2 is contained inside the doc1 at the optionally specified path.
+  A json element contains another json element if the following recursive rules are satisfied:
+
+- A json scalar contains another json scalar if they have the same type (their JSON_TYPE () are equal) and are equal. As an exception, json integer can be compared and equal to json double (even if their JSON_TYPE () evaluation are different).
+- A json array contains a json scalar or a json object if any of json array's elements contains the json_nonarray.
+- A json array contains another json array if all the second json array's elements are contained in the first json array.
+- A json object contains another json object if, for every (key2, value2) pair in the second object, there exists a (key1, value1) pair in the first object with key1=key2 and value2 contained in value1.
+  Otherwise the json element is not contained.
+
+  Returns whether doc2 is contained in root json element of doc1 if no json path argument is given.
+  Returns NULL if any argument is NULL.
+  An error occurs if any argument is invalid.
+
+.. code-block:: sql
+
+    SELECT JSON_CONTAINS ('"simple"','"simple"');
+
+::
+
+      json_contains('"simple"', '"simple"')
+    =======================================
+                                          1
+
+.. code-block:: sql
+
+    SELECT JSON_CONTAINS ('["a", "b"]','"b"');
+
+::
+
+      json_contains('["a", "b"]', '"b"')
+    ====================================
+                                       1
+
+.. code-block:: sql
+
+    SELECT JSON_CONTAINS ('["a", "b1", ["a", "b2"]]','["b1", "b2"]');
+
+::
+
+      json_contains('["a", "b1", ["a", "b2"]]','["b1", "b2"]')
+    ==========================================================
+                                                             1
+
+.. code-block:: sql
+
+    SELECT JSON_CONTAINS ('{"k1":["a", "b1"], "k2": ["a", "b2"]}','{"k1":"b1", "k2":"b2"}');
+
+::
+
+      json_contains('{"k1":["a", "b1"], "k2": ["a", "b2"]}','{"k1":"b1", "k2":"b2"}')
+    =================================================================================
+                                                                                    1
+
+Note that json objects do not check containment the same way json arrays do. It is impossible to have a json element that is not a descendent of a json object contained in a sub-element of a json object.
+
+.. code-block:: sql
+
+    SELECT JSON_CONTAINS ('["a", "b1", ["a", {"k":"b2"}]]','["b1", "b2"]');
+
+::
+
+      json_contains('["a", "b1", ["a", {"k":"b2"}]]','["b1", "b2"]')
+    ================================================================
+                                                                   0
+
+.. code-block:: sql
+
+    SELECT JSON_CONTAINS ('["a", "b1", ["a", {"k":["b2"]}]]','["b1", {"k":"b2"}]');
+
+::
+
+      json_contains('["a", "b1", ["a", {"k":["b2"]}]]','["b1", {"k":"b2"}]')
+    ========================================================================
+                                                                           1

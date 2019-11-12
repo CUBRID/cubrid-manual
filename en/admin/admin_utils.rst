@@ -946,15 +946,15 @@ The following shows [options] available with the **cubrid statdump** utility.
     
         cubrid statdump -c demodb
 
-    The following outputs the values per every 5 seconds. 
-    
+    The following outputs the values per every 5 seconds.
+
     ::
 
         $ cubrid statdump -i 5 -c testdb
 
-        
+
         Mon November 11 23:44:36 KST 2019
-        
+
          *** SERVER EXECUTION STATISTICS ***
         Num_file_creates              =          0
         Num_file_removes              =          0
@@ -1883,10 +1883,6 @@ The following shows [options] available with the **cubrid statdump** utility.
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
     | **Stat name**                            | **Stat type**  |  **Description**                                                      |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    | Num_heap_stats_bestspace_entries         | Accumulator    | The number of best pages which are saved on the "best page" list      |
-    +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    | Num_heap_stats_bestspace_maxed           | Accumulator    | The maximum number of pages which can be saved on the "best page" list|
-    +------------------------------------------+----------------+-----------------------------------------------------------------------+
     | Num_heap_stats_sync_bestspace            | Accumulator    | | The updated number of the "best page" list.                         |
     |                                          |                |                                                                       |
     |                                          |                | | "Best pages" means that the data pages of which the free space is   |
@@ -2055,6 +2051,29 @@ The following shows [options] available with the **cubrid statdump** utility.
     | Vacuum_page_fetch_ratio                  | Computed       | Ratio (percentage) of page unfix from vacuum module versus total.     |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
     | Num_data_page_avoid_dealloc              | Snapshot       | The number of data pages that cannot be deallocated by vacuum         |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+
+    **Heap Bestspace**
+
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | **Stat name**                            | **Stat type**  |  **Description**                                                      |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..heap_stats_sync_bestspace              | Counter/timer  | The number and duration of bestspace synchronization operations       |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_heap_stats_bestspace_entries         | Accumulator    | The number of best pages which are saved on the "best page" list      |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_heap_stats_bestspace_maxed           | Accumulator    | The maximum number of pages which can be saved on the "best page" list|
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..bestspace_add                          | Counter/timer  | The number and duration of adding entries to bestspace cache          |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..bestspace_del                          | Counter/timer  | The number and duration of deleting from bestpace cache               |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..bestspace_find                         | Counter/timer  | The number and duration of finding a bestpace cache entry             |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..heap_find_page_bestspace               | Counter/timer  | The number and duration of searching heap pages in bestspace cache    |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..heap_find_best_page                    | Counter/timer  | | The number and duration of finding or creating (if not found) a     |
+    |                                          |                | | page to insert in heap.                                             |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
 
     **Page buffer fix**

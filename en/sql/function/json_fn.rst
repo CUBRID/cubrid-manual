@@ -636,7 +636,8 @@ JSON_MERGE_PATCH
 ===================================
 
 .. function:: JSON_MERGE_PATCH (json_doc, json_doc [, json_doc] ...)
-The **JSON_MERGE_PATCH** function merges 2 or more json docs and returns the resulting merged json. **JSON_MERGE_PATCH** differs from **JSON_MERGE_PRESERVE** in that it will take the second argument when encountering merging conflicts. **JSON_MERGE_PATCH** is compliant with 
+
+The **JSON_MERGE_PATCH** function merges 2 or more json docs and returns the resulting merged json. **JSON_MERGE_PATCH** differs from **JSON_MERGE_PRESERVE** in that it will take the second argument when encountering merging conflicts. **JSON_MERGE_PATCH** is compliant with
 `RFC 7396 <https://tools.ietf.org/html/rfc7396/>`_.
 
 The merging of 2 json docuemnts is performed after the following rules, recursively:
@@ -656,6 +657,7 @@ An error occurs if any argument is not valid.
 .. code-block:: sql
 
     SELECT JSON_MERGE_PATCH ('["a","b","c"]', '"scalar"');
+
 ::
 
       json_merge_patch('["a","b","c"]', '"scalar"')
@@ -668,6 +670,7 @@ The exception to the merge-patching, when the first argument is non-object and t
 .. code-block:: sql
 
     SELECT JSON_MERGE_PATCH ('["a"]', '{"a":null}');
+
 ::
 
       json_merge_patch('["a"]', '{"a":null}')
@@ -679,6 +682,7 @@ Objects merging example, exemplifying the described object merging rules:
 .. code-block:: sql
 
     SELECT JSON_MERGE_PATCH ('{"a":null,"c":["elem"]}','{"b":null,"c":{"k":null},"d":"elem"}');
+
 ::
 
       json_merge_patch('{"a":null,"c":["elem"]}', '{"b":null,"c":{"k":null},"d":"elem"}')
@@ -693,6 +697,7 @@ JSON_MERGE_PRESERVE
   The **JSON_MERGE_PRESERVE** function merges 2 or more json docs and returns the resulting merged json. **JSON_MERGE_PRESERVE** differs from **JSON_MERGE_PATCH** in that it preserves both json elements on merging conflicts.
 
   The merging of 2 json docuemnts is performed after the following rules, recursively:
+  
 - when 2 json arrays are merged, they are concatenated.
 - when 2 json objects are merged, all pairs are kept that do not have a corresponding pair in the other json object. The pairs, that have a corresponding pair in the other json object are combined in a pair with the same key and with the two values being merged according to their json type merging rules.
 - when 2 non-array (scalar/object) json elements are merged and at most one of them is a json object, they are wrapped as singletons and merged as 2 json arrays.
@@ -706,6 +711,7 @@ JSON_MERGE_PRESERVE
 .. code-block:: sql
 
     SELECT JSON_MERGE_PATCH ('"a"', '"b"');
+
 ::
 
       json_merge('"a"', '"b"')
@@ -715,6 +721,7 @@ JSON_MERGE_PRESERVE
 .. code-block:: sql
 
     SELECT JSON_MERGE_PATCH ('["a","b","c"]', '"scalar"');
+
 ::
 
       json_merge('["a","b","c"]', '"scalar"')
@@ -727,6 +734,7 @@ JSON_MERGE_PRESERVE
 .. code-block:: sql
 
     SELECT JSON_MERGE_PRESERVE ('{"a":null,"c":["elem"]}','{"b":null,"c":{"k":null},"d":"elem"}');
+
 ::
 
       json_merge('{"a":null,"c":["elem"]}','{"b":null,"c":{"k":null},"d":"elem"}')

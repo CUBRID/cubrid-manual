@@ -642,7 +642,8 @@ The **JSON_MERGE_PATCH** function merges 2 or more json docs and returns the res
 
 The merging of 2 json documents is performed with the following rules, recursively:
 
-- when first argument is not an object, the result of the merge is the second object. As an exception, when the second argument is an object, the result of the merge is the merge result of the second argument with an empty object.
+- when 2 non-object jsons are merged, the result is of the merge is the second value.
+- when a non-object json is merged with a json object, the result is the merge result of an empty object with the second merging argument.
 - when 2 objects are merged, the resulting object consists of the following (key, value) pairs:
 
   - All (key, value) pairs from the first object that have no corresponding (key, value) pairs in the second object.

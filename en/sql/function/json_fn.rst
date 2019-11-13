@@ -869,7 +869,7 @@ JSON_INSERT
   For each (json path, json_val) pair, from left to right, if the json path addresses an existing element inside the json_doc, the argument pair is ignored and does not overwrite the existing json element.
   Otherwise, the json_val is inserted if the json path addresses one of the following json values inside the json_doc:
   
-  - An inexistent object member of an existing json object. A (key, value) pair is added to the json object with the key deduced from the json path and the value being the json_val.
+  - An inexistent object member of an existing json object. A (key, value) pair is added to the json object with the key being json path's last element and the value being the json_val.
   - An array index past of an existing json array's end. The array is filled with nulls after the initial end of the array and the json_val is inserted at the specified index.
 
   The document produced by evaluating one pair becomes the new value against which the next pair is evaluated. 
@@ -918,7 +918,7 @@ JSON_SET
   The **JSON_SET** function inserts or replaces json_val arguments inside the json_doc at the given paths.
 
 
-  For each (json path, json_val) pair, from left to right, an existing value is searched inside the json_doc at the json path and is replaced with json_val.
+  For each (json path, json_val) pair, from left to right, an existing value is searched inside the json_doc at the json path and is replaced with the given json_val.
   Otherwise, the json_val is inserted if the json path addresses one of the following json values inside the json_doc:
 
   - An inexistent object member of an existing json object. A (key, value) pair is added to the json object with the key deduced from the json path and the value being the json_val.

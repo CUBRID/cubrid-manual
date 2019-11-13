@@ -754,7 +754,7 @@ JSON_ARRAY_APPEND
 
 .. function:: JSON_ARRAY_APPEND (json_doc, json path, json_val [, json path, json_val] ...)
 
-  The **JSON_ARRAY_APPEND** function appends the given json_vals at their given json paths inside the json_doc.
+  The **JSON_ARRAY_APPEND** function returns a modified copy of first argument. For each given <json path, json_val> pair, the function appends the value to the json array addressed by the corresponding path.
 
   The (json path, json_val) pairs are evaluated one by one, from left to right. The document produced by evaluating one pair becomes the new value against which the next pair is evaluated.
 
@@ -801,7 +801,7 @@ JSON_ARRAY_INSERT
 
 .. function:: JSON_ARRAY_INSERT (json_doc, json path, json_val [, json path, json_val] ...)
 
-  The **JSON_ARRAY_INSERT** function inserts the given value in the json arrays at the given json paths.
+  The **JSON_ARRAY_INSERT** function returns a modified copy of first argument. For each given <json path, json_val> pair, the function inserts the value in the json array addressed by the corresponding path.
 
   The (json path, json_val) pairs are evaluated one by one, from left to right. The document produced by evaluating one pair becomes the new value against which the next pair is evaluated.
 
@@ -915,7 +915,7 @@ JSON_SET
 
 .. function:: JSON_SET (json_doc, json path, json_val [, json path, json_val] ...)
 
-  The **JSON_SET** function inserts or replaces json_val arguments inside the json_doc at the given paths.
+  The **JSON_SET** function returns a modified copy of first argument. For each given <json path, json_val> pair, the function inserts or replaces the value at the corresponding path.
 
 
   For each (json path, json_val) pair, from left to right, an existing value is searched inside the json_doc at the json path and is replaced with the given json_val.
@@ -966,7 +966,7 @@ JSON_REPLACE
 
 .. function:: JSON_REPLACE (json_doc, json path, json_val [, json path, json_val] ...)
 
-  The **JSON_REPLACE** function replaces json elements inside the json_doc at the given paths.
+ The **JSON_REPLACE** function returns a modified copy of first argument. For each given <json path, json_val> pair, the function replaces the value only if another value is found at the corresponding path.
 
   For each (json path, json_val) pair, from left to right, an existing value is searched inside the json_doc at the json path and is replaced with json_val.
   Otherwise, if the json_path does not exist inside the json_doc, the (json path, json_val) pair is ignored and has no effect.
@@ -1014,13 +1014,13 @@ JSON_REMOVE
 
 .. function:: JSON_REMOVE (json_doc, json path [, json path] ...)
 
-The **JSON_REMOVE** function removes the json element addressed by the json paths in the json_doc.
+The **JSON_REMOVE** function returns a modified copy of first argument, by removing values from all given paths.
 
 The json path arguments are evaluated one by one, from left to right. The result produced by evaluating a json path becomes the value against which the next json path is evaluated.
 
   Returns the resulting json after removal.
   Returns NULL if any argument is NULL.
-  An error occurs if any argument is invalid or if a path points to the root or if it does not exist inside the json_doc.
+  An error occurs if any argument is invalid or if a path points to the root or if a path does not exist.
 
 .. code-block:: sql
 

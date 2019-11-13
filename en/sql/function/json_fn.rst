@@ -642,13 +642,13 @@ The **JSON_MERGE_PATCH** function merges 2 or more json docs and returns the res
 
 The merging of two json documents is performed with the following rules, recursively:
 
-- when two non-object jsons are merged, the result is of the merge is the second value.
-- when a non-object json is merged with a json object, the result is the merge result of an empty object with the second merging argument.
+- when two non-object jsons are merged, the result of the merge is the second value.
+- when a non-object json is merged with a json object, the result is the merge of an empty object with the second merging argument.
 - when two objects are merged, the resulting object consists of the following members:
 
-  - All members from the first object that have no corresponging member with the same key in the second object.
-  - All members from the second object that have no corresponging members with equal keys in the first object, having values not null. Null valued members in second object are ignored.
-  - One member for each members in the first object that has a corresponding non-null valued member in the second object with the same key. Same key members that appear in both objects and the second object's value is null are ignored. The values of these pairs become the results of merging operations performed on the values of the members from the first and second object.
+  - All members from the first object that have no corresponding member with the same key in the second object.
+  - All members from the second object that have no corresponding members with equal keys in the first object, having values not null. Members with null values from second object are ignored.
+  - One member for each member in the first object that has a corresponding non-null valued member in the second object with the same key. Same key members that appear in both objects and the second object's member value is null, are ignored. The values of these pairs become the results of merging operations performed on the values of the members from the first and second object.
 
 Merge operations are executed serially when there are more than two arguments: the result of merging first two arguments is merged with third, this result is then merged with fourth and so on.
 

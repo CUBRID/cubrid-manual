@@ -756,10 +756,13 @@ JSON_ARRAY_APPEND
 
   The **JSON_ARRAY_APPEND** function appends the given json_vals at their given json paths inside the json_doc.
 
-The (json path, json_val) pairs are evaluated one by one, from left to right. The document produced by evaluating one pair becomes the new value against which the next pair is evaluated.
+  The (json path, json_val) pairs are evaluated one by one, from left to right. The document produced by evaluating one pair becomes the new value against which the next pair is evaluated.
 
-If the json path points to an json array inside the json_doc, the json_val is appended at the end of the array. 
-If the json path points to a non-array json element, the non-array gets wrapped as a single element json array containing the referred non-array element followed by the appending of the given json_val.
+  If the json path points to an json array inside the json_doc, the json_val is appended at the end of the array. 
+  If the json path points to a non-array json element, the non-array gets wrapped as a single element json array containing the referred non-array element followed by the appending of the given json_val.
+
+  Returns NULL if any argument is NULL.
+  An error occurs if any argument is invalid.
 
 .. code-block:: sql
 
@@ -791,6 +794,67 @@ If the json path points to a non-array json element, the non-array gets wrapped 
       json_array_append('{"a":[1,2]}', '$.a[0]', '1')
     ======================
       {"a":[[1,"1"],2]}
+
+
+JSON_ARRAY_INSERT
+===================================
+
+.. function:: JSON_ARRAY_INSERT (json_doc, json path, json_val [, json path, json_val] ...)
+
+  The **JSON_ARRAY_INSERT** function inserts the given value in the json arrays at the given json paths.
+
+  The (json path, json_val) pairs are evaluated one by one, from left to right. The document produced by evaluating one pair becomes the new value against which the next pair is evaluated.
+
+  The rules of the **JSON_ARRAY_INSERT** operation are the following:
+
+  - if a json path addresses an element of a json_array, the given json_val is inserted at the specified index, shifting any following elements to the right.
+  - if the json path points to an array index after the end of an array, the array is filled with nulls after end of the array until the specified index and the json_val is inserted at the specified index.
+  - if the json path does not exist inside the json_doc, the last token of the json path is an array index and the json path without the last array index token would have pointed to an element inside the json_doc, the element found by the stripped json path is replaced with single element json array and the **JSON_ARRAY_INSERT** operation is performed with the original json path.
+ 
+  Returns NULL if any argument is NULL.
+  An error occurs if any argument is invalid or if a json_path does not address a cell of an array inside the json_doc.
+
+.. code-block:: sql
+
+    SELECT JSON_ARRAY_INSERT ('[0,1,2]', '$[0]', '1');
+
+::
+
+      json_array_insert('[0,1,2]', '$[0]', '1')
+    ======================
+      ["1",0,1,2]
+
+.. code-block:: sql
+
+    SELECT JSON_ARRAY_INSERT ('[0,1,2]', '$[5]', '1');
+
+::
+
+      json_array_insert('[0,1,2]', '$[5]', '1')
+    ======================
+      [0,1,2,null,null,"1"]
+
+Examples for **JSON_ARRAY_INSERT's** third rule. 
+
+.. code-block:: sql
+
+    SELECT JSON_ARRAY_INSERT ('{"a":4}', '$[5]', '1');
+
+::
+
+      json_array_insert('{"a":4}', '$[5]', '1')
+    ======================
+      [{"a":4},null,null,null,null,"1"]
+
+.. code-block:: sql
+
+    SELECT JSON_ARRAY_INSERT ('"a"', '$[5]', '1');
+
+::
+
+      json_array_insert('"a"', '$[5]', '1')
+    ======================
+      ["a",null,null,null,null,"1"]
 
 JSON_INSERT
 ===================================

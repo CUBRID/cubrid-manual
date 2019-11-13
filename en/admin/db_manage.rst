@@ -106,7 +106,7 @@ The following is an example of files related to the database when *testdb* datab
 +----------------+-------+-----------------+                +------------------------------------------------------------------------------------------------------+
 | testdb_lgat    | 512MB | | active        |                | | Active log file                                                                                    |
 +----------------+-------+-----------------+----------------+------------------------------------------------------------------------------------------------------+
-| testdb_dwb     |  1MB  | | permanent     | | Double write | Double write buffer storage file, where flushed pages are written first.                             |
+| testdb_dwb     |  1MB  | | temporary     | | Double write | Double write buffer storage file, where flushed pages are written first.                             |
 |                |       | | data          | | buffer       |                                                                                                      |
 +----------------+-------+-----------------+----------------+------------------------------------------------------------------------------------------------------+
 

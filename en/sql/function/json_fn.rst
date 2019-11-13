@@ -464,7 +464,7 @@ The following json path will match all json paths that end with a json array ind
 
 .. function:: json_doc -> json path
 
-  Alias operator for JSON_EXTRACT with 2 arguments, having the json_doc argument constrained to be a column.
+  Alias operator for JSON_EXTRACT with two arguments, having the json_doc argument constrained to be a column.
   Raises an error if the json path is NULL or invalid.
   Returns NULL if it is applied on a NULL json_doc argument.
 
@@ -631,6 +631,123 @@ Note that json objects do not check containment the same way json arrays do. It 
       json_contains('["a", "b1", ["a", {"k":["b2"]}]]','["b1", {"k":"b2"}]')
     ========================================================================
                                                                            1
+
+JSON_MERGE_PATCH
+===================================
+
+.. function:: JSON_MERGE_PATCH (json_doc, json_doc [, json_doc] ...)
+
+The **JSON_MERGE_PATCH** function merges two or more json docs and returns the resulting merged json. **JSON_MERGE_PATCH** differs from **JSON_MERGE_PRESERVE** in that it will take the second argument when encountering merging conflicts. **JSON_MERGE_PATCH** is compliant with
+`RFC 7396 <https://tools.ietf.org/html/rfc7396/>`_.
+
+The merging of two json documents is performed with the following rules, recursively:
+
+- when two non-object jsons are merged, the result of the merge is the second value.
+- when a non-object json is merged with a json object, the result is the merge of an empty object with the second merging argument.
+- when two objects are merged, the resulting object consists of the following members:
+
+  - All members from the first object that have no corresponding member with the same key in the second object.
+  - All members from the second object that have no corresponding members with equal keys in the first object, having values not null. Members with null values from second object are ignored.
+  - One member for each member in the first object that has a corresponding non-null valued member in the second object with the same key. Same key members that appear in both objects and the second object's member value is null, are ignored. The values of these pairs become the results of merging operations performed on the values of the members from the first and second object.
+
+Merge operations are executed serially when there are more than two arguments: the result of merging first two arguments is merged with third, this result is then merged with fourth and so on.
+
+Returns NULL if any argument is NULL.
+An error occurs if any argument is not valid.
+
+.. code-block:: sql
+
+    SELECT JSON_MERGE_PATCH ('["a","b","c"]', '"scalar"');
+
+::
+
+      json_merge_patch('["a","b","c"]', '"scalar"')
+    ======================
+      "scalar"
+
+
+The exception to the merge-patching, when the first argument is non-object and the second is an object. A merge operation is performed between an empty object and the second object argument.
+
+.. code-block:: sql
+
+    SELECT JSON_MERGE_PATCH ('["a"]', '{"a":null}');
+
+::
+
+      json_merge_patch('["a"]', '{"a":null}')
+    ======================
+      {}
+
+Objects merging example, exemplifying the described object merging rules:
+
+.. code-block:: sql
+
+    SELECT JSON_MERGE_PATCH ('{"a":null,"c":["elem"]}','{"b":null,"c":{"k":null},"d":"elem"}');
+
+::
+
+      json_merge_patch('{"a":null,"c":["elem"]}', '{"b":null,"c":{"k":null},"d":"elem"}')
+    ======================
+      {"a":null,"c":{},"d":"elem"}
+
+JSON_MERGE_PRESERVE
+===================================
+
+.. function:: JSON_MERGE_PRESERVE (json_doc, json_doc [, json_doc] ...)
+
+  The **JSON_MERGE_PRESERVE** function merges two or more json docs and returns the resulting merged json. **JSON_MERGE_PRESERVE** differs from **JSON_MERGE_PATCH** in that it preserves both json elements on merging conflicts.
+
+  The merging of two json documents is performed after the following rules, recursively:
+  
+- when two json arrays are merged, they are concatenated.
+- when two non-array (scalar/object) json elements are merged and at most one of them is a json object, the result is an array containing the two json elements.
+- when a non-array json element is merged with a json array, the non-array is wrapped as a single element json array and then merged with the json array according to json array merging rules.
+- when two json objects are merged, all pairs that do not have a corresponding pair in the other json object are preserved. For matching keys, the values are always merged by applying the rules recursively.
+
+  Merge operations are executed serially when there are more than two arguments: the result of merging first two arguments is merged with third, this result is then merged with fourth and so on.
+
+  Returns NULL if any argument is NULL.
+  An error occurs if any argument is not valid.
+
+.. code-block:: sql
+
+    SELECT JSON_MERGE_PRESERVE ('"a"', '"b"');
+
+::
+
+      json_merge('"a"', '"b"')
+    ======================
+      ["a","b"]
+
+.. code-block:: sql
+
+    SELECT JSON_MERGE_PRESERVE ('["a","b","c"]', '"scalar"');
+
+::
+
+      json_merge('["a","b","c"]', '"scalar"')
+    ======================
+      ["a","b","c","scalar"]
+
+
+**JSON_MERGE_PRESERVE**, as opposed to **JSON_MERGE_PATCH**, will not drop and patch first argument's elements during merges and will gather them together.
+
+.. code-block:: sql
+
+    SELECT JSON_MERGE_PRESERVE ('{"a":null,"c":["elem"]}','{"b":null,"c":{"k":null},"d":"elem"}');
+
+::
+
+      json_merge('{"a":null,"c":["elem"]}','{"b":null,"c":{"k":null},"d":"elem"}')
+    ======================
+      {"a":null,"c":["elem",{"k":null}],"b":null,"d":"elem"}
+
+JSON_MERGE
+===================================
+
+.. function:: JSON_MERGE (json_doc, json_doc [, json_doc] ...)
+
+  **JSON_MERGE** is an alias for **JSON_MERGE_PRESERVE**.
 
 JSON_INSERT
 ===================================

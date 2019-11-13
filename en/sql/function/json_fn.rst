@@ -637,7 +637,7 @@ JSON_MERGE_PATCH
 
 .. function:: JSON_MERGE_PATCH (json_doc, json_doc [, json_doc] ...)
 
-The **JSON_MERGE_PATCH** function merges 2 or more json docs and returns the resulting merged json. **JSON_MERGE_PATCH** differs from **JSON_MERGE_PRESERVE** in that it will take the second argument when encountering merging conflicts. **JSON_MERGE_PATCH** is compliant with
+The **JSON_MERGE_PATCH** function merges two or more json docs and returns the resulting merged json. **JSON_MERGE_PATCH** differs from **JSON_MERGE_PRESERVE** in that it will take the second argument when encountering merging conflicts. **JSON_MERGE_PATCH** is compliant with
 `RFC 7396 <https://tools.ietf.org/html/rfc7396/>`_.
 
 The merging of two json documents is performed with the following rules, recursively:
@@ -711,7 +711,7 @@ JSON_MERGE_PRESERVE
 
 .. code-block:: sql
 
-    SELECT JSON_MERGE_PATCH ('"a"', '"b"');
+    SELECT JSON_MERGE_PRESERVE ('"a"', '"b"');
 
 ::
 
@@ -721,7 +721,7 @@ JSON_MERGE_PRESERVE
 
 .. code-block:: sql
 
-    SELECT JSON_MERGE_PATCH ('["a","b","c"]', '"scalar"');
+    SELECT JSON_MERGE_PRESERVE ('["a","b","c"]', '"scalar"');
 
 ::
 

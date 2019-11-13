@@ -631,3 +631,156 @@ Note that json objects do not check containment the same way json arrays do. It 
       json_contains('["a", "b1", ["a", {"k":["b2"]}]]','["b1", {"k":"b2"}]')
     ========================================================================
                                                                            1
+
+JSON_INSERT
+===================================
+
+.. function:: JSON_INSERT (json_doc, json path, json_val [, json path, json_val] ...)
+
+  The **JSON_INSERT** function inserts json_val arguments inside the json_doc at the given paths.
+  Returns the resulting json after insertion.
+
+  The insertion rules for **JSON_INSERT** are the following:
+
+  For each (json path, json_val) pair, from left to right, if the json path addresses an existing element inside the json_doc, the argument pair is ignored and does not overwrite the existing json element.
+  Otherwise, the json_val is inserted if the json path addresses one of the following json values inside the json_doc:
+  
+  - An inexistent object member of an existing json object. A (key, value) pair is added to the json object with the key deduced from the json path and the value being the json_val.
+  - An array index past of an existing json array's end. The array is filled with nulls after the initial end of the array and the json_val is inserted at the specified index.
+
+  The document produced by evaluating one pair becomes the new value against which the next pair is evaluated. 
+
+  Returns NULL if any argument is NULL.
+  An error occurs if any argument is invalid.
+
+
+Paths to existing elements inside the json_doc are ignored:
+
+.. code-block:: sql
+
+    SELECT JSON_INSERT ('{"a":1}','$.a','b');
+
+::
+
+      json_insert('{"a":1}', '$.a', 'b')
+    ======================
+      {"a":1}
+
+.. code-block:: sql
+
+    SELECT JSON_INSERT ('{"a":1}','$.b','1');
+
+::
+
+      json_insert('{"a":1}', '$.b', '1')
+    ======================
+      {"a":1,"b":"1"}
+
+.. code-block:: sql
+
+    SELECT JSON_INSERT ('[0,1,2]','$[4]','1');
+
+::
+
+      json_insert('[0,1,2]', '$[4]', '1')
+    ======================
+      [0,1,2,null,"1"]
+
+JSON_SET
+===================================
+
+.. function:: JSON_SET (json_doc, json path, json_val [, json path, json_val] ...)
+
+  The **JSON_SET** function inserts json_val arguments inside the json_doc at the given paths.
+
+
+  For each (json path, json_val) pair, from left to right, an existing value is searched inside the json_doc at the json path and is replaced with json_val.
+  Otherwise, the json_val is inserted if the json path addresses one of the following json values inside the json_doc:
+
+  - An inexistent object member of an existing json object. A (key, value) pair is added to the json object with the key deduced from the json path and the value being the json_val.
+  - An array index past of an existing json array's end. The array is filled with nulls after the initial end of the array and the json_val is inserted at the specified index.
+
+  The document produced by evaluating one pair becomes the new value against which the next pair is evaluated. 
+
+  Returns the resulting json after insertion.
+  Returns NULL if any argument is NULL.
+  An error occurs if any argument is invalid.
+
+.. code-block:: sql
+
+    SELECT JSON_SET ('{"a":1}','$.a','b');
+
+::
+
+      json_set('{"a":1}', '$.a', 'b')
+    ======================
+      {"a":"b"}
+
+.. code-block:: sql
+
+    SELECT JSON_SET ('{"a":1}','$.b','1');
+
+::
+
+      json_set('{"a":1}', '$.b', '1')
+    ======================
+      {"a":1,"b":"1"}
+
+.. code-block:: sql
+
+    SELECT JSON_SET ('[0,1,2]','$[4]','1');
+
+::
+
+      json_set('[0,1,2]', '$[4]', '1')
+    ======================
+      [0,1,2,null,"1"]
+
+
+JSON_REPLACE
+===================================
+
+.. function:: JSON_REPLACE (json_doc, json path, json_val [, json path, json_val] ...)
+
+  The **JSON_REPLACE** function inserts json_val arguments inside the json_doc at the given paths.
+
+  For each (json path, json_val) pair, from left to right, an existing value is searched inside the json_doc at the json path and is replaced with json_val.
+  Otherwise, if the json_path does not exist inside the json_doc, the (json path, json_val) pair is ignored and has no effect.
+
+  The document produced by evaluating one pair becomes the new value against which the next pair is evaluated. 
+
+  Returns the resulting json after replacements.
+  Returns NULL if any argument is NULL.
+  An error occurs if any argument is invalid.
+
+.. code-block:: sql
+
+    SELECT JSON_REPLACE ('{"a":1}','$.a','b');
+
+::
+
+      json_replace('{"a":1}', '$.a', 'b')
+    ======================
+      {"a":"b"}
+
+No replacement is done if the json path does not exist inside the json_doc. 
+
+.. code-block:: sql
+
+    SELECT JSON_REPLACE ('{"a":1}','$.b','1');
+
+::
+
+      json_replace('{"a":1}', '$.b', '1')
+    ======================
+      {"a":1}
+
+.. code-block:: sql
+
+    SELECT JSON_REPLACE ('[0,1,2]','$[4]','1');
+
+::
+
+      json_replace('[0,1,2]', '$[4]', '1')
+    ======================
+      [0,1,2]

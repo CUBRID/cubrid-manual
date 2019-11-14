@@ -2344,23 +2344,25 @@ The following shows [options] available with the **cubrid statdump** utility.
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
     | **Stat name**                            | **Stat type**  |  **Description**                                                      |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    | ..Time_DWB_flush_block_time              | Counter/timer  | The number and duration of DWB block flushes                          |
+    | ..DWB_flush_block                        | Counter/timer  | The number of blocks flushed and total writing duration               |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    | ..Time_DWB_flush_block_helper_time       | Counter/timer  | ??                                                                    |
+    | ..DWB_file_sync_helper                   | Counter/timer  | The number and duration of files synchronized by DWB helper           |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    | ..Time_DWB_flush_block_cond_wait_time    | Counter/timer  | The number and duration of DWB thread sleeps                          |
+    | ..DWB_flush_block_cond_wait              | Counter/timer  | The number and duration of DWB thread waits                           |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    | ..Time_DWB_flush_block_sort_time         | Counter/timer  | The number and duration of sorting pages for flush                    |
+    | ..DWB_flush_block_sort                   | Counter/timer  | The number and duration of sorting pages for flush                    |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    | ..Time_DWB_flush_remove_hash_entries     | Counter/timer  | The number and duration of removing page from DWB                     |
+    | ..DWB_decache_pages_after_write          | Counter/timer  | The number and duration of removing pages from DWB cache after flush  |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    | ..Time_DWB_checksum_time                 | Counter/timer  | !!Unused                                                              |
+    | ..DWB_wait_flush_block                   | Counter/timer  | | The number and duration of waiting for block to be flush to add a   |
+    |                                          |                | | page                                                                |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    | ..Time_DWB_wait_flush_block_time         | Counter/timer  | ??                                                                    |
+    | ..DWB_wait_file_sync_helper              | Counter/timer  | The number and duration of waiting for DWB helper to sync file        |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    | ..Time_DWB_wait_flush_block_helper_time  | Counter/timer  | ??                                                                    |
+    | ..DWB_flush_force                        | Counter/timer  | The number and duration of forced full DWB flushes                    |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    | ..Time_DWB_flush_force_time              | Counter/timer  | The number and duration of forced full DWB flushes                    |
+    | Num_dwb_flushed_block_volumes            | Complex        | | A histogram of number of files synchronized by each block flush     |
+    |                                          |                | | (last value is for ten or more files)                               |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
 
     **MVCC Snapshot**

@@ -2368,7 +2368,7 @@ The following shows [options] available with the **cubrid statdump** utility.
 
     **Thread workers**
 
-    Statistics collected by worker pools:
+    Statistics collected by thread worker pools:
 
     +--------------------------+----------------+---------------------------------------------------------------------------------------+
     | **Stat name**            | **Stat type**  |  **Description**                                                                      |
@@ -2397,6 +2397,60 @@ The following shows [options] available with the **cubrid statdump** utility.
 
     *   **Thread_loaddb_stats_counters_timers**: statistics for workers loading data into database (using **loaddb** command).
         *At least one load session must be active to see these statistics*.
+
+    **Thread daemons**
+
+    Statistics collected by background daemon threads:
+
+    +--------------------------+----------------+---------------------------------------------------------------------------------------+
+    | **Stat name**            | **Stat type**  |  **Description**                                                                      |
+    +--------------------------+----------------+---------------------------------------------------------------------------------------+
+    | ..daemon_loop_count      | Accumulator    | The number of loops executed by daemon thread                                         |
+    +--------------------------+----------------+---------------------------------------------------------------------------------------+
+    | ..daemon_execute_time    | Accumulator    | The total duration spent by daemon thread on execution                                |
+    +--------------------------+----------------+---------------------------------------------------------------------------------------+
+    | ..daemon_pause_time      | Accumulator    | The total duration spent by daemon thread between executions                          |
+    +--------------------------+----------------+---------------------------------------------------------------------------------------+
+    | ..looper_sleep_count     | Accumulator    | The number of times thread looper was put to sleep                                    |
+    +--------------------------+----------------+---------------------------------------------------------------------------------------+
+    | ..looper_sleep_time      | Accumulator    | The total duration thread looper spent on sleep                                       |
+    +--------------------------+----------------+---------------------------------------------------------------------------------------+
+    | ..looper_reset_count     | Accumulator    | The number of times an incremental looper is reset by wakeup                          |
+    +--------------------------+----------------+---------------------------------------------------------------------------------------+
+    | ..waiter_wakeup_count    | Accumulator    | The number of wakeup requests on daemon thread                                        |
+    +--------------------------+----------------+---------------------------------------------------------------------------------------+
+    | ..waiter_lock_wakeup\    | Accumulator    | The number of wakeup requests on daemon thread that required lock                     |
+    | \_count                  |                |                                                                                       |
+    +--------------------------+----------------+---------------------------------------------------------------------------------------+
+    | ..waiter_sleep_count     | Accumulator    | The number of times daemon thread went to sleep                                       |
+    +--------------------------+----------------+---------------------------------------------------------------------------------------+
+    | ..waiter_timeout_count   | Accumulator    | The number of daemon thread waits ended with timeout                                  |
+    +--------------------------+----------------+---------------------------------------------------------------------------------------+
+    | ..waiter_no_sleep_count  | Accumulator    | The number of times daemon thread spins with no wait                                  |
+    +--------------------------+----------------+---------------------------------------------------------------------------------------+
+    | ..waiter_awake_count     | Accumulator    | The number of times daemon thread is awaken by other thread request                   |
+    +--------------------------+----------------+---------------------------------------------------------------------------------------+
+    | ..waiter_wakeup_delay\   | Accumulator    | The total duration of awaking daemon thread                                           |
+    | \_time                   |                |                                                                                       |
+    +--------------------------+----------------+---------------------------------------------------------------------------------------+
+
+    Statistics are collected for next daemon threads:
+
+    +-------------------------------------------+---------------------------------------------------------------------------------------+
+    | **Daemon name**                           |  **Description**                                                                      |
+    +-------------------------------------------+---------------------------------------------------------------------------------------+
+    | Page_flush_daemon_thread                  | Background thread that flushes data pages to disk                                     |
+    +-------------------------------------------+---------------------------------------------------------------------------------------+
+    | Page_post_flush_daemon_thread             | Background thread that may reclaim memory space occupied by flushes data pages        |
+    +-------------------------------------------+---------------------------------------------------------------------------------------+
+    | Page_flush_control_daemon_thread          | Background thread that controls data flush rate                                       |
+    +-------------------------------------------+---------------------------------------------------------------------------------------+
+    | Page_maintenance_daemon_thread            | Background thread that recalculates quotas for private LRU lists                      |
+    +-------------------------------------------+---------------------------------------------------------------------------------------+
+    | Deadlock_detect_daemon_thread             | Background thread that looks for deadlocks and chooses victims to unblock the system  |
+    +-------------------------------------------+---------------------------------------------------------------------------------------+
+    | Log_flush_daemon_thread                   | Background thread that flushes log data to disk                                       |
+    +-------------------------------------------+---------------------------------------------------------------------------------------+
 
 
 .. option:: -o, --output-file=FILE

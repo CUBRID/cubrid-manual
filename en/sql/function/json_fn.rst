@@ -758,7 +758,7 @@ JSON_ARRAY_APPEND
 
   The (json path, json_val) pairs are evaluated one by one, from left to right. The document produced by evaluating one pair becomes the new value against which the next pair is evaluated.
 
-  If the json path points to an json array inside the json_doc, the json_val is appended at the end of the array. 
+  If the json path points to a json array inside the json_doc, the json_val is appended at the end of the array. 
   If the json path points to a non-array json element, the non-array gets wrapped as a single element json array containing the referred non-array element followed by the appending of the given json_val.
 
   Returns NULL if any argument is NULL.

@@ -1825,6 +1825,32 @@ The following shows [options] available with the **cubrid statdump** utility.
     | ..bt_vacuum_insid_traverse               | Counter/timer  | The number and duration of B-tree traverse for vacuum 'insert id'     |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
 
+    **Load Index Online**
+
+    +----------------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | **Stat name**                                      | **Stat type**  |  **Description**                                                      |
+    +----------------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..btree_online_load                                | Counter/timer  | The number and duration of B-tree online index loading statements     |
+    +----------------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..btree_online_insert_task                         | Counter/timer  | The number and duration of batch insert tasks by index loader         |
+    +----------------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..btree_online_prepare_task                        | Counter/timer  | The number and duration of preparing (sorting) index loader tasks     |
+    +----------------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..btree_online_insert_leaf                         | Counter/timer  | | The number and duration of leaf pages processed by index loader     |
+    |                                                    |                | | (multiple keys may be inserted while a leaf page is processed)      |
+    +----------------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_btree_online_inserts                           | Accumulator    | The number of key inserts by index loader                             |
+    +----------------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_btree_online_inserts_same_page_hold            | Accumulator    | |  The number of successive inserts by index loader in same leaf page |
+    |                                                    |                | | (loader optimization to avoid expensive index traversals)           |
+    +----------------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_btree_online_inserts_retry                     | Accumulator    | | The number of restarted inserts because successive keys do not      |
+    |                                                    |                | | belong to same leaf or because there is not enough space            |
+    +----------------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_btree_online_inserts_retry_nice                | Accumulator    | The number of restarted inserts to let others access leaf page        |
+    +----------------------------------------------------+----------------+-----------------------------------------------------------------------+
+
+
     **Query**
 
     +------------------------------------------+----------------+-----------------------------------------------------------------------+

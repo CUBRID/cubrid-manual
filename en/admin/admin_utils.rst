@@ -2500,7 +2500,7 @@ The following shows [options] available with the **cubrid statdump** utility.
                                                                   | - Thread_pgbuf_daemon_stats_counters_timers
       **128**   **Extended DWB**                      No          | Activate extented statistics collection for Double Write Buffer
                                                                   | - Num_dwb_flushed_block_volumes
-      **MAX**   **All statistiscs**                   No          | Activate collection of all statistics
+      **MAX**   **All statistics**                   No          | Activate collection of all statistics
       ========= ===================================== =========== ====================================================================
 
 .. _lockdb:

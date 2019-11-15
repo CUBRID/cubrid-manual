@@ -2221,6 +2221,10 @@ The following shows [options] available with the **cubrid statdump** utility.
     | ..compensate_flush                       | Counter/timer  | | The number and duration of flush compensations force by adaptive    |
     |                                          |                | | flush controller                                                    |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..assign_direct_bcb                      | Counter/timer  | The number and duration of assigning bcb's directly to waiters        |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..wake_flush_waiter                      | Counter/timer  | The number and duration of waking up a thread waiting for bcb         |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
     | ..flush_collect                          | Counter/timer  | The number and duration of flush thread collecting BCB sets           |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
     | ..flush_flush                            | Counter/timer  | The number and duration of flush thread flushing BCB sets             |
@@ -2275,6 +2279,15 @@ The following shows [options] available with the **cubrid statdump** utility.
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
     | Num_victim_use_invalid_bcb               | Accumulator    | The number of BCB's allocated from invalid list                       |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..alloc_bcb_get_victim_search\           | Counter/timer  | The number and duration of getting a victim from own private list     |
+    | \_own_private_list                       |                |                                                                       |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..alloc_bcb_get_victim_search\           | Counter/timer  | The number and duration of getting a victim from other private lists  |
+    | \_others_private_list                    |                |                                                                       |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..alloc_bcb_get_victim_search\           | Counter/timer  | The number and duration of getting a victim from a shared list        |
+    | \shared_list                             |                |                                                                       |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
     | Num_data_page_avoid_victim               | Accumulator    | | The number of BCB's that cannot be victimized because they are      |
     |                                          |                | | in process of being flushed to disk                                 |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
@@ -2292,11 +2305,11 @@ The following shows [options] available with the **cubrid statdump** utility.
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
     | Num_victim_assign_direct_adjust_lru      | Accumulator    | The number of direct victims assigned when BCB falls to LRU zone 3    |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    | | Num_victim_assign_direct_adjust_lru\   | Accumulator    | | The number of BCB's falling to LRU zone 3 **not** assigned as direct|
-    | | \_to_vacuum                            |                | | victims because a vacuum thread is expected to access it            |
+    | Num_victim_assign_direct_adjust_lru\     | Accumulator    | | The number of BCB's falling to LRU zone 3 **not** assigned as direct|
+    | \_to_vacuum                              |                | | victims because a vacuum thread is expected to access it            |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    | | Num_victim_assign_direct_search\       | Accumulator    | | The number of direct victims assigned by flush thread while         |
-    | | \_for_flush                            |                | | collecting BCB sets for flush                                       |
+    | Num_victim_assign_direct_search\         | Accumulator    | | The number of direct victims assigned by flush thread while         |
+    | \_for_flush                              |                | | collecting BCB sets for flush                                       |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
     | Num_victim_shared_lru_success            | Accumulator    | The number of successful victim searches in shared LRU lists          |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
@@ -2343,6 +2356,32 @@ The following shows [options] available with the **cubrid statdump** utility.
     | Num_lfcq_private_lists                   | Snapshot       | The current number of non-zero candidate private LRU lists            |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
     | Num_lfcq_shared_lists                    | Snapshot       | The current number of non-zero candidate shared LRU lists             |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+
+    **Double write buffer**
+
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | **Stat name**                            | **Stat type**  |  **Description**                                                      |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..DWB_flush_block                        | Counter/timer  | The number of blocks flushed and total writing duration               |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..DWB_file_sync_helper                   | Counter/timer  | The number and duration of files synchronized by DWB helper           |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..DWB_flush_block_cond_wait              | Counter/timer  | The number and duration of DWB thread waits                           |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..DWB_flush_block_sort                   | Counter/timer  | The number and duration of sorting pages for flush                    |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..DWB_decache_pages_after_write          | Counter/timer  | The number and duration of removing pages from DWB cache after flush  |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..DWB_wait_flush_block                   | Counter/timer  | | The number and duration of waiting for block to be flush to add a   |
+    |                                          |                | | page                                                                |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..DWB_wait_file_sync_helper              | Counter/timer  | The number and duration of waiting for DWB helper to sync file        |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | ..DWB_flush_force                        | Counter/timer  | The number and duration of forced full DWB flushes                    |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_dwb_flushed_block_volumes            | Complex        | | A histogram of number of files synchronized by each block flush     |
+    |                                          |                | | (last value is for ten or more files)                               |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
 
     **MVCC Snapshot**

@@ -2614,6 +2614,14 @@ The following shows [options] available with the **cubrid statdump** utility.
                                                                   | - Num_lfcq_prv_get_big
                                                                   | - Num_lfcq_shr_get_total_calls
                                                                   | - Num_lfcq_shr_get_empty
+      **32**    **Thread workers**                    No          | Activate statistics collection for thread worker pools
+                                                                  | - Thread_stats_counters_timers
+                                                                  | - Thread_loaddb_stats_counters_timers
+      **64**    **Thread daemons**                    No          | Activate statistics collection for daemon threads
+                                                                  | - Thread_pgbuf_daemon_stats_counters_timers
+      **128**   **Extended DWB**                      No          | Activate extented statistics collection for Double Write Buffer
+                                                                  | - Num_dwb_flushed_block_volumes
+      **MAX**   **All statistics**                   No          | Activate collection of all statistics
       ========= ===================================== =========== ====================================================================
 
 .. _lockdb:

@@ -1,6 +1,8 @@
 ## build files
 # en
 en/_build/
+en/.vscode/
 
 # ko
 ko/_build/
+ko/.vscode/

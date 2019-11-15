@@ -89,6 +89,10 @@ To get more information on the above, see :ref:`managing-archive-logs`.
 
 Background archive log is a volume used in the background with log archiving temporarily before creating archive logs. It is created as the same volume size as active log and stored.
 
+**Double Write Buffer File**
+
+Double write buffer file stores copies of data pages being flushed to disk as a protection against I/O errors. A detailed description of this file can be found in :ref:`database-volume` section.
+
 .. _temporary-volumes:
 
 Temporary Volume

@@ -267,6 +267,16 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | update_use_attribute_references     | client parameter        | O       | bool     | no                             | available             |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+| :ref:`thread-parameters`      | thread_connection_pooling           | server parameter        |         | bool     | yes                            |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | thread_connection_timeout_seconds   | server parameter        |         | int      | 300                            |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | thread_worker_pooling               | server parameter        |         | bool     | yes                            |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | thread_worker_timeout_seconds       | server parameter        |         | int      | 300                            |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | loaddb_worker_count                 | server parameter        |         | int      | 8                              |                       |
++-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 | :ref:`timezone-parameters`    | server_timezone                     | server parameter        |         | string   | OS timezone                    | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | timezone                            | client/server parameter | O       | string   | the value of server_timezone   | available             |
@@ -1603,8 +1613,8 @@ The following are parameters related to SQL statements and data types supported 
 
 .. _thread-parameters:
 
-Threads Parameters
-------------------
+Thread-Related Parameters
+-------------------------
 
 Thread managemenet can be confirued by threads parameters. The type and value range for each parameter are as follows:
 

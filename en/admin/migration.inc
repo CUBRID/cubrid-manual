@@ -166,6 +166,14 @@ In general, the **cubrid loaddb** utility uses files (schema definition, object 
 *   Trigger file(*database-name*\ **_trigger**): A file created by an unload operation. It contains information on the triggers defined in the database.
 *   User-defined object file(*user_defined_object_file*): A file in table format written by the user to enter mass data. (For details, see :ref:`howtowrite-loadfile` .)
 
+**Loading modes**
+
+The **cubrid loaddb** utility provides two modes of loading the data into a database.
+
+*   SA_MODE, which loads the data without running the server process.
+*   CS_MODE, which connects to a server via username and password and loads the data by sending it to the server.
+
+
 The following table shows [options] available with the **cubrid loaddb** utility.
 
 .. program:: loaddb
@@ -182,6 +190,18 @@ The following table shows [options] available with the **cubrid loaddb** utility
 
         cubrid loaddb -p admin -d demodb_objects newdb
 
+.. option:: -S, --SA-MODE
+
+    This option loads data into a database in standalone mode, without the necessity of a running server. This is the default loading mode of **loaddb**. ::
+
+        cubrid loaddb -S -u admin -p admin -d demodb_objects newdb
+
+.. option:: -C, --CS-MODE
+
+    This option requires a server process running on the database in which the data is being loaded. Unlike the standalone mode of **loaddb**, the client-server mode will load the data using multiple threads on the server, meaning greater performance for large amounts of data. ::
+
+        cubrid loaddb -S -u admin -p admin -d demodb_objects newdb
+
 .. option:: --data-file-check-only
 
     This option checks only the syntax of the data contained in demodb_objects, and does not load the data to the database. ::
@@ -190,7 +210,7 @@ The following table shows [options] available with the **cubrid loaddb** utility
 
 .. option:: -l, --load-only
 
-    This option loads data directly without checking the syntax of the data to be loaded. If the **-l** option is used, loading speed increases because data is loaded without checking the syntax included in demodb_objects, but an error might occur. ::
+    This option loads data directly without checking the syntax of the data to be loaded. If the **-l** option is used, loading speed increases because data is loaded without an apriori syntax check of the whole data fale. In case any syntax errors will occur, the load process will stop. The **-l** option is enabled by default during the client-server mode of **loaddb**, while the standalone version will also do the apriori syntax check of the data file. ::
 
         cubrid loaddb -l -d demodb_objects newdb
 
@@ -210,7 +230,9 @@ The following table shows [options] available with the **cubrid loaddb** utility
 
     This option commits periodically every time COUNT records are entered into the database. If this option is not specified, all records included in demodb_objects are loaded to the database before the transaction is committed. If this option is used together with the **-s** or **-i** option, commit is performed periodically every time 100 DDL statements are loaded. 
     
-    The recommended commit interval varies depending on the data to be loaded. It is recommended that the parameter of the **-c** option be configured to 50 for schema loading, 1,000 for record loading, and 1 for index loading. ::
+    The recommended commit interval varies depending on the data to be loaded. It is recommended that the parameter of the **-c** option be configured to 50 for schema loading, 1,000 for record loading, and 1 for index loading.
+    
+    The default value of **COUNT** is set to 10240. ::
 
         cubrid loaddb -c 100 -d demodb_objects newdb
 
@@ -318,6 +340,12 @@ The following table shows [options] available with the **cubrid loaddb** utility
     You can specify a file that lists classes to be ignored during loading records. All records of classes except ones specified in the file will be loaded. ::
 
         cubrid loaddb --ignore-class-file=skip_class_list -d demodb_objects newdb
+
+.. option:: --trigger-file=FILE
+
+    You can specify a file that contains triggers that need to be loaded into a database. ::
+
+        cubrid loaddb --trigger-file=demodb_triggers -d demodb_objects newdb
 
 .. warning::
 

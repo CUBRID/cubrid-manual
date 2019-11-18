@@ -1628,14 +1628,14 @@ Thread managemenet can be confirued by threads parameters. The type and value ra
 
 **thread_connection_timeout_seconds**
 
-     **thread_connection_timeout_seconds** is a parameter that configures \
-     \wait time before stopping for threads handling connection management. \
-     \After closing a connection, the thread will wait the value of the \
-     \parameter expressed in seconds to be assigned a new connection. If no \
-     \connection is assigned and the wait time expires, the thread stops. \
-     \Another thread may be started the next time a connection comes. \
-     \If parameter value is **-1**, threads never stop. They sleep until \
-     \they are given a new assignment.
+    **thread_connection_timeout_seconds** is a parameter that configures \
+    \wait time before stopping for threads handling connection management. \
+    \After closing a connection, the thread will wait the value of the \
+    \parameter expressed in seconds to be assigned a new connection. If no \
+    \connection is assigned and the wait time expires, the thread stops. \
+    \Another thread may be started the next time a connection comes. \
+    \If parameter value is **-1**, threads never stop. They sleep until \
+    \they are given a new assignment.
 
 **thread_worker_pooling**
 
@@ -1644,13 +1644,13 @@ Thread managemenet can be confirued by threads parameters. The type and value ra
 **thread_worker_timeout_seconds**
 
     **thread_worker_timeout_seconds** is a parameter that configures \
-     \wait time before stopping for threads handling client requests. \
-     \After executing a request, the thread will wait the value of the \
-     \parameter expressed in seconds to be assigned a request. If no \
-     \client request is assigned and the wait time expires, the thread stops. \
-     \Another thread may be started the next time a client request comes. \
-     \If parameter value is **-1**, threads never stop. They sleep until \
-     \they are given a new assignment.
+    \wait time before stopping for threads handling client requests. \
+    \After executing a request, the thread will wait the value of the \
+    \parameter expressed in seconds to be assigned a request. If no \
+    \client request is assigned and the wait time expires, the thread stops. \
+    \Another thread may be started the next time a client request comes. \
+    \If parameter value is **-1**, threads never stop. They sleep until \
+    \they are given a new assignment.
 
 **loaddb_worker_count**
 

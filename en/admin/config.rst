@@ -1601,6 +1601,64 @@ The following are parameters related to SQL statements and data types supported 
       
         1, NULL
 
+.. _thread-parameters:
+
+Threads Parameters
+------------------
+
+Thread managemenet can be confirued by threads parameters. The type and value range for each parameter are as follows:
+
++---------------------------------------+--------+-------------------+----------+----------+
+| Parameter Name                        | Type   | Default           | Min      | Max      |
++=======================================+========+===================+==========+==========+
+| thread_connection_pooling             | bool   | true              |          |          |
++---------------------------------------+--------+-------------------+----------+----------+
+| thread_connection_timeout_seconds     | int    | 300               | -1       | 3600     |
++---------------------------------------+--------+-------------------+----------+----------+
+| thread_worker_pooling                 | bool   | true              |          |          |
++---------------------------------------+--------+-------------------+----------+----------+
+| thread_worker_timeout_seconds         | int    | 300               | -1       | 3600     |
++---------------------------------------+--------+-------------------+----------+----------+
+| loaddb_worker_count                   | bool   | 8                 | 2        | 64       |
++---------------------------------------+--------+-------------------+----------+----------+
+
+**thread_connection_pooling**
+
+    If **thread_connection_pooling** parameter is true, all threads used for client connection management are pooled on server boot.
+
+**thread_connection_timeout_seconds**
+
+     **thread_connection_timeout_seconds** is a parameter that configures \
+     \wait time before stopping for threads handling connection management. \
+     \After closing a connection, the thread will wait the value of the \
+     \parameter expressed in seconds to be assigned a new connection. If no \
+     \connection is assigned and the wait time expires, the thread stops. \
+     \Another thread may be started the next time a connection comes. \
+     \If parameter value is **-1**, threads never stop. They sleep until \
+     \they are given a new assignment.
+
+**thread_worker_pooling**
+
+    If **thread_connection_pooling** parameter is true, all threads used for client requests execution are pooled on server boot.
+
+**thread_worker_timeout_seconds**
+
+    **thread_worker_timeout_seconds** is a parameter that configures \
+     \wait time before stopping for threads handling client requests. \
+     \After executing a request, the thread will wait the value of the \
+     \parameter expressed in seconds to be assigned a request. If no \
+     \client request is assigned and the wait time expires, the thread stops. \
+     \Another thread may be started the next time a client request comes. \
+     \If parameter value is **-1**, threads never stop. They sleep until \
+     \they are given a new assignment.
+
+**loaddb_worker_count**
+
+    **loaddb_worker_count** is a parameter that configures the maximum \
+    \number of threads that can be dedicated for **loaddb** sessions. \
+    \If a single **loaddb** session runs, it may use all threads. \
+    \If multiple **loaddb** sessions run concurrently, the total number \
+    \of threads of all sessions cannot exceed the parameter's value.
 
 .. _timezone-parameters:
 

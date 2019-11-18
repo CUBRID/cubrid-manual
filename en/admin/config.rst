@@ -160,6 +160,8 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               | volume_extension_path               | server parameter        |         | string   | NULL                           |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | double_write_buffer_size            | server parameter        |         | byte     | 2M                             |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | data_file_os_advise                 | server parameter        |         | int      | 0                              |                       |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 | :ref:`error-parameters`       | call_stack_dump_activation_list     | client/server parameter |         | string   | DEFAULT                        | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -626,6 +628,8 @@ The following are disk-related parameters for defining database volumes and stor
 +------------------------------------------+--------+----------+----------+----------+
 | double_write_buffer_size                 | byte   | 2M       | 0        | 32M      |
 +------------------------------------------+--------+----------+----------+----------+
+| data_file_os_advise                      | int    | 0        | 0        | 6        |
++------------------------------------------+--------+----------+----------+----------+
 
 **db_volume_size**
 
@@ -669,6 +673,37 @@ The following are disk-related parameters for defining database volumes and stor
 **double_write_buffer_size**
 
     **double_write_buffer_size** is a parameter to configure the memory and disk size of double writer buffer. Double write buffer protection against partial I/O writes can be disabled by setting this size to zero. By default, it is enabled and its size is 2M.
+
+**data_file_os_advise**
+
+    **data_file_os_advise** is a UNIX-only parameter that may be used to boost I/O performance. \
+    \The parameter value is converted into a *posix_fadvise()* flag \
+    \(for details about the flags `see here
+    <https://linux.die.net/man/2/posix_fadvise>`_).
+
+    +-----------------------------------+-------------------------------------------+
+    | Parameter Value                   | posix_fadvise flag                        |
+    +===================================+===========================================+
+    | 0                                 | 0                                         |
+    +-----------------------------------+-------------------------------------------+
+    | 1                                 | POSIX_FADV_NORMAL                         |
+    +-----------------------------------+-------------------------------------------+
+    | 2                                 | POSIX_FADV_SEQUENTIAL                     |
+    +-----------------------------------+-------------------------------------------+
+    | 3                                 | POSIX_FADV_RANDOM                         |
+    +-----------------------------------+-------------------------------------------+
+    | 4                                 | POSIX_FADV_NOREUSE                        |
+    +-----------------------------------+-------------------------------------------+
+    | 5                                 | POSIX_FADV_WILLNEED                       |
+    +-----------------------------------+-------------------------------------------+
+    | 6                                 | POSIX_FADV_DONTNEED                       |
+    +-----------------------------------+-------------------------------------------+
+
+    .. warning::
+
+        Make sure posix_fadvise flags and how data is accessed are perfectly understood. \
+        \The parameter can help improve performance but it can also degrade it if misused. \
+        \In most scenarios it is best to use the default value.
 
 .. _error-parameters:
 

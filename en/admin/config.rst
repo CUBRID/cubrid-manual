@@ -1616,7 +1616,7 @@ The following are parameters related to SQL statements and data types supported 
 Thread-Related Parameters
 -------------------------
 
-Thread managemenet can be confirued by threads parameters. The type and value range for each parameter are as follows:
+Thread management can be configured by threads parameters. The type and value range for each parameter are as follows:
 
 +---------------------------------------+--------+-------------------+----------+----------+
 | Parameter Name                        | Type   | Default           | Min      | Max      |

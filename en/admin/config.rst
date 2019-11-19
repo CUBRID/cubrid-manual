@@ -1649,7 +1649,7 @@ Thread management can be configured by threads parameters. The type and value ra
 
 **thread_worker_pooling**
 
-    If **thread_connection_pooling** parameter is true, all threads used for client requests execution are pooled on server boot.
+    If **thread_worker_pooling** parameter is true, all threads used for client requests execution are pooled on server boot.
 
 **thread_worker_timeout_seconds**
 

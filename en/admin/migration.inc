@@ -170,8 +170,8 @@ In general, the **cubrid loaddb** utility uses files (schema definition, object 
 
 The **cubrid loaddb** utility provides two modes of loading the data into a database.
 
-*   SA_MODE, which loads the data without running the server process.
-*   CS_MODE, which connects to a server via username and password and loads the data by sending it to the server.
+*   **Stand-alone** mode loads the data offline, within a single thread environment. CUBRID 10.1 and older versions run only in this mode.
+*   **Client-server** mode connects to a server and loads the data online and in parallel. **Client-server** mode can be much faster, but object references and class/shared attributes are not supported in this and they can only be loaded in **stand-alone** mode
 
 
 The following table shows [options] available with the **cubrid loaddb** utility.
@@ -192,15 +192,15 @@ The following table shows [options] available with the **cubrid loaddb** utility
 
 .. option:: -S, --SA-MODE
 
-    This option loads data into a database in standalone mode, without the necessity of a running server. This is the default loading mode of **loaddb**. ::
+    This option loads data into a database in **stand-alone** mode. This is the default loading mode of **loaddb** and it is fully compatible with CUBRID 10.1 and older database versions. ::
 
         cubrid loaddb -S -u admin -p admin -d demodb_objects newdb
 
 .. option:: -C, --CS-MODE
 
-    This option requires a server process running on the database in which the data is being loaded. Unlike the standalone mode of **loaddb**, the client-server mode will load the data using multiple threads on the server, meaning greater performance for large amounts of data. ::
+    This option connects to a running server process. Unlike the **stand-alone** mode, the **client-server** mode loads the data using multiple threads, leading to greater performance for large amounts of data. Multiple **loaddb** sessions may run at the same time. Object references and class/shared attributes are not supported in this mode. ::
 
-        cubrid loaddb -S -u admin -p admin -d demodb_objects newdb
+        cubrid loaddb -C -u admin -p admin -d demodb_objects newdb
 
 .. option:: --data-file-check-only
 
@@ -210,7 +210,11 @@ The following table shows [options] available with the **cubrid loaddb** utility
 
 .. option:: -l, --load-only
 
-    This option loads data directly without checking the syntax of the data to be loaded. If the **-l** option is used, loading speed increases because data is loaded without an apriori syntax check of the whole data fale. In case any syntax errors will occur, the load process will stop. The **-l** option is enabled by default during the client-server mode of **loaddb**, while the standalone version will also do the apriori syntax check of the data file. ::
+    **Stand-alone** mode does, by default, an a priori syntax check on the whole data file before actually loading the data into the database. If a syntax error occurs, no data is loaded and the error is reported.
+    
+    Using the **-l** option, the a priori syntax check is skipped, thus increasing the loading speed. Syntax is still checked before loading each row into the database. Loading is stopped if a syntax error occurs, but data may be partially loaded.
+    
+    **Client-server mode** doesn't do the a priori syntax check, so this option has no effect. ::
 
         cubrid loaddb -l -d demodb_objects newdb
 
@@ -230,9 +234,7 @@ The following table shows [options] available with the **cubrid loaddb** utility
 
     This option commits periodically every time COUNT records are entered into the database. If this option is not specified, all records included in demodb_objects are loaded to the database before the transaction is committed. If this option is used together with the **-s** or **-i** option, commit is performed periodically every time 100 DDL statements are loaded. 
     
-    The recommended commit interval varies depending on the data to be loaded. It is recommended that the parameter of the **-c** option be configured to 50 for schema loading, 1,000 for record loading, and 1 for index loading.
-    
-    The default value of **COUNT** is set to 10240. ::
+    The recommended commit interval varies depending on the data to be loaded. It is recommended that the parameter of the **-c** option be configured to 50 for schema loading and 1 for index loading. For record loading, the recommended and default value is 10240. ::
 
         cubrid loaddb -c 100 -d demodb_objects newdb
 

@@ -53,7 +53,7 @@ The [AS] alias clause is required.
 
     - NULL ON ERROR: the column is set to NULL. This is the default behavior.
     - ERROR ON ERROR: an error is thrown.
-    - DEFAULT json_string ON ERROR: json_string will be used instead of the array/object/ json scalar that failed coercion to desired column type. Column type rules also apply to the default value. 
+    - DEFAULT json_string ON ERROR: json_string will be used instead of the array/object/json scalar that failed coercion to desired column type. Column type rules also apply to the default value. 
 
 - name type EXISTS PATH json path: this returns 1 if any data is present at the json path location, 0 otherwise.
 
@@ -97,7 +97,7 @@ ON EMPTY example:
   Column b represents the value found at '$.a' in the given json_doc. Since the path does not exist, ON EMPTY is triggered resulting in NULL as a result.
   The '$.c' extraction also results in an empty result, but the triggered ON EMPTY behavior returns 0 as default value. 
 
-In the example bellow, '$.*' path will be used to make the parent columns receive root json object's member values one by one. Column a shows what is processed. Each member's value of
+In the example below, '$.*' path will be used to make the parent columns receive root json object's member values one by one. Column a shows what is processed. Each member's value of
 the root object will then be processed further by the NESTED [PATH] clause. NESTED PATH uses path '$[*]' take each element of the array to be further processed by its columns.
 FOR ORDINALITY columns track the count of the current processed element. In the example's result we can see that for each new element in a column, the ord column's value also gets incremented.
 FOR ORDINALITY nested_ord column also acts as a counter of the number of elements processed by sibling columns. The nested FOR ORDINALITY column gets reset after finishing each processing batch.
@@ -120,7 +120,7 @@ The third member's value, 6 cannot be treated as an array and therefore cannot b
                2  [3,4,5]                         2  4                   
                2  [3,4,5]                         3  5                   
                3  6                            NULL  NULL                
-               4  [7]                             1  6                   
+               4  [7]                             1  7                   
 
 The following example showcases how multiple NESTED [PATH] clauses are treated by the JSON_TABLE. The value to be processed gets passed once, in order, to each of the NESTED [PATH] clauses at the same level.
 During processing of a value by a NESTED [PATH] clause, any sibling NESTED [PATH] clauses will fill their column with NULL values.

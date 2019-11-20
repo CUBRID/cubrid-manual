@@ -64,10 +64,10 @@ The [AS] alias clause is required.
 
 .. code-block:: sql
 
-    SELECT * FROM JSON_TABLE ('{"a":[1,[2,3]]}', '$.a[*]' COLUMNS ( a INT PATH '$')) as jt;
+    SELECT * FROM JSON_TABLE ('{"a":[1,[2,3]]}', '$.a[*]' COLUMNS ( col INT PATH '$')) as jt;
 ::
 
-                         a
+                       col
     ======================
                          1 -- first value found at '$.a[*]' is 1 json scalar, which is coercible to 1
                       NULL -- second value found at '$.a[*]' is [2,3] json array which cannot be coerced to int, triggering NULL ON ERROR default behavior
@@ -76,10 +76,10 @@ Overriding the default on_error behavior, results in a different output from pre
 
 .. code-block:: sql
 
-    SELECT * FROM JSON_TABLE ('{"a":[1,[2,3]]}', '$.a[*]' COLUMNS ( a INT PATH '$' DEFAULT '-1' ON ERROR)) as jt;
+    SELECT * FROM JSON_TABLE ('{"a":[1,[2,3]]}', '$.a[*]' COLUMNS ( col INT PATH '$' DEFAULT '-1' ON ERROR)) as jt;
 ::
 
-                         a
+                       col
     ======================
                          1 -- first value found at '$.a[*]' is '1' json scalar, which is coercible to 1
                         -1 -- second value found at '$.a[*]' is '[2,3]' json array which cannot be coerced to int, triggering ON ERROR
@@ -88,14 +88,14 @@ ON EMPTY example:
 
 .. code-block:: sql
 
-    SELECT * FROM JSON_TABLE ('{"a":1}', '$' COLUMNS ( a INT PATH '$.a', b INT PATH '$.b', c INT PATH '$.c' DEFAULT '0' ON EMPTY)) as jt;
+    SELECT * FROM JSON_TABLE ('{"a":1}', '$' COLUMNS ( col1 INT PATH '$.a', col2 INT PATH '$.b', col3 INT PATH '$.c' DEFAULT '0' ON EMPTY)) as jt;
 
 ::
 
-                a            b            c
+             col1         col2         col3
     =======================================
                 1         NULL            0 
-  Column b represents the value found at '$.a' in the given json_doc. Since the path does not exist, ON EMPTY is triggered resulting in NULL as a result.
+  Column col2 represents the value found at '$.a' in the given json_doc. Since the path does not exist, ON EMPTY is triggered resulting in NULL as a result.
   The '$.c' extraction also results in an empty result, but the triggered ON EMPTY behavior returns 0 as default value. 
 
 In the example below, '$.*' path will be used to make the parent columns receive root json object's member values one by one. Column a shows what is processed. Each member's value of
@@ -108,12 +108,12 @@ The third member's value, 6 cannot be treated as an array and therefore cannot b
 
     SELECT * FROM JSON_TABLE ('{"a":[1,2],"b":[3,4,5],"d":6,"c":[7]}', '$.*'
                   COLUMNS ( ord FOR ORDINALITY, 
-                            a JSON PATH '$',
+                            col JSON PATH '$',
                             NESTED PATH '$[*]' COLUMNS (nested_ord FOR ORDINALITY, nested_col JSON PATH '$'))) as jt;
 
 ::
 
-             ord  a                      nested_ord  nested_col          
+             ord  col                    nested_ord  nested_col          
     =====================================================================
                1  [1,2]                           1  1                   
                1  [1,2]                           2  2                   
@@ -130,12 +130,12 @@ During processing of a value by a NESTED [PATH] clause, any sibling NESTED [PATH
 
     SELECT * FROM JSON_TABLE ('{"a":[1,2],"b":[3,4,5],"d":6,"c":[7]}', '$.*'
                   COLUMNS ( ord FOR ORDINALITY, 
-                            a JSON PATH '$',
+                            col JSON PATH '$',
                             NESTED PATH '$[*]' COLUMNS (nested_ord1 FOR ORDINALITY, nested_col1 JSON PATH '$'),
                             NESTED PATH '$[*]' COLUMNS (nested_ord2 FOR ORDINALITY, nested_col2 JSON PATH '$'))) as jt;
 ::
 
-             ord  a                     nested_ord1  nested_col1           nested_ord2  nested_col2         
+             ord  col                    nested_ord1  nested_col1           nested_ord2  nested_col2         
     =========================================================================================================
                 1  [1,2]                           1  1                            NULL  NULL                
                 1  [1,2]                           2  2                            NULL  NULL                

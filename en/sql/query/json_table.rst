@@ -168,3 +168,35 @@ During processing of a value by a NESTED [PATH] clause, any sibling NESTED [PATH
                 1  {"key1":[1,2],"key2":[3,4,5]}         NULL  NULL                            2  4                   
                 1  {"key1":[1,2],"key2":[3,4,5]}         NULL  NULL                            3  5                   
                 2  {"key1":6,"key2":[7]}                 NULL  NULL                            1  7                   
+
+An example for multiple layers NESTED [PATH] clauses:
+
+.. code-block:: sql
+
+    SELECT * FROM JSON_TABLE (
+            '{"a":{"key1":[1,2], "key2":[3,4,5]},"b":{"key1":6, "key2":[7]}}',
+            '$.*' COLUMNS ( ord FOR ORDINALITY,
+                            col JSON PATH '$',
+                            NESTED PATH '$.*' COLUMNS ( nested_ord1 FOR ORDINALITY,
+                                                        nested_col1 JSON PATH '$',
+                                                        NESTED PATH '$[*]' COLUMNS ( nested_ord11 FOR ORDINALITY,
+                                                                                     nested_col11 JSON PATH '$')),
+                            NESTED PATH '$.key2[*]' COLUMNS ( nested_ord2 FOR ORDINALITY,
+                                                              nested_col2 JSON PATH '$'))
+        )   AS jt;
+
+::
+
+              ord  col                            nested_ord1  nested_col1           nested_ord11  nested_col11          nested_ord2  nested_col2         
+    =======================================================================================================================================================
+                1  {"key1":[1,2],"key2":[3,4,5]}            1  [1,2]                            1  1                            NULL  NULL                
+                1  {"key1":[1,2],"key2":[3,4,5]}            1  [1,2]                            2  2                            NULL  NULL                
+                1  {"key1":[1,2],"key2":[3,4,5]}            2  [3,4,5]                          1  3                            NULL  NULL                
+                1  {"key1":[1,2],"key2":[3,4,5]}            2  [3,4,5]                          2  4                            NULL  NULL                
+                1  {"key1":[1,2],"key2":[3,4,5]}            2  [3,4,5]                          3  5                            NULL  NULL                
+                1  {"key1":[1,2],"key2":[3,4,5]}         NULL  NULL                          NULL  NULL                            1  3                   
+                1  {"key1":[1,2],"key2":[3,4,5]}         NULL  NULL                          NULL  NULL                            2  4                   
+                1  {"key1":[1,2],"key2":[3,4,5]}         NULL  NULL                          NULL  NULL                            3  5                   
+                2  {"key1":6,"key2":[7]}                    1  6                             NULL  NULL                         NULL  NULL                
+                2  {"key1":6,"key2":[7]}                    2  [7]                              1  7                            NULL  NULL                
+                2  {"key1":6,"key2":[7]}                 NULL  NULL                          NULL  NULL                            1  7                   

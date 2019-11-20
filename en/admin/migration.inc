@@ -166,12 +166,21 @@ In general, the **cubrid loaddb** utility uses files (schema definition, object 
 *   Trigger file(*database-name*\ **_trigger**): A file created by an unload operation. It contains information on the triggers defined in the database.
 *   User-defined object file(*user_defined_object_file*): A file in table format written by the user to enter mass data. (For details, see :ref:`howtowrite-loadfile` .)
 
+**Execution order of input files**
+
+The **cubrid loaddb** utility ensures correctness of the loading process by following a specific order of execution based on the input files, as it follows: ::
+
+    1. Load schema file
+    2. Load object file
+    3. Load index file
+    4. Load trigger file     
+
 **Loading modes**
 
 The **cubrid loaddb** utility provides two modes of loading the data into a database.
 
 *   **Stand-alone** mode loads the data offline, within a single thread environment. CUBRID 10.1 and older versions run only in this mode.
-*   **Client-server** mode connects to a server and loads the data online and in parallel. **Client-server** mode can be much faster, but object references and class/shared attributes are not supported in this and they can only be loaded in **stand-alone** mode
+*   **Client-server** mode connects to a server and loads the data online and in parallel. **Client-server** mode can be much faster, but object references and class/shared attributes are not supported in this mode and they can only be loaded in **stand-alone** mode
 
 
 The following table shows [options] available with the **cubrid loaddb** utility.

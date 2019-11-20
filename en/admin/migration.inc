@@ -155,6 +155,7 @@ You can load a database by using the **cubrid loaddb** utility in the following 
 *   Inserting massive amount of data faster than using the **INSERT** statement
 
 In general, the **cubrid loaddb** utility uses files (schema definition, object input, and index definition files) created by the **cubrid unloaddb** utility.
+::
 
     cubrid loaddb [options] database_name
 
@@ -168,12 +169,12 @@ In general, the **cubrid loaddb** utility uses files (schema definition, object 
 
 **Execution order of input files**
 
-The **cubrid loaddb** utility ensures correctness of the loading process by following a specific order of execution based on the input files, as it follows: ::
+The **cubrid loaddb** utility follows a specific order of parsing and executing input files, ensuring both correctness and optimized performance. The order is as follows:
 
-    1. Load schema file
-    2. Load object file
-    3. Load index file
-    4. Load trigger file     
+1. Load schema file (including primary keys)
+2. Load object file
+3. Load index file (secondary keys and foreign keys)
+4. Load trigger file
 
 **Loading modes**
 

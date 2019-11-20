@@ -5,7 +5,10 @@
 JSON_TABLE
 *********************************
 
-**JSON_TABLE** facilitates transforming jsons into a table-like structures that can be queried similarly as regular tables.
+**JSON_TABLE** facilitates transforming jsons into a table-like structures \
+\that can be queried similarly as regular tables.
+The transformation generates a single row or multiple rows, by expanding for \
+\example the elements of a JSON_ARRAY.
   The transformation generates a single row or multiple rows, by expanding for example the elements of a JSON_ARRAY.
 
 The full syntax of **JSON_TABLE**:
@@ -26,10 +29,10 @@ The full syntax of **JSON_TABLE**:
 	|  NESTED [PATH] path COLUMNS <column_list>
 
     <on_empty>::=
-        NULL | ERROR | DEFAULT json_value ON EMPTY
+        NULL | ERROR | DEFAULT value ON EMPTY
 
     <on_error>::=
-        NULL | ERROR | DEFAULT json_value ON ERROR
+        NULL | ERROR | DEFAULT value ON ERROR
 
 
 The json_doc expr must be an expression that results in a json_doc. This can be a constant json, a table's column or the result of a function or operator.
@@ -48,13 +51,13 @@ The [AS] alias clause is required.
 
     - NULL ON EMPTY: the column is set to NULL. This is the default behavior.
     - ERROR ON EMPTY: an error is thrown
-    - DEFAULT json_string ON EMPTY: json_string will be used instead of the missing value. Column type rules also apply to the default value.
+    - DEFAULT value ON EMPTY: value will be used instead of the missing value.
 
   - on error can have one of the following values:
 
     - NULL ON ERROR: the column is set to NULL. This is the default behavior.
     - ERROR ON ERROR: an error is thrown.
-    - DEFAULT json_string ON ERROR: json_string will be used instead of the array/object/json scalar that failed coercion to desired column type. Column type rules also apply to the default value. 
+    - DEFAULT valueON ERROR: value will be used instead of the array/object/json scalar that failed coercion to desired column type.
 
 - name type EXISTS PATH json path: this returns 1 if any data is present at the json path location, 0 otherwise.
 
@@ -64,7 +67,10 @@ The [AS] alias clause is required.
 
 .. code-block:: sql
 
-    SELECT * FROM JSON_TABLE ('{"a":[1,[2,3]]}', '$.a[*]' COLUMNS ( col INT PATH '$')) as jt;
+    SELECT * FROM JSON_TABLE (
+            '{"a":[1,[2,3]]}',
+            '$.a[*]' COLUMNS ( col INT PATH '$')
+        )   AS jt;
 ::
 
                        col
@@ -76,7 +82,10 @@ Overriding the default on_error behavior, results in a different output from pre
 
 .. code-block:: sql
 
-    SELECT * FROM JSON_TABLE ('{"a":[1,[2,3]]}', '$.a[*]' COLUMNS ( col INT PATH '$' DEFAULT '-1' ON ERROR)) as jt;
+    SELECT * FROM JSON_TABLE (
+            '{"a":[1,[2,3]]}',
+            '$.a[*]' COLUMNS ( col INT PATH '$' DEFAULT '-1' ON ERROR)
+        )   AS jt;
 ::
 
                        col
@@ -88,7 +97,12 @@ ON EMPTY example:
 
 .. code-block:: sql
 
-    SELECT * FROM JSON_TABLE ('{"a":1}', '$' COLUMNS ( col1 INT PATH '$.a', col2 INT PATH '$.b', col3 INT PATH '$.c' DEFAULT '0' ON EMPTY)) as jt;
+    SELECT * FROM JSON_TABLE (
+            '{"a":1}',
+            '$' COLUMNS ( col1 INT PATH '$.a',
+                          col2 INT PATH '$.b',
+                          col3 INT PATH '$.c' DEFAULT '0' ON EMPTY)
+        )   AS jt;
 
 ::
 
@@ -123,7 +137,7 @@ The third member's value, 6 cannot be treated as an array and therefore cannot b
                3  6                            NULL  NULL                
                4  [7]                             1  7                   
 
-The following example showcases how multiple NESTED [PATH] clauses are treated by the JSON_TABLE. The value to be processed gets passed once, in order, to each of the NESTED [PATH] clauses at the same level.
+The following example showcases how multiple same-level NESTED [PATH] clauses are treated by the JSON_TABLE. The value to be processed gets passed once, one by one and in order, to each of the NESTED [PATH] clauses.
 During processing of a value by a NESTED [PATH] clause, any sibling NESTED [PATH] clauses will fill their column with NULL values.
 
 .. code-block:: sql

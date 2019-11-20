@@ -1,11 +1,12 @@
-:meta-keywords: cubrid json, cubrid json_table, database json
+:meta-keywords: cubrid json, cubrid json_table, database json, json table
 :meta-description: CUBRID JSON_TABLE description
 
 *********************************
 JSON_TABLE
 *********************************
 
-**JSON_TABLE** facilitates transforming of json data into a table having the specified columns.
+**JSON_TABLE** facilitates transforming jsons into a table-like structures that can be queried similarly as regular tables.
+  The transformation generates a single row or multiple rows, by expanding for example the elements of a JSON_ARRAY.
 
 The full syntax of **JSON_TABLE**:
 ::
@@ -31,7 +32,7 @@ The full syntax of **JSON_TABLE**:
         NULL | ERROR | DEFAULT json_value ON ERROR
 
 
-The json_doc expr must be an expression that results in a json_doc. This can be a constant json, a table's column or a function or operator result.
+The json_doc expr must be an expression that results in a json_doc. This can be a constant json, a table's column or the result of a function or operator.
 The json path must be a valid path and is used to extract json data to be evaluated in the COLUMNS clause.
 The COLUMNS clause defines output column types and operations performed to get the output.  
 The [AS] alias clause is required.
@@ -41,7 +42,7 @@ The [AS] alias clause is required.
 
 - name FOR ORDINALITY: this type keeps track of a row's number inside a COLUMNS clause. The column's type is INTEGER.
 - name type PATH json path [on empty] [on error]: Columns of this type are used to extract json_values from the specified json paths. The extracted json data is then coerced to the specified type.
-  If the path does not exist, json value triggers the on empty clause. The on error clause is triggered if the extracted json value is a json array, a json object or if the extracted json value is not coercible to the target type.
+  If the path does not exist, json value triggers the on empty clause. The on error clause is triggered if the extracted json value is not coercible to the target type.
 
   - on empty determines the behavior of JSON_TABLE in case the path does not exist. On empty can have one of the following values:
 

@@ -2125,7 +2125,7 @@ Path expressions, like JSON Pointers and JSON text, should be encoded using ASCI
 JSON Pointers
 -------------
 
-JSON Pointers, as defined by https://tools.ietf.org/html/rfc6901 provide a an alternative to JSON paths.
+JSON Pointers, as defined by https://tools.ietf.org/html/rfc6901 provide an alternative to JSON paths.
 JSON Pointers, like JSON Paths and JSON text, should be encoded using ASCII or UTF-8 character set. If other character sets are used, a coercion will be done to UTF-8.
 
 ::

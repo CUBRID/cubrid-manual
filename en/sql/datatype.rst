@@ -2080,6 +2080,68 @@ LIST/SEQUENCE
 
 .. _implicit-type-conversion:
 
+JSON Data Type
+==============
+
+CUBRID provides two ways of addressing elements inside JSON data, JSON paths and JSON pointers.
+
+JSON Paths
+----------
+
+JSON Paths provide ways of addressing json elements inside a JSON. Many of the JSON functions require a JSON Path or JSON Pointer argument to define the location inside the JSON where operations are performed.
+JSON Paths start with '$'. JSON Paths then contain zero or more array_access_tokens, object_key_access_tokens and, if allowed, wildcard_tokens.  
+
+::
+
+   <json_path>::=
+      <start_token> [<path_token>] ...
+
+   <start_token>::=
+      $
+   
+   <path_token>::=
+      <array_access_token> | <object_key_access_token> | <wildcard_token>
+
+   <array_access_token>::=
+      [idx] 
+
+   <object_key_access_token>::=
+      .[key_identifier | "key_str"]
+   
+   <wildcard_token>::=
+      .*|[*]|**path_token
+
+As an example, relative to '{"a":[0,1,2,{"b":5}]}' '$.a[3].b' would mean: "The member having key 'b' of the element at index 3 of the member having key 'a' of the root" and would address the json value '5';
+Object_key_access_tokens as key string can be used to express the same key_identifiers and can also enable using characters that need escaping, e.g. '$."\""' can be used to refer to a member having a double quote as a key.  
+
+JSON wildcards can be one of three types:
+
+- .* , object member access matching wildcards
+- [*], array index access matching wildcards
+- \**, matching a sequence of object keys and array indexes. \** wildcards must be suffixed by a token 
+
+Path expressions, like JSON Pointers and JSON text, should be encoded using ASCII or UTF-8 character set. If other character sets are used, a coercion will be done to UTF-8.
+
+JSON Pointers
+-------------
+
+JSON Pointers, as defined by https://tools.ietf.org/html/rfc6901 provide an alternative to JSON paths.
+JSON Pointers, like JSON Paths and JSON text, should be encoded using ASCII or UTF-8 character set. If other character sets are used, a coercion will be done to UTF-8.
+
+::
+
+   <json_pointer>::=
+      [/path_token] ... [/-]
+
+::
+
+  '$.a[10].bb' is equivalent to '/a/10/bb'
+  '$' is equivalent to ''
+  
+The special character '-' can be used exclusively as a last path_token and can be used to address the end of a json_array. 
+
+JSON pointers can be used to address the same path as their corresponding no-wildcards JSON paths.
+
 Implicit Type Conversion
 ========================
 

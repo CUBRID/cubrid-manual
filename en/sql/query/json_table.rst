@@ -9,10 +9,11 @@ JSON_TABLE
 \that can be queried similarly as regular tables.
 The transformation generates a single row or multiple rows, by expanding for \
 \example the elements of a JSON_ARRAY.
-  The transformation generates a single row or multiple rows, by expanding for example the elements of a JSON_ARRAY.
+The transformation generates a single row or multiple rows, by expanding for example the elements of a JSON_ARRAY.
 
 The full syntax of **JSON_TABLE**:
 ::
+
     JSON_TABLE(
         expr,
         path COLUMNS (column_list)
@@ -61,9 +62,11 @@ The [AS] alias clause is required.
 
 - name type EXISTS PATH json path: this returns 1 if any data is present at the json path location, 0 otherwise.
 
-- NESTED [PATH] json path COLUMNS (column list):
-  The json path is relative to the parent's path. The parent's path is either JSON_TABLE's json path or the path of the parent NESTED [PATH] clause.
-
+- NESTED [PATH] json path COLUMNS (column list) generates from json data \
+  \found at path a separate subset of rows and columns that are combined \
+  \with the results of parent. Results are combined similarly as "for each"\
+  \ loops. The json path is relative to the parent's path. Same rules for \
+  \COLUMNS clause are applied recursively.
 
 .. code-block:: sql
 
@@ -71,6 +74,7 @@ The [AS] alias clause is required.
             '{"a":[1,[2,3]]}',
             '$.a[*]' COLUMNS ( col INT PATH '$')
         )   AS jt;
+
 ::
 
                        col
@@ -86,6 +90,7 @@ Overriding the default on_error behavior, results in a different output from pre
             '{"a":[1,[2,3]]}',
             '$.a[*]' COLUMNS ( col INT PATH '$' DEFAULT '-1' ON ERROR)
         )   AS jt;
+
 ::
 
                        col
@@ -109,8 +114,6 @@ ON EMPTY example:
              col1         col2         col3
     =======================================
                 1         NULL            0 
-  Column col2 represents the value found at '$.a' in the given json_doc. Since the path does not exist, ON EMPTY is triggered resulting in NULL as a result.
-  The '$.c' extraction also results in an empty result, but the triggered ON EMPTY behavior returns 0 as default value. 
 
 In the example below, '$.*' path will be used to make the parent columns receive root json object's member values one by one. Column a shows what is processed. Each member's value of
 the root object will then be processed further by the NESTED [PATH] clause. NESTED PATH uses path '$[*]' take each element of the array to be further processed by its columns.
@@ -120,10 +123,13 @@ The third member's value, 6 cannot be treated as an array and therefore cannot b
 
 .. code-block:: sql
 
-    SELECT * FROM JSON_TABLE ('{"a":[1,2],"b":[3,4,5],"d":6,"c":[7]}', '$.*'
-                  COLUMNS ( ord FOR ORDINALITY, 
+    SELECT * FROM JSON_TABLE (
+            '{"a":[1,2],"b":[3,4,5],"d":6,"c":[7]}',
+            '$.*' COLUMNS ( ord FOR ORDINALITY,
                             col JSON PATH '$',
-                            NESTED PATH '$[*]' COLUMNS (nested_ord FOR ORDINALITY, nested_col JSON PATH '$'))) as jt;
+                            NESTED PATH '$[*]' COLUMNS ( nested_ord FOR ORDINALITY,
+                                                         nested_col JSON PATH '$'))
+        )   AS jt;
 
 ::
 
@@ -142,11 +148,16 @@ During processing of a value by a NESTED [PATH] clause, any sibling NESTED [PATH
 
 .. code-block:: sql
 
-    SELECT * FROM JSON_TABLE ('{"a":{"key1":[1,2], "key2":[3,4,5]},"b":{"key1":6, "key2":[7]}}', '$.*'
-                  COLUMNS ( ord FOR ORDINALITY,
+    SELECT * FROM JSON_TABLE (
+            '{"a":{"key1":[1,2], "key2":[3,4,5]},"b":{"key1":6, "key2":[7]}}',
+            '$.*' COLUMNS ( ord FOR ORDINALITY,
                             col JSON PATH '$',
-                            NESTED PATH '$.key1[*]' COLUMNS (nested_ord1 FOR ORDINALITY, nested_col1 JSON PATH '$'),
-                            NESTED PATH '$.key2[*]' COLUMNS (nested_ord2 FOR ORDINALITY, nested_col2 JSON PATH '$'))) as jt;
+                            NESTED PATH '$.key1[*]' COLUMNS ( nested_ord1 FOR ORDINALITY,
+                                                              nested_col1 JSON PATH '$'),
+                            NESTED PATH '$.key2[*]' COLUMNS ( nested_ord2 FOR ORDINALITY,
+                                                              nested_col2 JSON PATH '$'))
+        )   AS jt;
+
 ::
 
               ord  col                            nested_ord1  nested_col1           nested_ord2  nested_col2         

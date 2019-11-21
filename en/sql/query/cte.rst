@@ -277,7 +277,7 @@ Also, in subclauses of **UPDATE** statement:
 
 .. code-block:: sql
 
-   CREATE TABLE green_products (producer_id INTEGER, sales_n INTEGER, product VARCHAR, product_type INTEGER, price INTEGER);
+    CREATE TABLE green_products (producer_id INTEGER, sales_n INTEGER, product VARCHAR, product_type INTEGER, price INTEGER);
     INSERT INTO green_products VALUES (1, 99, 'bicycle', 1, 99);
     INSERT INTO green_products VALUES (2, 337, 'bicycle', 1, 129);
     INSERT INTO green_products VALUES (3, 5012, 'bicycle', 1, 199);
@@ -287,13 +287,12 @@ Also, in subclauses of **UPDATE** statement:
 
     WITH price_increase_th AS (
         SELECT SUM (sales_n) * 7 / 10 AS threshold, product_type 
-	FROM green_products
-	GROUP BY product_type
+        FROM green_products
+        GROUP BY product_type
     )
         UPDATE green_products gp JOIN price_increase_th th ON gp.product_type = th.product_type 
         SET price = price + (price / 10)
-	
-	WHERE sales_n >= threshold;
+        WHERE sales_n >= threshold;
 	
 ::
 
@@ -303,11 +302,11 @@ And also, in subclauses of **DELETE** statement:
 
     WITH product_removal_th AS (
         SELECT SUM (sales_n) / 20 AS threshold, product_type 
-	FROM green_products
-	GROUP BY product_type
+        FROM green_products
+        GROUP BY product_type
     )
         DELETE 
-	FROM green_products gp 
-	WHERE sales_n < (select threshold from product_removal_th WHERE product_type = gp.product_type);
+        FROM green_products gp 
+        WHERE sales_n < (select threshold from product_removal_th WHERE product_type = gp.product_type);
 
 ::

@@ -273,25 +273,41 @@ Also, **INSERT**/**REPLACE INTO** table_name SELECT can use CTE:
        WITH cte AS (SELECT * FROM inc)
        SELECT * FROM cte;
 
-Also, in right-hand-side of assignment **UPDATE** operator:
+Also, in subclauses of **UPDATE** statement:
 
 .. code-block:: sql
 
-    WITH cte AS (SELECT MIN(price) FROM products)
-        UPDATE products
-        SET price = price + (SELECT * FROM cte);
+   CREATE TABLE green_products (producer_id INTEGER, sales_n INTEGER, product VARCHAR, product_type INTEGER, price INTEGER);
+    INSERT INTO green_products VALUES (1, 99, 'bicycle', 1, 99);
+    INSERT INTO green_products VALUES (2, 337, 'bicycle', 1, 129);
+    INSERT INTO green_products VALUES (3, 5012, 'bicycle', 1, 199);
+    INSERT INTO green_products VALUES (1, 989, 'scooter', 2, 899);
+    INSERT INTO green_products VALUES (3, 3211, 'scooter', 2, 599);
+    INSERT INTO green_products VALUES (4, 2312, 'scooter', 2, 1009);
+
+    WITH price_increase_th AS (
+        SELECT SUM (sales_n) * 7 / 10 AS threshold, product_type 
+	FROM green_products
+	GROUP BY product_type
+    )
+        UPDATE green_products gp JOIN price_increase_th th ON gp.product_type = th.product_type 
+        SET price = price + (price / 10)
+	
+	WHERE sales_n >= threshold;
+	
 ::
 
 And also, in subclauses of **DELETE** statement:
 
 .. code-block:: sql
 
-    WITH RECURSIVE cte (n) AS (
-        SELECT 1
-        UNION ALL
-        SELECT n + 1
-        FROM cte
-        WHERE n < 3)
-    DELETE FROM inc WHERE n < (SELECT MIN (n) from cte);
+    WITH product_removal_th AS (
+        SELECT SUM (sales_n) / 20 AS threshold, product_type 
+	FROM green_products
+	GROUP BY product_type
+    )
+        DELETE 
+	FROM green_products gp 
+	WHERE sales_n < (select threshold from product_removal_th WHERE product_type = gp.product_type);
 
 ::

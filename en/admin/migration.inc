@@ -198,19 +198,19 @@ The following table shows [options] available with the **cubrid loaddb** utility
 
     This option specifies the password of a database user who will load records. If the option is not specified, you will be prompted to enter the password. ::
 
-        cubrid loaddb -p admin -d demodb_objects newdb
+        cubrid loaddb -u dba -p pass -d demodb_objects newdb
 
 .. option:: -S, --SA-MODE
 
     This option loads data into a database in **stand-alone** mode. This is the default loading mode of **loaddb** and it is fully compatible with CUBRID 10.1 and older database versions. ::
 
-        cubrid loaddb -S -u admin -p admin -d demodb_objects newdb
+        cubrid loaddb -S -u dba -d demodb_objects newdb
 
 .. option:: -C, --CS-MODE
 
     This option connects to a running server process. Unlike the **stand-alone** mode, the **client-server** mode loads the data using multiple threads, leading to greater performance for large amounts of data. Multiple **loaddb** sessions may run at the same time. Object references and class/shared attributes are not supported in this mode. ::
 
-        cubrid loaddb -C -u admin -p admin -d demodb_objects newdb
+        cubrid loaddb -C -u dba -d demodb_objects newdb
 
 .. option:: --data-file-check-only
 
@@ -220,11 +220,11 @@ The following table shows [options] available with the **cubrid loaddb** utility
 
 .. option:: -l, --load-only
 
-    **Stand-alone** mode does, by default, an a priori syntax check on the whole data file before actually loading the data into the database. If a syntax error occurs, no data is loaded and the error is reported.
+    **Stand-alone** mode does, by default, one prior syntax check on the whole data file before actually loading the data into the database. If a syntax error occurs, no data is loaded and the error is reported.
     
-    Using the **-l** option, the a priori syntax check is skipped, thus increasing the loading speed. Syntax is still checked before loading each row into the database. Loading is stopped if a syntax error occurs, but data may be partially loaded.
+    Using the **-l** option, the prior syntax check is skipped, thus increasing the loading speed. Syntax is still checked before loading each row into the database. Loading is stopped if a syntax error occurs, but data may be partially loaded.
     
-    **Client-server mode** doesn't do the a priori syntax check, so this option has no effect. ::
+    **Client-server mode** doesn't do the prior syntax check, so this option has no effect. ::
 
         cubrid loaddb -l -d demodb_objects newdb
 
@@ -244,7 +244,11 @@ The following table shows [options] available with the **cubrid loaddb** utility
 
     This option commits periodically every time COUNT records are entered into the database. If this option is not specified, all records included in demodb_objects are loaded to the database before the transaction is committed. If this option is used together with the **-s** or **-i** option, commit is performed periodically every time 100 DDL statements are loaded. 
     
-    The recommended commit interval varies depending on the data to be loaded. It is recommended that the parameter of the **-c** option be configured to 50 for schema loading and 1 for index loading. For record loading, the recommended and default value is 10240. ::
+    The recommended commit interval varies depending on the data to be loaded. It is recommended that the parameter of the **-c** option be configured to 50 for schema loading and 1 for index loading. For record loading, the recommended and default value is 10240.
+    
+    The previous versions of **CUBRID**, like 10.1 or older, did not have a default value for **--periodic-commit** and would commit the transation only after loading the whole data. With the current approach, if you want to use the replicate the same behavior, you have to set the **--periodic-commit** argument to a very high value, so that the commit is done after loading all the data.
+
+::
 
         cubrid loaddb -c 100 -d demodb_objects newdb
 

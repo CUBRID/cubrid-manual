@@ -181,32 +181,7 @@ The recursive part should be defined in such way, that no cycle will be generate
       'Car'                       20000
       'Engine'                     4000
       'Frame'                      4700
-      'Wheel'                       100
-
-Using CTE in DDLs (**UPDATE** or **DELETE** data):
-      
-.. code-block:: sql
-
-    UPDATE products SET price = 
-        (WITH
-         RECURSIVE cars (id, parent_id, item, price) AS (
-                            SELECT id, parent_id, item, price 
-                                FROM products  WHERE item LIKE 'Car%' 
-                            UNION ALL 
-                            SELECT p.id, p.parent_id, p.item, p.price 
-                                FROM products p 
-                            INNER JOIN cars rec_cars ON p.parent_id = rec_cars.id)
-        SELECT SUM(price) - MAX(price) FROM cars ORDER BY 1) 
-    WHERE item='Car';    
-
-    select item, price from products where item='Car';
-
-::
-    
-      item                        price
-    ===================================
-      'Car'                        8800 
-  
+      'Wheel'                       100  
 
 Recursive CTEs may fall into an infinite loop. To avoid such case, set the system parameter **cte_max_recursions** to a desired threshold. Its default value is 2000 recursive iterations, maximum is 1000000 and minimum 2.
 
@@ -254,3 +229,69 @@ The recursive CTE must be referenced directly in the **FROM** clause, referencin
     '
     Recursive CTE 'cte1' must be referenced directly in its recursive query.
 
+CTE Usage in DMLs and CREATE
+============================
+
+Besides their use for **SELECT** statements, CTEs can also be used for other statements.
+CTEs can be used in CREATE TABLE table_name AS SELECT:
+
+.. code-block:: sql
+
+    CREATE TABLE inc AS
+        WITH RECURSIVE cte (n) AS (
+            SELECT 1
+            UNION ALL
+            SELECT n + 1
+            FROM cte
+            WHERE n < 3)
+        SELECT n FROM cte;
+    
+    SELECT * FROM inc;
+
+::
+
+                n
+    =============
+                1
+                2
+                3
+
+Also, **INSERT**/**REPLACE INTO** table_name SELECT can use CTE:
+
+.. code-block:: sql
+
+    INSERT INTO inc
+        WITH RECURSIVE cte (n) AS (
+            SELECT 1
+            UNION ALL
+            SELECT n + 1
+            FROM cte
+            WHERE n < 3)
+        SELECT * FROM cte;
+
+    REPLACE INTO inc
+       WITH cte AS (SELECT * FROM inc)
+       SELECT * FROM cte;
+
+Also, in right-hand-side of assignment **UPDATE** operator:
+
+.. code-block:: sql
+
+    WITH cte AS (SELECT MIN(price) FROM products)
+        UPDATE products
+        SET price = price + (SELECT * FROM cte);
+::
+
+And also, in subclauses of **DELETE** statement:
+
+.. code-block:: sql
+
+    WITH RECURSIVE cte (n) AS (
+        SELECT 1
+        UNION ALL
+        SELECT n + 1
+        FROM cte
+        WHERE n < 3)
+    DELETE FROM inc WHERE n < (SELECT MIN (n) from cte);
+
+::

@@ -29,7 +29,7 @@ To create a table, use the **CREATE TABLE** statement.
         <subclass_definition> ::= {UNDER | AS SUBCLASS OF} table_name, ...
         
         <column_definition> ::= 
-            column_name <data_type> [{<default_or_shared_or_ai> | <column_constraint>}] [COMMENT 'column_comment_string']
+            column_name <data_type> [{<default_or_shared_or_ai> | <on_update> | <column_constraint>}] [COMMENT 'column_comment_string']
         
             <data_type> ::= <column_type> [<charset_modifier_clause>] [<collation_modifier_clause>]
 
@@ -42,7 +42,7 @@ To create a table, use the **CREATE TABLE** statement.
                 DEFAULT <value_specification>  |
                 AUTO_INCREMENT [(seed, increment)]
 
-            [ON UPDATE <value_specification>]
+            <on_update> ::= [ON UPDATE <value_specification>]
 
             <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition> }
 
@@ -138,7 +138,7 @@ A column is a set of data values of a particular simple type, one for each row o
 ::
 
     <column_definition> ::= 
-        column_name <data_type> [[<default_or_shared_or_ai>] | [<column_constraint>]] ... [COMMENT 'comment_string']
+        column_name <data_type> [[<default_or_shared_or_ai>] | [<on_update>] | [<column_constraint>]] ... [COMMENT 'comment_string']
     
         <data_type> ::= <column_type> [<charset_modifier_clause>] [<collation_modifier_clause>]
 
@@ -151,7 +151,7 @@ A column is a set of data values of a particular simple type, one for each row o
             DEFAULT <value_specification>  |
             AUTO_INCREMENT [(seed, increment)]
 
-        [ON UPDATE <value_specification>]
+        <on_update> ::= [ON UPDATE <value_specification>]
 
         <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition>}
 
@@ -404,15 +404,11 @@ Including the attribute in the updated fields will not trigger an update with th
     UPDATE sales set sales_cnt = sales_cnt + 1
     WHERE product_id = 1;
 
-::
-
 .. code-block:: sql
 
    ALTER TABLE sales MODIFY last_sale TIMESTAMP; -- removes ON UPDATE
    UPDATE sales set sales_cnt = sales_cnt + 1
    WHERE product_id = 1; -- last_sale will remain unupdated
-
-::
 
 Constraint Definition
 ---------------------
@@ -1039,7 +1035,7 @@ You can add a new column by using the **ADD COLUMN** clause. You can specify the
     ADD [COLUMN | ATTRIBUTE] [(] <column_definition> [FIRST | AFTER old_column_name] [)];
 
         <column_definition> ::= 
-            column_name <data_type> [[<default_or_shared_or_ai>] | [<column_constraint>]] [COMMENT 'comment_string']
+            column_name <data_type> [[<default_or_shared_or_ai>] | [<on_update>] | [<column_constraint>]] [COMMENT 'comment_string']
         
             <data_type> ::= <column_type> [<charset_modifier_clause>] [<collation_modifier_clause>]
 
@@ -1052,7 +1048,7 @@ You can add a new column by using the **ADD COLUMN** clause. You can specify the
                 DEFAULT <value_specification>  |
                 AUTO_INCREMENT [(seed, increment)]
 
-            [ON UPDATE <value_specification>]
+            <on_update> ::= [ON UPDATE <value_specification>]
 
             <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition>}
 

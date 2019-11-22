@@ -181,32 +181,7 @@ The recursive part should be defined in such way, that no cycle will be generate
       'Car'                       20000
       'Engine'                     4000
       'Frame'                      4700
-      'Wheel'                       100
-
-Using CTE in DDLs (**UPDATE** or **DELETE** data):
-      
-.. code-block:: sql
-
-    UPDATE products SET price = 
-        (WITH
-         RECURSIVE cars (id, parent_id, item, price) AS (
-                            SELECT id, parent_id, item, price 
-                                FROM products  WHERE item LIKE 'Car%' 
-                            UNION ALL 
-                            SELECT p.id, p.parent_id, p.item, p.price 
-                                FROM products p 
-                            INNER JOIN cars rec_cars ON p.parent_id = rec_cars.id)
-        SELECT SUM(price) - MAX(price) FROM cars ORDER BY 1) 
-    WHERE item='Car';    
-
-    select item, price from products where item='Car';
-
-::
-    
-      item                        price
-    ===================================
-      'Car'                        8800 
-  
+      'Wheel'                       100  
 
 Recursive CTEs may fall into an infinite loop. To avoid such case, set the system parameter **cte_max_recursions** to a desired threshold. Its default value is 2000 recursive iterations, maximum is 1000000 and minimum 2.
 
@@ -254,3 +229,84 @@ The recursive CTE must be referenced directly in the **FROM** clause, referencin
     '
     Recursive CTE 'cte1' must be referenced directly in its recursive query.
 
+CTE Usage in DMLs and CREATE
+============================
+
+Besides their use for **SELECT** statements, CTEs can also be used for other statements.
+CTEs can be used in CREATE TABLE table_name AS SELECT:
+
+.. code-block:: sql
+
+    CREATE TABLE inc AS
+        WITH RECURSIVE cte (n) AS (
+            SELECT 1
+            UNION ALL
+            SELECT n + 1
+            FROM cte
+            WHERE n < 3)
+        SELECT n FROM cte;
+    
+    SELECT * FROM inc;
+
+::
+
+                n
+    =============
+                1
+                2
+                3
+
+Also, **INSERT**/**REPLACE INTO** table_name SELECT can use CTE:
+
+.. code-block:: sql
+
+    INSERT INTO inc
+        WITH RECURSIVE cte (n) AS (
+            SELECT 1
+            UNION ALL
+            SELECT n + 1
+            FROM cte
+            WHERE n < 3)
+        SELECT * FROM cte;
+
+    REPLACE INTO inc
+       WITH cte AS (SELECT * FROM inc)
+       SELECT * FROM cte;
+
+Also, in subclauses of **UPDATE** statement:
+
+.. code-block:: sql
+
+    CREATE TABLE green_products (producer_id INTEGER, sales_n INTEGER, product VARCHAR, product_type INTEGER, price INTEGER);
+    INSERT INTO green_products VALUES (1, 99, 'bicycle', 1, 99);
+    INSERT INTO green_products VALUES (2, 337, 'bicycle', 1, 129);
+    INSERT INTO green_products VALUES (3, 5012, 'bicycle', 1, 199);
+    INSERT INTO green_products VALUES (1, 989, 'scooter', 2, 899);
+    INSERT INTO green_products VALUES (3, 3211, 'scooter', 2, 599);
+    INSERT INTO green_products VALUES (4, 2312, 'scooter', 2, 1009);
+
+    WITH price_increase_th AS (
+        SELECT SUM (sales_n) * 7 / 10 AS threshold, product_type 
+        FROM green_products
+        GROUP BY product_type
+    )
+        UPDATE green_products gp JOIN price_increase_th th ON gp.product_type = th.product_type 
+        SET price = price + (price / 10)
+        WHERE sales_n >= threshold;
+	
+::
+
+And also, in subclauses of **DELETE** statement:
+
+.. code-block:: sql
+
+    WITH product_removal_th AS (
+        SELECT SUM (sales_n) / 20 AS threshold, product_type 
+        FROM green_products
+        GROUP BY product_type
+    )
+        DELETE 
+        FROM green_products gp 
+        WHERE sales_n < (select threshold from product_removal_th WHERE product_type = gp.product_type);
+
+::

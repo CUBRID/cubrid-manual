@@ -808,7 +808,7 @@ CUBRID determines the lock mode depending on the type of operation to be perform
 
     *   **Bulk Update Lock, BU_LOCK**
 
-        This lock is designed for inserting large amounts of data into the database. As of **CUBRID 10.2**, this lock is exclusively used during the :ref:`loaddb` process in **client-server** mode, by acquiring a **BU_LOCK** on a table in which the loading is done. The **BU_LOCK** on the table will ensure exclusive acces to the its data so that instance locking is not required anymore. Since **BU_LOCK** is compatible with **SCH_S_LOCK** and **BU_LOCK** only, using this lock will ensure that no other **SELECT/UPDATE/DDL** statements are allowed on the table which is locked with a **BU_LOCK**, so that the data will not be tampered until the loading is finished. However, any other **loaddb** processes are allowed to bulk insert their data into the same table.
+        This lock is designed for inserting large amounts of data into the database. As of **CUBRID 10.2**, this lock is exclusively used during the :ref:`loaddb` process while loading rows into a table. **BU_LOCK** is compatible with itself and **SCH_S_LOCK**; as a result this ensures that no other **SELECT/UPDATE/DDL** statements are allowed on the same table. However, multiple **loaddb** may load rows into a table. The **BU_LOCK** holder doesn't require row locks.
 
 .. note:: This is a summarized description about locking.
 

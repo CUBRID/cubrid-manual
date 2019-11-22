@@ -49,7 +49,7 @@ For how to use indexes on the **SELECT** statement like Using SQL Hint, Descendi
     
     *   The number of threads from PARALLEL option applies only to index loading step. The heap scan step is performed by the transaction thread (single thread). During this process, the rows are collected into batches; when a batch is full (reached 16M in size), it is dispatched to a index loading thread (or pushed in the queue), the collecting process continues. Batch size computing consists of index key size and the row identifier size (8 bytes).
 
-    *   When using CSQL in stand-alone mode, the WITH ONLINE option is ignored (normal index is created).
+    *   Under stand-alone mode, the WITH ONLINE option is ignored (normal index is created).
 
     *   The creation of online index is performed in three stages:
     

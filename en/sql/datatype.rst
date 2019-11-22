@@ -2088,10 +2088,34 @@ CUBRID 10.2 adds support for native **JSON** data type, as defined by \
 \offers automatic validation and allows fast access and operations on \
 JSON data.
 
+Creating JSON values
+--------------------
+
+JSON values are automatically converted (parsed) from string format \
+\when they're assigned to JSON data type columns. Conversions to JSON\
+\ can also be forced through :ref:`_castfn` or by using json keyword\
+\ before strings.
+
+..code-sql:
+
+  CREATE TABLE t (id int, j JSON);
+  INSERT INTO t VALUES (1, '{"a":1}');
+  SELECT TYPEOF(j) FROM t;
+::
+
+    typeof(j)
+  ======================
+    'json'
+
+
 JSON Validation
 ---------------
 
+Conversion to JSON data does built-in validation and reports an error \
+if the string\
+\is not a valid JSON.
 
+   
 
 JSON Paths
 ----------

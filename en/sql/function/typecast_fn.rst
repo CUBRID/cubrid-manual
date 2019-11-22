@@ -9,6 +9,8 @@ Data Type Casting Functions and Operators
 
 .. contents::
 
+.. _castfn:
+
 CAST
 ====
 

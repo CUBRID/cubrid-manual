@@ -9,7 +9,6 @@ JSON_TABLE
 \that can be queried similarly as regular tables.
 The transformation generates a single row or multiple rows, by expanding for \
 \example the elements of a JSON_ARRAY.
-The transformation generates a single row or multiple rows, by expanding for example the elements of a JSON_ARRAY.
 
 The full syntax of **JSON_TABLE**:
 ::
@@ -58,7 +57,7 @@ The [AS] alias clause is required.
 
     - NULL ON ERROR: the column is set to NULL. This is the default behavior.
     - ERROR ON ERROR: an error is thrown.
-    - DEFAULT valueON ERROR: value will be used instead of the array/object/json scalar that failed coercion to desired column type.
+    - DEFAULT value ON ERROR: value will be used instead of the array/object/json scalar that failed coercion to desired column type.
 
 - name type EXISTS PATH json path: this returns 1 if any data is present at the json path location, 0 otherwise.
 

@@ -1,5 +1,5 @@
 
-:meta-keywords: cubrid data types, cubrid type conversion, cubrid numeric types, cubrid date time, cubrid strings, cubrid character, cubrid enum, cubrid blob/clob, cubrid collection types
+:meta-keywords: cubrid data types, cubrid type conversion, cubrid numeric types, cubrid date time, cubrid strings, cubrid character, cubrid enum, cubrid blob/clob, cubrid collection types, cubrid json type
 :meta-description: All CUBRID data types and conversion rules.
 
 ***********
@@ -2083,7 +2083,15 @@ LIST/SEQUENCE
 JSON Data Type
 ==============
 
-CUBRID provides two ways of addressing elements inside JSON data, JSON paths and JSON pointers.
+CUBRID 10.2 adds support for native **JSON** data type, as defined by \
+\`RFC 7159<https://tools.ietf.org/html/rfc7159>`_ . **JSON** data type \
+\offers automatic validation and allows fast access and operations on \
+JSON data.
+
+JSON Validation
+---------------
+
+
 
 JSON Paths
 ----------

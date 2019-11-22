@@ -155,6 +155,7 @@ You can load a database by using the **cubrid loaddb** utility in the following 
 *   Inserting massive amount of data faster than using the **INSERT** statement
 
 In general, the **cubrid loaddb** utility uses files (schema definition, object input, and index definition files) created by the **cubrid unloaddb** utility.
+::
 
     cubrid loaddb [options] database_name
 
@@ -165,6 +166,23 @@ In general, the **cubrid loaddb** utility uses files (schema definition, object 
 *   Index file(*database-name*\ **_indexes**): A file created by an unload operation. It contains information on the indexes defined in the database.
 *   Trigger file(*database-name*\ **_trigger**): A file created by an unload operation. It contains information on the triggers defined in the database.
 *   User-defined object file(*user_defined_object_file*): A file in table format written by the user to enter mass data. (For details, see :ref:`howtowrite-loadfile` .)
+
+**Execution order of input files**
+
+The **cubrid loaddb** utility follows a specific order of parsing and executing input files, ensuring both correctness and optimized performance. The order is as follows:
+
+1. Load schema file (including primary keys)
+2. Load object file
+3. Load index file (secondary keys and foreign keys)
+4. Load trigger file
+
+**Loading modes**
+
+The **cubrid loaddb** utility provides two modes of loading the data into a database.
+
+*   **Stand-alone** mode loads the data offline, within a single thread environment. CUBRID 10.1 and older versions run only in this mode.
+*   **Client-server** mode connects to a server and loads the data online and in parallel. **Client-server** mode can be much faster, but object references and class/shared attributes are not supported in this mode and they can only be loaded in **stand-alone** mode
+
 
 The following table shows [options] available with the **cubrid loaddb** utility.
 
@@ -180,7 +198,19 @@ The following table shows [options] available with the **cubrid loaddb** utility
 
     This option specifies the password of a database user who will load records. If the option is not specified, you will be prompted to enter the password. ::
 
-        cubrid loaddb -p admin -d demodb_objects newdb
+        cubrid loaddb -u dba -p pass -d demodb_objects newdb
+
+.. option:: -S, --SA-MODE
+
+    This option loads data into a database in **stand-alone** mode. This is the default loading mode of **loaddb** and it is fully compatible with CUBRID 10.1 and older database versions. ::
+
+        cubrid loaddb -S -u dba -d demodb_objects newdb
+
+.. option:: -C, --CS-MODE
+
+    This option connects to a running server process. Unlike the **stand-alone** mode, the **client-server** mode loads the data using multiple threads, leading to greater performance for large amounts of data. Multiple **loaddb** sessions may run at the same time. Object references and class/shared attributes are not supported in this mode. ::
+
+        cubrid loaddb -C -u dba -d demodb_objects newdb
 
 .. option:: --data-file-check-only
 
@@ -190,7 +220,11 @@ The following table shows [options] available with the **cubrid loaddb** utility
 
 .. option:: -l, --load-only
 
-    This option loads data directly without checking the syntax of the data to be loaded. If the **-l** option is used, loading speed increases because data is loaded without checking the syntax included in demodb_objects, but an error might occur. ::
+    **Stand-alone** mode does, by default, one prior syntax check on the whole data file before actually loading the data into the database. If a syntax error occurs, no data is loaded and the error is reported.
+    
+    Using the **-l** option, the prior syntax check is skipped, thus increasing the loading speed. Syntax is still checked before loading each row into the database. Loading is stopped if a syntax error occurs, but data may be partially loaded.
+    
+    **Client-server mode** doesn't do the prior syntax check, so this option has no effect. ::
 
         cubrid loaddb -l -d demodb_objects newdb
 
@@ -210,7 +244,11 @@ The following table shows [options] available with the **cubrid loaddb** utility
 
     This option commits periodically every time COUNT records are entered into the database. If this option is not specified, all records included in demodb_objects are loaded to the database before the transaction is committed. If this option is used together with the **-s** or **-i** option, commit is performed periodically every time 100 DDL statements are loaded. 
     
-    The recommended commit interval varies depending on the data to be loaded. It is recommended that the parameter of the **-c** option be configured to 50 for schema loading, 1,000 for record loading, and 1 for index loading. ::
+    The recommended commit interval varies depending on the data to be loaded. It is recommended that the parameter of the **-c** option be configured to 50 for schema loading and 1 for index loading. For record loading, the recommended and default value is 10240.
+    
+    The previous versions of **CUBRID**, like 10.1 or older, did not have a default value for **--periodic-commit** and would commit the transation only after loading the whole data. With the current approach, if you want to use the replicate the same behavior, you have to set the **--periodic-commit** argument to a very high value, so that the commit is done after loading all the data.
+
+::
 
         cubrid loaddb -c 100 -d demodb_objects newdb
 
@@ -318,6 +356,12 @@ The following table shows [options] available with the **cubrid loaddb** utility
     You can specify a file that lists classes to be ignored during loading records. All records of classes except ones specified in the file will be loaded. ::
 
         cubrid loaddb --ignore-class-file=skip_class_list -d demodb_objects newdb
+
+.. option:: --trigger-file=FILE
+
+    You can specify a file that contains triggers that need to be loaded into a database. ::
+
+        cubrid loaddb --trigger-file=demodb_triggers -d demodb_objects newdb
 
 .. warning::
 

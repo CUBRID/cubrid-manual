@@ -29,7 +29,7 @@ To create a table, use the **CREATE TABLE** statement.
         <subclass_definition> ::= {UNDER | AS SUBCLASS OF} table_name, ...
         
         <column_definition> ::= 
-            column_name <data_type> [{<default_or_shared_or_ai> | <column_constraint>}] [COMMENT 'column_comment_string']
+            column_name <data_type> [{<default_or_shared_or_ai> | <on_update> | <column_constraint>}] [COMMENT 'column_comment_string']
         
             <data_type> ::= <column_type> [<charset_modifier_clause>] [<collation_modifier_clause>]
 
@@ -41,7 +41,9 @@ To create a table, use the **CREATE TABLE** statement.
                 SHARED <value_specification> | 
                 DEFAULT <value_specification>  |
                 AUTO_INCREMENT [(seed, increment)]
-         
+
+            <on_update> ::= [ON UPDATE <value_specification>]
+
             <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition> }
 
                 <referential_definition> ::=
@@ -50,7 +52,7 @@ To create a table, use the **CREATE TABLE** statement.
                     <referential_triggered_action> ::=
                         ON UPDATE <referential_action> |
                         ON DELETE <referential_action> 
-        
+
                         <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
                         
         <table_constraint> ::=
@@ -84,6 +86,7 @@ To create a table, use the **CREATE TABLE** statement.
 *   *column_name*: specifies the name of the column to be created (maximum: 254 bytes).
 *   *column_type*: specifies the data type of the column.
 *   [**SHARED** *value* | **DEFAULT** *value*]: specifies the initial value of the column.
+*   **ON UPDATE** specifies an expression to update the field when the field's ROW gets updated.
 *   <*column_constraint*>: specifies the constraint of the column. Available constraints are **NOT NULL**, **UNIQUE**, **PRIMARY KEY** and **FOREIGN KEY**. For details, see :ref:`constraint-definition`.
 *   <*default_or_shared_or_ai*>: only one of DEFAULT, SHARED, AUTO_INCREMENT can be used.
     When AUTO_INCREMENT is specified, "(seed, increment)" and "AUTO_INCREMENT = initial_value" cannot be defined at the same time.
@@ -135,7 +138,7 @@ A column is a set of data values of a particular simple type, one for each row o
 ::
 
     <column_definition> ::= 
-        column_name <data_type> [[<default_or_shared_or_ai>] | [<column_constraint>]] ... [COMMENT 'comment_string']
+        column_name <data_type> [[<default_or_shared_or_ai>] | [<on_update>] | [<column_constraint>]] ... [COMMENT 'comment_string']
     
         <data_type> ::= <column_type> [<charset_modifier_clause>] [<collation_modifier_clause>]
 
@@ -147,7 +150,9 @@ A column is a set of data values of a particular simple type, one for each row o
             SHARED <value_specification> | 
             DEFAULT <value_specification>  |
             AUTO_INCREMENT [(seed, increment)]
-     
+
+        <on_update> ::= [ON UPDATE <value_specification>]
+
         <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition>}
 
 Column Name
@@ -365,6 +370,45 @@ When you use the **CREATE TABLE** *table_name* (id INT **AUTO_INCREMENT**) **AUT
             CREATE TABLE tb1(A SMALLINT AUTO_INCREMENT, B CHAR(5));
 
 .. _constraint-definition:
+
+ON UPDATE
+---------
+
+An attribute in a table can be created with an automatic update when another attribute of the row is updated. You can change the value of **ON UPDATE** in the **ALTER TABLE** statement.
+The pseudocolumn allows for the **ON UPDATE** value as follows.
+Including the attribute in the updated fields will not trigger an update with the specified **ON UPDATE** value.
+
++-------------------------------+---------------+
+| DEFAULT Value                 | Data Type     |
++===============================+===============+
+| SYS_TIMESTAMP                 | TIMESTAMP     |
++-------------------------------+---------------+
+| UNIX_TIMESTAMP()              | INTEGER       |
++-------------------------------+---------------+
+| CURRENT_TIMESTAMP             | TIMESTAMP     |
++-------------------------------+---------------+
+| SYS_DATETIME                  | DATETIME      |
++-------------------------------+---------------+
+| CURRENT_DATETIME              | DATETIME      |
++-------------------------------+---------------+
+| SYS_DATE                      | DATE          |
++-------------------------------+---------------+
+| CURRENT_DATE                  | DATE          |
++-----------------------------------------------+
+
+.. code-block:: sql
+
+    CREATE TABLE sales (sales_cnt INTEGER, last_sale TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, product VARCHAR(100), product_id INTEGER);
+    INSERT INTO sales VALUES (0, NULL, 'bicycle', 1);
+
+    UPDATE sales set sales_cnt = sales_cnt + 1
+    WHERE product_id = 1;
+
+.. code-block:: sql
+
+   ALTER TABLE sales MODIFY last_sale TIMESTAMP; -- removes ON UPDATE
+   UPDATE sales set sales_cnt = sales_cnt + 1
+   WHERE product_id = 1; -- last_sale will remain unupdated
 
 Constraint Definition
 ---------------------
@@ -991,7 +1035,7 @@ You can add a new column by using the **ADD COLUMN** clause. You can specify the
     ADD [COLUMN | ATTRIBUTE] [(] <column_definition> [FIRST | AFTER old_column_name] [)];
 
         <column_definition> ::= 
-            column_name <data_type> [[<default_or_shared_or_ai>] | [<column_constraint>]] [COMMENT 'comment_string']
+            column_name <data_type> [[<default_or_shared_or_ai>] | [<on_update>] | [<column_constraint>]] [COMMENT 'comment_string']
         
             <data_type> ::= <column_type> [<charset_modifier_clause>] [<collation_modifier_clause>]
 
@@ -1003,7 +1047,9 @@ You can add a new column by using the **ADD COLUMN** clause. You can specify the
                 SHARED <value_specification> | 
                 DEFAULT <value_specification>  |
                 AUTO_INCREMENT [(seed, increment)]
-            
+
+            <on_update> ::= [ON UPDATE <value_specification>]
+
             <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition>}
 
                 <referential_definition> ::=

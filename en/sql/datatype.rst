@@ -2137,9 +2137,52 @@ keyword before strings.
 JSON Validation
 ---------------
 
-Conversion to JSON data does built-in validation and reports an error \
-if the string\
-\is not a valid JSON.
+Conversion to JSON data does built-in validation and reports an error if
+the string is not a valid JSON.
+
+.. code-block:: sql
+
+  -- non-quoted string is not a valid json
+  SELECT json'abc';
+
+::
+
+  In line 1, column 8,
+
+  ERROR: before ' ; '
+  Invalid JSON: 'abc'.
+
+JSON type columns with stricter validation rules can be defined using the
+`draft JSON Schema standard <https://json-schema.org/specification.html>`_.
+If you are not familiar with JSON Schema, you may refer to
+`Understanding JSON Schema
+<https://json-schema.org/understanding-json-schema/index.html>`_.
+
+A simple example of how schema can be used:
+
+.. code-block:: sql
+
+  -- set j column to accept only string type JSON's
+  CREATE TABLE t (id int, j JSON ('{"type": "string"}'));
+
+.. code-block:: sql
+
+  -- inserting string type JSON passes schema validation
+  INSERT into t values (1, '"abc"');
+
+::
+
+  1 command(s) successfully processed.
+
+.. code-block:: sql
+
+  -- inserting object type JSON does not pass schema validation
+  INSERT into t values (2, '{"a":1}');
+
+::
+
+  ERROR: before ' ); '
+  The provided JSON has been invalidated by the JSON schema (Invalid schema path: #, Keyword: type, Invalid provided JSON path: #)
 
 JSON Paths
 ----------

@@ -2092,21 +2092,46 @@ Creating JSON data
 --------------------
 
 JSON values are automatically converted (parsed) from string format
-when they're assigned to JSON data type columns. Conversions to JSON
-can also be forced through :ref:`_castfn` or by using json keyword
-before strings.
+when they're assigned to JSON data type columns.
 
 .. code-block:: sql
 
+  -- assign a string to JSON type column
   CREATE TABLE t (id int, j JSON);
   INSERT INTO t VALUES (1, '{"a":1}');
-  SELECT TYPEOF(j) FROM t;
+  SELECT j, TYPEOF(j) FROM t;
 
 ::
 
-    typeof(j)
+    j                     typeof(j)
+  ============================================
+    {"a":1}               'json'
+
+
+Conversions to JSON can also be forced through :ref:`_castfn` or by using json
+keyword before strings.
+
+.. code-block:: sql
+
+  -- cast string to json
+  SELECT CAST('{"a":1}' as JSON);
+
+::
+
+    cast('{"a":1}' as json)
   ======================
-    'json'
+    {"a":1}
+
+.. code-block:: sql
+
+  -- use json keyword
+  SELECT json'{"a":1}', TYPEOF (json'{"a":1}');
+
+::
+
+    json '{"a":1}'         typeof(json '{"a":1}')
+  ============================================
+    {"a":1}               'json'
 
 
 JSON Validation
@@ -2115,8 +2140,6 @@ JSON Validation
 Conversion to JSON data does built-in validation and reports an error \
 if the string\
 \is not a valid JSON.
-
-   
 
 JSON Paths
 ----------

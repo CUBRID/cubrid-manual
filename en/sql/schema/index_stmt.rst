@@ -49,13 +49,15 @@ For how to use indexes on the **SELECT** statement like Using SQL Hint, Descendi
     
     *   The number of threads from PARALLEL option applies only to index loading step. The heap scan step is performed by the transaction thread (single thread). During this process, the rows are collected into batches; when a batch is full (reached 16M in size), it is dispatched to a index loading thread (or pushed in the queue), the collecting process continues. Batch size computing consists of index key size and the row identifier size (8 bytes).
 
+    *   When using CSQL in stand-alone mode, the WITH ONLINE option is ignored (normal index is created).
+
     *   The creation of online index is performed in three stages:
     
-        * Adding index into schema with status INDEX IS IN ONLINE BUILDING. This is performed with a SCH_M_LOCK (like all schema changes). After this, the lock is demoted to IX_LOCK.
+        * Adding index into schema with status INDEX IS IN ONLINE BUILDING. This is performed with a SCH_M_LOCK (like all schema changes) on table. After this, the lock is demoted to IX_LOCK.
 
         * Populating the index : scanning the heap file into batches, sorting the batches and adding the keys to index. During this step, other transactions can modify table data (index is also updated with data changes from other committed transactions).
 
-        * Updating the index status as NORMAL INDEX; this is again performed with a SCH_M_LOCK.
+        * Updating the index status as NORMAL INDEX; this is performed after promoting the table lock back to SCH_M_LOCK (promotion is guaranteed).
     
     *   The online index being build is displayed by SHOW statements from other transactions. It is not visible from other transactions in :ref:`db-index` system table due to MVCC snapshot (other transactions can only see committed entries in this table).
 
@@ -143,7 +145,7 @@ Other transactions may see the online index with schema related statements:
          'i1'                  'INTEGER'             'YES'                 'MUL'                 NULL                  ''
          'i2'                  'INTEGER'             'YES'                 ''                    NULL                  ''
 
-       csql> ;sc t1
+       csql> ;schema t1
        
        === <Help: Schema of a Class> ===
        
@@ -185,7 +187,7 @@ Online unique index while other transactions inserts violates uniqueness
 +-------------------------------------------------------------------+-----------------------------------------------------------------------------------+
 |                                                                   | .. code-block:: sql                                                               |
 |                                                                   |                                                                                   |
-|                                                                   |    csql> ;sc t1                                                                   |
+|                                                                   |    csql> ;schema t1                                                               |
 |                                                                   |                                                                                   |
 |                                                                   |    === <Help: Schema of a Class> ===                                              |
 |                                                                   |                                                                                   |

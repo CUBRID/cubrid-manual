@@ -2083,24 +2083,25 @@ LIST/SEQUENCE
 JSON Data Type
 ==============
 
-CUBRID 10.2 adds support for native **JSON** data type, as defined by \
-\`RFC 7159<https://tools.ietf.org/html/rfc7159>`_ . **JSON** data type \
-\offers automatic validation and allows fast access and operations on \
+CUBRID 10.2 adds support for native **JSON** data type, as defined by
+`RFC 7159 <https://tools.ietf.org/html/rfc7159>`_. **JSON** data type
+offers automatic validation and allows fast access and operations on
 JSON data.
 
-Creating JSON values
+Creating JSON data
 --------------------
 
-JSON values are automatically converted (parsed) from string format \
-\when they're assigned to JSON data type columns. Conversions to JSON\
-\ can also be forced through :ref:`_castfn` or by using json keyword\
-\ before strings.
+JSON values are automatically converted (parsed) from string format
+when they're assigned to JSON data type columns. Conversions to JSON
+can also be forced through :ref:`_castfn` or by using json keyword
+before strings.
 
-..code-sql:
+.. code-block:: sql
 
   CREATE TABLE t (id int, j JSON);
   INSERT INTO t VALUES (1, '{"a":1}');
   SELECT TYPEOF(j) FROM t;
+
 ::
 
     typeof(j)

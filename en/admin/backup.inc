@@ -94,12 +94,6 @@ The following shows options available with the **cubrid backupdb** utility (opti
 
         cubrid backupdb -z demodb
 
-.. option:: -e, --except-active-log
-
-    The following shows how to execute backup excluding active logs of the database by using the **-e** option. You can reduce the time required for backup by using the **-e** option. However, extra caution is required because active logs needed for completing a restore to the state of a certain point from the backup point are not included in the backup file, which may lead to an unsuccessful restore. ::
-
-        cubrid backupdb -e demodb
-
 .. option:: --sleep-msecs=NUMBER
 
     This option allows you to specify the interval of idle time during the database backup. The default value is 0 in milliseconds. The system becomes idle for the specified amount of time whenever it reads 1 MB of data from a file. This option is used to reduce the performance degradation of an active server during a live backup. The idle time will prevent excessive disk I/O operations. ::

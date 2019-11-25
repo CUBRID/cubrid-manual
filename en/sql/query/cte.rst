@@ -293,8 +293,6 @@ Also, in subclauses of **UPDATE** statement:
         UPDATE green_products gp JOIN price_increase_th th ON gp.product_type = th.product_type 
         SET price = price + (price / 10)
         WHERE sales_n >= threshold;
-	
-::
 
 And also, in subclauses of **DELETE** statement:
 
@@ -308,5 +306,3 @@ And also, in subclauses of **DELETE** statement:
         DELETE 
         FROM green_products gp 
         WHERE sales_n < (select threshold from product_removal_th WHERE product_type = gp.product_type);
-
-::

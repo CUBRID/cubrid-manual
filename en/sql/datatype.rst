@@ -2136,6 +2136,8 @@ keyword before strings.
   ============================================
     {"a":1}               'json'
 
+JSON data type may also be created using :ref:`fn-json-object` and
+:ref:`fn-json-array` functions.
 
 JSON Validation
 ---------------

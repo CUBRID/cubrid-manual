@@ -441,6 +441,8 @@ Represents the SQL statement of a virtual class. An index for class_of is create
 | spec               | VARCHAR(4096) | SQL definition statement of the virtual class |
 +--------------------+---------------+-----------------------------------------------+
 
+.. _db-index:
+
 _db_index
 ---------
 

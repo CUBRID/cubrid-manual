@@ -2108,7 +2108,7 @@ when they're assigned to JSON data type columns.
     {"a":1}               'json'
 
 
-Conversions to JSON can also be forced through :ref:`_castfn` or by using json
+Conversions to JSON can also be forced through :ref:`castfn` or by using json
 keyword before strings.
 
 .. code-block:: sql

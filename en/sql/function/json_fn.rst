@@ -208,6 +208,8 @@ JSON_VALID
     SELECT JSON_VALID('{"wrong json object":');
     0
 
+.. _fn-json-type:
+
 JSON_TYPE
 ===================================
 

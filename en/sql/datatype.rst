@@ -2217,8 +2217,7 @@ A table of JSON value types:
 |             | null         | JSON_NULL           | Null value               |
 +-------------+--------------+---------------------+--------------------------+
 
-The type of a JSON value can be checked with :ref:`` function.
-
+The type of a JSON value can be checked with :ref:`fn-json-type` function.
 
 JSON Paths
 ----------

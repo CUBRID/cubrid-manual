@@ -2078,8 +2078,6 @@ LIST/SEQUENCE
     ============================================
       {'a', 'b', 'c'}  {'a', 'b', 'b', 'c', 'c', 'c'}
 
-.. _implicit-type-conversion:
-
 JSON Data Type
 ==============
 
@@ -2087,6 +2085,11 @@ CUBRID 10.2 adds support for native **JSON** data type, as defined by
 `RFC 7159 <https://tools.ietf.org/html/rfc7159>`_. **JSON** data type
 offers automatic validation and allows fast access and operations on
 JSON data.
+
+.. note::
+
+    Old driver versions connecting to CUBRID 10.2 server interpret a
+    JSON type column as Varchar.
 
 Creating JSON data
 --------------------
@@ -2217,13 +2220,72 @@ A table of JSON value types:
 |             | null         | JSON_NULL           | Null value               |
 +-------------+--------------+---------------------+--------------------------+
 
-The type of a JSON value can be checked with :ref:`fn-json-type` function.
+The CUBRID JSON type of a JSON value can be obtained with :ref:`fn-json-type` \
+\function.
+
+JSON Data Conversions
+---------------------
+
+JSON data types can be obtained by explicit or implicit casting from and to
+other types.
+
+Casting a JSON value to JSON type may fail if desired type has a schema and
+converted value does not pass schema validation.
+
+Converting other types to JSON is explained by next table:
+
++----------------------------+----------------------------------------------+
+| Original type              | CUBRID JSON type                             |
++============================+==============================================+
+| Any string                 | String is parsed as JSON data. The result    |
+|                            | may be of any type.                          |
+|                            |                                              |
+|                            | .. note::                                    |
+|                            |                                              |
+|                            |    If string codeset is not UTF8, string is  |
+|                            |    first converted to UTF8 and then parsed.  |
++----------------------------+----------------------------------------------+
+| Short, Integer             | INTEGER                                      |
++----------------------------+----------------------------------------------+
+| Bigint                     | BIGINT                                       |
++----------------------------+----------------------------------------------+
+| Float, Double              | DOUBLE                                       |
++----------------------------+----------------------------------------------+
+| Numeric                    | DOUBLE                                       |
++----------------------------+----------------------------------------------+
+
+Conversting JSON data type to other types is explained by next table:
+
++----------------------------+-----------------------------------------------+
+| CUBRID JSON Type           | Other accepted types                          |
++============================+===============================================+
+| JSON_OBJECT                | String with printed JSON                      |
++----------------------------+-----------------------------------------------+
+| JSON_ARRAY                 | String with printed JSON                      |
++----------------------------+-----------------------------------------------+
+| STRING                     | Any type that a string can be converted to    |
++----------------------------+-----------------------------------------------+
+| INTEGER                    | Any type that an integer can be converted to  |
++----------------------------+-----------------------------------------------+
+| BIGINT                     | Any type that a bigint can be converted to    |
++----------------------------+-----------------------------------------------+
+| DOUBLE                     | Any type that a double can be converted to    |
++----------------------------+-----------------------------------------------+
+| BOOLEAN                    | "true" or "false" if converted to string      |
+|                            +-----------------------------------------------+
+|                            | 0 or 1 if converted to a numeric type         |
++----------------------------+-----------------------------------------------+
+| JSON_NULL                  | String with printed JSON 'null'               |
++----------------------------+-----------------------------------------------+
 
 JSON Paths
 ----------
 
-JSON Paths provide ways of addressing json elements inside a JSON. Many of the JSON functions require a JSON Path or JSON Pointer argument to define the location inside the JSON where operations are performed.
-JSON Paths start with '$'. JSON Paths then contain zero or more array_access_tokens, object_key_access_tokens and, if allowed, wildcard_tokens.  
+JSON Paths provide ways of addressing json elements inside a JSON. Many of the
+JSON functions require a JSON Path or JSON Pointer argument to define the
+location inside the JSON where operations are performed.
+JSON Paths start with '$'. JSON Paths then contain zero or more
+array_access_tokens, object_key_access_tokens and, if allowed, wildcard_tokens.
 
 ::
 
@@ -2232,35 +2294,45 @@ JSON Paths start with '$'. JSON Paths then contain zero or more array_access_tok
 
    <start_token>::=
       $
-   
+
    <path_token>::=
       <array_access_token> | <object_key_access_token> | <wildcard_token>
 
    <array_access_token>::=
-      [idx] 
+      [idx]
 
    <object_key_access_token>::=
       .[key_identifier | "key_str"]
-   
+
    <wildcard_token>::=
       .*|[*]|**path_token
 
-As an example, relative to '{"a":[0,1,2,{"b":5}]}' '$.a[3].b' would mean: "The member having key 'b' of the element at index 3 of the member having key 'a' of the root" and would address the json value '5';
-Object_key_access_tokens as key string can be used to express the same key_identifiers and can also enable using characters that need escaping, e.g. '$."\""' can be used to refer to a member having a double quote as a key.  
+As an example, relative to '{"a":[0,1,2,{"b":5}]}' '$.a[3].b' would mean:
+"The member having key 'b' of the element at index 3 of the member having key
+'a' of the root" and would address the json value '5';
+Object_key_access_tokens as key string can be used to express the same
+key_identifiers and can also enable using characters that need escaping,
+e.g. '$."\""' can be used to refer to a member having a double quote as a key.
 
 JSON wildcards can be one of three types:
 
 - .* , object member access matching wildcards
 - [*], array index access matching wildcards
-- \**, matching a sequence of object keys and array indexes. \** wildcards must be suffixed by a token 
+- \**, matching a sequence of object keys and array indexes. \** wildcards must
+  be suffixed by a token
 
-Path expressions, like JSON Pointers and JSON text, should be encoded using ASCII or UTF-8 character set. If other character sets are used, a coercion will be done to UTF-8.
+Path expressions, like JSON Pointers and JSON text, should be encoded using
+ASCII or UTF-8 character set. If other character sets are used, a coercion
+will be done to UTF-8.
 
 JSON Pointers
 -------------
 
-JSON Pointers, as defined by https://tools.ietf.org/html/rfc6901 provide an alternative to JSON paths.
-JSON Pointers, like JSON Paths and JSON text, should be encoded using ASCII or UTF-8 character set. If other character sets are used, a coercion will be done to UTF-8.
+JSON Pointers, as defined by https://tools.ietf.org/html/rfc6901 provide an
+alternative to JSON paths.
+JSON Pointers, like JSON Paths and JSON text, should be encoded using ASCII
+or UTF-8 character set. If other character sets are used, a coercion will be
+done to UTF-8.
 
 ::
 
@@ -2271,15 +2343,19 @@ JSON Pointers, like JSON Paths and JSON text, should be encoded using ASCII or U
 
   '$.a[10].bb' is equivalent to '/a/10/bb'
   '$' is equivalent to ''
-  
-The special character '-' can be used exclusively as a last path_token and can be used to address the end of a json_array. 
 
-JSON pointers can be used to address the same path as their corresponding no-wildcards JSON paths.
+The special character '-' can be used exclusively as a last path_token and can
+be used to address the end of a json_array.
+
+JSON pointers can be used to address the same path as their corresponding
+no-wildcards JSON paths.
+
+.. _implicit-type-conversion:
 
 Implicit Type Conversion
 ========================
 
-An implicit type conversion represents an automatic conversion of a type of expression to a corresponding type. 
+An implicit type conversion represents an automatic conversion of a type of expression to a corresponding type.
 
 **SET**, **MULTISET**, **LIST** and **SEQUENCE** should be converted explicitly.
 

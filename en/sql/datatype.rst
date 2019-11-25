@@ -2184,6 +2184,42 @@ A simple example of how schema can be used:
   ERROR: before ' ); '
   The provided JSON has been invalidated by the JSON schema (Invalid schema path: #, Keyword: type, Invalid provided JSON path: #)
 
+JSON Value Types
+-----------------
+
+A JSON value must be an object, an array or a scalar (string, number, boolean
+or null), as defined by `RFC 7159
+<https://tools.ietf.org/html/rfc7159#section-3>`_.
+
+A table of JSON value types:
+
++----------------------------+---------------------+--------------------------+
+| Type                       | CUBRID JSON type    | Description              |
++============================+=====================+==========================+
+| Object                     | JSON_OBJECT         | A set of key-value pairs |
++----------------------------+---------------------+--------------------------+
+| Array                      | JSON_ARRAY          | An array of JSON values  |
++-------------+--------------+---------------------+--------------------------+
+| Scalar      | String       | STRING              | A quoted string          |
+|             +--------------+---------------------+--------------------------+
+|             | Number       | INTEGER             | 32-bit signed integer    |
+|             |              +---------------------+--------------------------+
+|             |              | BIGINT              | 64-bit signed integer    |
+|             |              +---------------------+--------------------------+
+|             |              | DOUBLE              | Non-integer number or    |
+|             |              |                     | integer bigger than      |
+|             |              |                     | 2\ :sup:`63`\ - 1        |
+|             +--------------+---------------------+--------------------------+
+|             | true         | BOOLEAN             | True boolean value       |
+|             +--------------+---------------------+--------------------------+
+|             | false        | BOOLEAN             | False boolean value      |
+|             +--------------+---------------------+--------------------------+
+|             | null         | JSON_NULL           | Null value               |
++-------------+--------------+---------------------+--------------------------+
+
+The type of a JSON value can be checked with :ref:`` function.
+
+
 JSON Paths
 ----------
 

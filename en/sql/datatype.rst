@@ -1,5 +1,5 @@
 
-:meta-keywords: cubrid data types, cubrid type conversion, cubrid numeric types, cubrid date time, cubrid strings, cubrid character, cubrid enum, cubrid blob/clob, cubrid collection types
+:meta-keywords: cubrid data types, cubrid type conversion, cubrid numeric types, cubrid date time, cubrid strings, cubrid character, cubrid enum, cubrid blob/clob, cubrid collection types, cubrid json type
 :meta-description: All CUBRID data types and conversion rules.
 
 ***********
@@ -2083,7 +2083,106 @@ LIST/SEQUENCE
 JSON Data Type
 ==============
 
-CUBRID provides two ways of addressing elements inside JSON data, JSON paths and JSON pointers.
+CUBRID 10.2 adds support for native **JSON** data type, as defined by
+`RFC 7159 <https://tools.ietf.org/html/rfc7159>`_. **JSON** data type
+offers automatic validation and allows fast access and operations on
+JSON data.
+
+Creating JSON data
+--------------------
+
+JSON values are automatically converted (parsed) from string format
+when they're assigned to JSON data type columns.
+
+.. code-block:: sql
+
+  -- assign a string to JSON type column
+  CREATE TABLE t (id int, j JSON);
+  INSERT INTO t VALUES (1, '{"a":1}');
+  SELECT j, TYPEOF(j) FROM t;
+
+::
+
+    j                     typeof(j)
+  ============================================
+    {"a":1}               'json'
+
+
+Conversions to JSON can also be forced through :ref:`castfn` or by using json
+keyword before strings.
+
+.. code-block:: sql
+
+  -- cast string to json
+  SELECT CAST('{"a":1}' as JSON);
+
+::
+
+    cast('{"a":1}' as json)
+  ======================
+    {"a":1}
+
+.. code-block:: sql
+
+  -- use json keyword
+  SELECT json'{"a":1}', TYPEOF (json'{"a":1}');
+
+::
+
+    json '{"a":1}'         typeof(json '{"a":1}')
+  ============================================
+    {"a":1}               'json'
+
+
+JSON Validation
+---------------
+
+Conversion to JSON data does built-in validation and reports an error if
+the string is not a valid JSON.
+
+.. code-block:: sql
+
+  -- non-quoted string is not a valid json
+  SELECT json'abc';
+
+::
+
+  In line 1, column 8,
+
+  ERROR: before ' ; '
+  Invalid JSON: 'abc'.
+
+JSON type columns with stricter validation rules can be defined using the
+`draft JSON Schema standard <https://json-schema.org/specification.html>`_.
+If you are not familiar with JSON Schema, you may refer to
+`Understanding JSON Schema
+<https://json-schema.org/understanding-json-schema/index.html>`_.
+
+A simple example of how schema can be used:
+
+.. code-block:: sql
+
+  -- set j column to accept only string type JSON's
+  CREATE TABLE t (id int, j JSON ('{"type": "string"}'));
+
+.. code-block:: sql
+
+  -- inserting string type JSON passes schema validation
+  INSERT into t values (1, '"abc"');
+
+::
+
+  1 command(s) successfully processed.
+
+.. code-block:: sql
+
+  -- inserting object type JSON does not pass schema validation
+  INSERT into t values (2, '{"a":1}');
+
+::
+
+  ERROR: before ' ); '
+  The provided JSON has been invalidated by the JSON schema (Invalid schema path: #, Keyword: type, Invalid provided JSON path: #)
 
 JSON Paths
 ----------

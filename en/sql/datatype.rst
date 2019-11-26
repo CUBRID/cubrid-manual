@@ -2280,6 +2280,8 @@ Converting JSON data type to other types is explained by next table:
 | JSON_NULL                  | String with printed JSON 'null'               |
 +----------------------------+-----------------------------------------------+
 
+.. _json-path:
+
 JSON Paths
 ----------
 
@@ -2327,6 +2329,8 @@ JSON wildcards can be one of three types:
 Path expressions, like JSON Pointers and JSON text, should be encoded using
 ASCII or UTF-8 character set. If other character sets are used, a coercion
 will be done to UTF-8.
+
+.. _json-pointer:
 
 JSON Pointers
 -------------

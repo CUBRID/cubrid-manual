@@ -21,7 +21,15 @@ They have in common several types of input arguments:
   - *val*: a JSON or a value that can be interpreted as one of supported JSON
     scalar types
   - *json key*: a string as key name
-  - *json path/pointer*: a string that follows the rules explained in TODO.
+  - *json path/pointer*: a string that follows the rules explained in
+    :ref:`json-path` and :ref:`json-pointer`.
+
+.. note::
+
+  UTF8 is expected to be the codeset of JSON functions string arguments.
+  Inputs with different codesets are implicitly converted to UTF8. One
+  consequence is that searching a case insensitive collation string with a
+  codeset other than UTF8 may not provide expected results.
 
 The next table shows the differences between *json_doc* and *val* input
 arguments:
@@ -29,20 +37,24 @@ arguments:
 +-------------------+-----------------------------+---------------------------+
 | Input type        | *json_doc*                  | *val*                     |
 +===================+=============================+===========================+
-| JSON              | Input JSON value            | Input JSON value          |
+| JSON              | Input is unchanged          | Input is unchanged        |
 +-------------------+-----------------------------+---------------------------+
-| String            | JSON parsed from input      | Input as JSON STRING      |
+| String            | JSON value is parsed from   | Input is converted to     |
+|                   | input                       | JSON STRING               |
 +-------------------+-----------------------------+---------------------------+
-| Short, Integer    | Error                       | Input as JSON INTEGER     |
+| Short, Integer    | Conversion error            | Input is converted to     |
+|                   |                             | JSON INTEGER              |
 +-------------------+-----------------------------+---------------------------+
-| Bigint            | Error                       | Input as JSON BIGINT      |
+| Bigint            | Conversion error            | Input is converted to     |
+|                   |                             | JSON BIGINT               |
 +-------------------+-----------------------------+---------------------------+
-| Float, Double,    | Error                       | Input as JSON DOUBLE      |
-| Numeric           |                             |                           |
+| Float, Double,    | Conversion error            | Input is converted to     |
+|                   |                             | JSON DOUBLE               |
 +-------------------+-----------------------------+---------------------------+
-| NULL              | NULL                        | 'null' (JSON_NULL)        |
+| NULL              | NULL                        | Input is converted to     |
+|                   |                             | JSON_NULL                 |
 +-------------------+-----------------------------+---------------------------+
-| Other             | Error                       | Error                     |
+| Other             | Conversion error            | Conversion error          |
 +-------------------+-----------------------------+---------------------------+
 
 .. _fn-json-array:

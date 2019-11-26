@@ -31,7 +31,7 @@ They have in common several types of input arguments:
   consequence is that searching a case insensitive collation string with a
   codeset other than UTF8 may not provide expected results.
 
-The next table shows the differences between *json_doc* and *val* input
+The next table shows the differences between *json_doc* and *val* when accepting input
 arguments:
 
 +-------------------+-----------------------------+---------------------------+

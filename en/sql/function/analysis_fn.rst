@@ -2067,9 +2067,10 @@ JSON_ARRAYAGG
         ('Tom', 30),
         ('Ralph', 99),
         ('David', 55),
-	('Amie', 65);
+        ('Amie', 65);
 
     SELECT JSON_ARRAYAGG (name) AS test_takers from t_score;
+
 ::
 
       test_takers
@@ -2097,6 +2098,7 @@ JSON_OBJECTAGG
         ('David', 55);
 
     SELECT JSON_OBJECTAGG (name, score) AS test_scores from t_score;
+
 ::
 
       test_scores

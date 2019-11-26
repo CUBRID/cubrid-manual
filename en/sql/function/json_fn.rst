@@ -9,6 +9,56 @@ JSON functions
 
 .. contents::
 
+.. _fn-json-intro:
+
+Introduction to JSON functions
+===================================
+
+The functions described in this section perform operations on JSON data.
+They have in common several types of input arguments:
+
+  - *json_doc*: a JSON or string that is parsed as JSON
+  - *val*: a JSON or a value that can be interpreted as one of supported JSON
+    scalar types
+  - *json key*: a string as key name
+  - *json path/pointer*: a string that follows the rules explained in
+    :ref:`json-path` and :ref:`json-pointer`.
+
+.. note::
+
+  UTF8 is expected to be the codeset of JSON functions string arguments.
+  Inputs with different codesets are implicitly converted to UTF8. One
+  consequence is that searching a case insensitive collation string with a
+  codeset other than UTF8 may not provide expected results.
+
+The next table shows the differences between *json_doc* and *val* when accepting input
+arguments:
+
++-------------------+-----------------------------+---------------------------+
+| Input type        | *json_doc*                  | *val*                     |
++===================+=============================+===========================+
+| JSON              | Input is unchanged          | Input is unchanged        |
++-------------------+-----------------------------+---------------------------+
+| String            | JSON value is parsed from   | Input is converted to     |
+|                   | input                       | JSON STRING               |
++-------------------+-----------------------------+---------------------------+
+| Short, Integer    | Conversion error            | Input is converted to     |
+|                   |                             | JSON INTEGER              |
++-------------------+-----------------------------+---------------------------+
+| Bigint            | Conversion error            | Input is converted to     |
+|                   |                             | JSON BIGINT               |
++-------------------+-----------------------------+---------------------------+
+| Float, Double,    | Conversion error            | Input is converted to     |
+| Numeric           |                             | JSON DOUBLE               |
++-------------------+-----------------------------+---------------------------+
+| NULL              | NULL                        | Input is converted to     |
+|                   |                             | JSON_NULL                 |
++-------------------+-----------------------------+---------------------------+
+| Other             | Conversion error            | Conversion error          |
++-------------------+-----------------------------+---------------------------+
+
+.. _fn-json-array:
+
 JSON_ARRAY
 ===================================
 
@@ -36,6 +86,8 @@ JSON_ARRAY
     ======================
       [1,"1",{"a":4},[1,2,3]]
 
+.. _fn-json-object:
+
 JSON_OBJECT
 ===================================
 
@@ -62,6 +114,8 @@ JSON_OBJECT
       json_object('a', 1, 'b', '1', 'c', json '{"a":4}', 'd', json '[1,2,3]')
     ======================
       {"a":1,"b":"1","c":{"a":4},"d":[1,2,3]}
+
+.. _fn-json-keys:
 
 JSON_KEYS
 ===================================
@@ -103,6 +157,8 @@ JSON_KEYS
     ======================
       ["a","b","c"]
 
+.. _fn-json-depth:
+
 JSON_DEPTH
 ===================================
 
@@ -143,6 +199,8 @@ Example of a deeper json:
       json_depth('[{"a":[1,2,3,{"k":[4,5]}]},2,3,4,5,6,7]')
     ======================
       6
+
+.. _fn-json-length:
 
 JSON_LENGTH
 ===================================
@@ -193,6 +251,8 @@ JSON_LENGTH
     ======================
       2
 
+.. _fn-json-valid:
+
 JSON_VALID
 ===================================
 
@@ -226,6 +286,8 @@ JSON_TYPE
     SELECT JSON_TYPE ('"aaa"');
     'STRING'
 
+.. _fn-json-quote:
+
 JSON_QUOTE
 ===================================
 
@@ -254,6 +316,8 @@ JSON_QUOTE
     ======================
       '"\""'
 
+.. _fn-json-unquote:
+
 JSON_UNQUOTE
 ===================================
 
@@ -281,6 +345,8 @@ JSON_UNQUOTE
       json_unquote('"\""')
     ======================
       '"'
+
+.. _fn-json-pretty:
 
 JSON_PRETTY
 ===================================
@@ -313,6 +379,8 @@ JSON_PRETTY
         ]
       }
     ]'
+
+.. _fn-json-search:
 
 JSON_SEARCH
 ===================================
@@ -396,6 +464,8 @@ Accepting any paths that contain json array indexes will filter out '$.b'
     ======================
       "["$.a[0]","$.c[0]","$.d.e[0]"]"
 
+.. _fn-json-extract:
+
 JSON_EXTRACT
 ===================================
 
@@ -461,6 +531,8 @@ The following json path will match all json paths that end with a json array ind
     ======================
       "["a"]" -- '$.d.e[0]' is the only path matching the given argument path family - paths that start with '.d' and end with an array index
 
+.. _fn-json-arrow:
+
 ->
 ===================================
 
@@ -486,6 +558,8 @@ The following json path will match all json paths that end with a json array ind
       3
       NULL
 
+.. _fn-json-double-arrow:
+
 ->>
 ===================================
 
@@ -510,6 +584,8 @@ The following json path will match all json paths that end with a json array ind
       '2'
       '3'
       NULL
+
+.. _fn-json-contains-path:
 
 JSON_CONTAINS_PATH
 ===================================
@@ -553,6 +629,8 @@ The JSON_CONTAINS_PATH function supports wildcards inside json paths.
      json_contains_path('[{"0":0},1,"2",{"three":3}]', 'one', '$.inexistent', '$[*]."three"')
     ==========================================================================
                                                                              1
+
+.. _fn-json-contains:
 
 JSON_CONTAINS
 ===================================
@@ -634,6 +712,8 @@ Note that json objects do not check containment the same way json arrays do. It 
     ========================================================================
                                                                            1
 
+.. _fn-json-merge-patch:
+
 JSON_MERGE_PATCH
 ===================================
 
@@ -692,6 +772,8 @@ Objects merging example, exemplifying the described object merging rules:
     ======================
       {"a":null,"c":{},"d":"elem"}
 
+.. _fn-json-preserve:
+
 JSON_MERGE_PRESERVE
 ===================================
 
@@ -744,12 +826,16 @@ JSON_MERGE_PRESERVE
     ======================
       {"a":null,"c":["elem",{"k":null}],"b":null,"d":"elem"}
 
+.. _fn-json-merge:
+
 JSON_MERGE
 ===================================
 
 .. function:: JSON_MERGE (json_doc, json_doc [, json_doc] ...)
 
   **JSON_MERGE** is an alias for **JSON_MERGE_PRESERVE**.
+
+.. _fn-json-array-append:
 
 JSON_ARRAY_APPEND
 ===================================
@@ -797,6 +883,7 @@ JSON_ARRAY_APPEND
     ======================
       {"a":[[1,"1"],2]}
 
+.. _fn-json-array-insert:
 
 JSON_ARRAY_INSERT
 ===================================
@@ -858,6 +945,8 @@ Examples for **JSON_ARRAY_INSERT's** third rule.
     ======================
       ["a",null,null,null,null,"1"]
 
+.. _fn-json-insert:
+
 JSON_INSERT
 ===================================
 
@@ -910,6 +999,8 @@ Paths to existing elements inside the json_doc are ignored:
     ======================
       [0,1,2,null,"1"]
 
+.. _fn-json-set:
+
 JSON_SET
 ===================================
 
@@ -956,6 +1047,7 @@ JSON_SET
     ======================
       [0,1,2,null,"1"]
 
+.. _fn-json-replace:
 
 JSON_REPLACE
 ===================================
@@ -1002,6 +1094,8 @@ No replacement is done if the json path does not exist inside the json_doc.
       json_replace('[0,1,2]', '$[4]', '1')
     ======================
       [0,1,2]
+
+.. _fn-json-remove:
 
 JSON_REMOVE
 ===================================

@@ -2280,14 +2280,17 @@ Converting JSON data type to other types is explained by next table:
 | JSON_NULL                  | String with printed JSON 'null'               |
 +----------------------------+-----------------------------------------------+
 
+.. _json-path:
+
 JSON Paths
 ----------
 
 JSON Paths provide ways of addressing json elements inside a JSON. Many of the
 JSON functions require a JSON Path or JSON Pointer argument to define the
 location inside the JSON where operations are performed.
-JSON Paths start with '$'. JSON Paths then contain zero or more
-array_access_tokens, object_key_access_tokens and, if allowed, wildcard_tokens.
+JSON Paths always start with '$' and may be followed by array indexes,
+object key tokens and wildcards. If '$' is followed by no other tokens, then
+path points to JSON data root.
 
 ::
 
@@ -2326,6 +2329,8 @@ JSON wildcards can be one of three types:
 Path expressions, like JSON Pointers and JSON text, should be encoded using
 ASCII or UTF-8 character set. If other character sets are used, a coercion
 will be done to UTF-8.
+
+.. _json-pointer:
 
 JSON Pointers
 -------------

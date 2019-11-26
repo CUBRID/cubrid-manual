@@ -49,7 +49,7 @@ arguments:
 |                   |                             | JSON BIGINT               |
 +-------------------+-----------------------------+---------------------------+
 | Float, Double,    | Conversion error            | Input is converted to     |
-|                   |                             | JSON DOUBLE               |
+| Numeric           |                             | JSON DOUBLE               |
 +-------------------+-----------------------------+---------------------------+
 | NULL              | NULL                        | Input is converted to     |
 |                   |                             | JSON_NULL                 |

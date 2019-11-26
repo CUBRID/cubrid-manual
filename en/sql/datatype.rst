@@ -2256,7 +2256,7 @@ Converting other types to JSON is explained by next table:
 | Numeric                    | DOUBLE                                       |
 +----------------------------+----------------------------------------------+
 
-Conversting JSON data type to other types is explained by next table:
+Converting JSON data type to other types is explained by next table:
 
 +----------------------------+-----------------------------------------------+
 | CUBRID JSON Type           | Other accepted types                          |

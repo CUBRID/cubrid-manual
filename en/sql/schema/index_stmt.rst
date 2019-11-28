@@ -20,7 +20,7 @@ For how to use indexes on the **SELECT** statement like Using SQL Hint, Descendi
         <index_col_desc> ::=
             { ( column_name [ASC | DESC] [ {, column_name [ASC | DESC]} ...] ) [ WHERE <filter_predicate> ] | 
             (function_name (argument_list) ) } 
-                [WITH ONLINE [PARALLEL parallel_count] | INVISIBLE]
+                { [[WITH ONLINE [PARALLEL parallel_count]] | [INVISIBLE] | [VISIBLE]] }
                 [COMMENT 'index_comment_string']
 
 *   **UNIQUE**: creates an index with unique values.

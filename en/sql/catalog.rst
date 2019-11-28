@@ -473,6 +473,8 @@ Represents index information. An index for class_of is created.
 +--------------------+---------------------------+------------------------------------------------+
 | comment            | VARCHAR (1024)            | Comment to describe the index                  |
 +--------------------+---------------------------+------------------------------------------------+
+| status             | INTEGER                   | Index status                  |
++--------------------+---------------------------+------------------------------------------------+
 
 The following example shows how to retrieve names of indexes that belong to the class.
 

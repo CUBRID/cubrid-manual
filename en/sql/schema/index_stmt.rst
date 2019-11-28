@@ -231,7 +231,7 @@ Online unique index while other transactions inserts violates uniqueness
 ALTER INDEX
 ===========
 
-The **ALTER INDEX** statement rebuilds an index or adds/changes the comment/status of an index. Rebuilding an index is a job which drops and recreates an index.
+The **ALTER INDEX** statement changes the properties of an index. Index is rebuilt unless only comment or status is changed. Rebuilding an index is a job which drops and recreates an index.
 
 The following is a syntax of rebuilding an index.
 
@@ -279,7 +279,7 @@ The following is a syntax of renaming an index.
 
     ALTER INDEX old_index_name ON table_name RENAME TO new_index_name [COMMENT 'index_comment_string'] ;
 
-The following is a syntax to change the status of an index to **INVISIBLE**/**VISIBLE**. When an index is set as **INVISIBLE**, queries will be executed as the index does not exist. In this way, you can check if the index actually provides an increase in performance by check if the query execution time drops if the index is not used, without actually dropping the index.
+The following is a syntax to change the status of an index to **INVISIBLE**/**VISIBLE**. When an index is set as **INVISIBLE**, queries will be executed as like the index does not exist. In this way, the performance of the index may be tested and the impact of its removal be evaluated without actually dropping the index.
 
 .. code-block:: sql
     

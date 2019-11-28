@@ -215,7 +215,7 @@ Null                                VARCHAR         YES if a column can include 
 Index_type                          VARCHAR         Index to be used (currently, only the BTREE is supported.)
 Func                                VARCHAR         A function which is used in a function-based index
 Comment                             VARCHAR         Comment to describe the index
-Status                              VARCHAR         Shows the status of an index (NORMAL_INDEX|INVISIBLE|ONLINE_INDEX_IN_PROGRESS)
+Visible                             VARCHAR         Shows the Visibility of an index (YES/NO)
 =================================== =============== ======================================================================================================================================
 
 The following shows the examples of this syntax.

@@ -16,4 +16,3 @@ Data Manipulation Statements
     prepare.rst
     do.rst
     cte.rst
-    json_table.rst

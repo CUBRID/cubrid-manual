@@ -1,4 +1,4 @@
-:meta-keywords: cubrid json, json functions, database json
+:meta-keywords: cubrid json, json functions, database json, JSON_TABLE
 :meta-description: CUBRID functions that create, query and modify JSON data.
 
 :tocdepth: 3
@@ -7,14 +7,37 @@
 JSON functions
 *********************************
 
-.. contents::
-
 .. _fn-json-intro:
 
 Introduction to JSON functions
 ===================================
 
 The functions described in this section perform operations on JSON data.
+All supported JSON functions can be found in next table:
+
++------------------+------------------+------------------+------------------+
+| :ref:`fn-json-\  | :ref:`fn-json-\  | :ref:`fn-json-\  | :ref:`fn-json-\  |
+| \arrow`          | \contains-path`  | \merge-patch`    | \replace`        |
++------------------+------------------+------------------+------------------+
+| :ref:`fn-json-\  | :ref:`fn-json-\  | :ref:`fn-json-\  | :ref:`fn-json-\  |
+| \double-arrow`   | \depth`          | \merge-preserve` | \search`         |
++------------------+------------------+------------------+------------------+
+| :ref:`fn-json-\  | :ref:`fn-json-\  | :ref:`fn-json-\  | :ref:`fn-json-\  |
+| \array`          | \extract`        | \object`         | \set`            |
++------------------+------------------+------------------+------------------+
+| :ref:`fn-json-\  | :ref:`fn-json-\  | :ref:`fn-json-\  | :ref:`fn-json-\  |
+| \arrayagg`       | \insert`         | \objectagg`      | \table`          |
++------------------+------------------+------------------+------------------+
+| :ref:`fn-json-\  | :ref:`fn-json-\  | :ref:`fn-json-\  | :ref:`fn-json-\  |
+| \array-append`   | \keys`           | \pretty`         | \type`           |
++------------------+------------------+------------------+------------------+
+| :ref:`fn-json-\  | :ref:`fn-json-\  | :ref:`fn-json-\  | :ref:`fn-json-\  |
+| \array-insert`   | \length`         | \quote`          | \unquote`        |
++------------------+------------------+------------------+------------------+
+| :ref:`fn-json-\  | :ref:`fn-json-\  | :ref:`fn-json-\  | :ref:`fn-json-\  |
+| \contains`       | \merge`          | \remove`         | \valid`          |
++------------------+------------------+------------------+------------------+
+
 They have in common several types of input arguments:
 
   - *json_doc*: a JSON or string that is parsed as JSON
@@ -772,7 +795,7 @@ Objects merging example, exemplifying the described object merging rules:
     ======================
       {"a":null,"c":{},"d":"elem"}
 
-.. _fn-json-preserve:
+.. _fn-json-merge-preserve:
 
 JSON_MERGE_PRESERVE
 ===================================
@@ -1129,7 +1152,7 @@ The json path arguments are evaluated one by one, from left to right. The result
     ======================
       {"b":2}
 
-.. _fn-json-table
+.. _fn-json-table:
 
 JSON_TABLE
 =====================

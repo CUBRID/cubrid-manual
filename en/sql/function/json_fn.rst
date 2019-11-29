@@ -1176,9 +1176,9 @@ The full syntax of **JSON_TABLE**:
 
     <column>::=
         name FOR ORDINALITY
-	|  name type PATH string path <on_empty> <on_error>
-	|  name type EXISTS PATH string path
-	|  NESTED [PATH] path COLUMNS <column_list>
+	|  name type PATH string_path <on_empty> <on_error>
+	|  name type EXISTS PATH string_path
+	|  NESTED [PATH] string_path COLUMNS <column_list>
 
     <on_empty>::=
         NULL | ERROR | DEFAULT value ON EMPTY

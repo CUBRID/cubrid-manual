@@ -33,7 +33,7 @@ Compatibility
 
 **Application Compatibility**
 
-*   Applications that use JDBC, PHP or CCI APIs from 2008 R4.1 or higher version of CUBRID can access the CUBRID 10.1 database. However, you must link the CUBRID 10.1 library or use the driver to use the added/improved features of JDBC, PHP or CCI interfaces. In order to use :ref:`timezone-type` which are introduced as 10.0, users should upgrade drivers. 
+*   Applications that use JDBC, PHP or CCI APIs from 2008 R4.1 or higher version of CUBRID can access the CUBRID 10.2 database. However, you must link the CUBRID 10.2 library or use the driver to use the added/improved features of JDBC, PHP or CCI interfaces. In order to use :ref:`timezone-type` which are introduced as 10.0, users should upgrade drivers.
 
 *   Note that query results may differ from those given in the earlier version because new reserved words have been added, and the specifications for some queries have been changed.
 
@@ -49,7 +49,7 @@ Compatibility
 
 *   Drivers for 2008 R2.2 and higher versions are included in CUBRID Manager by default, which you can download separately from the http://www.cubrid.org Website.
 
-.. note:: Old version users should upgrade all of driver, broker, DB server; Data migration should be done because its DB volume is not compatible with 10.1 version.
+.. note:: Old version users should upgrade all of driver, broker, DB server; Data migration should be done because its DB volume is not compatible with 10.2 version.
     For upgrade and data migration, see :doc:`/upgrade`.
 
 **Interoperability between CUBRID DB server and broker**
@@ -80,12 +80,12 @@ Check the following before installing CUBRID for Linux.
     
         %rpm -q glibc
     
-*   64-bit or 32-bit
+*   64-bit
     
     As 10.0, CUBRID supports only 64-bit Linux. You can check the version as follows: ::
     
         % uname -a
-        Linux host_name 2.6.18-53.1.14.el5xen #1 SMP Wed Mar 5 12:08:17 EST 2008 x86_64 x86_64 x86_64 GNU/Linux
+        Linux host_name 2.6.32-696.20.1.el6.x86_64 #1 SMP Fri Jan 26 17:51:45 UTC 2018 x86_64 x86_64 x86_64 GNU/Linux
     
     Make sure to install the CUBRID 64-bit version on 64-bit Linux. 
     
@@ -101,16 +101,16 @@ Check the following before installing CUBRID for Linux.
     
 **Installing CUBRID**
 
-The installation program consists of shell scripts that contain binary; thus it can be installed automatically. The following example shows how to install CUBRID with the "CUBRID-10.1.0.7663-1ca0ab8-Linux.x86_64.sh" file on the Linux. 
+The installation program consists of shell scripts that contain binary; thus it can be installed automatically. The following example shows how to install CUBRID with the "CUBRID-10.2.0.8787-a31ea42-Linux.x86_64.sh" file on the Linux. 
 
 ::
 
-    $ sh CUBRID-10.1.0.7663-1ca0ab8-Linux.x86_64.sh
+    $ sh CUBRID-10.2.0.8787-a31ea42-Linux.x86_64.sh
     Do you agree to the above license terms? (yes or no) : yes
     Do you want to install this software(CUBRID) to the default(/home1/cub_user/CUBRID) directory? (yes or no) [Default: yes] : yes
     Install CUBRID to '/home1/cub_user/CUBRID' ...
     In case a different version of the CUBRID product is being used in other machines, 
-    please note that the CUBRID 10.1 servers are only compatible with the CUBRID 10.1 clients and vice versa.
+    please note that the CUBRID 10.2 servers are only compatible with the CUBRID 10.2 clients and vice versa.
     Do you want to continue? (yes or no) [Default: yes] : yes
     Copying old .cubrid.sh to .cubrid.sh.bak ...
 
@@ -122,7 +122,7 @@ The installation program consists of shell scripts that contain binary; thus it 
     $ . /home1/cub_user/.cubrid.sh
     $ cubrid service start
 
-As shown in the example above, after installing the downloaded file (CUBRID-10.1.0.7663-1ca0ab8-Linux.x86_64.sh), the CUBRID related environment variables must be set in order to use the CUBRID database. Such setting has been made automatically when logging in the concerned terminal. Therefore there is no need to re-set after the first installation. ::
+As shown in the example above, after installing the downloaded file (CUBRID-10.2.0.8787-a31ea42-Linux.x86_64.sh), the CUBRID related environment variables must be set in order to use the CUBRID database. Such setting has been made automatically when logging in the concerned terminal. Therefore there is no need to re-set after the first installation. ::
 
     $ . /home1/cub_user/.cubrid.sh
 
@@ -153,7 +153,7 @@ When you want to check whether CUBRID Manager server and CUBRID broker works wel
 
 You can install CUBRID by using rpm file that is created on CentOS 5. The way of installing and uninstalling CUBRID is the same as that of using general rpm utility. While CUBRID is being installed, a new system group (cubrid) and a user account (cubrid) are created. After installation is complete, you should log in with a cubrid user account to start a CUBRID service.::
 
-    $ rpm -Uvh cubrid-10.1.0.7663-1ca0ab8-Linux.x86_64.rpm
+    $ rpm -Uvh cubrid-10.2.0.8787-a31ea42-Linux.x86_64.rpm
 
 When rpm is executed, CUBRID is installed in the "cubrid" home directory (/opt/cubrid) and related configuration file (cubrid.[c]sh) is installed in the /etc/profile.d directory. Note that *demodb* is not automatically installed. Therefore, you must executed /opt/cubrid/demo/make_cubrid_demo.sh with "cubrid" Linux ID. When installation is complete, enter the code below to start CUBRID with "cubrid" Linux ID. ::
 
@@ -221,11 +221,11 @@ Installing and Running CUBRID on Windows
 
 You should check the below before installing CUBRID for Windows.
 
-*   64-bit or 32-bit
+*   64-bit
     
-    CUBRID supports both 32-bit and 64-bit Windows. You can check the version by selecting [My Computer] > [System Properties]. Make sure to install the CUBRID 32-bit version on 32-bit Windows and the CUBRID 64-bit version on 64-bit Windows.
+    CUBRID supports only 64-bit Windows. You can check the version by selecting [My Computer] > [System Properties]. Make sure to install a CUBRID 64-bit version on 64-bit Windows.
 
-    .. warning:: 10.1 would be the last release of 32-bit Windows. Later releases will only provide 64-bit version.
+    .. warning:: 10.1 would be the last release of 32-bit Windows.
 
 **Installation Process**
     
@@ -338,7 +338,7 @@ Check the following before installing CUBRID for Linux.
 
         ::
         
-            tar xvfz CUBRID-10.1.0.7663-1ca0ab8-Linux.x86_64.tar.gz /home1/cub_user/
+            tar xvfz CUBRID-10.2.0.8787-a31ea42-Linux.x86_64.tar.gz /home1/cub_user/
 
         CUBRID directory is created under /home1/cub_user/ and files are created under CUBRID directory. 
 
@@ -404,11 +404,11 @@ Installing CUBRID with zip on Windows
 
 Check below list before installing CUBRID database of Windows version.
 
-*   64bit or 32bit
+*   64bit 
 
-    CUBRID supports both 32-bit and 64-bit Windows. You can check the version by selecting [My Computer] > [System Properties]. Make sure to install the CUBRID 32-bit version on 32-bit Windows and the CUBRID 64-bit version on 64-bit Windows.
+    CUBRID supports only 64-bit Windows. You can check the version by selecting [My Computer] > [System Properties]. Make sure to install a CUBRID 64-bit version on 64-bit Windows.
     
-    .. warning:: 10.1 would be the last release of 32-bit Windows. Later releases will only provide 64-bit version.
+    .. warning:: 10.1 would be the last release of 32-bit Windows.
 
 **Installation Process**
 

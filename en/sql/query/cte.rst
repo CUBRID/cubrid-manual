@@ -233,7 +233,7 @@ CTE Usage in DMLs and CREATE
 ============================
 
 Besides their use for **SELECT** statements, CTEs can also be used for other statements.
-CTEs can be used in CREATE TABLE table_name AS SELECT:
+CTEs can be used in **CREATE TABLE** *table_name* **AS SELECT**:
 
 .. code-block:: sql
 
@@ -256,7 +256,7 @@ CTEs can be used in CREATE TABLE table_name AS SELECT:
                 2
                 3
 
-Also, **INSERT**/**REPLACE INTO** table_name SELECT can use CTE:
+Also, **INSERT**/**REPLACE INTO** *table_name* **SELECT** can use CTE:
 
 .. code-block:: sql
 

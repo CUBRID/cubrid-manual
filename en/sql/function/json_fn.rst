@@ -148,7 +148,7 @@ JSON_KEYS
   The **JSON_KEYS** function returns a json array of all the object keys of the json object at the given path.
   Json null is returned if the path addresses a json element that is not a json object.
   If json path argument is missing, the keys are gathered from json root element.
-  An error occurs if json path does not exist. Returns NULL if json_doc argument is NULL.
+  An error occurs if *json path* does not exist. Returns **NULL** if *json_doc* argument is **NULL**.
 
 .. code-block:: sql
 
@@ -189,7 +189,7 @@ JSON_DEPTH
 
   The **JSON_DEPTH** function returns the maximum depth of the json.
   Depth count starts at 1. The depth level is increased by one by non-empty json arrays or by non-empty json objects.
-  Returns NULL if argument is NULL.
+  Returns **NULL** if argument is **NULL**.
 
 .. code-block:: sql
 
@@ -232,7 +232,7 @@ JSON_LENGTH
 
   The **JSON_LENGTH** function returns the length of the json element at the given path.
   If no path argument is given, the returned value is the length of the root json element.
-  Returns NULL if any argument is NULL or if no element exists at the given path.
+  Returns **NULL** if any argument is **NULL** or if no element exists at the given path.
 
 .. code-block:: sql
 
@@ -281,8 +281,8 @@ JSON_VALID
 
 .. function:: JSON_VALID (val)
 
-  The **JSON_VALID** function returns 1 if the given val argument is a valid json_doc, 0 otherwise.
-  Returns NULL if argument is NULL.
+  The **JSON_VALID** function returns 1 if the given *val* argument is a valid json_doc, 0 otherwise.
+  Returns **NULL** if argument is **NULL**.
 
 .. code-block:: sql
 
@@ -298,7 +298,7 @@ JSON_TYPE
 
 .. function:: JSON_TYPE (json_doc)
 
-  The **JSON_TYPE** function returns the type of the json_doc argument as a string.
+  The **JSON_TYPE** function returns the type of the *json_doc* argument as a string.
 
 .. code-block:: sql
 
@@ -317,7 +317,7 @@ JSON_QUOTE
 .. function:: JSON_QUOTE (str)
 
   Escapes quotes and special characters and surrounds the resulting string in quotes. Returns result as a json_string.
-  Returns NULL if str argument is NULL.
+  Returns **NULL** if *str* argument is **NULL**.
 
 .. code-block:: sql
 
@@ -347,7 +347,7 @@ JSON_UNQUOTE
 .. function:: JSON_UNQUOTE (json_doc)
 
   Unquotes a json_value's json string and returns the resulting string.
-  Returns NULL if json_doc argument is NULL.
+  Returns **NULL** if *json_doc* argument is **NULL**.
 
 .. code-block:: sql
 
@@ -376,8 +376,8 @@ JSON_PRETTY
 
 .. function:: JSON_PRETTY (json_doc)
 
-  Returns a string containing the json_doc pretty-printed.
-  Returns NULL if json_doc argument is NULL.
+  Returns a string containing the *json_doc* pretty-printed.
+  Returns **NULL** if *json_doc* argument is **NULL**.
 
 .. code-block:: sql
 
@@ -410,15 +410,15 @@ JSON_SEARCH
 
 .. function:: JSON_SEARCH (json_doc, one/all, search_str [, escape_char [, json path] ...])
 
-  Returns a json array of json paths or a single json path which contain json strings matching the given search_str.
-  The matching is performed by applying the LIKE operator on internal json strings and search_str. Same rules apply for the escape_char and search_str of JSON_SEARCH as for their counter-parts from the LIKE operator.
-  For further description of LIKE-related arguments rules refer to :ref:`like-expr`.
+  Returns a json array of json paths or a single json path which contain json strings matching the given *search_str*.
+  The matching is performed by applying the **LIKE** operator on internal json strings and *search_str*. Same rules apply for the *escape_char* and *search_str* of **JSON_SEARCH** as for their counter-parts from the **LIKE** operator.
+  For further description of **LIKE**-related arguments rules refer to :ref:`like-expr`.
 
-  Using 'one' as one/all argument will cause the json_search to stop after the first match is found.
-  On the other hand, 'all' will force json_search to gather all paths matching the given search_str.
+  Using 'one' as one/all argument will cause the **JSON_SEARCH** to stop after the first match is found.
+  On the other hand, 'all' will force **JSON_SEARCH** to gather all paths matching the given *search_str*.
 
   The given json paths determine filters on the returned paths, the resulting json paths's prefixes need to match at least one given json path argument.
-  If no json path argument is given, json_search will execute the search starting from the root element.
+  If no json path argument is given, **JSON_SEARCH** will execute the search starting from the root element.
 
 .. code-block:: sql
 
@@ -494,11 +494,11 @@ JSON_EXTRACT
 
 .. function:: JSON_EXTRACT (json_doc, json path [, json path] ...)
 
-  Returns json elements from the json_doc, that are addressed by the given paths.
+  Returns json elements from the *json_doc*, that are addressed by the given paths.
   If json path arguments contain wildcards, all elements that are addressed by a path compatible with the wildcards-containing json path are gathered in a resulting json array. 
   A single json element is returned if no wildcards are used in the given json paths and a single element is found, otherwise the json elements found are wrapped in a json array.
-  Raises an error if a json path is NULL or invalid or if json_doc argument is invalid.
-  Returns NULL if no elements are found or if json_doc is NULL.
+  Raises an error if a json path is **NULL** or invalid or if *json_doc* argument is invalid.
+  Returns **NULL** if no elements are found or if json_doc is **NULL**.
 
 .. code-block:: sql
 
@@ -561,9 +561,9 @@ The following json path will match all json paths that end with a json array ind
 
 .. function:: json_doc -> json path
 
-  Alias operator for JSON_EXTRACT with two arguments, having the json_doc argument constrained to be a column.
-  Raises an error if the json path is NULL or invalid.
-  Returns NULL if it is applied on a NULL json_doc argument.
+  Alias operator for **JSON_EXTRACT** with two arguments, having the *json_doc* argument constrained to be a column.
+  Raises an error if the json path is **NULL** or invalid.
+  Returns **NULL** if it is applied on a **NULL** *json_doc* argument.
 
 .. code-block:: sql
 
@@ -588,9 +588,9 @@ The following json path will match all json paths that end with a json array ind
 
 .. function:: json_doc ->> json path
 
-  Alias for JSON_UNQUOTE(json_doc->json path). Operator can be applied only on json_doc arguments that are columns.
-  Raises an error if the json path is NULL or invalid.
-  Returns NULL if it is applied on a NULL json_doc argument.
+  Alias for **JSON_UNQUOTE** (json_doc->json path). Operator can be applied only on *json_doc* arguments that are columns.
+  Raises an error if the json path is **NULL** or invalid.
+  Returns **NULL** if it is applied on a **NULL** *json_doc* argument.
 
 .. code-block:: sql
 
@@ -615,10 +615,13 @@ JSON_CONTAINS_PATH
 
 .. function:: JSON_CONTAINS_PATH (json_doc, one/all, json path [, json path] ...)
 
-  The **JSON_CONTAINS_PATH** function verifies whether the given paths exist inside the json_doc.
+  The **JSON_CONTAINS_PATH** function verifies whether the given paths exist inside the *json_doc*.
+
   When one/all argument is 'all', all given paths must exist to return 1. Returns 0 otherwise.
+
   When one/all argument is 'one', it returns 1 if any given path exists. Returns 0 otherwise.
-  Returns NULL if any argument is NULL.
+
+  Returns **NULL** if any argument is **NULL**.
   An error occurs if any argument is invalid.
 
 .. code-block:: sql
@@ -641,7 +644,7 @@ JSON_CONTAINS_PATH
     ======================================================================================================================
                                                                                                                          0
 
-The JSON_CONTAINS_PATH function supports wildcards inside json paths.
+The **JSON_CONTAINS_PATH** function supports wildcards inside json paths.
 
 .. code-block:: sql
 
@@ -660,17 +663,17 @@ JSON_CONTAINS
 
 .. function:: JSON_CONTAINS (json_doc doc1, json_doc doc2 [, json path])
 
-  The **JSON_CONTAINS** function verifies whether the doc2 is contained inside the doc1 at the optionally specified path.
+  The **JSON_CONTAINS** function verifies whether the *doc2* is contained inside the *doc1* at the optionally specified path.
   A json element contains another json element if the following recursive rules are satisfied:
 
-- A json scalar contains another json scalar if they have the same type (their JSON_TYPE () are equal) and are equal. As an exception, json integer can be compared and equal to json double (even if their JSON_TYPE () evaluation are different).
-- A json array contains a json scalar or a json object if any of json array's elements contains the json_nonarray.
-- A json array contains another json array if all the second json array's elements are contained in the first json array.
-- A json object contains another json object if, for every (key2, value2) pair in the second object, there exists a (key1, value1) pair in the first object with key1=key2 and value2 contained in value1.
-  Otherwise the json element is not contained.
+  - A json scalar contains another json scalar if they have the same type (their **JSON_TYPE** () are equal) and are equal. As an exception, json integer can be compared and equal to json double (even if their **JSON_TYPE** () evaluation are different).
+  - A json array contains a json scalar or a json object if any of json array's elements contains the json_nonarray.
+  - A json array contains another json array if all the second json array's elements are contained in the first json array.
+  - A json object contains another json object if, for every (*key2*, *value2*) pair in the second object, there exists a (*key1*, *value1*) pair in the first object with *key1* = *key2* and *value2* contained in *value1*.
+  - Otherwise the json element is not contained.
 
-  Returns whether doc2 is contained in root json element of doc1 if no json path argument is given.
-  Returns NULL if any argument is NULL.
+  Returns whether *doc2* is contained in root json element of *doc1* if no json path argument is given.
+  Returns **NULL** if any argument is **NULL**.
   An error occurs if any argument is invalid.
 
 .. code-block:: sql
@@ -757,7 +760,7 @@ The merging of two json documents is performed with the following rules, recursi
 
 Merge operations are executed serially when there are more than two arguments: the result of merging first two arguments is merged with third, this result is then merged with fourth and so on.
 
-Returns NULL if any argument is NULL.
+Returns **NULL** if any argument is **NULL**.
 An error occurs if any argument is not valid.
 
 .. code-block:: sql
@@ -806,14 +809,14 @@ JSON_MERGE_PRESERVE
 
   The merging of two json documents is performed after the following rules, recursively:
   
-- when two json arrays are merged, they are concatenated.
-- when two non-array (scalar/object) json elements are merged and at most one of them is a json object, the result is an array containing the two json elements.
-- when a non-array json element is merged with a json array, the non-array is wrapped as a single element json array and then merged with the json array according to json array merging rules.
-- when two json objects are merged, all pairs that do not have a corresponding pair in the other json object are preserved. For matching keys, the values are always merged by applying the rules recursively.
+  - when two json arrays are merged, they are concatenated.
+  - when two non-array (scalar/object) json elements are merged and at most one of them is a json object, the result is an array containing the two json elements.
+  - when a non-array json element is merged with a json array, the non-array is wrapped as a single element json array and then merged with the json array according to json array merging rules.
+  - when two json objects are merged, all pairs that do not have a corresponding pair in the other json object are preserved. For matching keys, the values are always merged by applying the rules recursively.
 
   Merge operations are executed serially when there are more than two arguments: the result of merging first two arguments is merged with third, this result is then merged with fourth and so on.
 
-  Returns NULL if any argument is NULL.
+  Returns **NULL** if any argument is **NULL**.
   An error occurs if any argument is not valid.
 
 .. code-block:: sql
@@ -865,14 +868,14 @@ JSON_ARRAY_APPEND
 
 .. function:: JSON_ARRAY_APPEND (json_doc, json path, json_val [, json path, json_val] ...)
 
-  The **JSON_ARRAY_APPEND** function returns a modified copy of the first argument. For each given <json path, json_val> pair, the function appends the value to the json array addressed by the corresponding path.
+  The **JSON_ARRAY_APPEND** function returns a modified copy of the first argument. For each given <*json path*, *json_val*> pair, the function appends the value to the json array addressed by the corresponding path.
 
-  The (json path, json_val) pairs are evaluated one by one, from left to right. The document produced by evaluating one pair becomes the new value against which the next pair is evaluated.
+  The (*json path*, *json_val*) pairs are evaluated one by one, from left to right. The document produced by evaluating one pair becomes the new value against which the next pair is evaluated.
 
-  If the json path points to a json array inside the json_doc, the json_val is appended at the end of the array. 
-  If the json path points to a non-array json element, the non-array gets wrapped as a single element json array containing the referred non-array element followed by the appending of the given json_val.
+  If the json path points to a json array inside the *json_doc*, the *json_val* is appended at the end of the array. 
+  If the json path points to a non-array json element, the non-array gets wrapped as a single element json array containing the referred non-array element followed by the appending of the given *json_val*.
 
-  Returns NULL if any argument is NULL.
+  Returns **NULL** if any argument is **NULL**.
   An error occurs if any argument is invalid.
 
 .. code-block:: sql
@@ -913,18 +916,18 @@ JSON_ARRAY_INSERT
 
 .. function:: JSON_ARRAY_INSERT (json_doc, json path, json_val [, json path, json_val] ...)
 
-  The **JSON_ARRAY_INSERT** function returns a modified copy of the first argument. For each given <json path, json_val> pair, the function inserts the value in the json array addressed by the corresponding path.
+  The **JSON_ARRAY_INSERT** function returns a modified copy of the first argument. For each given <*json path*, *json_val*> pair, the function inserts the value in the json array addressed by the corresponding path.
 
-  The (json path, json_val) pairs are evaluated one by one, from left to right. The document produced by evaluating one pair becomes the new value against which the next pair is evaluated.
+  The (*json path*, *json_val*) pairs are evaluated one by one, from left to right. The document produced by evaluating one pair becomes the new value against which the next pair is evaluated.
 
   The rules of the **JSON_ARRAY_INSERT** operation are the following:
 
-  - if a json path addresses an element of a json_array, the given json_val is inserted at the specified index, shifting any following elements to the right.
+  - if a json path addresses an element of a json_array, the given *json_val* is inserted at the specified index, shifting any following elements to the right.
   - if the json path points to an array index after the end of an array, the array is filled with nulls after end of the array until the specified index and the json_val is inserted at the specified index.
-  - if the json path does not exist inside the json_doc, the last token of the json path is an array index and the json path without the last array index token would have pointed to an element inside the json_doc, the element found by the stripped json path is replaced with single element json array and the **JSON_ARRAY_INSERT** operation is performed with the original json path.
+  - if the json path does not exist inside the *json_doc*, the last token of the json path is an array index and the json path without the last array index token would have pointed to an element inside the *json_doc*, the element found by the stripped json path is replaced with single element json array and the **JSON_ARRAY_INSERT** operation is performed with the original json path.
  
-  Returns NULL if any argument is NULL.
-  An error occurs if any argument is invalid or if a json_path does not address a cell of an array inside the json_doc.
+  Returns **NULL** if any argument is **NULL**.
+  An error occurs if any argument is invalid or if a *json_path* does not address a cell of an array inside the *json_doc*.
 
 .. code-block:: sql
 
@@ -975,22 +978,22 @@ JSON_INSERT
 
 .. function:: JSON_INSERT (json_doc, json path, json_val [, json path, json_val] ...)
 
-  The **JSON_INSERT** function returns a modified copy of the first argument. For each given <json path, json_val> pair, the function inserts the value if no other value exists at the corresponding path.
+  The **JSON_INSERT** function returns a modified copy of the first argument. For each given <*json path*, *json_val*> pair, the function inserts the value if no other value exists at the corresponding path.
 
   The insertion rules for **JSON_INSERT** are the following:
 
-  The json_val is inserted if the json path addresses one of the following json values inside the json_doc:
+  The *json_val* is inserted if the json path addresses one of the following json values inside the *json_doc*:
   
-  - An inexistent object member of an existing json object. A (key, value) pair is added to the json object with the key being json path's last element and the value being the json_val.
-  - An array index past of an existing json array's end. The array is filled with nulls after the initial end of the array and the json_val is inserted at the specified index.
+  - An inexistent object member of an existing json object. A (*key*, *value*) pair is added to the json object with the key being json path's last element and the value being the *json_val*.
+  - An array index past of an existing json array's end. The array is filled with nulls after the initial end of the array and the *json_val* is inserted at the specified index.
 
   The document produced by evaluating one pair becomes the new value against which the next pair is evaluated. 
 
-  Returns NULL if any argument is NULL.
+  Returns **NULL** if any argument is **NULL**.
   An error occurs if any argument is invalid.
 
 
-Paths to existing elements inside the json_doc are ignored:
+Paths to existing elements inside the *json_doc* are ignored:
 
 .. code-block:: sql
 
@@ -1029,15 +1032,15 @@ JSON_SET
 
 .. function:: JSON_SET (json_doc, json path, json_val [, json path, json_val] ...)
 
-  The **JSON_SET** function returns a modified copy of the first argument. For each given <json path, json_val> pair, the function inserts or replaces the value at the corresponding path.
-  Otherwise, the json_val is inserted if the json path addresses one of the following json values inside the json_doc:
+  The **JSON_SET** function returns a modified copy of the first argument. For each given <*json path*, *json_val*> pair, the function inserts or replaces the value at the corresponding path.
+  Otherwise, the *json_val* is inserted if the json path addresses one of the following json values inside the *json_doc*:
 
-  - An inexistent object member of an existing json object. A (key, value) pair is added to the json object with the key deduced from the json path and the value being the json_val.
-  - An array index past of an existing json array's end. The array is filled with nulls after the initial end of the array and the json_val is inserted at the specified index.
+  - An inexistent object member of an existing json object. A (*key*, *value*) pair is added to the json object with the key deduced from the json path and the value being the *json_val*.
+  - An array index past of an existing json array's end. The array is filled with nulls after the initial end of the array and the *json_val* is inserted at the specified index.
 
   The document produced by evaluating one pair becomes the new value against which the next pair is evaluated. 
 
-  Returns NULL if any argument is NULL.
+  Returns **NULL** if any argument is **NULL**.
   An error occurs if any argument is invalid.
 
 .. code-block:: sql
@@ -1077,14 +1080,14 @@ JSON_REPLACE
 
 .. function:: JSON_REPLACE (json_doc, json path, json_val [, json path, json_val] ...)
 
- The **JSON_REPLACE** function returns a modified copy of the first argument. For each given <json path, json_val> pair, the function replaces the value only if another value is found at the corresponding path.
+ The **JSON_REPLACE** function returns a modified copy of the first argument. For each given <*json path*, *json_val*> pair, the function replaces the value only if another value is found at the corresponding path.
 
-  If the json_path does not exist inside the json_doc, the (json path, json_val) pair is ignored and has no effect.
+ If the *json_path* does not exist inside the *json_doc*, the (*json path*, *json_val*) pair is ignored and has no effect.
 
-  The document produced by evaluating one pair becomes the new value against which the next pair is evaluated. 
+ The document produced by evaluating one pair becomes the new value against which the next pair is evaluated. 
 
-  Returns NULL if any argument is NULL.
-  An error occurs if any argument is invalid.
+ Returns **NULL** if any argument is **NULL**.
+ An error occurs if any argument is invalid.
 
 .. code-block:: sql
 
@@ -1096,7 +1099,7 @@ JSON_REPLACE
     ======================
       {"a":"b"}
 
-No replacement is done if the json path does not exist inside the json_doc. 
+No replacement is done if the *json path*` does not exist inside the *json_doc*. 
 
 .. code-block:: sql
 
@@ -1125,12 +1128,12 @@ JSON_REMOVE
 
 .. function:: JSON_REMOVE (json_doc, json path [, json path] ...)
 
-The **JSON_REMOVE** function returns a modified copy of the first argument, by removing values from all given paths.
+ The **JSON_REMOVE** function returns a modified copy of the first argument, by removing values from all given paths.
 
-The json path arguments are evaluated one by one, from left to right. The result produced by evaluating a json path becomes the value against which the next json path is evaluated.
+ The json path arguments are evaluated one by one, from left to right. The result produced by evaluating a json path becomes the value against which the next json path is evaluated.
 
-  Returns NULL if any argument is NULL.
-  An error occurs if any argument is invalid or if a path points to the root or if a path does not exist.
+ Returns **NULL** if any argument is **NULL**.
+ An error occurs if any argument is invalid or if a path points to the root or if a path does not exist.
 
 .. code-block:: sql
 
@@ -1157,7 +1160,7 @@ The json path arguments are evaluated one by one, from left to right. The result
 JSON_TABLE
 =====================
 
-**JSON_TABLE** facilitates transforming jsons into a table-like structures
+**JSON_TABLE** function facilitates transforming jsons into a table-like structures
 that can be queried similarly as regular tables.
 The transformation generates a single row or multiple rows, by expanding for
 example the elements of a JSON_ARRAY.
@@ -1187,37 +1190,37 @@ The full syntax of **JSON_TABLE**:
         NULL | ERROR | DEFAULT value ON ERROR
 
 
-The json_doc expr must be an expression that results in a json_doc. This can be a constant json, a table's column or the result of a function or operator.
-The json path must be a valid path and is used to extract json data to be evaluated in the COLUMNS clause.
-The COLUMNS clause defines output column types and operations performed to get the output.  
-The [AS] alias clause is required.
+The *json_doc* expr must be an expression that results in a json_doc. This can be a constant json, a table's column or the result of a function or operator.
+The *json path* must be a valid path and is used to extract json data to be evaluated in the **COLUMNS** clause.
+The **COLUMNS** clause defines output column types and operations performed to get the output.  
+The [**AS**] *alias* clause is required.
 
 
 **JSON_TABLE** supports four types of columns:
 
-- name FOR ORDINALITY: this type keeps track of a row's number inside a COLUMNS clause. The column's type is INTEGER.
-- name type PATH json path [on empty] [on error]: Columns of this type are used to extract json_values from the specified json paths. The extracted json data is then coerced to the specified type.
-  If the path does not exist, json value triggers the on empty clause. The on error clause is triggered if the extracted json value is not coercible to the target type.
+- *name* **FOR ORDINALITY**: this type keeps track of a row's number inside a **COLUMNS** clause. The column's type is **INTEGER**.
+- *name* *type* **PATH** *json path* [**on empty**] [**on error**]: Columns of this type are used to extract json_values from the specified json paths. The extracted json data is then coerced to the specified type.
+  If the path does not exist, json value triggers the **on empty** clause. The **on error** clause is triggered if the extracted json value is not coercible to the target type.
 
-  - on empty determines the behavior of JSON_TABLE in case the path does not exist. On empty can have one of the following values:
+  - **on empty** determines the behavior of **JSON_TABLE** in case the path does not exist. **on empty** can have one of the following values:
 
-    - NULL ON EMPTY: the column is set to NULL. This is the default behavior.
-    - ERROR ON EMPTY: an error is thrown
-    - DEFAULT value ON EMPTY: value will be used instead of the missing value.
+    - **NULL ON EMPTY**: the column is set to **NULL**. This is the default behavior.
+    - **ERROR ON EMPTY**: an error is thrown
+    - **DEFAULT** *value* **ON EMPTY**: *value* will be used instead of the missing value.
 
-  - on error can have one of the following values:
+  - **on error** can have one of the following values:
 
-    - NULL ON ERROR: the column is set to NULL. This is the default behavior.
-    - ERROR ON ERROR: an error is thrown.
-    - DEFAULT value ON ERROR: value will be used instead of the array/object/json scalar that failed coercion to desired column type.
+    - **NULL ON ERROR**: the column is set to **NULL**. This is the default behavior.
+    - **ERROR ON ERROR**: an error is thrown.
+    - **DEFAULT** *value* **ON ERROR**: *value* will be used instead of the array/object/json scalar that failed coercion to desired column type.
 
-- name type EXISTS PATH json path: this returns 1 if any data is present at the json path location, 0 otherwise.
+- *name* *type* **EXISTS PATH** *json path*: this returns 1 if any data is present at the json path location, 0 otherwise.
 
-- NESTED [PATH] json path COLUMNS (column list) generates from json data \
+- **NESTED** [**PATH**] *json path* **COLUMNS** (*column list*) generates from json data \
   \found at path a separate subset of rows and columns that are combined \
-  \with the results of parent. Results are combined similarly as "for each"\
+  \with the results of parent. Results are combined similarly as "for each" \
   \ loops. The json path is relative to the parent's path. Same rules for \
-  \COLUMNS clause are applied recursively.
+  \ **COLUMNS** clause are applied recursively.
 
 .. code-block:: sql
 
@@ -1249,7 +1252,7 @@ Overriding the default on_error behavior, results in a different output from pre
                          1 -- first value found at '$.a[*]' is '1' json scalar, which is coercible to 1
                         -1 -- second value found at '$.a[*]' is '[2,3]' json array which cannot be coerced to int, triggering ON ERROR
 
-ON EMPTY example:
+**ON EMPTY** example:
 
 .. code-block:: sql
 
@@ -1267,10 +1270,10 @@ ON EMPTY example:
                 1         NULL            0 
 
 In the example below, '$.*' path will be used to make the parent columns receive root json object's member values one by one. Column a shows what is processed. Each member's value of
-the root object will then be processed further by the NESTED [PATH] clause. NESTED PATH uses path '$[*]' take each element of the array to be further processed by its columns.
-FOR ORDINALITY columns track the count of the current processed element. In the example's result we can see that for each new element in a column, the ord column's value also gets incremented.
-FOR ORDINALITY nested_ord column also acts as a counter of the number of elements processed by sibling columns. The nested FOR ORDINALITY column gets reset after finishing each processing batch.
-The third member's value, 6 cannot be treated as an array and therefore cannot be processed by the nested columns. Nested columns will yield NULL values. 
+the root object will then be processed further by the **NESTED** [**PATH**] clause. **NESTED PATH** uses path '$[*]' take each element of the array to be further processed by its columns.
+**FOR ORDINALITY** columns track the count of the current processed element. In the example's result we can see that for each new element in a column, the *ord* column's value also gets incremented.
+**FOR ORDINALITY** *nested_ord* column also acts as a counter of the number of elements processed by sibling columns. The nested **FOR ORDINALITY** column gets reset after finishing each processing batch.
+The third member's value, 6 cannot be treated as an array and therefore cannot be processed by the nested columns. Nested columns will yield **NULL** values. 
 
 .. code-block:: sql
 
@@ -1294,8 +1297,8 @@ The third member's value, 6 cannot be treated as an array and therefore cannot b
                3  6                            NULL  NULL                
                4  [7]                             1  7                   
 
-The following example showcases how multiple same-level NESTED [PATH] clauses are treated by the JSON_TABLE. The value to be processed gets passed once, one by one and in order, to each of the NESTED [PATH] clauses.
-During processing of a value by a NESTED [PATH] clause, any sibling NESTED [PATH] clauses will fill their column with NULL values.
+The following example showcases how multiple same-level **NESTED** [**PATH**] clauses are treated by the **JSON_TABLE**. The value to be processed gets passed once, one by one and in order, to each of the **NESTED** [**PATH**] clauses.
+During processing of a value by a **NESTED** [**PATH**] clause, any sibling **NESTED** [**PATH**] clauses will fill their column with **NULL** values.
 
 .. code-block:: sql
 
@@ -1320,7 +1323,7 @@ During processing of a value by a NESTED [PATH] clause, any sibling NESTED [PATH
                 1  {"key1":[1,2],"key2":[3,4,5]}         NULL  NULL                            3  5                   
                 2  {"key1":6,"key2":[7]}                 NULL  NULL                            1  7                   
 
-An example for multiple layers NESTED [PATH] clauses:
+An example for multiple layers **NESTED** [**PATH**] clauses:
 
 .. code-block:: sql
 

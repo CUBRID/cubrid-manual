@@ -2048,6 +2048,8 @@ The following example shows how to output the score and sample variance of all s
                 3  'Sara'                   4.300000000000000e+01     5.435000000000000e+02
                 3  'Wane'                   9.900000000000000e+01     5.435000000000000e+02
 
+.. _fn-json-arrayagg:
+
 JSON_ARRAYAGG
 ===================================
 
@@ -2076,6 +2078,8 @@ JSON_ARRAYAGG
       test_takers
     ======================
       ["Amie","Jane","Lora","James","Peter","Tom","Ralph","David","Amie"]
+
+.. _fn-json-objectagg:
 
 JSON_OBJECTAGG
 ===================================

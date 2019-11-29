@@ -100,13 +100,13 @@ The following table provides conventions on definitions used in the CUBRID Datab
 Version Name and Version String Conventions
 -------------------------------------------
 
-Rules for version naming and string since CUBRID 10.1 are as follows:
+Rules for version naming and string since CUBRID 10.0 are as follows:
 
 *  Version name: CUBRID M.m Patch p (Major version, Minor version, Patch version if necessary)
    CUBRID 10.1 Patch 1 (CUBRID 10.1 P1 in short)
 
 *  Version string: M.m.p.build_number (Major version, Minor version, Patch version, Build number)
-   10.1.0.7595-d652d64
+   10.2.0.8787-a31ea42
 
    Build number consists of two parts which are separated by a hyphen. The former is the number of changes from the base revision, which monotonically increases. The later is the SHA-1 hash of the build built.
    

@@ -353,7 +353,7 @@ JSON_PRETTY
 
 .. function:: JSON_PRETTY (json_doc)
 
-  Returns a string containing the json_doc pretty-printed.
+  Returns a string containing the *json_doc* pretty-printed.
   Returns **NULL** if *json_doc* argument is **NULL**.
 
 .. code-block:: sql
@@ -565,7 +565,7 @@ The following json path will match all json paths that end with a json array ind
 
 .. function:: json_doc ->> json path
 
-  Alias for **JSON_UNQUOTE**(json_doc->json path). Operator can be applied only on *json_doc* arguments that are columns.
+  Alias for **JSON_UNQUOTE** (json_doc->json path). Operator can be applied only on *json_doc* arguments that are columns.
   Raises an error if the json path is **NULL** or invalid.
   Returns **NULL** if it is applied on a **NULL** *json_doc* argument.
 
@@ -593,8 +593,11 @@ JSON_CONTAINS_PATH
 .. function:: JSON_CONTAINS_PATH (json_doc, one/all, json path [, json path] ...)
 
   The **JSON_CONTAINS_PATH** function verifies whether the given paths exist inside the *json_doc*.
+
   When one/all argument is 'all', all given paths must exist to return 1. Returns 0 otherwise.
+
   When one/all argument is 'one', it returns 1 if any given path exists. Returns 0 otherwise.
+
   Returns **NULL** if any argument is **NULL**.
   An error occurs if any argument is invalid.
 
@@ -640,11 +643,11 @@ JSON_CONTAINS
   The **JSON_CONTAINS** function verifies whether the *doc2* is contained inside the *doc1* at the optionally specified path.
   A json element contains another json element if the following recursive rules are satisfied:
 
-- A json scalar contains another json scalar if they have the same type (their **JSON_TYPE** () are equal) and are equal. As an exception, json integer can be compared and equal to json double (even if their **JSON_TYPE** () evaluation are different).
-- A json array contains a json scalar or a json object if any of json array's elements contains the json_nonarray.
-- A json array contains another json array if all the second json array's elements are contained in the first json array.
-- A json object contains another json object if, for every (*key2*, *value2*) pair in the second object, there exists a (*key1*, *value1*) pair in the first object with *key1*=*key2* and *value2* contained in *value1*.
-  Otherwise the json element is not contained.
+  - A json scalar contains another json scalar if they have the same type (their **JSON_TYPE** () are equal) and are equal. As an exception, json integer can be compared and equal to json double (even if their **JSON_TYPE** () evaluation are different).
+  - A json array contains a json scalar or a json object if any of json array's elements contains the json_nonarray.
+  - A json array contains another json array if all the second json array's elements are contained in the first json array.
+  - A json object contains another json object if, for every (*key2*, *value2*) pair in the second object, there exists a (*key1*, *value1*) pair in the first object with *key1* = *key2* and *value2* contained in *value1*.
+  - Otherwise the json element is not contained.
 
   Returns whether *doc2* is contained in root json element of *doc1* if no json path argument is given.
   Returns **NULL** if any argument is **NULL**.
@@ -783,10 +786,10 @@ JSON_MERGE_PRESERVE
 
   The merging of two json documents is performed after the following rules, recursively:
   
-- when two json arrays are merged, they are concatenated.
-- when two non-array (scalar/object) json elements are merged and at most one of them is a json object, the result is an array containing the two json elements.
-- when a non-array json element is merged with a json array, the non-array is wrapped as a single element json array and then merged with the json array according to json array merging rules.
-- when two json objects are merged, all pairs that do not have a corresponding pair in the other json object are preserved. For matching keys, the values are always merged by applying the rules recursively.
+  - when two json arrays are merged, they are concatenated.
+  - when two non-array (scalar/object) json elements are merged and at most one of them is a json object, the result is an array containing the two json elements.
+  - when a non-array json element is merged with a json array, the non-array is wrapped as a single element json array and then merged with the json array according to json array merging rules.
+  - when two json objects are merged, all pairs that do not have a corresponding pair in the other json object are preserved. For matching keys, the values are always merged by applying the rules recursively.
 
   Merge operations are executed serially when there are more than two arguments: the result of merging first two arguments is merged with third, this result is then merged with fourth and so on.
 
@@ -846,8 +849,8 @@ JSON_ARRAY_APPEND
 
   The (*json path*, *json_val*) pairs are evaluated one by one, from left to right. The document produced by evaluating one pair becomes the new value against which the next pair is evaluated.
 
-  If the json path points to a json array inside the json_doc, the json_val is appended at the end of the array. 
-  If the json path points to a non-array json element, the non-array gets wrapped as a single element json array containing the referred non-array element followed by the appending of the given json_val.
+  If the json path points to a json array inside the *json_doc*, the *json_val* is appended at the end of the array. 
+  If the json path points to a non-array json element, the non-array gets wrapped as a single element json array containing the referred non-array element followed by the appending of the given *json_val*.
 
   Returns **NULL** if any argument is **NULL**.
   An error occurs if any argument is invalid.
@@ -956,7 +959,7 @@ JSON_INSERT
 
   The insertion rules for **JSON_INSERT** are the following:
 
-  The json_val is inserted if the json path addresses one of the following json values inside the *json_doc*:
+  The *json_val* is inserted if the json path addresses one of the following json values inside the *json_doc*:
   
   - An inexistent object member of an existing json object. A (*key*, *value*) pair is added to the json object with the key being json path's last element and the value being the *json_val*.
   - An array index past of an existing json array's end. The array is filled with nulls after the initial end of the array and the *json_val* is inserted at the specified index.
@@ -1054,14 +1057,14 @@ JSON_REPLACE
 
 .. function:: JSON_REPLACE (json_doc, json path, json_val [, json path, json_val] ...)
 
- The **JSON_REPLACE** function returns a modified copy of the first argument. For each given <json path, json_val> pair, the function replaces the value only if another value is found at the corresponding path.
+ The **JSON_REPLACE** function returns a modified copy of the first argument. For each given <*json path*, *json_val*> pair, the function replaces the value only if another value is found at the corresponding path.
 
-  If the json_path does not exist inside the json_doc, the (json path, json_val) pair is ignored and has no effect.
+ If the *json_path* does not exist inside the *json_doc*, the (*json path*, *json_val*) pair is ignored and has no effect.
 
-  The document produced by evaluating one pair becomes the new value against which the next pair is evaluated. 
+ The document produced by evaluating one pair becomes the new value against which the next pair is evaluated. 
 
-  Returns **NULL** if any argument is **NULL**.
-  An error occurs if any argument is invalid.
+ Returns **NULL** if any argument is **NULL**.
+ An error occurs if any argument is invalid.
 
 .. code-block:: sql
 
@@ -1073,7 +1076,7 @@ JSON_REPLACE
     ======================
       {"a":"b"}
 
-No replacement is done if the json path does not exist inside the json_doc. 
+No replacement is done if the *json path*` does not exist inside the *json_doc*. 
 
 .. code-block:: sql
 
@@ -1102,12 +1105,12 @@ JSON_REMOVE
 
 .. function:: JSON_REMOVE (json_doc, json path [, json path] ...)
 
-The **JSON_REMOVE** function returns a modified copy of the first argument, by removing values from all given paths.
+ The **JSON_REMOVE** function returns a modified copy of the first argument, by removing values from all given paths.
 
-The json path arguments are evaluated one by one, from left to right. The result produced by evaluating a json path becomes the value against which the next json path is evaluated.
+ The json path arguments are evaluated one by one, from left to right. The result produced by evaluating a json path becomes the value against which the next json path is evaluated.
 
-  Returns **NULL** if any argument is **NULL**.
-  An error occurs if any argument is invalid or if a path points to the root or if a path does not exist.
+ Returns **NULL** if any argument is **NULL**.
+ An error occurs if any argument is invalid or if a path points to the root or if a path does not exist.
 
 .. code-block:: sql
 

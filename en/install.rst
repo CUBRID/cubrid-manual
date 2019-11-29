@@ -35,6 +35,8 @@ Compatibility
 
 *   Applications that use JDBC, PHP or CCI APIs from 2008 R4.1 or higher version of CUBRID can access the CUBRID 10.2 database. However, you must link the CUBRID 10.2 library or use the driver to use the added/improved features of JDBC, PHP or CCI interfaces. In order to use :ref:`timezone-type` which are introduced as 10.0, users should upgrade drivers.
 
+*   Old driver versions connecting to CUBRID 10.2 server interpret a JSON type column as Varchar.
+
 *   Note that query results may differ from those given in the earlier version because new reserved words have been added, and the specifications for some queries have been changed.
 
 *   An application that is developed by using the GLO class can be used after it is converted to an application or schema suitable to the BLOB or CLOB type.
@@ -60,7 +62,7 @@ Compatibility
     
 *   Even if the operating systems are different, their interoperability is guaranteed if the bit version of a DB server is identical to the bit version of a broker server. 
 
-    For example, the 64-bit DB server for Linux is interoperable with the 64-bit broker server for Windows, but it is not interoperable with a 32-bit broker server.
+    For example, the 64-bit DB server for Linux is interoperable with the 64-bit broker server for Windows.
 
     For the relation between DB server and broker, see :doc:`intro`.
 
@@ -151,7 +153,7 @@ When you want to check whether CUBRID Manager server and CUBRID broker works wel
 
 **Installing CUBRID (rpm File)**
 
-You can install CUBRID by using rpm file that is created on CentOS 5. The way of installing and uninstalling CUBRID is the same as that of using general rpm utility. While CUBRID is being installed, a new system group (cubrid) and a user account (cubrid) are created. After installation is complete, you should log in with a cubrid user account to start a CUBRID service.::
+You can install CUBRID by using rpm file that is created on CentOS 6. The way of installing and uninstalling CUBRID is the same as that of using general rpm utility. While CUBRID is being installed, a new system group (cubrid) and a user account (cubrid) are created. After installation is complete, you should log in with a cubrid user account to start a CUBRID service.::
 
     $ rpm -Uvh cubrid-10.2.0.8787-a31ea42-Linux.x86_64.rpm
 

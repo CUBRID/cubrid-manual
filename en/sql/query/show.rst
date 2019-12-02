@@ -215,6 +215,7 @@ Null                                VARCHAR         YES if a column can include 
 Index_type                          VARCHAR         Index to be used (currently, only the BTREE is supported.)
 Func                                VARCHAR         A function which is used in a function-based index
 Comment                             VARCHAR         Comment to describe the index
+Visible                             VARCHAR         Shows the Visibility of an index (YES/NO)
 =================================== =============== ======================================================================================================================================
 
 The following shows the examples of this syntax.
@@ -225,12 +226,9 @@ The following shows the examples of this syntax.
     
 ::
 
-	  Table                  Non_unique  Key_name              Seq_in_index  Column_name           Collation             Cardinality     Sub_part  Packed                Null        
-			  Index_type            Func                  Comment             
-	=================================================================================================================================================================================
-	==========================================================================
-	  'athlete'                       0  'pk_athlete_code'                1  'code'                'A'                          6677         NULL  NULL                  'NO'        
-			  'BTREE'               NULL                  NULL 
+    Table                  Non_unique  Key_name              Seq_in_index  Column_name           Collation             Cardinality     Sub_part  Packed                Null                  Index_type            Func                  Comment               Visible
+    =================================================================================================================================================================================================================================================================================
+    'athlete'                       0  'pk_athlete_code'                1  'code'                'A'                          6677         NULL  NULL                  'NO'                  'BTREE'               NULL                  NULL                  'YES'
 
 .. code-block:: sql
 
@@ -240,32 +238,24 @@ The following shows the examples of this syntax.
     CREATE INDEX i_tbl1_s1 ON tbl1 (s1 (7));
     CREATE INDEX i_tbl1_i1_s1 ON tbl1 (i1, s1);
     CREATE UNIQUE INDEX i_tbl1_i2_s2 ON tbl1 (i2, s2);
+    
+    ALTER INDEX i_tbl1_s1 ON tbl1 INVISIBLE;
      
     SHOW INDEXES FROM tbl1;
-    
+  
 ::
 
-	  Table                  Non_unique  Key_name              Seq_in_index  Column_name           Collation             Cardinality     Sub_part  Packed                Null        
-			  Index_type            Func                  Comment             
-	=================================================================================================================================================================================
-	==========================================================================
-	  'tbl1'                          1  'i_tbl1_i1'                      1  'i1'                  'D'                             0         NULL  NULL                  'YES'       
-			  'BTREE'               NULL                  NULL                
-	  'tbl1'                          1  'i_tbl1_i1_s1'                   1  'i1'                  'A'                             0         NULL  NULL                  'YES'       
-			  'BTREE'               NULL                  NULL                
-	  'tbl1'                          1  'i_tbl1_i1_s1'                   2  's1'                  'A'                             0         NULL  NULL                  'YES'       
-			  'BTREE'               NULL                  NULL                
-	  'tbl1'                          0  'i_tbl1_i2_s2'                   1  'i2'                  'A'                             0         NULL  NULL                  'NO'        
-			  'BTREE'               NULL                  NULL                
-	  'tbl1'                          0  'i_tbl1_i2_s2'                   2  's2'                  'A'                             0         NULL  NULL                  'YES'       
-			  'BTREE'               NULL                  NULL                
-	  'tbl1'                          1  'i_tbl1_s1'                      1  's1'                  'A'                             0            7  NULL                  'YES'       
-			  'BTREE'               NULL                  NULL                
-	  'tbl1'                          0  'u_tbl1_i3'                      1  'i3'                  'A'                             0         NULL  NULL                  'YES'       
-			  'BTREE'               NULL                  NULL                
-	  'tbl1'                          0  'u_tbl1_s3'                      1  's3'                  'A'                             0         NULL  NULL                  'YES'       
-			  'BTREE'               NULL                  NULL            
-		  
+    Table                  Non_unique  Key_name              Seq_in_index  Column_name           Collation             Cardinality     Sub_part  Packed                Null                  Index_type            Func                  Comment               Visible
+    =================================================================================================================================================================================================================================================================================
+    'tbl1'                          1  'i_tbl1_i1'                      1  'i1'                  'D'                             0         NULL  NULL                  'YES'                 'BTREE'               NULL                  NULL                  'YES'
+    'tbl1'                          1  'i_tbl1_i1_s1'                   1  'i1'                  'A'                             0         NULL  NULL                  'YES'                 'BTREE'               NULL                  NULL                  'YES'
+    'tbl1'                          1  'i_tbl1_i1_s1'                   2  's1'                  'A'                             0         NULL  NULL                  'YES'                 'BTREE'               NULL                  NULL                  'YES'
+    'tbl1'                          0  'i_tbl1_i2_s2'                   1  'i2'                  'A'                             0         NULL  NULL                  'NO'                  'BTREE'               NULL                  NULL                  'YES'
+    'tbl1'                          0  'i_tbl1_i2_s2'                   2  's2'                  'A'                             0         NULL  NULL                  'YES'                 'BTREE'               NULL                  NULL                  'YES'
+    'tbl1'                          1  'i_tbl1_s1'                      1  's1'                  'A'                             0            7  NULL                  'YES'                 'BTREE'               NULL                  NULL                  'NO'
+    'tbl1'                          0  'u_tbl1_i3'                      1  'i3'                  'A'                             0         NULL  NULL                  'YES'                 'BTREE'               NULL                  NULL                  'YES'
+    'tbl1'                          0  'u_tbl1_s3'                      1  's3'                  'A'                             0         NULL  NULL                  'YES'                 'BTREE'               NULL                  NULL                  'YES'		  
+
 .. _show-collation-statement:
  
 SHOW COLLATION

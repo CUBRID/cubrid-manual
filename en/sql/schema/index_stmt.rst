@@ -20,7 +20,7 @@ For how to use indexes on the **SELECT** statement like Using SQL Hint, Descendi
         <index_col_desc> ::=
             { ( column_name [ASC | DESC] [ {, column_name [ASC | DESC]} ...] ) [ WHERE <filter_predicate> ] | 
             (function_name (argument_list) ) } 
-                [WITH ONLINE [PARALLEL parallel_count]]
+                { [[WITH ONLINE [PARALLEL parallel_count]] | [INVISIBLE] | [VISIBLE]] }
                 [COMMENT 'index_comment_string']
 
 *   **UNIQUE**: creates an index with unique values.
@@ -34,6 +34,8 @@ For how to use indexes on the **SELECT** statement like Using SQL Hint, Descendi
 *   *function_name* (*argument_list*): Defines the conditions to create function-based indexes. Regarding this, definitely watch :ref:`function-index`.
 
 *   **WITH ONLINE**: creates the index while allowing changes of table data from other transactions. If **PARALLEL** is not specified, the index is created using the transaction thread. <*parallel_count*> is the number of threads to be used for creating the index and it must be a integer between 1 and 16.
+
+*   **INVISIBLE**: creates the index with its status set to **INVISIBLE**, meaning queries executed will not take into account the index. If **INVISIBLE** is omitted, the index will be created with its status set to **NORMAL_INDEX**.
 
 *   *index_comment_string*: specifies a comment of an index.
 
@@ -229,7 +231,7 @@ Online unique index while other transactions inserts violates uniqueness
 ALTER INDEX
 ===========
 
-The **ALTER INDEX** statement rebuilds an index or adds/changes the comment of an index. Rebuilding an index is a job which drops and recreates an index.
+The **ALTER INDEX** statement changes the properties of an index. Index is rebuilt unless only comment or status is changed. Rebuilding an index is a job which drops and recreates an index.
 
 The following is a syntax of rebuilding an index.
 
@@ -261,7 +263,7 @@ The following is an example of recreating index.
 
 If you want to add or change a comment of the index without rebuilding an index, add a **COMMENT** clause and remove **REBUILD** keyword as follows:
 
-::
+.. code-block:: sql
 
     ALTER INDEX index_name ON table_name COMMENT 'index_comment_string' ;
 
@@ -273,9 +275,17 @@ The below is a syntax to only add or change a comment without rebuilding an inde
 
 The following is a syntax of renaming an index.
 
-:: 
+.. code-block:: sql
 
     ALTER INDEX old_index_name ON table_name RENAME TO new_index_name [COMMENT 'index_comment_string'] ;
+
+The following is a syntax to change the status of an index to **INVISIBLE**/**VISIBLE**. When an index is set as **INVISIBLE**, queries will be executed as like the index does not exist. In this way, the performance of the index may be tested and the impact of its removal be evaluated without actually dropping the index.
+
+.. code-block:: sql
+    
+    CREATE INDEX i_game_medal ON game(medal);
+    ALTER INDEX i_game_medal ON game VISIBLE;
+    ALTER INDEX i_game_medal ON game INVISIBLE;
 
 
 DROP INDEX

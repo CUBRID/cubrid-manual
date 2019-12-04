@@ -1,7 +1,7 @@
 :tocdepth: 3
 
 ******************
-10.1 Release Notes
+10.2 Release Notes
 ******************
 
 .. contents::
@@ -9,79 +9,74 @@
 Release Notes Information
 =========================
 
-This document includes information on CUBRID 10.1 Patch 1(Build Number: 10.1.1.7691-47d2437).
+This document includes information on CUBRID 10.2(Build Number: 10.2.0.8796-daeccf9).
 
-CUBRID 10.1 includes all of the fixed errors and improved features that were detected in the CUBRID 10.0 and were applied to the previous versions.
+CUBRID 10.2 includes all of the fixed errors and improved features that were detected in the CUBRID 10.1 and were applied to the previous versions.
 
+For CUBRID 10.1, please find http://www.cubrid.org/manual/en/10.1/release_note/index.html.
 For CUBRID 10.0, please find http://www.cubrid.org/manual/en/10.0/release_note/index.html.
-
 For CUBRID 9.3 or earlier, please find http://www.cubrid.org/documentation/manuals/other-versions.
 
 Overview
 ========
 
-CUBRID 10.1 is a significant upgrade and stable version of CUBRID 10.0. 
-
-CUBRID 10.1 Patch 1 includes many critical fixes of 10.1. All users of CUBRID 10.1 are kindly requested to upgrade to 10.1 Patch 1.
+CUBRID 10.2 is the latest stable version that includes new features, significant changes and enhancements.
 
 .. TODO: UPDATE WITH DETAILS.
 
-CUBRID 10.1
+CUBRID 10.2
 
 * is a significantly improved version.
 * is more reliable, faster and scalable.
 * fixes a large number of critical bugs.
-* includes useful SQL extensions: CTE(Common Table Expressions) and others
-* includes huge scale of code refactoring.
+* includes useful SQL extensions: JSON data type and CTE(Common Table Expressions) extensions.
+* includes many enhancements to index management: Online parallel index loading, Faster foreign key loading, Invisible Index.
+* includes huge scale of code refactoring and modernization.
 
-CUBRID 10.1 is **faster**. It has almost doubled the optimum workloads of TPC-C benchmark since CUBRID 9.3. In parallel, we also followed and improved results for sysbench (157%: 10.0, 128%: 9.3), YCSB workload A (126%: 10.0, 163%: 9.3), YCSB workload B (119%: 10.0, 147%: 9.3) and TPC-W (126%: 10.0, 370%: 9.3). CUBRID 10.1 also significantly improves replication performance.
+CUBRID 10.2 is **faster**. It optimizes auto-commit workloads, for instance, YCSB Workload A (140%: 10.1) and YCSB Workload B (130%: 10.1). For faster bulk data loading, CUBRID 10.2 has online parallel loader which shows x10 performance to CUBRID 10.1.
 
-CUBRID 10.1 is **stronger** by rewritting the entire storage engine. As a result, large databases loading is three times faster, while other basic operations for very large databases, it can't be even compared with previous versions.
+CUBRID 10.2 is also **better**, bringing new features. CUBRID 10.2 supports built-in JSON data types, path, functions and operators. Common Table Expressions is now allowed for INSERT, REPLACE, DELETE, UPDATE, CREATE TABLE AS SELECT as well as SELECT. \
+Index management is greatly improved. To load a secondary key is no more painful. It supports online index loading which allows other select and DMLs without loosing throughputs during index loading. It also provides parallel option to load an online index, which greatly helps for faster loading. \
+It also provides from x2 to x3 performance boost to load foreign keys. \
+Invisible index helps DBAs to test effect of removing an index without making a disruptive change.
 
-CUBRID 10.1 is also **better**, bringing new features. Common Table Expressions is old wish fulfilled by CUBRID 10.1; developers may finally write complex queries easier and clearer, recursive queries included.
+CUBRID 10.2 is **stronger** by double write buffer.
 
-CUBRID 10.1 is more **stable** too. It has fixed over 1000+ issues as CUBRID 10.1 and 5000+ from CUBRID 10.0, which is more than the total issue numbers fixed in all CUBRID 9.x versions.
+CUBRID 10.2 is more **stable** too. It has fixed over 1300+ issues as CUBRID 10.2 and passed rigorous tests.
 
-All the users of CUBRID 10.0 should upgrade to CUBRID 10.1. We also recommend upgrading CUBRID 9.x and earlier versions to CUBRID 10.1.
-The database volume of CUBRID 10.1 is not compatible with that of CUBRID 10.0 and earlier versions. Therefore, if you use CUBRID 10.0 or earlier, you must **migrate your databases**. Regarding this, see :doc:`/upgrade`.
+CUBRID 10.2 is built with devtoolset-8(g++ 8.2.1) of Linux.
+
+The database volume of CUBRID 10.2 is not compatible with that of CUBRID 10.1 and earlier versions. Therefore, if you use CUBRID 10.1 or earlier, you must **migrate your databases**. Regarding this, see :doc:`/upgrade`.
 
 .. TODO: coming soon 
 
 Driver Compatibility
 --------------------
 
-*   The JDBC and CCI driver of CUBRID 10.1 are compatible with the DB server of CUBRID 10.0, 9.3, 9.2, 9.1, 2008 R4.4, R4.3 or R4.1.
+*   The JDBC and CCI driver of CUBRID 10.2 are compatible with the DB server of CUBRID 10.1, 10.0, 9.3, 9.2, 9.1, 2008 R4.4, R4.3 or R4.1.
 *   To upgrade drivers are highly recommended.
 
-We strongly recommend to also upgrade your drivers to use CUBRID 10.1. Some new features, especially for TIMEZONE data types are only supported with 10.0 and higher drivers. 
+We strongly recommend to also upgrade your drivers to use CUBRID 10.2. Some new features, especially for JSON data types are only supported with 10.2 drivers.
 
-For more details on changes, see the :ref:`10_1_changes`. Users of previous versions should check the :ref:`10_1_changes` and :ref:`10_1_new_cautions` sections.
+For more details on changes, see the :ref:`10_1_changes`. Users of previous versions should check the :ref:`10_2_changes` and :ref:`10_2_new_cautions` sections.
 
-.. _10_1_p1_changes:
+.. _10_2_changes:
 
-10.1 Patch 1 Changes 
-====================
-
-.. include:: changes_10_1_patch.rst 
-
-
-.. _10_1_changes:
-
-10.1 Changes 
+10.2 Changes
 ============
 
-.. include:: changes_10_1.rst
+Please refer to https://github.com/CUBRID/cubrid/releases/tag/v10.2 for changelogs of CUBRID 10.2.
 
 
 Cautions
 =========
 
-.. _10_1_new_cautions:
+.. _10_2_new_cautions:
 
 New Cautions
 ------------
 
-The database volume of CUBRID 10.1 is not compatible with that of CUBRID 10.0 and earlier versions. 
+The database volume of CUBRID 10.2 is not compatible with that of CUBRID 10.1 and earlier versions.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Existing Cautions

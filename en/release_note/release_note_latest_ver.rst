@@ -14,7 +14,9 @@ This document includes information on CUBRID 10.2(Build Number: 10.2.0.8796-daec
 CUBRID 10.2 includes all of the fixed errors and improved features that were detected in the CUBRID 10.1 and were applied to the previous versions.
 
 For CUBRID 10.1, please find http://www.cubrid.org/manual/en/10.1/release_note/index.html.
+
 For CUBRID 10.0, please find http://www.cubrid.org/manual/en/10.0/release_note/index.html.
+
 For CUBRID 9.3 or earlier, please find http://www.cubrid.org/documentation/manuals/other-versions.
 
 Overview
@@ -27,7 +29,7 @@ CUBRID 10.2 is the latest stable version that includes new features, significant
 CUBRID 10.2
 
 * is a significantly improved version.
-* is more reliable, faster and scalable.
+* is more reliable, faster and scalable: Online parallel data loading, optimizes auto-commit workloads
 * fixes a large number of critical bugs.
 * includes useful SQL extensions: JSON data type and CTE(Common Table Expressions) extensions.
 * includes many enhancements to index management: Online parallel index loading, Faster foreign key loading, Invisible Index.
@@ -35,16 +37,14 @@ CUBRID 10.2
 
 CUBRID 10.2 is **faster**. It optimizes auto-commit workloads, for instance, YCSB Workload A (140%: 10.1) and YCSB Workload B (130%: 10.1). For faster bulk data loading, CUBRID 10.2 has online parallel loader which shows x10 performance to CUBRID 10.1.
 
-CUBRID 10.2 is also **better**, bringing new features. CUBRID 10.2 supports built-in JSON data types, path, functions and operators. Common Table Expressions is now allowed for INSERT, REPLACE, DELETE, UPDATE, CREATE TABLE AS SELECT as well as SELECT. \
-Index management is greatly improved. To load a secondary key is no more painful. It supports online index loading which allows other select and DMLs without loosing throughputs during index loading. It also provides parallel option to load an online index, which greatly helps for faster loading. \
+CUBRID 10.2 is also **better**, bringing new features. CUBRID 10.2 supports built-in JSON data types, path, functions and operators. Common Table Expression is now allowed for INSERT, REPLACE, DELETE, UPDATE, CREATE TABLE AS SELECT as well as SELECT. \
+Index management is greatly improved. To load a secondary key is no more painful. It supports online index loading which allows other select and DMLs without loosing throughputs. It even provides parallel option to load an online index, which greatly speeds up index loading. \
 It also provides from x2 to x3 performance boost to load foreign keys. \
 Invisible index helps DBAs to test effect of removing an index without making a disruptive change.
 
-CUBRID 10.2 is **stronger** by double write buffer.
+CUBRID 10.2 is more **reliable** and **stable** too. Double Write Buffer protects against I/O partial writes and includes many optimizations to minimize performance degradation. It has fixed over 1300+ issues as CUBRID 10.2 and passed rigorous tests.
 
-CUBRID 10.2 is more **stable** too. It has fixed over 1300+ issues as CUBRID 10.2 and passed rigorous tests.
-
-CUBRID 10.2 is built with devtoolset-8(g++ 8.2.1) of Linux.
+CUBRID 10.2 is built with devtoolset-8(GCC 8.2) of Linux and VS 2017 of Windows. CUBRID code is completely recompiled with C++ and new features implementation fully exploit the C++ extensions and STL.
 
 The database volume of CUBRID 10.2 is not compatible with that of CUBRID 10.1 and earlier versions. Therefore, if you use CUBRID 10.1 or earlier, you must **migrate your databases**. Regarding this, see :doc:`/upgrade`.
 
@@ -58,14 +58,14 @@ Driver Compatibility
 
 We strongly recommend to also upgrade your drivers to use CUBRID 10.2. Some new features, especially for JSON data types are only supported with 10.2 drivers.
 
-For more details on changes, see the :ref:`10_1_changes`. Users of previous versions should check the :ref:`10_2_changes` and :ref:`10_2_new_cautions` sections.
+For more details on changes, see the :ref:`10_2_changes`. Users of previous versions should check the :ref:`10_2_changes` and :ref:`10_2_new_cautions` sections.
 
 .. _10_2_changes:
 
 10.2 Changes
 ============
 
-Please refer to https://github.com/CUBRID/cubrid/releases/tag/v10.2 for changelogs of CUBRID 10.2.
+Please refer to `change logs of CUBRID 10.2 <https://github.com/CUBRID/cubrid/releases/tag/v10.2>`_.
 
 
 Cautions

@@ -9,7 +9,7 @@
 Release Notes Information
 =========================
 
-This document includes information on CUBRID 10.2(Build Number: 10.2.0.8796-daeccf9).
+This document includes information on CUBRID 10.2(Build Number: 10.2.0.8797-d56a158).
 
 CUBRID 10.2 includes all of the fixed errors and improved features that were detected in the CUBRID 10.1 and were applied to the previous versions.
 

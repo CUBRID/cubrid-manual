@@ -1233,6 +1233,190 @@ POSITION
     =================================
                                     5
 
+REGEXP_COUNT
+========
+
+.. function:: REGEXP_COUNT (string, pattern_string [, position [, match_type]]])
+
+    The **REGEXP_COUNT** function searches for a regular expression pattern, *pattern_string*, within a given character string, *string*, and replaces it with a character string, *replacement_string*. If **NULL** is specified as an argument, **NULL** is returned.
+
+    :param string: Specifies the original string. If the value is **NULL**, **NULL** is returned.
+    :param pattern_string: Specifies the regular expression pattern string to be searched. If the value is **NULL**, **NULL** is returned.
+    :param position: Specifies the position of the *string* to start the search. If the value is ommitted, the default value 1 is applied. If the value is negative or zero, an error will be returned. If the value is **NULL**, **NULL** is returned
+    :param match_type: Specifies the string to change default matching behavior of the function. If the value is ommitted, the default value 'c' is applied. If the value is **NULL**, **NULL** is returned.
+    :rtype: STRING
+
+.. code-block:: sql
+
+    --it returns NULL when an argument is specified with NULL value
+    SELECT REGEXP_REPLACE('12345abcdeabcde','[a-d]',NULL);
+    
+::
+
+    regexp_replace('12345abcdeabcde', '[a-d]', null)
+    ======================
+      NULL
+     
+.. code-block:: sql
+
+    --not only the first substring but all substrings into 'ABCDE' are replaced
+    SELECT REPLACE('12345abcdeabcde','abcde','ABCDE');
+    
+::
+
+    replace('12345abcdeabcde', 'abcde', 'ABCDE')
+    ======================
+      '12345ABCDEABCDE'
+
+REGEXP_INSTR
+========
+
+.. function:: REGEXP_INSTR (string, pattern_string, replacement_string [, position [, occurrence [, match_type]]])
+
+    The **REGEXP_INSTR** function searches for a regular expression pattern, *pattern_string*, within a given character string, *string*, and replaces it with a character string, *replacement_string*. If **NULL** is specified as an argument, **NULL** is returned.
+
+    :param string: Specifies the original string. If the value is **NULL**, **NULL** is returned.
+    :param pattern_string: Specifies the regular expression pattern string to be searched. If the value is **NULL**, **NULL** is returned.
+    :param replacement_string: Specifies the string to replace the matched string by *pattern_string*. If the value is **NULL**, **NULL** is returned.
+    :param position: Specifies the position of the *string* to start the search. If the value is ommitted, the default value 1 is applied. If the value is negative or zero, an error will be returned. If the value is **NULL**, **NULL** is returned
+    :param occurrence: Specifies the occurrence of replacement. If the value is ommitted, the default value 0 is applied. If the value is negative, an error will be returned. If the value is **NULL**, **NULL** is returned.
+    :param match_type: Specifies the string to change default matching behavior of the function. If the value is ommitted, the default value 'c' is applied. If the value is **NULL**, **NULL** is returned.
+    :rtype: STRING
+
+.. code-block:: sql
+
+    --it returns NULL when an argument is specified with NULL value
+    SELECT REGEXP_REPLACE('12345abcdeabcde','[a-d]',NULL);
+    
+::
+
+    regexp_replace('12345abcdeabcde', '[a-d]', null)
+    ======================
+      NULL
+     
+.. code-block:: sql
+
+    --not only the first substring but all substrings into 'ABCDE' are replaced
+    SELECT REPLACE('12345abcdeabcde','abcde','ABCDE');
+    
+::
+
+    replace('12345abcdeabcde', 'abcde', 'ABCDE')
+    ======================
+      '12345ABCDEABCDE'
+
+REGEXP_LIKE
+========
+
+.. function:: REGEXP_LIKE (string, pattern_string, replacement_string [, position [, occurrence [, match_type]]])
+
+    The **REGEXP_LIKE** function searches for a regular expression pattern, *pattern_string*, within a given character string, *string*, and replaces it with a character string, *replacement_string*. If **NULL** is specified as an argument, **NULL** is returned.
+
+    :param string: Specifies the original string. If the value is **NULL**, **NULL** is returned.
+    :param pattern_string: Specifies the regular expression pattern string to be searched. If the value is **NULL**, **NULL** is returned.
+    :param replacement_string: Specifies the string to replace the matched string by *pattern_string*. If the value is **NULL**, **NULL** is returned.
+    :param position: Specifies the position of the *string* to start the search. If the value is ommitted, the default value 1 is applied. If the value is negative or zero, an error will be returned. If the value is **NULL**, **NULL** is returned
+    :param occurrence: Specifies the occurrence of replacement. If the value is ommitted, the default value 0 is applied. If the value is negative, an error will be returned. If the value is **NULL**, **NULL** is returned.
+    :param match_type: Specifies the string to change default matching behavior of the function. If the value is ommitted, the default value 'c' is applied. If the value is **NULL**, **NULL** is returned.
+    :rtype: STRING
+
+.. code-block:: sql
+
+    --it returns NULL when an argument is specified with NULL value
+    SELECT REGEXP_REPLACE('12345abcdeabcde','[a-d]',NULL);
+    
+::
+
+    regexp_replace('12345abcdeabcde', '[a-d]', null)
+    ======================
+      NULL
+     
+.. code-block:: sql
+
+    --not only the first substring but all substrings into 'ABCDE' are replaced
+    SELECT REPLACE('12345abcdeabcde','abcde','ABCDE');
+    
+::
+
+    replace('12345abcdeabcde', 'abcde', 'ABCDE')
+    ======================
+      '12345ABCDEABCDE'
+
+REGEXP_REPLACE
+========
+
+.. function:: REGEXP_REPLACE (string, pattern_string, replacement_string [, position [, occurrence [, match_type]]])
+
+    The **REGEXP_REPLACE** function searches for a regular expression pattern, *pattern_string*, within a given character string, *string*, and replaces it with a character string, *replacement_string*. If **NULL** is specified as an argument, **NULL** is returned.
+
+    :param string: Specifies the original string. If the value is **NULL**, **NULL** is returned.
+    :param pattern_string: Specifies the regular expression pattern string to be searched. If the value is **NULL**, **NULL** is returned.
+    :param replacement_string: Specifies the string to replace the matched string by *pattern_string*. If the value is **NULL**, **NULL** is returned.
+    :param position: Specifies the position of the *string* to start the search. If the value is ommitted, the default value 1 is applied. If the value is negative or zero, an error will be returned. If the value is **NULL**, **NULL** is returned
+    :param occurrence: Specifies the occurrence of replacement. If the value is ommitted, the default value 0 is applied. If the value is negative, an error will be returned. If the value is **NULL**, **NULL** is returned.
+    :param match_type: Specifies the string to change default matching behavior of the function. If the value is ommitted, the default value 'c' is applied. If the value is **NULL**, **NULL** is returned.
+    :rtype: STRING
+
+.. code-block:: sql
+
+    --it returns NULL when an argument is specified with NULL value
+    SELECT REGEXP_REPLACE('12345abcdeabcde','[a-d]',NULL);
+    
+::
+
+    regexp_replace('12345abcdeabcde', '[a-d]', null)
+    ======================
+      NULL
+     
+.. code-block:: sql
+
+    --not only the first substring but all substrings into 'ABCDE' are replaced
+    SELECT REPLACE('12345abcdeabcde','abcde','ABCDE');
+    
+::
+
+    replace('12345abcdeabcde', 'abcde', 'ABCDE')
+    ======================
+      '12345ABCDEABCDE'
+
+REGEXP_SUBSTR
+========
+
+.. function:: REGEXP_REPLACE (string, pattern_string, replacement_string [, position [, occurrence [, match_type]]])
+
+    The **REGEXP_REPLACE** function searches for a regular expression pattern, *pattern_string*, within a given character string, *string*, and replaces it with a character string, *replacement_string*. If **NULL** is specified as an argument, **NULL** is returned.
+
+    :param string: Specifies the original string. If the value is **NULL**, **NULL** is returned.
+    :param pattern_string: Specifies the regular expression pattern string to be searched. If the value is **NULL**, **NULL** is returned.
+    :param replacement_string: Specifies the string to replace the matched string by *pattern_string*. If the value is **NULL**, **NULL** is returned.
+    :param position: Specifies the position of the *string* to start the search. If the value is ommitted, the default value 1 is applied. If the value is negative or zero, an error will be returned. If the value is **NULL**, **NULL** is returned
+    :param occurrence: Specifies the occurrence of replacement. If the value is ommitted, the default value 0 is applied. If the value is negative, an error will be returned. If the value is **NULL**, **NULL** is returned.
+    :param match_type: Specifies the string to change default matching behavior of the function. If the value is ommitted, the default value 'c' is applied. If the value is **NULL**, **NULL** is returned.
+    :rtype: STRING
+
+.. code-block:: sql
+
+    --it returns NULL when an argument is specified with NULL value
+    SELECT REGEXP_REPLACE('12345abcdeabcde','[a-d]',NULL);
+    
+::
+
+    regexp_replace('12345abcdeabcde', '[a-d]', null)
+    ======================
+      NULL
+     
+.. code-block:: sql
+
+    --not only the first substring but all substrings into 'ABCDE' are replaced
+    SELECT REPLACE('12345abcdeabcde','abcde','ABCDE');
+    
+::
+
+    replace('12345abcdeabcde', 'abcde', 'ABCDE')
+    ======================
+      '12345ABCDEABCDE'
+
+
 REPEAT
 ======
 

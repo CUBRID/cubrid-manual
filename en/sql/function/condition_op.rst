@@ -354,56 +354,23 @@ Whether to detect the escape characters of the LIKE conditional expression is de
 REGEXP, RLIKE
 =============
 
-The **REGEXP** and **RLIKE** are used interchangeably; a regular expressions is a powerful way to specify a pattern for a complex search. CUBRID uses Henry Spencer's implementation of regular expressions, which conforms the POSIX 1003.2 standards. The details on regular expressions are not described in this page. For more information on regular expressions, see Henry Spencer's regex(7).
+The **REGEXP** and **RLIKE** are used interchangeably; a regular expressions is a powerful way to specify a pattern for a complex search. CUBRID uses the standard C++ <regex> library, which conforms the ECMA-262 RegExp grammar. The details on regular expressions are not described in this page. For more information on regular expressions, (TBU) see Modified ECMAScript regular expression grammar chapter in C++ standard reference.
 
 The following list describes basic characteristics of regular expressions.
 
-*   "." matches any single character(including new-line and carriage-return).
+*   "." matches any single character except line terminators (LF(\\n), CR(\\r), LS('\u2028'), PS('\u2029')).
 
-*   "[...]" matches one of characters within square brackets. For example, "[abc]" matches "a", "b", or "c". To represent a range of characters, use a dash (-). "[a-z]" matches any alphabet letter whereas "[0-9]" matches any single number.
+*   "[...]" matches one of characters within square brackets. For example, "[abc]" matches "a", "b", or "c". To represent a range of characters, use a dash (-); "[a-z]". "[:alpha:]" matches any alphabetic character. whereas "[0-9]" matches any single number.
 
 *   "*" matches 0 or more instances of the thing proceeding it. For example, "xabc*" matches "xab", "xabc", "xabcc", and "xabcxabc" etc. "[0-9][0-9]*" matches any numbers, and ".*" matches every string.
 
-*   To match special characters such as "\\n", "\\t", "\\r", and "\\", some must be escaped with the backslash (\\) by specifying the value of **no_backslash_escapes** (default: yes) to **no**. For details on **no_backslash_escapes**, see :ref:`escape-characters`.
 
 The difference between **REGEXP** and **LIKE** are as follows:
 
 *  The **LIKE** operator succeeds only if the pattern matches the entire value.
 *  The **REGEXP** operator succeeds if the pattern matches anywhere in the value. To match the entire value, you should use "^" at the beginning and "$" at the end.
 *  The **LIKE** operator is case sensitive, but patterns of regular expressions in **REGEXP** is not case sensitive. To enable case sensitive, you should use **REGEXP BINARY** statement.
-*  **REGEXP**, **REGEXP BINARY** works as ASCII encoding without considering the collation of operands.
 
-.. code-block:: sql
-    
-    SELECT ('a' collate utf8_en_ci REGEXP BINARY 'A' collate utf8_en_ci); 
-
-::
-
-    0
-
-.. code-block:: sql
-    
-    SELECT ('a' collate utf8_en_cs REGEXP BINARY 'A' collate utf8_en_cs); 
-
-::
-
-    0
-    
-.. code-block:: sql
-
-    SELECT ('a' COLLATE iso88591_bin REGEXP 'A' COLLATE iso88591_bin);
-
-::
-
-    1
-    
-.. code-block:: sql
-
-    SELECT ('a' COLLATE iso88591_bin REGEXP BINARY 'A' COLLATE iso88591_bin);
-
-::
-
-    0
 
 In the below syntax, if *expression* matches *pattern*, 1 is returned; otherwise, 0 is returned. If either *expression* or *pattern* is **NULL**, **NULL** is returned.
 
@@ -416,7 +383,7 @@ The second syntax has the same meaning as the third syntax, which both syntaxes 
     NOT (expression REGEXP | RLIKE pattern)
 
 *   *expression* : Column or input expression
-*   *pattern* : Pattern used in regular expressions; not case sensitive
+*   *pattern* : Pattern used in regular expressions
 
 .. code-block:: sql
 
@@ -437,21 +404,6 @@ The second syntax has the same meaning as the third syntax, which both syntaxes 
     'Bukovec Brigita'
     'Bukic Perica'
     'Abdullayev Namik'
-     
-.. code-block:: sql
-
-    -- \n : match a special character, when no_backslash_escapes=no
-    SELECT ('new\nline' REGEXP 'new
-    line');
-
-
-::
-    
-    ('new
-    line' regexp 'new
-    line')
-    =====================================
-    1
      
 .. code-block:: sql
 
@@ -559,31 +511,6 @@ The second syntax has the same meaning as the third syntax, which both syntaxes 
     ('strike' regexp '^[^a-dXYZ]+$')
     ================================
     1
-
-.. note::
-
-    The following shows RegEx-Specer's license, which is library used to implement the **REGEXP** conditional expression. ::
-
-        Copyright 1992, 1993, 1994 Henry Spencer. All rights reserved.
-        This software is not subject to any license of the American Telephone
-        and Telegraph Company or of the Regents of the University of California.
-         
-        Permission is granted to anyone to use this software for any purpose on
-        any computer system, and to alter it and redistribute it, subject
-        to the following restrictions:
-         
-        1. The author is not responsible for the consequences of use of this
-        software, no matter how awful, even if they arise from flaws in it.
-         
-        2. The origin of this software must not be misrepresented, either by
-        explicit claim or by omission. Since few users ever read sources,
-        credits must appear in the documentation.
-         
-        3. Altered versions must be plainly marked as such, and must not be
-        misrepresented as being the original software. Since few users
-        ever read sources, credits must appear in the documentation.
-         
-        4. This notice may not be removed or altered.
 
 .. _case-expr:
 

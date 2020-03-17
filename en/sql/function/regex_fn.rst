@@ -7,8 +7,8 @@
 Regular Expressions Functions and Operators
 *********************************************
 
-The functions described in this section performs regular expression matching on a string. A regular expression is a powerful way to specify a pattern for a complex search.
-CUBRID uses the standard C++ <regex> library, which conforms the ECMA-262 RegExp grammar.
+A regular expression is a powerful way to specify a pattern for a complex search.
+The functions and operators described in this section performs regular expression matching on a string.
 
 .. contents::
 
@@ -37,6 +37,17 @@ The difference between **REGEXP** and **LIKE** are as follows:
 
 .. code-block:: sql
 
+    -- [a-dX], [^a-dX] : matches any character that is (or is not, if ^ is used) either a, b, c, d or X.
+    SELECT ('aXbc' REGEXP '^[a-dXYZ]+');
+
+::
+    
+    ('aXbc' regexp '^[a-dXYZ]+')
+    ==============================
+    1
+
+.. code-block:: sql
+
     -- When REGEXP is used in SELECT list, enclosing this with parentheses is required. 
     -- But used in WHERE clause, no need parentheses.
     -- case insensitive, except when used with BINARY.
@@ -54,28 +65,6 @@ The difference between **REGEXP** and **LIKE** are as follows:
     'Bukovec Brigita'
     'Bukic Perica'
     'Abdullayev Namik'
-
-.. code-block:: sql
-
-    -- ^ : match the beginning of a string
-    SELECT ('cubrid dbms' REGEXP '^cub');
-    
-::
-
-    ('cubrid dbms' regexp '^cub')
-    ===============================
-    1
-
-.. code-block:: sql
-
-    -- $ : match the end of a string
-    SELECT ('this is cubrid dbms' REGEXP 'dbms$');
-    
-::
-
-    ('this is cubrid dbms' regexp 'dbms$')
-    ========================================
-    1
 
 .. _regex-count:
 
@@ -342,9 +331,15 @@ REGEXP_SUBSTR
 ECMAScript Regular Expressions Pattern Syntax
 ==============================================
 
-CUBRID uses the standard C++ <regex> library, which conforms the ECMA-262 RegExp grammar. The details on the grammar are not described in this section.
+To implement regular expression support, CUBRID uses the standard C++ <regex> library, which conforms the ECMA-262 RegExp grammar.
+The following sub-sections describes supported regular expression grammars with several examples.
 
-The following sub-sections describes basic characteristics of regular expressions with several examples.
+.. note::
+
+  In the prior version of CUBRID 11, CUBRID used Henry Spencer’s implementation of regular expressions, which operates in byte-wise fashion. 
+  So the REGEXP and RLIKE were not multibyte safe. So they only worked as ASCII encoding without considering the collation of operands.
+  C++ <regex> standard library performs multibyte comparision by C++ <locale> standard dependent on system-supplied locales.
+  Therefore, system locale should be installed on your system for locale-sensitive functions.
 
 Special Pattern Characters
 ---------------------------
@@ -411,6 +406,23 @@ Each of these special pattern characters is matched in the target sequence again
     ================================
     1
 
+To match special characters such as "\\n", "\\t", "\\r", and "\\", some must be escaped with the backslash (\\) by specifying the value of **no_backslash_escapes** (default: yes) to **no**. 
+For details on **no_backslash_escapes**, see :ref:`escape-characters`.
+
+.. code-block:: sql
+
+    -- \n : match a special character, when no_backslash_escapes=no
+    SELECT ('new\nline' REGEXP 'new
+    line');
+
+
+::
+    
+    ('new
+    line' regexp 'new
+    line')
+    =====================================
+    1
 
 Quantifiers
 ------------
@@ -486,20 +498,19 @@ Quantifiers follow a character or a special pattern character. They can modify t
     ==========================
     1
 
-By default, all these quantifiers are greedy (i.e., they take as many characters that meet the condition as possible). 
-This behavior can be overridden to ungreedy (i.e., take as few characters that meet the condition as possible) by adding a question mark (?) after the quantifier.
+By default, all these quantifiers perform in a greedy way which takes as many characters that meet the condition as possible. 
+And this behavior can be overridden to non-greedy by adding a question mark (?) after the quantifier.
 
 .. code-block:: sql
 
-    -- (cub)* : match zero or more instances of the sequence abc.
-    SELECT ('cubcub' REGEXP '^(cub)*$');
+    -- (a+), (a+?) : match with quantifiers perfomrs greedy and ungreedy respectivly.
+    SELECT REGEXP_SUBSTR ('aardvark', '(a+)'), REGEXP_SUBSTR ('aardvark', '(a+?)');
     
 ::
 
-    ('cubcub' regexp '^(cub)*$')
-    ==========================
-    1
-
+    regexp_substr('aardvark', '(a+)')  regexp_substr('aardvark', '(a+?)')
+    ============================================
+    'aa'                  'a'
 
 Groups
 ------
@@ -538,6 +549,28 @@ Assertions are conditions that do not consume characters in the target sequence:
 | (?!*subpattern) | Negative lookahead. The characters following the assertion must not match subpattern, but no characters are consumed. |
 +-----------------+-----------------------------------------------------------------------------------------------------------------------+
 
+.. code-block:: sql
+
+    -- ^ : match the beginning of a string
+    SELECT ('cubrid dbms' REGEXP '^cub');
+    
+::
+
+    ('cubrid dbms' regexp '^cub')
+    ===============================
+    1
+
+.. code-block:: sql
+
+    -- $ : match the end of a string
+    SELECT ('this is cubrid dbms' REGEXP 'dbms$');
+    
+::
+
+    ('this is cubrid dbms' regexp 'dbms$')
+    ========================================
+    1
+
 Alternatives
 ------------
 
@@ -549,39 +582,86 @@ A pattern can include different alternatives:
 | \|              | Separates two alternative patterns or subpatterns.   |
 +-----------------+------------------------------------------------------+
 
+.. code-block:: sql
+
+    -- a|b : matches any character that is either a or b.
+    SELECT ('a' REGEXP 'a|b');
+    SELECT ('d' REGEXP 'a|b');
+    
+::
+
+    ('a' regexp 'a|b')
+    ==============================
+    1
+
+    ('d' regexp 'a|b')
+    ==============================
+    0
+
 A regular expression can contain multiple alternative patterns simply by separating them with the separator operator (|): The regular expression will match if any of the alternatives match, and as soon as one does.
 Subpatterns (in groups or assertions) can also use the separator operator to separate different alternatives.
+
+.. code-block:: sql
+
+    -- a|b|c : matches any character that is either a, b or c.
+    SELECT ('a' REGEXP 'a|b|c');
+    SELECT ('d' REGEXP 'a|b|c');
+    
+::
+
+    ('a' regexp 'a|b|c')
+    ==============================
+    1
+
+    ('d' regexp 'a|b|c')
+    ==============================
+    0
 
 Character classes
 -----------------
 
-Character classes syntax matches a category of characters. The character class can contain any combincation of:
+Character classes syntax matches one of characters or a category of characters within square brackets.
 
-- **Individual characters:** Any character specified is considered part of the class (except the characters \, [, ] and - when they have a special meaning as described in the following paragraphs).
-- **Ranges:** They can be specified by using the hyphen character (-) between two valid characters.
-- **POSIX-like classes:** A whole set of predefined classes can be added to a custom character class. There are three kinds:
+**Individual characters** 
 
-+-----------------+-----------------------------------------------------------------------------------------------------------------------+
-| Characters      | Description                                                                                                           |
-+=================+=======================================================================================================================+
-| [:*classname*:] | The character class                                                                                                   |
-+-----------------+-----------------------------------------------------------------------------------------------------------------------+
-| [.*classname*.] | The collating sequence doesn't support. CUBRID occurs an error when this syntax is given                              |
-+-----------------+-----------------------------------------------------------------------------------------------------------------------+
-| [=*classname*=] | The character equivalents indicates that contain characters should be considered as identical for sorting.            |
-+-----------------+-----------------------------------------------------------------------------------------------------------------------+
+Any character specified is considered part of the class (except the characters \, [, ] and - when they have a special meaning as described in the following paragraphs).
 
 .. code-block:: sql
 
-    -- [a-dX], [^a-dX] : matches any character that is (or is not, if ^ is used) either a, b, c, d or X.
-    SELECT ('aXbc' REGEXP '^[a-dXYZ]+');
+    -- [abc] : matches any character that is either a, b or c.
+    SELECT ('a' REGEXP '[abc]');
+    SELECT ('d' REGEXP '[abc]');
     
 ::
 
-    ('aXbc' regexp '^[a-dXYZ]+')
+    ('a' regexp '[abc]')
     ==============================
     1
-     
+
+    ('d' regexp '[abc]')
+    ==============================
+    0
+
+**Ranges** 
+
+To represent a range of characters, use the dash character (-) between two valid characters. 
+For example, "[a-z]" matches any alphabet letter whereas "[0-9]" matches any single number.
+
+.. code-block:: sql
+
+    SELECT ('adf' REGEXP '[a-f]');
+    SELECT ('adf' REGEXP '[g-z]');
+    
+::
+
+    ('adf' regexp '[a-f]')
+    ================================
+    1
+
+    ('adf' regexp '[g-z]')
+    ================================
+    0
+
 .. code-block:: sql
 
     SELECT ('strike' REGEXP '^[^a-dXYZ]+$');
@@ -591,6 +671,10 @@ Character classes syntax matches a category of characters. The character class c
     ('strike' regexp '^[^a-dXYZ]+$')
     ================================
     1
+
+**POSIX-based character classes**
+
+The POSIX-based character class (*[:classname:]*) defines categories of characters as shown below. [:d:], [:w:] and [:s:] are an extension to the ECMAScript grammar.
 
 +------------+-----------------------------------------+
 | Class      | Description                             |
@@ -626,6 +710,18 @@ Character classes syntax matches a category of characters. The character class c
 | [:s:]      | Whitespace character                    |
 +------------+-----------------------------------------+
 
+**Character equivalents** 
+
+The character equivalents (*[=word=]*) indicates that contain characters should be considered as identical for sorting.
+
 .. note::
 
-  The character classes depends on the 
+  **Compatibility Considerations**
+
+  CUBRID used Henry Spencer’s implementation of regular expressions in CUBRID 10.
+  The Spencer library supports the *POSIX collating element* expressions (*[.character.]*). But it does not support anymore. 
+  **CUBRID occurs an error when the collating element syntax is given**. 
+  
+  And the Spencer library matches line-terminator characters for the . operator. But it does not.
+
+  The word-beginning and word-end boundary ([[:<:]] and [[:>:]]) doesn't support. Instaed, the word boundary notation (\b) can be used.

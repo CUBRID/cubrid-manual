@@ -343,10 +343,19 @@ The following sub-sections describes supported regular expression grammars with 
 
 .. note::
 
-  In the prior version of CUBRID 11, CUBRID used Henry Spencer’s implementation of regular expressions, which operates in byte-wise fashion. 
+  **Compatibility Considerations**
+
+  1) In the prior version of CUBRID 11, CUBRID used Henry Spencer’s implementation of regular expressions, which operates in byte-wise fashion. 
   So the REGEXP and RLIKE were not multibyte safe. So they only worked as ASCII encoding without considering the collation of operands.
   C++ <regex> standard library performs multibyte comparision by C++ <locale> standard dependent on system-supplied locales.
   Therefore, system locale should be installed on your system for locale-sensitive functions.
+
+  2) The Spencer library supports the *POSIX collating element* expressions (*[.character.]*). But it does not support anymore. 
+  **CUBRID occurs an error when the collating element syntax is given**.
+  
+  3) And the Spencer library matches line-terminator characters for the . operator. But it does not.
+
+  4) The word-beginning and word-end boundary ([[:<:]] and [[:>:]]) doesn't support. Instaed, the word boundary notation (\b) can be used.
 
 Special Pattern Characters
 ---------------------------
@@ -795,15 +804,3 @@ The POSIX-based character class (*[:classname:]*) defines categories of characte
 **Character equivalents** 
 
 The character equivalents (*[=word=]*) indicates that contain characters should be considered as identical for sorting.
-
-.. note::
-
-  **Compatibility Considerations**
-
-  CUBRID used Henry Spencer’s implementation of regular expressions in CUBRID 10.
-  The Spencer library supports the *POSIX collating element* expressions (*[.character.]*). But it does not support anymore. 
-  **CUBRID occurs an error when the collating element syntax is given**. 
-  
-  And the Spencer library matches line-terminator characters for the . operator. But it does not.
-
-  The word-beginning and word-end boundary ([[:<:]] and [[:>:]]) doesn't support. Instaed, the word boundary notation (\b) can be used.

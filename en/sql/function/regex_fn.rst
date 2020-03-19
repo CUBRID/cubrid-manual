@@ -115,6 +115,7 @@ REGEXP_COUNT
 
 .. code-block:: sql
 
+    SET NAMES utf8 COLLATE utf8_ko_cs;
     SELECT REGEXP_COUNT('가나123abc가다abc가가','[가-나]+');
     
 ::
@@ -154,16 +155,6 @@ REGEXP_INSTR
      
 .. code-block:: sql
 
-    SELECT REGEXP_INSTR('12345가나다라마가나다라마바','[가-다]+');
-    
-::
-
-    regexp_instr('12345가나다라마가나다라마바','[가-다]+');
-    ======================
-      6
-
-.. code-block:: sql
-
     -- it returns the position of the first character of the match.
     SELECT REGEXP_INSTR('12354abc5','[:alpha:]+',1,1,0);
     
@@ -184,6 +175,17 @@ REGEXP_INSTR
     regexp_instr('12354abc5','[:alpha:]+', 1, 1, 1);
     ======================
       9
+
+.. code-block:: sql
+
+    SET NAMES utf8 COLLATE utf8_ko_cs;
+    SELECT REGEXP_INSTR('12345가나다라마가나다라마바','[가-다]+');
+    
+::
+
+    regexp_instr('12345가나다라마가나다라마바','[가-다]+');
+    ======================
+      6
 
 .. _regex-like:
 
@@ -211,16 +213,6 @@ REGEXP_LIKE
 
 .. code-block:: sql
 
-    SELECT REGEXP_LIKE('abefd123','가나?다');
-    
-::
-
-    regexp_like('가나나다','가나?다');
-    ======================
-      0
-
-.. code-block:: sql
-
     SELECT REGEXP_LIKE('abbbbc','AB+C', 'c');
     
 ::
@@ -228,6 +220,21 @@ REGEXP_LIKE
     regexp_like('abbbbc', 'AB+C');
     ======================
       0
+
+.. code-block:: sql
+
+    SET NAMES utf8 COLLATE utf8_ko_cs;
+    SELECT REGEXP_LIKE('가나다','가나?다');
+    SELECT REGEXP_LIKE('가나라다','가나?다');
+    
+::
+
+    regexp_like(_utf8'가나다' collate utf8_ko_cs, _utf8'가나?다' collate utf8_ko_cs)
+    ===============================================================================
+                                                                                  1
+    regexp_like(_utf8'가나라다' collate utf8_ko_cs, _utf8'가나?다' collate utf8_ko_cs)
+    =================================================================================
+                                                                                    0
 
 .. _regex-replace:
 
@@ -411,6 +418,17 @@ For details on **no_backslash_escapes**, see :ref:`escape-characters`.
 
 .. code-block:: sql
 
+    -- \n : match a special character, when no_backslash_escapes=yes (default)
+    SELECT ('new\nline' REGEXP 'new\\nline'); 
+
+::
+    
+    ('new\nline' REGEXP 'new\\nline'); 
+    =====================================
+    1
+
+.. code-block:: sql
+
     -- \n : match a special character, when no_backslash_escapes=no
     SELECT ('new\nline' REGEXP 'new
     line');
@@ -525,28 +543,54 @@ Groups allow to apply quantifiers to a sequence of characters (instead of a sing
 | (?:*subpattern*) | Passive group which does not create a backreference.  |
 +----------------+---------------------------------------------------------+
 
+.. code-block:: sql
+    -- captured group can be referenced with $int
+    SELECT REGEXP_REPLACE ('hello cubrid','([[:alnum:]]+)','$1!');
+::
+
+    regexp_replace('hello cubrid','([[:alnum:]]+)','$1!')
+    ==========================
+    'hello! cubrid!'
+
 When a group creates a backreference, the characters that represent the subpattern in the target sequence are stored as a submatch. Each submatch is numbered after the order of appearance of their opening parenthesis (the first submatch is number 1, the second is number 2, and so on...).
 These submatches can be used in the regular expression itself to specify that the entire subpattern should appear again somewhere else (see \int in the special characters list). They can also be used in the replacement string or retrieved in the match_results object filled by some regex operations.
+
+.. code-block:: sql
+
+    -- performs regexp_substr without groups, which is fully matched.
+    SELECT REGEXP_SUBSTR ('abckabcjabc', '[a-c]{3}k[a-c]{3}j[a-c]{3}');
+
+    -- ([a-c]{3}) creates a backreference, \1
+    SELECT REGEXP_SUBSTR ('abckabcjabc', '([a-c]{3})k\1j\1');
+::
+
+    regexp_substr('abckabcjabc', '[a-c]{3}k[a-c]{3}j[a-c]{3}')
+    ======================
+    'abckabcjabc'
+
+    regexp_substr('abckabcjabc', '([a-c]{3})k\1j\1')
+    ======================
+    'abckabcjabc'
 
 Assertions
 ----------
 
-Assertions are conditions that do not consume characters in the target sequence: they do not describe a character, but a condition that must be fulfilled before or after a character.
+Assertions are conditions that do not consume characters in a string: they do not describe a character, but a condition that must be fulfilled before or after a character.
 
 +-----------------+-----------------------------------------------------------------------------------------------------------------------+
 | Characters      | Description                                                                                                           |
 +=================+=======================================================================================================================+
-| ^               | The preceding is matched 0 or more times.                                                                             |
+| ^               | The beginning of a string, or follows a line terminator                                                               |
 +-----------------+-----------------------------------------------------------------------------------------------------------------------+
-| $               | The preceding is matched 1 or more times.                                                                             |
+| $               | The end of a string, or precedes a line terminator                                                                    |
 +-----------------+-----------------------------------------------------------------------------------------------------------------------+
 | \b              | The previous character is a word character and the next is a non-word character (or vice-versa).                      |
 +-----------------+-----------------------------------------------------------------------------------------------------------------------+
 | \B              | The previous and next characters are both word characters or both are non-word characters.                            |
 +-----------------+-----------------------------------------------------------------------------------------------------------------------+
-| (?=*subpattern) | Positive lookahead. The characters following the charcter must match subpattern, but no characters are consumed.      |
+| (?=subpattern) | Positive lookahead. The characters following the charcter must match subpattern, but no characters are consumed.       |
 +-----------------+-----------------------------------------------------------------------------------------------------------------------+
-| (?!*subpattern) | Negative lookahead. The characters following the assertion must not match subpattern, but no characters are consumed. |
+| (?!subpattern) | Negative lookahead. The characters following the assertion must not match subpattern, but no characters are consumed.  |
 +-----------------+-----------------------------------------------------------------------------------------------------------------------+
 
 .. code-block:: sql
@@ -570,6 +614,23 @@ Assertions are conditions that do not consume characters in the target sequence:
     ('this is cubrid dbms' regexp 'dbms$')
     ========================================
     1
+
+.. code-block:: sql
+
+    -- (?=subpattern): positive lookahead
+    SELECT REGEXP_REPLACE ('cubrid dbms cubrid sql cubrid rdbms', 'cubrid(?= sql)', 'CUBRID');
+
+    -- (?!subpattern): nagative lookahead
+    SELECT REGEXP_REPLACE ('cubrid dbms cubrid sql cubrid rdbms', 'cubrid(?! sql)', 'CUBRID');
+::
+
+   regexp_replace('cubrid dbms cubrid sql cubrid rdbms', 'cubrid(?= sql)', 'CUBRID')
+   ======================
+   'cubrid dbms CUBRID sql cubrid rdbms'
+
+   regexp_replace('cubrid dbms cubrid sql cubrid rdbms', 'cubrid(?! sql)', 'CUBRID')
+   ======================
+   'CUBRID dbms cubrid sql CUBRID rdbms'
 
 Alternatives
 ------------
@@ -709,6 +770,27 @@ The POSIX-based character class (*[:classname:]*) defines categories of characte
 +------------+-----------------------------------------+
 | [:s:]      | Whitespace character                    |
 +------------+-----------------------------------------+
+
+.. code-block:: sql
+
+    SELECT REGEXP_SUBSTR ('Samseong-ro 86-gil, Gangnam-gu, Seoul 06178', '[[:digit:]]{5}');
+    
+::
+
+    regexp_substr('Samseong-ro 86-gil, Gangnam-gu, Seoul 06178', '[[:digit:]]{5}')
+    ================================
+    '06178'
+
+.. code-block:: sql
+
+    SET NAMES utf8 COLLATE utf8_ko_cs;
+    SELECT REGEXP_REPLACE ('가나다 가나 가나다라', '\b[[:alpha:]]{2}\b', '#');
+    
+::
+
+    regexp_replace(_utf8'가나다 가나 가나다라' collate utf8_ko_cs, _utf8'\b[[:alpha:]]{2}\b' collate utf8_ko_cs, _utf8'#' collate utf8_ko_cs)
+    ======================
+    '가나다 # 가나다라'
 
 **Character equivalents** 
 

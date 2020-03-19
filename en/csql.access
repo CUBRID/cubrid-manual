@@ -1,0 +1,12 @@
+
+Time: 03/19/20 01:40:56.072 - NOTIFICATION *** file /home/hgryoo/hgryoo_cubrid/src/transaction/boot_sr.c, line 3130  CODE = -972, Tran = -1, EID = 4
+Program 'csql' (pid 19798) was connected from the host 'rnd06.cubrid.com'. (transaction index 1)
+
+*** The previous error message is the last one. ***
+
+
+Time: 03/19/20 02:22:18.662 - NOTIFICATION *** file /home/hgryoo/hgryoo_cubrid/src/transaction/boot_sr.c, line 3130  CODE = -972, Tran = -1, EID = 8
+Program 'csql' (pid 21087) was connected from the host 'rnd06.cubrid.com'. (transaction index 1)
+
+*** The previous error message is the last one. ***
+

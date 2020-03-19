@@ -553,8 +553,10 @@ Groups allow to apply quantifiers to a sequence of characters (instead of a sing
 +----------------+---------------------------------------------------------+
 
 .. code-block:: sql
+
     -- captured group can be referenced with $int
     SELECT REGEXP_REPLACE ('hello cubrid','([[:alnum:]]+)','$1!');
+
 ::
 
     regexp_replace('hello cubrid','([[:alnum:]]+)','$1!')
@@ -571,6 +573,7 @@ These submatches can be used in the regular expression itself to specify that th
 
     -- ([a-c]{3}) creates a backreference, \1
     SELECT REGEXP_SUBSTR ('abckabcjabc', '([a-c]{3})k\1j\1');
+
 ::
 
     regexp_substr('abckabcjabc', '[a-c]{3}k[a-c]{3}j[a-c]{3}')
@@ -631,6 +634,7 @@ Assertions are conditions that do not consume characters in a string: they do no
 
     -- (?!subpattern): nagative lookahead
     SELECT REGEXP_REPLACE ('cubrid dbms cubrid sql cubrid rdbms', 'cubrid(?! sql)', 'CUBRID');
+    
 ::
 
    regexp_replace('cubrid dbms cubrid sql cubrid rdbms', 'cubrid(?= sql)', 'CUBRID')

@@ -1,0 +1,135 @@
+
+Time: 03/19/20 01:40:56.070 - NOTIFICATION *** file /home/hgryoo/hgryoo_cubrid/src/query/vacuum.c, line 987  CODE = -1190, Tran = -1, EID = 1
+Stand-alone vacuum execution is started.
+
+Time: 03/19/20 01:40:56.072 - NOTIFICATION *** file /home/hgryoo/hgryoo_cubrid/src/query/vacuum.c, line 1080  CODE = -1191, Tran = -1, EID = 2
+Stand-alone vacuum execution is ended.
+
+Time: 03/19/20 01:40:56.072 - NOTIFICATION *** file /home/hgryoo/hgryoo_cubrid/src/transaction/boot_sr.c, line 228  CODE = -973, Tran = -1, EID = 3
+Server status is UP.
+
+Time: 03/19/20 01:49:56.587 - SYNTAX ERROR *** file /home/hgryoo/hgryoo_cubrid/src/compat/db_vdb.c, line 941 ERROR CODE = -492, Tran = 1, EID = 5
+In line 11, column 2 before '
+'
+'; '
+Syntax error: unexpected ''', expecting SELECT or VALUE or VALUES or '('
+
+Time: 03/19/20 01:57:33.620 - NOTIFICATION *** file /home/hgryoo/hgryoo_cubrid/src/transaction/log_tran_table.c, line 2756  CODE = -982, Tran = 1, EID = 6
+Set interrupt to the transaction 1.
+
+Time: 03/19/20 02:01:37.739 - SYNTAX ERROR *** file /home/hgryoo/hgryoo_cubrid/src/parser/query_result.c, line 378 ERROR CODE = -494, Tran = 1, EID = 7
+Semantic: before ' ); '
+Cannot coerce _utf8'#' collate utf8_ko_cs to type integer. select regexp_substr(_utf8'가나다 가나 가나다라' co...
+
+Time: 03/19/20 02:01:37.739 - SYNTAX ERROR *** file /home/hgryoo/hgryoo_cubrid/src/compat/db_vdb.c, line 941 ERROR CODE = -492, Tran = 1, EID = 8
+before ' ); '
+Cannot coerce _utf8'#' collate utf8_ko_cs to type integer.
+
+Time: 03/19/20 02:11:13.292 - SYNTAX ERROR *** file /home/hgryoo/hgryoo_cubrid/src/parser/query_result.c, line 378 ERROR CODE = -494, Tran = 1, EID = 9
+Semantic: before ' ,'([[:alnum:]]+)','$\1%') '
+str is not defined. select regexp_replace(str, _utf8'([[:alnum:]]+)' collate utf...
+
+Time: 03/19/20 02:11:13.292 - SYNTAX ERROR *** file /home/hgryoo/hgryoo_cubrid/src/compat/db_vdb.c, line 941 ERROR CODE = -492, Tran = 1, EID = 10
+before ' ,'([[:alnum:]]+)','$\1%') '
+str is not defined.
+
+Time: 03/19/20 02:13:15.826 - NOTIFICATION *** file /home/hgryoo/hgryoo_cubrid/src/transaction/log_tran_table.c, line 2756  CODE = -982, Tran = 1, EID = 11
+Set interrupt to the transaction 1.
+
+Time: 03/19/20 02:13:27.368 - NOTIFICATION *** file /home/hgryoo/hgryoo_cubrid/src/transaction/log_tran_table.c, line 2756  CODE = -982, Tran = 1, EID = 12
+Set interrupt to the transaction 1.
+
+Time: 03/19/20 02:13:27.524 - NOTIFICATION *** file /home/hgryoo/hgryoo_cubrid/src/transaction/log_tran_table.c, line 2756  CODE = -982, Tran = 1, EID = 13
+Set interrupt to the transaction 1.
+
+Time: 03/19/20 02:22:03.841 - NOTIFICATION *** file /home/hgryoo/hgryoo_cubrid/src/transaction/log_tran_table.c, line 2756  CODE = -982, Tran = 1, EID = 14
+Set interrupt to the transaction 1.
+
+*** The previous error message is the last one. ***
+
+
+Time: 03/19/20 02:22:18.536 - NOTIFICATION *** file /home/hgryoo/hgryoo_cubrid/src/transaction/log_recovery.c, line 734  CODE = -1128, Tran = -1, EID = 1
+Log recovery is started. The number of log records to be applied: 1. Log page: 769 ~ 769.
+
+Time: 03/19/20 02:22:18.539 - NOTIFICATION *** file /home/hgryoo/hgryoo_cubrid/src/transaction/log_page_buffer.c, line 6582  CODE = -977, Tran = -1, EID = 2
+Checkpoint started (previous checkpoint page id: 769, previous redo page id: 769).
+
+Time: 03/19/20 02:22:18.546 - NOTIFICATION *** file /home/hgryoo/hgryoo_cubrid/src/transaction/log_page_buffer.c, line 7015  CODE = -978, Tran = -1, EID = 3
+Checkpoint finished (checkpoint page id: 769, checkpoint redo page id: 769, flushed page count: 0).
+
+Time: 03/19/20 02:22:18.548 - NOTIFICATION *** file /home/hgryoo/hgryoo_cubrid/src/transaction/log_recovery.c, line 850  CODE = -1129, Tran = -1, EID = 4
+Log recovery is finished.
+
+Time: 03/19/20 02:22:18.660 - NOTIFICATION *** file /home/hgryoo/hgryoo_cubrid/src/query/vacuum.c, line 987  CODE = -1190, Tran = -1, EID = 5
+Stand-alone vacuum execution is started.
+
+Time: 03/19/20 02:22:18.662 - NOTIFICATION *** file /home/hgryoo/hgryoo_cubrid/src/query/vacuum.c, line 1080  CODE = -1191, Tran = -1, EID = 6
+Stand-alone vacuum execution is ended.
+
+Time: 03/19/20 02:22:18.662 - NOTIFICATION *** file /home/hgryoo/hgryoo_cubrid/src/transaction/boot_sr.c, line 228  CODE = -973, Tran = -1, EID = 7
+Server status is UP.
+
+Time: 03/19/20 02:22:20.819 - ERROR *** file /home/hgryoo/hgryoo_cubrid/src/query/string_regex.cpp, line 211 ERROR CODE = -1085, Tran = 1, EID = 9
+Cannot compile regular expression: 'regex_error(error_backref): the expression contains an invalid back reference'
+
+Time: 03/19/20 02:22:20.819 - SYNTAX ERROR *** file /home/hgryoo/hgryoo_cubrid/src/parser/query_result.c, line 378 ERROR CODE = -494, Tran = 1, EID = 10
+Semantic: Cannot compile regular expression: 'regex_error(error_backref): the expression contains an invalid back reference' select regexp_substr('hello dbms hello cubrid', '([a-z]+\1)')
+
+Time: 03/19/20 02:22:20.819 - SYNTAX ERROR *** file /home/hgryoo/hgryoo_cubrid/src/compat/db_vdb.c, line 941 ERROR CODE = -492, Tran = 1, EID = 11
+Cannot compile regular expression: 'regex_error(error_backref): the expression contains an invalid back reference'
+
+Time: 03/19/20 02:22:33.531 - ERROR *** file /home/hgryoo/hgryoo_cubrid/src/query/string_regex.cpp, line 211 ERROR CODE = -1085, Tran = 1, EID = 12
+Cannot compile regular expression: 'regex_error(error_backref): the expression contains an invalid back reference'
+
+Time: 03/19/20 02:22:33.531 - SYNTAX ERROR *** file /home/hgryoo/hgryoo_cubrid/src/parser/query_result.c, line 378 ERROR CODE = -494, Tran = 1, EID = 13
+Semantic: Cannot compile regular expression: 'regex_error(error_backref): the expression contains an invalid back reference' select regexp_substr('hello dbms hello cubrid', '([a-z]+)\2')
+
+Time: 03/19/20 02:22:33.531 - SYNTAX ERROR *** file /home/hgryoo/hgryoo_cubrid/src/compat/db_vdb.c, line 941 ERROR CODE = -492, Tran = 1, EID = 14
+Cannot compile regular expression: 'regex_error(error_backref): the expression contains an invalid back reference'
+
+Time: 03/19/20 02:22:36.546 - ERROR *** file /home/hgryoo/hgryoo_cubrid/src/query/string_regex.cpp, line 211 ERROR CODE = -1085, Tran = 1, EID = 15
+Cannot compile regular expression: 'regex_error(error_backref): the expression contains an invalid back reference'
+
+Time: 03/19/20 02:22:36.546 - SYNTAX ERROR *** file /home/hgryoo/hgryoo_cubrid/src/parser/query_result.c, line 378 ERROR CODE = -494, Tran = 1, EID = 16
+Semantic: Cannot compile regular expression: 'regex_error(error_backref): the expression contains an invalid back reference' select regexp_substr('hello dbms hello cubrid', '([a-z]+)\3')
+
+Time: 03/19/20 02:22:36.546 - SYNTAX ERROR *** file /home/hgryoo/hgryoo_cubrid/src/compat/db_vdb.c, line 941 ERROR CODE = -492, Tran = 1, EID = 17
+Cannot compile regular expression: 'regex_error(error_backref): the expression contains an invalid back reference'
+
+Time: 03/19/20 02:22:49.362 - ERROR *** file /home/hgryoo/hgryoo_cubrid/src/query/string_regex.cpp, line 211 ERROR CODE = -1085, Tran = 1, EID = 18
+Cannot compile regular expression: 'regex_error(error_backref): the expression contains an invalid back reference'
+
+Time: 03/19/20 02:22:49.362 - SYNTAX ERROR *** file /home/hgryoo/hgryoo_cubrid/src/parser/query_result.c, line 378 ERROR CODE = -494, Tran = 1, EID = 19
+Semantic: Cannot compile regular expression: 'regex_error(error_backref): the expression contains an invalid back reference' select regexp_substr('hello dbms hello cubrid', '([a-z])\2')
+
+Time: 03/19/20 02:22:49.362 - SYNTAX ERROR *** file /home/hgryoo/hgryoo_cubrid/src/compat/db_vdb.c, line 941 ERROR CODE = -492, Tran = 1, EID = 20
+Cannot compile regular expression: 'regex_error(error_backref): the expression contains an invalid back reference'
+
+Time: 03/19/20 02:23:36.285 - SYNTAX ERROR *** file /home/hgryoo/hgryoo_cubrid/src/parser/query_result.c, line 378 ERROR CODE = -494, Tran = 1, EID = 21
+Semantic: before ' ,"(ab)"); '
+[Yababa dababa do] is not defined. select regexp_substr([Yababa dababa do], [(ab)])
+
+Time: 03/19/20 02:23:36.285 - SYNTAX ERROR *** file /home/hgryoo/hgryoo_cubrid/src/compat/db_vdb.c, line 941 ERROR CODE = -492, Tran = 1, EID = 22
+before ' ,"(ab)"); '
+[Yababa dababa do] is not defined.
+
+Time: 03/19/20 02:23:49.194 - ERROR *** file /home/hgryoo/hgryoo_cubrid/src/query/string_regex.cpp, line 211 ERROR CODE = -1085, Tran = 1, EID = 23
+Cannot compile regular expression: 'regex_error(error_backref): the expression contains an invalid back reference'
+
+Time: 03/19/20 02:23:49.194 - SYNTAX ERROR *** file /home/hgryoo/hgryoo_cubrid/src/parser/query_result.c, line 378 ERROR CODE = -494, Tran = 1, EID = 24
+Semantic: Cannot compile regular expression: 'regex_error(error_backref): the expression contains an invalid back reference' select regexp_substr('Yababa dababa do', '(ab)\2')
+
+Time: 03/19/20 02:23:49.194 - SYNTAX ERROR *** file /home/hgryoo/hgryoo_cubrid/src/compat/db_vdb.c, line 941 ERROR CODE = -492, Tran = 1, EID = 25
+Cannot compile regular expression: 'regex_error(error_backref): the expression contains an invalid back reference'
+
+Time: 03/19/20 02:26:16.569 - ERROR *** file /home/hgryoo/hgryoo_cubrid/src/query/string_regex.cpp, line 211 ERROR CODE = -1085, Tran = 1, EID = 26
+Cannot compile regular expression: 'regex_error(error_backref): the expression contains an invalid back reference'
+
+Time: 03/19/20 02:26:16.569 - SYNTAX ERROR *** file /home/hgryoo/hgryoo_cubrid/src/parser/query_result.c, line 378 ERROR CODE = -494, Tran = 1, EID = 27
+Semantic: Cannot compile regular expression: 'regex_error(error_backref): the expression contains an invalid back reference' select regexp_substr('hello dbms hello cubrid', '([a-z]+)\2')
+
+Time: 03/19/20 02:26:16.569 - SYNTAX ERROR *** file /home/hgryoo/hgryoo_cubrid/src/compat/db_vdb.c, line 941 ERROR CODE = -492, Tran = 1, EID = 28
+Cannot compile regular expression: 'regex_error(error_backref): the expression contains an invalid back reference'
+
+*** The previous error message is the last one. ***
+

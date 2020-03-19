@@ -91,9 +91,9 @@ Each of these special pattern characters is matched in a string against a single
 | \\\ *character*| | Any character can be escaped except those which form any of the special character sequences above.     |
 |                | | Needed for: ^ $ \\ . * + ? ( ) [ ] { } \|                                                              |
 +----------------+----------------------------------------------------------------------------------------------------------+
-| \[\ *class*\]  | A string is part of the *class*. see **Character classes** below.                                        |
+| \[\ *class*\]  | A string is part of the *class*. see **POSIX-based character classes** below.                            |
 +----------------+----------------------------------------------------------------------------------------------------------+
-| \[^\ *class*\] | A string is not part of the *class*. see **Character classes** below.                                    |
+| \[^\ *class*\] | A string is not part of the *class*. see **POSIX-based character classes** below.                        |
 +----------------+----------------------------------------------------------------------------------------------------------+
 
 .. code-block:: sql

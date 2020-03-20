@@ -1,3 +1,6 @@
+
+:meta-keywords: cubrid lob, cubrid blob, cubrid clob, bit_to_blob, char_to_clob, clob_to_char, blob_from_file
+
 :tocdepth: 3
 
 ********

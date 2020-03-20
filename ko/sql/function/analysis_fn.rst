@@ -1,4 +1,9 @@
+
+:meta-keywords: cubrid aggregate, database aggregate function, curbid analytic, database analytic function
+:meta-description: CUBRID Aggregate/Analytic function is used when you want to analyze data and extract some results.
+
 :tocdepth: 3
+
 
 **************
 집계/분석 함수
@@ -1354,7 +1359,7 @@ id가 5인 행은 *grade*\ 가 1인 10개의 행 중에서 다섯번째에 위�
 PERCENTILE_CONT
 ===============
 
-.. function:: PERCENTILE_CONT(expression1) WITHIN GROUP (ORDER BY expression2 [DESC | ASC]) [OVER (<partition_by_clause>)]
+.. function:: PERCENTILE_CONT(expression1) WITHIN GROUP (ORDER BY expression2 [ASC | DESC]) [OVER (<partition_by_clause>)]
 
     **PERCENTILE_CONT** 함수는 집계 함수 또는 분석 함수로 사용되며, 연속 분포(continuous distribution) 모델을 가정한 역 분포 함수이다. 백분위 값을 입력 받아 정렬된 값들 중 백분위에 해당하는 보간 값(interpolated value)을 반환한다. 계산 시 NULL 값은 무시된다.
     
@@ -1362,11 +1367,11 @@ PERCENTILE_CONT
     
     :param expression1: 백분위 값. 0과 1사이의 숫자여야 한다.
     :param expression2: ORDER BY 절에 뒤따르는 칼럼 이름. 칼럼 개수는 *expression1*\의 칼럼 개수와 동일해야 한다. 
-    :rtype: DOUBLE
+    :rtype: **DOUBLE**
 
     .. seealso:: 
     
-        :func:`PERCENTILE_DISC`, :ref:`PERCENTILE_DISC와 PERCENTILE_CONT <compare-pd-pc>`
+        :ref:`PERCENTILE_DISC와 PERCENTILE_CONT 의 차이 <compare-pd-pc>`
 
 집계 함수인 경우, **PERCENTILE_DISC** 함수는 **ORDER BY** 절에 명시된 순서로 결과 값을 정렬한 후, 집계 그룹에 있는 행에서 백분위에 해당하는 보간 값을 반환한다.
 
@@ -1383,6 +1388,8 @@ PERCENTILE_CONT
     PERCENTILE_DISC는 집계된 값의 집합으로부터 값을 반환한다. 
     
     아래 예에서 백분위 값이 0.5이면 PERCENTILE_CONT 함수는 짝수 원소를 가진 그룹에 대해 두 개의 중간값의 평균을 반환하는 반면, PERCENTILEP_DISC 함수는 두 개의 중간 값 중 첫번째 값을 반환한다. 홀수 개수의 원소를 가진 집계 그룹에 대해서는, 두 함수 모두 중간 원소의 값을 반환한다.
+
+    실제로 MEDIAN 함수는 기본 백분위수 값(0.5)이 포함된 PERCENTILE_CONT의 특수한 경우이다. 자세한 내용은 :func:`MEDIAN` 을 참고한다.
 
 다음은 이 함수의 예에서 사용될 스키마 및 데이터이다.
 
@@ -1422,7 +1429,9 @@ PERCENTILE_CONT
 
 ::
     
-    7.500000000000000e+01
+      pcont               
+    ======================
+      7.500000000000000e+01
 
 다음은 분석 함수로 사용되는 예로, *class* 칼럼의 값이 같은 것끼리 그룹핑한 집합 내에서 *math* 칼럼에 대한 중앙값(median)을 출력한다. 
 
@@ -1465,7 +1474,7 @@ PERCENTILE_CONT는 연속된 값을 가정하므로 연속된 값의 표현이 �
 PERCENTILE_DISC
 ===============
 
-.. function:: PERCENTILE_DISC(expression1) WITHIN GROUP (ORDER BY expression2 [DESC | ASC]) [OVER (<partition_by_clause>)]
+.. function:: PERCENTILE_DISC(expression1) WITHIN GROUP (ORDER BY expression2 [ASC | DESC]) [OVER (<partition_by_clause>)]
 
     **PERCENTILE_DISC** 함수는 집계 함수 또는 분석 함수로 사용되며, 이산 분포(discrete distribution) 모델을 가정한 역 분포 함수이다. 백분위 값을 입력 받아 정렬된 값들 중 백분위에 해당하는 이산 값(discrete value)을 반환한다. 계산 시 NULL 값은 무시된다.
     
@@ -1473,13 +1482,13 @@ PERCENTILE_DISC
      
     :param expression1: 백분위 값. 0과 1사이의 숫자여야 한다.
     :param expression2: ORDER BY 절에 뒤따르는 칼럼 이름. 칼럼 개수는 *expression1*\의 칼럼 개수와 동일해야 한다. 
-    :rtype: *expression1*\의 타입과 동일.
+    :rtype: *expression2* 의 타입과 동일.
 
     .. seealso:: 
     
-        :func:`PERCENTILE_CONT`, :ref:`PERCENTILE_DISC와 PERCENTILE_CONT <compare-pd-pc>`
+        :ref:`PERCENTILE_DISC 와 PERCENTILE_CONT 의 차이 <compare-pd-pc>`
 
-집계 함수인 경우, **PERCENTILE_DISC** 함수는 **ORDER BY** 절에 명시된 순서로 정렬한 후, 집계 그룹에 있는 행에서 백분위에 위치한 값을 반환한다.
+집계 함수의 경우, 이것은 **ORDER BY** 절에 기술된 순서로 결과를 정렬한다; 그리고 집계 그룹에 있는 행에서 백분위에 위치한 값을 반환한다.
 
 분석 함수인 경우, **PARTITION BY**\ 에 의해 나누어진 그룹별로 각 행을 **ORDER BY** 절에 명시된 순서로 정렬한 후 그룹 내의 행에서 백분위에 위치한 값을 반환한다. 
 
@@ -1495,7 +1504,9 @@ PERCENTILE_DISC
 
 ::
     
-    7.500000000000000e+01
+      pdisc               
+    ======================
+      75
 
 다음은 분석 함수로 사용되는 예로, *class* 칼럼의 값이 같은 것끼리 그룹핑한 집합 내에서 *math* 칼럼에 대한 중앙값(median)을 출력한다. 
 
@@ -1508,28 +1519,29 @@ PERCENTILE_DISC
 
 ::
 
-         math  class                 pdisc
-    =====================================================
-           30  'A'                   6.000000000000000e+01
-           40  'A'                   6.000000000000000e+01
-           60  'A'                   6.000000000000000e+01
-           70  'A'                   6.000000000000000e+01
-           72  'A'                   6.000000000000000e+01
-           77  'A'                   6.000000000000000e+01
-           78  'B'                   8.500000000000000e+01
-           85  'B'                   8.500000000000000e+01
-           85  'B'                   8.500000000000000e+01
-           95  'B'                   8.500000000000000e+01
-           65  'C'                   7.500000000000000e+01
-           70  'C'                   7.500000000000000e+01
-           75  'C'                   7.500000000000000e+01
-           80  'C'                   7.500000000000000e+01
-           85  'C'                   7.500000000000000e+01
-           65  'D'                   7.500000000000000e+01
-           65  'D'                   7.500000000000000e+01
-           75  'D'                   7.500000000000000e+01
-           75  'D'                   7.500000000000000e+01
-           95  'D'                   7.500000000000000e+01
+         math  class                 pdisc               
+        =========================================================
+           30  'A'                   60
+           40  'A'                   60
+           60  'A'                   60
+           70  'A'                   60
+           72  'A'                   60
+           77  'A'                   60
+           78  'B'                   85
+           85  'B'                   85
+           85  'B'                   85
+           95  'B'                   85
+           65  'C'                   75
+           70  'C'                   75
+           75  'C'                   75
+           80  'C'                   75
+           85  'C'                   75
+           65  'D'                   75
+           65  'D'                   75
+           75  'D'                   75
+           75  'D'                   75
+           95  'D'                   75
+
 
 class 'A'에서 math의 값은 총 6개인데, PERCENTILE_DISC는 중간의 값이 두 개일 때 앞의 값을 출력하므로, 중앙값은 3번째 값 60과 4번째 값 70 중 앞의 것인 60이 된다. 
 

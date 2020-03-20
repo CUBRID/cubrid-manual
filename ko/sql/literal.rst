@@ -1,3 +1,8 @@
+
+:meta-keywords: cubrid number, cubrid date time, cubrid string, cubrid character, cubrid collection, cubrid null, database literal
+:meta-description: This section describes how to write a literal value in CUBRID.
+
+
 ******
 리터럴
 ******
@@ -64,7 +69,7 @@ CUBRID에서 리터럴(literal) 값을 작성하는 방법을 기술한다.
         
 *   타임존을 포함하는 날짜/시간 타입의 리터럴은 위에서 설명한 것과 동일한 형식을 가지며, 뒤에 타임존 정보를 나타내는 오프셋 또는 지역 이름을 추가한다. 
 
-    *   문자열 앞에 datetimetz, datetimeltz, timetz, timeltz, timestamptz, timestampltz 리터럴을 추가하여 각 타입에 해당하는 값을 표기한다.
+    *   각 타입의 값을 나타내기 위해 문자열 앞에 datetimetz, datetimeltz, timestamptz 또는 timestampltz 문자를 추가한다.
 
         ::
         
@@ -79,10 +84,9 @@ CUBRID에서 리터럴(literal) 값을 작성하는 방법을 기술한다.
     *   문자열 앞에 오는 리터럴은 <날짜/시간 타입> WITH TIMEZONE 또는 <날짜/시간 타입> WITH LOCAL TIME ZONE으로 대체할 수 있다.
 
         ::
+
             DATETIME WITH TIMEZONE = datetimetz
             DATETIME WITH LOCAL TIMEZONE = datetimeltz
-            TIME WITH TIMEZONE = timetz
-            TIME WITH LOCAL TIMEZONE = timeltz
             TIMESTAMP WITH TIMEZONE = timestamptz
             TIMESTAMP WITH LOCAL TIMEZONE = timestampltz
     

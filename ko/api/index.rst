@@ -1,3 +1,7 @@
+
+:meta-keywords: cubrid drivers, cubrid api
+:meta-description: This chapter cover CUBRID drivers and API's. JDBC Driver API, CCI Driver API, PHP Driver API, PDO Driver API, ODBC Driver API, OLE DB Driver API, ADO.NET Driver API, Perl Driver API, Python Driver API, Ruby Driver API, Node.js Driver API.
+
 ************
 API 레퍼런스
 ************
@@ -19,4 +23,4 @@ API 레퍼런스
     ruby.rst
     node_js.rst
     
-CUBRID가 지원하는 드라이버의 최신 정보를 확인하려면 `http://www.cubrid.org/wiki_apis/entry/cubrid-apis-wiki <http://www.cubrid.org/wiki_apis/entry/cubrid-apis-wiki>`_ 를 참고한다.
+.. FIXME: CUBRID가 지원하는 드라이버의 최신 정보를 확인하려면 `http://www.cubrid.org/wiki_apis/entry/cubrid-apis-wiki <http://www.cubrid.org/wiki_apis/entry/cubrid-apis-wiki>`_ 를 참고한다.

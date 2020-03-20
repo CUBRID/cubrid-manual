@@ -1,9 +1,14 @@
+
+:meta-keywords: cubrid update statistics, cubrid check statistics, query plan, query profiling, sql hint, cubrid index hint, cubrid special index, cubrid using index
+:meta-description: How to optimize query execution in CUBRID database.
+
+
 통계 정보 갱신
 ==============
 
 테이블과 인덱스에 대한 통계 정보는 데이터베이스 시스템이 질의를 효과적으로 처리할 수 있게 한다. 통계 정보는 테이블의 생성, 인덱스의 생성/삭제 등 DDL 문이 수행되면 자동으로 갱신된다. 그러나, INSERT, DELETE 등 DML 문이 수행되면 자동으로 갱신되지 않으므로 필요한 경우 사용자가 직접 **UPDATE STATISTICS** 문을 수행하여 통계 정보를 갱신해야 한다(:ref:`info-stats` 참고)
 
-**UPDATE STATISTICS** 문은 대량의 INSERT, 혹은 DELETE 문이 수행되어 실제 정보와 통계 정보 사이에 차이가 커질 때 수행할 것을 권장한다.
+**UPDATE STATISTICS** 문은 대량의 **INSERT**, 혹은 **DELETE** 문이 수행되어 실제 정보와 통계 정보 사이에 차이가 커질 때 수행할 것을 권장한다.
 
 ::
 
@@ -13,11 +18,11 @@
   
     UPDATE STATISTICS ON CATALOG CLASSES [WITH FULLSCAN]; 
 
-*   **WITH FULLSCAN**: 지정된 테이블의 전체 데이터를 가지고 통계 정보를 업데이트한다. 생략 시 샘플링한 데이터를 가지고 통계 정보를 업데이트한다. 대부분 통계 정보 갱신은 샘플링 정보를 업데이트하는 것으로 충분하며, WITH FULLSCAN은 시스템에 부담을 줄 수 있으므로 가급적 사용을 자제할 것을 권장한다. 
+*   **WITH FULLSCAN**: 지정된 테이블의 전체 데이터를 가지고 통계 정보를 업데이트한다. 생략 시 샘플링한 데이터를 가지고 통계 정보를 업데이트한다. 대부분 통계 정보 갱신은 샘플링 정보를 업데이트하는 것으로 충분하며, **WITH FULLSCAN** 은 시스템에 부담을 줄 수 있으므로 가급적 사용을 자제할 것을 권장한다. 
 
     .. note:: 
 
-        10.0 부터는 HA 환경의 마스터에서 수행한 UPDATE STATISTICS 문이 슬레이브/레플리카에 복제된다.
+        10.0 부터는 HA 환경의 마스터에서 수행한 **UPDATE STATISTICS** 문이 슬레이브/레플리카에 복제된다.
         
 *   **ALL CLASSES**: 모든 테이블의 통계 정보를 업데이트한다. 
 
@@ -93,7 +98,7 @@ CSQL 인터프리터의 세션 명령어로 지정한 테이블의 통계 정보
 
 CUBRID SQL 질의에 대한 실행 계획(query plan)을 보기 위해서는 다음의 방법을 사용할 수 있다.
 
-*   CUBRID 매니저 또는 CUBRID 쿼리 브라우저에서 플랜 보기 버튼을 누른다. CUBRID 매니저 또는 CUBRID 쿼리 브라우저의 사용 방법에 대해서는 `CUBRID 매니저 매뉴얼 <http://www.cubrid.org/wiki_tools/entry/cubrid-manager-manual_kr>`_ 또는 `CUBRID 쿼리 브라우저 매뉴얼 <http://www.cubrid.org/wiki_tools/entry/cubrid-query-browser-manual_kr>`_\ 을 참고한다.
+*   CUBRID Manager에서 "플랜 보기" 버튼을 누른다.
 
     .. image:: /images/query_plan_on_CM.png
 
@@ -623,7 +628,7 @@ SQL 힌트는 주석에 더하기 기호(+)를 함께 사용하여 지정한다.
 
 힌트 주석은 반드시 키워드 **SELECT**, **UPDATE** or **DELETE** 등의 예약어 다음에 나타나야 하고, 더하기 기호(+)가 주석에서 첫 번째 문자로 시작되어야 한다. 여러 개의 힌트를 지정할 때는 공백이 구분자로 사용된다. 여러 개의 힌트를 지정할 때는 공백이 구분자로 사용된다.
 
-SELECT, UPDATE, DELETE 문에는 다음 힌트가 지정될 수 있다.
+**SELECT**, **UPDATE**, **DELETE** 문에는 다음 힌트가 지정될 수 있다.
 
 *   **USE_NL**: 테이블 조인과 관련한 힌트로서, 질의 최적화기 중첩 루프 조인 실행 계획을 만든다.
 *   **USE_MERGE**: 테이블 조인과 관련한 힌트로서, 질의 최적화기는 정렬 병합 조인 실행 계획을 만든다.
@@ -676,7 +681,7 @@ MERGE 문에는 다음과 같은 힌트를 사용할 수 있다.
     SELECT /*+ USE_NL(a, b) */ * 
     FROM a INNER JOIN b ON a.col=b.col;
 
-다음은 심권호 선수가 메달을 획득한 연도와 메달 종류를 구하는 예제이다. 다음과 같은 질의로 표현이 되는데, 질의최적화기는 *athlete* 테이블을 외부 테이블로 하고, *game* 테이블을 내부 테이블로 하는 중첩 루프 조인 실행 계획을 만든다.
+다음은 *'심권호'* 선수가 메달을 획득한 연도와 메달 종류를 구하는 예제이다. 다음과 같은 질의로 표현이 되는데, 질의최적화기는 *athlete* 테이블을 외부 테이블로 하고, *game* 테이블을 내부 테이블로 하는 중첩 루프 조인 실행 계획을 만든다.
 
 .. code-block:: sql
 
@@ -701,7 +706,7 @@ MERGE 문에는 다음과 같은 힌트를 사용할 수 있다.
                    cost:  3 card 8653
         cost:  73 card 9
 
-다음은 USE_NL 힌트 사용 시 사용하는 테이블을 명시하는 예이다.
+다음은 **USE_NL** 힌트 사용 시 사용하는 테이블을 명시하는 예이다.
 
 .. code-block:: sql
 
@@ -716,7 +721,7 @@ MERGE 문에는 다음과 같은 힌트를 사용할 수 있다.
 인덱스 힌트
 ===========
 
-인덱스 힌트 구문은 질의에서 인덱스를 지정할 수 있도록 해서 질의 처리기가 적절한 인덱스를 선택할 수 있게 한다. 이와 같은 인덱스 힌트 구문은 USING INDEX 절을 사용하는 방식과 FROM 절에 { USE | FORCE | IGNORE } INDEX 구문을 사용하는 방식이 있다.
+인덱스 힌트 구문은 질의에서 인덱스를 지정할 수 있도록 해서 질의 처리기가 적절한 인덱스를 선택할 수 있게 한다. 이와 같은 인덱스 힌트 구문은 **USING INDEX** 절을 사용하는 방식과 FROM 절에 { **USE** | **FORCE** | **IGNORE** } **INDEX** 구문을 사용하는 방식이 있다.
 
 USING INDEX
 -----------
@@ -910,7 +915,7 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
 
 *   **USING INDEX** 절 또는 **USE INDEX** 구문을 통해 필터링된 인덱스를 명시하는 경우: 
 
-    인덱스를 구성하는 칼럼이 WHERE 절의 조건에 포함되어 있지 않으면 필터링된 인덱스를 사용하지 않는다. 
+    인덱스를 구성하는 칼럼이 **WHERE** 절의 조건에 포함되어 있지 않으면 필터링된 인덱스를 사용하지 않는다. 
 
     .. code-block:: sql
 
@@ -926,7 +931,7 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
    
         CREATE INDEX my_filter_index ON blogtopic(postDate) WHERE deleted=0;
 
-    아래 질의에서 my_filter_index를 구성하는 칼럼인 postDate가 WHERE 조건에 포함되어 있으므로, "USE INDEX" 구문으로도 인덱스를 사용할 수 있다.
+    아래 질의에서 my_filter_index를 구성하는 칼럼인 *postDate* 가 **WHERE** 조건에 포함되어 있으므로, **USE INDEX** 구문으로도 인덱스를 사용할 수 있다.
         
     .. code-block:: sql
         
@@ -936,9 +941,9 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
     
 *   **USING INDEX** <index_name>(+) 절 또는 **FORCE INDEX** 구문을 통해 필터링된 인덱스를 명시하는 경우: 
 
-    인덱스를 구성하는 칼럼이 WHERE 절의 조건에 포함되어 있지 않더라도 필터링된 인덱스를 사용한다.
+    인덱스를 구성하는 칼럼이 **WHERE** 절의 조건에 포함되어 있지 않더라도 필터링된 인덱스를 사용한다.
 
-    아래 질의에서는 my_filter_index의 인덱스를 구성하는 칼럼이 WHERE 조건에 포함되어 있지 않으므로, "USE INDEX" 구문으로는 인덱스를 사용할 수 없다.
+    아래 질의에서는 *my_filter_index* 의 인덱스를 구성하는 칼럼이 **WHERE** 조건에 포함되어 있지 않으므로, **USE INDEX** 구문으로는 인덱스를 사용할 수 없다.
 
     .. code-block:: sql
         
@@ -946,7 +951,7 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
         FROM blogtopic USE INDEX (my_filter_index)
         WHERE author = 'David' AND deleted=0;
 
-    따라서, my_filter_index 인덱스를 사용하려면 다음과 같이 "FORCE INDEX" 구문을 사용하여 인덱스 사용을 강제해야 한다.
+    따라서, my_filter_index 인덱스를 사용하려면 다음과 같이 **FORCE INDEX** 구문을 사용하여 인덱스 사용을 강제해야 한다.
     
     .. code-block:: sql
         
@@ -988,7 +993,7 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
     FROM bugs FORCE INDEX (idx_open_bugs)
     WHERE CreationDate > CURRENT_DATE - 10 AND Closed = 0;
 
-위의 예에서 "USING INDEX idx_open_bugs" 절이나 "USE INDEX (idx_open_bugs)" 절을 사용하는 경우, 인덱스를 사용하지 않고 질의를 수행하게 된다.
+위의 예에서 "**USING INDEX** *idx_open_bugs*" 또는 "**USE INDEX** (*idx_open_bugs*)" 를 사용하는 경우, *idx_open_bugs* 인덱스를 사용하지 않고 질의를 수행하게 된다.
     
 .. warning::
 
@@ -1485,7 +1490,7 @@ ORDER BY 절 최적화
 
 .. note::
 
-    :func:`CAST` 연산자 등을 통해 ORDER BY 절의 칼럼이 타입 변환되더라도, 타입 변환 전의 정렬 순서와 타입 변환 이후의 정렬 순서가 같다면 ORDER BY 절 최적화가 수행된다.
+    :func:`CAST` 연산자 등을 통해 **ORDER BY** 절의 칼럼이 타입 변환되더라도, 타입 변환 전의 정렬 순서와 타입 변환 이후의 정렬 순서가 같다면 **ORDER BY** 절 최적화가 수행된다.
     
         +----------------+----------------+
         | 변환 전        | 변환 이후      |
@@ -1764,7 +1769,7 @@ GROUP BY 절 최적화
 
     /* ---> skip GROUP BY */
 
-다음의 예는 k1, k2 칼럼으로 **GROUP BY**\를 수행하므로 tab(k1, k2, k3)로 구성된 인덱스가 사용되고 별도의 정렬 과정이 필요 없다. 하지만 **SELECT** 리스트에 있는 v 칼럼은 tab(k1, k2, k3)로 구성된 인덱스 내에 존재하지 않으므로 커버링 인덱스가 적용되지 않는다.
+다음의 예는 *k1*, *k2* 칼럼으로 **GROUP BY**\를 수행하므로 *tab*(*k1*, *k2*, *k3*)로 구성된 인덱스가 사용되고 별도의 정렬 과정이 필요 없다. 하지만 **SELECT** 리스트에 있는 v 칼럼은 *tab*(*k1*, *k2*, *k3*)로 구성된 인덱스 내에 존재하지 않으므로 커버링 인덱스가 적용되지 않는다.
     
 .. code-block:: sql
     
@@ -2006,10 +2011,10 @@ Loose index scan은 그룹핑되는 칼럼의 카디널리티가 전체 데이�
 
 질의문 힌트를 통해 **INDEX_LS**\가 입력되고 다음의 경우에 loose index scan의 적용이 고려된다.
 
-1.  인덱스가 SELECT 리스트의 모든 부분을 커버하는 경우. 즉, 커버링 인덱스가 적용되는 경우
-2.  SELECT DISTINCT, SELECT ... GROUP BY 또는 단일 투플 SELECT 문인 경우
-3.  MIN/MAX 함수를 제외한 모든 집계 함수가 DISTINCT를 포함하는 경우
-4.  COUNT(*)가 사용되어선 안 됨
+1.  인덱스가 **SELECT** 리스트의 모든 부분을 커버하는 경우. 즉, 커버링 인덱스가 적용되는 경우
+2.  **SELECT DISTINCT**, **SELECT** ... **GROUP BY** 또는 단일 투플 **SELECT** 문인 경우
+3.  **MIN**/**MAX** 함수를 제외한 모든 집계 함수가 **DISTINCT** 를 포함하는 경우
+4. **COUNT(*)** 가 사용되어선 안 됨
 5.  부분 키(subkey)의 카디널리티(고유 값의 개수)가 전체 인덱스의 카디널리티보다 100배 작은 경우
 
 부분 키는 복합 인덱스(composite index)에서 앞 쪽 부분에 해당하는 것으로, 예를 들어 INDEX(a, b, c, d)로 구성되어 있는 경우 (a), (a, b) 또는 (a, b, c)가 부분 키에 해당한다. 
@@ -2263,39 +2268,39 @@ Loose index scan은 그룹핑되는 칼럼의 카디널리티가 전체 데이�
 인-메모리 정렬
 --------------
 
-인-메모리 정렬(in memory sort, IMS) 기능은 ORDER BY 절을 명시한 LIMIT 질의에 적용되는 최적화이다. 일반적으로, ORDER BY와 LIMIT 절을 명시한 질의를 수행할 때, CUBRID는 전체 정렬 결과셋(full sorted resultset) 생성하고 나서 이 결과 셋에 LIMIT 연산을 적용한다. 전체 결과셋을 생성하는 대신 IMS 최적화를 사용하면, CUBRID는 ORDER BY ... LIMIT 절을 만족하는 투플만 정렬 버퍼(sort buffer)에 저장하는 인-메모리 바이너리 힙을 사용한다. 이 최적화는 정렬되지 않은 결과셋 전체를 정렬할 필요가 없게 하여 성능을 향상시킨다.
+인-메모리 정렬(in memory sort, IMS) 기능은 **ORDER BY** 절을 명시한 **LIMIT** 질의에 적용되는 최적화이다. 일반적으로, **ORDER BY** 와 **LIMIT** 절을 명시한 질의를 수행할 때, CUBRID는 전체 정렬 결과셋(full sorted resultset) 생성하고 나서 이 결과 셋에 **LIMIT** 연산을 적용한다. 전체 결과셋을 생성하는 대신 IMS 최적화를 사용하면, CUBRID는 **ORDER BY** ... **LIMIT** 절을 만족하는 투플만 정렬 버퍼(sort buffer)에 저장하는 인-메모리 바이너리 힙을 사용한다. 이 최적화는 정렬되지 않은 결과셋 전체를 정렬할 필요가 없게 하여 성능을 향상시킨다.
 
 이 최적화의 적용 여부는 사용자가 제어하는 것이 아니며, CUBRID는 다음 상황에서 IMS를 사용할 것을 결정한다.
 
-*   ORDER BY와 LIMIT 절을 명시한 질의
-*   LIMIT 절 적용 이후 최종 결과의 크기가 외부 정렬(external sort)에 의해 사용되는 메모리 양보다 작을 때(:ref:`memory-parameters`\ 의 **sort_buffer_size** 참고). 
+*   **ORDER BY** 와 **LIMIT** 절을 명시한 질의
+*   **LIMIT** 절 적용 이후 최종 결과의 크기가 외부 정렬(external sort)에 의해 사용되는 메모리 양보다 작을 때(:ref:`memory-parameters`\ 의 **sort_buffer_size** 참고). 
 
-IMS는 결과 행의 개수가 아닌 결과의 실제 크기를 고려함에 주의한다. 예를 들어, 기본 정렬 버퍼 크기(2MB)에 대해, 4바이트 INTEGER 하나로 구성된 레코드는 524288개 행의 LIMIT까지 IMS가 적용되지만 CHAR(1024) 하나로 구성된 레코드는 2048개 행의 LIMIT까지만 IMS가 적용된다. 이 최적화는 DISTINCT 정렬 결과 셋을 요구하는 질의에는 적용되지 않는다.
+IMS는 결과 행의 개수가 아닌 결과의 실제 크기를 고려함에 주의한다. 예를 들어, 기본 정렬 버퍼 크기(2MB)에 대해, 4바이트 **INTEGER** 하나로 구성된 레코드는 524288개 행의 **LIMIT** 까지 IMS가 적용되지만 **CHAR** (1024) 하나로 구성된 레코드는 2048개 행의 **LIMIT** 까지만 IMS가 적용된다. 이 최적화는 **DISTINCT** 정렬 결과 셋을 요구하는 질의에는 적용되지 않는다.
 
 .. _sort-limit-optimization:
 
 SORT-LIMIT 최적화
 -----------------
 
-SORT-LIMIT 최적화는 ORDER BY 절과 LIMIT 절을 명시한 질의에 적용되는 최적화이다. 이 최적화는 조인하는 동안의 카디널리티(cardinality)를 줄이기 위해 질의 계획에서 가능한 빨리 LIMIT 연산자를 평가하고자 한다. 
+SORT-LIMIT 최적화는 **ORDER BY** 절과 LIMIT 절을 명시한 질의에 적용되는 최적화이다. 이 최적화는 조인하는 동안의 카디널리티(cardinality)를 줄이기 위해 질의 계획에서 가능한 빨리 **LIMIT** 연산자를 평가하고자 한다. 
 
 다음 조건이 만족될 때 SORT-LIMIT 계획이 고려될 수 있다.
 
-*   ORDER BY 절에서 참조되는 모든 테이블은 SORT-LIMIT 계획에 속한다.
+*   **ORDER BY** 절에서 참조되는 모든 테이블은 SORT-LIMIT 계획에 속한다.
 *   JOIN 테이블 중 다음 테이블이 SORT-LIMIT 계획에 포함된다.
 
     *   외래 키/기본 키 관계에서 외래 키를 가지는 테이블
-    *   LEFT JOIN 시 왼쪽 테이블
-    *   RIGHT JOIN 시 오른쪽 테이블
+    *   **LEFT JOIN** 시 왼쪽 테이블
+    *   **RIGHT JOIN** 시 오른쪽 테이블
 
 *   LIMIT 행은 **sort_limit_max_count** 시스템 파라미터(기본값: 1000) 값보다 작아야 한다. 
 *   질의가 CROSS JOIN을 하지 않는다.
 *   질의가 최소한 2개의 릴레이션으로 조인한다.
-*   질의는 GROUP BY 절을 가지지 않는다.
-*   질의는 DISTINCT를 명시하지 않는다.
-*   ORDER BY 표현식이 스캔하는 동안 평가될 수 있다. 
+*   질의는 **GROUP BY** 절을 가지지 않는다.
+*   질의는 **DISTINCT** 를 명시하지 않는다.
+*   **ORDER BY** 표현식이 스캔하는 동안 평가될 수 있다. 
 
-    예를 들어, 아래와 같은 질의는 SORT-LIMIT 최적화가 적용될 수 없는데, SUM은 스캔하는 동안 평가될 수 없기 때문이다.
+    예를 들어, 아래와 같은 질의는 SORT-LIMIT 최적화가 적용될 수 없는데, **SUM** 은 스캔하는 동안 평가될 수 없기 때문이다.
 
     .. code-block:: sql
     
@@ -2315,7 +2320,7 @@ SORT-LIMIT 최적화는 ORDER BY 절과 LIMIT 절을 명시한 질의에 적용�
 
     SELECT /*+ RECOMPILE */ * FROM u, t WHERE u.i = t.i AND u.j > 10 ORDER BY u.j LIMIT 5; 
 
-위의 SELECT 질의 계획이 아래와 같이 출력될 때 "(sort limit)"을 확인할 수 있다.
+위의 **SELECT** 질의 계획이 아래와 같이 출력될 때 "(sort limit)"을 확인할 수 있다.
 
 ::
 

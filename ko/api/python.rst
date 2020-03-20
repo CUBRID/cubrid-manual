@@ -1,3 +1,7 @@
+
+:meta-keywords: cubrid python driver, cubrid python api, database python driver, python database sample
+:meta-description: CUBRIDdb is a Python extension package that implements Python Database API 2.0 compliant support for CUBRID. CUBRID Python driver is written based on CCI API.
+
 ***************
 Python 드라이버
 ***************
@@ -6,7 +10,7 @@ Python 드라이버
 
 CUBRID Python 드라이버는 CCI API를 기반으로 작성되었으므로, CCI API 및 CCI에 적용되는 **CCI_DEFAULT_AUTOCOMMIT** 과 같은 설정 파라미터에 영향을 받는다.
 
-별도로 Python 드라이버를 다운로드하거나 Python 드라이버에 대한 최신 정보를 확인하려면 http://www.cubrid.org/wiki_apis/entry/cubrid-python-driver\에 접속한다.
+.. FIXME: 별도로 Python 드라이버를 다운로드하거나 Python 드라이버에 대한 최신 정보를 확인하려면 http://www.cubrid.org/wiki_apis/entry/cubrid-python-driver\에 접속한다.
 
 Python 설치 및 설정
 ===================
@@ -40,7 +44,9 @@ Linux, Unix 및 유사 운영체제에서는 다음과 같은 세 가지 방법�
 
 **소스코드로 설치(Linux)**
 
-소스코드를 컴파일하여 CUBRID Python 드라이버를 설치하려면 Python Development Package가 필요하다. Python Development Package가 설치되어 있지 않다면 http://www.cubrid.org/wiki_apis/entry/install-python-development-package\ 를 참고하여 설치한다.
+소스코드를 컴파일하여 CUBRID Python 드라이버를 설치하려면 Python Development Package가 필요하다. 
+
+.. FIXME: Python Development Package가 설치되어 있지 않다면 http://www.cubrid.org/wiki_apis/entry/install-python-development-package\ 를 참고하여 설치한다.
 
 #.  소스 코드를 http://www.cubrid.org/?mid=downloads&item=python_driver\에서 다운로드한다.
 

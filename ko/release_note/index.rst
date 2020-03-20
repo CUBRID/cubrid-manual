@@ -5,7 +5,7 @@
 .. toctree::
     :maxdepth: 2
     
-    r100.rst
+    release_note_latest_ver.rst
 
 공통 정보
 =========
@@ -13,11 +13,11 @@
 개정 내역
 ---------
 
-+-------------+-------------------------------------+
-| 작성 날짜   | 설명                                |
-+=============+=====================================+
-| 2014년 월   | CUBRID 10.0 릴리스 (10.x.x.x)       |
-+-------------+-------------------------------------+
++-------------+---------------------------------------------+
+| 작성 날짜   | 설명                                        |
++=============+=============================================+
+| 2017년 7월   | CUBRID 10.1 릴리스 (10.1.0.7663-1ca0ab8)   |
++-------------+---------------------------------------------+
 
 버그 리포트 및 사용자 피드백 제공 방법
 --------------------------------------
@@ -27,32 +27,31 @@ CUBRID 프로젝트에서는 사용자의 거침없는 버그 리포트와 솔�
 +---------------+-----------------------------------------------------------------------+
 | 문서          | 설명                                                                  |
 +===============+=======================================================================+
-| 버그 리포트   | CUBRID 오픈 소스 프로젝트: http://dev.naver.com/projects/cubrid/issue |
+| 버그 리포트   | CUBRID Issue Tracker: http://jira.cubrid.org/browse                   |
 +---------------+-----------------------------------------------------------------------+
-| 사용자 피드백 | CUBRID 오픈 소스 프로젝트: http://dev.naver.com/projects/cubrid/forum |
+| 사용자 피드백 | CUBRID 오픈 소스 프로젝트: https://github.com/CUBRID/cubrid           |
 |               |                                                                       |
-|               | CUBRID 공식 사이트: http://www.cubrid.com, http://www.cubrid.org      |
+|               | CUBRID 공식 사이트: http://www.cubrid.org                             |
 +---------------+-----------------------------------------------------------------------+
 
 라이선스
 --------
 
-CUBRID의 서버 엔진에는 GNU GPL v2 or later 가 적용되고 CUBRID 매니저 및 인터페이스(API)에는 BSD 라이선스가 적용된다. 보다 상세한 정보는 CUBRID 공식 사이트의 라이선스 가이드(http://cubrid.com/zbxe/bbs_oss_guide/32249) 를 참고한다.
+CUBRID의 서버 엔진에는 GNU GPL v2 or later 가 적용되고 CUBRID 매니저 및 인터페이스(API)에는 BSD 라이선스가 적용된다. 보다 상세한 정보는 CUBRID 공식 사이트의 라이선스 가이드(http://www.cubrid.org/cubrid_license) 를 참고한다.
 
 추가 정보
 ---------
 
 업그레이드 및 마이그레이션과 관련된 정보는 :doc:`/upgrade`\ 를 참고한다.
 
-CUBRID 도구 정보는 http://www.cubrid.org/wiki_tools\ 를 참고한다.
+.. FIXME: CUBRID 도구 정보는 http://www.cubrid.org/wiki_tools\ 를 참고한다.
 
-CUBRID 드라이버 정보는 http://www.cubrid.org/wiki_apis\ 를 참고한다.
+.. FIXME: CUBRID 드라이버 정보는 http://www.cubrid.org/wiki_apis\ 를 참고한다.
 
-CUBRID 최신 소스는 http://svn.cubrid.org/\ 를 참고한다.
+CUBRID 최신 소스는 https://github.com/CUBRID/cubrid 와 https://github.com/CUBRID  를 참고한다.
 
 드라이버 관련 주의 사항
 -----------------------
 
-현재 CUBRID가 지원하는 드라이버들은 JDBC, Node.js, CCI(CUBRID C API), PHP, PDO, Python, Perl, Ruby, ADO.NET, ODBC, OLE DB이며, JDBC와 Node.js, ADO.NET을 제외한 모든 드라이버들은 CCI 기반으로 개발되었으므로 CCI와 관련하여 변경된 사항은 CCI 기반 드라이버들에 영향을 미칠 수 있음에 주의한다.
-
-.. 참고: OLE DB는 cubrid.so 안 쓰고 static lib 사용하여 컴파일됨.
+현재 CUBRID가 지원하는 드라이버들은 JDBC, Node.js, CCI(CUBRID C API), PHP, PDO, Python, Perl, Ruby, ADO.NET, ODBC, OLE DB이다.
+JDBC와 Node.js, ADO.NET을 제외한 모든 드라이버들은 CCI 기반으로 개발되었으므로 CCI와 관련하여 변경된 사항은 CCI 기반 드라이버들에 영향을 미칠 수 있다.

@@ -1,3 +1,6 @@
+
+:meta-keywords: cubrid coalesce, cubrid decode, cubrid greatest, cubrid if, cubrid ifnull, cubrid nvl, cubrid isnull, cubrid least, cubrid nullif, cubrid nlv2
+
 :tocdepth: 3
 
 *********

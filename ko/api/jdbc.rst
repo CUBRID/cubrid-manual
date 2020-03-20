@@ -1,3 +1,7 @@
+
+:meta-keywords: cubrid jdbc driver, cubrid jdbc api, jdbc programming, jdbc sample
+:meta-description: CUBRID JDBC driver (cubrid_jdbc.jar) implements an interface to enable access from applications in Java to CUBRID database server.
+
 *************
 JDBC 드라이버
 *************
@@ -9,7 +13,7 @@ JDBC 개요
 
 CUBRID JDBC 드라이버(cubrid_jdbc.jar)를 사용하면 Java로 작성된 응용 프로그램에서 CUBRID 데이터베이스에 접속할 수 있다. CUBRID JDBC 드라이버는 <*CUBRID 설치 디렉터리*> **/jdbc** 디렉터리에 위치한다. CUBRID JDBC 드라이버는 JDBC 2.0 스펙을 기준으로 개발되었으며, JDK 1.6에서 컴파일한 것을 기본으로 제공한다.
 
-별도로 JDBC 드라이버를 다운로드하거나 JDBC 드라이버에 대한 최신 정보를 확인하려면 http://www.cubrid.org/wiki_apis/entry/cubrid-jdbc-driver\ 에 접속한다.
+.. FIXME: 별도로 JDBC 드라이버를 다운로드하거나 JDBC 드라이버에 대한 최신 정보를 확인하려면 http://www.cubrid.org/wiki_apis/entry/cubrid-jdbc-driver\ 에 접속한다.
 
 **CUBRID JDBC 드라이버 버전 확인**
 
@@ -871,6 +875,23 @@ JDBC에서 **LOB** 데이터를 처리하는 인터페이스는 JDBC 4.0 스펙�
 .. note::
 
     칼럼에서 정의한 크기보다 큰 문자열을 **INSERT** / **UPDATE** 하면 문자열이 잘려서 입력된다.
+
+setBoolean
+----------
+
+prepareStatement.setBoolean(1, true) 는 다음으로 지정된다.
+    * numeric 타입에서의 1.
+    * string 타입에서의 '1'.
+
+prepareStatement.setBooelan(1, false) 는 다음으로 지정된다.
+    * numeric 타입에서 0.
+    * string 타입에서 '0'.
+
+.. note:: 이전 버전에서 동작 방식 
+    
+    prepareStatement.setBoolean(1, true) 은 다음으로 지정된다.
+        * 2008 R4.1, 9.0 에서는 BIT(1) 타입의 1 을 의미한다.
+        * 2008 R4.3, 2008 R4.4, 9.1, 9.2, 9.3 에서는SHORT 타입의 -128 을 의미한다.
 
 .. _jdbc-error-codes:
 

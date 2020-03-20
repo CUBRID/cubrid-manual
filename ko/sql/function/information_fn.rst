@@ -1,4 +1,8 @@
+
+:meta-keywords: cubrid charset, cubrid coercibility, cubrid collation, cubrid current_user, cubrid default, cubrid last_insert_id, cubrid row_count
+
 :tocdepth: 3
+
 
 *********
 정보 함수
@@ -186,6 +190,7 @@ DBTIMEZONE
 
     :func:`SESSIONTIMEZONE`, :func:`FROM_TZ`, :func:`NEW_TIME`, :func:`TZ_OFFSET`
 
+
 DEFAULT
 =======
 
@@ -220,6 +225,47 @@ DEFAULT
 .. note::
 
     CUBRID 9.0 미만 버전에서는 테이블 생성 시 DATE, DATETIME, TIME, TIMESTAMP 칼럼의 DEFAULT 값을 SYS_DATE, SYS_DATETIME, SYS_TIME, SYS_TIMESTAMP로 지정하면, CREATE TABLE 시점의 값이 저장된다. 따라서 데이터가 INSERT되는 시점의 값을 입력하려면 INSERT 구문의 VALUES 절에 해당 함수를 입력해야 한다.
+
+.. _disk_size:    
+
+DISK_SIZE
+=========
+
+.. function:: DISK_SIZE(expr)
+
+    이 함수는 *expr* 값을 저장하는 데 필요한 바이트 크기를 반환한다. 주로 데이터베이스 힙 파일에 값을 저장하는 데 필요한 크기를 확인할 때 사용한다.
+
+    :param expr: 연산식
+
+    :rtype: INTEGER
+
+.. code-block:: sql
+
+     SELECT DISK_SIZE('abc'), DISK_SIZE(1);
+
+::
+
+       disk_size('abc')   disk_size(1)
+    ==================================
+                      7              4
+
+
+값의 실제 내용에 따라 크기가 다르며, :ref:`문자열 압축<string_compression>` 도 고려한다.
+
+.. code-block:: sql
+
+     CREATE TABLE t1(s1 VARCHAR(10), s2 VARCHAR(300), c1 CHAR(10), c2 CHAR(300));
+     INSERT INTO t1 VALUES(REPEAT('a', 10), REPEAT('b', 300), REPEAT('c', 10), REPEAT('d', 300));
+     INSERT INTO t1 VALUES('a', 'b', 'c', 'd');
+     SELECT DISK_SIZE(s1), DISK_SIZE(s2), DISK_SIZE(c1), DISK_SIZE(c2) FROM t1;
+
+::
+
+       disk_size(s1)   disk_size(s2)   disk_size(c1)   disk_size(c2)
+    ================================================================
+                  12              24              10             300
+                   4               4              10             300
+
     
 INDEX_CARDINALITY
 =================

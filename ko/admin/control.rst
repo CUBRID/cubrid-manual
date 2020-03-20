@@ -1,3 +1,7 @@
+
+:meta-keywords: cubrid server process, cub_server, cubrid broker, cubrid cas, cubrid manager server, cubrid HA, cubrid services, cubrid logging, cubrid errors, cubrid server access, cubrid status, cubrid manager
+:meta-description: How to control and check CUBRID services and processes (server, broker), logging files, access, errors, and CUBRID Manager.
+
 .. _control-cubrid-processes:
 
 CUBRID 프로세스 제어
@@ -56,7 +60,6 @@ CUBRID 브로커 프로세스를 제어하기 위한 **cubrid** 유틸리티 구
                |on <broker_name> |off <broker_name>
                |reset broker_name 
                |info
-               |getid -b <broker_name> [-f] shard_key
 
 *   start: 브로커 프로세스 구동
 *   stop: 브로커 프로세스 종료
@@ -66,9 +69,7 @@ CUBRID 브로커 프로세스를 제어하기 위한 **cubrid** 유틸리티 구
 *   on/off: 명시한 브로커만 사용 가능하게 하거나 불가능하게 함
 *   reset: 브로커 접속을 리셋함
 *   info: 브로커 설정 정보 출력
-*   getid: 입력한 SHARD key에 해당하는 SHARD ID(SHARD 데이터베이스 ID)를 출력함
 
-SHARD 기능은 브로커가 구동되고 cubrid_broker.conf의 SHARD라는 브로커 파라미터 값이 ON일 때만 사용할 수 있다.
 
 CUBRID 매니저 서버 제어
 -----------------------
@@ -176,13 +177,13 @@ Windows 환경에서는 시스템 권한을 가진 사용자로 로그인한 경
     @ cubrid server start: demodb
 
     This may take a long time depending on the amount of recovery works to do.
-    CUBRID 9.2
+    CUBRID 10.1 
 
     ++ cubrid server start: success
     @ cubrid server start: testdb
 
     This may take a long time depending on the amount of recovery works to do.
-    CUBRID 9.2
+    CUBRID 10.1 
 
     ++ cubrid server start: success
     @ cubrid broker start
@@ -257,14 +258,14 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 10.0
+    CUBRID 10.1
 
     ++ cubrid server start: success
     @ cubrid server start: testdb
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 10.0
+    CUBRID 10.1
 
     ++ cubrid server start: success
     @ cubrid broker start
@@ -283,8 +284,8 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
     ++ cubrid master is running.
     @ cubrid server status
 
-    Server testdb (rel 9.2, pid 31059)
-    Server demodb (rel 9.2, pid 30950)
+    Server testdb (rel 10.1, pid 31059)
+    Server demodb (rel 10.1, pid 30950)
 
     @ cubrid broker status
     % query_editor
@@ -319,7 +320,7 @@ CUBRID는 cubrid 유틸리티의 수행 결과에 대한 로깅 기능을 제공
  
 **로깅 내용**
  
-$CUBRID/log/cubrid_utility.log 파일에 다음의 내용들이 로깅된다.
+**$CUBRID/log/cubrid_utility.log** 파일에 다음의 내용들이 로깅된다.
  
 *   cubrid 유틸리티를 통해 수행된 모든 명령:  usage, version, parsing 에러는 제외
     
@@ -329,7 +330,7 @@ $CUBRID/log/cubrid_utility.log 파일에 다음의 내용들이 로깅된다.
  
 **로그 파일 크기** 
  
-cubrid_utility.log 파일의 크기는 cubrid.conf의 error_log_size 파라미터에 설정한 값만큼 커지고, 해당 크기만큼 커지면 cubrid_utility.log.bak 파일로 백업된다.
+**cubrid_utility.log** 파일의 크기는 cubrid.conf의 error_log_size 파라미터에 설정한 값만큼 커지고, 해당 크기만큼 커지면 **cubrid_utility.log.bak** 파일로 백업된다.
  
 **로그 포맷**
  
@@ -351,7 +352,7 @@ cubrid_utility.log 파일의 크기는 cubrid.conf의 error_log_size 파라미�
     13-11-19 15:27:31.671 (17868) cubrid service stop
     13-11-19 15:27:34.909 (17868) SUCCESS
  
-단, Windows 환경에서는 일부 cubrid 명령이 서비스 프로세스를 통해 다시 실행되는 구조이므로 Linux와 달리 중첩된 정보가 출력될 수 있다.
+단, Windows 환경에서는 일부 **cubrid** 명령이 서비스 프로세스를 통해 다시 실행되는 구조이므로 Linux와 달리 중첩된 정보가 출력될 수 있다.
  
 ::
  
@@ -360,7 +361,7 @@ cubrid_utility.log 파일의 크기는 cubrid.conf의 error_log_size 파라미�
     13-11-13 17:17:56.027 ( 7848) SUCCESS
     13-11-13 17:17:57.136 ( 3820) SUCCESS
 
-또한 Windows 환경에서는 서비스 프로세스를 통해 수행되는 프로세스는 오류 메시지를 출력하지 못하므로, 서비스 구동과 관련된 오류메시지는 반드시 cubrid_utility.log를 통해 확인해야 한다.
+또한 Windows 환경에서는 서비스 프로세스를 통해 수행되는 프로세스는 오류 메시지를 출력하지 못하므로, 서비스 구동과 관련된 오류메시지는 반드시 **cubrid_utility.log** 를 통해 확인해야 한다.
 
 .. _control-cubrid-server:
 
@@ -380,7 +381,7 @@ cubrid_utility.log 파일의 크기는 cubrid.conf의 error_log_size 파라미�
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 9.2
+    CUBRID 10.1 
 
     ++ cubrid server start: success
 
@@ -396,7 +397,7 @@ cubrid_utility.log 파일의 크기는 cubrid.conf의 error_log_size 파라미�
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 9.2
+    CUBRID 10.1 
 
     ++ cubrid server start: success
 
@@ -453,7 +454,7 @@ cubrid_utility.log 파일의 크기는 cubrid.conf의 error_log_size 파라미�
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 9.2
+    CUBRID 10.1 
 
     ++ cubrid server start: success
 
@@ -467,8 +468,8 @@ cubrid_utility.log 파일의 크기는 cubrid.conf의 error_log_size 파라미�
     % cubrid server status
     
     @ cubrid server status
-    Server testdb (rel 9.2, pid 24465)
-    Server demodb (rel 9.2, pid 24342)
+    Server testdb (rel 10.1, pid 24465)
+    Server demodb (rel 10.1, pid 24342)
 
 마스터 프로세스가 중지된 상태라면, 다음과 같은 메시지가 출력된다. 
 
@@ -556,7 +557,7 @@ cubrid_utility.log 파일의 크기는 cubrid.conf의 error_log_size 파라미�
     Time: 10/29/10 17:32:42.360 - ERROR *** ERROR CODE = -1022, Tran = 0, CLIENT = (unknown):(unknown)(-1), EID = 2
     Address(10.24.18.66) is not authorized.
 
-데이터베이스 서버의 에러 로그는 $CUBRID/log/server 디렉터리에 생성되며, 파일 이름은 <db_name>_<yyyymmdd>_<hhmi>.err 형식으로 저장된다. 확장자는 .err이다.
+데이터베이스 서버의 에러 로그는 **$CUBRID/log/server** 디렉터리에 생성되며, 파일 이름은 <db_name>_<yyyymmdd>_<hhmi>.err 형식으로 저장된다. 확장자는 .err이다.
  
 ::
  
@@ -573,9 +574,9 @@ cubrid_utility.log 파일의 크기는 cubrid.conf의 error_log_size 파라미�
  
 질의 성능에 영향을 주는 이벤트가 발생하면 해당 이벤트를 이벤트 로그에 기록한다.
 
-이벤트 로그에 저장되는 이벤트는 SLOW_QUERY, MANY_IOREADS, LOCK_TIMEOUT, DEADLOCK, 그리고 TEMP_VOLUME_EXPAND가 있다.
+이벤트 로그에 저장되는 이벤트는 *SLOW_QUERY*, *MANY_IOREADS*, *LOCK_TIMEOUT*, *DEADLOCK*, 그리고 *TEMP_VOLUME_EXPAND* 가 있다.
 
-해당 로그 파일은 $CUBRID/log/server 디렉터리에 생성되며, 파일 이름은 <db_name>_<yyyymmdd>_<hhmi>.event 형식으로 저장된다. 확장자는 .event이다.
+해당 로그 파일은 **$CUBRID/log/server** 디렉터리에 생성되며, 파일 이름은 <db_name>_<yyyymmdd>_<hhmi>.event 형식으로 저장된다. 확장자는 .event이다.
  
 ::
  
@@ -640,17 +641,19 @@ I/O 읽기를 많이 발생시킨 질의를 기록한다. cubrid.conf의 **sql_t
  
 ::
  
-    06/13/13 20:56:18.650 - LOCK_TIMEOUT
+    02/02/16 20:56:18.650 - LOCK_TIMEOUT
     waiter:
       client: public@testhost|csql(21529)
-      lock:   NX_LOCK (oid=-532|540|16386, table=y, index=pk_y_a)
-      sql: update [y] [y] set [a]=400 where ([y].[a]= ?:0 ) using index [y].[pk_y_a](+)
+      lock:    X_LOCK (oid=0|650|3, table=t)
+      sql: update [t] [t] set [t].[a]= ?:0  where [t].[a]= ?:1
+      bind: 2
       bind: 1
  
     blocker:
       client: public@testhost|csql(21541)
-      lock:   NX_LOCK (oid=-532|540|16386, table=y, index=pk_y_a)
-      sql: update [y] [y] set [a]=100 where ([y].[a]= ?:0 ) using index [y].[pk_y_a](+)
+      lock:    X_LOCK (oid=0|650|3, table=t)
+      sql: update [t] [t] set [t].[a]= ?:0  where [t].[a]= ?:1
+      bind: 3
       bind: 1
       
 *   waiter: 잠금(lock)을 획득하려고 대기하는 클라이언트
@@ -672,57 +675,55 @@ I/O 읽기를 많이 발생시킨 질의를 기록한다. cubrid.conf의 **sql_t
 교착 상태(deadlock)가 발생했을 때, cycle에 속해있는 트랜잭션의 잠금(lock) 정보들을 기록한다. 다음은 출력 예이다.
  
 ::
- 
-    06/13/13 20:56:17.638 - DEADLOCK
+
+    02/02/16 20:56:17.638 - DEADLOCK
     client: public@testhost|csql(21541)
     hold:
-      lock:   NX_LOCK (oid=-532|540|16385, table=y, index=pk_y_a)
-      sql: update [y] [y] set [a]=100 where ([y].[a]= ?:0 ) using index [y].[pk_y_a](+)
+      lock:    X_LOCK (oid=0|650|5, table=t)
+      sql: update [t] [t] set [t].[a]= ?:0  where [t].[a]= ?:1 
+      bind: 3
       bind: 1
- 
-      lock:   NX_LOCK (oid=-532|540|16386, table=y, index=pk_y_a)
-      sql: update [y] [y] set [a]=100 where ([y].[a]= ?:0 ) using index [y].[pk_y_a](+)
-      bind: 1
- 
-      lock:    X_LOCK (oid=0|540|1, table=y)
-      sql: update [y] [y] set [a]=100 where ([y].[a]= ?:0 ) using index [y].[pk_y_a](+)
+
+      lock:    X_LOCK (oid=0|650|3, table=t)
+      sql: update [t] [t] set [t].[a]= ?:0  where [t].[a]= ?:1 
+      bind: 3
       bind: 1
  
     wait:
-      lock:   NX_LOCK (oid=-532|540|16390, table=y, index=pk_y_a)
-      sql: update [y] [y] set [a]=300 where ([y].[a]= ?:0 ) using index [y].[pk_y_a](+)
+      lock:    X_LOCK (oid=0|650|4, table=t)
+      sql: update [t] [t] set [t].[a]= ?:0  where [t].[a]= ?:1 
       bind: 5
+      bind: 2
  
     client: public@testhost|csql(21529)
     hold:
-      lock:   NX_LOCK (oid=-532|540|16389, table=y, index=pk_y_a)
-      sql: update [y] [y] set [a]=200 where ([y].[a]= ?:0 ) using index [y].[pk_y_a](+)
-      bind: 5
- 
-      lock:   NX_LOCK (oid=-532|540|16390, table=y, index=pk_y_a)
-      sql: update [y] [y] set [a]=200 where ([y].[a]= ?:0 ) using index [y].[pk_y_a](+)
-      bind: 5
- 
-      lock:    X_LOCK (oid=0|540|5, table=y)
-      sql: update [y] [y] set [a]=200 where ([y].[a]= ?:0 ) using index [y].[pk_y_a](+)
-      bind: 5
+      lock:    X_LOCK (oid=0|650|6, table=t)
+      sql: update [t] [t] set [t].[a]= ?:0  where [t].[a]= ?:1
+      bind: 4
+      bind: 2
+
+      lock:    X_LOCK (oid=0|650|4, table=t)
+      sql: update [t] [t] set [t].[a]= ?:0  where [t].[a]= ?:1
+      bind: 4
+      bind: 2
  
     wait:
-      lock:   NX_LOCK (oid=-532|540|16386, table=y, index=pk_y_a)
-      sql: update [y] [y] set [a]=400 where ([y].[a]= ?:0 ) using index [y].[pk_y_a](+)
+      lock:    X_LOCK (oid=0|650|3, table=t)
+      sql: update [t] [t] set [t].[a]= ?:0  where [t].[a]= ?:1
+      bind: 6
       bind: 1
  
 *   client: <DB 사용자>@<응용 클라이언트 호스트 명>|<프로세스 이름>(<프로세스 ID>)
 
     *   hold: 잠금을 소유하고 있는 객체
     
-        *   lock: 잠금 종류, 테이블 및 인덱스 이름
+        *   lock: 잠금 종류, 테이블 이름
         *   sql: 잠금을 소유하고 있는 SQL
         *   bind: 바인딩된 값
         
     *   wait: 잠금을 대기하고 있는 객체
     
-        *   lock: 잠금 종류, 테이블 및 인덱스 이름
+        *   lock: 잠금 종류, 테이블 이름
         *   sql: 잠금을 대기하고 있는 SQL
         *   bind: 바인딩된 값
  
@@ -732,7 +733,7 @@ I/O 읽기를 많이 발생시킨 질의를 기록한다. cubrid.conf의 **sql_t
 
 **TEMP_VOLUME_EXPAND**
  
-일시적 임시 볼륨(temporary temp volume)이 확장되면 해당 시각을 기록한다. 이를 통해 일시적 임시 볼륨 확장을 유발한 트랜잭션을 확인할 수 있다.
+일시적 볼륨(temporary volume)이 확장되면 해당 시각을 기록한다. 이를 통해 일시적 볼륨 확장을 유발한 트랜잭션을 확인할 수 있다.
  
 ::
   
@@ -744,11 +745,11 @@ I/O 읽기를 많이 발생시킨 질의를 기록한다. cubrid.conf의 **sql_t
       pages: 24399
  
 *   client: <DB 사용자>@<응용 클라이언트 호스트 명>|<프로그램 이름>(<프로세스 ID>)
-*   sql: 일시적 임시 볼륨이 필요한 SQL. INSERT ... SELECT를 제외한 모든 INSERT 문, DDL 문 등은 DB 서버에 SQL이 전달되지 않기 때문에 EMPTY로 표시된다.
-    SELECT, UPDATE, DELETE 문은 SQL이 표시된다.
+*   sql: 일시적 볼륨을 사용하는 SQL. INSERT ... SELECT를 제외한 모든 INSERT 문, DDL 문 등은 DB 서버에 SQL이 전달되지 않기 때문에 EMPTY로 표시된다. 
+    SELECT, UPDATE, DELETE 문은 SQL 구문이 표시된다.
 *   bind: 바인딩된 값
-*   time: 일시적 임시 볼륨을 생성하는데 소요된 시간(ms).
-*   pages: 일시적 임시 볼륨 생성에 필요한 페이지 개수
+*   time: 일시적 볼륨 생성에 소요된 시간(ms)
+*   pages: 일시적 볼륨 생성에 필요한  페이지의 개수 
 
 .. _database-server-error:
     
@@ -828,7 +829,7 @@ CCI 드라이버를 사용하여 C로 프로그램을 작성할 때는 에러 �
 브로커 구동
 -----------
 
-브로커를 구동하기 위하여 다음과 같이 입력한다. cubrid_broker.conf 의 브로커 파라미터인 **SHARD**\ 가 ON으로 설정된 경우 SHARD 기능이 활성화된다.
+브로커를 구동하기 위하여 다음과 같이 입력한다. 
 
 ::
 
@@ -844,14 +845,10 @@ CCI 드라이버를 사용하여 C로 프로그램을 작성할 때는 에러 �
     @ cubrid broker start
     ++ cubrid broker is running.
 
-.. warning::
- 
-    Linux 시스템에서 샤드 구동 시 필요한 파일 디스크립터(file descriptor, fd) 개수는 cubrid_broker.conf에서 설정하는 SHARD_MAX_CLIENTS보다 적당히 많은 정도이므로, "ulimit -n"으로 fd의 개수를 제약할 때 SHARD_MAX_CLIENTS보다 적당히 크게 설정해야 한다. Linux 시스템의 fd 개수 제약이 SHARD에서 필요한 fd 개수보다 작게 설정된 경우, SHARD 구동에 실패하면서 출력되는 오류 메시지에는 SHARD에서 필요한 fd 개수가 표시된다.
-
 브로커 종료
 -----------
 
-브로커를 종료하기 위하여 다음과 같이 입력한다. cubrid_broker.conf 의 브로커 파라미터인 SHARD가 ON으로 설정된 경우 SHARD 기능이 정지된다.
+브로커를 종료하기 위하여 다음과 같이 입력한다. 
 
 ::
 
@@ -881,20 +878,19 @@ CCI 드라이버를 사용하여 C로 프로그램을 작성할 때는 에러 �
 브로커 상태 확인
 ----------------
 
-**cubrid broker status**\ 는 여러 옵션을 제공하여, 각 브로커의 처리 완료된 작업 수, 처리 대기중인 작업 수를 포함한 브로커 상태 정보를 확인할 수 있도록 한다. 
-**cubrid_broker.conf**\ 의 **SHARD** 브로커 파라미터가 ON으로 설정된 경우 **-c** 옵션과 **-m** 옵션을 사용하여 SHARD에 접속한 클라이언트 또는 SHARD 상태를 확인할 수 있다. 또한 **-S** 옵션 또는 **-P** 옵션을 사용하여 shard DB 또는 proxy 별로 구분하여 정보를 출력할 수 있다.
+**cubrid broker status**  는 여러 옵션을 제공하여, 각 브로커의 처리 완료된 작업 수, 처리 대기중인 작업 수를 포함한 브로커 상태 정보를 확인할 수 있도록 한다. 
 
 ::
 
     cubrid broker status [options] [expr]
 
-*   *expr*: 브로커 이름의 일부 또는 "SERVICE=ON|OFF"
+*   *expr* : 브로커 이름의 일부 또는 "SERVICE=ON|OFF"
     
-*expr*\이 명시되면 이름이 *expr*을 포함하는 브로커에 대한 상태 모니터링을 수행하고, 생략되면 CUBRID 브로커 환경 설정 파일( **cubrid_broker.conf** )에 등록된 전체 브로커에 대해 상태 모니터링을 수행한다. 
+*expr* 이 명시되면 이름이 *expr* 을 포함하는 브로커에 대한 상태 모니터링을 수행하고, 생략되면 CUBRID 브로커 환경 설정 파일( **cubrid_broker.conf** )에 등록된 전체 브로커에 대해 상태 모니터링을 수행한다. 
 
-*expr*\에 "SERVICE=ON"이 명시되면 구동 중인 브로커의 상태만 출력하며, "SERVICE=OFF"가 명시되면 멈춰있는 브로커의 이름만 출력한다.
+*expr* 에 "SERVICE=ON"이 명시되면 구동 중인 브로커의 상태만 출력하며, "SERVICE=OFF"가 명시되면 멈춰있는 브로커의 이름만 출력한다.
 
-**cubrid broker status**\에서 사용하는 [options]는 다음과 같다. 이들 중 -b, -q, -c, -m, -S, -P, -f는 출력할 정보를 정의하는 모니터링 옵션이고, -s, -l, -t는 출력을 제어하는 옵션이다. 또한, -c, -m, -S, -P는 주로 SHARD 기능을 사용할 때 적용하는 옵션이다. 이 모든 옵션들은 서로 조합하여 사용하는 것이 가능하다.
+cubrid broker status에서 사용하는 [options]는 다음과 같다. 이들 중 -b, -q, -c, -m, -S, -P, -f는 출력할 정보를 정의하는 모니터링 옵션이고, -s, -l, -t는 출력을 제어하는 옵션이다. 이 모든 옵션들은 상호 조합하여 사용할 수 있다.
 
 .. program:: broker_status
 
@@ -906,32 +902,12 @@ CCI 드라이버를 사용하여 C로 프로그램을 작성할 때는 에러 �
 
     작업 큐에 대기 중인 작업을 출력한다.
 
-.. option:: -c
-
-    cubrid_broker.conf의 **SHARD**\ 가 ON으로 설정된 경우 proxy에 접속한 클라이언트 정보를 출력한다.
-
-.. option:: -m
-
-    cubrid_broker.conf의 **SHARD**\ 가 ON으로 설정된 경우 SHARD 상태 및 통계 정보를 출력한다. 
-
-.. option:: -S
-    
-    shard db 별로 구분하여, **-b** 옵션의 항목 중 NAME, PID, PORT, JQ, #CONNECT를 제외한 나머지를 출력하며, ID, SHARD-Q, #REQUEST를 추가로 출력한다.
-    
-.. option:: -P
-
-    proxy 별로 구분하여, -b 옵션의 항목 중 NAME, PID, PORT, JQ를 제외한 나머지를 출력하며, ID, SHARD-Q, #RESTART를 추가로 출력한다.
-
 .. option:: -f
 
     브로커가 접속한 DB 및 호스트 정보를 출력한다.
     
     **-b** 옵션과 함께 쓰이는 경우, CAS 정보를 추가로 출력한다. 하지만 -b 옵션에서 나타나는 SELECT, INSERT, UPDATE, DELETE, OTHERS 항목은 제외된다.
 
-    **-m** 옵션과 함께 쓰이는 경우, 보다 상세한 SHARD 통계 정보가 출력된다.
-
-    **-c** 옵션과 함께 쓰이는 경우, 각 shard proxy 별로 CLIENT-ID, CLIENT-IP, CONN-TIME, LAST-REQ-TIME, LAST-RES-TIME, LAST-REQ-CODE 항목을 추가로 출력한다.
-    
     **-P** 옵션과 함께 쓰이는 경우, STMT-POOL-RATIO 항목을 추가로 출력한다. 이 항목은 prepare statement 사용 시 pool에서 statement를 사용하는 비율을 나타낸다.
 
 .. option:: -l SECOND
@@ -973,21 +949,6 @@ CCI 드라이버를 사용하여 C로 프로그램을 작성할 때는 에러 �
 *   STATUS: CAS의 현재 상태로서, BUSY/IDLE/CLIENT_WAIT/CLOSE_WAIT가 있다.
 *   % broker1 OFF: broker1의 SERVICE 파라미터가 OFF이다. 따라서, broker1은 구동되지 않는다.
 
-.. note:: 
-
-    SHARD 상태 확인 시 출력되는 ID 정보는 "(proxy 의 일련번호) - (shard DB의 일련번호) - (shard DB 에 접속하는 응용 서버(CAS)의 일련번호)"로 구성된 수의 조합을 나타낸다.
-
-::
-
-    $ cubrid broker status
-    @ cubrid broker status
-    % shard1
-    ----------------------------------------------------------------
-        ID      PID     QPS   LQS PSIZE STATUS
-    ----------------------------------------------------------------
-        1-1-1  2580     100     3 55968 IDLE
-        1-2-1  2581     200     4 55968 IDLE
-
 다음은 **-b** 옵션을 사용하여 브로커에 관해 5초 간격으로 상세한 상태 정보를 출력한다. 화면이 5초 간격마다 새로운 상태 정보로 갱신되며, 상태 정보 화면을 벗어나려면 <Q>를 누른다.
 
 ::
@@ -1014,7 +975,7 @@ CCI 드라이버를 사용하여 C로 프로그램을 작성할 때는 에러 �
 *   OTHERS: 브로커 시작 이후 SELECT, INSERT, UPDATE, DELETE를 제외한 CREATE, DROP 등의 질의 개수. 옵션이 "-b -s <sec>"인 경우 -s 옵션으로 지정한 초 동안의 질의 개수로 매번 갱신됨. 
 *   LONG-T: LONG_TRANSACTION_TIME 시간을 초과한 트랜잭션 개수 / LONG_TRANSACTION_TIME 파라미터의 값. 옵션이 "-b -s <sec>"인 경우 -s 옵션으로 지정한 초 동안의 트랜잭션 개수로 매번 갱신됨.
 *   LONG-Q: LONG_QUERY_TIME 시간을 초과한 질의의 개수 / LONG_QUERY_TIME 파라미터의 값. 옵션이 "-b -s <sec>"인 경우 -s 옵션으로 지정한 초 동안의 질의 개수로 매번 갱신됨.
-*   ERR-Q: 에러가 발생한 질의의 개수. 옵션이 "-b -s <sec>"인 경우 -s 옵션으로 지정한 초 동안의 에러 개수로 매번 갱신됨. cubrid_broker.conf의 SHARD 파라미터가 ON으로 설정된 경우, proxy에서 에러가 발생하는 경우에도 ERR-Q의 값이 증가한다.
+*   ERR-Q: 에러가 발생한 질의의 개수. 옵션이 "-b -s <sec>"인 경우 -s 옵션으로 지정한 초 동안의 에러 개수로 매번 갱신됨.
 *   UNIQUE-ERR-Q: 고유 키 에러가 발생한 질의의 개수. 옵션이 "-b -s <sec>"인 경우 -s 옵션으로 지정한 초 동안의 고유 키 에러 개수로 매번 갱신됨.
 *   #CONNECT: 브로커 시작 후 응용 클라이언트가 CAS에 접속한 회수
 *   #REJECT: 브로커 시작 후 ACL에 포함되지 않은 IP로부터 접속하는 응용 클라이언트가 CAS에 접속하는 것을 거부당한 회수. ACL 설정과 관련하여 :ref:`limiting-broker-access`\ 를 참고한다.
@@ -1105,259 +1066,7 @@ CCI 드라이버를 사용하여 C로 프로그램을 작성할 때는 에러 �
 *   AS(B): 현재 클라이언트 수행(Busy) 상태인 CAS의 개수
 *   AS(Ns-W): N초 동안 클라이언트 대기(Waiting) 상태였던 CAS의 개수
 *   AS(Ns-B): N초 동안 클라이언트 수행(Busy) 상태였던 CAS의 개수
-*   CANCELED: 브로커 시작 이후 사용자 인터럽트로 인해 취소된 질의의 개수 (**-l** *N* 옵션과 함께 사용하면 *N*\ 초 동안 누적된 개수)
-
-**-m** 옵션을 사용하여 SHARD 상태 및 통계 정보를 출력한다. cubrid_broker.conf 의 파라미터에 대한 내용은 :ref:`broker-configuration`\ 을 참고한다.
-
-::
-
-    $ cubrid broker status -m
-    @ cubrid broker status
-    % shard1 
-    MODULAR : 256, LIBRARY_NAME : NOT DEFINED, FUNCTION_NAME : NOT DEFINED
-    ACTIVE-PROXY : 1, NUM-NO-HINT-ERR-Q : 0
-
-    SHARD STATISTICS
-       ID  NUM-KEY-Q   NUM-ID-Q   NUM-NO-HINT-Q             SUM
-    ------------------------------------------------------------
-        0       1281          0               0            1281
-        1       1281          0               0            1281
-        2       1281          0               0            1281
-        3       1281          0               0            1281
-
-    NUM_SHARD_Q
-       PROXY_ID      1
-    SHARD_ID
-    ------------------
-    0                1
-    1                0
-    2                0
-    3                2
-
-각 칼럼에 대한 설명은 다음과 같다.
-
-*   shard1: 브로커의 이름
-*   MODULAR: **cubrid_broker.conf**\ 의 **SHARD_KEY_MODULR** 파라미터 값
-*   LIBRARY_NAME: **cubrid_broker.conf**\ 의 **SHARD_KEY_LIBRARY_NAME** 파라미터 값
-*   FUNCTION_NAME: **cubrid_broker.conf**\ 의 **SHARD_KEY_FUNCTION_NAME** 파라미터 값
-*   ACTIVE-PROXY: 실행 중인 proxy 프로세스 수
-*   NUM-NO-HINT-ERR-Q: 쿼리에 shard hint가 없어서 에러가 발생한 쿼리 개수
-*   SHARD STATISTICS: shard ID 질의 정보
-
-    *   ID: shard DB 일련번호(shard ID)
-    *   NUM-KEY-Q: shard key가 포함된 질의 요청 개수
-    *   NUM-ID-Q: shard ID가 포함된 질의 요청 개수
-    *   NUM-NO-HINT-Q:  SHARD_IGNORE_HINT가 설정된 경우 hint 없이 load balancing되어 처리된 요청 개수
-    *   SUM: NUM-KEY-Q + NUM-ID-Q
-    
-*   NUM_SHARD_Q: SHARD-Q 에 대기 중인 질의 실행 요청 개수
-
-    *   PROXY_ID: proxy 의 일련번호
-    *   SHARD_ID: shard DB 의 일련번호
-
-.. _shard-q:
-    
-SHARD-Q는 Shard Waiting Queue를 줄인 말이다. SHARD proxy 프로세스가 질의 실행을 요청했으나 이를 처리할 SHARD CAS 프로세스가 없는 경우 질의 실행 요청은 SHARD-Q에서 잠시 대기한다. 이 값이 커질수록 질의 실행을 바로 처리하지 못하고 대기중인 경우가 많아진다는 의미이므로, MAX_NUM_APPL_SERVER의 개수를 더 크게 설정할 것을 고려한다.
-
-다음은 **-m** 옵션과 **-f** 옵션을 이용하여 좀 더 상세한 SHARD 통계 정보를 출력한다. cubrid_broker.conf 의 파라미터에 대한 내용은 :ref:`broker-configuration`\ 을 참고한다.
-
-::
-
-    $ cubrid broker status -m -f
-    @ cubrid broker status
-    % shard1 
-    MODULAR : 256, LIBRARY_NAME : NOT DEFINED, FUNCTION_NAME : NOT DEFINED
-    SHARD : 0 [HostA] [shard1], 1 [HostB] [shard1], 2 [HostC] [shard1], 3 [HostD] [shard1]
-    ACTIVE-PROXY : 1, NUM-NO-HINT-ERR-Q : 0
-
-    SHARD STATISTICS
-           ID  NUM-KEY-Q   NUM-ID-Q   NUM-NO-HINT-Q             SUM
-        ------------------------------------------------------------
-            0       2309          0               0            2309
-            1       2309          0               0            2309
-            2       2309          0               0            2309
-            3       2309          0               0            2309
-
-    NUM_SHARD_Q
-       PROXY_ID      1
-    SHARD_ID
-    ------------------
-    0                1
-    1                0
-    2                0
-    3                2
-
-    RANGE STATISTICS : user_no
-          MIN ~   MAX :      SHARD     NUM-Q
-        ------------------------------------
-            0 ~    31 :          0      1157
-           32 ~    63 :          1      1157
-           64 ~    95 :          2      1157
-           96 ~   127 :          3      1157
-          128 ~   159 :          0      1152
-          160 ~   191 :          1      1152
-          192 ~   223 :          2      1152
-          224 ~   255 :          3      1152
-
-    DB Alias : shard1 [USER : shard, PASSWD : shard123]
-
-추가된 칼럼에 대한 설명은 다음과 같다.
-
-*   SHARD: proxy 내의 shard DB 정보
-
-    *   0: shard DB 일련번호(shard ID)
-    *   [HostA]: shard 접속 정보
-    *   [shard1]: 실제 DB 이름
-
-*   RANGE STATISTICS: shard key 질의 정보
-
-    *   user_no: shard key 이름
-    *   MIN: shard key 최소 범위
-    *   MAX: shard key 최대 범위
-    *   SHARD: shard DB 일련번호(shard ID)
-    *   NUM-Q: shard key가 포함된 질의 요청 수
-
-**-c** 옵션을 사용하여 proxy에 접속한 클라이언트 정보를 출력한다.
-
-::
-
-    $ cubrid broker status -c
-    @ cubrid broker status
-    % shard1(0), MAX-CLIENT : 50, CUR-CLIENT : 0
-    % shard1(1), MAX-CLIENT : 50, CUR-CLIENT : 0
-
-*   MAX-CLIENT: 해당 proxy에 접속할 수 있는 최대 응용 클라이언트 개수
-*   CUR-CLIENT: 해당 proxy에 접속되어 있는 응용 클라이언트 개수
-    
-**-c** 옵션에 **-f** 옵션을 추가하면 좀더 상세한 클라이언트 정보가 출력된다.
-
-::
-
-    $ cubrid broker status -c -f
-    @ cubrid broker status
-    % shardqa(0), MAX-CLIENT : 50, CUR-CLIENT : 0
-    ---------------------------------------------------------------------------------------------------------------
-     CLIENT-ID           CLIENT-IP             CONN-TIME         LAST-REQ-TIME         LAST-RES-TIME  LAST-REQ-CODE
-    ---------------------------------------------------------------------------------------------------------------
-             2           127.0.0.1   2014/01/21 18:07:29   2014/01/21 18:07:56   2014/01/21 18:07:56              2
-    % shardqa(1), MAX-CLIENT : 50, CUR-CLIENT : 0
-    ---------------------------------------------------------------------------------------------------------------
-     CLIENT-ID           CLIENT-IP             CONN-TIME         LAST-REQ-TIME         LAST-RES-TIME  LAST-REQ-CODE
-    ---------------------------------------------------------------------------------------------------------------
-    
-추가된 칼럼에 대한 설명은 다음과 같다.
-
-*   CLIENT-ID: proxy 내에서 순차적으로 부여한 클라이언트 일련 번호
-*   CLIENT-IP: 클라이언트 IP 주소
-*   CONN-TIME: proxy에 접속한 시각
-*   LAST-REQ-TIME: proxy에 마지막으로 질의를 요청한 시각
-*   LAST-RES-TIME: proxy로부터 마지막으로 응답을 받은 시각
-*   LAST-REQ-CODE: 가장 마지막에 수행된 함수의 코드. 주요 코드에 해당하는 함수는 다음과 같다.
-
-    *   0:  end_tran(트랜잭션 종료)
-    *   1:  prepare
-    *   2:  execute
-    *   7:  fetch
-    
-다음은 **-S** 옵션을 사용하여 shard DB별 정보를 출력한다.
-
-::
-    
-    $ cubrid broker status -S
-    @ cubrid broker status
-    % shard1
-      SHARD_ID    AS SHARD-Q     TPS      QPS   SELECT   INSERT   UPDATE   DELETE   OTHERS     LONG-T     LONG-Q   ERR-Q  UNIQUE-ERR-Q  #REQUEST
-    =============================================================================================================================================
-             0     2       0    3200     3772      956      960      928      928        0     0/60.0     0/60.0     700             0      6978
-             1     2       0    3200     3776      960      960      928      928        0     0/60.0     0/60.0     704             0      6983
-             2     2       0    3200     3762      960      960      928      914        0     0/60.0     0/60.0     690             0      6968
-             3     2       0    3200     3776      960      960      928      928        0     0/60.0     0/60.0     704             0      6983
-
-추가된 칼럼에 대한 설명은 다음과 같다.
-
-*   SHARD_ID: shard의 index. 0부터 시작.
-*   SHARD-Q: 해당 shard의 SHARD-Q에 대기 중인 질의 실행 요청 개수(:ref:`SHARD-Q <shard-q>` 참고)
-*   #REQUEST: 해당 shard에 속한 CAS가 응용 클라이언트에게 받은 전체 요청 개수(요청은 질의 수행 뿐 아니라 연결 요청 등 모든 요청을 포함)
-             
-**-S** 옵션에 **-f** 옵션을 추가하면 AS 항목이 (T W B 1s-W 1s-B)으로 나뉘어져 상세히 출력된다. AS 항목에 대한 상세 설명은 :ref:`AS <as-detail>`\ 를 참고한다.
-
-다음은 **-P** 옵션을 사용하여 proxy별 정보를 출력한다.
-
-::
-
-    $ cubrid broker status -P
-    % shard1
-      PROXY_ID    AS SHARD-Q     TPS      QPS   SELECT   INSERT   UPDATE   DELETE   OTHERS     LONG-T     LONG-Q   ERR-Q  UNIQUE-ERR-Q  #CONNECT  #REJECT  #RESTART
-    ================================================================================================================================================================
-             1     4       0   22174    26160    26160        0        0        0        0     0/60.0     0/60.0    5256             0       165        0         0
-             2     4       0   35257    37903    23599     5152     4576     4576        0     0/60.0     0/60.0    4300             0       264        1         0
-                                                                                                                                                                                   
-**-P** 옵션을 사용할 때 **-b** 옵션에 비해 추가로 출력되는 칼럼 정보는 다음과 같다.
-
-*   PROXY_ID: proxy의 index. 1부터 시작.
-*   SHARD-Q: proxy의 SHARD-Q 에 대기 중인 질의 실행 요청 개수 (:ref:`SHARD-Q <shard-q>` 참고)
-*   #CONNECT: 응용 클라이언트가 proxy에 접속을 시도한 회수
-*   #REJECT: ACL에 포함되지 않은 IP로부터 접속하는 응용 클라이언트가 해당 proxy에 접속하는 것을 거부당한 회수. ACL 설정과 관련하여 :ref:`limiting-broker-access`\ 를 참고한다.
-*   #RESTART: proxy가 재시작한 횟수
-
-**-S** 옵션에 **-f** 옵션을 추가하면 AS 항목이 (T W B 1s-W 1s-B)으로 나뉘어져 상세히 출력되고, STMT-POOL-RATIO 항목이 추가된다. AS 항목에 대한 상세 설명은 :ref:`AS <as-detail>`\ 를 참고한다. 
-
-::
-
-    $ cubrid broker status -P -f
-    % shard1
-      PROXY_ID  AS(T      W      B   1s-W  1s-B) SHARD-Q   TPS   QPS   LONG-T   LONG-Q  ERR-Q  UNIQUE-ERR-Q  #CONNECT  #REJECT  #RESTART  STMT-POOL-RATIO (%)
-    ==========================================================================================================================================================
-             1     4      0      0      0      0       0     0     0   0/60.0   0/60.0      0             0       165        0         0                    -
-             2     4      0      0      0      0       0     0     0   0/60.0   0/60.0      0             0       264        1         0                    -
-                                                                                                                                               
-추가된 칼럼에 대한 설명은 다음과 같다.
-
-*   STMT-POOL-RATIO: prepare statement 사용 시 pool에서 statement를 사용하는 비율
-
-**-b**, **-S**, **-P** 옵션을 동시에 사용하면 다음과 같이 출력된다.
-
-::
-
-    $ cubrid broker status -b -S -P
-
-    @ cubrid broker status
-      NAME          PID  PORT    AS   JQ       TPS      QPS   SELECT   INSERT   UPDATE   DELETE   OTHERS     LONG-T     LONG-Q   ERR-Q  UNIQUE-ERR-Q  #CONNECT #REJECT  
-    ====================================================================================================================================================================
-    * shard1      10204 56001     8    0     57431    64063    49759     5152     4576     4576        0     0/60.0     0/60.0    9556             0       429       0  
-    * shard2      10221 56002     8    0     51913    58979    49844        0     4687     4448        0     0/60.0     0/60.0    9862             0       429       2  
-    % broker1 OFF                                                                                                                                
-
-    <SHARD INFO>
-    % shard1
-      SHARD_ID    AS SHARD-Q     TPS       QPS   SELECT   INSERT   UPDATE   DELETE   OTHERS     LONG-T     LONG-Q         ERR-Q  UNIQUE-ERR-Q    #REQUEST
-    ======================================================================================================================================================
-             0     2       0   14464     16165    12613     1312     1120     1120        0     0/60.0     0/60.0          2437             0       30645
-             1     2       0   14464     15926    12310     1248     1184     1184        0     0/60.0     0/60.0          2198             0       30403
-             2     2       0   14464     16347    12795     1312     1120     1120        0     0/60.0     0/60.0          2619             0       30824
-             3     2       0   14039     15625    12041     1280     1152     1152        0     0/60.0     0/60.0          2302             0       29681
-    % shard2
-      SHARD_ID    AS SHARD-Q     TPS       QPS   SELECT   INSERT   UPDATE   DELETE   OTHERS     LONG-T     LONG-Q         ERR-Q  UNIQUE-ERR-Q    #REQUEST
-    ======================================================================================================================================================
-             0     2       0   13085     14884    12580        0     1184     1120        0     0/60.0     0/60.0          2503             0       27985
-             1     2       0   13056     14808    12507        0     1181     1120        0     0/60.0     0/60.0          2456             0       27878
-             2     2       0   13056     14743    12453        0     1170     1120        0     0/60.0     0/60.0          2391             0       27812
-             3     2       0   12716     14544    12304        0     1152     1088        0     0/60.0     0/60.0          2512             0       27273
-
-    % broker1 OFF
-
-    <PROXY INFO>
-    % shard1
-      PROXY_ID    AS SHARD-Q      TPS     QPS   SELECT   INSERT   UPDATE   DELETE   OTHERS     LONG-T     LONG-Q  ERR-Q  UNIQUE-ERR-Q  #CONNECT  #REJECT  #RESTART
-    ===============================================================================================================================================================
-             1     4       0    22174   26160    26160        0        0        0        0     0/60.0     0/60.0   5256             0       165        0         0
-             2     4       0    35257   37903    23599     5152     4576     4576        0     0/60.0     0/60.0   4300             0       264        1         0
-    % shard2                                                                                                                        
-      PROXY_ID    AS SHARD-Q      TPS     QPS   SELECT   INSERT   UPDATE   DELETE   OTHERS     LONG-T     LONG-Q  ERR-Q  UNIQUE-ERR-Q  #CONNECT  #REJECT  #RESTART
-    ===============================================================================================================================================================
-             1     4       0    21590   25586    25586        0        0        0        0     0/60.0     0/60.0   5266             0       165        0         0
-             2     4       0    30323   33393    24258        0     4687     4448        0     0/60.0     0/60.0   4596             0       264        1         0
-    % broker1 OFF                                                                                                                    
+*   CANCELED: 브로커가 시작된 이후 사용자 인터럽트로 인해 취소된 질의의 개수 (-l N 옵션과 함께 사용하면 N초 동안 누적된 개수).
 
 .. _limiting-broker-access:
 
@@ -1552,10 +1261,6 @@ QUERY_EDITOR 브로커는 다음과 같은 응용의 접속 요청만을 허용�
 
 브로커 구동 중에 브로커 파라미터를 변경하기 위한 **broker_changer** 유틸리티의 구문은 다음과 같다. *broker_name*\ 에는 구동 중인 브로커 이름을 입력하면 되고 *parameter*\ 는 동적으로 변경할 수 있는 브로커 파라미터에 한정된다. 변경하고자 하는 파라미터에 따라 *value*\ 가 지정되어야 한다. 브로커 응용 서버 식별자( *cas_id* )를 지정하여 특정 브로커 응용 서버(CAS)에만 변경을 적용할 수도 있다.
 
-.. note::
-
-    CUBRID SHARD 기능이 활성화된 경우(cubrid_broker.conf에서 SHARD=ON) 응용 서버 식별자(cas_id)를 지정하여 특정 응용 서버(CAS)에만 변경을 적용할 수 없다.
-
 *cas_id*\ 는 **cubrid broker status** 명령에서 출력되는 ID이다.
 
 ::
@@ -1593,368 +1298,12 @@ HA 환경에서 브로커의 **ACCESS_MODE**\를 Read Only로 변경하고 해�
 
 참고로 현재 "실행 중"인 시스템 파라미터의 설정 정보(cubrid.conf)를 확인하려면 **cubrid paramdump** *database_name* 명령을 사용한다. **SET SYSTEM PARAMETERS** 구문에 의해 시스템 파라미터의 설정 정보가 동적으로 변경될 수 있는데, **cubrid broker info** 명령으로 동작 중인 시스템의 설정 정보를 확인할 수 있다.
 
-CUBRID SHARD ID 확인
---------------------
-**cubrid broker getid**\는 특정 키가 어느 샤드 DB에 속하는지 알고 싶을 때 사용하는 명령으로, shard key에 대한 SHARD ID를 출력한다. :: 
-
-    cubrid broker getid -b <broker-name> [-f] shard-key
-    
-*   -b <*broker-name*>: 브로커 이름
-*   -f: 상세 정보 출력
-*   *shard-key*: shard key
-
-다음은 shard1 브로커에서 키 1에 대한 SHARD ID를 출력하는 예이다.
-
-::
-
-    $ cubrid broker getid -b shard1 1
-    @ cubrid broker getid
-    % shard1
-     SHARD_ID : 0, SHARD_KEY: 1
-
-다음은 -f 옵션을 사용하여 상세 정보를 출력하는 예이다.
-
-::
-    
-    $ cubrid broker getid -b shard1 -f 1
-    @ cubrid broker getid
-    % shard1
-     SHARD_ID : 0, SHARD_KEY : 1, KEY_COLUMN : student_no
-     MODULAR : 256, LIBRARY_NAME : NOT DEFINED, FUNCTION_NAME : NOT DEFINED
-     RANGE STATISTICS : student_no
-          MIN ~   MAX :      SHARD
-        ---------------------------
-            0 ~    31 :          0
-
-     SHARD CONNECTION :
-        SHARD_ID          DB NAME          CONNECTION_INFO
-        ---------------------------------------------------
-               0           shard1                192.168.10.1
-
-.. _broker-test: 
-
-브로커와 DB 간 연결 테스트 
---------------------------
-
-**cubrid broker test**\ 는 지정한 브로커와 접속하는 DB에 사용자가 정의한 질의문을 수행해 보는 명령이다. 샤드 기능이 활성화되면 모든 SHARD DB에 질의를 수행해 본다. 질의 수행 후 트랜잭션은 롤백된다. 이 명령어를 통해 지정한 브로커에 접속하는 모든 SHARD DB에 질의를 수행하면 각 SHARD DB에 대한 질의 성공 여부를 확인할 수 있고, SHARD HASH 기능을 설정한 경우 입력한 질의가 어떤 SHARD DB에서 수행되었는지 확인할 수 있다. 
-
-::
-
-    cubrid broker test <broker_name> [-D <db_name>] [-u <db_user>] [-p <db_password>] {-c <query> | -i <input_file>} [-o <output_file>] [-s] [-v] 
-
-*   db_name: DB 이름 
-*   db_user: DB 사용자 계정 
-*   db_password: DB 사용자 암호 
-*   query: 질의문 
-*   input_file: 입력할 질의문을 저장한 파일 
-*   output_file: 결과를 저장할 파일 
-
-**cubrid broker test**\ 에서 사용하는 옵션은 다음과 같다. 
-
-.. program:: broker_test 
-
-.. option:: -D DB_NAME 
-     
-    테스트 대상 DB 이름을 지정한다. 이 옵션이 생략될 때 cubrid_broker.conf의 SHARD 파라미터 값이 ON이면 SHARD_DB_NAME 파라미터의 값이 사용된다. SHARD 파라미터의 값이 OFF이면 에러가 발생한다. 
-     
-.. option:: -u DB_USER 
-
-    테스트 대상 DB 사용자 계정을 지정한다. 이 옵션이 생략될 때 cubrid_broker.conf의 SHARD 파라미터 값이 ON이면 SHARD_DB_USER 파라미터의 값이 사용된다. SHARD 파라미터의 값이 OFF이면 "public"이 입력된다. 
-     
-.. option:: -p DB_PASSWORD 
-
-    테스트 대상 DB 사용자 계정의 암호를 지정한다. cubrid_broker.conf의 SHARD 파라미터 값이 ON일 때 이 옵션이 생략되면 SHARD_DB_PASSWORD 파라미터의 값이 사용된다. SHARD 파라미터의 값이 OFF이면 빈 문자열("")이 입력된다. 
-     
-.. option:: -c QUERY 
-
-    질의 문자열을 지정한다. 질의를 지정하기 위해 **-c** 또는 **-i** 옵션이 사용될 수 있다. **-c** 옵션과 **-i** 옵션이 생략되면 브로커와 DB 간 연결 여부만 출력한다. 
-     
-.. option:: -i FILE_NAME 
-
-    입력할 질의들을 저장한 파일을 지정한다. 질의를 지정하기 위해 **-c** 또는 **-i** 옵션이 사용될 수 있다. **-c** 옵션과 **-i** 옵션이 생략되면 브로커와 DB 간 연결 여부만 출력한다. 
-     
-.. option:: -o FILE_NAME 
-
-    화면에 출력되는 수행 결과를 저장할 파일 이름을 지정한다. 이 옵션이 생략되면 수행 결과를 화면에만 출력한다. 
-     
-.. option:: -s 
-
-    SHARD 힌트가 포함된 질의는 해당 SHARD DB에서만 수행된다. 이 옵션이 생략되면 모든 SHARD DB에 대해 질의를 수행한다. 
-     
-    SHARD 파라미터 값이 OFF이면 이 파라미터의 영향을 받지 않는다. 
-
-.. option:: -v 
-
-    아래의 정보와 함께 에러 메시지와 SELECT의 결과셋을 같이 출력한다. 
-     
-    *   RESULT: 질의 수행 후 에러가 반환되었는지 여부. [OK | FAIL] 출력 
-    *   SHARD_ID: 질의가 수행된 SHARD DB의 ID(SHARD 파라미터 값이 OFF이면 해당 항목은 출력되지 않음) 
-    *   ROW COUNT: DML에 의해 영향을 받는 행(affected rows)의 개수, 또는 SELECT 질의인 경우 행의 개수. 질의 수행 에러 시 -1을 출력 
-    *   EXECUTION TIME: 질의가 수행된 시간 
-    *   QUERY: 사용자가 입력한 질의 
-     
-    이 옵션이 생략되면 "RESULT, SHARD_ID, ROW COUNT, EXECUTION TIME, QUERY"만 출력한다. 
-
-다음은 위의 옵션들을 사용한 예이다. 
-
-*   DB에 질의 
-
-    **cubrid_broker.conf의 SHARD 파라미터 값이 OFF일 때** 
-     
-    DB 접속이 잘 되는지 확인한다. 
-
-    :: 
-
-        $ cubrid broker test shard1 -D shard -u shard -p shard123 -c "select 1 from db_root where charset = 3" 
-     
-        @ cubrid broker test 
-        @ [OK] CONNECT broker1 DB [demodb] USER [shard] 
-
-        @ SHARD OFF 
-
-        RESULT ROW COUNT EXECUTION TIME QUERY 
-        ======================================================== 
-        OK 1 0.011341 sec select 1,'a' from db_root where charset = 3 
-        @ [OK] QUERY TEST 
-         
-    **cubrid_broker.conf의 SHARD 파라미터 값이 ON일 때** 
-
-    모든 SHARD DB에 대해 접속이 잘 되는지 확인한다. 
-
-    :: 
-     
-        $ cubrid broker test shard1 -D shard -u shard -p shard123 -c "select 1 from db_root where charset = 3" 
-
-        @ cubrid broker test 
-        @ [OK] CONNECT shard1 DB [shard] USER [shard] 
-
-        @ SHARD ON 
-
-        RESULT SHARD_ID ROW COUNT EXECUTION TIME QUERY 
-        ================================================================== 
-        OK 0 1 0.003436 sec select 1 from db_root where charset = 3 
-        OK 1 1 0.003010 sec select 1 from db_root where charset = 3 
-        OK 2 1 0.003039 sec select 1 from db_root where charset = 3 
-        OK 3 1 0.002916 sec select 1 from db_root where charset = 3 
-        @ [OK] QUERY TEST 
-
-*   사용자 권한 확인 
-
-    **SHARD DB 중 하나에 INSERT 권한이 없는 경우** 
-     
-    INSERT 권한이 없으면 RESULT가 FAIL로 표시된다. 
-     
-    :: 
-     
-        $ cubrid broker test shard1 -c "insert into foo values (1,"a") " -v 
-         
-        @ cubrid broker test 
-        @ [OK] CONNECT shard1 DB [shard] USER [shard] 
-
-        @ SHARD ON 
-
-        RESULT SHARD_ID ROW COUNT EXECUTION TIME QUERY 
-        ================================================================== 
-        OK 0 1 0.001322 sec insert into foo values(1,'a') 
-        FAIL(-494) -1 -1 0.001608 sec insert into foo values(1,'a') 
-        <Error> 
-        ERROR CODE : -494 
-        Semantic: INSERT is not authorized on foo. insert into foo foo (foo.a, foo.b) values (1, cast('a' as v...[CAS INFO - 127.0.0.1:52002, 1, 18145]. 
-
-        OK 2 1 0.001334 sec insert into foo values(1,'a') 
-        OK 3 1 0.001325 sec insert into foo values(1,'a') 
-        @ [FAIL] QUERY TEST 
-     
-    **브로커에 접속하는 DB 중 하나에 UPDATE 권한이 없는 경우** 
-     
-    UPDATE 권한이 없으면 RESULT가 FAIL로 표시된다. 
-     
-    :: 
-     
-        $ vi dml.txt 
-     
-        #query 
-        select a from foo 
-        insert into foo(b) values(3) 
-        update foo set c = 2 where b = 3 
-        delete foo where b = 3 
-     
-    :: 
-     
-        $ cubrid broker test broker1 -D demodb -u shard -p shard123 -i dml.txt -v 
-
-        @ cubrid broker test 
-        @ [OK] CONNECT broker1 DB [demodb] USER [shard] 
-
-        @ SHARD OFF 
-
-        RESULT ROW COUNT EXECUTION TIME QUERY 
-        ======================================================== 
-        OK 1 0.001612 sec select a from foo 
-        <Result of SELECT Command> 
-          a 
-        ------------ 
-          1 
-
-        OK 1 0.001215 sec insert into foo(b) values(3) 
-        FAIL(-494) -1 0.001291 sec update foo set c = 2 where b = 3 
-        <Error> 
-        ERROR CODE : -494 
-        Semantic: UPDATE is not authorized on foo. update foo foo set foo.c=2 where foo.b=3[CAS INFO - 127.0.0.1:52001, 1, 18139]. 
-
-        OK 0 0.001534 sec delete foo where b = 3 
-        @ [FAIL] QUERY TEST 
-
-*   SHARD HASH 정상 동작 확인 
-
-    특정 키에 대해 해싱이 잘 되는지 확인한다. 
-
-    :: 
-     
-        $ vi test_query.txt 
-         
-        #query 
-        select number from demo_db where key = /*+ shard_key */ 14 
-        select number from demo_db where key = /*+ shard_key */ 50 
-        select number from demo_db where key = /*+ shard_key */ 80 
-        select number from demo_db where key = /*+ shard_key */ 120 
-        .. 
-
-    :: 
-     
-        $ cubrid broker test shard1 -D shard -u shard -p shard123 -i shard_key.txt -v -s 
-
-        @ cubrid broker test 
-        @ [OK] CONNECT shard1 DB [shard] USER [shard] 
-
-        @ SHARD ON 
-
-        RESULT SHARD_ID ROW COUNT EXECUTION TIME QUERY 
-        ================================================================== 
-        OK 0 1 0.002225 sec select * from foo where a = /*+ shard_key */ 10 
-        <Result of SELECT Command> 
-          a b 
-        ---------------------------------- 
-          10 'aaaa' 
-
-        OK 1 1 0.001870 sec select * from foo where a = /*+ shard_key */ 40 
-        <Result of SELECT Command> 
-          a b 
-        ---------------------------------- 
-          40 'bbb' 
-
-        OK 2 1 0.002004 sec select * from foo where a = /*+ shard_key */ 70 
-        <Result of SELECT Command> 
-          a b 
-        ---------------------------------- 
-          70 'cccc' 
-
-        OK 3 1 0.002025 sec select * from foo where a = /*+ shard_key */ 100 
-        <Result of SELECT Command> 
-          a b 
-        ---------------------------------- 
-          100 'dddd' 
-
-        @ [OK] QUERY TEST 
-         
-*   -v 옵션 사용 여부 
-
-    **-v 옵션을 사용할 때** 
-     
-    SELECT 질의가 성공하면 결과셋을 출력하며, 실패 시 에러 메시지를 출력한다. 
-     
-    :: 
-     
-        $ cubrid broker test broker1 -D demodb -u shard -p shard123 -i dml.txt -v 
-        @ cubrid broker test 
-        @ [OK] CONNECT broker1 DB [demodb] USER [shard] 
-
-        @ SHARD OFF 
-
-        RESULT ROW COUNT EXECUTION TIME QUERY 
-        OK 1 0.001311 sec select a from foo 
-        <Result of SELECT Command> 
-          a 
-        ------------ 
-          1 
-
-        OK 1 0.001083 sec insert into foo(b) values(3) 
-        FAIL(-494) -1 0.001166 sec update foo set c = 2 where b = 3 
-        <Error> 
-        ERROR CODE : -494 
-        Semantic: UPDATE is not authorized on foo. update foo foo set foo.c=2 where foo.b=3[CAS INFO - 127.0.0.1:52001, 1, 18139]. 
-
-        OK 0 0.001399 sec delete foo where b = 3 
-        @ [FAIL] QUERY TEST 
-         
-    **-v 옵션을 사용하지 않을 때** 
-
-    질의 성공, 실패 여부만 출력한다. 
-     
-    :: 
-     
-        $ cubrid broker test broker1 -D demodb -u shard -p shard123 -i dml.txt 
-         
-        @ cubrid broker test 
-        @ [OK] CONNECT broker1 DB [demodb] USER [shard] 
-
-        @ SHARD OFF 
-
-        RESULT ROW COUNT EXECUTION TIME QUERY 
-        OK 1 0.001485 sec select a from foo 
-        OK 1 0.001123 sec insert into foo(b) values(3) 
-        FAIL(-494) -1 0.001180 sec update foo set c = 2 where b = 3 
-        OK 0 0.001393 sec delete foo where b = 3 
-        @ [FAIL] QUERY TEST 
-         
-*   SHARD 키 값 확인 
-
-    -s 옵션과 함께 SHARD 키 힌트가 주어지면 해당 SHARD DB에 질의를 수행하며, 그 결과를 출력한다. SHARD_ID로 어느 SHARD DB에서 질의가 수행되었는지 확인할 수 있다. 
-     
-    :: 
-     
-        $ cubrid broker test shard1 -i shard_key.txt -s -v 
-         
-        @ cubrid broker test 
-        @ [OK] CONNECT shard1 DB [shard1] USER [shard] 
-
-        @ SHARD ON 
-
-        RESULT SHARD_ID ROW COUNT EXECUTION TIME QUERY 
-        OK 0 1 0.144730 sec select * from foo where a = /*+ shard_key */ 10 
-        <Result of SELECT Command> 
-          a b 
-        ---------------------------------- 
-          10 'aaaa' 
-
-        OK 1 1 0.001870 sec select * from foo where a = /*+ shard_key */ 40 
-        <Result of SELECT Command> 
-          a b 
-        ---------------------------------- 
-          40 'bbb' 
-
-        OK 2 1 0.002004 sec select * from foo where a = /*+ shard_key */ 70 
-        <Result of SELECT Command> 
-          a b 
-        ---------------------------------- 
-          70 'cccc' 
-
-        OK 3 1 0.002025 sec select * from foo where a = /*+ shard_key */ 100 
-        <Result of SELECT Command> 
-          a b 
-        ---------------------------------- 
-          100 'dddd' 
-
-        @ [OK] QUERY TEST
-
 .. _broker-logs:
     
 브로커 로그
 -----------
 
 브로커 구동과 관련된 로그에는 접속 로그, 에러 로그, SQL 로그가 있다. 각각의 로그는 설치 디렉터리의 log 디렉터리에서 확인할 수 있으며, 저장 디렉터리의 변경은 브로커 환경 설정 파일( **cubrid_broker.conf** )의 **LOG_DIR** 파라미터와 **ERROR_LOG_DIR** 파라미터를 통해 설정할 수 있다.
-
-SHARD = ON 인 경우, CUBRID proxy의 로그 디렉터리는 **SHARD_PROXY_LOG_DIR** 파라미터를 통해 설정할 수 있다. 
 
 접속 로그 확인
 ^^^^^^^^^^^^^^
@@ -2248,7 +1597,7 @@ cubrid_replay
 :: 
   
     EXEC TIME (REPLAY / SQL_LOG / DIFF): 0.003 / 0.001 / 0.002 
-    SQL: UPDATE NDV_QUOTA_INFO SET last_mod_date = now() , used_quota = ( SELECT IFNULL(sum(file_size),0) FROM NDV_RECYCLED_FILE_INFO WHERE user_id = ? ) + ( SELECT IFNULL(sum(file_size),0) FROM NDV_FILE_INFO WHERE user_id = ? ) WHERE user_id = ? /+shard_val(6900403)/ /* SQL : NDVMUpdResetUsedQuota */ 
+    SQL: UPDATE NDV_QUOTA_INFO SET last_mod_date = now() , used_quota = ( SELECT IFNULL(sum(file_size),0) FROM NDV_RECYCLED_FILE_INFO WHERE user_id = ? ) + ( SELECT IFNULL(sum(file_size),0) FROM NDV_FILE_INFO WHERE user_id = ? ) WHERE user_id = ? /* SQL : NDVMUpdResetUsedQuota */ 
     REWRITE SQL: select NDV_QUOTA_INFO, class NDV_QUOTA_INFO, cast( SYS_DATETIME as datetime), cast((select ifnull(sum(NDV_RECYCLED_FILE_INFO.file_size), 0) from NDV_RECYCLED_FILE_INFO NDV_RECYCLED_FILE_INFO where (NDV_RECYCLED_FILE_INFO.user_id= ?:0 ))+(select ifnull(sum(NDV_FILE_INFO.file_size), 0) from NDV_FILE_INFO NDV_FILE_INFO where (NDV_FILE_INFO.user_id= ?:1 )) as bigint) from NDV_QUOTA_INFO NDV_QUOTA_INFO where (NDV_QUOTA_INFO.user_id= ?:2 ) 
     BIND 1: 'babaemo' 
     BIND 2: 'babaemo' 
@@ -2337,8 +1686,8 @@ CAS 에러는 브로커 응용 서버(CAS) 프로세스에서 발생하는 에�
 
 .. _cubrid-manager-server:
 
-매니저 서버
-===========
+CUBRID 매니저 서버
+==================
 
 CUBRID 매니저 서버 구동
 -----------------------
@@ -2402,18 +1751,10 @@ CUBRID 매니저 서버의 환경 설정 파일에서 주석은 "#"으로 처리
 
     서버의 진단 항목 중 **slow_query** 항목을 설정할 경우 몇 초 이상을 늦은 질의로 판별할지 결정하는 매개 변수로, 기본 값은 **10**\이다. 서버에서 수행된 질의 수행 시간이 매개 변수 설정 값보다 큰 경우, **slow_query**\의 개수가 증가한다.
 
-**support_web_manager**
-
-    **support_web_manager**\는 CUBRID 웹 매니저를 사용하기 위해 설정한다. 기본값은 NO 이다.
- 
-**web_manager_path**
-
-    **web_manager_path**\는 CUBRID 웹 매니저가 설치된 경로를 지정한다. 지정하지 않을 경우 {CUBRID 설치 경로}/share/webmanager 이다.
- 
 **auto_job_timeout**
 
-    **auto_job_timeout**\는 작업 자동화(cub_auto)의 작업이 유지되기 위한 최대 시간이다. 기본값은 43,200 (12 시간)이다.
- 
+    **auto_job_timeout** 는 작업 자동화(cub_auto)의 작업이 유지되기 위한 최대 시간이다. 기본값은 43,200 (12 시간)이다.
+
 **mon_cub_auto**
 
     **mon_cub_auto**\는 cub_auto가 종료되면 자동으로 재시작할 것인지 설정한다. 기본값은 NO 이다.

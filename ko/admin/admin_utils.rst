@@ -1,3 +1,7 @@
+
+:meta-keywords: cubrid create, cubrid add volume, cubrid backup, cubrid online backup, cubrid restore, cubrid unload, cubrid load, cubrid space, cubrid compact, cubrid optimize, cubrid plan dump, cubrid stat dump, cubrid check, cubrid diag, cubrid commands
+:meta-description: CUBRID comprehensive list of utilities and commands. Utilities: createdb, deletedb, backupdb, restoredb, compactdb, statdump, diagdb, checkdb, genlocale, gen_tz and many others. CUBRID commands for HA, Locale and Timezone.
+
 .. _cubrid-utilities:
 
 cubrid 유틸리티
@@ -34,11 +38,13 @@ cubrid 유틸리티의 사용법(구문)은 다음과 같다. ::
         synccolldb [option] <database-name>  --- DB 콜레이션을 시스템 콜레이션에 맞게 변경하는 도구
         genlocale [option] <database-name>  --- 사용하고자 하는 로캘 정보를 컴파일하는 도구
         dumplocale [option] <database-name>   --- 컴파일된 바이너리 로캘 정보를 사람이 읽을 수 있는 텍스트로 출력하는 도구
+        gen_tz [option] [<database-name>]  --- 공유 라이브러리로 컴파일할 수 있는 타임존 데이터가 포함된 C 소스 파일 생성
+        dump_tz [option]  --- 타임존 관련 정보 출력
 
 cubrid 유틸리티 로깅
 --------------------
  
-CUBRID는 cubrid 유틸리티의 수행 결과에 대한 로깅 기능을 제공하며, 자세한 내용은 :ref:`cubrid-utility-logging`\ 을 참고한다.
+CUBRID는 cubrid 유틸리티의 수행 결과에 대한 로깅 기능을 제공하며, 자세한 내용은 :ref:`cubrid-utility-logging` 을 참고한다.
 
 .. _creating-database:
 
@@ -53,7 +59,7 @@ createdb
 
     데이터베이스를 생성할 때 데이터베이스 이름 뒤에 로캘 이름과 문자셋(예: ko_KR.utf8)을 반드시 지정해야 한다. 문자셋에 따라 문자열 타입의 크기, 문자열 비교 연산 등에 영향을 끼친다. 데이터베이스 생성 시 지정된 문자셋은 변경할 수 없으므로 지정에 주의해야 한다.
     
-    문자셋, 로캘 및 콜레이션 설정과 관련된 자세한 내용은 :doc:`/sql/i18n`\ 을 참고한다.
+    문자셋, 로캘 및 콜레이션 설정과 관련된 자세한 내용은 :doc:`/sql/i18n` 을 참고한다.
 
 ::
 
@@ -65,23 +71,23 @@ createdb
 
 *   *database_name*: 데이터베이스가 생성될 디렉터리 경로명을 포함하지 않고, 생성하고자 하는 데이터베이스의 이름을 고유하게 부여한다. 이 때, 지정한 데이터베이스 이름이 이미 존재하는 데이터베이스 이름과 중복되는 경우, CUBRID는 기존 파일을 보호하기 위하여 데이터베이스 생성을 더 이상 진행하지 않는다.
 
-*   *locale_name*: 데이터베이스에서 사용할 로캘 이름을 입력한다. CUBRID에서 사용 가능한 로캘 이름은 :ref:`locale-selection`\ 을 참고한다.
+*   *locale_name*: 데이터베이스에서 사용할 로캘 이름을 입력한다. CUBRID에서 사용 가능한 로캘 이름은 :ref:`locale-selection` 을 참고한다.
 
 *   *charset*: 데이터베이스에서 사용할 문자셋을 입력한다. CUBRID에서 사용 가능한 문자셋은 iso88591, euckr, utf8이다. 
     
-    *   *locale_name*\ 이 en_US이고 *charset*\ 을 생략하면 문자셋은 iso88591이 된다.
-    *   *locale_name*\ 이 ko_KR이고 *charset*\ 을 생략하면 문자셋은 utf8이 된다.
-    *   나머지 *locale_name*\ 은 *charset*\ 을 생략할 수 없으며, utf8만 지정 가능하다.
+    *   *locale_name* 이 en_US이고 *charset* 을 생략하면 문자셋은 iso88591이 된다.
+    *   *locale_name* 이 ko_KR이고 *charset* 을 생략하면 문자셋은 utf8이 된다.
+    *   나머지 *locale_name* 은 *charset* 을 생략할 수 없으며, utf8만 지정 가능하다.
 
 데이터베이스 이름의 최대 길이는 영문 17자이다.
 
-다음은 **cubrid createdb**\에 대한 [options]이다.
+다음은 **cubrid createdb** 에 대한 [options]이다.
 
 .. program:: createdb
 
 .. option:: --db-volume-size=SIZE
 
-    데이터베이스를 생성할 때 첫 번째 데이터베이스 볼륨의 크기를 지정하는 옵션으로, 기본값은 cubrid.conf에 지정된 시스템 파라미터 **db_volume_size**\ 의 값이다. 최소값은 20M이다. K, M, G, T로 단위를 설정할 수 있으며, 각각 KB(kilobytes), MB(megabytes), GB(gigabytes), TB(terabytes)를 의미한다. 단위를 생략하면 바이트 단위가 적용된다.
+    생성될 데이터베이스 볼륨의 크기를 지정한다. 기본값은 시스템 파라미터 **db_volume_size** 에 지정된 값이다. 단위는 K, M, G 및 T로 설정할 수 있으며, 각각 킬로바이트(KB), 메가바이트(MB), 기가바이트(GB) 및 테라바이트(TB)를 나타낸다. 단위를 생략하면 바이트 단위가 적용된다. 데이터베이스의 크기는 항상 64개 디스크 섹터의 배수로 올림된다. 이 값은 페이지의 크기에 따라 달라질 수 있으며, 페이지 크기가 각각 4k, 8k 및 16k인 경우 16M, 32M 또는 64M이 될 수 있다.
 
     다음은 첫 번째로 생성되는 testdb의 볼륨 크기를 512MB로 지정하는 구문이다. ::
 
@@ -97,9 +103,9 @@ createdb
 
 .. option:: --log-volume-size=SIZE 
 
-    생성되는 데이터베이스의 로그 볼륨 크기를 지정하는 옵션으로, 기본값은 데이터베이스 볼륨 크기와 같으며 최소값은 20M이다. K, M, G, T로 단위를 설정할 수 있으며, 각각 KB(kilobytes), MB(megabytes), GB(gigabytes), TB(terabytes)를 의미한다. 단위를 생략하면 바이트 단위가 적용된다.
+    데이터베이스 로그 볼륨의 크기를 지정한다. 기본값은 데이터베이스 볼륨 크기와 같으며, 최소값은 20M이다. 단위는 K, M, G 및 T로 설정할 수 있으며, 각각 킬로바이트(KB), 메가바이트(MB), 기가바이트(GB) 및 테라바이트(TB)를 나타낸다. 단위를 생략하면 바이트 단위가 적용된다.
 
-    다음은 *testdb*\를 생성하고, *testdb*\의 로그 볼륨 크기를 256M로 지정하는 구문이다. ::
+    다음은 *testdb* 를 생성하고, *testdb* 의 로그 볼륨 크기를 256M로 지정하는 구문이다. ::
 
         cubrid createdb --log-volume-size=256M testdb en_US
 
@@ -108,7 +114,7 @@ createdb
     생성되는 데이터베이스의 로그 볼륨 페이지 크기를 지정하는 옵션으로, 기본값은 데이터 페이지 크기와 같다. 최소값은 4K, 최대값은 16K이다. K는 KB(kilobytes)를 의미한다.
     데이터베이스 페이지 크기는 4K, 8K, 16K 중 하나의 값이 된다. 4K와 16K 사이의 값을 지정할 경우 지정한 값의 올림값으로 설정되며, 4K보다 작으면 4K로 설정되고 16K보다 크면 16K로 설정된다.
 
-    다음은 *testdb*\를 생성하고, *testdb*\ 의 로그 볼륨 페이지 크기를 8kbyte로 지정하는 구문이다. ::
+    다음은 *testdb* 를 생성하고, *testdb* 의 로그 볼륨 페이지 크기를 8kbyte로 지정하는 구문이다. ::
 
         cubrid createdb -log-page-size=8K testdb en_US
 
@@ -116,7 +122,7 @@ createdb
 
     데이터베이스의 볼륨 헤더에 지정된 주석을 포함하는 옵션으로, 문자열에 공백이 포함되면 큰 따옴표로 감싸주어야 한다.
 
-    다음은 *testdb*\를 생성하고, 데이터베이스 볼륨에 이에 대한 주석을 추가하는 구문이다. ::
+    다음은 *testdb* 를 생성하고, 데이터베이스 볼륨에 이에 대한 주석을 추가하는 구문이다. ::
 
         cubrid createdb --comment "a new database for study" testdb en_US
 
@@ -124,7 +130,7 @@ createdb
 
     새로운 데이터베이스가 생성되는 디렉터리의 절대 경로를 지정하는 옵션으로, **-F** 옵션을 지정하지 않으면 현재 작업 디렉터리에 새로운 데이터베이스가 생성된다.
 
-    다음은 *testdb*\라는 이름의 데이터베이스를 /dbtemp/new_db라는 디렉터리에 생성하는 구문이다. ::
+    다음은 *testdb* 라는 이름의 데이터베이스를 /dbtemp/new_db라는 디렉터리에 생성하는 구문이다. ::
 
         cubrid createdb -F "/dbtemp/new_db/" testdb en_US
 
@@ -133,15 +139,15 @@ createdb
     데이터베이스의 로그 파일이 생성되는 디렉터리의 절대 경로를 지정하는 옵션으로, **-L** 옵션을 지정하지 않으면 **-F** 옵션에서 지정한 디렉터리에 생성된다.
     **-F** 옵션과 **-L** 옵션을 둘 다 지정하지 않으면 데이터베이스와 로그 파일이 현재 작업 디렉터리에 생성된다.
 
-    다음은 *testdb*\라는 이름의 데이터베이스를 /dbtemp/newdb라는 디렉터리에 생성하고, 로그 파일을 /dbtemp/db_log 디렉터리에 생성하는 구문이다. ::
+    다음은 *testdb* 라는 이름의 데이터베이스를 /dbtemp/newdb라는 디렉터리에 생성하고, 로그 파일을 /dbtemp/db_log 디렉터리에 생성하는 구문이다. ::
 
         cubrid createdb -F "/dbtemp/new_db/" -L "/dbtemp/db_log/" testdb en_US
 
 .. option:: -B, --lob-base-path=PATH
 
-    **BLOB/CLOB** 데이터를 사용하는 경우 **LOB** 데이터 파일이 저장되는 디렉터리의 경로를 지정하는 옵션으로, 이 옵션을 지정하지 않으면 <*데이터베이스 볼륨이 생성되는 디렉터리*>\ **/lob** 디렉터리에 **LOB** 데이터 파일이 저장된다.
+    **BLOB/CLOB** 데이터를 사용하는 경우 **LOB** 데이터 파일이 저장되는 디렉터리의 경로를 지정하는 옵션으로, 이 옵션을 지정하지 않으면 <*데이터베이스 볼륨이 생성되는 디렉터리*> **/lob** 디렉터리에 **LOB** 데이터 파일이 저장된다.
 
-    다음은 *testdb*\ 를 현재 작업 디렉터리에 생성하고, **LOB** 데이터 파일이 저장될 디렉터리를 로컬 파일 시스템의 "/home/data1"으로 지정하는 구문이다. ::
+    다음은 *testdb* 를 현재 작업 디렉터리에 생성하고, **LOB** 데이터 파일이 저장될 디렉터리를 로컬 파일 시스템의 "/home/data1"으로 지정하는 구문이다. ::
 
         cubrid createdb --lob-base-path "file:/home1/data1" testdb en_US
 
@@ -149,15 +155,15 @@ createdb
 
     CUBRID의 클라이언트/서버 버전을 사용할 때 특정 데이터베이스에 대한 서버가 지정한 호스트 상에 구동되도록 하는 옵션이다. 이 옵션으로 지정된 서버 호스트의 정보는 데이터베이스 위치 정보 파일( **databases.txt** )에 기록된다. 이 옵션이 지정되지 않으면 기본값은 현재 로컬 호스트이다.
 
-    다음은 *testdb*\를 *aa_host* 호스트 상에 생성 및 등록하는 구문이다. ::
+    다음은 *testdb* 를 *aa_host* 호스트 상에 생성 및 등록하는 구문이다. ::
 
         cubrid createdb --server-name aa_host testdb en_US
 
 .. option:: -r, --replace
 
-    **-r**\은 지정된 데이터베이스 이름이 이미 존재하는 데이터베이스 이름과 중복되더라도 새로운 데이터베이스를 생성하고, 기존의 데이터베이스를 덮어쓰도록 하는 옵션이다.
+    **-r** 은 지정된 데이터베이스 이름이 이미 존재하는 데이터베이스 이름과 중복되더라도 새로운 데이터베이스를 생성하고, 기존의 데이터베이스를 덮어쓰도록 하는 옵션이다.
 
-    다음은 *testdb*\ 라는 이름의 데이터베이스가 이미 존재하더라도 기존의 *testdb*\ 를 덮어쓰고 새로운 *testdb*\ 를 생성하는 구문이다. ::
+    다음은 *testdb* 라는 이름의 데이터베이스가 이미 존재하더라도 기존의 *testdb* 를 덮어쓰고 새로운 *testdb* 를 생성하는 구문이다. ::
 
         cubrid createdb -r testdb en_US
 
@@ -165,40 +171,41 @@ createdb
 
     데이터베이스가 생성되는 디렉터리에 추가 볼륨을 생성하는 옵션으로 지정된 파일에 저장된 명세에 따라 추가 볼륨을 생성한다. 이 옵션을 이용하지 않더라도, **cubrid addvoldb** 유틸리티를 이용하여 볼륨을 추가할 수 있다.
 
-    다음은 *testdb*\를 생성함과 동시에 vol_info.txt에 저장된 명세를 기반으로 볼륨을 추가 생성하는 구문이다. ::
+    다음은 *testdb* 를 생성함과 동시에 vol_info.txt에 저장된 명세를 기반으로 볼륨을 추가 생성하는 구문이다. ::
 
         cubrid createdb --more-volume-file vol_info.txt testdb en_US
 
     다음은 위 구문으로 vol_info.txt에 저장된 추가 볼륨에 관한 명세이다. 각 볼륨에 관한 명세는 라인 단위로 작성되어야 한다. ::
 
-        #xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+        #xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
         # NAME volname COMMENTS volcmnts PURPOSE volpurp NPAGES volnpgs
-        NAME data_v1 COMMENTS "데이터 정보 볼륨" PURPOSE data NPAGES 1000
-        NAME data_v2 COMMENTS "데이터 정보 볼륨" PURPOSE data NPAGES 1000
-        NAME data_v3 PURPOSE data NPAGES 1000
-        NAME index_v1 COMMENTS "인덱스 정보 볼륨" PURPOSE index NPAGES 500
-        NAME temp_v1 COMMENTS "임시 정보 볼륨" PURPOSE temp NPAGES 500
-        NAME generic_v1 COMMENTS "일반 정보 볼륨" PURPOSE generic NPAGES 500
-        #xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+        NAME data_v1 COMMENTS "data information volume" PURPOSE data NPAGES 1000
+        NAME data_v2 COMMENTS "data information volume" NPAGES 1000
+        NAME temp_v1 COMMENTS "temporary information volume" PURPOSE temp NPAGES 500
+        #xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
     예제 파일에서와 같이 각 볼륨에 관한 명세는 다음과 같이 구성된다. ::
 
-        NAME volname COMMENTS volcmnts PURPOSE volpurp NPAGES volnpgs
+        [NAME volname] [COMMENTS volcmnts] [PURPOSE volpurp] NPAGES volnpgs 
 
     *   *volname*: 추가 생성될 볼륨의 이름으로 Unix 파일 이름 규약을 따라야 하고, 디렉터리 경로를 포함하지 않는 단순한 이름이어야 한다. 볼륨명에 관한 명세는 생략할 수 있으며, 이 경우 시스템에 의해 "생성될 데이터베이스 이름_볼륨 식별자"로 볼륨명이 생성된다.
 
     *   *volcmnts*: 볼륨 헤더에 기록되는 주석 문장으로, 추가 생성되는 볼륨에 관한 정보를 임의로 부여할 수 있다. 볼륨 주석에 관한 명세 역시 생략할 수 있다.
 
-    *   *volpurp*: 볼륨 저장의 목적으로, **data**, **index**, **temp**, **generic** 중 하나여야 한다. 볼륨 목적에 관한 명세는 생략할 수 있으며, 이 경우 기본값은 **generic**\이다.
+    *   *volpurp*: :볼륨이 사용되는 용도를 나타낸다. 영구적 데이터(기본 옵션) 볼륨 또는 일시적 데이터 볼륨 중에 하나를 사용할 수 있다. 
+     
+    .. note::
+      이전 버전과의 호환성을 위해 **data**, **index**, **temp** 또는 **generic** 등 기존의 모든 키워드를 사용할 수 있다. **temp** 는 일시적 데이터 볼륨이고, 나머지는 영구적 데이터 볼륨을 나타낸다.
 
-    *   *volnpgs*: 추가 생성되는 볼륨의 페이지 수이다. 볼륨 페이지 수에 관한 명세는 생략할 수 없으며, 반드시 지정해야 한다.
+
+    *   *volnpgs*: 생성될 추가 볼륨의 페이지 수를 나타낸다. 볼륨의 페이지 수 지정은 생략할 수 없으며, 반드시 지정해야 한다. 실제 볼륨 크기는 **64 sectors** 의 배수로 올림된다.
 
 .. option:: --user-definition-file=FILE
 
     생성하고자 하는 데이터베이스에 대해 권한이 있는 사용자를 추가하는 옵션으로, 파라미터로 지정된 사용자 정보 파일에 저장된 명세에 따라 사용자를 추가한다.
     **--user-definition-file** 옵션을 이용하지 않더라도 :ref:`create-user` 구문을 이용하여 사용자를 추가할 수 있다.
 
-    다음은 *testdb*\를 생성함과 동시에 user_info.txt에 정의된 사용자 정보를 기반으로 *testdb*\에 대한 사용자를 추가하는 구문이다. ::
+    다음은 *testdb* 를 생성함과 동시에 user_info.txt에 정의된 사용자 정보를 기반으로 *testdb* 에 대한 사용자를 추가하는 구문이다. ::
 
         cubrid createdb --user-definition-file=user_info.txt testdb en_US
 
@@ -214,13 +221,13 @@ createdb
 
     *   *user_name*: 데이터베이스에 대해 권한을 가지는 사용자 이름이며, 공백이 포함되지 않아야 한다.
 
-    *   **GROUPS** 절: 옵션이며, <group_name>은 지정된 <user_name>을 포함하는 상위 그룹의 이름이다. 이 때, <group_name>은 하나 이상이 지정될 수 있으며, **USER**\로 미리 정의되어야 한다.
+    *   **GROUPS** 절: 옵션이며, <group_name>은 지정된 <user_name>을 포함하는 상위 그룹의 이름이다. 이 때, <group_name>은 하나 이상이 지정될 수 있으며, **USER** 로 미리 정의되어야 한다.
 
-    *   **MEMBERS** 절: 옵션이며, <member_name> 은 지정된 <user_name>에 포함되는 하위 멤버의 이름이다. 이 때, <member_name>은 하나 이상이 지정될 수 있으며, **USER**\로 미리 정의되어야 한다.
+    *   **MEMBERS** 절: 옵션이며, <member_name> 은 지정된 <user_name>에 포함되는 하위 멤버의 이름이다. 이 때, <member_name>은 하나 이상이 지정될 수 있으며, **USER** 로 미리 정의되어야 한다.
 
     사용자 정보 파일에서는 주석을 사용할 수 있으며, 주석 라인은 연속된 하이픈(--)으로 시작된다. 공백 라인은 무시된다.
 
-    다음 예제는 그룹 *sedan*\에 *grandeur*\와 *sonata*\가, 그룹 *suv*\에 *tuscan*\이, 그룹 *hatchback*\에 *i30*\가 포함되는 것을 정의하는 사용자 정보 파일이다. 사용자 정보 파일명은 user_info.txt로 예시한다. ::
+    다음 예제는 그룹 *sedan* 에 *grandeur* 와 *sonata* 가, 그룹 *suv* 에 *tuscan* 이, 그룹 *hatchback* 에 *i30* 가 포함되는 것을 정의하는 사용자 정보 파일이다. 사용자 정보 파일명은 user_info.txt로 예시한다. ::
 
         --
         --  사용자 정보 파일의 예 1
@@ -233,7 +240,7 @@ createdb
         USER tuscan GROUPS suv
         USER i30 GROUPS hatchback
 
-    위 예제와 동일한 사용자 관계를 정의하는 파일이다. 다만, 아래 예제에서는 **MEMBERS**\ 절을 이용하였다. ::
+    위 예제와 동일한 사용자 관계를 정의하는 파일이다. 다만, 아래 예제에서는 **MEMBERS** 절을 이용하였다. ::
 
         --
         -- 사용자 정보 파일의 예 2
@@ -250,7 +257,7 @@ createdb
 
     생성하고자 하는 데이터베이스에 대해 CSQL 인터프리터에서 구문을 실행하는 옵션으로, 파라미터로 지정된 파일에 저장된 SQL 구문에 따라 스키마를 생성할 수 있다.
 
-    다음은 *testdb*\를 생성함과 동시에 table_schema.sql에 정의된 SQL 구문을 CSQL 인터프리터에서 실행시키는 구문이다. ::
+    다음은 *testdb* 를 생성함과 동시에 table_schema.sql에 정의된 SQL 구문을 CSQL 인터프리터에서 실행시키는 구문이다. ::
 
         cubrid createdb --csql-initialization-file table_schema.sql testdb en_US
 
@@ -259,7 +266,7 @@ createdb
     데이터베이스 생성에 관한 메시지를 파라미터로 지정된 파일에 저장하는 옵션이며, 파일은 데이터베이스와 동일한 디렉터리에 생성된다.
     **-o** 옵션이 지정되지 않으면 메시지는 콘솔 화면에 출력된다. **-o** 옵션은 데이터베이스가 생성되는 중에 출력되는 메시지를 지정된 파일에 저장함으로써 특정 데이터베이스의 생성 과정에 관한 정보를 활용할 수 있게 한다.
 
-    다음은 *testdb*\를 생성하면서 이에 관한 유틸리티의 출력을 콘솔 화면이 아닌 db_output 파일에 저장하는 구문이다. ::
+    다음은 *testdb* 를 생성하면서 이에 관한 유틸리티의 출력을 콘솔 화면이 아닌 db_output 파일에 저장하는 구문이다. ::
 
         cubrid createdb -o db_output testdb en_US
 
@@ -267,24 +274,22 @@ createdb
 
     데이터베이스 생성 연산에 관한 모든 정보를 화면에 출력하는 옵션으로서, **-o** 옵션과 마찬가지로 특정 데이터베이스 생성 과정에 관한 정보를 확인하는데 유용하다. 따라서, **-v** 옵션과 **-o** 옵션을 함께 지정하면, **-o** 옵션의 파라미터로 지정된 출력 파일에 **cubrid createdb** 유틸리티의 연산 정보와 생성 과정에 관한 출력 메시지를 저장할 수 있다.
 
-    다음은 *testdb*\를 생성하면서 이에 관한 상세한 연산 정보를 화면에 출력하는 구문이다. ::
+    다음은 *testdb* 를 생성하면서 이에 관한 상세한 연산 정보를 화면에 출력하는 구문이다. ::
 
         cubrid createdb -v testdb en_US
 
 .. note::
 
-    *  **temp_file_max_size_in_pages**\는 복잡한 질의문이나 정렬 수행에 사용되는 일시적 임시 볼륨(temporary temp volume)을 디스크에 저장하는 데에 할당되는 페이지의 최대 개수를 설정하는 파라미터이다. 기본값은 **-1**\로, **temp_volume_path** 파라미터가 지정한 디스크의 여유 공간까지 일시적 임시 볼륨(temporary temp volume)이 커질 수 있다. 0이면 일시적 임시 볼륨이 생성되지 않으므로 :ref:`cubrid addvoldb <adding-database-volume>` 유틸리티를 이용하여 영구적 임시 볼륨(permanent temp volume)을 충분히 추가해야 한다. 볼륨을 효율적으로 관리하려면 용도별로 볼륨을 추가하는 것을 권장한다.
+    *  **temp_file_max_size_in_pages** 는 복잡한 질의문이나 정렬 수행에 사용되는 일시적 볼륨을 디스크에 저장하는 데에 할당되는 최대 페이지 개수를 설정하는 파라미터이다. 기본값은 **-1** 로, **temp_volume_path** 파라미터가 지정한 디스크의 여유 공간까지 일시적 볼륨이 커질 수 있다. 0이면 일시적 볼륨이 생성되지 않으므로 :ref:`cubrid addvoldb <adding-database-volume>` 유틸리티를 이용하여 영구적 임시 볼륨을 충분히 추가해야 한다. 볼륨을 효율적으로 관리하기 위해서는 후자의 방법을 사용할 것을 권장한다.
     
-    *  :ref:`cubrid spacedb <spacedb>` 유틸리티를 사용하여 각 용도별 볼륨의 남은 공간을 검사할 수 있으며, :ref:`cubrid addvoldb <adding-database-volume>` 유틸리티를 사용하여 데이터베이스 운영 중에도 필요한 만큼 볼륨을 추가할 수 있다. 데이터베이스 운영 중에 볼륨을 추가하려면 가급적 시스템 부하가 적은 상태에서 추가할 것을 권장한다. 해당 용도의 볼륨 공간이 모두 사용되면 범용(**generic**) 볼륨이 생성되므로 여유 공간이 부족할 것으로 예상되는 용도의 볼륨을 미리 추가해 놓을 것을 권장한다.
+    *  :ref:`cubrid spacedb <spacedb>` 유틸리티를 사용하면 각 볼륨의 남은 공간을 확인할 수 있다. :ref:`cubrid addvoldb <adding-database-volume>` 유틸리티를 사용하면 데이터베이스를 관리하면서 필요에 따라 볼륨을 더 추가할 수 있다. 시스템 부하가 적을 때 볼륨을 추가하는 것이 좋다. 사전 할당된 볼륨이 모두 사용 중이면 데이터베이스 시스템에서는 자동으로 새 볼륨을 생성한다.
 
-다음은 데이터베이스를 생성하고 볼륨 용도를 구분하여 데이터(**data**), 인덱스(**index**), 임시(**temp**) 볼륨을 추가하는 예이다. ::
+다음 예제에서는 영구적 임시 볼륨을 포함한 여러 볼륨을 추가하는 데이터베이스 생성 방법을 보여준다. ::
 
     cubrid createdb --db-volume-size=512M --log-volume-size=256M cubriddb en_US
-    cubrid addvoldb -S -p data -n cubriddb_DATA01 --db-volume-size=512M cubriddb
-    cubrid addvoldb -S -p data -n cubriddb_DATA02 --db-volume-size=512M cubriddb
-    cubrid addvoldb -S -p index -n cubriddb_INDEX01 cubriddb --db-volume-size=512M cubriddb
-    cubrid addvoldb -S -p temp -n cubriddb_TEMP01 cubriddb --db-volume-size=512M cubriddb
-
+    cubrid addvoldb -S -n cubriddb_DATA01 --db-volume-size=512M cubriddb
+    cubrid addvoldb -S -p temp -n cubriddb_TEMP01 --db-volume-size=512M cubriddb
+    
 .. _adding-database-volume:    
 
 .. _addvoldb:
@@ -292,13 +297,9 @@ createdb
 addvoldb
 --------
 
-전체 **generic** 볼륨의 여유 공간이 :ref:`disk-parameters`\ 에 속한 **generic_vol_prealloc_size** 파라미터에서 지정한 크기(기본값: 50M)보다 작아지면 자동으로 **generic** 볼륨이 추가된다. 볼륨 자동 추가는 새로운 페이지 할당 요청이 있을 때 이루어지며, SELECT만 수행되는 경우 볼륨이 확장되지 않는다.
+CUBRID 볼륨을 세부적으로 관리하려면 addvoldb 를 사용하면 된다. 각 볼륨 파일명, 경로, 용도 및 크기를 세분해서 관리할 수 있다. 데이터베이스 시스템은 모든 볼륨을 직접 관리할 수 있으나, 옵션을 생략하면 각각의 새 볼륨을 구성할 때는 기본값을 사용한다
 
-CUBRID의 볼륨은 데이터 저장, 인덱스 저장, 임시 결과 저장 등 용도에 따라 구분되는데, **generic** 볼륨은 데이터 및 인덱스 저장 용도로 사용될 수 있다.
-
-각 볼륨의 종류(용도)에 대해서는 :ref:`database-volume-structure`\ 를 참고한다.
-
-이에 비해, 사용자에 의해 수동으로 데이터베이스 볼륨을 추가하는 명령은 다음과 같다.
+데이터베이스 볼륨을 수동으로 추가하기 위한 명령은 다음과 같다.
 
 ::
 
@@ -313,57 +314,63 @@ CUBRID의 볼륨은 데이터 저장, 인덱스 저장, 임시 결과 저장 등
 다음은 데이터베이스를 생성하고 볼륨 용도를 구분하여 데이터(**data**), 인덱스(**index**), 임시(**temp**) 볼륨을 추가하는 예이다. ::
 
     cubrid createdb --db-volume-size=512M --log-volume-size=256M cubriddb en_US
-    cubrid addvoldb -S -p data -n cubriddb_DATA01 --db-volume-size=512M cubriddb
-    cubrid addvoldb -S -p data -n cubriddb_DATA02 --db-volume-size=512M cubriddb
-    cubrid addvoldb -S -p index -n cubriddb_INDEX01 cubriddb --db-volume-size=512M cubriddb
-    cubrid addvoldb -S -p temp -n cubriddb_TEMP01 cubriddb --db-volume-size=512M cubriddb
+    cubrid addvoldb -S -n cubriddb_DATA01 --db-volume-size=512M cubriddb
+    cubrid addvoldb -S -p temp -n cubriddb_TEMP01 --db-volume-size=512M cubriddb
 
-다음은 cubrid addvoldb에 대한 [options]이다.
+다음은 **cubrid addvoldb** 에 대한 [options]이다.
 
 .. program:: addvoldb
 
 .. option:: --db-volume-size=SIZE
 
-    추가되는 데이터베이스 볼륨의 크기를 지정하는 옵션으로, 기본값은 **cubrid.conf**\에 지정된 시스템 파라미터 **db_volume_size**\ 의 값이다. K, M, G, T로 단위를 설정할 수 있으며, 각각 KB(kilobytes), MB(megabytes), GB(gigabytes), TB(terabytes)를 의미한다. 단위를 생략하면 바이트 단위가 적용된다.
+    **--db-volume-size** 지정한 데이터베이스에 추가될 볼륨 크기를 지정하는 옵션이다. **--db-volume-size** 옵션을 생략하면 시스템 파라미터 **db_volume_size** 의 값이 기본값으로 사용된다. 단위는 K, M, G 및 T로 설정할 수 있으며, 각각 킬로바이트(KB), 메가바이트(MB), 기가바이트(GB) 및 테라바이트(TB)를 나타낸다. 단위를 생략하면 바이트 단위가 적용된다. 데이터베이스의 크기는 항상 64개 디스크 섹터의 배수로 올림된다. 이 값은 페이지의 크기에 따라 달라질 수 있으며, 페이지 크기가 각각 4k, 8k 및 16k인 경우 16M, 32M 또는 64M이 될 수 있다
 
-    다음은 *testdb*\에 데이터 볼륨을 추가하며 볼륨 크기를 256MB로 지정하는 구문이다. ::
+    다음은 *testdb* 에 데이터 볼륨을 추가하며 볼륨 크기를 256MB로 지정하는 구문이다. ::
 
-        cubrid addvoldb -p data --db-volume-size=256M testdb
+        cubrid addvoldb --db-volume-size=256M testdb
 
 .. option:: -n, --volume-name=NAME
 
     지정된 데이터베이스에 대하여 추가될 볼륨의 이름을 지정하는 옵션이다. 볼륨명은 운영체제의 파일 이름 규약을 따라야 하고, 디렉터리 경로나 공백을 포함하지 않는 단순한 이름이어야 한다.
-    **-n** 옵션을 생략하면 추가되는 볼륨의 이름은 시스템에 의해 "데이터베이스 이름_볼륨 식별자"로 자동 부여된다. 예를 들어, 데이터베이스 이름이 *testdb*\ 이면 자동 부여된 볼륨명은 *testdb_x001*\ 이 된다.
+    **-n** 옵션을 생략하면 추가되는 볼륨의 이름은 시스템에 의해 "데이터베이스 이름_볼륨 식별자"로 자동 부여된다. 예를 들어, 데이터베이스 이름이 *testdb* 이면 자동 부여된 볼륨명은 *testdb_x001* 이 된다.
 
-    다음은 독립모드(standalone) 상태에서 *testdb*\ 라는 데이터베이스에 256MB 볼륨을 추가하는 구문이며, 생성되는 볼륨명은 *testdb_v1*\ 이 된다. ::
+    다음은 testdb라는 데이터베이스에 볼륨을 추가하는 예이며, 추가되는 볼륨명은 *testdb_v1* 이 된다. ::
 
-        cubrid addvoldb -S -n testdb_v1 --db-volume-size=256M testdb
+        cubrid addvoldb -n testdb_v1  testdb
 
 .. option::  -F, --file-path=PATH
 
-    지정된 데이터베이스에 대하여 추가될 볼륨이 저장되는 디렉터리 경로를 지정하는 옵션이다. **-F** 옵션을 생략하면, 시스템 파라미터인 **volume_extension_path**\ 의 값이 기본값으로 사용된다.
+    지정된 데이터베이스에 대하여 추가될 볼륨이 저장되는 디렉터리 경로를 지정하는 옵션이다. **-F** 옵션을 생략하면, 시스템 파라미터인 **volume_extension_path** 의 값이 기본값으로 사용된다.
 
-    다음은 독립모드(standalone) 상태에서 *testdb*\ 라는 데이터베이스에 256MB 볼륨을 추가하는 구문이며, 추가 볼륨은 /dbtemp/addvol 디렉터리에 생성된다. 볼륨명에 관한 **-n** 옵션을 지정하지 않았으므로, 생성되는 볼륨명은 *testdb_x001*\이 된다. ::
+    다음은 testdb라는 데이터베이스에 볼륨을 추가하는 구문이며, 추가 볼륨은 */dbtemp/addvol* 디렉터리에 생성된다. 볼륨명에 관한 **-n** 옵션을 지정하지 않았으므로, 볼륨명은 *testdb_x001* 으로 만들어진다. ::
 
-        cubrid addvoldb -S -F /dbtemp/addvol/ --db-volume-size=256M testdb
+        cubrid addvoldb -F /dbtemp/addvol/ testdb
 
 .. option:: --comment=COMMENT
 
-    추가된 볼륨에 관한 정보 검색을 쉽게 하기 위하여 볼륨에 관한 정보를 주석으로 처리하는 옵션이다. 이때 주석의 내용은 볼륨을 추가하는 **DBA**\ 의 이름이나 볼륨 추가의 목적을 포함하는 것이 바람직하며, 큰따옴표로 감싸야 한다.
+    추가된 볼륨에 관한 정보 검색을 쉽게 하기 위하여 볼륨에 관한 정보를 주석으로 처리하는 옵션이다. 이때 주석의 내용은 볼륨을 추가하는 **DBA** 의 이름이나 볼륨 추가의 목적을 포함하는 것이 바람직하며, 큰따옴표로 감싸야 한다.
     
-    다음은 독립모드(standalone) 상태에서 *testdb*\ 라는 데이터베이스에 256MB 볼륨을 추가하는 구문이며, 해당 볼륨에 관한 정보를 주석으로 남긴다. ::
+    다음은  볼륨을 추가하고 추가 정보로 주석을 삽입하는 구문이다. ::
 
-        cubrid addvoldb -S --comment "데이터 볼륨 추가_김철수" --db-volume-size=256M testdb
+        cubrid addvoldb --comment "Data volume added by cheolsoo kim because permanent data space was almost depleted." testdb
 
 .. option:: -p, --purpose=PURPOSE
 
-    추가할 볼륨의 사용 목적에 따라 볼륨의 종류를 지정하는 옵션이다. 이처럼 볼륨의 사용 목적에 맞는 볼륨을 지정해야 볼륨 종류별로 디스크 드라이브에 분리 저장할 수 있어 I/O 성능을 높일 수 있다.
-    **-p** 옵션의 파라미터로 가능한 값은 **data**, **index**, **temp**,    **generic** 중 하나이며, 기본값은 **generic**\이다. 각 볼륨 용도에 관해서는 :ref:`database-volume-structure` 를 참조한다.
+    추가될 볼륨의 용도를 지정한다. 지정된 용도는 추가된 볼륨의 파일 타입들을 정의한다.
+       
+    * **PERMANENT DATA** : 테이블 행, 인덱스 및 시스템 파일 저장.
+    * **TEMPORARY DATA** : 질의 처리 및 정렬을 수행할 때 중간 결과와 최종 결과 저장.
+                 
+    이 옵션이 지정되지 않은 경우 해당 볼륨의 용도는 기본적으로 **PERMANENT DATA** 로 간주한다. 다음은 임시 데이터 용도로 볼륨을 추가하는 구문이다. ::
+                  
+        cubrid addvoldb -p temp testdb
 
-    다음은 독립모드(standalone) 상태에서 *testdb*\라는 데이터베이스에 256MB 인덱스 볼륨을 추가하는 구문이다. ::
-
-        cubrid addvoldb -S -p index --db-volume-size=256M testdb
-
+    .. note::
+                         
+     예전 버전에는 PERMANENT DATA 볼륨이 generic, data 및 index로 구분되었으나, 이번 버전부터는 볼륨 구조에 대한 설계가 변경되어 볼륨의 구분이 없어졌다. 그러나 기존에 사용하던 스크립트의 오류를 방지하기 위해 예전에 사용하였던 keyword(generic, data, index)는 유지하였고, 기존 버전의 temp는 동일한 용도로 유지하였다.
+                            
+     각 용도에 대한 자세한 내용은 :ref:`database-volume-structure` 를 참고한다.
+                               
 .. option:: -S, --SA-mode
 
     서버 프로세스를 구동하지 않고 데이터베이스에 접근하는 독립 모드(standalone)로 작업하기 위해 지정되며, 인수는 없다. **-S** 옵션을 지정하지 않으면, 시스템은 클라이언트/서버 모드로 인식한다. ::
@@ -376,7 +383,7 @@ CUBRID의 볼륨은 데이터 저장, 인덱스 저장, 임시 결과 저장 등
 
         cubrid addvoldb -C --db-volume-size=256M testdb
 
-.. option:: --max_writesize-in-sec=SIZE
+.. option:: --max-writesize-in-sec=SIZE
 
     데이터베이스에 볼륨을 추가할 때 디스크 출력량을 제한하여 시스템 운영 영향을 줄이도록 하는 옵션이다. 이 옵션을 통해 1초당 쓸 수 있는 최대 크기를 지정할 수 있으며, 단위는 K(kilobytes), M(megabytes)이다. 최소값은 160K이며, 이보다 작게 값을 설정하면 160K로 바뀐다. 단, 클라이언트/서버 모드(-C)에서만 사용 가능하다.
     
@@ -391,7 +398,7 @@ CUBRID의 볼륨은 데이터 저장, 인덱스 저장, 임시 결과 저장 등
 deletedb
 --------
 
-**cubrid deletedb**\는 데이터베이스를 삭제하는 유틸리티이다. 데이터베이스가 몇 개의 상호 의존적 파일들로 만들어지기 때문에, 데이터베이스를 제거하기 위해 운영체제 파일 삭제 명령이 아닌 **cubrid deletedb** 유틸리티를 사용해야 한다.
+**cubrid deletedb** 는 데이터베이스를 삭제하는 유틸리티이다. 데이터베이스가 몇 개의 상호 의존적 파일들로 만들어지기 때문에, 데이터베이스를 제거하기 위해 운영체제 파일 삭제 명령이 아닌 **cubrid deletedb** 유틸리티를 사용해야 한다.
 
 **cubrid deletedb** 유틸리티는 데이터베이스 위치 파일( **databases.txt** )에 지정된 데이터베이스에 대한 정보도 같이 삭제한다. **cubrid deletedb** 유틸리티는 오프라인 상에서 즉, 아무도 데이터베이스를 사용하지 않는 상태에서 독립 모드로 사용해야 한다. ::
 
@@ -403,7 +410,7 @@ deletedb
 
 *   *database_name*: 디렉터리 경로명을 포함하지 않고, 삭제하고자 하는 데이터베이스의 이름을 지정한다
 
-다음은 **cubrid deletedb**\에 대한 [options]이다.
+다음은 **cubrid deletedb** 에 대한 [options]이다.
 
 .. program:: deletedb
 
@@ -431,7 +438,7 @@ renamedb
 
 **cubrid renamedb** 유틸리티는 존재하는 데이터베이스의 현재 이름을 변경한다. 정보 볼륨, 로그 볼륨, 제어 파일들이 새로운 이름과 일치되게 이름을 변경한다.
 
-이에 비해 **cubrid alterdbhost** 유틸리티는 지정된 데이터베이스의 호스트 이름을 설정하거나 변경한다. 즉, **databases.txt**\에 있는 호스트 이름을 변경한다. ::
+이에 비해 **cubrid alterdbhost** 유틸리티는 지정된 데이터베이스의 호스트 이름을 설정하거나 변경한다. 즉, **databases.txt** 에 있는 호스트 이름을 변경한다. ::
 
     cubrid renamedb [options] src_database_name dest_database_name
 
@@ -443,7 +450,7 @@ renamedb
 
 *   *dest_database_name*: 새로 부여하고자 하는 데이터베이스의 이름이며, 현재 존재하는 데이터베이스 이름과 중복되어서는 안 된다. 이 역시, 데이터베이스가 생성될 디렉터리 경로명을 포함하지 않는다.
 
-다음은 **cubrid renamedb**\에 대한 [options]이다.
+다음은 **cubrid renamedb** 에 대한 [options]이다.
 
 .. program:: renamedb
 
@@ -500,7 +507,7 @@ alterdbhost
 
 *   **alterdbhost**: 현 데이터베이스의 호스트 이름을 새로운 이름으로 변경하기 위한 명령이다.
 
-**cubrid alterdbhost**\에서 사용하는 옵션은 다음과 같다.
+**cubrid alterdbhost** 에서 사용하는 옵션은 다음과 같다.
 
 .. program:: alterdbhost
 
@@ -513,7 +520,7 @@ alterdbhost
 copydb
 ------
 
-**cubrid copydb** 유틸리티는 데이터베이스를 한 위치에서 다른 곳으로 복사 또는 이동하며, 인자로 원본 데이터베이스 이름과 새로운 데이터베이스 이름이 지정되어야 한다. 이때, 새로운 데이터베이스 이름은 원본 데이터베이스 이름과 다른 이름으로 지정되어야 하고, 새로운 데이터베이스에 대한 위치 정보는 **databases.txt**\에 등록된다.
+**cubrid copydb** 유틸리티는 데이터베이스를 한 위치에서 다른 곳으로 복사 또는 이동하며, 인자로 원본 데이터베이스 이름과 새로운 데이터베이스 이름이 지정되어야 한다. 이때, 새로운 데이터베이스 이름은 원본 데이터베이스 이름과 다른 이름으로 지정되어야 하고, 새로운 데이터베이스에 대한 위치 정보는 **databases.txt** 에 등록된다.
 
 **cubrid copydb** 유틸리티는 원본 데이터베이스가 정지 상태일 때(오프라인)에만 실행할 수 있다. ::
 
@@ -529,25 +536,25 @@ copydb
 
 [options]를 생략하면 원본 데이터베이스를 현재 작업 디렉터리에 복사한다.
 
-**cubrid copydb**\에 대한 [options]는 다음과 같다.
+**cubrid copydb** 에 대한 [options]는 다음과 같다.
 
 .. program:: copydb
 
 .. option:: --server-name=HOST
 
-    새로운 데이터베이스의 서버 호스트 이름을 명시하며, 이는 **databases.txt**\ 의 **db-host** 항목에 등록된다. 이 옵션을 생략하면, 로컬 호스트가 등록된다. ::
+    새로운 데이터베이스의 서버 호스트 이름을 명시하며, 이는 **databases.txt** 의 **db-host** 항목에 등록된다. 이 옵션을 생략하면, 로컬 호스트가 등록된다. ::
 
         cubrid copydb --server-name=cub_server1 demodb new_demodb
 
 .. option:: -F, --file-path=PATH
 
-    새로운 데이터베이스 볼륨이 저장되는 특정 디렉터리 경로를 지정할 수 있다. 절대 경로로 지정해야 하며, 존재하지 않는 디렉터리를 지정하면 에러를 출력한다. 이 옵션을 생략하면 현재 작업 디렉터리에 새로운 데이터베이스의 볼륨이 생성된다. 이 경로는 **databases.txt**\ 의 **vol-path** 항목에 등록된다. ::
+    새로운 데이터베이스 볼륨이 저장되는 특정 디렉터리 경로를 지정할 수 있다. 절대 경로로 지정해야 하며, 존재하지 않는 디렉터리를 지정하면 에러를 출력한다. 이 옵션을 생략하면 현재 작업 디렉터리에 새로운 데이터베이스의 볼륨이 생성된다. 이 경로는 **databases.txt** 의 **vol-path** 항목에 등록된다. ::
     
         cubrid copydb -F /home/usr/CUBRID/databases demodb new_demodb
 
 .. option:: -L, --log-path=PATH
 
-    새로운 데이터베이스 로그 볼륨이 저장되는 특정 디렉터리 경로를 지정할 수 있다. 절대 경로로 지정해야 하며, 존재하지 않는 디렉터리를 지정하면 에러를 출력한다. 이 옵션을 생략하면 새로운 데이터베이스 볼륨이 저장되는 경로에 로그 볼륨도 함께 생성된다. 이 경로는 **databases.txt**\ 의 **log-path** 항목에 등록된다. ::
+    새로운 데이터베이스 로그 볼륨이 저장되는 특정 디렉터리 경로를 지정할 수 있다. 절대 경로로 지정해야 하며, 존재하지 않는 디렉터리를 지정하면 에러를 출력한다. 이 옵션을 생략하면 새로운 데이터베이스 볼륨이 저장되는 경로에 로그 볼륨도 함께 생성된다. 이 경로는 **databases.txt** 의 **log-path** 항목에 등록된다. ::
     
         cubrid copydb -L /home/usr/CUBRID/databases/logs demodb new_demodb
 
@@ -567,15 +574,15 @@ copydb
 
         # volid   source_fullvolname   dest_fullvolname
         0 /usr/databases/demodb        /drive1/usr/databases/new_demodb
-        1 /usr/databases/demodb_data1  /drive1/usr/databases/new_demodb new_data1
-        2 /usr/databases/ext/demodb index1 /drive2//usr/databases/new_demodb new_index1
-        3 /usr/ databases/ext/demodb index2  /drive2/usr/databases/new_demodb new_index2
+        1 /usr/databases/demodb_data1  /drive1/usr/databases/new_demodb_data1
+        2 /usr/databases/ext/demodb_ext1 /drive2//usr/databases/new_demodb_ext1
+        3 /usr/databases/ext/demodb_ext2  /drive2/usr/databases/new_demodb_ext2
 
-    *   volid : 각 볼륨을 식별하기 위한 정수이며, 데이터베이스 볼륨 정보 제어 파일( **database_name_vinf** )를 통해 확인할 수 있다.
+    *   *volid* : 각 볼륨을 식별하기 위한 정수이며, 데이터베이스 볼륨 정보 제어 파일( **database_name_vinf** )를 통해 확인할 수 있다.
 
-    *   source_fullvolname : 원본 데이터베이스의 각 볼륨이 존재하는 현재 디렉터리 경로이다.
+    *   *source_fullvolname* : 원본 데이터베이스의 각 볼륨이 존재하는 현재 디렉터리 경로이다.
 
-    *   dest_fullvolname : 새로운 데이터베이스의 각 볼륨이 저장될 디렉터리 경로이며, 유효한 디렉터리를 지정해야 한다.
+    *   *dest_fullvolname* : 새로운 데이터베이스의 각 볼륨이 저장될 디렉터리 경로이며, 유효한 디렉터리를 지정해야 한다.
 
 .. option:: -r, --replace
 
@@ -583,9 +590,9 @@ copydb
 
         cubrid copydb -r -F /home/usr/CUBRID/databases demodb new_demodb
 
-.. option:: -d 또는 --delete-source
+.. option:: -d, --delete-source
 
-    새로운 데이터베이스로 복사한 후, 원본 데이터베이스를 제거한다. 이 옵션이 주어지면 데이터베이스 복사 후 **cubrid deletedb**\를 수행하는 것과 동일하다. 단, 원본 데이터베이스에 **LOB** 데이터를 포함하는 경우, 원본 데이터베이스 대한 **LOB** 파일 디렉터리 경로가 새로운 데이터베이스로 복사되어 **databases.txt**\ 의 **lob-base-path** 항목에 등록된다. ::
+    새로운 데이터베이스로 복사한 후, 원본 데이터베이스를 제거한다. 이 옵션이 주어지면 데이터베이스 복사 후 **cubrid deletedb** 를 수행하는 것과 동일하다. 단, 원본 데이터베이스에 **LOB** 데이터를 포함하는 경우, 원본 데이터베이스 대한 **LOB** 파일 디렉터리 경로가 새로운 데이터베이스로 복사되어 **databases.txt** 의 **lob-base-path** 항목에 등록된다. ::
 
         cubrid copydb -d -F /home/usr/CUBRID/databases demodb new_demodb
 
@@ -606,7 +613,7 @@ copydb
 installdb
 ---------
 
-**cubrid installdb** 유틸리티는 데이터베이스 위치 정보를 저장하는 **databases.txt**\에 새로 설치된 데이터베이스 정보를 등록한다. 이 유틸리티의 실행은 등록 대상 데이터베이스의 동작에 영향을 끼치지 않는다.
+**cubrid installdb** 유틸리티는 데이터베이스 위치 정보를 저장하는 **databases.txt** 에 새로 설치된 데이터베이스 정보를 등록한다. 이 유틸리티의 실행은 등록 대상 데이터베이스의 동작에 영향을 끼치지 않는다.
 
 ::
 
@@ -614,31 +621,31 @@ installdb
 
 *   **cubrid**: CUBRID 서비스 및 데이터베이스 관리를 위한 통합 유틸리티이다.
 
-*   **installdb**: 이동 또는 복사된 데이터베이스의 정보를 **databases.txt**\에 등록하는 명령이다.
+*   **installdb**: 이동 또는 복사된 데이터베이스의 정보를 **databases.txt** 에 등록하는 명령이다.
 
-*   *database_name*: **databases.txt**\에 등록하고자 하는 데이터베이스의 이름이다.
+*   *database_name*: **databases.txt** 에 등록하고자 하는 데이터베이스의 이름이다.
 
 [options]를 생략하는 경우, 해당 데이터베이스가 존재하는 디렉터리에서 명령을 수행해야 한다.
 
-**cubrid installdb**\에 대한 [options]는 다음과 같다.
+**cubrid installdb** 에 대한 [options]는 다음과 같다.
 
 .. program:: installdb
 
 .. option:: --server-name=HOST
 
-    대상 데이터베이스의 서버 호스트 정보를 지정된 호스트 명으로 **databases.txt**\에 등록한다. 이 옵션을 생략하면, 현재의 호스트 정보가 등록된다.  ::
+    대상 데이터베이스의 서버 호스트 정보를 지정된 호스트 명으로 **databases.txt** 에 등록한다. 이 옵션을 생략하면, 현재의 호스트 정보가 등록된다.  ::
 
         cubrid installdb --server-name=cub_server1 testdb
 
 .. option:: -F, --file-path=PATH
         
-    대상 데이터베이스 볼륨 디렉터리의 절대 경로를 **databases.txt**\에 등록한다. 이 옵션을 생략하면 기본값인 현재 디렉터리 경로가 등록된다.  ::
+    대상 데이터베이스 볼륨 디렉터리의 절대 경로를 **databases.txt** 에 등록한다. 이 옵션을 생략하면 기본값인 현재 디렉터리 경로가 등록된다.  ::
 
         cubrid installdb -F /home/cubrid/CUBRID/databases/testdb testdb
 
 .. option:: -L, --log-path=PATH
 
-    대상 데이터베이스 로그 볼륨 디렉터리의 절대 경로를 **databases.txt**\에 등록한다. 이 옵션을 생략하면 데이터베이스 볼륨의 디렉터리 경로가 등록된다.  ::
+    대상 데이터베이스 로그 볼륨 디렉터리의 절대 경로를 **databases.txt** 에 등록한다. 이 옵션을 생략하면 데이터베이스 볼륨의 디렉터리 경로가 등록된다.  ::
     
         cubrid installdb -L /home/cubrid/CUBRID/databases/logs/testdb testdb
 
@@ -652,7 +659,7 @@ spacedb
 -------
 
 **cubrid spacedb** 유틸리티는 사용 중인 데이터베이스 볼륨의 공간을 확인하기 위해서 사용된다.
-**cubrid spacedb** 유틸리티는 데이터베이스에 있는 모든 영구 데이터 볼륨의 간략한 설명을 보여준다. **cubrid spacedb** 유틸리티에 의해 반환되는 정보는 볼륨 ID와 이름, 각 볼륨의 목적, 각 볼륨과 관련된 총(total) 공간과 빈(free) 공간이다. 
+이 도구에서는 옵션에 따라 데이터베이스 공간 사용에 대한 간략한 집계 정보나 사용 중인 모든 볼륨 및 파일에 대한 자세한 설명을 볼 수 있다. **cubrid spacedb** 유틸리티에서 반환되는 정보는 볼륨의 ID, 각 볼륨의 이름, 용도,  저장 공간의 총 합계 및 남은 저장 공간 등이다.
 
 ::
 
@@ -664,7 +671,7 @@ spacedb
 
 *   *database_name*: 공간을 확인하고자 하는 데이터베이스의 이름이며, 데이터베이스가 생성될 디렉터리 경로명을 포함하지 않는다.
 
-다음은 **cubrid spacedb**\에 대한 [options]이다.
+다음은 **cubrid spacedb** 에 대한 [options]이다.
 
 .. program:: spacedb
 
@@ -689,88 +696,55 @@ spacedb
 
 .. option:: --size-unit={PAGE|M|G|T|H}
 
-    데이터베이스 볼륨의 공간을 지정한 크기 단위로 출력하기 위한 옵션이며, 기본값은 H이다.
-    단위를 PAGE, M, G, T, H로 설정할 수 있으며, 각각 페이지, MB(megabytes), GB(gigabytes), TB(terabytes), 자동 지정을 의미한다. 자동 지정을 의미하는 H로 설정하면 데이터베이스 크기가 1MB 이상 1024MB 미만일 때 MB 단위로, 1GB 이상 1024GB 미만일 때 GB 단위로 결정된다. ::
+    데이터베이스 볼륨의 공간을 지정한 크기 단위로 출력하기 위한 옵션이며, 기본값은 **H** 이다.
+    값을 H로 설정할 경우 단위는 다음과 같이 자동으로 지정된다. DB size < 1024 MB 보다 작을 경우 M는 MB 으로 , DB size < 1024 GB 보다 작을 경우 G는 GB 로 지정된다. ::
 
-        $ cubrid spacedb --size-unit=M testdb
         $ cubrid spacedb --size-unit=H testdb
 
         Space description for database 'testdb' with pagesize 16.0K. (log pagesize: 16.0K)
 
-        Volid  Purpose    total_size   free_size  Vol Name
+        type                purpose            volume_count        used_size           free_size            total_size
+        PERMANENT           PERMANENT DATA                2            61.0 M             963.0 M                1.0 G
+        PERMANENT           TEMPORARY DATA                1            12.0 M             500.0 M              512.0 M
+        TEMPORARY           TEMPORARY DATA                1            40.0 M              88.0 M              128.0 M
+        -                   -                             4           113.0 M               1.5 G                1.6 G
 
-            0   GENERIC       20.0 M      17.0 M  /home1/cubrid/testdb
-            1      DATA       20.0 M      19.5 M  /home1/cubrid/testdb_x001
-            2     INDEX       20.0 M      19.6 M  /home1/cubrid/testdb_x002
-            3      TEMP       20.0 M      19.6 M  /home1/cubrid/testdb_x003
-            4      TEMP       20.0 M      19.9 M  /home1/cubrid/testdb_x004
-        -------------------------------------------------------------------------------
-            5                100.0 M      95.6 M
-        Space description for temporary volumes for database 'testdb' with pagesize 16.0K.
-
-        Volid  Purpose    total_size   free_size  Vol Name
+        Space description for all volumes:
+        volid               type                purpose             used_size          free_size           total_size         volume_name
+            0               PERMANENT           PERMANENT DATA         60.0 M             452.0 M              512.0 M         /home1/cubrid/testdb
+            1               PERMANENT           PERMANENT DATA          1.0 M             511.0 M              512.0 M         /home1/cubrid/testdb_x001
+            2               PERMANENT           TEMPORARY DATA         12.0 M             500.0 M              512.0 M         /home1/cubrid/testdb_x002
+        32766               TEMPORARY           TEMPORARY DATA         40.0 M              88.0 M              128.0 M         /home1/cubrid/testdb_t32766
 
         LOB space description file:/home1/cubrid/lob
 
 .. option:: -s, --summarize
 
-    데이터 볼륨(DATA), 인덱스 볼륨(INDEX), 범용 볼륨(GENERIC), 임시 볼륨(TEMP), 일시적 임시 볼륨(TEMP TEMP)별로 전체 공간(total_pages), 사용 공간(used_pages), 빈 공간(free_pages)을 합산하여 출력한다. ::
+    볼륨 타입 및 용도별로 볼륨 수, 사용된 크기, 남은 저장 공간 크기 및 총 저장 공간 크기를 집계한다. 볼륨에는 영구적 데이터를 사용하는 영구적 볼륨, 일시적 데이터를 사용하는 영구적 볼륨과 일시적 데이터를 사용하는 일시적 볼륨, 이 세 가지 종류가 있으며 영구적 데이터를 사용하는 일시적 볼륨은 없다.  마지막 행은 모든 볼륨 타입의 총 공간 값을 출력한다. ::
 
         $ cubrid spacedb -s testdb
 
-        Summarized space description for database 'testdb' with pagesize 16.0K. (log pagesize: 16.0K)
+        Space description for database 'testdb' with pagesize 16.0K. (log pagesize: 16.0K)
 
-        Purpose     total_size   used_size   free_size  volume_count
-        -------------------------------------------------------------
-              DATA      20.0 M       0.5 M      19.5 M          1
-             INDEX      20.0 M       0.4 M      19.6 M          1
-           GENERIC      20.0 M       3.0 M      17.0 M          1
-              TEMP      40.0 M       0.5 M      39.5 M          2
-         TEMP TEMP       0.0 M       0.0 M       0.0 M          0
-        -------------------------------------------------------------
-             TOTAL     100.0 M       4.4 M      95.6 M          5
+        type                purpose            volume_count         used_size           free_size           total_size
+        PERMANENT           PERMANENT DATA                2            61.0 M             963.0 M                1.0 G
+        PERMANENT           TEMPORARY DATA                1            12.0 M             500.0 M              512.0 M
+        TEMPORARY           TEMPORARY DATA                1            40.0 M              88.0 M              128.0 M
+        -                   -                             4           113.0 M               1.5 G                1.6 G
 
 .. option:: -p, --purpose
 
-    사용 중인 디스크 공간을 data_size, index_size, temp_size로 구분하여 출력한다.
-
-    ::
+    저장된 데이터의 용도에 대한 자세한 정보를 출력한다. 이 정보에는 파일 수, 사용된 크기, 파일 테이블 크기, 예약된 섹터 크기 및 총 크기가 포함된다. ::
     
         Space description for database 'testdb' with pagesize 16.0K. (log pagesize: 16.0K)
 
-        Volid  Purpose    total_size   free_size   data_size  index_size   temp_size  Vol Name
-
-            0   GENERIC       20.0 M      17.0 M       2.1 M       0.9 M       0.0 M  /home1/cubrid/testdb
-            1      DATA       20.0 M      19.5 M       0.4 M       0.0 M       0.0 M  /home1/cubrid/testdb_x001
-            2     INDEX       20.0 M      19.6 M       0.0 M       0.4 M       0.0 M  /home1/cubrid/testdb_x002
-            3      TEMP       20.0 M      19.6 M       0.0 M       0.0 M       0.3 M  /home1/cubrid/testdb_x003
-            4      TEMP       20.0 M      19.9 M       0.0 M       0.0 M       0.1 M  /home1/cubrid/testdb_x004
-        ----------------------------------------------------------------------------------------------------
-            5                100.0 M      95.6 M       2.5 M       1.2 M       0.4 M
-        Space description for temporary volumes for database 'testdb' with pagesize 16.0K.
-
-        Volid  Purpose    total_size   free_size   data_size  index_size   temp_size  Vol Name
-
-        LOB space description file:/home1/cubrid/lob
-
-.. note::
-
-    **-p**\ 와 **-s**\ 를 함께 사용하는 경우, 요약 정보를 출력할 때 사용 중인 디스크 공간을 data_size, index_size, temp_size로 구분하여 출력한다.
-
-    ::
-
-        $ cubrid spacedb -s -p testdb
-        Summarized space description for database 'testdb' with pagesize 16.0K. (log pagesize: 16.0K)
-
-        Purpose     total_size   used_size   free_size   data_size  index_size   temp_size  volume_count
-        -------------------------------------------------------------------------------------------------
-              DATA      20.0 M       0.5 M      19.5 M       0.4 M       0.0 M       0.0 M          1
-             INDEX      20.0 M       0.4 M      19.6 M       0.0 M       0.4 M       0.0 M          1
-           GENERIC      20.0 M       3.0 M      17.0 M       2.1 M       0.9 M       0.0 M          1
-              TEMP      40.0 M       0.5 M      39.5 M       0.0 M       0.0 M       0.4 M          2
-         TEMP TEMP       0.0 M       0.0 M       0.0 M       0.0 M       0.0 M       0.0 M          0
-        -------------------------------------------------------------------------------------------------
-             TOTAL     100.0 M       4.4 M      95.6 M       2.5 M       1.2 M       0.4 M          5
+        Detailed space description for files:
+        data_type           file_count           used_size          file_table_size     reserved_size       total_size
+        INDEX                       17               0.3 M                    0.3 M            16.5 M           17.0 M
+        HEAP                        28               7.6 M                    0.4 M            26.0 M           34.0 M
+        SYSTEM                       8               0.4 M                    0.1 M             7.5 M            8.0 M
+        TEMP                        10               0.0 M                    0.2 M            49.8 M           50.0 M
+        -                           63               8.2 M                    1.0 M            99.8 M          109.0 M
 
 .. _compactdb:
 
@@ -804,9 +778,9 @@ compactdb
     
         ERROR: The class 'reuse_tbl' is marked as REUSE_OID and is non-referable. Non-referable classes can't be the domain of an attribute and their instances' OIDs cannot be returned.
  
-    REUSE_OID에 대한 자세한 설명은 :ref:`reuse-oid`\를 참고한다.
+    REUSE_OID에 대한 자세한 설명은 :ref:`reuse-oid` 를 참고한다.
 
-**cubrid compactdb** 유틸리티를 수행하면 삭제된 객체에 대한 참조를 **NULL**\ 로 표시하는데, 이렇게 **NULL**\ 로 표시된 공간은 OID가 재사용할 수 있는 공간임을 의미한다. ::
+**cubrid compactdb** 유틸리티를 수행하면 삭제된 객체에 대한 참조를 **NULL** 로 표시하는데, 이렇게 **NULL** 로 표시된 공간은 OID가 재사용할 수 있는 공간임을 의미한다. ::
 
     cubrid compactdb [<options>] database_name [ class_name1, class_name2, ...]
 
@@ -820,7 +794,7 @@ compactdb
 
 클라이언트/서버 모드에서만 **-I**, **-i**, **-c**, **-d**, **-p** 옵션을 사용할 수 있다.
 
-다음은 **cubrid compactdb**\에 대한 [options]이다.
+다음은 **cubrid compactdb** 에 대한 [options]이다.
 
 .. program:: compactdb
 
@@ -849,7 +823,7 @@ compactdb
 
 .. option:: -p, --pages-commited-once=NUMBER
 
-    한 번에 커밋할 수 있는 최대 페이지 수를 지정한다. 기본값은 **10**\이며, 최소 값은 1, 최대 값은 10이다. 옵션 값이 작으면 클래스/인스턴스에 대한 잠금 비용이 작으므로 동시성은 향상될 수 있으나 작업 속도는 저하될 수 있고, 옵션 값이 크면 동시성은 저하되나 작업 속도는 향상될 수 있다.  ::
+    한 번에 커밋할 수 있는 최대 페이지 수를 지정한다. 기본값은 **10** 이며, 최소 값은 1, 최대 값은 10이다. 옵션 값이 작으면 클래스/인스턴스에 대한 잠금 비용이 작으므로 동시성은 향상될 수 있으나 작업 속도는 저하될 수 있고, 옵션 값이 크면 동시성은 저하되나 작업 속도는 향상될 수 있다.  ::
 
         cubrid compactdb --CS-mode -p 10 testdb tbl1, tbl2, tbl5
 
@@ -880,7 +854,7 @@ CUBRID의 질의 최적화기가 사용하는 테이블에 있는 객체들의 �
 
 *   *database_name*: 비용기반 질의 최적화용 통계 자료를 업데이트하려는 데이터베이스 이름이다.
 
-다음은 *cubrid optimizedb*\에 대한 [option]이다.
+다음은 *cubrid optimizedb* 에 대한 [option]이다.
 
 .. program:: optimizedb
 
@@ -913,7 +887,7 @@ plandump
 
     cubrid plandump testdb
 
-다음은 **cubrid plandump**\에 대한 [options]이다.
+다음은 **cubrid plandump** 에 대한 [options]이다.
 
 .. program:: plandump
 
@@ -936,7 +910,7 @@ statdump
 
 **cubrid statdump** 유틸리티를 이용해 CUBRID 데이터베이스 서버가 실행한 통계 정보를 확인할 수 있으며, 통계 정보 항목은 크게 File I/O 관련, 페이지 버퍼 관련, 로그 관련, 트랜잭션 관련, 동시성 관련, 인덱스 관련, 쿼리 수행 관련, 네트워크 요청 관련으로 구분된다. 
 
-CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 세션 명령어를 이용할 수 있으며 :ref:`CSQL 실행 통계 정보 출력 <csql-execution-statistics>`\ 를 참고한다.
+CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 세션 명령어를 이용할 수 있으며 :ref:`CSQL 실행 통계 정보 출력 <csql-execution-statistics>` 를 참고한다.
 
 ::
 
@@ -944,11 +918,11 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
 
 *   **cubrid**: CUBRID 서비스 및 데이터베이스 관리를 위한 통합 유틸리티이다.
 
-*   **statdump**: 대상 데이터베이스 서버 실행 통계 정보를 출력하는 명령어이다. 데이터베이스가 동작 중일 때에만 정상 수행된다.
+*   **statdump**: 데이터베이스 서버 수행 시 통계 정보를 출력하는 명령어이다.
 
 *   *database_name*: 통계 자료를 확인하고자 하는 대상 데이터베이스 이름이다.
 
-다음은 **cubrid statdump**\에 대한 [options]이다.
+다음은 **cubrid statdump** 에 대한 [options]이다.
 
 .. program:: statdump
 
@@ -968,7 +942,7 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
     
         cubrid statdump demodb
         
-    다음은 위와 같은 결과를 출력한다. **-c** 옵션은 **-i** 옵션과 같이 쓰이지 않으면 옵션을 설정하지 않은 것과 동일하다.
+    다음은 위와 같은 결과를 출력한다. **-c** 옵션은 **-i** 옵션과 같이 쓰이지 않으면 옵션을 설정하지 않은 것과 동일하다. ::
     
         cubrid statdump -c demodb
 
@@ -977,66 +951,79 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
     ::
 
         $ cubrid statdump -i 5 -c testdb
-         
 
-                Fri November 21 15:58:06 KST 2014
+         
+        Thu January 07 16:46:05 GTB Standard Time 2016
 
          *** SERVER EXECUTION STATISTICS ***
         Num_file_creates              =          0
         Num_file_removes              =          0
         Num_file_ioreads              =          0
-        Num_file_iowrites             =       1386
-        Num_file_iosynches            =       1384
+        Num_file_iowrites             =         10
+        Num_file_iosynches            =         10
+        The timer values for file_iosync_all are:
+        Num_file_iosync_all           =          0
+        Total_time_file_iosync_all    =          0
+        Max_time_file_iosync_all      =          0
+        Avg_time_file_iosync_all      =          0
         Num_file_page_allocs          =          0
         Num_file_page_deallocs        =          0
-        Num_data_page_fetches         =        119
-        Num_data_page_dirties         =         70
+        Num_data_page_fetches         =          0
+        Num_data_page_dirties         =          0
         Num_data_page_ioreads         =          0
-        Num_data_page_iowrites        =          5
-        Num_data_page_victims         =          0
-        Num_data_page_iowrites_for_replacement =          0
-        Num_log_page_fetches          =         13
-        Num_log_page_fetch_ioreads    =          0
+        Num_data_page_iowrites        =          0
+        Num_data_page_flushed         =          0
+        Num_data_page_private_quota   =        327
+        Num_data_page_private_count   =        898
+        Num_data_page_fixed           =          1
+        Num_data_page_dirty           =          3
+        Num_data_page_lru1            =        857
+        Num_data_page_lru2            =        873
+        Num_data_page_lru3            =        898
+        Num_data_page_victim_candidate =        898
+        Num_log_page_fetches          =          0
         Num_log_page_ioreads          =          0
-        Num_log_page_iowrites         =       1374
-        Num_log_append_records        =       2798
+        Num_log_page_iowrites         =         20
+        Num_log_append_records        =         20
         Num_log_archives              =          0
-        Num_log_start_checkpoints     =          3
-        Num_log_end_checkpoints       =          3
-        Num_log_wals                  =          3
+        Num_log_start_checkpoints     =          0
+        Num_log_end_checkpoints       =          0
+        Num_log_wals                  =          0
         Num_log_page_iowrites_for_replacement =          0
+        Num_log_page_replacements     =          0
         Num_page_locks_acquired       =          0
-        Num_object_locks_acquired     =          6
+        Num_object_locks_acquired     =          0
         Num_page_locks_converted      =          0
-        Num_object_locks_converted    =          1
+        Num_object_locks_converted    =          0
         Num_page_locks_re-requested   =          0
-        Num_object_locks_re-requested =         40
+        Num_object_locks_re-requested =          0
         Num_page_locks_waits          =          0
         Num_object_locks_waits        =          0
+        Num_object_locks_time_waited_usec =          0
         Num_tran_commits              =          0
         Num_tran_rollbacks            =          0
         Num_tran_savepoints           =          0
-        Num_tran_start_topops         =         21
-        Num_tran_end_topops           =         21
-        Num_tran_interrupts           =          1
-        Num_btree_inserts             =          7
-        Num_btree_deletes             =          2
-        Num_btree_updates             =          3
+        Num_tran_start_topops         =          0
+        Num_tran_end_topops           =          0
+        Num_tran_interrupts           =          0
+        Num_btree_inserts             =          0
+        Num_btree_deletes             =          0
+        Num_btree_updates             =          0
         Num_btree_covered             =          0
-        Num_btree_noncovered          =          3
+        Num_btree_noncovered          =          0
         Num_btree_resumes             =          0
         Num_btree_multirange_optimization =          0
         Num_btree_splits              =          0
         Num_btree_merges              =          0
         Num_btree_get_stats           =          0
         Num_heap_stats_sync_bestspace =          0
-        Num_query_selects             =          6
-        Num_query_inserts             =          3
+        Num_query_selects             =          0
+        Num_query_inserts             =          0
         Num_query_deletes             =          0
-        Num_query_updates             =          4
+        Num_query_updates             =          0
         Num_query_sscans              =          0
-        Num_query_iscans              =         12
-        Num_query_lscans              =          6
+        Num_query_iscans              =          0
+        Num_query_lscans              =          0
         Num_query_setscans            =          0
         Num_query_methscans           =          0
         Num_query_nljoins             =          0
@@ -1045,327 +1032,1079 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
         Num_query_holdable_cursors    =          0
         Num_sort_io_pages             =          0
         Num_sort_data_pages           =          0
-        Num_network_requests          =       1447
-        Num_adaptive_flush_pages      =          5
-        Num_adaptive_flush_log_pages  =       1381
-        Num_adaptive_flush_max_pages  =     245250
-        Num_prior_lsa_list_size       =          3
+        Num_network_requests          =          4
+        Num_adaptive_flush_pages      =          0
+        Num_adaptive_flush_log_pages  =         10
+        Num_adaptive_flush_max_pages  =      25600
+        Num_prior_lsa_list_size       =          0
         Num_prior_lsa_list_maxed      =          0
-        Num_prior_lsa_list_removed    =       1375
-        Num_heap_stats_bestspace_entries =          0
+        Num_prior_lsa_list_removed    =         10
+        Num_heap_stats_bestspace_entries =        441
         Num_heap_stats_bestspace_maxed =          0
         Time_ha_replication_delay     =          0
         Num_plan_cache_add            =          0
-        Num_plan_cache_lookup         =         12
-        Num_plan_cache_hit            =         12
+        Num_plan_cache_lookup         =          0
+        Num_plan_cache_hit            =          0
         Num_plan_cache_miss           =          0
         Num_plan_cache_full           =          0
         Num_plan_cache_delete         =          0
         Num_plan_cache_invalid_xasl_id =          0
-        Num_plan_cache_query_string_hash_entries =          0
-        Num_plan_cache_xasl_id_hash_entries =          0
-        Num_plan_cache_class_oid_hash_entries =          0
+        Num_plan_cache_entries        =          2
         Num_vacuum_log_pages_vacuumed =          0
         Num_vacuum_log_pages_to_vacuum =          0
-
-         *** OTHER STATISTICS ***
-        Data_page_buffer_hit_ratio    =     100.00
-        Log_page_buffer_hit_ratio     =     100.00
+        Num_vacuum_prefetch_requests_log_pages =          0
+        Num_vacuum_prefetch_hits_log_pages =          0
+        Num_heap_home_inserts         =          0
+        Num_heap_big_inserts          =          0
+        Num_heap_assign_inserts       =          0
+        Num_heap_home_deletes         =          0
+        Num_heap_home_mvcc_deletes    =          0
+        Num_heap_home_to_rel_deletes  =          0
+        Num_heap_home_to_big_deletes  =          0
+        Num_heap_rel_deletes          =          0
+        Num_heap_rel_mvcc_deletes     =          0
+        Num_heap_rel_to_home_deletes  =          0
+        Num_heap_rel_to_big_deletes   =          0
+        Num_heap_rel_to_rel_deletes   =          0
+        Num_heap_big_deletes          =          0
+        Num_heap_big_mvcc_deletes     =          0
+        Num_heap_home_updates         =          0
+        Num_heap_home_to_rel_updates  =          0
+        Num_heap_home_to_big_updates  =          0
+        Num_heap_rel_updates          =          0
+        Num_heap_rel_to_home_updates  =          0
+        Num_heap_rel_to_rel_updates   =          0
+        Num_heap_rel_to_big_updates   =          0
+        Num_heap_big_updates          =          0
+        Num_heap_home_vacuums         =          0
+        Num_heap_big_vacuums          =          0
+        Num_heap_rel_vacuums          =          0
+        Num_heap_insid_vacuums        =          0
+        Num_heap_remove_vacuums       =          0
+        The timer values for heap_insert_prepare are:
+        Num_heap_insert_prepare  =          0
+        Total_time_heap_insert_prepare =          0
+        Max_time_heap_insert_prepare =          0
+        Avg_time_heap_insert_prepare =          0
+        The timer values for heap_insert_execute are:
+        Num_heap_insert_execute  =          0
+        Total_time_heap_insert_execute =          0
+        Max_time_heap_insert_execute =          0
+        Avg_time_heap_insert_execute =          0
+        The timer values for heap_insert_log are:
+        Num_heap_insert_log      =          0
+        Total_time_heap_insert_log =          0
+        Max_time_heap_insert_log =          0
+        Avg_time_heap_insert_log =          0
+        The timer values for heap_delete_prepare are:
+        Num_heap_delete_prepare  =          0
+        Total_time_heap_delete_prepare =          0
+        Max_time_heap_delete_prepare =          0
+        Avg_time_heap_delete_prepare =          0
+        The timer values for heap_delete_execute are:
+        Num_heap_delete_execute  =          0
+        Total_time_heap_delete_execute =          0
+        Max_time_heap_delete_execute =          0
+        Avg_time_heap_delete_execute =          0
+        The timer values for heap_delete_log are:
+        Num_heap_delete_log      =          0
+        Total_time_heap_delete_log =          0
+        Max_time_heap_delete_log =          0
+        Avg_time_heap_delete_log =          0
+        The timer values for heap_update_prepare are:
+        Num_heap_update_prepare  =          0
+        Total_time_heap_update_prepare =          0
+        Max_time_heap_update_prepare =          0
+        Avg_time_heap_update_prepare =          0
+        The timer values for heap_update_execute are:
+        Num_heap_update_execute  =          0
+        Total_time_heap_update_execute =          0
+        Max_time_heap_update_execute =          0
+        Avg_time_heap_update_execute =          0
+        The timer values for heap_update_log are:
+        Num_heap_update_log      =          0
+        Total_time_heap_update_log =          0
+        Max_time_heap_update_log =          0
+        Avg_time_heap_update_log =          0
+        The timer values for heap_vacuum_prepare are:
+        Num_heap_vacuum_prepare  =          0
+        Total_time_heap_vacuum_prepare =          0
+        Max_time_heap_vacuum_prepare =          0
+        Avg_time_heap_vacuum_prepare =          0
+        The timer values for heap_vacuum_execute are:
+        Num_heap_vacuum_execute  =          0
+        Total_time_heap_vacuum_execute =          0
+        Max_time_heap_vacuum_execute =          0
+        Avg_time_heap_vacuum_execute =          0
+        The timer values for heap_vacuum_log are:
+        Num_heap_vacuum_log      =          0
+        Total_time_heap_vacuum_log =          0
+        Max_time_heap_vacuum_log =          0
+        Avg_time_heap_vacuum_log =          0
+        The timer values for bt_fix_ovf_oids are:
+        Num_bt_fix_ovf_oids           =          0
+        Total_time_bt_fix_ovf_oids    =          0
+        Max_time_bt_fix_ovf_oids      =          0
+        Avg_time_bt_fix_ovf_oids      =          0
+        The timer values for bt_unique_rlocks are:
+        Num_bt_unique_rlocks          =          0
+        Total_time_bt_unique_rlocks   =          0
+        Max_time_bt_unique_rlocks     =          0
+        Avg_time_bt_unique_rlocks     =          0
+        The timer values for bt_unique_wlocks are:
+        Num_bt_unique_wlocks          =          0
+        Total_time_bt_unique_wlocks   =          0
+        Max_time_bt_unique_wlocks     =          0
+        Avg_time_bt_unique_wlocks     =          0
+        The timer values for bt_leaf are:
+        Num_bt_leaf                   =          0
+        Total_time_bt_leaf            =          0
+        Max_time_bt_leaf              =          0
+        Avg_time_bt_leaf              =          0
+        The timer values for bt_traverse are:
+        Num_bt_traverse               =          0
+        Total_time_bt_traverse        =          0
+        Max_time_bt_traverse          =          0
+        Avg_time_bt_traverse          =          0
+        The timer values for bt_find_unique are:
+        Num_bt_find_unique            =          0
+        Total_time_bt_find_unique     =          0
+        Max_time_bt_find_unique       =          0
+        Avg_time_bt_find_unique       =          0
+        The timer values for bt_find_unique_traverse are:
+        Num_bt_find_unique_traverse   =          0
+        Total_time_bt_find_unique_traverse =          0
+        Max_time_bt_find_unique_traverse =          0
+        Avg_time_bt_find_unique_traverse =          0
+        The timer values for bt_range_search are:
+        Num_bt_range_search           =          0
+        Total_time_bt_range_search    =          0
+        Max_time_bt_range_search      =          0
+        Avg_time_bt_range_search      =          0
+        The timer values for bt_range_search_traverse are:
+        Num_bt_range_search_traverse  =          0
+        Total_time_bt_range_search_traverse =          0
+        Max_time_bt_range_search_traverse =          0
+        Avg_time_bt_range_search_traverse =          0
+        The timer values for bt_insert are:
+        Num_bt_insert                 =          0
+        Total_time_bt_insert          =          0
+        Max_time_bt_insert            =          0
+        Avg_time_bt_insert            =          0
+        The timer values for bt_insert_traverse are:
+        Num_bt_insert_traverse        =          0
+        Total_time_bt_insert_traverse =          0
+        Max_time_bt_insert_traverse   =          0
+        Avg_time_bt_insert_traverse   =          0
+        The timer values for bt_delete_obj are:
+        Num_bt_delete_obj             =          0
+        Total_time_bt_delete_obj      =          0
+        Max_time_bt_delete_obj        =          0
+        Avg_time_bt_delete_obj        =          0
+        The timer values for bt_delete_obj_traverse are:
+        Num_bt_delete_obj_traverse    =          0
+        Total_time_bt_delete_obj_traverse =          0
+        Max_time_bt_delete_obj_traverse =          0
+        Avg_time_bt_delete_obj_traverse =          0
+        The timer values for bt_mvcc_delete are:
+        Num_bt_mvcc_delete            =          0
+        Total_time_bt_mvcc_delete     =          0
+        Max_time_bt_mvcc_delete       =          0
+        Avg_time_bt_mvcc_delete       =          0
+        The timer values for bt_mvcc_delete_traverse are:
+        Num_bt_mvcc_delete_traverse   =          0
+        Total_time_bt_mvcc_delete_traverse =          0
+        Max_time_bt_mvcc_delete_traverse =          0
+        Avg_time_bt_mvcc_delete_traverse =          0
+        The timer values for bt_mark_delete are:
+        Num_bt_mark_delete            =          0
+        Total_time_bt_mark_delete     =          0
+        Max_time_bt_mark_delete       =          0
+        Avg_time_bt_mark_delete       =          0
+        The timer values for bt_mark_delete_traverse are:
+        Num_bt_mark_delete_traverse   =          0
+        Total_time_bt_mark_delete_traverse =          0
+        Max_time_bt_mark_delete_traverse =          0
+        Avg_time_bt_mark_delete_traverse =          0
+        The timer values for bt_undo_insert are:
+        Num_bt_undo_insert            =          0
+        Total_time_bt_undo_insert     =          0
+        Max_time_bt_undo_insert       =          0
+        Avg_time_bt_undo_insert       =          0
+        The timer values for bt_undo_insert_traverse are:
+        Num_bt_undo_insert_traverse   =          0
+        Total_time_bt_undo_insert_traverse =          0
+        Max_time_bt_undo_insert_traverse =          0
+        Avg_time_bt_undo_insert_traverse =          0
+        The timer values for bt_undo_delete are:
+        Num_bt_undo_delete            =          0
+        Total_time_bt_undo_delete     =          0
+        Max_time_bt_undo_delete       =          0
+        Avg_time_bt_undo_delete       =          0
+        The timer values for bt_undo_delete_traverse are:
+        Num_bt_undo_delete_traverse   =          0
+        Total_time_bt_undo_delete_traverse =          0
+        Max_time_bt_undo_delete_traverse =          0
+        Avg_time_bt_undo_delete_traverse =          0
+        The timer values for bt_undo_mvcc_delete are:
+        Num_bt_undo_mvcc_delete       =          0
+        Total_time_bt_undo_mvcc_delete =          0
+        Max_time_bt_undo_mvcc_delete  =          0
+        Avg_time_bt_undo_mvcc_delete  =          0
+        The timer values for bt_undo_mvcc_delete_traverse are:
+        Num_bt_undo_mvcc_delete_traverse =          0
+        Total_time_bt_undo_mvcc_delete_traverse =          0
+        Max_time_bt_undo_mvcc_delete_traverse =          0
+        Avg_time_bt_undo_mvcc_delete_traverse =          0
+        The timer values for bt_vacuum are:
+        Num_bt_vacuum                 =          0
+        Total_time_bt_vacuum          =          0
+        Max_time_bt_vacuum            =          0
+        Avg_time_bt_vacuum            =          0
+        The timer values for bt_vacuum_traverse are:
+        Num_bt_vacuum_traverse        =          0
+        Total_time_bt_vacuum_traverse =          0
+        Max_time_bt_vacuum_traverse   =          0
+        Avg_time_bt_vacuum_traverse   =          0
+        The timer values for bt_vacuum_insid are:
+        Num_bt_vacuum_insid           =          0
+        Total_time_bt_vacuum_insid    =          0
+        Max_time_bt_vacuum_insid      =          0
+        Avg_time_bt_vacuum_insid      =          0
+        The timer values for bt_vacuum_insid_traverse are:
+        Num_bt_vacuum_insid_traverse  =          0
+        Total_time_bt_vacuum_insid_traverse =          0
+        Max_time_bt_vacuum_insid_traverse =          0
+        Avg_time_bt_vacuum_insid_traverse =          0
+        The timer values for vacuum_master are:
+        Num_vacuum_master             =          0
+        Total_time_vacuum_master      =          0
+        Max_time_vacuum_master        =          0
+        Avg_time_vacuum_master        =          0
+        The timer values for vacuum_job are:
+        Num_vacuum_job                =          0
+        Total_time_vacuum_job         =          0
+        Max_time_vacuum_job           =          0
+        Avg_time_vacuum_job           =          0
+        The timer values for vacuum_worker_process_log are:
+        Num_vacuum_worker_process_log =          0
+        Total_time_vacuum_worker_process_log =          0
+        Max_time_vacuum_worker_process_log =          0
+        Avg_time_vacuum_worker_process_log =          0
+        The timer values for vacuum_worker_execute are:
+        Num_vacuum_worker_execute     =          0
+        Total_time_vacuum_worker_execute =          0
+        Max_time_vacuum_worker_execute =          0
+        Avg_time_vacuum_worker_execute =          0
+        Time_get_snapshot_acquire_time =          0
+        Count_get_snapshot_retry      =          0
+        Time_tran_complete_time       =          0
+        Time_get_oldest_mvcc_acquire_time =       1024
+        Count_get_oldest_mvcc_retry   =          0
+        Data_page_buffer_hit_ratio    =       0.00
+        Log_page_buffer_hit_ratio     =       0.00
         Vacuum_data_page_buffer_hit_ratio =       0.00
         Vacuum_page_efficiency_ratio  =       0.00
         Vacuum_page_fetch_ratio       =       0.00
         Data_page_fix_lock_acquire_time_msec =       0.00
-        Data_page_fix_hold_acquire_time_msec =       0.08
-        Data_page_fix_acquire_time_msec =       0.42
-        Data_page_allocate_time_ratio =      80.95
+        Data_page_fix_hold_acquire_time_msec =       0.00
+        Data_page_fix_acquire_time_msec =       0.00
+        Data_page_allocate_time_ratio =       0.00
+        Data_page_total_promote_success =       0.00
+        Data_page_total_promote_fail  =       0.00
+        Data_page_total_promote_time_msec =       0.00
+        Num_unfix_void_to_private_top =          0
+        Num_unfix_void_to_private_mid =          0
+        Num_unfix_void_to_shared_mid  =          0
+        Num_unfix_lru1_private_to_shared_mid =          0
+        Num_unfix_lru2_private_to_shared_mid =          0
+        Num_unfix_lru3_private_to_shared_mid =          0
+        Num_unfix_lru2_private_keep   =          0
+        Num_unfix_lru2_shared_keep    =          0
+        Num_unfix_lru2_private_to_top =          0
+        Num_unfix_lru2_shared_to_top  =          0
+        Num_unfix_lru3_private_to_top =          0
+        Num_unfix_lru3_shared_to_top  =          0
+        Num_unfix_lru1_private_keep   =          0
+        Num_unfix_lru1_shared_keep    =          0
+        Num_unfix_void_to_private_mid_vacuum =          0
+        Num_unfix_lru1_any_keep_vacuum =          0
+        Num_unfix_lru2_any_keep_vacuum =          0
+        Num_unfix_lru3_any_keep_vacuum =          0
+        Num_unfix_void_aout_found     =          0
+        Num_unfix_void_aout_not_found =          0
+        Num_unfix_void_aout_found_vacuum =          0
+        Num_unfix_void_aout_not_found_vacuum =          0
+        Num_data_page_hash_anchor_waits =          0
+        Time_data_page_hash_anchor_wait =          0
+        The timer values for flush_collect are:
+        Num_flush_collect             =          0
+        Total_time_flush_collect      =          0
+        Max_time_flush_collect        =          0
+        Avg_time_flush_collect        =          0
+        The timer values for flush_flush are:
+        Num_flush_flush               =          0
+        Total_time_flush_flush        =          0
+        Max_time_flush_flush          =          0
+        Avg_time_flush_flush          =          0
+        The timer values for flush_sleep are:
+        Num_flush_sleep               =          4
+        Total_time_flush_sleep        =    8000949
+        Max_time_flush_sleep          =    2000244
+        Avg_time_flush_sleep          =    2000237
+        The timer values for flush_collect_per_page are:
+        Num_flush_collect_per_page    =          0
+        Total_time_flush_collect_per_page =          0
+        Max_time_flush_collect_per_page =          0
+        Avg_time_flush_collect_per_page =          0
+        The timer values for flush_flush_per_page are:
+        Num_flush_flush_per_page      =          0
+        Total_time_flush_flush_per_page =          0
+        Max_time_flush_flush_per_page =          0
+        Avg_time_flush_flush_per_page =          0
+        Num_data_page_writes          =          0
+        Num_data_page_dirty_to_post_flush =          0
+        Num_data_page_skipped_flush   =          0
+        Num_data_page_skipped_flush_need_wal =          0
+        Num_data_page_skipped_flush_already_flushed =          0
+        Num_data_page_skipped_flush_fixed_or_hot =          0
+        The timer values for compensate_flush are:
+        Num_compensate_flush          =          0
+        Total_time_compensate_flush   =          0
+        Max_time_compensate_flush     =          0
+        Avg_time_compensate_flush     =          0
+        The timer values for alloc_bcb are:
+        Num_alloc_bcb                 =          0
+        Total_time_alloc_bcb          =          0
+        Max_time_alloc_bcb            =          0
+        Avg_time_alloc_bcb            =          0
+        The timer values for alloc_bcb_search_victim are:
+        Num_alloc_bcb_search_victim   =          0
+        Total_time_alloc_bcb_search_victim =          0
+        Max_time_alloc_bcb_search_victim =          0
+        Avg_time_alloc_bcb_search_victim =          0
+        The timer values for alloc_bcb_cond_wait_high_prio are:
+        Num_alloc_bcb_cond_wait_high_prio =          0
+        Total_time_alloc_bcb_cond_wait_high_prio =          0
+        Max_time_alloc_bcb_cond_wait_high_prio =          0
+        Avg_time_alloc_bcb_cond_wait_high_prio =          0
+        The timer values for alloc_bcb_cond_wait_low_prio are:
+        Num_alloc_bcb_cond_wait_low_prio =          0
+        Total_time_alloc_bcb_cond_wait_low_prio =          0
+        Max_time_alloc_bcb_cond_wait_low_prio =          0
+        Avg_time_alloc_bcb_cond_wait_low_prio =          0
+        Num_alloc_bcb_prioritize_vacuum =          0
+        Num_victim_use_invalid_bcb    =          0
+        Num_victim_assign_direct_vacuum_void =          0
+        Num_victim_assign_direct_vacuum_lru =          0
+        Num_victim_assign_direct_flush =          0
+        Num_victim_assign_direct_panic =          0
+        Num_victim_assign_direct_adjust_lru =          0
+        Num_victim_assign_direct_adjust_lru_to_vacuum =          0
+        Num_victim_assign_direct_search_for_flush =          0
+        Num_victim_shared_lru_success =          0
+        Num_victim_own_private_lru_success =          0
+        Num_victim_other_private_lru_success =          0
+        Num_victim_shared_lru_fail    =          0
+        Num_victim_own_private_lru_fail =          0
+        Num_victim_other_private_lru_fail =          0
+        Num_victim_all_lru_fail       =          0
+        Num_victim_get_from_lru       =          0
+        Num_victim_get_from_lru_was_empty =          0
+        Num_victim_get_from_lru_fail  =          0
+        Num_victim_get_from_lru_bad_hint =          0
+        Num_lfcq_prv_get_total_calls  =          0
+        Num_lfcq_prv_get_empty        =          0
+        Num_lfcq_prv_get_big          =          0
+        Num_lfcq_shr_get_total_calls  =          0
+        Num_lfcq_shr_get_empty        =          0
+        Num_alloc_bcb_wait_threads_high_priority =          0
+        Num_alloc_bcb_wait_threads_low_priority =          0
+        Num_flushed_bcbs_wait_for_direct_victim =          0
+        Num_lfcq_big_private_lists    =          0
+        Num_lfcq_private_lists        =          5
+        Num_lfcq_shared_lists         =          0
+        Num_data_page_avoid_dealloc   =          0
+        Num_data_page_avoid_victim    =          0
         Num_data_page_fix_ext:
-        SYSTEM,PAGE_VOLHEADER,OLD_PAGE_IN_PB    ,WRITE,UNCOND_WAIT =          3
-        WORKER,PAGE_FTAB     ,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =          8
-        WORKER,PAGE_HEAP     ,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =         24
-        WORKER,PAGE_HEAP     ,OLD_PAGE_IN_PB    ,WRITE,COND        =          6
-        WORKER,PAGE_HEAP     ,OLD_PAGE_IN_PB    ,WRITE,UNCOND_WAIT =         16
-        WORKER,PAGE_VOLHEADER,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =          7
-        WORKER,PAGE_VOLBITMAP,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =          7
-        WORKER,PAGE_XASL     ,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =         12
-        WORKER,PAGE_CATALOG  ,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =          6
-        WORKER,PAGE_BTREE    ,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =         14
-        WORKER,PAGE_BTREE    ,OLD_PAGE_IN_PB    ,WRITE,UNCOND_WAIT =         16
+        Num_data_page_promote_ext:
+        Num_data_page_promote_time_ext:
         Num_data_page_unfix_ext:
-        SYSTEM,PAGE_VOLHEADER,BUF_NON_DIRTY,HOLDER_DIRTY    ,WRITE =          3
-        WORKER,PAGE_FTAB     ,BUF_NON_DIRTY,HOLDER_NON_DIRTY,READ  =          8
-        WORKER,PAGE_HEAP     ,BUF_NON_DIRTY,HOLDER_NON_DIRTY,READ  =         15
-        WORKER,PAGE_HEAP     ,BUF_NON_DIRTY,HOLDER_DIRTY    ,WRITE =          2
-        WORKER,PAGE_HEAP     ,BUF_DIRTY    ,HOLDER_NON_DIRTY,READ  =          9
-        WORKER,PAGE_HEAP     ,BUF_DIRTY    ,HOLDER_DIRTY    ,WRITE =         20
-        WORKER,PAGE_VOLHEADER,BUF_DIRTY    ,HOLDER_NON_DIRTY,READ  =          7
-        WORKER,PAGE_VOLBITMAP,BUF_NON_DIRTY,HOLDER_NON_DIRTY,READ  =          7
-        WORKER,PAGE_XASL     ,BUF_NON_DIRTY,HOLDER_NON_DIRTY,READ  =         12
-        WORKER,PAGE_CATALOG  ,BUF_NON_DIRTY,HOLDER_NON_DIRTY,READ  =          6
-        WORKER,PAGE_BTREE    ,BUF_NON_DIRTY,HOLDER_NON_DIRTY,WRITE =          2
-        WORKER,PAGE_BTREE    ,BUF_NON_DIRTY,HOLDER_DIRTY    ,WRITE =          1
-        WORKER,PAGE_BTREE    ,BUF_DIRTY    ,HOLDER_NON_DIRTY,READ  =         14
-        WORKER,PAGE_BTREE    ,BUF_DIRTY    ,HOLDER_NON_DIRTY,WRITE =          3
-        WORKER,PAGE_BTREE    ,BUF_DIRTY    ,HOLDER_DIRTY    ,WRITE =         10
         Time_data_page_lock_acquire_time:
         Time_data_page_hold_acquire_time:
-        SYSTEM,PAGE_VOLHEADER,OLD_PAGE_IN_PB    ,WRITE =                4
-        WORKER,PAGE_FTAB     ,OLD_PAGE_IN_PB    ,READ  =                4
-        WORKER,PAGE_HEAP     ,OLD_PAGE_IN_PB    ,READ  =               18
-        WORKER,PAGE_HEAP     ,OLD_PAGE_IN_PB    ,WRITE =               14
-        WORKER,PAGE_VOLHEADER,OLD_PAGE_IN_PB    ,READ  =                6
-        WORKER,PAGE_VOLBITMAP,OLD_PAGE_IN_PB    ,READ  =                3
-        WORKER,PAGE_XASL     ,OLD_PAGE_IN_PB    ,READ  =               12
-        WORKER,PAGE_CATALOG  ,OLD_PAGE_IN_PB    ,READ  =                9
-        WORKER,PAGE_BTREE    ,OLD_PAGE_IN_PB    ,READ  =                8
-        WORKER,PAGE_BTREE    ,OLD_PAGE_IN_PB    ,WRITE =                9
         Time_data_page_fix_acquire_time:
-        SYSTEM,PAGE_VOLHEADER,OLD_PAGE_IN_PB    ,WRITE,UNCOND_WAIT =               26
-        WORKER,PAGE_FTAB     ,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =               25
-        WORKER,PAGE_HEAP     ,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =               72
-        WORKER,PAGE_HEAP     ,OLD_PAGE_IN_PB    ,WRITE,COND        =               13
-        WORKER,PAGE_HEAP     ,OLD_PAGE_IN_PB    ,WRITE,UNCOND_WAIT =               44
-        WORKER,PAGE_VOLHEADER,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =               22
-        WORKER,PAGE_VOLBITMAP,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =               16
-        WORKER,PAGE_XASL     ,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =               85
-        WORKER,PAGE_CATALOG  ,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =               48
-        WORKER,PAGE_BTREE    ,OLD_PAGE_IN_PB    ,READ ,UNCOND_WAIT =               40
-        WORKER,PAGE_BTREE    ,OLD_PAGE_IN_PB    ,WRITE,UNCOND_WAIT =               37
+        Num_mvcc_snapshot_ext:
+        Time_obj_lock_acquire_time:
 
-    다음은 위의 데이터베이스 서버 실행 통계 정보에 대한 설명이다.
+    다음은 위의 통계 정보에 대한 설명이다. 통계 카테고리 (데이터베이스 모듈), 이름, 통계 유형 및 각 통계에 대한 간략한 설명을 볼 수 있다.
 
-    +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
-    | 분류             | 항목                                     | 설명                                                                                   |
-    +==================+==========================================+========================================================================================+
-    | File I/O         | Num_file_creates                         | 생성한 파일 개수                                                                       |
-    | 관련             +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_file_removes                         | 삭제한 파일 개수                                                                       |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_file_ioreads                         | 디스크로부터 읽은 횟수                                                                 |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_file_iowrites                        | 디스크로 저장한 횟수                                                                   |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_file_iosynches                       | 디스크와 동기화를 수행한 횟수                                                          |
-    +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
-    | 페이지 버퍼      | Num_data_page_fetches                    | 데이터 페이지를 페치(fetch)한 횟수                                                     |
-    | 관련             +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_data_page_dirties                    | 데이터 페이지를 변경(dirty)한 횟수                                                     |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_data_page_ioreads                    | 데이터 페이지를 디스크에서 읽은 횟수                                                   |
-    |                  |                                          | (이 값이 클수록 덜 효율적이며, 히트율이 낮은 것과 상관됨)                              |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_data_page_iowrites                   | 데이터 페이지를 디스크에 기록한 횟수(이 값이 클수록 덜 효율적임)                       |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_data_page_victims                    | 데이터 버퍼에서 디스크로 내려 쓰기(flush)하는 스레드가 깨어나는 회수                   |
-    |                  |                                          | (내려 쓰기되는 페이지의 또는 희생자(victim)의 개수가 아님)                             |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_data_page_iowrites_for_replacement   | 후보로 선정되어 디스크로 쓰여진 데이터 페이지 수                                       |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_adaptive_flush_pages                 | 데이터 버퍼로부터 디스크로 내려 쓰기(flush)한 데이터 페이지 수                         |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_adaptive_flush_log_pages             | 로그 버퍼로부터 디스크로 내려 쓰기(flush)한 로그 페이지 수                             |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_adaptive_flush_max_pages             | 데이터 및 로그 버퍼로부터 디스크로 내려 쓰기(flush)를 허용하는 최대                    |
-    |                  |                                          | 페이지 수                                                                              |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_prior_lsa_list_size                  | prior LSA(Log Sequence Address) list의 현재 크기.                                      |
-    |                  |                                          | prior LSA list에는 로그 버퍼에서 디스크에 쓰기 작업을 수행하기 전 미리 쓰기 순서를     |
-    |                  |                                          | LSA로 기록하는데, 디스크에 쓰는 작업으로 인한 트랜잭션의 대기 시간을 줄여서 동시성을   |
-    |                  |                                          | 높이기 위해 사용된다.                                                                  |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_prior_lsa_list_maxed                 | prior LSA list의 최대 크기에 도달한 회수.                                              |
-    |                  |                                          | prior LSA list의 최대 크기는 log_buffer_size * 2이다.                                  |
-    |                  |                                          | 이 값이 크면 로그 쓰기 작업이 동시에 많이 발생한다고 볼 수 있다.                       |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_prior_lsa_list_removed               | prior LSA list에서 로그 버퍼로 이동한 회수.                                            |
-    |                  |                                          | 이 값과 비슷한 회수의 커밋이 발생했다고 볼 수 있다.                                    |
-    +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
-    | 로그 관련        | Num_log_page_fetches                     | 페치된 로그 페이지의 개수                                                              |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_log_page_fetch_ioreads               | 페치 시 로그 페이지의 I/O 읽기 회수                                                    |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_log_page_ioreads                     | 로그 페이지의 읽기 I/O 회수                                                            |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_log_page_iowrites                    | 로그 페이지의 쓰기 I/O 회수                                                            |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_log_append_records                   | 추가(append)한 로그 레코드의 수                                                        |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_log_archives                         | 보관 로그의 개수                                                                       |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_log_start_checkpoints                | 체크포인트 시작 횟수                                                                   |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_log_end_checkpoints                  | 체크포인트 종료 횟수                                                                   |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_log_wals                             | 현재 사용하지 않음                                                                     |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_log_page_iowrites_for_replacement    | 페이지 교체로 인해 로그 페이지 버퍼로부터 버려진 로그 데이터 페이지의 개수             |
-    +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
-    | 동시성/잠금      | Num_page_locks_acquired                  | 페이지 잠금을 획득한 횟수                                                              |
-    | 관련             +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_object_locks_acquired                | 오브젝트 잠금을 획득한 횟수                                                            |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_page_locks_converted                 | 페이지 잠금 타입을 변환한 횟수                                                         |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_object_locks_converted               | 오브젝트 잠금 타입을 변환한 횟수                                                       |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_page_locks_re-requested              | 페이지 잠금을 재요청한 횟수                                                            |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_object_locks_re-requested            | 오브젝트 잠금을 재요청한 횟수                                                          |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_page_locks_waits                     | 잠금을 대기하는 페이지 개수                                                            |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_object_locks_waits                   | 잠금을 대기하는 오브젝트 개수                                                          |
-    +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
-    | 트랜잭션         | Num_tran_commits                         | 커밋한 횟수                                                                            |
-    | 관련             +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_tran_rollbacks                       | 롤백한 횟수                                                                            |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_tran_savepoints                      | 세이브포인트 횟수                                                                      |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_tran_start_topops                    | 시작한 top operation의 개수                                                            |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_tran_end_topops                      | 종료한 top operation의 개수                                                            |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_tran_interrupts                      | 인터럽트 개수                                                                          |
-    +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
-    | 인덱스 관련      | Num_btree_inserts                        | 삽입된 항목의 개수                                                                     |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_btree_deletes                        | 삭제된 항목의 개수                                                                     |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_btree_updates                        | 갱신된 항목의 개수                                                                     |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_btree_covered                        | 질의 시 인덱스가 데이터를 모두 포함한 경우의 개수                                      |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_btree_noncovered                     | 질의 시 인덱스가 데이터를 일부분만 포함하거나 전혀 포함하지 않은 경우의 개수           |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_btree_resumes                        | index_scan_oid_buffer_pages를 초과한 인덱스 스캔 횟수                                  |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_btree_multirange_optimization        | WHERE ... IN ... LIMIT 조건 질의문에 대해 다중 범위                                    |
-    |                  |                                          | 최적화(multi-range optimization)를 수행한 횟수                                         |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_btree_splits                         | B-tree 노드 분할 연산 회수                                                             |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_btree_merges                         | B-tree 노드 합병 연산 회수                                                             |
-    +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
-    | 쿼리 관련        | Num_query_selects                        | SELECT 쿼리의 수행 횟수                                                                |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_query_inserts                        | INSERT 쿼리의 수행 횟수                                                                |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_query_deletes                        | DELETE 쿼리의 수행 횟수                                                                |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_query_updates                        | UPDATE 쿼리의 수행 횟수                                                                |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_query_sscans                         | 순차 스캔(풀 스캔) 횟수                                                                |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_query_iscans                         | 인덱스 스캔 횟수                                                                       |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_query_lscans                         | LIST 스캔 횟수                                                                         |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_query_setscans                       | SET 스캔 횟수                                                                          |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_query_methscans                      | METHOD 스캔 횟수                                                                       |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_query_nljoins                        | Nested Loop 조인 횟수                                                                  |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_query_mjoins                         | 병합 조인 횟수                                                                         |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_query_objfetches                     | 객체를 가져오기(fetch)한 횟수                                                          |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_query_holdable_cursors               | 현재 서버에서 유지 중인 커서(holdable cursor)의 개수                                   |
-    +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
-    | 정렬 관련        | Num_sort_io_pages                        | 정렬하는 동안 디스크에서 페치한 페이지 개수(이 값이 클수록 덜 효율적임)                |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_sort_data_pages                      | 정렬하는 동안 페이지 버퍼에서 발견된 페이지 개수(이 값이 클수록 더 효율적임)           |
-    +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
-    | 네트워크         | Num_network_requests                     | 네트워크 요청 횟수                                                                     |
-    | 요청 관련        |                                          |                                                                                        |
-    +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
-    | 힙 관련          | Num_heap_stats_bestspace_entries         | "베스트 페이지" 목록에 저장된 베스트 페이지의 개수                                     |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_heap_stats_bestspace_maxed           | "베스트 페이지" 목록에 저장 가능한 베스트 페이지의 최대 개수                           |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_heap_stats_sync_bestspace            | "베스트 페이지" 목록의 갱신 횟수.                                                      |
-    |                  |                                          |                                                                                        |
-    |                  |                                          | "베스트 페이지"는 INSERT와 DELETE가 반복되는 환경에서 데이터를 가지고 있는 페이지의    |
-    |                  |                                          | 여유 공간이 30% 이상인 페이지들을 의미하며, 이 페이지들의 일부 정보만 "베스트 페이지   |
-    |                  |                                          | 목록"을 만들어 저장함. "베스트 페이지"에는 한번에 최대 100만개의 페이지 정보를 기록함. |
-    |                  |                                          | INSERT 시 이 목록을 탐색하여 이 레코드를 저장할 여유 공간을 가진 페이지가 없으면       |
-    |                  |                                          | "베스트 페이지 목록"을 갱신함. 수 차례 목록을 갱신해도 해당 목록에서 여유 공간을 가진  |
-    |                  |                                          | 페이지가 여전히 없으면 새 페이지에 레코드를 저장함.                                    |
-    |                  |                                          |                                                                                        |
-    +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
-    | 질의 계획        | Num_plan_cache_add                       | 캐시 엔트리(entry)가 새로 추가된 횟수                                                  |
-    | 캐시 관련        +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_plan_cache_lookup                    | 특정 키를 사용하여 룩업(lookup)을 시도한 횟수                                          |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_plan_cache_hit                       | 질의 문자열 해시 테이블에서 엔트리를 찾은(hit) 횟수                                    |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_plan_cache_miss                      | 질의 문자열 해시 테이블에서 엔트리를 찾지 못한(miss) 횟수                              |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_plan_cache_full                      | 캐시 엔트리의 개수가 허용된 최대 개수를 넘어 희생자(victim) 탐색을 시도한 횟수         |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_plan_cache_delete                    | 캐시 엔트리가 삭제된(victimized) 횟수                                                  |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_plan_cache_invalid_xasl_id           | xasl_id 해시 테이블에서 엔트리를 찾지 못한(miss) 횟수.                                 |
-    |                  |                                          | 서버에서 특정 엔트리가 제거(victimized)되었는데, 해당 엔트리를 클라이언트에서          |
-    |                  |                                          | 요청했을 때 발생하는 에러 횟수                                                         |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_plan_cache_query_string_hash_entries | 질의 문자열 해시 테이블의 현재 엔트리 개수                                             |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_plan_cache_xasl_id_hash_entries      | xasl id 해시 테이블의 현재 엔트리 개수                                                 |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_plan_cache_class_oid_hash_entries    | class oid 해시 테이블의 현재 엔트리 개수                                               |
-    +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
-    | HA 관련          | Time_ha_replication_delay                | 복제 지연 시간(초)                                                                     |
-    +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
-    | Vacuuming        | Num_vacuum_log_pages_vacuumed            | vacuum 작업자에 의해 정리되는(vacuumed) 로그 페이지의 개수.                            |
-    | 관련             |                                          | 실시간으로 업데이트되지 않음.                                                          |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_vacuum_log_pages_to_vacuum           | vacuum 작업자에 의해 정리될(to be vacuumed) 로그 페이지의 개수                         |
-    +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
-    | 기타             | Data_page_buffer_hit_ratio               | 데이터 페이지 버퍼의 히트율                                                            |
-    |                  |                                          | (Num_data_page_fetches - Num_data_page_ioreads)*100 / Num_data_page_fetches            |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Log_page_buffer_hit_ratio                | 로그 페이지 버퍼의 히트율                                                              |
-    |                  |                                          | (Num_log_page_fetches - Num_log_page_fetch_ioreads)*100 / Num_log_page_fetches         |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Vacuum_data_page_buffer_hit_ratio        | vacuuming되는 데이터 페이지 버퍼의 히트율                                              |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Vacuum_page_efficiency_ratio             | vacuuming될 때 더티 플래그를 가진 페이지 언픽스 개수와 전체 페이지 언픽스 사이의 비율. |
-    |                  |                                          | 이상적인 경우는 사용않는 모든 레코드를 정리하기 때문에 쓰기 작업만 수행되는 것임.      |
-    |                  |                                          | vacuuming이 최적화되었더라도, 실제로 100%는 될 수 없음.                                |
-    |                  |                                          |                                                                                        |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Vacuum_page_fetch_ratio                  | vacuum 모듈과 전체 페이지 언픽스 간의 비율.                                            |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Data_page_fix_lock_acquire_time_msec     | 페이지 잠금 확득에 대한 누적 시간                                                      |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Data_page_fix_hold_acquire_time_msec     | 페이지 유지(hold) 획득에 대한 누적 시간                                                |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Data_page_fix_acquire_time_msec          | 페이지 픽스(fix) 획득에 대한 누적 시간                                                 |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Data_page_allocate_time_ratio            | 페이지 할당에 소요된 누적 시간의 비율                                                  |
-    |                  |                                          | (Data_page_fix_acquire_time_msec - Data_page_fix_hold_acquire_time_msec -              |
-    |                  |                                          | Data_page_fix_lock_acquire_time_msec)*100 / Data_page_fix_acquire_time_msec            |
-    |                  |                                          | 이 값이 클수록 I/O가 주요 병목의 원인이며, 작을수록 동시성 처리가 주요 병목의 원인임   |
-    |                  |                                          |                                                                                        |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_data_page_fix_ext:                   | 모듈, 페이지 타입, 그리고 페이지 버퍼에서 발견된 페이지 타입의 신구 여부에 따른        |
-    |                  |                                          | 페이지 픽스 개수.                                                                      |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Num_data_page_unfix_ext:                 | 모듈, 페이지 타입, 그리고 페이지의 더티 여부에 따른 페이지의 언픽스 개수.              |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Time_data_page_lock_acquire_time:        | 모듈, 페이지 타입, 페이지 모드, 래치 모드, 그리고 컨디션 모드에 따른 잠금 획득 시간.   |
-    |                  |                                          |                                                                                        |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Time_data_page_hold_acquire_time:        | 모듈, 페이지 타입, 페이지 모드, 그리고 래치 모드에 따른 유지(hold) 획득 시간.          |
-    |                  +------------------------------------------+----------------------------------------------------------------------------------------+
-    |                  | Time_data_page_fix_acquire_time:         | 모듈, 페이지 타입, 페이지 모드, 래치 모드, 그리고 컨디션 모드에 따른 페이지 픽스(fix)  |
-    |                  |                                          | 획득 시간.                                                                             |
-    +------------------+------------------------------------------+----------------------------------------------------------------------------------------+
+    수집 방법에 따라 몇 가지 통계 유형이 있다. :
+
+    *  Accumulator: 트래킹이 발생할 때마다 통계치가 누적된다.
+    *  Counter/timer: 동작(action)별 횟수와 지속 시간에 대한 통계 뿐만 아니라 최대 및 평균 지속 시간에 대한 통계치를 산출한다. 
+    *  Snapshot: 통계는 데이터베이스의 내부 정보이다.
+    *  Complex: 통계는 다양한 속성별로 산출된 복합 통계치이다.
+
+    대부분 통계치는 누적이 되는 Accumulator 유형이다. 이 외에도 동작 횟수와 동작 지속 시간이 반영된 Counter/timer 유형, 데이터베이스에서 수집된 Snapshot 유형 및 다른 값을 기반으로 계산된 Computed 유형과 일부 동작에 대한 자세한 정보를 반영하는 복합(Complex) 유형이다. 
+
+    +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | 분류             | 항목                                     | 통계 타입      |  설명                                                                 |
+    +==================+==========================================+================+=======================================================================+
+    | File I/O 관련    | Num_file_removes                         | Accumulator    | 삭제한 파일 개수                                                      |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_file_creates                         | Accumulator    | 생성한 파일 개수                                                      |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_file_ioreads                         | Accumulator    | 디스크로부터 읽을 횟수                                                |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_file_iowrites                        | Accumulator    | 디스크로 저장한 횟수                                                  |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_file_iosynches                       | Accumulator    | 디스크와 동기화를 수행한 횟수                                         |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..file_iosync_all                        | Counter/timer  | 모든 파일을 동기화한 횟수와 시간                                      |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_file_page_allocs                     | Accumulator    | 할당한 페이지 개수                                                    |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_file_page_deallocs                   | Accumulator    | 반환된 페이지 개수                                                    |
+    +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | 페이지 버퍼 관련 | Num_data_page_fetches                    | Accumulator    | 가져오기(fetch)한 페이지 개수                                         |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_data_page_dirties                    | Accumulator    | 더티 페이지 개수                                                      |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_data_page_ioreads                    | Accumulator    | | 디스크에서 읽은 페이지 수                                           |
+    |                  |                                          |                | | (이 값이 클수록 덜 효율적이며,히트율이 낮은 것과 상관됨)            |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_data_page_iowrites                   | Accumulator    | 디스크에 기록한 페이지 수 (이 값이 클수록 덜 효율적임)                |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_data_page_private_quota              | Snapshot       | 전용 LRU 리스트의 대상 페이지 개수                                    |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_data_page_private_count              | Snapshot       | 전용 LRU 리스트에 대한 실제 페이지 개수                               |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_data_page_fixed                      | Snapshot       | 데이터 버퍼의 고정 페이지 개수                                        |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_data_page_dirty                      | Snapshot       | 데이터 버퍼의 더티 페이지 개수                                        |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_data_page_lru1                       | Snapshot       | 데이터 버퍼의 LRU1 존의 페이지 개수                                   |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_data_page_lru2                       | Snapshot       | 데이터 버퍼의 LRU2 존의 페이지 개수                                   |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_data_page_lru3                       | Snapshot       | 데이터 버퍼의 LRU3 존의 페이지 개수                                   |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_data_page_victim_candidate           | Snapshot       | 데이터 버퍼의 희생(victim) 후보 페이지 개수                           |
+    +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | 로그 관련        | Num_log_page_fetches                     | Accumulator    | 가져오기(fetch)한 로그 페이지의 개수                                  |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_log_page_ioreads                     | Accumulator    | 읽은 로그 페이지의 개수                                               |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_log_page_iowrites                    | Accumulator    | 저장한 로그 페이지의 개수                                             |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_log_append_records                   | Accumulator    | 추가한(append) 로그 레코드의 개수                                     |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_log_archives                         | Accumulator    | 보관 로그의 개수                                                      |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_log_start_checkpoints                | Accumulator    | 체크 포인트 시작 횟수                                                 |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_log_end_checkpoints                  | Accumulator    | 체크 포인트 종료 횟수                                                 |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_log_wals                             | Accumulator    | 데이터 페이지를 쓰기 위해 요청된 로그 플러시 횟수                     |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_log_page_iowrites_for_replacement    | Accumulator    | 페이지 교체로 인해 디스크에 기록된 로그 데이터 페이지 수              |
+    |                  |                                          |                | (0 이 되어야 함)                                                      |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_log_page_replacements                | Accumulator    | 페이지 교체로 인해 버려지는 로그 데이터 페이지 수                     |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_prior_lsa_list_size                  | Accumulator    | | 이전 LSA (Log Sequence Address) 목록의 현재 크기                    |
+    |                  |                                          |                | | CUBRID는 로그 버퍼에서 디스크로 쓰기 작업을 하기 전에               |
+    |                  |                                          |                | | 이전 LSA 목록에 쓰기 순서를 쓴다.                                   |
+    |                  |                                          |                | | 이 목록은 디스크에 기록하는 트랜잭션 대기시간을 줄임으로써 동시성을 |
+    |                  |                                          |                | | 높이는데 사용된다.                                                  |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_prior_lsa_list_maxed                 | Accumulator    | | 최대 크기에 도달한 이전 LSA 목록의 횟수                             |
+    |                  |                                          |                | | 이전 LSA 목록의 최대 크기는 log_buffer_size * 2 이다.               |
+    |                  |                                          |                | | 이 값이 크면 로그 작성 작업이 동시에 많이 발생한다고                |
+    |                  |                                          |                | | 가정할 수 있다.                                                     |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_prior_lsa_list_removed               | Accumulator    | | 이전 LSA 목록에서 로그 버퍼로 이동한  횟수                          |
+    |                  |                                          |                | | 이 값과 비슷한 횟수로 커밋이 발생했다고 가정 할 수 있다.            |
+    |                  |                                          |                | |                                                                     |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Log_page_buffer_hit_ratio                | Computed       | | 로그 페이지 버퍼의 히트률                                           |
+    |                  |                                          |                | | (Num_log_page_fetches - Num_log_page_fetch_ioreads)*100             |
+    |                  |                                          |                | | / Num_log_page_fetches                                              |
+    +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | 동시성/잠금      | Num_page_locks_acquired                  | Accumulator    | 페이지 잠금을 획득한 횟수                                             |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | 관련             | Num_object_locks_acquired                | Accumulator    | 오브젝트 잠금을 획득한 횟수                                           |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_page_locks_converted                 | Accumulator    | 페이지 잠금 타입을 변환한 횟수                                        |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_object_locks_converted               | Accumulator    | 오브젝트 잠금 타입을 변환한 횟수                                      |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_page_locks_re-requested              | Accumulator    | 페이지 잠금을 재요청한 횟수                                           |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_object_locks_re-requested            | Accumulator    | 오브젝트 잠금을 재요청한 횟수                                         |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_page_locks_waits                     | Accumulator    | 잠금을 대기하는 페이지 개수                                           |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_object_locks_waits                   | Accumulator    | 잠금을 대기하는 오브젝트 개수                                         |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_object_locks_time_waited_usec        | Accumulator    | 모든 오브젝트를 잠금하는 데 소요된 시간 (microseconds)                |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Time_obj_lock_acquire_time               | Complex        | 잠금 모드별로 객체를 잠그는 데 소요되는 시간                          |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | 트랜잭션         | Num_tran_commits                         | Accumulator    | 커밋한 횟수                                                           |
+    | 관련             +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_tran_rollbacks                       | Accumulator    | 롤백한 횟수                                                           |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_tran_savepoints                      | Accumulator    | 세이브포인트 횟수                                                     |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_tran_start_topops                    | Accumulator    | 시작한 top operation 개수                                             |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_tran_end_topops                      | Accumulator    | 종료한 top operation 개수                                             |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_tran_interrupts                      | Accumulator    | 인터럽트 횟수                                                         |
+    +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | 인덱스 관련      | Num_btree_inserts                        | Accumulator    | 삽입된 항목의 개수                                                    |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_btree_deletes                        | Accumulator    | 삭제된 항목의 개수                                                    |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_btree_updates                        | Accumulator    | 갱신된 항목의 개수                                                    |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_btree_covered                        | Accumulator    | 질의 시 인덱스가 데이터를 모두 포함한 경우의 개수                     |
+    |                  |                                          |                |                                                                       |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_btree_noncovered                     | Accumulator    | | 질의 시 인덱스가 데이터를 일부분만 포함하거나                       |
+    |                  |                                          |                | | 전혀 포함하지 않은 경우의 개수                                      |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_btree_resumes                        | Accumulator    | | index_scan_oid_buffer_pages를 초과한 인덱스 스캔 횟수               |
+    |                  |                                          |                | |                                                                     |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_btree_multirange_optimization        | Accumulator    | | WHERE ... IN ... LIMIT 조건 질의문에 대해                           |
+    |                  |                                          |                | | 다중 범위 최적화(multi-range optimization)를 수행한 횟수            |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_btree_splits                         | Accumulator    | B-tree 노드의 분할 연산 횟수                                          |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_btree_merges                         | Accumulator    | B-tree 노드의 합병 연산 횟수                                          |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_btree_get_stats                      | Accumulator    | B-tree 노드의 통계 호출 횟수                                          |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_leaf                                | Counter/timer  | B-tree 단말들에서 모든 연산 시간과 횟수                               |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_find_unique                         | Counter/timer  | B-tree의 'find unique' 연산 시간과 횟수                               |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..btrange_search                         | Counter/timer  | B-tree의 'range search' 연산 시간과 횟수                              |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_insert_obj                          | Counter/timer  | B-tree의 'insert object' 연산 시간과 횟수                             |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_delete_obj                          | Counter/timer  | B-tree의 'physical delete object' 연산 시간과 횟수                    |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_mvcc_delete                         | Counter/timer  | B-tree의 'mvcc delete' 연산 시간과 횟수                               |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_mark_delete                         | Counter/timer  | B-tree의 'mark delete' 연산 시간과 횟수                               |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_undo_insert                         | Counter/timer  | B-tree의 'undo physical insert' 연산 시간과 횟수                      |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_undo_delete                         | Counter/timer  | B-tree의 'undo physical delete' 연산 시간과 횟수                      |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_undo_mvcc_delete                    | Counter/timer  | B-tree의 'undo mvcc delete' 연산 시간과 횟수                          |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_vacuum                              | Counter/timer  | B-tree의 'vacuum deleted object' 연산 시간과 횟수                     |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_vacuum_insid                        | Counter/timer  | B-tree의 'vacuum insert id' 연산 시간과 횟수                          |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_fix_ovf_oids                        | Counter/timer  | B-tree 의 'overflow page' 수정 시간과 횟수                            |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_unique_rlocks                       | Counter/timer  | 고유 인덱스에서 읽기 잠금이 차단된 시간과 횟수                        |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_unique_wlocks                       | Counter/timer  | 고유 인덱스에서 쓰기 잠금이 차단된 시간과 횟수                        |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_traverse                            | Counter/timer  | B-tree 순회 시간과 횟수                                               |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_find_unique_traverse                | Counter/timer  | B-tree의 'find unique' 연산을 위한 B-tree 순회 시간과 횟수            |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_range_search_traverse               | Counter/timer  | B-tree의 'range search' 연산을 위한 B-tree 순회 시간과 횟수           |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_insert_traverse                     | Counter/timer  | B-tree의 'insert object' 연산을 위한 B-tree 순회 시간과 횟수          |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_delete_traverse                     | Counter/timer  | B-tree의 'physical delete object' 연산을 위한 B-tree 순회 시간과 횟수 |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_mvcc_delete_traverse                | Counter/timer  | B-tree의 'mvcc delete' 연산을 위한 B-tree 순회 시간과 횟수            |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_mark_delete_traverse                | Counter/timer  | B-tree의 'mark delete' 연산을 위한 B-tree 순회 시간과 횟수            |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_undo_insert_traverse                | Counter/timer  | B-tree의 'undo physical insert' 연산을 위한 B-tree 순회 시간과 횟수   |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_undo_delete_traverse                | Counter/timer  | B-tree의 'undo physical delete' 연산을 위한 B-tree 순회 시간과 횟수   |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_undo_mvcc_delete_traverse           | Counter/timer  | B-tree의 'undo mvcc delete' 연산을 위한 B-tree 순회 시간과 횟수       |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_vacuum_traverse                     | Counter/timer  | B-tree의 'vacuum deleted object' 연산을 위한 B-tree 순회 시간과 횟수  |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..bt_vacuum_insid_traverse               | Counter/timer  | B-tree의 'vacuum insert id' 연산을 위한 B-tree 순회 시간과 횟수       |
+    +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | 쿼리 관련        | Num_query_selects                        | Accumulator    | SELECT 쿼리의 수행 횟수                                               |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_query_inserts                        | Accumulator    | INSERT 쿼리의 수행 횟수                                               |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_query_deletes                        | Accumulator    | DELETE 쿼리의 수행 횟수                                               |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_query_updates                        | Accumulator    | UPDATE 쿼리의 수행 횟수                                               |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_query_sscans                         | Accumulator    | 순차 스캔(full scan) 횟수                                             |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_query_iscans                         | Accumulator    | 인덱스 스캔 횟수                                                      |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_query_lscans                         | Accumulator    | LIST 스캔 횟수                                                        |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_query_setscans                       | Accumulator    | SET 스캔 횟수                                                         |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_query_methscans                      | Accumulator    | METHOD 스캔 횟수                                                      |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_query_nljoins                        | Accumulator    | 중첩 루프 조인 (nested loop joins) 횟수                               |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_query_mjoins                         | Accumulator    | 병합 조인 횟수                                                        |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_query_objfetches                     | Accumulator    | 객체를 가져오기(fetch) 한 횟수                                        |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_query_holdable_cursors               | Snapshot       | 서버에서 유지 커서(holdabe cursor)의 개수                             |
+    +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | 정렬 관련        | Num_sort_io_pages                        | Accumulator    | | 정렬하는 동안 디스크에서 페치한 페이지 개수                         |
+    |                  |                                          |                | | (이 값이 클수록 덜 효율적임)                                        |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_sort_data_pages                      | Accumulator    | | 정렬하는 동안 페이지 버퍼에서 발견된 페이지 개수                    |
+    |                  |                                          |                | | (이 값이 클수록 덜 효율적임)                                        |
+    +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | 네트워크 요청    | Num_network_requests                     | Accumulator    | 네트워크 요청 횟수                                                    |
+    | 관련             |                                          |                |                                                                       |
+    +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | 힙 관련          | Num_heap_stats_bestspace_entries         | Accumulator    | "best page" 목록에 저장된 "best page" 개수                            |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_heap_stats_bestspace_maxed           | Accumulator    | "best page" 목록에 저장할 수 있는 있는 "best page" 최대값             |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_heap_stats_sync_bestspace            | Accumulator    | | "best page" 목록의 갱신 횟수                                        |
+    |                  |                                          |                |                                                                       |
+    |                  |                                          |                | | "best page"는 여러 INSERT 및 DELETE 환경에서 여유 공간이 30% 이상인 |
+    |                  |                                          |                | | 페이지를 의미한다.                                                  |
+    |                  |                                          |                | | "best page" 목록에는 이 페이지의 일부 정보만 저장된다.              |
+    |                  |                                          |                | | "best page" 목록에는 백만 페이지의 정보가 한 번에 저장된다.         |
+    |                  |                                          |                | | 이 목록은 레코드를 INSERT 할 때 검색되며                            |
+    |                  |                                          |                | | 해당 페이지의 여유 공간이 없을 때 "best page" 목록은 갱신된다.      |
+    |                  |                                          |                | | 이 목록이 여러번 갱신되어도 더 이상 저장할 공간이 없는 경우         |
+    |                  |                                          |                | | 레코드는 새로운 페이지에 저장된다.                                  |
+    |                  |                                          |                | |                                                                     |
+    |                  |                                          |                |                                                                       |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_heap_home_inserts                    | Accumulator    | HOME 타입의 레코드의 삽입 횟수                                        |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_heap_big_inserts                     | Accumulator    | BIG 타입 레코드의 삽입 횟수                                           |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_heap_assign_inserts                  | Accumulator    | ASSIGN 타입 레코드의 삽입 횟수                                        |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_heap_home_deletes                    | Accumulator    | Non-MVCC 모드에서 HOME 타입 레코드의 삭제 횟수                        |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_heap_home_mvcc_deletes               | Accumulator    | MVCC 모드에서 HOME  타입 레코드의 삭제 횟수                           |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_heap_home_to_rel_deletes             | Accumulator    | | MVCC 모드에서 HOME 타입으로부터 RELOCATION 타입으로 변경된 레코드의 |
+    |                  |                                          |                | | 삭제 횟수                                                           |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_heap_home_to_big_deletes             | Accumulator    | MVCC 모드에서 HOME 타입으로부터 BIG 타입으로 변경된 레코드의 삭제 횟수|
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_heap_rel_deletes                     | Accumulator    | | Non-MVCC 모드에서 RELOCATION 타입 레코드의 삭제 횟수                |
+    |                  |                                          |                | |                                                                     |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_heap_rel_mvcc_deletes                | Accumulator    | MVCC 모드에서 RELOCATION 타입 레코드의 삭제 횟수                      |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_heap_rel_to_home_deletes             | Accumulator    | | MVCC 모드에서 RELOCATION 타입으로부터 HOME 타입으로 변경된 레코드의 |
+    |                  |                                          |                | | 삭제 횟수                                                           |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_heap_rel_to_big_deletes              | Accumulator    | | MVCC 모드에서 RELOCATION 타입으로부터 BIG 타입으로 변경된 레코드의  |
+    |                  |                                          |                | | 삭제 횟수                                                           |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_heap_rel_to_rel_deletes              | Accumulator    | | MVCC 모드에서 RELOCATION 타입으로부터 RELOCATION 타입으로 변경된    |
+    |                  |                                          |                | | 레코드의 삭제 횟수                                                  |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_heap_big_deletes                     | Accumulator    | Non-MVCC 모드에서 BIG 타입 레코드의 삭제 횟수                         |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_heap_big_mvcc_deletes                | Accumulator    | MVCC 모드에서 BIG 타입 레코드의 삭제 횟수                             |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_heap_home_updates                    | Accumulator    | | Non-MVCC 모드에서 HOME 타입 레코드의 갱신 횟수(*)                   |
+    |                  |                                          |                | |                                                                     |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_heap_home_to_rel_updates             | Accumulator    | | Non-MVCC 모드에서 HOME 타입으로부터 RELOCATION 타입으로 갱신된      |
+    |                  |                                          |                | | 레코드의 횟수 (*)                                                   |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_heap_home_to_big_updates             | Accumulator    | | Non-MVCC 모드에서 HOME 타입으로부터 BIG 타입으로 갱신된 레코드의    |
+    |                  |                                          |                | | 횟수 (*)                                                            |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_heap_rel_updates                     | Accumulator    | | Non-MVCC 모드에서 RELOCATION 레코드의 갱신 횟수                     |
+    |                  |                                          |                | | (*)                                                                 |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_heap_rel_to_home_updates             | Accumulator    | | Non-MVCC 모드에서 RELOCATION 타입으로부터 HOME 타입으로 갱신된      |
+    |                  |                                          |                | | 레코드의 횟수(*)                                                    |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_heap_rel_to_rel_updates              | Accumulator    | | Non-MVCC 모드에서 RELOCATION 타입으로부터 RELOCATION 타입으로 갱신된|
+    |                  |                                          |                | | 레코드의 횟수(*)                                                    |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_heap_rel_to_big_updates              | Accumulator    | | Non-MVCC 모드에서 BIG 타입으로부터  RELOCATION 타입으로 갱신된 횟수 |
+    |                  |                                          |                | | (*)                                                                 |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_heap_big_updates                     | Accumulator    | Non-MVCC 모드에서 BIG 타입으로 갱신된 레코드의 횟수(*)                |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_heap_home_vacuums                    | Accumulator    | HOME 타입 레코드의 회수된 횟수                                        |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_heap_big_vacuums                     | Accumulator    | BIG 타입 레코드의 회수된 횟수                                         |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_heap_rel_vacuums                     | Accumulator    | RELOCATION 타입 레코드의 회수된 횟수                                  |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_heap_insid_vacuums                   | Accumulator    | 새로 삽입된 레코드의 회수된 횟수                                      |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_heap_remove_vacuums                  | Accumulator    | 삭제된 레코드의 회수된 횟수                                           |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..heap_insert_prepare                    | Counter/timer  | heap insert 연산에 대한 준비 횟수 및 시간                             |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..heap_insert_execute                    | Counter/timer  | heap insert 연산에 대한 실행 횟수 및 시간                             |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..heap_insert_log                        | Counter/timer  | heap insert 연산에 대한 로깅 횟수 및 시간                             |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..heap_delete_prepare                    | Counter/timer  | heap delete 연산에 대한 준비 횟수 및 시간                             |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..heap_delete_execute                    | Counter/timer  | heap delete 연산에 대한 실행 횟수 및 시간                             |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..heap_delete_log                        | Counter/timer  | heap delete 연산에 대한 로깅 횟수 및 시간                             |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..heap_update_prepare                    | Counter/timer  | heap update 연산에 대한 준비 횟수 및 시간                             |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..heap_update_execute                    | Counter/timer  | heap update 연산에 대한 실행 횟수 및 시간                             |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..heap_update_log                        | Counter/timer  | heap update 연산에 대한 로깅 횟수 및 시간                             |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..heap_vacuum_prepare                    | Counter/timer  | heap vacuum 연산에 대한 준비 횟수 및 시간                             |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..heap_vacuum_execute                    | Counter/timer  | heap vacuum 연산에 대한 실행 횟수 및 시간                             |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..heap_vacuum_log                        | Counter/timer  | heap vacuum 연산에 대한 로깅 횟수 및 시간                             |
+    +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | 질의 계획 캐시   | Num_plan_cache_add                       | Accumulator    | 쿼리 캐시 엔트리가 새로 추가된 횟수                                   |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | 관련             | Num_plan_cache_lookup                    | Accumulator    | 특정 키를 사용하여 쿼리 캐시 룩업(Lookup)을 시도한 횟수               |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_plan_cache_hit                       | Accumulator    | 질의 문자열 해시 테이블에서 엔트리를 찾은(hit) 횟수                   |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_plan_cache_miss                      | Accumulator    | 질의 문자열 해시 테이블에서 엔트리를 찾지 못한(miss) 횟수             |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_plan_cache_full                      | Accumulator    | 캐시 엔트리의 개수가 최대 개수를 넘어 희생자(victim)탐색을 시도한 횟수|
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_plan_cache_delete                    | Accumulator    | 캐시 엔트리가 삭제된(victimized) 횟수                                 |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_plan_cache_invalid_xasl_id           | Accumulator    | xasl_id 해시 테이블에서 엔트리를 찾지 못한(miss) 횟수.                |
+    |                  |                                          |                | 서버에서 특정 엔트리가 제거(victimized)되었는데, 해당 엔트리를        |
+    |                  |                                          |                | 클라이언트에서 요청했을 때 발생하는 에러 횟수                         |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_plan_cache_entries                   | Snapshot       | 쿼리 캐시 엔트리의 현재 개수                                          |
+    +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | HA  관련         | Time_ha_replication_delay                | Accumulator    | 복제 지연 시간(초)                                                    |
+    +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Vacuuming 관련   | Num_vacuum_log_pages_vacuumed            | Accumulator    | vacuum 워커에 의해 처리된 로그 데이타 페이지 개수                     |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_vacuum_log_pages_to_vacuum           | Accumulator    | | vacuum 워커가 회수할 로그 데이터 페이지 수                          |
+    |                  |                                          |                | | (이 값이 Num_vacuum_log_pages_vacuumed 보다 훨씬 큰 경우            |
+    |                  |                                          |                | | 이는 vacuum 시스템이 느리다는 것을 의미한다.)                       |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_vacuum_prefetch_requests_log_pages   | Accumulator    | 로그 페이지를 버퍼로 프리패치하는 요청 수                             |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_vacuum_prefetch_hits_log_pages       | Accumulator    | 로그 페이지를 버퍼로 프리패치하는 히트 수                             |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..vacuum_master                          | Counter/timer  | vacuum 마스터 작업 횟수와 시간                                        |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..vacuum_job                             | Counter/timer  | vacuum 작업 횟수와 시간                                               |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..vacuum_worker_process_log              | Counter/timer  | vacumm 워커의 로그 작업 수행 횟수와 시간                              |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..vacuum_worker_execute                  | Counter/timer  | vacuum 워커의 회수 작업 수행 횟수와 시간                              |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Vacuum_data_page_buffer_hit_ratio        | Computed       | 데이퍼 페이지 버퍼의 회수 히트율                                      |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Vacuum_page_efficiency_ratio             | Computed       | | 더티 플래그가있는 vacuum의 page unfix 수와 전체 vacuum의 page unfix |
+    |                  |                                          |                | | 수의 비율. 이상적으로는 vacuum프로세스는 사용되지 않는 모든 레코드를|
+    |                  |                                          |                | | 회수하므로 쓰기 작업 만 수행한다.                                   |
+    |                  |                                          |                | | 최적화된 회수 작업이라도 100% 효율은 가능하지 않다.                 |
+    |                  |                                          |                | |                                                                     |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Vacuum_page_fetch_ratio                  | Computed       | 회수 모듈에서 page unfix와 총 페이지의 비율 (백분율)                  |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_data_page_avoid_dealloc              | Snapshot       | 회수 시스템에 의해 반환 될 수 없는 데이터 페이지 수                   |
+    +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | 페이지 버퍼 fix  | Data_page_fix_lock_acquire_time_msec     | Computed       | 페이지를 로드하기 위해 다른 트랜잭션을 기다리는 시간                  |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | 관련             | Data_page_fix_hold_acquire_time_msec     | Computed       | 페이지 래치를 획득하는 시간                                           |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Data_page_fix_acquire_time_msec          | Computed       | 페이지를 고정하는 총 시간                                             |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Data_page_allocate_time_ratio            | Computed       | | 디스크에서 페이지를 로딩하는 데 필요한 시간과                       |
+    |                  |                                          |                | | 페이지를 고정하는 총 시간의 비율                                    |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Data_page_total_promote_success          | Computed       | 공유에서 상호배제로의 성공한 페이지 래치 프로모션 수                  |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Data_page_total_promote_fail             | Computed       | 실패한 페이지 래치 프로모션 수                                        |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Data_page_total_promote_time_msec        | Computed       | 페이지 래치 프로모션한 시간                                           |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_data_page_hash_anchor_waits          | Accumulator    | 페이지 버퍼 해시 버킷의 대기 수                                       |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Time_data_page_hash_anchor_wait          | Accumulator    | 페이지 버퍼 해시 버킷의 총 대기 시간                                  |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_data_page_fix_ext                    | Complex        | | 다음으로 분류 된 데이터 페이지 고정 수                              |
+    |                  |                                          |                | | - 모듈(system, worker, vacuum)                                      |
+    |                  |                                          |                | | - 페이지 타입                                                       |
+    |                  |                                          |                | | - 페이지 패치/탐색 모드                                             |
+    |                  |                                          |                | | - 페이지 래치 모드                                                  |
+    |                  |                                          |                | | - 페이지 래치 조건                                                  |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Time_data_page_lock_acquire_time         | Complex        | | 데이터 페이지를 로드 할 때까지 다른 쓰레드를 기다리는 시간          |
+    |                  |                                          |                | | - 모둘 (system, worker, vacuum)                                     |
+    |                  |                                          |                | | - 페이지 타입                                                       |
+    |                  |                                          |                | | - 페이지 페치/탐색 모드                                             |
+    |                  |                                          |                | | - 페이지 래치 모드                                                  |
+    |                  |                                          |                | | - 페이지 래치 조건                                                  |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Time_data_page_hold_acquire_time         | Complex        | | 데이터 페이지 래치 대기 시간:                                       |
+    |                  |                                          |                | | - 모듈(system, worker, vacuum)                                      |
+    |                  |                                          |                | | - 페이지 타입                                                       |
+    |                  |                                          |                | | - 페이지 페치/탐색 모드                                             |
+    |                  |                                          |                | | - 페이지 래치 모드                                                  |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Time_data_page_fix_acquire_time          | Complex        | | 데이터 페이지 고정 시간:                                            |
+    |                  |                                          |                | | - 모듈(system, worker, vacuum)                                      |
+    |                  |                                          |                | | - 페이지 타입                                                       |
+    |                  |                                          |                | | - 페이지 패치/발견 모드                                             |
+    |                  |                                          |                | | - 페이지 래치 모드                                                  |
+    |                  |                                          |                | | - 페이지 래치 조건                                                  |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_data_page_promote_ext                | Complex        | | 다음으로 분류 된 데이터 페이지 프로모션 수:                         |
+    |                  |                                          |                | | - 모듈(system, worker, vacuum)                                      |
+    |                  |                                          |                | | - 페이지 타입                                                       |
+    |                  |                                          |                | | - 프로모션 래치 조건                                                |
+    |                  |                                          |                | | - 홀더 래치 모드                                                    |
+    |                  |                                          |                | | - 성공/실패 프로모션                                                |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_data_page_promote_time_ext           | Complex        | | 다음으로 분류 된 데이터 페이지 대기 시간:                           |
+    |                  |                                          |                | | - 모듈(system, worker, vacuum)                                      |
+    |                  |                                          |                | | - 페이지 타입                                                       |
+    |                  |                                          |                | | - 프로모션 래치 조건                                                |
+    |                  |                                          |                | | - 홀더 래치 모드                                                    |
+    |                  |                                          |                | | - 성공/실패 프로모션                                                |
+    +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | 페이지 버퍼      | Num_unfix_void_to_private_top            | Accumulator    | 새로 로드된 데이터 페이지를 고정하지 않고 전용 LRU 상단에 추가한 수   |
+    | | unfix          +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_unfix_void_to_private_mid            | Accumulator    | 새로 로드된 데이터 페이지를 고정하지 않고 전용 LRU 중간에 추가한 수   |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_unfix_void_to_shared_mid             | Accumulator    | 새로 로드된 데이터 페이지를 고정하지 않고 공유 LRU 중간에 추가한 수   |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_unfix_lru1_private_to_shared_mid     | Accumulator    | 데이터 페이지를 고정하지 않고 전용 LRU 영역1에서 공유 LRU 중간으로    |
+    |                  |                                          |                | 이동한 수                                                             |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_unfix_lru2_private_to_shared_mid     | Accumulator    | 데이터 페이지를 고정하지 않고 전용 LRU 영역2에서 공유 LRU 중간으로    |
+    |                  |                                          |                | 이동한 수                                                             |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_unfix_lru3_private_to_shared_mid     | Accumulator    | 데이터 페이지를 고정하지 않고 전용 LRU 영역3에서 공유 LRU 중간으로    |
+    |                  |                                          |                | 이동한 수                                                             |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_unfix_lru2_private_keep              | Accumulator    | 데이터 페이지를 고정하지 않고 전용 LRU 영역2에 보관한 수              |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_unfix_lru2_shared_keep               | Accumulator    | 데이터 페이지를 고정하지 않고 공유 LRU 영역2에 보관한 수              |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_unfix_lru2_private_to_top            | Accumulator    | 데이터 페이지를 고정하지 않고 전용 LRU 영역2에서 상단으로 올린 수     |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_unfix_lru2_shared_to_top             | Accumulator    | 데이터 페이지를 고정하지 않고 공유 LRU 영역2에서 상단으로 올린 수     |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_unfix_lru3_private_to_top            | Accumulator    | 데이터 페이지를 고정하지 않고 전용 LRU 영역3에서 상단으로 올린 수     |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_unfix_lru3_shared_to_top             | Accumulator    | 데이터 페이지를 고정하지 않고 공유 LRU 영역3에서 상단으로 올린 수     |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_unfix_lru1_private_keep              | Accumulator    | 데이터 페이지를 고정하지 않고 전용 LRU 영역1에 보관한 수              |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_unfix_lru1_shared_keep               | Accumulator    | 데이터 페이지를 고정하지 않고 공유 LRU 영역1에 보관한 수              |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_unfix_void_to_private_mid_vacuum     | Accumulator    | | 새로 로드된 데이터 페이지를 고정하지 않고 전용 LRU 목록 중간에      |
+    |                  |                                          |                | | 추가한 수 (vacuum 쓰레드)                                           |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_unfix_lru1_any_keep_vacuum           | Accumulator    | | 새로 로드된 데이터 페이지를 고정하지 않고  전용/공유 LRU 영역 1에   |
+    |                  |                                          |                | | 보관한 수 (vacuum 쓰레드)                                           |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_unfix_lru2_any_keep_vacuum           | Accumulator    | | 새로 로드된 데이터 페이지를 고정하지 않고 전용/공유 LRU 영역 2에    |
+    |                  |                                          |                | | 보관한 수 (vacuum 쓰레드)                                           |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_unfix_lru3_any_keep_vacuum           | Accumulator    | | 새로 로드된 데이터 페이지를 수정하지 않고 전용/공유 LRU 영역 3에    |
+    |                  |                                          |                | | 보관한 수 (vacuum 쓰레드)                                           |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_unfix_void_aout_found                | Accumulator    | 새로 로드 된 데이터 페이지가 AOUT 에서 발견된 수                      |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_unfix_void_aout_not_found            | Accumulator    | 새로 로드 된 데이터 페이지가 AOUT 에서 발견되지 않은 수               |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_unfix_void_aout_found_vacuum         | Accumulator    | 새로 로드 된 데이터 페이지가 AOUT 에서 발견된 수(vacuum 쓰레드)       |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_unfix_void_aout_not_found_vacuum     | Accumulator    | 새로 로드 된 데이터 페이지가 AOUT 에서 발견되지 않은 수(vacuum 쓰레드)|
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_data_page_unfix_ext                  | Complex        | | 다음으로 분류 된 데이터 페이지 비 고정 수                           |
+    |                  |                                          |                | | - 모듈(system, worker, vacuum)                                      |
+    |                  |                                          |                | | - 페이지 타입                                                       |
+    |                  |                                          |                | | - 더티이거나 아닌 경우                                              |
+    |                  |                                          |                | | - 홀더에 의한 더티이거나 아닌 경우                                  |
+    |                  |                                          |                | | - 홀더 래치 모드                                                    |
+    +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | 페이지 버퍼 I/O  | Data_page_buffer_hit_ratio               | Computed       | | 데이터 페이지 버퍼의 히트율                                         |
+    | 관련             |                                          |                | | (Num_data_page_fetches - Num_data_page_ioreads)*100                 |
+    |                  |                                          |                | | / Num_data_page_fetches                                             |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_adaptive_flush_pages                 | Accumulator    | 적응형 플러시 컨트롤러에서 요청한 데이터 페이지 수                    |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_adaptive_flush_log_pages             | Accumulator    | 적응형 플러시 컨트롤러에서 요청한 로그 데이터 페이지 수               |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_adaptive_flush_max_pages             | Accumulator    | 적응형 플러시 컨트롤러에 의해 할당된 토큰 페이지 총 수                |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..compensate_flush                       | Counter/timer  | | 적응형 플러시 컨트롤러에 의한 플러시 보정의 횟수와 시간             |
+    |                  |                                          |                | |                                                                     |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..flush_collect                          | Counter/timer  | BCB 세트를 수집하는 플러시 쓰레드의 수와 시간                         |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..flush_flush                            | Counter/timer  | BCB 세트를 플러싱하는 플러시 쓰레드의 수와 시간                       |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..flush_sleep                            | Counter/timer  | 플러시 쓰레드 일시 정지 수와 시간                                     |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..flush_collect_per_page                 | Counter/timer  | 한개의 BCB 를 수집하는 플러시 쓰레드의 수와 시간                      |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..flush_flush_per_page                   | Counter/timer  | 한개의 BCB 를 플러싱하는 플러시 쓰레드의 수와 시간                    |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_data_page_writes                     | Accumulator    | 플러싱된 데이타 페이지의 총 수                                        |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_data_page_dirty_to_post_flush        | Accumulator    | 포스트 플러시 쓰레드로 보내진 플러시 된 페이지 수                     |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_data_page_skipped_flush              | Accumulator    | 플러시 쓰레드가 생략한 BCB의 총 수                                    |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_data_page_skipped_flush_need_wal     | Accumulator    | | 로그 데이터 페이지를 먼저 플러시해야하기 때문에                     |
+    |                  |                                          |                | | 플러시 쓰레드가 생략한 BCB 수                                       |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | | Num_data_page_skipped\                 | Accumulator    | | 이미 플러시 되어서 쓰레드가 생략한 BCB 수                           |
+    |                  | | \_flush_already_flushed                |                | |                                                                     |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_data_page_skipped_flush_fixed_or_hot | Accumulator    | | BCB가 고정되었거나 수집 된 후 고정되었기 때문에                     |
+    |                  |                                          |                | | 플러시 스레드가 생략한 BCB의 수                                     |
+    +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | | 페이지 버퍼    | ..alloc_bcb                              | Counter/timer  | | 새로운 데이터 페이지를 저장하기위한 BCB 할당의 수와 시간.           |
+    | | victimization  |                                          |                | | 데이터베이스가 시작되면 페이지 버퍼는 사용가능한 BCB가 있다.        |
+    |                  |                                          |                | | 그러나 페이지 버퍼가 모두 사용되면 모든 BCB가 사용 중이므로         |
+    |                  |                                          |                | | 페이지 버퍼 중 하나는 희생되어야 한다. 여기서 추적되는 시간은       |
+    |                  |                                          |                | | BCB 희생 및 디스크 로딩을 포함한다.                                 |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..alloc_bcb_search_victim                | Counter/timer  | 희생(Victim)자에 대한 모든 LRU 을 통한 검색 횟수 및 시간              |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..alloc_bcb_cond_wait_high_prio          | Counter/timer  | 우선 순위가 높은 대기열에서 직접적인 희생자(Victim) 대기의 수와 시간  |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | ..alloc_bcb_cond_wait_low_prio           | Counter/timer  | 우선 순위가 낮은 대기열에서 직접적인 희생자(Victim) 대기의 수와 시간  |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_alloc_bcb_prioritize_vacuum          | Accumulator    | 우선 순위가 높은 대기열에서 직접적인 희생자(Victim) 회수의 대기 수    |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_alloc_bcb_wait_threads_high_priority | Snapshot       | 우선 순위가 높은 대기열에서 직접적인 희생(Victim) 대기자의 현재 수    |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_alloc_bcb_wait_threads_low_priority  | Snapshot       | 우선 순위가 낮은 대기열에서 직접적인 희생(Victim) 대기자의 현재 수    |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_flushed_bcbs_wait_for_direct_victim  | Snapshot       | | 희생자를 처리하여 즉시 할당하는 post-flush 스레드를 기다리는 BCB의  |
+    |                  |                                          |                | | 현재 수                                                             |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_victim_use_invalid_bcb               | Accumulator    | 유효하지 않은 목록에서 할당 된 BCB의 수                               |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_data_page_avoid_victim               | Accumulator    | | 디스크로 플러시되는 과정에서 희생에서 제외되는 BCB의 수             |
+    |                  |                                          |                | |                                                                     |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_victim_assign_direct_vacuum_void     | Accumulator    | vacuum 워커가 빈(void) 영역에서 할당한 직접 희생자의 수               |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_victim_assign_direct_vacuum_lru      | Accumulator    | vacuum 워커가 LRU 영역 3에서 할당한 직접 희생자 수                    |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_victim_assign_direct_flush           | Accumulator    | 플러시 쓰레드가 지정한 직접적인 희생자 수                             |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_victim_assign_direct_panic           | Accumulator    | | 패닉 LRU 검색에 의해 할당 된 직접적인 희생자의 수                   |
+    |                  |                                          |                | | 희생자를 찾기 위한 대기자가 많으면 LRU 목록을 검색하는 동안         |
+    |                  |                                          |                | | 다른 희생자를 찾는 쓰레드가 직접 할당하려고 시도한다.               |
+    |                  |                                          |                | |                                                                     |
+    |                  |                                          |                | | 페이지 버퍼 유지 쓰레드 할당도 여기에  포함된다.                    |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_victim_assign_direct_adjust_lru      | Accumulator    | BCB가 LRU 영역 3으로 이동할 때 할당된 직접적인 희생자 수              |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | | Num_victim_assign_direct_adjust_lru\   | Accumulator    | | vacuum 쓰레드가 액세스할 것으로 예상되어 LRU 영역 3으로             |
+    |                  | | \_to_vacuum                            |                | | 이동할 때 직접적인 희생자로 할당되지 **않은** BCB의 수              |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | | Num_victim_assign_direct_search\       | Accumulator    | | 플러시를 위해 BCB셋(Set)을 수집하는 동안 플러시 쓰레드에 의해 할당된|
+    |                  | | \_for_flush                            |                | | 직접적인 희생자 수                                                  |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_victim_shared_lru_success            | Accumulator    | 공유 LRU 에서 성공한 희생자 검색 수                                   |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_victim_own_private_lru_success       | Accumulator    | 자체 전용 LRU 에서 성공한 희생자 검색 수                              |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_victim_other_private_lru_success     | Accumulator    | 다른 전용 LRU 에서 성공한 희생자 검색 수                              |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_victim_shared_lru_fail               | Accumulator    | 공유 LRU 에서 실패한 희생자 검색 수                                   |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_victim_own_private_lru_fail          | Accumulator    | 자체 전용 LRU에서 실패한 희생자 검색 수                               |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_victim_other_private_lru_fail        | Accumulator    | 다른 전용 LRU에서 실패한 희생자 검색 수                               |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_victim_all_lru_fail                  | Accumulator    | | 아래의 순서에서 희생자를 찾을 때 좋지 않은 경우의 수:               |
+    |                  |                                          |                | | 1.  자체 전용 LRU (쿼터가 초과될 경우)                              |
+    |                  |                                          |                | | 2.  다른 전용 LRU (자체 전용 쿼터가 초과될 경우)                    |
+    |                  |                                          |                | | 3.  공유 LRU                                                        |
+    |                  |                                          |                | | (자세한 설명은 다음을 참고한다. *pgbuf_get_victim* 함수)            |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_victim_get_from_lru                  | Accumulator    | 모든 LRU 에서 희생자 검색 총 수                                       |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_victim_get_from_lru_was_empty        | Accumulator    | | 후보 수가 0이기 때문에 모든 LRU에서 희생자 검색이 즉시 중지된 수    |
+    |                  |                                          |                | |                                                                     |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_victim_get_from_lru_fail             | Accumulator    | | 후보 수가 0이 아니더라도 모든 LRU 에서 희생자 검색이 실패된 수      |
+    |                  |                                          |                | |                                                                     |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_victim_get_from_lru_bad_hint         | Accumulator    | | 희생자가 잘못되어 모든 LRU 에서 희생자 검색이 실패된 수             |
+    |                  |                                          |                | |                                                                     |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_lfcq_prv_get_total_calls             | Accumulator    | 후보 수가 0이 아닌 전용 LRU 큐에서 희생자 검색 수                     |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_lfcq_prv_get_empty                   | Accumulator    | 후보수가 0이 아닌 전용 LRUs 큐가 비어있는 횟수                        |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_lfcq_prv_get_big                     | Accumulator    | | 후보 수가 매우 큰 전용 LRU 큐의 희생자 검색 수                      | 
+    |                  |                                          |                | | ( 매우 큰 것의 의미는 할당량을 초과하는 경우을 나타냄)              |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_lfcq_shr_get_total_calls             | Accumulator    | 후보수가 0이 아닌 공유 LRU 큐에서 희생자 검색 수                      |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_lfcq_shr_get_empty                   | Accumulator    | 후보수가 0이 아닌 공유 LRU 큐가 비어있는 횟수                         |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_lfcq_big_private_lists               | Snapshot       | 후보자가 매우 큰 전용 LRU 의 현재 수                                  |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_lfcq_private_lists                   | Snapshot       | 후보자가 0이 아닌 전용 LRU 의 현재 수                                 |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_lfcq_shared_lists                    | Snapshot       | 후보자가 0이 아닌 공유 LRU 의 현재 수                                 |
+    +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | MVCC 스냅샷      | Time_get_snapshot_acquire_time:          | Accumulator    | 스냅샷을 획득하기 위해 모든 트랜잭션이 수행된 총 시간                 |
+    | 관련             +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Count_get_snapshot_retry:                | Accumulator    | MVCC 스냅샷을 획득하기 위한 재시도 횟수                               |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Time_tran_complete_time:                 | Accumulator    | 커밋 / 롤백시 스냅샷 및 MVCCID를 무효화하는 데 수행된 시간            |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Time_get_oldest_mvcc_acquire_time:       | Accumulator    | "가장 오래된 전역 MVCC ID" 를 획득하기 위해 수행된 시간               |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Count_get_oldest_mvcc_retry:             | Accumulator    | "가장 오래된 전역 MVCC ID" 를 획득하기 위한 재시도 횟수               |
+    |                  +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    |                  | Num_mvcc_snapshot_ext                    | Complex        | | 다음과 같이 분류된 데이터 페이지 수정 수                            |
+    |                  |                                          |                | | - 스냅샷 타입                                                       |
+    |                  |                                          |                | | - 삽입/삭제 MVCCID의 상태                                           |
+    |                  |                                          |                | | - 가시성/비가시성                                                   |
+    +------------------+------------------------------------------+----------------+-----------------------------------------------------------------------+
+
+.. Note::  
+
+    (*) : 통계치는 내부에서 수행되는 비 MVCC 연산 또는 MVCC 연산에 대한 측정 자료이다 (내부적으로 결정됨)
+
 
 .. option:: -o, --output-file=FILE
 
-    대상 데이터베이스 서버의 실행 통계 정보를 지정된 파일에 저장한다. ::
+    **-o** 옵션을 이용하여 대상 데이터베이스 서버의 실행 통계 정보를 지정된 파일에 저장한다. ::
 
         cubrid statdump -o statdump.log testdb
 
@@ -1390,26 +2129,109 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
         cubrid statdump -s data testdb
 
         *** SERVER EXECUTION STATISTICS ***
-        Num_data_page_fetches         =        135
+        Num_data_page_fetches         =          0
         Num_data_page_dirties         =          0
         Num_data_page_ioreads         =          0
         Num_data_page_iowrites        =          0
-        Num_data_page_victims         =          0
-        Num_data_page_iowrites_for_replacement =          0
-         
-         *** OTHER STATISTICS ***
-        Data_page_buffer_hit_ratio    =     100.00
+        Num_data_page_flushed         =          0
+        Num_data_page_private_quota   =        327
+        Num_data_page_private_count   =        898
+        Num_data_page_fixed           =          1
+        Num_data_page_dirty           =          3
+        Num_data_page_lru1            =        857
+        Num_data_page_lru2            =        873
+        Num_data_page_lru3            =        898
+        Num_data_page_victim_candidate =        898
+        Num_sort_data_pages           =          0
+        Vacuum_data_page_buffer_hit_ratio =       0.00
+        Num_data_page_hash_anchor_waits =          0
+        Time_data_page_hash_anchor_wait =          0
+        Num_data_page_writes          =          0
+        Num_data_page_dirty_to_post_flush =          0
+        Num_data_page_skipped_flush   =          0
+        Num_data_page_skipped_flush_need_wal =          0
+        Num_data_page_skipped_flush_already_flushed =          0
+        Num_data_page_skipped_flush_fixed_or_hot =          0
+        Num_data_page_avoid_dealloc   =          0
+        Num_data_page_avoid_victim    =          0
+        Num_data_page_fix_ext:
+        Num_data_page_promote_ext:
+        Num_data_page_promote_time_ext:
+        Num_data_page_unfix_ext:
+        Time_data_page_lock_acquire_time:
+        Time_data_page_hold_acquire_time:
+        Time_data_page_fix_acquire_time:
+
 
 .. note::
 
-    각 상태 정보는 64비트 **INTEGER**\로 구성되어 있으며, 누적된 값이 한도를 넘으면 해당 실행 통계 정보가 유실될 수 있다.
+    각 상태 정보는 64비트 **INTEGER** 로 구성되어 있으며, 누적된 값이 한도를 넘으면 해당 실행 통계 정보가 유실될 수 있다.
+
+.. note::
+
+    아래는 활성화/비활성화 할 수 있는 성능 통계 세트 목록이다. 각 세트의 값은 2의 제곱으로 표현된다.  이 세트들은 **extended_statistics_activation** 시스템 매개 변수 값에 의해 활성화/비활성화되며, 이 변수 값은 2진수 형식으로 설정한다 
+
+    
+      ========= ===================================== =========== ====================================================================
+      값        이름                                  활성        설명
+                                                      기본값               
+      ========= ===================================== =========== ====================================================================
+      **1**     **Detailed b-tree pages**             Yes         | B- 트리 페이지를 3 가지 카테고리로 분류한다.: 루트, 비단말,단말
+                                                                  | 관련 통계수치:
+                                                                  | - Num_data_page_fix_ext
+                                                                  | - Time_data_page_lock_acquire_time
+                                                                  | - Time_data_page_hold_acquire_time
+                                                                  | - Time_data_page_fix_acquire_time
+                                                                  | - Num_data_page_promote_ext
+                                                                  | - Num_data_page_promote_time_ext
+                                                                  | - Num_data_page_unfix_ext
+      **2**     **MVCC Snapshot**                     Yes         | MVCC 스냅샷에 대한 통계 수집 :
+                                                                  | - Num_mvcc_snapshot_ext
+      **4**     **Time locks**                        Yes         | 타이밍 잠금 대기에 대한 통계 수집 :
+                                                                  | - Num_object_locks_time_waited_usec
+      **8**     **Hash anchor waits**                 Yes         | 해시 앵커 대기에 대한 통계 수집 :
+                                                                  | - Num_data_page_hash_anchor_waits
+                                                                  | - Time_data_page_hash_anchor_wait
+      **16**    **Extended victimization**            No          | 확장 페이지 버퍼 I/O 및 victim  대한 
+                                                                  | 통계 수집 :
+                                                                  | - Num_data_page_writes
+                                                                  | - flush_collect_per_page
+                                                                  | - flush_flush_per_page
+                                                                  | - Num_data_page_skipped_flush_already_flushed
+                                                                  | - Num_data_page_skipped_flush_need_wal
+                                                                  | - Num_data_page_skipped_flush_fixed_or_hot
+                                                                  | - Num_data_page_dirty_to_post_flush
+                                                                  | - Num_alloc_bcb_prioritize_vacuum
+                                                                  | - Num_victim_assign_direct_vacuum_void
+                                                                  | - Num_victim_assign_direct_vacuum_lru
+                                                                  | - Num_victim_assign_direct_flush
+                                                                  | - Num_victim_assign_direct_panic
+                                                                  | - Num_victim_assign_direct_adjust_lru
+                                                                  | - Num_victim_assign_direct_adjust_lru_to_vacuum
+                                                                  | - Num_victim_assign_direct_search_for_flush
+                                                                  | - Num_victim_shared_lru_success
+                                                                  | - Num_victim_own_private_lru_success
+                                                                  | - Num_victim_other_private_lru_success
+                                                                  | - Num_victim_shared_lru_fail
+                                                                  | - Num_victim_own_private_lru_fail
+                                                                  | - Num_victim_other_private_lru_fail
+                                                                  | - Num_victim_get_from_lru
+                                                                  | - Num_victim_get_from_lru_was_empty
+                                                                  | - Num_victim_get_from_lru_fail
+                                                                  | - Num_victim_get_from_lru_bad_hint
+                                                                  | - Num_lfcq_prv_get_total_calls
+                                                                  | - Num_lfcq_prv_get_empty
+                                                                  | - Num_lfcq_prv_get_big
+                                                                  | - Num_lfcq_shr_get_total_calls
+                                                                  | - Num_lfcq_shr_get_empty
+      ========= ===================================== =========== ====================================================================
 
 .. _lockdb:
 
 lockdb
 ------
 
-**cubrid lockdb**\는 대상 데이터베이스에 대하여 현재 트랜잭션에서 사용되고 있는 잠금 정보를 확인하는 유틸리티이다. ::
+**cubrid lockdb** 는 대상 데이터베이스에 대하여 현재 트랜잭션에서 사용되고 있는 잠금 정보를 확인하는 유틸리티이다. ::
 
     cubrid lockdb [<option>] database_name
 
@@ -1423,7 +2245,7 @@ lockdb
 
     cubrid lockdb testdb
 
-다음은 **cubrid lockdb**\에 대한 [option]이다.
+다음은 **cubrid lockdb** 에 대한 [option]이다.
     
 .. program:: lockdb
 
@@ -1436,7 +2258,7 @@ lockdb
 출력 내용
 ^^^^^^^^^
 
-**cubrid lockdb**\ 의 출력 내용은 논리적으로 3개의 섹션으로 나뉘어져 있다.
+**cubrid lockdb** 의 출력 내용은 논리적으로 3개의 섹션으로 나뉘어져 있다.
 
 *   서버에 대한 잠금 설정
 
@@ -1455,7 +2277,7 @@ lockdb
 
 위에서 잠금 에스컬레이션 레벨은 100000레코드로, 교착 상태 탐지 간격은 0초로 설정되어 있다.
 
-관련 시스템 파라미터인 **lock_escalation**\과 **deadlock_detection_interval**\에 대한 설명은 :ref:`lock-parameters` 를 참고한다.
+관련 시스템 파라미터인 **lock_escalation** 과 **deadlock_detection_interval** 에 대한 설명은 :ref:`lock-parameters` 를 참고한다.
 
 **현재 데이터베이스에 접속한 클라이언트들**
 
@@ -1464,10 +2286,10 @@ lockdb
 ::
 
     Transaction (index 1, csql, dba@cubriddb|12854)
-    Isolation READ COMMITTED CLASSES AND READ UNCOMMITTED INSTANCES
-    Timeout_period -1
+    Isolation COMMITTED READ
+    Timeout_period : Infinite wait
 
-위에서 트랜잭션 인덱스는 1이고, 프로그램 이름은 csql, 사용자 이름은 dba, 호스트 이름은 cubriddb, 클라이언트 프로세스 식별자는 12854, 격리 수준은 READ COMMITTED CLASSES AND READ UNCOMMITTED INSTANCES, 그리고 잠금 타임아웃은 무제한이다.
+위에서 트랜잭션 인덱스는 1이고, 프로그램 이름은 csql, 사용자 id은 dba, 호스트 이름은 cubriddb, 클라이언트 프로세스 id는 12854, 격리 수준은 COMMITTED READ, 그리고 잠금 타임아웃은 무제한이다.
 
 트랜잭션 인덱스가 0인 클라이언트는 내부적인 시스템 트랜잭션이다. 이것은 데이터베이스의 체크포인트 수행과 같이 특정한 시간에 잠금을 획득할 수 있지만 대부분의 경우 이 트랜잭션은 어떤 잠금도 획득하지 않을 것이다.
 
@@ -1482,42 +2304,45 @@ lockdb
     Object lock Table:
         Current number of ojbects which are locked = 2001
 
-**cubrid lockdb**\는 잠금을 획득한 각각의 객체에 대한 객체의 OID와 Object type, 테이블 이름을 출력한다. 추가적으로 객체에 대해서 잠금을 보유하고 있는 트랜잭션의 개수(Num holders), 잠금을 보유하고 있지만 상위 잠금으로 변환(예를 들어 U_LOCK에서 X_LOCK으로 잠금 변환)하지 못해 차단된 트랜잭션의 개수(Num blocked-holders), 객체의 잠금을 기다리는 다른 트랜잭션의 개수(Num waiters)가 출력된다. 그리고 잠금을 보유하고 있는 클라이언트 트랜잭션, 차단된 클라이언트 트랜잭션, 기다리는 클라이언트 트랜잭션의 리스트가 출력된다.
+**cubrid lockdb** 는 잠금을 획득한 각 객체의 OID, 객체 타입 및 테이블명을 출력한다. 또한 객체에 대한 잠금을 보유한 트랜잭션 수(*Num holders*), 잠금을 보유하지만 잠금을 상위 잠금으로 변환(예: **SCH_S_LOCK** 에서 **SCH_M_LOCK** 으로의 변환)할 수 없어 차단된 트랜잭션 수(*Num blocked-holders*) 및 객체의 잠금을 기다리는 다른 트랜잭션의 수(*Num waiters*)를 출력한다. 잠금을 보유한 클라이언트 트랜잭션, 차단된 클라이언트 트랜잭션 및 대기 중인 클라이언트 트랜잭션의 목록도 출력한다. 객체 타입이 클래스가 아닌 행에서는 MVCC 정보도 표시된다.
 
-다음 예는 Object type이 instance of class, 즉 레코드인 경우, OID( 2| 50| 1)인 객체에 대해서 트랜잭션 2가 S_LOCK을 가지고 있고, 트랜잭션 1이 U_LOCK을 획득하고 있지만 트랜잭션 2가 S_LOCK을 획득하고 있기 때문에 X_LOCK으로 변환하지 못해 차단되었음을 보여준다. 그리고 트랜잭션 3은 S_LOCK을 대기하고 있지만 트랜잭션 2가 X_LOCK을 대기하고 있기 때문에 차단되었음을 보여준다.
+다음 예제는 OID(0|62|5)인 클래스 타입의 객체를 나타내며,트랜잭션 1은 **IX_LOCK** 을 보유하고 트랜잭션 2는 **SCH_S_LOCK** 을 보유한 상태에서 **SCH_M_LOCK**으로 변환할 수 없어 차단된 상태를 보여준다. 또한 트랜잭션 3은**SCH_S_LOCK** 을 기다리지만 트랜잭션 2가 **SCH_M_LOCK** 을 기다리기 때문에 차단된 상태를 보여준다.
+
+::
+
+    OID = 0| 62| 5
+    Object type: Class = athlete.
+    Num holders = 1, Num blocked-holders= 1, Num waiters = 1
+    LOCK HOLDERS :
+        Tran_index = 1, Granted_mode = IX_LOCK, Count = 1, Nsubgranules = 1
+    BLOCKED LOCK HOLDERS :
+        Tran_index = 2, Granted_mode = SCH_S_LOCK, Count = 1, Nsubgranules = 0
+        Blocked_mode = SCH_M_LOCK
+                        Start_waiting_at = Wed Feb 3 14:44:31 2016
+                        Wait_for_secs = -1
+    LOCK WAITERS :
+        Tran_index = 3, Blocked_mode = SCH_S_LOCK
+                        Start_waiting_at = Wed Feb 3 14:45:14 2016
+                        Wait_for_secs = -1
+
+다음 예는 **X_LOCK** 을 보유한 트랜잭션 1에 의해서 삽입된 OID가 ( 2 | 50 | 1)인 클래스의 인스턴스를 보여준다. 트랜잭션1이 삽입한 인스턴스를 수정하기 위해 트랜잭션2가 **X_LOCK** 을 기다리는 것을 보여준다. 
 
 ::
 
     OID = 2| 50| 1
-    Object type: instance of class ( 0| 62| 5) = athlete
+    Object type: instance of class ( 0| 62| 5) = athlete.
+    MVCC info: insert ID = 6, delete ID = missing.
     Num holders = 1, Num blocked-holders= 1, Num waiters = 1
     LOCK HOLDERS :
-        Tran_index = 2, Granted_mode = S_LOCK, Count = 1
-    BLOCKED LOCK HOLDERS :
-        Tran_index = 1, Granted_mode = U_LOCK, Count = 3
-        Blocked_mode = X_LOCK
-                        Start_waiting_at = Fri May 3 14:44:31 2002
-                        Wait_for_secs = -1
+        Tran_index =   1, Granted_mode =   X_LOCK, Count =   1
     LOCK WAITERS :
-        Tran_index = 3, Blocked_mode = S_LOCK
-                        Start_waiting_at = Fri May 3 14:45:14 2002
-                        Wait_for_secs = -1
+        Tran_index =   2, Blocked_mode = X_LOCK
+                          Start_waiting_at = Wed Feb 3 14:45:14 2016
+                          Wait_for_secs = -1
 
-Object type이 Index key of class, 즉 인덱스 키인 경우 테이블의 인덱스에 대한 잠금 정보를 출력한다.
+*Granted_mode* 는 습득한 잠금의 모드를 나타내며, *Blocked_mode* 는 차단된 잠금의 모드를 나타낸다. *Starting_waiting_at* 은 잠금이 요청된 시간을 나타내며, *Wait_for_secs* 는 잠금의 대기 시간을 나타낸다. *Wait_for_secs* 값은 시스템 파라미터인 **lock_timeout** 에 의해 결정된다.
 
-::
-
-    OID = -662|   572|-32512
-    Object type: Index key of class ( 0|   319|  10) = athlete.
-    Index name: pk_athlete_code
-    Total mode of holders =   NX_LOCK, Total mode of waiters = NULL_LOCK.
-    Num holders=  1, Num blocked-holders=  0, Num waiters=  0
-    LOCK HOLDERS:
-        Tran_index =   1, Granted_mode =  NX_LOCK, Count =   1
-
-Granted_mode는 현재 획득한 잠금의 모드를 의미하고 Blocked_mode는 차단된 잠금의 모드를 의미한다. Starting_waiting_at은 잠금을 요청한 시간을 의미하고 Wait_for_secs는 잠금을 기다리는 시간을 의미한다. Wait_for_secs의 값은 lock_timeout 시스템 파라미터에 의해 설정된다. 
-
-Object type이 Class, 즉 테이블인 경우 Nsubgranules가 출력되는데 이것은 해당 테이블 내의 특정 트랜잭션이 획득하고 있는 레코드 잠금과 키 잠금을 합한 개수이다.
+객체 타입이 클래스(테이블)인 경우 테이블의 특정 트랜잭션에서 획득한 레코드 잠금과 키 잠금의 합계를 나타내는 *Nsubgranules* 가 표시된다.
 
 ::
 
@@ -1534,7 +2359,7 @@ Object type이 Class, 즉 테이블인 경우 Nsubgranules가 출력되는데 �
 tranlist
 --------
 
-**cubrid tranlist**\는 대상 데이터베이스의 트랜잭션 정보를 확인하는 유틸리티로서, DBA 또는 DBA그룹 사용자만 수행할 수 있다. ::
+**cubrid tranlist** 는 대상 데이터베이스의 트랜잭션 정보를 확인하는 유틸리티로서, DBA 또는 DBA그룹 사용자만 수행할 수 있다. ::
 
     cubrid tranlist [options] database_name
 
@@ -1564,7 +2389,7 @@ tranlist
 
 위의 예는 3개의 트랜잭션이 각각 INSERT문을 실행 중일 때 또 다른 트랜잭션에서 UPDATE문의 실행을 시도한다. 위에서 Tran index가 4인 update문은 3,2,1(Wait for lock holder)번의 트랜잭션이 종료되기를 대기하고 있다.
 
-화면에 출력되는 질의문(SQL Text)은 질의 계획 캐시에 저장되어 있는 것을 보여준다. 질의 수행이 완료되면 **empty**\로 표시된다.
+화면에 출력되는 질의문(SQL Text)은 질의 계획 캐시에 저장되어 있는 것을 보여준다. 질의 수행이 완료되면 **empty** 로 표시된다.
 
 각 칼럼의 의미는 다음과 같다.
 
@@ -1588,7 +2413,7 @@ tranlist
     *   ABORTED : 롤백되어 종료될 트랜잭션
     *   KILLED : 서버에 의해 강제 종료 중인 트랜잭션
 
-다음은 **cubrid tranlist**\ 에 대한 [options]이다.
+다음은 **cubrid tranlist** 에 대한 [options]이다.
 
 .. program:: tranlist
 
@@ -1667,7 +2492,7 @@ tranlist
 killtran
 --------
 
-**cubrid killtran**\은 대상 데이터베이스의 트랜잭션을 확인하거나 특정 트랜잭션을 강제 종료하는 유틸리티로서, **DBA** 사용자만 수행할 수 있다. ::
+**cubrid killtran** 은 대상 데이터베이스의 트랜잭션을 확인하거나 특정 트랜잭션을 강제 종료하는 유틸리티로서, **DBA** 사용자만 수행할 수 있다. ::
 
     cubrid killtran [options] database_name
 
@@ -1692,7 +2517,7 @@ killtran
        5(ACTIVE)       public      myhost            6944              csql
     -------------------------------------------------------------------------------
 
-다음은 **cubrid killtran**\에 대한 [options]이다.
+다음은 **cubrid killtran** 에 대한 [options]이다.
 
 .. program:: killtran
 
@@ -1738,15 +2563,15 @@ killtran
 
 .. option:: -p, --dba-password=PASSWORD
 
-    이 옵션 뒤에 오는 값은 **DBA**\ 의 암호이며 생략하면 프롬프트에서 입력해야 한다.
+    이 옵션 뒤에 오는 값은 **DBA** 의 암호이며 생략하면 프롬프트에서 입력해야 한다.
 
 .. option:: -q, --query-exec-info
 
-    cubrid tranlist 명령에서 "User name" 칼럼과 "Host name" 칼럼이 출력되지 않는다는 점만 다르다. :ref:`tranlist`\ 를 참고한다.
+    cubrid tranlist 명령에서 "User name" 칼럼과 "Host name" 칼럼이 출력되지 않는다는 점만 다르다. :ref:`tranlist` 를 참고한다.
 
 .. option:: -d, --display
 
-    기본 지정되는 옵션으로 트랜잭션의 요약 정보를 출력한다. cubrid tranlist 명령의 -s 옵션을 지정하여 실행한 것과 동일한 결과를 출력한다. :option:`tranlist -s`\ 를 참고한다.
+    기본 지정되는 옵션으로 트랜잭션의 요약 정보를 출력한다. cubrid tranlist 명령의 -s 옵션을 지정하여 실행한 것과 동일한 결과를 출력한다. :option:`tranlist -s` 를 참고한다.
 
 .. option:: -f, --force
 
@@ -1773,7 +2598,7 @@ checkdb
 
 *   *table_name1 table_name2*: 일관성을 확인하거나 복구하려는 테이블 이름을 나열한다.
 
-다음은 **cubrid checkdb**\에 대한 [options]이다.
+다음은 **cubrid checkdb** 에 대한 [options]이다.
 
 .. program:: checkdb
 
@@ -1870,7 +2695,7 @@ diagdb
 
 *   *database_name*: 내부 정보를 확인하려는 데이터베이스 이름이다.
 
-다음은 **cubrid diagdb**\에서 사용하는 [option]이다.
+다음은 **cubrid diagdb** 에서 사용하는 [option]이다.
 
 .. program:: diagdb
 
@@ -1906,6 +2731,16 @@ diagdb
     | 9      | 힙(heap) 정보를 출력한다.          |
     +--------+------------------------------------+
 
+.. option:: -o, --output-file=FILE
+
+    **-o** 옵션은 데이터베이스의 서버/클라이언트 프로세스에서 사용되는 파라미터 정보를 지정된 파일로 저장하는 데 사용된다. 이 파일은 현재 디렉터리에 생성된다. **-o** 옵션을 지정하지 않으면 콘솔 화면에 메시지가 표시된다. ::
+    
+        cubrid diagdb -d8 -o logdump_output demodb
+
+.. option:: --emergency
+
+    복구를 생략(suppression)하려면 **--emergency** 옵션을 사용한다. **이 옵션은 디버깅에만 사용해야 한다. 복구 이슈가 있는 경우 이 옵션을 사용하기 전에 데이터베이스를 백업할 것을 권장한다.** 
+
 .. _paramdump:
 
 paramdump
@@ -1921,7 +2756,7 @@ paramdump
 
 *   *database_name*: 파라미터 정보를 출력할 데이터베이스 이름이다.
 
-다음은 **cubrid paramdump**\에서 사용하는 [options]이다.
+다음은 **cubrid paramdump** 에서 사용하는 [options]이다.
 
 .. program:: paramdump
 
@@ -1965,8 +2800,21 @@ HA 명령어
 
 **cubrid genlocale** 유틸리티는 사용하고자 하는 로캘(locale) 정보를 컴파일하는 유틸리티이다. 이 유틸리티는 **make_locale.sh** (Windows는 **.bat**) 스크립트 내에서 실행된다.
 
-**cubrid dumplocale** 유틸리티는 컴파일된 바이너리 로캘 파일을 사람이 읽을 수 있는 형태로 콘솔에 출력한다. 출력 값이 매우 클 수 있으므로, 리다이렉션을 이용하여 특정 파일로 저장할 것을 권장한다.
+**cubrid dumplocale** 유틸리티는 컴파일된 바이너리 로캘(CUBRID 로케일 라이브러리) 파일을 사용자가 읽을 수 있는 형식으로 콘솔에 출력한다. 출력 정보는 리다이렉션(redirection)을 사용해서 저장해 두는 것이 좋다.
 
 **cubrid synccolldb** 유틸리티는 데이터베이스와 로캘 라이브러리 사이의 콜레이션 불일치 여부를 체크하고, 불일치하는 경우 동기화한다.
 
 자세한 사용법은 :ref:`locale-setting` 을 참고한다.
+
+
+타임존 명령어
+-------------
+
+**cubrid gen_tz** 유틸리티는 다음과 같이 두 가지 모드가 있다.:
+
+-   **new** 모드는 tzdata 폴더에 저장된 IANA 타임존 데이터를 C 소스 코드 파일로 컴파일할 때 사용한다.
+    이후 이 파일은 **make_tz.sh** (Linux) / **make_tz.bat** (Windows) 스크립트를 통해 Linux용 .so 공유 라이브러리나 Windows용 .dll 라이브러리로 변환된다.
+-   **extend** 모드는 new 모드와 비슷하지만 타임존 데이터를 다른 버전으로 갱신하고 기존 데이터와의 호환성을 유지하려고 할 때
+    사용하며, 항상 데이터베이스명 인자와 함께 사용한다.  단순히 두 가지  버전의 타임존 데이터를 병합하여 이전 데이터와의 호환성을 유지할 수 없는 경우에는 데이터베이스 테이블의 데이터를 갱신하기 위해 이 모드를 사용한다. Linux에서는 **make_tz.sh -g extend** 를 사용하고 Windows에서는 **make_tz.bat /extend** 를 사용한다.
+
+**cubrid dump_tz** 유틸리티는 컴파일된 CUBRID 타임존 라이브러리 파일을 콘솔에서 사용자가 읽을 수 있는 형식으로 출력한다. 출력 정보는 리다이렉션(redirection)을 사용해서 저장해 두는 것이 좋다.

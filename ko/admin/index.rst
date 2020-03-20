@@ -1,3 +1,7 @@
+
+:meta-keywords: cubrid administrator, cubrid dba, cubrid tools, cubrid utilities, cubrid services, cubrid processes, cubrid config, cubrid troubleshoot
+:meta-description: This manual chapter covers everything needed by database administrators how to use cubrid utilities, how to monitor cubrid systems, how to troubleshoot and how to fix problems.
+
 ***********
 CUBRID 운영
 ***********
@@ -8,7 +12,7 @@ CUBRID 운영
 
 *   **cubrid** 유틸리티를 통해 데이터베이스 생성 및 삭제, 볼륨 추가와 같은 데이터베이스 관리 작업, 데이터베이스를 다른 곳으로 이동하거나 시스템 버전에 맞춰서 변경하는 마이그레이션 작업, 장애 대비를 위한 데이터베이스의 백업 및 복구 작업 등에 대해 설명한다. :doc:`/admin/admin_utils`\를 참조한다.
 
-*   시스템 설정 방법에 대해 설명한다. :doc:`/admin/config`\를 참조한다.
+*   시스템 설정 방법에 대해 설명한다. :doc:`/admin/config` 을 참조한다.
 
 *   실행 중인 프로세스를 동적으로 모니터링하고 추적할 수 있는 SystemTap 사용 방법에 대해 설명한다. :doc:`/admin/systemtap`\을 참조한다.
    

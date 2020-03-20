@@ -1,3 +1,7 @@
+
+:meta-keywords: cubrid php driver, cubrid php api
+:meta-description: CUBRID PHP driver implements an interface to enable access from application in PHP to CUBRID database. CUBRID PHP driver is written based on CCI API.
+
 ************
 PHP 드라이버
 ************
@@ -8,12 +12,14 @@ CUBRID PHP 드라이버는 PHP로 작성한 응용 프로그램에서 CUBRID 데
 
 CUBRID PHP 드라이버는 CCI API를 기반으로 작성되었으므로, CCI API 및 CCI에 적용되는 **CCI_DEFAULT_AUTOCOMMIT** 과 같은 설정 파라미터에 영향을 받는다.
 
-별도로 PHP 드라이버를 다운로드하거나 PHP 드라이버에 대한 최신 정보를 확인하려면 http://www.cubrid.org/wiki_apis/entry/cubrid-php-driver 에 접속한다.
+.. FIXME: 별도로 PHP 드라이버를 다운로드하거나 PHP 드라이버에 대한 최신 정보를 확인하려면 http://www.cubrid.org/wiki_apis/entry/cubrid-php-driver 에 접속한다.
 
 PHP 설치 및 설정
 ================
 
-가장 쉽고 빠르게 응용 프로그램을 시스템에 설치하려면 Ubuntu에 CUBRID와 Apache, PHP를 설치한다. 설치 방법은 http://www.cubrid.org/wiki_apis/entry/install-cubrid-with-apache-and-php-on-ubuntu\ 를 참고한다.
+가장 쉽고 빠르게 응용 프로그램을 시스템에 설치하려면 Ubuntu에 CUBRID와 Apache, PHP를 설치한다. 
+
+.. FIXME: 설치 방법은 http://www.cubrid.org/wiki_apis/entry/install-cubrid-with-apache-and-php-on-ubuntu\ 를 참고한다.
 
 Linux
 -----
@@ -27,7 +33,8 @@ Linux
 **PECL을 이용한 설치**
 
 **PECL** 이 설치되어 있다면, **PECL** 이 소스코드 다운로드 및 컴파일을 수행하므로 다음과 같이 간단하게 CUBRID PHP 드라이버를 설치할 수 있다.
-**PECL** 이 설치되어있지 않다면 http://www.cubrid.org/wiki_apis/entry/installing-cubrid-php-driver-using-pecl\ 을 참고하여 PECL을 설치한다.
+
+.. FIXME: **PECL** 이 설치되어있지 않다면 http://www.cubrid.org/wiki_apis/entry/installing-cubrid-php-driver-using-pecl\ 을 참고하여 PECL을 설치한다.
 
 #.  다음과 같은 명령어를 입력하여 CUBRID PHP 드라이버 최신 버전을 설치한다. 
 
@@ -249,7 +256,7 @@ Linux
     
         <?php phpinfo(); ?>
     
-#.  웹 브라우저로 http://localhost/test.php에 접속하여 다음 내용이 보이는지 확인한다. 다음 내용이 보이면 설치가 완료된 것이다.
+#.  웹 브라우저로 http://localhost/test.php 에 접속하여 다음 내용이 보이는지 확인한다. 다음 내용이 보이면 설치가 완료된 것이다.
 
     +------------+------------+
     | CUBRID     |   Value    |

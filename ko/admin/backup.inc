@@ -217,9 +217,10 @@ backupdb
 
 운영체제의 파일 삭제 명령(rm, del)을 사용하여 보관 로그(archive log)를 임의로 삭제해서는 안 되며, 시스템의 설정, **cubrid backupdb** 유틸리티 또는 서버 프로세스에 의해 보관 로그가 삭제되어야 한다. 보관 로그가 삭제될 수 있는 경우는 다음의 3가지이다.
 
+
 *   HA 환경이 아닌 경우(ha_mode=off)
 
-    **force_remove_log_archives**\ 를 yes(기본값)로 설정하면, 최대 **log_max_archives** 개수만큼만 보관 로그가 유지되고 나머지는 자동으로 삭제된다. 단, 가장 오래된 보관 로그 파일에 액티브한 트랜잭션이 있다면 이 트랜잭션이 종료될 때까지 해당 로그 파일이 삭제되지 않는다.
+    **force_remove_log_archives**  를 yes(기본값)로 설정하면, 최대 **log_max_archives** 개수만큼만 보관 로그가 유지되고 나머지는 자동으로 삭제된다. 단, 가장 오래된 보관 로그 파일에 액티브한 트랜잭션이 있다면 이 트랜잭션이 종료될 때까지 해당 로그 파일이 삭제되지 않는다.
 
 *   HA 환경인 경우(ha_mode=on)
 
@@ -240,7 +241,7 @@ restoredb
 
 데이터베이스 복구는 동일 버전의 CUBRID 환경에서 수행된 백업 작업에 의해 생성된 백업 파일, 활성 로그 및 보관 로그를 이용하여 특정 시점의 데이터베이스로 복구하는 작업이다. 데이터베이스 복구를 진행하려면 **cubrid restoredb** 유틸리티 또는 CUBRID 매니저를 사용한다.
 
-**cubrid restoredb** 유틸리티는 백업이 수행된 이후에 모든 보관 및 활동 로그들에 기록된 정보들을 이용하여 데이터베이스 백업으로부터 데이터베이스를 복구한다. ::
+**cubrid restoredb** 유틸리티는 최종 백업을 수행한 이후 모든 활성 로그와 보관 로그의 정보를 이용해 데이터베이스 백업본으로부터 데이터베이스를 복구한다. ::
 
     cubrid restoredb [options] database_name
 
@@ -352,8 +353,6 @@ restoredb
 
 데이터베이스 서버 시작이나 백업 볼륨 복구 시 서버 에러 로그 또는 restoredb 에러 로그 파일에 로그 회복(log recovery) 시작 시간과 종료 시간에 대한 NOTIFICATION 메시지를 출력하여, 해당 작업의 소요 시간을 확인할 수 있다. 해당 메시지에는 적용(redo)해야할 로그의 개수와 로그 페이지 개수가 함께 기록된다. 
 
-NOTIFICATION 메시지를 출력하려면 cubrid.conf의 error_log_level 파라미터의 값을 NOTIFICATION 으로 지정해야 한다. 
-    
 :: 
   
     Time: 06/14/13 21:29:04.059 - NOTIFICATION *** file ../../src/transaction/log_recovery.c, line 748 CODE = -1128 Tran = -1, EID = 1 

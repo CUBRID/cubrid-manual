@@ -1,3 +1,7 @@
+
+:meta-keywords: cubrid syntax, database syntax
+:meta-description: Syntax rules for writing SQL queries in CUBRID database
+
 *********
 작성 규칙
 *********

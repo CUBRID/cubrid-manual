@@ -1,3 +1,7 @@
+
+:meta-keywords: cubrid logging, slow query, error log, deadlock detect, cubrid fail-over, cubrid fail-back
+:meta-description: Troubleshoot CUBRID database and High Availability nodes by consulting logs.
+
 **********
 트러블슈팅
 **********
@@ -51,10 +55,11 @@ CAS 정보 출력 함수
 CUBRID는 응용 프로그램-브로커-DB 서버의 3 계층 구조로 되어 있기 때문에, 슬로우 쿼리(slow query) 발생 시 원인이 응용 프로그램-브로커 구간에 있는지 브로커-DB 서버 구간에 있는지 파악하기 위해 응용 프로그램 로그 또는 브로커 응용 서버(CAS)의 SQL 로그를 확인해야 한다. 
 
 응용 프로그램 로그에는 슬로우 쿼리가 출력되었는데 CAS의 SQL 로그에는 해당 질의가 슬로우 쿼리로 출력되지 않았다면, 응용 프로그램-브로커 사이에서 속도가 저하된 원인이 존재할 것이다. 
+
 몇가지 예는 다음과 같다. 
  
 *   응용 프로그램-브로커 사이에서 네트워크 통신 속도가 저하되었는지 확인해 본다. 
-*   브로커 로그($CUBRID/log/broker 디렉터리 이하에 존재)에 기록되는 정보를 통해 CAS가 재시작된 경우가 있는지 확인한다. CAS 개수가 부족한 것으로 파악되면 CAS 개수를 늘리는데, 이를 위해 cubrid_broker.conf의 :ref:`MAX_NUM_APPL_SERVER <max-num-appl-server>`\ 값을 적절히 늘려야 한다. 이와 함께 cubrid.conf의 :ref:`max_clients <max_clients>` 값도 늘리는 것을 고려해야 한다. 
+*   브로커 로그( **$CUBRID/log/broker** 디렉터리 이하에 존재)에 기록되는 정보를 통해 CAS가 재시작된 경우가 있는지 확인한다. CAS 개수가 부족한 것으로 파악되면 CAS 개수를 늘리는데, 이를 위해 cubrid_broker.conf의 :ref:`MAX_NUM_APPL_SERVER <max-num-appl-server>`\ 값을 적절히 늘려야 한다. 이와 함께 cubrid.conf의 :ref:`max_clients <max_clients>` 값도 늘리는 것을 고려해야 한다. 
 
 응용 프로그램 로그와 CAS의 SQL 로그에 둘 다 슬로우 쿼리로 출력되고 둘 사이에 해당 질의의 수행 시간 차이가 거의 없다면, 브로커-DB 서버 사이에서 속도가 저하된 원인이 존재할 것이다. 한 예로, DB 서버에서 질의를 처리하는데 시간이 걸렸을 것이다. 
 
@@ -87,40 +92,16 @@ CUBRID는 응용 프로그램-브로커-DB 서버의 3 계층 구조로 되어 �
 서버 에러 로그
 ==============
 
-cubrid.conf의 error_log_level 파라미터의 설정에 따라 서버 에러 로그에서 다양한 정보를 얻을 수 있다. error_log_level 파라미터의 기본값은 ERROR이다. NOTIFICATION 메시지를 출력하려면 cubrid.conf의 error_log_level 파라미터의 값을 NOTIFICATION으로 지정해야 한다. 관련 파라미터 설정 방법은 :ref:`error-parameters`\ 를 참고한다.
+cubrid.conf에서 **error_log_level** 을 설정해서 서버 오류 로그로부터 다양한 정보를 얻을 수 있다. **error_log_level** 의 기본값은 **NOTIFICATION** 이다. 이 파라미터를 설정하는 방법은 :ref:`error-parameters` 를 참고한다.
 
 .. 4957
-
-인덱스와 데이터 사이의 불일치 감지
-----------------------------------
-
-인덱스와 데이터 사이의 불일치가 감지되는 경우 트랜잭션의 격리 수준(isolation level)에 따라 에러일 수도 있고, 에러인지 불확실할 수도 있다.
-
-cubrid.conf의 isolation_level 파라미터가 1 또는 3으로서, UNCOMMITTED INSTANCE를 허용하는 경우 인덱스와 데이터가 순간적으로 불일치할 수 있다. 따라서 이러한 경우를 서버 에러 로그에 출력하려면 cubrid.conf의 error_log_level 파라미터의 값이 NOTIFICATION이어야 한다. 출력되는 메시지는 다음과 같다.
-
-::
-
-    ----  database server error log
-    Time: 03/15/11 15:20:31.804 - NOTIFICATION *** CODE = -545, Tran = 1, CLIENT = cdbs034.cub:csql(3926), EID = 3
-    Internal error: INDEX u_foo_i ON CLASS foo (CLASS_OID: 0|550|8). Key and OID: 0|600|16 entry on B+tree: 0|209|590 is incorrect. The object does not exist.
-
-cubrid.conf의 isolation_level 파라미터가 2 또는 4 이상의 값으로서, COMMITTED INSTANCE만 허용하는 경우 인덱스와 데이터가 불일치하면 안 된다. 따라서 이러한 경우를 서버 에러 로그에 출력하려면 cubrid.conf의 error_log_level 파라미터의 값이 ERROR여야 한다. 출력되는 메시지는 다음과 같다.
-
-::
-
-    ----  database server error log
-    Time: 03/15/11 15:14:35.907 - ERROR *** ERROR CODE = -545, Tran = 1, CLIENT = cdbs034.cub:csql(3776), EID = 1
-    Internal error: INDEX u_foo_i ON CLASS foo (CLASS_OID: 0|550|8). Key and OID: 0|600|2 entry on B+tree: 0|209|590 is incorrect. The object does not exist.
-    
-    ---- client error log
-    ERROR: Internal error: INDEX u_foo_i ON CLASS foo (CLASS_OID: 0|550|8). Key and OID: 0|600|2 entry on B+tree: 0|209|590 is incorrect. The object does not exist.
 
 .. 10703 
 
 오버플로우 키 또는 오버플로우 페이지 감지
 -----------------------------------------
 
-오버플로우 키나 오버플로우 페이지가 발생하면 서버 에러 로그 파일에 NOTIFICATION 메시지를 출력한다. 사용자는 이 메시지를 통해 오버플로우 키 또는 오버플로우 페이지로 인해 DB 성능이 느려졌음을 감지할 수 있다. 가능하다면 오버플로우 키나 오버플로우 페이지가 발생하지 않도록 하는 것이 좋다. 즉, 크기가 큰 칼럼에 인덱스를 사용하지 않는 것이 좋으며, 레코드의 크기를 너무 크게 잡지 않는 것이 좋다.
+오버플로우 키나 오버플로우 페이지가 발생하면 서버 에러 로그 파일에 **NOTIFICATION** 메시지를 출력한다. 사용자는 이 메시지를 통해 오버플로우 키 또는 오버플로우 페이지로 인해 DB 성능이 느려졌음을 감지할 수 있다. 가능하다면 오버플로우 키나 오버플로우 페이지가 발생하지 않도록 하는 것이 좋다. 즉, 크기가 큰 칼럼에 인덱스를 사용하지 않는 것이 좋으며, 레코드의 크기를 너무 크게 잡지 않는 것이 좋다.
 
 ::
 
@@ -140,7 +121,7 @@ cubrid.conf의 isolation_level 파라미터가 2 또는 4 이상의 값으로서
 로그 회복 시간 감지
 -------------------
 
-DB 서버 시작이나 백업 볼륨 복구 시 서버 에러 로그 또는 restoredb 에러 로그 파일에 로그 회복(log recovery) 시작 시간과 종료 시간에 대한 NOTIFICATION 메시지를 출력하여, 해당 작업의 소요 시간을 확인할 수 있다. 해당 메시지에는 적용(redo)해야할 로그의 개수와 로그 페이지 개수가 함께 기록된다. 
+DB 서버 시작이나 백업 볼륨 복구 시 서버 에러 로그 또는 restoredb 에러 로그 파일에 로그 회복(log recovery) 시작 시간과 종료 시간에 대한 **NOTIFICATION** 메시지를 출력하여, 해당 작업의 소요 시간을 확인할 수 있다. 해당 메시지에는 적용(redo)해야할 로그의 개수와 로그 페이지 개수가 함께 기록된다. 
 
 :: 
   
@@ -155,30 +136,23 @@ DB 서버 시작이나 백업 볼륨 복구 시 서버 에러 로그 또는 rest
 교착 상태 감지
 --------------
 
-cubrid.conf의 error_log_level 시스템 파라미터의 값이 NOTIFICATION일 때 교착 상태(deadlock)가 발생하면 서버 에러 로그 파일에 잠금 관련 정보를 기록한다.
-
-다음의 에러 로그 파일 정보에서 (1)은 교착상태를 유발한 테이블 이름을, (2)는 인덱스 이름을 나타낸다.
+교착 상태 관련 잠금 정보는 서버 오류 로그에 기록된다.
 
 ::
 
-    demodb_20111102_1811.err
+    demodb_20160202_1811.err
     
           ...
-          
-         OID = -532| 520| 1
-    (1) Object type: Index key of class ( 0| 417| 7) = tbl.
-         BTID = 0| 123| 530
-    (2) Index Name : i_tbl_col1
-         Total mode of holders = NS_LOCK, Total mode of waiters = NULL_LOCK.
-         Num holders= 1, Num blocked-holders= 0, Num waiters= 0
-         LOCK HOLDERS:
-        Tran_index = 2, Granted_mode = NS_LOCK, Count = 1
-        ...
 
+    Your transaction (index 1, public@testhost|csql(21541)) timed out waiting on    X_LOCK lock on instance 0|650|3 of class t because of deadlock. You are waiting for user(s) public@testhost|csql(21529) to finish.
+
+          ...
+
+  
 HA 상태 변경 감지 
 ================= 
   
-HA 상태 변경은 cub_master 프로세스의 로그 파일에서 확인할 수 있다. 로그 파일은 $CUBRID/log 디렉터리에 <host_name>.cub_master.err 이름으로 저장된다. 
+HA 상태 변경은 cub_master 프로세스의 로그 파일에서 확인할 수 있다. 로그 파일은 **$CUBRID/log** 디렉터리에 *<host_name>.cub_master.err* 이름으로 저장된다. 
   
 HA split-brain 감지 
 ------------------- 
@@ -211,7 +185,7 @@ Fail-over, Fail-back 감지
   
 Fail-over 혹은 Fail-back이 발생하면 노드는 역할을 변경하게 된다. 
   
-fail-over 후 마스터로 변경되는 노드 혹은 fail-back 후 슬레이브로 변경되는 노드의 cub_master 로그 파일은 다음과 같이 노드 정보를 포함한다. 
+Fail-over 후 마스터로 변경되는 노드 혹은 Fail-back 후 슬레이브로 변경되는 노드의 cub_master 로그 파일은 다음과 같이 노드 정보를 포함한다. 
   
 :: 
   
@@ -230,7 +204,7 @@ fail-over 후 마스터로 변경되는 노드 혹은 fail-back 후 슬레이브
     testhost01 1 unknown 32767 0 
     ================================================================================ 
   
-위의 예는 fail-over로 인해 testhost02 서버가 슬레이브에서 마스터로 역할을 변경하는 도중 cub_master 로그에 출력하는 정보이다. 
+위의 예는 Fail-over로 인해 testhost02 서버가 슬레이브에서 마스터로 역할을 변경하는 도중 cub_master 로그에 출력하는 정보이다. 
 
 HA 구동 실패
 ============
@@ -243,14 +217,16 @@ HA 구동 실패
 
 *   서버의 복구에 실패한 경우
 
-이와 같이 복제 볼륨의 자동 복구가 불가능한 경우 "cubrid heartbeat start" 명령 수행에 실패하는데, 각각의 경우에 맞게 조치한다.
+이와 같이 복제 볼륨의 자동 복구가 불가능한 경우 **"cubrid heartbeat start"** 명령 수행에 실패하는데, 각각의 경우에 맞게 조치한다.
+
 
 대표적인 복구 불가능 장애
 -------------------------
 
-사용자의 개입 없이 자동으로 복제되는 DB 볼륨의 복구가 불가능한 경우 중 서버 프로세스가 원인인 경우는 워낙 다양하므로 설명을 생략하며, copylogdb 또는 applylogdb 프로세스가 원인인 경우 에러 메시지는 다음과 같다.
+사용자의 개입 없이 자동으로 복제되는 DB 볼륨의 복구가 불가능한 경우 중 서버 프로세스가 원인인 경우는 워낙 다양하므로 설명을 생략한다
+**copylogdb** 또는 **applylogdb** 프로세스가 원인인 경우 에러 메시지는 다음과 같다.
 
-*   copylogdb가 원인인 경우
+*   **copylogdb** 가 원인인 경우
 
     +------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
     | 원인                                                       |  에러 메시지                                                                                     |
@@ -260,7 +236,7 @@ HA 구동 실패
     | 이전 복사되던 DB와 다른 DB의 로그로 판단됨                 | Log \"/home1/cubrid/DB/tdb01_cdbs037.cub/tdb01_lgat\" does not belong to the given database.     |
     +------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
 
-*   applylogdb가 원인인 경우
+*   **applylogdb** 가 원인인 경우
 
     +------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
     | 원인                                                       |  에러 메시지                                                                                     |
@@ -271,6 +247,7 @@ HA 구동 실패
     +------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
     | db_ha_apply_info 카탈로그와 현재 복제 로그의 DB 생성       | HA generic: Failed to initialize db_ha_apply_info.                                               |
     | 시간이 다름. 즉, 이전 반영하던 복제 로그가 아님            |                                                                                                  |
+    |                                                            |                                                                                                  |
     +------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
     | 데이터베이스 로캘이 다름                                   | Locale initialization: Active log file(/home1/cubrid/DB/tdb01_cdbs037.cub/tdb01_lgat) charset    |
     |                                                            | is not valid (iso88591), expecting utf8.                                                         |

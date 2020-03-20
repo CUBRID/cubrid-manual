@@ -1,3 +1,7 @@
+
+:meta-keywords: cubrid partition, partitioning key, range partition, hash partition, list partition, partition pruning
+:meta-description: Partitioning is a method by which a table is divided into multiple independent physical units called partitions. In CUBRID, each partition is a table implemented as a subclass of the partitioned table.
+
 ****
 분할
 ****

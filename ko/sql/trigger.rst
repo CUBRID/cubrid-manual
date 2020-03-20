@@ -1,3 +1,7 @@
+
+:meta-keywords: cubrid trigger, database trigger, trigger condition, trigger action, trigger debugging, trigger example
+:meta-description: CUBRID trigger definition, manipulation and mechanics.
+
 ******
 트리거
 ******
@@ -330,12 +334,13 @@ CREATE TRIGGER
 
 .. code-block:: sql
 
-	SELECT name, comment FROM db_trigger;
-	SELECT trigger_name, comment FROM db_trig;
+	SELECT name, comment FROM db_trigger;
+	SELECT trigger_name, comment FROM db_trig;
 
 또는 CSQL 인터프리터에서 스키마를 출력하는 ;sc 명령으로 트리거의 커멘트를 확인할 수 있다.
 
-::
+.. code-block:: sql
+
     $ csql -u dba demodb
     
     csql> ;sc tbl

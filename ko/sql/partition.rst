@@ -1,3 +1,12 @@
+
+:meta-keywords: cubrid partition, partitioning key, range partition, hash partition, list partition, partition pruning
+:meta-description: Partitioning is a method by which a table is divided into multiple independent physical units called partitions. In CUBRID, each partition is a table implemented as a subclass of the partitioned table.
+
+
+****
+분할
+****
+
 .. _partitioning-key:
 
 분할 키
@@ -44,6 +53,8 @@
     *   :c:macro:`USER` 
     *   :ref:`PRIOR <prior-operator>` 
     *   :func:`WIDTH_BUCKET`
+*       각각의 고유 인덱스 키 또는  기본 키는 분할 키를 포함해야 한다.  이에 대한 자세한 내용은 :ref:`여기<index-partitions>` 를 참고한다.
+*       분할 표현식의 길이는 1024바이트를 초과하면 안 된다.
 
 .. _range-partitioning:
 
@@ -237,7 +248,8 @@
 
 또는 CSQL 인터프리터에서 테이블의 스키마를 출력하는 ;sc 명령으로 인덱스의 커멘트를 확인할 수 있다.
 
-::
+.. code-block:: sql
+
     $ csql -u dba demodb
     
     csql> ;sc tbl
@@ -532,7 +544,9 @@
     
     INSERT INTO t VALUES(1), (2), (3), (4), (5), (6);
     
-테이블 *t*\의 스키마와 데이터는 다음과 같다. ::
+테이블 *t* 의 스키마와 데이터는 다음과 같다.
+
+.. code-block:: sql
 
     csql> ;schema t
     === <Help: Schema of a Class> ===
@@ -561,7 +575,9 @@
 
     ALTER TABLE t PROMOTE PARTITION p0, p2;
 
-승격(promotion) 이후, 테이블 *t*\는 *p1*\이라는 하나의 분할만 포함하며 다음 데이터를 유지한다. ::
+승격(promotion) 이후, 테이블 *t*\는 *p1*\이라는 하나의 분할만 포함하며 다음 데이터를 유지한다.
+
+.. code-block:: sql
 
     csql> ;schema t
     === <Help: Schema of a Class> ===
@@ -580,76 +596,76 @@
                 3
                 4         
 
+.. _index-partitions:
+
 분할 테이블의 인덱스
 ====================
 
-분할 테이블에서 생성되는 인덱스는 로컬 인덱스 또는 글로벌 인덱스로 구분된다. 글로벌 인덱스는 모든 분할들의 데이터를 포함하는 하나의 인덱스를 유지하지만, 로컬 인덱스는 각 분할마다 독자적으로 하나의 인덱스를 유지한다. 분할 테이블에 인덱스를 생성할 때, 로컬 인덱스가 될 것인지 혹은 글로벌 인덱스가 될 것인지는 다음 규칙에 따라 시스템이 결정한다.
+분할 테이블에서 생성되는 모든 인덱스는 로컬 인덱스이다. 로컬 인덱스의 경우 각 분할에 대한 데이터가 별도의(로컬) 인덱스로 저장된다. 다른 분할의 데이터에 액세스하는 트랜잭션이 다른 로컬 인덱스에도 액세스하므로 분할 테이블 인덱스의 동시성을 향상시킨다.
 
-*   모든 기본 키는 글로벌 인덱스이다.
-*   모든 외래 키는 로컬 인덱스이다.
-*   모든 비고유 인덱스는 로컬 인덱스이다.
-*   고유 인덱스는 분할 키가 고유 인덱스에 속하면 로컬 인덱스이고, 그렇지 않으면 글로벌 인덱스이다.
+고유 인덱스를 생성할 때 다음 제약 사항을 충족해야 한다.
 
-다음 예는 시스템이 로컬 인덱스와 글로벌 인덱스를 결정하는 방법이다.
+*  고유 인덱스 키 또는  기본 키는 분할 키를 포함해야 한다.
+
+이를 충족하지 않으면 CUBRID에서 오류가 반환된다.
 
 .. code-block:: sql
-    
-    CREATE TABLE t(i INTEGER, j INTEGER k INTEGER)
-    PARTITION BY HASH(i) PARTITIONS 5;
-    
-    -- pk_t_i is global because it is a primary key
-    ALTER TABLE t ADD CONSTRAINT pk_t_i PRIMARY KEY(i);
-    
-    -- i_t_j and i_t_j_k are local indexes
-    CREATE INDEX i_t_j ON t(j);
-    CREATE INDEX i_t_j_k ON t(j, k);
-    
-    -- u_t_i_j is a local index because the partitioning key (i) is part of the index definition
-    CREATE UNIQUE INDEX u_t_i_j ON t(i, j);
-    
-    -- u_t_j_k is a global index because the partitioning key (i) is not part of the index definition
-    CREATE UNIQUE INDEX u_t_j_k ON t(j, k);
 
-가능한 한 최대로 로컬 인덱스를 정의하는 것이 성능상 중요하다. 시스템은 글로벌 인덱스를 사용하여 여러 개의 분할을 함께 스캔할 수 있도록 인덱스 스캔을 최적화하지는 않는다. 글로벌 인덱스 스캔 시에 프루닝되지 않은 각 분할에 대해 별개의 인덱스 스캔이 수행된다. 글로벌 인덱스를 통해 각 분할을 접근하는 과정에서 다른 분할에 속한 데이터 또한 디스크에서 읽게 되기 때문에 로컬 인덱스 스캔보다 좋지 못한 성능을 보인다. **INSERT** 문도 또한 로컬 인덱스가 더 작기 때문에 로컬 인덱스에서 더 나은 성능을 보인다.
+        csql> CREATE TABLE t(i INT , j INT) PARTITION BY HASH (i) PARTITIONS 4;
+        Execute OK. (0.142929 sec) Committed.
+
+        1 command(s) successfully processed.
+        csql> ALTER TABLE t ADD PRIMARY KEY (i);
+        Execute OK. (0.123776 sec) Committed.
+
+        1 command(s) successfully processed.
+        csql> CREATE UNIQUE INDEX idx2 ON t(j);
+
+        In the command from line 1,
+
+        ERROR: Partition key attributes must be present in the index key.
+
+
+        0 command(s) successfully processed.
+
+로컬 인덱스의 이점을 이해하는 것이 중요하다. 글로벌 인덱스 스캔의 경우 프루닝(pruning)되지 않은 분할에 대해 각각 별도의 인덱스 스캔이 수행된다. 디스크에서 다른 분할에 있는 데이터(지금 스캔 중인 분할이 아닌 다른 분할에 속한 데이터)를 가져온 다음 버리기 때문에 로컬 인덱스 스캔보다 성능이 저하된다. **INSERT** 질의문도 글로벌 인덱스보다 크기가 더 작은 로컬 인덱스에서 향상된 성능을 보인다.
 
 .. _partitioning-notes:
 
-분할 시 참고 사항
-=================
+분할에 관한 노트
+================
 
-분할 테이블은 일반적으로 일반 테이블처럼 동작한다. 그러나 테이블을 분할하여 얻는 이점을 충분히 활용하기 위해 고려해야 할 몇 가지 유의 사항이 있다. 
+분할된 테이블은 일반적인 테이블 처럼 정상적으로 동작한다. 하지만 분할된 테이블의 장점을 충분히 살리기 위해서 적용을 고려해야하는 노트가 있다.
 
-분할 테이블의 통계 정보
+분할 테이블에 관한 통계
 -----------------------
 
-CUBRID 9.0 버전부터는 **ALTER** 문의 **ANALYZE PARTITION** 절은 더 이상 동작하지 않는다(deprecated). 분할 프루닝이 질의 실행 중에 발생하므로 이 구문을 수행하더라도 얻을 수 있는 효과가 전혀 없기 때문에, 9.0 버전부터는 아무런 동작을 수행하지 않는다. 9.0부터 각 분할에 각각의 통계 정보가 유지된다. 분할 테이블의 통계 정보는 분할들의 통계 정보의 평균 값으로 계산된다.
+CUBRID 9.0에서 부터, **ALTER** 문의 **ANALYZE PARTITION** 절은 더 이상 사용되지 않는다. 질의를 수행하는 동안 분할을 잘라내는 것이 발생하고, 이러한 경우 이 문은 유용한 결과를 생산하지 못한다. 9.0에서 부터, CUBRID는 각 분할에 대한 통계를 분리 유지한다. 분할된 테이블의 통계는 각 분할에 대한 통계의 평균 값으로 계산된다. 이것은 일상적인 경우의 최적화, 하나를 제외하고 모든 분할이 제거된 분할에 대한 질의, 등을 위해서 진행되었다.
 
-분할 테이블 제약 사항
----------------------
+분할된 테이블에 대한 제약들
+---------------------------
 
-분할 테이블에 다음과 같은 제약 사항이 존재한다.
+다음의 제약이 분할된 테이블에 적용된다:
 
-*   한 테이블이 가질 수 있는 최대 분할 개수는 1,024이다.
+*   하나의 테이블에 대해서 최대 1,024 까지의 분할이 정의될 수있다.
 
-*   분할들은 상속(inheritance) 관계의 일부가 될 수 없다. 클래스는 분할을 상속할 수 없으며, 분할은 다른 클래스를 상속할 수 없다. 
+*   분할은 상속 체인의 부분이 될 수 없다. 클래스는 하나의 분할을 상속할 수 없고, 분할은 분할된 클래스(기본으로 상속한다)를 제외한 다른 클래스를 상속할 수 없다. 
 
-*   다음 질의 최적화는 분할 테이블에서 수행되지 않는다.
+*   다음의 질의 최적화는 분할된 테이블에 대해서 수행되지 않는다:
 
-    *   ORDER BY 절 최적화(:ref:`order-by-skip-optimization` 참고)
-    *   GROUP BY 절 최적화(:ref:`group-by-skip-optimization` 참고)
-    *   다중 키 범위 최적화(:ref:`multi-key-range-opt` 참고)
+    *   ORDER BY skip (for details, see :ref:`order-by-skip-optimization`)
+    *   GROUP BY skip (for details, see :ref:`group-by-skip-optimization`)
+    *   Multi-key range optimization (for details, see :ref:`multi-key-range-opt`)
     *   INDEX JOIN
-
-    .. 7583: 분할 테이블에서 인덱스 스킵 스캔이 수행됨
 
 분할 키와 문자셋, 콜레이션
 --------------------------
 
-분할 키 값과 분할 정의는 같은 문자셋을 가져야 한다. 따라서 아래와 같은 경우는 오류를 반환한다.
+분할하는 키들과 분할의 정의는 같은 문자셋이어야 한다. 아래의 질의는 오류를 반환한다:
 
 .. code-block:: sql
 
-    CREATE TABLE t (c CHAR(50) COLLATE utf8_bin) 
+    CREATE TABLE t (c CHAR(50) COLLATE utf8_bin)
     PARTITION BY LIST (c) (
         PARTITION p0 VALUES IN (_utf8'x'),
         PARTITION p1 VALUES IN (_iso88591'y')
@@ -659,22 +675,22 @@ CUBRID 9.0 버전부터는 **ALTER** 문의 **ANALYZE PARTITION** 절은 더 이
 
     ERROR: Invalid codeset '_iso88591' for partition value. Expecting '_utf8' codeset.
 
-분할 키에서 비교 작업을 수행할 때 분할 테이블에 정의된 콜레이션을 사용한다. 다음 예제에서  utf8_en_ci 콜레이션의 'test'는 'TEST'와 같으므로 오류를 반환한다.
+분할 키에서 비교 작업을 수행할 때 분할 테이블에 정의된 콜레이션을 사용한다. 다음 예제에서 utf8_en_ci 콜레이션의 'test'는 'TEST'와 같으므로 오류를 반환한다.
 
 .. code-block:: sql
 
-    CREATE TABLE tbl (str STRING) COLLATE utf8_en_ci 
+    CREATE TABLE tbl (str STRING) COLLATE utf8_en_ci
     PARTITION BY LIST (str) (
-        PARTITION p0 VALUES IN ('test'), 
+        PARTITION p0 VALUES IN ('test'),
         PARTITION p1 VALUES IN ('TEST')
     );
-    
+
 ::
 
     ERROR: Partition definition is duplicated. 'p1'
 
-.. CUBRIDSUS-10161 : 해시 분할 테이블에서 분할 키의 콜레이션은 바이너리여야 했던 9.1의 제약 사항이 없어짐. (이하는 커멘트 처리)
+.. CUBRIDSUS-10161 : below constraints of 9.1 was removed from 9.2. (below will be commented)
 
-    해시 분할 테이블에서 분할 키의 콜레이션은 바이너리여야 한다.
-        *   바이너리 콜레이션의 예: utf8_bin, iso88591_bin, euckr_bin
-        *   바이너리가 아닌 콜레이션의 예: utf8_de_exp_ai_ci
+    For hash-partitioned tables, the collation of the partitioning key must be binary.
+        *   e.g. of binary collation: utf8_bin, iso88591_bin, euckr_bin
+        *   e.g. of non-binary collation: utf8_de_exp_ai_ci

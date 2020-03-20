@@ -1,3 +1,7 @@
+
+:meta-keywords: uninstall cubrid linux, uninstall cubrid windows.
+:meta-description: Uninstalling CUBRID in Linux and Windows.
+
 .. _uninstall:
 
 CUBRID 제거
@@ -63,7 +67,7 @@ RPM 패키지로 설치했다면 rpm 명령을 통해 제거가 가능하다.
     ::
     
         $ rpm -q cubrid
-        cubrid-9.2.0.0123-el5.x86_64
+        cubrid-10.1.0.7663-1ca0ab8-Linux.x86_64
 
         $ rpm -e cubrid
         warning: /opt/cubrid/conf/cubrid.conf saved as /opt/cubrid/conf/cubrid.conf.rpmsave

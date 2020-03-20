@@ -1,8 +1,12 @@
+
+:meta-keywords: csql, cubrid csql, cubrid commands, executing csql, csql options
+:meta-description: CUBRID CSQL is an application that allows users to use SQL statements through a command-driven interface. This section briefly explains how to use the CSQL Interpreter and associated commands.
+
 ***************
 CSQL 인터프리터
 ***************
 
-CUBRID에서 SQL 문을 실행하는 방법은 GUI(Graphical User Interface) 기반의 `CUBRID Query Browser <http://www.cubrid.org/wiki_tools/entry/cubrid-query-browser>`_\ 를 이용하거나, 콘솔 기반의 CSQL 인터프리터를 이용하는 것이다.
+CUBRID에서 SQL 질의문을 수행하려면 그래픽 사용자 인터페이스(GUI) 기반 CUBRID Manager나 콘솔 기반 CSQL 인터프리터를 사용해야 한다.
 
 CSQL은 CUBRID에서 명령어 방식으로 SQL 문을 사용할 수 있는 프로그램이다. 여기에서는 CSQL 인터프리터의 간단한 사용법과 관련 명령어를 설명한다.
 
@@ -99,7 +103,7 @@ CSQL 시작 옵션
 
     $ csql
     A database-name is missing.
-    interactive SQL utility, version 9.1
+    interactive SQL utility, version 10.1
     usage: csql [OPTION] database-name[@host]
 
     valid options:
@@ -205,10 +209,16 @@ CSQL 시작 옵션
 
         1 rows selected. (0.006433 sec) Committed.
 
- 
+.. option:: -r, --read-only
+
+    **-r** 옵션을 이용하여 읽기 전용으로 데이터베이스에 접속한다. 데이터베이스에 읽기 전용으로 접속하면 테이블을 만들거나 데이터를 입력할 수 없고 데이터를 조회만 할 수 있다. ::
+
+        csql -r demodb
+
 .. option:: -t, --plain-output
  
-    스크립트에서 사용이 용이하도록 칼럼 이름과 데이터만 출력한다. **-c** 또는 **-i** 옵션과 함께 사용할 때만 유효하다. 각 칼럼의 이름과 데이터는 탭으로 구분하며, 내용에 포함된 줄바꿈, 탭, 백슬래시는 각각 \n, \t, \\으로 대체한다. 단, **-l** 옵션이 있는 경우에는 이 옵션이 무시된다. 
+    컬럼명과 값만 표시되며 **-c** 또는 **-i** 옵션과 함께 작동된다. 각 컬럼과 값이 탭과 줄 바꿈으로 구분되며, 결과에 포함된 탭과 백슬래시는 '\n', '\t' 및 '\\'으로 각각 대체된다. 이 옵션은 **-l** 옵션과 함께 지정된 경우에는 무시된다.
+
     ::
     
         $ csql testdb@localhost -c "select * from test_tbl" -t
@@ -227,7 +237,7 @@ CSQL 시작 옵션
  
 .. option:: -N, --skip-column-names
  
-    결과 출력 시 칼럼 이름을 출력하지 않는다. **-c** 또는 **-i** 옵션과 함께 사용할 때만 유효하며, 보통 **-t** 옵션과 함께 사용된다. 단, **-l** 옵션이 있는 경우에는 이 옵션이 무시된다.
+    결과에서 컬럼명을 숨긴다. **-c** 또는 **-i** 옵션을 사용하는 경우에만 작동하며 일반적으로 **-t** 옵션과 함께 사용된다. 이 옵션은 **-l** 옵션과 함께 지정된 경우에는 무시된다.
  
     ::
  
@@ -243,12 +253,6 @@ CSQL 시작 옵션
         string8 12:16:10.090 PM 10/23/2014
         string9 12:16:10.090 PM 10/23/2014
         string10 12:16:10.090 PM 10/23/2014
-
-.. option:: -r, --read-only
-
-    **-r** 옵션을 이용하여 읽기 전용으로 데이터베이스에 접속한다. 데이터베이스에 읽기 전용으로 접속하면 테이블을 만들거나 데이터를 입력할 수 없고 데이터를 조회만 할 수 있다. ::
-
-        csql -r demodb
 
 .. option:: --no-auto-commit
 
@@ -547,7 +551,8 @@ CSQL 인터프리터에서 작업 중인 데이터베이스 이름 및 호스트
 **문자열 타입과 비트 타입 칼럼의 출력 길이 지정(;STring-width)** 
 
 문자열 타입과 비트 타입 칼럼의 출력 길이를 제한하기 위해서 사용할 수 있다. 
-;ST 뒤에 값을 주지 않으면 현재의 출력 길이를 보여준다. 값이 0이면, 해당 칼럼의 값을 모두 출력한다. 값이 0보다 크다면, 해당 길이만큼 칼럼의 값을 출력한다.
+
+**;string-width** 뒤에 값을 주지 않으면 현재의 출력 길이를 보여준다. 값이 0이면, 해당 칼럼의 값을 모두 출력한다. 값이 0보다 크다면, 해당 길이만큼 칼럼의 값을 출력한다.
 
 ::
 
@@ -603,10 +608,10 @@ CSQL 인터프리터에서 작업 중인 데이터베이스 이름 및 호스트
  
     ;trace {on | off} [{text | json}]
  
-*   on: SQL 트레이스를 on한다.
-*   off: SQL 트레이스를 off한다.
-*   text: 일반 TEXT 형식으로 출력한다. OUTPUT 이하 절을 생략하면 일반 TEXT 형식으로 출력한다.
-*   json: JSON 형식으로 출력한다.
+*   **on**: SQL 트레이스를 on한다.
+*   **off**: SQL 트레이스를 off한다.
+*   **text**: 일반 TEXT 형식으로 출력한다. OUTPUT 이하 절을 생략하면 일반 TEXT 형식으로 출력한다.
+*   **json**: JSON 형식으로 출력한다.
 
 .. note:: 독립 모드(-S 옵션 사용)로 실행한 CSQL 인터프리터는 SQL 트레이스 기능을 지원하지 않는다.
 
@@ -618,7 +623,7 @@ CSQL 인터프리터에서 작업 중인 데이터베이스 이름 및 호스트
     *** Lock Table Dump ***
      Lock Escalation at = 100000, Run Deadlock interval = 1
     Transaction (index  0, unknown, unknown@unknown|-1)
-    Isolation REPEATABLE CLASSES AND READ UNCOMMITTED INSTANCES
+    Isolation COMMITTED READ 
     State TRAN_ACTIVE
     Timeout_period -1
     ......
@@ -638,8 +643,7 @@ CSQL 인터프리터에서 작업 중인 데이터베이스 이름 및 호스트
 
 참고로, DB 서버의 모든 질의 실행 통계 정보를 확인하기 위해서는 **cubrid statdump** 유틸리티를 사용해야 한다.
 
-다음 예제는 현재 연결에 대한 서버 실행 통계 정보를 확인하는 예제이다.
-출력되는 통계 정보 항목 또는 **cubrid statdump**\ 에 대한 설명은 :ref:`statdump`\ 을 참고한다.
+다음 예제는 현재 연결에 대한 서버 실행 통계 정보를 확인하는 예제이다.  출력되는 통계 정보 항목 또는 **cubrid statdump**\ 에 대한 설명은 :ref:`statdump`\ 을 참고한다.
 
 ::
 

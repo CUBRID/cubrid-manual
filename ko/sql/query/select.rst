@@ -1,3 +1,8 @@
+
+:meta-keywords: select statement, select from clause, select where clause, group by, having clause, limit clause, join query, subquery, select for update
+:meta-description: The SELECT statement specifies columns that you want to retrieve from a table.
+
+
 ******
 SELECT
 ******
@@ -29,7 +34,7 @@ SELECT
                                     ]
      
     <table_specification> ::=
-        <single_table_spec> [<correlation>] [WITH (<lock_hint>)] |
+        <single_table_spec> [<correlation>] |
         <metaclass_specification> [ <correlation> ] |
         <subquery> <correlation> |
         TABLE ( <expression> ) <correlation>
@@ -43,8 +48,8 @@ SELECT
      
     <join_table_specification> ::=
         {
-            [INNER | {LEFT | RIGHT} [OUTER]] JOIN | 
-            STRAIGHT_JOIN
+            [INNER | {LEFT | RIGHT} [OUTER]] JOIN 
+
         } <table_specification> ON <search_condition>
      
     <join_table_specification2> ::= 
@@ -53,7 +58,6 @@ SELECT
             NATURAL [ LEFT | RIGHT ] JOIN 
         } <table_specification>
     
-    <lock_hint> ::= READ UNCOMMITTED
 
 *   *qualifier*: 한정어. 생략이 가능하며 지정하지 않을 경우에는 **ALL** 로 지정된다.
 
@@ -151,7 +155,7 @@ FROM 절
     <select_expressions> ::= * | <expression_comma_list> | *, <expression_comma_list>
      
     <table_specification> ::=
-        <single_table_spec> [<correlation>] [WITH (<lock_hint>)] |
+        <single_table_spec> [<correlation>] |
         <metaclass_specification> [<correlation>] |
         <subquery> <correlation> |
         TABLE (<expression>) <correlation>
@@ -163,13 +167,10 @@ FROM 절
      
     <metaclass_specification> ::= CLASS <class_name>
      
-    <lock_hint> ::= READ UNCOMMITTED
 
 *   <*select_expressions*>: 조회하고자 하는 칼럼 또는 연산식을 하나 이상 지정할 수 있으며, 테이블 내 모든 칼럼을 조회할 때에는 * 를 지정한다. 조회하고자 하는 칼럼 또는 연산식에 대해 **AS** 키워드를 사용하여 별칭(alias)를 지정할 수 있으며, 지정된 별칭은 칼럼 이름으로 사용되어 **GROUP BY**, **HAVING**, **ORDER BY** 절 내에서 사용될 수 있다. 칼럼의 위치 인덱스(position)는 칼럼이 명시된 순서대로 부여되며, 시작 값은 1이다.
 
 *   <*table_specification*>: **FROM** 절 뒤에 하나 이상의 테이블 이름이 명시되며, 부질의와 유도 테이블도 지정될 수 있다. 부질의 유도 테이블에 대한 설명은 :ref:`subquery-derived-table`\ 을 참고한다.
-
-*   <*lock_hint*> : 해당 테이블에 대한 격리 수준(isolation level)을 **READ UNCOMMITTED** 수준으로 설정할 수 있다. **READ UNCOMMITTED**\은 오손 읽기(dirty read)가 발생할 수 있는 격리 수준으로서, CUBRID 트랜잭션의 격리 수준에 관한 자세한 설명은 :ref:`transaction-isolation-level`\ 을 참고한다.
 
 .. code-block:: sql
 
@@ -580,15 +581,24 @@ LIMIT 절
 
     LIMIT {[offset,] row_count | row_count [OFFSET offset]}
 
-*   *offset*: 출력할 레코드의 시작 행 오프셋 값을 지정한다. 결과 셋의 시작 행 오프셋 값은 0이다. 생략할 수 있으며, 기본값은 **0** 이다.
-*   *row_count*: 출력하고자 하는 레코드 개수를 명시한다. 0보다 큰 정수를 지정할 수 있다.
+    <offset> ::= <limit_expression>
+    <row_count> ::= <limit_expression>
+
+    <limit_expression> ::= <limit_term> | <limit_expression> + <limit_term> | <limit_expression> - <limit_term>
+    <limit_term> ::= <limit_factor> | <limit_term> * <limit_factor> | <limit_term> / <limit_factor>
+    <limit_factor> ::= <unsigned int> | <input_hostvar> | ( <limit_expression> )
+
+*   *offset*: 출력할 레코드의 시작 행의 오프셋을 지정한다. 결과 셋에 있는 시작 행의 오프셋은 0이다. 생략할 수 있으며 기본값은 **0** 이다. 부호 없는 정수, 호스트 변수 또는 간단한 표현식 중 하나일 수 있다.
+*   *row_count*: 출력하고자 하는 레코드 개수를 명시한다.  부호 없는 정수, 호스트 변수 또는 간단한 표현식 중 하나일 수 있다.
 
 .. code-block:: sql
 
     -- LIMIT clause can be used in prepared statement
     PREPARE stmt FROM 'SELECT * FROM sales_tbl LIMIT ?, ?';
     EXECUTE stmt USING 0, 10;
-     
+
+.. code-block:: sql
+
     -- selecting rows with LIMIT clause
     SELECT * 
     FROM sales_tbl
@@ -625,6 +635,15 @@ LIMIT 절
               201  'Laura'                         2           500
               301  'Max'                           1           300
 
+.. code-block:: sql
+
+    -- LIMIT clause allows simple expressions for both offset and row_count
+    SELECT *
+    FROM sales_tbl
+    WHERE sales_amount > 100
+    LIMIT ? * ?, (? * ?) + ?;
+
+
 .. _join-query:
               
 조인 질의
@@ -644,15 +663,15 @@ LIMIT 절
         | { <join_table_specification> | <join_table_specification2> } ...]
 
     <table_specification> ::=
-        <single_table_spec> [<correlation>] [WITH (<lock_hint>)]|
+        <single_table_spec> [<correlation>] |
         <metaclass_specification> [<correlation>] |
         <subquery> <correlation> |
         TABLE (<expression>) <correlation>
         
     <join_table_specification> ::=
         {
-            [INNER | {LEFT | RIGHT} [OUTER]] JOIN |
-            STRAIGHT_JOIN
+            [INNER | {LEFT | RIGHT} [OUTER]] JOIN 
+           
         } <table_specification> ON <search_condition>
      
     <join_table_specification2> ::= 
@@ -667,7 +686,7 @@ LIMIT 절
 
     *   {**LEFT** | **RIGHT**} [**OUTER**] **JOIN**: **LEFT** 는 왼쪽 외부 조인을 수행하는 질의를 만드는데 사용되고, **RIGHT** 는 오른쪽 외부 조인을 수행하는 질의를 만드는데 사용된다.
 
-    *   **STRAIGHT_JOIN**: (작성중)
+
      
 *   <*join_table_specification2*>
 
@@ -948,31 +967,12 @@ CUBRID는 외부 조인 중 왼쪽 외부 조인과 오른쪽 외부 조인만 �
                 1            1            1            1
              NULL         NULL            2            2
 
-STRAIGHT_JOIN
--------------
-(작성중): CUBRIDSUS-12814
 
-**STRAIGHT_JOIN**\이 SELECT 리스트에서 사용되는 경우. 
 
-**STRAIGHT_JOIN**\ 은 **INNER JOIN**\ 과 같은 동작을 수행한다. 다만, 질의 최적화기가 항상 중첩된 루프 조인(nested loop join)을 선택하여 왼쪽 테이블을 외부 테이블(outer table)로, 그리고 오른쪽 테이블을 내부 테이블(inner table)로 결정한다. **INNER JOIN** 구문에서 **USE_NL** 힌트를 사용하는 것과 마찬가지로 동작하므로 **USE_MERGE**\ 와 같은 힌트는 무시된다.
 
-다음은 **STRAIGHT_JOIN**\ 을 수행하는 예이다.
 
-.. code-block:: sql
-    
-    SELECT /*+ RECOMPILE*/ * 
-    FROM t1 STRAIGHT_JOIN t2 ON t1.a=t2.a;
 
-위의 질의는 아래의 질의를 수행하는 것과 동일하며, 같은 결과를 출력한다.
 
-.. code-block:: sql
-
-    SELECT /*+ RECOMPILE USE_NL*/ * 
-    FROM t1 INNER JOIN t2 ON t1.a=t2.a;
-
-::
-
-    (수행 결과)
 
 부질의
 ======
@@ -1099,17 +1099,15 @@ FOR UPDATE
         <spec_name_comma_list> ::= <spec_name> [, <spec_name>, ... ]
             <spec_name> ::= table_name | view_name 
          
-* <*spec_name_comma_list*>: FROM 절에서 참조하는 테이블/뷰들의 목록
+* <*spec_name_comma_list*>: **FROM** 절에서 참조하는 테이블/뷰들의 목록
 
-<*spec_name_comma_list*>에서 참조되는 테이블/뷰에만 잠금이 적용된다. FOR UPDATE 절에 <*spec_name_comma_list*>가 명시되지 않는 경우, FROM 절의 모든 테이블/뷰가 잠금 대상인 것으로 간주한다. 
-
-**FOR UPDATE** 절에서 잠금된 행들은 **UPDATE/DELETE** 문에서 잠금이 해제된다. **SELECT .. FOR UPDATE** 문 수행 시 키 잠금은 획득되지 않는다. 
+<*spec_name_comma_list*>에 참조된 테이블/뷰만 잠긴다. <*spec_name_comma_list*>가 누락되었지만 **FOR UPDATE** 가 있는 경우 **SELECT** 질의문의 **FROM** 절에 있는 모든 테이블/뷰가 참조된다고 가정한다. 행은 **X_LOCK** 을 사용하여 잠근다.
 
 .. note:: 제약 사항 
 
     *   부질의 안에서 **FOR UPDATE** 절을 사용할 수 없다. 단, **FOR UPDATE** 절이 부질의를 참조할 수는 있다. 
-    *   **GROUP BY, DISTINCT** 또는 집계 함수를 가진 질의문에서 사용할 수 없다. 
-    *   **UNION**\을 참조할 수 없다. 
+    *   **GROUP BY**, **DISTINCT** 또는 집계 함수를 가진 질의문에서 사용할 수 없다. 
+    *   **UNION** 을 참조할 수 없다. 
 
 다음은 **SELECT ... FOR UPDATE** 문을 사용하는 예이다. 
 

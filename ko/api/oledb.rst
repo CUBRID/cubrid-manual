@@ -1,3 +1,7 @@
+
+:meta-keywords: cubrid oledb driver, cubrid ole db driver, cubrid oledb api, cubrid ole db api, oledb programming
+:meta-description: CUBRID OLE DB driver is based on CCI API and provides an interface over .NET Framework using the Component Object Model (COM).
+
 ***************
 OLE DB 드라이버
 ***************
@@ -8,12 +12,14 @@ OLE DB(Object Linking and Embedding, Database)는 Microsoft에서 개발한 COM(
 
 CUBRID OLE DB 드라이버는 CCI API를 기반으로 작성되었으므로, CCI API 및 CCI에 적용되는 **CCI_DEFAULT_AUTOCOMMIT** 과 같은 설정 파라미터에 영향을 받는다.
 
-별도로 OLE DB 드라이버를 다운로드하거나 OLE DB 드라이버에 대한 최신 정보를 확인하려면 http://www.cubrid.org/wiki_apis/entry/cubrid-oledb-driver\ 에 접속한다.
+.. FIXME: 별도로 OLE DB 드라이버를 다운로드하거나 OLE DB 드라이버에 대한 최신 정보를 확인하려면 http://www.cubrid.org/wiki_apis/entry/cubrid-oledb-driver\ 에 접속한다.
 
 .. note:: 
 
     *   CUBRID OLEDB 드라이버 버전이 9.1.0.p1 이상이면, 32비트와 64비트 통합 설치 패키지 하나만 설치하면 된다. 이 인스톨러는 CUBRID DB 엔진 2008 R4.1 이상 버전을 지원한다.
-    *   CUBRID OLEDB 드라이버 버전이 9.1.0 이하이면, 64비트 OS에서 문제가 발생할 수 있다. 9.1.0 이하 OLE DB 드라이버 사용자는 다음 설치 문서를 참고한다: http://www.cubrid.org/wiki_apis/entry/cubrid-oledb-driver-installation-instructions-old
+    *   CUBRID OLEDB 드라이버 버전이 9.1.0 이하이면, 64비트 OS에서 문제가 발생할 수 있다. 
+
+.. FIXME: Please see our installation tutorial for an old version: http://www.cubrid.org/wiki_apis/entry/cubrid-oledb-driver-installation-instructions-old
 
 OLE DB 설치 및 설정
 ===================
@@ -35,8 +41,10 @@ CUBRID를 이용하는 응용 프로그램을 개발하려면 CUBRID OLE DB 공�
 
 *   **소스 코드에서 빌드하기**: CUBRID OLED DB Data Provider Installer를 변경하고 싶으면 소스 코드를 컴파일하여 직접 CUBRID OLED DB Data Provider Installer를 빌드할 수 있다. 자세한 내용은 다음 주소를 참고한다.
 
-    http://www.cubrid.org/wiki_apis/entry/compiling-the-cubrid-ole-db-installer 
-    
+.. FIXME: For details, see below:
+
+.. FIXME:    http://www.cubrid.org/wiki_apis/entry/compiling-the-cubrid-ole-db-installer
+
     CUBRID OLED DB Data Provider Installer를 이용하지 않는 경우에는 운영체제 버전에 따라 다음 명령어를 실행하여 드라이버를 등록해야 한다. 이때 32비트 Windows에서는 **C:\Windows\system32** 디렉터리의 regsvr32가 실행되어야 하고, 64비트 Windows에서는 **C:\Windows\SysWOW64** 디렉터리의 regsvr32가 실행되어야 한다. ::
 
         regsvr32 CUBRIDProvider.dll

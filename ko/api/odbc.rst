@@ -1,3 +1,7 @@
+
+:meta-keywords: cubrid odbc driver, cubrid odbc api, asp sample
+:meta-description: CUBRID ODBC driver supports ODBC version 3.52. It also ODBC core and some parts of Level 1 and Level 2 API. CUBRID ODBC driver is written based on CCI API.
+
 *************
 ODBC 드라이버
 *************
@@ -8,7 +12,7 @@ CUBRID ODBC 드라이버는 CCI API를 기반으로 작성되었지만, 예외�
 
 .. note:: ODBC가 CCI_DEFAULT_AUTOCOMMIT의 영향을 받지 않는 것은 9.3 버전부터이다. 그 이전 버전에서는 CCI_DEFAULT_AUTOCOMMIT를 OFF로 설정해야 한다.
 
-별도로 ODBC 드라이버를 다운로드하거나 ODBC 드라이버에 대한 최신 정보를 확인하려면 http://www.cubrid.org/wiki_apis/entry/cubrid-odbc-driver\ 에 접속한다.
+.. FIXME: 별도로 ODBC 드라이버를 다운로드하거나 ODBC 드라이버에 대한 최신 정보를 확인하려면 http://www.cubrid.org/wiki_apis/entry/cubrid-odbc-driver\ 에 접속한다.
 
 **CUBRID와 ODBC의 데이터 타입 매핑**
 
@@ -25,13 +29,15 @@ CUBRID ODBC 드라이버는 CCI API를 기반으로 작성되었지만, 예외�
 +-------------------------+--------------------------------+
 | BIT                     | SQL_BINARY                     |
 +-------------------------+--------------------------------+
-| VARYING BIT             | SQL_VARBINARY                  |
+| BIT VARYING             | SQL_VARBINARY                  |
 +-------------------------+--------------------------------+
 | NUMERIC                 | SQL_NUMERIC                    |
 +-------------------------+--------------------------------+
 | INT                     | SQL_INTEGER                    |
 +-------------------------+--------------------------------+
 | SHORT                   | SQL_SMALLINT                   |
++-------------------------+--------------------------------+
+| MONETARY                | SQL_DOUBLE                     |
 +-------------------------+--------------------------------+
 | FLOAT                   | SQL_FLOAT                      |
 +-------------------------+--------------------------------+
@@ -50,6 +56,8 @@ CUBRID ODBC 드라이버는 CCI API를 기반으로 작성되었지만, 예외�
 | OID                     | SQL_CHAR(32)                   |
 +-------------------------+--------------------------------+
 | SET, MULTISET, SEQUENCE | SQL_VARCHAR(MAX_STRING_LENGTH) |
++-------------------------+--------------------------------+
+| ENUM                    | SQL_VARCHAR                    |
 +-------------------------+--------------------------------+
 
 ODBC 설치 및 설정

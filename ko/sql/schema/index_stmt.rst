@@ -1,3 +1,12 @@
+
+:meta-keywords: index definition, unique index, create index, alter index, drop index
+:meta-description: Define table indexes using create index, alter index, drop index statements.
+
+
+*************
+인덱스 정의문
+*************
+
 CREATE INDEX
 ============
 
@@ -21,7 +30,8 @@ CREATE INDEX
 *   *column_name*: 인덱스를 적용할 칼럼의 이름을 명시한다. 다중 칼럼 인덱스를 생성할 경우 둘 이상의 칼럼 이름을 명시한다.
 *   **ASC** | **DESC**: 칼럼의 정렬 방향을 설정한다.
 
-*   <*filter_predicate*>: 필터링된 인덱스를 만드는 조건을 명시한다. 칼럼과 상수 간 비교 조건이 여러 개인 경우 **AND** 로 연결된 경우에만 필터가 될 수 있다. 이와 관련하여 :ref:`filtered-index`\ 를 반드시 참고한다.
+*   <*filter_predicate*>: 필터링된 인덱스를 만드는 조건을 명시한다. 컬럼과 상수 간 비교 조건이 여러 개인 경우 **AND** 로 연결된 경우에만 필터링이 될 수 있다. 자세한 내용은 :ref:`filtered-index` 를 참고한다.
+
 *   *function_name* (*argument_list*): 함수 기반 인덱스를 만드는 조건을 명시한다. 이와 관련하여 :ref:`function-index`\ 를 반드시 참고한다.
 
 *   *index_comment_string*: 인덱스의 커멘트를 지정한다.
@@ -31,6 +41,10 @@ CREATE INDEX
     *   CUBRID 9.0 버전부터는 인덱스 이름을 생략할 수 없다.
 
     *   prefix 인덱스 기능은 제거될 예정(deprecated)이므로, 더 이상 사용을 권장하지 않는다.
+
+    *   데이터베이스의 TIMESTAMP, TIMESTAMP WITH LOCAL TIME ZONE 또는 DATETIME WITH LOCAL TIME ZONE 타입 컬럼에 인덱스 또는 함수 인덱스가 포함되어 있는 경우 세션 및 서버 타임존(:ref:`timezone-parameters`)을 변경하면 안 된다.
+    
+    *   데이터베이스의 TIMESTAMP 또는 TIMESTAMP WITH LOCAL TIME ZONE 타입 컬럼에 인덱스 또는 함수 인덱스가 포함되어 있는 경우 윤초를 지원하는 파라미터(:ref:`timezone-parameters`)를 변경하면 안 된다.
 
 다음은 내림차순으로 정렬된 인덱스를 생성하는 예제이다.
 
@@ -61,18 +75,16 @@ CREATE INDEX
 
 지정된 인덱스의 커멘트는 다음 구문에서 확인할 수 있다.
 
-::
+.. code-block:: sql
 
     SHOW CREATE TABLE table_name;
-    
-    SELECT index_name, class_name, comment
-    FROM db_index WHERE class_name ='classname';
-    
+    SELECT index_name, class_name, comment from db_index WHERE class_name ='classname';
     SHOW INDEX FROM table_name;
 
 또는 CSQL 인터프리터에서 테이블의 스키마를 출력하는 ;sc 명령으로 인덱스의 커멘트를 확인할 수 있다.
 
-::
+.. code-block:: sql
+
     $ csql -u dba demodb
     
     csql> ;sc tbl
@@ -82,13 +94,13 @@ CREATE INDEX
 ALTER INDEX
 ===========
 
-**ALTER INDEX** 문을 사용하여 인덱스를 재생성하거나 인덱스의 커맨트를 생성하거나 변경한다. 인덱스 재성성은 인덱스를 제거하고 재생성하는 작업이다. 
+**ALTER INDEX** 질의문은 인덱스를 재생성하거나 인덱스의 커멘트를 추가/변경한다. 인덱스 재생성은 인덱스를 삭제하고 다시 생성하는 작업이다.
 
 다음은 인덱스를 재생성하는 구문이다.
 
 ::
 
-    ALTER INDEX index_name ON table_name [COMMENT 'index_comment_string'] REBUILD ;
+    ALTER INDEX index_name ON table_name REBUILD;
 
 *   *index_name*: 재생성하려는 인덱스의 이름을 명시한다. 인덱스 이름은 테이블 안에서 고유한 값이어야 한다.
 *   *table_name*: 인덱스를 재생성할 테이블의 이름을 명시한다.
@@ -112,7 +124,7 @@ ALTER INDEX
     CREATE INDEX i_game_medal ON game(medal);
     ALTER INDEX i_game_medal ON game COMMENT 'rebuild index comment' REBUILD ;
 
-인덱스의 재생성 잆이 인덱스의 커멘트를 추가 또는 변경하고 싶은 경우, 다음과 같이 COMMENT 문은 추가하고 REBUILD 키워드는 제거한다.
+인덱스를 재생성하지 않고 인덱스의 커멘트를 추가하거나 변경하려는 경우 다음과 같이 **COMMENT** 절을 추가하고 **REBUILD** 키워드를 제거한다.
 
 ::
 
@@ -123,6 +135,13 @@ ALTER INDEX
 .. code-block:: sql
     
     ALTER INDEX i_game_medal ON game COMMENT 'change index comment' ;
+
+다음은 인덱스 이름을 바꾸는 구문이다. 
+
+:: 
+
+    ALTER INDEX old_index_name ON table_name RENAME TO new_index_name [COMMENT 'index_comment_string'] ;
+
 
 DROP INDEX
 ==========

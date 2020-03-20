@@ -1,3 +1,6 @@
+
+:meta-keywords: cubrid set, cubrid multiset, cubrid list, cubrid sequence, cubrid collection type
+
 ****************
 집합 산술 연산자
 ****************

@@ -1,3 +1,8 @@
+
+:meta-keywords: update statement, update multiple table
+:meta-description: You can update the column value of a record stored in the target table or view to a new one by using the UPDATE statement.
+
+
 ******
 UPDATE
 ******
@@ -28,7 +33,7 @@ UPDATE
 
 *   *col_name* | <*expr*>: 업데이트할 순서의 기준이 되는 칼럼을 지정한다.
 
-*   *row_count*: :ref:`limit-clause`\ 에 업데이트할 레코드 수를 명시하며, 0보다 큰 정수를 지정할 수 있다.
+*   *row_count*: :ref:`limit-clause` 이후 갱신할 레코드 수를 지정한다. 부호 없는 정수, 호스트 변수 또는 간단한 표현식 중 하나일 수 있다.
 
 업데이트할 테이블이 한 개인 경우에 한하여, :ref:`order-by-clause`\ 이나 :ref:`limit-clause`\ 을 지정할 수 있다. :ref:`limit-clause`\ 을 명시하면 업데이트할 레코드 수를 한정할 수 있다. :ref:`order-by-clause`\ 을 명시하면 해당 칼럼의 순서로 레코드를 업데이트한다. :ref:`order-by-clause`\ 에 의한 업데이트는 트리거의 실행 순서나 잠금 순서를 유지하고자 할 때 유용하게 이용할 수 있다. 
 

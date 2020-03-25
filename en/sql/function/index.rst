@@ -13,6 +13,7 @@ Operators and Functions
     containment_op.rst
     bit_fn.rst
     string_fn.rst
+    regex_fn.rst
     numeric_fn.rst
     datetime_fn.rst
     json_fn.rst

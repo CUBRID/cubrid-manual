@@ -319,6 +319,8 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | java_stored_procedure               | server parameter        |         | bool     | no                             |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | java_stored_procedure_port          | server parameter        |         | int      | 0                              |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | multi_range_optimization_limit      | server parameter        | O       | int      | 100                            | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | optimizer_enable_merge_join         | client parameter        | O       | bool     | no                             | available             |
@@ -1864,6 +1866,8 @@ The following are other parameters. The type and value range for each parameter 
 +-------------------------------------+--------+----------------+----------------+----------------+
 | java_stored_procedure               | bool   | no             |                |                |
 +-------------------------------------+--------+----------------+----------------+----------------+
+| java_stored_procedure_port          | int    | 0              | 0              | 65535          |
++-------------------------------------+--------+----------------+----------------+----------------+
 | multi_range_optimization_limit      | int    | 100            | 0              | 10,000         |
 +-------------------------------------+--------+----------------+----------------+----------------+
 | optimizer_enable_merge_join         | bool   | no             |                |                |
@@ -1938,6 +1942,10 @@ The following are other parameters. The type and value range for each parameter 
 **java_stored_procedure**
 
     **java_stored_procedure** is a parameter to configure whether to use Java stored procedures by running the Java Virtual Machine (JVM). If the parameter is set to **no**, which is the default value, JVM is not executed; if it is set to **yes**, JVM is executed so you can use Java stored procedures. Therefore, configure the parameter to yes if you plan to use Java stored procedures.
+
+**java_stored_procedure_port**
+
+    **java_stored_procedure_port** is a parameter to configure the port number receiving a request that calls the java stored procedures from CAS. the value must be unique and smaller than 65,535. The default port value of **java_stored_procedure_port**' is **0** which means the port number is automatically allocated, typically from an ephemeral port range. The value configured in this parameter affects only **java_stored_procedure** is set to **yes**. Note that if the parameter set in **\[common\]** section, an error occurs.
 
 **multi_range_optimization_limit**
 

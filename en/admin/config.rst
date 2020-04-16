@@ -1976,7 +1976,7 @@ The following are other parameters. The type and value range for each parameter 
         .....
         java_stored_procedure=yes
 
-        # Note that -XX:PermSize=512m and -XX:MaxPermSize=512m will not be applied for testdb, Even though they specified in common section.
+        # Note that -XX:PermSize=512m and -XX:MaxPermSize=512m will not be applied for testdb, Even though they specified in [common] section.
         java_stored_procedure_jvm_options="-Xms2048m -Xmx2048m"
         .....
 

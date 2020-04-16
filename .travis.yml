@@ -1,0 +1,13 @@
+cache: pip
+language: python
+
+python:
+  - "2.7"
+
+install:
+  - python get-pip.py
+  - pip install sphinx
+  - pip install sphinx_rtd_theme
+
+script:
+  - make html

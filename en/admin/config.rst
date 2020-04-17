@@ -1965,7 +1965,7 @@ The following are other parameters. The type and value range for each parameter 
 
 **java_stored_procedure_jvm_options**
 
-    **java_stored_procedure_jvm_options** is a parameter to configure Java Virtual Machine (JVM) and Java options on which Java stored procedures are executed. Each option string should be separated by spaces. For JVM options, there are three types of options; standard, non-standard and advanced options. non-standard and advanced options are not guaranteed to be supported on all VM implementations. If the parameter value configured in [@<database>], it overwrites the value specified in [common]. ::
+    **java_stored_procedure_jvm_options** is a parameter to configure Java Virtual Machine (JVM) and Java options on which Java stored procedures are executed. Each option string should be separated by spaces. For JVM options, there are three types of options; standard, non-standard and advanced options. non-standard and advanced options are not guaranteed to be supported on all VM implementations. The default is an empty string. If the parameter value configured in [@<database>], it overwrites the value specified in [common]. ::
 
         ..... 
         [common] 

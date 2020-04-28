@@ -1813,7 +1813,7 @@ HA 관련 파라미터
 
 **java_stored_procedure_jvm_options**
 
-    **java_stored_procedure_jvm_options** 는 Java 저장 프로시저(Java stored procedure)가 실행되는 Java 가상 머신(Java Virtual Machine, JVM)과 Java 옵션을 설정하기위한 파라미터이다. 각 옵션 문자열은 공백으로 구분해야한다. JVM 옵션의 경우 표준 옵션, 비표준 옵션 그리고 고급 옵션이 있습니다. 비표준과 고급 옵션의 경우 모든 JVM 구현에서 지원하는것을 보장하지 않는다. 기본값은 빈 문자열이다. 만약 파라미터가 [@<database>] 섹션에 설정되면, 해당 데이터베이스에서 [common] 섹션에서 설정된 값은 적용되지 않는다. ::
+    **java_stored_procedure_jvm_options** 는 Java 저장 프로시저(Java stored procedure)가 실행되는 Java 가상 머신(Java Virtual Machine, JVM)과 Java 옵션을 설정하기위한 파라미터이다. 각 옵션 문자열은 공백으로 구분해야한다. JVM 옵션의 경우 표준 옵션, 비표준 옵션 그리고 고급 옵션이 있다. 비표준과 고급 옵션의 경우 모든 JVM 구현에서 지원하는것을 보장하지 않는다. 기본값은 빈 문자열이다. 만약 파라미터가 [@<database>] 섹션에 설정되면, 해당 데이터베이스에서 [common] 섹션에서 설정된 값은 적용되지 않는다. ::
 
         ..... 
         [common] 

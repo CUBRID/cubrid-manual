@@ -1824,7 +1824,7 @@ HA 관련 파라미터
         .....
         java_stored_procedure=yes
 
-        # Note that -XX:PermSize=512m and -XX:MaxPermSize=512m will not be applied for testdb, Even though they specified in [common] section.
+        # -XX:PermSize=512m and -XX:MaxPermSize=512m 옵션은 [common] 섹션에 설정되었더라도 testdb에 적용되지 않는다.
         java_stored_procedure_jvm_options="-Xms2048m -Xmx2048m"
         .....
 

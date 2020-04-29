@@ -433,13 +433,13 @@ _db_query_spec
 
 Represents the SQL statement of a virtual class. An index for class_of is created.
 
-+--------------------+---------------+-----------------------------------------------+
-|   Attribute Name   |   Data Type   |   Description                                 |
-+====================+===============+===============================================+
-| class_of           | _db_class     | Class information of the virtual class        |
-+--------------------+---------------+-----------------------------------------------+
-| spec               | VARCHAR(4096) | SQL definition statement of the virtual class |
-+--------------------+---------------+-----------------------------------------------+
++--------------------+---------------------+-----------------------------------------------+
+|   Attribute Name   |      Data Type      |   Description                                 |
++====================+=====================+===============================================+
+| class_of           | _db_class           | Class information of the virtual class        |
++--------------------+---------------------+-----------------------------------------------+
+| spec               | VARCHAR(1073741823) | SQL definition statement of the virtual class |
++--------------------+---------------------+-----------------------------------------------+
 
 .. _db-index:
 
@@ -1028,15 +1028,15 @@ DB_VCLASS
 
 Represents SQL definition statements of virtual classes for which the current user has access authorization to a database.
 
-+--------------------+---------------+-----------------------------------------------+
-|   Attribute Name   |   Data Type   |   Description                                 |
-+====================+===============+===============================================+
-| vclass_name        | VARCHAR(255)  | Virtual class name                            |
-+--------------------+---------------+-----------------------------------------------+
-| vclass_def         | VARCHAR(4096) | SQL definition statement of the virtual class |
-+--------------------+---------------+-----------------------------------------------+
-| comment            | VARCHAR(2048) | Comment to describe the virtual class         |
-+--------------------+---------------+-----------------------------------------------+
++--------------------+---------------------+-----------------------------------------------+
+|   Attribute Name   |      Data Type      |   Description                                 |
++====================+=====================+===============================================+
+| vclass_name        | VARCHAR(255)        | Virtual class name                            |
++--------------------+---------------------+-----------------------------------------------+
+| vclass_def         | VARCHAR(1073741823) | SQL definition statement of the virtual class |
++--------------------+---------------------+-----------------------------------------------+
+| comment            | VARCHAR(2048)       | Comment to describe the virtual class         |
++--------------------+---------------------+-----------------------------------------------+
 
 The following example shows how to retrieve SQL definition statements of the *db_class* virtual class.
 

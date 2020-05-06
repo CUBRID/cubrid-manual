@@ -303,6 +303,8 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------+
 |                               | java_stored_procedure               | 서버                    |         | bool     | no                             |                 |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------+
+|                               | java_stored_procedure_jvm_options   | 서버                    |         | string   |                                |                 |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------+
 |                               | multi_range_optimization_limit      | 서버                    | O       | int      | 100                            | DBA만 가능      |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------+
 |                               | optimizer_enable_merge_join         | 클라이언트              | O       | bool     | no                             | 가능            |
@@ -1732,6 +1734,8 @@ HA 관련 파라미터
 +-------------------------------------+--------+----------------+----------------+----------------+
 | java_stored_procedure               | bool   | no             |                |                |
 +-------------------------------------+--------+----------------+----------------+----------------+
+| java_stored_procedure_jvm_options   | string |                |                |                |
++-------------------------------------+--------+----------------+----------------+----------------+
 | multi_range_optimization_limit      | int    | 100            | 0              | 10,000         |
 +-------------------------------------+--------+----------------+----------------+----------------+
 | optimizer_enable_merge_join         | bool   | no             |                |                |
@@ -1806,6 +1810,23 @@ HA 관련 파라미터
 **java_stored_procedure**
 
     **java_stored_procedure** 는 Java 가상 머신(Java Virtual Machine, JVM)을 실행하여 Java 저장 프로시저(Java stored procedure)를 사용하게 하기 위한 파라미터이다. 기본값인 **no**\ 로 설정하며 JVM이 실행되지 않고, yes로 설정하면 JVM이 실행되어 Java 저장 프로시저(Java stored procedure)를 사용할 수 있다. 따라서, Java 저장 프로시저를 사용할 계획이 있는 경우에는 파라미터를 yes로 설정해야 한다.
+
+**java_stored_procedure_jvm_options**
+
+    **java_stored_procedure_jvm_options** 는 Java 저장 프로시저(Java stored procedure)가 실행되는 Java 가상 머신(Java Virtual Machine, JVM)과 Java 옵션을 설정하기 위한 파라미터이다. 각 옵션 문자열은 공백으로 구분해야한다. JVM 옵션의 경우 표준 옵션, 비표준 옵션 그리고 고급 옵션이 있다. 비표준과 고급 옵션의 경우 모든 JVM 구현에서 지원하는 것을 보장하지 않는다. 기본값은 빈 문자열이다. 만약 파라미터가 [@<database>] 섹션에 설정되면, [common] 섹션에서 설정된 옵션은 해당 데이터베이스에 적용되지 않는다. ::
+
+        ..... 
+        [common] 
+        ..... 
+        java_stored_procedure_jvm_options="-Xms1024m -Xmx1024m -XX:PermSize=512m -XX:MaxPermSize=512m"
+        .....
+        [@testdb]
+        .....
+        java_stored_procedure=yes
+
+        # -XX:PermSize=512m and -XX:MaxPermSize=512m 옵션은 [common] 섹션에 설정되었더라도 testdb에 적용되지 않는다.
+        java_stored_procedure_jvm_options="-Xms2048m -Xmx2048m"
+        .....
 
 **multi_range_optimization_limit**
 

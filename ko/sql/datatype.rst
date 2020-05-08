@@ -2137,15 +2137,15 @@ JSON 값으로 자동으로 변환된다.
 
 JSON 데이터 타입은 :ref:`fn-json-object`나 :ref:`fn-json-array`를 사용하여 생성할 수도 있다.
 
-JSON Validation
----------------
+JSON 유효성 검사
+----------------
 
-Conversion to JSON data does built-in validation and reports an error if
-the string is not a valid JSON.
+JSON 데이터로의 변환은 내장된 유효성 검사를 수행하고 
+문자열이 유효한 JSON이 아닌 경우 오류를 보고한다.
 
 .. code-block:: sql
 
-  -- non-quoted string is not a valid json
+  -- 따옴표가 없는 문자열은 유효한 json이 아니다
   SELECT json'abc';
 
 ::
@@ -2155,22 +2155,23 @@ the string is not a valid JSON.
   ERROR: before ' ; '
   Invalid JSON: 'abc'.
 
-JSON type columns with stricter validation rules can be defined using the
-`draft JSON Schema standard <https://json-schema.org/specification.html>`_.
-If you are not familiar with JSON Schema, you may refer to
+더 엄격한 유효성 검사 규칙을 가진 JSON 타입 컬럼은 
+`draft JSON Schema standard <https://json-schema.org/specification.html>`_ 를 사용하여 정의할 수 있다.
+만약 JSON 스키마를 다루어본 적이 없다면
 `Understanding JSON Schema
-<https://json-schema.org/understanding-json-schema/index.html>`_.
+<https://json-schema.org/understanding-json-schema/index.html>`_ 를 참고할 수 있다.
 
-A simple example of how schema can be used:
+
+다음은 어떻게 스키마를 사용할 수 있는지에 대한 간단한 예제이다.:
 
 .. code-block:: sql
 
-  -- set j column to accept only string type JSON's
+  -- j 컬럼이 JSON의 문자열 타입만을 입력할 수 있도록 설정
   CREATE TABLE t (id int, j JSON ('{"type": "string"}'));
 
 .. code-block:: sql
 
-  -- inserting string type JSON passes schema validation
+  -- JSON 스키마에 유효한 문자열 타입 JSON 입력
   INSERT into t values (1, '"abc"');
 
 ::
@@ -2179,7 +2180,7 @@ A simple example of how schema can be used:
 
 .. code-block:: sql
 
-  -- inserting object type JSON does not pass schema validation
+  -- JSON 스키마에 유효하지 않은 문자열 타입 JSON 입력
   INSERT into t values (2, '{"a":1}');
 
 ::

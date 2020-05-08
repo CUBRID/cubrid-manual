@@ -10,6 +10,8 @@
 
 .. contents::
 
+.. _castfn:
+
 CAST
 ====
 

@@ -2081,7 +2081,7 @@ LIST 또는 SEQUENCE
 JSON 데이터 타입
 ================
 
-CUBRID 10.2는 `RFC 7159 <https://tools.ietf.org/html/rfc7159>`_ 에서 정의된 
+CUBRID 10.2는 `RFC 7159 <https://tools.ietf.org/html/rfc7159>`__ 에서 정의된 
 native **JSON** 데이터 타입 지원한다. **JSON** 데이터 타입은
 JSON 데이터에 대해 자동 검증을 제공하며 
 JSON 데이터에 대한 빠른 액세스와 작업을 가능하게 한다.
@@ -2091,15 +2091,15 @@ JSON 데이터에 대한 빠른 액세스와 작업을 가능하게 한다.
     10.2 서버에 연결하는 이전 버전을 가진 드라이버에서는 
     JSON 타입 컬럼을 Varchar 타입으로 해석한다.
 
-Creating JSON data
---------------------
+JSON 데이터 생성
+----------------
 
-JSON values are automatically converted (parsed) from string format
-when they're assigned to JSON data type columns.
+JSON 포맷의 문자열 형식이 JSON 데이터 타입 컬럼에 입력되면 
+JSON 값으로 자동으로 변환된다.
 
 .. code-block:: sql
 
-  -- assign a string to JSON type column
+  -- 문자열을 JSON 타입 컬럼에 입력
   CREATE TABLE t (id int, j JSON);
   INSERT INTO t VALUES (1, '{"a":1}');
   SELECT j, TYPEOF(j) FROM t;
@@ -2111,12 +2111,11 @@ when they're assigned to JSON data type columns.
     {"a":1}               'json'
 
 
-Conversions to JSON can also be forced through :ref:`castfn` or by using json
-keyword before strings.
+:ref:`castfn` 를 사용하거나 문자열 앞에 json 키워드를 사용하여 강제로 JSON으로 변환 할 수도 있습니다.
 
 .. code-block:: sql
 
-  -- cast string to json
+  -- 문자열을 json으로 cast
   SELECT CAST('{"a":1}' as JSON);
 
 ::
@@ -2127,7 +2126,7 @@ keyword before strings.
 
 .. code-block:: sql
 
-  -- use json keyword
+  -- json 키워드 사용
   SELECT json'{"a":1}', TYPEOF (json'{"a":1}');
 
 ::
@@ -2136,8 +2135,7 @@ keyword before strings.
   ============================================
     {"a":1}               'json'
 
-JSON data type may also be created using :ref:`fn-json-object` and
-:ref:`fn-json-array` functions.
+JSON 데이터 타입은 :ref:`fn-json-object`나 :ref:`fn-json-array`를 사용하여 생성할 수도 있다.
 
 JSON Validation
 ---------------

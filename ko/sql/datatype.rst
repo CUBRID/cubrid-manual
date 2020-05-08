@@ -2078,18 +2078,18 @@ LIST 또는 SEQUENCE
     ============================================
       {'a', 'b', 'c'}  {'a', 'b', 'b', 'c', 'c', 'c'}
 
-JSON Data Type
-==============
+JSON 데이터 타입
+================
 
-CUBRID 10.2 adds support for native **JSON** data type, as defined by
-`RFC 7159 <https://tools.ietf.org/html/rfc7159>`_. **JSON** data type
-offers automatic validation and allows fast access and operations on
-JSON data.
+CUBRID 10.2는 `RFC 7159 <https://tools.ietf.org/html/rfc7159>`_ 에서 정의된 
+native **JSON** 데이터 타입 지원한다. **JSON** 데이터 타입은
+JSON 데이터에 대해 자동 검증을 제공하며 
+JSON 데이터에 대한 빠른 액세스와 작업을 가능하게 한다.
 
 .. note::
 
-    Old driver versions connecting to CUBRID 10.2 server interpret a
-    JSON type column as Varchar.
+    10.2 서버에 연결하는 이전 버전을 가진 드라이버에서는 
+    JSON 타입 컬럼을 Varchar 타입으로 해석한다.
 
 Creating JSON data
 --------------------

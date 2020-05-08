@@ -1,7 +1,6 @@
 
-:meta-keywords: cubrid data types, cubrid type conversion, cubrid numeric types, cubrid date time, cubrid strings, cubrid character, cubrid enum, cubrid blob/clob, cubrid collection types
+:meta-keywords: cubrid data types, cubrid type conversion, cubrid numeric types, cubrid date time, cubrid strings, cubrid character, cubrid enum, cubrid blob/clob, cubrid collection types, cubrid json type
 :meta-description: All CUBRID data types and conversion rules.
-
 
 ***********
 데이터 타입 
@@ -2078,6 +2077,285 @@ LIST 또는 SEQUENCE
        cast(col_1 as set)  cast(col_1 as multiset)
     ============================================
       {'a', 'b', 'c'}  {'a', 'b', 'b', 'c', 'c', 'c'}
+
+JSON Data Type
+==============
+
+CUBRID 10.2 adds support for native **JSON** data type, as defined by
+`RFC 7159 <https://tools.ietf.org/html/rfc7159>`_. **JSON** data type
+offers automatic validation and allows fast access and operations on
+JSON data.
+
+.. note::
+
+    Old driver versions connecting to CUBRID 10.2 server interpret a
+    JSON type column as Varchar.
+
+Creating JSON data
+--------------------
+
+JSON values are automatically converted (parsed) from string format
+when they're assigned to JSON data type columns.
+
+.. code-block:: sql
+
+  -- assign a string to JSON type column
+  CREATE TABLE t (id int, j JSON);
+  INSERT INTO t VALUES (1, '{"a":1}');
+  SELECT j, TYPEOF(j) FROM t;
+
+::
+
+    j                     typeof(j)
+  ============================================
+    {"a":1}               'json'
+
+
+Conversions to JSON can also be forced through :ref:`castfn` or by using json
+keyword before strings.
+
+.. code-block:: sql
+
+  -- cast string to json
+  SELECT CAST('{"a":1}' as JSON);
+
+::
+
+    cast('{"a":1}' as json)
+  ======================
+    {"a":1}
+
+.. code-block:: sql
+
+  -- use json keyword
+  SELECT json'{"a":1}', TYPEOF (json'{"a":1}');
+
+::
+
+    json '{"a":1}'         typeof(json '{"a":1}')
+  ============================================
+    {"a":1}               'json'
+
+JSON data type may also be created using :ref:`fn-json-object` and
+:ref:`fn-json-array` functions.
+
+JSON Validation
+---------------
+
+Conversion to JSON data does built-in validation and reports an error if
+the string is not a valid JSON.
+
+.. code-block:: sql
+
+  -- non-quoted string is not a valid json
+  SELECT json'abc';
+
+::
+
+  In line 1, column 8,
+
+  ERROR: before ' ; '
+  Invalid JSON: 'abc'.
+
+JSON type columns with stricter validation rules can be defined using the
+`draft JSON Schema standard <https://json-schema.org/specification.html>`_.
+If you are not familiar with JSON Schema, you may refer to
+`Understanding JSON Schema
+<https://json-schema.org/understanding-json-schema/index.html>`_.
+
+A simple example of how schema can be used:
+
+.. code-block:: sql
+
+  -- set j column to accept only string type JSON's
+  CREATE TABLE t (id int, j JSON ('{"type": "string"}'));
+
+.. code-block:: sql
+
+  -- inserting string type JSON passes schema validation
+  INSERT into t values (1, '"abc"');
+
+::
+
+  1 command(s) successfully processed.
+
+.. code-block:: sql
+
+  -- inserting object type JSON does not pass schema validation
+  INSERT into t values (2, '{"a":1}');
+
+::
+
+  ERROR: before ' ); '
+  The provided JSON has been invalidated by the JSON schema (Invalid schema path: #, Keyword: type, Invalid provided JSON path: #)
+
+JSON Value Types
+-----------------
+
+A JSON value must be an object, an array or a scalar (string, number, boolean
+or null), as defined by `RFC 7159
+<https://tools.ietf.org/html/rfc7159#section-3>`_.
+
+A table of JSON value types:
+
++----------------------------+---------------------+--------------------------+
+| Type                       | CUBRID JSON type    | Description              |
++============================+=====================+==========================+
+| Object                     | JSON_OBJECT         | A set of key-value pairs |
++----------------------------+---------------------+--------------------------+
+| Array                      | JSON_ARRAY          | An array of JSON values  |
++-------------+--------------+---------------------+--------------------------+
+| Scalar      | String       | STRING              | A quoted string          |
+|             +--------------+---------------------+--------------------------+
+|             | Number       | INTEGER             | 32-bit signed integer    |
+|             |              +---------------------+--------------------------+
+|             |              | BIGINT              | 64-bit signed integer    |
+|             |              +---------------------+--------------------------+
+|             |              | DOUBLE              | Non-integer number or    |
+|             |              |                     | integer bigger than      |
+|             |              |                     | 2\ :sup:`63`\ - 1        |
+|             +--------------+---------------------+--------------------------+
+|             | true         | BOOLEAN             | True boolean value       |
+|             +--------------+---------------------+--------------------------+
+|             | false        | BOOLEAN             | False boolean value      |
+|             +--------------+---------------------+--------------------------+
+|             | null         | JSON_NULL           | Null value               |
++-------------+--------------+---------------------+--------------------------+
+
+The CUBRID JSON type of a JSON value can be obtained with :ref:`fn-json-type` \
+\function.
+
+JSON Data Conversions
+---------------------
+
+JSON data types can be obtained by explicit or implicit casting from and to
+other types.
+
+Casting a JSON value to JSON type may fail if desired type has a schema and
+converted value does not pass schema validation.
+
+Converting other types to JSON is explained by next table:
+
++----------------------------+----------------------------------------------+
+| Original type              | CUBRID JSON type                             |
++============================+==============================================+
+| Any string                 | String is parsed as JSON data. The result    |
+|                            | may be of any type.                          |
+|                            |                                              |
+|                            | .. note::                                    |
+|                            |                                              |
+|                            |    If string codeset is not UTF8, string is  |
+|                            |    first converted to UTF8 and then parsed.  |
++----------------------------+----------------------------------------------+
+| Short, Integer             | INTEGER                                      |
++----------------------------+----------------------------------------------+
+| Bigint                     | BIGINT                                       |
++----------------------------+----------------------------------------------+
+| Float, Double              | DOUBLE                                       |
++----------------------------+----------------------------------------------+
+| Numeric                    | DOUBLE                                       |
++----------------------------+----------------------------------------------+
+
+Converting JSON data type to other types is explained by next table:
+
++----------------------------+-----------------------------------------------+
+| CUBRID JSON Type           | Other accepted types                          |
++============================+===============================================+
+| JSON_OBJECT                | String with printed JSON                      |
++----------------------------+-----------------------------------------------+
+| JSON_ARRAY                 | String with printed JSON                      |
++----------------------------+-----------------------------------------------+
+| STRING                     | Any type that a string can be converted to    |
++----------------------------+-----------------------------------------------+
+| INTEGER                    | Any type that an integer can be converted to  |
++----------------------------+-----------------------------------------------+
+| BIGINT                     | Any type that a bigint can be converted to    |
++----------------------------+-----------------------------------------------+
+| DOUBLE                     | Any type that a double can be converted to    |
++----------------------------+-----------------------------------------------+
+| BOOLEAN                    | "true" or "false" if converted to string      |
+|                            +-----------------------------------------------+
+|                            | 0 or 1 if converted to a numeric type         |
++----------------------------+-----------------------------------------------+
+| JSON_NULL                  | String with printed JSON 'null'               |
++----------------------------+-----------------------------------------------+
+
+.. _json-path:
+
+JSON Paths
+----------
+
+JSON Paths provide ways of addressing json elements inside a JSON. Many of the
+JSON functions require a JSON Path or JSON Pointer argument to define the
+location inside the JSON where operations are performed.
+JSON Paths always start with '$' and may be followed by array indexes,
+object key tokens and wildcards. If '$' is followed by no other tokens, then
+path points to JSON data root.
+
+::
+
+   <json_path>::=
+      <start_token> [<path_token>] ...
+
+   <start_token>::=
+      $
+
+   <path_token>::=
+      <array_access_token> | <object_key_access_token> | <wildcard_token>
+
+   <array_access_token>::=
+      [idx]
+
+   <object_key_access_token>::=
+      .[key_identifier | "key_str"]
+
+   <wildcard_token>::=
+      .*|[*]|**path_token
+
+As an example, relative to '{"a":[0,1,2,{"b":5}]}' '$.a[3].b' would mean:
+"The member having key 'b' of the element at index 3 of the member having key
+'a' of the root" and would address the json value '5';
+Object_key_access_tokens as key string can be used to express the same
+key_identifiers and can also enable using characters that need escaping,
+e.g. '$."\""' can be used to refer to a member having a double quote as a key.
+
+JSON wildcards can be one of three types:
+
+- .* , object member access matching wildcards
+- [*], array index access matching wildcards
+- \**, matching a sequence of object keys and array indexes. \** wildcards must
+  be suffixed by a token
+
+Path expressions, like JSON Pointers and JSON text, should be encoded using
+ASCII or UTF-8 character set. If other character sets are used, a coercion
+will be done to UTF-8.
+
+.. _json-pointer:
+
+JSON Pointers
+-------------
+
+JSON Pointers, as defined by https://tools.ietf.org/html/rfc6901 provide an
+alternative to JSON paths.
+JSON Pointers, like JSON Paths and JSON text, should be encoded using ASCII
+or UTF-8 character set. If other character sets are used, a coercion will be
+done to UTF-8.
+
+::
+
+   <json_pointer>::=
+      [/path_token] ... [/-]
+
+::
+
+  '$.a[10].bb' is equivalent to '/a/10/bb'
+  '$' is equivalent to ''
+
+The special character '-' can be used exclusively as a last path_token and can
+be used to address the end of a json_array.
+
+JSON pointers can be used to address the same path as their corresponding
+no-wildcards JSON paths.
 
 .. _implicit-type-conversion:
 

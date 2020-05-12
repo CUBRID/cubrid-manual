@@ -2152,8 +2152,8 @@ JSON 데이터로의 변환은 내장된 유효성 검사를 수행하고
 
   In line 1, column 8,
 
-  ERROR: before ' ; '
-  Invalid JSON: 'abc'.
+  에러: before ' ; '
+  유효하지 않은 JSON: 'abc'.
 
 더 엄격한 유효성 검사 규칙을 가진 JSON 타입 컬럼은 
 `draft JSON Schema standard <https://json-schema.org/specification.html>`_ 를 사용하여 정의할 수 있다.
@@ -2176,7 +2176,7 @@ JSON 데이터로의 변환은 내장된 유효성 검사를 수행하고
 
 ::
 
-  1 command(s) successfully processed.
+  1 개의 명령어가 실행되었습니다.
 
 .. code-block:: sql
 
@@ -2185,8 +2185,8 @@ JSON 데이터로의 변환은 내장된 유효성 검사를 수행하고
 
 ::
 
-  ERROR: before ' ); '
-  The provided JSON has been invalidated by the JSON schema (Invalid schema path: #, Keyword: type, Invalid provided JSON path: #)
+  에러: before ' ); '
+  주어진 JSON 은 JSON schema에 대해 유효하지 않습니다. (스키마 경로: #, 키워드: type, JSON 경로: #)
 
 JSON 데이터의 타입
 --------------------
@@ -2222,59 +2222,57 @@ JSON 데이터 타입 표:
 
 JSON 값의 CUBRID JSON 타입은 :ref:`fn-json-type` 함수로 얻을 수 있다.
 
-JSON Data Conversions
+JSON 데이터 변환
 ---------------------
+JSON 데이터 타입은 명시적 또는 암시적으로 다른 타입으로부터 변환하여 얻을 수 있다.
 
-JSON data types can be obtained by explicit or implicit casting from and to
-other types.
+JSON 데이터값을 다른 JSON 타입으로 변환하는 것은 
+변환하려는 타입이 스키마를 가지고 있고 변환된 값이 스키마 유효성 검사를 통과하지 못하는 경우 실패할 수 있다.
 
-Casting a JSON value to JSON type may fail if desired type has a schema and
-converted value does not pass schema validation.
+다른 타입에서 JSON으로의 변환은 다음 표에서 설명한다:
 
-Converting other types to JSON is explained by next table:
++----------------------------+----------------------------------------------------+
+| 기존 타입                   | CUBRID JSON 타입                                  |
++============================+====================================================+
+| Any string                 | 문자열은 모든 타입의 JSON 데이터로 변환할 수 있다. |
+|                            |                                                    |
+|                            | .. note::                                          |
+|                            |                                                    |
+|                            |    만약 문자열의 문자셋이 UTF8이 아니라면          |
+|                            |    문자열을 먼저 UTF8로 변환한 후                  |
+|                            |    JSON 데이터로 변환한다.                         |
++----------------------------+----------------------------------------------------+
+| Short, Integer             | INTEGER                                            |
++----------------------------+----------------------------------------------------+
+| Bigint                     | BIGINT                                             |
++----------------------------+----------------------------------------------------+
+| Float, Double              | DOUBLE                                             |
++----------------------------+----------------------------------------------------+
+| Numeric                    | DOUBLE                                             |
++----------------------------+----------------------------------------------------+
 
-+----------------------------+----------------------------------------------+
-| Original type              | CUBRID JSON type                             |
-+============================+==============================================+
-| Any string                 | String is parsed as JSON data. The result    |
-|                            | may be of any type.                          |
-|                            |                                              |
-|                            | .. note::                                    |
-|                            |                                              |
-|                            |    If string codeset is not UTF8, string is  |
-|                            |    first converted to UTF8 and then parsed.  |
-+----------------------------+----------------------------------------------+
-| Short, Integer             | INTEGER                                      |
-+----------------------------+----------------------------------------------+
-| Bigint                     | BIGINT                                       |
-+----------------------------+----------------------------------------------+
-| Float, Double              | DOUBLE                                       |
-+----------------------------+----------------------------------------------+
-| Numeric                    | DOUBLE                                       |
-+----------------------------+----------------------------------------------+
-
-Converting JSON data type to other types is explained by next table:
+JSON 데이터 타입에서 다른 타입으로의 변환은 다음 표에서 설명한다.:
 
 +----------------------------+-----------------------------------------------+
-| CUBRID JSON Type           | Other accepted types                          |
+| CUBRID JSON 타입           | 허용되는 다른 타입                            |
 +============================+===============================================+
-| JSON_OBJECT                | String with printed JSON                      |
+| JSON_OBJECT                | JSON 데이터 값을 출력한 문자열                |
 +----------------------------+-----------------------------------------------+
-| JSON_ARRAY                 | String with printed JSON                      |
+| JSON_ARRAY                 | JSON 데이터 값을 출력한 문자열                |
 +----------------------------+-----------------------------------------------+
-| STRING                     | Any type that a string can be converted to    |
+| STRING                     | 문자열로부터 변환할 수 있는 모든 타입         |
 +----------------------------+-----------------------------------------------+
-| INTEGER                    | Any type that an integer can be converted to  |
+| INTEGER                    | 숫자값으로부터 변환할 수 있는 모든 타입       |           
 +----------------------------+-----------------------------------------------+
-| BIGINT                     | Any type that a bigint can be converted to    |
+| BIGINT                     | Bigint 값으로부터 변환할 수 있는 모든 타입    |
 +----------------------------+-----------------------------------------------+
-| DOUBLE                     | Any type that a double can be converted to    |
+| DOUBLE                     | Double 값으로부터 변환할 수 있는 모든 타입    |
 +----------------------------+-----------------------------------------------+
-| BOOLEAN                    | "true" or "false" if converted to string      |
+| BOOLEAN                    | 문자열로 변환된다면 "true" 또는 "false"       |
 |                            +-----------------------------------------------+
-|                            | 0 or 1 if converted to a numeric type         |
+|                            | 숫자형으로 변환된다면 0 또는 1                |
 +----------------------------+-----------------------------------------------+
-| JSON_NULL                  | String with printed JSON 'null'               |
+| JSON_NULL                  | JSON 'null'을 출력한 문자열                   |
 +----------------------------+-----------------------------------------------+
 
 .. _json-path:

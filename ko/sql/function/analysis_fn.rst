@@ -2056,7 +2056,7 @@ JSON_ARRAYAGG
 
 .. function:: JSON_ARRAYAGG (json_val)
 
-  Aggregate function that builds a json array out of the evaluated rows.
+  평가된 행에서 JSON 배열을 만드는 집계 함수이다.
 
 .. code-block:: sql
 
@@ -2087,7 +2087,7 @@ JSON_OBJECTAGG
 
 .. function:: JSON_OBJECTYAGG (key, json_val expr)
 
-  Creates a json object out of the (key, json_val) expressions gathered from each row evaluation.
+  각 행의 평가에서 수집 된 (key, json_val) 표현식에서 JSON 객체를 생성한다.
 
 .. code-block:: sql
 

@@ -2323,14 +2323,12 @@ JSON 포인터와 JSON 텍스트와 같은 경로 식은 ASCII 또는 UTF-8 문�
 
 .. _json-pointer:
 
-JSON Pointers
+JSON 포인터
 -------------
 
-JSON Pointers, as defined by https://tools.ietf.org/html/rfc6901 provide an
-alternative to JSON paths.
-JSON Pointers, like JSON Paths and JSON text, should be encoded using ASCII
-or UTF-8 character set. If other character sets are used, a coercion will be
-done to UTF-8.
+https://tools.ietf.org/html/rfc6901에서 정의한 JSON 포인터는 JSON 경로와 다른 방법을 제공한다.
+JSON 포인터는 JSON 경로와 JSON 텍스트와 동일하게 ASCII 또는 UTF-8 문자셋으로 인코딩 되어야 한다.
+만약 다른 문자셋이 사용되면, UTF-8으로 변환(coercion)될 것이다.
 
 ::
 
@@ -2339,14 +2337,14 @@ done to UTF-8.
 
 ::
 
-  '$.a[10].bb' is equivalent to '/a/10/bb'
-  '$' is equivalent to ''
+  '$.a[10].bb' 는 '/a/10/bb' 와 동일하다
+  '$' 는 '' 와 동일하다
 
-The special character '-' can be used exclusively as a last path_token and can
-be used to address the end of a json_array.
+특수 문자 '-'는 마지막 path_token으로만 사용할 수 있으며
+json_array의 끝부분을 가리키는 데 사용할 수 있다.
 
-JSON pointers can be used to address the same path as their corresponding
-no-wildcards JSON paths.
+JSON 포인터는 비와일드카드 JSON 경로가 가리키는 것과 
+동일한 경로를 가리키는데 사용할 수 있다.
 
 .. _implicit-type-conversion:
 

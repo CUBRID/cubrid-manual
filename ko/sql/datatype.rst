@@ -2277,15 +2277,13 @@ JSON 데이터 타입에서 다른 타입으로의 변환은 다음 표에서 �
 
 .. _json-path:
 
-JSON Paths
-----------
+JSON 경로
+-----------
 
-JSON Paths provide ways of addressing json elements inside a JSON. Many of the
-JSON functions require a JSON Path or JSON Pointer argument to define the
-location inside the JSON where operations are performed.
-JSON Paths always start with '$' and may be followed by array indexes,
-object key tokens and wildcards. If '$' is followed by no other tokens, then
-path points to JSON data root.
+JSON 경로는 JSON 내에서 json 요소를 참조할 수 있는 방법을 제공한다.
+많은 JSON 함수는 JSON 내부에서 동작 위치를 정의하기 위해 JSON 경로 또는 JSON 포인터 인수를 필요로 한다.
+JSON 경로는 항상 '$'로 시작하며 배열 인덱스, 객체 키 토큰 및 와일드카드가 뒤따를 수 있다.
+만약 '$' 뒤에 다른 토큰이 없으면 경로는 JSON 데이터 루트를 가리킨다.
 
 ::
 
@@ -2307,23 +2305,21 @@ path points to JSON data root.
    <wildcard_token>::=
       .*|[*]|**path_token
 
-As an example, relative to '{"a":[0,1,2,{"b":5}]}' '$.a[3].b' would mean:
-"The member having key 'b' of the element at index 3 of the member having key
-'a' of the root" and would address the json value '5';
-Object_key_access_tokens as key string can be used to express the same
-key_identifiers and can also enable using characters that need escaping,
-e.g. '$."\""' can be used to refer to a member having a double quote as a key.
+예를 들어, '{"a":[0,1,2,{"b":5}]}'에 대해 '$.a[3].b'의 의미는
+"루트의 'a'를 가진 멤버의 인덱스 3에 해당하는 요소의 키 'b'를 가진 멤버"이며 JSON 값 '5'를 가리킨다;
 
-JSON wildcards can be one of three types:
+object_key_access_tokens를 키 문자열로 사용하여 동일한 
+key_identifiers를 표현할 수 있으며 이스케이프 문자를 사용할 수도 있다.
+예: '$"\"'은 큰따옴표를 가진 멤버를 키로 참조하는 데 사용할 수 있다.
 
-- .* , object member access matching wildcards
-- [*], array index access matching wildcards
-- \**, matching a sequence of object keys and array indexes. \** wildcards must
-  be suffixed by a token
+JSON 와일드카드는 다음 세 가지 유형 중 하나가 될 수 있다.
 
-Path expressions, like JSON Pointers and JSON text, should be encoded using
-ASCII or UTF-8 character set. If other character sets are used, a coercion
-will be done to UTF-8.
+- .* , 와일드카드와 매칭되는 객체 멤버
+- [*], 와일드카드와 매칭되는 배열 인덱스
+- \**, 객체 키의 시퀀스 배열 인덱스를 매칭. \** 와일드카드는 토큰(path_token)을 뒤에 붙여야 한다.
+
+JSON 포인터와 JSON 텍스트와 같은 경로 식은 ASCII 또는 UTF-8 문자셋으로 인코딩 되어야 한다.
+만약 다른 문자셋이 사용되면, UTF-8으로 변환(coercion)될 것이다.
 
 .. _json-pointer:
 

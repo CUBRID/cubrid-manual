@@ -9,11 +9,11 @@ JSON functions
 
 .. _fn-json-intro:
 
-Introduction to JSON functions
+JSON 함수
 ===================================
 
-The functions described in this section perform operations on JSON data.
-All supported JSON functions can be found in next table:
+이 섹션에서는 JSON 데이터 관련 동작에 대해 기술한다.
+지원되는 JSON 함수들은 다음 표와 같다:
 
 +------------------+------------------+------------------+------------------+
 | :ref:`fn-json-\  | :ref:`fn-json-\  | :ref:`fn-json-\  | :ref:`fn-json-\  |
@@ -38,46 +38,36 @@ All supported JSON functions can be found in next table:
 | \contains`       | \merge`          | \remove`         | \valid`          |
 +------------------+------------------+------------------+------------------+
 
-They have in common several types of input arguments:
+주로 아래와 같이 다양한 유형의 입력 방식을 가지고 있다.
 
-  - *json_doc*: a JSON or string that is parsed as JSON
-  - *val*: a JSON or a value that can be interpreted as one of supported JSON
-    scalar types
-  - *json key*: a string as key name
-  - *json path/pointer*: a string that follows the rules explained in
-    :ref:`json-path` and :ref:`json-pointer`.
+  - *json_doc*: JSON이나 JSON으로 파싱되는 스트링
+  - *val*: JSON이나 JSON 지원 스칼라 타입 중 하나로 해석될 수 있는 값
+  - *json key*: 키 이름으로서의 스트링
+  - *json path/pointer*: :ref:`json-path` 과 :ref:`json-pointer`에 설명된 규칙을 따르는 스트링
 
 .. note::
 
-  UTF8 is expected to be the codeset of JSON functions string arguments.
-  Inputs with different codesets are implicitly converted to UTF8. One
-  consequence is that searching a case insensitive collation string with a
-  codeset other than UTF8 may not provide expected results.
+  JSON 함수 스트링 인자의 코드셋은 UTF8을 기준으로 한다. 다른 코드셋의 입력 문자열은 UTF8로 변환된다.
+  UTF8이 아닌 코드셋 문자열에 대한 대소문자 구별 없는 검색은 기대와 다른 결과가 나올 수 있다.
 
-The next table shows the differences between *json_doc* and *val* when
-accepting input arguments:
+다음의 표는 입력 인자로 받아들이는 *json_doc* 와 *val*의 차이를 보여주고 있다:
 
 +-------------------+-----------------------------+---------------------------+
-| Input type        | *json_doc*                  | *val*                     |
+| 입력 타입            | *json_doc*                  | *val*                     |
 +===================+=============================+===========================+
-| JSON              | Input is unchanged          | Input is unchanged        |
+| JSON              | 입력 값이 변하지 않음              | 입력 값이 변하지 않음            |
 +-------------------+-----------------------------+---------------------------+
-| String            | JSON value is parsed from   | Input is converted to     |
-|                   | input                       | JSON STRING               |
+| String            | JSON 값이 입력으로부터 파싱됨        | 입력 값이 JSON STRING으로 변환됨 |
 +-------------------+-----------------------------+---------------------------+
-| Short, Integer    | Conversion error            | Input is converted to     |
-|                   |                             | JSON INTEGER              |
+| Short, Integer    | 변환 오류                      | 입력 값이 JSON INTEGER로 변환됨  |
 +-------------------+-----------------------------+---------------------------+
-| Bigint            | Conversion error            | Input is converted to     |
-|                   |                             | JSON BIGINT               |
+| Bigint            | 변환 오류                      | 입력 값이 JSON BIGINT로 변환됨   |
 +-------------------+-----------------------------+---------------------------+
-| Float, Double,    | Conversion error            | Input is converted to     |
-| Numeric           |                             | JSON DOUBLE               |
+| Float, Double,    | 변환 오류                      | 입력 값이 JSON DOUBLE로 변환됨   |
 +-------------------+-----------------------------+---------------------------+
-| NULL              | NULL                        | Input is converted to     |
-|                   |                             | JSON_NULL                 |
+| NULL              | NULL                        | 입력 값이 JSON_NULL로 변환됨    |
 +-------------------+-----------------------------+---------------------------+
-| Other             | Conversion error            | Conversion error          |
+| Other             | 변환 오류                      | 변환 오류                    |
 +-------------------+-----------------------------+---------------------------+
 
 .. _fn-json-array:
@@ -87,7 +77,7 @@ JSON_ARRAY
 
 .. function:: JSON_ARRAY ([val1 [ , val2] ...])
 
-  The **JSON_ARRAY** function returns a json array containing the given list (possibly empty) of values.
+  **JSON_ARRAY** 함수는 해당 값들(val, val2, ..)을 가진 리스트(텅빈 리스트도 가능)가 포함된 배열을 반환한다.
 
 .. code-block:: sql
 
@@ -116,7 +106,7 @@ JSON_OBJECT
 
 .. function:: JSON_OBJECT ([key1, val1 [ , key2, val2] ...])
 
-  The **JSON_OBJECT** function returns a json object containing the given list (possibly empty) of key-value pairs.
+  **JSON_OBJECT** 함수는 해당 키/값(key, val1, key, val2,...)쌍을 가진 리스트(텅빈 리스트도 가능)가 포함된 객체를 반환한다.
 
 .. code-block:: sql
 
@@ -145,10 +135,10 @@ JSON_KEYS
 
 .. function:: JSON_KEYS (json_doc [ , json path])
 
-  The **JSON_KEYS** function returns a json array of all the object keys of the json object at the given path.
-  Json null is returned if the path addresses a json element that is not a json object.
-  If json path argument is missing, the keys are gathered from json root element.
-  An error occurs if *json path* does not exist. Returns **NULL** if *json_doc* argument is **NULL**.
+  **JSON_KEYS** 함수는 해당 패스로 주어진 json 객체의 모든 키값을 가진 배열을 반환한다.
+  해당 경로가 json객체가 아닌 json 요소를 지정하면 json null이 반환된다.
+  json 경로 인자가 누락되면 키(key)는 json 루트 요소로부터 가져온다.
+  *json 경로*가 존재하지 않으면 오류가 발생하고 *json_doc* 인자가 **NULL**이면 **NULL**을 반환한다.
 
 .. code-block:: sql
 
@@ -187,9 +177,9 @@ JSON_DEPTH
 
 .. function:: JSON_DEPTH (json_doc)
 
-  The **JSON_DEPTH** function returns the maximum depth of the json.
-  Depth count starts at 1. The depth level is increased by one by non-empty json arrays or by non-empty json objects.
-  Returns **NULL** if argument is **NULL**.
+  **JSON_DEPTH** 함수는 json의 최대 깊이를 반환한다.
+  깊이는 1부터 시작하며 깊이 레벨은 비어있지 않은 json 배열이나 비어있지 않은 json 객체에서 1씩 증가한다. 
+  인자가 **NULL**이면 **NULL**을 반환한다.
 
 .. code-block:: sql
 
@@ -230,9 +220,9 @@ JSON_LENGTH
 
 .. function:: JSON_LENGTH (json_doc [ , json path])
 
-  The **JSON_LENGTH** function returns the length of the json element at the given path.
-  If no path argument is given, the returned value is the length of the root json element.
-  Returns **NULL** if any argument is **NULL** or if no element exists at the given path.
+  **JSON_LENGTH** 함수는 해당 json 경로에 있는 json 요소의 길이를 반환한다.
+  경로 인자가 주어지지 않으면 josn 루트 요소의 길이가 반환된다.
+  인자가 **NULL**이거나 해당 경로에 어떤 요소도 존재하지 않으면 **NULL**이 반환된다.
 
 .. code-block:: sql
 
@@ -281,8 +271,8 @@ JSON_VALID
 
 .. function:: JSON_VALID (val)
 
-  The **JSON_VALID** function returns 1 if the given *val* argument is a valid json_doc, 0 otherwise.
-  Returns **NULL** if argument is **NULL**.
+  **JSON_VALID** 함수는 해당 *val* 인자가 유효한 json_doc일 경우에 1을 그렇지 않은 경우에 0을 반환한다.
+  해당 인자가 **NULL**인 경우 **NULL**을 반환한다.
 
 .. code-block:: sql
 
@@ -298,7 +288,7 @@ JSON_TYPE
 
 .. function:: JSON_TYPE (json_doc)
 
-  The **JSON_TYPE** function returns the type of the *json_doc* argument as a string.
+  **JSON_TYPE** 함수는 스트링 인자인 *json_doc*의 타입을 반환한다.
 
 .. code-block:: sql
 
@@ -316,8 +306,8 @@ JSON_QUOTE
 
 .. function:: JSON_QUOTE (str)
 
-  Escapes quotes and special characters and surrounds the resulting string in quotes. Returns result as a json_string.
-  Returns **NULL** if *str* argument is **NULL**.
+  **JSON_QUOTE** 함수는 문자열과 이스케이프된 특수 문자들을 쌍따옴표로 묶은 json_string을 결과로 반환한다.
+  *str* 인자가 **NULL**인 경우 **NULL**을 반환한다.
 
 .. code-block:: sql
 
@@ -346,8 +336,8 @@ JSON_UNQUOTE
 
 .. function:: JSON_UNQUOTE (json_doc)
 
-  Unquotes a json_value's json string and returns the resulting string.
-  Returns **NULL** if *json_doc* argument is **NULL**.
+  **JSON_UNQUOTE** 함수는 따옴표로 묶이지 않은 json_value 문자열을 반환한다.
+  *json_doc* 인자가 **NULL**이면 **NULL**을 반환한다.
 
 .. code-block:: sql
 
@@ -376,8 +366,8 @@ JSON_PRETTY
 
 .. function:: JSON_PRETTY (json_doc)
 
-  Returns a string containing the *json_doc* pretty-printed.
-  Returns **NULL** if *json_doc* argument is **NULL**.
+  **JSON_PRETTY**는 *json_doc* 보기좋게 출력된 문자열을 반환한다.
+  *json_doc* 인자가 **NULL**이면 **NULL**을 반환한다.
 
 .. code-block:: sql
 
@@ -410,15 +400,15 @@ JSON_SEARCH
 
 .. function:: JSON_SEARCH (json_doc, one/all, search_str [, escape_char [, json path] ...])
 
-  Returns a json array of json paths or a single json path which contain json strings matching the given *search_str*.
-  The matching is performed by applying the **LIKE** operator on internal json strings and *search_str*. Same rules apply for the *escape_char* and *search_str* of **JSON_SEARCH** as for their counter-parts from the **LIKE** operator.
-  For further description of **LIKE**-related arguments rules refer to :ref:`like-expr`.
+  **JSON_SEARCH** 함수는 해당 *search_str*과 일치하는 json 문자열을 포함한 하나의 json 경로 혹은 복수의 json 경로를 반환한다.
+  일치 여부 검사는 내부의 json 문자열과 *search_str*에 **LIKE** 연산자를 적용하여 수행된다. **JSON_SEARCH**의 *escape_char* 및 *search_str*에 대해 **LIKE** 연산자의 대응 부분과 동일한 규칙이 적용된다.
+  **LIKE**관련 규칙에 대한 추가 설명은 :ref:`like-expr`을 참고한다.
 
-  Using 'one' as one/all argument will cause the **JSON_SEARCH** to stop after the first match is found.
-  On the other hand, 'all' will force **JSON_SEARCH** to gather all paths matching the given *search_str*.
+  one/all에서 'one'을 사용하면 **JSON_SEARCH** 첫번째 일치가 나타났을 때 탐색이 멈추게 된다.
+  반면에 'all'을 사용하면 *search_str*과 일치하는 모든 경로를 탐색한게 된다.
 
-  The given json paths determine filters on the returned paths, the resulting json paths's prefixes need to match at least one given json path argument.
-  If no json path argument is given, **JSON_SEARCH** will execute the search starting from the root element.
+  주어진 json 경로는 반환 된 경로의 필터를 결정하므로 결과로 나온 json 경로의 접두사(prefix)는 적어도 하나의 주어진 json 경로 인자와 일치해야 한다.
+  json경로 인자가 누락된 경우, **JSON_SEARCH**는 루트 요소로 부터 탐색을 시작한다.
 
 .. code-block:: sql
 
@@ -450,8 +440,8 @@ JSON_SEARCH
     ======================
       "["$.a[0]","$.b"]"
 
-Wildcards can be used to define path filters as more general formats.
-Accepting only json paths that start with object key identifier:
+와일드카드는 좀더 일반적인 형식의 경로 필터로 사용될 수 있다.
+json 경로는 객체 키 식별자로 시작하는 것만 허용된다.
 
 .. code-block:: sql
 
@@ -463,7 +453,7 @@ Accepting only json paths that start with object key identifier:
     ======================
       "["$.a[0]","$.b","$.c"]"
 
-Accepting only json paths that start with object key identifier and follow immediately with a json array index will filter out '$.b', '$.d.e[0]' matches:
+객체 키(key) 식별자로 시작하고 json 배열 인덱스를 따르는 json 경로만 허용함으로써 '$.b', '$.d.e[0]' 일치 항목이 필터링 된다:
 
 .. code-block:: sql
 
@@ -475,7 +465,7 @@ Accepting only json paths that start with object key identifier and follow immed
     ======================
       "["$.a[0]","$.c[0]"]"
 
-Accepting any paths that contain json array indexes will filter out '$.b'
+json 배열 인덱스를 포함하는 json 경로만 허용함으로써 '$.b'가 필터링 된다.
 
 .. code-block:: sql
 
@@ -494,11 +484,11 @@ JSON_EXTRACT
 
 .. function:: JSON_EXTRACT (json_doc, json path [, json path] ...)
 
-  Returns json elements from the *json_doc*, that are addressed by the given paths.
-  If json path arguments contain wildcards, all elements that are addressed by a path compatible with the wildcards-containing json path are gathered in a resulting json array. 
-  A single json element is returned if no wildcards are used in the given json paths and a single element is found, otherwise the json elements found are wrapped in a json array.
-  Raises an error if a json path is **NULL** or invalid or if *json_doc* argument is invalid.
-  Returns **NULL** if no elements are found or if json_doc is **NULL**.
+  해당 경로로 지정된 *json_doc*로부터 json 요소를 반환한다.
+  json 경로 인자가 와일드카드를 포함하는 경우 와일드카드에 의해 포함될 수 있는 모든 경로의 지정된 json 요소가 json 배열 결과로 반환된다.
+  와일드카드를 사용하지 않고 json 경로에서 하나의 요소만 발견된 경우 하나의 json 요소만 반환되며, 그렇지 않은 경우 발견된 json요소는 json 배열에 래핑된다.
+  josn path가 **NULL**이거나 유효하지 않은 경우 혹은 *json_doc* 인자가 유효하지 않은 경우 에러가 반환된다.
+  json 요소가 발견되지 않거나 json_doc이 **NULL**인 경우 **NULL**을 반환한다.
 
 .. code-block:: sql
 
@@ -518,9 +508,9 @@ JSON_EXTRACT
 
       json_extract('{"a":["a","b"],"b":"a","c":["a"], "d":{"e":["a"]}}', '$.a[*]')
     ======================
-      "["a","b"]" -- '$.a[0]' and '$.a[1]' wrapped in a json array, forming ["a","b"] 
+      "["a","b"]" -- '$.a[0]'와 '$.a[1]'는 json 배열로 래핑되어, ["a","b"]를 형성한다.
 
-Changing '.a' from previous query with '.*' wildcards will also match '$.c[0]'. This will match any json path that is exactly an object key identifier followed by an array index.
+와일드 카드'.*'를 포함한 이전의 쿼리를 '.a'로 바꾸면 '$.c[0]'가 일치할 것인데, 이것은 정확히 객체 키(key) 식별자와 배열 인덱스가 있는 모든 json 경로와 일치할 것이다.
 
 .. code-block:: sql
 
@@ -532,7 +522,7 @@ Changing '.a' from previous query with '.*' wildcards will also match '$.c[0]'. 
     ======================
       "["a","b","a"]"
 
-The following json path will match all json paths that end with a json array index (matches all previous matched paths and, in addition, '$.d.e[0]') :
+다음 json 경로는 json 배열 인덱스로 끝나는 모든 json 경로와 일치할 것이다 (이전의 일치하는 모든 경로 및 '$ .d.e [0]'과 일치):
 
 .. code-block:: sql
 
@@ -552,7 +542,7 @@ The following json path will match all json paths that end with a json array ind
 
       json_extract('{"a":["a","b"],"b":"a","c":["a"], "d":{"e":["a"]}}', '$d**[*]')
     ======================
-      "["a"]" -- '$.d.e[0]' is the only path matching the given argument path family - paths that start with '.d' and end with an array index
+	  "["a"]" -- '$.d.e[0]'은 헤딩 인수 경로 패밀리와 일치하는 유일한 경로이며, .d'로 시작하고 배열 인덱스로 끝나는 경로이다.
 
 .. _fn-json-arrow:
 
@@ -561,9 +551,9 @@ The following json path will match all json paths that end with a json array ind
 
 .. function:: json_doc -> json path
 
-  Alias operator for **JSON_EXTRACT** with two arguments, having the *json_doc* argument constrained to be a column.
-  Raises an error if the json path is **NULL** or invalid.
-  Returns **NULL** if it is applied on a **NULL** *json_doc* argument.
+  *json_doc* 인자가 하나의 컬럼으로 제한된 두 개의 인자를 가지는 **JSON_EXTRACT**의 별명 연산자.
+  json 경로가 **NULL**이거나 유효하지 않은 경우 오류를 반환한다.
+  **NULL** *josn_doc* 인자가 적용된 경우에는 **NULL**을 반환한다.
 
 .. code-block:: sql
 
@@ -588,9 +578,9 @@ The following json path will match all json paths that end with a json array ind
 
 .. function:: json_doc ->> json path
 
-  Alias for **JSON_UNQUOTE** (json_doc->json path). Operator can be applied only on *json_doc* arguments that are columns.
-  Raises an error if the json path is **NULL** or invalid.
-  Returns **NULL** if it is applied on a **NULL** *json_doc* argument.
+   **JSON_UNQUOTE**의 별명 (json_doc->json 경로). 본 연산자는 컬럼인 *json_doc* 인자에만 적용 할 수 있다.
+   json 경로가 **NULL**이거나 유효하지 않은 경우 오류가 발생한다.
+   **NULL** *json_doc* 인수에 적용된 경우 **NULL**을 반환한다.
 
 .. code-block:: sql
 
@@ -615,13 +605,15 @@ JSON_CONTAINS_PATH
 
 .. function:: JSON_CONTAINS_PATH (json_doc, one/all, json path [, json path] ...)
 
-  The **JSON_CONTAINS_PATH** function verifies whether the given paths exist inside the *json_doc*.
+  **JSON_CONTAINS_PATH** 함수는 해당 경로가 *json_doc* 내에 존재하는지를 검사한다.
 
-  When one/all argument is 'all', all given paths must exist to return 1. Returns 0 otherwise.
+  one/all 인자 중 'all'이 적용된 경우 모든 경로가 존재하면 1을 반환하고 그렇지 않으면 0을 반환한다.
+  
+  one/all 인자 중 'one'이 적용된 경우 하나의 경로라도 존재하면 1을 반환하고 그렇지 않으면 0을 반환한다.
 
-  When one/all argument is 'one', it returns 1 if any given path exists. Returns 0 otherwise.
-
+  해당 인자가 **NULL**이면 **NULL**을 반환한다.
   Returns **NULL** if any argument is **NULL**.
+  해당 인자가 유효하지 않으면 오류가 발생한다.
   An error occurs if any argument is invalid.
 
 .. code-block:: sql
@@ -643,8 +635,7 @@ JSON_CONTAINS_PATH
       json_contains_path('[{"0":0},1,"2",{"three":3}]', 'all', '$[0]', '$[0]."0"', '$[1]', '$[2]', '$[3]', '$.inexistent')
     ======================================================================================================================
                                                                                                                          0
-
-The **JSON_CONTAINS_PATH** function supports wildcards inside json paths.
+**JSON_CONTAINS_PATH** 함수는 json 경로 내에 와일드카드를 지원한다.
 
 .. code-block:: sql
 
@@ -663,18 +654,18 @@ JSON_CONTAINS
 
 .. function:: JSON_CONTAINS (json_doc doc1, json_doc doc2 [, json path])
 
-  The **JSON_CONTAINS** function verifies whether the *doc2* is contained inside the *doc1* at the optionally specified path.
-  A json element contains another json element if the following recursive rules are satisfied:
+  **JSON_CONTAINS** 함수는 *doc2*가 옵션으로 지정된 경로의 *doc1*에 포함되는지를 검사한다.
+  다음 재귀 규칙이 충족되는 경우 json 요소에 다른 json 요소가 포함된다.
 
-  - A json scalar contains another json scalar if they have the same type (their **JSON_TYPE** () are equal) and are equal. As an exception, json integer can be compared and equal to json double (even if their **JSON_TYPE** () evaluation are different).
-  - A json array contains a json scalar or a json object if any of json array's elements contains the json_nonarray.
-  - A json array contains another json array if all the second json array's elements are contained in the first json array.
-  - A json object contains another json object if, for every (*key2*, *value2*) pair in the second object, there exists a (*key1*, *value1*) pair in the first object with *key1* = *key2* and *value2* contained in *value1*.
-  - Otherwise the json element is not contained.
+  - 타입이 같고 (**JSON_TYPE** ()이 일치하고) 스칼라도 같은 경우 json 스칼라에 다른 json 스칼라가 포함된다. 예외적으로, json integer는 **JSON_TYPE** ()이 다른 경우에도 json double과 비교를 통해 동일한 것으로 간주될 수 있다.
+  - json 배열 요소에 json_nonarray가 포함되어 있으면 json 배열에 json 스칼라 또는 json 객체가 포함된다.
+  - 두 번째 json 배열의 모든 요소가 첫 번째 json 배열에 포함되어 있으면 json 배열에 다른 json 배열이 포함된다.
+  - 두 번째 객체의 모든 (*key2*, *value2*) 쌍에 대해 첫 번째 객체에 *key1* = *key2* 이고 *value2*가 *value1*을 포함하는 (*key1*, *value1*) 쌍이 있는 경우 json 개체에는 다른 json 오브젝트가 포함된다.
+  - 이 외에는 json 요소가 포함되지 않는다.
 
-  Returns whether *doc2* is contained in root json element of *doc1* if no json path argument is given.
-  Returns **NULL** if any argument is **NULL**.
-  An error occurs if any argument is invalid.
+  json 경로 인자가 제공되지 않은 경우 *doc2*가 *doc1*의 루트 json 요소에 포함되는지 여부를 리턴한다.
+  인수가 **NULL**이면 **NULL**을 반환한다.
+  인수가 유효하지 않은 경우 오류가 발생한다.
 
 .. code-block:: sql
 
@@ -716,7 +707,7 @@ JSON_CONTAINS
     =================================================================================
                                                                                     1
 
-Note that json objects do not check containment the same way json arrays do. It is impossible to have a json element that is not a descendent of a json object contained in a sub-element of a json object.
+json 객체는 json 배열과 같은 방식으로 포함을 검사하지 않으며, json 객체의 하위 요소에 포함된 json 객체의 자손이 아닌 json 요소를 가질 수 없다.
 
 .. code-block:: sql
 

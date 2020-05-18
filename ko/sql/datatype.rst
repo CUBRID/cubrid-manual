@@ -2082,14 +2082,14 @@ JSON 데이터 타입
 ================
 
 CUBRID 10.2는 `RFC 7159 <https://tools.ietf.org/html/rfc7159>`__ 에서 정의된 
-native **JSON** 데이터 타입 지원한다. **JSON** 데이터 타입은
-JSON 데이터에 대해 자동 검증을 제공하며 
-JSON 데이터에 대한 빠른 액세스와 작업을 가능하게 한다.
+native **JSON** 데이터 타입을 지원한다. **JSON** 데이터 타입은
+JSON 데이터에 대해 자동 검증을 제공하며, 
+빠른 액세스와 동작이 가능하다.
 
 .. note::
 
-    10.2 서버에 연결하는 이전 버전을 가진 드라이버에서는 
-    JSON 타입 컬럼을 Varchar 타입으로 해석한다.
+    10.2 서버에 연결하는 그 이전 버전의 드라이버는 
+    JSON 타입 컬럼을 Varchar 타입으로 인식한다.
 
 JSON 데이터 생성
 ----------------
@@ -2111,7 +2111,7 @@ JSON 값으로 자동으로 변환된다.
     {"a":1}               'json'
 
 
-:ref:`castfn` 를 사용하거나 문자열 앞에 json 키워드를 사용하여 강제로 JSON으로 변환 할 수도 있습니다.
+:ref:`castfn` 를 사용하거나 문자열 앞에 json 키워드를 사용하여 강제로 JSON으로 변환 할 수도 있다.
 
 .. code-block:: sql
 
@@ -2141,7 +2141,7 @@ JSON 유효성 검사
 ----------------
 
 JSON 데이터로의 변환은 내장된 유효성 검사를 수행하고 
-문자열이 유효한 JSON이 아닌 경우 오류를 보고한다.
+유효한 JSON 문자열이 아닌 경우 오류를 반환한다.
 
 .. code-block:: sql
 
@@ -2156,13 +2156,13 @@ JSON 데이터로의 변환은 내장된 유효성 검사를 수행하고
   유효하지 않은 JSON: 'abc'.
 
 더 엄격한 유효성 검사 규칙을 가진 JSON 타입 컬럼은 
-`draft JSON Schema standard <https://json-schema.org/specification.html>`_ 를 사용하여 정의할 수 있다.
+`JSON 스키마 표준 초안 (draft JSON Schema standard) <https://json-schema.org/specification.html>`_ 를 사용하여 정의할 수 있다.
 만약 JSON 스키마를 다루어본 적이 없다면
-`Understanding JSON Schema
+`JSON 스키마의 이해 (Understanding JSON Schema)
 <https://json-schema.org/understanding-json-schema/index.html>`_ 를 참고할 수 있다.
 
 
-다음은 어떻게 스키마를 사용할 수 있는지에 대한 간단한 예제이다.:
+다음은 스키마 사용 방법에 대한 간단한 예제이다.:
 
 .. code-block:: sql
 
@@ -2280,7 +2280,7 @@ JSON 데이터 타입에서 다른 타입으로의 변환은 다음 표에서 �
 JSON 경로
 -----------
 
-JSON 경로는 JSON 내에서 json 요소를 참조할 수 있는 방법을 제공한다.
+JSON 경로는 JSON 내에서 json 요소를 참조할 수 있는 방법이다.
 많은 JSON 함수는 JSON 내부에서 동작 위치를 정의하기 위해 JSON 경로 또는 JSON 포인터 인수를 필요로 한다.
 JSON 경로는 항상 '$'로 시작하며 배열 인덱스, 객체 키 토큰 및 와일드카드가 뒤따를 수 있다.
 만약 '$' 뒤에 다른 토큰이 없으면 경로는 JSON 데이터 루트를 가리킨다.
@@ -2318,8 +2318,8 @@ JSON 와일드카드는 다음 세 가지 유형 중 하나가 될 수 있다.
 - [*], 와일드카드와 매칭되는 배열 인덱스
 - \**, 객체 키의 시퀀스 배열 인덱스를 매칭. \** 와일드카드는 토큰(path_token)을 뒤에 붙여야 한다.
 
-JSON 포인터와 JSON 텍스트와 같은 경로 식은 ASCII 또는 UTF-8 문자셋으로 인코딩 되어야 한다.
-만약 다른 문자셋이 사용되면, UTF-8으로 변환(coercion)될 것이다.
+JSON 포인터 및 JSON 텍스트와 같은 경로 식은 ASCII 또는 UTF-8 문자셋으로 인코딩 되어야 한다.
+만약 다른 문자셋이 사용된다면, UTF-8으로 변환(coercion)될 것이다.
 
 .. _json-pointer:
 
@@ -2327,8 +2327,8 @@ JSON 포인터
 -------------
 
 https://tools.ietf.org/html/rfc6901에서 정의한 JSON 포인터는 JSON 경로와 다른 방법을 제공한다.
-JSON 포인터는 JSON 경로와 JSON 텍스트와 동일하게 ASCII 또는 UTF-8 문자셋으로 인코딩 되어야 한다.
-만약 다른 문자셋이 사용되면, UTF-8으로 변환(coercion)될 것이다.
+JSON 포인터는 JSON 경로 및 JSON 텍스트와 동일하게 ASCII 또는 UTF-8 문자셋으로 인코딩 되어야 한다.
+만약 다른 문자셋이 사용된다면, UTF-8으로 변환(coercion)될 것이다.
 
 ::
 

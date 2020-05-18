@@ -9,11 +9,11 @@ JSON functions
 
 .. _fn-json-intro:
 
-JSON 함수
+JSON 함수 소개
 ===================================
 
 이 섹션에서는 JSON 데이터 관련 동작에 대해 기술한다.
-지원되는 JSON 함수들은 다음 표와 같다:
+지원하는 JSON 함수들은 다음 표와 같다:
 
 +------------------+------------------+------------------+------------------+
 | :ref:`fn-json-\  | :ref:`fn-json-\  | :ref:`fn-json-\  | :ref:`fn-json-\  |
@@ -38,19 +38,19 @@ JSON 함수
 | \contains`       | \merge`          | \remove`         | \valid`          |
 +------------------+------------------+------------------+------------------+
 
-주로 아래와 같이 다양한 유형의 입력 방식을 가지고 있다.
+함수의 입력 인자는 아래와 같은 몇가지 유형을 가진다.
 
-  - *json_doc*: JSON이나 JSON으로 파싱되는 스트링
+  - *json_doc*: JSON이나 JSON으로 파싱되는 문자열
   - *val*: JSON이나 JSON 지원 스칼라 타입 중 하나로 해석될 수 있는 값
-  - *json key*: 키 이름으로서의 스트링
-  - *json path/pointer*: :ref:`json-path` 과 :ref:`json-pointer`에 설명된 규칙을 따르는 스트링
+  - *json key*: 키 이름으로서의 문자열
+  - *json path/pointer*: :ref:`json-path`과 :ref:`json-pointer`에 설명된 규칙을 따르는 문자열
 
 .. note::
 
-  JSON 함수 스트링 인자의 코드셋은 UTF8을 기준으로 한다. 다른 코드셋의 입력 문자열은 UTF8로 변환된다.
+  JSON 함수 문자열 인자의 코드셋은 UTF8을 기준으로 한다. 다른 코드셋의 입력 문자열은 UTF8로 변환된다.
   UTF8이 아닌 코드셋 문자열에 대한 대소문자 구별 없는 검색은 기대와 다른 결과가 나올 수 있다.
 
-다음의 표는 입력 인자로 받아들이는 *json_doc* 와 *val*의 차이를 보여주고 있다:
+다음의 표는 입력 인자를 해석하는데 있어서 *json_doc*와 *val*의 차이를 보여주고 있다:
 
 +-------------------+-----------------------------+----------------------------------+
 | 입력 타입         | *json_doc*                  | *val*                            |
@@ -77,7 +77,7 @@ JSON_ARRAY
 
 .. function:: JSON_ARRAY ([val1 [ , val2] ...])
 
-  **JSON_ARRAY** 함수는 해당 값들(val, val2, ..)을 가진 리스트(텅빈 리스트도 가능)가 포함된 배열을 반환한다.
+  **JSON_ARRAY** 함수는 해당 값들(val, val2, ..)을 가진 리스트(텅빈 리스트도 가능)가 포함된 json 배열을 반환한다.
 
 .. code-block:: sql
 
@@ -106,7 +106,7 @@ JSON_OBJECT
 
 .. function:: JSON_OBJECT ([key1, val1 [ , key2, val2] ...])
 
-  **JSON_OBJECT** 함수는 해당 키/값(key, val1, key, val2,...)쌍을 가진 리스트(텅빈 리스트도 가능)가 포함된 객체를 반환한다.
+  **JSON_OBJECT** 함수는 해당 키/값(key, val1, key, val2,...)쌍을 가진 리스트(텅빈 리스트도 가능)가 포함된 json 객체를 반환한다.
 
 .. code-block:: sql
 
@@ -135,8 +135,8 @@ JSON_KEYS
 
 .. function:: JSON_KEYS (json_doc [ , json path])
 
-  **JSON_KEYS** 함수는 해당 패스로 주어진 json 객체의 모든 키값을 가진 배열을 반환한다.
-  해당 경로가 json객체가 아닌 json 요소를 지정하면 json null이 반환된다.
+  **JSON_KEYS** 함수는 해당 패스로 주어진 json 객체의 모든 키값을 가진 json 배열을 반환한다.
+  해당 경로가 json 객체가 아닌 json 요소를 지정하면 json null이 반환된다.
   json 경로 인자가 누락되면 키(key)는 json 루트 요소로부터 가져온다.
   *json 경로*가 존재하지 않으면 오류가 발생하고 *json_doc* 인자가 **NULL**이면 **NULL**을 반환한다.
 
@@ -220,7 +220,7 @@ JSON_LENGTH
 
 .. function:: JSON_LENGTH (json_doc [ , json path])
 
-  **JSON_LENGTH** 함수는 해당 json 경로에 있는 json 요소의 길이를 반환한다.
+  **JSON_LENGTH** 함수는 주어진 경로에 있는 json 요소의 길이를 반환한다.
   경로 인자가 주어지지 않으면 josn 루트 요소의 길이가 반환된다.
   인자가 **NULL**이거나 해당 경로에 어떤 요소도 존재하지 않으면 **NULL**이 반환된다.
 
@@ -288,7 +288,7 @@ JSON_TYPE
 
 .. function:: JSON_TYPE (json_doc)
 
-  **JSON_TYPE** 함수는 스트링 인자인 *json_doc*의 타입을 반환한다.
+  **JSON_TYPE** 함수는 문자열 인자인 *json_doc*의 타입을 반환한다.
 
 .. code-block:: sql
 
@@ -306,7 +306,7 @@ JSON_QUOTE
 
 .. function:: JSON_QUOTE (str)
 
-  **JSON_QUOTE** 함수는 문자열과 이스케이프된 특수 문자들을 쌍따옴표로 묶은 json_string을 결과로 반환한다.
+  **JSON_QUOTE** 함수는 문자열과 이스케이프된 특수 문자들을 큰따옴표로 묶은 json_string을 결과로 반환한다.
   *str* 인자가 **NULL**인 경우 **NULL**을 반환한다.
 
 .. code-block:: sql
@@ -405,10 +405,10 @@ JSON_SEARCH
   **LIKE**관련 규칙에 대한 추가 설명은 :ref:`like-expr`을 참고한다.
 
   one/all에서 'one'을 사용하면 **JSON_SEARCH** 첫번째 일치가 나타났을 때 탐색이 멈추게 된다.
-  반면에 'all'을 사용하면 *search_str*과 일치하는 모든 경로를 탐색한게 된다.
+  반면에 'all'을 사용하면 *search_str*과 일치하는 모든 경로를 탐색하게 된다.
 
   주어진 json 경로는 반환 된 경로의 필터를 결정하므로 결과로 나온 json 경로의 접두사(prefix)는 적어도 하나의 주어진 json 경로 인자와 일치해야 한다.
-  json경로 인자가 누락된 경우, **JSON_SEARCH**는 루트 요소로 부터 탐색을 시작한다.
+  json 경로 인자가 누락된 경우, **JSON_SEARCH**는 루트 요소로 부터 탐색을 시작한다.
 
 .. code-block:: sql
 
@@ -486,8 +486,8 @@ JSON_EXTRACT
 
   해당 경로로 지정된 *json_doc*로부터 json 요소를 반환한다.
   json 경로 인자가 와일드카드를 포함하는 경우 와일드카드에 의해 포함될 수 있는 모든 경로의 지정된 json 요소가 json 배열 결과로 반환된다.
-  와일드카드를 사용하지 않고 json 경로에서 하나의 요소만 발견된 경우 하나의 json 요소만 반환되며, 그렇지 않은 경우 발견된 json요소는 json 배열에 래핑된다.
-  josn path가 **NULL**이거나 유효하지 않은 경우 혹은 *json_doc* 인자가 유효하지 않은 경우 에러가 반환된다.
+  와일드카드를 사용하지 않고 json 경로에서 하나의 요소만 발견된 경우 하나의 json 요소만 반환되며, 그렇지 않은 경우 발견된 json 요소는 json 배열로 구성하여 반환된다.
+  json 경로가 **NULL**이거나 유효하지 않은 경우 혹은 *json_doc* 인자가 유효하지 않은 경우 에러가 반환된다.
   json 요소가 발견되지 않거나 json_doc이 **NULL**인 경우 **NULL**을 반환한다.
 
 .. code-block:: sql
@@ -508,7 +508,7 @@ JSON_EXTRACT
 
       json_extract('{"a":["a","b"],"b":"a","c":["a"], "d":{"e":["a"]}}', '$.a[*]')
     ======================
-      "["a","b"]" -- '$.a[0]'와 '$.a[1]'는 json 배열로 래핑되어, ["a","b"]를 형성한다.
+      "["a","b"]" -- '$.a[0]'와 '$.a[1]'는 json 배열로 구성하여, ["a","b"]를 형성한다.
 
 와일드 카드'.*'를 포함한 이전의 쿼리를 '.a'로 바꾸면 '$.c[0]'가 일치할 것인데, 이것은 정확히 객체 키(key) 식별자와 배열 인덱스가 있는 모든 json 경로와 일치할 것이다.
 
@@ -542,7 +542,7 @@ JSON_EXTRACT
 
       json_extract('{"a":["a","b"],"b":"a","c":["a"], "d":{"e":["a"]}}', '$d**[*]')
     ======================
-	  "["a"]" -- '$.d.e[0]'은 헤딩 인수 경로 패밀리와 일치하는 유일한 경로이며, .d'로 시작하고 배열 인덱스로 끝나는 경로이다.
+	  "["a"]" -- '$.d.e[0]'은 해당 인자의 경로 패밀리와 일치하는 유일한 경로이며, .d'로 시작하고 배열 인덱스로 끝나는 경로이다.
 
 .. _fn-json-arrow:
 
@@ -551,7 +551,7 @@ JSON_EXTRACT
 
 .. function:: json_doc -> json path
 
-  *json_doc* 인자가 하나의 컬럼으로 제한된 두 개의 인자를 가지는 **JSON_EXTRACT**의 별명 연산자.
+  *json_doc* 인자가 하나의 컬럼으로 제한된 두 개의 인자를 가지는 **JSON_EXTRACT**의 별칭 연산자.
   json 경로가 **NULL**이거나 유효하지 않은 경우 오류를 반환한다.
   **NULL** *josn_doc* 인자가 적용된 경우에는 **NULL**을 반환한다.
 
@@ -578,9 +578,9 @@ JSON_EXTRACT
 
 .. function:: json_doc ->> json path
 
-   **JSON_UNQUOTE**의 별명 (json_doc->json 경로). 본 연산자는 컬럼인 *json_doc* 인자에만 적용 할 수 있다.
+   **JSON_UNQUOTE**의 별칭 (json_doc->json 경로). 본 연산자는 컬럼인 *json_doc* 인자에만 적용 할 수 있다.
    json 경로가 **NULL**이거나 유효하지 않은 경우 오류가 발생한다.
-   **NULL** *json_doc* 인수에 적용된 경우 **NULL**을 반환한다.
+   **NULL** *json_doc* 인자에 적용된 경우 **NULL**을 반환한다.
 
 .. code-block:: sql
 
@@ -655,7 +655,7 @@ JSON_CONTAINS
 .. function:: JSON_CONTAINS (json_doc doc1, json_doc doc2 [, json path])
 
   **JSON_CONTAINS** 함수는 *doc2*가 옵션으로 지정된 경로의 *doc1*에 포함되는지를 검사한다.
-  다음 재귀 규칙이 충족되는 경우 json 요소에 다른 json 요소가 포함된다.
+  다음과 같이 재귀 규칙이 충족되는 경우 json 요소에 다른 json 요소가 포함된다.
 
   - 타입이 같고 (**JSON_TYPE** ()이 일치하고) 스칼라도 같은 경우 json 스칼라에 다른 json 스칼라가 포함된다. 예외적으로, json integer는 **JSON_TYPE** ()이 다른 경우에도 json double과 비교를 통해 동일한 것으로 간주될 수 있다.
   - json 배열 요소에 json_nonarray가 포함되어 있으면 json 배열에 json 스칼라 또는 json 객체가 포함된다.
@@ -664,8 +664,8 @@ JSON_CONTAINS
   - 이 외에는 json 요소가 포함되지 않는다.
 
   json 경로 인자가 제공되지 않은 경우 *doc2*가 *doc1*의 루트 json 요소에 포함되는지 여부를 리턴한다.
-  인수가 **NULL**이면 **NULL**을 반환한다.
-  인수가 유효하지 않은 경우 오류가 발생한다.
+  인자가 **NULL**이면 **NULL**을 반환한다.
+  인자가 유효하지 않은 경우 오류가 발생한다.
 
 .. code-block:: sql
 

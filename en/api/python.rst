@@ -68,7 +68,7 @@ To install CUBRID Python driver by compiling source code, you should have Python
 
 **Using a Package Manager (EasyInstall) of CUBRID Python Driver (Linux)**
 
-EasyInstall is a Python module (**easy_install**) bundled with **setuptools** that lets you automatically download, build, install, and manage Python packages. It gives you a quick way to install packages remotely by connecting to other websites via HTTP as well as connecting to the Package Index. It is somewhat analogous to the CPAN and PEAR tools for Perl and PHP, respectively. For more information about EasyInstall, see http://packages.python.org/distribute/easy_install.html.
+EasyInstall is a Python module (**easy_install**) bundled with **setuptools** that lets you automatically download, build, install, and manage Python packages. It gives you a quick way to install packages remotely by connecting to other websites via HTTP as well as connecting to the Package Index. It is somewhat analogous to the CPAN and PEAR tools for Perl and PHP, respectively. For more information about EasyInstall, see https://setuptools.readthedocs.io/en/latest/easy_install.html.
 
 Enter the command below to install CUBRID Python driver by using EasyInstall. ::
 

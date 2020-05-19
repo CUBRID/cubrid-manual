@@ -1984,7 +1984,7 @@ The tags and attributes which are specific only to CUBRID can be easily identifi
 
 The best approach to add a new locale is to copy existing LDML file and tweak various setting until desired results are obtained.
 The filename must be formatted like cubrid_<*language*>.xml and be placed in the folder **$CUBRID/locales/data/ldml**.
-The <*language*> part should be a ASCII string (normally five characters) in IETF format (http://en.wikipedia.org/wiki/BCP_47).
+The <*language*> part should be a ASCII string (normally five characters) in IETF format (https://en.wikipedia.org/wiki/BCP_47).
 After creating the LDML file, the <*language*> part string must be added into CUBRID configuration file **$CUBRID/conf/cubrid_locales.txt**.
 Note that the order in this file is the order of generating (compiling) locale library and loading locales at start-up.
 

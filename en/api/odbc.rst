@@ -294,7 +294,7 @@ You can check the result of the sample program by connecting to http://localhost
 ODBC API
 ========
 
-For ODBC API, see ODBC API Reference ( http://msdn.microsoft.com/en-us/library/windows/desktop/ms714562%28v=vs.85%29.aspx ) on the MSDN page. See the table below to get information about the list of functions, ODBC Spec version, and compatibility that CUBRID supports.
+For ODBC API, see ODBC API Reference ( https://docs.microsoft.com/en-us/sql/odbc/reference/syntax/odbc-api-reference?redirectedfrom=MSDN&view=sql-server-ver15 ) on the MSDN page. See the table below to get information about the list of functions, ODBC Spec version, and compatibility that CUBRID supports.
 
 +---------------------+------------------------+--------------------------+--------------------------+
 | API                 | Version Introduced     | Standards Compliance     | Support                  |

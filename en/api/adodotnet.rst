@@ -16,8 +16,8 @@ Installing and Configuring ADO.NET
 **Requirements**
 
 *   Windows (Windows Vista or Windows 7 recommended)
-*   .NET Framework 2.0 or later (4.0 or later versions recommended)
-*   Microsoft Visual Studio Express edition ( http://www.microsoft.com/visualstudio/en-us/products/2010-editions/visual-csharp-express )
+*   .NET Framework 2.0 or later (4.0 or later versions recommended)http://en.wikipedia.org/wiki/Global_Assembly_Cache
+*   Microsoft Visual Studio Express edition ( https://visualstudio.microsoft.com/ )
 
 **Installing and Configuring CUBRID ADO.NET Driver**
 
@@ -25,7 +25,7 @@ Before you start developing .NET applications with CUBRID, you will need the CUB
 
 *   Download the complied library along with other files from:
 
-    http://www.cubrid.org/?mid=downloads&item=ado_dot_net_driver
+    https://www.cubrid.org/?mid=downloads&item=ado_dot_net_driver
 
 *   Compile it yourself from source code. You can check out the code from the SVN repository. If you are using CUBRID 9.0.0 version, enter 9.0.0 in *<CUBRID version>*.
 
@@ -35,7 +35,7 @@ The CUBRID .NET Data Provider is 100% full-managed .NET code and it does not rel
 
 The easiest way to install CUBRID ADO.NET Data Provider is to use the official installer. If you choose to install using the default option (x86), the driver will be installed in the **Program Files\\CUBRID\\CUBRID ADO.NET Data Provider 8.4.1** directory.
 
-You can also choose to install the driver in GAC ( http://en.wikipedia.org/wiki/Global_Assembly_Cache ). The best way to install the driver is to use the tlbimp ( http://msdn.microsoft.com/en-us/library/tt0cf3sx%28v=vs.80%29.aspx ) tool. See the below to import the required namespaces.
+You can also choose to install the driver in GAC ( https://en.wikipedia.org/wiki/Global_Assembly_Cache ). The best way to install the driver is to use the tlbimp ( https://docs.microsoft.com/en-us/previous-versions/dotnet/netframework-2.0/tt0cf3sx(v=vs.80)?redirectedfrom=MSDN ) tool. See the below to import the required namespaces.
 
 .. image:: /images/image88.png
 
@@ -60,7 +60,7 @@ Let's take a look at a simple code which retrieves value from a CUBRID database 
         }
     }
 
-Once you have created the `DbDataReader <http://msdn.microsoft.com/en-us/library/system.data.common.dbdatareader.aspx>`_ object, all you have to do is to use the Get...() method to retrieve any column data. CUBRID ADO.NET driver implements all methods required to read any CUBRID data types.
+Once you have created the `DbDataReader <https://docs.microsoft.com/en-us/dotnet/api/system.data.common.dbdatareader?redirectedfrom=MSDN&view=netcore-3.1>`_ object, all you have to do is to use the Get...() method to retrieve any column data. CUBRID ADO.NET driver implements all methods required to read any CUBRID data types.
 
 .. code-block:: c#
 
@@ -69,7 +69,7 @@ Once you have created the `DbDataReader <http://msdn.microsoft.com/en-us/library
 
 The Get...() method will use as an input parameter the 0-based index position of the retrieved column.
 
-To retrieve specific CUBRID data types, you need to use `CUBRIDDataReader <http://www.cubrid.org/manual/api/ado.net/8.4.1/html/4d0a4cd3-4ac2-07d9-67db-097a8eb850ef.htm>`_, instead of the `DbDataReader <http://msdn.microsoft.com/en-us/library/system.data.common.dbdatareader.aspx>`_ interface.
+To retrieve specific CUBRID data types, you need to use `CUBRIDDataReader <http://www.cubrid.org/manual/api/ado.net/8.4.1/html/4d0a4cd3-4ac2-07d9-67db-097a8eb850ef.htm>`_, instead of the `DbDataReader <https://docs.microsoft.com/en-us/dotnet/api/system.data.common.dbdatareader?redirectedfrom=MSDN&view=netcore-3.1>`_ interface.
 
 .. code-block:: c#
 
@@ -91,7 +91,7 @@ batch Commands
 --------------
 
 When using CUBRID ADO.NET Data Provider library, you can execute more than one query against the data service in a single batch. For more information, see 
-http://msdn.microsoft.com/en-us/library/dd744839%28v=vs.90%29.aspx .
+https://docs.microsoft.com/en-us/previous-versions/dd744839(v=vs.90)?redirectedfrom=MSDN .
 
 For example, in CUBRID, you can write the code like:
 
@@ -334,12 +334,12 @@ The example below shows how to get the list of indexes in a table.
 DataTable Support
 -----------------
 
-The `DataTable <http://msdn.microsoft.com/en-us/library/system.data.datatable.aspx>`_ is a central object in the ADO.NET library and CUBRID ADO.NET Data Provider support the following features.
+The `DataTable <https://docs.microsoft.com/en-us/dotnet/api/system.data.datatable?redirectedfrom=MSDN&view=netcore-3.1>`_ is a central object in the ADO.NET library and CUBRID ADO.NET Data Provider support the following features.
 
-*   `DataTable <http://msdn.microsoft.com/en-us/library/system.data.datatable.aspx>`_ populate
+*   `DataTable <https://docs.microsoft.com/en-us/dotnet/api/system.data.datatable?redirectedfrom=MSDN&view=netcore-3.1>`_ populate
 *   Built-in commands: **INSERT**, **UPDATE**, and  **DELETE**
 *   Column metadata/attributes
-*   `DataSet <http://msdn.microsoft.com/en-us/library/system.data.dataset.aspx>`_, `DataView <http://msdn.microsoft.com/en-us/library/system.data.dataview.aspx>`_ inter-connection
+*   `DataSet <https://docs.microsoft.com/en-us/dotnet/api/system.data.dataset?redirectedfrom=MSDN&view=netcore-3.1>`_, `DataView <https://docs.microsoft.com/en-us/dotnet/api/system.data.dataview?redirectedfrom=MSDN&view=netcore-3.1>`_ inter-connection
 
 The following example shows how to get columns attributes.
 

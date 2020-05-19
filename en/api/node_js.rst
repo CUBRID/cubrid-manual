@@ -16,7 +16,7 @@ Node.js has the following specifics.
 * Good at handling lots of different kinds of I/O at the same time.
 * Non-blocking I/O model that makes it lightweight and efficient.
 
-For more details, see http://nodejs.org/.
+For more details, see https://nodejs.org/en/.
 
 If you want to download CUBRRID Node.js driver or find the recent information, see the following sites:
 
@@ -30,11 +30,11 @@ Installing Node.js
 **Requirements**
 
 *   CUBRID 8.4.1 Patch 2 or higher
-*   `Node.js <http://nodejs.org/>`_
+*   `Node.js <https://nodejs.org/en/>`_
 
 **Installation**
 
-You can install CUBRID Node.js driver with "npm(Node Packaged Modules) install" command, but firstly you need to install node.js on http://nodejs.org/download/. ::
+You can install CUBRID Node.js driver with "npm(Node Packaged Modules) install" command, but firstly you need to install node.js on https://nodejs.org/download/. ::
 
     npm install node-cubrid
 
@@ -60,7 +60,7 @@ Examples
 * `Example using events <https://github.com/CUBRID/node-cubrid#usage>`_
 * `Example based on asyc Node.js module <https://github.com/CUBRID/node-cubrid#usage>`_
 * `Example plain callback style <https://github.com/CUBRID/node-cubrid#usage>`_
-* CUBRID Node.js Driver Demo Video (`Vimeo <https://vimeo.com/cubrid/nodejs-driver>`_, `Youtube <http://www.youtube.com/watch?v=9V4pW-BcyFU&list=UUn7F3CqcEgadeiw-QSWtMjQ&index=1&feature=plcp>`_)
+* CUBRID Node.js Driver Demo Video (`Vimeo <https://vimeo.com/48722475>`_, `Youtube <https://www.youtube.com/watch?v=9V4pW-BcyFU&list=UUn7F3CqcEgadeiw-QSWtMjQ&index=1&feature=plcp>`_)
 
 CUBRID Node.js API
 ==================

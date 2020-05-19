@@ -736,23 +736,23 @@ JSON_MERGE_PATCH
 
 .. function:: JSON_MERGE_PATCH (json_doc, json_doc [, json_doc] ...)
 
-The **JSON_MERGE_PATCH** function merges two or more json docs and returns the resulting merged json. **JSON_MERGE_PATCH** differs from **JSON_MERGE_PRESERVE** in that it will take the second argument when encountering merging conflicts. **JSON_MERGE_PATCH** is compliant with
-`RFC 7396 <https://tools.ietf.org/html/rfc7396/>`_.
+** JSON_MERGE_PATCH ** 함수는 둘 이상의 json 문서를 병합하고 병합 된 결과 json을 리턴한다. ** JSON_MERGE_PATCH **는 병합 충돌시 두 번째 인수가 필요하다는 점에서 ** JSON_MERGE_PRESERVE **와 다르다. 
+**JSON_MERGE_PATCH** 함수는 `RFC 7396 <https://tools.ietf.org/html/rfc7396/>`_을 준수한다.
 
-The merging of two json documents is performed with the following rules, recursively:
+두 개의 json 문서 병합은 다음 규칙에 따라 재귀 적으로 수행된다:
 
-- when two non-object jsons are merged, the result of the merge is the second value.
-- when a non-object json is merged with a json object, the result is the merge of an empty object with the second merging argument.
-- when two objects are merged, the resulting object consists of the following members:
+- 두 개의 비 객체 JSON이 병합되면 병합 결과는 두 번째 값이다.
+- 객체가 아닌 json이 json 객체와 병합되면 빈 객체와 두 번째 병합 인수가 병합된다.
+- 두 객체가 병합되면 결과 객체는 다음 멤버로 구성된다:
 
-  - All members from the first object that have no corresponding member with the same key in the second object.
-  - All members from the second object that have no corresponding members with equal keys in the first object, having values not null. Members with null values from second object are ignored.
-  - One member for each member in the first object that has a corresponding non-null valued member in the second object with the same key. Same key members that appear in both objects and the second object's member value is null, are ignored. The values of these pairs become the results of merging operations performed on the values of the members from the first and second object.
+  - 두 번째 개체와 동일한 키를 가진 멤버를 제외한 첫 번째 개체의 모든 멤버.
+  - 첫 번째 개체에 동일한 키를 가진 멤버와 모든 멤버가 null인 값을 제외한 두번째 개체의 모든 멤버. 두 번째 개체의 null 값을 가진 멤버는 무시된다.
+  - 두 번째 개체와 동일한 키를 가진 null이 아닌 첫 번째 개체의 멤버. 두 객체 모두에 나타나는 동일한 키 멤버일때 두 번째 객체의 멤버 값이 null이면 무시된다. 이 두개의 값은 첫 번째 및 두 번째 오브젝트의 멤버 값에 대해 수행된 병합 조작의 결과가된다.
 
-Merge operations are executed serially when there are more than two arguments: the result of merging first two arguments is merged with third, this result is then merged with fourth and so on.
+병합 작업은 두 개 이상의 인수가있을 때 연속적으로 실행된다. 처음 두 인수를 병합 한 결과는 세 번째와 병합되고 이 결과는 네 번째와 병합된다.
 
-Returns **NULL** if any argument is **NULL**.
-An error occurs if any argument is not valid.
+인수가 ** NULL **이면 ** NULL **을 리턴한다.
+인수가 유효하지 않은 경우 오류가 발생한다.
 
 .. code-block:: sql
 
@@ -765,7 +765,7 @@ An error occurs if any argument is not valid.
       "scalar"
 
 
-The exception to the merge-patching, when the first argument is non-object and the second is an object. A merge operation is performed between an empty object and the second object argument.
+첫 번째 인수가 객체가 아니고 두 번째 인수가 객체 인 경우 병합에 대한 예외. 빈 개체와 두 번째 개체 인수간에 병합 작업이 수행된다.
 
 .. code-block:: sql
 
@@ -777,7 +777,7 @@ The exception to the merge-patching, when the first argument is non-object and t
     ======================
       {}
 
-Objects merging example, exemplifying the described object merging rules:
+기술된 객체 병합 예시:
 
 .. code-block:: sql
 
@@ -796,19 +796,19 @@ JSON_MERGE_PRESERVE
 
 .. function:: JSON_MERGE_PRESERVE (json_doc, json_doc [, json_doc] ...)
 
-  The **JSON_MERGE_PRESERVE** function merges two or more json docs and returns the resulting merged json. **JSON_MERGE_PRESERVE** differs from **JSON_MERGE_PATCH** in that it preserves both json elements on merging conflicts.
+  ** JSON_MERGE_PRESERVE ** 함수는 둘 이상의 json 문서를 병합하고 병합 된 결과 json을 리턴한다. ** JSON_MERGE_PRESERVE **는 병합 충돌시 두 json 요소를 모두 보존한다는 점에서 ** JSON_MERGE_PATCH **와 다르다.
 
-  The merging of two json documents is performed after the following rules, recursively:
+  두 json 문서의 병합은 다음 규칙에 따라 재귀 적으로 수행된다:
   
-  - when two json arrays are merged, they are concatenated.
-  - when two non-array (scalar/object) json elements are merged and at most one of them is a json object, the result is an array containing the two json elements.
-  - when a non-array json element is merged with a json array, the non-array is wrapped as a single element json array and then merged with the json array according to json array merging rules.
-  - when two json objects are merged, all pairs that do not have a corresponding pair in the other json object are preserved. For matching keys, the values are always merged by applying the rules recursively.
+  - 두 개의 json 배열이 병합되면 연결된다.
+  - 두 개의 비 배열 (스칼라 / 오브젝트) json 요소가 병합되고 최대 하나가 json 객체 인 경우 결과는 두 개의 json 요소를 포함하는 배열이다.
+  - 비 배열 json 요소가 json 배열과 병합되면 비 배열은 단일 요소 json 배열로 변경된 다음 json 배열 병합 규칙에 따라 json 배열과 병합된다.
+  - 두 개의 json 객체가 병합되면 다른 json 객체와 비교해 없는 모든 멤버가 유지된다. 일치하는 키의 경우 규칙을 재귀 적으로 적용하여 값이 항상 병합된다.
 
-  Merge operations are executed serially when there are more than two arguments: the result of merging first two arguments is merged with third, this result is then merged with fourth and so on.
+  병합 작업은 두 개 이상의 인수가있을 때 연속적으로 실행된다. 처음 두 인수를 병합 한 결과는 세 번째와 병합되고이 결과는 네 번째와 병합된다.
 
-  Returns **NULL** if any argument is **NULL**.
-  An error occurs if any argument is not valid.
+  인수가 ** NULL **이면 ** NULL **을 리턴한다.
+  인수가 유효하지 않은 경우 오류가 발생한다.
 
 .. code-block:: sql
 
@@ -831,7 +831,7 @@ JSON_MERGE_PRESERVE
       ["a","b","c","scalar"]
 
 
-**JSON_MERGE_PRESERVE**, as opposed to **JSON_MERGE_PATCH**, will not drop and patch first argument's elements during merges and will gather them together.
+** JSON_MERGE_PATCH **와 달리 ** JSON_MERGE_PRESERVE **는 병합하는 동안 첫 번째 인수의 요소를 삭제 및 수정하지 않고 함께 수집한다.
 
 .. code-block:: sql
 
@@ -850,7 +850,7 @@ JSON_MERGE
 
 .. function:: JSON_MERGE (json_doc, json_doc [, json_doc] ...)
 
-  **JSON_MERGE** is an alias for **JSON_MERGE_PRESERVE**.
+  ** JSON_MERGE **는 ** JSON_MERGE_PRESERVE **의 별칭이다.
 
 .. _fn-json-array-append:
 
@@ -859,15 +859,15 @@ JSON_ARRAY_APPEND
 
 .. function:: JSON_ARRAY_APPEND (json_doc, json path, json_val [, json path, json_val] ...)
 
-  The **JSON_ARRAY_APPEND** function returns a modified copy of the first argument. For each given <*json path*, *json_val*> pair, the function appends the value to the json array addressed by the corresponding path.
+  ** JSON_ARRAY_APPEND ** 함수는 첫 번째 인수의 수정 된 사본을 리턴한다. 주어진 각 <* json path *, * json_val *> 에 대해 함수는 해당 경로로 지정된 json 배열에 값을 추가한다.
 
-  The (*json path*, *json_val*) pairs are evaluated one by one, from left to right. The document produced by evaluating one pair becomes the new value against which the next pair is evaluated.
+  (* json path *, * json_val *) 은 왼쪽에서 오른쪽으로 하나씩 평가된다. 한 쌍을 평가하여 작성된 문서는 다음 쌍이 평가되는 새로운 값이된다.
 
-  If the json path points to a json array inside the *json_doc*, the *json_val* is appended at the end of the array. 
-  If the json path points to a non-array json element, the non-array gets wrapped as a single element json array containing the referred non-array element followed by the appending of the given *json_val*.
+  json 경로가 * json_doc * 내부의 json 배열을 가리키는 경우 * json_val *이 배열의 끝에 추가된다.
+  json 경로가 비 배열 json 요소를 지정하는 경우 비 배열 요소를 포함하는 단일 요소 json 배열로 변경되고 * json_val *을 추가한다.
 
-  Returns **NULL** if any argument is **NULL**.
-  An error occurs if any argument is invalid.
+  인수가 ** NULL **이면 ** NULL **을 리턴한다.
+  인수가 유효하지 않은 경우 오류가 발생한다.
 
 .. code-block:: sql
 
@@ -907,18 +907,18 @@ JSON_ARRAY_INSERT
 
 .. function:: JSON_ARRAY_INSERT (json_doc, json path, json_val [, json path, json_val] ...)
 
-  The **JSON_ARRAY_INSERT** function returns a modified copy of the first argument. For each given <*json path*, *json_val*> pair, the function inserts the value in the json array addressed by the corresponding path.
+  ** JSON_ARRAY_INSERT ** 함수는 첫 번째 인수의 수정 된 사본을 리턴한다. 주어진 각 <* json path *, * json_val *> 에 대해 함수는 해당 경로로 지정된 json 배열에 값을 삽입한다.
 
-  The (*json path*, *json_val*) pairs are evaluated one by one, from left to right. The document produced by evaluating one pair becomes the new value against which the next pair is evaluated.
+  (* json path *, * json_val *) 은 왼쪽에서 오른쪽으로 하나씩 평가된다. 한 쌍을 평가하여 작성된 문서는 다음 쌍이 평가되는 새로운 값이된다.
 
-  The rules of the **JSON_ARRAY_INSERT** operation are the following:
+  ** JSON_ARRAY_INSERT ** 작업의 규칙은 다음과 같다:
 
-  - if a json path addresses an element of a json_array, the given *json_val* is inserted at the specified index, shifting any following elements to the right.
-  - if the json path points to an array index after the end of an array, the array is filled with nulls after end of the array until the specified index and the json_val is inserted at the specified index.
-  - if the json path does not exist inside the *json_doc*, the last token of the json path is an array index and the json path without the last array index token would have pointed to an element inside the *json_doc*, the element found by the stripped json path is replaced with single element json array and the **JSON_ARRAY_INSERT** operation is performed with the original json path.
+  - json 경로가 json_array의 요소를 지정하면 * json_val *이 지정된 색인에 삽입되어 다음 요소를 오른쪽으로 이동한다.
+  - json 경로가 배열 끝의 다음을 가리키는 경우, 배열의 끝부터 지정된 색인에 삽입 될 때까지 null로채워진다. 그리고 json_val이 지정된 색인에 삽입된다.
+  - json 경로가 * json_doc * 내에 존재하지 않는 경우, json 경로의 마지막 토큰은 배열 인덱스이고 마지막 토큰을 제외한 json 경로는 * json_doc * 내의 요소를 지정했을 것이다. 마지막 토큰을 제외한 json 경로로 찾은 요소는 단일 요소 json 배열로 대체되고 ** JSON_ARRAY_INSERT ** 작업은 원래 json 경로로 수행됩니다.
  
-  Returns **NULL** if any argument is **NULL**.
-  An error occurs if any argument is invalid or if a *json_path* does not address a cell of an array inside the *json_doc*.
+  인수가 ** NULL **이면 ** NULL **을 리턴한다.
+  인수가 유효하지 않거나 * json_path *가 * json_doc * 내부의 배열의 장소를 가르키지 않으면 오류가 발생한다.
 
 .. code-block:: sql
 
@@ -969,22 +969,22 @@ JSON_INSERT
 
 .. function:: JSON_INSERT (json_doc, json path, json_val [, json path, json_val] ...)
 
-  The **JSON_INSERT** function returns a modified copy of the first argument. For each given <*json path*, *json_val*> pair, the function inserts the value if no other value exists at the corresponding path.
+  ** JSON_INSERT ** 함수는 첫 번째 인수의 수정 된 사본을 리턴한다. 주어진 각 <* json path *, * json_val *> 에 대해 해당 경로에 다른 값이 없으면 값을 삽입한다.
 
-  The insertion rules for **JSON_INSERT** are the following:
+  ** JSON_INSERT **의 삽입 규칙은 다음과 같다:
 
-  The *json_val* is inserted if the json path addresses one of the following json values inside the *json_doc*:
+  json 경로가 * json_doc * 내의 다음 json 값 중 하나를 처리하는 경우 * json_val *이 삽입된다:
   
-  - An inexistent object member of an existing json object. A (*key*, *value*) pair is added to the json object with the key being json path's last element and the value being the *json_val*.
-  - An array index past of an existing json array's end. The array is filled with nulls after the initial end of the array and the *json_val* is inserted at the specified index.
+  - 기존 json 객체의 존재하지 않는 객체 멤버이다. key가 json 경로의 마지막 요소이고 값이 * json_val * 인 (* key *, * value *)이 json 오브젝트에 추가된다.
+  - 기존 json 배열 끝을 넘는 배열 색인. 배열은 배열의 끝까지 널로 채워지고 * json_val *은 지정된 색인에 삽입된다.
 
-  The document produced by evaluating one pair becomes the new value against which the next pair is evaluated. 
+  <* json path *, * json_val *> 한 쌍을 평가하여 작성된 json_doc은 다음 <* json path *, * json_val *>이 평가될 때 새로운 값이된다.
 
-  Returns **NULL** if any argument is **NULL**.
-  An error occurs if any argument is invalid.
+  인수가 ** NULL **이면 ** NULL **을 리턴한다.
+  인수가 유효하지 않은 경우 오류가 발생한다.
 
 
-Paths to existing elements inside the *json_doc* are ignored:
+* json_doc * 내의 기존 요소에 대한 경로는 무시된다:
 
 .. code-block:: sql
 
@@ -1023,16 +1023,16 @@ JSON_SET
 
 .. function:: JSON_SET (json_doc, json path, json_val [, json path, json_val] ...)
 
-  The **JSON_SET** function returns a modified copy of the first argument. For each given <*json path*, *json_val*> pair, the function inserts or replaces the value at the corresponding path.
-  Otherwise, the *json_val* is inserted if the json path addresses one of the following json values inside the *json_doc*:
+  ** JSON_SET ** 함수는 첫 번째 인수의 수정 된 사본을 리턴한다. 주어진 각 <* json path *, * json_val *> 에 대해 함수는 해당 경로의 값을 삽입하거나 대체한다.
+  json 경로가 * json_doc * 내부에서 아래의 json 값 중 하나를 가르키면 * json_val *이 삽입된다.
 
-  - An inexistent object member of an existing json object. A (*key*, *value*) pair is added to the json object with the key deduced from the json path and the value being the *json_val*.
-  - An array index past of an existing json array's end. The array is filled with nulls after the initial end of the array and the *json_val* is inserted at the specified index.
+  - 기존 json 객체의 존재하지 않는 객체 멤버이다. (* key *, * value *) 이 json 경로에서 추론 된 키와 * json_val * 값으로 json 객체에 추가된다.
+  - 기존 json 배열 끝을 넘는 배열 색인. 배열은 배열의 끝까지 널로 채워지고 * json_val *은 지정된 색인에 삽입된다.
 
-  The document produced by evaluating one pair becomes the new value against which the next pair is evaluated. 
+  <* json path *, * json_val *> 한 쌍을 평가하여 작성된 json_doc은 다음 <* json path *, * json_val *>이 평가될 때 새로운 값이 된다.
 
-  Returns **NULL** if any argument is **NULL**.
-  An error occurs if any argument is invalid.
+  인수가 ** NULL **이면 ** NULL **을 리턴한다.
+  인수가 유효하지 않은 경우 오류가 발생한다.
 
 .. code-block:: sql
 
@@ -1071,14 +1071,14 @@ JSON_REPLACE
 
 .. function:: JSON_REPLACE (json_doc, json path, json_val [, json path, json_val] ...)
 
- The **JSON_REPLACE** function returns a modified copy of the first argument. For each given <*json path*, *json_val*> pair, the function replaces the value only if another value is found at the corresponding path.
+ ** JSON_REPLACE ** 함수는 첫 번째 인수의 수정 된 사본을 리턴한다. 주어진 각 <* json path *, * json_val *> 에 대해 해당 경로에 다른 값이있는 경우에만 함수가 값을 대체한다.
 
- If the *json_path* does not exist inside the *json_doc*, the (*json path*, *json_val*) pair is ignored and has no effect.
+ * json_path *가 * json_doc * 내에 존재하지 않으면 (* json path *, * json_val *) 이 무시되고 변경되지 않는다.
 
- The document produced by evaluating one pair becomes the new value against which the next pair is evaluated. 
+ <* json path *, * json_val *> 한 쌍을 평가하여 작성된 json_doc은 다음 <* json path *, * json_val *>이 평가될 때 새로운 값이된다.
 
- Returns **NULL** if any argument is **NULL**.
- An error occurs if any argument is invalid.
+ 인수가 ** NULL **이면 ** NULL **을 리턴한다.
+ 인수가 유효하지 않은 경우 오류가 발생한다.
 
 .. code-block:: sql
 
@@ -1090,7 +1090,7 @@ JSON_REPLACE
     ======================
       {"a":"b"}
 
-No replacement is done if the *json path*` does not exist inside the *json_doc*. 
+* json_doc * 안에 * json path *`가 없으면 대체가 수행되지 않는다.
 
 .. code-block:: sql
 
@@ -1119,12 +1119,12 @@ JSON_REMOVE
 
 .. function:: JSON_REMOVE (json_doc, json path [, json path] ...)
 
- The **JSON_REMOVE** function returns a modified copy of the first argument, by removing values from all given paths.
+ ** JSON_REMOVE ** 함수는 주어진 모든 경로에서 값을 제거하여 첫 번째 인수의 수정 된 사본을 리턴한다.
 
- The json path arguments are evaluated one by one, from left to right. The result produced by evaluating a json path becomes the value against which the next json path is evaluated.
+ json 경로 인수는 왼쪽에서 오른쪽으로 하나씩 평가됩니다. json 경로를 평가하여 생성 된 결과는 다음 json 경로가 평가되는 값이된다.
 
- Returns **NULL** if any argument is **NULL**.
- An error occurs if any argument is invalid or if a path points to the root or if a path does not exist.
+ 인수가 ** NULL **이면 ** NULL **을 리턴한다.
+ 인수가 유효하지 않거나 경로가 루트를 가리 키거나 경로가없는 경우 오류가 발생한다.
 
 .. code-block:: sql
 
@@ -1151,12 +1151,12 @@ JSON_REMOVE
 JSON_TABLE
 =====================
 
-**JSON_TABLE** function facilitates transforming jsons into a table-like structures
-that can be queried similarly as regular tables.
-The transformation generates a single row or multiple rows, by expanding for
-example the elements of a JSON_ARRAY.
+** JSON_TABLE ** 함수는 JSON을 테이블과 같은 구조로 변환하는 것을 용이하게 한다.
+일반 테이블과 유사하게 쿼리 할 수 있다.
+변환은 다음을 확장하여 단일 행 또는 여러 행을 생성한다.
+JSON_ARRAY의 요소를 예로들 수 있다.
 
-The full syntax of **JSON_TABLE**:
+** JSON_TABLE **의 전체 문법 :
 ::
 
     JSON_TABLE(
@@ -1181,37 +1181,36 @@ The full syntax of **JSON_TABLE**:
         NULL | ERROR | DEFAULT value ON ERROR
 
 
-The *json_doc* expr must be an expression that results in a json_doc. This can be a constant json, a table's column or the result of a function or operator.
-The *json path* must be a valid path and is used to extract json data to be evaluated in the **COLUMNS** clause.
-The **COLUMNS** clause defines output column types and operations performed to get the output.  
-The [**AS**] *alias* clause is required.
+* json_doc * expr은결과가 json_doc이 되는 표현식이어야 한다. 상수 json, 테이블의 열 또는 함수 또는 연산자의 결과 일 수 있다.
+* json path *는 유효한 경로 여야하며 ** COLUMNS ** 절에서 평가할 json 데이터를 추출하는 데 사용된다.
+** COLUMNS ** 절은 열 유형 및 출력을 얻기 위해 수행되는 작업을 정의한다.
+[** AS **] * alias * 절이 필요합니다.
 
 
-**JSON_TABLE** supports four types of columns:
+** JSON_TABLE **은 네 가지 유형의 열을 지원한다:
 
-- *name* **FOR ORDINALITY**: this type keeps track of a row's number inside a **COLUMNS** clause. The column's type is **INTEGER**.
-- *name* *type* **PATH** *json path* [**on empty**] [**on error**]: Columns of this type are used to extract json_values from the specified json paths. The extracted json data is then coerced to the specified type.
-  If the path does not exist, json value triggers the **on empty** clause. The **on error** clause is triggered if the extracted json value is not coercible to the target type.
+- * name * ** FOR ORDINALITY ** :이 유형은 ** COLUMNS ** 절 내에서 행 번호를 추적한다. 열 유형은 ** INTEGER **이다.
+- * name * * type * ** PATH ** * json path * [** on empty **] [** on error **] :이 유형의 열은 지정된 json 경로에서 json_values를 추출하는 데 사용된다. 추출 된 json 데이터는 지정된 유형으로 강제 변환된다.
+  경로가 존재하지 않으면 json 값은 ** on empty ** 절을 트리거한다. 추출 된 json 값이 대상 유형에 강제되지 않으면 ** on error ** 절이 트리거된다.
 
-  - **on empty** determines the behavior of **JSON_TABLE** in case the path does not exist. **on empty** can have one of the following values:
+  - **on empty**은 경로가 존재하지 않는 경우 ** JSON_TABLE **의 동작을 결정한다. **on empty**은 다음 값 중 하나를 가질 수 있다:
 
-    - **NULL ON EMPTY**: the column is set to **NULL**. This is the default behavior.
-    - **ERROR ON EMPTY**: an error is thrown
-    - **DEFAULT** *value* **ON EMPTY**: *value* will be used instead of the missing value.
+    - ** NULL ON EMPTY ** : 열이 ** NULL **로 설정된다. 이것이 기본 동작이다.
+    - **ERROR ON EMPTY**: 오류가 발생한다.
+    - **DEFAULT** *value* **ON EMPTY**: 빈 값 대신에 *value* 가 사용된다.
 
-  - **on error** can have one of the following values:
+  - **on error**는 다음 값 중 하나를 가질 수 있다.:
 
-    - **NULL ON ERROR**: the column is set to **NULL**. This is the default behavior.
-    - **ERROR ON ERROR**: an error is thrown.
-    - **DEFAULT** *value* **ON ERROR**: *value* will be used instead of the array/object/json scalar that failed coercion to desired column type.
+    - **NULL ON ERROR**: 열이 ** NULL **로 설정된다. 이것이 기본 동작이다.
+    - **ERROR ON ERROR**: 오류가 발생한다.
+    - **DEFAULT** *value* **ON ERROR**: 원하는 열 유형으로 강제 변환하지 못한 배열 / 객체 / json 스칼라 대신 * value *가 사용된다.
 
-- *name* *type* **EXISTS PATH** *json path*: this returns 1 if any data is present at the json path location, 0 otherwise.
+- *name* *type* **EXISTS PATH** *json path*: json 경로 위치에 데이터가 있으면 1을 리턴하고 그렇지 않으면 0을 리턴한다.
 
-- **NESTED** [**PATH**] *json path* **COLUMNS** (*column list*) generates from json data \
-  \found at path a separate subset of rows and columns that are combined \
-  \with the results of parent. Results are combined similarly as "for each" \
-  \ loops. The json path is relative to the parent's path. Same rules for \
-  \ **COLUMNS** clause are applied recursively.
+- **NESTED** [**PATH**] *json path* **COLUMNS** (*column list*) 는 경로에서 찾은 json 데이터에서 부모 결과와 결합 된 행과 열의 개별 서브 세트를 생성한다. \
+  \결과는 "for each"루프와 유사하게 결합된다. \
+  \json 경로는 부모 경로와 관련이 있다. \
+  \ ** COLUMNS ** 절에 대해 동일한 규칙이 재귀 적으로 적용된다.
 
 .. code-block:: sql
 
@@ -1227,7 +1226,7 @@ The [**AS**] *alias* clause is required.
                          1 -- first value found at '$.a[*]' is 1 json scalar, which is coercible to 1
                       NULL -- second value found at '$.a[*]' is [2,3] json array which cannot be coerced to int, triggering NULL ON ERROR default behavior
 
-Overriding the default on_error behavior, results in a different output from previous example: 
+기본 on_error 동작을 재정의하면 이전 예제와 다른 결과가 나타난다: 
 
 .. code-block:: sql
 
@@ -1260,11 +1259,11 @@ Overriding the default on_error behavior, results in a different output from pre
     =======================================
                 1         NULL            0 
 
-In the example below, '$.*' path will be used to make the parent columns receive root json object's member values one by one. Column a shows what is processed. Each member's value of
-the root object will then be processed further by the **NESTED** [**PATH**] clause. **NESTED PATH** uses path '$[*]' take each element of the array to be further processed by its columns.
-**FOR ORDINALITY** columns track the count of the current processed element. In the example's result we can see that for each new element in a column, the *ord* column's value also gets incremented.
-**FOR ORDINALITY** *nested_ord* column also acts as a counter of the number of elements processed by sibling columns. The nested **FOR ORDINALITY** column gets reset after finishing each processing batch.
-The third member's value, 6 cannot be treated as an array and therefore cannot be processed by the nested columns. Nested columns will yield **NULL** values. 
+아래 예에서 '$. *'경로는 상위 열이 루트 json 객체의 멤버 값을 하나씩 받도록하는 데 사용된다. 열 a는 처리 된 내용을 보여준다.
+그런 다음 루트 오브젝트의 각 멤버 값은 ** NESTED ** [** PATH **] 절에 의해 추가로 처리된다. ** NESTED PATH **는 경로 '$ [*]'를 사용하여 배열의 각 요소를 열에 의해 추가로 처리한다.
+** FOR ORDINALITY ** 열은 현재 처리 된 요소의 수를 추적한다. 예제 결과에서 우리는 열의 각 새로운 요소에 대해 * ord * 열의 값도 증가 함을 알 수 있다.
+** FOR ORDINALITY ** * nested_ord * 열은 형제 열에 의해 처리되는 요소 수의 카운터 역할도 한다. 중첩 된 ** FOR ORDINALITY ** 열은 각 처리 일괄 처리가 완료된 후 재설정된다.
+세 번째 멤버의 값인 6은 배열로 취급 될 수 없으므로 중첩 된 열로 처리 할 수 없다. 중첩 된 열은 ** NULL ** 값을 생성한다.
 
 .. code-block:: sql
 
@@ -1288,8 +1287,8 @@ The third member's value, 6 cannot be treated as an array and therefore cannot b
                3  6                            NULL  NULL                
                4  [7]                             1  7                   
 
-The following example showcases how multiple same-level **NESTED** [**PATH**] clauses are treated by the **JSON_TABLE**. The value to be processed gets passed once, one by one and in order, to each of the **NESTED** [**PATH**] clauses.
-During processing of a value by a **NESTED** [**PATH**] clause, any sibling **NESTED** [**PATH**] clauses will fill their column with **NULL** values.
+다음 예는 여러 개의 동일한 레벨 ** NESTED ** [** PATH **] 절이 ** JSON_TABLE **에 의해 처리되는 방법을 보여준다. 처리 될 값은 각 ** NESTED ** [** PATH **] 절에 하나씩 차례로 순서대로 전달된다.
+** NESTED ** [** PATH **] 절로 값을 처리하는 동안 형제 ** NESTED ** [** PATH **] 절은 ** NULL ** 값으로 열을 채웁니다.
 
 .. code-block:: sql
 
@@ -1345,3 +1344,4 @@ An example for multiple layers **NESTED** [**PATH**] clauses:
                 2  {"key1":6,"key2":[7]}                    1  6                             NULL  NULL                         NULL  NULL                
                 2  {"key1":6,"key2":[7]}                    2  [7]                              1  7                            NULL  NULL                
                 2  {"key1":6,"key2":[7]}                 NULL  NULL                          NULL  NULL                            1  7                   
+

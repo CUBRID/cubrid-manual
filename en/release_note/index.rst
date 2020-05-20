@@ -31,7 +31,7 @@ CUBRID welcomes your active participation in bug reporting and looks forward to 
 +---------------+-----------------------------------------------------------------------+
 | User Feedback | CUBRID Open Source Project: https://github.com/CUBRID/cubrid          |
 |               |                                                                       |
-|               | CUBRID Website: http://www.cubrid.org                                 |
+|               | CUBRID Website: https://www.cubrid.org                                |
 +---------------+-----------------------------------------------------------------------+
 
 License

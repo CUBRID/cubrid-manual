@@ -997,7 +997,7 @@ The following example shows how to configure CCI.
 PHP Configuration
 -----------------
 
-To use the functions of CUBRID HA in PHP, connect to the broker by using `cubrid_connect_with_url <http://www.php.net/manual/en/function.cubrid-connect-with-url.php>`_, which is used to specify the connection information of the failover broker in the connection URL. The attribute specified for CUBRID HA is **altHosts**, the information on one or more broker nodes to be connected when a failover occurs.
+To use the functions of CUBRID HA in PHP, connect to the broker by using `cubrid_connect_with_url <https://www.php.net/manual/en/function.cubrid-connect-with-url.php>`_, which is used to specify the connection information of the failover broker in the connection URL. The attribute specified for CUBRID HA is **altHosts**, the information on one or more broker nodes to be connected when a failover occurs.
 
 The following example shows how to configure PHP.
 

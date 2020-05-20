@@ -8,7 +8,7 @@ Node.js Driver
 
 CUBRID Node.js driver is developed in 100% JavaScript and does not require specific platform compilation
 
-Node.js is a platform built on `Chrome's JavaScript runtime <http://code.google.com/p/v8/>`_.
+Node.js is a platform built on `Chrome's JavaScript runtime <https://en.wikipedia.org/wiki/V8_(JavaScript_engine)>`_.
 
 Node.js has the following specifics.
 

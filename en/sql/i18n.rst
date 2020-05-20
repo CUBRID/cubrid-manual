@@ -221,7 +221,7 @@ CUBRID uses following directories and files to set the locales.
 
 *   **$CUBRID/locales/data/ducet.txt** file: Text file containing default universal collation information (codepoints, contractions and expansions, to be more specific) and their weights, as standardized by The Unicode Consortium, which is the starting point for the creation of collations. For more information, see  http://unicode.org/reports/tr10/#Default_Unicode_Collation_Element_Table .
 
-*   **$CUBRID/locales/data/unicodedata.txt** file: Text file containing information about each Unicode codepoint regarding casing, decomposition, normalization etc. CUBRID uses this to determine casing. For more information, see  http://www.ksu.ru/eng/departments/ktk/test/perl/lib/unicode/UCDFF301.html .
+*   **$CUBRID/locales/data/unicodedata.txt** file: Text file containing information about each Unicode codepoint regarding casing, decomposition, normalization etc. CUBRID uses this to determine casing. For more information, see  https://docs.python.org/3/library/unicodedata.html .
 
 *   **$CUBRID/locales/data/ldml** directory: common_collations.xml and XML files, name with the convention cubrid_<*locale_name*>.xml. common_collations.xml file contains shared collation information in all locale files, and each cubrid_<*locale_name*>.xml file contains a locale information for the supported language.
 

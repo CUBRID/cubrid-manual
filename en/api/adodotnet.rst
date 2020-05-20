@@ -16,7 +16,7 @@ Installing and Configuring ADO.NET
 **Requirements**
 
 *   Windows (Windows Vista or Windows 7 recommended)
-*   .NET Framework 2.0 or later (4.0 or later versions recommended)http://en.wikipedia.org/wiki/Global_Assembly_Cache
+*   .NET Framework 2.0 or later (4.0 or later versions recommended)
 *   Microsoft Visual Studio Express edition ( https://visualstudio.microsoft.com/ )
 
 **Installing and Configuring CUBRID ADO.NET Driver**

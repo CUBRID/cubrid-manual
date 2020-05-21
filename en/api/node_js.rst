@@ -42,26 +42,6 @@ If you uninstall CUBRID Node.js driver, do the following command. ::
 
     npm uninstall node-cubrid
 
-CUBRID Node.js Programming
-==========================
-
-.. FIXME: Connection
-.. FIXME: ----------
-
-.. FIXME: * `Connecting to CUBRID through Node.js Driver <http://www.cubrid.org/wiki_apis/entry/connecting-to-cubrid-through-node-js-driver>`_
-
-Examples
---------
-
-.. FIXME: The following blog is missing
-.. FIXME: * `Common uses of CUBRID Node.js API with examples <http://www.cubrid.org/blog/cubrid-appstools/common-uses-of-cubrid-nodejs-api-with-examples/>`_
-.. FIXME: * `Executing Queries with CUBRID Node.js Driver <http://www.cubrid.org/wiki_apis/entry/executing-queries-with-cubrid-node-js-driver>`_
-
-* `Example using events <https://github.com/CUBRID/node-cubrid#usage>`_
-* `Example based on asyc Node.js module <https://github.com/CUBRID/node-cubrid#usage>`_
-* `Example plain callback style <https://github.com/CUBRID/node-cubrid#usage>`_
-* CUBRID Node.js Driver Demo Video (`Vimeo <https://vimeo.com/48722475>`_, `Youtube <https://www.youtube.com/watch?v=9V4pW-BcyFU&list=UUn7F3CqcEgadeiw-QSWtMjQ&index=1&feature=plcp>`_)
-
 CUBRID Node.js API
 ==================
 

@@ -287,7 +287,7 @@ Create the below code as cubrid.asp and store it in a virtual directory. ::
     %>
     </table>
 
-You can check the result of the sample program by connecting to http://localhost/cubrid.asp. When you execute the ASP sample code above, you will get the following output. Enter an appropriate value in each field, enter the query statement in the Query field, and click [Run]. The query result will be displayed at the lower part of the page.
+You can check the result of the sample program by connecting to \http://localhost/cubrid.asp. When you execute the ASP sample code above, you will get the following output. Enter an appropriate value in each field, enter the query statement in the Query field, and click [Run]. The query result will be displayed at the lower part of the page.
 
 .. image:: /images/image83.png
 

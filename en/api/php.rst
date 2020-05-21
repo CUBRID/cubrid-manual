@@ -266,7 +266,7 @@ In this section, we will introduce the way of building CUBRID PHP driver for Lin
     
         <?php phpinfo(); ?>
     
-#.  Use web browser to visit http://localhost/test.php. If you can see the following result, it means that installation is successfully completed.
+#.  Use web browser to visit \http://localhost/test.php. If you can see the following result, it means that installation is successfully completed.
     
     +------------+-------------+
     | CUBRID     |   Value     |

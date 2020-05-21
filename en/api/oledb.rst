@@ -71,7 +71,7 @@ To access this dialog box in Visual Studio .NET, select Connect to Database from
 
 *   Fill in the information, and click Test Connection button, if driver connect database successful, success dialog will pop up.
 
-    More information can found in msdn: https://docs.microsoft.com/en-us/previous-versions/79t8s5dk(v=vs.90)?redirectedfrom=MSDN
+    More information can found in msdn: `https://docs.microsoft.com/en-us/previous-versions/79t8s5dk(v=vs.90) <https://docs.microsoft.com/en-us/previous-versions/79t8s5dk(v=vs.90)>`_
 
      .. image:: /images/oledb_4_confconn.jpg
 
@@ -165,6 +165,6 @@ Without any changes of given values, the default value of the attribute in the T
 OLE DB API
 ==========
 
-For more information about OLE DB API, see Micorosoft OLE DB documentation at  https://docs.microsoft.com/en-us/previous-versions/windows/desktop/ms722784(v=vs.85)?redirectedfrom=MSDN .
+For more information about OLE DB API, see Micorosoft OLE DB documentation at `https://docs.microsoft.com/en-us/previous-versions/windows/desktop/ms722784(v=vs.85) <https://docs.microsoft.com/en-us/previous-versions/windows/desktop/ms722784(v=vs.85)>`_ .
 
 For more information about CUBRID OLE DB, see http://ftp.cubrid.org/CUBRID_Docs/Drivers/OLEDB/.

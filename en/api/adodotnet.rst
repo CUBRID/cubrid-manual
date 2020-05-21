@@ -35,7 +35,7 @@ The CUBRID .NET Data Provider is 100% full-managed .NET code and it does not rel
 
 The easiest way to install CUBRID ADO.NET Data Provider is to use the official installer. If you choose to install using the default option (x86), the driver will be installed in the **Program Files\\CUBRID\\CUBRID ADO.NET Data Provider 8.4.1** directory.
 
-You can also choose to install the driver in GAC ( https://en.wikipedia.org/wiki/Global_Assembly_Cache ). The best way to install the driver is to use the tlbimp ( https://docs.microsoft.com/en-us/previous-versions/dotnet/netframework-2.0/tt0cf3sx(v=vs.80)?redirectedfrom=MSDN ) tool. See the below to import the required namespaces.
+You can also choose to install the driver in GAC ( https://en.wikipedia.org/wiki/Global_Assembly_Cache ). The best way to install the driver is to use the tlbimp ( `https://docs.microsoft.com/en-us/previous-versions/dotnet/netframework-2.0/tt0cf3sx(v=vs.80) <https://docs.microsoft.com/en-us/previous-versions/dotnet/netframework-2.0/tt0cf3sx(v=vs.80)>`_ ) tool. See the below to import the required namespaces.
 
 .. image:: /images/image88.png
 
@@ -60,7 +60,7 @@ Let's take a look at a simple code which retrieves value from a CUBRID database 
         }
     }
 
-Once you have created the `DbDataReader <https://docs.microsoft.com/en-us/dotnet/api/system.data.common.dbdatareader?redirectedfrom=MSDN&view=netcore-3.1>`_ object, all you have to do is to use the Get...() method to retrieve any column data. CUBRID ADO.NET driver implements all methods required to read any CUBRID data types.
+Once you have created the `DbDataReader <https://docs.microsoft.com/en-us/dotnet/api/system.data.common.dbdatareader?view=netcore-3.1>`_ object, all you have to do is to use the Get...() method to retrieve any column data. CUBRID ADO.NET driver implements all methods required to read any CUBRID data types.
 
 .. code-block:: c#
 
@@ -69,7 +69,7 @@ Once you have created the `DbDataReader <https://docs.microsoft.com/en-us/dotnet
 
 The Get...() method will use as an input parameter the 0-based index position of the retrieved column.
 
-To retrieve specific CUBRID data types, you need to use `CUBRIDDataReader <http://www.cubrid.org/manual/api/ado.net/8.4.1/html/4d0a4cd3-4ac2-07d9-67db-097a8eb850ef.htm>`_, instead of the `DbDataReader <https://docs.microsoft.com/en-us/dotnet/api/system.data.common.dbdatareader?redirectedfrom=MSDN&view=netcore-3.1>`_ interface.
+To retrieve specific CUBRID data types, you need to use `CUBRIDDataReader <http://www.cubrid.org/manual/api/ado.net/8.4.1/html/4d0a4cd3-4ac2-07d9-67db-097a8eb850ef.htm>`_, instead of the `DbDataReader <https://docs.microsoft.com/en-us/dotnet/api/system.data.common.dbdatareader?view=netcore-3.1>`_ interface.
 
 .. code-block:: c#
 
@@ -91,7 +91,7 @@ batch Commands
 --------------
 
 When using CUBRID ADO.NET Data Provider library, you can execute more than one query against the data service in a single batch. For more information, see 
-https://docs.microsoft.com/en-us/previous-versions/dd744839(v=vs.90)?redirectedfrom=MSDN .
+`https://docs.microsoft.com/en-us/previous-versions/dd744839(v=vs.90) <https://docs.microsoft.com/en-us/previous-versions/dd744839(v=vs.90)>` .
 
 For example, in CUBRID, you can write the code like:
 
@@ -334,12 +334,12 @@ The example below shows how to get the list of indexes in a table.
 DataTable Support
 -----------------
 
-The `DataTable <https://docs.microsoft.com/en-us/dotnet/api/system.data.datatable?redirectedfrom=MSDN&view=netcore-3.1>`_ is a central object in the ADO.NET library and CUBRID ADO.NET Data Provider support the following features.
+The `DataTable <https://docs.microsoft.com/en-us/dotnet/api/system.data.datatable?view=netcore-3.1>`_ is a central object in the ADO.NET library and CUBRID ADO.NET Data Provider support the following features.
 
-*   `DataTable <https://docs.microsoft.com/en-us/dotnet/api/system.data.datatable?redirectedfrom=MSDN&view=netcore-3.1>`_ populate
+*   `DataTable <https://docs.microsoft.com/en-us/dotnet/api/system.data.datatable?view=netcore-3.1>`_ populate
 *   Built-in commands: **INSERT**, **UPDATE**, and  **DELETE**
 *   Column metadata/attributes
-*   `DataSet <https://docs.microsoft.com/en-us/dotnet/api/system.data.dataset?redirectedfrom=MSDN&view=netcore-3.1>`_, `DataView <https://docs.microsoft.com/en-us/dotnet/api/system.data.dataview?redirectedfrom=MSDN&view=netcore-3.1>`_ inter-connection
+*   `DataSet <https://docs.microsoft.com/en-us/dotnet/api/system.data.dataset?view=netcore-3.1>`_, `DataView <https://docs.microsoft.com/en-us/dotnet/api/system.data.dataview?view=netcore-3.1>`_ inter-connection
 
 The following example shows how to get columns attributes.
 

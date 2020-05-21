@@ -91,7 +91,7 @@ batch Commands
 --------------
 
 When using CUBRID ADO.NET Data Provider library, you can execute more than one query against the data service in a single batch. For more information, see 
-`https://docs.microsoft.com/en-us/previous-versions/dd744839(v=vs.90) <https://docs.microsoft.com/en-us/previous-versions/dd744839(v=vs.90)>` .
+`https://docs.microsoft.com/en-us/previous-versions/dd744839(v=vs.90) <https://docs.microsoft.com/en-us/previous-versions/dd744839(v=vs.90)>`_ .
 
 For example, in CUBRID, you can write the code like:
 

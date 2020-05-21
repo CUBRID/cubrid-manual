@@ -160,7 +160,7 @@ Now that the table is empty, insert data for the test. First, you have to obtain
 
 The auto-commit in CUBRID Python driver is disabled by default. Therefore, you have to manually perform commit by using the `commit <https://pythonhosted.org/CUBRID-Python/_cubrid.connection-class.html#commit>`_ () function after executing any SQL statement. This is equivalent to executing **cur.execute("COMMIT")** . The opposite to executing commit() is executing `rollback <https://pythonhosted.org/CUBRID-Python/_cubrid.connection-class.html#rollback>`_ (), which aborts the current transaction.
 
-Another way to insert data is to use prepared statements. You can safely insert data into the database by defining a row that contains the parameters and passing it to the `execute <http://packages.python.org/CUBRID-Python/CUBRIDdb.cursors.Cursor-class.html#execute>`_ () function.
+Another way to insert data is to use prepared statements. You can safely insert data into the database by defining a row that contains the parameters and passing it to the `execute <https://pythonhosted.org/CUBRID-Python/CUBRIDdb.cursors.BaseCursor-class.html#execute>`_ () function.
 
 .. code-block:: python
 
@@ -186,7 +186,7 @@ The entire script up to now looks like this:
 
 **Fetching all records at a time**
 
-You can fetch entire records at a time by using the `fetchall <http://packages.python.org/CUBRID-Python/CUBRIDdb.cursors.Cursor-class.html#fetchall>`_ () function.
+You can fetch entire records at a time by using the `fetchall <https://pythonhosted.org/CUBRID-Python/CUBRIDdb.cursors.BaseCursor-class.html#fetchall>`_ () function.
 
 .. code-block:: python
 
@@ -202,7 +202,7 @@ This will return the two rows inserted earlier in the following form: ::
 
 **Fetching a single record at a time**
 
-In a scenario where a lot of data must be returned into the cursor, you can fetch only one row at a time by using the `fetchone <http://packages.python.org/CUBRID-Python/CUBRIDdb.cursors.Cursor-class.html#fetchone>`_ () function.
+In a scenario where a lot of data must be returned into the cursor, you can fetch only one row at a time by using the `fetchone <https://pythonhosted.org/CUBRID-Python/CUBRIDdb.cursors.BaseCursor-class.html#fetchone>`_ () function.
 
 .. code-block:: python
 
@@ -214,7 +214,7 @@ In a scenario where a lot of data must be returned into the cursor, you can fetc
 
 **Fetching as many as records desired at a time**
 
-You can fetch a specified number of records at a time by using the `fetchmany <http://packages.python.org/CUBRID-Python/CUBRIDdb.cursors.Cursor-class.html#fetchmany>`_ () function.
+You can fetch a specified number of records at a time by using the `fetchmany <https://pythonhosted.org/CUBRID-Python/CUBRIDdb.cursors.BaseCursor-class.html#fetchmany>`_ () function.
 
 .. code-block:: python
 
@@ -247,7 +247,7 @@ For more information about numbers representing data types, see https://pythonho
 
 **Releasing Resource**
 
-After you have done using any cursor or connection to the database, you must release the resource by calling both object's `close <http://packages.python.org/CUBRID-Python/CUBRIDdb.cursors.Cursor-class.html#close>`_ () function.
+After you have done using any cursor or connection to the database, you must release the resource by calling both object's `close <https://pythonhosted.org/CUBRID-Python/CUBRIDdb.cursors.BaseCursor-class.html#close>`_ () function.
 
 .. code-block:: python
 

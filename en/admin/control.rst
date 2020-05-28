@@ -1233,7 +1233,7 @@ CUBRID supports encrypted connections between clients and server using TLS (Tran
 
 CUBRID Broker can be configured for encrypted mode (**SSL = ON**) or non-encrypted mode (**SSL = OFF**) using **SSL** parameter in **cubrid_broker.conf**. A Broker must be restarted when the encryption parameter is changed. When a Broker is configured in encryption mode, clients such as **jdbc client** must connect in encryption mode, otherwise the connection to the broker will be rejected. The opposite is also true. That is, a connection request of clients using encryption mode to non-secure broker will be refused.
 
-When SSL parameter is not specified in cubrid_broker.conf, that broker will be started in non-encrypted mode (**'SSL = OFF'** is the default). The following is an example of setting the Broker **'query_editor'** in SSL mode (cubrid_broker.conf).
+When SSL parameter is not specified in cubrid_broker.conf, that broker will be started in non-encrypted mode (**'SSL = OFF'** is the default). The following is an example of setting the Broker **'query_editor'** in **encrypted mode** (cubrid_broker.conf).
 
 ::
 
@@ -1246,7 +1246,11 @@ When SSL parameter is not specified in cubrid_broker.conf, that broker will be s
 
 **Certificate and Private Key**
 
-In order to exchange an encrypted **symmetric session key** which will be used in a secure communication session, a public key and a private key are required in the server. The public key used by the server is included in the certificate **'cas_ssl_cert.crt'**, and the private key is included **'cas_ssl_cert.key'**. The certificate and private key are located in the **$CUBRID/conf** directory. This certificate was created with the OpenSSL command tool utility, which is a 'self-signed' certificate and can be replaced with another certificate issued by a public CA (Certificate Authorities, for example **IdenTrust** or **DigiCert**) if desired. Or, existing certificate/private key can be replaced by generating new one using OpenSSL as shown below.
+In order to exchange an encrypted **symmetric session key** which will be used in a secure communication session, a public key and a private key are required in the server.
+
+The public key used by the server is included in the certificate **'cas_ssl_cert.crt'**, and the private key is included **'cas_ssl_cert.key'**. The certificate and private key are located in the **$CUBRID/conf** directory.
+
+This certificate was created with the OpenSSL command tool utility, which is a **'self-signed'** certificate and can be replaced with another certificate issued by a public **CA** (Certificate Authorities, for example **IdenTrust** or **DigiCert**) if desired. Or, existing certificate/private key can be replaced by generating new one using OpenSSL as shown below.
 
 ::
 
@@ -1254,7 +1258,7 @@ In order to exchange an encrypted **symmetric session key** which will be used i
     $ openssl req -new -key my_cert.key -out my_cert.csr                                 # create CSR (Certificate Signing Request)
     $ openssl x509 -req -days 365 -in my_cert.csr -signkey my_cert.key -out my_cert.crt  # create a certificate valid for 1 year.
 
-And replace my_cert.key and my_cert.crt with $CUBRID/conf/cas_ssl_cert.key and $CUBRID/conf/cas_ssl_cert.crt respectively.
+And replace **my_cert.key** and **my_cert.crt** with $CUBRID/conf/cas_ssl_cert.key and $CUBRID/conf/cas_ssl_cert.crt respectively.
 
 Managing a Specific Broker
 --------------------------
@@ -1715,7 +1719,7 @@ If there is only one message, they are the same, but if there are two messages, 
 +--------------------------------------------------+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------+
 | CAS_ER_NOT_IMPLEMENTED(-10100)                   |  None / Attempt to use a not supported service                      |                                                                                                                      |
 +--------------------------------------------------+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| CAS_ER_SSL_TYPE_NOT_ALLOWED                      |  None / The requested SSL mode is not permitted                     |                                                                                                                      |
+| CAS_ER_SSL_TYPE_NOT_ALLOWED(-10103)              |  None / The requested SSL mode is not permitted                     |                                                                                                                      |
 +--------------------------------------------------+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------+
 | CAS_ER_IS(-10200)                                |  None / Authentication failure                                      |                                                                                                                      |
 +--------------------------------------------------+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------+

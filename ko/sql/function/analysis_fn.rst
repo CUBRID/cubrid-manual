@@ -1,5 +1,5 @@
 
-:meta-keywords: cubrid aggregate, database aggregate function, curbid analytic, database analytic function
+:meta-keywords: cubrid aggregate, database aggregate function, cubrid analytic, database analytic function, json aggregate function
 :meta-description: CUBRID Aggregate/Analytic function is used when you want to analyze data and extract some results.
 
 :tocdepth: 3
@@ -2048,3 +2048,65 @@ VAR_SAMP
                 3  'Lee'                    9.300000000000000e+01     5.435000000000000e+02
                 3  'Sara'                   4.300000000000000e+01     5.435000000000000e+02
                 3  'Wane'                   9.900000000000000e+01     5.435000000000000e+02
+
+.. _fn-json-arrayagg:
+
+JSON_ARRAYAGG
+===================================
+
+.. function:: JSON_ARRAYAGG (json_val)
+
+  평가된 행으로부터 JSON 배열을 만드는 집계 함수이다.
+
+.. code-block:: sql
+
+    CREATE TABLE t_score(name VARCHAR(10), score INT);
+    INSERT INTO t_score VALUES
+        ('Amie', 60),
+        ('Jane', 80),
+        ('Lora', 60),
+        ('James', 75),
+        ('Peter', 70),
+        ('Tom', 30),
+        ('Ralph', 99),
+        ('David', 55),
+        ('Amie', 65);
+
+    SELECT JSON_ARRAYAGG (name) AS test_takers from t_score;
+
+::
+
+      test_takers
+    ======================
+      ["Amie","Jane","Lora","James","Peter","Tom","Ralph","David","Amie"]
+
+.. _fn-json-objectagg:
+
+JSON_OBJECTAGG
+===================================
+
+.. function:: JSON_OBJECTYAGG (key, json_val expr)
+
+  각 행의 평가에서 수집된 (key, json_val) 표현식으로부터 JSON 객체를 생성한다.
+
+.. code-block:: sql
+
+    CREATE TABLE t_score(name VARCHAR(10), score INT);
+    INSERT INTO t_score VALUES
+        ('Amie', 60),
+        ('Jane', 80),
+        ('Lora', 60),
+        ('James', 75),
+        ('Peter', 70),
+        ('Tom', 30),
+        ('Ralph', 99),
+        ('David', 55);
+
+    SELECT JSON_OBJECTAGG (name, score) AS test_scores from t_score;
+
+::
+
+      test_scores
+    ======================
+      {"Amie":60,"Jane":80,"Lora":60,"James":75,"Peter":70,"Tom":30,"Ralph":99,"David":55}
+

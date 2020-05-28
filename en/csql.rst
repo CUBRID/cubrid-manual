@@ -15,7 +15,7 @@ CSQL is an application that allows users to use SQL statements through a command
 Introduction to the CSQL Interpreter
 ====================================
 
-**A Tool for SQL*
+**A Tool for SQL**
 
 The CSQL Interpreter is an application installed with CUBRID that allows you to execute in an interactive or batch mode and viewing query results. The CSQL Interpreter has a command-line interface. With this, you can store SQL statements together with their results to a file for a later use.
 

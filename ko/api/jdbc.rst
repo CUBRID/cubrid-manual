@@ -184,12 +184,10 @@ JDBC 프로그래밍
 
     *   **useLazyConnection**: 이 값이 true이면 사용자의 연결 요청 시 브로커 연결 없이 성공을 반환(기본값: false)하고, prepare나 execute 등의 함수를 호출할 때 브로커에 연결한다. 이 값을 true로 설정하면 많은 응용 클라이언트가 동시에 재시작되면서 연결 풀(connection pool)을 생성할 때 접속이 지연되거나 실패하는 현상을 피할 수 있다. 
 
-    *   **useSSL**: default는 false이며, 이 값이 true이면 사용자 연결 요청 시 암호화 연결을 시도하고, 연결이 성공 하면 client와 server간의 통신 데이터는 암호화 됩니다. 
+    *  **useSSL**: 패킷 암호화 여부 (기본값: false)
 
-        *   암호화 연결 방법
-
-            *   Client : useSSL = true
-            *   Server : cubrid_broker.conf 에 SSL = ON 설정 (SSL의 default는 OFF)
+       *   패킷 암호화: useSSL = true
+       *   일반 평문: useSSL = false
 
 **예제 1** ::
 
@@ -217,7 +215,7 @@ JDBC 프로그래밍
     --connection URL string when properties(altHosts,rcTime, charSet) specified for HA
     URL=jdbc:CUBRID:192.168.0.1:33000:demodb:public::?altHosts=192.168.0.2:33000,192.168.0.3:33000&rcTime=600&charSet=utf-8
 
-    --connection URL string when useSSL property specified for encrypt
+    --connection URL string when useSSL property specified for encrypted connection
     URL=jdbc:CUBRID:192.168.0.1:33000:demodb:public::?useSSL=true
 
 **예제 2**
@@ -250,10 +248,10 @@ JDBC 프로그래밍
 
 .. warning::
 
-    Server와 Client의 기본 설정은 암호화를 하지 않습니다. 암호화를 하기위해서는 Server와 client 모두 SSL을 설정해야 하며, Server와 Client의 SSL설정이 서로 다른 경우 연결이 되지 않습니다.
-
-    *   useSSL=true, SSL=OFF 일 때 연결 불가
-    *   useSSL=false, SSL=ON 일 때 연결 불가
+    * useSSL의 flag는 **브로커 모드와 일치해야 한다**. 아래와 같이 브로커의 암호화 모드와 다른 flag로 접속을 요청하는 경우 **연결되지 않는다**.
+ 
+       *   useSSL=true, 브로커 '일반 모드' 일 때 연결 불가 (**cubrid_broker.conf**: SSL = OFF)
+       *   useSSL=false, 브로커 '암호화 모드' 일때 연결 불가 (**cubrid_broker.conf**: SSL = ON)
 
 .. _jdbc-conn-datasource:
 

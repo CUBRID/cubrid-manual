@@ -138,6 +138,7 @@ The **getConnection** method returns the **Connection** object and it is used to
                  | logOnException=<bool_type>
                  | logSlowQueries=<bool_type>&slowQueryThresholdMillis=<millisecond>
                  | useLazyConnection=<bool_type>
+                 | useSSL=<bool_type>
                  
         <alternative_hosts> ::=
         <standby_broker1_host>:<port> [,<standby_broker2_host>:<port>]
@@ -183,6 +184,11 @@ The **getConnection** method returns the **Connection** object and it is used to
 
     *   **useLazyConnection**: If this is true, it returns success without connecting to the broker when user requests the connection, and it connects to the broker after calling prepare or execute function(default: false). If this value is true, it can prevent from access delay or failure as many application clients restart simultaniously and create connection pools.
 
+    *  **useSSL**: Packet Encryption mode (Default: false)
+
+       *   Packet encryption: useSSL = true
+       *   Plain text: useSSL = false
+
 **Example 1** ::
 
     --connection URL string when user name and password omitted
@@ -208,6 +214,9 @@ The **getConnection** method returns the **Connection** object and it is used to
      
     --connection URL string when properties(altHosts,rcTime, charSet) specified for HA
     URL=jdbc:CUBRID:192.168.0.1:33000:demodb:public::?altHosts=192.168.0.2:33000,192.168.0.3:33000&rcTime=600&charSet=utf-8
+
+    --connection URL string when useSSL property specified for encrypted connection
+    URL=jdbc:CUBRID:192.168.0.1:33000:demodb:public::?useSSL=true
 
 **Example 2**
 
@@ -236,6 +245,13 @@ The **getConnection** method returns the **Connection** object and it is used to
     *   The database connection in thread-based programming must be used independently each other.
     *   The rollback method requesting transaction rollback will be ended after a server completes the rollback job.
     *   In autocommit mode, the transaction is not committed if all results are not fetched after running the SELECT statement. Therefore, although in autocommit mode, you should end the transaction by executing COMMIT or ROLLBACK if some error occurs during fetching for the resultset.
+
+.. warning::
+
+    * The **useSSL** flag must match with mode of the broker trying to connect. If the encryption mode is different from the server that trying to connect, that connection request will be rejected. Please refer the following cases that are not allowed.
+
+       *   useSSL=true, connection request will be rejected when the broker is in 'normal mode' (**cubrid_broker.conf**: SSL = OFF)
+       *   useSSL=false, connection request will be rejected when the broker is in 'encryption mode' (**cubrid_broker.conf**: SSL = ON)
 
 .. _jdbc-conn-datasource:
 

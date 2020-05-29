@@ -1227,7 +1227,7 @@ The below is an example of displaying results.
 Encrypted Connections
 ---------------------
 
-In an unencrypted communication environment, someone can monitor and interpret all the traffic between clients and a database server. In order to access information in an unsafe communication environment while avoiding such an information leakage, data transmitted and received must be encrypted. CUBRID Broker can be configured in safe mode. In this case, all data transmitted and received between the database server and the client are encrypted.
+In an unencrypted communication environment, someone can monitor and interpret all the traffic between clients and a database server, and collected information could be used illegally. In order to access information in an unsafe communication environment while avoiding such an information leakage, data transmitted and received must be encrypted. CUBRID Broker can be configured in safe mode. In this case, all data transmitted and received between the database server and the client are encrypted.
 
 CUBRID supports encrypted connections between clients and server using TLS (Transport Layer Security) protocol. TLS provides data encryption mechanism as well as detecting data tampering, loss, hence ensures providing secure and trusted communication channel between clients and the server. CUBRID provides these TLS functions using **OpenSSL**.
 
@@ -1248,7 +1248,7 @@ When SSL parameter is not specified in cubrid_broker.conf, that broker will be s
 
 In order to exchange an encrypted **symmetric session key** which will be used in a secure communication session, a public key and a private key are required in the server.
 
-The public key used by the server is included in the certificate **'cas_ssl_cert.crt'**, and the private key is included **'cas_ssl_cert.key'**. The certificate and private key are located in the **$CUBRID/conf** directory.
+The public key used by the server is included in the certificate **'cas_ssl_cert.crt'**, and the private key is included in **'cas_ssl_cert.key'**. The certificate and private key are located in the **$CUBRID/conf** directory.
 
 This certificate was created with the OpenSSL command tool utility, which is a **'self-signed'** certificate and can be replaced with another certificate issued by a public **CA** (Certificate Authorities, for example **IdenTrust** or **DigiCert**) if desired. Or, existing certificate/private key can be replaced by generating new one using OpenSSL as shown below.
 

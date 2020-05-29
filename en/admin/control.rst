@@ -1229,7 +1229,7 @@ Encrypted Connections
 
 In an unencrypted communication environment, someone can monitor and interpret all the traffic between clients and a database server, and collected information could be used illegally. In order to access information in an unsafe communication environment while avoiding such an information leakage, data transmitted and received must be encrypted. CUBRID Broker can be configured in safe mode. In this case, all data transmitted and received between the database server and the client are encrypted.
 
-CUBRID supports encrypted connections between clients and server using TLS (Transport Layer Security) protocol. TLS provides data encryption mechanism as well as detecting data tampering, loss, hence ensures providing secure and trusted communication channel between clients and the server. CUBRID provides these TLS functions using **OpenSSL**.
+CUBRID supports encrypted connections between clients and the server using TLS (Transport Layer Security) protocol. TLS provides data encryption mechanism as well as detecting data tampering, loss, hence ensures providing secure and trusted communication channel between clients and the server. CUBRID provides these TLS functions using `OpenSSL <https://www.openssl.org>`_.
 
 CUBRID Broker can be configured for encrypted mode (**SSL = ON**) or non-encrypted mode (**SSL = OFF**) using **SSL** parameter in **cubrid_broker.conf**. A Broker must be restarted when the encryption parameter is changed. When a Broker is configured in encryption mode, clients such as **jdbc client** must connect in encryption mode, otherwise the connection to the broker will be rejected. The opposite is also true. That is, a connection request of clients using encryption mode to non-secure broker will be refused.
 
@@ -1250,7 +1250,7 @@ In order to exchange an encrypted **symmetric session key** which will be used i
 
 The public key used by the server is included in the certificate **'cas_ssl_cert.crt'**, and the private key is included in **'cas_ssl_cert.key'**. The certificate and private key are located in the **$CUBRID/conf** directory.
 
-This certificate was created with the OpenSSL command tool utility, which is a **'self-signed'** certificate and can be replaced with another certificate issued by a public **CA** (Certificate Authorities, for example **IdenTrust** or **DigiCert**) if desired. Or, existing certificate/private key can be replaced by generating new one using OpenSSL as shown below.
+This certificate, **'self-signed'** certificate, was created with the OpenSSL command tool utility, and can be replaced with another certificate issued by a public **CA** (Certificate Authorities, for example **IdenTrust** or **DigiCert**) if desired. Or, existing certificate/private key can be replaced by generating new one using OpenSSL command utility as shown below.
 
 ::
 

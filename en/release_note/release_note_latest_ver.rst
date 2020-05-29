@@ -17,7 +17,7 @@ For CUBRID 10.1, please find https://www.cubrid.org/manual/en/10.1/release_note/
 
 For CUBRID 10.0, please find https://www.cubrid.org/manual/en/10.0/release_note/index.html.
 
-For CUBRID 9.3 or earlier, please find http://www.cubrid.org/documentation/manuals/other-versions.
+For CUBRID 9.3, please find https://www.cubrid.org/manual/en/9.3.0/release_note/index.html.
 
 Overview
 ========

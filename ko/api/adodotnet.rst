@@ -27,11 +27,11 @@ CUBRID를 사용하는 .NET 응용 프로그램을 개발하려면 CUBRID ADO.NE
 
     http://www.cubrid.org/?mid=downloads&item=ado_dot_net_driver
 
-*   소스코드에서 직접 빌드한다. 소스코드는 다음 SVN 저장소에서 체크아웃할 수 있다. CUBRID 버전이 9.0.0이라면 <*CUBRID-version*> 에는 9.0.0을 입력한다. 
+*   소스코드에서 직접 빌드한다. 소스코드는 GitHub에서 다운 받을 수 있습니다.
 
     ::
 
-        http://svn.cubrid.org/cubridapis/adodotnet/branches/RB-<CUBRID-version>/Data/Source
+        https://github.com/CUBRID/cubrid-adonet
 
 CUBRID .NET Data Provider는 full-managed .NET 코드로 작성되어 CUBRID 라이브러리 파일에 의존하지 않는다. 따라서 CUBRID를 설치하거나 CUBRID 파일을 다운로드하지 않아도 CUBRID .NET Data Provider를 사용할 수 있다.
 

@@ -37,7 +37,7 @@ CUBRID welcomes your active participation in bug reporting and looks forward to 
 License
 -------
 
-The GNU GPL v2 license or later applies to the CUBRID server engine, and the BSD license applies to CUBRID MANAGER and interfaces (APIs). For more information, see the License Policy on http://www.cubrid.org/license\ .
+The GNU GPL v2 license or later applies to the CUBRID server engine, and the BSD license applies to CUBRID MANAGER and interfaces (APIs). For more information, see the License Policy on https://www.cubrid.org/cubrid .
 
 Additional Information
 ----------------------

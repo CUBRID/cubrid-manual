@@ -25,23 +25,6 @@ There are three ways to install CUBRID Python driver on Linux, UNIX, and UNIX-li
 *   Operating system: 32-bit or 64-bit Linux, UNIX, or UNIX-like operating systems
 *   Python: 2.4 or later (https://www.python.org/downloads/)
 
-**Installing CUBRID Python Driver using Yum (Fedora or CentOS)**
-
-#.  To install CUBRID Python driver by using the **yum** command, you need to tell **Yum** where to look for CUBRID package. First, visit one of the following links depending on your operating system.
-
-    *   CentOS: http://www.cubrid.org/?mid=yum_repository&os=centos
-    *   Fedora: http://www.cubrid.org/?mid=yum_repository&os=fedora
-
-    For the example to install CUBRID 9.0 on Fedora 17 is as follows: (fc17 means this operating system version). ::
-
-        rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/9.0.0/cubridrepo-9.0.0-1.fc17.noarch.rpm
-
-#.  Enter the command below to install CUBRID Python driver. 
-
-    ::
-
-        yum install python-cubrid
-
 **Building CUBRID Python Driver from Source Code (Linux)**
 
 To install CUBRID Python driver by compiling source code, you should have Python Development Package installed on your system. 

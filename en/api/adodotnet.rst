@@ -27,9 +27,9 @@ Before you start developing .NET applications with CUBRID, you will need the CUB
 
     https://www.cubrid.org/?mid=downloads&item=ado_dot_net_driver
 
-*   Compile it yourself from source code. You can check out the code from the SVN repository. If you are using CUBRID 9.0.0 version, enter 9.0.0 in *<CUBRID version>*.
+*   Compile it yourself from source code. You can download the source code from GitHub.
 
-    http://svn.cubrid.org/cubridapis/adodotnet/branches/RB-*<CUBRID version>*/Data/Source
+    https://github.com/CUBRID/cubrid-adonet
 
 The CUBRID .NET Data Provider is 100% full-managed .NET code and it does not rely on any CUBRID library files. This means that the usage of the driver does not require any kind of CUBRID installation or files on the local machine.
 
@@ -69,7 +69,7 @@ Once you have created the `DbDataReader <https://docs.microsoft.com/en-us/dotnet
 
 The Get...() method will use as an input parameter the 0-based index position of the retrieved column.
 
-To retrieve specific CUBRID data types, you need to use `CUBRIDDataReader <http://www.cubrid.org/manual/api/ado.net/8.4.1/html/4d0a4cd3-4ac2-07d9-67db-097a8eb850ef.htm>`_, instead of the `DbDataReader <https://docs.microsoft.com/en-us/dotnet/api/system.data.common.dbdatareader?view=netcore-3.1>`_ interface.
+To retrieve specific CUBRID data types, you need to use CUBRIDDataReader, instead of the `DbDataReader <https://docs.microsoft.com/en-us/dotnet/api/system.data.common.dbdatareader?view=netcore-3.1>`_ interface.
 
 .. code-block:: c#
 
@@ -137,7 +137,7 @@ The examples of connection string with different options are as follows:
 
     ConnectionString = "server=10.50.99.1;database=demodb;port=30000;user=dba;password=secret"
 
-As an alternative, you can use the `CUBRIDConnectionStringBuilder <http://www.cubrid.org/manual/api/ado.net/8.4.1/html/a093b61e-d064-4f4e-b007-73bc601c564c.htm>`_ class to build easily a connection string in the correct format.
+As an alternative, you can use the CUBRIDConnectionStringBuilder class to build easily a connection string in the correct format.
 
 .. code-block:: c#
 
@@ -265,8 +265,7 @@ Updating CLOB data:
 CUBRID Metadata Support
 -----------------------
 
-CUBRID ADO.NET Data Provider supports for database metadata. Most of these methods are implemented in the `CUBRIDSchemaProvider <http://www.cubrid.org/manual/api/ado.net/8.4.1/html/d5aac1e7-a7e6-4b37-6d49-7fcf1502436e.htm>`_ class.
-
+CUBRID ADO.NET Data Provider supports for database metadata. Most of these methods are implemented in the CUBRIDSchemaProvider class.
 .. code-block:: c#
 
     public DataTable GetDatabases(string[] filters)

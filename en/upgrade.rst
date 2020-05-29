@@ -20,7 +20,7 @@ Please confirm :ref:`10_1_changes` in the release notes.
 
 **Checking New Reserved Words**
 
-*   You can check whether reserved words are being used or not by applying the CUBRID 10.2 reserved word detection script, check_reserved.sql, which is distributed through the CUBRID installation package or http://ftp.cubrid.org/CUBRID_Engine/10.2.0/. If the reserved words are being used as identifiers, the identifiers must be modified. See :doc:`sql/identifier`.
+*   You can check whether reserved words are being used or not by applying the CUBRID 10.2 reserved word detection script, check_reserved.sql, which is distributed through the CUBRID installation package or http://ftp.cubrid.org/CUBRID_Engine/10.2/. If the reserved words are being used as identifiers, the identifiers must be modified. See :doc:`sql/identifier`.
 
 **Configuring environment variables of CUBRID_MSG_LANG**
 
@@ -63,7 +63,7 @@ Users who are using versions CUBRID 9.2/9.3/10.0/10.1 should install 10.2 in the
 DB migration
 ^^^^^^^^^^^^
 
-The following table shows how to perform the migration using the reserved word detection script, check_reserved.sql, which is separately distributed from http://ftp.cubrid.org/CUBRID_Engine/10.2.0/Linux/ and the cubrid unloaddb/loaddb utilities. (See :ref:`unloaddb` and :ref:`loaddb`)
+The following table shows how to perform the migration using the reserved word detection script, check_reserved.sql, which is separately distributed from http://ftp.cubrid.org/CUBRID_Engine/10.2/ and the cubrid unloaddb/loaddb utilities. (See :ref:`unloaddb` and :ref:`loaddb`)
 
 +------------------------------------+-----------------------------------------------+-----------------------------------------------+
 | Step                               | Linux Environment                             | Windows Environment                           |

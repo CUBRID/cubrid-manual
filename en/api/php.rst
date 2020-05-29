@@ -96,31 +96,6 @@ If **PECL** package has been installed on your system, the installation of CUBRI
     
         service apache2 restart
 
-**Installing using Yum on Fedora/CentOS**
-
-#.  To install CUBRID PHP driver using **yum** command, we need to tell **Yum** where to look for CUBRID package. First, visit one of the following links depending on your operating system.
-    
-    *   CentOS: http://www.cubrid.org/?mid=yum_repository&os=centos
-    *   Fedora: http://www.cubrid.org/?mid=yum_repository&os=fedora
-    
-#.  Choose CUBRID version. You will be given a list of links for your particular version. For example, the following link is provided for Fedora 16 where fc16 means this operating system version. ::
-    
-        rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/10.1.0/cubridrepo-10.1.0-1.fc16.noarch.rpm
-    
-    For CentOS, el6.2 means CentOS version 6.2. ::
-    
-        rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/10.1.0/cubridrepo-10.1.0-1.el6.2.noarch.rpm
-    
-    Executing this command will tell **Yum** where to look for CUBRID package.
-    
-#.  Execute the command below to install CUBRID PHP driver. ::
-    
-        yum install php-cubrid
-    
-#.  Restart the web server. ::
-    
-        service httpd restart
-
 For Windows
 -----------
 

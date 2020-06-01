@@ -25,7 +25,7 @@ Before you start developing .NET applications with CUBRID, you will need the CUB
 
 *   Download the complied library along with other files from:
 
-    https://www.cubrid.org/?mid=downloads&item=ado_dot_net_driver
+    https://www.cubrid.org/downloads#adonet
 
 *   Compile it yourself from source code. You can download the source code from GitHub.
 

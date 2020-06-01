@@ -31,7 +31,7 @@ To install CUBRID Python driver by compiling source code, you should have Python
 
 .. FIXME: If you do not have the package, follow the instructions stated at http://www.cubrid.org/wiki_apis/entry/install-python-development-package .
 
-#.  Download the source code from https://www.cubrid.org/?mid=downloads&item=python_driver.
+#.  Download the source code from https://www.cubrid.org/downloads#python.
 
 #.  Extract the archive to the desired location. ::
 
@@ -64,7 +64,7 @@ To install CUBRID Python driver on Windows, first download CUBRID Python driver 
 
 *   Visit the website below to download the driver. You will be given to select your operating system and Python version installed on your system.
 
-    https://www.cubrid.org/?mid=downloads&item=python_driver&os=windows&python=detect
+    https://www.cubrid.org/downloads#python
 
 *   Extract the archive you downloaded. You should see a folder and two files in the folder. Copy these files to the **Lib** folder where your Python has been installed; by default, it is **C:\\Program Files\\Python\\Lib**.
 

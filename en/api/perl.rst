@@ -28,7 +28,7 @@ Installing and Configuring Perl
 
 *   DBI: http://code.activestate.com/ppm/DBI/ .
 
-*   C compiler: In most cases, there are binary distributions of **DBD::cubrid** ( https://www.cubrid.org/?mid=downloads&item=perl_driver ) available. However, if you want to build the driver from source code, a C compiler is required. Make sure to use the same C compiler that was used for compiling Perl and CUBRID. Otherwise, you will encounter problems because of differences in the underlying C runtime libraries.
+*   C compiler: In most cases, there are binary distributions of **DBD::cubrid** ( https://www.cubrid.org/downloads#perl ) available. However, if you want to build the driver from source code, a C compiler is required. Make sure to use the same C compiler that was used for compiling Perl and CUBRID. Otherwise, you will encounter problems because of differences in the underlying C runtime libraries.
 
 **Comprehensive Perl Archive Network (CPAN) Installation**
 
@@ -48,7 +48,7 @@ If you are using an older version, you might enter the command line below, inste
 
 If you cannot get the CPAN module, you should download the **DBD::cubrid** source code. The latest version is always available below:
 
-https://www.cubrid.org/?mid=downloads&item=perl_driver
+https://www.cubrid.org/downloads#perl
 
 The file name is typically something like this: **DBD-cubrid-X.X.X.tar.gz**. After extracting the archive, enter the command line below under the **DBD-cubrid-X.X.X** directory. (On Windows, you may need to replace **make** with **nmake** or **dmake**.) ::
 

@@ -116,7 +116,7 @@ Before you install CUBRID PHP driver, make sure that paths of PHP and CUBRID are
 
 #.  Download the CUBRID PHP API installer for Windows from the link below. The current installer includes the drivers for all CUBRID versions.
     
-    https://www.cubrid.org/?mid=downloads&item=php_driver&os=windows
+    https://www.cubrid.org/downloads#php
     
 #.  To install the PHP extension, run the installer. Once the installer starts, click the [Next] button.
 
@@ -170,7 +170,7 @@ If you cannot get the result like above, it is highly likely that your PHP and C
 
 **Downloading and Installing Compiled CUBRID PHP Driver**
 
-First, download CUBRID PHP/PDO driver of which versions match the versions of your operating system and PHP installed from https://www.cubrid.org/?mid=downloads&item=php_driver&os=windows&php=detect&driver=detect .
+First, download CUBRID PHP/PDO driver of which versions match the versions of your operating system and PHP installed from https://www.cubrid.org/downloads#php .
 
 After you download the driver, you will see the **php_cubrid.dll** file for CUBRID PHP driver or the **php_pdo_cubrid.dll** file for CUBRID PDO driver. Follow the steps below to install it.
 
@@ -201,7 +201,7 @@ In this section, we will introduce the way of building CUBRID PHP driver for Lin
 *   CUBRID: Install CUBRID. Make sure the environment variable **%CUBRID%** is defined in your system.
 *   PHP 5.6.x or 7.1.x source code: You can download PHP source code from https://www.php.net/downloads.php .
 *   Apache 2: It can be used to test PHP.
-*   CUBRID PHP driver source code: You can download the source code from https://www.cubrid.org/?mid=downloads&item=php_driver . Make sure that the version you download is the same as the version of CUBRID which has been installed on your system.
+*   CUBRID PHP driver source code: You can download the source code from https://www.cubrid.org/downloads#php . Make sure that the version you download is the same as the version of CUBRID which has been installed on your system.
 
 **Compiling CUBRID PHP driver**
 
@@ -301,7 +301,7 @@ More recent versions of PHP are built with VC11, VC14 (Visual Studio 2012 or 201
 
     .. image:: /images/image58.jpg
 
-*   CUBRID PHP driver source code: You can download CUBRID PHP driver source code of which the version is the same as the version of CUBRID that have been installed on your system. You can get it from https://www.cubrid.org/?mid=downloads&item=php_driver .
+*   CUBRID PHP driver source code: You can download CUBRID PHP driver source code of which the version is the same as the version of CUBRID that have been installed on your system. You can get it from https://www.cubrid.org/downloads#php .
 
 .. note::
 
@@ -341,7 +341,7 @@ More recent versions of PHP are built with VC11, VC14 (Visual Studio 2012 or 201
 
     .. image:: /images/image62.jpg
 
-*   CUBRID PHP driver source code: You can download CUBRID PHP driver source code of which the version is the same as the version of CUBRID that has been installed on your system. You can get it from https://www.cubrid.org/?mid=downloads&item=php_driver .
+*   CUBRID PHP driver source code: You can download CUBRID PHP driver source code of which the version is the same as the version of CUBRID that has been installed on your system. You can get it from https://www.cubrid.org/downloads#php .
 
 .. note::
 
@@ -405,7 +405,7 @@ More recent versions of PHP are built with VC11, VC14 (Visual Studio 2012 or 201
 
 *   PHP 7.1.x source: Remember to get the src package that matches your binary version. After you extract the PHP 7.1.x src, add system environment variable **%PHP7_SRC%** and set its value to the path of PHP 7.1.s source code. In the VC14 [Property Pages] dialog box, select [General] under the [C/C++] tree node. You can see **$(PHP7_SRC)** in [Additional Include Directories].
 
-*   CUBRID PHP driver source code: You can download CUBRID PHP driver source code of which the version is the same as the version of CUBRID that is installed on your system. You can get it from https://www.cubrid.org/?mid=downloads&item=php_driver .
+*   CUBRID PHP driver source code: You can download CUBRID PHP driver source code of which the version is the same as the version of CUBRID that is installed on your system. You can get it from https://www.cubrid.org/downloads#php .
 
 .. note::
 

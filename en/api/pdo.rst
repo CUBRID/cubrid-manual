@@ -71,7 +71,7 @@ Windows
 
 **Downloading and Installing Compiled CUBRID PDO Driver**
 
-First, download CUBRID PHP/PDO driver of which versions match the versions of your operating system and PHP installed at https://www.cubrid.org/?mid=downloads&item=php_driver&os=windows&ostype=any&php=any&driver_type=pdo.
+First, download CUBRID PHP/PDO driver of which versions match the versions of your operating system and PHP installed at https://www.cubrid.org/downloads#pdo.
 
 After you download the driver, you will see the **php_cubrid.dll** file for CUBRID PHP driver or the **php_pdo_cubrid.dll** file for CUBRID PDO driver. Follow the steps below to install it.
 

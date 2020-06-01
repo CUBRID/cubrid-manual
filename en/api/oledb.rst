@@ -28,7 +28,7 @@ Installing and Configuring OLE DB
 
 Before you start developing applications with CUBRID, you will need the Provider driver (**CUBRIDProvider.dll**). You have two options to get the driver.
 
-*   **Installing the driver**: Download the CUBRID OLE DB driver's .exe file at the location http://ftp.cubrid.org/CUBRID_Drivers/OLEDB_Driver/ or https://www.cubrid.org/?mid=downloads&item=oledb_driver. From OLE DB driver 9.1.0.p1 version(available from CUBRID server 2008 R4.1), both of 32 bit and 64 bit driver are installed on one installation.
+*   **Installing the driver**: Download the CUBRID OLE DB driver's .exe file at the location http://ftp.cubrid.org/CUBRID_Drivers/OLEDB_Driver/ . From OLE DB driver 9.1.0.p1 version(available from CUBRID server 2008 R4.1), both of 32 bit and 64 bit driver are installed on one installation.
 
     .. image:: /images/oledb_install.jpg
 

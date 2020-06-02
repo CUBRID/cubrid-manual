@@ -28,7 +28,7 @@ CUBRID가 지원하는 플랫폼과 설치를 위한 하드웨어/소프트웨�
 
 CUBRID 매니저 JDBC, PHP, ODBC, OLE DB 등의 드라이버들도 http://ftp.cubrid.org 에서 받을 수 있다.
 
-CUBRID 엔진, 사용 도구 및 드라이버에 대한 자세한 정보는 http://www.cubrid.org 를 참고한다.
+CUBRID 엔진, 사용 도구 및 드라이버에 대한 자세한 정보는 https://www.cubrid.org 를 참고한다.
 
 버전 호환성
 -----------
@@ -49,7 +49,7 @@ CUBRID 엔진, 사용 도구 및 드라이버에 대한 자세한 정보는 http
 
     예를 들어, 64Bit 버전 DB 서버라도 CUBRID Manager 32Bit 버전을 사용한다면 JRE 또는 JDK 32Bit 버전을 설치해야 한다.
 
-*   CUBRID 2008 R2.2 이상 버전의 드라이버는 CUBRID 매니저에 기본으로 내장되어 있으며, http://www.cubrid.org 웹사이트에서 별도로 받을 수도 있다.
+*   CUBRID 2008 R2.2 이상 버전의 드라이버는 CUBRID 매니저에 기본으로 내장되어 있으며, https://www.cubrid.org 웹사이트에서 별도로 받을 수도 있다.
 
 .. note:: 과거 버전 사용자들은 드라이버, 브로커, DB 서버 모두를 반드시 업그레이드해야 하며, DB 볼륨이 10.1과 호환되지 않으므로 반드시 데이터 마이그레이션을 해야 한다.
     업그레이드 및 데이터 마이그레이션은 :doc:`/upgrade`\ 를 참고한다.
@@ -202,7 +202,7 @@ CUBRID를 설치하고 설정 파일을 구성할 때 기존의 설정 파일을
 
 **CUBRID 인터페이스 설치**
 
-CCI, JDBC, PHP, ODBC, OLE DB, ADO.NET, Ruby, Python, Node.js 등의 인터페이스 모듈은 http://www.cubrid.org/download. 에서 최신 정보를 확인할 수 있고 관련 파일을 내려받아 설치할 수 있다.
+CCI, JDBC, PHP, ODBC, OLE DB, ADO.NET, Ruby, Python, Node.js 등의 인터페이스 모듈은 https://www.cubrid.org/downloads 에서 최신 정보를 확인할 수 있고 관련 파일을 내려받아 설치할 수 있다.
 
 .. FIXME You can see the latest information on interface modules such as CCI, JDBC, PHP, ODBC, OLE DB, ADO.NET, Ruby, Python and Node.js and install them by downloading files from http://www.cubrid.org/downloads.  
 
@@ -210,7 +210,7 @@ CCI, JDBC, PHP, ODBC, OLE DB, ADO.NET, Ruby, Python, Node.js 등의 인터페이
     
 **CUBRID 도구 설치**
 
-CUBRID 매니저 등의 도구는 http://www.cubrid.org/downloads. 에서 최신 정보를 확인할 수 있고 관련 파일을 내려받아 설치할 수 있다.
+CUBRID 매니저 등의 도구는 https://www.cubrid.org/downloads 에서 최신 정보를 확인할 수 있고 관련 파일을 내려받아 설치할 수 있다.
 
 .. FIXME CUBRID 웹매니저는 CUBRID 설치 시 같이 설치된다. 자세한 설명은 `CUBRID 웹 매니저 매뉴얼 <http://www.cubrid.org/wiki_tools/entry/cubrid-web-manager-manual>`_\ 을 참고한다.
     
@@ -284,7 +284,7 @@ Windows 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항
 
 **CUBRID 인터페이스 설치**
 
-http://www.cubrid.org/downloads에서 CCI, JDBC, PHP, ODBC, OLE DB, ADO.NET, Ruby, Python 및 Node.js와 같은 인터페이스 모듈을 다운로드할 수 있다.
+https://www.cubrid.org/downloads 에서 CCI, JDBC, PHP, ODBC, OLE DB, ADO.NET, Ruby, Python 및 Node.js와 같은 인터페이스 모듈을 다운로드할 수 있다.
 
 .. FIXME: You can see the latest information on interface modules such as JDBC, PHP, ODBC, and OLE DB and install them by downloading files from `<http://www.cubrid.org/wiki_apis>`_.
 
@@ -292,7 +292,7 @@ http://www.cubrid.org/downloads에서 CCI, JDBC, PHP, ODBC, OLE DB, ADO.NET, Rub
 
 **CUBRID 도구 설치**
 
-http://www.cubrid.org/downloads에서 CUBRID Manager 및 CUBRID Migration Toolkit을 비롯한 다양한 도구를 다운로드할 수 있다.
+https://www.cubrid.org/downloads 에서 CUBRID Manager 및 CUBRID Migration Toolkit을 비롯한 다양한 도구를 다운로드할 수 있다.
 
 .. FIXME: You can see the latest information on interface modules such as JDBC, PHP, ODBC, and OLE DB and install them by downloading files from `<http://www.cubrid.org/wiki_apis>`_.
 

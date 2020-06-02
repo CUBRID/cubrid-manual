@@ -61,7 +61,7 @@ JDBC 설치 및 설정
 
 **Java 설치 및 환경 변수 설정**
 
-시스템에 Java가 설치되어 있고 **JAVA_HOME** 환경 변수가 등록되어 있어야 한다. Java는 Developer Resources for Java Technology 사이트( http://java.sun.com )에서 다운로드할 수 있다. 이에 대한 자세한 설명은 :ref:`jsp-environment-configuration` 절을 참고한다.
+시스템에 Java가 설치되어 있고 **JAVA_HOME** 환경 변수가 등록되어 있어야 한다. Java는 Developer Resources for Java Technology 사이트( https://www.oracle.com/java/technologies/ )에서 다운로드할 수 있다. 이에 대한 자세한 설명은 :ref:`jsp-environment-configuration` 절을 참고한다.
 
 **Windows 환경에서 환경 변수 설정**
 
@@ -1393,7 +1393,7 @@ CUBRIDDataSource에 대한 자세한 설명은 :ref:`jdbc-conn-datasource`\ 을 
 JDBC API
 ========
 
-JDBC API에 대한 자세한 내용은 Java API Specification 문서(http://docs.oracle.com/javase/7/docs/api)를 참고한다. 기타 Java에 대한 자세한 내용은 Java SE Documentation 문서(http://www.oracle.com/technetwork/java/javase/documentation/index.html)를 참고한다.
+JDBC API에 대한 자세한 내용은 Java API Specification 문서(https://docs.oracle.com/javase/7/docs/api/)를 참고한다. 기타 Java에 대한 자세한 내용은 Java SE Documentation 문서(https://www.oracle.com/technetwork/java/javase/documentation/index.htm)를 참고한다.
 
 :ref:`커서 유지(cursor holdability) <cursor-holding>`\ 와 관련하여 설정을 명시하지 않으면 기본으로 커서가 유지된다.
 

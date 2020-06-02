@@ -31,7 +31,7 @@ Linux
 
 *   운영체제: Linux: 32 비트 또는 64비트
 *   웹 서버: Apache
-*   PHP: 5.2 또는 5.3(http://php.net/downloads.php )
+*   PHP: 5.2 또는 5.3https://www.php.net/downloads.php )
 
 **PECL을 이용한 설치**
 
@@ -67,11 +67,11 @@ Windows
 
 *   운영체제: Windows 32 비트 또는 64비트
 *   웹 서버: Apache 또는 IIS
-*   PHP: 5.2 또는 5.3(http://windows.php.net/download/)
+*   PHP: 5.2 또는 5.3(https://windows.php.net/download)
 
 **빌드된 드라이버 다운로드 및 설치**
 
-운영체제와 PHP 버전에 맞는 Windows용 CUBRID PHP/PDO 드라이버를 http://www.cubrid.org/?mid=downloads&item=php_driver&os=windows&ostype=any&php=any&driver_type=pdo\ 에서 다운로드한다.
+운영체제와 PHP 버전에 맞는 Windows용 CUBRID PHP/PDO 드라이버를 https://www.cubrid.org/downloads#pdo 에서 다운로드한다.
 
 PDO 드라이버를 다운로드하면 **php_cubrid.dll** 파일을 볼 수 있으며, PDO 드라이버를 다운로드하면 **php_pdo_cubrid.dll** 파일을 볼 수 있다. 드라이버를 설치하는 방법은 다음과 같다.
 
@@ -128,7 +128,7 @@ CUBRID PDO 드라이버에 의해 정의되는 상수(predefined constants)는 C
 
 코드가 여러 개의 드라이버와 함께 실행될 수 있다면, **PDO_ATTR_DRIVER_NAME** 속성 값을 얻어 드라이버를 확인하기 위해 `PDO::getAttribute() <http://docs.php.net/manual/en/pdo.getattribute.php>`_ 함수를 사용할 수 있다.
 
-다음 상수는 `PDO::cubrid_schema <http://www.php.net/manual/en/pdo.cubrid-schema.php>`_ () 함수를 이용하여 스키마 정보를 얻을 때 사용할 수 있다.
+다음 상수는 `PDO::cubrid_schema <https://www.php.net/manual/en/pdo.cubrid-schema.php>`_ () 함수를 이용하여 스키마 정보를 얻을 때 사용할 수 있다.
 
 +------------------------------------+---------+---------------------------------------------------------------------------------------------------+
 | 상수                               | 타입    | 설명                                                                                              |
@@ -252,7 +252,7 @@ PDO에서 SQL 질의를 수행하려면 질의나 응용 프로그램의 성격�
 
 다음 예제에서는 가장 간단한 `query <http://docs.php.net/manual/en/pdo.exec.php>`_ () 함수를 사용한다. 리턴 값은 PDOStatement 객체인 resultset에서 $rs["column_name"]와 같이 칼럼 이름을 이용하여 얻을 수 있다.
 
-`query <http://docs.php.net/manual/en/pdo.exec.php>`_ () 함수를 사용할 때에는 질의 코드가 제대로 이스케이프되었는지 확인해야 한다. 이스케이프에 대한 내용은 `PDO::quote <http://www.php.net/manual/en/pdo.quote.php>`_ ()를 참고한다.
+`query <http://docs.php.net/manual/en/pdo.exec.php>`_ () 함수를 사용할 때에는 질의 코드가 제대로 이스케이프되었는지 확인해야 한다. 이스케이프에 대한 내용은 `PDO::quote <https://www.php.net/manual/en/pdo.quote.php>`_ ()를 참고한다.
 
 .. code-block:: php
 
@@ -525,6 +525,6 @@ CUBRID PDO 확장은 데이터베이스 스키마와 메타데이터 정보를 �
 PDO API
 =======
 
-PDO API와 관련하여 http://kr.php.net/manual/en/book.pdo.php\를 참고한다.
+PDO API와 관련하여 http://docs.php.net/manual/en/book.pdo.php\를 참고한다.
 
 CUBRID PDO 드라이버가 제공하는 PDO API는 http://ftp.cubrid.org/CUBRID_Docs/Drivers/PDO/\를 참고한다.

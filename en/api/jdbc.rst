@@ -61,7 +61,7 @@ Installing and Configuring JDBC
 
 **Installing Java and Configuring Environment**
 
-You must already have Java installed and the **JAVA_HOME** environment variable configured in your system. You can download Java from the Developer Resources for Java Technology website ( http://java.sun.com ). For more information, please see :ref:`jsp-environment-configuration`.
+You must already have Java installed and the **JAVA_HOME** environment variable configured in your system. You can download Java from the Developer Resources for Java Technology website ( https://www.oracle.com/java/technologies/ ). For more information, please see :ref:`jsp-environment-configuration`.
 
 **Configuring the environment variables for Windows**
 
@@ -1406,7 +1406,7 @@ The following example shows how to execute the **INSERT** statement by connectin
 JDBC API
 ========
 
-For details about JDBC API, see Java API Specification (http://docs.oracle.com/javase/7/docs/api) and for details about Java, see Java SE Documentation (http://www.oracle.com/technetwork/java/javase/documentation/index.htm).
+For details about JDBC API, see Java API Specification (https://docs.oracle.com/javase/7/docs/api/) and for details about Java, see Java SE Documentation (https://www.oracle.com/technetwork/java/javase/documentation/index.htm).
 
 If :ref:`cursor holdability <cursor-holding>` is not configured, a cursor is maintained by default.
 

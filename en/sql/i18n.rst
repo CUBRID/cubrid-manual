@@ -221,7 +221,7 @@ CUBRID uses following directories and files to set the locales.
 
 *   **$CUBRID/locales/data/ducet.txt** file: Text file containing default universal collation information (codepoints, contractions and expansions, to be more specific) and their weights, as standardized by The Unicode Consortium, which is the starting point for the creation of collations. For more information, see  http://unicode.org/reports/tr10/#Default_Unicode_Collation_Element_Table .
 
-*   **$CUBRID/locales/data/unicodedata.txt** file: Text file containing information about each Unicode codepoint regarding casing, decomposition, normalization etc. CUBRID uses this to determine casing. For more information, see  http://www.ksu.ru/eng/departments/ktk/test/perl/lib/unicode/UCDFF301.html .
+*   **$CUBRID/locales/data/unicodedata.txt** file: Text file containing information about each Unicode codepoint regarding casing, decomposition, normalization etc. CUBRID uses this to determine casing. For more information, see  https://docs.python.org/3/library/unicodedata.html .
 
 *   **$CUBRID/locales/data/ldml** directory: common_collations.xml and XML files, name with the convention cubrid_<*locale_name*>.xml. common_collations.xml file contains shared collation information in all locale files, and each cubrid_<*locale_name*>.xml file contains a locale information for the supported language.
 
@@ -1426,7 +1426,7 @@ Contraction
 
 A contraction is a sequence consisting of two or more codepoints, considered a single letter in sorting. For example, in the traditional Spanish sorting order, "ch" is considered a single letter. All words that begin with "ch" sort after all other words beginning with "c", but before words starting with "d". Other examples of contractions are "ch" in Czech, which sorts after "h", and "lj" and "nj" in Croatian and Latin Serbian, which sort after "l" and "n" respectively.
 See http://userguide.icu-project.org/collation/concepts for additional information.
-There are also some contractions defined in `http://www.unicode.org/Public/UCA/latest/allkeys.txt DUCET <http://www.unicode.org/Public/UCA/latest/allkeys.txt%20DUCET>`_.
+There are also some contractions defined in `http://www.unicode.org/Public/UCA/latest/allkeys.txt <http://www.unicode.org/Public/UCA/latest/allkeys.txt>`_ DUCET.
 
 Contractions are supported in both collation variants: with expansions and without expansions. Contractions support requires changes in a significant number of key areas. It also involves storing a contraction table inside the collation data. The handling of contractions is controlled by LDML parameters **DUCETContractions="ignore/use"** **TailoringContractions="ignore/use"** in <settings> tag of collation definition. The first one controls if contractions in DUCET file are loaded into collation, the second one controls if contractions defined by rules in LDML are ignore or not (easier way then adding-deleting all rules introducing contractions).
 
@@ -1984,7 +1984,7 @@ The tags and attributes which are specific only to CUBRID can be easily identifi
 
 The best approach to add a new locale is to copy existing LDML file and tweak various setting until desired results are obtained.
 The filename must be formatted like cubrid_<*language*>.xml and be placed in the folder **$CUBRID/locales/data/ldml**.
-The <*language*> part should be a ASCII string (normally five characters) in IETF format (http://en.wikipedia.org/wiki/BCP_47).
+The <*language*> part should be a ASCII string (normally five characters) in IETF format (https://en.wikipedia.org/wiki/BCP_47).
 After creating the LDML file, the <*language*> part string must be added into CUBRID configuration file **$CUBRID/conf/cubrid_locales.txt**.
 Note that the order in this file is the order of generating (compiling) locale library and loading locales at start-up.
 

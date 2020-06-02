@@ -26,7 +26,7 @@ Beginning with 2008 R4.0, CUBRID Manager Client is not automatically installed w
 
 A variety of drivers such as PHP, ODBC and OLE DB can also be downloaded from http://ftp.cubrid.org.
 
-For more information on the CUBRID engine, tools, and drivers, see http://www.cubrid.org.
+For more information on the CUBRID engine, tools, and drivers, see https://www.cubrid.org.
 
 Compatibility
 -------------
@@ -49,7 +49,7 @@ Compatibility
 
     For example, if a 64-bit DB server uses CUBRID Manager 32-bit version, JRE or JDK 32-bit version should be installed.
 
-*   Drivers for 2008 R2.2 and higher versions are included in CUBRID Manager by default, which you can download separately from the http://www.cubrid.org Website.
+*   Drivers for 2008 R2.2 and higher versions are included in CUBRID Manager by default, which you can download separately from the https://www.cubrid.org Website.
 
 .. note:: Old version users should upgrade all of driver, broker, DB server; Data migration should be done because its DB volume is not compatible with 10.2 version.
     For upgrade and data migration, see :doc:`/upgrade`.
@@ -205,7 +205,7 @@ You can modify the environment such as service ports etc. edit the parameters of
 
 **Installing CUBRID Interfaces**
 
-You can download interface modules such as CCI, JDBC, PHP, ODBC, OLE DB, ADO.NET, Ruby, Python and Node.js from http://www.cubrid.org/downloads.
+You can download interface modules such as CCI, JDBC, PHP, ODBC, OLE DB, ADO.NET, Ruby, Python and Node.js from https://www.cubrid.org/downloads.
 
 .. FIXME You can see the latest information on interface modules such as CCI, JDBC, PHP, ODBC, OLE DB, ADO.NET, Ruby, Python and Node.js and install them by downloading files from http://www.cubrid.org/downloads.
 
@@ -213,7 +213,7 @@ A simple description on each driver can be found on :doc:`/api/index`.
 
 **Installing CUBRID Tools**
 
-You can download various tools including CUBRID Manager and CUBRID Migration Toolkit from http://www.cubrid.org/downloads.
+You can download various tools including CUBRID Manager and CUBRID Migration Toolkit from https://www.cubrid.org/downloads.
 
 .. FIXME You can see the latest information on tools such as CUBRID Manager and install them by downloading files from http://www.cubrid.org/downloads.
 
@@ -287,7 +287,7 @@ You can change configuration such as service ports to meet the user environment 
 
 **Installing CUBRID Interfaces**
 
-You can download interface modules such as CCI, JDBC, PHP, ODBC, OLE DB, ADO.NET, Ruby, Python and Node.js from http://www.cubrid.org/downloads.
+You can download interface modules such as CCI, JDBC, PHP, ODBC, OLE DB, ADO.NET, Ruby, Python and Node.js from https://www.cubrid.org/downloads.
 
 .. FIXME: You can see the latest information on interface modules such as JDBC, PHP, ODBC, and OLE DB and install them by downloading files from `<http://www.cubrid.org/wiki_apis>`_.
 
@@ -295,7 +295,7 @@ A simple description on each driver can be found on :doc:`/api/index`.
 
 **Installing CUBRID Tools**
 
-You can download various tools including CUBRID Manager and CUBRID Migration Toolkit from http://www.cubrid.org/downloads.
+You can download various tools including CUBRID Manager and CUBRID Migration Toolkit from https://www.cubrid.org/downloads.
 
 .. FIXME: You can see the latest information on tools such as CUBRID Manager and install them by downloading files from `<http://www.cubrid.org/wiki_tools>`_.
 

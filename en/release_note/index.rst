@@ -31,13 +31,13 @@ CUBRID welcomes your active participation in bug reporting and looks forward to 
 +---------------+-----------------------------------------------------------------------+
 | User Feedback | CUBRID Open Source Project: https://github.com/CUBRID/cubrid          |
 |               |                                                                       |
-|               | CUBRID Website: http://www.cubrid.org                                 |
+|               | CUBRID Website: https://www.cubrid.org                                |
 +---------------+-----------------------------------------------------------------------+
 
 License
 -------
 
-The GNU GPL v2 license or later applies to the CUBRID server engine, and the BSD license applies to CUBRID MANAGER and interfaces (APIs). For more information, see the License Policy on http://www.cubrid.org/license\ .
+The GNU GPL v2 license or later applies to the CUBRID server engine, and the BSD license applies to CUBRID MANAGER and interfaces (APIs). For more information, see the License Policy on https://www.cubrid.org/cubrid .
 
 Additional Information
 ----------------------

@@ -31,7 +31,7 @@ Linux
 
 *   Operating system: 32-bit or 64-bit Linux
 *   Web server: Apache
-*   PHP: 5.2 or 5.3 ( http://php.net/downloads.php )
+*   PHP: 5.2 or 5.3 ( https://www.php.net/downloads.php )
 
 **Installing CUBRID PHP Driver using PECL**
 
@@ -67,11 +67,11 @@ Windows
 
 *   Operating system: 32-bit or 64-bit Windows
 *   Web server: Apache or IIS
-*   PHP: 5.2 or 5.3 ( http://windows.php.net/download )
+*   PHP: 5.2 or 5.3 ( https://windows.php.net/download )
 
 **Downloading and Installing Compiled CUBRID PDO Driver**
 
-First, download CUBRID PHP/PDO driver of which versions match the versions of your operating system and PHP installed at http://www.cubrid.org/?mid=downloads&item=php_driver&os=windows&ostype=any&php=any&driver_type=pdo.
+First, download CUBRID PHP/PDO driver of which versions match the versions of your operating system and PHP installed at https://www.cubrid.org/downloads#pdo.
 
 After you download the driver, you will see the **php_cubrid.dll** file for CUBRID PHP driver or the **php_pdo_cubrid.dll** file for CUBRID PDO driver. Follow the steps below to install it.
 
@@ -128,7 +128,7 @@ The constants defined by CUBRID PDO driver are available only when the extension
 
 The `PDO::getAttribute() <http://docs.php.net/manual/en/pdo.getattribute.php>`_ function may be used to obtain the **PDO_ATTR_DRIVER_NAME** attribute value to check the driver if your code can run.
 
-The constants below can be used with the `PDO::cubrid_schema <http://www.php.net/manual/en/pdo.cubrid-schema.php>`_ function to get schema information.
+The constants below can be used with the `PDO::cubrid_schema <https://www.php.net/manual/en/pdo.cubrid-schema.php>`_ function to get schema information.
 
 +------------------------------------+----------+-----------------------------------------------------------------------------------------------------+
 | Constant                           | Type     | Description                                                                                         |
@@ -252,7 +252,7 @@ In PDO, there is more than one way to execute SQL queries.
 
 The example script below shows the simplest one - using the `query <http://docs.php.net/manual/en/pdo.exec.php>`_ () function. You can retrieve the return values from the resultset (a PDOStatement object) by using the column names, like $rs["*column_name*"].
 
-Note that when you use the `query <http://docs.php.net/manual/en/pdo.exec.php>`_ () function, you must ensure that the query code is properly escaped. For information about escaping, see `PDO::quote <http://www.php.net/manual/en/pdo.quote.php>`_ () function.
+Note that when you use the `query <http://docs.php.net/manual/en/pdo.exec.php>`_ () function, you must ensure that the query code is properly escaped. For information about escaping, see `PDO::quote <https://www.php.net/manual/en/pdo.quote.php>`_ () function.
 
 .. code-block:: php
 

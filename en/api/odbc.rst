@@ -287,14 +287,14 @@ Create the below code as cubrid.asp and store it in a virtual directory. ::
     %>
     </table>
 
-You can check the result of the sample program by connecting to http://localhost/cubrid.asp. When you execute the ASP sample code above, you will get the following output. Enter an appropriate value in each field, enter the query statement in the Query field, and click [Run]. The query result will be displayed at the lower part of the page.
+You can check the result of the sample program by connecting to \http://localhost/cubrid.asp. When you execute the ASP sample code above, you will get the following output. Enter an appropriate value in each field, enter the query statement in the Query field, and click [Run]. The query result will be displayed at the lower part of the page.
 
 .. image:: /images/image83.png
 
 ODBC API
 ========
 
-For ODBC API, see ODBC API Reference ( http://msdn.microsoft.com/en-us/library/windows/desktop/ms714562%28v=vs.85%29.aspx ) on the MSDN page. See the table below to get information about the list of functions, ODBC Spec version, and compatibility that CUBRID supports.
+For ODBC API, see ODBC API Reference ( https://docs.microsoft.com/en-us/sql/odbc/reference/syntax/odbc-api-reference?view=sql-server-ver15 ) on the MSDN page. See the table below to get information about the list of functions, ODBC Spec version, and compatibility that CUBRID supports.
 
 +---------------------+------------------------+--------------------------+--------------------------+
 | API                 | Version Introduced     | Standards Compliance     | Support                  |

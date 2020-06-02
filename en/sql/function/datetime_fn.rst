@@ -1312,7 +1312,7 @@ The following are examples of using timezone type values. For timezone related d
 ROUND
 =====
 
-.. function:: ROUND(date, fmt)
+.. :noindex: function:: ROUND(date, fmt)
 
     This function rounds date to the unit specified by the format string, *fmt*. It returns a value of DATE type.
     
@@ -2023,7 +2023,7 @@ TO_DAYS
 TRUNC
 =====
 
-.. function:: TRUNC( date[, fmt] )
+.. :noindex: function:: TRUNC( date[, fmt] )
 
     This function truncates date to the unit specified by the format string, *fmt*. It returns a value of DATE type.
     

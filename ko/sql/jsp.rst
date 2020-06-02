@@ -26,7 +26,7 @@ Java 저장 함수/프로시저를 사용할 때 얻을 수 있는 이점은 다
 Java 저장 함수/프로시저 환경 설정
 =================================
 
-CUBRID에서 Java 저장 함수/프로시저를 사용하기 위해서는 CUBRID 서버가 설치되는 환경에 Java Runtime Environment (JRE) 1.6 이상 버전이 설치되어야 한다. JRE는 Developer Resources for Java Technology 사이트(`http://java.sun.com <http://java.sun.com>`_)에서 다운로드할 수 있다.
+CUBRID에서 Java 저장 함수/프로시저를 사용하기 위해서는 CUBRID 서버가 설치되는 환경에 Java Runtime Environment (JRE) 1.6 이상 버전이 설치되어야 한다. JRE는 Developer Resources for Java Technology 사이트(`https://www.oracle.com/java/technologies <https://www.oracle.com/java/technologies>`_)에서 다운로드할 수 있다.
 
 CUBRID 환경 설정 파일(cubrid.conf)에 java_stored_procedure 파라미터가 yes로 설정되어 있으면, CUBRID 64비트 버전에는 JRE 64비트 버전이 필요하고, CUBRID 32비트 버전에는 JRE 32비트 버전이 필요하다. JRE 32비트 버전이 설치된 컴퓨터에서 CUBRID 64비트 버전을 실행하면 아래와 같은 에러 메시지가 출력된다. ::
 

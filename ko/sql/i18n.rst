@@ -222,7 +222,7 @@ CUBRID는 로캘 설정을 위해 여러 디렉터리와 파일들을 사용한�
 
 *   **$CUBRID/locales/data/ducet.txt** 파일: 코드포인트, 축약과 확장 등과 같은 기본적인 범용 콜레이션 정보와 이들의 가중치 값을 표현하는 파일로, 이 정보들은 유니코드 컨소시엄에 의해 제정된 표준을 따른다. 자세한 사항은 http://unicode.org/reports/tr10/#Default_Unicode_Collation_Element_Table 을 참고한다.
 
-*   **$CUBRID/locales/data/unicodedata.txt** 파일: 대소문자 구별, 분해, 정규화 등 각각의 유니코드 코드 포인트를 포함하는 파일로, CUBRID는 대소문자 구분 규칙을 결정하기 위해 이 파일을 사용한다. 더 많은 정보는  http://www.ksu.ru/eng/departments/ktk/test/perl/lib/unicode/UCDFF301.html 을 참고한다.
+*   **$CUBRID/locales/data/unicodedata.txt** 파일: 대소문자 구별, 분해, 정규화 등 각각의 유니코드 코드 포인트를 포함하는 파일로, CUBRID는 대소문자 구분 규칙을 결정하기 위해 이 파일을 사용한다. 더 많은 정보는  https://docs.python.org/3/library/unicodedata.html 을 참고한다.
 
 *   **$CUBRID/locales/data/ldml** 디렉터리: common_collations.xml 파일과 cubrid_<*locale_name*>.xml 형식의 이름을 지니는 XML 파일들을 포함한다. common_collations.xml 파일은 모든 로캘에서 공유되는 콜레이션 정보를 표현하며, 각각의 cubrid_<*locale_name*>.xml 파일은 해당 언어에 대한 로캘 정보를 표현한다.
 
@@ -1984,7 +1984,7 @@ CUBRID에만 명시되는 태그와 속성은 이름에 "cubrid"를 포함하고
 
 새로운 로캘을 추가하는 가장 좋은 방법은 기존의 LDML 파일을 복사해서 원하는 결과가 나올 때까지 설정을 바꾸는 것이다.
 파일 이름은 "cubrid_<*language*>.xml"과 같이 주어져야 하며 **$CUBRID/locales/data/ldml** 디렉터리에 위치한다.
-<*language*> 부분은 IETF 포맷(http://en.wikipedia.org/wiki/BCP_47)에 있는 ASCII 문자열(보통 5개 문자)이어야 한다.
+<*language*> 부분은 IETF 포맷(https://en.wikipedia.org/wiki/BCP_47)에 있는 ASCII 문자열(보통 5개 문자)이어야 한다.
 LDML 파일을 생성한 이후, <*language*> 부분이 CUBRID 설정 파일인 **$CUBRID/conf/cubrid_locales.txt** 에 추가되어야 한다.
 이 파일에 기록된 언어의 순서가 로캘 라이브러리를 생성(컴파일)하고 구동 시 로캘을 읽는 순서임에 유의한다.
 

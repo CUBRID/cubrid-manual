@@ -8,7 +8,7 @@
 
 CUBRID를 처음 사용하는데 참고할 수 있는 간략한 사용법을 설명한다. CUBRID 서비스 시작하기, CSQL 인터프리터 및 GUI 도구를 이용한 질의 실행 방법을 찾아볼 수 있다. 
 
-CUBRID의 다양한 도구 및 드라이버는 http://www.cubrid.org/downloads\ 에서 다운로드할 수 있다.
+CUBRID의 다양한 도구 및 드라이버는 https://www.cubrid.org/downloads\ 에서 다운로드할 수 있다.
 
 CUBRID가 제공하는 다음 도구를 사용하면 GUI를 통해 편리하게 CUBRID의 기능을 이용할 수 있다.
 

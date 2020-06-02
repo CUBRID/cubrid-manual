@@ -579,8 +579,8 @@ JSON_EXTRACT
 .. function:: json_doc ->> json path
 
    **JSON_UNQUOTE**의 별칭 (json_doc->json 경로). 본 연산자는 컬럼인 *json_doc* 인자에만 적용 할 수 있다.
-?? json 경로가 **NULL**이거나 유효하지 않은 경우 오류가 발생한다.
-?? **NULL** *json_doc* 인자에 적용된 경우 **NULL**을 반환한다.
+   json 경로가 **NULL**이거나 유효하지 않은 경우 오류가 발생한다.
+   **NULL** *json_doc* 인자에 적용된 경우 **NULL**을 반환한다.
 
 .. code-block:: sql
 

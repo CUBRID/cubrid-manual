@@ -13,11 +13,11 @@ This document includes information on CUBRID 10.2(Build Number: 10.2.0.8797-d56a
 
 CUBRID 10.2 includes all of the fixed errors and improved features that were detected in the CUBRID 10.1 and were applied to the previous versions.
 
-For CUBRID 10.1, please find http://www.cubrid.org/manual/en/10.1/release_note/index.html.
+For CUBRID 10.1, please find https://www.cubrid.org/manual/en/10.1/release_note/index.html.
 
-For CUBRID 10.0, please find http://www.cubrid.org/manual/en/10.0/release_note/index.html.
+For CUBRID 10.0, please find https://www.cubrid.org/manual/en/10.0/release_note/index.html.
 
-For CUBRID 9.3 or earlier, please find http://www.cubrid.org/documentation/manuals/other-versions.
+For CUBRID 9.3, please find https://www.cubrid.org/manual/en/9.3.0/release_note/index.html.
 
 Overview
 ========

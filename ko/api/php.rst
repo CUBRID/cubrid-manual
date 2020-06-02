@@ -89,31 +89,6 @@ Linux
     
         service apache2 restart
 
-**Yum을 이용하여 Fedora/CentOS에 설치**
-
-#.  **Yum** 을 이용하여 CUBRID PHP 드라이버를 설치하려면 **Yum** 에 CUBRID 패키지의 위치를 알려야 한다. 사용하는 운영체제에 따라 다음 주소에 접속한다.
-    
-    *   CentOS: http://www.cubrid.org/?mid=yum_repository&os=centos 
-    *   Fedora: http://www.cubrid.org/?mid=yum_repository&os=fedora 
-    
-#.  위 주소에서 운영체제와 CUBRID의 버전에 맞는 명령을 찾아 실행한다. 예를 들어 Fedora 16과 CBURID 9.0에 해당하는 드라이버를 설치하려면 다음 명령을 실행한다. **Yum** 저장소 주소의 fc16은 Fedora 16을 의미한다. ::
-    
-        rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/9.0.0/cubridrepo-9.0.0-1.fc16.noarch.rpm
-    
-    CentOS의 예는 다음과 같다. el6.2는 CentOS 6.2를 의미한다. ::
-    
-        rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/9.0.0/cubridrepo-9.0.0-1.el6.2.noarch.rpm
-    
-    위 명령어를 실행하면 **Yum** 은 CUBRID 패키지의 위치를 알게 된다.
-    
-#.  CUBRID PHP 드라이버를 설치하려면 다음 명령을 실행한다. ::
-    
-        yum install php-cubrid
-    
-#.  웹 서버를 재시작한다. ::
-    
-        service httpd restart
-
 Windows
 -------
 

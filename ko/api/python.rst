@@ -25,23 +25,6 @@ Linux, Unix 및 유사 운영체제에서는 다음과 같은 세 가지 방법�
 *   운영체제: Linux: 32 비트/64비트 또는 유사 Unix 운영체제
 *   Python: 2.4 이상(http://www.python.org/download/)
 
-**Yum을 이용한 설치(Fedora, CentOS)**
-
-#.  Yum을 이용하여 CUBRID Python 드라이버를 설치하려면, CUBRID 패키지의 위치를 Yum에 알려야 한다. 운영체제에 따라 다음 주소에 접속하여 사용하는 운영체제와 CUBRID 버전에 해당하는 명령어를 찾아 사용한다.
-
-    *   CentOS: http://www.cubrid.org/?mid=yum_repository&os=centos
-    *   Fedora: http://www.cubrid.org/?mid=yum_repository&os=fedora
-
-    예를 들어 Fedora 17에 CUBRID 9.0을 설치한 경우에 해당하는 명령어는 다음과 같다. ::
-
-        rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/9.0.0/cubridrepo-9.0.0-1.fc17.noarch.rpm
-
-#.  다음 명령어를 실행하여 CUBRID Python 드라이버를 설치한다.
-
-    ::
-
-        yum install python-cubrid
-
 **소스코드로 설치(Linux)**
 
 소스코드를 컴파일하여 CUBRID Python 드라이버를 설치하려면 Python Development Package가 필요하다. 

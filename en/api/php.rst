@@ -28,7 +28,7 @@ For Linux
 
 *   Operating system: 32-bit or 64-bit Linux
 *   Web server: Apache
-*   PHP: version 5.x, or version 7.x (http://php.net/downloads.php)
+*   PHP: version 5.x, or version 7.x (https://www.php.net/downloads.php)
 *	We refer to the latest PHP versions 5.6.x and 7.1.x as a convenience.
 
 **Installing CUBRID PHP Driver using PECL**
@@ -96,31 +96,6 @@ If **PECL** package has been installed on your system, the installation of CUBRI
     
         service apache2 restart
 
-**Installing using Yum on Fedora/CentOS**
-
-#.  To install CUBRID PHP driver using **yum** command, we need to tell **Yum** where to look for CUBRID package. First, visit one of the following links depending on your operating system.
-    
-    *   CentOS: http://www.cubrid.org/?mid=yum_repository&os=centos
-    *   Fedora: http://www.cubrid.org/?mid=yum_repository&os=fedora
-    
-#.  Choose CUBRID version. You will be given a list of links for your particular version. For example, the following link is provided for Fedora 16 where fc16 means this operating system version. ::
-    
-        rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/10.1.0/cubridrepo-10.1.0-1.fc16.noarch.rpm
-    
-    For CentOS, el6.2 means CentOS version 6.2. ::
-    
-        rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/10.1.0/cubridrepo-10.1.0-1.el6.2.noarch.rpm
-    
-    Executing this command will tell **Yum** where to look for CUBRID package.
-    
-#.  Execute the command below to install CUBRID PHP driver. ::
-    
-        yum install php-cubrid
-    
-#.  Restart the web server. ::
-    
-        service httpd restart
-
 For Windows
 -----------
 
@@ -129,7 +104,7 @@ For Windows
 *   CUBRID: 9.3.x or later
 *   Operating system: 32-bit or 64 bit Windows
 *   Web server: Apache or IIS
-*   PHP: 5.6.x or 7.1.x (http://windows.php.net/download/)
+*   PHP: 5.6.x or 7.1.x (https://windows.php.net/download/)
 
 **Using CUBRID PHP Driver Installer**
 
@@ -141,7 +116,7 @@ Before you install CUBRID PHP driver, make sure that paths of PHP and CUBRID are
 
 #.  Download the CUBRID PHP API installer for Windows from the link below. The current installer includes the drivers for all CUBRID versions.
     
-    http://www.cubrid.org/?mid=downloads&item=php_driver&os=windows
+    https://www.cubrid.org/downloads#php
     
 #.  To install the PHP extension, run the installer. Once the installer starts, click the [Next] button.
 
@@ -195,7 +170,7 @@ If you cannot get the result like above, it is highly likely that your PHP and C
 
 **Downloading and Installing Compiled CUBRID PHP Driver**
 
-First, download CUBRID PHP/PDO driver of which versions match the versions of your operating system and PHP installed from http://www.cubrid.org/?mid=downloads&item=php_driver&os=windows&php=detect&driver=detect .
+First, download CUBRID PHP/PDO driver of which versions match the versions of your operating system and PHP installed from https://www.cubrid.org/downloads#php .
 
 After you download the driver, you will see the **php_cubrid.dll** file for CUBRID PHP driver or the **php_pdo_cubrid.dll** file for CUBRID PDO driver. Follow the steps below to install it.
 
@@ -224,9 +199,9 @@ In this section, we will introduce the way of building CUBRID PHP driver for Lin
 **Configuring the environment**
 
 *   CUBRID: Install CUBRID. Make sure the environment variable **%CUBRID%** is defined in your system.
-*   PHP 5.6.x or 7.1.x source code: You can download PHP source code from http://php.net/downloads.php .
+*   PHP 5.6.x or 7.1.x source code: You can download PHP source code from https://www.php.net/downloads.php .
 *   Apache 2: It can be used to test PHP.
-*   CUBRID PHP driver source code: You can download the source code from http://www.cubrid.org/?mid=downloads&item=php_driver . Make sure that the version you download is the same as the version of CUBRID which has been installed on your system.
+*   CUBRID PHP driver source code: You can download the source code from https://www.cubrid.org/downloads#php . Make sure that the version you download is the same as the version of CUBRID which has been installed on your system.
 
 **Compiling CUBRID PHP driver**
 
@@ -266,7 +241,7 @@ In this section, we will introduce the way of building CUBRID PHP driver for Lin
     
         <?php phpinfo(); ?>
     
-#.  Use web browser to visit http://localhost/test.php. If you can see the following result, it means that installation is successfully completed.
+#.  Use web browser to visit \http://localhost/test.php. If you can see the following result, it means that installation is successfully completed.
     
     +------------+-------------+
     | CUBRID     |   Value     |
@@ -326,7 +301,7 @@ More recent versions of PHP are built with VC11, VC14 (Visual Studio 2012 or 201
 
     .. image:: /images/image58.jpg
 
-*   CUBRID PHP driver source code: You can download CUBRID PHP driver source code of which the version is the same as the version of CUBRID that have been installed on your system. You can get it from http://www.cubrid.org/?mid=downloads&item=php_driver .
+*   CUBRID PHP driver source code: You can download CUBRID PHP driver source code of which the version is the same as the version of CUBRID that have been installed on your system. You can get it from https://www.cubrid.org/downloads#php .
 
 .. note::
 
@@ -366,7 +341,7 @@ More recent versions of PHP are built with VC11, VC14 (Visual Studio 2012 or 201
 
     .. image:: /images/image62.jpg
 
-*   CUBRID PHP driver source code: You can download CUBRID PHP driver source code of which the version is the same as the version of CUBRID that has been installed on your system. You can get it from http://www.cubrid.org/?mid=downloads&item=php_driver .
+*   CUBRID PHP driver source code: You can download CUBRID PHP driver source code of which the version is the same as the version of CUBRID that has been installed on your system. You can get it from https://www.cubrid.org/downloads#php .
 
 .. note::
 
@@ -430,7 +405,7 @@ More recent versions of PHP are built with VC11, VC14 (Visual Studio 2012 or 201
 
 *   PHP 7.1.x source: Remember to get the src package that matches your binary version. After you extract the PHP 7.1.x src, add system environment variable **%PHP7_SRC%** and set its value to the path of PHP 7.1.s source code. In the VC14 [Property Pages] dialog box, select [General] under the [C/C++] tree node. You can see **$(PHP7_SRC)** in [Additional Include Directories].
 
-*   CUBRID PHP driver source code: You can download CUBRID PHP driver source code of which the version is the same as the version of CUBRID that is installed on your system. You can get it from http://www.cubrid.org/?mid=downloads&item=php_driver .
+*   CUBRID PHP driver source code: You can download CUBRID PHP driver source code of which the version is the same as the version of CUBRID that is installed on your system. You can get it from https://www.cubrid.org/downloads#php .
 
 .. note::
 
@@ -496,7 +471,7 @@ PHP Programming
 Connecting to a Database
 ------------------------
 
-The first step of database applications is to use `cubrid_connect <http://www.php.net/manual/en/function.cubrid-connect.php>`_ () or `cubrid_connect_with_url <http://www.php.net/manual/en/function.cubrid-connect-with-url.php>`_ () function which provides database connection. Once `cubrid_connect <http://www.php.net/manual/en/function.cubrid-connect.php>`_ () or `cubrid_connect_with_url <http://www.php.net/manual/en/function.cubrid-connect-with-url.php>`_ () function is executed successfully, you can use any functions available in the database. It is very important to call the `cubrid_disconnect <http://www.php.net/manual/en/function.cubrid-disconnect.php>`_ () function before applications are terminated. The `cubrid_disconnect <http://www.php.net/manual/en/function.cubrid-disconnect.php>`_ () function terminates the current transaction as well as the connection handle and all request handles created by the `cubrid_connect <http://www.php.net/manual/en/function.cubrid-connect.php>`_ () function.
+The first step of database applications is to use `cubrid_connect <https://www.php.net/manual/en/function.cubrid-connect.php>`_ () or `cubrid_connect_with_url <https://www.php.net/manual/en/function.cubrid-connect-with-url.php>`_ () function which provides database connection. Once `cubrid_connect <https://www.php.net/manual/en/function.cubrid-connect.php>`_ () or `cubrid_connect_with_url <https://www.php.net/manual/en/function.cubrid-connect-with-url.php>`_ () function is executed successfully, you can use any functions available in the database. It is very important to call the `cubrid_disconnect <https://www.php.net/manual/en/function.cubrid-disconnect.php>`_ () function before applications are terminated. The `cubrid_disconnect <https://www.php.net/manual/en/function.cubrid-disconnect.php>`_ () function terminates the current transaction as well as the connection handle and all request handles created by the `cubrid_connect <https://www.php.net/manual/en/function.cubrid-connect.php>`_ () function.
 
 .. note:: 
 
@@ -506,11 +481,11 @@ The first step of database applications is to use `cubrid_connect <http://www.ph
 Transactions and Auto-Commit
 ----------------------------
 
-CUBRID PHP supports transaction and auto-commit mode. Auto-commit mode means that every query that you run has its own implicit transaction. You can use the `cubrid_get_autocommit <http://www.php.net/manual/en/function.cubrid-get-autocommit.php>`_ () function to get the status of current connection auto-commit mode and use the `cubrid_set_autocommit <http://www.php.net/manual/en/function.cubrid-set-autocommit.php>`_ () function to enable/disable auto-commit mode of current connection. In auto-commit mode, any transactions being executed are committed regardless of whether it is set to **ON** or **OFF**.
+CUBRID PHP supports transaction and auto-commit mode. Auto-commit mode means that every query that you run has its own implicit transaction. You can use the `cubrid_get_autocommit <https://www.php.net/manual/en/function.cubrid-get-autocommit.php>`_ () function to get the status of current connection auto-commit mode and use the `cubrid_set_autocommit <https://www.php.net/manual/en/function.cubrid-set-autocommit.php>`_ () function to enable/disable auto-commit mode of current connection. In auto-commit mode, any transactions being executed are committed regardless of whether it is set to **ON** or **OFF**.
 
 The default value of auto-commit mode upon application startup is configured by the **CCI_DEFAULT_AUTOCOMMIT** (broker parameter). If the broker parameter value is not configured, the default value is set to **ON**. 
 
-If you set auto-commit mode to **OFF** in the `cubrid_set_autocommit <http://www.php.net/manual/en/function.cubrid-set-autocommit.php>`_ () function, you can handle transactions by specifying a proper function; to commit transactions, use the `cubrid_commit <http://www.php.net/manual/en/function.cubrid-commit.php>`_ () function and to roll back transactions, use the `cubrid_rollback <http://www.php.net/manual/en/function.cubrid-rollback.php>`_ () function. If you use the `cubrid_disconnect <http://www.php.net/manual/en/function.cubrid-disconnect.php>`_ () function, transactions will be disconnected and jobs which have not been committed will be rolled back.
+If you set auto-commit mode to **OFF** in the `cubrid_set_autocommit <https://www.php.net/manual/en/function.cubrid-set-autocommit.php>`_ () function, you can handle transactions by specifying a proper function; to commit transactions, use the `cubrid_commit <https://www.php.net/manual/en/function.cubrid-commit.php>`_ () function and to roll back transactions, use the `cubrid_rollback <https://www.php.net/manual/en/function.cubrid-rollback.php>`_ () function. If you use the `cubrid_disconnect <https://www.php.net/manual/en/function.cubrid-disconnect.php>`_ () function, transactions will be disconnected and jobs which have not been committed will be rolled back.
 
 Processing Queries
 ------------------
@@ -541,7 +516,7 @@ The following are the basic steps to execute queries.
 
 **Column types and names of the query result**
 
-The `cubrid_column_types <http://www.php.net/manual/en/function.cubrid-column-types.php>`_ () function is used to get arrays containing column types and the `cubrid_column_types <http://www.php.net/manual/en/function.cubrid-column-types.php>`_ () functions is used to get arrays containing colunm names.
+The `cubrid_column_types <https://www.php.net/manual/en/function.cubrid-column-types.php>`_ () function is used to get arrays containing column types and the `cubrid_column_types <https://www.php.net/manual/en/function.cubrid-column-types.php>`_ () functions is used to get arrays containing colunm names.
 
 .. code-block:: php
 
@@ -561,7 +536,7 @@ The `cubrid_column_types <http://www.php.net/manual/en/function.cubrid-column-ty
 
 **Controlling a cursor**
 
-The `cubrid_move_cursor <http://www.php.net/manual/en/function.cubrid-move-cursor.php>`_ () function is used to move a cursor to a specified position from one of three points: beginning of the query result, current cursor position, or end of the query result).
+The `cubrid_move_cursor <https://www.php.net/manual/en/function.cubrid-move-cursor.php>`_ () function is used to move a cursor to a specified position from one of three points: beginning of the query result, current cursor position, or end of the query result).
 
 .. code-block:: php
 
@@ -576,7 +551,7 @@ The `cubrid_move_cursor <http://www.php.net/manual/en/function.cubrid-move-curso
 
 **Result array types**
 
-One of the following three types of arrays is used in the result of the `cubrid_fetch <http://www.php.net/manual/en/function.cubrid-fetch.php>`_ () function. The array types can be determined when the `cubrid_fetch <http://www.php.net/manual/en/function.cubrid-fetch.php>`_ () function is called. Of array types, the associative array uses string indexes and the numeric array uses number indexes. The last array includes both associative and numeric arrays.
+One of the following three types of arrays is used in the result of the `cubrid_fetch <https://www.php.net/manual/en/function.cubrid-fetch.php>`_ () function. The array types can be determined when the `cubrid_fetch <https://www.php.net/manual/en/function.cubrid-fetch.php>`_ () function is called. Of array types, the associative array uses string indexes and the numeric array uses number indexes. The last array includes both associative and numeric arrays.
 
 *   Numeric array
 
@@ -598,7 +573,7 @@ One of the following three types of arrays is used in the result of the `cubrid_
 
 **Catalog Operations**
 
-The `cubrid_schema <http://www.php.net/manual/en/function.cubrid-schema.php>`_ () function is used to get database schema information such as classes, virtual classes, attributes, methods, triggers, and constraints. The return value of the `cubrid_schema <http://www.php.net/manual/en/function.cubrid-schema.php>`_ () function is a two-dimensional array.
+The `cubrid_schema <https://www.php.net/manual/en/function.cubrid-schema.php>`_ () function is used to get database schema information such as classes, virtual classes, attributes, methods, triggers, and constraints. The return value of the `cubrid_schema <https://www.php.net/manual/en/function.cubrid-schema.php>`_ () function is a two-dimensional array.
 
 .. code-block:: php
 
@@ -614,13 +589,13 @@ The `cubrid_schema <http://www.php.net/manual/en/function.cubrid-schema.php>`_ (
 
 **Error Handling**
 
-When an error occurs, most of PHP interfaces display error messages and return false or -1. The `cubrid_error_msg <http://www.php.net/manual/en/function.cubrid-error-msg.php>`_ (), `cubrid_error_code <http://www.php.net/manual/en/function.cubrid-error-code.php>`_ () and `cubrid_error_code_facility <http://www.php.net/manual/en/function.cubrid-error-code-facility.php>`_ () functions are used to check error messages, error codes, and error facility codes.
+When an error occurs, most of PHP interfaces display error messages and return false or -1. The `cubrid_error_msg <https://www.php.net/manual/en/function.cubrid-error-msg.php>`_ (), `cubrid_error_code <https://www.php.net/manual/en/function.cubrid-error-code.php>`_ () and `cubrid_error_code_facility <https://www.php.net/manual/en/function.cubrid-error-code-facility.php>`_ () functions are used to check error messages, error codes, and error facility codes.
 
-The return value of the `cubrid_error_code_facility <http://www.php.net/manual/en/function.cubrid-error-code-facility.php>`_ () function is one of the following (**CUBRID_FACILITY_DBMS** (DBMS error), **CUBRID_FACILITY_CAS** (CAS server error), **CUBRID_FACILITY_CCI** (CCI error), or **CUBRID_FACILITY_CLIENT** (PHP module error).
+The return value of the `cubrid_error_code_facility <https://www.php.net/manual/en/function.cubrid-error-code-facility.php>`_ () function is one of the following (**CUBRID_FACILITY_DBMS** (DBMS error), **CUBRID_FACILITY_CAS** (CAS server error), **CUBRID_FACILITY_CCI** (CCI error), or **CUBRID_FACILITY_CLIENT** (PHP module error).
 
 **Using OIDs**
 
-The OID value in the currently updated f record by using the `cubrid_current_oid <http://www.php.net/manual/en/function.cubrid-current-oid.php>`_ function if it is used together with query that can update the **CUBRID_INCLUDE_OID** option in the `cubrid_execute <http://www.php.net/manual/en/function.cubrid-execute.php>`_ () function.
+The OID value in the currently updated f record by using the `cubrid_current_oid <https://www.php.net/manual/en/function.cubrid-current-oid.php>`_ function if it is used together with query that can update the **CUBRID_INCLUDE_OID** option in the `cubrid_execute <https://www.php.net/manual/en/function.cubrid-execute.php>`_ () function.
 
 .. code-block:: php
 
@@ -636,7 +611,7 @@ The OID value in the currently updated f record by using the `cubrid_current_oid
 
 Values in every attribute, specified attributes, or a single attribute of an instance can be obtained by using OIDs. 
 
-If any attributes are not specified in the `cubrid_get <http://www.php.net/manual/en/function.cubrid-get.php>`_ () function, values in every attribute are returned (a). 
+If any attributes are not specified in the `cubrid_get <https://www.php.net/manual/en/function.cubrid-get.php>`_ () function, values in every attribute are returned (a). 
 If attributes is specified in the array data type, the array containing the specified attribute value is returned in the associative array (b). 
 If a single attribute it is specified in the string type, a value of the attributed is returned (c).
 
@@ -655,7 +630,7 @@ The attribute values of an instance can be updated by using OIDs. To update a si
 
 **Using Collections**
 
-You can use the collection data types through PHP array data types or functions that support array data types. The following example shows how to fetch query result by using the `cubrid_fetch <http://www.php.net/manual/en/function.cubrid-fetch.php>`_ () function.
+You can use the collection data types through PHP array data types or functions that support array data types. The following example shows how to fetch query result by using the `cubrid_fetch <https://www.php.net/manual/en/function.cubrid-fetch.php>`_ () function.
 
 .. code-block:: php
 
@@ -665,7 +640,7 @@ You can use the collection data types through PHP array data types or functions 
        echo $cust;
     }
 
-You can get values of collection attributes. The example shows how to get values of collection attributes by using the `cubrid_col_get <http://www.php.net/manual/en/function.cubrid-col-get.php>`_ () function.
+You can get values of collection attributes. The example shows how to get values of collection attributes by using the `cubrid_col_get <https://www.php.net/manual/en/function.cubrid-col-get.php>`_ () function.
 
 .. code-block:: php
 

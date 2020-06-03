@@ -280,9 +280,9 @@ Assertions are conditions that do not consume characters in a string: they do no
 +-----------------+-----------------------------------------------------------------------------------------------------------------------+
 | $               | The end of a string, or precedes a line terminator                                                                    |
 +-----------------+-----------------------------------------------------------------------------------------------------------------------+
-| \\b              | The previous character is a word character and the next is a non-word character (or vice-versa).                      |
+| \\b             | The previous character is a word character and the next is a non-word character (or vice-versa).                      |
 +-----------------+-----------------------------------------------------------------------------------------------------------------------+
-| \\B              | The previous and next characters are both word characters or both are non-word characters.                            |
+| \\B             | The previous and next characters are both word characters or both are non-word characters.                            |
 +-----------------+-----------------------------------------------------------------------------------------------------------------------+
 | (?=subpattern)  | Positive lookahead. The characters following the charcter must match subpattern, but no characters are consumed.      |
 +-----------------+-----------------------------------------------------------------------------------------------------------------------+

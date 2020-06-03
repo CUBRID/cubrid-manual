@@ -285,5 +285,10 @@ texinfo_documents = [
 
 linkcheck_ignore = [
   r'https://github.com/CUBRID/cubrid/.*', 
-  r'http://jira.cubrid.org/browse/.*'
+  r'http://jira.cubrid.org/browse/.*',
+  r'https://www.apachelounge.com/download/win64/binaries/.*'
 ]
+
+linkcheck_timeout = 30
+linkcheck_workers = 10
+linkcheck_retries = 5

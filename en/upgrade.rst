@@ -12,7 +12,7 @@ Cautions during upgrade
 
 **Changes**
 
-Please confirm :ref:`10_1_changes` in the release notes.
+Please confirm :ref:`10_2_changes` in the release notes.
 
 **Saving the Existing Configuration File**
 

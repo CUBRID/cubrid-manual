@@ -22,13 +22,13 @@ Perl 설치 및 설정
 
 **기본 환경**
 
-*   Perl: 시스템에 적합한 버전의 Perl을 사용하는 것을 권장한다. 모든 Linux와 FreeBSD에는 Perl이 포함되어 있으며, Windows에서는 ActivePerl을 권장한다. Active Perl에 대한 자세한 내용은 http://www.activestate.com/activeperl\ 을 참고한다.
+*   Perl: 시스템에 적합한 버전의 Perl을 사용하는 것을 권장한다. 모든 Linux와 FreeBSD에는 Perl이 포함되어 있으며, Windows에서는 ActivePerl을 권장한다. Active Perl에 대한 자세한 내용은 https://www.activestate.com/products/perl\ 을 참고한다.
 
-*   CUBRID: Perl 드라이버를 빌드하기 위해 CCI 드라이버가 필요하며, 이를 위해 CUBRID를 설치해야 한다. CUBRID는 http://www.cubrid.org/downloads\ 에서 다운로드한다.
+*   CUBRID: Perl 드라이버를 빌드하기 위해 CCI 드라이버가 필요하며, 이를 위해 CUBRID를 설치해야 한다. CUBRID는 https://www.cubrid.org/downloads\ 에서 다운로드한다.
 
 *   DBI: http://code.activestate.com/ppm/DBI/
 
-*   C 컴파일러: 대부분의 경우에는 **DBD::cubrid** 바이너리(http://www.cubrid.org/?mid=downloads&item=perl_driver)를 사용할 수 있으나, 만약 소스코드에서 드라이버를 빌드하려면 C 컴파일러가 필요하다. C 컴파일러를 사용하려면 Perl과 CUBRID를 컴파일한 컴파일러와 같은 컴파일러를 사용해야 한다. 그렇지 않으면 C 런타임 라이브러리 차이 때문에 문제가 발생할 수 있다.
+*   C 컴파일러: 대부분의 경우에는 **DBD::cubrid** 바이너리(https://www.cubrid.org/downloads#perl)를 사용할 수 있으나, 만약 소스코드에서 드라이버를 빌드하려면 C 컴파일러가 필요하다. C 컴파일러를 사용하려면 Perl과 CUBRID를 컴파일한 컴파일러와 같은 컴파일러를 사용해야 한다. 그렇지 않으면 C 런타임 라이브러리 차이 때문에 문제가 발생할 수 있다.
 
 **CPAN을 이용한 설치**
 
@@ -48,7 +48,7 @@ Perl 설치 및 설정
 
 **CPAN** 을 이용해서 설치할 수 없다면 **DBD::cubrid** 소스코드를 다운로드해야 한다. 최신 버전은 아래 주소에서 다운로드할 수 있다.
 
-http://www.cubrid.org/?mid=downloads&item=perl_driver
+https://www.cubrid.org/downloads#perl
 
 파일 이름은 일반적으로 **DBD-cubrid-X.X.X.tar.gz** 와 같은 형식이다. 압축을 해제한 후 **DBD-cubrid-X.X.X** 디렉터리로 이동하여 다음 명령어를 실행한다. ::
 

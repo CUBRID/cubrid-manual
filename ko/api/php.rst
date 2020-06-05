@@ -28,7 +28,7 @@ Linux
 
 *   운영체제: Linux: 32 비트 또는 64비트
 *   웹 서버: Apache
-*   PHP: 5.2 또는 5.3( http://php.net/downloads.php )
+*   PHP: 5.2 또는 5.3( https://www.php.net/downloads.php )
 
 **PECL을 이용한 설치**
 
@@ -97,7 +97,7 @@ Windows
 *   CUBRID: 2008 R3.0(8.3.0) 이상
 *   운영체제: Windows 32 비트 또는 64비트
 *   웹 서버: Apache 또는 IIS
-*   PHP: 5.2 또는 5.3(`http://windows.php.net/download/ <http://windows.php.net/download/>`_)
+*   PHP: 5.2 또는 5.3(https://windows.php.net/download/)
 
 **CUBRID PHP API Installer를 사용한 설치**
 
@@ -109,7 +109,7 @@ CUBRID PHP 드라이버를 설치하기 전에 PHP와 CUBRID의 경로가 시스
 
 #.  다음 주소에서 CUBRID PHP API Installer를 다운로드한다. 아래 주소에서는 모든 CUBRID 버전에 대한 CUBRID PHP 드라이버를 제공한다.
     
-    http://www.cubrid.org/?mid=downloads&item=php_driver&os=windows
+    https://www.cubrid.org/downloads#php
     
 #.  CUBRID PHP API Installer를 실행하고 [다음]을 클릭하여 설치를 진행한다.
 
@@ -158,7 +158,7 @@ CUBRID PHP 드라이버를 설치하기 전에 PHP와 CUBRID의 경로가 시스
 
 **빌드된 드라이버 다운로드 및 설치**
 
-운영체제와 PHP 버전에 맞는 Windows용 CUBRID PHP/PDO 드라이버를 http://www.cubrid.org/?mid=downloads&item=php_driver&os=windows&ostype=any&php=any&driver_type=phpdr 에서 다운로드한다.
+운영체제와 PHP 버전에 맞는 Windows용 CUBRID PHP/PDO 드라이버를 https://www.cubrid.org/downloads#php 에서 다운로드한다.
 
 PHP 드라이버를 다운로드하면 **php_cubrid.dll** 파일을 볼 수 있으며, PDO 드라이버를 다운로드하면 **php_pdo_cubrid.dll** 파일을 볼 수 있다. 드라이버를 설치하는 방법은 다음과 같다.
 
@@ -189,9 +189,9 @@ Linux
 **환경 설정**
 
 *   CUBRID: CUBRID를 설치한다. 시스템에 환경 변수 **%CUBRID%** 가 정의되어 있는지 확인한다.
-*   PHP 5.3 소스코드: PHP 5.3 소스코드를 다음 주소에서 다운로드한다. http://php.net/downloads.php
+*   PHP 5.3 소스코드: PHP 5.3 소스코드를 다음 주소에서 다운로드한다. https://www.php.net/downloads.php
 *   Apache 2: PHP 테스트에 Apache 2를 사용할 수 있다.
-*   CUBRID PHP 드라이버 소스코드: http://www.cubrid.org/?mid=downloads&item=php_driver 에서 CUBRID 버전에 맞는 CUBRID PHP 드라이버의 소스코드를 다운로드한다.
+*   CUBRID PHP 드라이버 소스코드: https://www.cubrid.org/downloads#php 에서 CUBRID 버전에 맞는 CUBRID PHP 드라이버의 소스코드를 다운로드한다.
 
 **CUBRID PHP 드라이브 빌드**
 
@@ -231,7 +231,7 @@ Linux
     
         <?php phpinfo(); ?>
     
-#.  웹 브라우저로 http://localhost/test.php 에 접속하여 다음 내용이 보이는지 확인한다. 다음 내용이 보이면 설치가 완료된 것이다.
+#.  웹 브라우저로 \http://localhost/test.php 에 접속하여 다음 내용이 보이는지 확인한다. 다음 내용이 보이면 설치가 완료된 것이다.
 
     +------------+------------+
     | CUBRID     |   Value    |
@@ -284,7 +284,7 @@ VC9 버전을 컴파일하려면 Visual C++ 2008이 필요하다. 하지만 VC9 
 
     .. image:: /images/image58.png
 
-*   CUBRID PHP 드라이버 소스코드: http://www.cubrid.org/?mid=downloads&item=php_driver 에서 CUBRID 버전에 맞는 CUBRID PHP 드라이버의 소스코드를 다운로드한다.
+*   CUBRID PHP 드라이버 소스코드: https://www.cubrid.org/downloads#php 에서 CUBRID 버전에 맞는 CUBRID PHP 드라이버의 소스코드를 다운로드한다.
 
 .. note::
 
@@ -325,7 +325,7 @@ VC9 버전을 컴파일하려면 Visual C++ 2008이 필요하다. 하지만 VC9 
 
     .. image:: /images/image62.png
 
-*   CUBRID PHP 드라이버 소스코드: http://www.cubrid.org/?mid=downloads&item=php_driver 에서 CUBRID 버전에 맞는 CUBRID PHP 드라이버의 소스코드를 다운로드한다.
+*   CUBRID PHP 드라이버 소스코드: https://www.cubrid.org/downloads#php 에서 CUBRID 버전에 맞는 CUBRID PHP 드라이버의 소스코드를 다운로드한다.
 
 .. note::
 
@@ -353,13 +353,13 @@ VC9 버전을 컴파일하려면 Visual C++ 2008이 필요하다. 하지만 VC9 
 
 **x64 PHP**
 
-Windows x64 CUBRID PHP 드라이버는 제공되지 않는다. windows.php.net에도 Windows 32비트용 PHP만 있고 공식적인 Windows x64 PHP는 없지만, Windows x64 PHP가 필요하다면 직접 소스코드를 컴파일할 수 있다(다른 사용자가 빌드한 비공식 PHP는 http://www.anindya.com/ 에서 다운로드할 수 있다). 여기에서는 x64 PHP를 빌드하는 방법은 자세히 설명하지 않는다.
+Windows x64 CUBRID PHP 드라이버는 제공되지 않는다. windows.php.net에도 Windows 32비트용 PHP만 있고 공식적인 Windows x64 PHP는 없지만, Windows x64 PHP가 필요하다면 직접 소스코드를 컴파일할 수 있다(다른 사용자가 빌드한 비공식 PHP는 https://www.anindya.com/ 에서 다운로드할 수 있다). 여기에서는 x64 PHP를 빌드하는 방법은 자세히 설명하지 않는다.
 
 Windows에서 PHP 빌드를 지원하는 컴파일러 목록은 https://wiki.php.net/internals/windows/compiler 에서 제공하며, x64 PHP를 빌드할 때에는 Visual C++ 8(2005)와 Visual C++ 9(2008 SP1 only)을 사용할 수 있다는 것을 확인할 수 있다. Visual C++ 2005 미만 버전에서 x64 PHP를 빌드하려면 Windows Server Feb. 2003 SDK를 사용해야 한다.
 
 **x64 Apache**
 
-http://www.apachelounge.com/에서는 VC9 x86 버전 Apache만 있고 공식 Windows x64 Apache는 없다. 대신에 64비트 Windows를 사용하는 Windows 서버에서는 IIS를 사용할 수 있다. 반드시 VC9 x64 버전 Apache를 사용하고 싶다면, http://www.anindya.com/ 에서 다운로드할 수 있다.
+https://www.apachelounge.com/\ 에서는 VC9 x86 버전 Apache만 있고 공식 Windows x64 Apache는 없다. 대신에 64비트 Windows를 사용하는 Windows 서버에서는 IIS를 사용할 수 있다. 반드시 VC9 x64 버전 Apache를 사용하고 싶다면, https://www.anindya.com/ 에서 다운로드할 수 있다.
 
 **환경 설정**
 
@@ -369,11 +369,11 @@ http://www.apachelounge.com/에서는 VC9 x86 버전 Apache만 있고 공식 Win
 
 *   SDK 6.1: VC9을 사용한다면 Windows SDK for Windows Server 2008 and .NET Framework 3.5(또는 SDK 6.1)가 필요하다.
 
-*   PHP 5.3 x64 바이너리: SDK 6.1을 이용하여 VC9 x64 PHP를 직접 빌드하거나, http://www.anindya.com/ 에서 VC9 x64 Non Thread Safe 또는 VC9 x64 Thread Safe 버전을 다운로드할 수 있다. 시스템 환경 변수 **%PHPRC%** 가 제대로 정의되어 있어야 한다.
+*   PHP 5.3 x64 바이너리: SDK 6.1을 이용하여 VC9 x64 PHP를 직접 빌드하거나, https://www.anindya.com/ 에서 VC9 x64 Non Thread Safe 또는 VC9 x64 Thread Safe 버전을 다운로드할 수 있다. 시스템 환경 변수 **%PHPRC%** 가 제대로 정의되어 있어야 한다.
 
 *   PHP 5.3 소스코드: 바이너리 버전에 맞는 소스코드를 다운로드해야 한다. PHP 5.3 소스코드를 다운로드한 후 압축 해제하고, 시스템 환경 변수 **%PHP5_SRC%** 를 추가하여 PHP 5.3 소스코드의 경로를 값으로 설정한다. VC9 프로젝트 속성에서 [C/C++] > [General]을 선택하면 [Additional Library Directories]에서 **$(PHP5_SRC)** 가 사용되는 것을 볼 수 있다.
 
-*   CUBRID PHP 드라이버 소스코드: http://www.cubrid.org/?mid=downloads&item=php_driver 에서 CUBRID 버전에 맞는 CUBRID PHP 드라이버의 소스코드를 다운로드한다.
+*   CUBRID PHP 드라이버 소스코드: https://www.cubrid.org/downloads#php 에서 CUBRID 버전에 맞는 CUBRID PHP 드라이버의 소스코드를 다운로드한다.
 
 .. note::
 
@@ -439,7 +439,7 @@ PHP 프로그래밍
 데이터베이스 연결
 -----------------
 
-데이터베이스 응용에서 첫 단계는 `cubrid_connect <http://www.php.net/manual/en/function.cubrid-connect.php>`_ () 함수 또는 `cubrid_connect_with_url <http://www.php.net/manual/en/function.cubrid-connect-with-url.php>`_ () 함수를 사용하는 것으로 데이터베이스 연결을 제공한다. `cubrid_connect <http://www.php.net/manual/en/function.cubrid-connect.php>`_ 함수 또는 `cubrid_connect_with_url <http://www.php.net/manual/en/function.cubrid-connect-with-url.php>`_ () 함수가 성공적으로 수행되면, 데이터베이스를 사용할 수 있는 모든 함수를 사용할 수 있다. 응용을 완전히 끝내기 전에 `cubrid_disconnect <http://www.php.net/manual/en/function.cubrid-disconnect.php>`_ () 함수를 호출하는 것은 매우 중요하다. `cubrid_disconnect <http://www.php.net/manual/en/function.cubrid-disconnect.php>`_ () 함수는 현재 발생한 트랜잭션을 끝마치고 `cubrid_connect <http://www.php.net/manual/en/function.cubrid-connect.php>`_ () 함수에 의해 생성된 연결 핸들과 모든 요청 핸들을 종료한다.
+데이터베이스 응용에서 첫 단계는 `cubrid_connect <https://www.php.net/manual/en/function.cubrid-connect.php>`_ () 함수 또는 `cubrid_connect_with_url <https://www.php.net/manual/en/function.cubrid-connect-with-url.php>`_ () 함수를 사용하는 것으로 데이터베이스 연결을 제공한다. `cubrid_connect <https://www.php.net/manual/en/function.cubrid-connect.php>`_ 함수 또는 `cubrid_connect_with_url <https://www.php.net/manual/en/function.cubrid-connect-with-url.php>`_ () 함수가 성공적으로 수행되면, 데이터베이스를 사용할 수 있는 모든 함수를 사용할 수 있다. 응용을 완전히 끝내기 전에 `cubrid_disconnect <https://www.php.net/manual/en/function.cubrid-disconnect.php>`_ () 함수를 호출하는 것은 매우 중요하다. `cubrid_disconnect <https://www.php.net/manual/en/function.cubrid-disconnect.php>`_ () 함수는 현재 발생한 트랜잭션을 끝마치고 `cubrid_connect <https://www.php.net/manual/en/function.cubrid-connect.php>`_ () 함수에 의해 생성된 연결 핸들과 모든 요청 핸들을 종료한다.
 
 .. note:: 
 
@@ -449,11 +449,11 @@ PHP 프로그래밍
 트랜잭션과 자동 커밋
 --------------------
 
-CUBRID PHP는 트랜잭션과 자동 커밋 모드를 지원한다. 자동 커밋 모드에서는 하나의 질의마다 하나의 트랜잭션이 이루어진다. `cubrid_get_autocommit <http://www.php.net/manual/en/function.cubrid-get-autocommit.php>`_ () 함수를 사용하면 현재 연결의 자동 커밋 모드 여부를 확인할 수 있다. `cubrid_set_autocommit <http://www.php.net/manual/en/function.cubrid-set-autocommit.php>`_ () 함수를 사용하면 현재 연결의 자동 커밋 모드 여부를 설정할 수 있으며, 진행 중이던 트랜잭션은 모드 설정과 상관없이 커밋된다.
+CUBRID PHP는 트랜잭션과 자동 커밋 모드를 지원한다. 자동 커밋 모드에서는 하나의 질의마다 하나의 트랜잭션이 이루어진다. `cubrid_get_autocommit <https://www.php.net/manual/en/function.cubrid-get-autocommit.php>`_ () 함수를 사용하면 현재 연결의 자동 커밋 모드 여부를 확인할 수 있다. `cubrid_set_autocommit <https://www.php.net/manual/en/function.cubrid-set-autocommit.php>`_ () 함수를 사용하면 현재 연결의 자동 커밋 모드 여부를 설정할 수 있으며, 진행 중이던 트랜잭션은 모드 설정과 상관없이 커밋된다.
 
 응용 프로그램 시작 시 자동 커밋 모드의 기본값은 브로커 파라미터인 **CCI_DEFAULT_AUTOCOMMIT** 으로 설정한다. 브로커 파라미터 설정을 생략하면 기본값은 **ON** 이다.
 
-`cubrid_set_autocommit <http://www.php.net/manual/en/function.cubrid-set-autocommit.php>`_ () 함수에서 자동 커밋 모드를 OFF로 설정하면 커밋 또는 롤백을 명시하여 트랜잭션을 처리할 수 있다. 트랜잭션을 커밋하려면 `cubrid_commit <http://www.php.net/manual/en/function.cubrid-commit.php>`_ () 함수를 사용하고 트랜잭션을 롤백하려면 `cubrid_rollback <http://www.php.net/manual/en/function.cubrid-rollback.php>`_ () 함수를 사용한다. `cubrid_disconnect <http://www.php.net/manual/en/function.cubrid-disconnect.php>`_ () 함수는 트랜잭션을 종료하고 커밋되지 않은 작업을 롤백한다.
+`cubrid_set_autocommit <https://www.php.net/manual/en/function.cubrid-set-autocommit.php>`_ () 함수에서 자동 커밋 모드를 OFF로 설정하면 커밋 또는 롤백을 명시하여 트랜잭션을 처리할 수 있다. 트랜잭션을 커밋하려면 `cubrid_commit <https://www.php.net/manual/en/function.cubrid-commit.php>`_ () 함수를 사용하고 트랜잭션을 롤백하려면 `cubrid_rollback <https://www.php.net/manual/en/function.cubrid-rollback.php>`_ () 함수를 사용한다. `cubrid_disconnect <https://www.php.net/manual/en/function.cubrid-disconnect.php>`_ () 함수는 트랜잭션을 종료하고 커밋되지 않은 작업을 롤백한다.
 
 질의 처리
 ---------
@@ -484,7 +484,7 @@ CUBRID PHP는 트랜잭션과 자동 커밋 모드를 지원한다. 자동 커�
 
 **질의 결과의 열 타입과 이름**
 
-`cubrid_column_types <http://www.php.net/manual/en/function.cubrid-column-types.php>`_ () 함수를 사용하여 열 타입이 들어있는 배열을 얻을 수 있고, `cubrid_column_types <http://www.php.net/manual/en/function.cubrid-column-types.php>`_ () 함수를 사용하여 열의 이름이 들어있는 배열을 얻을 수 있다.
+`cubrid_column_types <https://www.php.net/manual/en/function.cubrid-column-types.php>`_ () 함수를 사용하여 열 타입이 들어있는 배열을 얻을 수 있고, `cubrid_column_types <https://www.php.net/manual/en/function.cubrid-column-types.php>`_ () 함수를 사용하여 열의 이름이 들어있는 배열을 얻을 수 있다.
 
 .. code-block:: php
 
@@ -504,7 +504,7 @@ CUBRID PHP는 트랜잭션과 자동 커밋 모드를 지원한다. 자동 커�
 
 **커서 조정**
 
-질의 결과의 위치를 설정할 수 있다. `cubrid_move_cursor <http://www.php.net/manual/en/function.cubrid-move-cursor.php>`_ () 함수를 사용하여 커서를 세 가지 포인트(질의 결과의 처음, 현재 커서 위치, 질의 결과의 끝) 중 한 포인트로부터 일정한 위치로 이동할 수 있다.
+질의 결과의 위치를 설정할 수 있다. `cubrid_move_cursor <https://www.php.net/manual/en/function.cubrid-move-cursor.php>`_ () 함수를 사용하여 커서를 세 가지 포인트(질의 결과의 처음, 현재 커서 위치, 질의 결과의 끝) 중 한 포인트로부터 일정한 위치로 이동할 수 있다.
 
 .. code-block:: php
 
@@ -519,7 +519,7 @@ CUBRID PHP는 트랜잭션과 자동 커밋 모드를 지원한다. 자동 커�
 
 **결과 배열 타입**
 
-`cubrid_fetch <http://www.php.net/manual/en/function.cubrid-fetch.php>`_ () 함수의 결과에는 세가지 종류의 배열 타입 중 하나가 사용된다. `cubrid_fetch <http://www.php.net/manual/en/function.cubrid-fetch.php>`_ () 함수가 호출될 때 배열의 타입을 결정할 수 있다. 그 중 하나인 연관배열은 문자열 색인을 사용한다. 두 번째로 수치배열은 숫자 순서 색인을 사용한다. 마지막 배열은 연관배열과 수치배열을 둘 다 포함한다.
+`cubrid_fetch <https://www.php.net/manual/en/function.cubrid-fetch.php>`_ () 함수의 결과에는 세가지 종류의 배열 타입 중 하나가 사용된다. `cubrid_fetch <https://www.php.net/manual/en/function.cubrid-fetch.php>`_ () 함수가 호출될 때 배열의 타입을 결정할 수 있다. 그 중 하나인 연관배열은 문자열 색인을 사용한다. 두 번째로 수치배열은 숫자 순서 색인을 사용한다. 마지막 배열은 연관배열과 수치배열을 둘 다 포함한다.
 
 *   수치배열
 
@@ -541,7 +541,7 @@ CUBRID PHP는 트랜잭션과 자동 커밋 모드를 지원한다. 자동 커�
 
 **카탈로그 연산**
 
-클래스, 가상 클래스, 속성, 메서드, 트리거, 제약 조건 등 데이터베이스의 스키마 정보는 `cubrid_schema <http://www.php.net/manual/en/function.cubrid-schema.php>`_ () 함수를 호출하여 얻을 수 있다. `cubrid_schema <http://www.php.net/manual/en/function.cubrid-schema.php>`_ () 함수의 리턴 값은 2차원 배열이다.
+클래스, 가상 클래스, 속성, 메서드, 트리거, 제약 조건 등 데이터베이스의 스키마 정보는 `cubrid_schema <https://www.php.net/manual/en/function.cubrid-schema.php>`_ () 함수를 호출하여 얻을 수 있다. `cubrid_schema <https://www.php.net/manual/en/function.cubrid-schema.php>`_ () 함수의 리턴 값은 2차원 배열이다.
 
 .. code-block:: php
 
@@ -557,13 +557,13 @@ CUBRID PHP는 트랜잭션과 자동 커밋 모드를 지원한다. 자동 커�
 
 **에러 처리**
 
-에러가 발생하면 대부분의 PHP 인터페이스 함수는 에러 메시지를 출력하고 false나 -1을 반환한다. `cubrid_error_msg <http://www.php.net/manual/en/function.cubrid-error-msg.php>`_ (), `cubrid_error_code <http://www.php.net/manual/en/function.cubrid-error-code.php>`_ () 그리고 `cubrid_error_code_facility <http://www.php.net/manual/en/function.cubrid-error-code-facility.php>`_ () 함수를 사용하면 각각 에러 메시지, 에러 코드, 에러 기능 코드를 확인할 수 있다.
+에러가 발생하면 대부분의 PHP 인터페이스 함수는 에러 메시지를 출력하고 false나 -1을 반환한다. `cubrid_error_msg <https://www.php.net/manual/en/function.cubrid-error-msg.php>`_ (), `cubrid_error_code <https://www.php.net/manual/en/function.cubrid-error-code.php>`_ () 그리고 `cubrid_error_code_facility <https://www.php.net/manual/en/function.cubrid-error-code-facility.php>`_ () 함수를 사용하면 각각 에러 메시지, 에러 코드, 에러 기능 코드를 확인할 수 있다.
 
-`cubrid_error_code_facility <http://www.php.net/manual/en/function.cubrid-error-code-facility.php>`_ () 함수의 결과 값은 **CUBRID_FACILITY_DBMS** (DBMS 에러), **CUBRID_FACILITY_CAS** (CAS 서버 에러), **CUBRID_FACILITY_CCI** (CCI 에러), **CUBRID_FACILITY_CLIENT** (PHP 모듈 에러) 중 하나이다.
+`cubrid_error_code_facility <https://www.php.net/manual/en/function.cubrid-error-code-facility.php>`_ () 함수의 결과 값은 **CUBRID_FACILITY_DBMS** (DBMS 에러), **CUBRID_FACILITY_CAS** (CAS 서버 에러), **CUBRID_FACILITY_CCI** (CCI 에러), **CUBRID_FACILITY_CLIENT** (PHP 모듈 에러) 중 하나이다.
 
 **OID 사용**
 
-`cubrid_execute <http://www.php.net/manual/en/function.cubrid-execute.php>`_ () 함수에서 CUBRID_INCLUDE_OID 옵션을 업데이트할 수 있는 질의를 함께 사용하면 `cubrid_current_oid <http://www.php.net/manual/en/function.cubrid-current-oid.php>`_ 함수를 통해 업데이트된 현재 f 레코드의 OID 값을 가져올 수 있다.
+`cubrid_execute <https://www.php.net/manual/en/function.cubrid-execute.php>`_ () 함수에서 CUBRID_INCLUDE_OID 옵션을 업데이트할 수 있는 질의를 함께 사용하면 `cubrid_current_oid <https://www.php.net/manual/en/function.cubrid-current-oid.php>`_ 함수를 통해 업데이트된 현재 f 레코드의 OID 값을 가져올 수 있다.
 
 .. code-block:: php
 
@@ -579,7 +579,7 @@ CUBRID PHP는 트랜잭션과 자동 커밋 모드를 지원한다. 자동 커�
 
 OID를 사용하여 인스턴스의 모든 속성, 지정한 속성 또는 한 속성의 값을 얻을 수 있다.
 
-만약 `cubrid_get <http://www.php.net/manual/en/function.cubrid-get.php>`_ () 함수에 속성을 명시하지 않으면 모든 속성의 값을 반환한다(a). 
+만약 `cubrid_get <https://www.php.net/manual/en/function.cubrid-get.php>`_ () 함수에 속성을 명시하지 않으면 모든 속성의 값을 반환한다(a). 
 만약 배열 데이터 타입으로 속성을 명시하면 지정한 속성 값이 들어있는 배열은 연관배열로 반환된다(b). 
 만약 문자열 타입으로 한 속성을 명시하면 속성의 값이 반환된다(c).
 
@@ -598,7 +598,7 @@ OID를 사용하여 인스턴스의 속성 값을 갱신할 수도 있다. 하�
 
 **컬렉션 사용**
 
-컬렉션 데이터 타입은 PHP 배열 데이터 타입을 통해 사용할 수 있고 배열 데이터 타입을 지원하는 PHP 함수를 사용할 수 있다. 다음은 `cubrid_fetch <http://www.php.net/manual/en/function.cubrid-fetch.php>`_ () 함수를 사용하여 질의 결과를 가져오는 예제이다.
+컬렉션 데이터 타입은 PHP 배열 데이터 타입을 통해 사용할 수 있고 배열 데이터 타입을 지원하는 PHP 함수를 사용할 수 있다. 다음은 `cubrid_fetch <https://www.php.net/manual/en/function.cubrid-fetch.php>`_ () 함수를 사용하여 질의 결과를 가져오는 예제이다.
 
 .. code-block:: php
 
@@ -608,7 +608,7 @@ OID를 사용하여 인스턴스의 속성 값을 갱신할 수도 있다. 하�
        echo $cust;
     }
 
-컬렉션 속성의 값도 얻을 수 있다. 다음은 `cubrid_col_get <http://www.php.net/manual/en/function.cubrid-col-get.php>`_ () 함수를 사용하여 컬렉션 속성 값을 가져오는 예제이다.
+컬렉션 속성의 값도 얻을 수 있다. 다음은 `cubrid_col_get <https://www.php.net/manual/en/function.cubrid-col-get.php>`_ () 함수를 사용하여 컬렉션 속성 값을 가져오는 예제이다.
 
 .. code-block:: php
 

@@ -228,6 +228,6 @@ CUBRID가 지원하는 드라이버는 다음과 같다.
 
 *   :doc:`CUBRID Ruby driver <api/ruby>` (`Downloads Ruby <http://ftp.cubrid.org/CUBRID_Drivers/Ruby_Driver/>`_)
 
-*   :doc:`CUBRID Node.js driver <api/node_js>` (`Downloads Node.js <http://www.cubrid.org/downloads/linux/64-bit/drivers/node-js>`_)
+*   :doc:`CUBRID Node.js driver <api/node_js>` (`Downloads Node.js <http://ftp.cubrid.org/CUBRID_Drivers/Node.JS_Driver/>`_)
 
 위 드라이버 중 JDBC, CCI 드라이버는 CUBRID를 설치할 때 자동으로 다운로드되므로 따로 다운로드하지 않아도 된다.

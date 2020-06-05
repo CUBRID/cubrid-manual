@@ -23,7 +23,7 @@ Linux, Unix 및 유사 운영체제에서는 다음과 같은 세 가지 방법�
 **기본 환경**
 
 *   운영체제: Linux: 32 비트/64비트 또는 유사 Unix 운영체제
-*   Python: 2.4 이상(http://www.python.org/download/)
+*   Python: 2.4 이상(https://www.python.org/downloads/)
 
 **소스코드로 설치(Linux)**
 
@@ -31,7 +31,7 @@ Linux, Unix 및 유사 운영체제에서는 다음과 같은 세 가지 방법�
 
 .. FIXME: Python Development Package가 설치되어 있지 않다면 http://www.cubrid.org/wiki_apis/entry/install-python-development-package\ 를 참고하여 설치한다.
 
-#.  소스 코드를 http://www.cubrid.org/?mid=downloads&item=python_driver\에서 다운로드한다.
+#.  소스 코드를 https://www.cubrid.org/downloads#python\에서 다운로드한다.
 
 #.  다음 명령어를 실행하여 원하는 위치에 다운로드한 파일의 압축을 해제한다. ::
 
@@ -51,7 +51,7 @@ Linux, Unix 및 유사 운영체제에서는 다음과 같은 세 가지 방법�
 
 **Easy Install을 이용한 설치(Linux)**
 
-Easy Install은 자동으로 Python 패키지를 다운로드/빌드/설치/관리할 수 있는 Python 모듈로, setuptools에 포함되어 있다. Easy Install을 사용하면 패키지 인덱스뿐만 아니라 다른 웹 사이트에도 HTTP로 연결하여 패키지를 설치할 수 있다. Perl의 CPAN이나 PHP의 PEAR와 유사하다. Easy Install에 대한 더 자세한 설명은 http://packages.python.org/distribute/easy_install.html\ 을 참고한다.
+Easy Install은 자동으로 Python 패키지를 다운로드/빌드/설치/관리할 수 있는 Python 모듈로, setuptools에 포함되어 있다. Easy Install을 사용하면 패키지 인덱스뿐만 아니라 다른 웹 사이트에도 HTTP로 연결하여 패키지를 설치할 수 있다. Perl의 CPAN이나 PHP의 PEAR와 유사하다. Easy Install에 대한 더 자세한 설명은 https://setuptools.readthedocs.io/en/latest/easy_install.html\ 을 참고한다.
 
 Easy Install을 이용하여 CUBRID Python 드라이버를 설치하려면 다음 명령어를 입력한다. ::
 
@@ -64,7 +64,7 @@ Windows에 CUBRID Python 드라이버를 설치하려면 다음과 같이 CUBRID
 
 *   다음 주소에서 운영체제와 Python의 버전에 맞는 드라이버를 다운로드한다.
 
-    http://www.cubrid.org/?mid=downloads&item=python_driver&os=windows&python=detect
+    https://www.cubrid.org/downloads#python
 
 *   다운로드한 파일의 압축을 해제하여 Python이 설치된 경로의 **Lib** 폴더( **C:\\Program Files\\Python\\Lib** ) 안에 복사한다.
 
@@ -105,7 +105,7 @@ Python 예제 프로그램
         conn = CUBRIDdb.connect('CUBRID:localhost:30000:dba::')
 
 *demodb* 데이터베이스는 비밀번호가 필요하지 않으므로 비밀번호를 입력하지 않았다. 그러나 실제 데이터베이스에 연결할 때에는 비밀번호가 필요하다면 비밀번호를 입력해야 한다.
-`connect <http://packages.python.org/CUBRID-Python/_cubrid-module.html#connect>`_ () 함수의 구문은 다음과 같다. ::
+`connect <https://pythonhosted.org/CUBRID-Python/_cubrid-module.html#connect>`_ () 함수의 구문은 다음과 같다. ::
 
     connect (url[,user[password]])
 
@@ -141,9 +141,9 @@ Python 예제 프로그램
     cur.execute("INSERT INTO posts (id, title, body, last_updated) VALUES (1, 'Title 1', 'Test body #1', CURRENT_TIMESTAMP)")
     conn.commit()
 
-CUBRID Python 드라이버에서는 기본적으로 자동 커밋 모드가 비활성화되어 있다. 따라서 SQL문을 실행한 후에는 수동으로 `commit <http://packages.python.org/CUBRID-Python/_cubrid.connection-class.html#commit>`_ () 함수를 사용하여 커밋을 수행해야 한다. 이 함수는 **cur.execute("COMMIT")** 와 같은 동작을 수행한다. 반대로 현재 트랜잭션을 중단하고 롤백하려면 `rollback <http://packages.python.org/CUBRID-Python/_cubrid.connection-class.html#rollback>`_ () 함수를 사용한다.
+CUBRID Python 드라이버에서는 기본적으로 자동 커밋 모드가 비활성화되어 있다. 따라서 SQL문을 실행한 후에는 수동으로 `commit <https://pythonhosted.org/CUBRID-Python/_cubrid.connection-class.html#commit>`_ () 함수를 사용하여 커밋을 수행해야 한다. 이 함수는 **cur.execute("COMMIT")** 와 같은 동작을 수행한다. 반대로 현재 트랜잭션을 중단하고 롤백하려면 `rollback <https://pythonhosted.org/CUBRID-Python/_cubrid.connection-class.html#rollback>`_ () 함수를 사용한다.
 
-데이터를 입력하는 다른 방법으로 prepared statement를 사용할 수도 있다. 다음과 같이 파라미터를 포함하는 투플을 정의한 후 `execute <http://packages.python.org/CUBRID-Python/CUBRIDdb.cursors.Cursor-class.html#execute>`_ () 함수에 전달하여 안전하게 데이터베이스에 데이터를 입력할 수 있다.
+데이터를 입력하는 다른 방법으로 prepared statement를 사용할 수도 있다. 다음과 같이 파라미터를 포함하는 투플을 정의한 후 `execute <https://pythonhosted.org/CUBRID-Python/CUBRIDdb.cursors.BaseCursor-class.html#execute>`_ () 함수에 전달하여 안전하게 데이터베이스에 데이터를 입력할 수 있다.
 
 .. code-block:: python
 
@@ -169,7 +169,7 @@ CUBRID Python 드라이버에서는 기본적으로 자동 커밋 모드가 비�
 
 **전체 레코드를 한 번에 조회**
 
-`fetchall <http://packages.python.org/CUBRID-Python/CUBRIDdb.cursors.Cursor-class.html#fetchall>`_ () 함수를 사용하면 전체 레코드를 한 번에 조회할 수 있다.
+`fetchall <https://pythonhosted.org/CUBRID-Python/CUBRIDdb.cursors.BaseCursor-class.html#fetchall>`_ () 함수를 사용하면 전체 레코드를 한 번에 조회할 수 있다.
 
 .. code-block:: python
 
@@ -185,7 +185,7 @@ CUBRID Python 드라이버에서는 기본적으로 자동 커밋 모드가 비�
 
 **하나의 레코드를 조회**
 
-데이터의 양이 많다면 전체 결과를 메모리로 가져오는 대신 다음과 같이 `fetchone <http://packages.python.org/CUBRID-Python/CUBRIDdb.cursors.Cursor-class.html#fetchone>`_ () 함수를 사용하여 레코드를 한 번에 하나씩 조회할 수 있다.
+데이터의 양이 많다면 전체 결과를 메모리로 가져오는 대신 다음과 같이 `fetchone <https://pythonhosted.org/CUBRID-Python/CUBRIDdb.cursors.BaseCursor-class.html#fetchone>`_ () 함수를 사용하여 레코드를 한 번에 하나씩 조회할 수 있다.
 
 .. code-block:: python
 
@@ -197,7 +197,7 @@ CUBRID Python 드라이버에서는 기본적으로 자동 커밋 모드가 비�
 
 **레코드 개수를 지정하여 조회**
 
-다음과 같이 `fetchmany <http://packages.python.org/CUBRID-Python/CUBRIDdb.cursors.Cursor-class.html#fetchmany>`_ () 함수를 사용하면 조회할 레코드의 개수를 지정할 수 있다.
+다음과 같이 `fetchmany <https://pythonhosted.org/CUBRID-Python/CUBRIDdb.cursors.BaseCursor-class.html#fetchmany>`_ () 함수를 사용하면 조회할 레코드의 개수를 지정할 수 있다.
 
 .. code-block:: python
 
@@ -208,7 +208,7 @@ CUBRID Python 드라이버에서는 기본적으로 자동 커밋 모드가 비�
 
 **반환된 데이터의 메타데이터에 접근**
 
-조회한 레코드의 칼럼 속성에 대한 정보가 필요하면 커서의 `description <http://packages.python.org/CUBRID-Python/_cubrid.cursor-class.html#description>`_ 메서드를 사용한다.
+조회한 레코드의 칼럼 속성에 대한 정보가 필요하면 커서의 `description <https://pythonhosted.org/CUBRID-Python/_cubrid.cursor-class.html#description>`_ 메서드를 사용한다.
 
 .. code-block:: python
 
@@ -226,11 +226,11 @@ CUBRID Python 드라이버에서는 기본적으로 자동 커밋 모드가 비�
 
     (column_name, data_type, display_size, internal_size, precision, scale, nullable)
 
-데이터 타입을 나타내는 숫자에 대한 자세한 내용은 http://packages.python.org/CUBRID-Python/toc-CUBRIDdb.FIELD_TYPE-module.html 을 참고한다.
+데이터 타입을 나타내는 숫자에 대한 자세한 내용은 https://pythonhosted.org/CUBRID-Python/toc-CUBRIDdb.FIELD_TYPE-module.html 을 참고한다.
 
 **자원 해제**
 
-데이터베이스 연결이나 커서를 사용하는 모든 작업을 마친 후에는 객체의 `close <http://packages.python.org/CUBRID-Python/CUBRIDdb.cursors.Cursor-class.html#close>`_ () 함수를 호출하여 자원을 해제해야 한다.
+데이터베이스 연결이나 커서를 사용하는 모든 작업을 마친 후에는 객체의 `close <https://pythonhosted.org/CUBRID-Python/CUBRIDdb.cursors.BaseCursor-class.html#close>`_ () 함수를 호출하여 자원을 해제해야 한다.
 
 .. code-block:: python
 
@@ -240,6 +240,6 @@ CUBRID Python 드라이버에서는 기본적으로 자동 커밋 모드가 비�
 Python API
 ==========
 
-Python Database API는 connect() 모듈 클래스와 Connection 객체, Cursor 객체, 그리고 그 밖의 보조적인 함수들로 이루어진다. 이에 대한 자세한 내용은 http://www.python.org/dev/peps/pep-0249/ 를 참고한다.
+Python Database API는 connect() 모듈 클래스와 Connection 객체, Cursor 객체, 그리고 그 밖의 보조적인 함수들로 이루어진다. 이에 대한 자세한 내용은 https://www.python.org/dev/peps/pep-0249/ 를 참고한다.
 
 CUBRID Python API에 대한 자세한 내용은 http://ftp.cubrid.org/CUBRID_Docs/Drivers/Python/\을 참고한다.

@@ -241,10 +241,6 @@ Parameter configuration
 *   In **KEEP_CONNECTION** parameter, **OFF** value should be changed as **ON** or **AUTO** since **OFF** setting value is no longer used. 
 *   **SELECT_AUTO_COMMIT** should be deleted since this parameter is no longer used.
 *   The value of **APPL_SERVER_MAX_SIZE_HARD_LIMIT** should be 2,097,151 or less since the maximum value of **APPL_SERVER_MAX_SIZE_HARD_LIMIT** is 2,097,151.
-    
-**cubrid_ha.conf**
-
-*   Users who have configured the **ha_apply_max_mem_size** parameter value more than 500 must the value to 500 or less.
 
 **Environment variable**
 

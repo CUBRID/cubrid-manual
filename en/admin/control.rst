@@ -1224,8 +1224,8 @@ The below is an example of displaying results.
 
 .. _encrypted_connections:
 
-Encrypted Connections
----------------------
+Packet Encryption
+-----------------
 
 In an unencrypted communication environment, someone can monitor and interpret all the traffic between clients and a database server, and collected information could be used illegally. In order to access information in an unsafe communication environment while avoiding such an information leakage, data transmitted and received must be encrypted. CUBRID Broker can be configured in safe mode. In this case, all data transmitted and received between the database server and the client are encrypted.
 

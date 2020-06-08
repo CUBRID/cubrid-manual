@@ -2164,11 +2164,11 @@ The following table shows the broker parameters available in the broker configur
 |                                 |                         +---------------------------------+--------+------------------------------+-----------+
 |                                 |                         | SQL_LOG_MAX_SIZE                | KB     | 10,000                       | available |
 |                                 +-------------------------+---------------------------------+--------+------------------------------+-----------+
-|                                 | Encrypted Connections   | SSL                             | string | OFF                          |           |
-|                                 +-------------------------+---------------------------------+--------+------------------------------+-----------+
 |                                 | Etc                     | MAX_STRING_LENGTH               | int    | -1                           |           |
 |                                 |                         +---------------------------------+--------+------------------------------+-----------+
 |                                 |                         | SERVICE                         | string | ON                           |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SSL                             | string | OFF                          |           |
 |                                 |                         +---------------------------------+--------+------------------------------+-----------+
 |                                 |                         | SOURCE_ENV                      | string | cubrid.env                   |           |
 +---------------------------------+-------------------------+---------------------------------+--------+------------------------------+-----------+
@@ -2512,17 +2512,6 @@ Logging
     *   If the size of the SQL log file, which is created when the **SQL_LOG** parameter is configured to **ON**, reaches to the size configured by the parameter, *broker_name_id.sql.log.bak* is created.
     *   If the size of the SLOW SQL log file, which is created when the **SLOW_LOG** parameter is configured to **ON**, reaches to the size configured by the parameter, *broker_name_id.slow.log.bak* is created.
   
-Encrypted Connection
-^^^^^^^^^^^^^^^^^^^^
-
-**SSL**
-
-    **SSL** is a parameter to configure whether to apply packet encryption (**SSL**) to the broker. It can be either **ON** or **OFF**. The default value is **OFF**. When this value is configured to **ON**, packet encryption using **TLS** will be applied to the broker/CAS. 
-
-    .. warning::
-
-        When the broker is configured to do **TLS** (**SSL=ON**), clients such as **jdbc** client must connect in encryption mode, otherwise the connection request to the broker will be rejected. The opposite is also true. The connection request of SSL clients to the non-SSL broker will be rejected.
-
 Etc
 ^^^
 
@@ -2534,6 +2523,13 @@ Etc
 
     **SERVICE** is a parameter to configure whether to run the broker. It can be either **ON** or **OFF**. The default value is **ON**. The broker can run only when this value is configured to **ON**.
 
+**SSL**
+
+    **SSL** is a parameter to configure whether to apply packet encryption (**SSL**) to the broker. It can be either **ON** or **OFF**. The default value is **OFF**. When this value is configured to **ON**, packet encryption using **TLS** will be applied to the broker/CAS.
+
+    .. warning::
+
+        When the broker is configured to do **TLS** (**SSL=ON**), clients such as **jdbc** client must connect in encryption mode, otherwise the connection request to the broker will be rejected. The opposite is also true. The connection request of SSL clients to the non-SSL broker will be rejected.
 
 **SOURCE_ENV**
 

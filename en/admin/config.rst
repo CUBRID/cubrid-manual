@@ -2164,6 +2164,8 @@ The following table shows the broker parameters available in the broker configur
 |                                 |                         +---------------------------------+--------+------------------------------+-----------+
 |                                 |                         | SQL_LOG_MAX_SIZE                | KB     | 10,000                       | available |
 |                                 +-------------------------+---------------------------------+--------+------------------------------+-----------+
+|                                 | Encrypted Connections   | SSL                             | string | OFF                          |           |
+|                                 +-------------------------+---------------------------------+--------+------------------------------+-----------+
 |                                 | Etc                     | MAX_STRING_LENGTH               | int    | -1                           |           |
 |                                 |                         +---------------------------------+--------+------------------------------+-----------+
 |                                 |                         | SERVICE                         | string | ON                           |           |
@@ -2184,6 +2186,7 @@ The following is the content of the **cubrid_broker.conf** file provided by defa
      
     [%query_editor]
     SERVICE                 =ON
+    SSL                     =OFF
     BROKER_PORT             =30000
     MIN_NUM_APPL_SERVER     =5
     MAX_NUM_APPL_SERVER     =40
@@ -2197,6 +2200,7 @@ The following is the content of the **cubrid_broker.conf** file provided by defa
      
     [%BROKER1]
     SERVICE                 =ON
+    SSL                     =OFF
     BROKER_PORT             =33000
     MIN_NUM_APPL_SERVER     =5
     MAX_NUM_APPL_SERVER     =40
@@ -2520,6 +2524,10 @@ Etc
 **SERVICE**
 
     **SERVICE** is a parameter to configure whether to run the broker. It can be either **ON** or **OFF**. The default value is **ON**. The broker can run only when this value is configured to **ON**.
+
+**SSL**
+
+    **SSL** is a parameter to configure whether to apply packet encryption (**SSL**) to the broker. It can be either **ON** or **OFF**. The default value is **OFF**. When this value is configured to **ON**, packet encryption using **TLS** will be applied to the broker/CAS. In this case, clients such as **jdbc** client must connect in encryption mode, otherwise the connection to the broker will be rejected. The opposite is also true.
 
 
 **SOURCE_ENV**

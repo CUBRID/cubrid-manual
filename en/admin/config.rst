@@ -2168,6 +2168,8 @@ The following table shows the broker parameters available in the broker configur
 |                                 |                         +---------------------------------+--------+------------------------------+-----------+
 |                                 |                         | SERVICE                         | string | ON                           |           |
 |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SSL                             | string | OFF                          |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
 |                                 |                         | SOURCE_ENV                      | string | cubrid.env                   |           |
 +---------------------------------+-------------------------+---------------------------------+--------+------------------------------+-----------+
 
@@ -2521,6 +2523,13 @@ Etc
 
     **SERVICE** is a parameter to configure whether to run the broker. It can be either **ON** or **OFF**. The default value is **ON**. The broker can run only when this value is configured to **ON**.
 
+**SSL**
+
+    **SSL** is a parameter to configure whether to apply packet encryption (**SSL**) to the broker. It can be either **ON** or **OFF**. The default value is **OFF**. When this value is configured to **ON**, packet encryption using **TLS** will be applied to the broker/CAS.
+
+    .. warning::
+
+        When the broker is configured to do **TLS** (**SSL=ON**), clients such as **jdbc** client must connect in encryption mode, otherwise the connection request to the broker will be rejected. The opposite is also true. The connection request of SSL clients to the non-SSL broker will be rejected.
 
 **SOURCE_ENV**
 

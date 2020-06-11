@@ -184,31 +184,6 @@ CTE에 컬럼명이 없으면 CTE의 첫 번째 내부 Select 문에서 컬럼�
       'Frame'                      4700
       'Wheel'                       100
 
-DML에서 CTE 사용(**UPDATE** 또는 **DELETE** 데이터) :
-      
-.. code-block:: sql
-
-    UPDATE products SET price = 
-        (WITH
-         RECURSIVE cars (id, parent_id, item, price) AS (
-                            SELECT id, parent_id, item, price 
-                                FROM products  WHERE item LIKE 'Car%' 
-                            UNION ALL 
-                            SELECT p.id, p.parent_id, p.item, p.price 
-                                FROM products p 
-                            INNER JOIN cars rec_cars ON p.parent_id = rec_cars.id)
-        SELECT SUM(price) - MAX(price) FROM cars ORDER BY 1) 
-    WHERE item='Car';    
-
-    select item, price from products where item='Car';
-
-::
-    
-      item                        price
-    ===================================
-      'Car'                        8800 
-  
-
 재귀적 CTE는 무한 루프에 빠질 수 있다. 이러한 경우를 방지하려면 시스템 파라미터 **cte_max_recursions** 를 원하는 임계값으로 설정한다. 기본값은 2000번 재귀 반복이고, 최대값은 1000000, 최소값은 2이다.
 
 .. code-block:: sql
@@ -255,3 +230,80 @@ DML에서 CTE 사용(**UPDATE** 또는 **DELETE** 데이터) :
     '
     Recursive CTE 'cte1' must be referenced directly in its recursive query.
 
+DML 및 CREATE에서 CTE 사용
+==========================
+
+CTE는 **SELECT** 질의문 외에 다른 질의문에도 사용될 수 있다.
+CTE는 **CREATE TABLE** *table_name* **AS SELECT** 에서 사용할 수 있다:
+
+.. code-block:: sql
+
+    CREATE TABLE inc AS
+        WITH RECURSIVE cte (n) AS (
+            SELECT 1
+            UNION ALL
+            SELECT n + 1
+            FROM cte
+            WHERE n < 3)
+        SELECT n FROM cte;
+
+    SELECT * FROM inc;
+
+::
+
+                n
+    =============
+                1
+                2
+                3
+
+또한 **INSERT**/**REPLACE INTO** *table_name* **SELECT** 는 CTE를 사용할 수 있다:
+
+.. code-block:: sql
+
+    INSERT INTO inc
+        WITH RECURSIVE cte (n) AS (
+            SELECT 1
+            UNION ALL
+            SELECT n + 1
+            FROM cte
+            WHERE n < 3)
+        SELECT * FROM cte;
+
+    REPLACE INTO inc
+       WITH cte AS (SELECT * FROM inc)
+       SELECT * FROM cte;
+
+또한 **UPDATE** 질의문의 하위절에도 사용할 수 있고:
+
+.. code-block:: sql
+
+    CREATE TABLE green_products (producer_id INTEGER, sales_n INTEGER, product VARCHAR, product_type INTEGER, price INTEGER);
+    INSERT INTO green_products VALUES (1, 99, 'bicycle', 1, 99);
+    INSERT INTO green_products VALUES (2, 337, 'bicycle', 1, 129);
+    INSERT INTO green_products VALUES (3, 5012, 'bicycle', 1, 199);
+    INSERT INTO green_products VALUES (1, 989, 'scooter', 2, 899);
+    INSERT INTO green_products VALUES (3, 3211, 'scooter', 2, 599);
+    INSERT INTO green_products VALUES (4, 2312, 'scooter', 2, 1009);
+
+    WITH price_increase_th AS (
+        SELECT SUM (sales_n) * 7 / 10 AS threshold, product_type
+        FROM green_products
+        GROUP BY product_type
+    )
+        UPDATE green_products gp JOIN price_increase_th th ON gp.product_type = th.product_type
+        SET price = price + (price / 10)
+        WHERE sales_n >= threshold;
+
+**DELETE** 질의문의 하위절에도 사용할 수 있다: 
+
+.. code-block:: sql
+
+    WITH product_removal_th AS (
+        SELECT SUM (sales_n) / 20 AS threshold, product_type
+        FROM green_products
+        GROUP BY product_type
+    )
+        DELETE
+        FROM green_products gp
+        WHERE sales_n < (select threshold from product_removal_th WHERE product_type = gp.product_type);

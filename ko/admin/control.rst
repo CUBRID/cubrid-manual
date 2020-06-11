@@ -177,13 +177,13 @@ Windows 환경에서는 시스템 권한을 가진 사용자로 로그인한 경
     @ cubrid server start: demodb
 
     This may take a long time depending on the amount of recovery works to do.
-    CUBRID 10.1 
+    CUBRID 10.2 
 
     ++ cubrid server start: success
     @ cubrid server start: testdb
 
     This may take a long time depending on the amount of recovery works to do.
-    CUBRID 10.1 
+    CUBRID 10.2 
 
     ++ cubrid server start: success
     @ cubrid broker start
@@ -258,14 +258,14 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 10.1
+    CUBRID 10.2
 
     ++ cubrid server start: success
     @ cubrid server start: testdb
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 10.1
+    CUBRID 10.2
 
     ++ cubrid server start: success
     @ cubrid broker start
@@ -284,8 +284,8 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
     ++ cubrid master is running.
     @ cubrid server status
 
-    Server testdb (rel 10.1, pid 31059)
-    Server demodb (rel 10.1, pid 30950)
+    Server testdb (rel 10.2, pid 31059)
+    Server demodb (rel 10.2, pid 30950)
 
     @ cubrid broker status
     % query_editor
@@ -381,7 +381,7 @@ CUBRID는 cubrid 유틸리티의 수행 결과에 대한 로깅 기능을 제공
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 10.1 
+    CUBRID 10.2 
 
     ++ cubrid server start: success
 
@@ -397,7 +397,7 @@ CUBRID는 cubrid 유틸리티의 수행 결과에 대한 로깅 기능을 제공
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 10.1 
+    CUBRID 10.2 
 
     ++ cubrid server start: success
 
@@ -454,7 +454,7 @@ CUBRID는 cubrid 유틸리티의 수행 결과에 대한 로깅 기능을 제공
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 10.1 
+    CUBRID 10.2 
 
     ++ cubrid server start: success
 
@@ -468,8 +468,8 @@ CUBRID는 cubrid 유틸리티의 수행 결과에 대한 로깅 기능을 제공
     % cubrid server status
     
     @ cubrid server status
-    Server testdb (rel 10.1, pid 24465)
-    Server demodb (rel 10.1, pid 24342)
+    Server testdb (rel 10.2, pid 24465)
+    Server demodb (rel 10.2, pid 24342)
 
 마스터 프로세스가 중지된 상태라면, 다음과 같은 메시지가 출력된다. 
 
@@ -1360,10 +1360,10 @@ SQL 로그 파일은 응용 클라이언트가 요청하는 SQL을 기록하며,
 
     13-06-11 15:07:39.282 (0) STATE idle
     13-06-11 15:07:44.832 (0) CLIENT IP 192.168.10.100
-    13-06-11 15:07:44.835 (0) CLIENT VERSION 9.2.0.0062
+    13-06-11 15:07:44.835 (0) CLIENT VERSION 10.2.0.8787
     13-06-11 15:07:44.835 (0) session id for connection 0
     13-06-11 15:07:44.836 (0) connect db demodb user dba url jdbc:cubrid:192.168.10.200:30000:demodb:dba:********: session id 12
-    13-06-11 15:07:44.836 (0) DEFAULT isolation_level 3, lock_timeout -1
+    13-06-11 15:07:44.836 (0) DEFAULT isolation_level 4, lock_timeout -1
     13-06-11 15:07:44.840 (0) end_tran COMMIT
     13-06-11 15:07:44.841 (0) end_tran 0 time 0.000
     13-06-11 15:07:44.841 (0) *** elapsed time 0.004
@@ -1371,7 +1371,7 @@ SQL 로그 파일은 응용 클라이언트가 요청하는 SQL을 기록하며,
     13-06-11 15:07:44.844 (0) check_cas 0
     13-06-11 15:07:44.848 (0) set_db_parameter lock_timeout 1000
     13-06-11 15:09:36.299 (0) check_cas 0
-    13-06-11 15:09:36.303 (0) get_db_parameter isolation_level 3
+    13-06-11 15:09:36.303 (0) get_db_parameter isolation_level 4
     13-06-11 15:09:36.375 (1) prepare 0 CREATE TABLE unique_tbl (a INT PRIMARY key);
     13-06-11 15:09:36.376 (1) prepare srv_h_id 1
     13-06-11 15:09:36.419 (1) set query timeout to 0 (no limit)
@@ -1381,7 +1381,7 @@ SQL 로그 파일은 응용 클라이언트가 요청하는 SQL을 기록하며,
     13-06-11 15:09:38.344 (0) auto_commit 0
     13-06-11 15:09:38.344 (0) *** elapsed time 1.968
     
-    13-06-11 15:09:54.481 (0) get_db_parameter isolation_level 3
+    13-06-11 15:09:54.481 (0) get_db_parameter isolation_level 4
     13-06-11 15:09:54.484 (0) close_req_handle srv_h_id 1
     13-06-11 15:09:54.484 (2) prepare 0 INSERT INTO unique_tbl VALUES (1);
     13-06-11 15:09:54.485 (2) prepare srv_h_id 1
@@ -1394,7 +1394,7 @@ SQL 로그 파일은 응용 클라이언트가 요청하는 SQL을 기록하며,
     
     ...
     
-    13-06-11 15:19:04.593 (0) get_db_parameter isolation_level 3
+    13-06-11 15:19:04.593 (0) get_db_parameter isolation_level 4
     13-06-11 15:19:04.597 (0) close_req_handle srv_h_id 2
     13-06-11 15:19:04.597 (7) prepare 0 SELECT * FROM unique_tbl  WHERE ROWNUM BETWEEN 1 AND 5000;
     13-06-11 15:19:04.598 (7) prepare srv_h_id 2 (PC)

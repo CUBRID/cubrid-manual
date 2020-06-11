@@ -29,13 +29,13 @@ Linux 환경 또는 Windows 환경에서 아래와 같은 셸 명령어로 CUBRI
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 10.1 
+    CUBRID 10.2 
 
     ++ cubrid server start: success
 
     @ cubrid server status
 
-    Server demodb (rel 10.1, pid 31322)
+    Server demodb (rel 10.2, pid 31322)
 
 CUBRIDService 또는 CUBRID Service Tray
 --------------------------------------

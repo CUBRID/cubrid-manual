@@ -257,7 +257,7 @@ CTE는 **CREATE TABLE** *table_name* **AS SELECT** 에서 사용할 수 있다:
                 2
                 3
 
-또한 **INSERT**/**REPLACE INTO** *table_name* **SELECT** 는 CTE를 사용할 수 있다:
+또한 **INSERT**/**REPLACE INTO** *table_name* **SELECT** 에서 CTE를 사용할 수 있다:
 
 .. code-block:: sql
 
@@ -274,7 +274,7 @@ CTE는 **CREATE TABLE** *table_name* **AS SELECT** 에서 사용할 수 있다:
        WITH cte AS (SELECT * FROM inc)
        SELECT * FROM cte;
 
-또한 **UPDATE** 질의문의 하위절에도 사용할 수 있고:
+또한 **UPDATE** 질의문의 하위절에도 사용할 수 있다:
 
 .. code-block:: sql
 

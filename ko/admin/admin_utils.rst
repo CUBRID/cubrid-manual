@@ -2224,6 +2224,14 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
                                                                   | - Num_lfcq_prv_get_big
                                                                   | - Num_lfcq_shr_get_total_calls
                                                                   | - Num_lfcq_shr_get_empty
+      **32**    **Thread workers**                    No          | 스레드 워커 풀에 대한 통계 수집 :
+                                                                  | - Thread_stats_counters_timers
+                                                                  | - Thread_loaddb_stats_counters_timers
+      **64**    **Thread daemons**                    No          | 데몬 스레드에 대한 통계 수집 :
+                                                                  | - Thread_pgbuf_daemon_stats_counters_timers
+      **128**   **Extended DWB**                      No          | 이중 쓰기 버퍼에 대한 통계 수집 :
+                                                                  | - Num_dwb_flushed_block_volumes
+      **MAX**   **All statistics**                    No          | 모든 통계 수집
       ========= ===================================== =========== ====================================================================
 
 .. _lockdb:

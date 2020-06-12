@@ -677,7 +677,7 @@ To prevent wasting needless disk space, it is recommended to keep this value as 
 
 **ha_apply_max_mem_size**
 
-**ha_apply_max_mem_size** is a parameter used to configure the value of maximum memory that the replication log reflection process of CUBRID HA can use. The default value is **500** (unit: MB) and the maximum value is **INT_MAX** (2147483647). When the value is larger than the size allowed by the system, memory allocation fails and the HA replication reflection process may malfunction. For this reason, you must check whether or not the memory resource can handle the specified value before setting it.
+**ha_apply_max_mem_size** is a parameter used to configure the value of maximum memory that the replication log reflection process of CUBRID HA can use. The default and maximum values are **500** (unit: MB). When the value is larger than the size allowed by the system, memory allocation fails and the HA replication reflection process may malfunction. For this reason, you must check whether or not the memory resource can handle the specified value before setting it.
 
 **ha_applylogdb_ignore_error_list**
 

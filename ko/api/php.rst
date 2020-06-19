@@ -273,18 +273,18 @@ Windows
 
 여기에서는 Windows에서 CUBRID PHP 드라이버를 빌드하는 방법을 설명한다. 어떤 버전을 선택해야 할지 알 수 없는 경우 다음 내용을 참고한다.
 
-Apache.org에서 Apache 빌드시 PHP를 모듈로 사용하는 경우(권장되지 않음) Visual Studio 6 컴파일러로 컴파일 된 VC6 PHP버전을 사용해야 합니다. Apache.org 바이너리와 함께 VC11+ 버전의 PHP를 사용하지 마십시오.
+Apache.org에서 Apache 빌드시 PHP를 모듈로 사용하는 경우(권장되지 않음) Visual Studio 6 컴파일러로 컴파일 된 VC6 PHP버전을 사용해야 한다. Apache.org 바이너리와 함께 VC11+ 버전의 PHP를 사용하면 안된다.
 
-Apache에서는 PHP의 Thread Safe(TS) 버전을 사용해야 합니다.
+Apache에서는 PHP의 Thread Safe(TS) 버전을 사용해야 한다.
 
-*	PHP 버전 5.5.x 이상을 사용하는 경우 VC11 버전을 사용해야 합니다 (Visual Studio 2012)
-*	PHP 버전 7.1.x 이상을 사용하는 경우 VC14 버전을 사용해야 합니다 (Visual Studio 2015)
+*	PHP 버전 5.5.x 이상을 사용하는 경우 VC11 버전을 사용해야 한다. (Visual Studio 2012)
+*	PHP 버전 7.1.x 이상을 사용하는 경우 VC14 버전을 사용해야 한다. (Visual Studio 2015)
 
-VC11 및 VC14 버전은 각각 Visual Studio 2012 및 2015 컴파일러로 컴파일됩니다. VC11 또는 VC14 버전은 성능과 안정성이 더욱 향상되었습니다.
+VC11 및 VC14 버전은 각각 Visual Studio 2012 및 2015 컴파일러로 컴파일된다. VC11 또는 VC14 버전은 성능과 안정성이 더욱 향상되었다.
 
-PHP의 최신 버전은 VC11, VC14 (각각 Visual Studio 2012 또는 2015 컴파일러)로 빌드되며 성능 및 안정성이 향상되었습니다.
-*	VC11 에서 빌드를 하기 위해서는 Visual C ++ Redistributable for Visual Studio 2012 x86 또는 x64가 설치되어 있어야합니다
-*	VC14 에서 빌드를 하기 위해서는 Visual C ++ Redistributable for Visual Studio 2015 x86 또는 x64가 설치되어 있어야합니다
+PHP의 최신 버전은 VC11, VC14 (각각 Visual Studio 2012 또는 2015 컴파일러)로 빌드되며 성능 및 안정성이 향상되었다.
+*	VC11 에서 빌드를 하기 위해서는 Visual C ++ Redistributable for Visual Studio 2012 x86 또는 x64가 설치되어 있어야 한다.
+*	VC14 에서 빌드를 하기 위해서는 Visual C ++ Redistributable for Visual Studio 2015 x86 또는 x64가 설치되어 있어야 한다.
 
 **VC11를 이용하여 PHP 5.6.x CUBRID PHP 드라이버 빌드**
 
@@ -331,7 +331,7 @@ PHP의 최신 버전은 VC11, VC14 (각각 Visual Studio 2012 또는 2015 컴파
 
 *   CUBRID: CUBRID를 설치한다. 시스템에 환경 변수 **%CUBRID%** 가 정의되어 있는지 확인한다.
 
-*   Windows SDK에 포함 된 무료 Visual C++ Express Edition 또는 Visual C++ 14 컴파일러를 모두 사용할 수 있습니다. CUBRID PHP VC14 드라이버를 사용하려면 시스템에 Microsoft Visual C++ Redistributable Package가 설치되어 있는지 확인하십시오.
+*   Windows SDK에 포함 된 무료 Visual C++ Express Edition 또는 Visual C++ 14 컴파일러를 모두 사용할 수 있다. CUBRID PHP VC14 드라이버를 사용하려면 시스템에 Microsoft Visual C++ Redistributable Package가 설치되어 있어야 한다.
 
 *   PHP 7.1.x 바이너리: VC14 x86 Non Thread Safe 또는 VC6 x86 Thread Safe를 사용할 수 있다. 시스템 환경 변수 **%PHPRC%** 가 제대로 정의되어 있어야 한다. VC14 프로젝트의 [Project Settings]을 열면 [Link] 탭의 [Additional library path]에서 **$(PHPRC)** 가 사용되는 것을 볼 수 있다.
 
@@ -369,29 +369,29 @@ PHP의 최신 버전은 VC11, VC14 (각각 Visual Studio 2012 또는 2015 컴파
 
 **x64 PHP**
 
-*   PHP 5.6.x 바이너리 : VC11 x64 Non Thread Safe 또는 VC11 x64 Thread Safe를 설치할 수 있습니다. 시스템 환경 변수 **%PHPRC%** 가 제대로 정의되어 있어야 합니다. [Property Pages] 대화 상자의 [Linker] 에서 [General]을 선택하십시오. [Additional Library Directories]에서 **$(PHPRC)** 를 볼 수 있습니다.
+*   PHP 5.6.x 바이너리 : VC11 x64 Non Thread Safe 또는 VC11 x64 Thread Safe를 설치할 수 있다. 시스템 환경 변수 **%PHPRC%** 가 제대로 정의되어 있어야 한다. [Property Pages] 대화 상자의 [Linker] 에서 [General]을 선택한다. [Additional Library Directories]에서 **$(PHPRC)** 를 볼 수 있다.
     
     .. image:: /images/image57.jpg
     
-*   PHP 5.6.x 소스 코드 : 바이너리 버전과 일치하는 소스 코드를 가져와야 합니다. PHP 5.6.x 소스 코드를 압축 해제한 후 시스템 환경 변수 **%PHPRC%** 를 추가하고 해당 값에 PHP 5.6.x 소스 코드의 경로로 설정하십시오. [Property Pages] 대화 상자의 [C/C++] 에서 [General]을 선택하십시오. [Additional Library Directories]에서 **$(PHP5_SRC)** 를 볼 수 있습니다.
+*   PHP 5.6.x 소스 코드 : 바이너리 버전과 일치하는 소스 코드를 가져와야 한다. PHP 5.6.x 소스 코드를 압축 해제한 후 시스템 환경 변수 **%PHPRC%** 를 추가하고 해당 값에 PHP 5.6.x 소스 코드의 경로로 설정해야 한다. [Property Pages] 대화 상자의 [C/C++] 에서 [General]을 선택한다. [Additional Library Directories]에서 **$(PHP5_SRC)** 를 볼 수 있다..
     
     .. image:: /images/image58.jpg
     
-*   PHP 7.1.x 바이너리 : VC14 x64 Non Thread Safe 또는 VC14 x64 Thread Safe를 설치할 수 있습니다. 시스템 환경 변수 **%PHPRC%** 가 올바르게 설정되어 있는지 확인하십시오. [Property Pages] 대화 상자의 [Linker] 에서 [General]을 선택하십시오. [Additional Library Directories]에서 **$(PHPRC)** 를 볼 수 있습니다.
+*   PHP 7.1.x 바이너리 : VC14 x64 Non Thread Safe 또는 VC14 x64 Thread Safe를 설치할 수 있다. 시스템 환경 변수 **%PHPRC%** 가 올바르게 설정되어 있는지 확인해야 한다. [Property Pages] 대화 상자의 [Linker] 에서 [General]을 선택한다. [Additional Library Directories]에서 **$(PHPRC)** 를 볼 수 있다.
     
     .. image:: /images/image57.jpg
     
-*   PHP 7.1.x 소스 코드 : 바이너리 버전과 일치하는 소스 코드를 가져와야 합니다. PHP 7.1.x 소스 코드를 압축을 해제한 후 시스템 환경 변수에 **%PHP7_SRC%** 를 추가하고 해당 값에 PHP 7.1.x 소스 코드의 경로로 설정하십시오. [Property Pages] 대화 상자의 [C/C++] 에서 [General]을 선택하십시오. [Additional Library Directories]에서 **$(PHP7_SRC)** 를 볼 수 있습니다.
+*   PHP 7.1.x 소스 코드 : 바이너리 버전과 일치하는 소스 코드를 가져와야 한다. PHP 7.1.x 소스 코드를 압축을 해제한 후 시스템 환경 변수에 **%PHP7_SRC%** 를 추가하고 해당 값에 PHP 7.1.x 소스 코드의 경로로 설정해야 한다. [Property Pages] 대화 상자의 [C/C++] 에서 [General]을 선택한다. [Additional Library Directories]에서 **$(PHP7_SRC)** 를 볼 수 있다.
 
 Windows에서 PHP 빌드를 지원하는 컴파일러 목록은 https://wiki.php.net/internals/windows/compiler 에서 제공하며, x64 PHP를 빌드할 때에는 Visual C++ 8(2005)와 Visual C++ 9(2008 SP1 only)을 사용할 수 있다는 것을 확인할 수 있다. Visual C++ 2005 미만 버전에서 x64 PHP를 빌드하려면 Windows Server Feb. 2003 SDK를 사용해야 한다.
     
     .. image:: /images/image58.jpg
     
-* https://wiki.php.net/internals/windows/compiler에는 Windows용 PHP 빌드를 지원하는 컴파일러를 찾을 수 있습니다. Visual C++ 11 (2012)과 Visual C++ 14 (2015)를 모두 사용하여 64bit PHP를 빌드 할 수 있음을 알 수 있습니다.
+* https://wiki.php.net/internals/windows/compiler에는 Windows용 PHP 빌드를 지원하는 컴파일러를 찾을 수 있다. Visual C++ 11 (2012)과 Visual C++ 14 (2015)를 모두 사용하여 64bit PHP를 빌드 할 수 있음을 알 수 있다.
 
 **x64 Apache**
 
-* Apache Lounge는 64bit 버전을 포함한 최신 Windows 바이너리를 제공합니다. 다음 링크에서 최신 Apache 2.2.34 64bit 버전을 다운로드 할 수 있습니다.
+* Apache Lounge는 64bit 버전을 포함한 최신 Windows 바이너리를 제공한다. 다음 링크에서 최신 Apache 2.2.34 64bit 버전을 다운로드 할 수 있다.
 
  https://www.apachelounge.com/download/win64/binaries/httpd-2.2.34-win64.zip
  
@@ -401,9 +401,9 @@ Windows에서 PHP 빌드를 지원하는 컴파일러 목록은 https://wiki.php
 
 *   Visual Studio 2012 or 2015: makefile을 잘 다룰 수 있는 사용자라면, Visual Studio 2008 대신에 무료인 Visual C++ Express Edition이나 Windows SDK v6.1에 포함된 VC++ 9 컴파일러를 사용할 수 있다. Windows에서 CUBRID PHP VC9 드라이버를 사용하려면 Visual C++ 2008 Redistributable Package가 설치되어 있어야 한다.
 
-*   64-bit Windows 용 PHP 5.6.x 또는 7.1.x 바이너리 : VC11 또는 VC14 x64 이용하여 PHP를 빌드 할 수 있습니다. x64 Non Thread Safe와 x64 Thread Safe를 모두 사용할 수 있습니다. 설치 한 후 시스템 환경 변수 **%PHPRC%** 의 값이 올바르게 설정되어 있는지 확인 하십시오.
+*   64-bit Windows 용 PHP 5.6.x 또는 7.1.x 바이너리 : VC11 또는 VC14 x64 이용하여 PHP를 빌드 할 수 있다. x64 Non Thread Safe와 x64 Thread Safe를 모두 사용할 수 있다. 설치 한 후 시스템 환경 변수 **%PHPRC%** 의 값이 올바르게 설정되어 있는지 확인 한다.
 
-*   PHP 5.6.x 소스: 바이너리 버전에 맞는 소스코드를  소스코드를 다운로드해야 한다. PHP 5.6.x 소스를 압축 해제한 후 시스템 환경 변수에 **%PHP5_SRC%** 를 추가하고 해당 값에 PHP 5.6.x 소스 코드의 경로로 설정하십시오. VC11 [Property Pages] 대화 상자의 [C/C++] 에서 [General]을 선택하십시오. [Additional Include Directories]에서 **$(PHP5_SRC)** 를 볼 수 있습니다.
+*   PHP 5.6.x 소스: 바이너리 버전에 맞는 소스코드를  소스코드를 다운로드해야 한다. PHP 5.6.x 소스를 압축 해제한 후 시스템 환경 변수에 **%PHP5_SRC%** 를 추가하고 해당 값에 PHP 5.6.x 소스 코드의 경로로 설정해야 한다. VC11 [Property Pages] 대화 상자의 [C/C++] 에서 [General]을 선택한다. [Additional Include Directories]에서 **$(PHP5_SRC)** 를 볼 수 있다.
 
 *   PHP 7.1.x 소스코드: 바이너리 버전에 맞는 소스코드를 다운로드해야 한다. PHP 7.1.x 소스코드를 다운로드한 후 압축 해제하고, 시스템 환경 변수 **%PHP7_SRC%** 를 추가하여 PHP 7.1.x 소스코드의 경로를 값으로 설정한다. VC14 프로젝트 속성에서 [C/C++] > [General]을 선택하면 [Additional Library Directories]에서 **$(PHP7_SRC)** 가 사용되는 것을 볼 수 있다.
 

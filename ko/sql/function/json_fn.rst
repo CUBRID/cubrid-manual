@@ -1181,7 +1181,7 @@ JSON_TABLE
 *json_doc* expr은 결과가 json_doc이 되는 표현식이어야 한다. 상수 json, 테이블의 열 또는 함수 또는 연산자의 결과 일 수 있다.
 *json path* 는 유효한 경로 이어야 하며 **COLUMNS** 절에서 평가할 json 데이터를 추출하는 데 사용된다.
 ** COLUMNS ** 절은 열 유형 및 출력을 얻기 위해 수행되는 작업을 정의한다.
-[**A**] *alias* 절이 필요하다.
+[**AS**] *alias* 절이 필요하다.
 
 
 **JSON_TABLE** 은 네 가지 유형의 열을 지원한다:

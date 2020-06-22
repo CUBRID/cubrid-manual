@@ -87,8 +87,8 @@ CREATE TABLE
 *   *column_name*: 생성할 칼럼의 이름을 지정한다(최대 254바이트).
 *   *column_type*: 칼럼의 데이터 타입을 지정한다.
 *   [**SHARED** *value* | **DEFAULT** *value*]: 칼럼의 초기값을 지정한다.
-*   **ON UPDATE**: 레코드의 필드가 수정되었을 때 갱신될 필드에 대한 수식을 지정한다.
-*   <*column_constraint*>: 칼럼의 제약 조건을 지정하며 제약 조건의 종류에는 **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** 가 있다. 자세한 내용은 :ref:`constraint-definition` 을 참고한다.
+*   **ON UPDATE**: 레코드의 필드가 수정되었을 때 갱신될 필드에 대한 수식을 지정한다. 자세한 내용은 :ref:`constraint-definition` 을 참고한다.
+*   <*column_constraint*>: 칼럼의 제약 조건을 지정하며 제약 조건의 종류에는 **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** 가 있다.
 *   <*default_or_shared_or_ai*>: DEFAULT, SHARED, AUTO_INCREMENT 중 하나만 사용될 수 있다.
     AUTO_INCREMENT이 지정될 때 "(seed, increment)"와 "AUTO_INCREMENT = initial_value"는 동시에 정의될 수 없다.
 *   *table_comment_string*: 테이블의 커멘트를 지정한다.

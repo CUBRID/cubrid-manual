@@ -86,8 +86,8 @@ To create a table, use the **CREATE TABLE** statement.
 *   *column_name*: specifies the name of the column to be created (maximum: 254 bytes).
 *   *column_type*: specifies the data type of the column.
 *   [**SHARED** *value* | **DEFAULT** *value*]: specifies the initial value of the column.
-*   **ON UPDATE** specifies an expression to update the field when the field's ROW gets updated.
-*   <*column_constraint*>: specifies the constraint of the column. Available constraints are **NOT NULL**, **UNIQUE**, **PRIMARY KEY** and **FOREIGN KEY**. For details, see :ref:`constraint-definition`.
+*   **ON UPDATE** specifies an expression to update the field when the field's ROW gets updated. For details, see :ref:`constraint-definition`.
+*   <*column_constraint*>: specifies the constraint of the column. Available constraints are **NOT NULL**, **UNIQUE**, **PRIMARY KEY** and **FOREIGN KEY**.
 *   <*default_or_shared_or_ai*>: only one of DEFAULT, SHARED, AUTO_INCREMENT can be used.
     When AUTO_INCREMENT is specified, "(seed, increment)" and "AUTO_INCREMENT = initial_value" cannot be defined at the same time.
 *   *table_comment_string*: specifies a table's comment

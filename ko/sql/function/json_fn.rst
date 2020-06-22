@@ -43,14 +43,14 @@ JSON 함수 소개
   - *json_doc*: JSON이나 JSON으로 파싱되는 문자열
   - *val*: JSON이나 JSON 지원 스칼라 타입 중 하나로 해석될 수 있는 값
   - *json key*: 키 이름으로서의 문자열
-  - *json path/pointer*: :ref:`json-path`과 :ref:`json-pointer`에 설명된 규칙을 따르는 문자열
+  - *json path/pointer*: :ref:`json-path` 와 :ref:`json-pointer` 에 설명된 규칙을 따르는 문자열
 
 .. note::
 
   JSON 함수 문자열 인자의 코드셋은 UTF8을 기준으로 한다. 다른 코드셋의 입력 문자열은 UTF8로 변환된다.
   UTF8이 아닌 코드셋 문자열에 대한 대소문자 구별 없는 검색은 기대와 다른 결과가 나올 수 있다.
 
-다음의 표는 입력 인자를 해석하는데 있어서 *json_doc*와 *val*의 차이를 보여주고 있다:
+다음의 표는 입력 인자를 해석하는데 있어서 *json_doc* 와 *val* 의 차이를 보여주고 있다:
 
 +-------------------+-----------------------------+----------------------------------+
 | 입력 타입         | *json_doc*                  | *val*                            |
@@ -138,7 +138,7 @@ JSON_KEYS
   **JSON_KEYS** 함수는 해당 패스로 주어진 json 객체의 모든 키값을 가진 json 배열을 반환한다.
   해당 경로가 json 객체가 아닌 json 요소를 지정하면 json null이 반환된다.
   json 경로 인자가 누락되면 키(key)는 json 루트 요소로부터 가져온다.
-  *json 경로*가 존재하지 않으면 오류가 발생하고 *json_doc* 인자가 **NULL**이면 **NULL**을 반환한다.
+  *json 경로* 가 존재하지 않으면 오류가 발생하고 *json_doc* 인자가 **NULL** 이면 **NULL** 을 반환한다.
 
 .. code-block:: sql
 
@@ -179,7 +179,7 @@ JSON_DEPTH
 
   **JSON_DEPTH** 함수는 json의 최대 깊이를 반환한다.
   깊이는 1부터 시작하며 깊이 레벨은 비어있지 않은 json 배열이나 비어있지 않은 json 객체에서 1씩 증가한다. 
-  인자가 **NULL**이면 **NULL**을 반환한다.
+  인자가 **NULL** 이면 **NULL** 을 반환한다.
 
 .. code-block:: sql
 
@@ -222,7 +222,7 @@ JSON_LENGTH
 
   **JSON_LENGTH** 함수는 주어진 경로에 있는 json 요소의 길이를 반환한다.
   경로 인자가 주어지지 않으면 josn 루트 요소의 길이가 반환된다.
-  인자가 **NULL**이거나 해당 경로에 어떤 요소도 존재하지 않으면 **NULL**이 반환된다.
+  인자가 **NULL** 이거나 해당 경로에 어떤 요소도 존재하지 않으면 **NULL** 이 반환된다.
 
 .. code-block:: sql
 
@@ -272,7 +272,7 @@ JSON_VALID
 .. function:: JSON_VALID (val)
 
   **JSON_VALID** 함수는 해당 *val* 인자가 유효한 json_doc일 경우에 1을 그렇지 않은 경우에 0을 반환한다.
-  해당 인자가 **NULL**인 경우 **NULL**을 반환한다.
+  해당 인자가 **NULL** 인 경우 **NULL** 을 반환한다.
 
 .. code-block:: sql
 
@@ -288,7 +288,7 @@ JSON_TYPE
 
 .. function:: JSON_TYPE (json_doc)
 
-  **JSON_TYPE** 함수는 문자열 인자인 *json_doc*의 타입을 반환한다.
+  **JSON_TYPE** 함수는 문자열 인자인 *json_doc* 의 타입을 반환한다.
 
 .. code-block:: sql
 
@@ -307,7 +307,7 @@ JSON_QUOTE
 .. function:: JSON_QUOTE (str)
 
   **JSON_QUOTE** 함수는 문자열과 이스케이프된 특수 문자들을 큰따옴표로 묶은 json_string을 결과로 반환한다.
-  *str* 인자가 **NULL**인 경우 **NULL**을 반환한다.
+  *str* 인자가 **NULL** 인 경우 **NULL** 을 반환한다.
 
 .. code-block:: sql
 
@@ -337,7 +337,7 @@ JSON_UNQUOTE
 .. function:: JSON_UNQUOTE (json_doc)
 
   **JSON_UNQUOTE** 함수는 따옴표로 묶이지 않은 json_value 문자열을 반환한다.
-  *json_doc* 인자가 **NULL**이면 **NULL**을 반환한다.
+  *json_doc* 인자가 **NULL** 이면 **NULL** 을 반환한다.
 
 .. code-block:: sql
 
@@ -366,8 +366,8 @@ JSON_PRETTY
 
 .. function:: JSON_PRETTY (json_doc)
 
-  **JSON_PRETTY**는 *json_doc* 보기좋게 출력된 문자열을 반환한다.
-  *json_doc* 인자가 **NULL**이면 **NULL**을 반환한다.
+  **JSON_PRETTY** 는 *json_doc* 보기좋게 출력된 문자열을 반환한다.
+  *json_doc* 인자가 **NULL** 이면 **NULL** 을 반환한다.
 
 .. code-block:: sql
 
@@ -400,15 +400,15 @@ JSON_SEARCH
 
 .. function:: JSON_SEARCH (json_doc, one/all, search_str [, escape_char [, json path] ...])
 
-  **JSON_SEARCH** 함수는 해당 *search_str*과 일치하는 json 문자열을 포함한 하나의 json 경로 혹은 복수의 json 경로를 반환한다.
-  일치 여부 검사는 내부의 json 문자열과 *search_str*에 **LIKE** 연산자를 적용하여 수행된다. **JSON_SEARCH**의 *escape_char* 및 *search_str*에 대해 **LIKE** 연산자의 대응 부분과 동일한 규칙이 적용된다.
-  **LIKE**관련 규칙에 대한 추가 설명은 :ref:`like-expr`을 참고한다.
+  **JSON_SEARCH** 함수는 해당 *search_str* 과 일치하는 json 문자열을 포함한 하나의 json 경로 혹은 복수의 json 경로를 반환한다.
+  일치 여부 검사는 내부의 json 문자열과 *search_str* 에 **LIKE** 연산자를 적용하여 수행된다. **JSON_SEARCH** 의 *escape_char* 및 *search_str* 에 대해 **LIKE** 연산자의 대응 부분과 동일한 규칙이 적용된다.
+  **LIKE** 관련 규칙에 대한 추가 설명은 :ref:`like-expr` 을 참고한다.
 
   one/all에서 'one'을 사용하면 **JSON_SEARCH** 첫번째 일치가 나타났을 때 탐색이 멈추게 된다.
-  반면에 'all'을 사용하면 *search_str*과 일치하는 모든 경로를 탐색하게 된다.
+  반면에 'all'을 사용하면 *search_str* 과 일치하는 모든 경로를 탐색하게 된다.
 
   주어진 json 경로는 반환 된 경로의 필터를 결정하므로 결과로 나온 json 경로의 접두사(prefix)는 적어도 하나의 주어진 json 경로 인자와 일치해야 한다.
-  json 경로 인자가 누락된 경우, **JSON_SEARCH**는 루트 요소로 부터 탐색을 시작한다.
+  json 경로 인자가 누락된 경우, **JSON_SEARCH** 는 루트 요소로 부터 탐색을 시작한다.
 
 .. code-block:: sql
 
@@ -484,11 +484,11 @@ JSON_EXTRACT
 
 .. function:: JSON_EXTRACT (json_doc, json path [, json path] ...)
 
-  해당 경로로 지정된 *json_doc*로부터 json 요소를 반환한다.
+  해당 경로로 지정된 *json_doc* 로부터 json 요소를 반환한다.
   json 경로 인자가 와일드카드를 포함하는 경우 와일드카드에 의해 포함될 수 있는 모든 경로의 지정된 json 요소가 json 배열 결과로 반환된다.
   와일드카드를 사용하지 않고 json 경로에서 하나의 요소만 발견된 경우 하나의 json 요소만 반환되며, 그렇지 않은 경우 발견된 json 요소는 json 배열로 구성하여 반환된다.
-  json 경로가 **NULL**이거나 유효하지 않은 경우 혹은 *json_doc* 인자가 유효하지 않은 경우 에러가 반환된다.
-  json 요소가 발견되지 않거나 json_doc이 **NULL**인 경우 **NULL**을 반환한다.
+  json 경로가 **NULL** 이거나 유효하지 않은 경우 혹은 *json_doc* 인자가 유효하지 않은 경우 에러가 반환된다.
+  json 요소가 발견되지 않거나 json_doc이 **NULL** 인 경우 **NULL** 을 반환한다.
 
 .. code-block:: sql
 
@@ -551,9 +551,9 @@ JSON_EXTRACT
 
 .. function:: json_doc -> json path
 
-  *json_doc* 인자가 하나의 컬럼으로 제한된 두 개의 인자를 가지는 **JSON_EXTRACT**의 별칭 연산자.
-  json 경로가 **NULL**이거나 유효하지 않은 경우 오류를 반환한다.
-  **NULL** *josn_doc* 인자가 적용된 경우에는 **NULL**을 반환한다.
+  *json_doc* 인자가 하나의 컬럼으로 제한된 두 개의 인자를 가지는 **JSON_EXTRACT** 의 별칭 연산자.
+  json 경로가 **NULL** 이거나 유효하지 않은 경우 오류를 반환한다.
+  **NULL** *josn_doc* 인자가 적용된 경우에는 **NULL** 을 반환한다.
 
 .. code-block:: sql
 
@@ -578,9 +578,9 @@ JSON_EXTRACT
 
 .. function:: json_doc ->> json path
 
-   **JSON_UNQUOTE**의 별칭 (json_doc->json 경로). 본 연산자는 컬럼인 *json_doc* 인자에만 적용 할 수 있다.
-   json 경로가 **NULL**이거나 유효하지 않은 경우 오류가 발생한다.
-   **NULL** *json_doc* 인자에 적용된 경우 **NULL**을 반환한다.
+   **JSON_UNQUOTE** 의 별칭 (json_doc->json 경로). 본 연산자는 컬럼인 *json_doc* 인자에만 적용 할 수 있다.
+   json 경로가 **NULL** 이거나 유효하지 않은 경우 오류가 발생한다.
+   **NULL** *json_doc* 인자에 적용된 경우 **NULL** 을 반환한다.
 
 .. code-block:: sql
 
@@ -611,10 +611,8 @@ JSON_CONTAINS_PATH
   
   one/all 인자 중 'one'이 적용된 경우 하나의 경로라도 존재하면 1을 반환하고 그렇지 않으면 0을 반환한다.
 
-  해당 인자가 **NULL**이면 **NULL**을 반환한다.
-  Returns **NULL** if any argument is **NULL**.
+  해당 인자가 **NULL** 이면 **NULL** 을 반환한다.
   해당 인자가 유효하지 않으면 오류가 발생한다.
-  An error occurs if any argument is invalid.
 
 .. code-block:: sql
 
@@ -635,6 +633,7 @@ JSON_CONTAINS_PATH
       json_contains_path('[{"0":0},1,"2",{"three":3}]', 'all', '$[0]', '$[0]."0"', '$[1]', '$[2]', '$[3]', '$.inexistent')
     ======================================================================================================================
                                                                                                                          0
+
 **JSON_CONTAINS_PATH** 함수는 json 경로 내에 와일드카드를 지원한다.
 
 .. code-block:: sql
@@ -654,17 +653,17 @@ JSON_CONTAINS
 
 .. function:: JSON_CONTAINS (json_doc doc1, json_doc doc2 [, json path])
 
-  **JSON_CONTAINS** 함수는 *doc2*가 옵션으로 지정된 경로의 *doc1*에 포함되는지를 검사한다.
+  **JSON_CONTAINS** 함수는 *doc2* 가 옵션으로 지정된 경로의 *doc1* 에 포함되는지를 검사한다.
   다음과 같이 재귀 규칙이 충족되는 경우 json 요소에 다른 json 요소가 포함된다.
 
   - 타입이 같고 (**JSON_TYPE** ()이 일치하고) 스칼라도 같은 경우 json 스칼라에 다른 json 스칼라가 포함된다. 예외적으로, json integer는 **JSON_TYPE** ()이 다른 경우에도 json double과 비교를 통해 동일한 것으로 간주될 수 있다.
   - json 배열 요소에 json_nonarray가 포함되어 있으면 json 배열에 json 스칼라 또는 json 객체가 포함된다.
   - 두 번째 json 배열의 모든 요소가 첫 번째 json 배열에 포함되어 있으면 json 배열에 다른 json 배열이 포함된다.
-  - 두 번째 객체의 모든 (*key2*, *value2*) 쌍에 대해 첫 번째 객체에 *key1* = *key2* 이고 *value2*가 *value1*을 포함하는 (*key1*, *value1*) 쌍이 있는 경우 json 객체에는 다른 json 오브젝트가 포함된다.
+  - 두 번째 객체의 모든 (*key2*, *value2*) 쌍에 대해 첫 번째 객체에 *key1* = *key2* 이고 *value2* 가 *value1* 을 포함하는 (*key1*, *value1*) 쌍이 있는 경우 json 객체에는 다른 json 오브젝트가 포함된다.
   - 이 외에는 json 요소가 포함되지 않는다.
 
-  json 경로 인자를 입력하지 않은 경우 *doc2*가 *doc1*의 루트 json 요소에 포함되는지 여부를 반환한다.
-  인자가 **NULL**이면 **NULL**을 반환한다.
+  json 경로 인자를 입력하지 않은 경우 *doc2* 가 *doc1* 의 루트 json 요소에 포함되는지 여부를 반환한다.
+  인자가 **NULL** 이면 **NULL** 을 반환한다.
   인자가 유효하지 않은 경우 오류가 발생한다.
 
 .. code-block:: sql
@@ -736,8 +735,8 @@ JSON_MERGE_PATCH
 
 .. function:: JSON_MERGE_PATCH (json_doc, json_doc [, json_doc] ...)
 
-** JSON_MERGE_PATCH ** 함수는 둘 이상의 json 문서를 병합하고 병합된 결과 json을 반환한다. ** JSON_MERGE_PATCH **는 병합 충돌 시 두 번째 인자를 사용하는 점에서 ** JSON_MERGE_PRESERVE **와 다르다. 
-**JSON_MERGE_PATCH** 함수는 `RFC 7396 <https://tools.ietf.org/html/rfc7396/>`_을 준수한다.
+**JSON_MERGE_PATCH** 함수는 둘 이상의 json 문서를 병합하고 병합된 결과 json을 반환한다. **JSON_MERGE_PATCH** 는 병합 충돌 시 두 번째 인자를 사용하는 점에서 **JSON_MERGE_PRESERVE** 와 다르다. 
+**JSON_MERGE_PATCH** 함수는 `RFC 7396 <https://tools.ietf.org/html/rfc7396/>` 을 준수한다.
 
 두 개의 json 문서 병합은 다음 규칙에 따라 재귀적으로 수행된다:
 
@@ -751,7 +750,7 @@ JSON_MERGE_PATCH
 
 병합 작업은 두 개 이상의 인자가 있을 때 연속적으로 실행된다. 처음 두 인자를 병합한 결과는 세 번째와 병합되고 이 결과는 네 번째와 병합된다.
 
-인자가 ** NULL **이면 ** NULL **을 반환한다.
+인자가 **NULL** 이면 **NULL** 을 반환한다.
 인자가 유효하지 않은 경우 오류가 발생한다.
 
 .. code-block:: sql
@@ -796,7 +795,7 @@ JSON_MERGE_PRESERVE
 
 .. function:: JSON_MERGE_PRESERVE (json_doc, json_doc [, json_doc] ...)
 
-  ** JSON_MERGE_PRESERVE ** 함수는 둘 이상의 json 문서를 병합하고 병합된 결과 json을 반환한다. ** JSON_MERGE_PRESERVE **는 병합 충돌 시 두 json 요소를 모두 보존한다는 점에서 ** JSON_MERGE_PATCH **와 다르다.
+  **JSON_MERGE_PRESERVE** 함수는 둘 이상의 json 문서를 병합하고 병합된 결과 json을 반환한다. **JSON_MERGE_PRESERVE** 는 병합 충돌 시 두 json 요소를 모두 보존한다는 점에서 **JSON_MERGE_PATCH** 와 다르다.
 
   두 json 문서의 병합은 다음 규칙에 따라 재귀적으로 수행된다:
   
@@ -807,7 +806,7 @@ JSON_MERGE_PRESERVE
 
   병합 작업은 두 개 이상의 인자가 있을 때 연속적으로 실행된다. 처음 두 인자를 병합 한 결과는 세 번째와 병합되고 이 결과는 네 번째와 병합된다.
 
-  인자가 ** NULL **이면 ** NULL **을 반환한다.
+  인자가 **NULL** 이면 **NULL** 을 반환한다.
   인자가 유효하지 않은 경우 오류가 발생한다.
 
 .. code-block:: sql
@@ -831,7 +830,7 @@ JSON_MERGE_PRESERVE
       ["a","b","c","scalar"]
 
 
-** JSON_MERGE_PATCH **와 달리 ** JSON_MERGE_PRESERVE **는 병합하는 동안 첫 번째 인자의 요소를 삭제 및 수정하지 않고 합쳐서 가져온다.
+**JSON_MERGE_PATCH** 와 달리 **JSON_MERGE_PRESERVE** 는 병합하는 동안 첫 번째 인자의 요소를 삭제 및 수정하지 않고 합쳐서 가져온다.
 
 .. code-block:: sql
 
@@ -850,7 +849,7 @@ JSON_MERGE
 
 .. function:: JSON_MERGE (json_doc, json_doc [, json_doc] ...)
 
-  ** JSON_MERGE **는 ** JSON_MERGE_PRESERVE **의 별칭이다.
+  **JSON_MERGE** 는 **JSON_MERGE_PRESERVE** 의 별칭이다.
 
 .. _fn-json-array-append:
 
@@ -859,14 +858,14 @@ JSON_ARRAY_APPEND
 
 .. function:: JSON_ARRAY_APPEND (json_doc, json path, json_val [, json path, json_val] ...)
 
-  ** JSON_ARRAY_APPEND ** 함수는 첫 번째 인자의 수정된 사본을 반환한다. 주어진 각 <* json path *, * json_val *> 에 대해 함수는 해당 경로로 지정된 json 배열에 값을 추가한다.
+  **JSON_ARRAY_APPEND** 함수는 첫 번째 인자의 수정된 사본을 반환한다. 주어진 각 <*json path*, *json_val*> 에 대해 함수는 해당 경로로 지정된 json 배열에 값을 추가한다.
 
-  (* json path *, * json_val *) 은 왼쪽에서 오른쪽으로 하나씩 평가한다. 한 쌍을 평가하여 작성된 문서는 다음 쌍을 평가하는 새로운 값이 된다.
+  (*json path*, *json_val*) 은 왼쪽에서 오른쪽으로 하나씩 평가한다. 한 쌍을 평가하여 작성된 문서는 다음 쌍을 평가하는 새로운 값이 된다.
 
-  json 경로가 * json_doc * 내부의 json 배열을 가리키는 경우 * json_val *이 배열의 끝에 추가된다.
-  json 경로가 비 배열 json 요소를 지정하는 경우 비 배열 요소를 포함하는 단일 요소 json 배열로 변경되고 * json_val *을 추가한다.
+  json 경로가 *json_doc* 내부의 json 배열을 가리키는 경우 *json_val* 이 배열의 끝에 추가된다.
+  json 경로가 비 배열 json 요소를 지정하는 경우 비 배열 요소를 포함하는 단일 요소 json 배열로 변경되고 *json_val* 을 추가한다.
 
-  인자가 ** NULL **이면 ** NULL **을 반환한다.
+  인자가 **NULL** 이면 **NULL** 을 반환한다.
   인자가 유효하지 않은 경우 오류가 발생한다.
 
 .. code-block:: sql
@@ -907,18 +906,18 @@ JSON_ARRAY_INSERT
 
 .. function:: JSON_ARRAY_INSERT (json_doc, json path, json_val [, json path, json_val] ...)
 
-  ** JSON_ARRAY_INSERT ** 함수는 첫 번째 인자의 수정된 사본을 반환한다. 주어진 각 <* json path *, * json_val *> 에 대해 함수는 해당 경로로 지정된 json 배열에 값을 삽입한다.
+  **JSON_ARRAY_INSERT** 함수는 첫 번째 인자의 수정된 사본을 반환한다. 주어진 각 <*json path*, *json_val*> 에 대해 함수는 해당 경로로 지정된 json 배열에 값을 삽입한다.
 
-  (* json path *, * json_val *) 은 왼쪽에서 오른쪽으로 하나씩 평가한다. 한 쌍을 평가하여 작성된 문서는 다음 쌍을 평가하는 새로운 값이 된다.
+  (*json path*, *json_val*) 은 왼쪽에서 오른쪽으로 하나씩 평가한다. 한 쌍을 평가하여 작성된 문서는 다음 쌍을 평가하는 새로운 값이 된다.
 
-  ** JSON_ARRAY_INSERT ** 작업의 규칙은 다음과 같다:
+  **JSON_ARRAY_INSERT** 작업의 규칙은 다음과 같다:
 
-  - json 경로가 json_array의 요소를 지정하면 * json_val *이 지정된 색인에 삽입되어 다음 요소를 오른쪽으로 이동시킨다.
+  - json 경로가 json_array의 요소를 지정하면 *json_val* 이 지정된 색인에 삽입되어 다음 요소를 오른쪽으로 이동시킨다.
   - json 경로가 배열 끝의 다음을 가리키는 경우, 배열의 끝부터 지정된 색인에 삽입될 때까지 null로 채워진다. 그리고 json_val이 지정된 색인에 삽입된다.
-  - json 경로가 * json_doc * 내에 존재하지 않는 경우, json 경로의 마지막 토큰은 배열 인덱스이고 마지막 배열 인덱스 토큰이 없는 json 경로는 * json_doc * 내의 요소를 지정했을 것이다. 마지막 토큰을 제외한 json 경로로 찾은 요소는 단일 요소 json 배열로 대체되고 ** JSON_ARRAY_INSERT ** 작업은 원래 json 경로로 수행된다.
+  - json 경로가 *json_doc* 내에 존재하지 않는 경우, json 경로의 마지막 토큰은 배열 인덱스이고 마지막 배열 인덱스 토큰이 없는 json 경로는 *json_doc* 내의 요소를 지정했을 것이다. 마지막 토큰을 제외한 json 경로로 찾은 요소는 단일 요소 json 배열로 대체되고 **JSON_ARRAY_INSERT** 작업은 원래 json 경로로 수행된다.
  
-  인자가 ** NULL **이면 ** NULL **을 반환한다.
-  인자가 유효하지 않거나 * json_path *가 * json_doc * 내부의 배열의 장소를 지정하지 않으면 오류가 발생한다.
+  인자가 **NULL** 이면 **NULL** 을 반환한다.
+  인자가 유효하지 않거나 *json_path* 가 *json_doc* 내부의 배열의 장소를 지정하지 않으면 오류가 발생한다.
 
 .. code-block:: sql
 
@@ -969,18 +968,18 @@ JSON_INSERT
 
 .. function:: JSON_INSERT (json_doc, json path, json_val [, json path, json_val] ...)
 
-  ** JSON_INSERT ** 함수는 첫 번째 인자의 수정된 사본을 반환한다. 주어진 각 <* json path *, * json_val *> 에 대해 해당 경로에 다른 값이 없으면 값을 삽입한다.
+  **JSON_INSERT** 함수는 첫 번째 인자의 수정된 사본을 반환한다. 주어진 각 <*json path*, *json_val*> 에 대해 해당 경로에 다른 값이 없으면 값을 삽입한다.
 
-  ** JSON_INSERT **의 삽입 규칙은 다음과 같다:
+  **JSON_INSERT** 의 삽입 규칙은 다음과 같다:
 
-  json 경로가 * json_doc * 내의 다음 json 값 중 하나를 처리하는 경우 * json_val *이 삽입된다:
+  json 경로가 *json_doc* 내의 다음 json 값 중 하나를 처리하는 경우 *json_val* 이 삽입된다:
   
-  - 기존 json 객체에 존재하지 않는 객체 멤버이다. 키(key)가 json 경로의 마지막 요소이고 값이 * json_val * 인 (* key *, * value *)이 json 오브젝트에 추가된다.
-  - 기존 json 배열 끝을 넘는 배열 색인. 배열은 배열의 끝까지 널로 채워지고 * json_val *은 지정된 색인에 삽입된다.
+  - 기존 json 객체에 존재하지 않는 객체 멤버이다. 키(key)가 json 경로의 마지막 요소이고 값이 *json_val* 인 (*key*, *value*)이 json 오브젝트에 추가된다.
+  - 기존 json 배열 끝을 넘는 배열 색인. 배열은 배열의 끝까지 널로 채워지고 *json_val* 은 지정된 색인에 삽입된다.
 
-  <* json path *, * json_val *> 한 쌍을 평가하여 작성된 json_doc은 다음 <* json path *, * json_val *>이 평가될 때 새로운 값이 된다.
+  <*json path*, *json_val*> 한 쌍을 평가하여 작성된 json_doc은 다음 <*json path*, *json_val*>이 평가될 때 새로운 값이 된다.
 
-  인자가 ** NULL **이면 ** NULL **을 반환한다.
+  인자가 **NULL** 이면 **NULL** 을 반환한다.
   인자가 유효하지 않은 경우 오류가 발생한다.
 
 
@@ -1023,15 +1022,15 @@ JSON_SET
 
 .. function:: JSON_SET (json_doc, json path, json_val [, json path, json_val] ...)
 
-  ** JSON_SET ** 함수는 첫 번째 인자의 수정된 사본을 반환한다. 주어진 각 <* json path *, * json_val *> 에 대해 함수는 해당 경로의 값을 삽입하거나 대체한다.
-  json 경로가 * json_doc * 내부에서 아래의 json 값 중 하나를 지정하면 * json_val *이 삽입된다.
+  **JSON_SET** 함수는 첫 번째 인자의 수정된 사본을 반환한다. 주어진 각 <*json path*, *json_val*> 에 대해 함수는 해당 경로의 값을 삽입하거나 대체한다.
+  json 경로가 *json_doc* 내부에서 아래의 json 값 중 하나를 지정하면 *json_val* 이 삽입된다.
 
-  - 기존 json 객체의 존재하지 않는 객체 멤버. (* key *, * value *) 이 json 경로에서 추론된 키와 * json_val * 값으로 json 객체에 추가된다.
-  - 기존 json 배열 끝을 넘는 배열 색인. 배열은 배열의 끝까지 널로 채워지고 * json_val *은 지정된 색인에 삽입된다.
+  - 기존 json 객체의 존재하지 않는 객체 멤버. (*key*, *value*) 이 json 경로에서 추론된 키와 *json_val* 값으로 json 객체에 추가된다.
+  - 기존 json 배열 끝을 넘는 배열 색인. 배열은 배열의 끝까지 널로 채워지고 *json_val* 은 지정된 색인에 삽입된다.
 
-  <* json path *, * json_val *> 한 쌍을 평가하여 작성된 json_doc은 다음 <* json path *, * json_val *>이 평가될 때 새로운 값이 된다.
+  <*json path*, *json_val*> 한 쌍을 평가하여 작성된 json_doc은 다음 <*json path*, *json_val*>이 평가될 때 새로운 값이 된다.
 
-  인자가 ** NULL **이면 ** NULL **을 반환한다.
+  인자가 **NULL** 이면 **NULL** 을 반환한다.
   인자가 유효하지 않은 경우 오류가 발생한다.
 
 .. code-block:: sql
@@ -1071,13 +1070,13 @@ JSON_REPLACE
 
 .. function:: JSON_REPLACE (json_doc, json path, json_val [, json path, json_val] ...)
 
- ** JSON_REPLACE ** 함수는 첫 번째 인자의 수정된 사본을 반환한다. 주어진 각 <* json path *, * json_val *> 에 대해 해당 경로에 다른 값이 있는 경우에만 값을 대체한다.
+ **JSON_REPLACE** 함수는 첫 번째 인자의 수정된 사본을 반환한다. 주어진 각 <*json path*, *json_val*> 에 대해 해당 경로에 다른 값이 있는 경우에만 값을 대체한다.
 
- * json_path *가 * json_doc * 내에 존재하지 않으면 (* json path *, * json_val *) 이 무시되고 변경되지 않는다.
+ *json_path* 가 *json_doc* 내에 존재하지 않으면 (*json path*, *json_val*) 이 무시되고 변경되지 않는다.
 
- <* json path *, * json_val *> 한 쌍을 평가하여 작성된 json_doc은 다음 <* json path *, * json_val *>이 평가될 때 새로운 값이 된다.
+ <*json path*, *json_val*> 한 쌍을 평가하여 작성된 json_doc은 다음 <*json path*, *json_val*>이 평가될 때 새로운 값이 된다.
 
- 인자가 ** NULL **이면 ** NULL **을 반환한다.
+ 인자가 **NULL** 이면 **NULL** 을 반환한다.
  인자가 유효하지 않은 경우 오류가 발생한다.
 
 .. code-block:: sql
@@ -1090,7 +1089,7 @@ JSON_REPLACE
     ======================
       {"a":"b"}
 
-* json_doc * 안에 * json path *`가 없으면 대체(replace) 동작이 수행되지 않는다.
+*json_doc* 안에 *json path* 가 없으면 대체 (replace) 동작이 수행되지 않는다.
 
 .. code-block:: sql
 
@@ -1119,11 +1118,11 @@ JSON_REMOVE
 
 .. function:: JSON_REMOVE (json_doc, json path [, json path] ...)
 
- ** JSON_REMOVE ** 함수는 주어진 모든 경로에서 값을 제거하여 첫 번째 인자의 수정된 사본을 반환한다.
+ **JSON_REMOVE** 함수는 주어진 모든 경로에서 값을 제거하여 첫 번째 인자의 수정된 사본을 반환한다.
 
  json 경로 인자는 왼쪽에서 오른쪽으로 하나씩 평가된다. json 경로를 평가하여 생성된 결과는 다음 json 경로가 평가되는 값이 된다.
 
- 인자가 ** NULL **이면 ** NULL **을 반환한다.
+ 인자가 **NULL** 이면 **NULL** 을 반환한다.
  인자가 유효하지 않거나 경로가 루트를 지정하거나 경로가 없는 경우 오류가 발생한다.
 
 .. code-block:: sql
@@ -1151,10 +1150,10 @@ JSON_REMOVE
 JSON_TABLE
 =====================
 
-** JSON_TABLE ** 함수는 json을 일반 테이블과 유사하게 질의(query)할 수 있는 유사 테이블 구조로 변환하는 것을 용이하게 해준다.
+**JSON_TABLE** 함수는 json을 일반 테이블과 유사하게 질의(query)할 수 있는 유사 테이블 구조로 변환하는 것을 용이하게 해준다.
 변환은 예를 들면 JSON_ARRAY 요소를 확장함으로써, 하나의 행 또는 복수의 행을 생성한다.
 
-** JSON_TABLE **의 전체 문법 :
+**JSON_TABLE** 의 전체 문법 :
 ::
 
     JSON_TABLE(
@@ -1179,36 +1178,36 @@ JSON_TABLE
         NULL | ERROR | DEFAULT value ON ERROR
 
 
-* json_doc * expr은 결과가 json_doc이 되는 표현식이어야 한다. 상수 json, 테이블의 열 또는 함수 또는 연산자의 결과 일 수 있다.
-* json path *는 유효한 경로 이어야 하며 ** COLUMNS ** 절에서 평가할 json 데이터를 추출하는 데 사용된다.
+*json_doc* expr은 결과가 json_doc이 되는 표현식이어야 한다. 상수 json, 테이블의 열 또는 함수 또는 연산자의 결과 일 수 있다.
+*json path* 는 유효한 경로 이어야 하며 **COLUMNS** 절에서 평가할 json 데이터를 추출하는 데 사용된다.
 ** COLUMNS ** 절은 열 유형 및 출력을 얻기 위해 수행되는 작업을 정의한다.
-[** AS **] * alias * 절이 필요하다.
+[**AS**] *alias* 절이 필요하다.
 
 
-** JSON_TABLE **은 네 가지 유형의 열을 지원한다:
+**JSON_TABLE** 은 네 가지 유형의 열을 지원한다:
 
-- * name * ** FOR ORDINALITY ** :이 유형은 ** COLUMNS ** 절 내에서 행 번호를 추적한다. 열 유형은 ** INTEGER **이다.
-- * name * * type * ** PATH ** * json path * [** on empty **] [** on error **] :이 유형의 열은 지정된 json 경로에서 json_values를 추출하는 데 사용된다. 추출된 json 데이터는 지정된 유형으로 강제 변환된다.
-  경로가 존재하지 않으면 ** on empty ** 절이 자동 수행된다. 추출된 json 값이 대상 유형으로 변환되지 않으면 ** on error ** 절이 자동 수행된다.
+- *name* **FOR ORDINALITY** :이 유형은 **COLUMNS** 절 내에서 행 번호를 추적한다. 열 유형은 **INTEGER** 이다.
+- *name* *type* **PATH** *json path* [**on empty**] [**on error**] :이 유형의 열은 지정된 json 경로에서 json_values를 추출하는 데 사용된다. 추출된 json 데이터는 지정된 유형으로 강제 변환된다.
+  경로가 존재하지 않으면 **on empty** 절이 자동 수행된다. 추출된 json 값이 대상 유형으로 변환되지 않으면 **on error** 절이 자동 수행된다.
 
-  - **on empty**은 경로가 존재하지 않는 경우 ** JSON_TABLE **의 동작을 결정한다. **on empty**은 다음 값 중 하나를 가질 수 있다:
+  - **on empty** 은 경로가 존재하지 않는 경우 **JSON_TABLE**의 동작을 결정한다. **on empty** 은 다음 값 중 하나를 가질 수 있다:
 
-    - ** NULL ON EMPTY ** : 열이 ** NULL **로 설정된다. 이것이 기본 동작이다.
+    - **NULL ON EMPTY** : 열이 **NULL** 로 설정된다. 이것이 기본 동작이다.
     - **ERROR ON EMPTY**: 오류가 발생한다.
     - **DEFAULT** *value* **ON EMPTY**: 빈 값 대신에 *value* 가 사용된다.
 
-  - **on error**는 다음 값 중 하나를 가질 수 있다.:
+  - **on error** 는 다음 값 중 하나를 가질 수 있다.:
 
-    - **NULL ON ERROR**: 열이 ** NULL **로 설정된다. 이것이 기본 동작이다.
+    - **NULL ON ERROR**: 열이 **NULL** 로 설정된다. 이것이 기본 동작이다.
     - **ERROR ON ERROR**: 오류가 발생한다.
-    - **DEFAULT** *value* **ON ERROR**: 원하는 열 유형으로 강제 변환하지 못한 배열 / 객체 / json 스칼라 대신 * value *가 사용된다.
+    - **DEFAULT** *value* **ON ERROR**: 원하는 열 유형으로 강제 변환하지 못한 배열 / 객체 / json 스칼라 대신 *value* 가 사용된다.
 
 - *name* *type* **EXISTS PATH** *json path*: json 경로 위치에 데이터가 있으면 1을 반환하고 그렇지 않으면 0을 반환한다.
 
 - **NESTED** [**PATH**] *json path* **COLUMNS** (*column list*) 는 경로에서 찾은 json 데이터에서 부모 결과와 결합 된 행과 열의 개별 서브 세트를 생성한다. \
   \결과는 "for each"루프와 유사하게 결합된다. \
   \json 경로는 부모 경로와 관련이 있다. \
-  \ ** COLUMNS ** 절에 대해 동일한 규칙이 재귀적으로 적용된다.
+  \ **COLUMNS** 절에 대해 동일한 규칙이 재귀적으로 적용된다.
 
 .. code-block:: sql
 
@@ -1258,10 +1257,10 @@ JSON_TABLE
                 1         NULL            0 
 
 아래 예에서 '$. *'경로는 상위 열이 루트 json 객체의 멤버 값을 하나씩 받도록 하는 데 사용된다. 열 a는 처리된 내용을 보여준다.
-그런 다음 루트 오브젝트의 각 멤버 값은 ** NESTED ** [** PATH **] 절에 의해 추가로 처리된다. ** NESTED PATH **는 경로 '$ [*]'를 사용하여 배열의 각 요소를 열에 의해 추가로 처리한다.
-** FOR ORDINALITY ** 열은 현재 처리된 요소의 수를 추적한다. 예제 결과에서 우리는 열의 각 새로운 요소에 대해 * ord * 열의 값도 증가함을 알 수 있다.
-** FOR ORDINALITY ** * nested_ord * 열은 형제 열(sibling columns)에 의해 처리되는 요소 수의 카운터 역할도 한다. 중첩된 ** FOR ORDINALITY ** 열은 각 일괄 처리가 완료된 후 재설정된다.
-세 번째 멤버의 값인 6은 배열로 취급될 수 없으므로 중첩된 열로 처리할 수 없다. 중첩된 열은 ** NULL ** 값을 생성한다.
+그런 다음 루트 오브젝트의 각 멤버 값은 **NESTED** [**PATH**] 절에 의해 추가로 처리된다. **NESTED PATH**는 경로 '$ [*]'를 사용하여 배열의 각 요소를 열에 의해 추가로 처리한다.
+**FOR ORDINALITY** 열은 현재 처리된 요소의 수를 추적한다. 예제 결과에서 우리는 열의 각 새로운 요소에 대해 * ord * 열의 값도 증가함을 알 수 있다.
+**FOR ORDINALITY** *nested_ord* 열은 형제 열(sibling columns)에 의해 처리되는 요소 수의 카운터 역할도 한다. 중첩된 **FOR ORDINALITY** 열은 각 일괄 처리가 완료된 후 재설정된다.
+세 번째 멤버의 값인 6은 배열로 취급될 수 없으므로 중첩된 열로 처리할 수 없다. 중첩된 열은 **NULL** 값을 생성한다.
 
 .. code-block:: sql
 
@@ -1285,8 +1284,8 @@ JSON_TABLE
                3  6                            NULL  NULL                
                4  [7]                             1  7                   
 
-다음 예는 여러 개의 동일한 레벨 ** NESTED ** [** PATH **] 절이 ** JSON_TABLE **에 의해 처리되는 방법을 보여준다. 처리될 값은 각 ** NESTED ** [** PATH **] 절에 하나씩 차례로 순서대로 전달된다.
-** NESTED ** [** PATH **] 절로 값을 처리하는 동안 형제 ** NESTED ** [** PATH **] 절은 ** NULL ** 값으로 열을 채운다.
+다음 예는 여러 개의 동일한 레벨 **NESTED** [**PATH**] 절이 **JSON_TABLE** 에 의해 처리되는 방법을 보여준다. 처리될 값은 각 **NESTED** [**PATH**] 절에 하나씩 차례로 순서대로 전달된다.
+**NESTED** [**PATH**] 절로 값을 처리하는 동안 형제 **NESTED** [**PATH**] 절은 **NULL** 값으로 열을 채운다.
 
 .. code-block:: sql
 

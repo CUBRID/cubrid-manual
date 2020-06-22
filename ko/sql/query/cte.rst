@@ -201,7 +201,7 @@ CTE에 컬럼명이 없으면 CTE의 첫 번째 내부 Select 문에서 컬럼�
 
 ::
 
-    9번째 명령어 줄에서In the command from line 9
+    9번째 명령어 줄에서
     최대 재귀 2가 CTE 실행에 도달했다.
 
 .. warning::

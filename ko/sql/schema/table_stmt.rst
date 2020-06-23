@@ -30,7 +30,7 @@ CREATE TABLE
         <subclass_definition> ::= {UNDER | AS SUBCLASS OF} table_name, ...
         
         <column_definition> ::= 
-            column_name <data_type> [{<default_or_shared_or_ai> | <column_constraint>}] [COMMENT 'column_comment_string']
+            column_name <data_type> [{<default_or_shared_or_ai> | <on_update> | <column_constraint>}] [COMMENT 'column_comment_string']
         
             <data_type> ::= <column_type> [<charset_modifier_clause>] [<collation_modifier_clause>]
 
@@ -42,6 +42,8 @@ CREATE TABLE
                 SHARED <value_specification> | 
                 DEFAULT <value_specification>  |
                 AUTO_INCREMENT [(seed, increment)]
+
+                <on_update> ::= [ON UPDATE <value_specification>]
          
             <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition> }
 
@@ -51,7 +53,7 @@ CREATE TABLE
                     <referential_triggered_action> ::=
                         ON UPDATE <referential_action> |
                         ON DELETE <referential_action> 
-        
+
                         <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
                         
         <table_constraint> ::=
@@ -85,7 +87,8 @@ CREATE TABLE
 *   *column_name*: 생성할 칼럼의 이름을 지정한다(최대 254바이트).
 *   *column_type*: 칼럼의 데이터 타입을 지정한다.
 *   [**SHARED** *value* | **DEFAULT** *value*]: 칼럼의 초기값을 지정한다.
-*   <*column_constraint*>: 칼럼의 제약 조건을 지정하며 제약 조건의 종류에는 **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** 가 있다. 자세한 내용은 :ref:`constraint-definition` 을 참고한다.
+*   **ON UPDATE**: 레코드의 필드가 수정되었을 때 갱신될 필드에 대한 수식을 지정한다. 자세한 내용은 :ref:`constraint-definition` 을 참고한다.
+*   <*column_constraint*>: 칼럼의 제약 조건을 지정하며 제약 조건의 종류에는 **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** 가 있다.
 *   <*default_or_shared_or_ai*>: DEFAULT, SHARED, AUTO_INCREMENT 중 하나만 사용될 수 있다.
     AUTO_INCREMENT이 지정될 때 "(seed, increment)"와 "AUTO_INCREMENT = initial_value"는 동시에 정의될 수 없다.
 *   *table_comment_string*: 테이블의 커멘트를 지정한다.
@@ -138,7 +141,7 @@ CREATE TABLE
 ::
 
     <column_definition> ::= 
-        column_name <data_type> [[<default_or_shared_or_ai>] | [<column_constraint>]] ... [COMMENT 'comment_string']
+        column_name <data_type> [[<default_or_shared_or_ai>] | [<on_update>] | [<column_constraint>]] ... [COMMENT 'comment_string']
     
         <data_type> ::= <column_type> [<charset_modifier_clause>] [<collation_modifier_clause>]
 
@@ -150,7 +153,9 @@ CREATE TABLE
             SHARED <value_specification> | 
             DEFAULT <value_specification>  |
             AUTO_INCREMENT [(seed, increment)]
-     
+
+        <on_update> ::= [ON UPDATE <value_specification>]
+
         <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition>}
 
 칼럼 이름
@@ -368,6 +373,43 @@ CREATE TABLE
             CREATE TABLE tb1(A SMALLINT AUTO_INCREMENT, B CHAR(5));
 
 .. _constraint-definition:
+
+ON UPDATE
+---------
+
+특정 테이블의 해당 열의 다른 속성값이 변경되면 자동으로 변경되는 속성을 추가할 수있다. **ON UPDATE** 의 값은 **ALTER** 문을 통해서 변경할 수있다. 의사 컬럼은 다음과 같은 방법으로 **ON UPDATE** 의 값을 허용한다. 갱신되는 필드의 목록에 의사 컬럼이 포함되는 경우, 정해진 **ON UPDATE** 값으로의 수정되지 않는다.
+
++-------------------------------+---------------+
+| 기본값                        | 데이터 타입   |
++===============================+===============+
+| SYS_TIMESTAMP                 | TIMESTAMP     |
++-------------------------------+---------------+
+| UNIX_TIMESTAMP()              | INTEGER       |
++-------------------------------+---------------+
+| CURRENT_TIMESTAMP             | TIMESTAMP     |
++-------------------------------+---------------+
+| SYS_DATETIME                  | DATETIME      |
++-------------------------------+---------------+
+| CURRENT_DATETIME              | DATETIME      |
++-------------------------------+---------------+
+| SYS_DATE                      | DATE          |
++-------------------------------+---------------+
+| CURRENT_DATE                  | DATE          |
++-------------------------------+---------------+
+
+.. code-block:: sql
+
+     CREATE TABLE sales (sales_cnt INTEGER, last_sale TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, product VARCHAR(100), product_id INTEGER);
+     INSERT INTO sales VALUES (0, NULL, 'bicycle', 1);
+
+     UPDATE sales set sales_cnt = sales_cnt + 1
+     WHERE product_id = 1;
+
+.. code-block:: sql
+
+    ALTER TABLE sales MODIFY last_sale TIMESTAMP; -- removes ON UPDATE
+    UPDATE sales set sales_cnt = sales_cnt + 1
+    WHERE product_id = 1; -- last_sale will remain unupdated
 
 제약 조건 정의
 --------------
@@ -994,7 +1036,7 @@ ADD COLUMN 절
     ADD [COLUMN | ATTRIBUTE] [(] <column_definition> [FIRST | AFTER old_column_name] [)];
 
         <column_definition> ::= 
-            column_name <data_type> [[<default_or_shared_or_ai>] | [<column_constraint>]] [COMMENT 'comment_string']
+            column_name <data_type> [[<default_or_shared_or_ai>] | [<on_update>] | [<column_constraint>]] [COMMENT 'comment_string']
         
             <data_type> ::= <column_type> [<charset_modifier_clause>] [<collation_modifier_clause>]
 
@@ -1006,6 +1048,8 @@ ADD COLUMN 절
                 SHARED <value_specification> | 
                 DEFAULT <value_specification>  |
                 AUTO_INCREMENT [(seed, increment)]
+
+            <on_update> ::= [ON UPDATE <value_specification>]
             
             <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition>}
 

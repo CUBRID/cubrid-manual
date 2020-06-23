@@ -229,7 +229,7 @@ CTE에 컬럼명이 없으면 CTE의 첫 번째 내부 Select 문에서 컬럼�
     before '
     SELECT * FROM cte1;
     '
-    재귀 CTE 'cte1'은 재귀 쿼리에서 직접 참조되어야한다.
+    Recursive CTE 'cte1' must be referenced directly in its recursive query.
 
 DML과 CREATE에서 CTE의 사용
 ============================

@@ -19,8 +19,9 @@ CREATE INDEX
     CREATE [UNIQUE] INDEX index_name ON table_name <index_col_desc> ;
      
         <index_col_desc> ::=
-            { ( column_name [ASC | DESC] [ {, column_name [ASC | DESC]} ...] ) [ WHERE <filter_predicate> ] | 
-            (function_name (argument_list) ) } 
+            { ( column_name [ASC | DESC] [ {, column_name [ASC | DESC]} ...] ) [ WHERE <filter_predicate> ] |
+            (function_name (argument_list) ) }
+                { [[WITH ONLINE [PARALLEL parallel_count]] | [INVISIBLE] | [VISIBLE]] }
                 [COMMENT 'index_comment_string']
 
 *   **UNIQUE**: 유일한 값을 갖는 고유 인덱스를 생성한다.
@@ -33,6 +34,8 @@ CREATE INDEX
 *   <*filter_predicate*>: 필터링된 인덱스를 만드는 조건을 명시한다. 컬럼과 상수 간 비교 조건이 여러 개인 경우 **AND** 로 연결된 경우에만 필터링이 될 수 있다. 자세한 내용은 :ref:`filtered-index` 를 참고한다.
 
 *   *function_name* (*argument_list*): 함수 기반 인덱스를 만드는 조건을 명시한다. 이와 관련하여 :ref:`function-index`\ 를 반드시 참고한다.
+*   **WITH ONLINE**: 다른 트랜잭션들에 의해 테이블 데이터가 변경중에 인덱스의 생성을 허용한다. **PARALLEL** 이 선언되지 않은 경우, 인덱스는 동일 트랜잭션 스레드에서 생성된다. <parallel_count>는 인덱스를 생성하기 위해 사용되는 스레드의 갯수이며 1부터 16사이의 정수이다.
+*   **INVISIBLE**: 인덱스를 생성할 때 인덱스의 상태를 **INVISIBLE** 로 설정한다. 이것은 질의의 실행이 인덱스의 생성과 무관하게 실행된다는 것이다. **INVISIBLE** 이 생략된 경우 생성되는 인덱스의 상태는 **NORNAL_INDEX** 로 설정된다.
 
 *   *index_comment_string*: 인덱스의 커멘트를 지정한다.
 
@@ -94,7 +97,7 @@ CREATE INDEX
 ALTER INDEX
 ===========
 
-**ALTER INDEX** 질의문은 인덱스를 재생성하거나 인덱스의 커멘트를 추가/변경한다. 인덱스 재생성은 인덱스를 삭제하고 다시 생성하는 작업이다.
+**ALTER INDEX** 문은 인덱스의 특성을 변경한다. 주석 또는 상태만 변경된 경우를 제외하고 인덱스가 재구성된다. 인덱스 재구성은 인덱스를 제거하고 다시 생성하는 작업이다.
 
 다음은 인덱스를 재생성하는 구문이다.
 
@@ -126,7 +129,7 @@ ALTER INDEX
 
 인덱스를 재생성하지 않고 인덱스의 커멘트를 추가하거나 변경하려는 경우 다음과 같이 **COMMENT** 절을 추가하고 **REBUILD** 키워드를 제거한다.
 
-::
+.. code-block:: sql
 
     ALTER INDEX index_name ON table_name COMMENT 'index_comment_string' ;
     
@@ -138,10 +141,17 @@ ALTER INDEX
 
 다음은 인덱스 이름을 바꾸는 구문이다. 
 
-:: 
+.. code-block:: sql
 
     ALTER INDEX old_index_name ON table_name RENAME TO new_index_name [COMMENT 'index_comment_string'] ;
 
+다음은 인덱스의 상태를 **INVISIBLE**/**VISIBLE** 로 변경하기 위한 구문이다. 인덱스의 상태가 **INVISIBLE** 인 경우, 질의 실행은 인덱스가 없는 것처럼 수행된다. 이 방법으로 인덱스의 성능 측정이 가능하며, 실제로 인덱스를 제거하지 않고 인덱스 제거에 따른 영향도를 측정할 수있다.
+
+.. code-block:: sql
+
+    CREATE INDEX i_game_medal ON game(medal);
+    ALTER INDEX i_game_medal ON game VISIBLE;
+    ALTER INDEX i_game_medal ON game INVISIBLE;
 
 DROP INDEX
 ==========

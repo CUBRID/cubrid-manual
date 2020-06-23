@@ -184,18 +184,18 @@ CTE에 컬럼명이 없으면 CTE의 첫 번째 내부 Select 문에서 컬럼�
       'Frame'                      4700
       'Wheel'                       100
 
-재귀적 CTE는 무한 루프에 빠질 수 있다. 이러한 경우를 방지하려면 시스템 파라미터 **cte_max_recursions** 를 원하는 임계값으로 설정한다. 기본값은 2000번 재귀 반복이고, 최대값은 1000000, 최소값은 2이다.
+재귀적 CTE는 무한 루프에 빠질수 있다. 이런 경우를 피하기 위해서 시스템 파라미터 **cte_max_recursions** 를 원하는 임계치로 설정해야 한다. 이 파라미터의 기본값은 2,000번 재귀 반복이며, 최대값은 1,000,000 최소값은 2이다.
 
 .. code-block:: sql
 
     SET SYSTEM PARAMETERS 'cte_max_recursions=2';
     WITH
      RECURSIVE cars (id, parent_id, item, price) AS (
-                        SELECT id, parent_id, item, price 
-                            FROM products  WHERE item LIKE 'Car%' 
-                        UNION ALL 
-                        SELECT p.id, p.parent_id, p.item, p.price 
-                            FROM products p 
+                        SELECT id, parent_id, item, price
+                            FROM products  WHERE item LIKE 'Car%'
+                        UNION ALL
+                        SELECT p.id, p.parent_id, p.item, p.price
+                            FROM products p
                         INNER JOIN cars rec_cars ON p.parent_id = rec_cars.id)
     SELECT item, price FROM cars ORDER BY 1;
 
@@ -206,15 +206,16 @@ CTE에 컬럼명이 없으면 CTE의 첫 번째 내부 Select 문에서 컬럼�
 
 .. warning::
 
-    *   CTE 부질의의 복잡도에 따라 부질의에 대한 결과 셋이 매우 크게 증가하여 대용량의 데이터가 생성될 수 있으므로 디스크 공간 부족을 방지하기 위해  **cte_max_recursions** 설정값 조정을 고려해야 한다.
+    *    CTE 부질의의 복잡도에 따라, 많은 량의 데이타가 생산되며, 심지어 **cte_max_recursions** 의 기본값만으로도 디스크 공간 부족을 발생할 수 있다.
 
-재귀적 CTE의 수행 알고리즘은 다음과 같이 요약할 수 있다.
+
+재귀적 CTE의 실행 알고리즘은 다음과 같이 요약 될 수 있다:
  * CTE의 비재귀적 부분을 수행하고 결과를 최종 결과 셋에 추가
- * 비재귀적 부분에서 얻은 결과 셋을 사용하여 재귀적 부분을 수행하고, 결과를 최종 결과 셋에 추가한 후, 결과 셋 내에서 현재 반복의 시작과 끝을 기억한다.
+ * 비재귀적 부분에서 얻은 결과 셋을 사용하여 재귀적 부분을 수행하고, 결과를 최종 결과 셋에 추가한 후, 결과 셋 내에서 현재 반복의 시작과 끝을 기억한다
  * 이전 반복의 결과 셋을 사용하여 비재귀적 부분의 수행을 반복하고 해당 결과를 최종 결과 셋에 추가
  * 재귀 반복에서 결과가 생성되지 않으면 중지
  * 설정된 최대 반복 횟수에 도달하는 경우에도 중지
- 
+
 재귀적 CTE를 **FROM** 절에서 바로 참조해야 한다. 부질의에서 참조하면 오류가 발생한다.
 
 .. code-block:: sql
@@ -228,13 +229,13 @@ CTE에 컬럼명이 없으면 CTE의 첫 번째 내부 Select 문에서 컬럼�
     before '
     SELECT * FROM cte1;
     '
-    Recursive CTE 'cte1' must be referenced directly in its recursive query.
+    재귀 CTE 'cte1'은 재귀 쿼리에서 직접 참조되어야한다.
 
-DML 및 CREATE에서 CTE 사용
-==========================
+DML과 CREATE에서 CTE의 사용
+============================
 
-CTE는 **SELECT** 질의문 외에 다른 질의문에도 사용될 수 있다.
-CTE는 **CREATE TABLE** *table_name* **AS SELECT** 에서 사용할 수 있다:
+**SELECT** 문에 대한 사용 외에도 CTE는 다른 문장에도 사용될 수 있다.
+CTE가 **CREATE TABLE** *table_name* **AS SELECT** 에 사용될 수있다:
 
 .. code-block:: sql
 
@@ -257,7 +258,7 @@ CTE는 **CREATE TABLE** *table_name* **AS SELECT** 에서 사용할 수 있다:
                 2
                 3
 
-또한 **INSERT**/**REPLACE INTO** *table_name* **SELECT** 에서 CTE를 사용할 수 있다:
+또한, **INSERT**/**REPLACE INTO** *table_name* **SELECT** 도 CTE 사용이 가능하다:
 
 .. code-block:: sql
 
@@ -274,7 +275,7 @@ CTE는 **CREATE TABLE** *table_name* **AS SELECT** 에서 사용할 수 있다:
        WITH cte AS (SELECT * FROM inc)
        SELECT * FROM cte;
 
-또한 **UPDATE** 질의문의 하위절에도 사용할 수 있다:
+또한 **UPDATE** 의 부질의에서도 사용가능하다:
 
 .. code-block:: sql
 
@@ -295,7 +296,7 @@ CTE는 **CREATE TABLE** *table_name* **AS SELECT** 에서 사용할 수 있다:
         SET price = price + (price / 10)
         WHERE sales_n >= threshold;
 
-**DELETE** 질의문의 하위절에도 사용할 수 있다: 
+또한, **DELETE** 의 부질의에서도 사용가능하다:
 
 .. code-block:: sql
 

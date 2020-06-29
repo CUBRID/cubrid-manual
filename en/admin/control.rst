@@ -1506,7 +1506,7 @@ The part where the time format is omitted is set to 0 by default. This means tha
 
     broker_log_top -F "13-01-19" -T "13-01-20" log1.log
 
-The following logs are the results of executing the broker_log_top utility; logs are generated from Nov. 11th to Nov. 12th 2013, and it is displayed in the order of the longest execution of SQL statements. Each month and day are separated by a hyphen (-) when specifying period. Note that "\*.sql.log" is not recognized so the SQL logs should be separated by a white space on Windows.  
+The following logs are the results of executing the broker_log_top utility; logs are generated from Nov. 11th to Nov. 12th, and it is displayed in the order of the longest execution of SQL statements. Each month and day are separated by a hyphen (-) when specifying period. Note that "\*.sql.log" is not recognized so the SQL logs should be separated by a white space on Windows.  
 
 ::
 

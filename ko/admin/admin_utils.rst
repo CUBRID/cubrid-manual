@@ -952,15 +952,14 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
 
         $ cubrid statdump -i 5 -c testdb
 
-         
-        Thu January 07 16:46:05 GTB Standard Time 2016
-
+        Mon November 11 23:44:36 KST 2019
+        
          *** SERVER EXECUTION STATISTICS ***
         Num_file_creates              =          0
         Num_file_removes              =          0
         Num_file_ioreads              =          0
-        Num_file_iowrites             =         10
-        Num_file_iosynches            =         10
+        Num_file_iowrites             =          3
+        Num_file_iosynches            =          3
         The timer values for file_iosync_all are:
         Num_file_iosync_all           =          0
         Total_time_file_iosync_all    =          0
@@ -973,18 +972,18 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
         Num_data_page_ioreads         =          0
         Num_data_page_iowrites        =          0
         Num_data_page_flushed         =          0
-        Num_data_page_private_quota   =        327
-        Num_data_page_private_count   =        898
+        Num_data_page_private_quota   =      11327
+        Num_data_page_private_count   =          0
         Num_data_page_fixed           =          1
-        Num_data_page_dirty           =          3
-        Num_data_page_lru1            =        857
-        Num_data_page_lru2            =        873
-        Num_data_page_lru3            =        898
-        Num_data_page_victim_candidate =        898
+        Num_data_page_dirty           =          0
+        Num_data_page_lru1            =         18
+        Num_data_page_lru2            =         10
+        Num_data_page_lru3            =          0
+        Num_data_page_victim_candidate =          0
         Num_log_page_fetches          =          0
         Num_log_page_ioreads          =          0
-        Num_log_page_iowrites         =         20
-        Num_log_append_records        =         20
+        Num_log_page_iowrites         =          6
+        Num_log_append_records        =          9
         Num_log_archives              =          0
         Num_log_start_checkpoints     =          0
         Num_log_end_checkpoints       =          0
@@ -1016,7 +1015,38 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
         Num_btree_splits              =          0
         Num_btree_merges              =          0
         Num_btree_get_stats           =          0
-        Num_heap_stats_sync_bestspace =          0
+        Num_btree_online_inserts      =          0
+        Num_btree_online_inserts_same_page_hold =          0
+        Num_btree_online_inserts_reject_no_more_keys =          0
+        Num_btree_online_inserts_reject_max_key_len =          0
+        Num_btree_online_inserts_reject_no_space =          0
+        Num_btree_online_release_latch =          0
+        Num_btree_online_inserts_reject_key_not_in_range1 =          0
+        Num_btree_online_inserts_reject_key_not_in_range2 =          0
+        Num_btree_online_inserts_reject_key_not_in_range3 =          0
+        Num_btree_online_inserts_reject_key_not_in_range4 =          0
+        Num_btree_online_inserts_reject_key_false_failed_range1 =          0
+        Num_btree_online_inserts_reject_key_false_failed_range2 =          0
+        The timer values for btree_online are:
+        Num_btree_online              =          0
+        Total_time_btree_online       =          0
+        Max_time_btree_online         =          0
+        Avg_time_btree_online         =          0
+        The timer values for btree_online_insert_task are:
+        Num_btree_online_insert_task  =          0
+        Total_time_btree_online_insert_task =          0
+        Max_time_btree_online_insert_task =          0
+        Avg_time_btree_online_insert_task =          0
+        The timer values for btree_online_prepare_task are:
+        Num_btree_online_prepare_task =          0
+        Total_time_btree_online_prepare_task =          0
+        Max_time_btree_online_prepare_task =          0
+        Avg_time_btree_online_prepare_task =          0
+        The timer values for btree_online_insert_same_leaf are:
+        Num_btree_online_insert_same_leaf =          0
+        Total_time_btree_online_insert_same_leaf =          0
+        Max_time_btree_online_insert_same_leaf =          0
+        Avg_time_btree_online_insert_same_leaf =          0
         Num_query_selects             =          0
         Num_query_inserts             =          0
         Num_query_deletes             =          0
@@ -1032,15 +1062,13 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
         Num_query_holdable_cursors    =          0
         Num_sort_io_pages             =          0
         Num_sort_data_pages           =          0
-        Num_network_requests          =          4
+        Num_network_requests          =          3
         Num_adaptive_flush_pages      =          0
-        Num_adaptive_flush_log_pages  =         10
-        Num_adaptive_flush_max_pages  =      25600
+        Num_adaptive_flush_log_pages  =          0
+        Num_adaptive_flush_max_pages  =      14464
         Num_prior_lsa_list_size       =          0
         Num_prior_lsa_list_maxed      =          0
-        Num_prior_lsa_list_removed    =         10
-        Num_heap_stats_bestspace_entries =        441
-        Num_heap_stats_bestspace_maxed =          0
+        Num_prior_lsa_list_removed    =          3
         Time_ha_replication_delay     =          0
         Num_plan_cache_add            =          0
         Num_plan_cache_lookup         =          0
@@ -1049,7 +1077,7 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
         Num_plan_cache_full           =          0
         Num_plan_cache_delete         =          0
         Num_plan_cache_invalid_xasl_id =          0
-        Num_plan_cache_entries        =          2
+        Num_plan_cache_entries        =          0
         Num_vacuum_log_pages_vacuumed =          0
         Num_vacuum_log_pages_to_vacuum =          0
         Num_vacuum_prefetch_requests_log_pages =          0
@@ -1082,65 +1110,97 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
         Num_heap_insid_vacuums        =          0
         Num_heap_remove_vacuums       =          0
         The timer values for heap_insert_prepare are:
-        Num_heap_insert_prepare  =          0
+        Num_heap_insert_prepare       =          0
         Total_time_heap_insert_prepare =          0
-        Max_time_heap_insert_prepare =          0
-        Avg_time_heap_insert_prepare =          0
+        Max_time_heap_insert_prepare  =          0
+        Avg_time_heap_insert_prepare  =          0
         The timer values for heap_insert_execute are:
-        Num_heap_insert_execute  =          0
+        Num_heap_insert_execute       =          0
         Total_time_heap_insert_execute =          0
-        Max_time_heap_insert_execute =          0
-        Avg_time_heap_insert_execute =          0
+        Max_time_heap_insert_execute  =          0
+        Avg_time_heap_insert_execute  =          0
         The timer values for heap_insert_log are:
-        Num_heap_insert_log      =          0
-        Total_time_heap_insert_log =          0
-        Max_time_heap_insert_log =          0
-        Avg_time_heap_insert_log =          0
+        Num_heap_insert_log           =          0
+        Total_time_heap_insert_log    =          0
+        Max_time_heap_insert_log      =          0
+        Avg_time_heap_insert_log      =          0
         The timer values for heap_delete_prepare are:
-        Num_heap_delete_prepare  =          0
+        Num_heap_delete_prepare       =          0
         Total_time_heap_delete_prepare =          0
-        Max_time_heap_delete_prepare =          0
-        Avg_time_heap_delete_prepare =          0
+        Max_time_heap_delete_prepare  =          0
+        Avg_time_heap_delete_prepare  =          0
         The timer values for heap_delete_execute are:
-        Num_heap_delete_execute  =          0
+        Num_heap_delete_execute       =          0
         Total_time_heap_delete_execute =          0
-        Max_time_heap_delete_execute =          0
-        Avg_time_heap_delete_execute =          0
+        Max_time_heap_delete_execute  =          0
+        Avg_time_heap_delete_execute  =          0
         The timer values for heap_delete_log are:
-        Num_heap_delete_log      =          0
-        Total_time_heap_delete_log =          0
-        Max_time_heap_delete_log =          0
-        Avg_time_heap_delete_log =          0
+        Num_heap_delete_log           =          0
+        Total_time_heap_delete_log    =          0
+        Max_time_heap_delete_log      =          0
+        Avg_time_heap_delete_log      =          0
         The timer values for heap_update_prepare are:
-        Num_heap_update_prepare  =          0
+        Num_heap_update_prepare       =          0
         Total_time_heap_update_prepare =          0
-        Max_time_heap_update_prepare =          0
-        Avg_time_heap_update_prepare =          0
+        Max_time_heap_update_prepare  =          0
+        Avg_time_heap_update_prepare  =          0
         The timer values for heap_update_execute are:
-        Num_heap_update_execute  =          0
+        Num_heap_update_execute       =          0
         Total_time_heap_update_execute =          0
-        Max_time_heap_update_execute =          0
-        Avg_time_heap_update_execute =          0
+        Max_time_heap_update_execute  =          0
+        Avg_time_heap_update_execute  =          0
         The timer values for heap_update_log are:
-        Num_heap_update_log      =          0
-        Total_time_heap_update_log =          0
-        Max_time_heap_update_log =          0
-        Avg_time_heap_update_log =          0
+        Num_heap_update_log           =          0
+        Total_time_heap_update_log    =          0
+        Max_time_heap_update_log      =          0
+        Avg_time_heap_update_log      =          0
         The timer values for heap_vacuum_prepare are:
-        Num_heap_vacuum_prepare  =          0
+        Num_heap_vacuum_prepare       =          0
         Total_time_heap_vacuum_prepare =          0
-        Max_time_heap_vacuum_prepare =          0
-        Avg_time_heap_vacuum_prepare =          0
+        Max_time_heap_vacuum_prepare  =          0
+        Avg_time_heap_vacuum_prepare  =          0
         The timer values for heap_vacuum_execute are:
-        Num_heap_vacuum_execute  =          0
+        Num_heap_vacuum_execute       =          0
         Total_time_heap_vacuum_execute =          0
-        Max_time_heap_vacuum_execute =          0
-        Avg_time_heap_vacuum_execute =          0
+        Max_time_heap_vacuum_execute  =          0
+        Avg_time_heap_vacuum_execute  =          0
         The timer values for heap_vacuum_log are:
-        Num_heap_vacuum_log      =          0
-        Total_time_heap_vacuum_log =          0
-        Max_time_heap_vacuum_log =          0
-        Avg_time_heap_vacuum_log =          0
+        Num_heap_vacuum_log           =          0
+        Total_time_heap_vacuum_log    =          0
+        Max_time_heap_vacuum_log      =          0
+        Avg_time_heap_vacuum_log      =          0
+        The timer values for heap_stats_sync_bestspace are:
+        Num_heap_stats_sync_bestspace =          0
+        Total_time_heap_stats_sync_bestspace =          0
+        Max_time_heap_stats_sync_bestspace =          0
+        Avg_time_heap_stats_sync_bestspace =          0
+        Num_heap_stats_bestspace_entries =          0
+        Num_heap_stats_bestspace_maxed =          0
+        The timer values for bestspace_add are:
+        Num_bestspace_add             =          0
+        Total_time_bestspace_add      =          0
+        Max_time_bestspace_add        =          0
+        Avg_time_bestspace_add        =          0
+        The timer values for bestspace_del are:
+        Num_bestspace_del             =          0
+        Total_time_bestspace_del      =          0
+        Max_time_bestspace_del        =          0
+        Avg_time_bestspace_del        =          0
+        The timer values for bestspace_find are:
+        Num_bestspace_find            =          0
+        Total_time_bestspace_find     =          0
+        Max_time_bestspace_find       =          0
+        Avg_time_bestspace_find       =          0
+        The timer values for heap_find_page_bestspace are:
+        Num_heap_find_page_bestspace  =          0
+        Total_time_heap_find_page_bestspace =          0
+        Max_time_heap_find_page_bestspace =          0
+        Avg_time_heap_find_page_bestspace =          0
+        The timer values for heap_find_best_page are:
+        Num_heap_find_best_page       =          0
+        Total_time_heap_find_best_page =          0
+        Max_time_heap_find_best_page  =          0
+        Avg_time_heap_find_best_page  =          0
         The timer values for bt_fix_ovf_oids are:
         Num_bt_fix_ovf_oids           =          0
         Total_time_bt_fix_ovf_oids    =          0
@@ -1277,10 +1337,10 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
         Max_time_bt_vacuum_insid_traverse =          0
         Avg_time_bt_vacuum_insid_traverse =          0
         The timer values for vacuum_master are:
-        Num_vacuum_master             =          0
-        Total_time_vacuum_master      =          0
-        Max_time_vacuum_master        =          0
-        Avg_time_vacuum_master        =          0
+        Num_vacuum_master             =        561
+        Total_time_vacuum_master      =       1259
+        Max_time_vacuum_master        =          6
+        Avg_time_vacuum_master        =          2
         The timer values for vacuum_job are:
         Num_vacuum_job                =          0
         Total_time_vacuum_job         =          0
@@ -1299,7 +1359,11 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
         Time_get_snapshot_acquire_time =          0
         Count_get_snapshot_retry      =          0
         Time_tran_complete_time       =          0
-        Time_get_oldest_mvcc_acquire_time =       1024
+        The timer values for compute_oldest_visible are:
+        Num_compute_oldest_visible    =        561
+        Total_time_compute_oldest_visible =        569
+        Max_time_compute_oldest_visible =          4
+        Avg_time_compute_oldest_visible =          1
         Count_get_oldest_mvcc_retry   =          0
         Data_page_buffer_hit_ratio    =       0.00
         Log_page_buffer_hit_ratio     =       0.00
@@ -1349,9 +1413,9 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
         Avg_time_flush_flush          =          0
         The timer values for flush_sleep are:
         Num_flush_sleep               =          4
-        Total_time_flush_sleep        =    8000949
-        Max_time_flush_sleep          =    2000244
-        Avg_time_flush_sleep          =    2000237
+        Total_time_flush_sleep        =    4000307
+        Max_time_flush_sleep          =    1000077
+        Avg_time_flush_sleep          =    1000076
         The timer values for flush_collect_per_page are:
         Num_flush_collect_per_page    =          0
         Total_time_flush_collect_per_page =          0
@@ -1373,6 +1437,16 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
         Total_time_compensate_flush   =          0
         Max_time_compensate_flush     =          0
         Avg_time_compensate_flush     =          0
+        The timer values for assign_direct_bcb are:
+        Num_assign_direct_bcb         =          0
+        Total_time_assign_direct_bcb  =          0
+        Max_time_assign_direct_bcb    =          0
+        Avg_time_assign_direct_bcb    =          0
+        The timer values for wake_flush_waiter are:
+        Num_wake_flush_waiter         =          0
+        Total_time_wake_flush_waiter  =          0
+        Max_time_wake_flush_waiter    =          0
+        Avg_time_wake_flush_waiter    =          0
         The timer values for alloc_bcb are:
         Num_alloc_bcb                 =          0
         Total_time_alloc_bcb          =          0
@@ -1395,6 +1469,21 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
         Avg_time_alloc_bcb_cond_wait_low_prio =          0
         Num_alloc_bcb_prioritize_vacuum =          0
         Num_victim_use_invalid_bcb    =          0
+        The timer values for alloc_bcb_get_victim_search_own_private_list are:
+        Num_alloc_bcb_get_victim_search_own_private_list =          0
+        Total_time_alloc_bcb_get_victim_search_own_private_list =          0
+        Max_time_alloc_bcb_get_victim_search_own_private_list =          0
+        Avg_time_alloc_bcb_get_victim_search_own_private_list =          0
+        The timer values for alloc_bcb_get_victim_search_others_private_list are:
+        Num_alloc_bcb_get_victim_search_others_private_list =          0
+        Total_time_alloc_bcb_get_victim_search_others_private_list =          0
+        Max_time_alloc_bcb_get_victim_search_others_private_list =          0
+        Avg_time_alloc_bcb_get_victim_search_others_private_list =          0
+        The timer values for alloc_bcb_get_victim_search_shared_list are:
+        Num_alloc_bcb_get_victim_search_shared_list =          0
+        Total_time_alloc_bcb_get_victim_search_shared_list =          0
+        Max_time_alloc_bcb_get_victim_search_shared_list =          0
+        Avg_time_alloc_bcb_get_victim_search_shared_list =          0
         Num_victim_assign_direct_vacuum_void =          0
         Num_victim_assign_direct_vacuum_lru =          0
         Num_victim_assign_direct_flush =          0
@@ -1418,11 +1507,56 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
         Num_lfcq_prv_get_big          =          0
         Num_lfcq_shr_get_total_calls  =          0
         Num_lfcq_shr_get_empty        =          0
+        The timer values for Time_DWB_flush_block_time are:
+        Num_Time_DWB_flush_block_time =          0
+        Total_time_Time_DWB_flush_block_time =          0
+        Max_time_Time_DWB_flush_block_time =          0
+        Avg_time_Time_DWB_flush_block_time =          0
+        The timer values for Time_DWB_flush_block_helper_time are:
+        Num_Time_DWB_flush_block_helper_time =          0
+        Total_time_Time_DWB_flush_block_helper_time =          0
+        Max_time_Time_DWB_flush_block_helper_time =          0
+        Avg_time_Time_DWB_flush_block_helper_time =          0
+        The timer values for Time_DWB_flush_block_cond_wait_time are:
+        Num_Time_DWB_flush_block_cond_wait_time =       5352
+        Total_time_Time_DWB_flush_block_cond_wait_time =    5629578
+        Max_time_Time_DWB_flush_block_cond_wait_time =       1059
+        Avg_time_Time_DWB_flush_block_cond_wait_time =       1051
+        The timer values for Time_DWB_flush_block_sort_time are:
+        Num_Time_DWB_flush_block_sort_time =          0
+        Total_time_Time_DWB_flush_block_sort_time =          0
+        Max_time_Time_DWB_flush_block_sort_time =          0
+        Avg_time_Time_DWB_flush_block_sort_time =          0
+        The timer values for Time_DWB_flush_remove_hash_entries are:
+        Num_Time_DWB_flush_remove_hash_entries =          0
+        Total_time_Time_DWB_flush_remove_hash_entries =          0
+        Max_time_Time_DWB_flush_remove_hash_entries =          0
+        Avg_time_Time_DWB_flush_remove_hash_entries =          0
+        The timer values for Time_DWB_checksum_time are:
+        Num_Time_DWB_checksum_time    =          0
+        Total_time_Time_DWB_checksum_time =          0
+        Max_time_Time_DWB_checksum_time =          0
+        Avg_time_Time_DWB_checksum_time =          0
+        The timer values for Time_DWB_wait_flush_block_time are:
+        Num_Time_DWB_wait_flush_block_time =          0
+        Total_time_Time_DWB_wait_flush_block_time =          0
+        Max_time_Time_DWB_wait_flush_block_time =          0
+        Avg_time_Time_DWB_wait_flush_block_time =          0
+        The timer values for Time_DWB_wait_flush_block_helper_time are:
+        Num_Time_DWB_wait_flush_block_helper_time =          0
+        Total_time_Time_DWB_wait_flush_block_helper_time =          0
+        Max_time_Time_DWB_wait_flush_block_helper_time =          0
+        Avg_time_Time_DWB_wait_flush_block_helper_time =          0
+        The timer values for Time_DWB_flush_force_time are:
+        Num_Time_DWB_flush_force_time =          0
+        Total_time_Time_DWB_flush_force_time =          0
+        Max_time_Time_DWB_flush_force_time =          0
+        Avg_time_Time_DWB_flush_force_time =          0
         Num_alloc_bcb_wait_threads_high_priority =          0
         Num_alloc_bcb_wait_threads_low_priority =          0
         Num_flushed_bcbs_wait_for_direct_victim =          0
         Num_lfcq_big_private_lists    =          0
-        Num_lfcq_private_lists        =          5
+        Num_lfcq_private_lists        =          0
         Num_lfcq_shared_lists         =          0
         Num_data_page_avoid_dealloc   =          0
         Num_data_page_avoid_victim    =          0
@@ -1435,6 +1569,10 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
         Time_data_page_fix_acquire_time:
         Num_mvcc_snapshot_ext:
         Time_obj_lock_acquire_time:
+        Thread_stats_counters_timers:
+        Thread_pgbuf_daemon_stats_counters_timers:
+        Num_dwb_flushed_block_volumes:
+        Thread_loaddb_stats_counters_timers:
 
     다음은 위의 통계 정보에 대한 설명이다. 통계 카테고리 (데이터베이스 모듈), 이름, 통계 유형 및 각 통계에 대한 간략한 설명을 볼 수 있다.
 
@@ -1586,6 +1724,18 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
     | Num_tran_end_topops                      | Accumulator    | 종료한 top operation의 개수                                           |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
     | Num_tran_interrupts                      | Accumulator    | 인터럽트 횟수                                                         |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_tran_postpone_cache_hits             | Accumulator    | 트랜잭션 지연 (postpone)연산들을 실행할 때 발생한 캐시 히트 수        |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_tran_postpone_cache_miss             | Accumulator    | | 트랜잭션 지연 (postpone)연산들을 실행할 때 발생한 캐시 미스 수      |
+    |                                          |                | | 캐시 미스는 트랙잭션 커밋의 성능을 저하시킬 수 있고, 전체 로그      |
+    |                                          |                | | 연산들에 영향을 끼칠 수 있다.                                       |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_tran_topop_postpone_cache_hits       | Accumulator    | top operation 지연 (postpone)연산들을 실행할 때 발생한 캐시 히트 수   |
+    +------------------------------------------+----------------+-----------------------------------------------------------------------+
+    | Num_tran_topop_postpone_cache_miss       | Accumulator    | | top operation 지연 (postpone)연산들을 실행할 때 발생한 캐시 미스 수 |
+    |                                          |                | | 캐시 미스는 top operation 커밋의 성능을 저하시킬 수 있고, 전체 로그 |
+    |                                          |                | | 연산들에 영향을 끼칠 수 있다.                                       |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
    
     **인덱스**

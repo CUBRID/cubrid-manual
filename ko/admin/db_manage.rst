@@ -126,7 +126,7 @@ CUBRID 데이터베이스의 볼륨은 크게 영구적 볼륨, 일시적 볼륨
     *   위의 표에서 *testdb_lgar_t*, *testdb_lgar224* 및 *testdb_lgat* 는 로그 볼륨 파일로 분류된다.
     *   파일 크기는 **cubrid.conf** 의 **log_volume_size** 또는 **cubrid createdb** 의 **--log-volume-size** 옵션에 의해 결정된다.
 
-*   Double Write Buffer (DWB) 파일
+*   이중 쓰기 버퍼 (Double Write Buffer, DWB) 파일
       
     *   DWB 파일은 부분 쓰기(Partial Write) 로 인한 I/O 에러를 방지하기위한 저장공간이다.
     *   모든 데이터 페이지는 DWB 에 먼저 쓰여지고 난 후에 영구 데이터 볼륨에 있는 데이터 위치에 쓰여진다.

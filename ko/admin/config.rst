@@ -684,7 +684,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
 **double_write_buffer_size**
 
-    **double_write_buffer_size**\ 는 Double Write Buffer (DWB)의 메모리와 디스크 공간을 설정할 수 있는 파라미터이다. 이 크기를 0으로 설정함으로써 Partial I/O를 방지하기 위한 DWB를 사용하지 않을 수 있다. 기본적으로 DWB는 활성화되어 있으며, 기본값은 **2M** 이다.  
+    **double_write_buffer_size**\ 는 이중 쓰기 버퍼 (Double Write Buffer, DWB)의 메모리와 디스크 공간을 설정할 수 있는 파라미터이다. 이 크기를 0으로 설정함으로써 Partial I/O를 방지하기 위한 DWB를 사용하지 않을 수 있다. 기본적으로 DWB는 활성화되어 있으며, 기본값은 **2M** 이다.  
 
 **data_file_os_advise**
 
@@ -711,7 +711,6 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
     .. warning::
 
         posix_fadvise 플래그와 데이터 액세스 방법을 완벽히 이해해야 한다. 파라미터 설정은 성능 향상을 도울 수도 있지만 잘못 사용할 경우 성능을 하락시킬 수도 있다. 대부분의 시나리오에서 디폴트 값을 사용하는 것이 가장 좋다.
->>>>>>> 10.2
 
 .. _error-parameters:
 

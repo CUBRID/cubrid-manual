@@ -89,6 +89,10 @@ CUBRID는 객체 관계형 데이터베이스 관리 시스템으로서, 데이�
 
 백그라운드 보관 로그(background archive log)는 백그라운드에서 로그 보관 작업(log archiving)을 수행할 때 사용하는 볼륨이다.
 
+**이중 쓰기 버퍼 (Double Write Buffer, DWB) 파일**
+
+이중 쓰기 버퍼 파일은 I/O 에러를 방지하기 위하여 디스크에 쓰여지는 데이터 페이지들의 복사본을 저장한다. 이에 대한 자세한 설명은 :ref:`database-volume` 을 참고한다.
+
 .. _temporary-volumes:
 
 일시적 볼륨(Temporary Volume)

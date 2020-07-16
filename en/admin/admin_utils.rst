@@ -2517,6 +2517,10 @@ The following shows [options] available with the **cubrid statdump** utility.
     | Log_flush_daemon_thread                   | Background thread that flushes log data to disk                                       |
     +-------------------------------------------+---------------------------------------------------------------------------------------+
 
+.. Note::  
+
+    (*) : These statistics measure the non-MVCC operations or MVCC operations which are performed in-place (decided internally)
+
 
 .. option:: -o, --output-file=FILE
 

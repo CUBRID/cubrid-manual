@@ -637,12 +637,6 @@ installdb
 
         cubrid installdb --server-name=cub_server1 testdb
 
-.. option:: -F, --file-path=PATH
-        
-    대상 데이터베이스 볼륨 디렉터리의 절대 경로를 **databases.txt** 에 등록한다. 이 옵션을 생략하면 기본값인 현재 디렉터리 경로가 등록된다.  ::
-
-        cubrid installdb -F /home/cubrid/CUBRID/databases/testdb testdb
-
 .. option:: -L, --log-path=PATH
 
     대상 데이터베이스 로그 볼륨 디렉터리의 절대 경로를 **databases.txt** 에 등록한다. 이 옵션을 생략하면 데이터베이스 볼륨의 디렉터리 경로가 등록된다.  ::

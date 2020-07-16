@@ -20,7 +20,7 @@
 
 **새로 추가된 예약어 검사**
 
-*   CUBRID 설치 패키지에 포함 또는 http://ftp.cubrid.org/CUBRID_Engine/10.2.0/\ 에서 배포되는 CUBRID 10.2 버전용 예약어 검출 스크립트인 check_reserved.sql을 이용하여 예약어 사용 여부를 검사할 수 있으며, 예약어로 지정된 식별자를 사용하고 있을 경우 식별자를 수정해야 한다. :doc:`sql/identifier` 절을 참고한다.
+*   CUBRID 설치 패키지에 포함 또는 http://ftp.cubrid.org/CUBRID_Engine/10.2/\ 에서 배포되는 CUBRID 10.2 버전용 예약어 검출 스크립트인 check_reserved.sql을 이용하여 예약어 사용 여부를 검사할 수 있으며, 예약어로 지정된 식별자를 사용하고 있을 경우 식별자를 수정해야 한다. :doc:`sql/identifier` 절을 참고한다.
 
 **환경 변수 CUBRID_MSG_LANG 설정**
 
@@ -63,7 +63,7 @@ CUBRID 9.2/9.3/10.0/10.1 버전을 사용 중인 사용자는 다른 디렉터�
 DB 마이그레이션
 ^^^^^^^^^^^^^^^
 
-다음 표는 http://ftp.cubrid.org/CUBRID_Engine/10.2.0/ 에서 제공되는 예약어 검출 스크립트인 check_reserved.sql와 cubrid unloaddb/loaddb 유틸리티를 사용하여 마이그레이션을 수행하는 방법을 보여준다. (:ref:`unloaddb` 및 :ref:`loaddb` 참고)
+다음 표는 http://ftp.cubrid.org/CUBRID_Engine/10.2/ 에서 제공되는 예약어 검출 스크립트인 check_reserved.sql와 cubrid unloaddb/loaddb 유틸리티를 사용하여 마이그레이션을 수행하는 방법을 보여준다. (:ref:`unloaddb` 및 :ref:`loaddb` 참고)
 
 +------------------------------------+-----------------------------------------------+-----------------------------------------------+
 | 단계                               | Linux 환경                                    | Windows 환경                                  |

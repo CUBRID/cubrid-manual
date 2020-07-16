@@ -47,8 +47,8 @@ The **SELECT** statement specifies columns that you want to retrieve from a tabl
      
     <join_table_specification> ::=
         {
-            [INNER | {LEFT | RIGHT} [OUTER]] JOIN |
-            STRAIGHT_JOIN 
+            [INNER | {LEFT | RIGHT} [OUTER]] JOIN 
+
         } <table_specification> ON <search_condition>
      
     <join_table_specification2> ::= 
@@ -668,8 +668,8 @@ An outer join is divided into a left outer join which outputs all rows of the le
         
     <join_table_specification> ::=
         {
-            [INNER | {LEFT | RIGHT} [OUTER]] JOIN |
-            STRAIGHT_JOIN 
+            [INNER | {LEFT | RIGHT} [OUTER]] JOIN 
+
          } <table_specification> ON <search_condition>
      
     <join_table_specification2> ::=
@@ -684,7 +684,6 @@ An outer join is divided into a left outer join which outputs all rows of the le
 
     *   {**LEFT** | **RIGHT**} [**OUTER**] **JOIN**: **LEFT** is used for a left outer join query, and **RIGHT** is for a right outer join query.
 
-    *   **STRAIGHT_JOIN**: (on changing)
    
 *   <*join_table_specification2*>
 
@@ -965,11 +964,6 @@ Running the above query is the same as running the below query, and they display
                 1            1            1            1
              NULL         NULL            2            2
 
-(on changing)
-
-STRAIGHT_JOIN
--------------
-CUBRIDSUS-12814
 
 
 

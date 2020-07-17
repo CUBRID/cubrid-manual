@@ -177,13 +177,13 @@ Windows 환경에서는 시스템 권한을 가진 사용자로 로그인한 경
     @ cubrid server start: demodb
 
     This may take a long time depending on the amount of recovery works to do.
-    CUBRID 10.1 
+    CUBRID 10.2 
 
     ++ cubrid server start: success
     @ cubrid server start: testdb
 
     This may take a long time depending on the amount of recovery works to do.
-    CUBRID 10.1 
+    CUBRID 10.2 
 
     ++ cubrid server start: success
     @ cubrid broker start
@@ -258,14 +258,14 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 10.1
+    CUBRID 10.2
 
     ++ cubrid server start: success
     @ cubrid server start: testdb
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 10.1
+    CUBRID 10.2
 
     ++ cubrid server start: success
     @ cubrid broker start
@@ -284,8 +284,8 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
     ++ cubrid master is running.
     @ cubrid server status
 
-    Server testdb (rel 10.1, pid 31059)
-    Server demodb (rel 10.1, pid 30950)
+    Server testdb (rel 10.2, pid 31059)
+    Server demodb (rel 10.2, pid 30950)
 
     @ cubrid broker status
     % query_editor
@@ -381,7 +381,7 @@ CUBRID는 cubrid 유틸리티의 수행 결과에 대한 로깅 기능을 제공
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 10.1 
+    CUBRID 10.2 
 
     ++ cubrid server start: success
 
@@ -397,7 +397,7 @@ CUBRID는 cubrid 유틸리티의 수행 결과에 대한 로깅 기능을 제공
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 10.1 
+    CUBRID 10.2 
 
     ++ cubrid server start: success
 
@@ -454,7 +454,7 @@ CUBRID는 cubrid 유틸리티의 수행 결과에 대한 로깅 기능을 제공
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 10.1 
+    CUBRID 10.2 
 
     ++ cubrid server start: success
 
@@ -468,8 +468,8 @@ CUBRID는 cubrid 유틸리티의 수행 결과에 대한 로깅 기능을 제공
     % cubrid server status
     
     @ cubrid server status
-    Server testdb (rel 10.1, pid 24465)
-    Server demodb (rel 10.1, pid 24342)
+    Server testdb (rel 10.2, pid 24465)
+    Server demodb (rel 10.2, pid 24342)
 
 마스터 프로세스가 중지된 상태라면, 다음과 같은 메시지가 출력된다. 
 
@@ -1397,10 +1397,10 @@ SQL 로그 파일은 응용 클라이언트가 요청하는 SQL을 기록하며,
 
     13-06-11 15:07:39.282 (0) STATE idle
     13-06-11 15:07:44.832 (0) CLIENT IP 192.168.10.100
-    13-06-11 15:07:44.835 (0) CLIENT VERSION 9.2.0.0062
+    13-06-11 15:07:44.835 (0) CLIENT VERSION 10.2.0.8787
     13-06-11 15:07:44.835 (0) session id for connection 0
     13-06-11 15:07:44.836 (0) connect db demodb user dba url jdbc:cubrid:192.168.10.200:30000:demodb:dba:********: session id 12
-    13-06-11 15:07:44.836 (0) DEFAULT isolation_level 3, lock_timeout -1
+    13-06-11 15:07:44.836 (0) DEFAULT isolation_level 4, lock_timeout -1
     13-06-11 15:07:44.840 (0) end_tran COMMIT
     13-06-11 15:07:44.841 (0) end_tran 0 time 0.000
     13-06-11 15:07:44.841 (0) *** elapsed time 0.004
@@ -1408,7 +1408,7 @@ SQL 로그 파일은 응용 클라이언트가 요청하는 SQL을 기록하며,
     13-06-11 15:07:44.844 (0) check_cas 0
     13-06-11 15:07:44.848 (0) set_db_parameter lock_timeout 1000
     13-06-11 15:09:36.299 (0) check_cas 0
-    13-06-11 15:09:36.303 (0) get_db_parameter isolation_level 3
+    13-06-11 15:09:36.303 (0) get_db_parameter isolation_level 4
     13-06-11 15:09:36.375 (1) prepare 0 CREATE TABLE unique_tbl (a INT PRIMARY key);
     13-06-11 15:09:36.376 (1) prepare srv_h_id 1
     13-06-11 15:09:36.419 (1) set query timeout to 0 (no limit)
@@ -1418,7 +1418,7 @@ SQL 로그 파일은 응용 클라이언트가 요청하는 SQL을 기록하며,
     13-06-11 15:09:38.344 (0) auto_commit 0
     13-06-11 15:09:38.344 (0) *** elapsed time 1.968
     
-    13-06-11 15:09:54.481 (0) get_db_parameter isolation_level 3
+    13-06-11 15:09:54.481 (0) get_db_parameter isolation_level 4
     13-06-11 15:09:54.484 (0) close_req_handle srv_h_id 1
     13-06-11 15:09:54.484 (2) prepare 0 INSERT INTO unique_tbl VALUES (1);
     13-06-11 15:09:54.485 (2) prepare srv_h_id 1
@@ -1431,7 +1431,7 @@ SQL 로그 파일은 응용 클라이언트가 요청하는 SQL을 기록하며,
     
     ...
     
-    13-06-11 15:19:04.593 (0) get_db_parameter isolation_level 3
+    13-06-11 15:19:04.593 (0) get_db_parameter isolation_level 4
     13-06-11 15:19:04.597 (0) close_req_handle srv_h_id 2
     13-06-11 15:19:04.597 (7) prepare 0 SELECT * FROM unique_tbl  WHERE ROWNUM BETWEEN 1 AND 5000;
     13-06-11 15:19:04.598 (7) prepare srv_h_id 2 (PC)
@@ -1485,7 +1485,7 @@ broker_log_top
 
 .. option:: -F DATETIME
 
-        분석 대상 SQL의 시작 날짜 및 시간을 지정한다. 입력 형식은 YY[-MM[-DD[ hh[:mm[:ss[.msec]]]]]]이며 []로 감싼 부분은 생략할 수 있다. 생략하면 MM, DD는 01을 입력한 것과 같고, hh, mm, ss, msec은 0을 입력한 것과 같다.
+        분석 대상 SQL의 시작 날짜 및 시간을 지정한다. 입력 형식은 YY-MM-DD[ hh[:mm[:ss[.msec]]]]이며 []로 감싼 부분은 생략할 수 있다. 생략하면 hh, mm, ss, msec은 0을 입력한 것과 같다.
         
 .. option:: -T DATETIME
 
@@ -1497,20 +1497,20 @@ broker_log_top
 
 ::
 
-    broker_log_top -F "01/19 15:00:25.000" -T "01/19 15:15:25.180" log1.log
+    broker_log_top -F "13-01-19 15:00:25.000" -T "13-01-19 15:15:25.180" log1.log
 
-다음 예에서 시간 형식이 생략된 부분은 기본값 0으로 정해진다. 즉, -F "01/19 00:00:00.000" -T "01/20 00:00:00.000"을 입력한 것과 같다.
+다음 예에서 시간 형식이 생략된 부분은 기본값 0으로 정해진다. 즉, -F "13-01-19 00:00:00.000" -T "13-01-20 00:00:00.000"을 입력한 것과 같다.
 
 ::
 
-    broker_log_top -F "01/19" -T "01/20" log1.log
+    broker_log_top -F "13-01-19" -T "13-01-20" log1.log
 
-다음 예는 11월 11일부터 11월 12일까지 생성된 SQL 로그에 대해 실행 시간이 긴 SQL문을 확인하기 위하여 **broker_log_top** 유틸리티를 실행한 화면이다. 기간을 지정할 때, 월과 일은 빗금(/)으로 구분한다. Windows에서는 "\*.sql.log" 를 인식하지 않으므로 SQL 로그 파일들을 공백(space)으로 구분해서 나열해야 한다.
+다음 예는 2013년 11월 11일부터 11월 12일까지 생성된 SQL 로그에 대해 실행 시간이 긴 SQL문을 확인하기 위하여 **broker_log_top** 유틸리티를 실행한 화면이다. 기간을 지정할 때, 연, 월, 일은 하이픈(-)으로 구분한다. Windows에서는 "\*.sql.log" 를 인식하지 않으므로 SQL 로그 파일들을 공백(space)으로 구분해서 나열해야 한다.
 
 ::
 
     --Linux에서 broker_log_top 실행
-    % broker_log_top -F "11/11" -T "11/12" -t *.sql.log
+    % broker_log_top -F "13-11-11" -T "13-11-12" -t *.sql.log
 
     query_editor_1.sql.log
     query_editor_2.sql.log
@@ -1519,7 +1519,7 @@ broker_log_top
     query_editor_5.sql.log
 
     --Windows에서 broker_log_top 실행
-    % broker_log_top -F "11/11" -T "11/12" -t query_editor_1.sql.log query_editor_2.sql.log query_editor_3.sql.log query_editor_4.sql.log query_editor_5.sql.log
+    % broker_log_top -F "13-11-11" -T "13-11-12" -t query_editor_1.sql.log query_editor_2.sql.log query_editor_3.sql.log query_editor_4.sql.log query_editor_5.sql.log
 
 위 예제를 실행하면 SQL 로그 분석 결과가 저장되는 **log.top.q** 및 **log.top.res** 파일이 동일한 디렉터리에 생성된다.
 **log.top.q** 에서 각 SQL 문 및 SQL 로그 상의 라인 번호를 확인할 수 있고, **log.top.res** 에서 각 SQL 문에 대한 최소 실행 시간, 최대 실행 시간, 평균 실행 시간, 쿼리 실행 수를 확인할 수 있다.
@@ -1529,14 +1529,14 @@ broker_log_top
     --log.top.q 파일의 내용
     [Q1]-------------------------------------------
     broker1_6.sql.log:137734
-    11/11 18:17:59.396 (27754) execute_all srv_h_id 34 select a.int_col, b.var_col from dml_v_view_6 a, dml_v_view_6 b, dml_v_view_6 c , dml_v_view_6 d, dml_v_view_6 e where a.int_col=b.int_col and b.int_col=c.int_col and c.int_col=d.int_col and d.int_col=e.int_col order by 1,2;
+    13-11-11 18:17:59.396 (27754) execute_all srv_h_id 34 select a.int_col, b.var_col from dml_v_view_6 a, dml_v_view_6 b, dml_v_view_6 c , dml_v_view_6 d, dml_v_view_6 e where a.int_col=b.int_col and b.int_col=c.int_col and c.int_col=d.int_col and d.int_col=e.int_col order by 1,2;
     11/11 18:18:58.378 (27754) execute_all 0 tuple 497664 time 58.982
     .
     .
     [Q4]-------------------------------------------
     broker1_100.sql.log:142068
-    11/11 18:12:38.387 (27268) execute_all srv_h_id 798 drop table list_test;
-    11/11 18:13:08.856 (27268) execute_all 0 tuple 0 time 30.469
+    13-11-11 18:12:38.387 (27268) execute_all srv_h_id 798 drop table list_test;
+    13-11-11 18:13:08.856 (27268) execute_all 0 tuple 0 time 30.469
 
     --log.top.res 파일의 내용
 

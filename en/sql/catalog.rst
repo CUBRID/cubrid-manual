@@ -433,13 +433,17 @@ _db_query_spec
 
 Represents the SQL statement of a virtual class. An index for class_of is created.
 
-+--------------------+---------------------+-----------------------------------------------+
-|   Attribute Name   |      Data Type      |   Description                                 |
-+====================+=====================+===============================================+
-| class_of           | _db_class           | Class information of the virtual class        |
-+--------------------+---------------------+-----------------------------------------------+
-| spec               | VARCHAR(1073741823) | SQL definition statement of the virtual class |
-+--------------------+---------------------+-----------------------------------------------+
+The data type of attribute 'spec' is VARCHAR (4096) for prior versions including 10.1 Patch 3.
+
++--------------------+---------------------+-----------------------------------------------+-------------------------------+
+|   Attribute Name   |      Data Type      |   Description                                 |   Classification (10.1 Only)  |
++====================+=====================+===============================================+===============================+
+| class_of           | _db_class           | Class information of the virtual class        |                               |
++--------------------+---------------------+-----------------------------------------------+-------------------------------+
+|                    | VARCHAR(1073741823) |                                               | 10.1 Patch 4 or later         |
++ spec               +---------------------+ SQL definition statement of the virtual class +-------------------------------+
+|                    | VARCHAR(4096)       |                                               | 10.1 Patch 3 or earlier       |
++--------------------+---------------------+-----------------------------------------------+-------------------------------+
 
 .. _db-index:
 
@@ -1028,15 +1032,19 @@ DB_VCLASS
 
 Represents SQL definition statements of virtual classes for which the current user has access authorization to a database.
 
-+--------------------+---------------------+-----------------------------------------------+
-|   Attribute Name   |      Data Type      |   Description                                 |
-+====================+=====================+===============================================+
-| vclass_name        | VARCHAR(255)        | Virtual class name                            |
-+--------------------+---------------------+-----------------------------------------------+
-| vclass_def         | VARCHAR(1073741823) | SQL definition statement of the virtual class |
-+--------------------+---------------------+-----------------------------------------------+
-| comment            | VARCHAR(2048)       | Comment to describe the virtual class         |
-+--------------------+---------------------+-----------------------------------------------+
+The data type of attribute 'vclass_def' is VARCHAR (4096) for prior versions including 10.1 Patch 3.
+
++--------------------+---------------------+-----------------------------------------------+-------------------------------+
+|   Attribute Name   |      Data Type      |   Description                                 |   Classification (10.1 Only)  |
++====================+=====================+===============================================+===============================+
+| vclass_name        | VARCHAR(255)        | Virtual class name                            |                               |
++--------------------+---------------------+-----------------------------------------------+-------------------------------+
+|                    | VARCHAR(1073741823) |                                               | 10.1 Patch 4 or later         | 
++ vclass_def         +---------------------+ SQL definition statement of the virtual class +-------------------------------+
+|                    | VARCHAR(4096)       |                                               | 10.1 Patch 3 or earlier       | 
++--------------------+---------------------+-----------------------------------------------+-------------------------------+
+| comment            | VARCHAR(2048)       | Comment to describe the virtual class         |                               |
++--------------------+---------------------+-----------------------------------------------+-------------------------------+
 
 The following example shows how to retrieve SQL definition statements of the *db_class* virtual class.
 

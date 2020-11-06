@@ -1,6 +1,6 @@
 
-:meta-keywords: cubrid server process, cub_server, cubrid broker, cubrid cas, cubrid manager server, cubrid HA, cubrid services, cubrid logging, cubrid errors, cubrid server access, cubrid status, cubrid manager
-:meta-description: How to control and check CUBRID services and processes (server, broker), logging files, access, errors, and CUBRID Manager.
+:meta-keywords: cubrid server process, cub_server, cubrid broker, cubrid cas, cubrid manager server, cubrid HA, cubrid services, cubrid logging, cubrid errors, cubrid server access, cubrid status, cubrid manager, cubrid javasp, cub_javasp
+:meta-description: How to control and check CUBRID services and processes (server, broker), logging files, access, errors, CUBRID Manager and CUBRID Java SP Server.
 
 .. _control-cubrid-processes:
 
@@ -103,6 +103,25 @@ The following **cubrid heartbeat** utility syntax shows how to use CUBRID HA. On
 *   status: check HA status. 
 
 For details, see :ref:`cubrid-heartbeat`.
+
+Controlling Java Stored Procedure Server
+----------------------------------------
+
+The following **cubrid** utility syntax shows how to control Java Stored Procedure server process. 
+
+::
+
+    cubrid javasp <command> [database_name]
+    <command>: {start|stop|restart|status}
+
+One of the following can be specified in <command>: 
+
+*   start: start a Java Stored Procedure server process.
+*   stop: stop a Java Stored Procedure server process.
+*   restart: restart a Java Stored Procedure server process.
+*   status: check status of a Java Stored Procedure server process.
+
+Every command must have a database name as an argument.
 
 .. _control-cubrid-services:
 
@@ -2140,3 +2159,123 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
         ::
 
             cm_admin changedbinfo -p 33000 testcm testdb
+
+.. _cubrid-javasp-server:
+
+CUBRID Java Stored Procedure Server
+===================================
+
+Starting CUBRID Java SP Server
+------------------------------
+
+The following example shows how to start CUBRID Java SP server for *demodb*.
+
+::
+
+    % cubrid javasp start demodb
+
+    @ cubrid javasp start: demodb
+    ++ cubrid javasp start: success
+
+The following message is returned if CUBRID Java SP server is already running. 
+
+::
+
+    % cubrid javasp start demodb
+
+    @ cubrid javasp start: demodb
+    ++ cubrid javasp 'demodb' is running.
+
+// JVM
+
+// java stored procedure paramter
+
+// java stored procedure port
+
+Stopping CUBRID Java SP Server
+------------------------------
+
+The following example shows how to stop CUBRID Java SP server for *demodb*. 
+
+::
+
+    % cubrid javasp stop demodb
+
+    @ cubrid javasp stop: demodb
+    ++ cubrid javasp stop: success
+
+The following message is returned when CUBRID Java SP server has stopped. 
+
+::
+
+    % cubrid javasp stop demodb
+
+    @ cubrid javasp stop: demodb
+    ++ cubrid javasp 'demodb' is not running.
+    ++ cubrid javasp stop: fail
+
+Restarting CUBRID Java SP Server
+--------------------------------
+
+The following example shows how to restart CUBRID Java SP server for *demodb*. the server that has already run stops and the server restarts. 
+
+::
+
+    % cubrid javasp restart demodb
+    
+    @ cubrid javasp stop: demodb
+    ++ cubrid javasp stop: success
+    @ cubrid javasp start: demodb
+    ++ cubrid javasp start: success
+
+Checking CUBRID Java SP Server Status
+-------------------------------------
+
+The following example shows how to check the status of a CUBRID Java SP server for *demodb*.
+the name which currently running Java SP server, *demodb* is displayed.
+Additionaly, The server's PID, port number, and the applied JVM option are displayed.
+
+::
+
+    % cubrid javasp status demodb
+    
+    @ cubrid javasp status: demodb
+    Java Stored Procedure Server (demodb, pid 9220, port 38408)
+    Java VM arguments :
+    -------------------------------------------------
+    -Djava.util.logging.config.file=/home/hgryoo/javasp_cubrid/build_x86_64_release/_install/CUBRID/java/logging.properties
+    -Xrs
+    -------------------------------------------------
+
+Configuring for CUBRID Java SP Server
+-------------------------------------
+
+TBD
+
+CUBRID Java SP Server Log
+-------------------------
+
+The logs of CUBRID Java SP server are stored in the log/ directory under the installation directory. There are two types of log files depending on server process of CUBRID Java Stored Procedure Server.
+
+*   Error Log ([database-name]_java.log): TBD
+*   Java Log ([database-name]_java.err): TBD
+
+Error Log
+^^^^^^^^^
+
+TBD
+
+Java Log
+^^^^^^^^^
+
+If an event which affects on the query performance occurs, this is saved into the event log.
+
+The events which are saved on the event log are *SLOW_QUERY*, *MANY_IOREADS*, *LOCK_TIMEOUT*, *DEADLOCK* and *TEMP_VOLUME_EXPAND*.
+
+This log file is saved into the **$CUBRID/log/server** directory, and the format of the file name is *<db_name>_<yyyymmdd>_<hhmi>.event*. The extension is ".event".
+
+
+CUBRID Java SP Server Errors
+----------------------------
+
+TBD

@@ -760,7 +760,7 @@ I/O 읽기를 많이 발생시킨 질의를 기록한다. cubrid.conf의 **sql_t
 
 **데이터베이스 서버 에러 코드의 확인**
 
-*   **CUBRID/include/dbi.h** 파일의 **#define ER_**\로 시작하는 정의문은 모두 서버 에러 코드를 나타낸다.
+*   **$CUBRID/include/error_code.h** 파일의 **#define ER_**\로 시작하는 정의문은 모두 서버 에러 코드를 나타낸다.
 
 *   **CUBRID/msg/en_US** (한글은 ko_KR.eucKR 혹은 ko_KR.utf8) **/cubrid.msg** 파일의 "$set 5 MSGCAT_SET_ERROR" 이하 메시지 그룹은 모두 서버 에러 메시지를 나타낸다.
 
@@ -770,7 +770,7 @@ CCI 드라이버를 사용하여 C로 프로그램을 작성할 때는 에러 �
 
 ::
 
-    $ vi $CUBRID/include/dbi.h
+    $ vi $CUBRID/include/error_code.h
 
     #define NO_ERROR                                       0
     #define ER_FAILED                                     -1

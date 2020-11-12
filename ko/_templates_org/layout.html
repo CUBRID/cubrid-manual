@@ -57,16 +57,23 @@
     <!-- naver analytics end-->
     
     <!-- meta-tags -->
+      {% import sys %}
       {% set my_keys = title + ', ' + docstitle %}
       {% set my_desc = title + ' &mdash; ' + docstitle + '.' %}
       {% if meta is defined %}
-        {% if 'meta-keywords' in meta.viewkeys() %}
+        {% if sys.version_info[0] == 3 %}
+          {% set meta_keys = meta.keys() %}
+        {% else %}
+          {% set meta_keys = meta.viewkeys() %}
+        {% endif %}
+        {% if 'meta-keywords' in meta_keys %}
           {% set my_keys = my_keys + ', ' + meta.get('meta-keywords') %}
         {% endif %}
-        {%if 'meta-description' in meta.viewkeys() %}
+        {%if 'meta-description' in meta_keys %}
           {% set my_desc = my_desc + ' ' + meta.get('meta-description') %}
         {% endif %}
       {% endif %}
+
       <!-- keywords & description -->
       <meta name="keywords" content="{{ my_keys }}" />
       <meta name="description" content = "{{ my_desc }} " />

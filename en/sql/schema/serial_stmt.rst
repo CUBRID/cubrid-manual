@@ -25,6 +25,7 @@ You can create a serial object in the database by using the **CREATE SERIAL** st
     [INCREMENT BY interval]
     [MINVALUE min | NOMINVALUE]
     [MAXVALUE max | NOMAXVALUE]
+    [CYCLE | NOCYCLE]
     [CACHE cached_num | NOCACHE]
     [COMMENT 'comment_string'];
 
@@ -125,6 +126,7 @@ With the **ALTER SERIAL** statement, you can update the increment of the serial 
     [START WITH initial_value]
     [MINVALUE min | NOMINVALUE]
     [MAXVALUE max | NOMAXVALUE]
+    [CYCLE | NOCYCLE]
     [CACHE cached_num | NOCACHE]
     [COMMENT 'comment_string'];
 

@@ -26,6 +26,7 @@ CREATE SERIAL
     [INCREMENT BY interval]
     [MINVALUE min | NOMINVALUE]
     [MAXVALUE max | NOMAXVALUE]
+    [CYCLE | NOCYCLE]
     [CACHE cached_num | NOCACHE]
     [COMMENT 'comment_string'];
 
@@ -126,6 +127,7 @@ ALTER SERIAL
     [START WITH initial_value]
     [MINVALUE min | NOMINVALUE]
     [MAXVALUE max | NOMAXVALUE]
+    [CYCLE | NOCYCLE]
     [CACHE cached_num | NOCACHE]
     [COMMENT 'comment_string'];
 

@@ -1348,7 +1348,7 @@ Checking the Access Log
 
 The access log file records information on the application client and is stored to **$CUBRID/log/broker/**\ `<broker_name>`\ **.access** file. If the **ACCESS_LOG** parameter is configured to **ON** in the broker configuration file, when the broker stops properly, the access log file is stored. 
 
-The maximum size of the ACCESS_LOG file can be specified through the ACCESS_LOG_MAX_SIZE parameter. When the ACCESS_LOG file is largerthan the specified size, it is backed up in the name of broker_name.access.YYYYMMDDHHMISS, and the log is recorded in a new file (broker_name.access).
+The maximum size of the ACCESS_LOG file can be specified through the ACCESS_LOG_MAX_SIZE parameter. When the ACCESS_LOG file is larger than the specified size, it is backed up in the name of broker_name.access.YYYYMMDDHHMISS, and the log is recorded in a new file (broker_name.access).
 
 The record of denied access is recorded in broker_name.access.denied. It is backed up with the same rules as the ACCESS_LOG file.
 

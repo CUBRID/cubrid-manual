@@ -1303,7 +1303,7 @@ The syntax for the **broker_changer** utility, which is used to change broker pa
 
 ::
 
-    broker_changer broker_name [cas_id] parameters value
+    broker_changer <broker_name> [<cas_id>] <conf-name> <conf-value>
 
 Enter the following to configure the **SQL_LOG** parameter to **ON** so that SQL logs can be written to the currently running broker. Such dynamic parameter change is effective only while the broker is running. 
 
@@ -1346,25 +1346,27 @@ There are three types of logs that relate to starting the broker: access, error 
 Checking the Access Log
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-The access log file records information on the application client and is stored to **$CUBRID/log/broker/**\ `<broker_name>`\ **.access** file. If the **LOG_BACKUP** parameter is configured to **ON** in the broker configuration file, when the broker stops properly, the access log file is stored with the date and time that the broker has stopped. For example, if broker1 stopped at 12:27 P.M. on June 17, 2008, an access file named broker1.access.20080617.1227 is generated in the **log/broker** directory. The following example shows an access log.
+The access log file records information on the application client and is stored to **$CUBRID/log/broker/**\ `<broker_name>`\ **.access** file. If the **ACCESS_LOG** parameter is configured to **ON** in the broker configuration file, when the broker stops properly, the access log file is stored. 
+
+The maximum size of the ACCESS_LOG file can be specified through the ACCESS_LOG_MAX_SIZE parameter. When the ACCESS_LOG file is largerthan the specified size, it is backed up in the name of broker_name.access.YYYYMMDDHHMISS, and the log is recorded in a new file (broker_name.access).
+
+The record of denied access is recorded in broker_name.access.denied. It is backed up with the same rules as the ACCESS_LOG file.
 
 The following example and description show an access log file created in the log directory: 
 
 ::
 
-    1 192.168.1.203 - - 972523031.298 972523032.058 2008/06/17 12:27:46~2008/06/17 12:27:47 7118 - -1
-    2 192.168.1.203 - - 972523052.778 972523052.815 2008/06/17 12:27:47~2008/06/17 12:27:47 7119 ERR 1025
-    1 192.168.1.203 - - 972523052.778 972523052.815 2008/06/17 12:27:49~2008/06/17 12:27:49 7118 - -1
-
+    1 192.168.56.4 2020/11/10 14:41:55 testdb dba NEW 6
 *   1: ID assigned to the application server of the broker
-*   192.168.1.203: IP address of the application client
-*   972523031.298: UNIX timestamp value when the client's request processing started
-*   2008/06/17 12:27:46: Time when the client's request processing started
-*   972523032.058: UNIX timestamp value when the client's request processing finished
-*   2008/06/17 12:27:47: Time when the client's request processing finished
-*   7118: Process ID of the application server
-*   -1: No error occurred during the request processing
-*   ERR 1025: Error occurred during the request processing. Error information exists in offset=1025 of the error log file
+*   192.168.56.4: IP address of the application client
+*   2020/11/10 14:41:55: Time when the client's request processing started
+*   testdb: The name of the database that the client requested to connect to
+*   dba: The user name of the database that the client requested to connect to
+*   NEW: Connection type
+    *   NEW: New connection
+    *   OLD: Change client or reconnection of existing connection due to CAS restart
+    *   REJ: Connction denied (Recorded only in access.denied file)
+*   6: session-id (session-id assgined by server)
 
 Checking the Error Log
 ^^^^^^^^^^^^^^^^^^^^^^

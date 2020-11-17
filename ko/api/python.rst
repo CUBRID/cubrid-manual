@@ -51,7 +51,7 @@ Linux, Unix 및 유사 운영체제에서는 다음과 같은 세 가지 방법�
 
 **Easy Install을 이용한 설치(Linux)**
 
-Easy Install은 자동으로 Python 패키지를 다운로드/빌드/설치/관리할 수 있는 Python 모듈로, setuptools에 포함되어 있다. Easy Install을 사용하면 패키지 인덱스뿐만 아니라 다른 웹 사이트에도 HTTP로 연결하여 패키지를 설치할 수 있다. Perl의 CPAN이나 PHP의 PEAR와 유사하다. Easy Install에 대한 더 자세한 설명은 https://setuptools.readthedocs.io/en/latest/deprecated/easy_install.html\ 을 참고한다.
+Easy Install은 자동으로 Python 패키지를 다운로드/빌드/설치/관리할 수 있는 Python 모듈로, setuptools에 포함되어 있다. Easy Install을 사용하면 패키지 인덱스뿐만 아니라 다른 웹 사이트에도 HTTP로 연결하여 패키지를 설치할 수 있다. Perl의 CPAN이나 PHP의 PEAR와 유사하다. Easy Install에 대한 더 자세한 설명은 https://setuptools.readthedocs.io/en/latest/easy_install.html\ 을 참고한다.
 
 Easy Install을 이용하여 CUBRID Python 드라이버를 설치하려면 다음 명령어를 입력한다. ::
 

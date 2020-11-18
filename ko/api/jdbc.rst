@@ -29,7 +29,7 @@ JDBC 드라이버 버전은 다음과 같은 방법으로 확인할 수 있다. 
     cubrid/sql/
     cubrid/jdbc/driver/CUBRIDBlob.class
     ...
-    CUBRID-JDBC-8.3.1.1032
+    CUBRID-JDBC-10.2.2.8874
 
 **CUBRID JDBC 드라이버 등록**
 
@@ -607,7 +607,7 @@ OID를 사용할 때 다음의 규칙을 지켜야 한다.
                Connection con = DriverManager.getConnection(url,user,passwd);
                Statement stmt = con.createStatement();
                CUBRIDResultSet rs = (CUBRIDResultSet) stmt.executeQuery(sql);
-               CUBRIDResultSetMetaData rsmd = (CUBRIDResultSetMetaData) rs.getMeta Data();
+               CUBRIDResultSetMetaData rsmd = (CUBRIDResultSetMetaData) rs.getMetaData();
                int numbOfColumn = rsmd.getColumnCount();
                while (rs.next ()) {
                    for (int j=1; j<=numbOfColumn; j++ ) {
@@ -667,15 +667,15 @@ OID를 사용할 때 다음의 규칙을 지켜야 한다.
                CUBRIDResultSet rs = (CUBRIDResultSet)stmt.executeQuery(sql);
                while (rs.next ()) {
                    CUBRIDOID oid = rs.getOID(1);
-                   oid.addToSet("settest",new Integer(10));
-                   oid.addToSet("multisettest",new Integer(20));
-                   oid.addToSequence("listtest",1,new Integer(30));
-                   oid.addToSequence("listtest",100,new Integer(100));
-                   oid.putIntoSequence("listtest",99,new Integer(99));
-                   oid.removeFromSet("settest",new Integer(1));
-                   oid.removeFromSet("multisettest",new Integer(2));
-                   oid.removeFromSequence("listtest",99);
-                   oid.removeFromSequence("listtest",1);
+				   oid.addToSet("settest", Integer.valueOf(10));
+				   oid.addToSet("multisettest", Integer.valueOf(20));
+				   oid.addToSequence("listtest", 1, Integer.valueOf(30));
+				   oid.addToSequence("listtest", 100, Integer.valueOf(100));
+				   oid.putIntoSequence("listtest", 99, Integer.valueOf(99));
+				   oid.removeFromSet("settest", Integer.valueOf(1));
+				   oid.removeFromSet("multisettest", Integer.valueOf(2));
+				   oid.removeFromSequence("listtest", 99);
+				   oid.removeFromSequence("listtest", 1);
                }
                con.commit();
                rs.close();
@@ -1311,7 +1311,7 @@ CUBRIDDataSource에 대한 자세한 설명은 :ref:`jdbc-conn-datasource`\ 을 
                stmt = conn.createStatement();
                stmt.executeUpdate("CREATE TABLE xoo ( a INT, b INT, c CHAR(10))");
      
-               preStmt = conn.prepareStatement("INSERT INTO xoo VALUES(?,?,''''100'''')");
+               preStmt = conn.prepareStatement("INSERT INTO xoo VALUES(?,?,'100')");
                preStmt.setInt (1, 1) ;
                preStmt.setInt (2, 1*10) ;
                int rst = preStmt.executeUpdate () ;

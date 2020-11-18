@@ -60,7 +60,7 @@
       {% set my_keys = title + ', ' + docstitle %}
       {% set my_desc = title + ' &mdash; ' + docstitle + '.' %}
       {% if meta is defined %}
-          {% set meta_keys = meta.keys() %}
+        {% set meta_keys = meta.keys() %}
         {% if 'meta-keywords' in meta_keys %}
           {% set my_keys = my_keys + ', ' + meta.get('meta-keywords') %}
         {% endif %}

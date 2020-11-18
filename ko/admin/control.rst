@@ -1302,7 +1302,7 @@ QUERY_EDITOR 브로커는 다음과 같은 응용의 접속 요청만을 허용�
 
 ::
 
-    broker_changer    <broker_name> [<cas_id>] <conf_name> <conf_value>
+    broker_changer    broker_name [cas_id] conf_name conf_value
 
 구동 중인 브로커에서 SQL 로그가 기록되도록 **SQL_LOG** 파라미터를 ON으로 설정하기 위하여 다음과 같이 입력한다. 이와 같은 파라미터의 동적 변경은 브로커 구동 중일 때만 한시적으로 효력이 있다.
 

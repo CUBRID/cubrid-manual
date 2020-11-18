@@ -760,7 +760,7 @@ Database server error processes use the server error code when an error has occu
 
 **Checking the Database Server Error Codes**
 
-*   Every data definition statement starting with **#define ER_** in the **$CUBRID/include/dbi.h** file indicate the server error codes.
+*   Every data definition statement starting with **#define ER_** in the **$CUBRID/include/error_code.h** file indicate the server error codes.
 
 *   All message groups under "$set 5 MSGCAT_SET_ERROR" in the **CUBRID/msg/en_US (in Korean, ko_KR.eucKR** or **ko_KR.utf8)/cubrid.msg** $ file indicates the server error messages.
 
@@ -770,7 +770,7 @@ However, when you write a JAVA code with JDBC driver, you have to use error code
 
 ::
 
-    $ vi $CUBRID/include/dbi.h
+    $ vi $CUBRID/include/error_code.h
 
     #define NO_ERROR                                       0
     #define ER_FAILED                                     -1

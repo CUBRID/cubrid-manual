@@ -61,7 +61,6 @@ CSQL 인터프리터는 셸에서 다음과 같이 시작할 수 있다. 처음 
        ;DATE                       - display the local time, date.
        ;DATAbase                   - display the name of database being accessed.
        ;SChema class-name          - display schema information of a class.
-       ;SYntax [sql-cmd-name]      - display syntax of a command.
        ;TRigger [`*'|trigger-name] - display trigger definition.
        ;Get system_parameter       - get the value of a system parameter.
        ;SEt system_parameter=value - set the value of a system parameter.
@@ -113,7 +112,7 @@ csql을 실행하고 난 후에는 csql> 프롬프트에서 원하는 SQL문을 
 |                          | 4) CUBRID Manager 서버를 통해 DB 접속                                       |                                                                 |
 +--------------------------+-----------------------------------------------------------------------------+-----------------------------------------------------------------+
 | CUBRID Migration Toolkit | 소스 DB(MySQL, Oracle, CUBRID)에서 CUBRID로 데이터 및 스키마를 이전하는     | `CUBRID Migration Toolkit Download                              |
-|                          | Java 기반 틀라이언트 도구이다.                                              | <http://ftp.cubrid.org/CUBRID_Tools/CUBRID_Migration_Toolkit>`_ |
+|                          | Java 기반 클라이언트 도구이다.                                              | <http://ftp.cubrid.org/CUBRID_Tools/CUBRID_Migration_Toolkit>`_ |
 |                          |                                                                             |                                                                 |
 |                          | 1) JAVA 기반 관리 도구(JRE 1.6 이상 요구)                                   |                                                                 |
 |                          |                                                                             |                                                                 |

@@ -8,7 +8,7 @@ CUBRID Management
 
 This chapter describes how the database administrators (**DBA**) operates the CUBRID system.
 
-*   It includes instructions on how to use the **cubrid** utility, which starts and stops various processes of the CUBRID server, the broker and manager server. See :doc:`/admin/control`.
+*   It includes instructions on how to use the **cubrid** utility, which starts and stops various processes of the CUBRID server, the broker, java stored procedure server and manager server. See :doc:`/admin/control`.
 
 *   It includes instructions on the following: database management tasks (creating and deleting databases, adding volume, etc.), migration tasks (moving database to a different location or making changes so that it fits the system's version), and making back-ups and rollbacks of the database in case of failures. See :doc:`/admin/admin_utils`.
 

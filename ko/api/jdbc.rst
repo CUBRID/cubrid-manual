@@ -636,7 +636,7 @@ OID를 사용할 때 다음의 규칙을 지켜야 한다.
     import java.lang.*;
     import cubrid.sql.*;
     import cubrid.jdbc.driver.*;
-     
+
     // create class collection_test(
     // settest set(integer),
     // multisettest multiset(integer),
@@ -646,45 +646,42 @@ OID를 사용할 때 다음의 규칙을 지켜야 한다.
     // insert into collection_test values({1,2,3},{1,2,3},{1,2,3});
     // insert into collection_test values({2,3,4},{2,3,4},{2,3,4});
     // insert into collection_test values({3,4,5},{3,4,5},{3,4,5});
-     
-    class SetOP_Sample
-    {
-       public static void main (String args [])
-       {
-           String url = "jdbc:cubrid:127.0.0.1:33000:demodb:public::";
-           String user = "";
-           String passwd = "";
-           String sql = "select collection_test from collection_test";
-           try {
-               Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
-           } catch(Exception e){
-               e.printStackTrace();
-           }
-           try {
-               CUBRIDConnection con =(CUBRIDConnection)
-               DriverManager.getConnection(url,user,passwd);
-               Statement stmt = con.createStatement();
-               CUBRIDResultSet rs = (CUBRIDResultSet)stmt.executeQuery(sql);
-               while (rs.next ()) {
-                   CUBRIDOID oid = rs.getOID(1);
-				   oid.addToSet("settest", Integer.valueOf(10));
-				   oid.addToSet("multisettest", Integer.valueOf(20));
-				   oid.addToSequence("listtest", 1, Integer.valueOf(30));
-				   oid.addToSequence("listtest", 100, Integer.valueOf(100));
-				   oid.putIntoSequence("listtest", 99, Integer.valueOf(99));
-				   oid.removeFromSet("settest", Integer.valueOf(1));
-				   oid.removeFromSet("multisettest", Integer.valueOf(2));
-				   oid.removeFromSequence("listtest", 99);
-				   oid.removeFromSequence("listtest", 1);
-               }
-               con.commit();
-               rs.close();
-               stmt.close();
-               con.close();
-           } catch(SQLException e) {
-               e.printStackTrace();
-           }
-       }
+
+    class SetOP_Sample {
+	    public static void main(String args[]) {
+		    String url = "jdbc:cubrid:127.0.0.1:33000:demodb:public::";
+		    String user = "";
+		    String passwd = "";
+		    String sql = "select collection_test from collection_test";
+		    try {
+			    Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
+		    } catch (Exception e) {
+			    e.printStackTrace();
+		    }
+		    try {
+			    CUBRIDConnection con = (CUBRIDConnection) DriverManager.getConnection(url, user, passwd);
+			    Statement stmt = con.createStatement();
+			    CUBRIDResultSet rs = (CUBRIDResultSet) stmt.executeQuery(sql);
+			    while (rs.next()) {
+				    CUBRIDOID oid = rs.getOID(1);
+				    oid.addToSet("settest", Integer.valueOf(10));
+				    oid.addToSet("multisettest", Integer.valueOf(20));
+				    oid.addToSequence("listtest", 1, Integer.valueOf(30));
+				    oid.addToSequence("listtest", 100, Integer.valueOf(100));
+				    oid.putIntoSequence("listtest", 99, Integer.valueOf(99));
+				    oid.removeFromSet("settest", Integer.valueOf(1));
+				    oid.removeFromSet("multisettest", Integer.valueOf(2));
+				    oid.removeFromSequence("listtest", 99);
+				    oid.removeFromSequence("listtest", 1);
+			    }
+			    con.commit();
+			    rs.close();
+			    stmt.close();
+			    con.close();
+		    } catch (SQLException e) {
+			    e.printStackTrace();
+		    }
+	    }
     }
 
 자동 증가 특성의 칼럼 값 검색

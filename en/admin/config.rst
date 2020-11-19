@@ -221,7 +221,9 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 | :ref:`stmt-type-parameters`   | add_column_update_hard_default      | client/server parameter | O       | bool     | no                             | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | alter_table_change_type_strict      | client/server parameter | O       | bool     | no                             | available             |
+|                               | alter_table_change_type_strict      | client/server parameter | O       | bool     | yes                             | available             |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | allow_truncated_string              | client/server parameter | O       | bool     | no                             | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | ansi_quotes                         | client parameter        |         | bool     | yes                            |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -1134,7 +1136,9 @@ The following are parameters related to SQL statements and data types supported 
 +=================================+========+============+============+============+
 | add_column_update_hard_default  | bool   | no         |            |            |
 +---------------------------------+--------+------------+------------+------------+
-| alter_table_change_type_strict  | bool   | no         |            |            |
+| alter_table_change_type_strict  | bool   | yes        |            |            |
++---------------------------------+--------+------------+------------+------------+
+| allow_truncated_string          | bool   | no         |            |            |
 +---------------------------------+--------+------------+------------+------------+
 | ansi_quotes                     | bool   | yes        |            |            |
 +---------------------------------+--------+------------+------------+------------+
@@ -1220,7 +1224,11 @@ The following are parameters related to SQL statements and data types supported 
 
 **alter_table_change_type_strict**
 
-    **alter_table_change_type_strict** is a parameter to configure whether or not to allow the conversion of column values according to the type change, and the default value is **no**. If a value for this parameter is set to **no**, the value may be changed when you change the column types or when you add **NOT NULL** constraints; if it is set to **yes**, the value is not changed. For details, see CHANGE Clause in the :ref:`change-column`.
+    **alter_table_change_type_strict** is a parameter to configure whether or not to allow the conversion of column values according to the type change, and the default value is **yes**. If a value for this parameter is set to **no**, the value may be changed when you change the column types or when you add **NOT NULL** constraints; if it is set to **yes**, the value is not changed. For details, see CHANGE Clause in the :ref:`change-column`.
+
+**allow_truncated_string**
+
+    **allow_truncated_string** is a parameter to configure whether or not to allow the truncation of string values according to any string operations, and the default value is **no**. If a value for this parameter is set to **no**, the string value may be truncated when you do operation for any string related on insert or update query but the string related on select query may be truncated regardless of this configuration. If it is set to **yes**, the string value may be truncated regardless of the type of (insert/update/select) query.
 
 **ansi_quotes**
 

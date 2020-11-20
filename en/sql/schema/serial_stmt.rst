@@ -25,6 +25,7 @@ You can create a serial object in the database by using the **CREATE SERIAL** st
     [INCREMENT BY interval]
     [MINVALUE min | NOMINVALUE]
     [MAXVALUE max | NOMAXVALUE]
+    [CYCLE | NOCYCLE]
     [CACHE cached_num | NOCACHE]
     [COMMENT 'comment_string'];
 
@@ -48,7 +49,7 @@ You can create a serial object in the database by using the **CREATE SERIAL** st
 
 *   **CACHE**: Stores as many serials as the number specified by "cached_num" in the cache to improve the performance of the serials and fetches a serial value when one is requested. If all cached values are used up, as many serials as "cached_num" are fetched again from the disk to the memory. If the database server stops accidentally, all cached serial values are deleted. For this reason, the serial values before and after the restart of the database server may be discontinuous. Because the transaction rollback does not affect the cached serial values, the request for the next serial will return the next value of the value used (or fetched) lastly when the transaction is rolled back. The "cached_num" after the **CACHE** keyword cannot be omitted. If the "cached_num" is equal to or smaller than 1, the serial cache is not applied.
 
-*   **NOCACHE**: Specifies that the serial cache is not used, and serial value is updated for each time.
+*   **NOCACHE**: Specifies that the serial cache is not used, and serial value is updated for each time. The default value is **NOCACHE**.
 
 *   *comment_string*: specifies a comment of a serial.
 
@@ -125,6 +126,7 @@ With the **ALTER SERIAL** statement, you can update the increment of the serial 
     [START WITH initial_value]
     [MINVALUE min | NOMINVALUE]
     [MAXVALUE max | NOMAXVALUE]
+    [CYCLE | NOCYCLE]
     [CACHE cached_num | NOCACHE]
     [COMMENT 'comment_string'];
 
@@ -148,7 +150,7 @@ With the **ALTER SERIAL** statement, you can update the increment of the serial 
 
 *   **CACHE**: stores as many serials as the number specified by *integer* in the cache to improve the performance of the serials and fetches a serial value when one is requested. The *integer* after the **CACHE** keyword cannot be omitted. If a number equal to or smaller than 1 is specified, the serial cache is not applied.
 
-*   **NOCACHE**: It does not use the serial cache feature. The serial value is updated every time and a new serial value is fetched from the disk upon each request.
+*   **NOCACHE**: It does not use the serial cache feature. The serial value is updated every time and a new serial value is fetched from the disk upon each request. The default is **NOCACHE**.
 
 *   *comment_string*: specifies a comment of a serial.
 

@@ -135,8 +135,8 @@ You can register database servers, CUBRID brokers, CUBRID Java Stored Procedure 
 
 If you do not register any service, only master process is registered by default. It is convenient for you to view status of all related processes at a glance or start and stop the processes at once with the **cubrid** **service** utility once it is registered as CUBRID service. 
 
-For details on CUBRID HA configuration, see :ref:`cubrid-service-util`.
-For details on CUBRID Javap Stored Procedure server configuration, see :ref:`cubrid-javasp-server:`.
+- For details on CUBRID HA configuration, see :ref:`cubrid-service-util`.
+- For details on CUBRID Javap Stored Procedure server configuration, see :ref:`cubrid-javasp-server-config`.
 
 The following example shows how to register database server and broker as service in the **cubrid.conf** file and enable databases ( *demodb* and *testdb* ) to start automatically at once when CUBRID server starts running.
 
@@ -148,11 +148,11 @@ The following example shows how to register database server and broker as servic
     [service]
 
     # The list of processes to be started automatically by 'cubrid service start' command
-    # Any combinations are available with server, broker, manager and heartbeat.
+    # Any combinations are available with server, broker, manager, javasp and heartbeat.
     service=server,broker
 
     # The list of database servers in all by 'cubrid service start' command.
-    # This property is effective only when the above 'service' property contains 'server' keyword.
+    # This property is effective only when the above 'service' property contains 'server' or 'javasp' keyword.
     server=demodb,testdb
 
 Starting Services
@@ -2249,6 +2249,8 @@ Additionaly, The server's PID, port number, and the applied JVM option are displ
     -Djava.util.logging.config.file=/home/hgryoo/javasp_cubrid/build_x86_64_release/_install/CUBRID/java/logging.properties
     -Xrs
     -------------------------------------------------
+
+.. _cubrid-javasp-server-config:
 
 Configuring for CUBRID Java SP Server
 -------------------------------------

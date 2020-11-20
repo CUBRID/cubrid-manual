@@ -2234,9 +2234,9 @@ The following example shows how to restart CUBRID Java SP server for *demodb*. t
 Checking CUBRID Java SP Server Status
 -------------------------------------
 
-The following example shows how to check the status of a CUBRID Java SP server for *demodb*.
-the name which currently running Java SP server, *demodb* is displayed.
-Additionaly, The server's PID, port number, and the applied JVM option are displayed.
+The following example shows how to check the status of a CUBRID Java SP server for *demodb*. 
+The name of Java SP server, which currently running, *demodb* is displayed. 
+Additionally, The server's PID, port number, and the applied JVM option are shown together.
 
 ::
 

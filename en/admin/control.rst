@@ -2246,7 +2246,7 @@ Additionally, The server's PID, port number, and the applied JVM option are show
     Java Stored Procedure Server (demodb, pid 9220, port 38408)
     Java VM arguments :
     -------------------------------------------------
-    -Djava.util.logging.config.file=/home/hgryoo/javasp_cubrid/build_x86_64_release/_install/CUBRID/java/logging.properties
+    -Djava.util.logging.config.file=...;/CUBRID/java/logging.properties
     -Xrs
     -------------------------------------------------
 

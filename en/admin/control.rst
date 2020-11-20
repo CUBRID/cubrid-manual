@@ -2189,11 +2189,7 @@ The following message is returned if CUBRID Java SP server is already running.
     @ cubrid javasp start: demodb
     ++ cubrid javasp 'demodb' is running.
 
-// JVM
-
-// java stored procedure paramter
-
-// java stored procedure port
+For details on other types of errors that may occur when starting the server, see :ref:`cubrid-javasp-server-errors`.
 
 Stopping CUBRID Java SP Server
 ------------------------------
@@ -2246,7 +2242,7 @@ Additionally, The server's PID, port number, and the applied JVM option are show
     Java Stored Procedure Server (demodb, pid 9220, port 38408)
     Java VM arguments :
     -------------------------------------------------
-    -Djava.util.logging.config.file=...;/CUBRID/java/logging.properties
+    -Djava.util.logging.config.file=/path/to/CUBRID/java/logging.properties
     -Xrs
     -------------------------------------------------
 
@@ -2280,7 +2276,15 @@ The events which are saved on the event log are *SLOW_QUERY*, *MANY_IOREADS*, *L
 This log file is saved into the **$CUBRID/log/server** directory, and the format of the file name is *<db_name>_<yyyymmdd>_<hhmi>.event*. The extension is ".event".
 
 
+.. _cubrid-javasp-server-errors:
+
 CUBRID Java SP Server Errors
 ----------------------------
+
+// JVM
+
+// java stored procedure paramter
+
+// java stored procedure port
 
 TBD

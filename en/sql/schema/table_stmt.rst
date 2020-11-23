@@ -1607,7 +1607,7 @@ The **alter_table_change_type_strict** parameter determines whether the value co
 
 When the value of the parameter, **alter_table_change_type_strict** is no, it will operate depending on the conditions as follows:
 
-*   Overflow occurred while converting numbers or character strings to Numbers: It is determined based on symbol of the result type. If it is negative value, it is specified as a minimum value or positive value, specified as the maximum value and a warning message for records where overflow occurred is recorded in the log. For strings, it will follow the rules stated above after it is converted to **DOUBLE** type. Overflow also can be returned by the parameter **allow_truncated_string** setting to **no** if the converted string is not to fit the length of the target string type.
+*   Overflow occurred while converting numbers or character strings to Numbers: It is determined based on symbol of the result type. If it is negative value, it is specified as a minimum value or positive value, specified as the maximum value and a warning message for records where overflow occurred is recorded in the log. For strings, it will follow the rules stated above after it is converted to **DOUBLE** type. Overflow can also be returned by the parameter **allow_truncated_string** setting to **no** if the converted string does not fit the length of the target string type.
 
 *   Character strings to convert to shorter ones: The record will be updated to the hard default value of the type that is defined and the warning message will be recorded in a log. Converting to shorter ones is not allowed when the **allow_truncated_string** is set to **no**.
 

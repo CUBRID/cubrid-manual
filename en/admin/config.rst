@@ -1224,11 +1224,11 @@ The following are parameters related to SQL statements and data types supported 
 
 **alter_table_change_type_strict**
 
-    **alter_table_change_type_strict** is a parameter to configure whether or not to allow the conversion of column values according to the type change, and the default value is **yes**. If a value for this parameter is set to **no**, the value may be changed when you change the column types or when you add **NOT NULL** constraints; if it is set to **yes**, the value is not changed. For details, see CHANGE Clause in the :ref:`change-column`.
+    **alter_table_change_type_strict** is a parameter to configure whether to allow the conversion of column values according to the type change, and the default value is **yes**. If a value for this parameter is set to **no**, the value may be changed when you change the column types or when you add **NOT NULL** constraints; if it is set to **yes**, the value does not change. For details, see CHANGE Clause in the :ref:`change-column`.
 
 **allow_truncated_string**
 
-    **allow_truncated_string** is a parameter to configure whether or not to allow the truncation of string values according to any string operations, and the default value is **no**. If a value for this parameter is set to **no**, the string value may be truncated when you do operation for any string related on insert or update query but the string related on select query may be truncated regardless of this configuration. If it is set to **yes**, the string value may be truncated regardless of the type of (insert/update/select) query.
+    **allow_truncated_string** is a parameter to configure whether to allow the truncation of string values according to the string manipulation operations used in insert or update query, and the default value is **no**. If the value for this parameter is set to **no**, the string value not allow to be truncated when you do operation for any string related to insert or update query; however the string related to select query may be truncated regardless of this configuration. If it is set to **yes**, the string value may be truncated regardless of the type of (insert/update/select) query.
 
 **ansi_quotes**
 

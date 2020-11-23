@@ -1804,7 +1804,7 @@ The following are parameters related to the query cache functionality. The type 
 
     The following example shows how to cache up to 500 queries. ::
 
-        max_plan_cache_entries=500
+        max_query_cache_entries=500
 
 **query_cache_use_pages**
 
@@ -1812,7 +1812,7 @@ The following are parameters related to the query cache functionality. The type 
 
     The following example shows how to cache up to 4,000 pages. ::
 
-        max_plan_cache_pages=4,000
+        query_cache_use_pages=4000
 
 .. _utility-parameters:
 

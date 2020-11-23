@@ -1660,7 +1660,7 @@ If this parameter's value is **yes**, the string comparsion follows "trailing sp
 The string value 'abc' and 'abc ' is equal regardless the types of values are VARCHAR-type with variable length.
 
 **CAUTION:**
-For the string data stored as "ignore_trailing_space" is set to **no** or **yes**, it will result to confuse at several parts of using the data when the configuration parameter value is changed to set to **yes** or **no**. Threfore, this configuration value change should be considered seriously. CUBRID recommends that the value of this parameter be fixed not to change for all life times in the database.
+For the string data stored as "ignore_trailing_space" is set to **no** or **yes**, it will result to confuse at several parts of using the data when the configuration parameter value is changed to set to **yes** or **no**. Therefore, this configuration value change should be considered seriously. CUBRID recommends that the value of this parameter is fixed not to change for all life times in the database.
 
 .. _thread-parameters:
 

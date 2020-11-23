@@ -1334,6 +1334,26 @@ If you want use other character than a backslash as an escape character, you can
 
     SELECT a FROM t1 WHERE a LIKE 'aaa#%' ESCAPE '#';
 
+Comparison Rules
+----------------
+
+The string values having CHAR-type or VARCAHR-type are compared using one of the two comparison rules as follows:
+
+*   Comparison for trailing space insensitive
+*   Comparison for trailing space sensitive
+
+**Trailing space insensitive**
+
+If the two string values have fixed length like CHAR-type, the comparison ignores trailing spaces as belows example.
+'abc ' = 'abc   ' results equal
+
+**Trailing space sensitive**
+
+If the two string values have variable length like VARCHAR-type, the comparison does not ignore trailing spaces as belows example.
+'abc ' < 'abc   ' results 'abc   ' greater than 'abc '
+
+If two string values have each length as fixed and variable, CUBRID follows "comparison for trailing sensitive" rule
+
 ENUM Data Type
 ==============
 

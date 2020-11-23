@@ -45,17 +45,7 @@
   {% endblock %}
 
 {%- block extrahead %}
-    <!-- naver analytics begin-->
-    
-    <script type="text/javascript" src="http://wcs.naver.net/wcslog.js"></script>
-    <script type="text/javascript">
-        if(!wcs_add) var wcs_add = {};
-        wcs_add["wa"] = "195d9567225f24";
-        wcs_do();
-    </script>
 
-    <!-- naver analytics end-->
-    
     <!-- meta-tags -->
       {% set my_keys = title + ', ' + docstitle %}
       {% set my_desc = title + ' &mdash; ' + docstitle + '.' %}

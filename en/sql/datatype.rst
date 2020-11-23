@@ -1148,7 +1148,7 @@ When the length of a character string exceeds *n*, they are truncated. When char
 
 .. note:: In the earlier versions of CUBRID 9.0, *n* represents bite length, not the number of characters.
 
-*   *n* is an integer between 1 and 268,435,455 (256MB).
+*   *n* is an integer between 1 and 268,435,455 (256M).
 
 *   Empty quotes (' ') are used to represent a blank string. In this case, the return value of the **LENGTH** function is not 0, but is the fixed length defined in **CHAR** (*n*). That is, if you enter a blank string into a column with **CHAR** (10), the **LENGTH** is 10; if you enter a blank value into a **CHAR** with no length specified, the **LENGTH** is the default value 1.
 

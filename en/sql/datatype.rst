@@ -1107,7 +1107,8 @@ The following are the rules that are applied when using the character string typ
 
     For a fixed-length character string type such as **CHAR**, the length is fixed at the declared length. Therefore, the right part (trailing space) of the character string is filled with space characters when the string is stored. For a variable-length character string type such as **VARCHAR**, only the entered character string is stored, and the space is not filled with space characters.
 
-    The maximum length of a **CHAR** or **VARCHAR** type to be specified is 1,073,741,823.
+    The maximum length of a **CHAR** type to be specified is 268,435,455.
+    The maximum length of a **VARCHAR** type to be specified is 1,073,741,823.
     
     Also, the maximum length that can be input or output in a CSQL statement is 8,192 KB.
 
@@ -1147,7 +1148,7 @@ When the length of a character string exceeds *n*, they are truncated. When char
 
 .. note:: In the earlier versions of CUBRID 9.0, *n* represents bite length, not the number of characters.
 
-*   *n* is an integer between 1 and 1,073,741,823 (1G).
+*   *n* is an integer between 1 and 268,435,455 (256M).
 
 *   Empty quotes (' ') are used to represent a blank string. In this case, the return value of the **LENGTH** function is not 0, but is the fixed length defined in **CHAR** (*n*). That is, if you enter a blank string into a column with **CHAR** (10), the **LENGTH** is 10; if you enter a blank value into a **CHAR** with no length specified, the **LENGTH** is the default value 1.
 

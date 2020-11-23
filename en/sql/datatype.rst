@@ -1352,7 +1352,10 @@ If the two string values have fixed length like CHAR-type, the comparison ignore
 If the two string values have variable length like VARCHAR-type, the comparison does not ignore trailing spaces as belows example.
 'abc ' < 'abc   ' results 'abc   ' greater than 'abc '
 
-If two string values have each length as fixed and variable, CUBRID follows "comparison for trailing sensitive" rule
+**Exceptions**
+
+If two string values have each length as fixed and variable, CUBRID follows "trailing space sensitive" rule
+If the configuration parameter value **ignore_trailing_space** is set to **yes**, CUBIRD follows "trailing space insensitive" rule regardless two string values have fixed or variable length.
 
 ENUM Data Type
 ==============

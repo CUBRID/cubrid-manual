@@ -609,7 +609,8 @@ Using hints can affect the performance of query execution. You can allow the que
     NO_MULTI_RANGE_OPT |
     NO_SORT_LIMIT |
     NO_HASH_AGGREGATE |
-    RECOMPILE
+    RECOMPILE |
+    QUERY_CACHE
 
     <spec_name_comma_list> ::= <spec_name> [, <spec_name>, ... ]
         <spec_name> ::= table_name | view_name
@@ -640,6 +641,9 @@ The following hints can be specified in **UPDATE**, **DELETE** and **SELECT** st
 *   **NO_COVERING_IDX**: This is a hint not to use the covering index. For details, see :ref:`covering-index`.
 *   **NO_MULTI_RANGE_OPT**: This is a hint not to use the multi-key range optimization. For details, see :ref:`multi-key-range-opt`.
 *   **NO_SORT_LIMIT**: This is a hint not to use the SORT-LIMIT optimization. For more details, see :ref:`sort-limit-optimization`.
+
+The following hint can be specified in **SELECT** statements only.
+*   **QUERY_CACHE**: This is a hint for caching the query with its results. For more information, see :ref:`query-cache`.
 
 .. _no-hash-aggregate:
 
@@ -2337,3 +2341,81 @@ The above **SELECT** query's plan is printed out as below; we can see "(sort lim
                    cost:  6 card 1000
         sort:  2 asc
         cost:  7 card 0
+
+.. _query-cache:
+
+QUERY CACHE
+===========
+
+The **QUERY_CACHE** hint can be used to enhance the performance for the query which is executed repeatedly. The query is cached in dedicated memory area and its results are also cached at the separated disk space. The hint is applied to select-query only; however for the following cases, the hint is not applied to the query:
+
+*   a system time or date related attribute in in the query as below
+    ex) SELECT SYSDATE, ADDDATE(SYSDATE,INTERVAL -24 HOUR), ADDDATE(SYSDATE, -1);
+*   a serial related attribute is in the query
+*   a column-path related attribute is in the query
+*   a method is the query
+*   a stored procedure or a stored function is in the query
+*   a system tables like dual, _db_attribute, and so on, is in the query
+*   a system function like sys_guid() is in the query
+
+When the hint is set and a new SELECT query is processed, the query cache is look up if the query appears in the query cache. The queries are considered identical in case that they use the same query text and the same bind values under the same database. If the cached query is not found, the query will be processed and then cached newly with its result. If the query is found from the cache, the results will be fetched from the cached area. AT the CSQL, we can measure the enhancement easily to execute repeatedly the query using COUNT clause as below example. ::
+
+    csql> SELECT count(*) FROM game;
+
+    === <Result of SELECT Command in Line 1> ===
+
+         count(*)
+    =============
+         8653
+
+    1 row selected. (0.107082 sec) Committed.
+
+    1 command(s) successfully processed.
+
+    csql> SELECT /*+ QUERY_CACHE */ count(*) FROM game;
+
+    === <Result of SELECT Command in Line 1> ===
+
+         count(*)
+    =============
+         8653
+
+    1 row selected. (0.003932 sec) Committed.
+
+    1 command(s) successfully processed.
+
+The user can check the query to be cached or not by putting the session command *;info qcache'* in CSQL as follows: ::
+
+    csql> ;info qcache
+
+    csql> ;info qcache
+    LIST_CACHE {
+      n_hts 1010
+      n_entries 1  n_pages 1
+      lookup_counter 1
+      hit_counter 1
+      miss_counter 0
+      full_counter 0
+    }
+
+    list_hts[0] 0x6a74d10
+    HTABLE NAME = list file cache (DB_VALUE list), SIZE = 211, REHASH_AT = 147,
+    NENTRIES = 1, NPREALLOC = 0, NCOLLISIONS = 0
+
+    HASH AT 0
+    LIST_CACHE_ENTRY (0x6c46d18) {
+      param_values = [ ]
+      list_id = { type_list { 1 integer/1 } tuple_cnt 1 page_cnt 1 first_vpid { 65 32766 } last_vpid { 65 32766 } lasttpl_len 24 query_id 2
+      temp_vfid { 64 32766 } }
+      uncommitted_marker = false
+      tran_isolation = 4
+      tran_index_array = [ ]
+      last_ta_idx = 0
+      query_string = select /*+ QUERY_CACHE */ count(*) from [game] [game]?193="en_US";194="en_US";249="Asia/Seoul";user=0|833|1
+      time_created = 11/23/20 16:07:12.779703
+      time_last_used = 11/23/20 16:07:22.772330
+      ref_count = 1
+      deletion_marker = false
+    }
+
+The cached query is shown as **query_string** at the middle of the result screen. Each of the **n_entries** and **n_pages** represents the number of cached query and the number of pages in the cached results. The **n_entries** is limited to the value of configuration parameter **max_query_cache_entries** and the **n_pages** is limited to the value of **query_cache_use_pages**. If the **n_entries** is overflown or the **n_pages** is overflown, the victims of the cache entries are selected and they are uncached. The number of victims is about 20% of **max_query_cache_entries** value and of the **query_cache_use_pages** value.

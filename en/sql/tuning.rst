@@ -2353,14 +2353,14 @@ The **QUERY_CACHE** hint can be used to enhance the performance for the query wh
     ex) SELECT SYSDATE, ADDDATE(SYSDATE,INTERVAL -24 HOUR), ADDDATE(SYSDATE, -1);
 *   a serial related attribute is in the query
 *   a column-path related attribute is in the query
-*   a method is the query
+*   a method is in the query
 *   a stored procedure or a stored function is in the query
 *   a system tables like dual, _db_attribute, and so on, is in the query
 *   a system function like sys_guid() is in the query
 
-When the hint is set and a new SELECT query is processed, the query cache is look up if the query appears in the query cache. The queries are considered identical in case that they use the same query text and the same bind values under the same database. If the cached query is not found, the query will be processed and then cached newly with its result. If the query is found from the cache, the results will be fetched from the cached area. AT the CSQL, we can measure the enhancement easily to execute repeatedly the query using COUNT clause as below example. ::
+When the hint is set and a new SELECT query is processed, the query cache is looked up if the query appears in the query cache. The queries are considered identical in case that they use the same query text and the same bind values under the same database. If the cached query is not found, the query will be processed and then cached newly with its result. If the query is found from the cache, the results will be fetched from the cached area. AT the CSQL, we can measure the enhancement easily to execute repeatedly the query using COUNT clause as below example. The query and its results will be cached at the first appear, so the response time is slower than the next same query. The second query's result is fetched from cached area, so the response time is very faster than the prior same query's one. ::
 
-    csql> SELECT count(*) FROM game;
+    csql> SELECT /*+ QUERY_CACHE */ count(*) FROM game;
 
     === <Result of SELECT Command in Line 1> ===
 
@@ -2388,7 +2388,6 @@ The user can check the query to be cached or not by putting the session command 
 
     csql> ;info qcache
 
-    csql> ;info qcache
     LIST_CACHE {
       n_hts 1010
       n_entries 1  n_pages 1

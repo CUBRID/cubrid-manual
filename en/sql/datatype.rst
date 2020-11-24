@@ -1344,13 +1344,13 @@ The string values having CHAR-type or VARCAHR-type are compared using one of the
 
 **Trailing space insensitive**
 
-If the two string values have fixed length like CHAR-type, the comparison ignores trailing spaces as belows example.
-'abc ' = 'abc   ' results equal
+If the two string values have fixed length like CHAR-type, the comparison ignores trailing spaces as below example.
+comparing 'abc ' with 'abc   ' results equal
 
 **Trailing space sensitive**
 
-If the two string values have variable length like VARCHAR-type, the comparison does not ignore trailing spaces as belows example.
-'abc ' < 'abc   ' results 'abc   ' greater than 'abc '
+If the two string values have variable length like VARCHAR-type, the comparison does not ignore trailing spaces as below example.
+comparing 'abc ' with 'abc   ' results 'abc   ' greater than 'abc '
 
 **Exceptions**
 

@@ -2347,7 +2347,7 @@ The above **SELECT** query's plan is printed out as below; we can see "(sort lim
 QUERY CACHE
 ===========
 
-The **QUERY_CACHE** hint can be used to enhance the performance for the query which is executed repeatedly. The query is cached in dedicated memory area and its results are also cached at the separated disk space. The hint is applied to select-query only; however for the following cases, the hint is not applied to the query:
+The **QUERY_CACHE** hint can be used to enhance the performance for the query which is executed repeatedly. The query is cached in dedicated memory area and its results are also cached at the separated disk space. The hint is applied to SELECT query only; however for the following cases, the hint is not applied to the query:
 
 *   a system time or date related attribute in in the query as below
     ex) SELECT SYSDATE, ADDDATE(SYSDATE,INTERVAL -24 HOUR), ADDDATE(SYSDATE, -1);
@@ -2417,4 +2417,4 @@ The user can check the query to be cached or not by putting the session command 
       deletion_marker = false
     }
 
-The cached query is shown as **query_string** at the middle of the result screen. Each of the **n_entries** and **n_pages** represents the number of cached query and the number of pages in the cached results. The **n_entries** is limited to the value of configuration parameter **max_query_cache_entries** and the **n_pages** is limited to the value of **query_cache_use_pages**. If the **n_entries** is overflown or the **n_pages** is overflown, the victims of the cache entries are selected and they are uncached. The number of victims is about 20% of **max_query_cache_entries** value and of the **query_cache_use_pages** value.
+The cached query is shown as **query_string** at the middle of the result screen. Each of the **n_entries** and **n_pages** represents the number of cached query and the number of pages in the cached results. The **n_entries** is limited to the value of configuration parameter **max_query_cache_entries** and the **n_pages** is limited to the value of **query_cache_use_pages**. If the **n_entries** is overflown or the **n_pages** is overflown, some victims among the cache entries are selected and they are uncached. The number of victims is about 20% of **max_query_cache_entries** value and of the **query_cache_use_pages** value.

@@ -1656,11 +1656,11 @@ The following are parameters related to SQL statements and data types supported 
 
 **ignore_trailing_space**
 
-If this parameter's value is **yes**, the string comparsion follows "trailing space insensitive" rules as below examle.
+If this parameter's value is **yes**, the string comparison follows "trailing space insensitive" rules as below example.
 The string value 'abc' and 'abc ' is equal regardless the types of values are VARCHAR-type with variable length.
 
 **CAUTION:**
-For the string data stored as "ignore_trailing_space" is set to **no** or **yes**, it will result to confuse at several parts of using the data when the configuration parameter value is changed to set to **yes** or **no**. Therefore, this configuration value change should be considered seriously. CUBRID recommends that the value of this parameter is fixed not to change for all life times in the database.
+For the string data stored as **ignore_trailing_space** is set to **no** or **yes**; will result in confusion at several parts of using the data when the configuration parameter value is changed to set to **yes** or **no**. Therefore, this configuration value change should be considered seriously. CUBRID recommends that the value of this parameter is fixed and not to change for all life times in the database.
 
 .. _thread-parameters:
 

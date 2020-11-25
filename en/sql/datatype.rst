@@ -1337,25 +1337,25 @@ If you want use other character than a backslash as an escape character, you can
 Comparison Rules
 ----------------
 
-The string values having CHAR-type or VARCAHR-type are compared using one of the two comparison rules as follows:
+When two string values are compared, the followings are the comparison rules about the behavior of trailing spaces:
 
 *   Comparison for trailing space insensitive
 *   Comparison for trailing space sensitive
 
 **Trailing space insensitive**
 
-If the two string values have fixed length like CHAR-type, the comparison ignores trailing spaces as below example.
+If the two string values are both fixed-length types (CHAR-type), the comparison ignores trailing spaces as below example.
 comparing 'abc ' with 'abc   ' results equal
 
 **Trailing space sensitive**
 
-If the two string values have variable length like VARCHAR-type, the comparison does not ignore trailing spaces as below example.
+If two string values are both of variable-length types (VARCHAR-type), the comparison does not ignore trailing spaces as below example.
 comparing 'abc ' with 'abc   ' results 'abc   ' greater than 'abc '
 
 **Exceptions**
 
-If two string values have each length as fixed and variable, CUBRID follows "trailing space sensitive" rule
-If the configuration parameter value **ignore_trailing_space** is set to **yes**, CUBIRD follows "trailing space insensitive" rule regardless two string values have fixed or variable length.
+When comparing two string values, if one is a fixed-type and the other is a variable-type, CUBRID follows "trailing space sensitive" rule.
+If the configuration parameter value **ignore_trailing_space** is set to **yes**, CUBIRD follows "trailing space insensitive" rule regardless of the types of string values.
 
 ENUM Data Type
 ==============

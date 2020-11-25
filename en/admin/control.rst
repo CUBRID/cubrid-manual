@@ -2253,28 +2253,48 @@ Configuring for CUBRID Java SP Server
 
 TBD
 
+.. _cubrid-javasp-server-log:
+
 CUBRID Java SP Server Log
 -------------------------
 
 The logs of CUBRID Java SP server are stored in the log/ directory under the installation directory. There are two types of log files depending on server process of CUBRID Java Stored Procedure Server.
 
-*   Error Log ([database-name]_java.log): TBD
-*   Java Log ([database-name]_java.err): TBD
+*   Error Log ($CUBRID/log/[db_name]_java.err)
+*   Java Log ($CUBRID/log/[db_name]_java.log)
 
 Error Log
 ^^^^^^^^^
 
-TBD
+An error log of the Java SP server for each database is saved into **$CUBRID/log** directory, and and the format of the file name is *<db_name>_java.err*. The extension is ".err".
+
+::
+
+    demodb_java.err
+
+If any error occurs during starting the Java SP server, the error message is saved into the error log file.
+
+// TBD : Example
+
+.. note::
+
+    For more details on what errors can be occured, see :ref:`cubrid-javasp-server-errors`.
+
 
 Java Log
 ^^^^^^^^^
 
-If an event which affects on the query performance occurs, this is saved into the event log.
+An Java log of the JVM in the Java SP server is saved into **$CUBRID/log** directory, and and the format of the file name is *<db_name>_java.log*. The extension is ".log".
 
-The events which are saved on the event log are *SLOW_QUERY*, *MANY_IOREADS*, *LOCK_TIMEOUT*, *DEADLOCK* and *TEMP_VOLUME_EXPAND*.
+::
 
-This log file is saved into the **$CUBRID/log/server** directory, and the format of the file name is *<db_name>_<yyyymmdd>_<hhmi>.event*. The extension is ".event".
+    demodb_java.log
 
+If any exception during performing java stored procedure/function occurs from JVM, the exception string is saved into the java log.
+
+::
+
+    // TBD : Example
 
 .. _cubrid-javasp-server-errors:
 

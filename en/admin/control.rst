@@ -2337,7 +2337,7 @@ The following table shows the server paramters related to Java SP server availab
 | Parameter Name                      | Type   | Default        | Min | Max   |
 +-------------------------------------+--------+----------------+-----+-------+
 | java_stored_procedure               | bool   | no             |     |       |
-+-------------------------------------+--------+----------------------+-------+
++-------------------------------------+--------+----------------+-----+-------+
 | java_stored_procedure_port          | int    | 0              | 0   | 65535 |
 +-------------------------------------+--------+----------------+-----+-------+
 | java_stored_procedure_jvm_options   | string |                |     |       |
@@ -2350,17 +2350,17 @@ For more details on these paramters, see :ref:`cubrid-conf`.
 Registering Java SP Server to cubrid service
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If you register javasp to CUBRID service, you can use the utilities of **cubrid service** to start, stop or check all the registered javasp processes at once. 
+If you register javasp to CUBRID service, you can use the utilities of **cubrid service** to start, stop or check all the registered javasp processes at once.
 
-First, add **javasp** to the **service** parameter in the [**service**] section of the **cubrid.conf** file.
-Because a javasp server is dependent on the database, it shares the server property with database server in the [**service**] section.
-To register the javasp server for a database, add the database name at the server property.
-Finally, set **java_stored_procedure** as yes to enable starting the javasp server for the database.
+- First, add **javasp** to the **service** parameter in the [**service**] section of the **cubrid.conf** file.
+- Second, To register the javasp server for a database, add the name of the database to the server parameter in the [**service**] section. Note that it shares the server parameter with the database server. a javasp server is dependent on the database server that has the same database name.
+- Finally, set **java_stored_procedure** as yes to enable starting the javasp server for the database.
 
 The following example shows how to register javasp server as service in the **cubrid.conf** file.
 Both *demodb* and *testdb* are present in the server property, but only demodb with **java_stored_procedure** set to yes is started by the **cubrid service start** command.
 
 ::
+
     # cubrid.conf
 
     ...

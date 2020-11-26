@@ -2768,7 +2768,7 @@ lockdb
 tranlist
 --------
 
-**cubrid tranlist** 는 대상 데이터베이스의 트랜잭션 정보를 확인하는 유틸리티로서, DBA 또는 DBA그룹 사용자만 수행할 수 있다. ::
+**cubrid tranlist** 는 대상 데이터베이스의 트랜잭션 정보를 확인하는 유틸리티입니다. ::
 
     cubrid tranlist [options] database_name
 
@@ -2826,14 +2826,6 @@ tranlist
 
 .. program:: tranlist
 
-.. option:: -u, --user=USER
-
-    로그인할 사용자 ID. DBA및 DBA그룹 사용자만 허용한다.(기본값 : DBA)
-    
-.. option:: -p, --password=PASSWORD
-
-    사용자 비밀번호
-    
 .. option:: -s, --summary
 
     요약 정보만 출력한다(질의 수행 정보 또는 잠금 관련 정보를 생략).
@@ -2901,7 +2893,7 @@ tranlist
 killtran
 --------
 
-**cubrid killtran** 은 대상 데이터베이스의 트랜잭션을 확인하거나 특정 트랜잭션을 강제 종료하는 유틸리티로서, **DBA** 사용자만 수행할 수 있다. ::
+**cubrid killtran** 은 대상 데이터베이스의 트랜잭션을 확인하거나 특정 트랜잭션을 강제 종료하는 유틸리티로서, **DBA** 사용자만 트랜잭션을 제거할 수 있습니다. ::
 
     cubrid killtran [options] database_name
 
@@ -2972,6 +2964,7 @@ killtran
 
 .. option:: -p, --dba-password=PASSWORD
 
+    -i 또는 --kill 옵션들이 사용될 경우에만 해당 옵션을 사용할 수 있습니다.
     이 옵션 뒤에 오는 값은 **DBA** 의 암호이며 생략하면 프롬프트에서 입력해야 한다.
 
 .. option:: -q, --query-exec-info

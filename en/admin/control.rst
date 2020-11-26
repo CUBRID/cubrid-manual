@@ -2331,15 +2331,84 @@ To use other vendor's implementation instead of Sun's Java Virtual Machine, add 
 Java SP Server System Parameters
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-TBD
+The following table shows the server paramters related to Java SP server available in the configuration file (**cubrid.conf**)
+
++-------------------------------------+--------+----------------+-----+-------+
+| Parameter Name                      | Type   | Default        | Min | Max   |
++-------------------------------------+--------+----------------+-----+-------+
+| java_stored_procedure               | bool   | no             |     |       |
++-------------------------------------+--------+----------------------+-------+
+| java_stored_procedure_port          | int    | 0              | 0   | 65535 |
++-------------------------------------+--------+----------------+-----+-------+
+| java_stored_procedure_jvm_options   | string |                |     |       |
++-------------------------------------+--------+----------------+-----+-------+
+
+For more details on these paramters, see :ref:`cubrid-conf`.
 
 .. _cubrid-javasp-service-util:
 
 Registering Java SP Server to cubrid service
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-TBD
+If you register javasp to CUBRID service, you can use the utilities of **cubrid service** to start, stop or check all the registered javasp processes at once. 
 
+First, add **javasp** to the **service** parameter in the [**service**] section of the **cubrid.conf** file.
+Because a javasp server is dependent on the database, it shares the server property with database server in the [**service**] section.
+To register the javasp server for a database, add the database name at the server property.
+Finally, set **java_stored_procedure** as yes to enable starting the javasp server for the database.
+
+The following example shows how to register javasp server as service in the **cubrid.conf** file.
+Both *demodb* and *testdb* are present in the server property, but only demodb with **java_stored_procedure** set to yes is started by the **cubrid service start** command.
+
+::
+    # cubrid.conf
+
+    ...
+
+    [service]
+
+    ...
+
+    service=broker,server,javasp
+
+    # The list of database servers in all by 'cubrid service start' command.
+    # This property is effective only when the above 'service' property contains 'server' or 'javasp' keyword.
+    server=demodb,testdb
+
+    ...
+
+    [common]
+
+    ...
+
+    [@demodb]
+    java_stored_procedure=yes
+
+    [@testdb]
+    java_stored_procedure=no
+
+::
+
+    % cubrid service start
+    
+    @ cubrid master start
+    ++ cubrid master start: success
+    @ cubrid server start: demodb
+
+    This may take a long time depending on the amount of restore works to do.
+    CUBRID 10.2
+
+    ++ cubrid server start: success
+    @ cubrid server start: testdb
+
+    This may take a long time depending on the amount of recovery works to do.
+    CUBRID 10.2
+
+    ++ cubrid server start: success
+    @ cubrid javasp start: demodb
+    ++ cubrid javasp start: success
+    @ cubrid broker start
+    ++ cubrid broker start: success
 
 .. _cubrid-javasp-server-log:
 

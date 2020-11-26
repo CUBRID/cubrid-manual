@@ -3273,7 +3273,7 @@ HA 서비스 운영 중 슬레이브를 새로 추가하려면 기존의 마스�
             
             repl_log_path=$repl_log_home_abs/${db_name}_${master_host}
 
-            local_db_creation=`awk 'BEGIN { print strftime("%m/%d/%Y %H:%M:%S", $db_creation) }'`
+            local_db_creation=`awk 'BEGIN { print strftime("%m/%d/%Y %H:%M:%S", '$db_creation') }'`
                 csql_cmd="\
                 INSERT INTO \
                         db_ha_apply_info \

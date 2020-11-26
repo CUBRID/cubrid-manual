@@ -44,7 +44,7 @@ The service management utilities are as follows:
 
 *   Java SP Server utility : Operates and manages the process of java stored procedure server.
 
-    *   :ref:`cubrid javasp <control-cubrid-javasp>`
+    *   :ref:`cubrid javasp <cubrid-javasp-server>`
 
 See :ref:`control-cubrid-processes` for details.
 

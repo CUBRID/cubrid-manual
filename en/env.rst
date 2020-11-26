@@ -74,9 +74,9 @@ OS Environment and Java Environment Variables
 
 *   Path: In the Windows environment, the **%CUBRID%\\bin**, which is a directory that contains CUBRID system's execution file, must be included in the **Path** environment variable.
 
-*   JAVA_HOME: To use the Java stored procedure in the CUBRID system, the Java Virtual Machine (JVM) version 1.6 or later must be installed, and the **JAVA_HOME** environment variable must designate the concerned directory. See the :ref:`jsp-environment-configuration`.
+*   JAVA_HOME: To use the Java stored procedure in the CUBRID system, the Java Virtual Machine (JVM) version 1.6 or later must be installed, and the **JAVA_HOME** environment variable must designate the concerned directory. See the :ref:`cubrid-javasp-server-config`.
 
-*   JVM_PATH: To use the Java stored procedure in the CUBRD system, the **JVM_PATH** environment variable can specify the JVM library (libjvm) path explicitly instead of finding the library from **JAVA_HOME**. See the :ref:`jsp-environment-configuration`.
+*   JVM_PATH: To use the Java stored procedure in the CUBRD system, the **JVM_PATH** environment variable can specify the JVM library (libjvm) path explicitly instead of finding the library from **JAVA_HOME**. See the :ref:`cubrid-javasp-server-config`.
 
 Configuring the Environment Variable
 ------------------------------------

@@ -2001,7 +2001,7 @@ On the partitioned table, the table which has promoted some partitions by the **
 
 **Java Stored Procedure**
 
-Because using java stored procedures in CUBRID HA cannot be replicated, java stored procedures should be configured to all nodes. For more details, see :ref:`jsp-environment-configuration`.
+Because using java stored procedures in CUBRID HA cannot be replicated, java stored procedures should be configured to all nodes. For more details, see :ref:`cubrid-javasp-server-config`.
 
 **Method**
 

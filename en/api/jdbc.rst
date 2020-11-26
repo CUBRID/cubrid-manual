@@ -61,7 +61,7 @@ Installing and Configuring JDBC
 
 **Installing Java and Configuring Environment**
 
-You must already have Java installed and the **JAVA_HOME** environment variable configured in your system. You can download Java from the Developer Resources for Java Technology website ( https://www.oracle.com/java/technologies/ ). For more information, please see :ref:`jsp-environment-configuration`.
+You must already have Java installed and the **JAVA_HOME** environment variable configured in your system. You can download Java from the Developer Resources for Java Technology website ( https://www.oracle.com/java/technologies/ ).
 
 **Configuring the environment variables for Windows**
 

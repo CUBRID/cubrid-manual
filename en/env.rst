@@ -76,6 +76,8 @@ OS Environment and Java Environment Variables
 
 *   JAVA_HOME: To use the Java stored procedure in the CUBRID system, the Java Virtual Machine (JVM) version 1.6 or later must be installed, and the **JAVA_HOME** environment variable must designate the concerned directory. See the :ref:`jsp-environment-configuration`.
 
+*   JVM_PATH: To use the Java stored procedure in the CUBRD system, the **JVM_PATH** environment variable can specify the JVM library (libjvm) path explicitly instead of finding the library from **JAVA_HOME**. See the :ref:`jsp-environment-configuration`.
+
 Configuring the Environment Variable
 ------------------------------------
 

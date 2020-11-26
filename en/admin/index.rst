@@ -42,7 +42,7 @@ The service management utilities are as follows:
 
     *   :ref:`cubrid heartbeat <cubrid-heartbeat>`
 
-*   Java SP Server utility : Operates and manages the process of java stored procedure server.
+*   Java SP Server utility : Operates and manages the process of the Java stored procedure (Java SP) server.
 
     *   :ref:`cubrid javasp <cubrid-javasp-server>`
 

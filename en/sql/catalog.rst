@@ -885,7 +885,7 @@ A table that stores the progress status every time the **applylogdb** utility ap
 dual
 ----
 
-The dual class is a one-row, one-column table that is used as a dummy table. It is used to select a constant, expression or pseudo column such as SYS_DATE or USER. Pseudo columns can be provided as functions in CUBRID. More details and examples are in :ref:`operators-and-functions`. However, it is not mandatory to have FROM clause when selecting a constant, expression, or pseudo column because dual class will be referenced automatically. Like other System Catalog Classes, dual class is created to be owned by dba and dba can only execute SELECT operations. Unlike other System Catalog Classes, however, any user can execute SELECT operation on dual class.
+The dual class is a one-row, one-column table that is used as a dummy table. It is used to select a constant, expression, or pseudo column such as SYS_DATE or USER. Pseudo columns can be provided as functions in CUBRID. More details and examples are in :ref:`operators-and-functions`. However, it is not mandatory to have FROM clause when selecting a constant, expression, or pseudo column because dual class will be referenced automatically. Like other system catalog classes, dual class is created to be owned by dba and dba can only execute SELECT operation. Unlike other system catalog classes, however, any user can execute SELECT operation on dual class.
 
 +--------------------+---------------+----------------------------------------------------------+
 |   Attribute Name   |   Data Type   |   Description                                            |
@@ -893,7 +893,7 @@ The dual class is a one-row, one-column table that is used as a dummy table. It 
 | dummy              | VARCHAR(1)    | Value used for dummy purpose only                        |
 +--------------------+---------------+----------------------------------------------------------+
 
-The following example shows the result which ran the query that select Pseudo column after inputting ";plan detail" or "SET OPTIMIZATION LEVEL 513;" in CSQL. This shows the dual class is referenced automatically even if there is no FROM clause. 
+The following example shows the result which ran the query that select pseudo column after inputting ";plan detail" or "SET OPTIMIZATION LEVEL 513;" in CSQL. This shows the dual class is referenced automatically even if there is no FROM clause.
 
 .. code-block:: sql
 

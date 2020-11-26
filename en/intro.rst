@@ -31,6 +31,8 @@ CUBRID is an object-relational database management system (DBMS) consisting of t
 
 .. FIXME: For more information about CUBRID Manager, see http://www.cubrid.org/wiki_tools/entry/cubrid-manager.
 
+*   The CUBRID Java SP server is an execuction server that processes Java stored procedures/functions passed from the database server.
+
 .. image:: /images/image1.png
 
 .. _database-volume-structure:

@@ -2362,7 +2362,14 @@ An error log of the Java SP server for each database is saved into **$CUBRID/log
 
 If any error occurs during starting the Java SP server, the error message is saved into the error log file.
 
-// TBD : Example
+::
+
+    Time: 11/11/20 18:17:15.438 - ERROR *** file ../../src/jsp/jsp_sr.c, line 501 ERROR CODE = -900, Tran = -1, EID = 1
+    Java VM library is not found: 
+        Failed to get 'JVM_PATH' environment variable.
+        Failed to load libjvm from 'JAVA_HOME' envirnment variable: 
+            /jre/lib/amd64/server/libjvm.so: cannot open shared object file: No such file or directory
+            /lib/server/libjvm.so: cannot open shared object file: No such file or directory.
 
 .. note::
 

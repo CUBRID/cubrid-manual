@@ -3276,7 +3276,7 @@ Now let's see the case of rebuilding a existing slave node during a service in a
             
             repl_log_path=$repl_log_home_abs/${db_name}_${master_host}
 
-            local_db_creation=`awk 'BEGIN { print strftime("%m/%d/%Y %H:%M:%S", $db_creation) }'`
+            local_db_creation=`awk 'BEGIN { print strftime("%m/%d/%Y %H:%M:%S", '$db_creation') }'`
                 csql_cmd="\
                 INSERT INTO \
                         db_ha_apply_info \

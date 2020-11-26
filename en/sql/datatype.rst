@@ -1179,11 +1179,11 @@ When the length of a character string exceeds *n*, they may be truncated on the 
 
 ::
 
-    If you specify 'pacesetter' as CHAR(4), 'pace' may be stored or error occurs depending on the configuration value of allow_truncated_string (truncated as the length of the character string is greater than 4).
+    If you specify 'pacesetter' as VARCHAR(4), 'pace' may be stored or error occurs depending on the configuration value of allow_truncated_string (truncated as the length of the character string is greater than 4).
     If you specify 'pacesetter' as VARCHAR(12), 'pacesetter' is stored (a 10-character string).
-    If you specify 'pacesetter ' as VARCHAR(12), 'pacesetter ' is stored (a 10-character string plus two whitespace characters).
-    If you specify 'pacesetter ' as VARCHAR(10), 'pacesetter' is stored (a 10-character string; two whitespace characters can be truncated as above example).
-    If you specify 'p ' as VARCHAR, 'p ' is stored (if n is not specified, the default value 1,073,741,823 is used, and the trailing space is not filled with whitespace characters).
+    If you specify 'pacesetter ' as VARCHAR(12), 'pacesetter ' is stored (a 12-character string).
+    If you specify 'pacesetter ' as VARCHAR(10), 'pacesetter' may be stored or error occurs depending on the configuration value of allow_truncated_string (a 10-character string; two whitespace characters can be truncated).
+    If you specify 'p ' as VARCHAR, 'p ' is stored (if n is not specified, the default value 1,073,741,823 is used, and the trailing space is not filled with whitespace characters)`
 
 *   **DEFAULT** constraint can be specified in a column of this type.
 

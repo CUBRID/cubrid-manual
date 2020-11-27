@@ -2274,8 +2274,7 @@ Execute the following command to check the JRE version if you have it already in
     % java -version Java(TM) SE Runtime Environment (build 1.6.0_05-b13)
     Java HotSpot(TM) 64-Bit Server VM (build 10.0-b19, mixed mode)
 
-Windows Environment
-+++++++++++++++++++
+**Windows Environment**
 
 For Windows, CUBRID loads the **jvm.dll** file to run the Java Virtual Machine. CUBRID first locates the **jvm.dll** file from the **PATH** environment variable and then loads it. If it cannot find the file, it uses the Java runtime information registered in the system registry.
 
@@ -2298,8 +2297,7 @@ CUBRID first looks for the **jvm.dll** file in the **JVM_PATH** variable. if **J
     
     % set JVM_PATH=C:\jdk1.6.0\jre\bin\server\libjvm.dll
 
-Linux/UNIX Environment
-++++++++++++++++++++++
+**Linux/UNIX Environment**
 
 For Linux/UNIX environment, CUBRID loads the **libjvm.so** file to run the Java Virtual Machine. CUBRID first locates the **libjvm.so** file from the **LD_LIBRARY_PATH** environment variable and then loads it. If it cannot find the file, it uses the **JAVA_HOME** environment variable. For Linux, glibc 2.3.4 or later versions are supported. The following example shows how to configure the Linux environment variable (e.g., **.profile**, **.cshrc**, **.bashrc**, **.bash_profile**, etc.).
 

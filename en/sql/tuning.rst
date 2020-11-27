@@ -642,9 +642,6 @@ The following hints can be specified in **UPDATE**, **DELETE** and **SELECT** st
 *   **NO_MULTI_RANGE_OPT**: This is a hint not to use the multi-key range optimization. For details, see :ref:`multi-key-range-opt`.
 *   **NO_SORT_LIMIT**: This is a hint not to use the SORT-LIMIT optimization. For more details, see :ref:`sort-limit-optimization`.
 
-The following hint can be specified in **SELECT** statements only.
-*   **QUERY_CACHE**: This is a hint for caching the query with its results. For more information, see :ref:`query-cache`.
-
 .. _no-hash-aggregate:
 
 *   **NO_HASH_AGGREGATE**: This is a hint not to use hashing for the sorting tuples in aggregate functions. Instead, external sorting is used in aggregate functions. By using an in-memory hash table, we can reduce or even eliminate the amount of data that needs to be sorted. However, in some scenarios the user may know beforehand that hash aggregation will fail and can use the hint to skip hash aggregation entirely. For setting the memory size of hashing aggregate, see :ref:`max_agg_hash_size <max_agg_hash_size>`.
@@ -656,6 +653,8 @@ The following hint can be specified in **SELECT** statements only.
 .. _recompile:
 
 *   **RECOMPILE** : Recompiles the query execution plan. This hint is used to delete the query execution plan stored in the cache and establish a new query execution plan.
+
+*   **QUERY_CACHE**: This is a hint for caching the query with its results. This hint can be specified in **SELECT** statements only. For more information, see :ref:`query-cache`.
 
 .. note::
 
@@ -2349,7 +2348,7 @@ QUERY CACHE
 
 The **QUERY_CACHE** hint can be used to enhance the performance for the query which is executed repeatedly. The query is cached in dedicated memory area and its results are also cached at the separated disk space. The hint is applied to SELECT query only; however for the following cases, the hint is not applied to the query:
 
-*   a system time or date related attribute in in the query as below
+*   a system time or date related attribute in the query as below
     ex) SELECT SYSDATE, ADDDATE(SYSDATE,INTERVAL -24 HOUR), ADDDATE(SYSDATE, -1);
 *   a serial related attribute is in the query
 *   a column-path related attribute is in the query
@@ -2358,7 +2357,7 @@ The **QUERY_CACHE** hint can be used to enhance the performance for the query wh
 *   a system tables like dual, _db_attribute, and so on, is in the query
 *   a system function like sys_guid() is in the query
 
-When the hint is set and a new SELECT query is processed, the query cache is looked up if the query appears in the query cache. The queries are considered identical in case that they use the same query text and the same bind values under the same database. If the cached query is not found, the query will be processed and then cached newly with its result. If the query is found from the cache, the results will be fetched from the cached area. AT the CSQL, we can measure the enhancement easily to execute repeatedly the query using COUNT clause as below example. The query and its results will be cached at the first appear, so the response time is slower than the next same query. The second query's result is fetched from cached area, so the response time is very faster than the prior same query's one. ::
+When the hint is set and a new SELECT query is processed, the query cache is looked up if the query appears in the query cache. The queries are considered identical in case that they use the same query text and the same bind values under the same database. If the cached query is not found, the query will be processed and then cached newly with its result. If the query is found from the cache, the results will be fetched from the cached area. AT the CSQL, we can measure the enhancement easily to execute repeatedly the query using COUNT function as below example. The query and its results will be cached at the first appear, so the response time is slower than the next same query. The second query's result is fetched from cached area, so the response time is very faster than the prior same query's one. ::
 
     csql> SELECT /*+ QUERY_CACHE */ count(*) FROM game;
 

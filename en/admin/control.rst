@@ -2470,17 +2470,52 @@ If any exception during performing java stored procedure/function occurs from JV
 
 ::
 
-    // TBD : Example
+    SEVERE:
+    java.lang.NullPointerException
+    at Test.testFunction(Test.java:50)
+    ...
+    at com.cubrid.jsp.StoredProcedure.invoke(StoredProcedure.java:263)
+    at com.cubrid.jsp.ExecuteThread.run(ExecuteThread.java:197)
 
 .. _cubrid-javasp-server-errors:
 
 CUBRID Java SP Server Errors
 ----------------------------
 
-// JVM
+The following are error messages about the errors which can be occurred in starting Java SP server.
+Error messages are written to **$CUBRID/log**/\ *<db_name>_java*\ **.err**.
 
-// java stored procedure paramter
++-------+----------------------------------+-----------------------------------------------------+-----------------------------------------------------------------------------------+
+| Error | Error Message                    | Description                                         | Solution                                                                          |
+| Code  |                                  |                                                     |                                                                                   |
++=======+==================================+=====================================================+===================================================================================+
+| -900  | Java VM library is not found: ?  | CUBRID can't find the JVM library                   | Make sure JAVA_HOME or JVM_PATH variable is set properly.                         |
+|       |                                  | from the JAVA_HOME or JVM_PATH variables            | see :ref:`cubrid-javasp-environment-configuration`.                               |
++-------+----------------------------------+-----------------------------------------------------+-----------------------------------------------------------------------------------+
+| -901  | Java VM can not be started: ?    | Unexpected internal error occured in JVM library.   | Try installing the JRE again. If you keep getting the error,                      |
+|       |                                  | The JVM library may be broken, or there may be a    | try installing a different version of the JRE.                                    |
+|       |                                  | problem with the $CUBRID/java/jspserver.jar file.   | Try replacing it with the same CUBRID version of $CUBRID/java/jspserver.jar file. |
++-------+----------------------------------+-----------------------------------------------------+-----------------------------------------------------------------------------------+
 
-// java stored procedure port
+The following are error messages about the errors which can be occrured when there is a problem with the connection to Java SP server including it is not started.
+Error messages are written to **$CUBRID/log/broker/error_log**/\ *<broker_name>_<app_server_num>*\ **.err**.
 
-TBD
++-------+----------------------------------+-----------------------------------------------------+------------------------------------------------------------------------------------+
+| Error | Error Message                    | Description                                         | Solution                                                                           |
+| Code  |                                  |                                                     |                                                                                    |
++=======+==================================+=====================================================+====================================================================================+
+| -902  | Java VM is not running.          | Java SP server is not started                       | Start Java SP server by **cubrid javasp start <db_name>** command.                 |
+|       |                                  |                                                     | see :ref:`cubrid-javasp-server`.                                                   |
++-------+----------------------------------+-----------------------------------------------------+------------------------------------------------------------------------------------+
+| -903  | Can't connect Java VM: ?         | Java SP server cannot be connected from CAS.        | Restart the Java SP server. If the restart fails,                                  |
+|       |                                  | This can happen for many reasons.                   | try to shutdown **cub_javasp <db_name>** process forcibly                          |
+|       |                                  | For example, the Java SP server is unstable,        | with the Linux **kill** command. and restart the server again.                     |
+|       |                                  | the server is unreachable from CAS,                 |                                                                                    |
+|       |                                  | or the server is killed unexpectedly.               | Check if the port of the Java SP server through **cubrid javasp status <db_name>** |
+|       |                                  |                                                     | is reachable from CAS.                                                             |
+|       |                                  |                                                     | It could be that a firewall forbids the port. Open the port in the firewall.       |
+|       |                                  |                                                     | If required, set **java_stored_procedure_port** and restart the Java SP server     |
+|       |                                  |                                                     | see :ref:`connect-to-cubrid-server`.                                               |
++-------+----------------------------------+-----------------------------------------------------+------------------------------------------------------------------------------------+
+| -903  | Networking with JVM failed: ?    | CAS received invalid packet from the Java SP server |                                                                                    |
++-------+----------------------------------+-----------------------------------------------------+------------------------------------------------------------------------------------+

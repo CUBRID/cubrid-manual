@@ -3964,6 +3964,8 @@ The following are optional items:
 
 *   **scp_option** : Specifies the **scp** option which enables backup of source node in which replication is rebuilt to copy into the target node. The default option is **-l 131072**, which does not impose an overload on network (limits the transfer rate to 16 MB).
 
+*   **ssh_port**  : Specifies the **port** number of the ssh and scp used in the script. This option also applies to **expect** run from the script. The default port number is **22**.
+
 Once the script has been configured, execute the **ha_make_slavedb.sh** script in the target node in which replication will be rebuilt. When the script is executed, rebuilding replication happens in a number of phases. To move to the next stage, the user must enter an appropriate value. The following are the descriptions of available values.
 
 *   **yes** : Keeps going.

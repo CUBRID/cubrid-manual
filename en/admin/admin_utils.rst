@@ -815,11 +815,11 @@ The following shows [options] available with the **cubrid compactdb** utility.
 
     This option specifies to compact used space in client/server mode while database server is running; no argument is specified. Even though this option is omitted, system recognizes that the job is executed in client/server mode. 
 
-The following options can be used in client/server mode only.
-
 .. option:: -i, --input-class-file=FILE
 
     You can specify an input file name that contains the table name with this option. Write one table name in a single line; invalid table name is ignored. Note that you cannot specify the list of the table names after a database name in case of you use this option. If you use this option on client/server mode, It is skipped freeing objects such as catalog, delete files and tracker etc.
+
+The following options can be used in client/server mode only.
 
 .. option:: -p, --pages-commited-once=NUMBER
 

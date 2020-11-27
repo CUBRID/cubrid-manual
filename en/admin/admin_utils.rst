@@ -790,9 +790,9 @@ Reference to the object deleted during compacting is displayed as **NULL**, whic
 
 *   *database_name*: The name of the database whose space is to be compacted. The path name to the directory where the database is to be created must not be included.
 
-*   *class_name_list*: You can specify the list of tables names that you want to compact space after a database name; the **-i** option cannot be used together. It is used in client/server mode only.
+*   *class_name_list*: You can specify the list of tables names that you want to compact space after a database name; the **-i** option cannot be used together. If you use the lists on client/server mode, It is skipped freeing objects such as catalog, delete files and tracker etc. 
 
-**-I**, **-i**, **-c**, **-d**, **-p** options are applied in client/server mode only.
+**-I**, **-c**, **-d**, **-p** options are applied in client/server mode only.
 
 The following shows [options] available with the **cubrid compactdb** utility.
 
@@ -819,7 +819,7 @@ The following options can be used in client/server mode only.
 
 .. option:: -i, --input-class-file=FILE
 
-    You can specify an input file name that contains the table name with this option. Write one table name in a single line; invalid table name is ignored. Note that you cannot specify the list of the table names after a database name in case of you use this option.
+    You can specify an input file name that contains the table name with this option. Write one table name in a single line; invalid table name is ignored. Note that you cannot specify the list of the table names after a database name in case of you use this option. If you use this option on client/server mode, It is skipped freeing objects such as catalog, delete files and tracker etc.
 
 .. option:: -p, --pages-commited-once=NUMBER
 

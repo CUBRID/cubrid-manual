@@ -893,7 +893,7 @@ The dual class is a one-row, one-column table that is used as a dummy table. It 
 | dummy              | VARCHAR(1)    | Value used for dummy purpose only                        |
 +--------------------+---------------+----------------------------------------------------------+
 
-The following example shows the result which ran the query that select pseudo column after inputting ";plan detail" or "SET OPTIMIZATION LEVEL 513;" in CSQL. This shows the dual class is referenced automatically even if there is no FROM clause.
+The following example shows the result which ran the query that select pseudo column after inputting ";plan detail" or "SET OPTIMIZATION LEVEL 513;" in CSQL (:ref:`viewing-query-plan`).This shows the dual class is referenced automatically even if there is no FROM clause.
 
 .. code-block:: sql
 

@@ -92,6 +92,8 @@ The following shows the statistical information of *t1* table in CSQL interprete
             BTID: { 0 , 1049 }
             Cardinality: 5 (5) , Total pages: 2 , Leaf pages: 1 , Height: 2
 
+.. _viewing-query-plan:
+
 Viewing Query Plan
 ==================
 

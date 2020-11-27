@@ -2291,7 +2291,12 @@ You can configure the **JAVA_HOME** environment variable and add the directory i
     % set JAVA_HOME=C:\jdk1.6.0
     % set PATH=%PATH%;%JAVA_HOME%\jre\bin\client
 
-To use other vendor's implementation instead of Sun's Java Virtual Machine, add the path of the **jvm.dll** file to the **PATH** variable during the installation.
+If you want to specify the path of Java Virtual Machine (JVM) explicitly including cases to use other vendor's implementation instead of Sun's JVM, add the path of the **jvm.dll** file to the **JVM_PATH** variable during the installation.
+CUBRID first looks for the **jvm.dll** file in the **JVM_PATH** variable. if **JVM_PATH** is not set or if the file cannot be loaded, it looks for the file in the **JAVA_HOME** variable as described above.
+
+*   An example of configuring the **JVM_PATH** environment variable ::
+    
+    % set JVM_PATH=C:\jdk1.6.0\jre\bin\server\libjvm.dll
 
 Linux/UNIX Environment
 ++++++++++++++++++++++
@@ -2324,7 +2329,14 @@ For Linux/UNIX environment, CUBRID loads the **libjvm.so** file to run the Java 
     % setenv LD_LIBRARY_PATH $JAVA_HOME/jre/lib/i386:$JAVA_HOME/jre/lib/i386/client:$LD_LIBRARY_PATH
     % set path=($path $JAVA_HOME/bin .)
 
-To use other vendor's implementation instead of Sun's Java Virtual Machine, add the path of the JVM (**libjvm.so**) to the library path during the installation. The path of the **libjvm.so** file can be different depending on the platform. For example, the path is the **$JAVA_HOME/jre/lib/sparc** directory in a SUN Sparc machine.
+If you want to specify the path of Java Virtual Machine (JVM) explicitly including cases to use other vendor's implementation instead of Sun's JVM, add the path of the **libjvm.so** file to the **JVM_PATH** variable during the installation.
+The path of the **libjvm.so** file can be different depending on the platform. For example, the path is the **$JAVA_HOME/jre/lib/sparc** directory in a SUN Sparc machine.
+CUBRID first looks for the **libjvm.so** file in the **JVM_PATH** variable. if **JVM_PATH** is not set or if the file cannot be loaded, it looks for the file in the **JAVA_HOME** variable as described above.
+
+*   An example of configuring the **JVM_PATH** environment variable ::
+    
+    % JVM_PATH=/usr/java/jdk1.6.0_10/jre/lib/amd64/server/libjvm.so
+    % export JVM_PATH
 
 .. _cubrid-javasp-system-parameter:
 

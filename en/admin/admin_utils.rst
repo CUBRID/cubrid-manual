@@ -2787,7 +2787,7 @@ When the object type is a class (table), *Nsubgranules* is displayed, which is t
 tranlist
 --------
 
-The **cubrid tranlist** is used to check the transaction information of the target database. Only DBA or DBA group can use this utility. ::
+The **cubrid tranlist** is used to check the transaction information of the target database. ::
 
     cubrid tranlist [options] database_name
 
@@ -2845,14 +2845,6 @@ The following shows [options] available with the **cubrid tranlist** utility.
 
 .. program:: tranlist
 
-.. option:: -u, --user=USER
-
-    *USER* is DB user's ID to log-in. It only allows DBA and DBA group users.(The default: DBA)
-    
-.. option:: -p, --password=PASSWORD
-
-    *PASSWORD* is DB user's password.
-    
 .. option:: -s, --summary
 
     This option outputs only summarized information(it omits query execution information or locking information).
@@ -2920,7 +2912,7 @@ The following shows [options] available with the **cubrid tranlist** utility.
 killtran
 --------
 
-The **cubrid killtran** is used to check transactions or abort specific transaction. Only a DBA can execute this utility. ::
+The **cubrid killtran** is used to check transactions or abort specific transaction. Only a **DBA** can use options for killing a transaction. ::
 
     cubrid killtran [options] database_name
 
@@ -2991,6 +2983,7 @@ The following shows [options] available with the **cubrid killtran** utility.
 
 .. option:: -p PASSWORD
 
+    This option can only be used, if using killing option such as -i and --kill options.
     A value followed by the -p option is a password of the **DBA**, and should be entered in the prompt.
 
 .. option:: -q, --query-exec-info

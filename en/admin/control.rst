@@ -2315,7 +2315,7 @@ For Linux/UNIX environment, CUBRID loads the **libjvm.so** file to run the Java 
     % export JAVA_HOME
     % export LD_LIBRARY_PATH
 
-*   An example of installing 64 Bit JDK 1.6 and configuring the environment variables in a csh ::
+*   An example of installing 64 Bit JDK 1.6 and configuring the environment variables in a csh shell ::
 
     % setenv JAVA_HOME /usr/java/jdk1.6.0_10
     % setenv LD_LIBRARY_PATH $JAVA_HOME/jre/lib/amd64:$JAVA_HOME/jre/lib/amd64/server:$LD_LIBRARY_PATH

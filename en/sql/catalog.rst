@@ -1025,6 +1025,7 @@ The following example shows how to retrieve system classes that can be accessed 
       'db_root'
       'db_serial'
       'db_user'
+      'dual'
 
 DB_DIRECT_SUPER_CLASS
 ---------------------

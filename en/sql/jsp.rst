@@ -26,7 +26,7 @@ The advantages of using Java stored functions/procedures are as follows:
 Starting Java Stored Procedure Server
 =====================================
 
-You need to start a Java Stored Procedure server (Java SP server) for a database you want to use Java-stored procedures/functions.
+You need to start a Java Stored Procedure server (Java SP server) for the database you want to use Java-stored procedures/functions.
 
 Execute the **cubrid javasp** **start** *db_name*. ::
 

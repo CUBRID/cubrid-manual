@@ -2205,7 +2205,7 @@ The following example shows how to stop CUBRID Java SP server for *demodb*.
     @ cubrid javasp stop: demodb
     ++ cubrid javasp stop: success
 
-The following message is returned when CUBRID Java SP server has stopped. 
+The following message is returned when CUBRID Java SP server has been stopped already.
 
 ::
 
@@ -2258,7 +2258,7 @@ Configuring for CUBRID Java SP Server
 Environment Configuration for Java Stored Function/Procedure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To use Java-stored functions/procedures in CUBRID, you must have JRE (Java Runtime Environment) 1.6 or better installed in the environment where the CUBRID server is installed. You can download JRE from the Developer Resources for Java Technology (`https://www.oracle.com/java/technologies <https://www.oracle.com/java/technologies>`_).
+To use Java-stored functions/procedures in CUBRID, you must have JRE (Java Runtime Environment) 1.6 or later installed in the environment where the CUBRID server is installed. You can download JRE from the Developer Resources for Java Technology (`https://www.oracle.com/java/technologies <https://www.oracle.com/java/technologies>`_).
 
 CUBRID 64-bit needs a 64-bit Java Runtime Environment, and CUBRID 32-bit needs a 32-bit Java Runtime Environment. For example, when you run CUBRID 64-bit in the system in which a 32-bit JAVA Runtime Environment is installed, the following error may occur. ::
 
@@ -2425,7 +2425,7 @@ Both *demodb* and *testdb* are present in the server property, but only demodb w
 CUBRID Java SP Server Log
 -------------------------
 
-The logs of CUBRID Java SP server are stored in the log/ directory under the installation directory. There are two types of log files depending on server process of CUBRID Java Stored Procedure Server.
+The logs of CUBRID Java SP server are stored in the **log/** directory under the installation directory. The following log files are created for CUBRID Java Stored Procedure Server per database.
 
 *   Error Log ($CUBRID/log/[db_name]_java.err)
 *   Java Log ($CUBRID/log/[db_name]_java.log)

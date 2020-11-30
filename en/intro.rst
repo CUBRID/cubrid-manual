@@ -29,7 +29,7 @@ CUBRID is an object-relational database management system (DBMS) consisting of t
 
 *   The CUBRID Manager is a GUI tool that allows users to remotely manage the database and the broker. It also provides the Query Editor, a convenient tool that allows users to execute SQL queries on the database server. 
 
-*   The CUBRID Java SP server is an execuction server that processes Java stored procedures/functions passed from the database server.
+*   The CUBRID Java SP server is an execution server that processes Java stored procedures/functions passed from the database server.
 
 .. FIXME: For more information about CUBRID Manager, see http://www.cubrid.org/wiki_tools/entry/cubrid-manager.
 

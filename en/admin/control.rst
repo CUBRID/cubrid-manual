@@ -2458,7 +2458,7 @@ If any error occurs during starting the Java SP server, the error message is sav
 Java Log
 ^^^^^^^^^
 
-An Java log of the JVM in the Java SP server is saved into **$CUBRID/log** directory, and and the format of the file name is *<db_name>_java.log*. The extension is ".log".
+An Java log of the JVM in the Java SP server is saved into **$CUBRID/log** directory, and the format of the file name is *<db_name>_java.log*. The extension is ".log".
 
 ::
 

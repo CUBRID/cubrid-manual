@@ -896,7 +896,7 @@ dual 테이블은 오직 하나의 열과 행을 가지며, 더미 테이블로 
 | dummy              | VARCHAR(1)    | 더미 목적으로만 사용되는 값                              |
 +--------------------+---------------+----------------------------------------------------------+
 
-다음은 CSQL에서 ";plan detail" 명령 입력 또는 "SET OPTIMIZATION LEVEL 513;"을 입력 후 의사 칼럼을 조회하는 질의를 수행한 결과이다(:ref:`viewing-query-plan`). FROM 절을 생략하여도 자동적으로 dual 테이블이 참조되는 것을 볼 수 있다.
+다음은 CSQL에서 ";plan detail" 명령 입력 또는 "SET OPTIMIZATION LEVEL 513;"을 입력 후 의사 칼럼을 조회하는 질의를 수행한 결과이다(:ref:`viewing-query-plan`). FROM절을 생략하여도 자동적으로 dual 테이블이 참조되는 것을 볼 수 있다.
 
 .. code-block:: sql
 

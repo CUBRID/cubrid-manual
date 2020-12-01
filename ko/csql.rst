@@ -535,7 +535,7 @@ CSQL 인터프리터에서 작업 중인 데이터베이스 이름 및 호스트
 
     csql> ;get isolation_level
     === Get Param Input ===
-    isolation_level=4
+    isolation_level="tran_rep_class_commit_instance"
 
 **파라미터 값 설정(;SEt)**
 

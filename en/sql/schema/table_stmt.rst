@@ -1362,7 +1362,8 @@ The **MODIFY** clause can modify type, size, and attribute of a column but canno
 
 If you set the type, size, and attribute to apply to a new column with the **CHANGE** clause or the **MODIFY** clause, the attribute that is currently defined will not be passed to the attribute of the new column.
 
-When you change data types using the **CHANGE** clause or the **MODIFY** clause, the data can be modified. For example, if you shorten the length of a column, the character string may be truncated.
+When you change data types using the **CHANGE** clause or the **MODIFY** clause, the data can be modified. For example, if you shorten the length of a column, the character string may be truncated if the value of configuration parameter alter_table_change_type_strict is set to **no**. But if the parameter value is set to **yes**, the change or modify is not allowed and it returns an error.
+the configuration parameter allow_truncated_string also affect the similar as alter_table_change_type_strict.
 
 .. warning::
 
@@ -1606,13 +1607,13 @@ The **alter_table_change_type_strict** parameter determines whether the value co
 
 When the value of the parameter, **alter_table_change_type_strict** is no, it will operate depending on the conditions as follows:
 
-*   Overflow occurred while converting numbers or character strings to Numbers: It is determined based on symbol of the result type. If it is negative value, it is specified as a minimum value or positive value, specified as the maximum value and a warning message for records where overflow occurred is recorded in the log. For strings, it will follow the rules stated above after it is converted to **DOUBLE** type.
+*   Overflow occurred while converting numbers or character strings to Numbers: It is determined based on symbol of the result type. If it is negative value, it is specified as a minimum value or positive value, specified as the maximum value and a warning message for records where overflow occurred is recorded in the log. For strings, it will follow the rules stated above after it is converted to **DOUBLE** type. Overflow can also be returned by the parameter **allow_truncated_string** setting to **no** if the converted string does not fit the length of the target string type.
 
-*   Character strings to convert to shorter ones: The record will be updated to the hard default value of the type that is defined and the warning message will be recorded in a log.
+*   Character strings to convert to shorter ones: The record will be updated to the hard default value of the type that is defined and the warning message will be recorded in a log. Converting to shorter ones is not allowed when the **allow_truncated_string** is set to **no**.
 
 *   Conversion failure due to other reasons: The record will be updated to the hard default value of the type that is defined and the warning message will be recorded in a log.
 
-If the value of the **alter_table_change_type_strict** parameter is yes, an error message will be displayed and the changes will be rolled back.
+If the value of the **alter_table_change_type_strict** parameter is yes or **allow_truncated_string** is set to no, an error message will be displayed and the changes will be rolled back.
 
 The **ALTER CHANGE** statement checks the possibility of type conversion before updating a record but the type conversion of specific values may fail. For example, if the value format is not correct when you convert **VARCHAR** to **DATE**, the conversion may fail. In this case, the hard default value of the **DATE** type will be assigned.
 

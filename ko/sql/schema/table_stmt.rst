@@ -970,7 +970,8 @@ ALTER TABLE
             MODIFY <alter_modify> |            
             INHERIT <resolution>, ... |
             AUTO_INCREMENT = <initial_value> |
-            COMMENT [=] 'table_comment_string'
+            COMMENT [=] 'table_comment_string' |
+            COMMENT ON {COLUMN | CLASS ATTRIBUTE} <column_comment_definition> [, <column_comment_definition>] ;
                            
             <alter_add> ::= 
                 [ATTRIBUTE|COLUMN] [(]<class_element>, ...[)] [FIRST|AFTER old_column_name] |
@@ -1017,9 +1018,11 @@ ALTER TABLE
 
             <index_col_name> ::= column_name [(length)] [ASC | DESC]
 
+            <column_comment_definition> ::= column_name [=] 'column_comment_string'
+
 .. note::
 
-    칼럼의 커멘트는 <column_definition>에서 지정한다. <column_definition>은 위의 CREATE TABLE 구문을 참고한다.
+    칼럼의 커멘트는 <column_definition>에서 지정하거나 <column_comment_definition>에서 지정한다. <column_definition>은 위의 CREATE TABLE 구문을 참고한다.
 
 .. warning::
 
@@ -1668,18 +1671,27 @@ CHANGE/MODIFY 절
 칼럼의 커멘트
 -------------
 
-칼럼의 커멘트는 ADD/MODIFY/CHANGE 구문 뒤에 위치하는 <*column_definition*> 에서 지정한다. <*column_definition*>은 위의 CREATE TABLE 구문을 참고한다.
+칼럼의 커멘트는 ADD/MODIFY/CHANGE 구문 뒤에 위치하는 <*column_definition*> 에서 지정하거나 COMMENT ON COLUMN 구문 뒤에 위치하는 <column_comment_definition> 에서 지정한다. <*column_definition*>은 위의 CREATE TABLE 구문을 참고한다.
 
-다음은 칼럼의 커멘트를 확인하는 구문이다.
+COMMENT ON COLUMN 구문에서는 하나 이상의 칼럼을 지정하여 칼럼 커멘트를 변경할 수 있다.
+다음은 COMMENT ON COLUMN 구문을 이용해서 칼럼의 커멘트를 변경하는 예제이다.
 
 .. code-block:: sql
 
-    SHOW CREATE TABLE table_name;
+    ALTER TABLE t1 COMMENT ON COLUMN c1 = 'changed table column c1 comment';
+    ALTER TABLE t1 COMMENT ON COLUMN c2 = 'changed table column c2 comment', c3 = 'changed table column c3 comment';
+
+다음은 칼럼의 커멘트를 확인하는 예제이다.
+
+.. code-block:: sql
+
+    SHOW CREATE TABLE t1 /* table_name */ ;
 
     SELECT attr_name, class_name, comment 
-    FROM db_attribute WHERE class_name ='classname';
+    FROM db_attribute
+    WHERE class_name = 't1' /* lowercase_table_name */ ;
 
-    SHOW FULL COLUMNS FROM table_name;
+    SHOW FULL COLUMNS FROM t1 /* table_name */ ;
 
 CSQL 인터프리터에서 ";sc table_name" 명령으로도 확인할 수 있다.
 
@@ -1687,7 +1699,7 @@ CSQL 인터프리터에서 ";sc table_name" 명령으로도 확인할 수 있다
 
     $ csql -u dba demodb
     
-    csql> ;sc table_name
+    csql> ;sc t1
 
 .. _rename-column:
 

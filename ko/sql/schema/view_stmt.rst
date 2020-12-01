@@ -294,15 +294,55 @@ DROP QUERY 절
 COMMENT 절
 ----------
 
-**ALTER VIEW** 문의 **COMMENT** 절을 이용하여 뷰의 커멘트를 변경할 수 있다.
+**ALTER VIEW** 문의 **COMMENT** 절을 이용하여 뷰와 컬럼의 커멘트를 변경할 수 있다.
 
 ::
 
-    ALTER [VIEW | VCLASS] view_name COMMENT [=] 'view_comment';
+    ALTER [VIEW | VCLASS] view_name
+    COMMENT [=] 'view_comment';
+    COMMENT ON {COLUMN | CLASS ATTRIBUTE} <column_comment_definition> [, <column_comment_definition>] ;
+
+        <column_comment_definition> ::= column_name [=] 'column_comment_string'
+
+*   *view_name*: 변경할 뷰의 이름을 명시한다.
+*   *column_name*: 변경할 칼럼의 이름을 명시한다.
+*   *view_comment_string*: 뷰의 커멘트를 지정한다.
+*   *column_comment_string*: 칼럼의 커멘트를 지정한다.
+
+다음은 뷰의 커멘트를 변경하는 예제이다.
 
 .. code-block:: sql
 
-    ALTER VIEW b_view COMMENT = 'changed view comment';
+    ALTER VIEW v1 COMMENT = 'changed view v1 comment';
+
+ON COLUMN 키워드 뒤에 하나 이상의 칼럼을 지정하여 칼럼의 커멘트를 변경할 수 있다.
+다음은 칼럼의 커멘트를 변경하는 예제이다.
+
+.. code-block:: sql
+
+    ALTER VIEW v1 COMMENT ON COLUMN c1 = 'changed view column c1 comment';
+    ALTER VIEW v1 COMMENT ON COLUMN c2 = 'changed view column c2 comment', c3 = 'changed view column c3 comment';
+
+다음은 뷰와 칼럼의 커멘트를 확인하는 예제이다.
+SHOW CREATE VIEW 구문에서는 뷰 커멘트만 확인할 수 있다.
+
+.. code-block:: sql
+
+    SHOW CREATE VIEW v1 /* view_name */ ;
+
+    SELECT attr_name, class_name, comment 
+    FROM db_attribute
+    WHERE class_name = 'v1' /* lowercase_view_name */ ;
+
+    SHOW FULL COLUMNS FROM v1 /* view_name */ ;
+
+CSQL 인터프리터에서 ";sc view_name" 명령으로도 확인할 수 있다.
+
+::
+
+    $ csql -u dba demodb
+    
+    csql> ;sc v1
 
 DROP VIEW
 =========

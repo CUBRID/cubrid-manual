@@ -970,6 +970,7 @@ You can modify the structure of a table by using the **ALTER** statement. You ca
             INHERIT <resolution>, ... |
             AUTO_INCREMENT = <initial_value> |
             COMMENT [=] 'table_comment_string'
+            COMMENT ON {COLUMN | CLASS ATTRIBUTE} <column_comment_definition> [, <column_comment_definition>] ;
                            
             <alter_add> ::= 
                 [ATTRIBUTE|COLUMN] [(]<class_element>, ...[)] [FIRST|AFTER old_column_name] |
@@ -1016,9 +1017,11 @@ You can modify the structure of a table by using the **ALTER** statement. You ca
 
             <index_col_name> ::= column_name [(length)] [ASC | DESC]
 
+            <column_comment_definition> ::= column_name [=] 'column_comment_string'
+
 .. note::
 
-    A column's comment is specified in <*column_definition*>. For <*column_definition*>, see the above CREATE TABLE syntax.
+    A column's comment is specified in <*column_definition*> or <*column_comment_definition*>. For <*column_definition*>, see the above CREATE TABLE syntax.
 
 .. warning::
 
@@ -1667,18 +1670,27 @@ The hard default value is a value that will be used when you add columns with th
 Column's COMMENT
 ----------------
 
-A column's comment is specified in <*column_definition*>, which is located at the end of ADD/MODIFY/CHANGE syntax. To see the meaning of <*column_definition*>, refer to CREATE TABLE syntax on the above.
+A column's comment is specified in <*column_definition*>, which is located at the end of ADD/MODIFY/CHANGE syntax, or in <*column_comment_definition*>, which is located at the end of COMMENT ON COLUMN syntax. To see the meaning of <*column_definition*>, refer to CREATE TABLE syntax on the above.
+
+In the COMMENT ON COLUMN syntax, column comments are changed by specifying one or more columns.
+The following example shows how to change a column comment using the COMMENT ON COLUMN statement.
+
+.. code-block:: sql
+
+    ALTER TABLE t1 COMMENT ON COLUMN c1 = 'changed table column c1 comment';
+    ALTER TABLE t1 COMMENT ON COLUMN c2 = 'changed table column c2 comment', c3 = 'changed table column c3 comment';
 
 The below is a syntax to show a column's comment.
 
 .. code-block:: sql
 
-    SHOW CREATE TABLE table_name;
+    SHOW CREATE TABLE t1 /* table_name */ ;
 
     SELECT attr_name, class_name, comment 
-    FROM db_attribute WHERE class_name ='classname';
+    FROM db_attribute
+    WHERE class_name = t1 /* lowercase_table_name */ ;
 
-    SHOW FULL COLUMNS FROM table_name;
+    SHOW FULL COLUMNS FROM t1 /* table_name */ ;
 
 You can see this comment with the ";sc table_name" command in the CSQL interpreter.
 

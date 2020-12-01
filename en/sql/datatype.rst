@@ -1047,6 +1047,7 @@ A variable-length bit string is represented as **BIT VARYING** (*n*), where *n* 
     INSERT INTO bitvar_tbl VALUES (0b1010, 0b1010);
     INSERT INTO bitvar_tbl VALUES (0xaa, 0xaa);
     INSERT INTO bitvar_tbl(a1) VALUES (0xaaa);
+    INSERT INTO bitvar_tbl(a2) VALUES (0xaaa);
     SELECT * FROM bitvar_tbl;
 
 ::
@@ -1057,14 +1058,7 @@ A variable-length bit string is represented as **BIT VARYING** (*n*), where *n* 
       X'a'                  X'a'
       X'aa'                 X'aa'
       X'aaa'                NULL
-
-.. code-block:: sql
-
-    INSERT INTO bitvar_tbl(a2) VALUES (0xaaa);
-
-::
-
-    ERROR: Data overflow coercing X'aaa' to type bit varying.
+      NULL                  X'aaa'
 
 .. _char-data-type:
 

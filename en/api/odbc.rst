@@ -75,7 +75,7 @@ To run 32-bit application, 32-bit ODBC driver is required. If you have to choose
 
 Microsoft Windows 64-bit platform support the environment to run 32-bit application on 64-bit environment, which is called WOW64 (Windows-32-on-Windows-64). This environment maintains its own copy of the registry that is only for 32-bit applications.
 
-**Configuring DNS**
+**Configuring DSN**
 
 After you check the CUBRID ODBC driver installed, configure DSN as a database where the applications are trying to connect. To configure, click the [Add] button in the ODBC Data Source Administrator dialog box. Then, the following dialog box will appear. Select "CUBRID Driver" and then click the [Finish] button.
 

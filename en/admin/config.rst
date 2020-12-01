@@ -1228,7 +1228,7 @@ The following are parameters related to SQL statements and data types supported 
 
 **allow_truncated_string**
 
-    **allow_truncated_string** is a parameter to configure whether to allow the truncation of string values according to the string manipulation operations used in insert or update query, and the default value is **no**. If the value for this parameter is set to **no**, the string value is not allow to be truncated when you do operation for any string related to insert or update query; however the string related to select query may be truncated regardless of this configuration. If it is set to **yes**, the string value may be truncated regardless of the type of (insert/update/select) query.
+    **allow_truncated_string** is a parameter to configure whether to allow the truncation of string values according to the string manipulation operations used in insert or update query, and the default value is **no**. If the value for this parameter is set to **no**, the string value is not allowed to be truncated when you do operation for any string related to insert or update query; however the string related to select query may be truncated regardless of this configuration. If it is set to **yes**, the string value may be truncated regardless of the type of (INSERT/UPDATE/SELECT) query.
 
 **ansi_quotes**
 

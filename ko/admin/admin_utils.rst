@@ -40,6 +40,7 @@ cubrid 유틸리티의 사용법(구문)은 다음과 같다. ::
         dumplocale [option] <database-name>   --- 컴파일된 바이너리 로캘 정보를 사람이 읽을 수 있는 텍스트로 출력하는 도구
         gen_tz [option] [<database-name>]  --- 공유 라이브러리로 컴파일할 수 있는 타임존 데이터가 포함된 C 소스 파일 생성
         dump_tz [option]  --- 타임존 관련 정보 출력
+		tde <operation> [option] <database_name> --- TDE 암호화 관리 도구
 
 cubrid 유틸리티 로깅
 --------------------
@@ -3185,6 +3186,83 @@ paramdump
     클라이언트-서버 모드에서 서버 프로세스의 파라미터 정보를 출력한다. ::
 
         cubrid paramdump -C demodb
+
+.. _tde:
+
+tde
+---
+
+**cubrid tde** 유틸리티는 데이터베이스의 TDE 암호화를 관리하기 위하여 사용된다. **cubrid tde** 유틸리티를 사용하면 데이터베이스에 등록된 키를 변경할 수 있고, 키 파일에 새로운 키를 안정적으로 추가하고 제거할 수 있다. 또한, 지금까지 키 파일에 추가된 키들과 데이터베이스에 등록된 키가 무엇인지 조회할 수 있다. 자세한 내용은 :ref:`Transparent Data Encryption` 을 참고한다.
+
+::
+
+    cubrid tde operation [option] database_name
+
+*   **cubrid**: CUBRID 서비스 및 데이터베이스 관리를 위한 통합 유틸리티
+
+*   **tde**: 대상 데이터베이스에 적용된 TDE 암호화에 대한 관리 도구
+
+*   *operation*: 도구를 통한 수행할 작업을 지정한다. 키 조회, 키 추가, 키 제거, 키 변경 네 가지 종류가 있으며 하나의 작업이 주어져야 한다.
+
+*   *database_name*: 일관성을 확인하거나 복구하려는 데이터베이스 이름
+
+다음은 **cubrid tde** 에 대한 operation이다.
+
+.. program:: tde
+
+.. option:: -s, --show-keys
+
+    데이터베이스에 등록된 키와 키 파일 (_keys)내의 키들에 대한 정보를 출력한다.  ::
+
+        $ cubrid tde -s testdb
+        Key File: /home/usr/CUBRID/databases/testdb/testdb_keys
+
+        The current key set on testdb:
+        Key Index: 2
+        Created on Fri Nov 27 11:14:54 2020
+        Set     on Fri Nov 27 11:15:30 2020
+
+        Keys Information: 
+        Key Index: 0 created on Fri Nov 27 11:11:27 2020
+        Key Index: 1 created on Fri Nov 27 11:14:47 2020
+        Key Index: 2 created on Fri Nov 27 11:14:54 2020
+        Key Index: 3 created on Fri Nov 27 11:14:55 2020
+
+        The number of keys: 4
+
+    상단에 출력되는 `the current key` 정보가 현재 데이터베이스에 등록된 키의 정보이다. 키 파일내에서의 인덱스와 키의 생성시간, 등록된 시간을 출력해준다. 키 인덱스와 생성시간으로 등록된 키를 식별할 수 있고, 등록된 시간을 통해 키 변경 계획을 수립할 수 있다.
+
+    하단의 `Keys Information`은 키 파일내에서 생성되어 관리되고 있는 키들을 보여준다. 키 인덱스와 생성시간을 확인할 수 있다.	
+
+.. option:: -n, --generate-new-key
+
+    키 파일 (_keys)에 새로운 키를 추가한다 (최대 128개). 성공할 경우 추가된 키의 인덱스를 출력해주며, 이 인덱스는 이후 키를 변경하거나 제거할 때에 키를 식별하기 위하여 사용된다. 추가된 키들의 정보는 \\-\\-show-keys 를 통해 확인할 수 있다. ::
+
+        $ cubrid tde -n testdb
+        Key File: /home/usr/CUBRID/databases/testdb/testdb_keys
+
+        SUCCESS: A new key has been generated - key index: 1 created on Tue Dec  1 11:30:47 2020
+
+.. option:: -d, --delete-key=KEY_INDEX
+
+    키 파일 (-keys)에서 인덱스로 지정된 키 하나를 제거한다. 현재 데이터베이스에 등록된 키는 제거할 수 없다. ::
+
+        $ cubrid tde -d 1 testdb
+        Key File: /home/usr/CUBRID/databases/testdb/testdb_keys
+
+        SUCCESS: The key (index: 1) has been deleted
+
+.. option:: -c, --change-key=KEY_INDEX
+
+    데이터베이스에 등록된 키를 키 파일 (_keys)에 존재하는 다른 키로 변경한다. 변경 시에 이전에 등록된 키와 새로 등록하려는 키가 모두 존재해야 한다. 변경된 내용은  ::
+
+        $ cubrid tde -c 2 testdb
+        Key File: /home/usr/CUBRID/databases/testdb/testdb_keys
+
+        Trying to change the key from the key (index: 0) to the key (index: 2)..
+        SUCCESS: The key has been changed from the key (index: 0) to the key (index: 2)
+
+    데이터베이스에 등록된 키를 변경하기 위해서는 먼저 \\-\\-generate-new-key 를 통해 등록할 키를 먼저 생성해야 한다. 사용자는 키 변경을 위해 새로운 키를 생성할 수 있고, 미리 여러 키를 생성해 두고 보안 계획에 따라 키를 변경할 수 있다.
 
 HA 명령어
 ---------

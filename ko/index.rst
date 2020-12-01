@@ -55,6 +55,7 @@ CUBRID 10.2 사용자 매뉴얼
     sql/index.rst
     admin/index.rst
     ha.rst
+    security.rst
     api/index.rst
     release_note/index.rst
 

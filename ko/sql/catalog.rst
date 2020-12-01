@@ -885,6 +885,48 @@ db_ha_apply_info
 | start_time           | DATETIME      | applylogdb 프로세스가 슬레이브 DB에 접속한 시간                             |
 +----------------------+---------------+-----------------------------------------------------------------------------+
 
+dual
+----
+
+dual 테이블은 오직 하나의 열과 행을 가지며, 더미 테이블로 사용된다. dual 테이블은 상수, 계산식, 또는 SYS_DATE나 USER와 같은 의사 칼럼들을 조회할 때 사용된다. 큐브리드에서 의사 칼럼은 함수로써 제공되며  이에 대한 자세한 내용과 예제들은 :ref:`operators-and-functions` 를 참고한다. 상수, 계산식, 또는 의사 칼럼을 조회할 때는 FROM절을 생략하여도 dual 테이블이 자동적으로 참조된다. dual 테이블은 다른 시스템 카탈로그처럼 dba 소유로 생성되지만 dba는 dual 테이블에 대해 SELECT 연산만 수행가능하다. 하지만, 다른 시스템 카탈로그와 다르게 PUBLIC 사용자들 또한 dual 테이블에 대해 SELECT 연산을 수행할 수 있다.
+
++--------------------+---------------+----------------------------------------------------------+
+| 속성명             | 데이터 타입   | 설명                                                     |
++====================+===============+==========================================================+
+| dummy              | VARCHAR(1)    | 더미 목적으로만 사용되는 값                              |
++--------------------+---------------+----------------------------------------------------------+
+
+다음은 CSQL에서 ";plan detail" 명령 입력 또는 "SET OPTIMIZATION LEVEL 513;"을 입력 후 의사 칼럼을 조회하는 질의를 수행한 결과이다(:ref:`viewing-query-plan`). FROM 절을 생략하여도 자동적으로 dual 테이블이 참조되는 것을 볼 수 있다.
+
+.. code-block:: sql
+
+  SET OPTIMIZATION LEVEL 513;
+  SELECT SYS_DATE;
+
+::
+
+  Join graph segments (f indicates final):
+  seg[0]: [0]
+  Join graph nodes:
+  node[0]: dual dual(1/1) (loc -1)
+
+  Query plan:
+
+    sscan
+      class: dual node[0]
+      cost:  1 card 1
+
+    Query stmt:
+
+    select  SYS_DATE  from dual dual
+
+    === <Result of SELECT Command in Line 1> ===
+
+            SYS_DATE
+         ============
+           11/26/2020
+
+
 시스템 카탈로그 가상 클래스
 ===========================
 
@@ -986,6 +1028,7 @@ DB_CLASS
       'db_root'
       'db_serial'
       'db_user'
+      'dual'
 
 DB_DIRECT_SUPER_CLASS
 ---------------------

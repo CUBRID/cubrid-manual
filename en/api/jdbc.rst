@@ -859,7 +859,7 @@ You can get the **LOB** type data in the following ways.
      
     // Getting data directly from ResetSet
     PrepareStatement pstmt1 = conn.prepareStatement("SELECT content FROM doc_t WHERE doc_id = ? ");
-    pstmt2.setString(1, "doc-10");
+    pstmt1.setString(1, "doc-10");
     ResultSet rs = pstmt1.executeQuery();
     
     while (rs.next())

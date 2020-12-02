@@ -862,7 +862,7 @@ JDBC에서 **LOB** 데이터를 처리하는 인터페이스는 JDBC 4.0 스펙�
      
     // ResetSet에서 직접 데이터 인출
     PrepareStatement pstmt1 = conn.prepareStatement("SELECT content FROM doc_t WHERE doc_id = ? ");
-    pstmt2.setString(1, "doc-10");
+    pstmt1.setString(1, "doc-10");
     ResultSet rs = pstmt1.executeQuery();
     
     while (rs.next())

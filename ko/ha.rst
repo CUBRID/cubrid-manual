@@ -2213,6 +2213,10 @@ restoreslave
 
     이 옵션은 databases.txt에 지정된 데이터베이스 경로로 복구를 수행할 경우 지정한다. 더 많은 정보는 :ref:`restoredb` 의 -u 옵션을 참고한다.
 
+.. option:: -k, --keys-file-path=PATH
+
+    이 옵션은 복구 시 필요한 키 파일을 지정한다. 더 많은 정보는 :ref:`restoredb` 를 참고한다.
+
 복제 구축 시나리오 예제
 -----------------------
 

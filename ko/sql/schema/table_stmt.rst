@@ -78,7 +78,7 @@ CREATE TABLE
      
         <resolution> ::= [CLASS] {column_name} OF superclass_name [AS alias]
         <table_options> ::= <table_option> [[,] <table_option> ...] 
-            <table_option> ::= REUSE_OID | 
+            <table_option> ::= REUSE_OID | DONT_REUSE_OID |
                                COMMENT [=] 'table_comment_string' |
                                [CHARSET charset_name] [COLLATE collation_name]
 
@@ -685,6 +685,8 @@ KEY 또는 INDEX
 테이블 옵션
 -----------
 
+테이블 옵션 중 **REUSE_OID** 와 **DONT_REUSE_OID** 은 테이블이 참조 가능한 테이블인지 아닌지를 지정하는 옵션입니다. 두개의 옵션은 함께 사용할 수 없으며, 생략한 경우에는 **REUSE_OID** 테이블 옵션을 사용하여 테이블을 생성한다. 기본 옵션을 **DONT_REUSE_OID**\로 변경하고 싶은 경우에는 시스템 파라미터 **create_table_reuseoid** 값을 **no**로 변경하면 된다.
+
 .. _reuse-oid:
 
 REUSE_OID
@@ -727,6 +729,13 @@ OID(Object Identifier)는 볼륨 번호, 페이지 번호, 슬롯 번호와 같�
     *   OID 재사용 테이블에서 인스턴스 메서드를 호출할 수 없다. 메서드가 정의된 클래스를 상속받은 서브클래스가 OID 재사용 테이블로 정의되어도 마찬가지로 인스턴스 메서드를 호출할 수 없다.
     *   OID 재사용 테이블은 CUBRID 2008 R2.2 버전 이상에서만 지원되며, 하위 호환성을 보장하지 않는다. 즉, 더 낮은 버전의 데이터베이스 서버에서 OID 재사용 테이블이 존재하는 데이터베이스에 접근할 수 없다.
     *   OID 재사용 테이블은 분할 테이블로 관리될 수 있으며, 복제될 수 있다.
+
+.. _dont-reuse-oid:
+
+DONT_REUSE_OID
+^^^^^^^^^^^^^^
+
+테이블 생성 시 **DONT_REUSE_OID** 옵션을 명시하면, **REUSE_OID**와 상반된 참조 가능(referable)한 테이블을 생성한다. 
 
 문자셋과 콜레이션
 ^^^^^^^^^^^^^^^^^

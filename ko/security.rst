@@ -237,7 +237,7 @@ SHOW CREATE TABLE 구문 이용
 
       TABLE                 CREATE TABLE        
     ============================================
-      'tde_tbl1'          'CREATE TABLE [tde_tbl1] ([a] INTEGER) REUSE_OID, COLLATE iso88591_bin **ENCRYPT=AES**'
+      'tde_tbl1'          'CREATE TABLE [tde_tbl1] ([a] INTEGER) REUSE_OID, COLLATE iso88591_bin ENCRYPT=AES'
 
     1 row selected. (0.144627 sec) Committed.
 
@@ -254,7 +254,7 @@ db_class 시스템 카탈로그로 질의
 
     === <Result of SELECT Command in Line 1> ===
 
-      class_name            **tde_algorithm**       
+      class_name            tde_algorithm
     ============================================
       'tde_tbl1'          'AES'               
       'tde_tbl2'          'ARIA'              
@@ -278,7 +278,7 @@ cubrid diagdb 유틸리티를 통한 확인
                     vfid = 0|3520 
                     permanent 
                     regular 
-                    **tde_algorithm: AES**  
+                    tde_algorithm: AES
                     page: total = 64, user = 1, table = 1, free = 62 
                     sector: total = 1, partial = 1, full = 0, empty = 0  
     ...

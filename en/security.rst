@@ -5,7 +5,7 @@
 ***************
 CUBRID Security
 ***************
-
+This chapter describes the CUBRID security features. CUBRID provides Packet Encryption, ACL(Access Control List), authorization, and TDE(Transparent Data Encryption) features to protect the user database.
 
 Packet Encryption
 =================

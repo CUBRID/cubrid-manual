@@ -235,7 +235,7 @@ To display the option list in the prompt, execute the **csql** utilities without
  
 .. option:: -q, --query-output
 
-    This option displays the result for easy use in insert queries, only show column names and values and works with **-c** or **-i** option. Each column name and value is separated by a comma or a single character of the **--delimiter** option and all results except for numeric types is enclosed by a single quote or a single character of the **--enclosure** option. If the enclosure is single quote, the single quote in the results is replaced with two ones. It is ignored when it is given with **-l** option.
+    This option displays the result for easy use in insert queries, only show column names and values, and works with **-c** or **-i** option. Each column name and value are separated by a comma or a single character of the **--delimiter** option; and all results except for numeric types are enclosed by a single quote or a single character of the **--enclosure** option. If the enclosure is a single quote, the single quote in the results is replaced with two ones. It is ignored when it is given with **-l** option.
 
     ::
 
@@ -259,7 +259,7 @@ To display the option list in the prompt, execute the **csql** utilities without
 
 .. option:: -d, --loaddb-output
 
-    This option displays the result for easy use in loaddb utility, only show column names and values and works with **-c** or **-i** option. Each column name and value is separated by a space and all results except for numeric types is enclosed by a single quote. The single quote in the results is replaced with two ones and the result of the enum type is outputed by an index instead of a value. This opton is ignored when it is given with **-l** option.
+    This option displays the result for easy use in loaddb utility, only show column names and values, and works with **-c** or **-i** option. Each column name and value are separated by a space; and all results except for numeric types are enclosed by a single quote. The single quote in the results is replaced with two ones and the result of the enum type is outputted by an index instead of a value. This opton is ignored when it is given with **-l** option.
 
     ::
 

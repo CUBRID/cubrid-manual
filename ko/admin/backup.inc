@@ -56,6 +56,7 @@ backupdb
         -----------------------------------------------------------------------------
          volume name                  | # of pages | backup progress status    | done
         -----------------------------------------------------------------------------
+         demodb_keys                  |          1 | ######################### | done
          demodb_vinf                  |          1 | ######################### | done
          demodb                       |      25000 | ######################### | done
          demodb_lginf                 |          1 | ######################### | done
@@ -99,6 +100,12 @@ backupdb
     대상 데이터베이스를 백업하는 도중 쉬는 시간을 설정한다. 단위는 밀리초이며, 기본값은 **0** 이다. 1MB의 파일을 읽을 때마다 설정한 시간만큼 쉰다. 백업 작업이 과도한 디스크 I/O를 유발하기 때문에, 운영 중인 서비스에 백업 작업으로 인한 영향을 줄이고자 할 때 이 옵션이 사용된다. ::
 
         cubrid backupdb --sleep-msecs=5 demodb
+
+.. option:: --separate-keys
+
+    백업 볼륨에 키 파일을 포함하지 않는다. 포함되지 않은 키는 [database]_bk[backup_level]_keys 라는 이름을 가진 별도의 파일로 분리된다. 옵션을 주지 않을 경우 기본적으로 키 파일은 백업 볼륨에 포함된다. 키 파일 분리에 대한 자세한 설명은 :ref:`tde-enc-backup` 을 참고한다.  ::
+
+        cubrid backupdb --seprate-keys demodb
 
 백업 정책 및 방식
 ^^^^^^^^^^^^^^^^^
@@ -283,6 +290,8 @@ restoredb
                 Zip Level: 0 (NONE)
         Previous Backup level: 0 Time: Mon Oct 1 17:31:40 2008
         (start_lsa was -1|-1)
+        Database Volume name: /local1/testing/demodb_keys
+             Volume Identifier: -6, Size: 65 bytes (1 pages)
         Database Volume name: /local1/testing/demodb_vinf
              Volume Identifier: -5, Size: 308 bytes (1 pages)
         Database Volume name: /local1/testing/demodb
@@ -344,6 +353,12 @@ restoredb
     데이터베이스 위치 정보 파일(**databases.txt**)에 지정된 경로에서 대상 데이터베이스를 복구하는 구문이다. **-u** 옵션은 A 서버에서 백업을 수행하고 B 서버에서 백업 파일을 복구하고자 할 때 사용할 수 있는 유용한 옵션이다. ::
 
         cubrid restoredb -u demodb
+
+.. option:: -k, --keys-file-path=PATH
+
+    대상 데이터베이스 복구 시 필요한 키 파일을 지정한다. 올바른 키 파일이 주어지지 않았을 경우 복구에 실패한다. 옵션을 지정해주지 않을 경우 적절한 키 파일을 탐색하여 사용한다. 이에 대한 자세한 내용은 :ref:`tde-enc-backup` 을 참고한다. ::
+
+        cubrid restoredb -k /home/cubrid/backup_keys/demodb_bk1_keys demodb
 
 데이터베이스 서버 시작이나 백업 볼륨 복구 시 서버 에러 로그 또는 restoredb 에러 로그 파일에 로그 회복(log recovery) 시작 시간과 종료 시간에 대한 NOTIFICATION 메시지를 출력하여, 해당 작업의 소요 시간을 확인할 수 있다. 해당 메시지에는 적용(redo)해야할 로그의 개수와 로그 페이지 개수가 함께 기록된다. 
 

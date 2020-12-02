@@ -290,6 +290,10 @@ createdb
     cubrid createdb --db-volume-size=512M --log-volume-size=256M cubriddb en_US
     cubrid addvoldb -S -n cubriddb_DATA01 --db-volume-size=512M cubriddb
     cubrid addvoldb -S -p temp -n cubriddb_TEMP01 --db-volume-size=512M cubriddb
+
+.. note:: **기존 키 파일을 사용하는 데이터베이스 생성**
+
+    데이터베이스가 생성될 때 기본적으로 키 파일이 함께 생성된다. 만약 기존에 사용하던 키 파일을 이용하는 데이터베이스를 생성하고 싶다면 키를 [database-name]_keys 이름으로 먼저 복사해 둔다. 이후  **tde_keys_file_path** 로 복사한 키 파일이 존재하는 디렉터리를 지정하고 **createdb** 유틸리티를 통해 데이터베이스를 생성한다. TDE 키 파일에 관한 자세한 내용은 :ref:`tde-file-based-key` 를 참고한다.
     
 .. _adding-database-volume:    
 

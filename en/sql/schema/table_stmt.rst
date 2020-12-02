@@ -969,7 +969,7 @@ You can modify the structure of a table by using the **ALTER** statement. You ca
             MODIFY <alter_modify> |            
             INHERIT <resolution>, ... |
             AUTO_INCREMENT = <initial_value> |
-            COMMENT [=] 'table_comment_string'
+            COMMENT [=] 'table_comment_string' |
             COMMENT ON {COLUMN | CLASS ATTRIBUTE} <column_comment_definition> [, <column_comment_definition>] ;
                            
             <alter_add> ::= 

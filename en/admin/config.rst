@@ -221,7 +221,7 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 | :ref:`stmt-type-parameters`   | add_column_update_hard_default      | client/server parameter | O       | bool     | no                             | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | alter_table_change_type_strict      | client/server parameter | O       | bool     | yes                             | available             |
+|                               | alter_table_change_type_strict      | client/server parameter | O       | bool     | yes                             | available            |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | allow_truncated_string              | client/server parameter | O       | bool     | no                             | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -232,6 +232,8 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               | block_nowhere_statement             | client parameter        | O       | bool     | no                             | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | compat_numeric_division_scale       | client/server parameter | O       | bool     | no                             | available             |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | create_table_reuseoid               | client parameter        | O       | bool     | yes                            | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | cte_max_recursions                  | client/server parameter | O       | int      | 2000                           | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -1148,6 +1150,8 @@ The following are parameters related to SQL statements and data types supported 
 +---------------------------------+--------+------------+------------+------------+
 | compat_numeric_division_scale   | bool   | no         |            |            |
 +---------------------------------+--------+------------+------------+------------+
+| create_table_reuseoid           | bool   | yes        |            |            |
++---------------------------------+--------+------------+------------+------------+
 | cte_max_recursions              | int    | 2,000      | 2          | 1,000,000  |
 +---------------------------------+--------+------------+------------+------------+
 | default_week_format             | int    | 0          |            |            |
@@ -1249,6 +1253,12 @@ The following are parameters related to SQL statements and data types supported 
 **compat_numeric_division_scale**
 
     **compat_numeric_division_scale** is a parameter to configure the scale to be displayed in the result (quotient) of a division operation. If the parameter is set to **no**, the scale of the quotient is 9, if it is set to **yes**, the scale is determined by that of the operand. The default value is **no**.
+
+**create_table_reuseoid**
+
+   **create_table_reuseoid** is a parameter to specify whether to use the **REUSE_OID** or **DONT_REUSE_OID** option when creating a table without table option. If it is set to **yes**, the table is created with **REUSE_OID** option. The default value is **yes**.
+
+   For detail, see :ref:`reuse-oid` and :ref:`dont-reuse-oid` .
 
 **cte_max_recursions**
 

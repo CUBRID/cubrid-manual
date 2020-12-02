@@ -299,7 +299,7 @@ You can change a view's comment and column comments with **COMMENT** clause of *
 ::
 
     ALTER [VIEW | VCLASS] view_name
-    COMMENT [=] 'view_comment_string';
+    COMMENT [=] 'view_comment_string' |
     COMMENT ON {COLUMN | CLASS ATTRIBUTE} <column_comment_definition> [, <column_comment_definition>] ;
 
         <column_comment_definition> ::= column_name [=] 'column_comment_string'

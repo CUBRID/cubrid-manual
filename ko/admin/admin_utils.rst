@@ -40,7 +40,7 @@ cubrid 유틸리티의 사용법(구문)은 다음과 같다. ::
         dumplocale [option] <database-name>   --- 컴파일된 바이너리 로캘 정보를 사람이 읽을 수 있는 텍스트로 출력하는 도구
         gen_tz [option] [<database-name>]  --- 공유 라이브러리로 컴파일할 수 있는 타임존 데이터가 포함된 C 소스 파일 생성
         dump_tz [option]  --- 타임존 관련 정보 출력
-		tde <operation> [option] <database_name> --- TDE 암호화 관리 도구
+        tde <operation> [option] <database_name> --- TDE 암호화 관리 도구
 
 cubrid 유틸리티 로깅
 --------------------

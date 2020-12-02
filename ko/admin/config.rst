@@ -371,6 +371,8 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
 **cubrid.conf**\ 에 지정된 파라미터는 다음과 같이 네 가지 섹션으로 제공된다.
 
 *   CUBRID 서비스를 시작할 때 사용 : [service] 섹션
+*   전체 데이터베이스에 공통으로 적용 : [common] 섹션
+*   각 데이터베이스에 개별적으로 적용 : [@<*database*>] 섹션
 *   cubrid 유틸리티가 독립 모드(stand-alone, --SA-mode)로 구동할 때만 사용 : [standalone] 섹션 
 
 여기서 <*database*>는 파라미터를 개별적으로 적용할 데이터베이스 이름이며, [common]에 설정된 파라미터가 [@<*database*>]에 설정된 파라미터와 동일한 경우 [@<*database*>]에 설정된 파라미터가 최종 적용된다.

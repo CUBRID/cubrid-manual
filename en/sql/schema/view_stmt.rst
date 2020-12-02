@@ -294,7 +294,7 @@ You can drop a query defined in the query specification by using the **DROP QUER
 COMMENT Clause
 --------------
 
-View and column comments can be changed by using the **COMMENT** clause of the **ALTER VIEW** syntax.
+You can change a view's comment and column comments with **COMMENT** clause of **ALTER VIEW** syntax.
 
 ::
 

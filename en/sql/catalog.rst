@@ -1022,6 +1022,7 @@ The following example shows how to retrieve system classes that can be accessed 
     ======================
       'db_authorization'
       'db_authorizations'
+      'db_ha_apply_info'
       'db_root'
       'db_serial'
       'db_user'

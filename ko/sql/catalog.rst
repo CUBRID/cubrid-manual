@@ -983,6 +983,7 @@ DB_CLASS
     ======================
       'db_authorization'
       'db_authorizations'
+      'db_ha_apply_info'
       'db_root'
       'db_serial'
       'db_user'

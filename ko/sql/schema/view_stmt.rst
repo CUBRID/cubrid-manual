@@ -299,7 +299,7 @@ COMMENT 절
 ::
 
     ALTER [VIEW | VCLASS] view_name
-    COMMENT [=] 'view_comment';
+    COMMENT [=] 'view_comment_string';
     COMMENT ON {COLUMN | CLASS ATTRIBUTE} <column_comment_definition> [, <column_comment_definition>] ;
 
         <column_comment_definition> ::= column_name [=] 'column_comment_string'

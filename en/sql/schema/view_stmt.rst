@@ -304,10 +304,10 @@ You can change a view's comment and column comments with **COMMENT** clause of *
 
         <column_comment_definition> ::= column_name [=] 'column_comment_string'
 
-*   *view_name*: specifies the name of a view to be modified.
-*   *column_name*: specifies the name of a column to be modified.
-*   *view_comment_string*: specifies a view's comment.
-*   *column_comment_string*: specifies a column's comment.
+*   *view_name*: Specifies the name of a view to be modified.
+*   *column_name*: Specifies the name of a column to be modified.
+*   *view_comment_string*: Specifies a view's comment.
+*   *column_comment_string*: Specifies a column's comment.
 
 The following example shows how to change a view's comments.
 
@@ -323,7 +323,7 @@ The following example shows how to change a column's comments.
     ALTER VIEW v1 COMMENT ON COLUMN c1 = 'changed view column c1 comment';
     ALTER VIEW v1 COMMENT ON COLUMN c2 = 'changed view column c2 comment', c3 = 'changed view column c3 comment';
 
-The below is a syntax to show a column's comment.
+Below is a syntax to show a column's comment.
 The SHOW CREATE VIEW statement shows only view comments.
 
 .. code-block:: sql

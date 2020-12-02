@@ -119,12 +119,16 @@ CSQL 시작 옵션
       -l, --line-output            display each value in a line
       -r, --read-only              read-only mode
       -t, --plain-output           display results in a script-friendly format (only works with -c and -i)
+      -q, --query-output           display results in a query-friendly format (only work with -c and -i)
+      -d, --loaddb-output          display results in a loaddb-friendly format (only work with -c and -i)
       -N, --skip-column-names      do not display column names in results (only works with -c and -i)
           --string-width           display each column which is a string type in this width
           --no-auto-commit         disable auto commit mode execution
           --no-pager               do not use pager
           --no-single-line         turn off single line oriented execution
           --no-trigger-action      disable trigger action
+          --delimiter=ARG          delimiter between columns (only work with -q)
+          --enclosure=ARG          enclosure for a result string (only work with -q)
 
     For additional information, see http://www.cubrid.org
 
@@ -221,38 +225,64 @@ CSQL 시작 옵션
 
     ::
     
-        $ csql testdb@localhost -c "select * from test_tbl" -t
+        $ csql demodb -c "select * from athlete where code between 12762 and 12765" -t
  
-        col1 col2 col3
-        string1 12:16:10.090 PM 10/23/2014
-        string2 12:16:10.090 PM 10/23/2014
-        string3 12:16:10.090 PM 10/23/2014
-        string4 12:16:10.090 PM 10/23/2014
-        string5 12:16:10.090 PM 10/23/2014
-        string6 12:16:10.090 PM 10/23/2014
-        string7 12:16:10.090 PM 10/23/2014
-        string8 12:16:10.090 PM 10/23/2014
-        string9 12:16:10.090 PM 10/23/2014
-        string10 12:16:10.090 PM 10/23/2014
+        code	name	gender	nation_code	event
+        12762	O'Brien Dan	M	USA	Athletics
+        12763	O'Brien Leah	W	USA	Softball
+        12764	O'Brien Shaun William	M	AUS	Cycling
+        12765	O'Brien-Amico Leah	W	USA	Softball
+
+.. option:: -q, --query-output
  
+    결과를 insert 질의에서 사용할 수 있게 출력하는 옵션으로 컬럼명과 값만 표시되며 **-c** 또는 **-i** 옵션과 같이 사용해야 한다. 각 컬럼명과 값은 콤마 또는 **--delimiter** 옵션의 문자로 구분되며, 숫자형 타입을 제외한 모든 결과들은 작은 따옴표 또는 **--enclosure** 옵션의 문자로 둘러싸여 출력된다.  엔클러저(enclosure)가 작은 따옴표인 경우 결과안의 작은 따옴표는 두개 작은 따옴표로 대체된다. 이 옵션은 **-l** 옵션과 함께 지정된 경우에는 무시된다.
+
+    ::
+    
+        $ csql demodb -c "select * from athlete where code between 12762 and 12765" -q
+ 
+        code,name,gender,nation_code,event
+        12762,'O''Brien Dan','M','USA','Athletics'
+        12763,'O''Brien Leah','W','USA','Softball'
+        12764,'O''Brien Shaun William','M','AUS','Cycling'
+        12765,'O''Brien-Amico Leah','W','USA','Softball'
+
+    ::
+    
+        $ csql demodb -c "select * from athlete where code between 12762 and 12765" -q --delimiter="" --enclosure="\""
+
+        code,name,gender,nation_code,event
+        12762,"O'Brien Dan","M","USA","Athletics"
+        12763,"O'Brien Leah","W","USA","Softball"
+        12764,"O'Brien Shaun William","M","AUS","Cycling"
+        12765,"O'Brien-Amico Leah","W","USA","Softball"
+
+.. option:: -d, --loaddb-output
+
+    결과를 loaddb 유틸리티에서 사용할 수 있게 출력하는 옵션으로 컬럼명과 값만 표시되며 **-c** 또는 **-i** 옵션과 같이 사용해야 한다. 각 컬럼명과 값은 공백으로 구분되며, 숫자형 타입를 제외한 모든 결과들은 작은 따옴표로 둘러싸여 출력된다.  결과안의 작은 따옴표는 두개 작은 따옴표로 대체되며, 열거형(ENUM)타입의 결과는 값대신 색인값을 출력한다. 이 옵션은 **-l** 옵션과 함께 지정된 경우에는 무시된다.
+
+    ::
+    
+        $ csql demodb -c "select * from athlete where code between 12762 and 12765" -d
+ 
+        %class [ ] ([code] [name] [gender] [nation_code] [event])
+        12762 'O''Brien Dan' 'M' 'USA' 'Athletics'
+        12763 'O''Brien Leah' 'W' 'USA' 'Softball'
+        12764 'O''Brien Shaun William' 'M' 'AUS' 'Cycling'
+        12765 'O''Brien-Amico Leah' 'W' 'USA' 'Softball'
+
 .. option:: -N, --skip-column-names
  
-    결과에서 컬럼명을 숨긴다. **-c** 또는 **-i** 옵션을 사용하는 경우에만 작동하며 일반적으로 **-t** 옵션과 함께 사용된다. 이 옵션은 **-l** 옵션과 함께 지정된 경우에는 무시된다.
+    결과에서 컬럼명을 숨긴다. **-c** 또는 **-i** 옵션을 사용하는 경우에만 작동하며 일반적으로 **-t**\,**-q**\,**-d** 옵션과 함께 사용된다. 이 옵션은 **-l** 옵션과 함께 지정된 경우에는 무시된다.
  
     ::
  
-        $ csql testdb@localhost -c "select * from test_tbl" -t -N
+        $ csql demodb -c "select * from athlete where code between 12762 and 12765" -d -N
  
-        string1 12:16:10.090 PM 10/23/2014
-        string2 12:16:10.090 PM 10/23/2014
-        string3 12:16:10.090 PM 10/23/2014
-        string4 12:16:10.090 PM 10/23/2014
-        string5 12:16:10.090 PM 10/23/2014
-        string6 12:16:10.090 PM 10/23/2014
-        string7 12:16:10.090 PM 10/23/2014
-        string8 12:16:10.090 PM 10/23/2014
-        string9 12:16:10.090 PM 10/23/2014
-        string10 12:16:10.090 PM 10/23/2014
+        12762 'O''Brien Dan' 'M' 'USA' 'Athletics'
+        12763 'O''Brien Leah' 'W' 'USA' 'Softball'
+        12764 'O''Brien Shaun William' 'M' 'AUS' 'Cycling'
+        12765 'O''Brien-Amico Leah' 'W' 'USA' 'Softball'
 
 .. option:: --no-auto-commit
 
@@ -296,6 +326,14 @@ CSQL 시작 옵션
 
     이 옵션을 지정하면 해당 CSQL에서 수행되는 질의문의 트리거는 동작하지 않는다.
       
+.. option::  --delimiter=ARG
+
+    이 옵션은 **-q**\와 같이 사용해야 하며, 인자에는 컬럼명과 값을 구분하는 단일 문자를 지정한다. (\\t, \\n 와 같은 특수 문자 지정 가능)
+
+.. option::  --enclosure=ARG
+    
+	이 옵션은 **-q**\와 같이 사용해야 하며, 인자에는 숫자형 타입을 제외한 모든 결과값을 둘러싸는 단일 문자를 지정한다.
+
 .. _csql-session-commands:
 
 세션 명령어

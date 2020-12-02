@@ -535,7 +535,7 @@ You can check the parameter value currently set in the CSQL Interpreter using th
 
     csql> ;get isolation_level
     === Get Param Input ===
-    isolation_level=4
+    isolation_level="tran_rep_class_commit_instance"
 
 **Setting the parameter value (;SEt)**
 

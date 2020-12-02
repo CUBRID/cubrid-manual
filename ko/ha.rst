@@ -2595,7 +2595,7 @@ HA 서비스 운영 중 슬레이브를 새로 추가하려면 기존의 마스�
     
         ::
     
-            [nodeB]$ 
+            [nodeB]$ cd $CUBRID_DATABASES/testdb/log
             [nodeB]$ scp -l 131072 testdb_bk* cubrid_usr@nodeC:$CUBRID_DATABASES/testdb/log
         
         .. note::
@@ -2990,7 +2990,7 @@ HA 서비스 운영 중 슬레이브를 새로 추가하려면 기존의 마스�
     
         ::
     
-            [nodeB]$ 
+            [nodeB]$ cd $CUBRID_DATABASES/testdb/log
             [nodeB]$ scp -l 131072 testdb_bk* cubrid_usr@nodeC:$CUBRID_DATABASES/testdb/log
             
             .. note::

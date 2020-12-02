@@ -2598,7 +2598,7 @@ You can use an existing master or slave if you want to add a new slave during HA
     
         ::
     
-            [nodeB]$ 
+            [nodeB]$ cd $CUBRID_DATABASES/testdb/log
             [nodeB]$ scp -l 131072 testdb_bk* cubrid_usr@nodeC:$CUBRID_DATABASES/testdb/log
     
         .. note::
@@ -2993,7 +2993,7 @@ Now let's add a replica when HA environment is set as "master:slave=1:1". The be
     
         ::
     
-            [nodeB]$ 
+            [nodeB]$ cd $CUBRID_DATABASES/testdb/log
             [nodeB]$ scp -l 131072 testdb_bk* cubrid_usr@nodeC:$CUBRID_DATABASES/testdb/log
     
         .. note::

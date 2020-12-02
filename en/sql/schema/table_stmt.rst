@@ -1670,7 +1670,7 @@ The hard default value is a value that will be used when you add columns with th
 Column's COMMENT
 ----------------
 
-A column's comment is specified in <*column_definition*>, which is located at the end of ADD/MODIFY/CHANGE syntax, or in <*column_comment_definition*>, which is located at the end of COMMENT ON COLUMN syntax. To see the meaning of <*column_definition*>, refer to CREATE TABLE syntax on the above.
+A column's comment is specified in <*column_definition*> or <*column_comment_definition*>. <*column_definition*> is located at the end of ADD/MODIFY/CHANGE syntax and <*column_comment_definition*> is located at the end of COMMENT ON COLUMN syntax. To see the meaning of <*column_definition*>, refer to CREATE TABLE syntax on the above.
 
 In the COMMENT ON COLUMN syntax, column comments are changed by specifying one or more columns.
 The following example shows how to change a column comment using the COMMENT ON COLUMN statement.

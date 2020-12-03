@@ -130,6 +130,8 @@ Compile the SpCubrid.java file as follows:
 
 Here, the Java class method must be public static.
 
+.. _jsp-loadjava:
+
 Load the compiled Java class into CUBRID
 ----------------------------------------
 

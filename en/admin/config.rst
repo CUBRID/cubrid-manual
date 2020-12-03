@@ -268,8 +268,6 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               | unicode_output_normalization        | client parameter        | O       | bool     | no                             | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | update_use_attribute_references     | client parameter        | O       | bool     | no                             | available             |
-|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | ignore_trailing_space               | server parameter        |         | bool     | no                             |               |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 | :ref:`thread-parameters`      | thread_connection_pooling           | server parameter        |         | bool     | yes                            |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -1184,8 +1182,6 @@ The following are parameters related to SQL statements and data types supported 
 +---------------------------------+--------+------------+------------+------------+
 | update_use_attribute_references | bool   | no         |            |            |
 +---------------------------------+--------+------------+------------+------------+
-| ignore_trailing_space           | bool   | no         |            |            |
-+---------------------------------+--------+------------+------------+------------+
 
 **add_column_update_hard_default**
 
@@ -1653,15 +1649,6 @@ The following are parameters related to SQL statements and data types supported 
     ::
       
         1, NULL
-
-**ignore_trailing_space**
-
-If this parameter's value is **yes**, the string comparison follows "trailing space insensitive" rules as below example.
-The string value 'abc' and 'abc ' is equal regardless the types of values are VARCHAR-type with variable length.
-
-**CAUTION:**
-
-Do not change this parameter value or it will result in confusion at several parts of using the data. Especially, for the table with primary key or unique key using string type, the data integrity may not be preserved by changing this parameter value. For example, data with unique key constraint at **"no ignore trailing space"** configuration might violate this constraint at **"ignore trailing space"** because the key value 'abc  'and 'abc ' is equal at changed configuration. Therefore, this configuration value change should be considered seriously. CUBRID recommends that the value of this parameter is fixed and not to change for all life times in the database.
 
 .. _thread-parameters:
 

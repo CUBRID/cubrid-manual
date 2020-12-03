@@ -1355,7 +1355,6 @@ comparing 'abc ' with 'abc   ' results 'abc   ' greater than 'abc '
 **Exceptions**
 
 When comparing two string values, if one is a fixed-type and the other is a variable-type, CUBRID follows "trailing space sensitive" rule.
-If the configuration parameter value **ignore_trailing_space** is set to **yes**, CUBIRD follows "trailing space insensitive" rule regardless of the types of string values.
 
 ENUM Data Type
 ==============

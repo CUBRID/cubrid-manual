@@ -905,7 +905,7 @@ cci_connect_with_url
 
     .. warning::
 
-        * The **useSSL** flag must match with mode of the broker trying to connect. If the encryption mode is different from the server that trying to connect, that connection request will be rejected. Please refer the following cases that are not allowed.
+        * The **useSSL** flag must match with the mode of the broker trying to connect. If encryption mode is different from the server that trying to connect, that connection request will be rejected. Please refer to the following cases that are not allowed.
 
            *   useSSL=true, connection request will be rejected when the broker is in 'normal mode' (**cubrid_broker.conf**: SSL = OFF)
            *   useSSL=false, connection request will be rejected when the broker is in 'encryption mode' (**cubrid_broker.conf**: SSL = ON)

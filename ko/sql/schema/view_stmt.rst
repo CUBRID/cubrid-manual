@@ -324,7 +324,7 @@ ON COLUMN 키워드 뒤에 하나 이상의 칼럼을 지정하여 칼럼의 커
     ALTER VIEW v1 COMMENT ON COLUMN c2 = 'changed view column c2 comment', c3 = 'changed view column c3 comment';
 
 다음은 뷰와 칼럼의 커멘트를 확인하는 예제이다.
-SHOW CREATE VIEW 구문에서는 뷰 커멘트만 확인할 수 있다.
+하지만 SHOW CREATE VIEW 구문에서는 뷰 커멘트만 확인할 수 있다.
 
 .. code-block:: sql
 

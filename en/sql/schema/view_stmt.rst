@@ -324,7 +324,7 @@ The following example shows how to change a column's comments.
     ALTER VIEW v1 COMMENT ON COLUMN c2 = 'changed view column c2 comment', c3 = 'changed view column c3 comment';
 
 Below is a syntax to show a column's comment.
-The SHOW CREATE VIEW statement shows only view comments.
+But the SHOW CREATE VIEW statement shows only view comments.
 
 .. code-block:: sql
 

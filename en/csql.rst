@@ -119,12 +119,16 @@ To display the option list in the prompt, execute the **csql** utilities without
       -l, --line-output            display each value in a line
       -r, --read-only              read-only mode
       -t, --plain-output           display results in a script-friendly format (only works with -c and -i)
+      -q, --query-output           display results in a query-friendly format (only work with -c and -i)
+      -d, --loaddb-output          display results in a loaddb-friendly format (only work with -c and -i)
       -N, --skip-column-names      do not display column names in results (only works with -c and -i)
           --string-width           display each column which is a string type in this width
           --no-auto-commit         disable auto commit mode execution
           --no-pager               do not use pager
           --no-single-line         turn off single line oriented execution
           --no-trigger-action      disable trigger action
+          --delimiter=ARG          delimiter between columns (only work with -q)
+          --enclosure=ARG          enclosure for a result string (only work with -q)		  
 
     For additional information, see http://www.cubrid.org
 
@@ -221,38 +225,64 @@ To display the option list in the prompt, execute the **csql** utilities without
     
     ::
     
-        $ csql testdb@localhost -c "select * from test_tbl" -t
+        $ csql demodb -c "select * from athlete where code between 12762 and 12765" -t
+
+        code    name    gender  nation_code event
+        12762   O'Brien Dan M   USA Athletics
+        12763   O'Brien Leah    W   USA Softball
+        12764   O'Brien Shaun William   M   AUS Cycling
+        12765   O'Brien-Amico Leah  W   USA Softball
  
-        col1 col2 col3
-        string1 12:16:10.090 PM 10/23/2014
-        string2 12:16:10.090 PM 10/23/2014
-        string3 12:16:10.090 PM 10/23/2014
-        string4 12:16:10.090 PM 10/23/2014
-        string5 12:16:10.090 PM 10/23/2014
-        string6 12:16:10.090 PM 10/23/2014
-        string7 12:16:10.090 PM 10/23/2014
-        string8 12:16:10.090 PM 10/23/2014
-        string9 12:16:10.090 PM 10/23/2014
-        string10 12:16:10.090 PM 10/23/2014
- 
+.. option:: -q, --query-output
+
+    This option displays the result for easy use in insert queries, only show column names and values, and works with **-c** or **-i** option. Each column name and value are separated by a comma or a single character of the **--delimiter** option; and all results except for numeric types are enclosed by a single quote or a single character of the **--enclosure** option. If the enclosure is a single quote, the single quote in the results is replaced with two ones. It is ignored when it is given with **-l** option.
+
+    ::
+
+        $ csql demodb -c "select * from athlete where code between 12762 and 12765" -q
+
+        code,name,gender,nation_code,event
+        12762,'O''Brien Dan','M','USA','Athletics'
+        12763,'O''Brien Leah','W','USA','Softball'
+        12764,'O''Brien Shaun William','M','AUS','Cycling'
+        12765,'O''Brien-Amico Leah','W','USA','Softball'
+
+    ::
+
+        $ csql demodb -c "select * from athlete where code between 12762 and 12765" -q --delimiter="" --enclosure="\""
+
+        code,name,gender,nation_code,event
+        12762,"O'Brien Dan","M","USA","Athletics"
+        12763,"O'Brien Leah","W","USA","Softball"
+        12764,"O'Brien Shaun William","M","AUS","Cycling"
+        12765,"O'Brien-Amico Leah","W","USA","Softball"
+
+.. option:: -d, --loaddb-output
+
+    This option displays the result for easy use in loaddb utility, only show column names and values, and works with **-c** or **-i** option. Each column name and value are separated by a space; and all results except for numeric types are enclosed by a single quote. The single quote in the results is replaced with two ones and the result of the enum type is outputted by an index instead of a value. This opton is ignored when it is given with **-l** option.
+
+    ::
+
+        $ csql demodb -c "select * from athlete where code between 12762 and 12765" -d
+
+        %class [ ] ([code] [name] [gender] [nation_code] [event])
+        12762 'O''Brien Dan' 'M' 'USA' 'Athletics'
+        12763 'O''Brien Leah' 'W' 'USA' 'Softball'
+        12764 'O''Brien Shaun William' 'M' 'AUS' 'Cycling'
+        12765 'O''Brien-Amico Leah' 'W' 'USA' 'Softball'
+
 .. option:: -N, --skip-column-names
  
-    It will hide column names from the results. It only works with **-c** or **-i** option and is usually used with **-t** option. This option is ignored when it is given with **-l** option. 
+    It will hide column names from the results. It only works with **-c** or **-i** option and is usually used with **-t** **-q** or **-d** option. This option is ignored when it is given with **-l** option. 
  
     ::
- 
-        $ csql testdb@localhost -c "select * from test_tbl" -t -N
- 
-        string1 12:16:10.090 PM 10/23/2014
-        string2 12:16:10.090 PM 10/23/2014
-        string3 12:16:10.090 PM 10/23/2014
-        string4 12:16:10.090 PM 10/23/2014
-        string5 12:16:10.090 PM 10/23/2014
-        string6 12:16:10.090 PM 10/23/2014
-        string7 12:16:10.090 PM 10/23/2014
-        string8 12:16:10.090 PM 10/23/2014
-        string9 12:16:10.090 PM 10/23/2014
-        string10 12:16:10.090 PM 10/23/2014
+
+        $ csql demodb -c "select * from athlete where code between 12762 and 12765" -d -N
+
+        12762 'O''Brien Dan' 'M' 'USA' 'Athletics'
+        12763 'O''Brien Leah' 'W' 'USA' 'Softball'
+        12764 'O''Brien Shaun William' 'M' 'AUS' 'Cycling'
+        12765 'O''Brien-Amico Leah' 'W' 'USA' 'Softball'
 
 .. option:: --no-auto-commit
 
@@ -295,7 +325,15 @@ To display the option list in the prompt, execute the **csql** utilities without
 .. option::  --no-trigger-action
 
     If you specify this option, triggers of the queries executed in this CSQL are not triggered.
-      
+
+.. option::  --delimiter=ARG
+
+    This option should be used together with **-q** and a single character is specified in the argument to separate the column name and value. (include special characters such as \\t and \\n)
+
+.. option::  --enclosure=ARG
+
+    This option should be used together with **-q** and a single character is specified in the argument to enclose all values except for numeric types.
+
 .. _csql-session-commands:
 
 Session Commands

@@ -103,7 +103,7 @@ backupdb
 
 .. option:: --separate-keys
 
-    백업 볼륨에 키 파일을 포함하지 않는다. 포함되지 않은 키는 [database]_bk[backup_level]_keys 라는 이름을 가진 별도의 파일로 분리된다. 옵션을 주지 않을 경우 기본적으로 키 파일은 백업 볼륨에 포함된다. 키 파일 분리에 대한 자세한 설명은 :ref:`tde-enc-backup` 을 참고한다.  ::
+    백업 볼륨에 키 파일을 포함하지 않는다. 포함되지 않은 키는 <database_name>_bk<backup_level>_keys 라는 이름을 가진 별도의 파일로 분리된다. 옵션을 주지 않을 경우 기본적으로 키 파일은 백업 볼륨에 포함된다. 키 파일 분리에 대한 자세한 설명은 :ref:`tde-enc-backup` 을 참고한다.  ::
 
         cubrid backupdb --seprate-keys demodb
 

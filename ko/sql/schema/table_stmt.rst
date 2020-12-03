@@ -1022,7 +1022,7 @@ ALTER TABLE
 
 .. note::
 
-    칼럼의 커멘트는 <column_definition>에서 지정하거나 <column_comment_definition>에서 지정한다. <column_definition>은 위의 CREATE TABLE 구문을 참고한다.
+    칼럼의 커멘트는 <column_definition>에서 지정하거나 <column_comment_definition>에서 지정한다. <column_definition>은 위의 :ref:`CREATE TABLE 문법<column-definition>`\을 참고한다.
 
 .. warning::
 

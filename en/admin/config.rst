@@ -1787,20 +1787,22 @@ The following are parameters related to the query plan cache functionality. The 
 Query Cache-Related Parameters
 -----------------------------------
 
-The following are parameters related to the query cache functionality. The type and value range for each parameter are as follows:
+The following are the parameters related to the query cache functionality. The type and value range for each parameter are as follows:
 
 +-------------------------------+--------+----------+----------+----------+
 | Parameter Name                | Type   | Default  | Min      | Max      |
 +===============================+========+==========+==========+==========+
 +-------------------------------+--------+----------+----------+----------+
-| max_query_cache_entries       | int    | 200      | 1        | INT_MAX  |
+| max_query_cache_entries       | int    | 200      | 0        | INT_MAX  |
 +-------------------------------+--------+----------+----------+----------+
-| max_query_cache_pages         | int    | 1,000    | 1        | INT_MAX  |
+| max_query_cache_pages         | int    | 1,000    | 0        | INT_MAX  |
 +-------------------------------+--------+----------+----------+----------+
+
+If one of the parameters is set to 0 or negative value, the query cache is disabled regardless using the query hint **QUERY_CACHE**.
 
 **max_query_cache_entries**
 
-    **max_query_cache_entries** is a parameter to configure the maximum number of query to be cached. If the **max_query_cache_entries** parameter is configured to 0 or a negative value, paramter configuration error occurs; if it is configured to an integer value equal to or greater than 1, a specified number of queries are cached with the result.
+    **max_query_cache_entries** is a parameter to configure the maximum number of query to be cached. If it is configured to an integer value equal to or greater than 1, a specified number of queries are cached with the result.
 
     The following example shows how to cache up to 500 queries. ::
 
@@ -1808,7 +1810,7 @@ The following are parameters related to the query cache functionality. The type 
 
 **query_cache_use_pages**
 
-    **query_cache_use_pages** is a parameter to configure the maximum page of result to be cached. If the **query_cache_use_pages** parameter is configured to 0 or a negative value, parameter configuration error occurs; if it is configured to an integer value equal to or greater than 1, specified pages in results are cached as temp files.
+    **query_cache_use_pages** is a parameter to configure the maximum page of result to be cached. If it is configured to an integer value equal to or greater than 1, specified pages in results are cached as temp files.
 
     The following example shows how to cache up to 4,000 pages. ::
 

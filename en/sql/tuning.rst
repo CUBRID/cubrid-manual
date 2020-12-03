@@ -2346,18 +2346,18 @@ The above **SELECT** query's plan is printed out as below; we can see "(sort lim
 QUERY CACHE
 ===========
 
-The **QUERY_CACHE** hint can be used to enhance the performance for the query which is executed repeatedly. The query is cached in dedicated memory area and its results are also cached at the separated disk space. The hint is applied to SELECT query only; however for the following cases, the hint is not applied to the query:
+The **QUERY_CACHE** hint can be used to enhance the performance for the query which is executed repeatedly. The query is cached in dedicated memory area and its results are also cached at the separated disk space. The hint is applied to SELECT query only; however, for the following cases, the hint is not applicable to the query and the hint is meaningless:
 
 *   a system time or date related attribute in the query as below
     ex) SELECT SYSDATE, ADDDATE(SYSDATE,INTERVAL -24 HOUR), ADDDATE(SYSDATE, -1);
-*   a serial related attribute is in the query
+*   a SERIAL related attribute is in the query
 *   a column-path related attribute is in the query
 *   a method is in the query
 *   a stored procedure or a stored function is in the query
 *   a system tables like dual, _db_attribute, and so on, is in the query
 *   a system function like sys_guid() is in the query
 
-When the hint is set and a new SELECT query is processed, the query cache is looked up if the query appears in the query cache. The queries are considered identical in case that they use the same query text and the same bind values under the same database. If the cached query is not found, the query will be processed and then cached newly with its result. If the query is found from the cache, the results will be fetched from the cached area. AT the CSQL, we can measure the enhancement easily to execute repeatedly the query using COUNT function as below example. The query and its results will be cached at the first appear, so the response time is slower than the next same query. The second query's result is fetched from cached area, so the response time is very faster than the prior same query's one. ::
+When the hint is set and a new SELECT query is processed, the query cache is looked up if the query appears in the query cache. The queries are considered identical in case they use the same query text and the same bind values under the same database. If the cached query is not found, the query will be processed and then cached newly with its result. If the query is found from the cache, the results will be fetched from the cached area. AT the CSQL, we can measure the enhancement easily to execute the query repeatedly using the COUNT function as below example. The query and its results will be cached at the first appearance, so the response time is slower than the next same query. The second query's result is fetched from the cached area, so the response time is much faster than the prior same query's one. ::
 
     csql> SELECT /*+ QUERY_CACHE */ count(*) FROM game;
 
@@ -2416,4 +2416,4 @@ The user can check the query to be cached or not by putting the session command 
       deletion_marker = false
     }
 
-The cached query is shown as **query_string** at the middle of the result screen. Each of the **n_entries** and **n_pages** represents the number of cached query and the number of pages in the cached results. The **n_entries** is limited to the value of configuration parameter **max_query_cache_entries** and the **n_pages** is limited to the value of **query_cache_use_pages**. If the **n_entries** is overflown or the **n_pages** is overflown, some victims among the cache entries are selected and they are uncached. The number of victims is about 20% of **max_query_cache_entries** value and of the **query_cache_use_pages** value.
+The cached query is shown as **query_string** in the middle of the result screen. Each of the **n_entries** and **n_pages** represents the number of cached queries and the number of pages in the cached results. The **n_entries** is limited to the value of configuration parameter **max_query_cache_entries** and the **n_pages** is limited to the value of **query_cache_use_pages**. If the **n_entries** is overflown or the **n_pages** is overflown, some victims among the cache entries are selected and they are uncached. The number of victims is about 20% of **max_query_cache_entries** value and of the **query_cache_use_pages** value.

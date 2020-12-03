@@ -1021,7 +1021,7 @@ You can modify the structure of a table by using the **ALTER** statement. You ca
 
 .. note::
 
-    A column's comment is specified in <*column_definition*> or <*column_comment_definition*>. For <*column_definition*>, see the above CREATE TABLE syntax.
+    A column's comment is specified in <*column_definition*> or <*column_comment_definition*>. For <*column_definition*>, see the above :ref:`CREATE TABLE syntax<column-definition>`.
 
 .. warning::
 

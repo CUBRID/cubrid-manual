@@ -2028,11 +2028,11 @@ HA 관련 파라미터
 
 **tde_keys_file_path**
     
-  **tde_keys_file_path** 는 TDE 기능을 위한 키 파일의 경로를 설정하는 파라미터이다. 키 파일의 이름은 [database_name]_keys 로 고정되어 있고, 해당 키 파일이 존재하는 디렉토리를 지정한다. 이 시스템 파라미터가 설정되지 않았을 경우에는 데이터베이스 볼륨과 같은 위치에서 키 파일을 찾는다. 키 파일에 대한 자세한 설명은 :ref:`tde-file-based-key` 를 참고한다.
+  **tde_keys_file_path** 는 TDE를 위한 키 파일의 경로를 설정하는 파라미터이다. 키 파일의 이름은 [database_name]_keys 로 고정되어 있고, 해당 키 파일이 존재하는 디렉토리를 지정한다. 이 시스템 파라미터가 설정되지 않았을 경우에는 데이터베이스 볼륨과 같은 위치에서 키 파일을 찾는다. 키 파일에 대한 자세한 설명은 :ref:`tde-file-based-key` 를 참고한다.
 
 **tde_default_algorithm**
     
- **tde_default_algorithm** 는 TDE 암호화 테이블 생성 시에 사용하는 기본 알고리즘을 설정하는 파라미터이다. 로그 및 임시 데이터를 암호화 시에는 항상 이 파라미터로 설정한 알고리즘이 사용된다. **AES** 와 **ARIA** 가 설정 가능하다. 암호화 알고리즘에 관한 자세한 내용은 :ref:`tde-algorithm` 을 참고한다.
+ **tde_default_algorithm** 는 TDE 암호화 테이블 생성 시에 사용하는 기본 알고리즘을 설정하는 파라미터이다. 로그 및 임시 데이터는 항상 이 파라미터로 설정된 알고리즘을 이용하여 암호화된다. **AES** 와 **ARIA** 가 설정 가능하다. 암호화 알고리즘에 관한 자세한 내용은 :ref:`tde-algorithm` 을 참고한다.
 
 .. _broker-configuration:
 

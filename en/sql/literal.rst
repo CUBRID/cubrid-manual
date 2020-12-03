@@ -45,7 +45,7 @@ However, the writing order of a string which indicates date or time.
 
     ::
     
-        date'1974-12-31', date'12-31-1974'
+        date'1974-12-31', date'12/31/1974'
 
 
 *   The time literal only allows 'HH:MI:SS', 'HH:MI:SS AM' or 'HH:MI:SS PM'.

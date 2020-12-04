@@ -6,7 +6,7 @@
 Python 드라이버
 ***************
 
-**CUBRIDdb** 는 Python Database API 2.0을 준수하며 CUBRID 데이터베이를 지원하는 Python 확장 패키지이다. CUBRID Python API는 Python Database API가 제공하는 기본 기능 외에도, CUBRID 데이터베이스 엔진에서 제공하는 기능을 **_cubrid** 모듈에서 제공한다.
+**CUBRIDdb** 는 Python Database API 2.0을 준수하며 CUBRID 데이터베이스를 지원하는 Python 확장 패키지이다. CUBRID Python API는 Python Database API가 제공하는 기본 기능 외에도, CUBRID 데이터베이스 엔진에서 제공하는 기능을 **_cubrid** 모듈에서 제공한다.
 
 CUBRID Python 드라이버는 CCI API를 기반으로 작성되었으므로, CCI API 및 CCI에 적용되는 **CCI_DEFAULT_AUTOCOMMIT** 과 같은 설정 파라미터에 영향을 받는다.
 

@@ -1,6 +1,6 @@
 
-:meta-keywords: cubrid server process, cub_server, cubrid broker, cubrid cas, cubrid manager server, cubrid HA, cubrid services, cubrid logging, cubrid errors, cubrid server access, cubrid status, cubrid manager
-:meta-description: How to control and check CUBRID services and processes (server, broker), logging files, access, errors, and CUBRID Manager.
+:meta-keywords: cubrid server process, cub_server, cubrid broker, cubrid cas, cubrid manager server, cubrid HA, cubrid services, cubrid logging, cubrid errors, cubrid server access, cubrid status, cubrid manager, cubrid javasp, cub_javasp
+:meta-description: How to control and check CUBRID services and processes (server, broker), logging files, access, errors, and CUBRID Manager and CUBRID Java SP Server.
 
 .. _control-cubrid-processes:
 
@@ -103,6 +103,23 @@ CUBRID HA 기능을 사용하기 위한 **cubrid heartbeat** 유틸리티 구문
 *   status: HA 상태 정보를 확인
 
 자세한 내용은 :ref:`cubrid-heartbeat`\ 를 참고한다. 
+
+CUBRID 자바 저장 프로시저 (Java SP) 서버 제어
+----------------------------------------------
+
+CUBRID 자바 저장 프로시저 (Java SP) 서버 프로세스를 제어하기 위한 **cubrid** 유틸리티 구문은 다음과 같다.
+
+::
+
+    cubrid javasp <command> [database_name]
+    <command>: {start|stop|restart|status}
+
+*   start: 자바 저장 프로시저 서버 프로세스 구동
+*   stop: 자바 저장 프로시저 서버 프로세스 종료
+*   restart: 자바 저장 프로시저 서버 프로세스 재시작
+*   status: 자바 저장 프로시저 서버 프로세스 상태 확인
+
+모든 명령어에는 데이터베이스 이름이 인수로 지정되어야 한다.
 
 .. _control-cubrid-services:
 

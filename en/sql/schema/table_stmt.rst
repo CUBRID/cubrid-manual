@@ -684,7 +684,7 @@ You can specify options such as **ASC** or **DESC** after the column name when d
 Table Option
 ------------
 
-**REUSE_OID** and **DONT_REUSE_OID** are options that specify whether the table to be created is a referable table. The two options cannot be used together and can be used with other options. When creating a table without the option, the **REUSE_OID** table option is used. To change the default option to **DONT_REUSE_OID**, you should change the system parameter **create_table_reuseoid** to **no**. For detail, see :ref:`stmt-type-parameters` .
+**REUSE_OID** and **DONT_REUSE_OID** are options that specify whether to be referable when creating a table. The two options cannot be used together and can be used with other options. When creating a table without the option, the **REUSE_OID** table option is used. To change the default option to **DONT_REUSE_OID**, you should change the system parameter **create_table_reuseoid** to **no**. For detail, see :ref:`stmt-type-parameters` .
 
 ::
 

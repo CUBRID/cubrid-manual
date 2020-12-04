@@ -1998,7 +1998,7 @@ CUBRID HA 그룹 내의 노드 간 특정 테이블의 데이터가 동기화되
 
 **Java 저장 프로시저(java stored procedure)**
 
-CUBRID HA에서 Java 저장 프로시저 환경 구축은 복제되지 않으므로, Java 저장 프로시저를 사용하려면 모든 노드에 각각 Java 저장 프로시저 환경을 설정해야 한다. :ref:`jsp-environment-configuration`\ 을 참고한다.
+CUBRID HA에서 Java 저장 프로시저 환경 구축은 복제되지 않으므로, Java 저장 프로시저를 사용하려면 모든 노드에 각각 Java 저장 프로시저 환경을 설정해야 한다. :ref:`cubrid-javasp-server-config`\ 을 참고한다.
 
 **메서드**
 

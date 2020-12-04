@@ -80,7 +80,8 @@ CREATE TABLE
         <table_options> ::= <table_option> [[,] <table_option> ...] 
             <table_option> ::= REUSE_OID | 
                                COMMENT [=] 'table_comment_string' |
-                               [CHARSET charset_name] [COLLATE collation_name]
+                               [CHARSET charset_name] [COLLATE collation_name] |
+                               ENCRYPT [=] [AES | ARIA]
 
 *   **IF NOT EXISTS**: 생성하려는 테이블이 존재하는 경우 에러 없이 테이블을 생성하지 않는다. 
 *   *table_name*: 생성할 테이블의 이름을 지정한다(최대 254바이트).
@@ -757,6 +758,24 @@ OID(Object Identifier)는 볼륨 번호, 페이지 번호, 슬롯 번호와 같�
     $ csql -u dba demodb
     
     csql> ;sc tbl
+
+.. _create-tde-table:
+
+테이블 암호화 (TDE)
+^^^^^^^^^^^^^^^^^^^
+
+다음과 같이 테이블을 암호화할 수 있다. TDE 암호화에 관한 자세한 내용은 :ref:`tde` 절을 참고한다. 
+
+.. code-block:: sql
+
+    CREATE TABLE enc_tbl (a INT, b INT) ENCRYPT = AES;
+
+암호화 알고리즘으로 **AES**, **ARIA** 를 지정할 수 있다. 다음과 같이 생략할 경우 시스템 파라미터 **tde_default_algorithm** 으로
+지정된 암호화 알고리즘이 사용 된다. 기본 값은 **AES** 이다.
+
+.. code-block:: sql
+
+    CREATE TABLE enc_tbl (a INT, b INT) ENCRYPT;
 
 CREATE TABLE LIKE
 -----------------

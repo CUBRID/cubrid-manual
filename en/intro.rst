@@ -274,7 +274,7 @@ To address this issue, CUBRID introduces the new concept of the Click Counter th
 
 *   **JSON**
 
-    JavaScript Object Notation (JSON) has become the de facto standard for data-interchanging. JSON, one of the semi-structured data, is not allowed to reside in the relational data model. In CUBRID, However, you can create and query JSON documents using :ref:`SQL functions for JSON<json-fn>`. and you can define a :ref:`JSON data type<json-data-type>` column and stores a JSON document into the column.
+    JavaScript Object Notation (JSON) has become the de facto standard for data-interchanging. JSON, one of the semi-structured data, is not allowed to reside in the relational data model. In CUBRID, however, you can create and query JSON documents using :ref:`SQL functions for JSON<json-fn>`. you can define a :ref:`JSON data type<json-data-type>` column and stores a JSON document into the column.
 
 *   **Inheritance**
 

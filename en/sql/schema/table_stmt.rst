@@ -77,7 +77,7 @@ To create a table, use the **CREATE TABLE** statement.
      
         <resolution> ::= [CLASS] {column_name} OF superclass_name [AS alias]
         <table_options> ::= <table_option> [[,] <table_option> ...] 
-            <table_option> ::= REUSE_OID | 
+            <table_option> ::= REUSE_OID | DONT_REUSE_OID |
                                COMMENT [=] 'table_comment_string' |
                                [CHARSET charset_name] [COLLATE collation_name]
 
@@ -684,6 +684,15 @@ You can specify options such as **ASC** or **DESC** after the column name when d
 Table Option
 ------------
 
+**REUSE_OID** and **DONT_REUSE_OID** are options that specify whether to be referable when creating a table. The two options cannot be used together and can be used with other options. When creating a table without the option, the **REUSE_OID** table option is used. To change the default option to **DONT_REUSE_OID**, you should change the system parameter **create_table_reuseoid** to **no**. For detail, see :ref:`stmt-type-parameters` .
+
+::
+
+        <table_options> ::= <table_option> [[,] <table_option> ...]
+            <table_option> ::= REUSE_OID | DONT_REUSE_OID |
+                               COMMENT [=] 'table_comment_string' |
+                               [CHARSET charset_name] [COLLATE collation_name]
+
 .. _reuse-oid:
 
 REUSE_OID
@@ -726,6 +735,13 @@ If you specify REUSE_OID together with the collation of table, it can be placed 
     *   Instance methods cannot be called from OID reusable tables. Also, instance methods cannot be called if a sub class inherited from the class where the method is defined is defined as an OID reusable table.
     *   OID reusable tables are supported only by CUBRID 2008 R2.2 or above, and backward compatibility is not ensured. That is, the database in which the OID reusable table is located cannot be accessed from a lower version database.
     *   OID reusable tables can be managed as partitioned tables and can be replicated.
+
+.. _dont-reuse-oid:
+
+DONT_REUSE_OID
+^^^^^^^^^^^^^^
+
+Specifying the **DONT_REUSE_OID** option when creating the table will create a referable table as opposite to **REUSE_OID**.
 
 Charset and Collation
 ^^^^^^^^^^^^^^^^^^^^^

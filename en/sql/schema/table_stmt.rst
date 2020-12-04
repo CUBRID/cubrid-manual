@@ -741,7 +741,7 @@ If you specify REUSE_OID together with the collation of table, it can be placed 
 DONT_REUSE_OID
 ^^^^^^^^^^^^^^
 
-You can specify the **DONT_REUSE_OID** option when creating a table, then a referable table opposite to **REUSE_OID** is created.
+Specifying the **DONT_REUSE_OID** option when creating the table will create a referable table as opposite to **REUSE_OID**.
 
 Charset and Collation
 ^^^^^^^^^^^^^^^^^^^^^

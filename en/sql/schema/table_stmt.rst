@@ -77,7 +77,7 @@ To create a table, use the **CREATE TABLE** statement.
      
         <resolution> ::= [CLASS] {column_name} OF superclass_name [AS alias]
         <table_options> ::= <table_option> [[,] <table_option> ...] 
-            <table_option> ::= REUSE_OID | 
+            <table_option> ::= REUSE_OID | DONT_REUSE_OID |
                                COMMENT [=] 'table_comment_string' |
                                [CHARSET charset_name] [COLLATE collation_name]
 
@@ -684,6 +684,15 @@ You can specify options such as **ASC** or **DESC** after the column name when d
 Table Option
 ------------
 
+**REUSE_OID** and **DONT_REUSE_OID** are options that specify whether to be referable when creating a table. The two options cannot be used together and can be used with other options. When creating a table without the option, the **REUSE_OID** table option is used. To change the default option to **DONT_REUSE_OID**, you should change the system parameter **create_table_reuseoid** to **no**. For detail, see :ref:`stmt-type-parameters` .
+
+::
+
+        <table_options> ::= <table_option> [[,] <table_option> ...]
+            <table_option> ::= REUSE_OID | DONT_REUSE_OID |
+                               COMMENT [=] 'table_comment_string' |
+                               [CHARSET charset_name] [COLLATE collation_name]
+
 .. _reuse-oid:
 
 REUSE_OID
@@ -726,6 +735,13 @@ If you specify REUSE_OID together with the collation of table, it can be placed 
     *   Instance methods cannot be called from OID reusable tables. Also, instance methods cannot be called if a sub class inherited from the class where the method is defined is defined as an OID reusable table.
     *   OID reusable tables are supported only by CUBRID 2008 R2.2 or above, and backward compatibility is not ensured. That is, the database in which the OID reusable table is located cannot be accessed from a lower version database.
     *   OID reusable tables can be managed as partitioned tables and can be replicated.
+
+.. _dont-reuse-oid:
+
+DONT_REUSE_OID
+^^^^^^^^^^^^^^
+
+Specifying the **DONT_REUSE_OID** option when creating the table will create a referable table as opposite to **REUSE_OID**.
 
 Charset and Collation
 ^^^^^^^^^^^^^^^^^^^^^
@@ -969,7 +985,8 @@ You can modify the structure of a table by using the **ALTER** statement. You ca
             MODIFY <alter_modify> |            
             INHERIT <resolution>, ... |
             AUTO_INCREMENT = <initial_value> |
-            COMMENT [=] 'table_comment_string'
+            COMMENT [=] 'table_comment_string' |
+            COMMENT ON {COLUMN | CLASS ATTRIBUTE} <column_comment_definition> [, <column_comment_definition>] ;
                            
             <alter_add> ::= 
                 [ATTRIBUTE|COLUMN] [(]<class_element>, ...[)] [FIRST|AFTER old_column_name] |
@@ -1016,9 +1033,11 @@ You can modify the structure of a table by using the **ALTER** statement. You ca
 
             <index_col_name> ::= column_name [(length)] [ASC | DESC]
 
+            <column_comment_definition> ::= column_name [=] 'column_comment_string'
+
 .. note::
 
-    A column's comment is specified in <*column_definition*>. For <*column_definition*>, see the above CREATE TABLE syntax.
+    A column's comment is specified in <*column_definition*> or <*column_comment_definition*>. For <*column_definition*>, see the above :ref:`CREATE TABLE syntax<column-definition>`.
 
 .. warning::
 
@@ -1362,7 +1381,8 @@ The **MODIFY** clause can modify type, size, and attribute of a column but canno
 
 If you set the type, size, and attribute to apply to a new column with the **CHANGE** clause or the **MODIFY** clause, the attribute that is currently defined will not be passed to the attribute of the new column.
 
-When you change data types using the **CHANGE** clause or the **MODIFY** clause, the data can be modified. For example, if you shorten the length of a column, the character string may be truncated.
+When you change data types using the **CHANGE** clause or the **MODIFY** clause, the data can be modified. For example, if you shorten the length of a column, the character string may be truncated if the value of configuration parameter alter_table_change_type_strict is set to **no**. But if the parameter value is set to **yes**, the change or modify is not allowed and it returns an error.
+the configuration parameter allow_truncated_string also affect the similar as alter_table_change_type_strict.
 
 .. warning::
 
@@ -1606,13 +1626,13 @@ The **alter_table_change_type_strict** parameter determines whether the value co
 
 When the value of the parameter, **alter_table_change_type_strict** is no, it will operate depending on the conditions as follows:
 
-*   Overflow occurred while converting numbers or character strings to Numbers: It is determined based on symbol of the result type. If it is negative value, it is specified as a minimum value or positive value, specified as the maximum value and a warning message for records where overflow occurred is recorded in the log. For strings, it will follow the rules stated above after it is converted to **DOUBLE** type.
+*   Overflow occurred while converting numbers or character strings to Numbers: It is determined based on symbol of the result type. If it is negative value, it is specified as a minimum value or positive value, specified as the maximum value and a warning message for records where overflow occurred is recorded in the log. For strings, it will follow the rules stated above after it is converted to **DOUBLE** type. Overflow can also be returned by the parameter **allow_truncated_string** setting to **no** if the converted string does not fit the length of the target string type.
 
-*   Character strings to convert to shorter ones: The record will be updated to the hard default value of the type that is defined and the warning message will be recorded in a log.
+*   Character strings to convert to shorter ones: The record will be updated to the hard default value of the type that is defined and the warning message will be recorded in a log. Converting to shorter ones is not allowed when the **allow_truncated_string** is set to **no**.
 
 *   Conversion failure due to other reasons: The record will be updated to the hard default value of the type that is defined and the warning message will be recorded in a log.
 
-If the value of the **alter_table_change_type_strict** parameter is yes, an error message will be displayed and the changes will be rolled back.
+If the value of the **alter_table_change_type_strict** parameter is yes or **allow_truncated_string** is set to no, an error message will be displayed and the changes will be rolled back.
 
 The **ALTER CHANGE** statement checks the possibility of type conversion before updating a record but the type conversion of specific values may fail. For example, if the value format is not correct when you convert **VARCHAR** to **DATE**, the conversion may fail. In this case, the hard default value of the **DATE** type will be assigned.
 
@@ -1667,18 +1687,27 @@ The hard default value is a value that will be used when you add columns with th
 Column's COMMENT
 ----------------
 
-A column's comment is specified in <*column_definition*>, which is located at the end of ADD/MODIFY/CHANGE syntax. To see the meaning of <*column_definition*>, refer to CREATE TABLE syntax on the above.
+A column's comment is specified in <*column_definition*> or <*column_comment_definition*>. <*column_definition*> is located at the end of ADD/MODIFY/CHANGE syntax and <*column_comment_definition*> is located at the end of COMMENT ON COLUMN syntax. To see the meaning of <*column_definition*>, refer to :ref:`CREATE TABLE syntax<column-definition>` on the above.
+
+In the COMMENT ON COLUMN syntax, you can change column comments by specifying one or more columns.
+The following example shows how to change a column comment using the COMMENT ON COLUMN statement.
+
+.. code-block:: sql
+
+    ALTER TABLE t1 COMMENT ON COLUMN c1 = 'changed table column c1 comment';
+    ALTER TABLE t1 COMMENT ON COLUMN c2 = 'changed table column c2 comment', c3 = 'changed table column c3 comment';
 
 The below is a syntax to show a column's comment.
 
 .. code-block:: sql
 
-    SHOW CREATE TABLE table_name;
+    SHOW CREATE TABLE t1 /* table_name */ ;
 
     SELECT attr_name, class_name, comment 
-    FROM db_attribute WHERE class_name ='classname';
+    FROM db_attribute
+    WHERE class_name = t1 /* lowercase_table_name */ ;
 
-    SHOW FULL COLUMNS FROM table_name;
+    SHOW FULL COLUMNS FROM t1 /* table_name */ ;
 
 You can see this comment with the ";sc table_name" command in the CSQL interpreter.
 

@@ -92,6 +92,8 @@ The following shows the statistical information of *t1* table in CSQL interprete
             BTID: { 0 , 1049 }
             Cardinality: 5 (5) , Total pages: 2 , Leaf pages: 1 , Height: 2
 
+.. _viewing-query-plan:
+
 Viewing Query Plan
 ==================
 
@@ -449,31 +451,42 @@ The following is an example to join 3 tables.
 ::
  
     csql> SET TRACE ON;
-    csql> SELECT /*+ RECOMPILE */ o.host_year, o.host_nation, o.host_city, n.name, SUM(p.gold), SUM(p.silver), SUM(p.bronze)  
-            FROM OLYMPIC o, PARTICIPANT p, NATION n
-            WHERE o.host_year = p.host_year AND p.nation_code = n.code AND p.gold > 10 
-            GROUP BY o.host_nation;
+    csql> SELECT /*+ RECOMPILE ORDERED */ o.host_year, o.host_nation, o.host_city, n.name, SUM(p.gold), SUM(p.silver), SUM(p.bronze)
+            FROM OLYMPIC o,
+                 (select * from PARTICIPANT p where p.gold > 10) p,
+                 NATION n
+          WHERE o.host_year = p.host_year AND p.nation_code = n.code
+          GROUP BY o.host_nation;
     csql> SHOW TRACE;
  
       trace
     ======================
-      '
+    '
     Query Plan:
+      TABLE SCAN (p)
+    
+      rewritten query: (select p.host_year, p.nation_code, p.gold, p.silver, p.bronze from PARTICIPANT p where (p.gold> ?:0 ))
+    
       SORT (group by)
         NESTED LOOPS (inner join)
           NESTED LOOPS (inner join)
             TABLE SCAN (o)
-            INDEX SCAN (p.fk_participant_host_year) (key range: (o.host_year=p.host_year))
+            TABLE SCAN (p)
           INDEX SCAN (n.pk_nation_code) (key range: p.nation_code=n.code)
-
-      rewritten query: select o.host_year, o.host_nation, o.host_city, n.[name], sum(p.gold), sum(p.silver), sum(p.bronze) from OLYMPIC o, PARTICIPANT p, NATION n where (o.host_year=p.host_year and p.nation_code=n.code and (p.gold> ?:0 )) group by o.host_nation
-
+    
+      rewritten query: select /*+ ORDERED */ o.host_year, o.host_nation, o.host_city, n.[name], sum(p.gold), sum(p.silver), sum(p.bronze) from OLYMPIC o, (select p.host_year, p.nation_code, p.gold, p.silver, p.bronze from PARTICIPANT p where (p.gold> ?:0 )) p (host_year, nation_code, gold,
+    silver, bronze), NATION n where o.host_year=p.host_year and p.nation_code=n.code group by o.host_nation
+    
+    
     Trace Statistics:
-      SELECT (time: 1, fetch: 1059, ioread: 2)
-        SCAN (table: olympic), (heap time: 0, fetch: 26, ioread: 0, readrows: 25, rows: 25)
-          SCAN (index: participant.fk_participant_host_year), (btree time: 1, fetch: 945, ioread: 2, readkeys: 5, filteredkeys: 5, rows: 916) (lookup time: 0, rows: 38)
-            SCAN (index: nation.pk_nation_code), (btree time: 0, fetch: 76, ioread: 0, readkeys: 38, filteredkeys: 38, rows: 38) (lookup time: 0, rows: 38)
-        GROUPBY (time: 0, sort: true, page: 0, ioread: 0, rows: 5)
+      SELECT (time: 6, fetch: 880, ioread: 0)
+        SCAN (table: olympic), (heap time: 0, fetch: 104, ioread: 0, readrows: 25, rows: 25)
+          SCAN (hash temp buildtime : 0, time: 0, fetch: 0, ioread: 0, readrows: 76, rows: 38)
+            SCAN (index: nation.pk_nation_code), (btree time: 2, fetch: 760, ioread: 0, readkeys: 38, filteredkeys: 0, rows: 38) (lookup time: 0, rows: 38)
+        GROUPBY (time: 0, hash: true, sort: true, page: 0, ioread: 0, rows: 5)
+        SUBQUERY (uncorrelated)
+          SELECT (time: 2, fetch: 12, ioread: 0)
+            SCAN (table: participant), (heap time: 2, fetch: 12, ioread: 0, readrows: 916, rows: 38)
     '
 
 The following are the explanation regarding items of trace statistics.
@@ -489,7 +502,7 @@ The following are the explanation regarding items of trace statistics.
 *   heap: data scanning job without index
 
     *   time, fetch, ioread: the estimated time(ms), page fetching count and I/O read count in the heap of this operation 
-    *   readrows: the number of read rows when this operation is performed
+    *   readrows: the number of rows read when this operation is performed
     *   rows: the number of result rows when this operation is performed
     
 *   btree: index scanning job
@@ -498,6 +511,15 @@ The following are the explanation regarding items of trace statistics.
     *   readkeys: the number of the keys which are read in btree when this operation is performed
     *   filteredkeys: the number of the keys to which the key filter is applied from the read keys
     *   rows: the number of result rows when this operation is performed; the number of result rows to which key filter is applied
+
+*   temp: data scanning job with temp file
+
+    *   hash: hash list scan or not. See :ref:`NO_HASH_LIST_SCAN <no-hash-list-scan>` hint.
+    *   buildtime: the estimated time(ms) in building hash table.
+    *   time: the estimated time(ms) in probing hash table.
+    *   fetch, ioread: page fetching count and I/O read count in the temp file of this operation
+    *   readrows: the number of rows read when this operation is performed
+    *   rows: the number of result rows when this operation is performed
     
 *   lookup: data accessing job after index scanning
 
@@ -510,13 +532,13 @@ The following are the explanation regarding items of trace statistics.
 *   sort: sorting or not
 *   page: the number of pages which is read in this operation; the number of used pages except the internal sorting buffer
 *   rows: the number of the result rows in this operation
+*   hash: hash aggregate evaluation or not, when sorting tuples in the aggregate function(true/false). See :ref:`NO_HASH_AGGREGATE <no-hash-aggregate>` hint.
 
 **INDEX SCAN**
 
 *   key range: the range of a key
 *   covered: covered index or not(true/false)
 *   loose: loose index scan or not(true/false)
-*   hash: hash aggregate evaluation or not, when sorting tuples in the aggregate function(true/false). See :ref:`NO_HASH_AGGREGATE <no-hash-aggregate>` hint.
 
 The above example can be output as JSON format.
  
@@ -609,6 +631,7 @@ Using hints can affect the performance of query execution. You can allow the que
     NO_MULTI_RANGE_OPT |
     NO_SORT_LIMIT |
     NO_HASH_AGGREGATE |
+    NO_HASH_LIST_SCAN |
     RECOMPILE |
     QUERY_CACHE
 
@@ -649,6 +672,14 @@ The following hints can be specified in **UPDATE**, **DELETE** and **SELECT** st
     .. note::
     
         Hash aggregate evaluation will not work for functions evaluated on distinct values (e.g. AVG(DISTINCT x)) and for the GROUP_CONCAT and MEDIAN functions, since they require an extra sorting step for the tuples of each group.
+
+.. _no-hash-list-scan:
+
+*   **NO_HASH_LIST_SCAN**: This is a hint not to use hash list scan for scanning sub-query's result. Instead, list scan is used to scan temp file. By building and probing hash table, we can reduce the amount of data that needs to be searched. However, in some scenarios, the user may know beforehand that outer cardinality is very small and can use the hint to skip hash list scan entirely. For setting the memory size of hash scan, see :ref:`max_hash_list_scan_size <max_hash_list_scan_size>`.
+
+    .. note::
+    
+        Hash List scan only works for predicates having a equal operation and does NOT work for predicates having OID type.
 
 .. _recompile:
 

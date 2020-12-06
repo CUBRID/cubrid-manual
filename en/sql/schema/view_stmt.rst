@@ -294,15 +294,55 @@ You can drop a query defined in the query specification by using the **DROP QUER
 COMMENT Clause
 --------------
 
-You can change a view's comment with **COMMENT** clause of **ALTER VIEW** syntax.
+You can change a view's comment, columns' comment, or attributes' comment with **COMMENT** clause of **ALTER VIEW** syntax.
 
 ::
 
-    ALTER [VIEW | VCLASS] view_name COMMENT [=] 'view_comment';
+    ALTER [VIEW | VCLASS] view_name
+    COMMENT [=] 'view_comment_string' |
+    COMMENT ON {COLUMN | CLASS ATTRIBUTE} <column_comment_definition> [, <column_comment_definition>] ;
+
+        <column_comment_definition> ::= column_name [=] 'column_comment_string'
+
+*   *view_name*: Specifies the name of a view to be modified.
+*   *column_name*: Specifies the name of a column to be modified.
+*   *view_comment_string*: Specifies a view's comment.
+*   *column_comment_string*: Specifies a column's comment.
+
+The following example shows how to change a view's comments.
 
 .. code-block:: sql
 
-    ALTER VIEW b_view COMMENT = 'changed view comment';
+    ALTER VIEW v1 COMMENT = 'changed view v1 comment';
+
+You can change the column comment by specifying one or more columns after the ON COLUMN keyword.
+The following example shows how to change a column's comments.
+
+.. code-block:: sql
+
+    ALTER VIEW v1 COMMENT ON COLUMN c1 = 'changed view column c1 comment';
+    ALTER VIEW v1 COMMENT ON COLUMN c2 = 'changed view column c2 comment', c3 = 'changed view column c3 comment';
+
+Below is a syntax to show a column's comment.
+But the SHOW CREATE VIEW statement shows only view comments.
+
+.. code-block:: sql
+
+    SHOW CREATE VIEW v1 /* view_name */ ;
+
+    SELECT attr_name, class_name, comment 
+    FROM db_attribute
+    WHERE class_name = 'v1' /* lowercase_view_name */ ;
+
+    SHOW FULL COLUMNS FROM v1 /* view_name */ ;
+
+You can see this comment with the ";sc view_name" command in the CSQL interpreter.
+
+::
+
+    $ csql -u dba demodb
+    
+    csql> ;sc v1
 
 DROP VIEW
 =========

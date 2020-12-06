@@ -1047,6 +1047,7 @@ A variable-length bit string is represented as **BIT VARYING** (*n*), where *n* 
     INSERT INTO bitvar_tbl VALUES (0b1010, 0b1010);
     INSERT INTO bitvar_tbl VALUES (0xaa, 0xaa);
     INSERT INTO bitvar_tbl(a1) VALUES (0xaaa);
+    INSERT INTO bitvar_tbl(a2) VALUES (0xaaa);
     SELECT * FROM bitvar_tbl;
 
 ::
@@ -1057,14 +1058,7 @@ A variable-length bit string is represented as **BIT VARYING** (*n*), where *n* 
       X'a'                  X'a'
       X'aa'                 X'aa'
       X'aaa'                NULL
-
-.. code-block:: sql
-
-    INSERT INTO bitvar_tbl(a2) VALUES (0xaaa);
-
-::
-
-    ERROR: Data overflow coercing X'aaa' to type bit varying.
+      NULL                  X'aa'
 
 .. _char-data-type:
 
@@ -1103,11 +1097,12 @@ The following are the rules that are applied when using the character string typ
 
     Specify the number of a character string.
 
-    When the length of the character string entered exceeds the length specified, the excess characters are truncated.
+    When the length of the character string entered exceeds the length specified, the excess characters may be truncated in the insert/update operation if the allow_truncated_string configuration value is "yes" otherwise error occurs.
 
     For a fixed-length character string type such as **CHAR**, the length is fixed at the declared length. Therefore, the right part (trailing space) of the character string is filled with space characters when the string is stored. For a variable-length character string type such as **VARCHAR**, only the entered character string is stored, and the space is not filled with space characters.
 
-    The maximum length of a **CHAR** or **VARCHAR** type to be specified is 1,073,741,823.
+    The maximum length of a **CHAR** type to be specified is 268,435,455.
+    The maximum length of a **VARCHAR** type to be specified is 1,073,741,823.
     
     Also, the maximum length that can be input or output in a CSQL statement is 8,192 KB.
 
@@ -1141,13 +1136,13 @@ CHAR(n)
 
 A fixed-length character string is represented as **CHAR** *(n)*, in which *n* represents the number of characters. If *n* is not specified, the value is specified as 1, default value.
 
-When the length of a character string exceeds *n*, they are truncated. When character string which is shorter than *n* is stored, whitespace characters are used to fill up the trailing space.
+When the length of a character string exceeds *n*, they may be truncated in the insert/update operation if the allow_truncated_string configuration value is "yes" otherwise error occurs. When character string which is shorter than *n* is stored, white space characters are used to fill up the trailing space.
 
 **CHAR** (*n*) and **CHARACTER** (*n*) are used interchangeably.
 
 .. note:: In the earlier versions of CUBRID 9.0, *n* represents bite length, not the number of characters.
 
-*   *n* is an integer between 1 and 1,073,741,823 (1G).
+*   *n* is an integer between 1 and 268,435,455 (256M).
 
 *   Empty quotes (' ') are used to represent a blank string. In this case, the return value of the **LENGTH** function is not 0, but is the fixed length defined in **CHAR** (*n*). That is, if you enter a blank string into a column with **CHAR** (10), the **LENGTH** is 10; if you enter a blank value into a **CHAR** with no length specified, the **LENGTH** is the default value 1.
 
@@ -1155,9 +1150,9 @@ When the length of a character string exceeds *n*, they are truncated. When char
 
 ::
 
-    If you specify 'pacesetter' as CHAR(12), 'pacesetter ' is stored (a 10-character string plus two whitespace characters).
-    If you specify 'pacesetter ' as CHAR(10), 'pacesetter' is stored (a 10-character string; two whitespace characters are truncated).
-    If you specify 'pacesetter' as CHAR(4), 'pace' is stored (truncated as the length of the character string is greater than 4).
+    If you specify 'pacesetter' as CHAR(12), 'pacesetter ' is stored (a 10-character string plus two white space characters).
+    If you specify 'pacesetter ' as CHAR(10), 'pacesetter' is stored (a 10-character string; two white space characters are truncated).
+    If you specify 'pacesetter' as CHAR(4), 'pace' may be stored or error occurs depending on the configuration value of allow_truncated_string (truncated as the length of the character string is greater than 4).
     If you specify 'p ' as CHAR, 'p' is stored (if n is not specified, the length is set to the default value 1).
 
 *   **DEFAULT** constraint can be specified in a column of this type.
@@ -1167,7 +1162,7 @@ VARCHAR(n)/CHAR VARYING(n)
 
 Variable-length character strings are represented as **VARCHAR** (*n*), where *n* represents the number of characters. If *n* is not specified, the value is specified as 1,073,741,823, the maximum length.
 
-When the length of a character string exceeds *n*, they are truncated. When character string which is shorter than *n* is stored, whitespace characters are used to fill up the trailing space for **VARCHAR** (*n*), the length of string used are stored. 
+When the length of a character string exceeds *n*, they may be truncated in the insert/update operation if the allow_truncated_string configuration value is **yes** or error occurs if not.  When character string which is shorter than *n* is stored, for **VARCHAR** (*n*), the length of string used are stored without any trailing spaces.
 
 **VARCHAR** (*n*), **CHARACTER, VARYING** (*n*), and **CHAR VARYING** (*n*) are used interchangeably.
 
@@ -1179,11 +1174,11 @@ When the length of a character string exceeds *n*, they are truncated. When char
 
 ::
 
-    If you specify 'pacesetter' as CHAR(4), 'pace' is stored (truncated as the length of the character string is greater than 4).
+    If you specify 'pacesetter' as VARCHAR(4), 'pace' may be stored or error occurs depending on the configuration value of allow_truncated_string (truncated as the length of the character string is greater than 4).
     If you specify 'pacesetter' as VARCHAR(12), 'pacesetter' is stored (a 10-character string).
-    If you specify 'pacesetter ' as VARCHAR(12), 'pacesetter ' is stored (a 10-character string plus two whitespace characters).
-    If you specify 'pacesetter ' as VARCHAR(10), 'pacesetter' is stored (a 10-character string; two whitespace characters are truncated).
-    If you specify 'p ' as VARCHAR, 'p' is stored (if n is not specified, the default value 1,073,741,823 is used, and the trailing space is not filled with whitespace characters).
+    If you specify 'pacesetter ' as VARCHAR(12), 'pacesetter ' is stored (a 11-character string).
+    If you specify 'pacesetter ' as VARCHAR(10), 'pacesetter' may be stored or error occurs depending on the configuration value of allow_truncated_string (a 10-character string; two white space characters can be truncated).
+    If you specify 'p ' as VARCHAR, 'p ' is stored (if n is not specified, the default value 1,073,741,823 is used, and the trailing space is not filled with white space characters).
 
 *   **DEFAULT** constraint can be specified in a column of this type.
 

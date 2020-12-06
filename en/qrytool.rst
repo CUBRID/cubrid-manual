@@ -61,7 +61,6 @@ You can start the CSQL program in the shell as shown below. At the initial insta
        ;DATE                       - display the local time, date.
        ;DATAbase                   - display the name of database being accessed.
        ;SChema class-name          - display schema information of a class.
-       ;SYntax [sql-cmd-name]      - display syntax of a command.
        ;TRigger [`*'|trigger-name] - display trigger definition.
        ;Get system_parameter       - get the value of a system parameter.
        ;SEt system_parameter=value - set the value of a system parameter.

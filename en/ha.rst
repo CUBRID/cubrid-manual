@@ -2598,7 +2598,7 @@ You can use an existing master or slave if you want to add a new slave during HA
     
         ::
     
-            [nodeB]$ 
+            [nodeB]$ cd $CUBRID_DATABASES/testdb/log
             [nodeB]$ scp -l 131072 testdb_bk* cubrid_usr@nodeC:$CUBRID_DATABASES/testdb/log
     
         .. note::
@@ -2993,7 +2993,7 @@ Now let's add a replica when HA environment is set as "master:slave=1:1". The be
     
         ::
     
-            [nodeB]$ 
+            [nodeB]$ cd $CUBRID_DATABASES/testdb/log
             [nodeB]$ scp -l 131072 testdb_bk* cubrid_usr@nodeC:$CUBRID_DATABASES/testdb/log
     
         .. note::
@@ -3276,7 +3276,7 @@ Now let's see the case of rebuilding a existing slave node during a service in a
             
             repl_log_path=$repl_log_home_abs/${db_name}_${master_host}
 
-            local_db_creation=`awk 'BEGIN { print strftime("%m/%d/%Y %H:%M:%S", $db_creation) }'`
+            local_db_creation=`awk 'BEGIN { print strftime("%m/%d/%Y %H:%M:%S", '$db_creation') }'`
                 csql_cmd="\
                 INSERT INTO \
                         db_ha_apply_info \
@@ -3963,6 +3963,8 @@ The following are optional items:
 *   **restore_option** : Specifies necessary options when executing **restoredb** in the target node in which replication will be rebuilt.
 
 *   **scp_option** : Specifies the **scp** option which enables backup of source node in which replication is rebuilt to copy into the target node. The default option is **-l 131072**, which does not impose an overload on network (limits the transfer rate to 16 MB).
+
+*   **ssh_port**  : Specifies the **port** number of the ssh and scp used in the script. This option also applies to **expect** run from the script. The default port number is **22**.
 
 Once the script has been configured, execute the **ha_make_slavedb.sh** script in the target node in which replication will be rebuilt. When the script is executed, rebuilding replication happens in a number of phases. To move to the next stage, the user must enter an appropriate value. The following are the descriptions of available values.
 

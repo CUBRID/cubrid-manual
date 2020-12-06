@@ -1772,7 +1772,7 @@ The following are parameters related to the query plan cache functionality. The 
 
 **max_plan_cache_entries**
 
-    **max_plan_cache_entries** is a parameter to configure the maximum number of query plans to be cached in the memory. If the **max_plan_cache_entries** parameter is configured to -1 or 0, generated query plans are not stored in the memory cache; if it is configured to an integer value equal to or greater than 1, a specified number of query plans are cached in the memory.
+    **max_plan_cache_entries** is a parameter to configure the maximum number of query plans to be cached in the memory. If the **max_plan_cache_entries** parameter is configured to -1 or 0, generated query plans are not stored in the memory cache; if it is configured to an integer value equal to 0 or greater than 1, a specified number of query plans are cached in the memory.
 
     The following example shows how to cache up to 1,000 queries. ::
 
@@ -1802,7 +1802,7 @@ If one of the parameters is set to 0 or negative value, the query cache is disab
 
 **max_query_cache_entries**
 
-    **max_query_cache_entries** is a parameter to configure the maximum number of query to be cached. If it is configured to an integer value equal to or greater than 1, a specified number of queries are cached with the result.
+    **max_query_cache_entries** is a parameter to configure the maximum number of query to be cached. If it is configured to an integer value equal to 0 or greater than 1, a specified number of queries are cached with the result.
 
     The following example shows how to cache up to 500 queries. ::
 
@@ -1810,7 +1810,7 @@ If one of the parameters is set to 0 or negative value, the query cache is disab
 
 **query_cache_use_pages**
 
-    **query_cache_use_pages** is a parameter to configure the maximum page of result to be cached. If it is configured to an integer value equal to or greater than 1, specified pages in results are cached as temp files.
+    **query_cache_use_pages** is a parameter to configure the maximum page of result to be cached. If it is configured to an integer value equal to 0 or greater than 1, specified pages in results are cached as temp files.
 
     The following example shows how to cache up to 4,000 pages. ::
 

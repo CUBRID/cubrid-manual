@@ -299,6 +299,11 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | max_filter_pred_cache_entries       | client/server parameter |         | int      | 1,000                          |                       |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+| :ref:`query-cache-parameters` | max_query_cache_entries             | server parameter        |         | int      | 200                            | available             |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | query_cache_use_pages               | server parameter        |         | int      | 1,000                          | available             |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
++-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 | :ref:`utility-parameters`     | backup_volume_max_size_bytes        | server parameter        |         | byte     | 0                              |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | communication_histogram             | client parameter        | O       | bool     | no                             | available             |
@@ -1799,7 +1804,7 @@ The following are parameters related to the query plan cache functionality. The 
 
 **max_plan_cache_entries**
 
-    **max_plan_cache_entries** is a parameter to configure the maximum number of query plans to be cached in the memory. If the **max_plan_cache_entries** parameter is configured to -1 or 0, generated query plans are not stored in the memory cache; if it is configured to an integer value equal to or greater than 1, a specified number of query plans are cached in the memory.
+    **max_plan_cache_entries** is a parameter to configure the maximum number of query plans to be cached in the memory. If the **max_plan_cache_entries** parameter is configured to -1 or 0, generated query plans are not stored in the memory cache; if it is configured to an integer value equal to 0 or greater than 1, a specified number of query plans are cached in the memory.
 
     The following example shows how to cache up to 1,000 queries. ::
 
@@ -1808,6 +1813,40 @@ The following are parameters related to the query plan cache functionality. The 
 **max_filter_pred_cache_entries**
 
     **max_filter_pred_cache_entries** is a parameter used to specify the maximum number of filtered index expressions. The filtered index expressions are stored with them complied and can be immediately used in server. If it is not stored in cache, the process is required which filtered index expressions are fetched from database schema and interpreted.
+
+.. _query-cache-parameters:
+
+Query Cache-Related Parameters
+-----------------------------------
+
+The following are the parameters related to the query cache functionality. The type and value range for each parameter are as follows:
+
++-------------------------------+--------+----------+----------+----------+
+| Parameter Name                | Type   | Default  | Min      | Max      |
++===============================+========+==========+==========+==========+
++-------------------------------+--------+----------+----------+----------+
+| max_query_cache_entries       | int    | 200      | 0        | INT_MAX  |
++-------------------------------+--------+----------+----------+----------+
+| max_query_cache_pages         | int    | 1,000    | 0        | INT_MAX  |
++-------------------------------+--------+----------+----------+----------+
+
+If one of the parameters is set to 0 or negative value, the query cache is disabled regardless using the query hint **QUERY_CACHE**.
+
+**max_query_cache_entries**
+
+    **max_query_cache_entries** is a parameter to configure the maximum number of query to be cached. If it is configured to an integer value equal to 0 or greater than 1, a specified number of queries are cached with the result.
+
+    The following example shows how to cache up to 500 queries. ::
+
+        max_query_cache_entries=500
+
+**query_cache_use_pages**
+
+    **query_cache_use_pages** is a parameter to configure the maximum page of result to be cached. If it is configured to an integer value equal to 0 or greater than 1, specified pages in results are cached as temp files.
+
+    The following example shows how to cache up to 4,000 pages. ::
+
+        query_cache_use_pages=4000
 
 .. _utility-parameters:
 

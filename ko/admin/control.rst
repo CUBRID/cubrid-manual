@@ -2168,12 +2168,12 @@ CUBRID 매니저 사용자의 계정과 비밀번호는 CUBRID 매니저 클라�
 CUBRID 자바 저장 프로시저 서버
 ====================================
 
-CUBRID 자바 저장 프로시저 서버 구동하기
+CUBRID 자바 저장 프로시저 서버 구동
 ---------------------------------------
 
-The following example shows how to start CUBRID Java SP server for *demodb*.
+다음은 *demodb* 용 CUBRID 자바 저장 프로시저 서버를 구동하는 방법이다.
 
-To start the Java SP server, the java_stored_procedure parameter in the CUBRID configuration file (cubrid.conf) must set to yes.
+CUBRID 자바 저장 프로시저 서버를 시작하려면 CUBRID 설정 파일 (**cubrid.conf**)의 **java_stored_procedure** 파라미터를 yes로 설정해야한다.
 
 ::
 
@@ -2182,7 +2182,7 @@ To start the Java SP server, the java_stored_procedure parameter in the CUBRID c
     @ cubrid javasp start: demodb
     ++ cubrid javasp start: success
 
-The following message is returned if CUBRID Java SP server is already running. 
+CUBRID 자바 저장 프로시저 서버가 이미 실행중인 경우 다음과 같은 메시지가 출력된다.
 
 ::
 
@@ -2191,12 +2191,12 @@ The following message is returned if CUBRID Java SP server is already running.
     @ cubrid javasp start: demodb
     ++ cubrid javasp 'demodb' is running.
 
-For details on other types of errors that may occur when starting the server, see :ref:`cubrid-javasp-server-errors`.
+서버 시작 시 발생할 수 있는 다른 유형의 오류에 대한 자세한 내용은 :ref:`cubrid-javasp-server-errors` 를 참고한다.
 
-Stopping CUBRID Java SP Server
-------------------------------
+CUBRID 자바 저장 프로시저 서버 종료
+-----------------------------------
 
-The following example shows how to stop CUBRID Java SP server for *demodb*. 
+다음은 *demodb* 용 CUBRID 자바 저장 프로시저 서버를 종료하는 방법이다.
 
 ::
 
@@ -2205,7 +2205,7 @@ The following example shows how to stop CUBRID Java SP server for *demodb*.
     @ cubrid javasp stop: demodb
     ++ cubrid javasp stop: success
 
-The following message is returned when CUBRID Java SP server has been stopped already.
+CUBRID 자바 저장 프로시저 서버가 이미 중지 된 경우 다음과 같은 메시지가 출력된다.
 
 ::
 
@@ -2215,10 +2215,10 @@ The following message is returned when CUBRID Java SP server has been stopped al
     ++ cubrid javasp 'demodb' is not running.
     ++ cubrid javasp stop: fail
 
-Restarting CUBRID Java SP Server
---------------------------------
+CUBRID 자바 저장 프로시저 서버 재시작
+-------------------------------------
 
-The following example shows how to restart CUBRID Java SP server for *demodb*. the server that has already run stops and the server restarts. 
+다음은 *demodb* 용 CUBRID 자바 저장 프로시저 서버를 재시작하는 방법이다.
 
 ::
 
@@ -2229,12 +2229,12 @@ The following example shows how to restart CUBRID Java SP server for *demodb*. t
     @ cubrid javasp start: demodb
     ++ cubrid javasp start: success
 
-Checking CUBRID Java SP Server Status
--------------------------------------
+CUBRID 자바 저장 프로시저 서버 상태 확인
+----------------------------------------
 
-The following example shows how to check the status of a CUBRID Java SP server for *demodb*. 
-The name of Java SP server, which currently running, *demodb* is displayed. 
-Additionally, The server's PID, port number, and the applied JVM option are shown together.
+다음은 *demodb* 용 CUBRID 자바 저장 프로시저 서버의 상태를 확인하는 예시이다.
+자바 저장 프로시저 서버가 현재 실행 중인 대상 데이터베이스의 이름, *demodb* 가 출력된다.
+또한 서버의 PID, 포트 번호와 적용된 JVM 옵션이 함께 표시된다.
 
 ::
 
@@ -2357,17 +2357,17 @@ For more details on these paramters, see :ref:`cubrid-conf`.
 
 .. _cubrid-javasp-service-util:
 
-Registering Java SP Server to cubrid service
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cubrid service에 자바 저장 프로시저 서버 등록
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If you register javasp to CUBRID service, you can use the utilities of **cubrid service** to start, stop or check all the registered javasp processes at once.
+CUBRID service에 javasp를 등록하면, **cubrid service** 유틸리티를 사용하여 등록된 모든 자바 저장 프로시저 서버 프로세스 (javasp 프로세스)를 한 번에 시작, 중지 또는 서버의 상태를 확인이 가능하다.
 
-- First, add **javasp** to the **service** parameter in the [**service**] section of the **cubrid.conf** file.
-- Second, To register the javasp server for a database, add the name of the database to the server parameter in the [**service**] section. Note that it shares the server parameter with the database server. a javasp server is dependent on the database server that has the same database name.
-- Finally, set **java_stored_procedure** as yes to enable starting the javasp server for the database.
+- 먼저 **cubrid.conf** 파일의 [**service**] 섹션의 **service** 파라미터에 **javasp**를 추가한다.
+- 다음으로 데이터베이스에 대한 javasp 서버를 등록하기 위해 **cubrid.conf** 파일의 [**service**] 섹션의 **server** 파라미터에 데이터베이스 이름을 추가한다. **server** 파라미터는 데이터베이스 서버와 공유하는 것을 참고한다. javasp 서버는 동일한 데이터베이스 이름을 가진 데이터베이스 서버에 종속된다.
+- 마지막으로 **java_stored_procedure**를 yes로 설정하여 해당 데이터베이스에 대한 **javasp** 서버 구동을 활성화한다.
 
-The following example shows how to register javasp server as service in the **cubrid.conf** file.
-Both *demodb* and *testdb* are present in the server property, but only demodb with **java_stored_procedure** set to yes is started by the **cubrid service start** command.
+다음은 **cubrid.conf** 파일에서 **javasp** 서버를 서비스로 등록하는 방법을 보여준다.
+*demodb*와 *testdb*는 모두 **server** 파라미터에 추가되어 있지만, **java_stored_procedure**가 yes로 설정된 demodb만 **cubrid service start** 명령으로 시작된다.
 
 ::
 
@@ -2422,15 +2422,15 @@ Both *demodb* and *testdb* are present in the server property, but only demodb w
 
 .. _cubrid-javasp-server-log:
 
-CUBRID Java SP Server Log
--------------------------
+CUBRID 자바 저장 프로시저 서버 로그
+------------------------------------
 
-The logs of CUBRID Java SP server are stored in the **log/** directory under the installation directory. The following log files are created for CUBRID Java Stored Procedure Server per database.
+CUBRID 자바 저장 프로시저 서버의 로그는 설치 디렉터리의 **log/**에 저장된다. 각 데이터베이스 별로 다음과 같은 로그 파일이 생성된다.
 
-*   Error Log ($CUBRID/log/[db_name]_java.err)
-*   Java Log ($CUBRID/log/[db_name]_java.log)
+*   에러 로그 ($CUBRID/log/[db_name]_java.err)
+*   자바 로그 ($CUBRID/log/[db_name]_java.log)
 
-Error Log
+에러 로그
 ^^^^^^^^^
 
 An error log of the Java SP server for each database is saved into **$CUBRID/log** directory, and and the format of the file name is *<db_name>_java.err*. The extension is ".err".
@@ -2455,7 +2455,7 @@ If any error occurs during starting the Java SP server, the error message is sav
     For more details on what errors can be occured, see :ref:`cubrid-javasp-server-errors`.
 
 
-Java Log
+자바 로그
 ^^^^^^^^^
 
 An Java log of the JVM in the Java SP server is saved into **$CUBRID/log** directory, and the format of the file name is *<db_name>_java.log*. The extension is ".log".
@@ -2477,11 +2477,11 @@ If any exception during performing java stored procedure/function occurs from JV
 
 .. _cubrid-javasp-server-errors:
 
-CUBRID Java SP Server Errors
-----------------------------
+CUBRID 자바 저장 프로시저 에러
+-------------------------------
 
-The following are error messages about the errors which can be occurred in starting Java SP server.
-Error messages are written to **$CUBRID/log**/\ *<db_name>_java*\ **.err**.
+다음은 CUBRID 자바 저장 프로시저 서버 시작 시 발생할 수 있는 에러에 대한 에러 메시지이다.
+에러 메시지는 **$CUBRID/log**/\ *<db_name>_java*\ **.err** 에 저장된다.
 
 +-------+----------------------------------+-----------------------------------------------------+-----------------------------------------------------------------------------------+
 | Error | Error Message                    | Description                                         | Solution                                                                          |

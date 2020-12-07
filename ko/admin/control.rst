@@ -2264,9 +2264,9 @@ CUBRID 64비트 버전에는 JRE 64비트 버전이 필요하고, CUBRID 32비�
 
     % cubrid javasp start demodb
 
-    Java VM library is not found:
+    Java 가상 머신 라이브러리를 찾을 수 없습니다:
         Failed to get 'JVM_PATH' environment variable.
-        Failed to load libjvm from 'JAVA_HOME' envirnment variable:
+        Failed to load libjvm from 'JAVA_HOME' environment variable:
             /usr/java/jdk1.6.0_15/jre/lib/amd64/server/libjvm.so: cannot open shared object file: No such file or directory.
 
 JRE가 이미 설치되어 있다면, 아래와 같은 명령으로 버전을 확인한다. ::
@@ -2433,20 +2433,20 @@ CUBRID 자바 저장 프로시저 서버의 로그는 설치 디렉터리의 **l
 에러 로그
 ^^^^^^^^^
 
-An error log of the Java SP server for each database is saved into **$CUBRID/log** directory, and and the format of the file name is *<db_name>_java.err*. The extension is ".err".
+각 데이터베이스 별 자바 저장 프로시저 서버의 에러 로그는 **$CUBRID/log** 디렉터리에 저장되며, 파일 이름은 **<db_name>_java.err** 형식으로 저장된다. 확장자는 **.err** 이다.
 
 ::
 
     demodb_java.err
 
-If any error occurs during starting the Java SP server, the error message is saved into the error log file.
+자바 저장 프로시저 서버를 시작하는 동안 에러가 발생하면 에러 메시지가 에러 로그 파일에 저장된다.
 
 ::
 
     Time: 11/11/20 18:17:15.438 - ERROR *** file ../../src/jsp/jsp_sr.c, line 501 ERROR CODE = -900, Tran = -1, EID = 1
-    Java VM library is not found: 
+    Java 가상 머신 라이브러리를 찾을 수 없습니다:
         Failed to get 'JVM_PATH' environment variable.
-        Failed to load libjvm from 'JAVA_HOME' envirnment variable: 
+        Failed to load libjvm from 'JAVA_HOME' environment variable:
             /jre/lib/amd64/server/libjvm.so: cannot open shared object file: No such file or directory
             /lib/server/libjvm.so: cannot open shared object file: No such file or directory.
 
@@ -2458,13 +2458,13 @@ If any error occurs during starting the Java SP server, the error message is sav
 자바 로그
 ^^^^^^^^^
 
-An Java log of the JVM in the Java SP server is saved into **$CUBRID/log** directory, and the format of the file name is *<db_name>_java.log*. The extension is ".log".
+각 데이터베이스 별 자바 저장 프로시저 서버의 자바 로그는 **$CUBRID/log** 디렉터리에 저장되며, 파일 이름은 **<db_name>_java.log** 형식으로 저장된다. 확장자는 **.log** 이다.
 
 ::
 
     demodb_java.log
 
-If any exception during performing java stored procedure/function occurs from JVM, the exception string is saved into the java log.
+JVM에서 Java 저장 프로 시저/함수를 수행하는 동안 예외가 발생하면 예외 문자열이 Java 로그에 저장된다.
 
 ::
 
@@ -2483,37 +2483,37 @@ CUBRID 자바 저장 프로시저 에러
 다음은 CUBRID 자바 저장 프로시저 서버 시작 시 발생할 수 있는 에러에 대한 에러 메시지이다.
 에러 메시지는 **$CUBRID/log**/\ *<db_name>_java*\ **.err** 에 저장된다.
 
-+-------+----------------------------------+-----------------------------------------------------+-----------------------------------------------------------------------------------+
-| Error | Error Message                    | Description                                         | Solution                                                                          |
-| Code  |                                  |                                                     |                                                                                   |
-+=======+==================================+=====================================================+===================================================================================+
-| -900  | Java VM library is not found: ?  | CUBRID can't find the JVM library                   | Make sure JAVA_HOME or JVM_PATH variable is set properly.                         |
-|       |                                  | from the JAVA_HOME or JVM_PATH variables            | see :ref:`cubrid-javasp-environment-configuration`.                               |
-+-------+----------------------------------+-----------------------------------------------------+-----------------------------------------------------------------------------------+
-| -901  | Java VM can not be started: ?    | Unexpected internal error occured in JVM library.   | Try installing the JRE again. If you keep getting the error,                      |
-|       |                                  | The JVM library may be broken, or there may be a    | try installing a different version of the JRE.                                    |
-|       |                                  | problem with the $CUBRID/java/jspserver.jar file.   | Try replacing it with the same CUBRID version of $CUBRID/java/jspserver.jar file. |
-+-------+----------------------------------+-----------------------------------------------------+-----------------------------------------------------------------------------------+
++-------+--------------------------------------------------+-----------------------------------------------------+-----------------------------------------------------------------------------------+
+| 에러  | 에러 메시지                                      | 설명                                                | 조치사항                                                                          |
+| 코드  |                                                  |                                                     |                                                                                   |
++=======+==================================================+=====================================================+===================================================================================+
+| -900  | Java 가상 머신 라이브러리를 찾을 수 없습니다: ?  | CUBRID 가 JAVA_HOME 또는 JVM_PATH 환경 변수에서     | JAVA_HOME 또는 JVM_PATH 변수가 올바르게 설정 되었는지 확인한다.                   |
+|       |                                                  | JVM 라이브러리를 찾을 수 없음                       | :ref:`cubrid-javasp-environment-configuration` 를 참고한다.                       |
++-------+--------------------------------------------------+-----------------------------------------------------+-----------------------------------------------------------------------------------+
+| -901  | Java 가상 머신을 시작할 수 없습니다: ?           | JVM 라이브러리 내에서 예상치 못한 에러가 발생       | JRE 재설치를 시도해보고 만약 동일한 에러가 발생하면                               |
+|       |                                                  | JVM 라이브러리 또는 $CUBRID/java/jspserver.jar 에서 | 다른 버전의 JRE를 설치를 시도한다.                                                |
+|       |                                                  | 문제가 발생할 가능성 있음                           | 그리고 $CUBRID/java/jspserver.jar 파일을 동일한 CUBRID 버전의 것으로 교체한다.    |
++-------+--------------------------------------------------+-----------------------------------------------------+-----------------------------------------------------------------------------------+
 
-The following are error messages about the errors which can be occrured when there is a problem with the connection to Java SP server including it is not started.
-Error messages are written to **$CUBRID/log/broker/error_log**/\ *<broker_name>_<app_server_num>*\ **.err**.
+다음은 CUBRID 자바 저장 프로시저 서버가 시작되지 않은 경우를 포함하여 연결에 문제가 있을 때 발생할 수 있는 에러에 대한 에러 메시지이다.
+에러 메시지는 **$CUBRID/log/broker/error_log**/\ *<broker_name>_<app_server_num>*\ **.err** 에 저장된다.
 
-+-------+----------------------------------+-----------------------------------------------------+------------------------------------------------------------------------------------+
-| Error | Error Message                    | Description                                         | Solution                                                                           |
-| Code  |                                  |                                                     |                                                                                    |
-+=======+==================================+=====================================================+====================================================================================+
-| -902  | Java VM is not running.          | Java SP server is not started                       | Start Java SP server by **cubrid javasp start <db_name>** command.                 |
-|       |                                  |                                                     | see :ref:`cubrid-javasp-server`.                                                   |
-+-------+----------------------------------+-----------------------------------------------------+------------------------------------------------------------------------------------+
-| -903  | Can't connect Java VM: ?         | Java SP server cannot be connected from CAS.        | Restart the Java SP server. If the restart fails,                                  |
-|       |                                  | This can happen for many reasons.                   | try to shutdown **cub_javasp <db_name>** process forcibly                          |
-|       |                                  | For example, the Java SP server is unstable,        | with the Linux **kill** command. and restart the server again.                     |
-|       |                                  | the server is unreachable from CAS,                 |                                                                                    |
-|       |                                  | or the server is killed unexpectedly.               | Check if the port of the Java SP server through **cubrid javasp status <db_name>** |
-|       |                                  |                                                     | is reachable from CAS.                                                             |
-|       |                                  |                                                     | It could be that a firewall forbids the port. Open the port in the firewall.       |
-|       |                                  |                                                     | If required, set **java_stored_procedure_port** and restart the Java SP server     |
-|       |                                  |                                                     | see :ref:`connect-to-cubrid-server`.                                               |
-+-------+----------------------------------+-----------------------------------------------------+------------------------------------------------------------------------------------+
-| -903  | Networking with JVM failed: ?    | CAS received invalid packet from the Java SP server |                                                                                    |
-+-------+----------------------------------+-----------------------------------------------------+------------------------------------------------------------------------------------+
++-------+---------------------------------------------------+----------------------------------------------------------+------------------------------------------------------------------------------------------------------+
+| 에러  | 에러 메시지                                       | 설명                                                     | 조치사항                                                                                             |
+| 코드  |                                                   |                                                          |                                                                                                      |
++=======+===================================================+==========================================================+======================================================================================================+
+| -902  | Java 가상 머신이 실행되지 않았습니다.             | 자바 저장 프로시저 서버가 시작되지 않음                  | **cubrid javasp start <db_name>** 명령어로 자바 저장 프로시저 서버를 시작한다.                       |
+|       |                                                   |                                                          | 자세한 설명은 :ref:`cubrid-javasp-server` 를 참고한다.                                               |
++-------+---------------------------------------------------+----------------------------------------------------------+------------------------------------------------------------------------------------------------------+
+| -903  | Java 가상 머신에 접속할 수 없습니다: ?            | 자바 저장 프로시저 서버가 CAS로부터 연결할 수 없음       | 자바 저장 프로시저 서버를 재시작한다. 만약 재시작을 실패하면                                         |
+|       |                                                   | 이 에러는 여러가지 이유로 발생할 수 있다.                | **cub_javasp <db_name>** 프로세스를 리눅스 **kill** 명령어로 강제로 종료 한다.                       |
+|       |                                                   | 예를 들어 자바 저장 프로시저 서버가 불안정하거나         | 그리고 다시 자바 저장 프로시저 서버를 재시작한다.                                                    |
+|       |                                                   | CAS에서 자바 저장 프로시저 서버에 연결할 수 없는 경우,   |                                                                                                      |
+|       |                                                   | 또는 자바 저장 프로시저가 예기치 않게 종료(kill) 된 경우 | **cubrid javasp status <db_name>** 명령어를 통해 자바 저장 프로시저 서버의 포트로                    |
+|       |                                                   | 이러한 에러 메시지를 출력한다.                           | CAS 에서 접근 가능한지 확인한다.                                                                     |
+|       |                                                   |                                                          | 방화벽에 의해 해당 포트가 막혀있을 수 있으므로 방화벽에서 포트를 열어준다.                           |
+|       |                                                   |                                                          | 필요한 경우 **java_stored_procedure_port** 파라미터를 설정하고 자바 저장 프로시저 서버를 재시작한다. |
+|       |                                                   |                                                          | 자세한 사항은 :ref:`connect-to-cubrid-server` 를 참고한다.                                           |
++-------+---------------------------------------------------+----------------------------------------------------------+------------------------------------------------------------------------------------------------------+
+| -905  | Java 가상 머신과 통신 중 오류가 발생하였습니다: ? | CAS 가 자바 저장 프로시저 서버로부터 잘못된 패킷을 받음  |                                                                                                      |
++-------+---------------------------------------------------+----------------------------------------------------------+------------------------------------------------------------------------------------------------------+

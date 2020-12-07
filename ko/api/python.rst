@@ -103,7 +103,7 @@ Python 예제 프로그램
     
     .. code-block:: python
     
-        conn = CUBRIDdb.connect('CUBRID:localhost:30000:demodb:dba::')
+        conn = CUBRIDdb.connect('CUBRID:localhost:33000:demodb:::', 'dba', '')
 
 *demodb* 데이터베이스는 비밀번호가 필요하지 않으므로 비밀번호를 입력하지 않았다. 그러나 실제 데이터베이스에 연결할 때에는 비밀번호가 필요하다면 비밀번호를 입력해야 한다.
 `connect <https://pythonhosted.org/CUBRID-Python/_cubrid-module.html#connect>`_ () 함수의 구문은 다음과 같다. ::
@@ -156,7 +156,7 @@ CUBRID Python 드라이버에서는 기본적으로 자동 커밋 모드가 비�
 .. code-block:: python
 
     import CUBRIDdb
-    conn = CUBRIDdb.connect('CUBRID:localhost:33000:demodb:::', 'public', '')
+    conn = CUBRIDdb.connect('CUBRID:localhost:33000:demodb:::', 'dba', '')
     cur = conn.cursor()
      
     # Plain insert statement

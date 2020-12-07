@@ -3197,10 +3197,10 @@ HA 서비스 운영 중 슬레이브를 새로 추가하려면 기존의 마스�
         ::
         
             [nodeA]$ csql --sysadm -u dba testdb@localhost 
-            csql> DELETE FROM db_ha_apply_info WHERE copied_log_path-='/home/cubrid/DB/databases/testdb_nodeB'
+            csql> DELETE FROM db_ha_apply_info WHERE copied_log_path='/home/cubrid/DB/databases/testdb_nodeB';
 
             [nodeC]$ csql --sysadm --write-on-standby -u dba testdb@localhost 
-            csql> DELETE FROM db_ha_apply_info WHERE copied_log_path-='/home/cubrid/DB/databases/testdb_nodeB'
+            csql> DELETE FROM db_ha_apply_info WHERE copied_log_path='/home/cubrid/DB/databases/testdb_nodeB';
 
     *   *nodeA* 백업
 

@@ -397,4 +397,4 @@ CUBRID 자바 저장 프로시저 서버 사용 포트
 +---------------+--------------+----------------------------+--------------------------+
 
 *   이 포트는 CAS가 CUBRID 자바 저장 프로시저 서버 (cub_javasp)와 cub_server 사이를 중계 할 때 사용되며, CAS는 cub_server로부터 자바 저장 프로시저 호출을 수신한 후 **cubrid.conf**의 **java_stored_procedure_port** 를 통해 CUBRID 자바 저장 프로시저 서버 프로세스로 호출을 전달한다.
-*   **java_stored_procedure_port** 의 기본 값은 0으로, 사용 가능한 임의의 가용 포트가 할당됨을 의미합니다.
+*   **java_stored_procedure_port** 파라미터의 기본값은 0으로, 사용 가능한 임의의 가용 포트가 할당됨을 의미한다.

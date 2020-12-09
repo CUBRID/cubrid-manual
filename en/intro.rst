@@ -33,7 +33,7 @@ CUBRID is an object-relational database management system (DBMS) consisting of t
 
 .. FIXME: For more information about CUBRID Manager, see http://www.cubrid.org/wiki_tools/entry/cubrid-manager.
 
-.. image:: /images/image1.png
+.. image:: /images/process_structure.png
 
 .. _database-volume-structure:
 

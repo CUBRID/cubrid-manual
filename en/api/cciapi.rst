@@ -808,6 +808,8 @@ cci_connect_ex
         *   **CCI_ER_COMMUNICATION**
         *   **CCI_ER_CONNECT**
 
+.. _cci_connect_with_url:
+
 cci_connect_with_url
 --------------------
 

@@ -58,7 +58,7 @@ SSL 은 대칭형 (symmetric) 키를 이용하여 송수신 데이터를 암호�
 위에서 생성된 my_cert.key 와 my_cert.crt 를 각각 $CUBRID/conf/cas_ssl_cert.key와 $CUBRID/conf/cas_ssl_cert.crt로 대체하면 된다.
 
 
-큐브리드 Driver
+지원하는 드라이버
 ----------------------
 큐브리드는 다양한 Driver를 재공하고 있으며, 그 중 암호화 연결을 지원하는 Driver는 JDBC, CCI Driver 있다.
 JDBC Driver는 jre 1.6 또는 그 이상 버전을 지원 하고 있으며, CCI Driver는 OpenSSL을 사용 하고 있다.

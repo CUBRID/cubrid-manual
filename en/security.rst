@@ -90,7 +90,7 @@ Managing keys in two levels makes it possible to efficiently perform the key cha
 File-based Master Key Management
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Master keys are separately stored and managed as a separate key file so that the user can manage master keys in various ways according to individual security requirements. This key file contains all the information of master keys, so if it is leaked, there may be a security problem, and if it is lost, the encrypted data cannot be read (:re:`tde-load-failure`). So, be careful to manage this key file.
+Master keys are separately stored and managed as a separate key file so that the user can manage master keys in various ways according to individual security requirements. This key file contains all the information of master keys, so if it is leaked, there may be a security problem, and if it is lost, the encrypted data cannot be read (:ref:`tde-load-failure`). So, be careful to manage this key file.
 
 By default, the key file is created with the name of **<database-name>_keys** at the location where the data volume is created when creating a database using **cubrid createdb** utility. Without additional configuration for the key file, this key file is automatically used. The location of the key file te be used can be changed by a system parameter. For more information, see :ref:`disk-parameters`.
 
@@ -209,7 +209,7 @@ If the \\-\\-keys-file-path option is not given, the key file to be used is sear
 .. _tde-algorithm:
 
 Encryption Algorithm
--------------------
+--------------------
 
 CUBRID supports the following encryption algorithms for TDE.
 

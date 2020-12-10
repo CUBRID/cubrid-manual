@@ -56,6 +56,7 @@ The following shows options available with the **cubrid backupdb** utility (opti
         -----------------------------------------------------------------------------
          volume name                  | # of pages | backup progress status    | done
         -----------------------------------------------------------------------------
+         demodb_keys                  |          1 | ######################### | done
          demodb_vinf                  |          1 | ######################### | done
          demodb                       |      25000 | ######################### | done
          demodb_lginf                 |          1 | ######################### | done
@@ -99,6 +100,12 @@ The following shows options available with the **cubrid backupdb** utility (opti
     This option allows you to specify the interval of idle time during the database backup. The default value is 0 in milliseconds. The system becomes idle for the specified amount of time whenever it reads 1 MB of data from a file. This option is used to reduce the performance degradation of an active server during a live backup. The idle time will prevent excessive disk I/O operations. ::
 
         cubrid backupdb --sleep-msecs=5 demodb
+
+.. option:: -k, --separate-keys
+
+   This option is used not to include the key file in the backup volume. The key file that is not included are separated into a file named **<database_name>_bk<backup_level>_keys**. If this option is not given, the key file is included in the backup volume by default. For a detailed description of key file separation, see :ref:`tde-enc-backup`.  ::
+
+        cubrid backupdb --seprate-keys demodb
 
 Backup Strategy and Method
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -283,6 +290,8 @@ The following table shows options available with the **cubrid restoredb** utilit
                 Zip Level: 0 (NONE)
         Previous Backup level: 0 Time: Mon Oct 1 17:31:40 2008
         (start_lsa was -1|-1)
+        Database Volume name: /local1/testing/demodb_keys
+             Volume Identifier: -6, Size: 65 bytes (1 pages)
         Database Volume name: /local1/testing/demodb_vinf
              Volume Identifier: -5, Size: 308 bytes (1 pages)
         Database Volume name: /local1/testing/demodb
@@ -344,6 +353,12 @@ The following table shows options available with the **cubrid restoredb** utilit
     This option restores a database to the path specified in the database location file(**databases.txt**).  The **-u** option is useful when you perform a backup on server A and store the backup file on server B. ::
 
         cubrid restoredb -u demodb
+
+.. option:: -k, --keys-file-path=path
+
+    This option specifies the path of a key file required to restore the database. If the valid key file is not given, it could be fail to restore. If this option is not given, the appropriate key file is searched automatically according to a priority. For more information on this, refer to :ref:`tde-enc-backup`. ::
+
+        cubrid restoredb -k /home/cubrid/backup_keys/demodb_bk1_keys demodb
 
 NOTIFICATION messages, log recovery starting time and ending time are written into the server error log file or the restoredb error log file when database server is started or backup volume is restored; so you can check the elapsed time of these operations. In this message, the number of log records to be applied(redo) and the number of log pages are written together.
 

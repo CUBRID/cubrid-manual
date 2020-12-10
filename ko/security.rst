@@ -25,7 +25,7 @@ SSL 3.0 버전은 TLS 1.0의 기초가 되고, 1999년 1월 IETF에서 `RFC2246 
 SSL/TLS 은 서버 인증(Server Authentication), 클라이언트 인증(Client Authentication) 그리고 데이터 암호화(Data Encryption) 기능을 제공한다.
 인증(Authentication)은 상대방이 맞는지 확인하는 절차를 의미하며, 암호화는 데이터를 탈취 하더라도 내용을 열람할 수 없게 하는 것을 의미한다.
 
-큐브리드 암호화 방법
+패킷 암호화 방법
 ------------------------
 큐브리드는 클라이언트와 서버 간에 전송되는 데이터를 암호화 하기 위해 SSL/TLS 프로토콜을 사용한다. 
 큐브리드 서버는 암호화를 위해 OpenSSL을 사용 하였으며, 클라이언트는 JDBC, CCI Driver를 이용 암호화 연결을 할 수 있다.

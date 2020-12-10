@@ -275,7 +275,10 @@ To address this issue, CUBRID introduces the new concept of the Click Counter th
     *   **MULTISET**: A collection type that allows the duplication of elements. The order of entry is not considered.
     *   **LIST**: A collection type that allows the duplication of elements. Unlike with **SET** and **MULTISET**, the order of entry is maintained.
 
+*   **JSON**
+
+    JavaScript Object Notation (JSON) has become the de facto standard for data-interchanging. JSON, one of the semi-structured data, is not allowed to reside in the relational data model. In CUBRID, however, you can create and query JSON documents using :ref:`SQL functions for JSON<json-fn>`. you can define a :ref:`JSON data type<json-data-type>` column and stores a JSON document into the column.
+
 *   **Inheritance**
 
     Inheritance is a concept to reuse columns and methods of a super class (table) in those of a sub class. CUBRID supports reusability through inheritance. By using inheritance provided by CUBRID, you can create a super class with some common columns and then create a sub class inherited from the super class with some unique columns added. In this way, you can create a database model which can minimize the number of columns.
-

@@ -65,7 +65,7 @@ JDBC Driver는 jre 1.6 또는 그 이상 버전을 지원 하고 있으며, CCI 
 
 **암호화 연결 방법**
 
-클라이언트는 Driver를 통해 서버와 암호화 연결을 할 수 있으며, db-url의 useSSL property를 사용 하여 암호화 연결을 할 수 있다.
+클라이언트는  드라이버 연결 설정 중 db-url의 useSSL property를 사용하여 서버와 암호화 연결을 할 수 있다.
 자세한 사용 방법은 JDBC Driver의 :ref:`jdbc-connection-conf`\  또는 CCI Driver의 :ref:`cci_connect_with_url`\ 을 참고 한다. 
 
 서버 접근제어

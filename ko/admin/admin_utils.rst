@@ -3200,7 +3200,7 @@ tde
 
 ::
 
-    cubrid tde operation [option] database_name
+    cubrid tde <operation> [option] database_name
 
 *   **cubrid**: CUBRID 서비스 및 데이터베이스 관리를 위한 통합 유틸리티
 
@@ -3258,7 +3258,7 @@ tde
 
 .. option:: -c, --change-key=KEY_INDEX
 
-    데이터베이스에 등록된 키를 키 파일 (_keys)에 존재하는 다른 키로 변경한다. 변경 시에 이전에 등록된 키와 새로 등록하려는 키가 모두 존재해야 한다.
+    데이터베이스에 등록된 키를 키 파일 (_keys)에 존재하는 다른 키로 변경한다. 변경 시에 이전에 등록된 키와 새로 등록하려는 키가 모두 존재해야 한다. ::
 
         $ cubrid tde -c 2 testdb
         Key File: /home/usr/CUBRID/databases/testdb/testdb_keys

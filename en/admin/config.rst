@@ -364,6 +364,10 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               | data_buffer_neighbor_flush_pages    | server parameter        |         | int      | 8                              | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | data_buffer_neighbor_flush_nondirty | server parameter        |         | bool     | no                             | DBA only              |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | tde_keys_file_path                  | server parameter        |         | string   | NULL                           |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | tde_default_algorithm               | server parameter        |         | string   | AES                            |                       |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 
 .. _lpg:
@@ -1975,6 +1979,10 @@ The following are other parameters. The type and value range for each parameter 
 +-------------------------------------+--------+----------------+----------------+----------------+
 | data_buffer_neighbor_flush_nondirty | bool   | no             |                |                |
 +-------------------------------------+--------+----------------+----------------+----------------+
+| tde_keys_file_path                  | string | NULL           |                |                |
++-------------------------------------+--------+----------------+----------------+----------------+
+| tde_default_algorithm               | string | AES            |                |                |
++-------------------------------------+--------+----------------+----------------+----------------+
 
 **access_ip_control**
 
@@ -2142,6 +2150,14 @@ The following are other parameters. The type and value range for each parameter 
 **data_buffer_neighbor_flush_nondirty**
     
 	**data_buffer_neighbor_flush_nondirty** is a parameter to control the flushing of non-dirty neighbor pages. When victim candidates pages are flushed, and neighbor flush is activated (**data_buffer_neighbor_flush_pages** is greater than 1), than single non-dirty pages which completes a chain of neighbor (dirty) pages are also flushed.
+
+**tde_keys_file_path**
+
+    **tde_keys_file_path** is a parameter to configure the path of the key file for TDE. The name of the key file is fixed as [database_name]_keys, and the directory where the key file exists is designated. If this system parameter is not set, the key file is searched in the same location as the database volume. For a detailed description of the key file, see :ref:`tde-file-based-key`.
+
+**tde_default_algorithm**
+
+    **tde_default_algorithm** is a parameter that configures the default algorithm used when creating the TDE encryption table. Log and temporary data are always encrypted using the algorithm set with this parameter when they have to be encrypted. **AES** and **ARIA** can be set. For more information on encryption algorithms, refer to :ref:`tde-algorithm`.
 
 .. _broker-configuration:
 

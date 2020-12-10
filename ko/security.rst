@@ -38,7 +38,7 @@ SSL/TLS 은 서버 인증(Server Authentication), 클라이언트 인증(Client 
 큐브리드는 암호화 모드 또는 비암호화 모드를 설정할 수 있으며, 기본은 비암호화 모드이다.
 암호화 모드로 변경하기 위해서는 cubrid_broker.conf 의 SSL 파라메터 값을 변경하여 암호화 모드로 설정 할 수 있다.
 cubrid_broker.conf 의 SSL 파라메터 값을 변경하였다면 반드시 브로커를 재 시작해야 한다.
-자세한 설정 방법은 :ref:`broker-configuration`\ 을 참조 한다.
+자세한 설정 방법은 :ref:`broker-configuration`\ 을 참조한다.
 
 
 **인증서 (Certificate) 와 개인키 (Private Key)**

@@ -531,3 +531,7 @@ The following steps describes migration scenario that can be applied while the e
 .. warning:: 
 
     Even if the version is identical, the 32-bit database volume and the 64-bit database volume are not compatible for backup and recovery. Therefore, it is not recommended to recover a 32-bit database backup on the 64-bit CUBRID or vice versa.
+
+.. warning::
+
+    When using the TDE feature in CUBRID 11, it does not provide backward compatibility, so the unloaded file in CUBRID 11 cannot be loaded from a lower version.

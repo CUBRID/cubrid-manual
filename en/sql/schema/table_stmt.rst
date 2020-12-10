@@ -79,7 +79,8 @@ To create a table, use the **CREATE TABLE** statement.
         <table_options> ::= <table_option> [[,] <table_option> ...] 
             <table_option> ::= REUSE_OID | DONT_REUSE_OID |
                                COMMENT [=] 'table_comment_string' |
-                               [CHARSET charset_name] [COLLATE collation_name]
+                               [CHARSET charset_name] [COLLATE collation_name] |
+                               ENCRYPT [=] [AES | ARIA]
 
 *   IF NOT EXISTS: If an identically named table already exists, a new table will not be created without an error.
 *   *table_name*: specifies the name of the table to be created (maximum: 254 bytes).
@@ -772,6 +773,23 @@ Or you can see the table's comment with ;sc command in the CSQL interpreter.
     $ csql -u dba demodb
     
     csql> ;sc tbl
+
+.. _create-tde-table:
+
+Table Encryption (TDE)
+^^^^^^^^^^^^^^^^^^^^^^
+
+You can encrypt a table as follows. For more information on TDE encryption, see :ref:`tde`.
+
+.. code-block:: sql
+
+    CREATE TABLE enc_tbl (a INT, b INT) ENCRYPT = AES;
+
+You can specify **AES** and **ARIA** as the encryption algorithm. If omitted as follows, the encryption algorithm specified by the system parameter **tde_default_algorithm** is used. The default value is **AES**.
+
+.. code-block:: sql
+
+    CREATE TABLE enc_tbl (a INT, b INT) ENCRYPT;
 
 CREATE TABLE LIKE
 -----------------

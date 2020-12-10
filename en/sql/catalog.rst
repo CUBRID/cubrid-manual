@@ -2,6 +2,8 @@
 :meta-keywords: cubrid catalog
 :meta-description: With CUBRID you can easily obtain schema information using SQL statements on system catalog virtual classes.
 
+.. _catalog:
+
 **************
 System Catalog
 **************
@@ -73,6 +75,9 @@ Represents class information. An index for class_name is created.
 +--------------------+---------------------------+------------------------------------------------------------------------------------------+
 | collation_id       | INTEGER                   | Collation id                                                                             |
 |                    |                           |                                                                                          |
++--------------------+---------------------------+------------------------------------------------------------------------------------------+
+| tde_algorithm      | INTEGER                   | TDE encryption algorithm                                                                 |
+|                    |                           | 0: NONE, 1: AES, 2: ARIA                                                                 |
 +--------------------+---------------------------+------------------------------------------------------------------------------------------+
 | sub_classes        | SEQUENCE OF _db_class     | Class one level down                                                                     |
 |                    |                           |                                                                                          |
@@ -943,6 +948,8 @@ Represents information of classes for which the current user has access authoriz
 | class_type         | VARCHAR(6)    | 'CLASS' for a class, and 'VCLASS' for a virtual class    |
 +--------------------+---------------+----------------------------------------------------------+
 | is_system_class    | VARCHAR(3)    | 'YES' for a system class, and 'NO' otherwise.            |
++--------------------+---------------+----------------------------------------------------------+
+| tde_algorithm      | VARCHAR(32)   | TDE encryption algorithm                                 |
 +--------------------+---------------+----------------------------------------------------------+
 | partitioned        | VARCHAR(3)    | 'YES' for a partitioned group class, and 'NO' otherwise. |
 +--------------------+---------------+----------------------------------------------------------+

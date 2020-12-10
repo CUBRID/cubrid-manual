@@ -95,6 +95,10 @@ Background archive log is a volume used in the background with log archiving tem
 
 Double write buffer file stores copies of data pages being flushed to disk as a protection against I/O errors. A detailed description of this file can be found in :ref:`database-volume` section.
 
+**TDE Key File**
+
+TDE (Transparent Data Encryption) key file contains keys for database encryption. The keys in the file are managed using the TDE utility. For more information on this, see :ref:`tde-file-based-key` and :ref:`TDE Utility<tde-utility>`.
+
 .. _temporary-volumes:
 
 Temporary Volume

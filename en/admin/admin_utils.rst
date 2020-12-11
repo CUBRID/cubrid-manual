@@ -293,7 +293,12 @@ The following example shows how to create a database, with additional volumes, i
 
 .. note:: **Creating a database using an existing key file**
 
-    When the database is created, a key file is created together by default. If you want to use an existing key file when creating a database, first copy the key file with the name <database-name>_keys. Afterward, specify the directory path of the copied key file by the **tde_keys_file_path** system parameter, and create a database through the **createdb** utility. For more information on the TDE key file, see :ref:`tde-file-based-key`.
+    When the database is created, a key file is created together by default. If you want to use an existing key file when creating a database:
+#.  Copy the key file with the name <database-name>_keys.
+#.  Specify the directory path of the copied key file by the system parameter **tde_keys_file_path**.
+#.  Create a database by using the **createdb** utility.
+
+    For more information on the TDE key file, see :ref:`tde-file-based-key`.
 
 .. _adding-database-volume:
 

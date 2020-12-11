@@ -356,7 +356,7 @@ The following table shows options available with the **cubrid restoredb** utilit
 
 .. option:: -k, --keys-file-path=path
 
-    This option specifies the path of a key file required to restore the database. If the valid key file is not given, it could be fail to restore. If this option is not given, the appropriate key file is searched automatically according to a priority. For more information on this, refer to :ref:`tde-enc-backup`. ::
+    This option specifies the path of a key file required to restore the database. If the valid key file is not given, it could fail to restore. If this option is not given, the appropriate key file is searched automatically according to a priority. For more information on this, refer to :ref:`tde-enc-backup`. ::
 
         cubrid restoredb -k /home/cubrid/backup_keys/demodb_bk1_keys demodb
 

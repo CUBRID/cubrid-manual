@@ -293,7 +293,7 @@ The following example shows how to create a database, with additional volumes, i
 
 .. note:: **Creating a database using an existing key file**
 
-    When the database is created, a key file is created together by default. If you want to use an existing key file when creating a database, first copy the key file with the name <database-name>_keys. Afterward, specify the directory path of the copied key file by the **ted_keys_file_path** system parameter, and create a database through the **createdb** utility. For more information on the TDE key file, see :ref:`tde-file-based-key`.
+    When the database is created, a key file is created together by default. If you want to use an existing key file when creating a database, first copy the key file with the name <database-name>_keys. Afterward, specify the directory path of the copied key file by the **tde_keys_file_path** system parameter, and create a database through the **createdb** utility. For more information on the TDE key file, see :ref:`tde-file-based-key`.
 
 .. _adding-database-volume:
 
@@ -3215,7 +3215,7 @@ The following shows [options] available with the **cubrid paramdump** utility.
 tde
 ---
 
-The **cubrid tde** utility is used to manage the TDE encryption of the database, and can only be executed by the **DBA** user. With **cubrid tde** utility, you can change the key set on the database, and add a new key and remove a key in the key file stably. Also, you can inquire about the keys added to the key file and the key set on the database. For more information, see :ref:`tde`.
+The **cubrid tde** utility is used to manage the TDE encryption of the database and can only be executed by the **DBA** user. With **cubrid tde** utility, you can change the key set on the database, add a new key, or remove a key in the key file stably. Also, you can inquire about the keys added to the key file and the key set on the database. For more information, see :ref:`tde`.
 
 ::
 
@@ -3225,9 +3225,9 @@ The **cubrid tde** utility is used to manage the TDE encryption of the database,
 
 *   **tde**: A utility that manages TDE encryption applied to the database
 
-*   *operation*: There are four types of operation: key addition, key deletion, key change, and showing keys' information. One operation must be given and they are exclusive.
+*   *operation*: There are four types of operation: key addition, key deletion, key change, and showing keys' information. One operation must be set, and they are exclusive.
 
-*   *database_name*: The name of the database on which TDE administration operations are to be performed
+*   *database_name*: The name of the database on which TDE administration operations to be performed
 
 The following table shows <operation> available with the cubrid tde utility.
 
@@ -3259,7 +3259,7 @@ The following table shows <operation> available with the cubrid tde utility.
 
 .. option:: -n, --generate-new-key
 
-    This option is used to add a new key to the key file (up to 128). If successful, the index of the added key is displayed, and this index is used to identify the key when changing or removing the key later. Information of added keys can be checked by \\-\\-show-keys. ::
+    This option is used to add a new key to the key file (up to 128). If it is successful, the index of the added key is displayed, and this index is used to identify the key when changing or removing the key later. Information of added keys can be checked by \\-\\-show-keys. ::
 
         $ cubrid tde -n testdb
         Key File: /home/usr/CUBRID/databases/testdb/testdb_keys
@@ -3277,7 +3277,7 @@ The following table shows <operation> available with the cubrid tde utility.
 
 .. option:: -c, --change-key=KEY_INDEX
 
-    This option is used to change the key set on the database to another key existing in the key file. When changing, both the previously set key and the newly  key to be set must exist.  ::
+    This option is used to change the key set on the database to another key existing in the key file. When changing, both the previously set key and the new key to be set must exist.  ::
 
         $ cubrid tde -c 2 testdb
         Key File: /home/usr/CUBRID/databases/testdb/testdb_keys
@@ -3285,7 +3285,7 @@ The following table shows <operation> available with the cubrid tde utility.
         Trying to change the key from the key (index: 0) to the key (index: 2)..
         SUCCESS: The key has been changed from the key (index: 0) to the key (index: 2)
 
-    To change the key set on the database, a user must first create a key to be set by the \\-\\-generate-new-key option. The user can create a new key to change, or create multiple keys in advance, and change the key according to theis own security plans.
+    To change the key set on the database, a user must first create a key to be set by the \\-\\-generate-new-key option. The user can create a new key to change, or create multiple keys in advance, and change the key according to their own security plans.
 
 The following table shows [options] available with the cubrid tde utility.
 

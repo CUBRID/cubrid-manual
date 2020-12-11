@@ -1837,3 +1837,67 @@ Num_busy_workers            INT             The number of busy worker threads of
 Num_connection_workers      INT             The number of connection worker threads of the queue
 =========================== =============== =======================================================
 
+SHOW PAGE BUFFER STATUS
+-----------------------
+
+It shows the status of data page buffer pool.
+
+.. code-block:: sql
+
+    SHOW PAGE BUFFER STATUS;
+
+This query has the following columns:
+
+=========================== =============== ================================================================================
+Column name                 Type            Description
+=========================== =============== ================================================================================
+Hit_rate                    NUMERIC(13,10)  The buffer pool hit rate (since the last printout)
+Num_hit                     BIGINT          The number of buffer hit (since the last printout)
+Num_page_request            BIGINT          The number of page requests (since the last printout)
+Pool_size                   INT             Buffer pool size in pages
+Page_size                   INT             Data page size
+Free_pages                  INT             The number of free pages in the buffer pool
+Victim_candidate_pages      INT             The number of victim candidate pages in the cold LRU area
+Clean_pages                 INT             The number of clean pages in the buffer pool
+Dirty_pages                 INT             The number of dirty pages in the buffer pool
+Num_index_pages             INT             The number of index pages in the buffer pool
+Num_data_pages              INT             The number of data pages in the buffer pool
+Num_system_pages            INT             The number of system pages in the buffer pool
+Num_temp_pages              INT             The number of temp pages in the buffer pool
+Num_pages_created           BIGINT          The number of pages created in the buffer pool (since the last printout)
+Num_pages_written           BIGINT          The number of pages written to disk in the buffer pool (since the last printout)
+Pages_written_rate          NUMERIC(20,10)  The number of pages written per second (since the last printout)
+Num_pages_read              BIGINT          The number of pages read from disk in the buffer pool (since the last printout)
+Pages_read_rate             NUMERIC(20,10)  The number of pages read per second (since the last printout)
+Num_flusher_waiting_threads INT             The number of waiting threads for flusher
+=========================== =============== ================================================================================
+
+The following shows the examples of this syntax.
+
+.. code-block:: sql
+
+    -- csql> ;line on
+    SHOW PAGE BUFFER STATUS;
+
+::
+
+    <00001> Hit_rate                   : 0.0000000000
+            Num_hit                    : 0
+            Num_page_request           : 0
+            Pool_size                  : 32768
+            Page_size                  : 16392
+            Free_pages                 : 32739
+            Victim_candidate_pages     : 0
+            Clean_pages                : 32767
+            Dirty_pages                : 1
+            Num_index_pages            : 2
+            Num_data_pages             : 15
+            Num_system_pages           : 12
+            Num_temp_pages             : 0
+            Num_pages_created          : 0
+            Num_pages_written          : 0
+            Pages_written_rate         : 0.0000000000
+            Num_pages_read             : 0
+            Pages_read_rate            : 0.0000000000
+            Num_flusher_waiting_threads: 0
+

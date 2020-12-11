@@ -513,7 +513,7 @@ SQL에 대한 성능 분석을 위해서는 질의 프로파일링(profiling) �
 
 *   temp: 템프 파일에서 데이터를 스캔하는 작업
 
-    *   hash: hash list scan 사용 여부. :ref:`NO_HASH_LIST_SCAN <no-hash-list-scan>` 힌트를 참고한다.
+    *   hash: 해시 리스트 스캔 사용 여부. :ref:`NO_HASH_LIST_SCAN <no-hash-list-scan>` 힌트를 참고한다.
     *   buildtime: 해시 테이블 빌드 수행 시 소요된 시간(ms)
     *   time: 해시 테이블 조사 수행 시 소요된 시간(ms)
     *   fetch, ioread: temp file에서 해당 연산 수행 시 소요된 fetch 회수, I/O 읽기 회수
@@ -673,7 +673,7 @@ SQL 힌트는 주석에 더하기 기호(+)를 함께 사용하여 지정한다.
 
 .. _no-hash-list-scan:
 
-*   **NO_HASH_LIST_SCAN**: 부질의 스캔시 해시 리스트 스캔을 사용하지 않도록 하는 힌트이다. 그 대신, 템프 파일 스캔을 위해 리스트 스캔이 사용된다. 해시 테으블을 빌드 및 조사 함으로써, CUBRID는 조회할 때 필요로 하는 데이터의 양을 줄일 수 있다. 그러나, 어떤 경우에는 외부 데이터양이 매우 적다는 것을 미리 알고 전체적으로 해시 리스트 스캔 과정을 생략하기 위해 이 힌트를 사용할 수 있다. 해시 리스트 스캔의 메모리 크기를 설정하기 위해서는 :ref:`max_hash_list_scan_size <max_hash_list_scan_size>`\ 를 참고한다.
+*   **NO_HASH_LIST_SCAN**: 부질의 스캔 시 해시 리스트 스캔을 사용하지 않도록 하는 힌트이다. 그 대신, 템프 파일 스캔을 위해 리스트 스캔이 사용된다. 해시 테이블을 빌드 및 조사 함으로써, CUBRID는 조회할 때 필요로 하는 데이터의 양을 줄일 수 있다. 그러나, 어떤 경우에는 외부 데이터양이 매우 적다는 것을 미리 알고 전체적으로 해시 리스트 스캔 과정을 생략하기 위해 이 힌트를 사용할 수 있다. 해시 리스트 스캔의 메모리 크기를 설정하기 위해서는 :ref:`max_hash_list_scan_size <max_hash_list_scan_size>`\ 를 참고한다.
 
     .. note::
     

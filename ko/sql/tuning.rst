@@ -450,31 +450,42 @@ SQL에 대한 성능 분석을 위해서는 질의 프로파일링(profiling) �
 ::
  
     csql> SET TRACE ON;
-    csql> SELECT /*+ RECOMPILE */ o.host_year, o.host_nation, o.host_city, n.name, SUM(p.gold), SUM(p.silver), SUM(p.bronze)  
-            FROM OLYMPIC o, PARTICIPANT p, NATION n
-            WHERE o.host_year = p.host_year AND p.nation_code = n.code AND p.gold > 10 
-            GROUP BY o.host_nation;
+    csql> SELECT /*+ RECOMPILE ORDERED */ o.host_year, o.host_nation, o.host_city, n.name, SUM(p.gold), SUM(p.silver), SUM(p.bronze)
+            FROM OLYMPIC o,
+                 (select * from PARTICIPANT p where p.gold > 10) p,
+                 NATION n
+          WHERE o.host_year = p.host_year AND p.nation_code = n.code
+          GROUP BY o.host_nation;
     csql> SHOW TRACE;
  
       trace
     ======================
-      '
+    '
     Query Plan:
+      TABLE SCAN (p)
+    
+      rewritten query: (select p.host_year, p.nation_code, p.gold, p.silver, p.bronze from PARTICIPANT p where (p.gold> ?:0 ))
+    
       SORT (group by)
         NESTED LOOPS (inner join)
           NESTED LOOPS (inner join)
             TABLE SCAN (o)
-            INDEX SCAN (p.fk_participant_host_year) (key range: (o.host_year=p.host_year))
+            TABLE SCAN (p)
           INDEX SCAN (n.pk_nation_code) (key range: p.nation_code=n.code)
-
-      rewritten query: select o.host_year, o.host_nation, o.host_city, n.[name], sum(p.gold), sum(p.silver), sum(p.bronze) from OLYMPIC o, PARTICIPANT p, NATION n where (o.host_year=p.host_year and p.nation_code=n.code and (p.gold> ?:0 )) group by o.host_nation
-
+    
+      rewritten query: select /*+ ORDERED */ o.host_year, o.host_nation, o.host_city, n.[name], sum(p.gold), sum(p.silver), sum(p.bronze) from OLYMPIC o, (select p.host_year, p.nation_code, p.gold, p.silver, p.bronze from PARTICIPANT p where (p.gold> ?:0 )) p (host_year, nation_code, gold,
+    silver, bronze), NATION n where o.host_year=p.host_year and p.nation_code=n.code group by o.host_nation
+    
+    
     Trace Statistics:
-      SELECT (time: 1, fetch: 1059, ioread: 2)
-        SCAN (table: olympic), (heap time: 0, fetch: 26, ioread: 0, readrows: 25, rows: 25)
-          SCAN (index: participant.fk_participant_host_year), (btree time: 1, fetch: 945, ioread: 2, readkeys: 5, filteredkeys: 5, rows: 916) (lookup time: 0, rows: 38)
-            SCAN (index: nation.pk_nation_code), (btree time: 0, fetch: 76, ioread: 0, readkeys: 38, filteredkeys: 38, rows: 38) (lookup time: 0, rows: 38)
-        GROUPBY (time: 0, sort: true, page: 0, ioread: 0, rows: 5)
+      SELECT (time: 6, fetch: 880, ioread: 0)
+        SCAN (table: olympic), (heap time: 0, fetch: 104, ioread: 0, readrows: 25, rows: 25)
+          SCAN (hash temp buildtime : 0, time: 0, fetch: 0, ioread: 0, readrows: 76, rows: 38)
+            SCAN (index: nation.pk_nation_code), (btree time: 2, fetch: 760, ioread: 0, readkeys: 38, filteredkeys: 0, rows: 38) (lookup time: 0, rows: 38)
+        GROUPBY (time: 0, hash: true, sort: true, page: 0, ioread: 0, rows: 5)
+        SUBQUERY (uncorrelated)
+          SELECT (time: 2, fetch: 12, ioread: 0)
+            SCAN (table: participant), (heap time: 2, fetch: 12, ioread: 0, readrows: 916, rows: 38)
     '
 
 다음은 트레이스 항목에 대한 설명이다.
@@ -499,7 +510,16 @@ SQL에 대한 성능 분석을 위해서는 질의 프로파일링(profiling) �
     *   readkeys: btree에서 해당 연산 수행 시 읽은 키의 개수
     *   filteredkeys: 읽은 키 중에 키 필터가 적용된 키의 개수
     *   rows: 해당 연산에 대한 결과 행의 개수로, 키 필터가 적용된 결과 행의 개수
-    
+
+*   temp: 템프 파일에서 데이터를 스캔하는 작업
+
+    *   hash: hash list scan 사용 여부. :ref:`NO_HASH_LIST_SCAN <no-hash-list-scan>` 힌트를 참고한다.
+    *   buildtime: 해시 테이블 빌드 수행 시 소요된 시간(ms)
+    *   time: 해시 테이블 조사 수행 시 소요된 시간(ms)
+    *   fetch, ioread: temp file에서 해당 연산 수행 시 소요된 fetch 회수, I/O 읽기 회수
+    *   readrows: 해당 연산 수행 시 읽은 행의 개수
+    *   rows: 해당 연산에 대한 결과 행의 개수
+
 *   lookup: 인덱스 스캔 후 데이터에 접근하는 작업
 
     *   time: 해당 연산 수행 시 소요된 시간(ms)
@@ -511,13 +531,13 @@ SQL에 대한 성능 분석을 위해서는 질의 프로파일링(profiling) �
 *   sort: 정렬 여부
 *   page: 정렬에 사용된 임시 페이지 개수로, 내부 정렬 버퍼 외에 사용한 페이지 개수.
 *   rows: 해당 연산에 대한 결과 행의 개수
+*   hash: 집계 함수에서 투플 정렬 시 해시 집계 방식 적용 여부(true/false). :ref:`NO_HASH_AGGREGATE <no-hash-aggregate>` 힌트를 참고한다.
 
 **INDEX SCAN**
 
 *   key range: 키의 범위
 *   covered: 커버링 인덱스 적용 여부(true/false)
 *   loose: loose index scan 적용 여부(true/false)
-*   hash: 집계 함수에서 투플 정렬 시 해시 집계 방식 적용 여부(true/false). :ref:`NO_HASH_AGGREGATE <no-hash-aggregate>` 힌트를 참고한다.
 
 위의 예는 JSON 형식으로도 출력할 수 있다.
  
@@ -610,6 +630,7 @@ SQL 힌트
     NO_MULTI_RANGE_OPT |
     NO_SORT_LIMIT |
     NO_HASH_AGGREGATE |
+    NO_HASH_LIST_SCAN |
     RECOMPILE
 
     <spec_name_comma_list> ::= <spec_name> [, <spec_name>, ... ]
@@ -649,6 +670,14 @@ SQL 힌트는 주석에 더하기 기호(+)를 함께 사용하여 지정한다.
     .. note::
     
         DISTINCT한 값을 계산하는 함수들(예. AVG(DISTINCT x))과 GROUP_CONCAT, MEDIAN 함수들은 각 그룹의 투플들에 대해 외부 정렬(external sorting) 과정을 요구하므로 해시 집계 방식이 동작하지 않을 것이다.
+
+.. _no-hash-list-scan:
+
+*   **NO_HASH_LIST_SCAN**: 부질의 스캔시 해시 리스트 스캔을 사용하지 않도록 하는 힌트이다. 그 대신, 템프 파일 스캔을 위해 리스트 스캔이 사용된다. 해시 테으블을 빌드 및 조사 함으로써, CUBRID는 조회할 때 필요로 하는 데이터의 양을 줄일 수 있다. 그러나, 어떤 경우에는 외부 데이터양이 매우 적다는 것을 미리 알고 전체적으로 해시 리스트 스캔 과정을 생략하기 위해 이 힌트를 사용할 수 있다. 해시 리스트 스캔의 메모리 크기를 설정하기 위해서는 :ref:`max_hash_list_scan_size <max_hash_list_scan_size>`\ 를 참고한다.
+
+    .. note::
+    
+        해시 리스트 스캔은 오직 동등 연산자를 가지고 있는 조회조건에서 동작하며, OID 타입을 가지고 있는 조회 조건에서는 동작하지 않는다.
 
 .. _recompile:
 

@@ -25,9 +25,9 @@ For more details, see :ref:`limiting-broker-access` and :ref:`limiting-server-ac
 Authorization
 =============
 
-큐브리드는 사용자(그룹)를 생성할 수 있고, 사용자가 생성한 테이블에 대해 다른 사용자(그룹)의 접근 여부를 제어할 수 있는 기능을 제공한다.
+CUBRID can create users(or groups), and provides a function to control the access of the other users(or groups) to tables created by a user.
 
-자신이 만든 테이블에 다른 사용자(그룹)의 접근을 허용하려면 :ref:`granting-authorization` 구문을 사용하여 해당 사용자(그룹)에게 적절한 권한을 제공해야 한다. 접근 권한을 해지하기 위해서는 :ref:`revoking-authorization` 구문을 사용하여 해당 사용자(그룹)으로부터 권한을 회수할 수 있다. PUBLIC 사용자가 생성한 (가상) 테이블은 권한 제공 절차 없이 모든 사용자에게 접근이 허용된다.
+If you want to allow other users(or groups) to access your tables, you could provide access privileges to the users(or groups) by :ref:`granting-authorization`. Also, to revoke access previleges of other users, you can use :ref:`revoking-authorization`. The access to the (virtual) table created by a PUBLIC user is allowed to all users.
 
 For more details, see :doc:`/sql/authorization`.
 

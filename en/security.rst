@@ -47,7 +47,7 @@ CUBRID TDE provides encryption and decryption at the engine level to minimize pe
 
 **Table Encryption**
 
-In CUBRID, a **table** is the unit for TDE-encryption. To use the TDE feature, create a table using the **ENCRYPT** option as follows.
+In CUBRID, a **table** is the unit for TDE-encryption. To use the TDE feature, create a table using the **ENCRYPT** option as follows. For more information, see :ref:`create-tde-table`.
 
 .. code-block:: sql
 
@@ -128,7 +128,7 @@ Encryption Target
 Permanent Data Encryption
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The encrypted table data and all index data created on the table are encrypted. The encryption option for a table is not inherited and is not copied when the `CREATE TABLE LIKE` statement is used.
+The encrypted table data and all index data created on the table are encrypted. For more information on the encrypted table, see :ref:`create-tde-table`.
 
 .. _tde-enc-temp:
 

@@ -16,7 +16,7 @@ ACL (Access Control List)
 =========================
 
 CUBRID supports the ACL function that can be accessed only for users or applications authorized in two layers: the broker layer and the database server layer.
-The ACL of the broker layer is mainly used to control the access of application programs such as WEB and WAS, and the ACL of database server layer is mainly used to control the access of the brokers and csqls.
+The ACL of the broker layer is mainly used to control the access of application programs such as WEB and WAS, and the ACL of the database server layer is mainly used to control the access of the brokers and csqls.
 
 For more details, see :ref:`limiting-broker-access` and :ref:`limiting-server-access`. 
 
@@ -34,4 +34,3 @@ For more details, see :doc:`/sql/authorization`.
 
 TDE (Transparent Data Encryption)
 =================================
-

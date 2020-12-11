@@ -25,7 +25,7 @@ For more details, see :ref:`limiting-broker-access` and :ref:`limiting-server-ac
 Authorization
 =============
 
-CUBRID can create users(or groups), and provides a function to control the access of the other users(or groups) to tables created by a user.
+CUBRID can create users(or groups) and provide a function to control the access of the other users(or groups) to tables created by a user.
 
 If you want to allow other users(or groups) to access your tables, you could provide access privileges to the users(or groups) by :ref:`granting-authorization`. Also, to revoke access previleges of other users, you can use :ref:`revoking-authorization`. The access to the (virtual) table created by a PUBLIC user is allowed to all users.
 

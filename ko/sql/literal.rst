@@ -46,7 +46,7 @@ CUBRID에서 리터럴(literal) 값을 작성하는 방법을 기술한다.
 
     ::
     
-        date'1974-12-31', date'12-31-1974'
+        date'1974-12-31', date'12/31/1974'
 
 
 *   시간 리터럴은 'HH:MI:SS', 'HH:MI:SS AM', 'HH:MI:SS PM'만 허용한다.

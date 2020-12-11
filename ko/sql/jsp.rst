@@ -21,77 +21,33 @@ Java 저장 함수/프로시저를 사용할 때 얻을 수 있는 이점은 다
 
     *   Java를 제외한 다른 언어에서는 저장 함수/프로시저를 지원하지 않는다. CUBRID에서 저장 함수/프로시저는 오직 Java로만 구현 가능하다.
 
-.. _jsp-environment-configuration:
+.. _jsp-starting-javasp:
 
-Java 저장 함수/프로시저 환경 설정
-=================================
+자바 저장 프로시저 서버 구동하기
+===================================
 
-CUBRID에서 Java 저장 함수/프로시저를 사용하기 위해서는 CUBRID 서버가 설치되는 환경에 Java Runtime Environment (JRE) 1.6 이상 버전이 설치되어야 한다. JRE는 Developer Resources for Java Technology 사이트(`https://www.oracle.com/java/technologies <https://www.oracle.com/java/technologies>`_)에서 다운로드할 수 있다.
+Java 저장 프로시저/함수를 사용하려는 데이터베이스에 대해 Java 저장 프로시저 서버 (Java SP 서버)를 시작해야 한다.
 
-CUBRID 환경 설정 파일(cubrid.conf)에 java_stored_procedure 파라미터가 yes로 설정되어 있으면, CUBRID 64비트 버전에는 JRE 64비트 버전이 필요하고, CUBRID 32비트 버전에는 JRE 32비트 버전이 필요하다. JRE 32비트 버전이 설치된 컴퓨터에서 CUBRID 64비트 버전을 실행하면 아래와 같은 에러 메시지가 출력된다. ::
+**cubrid javasp** **start** *db_name* 을 실행한다 ::
 
-    % cubrid server start demodb
-     
-    This may take a long time depending on the amount of recovery works to do.
-    WARNING: Java VM library is not found : /usr/java/jdk1.6.0_15/jre/lib/amd64/server/libjvm.so: cannot open shared object file: No such file or directory.
-    Consequently, calling java stored procedure is not allowed
+    % cubrid javasp start demodb
 
-JRE가 이미 설치되어 있다면, 아래와 같은 명령으로 버전을 확인한다. ::
+    @ cubrid javasp start: demodb
+    ++ cubrid javasp start: success
 
-    % java -version Java(TM) SE Runtime Environment (build 1.6.0_05-b13)
-    Java HotSpot(TM) 64-Bit Server VM (build 10.0-b19, mixed mode)
+Java SP 서버가 성공적으로 시작되었는지 다음의 명령어로 확인할 수 있다.
 
-Windows 환경
-------------
+**cubrid javasp** **status** *db_name* 을 실행한다 ::
 
-CUBRID는 Windows 환경에서 **jvm.dll** 파일을 로딩하여 Java 가상 머신을 실행시킨다. CUBRID는 먼저 시스템의 **Path** 환경 변수에서 **jvm.dll** 을 찾아 로딩한다. 만약 찾지 못하면 시스템 레지스트리에 등록된 Java 런타임 정보를 이용한다.
+    @ cubrid javasp status: demodb
+    Java Stored Procedure Server (demodb, pid 9220, port 38408)
+    Java VM arguments :
+    -------------------------------------------------
+    -Djava.util.logging.config.file=/path/to/CUBRID/java/logging.properties
+    -Xrs
+    -------------------------------------------------
 
-아래와 같이 명령어를 실행하여 **JAVA_HOME** 환경 변수를 설정하고 Java 실행 파일이 있는 디렉터리를 **Path** 환경 변수에 추가할 수 있다. GUI를 이용해서 환경 변수를 설정하는 방법은 JDBC 설치 및 설정을 참고한다.
-
-* JDK 1.6 64비트 버전을 설치하고, 환경 변수를 설정한 예 ::
-
-    % set JAVA_HOME=C:\jdk1.6.0
-    % set PATH=%PATH%;%JAVA_HOME%\jre\bin\server
-
-* JDK 1.6 32비트 버전을 설치하고, 환경 변수를 설정한 예 ::
-  
-    % set JAVA_HOME=C:\jdk1.6.0
-    % set PATH=%PATH%;%JAVA_HOME%\jre\bin\client
-
-SUN의 Java 가상 머신을 사용하지 않고 다른 벤더의 구현을 사용하려면 해당 벤더의 설치에서 **jvm.dll** 파일의 경로를 **PATH** 에 추가해 주어야 한다.
-
-Linux/Unix 환경
----------------
-
-CUBRID는 Linux/Unix 환경에서 **libjvm.so** 파일을 로딩하여 Java 가상 머신을 실행시킨다. CUBRID는 먼저 **LD_LIBRARY_PATH** 환경 변수에서 **libjvm.so** 파일을 찾아 로딩한다. 만약 찾지 못하면 **JAVA_HOME** 환경 변수를 이용하여 찾는다. 리눅스의 경우 glibc 2.3.4 이상만 지원되며, 아래는 리눅스 환경 설정 파일(예: **.profile**, **.cshrc**, **.bashrc**, **.bash_profile** 등)에 환경 변수를 설정하는 예이다.
-
-*   JDK 1.6 64비트 버전을 설치하고, bash 셸에서 환경 변수를 설정한 예 ::
-
-    % JAVA_HOME=/usr/java/jdk1.6.0_10
-    % LD_LIBRARY_PATH=$JAVA_HOME/jre/lib/amd64:$JAVA_HOME/jre/lib/amd64/server:$LD_LIBRARY_PATH
-    % export JAVA_HOME
-    % export LD_LIBRARY_PATH
-
-*   JDK 1.6 32비트 버전을 설치하고, bash 셸에서 환경 변수를 설정한 예 ::
-
-    % JAVA_HOME=/usr/java/jdk1.6.0_10
-    % LD_LIBRARY_PATH=$JAVA_HOME/jre/lib/i386/:$JAVA_HOME/jre/lib/i386/client:$LD_LIBRARY_PATH
-    % export JAVA_HOME
-    % export LD_LIBRARY_PATH
-
-*   JDK 1.6 64비트 버전을 설치하고, csh 셸에서 환경 변수를 설정한 예 ::
-
-    % setenv JAVA_HOME /usr/java/jdk1.6.0_10
-    % setenv LD_LIBRARY_PATH $JAVA_HOME/jre/lib/amd64:$JAVA_HOME/jre/lib/amd64/server:$LD_LIBRARY_PATH
-    % set path=($path $JAVA_HOME/bin .)
-
-*   JDK 1.6 32비트 버전을 설치하고, csh 셸에서 환경 변수를 설정한 예 ::
-
-    % setenv JAVA_HOME /usr/java/jdk1.6.0_10
-    % setenv LD_LIBRARY_PATH $JAVA_HOME/jre/lib/i386:$JAVA_HOME/jre/lib/i386/client:$LD_LIBRARY_PATH
-    % set path=($path $JAVA_HOME/bin .)
-
-SUN 이외의 다른 벤더가 제공하는 Java 가상 머신을 사용하는 경우, Library Path에 Java VM( **libjvm.so** )이 있는 경로를 추가해 주어야 한다. 이때, **libjvm.so** 파일의 경로는 OS 플랫폼, 지원 비트마다 다르므로 주의하여 설정한다. 예를 들어 SUN Sparc 머신에서 **libjvm.so** 파일의 경로는 **$JAVA_HOME/jre/lib/sparc** 이다.
+자바 저장 프로시저 서버에 대한 보다 자세한 내용은 :ref:`cubrid-javasp-server` 와 :ref:`cubrid-javasp-server-config` 을 참고한다.
 
 함수/프로시저 작성
 ==================

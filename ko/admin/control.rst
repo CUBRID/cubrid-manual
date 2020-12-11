@@ -1,6 +1,6 @@
 
-:meta-keywords: cubrid server process, cub_server, cubrid broker, cubrid cas, cubrid manager server, cubrid HA, cubrid services, cubrid logging, cubrid errors, cubrid server access, cubrid status, cubrid manager
-:meta-description: How to control and check CUBRID services and processes (server, broker), logging files, access, errors, and CUBRID Manager.
+:meta-keywords: cubrid server process, cub_server, cubrid broker, cubrid cas, cubrid manager server, cubrid HA, cubrid services, cubrid logging, cubrid errors, cubrid server access, cubrid status, cubrid manager, cubrid javasp, cub_javasp
+:meta-description: How to control and check CUBRID services and processes (server, broker), logging files, access, errors, and CUBRID Manager and CUBRID Java SP Server.
 
 .. _control-cubrid-processes:
 
@@ -104,6 +104,23 @@ CUBRID HA 기능을 사용하기 위한 **cubrid heartbeat** 유틸리티 구문
 
 자세한 내용은 :ref:`cubrid-heartbeat`\ 를 참고한다. 
 
+CUBRID 자바 저장 프로시저 (Java SP) 서버 제어
+----------------------------------------------
+
+CUBRID 자바 저장 프로시저 (Java SP) 서버 프로세스를 제어하기 위한 **cubrid** 유틸리티 구문은 다음과 같다.
+
+::
+
+    cubrid javasp <command> [database_name]
+    <command>: {start|stop|restart|status}
+
+*   start: 자바 저장 프로시저 서버 프로세스 구동
+*   stop: 자바 저장 프로시저 서버 프로세스 종료
+*   restart: 자바 저장 프로시저 서버 프로세스 재시작
+*   status: 자바 저장 프로시저 서버 프로세스 상태 확인
+
+모든 명령어에는 데이터베이스 이름이 인수로 지정되어야 한다.
+
 .. _control-cubrid-services:
 
 CUBRID 서비스
@@ -112,11 +129,12 @@ CUBRID 서비스
 서비스 등록
 -----------
 
-사용자는 임의로 데이터베이스 서버, CUBRID 브로커, CUBRID 매니저, CUBRID HA를 데이터베이스 환경 설정 파일(cubrid.conf)에 CUBRID 서비스로 등록할 수 있다. 이를 위해 cubrid.conf의 service 파라미터 값으로 각각 server, broker, manager, heartbeat를 입력하면 되며, 이들을 쉼표(,)로 구분하여 여러 개를 같이 등록할 수 있다.
+사용자는 임의로 데이터베이스 서버, CUBRID 브로커, CUBRID 자바 저장 프로시저 서버, CUBRID 매니저, CUBRID HA를 데이터베이스 환경 설정 파일(cubrid.conf)에 CUBRID 서비스로 등록할 수 있다. 이를 위해 cubrid.conf의 service 파라미터 값으로 각각 server, broker, javasp, manager, heartbeat를 입력하면 되며, 이들을 쉼표(,)로 구분하여 여러 개를 같이 등록할 수 있다.
 
 사용자가 별도로 서비스를 등록하지 않으면, 기본적으로 마스터 프로세스(cub_master)만 등록된다. CUBRID 서비스에 등록되어 있으면 **cubrid service** 유틸리티를 사용해서 한 번에 관련된 프로세스들을 모두 구동, 정지하거나 상태를 알아볼 수 있어 편리하다.
 
-CUBRID HA를 설정하는 방법은 :ref:`cubrid-service-util`\ 을 참고한다.
+- CUBRID HA를 설정하는 방법은 :ref:`cubrid-service-util`\ 을 참고한다.
+- CUBRID 자바 저장 프로시저 서버를 설정하는 방법은 :ref:`cubrid-javasp-server-config`\ 을 참고한다.
 
 다음은 데이터베이스 환경 설정 파일에서 데이터베이스 서버와 브로커를 서비스로 등록하고, CUBRID 서비스 구동과 함께 *demodb*\ 와 *testdb*\ 라는 데이터베이스를 자동으로 시작하도록 설정한 예이다.
 
@@ -128,11 +146,11 @@ CUBRID HA를 설정하는 방법은 :ref:`cubrid-service-util`\ 을 참고한다
     [service]
 
     # The list of processes to be started automatically by 'cubrid service start' command
-    # Any combinations are available with server, broker, manager and heartbeat.
+    # Any combinations are available with server, broker, manager, javasp and heartbeat.
     service=server,broker
 
     # The list of database servers in all by 'cubrid service start' command.
-    # This property is effective only when the above 'service' property contains 'server' keyword.
+    # This property is effective only when the above 'service' property contains 'server' or 'javasp' keyword.
     server=demodb,testdb
 
 서비스 구동
@@ -2144,3 +2162,358 @@ CUBRID 매니저 사용자의 계정과 비밀번호는 CUBRID 매니저 클라�
         ::
 
             cm_admin changedbinfo -p 33000 testcm testdb
+
+.. _cubrid-javasp-server:
+
+CUBRID 자바 저장 프로시저 서버
+====================================
+
+CUBRID 자바 저장 프로시저 서버 구동
+---------------------------------------
+
+다음은 *demodb* 용 CUBRID 자바 저장 프로시저 서버를 구동하는 방법이다.
+
+CUBRID 자바 저장 프로시저 서버를 시작하려면 CUBRID 설정 파일 (**cubrid.conf**)의 **java_stored_procedure** 파라미터를 yes로 설정해야한다.
+
+::
+
+    % cubrid javasp start demodb
+
+    @ cubrid javasp start: demodb
+    ++ cubrid javasp start: success
+
+CUBRID 자바 저장 프로시저 서버가 이미 실행중인 경우 다음과 같은 메시지가 출력된다.
+
+::
+
+    % cubrid javasp start demodb
+
+    @ cubrid javasp start: demodb
+    ++ cubrid javasp 'demodb' is running.
+
+서버 시작 시 발생할 수 있는 다른 유형의 오류에 대한 자세한 내용은 :ref:`cubrid-javasp-server-errors` 를 참고한다.
+
+CUBRID 자바 저장 프로시저 서버 종료
+-----------------------------------
+
+다음은 *demodb* 용 CUBRID 자바 저장 프로시저 서버를 종료하는 방법이다.
+
+::
+
+    % cubrid javasp stop demodb
+
+    @ cubrid javasp stop: demodb
+    ++ cubrid javasp stop: success
+
+CUBRID 자바 저장 프로시저 서버가 이미 중지 된 경우 다음과 같은 메시지가 출력된다.
+
+::
+
+    % cubrid javasp stop demodb
+
+    @ cubrid javasp stop: demodb
+    ++ cubrid javasp 'demodb' is not running.
+    ++ cubrid javasp stop: fail
+
+CUBRID 자바 저장 프로시저 서버 재시작
+-------------------------------------
+
+다음은 *demodb* 용 CUBRID 자바 저장 프로시저 서버를 재시작하는 방법이다.
+
+::
+
+    % cubrid javasp restart demodb
+    
+    @ cubrid javasp stop: demodb
+    ++ cubrid javasp stop: success
+    @ cubrid javasp start: demodb
+    ++ cubrid javasp start: success
+
+CUBRID 자바 저장 프로시저 서버 상태 확인
+----------------------------------------
+
+다음은 *demodb* 용 CUBRID 자바 저장 프로시저 서버의 상태를 확인하는 예시이다.
+자바 저장 프로시저 서버가 현재 실행 중인 대상 데이터베이스의 이름, *demodb* 가 출력된다.
+또한 서버의 PID, 포트 번호와 적용된 JVM 옵션이 함께 표시된다.
+
+::
+
+    % cubrid javasp status demodb
+    
+    @ cubrid javasp status: demodb
+    Java Stored Procedure Server (demodb, pid 9220, port 38408)
+    Java VM arguments :
+    -------------------------------------------------
+    -Djava.util.logging.config.file=/path/to/CUBRID/java/logging.properties
+    -Xrs
+    -------------------------------------------------
+
+.. _cubrid-javasp-server-config:
+
+Java 저장 함수/프로시저 서버 설정
+-------------------------------------
+
+.. _cubrid-javasp-environment-configuration:
+
+Java 저장 함수/프로시저 환경 설정
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+CUBRID에서 Java 저장 함수/프로시저를 사용하기 위해서는 CUBRID 서버가 설치되는 환경에 Java Runtime Environment (JRE) 1.6 이상 버전이 설치되어야 한다. JRE는 Developer Resources for Java Technology 사이트(`https://www.oracle.com/java/technologies <https://www.oracle.com/java/technologies>`_)에서 다운로드할 수 있다.
+
+CUBRID 64비트 버전에는 JRE 64비트 버전이 필요하고, CUBRID 32비트 버전에는 JRE 32비트 버전이 필요하다. JRE 32비트 버전이 설치된 컴퓨터에서 CUBRID 64비트 버전을 실행하면 아래와 같은 에러 메시지가 출력된다. ::
+
+    % cubrid javasp start demodb
+
+    Java 가상 머신 라이브러리를 찾을 수 없습니다:
+        Failed to get 'JVM_PATH' environment variable.
+        Failed to load libjvm from 'JAVA_HOME' environment variable:
+            /usr/java/jdk1.6.0_15/jre/lib/amd64/server/libjvm.so: cannot open shared object file: No such file or directory.
+
+JRE가 이미 설치되어 있다면, 아래와 같은 명령으로 버전을 확인한다. ::
+
+    % java -version Java(TM) SE Runtime Environment (build 1.6.0_05-b13)
+    Java HotSpot(TM) 64-Bit Server VM (build 10.0-b19, mixed mode)
+
+**Windows 환경**
+
+CUBRID는 Windows 환경에서 **jvm.dll** 파일을 로딩하여 Java 가상 머신을 실행시킨다. CUBRID는 먼저 시스템의 **Path** 환경 변수에서 **jvm.dll** 을 찾아 로딩한다. 만약 찾지 못하면 시스템 레지스트리에 등록된 Java 런타임 정보를 이용한다.
+
+아래와 같이 명령어를 실행하여 **JAVA_HOME** 환경 변수를 설정하고 Java 실행 파일이 있는 디렉터리를 **Path** 환경 변수에 추가할 수 있다. GUI를 이용해서 환경 변수를 설정하는 방법은 JDBC 설치 및 설정을 참고한다.
+
+* JDK 1.6 64비트 버전을 설치하고, 환경 변수를 설정한 예 ::
+
+    % set JAVA_HOME=C:\jdk1.6.0
+    % set PATH=%PATH%;%JAVA_HOME%\jre\bin\server
+
+* JDK 1.6 32비트 버전을 설치하고, 환경 변수를 설정한 예 ::
+  
+    % set JAVA_HOME=C:\jdk1.6.0
+    % set PATH=%PATH%;%JAVA_HOME%\jre\bin\client
+
+SUN의 Java 가상 머신을 사용하지 않고 다른 벤더의 구현을 사용하는 경우를 포함하여 명시적으로 Java 가상 머신 (JVM)의 경로를 지정하려면 **jvm.dll** 파일의 경로를 **JVM_PATH** 환경 변수에 추가한다.
+CUBRID는 먼저 **JVM_PATH** 변수에서 **jvm.dll** 파일의 경로를 찾는다. **JVM_PATH** 가 설정되지 않았거나 파일을 로드할 수 없는 경우 위에서 설명한 **JAVA_HOME** 변수에서 **jvm.dll**을 찾는다.
+
+*   **JVM_PATH** 환경 변수를 설정한 예 ::
+    
+    % set JVM_PATH=C:\jdk1.6.0\jre\bin\server\libjvm.dll
+
+**Linux/Unix 환경**
+
+CUBRID는 Linux/Unix 환경에서 **libjvm.so** 파일을 로딩하여 Java 가상 머신을 실행시킨다. CUBRID는 먼저 **LD_LIBRARY_PATH** 환경 변수에서 **libjvm.so** 파일을 찾아 로딩한다. 만약 찾지 못하면 **JAVA_HOME** 환경 변수를 이용하여 찾는다. 리눅스의 경우 glibc 2.3.4 이상만 지원되며, 아래는 리눅스 환경 설정 파일(예: **.profile**, **.cshrc**, **.bashrc**, **.bash_profile** 등)에 환경 변수를 설정하는 예이다.
+
+*   JDK 1.6 64비트 버전을 설치하고, bash 셸에서 환경 변수를 설정한 예 ::
+
+    % JAVA_HOME=/usr/java/jdk1.6.0_10
+    % LD_LIBRARY_PATH=$JAVA_HOME/jre/lib/amd64:$JAVA_HOME/jre/lib/amd64/server:$LD_LIBRARY_PATH
+    % export JAVA_HOME
+    % export LD_LIBRARY_PATH
+
+*   JDK 1.6 32비트 버전을 설치하고, bash 셸에서 환경 변수를 설정한 예 ::
+
+    % JAVA_HOME=/usr/java/jdk1.6.0_10
+    % LD_LIBRARY_PATH=$JAVA_HOME/jre/lib/i386/:$JAVA_HOME/jre/lib/i386/client:$LD_LIBRARY_PATH
+    % export JAVA_HOME
+    % export LD_LIBRARY_PATH
+
+*   JDK 1.6 64비트 버전을 설치하고, csh 셸에서 환경 변수를 설정한 예 ::
+
+    % setenv JAVA_HOME /usr/java/jdk1.6.0_10
+    % setenv LD_LIBRARY_PATH $JAVA_HOME/jre/lib/amd64:$JAVA_HOME/jre/lib/amd64/server:$LD_LIBRARY_PATH
+    % set path=($path $JAVA_HOME/bin .)
+
+*   JDK 1.6 32비트 버전을 설치하고, csh 셸에서 환경 변수를 설정한 예 ::
+
+    % setenv JAVA_HOME /usr/java/jdk1.6.0_10
+    % setenv LD_LIBRARY_PATH $JAVA_HOME/jre/lib/i386:$JAVA_HOME/jre/lib/i386/client:$LD_LIBRARY_PATH
+    % set path=($path $JAVA_HOME/bin .)
+
+SUN의 Java 가상 머신을 사용하지 않고 다른 벤더의 구현을 사용하는 경우를 포함하여 명시적으로 Java 가상 머신 (JVM)의 경로를 지정하려면 Java VM( **libjvm.so** ) 파일의 경로를 **JVM_PATH** 환경 변수에 추가한다.
+**libjvm.so** 파일의 경로는 OS 플랫폼, 지원 비트마다 다를 수 있다. 예를 들어 SUN Sparc 머신에서 **libjvm.so** 파일의 경로는 **$JAVA_HOME/jre/lib/sparc** 이다.
+CUBRID는 먼저 **JVM_PATH** 변수에서 **libjvm.so** 파일의 경로를 찾는다. **JVM_PATH** 가 설정되지 않았거나 파일을 로드할 수 없는 경우 위에서 설명한 **JAVA_HOME** 변수에서 **libjvm.so**을 찾는다.
+
+*   **JVM_PATH** 환경 변수를 설정한 예 ::
+    
+    % JVM_PATH=/usr/java/jdk1.6.0_10/jre/lib/amd64/server/libjvm.so
+    % export JVM_PATH
+
+.. _cubrid-javasp-system-parameter:
+
+자바 저장 프로시저 서버 시스템 파라미터
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+다음 표는 설정 파일 (**cubrid.conf**)에서 설정할 수 있는 자바 저장 프로시저 서버 관련 서버 파라미터이다.
+
++-------------------------------------+--------+----------------+--------+--------+
+| 파라미터 이름                       | 타입   | 기본값         | 최소값 | 최대값 |
++-------------------------------------+--------+----------------+--------+--------+
+| java_stored_procedure               | bool   | no             |        |        |
++-------------------------------------+--------+----------------+--------+--------+
+| java_stored_procedure_port          | int    | 0              | 0      | 65535  |
++-------------------------------------+--------+----------------+--------+--------+
+| java_stored_procedure_jvm_options   | string |                |        |        |
++-------------------------------------+--------+----------------+--------+--------+
+
+이 파라미터에 대한 자세한 사항은 :ref:`cubrid-conf` 를 참고한다.
+
+.. _cubrid-javasp-service-util:
+
+cubrid service에 CUBRID 자바 저장 프로시저 서버 등록
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+CUBRID service에 javasp를 등록하면, **cubrid service** 유틸리티를 사용하여 등록된 모든 자바 저장 프로시저 서버 프로세스 (javasp 프로세스)를 한 번에 시작, 중지 또는 서버의 상태를 확인이 가능하다.
+
+- 먼저 **cubrid.conf** 파일의 [**service**] 섹션의 **service** 파라미터에 **javasp**를 추가한다.
+- 다음으로 데이터베이스에 대한 javasp 서버를 등록하기 위해 [**service**] 섹션의 **server** 파라미터에 데이터베이스 이름을 추가한다. **server** 파라미터는 데이터베이스 서버와 공유하는 것을 참고한다. javasp 서버는 동일한 데이터베이스 이름을 가진 데이터베이스 서버에 종속된다.
+- 마지막으로 **java_stored_procedure**를 yes로 설정하여 해당 데이터베이스에 대한 **javasp** 서버 구동을 활성화한다.
+
+다음은 **cubrid.conf** 파일에서 **javasp** 서버를 서비스로 등록하는 방법을 보여준다.
+*demodb*와 *testdb*는 모두 **server** 파라미터에 추가되어 있지만, **java_stored_procedure**가 yes로 설정된 demodb만 **cubrid service start** 명령으로 시작된다.
+
+::
+
+    # cubrid.conf
+
+    ...
+
+    [service]
+
+    ...
+
+    service=broker,server,javasp
+
+    # The list of database servers in all by 'cubrid service start' command.
+    # This property is effective only when the above 'service' property contains 'server' or 'javasp' keyword.
+    server=demodb,testdb
+
+    ...
+
+    [common]
+
+    ...
+
+    [@demodb]
+    java_stored_procedure=yes
+
+    [@testdb]
+    java_stored_procedure=no
+
+::
+
+    % cubrid service start
+    
+    @ cubrid master start
+    ++ cubrid master start: success
+    @ cubrid server start: demodb
+
+    This may take a long time depending on the amount of restore works to do.
+    CUBRID 10.2
+    
+    ++ cubrid server start: success
+    @ cubrid server start: testdb
+
+    This may take a long time depending on the amount of recovery works to do.
+    CUBRID 10.2
+
+    ++ cubrid server start: success
+    @ cubrid javasp start: demodb
+    ++ cubrid javasp start: success
+    @ cubrid broker start
+    ++ cubrid broker start: success
+
+.. _cubrid-javasp-server-log:
+
+CUBRID 자바 저장 프로시저 서버 로그
+------------------------------------
+
+CUBRID 자바 저장 프로시저 서버의 로그는 설치 디렉터리의 **log/**에 저장된다. 각 데이터베이스 별로 다음과 같은 로그 파일이 생성된다.
+
+*   에러 로그 ($CUBRID/log/[db_name]_java.err)
+*   자바 로그 ($CUBRID/log/[db_name]_java.log)
+
+에러 로그
+^^^^^^^^^
+
+각 데이터베이스 별 자바 저장 프로시저 서버의 에러 로그는 **$CUBRID/log** 디렉터리에 저장되며, 파일 이름은 **<db_name>_java.err** 형식으로 저장된다. 확장자는 **.err** 이다.
+
+::
+
+    demodb_java.err
+
+자바 저장 프로시저 서버를 시작하는 동안 에러가 발생하면 에러 메시지가 에러 로그 파일에 저장된다.
+
+::
+
+    Time: 11/11/20 18:17:15.438 - ERROR *** file ../../src/jsp/jsp_sr.c, line 501 ERROR CODE = -900, Tran = -1, EID = 1
+    Java 가상 머신 라이브러리를 찾을 수 없습니다:
+        Failed to get 'JVM_PATH' environment variable.
+        Failed to load libjvm from 'JAVA_HOME' environment variable:
+            /jre/lib/amd64/server/libjvm.so: cannot open shared object file: No such file or directory
+            /lib/server/libjvm.so: cannot open shared object file: No such file or directory.
+
+.. note::
+
+    For more details on what errors can be occured, see :ref:`cubrid-javasp-server-errors`.
+
+
+자바 로그
+^^^^^^^^^
+
+각 데이터베이스 별 자바 저장 프로시저 서버의 자바 로그는 **$CUBRID/log** 디렉터리에 저장되며, 파일 이름은 **<db_name>_java.log** 형식으로 저장된다. 확장자는 **.log** 이다.
+
+::
+
+    demodb_java.log
+
+JVM에서 Java 저장 프로 시저/함수를 수행하는 동안 예외가 발생하면 예외 문자열이 Java 로그에 저장된다.
+
+::
+
+    SEVERE:
+    java.lang.NullPointerException
+    at Test.testFunction(Test.java:50)
+    ...
+    at com.cubrid.jsp.StoredProcedure.invoke(StoredProcedure.java:263)
+    at com.cubrid.jsp.ExecuteThread.run(ExecuteThread.java:197)
+
+.. _cubrid-javasp-server-errors:
+
+CUBRID 자바 저장 프로시저 에러
+-------------------------------
+
+다음은 CUBRID 자바 저장 프로시저 서버 시작 시 발생할 수 있는 에러에 대한 에러 메시지이다.
+에러 메시지는 **$CUBRID/log**/\ *<db_name>_java*\ **.err** 에 저장된다.
+
++-------+--------------------------------------------------+-----------------------------------------------------+-----------------------------------------------------------------------------------+
+| 에러  | 에러 메시지                                      | 설명                                                | 조치사항                                                                          |
+| 코드  |                                                  |                                                     |                                                                                   |
++=======+==================================================+=====================================================+===================================================================================+
+| -900  | Java 가상 머신 라이브러리를 찾을 수 없습니다: ?  | CUBRID 가 JAVA_HOME 또는 JVM_PATH 환경 변수에서     | JAVA_HOME 또는 JVM_PATH 변수가 올바르게 설정 되었는지 확인한다.                   |
+|       |                                                  | JVM 라이브러리를 찾을 수 없음                       | :ref:`cubrid-javasp-environment-configuration` 를 참고한다.                       |
++-------+--------------------------------------------------+-----------------------------------------------------+-----------------------------------------------------------------------------------+
+| -901  | Java 가상 머신을 시작할 수 없습니다: ?           | JVM 라이브러리 내에서 예상치 못한 에러가 발생       | JRE 재설치를 시도해보고 만약 동일한 에러가 발생하면                               |
+|       |                                                  | JVM 라이브러리 또는 $CUBRID/java/jspserver.jar 에서 | 다른 버전의 JRE를 설치를 시도한다.                                                |
+|       |                                                  | 문제가 발생할 가능성 있음                           | 그리고 $CUBRID/java/jspserver.jar 파일을 동일한 CUBRID 버전의 것으로 교체한다.    |
++-------+--------------------------------------------------+-----------------------------------------------------+-----------------------------------------------------------------------------------+
+
+다음은 CUBRID 자바 저장 프로시저 서버가 시작되지 않은 경우를 포함하여 연결에 문제가 있을 때 발생할 수 있는 에러에 대한 에러 메시지이다.
+에러 메시지는 **$CUBRID/log/broker/error_log**/\ *<broker_name>_<app_server_num>*\ **.err** 에 저장된다.
+
++-------+---------------------------------------------------+----------------------------------------------------------+------------------------------------------------------------------------------------------------------+
+| 에러  | 에러 메시지                                       | 설명                                                     | 조치사항                                                                                             |
+| 코드  |                                                   |                                                          |                                                                                                      |
++=======+===================================================+==========================================================+======================================================================================================+
+| -902  | Java 가상 머신이 실행되지 않았습니다.             | 자바 저장 프로시저 서버가 시작되지 않음                  | **cubrid javasp start <db_name>** 명령어로 자바 저장 프로시저 서버를 시작한다.                       |
+|       |                                                   |                                                          | 자세한 설명은 :ref:`cubrid-javasp-server` 를 참고한다.                                               |
++-------+---------------------------------------------------+----------------------------------------------------------+------------------------------------------------------------------------------------------------------+
+| -903  | Java 가상 머신에 접속할 수 없습니다: ?            | 자바 저장 프로시저 서버가 CAS로부터 연결할 수 없음       | 자바 저장 프로시저 서버를 재시작한다. 만약 재시작을 실패하면                                         |
+|       |                                                   | 이 에러는 여러가지 이유로 발생할 수 있다.                | **cub_javasp <db_name>** 프로세스를 리눅스 **kill** 명령어로 강제로 종료 한다.                       |
+|       |                                                   | 예를 들어 자바 저장 프로시저 서버가 불안정하거나         | 그리고 다시 자바 저장 프로시저 서버를 재시작한다.                                                    |
+|       |                                                   | CAS에서 자바 저장 프로시저 서버에 연결할 수 없는 경우,   |                                                                                                      |
+|       |                                                   | 또는 자바 저장 프로시저가 예기치 않게 종료(kill) 된 경우 | **cubrid javasp status <db_name>** 명령어를 통해 자바 저장 프로시저 서버의 포트로                    |
+|       |                                                   | 이러한 에러 메시지를 출력한다.                           | CAS 에서 접근 가능한지 확인한다.                                                                     |
+|       |                                                   |                                                          | 방화벽에 의해 해당 포트가 막혀있을 수 있으므로 방화벽에서 포트를 열어준다.                           |
+|       |                                                   |                                                          | 필요한 경우 **java_stored_procedure_port** 파라미터를 설정하고 자바 저장 프로시저 서버를 재시작한다. |
+|       |                                                   |                                                          | 자세한 사항은 :ref:`connect-to-cubrid-server` 를 참고한다.                                           |
++-------+---------------------------------------------------+----------------------------------------------------------+------------------------------------------------------------------------------------------------------+
+| -905  | Java 가상 머신과 통신 중 오류가 발생하였습니다: ? | CAS 가 자바 저장 프로시저 서버로부터 잘못된 패킷을 받음  |                                                                                                      |
++-------+---------------------------------------------------+----------------------------------------------------------+------------------------------------------------------------------------------------------------------+

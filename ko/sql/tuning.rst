@@ -93,6 +93,8 @@ CSQL 인터프리터의 세션 명령어로 지정한 테이블의 통계 정보
             BTID: { 0 , 1049 }
             Cardinality: 5 (5) , Total pages: 2 , Leaf pages: 1 , Height: 2
 
+.. _viewing-query-plan:
+
 질의 실행 계획 보기
 ===================
 

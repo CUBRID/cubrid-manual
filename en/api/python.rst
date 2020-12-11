@@ -35,11 +35,11 @@ To install CUBRID Python driver by compiling source code, you should have Python
 
 #.  Extract the archive to the desired location. ::
 
-        tar xvfz cubrid-python-src-8.4.0.0001.tar.gz
+        tar xvfz cubrid-python-10.2-latest.tar.gz
 
 #.  Navigate to the directory where you have extracted the source code. ::
 
-        cd cubrid-python-src
+        cd RB-10.2.0
 
 #.  Build the driver. At this and next step, make sure you are still under the root user. ::
 
@@ -103,7 +103,7 @@ This sample program will show steps that you need to perform in order to connect
     
     .. code-block:: python
     
-        conn = CUBRIDdb.connect('CUBRID:localhost:30000:demodb:dba::')
+        conn = CUBRIDdb.connect('CUBRID:localhost:33000:demodb:::', 'dba', '')
 
 For the *demodb* database, it is not required to enter any password. In a real-world scenario, you will have to provide the password to successfully connect. 
 The syntax to use the `connect <https://pythonhosted.org/CUBRID-Python/_cubrid-module.html#connect>`_ () function is as follows: ::
@@ -156,7 +156,7 @@ The entire script up to now looks like this:
 .. code-block:: python
 
     import CUBRIDdb
-    conn = CUBRIDdb.connect('CUBRID:localhost:33000:demodb:::', 'public', '')
+    conn = CUBRIDdb.connect('CUBRID:localhost:33000:demodb:::', 'dba', '')
     cur = conn.cursor()
      
     # Plain insert statement

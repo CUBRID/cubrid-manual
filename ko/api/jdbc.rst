@@ -61,7 +61,7 @@ JDBC 설치 및 설정
 
 **Java 설치 및 환경 변수 설정**
 
-시스템에 Java가 설치되어 있고 **JAVA_HOME** 환경 변수가 등록되어 있어야 한다. Java는 Developer Resources for Java Technology 사이트( https://www.oracle.com/java/technologies/ )에서 다운로드할 수 있다. 이에 대한 자세한 설명은 :ref:`jsp-environment-configuration` 절을 참고한다.
+시스템에 Java가 설치되어 있고 **JAVA_HOME** 환경 변수가 등록되어 있어야 한다. Java는 Developer Resources for Java Technology 사이트( https://www.oracle.com/java/technologies/ )에서 다운로드할 수 있다.
 
 **Windows 환경에서 환경 변수 설정**
 
@@ -859,7 +859,7 @@ JDBC에서 **LOB** 데이터를 처리하는 인터페이스는 JDBC 4.0 스펙�
      
     // ResetSet에서 직접 데이터 인출
     PrepareStatement pstmt1 = conn.prepareStatement("SELECT content FROM doc_t WHERE doc_id = ? ");
-    pstmt2.setString(1, "doc-10");
+    pstmt1.setString(1, "doc-10");
     ResultSet rs = pstmt1.executeQuery();
     
     while (rs.next())

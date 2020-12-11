@@ -808,6 +808,8 @@ cci_connect_ex
         *   **CCI_ER_COMMUNICATION**
         *   **CCI_ER_CONNECT**
 
+.. _cci_connect_with_url:
+
 cci_connect_with_url
 --------------------
 
@@ -843,6 +845,7 @@ cci_connect_with_url
                      | logSlowQueries=true|false[&slowQueryThresholdMillis=<milli_sec>]
                      | logTraceApi=true|false
                      | logTraceNetwork=true|false
+                     | useSSL=<bool_type>
          
         <alternative_hosts> ::= <host>:<port> [,<host>:<port>]
          
@@ -883,6 +886,11 @@ cci_connect_with_url
     *   **logTraceApi**: Whether to log the start and end of CCI functions
     *   **logTraceNetwork**: Whether to log network data content transferred of CCI functions
 
+    *   **useSSL**: Packet Encryption mode (Default: false)
+
+       *   Packet encryption: useSSL = true
+       *   Plain text: useSSL = false
+
     **Example** ::
 
         --connection URL string when a property(altHosts) is specified for HA
@@ -893,6 +901,16 @@ cci_connect_with_url
          
         --connection URL string when properties(logSlowQueries,slowQueryThresholdMills, logTraceApi, logTraceNetwork) are specified for interface debugging
         URL = "cci:cubrid:192.168.0.1:33000:demodb:::?logSlowQueries=true&slowQueryThresholdMillis=1000&logTraceApi=true&logTraceNetwork=true"
+
+        --connection URL string when useSSL property specified for encrypted connection
+        URL = "cci:cubrid:192.168.0.1:33000:demodb:::?useSSL=true
+
+    .. warning::
+
+        * The **useSSL** flag must match with the mode of the broker trying to connect. If encryption mode is different from the server that trying to connect, that connection request will be rejected. Please refer to the following cases that are not allowed.
+
+           *   useSSL=true, connection request will be rejected when the broker is in 'normal mode' (**cubrid_broker.conf**: SSL = OFF)
+           *   useSSL=false, connection request will be rejected when the broker is in 'encryption mode' (**cubrid_broker.conf**: SSL = ON)
 
 cci_connect_with_url_ex
 -----------------------

@@ -1047,6 +1047,7 @@ BIT VARYING(n)
     INSERT INTO bitvar_tbl VALUES (0b1010, 0b1010);
     INSERT INTO bitvar_tbl VALUES (0xaa, 0xaa);
     INSERT INTO bitvar_tbl(a1) VALUES (0xaaa);
+    INSERT INTO bitvar_tbl(a2) VALUES (0xaaa);
     SELECT * FROM bitvar_tbl;
 
 ::
@@ -1057,14 +1058,7 @@ BIT VARYING(n)
       X'a'                  X'a'
       X'aa'                 X'aa'
       X'aaa'                NULL
-
-.. code-block:: sql
-
-    INSERT INTO bitvar_tbl(a2) VALUES (0xaaa);
-
-::
-
-    ERROR: Data overflow coercing X'aaa' to type bit varying.
+      NULL                  X'aa'
 
 .. _char-data-type:
 
@@ -2077,6 +2071,8 @@ LIST 또는 SEQUENCE
        cast(col_1 as set)  cast(col_1 as multiset)
     ============================================
       {'a', 'b', 'c'}  {'a', 'b', 'b', 'c', 'c', 'c'}
+
+.. _json-data-type:
 
 JSON 데이터 타입
 ================

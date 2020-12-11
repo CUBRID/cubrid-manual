@@ -808,6 +808,8 @@ cci_connect_ex
         *   **CCI_ER_COMMUNICATION**
         *   **CCI_ER_CONNECT**
 
+.. _cci_connect_with_url:
+
 cci_connect_with_url
 --------------------
 
@@ -843,7 +845,8 @@ cci_connect_with_url
                      | logSlowQueries=true|false[&slowQueryThresholdMillis=<milli_sec>]
                      | logTraceApi=true|false
                      | logTraceNetwork=true|false
-         
+                     | useSSL=<bool_type>
+
         <alternative_hosts> ::= <host>:<port> [,<host>:<port>]
          
         <host> := HOSTNAME | IP_ADDR
@@ -883,6 +886,11 @@ cci_connect_with_url
     *   **logTraceApi**: CCI 함수 시작과 끝의 로깅 여부
     *   **logTraceNetwork**: CCI 함수 네트워크 데이터 전송 내용의 로깅 여부
 
+    *  **useSSL**: 패킷 암호화 여부 (기본값: false)
+
+       *   패킷 암호화: useSSL = true
+       *   일반 평문: useSSL = false
+
     **예제** ::
 
         --connection URL string when a property(altHosts) is specified for HA
@@ -893,6 +901,16 @@ cci_connect_with_url
          
         --connection URL string when properties(logSlowQueries,slowQueryThresholdMills, logTraceApi, logTraceNetwork) are specified for interface debugging
         URL = "cci:cubrid:192.168.0.1:33000:demodb:::?logSlowQueries=true&slowQueryThresholdMillis=1000&logTraceApi=true&logTraceNetwork=true"
+
+        --connection URL string when useSSL property specified for encrypted connection
+        URL = "cci:cubrid:192.168.0.1:33000:demodb:::?useSSL=true
+
+    .. warning::
+
+        * useSSL의 flag는 **브로커 모드와 일치해야 한다**. 아래와 같이 브로커의 암호화 모드와 다른 flag로 접속을 요청하는 경우 **연결되지 않는다**.
+
+           *   useSSL=true, 브로커 '일반 모드' 일 때 연결 불가 (**cubrid_broker.conf**: SSL = OFF)
+           *   useSSL=false, 브로커 '암호화 모드' 일때 연결 불가 (**cubrid_broker.conf**: SSL = ON)
 
 cci_connect_with_url_ex
 -----------------------

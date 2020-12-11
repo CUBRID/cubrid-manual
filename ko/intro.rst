@@ -29,9 +29,11 @@ CUBRID는 객체 관계형 데이터베이스 관리 시스템으로서, 데이�
 
 *   CUBRID Manager는 사용자가 데이터베이스와 브로커를 원격으로 관리할 수 있게 해주는 GUI 도구이다. 사용자가 데이터베이스 서버에 SQL 질의를 수행할 수 있게 해주는 편리한 도구인 질의 편집기를 제공한다.
 
+*   CUBRID 자바 저장 프로시저 (Java SP) 서버는 데이터베이스 서버에서 요청한 자바 저장 프로시저/함수를 처리하는 실행 (Execution) 서버이다.
+
 .. FIXME: For more information about CUBRID Manager, see http://www.cubrid.org/wiki_tools/entry/cubrid-manager.
 
-.. image:: /images/image1.png
+.. image:: /images/process_structure.png
 
 .. _database-volume-structure:
 
@@ -92,6 +94,10 @@ CUBRID는 객체 관계형 데이터베이스 관리 시스템으로서, 데이�
 **이중 쓰기 버퍼 (Double Write Buffer, DWB) 파일**
 
 이중 쓰기 버퍼 파일은 I/O 에러를 방지하기 위하여 디스크에 쓰여지는 데이터 페이지들의 복사본을 저장한다. 이에 대한 자세한 설명은 :ref:`database-volume` 을 참고한다.
+
+**TDE 키 파일 (TDE Key File)**
+
+TDE (Transparent Data Encryption) 키 파일은 데이터베이스 암호화를 위한 키들을 담고 있다. 파일 내의 키들은 TDE 유틸리티를 사용하여 관리된다. 이에 대한 자세한 설명은 :ref:`tde-file-based-key` 와 :ref:`TDE 유틸리티<tde-utility>` 를 참고한다.
 
 .. _temporary-volumes:
 
@@ -250,6 +256,7 @@ CUBRID는 하드웨어, 소프트웨어, 네트워크 등에 장애가 발생해
 *   Java 소스 파일 작성
 *   컴파일 및 Java 리소스 로딩
 *   로딩된 Java 클래스를 데이터베이스에서 호출할 수 있도록 등록
+*   Java 저장 프로시저 서버를 구동 (:ref:`cubrid-javasp-server`\ 를 참고)
 *   Java 저장 프로시저 호출
 
 **클릭 카운터**
@@ -272,7 +279,10 @@ CUBRID는 하드웨어, 소프트웨어, 네트워크 등에 장애가 발생해
     *   **MULTISET**: 각 원소의 중복을 허용하는 집합으로서, 원소의 나열 순서와 무관하다.
     *   **LIST**: 각 원소의 중복을 허용하는 집합으로서, **SET**, **MULTISET** 과 달리 원소의 순서를 유지한다.
 
+*   **JSON**
+
+    JavaScript Object Notation (JSON) 은 데이터 교환을 위한 사실상의 표준이 되었다. 관계형 데이터 모델에서는 반 정형 데이터 중 하나인 JSON을 가지는 것을 허용하지 않는다. 그러나 큐브리드에서는 :ref:`SQL JSON 함수<json-fn>`\를 사용하여 JSON 문서를 생성하고 질의 할 수 있다. 또한 :ref:`JSON 데이터 타입<json-data-type>` 컬럼을 정의하고 JSON 문서를 JSON 타입 컬럼에 저장할 수 있다.
+
 *    **상속**
 
     상속은 상위 클래스(테이블)에서 생성된 칼럼과 메서드들을 하위 클래스에서 재사용할 수 있게 하는 개념으로, CUBRID는 상속을 지원함으로써 재사용성을 제공한다. CUBRID에서 제공하는 상속 기능을 이용하여 공통의 칼럼을 가지는 상위 클래스를 생성하고, 상위 클래스를 상속받아 고유한 칼럼을 추가한 하위 클래스를 생성함으로써, 필요한 칼럼 수를 최소화한 데이터베이스 모델링이 가능해진다.
-

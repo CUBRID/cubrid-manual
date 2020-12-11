@@ -790,9 +790,9 @@ Reference to the object deleted during compacting is displayed as **NULL**, whic
 
 *   *database_name*: The name of the database whose space is to be compacted. The path name to the directory where the database is to be created must not be included.
 
-*   *class_name_list*: You can specify the list of tables names that you want to compact space after a database name; the **-i** option cannot be used together. It is used in client/server mode only.
+*   *class_name_list*: You can specify the list of tables names that you want to compact space after a database name; the **-i** option cannot be used together. If you use the lists on client/server mode, it skips securing space taken by objects such as catalog, delete files and tracker, etc. 
 
-**-I**, **-i**, **-c**, **-d**, **-p** options are applied in client/server mode only.
+**-I**, **-c**, **-d**, **-p** options are applied in client/server mode only.
 
 The following shows [options] available with the **cubrid compactdb** utility.
 
@@ -815,11 +815,11 @@ The following shows [options] available with the **cubrid compactdb** utility.
 
     This option specifies to compact used space in client/server mode while database server is running; no argument is specified. Even though this option is omitted, system recognizes that the job is executed in client/server mode. 
 
-The following options can be used in client/server mode only.
-
 .. option:: -i, --input-class-file=FILE
 
-    You can specify an input file name that contains the table name with this option. Write one table name in a single line; invalid table name is ignored. Note that you cannot specify the list of the table names after a database name in case of you use this option.
+    You can specify an input file name that contains the table name with this option. Write one table name in a single line; invalid table name is ignored. Note that you cannot specify the list of the table names after a database name in case of you use this option. If you use this option on client/server mode, it skips securing space taken by objects such as catalog, delete files and tracker, etc.
+
+The following options can be used in client/server mode only.
 
 .. option:: -p, --pages-commited-once=NUMBER
 
@@ -2787,7 +2787,7 @@ When the object type is a class (table), *Nsubgranules* is displayed, which is t
 tranlist
 --------
 
-The **cubrid tranlist** is used to check the transaction information of the target database. Only DBA or DBA group can use this utility. ::
+The **cubrid tranlist** is used to check the transaction information of the target database. ::
 
     cubrid tranlist [options] database_name
 
@@ -2845,14 +2845,6 @@ The following shows [options] available with the **cubrid tranlist** utility.
 
 .. program:: tranlist
 
-.. option:: -u, --user=USER
-
-    *USER* is DB user's ID to log-in. It only allows DBA and DBA group users.(The default: DBA)
-    
-.. option:: -p, --password=PASSWORD
-
-    *PASSWORD* is DB user's password.
-    
 .. option:: -s, --summary
 
     This option outputs only summarized information(it omits query execution information or locking information).
@@ -2920,7 +2912,7 @@ The following shows [options] available with the **cubrid tranlist** utility.
 killtran
 --------
 
-The **cubrid killtran** is used to check transactions or abort specific transaction. Only a DBA can execute this utility. ::
+The **cubrid killtran** is used to check transactions or abort specific transaction. Only a **DBA** can use options for killing a transaction. ::
 
     cubrid killtran [options] database_name
 
@@ -2991,6 +2983,7 @@ The following shows [options] available with the **cubrid killtran** utility.
 
 .. option:: -p PASSWORD
 
+    This option can only be used, if using killing option such as -i and --kill options.
     A value followed by the -p option is a password of the **DBA**, and should be entered in the prompt.
 
 .. option:: -q, --query-exec-info

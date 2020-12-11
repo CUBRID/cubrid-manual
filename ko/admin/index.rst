@@ -42,6 +42,10 @@ CUBRID 운영
 
     *   :ref:`cubrid heartbeat <cubrid-heartbeat>`
 
+*   자바 저장프로시저 서버 유틸리티: 자바 저장프로시저 서버를 구동 및 관리한다.
+    
+    *   :ref:`cubrid javasp <cubrid-javasp-server>`
+
 자세한 설명은 :ref:`control-cubrid-processes` 절을 참조한다.
 
 데이터베이스 관리 유틸리티는 다음과 같다.

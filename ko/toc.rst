@@ -21,6 +21,8 @@ CUBRID 데이터베이스 관리 시스템(Database Management System, DBMS) 매
 
 *   :doc:`admin/index`: 데이터베이스를 생성, 삭제, 백업, 복구 및 마이그레이션하는 방법, 다국어(globalization)를 설정하는 방법 및 CUBRID HA를 수행하는 방법에 대해 설명한다. 또한 서버, 브로커 및 CUBRID Manager 서버 등을 구동하고 종료시키는 **cubrid** 유틸리티의 사용법에 대한 설명도 포함한다. 또한 이 장에서는 성능에 영향을 미칠 수 있는 시스템 파라미터를 설정하는 방법도 설명한다. 서버와 브로커에서 사용하는 설정 파일과 각 파라미터에 대해서도 설명한다.
 
+*   :doc:`security`: 패킷 암호화, 서버 접근제어, 권한 관리, TDE(Transparent Data Encryption) 등 CUBRID에서 제공하는 보안 기능에 대해 설명한다.
+
 *   :doc:`api/index`: JDBC API, ODBC API, OLE DB API, PHP API 및 CCI API에 대해 설명한다.
 
 *   :doc:`release_note/index`: 이전 버전 대비 추가, 변경, 개선 및 버그 수정 등을 설명한다.

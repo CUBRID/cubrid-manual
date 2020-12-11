@@ -21,6 +21,8 @@ The contents of the CUBRID Database Management System (CUBRID DBMS) product manu
 
 *   :doc:`admin/index`: This chapter provides instructions on how to create, drop, back up, restore and migrate a database, configuring globalization, and executing CUBRID HA. Also it includes instructions on how to use the  **cubrid** utility, which starts and stops the server, broker, and CUBRID Manager server, etc. Also, this chapter provides instructions on setting system parameters that may influence the performance. It provides information on how to use the configuration file for the server and broker, and describes the meaning of each parameter.
 
+*   :doc:`security`: This chapter describes the CUBRID security features such as packet encryption, ACL(Access Control List), authorization, and TDE(Transparent Data Encryption).
+
 *   :doc:`api/index`: The "Performance Tuning" chapter provides instructions on setting system parameters that may influence the performance. This chapter provides information on how to use the configuration file for the server and broker, and describes the meaning of each parameter.
 
 *   :doc:`release_note/index`: This chapter provides a description of additions, changes, improvements and bug fixes.

@@ -40,6 +40,7 @@ cubrid 유틸리티의 사용법(구문)은 다음과 같다. ::
         dumplocale [option] <database-name>   --- 컴파일된 바이너리 로캘 정보를 사람이 읽을 수 있는 텍스트로 출력하는 도구
         gen_tz [option] [<database-name>]  --- 공유 라이브러리로 컴파일할 수 있는 타임존 데이터가 포함된 C 소스 파일 생성
         dump_tz [option]  --- 타임존 관련 정보 출력
+        tde <operation> [option] <database_name> --- TDE 암호화 관리 도구
 
 cubrid 유틸리티 로깅
 --------------------
@@ -289,6 +290,10 @@ createdb
     cubrid createdb --db-volume-size=512M --log-volume-size=256M cubriddb en_US
     cubrid addvoldb -S -n cubriddb_DATA01 --db-volume-size=512M cubriddb
     cubrid addvoldb -S -p temp -n cubriddb_TEMP01 --db-volume-size=512M cubriddb
+
+.. note:: **기존 키 파일을 사용하는 데이터베이스 생성**
+
+    데이터베이스가 생성될 때 기본적으로 키 파일이 함께 생성된다. 만약 데이터베이스 생성 시 기존 키 파일을 사용하고 싶다면, 먼저 키 파일을 <database-name>_keys 이름으로 복사해 둔다. 이후 복사한 키 파일의 디렉토리를 **ted_keys_file_path** 시스템 파라미터에 지정하고 **createdb** 유틸리티를 통해 데이터베이스를 생성한다. TDE 키 파일에 관한 자세한 내용은 :ref:`tde-file-based-key` 를 참고한다.
     
 .. _adding-database-volume:    
 
@@ -780,13 +785,13 @@ compactdb
 
 *   **cubrid**: 큐브리드 서비스 및 데이터베이스 관리를 위한 통합 유틸리티이다.
 
-*   **compactdb**: 대상 데이터베이스에 대하여 삭제된 데이터에 할당되었던 OID가 재사용될 수 있도록 공간을 정리하는 명령으로서, 데이터베이스가 구동 정지 상태인 경우에만 정상적으로 수행된다.
+*   **compactdb**: 대상 데이터베이스에 대하여 삭제된 데이터에 할당되었던 OID가 재사용될 수 있도록 공간을 정리하는 명령입니다. 
 
 *   *database_name*: 공간을 정리할 데이터베이스의 이름이며, 데이터베이스가 생성될 디렉터리 경로명을 포함하지 않는다.
 
-*   *class_name_list*: 공간을 정리할 테이블 이름 리스트를 데이터베이스 이름 뒤에 직접 명시할 수 있으며, **-i** 옵션과 함께 사용할 수 없다. 클라이언트/서버 모드에서만 명시할 수 있다.
+*   *class_name_list*: 공간을 정리할 테이블 이름 리스트를 데이터베이스 이름 뒤에 직접 명시할 수 있으며, **-i** 옵션과 함께 사용할 수 없다. 클라이언트/서버 모드에서 사용한 경우 catalog, delete files 그리고 tracker와 같은 객체에 대한 정리 작업을 수행하지 않는다.
 
-클라이언트/서버 모드에서만 **-I**, **-i**, **-c**, **-d**, **-p** 옵션을 사용할 수 있다.
+클라이언트/서버 모드에서만 **-I**, **-c**, **-d**, **-p** 옵션을 사용할 수 있다.
 
 다음은 **cubrid compactdb** 에 대한 [options]이다.
 
@@ -807,13 +812,13 @@ compactdb
 
 .. option:: -C, --CS-mode
 
-    **-C** 옵션은 데이터베이스 서버가 구동 중인 상태에서 클라이언트/서버 모드로 공간 정리 작업을 수행하기 위해 지정되며, 인수는 없다. **-C** 옵션이 생략되더라도 시스템은 기본적으로 클라이언트/서버 모드로 인식한다. 클라이언트/서버 모드에서만 -I, -i, -c, -d, -p 옵션을 사용할 수 있다.
-
-다음은 클라이언트/서버 모드에서만 사용할 수 있는 옵션이다.
+    **-C** 옵션은 데이터베이스 서버가 구동 중인 상태에서 클라이언트/서버 모드로 공간 정리 작업을 수행하기 위해 지정되며, 인수는 없다. **-C** 옵션이 생략되더라도 시스템은 기본적으로 클라이언트/서버 모드로 인식한다. 
 
 .. option:: -i, --input-class-file=FILE
 
-    대상 테이블 이름을 포함하는 입력 파일 이름을 지정할 수 있다. 라인 당 하나의 테이블 이름을 명시하며, 유효하지 않은 테이블 이름은 무시된다. 이 옵션을 지정하는 경우, 데이터베이스 이름 뒤에 대상 테이블 이름 리스트를 직접 명시할 수 없으므로 주의한다.
+    대상 테이블 이름을 포함하는 입력 파일 이름을 지정할 수 있다. 라인 당 하나의 테이블 이름을 명시하며, 유효하지 않은 테이블 이름은 무시된다. 이 옵션을 지정하는 경우, 데이터베이스 이름 뒤에 대상 테이블 이름 리스트를 직접 명시할 수 없으므로 주의한다. 클라이언트/서버 모드에서 사용한 경우 catalog, delete files 그리고 tracker와 같은 객체에 대한 정리 작업을 수행하지 않는다.
+
+다음은 클라이언트/서버 모드에서만 사용할 수 있는 옵션이다.
 
 .. option:: -p, --pages-commited-once=NUMBER
 
@@ -2768,7 +2773,7 @@ lockdb
 tranlist
 --------
 
-**cubrid tranlist** 는 대상 데이터베이스의 트랜잭션 정보를 확인하는 유틸리티로서, DBA 또는 DBA그룹 사용자만 수행할 수 있다. ::
+**cubrid tranlist** 는 대상 데이터베이스의 트랜잭션 정보를 확인하는 유틸리티이다. ::
 
     cubrid tranlist [options] database_name
 
@@ -2826,14 +2831,6 @@ tranlist
 
 .. program:: tranlist
 
-.. option:: -u, --user=USER
-
-    로그인할 사용자 ID. DBA및 DBA그룹 사용자만 허용한다.(기본값 : DBA)
-    
-.. option:: -p, --password=PASSWORD
-
-    사용자 비밀번호
-    
 .. option:: -s, --summary
 
     요약 정보만 출력한다(질의 수행 정보 또는 잠금 관련 정보를 생략).
@@ -2901,7 +2898,7 @@ tranlist
 killtran
 --------
 
-**cubrid killtran** 은 대상 데이터베이스의 트랜잭션을 확인하거나 특정 트랜잭션을 강제 종료하는 유틸리티로서, **DBA** 사용자만 수행할 수 있다. ::
+**cubrid killtran** 은 대상 데이터베이스의 트랜잭션을 확인하거나 특정 트랜잭션을 강제 종료하는 유틸리티로서, **DBA** 사용자만 트랜잭션을 제거할 수 있다. ::
 
     cubrid killtran [options] database_name
 
@@ -2972,6 +2969,7 @@ killtran
 
 .. option:: -p, --dba-password=PASSWORD
 
+    -i 또는 --kill 옵션들이 사용될 경우에만 해당 옵션을 사용할 수 있다.
     이 옵션 뒤에 오는 값은 **DBA** 의 암호이며 생략하면 프롬프트에서 입력해야 한다.
 
 .. option:: -q, --query-exec-info
@@ -3192,6 +3190,89 @@ paramdump
     클라이언트-서버 모드에서 서버 프로세스의 파라미터 정보를 출력한다. ::
 
         cubrid paramdump -C demodb
+
+.. _tde-utility:
+
+tde
+---
+
+**cubrid tde** 유틸리티는 데이터베이스의 TDE 암호화를 관리하기 위하여 사용되며, **DBA** 사용자만 수행할 수 있다. **cubrid tde** 유틸리티를 사용하면 데이터베이스에 등록된 키를 변경할 수 있고, 키 파일에 새로운 키를 안정적으로 추가하고 제거할 수 있다. 또한, 지금까지 키 파일에 추가된 키들과 데이터베이스에 등록된 키가 무엇인지 조회할 수 있다. 자세한 내용은 :ref:`tde` 을 참고한다.
+
+::
+
+    cubrid tde operation [option] database_name
+
+*   **cubrid**: CUBRID 서비스 및 데이터베이스 관리를 위한 통합 유틸리티
+
+*   **tde**: 대상 데이터베이스에 적용된 TDE 암호화에 대한 관리 도구
+
+*   *operation*: 도구를 통한 수행할 작업을 지정한다. 키 조회, 키 추가, 키 제거, 키 변경 네 가지 종류가 있으며 하나의 작업이 주어져야 한다.
+
+*   *database_name*: TDE 관리 작업을 수행하려는 데이터베이스 이름
+
+다음은 **cubrid tde** 에 대한 오퍼레이션 (operation)에 대한 설명이다. 다음 중 하나의 작업이 주어져야 한다.
+
+.. program:: tde
+
+.. option:: -s, --show-keys
+
+    데이터베이스에 등록된 키와 키 파일 (_keys)내의 키들에 대한 정보를 출력한다.  ::
+
+        $ cubrid tde -s testdb
+        Key File: /home/usr/CUBRID/databases/testdb/testdb_keys
+
+        The current key set on testdb:
+        Key Index: 2
+        Created on Fri Nov 27 11:14:54 2020
+        Set     on Fri Nov 27 11:15:30 2020
+
+        Keys Information: 
+        Key Index: 0 created on Fri Nov 27 11:11:27 2020
+        Key Index: 1 created on Fri Nov 27 11:14:47 2020
+        Key Index: 2 created on Fri Nov 27 11:14:54 2020
+        Key Index: 3 created on Fri Nov 27 11:14:55 2020
+
+        The number of keys: 4
+
+    **The current key** 정보는 현재 데이터베이스에 등록된 키의 정보이다. 키 파일내에서의 인덱스와 키의 생성시간, 등록된 시간을 출력해준다. 키 인덱스와 생성시간으로 등록된 키를 식별할 수 있고, 등록된 시간을 통해 키 변경 계획을 수립할 수 있다.
+
+    **Keys Information** 은 키 파일 내에서 생성되어 관리되고 있는 키들을 보여준다. 키 인덱스와 생성시간을 확인할 수 있다.	
+
+.. option:: -n, --generate-new-key
+
+    키 파일 (_keys)에 새로운 키를 추가한다 (최대 128개). 성공할 경우 추가된 키의 인덱스를 출력해주며, 이 인덱스는 이후 키를 변경하거나 제거할 때에 키를 식별하기 위하여 사용된다. 추가된 키들의 정보는 \\-\\-show-keys 를 통해 확인할 수 있다. ::
+
+        $ cubrid tde -n testdb
+        Key File: /home/usr/CUBRID/databases/testdb/testdb_keys
+
+        SUCCESS: A new key has been generated - key index: 1 created on Tue Dec  1 11:30:47 2020
+
+.. option:: -d, --delete-key=KEY_INDEX
+
+    키 파일 (-keys)에서 인덱스로 지정된 키 하나를 제거한다. 현재 데이터베이스에 등록된 키는 제거할 수 없다. ::
+
+        $ cubrid tde -d 1 testdb
+        Key File: /home/usr/CUBRID/databases/testdb/testdb_keys
+
+        SUCCESS: The key (index: 1) has been deleted
+
+.. option:: -c, --change-key=KEY_INDEX
+
+    데이터베이스에 등록된 키를 키 파일 (_keys)에 존재하는 다른 키로 변경한다. 변경 시에 이전에 등록된 키와 새로 등록하려는 키가 모두 존재해야 한다.
+
+        $ cubrid tde -c 2 testdb
+        Key File: /home/usr/CUBRID/databases/testdb/testdb_keys
+
+        Trying to change the key from the key (index: 0) to the key (index: 2)..
+        SUCCESS: The key has been changed from the key (index: 0) to the key (index: 2)
+
+    데이터베이스에 등록된 키를 변경하기 위해서는 먼저 \\-\\-generate-new-key 를 통해 등록할 키를 생성해야 한다. 사용자는 키 변경을 위해 새로운 키를 생성할 수 있고, 미리 여러 키를 생성해 두고 보안 계획에 따라 키를 변경할 수 있다.
+
+다음은 **cubrid tde** 에서 사용하는 [options]이다.
+
+.. option:: -p, --dba-password=PASSWORD
+
+    이 옵션 뒤에 오는 값은 **DBA** 의 암호이며 생략하면 프롬프트에서 입력해야 한다.
 
 HA 명령어
 ---------

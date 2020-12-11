@@ -61,7 +61,7 @@ Installing and Configuring JDBC
 
 **Installing Java and Configuring Environment**
 
-You must already have Java installed and the **JAVA_HOME** environment variable configured in your system. You can download Java from the Developer Resources for Java Technology website ( https://www.oracle.com/java/technologies/ ). For more information, please see :ref:`jsp-environment-configuration`.
+You must already have Java installed and the **JAVA_HOME** environment variable configured in your system. You can download Java from the Developer Resources for Java Technology website ( https://www.oracle.com/java/technologies/ ).
 
 **Configuring the environment variables for Windows**
 
@@ -856,7 +856,7 @@ You can get the **LOB** type data in the following ways.
      
     // Getting data directly from ResetSet
     PrepareStatement pstmt1 = conn.prepareStatement("SELECT content FROM doc_t WHERE doc_id = ? ");
-    pstmt2.setString(1, "doc-10");
+    pstmt1.setString(1, "doc-10");
     ResultSet rs = pstmt1.executeQuery();
     
     while (rs.next())

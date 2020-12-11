@@ -9,8 +9,63 @@ CUBRID 보안
 
 패킷 암호화
 ===========
+패킷 암호화 필요성
+-------------------
+클라이언트와 서버 간에 암호화 연결을 사용하지 않을 경우, 네트워크에 접근 가능한 해커가 모든 트래픽을 감시하고 클라이언트와 서버 간에 주고받는 데이터를 탈취하여 악용할 수 있다.
+이렇게 제3자(중간자)가 정보를 탈취하여 악용하는 것을 중간자 (MITM, Man in the Middle) 공격이라 한다. 이 중간자 공격은 클라이언트와 서버간 연결에 보안 인증 절차를 추가하여 방지할 수 있다.
 
 .. _access-control:
+
+패킷 암호화 방법
+------------------------
+큐브리드는 클라이언트와 서버 간에 전송되는 데이터를 암호화 하기 위해 SSL/TLS (Secure Socket Layer/Transport Layer Security) 프로토콜을 사용한다. 
+큐브리드 서버는 암호화를 위해 OpenSSL을 사용하였으며, 클라이언트는 JDBC, CCI Driver를 이용하여 암호화 연결을 할 수 있다.
+클라이언트와 서버 간에 지원하는 암호화 프로토콜은 SSLv3, TLSv1, TLSv1.1, TLSv1.2 이다.
+
+.. note:: **SSL/TLS**
+
+	SSL 란 네트워크를 통해 작동하는 클라이언트와 서버 간에 인증 및 데이터 암호화를 제공하는 암호화 프로토콜로 Netscape에 의해 처음 개발 되었다. Nescape는 1996년 보안 결함을 개선한 3.0 버전을 릴리즈하였다.
+	SSL 3.0 버전은 TLS 1.0의 기초가 되고, 1999년 1월 IETF에서 `RFC2246 <https://tools.ietf.org/html/RFC2246>`_ 표준 규약으로 정의되었고. 마지막 갱신은 `RFC5246 <https://tools.ietf.org/html/RFC5246>`_ 이다. TLS는 SSL 3.0 을 기반으로 정의되었기 때문에 SSL 3.0과 거의 유사하다.
+
+	SSL/TLS 은 서버 인증(Server Authentication), 클라이언트 인증(Client Authentication) 그리고 데이터 암호화(Data Encryption) 기능을 제공한다.
+	인증(Authentication)은 상대방이 맞는지 확인하는 절차를 의미하며, 암호화는 데이터를 탈취 하더라도 내용을 열람할 수 없게 하는 것을 의미한다.
+
+
+패킷 암호화를 위한 서버 설정
+-----------------------------
+**암호화 모드 및 비암호화 모드 설정**
+
+큐브리드는 암호화 모드 또는 비암호화 모드를 설정할 수 있으며, 기본은 비암호화 모드이다.
+암호화 모드로 변경하기 위해서는 cubrid_broker.conf 의 SSL 파라메터 값을 변경하여 암호화 모드로 설정 할 수 있다.
+cubrid_broker.conf 의 SSL 파라메터 값을 변경하였다면 반드시 브로커를 재 시작해야 한다.
+자세한 설정 방법은 :ref:`broker-configuration`\ 을 참조한다.
+
+
+**인증서 (Certificate) 와 개인키 (Private Key)**
+
+SSL은 대칭형(symmetric)키를 이용하여 송수신 데이터를 암호화한다 (클라이언트와 서버가 같은 세션키를 공유하여 암복호함). 클라이언트가 서버에 연결할 때마다 새롭게 생성되는 세션키를 암호화한 형태로 교환하기 위해서 비 대칭 (asymmetric) 암호화 알고리즘을 사용하며, 이를 위해서 서버의 공개키와 개인키가 필요하다.
+
+공개키는 인증서에 포함되어 있으며, 인증서와 개인키는 $CUBRID/conf 디렉터리에 있으며 각각의 파일명은 'cas_ssl_cert.crt' 와 'cas_ssl_cert.crt' 이다. 이 인증서는 OpenSSL의 명령어 도구를 이용하여 생성된 것이며 'self-signed' 형태의 인증서이다.
+
+사용자가 원하는 경우 IdenTrust나 DigiCert와 같은 공인 인증기관에서 발급 받은 인증서로 대체 가능하며, OpenSSL 명령어 도구로 새롭게 생성하여 대체하는 것도 가능하다. 아래의 예는 OpenSSL 명령어 도구를 이용하여 개인키와 인증서를 생성하는 것이다.
+
+.. code-block:: bash
+
+	$ openssl genrsa -out my_cert.key 2048                                               # 2048 bit 크기의 RSA 개인키 생성
+	$ openssl req -new -key my_cert.key -out my_cert.csr                                 # 인증요청서 CSR (Certificate Signing Request)
+	$ openssl x509 -req -days 365 -in my_cert.csr -signkey my_cert.key -out my_cert.crt  # 1년 유효한 인증서 생성
+
+위에서 생성된 my_cert.key 와 my_cert.crt 를 각각 $CUBRID/conf/cas_ssl_cert.key와 $CUBRID/conf/cas_ssl_cert.crt로 대체하면 된다.
+
+
+지원하는 드라이버
+----------------------
+큐브리드는 다양한 드라이버를 재공하고 있으나, 현재 패킷 암호화 연결을 지원하는 드라이버는 JDBC, CCI 이다.
+
+**암호화 연결 방법**
+
+클라이언트는 드라이버 연결 설정 중 db-url의 useSSL property를 사용하여 서버와 암호화 연결을 할 수 있다.
+자세한 사용 방법은 JDBC 드라이버의 :ref:`jdbc-connection-conf`\  또는 CCI 드라이버의 :ref:`cci_connect_with_url`\ 을 참고한다. 
 
 서버 접근제어
 =============

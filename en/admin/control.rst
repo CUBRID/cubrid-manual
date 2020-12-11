@@ -1,6 +1,6 @@
 
-:meta-keywords: cubrid server process, cub_server, cubrid broker, cubrid cas, cubrid manager server, cubrid HA, cubrid services, cubrid logging, cubrid errors, cubrid server access, cubrid status, cubrid manager
-:meta-description: How to control and check CUBRID services and processes (server, broker), logging files, access, errors, and CUBRID Manager.
+:meta-keywords: cubrid server process, cub_server, cubrid broker, cubrid cas, cubrid manager server, cubrid HA, cubrid services, cubrid logging, cubrid errors, cubrid server access, cubrid status, cubrid manager, cubrid javasp, cub_javasp
+:meta-description: How to control and check CUBRID services and processes (server, broker), logging files, access, errors, CUBRID Manager and CUBRID Java SP Server.
 
 .. _control-cubrid-processes:
 
@@ -104,6 +104,25 @@ The following **cubrid heartbeat** utility syntax shows how to use CUBRID HA. On
 
 For details, see :ref:`cubrid-heartbeat`.
 
+Controlling CUBRID Java Stored Procedure Server
+------------------------------------------------
+
+The following **cubrid** utility syntax shows how to control CUBRID Java Stored Procedure server process.
+
+::
+
+    cubrid javasp <command> [database_name]
+    <command>: {start|stop|restart|status}
+
+One of the following can be specified in <command>: 
+
+*   start: start a Java Stored Procedure server process.
+*   stop: stop a Java Stored Procedure server process.
+*   restart: restart a Java Stored Procedure server process.
+*   status: check status of a Java Stored Procedure server process.
+
+Every command must have a database name as an argument.
+
 .. _control-cubrid-services:
 
 CUBRID Services
@@ -112,11 +131,12 @@ CUBRID Services
 Registering Services
 --------------------
 
-You can register database servers, CUBRID brokers, CUBRID Manager(s) or CUBRID HA as CUBRID service in the configuration file ( **cubrid.conf** ). To register services, you can input for each **server**, **broker**, **manager** or **heartbeat** as a parameter value, and it is possible to input several values by concatenating them in comma(,).
+You can register database servers, CUBRID brokers, CUBRID Java Stored Procedure servers, CUBRID Manager(s) or CUBRID HA as CUBRID service in the configuration file ( **cubrid.conf** ). To register services, you can input for each **server**, **broker**, **javasp**, **manager** or **heartbeat** as a parameter value, and it is possible to input several values by concatenating them in comma(,).
 
 If you do not register any service, only master process is registered by default. It is convenient for you to view status of all related processes at a glance or start and stop the processes at once with the **cubrid** **service** utility once it is registered as CUBRID service. 
 
-For details on CUBRID HA configuration, see :ref:`cubrid-service-util`.
+- For details on CUBRID HA configuration, see :ref:`cubrid-service-util`.
+- For details on CUBRID Java Stored Procedure server configuration, see :ref:`cubrid-javasp-server-config`.
 
 The following example shows how to register database server and broker as service in the **cubrid.conf** file and enable databases ( *demodb* and *testdb* ) to start automatically at once when CUBRID server starts running.
 
@@ -128,11 +148,11 @@ The following example shows how to register database server and broker as servic
     [service]
 
     # The list of processes to be started automatically by 'cubrid service start' command
-    # Any combinations are available with server, broker, manager and heartbeat.
+    # Any combinations are available with server, broker, manager, javasp and heartbeat.
     service=server,broker
 
     # The list of database servers in all by 'cubrid service start' command.
-    # This property is effective only when the above 'service' property contains 'server' keyword.
+    # This property is effective only when the above 'service' property contains 'server' or 'javasp' keyword.
     server=demodb,testdb
 
 Starting Services
@@ -2142,3 +2162,358 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
         ::
 
             cm_admin changedbinfo -p 33000 testcm testdb
+
+.. _cubrid-javasp-server:
+
+CUBRID Java Stored Procedure Server
+===================================
+
+Starting CUBRID Java SP Server
+------------------------------
+
+The following example shows how to start CUBRID Java SP server for *demodb*.
+
+To start the Java SP server, the **java_stored_procedure parameter** in the CUBRID configuration file (**cubrid.conf**) must set to yes.
+
+::
+
+    % cubrid javasp start demodb
+
+    @ cubrid javasp start: demodb
+    ++ cubrid javasp start: success
+
+The following message is returned if CUBRID Java SP server is already running. 
+
+::
+
+    % cubrid javasp start demodb
+
+    @ cubrid javasp start: demodb
+    ++ cubrid javasp 'demodb' is running.
+
+For details on other types of errors that may occur when starting the server, see :ref:`cubrid-javasp-server-errors`.
+
+Stopping CUBRID Java SP Server
+------------------------------
+
+The following example shows how to stop CUBRID Java SP server for *demodb*. 
+
+::
+
+    % cubrid javasp stop demodb
+
+    @ cubrid javasp stop: demodb
+    ++ cubrid javasp stop: success
+
+The following message is returned when CUBRID Java SP server has been stopped already.
+
+::
+
+    % cubrid javasp stop demodb
+
+    @ cubrid javasp stop: demodb
+    ++ cubrid javasp 'demodb' is not running.
+    ++ cubrid javasp stop: fail
+
+Restarting CUBRID Java SP Server
+--------------------------------
+
+The following example shows how to restart CUBRID Java SP server for *demodb*. the server that has already run stops and the server restarts. 
+
+::
+
+    % cubrid javasp restart demodb
+    
+    @ cubrid javasp stop: demodb
+    ++ cubrid javasp stop: success
+    @ cubrid javasp start: demodb
+    ++ cubrid javasp start: success
+
+Checking CUBRID Java SP Server Status
+-------------------------------------
+
+The following example shows how to check the status of a CUBRID Java SP server for *demodb*. 
+The database name of Java SP server, which currently running, *demodb* is displayed.
+Additionally, The server's PID, port number, and the applied JVM option are shown together.
+
+::
+
+    % cubrid javasp status demodb
+    
+    @ cubrid javasp status: demodb
+    Java Stored Procedure Server (demodb, pid 9220, port 38408)
+    Java VM arguments :
+    -------------------------------------------------
+    -Djava.util.logging.config.file=/path/to/CUBRID/java/logging.properties
+    -Xrs
+    -------------------------------------------------
+
+.. _cubrid-javasp-server-config:
+
+Configuring for CUBRID Java SP Server
+-------------------------------------
+
+.. _cubrid-javasp-environment-configuration:
+
+Environment Configuration for Java Stored Function/Procedure
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To use Java-stored functions/procedures in CUBRID, you must have JRE (Java Runtime Environment) 1.6 or later installed in the environment where the CUBRID server is installed. You can download JRE from the Developer Resources for Java Technology (`https://www.oracle.com/java/technologies <https://www.oracle.com/java/technologies>`_).
+
+CUBRID 64-bit needs a 64-bit Java Runtime Environment, and CUBRID 32-bit needs a 32-bit Java Runtime Environment. For example, when you run CUBRID 64-bit in the system in which a 32-bit JAVA Runtime Environment is installed, the following error may occur. ::
+
+    % cubrid javasp start demodb
+
+    Java VM library is not found:
+        Failed to get 'JVM_PATH' environment variable.
+        Failed to load libjvm from 'JAVA_HOME' environment variable:
+            /usr/java/jdk1.6.0_15/jre/lib/amd64/server/libjvm.so: cannot open shared object file: No such file or directory.
+
+Execute the following command to check the JRE version if you have it already installed in the system. ::
+
+    % java -version Java(TM) SE Runtime Environment (build 1.6.0_05-b13)
+    Java HotSpot(TM) 64-Bit Server VM (build 10.0-b19, mixed mode)
+
+**Windows Environment**
+
+For Windows, CUBRID loads the **jvm.dll** file to run the Java Virtual Machine. CUBRID first locates the **jvm.dll** file from the **PATH** environment variable and then loads it. If it cannot find the file, it uses the Java runtime information registered in the system registry.
+
+You can configure the **JAVA_HOME** environment variable and add the directory in which the Java executable file is located to **Path**, by executing the command as follows: For information on configuring environment variables using GUI, see Installing and Configuring JDBC.
+
+*   An example of installing 64 Bit JDK 1.6 and configuring the environment variables ::
+
+    % set JAVA_HOME=C:\jdk1.6.0
+    % set PATH=%PATH%;%JAVA_HOME%\jre\bin\server
+
+*   An example of installing 32 Bit JDK 1.6 and configuring the environment variables ::
+
+    % set JAVA_HOME=C:\jdk1.6.0
+    % set PATH=%PATH%;%JAVA_HOME%\jre\bin\client
+
+If you want to specify the path of Java Virtual Machine (JVM) explicitly including cases to use other vendor's implementation instead of Sun's JVM, add the path of the **jvm.dll** file to the **JVM_PATH** variable during the installation.
+CUBRID first looks for the **jvm.dll** file in the **JVM_PATH** variable. if **JVM_PATH** is not set or if the file cannot be loaded, it looks for the file in the **JAVA_HOME** variable as described above.
+
+*   An example of configuring the **JVM_PATH** environment variable ::
+    
+    % set JVM_PATH=C:\jdk1.6.0\jre\bin\server\libjvm.dll
+
+**Linux/UNIX Environment**
+
+For Linux/UNIX environment, CUBRID loads the **libjvm.so** file to run the Java Virtual Machine. CUBRID first locates the **libjvm.so** file from the **LD_LIBRARY_PATH** environment variable and then loads it. If it cannot find the file, it uses the **JAVA_HOME** environment variable. For Linux, glibc 2.3.4 or later versions are supported. The following example shows how to configure the Linux environment variable (e.g., **.profile**, **.cshrc**, **.bashrc**, **.bash_profile**, etc.).
+
+*   An example of installing 64 Bit JDK 1.6 and configuring the environment variables in a bash shell ::
+
+    % JAVA_HOME=/usr/java/jdk1.6.0_10
+    % LD_LIBRARY_PATH=$JAVA_HOME/jre/lib/amd64:$JAVA_HOME/jre/lib/amd64/server:$LD_LIBRARY_PATH
+    % export JAVA_HOME
+    % export LD_LIBRARY_PATH
+
+*   An example of installing 32 Bit JDK 1.6 and configuring the environment variables in a bash shell ::
+
+    % JAVA_HOME=/usr/java/jdk1.6.0_10
+    % LD_LIBRARY_PATH=$JAVA_HOME/jre/lib/i386/:$JAVA_HOME/jre/lib/i386/client:$LD_LIBRARY_PATH
+    % export JAVA_HOME
+    % export LD_LIBRARY_PATH
+
+*   An example of installing 64 Bit JDK 1.6 and configuring the environment variables in a csh shell ::
+
+    % setenv JAVA_HOME /usr/java/jdk1.6.0_10
+    % setenv LD_LIBRARY_PATH $JAVA_HOME/jre/lib/amd64:$JAVA_HOME/jre/lib/amd64/server:$LD_LIBRARY_PATH
+    % set path=($path $JAVA_HOME/bin .)
+
+*   An example of installing 32 Bit JDK 1.6 and configuring the environment variables in a csh shell ::
+
+    % setenv JAVA_HOME /usr/java/jdk1.6.0_10
+    % setenv LD_LIBRARY_PATH $JAVA_HOME/jre/lib/i386:$JAVA_HOME/jre/lib/i386/client:$LD_LIBRARY_PATH
+    % set path=($path $JAVA_HOME/bin .)
+
+If you want to specify the path of Java Virtual Machine (JVM) explicitly including cases to use other vendor's implementation instead of Sun's JVM, add the path of the **libjvm.so** file to the **JVM_PATH** variable during the installation.
+The path of the **libjvm.so** file can be different depending on the platform. For example, the path is the **$JAVA_HOME/jre/lib/sparc** directory in a SUN Sparc machine.
+CUBRID first looks for the **libjvm.so** file in the **JVM_PATH** variable. if **JVM_PATH** is not set or if the file cannot be loaded, it looks for the file in the **JAVA_HOME** variable as described above.
+
+*   An example of configuring the **JVM_PATH** environment variable ::
+    
+    % JVM_PATH=/usr/java/jdk1.6.0_10/jre/lib/amd64/server/libjvm.so
+    % export JVM_PATH
+
+.. _cubrid-javasp-system-parameter:
+
+Java SP Server System Parameters
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The following table shows the server paramters related to Java SP server available in the configuration file (**cubrid.conf**)
+
++-------------------------------------+--------+----------------+-----+-------+
+| Parameter Name                      | Type   | Default        | Min | Max   |
++-------------------------------------+--------+----------------+-----+-------+
+| java_stored_procedure               | bool   | no             |     |       |
++-------------------------------------+--------+----------------+-----+-------+
+| java_stored_procedure_port          | int    | 0              | 0   | 65535 |
++-------------------------------------+--------+----------------+-----+-------+
+| java_stored_procedure_jvm_options   | string |                |     |       |
++-------------------------------------+--------+----------------+-----+-------+
+
+For more details on these paramters, see :ref:`cubrid-conf`.
+
+.. _cubrid-javasp-service-util:
+
+Registering CUBRID Java SP Server to cubrid service
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If you register javasp to CUBRID service, you can use the utilities of **cubrid service** to start, stop or check all the registered javasp processes at once.
+
+- First, add **javasp** to the **service** parameter in the [**service**] section of the **cubrid.conf** file.
+- Second, To register the javasp server for a database, add the name of the database to the **server** parameter in the [**service**] section. Note that it shares the **server** parameter with the database server. a javasp server is dependent on the database server that has the same database name.
+- Finally, set **java_stored_procedure** as yes to enable starting the javasp server for the database.
+
+The following example shows how to register **javasp** server as service in the **cubrid.conf** file.
+Both *demodb* and *testdb* are present in the **server** property, but only demodb with **java_stored_procedure** set to yes is started by the **cubrid service start** command.
+
+::
+
+    # cubrid.conf
+
+    ...
+
+    [service]
+
+    ...
+
+    service=broker,server,javasp
+
+    # The list of database servers in all by 'cubrid service start' command.
+    # This property is effective only when the above 'service' property contains 'server' or 'javasp' keyword.
+    server=demodb,testdb
+
+    ...
+
+    [common]
+
+    ...
+
+    [@demodb]
+    java_stored_procedure=yes
+
+    [@testdb]
+    java_stored_procedure=no
+
+::
+
+    % cubrid service start
+    
+    @ cubrid master start
+    ++ cubrid master start: success
+    @ cubrid server start: demodb
+
+    This may take a long time depending on the amount of restore works to do.
+    CUBRID 10.2
+
+    ++ cubrid server start: success
+    @ cubrid server start: testdb
+
+    This may take a long time depending on the amount of recovery works to do.
+    CUBRID 10.2
+
+    ++ cubrid server start: success
+    @ cubrid javasp start: demodb
+    ++ cubrid javasp start: success
+    @ cubrid broker start
+    ++ cubrid broker start: success
+
+.. _cubrid-javasp-server-log:
+
+CUBRID Java SP Server Log
+-------------------------
+
+The logs of CUBRID Java SP server are stored in the **log/** directory under the installation directory. The following log files are created for CUBRID Java Stored Procedure Server per database.
+
+*   Error Log ($CUBRID/log/[db_name]_java.err)
+*   Java Log ($CUBRID/log/[db_name]_java.log)
+
+Error Log
+^^^^^^^^^
+
+An error log of the Java SP server for each database is saved into **$CUBRID/log** directory, and and the format of the file name is **<db_name>_java.err**. The extension is **.err**.
+
+::
+
+    demodb_java.err
+
+If any error occurs during starting the Java SP server, the error message is saved into the error log file.
+
+::
+
+    Time: 11/11/20 18:17:15.438 - ERROR *** file ../../src/jsp/jsp_sr.c, line 501 ERROR CODE = -900, Tran = -1, EID = 1
+    Java VM library is not found: 
+        Failed to get 'JVM_PATH' environment variable.
+        Failed to load libjvm from 'JAVA_HOME' environment variable:
+            /jre/lib/amd64/server/libjvm.so: cannot open shared object file: No such file or directory
+            /lib/server/libjvm.so: cannot open shared object file: No such file or directory.
+
+.. note::
+
+    For more details on what errors can be occured, see :ref:`cubrid-javasp-server-errors`.
+
+
+Java Log
+^^^^^^^^^
+
+An Java log of the JVM in the Java SP server is saved into **$CUBRID/log** directory, and the format of the file name is **<db_name>_java.log**. The extension is **.log**.
+
+::
+
+    demodb_java.log
+
+If any exception during performing java stored procedure/function occurs from JVM, the exception string is saved into the java log.
+
+::
+
+    SEVERE:
+    java.lang.NullPointerException
+    at Test.testFunction(Test.java:50)
+    ...
+    at com.cubrid.jsp.StoredProcedure.invoke(StoredProcedure.java:263)
+    at com.cubrid.jsp.ExecuteThread.run(ExecuteThread.java:197)
+
+.. _cubrid-javasp-server-errors:
+
+CUBRID Java SP Server Errors
+----------------------------
+
+The following are error messages about the errors which can be occurred in starting Java SP server.
+Error messages are written to **$CUBRID/log**/\ *<db_name>_java*\ **.err**.
+
++-------+----------------------------------+-----------------------------------------------------+-----------------------------------------------------------------------------------+
+| Error | Error Message                    | Description                                         | Solution                                                                          |
+| Code  |                                  |                                                     |                                                                                   |
++=======+==================================+=====================================================+===================================================================================+
+| -900  | Java VM library is not found: ?  | CUBRID can't find the JVM library                   | Make sure JAVA_HOME or JVM_PATH variable is set properly.                         |
+|       |                                  | from the JAVA_HOME or JVM_PATH variables            | see :ref:`cubrid-javasp-environment-configuration`.                               |
++-------+----------------------------------+-----------------------------------------------------+-----------------------------------------------------------------------------------+
+| -901  | Java VM can not be started: ?    | Unexpected internal error occured in JVM library.   | Try installing the JRE again. If you keep getting the error,                      |
+|       |                                  | The JVM library may be broken, or there may be a    | try installing a different version of the JRE.                                    |
+|       |                                  | problem with the $CUBRID/java/jspserver.jar file.   | Try replacing it with the same CUBRID version of $CUBRID/java/jspserver.jar file. |
++-------+----------------------------------+-----------------------------------------------------+-----------------------------------------------------------------------------------+
+
+The following are error messages about the errors which can be occurred when there is a problem with the connection to Java SP server including the case it is not started.
+Error messages are written to **$CUBRID/log/broker/error_log**/\ *<broker_name>_<app_server_num>*\ **.err**.
+
++-------+----------------------------------+-----------------------------------------------------+------------------------------------------------------------------------------------+
+| Error | Error Message                    | Description                                         | Solution                                                                           |
+| Code  |                                  |                                                     |                                                                                    |
++=======+==================================+=====================================================+====================================================================================+
+| -902  | Java VM is not running.          | Java SP server is not started                       | Start Java SP server by **cubrid javasp start <db_name>** command.                 |
+|       |                                  |                                                     | see :ref:`cubrid-javasp-server`.                                                   |
++-------+----------------------------------+-----------------------------------------------------+------------------------------------------------------------------------------------+
+| -903  | Can't connect Java VM: ?         | Java SP server cannot be connected from CAS.        | Restart the Java SP server. If the restart fails,                                  |
+|       |                                  | This can happen for many reasons.                   | try to shutdown **cub_javasp <db_name>** process forcibly                          |
+|       |                                  | For example, the Java SP server is unstable,        | with the Linux **kill** command. and restart the server again.                     |
+|       |                                  | the server is unreachable from CAS,                 |                                                                                    |
+|       |                                  | or the server is killed unexpectedly.               | Check if the port of the Java SP server through **cubrid javasp status <db_name>** |
+|       |                                  |                                                     | is reachable from CAS.                                                             |
+|       |                                  |                                                     | It could be that a firewall forbids the port. Open the port in the firewall.       |
+|       |                                  |                                                     | If required, set **java_stored_procedure_port** and restart the Java SP server     |
+|       |                                  |                                                     | see :ref:`connect-to-cubrid-server`.                                               |
++-------+----------------------------------+-----------------------------------------------------+------------------------------------------------------------------------------------+
+| -905  | Networking with JVM failed: ?    | CAS received invalid packet from the Java SP server |                                                                                    |
++-------+----------------------------------+-----------------------------------------------------+------------------------------------------------------------------------------------+

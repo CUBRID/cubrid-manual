@@ -35,11 +35,11 @@ To install CUBRID Python driver by compiling source code, you should have Python
 
 #.  Extract the archive to the desired location. ::
 
-        tar xvfz cubrid-python-src-8.4.0.0001.tar.gz
+        tar xvfz cubrid-python-10.2-latest.tar.gz
 
 #.  Navigate to the directory where you have extracted the source code. ::
 
-        cd cubrid-python-src
+        cd RB-10.2.0
 
 #.  Build the driver. At this and next step, make sure you are still under the root user. ::
 

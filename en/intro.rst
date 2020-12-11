@@ -29,9 +29,11 @@ CUBRID is an object-relational database management system (DBMS) consisting of t
 
 *   The CUBRID Manager is a GUI tool that allows users to remotely manage the database and the broker. It also provides the Query Editor, a convenient tool that allows users to execute SQL queries on the database server. 
 
+*   The CUBRID Java SP server is an execution server that processes Java stored procedures/functions requested from the database server.
+
 .. FIXME: For more information about CUBRID Manager, see http://www.cubrid.org/wiki_tools/entry/cubrid-manager.
 
-.. image:: /images/image1.png
+.. image:: /images/process_structure.png
 
 .. _database-volume-structure:
 
@@ -250,6 +252,7 @@ A stored procedure is a method to decrease the complexity of applications and to
 *   Create Java source files
 *   Compile the files and load Java resources
 *   Publish the loaded Java classes so they can be called from the database
+*   Run CUBRID Java SP server for the database (see :ref:`cubrid-javasp-server`)
 *   Call the Java stored procedures
 
 **Click Counter**
@@ -272,7 +275,10 @@ To address this issue, CUBRID introduces the new concept of the Click Counter th
     *   **MULTISET**: A collection type that allows the duplication of elements. The order of entry is not considered.
     *   **LIST**: A collection type that allows the duplication of elements. Unlike with **SET** and **MULTISET**, the order of entry is maintained.
 
+*   **JSON**
+
+    JavaScript Object Notation (JSON) has become the de facto standard for data-interchanging. JSON, one of the semi-structured data, is not allowed to reside in the relational data model. In CUBRID, however, you can create and query JSON documents using :ref:`SQL functions for JSON<json-fn>`. you can define a :ref:`JSON data type<json-data-type>` column and stores a JSON document into the column.
+
 *   **Inheritance**
 
     Inheritance is a concept to reuse columns and methods of a super class (table) in those of a sub class. CUBRID supports reusability through inheritance. By using inheritance provided by CUBRID, you can create a super class with some common columns and then create a sub class inherited from the super class with some unique columns added. In this way, you can create a database model which can minimize the number of columns.
-

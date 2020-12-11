@@ -534,4 +534,4 @@ The following steps describes migration scenario that can be applied while the e
 
 .. warning::
 
-    When using the TDE feature in CUBRID 11, it does not provide backward compatibility, so the unloaded file in CUBRID 11 cannot be loaded from a lower version.
+    When using the TDE feature in CUBRID 11, it does not provide backward compatibility, so the unloaded file in CUBRID 11 cannot be loaded into a lower version.

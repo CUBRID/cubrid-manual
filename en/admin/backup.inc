@@ -103,7 +103,7 @@ The following shows options available with the **cubrid backupdb** utility (opti
 
 .. option:: -k, --separate-keys
 
-   This option is used not to include the key file in the backup volume. The key file that is not included are separated into a file named **<database_name>_bk<backup_level>_keys**. If this option is not given, the key file is included in the backup volume by default. For a detailed description of key file separation, see :ref:`tde-enc-backup`.  ::
+   This option is used not to include the key file in the backup volume. The key file that is not included is separated into a file named **<database_name>_bk<backup_level>_keys**. If this option is not given, the key file is included in the backup volume by default. For a detailed description of key file separation, see :ref:`tde-enc-backup`.  ::
 
         cubrid backupdb --seprate-keys demodb
 
@@ -354,7 +354,7 @@ The following table shows options available with the **cubrid restoredb** utilit
 
         cubrid restoredb -u demodb
 
-.. option:: -k, --keys-file-path=path
+.. option:: -k, --keys-file-path=PATH
 
     This option specifies the path of a key file required to restore the database. If the valid key file is not given, it could fail to restore. If this option is not given, the appropriate key file is searched automatically according to a priority. For more information on this, refer to :ref:`tde-enc-backup`. ::
 

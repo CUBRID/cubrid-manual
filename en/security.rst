@@ -53,14 +53,14 @@ In CUBRID, a **table** is the unit for TDE-encryption. To use the TDE feature, c
 
 	CREATE TABLE tde_tbl (att1 INT, att2 VARCHAR(20)) ENCRYPT=AES;
 
-When an encrypted table is created, all data related to the table is automatically encrypted when written to disk, and decrypted when read into memory. Related data includes not only tables, but also indexes created on the table, temporary data created while executing queries related to the table, logs created when data is changed, DWB, and backups. For more details, see :ref:`tde-enc-target` and :ref:`tde-restriction`.
+When an encrypted table is created, all data related to the table is automatically encrypted when written to disk; and decrypted when read into memory. Related data includes not only tables but also indexes created on the table, temporary data created while executing queries related to the table, logs created when data is changed, DWB, and backups. For more details, see :ref:`tde-enc-target` and :ref:`tde-restriction`.
 
 .. _tde-key:
 
 Key Management
 --------------
 
-CUBRID uses symmetric key algorithms to encrypt the data. Keys used for encryption are managed in two levels consisting of master keys and data keys for efficiency. Master keys managed by the user is stored in a separate file, and CUBRID provides a utility to manage it.
+CUBRID uses symmetric key algorithms to encrypt the data. Keys used for encryption are managed in two levels consisting of master keys and data keys for efficiency. Master keys managed by the user are stored in a separate file, and CUBRID provides a utility to manage it.
 
 .. _tde-2level-key:
 
@@ -75,11 +75,11 @@ CUBRID TDE manages keys in two levels as follows:
   :alt: 2 Level Key Management Image
 
 *    **Master key**: A key used when encrypting and decrypting data keys, and is managed by DBA user.
-*    **Data Key**: A key used when encrypting user data such as table and log, and is managed by CUBRID Engine.
+*    **Data Key**: A key used when encrypting user data such as table and log, and it is managed by CUBRID Engine.
 
-Data keys are stored within the data volume and are always securely encrypted using a master key when written to disk. The master key is stored in a separate file and it must be managed safely according to a security policy users comply with.
+Data keys are stored within the data volume and are always securely encrypted using a master key when written to disk. The master key is stored in a separate file, and it must be managed safely according to the security policy users comply with.
 
-Managing keys in two levels makes it possible to efficiently perform the key change operation. If there is only a key that encrypts the user data, when you change the key, it takes a long time to work because all the data which has been encrypted has to be read, and decrypted and re-encrypted. Also, the overall performance of the database may be degraded during this process.
+Managing keys in two levels makes it possible to perform the key change operation efficiently. If there is only a key that encrypts the user data, it takes a long time to work when you change the key. All the data that has been encrypted has to be read, decrypted, and re-encrypted. Also, the overall performance of the database may be degraded during this process.
 
 .. warning:: **Loss of Master Key**
     
@@ -94,7 +94,7 @@ Master keys are separately stored and managed as a separate key file so that the
 
 By default, the key file is created with the name of **<database-name>_keys** at the location where the data volume is created when creating a database using **cubrid createdb** utility. Without additional configuration for the key file, this key file is automatically used. The location of the key file te be used can be changed by a system parameter. For more information, see :ref:`disk-parameters`.
 
-The key file can contain several master keys (up to 128). A master key among those keys is set on the database to encrypt the database, data keys technically. One master key is created and set by default when the key file is created, and DBA can add, delete, change, and search keys using the TDE utility (:ref:`TDE utility<tde-utility>`). When deleting a key, the key to delete must exist in the key file, and the key set on the database currently cannot be removed. When changing a key to set to encrypt database, both the previously key set on the database and the key to be set must exist in the key file. Through key inquiry, you can check the number of keys and creation time of them, and you can check the current key set on the database and setting time.
+The key file can contain several master keys (up to 128). A master key among those keys is set on the database to encrypt the database, data keys technically. One master key is created and set by default when the key file is created, and DBA can add, delete, change, and search keys using the TDE utility (:ref:`TDE utility<tde-utility>`). When deleting a key, the key to delete must exist in the key file, and the key set on the database currently cannot be removed. When changing a key to set to encrypt a database, both the previously key set on the database and the key to be set must exist in the key file. Through key inquiry, you can check the number of keys and creation time of them, and you can check the current key set on the database and setting time.
 
 .. code-block:: bash
 
@@ -135,7 +135,7 @@ The encrypted table data and all index data created on the table are encrypted. 
 Temporary Data Encryption
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In addition to persistent data such as tables, temporary data created during queries related to encrypted tables are also encrypted. For example, all temporary data created in the process of executing a query such as `SELECT * FROM tde_tbl ORDER BY att1` or creating an index on `tde_tbl` are encrypted when it is written to disk. For more information on temporary data, see :ref:`temporary-volumes`.
+In addition to persistent data such as tables, temporary data created during queries related to encrypted tables are also encrypted. For example, all temporary data created in executing a query such as `SELECT * FROM tde_tbl ORDER BY att1` or creating an index on `tde_tbl` are encrypted when it is written to disk. For more information on temporary data, see :ref:`temporary-volumes`.
 
 .. _tde-enc-log:
 
@@ -149,7 +149,7 @@ Since the data which has to be encrypted may be included in the REDO and UNDO lo
 DWB Encryption
 ^^^^^^^^^^^^^^
 
-Persistent data is temporarily written to the Double Write Buffer (DWB) before being written to the data volume. Even at this time, it may be encrypted because the data for the encrypted table can be included. For more information on DWB, see :ref:`database-volume`.
+Persistent data is temporarily written to the Double Write Buffer (DWB) before being written to the data volume. It may be encrypted even at this time because the data for the encrypted table can be included. For more information on DWB, see :ref:`database-volume`.
 
 .. _tde-enc-backup:
 
@@ -160,7 +160,7 @@ If there are encrypted data in data volumes and log volumes, they are also store
 
 **Backup Key File**
 
-The backup volume contains the key file by default. If the backup volume including the key file is leaked, it means the master key is also leaked, so there may be a security problem though the data in the volume is encrypted. To prevent this, you can backup the key file separately by using the **\\-\\-separate-keys** option. However, in the case of separating the key file, it must be managed carefully not to lose the key file for database restore. The separated backup key file is created in the same directory path as the backup volume and has the name **<database_name>_bk<backup_level>_keys**.
+The backup volume contains the key file by default. If the backup volume, including the key file, is leaked, meaning the master key is also leaked. There may be a security problem even though the data in the volume is encrypted. To prevent this, you can backup the key file separately by using the **\\-\\-separate-keys** option. However, in the case of separating the key file, it must be managed carefully to prevent losing the key file for database restore. The separated backup key file is created in the same directory path as the backup volume and has the name **<database_name>_bk<backup_level>_keys**.
 
 .. code-block:: bash
 
@@ -172,21 +172,21 @@ The backup volume contains the key file by default. If the backup volume includi
 
 **The key file used to restore**
 
-The key file separated during backup can be given as the key file to be used for restore by using the **\\-\\-keys-file-path** option (restoredb). If the valid key file does not exist in the specified path, restore fails.
+The key file separated during backup can be given as the key file for restoration by using the **\\-\\-keys-file-path** option (restoredb). If the valid key file does not exist in the specified path, restore fails.
 
 If the \\-\\-keys-file-path option is not given, the key file to be used is searched according to the following priority. If the valid key file cannot be found, recovery fails.
 
 *Key file classification*
 
 - Server key file: A key file that is generally used when running the server. It can be set with the tde_keys_file_path system parameter or in the default path same as the data volume.
-- Backup key file: A key file created during backup included in the backup volume, or separated by \\-\\-separate-keys option.
+- Backup key file: A key file created during backup included in the backup volume or separated by \\-\\-separate-keys option.
 
 *The priority of the key file to use for restore*
 
 #.  The backup key file that the backup volume contains
 #.  The backup key file created with the **\\-\\-separate-keys** option during backup (e.g. testdb_bk0_keys). This key file must exist in the same path as the backup volume.
 #.  The server key file in the path specified by the **tde-keys-file-path** system parameter.
-#.  The server key file in the same path as the data volume (e.g. testdb_keys).
+#.  The server key file in the same path as the data volume (e.g., testdb_keys).
 
  .. note::
 
@@ -204,7 +204,7 @@ If the \\-\\-keys-file-path option is not given, the key file to be used is sear
 
 .. note:: **The case in which the key is changed automatically after restore**
 
-  If the key set on the database does not exist in the server key file at the end of the restoration process, the backup key file is copied to the server key file, and the first key in the key file is arbitrarily set on the database for encrypting the database. This is because the key set on the database may not exist in any key file after the restore is complete.
+  Suppose the key set on the database does not exist in the server key file at the end of the restoration process. In that case, the backup key file is copied to the server key file, and the first key in the key file is arbitrarily set on the database for encrypting the database. This is because the key set on the database may not exist in any key file after the restore is complete.
 
 .. _tde-algorithm:
 
@@ -234,7 +234,7 @@ Advanced Encryption Algorithm (AES) is a specification established by the Nation
 Table Encryption Checking
 -------------------------
 
-You can check whether the table is encrypted or not by following three ways.
+You can check whether the table is encrypted by following three ways.
 
 SHOW CREATE TABLE
 ^^^^^^^^^^^^^^^^^
@@ -314,15 +314,15 @@ In the following cases, the TDE feature cannot be used, and an error occurs beca
 
 Even if the TDE module is not loaded, the server can start normally, and users can access unencrypted tables. This means that all DML and DDL such as SELECT and INSERT only for TDE-encrypted tables cannot be executed.
 
-However, the case log data has been encrypted is different. If the log data is encrypted when the TDE module is not loaded and the log is accessed by recovery, HA, VACUUM, etc., the system cannot be properly executed and the entire server has no option but to stop running server.
+However, the case log data has been encrypted is different. If the log data is encrypted when the TDE module is not loaded and the log is accessed by recovery, HA, VACUUM, etc., the system cannot be properly executed, and the entire server has no option but to stop running the server.
 
 .. _tde-restriction:
 
 TDE Restriction
 ---------------
 
-In addition to restrictions described above, there are the following.
+In addition to the restrictions described above, there are the following.
 
 #. The replication log is not encrypted in HA.
-#. CUBRID doesn't support the **ALTER TABLE** statement to change the TDE table option, which means you cannot set TDE to existing tables. If you want to do that, you need to move the data to the new table created with the TDE table option.
+#. CUBRID does not support the **ALTER TABLE** statement to change the TDE table option, which means you cannot set TDE to existing tables. If you want to do that, you need to move the data to the new table created with the TDE table option.
 #. SQL log is not encrypted. For more information on the SQL log, see :ref:`sql-log-manage`.

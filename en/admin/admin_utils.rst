@@ -3291,7 +3291,7 @@ The following table shows <operation> available with the cubrid tde utility.
         Trying to change the key from the key (index: 0) to the key (index: 2)..
         SUCCESS: The key has been changed from the key (index: 0) to the key (index: 2)
 
-    To change the key set on the database, a user must first create a key to be set by the \\-\\-generate-new-key option. The user can create a new key to change, or create multiple keys in advance, and change the key according to their own security plans.
+    To change the key set on the database, a user must first create a key to be set by the \\-\\-generate-new-key option. The user can create a new key to change, or create multiple keys in advance for changing the key according to their own security plans.
 
 The following table shows [options] available with the cubrid tde utility.
 

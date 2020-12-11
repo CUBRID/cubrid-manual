@@ -74,7 +74,7 @@ CUBRID TDE manages keys in two levels as follows:
   :align: center
   :alt: 2 Level Key Management Image
 
-*    **Master key**: A key used when encrypting and decrypting data keys, and is managed by DBA user.
+*    **Master key**: A key used when encrypting and decrypting data keys, and it is managed by DBA user.
 *    **Data Key**: A key used when encrypting user data such as table and log, and it is managed by CUBRID Engine.
 
 Data keys are stored within the data volume and are always securely encrypted using a master key when written to disk. The master key is stored in a separate file, and it must be managed safely according to the security policy users comply with.

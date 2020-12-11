@@ -46,7 +46,7 @@ CUBRID Environment Variables
 **CUBRID_TMP** can be used to avoid the following problems that can occur at the default path of the UNIX domain socket that CUBRID uses.
 
 *   **/tmp** is used to store the temporary files in Linux. If the system administrator periodically and voluntarily cleans the space, the UNIX domain socket may be removed. In this case, configure **$CUBRID_TMP** to another path, not **/tmp**.
-*   The maximum length of the UNIX socket path is 108. When the installation path of CUBRID is too long and the **$CUBRID/var/CUBRID_SOCK** path that store the UNIX socket path for cub_broker exceeds 108 characters, the broker cannot be executed. Therefore, the path of **$CUBRID_TMP** must not exceed 1008 characters.
+*   The maximum length of the UNIX socket path is 108. When the installation path of CUBRID is too long and the **$CUBRID/var/CUBRID_SOCK** path that store the UNIX socket path for cub_broker exceeds 108 characters, the broker cannot be executed. Therefore, the path of **$CUBRID_TMP** must not exceed 108 characters.
 
 The above mentioned environment variables are set when the CUBRID is installed. However, the following commands can be used to verify the setting.
 
@@ -74,7 +74,9 @@ OS Environment and Java Environment Variables
 
 *   Path: In the Windows environment, the **%CUBRID%\\bin**, which is a directory that contains CUBRID system's execution file, must be included in the **Path** environment variable.
 
-*   JAVA_HOME: To use the Java stored procedure in the CUBRID system, the Java Virtual Machine (JVM) version 1.6 or later must be installed, and the **JAVA_HOME** environment variable must designate the concerned directory. See the :ref:`jsp-environment-configuration`.
+*   JAVA_HOME: To use the Java stored procedure in the CUBRID system, the Java Virtual Machine (JVM) version 1.6 or later must be installed, and the **JAVA_HOME** environment variable must designate the concerned directory. See the :ref:`cubrid-javasp-server-config`.
+
+*   JVM_PATH: To use the Java stored procedure in the CUBRD system, the **JVM_PATH** environment variable can specify the JVM library (libjvm) path explicitly instead of finding the library from **JAVA_HOME**. See the :ref:`cubrid-javasp-server-config`.
 
 Configuring the Environment Variable
 ------------------------------------
@@ -158,55 +160,58 @@ This method can be used for the case that it is difficult to specify a specific 
 *   Add "%CUBRID%\\bin\\cub_master.exe" to open all ports for cub_master.
 *   Add "%CUBRID%\\bin\\cub_server.exe" to open all ports for cub_server.
 *   Add "%CUBRID%\\bin\\cub_cmserver.exe" to open all ports for the CUBRID Manager.
+*   Add "%CUBRID%\\bin\\cub_javasp.exe" to open all ports for the CUBRID Java SP server.
     
 If you use CUBRID for Linux at the broker machine or the DB server machine, all of Linux ports should be opened. 
 If you use CUBRID for Windows at the broker machine or the DB server machine, all of Linux ports should be opened or the related processes should be added to the program list allowed for the Windows firewall.
      
-+---------------+---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
-| Label         | Listener      | Requester     | Linux Port     | Windows Port                                        | Firewall Port Setting    | Description            |
-+===============+===============+===============+================+=====================================================+==========================+========================+
-| Default use   | cub_broker    | application   | BROKER_PORT    | BROKER_PORT                                         | Open                     | One-time connection    |
-|               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
-|               | CAS           | application   | BROKER_PORT    | APPL_SERVER_PORT ~ (APP_SERVER_PORT + # of CAS - 1) | Open                     | Keep connected         |
-|               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
-|               | cub_master    | CAS           | cubrid_port_id | cubrid_port_id                                      | Open                     | One-time connection    |
-|               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
-|               | cub_server    | CAS           | cubrid_port_id | A random available port                             | Linux: Open              | Keep connected         |
-|               |               |               |                |                                                     |                          |                        |
-|               |               |               |                |                                                     | Windows: Program         |                        |
-|               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
-|               | Client        | cub_server    | ECHO(7)        | ECHO(7)                                             | Open                     | Periodical connection  |
-|               | machine(*)    |               |                |                                                     |                          |                        |
-|               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
-|               | Server        | CAS, CSQL     | ECHO(7)        | ECHO(7)                                             | Open                     | Periodical connection  |
-|               | machine(**)   |               |                |                                                     |                          |                        |
-+---------------+---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
-| HA use        | cub_broker    | application   | BROKER_PORT    | Not supported                                       | Open                     | One-time connection    |
-|               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
-|               | CAS           | application   | BROKER_PORT    | Not supported                                       | Open                     | Keep connected         |
-|               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
-|               | cub_master    | CAS           | cubrid_port_id | Not supported                                       | Open                     | One-time connection    |
-|               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
-|               | cub_master    | cub_master    | ha_port_id     | Not supported                                       | Open                     | Periodical connection, |
-|               |               |               |                |                                                     |                          | check the heartbeat    |
-|               | (slave)       | (master)      |                |                                                     |                          |                        |
-|               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
-|               | cub_master    | cub_master    | ha_port_id     | Not supported                                       | Open                     | Periodical connection, |
-|               |               |               |                |                                                     |                          | check the heartbeat    |
-|               | (master)      | (slave)       |                |                                                     |                          |                        |
-|               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
-|               | cub_server    | CAS           | cubrid_port_id | Not supported                                       | Open                     | Keep connected         |
-|               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
-|               | Client        | cub_server    | ECHO(7)        | Not supported                                       | Open                     | Periodical connection  |
-|               | machine(*)    |               |                |                                                     |                          |                        |
-|               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
-|               | Server        | CAS, CSQL,    | ECHO(7)        | Not supported                                       | Open                     | Periodical connection  |
-|               | machine(**)   | copylogdb,    |                |                                                     |                          |                        |
-|               |               | applylogdb    |                |                                                     |                          |                        |
-+---------------+---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
-| Manager use   | Manager       | application   | 8001           | 8001                                                | Open                     |                        |
-|               | server        |               |                |                                                     |                          |                        |
-+---------------+---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
++---------------+---------------+---------------+----------------------------+-----------------------------------------------------+--------------------------+------------------------+
+| Label         | Listener      | Requester     | Linux Port                 | Windows Port                                        | Firewall Port Setting    | Description            |
++===============+===============+===============+============================+=====================================================+==========================+========================+
+| Default use   | cub_broker    | application   | BROKER_PORT                | BROKER_PORT                                         | Open                     | One-time connection    |
+|               +---------------+---------------+----------------------------+-----------------------------------------------------+--------------------------+------------------------+
+|               | CAS           | application   | BROKER_PORT                | APPL_SERVER_PORT ~ (APP_SERVER_PORT + # of CAS - 1) | Open                     | Keep connected         |
+|               +---------------+---------------+----------------------------+-----------------------------------------------------+--------------------------+------------------------+
+|               | cub_master    | CAS           | cubrid_port_id             | cubrid_port_id                                      | Open                     | One-time connection    |
+|               +---------------+---------------+----------------------------+-----------------------------------------------------+--------------------------+------------------------+
+|               | cub_server    | CAS           | cubrid_port_id             | A random available port                             | Linux: Open              | Keep connected         |
+|               |               |               |                            |                                                     |                          |                        |
+|               |               |               |                            |                                                     | Windows: Program         |                        |
+|               +---------------+---------------+----------------------------+-----------------------------------------------------+--------------------------+------------------------+
+|               | Client        | cub_server    | ECHO(7)                    | ECHO(7)                                             | Open                     | Periodical connection  |
+|               | machine(*)    |               |                            |                                                     |                          |                        |
+|               +---------------+---------------+----------------------------+-----------------------------------------------------+--------------------------+------------------------+
+|               | Server        | CAS, CSQL     | ECHO(7)                    | ECHO(7)                                             | Open                     | Periodical connection  |
+|               | machine(**)   |               |                            |                                                     |                          |                        |
++---------------+---------------+---------------+----------------------------+-----------------------------------------------------+--------------------------+------------------------+
+| HA use        | cub_broker    | application   | BROKER_PORT                | Not supported                                       | Open                     | One-time connection    |
+|               +---------------+---------------+----------------------------+-----------------------------------------------------+--------------------------+------------------------+
+|               | CAS           | application   | BROKER_PORT                | Not supported                                       | Open                     | Keep connected         |
+|               +---------------+---------------+----------------------------+-----------------------------------------------------+--------------------------+------------------------+
+|               | cub_master    | CAS           | cubrid_port_id             | Not supported                                       | Open                     | One-time connection    |
+|               +---------------+---------------+----------------------------+-----------------------------------------------------+--------------------------+------------------------+
+|               | cub_master    | cub_master    | ha_port_id                 | Not supported                                       | Open                     | Periodical connection, |
+|               |               |               |                            |                                                     |                          | check the heartbeat    |
+|               | (slave)       | (master)      |                            |                                                     |                          |                        |
+|               +---------------+---------------+----------------------------+-----------------------------------------------------+--------------------------+------------------------+
+|               | cub_master    | cub_master    | ha_port_id                 | Not supported                                       | Open                     | Periodical connection, |
+|               |               |               |                            |                                                     |                          | check the heartbeat    |
+|               | (master)      | (slave)       |                            |                                                     |                          |                        |
+|               +---------------+---------------+----------------------------+-----------------------------------------------------+--------------------------+------------------------+
+|               | cub_server    | CAS           | cubrid_port_id             | Not supported                                       | Open                     | Keep connected         |
+|               +---------------+---------------+----------------------------+-----------------------------------------------------+--------------------------+------------------------+
+|               | Client        | cub_server    | ECHO(7)                    | Not supported                                       | Open                     | Periodical connection  |
+|               | machine(*)    |               |                            |                                                     |                          |                        |
+|               +---------------+---------------+----------------------------+-----------------------------------------------------+--------------------------+------------------------+
+|               | Server        | CAS, CSQL,    | ECHO(7)                    | Not supported                                       | Open                     | Periodical connection  |
+|               | machine(**)   | copylogdb,    |                            |                                                     |                          |                        |
+|               |               | applylogdb    |                            |                                                     |                          |                        |
++---------------+---------------+---------------+----------------------------+-----------------------------------------------------+--------------------------+------------------------+
+| Manager use   | Manager       | application   | 8001                       | 8001                                                | Open                     |                        |
+|               | server        |               |                            |                                                     |                          |                        |
++---------------+---------------+---------------+----------------------------+-----------------------------------------------------+--------------------------+------------------------+
+| Java SP use   | cub_javasp    | CAS           | java_stored_procedure_port | java_stored_procedure_port                          | Open                     | Keep connected         |
++---------------+---------------+---------------+----------------------------+-----------------------------------------------------+--------------------------+------------------------+
 
 (*): The machine which has the CAS, CSQL, copylogdb, or applylogdb process
 
@@ -378,3 +383,18 @@ The following table summarizes the ports, based on the listening processes, used
 +--------------------------+--------------+----------------+--------------------------+
 
 *   The port used when the CUBRID Manager client accesses the CUBRID Manager server process is **cm_port** of the cm.conf. The default value is 8001.
+
+Ports for CUBRID Java Stored Procedure Server
+---------------------------------------------
+
+The following table summarizes the ports, based on the listening processes, used for CUBRID Java Stored Procedure (Java SP) server. The ports are identical regardless of the OS type.
+
++---------------+--------------+----------------------------+--------------------------+
+| Listener      | Requester    | Port                       | Firewall Port Setting    |
++===============+==============+============================+==========================+
+| cub_javasp    | CAS          | java_stored_procedure_port | Open                     |
++---------------+--------------+----------------------------+--------------------------+
+
+*   The port is used when the CAS relays between Java SP server (cub_javasp) and cub_server, which CAS receives a call of the java stored procedure from cub_server and then CAS passed the call to the CUBRID Java SP server process through **java_stored_procedure_port** of cubrid.conf.
+*   The default value of **java_stored_procedure_port** is 0, which means a random available port is assigned.
+

@@ -138,6 +138,8 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | max_agg_hash_size                   | server parameter        |         | byte     | 2,097,152(2M)                  |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | max_hash_list_scan_size             | server parameter        |         | byte     | 4,194,304(4M)                  |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | sort_buffer_size                    | server parameter        |         | byte     | 128 *                          |                       |
 |                               |                                     |                         |         |          | :ref:`db_page_size <dpg>`      |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -221,7 +223,9 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 | :ref:`stmt-type-parameters`   | add_column_update_hard_default      | client/server parameter | O       | bool     | no                             | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | alter_table_change_type_strict      | client/server parameter | O       | bool     | no                             | available             |
+|                               | alter_table_change_type_strict      | client/server parameter | O       | bool     | yes                             | available            |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | allow_truncated_string              | client/server parameter | O       | bool     | no                             | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | ansi_quotes                         | client parameter        |         | bool     | yes                            |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -230,6 +234,8 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               | block_nowhere_statement             | client parameter        | O       | bool     | no                             | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | compat_numeric_division_scale       | client/server parameter | O       | bool     | no                             | available             |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | create_table_reuseoid               | client parameter        | O       | bool     | yes                            | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | cte_max_recursions                  | client/server parameter | O       | int      | 2000                           | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -293,6 +299,11 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | max_filter_pred_cache_entries       | client/server parameter |         | int      | 1,000                          |                       |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+| :ref:`query-cache-parameters` | max_query_cache_entries             | server parameter        |         | int      | 200                            | available             |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | query_cache_use_pages               | server parameter        |         | int      | 1,000                          | available             |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
++-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 | :ref:`utility-parameters`     | backup_volume_max_size_bytes        | server parameter        |         | byte     | 0                              |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | communication_histogram             | client parameter        | O       | bool     | no                             | available             |
@@ -326,6 +337,8 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               | multi_range_optimization_limit      | server parameter        | O       | int      | 100                            | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | optimizer_enable_merge_join         | client parameter        | O       | bool     | no                             | available             |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | use_stat_estimation                 | server parameter        |         | bool     | no                             |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | pthread_scope_process               | server parameter        |         | bool     | yes                            |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -478,7 +491,7 @@ The following are parameters related to the database server. The type and value 
 +---------------------------------+--------+----------+----------+----------+
 | db_hosts                        | string | NULL     |          |          |
 +---------------------------------+--------+----------+----------+----------+
-| max_clients                     | int    | 100      | 10       | 2,000    |
+| max_clients                     | int    | 100      | 10       | 4,000    |
 +---------------------------------+--------+----------+----------+----------+
 | tcp_keepalive                   | bool   | yes      |          |          |
 +---------------------------------+--------+----------+----------+----------+
@@ -558,6 +571,8 @@ The following are parameters related to the memory used by the database server o
 +--------------------------------+--------+---------------------------+---------------------------+---------------------------+
 | max_agg_hash_size              | byte   | 2,097,152(2M)             | 32,768(32K)               | 134,217,728(128MB)        |
 +--------------------------------+--------+---------------------------+---------------------------+---------------------------+
+| max_hash_list_scan_size        | byte   | 4,194,304(4M)            | 0                         | 128MB                     |
++--------------------------------+--------+---------------------------+---------------------------+---------------------------+
 | sort_buffer_size               | byte   | 128 *                     | 1 *                       | 2G(32bit),                |
 |                                |        | :ref:`db_page_size <dpg>` | :ref:`db_page_size <dpg>` | INT_MAX *                 |
 |                                |        |                           |                           | :ref:`db_page_size <dpg>` |
@@ -589,6 +604,14 @@ The following are parameters related to the memory used by the database server o
     **max_agg_hash_size** is a parameter to configure the maximum memory per transaction allocated for hashing the tuple groups in a query containing aggregation. The default is **2,097,152**\ (2M), the minimum size is 32,768(32K), and the maximum size is  134,217,728(128MB). 
     
     If :ref:`NO_HASH_AGGREGATE <no-hash-aggregate>` hint is specified, hash aggregate evaluation will not be used. As a reference, see :ref:`agg_hash_respect_order <agg_hash_respect_order>`.
+
+.. _max_hash_list_scan_size:
+
+**max_hash_list_scan_size**
+
+    **max_hash_list_scan_size** is a parameter to configure the maximum memory per transaction allocated for building hash table in a query containing subquerys. The default is 4MB, the minimum size is 0, and the maximum size is 128MB.
+
+    If this parameter is set to 0 or If :ref:`NO_HASH_LIST_SCAN <no-hash-list-scan>` hint is specified, hash list scan will not be used.
 
 **sort_buffer_size**
 
@@ -1134,7 +1157,9 @@ The following are parameters related to SQL statements and data types supported 
 +=================================+========+============+============+============+
 | add_column_update_hard_default  | bool   | no         |            |            |
 +---------------------------------+--------+------------+------------+------------+
-| alter_table_change_type_strict  | bool   | no         |            |            |
+| alter_table_change_type_strict  | bool   | yes        |            |            |
++---------------------------------+--------+------------+------------+------------+
+| allow_truncated_string          | bool   | no         |            |            |
 +---------------------------------+--------+------------+------------+------------+
 | ansi_quotes                     | bool   | yes        |            |            |
 +---------------------------------+--------+------------+------------+------------+
@@ -1143,6 +1168,8 @@ The following are parameters related to SQL statements and data types supported 
 | block_nowhere_statement         | bool   | no         |            |            |
 +---------------------------------+--------+------------+------------+------------+
 | compat_numeric_division_scale   | bool   | no         |            |            |
++---------------------------------+--------+------------+------------+------------+
+| create_table_reuseoid           | bool   | yes        |            |            |
 +---------------------------------+--------+------------+------------+------------+
 | cte_max_recursions              | int    | 2,000      | 2          | 1,000,000  |
 +---------------------------------+--------+------------+------------+------------+
@@ -1220,7 +1247,11 @@ The following are parameters related to SQL statements and data types supported 
 
 **alter_table_change_type_strict**
 
-    **alter_table_change_type_strict** is a parameter to configure whether or not to allow the conversion of column values according to the type change, and the default value is **no**. If a value for this parameter is set to **no**, the value may be changed when you change the column types or when you add **NOT NULL** constraints; if it is set to **yes**, the value is not changed. For details, see CHANGE Clause in the :ref:`change-column`.
+    **alter_table_change_type_strict** is a parameter to configure whether to allow the conversion of column values according to the type change, and the default value is **yes**. If a value for this parameter is set to **no**, the value may be changed when you change the column types or when you add **NOT NULL** constraints; if it is set to **yes**, the value does not change. For details, see CHANGE Clause in the :ref:`change-column`.
+
+**allow_truncated_string**
+
+    **allow_truncated_string** is a parameter to configure whether to allow the truncation of string values according to the string manipulation operations used in insert or update query, and the default value is **no**. If the value for this parameter is set to **no**, the string value is not allowed to be truncated when you do operation for any string related to insert or update query; however the string related to select query may be truncated regardless of this configuration. If it is set to **yes**, the string value may be truncated regardless of the type of (INSERT/UPDATE/SELECT) query.
 
 **ansi_quotes**
 
@@ -1241,6 +1272,12 @@ The following are parameters related to SQL statements and data types supported 
 **compat_numeric_division_scale**
 
     **compat_numeric_division_scale** is a parameter to configure the scale to be displayed in the result (quotient) of a division operation. If the parameter is set to **no**, the scale of the quotient is 9, if it is set to **yes**, the scale is determined by that of the operand. The default value is **no**.
+
+**create_table_reuseoid**
+
+   **create_table_reuseoid** is a parameter to specify whether to use the **REUSE_OID** or **DONT_REUSE_OID** option when creating a table without table option. If it is set to **yes**, the table is created with **REUSE_OID** option. The default value is **yes**.
+
+   For detail, see :ref:`reuse-oid` and :ref:`dont-reuse-oid` .
 
 **cte_max_recursions**
 
@@ -1767,7 +1804,7 @@ The following are parameters related to the query plan cache functionality. The 
 
 **max_plan_cache_entries**
 
-    **max_plan_cache_entries** is a parameter to configure the maximum number of query plans to be cached in the memory. If the **max_plan_cache_entries** parameter is configured to -1 or 0, generated query plans are not stored in the memory cache; if it is configured to an integer value equal to or greater than 1, a specified number of query plans are cached in the memory.
+    **max_plan_cache_entries** is a parameter to configure the maximum number of query plans to be cached in the memory. If the **max_plan_cache_entries** parameter is configured to -1 or 0, generated query plans are not stored in the memory cache; if it is configured to an integer value equal to 0 or greater than 1, a specified number of query plans are cached in the memory.
 
     The following example shows how to cache up to 1,000 queries. ::
 
@@ -1776,6 +1813,40 @@ The following are parameters related to the query plan cache functionality. The 
 **max_filter_pred_cache_entries**
 
     **max_filter_pred_cache_entries** is a parameter used to specify the maximum number of filtered index expressions. The filtered index expressions are stored with them complied and can be immediately used in server. If it is not stored in cache, the process is required which filtered index expressions are fetched from database schema and interpreted.
+
+.. _query-cache-parameters:
+
+Query Cache-Related Parameters
+-----------------------------------
+
+The following are the parameters related to the query cache functionality. The type and value range for each parameter are as follows:
+
++-------------------------------+--------+----------+----------+----------+
+| Parameter Name                | Type   | Default  | Min      | Max      |
++===============================+========+==========+==========+==========+
++-------------------------------+--------+----------+----------+----------+
+| max_query_cache_entries       | int    | 200      | 0        | INT_MAX  |
++-------------------------------+--------+----------+----------+----------+
+| max_query_cache_pages         | int    | 1,000    | 0        | INT_MAX  |
++-------------------------------+--------+----------+----------+----------+
+
+If one of the parameters is set to 0 or negative value, the query cache is disabled regardless using the query hint **QUERY_CACHE**.
+
+**max_query_cache_entries**
+
+    **max_query_cache_entries** is a parameter to configure the maximum number of query to be cached. If it is configured to an integer value equal to 0 or greater than 1, a specified number of queries are cached with the result.
+
+    The following example shows how to cache up to 500 queries. ::
+
+        max_query_cache_entries=500
+
+**query_cache_use_pages**
+
+    **query_cache_use_pages** is a parameter to configure the maximum page of result to be cached. If it is configured to an integer value equal to 0 or greater than 1, specified pages in results are cached as temp files.
+
+    The following example shows how to cache up to 4,000 pages. ::
+
+        query_cache_use_pages=4000
 
 .. _utility-parameters:
 
@@ -1875,6 +1946,8 @@ The following are other parameters. The type and value range for each parameter 
 | multi_range_optimization_limit      | int    | 100            | 0              | 10,000         |
 +-------------------------------------+--------+----------------+----------------+----------------+
 | optimizer_enable_merge_join         | bool   | no             |                |                |
++-------------------------------------+--------+----------------+----------------+----------------+
+| use_stat_estimation                 | bool   | no             |                |                |
 +-------------------------------------+--------+----------------+----------------+----------------+
 | pthread_scope_process               | bool   | yes            |                |                |
 +-------------------------------------+--------+----------------+----------------+----------------+
@@ -1991,6 +2064,10 @@ The following are other parameters. The type and value range for each parameter 
 **optimizer_enable_merge_join**
 
     **optimizer_enable_merge_join** is a parameter to specify whether to include sort merge join plan as a candidate of query plans or not. The default is **no**. Regarding sort merge join, see :ref:`sql-hint`.
+
+**use_stat_estimation**
+
+    **use_stat_estimation** is a parameter to specify whether to use the estimated information in calculating statistics or not. The default is no. The estimated information generated by the heap manager while processing DML is associated with the number of added objects. it is relatively accurate for the number of total objects, NOT for the number of distinct values.
 
 **pthread_scope_process**
 

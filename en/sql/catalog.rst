@@ -433,13 +433,17 @@ _db_query_spec
 
 Represents the SQL statement of a virtual class. An index for class_of is created.
 
-+--------------------+---------------------+-----------------------------------------------+
-|   Attribute Name   |      Data Type      |   Description                                 |
-+====================+=====================+===============================================+
-| class_of           | _db_class           | Class information of the virtual class        |
-+--------------------+---------------------+-----------------------------------------------+
-| spec               | VARCHAR(1073741823) | SQL definition statement of the virtual class |
-+--------------------+---------------------+-----------------------------------------------+
+The data type of attribute 'spec' is VARCHAR (4096) for prior versions including 10.1 Patch 3.
+
++--------------------+---------------------+-----------------------------------------------+-------------------------------+
+|   Attribute Name   |      Data Type      |   Description                                 |   Classification (10.1 Only)  |
++====================+=====================+===============================================+===============================+
+| class_of           | _db_class           | Class information of the virtual class        |                               |
++--------------------+---------------------+-----------------------------------------------+-------------------------------+
+|                    | VARCHAR(1073741823) |                                               | 10.1 Patch 4 or later         |
++ spec               +---------------------+ SQL definition statement of the virtual class +-------------------------------+
+|                    | VARCHAR(4096)       |                                               | 10.1 Patch 3 or earlier       |
++--------------------+---------------------+-----------------------------------------------+-------------------------------+
 
 .. _db-index:
 
@@ -878,6 +882,47 @@ A table that stores the progress status every time the **applylogdb** utility ap
 | start_time           | DATETIME        | Time when the applylogdb process accessed the slave database                                                                                       |
 +----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
 
+dual
+----
+
+The dual class is a one-row, one-column table that is used as a dummy table. It is used to select a constant, expression, or pseudo column such as SYS_DATE or USER. Pseudo columns can be provided as functions in CUBRID. More details and examples are in :ref:`operators-and-functions`. However, it is not mandatory to have FROM clause when selecting a constant, expression, or pseudo column because dual class will be referenced automatically. Like other system catalog classes, dual class is created to be owned by dba but dba can only execute SELECT operation. Unlike other system catalog classes, however, any user can execute SELECT operation on dual class.
+
++--------------------+---------------+----------------------------------------------------------+
+|   Attribute Name   |   Data Type   |   Description                                            |
++====================+===============+==========================================================+
+| dummy              | VARCHAR(1)    | Value used for dummy purpose only                        |
++--------------------+---------------+----------------------------------------------------------+
+
+The following example shows the result which ran the query that select pseudo column after inputting ";plan detail" or "SET OPTIMIZATION LEVEL 513;" in CSQL (:ref:`viewing-query-plan`). This shows the dual class is referenced automatically even if there is no FROM clause.
+
+.. code-block:: sql
+
+  SET OPTIMIZATION LEVEL 513;
+  SELECT SYS_DATE;
+
+::
+
+  Join graph segments (f indicates final):
+  seg[0]: [0]
+  Join graph nodes:
+  node[0]: dual dual(1/1) (loc -1)
+
+  Query plan:
+
+    sscan
+      class: dual node[0]
+      cost:  1 card 1
+
+  Query stmt:
+
+  select  SYS_DATE  from dual dual
+
+  === <Result of SELECT Command in Line 1> ===
+
+          SYS_DATE
+        ============
+          11/26/2020
+
 System Catalog Virtual Class
 ============================
 
@@ -977,9 +1022,11 @@ The following example shows how to retrieve system classes that can be accessed 
     ======================
       'db_authorization'
       'db_authorizations'
+      'db_ha_apply_info'
       'db_root'
       'db_serial'
       'db_user'
+      'dual'
 
 DB_DIRECT_SUPER_CLASS
 ---------------------
@@ -1028,15 +1075,19 @@ DB_VCLASS
 
 Represents SQL definition statements of virtual classes for which the current user has access authorization to a database.
 
-+--------------------+---------------------+-----------------------------------------------+
-|   Attribute Name   |      Data Type      |   Description                                 |
-+====================+=====================+===============================================+
-| vclass_name        | VARCHAR(255)        | Virtual class name                            |
-+--------------------+---------------------+-----------------------------------------------+
-| vclass_def         | VARCHAR(1073741823) | SQL definition statement of the virtual class |
-+--------------------+---------------------+-----------------------------------------------+
-| comment            | VARCHAR(2048)       | Comment to describe the virtual class         |
-+--------------------+---------------------+-----------------------------------------------+
+The data type of attribute 'vclass_def' is VARCHAR (4096) for prior versions including 10.1 Patch 3.
+
++--------------------+---------------------+-----------------------------------------------+-------------------------------+
+|   Attribute Name   |      Data Type      |   Description                                 |   Classification (10.1 Only)  |
++====================+=====================+===============================================+===============================+
+| vclass_name        | VARCHAR(255)        | Virtual class name                            |                               |
++--------------------+---------------------+-----------------------------------------------+-------------------------------+
+|                    | VARCHAR(1073741823) |                                               | 10.1 Patch 4 or later         | 
++ vclass_def         +---------------------+ SQL definition statement of the virtual class +-------------------------------+
+|                    | VARCHAR(4096)       |                                               | 10.1 Patch 3 or earlier       | 
++--------------------+---------------------+-----------------------------------------------+-------------------------------+
+| comment            | VARCHAR(2048)       | Comment to describe the virtual class         |                               |
++--------------------+---------------------+-----------------------------------------------+-------------------------------+
 
 The following example shows how to retrieve SQL definition statements of the *db_class* virtual class.
 

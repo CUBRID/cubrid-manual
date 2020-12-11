@@ -78,16 +78,18 @@ CREATE TABLE
      
         <resolution> ::= [CLASS] {column_name} OF superclass_name [AS alias]
         <table_options> ::= <table_option> [[,] <table_option> ...] 
-            <table_option> ::= REUSE_OID | 
+            <table_option> ::= REUSE_OID | DONT_REUSE_OID |
                                COMMENT [=] 'table_comment_string' |
-                               [CHARSET charset_name] [COLLATE collation_name]
+                               [CHARSET charset_name] [COLLATE collation_name] |
+                               ENCRYPT [=] [AES | ARIA]
 
 *   **IF NOT EXISTS**: 생성하려는 테이블이 존재하는 경우 에러 없이 테이블을 생성하지 않는다. 
 *   *table_name*: 생성할 테이블의 이름을 지정한다(최대 254바이트).
 *   *column_name*: 생성할 칼럼의 이름을 지정한다(최대 254바이트).
 *   *column_type*: 칼럼의 데이터 타입을 지정한다.
 *   [**SHARED** *value* | **DEFAULT** *value*]: 칼럼의 초기값을 지정한다.
-*   <*column_constraint*>: 칼럼의 제약 조건을 지정하며 제약 조건의 종류에는 **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** 가 있다. 자세한 내용은 :ref:`constraint-definition` 을 참고한다.
+*   **ON UPDATE**: 레코드의 필드가 수정되었을 때 갱신될 필드에 대한 수식을 지정한다. 자세한 내용은 :ref:`constraint-definition` 을 참고한다.
+*   <*column_constraint*>: 칼럼의 제약 조건을 지정하며 제약 조건의 종류에는 **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** 가 있다.
 *   <*default_or_shared_or_ai*>: DEFAULT, SHARED, AUTO_INCREMENT 중 하나만 사용될 수 있다.
     AUTO_INCREMENT이 지정될 때 "(seed, increment)"와 "AUTO_INCREMENT = initial_value"는 동시에 정의될 수 없다.
 *   *table_comment_string*: 테이블의 커멘트를 지정한다.
@@ -684,6 +686,15 @@ KEY 또는 INDEX
 테이블 옵션
 -----------
 
+테이블 옵션 중 **REUSE_OID** 와 **DONT_REUSE_OID** 은 생성하는 테이블이 참조 가능한 테이블인지 아닌지를 지정하는 옵션이다. 두개의 옵션은 함께 사용할 수 없으며 다른 옵션들과는 함께 사용할 수 있다. 테이블 생성시 옵션을 생략한 경우에는 **REUSE_OID** 테이블 옵션을 사용한다. 기본 옵션을 **DONT_REUSE_OID** 로 변경하려면, 시스템 파라미터인 **create_table_reuseoid** 값을 **no** 로 변경하면 된다. 자세한 내용은 :ref:`stmt-type-parameters` 를 참조하면 된다.
+
+::
+
+        <table_options> ::= <table_option> [[,] <table_option> ...]
+            <table_option> ::= REUSE_OID | DONT_REUSE_OID |
+                               COMMENT [=] 'table_comment_string' |
+                               [CHARSET charset_name] [COLLATE collation_name]
+
 .. _reuse-oid:
 
 REUSE_OID
@@ -727,6 +738,13 @@ OID(Object Identifier)는 볼륨 번호, 페이지 번호, 슬롯 번호와 같�
     *   OID 재사용 테이블은 CUBRID 2008 R2.2 버전 이상에서만 지원되며, 하위 호환성을 보장하지 않는다. 즉, 더 낮은 버전의 데이터베이스 서버에서 OID 재사용 테이블이 존재하는 데이터베이스에 접근할 수 없다.
     *   OID 재사용 테이블은 분할 테이블로 관리될 수 있으며, 복제될 수 있다.
 
+.. _dont-reuse-oid:
+
+DONT_REUSE_OID
+^^^^^^^^^^^^^^
+
+테이블 생성시 **DONT_REUSE_OID** 옵션을 명시하면, **REUSE_OID** 와 상반된 참조 가능(referable)한 테이블을 생성한다. 
+
 문자셋과 콜레이션
 ^^^^^^^^^^^^^^^^^
 
@@ -756,6 +774,24 @@ OID(Object Identifier)는 볼륨 번호, 페이지 번호, 슬롯 번호와 같�
     $ csql -u dba demodb
     
     csql> ;sc tbl
+
+.. _create-tde-table:
+
+테이블 암호화 (TDE)
+^^^^^^^^^^^^^^^^^^^
+
+다음과 같이 테이블을 암호화할 수 있다. TDE 암호화에 관한 자세한 내용은 :ref:`tde` 절을 참고한다. 
+
+.. code-block:: sql
+
+    CREATE TABLE enc_tbl (a INT, b INT) ENCRYPT = AES;
+
+암호화 알고리즘으로 **AES**, **ARIA** 를 지정할 수 있다. 다음과 같이 생략할 경우 시스템 파라미터 **tde_default_algorithm** 으로
+지정된 암호화 알고리즘이 사용 된다. 기본 값은 **AES** 이다.
+
+.. code-block:: sql
+
+    CREATE TABLE enc_tbl (a INT, b INT) ENCRYPT;
 
 CREATE TABLE LIKE
 -----------------
@@ -969,7 +1005,8 @@ ALTER TABLE
             MODIFY <alter_modify> |            
             INHERIT <resolution>, ... |
             AUTO_INCREMENT = <initial_value> |
-            COMMENT [=] 'table_comment_string'
+            COMMENT [=] 'table_comment_string' |
+            COMMENT ON {COLUMN | CLASS ATTRIBUTE} <column_comment_definition> [, <column_comment_definition>] ;
                            
             <alter_add> ::= 
                 [ATTRIBUTE|COLUMN] [(]<class_element>, ...[)] [FIRST|AFTER old_column_name] |
@@ -1016,9 +1053,11 @@ ALTER TABLE
 
             <index_col_name> ::= column_name [(length)] [ASC | DESC]
 
+            <column_comment_definition> ::= column_name [=] 'column_comment_string'
+
 .. note::
 
-    칼럼의 커멘트는 <column_definition>에서 지정한다. <column_definition>은 위의 CREATE TABLE 구문을 참고한다.
+    칼럼의 커멘트는 <column_definition>에서 지정하거나 <column_comment_definition>에서 지정한다. <column_definition>은 위의 :ref:`CREATE TABLE 문법<column-definition>`\을 참고한다.
 
 .. warning::
 
@@ -1667,18 +1706,27 @@ CHANGE/MODIFY 절
 칼럼의 커멘트
 -------------
 
-칼럼의 커멘트는 ADD/MODIFY/CHANGE 구문 뒤에 위치하는 <*column_definition*> 에서 지정한다. <*column_definition*>은 위의 CREATE TABLE 구문을 참고한다.
+칼럼의 커멘트는 ADD/MODIFY/CHANGE 구문 뒤에 위치하는 <*column_definition*> 에서 지정하거나 COMMENT ON COLUMN 구문 뒤에 위치하는 <column_comment_definition> 에서 지정한다. <*column_definition*>은 위의 :ref:`CREATE TABLE 문법<column-definition>`\을 참고한다.
 
-다음은 칼럼의 커멘트를 확인하는 구문이다.
+COMMENT ON COLUMN 구문에서는 하나 이상의 칼럼을 지정하여 칼럼 커멘트를 변경할 수 있다.
+다음은 COMMENT ON COLUMN 구문을 이용해서 칼럼의 커멘트를 변경하는 예제이다.
 
 .. code-block:: sql
 
-    SHOW CREATE TABLE table_name;
+    ALTER TABLE t1 COMMENT ON COLUMN c1 = 'changed table column c1 comment';
+    ALTER TABLE t1 COMMENT ON COLUMN c2 = 'changed table column c2 comment', c3 = 'changed table column c3 comment';
+
+다음은 칼럼의 커멘트를 확인하는 예제이다.
+
+.. code-block:: sql
+
+    SHOW CREATE TABLE t1 /* table_name */ ;
 
     SELECT attr_name, class_name, comment 
-    FROM db_attribute WHERE class_name ='classname';
+    FROM db_attribute
+    WHERE class_name = 't1' /* lowercase_table_name */ ;
 
-    SHOW FULL COLUMNS FROM table_name;
+    SHOW FULL COLUMNS FROM t1 /* table_name */ ;
 
 CSQL 인터프리터에서 ";sc table_name" 명령으로도 확인할 수 있다.
 
@@ -1686,7 +1734,7 @@ CSQL 인터프리터에서 ";sc table_name" 명령으로도 확인할 수 있다
 
     $ csql -u dba demodb
     
-    csql> ;sc table_name
+    csql> ;sc t1
 
 .. _rename-column:
 

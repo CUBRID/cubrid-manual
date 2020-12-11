@@ -29,7 +29,7 @@ JDBC 드라이버 버전은 다음과 같은 방법으로 확인할 수 있다. 
     cubrid/sql/
     cubrid/jdbc/driver/CUBRIDBlob.class
     ...
-    CUBRID-JDBC-8.3.1.1032
+    CUBRID-JDBC-10.2.2.8874
 
 **CUBRID JDBC 드라이버 등록**
 
@@ -61,7 +61,7 @@ JDBC 설치 및 설정
 
 **Java 설치 및 환경 변수 설정**
 
-시스템에 Java가 설치되어 있고 **JAVA_HOME** 환경 변수가 등록되어 있어야 한다. Java는 Developer Resources for Java Technology 사이트( https://www.oracle.com/java/technologies/ )에서 다운로드할 수 있다. 이에 대한 자세한 설명은 :ref:`jsp-environment-configuration` 절을 참고한다.
+시스템에 Java가 설치되어 있고 **JAVA_HOME** 환경 변수가 등록되어 있어야 한다. Java는 Developer Resources for Java Technology 사이트( https://www.oracle.com/java/technologies/ )에서 다운로드할 수 있다.
 
 **Windows 환경에서 환경 변수 설정**
 
@@ -607,7 +607,7 @@ OID를 사용할 때 다음의 규칙을 지켜야 한다.
                Connection con = DriverManager.getConnection(url,user,passwd);
                Statement stmt = con.createStatement();
                CUBRIDResultSet rs = (CUBRIDResultSet) stmt.executeQuery(sql);
-               CUBRIDResultSetMetaData rsmd = (CUBRIDResultSetMetaData) rs.getMeta Data();
+               CUBRIDResultSetMetaData rsmd = (CUBRIDResultSetMetaData) rs.getMetaData();
                int numbOfColumn = rsmd.getColumnCount();
                while (rs.next ()) {
                    for (int j=1; j<=numbOfColumn; j++ ) {
@@ -636,7 +636,7 @@ OID를 사용할 때 다음의 규칙을 지켜야 한다.
     import java.lang.*;
     import cubrid.sql.*;
     import cubrid.jdbc.driver.*;
-     
+
     // create class collection_test(
     // settest set(integer),
     // multisettest multiset(integer),
@@ -646,45 +646,42 @@ OID를 사용할 때 다음의 규칙을 지켜야 한다.
     // insert into collection_test values({1,2,3},{1,2,3},{1,2,3});
     // insert into collection_test values({2,3,4},{2,3,4},{2,3,4});
     // insert into collection_test values({3,4,5},{3,4,5},{3,4,5});
-     
-    class SetOP_Sample
-    {
-       public static void main (String args [])
-       {
-           String url = "jdbc:cubrid:127.0.0.1:33000:demodb:public::";
-           String user = "";
-           String passwd = "";
-           String sql = "select collection_test from collection_test";
-           try {
-               Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
-           } catch(Exception e){
-               e.printStackTrace();
-           }
-           try {
-               CUBRIDConnection con =(CUBRIDConnection)
-               DriverManager.getConnection(url,user,passwd);
-               Statement stmt = con.createStatement();
-               CUBRIDResultSet rs = (CUBRIDResultSet)stmt.executeQuery(sql);
-               while (rs.next ()) {
-                   CUBRIDOID oid = rs.getOID(1);
-                   oid.addToSet("settest",new Integer(10));
-                   oid.addToSet("multisettest",new Integer(20));
-                   oid.addToSequence("listtest",1,new Integer(30));
-                   oid.addToSequence("listtest",100,new Integer(100));
-                   oid.putIntoSequence("listtest",99,new Integer(99));
-                   oid.removeFromSet("settest",new Integer(1));
-                   oid.removeFromSet("multisettest",new Integer(2));
-                   oid.removeFromSequence("listtest",99);
-                   oid.removeFromSequence("listtest",1);
-               }
-               con.commit();
-               rs.close();
-               stmt.close();
-               con.close();
-           } catch(SQLException e) {
-               e.printStackTrace();
-           }
-       }
+
+    class SetOP_Sample {
+	    public static void main(String args[]) {
+		    String url = "jdbc:cubrid:127.0.0.1:33000:demodb:public::";
+		    String user = "";
+		    String passwd = "";
+		    String sql = "select collection_test from collection_test";
+		    try {
+			    Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
+		    } catch (Exception e) {
+			    e.printStackTrace();
+		    }
+		    try {
+			    CUBRIDConnection con = (CUBRIDConnection) DriverManager.getConnection(url, user, passwd);
+			    Statement stmt = con.createStatement();
+			    CUBRIDResultSet rs = (CUBRIDResultSet) stmt.executeQuery(sql);
+			    while (rs.next()) {
+				    CUBRIDOID oid = rs.getOID(1);
+				    oid.addToSet("settest", Integer.valueOf(10));
+				    oid.addToSet("multisettest", Integer.valueOf(20));
+				    oid.addToSequence("listtest", 1, Integer.valueOf(30));
+				    oid.addToSequence("listtest", 100, Integer.valueOf(100));
+				    oid.putIntoSequence("listtest", 99, Integer.valueOf(99));
+				    oid.removeFromSet("settest", Integer.valueOf(1));
+				    oid.removeFromSet("multisettest", Integer.valueOf(2));
+				    oid.removeFromSequence("listtest", 99);
+				    oid.removeFromSequence("listtest", 1);
+			    }
+			    con.commit();
+			    rs.close();
+			    stmt.close();
+			    con.close();
+		    } catch (SQLException e) {
+			    e.printStackTrace();
+		    }
+	    }
     }
 
 자동 증가 특성의 칼럼 값 검색
@@ -862,7 +859,7 @@ JDBC에서 **LOB** 데이터를 처리하는 인터페이스는 JDBC 4.0 스펙�
      
     // ResetSet에서 직접 데이터 인출
     PrepareStatement pstmt1 = conn.prepareStatement("SELECT content FROM doc_t WHERE doc_id = ? ");
-    pstmt2.setString(1, "doc-10");
+    pstmt1.setString(1, "doc-10");
     ResultSet rs = pstmt1.executeQuery();
     
     while (rs.next())
@@ -1311,7 +1308,7 @@ CUBRIDDataSource에 대한 자세한 설명은 :ref:`jdbc-conn-datasource`\ 을 
                stmt = conn.createStatement();
                stmt.executeUpdate("CREATE TABLE xoo ( a INT, b INT, c CHAR(10))");
      
-               preStmt = conn.prepareStatement("INSERT INTO xoo VALUES(?,?,''''100'''')");
+               preStmt = conn.prepareStatement("INSERT INTO xoo VALUES(?,?,'100')");
                preStmt.setInt (1, 1) ;
                preStmt.setInt (2, 1*10) ;
                int rst = preStmt.executeUpdate () ;

@@ -926,7 +926,7 @@ CAS가 연결할 호스트 순서를 결정할 때 **$CUBRID_DATABASES/databases
 
 *   2차 연결: 1차 연결 실패 후 실패한 위치에서부터 두번째로 접속을 시도하는 단계. DB 상태(active/standby)와 복제 지연 여부를 무시. 단, **SO** 브로커는 항상 standby DB에만 접속 허용.
 
-    이때는 DB의 상태(active/standby) 및 복제 지연 여부와 무관하게 접속이 가능하면 접속을 결정한다. 하지만 질의 수행 단계에서 에러가 발생할 수 있다. 예를 들어 **ACCESS_MODE** 가 **RW**인데 standby 상태의 서버에 접속하면 INSERT 질의 수행 시 에러가 발생한다. 에러 발생과는 무관하게, standby로 연결되어 트랜잭션이 수행된 이후에는 1차 연결을 다시 시도한다. 단, **SO** 브로커는 절대로 active DB에 연결될 수 없다.
+    이때는 DB의 상태(active/standby) 및 복제 지연 여부와 무관하게 접속이 가능하면 접속을 결정한다. 하지만 질의 수행 단계에서 에러가 발생할 수 있다. 예를 들어 **ACCESS_MODE** 가 **RW**\인데 standby 상태의 서버에 접속하면 INSERT 질의 수행 시 에러가 발생한다. 에러 발생과는 무관하게, standby로 연결되어 트랜잭션이 수행된 이후에는 1차 연결을 다시 시도한다. 단, **SO**\ 브로커는 절대로 active DB에 연결될 수 없다.
     
 **MAX_NUM_DELAYED_HOSTS_LOOKUP**\ 의 값에 따라 접속을 시도하는 호스트의 개수가 제한되는 방법은 다음과 같다:
 
@@ -1998,7 +1998,7 @@ CUBRID HA 그룹 내의 노드 간 특정 테이블의 데이터가 동기화되
 
 **Java 저장 프로시저(java stored procedure)**
 
-CUBRID HA에서 Java 저장 프로시저 환경 구축은 복제되지 않으므로, Java 저장 프로시저를 사용하려면 모든 노드에 각각 Java 저장 프로시저 환경을 설정해야 한다. :ref:`jsp-environment-configuration`\ 을 참고한다.
+CUBRID HA에서 Java 저장 프로시저 환경 구축은 복제되지 않으므로, Java 저장 프로시저를 사용하려면 모든 노드에 각각 Java 저장 프로시저 환경을 설정해야 한다. :ref:`cubrid-javasp-server-config`\ 을 참고한다.
 
 **메서드**
 
@@ -2212,6 +2212,10 @@ restoreslave
 .. option:: -u, --use-database-location-path
 
     이 옵션은 databases.txt에 지정된 데이터베이스 경로로 복구를 수행할 경우 지정한다. 더 많은 정보는 :ref:`restoredb` 의 -u 옵션을 참고한다.
+
+.. option:: -k, --keys-file-path=PATH
+
+    이 옵션은 복구 시 필요한 키 파일의 경로를 지정한다. 더 많은 정보는 :ref:`restoredb` 를 참고한다.
 
 복제 구축 시나리오 예제
 -----------------------
@@ -2595,7 +2599,7 @@ HA 서비스 운영 중 슬레이브를 새로 추가하려면 기존의 마스�
     
         ::
     
-            [nodeB]$ 
+            [nodeB]$ cd $CUBRID_DATABASES/testdb/log
             [nodeB]$ scp -l 131072 testdb_bk* cubrid_usr@nodeC:$CUBRID_DATABASES/testdb/log
         
         .. note::
@@ -2990,7 +2994,7 @@ HA 서비스 운영 중 슬레이브를 새로 추가하려면 기존의 마스�
     
         ::
     
-            [nodeB]$ 
+            [nodeB]$ cd $CUBRID_DATABASES/testdb/log
             [nodeB]$ scp -l 131072 testdb_bk* cubrid_usr@nodeC:$CUBRID_DATABASES/testdb/log
             
             .. note::
@@ -3193,10 +3197,10 @@ HA 서비스 운영 중 슬레이브를 새로 추가하려면 기존의 마스�
         ::
         
             [nodeA]$ csql --sysadm -u dba testdb@localhost 
-            csql> DELETE FROM db_ha_apply_info WHERE copied_log_path-='/home/cubrid/DB/databases/testdb_nodeB'
+            csql> DELETE FROM db_ha_apply_info WHERE copied_log_path='/home/cubrid/DB/databases/testdb_nodeB';
 
             [nodeC]$ csql --sysadm --write-on-standby -u dba testdb@localhost 
-            csql> DELETE FROM db_ha_apply_info WHERE copied_log_path-='/home/cubrid/DB/databases/testdb_nodeB'
+            csql> DELETE FROM db_ha_apply_info WHERE copied_log_path='/home/cubrid/DB/databases/testdb_nodeB';
 
     *   *nodeA* 백업
 
@@ -3273,7 +3277,7 @@ HA 서비스 운영 중 슬레이브를 새로 추가하려면 기존의 마스�
             
             repl_log_path=$repl_log_home_abs/${db_name}_${master_host}
 
-            local_db_creation=`awk 'BEGIN { print strftime("%m/%d/%Y %H:%M:%S", $db_creation) }'`
+            local_db_creation=`awk 'BEGIN { print strftime("%m/%d/%Y %H:%M:%S", '$db_creation') }'`
                 csql_cmd="\
                 INSERT INTO \
                         db_ha_apply_info \
@@ -3960,6 +3964,8 @@ ha_make_slavedb.sh 스크립트
 *   **restore_option** : 복제 대상 노드에서 **restoredb** 수행 시 필요한 옵션을 설정한다.
 
 *   **scp_option** : 복제 원본 노드의 백업 볼륨을 복제 대상 노드로 복사해 오기 위한 **scp** 옵션을 설정할 수 있는 항목으로 기본값은 복제 원본 노드의 네트워크 부하를 주지 않기 위해 **-l 131072** 옵션을 사용한다(전송 속도를 16M로 제한).
+
+*   **ssh_port** : 스크립트에서 사용되는 ssh와 scp를 위한 **port** 번호를 설정할 수 있는 항목으로 기본값은 **22** 로 설정된다. 이 옵션은 스크립트에서 이용되는 **expect** 에도 동일하게 적용된다.
 
 스크립트의 설정이 끝나면 **ha_make_slavedb.sh** 스크립트를 복제 대상 노드에서 수행한다. 스크립트 수행 시 여러 단계에 의해 복제 재구축이 이루어지며 각 단계의 진행을 위해서 사용자가 적절한 값을 입력해야 한다. 다음은 입력할 수 있는 값에 대한 설명이다.
 

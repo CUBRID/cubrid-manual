@@ -6,7 +6,7 @@
 Python 드라이버
 ***************
 
-**CUBRIDdb** 는 Python Database API 2.0을 준수하며 CUBRID 데이터베이를 지원하는 Python 확장 패키지이다. CUBRID Python API는 Python Database API가 제공하는 기본 기능 외에도, CUBRID 데이터베이스 엔진에서 제공하는 기능을 **_cubrid** 모듈에서 제공한다.
+**CUBRIDdb** 는 Python Database API 2.0을 준수하며 CUBRID 데이터베이스를 지원하는 Python 확장 패키지이다. CUBRID Python API는 Python Database API가 제공하는 기본 기능 외에도, CUBRID 데이터베이스 엔진에서 제공하는 기능을 **_cubrid** 모듈에서 제공한다.
 
 CUBRID Python 드라이버는 CCI API를 기반으로 작성되었으므로, CCI API 및 CCI에 적용되는 **CCI_DEFAULT_AUTOCOMMIT** 과 같은 설정 파라미터에 영향을 받는다.
 
@@ -35,11 +35,11 @@ Linux, Unix 및 유사 운영체제에서는 다음과 같은 세 가지 방법�
 
 #.  다음 명령어를 실행하여 원하는 위치에 다운로드한 파일의 압축을 해제한다. ::
 
-        tar xvfz cubrid-python-src-8.4.0.0001.tar.gz
+        tar xvfz cubrid-python-10.2-latest.tar.gz
 
 #.  압축을 해제한 디렉터리로 이동한다. ::
 
-        cd cubrid-python-src
+        cd RB-10.2.0
 
 #.  드라이버를 빌드한다. 이 단계와 다음 단계는 루트 사용자 계정으로 실행해야 한다. ::
 
@@ -51,7 +51,7 @@ Linux, Unix 및 유사 운영체제에서는 다음과 같은 세 가지 방법�
 
 **Easy Install을 이용한 설치(Linux)**
 
-Easy Install은 자동으로 Python 패키지를 다운로드/빌드/설치/관리할 수 있는 Python 모듈로, setuptools에 포함되어 있다. Easy Install을 사용하면 패키지 인덱스뿐만 아니라 다른 웹 사이트에도 HTTP로 연결하여 패키지를 설치할 수 있다. Perl의 CPAN이나 PHP의 PEAR와 유사하다. Easy Install에 대한 더 자세한 설명은 https://setuptools.readthedocs.io/en/latest/easy_install.html\ 을 참고한다.
+Easy Install은 자동으로 Python 패키지를 다운로드/빌드/설치/관리할 수 있는 Python 모듈로, setuptools에 포함되어 있다. Easy Install을 사용하면 패키지 인덱스뿐만 아니라 다른 웹 사이트에도 HTTP로 연결하여 패키지를 설치할 수 있다. Perl의 CPAN이나 PHP의 PEAR와 유사하다. Easy Install에 대한 더 자세한 설명은 https://setuptools.readthedocs.io/en/latest/deprecated/easy_install.html\ 을 참고한다.
 
 Easy Install을 이용하여 CUBRID Python 드라이버를 설치하려면 다음 명령어를 입력한다. ::
 
@@ -89,6 +89,7 @@ Python 예제 프로그램
 여기에서는 Python으로 CUBRID 데이터베이스에 대한 작업을 수행하는 예제 프로그램을 작성한다. 예제로 다음과 같은 테이블을 생성한다. ::
 
     csql -u dba -c "CREATE TABLE posts( id integer, title varchar(255), body string, last_updated timestamp );" demodb
+    csql -u dba -c "grant ALL PRIVILEGES on posts to public;" demodb
 
 **Python에서 demodb에 연결**
 
@@ -102,7 +103,7 @@ Python 예제 프로그램
     
     .. code-block:: python
     
-        conn = CUBRIDdb.connect('CUBRID:localhost:30000:dba::')
+        conn = CUBRIDdb.connect('CUBRID:localhost:33000:demodb:::', 'dba', '')
 
 *demodb* 데이터베이스는 비밀번호가 필요하지 않으므로 비밀번호를 입력하지 않았다. 그러나 실제 데이터베이스에 연결할 때에는 비밀번호가 필요하다면 비밀번호를 입력해야 한다.
 `connect <https://pythonhosted.org/CUBRID-Python/_cubrid-module.html#connect>`_ () 함수의 구문은 다음과 같다. ::
@@ -113,23 +114,23 @@ Python 예제 프로그램
 
     Traceback (most recent call last):
       File "tutorial.py", line 3, in <module>
-        conn = CUBRIDdb.connect('CUBRID:localhost:30000:dba::')
-      File "/usr/local/lib/python2.6/site-packages/CUBRIDdb/__init__.py", line 48, in Connect
+        conn = CUBRIDdb.connect('CUBRID:localhost:30000:demodb:dba::')
+      File "/usr/local/lib/python3.5/site-packages/CUBRIDdb/__init__.py", line 61, in Connect
         return Connection(*args, **kwargs)
-      File "/usr/local/lib/python2.6/site-packages/CUBRIDdb/connections.py", line 19, in __init__
-        self._db = _cubrid.connect(*args, **kwargs)
-    _cubrid.Error: (-1, 'ERROR: DBMS, 0, Unknown DBMS Error')
+      File "/usr/local/lib/python3.5/site-packages/CUBRIDdb/connections.py", line 22, in __init__
+        self.connection = _cubrid.connect(*args, **kwargs2)
+    _cubrid.OperationalError: (-677, "ERROR: DBMS, -677, Failed to connect to database server, 'demodb', on the following host(s): localhost:localhost[CAS INFO-127.0.0.1:30000,0,0].")
 
 자격이 잘못되었다면 다음과 같은 오류가 발생한다. ::
 
     Traceback (most recent call last):
       File "tutorial.py", line 3, in <module>
-        con = CUBRIDdb.connect('CUBRID:localhost:33000:demodb','a','b')
-      File "/usr/local/lib/python2.6/site-packages/CUBRIDdb/__init__.py", line 48, in Connect
+        con = CUBRIDdb.connect('CUBRID:localhost:33000:demodb:::','a','b')
+      File "/usr/local/lib/python3.5/site-packages/CUBRIDdb/__init__.py", line 61, in Connect
         return Connection(*args, **kwargs)
-      File "/usr/local/lib/python2.6/site-packages/CUBRIDdb/connections.py", line 19, in __init__
-        self._db = _cubrid.connect(*args, **kwargs)
-    _cubrid.Error: (-1, 'ERROR: DBMS, 0, Unknown DBMS Error')
+      File "/usr/local/lib/python3.5/site-packages/CUBRIDdb/connections.py", line 22, in __init__
+        self.connection = _cubrid.connect(*args, **kwargs2)
+    _cubrid.DatabaseError: (-165, 'ERROR: DBMS, -165, User "a" is invalid.[CAS INFO-127.0.0.1:33000,0,0].')
 
 **INSERT 문 실행**
 
@@ -155,7 +156,7 @@ CUBRID Python 드라이버에서는 기본적으로 자동 커밋 모드가 비�
 .. code-block:: python
 
     import CUBRIDdb
-    conn = CUBRIDdb.connect('CUBRID:localhost:33000:demodb', 'public', '')
+    conn = CUBRIDdb.connect('CUBRID:localhost:33000:demodb:::', 'dba', '')
     cur = conn.cursor()
      
     # Plain insert statement
@@ -176,7 +177,7 @@ CUBRID Python 드라이버에서는 기본적으로 자동 커밋 모드가 비�
     cur.execute("SELECT * FROM posts ORDER BY last_updated")
     rows = cur.fetchall()
     for row in rows:
-        print row
+        print (row)
 
 위 코드는 다음과 같은 내용을 출력한다. ::
 
@@ -192,7 +193,7 @@ CUBRID Python 드라이버에서는 기본적으로 자동 커밋 모드가 비�
     cur.execute("SELECT * FROM posts")
     row = cur.fetchone()
     while row:
-        print row
+        print (row)
         row = cur.fetchone()
 
 **레코드 개수를 지정하여 조회**
@@ -204,7 +205,7 @@ CUBRID Python 드라이버에서는 기본적으로 자동 커밋 모드가 비�
     cur.execute("SELECT * FROM posts")
     rows = cur.fetchmany(3)
     for row in rows:
-        print row
+        print (row)
 
 **반환된 데이터의 메타데이터에 접근**
 
@@ -213,7 +214,7 @@ CUBRID Python 드라이버에서는 기본적으로 자동 커밋 모드가 비�
 .. code-block:: python
 
     for description in cur.description:
-        print description
+        print (description)
 
 위 코드는 다음과 같은 내용을 출력한다. ::
 

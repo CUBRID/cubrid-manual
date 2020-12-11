@@ -35,11 +35,11 @@ To install CUBRID Python driver by compiling source code, you should have Python
 
 #.  Extract the archive to the desired location. ::
 
-        tar xvfz cubrid-python-src-8.4.0.0001.tar.gz
+        tar xvfz cubrid-python-10.2-latest.tar.gz
 
 #.  Navigate to the directory where you have extracted the source code. ::
 
-        cd cubrid-python-src
+        cd RB-10.2.0
 
 #.  Build the driver. At this and next step, make sure you are still under the root user. ::
 
@@ -51,7 +51,7 @@ To install CUBRID Python driver by compiling source code, you should have Python
 
 **Using a Package Manager (EasyInstall) of CUBRID Python Driver (Linux)**
 
-EasyInstall is a Python module (**easy_install**) bundled with **setuptools** that lets you automatically download, build, install, and manage Python packages. It gives you a quick way to install packages remotely by connecting to other websites via HTTP as well as connecting to the Package Index. It is somewhat analogous to the CPAN and PEAR tools for Perl and PHP, respectively. For more information about EasyInstall, see https://setuptools.readthedocs.io/en/latest/easy_install.html.
+EasyInstall is a Python module (**easy_install**) bundled with **setuptools** that lets you automatically download, build, install, and manage Python packages. It gives you a quick way to install packages remotely by connecting to other websites via HTTP as well as connecting to the Package Index. It is somewhat analogous to the CPAN and PEAR tools for Perl and PHP, respectively. For more information about EasyInstall, see https://setuptools.readthedocs.io/en/latest/deprecated/easy_install.html.
 
 Enter the command below to install CUBRID Python driver by using EasyInstall. ::
 
@@ -89,6 +89,7 @@ Python Sample Program
 This sample program will show steps that you need to perform in order to connect to the CUBRID database and run SQL statements from Python programming language. Enter the command line below to create a new table in your database. ::
 
     csql -u dba -c "CREATE TABLE posts( id integer, title varchar(255), body string, last_updated timestamp );" demodb
+    csql -u dba -c "grant ALL PRIVILEGES on posts to public;" demodb
 
 **Connecting to demodb from Python**
 
@@ -102,7 +103,7 @@ This sample program will show steps that you need to perform in order to connect
     
     .. code-block:: python
     
-        conn = CUBRIDdb.connect('CUBRID:localhost:30000:dba::')
+        conn = CUBRIDdb.connect('CUBRID:localhost:33000:demodb:::', 'dba', '')
 
 For the *demodb* database, it is not required to enter any password. In a real-world scenario, you will have to provide the password to successfully connect. 
 The syntax to use the `connect <https://pythonhosted.org/CUBRID-Python/_cubrid-module.html#connect>`_ () function is as follows: ::
@@ -113,23 +114,23 @@ If the database has not started and you try to connect to it, you will receive a
 
     Traceback (most recent call last):
       File "tutorial.py", line 3, in <module>
-        conn = CUBRIDdb.connect('CUBRID:localhost:30000:dba::')
-      File "/usr/local/lib/python2.6/site-packages/CUBRIDdb/__init__.py", line 48, in Connect
+        conn = CUBRIDdb.connect('CUBRID:localhost:30000:demodb:dba::')
+      File "/usr/local/lib/python3.5/site-packages/CUBRIDdb/__init__.py", line 61, in Connect
         return Connection(*args, **kwargs)
-      File "/usr/local/lib/python2.6/site-packages/CUBRIDdb/connections.py", line 19, in __init__
-        self._db = _cubrid.connect(*args, **kwargs)
-    _cubrid.Error: (-1, 'ERROR: DBMS, 0, Unknown DBMS Error')
+      File "/usr/local/lib/python3.5/site-packages/CUBRIDdb/connections.py", line 22, in __init__
+        self.connection = _cubrid.connect(*args, **kwargs2)
+    _cubrid.OperationalError: (-677, "ERROR: DBMS, -677, Failed to connect to database server, 'demodb', on the following host(s): localhost:localhost[CAS INFO-127.0.0.1:30000,0,0].")
 
 If you provide wrong credentials, you will receive an error such as this: ::
 
     Traceback (most recent call last):
       File "tutorial.py", line 3, in <module>
-        con = CUBRIDdb.connect('CUBRID:localhost:33000:demodb','a','b')
-      File "/usr/local/lib/python2.6/site-packages/CUBRIDdb/__init__.py", line 48, in Connect
+        con = CUBRIDdb.connect('CUBRID:localhost:33000:demodb:::','a','b')
+      File "/usr/local/lib/python3.5/site-packages/CUBRIDdb/__init__.py", line 61, in Connect
         return Connection(*args, **kwargs)
-      File "/usr/local/lib/python2.6/site-packages/CUBRIDdb/connections.py", line 19, in __init__
-        self._db = _cubrid.connect(*args, **kwargs)
-    _cubrid.Error: (-1, 'ERROR: DBMS, 0, Unknown DBMS Error')
+      File "/usr/local/lib/python3.5/site-packages/CUBRIDdb/connections.py", line 22, in __init__
+        self.connection = _cubrid.connect(*args, **kwargs2)
+    _cubrid.DatabaseError: (-165, 'ERROR: DBMS, -165, User "a" is invalid.[CAS INFO-127.0.0.1:33000,0,0].')
 
 **Executing an INSERT Statement**
 
@@ -155,7 +156,7 @@ The entire script up to now looks like this:
 .. code-block:: python
 
     import CUBRIDdb
-    conn = CUBRIDdb.connect('CUBRID:localhost:33000:demodb', 'public', '')
+    conn = CUBRIDdb.connect('CUBRID:localhost:33000:demodb:::', 'dba', '')
     cur = conn.cursor()
      
     # Plain insert statement
@@ -176,7 +177,7 @@ You can fetch entire records at a time by using the `fetchall <https://pythonhos
     cur.execute("SELECT * FROM posts ORDER BY last_updated")
     rows = cur.fetchall()
     for row in rows:
-        print row
+        print (row)
 
 This will return the two rows inserted earlier in the following form: ::
 
@@ -192,7 +193,7 @@ In a scenario where a lot of data must be returned into the cursor, you can fetc
     cur.execute("SELECT * FROM posts")
     row = cur.fetchone()
     while row:
-        print row
+        print (row)
         row = cur.fetchone()
 
 **Fetching as many as records desired at a time**
@@ -204,7 +205,7 @@ You can fetch a specified number of records at a time by using the `fetchmany <h
     cur.execute("SELECT * FROM posts")
     rows = cur.fetchmany(3)
     for row in rows:
-        print row
+        print (row)
 
 **Accessing Metadata on the Returned Data**
 
@@ -213,7 +214,7 @@ If it is necessary to get information about column attributes of the obtained re
 .. code-block:: python
 
     for description in cur.description:
-        print description
+        print (description)
 
 The output of the script is as follows: ::
 

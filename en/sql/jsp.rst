@@ -1,5 +1,5 @@
 
-:meta-keywords: cubrid jsp, loadjava utility
+:meta-keywords: cubrid jsp, cubrid javasp, loadjava utility
 :meta-description: CUBRID supports to develop stored functions and procedures in Java. Java stored functions/procedures are executed on the JVM (Java Virtual Machine) hosted by CUBRID.
 
 ******************************
@@ -21,77 +21,35 @@ The advantages of using Java stored functions/procedures are as follows:
 
     *   The other languages except Java do not support stored function/procedure. In CUBRID, only Java can implement stored function/procedure.
 
-.. _jsp-environment-configuration:
+.. _jsp-starting-javasp:
 
-Environment Configuration for Java Stored Function/Procedure
-============================================================
+Starting Java Stored Procedure Server
+=====================================
 
-To use Java-stored functions/procedures in CUBRID, you must have JRE (Java Runtime Environment) 1.6 or better installed in the environment where the CUBRID server is installed. You can download JRE from the Developer Resources for Java Technology (`https://www.oracle.com/java/technologies <https://www.oracle.com/java/technologies>`_).
+You need to start a Java Stored Procedure server (Java SP server) for the database you want to use Java-stored procedures/functions.
 
-If the java_stored_procedure parameter in the CUBRID configuration file (cubrid.conf) is set to yes, CUBRID 64-bit needs a 64-bit Java Runtime Environment, and CUBRID 32-bit needs a 32-bit Java Runtime Environment. For example, when you run CUBRID 64-bit in the system in which a 32-bit JAVA Runtime Environment is installed, the following error may occur. ::
+Execute the **cubrid javasp** **start** *db_name*. ::
 
-    % cubrid server start demodb
-     
-    This may take a long time depending on the amount of recovery works to do.
-    WARNING: Java VM library is not found : /usr/java/jdk1.6.0_15/jre/lib/amd64/server/libjvm.so: cannot open shared object file: No such file or directory.
-    Consequently, calling java stored procedure is not allowed
+    % cubrid javasp start demodb
 
-Execute the following command to check the JRE version if you have it already installed in the system. ::
+    @ cubrid javasp start: demodb
+    ++ cubrid javasp start: success
 
-    % java -version Java(TM) SE Runtime Environment (build 1.6.0_05-b13)
-    Java HotSpot(TM) 64-Bit Server VM (build 10.0-b19, mixed mode)
+You can verify that the Java SP server is successfully started.
 
-Windows Environment
--------------------
+Execute the **cubrid javasp** **status** *db_name*. ::
 
-For Windows, CUBRID loads the **jvm.dll** file to run the Java Virtual Machine. CUBRID first locates the **jvm.dll** file from the **PATH** environment variable and then loads it. If it cannot find the file, it uses the Java runtime information registered in the system registry.
+    % cubrid javasp status demodb
 
-You can configure the **JAVA_HOME** environment variable and add the directory in which the Java executable file is located to **Path**, by executing the command as follows: For information on configuring environment variables using GUI, see Installing and Configuring JDBC.
+    @ cubrid javasp status: demodb
+    Java Stored Procedure Server (demodb, pid 9220, port 38408)
+    Java VM arguments :
+    -------------------------------------------------
+    -Djava.util.logging.config.file=/path/to/CUBRID/java/logging.properties
+    -Xrs
+    -------------------------------------------------
 
-*   An example of installing 64 Bit JDK 1.6 and configuring the environment variables ::
-
-    % set JAVA_HOME=C:\jdk1.6.0
-    % set PATH=%PATH%;%JAVA_HOME%\jre\bin\server
-
-*   An example of installing 32 Bit JDK 1.6 and configuring the environment variables ::
-
-    % set JAVA_HOME=C:\jdk1.6.0
-    % set PATH=%PATH%;%JAVA_HOME%\jre\bin\client
-
-To use other vendor's implementation instead of Sun's Java Virtual Machine, add the path of the **jvm.dll** file to the **PATH** variable during the installation.
-
-Linux/UNIX Environment
-----------------------
-
-For Linux/UNIX environment, CUBRID loads the **libjvm.so** file to run the Java Virtual Machine. CUBRID first locates the **libjvm.so** file from the **LD_LIBRARY_PATH** environment variable and then loads it. If it cannot find the file, it uses the **JAVA_HOME** environment variable. For Linux, glibc 2.3.4 or later versions are supported. The following example shows how to configure the Linux environment variable (e.g., **.profile**, **.cshrc**, **.bashrc**, **.bash_profile**, etc.).
-
-*   An example of installing 64 Bit JDK 1.6 and configuring the environment variables in a bash shell ::
-
-    % JAVA_HOME=/usr/java/jdk1.6.0_10
-    % LD_LIBRARY_PATH=$JAVA_HOME/jre/lib/amd64:$JAVA_HOME/jre/lib/amd64/server:$LD_LIBRARY_PATH
-    % export JAVA_HOME
-    % export LD_LIBRARY_PATH
-
-*   An example of installing 32 Bit JDK 1.6 and configuring the environment variables in a bash shell ::
-
-    % JAVA_HOME=/usr/java/jdk1.6.0_10
-    % LD_LIBRARY_PATH=$JAVA_HOME/jre/lib/i386/:$JAVA_HOME/jre/lib/i386/client:$LD_LIBRARY_PATH
-    % export JAVA_HOME
-    % export LD_LIBRARY_PATH
-
-*   An example of installing 64 Bit JDK 1.6 and configuring the environment variables in a csh ::
-
-    % setenv JAVA_HOME /usr/java/jdk1.6.0_10
-    % setenv LD_LIBRARY_PATH $JAVA_HOME/jre/lib/amd64:$JAVA_HOME/jre/lib/amd64/server:$LD_LIBRARY_PATH
-    % set path=($path $JAVA_HOME/bin .)
-
-*   An example of installing 32 Bit JDK 1.6 and configuring the environment variables in a csh shell ::
-
-    % setenv JAVA_HOME /usr/java/jdk1.6.0_10
-    % setenv LD_LIBRARY_PATH $JAVA_HOME/jre/lib/i386:$JAVA_HOME/jre/lib/i386/client:$LD_LIBRARY_PATH
-    % set path=($path $JAVA_HOME/bin .)
-
-To use other vendor's implementation instead of Sun's Java Virtual Machine, add the path of the JVM (**libjvm.so**) to the library path during the installation. The path of the **libjvm.so** file can be different depending on the platform. For example, the path is the **$JAVA_HOME/jre/lib/sparc** directory in a SUN Sparc machine.
+For more details on javasp utility, see :ref:`cubrid-javasp-server` and :ref:`cubrid-javasp-server-config`.
 
 How to Write Java Stored Function/Procedure
 ===========================================

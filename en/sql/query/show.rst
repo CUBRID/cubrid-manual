@@ -1840,7 +1840,7 @@ Num_connection_workers      INT             The number of connection worker thre
 SHOW PAGE BUFFER STATUS
 -----------------------
 
-It shows the status of data page buffer pool.
+It shows the status of the data page buffer pool.
 
 .. code-block:: sql
 
@@ -1900,4 +1900,3 @@ The following shows the examples of this syntax.
             Num_pages_read             : 0
             Pages_read_rate            : 0.0000000000
             Num_flusher_waiting_threads: 0
-

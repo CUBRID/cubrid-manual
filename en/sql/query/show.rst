@@ -1852,7 +1852,7 @@ This query has the following columns:
 Column name                 Type            Description
 =========================== =============== ================================================================================
 Hit_rate                    NUMERIC(13,10)  The buffer pool hit rate (since the last printout)
-Num_hit                     BIGINT          The number of buffer hit (since the last printout)
+Num_hit                     BIGINT          The number of buffer hits (since the last printout)
 Num_page_request            BIGINT          The number of page requests (since the last printout)
 Pool_size                   INT             Buffer pool size in pages
 Page_size                   INT             Data page size

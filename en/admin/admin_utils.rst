@@ -3227,13 +3227,13 @@ The **cubrid tde** utility is used to manage the TDE encryption of the database 
 
     cubrid tde <operation> [option] database_name
 
-*   **cubrid**: An integrated utility for the CUBRID service and database management
+*   **cubrid**: An integrated utility for the CUBRID service and database management.
 
-*   **tde**: A utility that manages TDE encryption applied to the database
+*   **tde**: A utility that manages TDE encryption applied to the database.
 
 *   *operation*: There are four types of operation: key addition, key deletion, key change, and showing keys' information. One operation must be set, and they are exclusive.
 
-*   *database_name*: The name of the database on which TDE administration operations to be performed
+*   *database_name*: The name of the database on which TDE administration operations to be performed.
 
 The following table shows <operation> available with the cubrid tde utility.
 
@@ -3247,7 +3247,7 @@ The following table shows <operation> available with the cubrid tde utility.
         Key File: /home/usr/CUBRID/databases/testdb/testdb_keys
 
         The current key set on testdb:
-       Key Index: 2
+        Key Index: 2
         Created on Fri Nov 27 11:14:54 2020
         Set     on Fri Nov 27 11:15:30 2020
 

@@ -105,7 +105,7 @@ The following shows options available with the **cubrid backupdb** utility (opti
 
    This option is used not to include the key file in the backup volume. The key file that is not included is separated into a file named **<database_name>_bk<backup_level>_keys**. If this option is not given, the key file is included in the backup volume by default. For a detailed description of key file separation, see :ref:`tde-enc-backup`.  ::
 
-        cubrid backupdb --seprate-keys demodb
+        cubrid backupdb -k demodb
 
 Backup Strategy and Method
 ^^^^^^^^^^^^^^^^^^^^^^^^^^

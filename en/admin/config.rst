@@ -2153,7 +2153,7 @@ The following are other parameters. The type and value range for each parameter 
 
 **tde_keys_file_path**
 
-    **tde_keys_file_path** is a parameter to configure the path of the key file for TDE. The key file's name is fixed as [database_name]_keys, and the directory where the key file exists is designated. If this system parameter is not set, the key file is searched in the same location as the database volume. For a detailed description of the key file, see :ref:`tde-file-based-key`.
+    **tde_keys_file_path** is a parameter to configure the path of the key file for TDE. The key file's name is fixed as <database_name>_keys, and the directory where the key file exists is designated. If this system parameter is not set, the key file is searched in the same location as the database volume. For a detailed description of the key file, see :ref:`tde-file-based-key`.
 
 **tde_default_algorithm**
 

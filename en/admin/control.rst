@@ -43,9 +43,8 @@ One of the following can be specified in <command>:
 *   restart: restart a database server process.
 *   status: check status of a database server process. 
 
-| Every command can have a database name (**[database_name]**) as an argument to specify the database to execute the command.
-| If the database name is not specified in the **status** command, names of currently running database servers are displayed. see :ref:`control-cubrid-server-status`.  
-| If the database name is not specified in every command except **status**, the utility refers to the database names in the **server** property of the **[service]** section of **cubrid.conf**.
+| Every command can specify a database name (**[database_name]**) as an argument.
+| If the database name is not specified, the **status** command displays the currently running database servers' information, and the commands except **status** refer to the database names in the **server** property of the **[service]** section of **cubrid.conf** and execute the command.
 
 ::
 
@@ -155,8 +154,7 @@ One of the following can be specified in <command>:
 *   restart: restart a Java Stored Procedure server process.
 *   status: check status of a Java Stored Procedure server process.
 
-| Every command can have a database name (**[database_name]**) as an argument to specify the database to execute the command.
-| If the database name is not specified in every command, the utility refers to the database names in the **server** property of the **[service]** section of **cubrid.conf**.
+Every command can specify a database name (**[database_name]**) as an argument. If the database name is not specified, the command is executed by referring to the database names in the **server** property of the **[service]** section of **cubrid.conf**.
 
 ::
 

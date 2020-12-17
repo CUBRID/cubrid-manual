@@ -2386,7 +2386,7 @@ SORT-LIMIT 최적화는 **ORDER BY** 절과 LIMIT 절을 명시한 질의에 적
 * SERIAL 관련 속성이 포함된 경우.
 * 컬럼 경로 관련 속성이 포함된 경우.
 * 메서드가 포함된 경우.
-* 저장 프로 시저 또는 저장 함수가 포함된 경우
+* 저장 프로 시저 또는 저장 함수가 포함된 경우.
 * dual, _db_attribute 등과 같은 시스템 테이블이 포함된 경우.
 * sys_guid ()와 같은 시스템 함수가 포함된 경우.
 
@@ -2449,4 +2449,4 @@ SORT-LIMIT 최적화는 **ORDER BY** 절과 LIMIT 절을 명시한 질의에 적
       deletion_marker = false
     }
 
-캐시 된 질의는 결과 화면 중간에 **query_string** 으로 표시되며 각 **n_entries** 및 **n_pages** 는 캐시된 질의 수와 캐시 된 결과의 페이지 수를 나타낸다. **n_entries** 는 파라미터 **max_query_cache_entries** 의 값으로 제한되고 **n_pages** 는 **query_cache_use_pages** 의 값으로 제한된다. **n_entries** 가 초과되거나 **n_pages** 가 초과되면 캐시 항목 중 일부가 삭제될 후보로 선택되어 삭제되고, 삭제되는 캐시는 **max_query_cache_entries** 값과 **query_cache_use_pages** 값의 약 20% 이다.
+캐시 된 질의는 결과 화면 중간에 **query_string** 으로 표시되며 각 **n_entries** 및 **n_pages** 는 캐시된 질의 수와 캐시 된 결과의 페이지 수를 나타낸다. **n_entries** 는 파라미터 **max_query_cache_entries** 의 값으로 제한되고 **n_pages** 는 **query_cache_size_in_pages** 의 값으로 제한된다. **n_entries** 가 초과되거나 **n_pages** 가 초과되면 캐시 항목 중 일부가 삭제될 후보로 선택되어 삭제되고, 삭제되는 캐시는 **max_query_cache_entries** 값과 **query_cache_size_in_pages** 값의 약 20% 이다.

@@ -293,7 +293,7 @@ createdb
 
 .. note:: **기존 키 파일을 사용하는 데이터베이스 생성**
 
-    데이터베이스가 생성될 때 기본적으로 키 파일이 함께 생성된다. 만약 데이터베이스 생성 시 기존 키 파일을 사용하고 싶다면, 먼저 키 파일을 <database-name>_keys 이름으로 복사해 둔다. 이후 복사한 키 파일의 디렉토리를 **ted_keys_file_path** 시스템 파라미터에 지정하고 **createdb** 유틸리티를 통해 데이터베이스를 생성한다. TDE 키 파일에 관한 자세한 내용은 :ref:`tde-file-based-key` 를 참고한다.
+    데이터베이스가 생성될 때 기본적으로 키 파일이 함께 생성된다. 만약 데이터베이스 생성 시 기존 키 파일을 사용하고 싶다면, 먼저 키 파일을 <database-name>_keys 이름으로 복사해 둔다. 이후 복사한 키 파일의 디렉토리를 **tde_keys_file_path** 시스템 파라미터에 지정하고 **createdb** 유틸리티를 통해 데이터베이스를 생성한다. TDE 키 파일에 관한 자세한 내용은 :ref:`tde-file-based-key` 를 참고한다.
     
 .. _adding-database-volume:    
 
@@ -3200,7 +3200,7 @@ tde
 
 ::
 
-    cubrid tde operation [option] database_name
+    cubrid tde <operation> [option] database_name
 
 *   **cubrid**: CUBRID 서비스 및 데이터베이스 관리를 위한 통합 유틸리티
 
@@ -3249,7 +3249,7 @@ tde
 
 .. option:: -d, --delete-key=KEY_INDEX
 
-    키 파일 (-keys)에서 인덱스로 지정된 키 하나를 제거한다. 현재 데이터베이스에 등록된 키는 제거할 수 없다. ::
+    키 파일 (_keys)에서 인덱스로 지정된 키 하나를 제거한다. 현재 데이터베이스에 등록된 키는 제거할 수 없다. ::
 
         $ cubrid tde -d 1 testdb
         Key File: /home/usr/CUBRID/databases/testdb/testdb_keys
@@ -3258,7 +3258,7 @@ tde
 
 .. option:: -c, --change-key=KEY_INDEX
 
-    데이터베이스에 등록된 키를 키 파일 (_keys)에 존재하는 다른 키로 변경한다. 변경 시에 이전에 등록된 키와 새로 등록하려는 키가 모두 존재해야 한다.
+    데이터베이스에 등록된 키를 키 파일 (_keys)에 존재하는 다른 키로 변경한다. 변경 시에 이전에 등록된 키와 새로 등록하려는 키가 모두 존재해야 한다. ::
 
         $ cubrid tde -c 2 testdb
         Key File: /home/usr/CUBRID/databases/testdb/testdb_keys

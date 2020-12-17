@@ -641,7 +641,8 @@ SQL 힌트
     <merge_statement_hint> ::=
     USE_UPDATE_INDEX (<update_index_list>) |
     USE_DELETE_INDEX (<insert_index_list>) |
-    RECOMPILE
+    RECOMPILE |
+    QUERY_CACHE
 
 SQL 힌트는 주석에 더하기 기호(+)를 함께 사용하여 지정한다. 힌트를 사용하는 방법은 :doc:`comment` 절에 소개된 바와 같이 세 가지 방식이 있다. 따라서 SQL 힌트도 다음과 같이 세 가지 방식으로 사용할 수 있다.
 
@@ -684,6 +685,8 @@ SQL 힌트는 주석에 더하기 기호(+)를 함께 사용하여 지정한다.
 .. _recompile:
 
 *   **RECOMPILE** : 질의 실행 계획을 리컴파일한다. 캐시에 저장된 기존 질의 실행 계획을 삭제하고 새로운 질의 실행 계획을 수립하기 위해 이 힌트를 사용한다.
+
+*   **QUERY_CACHE** : 질의와 그 결과를 캐시한다. 이 힌트는 **SELECT** 질의에서만 사용할 수 있으며, 자세한 내용은 :ref:`query-cache` 를 참고한다.
 
 .. note::
 
@@ -2370,3 +2373,80 @@ SORT-LIMIT 최적화는 **ORDER BY** 절과 LIMIT 절을 명시한 질의에 적
                    cost:  6 card 1000
         sort:  2 asc
         cost:  7 card 0
+
+.. _query-cache :
+
+쿼리 캐시
+===========
+
+**QUERY_CACHE** 힌트는 반복적으로 실행되는 쿼리의 성능을 향상시키는 데 사용할 수 있으며, 쿼리는 전용 메모리 영역에 캐시되고 그 결과도 별도의 디스크 공간에 캐시된다. 단, 힌트는 SELECT 쿼리에만 적용된다. 그러나 다음과 같은 경우에는 쿼리에 힌트를 적용 할 수 없으며 힌트는 의미가 없어진다.
+
+* 아래와 같이 질의에 시스템 시간 또는 날짜 관련 속성이 포함된 경우
+    예) SELECT SYSDATE, ADDDATE (SYSDATE, INTERVAL -24 HOUR), ADDDATE (SYSDATE, -1);
+* SERIAL 관련 속성이 포함된 경우.
+* 컬럼 경로 관련 속성이 포함된 경우.
+* 메서드가 포함된 경우.
+* 저장 프로 시저 또는 저장 함수가 포함된 경우
+* dual, _db_attribute 등과 같은 시스템 테이블이 포함된 경우.
+* sys_guid ()와 같은 시스템 함수가 포함된 경우.
+
+힌트가 설정되고 새 SELECT 질의가 처리 될 때 질의가 캐시에서 발견되면 쿼리 캐시를 사용한다. 동일한 데이터베이스에서 동일한 질의 텍스트와 동일한 바인딩 값을 사용하는 경우 질의는 동일한 것으로 간주된다. 캐시 된 질의를 찾을 수없는 경우 질의가 처리된 다음 결과와 함께 캐시가 생성된다. 질의가 캐시에서 발견되면 캐시된 영역에서 결과를 가져온다. CSQL에서는 아래 예제와 같이 COUNT 함수를 사용하여 질의를 반복적으로 실행할 때 개선된 성능을 쉽게 측정 할 수 있다. 첫번째 질의에 대한 결과는 캐시가 되어 있지 않아서 느리지만, 두 번째 질의의 결과는 캐시 된 영역에서 가져오므로 응답 시간이 이전 질의보다 훨씬 빠르다. ::
+
+    csql> SELECT /*+ QUERY_CACHE */ count(*) FROM game;
+
+    === <Result of SELECT Command in Line 1> ===
+
+         count(*)
+    =============
+         8653
+
+    1 row selected. (0.107082 sec) Committed.
+
+    1 command(s) successfully processed.
+
+    csql> SELECT /*+ QUERY_CACHE */ count(*) FROM game;
+
+    === <Result of SELECT Command in Line 1> ===
+
+         count(*)
+    =============
+         8653
+
+    1 row selected. (0.003932 sec) Committed.
+
+    1 command(s) successfully processed.
+
+다음과 같이 CSQL에 세션 명령 *;info qcache* 를 입력하여 쿼리가 캐시되는지 여부를 확인할 수 있다. ::
+
+    csql> ;info qcache
+
+    LIST_CACHE {
+      n_hts 1010
+      n_entries 1  n_pages 1
+      lookup_counter 1
+      hit_counter 1
+      miss_counter 0
+      full_counter 0
+    }
+
+    list_hts[0] 0x6a74d10
+    HTABLE NAME = list file cache (DB_VALUE list), SIZE = 211, REHASH_AT = 147,
+    NENTRIES = 1, NPREALLOC = 0, NCOLLISIONS = 0
+
+    HASH AT 0
+    LIST_CACHE_ENTRY (0x6c46d18) {
+      param_values = [ ]
+      list_id = { type_list { 1 integer/1 } tuple_cnt 1 page_cnt 1 first_vpid { 65 32766 } last_vpid { 65 32766 } lasttpl_len 24 query_id 2
+      temp_vfid { 64 32766 } }
+      uncommitted_marker = false
+      tran_isolation = 4
+      tran_index_array = [ ]
+      last_ta_idx = 0
+      query_string = select /*+ QUERY_CACHE */ count(*) from [game] [game]?193="en_US";194="en_US";249="Asia/Seoul";user=0|833|1
+      time_created = 11/23/20 16:07:12.779703
+      time_last_used = 11/23/20 16:07:22.772330
+      ref_count = 1
+      deletion_marker = false
+    }
+
+캐시 된 질의는 결과 화면 중간에 **query_string** 으로 표시되며 각 **n_entries** 및 **n_pages** 는 캐시된 질의 수와 캐시 된 결과의 페이지 수를 나타낸다. **n_entries** 는 파라미터 **max_query_cache_entries** 의 값으로 제한되고 **n_pages** 는 **query_cache_use_pages** 의 값으로 제한된다. **n_entries** 가 초과되거나 **n_pages** 가 초과되면 캐시 항목 중 일부가 삭제될 후보로 선택되어 삭제되고, 삭제되는 캐시는 **max_query_cache_entries** 값과 **query_cache_use_pages** 값의 약 20% 이다.

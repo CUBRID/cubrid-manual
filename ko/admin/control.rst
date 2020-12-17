@@ -40,9 +40,43 @@ CUBRID 설정 파일에 등록된 서비스를 제어하기 위한 **cubrid** �
 *   start: 데이터베이스 서버 프로세스 구동
 *   stop: 데이터베이스 서버 프로세스 종료
 *   restart: 데이터베이스 서버 프로세스 재시작
-*  status: 데이터베이스 서버 프로세스 상태 확인
- 
-**status**\ 를 제외한 명령어에는 데이터베이스 이름이 인수로 지정되어야 한다.
+*   status: 데이터베이스 서버 프로세스 상태 확인
+
+| 모든 명령어는 실행할 데이터베이스를 지정하기 위해 데이터베이스 이름(**[database_name]**)을 인수로 가질 수 있다.
+| **status** 명령어는 데이터베이스 이름을 지정하지 않으면 구동 중인 모든 데이터베이스 서버의 이름이 표시된다. :ref:`control-cubrid-server-status`\을 참고한다.
+| **status** 명령어를 제외한 다른 명령어에서 데이터베이스 이름을 지정하지 않으면, cubrid.conf의 **[service]** 섹션의 **server** 프로퍼티에서 데이터베이스 이름을 참조한다.
+
+::
+
+    # cubrid.conf
+
+    [service]
+
+    ...
+
+    server=demodb,testdb
+
+    ...
+
+::
+
+    % cubrid server start
+
+    @ cubrid server start: demodb
+
+    This may take a long time depending on the amount of recovery works to do.
+
+    CUBRID 10.2 
+
+    ++ cubrid server start: success
+
+    @ cubrid server start: testdb
+
+    This may take a long time depending on the amount of recovery works to do.
+
+    CUBRID 10.2 
+
+    ++ cubrid server start: success
 
 브로커 제어
 -----------
@@ -119,7 +153,30 @@ CUBRID 자바 저장 프로시저 (Java SP) 서버 프로세스를 제어하기 
 *   restart: 자바 저장 프로시저 서버 프로세스 재시작
 *   status: 자바 저장 프로시저 서버 프로세스 상태 확인
 
-모든 명령어에는 데이터베이스 이름이 인수로 지정되어야 한다.
+| 모든 명령어는 실행할 데이터베이스를 지정하기 위해 데이터베이스 이름(**[database_name]**)을 인수로 가질 수 있다.
+| 명령어에 데이터베이스 이름을 지정하지 않으면, cubrid.conf의 **[service]** 섹션의 **server** 프로퍼티에서 데이터베이스 이름을 참조한다.
+
+::
+
+    # cubrid.conf
+
+    [service]
+
+    ...
+
+    server=demodb,testdb
+
+    ...
+
+::
+
+    % cubrid javasp start
+
+    @ cubrid javasp start: demodb
+    ++ cubrid javasp start: success
+
+    @ cubrid javasp start: testdb
+    ++ cubrid javasp start: success
 
 .. _control-cubrid-services:
 
@@ -475,6 +532,8 @@ CUBRID는 cubrid 유틸리티의 수행 결과에 대한 로깅 기능을 제공
     CUBRID 10.2 
 
     ++ cubrid server start: success
+
+.. _control-cubrid-server-status:
 
 데이터베이스 상태 확인
 ----------------------

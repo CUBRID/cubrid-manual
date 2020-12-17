@@ -43,7 +43,41 @@ One of the following can be specified in <command>:
 *   restart: restart a database server process.
 *   status: check status of a database server process. 
 
-Every command except **status** must have a database name as an argument. 
+| Every command can have a database name (**[database_name]**) as an argument to specify the database to execute the command.
+| If the database name is not specified in the **status** command, names of currently running database servers are displayed. see :ref:`control-cubrid-server-status`.  
+| If the database name is not specified in every command except **status**, the utility refers to the database names in the **server** property of the **[service]** section of **cubrid.conf**.
+
+::
+
+    # cubrid.conf
+
+    [service]
+
+    ...
+
+    server=demodb,testdb
+
+    ...
+
+::
+
+    % cubrid server start
+
+    @ cubrid server start: demodb
+
+    This may take a long time depending on the amount of recovery works to do.
+
+    CUBRID 10.2 
+
+    ++ cubrid server start: success
+
+    @ cubrid server start: testdb
+
+    This may take a long time depending on the amount of recovery works to do.
+
+    CUBRID 10.2 
+
+    ++ cubrid server start: success
 
 Controlling Broker
 ------------------
@@ -121,7 +155,30 @@ One of the following can be specified in <command>:
 *   restart: restart a Java Stored Procedure server process.
 *   status: check status of a Java Stored Procedure server process.
 
-Every command must have a database name as an argument.
+| Every command can have a database name (**[database_name]**) as an argument to specify the database to execute the command.
+| If the database name is not specified in every command, the utility refers to the database names in the **server** property of the **[service]** section of **cubrid.conf**.
+
+::
+
+    # cubrid.conf
+
+    [service]
+
+    ...
+
+    server=demodb,testdb
+
+    ...
+
+::
+
+    % cubrid javasp start
+
+    @ cubrid javasp start: demodb
+    ++ cubrid javasp start: success
+
+    @ cubrid javasp start: testdb
+    ++ cubrid javasp start: success
 
 .. _control-cubrid-services:
 
@@ -477,6 +534,8 @@ The following example shows how to restart *demodb* server. *demodb* server that
     CUBRID 10.2
 
     ++ cubrid server start: success
+
+.. _control-cubrid-server-status:
 
 Checking Database Server Status
 -------------------------------

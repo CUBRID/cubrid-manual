@@ -174,7 +174,7 @@ The backup volume contains the key file by default. If the backup volume, includ
 
 The key file separated during backup can be given as the key file for restoration by using the **\\-\\-keys-file-path** option (restoredb). If the valid key file does not exist in the specified path, restore fails.
 
-If the \\-\\-keys-file-path option is not given, the key file to be used is searched according to the following priority. If the valid key file cannot be found, recovery fails.
+If the \\-\\-keys-file-path option is not given, the key file to be used is searched according to the following priority. If the valid key file cannot be found, restore fails.
 
 *Key file classification*
 
@@ -183,7 +183,7 @@ If the \\-\\-keys-file-path option is not given, the key file to be used is sear
 
 *The priority of the key file to use for restore*
 
-#.  The backup key file that the backup volume contains
+#.  The backup key file that the backup volume contains.
 #.  The backup key file created with the **\\-\\-separate-keys** option during backup (e.g. testdb_bk0_keys). This key file must exist in the same path as the backup volume.
 #.  The server key file in the path specified by the **tde-keys-file-path** system parameter.
 #.  The server key file in the same path as the data volume (e.g., testdb_keys).
@@ -218,7 +218,7 @@ CUBRID supports the following encryption algorithms for TDE.
 =================================  =============  =============
  Algorithm                          Key Size       Option Name   
 =================================  =============  =============
- Advanced Encryption Algorithm      256 bits       AES         
+ Advanced Encryption Standard      256 bits       AES         
 ---------------------------------  -------------  -------------
  ARIA                               256 bits       ARIA        
 =================================  =============  =============
@@ -274,7 +274,7 @@ Encryption of each table and encryption algorithm can be checked by the **tde_al
 
     1 command(s) successfully processed.
 
-Using cubrid diagdb Utility
+Using cubrid diagdb utility
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You can check by referring to **tde_algorithm** among the file header information of encrypted tables and index files from the result by **cubrid diagdb** utility with  the -d1 (dump file tables) option. For more details, see :ref:`diagdb`.

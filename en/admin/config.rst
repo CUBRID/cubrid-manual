@@ -2157,7 +2157,7 @@ The following are other parameters. The type and value range for each parameter 
 
 **tde_default_algorithm**
 
-    **tde_default_algorithm** is a parameter that configures the default algorithm used when creating the TDE encryption table. Log and temporary data are always encrypted using the algorithm set with this parameter when they have to be encrypted. **AES** and **ARIA** can be set. For more information on encryption algorithms, refer to :ref:`tde-algorithm`.
+    **tde_default_algorithm** is a parameter that configures the default algorithm used when creating the TDE encryption table. Log and temporary data are always encrypted using the algorithm set with this parameter when they have to be encrypted. **AES** or **ARIA** can be set. For more information on encryption algorithms, refer to :ref:`tde-algorithm`.
 
 .. _broker-configuration:
 

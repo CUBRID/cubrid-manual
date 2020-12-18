@@ -785,7 +785,7 @@ You can encrypt a table as follows. For more information on TDE encryption, see 
 
     CREATE TABLE enc_tbl (a INT, b INT) ENCRYPT = AES;
 
-You can specify **AES** and **ARIA** as the encryption algorithm. If omitted as follows, the encryption algorithm specified by the system parameter **tde_default_algorithm** is used. The default value is **AES**.
+You can specify **AES** or **ARIA** as the encryption algorithm. If omitted as follows, the encryption algorithm specified by the system parameter **tde_default_algorithm** is used. The default value is **AES**.
 
 .. code-block:: sql
 

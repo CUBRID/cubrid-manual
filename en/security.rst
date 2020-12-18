@@ -10,6 +10,53 @@ This chapter describes the CUBRID security features. CUBRID provides Packet Encr
 Packet Encryption
 =================
 
+The need for packet encryption
+------------------------------
+Without an encrypted connection between the client and the server, a hacker with access to the network can monitor all traffic and steal and exploit data exchanged between the client and server. In this way, a third party (the man in the middle) steals information and uses it as a man in the middle (MITM) attack. This man-in-the-middle attack can be prevented by adding a secure authentication procedure to the connection between the client and server.
+
+Packet encryption method
+------------------------------
+CUBRID uses SSL/TLS (Secure Socket Layer/Transport Layer Security) protocol to encrypt data transmitted between the client and server. The CUBRID server uses OpenSSL for encryption, and the client can make an encrypted connection using JDBC or CCI Driver. The encryption protocols supported between the client and server are SSLv3, TLSv1, TLSv1.1, and TLSv1.2.
+
+.. note:: **SSL/TLS**
+
+	SSL was first developed by Netscape as an encryption protocol that provides authentication and data encryption between a client and server working over a network. Nescape released version 3.0, which improved security flaws in 1996. The SSL 3.0 version became the basis for TLS 1.0, and was defined by the IETF in January 1999 as the `RFC2246 <https://tools.ietf.org/html/RFC2246>`_ standard. The last update is `RFC5246 <https://tools.ietf.org/html/RFC5246>`_ . TLS is defined based on SSL 3.0, it is almost similar to SSL 3.0.
+
+	SSL/TLS provides Server Authentication, Client Authentication and Data Encryption functions. Authentication refers to a procedure to verify that the other party is correct, and encryption refers to preventing access to contents even if data is stolen.
+
+
+Server setup for packet encryption
+------------------------------------
+**Set encryption mode and non-encryption mode**
+
+CUBRID can set either an encryption mode or a non-encryption mode, and the default is non-encryption mode. To change to the encryption mode, you can set the encryption mode by changing the SSL parameter value in cubrid_broker.conf. If you change the SSL parameter value of cubrid_broker.conf, you must restart the broker. For detailed configuration method, refer to :ref:`broker-configuration`\ .
+
+
+**Certificate and Private Key**
+
+In order to exchange an encrypted symmetric session key which will be used in a secure communication session, a public key and a private key are required in the server.
+
+The public key used by the server is included in the certificate 'cas_ssl_cert.crt', and the private key is included in 'cas_ssl_cert.key'. The certificate and private key are located in the $CUBRID/conf directory.
+
+This certificate, 'self-signed' certificate, was created with the OpenSSL command tool utility, and can be replaced with another certificate issued by a public CA (Certificate Authorities, for example IdenTrust or DigiCert) if desired. Or, existing certificate/private key can be replaced by generating new one using OpenSSL command utility as shown below.
+
+.. code-block:: bash
+
+	$ openssl genrsa -out my_cert.key 2048                                               # create 2048 bit size RSA private key
+	$ openssl req -new -key my_cert.key -out my_cert.csr                                 # create CSR (Certificate Signing Request)
+	$ openssl x509 -req -days 365 -in my_cert.csr -signkey my_cert.key -out my_cert.crt  # create a certificate valid for 1 year.
+
+And replace my_cert.key and my_cert.crt with $CUBRID/conf/cas_ssl_cert.key and $CUBRID/conf/cas_ssl_cert.crt respectively.
+
+
+Supported driver
+------------------------------
+CUBRID provides various drivers, Currently, the drivers that support packet encryption connection are JDBC and CCI.
+
+**Encrypted connection method**
+
+The client can make an encrypted connection with the server by using the useSSL property of db-url during driver connection setup. For more information on how to use it, refer to :ref:`jdbc-connection-conf`\  of the JDBC driver or :ref:`cci_connect_with_url`\  of the CCI driver.
+
 .. _access-control:
 
 ACL (Access Control List)

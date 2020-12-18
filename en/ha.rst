@@ -2216,6 +2216,10 @@ restoreslave
 
     This option restores a database to the path specified in the database location file(databases.txt). For further information, see -u of :ref:`restoredb`
 
+.. option:: -k, --keys-file-path=PATH
+
+    This option specifies the path of the key file required to restore. For more information, see :ref:`restoredb`.
+
 Example Scenarios of Building Replication
 -----------------------------------------
 

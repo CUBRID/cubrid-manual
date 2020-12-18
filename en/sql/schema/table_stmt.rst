@@ -79,7 +79,8 @@ To create a table, use the **CREATE TABLE** statement.
         <table_options> ::= <table_option> [[,] <table_option> ...] 
             <table_option> ::= REUSE_OID | DONT_REUSE_OID |
                                COMMENT [=] 'table_comment_string' |
-                               [CHARSET charset_name] [COLLATE collation_name]
+                               [CHARSET charset_name] [COLLATE collation_name] |
+                               ENCRYPT [=] [AES | ARIA]
 
 *   IF NOT EXISTS: If an identically named table already exists, a new table will not be created without an error.
 *   *table_name*: specifies the name of the table to be created (maximum: 254 bytes).
@@ -773,10 +774,29 @@ Or you can see the table's comment with ;sc command in the CSQL interpreter.
     
     csql> ;sc tbl
 
+.. _create-tde-table:
+
+Table Encryption (TDE)
+^^^^^^^^^^^^^^^^^^^^^^
+
+You can encrypt a table as follows. For more information on TDE encryption, see :ref:`tde`.
+
+.. code-block:: sql
+
+    CREATE TABLE enc_tbl (a INT, b INT) ENCRYPT = AES;
+
+You can specify **AES** or **ARIA** as the encryption algorithm. If omitted as follows, the encryption algorithm specified by the system parameter **tde_default_algorithm** is used. The default value is **AES**.
+
+.. code-block:: sql
+
+    CREATE TABLE enc_tbl (a INT, b INT) ENCRYPT;
+
+The encryption information is not inherited.
+
 CREATE TABLE LIKE
 -----------------
 
-You can create a table that has the same schema as an existing table by using the **CREATE TABLE ... LIKE** statement. Column attribute, table constraint, and index are replicated from the existing table. An index name created from the existing table changes according to a new table name, but an index name defined by a user is replicated as it is. Therefore, you should be careful at a query statement that is supposed to use a specific index created by using the index hint syntax(see :ref:`index-hint-syntax`).
+You can create a table with the same schema as an existing table by using the **CREATE TABLE ... LIKE** statement. Column attribute, table constraint, index, and encryption information are replicated from the existing table. An index name created from the existing table changes according to a new table name, but an index name defined by a user is replicated as it is. Therefore, you should be careful with a query statement that is supposed to use a specific index created by using the index hint syntax(see :ref:`index-hint-syntax`).
 
 You cannot create the column definition because the **CREATE TABLE ... LIKE** statement replicates the schema only. 
 

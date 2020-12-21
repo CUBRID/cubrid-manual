@@ -38,7 +38,7 @@ In order to exchange an encrypted symmetric session key which will be used in a 
 
 The public key used by the server is included in the certificate 'cas_ssl_cert.crt', and the private key is included in 'cas_ssl_cert.key'. The certificate and private key are located in the $CUBRID/conf directory.
 
-This certificate, 'self-signed' certificate, was created with the OpenSSL command tool utility, and can be replaced with another certificate issued by a public CA (Certificate Authorities, for example IdenTrust or DigiCert) if desired. Or, existing certificate/private key can be replaced by generating new one using OpenSSL command utility as shown below.
+This certificate, 'self-signed' certificate, was created with the OpenSSL command tool utility and can be replaced with another certificate issued by a public CA (Certificate Authorities, for example, IdenTrust or DigiCert) if desired. Or, the existing certificate/private key can be replaced by generating a new one using the OpenSSL command utility as shown below.
 
 .. code-block:: bash
 

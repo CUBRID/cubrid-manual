@@ -1,6 +1,6 @@
 
 :meta-keywords: DDL Audit, log
-:meta-description: CUBRID has capability of recording DDL (Data Definition Language) that changes the database system configuration such as create/delete/modify tables as well as changing access privilege of a table.
+:meta-description: CUBRID has the capability of recording DDL (Data Definition Language) that changes the database system configuration such as create/delete/modify tables as well as changing the access privilege of a table.
 
 .. _ddl-audit:
 

@@ -10,8 +10,8 @@ This chapter describes the CUBRID security features. CUBRID provides Packet Encr
 Packet Encryption
 =================
 
-The need for packet encryption
-------------------------------
+Requirements of secure communication
+--------------------------------------
 Without an encrypted connection between the client and the server, a hacker with access to the network can monitor all traffic and steal and exploit data exchanged between the client and the server. In this way, a third party (middle-man) steals and makes bad use of information, it is called a man in the middle (MITM) attack. This MITM attack can be prevented by adding a secure authentication procedure to the connection between the client and the server.
 
 Packet encryption method
@@ -51,7 +51,7 @@ And replace my_cert.key and my_cert.crt with $CUBRID/conf/cas_ssl_cert.key and $
 
 Supported driver
 ------------------------------
-CUBRID provides various drivers, Currently, the drivers that support packet encryption connection are JDBC and CCI.
+CUBRID provides various drivers. Currently, the drivers that support packet encryption feature are JDBC and CCI.
 
 **Encrypted connection method**
 

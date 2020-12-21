@@ -20,7 +20,7 @@ CUBRID uses SSL/TLS (Secure Socket Layer/Transport Layer Security) protocol to e
 
 .. note:: **SSL/TLS**
 
-	SSL was first developed by Netscape as an encryption protocol that provides authentication and data encryption between a client and server working over a network. Nescape released version 3.0, which improved security flaws in 1996. The SSL 3.0 version became the basis for TLS 1.0, and was defined by the IETF in January 1999 as the `RFC2246 <https://tools.ietf.org/html/RFC2246>`_ standard. The last update is `RFC5246 <https://tools.ietf.org/html/RFC5246>`_ . TLS is defined based on SSL 3.0, it is almost similar to SSL 3.0.
+	SSL was first developed by Netscape as an encryption protocol that provides authentication and data encryption between a client and server working over a network. Netscape released version 3.0, which improved security flaws in 1996; Since then, the SSL 3.0 version became the basis for TLS 1.0; and it was defined by the IETF in January 1999 as the `RFC2246 <https://tools.ietf.org/html/RFC2246>`_ standard. The last update is `RFC5246 <https://tools.ietf.org/html/RFC5246>`_ . TLS is defined based on SSL 3.0, and it is almost similar to SSL 3.0.
 
 	SSL/TLS provides Server Authentication, Client Authentication and Data Encryption functions. Authentication refers to a procedure to verify that the other party is correct, and encryption refers to preventing access to contents even if data is stolen.
 

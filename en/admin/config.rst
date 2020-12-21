@@ -1139,7 +1139,7 @@ The following are parameters related to logs used for database backup and restor
 	If this value is yes, it is saved in the log file when DDL SQL is executed. The path to save the log file is log/ddl_audit, and refer to :doc:`/admin/ddl_audit` for the DDL AUDIT log file name.
 
 **ddl_audit_log_size**
-	**ddl_audit_log_size** specifies the maximum size of the DDL AUDIT log file. If the ddl audit log file is larger than the specified size, the ddl audit log file is backed up with the name of .bak appended to the ddl audit log file, and the log is recorded in a new file. You can set a unit as B, K, M, G or T, which stand for bytes, kilobytes (KB), megabytes (MB), gigabytes (GB), and terabytes (TB) respectively. If you omit the unit, bytes will be applied. The default is 10M, and it can be set up to 2G.
+	**ddl_audit_log_size** specifies the maximum size of the DDL AUDIT log file. If the ddl audit log file is larger than the specified size, the ddl audit log file is backed up with the name of .bak appended to the ddl audit log file, and the log is recorded in a new file. You can set a unit as B, K, M, G or T, which stand for bytes, kilobytes (KB), megabytes (MB), gigabytes (GB), and terabytes (TB), respectively. If you omit the unit, bytes will be applied. The default is 10M, and it can be set up to 2G.
 	
 .. _transaction-parameters:
 

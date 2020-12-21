@@ -216,6 +216,10 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | sync_on_flush_size                  | server parameter        |         | byte     | 200 *                          | DBA only              |
 |                               |                                     |                         |         |          | :ref:`db_page_size <dpg>`      |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | ddl_audit_log                       | client parameter        |         | bool     | no                             |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | ddl_audit_log_size                  | client parameter        |         | byte     | 10M                            |                       |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 | :ref:`transaction-parameters` | async_commit                        | server parameter        |         | bool     | no                             |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -1007,6 +1011,10 @@ The following are parameters related to logs used for database backup and restor
 | sync_on_flush_size                  | byte   | 200 *                      | 1 *                        | INT_MAX *                  |
 |                                     |        | :ref:`db_page_size <dpg>`  | :ref:`db_page_size <dpg>`  | :ref:`db_page_size <dpg>`  |
 +-------------------------------------+--------+----------------------------+----------------------------+----------------------------+
+| ddl_audit_log                       | bool   | no                         |                            |                            |
++-------------------------------------+--------+----------------------------+----------------------------+----------------------------+
+| ddl_audit_log_size                  | byte   | 10M                        | 10M                        | 2G                         |
++-------------------------------------+--------+----------------------------+----------------------------+----------------------------+
 
 **adaptive_flush_control**
 
@@ -1126,6 +1134,13 @@ The following are parameters related to logs used for database backup and restor
 
     **sync_on_flush_size** is a parameter to configure the interval in pages between after data and log pages are flushed from buffer and before they are synchronized with FILE I/O of operating system. The default value is 200 * :ref:`db_page_size <dpg>` (**3.125M** when db_page_size is 16K). That is, the CUBRID Server performs synchronization with the FILE I/O of the operating system whenever 200 pages have been flushed. This is also a parameter related to I/O load.
 
+**ddl_audit_log**
+	**ddl_audit_log** is a parameter to configure whether to log. The default value is no.  
+	If this value is yes, it is saved in the log file when DDL SQL is executed. The path to save the log file is log/ddl_audit, and refer to :doc:`/admin/ddl_audit` for the DDL AUDIT log file name.
+
+**ddl_audit_log_size**
+	**ddl_audit_log_size** specifies the maximum size of the DDL AUDIT log file. If the ddl audit log file is larger than the specified size, the ddl audit log file is backed up with the name of .bak appended to the ddl audit log file, and the log is recorded in a new file. You can set a unit as B, K, M, G or T, which stand for bytes, kilobytes (KB), megabytes (MB), gigabytes (GB), and terabytes (TB) respectively. If you omit the unit, bytes will be applied. The default is 10M, and it can be set up to 2G.
+	
 .. _transaction-parameters:
 
 Transaction Processing-Related Parameters

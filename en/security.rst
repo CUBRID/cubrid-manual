@@ -27,7 +27,7 @@ CUBRID uses SSL/TLS (Secure Socket Layer/Transport Layer Security) protocol to e
 
 Server setup for packet encryption
 ------------------------------------
-**Set encryption mode and non-encryption mode**
+**Setting encryption mode and non-encryption mode**
 
 CUBRID can set either an encryption mode or a non-encryption mode, and the default is non-encryption mode. To change to the encryption mode, you can set the encryption mode by changing the SSL parameter value in cubrid_broker.conf. If you change the SSL parameter value of cubrid_broker.conf, you must restart the broker. For detailed configuration method, refer to :ref:`broker-configuration`\ .
 

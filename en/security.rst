@@ -12,7 +12,7 @@ Packet Encryption
 
 The need for packet encryption
 ------------------------------
-Without an encrypted connection between the client and the server, a hacker with access to the network can monitor all traffic and steal and exploit data exchanged between the client and server. In this way, a third party (middle-man) steals and make bad use  information, it is called a man in the middle (MITM) attack. This MITM attack can be prevented by adding a secure authentication procedure to the connection between the client and server.
+Without an encrypted connection between the client and the server, a hacker with access to the network can monitor all traffic and steal and exploit data exchanged between the client and the server. In this way, a third party (middle-man) steals and makes bad use of information, it is called a man in the middle (MITM) attack. This MITM attack can be prevented by adding a secure authentication procedure to the connection between the client and the server.
 
 Packet encryption method
 ------------------------------

@@ -70,4 +70,4 @@ DDL Audit Log format of LOADDB
 	* [user name]: the database user name who issued DDL
 	* [result]: Result of loaddb execution, OK if successful, otherwise error code (e.g. ERROR:-494)
 	* [log contents]: The number of total statements, or the number of commit in case of error and error line
-	* [file name]: Copy the file loaded from loaddb. At this time, it is the name of the copied file.
+	* [file name]: Copy the file loaded from loaddb. At this time, it is the name of the copied file

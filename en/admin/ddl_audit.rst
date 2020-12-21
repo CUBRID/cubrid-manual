@@ -12,7 +12,7 @@ Overview
 ==========
 
 CUBRID has the capability of recording DDL (Data Definition Language) that changes the database system configuration such as create/delete/modify tables as well as changing the access privilege of a table.
-DDLs issued through CAS, csql, and loaddb could be recorded in log files files in addition to copy of the files executed if required.
+DDLs issued through CAS, csql, and loaddb could be recorded in log files in addition to the copy of the files executed if required.
 
 The DDL Audit log will be created in the $CUBRID/log/ddl_audit directory when ddl_audit_log of the system parameter is turned on. Note that the size of the each log file cannot exceed the value specified in the ddl_audit_log_size parameter. For parameters related to DDL audit, refer to system parameters of CUBRID Managment :doc:`/admin/config` .
 

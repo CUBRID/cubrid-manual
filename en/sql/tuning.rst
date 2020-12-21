@@ -624,6 +624,7 @@ Using hints can affect the performance of query execution. You can allow the que
     USE_MERGE [ (<spec_name_comma_list>) ] |
     ORDERED |
     USE_DESC_IDX |
+    USE_SBR |
     INDEX_SS [ (<spec_name_comma_list>) ] |
     INDEX_LS |
     NO_DESC_IDX |
@@ -658,6 +659,12 @@ The following hints can be specified in **UPDATE**, **DELETE** and **SELECT** st
 *   **ORDERED**: Related to a table join, the query optimizer create a join execution plan with this hint, based on the order of tables specified in the **FROM** clause. The left table in the **FROM** clause becomes the outer table; the right one becomes the inner table.
 *   **USE_IDX**: Related to an index, the query optimizer creates an index join execution plan corresponding to a specified table with this hint.
 *   **USE_DESC_IDX**: This is a hint for the scan in descending index. For more information, see :ref:`index-descending-scan`.
+*   **USE_SBR**: This is a hint for the statement-based replication. It supports data replication for tables without a primary key.
+
+    .. note::
+
+        The data inconsistency of a table may occur between nodes since the corresponding statement is executed when the transaction log is applied in the slave node.
+
 *   **INDEX_SS**: Consider the query plan of index skip scan. For more information, see :ref:`index-skip-scan`.
 *   **INDEX_LS**: Consider the query plan of loose index scan. For more information, see :ref:`loose-index-scan`.
 *   **NO_DESC_IDX**: This is a hint not to use the descending index.

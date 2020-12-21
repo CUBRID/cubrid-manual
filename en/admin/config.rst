@@ -1135,11 +1135,11 @@ The following are parameters related to logs used for database backup and restor
     **sync_on_flush_size** is a parameter to configure the interval in pages between after data and log pages are flushed from buffer and before they are synchronized with FILE I/O of operating system. The default value is 200 * :ref:`db_page_size <dpg>` (**3.125M** when db_page_size is 16K). That is, the CUBRID Server performs synchronization with the FILE I/O of the operating system whenever 200 pages have been flushed. This is also a parameter related to I/O load.
 
 **ddl_audit_log**
-	**ddl_audit_log** is a parameter to configure whether to log. The default value is no.  
-	If this value is yes, it is saved in the log file when DDL SQL is executed. The path to save the log file is log/ddl_audit, and refer to :doc:`/admin/ddl_audit` for the DDL AUDIT log file name.
+	**ddl_audit_log** is a parameter to turn on/off DDL logging facility. The default value is no.
+	If this value is set to yes, all DDL executed will be logged into the logfile. The path of log files is $CUBRID/log/ddl_audit, and refer to :doc:/admin/ddl_audit for each DDL AUDIT log file name and description of log files in detail.
 
 **ddl_audit_log_size**
-	**ddl_audit_log_size** specifies the maximum size of the DDL AUDIT log file. If the ddl audit log file is larger than the specified size, the ddl audit log file is backed up with the name of .bak appended to the ddl audit log file, and the log is recorded in a new file. You can set a unit as B, K, M, G or T, which stand for bytes, kilobytes (KB), megabytes (MB), gigabytes (GB), and terabytes (TB) respectively. If you omit the unit, bytes will be applied. The default is 10M, and it can be set up to 2G.
+	**ddl_audit_log_size** specifies the maximum size of the DDL AUDIT log file. If the ddl audit log file is larger than the specified size, that ddl audit log file is backed up with the name of .bak appended to the ddl audit log file, and new recording will be started with the file from the beginning of the file. You can set the size with a size unit as B, K, M, or G, which stand for bytes, kilobytes (KB), megabytes (MB), and gigabytes (GB) respectively. If you omit the size unit, bytes will be applied. The default is 10M, and it can be set up to 2G.
 	
 .. _transaction-parameters:
 

@@ -1,6 +1,6 @@
 
 :meta-keywords: DDL Audit, log
-:meta-description: CUBRID has capability of recording DDL (Data Definition Language) that changes the database system configuration such as create/delete/modify tables as well as changing access privilege of a table.
+:meta-description: CUBRID has the capability of recording DDL (Data Definition Language) that changes the database system configuration such as create/delete/modify tables as well as changing the access privilege of a table.
 
 .. _ddl-audit:
 
@@ -11,10 +11,10 @@ DDL Audit Log
 Overview
 ==========
 
-CUBRID has capability of recording DDL (Data Definition Language) that changes the database system configuration such as create/delete/modify tables as well as changing access privilege of a table.
-DDLs issued through CAS, csql, and loaddb could be recorded in log files files in addition to copy of the files executed if required.
+CUBRID has the capability of recording DDL (Data Definition Language) that changes the database system configuration such as create/delete/modify tables as well as changing the access privilege of a table.
+DDLs issued through CAS, csql, and loaddb could be recorded in log files in addition to the copy of the files executed if required.
 
-The DDL Audit log will be created in the $CUBRID/log/ddl_audit directory when ddl_audit_log of the system parameter is turned on. Note that the size of the each log file cannot exceed the value specified in the ddl_audit_log_size parameter. For parameters related to DDL audit, refer to system parameters of CUBRID Managment :doc:`/admin/config` .
+The DDL Audit log will be created in the $CUBRID/log/ddl_audit directory when ddl_audit_log of the system parameter is turned on. Note that the size of each log file cannot exceed the value specified in the ddl_audit_log_size parameter. For parameters related to DDL audit, refer to system parameters of CUBRID Managment :doc:`/admin/config` .
 
 DDL Audit Log file name convention
 ======================================
@@ -40,7 +40,7 @@ DDL Audit Logfile format of CAS
 	* [user name]: the database user name who issued DDL
 	* [result]: statement execution result. OK if successful, otherwise error code (e.g. ERROR:-494)
 	* [elapsed time]: Elapsed time of statement execution
-	* [auto commit/rollback]: Automatically committed or rolled back, with the error code of it.
+	* [auto commit/rollback]: Automatically committed or rolled back, with the error code of it
 	* [sql_text]: executed DDL text
 
 DDL Audit Logfile format of CSQL
@@ -55,7 +55,7 @@ DDL Audit Logfile format of CSQL
 	* [user name]: the database user name who issued DDL
 	* [result]: statement execution result. OK if successful, otherwise error code  (e.g. ERROR:-272)
 	* [elapsed time]: Elapsed time of statement execution
-	* [auto commit/rollback]: Automatically committed or rolled back, with the error code.
+	* [auto commit/rollback]: Automatically committed or rolled back, with the error code
 	* [sql_text]: executed DDL text or executed csql filename
 
 DDL Audit Log format of LOADDB
@@ -69,5 +69,5 @@ DDL Audit Log format of LOADDB
 	* [pid]: loaddb process id
 	* [user name]: the database user name who issued DDL
 	* [result]: Result of loaddb execution, OK if successful, otherwise error code (e.g. ERROR:-494)
-	* [log contents]: The number of total statements, or the number of commit in case of error and error line.
-	* [file name]: Copy the file loaded from loaddb. At this time, it is the name of the copied file.
+	* [log contents]: The number of total statements, or the number of commit in case of error and error line
+	* [file name]: Copy the file loaded from loaddb. At this time, it is the name of the copied file

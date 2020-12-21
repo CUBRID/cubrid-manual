@@ -16,7 +16,7 @@ Without an encrypted connection between the client and the server, a hacker with
 
 Packet encryption method
 ------------------------------
-CUBRID uses SSL/TLS (Secure Socket Layer/Transport Layer Security) protocol to encrypt data transmitted between the client and server. The CUBRID server uses OpenSSL for encryption, and the client can make an encrypted connection using JDBC or CCI Driver. The encryption protocols supported between the client and server are SSLv3, TLSv1, TLSv1.1, and TLSv1.2.
+CUBRID uses SSL/TLS (Secure Socket Layer/Transport Layer Security) protocol to encrypt data transmitted between the client and the server. The CUBRID server uses OpenSSL for encryption, and the client can make an encrypted connection using JDBC or CCI Driver. The encryption protocols supported between the client and server are SSLv3, TLSv1, TLSv1.1, and TLSv1.2.
 
 .. note:: **SSL/TLS**
 

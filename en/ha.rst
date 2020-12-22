@@ -1999,6 +1999,10 @@ If data of the specific table within CUBRID HA groups is not synchronized, you s
 
 On the partitioned table, the table which has promoted some partitions by the **PROMOTE** statement replicates all data to the slave. However, since the table does not have the primary key, the data changes on the table made by the master are not applied to the slave.
 
+.. note::
+
+    The data replication of tables without a primary key is supported by **USE_SBR** hint. For more information, see :ref:`_sql-hint`.
+
 **Java Stored Procedure**
 
 Because using java stored procedures in CUBRID HA cannot be replicated, java stored procedures should be configured to all nodes. For more details, see :ref:`cubrid-javasp-server-config`.

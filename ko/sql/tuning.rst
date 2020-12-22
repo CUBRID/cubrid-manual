@@ -625,6 +625,7 @@ SQL 힌트
     USE_MERGE [ (<spec_name_comma_list>) ] |
     ORDERED |
     USE_DESC_IDX |
+    USE_SBR |
     INDEX_SS [ (<spec_name_comma_list>) ] |
     INDEX_LS |
     NO_DESC_IDX |
@@ -659,6 +660,12 @@ SQL 힌트는 주석에 더하기 기호(+)를 함께 사용하여 지정한다.
 *   **ORDERED**: 테이블 조인과 관련한 힌트로서, 질의 최적화기는 **FROM** 절에 명시된 테이블의 순서대로 조인하는 실행 계획을 만든다. **FROM** 절에서 왼쪽 테이블은 조인의 외부 테이블이 되고, 오른쪽 테이블은 내부 테이블이 된다.
 *   **USE_IDX**: 인덱스 관련한 힌트로서, 질의 최적화기는 명시된 테이블에 대해 인덱스 조인 실행 계획을 만든다.
 *   **USE_DESC_IDX**: 내림차순 스캔을 위한 힌트이다. 자세한 내용은 :ref:`index-descending-scan`\ 을 참고한다.
+*   **USE_SBR**: 구문 기반 복제(statement-based replication)를 위한 힌트로서, 기본키가 설정되지 않은 테이블에 대한 데이터 복제도 지원한다.
+
+    .. note::
+
+        슬레이브 노드에서 트랜잭션 로그가 반영되는 시점에 해당 구문을 다시 실행하기 때문에 노드 간 반영된 데이터의 불일치가 발생할 수 있다.
+
 *   **INDEX_SS**: index skip scan 실행 계획을 고려한다. 자세한 내용은 :ref:`index-skip-scan`\을 참고한다.
 *   **INDEX_LS**: loose index scan 실행 계획을 고려한다. 자세한 내용은 :ref:`loose-index-scan`\을 참고한다.
 *   **NO_DESC_IDX**: 내림차순 스캔을 사용하지 않도록 하는 힌트이다.

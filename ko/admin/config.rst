@@ -1129,11 +1129,11 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
 **ddl_audit_log**
 
-	**ddl_audit_log** 로깅 여부를 지정하는 파라미터이다. 기본값은 no 이다. 이 값이 yes 이면, DDL SQL이 수행 될때 로그 파일에 저장된다. 로파일 저장 경로는 log/ddl_audit 이며, DDL AUDIT 로그 파일 이름은 :doc:`/admin/ddl_audit` 를 참조 한다.
+	**ddl_audit_log** 로깅 여부를 지정하는 파라미터이다. 기본값은 no 이다. 이 값이 yes로 설정되면, 모든 DDL이 수행 될때 로그 파일에 저장된다. 로그 파일 저장 경로는 $CUBRID/log/ddl_audit 이며, 각각의 DDL AUDIT 로그 파일 이름은 :doc:`/admin/ddl_audit` 를 참조 한다.
 
 **ddl_audit_log_size**
  
-	**ddl_audit_log_size** 는 DDL AUDIT 로그 파일의 최대 크기를 지정하며, DDL AUDIT 로그 파일이 지정한 크기보다 커지면 DDL AUDIT 로그 파일에 .bak 를 붙인 형식의 이름으로 백업된 후 새 파일에 로그가 기록된다. 값 뒤에 B, K, M, G, T로 단위를 붙일 수 있으며, 각각 Bytes, Kilobytes, Megabytes, Gigabytes, Terabytes를 의미한다. 단위를 생략하면 바이트 단위가 적용된다. 기본값은 10M 이고, 최대 2G로 설정할 수 있다.
+	**ddl_audit_log_size** 는 DDL AUDIT 로그 파일의 최대 크기를 지정한다. 로그 파일이 지정한 크기보다 커지면 DDL AUDIT 로그 파일에 .bak 를 붙인 형식의 이름으로 백업된 후 새 파일에 로그가 기록된다. 크기 설정 값 뒤에 B, K, M, G의 크기 단위를 사용할 수 있으며, 각각 Bytes, Kilobytes, Megabytes 그리고 Gigabytes를 의미한다. 단위를 생략하면 바이트 단위가 적용된다. 기본값은 10M 이고, 최대 2G까지 설정가능하다.
  
 .. _transaction-parameters:
 

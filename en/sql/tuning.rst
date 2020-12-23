@@ -633,6 +633,7 @@ Using hints can affect the performance of query execution. You can allow the que
     NO_SORT_LIMIT |
     NO_HASH_AGGREGATE |
     NO_HASH_LIST_SCAN |
+    NO_LOGGING |
     RECOMPILE |
     QUERY_CACHE
 
@@ -687,6 +688,12 @@ The following hints can be specified in **UPDATE**, **DELETE** and **SELECT** st
     .. note::
     
         Hash List scan only works for predicates having a equal operation and does NOT work for predicates having OID type.
+
+*   **NO_LOGGING**: This is a hint not to include the redo in the log generated when inserting, updating, or deleting records to a table.
+
+    .. note::
+
+        Currently, The NO_LOGGING hint only affects the log created from the heap file when inserting, updating, or deleting records to a table. Therefore, there may be a problem that the data of the table and the index are inconsistent after recovery and the problem that the committed record is not recovered, etc. You should use it carefully.
 
 .. _recompile:
 

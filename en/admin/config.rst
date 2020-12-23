@@ -579,7 +579,7 @@ The following are parameters related to the memory used by the database server o
 +--------------------------------+--------+---------------------------+---------------------------+---------------------------+
 | max_agg_hash_size              | byte   | 2,097,152(2M)             | 32,768(32K)               | 134,217,728(128MB)        |
 +--------------------------------+--------+---------------------------+---------------------------+---------------------------+
-| max_hash_list_scan_size        | byte   | 4,194,304(4M)            | 0                         | 128MB                     |
+| max_hash_list_scan_size        | byte   | 4,194,304(4M)             | 0                         | 128MB                     |
 +--------------------------------+--------+---------------------------+---------------------------+---------------------------+
 | sort_buffer_size               | byte   | 128 *                     | 1 *                       | 2G(32bit),                |
 |                                |        | :ref:`db_page_size <dpg>` | :ref:`db_page_size <dpg>` | INT_MAX *                 |
@@ -1861,7 +1861,7 @@ If one of the parameters is set to 0 or negative value, the query cache is disab
 
 **query_cache_size_in_pages**
 
-    ***query_cache_size_in_pages* is a parameter to configure the maximum page of result to be cached. If it is configured to an integer value equal to 0 or greater than 1, specified pages in results are cached as temp files.
+    **query_cache_size_in_pages** is a parameter to configure the maximum page of result to be cached. If it is configured to an integer value equal to 0 or greater than 1, specified pages in results are cached as temp files.
 
     The following example shows how to cache up to 4,000 pages. ::
 

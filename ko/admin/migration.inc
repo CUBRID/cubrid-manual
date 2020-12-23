@@ -155,7 +155,9 @@ loaddb
 *   **INSERT** 구문 실행보다 빠른 성능으로 대용량 데이터를 입력하는 경우
 
 일반적으로 **cubrid loaddb** 유틸리티는 **cubrid unloaddb** 유틸리티가 생성한 파일(스키마 정의 파일, 객체 입력 파일, 인덱스 정의 파일)을 사용한다.
+
 ::
+
     cubrid loaddb [options] database_name
 
 **입력 파일**

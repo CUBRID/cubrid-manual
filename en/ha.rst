@@ -2001,7 +2001,7 @@ On the partitioned table, the table which has promoted some partitions by the **
 
 .. note::
 
-    The data replication of tables without a primary key is supported by **USE_SBR** hint. For more information, see :ref:`_sql-hint`.
+    The data replication of tables without a primary key is supported by **USE_SBR** hint. For more information, see :ref:`sql-hint`.
 
 **Java Stored Procedure**
 

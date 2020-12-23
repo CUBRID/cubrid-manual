@@ -1434,15 +1434,18 @@ The following example and description show an access log file created in the log
 ::
 
     1 192.168.56.4 2020/11/10 14:41:55 testdb dba NEW 6
+
 *   1: ID assigned to the application server of the broker
 *   192.168.56.4: IP address of the application client
 *   2020/11/10 14:41:55: Time when the client's request processing started
 *   testdb: The name of the database that the client requested to connect to
 *   dba: The user name of the database that the client requested to connect to
 *   NEW: Connection type
+
     *   NEW: New connection
     *   OLD: Change client or reconnection of existing connection due to CAS restart
     *   REJ: Connction denied (Recorded only in access.denied file)
+
 *   6: session-id (session-id assgined by server)
 
 Checking the Error Log

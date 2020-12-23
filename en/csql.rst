@@ -328,11 +328,11 @@ To display the option list in the prompt, execute the **csql** utilities without
 
 .. option::  --delimiter=ARG
 
-    This option should be used together with **-q** and a single character is specified in the argument to separate the column name and value. (include special characters such as \\t and \\n)
+    This option should be used together with **-q** and a single character is specified in the argument to separate the column name and value. If multiple characters are specified, the first character is used without displaying an error. (include special characters such as \\t and \\n) 
 
 .. option::  --enclosure=ARG
 
-    This option should be used together with **-q** and a single character is specified in the argument to enclose all values except for numeric types.
+    This option should be used together with **-q** and a single character is specified in the argument to enclose all values except for numeric types. If multiple characters are specified, the first character is used without displaying an error.
 
 .. _csql-session-commands:
 

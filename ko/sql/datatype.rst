@@ -1330,7 +1330,7 @@ ESCAPE 절에서는 백슬래시가 이스케이프 문자로 간주되기 때�
     SELECT a FROM t1 WHERE a LIKE 'aaa#%' ESCAPE '#';
 
 비교 규칙
---------
+--------- 
 
 두 문자열 값을 비교할 때 후행 공백에 대한 비교 규칙은 다음과 같다.
 
@@ -2154,7 +2154,7 @@ JSON 값으로 자동으로 변환된다.
   ============================================
     {"a":1}               'json'
 
-JSON 데이터 타입은 :ref:`fn-json-object`나 :ref:`fn-json-array`를 사용하여 생성할 수도 있다.
+JSON 데이터 타입은 :ref:`fn-json-object` 나 :ref:`fn-json-array` 를 사용하여 생성할 수도 있다.
 
 JSON 유효성 검사
 ----------------
@@ -2210,7 +2210,7 @@ JSON 데이터로의 변환은 내장된 유효성 검사를 수행하고
 JSON 데이터의 타입
 --------------------
 
-JSON 데이터의 값은 `RFC 7159 <https://tools.ietf.org/html/rfc7159#section-3>`_에서 정의된 것과 같이 
+JSON 데이터의 값은 `RFC 7159 <https://tools.ietf.org/html/rfc7159#section-3>` 에서 정의된 것과 같이 
 객체 (Object), 배열 (Array) 또는 스칼라 (Scalar) 여야 한다. 스칼라 값은 문자열, 숫자형, 불리언 (boolean) 또는 널 (null) 이다.
 
 JSON 데이터 타입 표:

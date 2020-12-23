@@ -89,6 +89,9 @@ pygments_style = 'sphinx'
 # A list of ignored prefixes for module index sorting.
 #modindex_common_prefix = []
 
+suppress_warnings = [
+  'misc.highlighting_failure'
+]
 
 # -- Options for HTML output ---------------------------------------------------
 
@@ -286,7 +289,7 @@ texinfo_documents = [
 linkcheck_ignore = [
   r'https://github.com/CUBRID/cubrid/.*', 
   r'http://jira.cubrid.org/browse/.*',
-  r'https://www.apachelounge.com/.*'
+  r'https://www.apachelounge.com//download/win64/binaries/.*'
 ]
 
 linkcheck_timeout = 30

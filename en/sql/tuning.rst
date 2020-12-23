@@ -693,7 +693,7 @@ The following hints can be specified in **UPDATE**, **DELETE** and **SELECT** st
 
     .. note::
 
-        Currently, The NO_LOGGING hint only affects the log created from the heap file when inserting, updating, or deleting records to a table. Therefore, there may be a problem that the data of the table and the index are inconsistent after recovery and the problem that the committed record is not recovered, etc. You should use it carefully.
+        Currently, The NO_LOGGING hint only affects the log created from the heap file when inserting, updating, or deleting records to a table. Therefore, problems such as the inconsistency between the data of the table and the date of the index might occur after recovery; and the situation of committed record cannot be recovered might also occur, etc. You should use it carefully.
 
 .. _recompile:
 

@@ -33,9 +33,9 @@ Compatibility
 
 **Application Compatibility**
 
-*   Applications that use JDBC, PHP or CCI APIs from 2008 R4.1 or higher version of CUBRID can access the CUBRID 10.2 database. However, you must link the CUBRID 10.2 library or use the driver to use the added/improved features of JDBC, PHP or CCI interfaces. In order to use :ref:`timezone-type` which are introduced as 10.0, users should upgrade drivers.
+*   Applications that use JDBC, PHP or CCI APIs from 2008 R4.1 or higher version of CUBRID can access the CUBRID 11.0 database. However, you must link the CUBRID 11.0 library or use the driver to use the added/improved features of JDBC, PHP or CCI interfaces. In order to use :ref:`timezone-type` which are introduced as 10.0, users should upgrade drivers.
 
-*   Old driver versions connecting to CUBRID 10.2 server interpret a JSON type column as Varchar.
+*   Drivers lower version than 10.2 interpret JSON type columns as Varchar.
 
 *   Note that query results may differ from those given in the earlier version because new reserved words have been added, and the specifications for some queries have been changed.
 
@@ -51,7 +51,7 @@ Compatibility
 
 *   Drivers for 2008 R2.2 and higher versions are included in CUBRID Manager by default, which you can download separately from the https://www.cubrid.org Website.
 
-.. note:: Old version users should upgrade all of driver, broker, DB server; Data migration should be done because its DB volume is not compatible with 10.2 version.
+.. note:: Old version users should upgrade all of driver, broker, DB server; Data migration should be done because its DB volume is not compatible with 11.0 version.
     For upgrade and data migration, see :doc:`/upgrade`.
 
 **Interoperability between CUBRID DB server and broker**
@@ -115,7 +115,7 @@ The installation program consists of shell scripts that contain binary; thus it 
     Do you want to install this software(CUBRID) to the default(/home1/cub_user/CUBRID) directory? (yes or no) [Default: yes] : yes
     Install CUBRID to '/home1/cub_user/CUBRID' ...
     In case a different version of the CUBRID product is being used in other machines, 
-    please note that the CUBRID 10.2 servers are only compatible with the CUBRID 10.2 clients and vice versa.
+    please note that the CUBRID 11.0 servers are only compatible with the CUBRID 11.0 clients and vice versa.
     Do you want to continue? (yes or no) [Default: yes] : yes
     Copying old .cubrid.sh to .cubrid.sh.bak ...
 

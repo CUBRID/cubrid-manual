@@ -103,7 +103,7 @@ CSQL 시작 옵션
 
     $ csql
     A database-name is missing.
-    interactive SQL utility, version 10.2
+    interactive SQL utility, version 11.0
     usage: csql [OPTION] database-name[@host]
 
     valid options:

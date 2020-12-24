@@ -35,9 +35,9 @@ CUBRID 엔진, 사용 도구 및 드라이버에 대한 자세한 정보는 http
 
 **응용 프로그램의 호환성**
 
-*   2008 R4.1 또는 그 이상 버전에서 JDBC, PHP, CCI API 등을 사용하는 응용 프로그램은 CUBRID 10.2 브로커에 접근할 수 있다. 다만, JDBC, PHP, CCI 인터페이스에 추가/개선된 기능을 사용하기 위해서는 CUBRID 10.2 버전의 라이브러리를 링크하거나 드라이버를 사용해야 한다. 10.0에서 추가된 :ref:`timezone-type` 을 사용하기 위해서는 드라이버를 업그레이드 해야 한다.
+*   2008 R4.1 또는 그 이상 버전에서 JDBC, PHP, CCI API 등을 사용하는 응용 프로그램은 CUBRID 11.0 브로커에 접근할 수 있다. 다만, JDBC, PHP, CCI 인터페이스에 추가/개선된 기능을 사용하기 위해서는 CUBRID 11.0 버전의 라이브러리를 링크하거나 드라이버를 사용해야 한다. 10.0에서 추가된 :ref:`timezone-type` 을 사용하기 위해서는 드라이버를 업그레이드 해야 한다.
 
-*   10.2 서버와 연결하는 그 이전 버전의 드라이버는 JSON 타입 컬럼을 Varchar 타입으로 인식한다.
+*   10.2 이전 버전의 드라이버는 JSON 타입 컬럼을 Varchar 타입으로 인식한다.
 
 *   새로운 예약어 추가 및 일부 질의에 대한 스펙 변경으로 인해 질의 결과가 과거 버전과 다를 수 있으므로 주의한다.
 
@@ -53,7 +53,7 @@ CUBRID 엔진, 사용 도구 및 드라이버에 대한 자세한 정보는 http
 
 *   CUBRID 2008 R2.2 이상 버전의 드라이버는 CUBRID 매니저에 기본으로 내장되어 있으며, https://www.cubrid.org 웹사이트에서 별도로 받을 수도 있다.
 
-.. note:: 과거 버전 사용자들은 드라이버, 브로커, DB 서버 모두를 반드시 업그레이드해야 하며, DB 볼륨이 10.2와 호환되지 않으므로 반드시 데이터 마이그레이션을 해야 한다.
+.. note:: 과거 버전 사용자들은 드라이버, 브로커, DB 서버 모두를 반드시 업그레이드해야 하며, DB 볼륨이 11.0와 호환되지 않으므로 반드시 데이터 마이그레이션을 해야 한다.
     업그레이드 및 데이터 마이그레이션은 :doc:`/upgrade`\ 를 참고한다.
 
 **CUBRID DB 서버와 브로커 간 상호 운용성**
@@ -117,7 +117,7 @@ Linux 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항�
     Do you want to install this software(CUBRID) to the default(/home1/cub_user/CUBRID) directory? (yes or no) [Default: yes] : yes
     Install CUBRID to '/home1/cub_user/CUBRID' ...
     In case a different version of the CUBRID product is being used in other machines, 
-    please note that the CUBRID 10.2 servers are only compatible with the CUBRID 10.2 clients and vice versa.
+    please note that the CUBRID 11.0 servers are only compatible with the CUBRID 11.0 clients and vice versa.
     Do you want to continue? (yes or no) [Default: yes] : yes
     Copying old .cubrid.sh to .cubrid.sh.bak ...
 

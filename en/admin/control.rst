@@ -66,7 +66,7 @@ One of the following can be specified in <command>:
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 10.2 
+    CUBRID 11.0
 
     ++ cubrid server start: success
 
@@ -74,7 +74,7 @@ One of the following can be specified in <command>:
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 10.2 
+    CUBRID 11.0
 
     ++ cubrid server start: success
 
@@ -252,13 +252,13 @@ After registering service as explained in :ref:`control-cubrid-services`, enter 
     @ cubrid server start: demodb
 
     This may take a long time depending on the amount of restore works to do.
-    CUBRID 10.2
+    CUBRID 11.0
 
     ++ cubrid server start: success
     @ cubrid server start: testdb
 
     This may take a long time depending on the amount of recovery works to do.
-    CUBRID 10.2
+    CUBRID 11.0
 
     ++ cubrid server start: success
     @ cubrid broker start
@@ -333,14 +333,14 @@ Enter code below to restart registered CUBRID service. You can verify that serve
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 10.2
+    CUBRID 11.0
 
     ++ cubrid server start: success
     @ cubrid server start: testdb
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 10.2
+    CUBRID 11.0
 
     ++ cubrid server start: success
     @ cubrid broker start
@@ -359,8 +359,8 @@ The following example shows how to check the status of master process and databa
     ++ cubrid master is running.
     @ cubrid server status
 
-    Server testdb (rel 10.2, pid 31059)
-    Server demodb (rel 10.2, pid 30950)
+    Server testdb (rel 11.0, pid 31059)
+    Server demodb (rel 11.0, pid 30950)
 
     @ cubrid broker status
     % query_editor
@@ -456,7 +456,7 @@ The following example shows how to run *demodb* server.
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 10.2
+    CUBRID 11.0
 
     ++ cubrid server start: success
     
@@ -472,7 +472,7 @@ If you start *demodb* server while master process has stopped, master process au
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 10.2
+    CUBRID 11.0
 
     ++ cubrid server start: success
 
@@ -529,7 +529,7 @@ The following example shows how to restart *demodb* server. *demodb* server that
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 10.2
+    CUBRID 11.0
 
     ++ cubrid server start: success
 
@@ -545,8 +545,8 @@ The following example shows how to check the status of a database server. Names 
     % cubrid server status
     
     @ cubrid server status
-    Server testdb (rel 10.2, pid 24465)
-    Server demodb (rel 10.2, pid 24342)
+    Server testdb (rel 11.0, pid 24465)
+    Server demodb (rel 11.0, pid 24342)
 
 The following example shows the message when master process has stopped. 
 
@@ -2466,13 +2466,13 @@ Both *demodb* and *testdb* are present in the **server** property, but only demo
     @ cubrid server start: demodb
 
     This may take a long time depending on the amount of restore works to do.
-    CUBRID 10.2
+    CUBRID 11.0
 
     ++ cubrid server start: success
     @ cubrid server start: testdb
 
     This may take a long time depending on the amount of recovery works to do.
-    CUBRID 10.2
+    CUBRID 11.0
 
     ++ cubrid server start: success
     @ cubrid javasp start: demodb

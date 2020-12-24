@@ -12,7 +12,7 @@ Cautions during upgrade
 
 **Changes**
 
-Please confirm :ref:`10_2_changes` in the release notes.
+Please confirm :ref:`11_0_changes` in the release notes.
 
 **Saving the Existing Configuration File**
 
@@ -20,7 +20,7 @@ Please confirm :ref:`10_2_changes` in the release notes.
 
 **Checking New Reserved Words**
 
-*   You can check whether reserved words are being used or not by applying the CUBRID 10.2 reserved word detection script, check_reserved.sql, which is distributed through the CUBRID installation package or http://ftp.cubrid.org/CUBRID_Engine/10.2/. If the reserved words are being used as identifiers, the identifiers must be modified. See :doc:`sql/identifier`.
+*   You can check whether reserved words are being used or not by applying the CUBRID 11.0 reserved word detection script, check_reserved.sql, which is distributed through the CUBRID installation package or http://ftp.cubrid.org/CUBRID_Engine/11.0/. If the reserved words are being used as identifiers, the identifiers must be modified. See :doc:`sql/identifier`.
 
 **Configuring environment variables of CUBRID_MSG_LANG**
 
@@ -37,7 +37,7 @@ Please confirm :ref:`10_2_changes` in the release notes.
 
 **DB migration**
 
-*   Since the DB volume of CUBRID 10.1 and earlier versions are not compatible with the DB volume of CUBRID 10.2, it should be migrated with cubrid unloaddb/loaddb utility. For more detail procedure, see :ref:`migration-from-41`.
+*   Since the DB volume of CUBRID 10.2 and earlier versions are not compatible with the DB volume of CUBRID 11.0, it should be migrated with cubrid unloaddb/loaddb utility. For more detail procedure, see :ref:`migration-from-41`.
 *   CUBRID 2008 R3.1 and later don't support GLO and the LOB type replaces the GLO feature. For this reason, applications or schemas that use GLO must be modified to be compatible with LOB.
 
 .. note::
@@ -51,19 +51,20 @@ Please confirm :ref:`10_2_changes` in the release notes.
 
 **Java Stored Function/Procedure**
 
-*   A user who uses Java stored function/procedure should run loadjava command to load Java classes into CUBRID. See :doc:`/sql/jsp`.
+*   A user who uses Java stored function/procedure should run loadjava command to load Java classes into CUBRID. See :ref:`jsp-loadjava`.
+*   **Java SP server** should be started before using Java stored procedure/function. See :ref:`jsp-starting-javasp`.
 
-Upgrading from CUBRID 9.2/9.3/10.0/10.1 to CUBRID 10.2
-------------------------------------------------------
+Upgrading from CUBRID 9.2/9.3/10.0/10.1/10.2 to CUBRID 11.0
+------------------------------------------------------------
 
-Users who are using versions CUBRID 9.2/9.3/10.0/10.1 should install 10.2 in the different directory, migrate the databases to 10.2 and modify parameter values in the previous environment configuration file.
+Users who are using versions CUBRID 9.2/9.3/10.0/10.1/10.2 should install 11.0 in the different directory, migrate the databases to 11.0 and modify parameter values in the previous environment configuration file.
 
-.. _db-migrate-to-10:
+.. _db-migrate-to-11:
 
 DB migration
 ^^^^^^^^^^^^
 
-The following table shows how to perform the migration using the reserved word detection script, check_reserved.sql, which is separately distributed from http://ftp.cubrid.org/CUBRID_Engine/10.2/ and the cubrid unloaddb/loaddb utilities. (See :ref:`unloaddb` and :ref:`loaddb`)
+The following table shows how to perform the migration using the reserved word detection script, check_reserved.sql, which is separately distributed from http://ftp.cubrid.org/CUBRID_Engine/11.0/ and the cubrid unloaddb/loaddb utilities. (See :ref:`unloaddb` and :ref:`loaddb`)
 
 +------------------------------------+-----------------------------------------------+-----------------------------------------------+
 | Step                               | Linux Environment                             | Windows Environment                           |
@@ -131,17 +132,17 @@ Parameter configuration
 
 .. _up-from-91:
 
-Upgrading from CUBRID 9.1 to CUBRID 10.2
+Upgrading from CUBRID 9.1 to CUBRID 11.0
 ----------------------------------------
 
-Users who are using versions CUBRID 9.1 should install 10.2 in the different directory, migrate databases to 10.2 and modify parameter values in the previous environment configuration file.
+Users who are using versions CUBRID 9.1 should install 11.0 in the different directory, migrate databases to 11.0 and modify parameter values in the previous environment configuration file.
 
 .. _migration-from-91:
 
 DB migration
 ^^^^^^^^^^^^
 
-Please refer :ref:`db-migrate-to-10` for migration steps.
+Please refer :ref:`db-migrate-to-11` for migration steps.
 
 .. _conf-from-91:
 
@@ -188,17 +189,17 @@ Parameter configuration
 
 .. _up-from-41:
 
-Upgrading From CUBRID 2008 R4.1/R4.3/R4.4 To CUBRID 10.2
+Upgrading From CUBRID 2008 R4.1/R4.3/R4.4 To CUBRID 11.0
 --------------------------------------------------------
 
-Users who are using a version of CUBRID 2008 R4.1, R4.3 or R4.4 should install 10.2 in the different directory, migrate databases to 10.2 and modify parameter values in the existing environment configuration file.
+Users who are using a version of CUBRID 2008 R4.1, R4.3 or R4.4 should install 11.0 in the different directory, migrate databases to 11.0 and modify parameter values in the existing environment configuration file.
 
 .. _migration-from-41:
 
 DB migration
 ^^^^^^^^^^^^
 
-Please refer :ref:`db-migrate-to-10` for migration steps.
+Please refer :ref:`db-migrate-to-11` for migration steps.
 
 (\*): The user which uses CUBRID 2008 R4.x or before should be cautious for determining a locale(language and charset). For example, when the user which used the language as ko_KR(Korean) and the charset as utf8 processes DB migration, the locale should be set as "cubrid createdb testdb ko_KR.utf8". If the locale is not built-in locale, you should run make_locale(.sh) command first. For more details, see :ref:`locale-setting`. 
 
@@ -254,15 +255,15 @@ Parameter configuration
 
 .. _up-from-40:
 
-Upgrading From CUBRID 2008 R4.0 or Earlier Versions To CUBRID 10.2
+Upgrading From CUBRID 2008 R4.0 or Earlier Versions To CUBRID 11.0
 ------------------------------------------------------------------
 
-Users who are using versions CUBRID 2008 R4.0 or earlier should install 10.2 in the different directory, migrate databases to 10.2 and modify parameter values in the existing environment configuration file.
+Users who are using versions CUBRID 2008 R4.0 or earlier should install 11.0 in the different directory, migrate databases to 11.0 and modify parameter values in the existing environment configuration file.
 
 DB migration
 ^^^^^^^^^^^^
 
-Do the same procedures with :ref:`db-migrate-to-10`. If you use GLO classes, you must modify applications and schema in order to use **BLOB** or **CLOB** types, since GLO classes are not supported in 2008 R3.1. If this modification is not easy, it is not recommended to perform the migration.
+Do the same procedures with :ref:`db-migrate-to-11`. If you use GLO classes, you must modify applications and schema in order to use **BLOB** or **CLOB** types, since GLO classes are not supported in 2008 R3.1. If this modification is not easy, it is not recommended to perform the migration.
 
 Parameter configuration
 ^^^^^^^^^^^^^^^^^^^^^^^
@@ -319,7 +320,7 @@ Parameter configuration
 Database Migration under HA Environment
 =======================================
 
-HA migration from CUBRID 2008 R2.2 or higher to CUBRID 10.2
+HA migration from CUBRID 2008 R2.2 or higher to CUBRID 11.0
 -----------------------------------------------------------
 
 In the scenario described below, the current service is stopped to perform an upgrade in an environment in which a broker, a master DB and a slave DB are operating on different servers.
@@ -327,7 +328,7 @@ In the scenario described below, the current service is stopped to perform an up
 +------------------------------------------------------+-----------------------------------------------------------------------------------------------------------+
 | Step                                                 | Description                                                                                               |
 +======================================================+===========================================================================================================+
-| Steps C1-C6: Perform :ref:`db-migrate-to-10`         | Run the CUBRID upgrade and database migration in the master node, and back up the new version's database  |
+| Steps C1-C6: Perform :ref:`db-migrate-to-11`         | Run the CUBRID upgrade and database migration in the master node, and back up the new version's database  |
 |                                                      | on the master node.                                                                                       |
 |                                                      |                                                                                                           |
 +------------------------------------------------------+-----------------------------------------------------------------------------------------------------------+
@@ -360,7 +361,7 @@ In the scenario described below, the current service is stopped to perform an up
 |                                                      |   % cubrid broker start                                                                                   |
 +------------------------------------------------------+-----------------------------------------------------------------------------------------------------------+
 
-HA Migration from CUBRID 2008 R2.0/R2.1 to CUBRID 10.2
+HA Migration from CUBRID 2008 R2.0/R2.1 to CUBRID 11.0
 ------------------------------------------------------
 
 If you are using the HA feature of CUBRID 2008 R2.0 or 2008 R2.1, you must upgrade the server version, migrate the database, set up a new HA environment, and then change the Linux Heartbeat auto start setting used in 2008 R2.0 or 2008 R2.1. If the Linux Heartbeat package is not needed, delete it.

@@ -60,7 +60,7 @@ We strongly recommend to also upgrade your drivers to use CUBRID 10.2. Some new 
 
 For more details on changes, see the :ref:`10_2_changes`. Users of previous versions should check the :ref:`10_2_changes` and :ref:`10_2_new_cautions` sections.
 
-.. _10_2_changes:
+.. _11_0_changes:
 
 10.2 Changes
 ============

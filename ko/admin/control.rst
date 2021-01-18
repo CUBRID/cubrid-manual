@@ -1477,7 +1477,7 @@ SQL 로그 파일은 응용 클라이언트가 요청하는 SQL을 기록하며,
 
     13-06-11 15:07:39.282 (0) STATE idle
     13-06-11 15:07:44.832 (0) CLIENT IP 192.168.10.100
-    13-06-11 15:07:44.835 (0) CLIENT VERSION 10.2.0.8787
+    13-06-11 15:07:44.835 (0) CLIENT VERSION 11.0.0.0254
     13-06-11 15:07:44.835 (0) session id for connection 0
     13-06-11 15:07:44.836 (0) connect db demodb user dba url jdbc:cubrid:192.168.10.200:30000:demodb:dba:********: session id 12
     13-06-11 15:07:44.836 (0) DEFAULT isolation_level 4, lock_timeout -1

@@ -346,7 +346,7 @@ Check the following before installing CUBRID for Linux.
 
         ::
         
-            tar xvfz CUBRID-11.0.0.0248-b53ae4a.x86_64.tar.gz /home1/cub_user/
+            tar xvfz CUBRID-11.0.0.0248-b53ae4a-Linux.x86_64.tar.gz /home1/cub_user/
 
         CUBRID directory is created under /home1/cub_user/ and files are created under CUBRID directory. 
 

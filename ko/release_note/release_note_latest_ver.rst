@@ -25,7 +25,7 @@ CUBRID 9.3에 대한 정보는 https://www.cubrid.org/manual/en/9.3.0/release_no
 ===========
 
 
-CUBRID 11.0은 새로운 기능, 중요한 변경 사항 및 개선 사항이 포함 된 최신 안정화 버전입니다.
+CUBRID 11.0은 새로운 기능, 중요한 변경 사항 및 개선 사항이 포함 된 최신 안정화 버전이다.
 
 .. TODO: UPDATE WITH DETAILS.
 

@@ -2523,31 +2523,31 @@ CUBRID 설치 시 생성되는 기본 브로커 설정 파일인 **cubrid_broker
 
 **JDBC_CACHE**
 
-    **JDBC_CACHE**는 결과 캐시 기능의 사용 여부를 설정하는 파라미터로 기본 값은 **OFF**이다.
+    **JDBC_CACHE** 는 결과 캐시 기능의 사용 여부를 설정하는 파라미터로 기본 값은 **OFF** 이다.
 
-    이 파라미터 값을 **ON**으로 설정하면 JDBC의 모든 SELECT 질의는 **JDBC_CACHE_LIFE_TIME**으로 설정된 시간 동안 캐시된다.
+    이 파라미터 값을 **ON** 으로 설정하면 JDBC의 모든 SELECT 질의는 **JDBC_CACHE_LIFE_TIME** 으로 설정된 시간 동안 캐시된다.
 
 **JDBC_CACHE_HINT_ONLY**
 
-    **JDBC_CACHE_HINT_ONLY**는 결과 캐시 기능을 질의 힌트 /*+ JDBC_CACHE */에 의해서만 사용할지의 여부를 설정하는 파라미터로 기본 값은 **OFF** 이다.
+    **JDBC_CACHE_HINT_ONLY** 는 결과 캐시 기능을 질의 힌트 /\*+ JDBC_CACHE \*/에 의해서만 사용할지의 여부를 설정하는 파라미터로 기본 값은 **OFF** 이다.
 
     질의 힌트가 주어졌을 때 동작은 JDBC_CACHE 설정과 동일하다.
 
 **JDBC_CACHE_LIFE_TIME**
 
-    **JDBC_CACHE_HINT_ONLY**는 JDBC 클라이언트의 결과 캐시 유지 시간을 설정하는 파라미터로 기본 값은 1000(초)이다.
+    **JDBC_CACHE_HINT_ONLY** 는 JDBC 클라이언트의 결과 캐시 유지 시간을 설정하는 파라미터로 기본 값은 1000(초)이다.
 
     캐시 유지 시간 동안에만 결과 캐시는 유효하다. 캐시 유지 시간이 지난 후에는 캐시되었던 결과들은 더 이상 사용할 수 없으며 질의 결과는 다시 캐시된다.
 
-    캐시 유지 시간은 **JDBC_CACHE**나 **JDBC_CACHE_HINT_ONLY** 파라미터가 "ON"으로 설정되어 있어야만 동작한다.
+    캐시 유지 시간은 **JDBC_CACHE** 나 **JDBC_CACHE_HINT_ONLY** 파라미터가 **ON** 으로 설정되어 있어야만 동작한다.
 
     **주의**
 
-    **JDBC_CACHE**와 **JDBC_CACHE_HINT_ONLY**, **JDBC_CACHE_LIFE_TIME** 파라미터 설정은
+    **JDBC_CACHE** 와 **JDBC_CACHE_HINT_ONLY**, **JDBC_CACHE_LIFE_TIME** 파라미터 설정은
 
-    시스템 파라미터 **max_query_cache_entries**와 **query_cache_size_in_pages**가 0보다 큰 값으로 설정되었을 때만 의미를 가진다.
+    시스템 파라미터 **max_query_cache_entries** 와 **query_cache_size_in_pages** 가 0보다 큰 값으로 설정되었을 때만 의미를 가진다.
 
-    JDBC 클라이언트 결과 캐시가 동작하기 위해서는 앞서 언급된 3개의 JDBC관련 파라미터 설정과 함께 SELECT 질의가 반드시 질의 힌트 /*+ QUERY CACHE */를 포함하고 있어야 한다.
+    JDBC 클라이언트 결과 캐시가 동작하기 위해서는 앞서 언급된 3개의 JDBC관련 파라미터 설정과 함께 SELECT 질의가 반드시 질의 힌트 /\*+ QUERY CACHE \*/를 포함하고 있어야 한다.
 
 .. _trigger_action:
 

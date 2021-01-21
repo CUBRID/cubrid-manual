@@ -263,7 +263,7 @@ JDBC 프로그래밍
        *   useSSL=true, 브로커 '일반 모드' 일 때 연결 불가 (**cubrid_broker.conf**: SSL = OFF)
        *   useSSL=false, 브로커 '암호화 모드' 일때 연결 불가 (**cubrid_broker.conf**: SSL = ON)
 
-    * **clientCacheSize**는 브로커 파라미터인 **JDBC_CACHE** 이나 **JDBC_CACHE_ONLY_HINT**가 **ON**으로 설정되어 있어야 유효하다.
+    * **clientCacheSize** 는 브로커 파라미터인 **JDBC_CACHE** 혹은 **JDBC_CACHE_ONLY_HINT** 가 **ON** 으로 설정되어 있어야 유효하다.
 
 .. _jdbc-conn-datasource:
 

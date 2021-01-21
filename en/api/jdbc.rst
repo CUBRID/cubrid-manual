@@ -194,7 +194,7 @@ The **getConnection** method returns the **Connection** object and it is used to
     *  **clientCacheSize**: cache size for result-cache
 	   *   the unit is multiple of mega-byte
 	   *   the range is 1 ~ 1024 (1 mega-byte to 1 giga-byte)
-	   *   the default valuse is 1
+	   *   the default value is 1
 
 **Example 1** ::
 

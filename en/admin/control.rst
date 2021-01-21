@@ -1480,7 +1480,7 @@ The following examples and descriptions show SQL log files:
 
     13-06-11 15:07:39.282 (0) STATE idle
     13-06-11 15:07:44.832 (0) CLIENT IP 192.168.10.100
-    13-06-11 15:07:44.835 (0) CLIENT VERSION 11.0.0.0254
+    13-06-11 15:07:44.835 (0) CLIENT VERSION 11.0.0.0248
     13-06-11 15:07:44.835 (0) session id for connection 0
     13-06-11 15:07:44.836 (0) connect db demodb user dba url jdbc:cubrid:192.168.10.200:30000:demodb:dba:********: session id 12
     13-06-11 15:07:44.836 (0) DEFAULT isolation_level 4, lock_timeout -1

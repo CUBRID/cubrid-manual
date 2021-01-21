@@ -29,7 +29,7 @@ JDBC 드라이버 버전은 다음과 같은 방법으로 확인할 수 있다. 
     cubrid/sql/
     cubrid/jdbc/driver/CUBRIDBlob.class
     ...
-    CUBRID-JDBC-11.0.0.0254
+    CUBRID-JDBC-11.0.0.0248
 
 **CUBRID JDBC 드라이버 등록**
 

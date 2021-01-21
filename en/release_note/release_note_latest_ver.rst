@@ -1,7 +1,7 @@
 :tocdepth: 3
 
 ******************
-10.2 Release Notes
+11.0 Release Notes
 ******************
 
 .. contents::
@@ -9,9 +9,11 @@
 Release Notes Information
 =========================
 
-This document includes information on CUBRID 10.2(Build Number: 10.2.0.8797-d56a158).
+This document includes information on CUBRID 11.0(Build Number: 11.0.0.0248-b53ae4a).
 
-CUBRID 10.2 includes all of the fixed errors and improved features that were detected in the CUBRID 10.1 and were applied to the previous versions.
+CUBRID 11.0 includes all of the fixed errors and improved features that were detected in the CUBRID 10.2 and were applied to the previous versions.
+
+For CUBRID 10.2, please find https://www.cubrid.org/manual/en/10.2/release_note/index.html.
 
 For CUBRID 10.1, please find https://www.cubrid.org/manual/en/10.1/release_note/index.html.
 
@@ -22,62 +24,66 @@ For CUBRID 9.3, please find https://www.cubrid.org/manual/en/9.3.0/release_note/
 Overview
 ========
 
-CUBRID 10.2 is the latest stable version that includes new features, significant changes and enhancements.
+CUBRID 11.0 is the latest stable version that includes new features, significant changes and enhancements.
 
 .. TODO: UPDATE WITH DETAILS.
 
-CUBRID 10.2
+CUBRID 11.0
 
-* is a significantly improved version.
-* is more reliable, faster and scalable: Online parallel data loading, optimizes auto-commit workloads
+* is a version with improved security.
+* is more stable, faster, and more convenient for administrators.
 * fixes a large number of critical bugs.
-* includes useful SQL extensions: JSON data type and CTE(Common Table Expressions) extensions.
-* includes many enhancements to index management: Online parallel index loading, Faster foreign key loading, Invisible Index.
-* includes huge scale of code refactoring and modernization.
+* includes useful SQL extensions: Supporting RVC (Row Value Constructor) and various REGEXP functions.
+* includes code refactoring and modernization.
 
-CUBRID 10.2 is **faster**. It optimizes auto-commit workloads, for instance, YCSB Workload A (140%: 10.1) and YCSB Workload B (130%: 10.1). For faster bulk data loading, CUBRID 10.2 has online parallel loader which shows x10 performance to CUBRID 10.1.
+CUBRID 11.0 **improves security** by providing data encryption and packet encryption. This version prevents abnormal data loss by supporting table-based TDE (Transparent Data Encryption) and packet encryption between the driver and server.
 
-CUBRID 10.2 is also **better**, bringing new features. CUBRID 10.2 supports built-in JSON data types, path, functions and operators. Common Table Expression is now allowed for INSERT, REPLACE, DELETE, UPDATE, CREATE TABLE AS SELECT as well as SELECT. \
-Index management is greatly improved. To load a secondary key is no more painful. It supports online index loading which allows other select and DMLs without loosing throughputs. It even provides parallel option to load an online index, which greatly speeds up index loading. \
-It also provides from x2 to x3 performance boost to load foreign keys. \
-Invisible index helps DBAs to test effect of removing an index without making a disruptive change.
+CUBRID 11.0 is **faster**. This version supports hash scan and improves the performances by up to 10 times in join query that could not perform index scans. By supporting the cache of search query results through hints, data change is minimal, and the performance of the workload with complex queries is maximized.
 
-CUBRID 10.2 is more **reliable** and **stable** too. Double Write Buffer protects against I/O partial writes and includes many optimizations to minimize performance degradation. It has fixed over 1300+ issues as CUBRID 10.2 and passed rigorous tests.
+CUBRID 11.0 **improves administrator convenience** by providing new functions for administrators. This version supports statement based replication through hints on the HA environment, improving the replication time when deleting and updating a large amount of data. By separating the Java SP server from the DB server, the influence of the DB server is minimized from the start/stop of the Java SP server. In addition, the DDL audit function is provided so that DDL change can be tracked.
 
-CUBRID 10.2 is built with devtoolset-8(GCC 8.2) of Linux and VS 2017 of Windows. CUBRID code is completely recompiled with C++ and new features implementation fully exploit the C++ extensions and STL.
-
-The database volume of CUBRID 10.2 is not compatible with that of CUBRID 10.1 and earlier versions. Therefore, if you use CUBRID 10.1 or earlier, you must **migrate your databases**. Regarding this, see :doc:`/upgrade`.
+The database volume of CUBRID 11.0 is not compatible with that of CUBRID 10.2 and earlier versions. Therefore, if you use CUBRID 10.1 or earlier, you must **migrate your databases**. Regarding this, see :doc:`/upgrade`.
 
 .. TODO: coming soon 
 
 Driver Compatibility
 --------------------
 
-*   The JDBC and CCI driver of CUBRID 10.2 are compatible with the DB server of CUBRID 10.1, 10.0, 9.3, 9.2, 9.1, 2008 R4.4, R4.3 or R4.1.
+*   The JDBC and CCI driver of CUBRID 11.0 are compatible with the DB server of CUBRID 10.2, 10.1, 10.0, 9.3, 9.2, 9.1, 2008 R4.4, R4.3 or R4.1.
 *   To upgrade drivers are highly recommended.
 
-We strongly recommend to also upgrade your drivers to use CUBRID 10.2. Some new features, especially for JSON data types are only supported with 10.2 drivers.
+As new features such as result cache have been improved in the CUBRID 11.0 driver, CUBRID 11.0 users are strongly recommended to upgrade the driver. 
 
-For more details on changes, see the :ref:`10_2_changes`. Users of previous versions should check the :ref:`10_2_changes` and :ref:`10_2_new_cautions` sections.
+For more details on changes, see the :ref:`11_0_changes`. Users of previous versions should check the :ref:`11_0_changes` and :ref:`11_0_new_cautions` sections.
 
 .. _11_0_changes:
 
-10.2 Changes
+11.0 Changes
 ============
 
-Please refer to `change logs of CUBRID 10.2 <https://github.com/CUBRID/cubrid/releases/tag/v10.2>`_.
+Please refer to `change logs of CUBRID 11.0 <https://github.com/CUBRID/cubrid/releases/tag/v11.0>`_.
 
 
 Cautions
 =========
 
-.. _10_2_new_cautions:
+.. _11_0_new_cautions:
 
 New Cautions
 ------------
 
-The database volume of CUBRID 10.2 is not compatible with that of CUBRID 10.1 and earlier versions.
+The database volume of CUBRID 11.0 is not compatible with that of CUBRID 10.2 and earlier versions.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+When creating a table without an option, it is created as a reuse_oid table.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The maximum length of the CHAR data type has been changed to 256M character string.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Modified to occur error when the input string length is longer than the set length of the string data type.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Modified to recognize the space character at the end of the string, it is recognized as a different character string according to the space character at the end of the string.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Due to the change in the statistics collection method, it is necessary to perform periodic statistics collection.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Existing Cautions
 -----------------

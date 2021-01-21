@@ -139,11 +139,13 @@ The **getConnection** method returns the **Connection** object and it is used to
                  | logSlowQueries=<bool_type>&slowQueryThresholdMillis=<millisecond>
                  | useLazyConnection=<bool_type>
                  | useSSL=<bool_type>
+                 | clientCacheSize=<unit_size>
                  
         <alternative_hosts> ::=
         <standby_broker1_host>:<port> [,<standby_broker2_host>:<port>]
         <behavior_type> ::= exception | round | convertToNull
         <bool_type> ::= true | false
+		<unit_size> ::= multiple of mega byte
 
 *   *host*: IP address or host name where the CUBRID broker is running
 *   *port*: The CUBRID broker port number (default value: 33,000)
@@ -189,6 +191,11 @@ The **getConnection** method returns the **Connection** object and it is used to
        *   Packet encryption: useSSL = true
        *   Plain text: useSSL = false
 
+    *  **clientCacheSize**: cache size for result-cache
+       *   the unit is multiple of mega-byte
+       *   the range is 1 ~ 1024 (1 mega-byte to 1 giga-byte)
+       *   the default value is 1
+
 **Example 1** ::
 
     --connection URL string when user name and password omitted
@@ -217,6 +224,9 @@ The **getConnection** method returns the **Connection** object and it is used to
 
     --connection URL string when useSSL property specified for encrypted connection
     URL=jdbc:CUBRID:192.168.0.1:33000:demodb:public::?useSSL=true
+
+    --connection URL string when clientCacheSize property specified for result-cache
+    URL=jdbc:CUBRID:192.168.0.1:33000:demodb:public::?clientCacheSize=1
 
 **Example 2**
 
@@ -252,6 +262,8 @@ The **getConnection** method returns the **Connection** object and it is used to
 
        *   useSSL=true, connection request will be rejected when the broker is in 'normal mode' (**cubrid_broker.conf**: SSL = OFF)
        *   useSSL=false, connection request will be rejected when the broker is in 'encryption mode' (**cubrid_broker.conf**: SSL = ON)
+
+    * The **clientCacheSize** works only when **JDBC_CACHE** or **JDBC_CACHE_ONLY_HINT** of broker configure is **ON**.
 
 .. _jdbc-conn-datasource:
 

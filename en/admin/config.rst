@@ -2577,7 +2577,7 @@ Transaction & Query
 
 **JDBC_CACHE_HINT_ONLY**
 
-    **JDBC_CACHE_HINT_ONLY** is a parameter to configure whether to use result-cache feature only by query hint /*+ JDBC_CACHE */.
+    **JDBC_CACHE_HINT_ONLY** is a parameter to configure whether to use result-cache feature only by query hint /\*+ JDBC_CACHE \*/.
 
 	It works as if the parameter is **ON** when the query hint is given.
 
@@ -2595,7 +2595,7 @@ Transaction & Query
 
 	when the system parameter both of **max_query_cache_entries** and **query_cache_size_in_pages** are not set to positive value.
 
-	For result cache working, the SELECT query must include query hint /*+ QUERY_CACHE */ together with these JDBC related paramter setting.
+	For result cache working, the SELECT query must include query hint /\*+ QUERY_CACHE \*/ together with these JDBC related paramter setting.
 
 .. _trigger_action:
 

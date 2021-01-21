@@ -139,11 +139,13 @@ JDBC 프로그래밍
                  | logSlowQueries=<bool_type>&slowQueryThresholdMillis=<millisecond>
                  | useLazyConnection=<bool_type>
                  | useSSL=<bool_type>
+				 | clientCacheSize=<unit_size>
                  
         <alternative_hosts> ::=
         <standby_broker1_host>:<port> [,<standby_broker2_host>:<port>]
         <behavior_type> ::= exception | round | convertToNull
         <bool_type> ::= true | false
+		<unit_size> ::= multiple of mega byte
 
 *   *host*: CUBRID 브로커가 동작하고 있는 서버의 IP 주소 또는 호스트 이름
 *   *port*: CUBRID 브로커의 포트 번호(기본값: 33000)
@@ -189,6 +191,11 @@ JDBC 프로그래밍
        *   패킷 암호화: useSSL = true
        *   일반 평문: useSSL = false
 
+    *  **clientCacheSize**: 결과를 캐시할 크기
+	   *   단위는 메가 바이트
+	   *   범위는 1 ~ 1024 (1메가 바이트에서 to 1기가 바이트)
+	   *   기본 값은 1 (메가 바이트)
+
 **예제 1** ::
 
     --connection URL string when user name and password omitted
@@ -217,6 +224,9 @@ JDBC 프로그래밍
 
     --connection URL string when useSSL property specified for encrypted connection
     URL=jdbc:CUBRID:192.168.0.1:33000:demodb:public::?useSSL=true
+
+    --connection URL string when clientCacheSize property specified for result-cache
+    URL=jdbc:CUBRID:192.168.0.1:33000:demodb:public::?clientCacheSize=1
 
 **예제 2**
 
@@ -252,6 +262,8 @@ JDBC 프로그래밍
  
        *   useSSL=true, 브로커 '일반 모드' 일 때 연결 불가 (**cubrid_broker.conf**: SSL = OFF)
        *   useSSL=false, 브로커 '암호화 모드' 일때 연결 불가 (**cubrid_broker.conf**: SSL = ON)
+
+    * **clientCacheSize**는 브로커 파라미터인 **JDBC_CACHE** 이나 **JDBC_CACHE_ONLY_HINT**가 **ON**으로 설정되어 있어야 유효하다.
 
 .. _jdbc-conn-datasource:
 

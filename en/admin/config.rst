@@ -2585,7 +2585,7 @@ Transaction & Query
 
     **JDBC_CACHE_HINT_ONLY** is a parameter to configure JDBC client's result-cache life time. The default value is 1000 (sec).
 
-	For only cache life time, the result-cache is available. After the cache life time expired prior cached results are no more available and a new result is cached.
+	For only cache life time, the result-cache is available. After the cache lifetime expired, the prior cached results are no more available and a new result is cached.
 
 	The cache life time works only when the paramter **JDBC_CACHE** or **JDBC_CACHE_HINT_ONLY** is configured to "ON".
 

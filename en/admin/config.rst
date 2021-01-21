@@ -2252,6 +2252,12 @@ The following table shows the broker parameters available in the broker configur
 |                                 |                         +---------------------------------+--------+------------------------------+-----------+
 |                                 |                         | STATEMENT_POOLING               | string | ON                           | available |
 |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | JDBC_CACHE                      | string | OFF                          | available |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | JDBC_CACHE_HINT_ONLY            | string | OFF                          | available |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | JDBC_CACHE_LIFE_TIME            | sec    | 1000                         | available |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
 |                                 |                         | TRIGGER_ACTION                  | string | ON                           | available |
 |                                 +-------------------------+---------------------------------+--------+------------------------------+-----------+
 |                                 | Logging                 | ACCESS_LOG                      | string | OFF                          | available |
@@ -2562,6 +2568,34 @@ Transaction & Query
     If the prepared statement is executed after transaction commit or termination while **STATEMENT_POOLING** is set to **OFF**, the following message will be displayed. ::
 
         Caused by: cubrid.jdbc.driver.CUBRIDException: Attempt to access a closed Statement.
+
+**JDBC_CACHE**
+
+    **JDBC_CACHE** is a parameter to configure whether to use result-cache fetaure. The default value is **OFF**.
+
+	If the parameter is **ON**, all of SELECT queries from JDBC is cached at client for life time which is configured by **JDBC_CACHE_LIFE_TIME**
+
+**JDBC_CACHE_HINT_ONLY**
+
+    **JDBC_CACHE_HINT_ONLY** is a parameter to configure whether to use result-cache feature only by query hint /*+ JDBC_CACHE */.
+
+	It works as if the parameter is **ON** when the query hint is given.
+
+**JDBC_CACHE_LIFE_TIME**
+
+    **JDBC_CACHE_HINT_ONLY** is a parameter to configure JDBC client's result-cache life time. The default value is 1000 (sec).
+
+	For only cache life time, the result-cache is available. After the cache life time expired prior cached results are no more available and a new result is cached.
+
+	The cache life time works only when the paramter **JDBC_CACHE** or **JDBC_CACHE_HINT_ONLY** is configured to "ON".
+
+    **WARNING**
+
+    **JDBC_CACHE**, **JDBC_CACHE_HINT_ONLY**, and **JDBC_CACHE_LIFE_TIME** parameters are meaningless
+
+	when the system parameter **max_query_cache_entries" or **query_cache_size_in_pages** is not set to positive value.
+
+	For result cache working, the SELECT query must include query hint /*+ QUERY_CACHE */ together with these JDBC related paramter setting.
 
 .. _trigger_action:
 

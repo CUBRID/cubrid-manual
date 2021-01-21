@@ -2545,9 +2545,9 @@ CUBRID 설치 시 생성되는 기본 브로커 설정 파일인 **cubrid_broker
 
     **JDBC_CACHE**와 **JDBC_CACHE_HINT_ONLY**, **JDBC_CACHE_LIFE_TIME** 파라미터 설정은
 
-	시스템 파라미터 **max_query_cache_entries**와 **query_cache_size_in_pages**가 0보다 큰 값으로 설정되었을 때만 의미를 가진다.
+    시스템 파라미터 **max_query_cache_entries**와 **query_cache_size_in_pages**가 0보다 큰 값으로 설정되었을 때만 의미를 가진다.
 
-	JDBC 클라이언트 결과 캐시가 동작하기 위해서는 앞서 언급된 3개의 JDBC관련 파라미터 설정과 함께 SELECT 질의가 반드시 질의 힌트 /*+ QUERY CACHE */를 포함하고 있어야 한다.
+    JDBC 클라이언트 결과 캐시가 동작하기 위해서는 앞서 언급된 3개의 JDBC관련 파라미터 설정과 함께 SELECT 질의가 반드시 질의 힌트 /*+ QUERY CACHE */를 포함하고 있어야 한다.
 
 .. _trigger_action:
 

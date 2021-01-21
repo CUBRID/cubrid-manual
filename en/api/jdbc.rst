@@ -139,7 +139,7 @@ The **getConnection** method returns the **Connection** object and it is used to
                  | logSlowQueries=<bool_type>&slowQueryThresholdMillis=<millisecond>
                  | useLazyConnection=<bool_type>
                  | useSSL=<bool_type>
-				 | clientCacheSize=<unit_size>
+                 | clientCacheSize=<unit_size>
                  
         <alternative_hosts> ::=
         <standby_broker1_host>:<port> [,<standby_broker2_host>:<port>]
@@ -192,9 +192,9 @@ The **getConnection** method returns the **Connection** object and it is used to
        *   Plain text: useSSL = false
 
     *  **clientCacheSize**: cache size for result-cache
-	   *   the unit is multiple of mega-byte
-	   *   the range is 1 ~ 1024 (1 mega-byte to 1 giga-byte)
-	   *   the default value is 1
+       *   the unit is multiple of mega-byte
+       *   the range is 1 ~ 1024 (1 mega-byte to 1 giga-byte)
+       *   the default value is 1
 
 **Example 1** ::
 

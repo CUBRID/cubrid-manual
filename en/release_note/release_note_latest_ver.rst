@@ -36,11 +36,11 @@ CUBRID 11.0
 * includes useful SQL extensions: Supporting RVC (Row Value Constructor) and various REGEXP functions.
 * includes code refactoring and modernization.
 
-CUBRID 11.0 **improves security** by providing data encryption and packet encryption. This version prevents abnormal data leakage by supporting table-based TDE (Transparent Data Encryption) and packet encryption between the driver and server.
+CUBRID 11.0 **improves security** by providing data encryption and packet encryption. This version prevents abnormal data loss by supporting table-based TDE (Transparent Data Encryption) and packet encryption between the driver and server.
 
 CUBRID 11.0 is **faster**. This version supports hash scan and improves the performances by up to 10 times in join query that could not perform index scans. By supporting the cache of search query results through hints, data change is minimal, and the performance of the workload with complex queries is maximized.
 
-CUBRID 11.0 **improves administrator convenience** by providing new functions for administrators. This version supports syntax-based replication through hints on the HA environment, improving the replication time when deleting and updating a large amount of data. By separating the Java SP server from the DB server, the influence of the DB server is minimized from the start/stop of the Java SP server. In addition, the DDL audit function is provided so that DDL change can be tracked.
+CUBRID 11.0 **improves administrator convenience** by providing new functions for administrators. This version supports statement based replication through hints on the HA environment, improving the replication time when deleting and updating a large amount of data. By separating the Java SP server from the DB server, the influence of the DB server is minimized from the start/stop of the Java SP server. In addition, the DDL audit function is provided so that DDL change can be tracked.
 
 The database volume of CUBRID 11.0 is not compatible with that of CUBRID 10.2 and earlier versions. Therefore, if you use CUBRID 10.1 or earlier, you must **migrate your databases**. Regarding this, see :doc:`/upgrade`.
 
@@ -78,8 +78,8 @@ When creating a table without an option, it is created as a reuse_oid table.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 The maximum length of the CHAR data type has been changed to 256M character string.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Modified to occur error when the length of a string is larger than the length was entered in the string data type.
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Modified to occur error when the input string length is longer than the set length of the string data type.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Modified to recognize the space character at the end of the string, it is recognized as a different character string according to the space character at the end of the string.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Due to the change in the statistics collection method, it is necessary to perform periodic statistics collection.

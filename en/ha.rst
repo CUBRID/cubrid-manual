@@ -1808,7 +1808,7 @@ Load Balancing Structure
 
 The load balancing structure increases the availability of the CUBRID service by placing several nodes in the HA configuration (one master node and one slave node) and distributes read-load.
 
-Because the replica nodes receive replication logs from the nodes in the HA configuration and maintain the same data, and because the nodes in the HA configuration do not receive replication logs from the replica nodes, its network and disk usage rate is lower than that of the multiple-slave structure.
+Because the replica nodes receive replication logs from the master node in the HA configuration and maintain the same data, and because the master node in the HA configuration do not receive replication logs from the replica nodes, its network and disk usage rate is lower than that of the multiple-slave structure.
 
 Because replica nodes are not included in the HA structure, they provide read service without failover, even when all other nodes in the HA structure fail.
 
@@ -3415,11 +3415,11 @@ Detection of Replication Mismatch
 How to Detect Replication Mismatch
 ----------------------------------
 
-Replication mismatch between replication nodes, indicating that data of the master node and the slave node is not identical, can be detected to some degree by the following process. You can also use :ref:`cubrid-checksumdb` utility to detect a replication inconsistency. However, please note that there is no more accurate way to detect a replication mismatch than by directly comparing the data of the master node to the data of the slave node. If it is determined that there has been a replication mismatch, you should rebuild the database of the master node to the slave node (see :ref:`rebuilding-replication`.)
+Replication mismatch between replication nodes, indicating that data of the master node and the slave node (or the replica node) is not identical, can be detected to some degree by the following process. You can also use :ref:`cubrid-checksumdb` utility to detect a replication inconsistency. However, please note that there is no more accurate way to detect a replication mismatch than by directly comparing the data of the master node to the data of the slave node (or the replica node). If it is determined that there has been a replication mismatch, you should rebuild the database of the master node to the slave nodei (or the replica node) (see :ref:`rebuilding-replication`.)
 
 *   Execute **cubrid statdump** command and check **Time_ha_replication_delay**. When this value is bigger, replication latency can be larger; the bigger latency time shows the possibility of the larger replication mismatch.
 
-*   On the slave node, execute **cubrid applyinfo** to check the "Fail count" value. If the "Fail count" is 0, it can be determined that no transaction has failed in replication (see :ref:`cubrid-applyinfo`.) ::
+*   On the slave node (or the replica node), execute **cubrid applyinfo** to check the "Fail count" value. If the "Fail count" is 0, it can be determined that no transaction has failed in replication (see :ref:`cubrid-applyinfo`.) ::
 
         [nodeB]$ cubrid applyinfo -L /home/cubrid/DB/testdb_nodeA -r nodeA -a testdb
          
@@ -3433,7 +3433,7 @@ Replication mismatch between replication nodes, indicating that data of the mast
         Fail count                     : 0
         ...
 
-*   To check whether copying replication logs has been delayed or not on the slave node, execute **cubrid applyinfo** and compare the "Append LSA" value of "Copied Active Info." to the "Append LSA" value of "Active Info.". If there is a big difference between the two values, it means that delay has occurred while copying the replication logs to the slave node (see :ref:`cubrid-applyinfo`.) ::
+*   To check whether copying replication logs has been delayed or not on the slave node (or the replica node), execute **cubrid applyinfo** and compare the "Append LSA" value of "Copied Active Info." to the "Append LSA" value of "Active Info.". If there is a big difference between the two values, it means that delay has occurred while copying the replication logs to the slave node (or the replica node) (see :ref:`cubrid-applyinfo`.) ::
 
         [nodeB]$ cubrid applyinfo -L /home/cubrid/DB/testdb_nodeA -r nodeA -a testdb
      
@@ -3455,7 +3455,7 @@ Replication mismatch between replication nodes, indicating that data of the mast
 
 *   If a delay seems to occur when copying the replication logs, check whether the network line speed is slow, whether there is sufficient free disk space, disk I/O is normal, etc.
 
-*   To check the delay in applying the replication log in the slave node, execute **cubrid applyinfo** and compare the "Committed page" value of "Applied Info." to the "EOF LSA" value of "Copied Active Info.". If there is a big difference between the two values, it means that a delay has occurred while applying the replication logs to the slave database (see :ref:`cubrid-applyinfo`.) ::
+*   To check the delay in applying the replication log in the slave node (or the replica node), execute **cubrid applyinfo** and compare the "Committed page" value of "Applied Info." to the "EOF LSA" value of "Copied Active Info.". If there is a big difference between the two values, it means that a delay has occurred while applying the replication logs to the slave database (or the replica database) (see :ref:`cubrid-applyinfo`.) ::
 
         [nodeB]$ cubrid applyinfo -L /home/cubrid/DB/testdb_nodeA -r nodeA -a testdb
      
@@ -3476,11 +3476,11 @@ Replication mismatch between replication nodes, indicating that data of the mast
         HA server state                : active
         ...
 
-*   If the delay in applying the replication logs is too long, it may be due to a transaction with a long execution time. If the transaction is performed normally, a delay in applying the replication logs may normally occur. To determine whether it is normal or abnormal, continuously execute **cubrid applyinfo** and check whether applylogdb continuously applies replication logs to the slave node or not.
+*   If the delay in applying the replication logs is too long, it may be due to a transaction with a long execution time. If the transaction is performed normally, a delay in applying the replication logs may normally occur. To determine whether it is normal or abnormal, continuously execute **cubrid applyinfo** and check whether applylogdb continuously applies replication logs to the slave node (or the replica node) or not.
 
 *   Check the error log message created by the copylogdb process and the applylogdb process (see the error message).
 
-*   Compare the number of records on the master database table to that on the slave database table.
+*   Compare the number of records on the master database table to that on the slave (or the replica)  database table.
 
 
 
@@ -3489,7 +3489,7 @@ Replication mismatch between replication nodes, indicating that data of the mast
 checksumdb
 ----------
 
-**checksumdb** provides a simple way to check replication integrity. Basically, it divides each table from a master node into fixed-size chunks and then calculates CRC32 values. The calculation itself, not the calculated value, is then replicated through CUBRID HA. Consequently, by comparing CRC32 values calculated on master and slave nodes, **checksumdb** can report the replication integrity. Note that **checksumdb** might affect master's performance even though it is designed to minimize the performance degradation. ::
+**checksumdb** provides a simple way to check replication integrity. Basically, it divides each table from a master node into fixed-size chunks and then calculates CRC32 values. The calculation itself, not the calculated value, is then replicated through CUBRID HA. Consequently, by comparing CRC32 values calculated on master and slave nodes (or replica nodes), **checksumdb** can report the replication integrity. Note that **checksumdb** might affect master's performance even though it is designed to minimize the performance degradation. ::
 
         cubrid checksumdb [options] <database-name>@<hostname>
 

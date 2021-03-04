@@ -1808,7 +1808,7 @@ Load Balancing Structure
 
 The load balancing structure increases the availability of the CUBRID service by placing several nodes in the HA configuration (one master node and one slave node) and distributes read-load.
 
-Because the replica nodes receive replication logs from the master node in the HA configuration and maintain the same data, and because the master node in the HA configuration do not receive replication logs from the replica nodes, its network and disk usage rate is lower than that of the multiple-slave structure.
+Because the replica nodes receive replication logs from whole nodes in the HA configuration and maintain the same data, and because whole nodes in the HA configuration do not receive replication logs from the replica nodes, its network and disk usage rate is lower than that of the multiple-slave structure.
 
 Because replica nodes are not included in the HA structure, they provide read service without failover, even when all other nodes in the HA structure fail.
 

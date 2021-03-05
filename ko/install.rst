@@ -444,7 +444,13 @@ Windows 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항
         ::
         
             %CUBRID%\bin
-                
+
+	.. note:: 
+	
+	    CUBRID를 사용하기 위한 환경변수 설정은 아래의 Batch file(cubrid_env.bat)을 이용하여 설정을 편리하게 할 수 있다.
+	    C:\\CUBRID\\shard\\windows_scripts\\cubrid_env.bat
+
+
     **DB 생성**
         
     *   cmd 명령으로 콘솔 창을 띄운 후 DB를 생성할 디렉터리로 이동해서 DB를 직접 생성한다.
@@ -541,3 +547,13 @@ zip 파일로 CUBRID를 설치하는 경우 CUBRID Service Tray가 자동으로 
     *   [시작 버튼] > [모든 프로그램] > [시작프로그램]에 CUBRID Service Tray가 등록되어 있는지 확인하고, 그렇지 않으면 CUBRID Service Tray를 등록한다.
 
 CUBRID 설치 이후 환경 설정, 도구 설치, 인터페이스 설치 등은 :ref:`Installing-and-Running-on-Windows`\을 확인하도록 한다.
+
+.. note:: 
+
+    zip 파일로 CUBRID를 설치한 경우, CUBRID 실행에 필요한 DLL 이 없어 실행이 되지 않을 수 있다.
+    이런 경우 Microsoft Visual C++ Redistributable 를 설치해야 한다.
+    
+    *   **Microsoft Visual C++ Redistributable**
+    
+        https://visualstudio.microsoft.com/ko/downloads/
+        

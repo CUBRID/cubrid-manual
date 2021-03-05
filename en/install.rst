@@ -553,4 +553,5 @@ For environment setting, tools installation and interfaces installation after CU
     
     *   **Microsoft Visual C++ Redistributable**
     
-        https://visualstudio.microsoft.com/downloads/
+        32bit : https://www.microsoft.com/en-US/download/details.aspx?id=29
+        64bit : https://www.microsoft.com/en-US/download/details.aspx?id=15336

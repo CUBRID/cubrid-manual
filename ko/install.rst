@@ -555,5 +555,5 @@ CUBRID 설치 이후 환경 설정, 도구 설치, 인터페이스 설치 등은
     
     *   **Microsoft Visual C++ Redistributable**
     
-        https://visualstudio.microsoft.com/ko/downloads/
-        
+        *   32bit : https://www.microsoft.com/ko-KR/download/details.aspx?id=29
+        *   64bit : https://www.microsoft.com/ko-kr/download/details.aspx?id=15336

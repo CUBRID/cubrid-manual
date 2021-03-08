@@ -443,6 +443,12 @@ Check below list before installing CUBRID database of Windows version.
         
             %CUBRID%\bin
                 
+    .. note:: 
+
+        Setting environment variables for using CUBRID can be conveniently configured by using the batch file (cubrid_env.bat) below.
+        C:\CUBRID\shard\windows_scripts\cubrid_env.bat
+	
+	
     **Creating DB**
         
     *   Run **cmd** command and open the console; move to the directory to create DB and create DB.
@@ -539,3 +545,13 @@ Since CUBRID Service Tray is not automatically registered when installing CUBRID
     *   Check if CUBRID Service Tray is registered in [Start button] > [All Programs] > [Startup]; if not, register CUBRID Service Tray.
 
 For environment setting, tools installation and interfaces installation after CUBRID installation,  see :ref:`Installing-and-Running-on-Windows`.
+
+.. note:: 
+
+    If CUBRID is installed as a zip file, it may not be executed because there is no DLL required to execute CUBRID.
+    In this case, you need to install Microsoft Visual C++ Redistributable.
+    
+    *   **Microsoft Visual C++ Redistributable**
+    
+        32bit : https://www.microsoft.com/en-US/download/details.aspx?id=29
+        64bit : https://www.microsoft.com/en-US/download/details.aspx?id=15336

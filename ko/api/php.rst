@@ -105,6 +105,7 @@ Windows
 *   운영체제: Windows 32 비트 또는 64비트
 *   웹 서버: Apache 또는 IIS
 *   PHP: 5.6.x 또는 7.1.x(https://windows.php.net/download/)
+*   PHP 7.1.x 의 경우 32bit 또는 64bit용 Microsoft Visual C ++ 2015 재배포 가능 패키지를 설치해야 한다.
 
 **CUBRID PHP API Installer를 사용한 설치**
 

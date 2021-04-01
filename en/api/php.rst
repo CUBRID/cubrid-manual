@@ -105,6 +105,7 @@ For Windows
 *   Operating system: 32-bit or 64 bit Windows
 *   Web server: Apache or IIS
 *   PHP: 5.6.x or 7.1.x (https://windows.php.net/download/)
+*   For PHP 7.1.x, you need to install Microsoft Visual C++ 2015 Redistributable Package for 32bit or 64bit.
 
 **Using CUBRID PHP Driver Installer**
 

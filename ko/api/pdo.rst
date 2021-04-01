@@ -31,7 +31,7 @@ Linux
 
 *   운영체제: Linux: 32 비트 또는 64비트
 *   웹 서버: Apache
-*   PHP: 5.2 또는 5.3https://www.php.net/downloads.php )
+*   PHP: 5.6.x, 또는 7.1.x (https://www.php.net/downloads.php)
 
 **PECL을 이용한 설치**
 
@@ -67,7 +67,8 @@ Windows
 
 *   운영체제: Windows 32 비트 또는 64비트
 *   웹 서버: Apache 또는 IIS
-*   PHP: 5.2 또는 5.3(https://windows.php.net/download)
+*   PHP: 5.6.x 또는 7.1.x(https://windows.php.net/download/)
+*   PHP 7.1.x 의 경우 32bit 또는 64bit용 Microsoft Visual C ++ 2015 재배포 가능 패키지를 설치해야 한다.
 
 **빌드된 드라이버 다운로드 및 설치**
 

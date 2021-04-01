@@ -31,7 +31,7 @@ Linux
 
 *   Operating system: 32-bit or 64-bit Linux
 *   Web server: Apache
-*   PHP: 5.2 or 5.3 ( https://www.php.net/downloads.php )
+*   PHP: 5.6.x, or 7.1.x (https://www.php.net/downloads.php)
 
 **Installing CUBRID PHP Driver using PECL**
 
@@ -67,7 +67,8 @@ Windows
 
 *   Operating system: 32-bit or 64-bit Windows
 *   Web server: Apache or IIS
-*   PHP: 5.2 or 5.3 ( https://windows.php.net/download )
+*   PHP: 5.6.x or 7.1.x (https://windows.php.net/download/)
+*   For PHP 7.1.x, you need to install Microsoft Visual C++ 2015 Redistributable Package for 32bit or 64bit.
 
 **Downloading and Installing Compiled CUBRID PDO Driver**
 

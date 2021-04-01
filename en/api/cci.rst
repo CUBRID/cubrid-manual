@@ -21,6 +21,10 @@ It is automatically installed upon CUBRID installation and can be found in the *
 | Dynamic library | bin/cascci.dll    | lib/libcascci.so  |
 +-----------------+-------------------+-------------------+
 
+.. note::
+
+    *   For Windows, Microsoft Visual C++ 2015 Redistributable (x86 or x64) must be installed to use the CCI Driver.
+
 Because CUBRID CCI driver is connected through the CUBRID broker, you can manage it the same way as other interfaces such as JDBC, PHP, ODBC, etc. In fact, CCI provides back-end infrastructure to implement PHP, ODBC, Python, and Ruby interfaces.
 
 .. image:: /images/image54.jpg

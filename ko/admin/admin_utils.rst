@@ -2976,7 +2976,7 @@ killtran
 
     cubrid tranlist 명령에서 "User name" 칼럼과 "Host name" 칼럼이 출력되지 않는다는 점만 다르다. :ref:`tranlist` 를 참고한다.
 
-.. option:: -d, --display
+.. option:: -d, --display-information
 
     기본 지정되는 옵션으로 트랜잭션의 요약 정보를 출력한다. cubrid tranlist 명령의 -s 옵션을 지정하여 실행한 것과 동일한 결과를 출력한다. :option:`tranlist -s` 를 참고한다.
 

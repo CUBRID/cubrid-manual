@@ -2974,7 +2974,7 @@ The following shows [options] available with the **cubrid killtran** utility.
 
         cubrid killtran --kill-user-name=os_user_id demodb
 
-.. option::  --kill- host-name=HOST
+.. option::  --kill-host-name=HOST
 
     This option kills transactions of a specified client host. ::
 
@@ -2992,7 +2992,7 @@ The following shows [options] available with the **cubrid killtran** utility.
 
         cubrid killtran --kill-sql-id=5377225ebc75a demodb
 
-.. option:: -p PASSWORD
+.. option:: -p, --dba-password=PASSWORD
 
     This option can only be used, if using killing option such as -i and --kill options.
     A value followed by the -p option is a password of the **DBA**, and should be entered in the prompt.
@@ -3001,7 +3001,7 @@ The following shows [options] available with the **cubrid killtran** utility.
 
     The difference with the output of "cubrid tranlist" command is that there are no "User name" column and "Host name" column. See :ref:`tranlist`.
 
-.. option:: -d, --display
+.. option:: -d, --display-information
 
     This is the default option and it displays the summary of transactions. Its output is the same as the output of "cubrid tranlist" with **-s** option. See :option:`tranlist -s`
         

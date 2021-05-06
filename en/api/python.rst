@@ -28,6 +28,7 @@ There are three ways to install CUBRID Python driver on Linux, UNIX, and UNIX-li
 **Building CUBRID Python Driver from Source Code (Linux)**
 
 To install CUBRID Python driver by compiling source code, you should have Python Development Package installed on your system. 
+
 .. FIXME: If you do not have the package, follow the instructions stated at http://www.cubrid.org/wiki_apis/entry/install-python-development-package .
 
 #.  For Building CCI Driver, GNU Developer Toolset 8 or higher is required.

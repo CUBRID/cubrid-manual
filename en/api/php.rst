@@ -29,7 +29,7 @@ For Linux
 *   Operating system: 32-bit or 64-bit Linux
 *   Web server: Apache
 *   PHP: version 5.x, or version 7.x (https://www.php.net/downloads.php)
-*	We refer to the latest PHP versions 5.6.x and 7.1.x as a convenience.
+*	We refer to the latest PHP versions 5.6.x ,7.1.x and 7.4.x as a convenience.
 
 **Installing CUBRID PHP Driver using PECL**
 
@@ -104,8 +104,8 @@ For Windows
 *   CUBRID: 9.3.x or later
 *   Operating system: 32-bit or 64 bit Windows
 *   Web server: Apache or IIS
-*   PHP: 5.6.x or 7.1.x (https://windows.php.net/download/)
-*   For PHP 7.1.x, you need to install Microsoft Visual C++ 2015 Redistributable Package for 32bit or 64bit.
+*   PHP: 5.6.x, 7.1.x or 7.4.x (https://windows.php.net/download/)
+*   For PHP 7.1.x or 7.4.x, you need to install Microsoft Visual C++ 2015 Redistributable Package for 32bit or 64bit.
 
 **Using CUBRID PHP Driver Installer**
 
@@ -189,6 +189,8 @@ After you download the driver, you will see the **php_cubrid.dll** file for CUBR
     
 #.  Restart your web server to apply changes.
 
+.. _how-to-php-driver-build:
+
 Building CUBRID PHP Driver from Source Code
 ===========================================
 
@@ -200,9 +202,10 @@ In this section, we will introduce the way of building CUBRID PHP driver for Lin
 **Configuring the environment**
 
 *   CUBRID: Install CUBRID. Make sure the environment variable **%CUBRID%** is defined in your system.
-*   PHP 5.6.x or 7.1.x source code: You can download PHP source code from https://www.php.net/downloads.php .
+*   PHP 5.6.x, 7.1.x or 7.4.x source code: You can download PHP source code from https://www.php.net/downloads.php .
 *   Apache 2: It can be used to test PHP.
 *   CUBRID PHP driver source code: You can download the source code from https://www.cubrid.org/downloads#php . Make sure that the version you download is the same as the version of CUBRID which has been installed on your system.
+*   IF Building CCI driver In Linux Or Mac, GNU Developer Toolset 8 or higher is required.
 
 **Compiling CUBRID PHP driver**
 

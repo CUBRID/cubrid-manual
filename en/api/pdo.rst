@@ -31,7 +31,7 @@ Linux
 
 *   Operating system: 32-bit or 64-bit Linux
 *   Web server: Apache
-*   PHP: 5.6.x, or 7.1.x (https://www.php.net/downloads.php)
+*   PHP: 5.6.x, 7.1.x, or 7.4.x (https://www.php.net/downloads.php)
 
 **Installing CUBRID PHP Driver using PECL**
 
@@ -67,8 +67,8 @@ Windows
 
 *   Operating system: 32-bit or 64-bit Windows
 *   Web server: Apache or IIS
-*   PHP: 5.6.x or 7.1.x (https://windows.php.net/download/)
-*   For PHP 7.1.x, you need to install Microsoft Visual C++ 2015 Redistributable Package for 32bit or 64bit.
+*   PHP: 5.6.x, 7.1.x, or 7.4.x (https://windows.php.net/download/)
+*   For PHP 7.1.x or 7.4.x, you need to install Microsoft Visual C++ 2015 Redistributable Package for 32bit or 64bit.
 
 **Downloading and Installing Compiled CUBRID PDO Driver**
 
@@ -95,6 +95,12 @@ After you download the driver, you will see the **php_cubrid.dll** file for CUBR
         extension = php_pdo_cubrid.dll
 
 #.  Restart your web server to apply changes.
+
+Building CUBRID PHP Driver from Source Code
+===========================================
+
+Building CUBRID PDO driver and :ref:`Building CUBRID PHP driver from source code<how-to-php-driver-build>` \are the same.
+
 
 PDO Programming
 ===============

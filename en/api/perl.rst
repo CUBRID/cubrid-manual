@@ -30,6 +30,8 @@ Installing and Configuring Perl
 
 *   C compiler: In most cases, there are binary distributions of **DBD::cubrid** ( https://www.cubrid.org/downloads#perl ) available. However, if you want to build the driver from source code, a C compiler is required. Make sure to use the same C compiler that was used for compiling Perl and CUBRID. Otherwise, you will encounter problems because of differences in the underlying C runtime libraries.
 
+*   For Building CCI Driver In Linux, GNU Developer Toolset 8 or higher is required.
+
 **Comprehensive Perl Archive Network (CPAN) Installation**
 
 You can automatically install the driver from source code by using the CPAN module. ::

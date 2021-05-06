@@ -30,7 +30,7 @@ Linux
 *   웹 서버: Apache
 *   PHP: 5.2 또는 5.3( https://www.php.net/downloads.php )
 *   PHP: 5.x, 또는 7.x (https://www.php.net/downloads.php)
-*   편의상 최신 PHP 5.6.x 및 7.1.x를 참조 바랍니다.
+*   편의상 최신 PHP 5.6.x, 7.1.x 및 7.4.x를 참조 바랍니다.
 
 **PECL을 이용한 설치**
 
@@ -104,8 +104,8 @@ Windows
 *   CUBRID: 9.3.x 이상
 *   운영체제: Windows 32 비트 또는 64비트
 *   웹 서버: Apache 또는 IIS
-*   PHP: 5.6.x 또는 7.1.x(https://windows.php.net/download/)
-*   PHP 7.1.x 의 경우 32bit 또는 64bit용 Microsoft Visual C ++ 2015 재배포 가능 패키지를 설치해야 한다.
+*   PHP: 5.6.x, 7.1.x 또는 7.4.x(https://windows.php.net/download/)
+*   PHP 7.1.x 또는 7.4.x 의 경우 32bit 또는 64bit용 Microsoft Visual C ++ 2015 재배포 가능 패키지를 설치해야 한다.
 
 **CUBRID PHP API Installer를 사용한 설치**
 
@@ -191,6 +191,8 @@ PHP 드라이버를 다운로드하면 **php_cubrid.dll** 파일을 볼 수 있�
     
 #.  웹 서버를 재시작한다.
 
+.. _how-to-php-driver-build:
+
 PHP 드라이버 빌드
 =================
 
@@ -202,9 +204,10 @@ Linux
 **환경 설정**
 
 *   CUBRID: CUBRID를 설치한다. 시스템에 환경 변수 **%CUBRID%** 가 정의되어 있는지 확인한다.
-*   PHP 5.6.x 또는 7.1.x 소스코드: PHP 5.3 소스코드를 다음 주소에서 다운로드한다. https://www.php.net/downloads.php
+*   PHP 5.6.x , 7.1.x 또는 7.4.x 소스코드: PHP 5.3 소스코드를 다음 주소에서 다운로드한다. https://www.php.net/downloads.php
 *   Apache 2: PHP 테스트에 Apache 2를 사용할 수 있다.
 *   CUBRID PHP 드라이버 소스코드: https://www.cubrid.org/downloads#php 에서 CUBRID 버전에 맞는 CUBRID PHP 드라이버의 소스코드를 다운로드한다.
+*   Linux 또는 Mac 에서는 CCI 드라이버 빌드를 하려면 GNU Developer Toolset 8 또는 그 이상이 필요하다.
 
 **CUBRID PHP 드라이브 빌드**
 

@@ -205,7 +205,7 @@ In this section, we will introduce the way of building CUBRID PHP driver for Lin
 *   PHP 5.6.x, 7.1.x or 7.4.x source code: You can download PHP source code from https://www.php.net/downloads.php .
 *   Apache 2: It can be used to test PHP.
 *   CUBRID PHP driver source code: You can download the source code from https://www.cubrid.org/downloads#php . Make sure that the version you download is the same as the version of CUBRID which has been installed on your system.
-*   IF Building CCI driver In Linux Or Mac, GNU Developer Toolset 8 or higher is required.
+*   IF building CCI driver In Linux Or Mac, GNU Developer Toolset 8 or higher is required.
 
 **Compiling CUBRID PHP driver**
 

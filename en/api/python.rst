@@ -31,6 +31,8 @@ To install CUBRID Python driver by compiling source code, you should have Python
 
 .. FIXME: If you do not have the package, follow the instructions stated at http://www.cubrid.org/wiki_apis/entry/install-python-development-package .
 
+#.  For building CCI Driver, GNU Developer Toolset 8 or higher is required.
+
 #.  Download the source code from https://www.cubrid.org/downloads#python.
 
 #.  Extract the archive to the desired location. ::

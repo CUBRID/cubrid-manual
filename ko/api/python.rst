@@ -31,6 +31,8 @@ Linux, Unix 및 유사 운영체제에서는 다음과 같은 세 가지 방법�
 
 .. FIXME: Python Development Package가 설치되어 있지 않다면 http://www.cubrid.org/wiki_apis/entry/install-python-development-package\ 를 참고하여 설치한다.
 
+#.  CCI 드라이버 빌드하기 위해 GNU Developer Toolset 8 또는 그 이상이 필요하다.
+
 #.  소스 코드를 https://www.cubrid.org/downloads#python\에서 다운로드한다.
 
 #.  다음 명령어를 실행하여 원하는 위치에 다운로드한 파일의 압축을 해제한다. ::

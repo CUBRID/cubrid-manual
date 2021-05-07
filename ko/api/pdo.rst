@@ -31,7 +31,7 @@ Linux
 
 *   운영체제: Linux: 32 비트 또는 64비트
 *   웹 서버: Apache
-*   PHP: 5.6.x, 또는 7.1.x (https://www.php.net/downloads.php)
+*   PHP: 5.6.x, 7.1.x, 또는 7.4.x (https://www.php.net/downloads.php)
 
 **PECL을 이용한 설치**
 
@@ -67,8 +67,8 @@ Windows
 
 *   운영체제: Windows 32 비트 또는 64비트
 *   웹 서버: Apache 또는 IIS
-*   PHP: 5.6.x 또는 7.1.x(https://windows.php.net/download/)
-*   PHP 7.1.x 의 경우 32bit 또는 64bit용 Microsoft Visual C ++ 2015 재배포 가능 패키지를 설치해야 한다.
+*   PHP: 5.6.x, 7.1.x 또는 7.4.x(https://windows.php.net/download/)
+*   PHP 7.1.x 또는 7.4.x 의 경우 32bit 또는 64bit용 Microsoft Visual C ++ 2015 재배포 가능 패키지를 설치해야 한다.
 
 **빌드된 드라이버 다운로드 및 설치**
 
@@ -95,6 +95,11 @@ PDO 드라이버를 다운로드하면 **php_cubrid.dll** 파일을 볼 수 있�
         extension = php_pdo_cubrid.dll
 
 #.  웹 서버를 재시작한다.
+
+PHP 드라이버 빌드
+=================
+
+CUBRID PDO 드라이버를 빌드하는 방법은 :ref:`CUBRID PHP 드라이버를 빌드하는 방법<how-to-php-driver-build>`\과 동일하므로 참고하여 진행한다.
 
 PDO 프로그래밍
 ==============

@@ -163,7 +163,7 @@ The key file can contain several master keys (up to 128). A master key among tho
 
 .. note:: **Creating a database using an existing key file**
 
-    If you want multiple databases to share an existing or new key file, you can create a database after setting the path of the key file by using the **tde_keys_file_path** system parameter. For more information on the system parameters, see :ref:`other-parameters`.
+    If you'd like to create a database with an existing key file which is probably being managed, you can create a database after setting the path of the key file by using the **tde_keys_file_path** system parameter. For more information on the system parameters, see :ref:`other-parameters`.
 
 .. _tde-enc-target:
 

@@ -303,9 +303,9 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | max_filter_pred_cache_entries       | client/server parameter |         | int      | 1,000                          |                       |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-| :ref:`query-cache-parameters` | max_query_cache_entries             | server parameter        |         | int      | 200                            | available             |
+| :ref:`query-cache-parameters` | max_query_cache_entries             | server parameter        |         | int      | 0                            | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | query_cache_size_in_pages           | server parameter        |         | int      | 1,000                          | available             |
+|                               | query_cache_size_in_pages           | server parameter        |         | int      | 0                            | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 | :ref:`utility-parameters`     | backup_volume_max_size_bytes        | server parameter        |         | byte     | 0                              |                       |
@@ -1844,9 +1844,9 @@ The following are the parameters related to the query cache functionality. The t
 | Parameter Name                | Type   | Default  | Min      | Max      |
 +===============================+========+==========+==========+==========+
 +-------------------------------+--------+----------+----------+----------+
-| max_query_cache_entries       | int    | 200      | 0        | INT_MAX  |
+| max_query_cache_entries       | int    | 0        | 0        | INT_MAX  |
 +-------------------------------+--------+----------+----------+----------+
-| query_cache_size_in_pages     | int    | 1,000    | 0        | INT_MAX  |
+| query_cache_size_in_pages     | int    | 0        | 0        | INT_MAX  |
 +-------------------------------+--------+----------+----------+----------+
 
 If one of the parameters is set to 0 or negative value, the query cache is disabled regardless using the query hint **QUERY_CACHE**.

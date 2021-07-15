@@ -418,7 +418,8 @@ Default Parameters
 
 The following is the content of the **cubrid.conf** file. ::
 
-    # Copyright (C) 2008 Search Solution Corporation. All rights reserved by Search Solution.
+    # Copyright 2008 Search Solution Corporation
+    # Copyright 2016 CUBRID Corporation
     #
     # $Id$
     #

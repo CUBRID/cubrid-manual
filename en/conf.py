@@ -44,7 +44,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'CUBRID'
-copyright = u'2017, Search Solution Corporation'
+copyright = u'2021, CUBRID Corporation'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -162,7 +162,7 @@ html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 html_static_path = ['_static']
 
 def setup(app):
-  app.add_stylesheet('style.css')
+  app.add_css_file('style.css')
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
@@ -227,7 +227,7 @@ latex_elements = {
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
   ('index', 'cubrid.tex', u'CUBRID Documentation',
-   u'Search Solution Corporation', 'manual'),
+   u'CUBRID Corporation', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -257,7 +257,7 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     ('index', 'cubrid', u'CUBRID Documentation',
-     [u'Search Solution Corporation'], 1)
+     [u'CUBRID Corporation'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -271,7 +271,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
   ('index', 'cubrid', u'CUBRID Documentation',
-   u'Search Solution Corporation', 'cubrid', 'One line description of project.',
+   u'CUBRID Corporation', 'cubrid', 'One line description of project.',
    'Miscellaneous'),
 ]
 
@@ -289,7 +289,7 @@ texinfo_documents = [
 linkcheck_ignore = [
   r'https://github.com/CUBRID/cubrid/.*', 
   r'http://jira.cubrid.org/browse/.*',
-  r'https://www.apachelounge.com/download/win64/binaries/.*'
+  r'https://www.apachelounge.com/download/.*'
 ]
 
 linkcheck_timeout = 30

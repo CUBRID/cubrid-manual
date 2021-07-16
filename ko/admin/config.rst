@@ -415,7 +415,8 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
 다음은 **cubrid.conf** 파일 내용이다. ::
 
-    # Copyright (C) 2008 Search Solution Corporation. All rights reserved by Search Solution.
+    # Copyright 2008 Search Solution Corporation
+    # Copyright 2016 CUBRID Corporation
     #
     # $Id$
     #

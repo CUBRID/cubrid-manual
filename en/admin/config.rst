@@ -303,9 +303,9 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | max_filter_pred_cache_entries       | client/server parameter |         | int      | 1,000                          |                       |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-| :ref:`query-cache-parameters` | max_query_cache_entries             | server parameter        |         | int      | 0                            | available             |
+| :ref:`query-cache-parameters` | max_query_cache_entries             | server parameter        |         | int      | 0                              | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | query_cache_size_in_pages           | server parameter        |         | int      | 0                            | available             |
+|                               | query_cache_size_in_pages           | server parameter        |         | int      | 0                              | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 | :ref:`utility-parameters`     | backup_volume_max_size_bytes        | server parameter        |         | byte     | 0                              |                       |

@@ -717,8 +717,8 @@ The following hints can be specified in **UPDATE**, **DELETE** and **SELECT** st
 
 MERGE statement can have below hints.
 
-*   **USE_INSERT_INDEX** (<*insert_index_list*>): An index hint which is used in **INSERT** clause of **MERGE** statement. Lists index names to *insert_index_list* to use when executing **INSERT** clause. This hint is applied to  <*join_condition*> of **MERGE** statement.
-*   **USE_UPDATE_INDEX** (<*update_index_list*>): An index hint which is used in **UPDATE** clause of **MERGE** statement. Lists index names to *update_index_list* to use when executing **UPDATE** clause. This hint is applied to <*join_condition*> and <*update_condition*> of **MERGE** statement.
+*   **USE_INSERT_IDX** (<*insert_index_list*>): An index hint which is used in **INSERT** clause of **MERGE** statement. Lists index names to *insert_index_list* to use when executing **INSERT** clause. This hint is applied to  <*join_condition*> of **MERGE** statement.
+*   **USE_UPDATE_IDX** (<*update_index_list*>): An index hint which is used in **UPDATE** clause of **MERGE** statement. Lists index names to *update_index_list* to use when executing **UPDATE** clause. This hint is applied to <*join_condition*> and <*update_condition*> of **MERGE** statement.
 *   **RECOMPILE**: See the above :ref:`RECOMPILE <recompile>`.
 
 Table/view names to join can be specified to the joining hint; at this time, table/view names are separated by ",".

@@ -1,0 +1,121 @@
+    CUBRID 11.0
+    CUBRID 11.0
+    CUBRID 11.0
+    CUBRID 11.0
+    CUBRID 11.0
+    CUBRID 11.0
+    Server testdb (rel 11.0, pid 31059)
+    Server demodb (rel 11.0, pid 30950)
+    CUBRID 11.0
+    CUBRID 11.0
+    CUBRID 11.0
+    Server testdb (rel 11.0, pid 24465)
+    Server demodb (rel 11.0, pid 24342)
+      10.113.153.144 2013-11-07 15:19:14 
+             10.64.* 2013-11-07 15:20:50 
+                   * 2013-11-08 10:10:12 
+    13-06-11 15:07:44.835 (0) CLIENT VERSION 11.0.0.0248
+    CUBRID 11.0
+    CUBRID 11.0
+./admin/control.rst
+            1               PERMANENT           PERMANENT DATA          1.0 M             511.0 M              512.0 M         /home1/cubrid/testdb_x001
+./admin/admin_utils.rst
+    CUBRID-JDBC-11.0.0.0248
+| -21110        | The query is not applicable to the executeUpdate(). Use the executeQuery() instead.  |
+| -21120        | The argument is invalid.                                                             |
+| -21130        | Given Reader object has no data.                                                     |
+| -21140        | Lob is not writable.                                                                 |
+./api/jdbc.rst
+        tar xvfz cubrid-python-11.0-latest.tar.gz
+        cd RB-11.0.0
+./api/python.rst
+* `[649] <https://github.com/CUBRID/cubrid/pull/649>`_ `[CBRD-21190] <http://jira.cubrid.org/browse/CBRD-21190>`_ locator_lock_and_get_object_with_evaluation: use latch write  
+* `[637] <https://github.com/CUBRID/cubrid/pull/637>`_ `[CBRD-21170] <http://jira.cubrid.org/browse/CBRD-21170>`_ fixed bad condition  
+* `[632] <https://github.com/CUBRID/cubrid/pull/632>`_ `[CBRD-21170] <http://jira.cubrid.org/browse/CBRD-21170>`_ fixes invalid XASL error of multi-table UPDATE/DELETE with explicit join  
+* `[621] <https://github.com/CUBRID/cubrid/pull/621>`_ `[CBRD-21140] <http://jira.cubrid.org/browse/CBRD-21140>`_ fixed crash caused by null domain in MRO  
+* `[611] <https://github.com/CUBRID/cubrid/pull/611>`_ `[CBRD-21100] <http://jira.cubrid.org/browse/CBRD-21100>`_ Do not deregister "avoid deallocation" on victimized bcb  
+* `[578] <https://github.com/CUBRID/cubrid/pull/578>`_ `[CBRD-21100] <http://jira.cubrid.org/browse/CBRD-21100>`_ Safe-guards for bcb.count_fix_and_avoid_dealloc  
+./release_note/changes_10_1.rst
+| 2021년 1월  | CUBRID 11.0 릴리스 (11.0.0.0248-b53ae4a)    |
+./release_note/index.rst
+11.0 릴리즈 노트
+본 문서는 CUBRID 11.0(빌드 번호: 11.0.0.0248-b53ae4a)에 관한 정보를 포함한다.
+CUBRID 11.0은 CUBRID 10.2에서 발견된 오류 수정 및 기능 개선과 이전 버전들에 반영된 모든 오류 수정 및 기능 개선을 포함한다.
+CUBRID 11.0은 새로운 기능, 중요한 변경 사항 및 개선 사항이 포함 된 최신 안정화 버전이다.
+CUBRID 11.0은
+CUBRID 11.0은 데이터 암호화와 패킷 암호화를 제공하여 **보안을 향상시켰다**. 이 버전은 테이블 기반의 TDE(Transparent Data Encryption) 지원과 드라이버와 서버 사이의 패킷 암호화를 지원하여 비정상적으로 데이터가 유출되는 것을 방지하였다.
+CUBRID 11.0은 **더 빨라졌다**.  이 버전은 조인 질의에서 해시 스캔(Hash scan)을 지원하여 인덱스 스캔을 할 수 없던 조인 질의 성능을 최대 10배 개선하였고, 힌트를 통해 검색 질의의 결과 캐시를 지원하여  데이터 변경이 적으면서, 질의가 복잡한 워크로드의 성능을 극대화하였다.
+CUBRID 11.0은 관리자를 위한 신규 기능을 제공하여 **관리자 편의성을 개선** 하였다. 이 버전은 HA 환경에서 힌트를 통해 구문 기반의 복제를 지원하여 대량의 데이터를 삭제, 수정 시 복제 시간을 개선하였고, Java SP 서버를 DB서버로부터 분리하여 Java SP 서버의 구동/정지에 따른 DB 서버의 영향도를 최소화하였다.  또한 DDL audit 기능을 제공하여, DDL의 변경 사항을 추적할 수 있게 하였다.
+CUBRID 11.0의 데이터베이스 볼륨은 CUBRID 10.2 및 그 이전 버전의 볼륨과 호환되지 않는다. 따라서, CUBRID 10.2 또는 이전 버전을 사용하는 경우 반드시 **데이터베이스 마이그레이션**\을  해야 한다. 이와 관련하여 :doc:`/upgrade` 절을 참고한다.
+*   CUBRID 11.0의 JDBC 및 CCI 드라이버는 CUBRID 10.2, 10.1, 10.0, 9.3, 9.2, 9.1, 2008 R4.4, R4.3 또는 R4.1의 DB 서버와 호환된다.
+11.0 드라이버에서 결과 캐시와 같은 새로운 기능이 개선되었음으로 CUBRD 11.0 사용자는 드라이버를 업그레이드할 것을 강력히 권고한다.
+변경 사항에 대한 자세한 내용은 :ref:`11_0_changes` 절을 참고한다. 이전 버전의 사용자는 :ref:`11_0_changes` 및 :ref:`11_0_new_cautions` 절을 확인해야 한다.
+.. _11_0_changes:
+11.0 변경사항 
+`change logs of CUBRID 11.0 <https://github.com/CUBRID/cubrid/releases/tag/v11.0>`_ 를 참고한다.
+.. _11_0_new_cautions:
+CUBRID 11.0의 데이터베이스 볼륨은 CUBRID 10.2 및 그 이전 버전의 볼륨과 호환되지 않는다. 
+./release_note/release_note_latest_ver.rst
+    '1100'
+    SELECT POSITION (B'1' IN B'000011110000');
+      position(B'1' in B'000011110000')
+./sql/function/string_fn.rst
+        (2001, 5, 1200), (2001, 6, 1400), (2001, 7, 1700), (2001, 8, 1110), 
+        (2002, 5, 1110), (2002, 6, 570), (2002, 7, 1630), (2002, 8, 1890), 
+             2001            8         1110            4
+             2002            5         1110            5
+             2000           10         1300        11190
+             2001            8         1110         8620
+             2002            5         1110         4550
+./sql/function/analysis_fn.rst
+      11:08:57.041 PM 02/04/2016     04:08:57.041 PM 02/05/2016
+    11/01/2012
+      11:00:00 PM
+      11:00:00 PM
+      11:08:57.041 PM 02/04/2016     04:08:57.041 PM 02/05/2016   
+    11:00:00 PM
+./sql/function/datetime_fn.rst
+    SELECT MOD(11, 4), MOD(11, -4), MOD(-11, 4), MOD(-11, -4), MOD(11,0);
+    SELECT MOD(11.0, 4), MOD(11.000, 4), MOD(11, 4.0), MOD(11, 4.000);
+      mod(11.0, 4)          mod(11.000, 4)        mod(11, 4.0)          mod(11, 4.000)
+       2078876566     1160177096
+./sql/function/numeric_fn.rst
+    SELECT STR_TO_DATE('2001-10-11 02:03:04 AM Europe/Bucharest EEST', '%Y-%m-%d %h:%i:%s %p %TZR %TZD');
+    SELECT TIME_FORMAT(datetimetz'2001-10-11 02:03:04 AM Europe/Bucharest EEST', '%h:%i:%s %p %TZR %TZD');
+    SELECT TO_CHAR(datetimetz'2001-10-11 02:03:04 AM Europe/Bucharest EEST');
+    SELECT TO_CHAR(datetimetz'2001-10-11 02:03:04 AM Europe/Bucharest EEST', 'MM/DD/YYYY HH24:MI TZR TZD TZH TZM');
+./sql/function/typecast_fn.rst
+    'US/Samoa'            '-11:00'              '+00:00'              'SST'
+        3  'LOG'                      'none' 0                    0                NULL              NULL 11 0                           NULL  0.000                 0.000
+./sql/query/show.rst
+        1100  ; [.313B.0020.0002.1100] # HANGUL CHOSEONG KIYEOK
+    위의 예에서 1100은 코드포인트, [.313B.0020.0002.1100]은 하나의 콜레이션 원소이며, 313B는 Level 1, 0020은 Level 2, 0002는 Level 3, 1100은 Level 4의 가중치이다.
+./sql/i18n.rst
+            datetimetz'2001-10-11 02:03:04 AM Europe/Bucharest EEST';
+./sql/literal.rst
+    *   2011-04-20 : 2011년 4월 20일
+    *   2011-04-20 09 : 2011년 4월 20일 오전 9시
+    *   04/20/2011 09 : 2011년 4월 20일 오전 9시
+    *   09:10:15.359 am 2011-04-20 : 2011년 4월 20일 오전 9시 10분 15.359초
+    SELECT STR_TO_DATE ('2001-10-11 02:03:04 AM Europe/Bucharest EEST', '%Y-%m-%d %h:%i:%s %p %TZR %TZD');
+    SELECT TO_CHAR (datetimetz'2001-10-11 02:03:04 AM Europe/Bucharest EEST');
+    SELECT TO_DATETIME_TZ ('2001-10-11 02:03:04 AM Europe/Bucharest EEST');
+    SELECT TO_TIMESTAMP_TZ ('2001-10-11 02:03:04 AM Europe/Bucharest');
+./sql/datatype.rst
+11.0 버전과의 동작 차이에 대해서는 릴리스 노트의 :ref:`11_2_changes`\ 을 반드시 참고한다.
+*   CUBRID 11.2는 CUBRID 11.0 및 이전 버전들과 DB 볼륨이 호환되지 않으므로, cubrid unloaddb/loaddb 유틸리티를 이용해서 마이그레이션을 해야 한다. 자세한 절차는 :ref:`migration-from-41` 을 참고하면 된다.
+CUBRID 9.2/9.3/10.0/10.1/10.2/11.0 에서 CUBRID 11.2 으로 업그레이드하기
+CUBRID 9.2/9.3/10.0/10.1/10.2/11.0 버전을 사용 중인 사용자는 다른 디렉터리에 11.2를 설치하고 데이터베이스를 11.2로 마이그레이션한 후 이전 환경 설정 파일에서 파라미터 값을 수정해야 한다.
+CUBRID 2008 R4.0 이하 버전에서 CUBRID 11.0으로 업그레이드하기
+./upgrade.rst
+    DB creation time               : 04:29:00.000 PM 11/04/2012 (1352014140)
+    DB creation time               : 04:29:00.000 PM 11/04/2012 (1352014140)
+| -1140 | Handshake error (peer host ?):                      | error        | **ha_delay_limit**\을 설정한 서버에서 복제 지연 발생 |                                                                      |
+./ha.rst
+설치 프로그램은 바이너리를 포함한 쉘 스크립트로 되어 있어 자동으로 설치할 수 있다. 다음은 리눅스에서 "CUBRID-11.0.0.0248-b53ae4a-Linux.x86_64.sh" 파일을 이용하여 CUBRID를 설치하는 예제이다. 
+    $ sh CUBRID-11.0.0.0248-b53ae4a-Linux.x86_64.sh 
+    please note that the CUBRID 11.0 servers are only compatible with the CUBRID 11.0 clients and vice versa.
+위의 예제와 같이 다운로드한 파일(CUBRID-11.0.0.0248-b53ae4a-Linux.x86_64.sh)을 설치한 후, CUBRID 데이터베이스를 사용하기 위해서는 CUBRID 관련 환경 정보를 설정해야 한다. 이 설정은 해당 터미널에 로그인할 때 자동 설정되도록 지정되어 있으므로 설치 후 최초 한 번만 수행하면 된다. ::
+    $ rpm -Uvh cubrid-11.0.0.0248-b53ae4a-Linux.x86_64.rpm
+            tar xvfz CUBRID-11.0.0.0248-b53ae4a-Linux.x86_64.tar.gz /home1/cub_user/
+./install.rst

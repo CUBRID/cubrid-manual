@@ -13,7 +13,7 @@ CREATE SERVER
 서버 정의
 -----------
 
-**CREATE SERVER** 문을 사용하여 새로운 서버를 생성한다. 
+**CREATE SERVER** 문을 사용하여 원격 접속 정보를 생성한다. 
 생성된 서버는 **DBLINK** 기능을 이용해서  :doc:`/sql/query/select` 질의를 수행 때 원격 서버를 지정하는데 사용 할 수 있다.
 준비된 서버의 사용 방법은 `DBLINK </sql/query/select.html#dblink-clause>`_ 를 참고한다.
 
@@ -142,7 +142,7 @@ RENAME SERVER
 
 ::
 
-    RENAME  SERVER [owner_name.] old_server_name AS new_server_name ;
+    RENAME SERVER [owner_name.] old_server_name AS new_server_name ;
             
         
 *   *owner_name*: 이름을 변경할 대상 서버의 소유자 이름을 지정한다.
@@ -165,8 +165,8 @@ RENAME SERVER
 
 ..
 
-   위 예제가 *dba* 계정에서 수행 되었다면 *srv1* 서버의 소유자가 *cub* 였다면 변경된 *srv2* 의 소유자도 *cub* 이다.
-   또한, *srv3* 서버의 소유자는 *dev1* 으로 계속 유지 된다. 
+위 예제가 *dba* 계정에서 수행 되었다면 *srv1* 서버의 소유자가 *cub* 였다면 변경된 *srv2* 의 소유자도 *cub* 이다.
+또한, *srv3* 서버의 소유자는 *dev1* 으로 계속 유지 된다. 
 
 
 DROP SERVER
@@ -279,7 +279,7 @@ OWNER TO 절
 
 ::
 
-    ALTER SERVER  [owner_name.] server_name  OWNER TO new_owner_name ;
+    ALTER SERVER [owner_name.] server_name  OWNER TO new_owner_name ;
     
 *   *owner_name*: 소유자를 변경할 대상 서버의 소유자 이름을 지정한다.
 *   *server_name*: 소유자를 변경할 대상 서버의 이름을 지정한다.

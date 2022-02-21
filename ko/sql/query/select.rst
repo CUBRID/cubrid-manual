@@ -158,7 +158,7 @@ FROM 절
         <single_table_spec> [<correlation>] |
         <metaclass_specification> [<correlation>] |
         <subquery> <correlation> |
-        TABLE (<expression>) <correlation>
+        TABLE (<expression>) <correlation> |
         DBLINK (<dblink_expr>) <dblink_identifier_col_attrs> 
      
     <correlation> ::= [AS] <identifier> [(<identifier_comma_list>)]
@@ -286,7 +286,7 @@ DBLINK
 
     DBLINK에서는 다음과 같은 속성의 컬럼은 지원하지 않는다.
     
-    * CLLECTION Type ( SET, MULTISET, SEQUENCE )
+    * CLLECTION TYPE ( SET, MULTISET, SEQUENCE )
     * OBJECT
     * CLOB / BLOB
     * ENUM

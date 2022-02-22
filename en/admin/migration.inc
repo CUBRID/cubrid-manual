@@ -300,7 +300,7 @@ The following table shows [options] available with the **cubrid loaddb** utility
 
     This option specifies the table name if a table name header is omitted in the data file to be loaded. ::
 
-        cubrid loaded -u dba -d demodb_objects -t tbl_name newdb
+        cubrid loaddb -u dba -d demodb_objects -t tbl_name newdb
 
 .. option:: --error-control-file=FILE
 

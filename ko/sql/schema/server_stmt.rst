@@ -210,7 +210,7 @@ DROP SERVER
 
     In the command from line 1,
 
-    ERROR: Cannot drop the user who owns database objects(class/trigger/serial etc).
+    ERROR: Cannot drop the user who owns database objects(class/trigger/serial/server etc).
 
     0 command(s) successfully processed.
     csql> drop server cub.tsrv;

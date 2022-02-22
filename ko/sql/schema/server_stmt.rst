@@ -165,7 +165,7 @@ RENAME SERVER
 
 ..
 
-위 예제가 *dba* 계정에서 수행 되었다면 *srv1* 서버의 소유자가 *cub* 였다면 변경된 *srv2* 의 소유자도 *cub* 이다.
+위 예제를 *dba* 계정에서 수행하더라도, *srv2* 의 소유자는 변경되지 않고 *srv1* 서버의 소유자인 *cub* 로 유지한다.
 또한, *srv3* 서버의 소유자는 *dev1* 으로 계속 유지 된다. 
 
 
@@ -338,9 +338,9 @@ CHANGE 절
 
     CREATE SERVER srv1 ( HOST='localhost', PORT=3300, DBNAME=demodb, USER=dev1 );
     
-    ALTER SERVER  srv1 CHANGE HOST='127.0.0.1';
-    ALTER SERVER  srv1 CHANGE HOST='127.0.0.1', OWNER TO usr1;
-    ALTER SERVER  srv1 CHANGE USER=dev2, CHANGE PASSWORD='dev2-pawword', CHANGE PORT=3500;
+    ALTER SERVER srv1 CHANGE HOST='127.0.0.1';
+    ALTER SERVER srv1 CHANGE HOST='127.0.0.1', OWNER TO usr1;
+    ALTER SERVER srv1 CHANGE USER=dev2, CHANGE PASSWORD='dev2-pawword', CHANGE PORT=3500;
 
 ..
 
@@ -349,11 +349,11 @@ CHANGE 절
 
 .. code-block:: sql
      
-    ALTER SERVER  srv1 CHANGE PORT=;    
-    ALTER SERVER  srv1 CHANGE DBNAME=;    
-    ALTER SERVER  srv1 CHANGE USER=;
-    ALTER SERVER  srv1 CHANGE HOST=;
-    ALTER SERVER  srv1 CHANGE HOST='';
+    ALTER SERVER srv1 CHANGE PORT=;    
+    ALTER SERVER srv1 CHANGE DBNAME=;    
+    ALTER SERVER srv1 CHANGE USER=;
+    ALTER SERVER srv1 CHANGE HOST=;
+    ALTER SERVER srv1 CHANGE HOST='';
     
 ..
 
@@ -362,14 +362,14 @@ CHANGE 절
     
 .. code-block:: sql
     
-    ALTER SERVER  srv1 CHANGE PASSWORD=;
-    ALTER SERVER  srv1 CHANGE PASSWORD='';
+    ALTER SERVER srv1 CHANGE PASSWORD=;
+    ALTER SERVER srv1 CHANGE PASSWORD='';
     
-    ALTER SERVER  srv1 CHANGE PROPERTIES=;
-    ALTER SERVER  srv1 CHANGE PROPERTIES='';
+    ALTER SERVER srv1 CHANGE PROPERTIES=;
+    ALTER SERVER srv1 CHANGE PROPERTIES='';
     
-    ALTER SERVER  srv1 CHANGE COMMENT=;
-    ALTER SERVER  srv1 CHANGE COMMENT='';
+    ALTER SERVER srv1 CHANGE COMMENT=;
+    ALTER SERVER srv1 CHANGE COMMENT='';
     
 ..
 

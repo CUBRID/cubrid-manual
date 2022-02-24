@@ -35,17 +35,17 @@ CREATE SERVER
                 | PROPERTIES = [properties_string] 
                 | COMMENT = [server_comment_string]
       
-*   *owner_name*: 생성할 서버의 소유자 이름을(user name)지정한다.
+*   *owner_name*: 생성할 서버의 소유자 이름을 지정한다.
 *   *server_name*: 생성할 서버의 이름을 지정한다(최대 254바이트).
 *   <*connect_info*>: 접속 정보 리스트로 <connect_item> 항목 중 **HOST**, **PORT**, **DBNAME**, **USER** 는 필수 항목이다.
-*   <*connect_item*>: HOST, PORT, DBNAME, USER, PASSWOED, PROPERTIES, COMMENT 항목으로 구성 되며, 동일한 항목이 중복 될 수 없다.
+*   <*connect_item*>: HOST, PORT, DBNAME, USER, PASSWOED, PROPERTIES, COMMENT 항목으로 구성되며, 동일한 항목이 중복될 수 없다.
 	
-    *   *host_string*: 원격 접속 할 DBMS 정보를 가지고 있는 Broker 서버의 호스명 또는 IP 주소이다.
-    *   *port_number*: 원격 접속 할 DBMS 정보를 가지고 있는 Broker 서버의 포트 번호이다.
+    *   *host_string*: 원격 접속할 DBMS 정보를 가지고 있는 Broker 서버의 호스명 또는 IP 주소이다.
+    *   *port_number*: 원격 접속할 DBMS 정보를 가지고 있는 Broker 서버의 포트 번호이다.
     *   *db_name*: 원격 접속할 데이터베이스 이름.
-    *   *user_name*: 원격 접속할 데이터베이스에 접속 할 때 사용 할 사용자 이름.
-    *   *password_string*: 원격 접속할 데이터베이스에 접속 할 때 사용하는 *user_name* 에 대한 패스워드 문자열.
-    *   *properties_string*: 원격 접속할 데이터베이스에 접속 할 때 사용하는 property 정보 문자열.(최대 2047바이트)	
+    *   *user_name*: 원격 접속할 데이터베이스에 접속할 때 사용할 사용자 이름.
+    *   *password_string*: 원격 접속할 데이터베이스에 접속할 때 사용하는 *user_name*에 대한 패스워드 문자열.
+    *   *properties_string*: 원격 접속할 데이터베이스에 접속할 때 사용하는 property 정보 문자열.(최대 2047바이트)	
     *   *server_comment_string*: 서버 정보에 대한 커멘트를 지정한다.(최대 1023바이트)
   
 .. code-block:: sql
@@ -61,7 +61,7 @@ CREATE SERVER
     );
 
 다음은 서버 생성 시 최소한의 정보만 포함하는 예제이다.
-원격지의 demodb에 비밀번호가 없는 dev1 계정으로 접속 할 것임을 나타내고 있다. 
+원격지의 demodb에 비밀번호가 없는 dev1 계정으로 접속할 것임을 나타내고 있다. 
 srv1, srv2, srv3는 동일한 의미이다.
 
 .. code-block:: sql
@@ -90,9 +90,9 @@ srv1, srv2, srv3는 동일한 의미이다.
     );
     
 다음은 서버 생성 시 소유자를 지정하는 예제이다.
-소유자 지정없이 CREATE하는 경우에는 현재 사용자가 소유자가 된다.
+소유자 지정 없이 CREATE하는 경우에는 현재 사용자가 소유자가 된다.
 추후 ALTER SERVER 구문을 이용해서 소유자를 변경할 수 있다.
-아래 예제에서 두 서버의 이름이 동일하게 *srv2* 로 같지만 소유자는 각각 *dba* 와 *cub* 로 다르다.
+아래 예제에서 두 서버의 이름이 동일하게 *srv2*로 같지만 소유자는 각각 *dba*와 *cub*로 다르다.
 
 .. code-block:: sql
 
@@ -131,7 +131,7 @@ srv1, srv2, srv3는 동일한 의미이다.
         
 .. note::
 
-    서버명에는 점('.')을 사용 할 수 없습니다. 따옴표나 []로 묶은 경우라고 해도 서버명에 점('.')을 사용할 수는 없습니다.
+    서버명에는 점('.')을 사용 할 수 없다. 따옴표나 []로 묶은 경우라고 해도 서버명에 점('.')을 사용할 수는 없다.
 
 
 
@@ -283,7 +283,7 @@ OWNER TO 절
     
 *   *owner_name*: 소유자를 변경할 대상 서버의 소유자 이름을 지정한다.
 *   *server_name*: 소유자를 변경할 대상 서버의 이름을 지정한다.
-*   *new_owner_name*: 새로운 소우자 이름을 지정한다.
+*   *new_owner_name*: 새로운 소유자 이름을 지정한다.
 
 .. warning::
     
@@ -324,12 +324,12 @@ CHANGE 절
 
 *   *owner_name*: 생성할 서버의 소유자 이름을(user name)지정한다.
 *   *server_name*: 생성할 서버의 이름을 지정한다(최대 254바이트).
-*   *host_string*: 원격 접속 할 DBMS 정보를 가지고 있는 Broker 서버의 호스명 또는 IP 주소이다.
-*   *port_number*: 원격 접속 할 DBMS 정보를 가지고 있는 Broker 서버의 포트 번호이다.
+*   *host_string*: 원격 접속할DBMS 정보를 가지고 있는 Broker 서버의 호스트명 또는 IP 주소이다.
+*   *port_number*: 원격 접속할 DBMS 정보를 가지고 있는 Broker 서버의 포트 번호이다.
 *   *db_name*: 원격 접속할 데이터베이스 이름.
-*   *user_name*: 원격 접속할 데이터베이스에 접속 할 때 사용 할 사용자 이름.
-*   *password_string*: 원격 접속할 데이터베이스에 접속 할 때 사용하는 *user_name* 에 대한 패스워드 문자열.
-*   *properties_string*: 원격 접속할 데이터베이스에 접속 할 때 사용하는 property 정보 문자열.	
+*   *user_name*: 원격 접속할 데이터베이스에 접속할 때 사용할 사용자 이름.
+*   *password_string*: 원격 접속할 데이터베이스에 접속할 때 사용하는 *user_name* 에 대한 패스워드 문자열.
+*   *properties_string*: 원격 접속할 데이터베이스에 접속할 때 사용하는 property 정보 문자열.	
 *   *server_comment_string*: 서버 정보에 대한 커멘트를 지정한다.
 
 

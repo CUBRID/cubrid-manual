@@ -294,7 +294,7 @@ COUNT
     :param expression: Specifies an expression.
     :param ALL: Gets the number of rows given in the *expression* (default).
     :param DISTINCT,DISTINCTROW,UNIQUE: Gets the number of rows without duplicates.
-    :rtype: INT
+    :rtype: BIGINT
     
 A column that has collection type and object domain (user-defined class) can also be specified in the *expression*.
 

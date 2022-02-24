@@ -295,7 +295,7 @@ COUNT
     :param expression: 임의의 연산식이다.
     :param ALL: 주어진 expression의 모든 행의 개수를 구하기 위해 사용되며, 기본값이다.
     :param DISTINCT,DISTINCTROW,UNIQUE: 중복이 제거된 유일한 값을 가지는 행의 개수를 구하기 위해 사용된다.
-    :rtype: INT
+    :rtype: BIGINT
     
 연산식 *expression* 은 수치형 또는 문자열 타입은 물론, 컬렉션 타입 칼럼과 오브젝트 도메인(사용자 정의 클래스)을 가지는 칼럼도 지정될 수 있다.
 

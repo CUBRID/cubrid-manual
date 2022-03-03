@@ -453,7 +453,7 @@ The following is an example to join 3 tables.
     csql> SET TRACE ON;
     csql> SELECT /*+ RECOMPILE ORDERED */ o.host_year, o.host_nation, o.host_city, n.name, SUM(p.gold), SUM(p.silver), SUM(p.bronze)
             FROM OLYMPIC o,
-                 (select * from PARTICIPANT p where p.gold > 10) p,
+                 (select /*+ NO_MERGE */ * from PARTICIPANT p where p.gold > 10) p,
                  NATION n
           WHERE o.host_year = p.host_year AND p.nation_code = n.code
           GROUP BY o.host_nation;
@@ -481,7 +481,7 @@ The following is an example to join 3 tables.
     Trace Statistics:
       SELECT (time: 6, fetch: 880, ioread: 0)
         SCAN (table: olympic), (heap time: 0, fetch: 104, ioread: 0, readrows: 25, rows: 25)
-          SCAN (hash temp buildtime : 0, time: 0, fetch: 0, ioread: 0, readrows: 76, rows: 38)
+          SCAN (hash temp(m), buildtime : 0, time: 0, fetch: 0, ioread: 0, readrows: 76, rows: 38)
             SCAN (index: nation.pk_nation_code), (btree time: 2, fetch: 760, ioread: 0, readkeys: 38, filteredkeys: 0, rows: 38) (lookup time: 0, rows: 38)
         GROUPBY (time: 0, hash: true, sort: true, page: 0, ioread: 0, rows: 5)
         SUBQUERY (uncorrelated)
@@ -514,7 +514,7 @@ The following are the explanation regarding items of trace statistics.
 
 *   temp: data scanning job with temp file
 
-    *   hash: hash list scan or not. See :ref:`NO_HASH_LIST_SCAN <no-hash-list-scan>` hint.
+    *   hash temp(m): hash list scan or not. depending on the amount of data, the IN-MEMORY(m), HYBRID(h), FILE(f) hash data structure is used..
     *   buildtime: the estimated time(ms) in building hash table.
     *   time: the estimated time(ms) in probing hash table.
     *   fetch, ioread: page fetching count and I/O read count in the temp file of this operation
@@ -631,6 +631,8 @@ Using hints can affect the performance of query execution. You can allow the que
     NO_COVERING_IDX |
     NO_MULTI_RANGE_OPT |
     NO_SORT_LIMIT |
+    NO_PRED_PUSH |
+    NO_MERGE |
     NO_HASH_AGGREGATE |
     NO_HASH_LIST_SCAN |
     NO_LOGGING |
@@ -672,6 +674,8 @@ The following hints can be specified in **UPDATE**, **DELETE** and **SELECT** st
 *   **NO_COVERING_IDX**: This is a hint not to use the covering index. For details, see :ref:`covering-index`.
 *   **NO_MULTI_RANGE_OPT**: This is a hint not to use the multi-key range optimization. For details, see :ref:`multi-key-range-opt`.
 *   **NO_SORT_LIMIT**: This is a hint not to use the SORT-LIMIT optimization. For more details, see :ref:`sort-limit-optimization`.
+*   **NO_PRED_PUSH**: This is a hint not to use the PREDICATE-PUSH optimization.
+*   **NO_MERGE**: This is a hint not to use the VIEW_MERGE optimization.
 
 .. _no-hash-aggregate:
 

@@ -454,7 +454,7 @@ SQL에 대한 성능 분석을 위해서는 질의 프로파일링(profiling) �
     csql> SET TRACE ON;
     csql> SELECT /*+ RECOMPILE ORDERED */ o.host_year, o.host_nation, o.host_city, n.name, SUM(p.gold), SUM(p.silver), SUM(p.bronze)
             FROM OLYMPIC o,
-                 (select * from PARTICIPANT p where p.gold > 10) p,
+                 (select /*+ NO_MERGE */ * from PARTICIPANT p where p.gold > 10) p,
                  NATION n
           WHERE o.host_year = p.host_year AND p.nation_code = n.code
           GROUP BY o.host_nation;
@@ -482,7 +482,7 @@ SQL에 대한 성능 분석을 위해서는 질의 프로파일링(profiling) �
     Trace Statistics:
       SELECT (time: 6, fetch: 880, ioread: 0)
         SCAN (table: olympic), (heap time: 0, fetch: 104, ioread: 0, readrows: 25, rows: 25)
-          SCAN (hash temp buildtime : 0, time: 0, fetch: 0, ioread: 0, readrows: 76, rows: 38)
+          SCAN (hash temp(m), buildtime : 0, time: 0, fetch: 0, ioread: 0, readrows: 76, rows: 38)
             SCAN (index: nation.pk_nation_code), (btree time: 2, fetch: 760, ioread: 0, readkeys: 38, filteredkeys: 0, rows: 38) (lookup time: 0, rows: 38)
         GROUPBY (time: 0, hash: true, sort: true, page: 0, ioread: 0, rows: 5)
         SUBQUERY (uncorrelated)
@@ -515,7 +515,7 @@ SQL에 대한 성능 분석을 위해서는 질의 프로파일링(profiling) �
 
 *   temp: 템프 파일에서 데이터를 스캔하는 작업
 
-    *   hash: 해시 리스트 스캔 사용 여부. :ref:`NO_HASH_LIST_SCAN <no-hash-list-scan>` 힌트를 참고한다.
+    *   hash temp(m): 해시 리스트 스캔 사용 여부. 데이터 양에 따라서, IN-MEMORY(m), HYBRID(h), FILE(f) 해시 자료구조를 사용한다.
     *   buildtime: 해시 테이블 빌드 수행 시 소요된 시간(ms)
     *   time: 해시 테이블 조사 수행 시 소요된 시간(ms)
     *   fetch, ioread: temp file에서 해당 연산 수행 시 소요된 fetch 회수, I/O 읽기 회수
@@ -632,6 +632,8 @@ SQL 힌트
     NO_COVERING_IDX |
     NO_MULTI_RANGE_OPT |
     NO_SORT_LIMIT |
+    NO_PRED_PUSH |
+    NO_MERGE |
     NO_HASH_AGGREGATE |
     NO_HASH_LIST_SCAN |
     NO_LOGGING |
@@ -673,6 +675,8 @@ SQL 힌트는 주석에 더하기 기호(+)를 함께 사용하여 지정한다.
 *   **NO_COVERING_IDX**: 커버링 인덱스 기능을 사용하지 않도록 하는 힌트이다. 자세한 내용은 :ref:`covering-index` 를 참고한다.
 *   **NO_MULTI_RANGE_OPT**: 다중 키 범위 최적화 기능을 사용하지 않도록 하는 힌트이다. 자세한 내용은 :ref:`multi-key-range-opt` 를 참고한다.
 *   **NO_SORT_LIMIT**: SORT-LIMIT 최적화를 사용하지 않기 위한 힌트이다. 자세한 내용은 :ref:`sort-limit-optimization`\ 를 참고한다.
+*   **NO_PRED_PUSH**: PREDICATE-PUSH 최적화를 사용하지 않기 위한 힌트이다.
+*   **NO_MERGE**: VIEW-MERGE 최적화를 사용하지 않기 위한 힌트이다.
 
 .. _no-hash-aggregate:
 

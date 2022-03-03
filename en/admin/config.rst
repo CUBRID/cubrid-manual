@@ -138,7 +138,7 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | max_agg_hash_size                   | server parameter        |         | byte     | 2,097,152(2M)                  |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | max_hash_list_scan_size             | server parameter        |         | byte     | 4,194,304(4M)                  |                       |
+|                               | max_hash_list_scan_size             | server parameter        |         | byte     | 8,388,608(8M)                  |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | sort_buffer_size                    | server parameter        |         | byte     | 128 *                          |                       |
 |                               |                                     |                         |         |          | :ref:`db_page_size <dpg>`      |                       |
@@ -579,7 +579,7 @@ The following are parameters related to the memory used by the database server o
 +--------------------------------+--------+---------------------------+---------------------------+---------------------------+
 | max_agg_hash_size              | byte   | 2,097,152(2M)             | 32,768(32K)               | 134,217,728(128MB)        |
 +--------------------------------+--------+---------------------------+---------------------------+---------------------------+
-| max_hash_list_scan_size        | byte   | 4,194,304(4M)             | 0                         | 128MB                     |
+| max_hash_list_scan_size        | byte   | 8,388,608(8M)             | 0                         | 128MB                     |
 +--------------------------------+--------+---------------------------+---------------------------+---------------------------+
 | sort_buffer_size               | byte   | 128 *                     | 1 *                       | 2G(32bit),                |
 |                                |        | :ref:`db_page_size <dpg>` | :ref:`db_page_size <dpg>` | INT_MAX *                 |
@@ -617,7 +617,7 @@ The following are parameters related to the memory used by the database server o
 
 **max_hash_list_scan_size**
 
-    **max_hash_list_scan_size** is a parameter to configure the maximum memory per transaction allocated for building hash table in a query containing subquerys. The default is 4MB, the minimum size is 0, and the maximum size is 128MB.
+    **max_hash_list_scan_size** is a parameter to configure the maximum memory per transaction allocated for building hash table in a query containing subquerys. The default is 8MB, the minimum size is 0, and the maximum size is 128MB.
 
     If this parameter is set to 0 or If :ref:`NO_HASH_LIST_SCAN <no-hash-list-scan>` hint is specified, hash list scan will not be used.
 

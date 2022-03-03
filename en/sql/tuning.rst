@@ -514,7 +514,7 @@ The following are the explanation regarding items of trace statistics.
 
 *   temp: data scanning job with temp file
 
-    *   hash temp(m): hash list scan or not. depending on the amount of data, the IN-MEMORY(m), HYBRID(h), FILE(f) hash data structure is used..
+    *   hash temp(m): hash list scan or not. depending on the amount of data, the IN-MEMORY(m), HYBRID(h), FILE(f) hash data structure is used.
     *   buildtime: the estimated time(ms) in building hash table.
     *   time: the estimated time(ms) in probing hash table.
     *   fetch, ioread: page fetching count and I/O read count in the temp file of this operation

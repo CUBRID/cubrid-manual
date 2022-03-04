@@ -3,9 +3,9 @@
 :meta-description: Define servers in CUBRID database using create server, alter server, drop server and rename server statements.
 
 
-********************
-서버(SERVER) 정의문
-********************
+**************
+서버 정의문
+**************
 
 CREATE SERVER
 =============
@@ -14,7 +14,7 @@ CREATE SERVER
 -----------
 
 **CREATE SERVER** 문을 사용하여 원격 접속 정보를 생성한다. 
-생성된 서버는 **DBLINK** 기능을 이용해서  :doc:`/sql/query/select` 질의를 수행 때 원격 서버를 지정하는데 사용 할 수 있다.
+생성된 서버는 **DBLINK**\를 이용하는 :doc:`/sql/query/select` 질의를 수행 할 때 원격 서버를 지정하는데 사용한다.
 준비된 서버의 사용 방법은 `DBLINK </sql/query/select.html#dblink-clause>`_ 를 참고한다.
 
 ::
@@ -37,14 +37,14 @@ CREATE SERVER
       
 *   *owner_name*: 생성할 서버의 소유자 이름을 지정한다.
 *   *server_name*: 생성할 서버의 이름을 지정한다(최대 254바이트).
-*   <*connect_info*>: 접속 정보 리스트로 <connect_item> 항목 중 **HOST**, **PORT**, **DBNAME**, **USER** 는 필수 항목이다.
+*   <*connect_info*>: 접속 정보 리스트로 <connect_item> 항목 중 **HOST**, **PORT**, **DBNAME**, **USER**\는 필수 항목이다.
 *   <*connect_item*>: HOST, PORT, DBNAME, USER, PASSWOED, PROPERTIES, COMMENT 항목으로 구성되며, 동일한 항목이 중복될 수 없다.
 	
     *   *host_string*: 원격 접속할 DBMS 정보를 가지고 있는 Broker 서버의 호스명 또는 IP 주소이다.
     *   *port_number*: 원격 접속할 DBMS 정보를 가지고 있는 Broker 서버의 포트 번호이다.
     *   *db_name*: 원격 접속할 데이터베이스 이름.
     *   *user_name*: 원격 접속할 데이터베이스에 접속할 때 사용할 사용자 이름.
-    *   *password_string*: 원격 접속할 데이터베이스에 접속할 때 사용하는 *user_name*에 대한 패스워드 문자열.
+    *   *password_string*: 원격 접속할 데이터베이스에 접속할 때 사용하는 *user_name*\에 대한 패스워드 문자열.
     *   *properties_string*: 원격 접속할 데이터베이스에 접속할 때 사용하는 property 정보 문자열.(최대 2047바이트)	
     *   *server_comment_string*: 서버 정보에 대한 커멘트를 지정한다.(최대 1023바이트)
   
@@ -92,7 +92,7 @@ srv1, srv2, srv3는 동일한 의미이다.
 다음은 서버 생성 시 소유자를 지정하는 예제이다.
 소유자 지정 없이 CREATE하는 경우에는 현재 사용자가 소유자가 된다.
 추후 ALTER SERVER 구문을 이용해서 소유자를 변경할 수 있다.
-아래 예제에서 두 서버의 이름이 동일하게 *srv2*로 같지만 소유자는 각각 *dba*와 *cub*로 다르다.
+아래 예제에서 두 서버의 이름이 동일하게 *srv2*\로 같지만 소유자는 각각 *dba*\와 *cub*\로 다르다.
 
 .. code-block:: sql
 
@@ -344,7 +344,7 @@ CHANGE 절
 
 ..
 
-위 예시는 **CHANGE** 절은 여러개를 한번에 나열해서 사용할 수도 있고 **OWNER TO** 절과 함께 사용 될 수도 있음을 보여 줍니다. 
+위 예시는 **CHANGE** 절은 여러개를 한번에 나열해서 사용할 수도 있고 **OWNER TO** 절과 함께 사용 될 수도 있음을 보여 준다. 
 
 
 .. code-block:: sql
@@ -373,6 +373,6 @@ CHANGE 절
     
 ..
 
-위 예시는 모두 지원 되는 예시이다. 서버 정보의 구성에서 필수요소가 아닌 PASSWORD, PROPERTIES, COMMENT는 반드시 값을 가지고 있어야할 필요가 없기 때문에 값을 삭제하는 설정 변경이 가능하다. 
+위 예시는 모두 지원되는 예시이다. 서버 정보의 구성에서 필수요소가 아닌 PASSWORD, PROPERTIES, COMMENT는 반드시 값을 가지고 있어야할 필요가 없기 때문에 값을 삭제하는 설정 변경이 가능하다. 
     
   

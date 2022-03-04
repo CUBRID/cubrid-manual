@@ -268,9 +268,9 @@ DBLINK
         <dblink_column_definition_list> ::= dblink_column_alias <primitive_type> [{, dblink_column_alias <primitive_type>} ...]
 
 *   *remote_query_sting*: 원격지 DBMS에 전달할 질의문으로 SELECT 쿼리만 지정 할 수 있다.
-*   *server_name*: :doc:`/sql/schema/server_stmt` 을 사용해서 생성한 서버 이름.
-*   *dblink_conn_string*: 문자열로 표현 된 원격지 접속 정보.
-*   *dblink_table_alias*: DBLINK를 이용하여 생성하는 유도테이블 이름(derived_table_name).
+*   *server_name*: :doc:`/sql/schema/server_stmt`\을 사용해서 생성한 서버 이름.
+*   *dblink_conn_string*: 문자열로 표현된 원격지 접속 정보.
+*   *dblink_table_alias*: DBLINK를 이용하여 생성하는 파생테이블(derived table) 이름.
 *   *dblink_column_alias*: DBLINK의 *remote_query_sting* 의 select list에 대응하는 가상의 컬럼명.
 
 .. note::
@@ -295,13 +295,13 @@ DBLINK
 
 .. note::
 
-    *dblink_conn_string* 은아래와 같은 구조로 구성된다. 
+    *dblink_conn_string*\은 아래와 같은 구조로 구성된다. 
     각각의 내용은 :doc:`/sql/schema/server_stmt` 구문의 HOST, PORT, DBNAME, USER, PASSWOED, PROPERTIES에 해당하는 정보이다.
     각 항목은 ':' 문자로 구분된다.    
     
     <broker-host>:<port#>:<db_name>:<db_user>:<db_password>:[?<properties>]
     
-    비밀번호의 노출을 막기 위해서는 *dblink_conn_string* 을 이용하기 보다는 *server_name* 을 이용하는 것을 권장한다.
+    비밀번호의 노출을 막기 위해서는 *dblink_conn_string*\을 이용하기 보다는 *server_name*\을 이용하는 것을 권장한다.
   
 .. code-block:: sql
 

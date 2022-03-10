@@ -286,7 +286,7 @@ DBLINK
 
     DBLINK에서는 다음과 같은 속성의 컬럼은 지원하지 않는다.
     
-    * CLLECTION TYPE ( SET, MULTISET, SEQUENCE )
+    * COLLECTION TYPE ( SET, MULTISET, SEQUENCE )
     * OBJECT
     * CLOB / BLOB
     * ENUM

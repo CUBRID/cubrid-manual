@@ -255,7 +255,7 @@ FROM 절
 DBLINK
 --------
 
-원격지에 있는 별도의 DBMS에 질의를 수행하여 그 결과를 얻을 수 있다. 그 결과는 일종의 부질의로서 :ref:`유도 테이블(derived table) <subquery-derived-table>`\ 로 생성된다.
+원격지에 있는 별도의 DBMS에서 질의를 수행하여 그 결과를 얻을 수 있다. 그 결과는 일종의 부질의로 :ref:`유도 테이블(derived table) <subquery-derived-table>`\ 로 생성된다.
 
 ::
 

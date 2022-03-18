@@ -267,7 +267,7 @@ ALTER SERVER
 
 .. warning::
 
-    HOST, PORT, DBNAME, USER에 대한 값을 제거하는 갱신을 할 수는 없다.
+    HOST, PORT, DBNAME, USER에 대한 값을 제거하는 갱신은 할 수 없다.
 
 
 .. _owner_to:

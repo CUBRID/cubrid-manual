@@ -270,7 +270,7 @@ DBLINK
 *   *remote_query_sting*: 원격지 DBMS에 전달할 질의문으로 SELECT 쿼리만 지정 할 수 있다.
 *   *server_name*: :doc:`/sql/schema/server_stmt`\을 사용해서 생성한 서버 이름.
 *   *dblink_conn_string*: 문자열로 표현된 원격지 접속 정보.
-*   *dblink_table_alias*: DBLINK를 이용하여 생성하는 파생테이블(derived table) 이름.
+*   *dblink_table_alias*: DBLINK를 이용하여 생성하는 유도테이블(derived table) 이름.
 *   *dblink_column_alias*: DBLINK의 *remote_query_sting* 의 select list에 대응하는 가상의 컬럼명.
 
 .. note::

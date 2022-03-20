@@ -283,7 +283,7 @@ The result can be obtained by executing a query in a separate DBMS located at a 
 
 .. warning::
 
-    DBLINK does not support columns with the following attributes.
+    DBLINK does not support columns with the following data types.
     
     * COLLECTION TYPE ( SET, MULTISET, SEQUENCE )
     * OBJECT

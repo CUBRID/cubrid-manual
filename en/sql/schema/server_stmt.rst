@@ -272,7 +272,7 @@ You can change the server information by using the **ALTER** statement. You can 
 
 .. _owner_to:
 
-OWNER TO 절
+OWNER TO clause
 ----------------
 
 You can change the owner of the server using the **OWNER TO** clause.
@@ -299,7 +299,7 @@ You can change the owner of the server using the **OWNER TO** clause.
 
 .. _change-server:
 
-CHANGE 절
+CHANGE clause
 ----------------
 
 The **CHANGE** section is used to change the values of HOST, PORT, DBNAME, USER, PASSWOED, PROPERTIES, and COMMENT items.

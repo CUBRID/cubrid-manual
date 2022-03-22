@@ -157,7 +157,7 @@ The **FROM** clause specifies the table in which data is to be retrieved in the 
         <single_table_spec> [<correlation>] |
         <metaclass_specification> [<correlation>] |
         <subquery> <correlation> |
-        TABLE (<expression>) <correlation>
+        TABLE (<expression>) <correlation> |
         DBLINK (<dblink_expr>) <dblink_identifier_col_attrs>
      
     <correlation> ::= [AS] <identifier> [(<identifier_comma_list>)]

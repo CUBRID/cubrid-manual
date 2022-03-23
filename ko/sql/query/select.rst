@@ -158,7 +158,8 @@ FROM 절
         <single_table_spec> [<correlation>] |
         <metaclass_specification> [<correlation>] |
         <subquery> <correlation> |
-        TABLE (<expression>) <correlation>
+        TABLE (<expression>) <correlation> |
+        DBLINK (<dblink_expr>) <dblink_identifier_col_attrs> 
      
     <correlation> ::= [AS] <identifier> [(<identifier_comma_list>)]
      
@@ -246,6 +247,74 @@ FROM 절
       'CHN'                2004         32
       'DEN'                1996          4
       'ESP'                1992         13
+
+
+.. _dblink-clause:
+
+
+DBLINK
+--------
+
+원격지에 있는 별도의 DBMS에서 질의를 수행하여 그 결과를 얻을 수 있다. 그 결과는 일종의 부질의로 :ref:`유도 테이블(derived table) <subquery-derived-table>`\ 로 생성된다.
+
+::
+
+    FROM DBLINK (<dblink_expr>) [AS] <dblink_identifier_col_attrs> 
+
+        <dblink_expr> ::= <dblink_conn>,  remote_query_sting  
+        <dblink_conn> ::= server_name | dblink_conn_string
+            
+        <dblink_identifier_col_attrs> ::= dblink_table_alias ( <dblink_column_definition_list> ) 
+        <dblink_column_definition_list> ::= dblink_column_alias <primitive_type> [{, dblink_column_alias <primitive_type>} ...]
+
+*   *remote_query_sting*: 원격지 DBMS에 전달할 질의문으로 SELECT 쿼리만 지정 할 수 있다.
+*   *server_name*: :doc:`/sql/schema/server_stmt`\을 사용해서 생성한 서버 이름.
+*   *dblink_conn_string*: 문자열로 표현된 원격지 접속 정보.
+*   *dblink_table_alias*: DBLINK를 이용하여 생성하는 유도테이블(derived table) 이름.
+*   *dblink_column_alias*: DBLINK의 *remote_query_sting* 의 select list에 대응하는 가상의 컬럼명.
+
+.. note::
+
+    DBLINK에서 지원하는 컬럼의 속성은 다음과 같다.
+    
+    * INT, BIGINT, SHORT, FLOAT, DOUBLE, MONETARY, NUMERIC
+    * VARCHAR, VARNCHAR, CHAR, NCHAR
+    * DATE, TIME, TIMESTAMP, DATETIME
+    * DATETIMETZ, DATETIMELTZ, TIMESTAMPTZ, TIMESTAMPLTZ
+
+.. warning::
+
+    DBLINK에서는 다음과 같은 속성의 컬럼은 지원하지 않는다.
+    
+    * COLLECTION TYPE ( SET, MULTISET, SEQUENCE )
+    * OBJECT
+    * CLOB / BLOB
+    * ENUM
+    * BIT / BIT VARYING
+    * JSON
+
+.. note::
+
+    *dblink_conn_string*\은 아래와 같은 구조로 구성된다. 
+    각각의 내용은 :doc:`/sql/schema/server_stmt` 구문의 HOST, PORT, DBNAME, USER, PASSWOED, PROPERTIES에 해당하는 정보이다.
+    각 항목은 ':' 문자로 구분된다.    
+    
+    <broker-host>:<port#>:<db_name>:<db_user>:<db_password>:[?<properties>]
+    
+    비밀번호의 노출을 막기 위해서는 *dblink_conn_string*\을 이용하기 보다는 *server_name*\을 이용하는 것을 권장한다.
+  
+.. code-block:: sql
+
+    CREATE SERVER remote_srv1 ( HOST='127.0.0.1', PORT=3300, DBNAME=demodb, USER=cub, PASSWORD='cub-password');    
+    SELECT * FROM DBLINK (remote_srv1, 'SELECT col1 FROM remote_t') AS t(col1 int);
+    
+    SELECT * FROM DBLINK ('127.0.0.1:3300:demodb:cub:cub-password:','SELECT col1, col2 FROM remote_t') AS t(col1 int, col2 varchar(32));
+
+  
+위 예시에서 두 SELECT 구문은 동일한 기능을 수행한다.  
+  
+
+
 
 .. _where-clause:
 

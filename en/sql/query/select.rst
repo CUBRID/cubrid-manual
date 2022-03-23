@@ -157,7 +157,8 @@ The **FROM** clause specifies the table in which data is to be retrieved in the 
         <single_table_spec> [<correlation>] |
         <metaclass_specification> [<correlation>] |
         <subquery> <correlation> |
-        TABLE (<expression>) <correlation>
+        TABLE (<expression>) <correlation> |
+        DBLINK (<dblink_expr>) <dblink_identifier_col_attrs>
      
     <correlation> ::= [AS] <identifier> [(<identifier_comma_list>)]
      
@@ -245,6 +246,76 @@ The following example shows *nation_code*, *host_year* and *gold* records whose 
       'CHN'                2004         32
       'DEN'                1996          4
       'ESP'                1992         13
+
+
+.. _dblink-clause:
+
+
+DBLINK
+--------
+
+The result can be obtained by executing a query in a separate DBMS located at a remote location. The result is a kind of subquery that is created as :ref:`Subquery Derived Table <subquery-derived-table>`\.
+
+::
+
+    FROM DBLINK (<dblink_expr>) [AS] <dblink_identifier_col_attrs> 
+
+        <dblink_expr> ::= <dblink_conn>,  remote_query_sting  
+        <dblink_conn> ::= server_name | dblink_conn_string
+            
+        <dblink_identifier_col_attrs> ::= dblink_table_alias ( <dblink_column_definition_list> ) 
+        <dblink_column_definition_list> ::= dblink_column_alias <primitive_type> [{, dblink_column_alias <primitive_type>} ...]
+
+*   *remote_query_sting*: Only SELECT query can be specified as the query to be transmitted to the remote DBMS.
+*   *server_name*: The name of the server created using:doc:`/sql/schema/server_stmt`\.
+*   *dblink_conn_string*: Remote access information expressed as a string.
+*   *dblink_table_alias*: The name of a derived table created using DBLINK.
+*   *dblink_column_alias*: Virtual column name corresponding to the select list of *remote_query_string* in DBLINK.
+
+.. note::
+
+    The attributes of the column supported by DBLINK are as follows.
+    
+    * INT, BIGINT, SHORT, FLOAT, DOUBLE, MONETARY, NUMERIC
+    * VARCHAR, VARNCHAR, CHAR, NCHAR
+    * DATE, TIME, TIMESTAMP, DATETIME
+    * DATETIMETZ, DATETIMELTZ, TIMESTAMPTZ, TIMESTAMPLTZ
+
+.. warning::
+
+    DBLINK does not support columns with the following data types.
+    
+    * COLLECTION TYPE ( SET, MULTISET, SEQUENCE )
+    * OBJECT
+    * CLOB / BLOB
+    * ENUM
+    * BIT / BIT VARYING
+    * JSON
+
+.. note::
+
+    *dblink_conn_string* is composed of the following structure.
+    Each content is information corresponding to HOST, PORT, DBNAME, USER, PASSWOED, and PROPERTIES in the :doc:`/sql/schema/server_stmt` syntax.
+    Each item is separated by the character ':'.
+        
+    
+    <broker-host>:<port#>:<db_name>:<db_user>:<db_password>:[?<properties>]
+    
+    To prevent password exposure, it is recommended to use *server_name* rather than *dblink_conn_string*.
+    
+  
+.. code-block:: sql
+
+    CREATE SERVER remote_srv1 ( HOST='127.0.0.1', PORT=3300, DBNAME=demodb, USER=cub, PASSWORD='cub-password');    
+    SELECT * FROM DBLINK (remote_srv1, 'SELECT col1 FROM remote_t') AS t(col1 int);
+    
+    SELECT * FROM DBLINK ('127.0.0.1:3300:demodb:cub:cub-password:','SELECT col1, col2 FROM remote_t') AS t(col1 int, col2 varchar(32));
+
+  
+In the example above, the two SELECT statements perform the same function.
+  
+
+
 
 .. _where-clause:
 

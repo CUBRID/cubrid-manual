@@ -115,6 +115,10 @@ The following is [options] used in **cubrid unloaddb**.
     
     This option specifies the name of the hash file.
 
+.. option:: --latest-image
+   
+    This option makes it to unload the latest image of objects in data volumes when unloading instances (the MVCC version is ignored and it does not refer to the log volumes). It may include uncommitted data and deleted data that has not been vacuumed.
+
 .. option:: -v, --verbose
 
     This option displays detailed information on the database tables and records being unloaded while the unload operation is under way. ::

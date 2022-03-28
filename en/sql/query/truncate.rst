@@ -8,11 +8,11 @@ TRUNCATE
 
 You can delete all records in the specified table by using the **TRUNCATE** statement.
 
-It has following advantages than using the **DELETE FROM** *table_name* statement without a **WHERE** clause.
+It has the following advantages over using the **DELETE FROM** *table_name* statement without a **WHERE** clause.
 
-* It's way faster due to deleting all indexes and constraints in adavance and deleing records at once.
+* It's way faster due to deleting all indexes and constraints in advance and deleting records at once.
 * There is no vacuum cost.
-* It generates way lesser log records so that it is better in terms of HA, Recovery and Rollback.
+* It generates way lesser log records so that it is better in terms of HA replication, Recovery, and Rollback.
 
 .. note:: 
 
@@ -26,7 +26,7 @@ It has following advantages than using the **DELETE FROM** *table_name* statemen
     TRUNCATE [ TABLE ] <table_name>
 
 *   *table_name* : Specifies the name of the table that contains the data to be deleted.
-*   **CASACDE** : Deletes all records in all tables referring to the specified table with a foreign key. This is propagated to all tables in foreign key relationship. A **PRIMARY KEY** constraint has to be defined in the table and this has to be referred to by one or more **FOREIGN KEY**, and the foreign key action has to be **ON DELETE**. It fails without this option when a foreign key referring to the specified table is defined. It also fails when even one **ON DELETE** action is not **CASCADE** in all foreign key relationships. See :ref:`foreign-key-constraint` for more information about foreign key constraint. 
+*   **CASACDE** : Deletes all records in all tables referring to the specified table with a foreign key. This is propagated to all tables in the foreign key relationship. A **PRIMARY KEY** constraint has to be defined in the table and this has to be referred to by one or more **FOREIGN KEY**, and the foreign key action has to be **ON DELETE**. It fails without this option when a foreign key referring to the specified table is defined. It also fails when even one **ON DELETE** action is not **CASCADE** in all foreign key relationships. See :ref:`foreign-key-constraint` for more information about the foreign key constraint. 
 
 .. code-block:: sql
 
@@ -55,7 +55,7 @@ It has following advantages than using the **DELETE FROM** *table_name* statemen
     =============
                 3
 
-The following example uses the **CASCADE** option. Note that a record even refers to nothing, but the propagated **TRUNCATE** deletes all records.                 
+The following example uses the **CASCADE** option. Note that even a record refers to nothing, but the propagated **TRUNCATE** deletes all records.                 
 
 .. code-block:: sql
     

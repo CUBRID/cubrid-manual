@@ -2132,7 +2132,7 @@ HA 관련 파라미터
 
 **recovery_progress_logging_interval**
     
- **recovery_progress_logging_interval** 는 복구 (recovery) 의 상세과정을 로그에 출력하지  여부와 출력 주기를 설정한다. Analysis, Redo, Undo 각 페이즈별 전체 작업량과 현재 작업량, 앞으로 남은 시간 예상치를 출력한다. 5초보다 작게 설정될 경우 5초로 설정된다.
+ **recovery_progress_logging_interval** 는 복구 (recovery) 의 상세과정을 로그에 출력할지 여부와 출력 주기를 설정한다. 분석(analysis), 리두(redo), 언두(undo) 각 단계별 전체 작업량과 현재 작업량, 앞으로 남은 시간 예상치를 출력한다. 5초보다 작게 설정될 경우 5초로 설정된다.
 
 .. _broker-configuration:
 

@@ -2180,7 +2180,7 @@ The following are other parameters. The type and value range for each parameter 
 
 **recovery_progress_logging_interval**
     
- **recovery_progress_logging_interval** is a parameter to decide whether the details of recovery is printed or not and configure its period. If it is set bigger than 0, the total works and remained works to do of three phase of recovery, Analysis, Redo and Undo are printed. When this is set smaller than 5, it is set to 5.
+ **recovery_progress_logging_interval** is a parameter to decide whether the details of recovery is printed or not and configure its period in seconds. If it is set bigger than 0, the total works and remained works to do of three phase of recovery, Analysis, Redo and Undo are printed. When this is set smaller than 5, it is set to 5.
 
 .. _broker-configuration:
 

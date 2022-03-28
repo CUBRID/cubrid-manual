@@ -17,6 +17,7 @@ TRUNCATE
 .. note:: 
 
     * **TRUNCATE** 문을 사용해서 삭제하면 **ON DELETE** 트리거가 활성화되지 않는다.
+    * **TRUNCATE** 문은 해당 테이블의 **AUTO INCREMENT** 칼럼을 초기화하여, 다시 데이터가 입력되면 **AUTO INCREMENT** 칼럼의 초기값부터 생성된다.
     * **TRUNCATE** 문을 수행하려면 해당 테이블에 **ALTER**, **INDEX**, **DELETE** 권한이 필요하다. 권한을 부여하는 방법은 :ref:`granting-authorization` 를 참고한다.
     * 테이블이 **DONT_REUSE_OID** 옵션(:ref:`dont-reuse-oid`)으로 생성된 경우 다른 테이블의 컬럼이 해당 테이블을 참조할 수 있다. 이렇게 외부 참조가 있을 경우 일괄 삭제가 불가능하며 내부적으로 DELETE FROM 연산을 통해 TRUNCATE가 수행된다.
 

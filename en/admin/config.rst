@@ -303,9 +303,9 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | max_filter_pred_cache_entries       | client/server parameter |         | int      | 1,000                          |                       |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-| :ref:`query-cache-parameters` | max_query_cache_entries             | server parameter        |         | int      | 0                            | available             |
+| :ref:`query-cache-parameters` | max_query_cache_entries             | server parameter        |         | int      | 0                              | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | query_cache_size_in_pages           | server parameter        |         | int      | 0                            | available             |
+|                               | query_cache_size_in_pages           | server parameter        |         | int      | 0                              | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 | :ref:`utility-parameters`     | backup_volume_max_size_bytes        | server parameter        |         | byte     | 0                              |                       |
@@ -372,6 +372,8 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               | tde_keys_file_path                  | server parameter        |         | string   | NULL                           |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | tde_default_algorithm               | server parameter        |         | string   | AES                            |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | recovery_progress_logging_interval  | server parameter        |         | int      | 0                              |                       |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 
 .. _lpg:
@@ -1998,6 +2000,8 @@ The following are other parameters. The type and value range for each parameter 
 +-------------------------------------+--------+----------------+----------------+----------------+
 | tde_default_algorithm               | string | AES            |                |                |
 +-------------------------------------+--------+----------------+----------------+----------------+
+| recovery_progress_logging_interval  | int    | 0 (off)        | 0              | 3600           |
++-------------------------------------+--------+----------------+----------------+----------------+
 
 **access_ip_control**
 
@@ -2173,6 +2177,10 @@ The following are other parameters. The type and value range for each parameter 
 **tde_default_algorithm**
 
     **tde_default_algorithm** is a parameter that configures the default algorithm used when creating the TDE encryption table. Log and temporary data are always encrypted using the algorithm set with this parameter when they have to be encrypted. **AES** or **ARIA** can be set. For more information on encryption algorithms, refer to :ref:`tde-algorithm`.
+
+**recovery_progress_logging_interval**
+    
+    **recovery_progress_logging_interval** is a parameter to decide whether the details of recovery are printed and configure its period in seconds. If it is set bigger than 0, the total works and remained works to do of the three phases of recovery: Analysis, Redo and Undo are printed. When this is set smaller than 5, it is set to 5.
 
 .. _broker-configuration:
 

@@ -117,7 +117,7 @@ The following is [options] used in **cubrid unloaddb**.
 
 .. option:: --latest-image
    
-    This option makes it dump the latest image of objects in data volumes when dumping objects, not referring to log volumes (ignoring MVCC). It could include uncommitted data and deleted data which has not vacuummed.
+    This option makes it to unload the latest image of objects in data volumes when unloading instances (the MVCC version is ignored and it does not refer to the log volumes). It may include uncommitted data and deleted data that has not been vacuumed.
 
 .. option:: -v, --verbose
 

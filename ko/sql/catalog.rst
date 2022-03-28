@@ -499,6 +499,7 @@ _db_index
       '_db_auth'            'i__db_auth_grantee'
       '_db_class'           'i__db_class_class_name'
       '_db_domain'          'i__db_domain_object_of'
+      '_db_domain'          'i__db_domain_data_type'
       '_db_index'           'i__db_index_class_of'
       '_db_index_key'       'i__db_index_key_index_of'
       '_db_meth_arg'        'i__db_meth_arg_meth_sig_of'

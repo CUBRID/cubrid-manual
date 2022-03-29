@@ -16,7 +16,7 @@ It has the following advantages over using the **DELETE FROM** *table_name* stat
 
 .. note:: 
 
-    * The **ON DELETE** trigger is disabled while deleting records with the **TRUNCATE** statement.
+    * The **DELETE** trigger is disabled while deleting records with the **TRUNCATE** statement.
     * The **TRUNCATE** statement initializes the **AUTO INCREMENT** column of the table. Therefore, if data is inserted, the **AUTO INCREMENT** column value increases from the initial value. 
     * To execute the **TRUNCATE** statement, the authorization of **ALTER**, **INDEX**, and **DELETE** is required on the table. For granting authorization, see :ref:`granting-authorization`.
     * If a table is created with **DONT_REUSE_OID** option (:ref:`dont-reuse-oid`), other tables can refer to it as a column. When the specified table is referred to like this, it is impossible to truncate the table and it's done with **DELETE FROM** statement internally.

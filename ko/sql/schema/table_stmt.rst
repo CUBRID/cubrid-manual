@@ -544,6 +544,8 @@ PRIMARY KEY 제약
         PRIMARY KEY (host_year, event_code, athlete_code, medal)
     );
 
+.. _foreign-key-constraint:
+
 FOREIGN KEY 제약
 ^^^^^^^^^^^^^^^^
 

@@ -141,7 +141,7 @@ The following example shows how to retrieve all sub classes under the class owne
 _db_attribute
 -------------
 
-Represents attribute information. Indexes for class_of, attr_name and attr_type are created.
+Represents attribute information. An index for class_of, attr_name and attr_type is created.
 
 +--------------------+------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------+
 |   Attribute Name   |   Data Type            |   Description                                                                                                                                               |
@@ -258,7 +258,7 @@ The following example shows how to retrieve user classes (from_class_of.is_syste
 _db_domain
 ----------
 
-Represents domain information. An index for object_of is created.
+Represents domain information. Indexes for object_of and data_type are created.
 
 +--------------------+------------------------+---------------------------------------------------------------------------------------------------------+
 |   Attribute Name   |   Data Type            |   Description                                                                                           |
@@ -336,7 +336,7 @@ The information on collation.
 _db_method
 ----------
 
-Represents method information. Indexes for class_of and meth_name are created.
+Represents method information. An index for class_of and meth_name is created.
 
 +--------------------+--------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
 |   Attribute Name   |   Data Type              |   Description                                                                                                                                 |
@@ -501,6 +501,7 @@ The following example shows how to retrieve names of indexes that belong to the 
       '_db_auth'            'i__db_auth_grantee'
       '_db_class'           'i__db_class_class_name'
       '_db_domain'          'i__db_domain_object_of'
+      '_db_domain'          'i__db_domain_data_type'
       '_db_index'           'i__db_index_class_of'
       '_db_index_key'       'i__db_index_key_index_of'
       '_db_meth_arg'        'i__db_meth_arg_meth_sig_of'
@@ -649,7 +650,7 @@ The following example shows how to retrieve attributes and type names of the *ev
 _db_partition
 -------------
 
-Represents partition information. Indexes for class_of and pname are created.
+Represents partition information. An index for class_of and pname is created.
 
 +--------------------+---------------+-----------------------------------+
 |   Attribute Name   |   Data Type   |   Description                     |

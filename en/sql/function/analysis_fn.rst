@@ -289,7 +289,7 @@ COUNT
 .. function:: COUNT ([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression)
 .. function:: COUNT ([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression) OVER (<analytic_clause>)
 
-    The **COUNT** function is used as an aggregate function or an analytic function. It returns the number of rows returned by a query. If an asterisk (*) is specified, the number of all rows satisfying the condition (including the rows with the **NULL** value) is returned. If the **DISTINCT** or **UNIQUE** keyword is specified in front of the expression, only the number of rows that have a unique value (excluding the rows with the **NULL** value) is returned after duplicates have been removed. Therefore, the value returned is always an big integer and **NULL** is never returned.
+    The **COUNT** function is used as an aggregate function or an analytic function. It returns the number of rows returned by a query. If an asterisk (*) is specified, the number of all rows satisfying the condition (including the rows with the **NULL** value) is returned. If the **DISTINCT** or **UNIQUE** keyword is specified in front of the expression, only the number of rows that have a unique value (excluding the rows with the **NULL** value) is returned after duplicates have been removed. Therefore, the value returned is always a big integer and **NULL** is never returned.
 
     :param expression: Specifies an expression.
     :param ALL: Gets the number of rows given in the *expression* (default).

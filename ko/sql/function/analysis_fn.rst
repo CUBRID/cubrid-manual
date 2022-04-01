@@ -290,7 +290,7 @@ COUNT
 .. function:: COUNT ([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression)
 .. function:: COUNT ([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression) OVER (<analytic_clause>)
 
-    **COUNT** 함수는 집계 함수 또는 분석 함수로 사용되며,  질의문이 반환하는 결과 행들의 개수를 반환한다. 별표(*)를 지정하면 조건을 만족하는 모든 행(**NULL** 값을 가지는 행 포함)의 개수를 반환하며, **DISTINCT** 또는 **UNIQUE** 키워드를 연산식 앞에 지정하면 중복을 제거한 후 유일한 값을 가지는 행(**NULL** 값을 가지는 행은 포함하지 않음)의 개수만 반환한다. 따라서, 반환되는 값은 항상 정수이며, **NULL** 은 반환되지 않는다.
+    **COUNT** 함수는 집계 함수 또는 분석 함수로 사용되며,  질의문이 반환하는 결과 행들의 개수를 반환한다. 별표(*)를 지정하면 조건을 만족하는 모든 행(**NULL** 값을 가지는 행 포함)의 개수를 반환하며, **DISTINCT** 또는 **UNIQUE** 키워드를 연산식 앞에 지정하면 중복을 제거한 후 유일한 값을 가지는 행(**NULL** 값을 가지는 행은 포함하지 않음)의 개수만 반환한다. 따라서, 반환되는 값은 항상 큰 정수 타입이며, **NULL** 은 반환되지 않는다.
 
     :param expression: 임의의 연산식이다.
     :param ALL: 주어진 expression의 모든 행의 개수를 구하기 위해 사용되며, 기본값이다.
@@ -309,9 +309,9 @@ COUNT
     
 ::
 
-         count(*)
-    =============
-                9
+              count(*)
+======================
+                     9
 
 다음은 *demodb* 에서 nation_code가 'AUT'인 국가의 참가 선수의 종목(event)별 인원 수를 종목이 바뀔 때마다 누적하여 출력한 예제이다. 가장 마지막 줄에는 모든 인원 수가 출력된다.
 
@@ -322,26 +322,26 @@ COUNT
     
 ::
 
-       nation_code           event                 name                           co
-    ===============================================================================
-      'AUT'                 'Athletics'           'Kiesl Theresia'                2
-      'AUT'                 'Athletics'           'Graf Stephanie'                2
-      'AUT'                 'Equestrian'          'Boor Boris'                    6
-      'AUT'                 'Equestrian'          'Fruhmann Thomas'               6
-      'AUT'                 'Equestrian'          'Munzner Joerg'                 6
-      'AUT'                 'Equestrian'          'Simon Hugo'                    6
-      'AUT'                 'Judo'                'Heill Claudia'                 9
-      'AUT'                 'Judo'                'Seisenbacher Peter'            9
-      'AUT'                 'Judo'                'Hartl Roswitha'                9
-      'AUT'                 'Rowing'              'Jonke Arnold'                 11
-      'AUT'                 'Rowing'              'Zerbst Christoph'             11
-      'AUT'                 'Sailing'             'Hagara Roman'                 15
-      'AUT'                 'Sailing'             'Steinacher Hans Peter'        15
-      'AUT'                 'Sailing'             'Sieber Christoph'             15
-      'AUT'                 'Sailing'             'Geritzer Andreas'             15
-      'AUT'                 'Shooting'            'Waibel Wolfram Jr.'           17
-      'AUT'                 'Shooting'            'Planer Christian'             17
-      'AUT'                 'Swimming'            'Rogan Markus'                 18
+  nation_code           event                 name                                    co
+========================================================================================
+  'AUT'                 'Athletics'           'Kiesl Theresia'                         2
+  'AUT'                 'Athletics'           'Graf Stephanie'                         2
+  'AUT'                 'Equestrian'          'Boor Boris'                             6
+  'AUT'                 'Equestrian'          'Fruhmann Thomas'                        6
+  'AUT'                 'Equestrian'          'Munzner Joerg'                          6
+  'AUT'                 'Equestrian'          'Simon Hugo'                             6
+  'AUT'                 'Judo'                'Heill Claudia'                          9
+  'AUT'                 'Judo'                'Seisenbacher Peter'                     9
+  'AUT'                 'Judo'                'Hartl Roswitha'                         9
+  'AUT'                 'Rowing'              'Jonke Arnold'                          11
+  'AUT'                 'Rowing'              'Zerbst Christoph'                      11
+  'AUT'                 'Sailing'             'Hagara Roman'                          15
+  'AUT'                 'Sailing'             'Steinacher Hans Peter'                 15
+  'AUT'                 'Sailing'             'Sieber Christoph'                      15
+  'AUT'                 'Sailing'             'Geritzer Andreas'                      15
+  'AUT'                 'Shooting'            'Waibel Wolfram Jr.'                    17
+  'AUT'                 'Shooting'            'Planer Christian'                      17
+  'AUT'                 'Swimming'            'Rogan Markus'                          18
 
 CUME_DIST
 =========

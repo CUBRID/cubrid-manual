@@ -29,7 +29,10 @@ jobs:
       with:
         docs-folder: ${{ matrix.lang }}
         pre-build-command: "pip install sphinx_rtd_theme"
+        build-command: "sphinx-build -W -b html . _build"
     - uses: actions/upload-artifact@v1
       with:
         name: DocumentationHTML
         path: ${{ matrix.lang }}/_build/html/
+
+

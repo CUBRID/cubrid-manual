@@ -19,7 +19,7 @@ ROWNUM, INST_NUM
 
 **ROWNUM** and **INST_NUM()** can be used in the **SELECT** statement; **ORDERBY_NUM()** can be used in the **SELECT** statement with **ORDER BY** clauses, and **GROUPBY_NUM()** can be used in the **SELECT** statement with **GROUP BY** clauses. The **ROWNUM** function can be used to limit the number of result records of the query in several ways. For example, it can be used to search only the first 10 records or to return even or odd number records.
 
-The **ROWNUM** function has a result value as an big integer, and can be used wherever an expression is valid such as the **SELECT** or **WHERE** clause. However, it is not allowed to compare the result of the **ROWNUM** function with the attribute or the correlated subquery.
+The **ROWNUM** function has a result value as a big integer, and can be used wherever an expression is valid such as the **SELECT** or **WHERE** clause. However, it is not allowed to compare the result of the **ROWNUM** function with the attribute or the correlated subquery.
 
 .. note::
 

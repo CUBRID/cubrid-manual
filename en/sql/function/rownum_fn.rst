@@ -19,7 +19,7 @@ ROWNUM, INST_NUM
 
 **ROWNUM** and **INST_NUM()** can be used in the **SELECT** statement; **ORDERBY_NUM()** can be used in the **SELECT** statement with **ORDER BY** clauses, and **GROUPBY_NUM()** can be used in the **SELECT** statement with **GROUP BY** clauses. The **ROWNUM** function can be used to limit the number of result records of the query in several ways. For example, it can be used to search only the first 10 records or to return even or odd number records.
 
-The **ROWNUM** function has a result value as an integer, and can be used wherever an expression is valid such as the **SELECT** or **WHERE** clause. However, it is not allowed to compare the result of the **ROWNUM** function with the attribute or the correlated subquery.
+The **ROWNUM** function has a result value as an big integer, and can be used wherever an expression is valid such as the **SELECT** or **WHERE** clause. However, it is not allowed to compare the result of the **ROWNUM** function with the attribute or the correlated subquery.
 
 .. note::
 
@@ -67,12 +67,12 @@ LIMIT clause limits the sorted result rows; therefore, the below result is the s
     
 ::
 
-           rownum  nation_code
-    ===================================
-              156  'URS'
-              155  'GDR'
-              154  'USA'
-              153  'KOR'
+                rownum  nation_code
+============================================
+                   143  'URS'
+                    51  'GDR'
+                   145  'USA'
+                    78  'KOR'
 
 ROWNUM condition in the below limits before sorting; therefore, the result is different from the above.
 
@@ -85,12 +85,12 @@ ROWNUM condition in the below limits before sorting; therefore, the result is di
     
 ::
 
-           rownum  nation_code
-    ===================================
-                1  'ZIM'
-                2  'ZAM'
-                3  'ZAI'
-                4  'YMD'
+                rownum  nation_code
+============================================
+                     1  'AFG'
+                     2  'AHO'
+                     3  'AND'
+                     4  'ANG'
 
 ORDERBY_NUM
 ===========
@@ -99,7 +99,7 @@ ORDERBY_NUM
 
     The **ORDERBY_NUM()** function is used with the **ROWNUM()** or **INST_NUM()** function to limit the number of result rows. The difference is that the **ORDERBY_NUM()** function is combined after the ORDER BY clause to give order to a result that has been already sorted. That is, when retrieving only some of the result rows by using **ROWNUM** in a condition clause of the **SELECT** statement that includes the **ORDER BY** clause, **ROWNUM** is applied first and then group sorting by **ORDER BY** is performed. On the other hand, when retrieving only some of the result rows by using the **ORDER_NUM()** function, **ROWNUM** is applied to the result of sorting by **ORDER BY**.
 
-    :rtype: INT
+    :rtype: BIGINT
 
 The following example shows how to retrieve athlete names ranked 3rd to 5th and their records in the *history* table in the *demodb* database.
 
@@ -111,11 +111,11 @@ The following example shows how to retrieve athlete names ranked 3rd to 5th and 
     
 ::
 
-        orderby_num()  athlete               score
-    ==============================================================
-                    3  'Luo Xuejuan'         '01:07.0'
-                    4  'Rodal Vebjorn'       '01:43.0'
-                    5  'Thorpe Ian'          '01:45.0'
+         orderby_num()  athlete               score
+==================================================================
+                     3  'Luo Xuejuan'         '01:07.0'
+                     4  'Rodal Vebjorn'       '01:43.0'
+                     5  'Thorpe Ian'          '01:45.0'
 
 The following query using a LIMIT clause outputs the same result with the above query.
 
@@ -149,7 +149,7 @@ GROUPBY_NUM
     
     That is, when retrieving only some of the result rows by using **ROWNUM** in a condition clause of the **SELECT** statement that includes the **GROUP BY** clause, **ROWNUM** is applied first and then group sorting by **GROUP BY** is performed. On the other hand, when retrieving only some of the result rows by using the **GROUPBY_NUM()** function, **ROWNUM** is applied to the result of group sorting by **GROUP BY**.
 
-    :rtype: INT
+    :rtype: BIGINT
 
 The following example shows how to retrieve the fastest record in the previous five Olympic Games from the *history* table in the  *demodb* database.
 
@@ -161,13 +161,13 @@ The following example shows how to retrieve the fastest record in the previous f
     
 ::
 
-        groupby_num()    host_year  min(score)
-    =====================================================
-                    1         1968  '8.9'
-                    2         1980  '01:53.0'
-                    3         1984  '13:06.0'
-                    4         1988  '01:58.0'
-                    5         1992  '02:07.0'
+         groupby_num()    host_year  min(score)
+=========================================================
+                     1         1968  '8.9'
+                     2         1980  '01:53.0'
+                     3         1984  '13:06.0'
+                     4         1988  '01:58.0'
+                     5         1992  '02:07.0'
 
 The following query using a LIMIT clause outputs the same result with the above query.
 

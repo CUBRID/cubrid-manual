@@ -29,8 +29,7 @@ jobs:
       with:
         docs-folder: ${{ matrix.lang }}
         pre-build-command: "pip install sphinx_rtd_theme"
-        build-command: "sphinx-build -b html . _build"
     - name: Deploy preview
       uses: rossjrw/pr-preview-action@v1
       with:
-        source-dir: ${{ matrix.lang }}/_build/html/
+        source-dir: .

@@ -1745,7 +1745,7 @@ Jobq_index                  INT             워커 쓰레드의 작업 큐 인�
 Thread_id                   BIGINT          쓰레드 식별자
 Tran_index                  INT             쓰레드가 속한 트랜잭션 인덱스. 관련 쓰레드가 없을 경우 NULL
 Type                        VARCHAR(8)      쓰레드 종류. 다음 중 하나 'MASTER', 'SERVER', 'WORKER', 'DAEMON', 'VACUUM_MASTER', 'VACUUM_WORKER', 'NONE', 'UNKNOWN'.
-Status                      VARCHAR(8)      쓰레드 상태. 다음 중 하나 'DEAD', 'FREE', 'RUN', 'WAIT', 'CHECK'.
+Status                      VARCHAR(8)      쓰레드 상태. 다음 중 하나 'FREE', 'RUN', 'WAIT', 'CHECK'.
 Resume_status               VARCHAR(32)     재시작 상태. 다음 중 하나 'RESUME_NONE', 'RESUME_DUE_TO_INTERRUPT', 'RESUME_DUE_TO_SHUTDOWN', 'PGBUF_SUSPENDED', 'PGBUF_RESUMED', 
                                             'JOB_QUEUE_SUSPENDED', 'JOB_QUEUE_RESUMED', 'CSECT_READER_SUSPENDED', 'CSECT_READER_RESUMED', 'CSECT_WRITER_SUSPENDED', 'CSECT_WRITER_RESUMED',
                                             'CSECT_PROMOTER_SUSPENDED', 'CSECT_PROMOTER_RESUMED', 'CSS_QUEUE_SUSPENDED', 'CSS_QUEUE_RESUMED', 'QMGR_ACTIVE_QRY_SUSPENDED', 'QMGR_ACTIVE_QRY_RESUMED',

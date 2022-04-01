@@ -1727,7 +1727,7 @@ Jobq_index                  INT             Job queue index only for worker thre
 Thread_id                   BIGINT          Thread id.
 Tran_index                  INT             Transaction index to which this thread belongs. If no related tran index, NULL.
 Type                        VARCHAR(8)      Thread type. Either one of the followings: 'MASTER', 'SERVER', 'WORKER', 'DAEMON', 'VACUUM_MASTER', 'VACUUM_WORKER', 'NONE', 'UNKNOWN'.
-Status                      VARCHAR(8)      Thread status. Either one of the followings: 'DEAD', 'FREE', 'RUN', 'WAIT', 'CHECK'.
+Status                      VARCHAR(8)      Thread status. Either one of the followings: 'FREE', 'RUN', 'WAIT', 'CHECK'.
 Resume_status               VARCHAR(32)     Resume status. Either one of the followings: 'RESUME_NONE', 'RESUME_DUE_TO_INTERRUPT', 'RESUME_DUE_TO_SHUTDOWN', 'PGBUF_SUSPENDED', 'PGBUF_RESUMED', 
                                             'JOB_QUEUE_SUSPENDED', 'JOB_QUEUE_RESUMED', 'CSECT_READER_SUSPENDED', 'CSECT_READER_RESUMED', 'CSECT_WRITER_SUSPENDED', 'CSECT_WRITER_RESUMED',
                                             'CSECT_PROMOTER_SUSPENDED', 'CSECT_PROMOTER_RESUMED', 'CSS_QUEUE_SUSPENDED', 'CSS_QUEUE_RESUMED', 'QMGR_ACTIVE_QRY_SUSPENDED', 'QMGR_ACTIVE_QRY_RESUMED',

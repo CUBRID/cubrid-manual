@@ -289,7 +289,7 @@ COUNT
 .. function:: COUNT ([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression)
 .. function:: COUNT ([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression) OVER (<analytic_clause>)
 
-    The **COUNT** function is used as an aggregate function or an analytic function. It returns the number of rows returned by a query. If an asterisk (*) is specified, the number of all rows satisfying the condition (including the rows with the **NULL** value) is returned. If the **DISTINCT** or **UNIQUE** keyword is specified in front of the expression, only the number of rows that have a unique value (excluding the rows with the **NULL** value) is returned after duplicates have been removed. Therefore, the value returned is always an integer and **NULL** is never returned.
+    The **COUNT** function is used as an aggregate function or an analytic function. It returns the number of rows returned by a query. If an asterisk (*) is specified, the number of all rows satisfying the condition (including the rows with the **NULL** value) is returned. If the **DISTINCT** or **UNIQUE** keyword is specified in front of the expression, only the number of rows that have a unique value (excluding the rows with the **NULL** value) is returned after duplicates have been removed. Therefore, the value returned is always an big integer and **NULL** is never returned.
 
     :param expression: Specifies an expression.
     :param ALL: Gets the number of rows given in the *expression* (default).
@@ -308,9 +308,9 @@ The following example shows how to retrieve the number of Olympic Games that hav
     
 ::
 
-         count(*)
-    =============
-                9
+              count(*)
+======================
+                     9
 
 The following example shows how to output the number of players whose nation_code is 'AUT' in *demodb* by accumulating the number of events when the event is changed. The last row shows the number of all players.
 
@@ -321,26 +321,26 @@ The following example shows how to output the number of players whose nation_cod
     
 ::
 
-       nation_code           event                 name                           co
-    ===============================================================================
-      'AUT'                 'Athletics'           'Kiesl Theresia'                2
-      'AUT'                 'Athletics'           'Graf Stephanie'                2
-      'AUT'                 'Equestrian'          'Boor Boris'                    6
-      'AUT'                 'Equestrian'          'Fruhmann Thomas'               6
-      'AUT'                 'Equestrian'          'Munzner Joerg'                 6
-      'AUT'                 'Equestrian'          'Simon Hugo'                    6
-      'AUT'                 'Judo'                'Heill Claudia'                 9
-      'AUT'                 'Judo'                'Seisenbacher Peter'            9
-      'AUT'                 'Judo'                'Hartl Roswitha'                9
-      'AUT'                 'Rowing'              'Jonke Arnold'                 11
-      'AUT'                 'Rowing'              'Zerbst Christoph'             11
-      'AUT'                 'Sailing'             'Hagara Roman'                 15
-      'AUT'                 'Sailing'             'Steinacher Hans Peter'        15
-      'AUT'                 'Sailing'             'Sieber Christoph'             15
-      'AUT'                 'Sailing'             'Geritzer Andreas'             15
-      'AUT'                 'Shooting'            'Waibel Wolfram Jr.'           17
-      'AUT'                 'Shooting'            'Planer Christian'             17
-      'AUT'                 'Swimming'            'Rogan Markus'                 18
+  nation_code           event                 name                                    co
+========================================================================================
+  'AUT'                 'Athletics'           'Kiesl Theresia'                         2
+  'AUT'                 'Athletics'           'Graf Stephanie'                         2
+  'AUT'                 'Equestrian'          'Boor Boris'                             6
+  'AUT'                 'Equestrian'          'Fruhmann Thomas'                        6
+  'AUT'                 'Equestrian'          'Munzner Joerg'                          6
+  'AUT'                 'Equestrian'          'Simon Hugo'                             6
+  'AUT'                 'Judo'                'Heill Claudia'                          9
+  'AUT'                 'Judo'                'Seisenbacher Peter'                     9
+  'AUT'                 'Judo'                'Hartl Roswitha'                         9
+  'AUT'                 'Rowing'              'Jonke Arnold'                          11
+  'AUT'                 'Rowing'              'Zerbst Christoph'                      11
+  'AUT'                 'Sailing'             'Hagara Roman'                          15
+  'AUT'                 'Sailing'             'Steinacher Hans Peter'                 15
+  'AUT'                 'Sailing'             'Sieber Christoph'                      15
+  'AUT'                 'Sailing'             'Geritzer Andreas'                      15
+  'AUT'                 'Shooting'            'Waibel Wolfram Jr.'                    17
+  'AUT'                 'Shooting'            'Planer Christian'                      17
+  'AUT'                 'Swimming'            'Rogan Markus'                          18
 
 CUME_DIST
 =========

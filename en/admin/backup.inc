@@ -89,11 +89,11 @@ The following shows options available with the **cubrid backupdb** utility (opti
 
         cubrid backupdb -t 4 demodb
 
-.. option:: -z, --compress
+.. option:: --no-compress
 
-    The following shows how to compress the database and stores it in the backup file by using the **-z** option. The size of the backup file and the time required for backup can be reduced by using the **-z** option. ::
+    Basically, in order to reduce the size of the backup volume, CUBRID compresses the target database and then saves it. If the user wants to eliminate the CPU usage that occurs when the backup file is compressed, the backup volume compression can be stopped by setting the --no-compress option. ::
 
-        cubrid backupdb -z demodb
+        cubrid backupdb --no-compress demodb
 
 .. option:: --sleep-msecs=NUMBER
 
@@ -175,7 +175,7 @@ Backup files created for backup levels 0, 1 and 2 may all be required for databa
 
 A compress backup is a method of backing up the database by compressing it. This type of backup reduces disk I/O costs and stores disk space because it requires less backup volume.
 
-To perform a compress backup, use the **cubrid backupdb -z** | **--compress** command.
+From version 11.1 of CUBRID, compress backup is used by default.
 
 **Parallel Backup Mode**
 

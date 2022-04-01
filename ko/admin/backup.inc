@@ -89,11 +89,11 @@ backupdb
 
         cubrid backupdb -t 4 demodb
 
-.. option:: -z, --compress
+.. option:: --no-compress
 
-    대상 데이터베이스를 압축하여 백업 파일에 저장한다. **-z** 옵션을 사용하면, 백업 파일의 크기 및 백업 시간을 단축시킬 수 있다. ::
+    기본적으로 큐브리드는 백업 볼륨의 크기를 줄이기 위해서, 대상 데이터베이스를 압축한 뒤 저장한다. 백업 파일 압축 실행 시 발생하는 CPU 사용량을 없애고 싶다면,  --no-compress 옵션을 설정해서 백업 볼륨 압축을 중지할 수 있다. ::
 
-        cubrid backupdb -z demodb
+        cubrid backupdb --no-compress demodb
 
 .. option:: --sleep-msecs=NUMBER
 
@@ -175,7 +175,7 @@ backupdb
 
 압축 백업(compress backup)은 데이터베이스를 압축하여 백업을 수행하기 때문에 백업 볼륨의 크기가 줄어들어 디스크 I/O 비용을 감소시킬 수 있고, 디스크 공간을 절약할 수 있다.
 
-압축 백업을 하려면 **cubrid backupdb -z** | **--compress** 명령어를 사용한다.
+큐브리드 11.1버전부터는 기본적으로 압축 백업 모드를 사용 중이다.
 
 **병렬 백업 모드**
 

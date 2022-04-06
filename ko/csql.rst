@@ -500,7 +500,7 @@ CSQL 인터프리터를 종료한다. ::
 
 CSQL 세션 내에서 체크포인트 수행을 지시하는 명령어이다. CSQL 인터프리터 접속 시 사용자 지정 옵션(**-u** *user_name*)에 **DBA** 그룹 멤버가 지정되고 시스템 관리자 모드(**--sysadm**)로 접속한 경우에만 수행할 수 있다.
 
-체크포인트는 현재 데이터 버퍼에 존재하는 모든 더티 페이지를 디스크로 내려쓰기(flush)하는 작업이며, CSQL 세션 내에서 파라미터 값을 설정하는 명령어(**;set** *parameter_name value*)를 통해서도 체크포인트 주기를 변경할 수 있다. 체크포인트 수행 주기와 관련된 파라미터는 **checkpoint_interval**\ 과 **checkpoint_every_size** 가 있다. 이에 대한 자세한 내용은 :ref:`logging-parameters` 를 참고한다. ::
+체크포인트는 현재 데이터 버퍼에 존재하는 페이지 중 임시 페이지를 제외한 모든 더티 페이지를 디스크로 내려쓰기(flush)하는 작업이며, CSQL 세션 내에서 파라미터 값을 설정하는 명령어(**;set** *parameter_name value*)를 통해서도 체크포인트 주기를 변경할 수 있다. 체크포인트 수행 주기와 관련된 파라미터는 **checkpoint_interval**\ 과 **checkpoint_every_size** 가 있다. 이에 대한 자세한 내용은 :ref:`logging-parameters` 를 참고한다. ::
 
     sysadm> ;checkpoint
     Checkpoint has been issued.

@@ -36,8 +36,14 @@ jobs:
       with:
         docs-folder: ${{ matrix.lang }}
         pre-build-command: "pip install sphinx_rtd_theme"
+  link_check:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        lang: [en, ko]
+    steps:
     - name: Check link
-      run: |
-        ls
-        cd ${{ matrix.lang }}
-        make linkcheck
+      uses: ammaraskar/sphinx-action@master
+      with:
+        docs-folder: ${{ matrix.lang }}
+        build-command: make linkcheck

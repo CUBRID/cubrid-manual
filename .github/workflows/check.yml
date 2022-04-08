@@ -40,4 +40,5 @@ jobs:
       uses: ammaraskar/sphinx-action@master
       with:
         docs-folder: ${{ matrix.lang }}
+        pre-build-command: "pip install sphinx_rtd_theme"
         build-command: make linkcheck

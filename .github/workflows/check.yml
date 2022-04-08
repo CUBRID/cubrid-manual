@@ -37,6 +37,7 @@ jobs:
         docs-folder: ${{ matrix.lang }}
         pre-build-command: "pip install sphinx_rtd_theme"
   external_link_check:
+    needs: build_docs
     runs-on: ubuntu-latest
     strategy:
       matrix:

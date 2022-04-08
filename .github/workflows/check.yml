@@ -36,28 +36,8 @@ jobs:
       with:
         docs-folder: ${{ matrix.lang }}
         pre-build-command: "pip install sphinx_rtd_theme"
-    - uses: actions/upload-artifact@v1
-      with:
-        name: docs-${{ matrix.lang }}
-        path: ${{ matrix.lang }}/_build/html/
-  deploy-via-surge:
-    needs: build_docs
-    runs-on: ubuntu-latest
-    steps:
-    - name: Download artifact
-      uses: actions/download-artifact@v3
-    - name: Display structure of downloaded files
-      run: ls -R
-    - name: Publish to surge.sh
-      run: npx surge . ${{ env.DOMAIN }}
-      env:
-        SURGE_LOGIN: ${{ secrets.SURGE_LOGIN }}
-        SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
-    - name: Add comment to PR
-      uses: peter-evans/create-or-update-comment@v2
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        issue-number: ${{ github.event.pull_request.number }}
-        body: |
-          ${{ format('Published to [english docs](https://{0}/{1})', env.DOMAIN, 'docs-en') }}
-          ${{ format('Published to [korean docs](https://{0}/{1})', env.DOMAIN, 'docs-ko') }}
+    - name: Check link
+      run: |
+        ls
+        cd ${{ matrix.lang }}
+        make linkcheck

@@ -3311,7 +3311,7 @@ The **cubrid vacuumdb** utility is used to vacuum deleted records or unnecessary
 
 *   **cubrid**: An integrated utility for the CUBRID service and database management.
 
-*   **vacuumdb**: A utility that vacuum deleted records or unnecessary mvcc related information from records in the database.
+*   **vacuumdb**: A utility that vacuum deleted records and unnecessary mvcc related information from records in the database.
 
 *   *database_name*: The name of the database to vacuum.
 

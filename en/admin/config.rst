@@ -1032,7 +1032,7 @@ The following are parameters related to logs used for database backup and restor
    
     You can distribute disk I/O overload at the checkpoint by specifying lower size in the **checkpoint_every_size** parameter, especially in the environment where **INSERT** / **UPDATE** are heavily loaded at a specific time.
 
-    Checkpoint is a job to record every modified page in data buffers to database volumes (disk) at a specific point. Checkpoint can shrink a restore time after the database failure because this makes the transaction logs which have been generated previously than the checkpoint time needless when the restore is processed.
+    Checkpoint is a job to record every modified page except for the temp page in data buffers to database volumes (disk) at a specific point. Checkpoint can shrink a restore time after the database failure because this makes the transaction logs which have been generated previously than the checkpoint time needless when the restore is processed.
     However, an efficient checkpoint interval should be properly considered because this job can occur a lot of disk I/O.
     
     .. note::

@@ -3327,7 +3327,7 @@ The following shows [options] available with the **cubrid vacuumdb** utility.
 
 .. option:: --dump
 
-    This option is used to display the status information about the vacuum. It currently displays the first log page ID referenced by the vacuum and the log volume name in which it resides. It can be used with both the standalone mode and the client/server mode. ::
+    This option is used to display the status information about the vacuum. It currently displays the first log page ID referenced by the vacuum and the log volume name in which it resides. Users can check the progress of the vacuum operation through the change of the first log page ID and they can know the minimum log volume to keep for the vacuum operation. It can be used with both the standalone mode and the client/server mode. ::
 
         cubrid vacuumdb --dump demodb
 

@@ -3305,7 +3305,7 @@ The following table shows [options] available with the cubrid tde utility.
 vacuumdb
 --------
 
-The **cubrid vacuumdb** utility is used to vacuum deleted records or unnecessary mvcc related information from records in the database. And it is also used to get the status information about the vacuum. ::
+The **cubrid vacuumdb** utility is used to vacuum deleted records and unnecessary mvcc related information from records in the database. And it is also used to get the status information about the vacuum. ::
 
     cubrid vacuumdb [options] database_name
 

@@ -41,6 +41,7 @@ The following shows how to use the cubrid management utilities. ::
         gen_tz [option] [<database-name>]  --- Generates C source file containing timezone data ready to be compiled into a shared library
         dump_tz [option]  --- Displaying timezone related information
         tde <operation> [option] <database-name> --- Managing Transparent Data Encryption (TDE)
+        vacuumdb [option] <database-name>  --- Vacuuming deleted records or unnecessary mvcc related information from records in the database
 
 cubrid Utility Logging
 ----------------------
@@ -3298,6 +3299,49 @@ The following table shows [options] available with the cubrid tde utility.
 .. option:: -p, --dba-password=PASSWORD
 
     This option specifies the password of the DBA.
+
+.. _vacuumdb:
+
+vacuumdb
+--------
+
+The **cubrid vacuumdb** utility is used to vacuum deleted records and unnecessary mvcc related information from records in the database. And it is also used to get the status information about the vacuum. ::
+
+    cubrid vacuumdb [options] database_name
+
+*   **cubrid**: An integrated utility for the CUBRID service and database management.
+
+*   **vacuumdb**: A utility that vacuum deleted records and unnecessary mvcc related information from records in the database.
+
+*   *database_name*: The name of the database to vacuum.
+
+The following shows [options] available with the **cubrid vacuumdb** utility.
+
+.. program:: vacuumdb
+
+.. option:: -o, --output-file=FILE
+
+    This option is used to store the status information about the vacuum in a specified file. The file is created in the current directory. If the **-o** option is not specified, the message is displayed on a console screen. ::
+
+        cubrid vacuumdb -o db_output demodb
+
+.. option:: --dump
+
+    This option is used to display the status information about the vacuum. It currently displays the first log page ID referenced by the vacuum and the log volume name in which it resides. Users can check the progress of the vacuum operation through the change of the first log page ID and they can know the minimum log volume to keep for the vacuum operation. It can be used with both the standalone mode and the client/server mode. ::
+
+        cubrid vacuumdb --dump demodb
+
+.. option:: -S, --SA-mode
+
+    This option performs vacuuming the database in standalone mode. ::
+
+        cubrid vacuumdb -S demodb
+
+.. option:: -C, --CS-mode
+
+    This option performs vacuuming the database in client/server mode. But it is not currently supported to vacuum in this mode. ::
+
+        cubrid vacuumdb -C demodb
 
 HA Commands
 -----------

@@ -91,7 +91,7 @@ The following shows options available with the **cubrid backupdb** utility (opti
 
 .. option:: --no-compress
 
-    By default, CUBRID compresses the target database in order to reduce the size of the backup volume and then saves it. If a user wants to eliminate the CPU usage by the compression, they can set the --no-compress option not to compress the backup volume. ::
+    By default, CUBRID compresses the target database in order to reduce the size of the backup volume and then saves it. If a user wants to eliminate the CPU usage by the compression, they can set the **--no-compress** option not to compress the backup volume. ::
 
         cubrid backupdb --no-compress demodb
 

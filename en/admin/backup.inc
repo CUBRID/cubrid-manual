@@ -175,7 +175,7 @@ Backup files created for backup levels 0, 1 and 2 may all be required for databa
 
 A compress backup is a method of backing up the database by compressing it. This type of backup reduces disk I/O costs and stores disk space because it requires less backup volume.
 
-From version 11.1 of CUBRID, compress backup is used by default.
+From version 11.2 of CUBRID, compress backup is used by default.
 
 **Parallel Backup Mode**
 

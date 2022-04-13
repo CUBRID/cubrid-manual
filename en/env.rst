@@ -70,9 +70,9 @@ OS Environment and Java Environment Variables
 
 *   PATH: In the Linux environment, the directory **$CUBRID/bin**, which includes a CUBRID system executable file, must be included in the PATH environment variable.
 
-*   LD_LIBRARY_PATH: In the Linux environment, **$CUBRID/lib**, which is the CUBRID system's dynamic library file (libjvm.so), must be included in the **LD_LIBRARY_PATH** (or **SHLIB_PATH** or **LIBPATH**) environment variable.
+*   LD_LIBRARY_PATH: In the Linux environment, **$CUBRID/lib** and **$CUBRID/cci/lib**, which is the CUBRID system's dynamic library file (libjvm.so), must be included in the **LD_LIBRARY_PATH** (or **SHLIB_PATH** or **LIBPATH**) environment variable.
 
-*   Path: In the Windows environment, the **%CUBRID%\\bin**, which is a directory that contains CUBRID system's execution file, must be included in the **Path** environment variable.
+*   Path: In the Windows environment, the **%CUBRID%\\bin** and **%CUBRID%\\cci\\bin**, which is a directory that contains CUBRID system's execution file, must be included in the **Path** environment variable.
 
 *   JAVA_HOME: To use the Java stored procedure in the CUBRID system, the Java Virtual Machine (JVM) version 1.6 or later must be installed, and the **JAVA_HOME** environment variable must designate the concerned directory. See the :ref:`cubrid-javasp-server-config`.
 
@@ -99,11 +99,11 @@ If the CUBRID system has been installed on Linux, the installation program autom
     
     if [ "$ld_lib_path" = "" ]
     then
-        LD_LIBRARY_PATH=$CUBRID/lib
+        LD_LIBRARY_PATH=$CUBRID/lib:$CUBRID/cci/lib
     else
-        LD_LIBRARY_PATH=$CUBRID/lib:$LD_LIBRARY_PATH
+        LD_LIBRARY_PATH=$CUBRID/lib:$CUBRID/cci/lib:$LD_LIBRARY_PATH
     fi
-    
+
     SHLIB_PATH=$LD_LIBRARY_PATH
     LIBPATH=$LD_LIBRARY_PATH
     PATH=$CUBRID/bin:$CUBRID/cubridmanager:$PATH

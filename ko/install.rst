@@ -447,11 +447,11 @@ Windows 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항
         
             %CUBRID%\jdbc\cubrid_jdbc.jar       
             
-    #.  **Path** 시스템 변수에 CUBRID bin 디렉터리를 추가한다.
+    #.  **Path** 시스템 변수에 CUBRID bin 과 CUBRID cci bin 디렉터리를 추가한다.
       
         ::
-        
-            %CUBRID%\bin
+
+            %CUBRID%\bin;%CUBRID%\cci\bin
 
 	.. note:: 
 	

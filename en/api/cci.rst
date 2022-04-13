@@ -11,19 +11,20 @@ CUBRID CCI (C Client Interface) driver implements an interface to enable access 
 
 It is automatically installed upon CUBRID installation and can be found in the **$CUBRID/lib** directory. A header file as well as library files is required to use the driver.
 
-+-----------------+-------------------+-------------------+
-|                 | Windows           | UNIX/Linux        |
-+=================+===================+===================+
-| C header file   | include/cas_cci.h | include/cas_cci.h |
-+-----------------+-------------------+-------------------+
-| Static library  | lib/cascci.lib    | lib/libcascci.a   |
-+-----------------+-------------------+-------------------+
-| Dynamic library | bin/cascci.dll    | lib/libcascci.so  |
-+-----------------+-------------------+-------------------+
++-----------------+-----------------------+-----------------------+
+|                 | Windows               | UNIX/Linux            |
++=================+=======================+=======================+
+| C header file   | cci/include/cas_cci.h | cci/include/cas_cci.h |
++-----------------+-----------------------+-----------------------+
+| Static library  | cci/lib/cascci.lib    | cci/lib/libcascci.a   |
++-----------------+-----------------------+-----------------------+
+| Dynamic library | cci/bin/cascci.dll    | cci/lib/libcascci.so  |
++-----------------+-----------------------+-----------------------+
 
 .. note::
 
     *   For Windows, Microsoft Visual C++ 2015 Redistributable (x86 or x64) must be installed to use the CCI Driver.
+    *   From 11.2 Version, the path to the CCI driver has been changed. (cci/include, cci/lib, cci/bin)
 
 Because CUBRID CCI driver is connected through the CUBRID broker, you can manage it the same way as other interfaces such as JDBC, PHP, ODBC, etc. In fact, CCI provides back-end infrastructure to implement PHP, ODBC, Python, and Ruby interfaces.
 
@@ -70,7 +71,7 @@ General process for writing applications is as follows. For using the prepared s
 .. code-block:: c
 
     // Example to execute a simple query
-    // In Linux: gcc -o simple simple.c -m64 -I${CUBRID}/include -lnsl ${CUBRID}/lib/libcascci.so -lpthread
+    // In Linux: gcc -o simple simple.c -m64 -I${CUBRID}/cci/include -lnsl ${CUBRID}/cci/lib/libcascci.so -lpthread
     
     #include <stdio.h>
     #include "cas_cci.h"  
@@ -193,7 +194,7 @@ General process for writing applications is as follows. For using the prepared s
 .. code-block:: c
 
     // Example to execute a query with a bind variable
-    // In Linux: gcc -o cci_bind cci_bind.c -m64 -I${CUBRID}/include -lnsl ${CUBRID}/lib/libcascci.so -lpthread
+    // In Linux: gcc -o cci_bind cci_bind.c -m64 -I${CUBRID}/cci/include -lnsl ${CUBRID}/cci/lib/libcascci.so -lpthread
 
     #include <stdio.h>
     #include <string.h>
@@ -345,7 +346,7 @@ General process for writing applications is as follows. For using the prepared s
 .. code-block:: c
 
     // Example to use connection/statement pool in CCI
-    // In Linux: gcc -o cci_pool cci_pool.c -m64 -I${CUBRID}/include -lnsl ${CUBRID}/lib/libcascci.so -lpthread
+    // In Linux: gcc -o cci_pool cci_pool.c -m64 -I${CUBRID}/cci/include -lnsl ${CUBRID}/cci/lib/libcascci.so -lpthread
 
     #include <stdio.h>
     #include "cas_cci.h"
@@ -477,8 +478,9 @@ Once you have written applications using CCI, you should decide, according to it
 The following is an example of Makefile, which makes a link by using the dynamic library on UNIX/Linux. ::
 
     CC=gcc
-    CFLAGS = -g -Wall -I. -I$CUBRID/include
-    LDFLAGS = -L$CUBRID/lib -lcascci -lnsl
+    CFLAGS = -g -Wall -I. -I$(CUBRID)/cci/include
+    LDFLAGS = -L$(CUBRID)/cci/lib -lcascci -lnsl
+
     TEST_OBJS = test.o
     EXES = test
     all: $(EXES)
@@ -661,7 +663,7 @@ and the error message, 'Syntax: Unknown class "notable". select * from notable' 
 
 .. code-block:: c
 
-    // gcc -o err err.c -m64 -I${CUBRID}/include -lnsl ${CUBRID}/lib/libcascci.so -lpthread
+    // gcc -o err err.c -m64 -I${CUBRID}/cci/include -lnsl ${CUBRID}/cci/lib/libcascci.so -lpthread
     #include <stdio.h>
     #include "cas_cci.h"
      
@@ -1218,7 +1220,7 @@ With the program source and the Makefile prepared, executing **make** will creat
 
 The code below a command line that makes a test program build by using a dynamic library instead of using **make** on Linux. ::
 
-    cc -o test test.c -I$CUBRID/include -L$CUBRID/lib -lnsl -lcascci
+    cc -o test test.c -I$CUBRID/cci/include -L$CUBRID/cci/lib -lnsl -lcascci
 
 **Sample Code**
 

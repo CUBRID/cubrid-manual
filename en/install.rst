@@ -445,11 +445,11 @@ Check below list before installing CUBRID database of Windows version.
         
             %CUBRID%\jdbc\cubrid_jdbc.jar       
             
-    #.  Add CUBRID bin directory and CUBRID cci bin directory to **Path** system variable.
+    #.  Add CUBRID bin and cci\bin directory to **Path** system variable.
       
         ::
 
-            %CUBRID%\cci/bin;%CUBRID%\bin
+            %CUBRID%\cci\bin;%CUBRID%\bin
 
     .. note:: 
 

@@ -91,6 +91,8 @@ In the [Config CUBRID Data Sources] dialog box, enter information as follows:
 *   **Password** : The password of a database user
 *   **Server Address** : The host address of a database. The value should be either localhost or the IP address of other server.
 *   **Server Port** : The number of a broker port. You can check the CUBRID broker port number in the **cubrid_broker.conf** file. The default value is 33,000. To verify the port number, check the BROKER_PORT value in the **cubrid_broker.conf** file or enter the **cubrid service status** in the command prompt. The result will be displayed as follows:
+*   **Charset** : The name of a database charset
+*   **Autocommit** : Autocommit mode. Default is OFF.
 
 .. image:: /images/image80.png
 
@@ -138,6 +140,8 @@ When you are programming CUBRID ODBC, write the connection strings as follows:
 | DESCRIPTION  | cubrid_test           | Description                                               |
 +--------------+-----------------------+-----------------------------------------------------------+
 | CHARSET      | utf-8                 | Character set                                             |
++--------------+-----------------------+-----------------------------------------------------------+
+| AUTOCOMMIT   | ON                    | Autocommit mode                                           |
 +--------------+-----------------------+-----------------------------------------------------------+
 
 The following shows the result of using connection strings above. ::

@@ -200,8 +200,8 @@ JDBC 프로그래밍
        *   기본 값은 1 (메가 바이트)
 
     *  **usePreparedStmtCache**: Prepared Statement 캐시 여부 (기본값: false)
-    *  **preparedStmtCacheSize**: usePreparedStmtCache이 TRUE일 경우, 캐싱할 수 있는 갯수  (기본:25, 최소:1, 최대:2147483647)
-    *  **preparedStmtCacheSqlLimit**: usePreparedStmtCache이 TRUE일 경우, 캐싱할 수 있는 SQL의 길이 (기본:256, 최소:1, 최대:2147483647)
+    *  **preparedStmtCacheSize**: usePreparedStmtCache가 TRUE일 경우, 캐싱할 수 있는 갯수  (기본:25, 최소:1, 최대:2147483647)
+    *  **preparedStmtCacheSqlLimit**: usePreparedStmtCache가 TRUE일 경우, 캐싱할 수 있는 SQL의 길이 (기본:256, 최소:1, 최대:2147483647)
 
 **예제 1** ::
 

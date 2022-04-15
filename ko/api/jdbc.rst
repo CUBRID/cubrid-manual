@@ -140,7 +140,10 @@ JDBC 프로그래밍
                  | useLazyConnection=<bool_type>
                  | useSSL=<bool_type>
                  | clientCacheSize=<unit_size>
-                 
+                 | usePreparedStmtCache=<bool_type>
+                 | preparedStmtCacheSize=<unit_size>
+                 | preparedStmtCacheSqlLimit=<unit_size>
+
         <alternative_hosts> ::=
         <standby_broker1_host>:<port> [,<standby_broker2_host>:<port>]
         <behavior_type> ::= exception | round | convertToNull
@@ -196,6 +199,10 @@ JDBC 프로그래밍
        *   범위는 1 ~ 1024 (1메가 바이트에서 to 1기가 바이트)
        *   기본 값은 1 (메가 바이트)
 
+    *  **usePreparedStmtCache**: Prepared Statement 캐시 여부 (기본값: false)
+    *  **preparedStmtCacheSize**: usePreparedStmtCache이 TRUE일 경우, 캐싱할 수 있는 갯수  (기본:25, 최소:1, 최대:2147483647)
+    *  **preparedStmtCacheSqlLimit**: usePreparedStmtCache이 TRUE일 경우, 캐싱할 수 있는 SQL의 길이 (기본:256, 최소:1, 최대:2147483647)
+
 **예제 1** ::
 
     --connection URL string when user name and password omitted
@@ -227,6 +234,9 @@ JDBC 프로그래밍
 
     --connection URL string when clientCacheSize property specified for result-cache
     URL=jdbc:CUBRID:192.168.0.1:33000:demodb:public::?clientCacheSize=1
+
+    --connection URL string when usePreparedStmtCache property specified for prepared stament cache
+    URL=jdbc:CUBRID:192.168.0.1:33000:demodb:public::?usePreparedStmtCache=true&preparedStmtCacheSize=100&preparedStmtCacheSqlLimit=1024"
 
 **예제 2**
 

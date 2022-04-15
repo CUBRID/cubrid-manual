@@ -2345,7 +2345,7 @@ JSON 포인터 및 JSON 텍스트와 같은 경로 식은 ASCII 또는 UTF-8 문
 JSON 포인터
 -------------
 
-https://tools.ietf.org/html/rfc6901에서 정의한 JSON 포인터는 JSON 경로와 다른 방법을 제공한다.
+https://tools.ietf.org/html/rfc6901 에서 정의한 JSON 포인터는 JSON 경로와 다른 방법을 제공한다.
 JSON 포인터는 JSON 경로 및 JSON 텍스트와 동일하게 ASCII 또는 UTF-8 문자셋으로 인코딩 되어야 한다.
 만약 다른 문자셋이 사용된다면, UTF-8으로 변환(coercion)될 것이다.
 

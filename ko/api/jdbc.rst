@@ -196,7 +196,7 @@ JDBC 프로그래밍
 
     *  **clientCacheSize**: 결과를 캐시할 크기
        *   단위는 메가 바이트
-       *   범위는 1 ~ 1024 (1메가 바이트에서 to 1기가 바이트)
+       *   범위는 1 ~ 1024 (1메가 바이트에서 1기가 바이트)
        *   기본 값은 1 (메가 바이트)
 
     *  **usePreparedStmtCache**: Prepared Statement 캐시 여부 (기본값: false)

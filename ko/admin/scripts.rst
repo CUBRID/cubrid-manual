@@ -103,4 +103,4 @@ unloaddb.sh 스크립트
 
 .. note::
 
-   * unloaddb.sh의 실행이 완전히 종료되기 이전에 터미널에서 인터럽트 키 (CTRL-C)를 입력하면, 언로드가 진행중인 unloaddb에 의해서 생성되는 object 파일들은 삭제된다 (언도드가 완료된 object 파일들은 삭제되지 않는다).
+   * unloaddb.sh의 실행이 완전히 종료되기 이전에 터미널에서 인터럽트 키 (**CTRL-C**)를 입력하면, 언로드가 진행중인 unloaddb object 파일들은 삭제된다 (언도드가 완료된 object 파일들은 삭제되지 않는다).

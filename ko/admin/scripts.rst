@@ -14,7 +14,7 @@ unloaddb.sh
 **unloaddb** 의 실행 시간을 단축하기 위해서 서로 다른 테이블을 unload 하기 위한 **cubrid unloaddb** 명령어를 동시에 여러 개 실행할 수 있다. 
 **unloaddb.sh** 은 이러한 과정을 자동화해주는 shell script이다.
 
-다수의 자식 process에게 균등하게 unloaddb를 부하를 배분하여 실행시키기 위해서 unloadb.sh은 catalog에서 언로드 대상 테이블들의 크기 정보를 가져온다 (DBA 권한 필요). 
+다수의 자식 process에게 균등하게 unloaddb의 부하를 배분하여 실행시키기 위해서 unloadb.sh은 catalog에서 언로드 대상 테이블들의 크기 정보를 가져온다 (DBA 권한 필요). 
 
 테이블 크기를 기준으로 각 자식 프로세스들에게 unload할 테이블들이 할당되며, 각 자식 프로세스들은 할당된 테이블들의 unloaddb를 동시에 수행한다.
 

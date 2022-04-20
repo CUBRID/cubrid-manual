@@ -2,16 +2,16 @@
 :meta-keywords: scripts
 :meta-description: Various CUBRID scripts support CUBRID Managements
 
-.. _scripts:
-
 ***************
 cubrid 스크립트
 ***************
 
-unloaddb.sh
-===========
+.. _cubrid_scripts_unloaddb_sh:
 
-**unloaddb** 의 실행 시간을 단축하기 위해서 서로 다른 테이블을 unload 하기 위한 **cubrid unloaddb** 명령어를 동시에 여러 개 실행할 수 있다. 
+unloaddb.sh 스크립트
+===================
+
+**unloaddb** 의 실행 시간을 단축하기 위해서 서로 다른 테이블을 언로드 하기 위한 **cubrid unloaddb** 명령어를 동시에 여러 개 실행할 수 있다. 
 **unloaddb.sh** 은 이러한 과정을 자동화해주는 shell script이다.
 
 다수의 자식 process에게 균등하게 unloaddb의 부하를 배분하여 실행시키기 위해서 unloadb.sh은 catalog에서 언로드 대상 테이블들의 크기 정보를 가져온다 (DBA 권한 필요). 

@@ -56,7 +56,7 @@ The following is [options] used in **unloaddb.sh**.
 
 .. option:: -D output-directory
 
-    Specifies the directory in which to create schema and object files. If not specified, files are created in the current directory. ::
+    Specifies the directory in which to create schema and object files. If it is not specified, files are created in the current directory. ::
 
         sh unloaddb.sh -D /tmp demodb
 

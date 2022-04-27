@@ -44,7 +44,7 @@ To create a table, use the **CREATE TABLE** statement.
 
             <on_update> ::= [ON UPDATE <value_specification>]
 
-            <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition> }
+            <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] <referential_definition> }
 
                 <referential_definition> ::=
                     REFERENCES [referenced_table_name] (column_name, ...) [<referential_triggered_action> ...]
@@ -154,7 +154,7 @@ A column is a set of data values of a particular simple type, one for each row o
 
         <on_update> ::= [ON UPDATE <value_specification>]
 
-        <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition>}
+        <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] <referential_definition>}
 
 Column Name
 ^^^^^^^^^^^
@@ -418,7 +418,7 @@ You can define **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** as the
 
 ::
 
-    <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition> }
+    <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] <referential_definition> }
 
     <table_constraint> ::=
         [CONSTRAINT [constraint_name]] 
@@ -1089,7 +1089,7 @@ You can add a new column by using the **ADD COLUMN** clause. You can specify the
 
             <on_update> ::= [ON UPDATE <value_specification>]
 
-            <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition>}
+            <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] <referential_definition>}
 
                 <referential_definition> ::=
                     REFERENCES [referenced_table_name] (column_name, ...) [<referential_triggered_action> ...]

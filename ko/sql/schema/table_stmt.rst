@@ -45,7 +45,7 @@ CREATE TABLE
 
                 <on_update> ::= [ON UPDATE <value_specification>]
          
-            <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition> }
+            <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] <referential_definition> }
 
                 <referential_definition> ::=
                     REFERENCES [referenced_table_name] (column_name, ...) [<referential_triggered_action> ...]
@@ -157,7 +157,7 @@ CREATE TABLE
 
         <on_update> ::= [ON UPDATE <value_specification>]
 
-        <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition>}
+        <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] <referential_definition>}
 
 칼럼 이름
 ^^^^^^^^^
@@ -419,7 +419,7 @@ ON UPDATE
 
 ::
 
-    <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition> }
+    <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] <referential_definition> }
 
     <table_constraint> ::=
         [CONSTRAINT [constraint_name]] 
@@ -1093,7 +1093,7 @@ ADD COLUMN 절
 
             <on_update> ::= [ON UPDATE <value_specification>]
             
-            <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition>}
+            <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] <referential_definition>}
 
                 <referential_definition> ::=
                     REFERENCES [referenced_table_name] (column_name, ...) [<referential_triggered_action> ...]

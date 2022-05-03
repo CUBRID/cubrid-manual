@@ -42,6 +42,7 @@ The following shows how to use the cubrid management utilities. ::
         dump_tz [option]  --- Displaying timezone related information
         tde <operation> [option] <database-name> --- Managing Transparent Data Encryption (TDE)
         vacuumdb [option] <database-name>  --- Vacuuming deleted records or unnecessary mvcc related information from records in the database
+        flashback [option] <database-name> <owner_name.class_name> --- Provides statements to flashback a specific transaction.
 
 cubrid Utility Logging
 ----------------------
@@ -3342,6 +3343,117 @@ The following shows [options] available with the **cubrid vacuumdb** utility.
     This option performs vacuuming the database in client/server mode. But it is not currently supported to vacuum in this mode. ::
 
         cubrid vacuumdb -C demodb
+
+.. _flashback:
+
+flashback
+--------
+
+The **cubrid flashback** utility is used to get SQL statements to flashback a specific transaction, and can only be executed by the **DBA** user. The system parameter **supplemental_log** must be turned on, and flashback is supported only for DML executed after the **supplemental_log** is set. ::
+
+    cubrid flashback [options] database_name owner_name.class_name1 [owner_name.class_name2, ...]
+
+*   **cubrid**: An integrated utility for the CUBRID service and database management.
+
+*   **flashback**: A utility that provides statements to flashback a specific transaction.
+
+*   *database_name*: The name of the database to flashback.
+
+*   *owner_name.class_name*: The classes to flashback to. When specifying the class_name, it must be specified along with the owner name.
+
+The following shows what information is displayed when users run "cubrid flashback demodb dba.tbl".
+
+::
+
+    csql> CREATE TABLE tbl (a INT);
+    csql> INSERT INTO tbl VALUES (10);
+
+    $ cubrid flashback demodb dba.tbl
+
+    Flashback Summary
+    Number of Transaction: 1
+    Start date - End date: 03-05-2022:10:52:56 - 03-05-2022:11:02:56
+    Transaction id  User name                         Start time            End time              Num_insert  Num_update  Num_delete  Table
+               135  DBA                               03-05-2022:11:02:40   03-05-2022:11:02:41            1           0           0  dba.tbl
+    Enter transaction id (press -1 to quit): 135
+
+    delete from [dba.tbl] where [a] = 10 limit 1;
+
+In the above example, when the flashback is performed, it displays information about transactions performed within the specified time period. If users do not specify a period, the transaction history up to 10 minutes before the current time is displayed. When the user selects a transaction ID to perform flashback, SQL statements are provided to perform flashback on DML executed within the selected transaction.
+
+Each column's meaning is as following.
+
+    *   Transaction id : The identifier of transaction
+    *   User name : Transaction user
+    *   Start time : Transaction start time
+    *   End time :  Transaction end time
+    *   Num_insert : Number of insert operation executed in the transaction
+    *   Num_update : Number of update operation executed in the transaction
+    *   Num_delete : Number of delete operation executed in the transaction
+    *   Table : List of tables for which DML has been performed within the transaction
+
+.. note:: 
+		If users attempts to flashback the table on which the trigger is created, unintended results may be obtained. Users are recommended to disable the triggers on the table before flashback.  For more information, see :ref:`alter-trigger`.
+
+The following shows [options] available with the **cubrid flashback** utility.
+
+.. program:: flashback
+
+.. option:: -o, --output-file=FILE
+
+    This option is used to store the SQL statements that can flashback a specific transaction in a specified file. The file is created in the current directory. If the **-o** option is not specified, the message is displayed on a console screen. ::
+
+        cubrid flashback -o db_output demodb dba.tbl
+
+.. option:: -u, --user=ID
+
+    This option is used to specify the user who executed the SQL statements to flashback. If the **-u** option is not specified, then it searches for statements executed by all users. ::
+
+        cubrid flashback -u dba demodb dba.tbl
+
+.. option:: -p, --dba-password=PASSWORD
+
+    This option specifies the password of the dba. If the **-p** option is not specified, then the password should be entered in the prompt. ::
+
+.. option:: -s, --start-date=DATE
+
+    This option specifies the starting DATE to flashback in the dd-mm-yyyy:hh:mi:ss (e.g. 28-04-2022:14:10:00) format. It finds transactions that have started after the specified time or are in progress at the specified time among committed transactions. ::
+
+        cubrid flashback -s 28-04-2022:14:10:00 demodb dba.tbl
+
+.. option:: -e, --end-date=DATE
+
+    This option specifies the end DATE to flashback in the dd-mm-yyyy:hh:mi:ss (e.g. 28-04-2022:14:10:00) format. It finds transactions that have committed before the specified time. 
+
+    If no start date is specified, the start date is set to the value 10 minutes before the end date. Also, if an end date is not specified, the end date is set to 10 minutes after the start date.
+    If neither start date nor end date is set, transactions performed up to 10 minutes before the current time are searched for. ::
+
+        cubrid flashback -e 28-04-2022:14:10:00 demodb dba.tbl
+
+.. option:: --detail
+
+    This option is used to display the detailed information for each SQL statements. Transaction ID, transaction user, and original SQL statements are displayed with the SQL statements for flashback.
+    If the **--detail** option is not specified, only the SQL statements for flashback is displayed. ::
+
+        cubrid flashback --detail demodb dba.tbl
+
+        Flashback Summary
+        Number of Transaction: 1
+        Start date - End date: 03-05-2022:10:52:56 - 03-05-2022:11:02:56
+        Transaction id  User name                         Start time            End time              Num_insert  Num_update  Num_delete  Table
+                   135  DBA                               03-05-2022:11:02:40   03-05-2022:11:02:41            1           0           0  dba.tbl
+        Enter transaction id (press -1 to quit): 135
+
+        [TRANSACTION ID] 135
+        [USER]           DBA
+        [ORIGINAL]       insert into [dba.tbl] values (10);
+        [FLASHBACK]      delete from [dba.tbl] where [a] = 10 limit 1;
+
+.. option:: --oldest
+
+    This option is used to display the SQL statements executed within the specified transaction in chronological order. If the **--oldest** is not specified, the SQL statements executed within the transaction are displayed in reverse chronological order. ::
+
+        cubrid flashback --oldest demodb dba.tbl
 
 HA Commands
 -----------

@@ -3347,7 +3347,7 @@ The following shows [options] available with the **cubrid vacuumdb** utility.
 .. _flashback:
 
 flashback
---------
+---------
 
 The **cubrid flashback** utility is used to get SQL statements to flashback a specific transaction, and can only be executed by the **DBA** user. The system parameter **supplemental_log** must be turned on, and flashback is supported only for DML executed after the **supplemental_log** is set. ::
 
@@ -3364,6 +3364,7 @@ The **cubrid flashback** utility is used to get SQL statements to flashback a sp
 The following shows what information is displayed when users run "cubrid flashback demodb dba.tbl".
 
 ::
+
     $ csql -u dba demodb
 
     csql> CREATE TABLE tbl (a INT);
@@ -3414,7 +3415,7 @@ The following shows [options] available with the **cubrid flashback** utility.
 
 .. option:: -p, --dba-password=PASSWORD
 
-    This option specifies the password of the dba. If the **-p** option is not specified, then the password should be entered in the prompt. ::
+    This option specifies the password of the dba. If the **-p** option is not specified, then the password should be entered in the prompt.
 
 .. option:: -s, --start-date=DATE
 

@@ -3364,6 +3364,7 @@ The **cubrid flashback** utility is used to get SQL statements to flashback a sp
 The following shows what information is displayed when users run "cubrid flashback demodb dba.tbl".
 
 ::
+    $ csql -u dba demodb
 
     csql> CREATE TABLE tbl (a INT);
     csql> INSERT INTO tbl VALUES (10);
@@ -3379,7 +3380,7 @@ The following shows what information is displayed when users run "cubrid flashba
 
     delete from [dba.tbl] where [a] = 10 limit 1;
 
-In the above example, when the flashback is performed, it displays information about transactions performed within the specified time period. If users do not specify a period, the transaction history up to 10 minutes before the current time is displayed. When the user selects a transaction ID to perform flashback, SQL statements are provided to perform flashback on DML executed within the selected transaction.
+In the above example, when the flashback is performed, it displays information about transactions performed within the specified time period. If users do not specify a period, the transaction history up to 10 minutes before the current time is displayed. When the user selects a transaction ID, SQL statements are provided to perform flashback on DML executed within the selected transaction.
 
 Each column's meaning is as following.
 
@@ -3387,9 +3388,9 @@ Each column's meaning is as following.
     *   User name : Transaction user
     *   Start time : Transaction start time
     *   End time :  Transaction end time
-    *   Num_insert : Number of insert operation executed in the transaction
-    *   Num_update : Number of update operation executed in the transaction
-    *   Num_delete : Number of delete operation executed in the transaction
+    *   Num_insert : Number of insert operation executed within the transaction
+    *   Num_update : Number of update operation executed within the transaction
+    *   Num_delete : Number of delete operation executed within the transaction
     *   Table : List of tables for which DML has been performed within the transaction
 
 .. note:: 
@@ -3417,13 +3418,13 @@ The following shows [options] available with the **cubrid flashback** utility.
 
 .. option:: -s, --start-date=DATE
 
-    This option specifies the starting DATE to flashback in the dd-mm-yyyy:hh:mi:ss (e.g. 28-04-2022:14:10:00) format. It finds transactions that have started after the specified time or are in progress at the specified time among committed transactions. ::
+    This option specifies the start date to flashback in the dd-mm-yyyy:hh:mi:ss (e.g. 28-04-2022:14:10:00) format. It finds transactions that have started after the specified time or are in progress at the specified time among committed transactions. ::
 
         cubrid flashback -s 28-04-2022:14:10:00 demodb dba.tbl
 
 .. option:: -e, --end-date=DATE
 
-    This option specifies the end DATE to flashback in the dd-mm-yyyy:hh:mi:ss (e.g. 28-04-2022:14:10:00) format. It finds transactions that have committed before the specified time. 
+    This option specifies the end date to flashback in the dd-mm-yyyy:hh:mi:ss (e.g. 28-04-2022:14:10:00) format. It finds transactions that have committed before the specified time.
 
     If no start date is specified, the start date is set to the value 10 minutes before the end date. Also, if an end date is not specified, the end date is set to 10 minutes after the start date.
     If neither start date nor end date is set, transactions performed up to 10 minutes before the current time are searched for. ::

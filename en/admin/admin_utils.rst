@@ -3349,7 +3349,7 @@ The following shows [options] available with the **cubrid vacuumdb** utility.
 flashback
 ---------
 
-The **cubrid flashback** utility is used to get SQL statements to flashback a specific transaction, and can only be executed by the **DBA** user. The system parameter **supplemental_log** must be turned on, and flashback is supported only for DML executed after the **supplemental_log** is set. ::
+The **cubrid flashback** utility is used to get SQL statements to flashback a specific committed transaction, and can only be executed by the **DBA** user. The system parameter **supplemental_log** must be turned on, and flashback is supported only for DML executed after the **supplemental_log** is set. ::
 
     cubrid flashback [options] database_name owner_name.class_name1 [owner_name.class_name2, ...]
 
@@ -3359,9 +3359,9 @@ The **cubrid flashback** utility is used to get SQL statements to flashback a sp
 
 *   *database_name*: The name of the database to flashback.
 
-*   *owner_name.class_name*: The classes to flashback to. When specifying the class_name, it must be specified along with the owner name.
+*   *owner_name.class_name*: The classes to flashback. When specifying the class_name, it must be specified along with the owner name.
 
-The following shows what information is displayed when users run "cubrid flashback demodb dba.tbl".
+The following shows what information is displayed when a user runs "cubrid flashback demodb dba.tbl".
 
 ::
 
@@ -3381,13 +3381,13 @@ The following shows what information is displayed when users run "cubrid flashba
 
     delete from [dba.tbl] where [a] = 10 limit 1;
 
-In the above example, when the flashback is performed, it displays information about transactions performed within the specified time period. If users do not specify a period, the transaction history up to 10 minutes before the current time is displayed. When the user selects a transaction ID, SQL statements are provided to perform flashback on DML executed within the selected transaction.
+In the above example, when the flashback is executed, it displays information about transactions performed within the specified time period. If users do not specify a period, the transaction history up to 10 minutes before the current time is displayed. When the user selects a transaction ID, SQL statements are provided to perform flashback on DML executed within the selected transaction.
 
-Each column's meaning is as following.
+Each column's meaning in the **Flashback Summary** is as following.
 
     *   Transaction id : The identifier of the transaction
     *   User name : Transaction user
-    *   Start time : Transaction start time
+    *   Start time : Transaction start time (approximate time)
     *   End time :  Transaction end time
     *   Num_insert : Number of insert operations executed within the transaction
     *   Num_update : Number of update operations executed within the transaction
@@ -3411,7 +3411,25 @@ The following shows [options] available with the **cubrid flashback** utility.
 
     This option is used to specify the user who executed the SQL statements to flashback. If the **-u** option is not specified, then it searches for statements executed by all users. ::
 
-        cubrid flashback -u dba demodb dba.tbl
+        $ csql -u public demodb
+
+        csql> CREATE TABLE tbl (a int);
+        csql> INSERT INTO tbl VALUES (10);
+
+        csql> CALL login ('dba', '') ON CLASS db_user;
+
+        csql> INSERT INTO public.tbl VALUES (20);
+
+        $ cubrid flashback -u public demodb dba.tbl
+
+        Flashback Summary
+        Number of Transaction: 1
+        Start date - End date: 03-05-2022:10:52:56 - 03-05-2022:11:02:56
+        Transaction id  User name                         Start time            End time              Num_insert  Num_update  Num_delete  Table
+                   135  PUBLIC                            03-05-2022:11:02:40   03-05-2022:11:02:41            1           0           0  public.tbl
+        Enter transaction id (press -1 to quit): 135
+
+        delete from [public.tbl] where [a] = 10 limit 1;
 
 .. option:: -p, --dba-password=PASSWORD
 
@@ -3434,7 +3452,7 @@ The following shows [options] available with the **cubrid flashback** utility.
 
 .. option:: --detail
 
-    This option is used to display the detailed information for each SQL statement. Transaction ID, transaction user, and original SQL statements are displayed with the SQL statements for flashback.
+    This option is used to display the detailed information for each SQL statement. Transaction ID, transaction user, and original SQL statements are displayed with the SQL statements for flashback. The original SQL statement is not the exact syntax user executed. It simply represents the user-executed statement as INSERT/UPDATE/DELETE statements that are executed row-by-row. For example, An INSERT … SELECT statement is expressed as multiple INSERT statements.
     If the **--detail** option is not specified, only the SQL statements for flashback is displayed. ::
 
         cubrid flashback --detail demodb dba.tbl

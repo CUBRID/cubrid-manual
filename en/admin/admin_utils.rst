@@ -3349,17 +3349,17 @@ The following shows [options] available with the **cubrid vacuumdb** utility.
 flashback
 ---------
 
-The **cubrid flashback** utility is used to get SQL statements to flashback a specific committed transaction, and can only be executed by the **DBA** user. The system parameter **supplemental_log** must be turned on, and flashback is supported only for DML executed after the **supplemental_log** is set. ::
+The **cubrid flashback** utility is used to get SQL statements to rewind a specific committed transaction, and can only be executed by the **DBA** user. The system parameter **supplemental_log** must be turned on, and flashback is supported only for DML executed after the **supplemental_log** is set. ::
 
     cubrid flashback [options] database_name owner_name.class_name1 [owner_name.class_name2, ...]
 
 *   **cubrid**: An integrated utility for the CUBRID service and database management.
 
-*   **flashback**: A utility that provides statements to flashback a specific transaction.
+*   **flashback**: A utility that provides statements to rewind a specific transaction.
 
-*   *database_name*: The name of the database to flashback.
+*   *database_name*: The name of the database whose transaction is to be rewound.
 
-*   *owner_name.class_name*: The classes to flashback. When specifying the class_name, it must be specified along with the owner name.
+*   *owner_name.class_name*: The classes to rewind. When specifying the class_name, it must be specified along with the owner name.
 
 The following shows what information is displayed when a user runs "cubrid flashback demodb dba.tbl".
 
@@ -3381,7 +3381,7 @@ The following shows what information is displayed when a user runs "cubrid flash
 
     delete from [dba.tbl] where [a] = 10 limit 1;
 
-In the above example, when the flashback is executed, it displays information about transactions performed within the specified time period. If users do not specify a period, the transaction history up to 10 minutes before the current time is displayed. When the user selects a transaction ID, SQL statements are provided to perform flashback on DML executed within the selected transaction.
+In the above example, when the flashback is executed, it displays information about transactions performed within the specified time period. If users do not specify a period, the transaction history up to 10 minutes before the current time is displayed. When the user selects a transaction ID, SQL statements are provided to execute the flashback on DML executed within the selected transaction.
 
 Each column's meaning in the **Flashback Summary** is as following.
 
@@ -3395,7 +3395,7 @@ Each column's meaning in the **Flashback Summary** is as following.
     *   Table : List of tables for which DMLs have been performed within the transaction
 
 .. note:: 
-		If users attempt to flashback a table on which a trigger is created, unintended results may be obtained. Users are recommended to disable triggers on the table before flashback. For more information, see :ref:`alter-trigger`.
+		If users attempt to rewind a table on which a trigger is created, unintended results may be obtained. Users are recommended to disable triggers on the table before executing the flashback. For more information, see :ref:`alter-trigger`.
 
 The following shows [options] available with the **cubrid flashback** utility.
 
@@ -3403,13 +3403,13 @@ The following shows [options] available with the **cubrid flashback** utility.
 
 .. option:: -o, --output-file=FILE
 
-    This option is used to store the SQL statements that can flashback a specific transaction in a specified file. The file is created in the current directory. If the **-o** option is not specified, the message is displayed on a console screen. ::
+    This option is used to store the SQL statements that can rewind a specific transaction in a specified file. The file is created in the current directory. If the **-o** option is not specified, the message is displayed on a console screen. ::
 
         cubrid flashback -o db_output demodb dba.tbl
 
 .. option:: -u, --user=ID
 
-    This option is used to specify the user who executed the SQL statements to flashback. If the **-u** option is not specified, then it searches for statements executed by all users. ::
+    This option is used to specify the user who executed the SQL statements. If the **-u** option is not specified, then it searches for statements executed by all users. ::
 
         $ csql -u public demodb
 
@@ -3437,15 +3437,15 @@ The following shows [options] available with the **cubrid flashback** utility.
 
 .. option:: -s, --start-date=DATE
 
-    This option specifies the start date to flashback in the dd-mm-yyyy:hh:mi:ss (e.g. 28-04-2022:14:10:00) format. It finds transactions that started after the specified time or are in progress at the specified time among committed transactions. ::
+    This option specifies the start date in the dd-mm-yyyy:hh:mi:ss (e.g. 28-04-2022:14:10:00) format. It finds transactions that started after the specified time or are in progress at the specified time among committed transactions. ::
 
         cubrid flashback -s 28-04-2022:14:10:00 demodb dba.tbl
 
 .. option:: -e, --end-date=DATE
 
-    This option specifies the end date to flashback in the dd-mm-yyyy:hh:mi:ss (e.g. 28-04-2022:14:10:00) format. It finds transactions that have committed before the specified time.
+    This option specifies the end date in the dd-mm-yyyy:hh:mi:ss (e.g. 28-04-2022:14:10:00) format. It finds transactions that have committed before the specified time.
 
-    If no start date is specified, the start date is set to the value 10 minutes before the end date. Also, if an end date is not specified, the end date is set to 10 minutes after the start date.
+    If no start date is specified, the start date is set to the value of 10 minutes before the end date. Also, if an end date is not specified, the end date is set to 10 minutes after the start date.
     If neither start date nor end date is set, transactions performed up to 10 minutes before the current time are searched for. ::
 
         cubrid flashback -e 28-04-2022:14:10:00 demodb dba.tbl

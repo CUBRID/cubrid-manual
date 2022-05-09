@@ -42,7 +42,7 @@ The following shows how to use the cubrid management utilities. ::
         dump_tz [option]  --- Displaying timezone related information
         tde <operation> [option] <database-name> --- Managing Transparent Data Encryption (TDE)
         vacuumdb [option] <database-name>  --- Vacuuming deleted records or unnecessary mvcc related information from records in the database
-        flashback [option] <database-name> <owner_name.class_name> --- Provides statements to flashback a specific transaction.
+        flashback [option] <database-name> <owner_name.class_name> --- Provides statements to rewind a specific transaction.
 
 cubrid Utility Logging
 ----------------------

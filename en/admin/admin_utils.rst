@@ -3381,7 +3381,8 @@ The following shows what information is displayed when a user runs "cubrid flash
 
     delete from [dba.tbl] where [a] = 10 limit 1;
 
-In the above example, when the flashback is executed, it displays information about transactions performed within the specified time period. If users do not specify a period, the transaction history up to 10 minutes before the current time is displayed. When the user selects a transaction ID, SQL statements are provided to execute the flashback on DML executed within the selected transaction.
+In the above example, when the flashback is executed, it displays information about transactions performed within the specified time period. If users do not specify a period, the transaction history up to 10 minutes before the current time is displayed.
+When the user selects a transaction ID, SQL statements are provided to execute the flashback on DML executed within the selected transaction. The user must enter the transaction ID within 300 seconds which can be adjusted using the system parameter **flashback_timeout** .
 
 Each column's meaning in the **Flashback Summary** is as following.
 

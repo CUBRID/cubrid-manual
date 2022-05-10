@@ -42,7 +42,7 @@ cubrid 유틸리티의 사용법(구문)은 다음과 같다. ::
         dump_tz [option]  --- 타임존 관련 정보 출력
         tde <operation> [option] <database_name> --- TDE 암호화 관리 도구
         flashback [option] <database-name> <owner_name.class_name> --- 커밋된 특정 트랜잭션을 되돌릴 수 있도록 SQL 구문을 제공하는 도구
-        
+
 cubrid 유틸리티 로깅
 --------------------
  
@@ -3312,13 +3312,14 @@ flashback
 
     delete from [dba.tbl] where [a] = 10 limit 1;
 
-위의 예에서 **cubrid flashback** 을 실행하면 지정된 기간 내에 수행된 트랜잭션에 대한 정보를 표시한다. 사용자가 기간을 지정하지 않으면 현재 시각으로부터 10분 전까지 수행된 트랜잭션들이 표시된다. 사용자가 Transaction ID를 선택하면, 선택한 트랜잭션 내에서 실행된 DML에 대하여 되돌릴 수 있도록 SQL 구문을 제공한다.
+위의 예에서 **cubrid flashback** 을 실행하면 지정된 기간 내에 수행된 트랜잭션에 대한 정보를 표시한다. 사용자가 기간을 지정하지 않으면 현재 시각으로부터 10분 전까지 수행된 트랜잭션들이 표시된다.
+사용자가 Transaction ID를 선택하면, 선택한 트랜잭션 내에서 실행된 DML에 대하여 되돌릴 수 있도록 SQL 구문을 제공한다. 사용자는 300초 이내에 Transaction ID를 입력해야하며, 해당 제한 시간은 시스템 파라미터 **flashback_timeout** 을 통해 조절할 수 있다.
 
 **Flashback Summary** 에 표시된 각 칼럼의 의미는 다음과 같다.
 
     *   Transaction id : 트랜잭션 식별자
     *   User name : 트랜잭션을 수행한 사용자
-    *   Start time : 트랜잭션을 시작한 시간 (근삿값)
+    *   Start time : 트랜잭션을 시작한 시간 (추정시간)
     *   End time :  트랜잭션이 완료된 시간
     *   Num_insert : 트랜잭션 내에서 수행된 삽입(insert) 연산 횟수
     *   Num_update : 트랜잭션 내에서 수행된 수정(update) 연산 횟수

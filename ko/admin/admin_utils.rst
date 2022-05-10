@@ -42,6 +42,7 @@ cubrid 유틸리티의 사용법(구문)은 다음과 같다. ::
         dump_tz [option]  --- 타임존 관련 정보 출력
         tde <operation> [option] <database_name> --- TDE 암호화 관리 도구
         flashback [option] <database-name> <owner_name.class_name> --- 커밋된 특정 트랜잭션을 되돌릴 수 있도록 SQL 구문을 제공하는 도구
+        
 cubrid 유틸리티 로깅
 --------------------
  

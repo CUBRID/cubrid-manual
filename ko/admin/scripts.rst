@@ -49,10 +49,10 @@ unloaddb.sh 스크립트
 
     다음은 입력 파일 table_list.txt의 예이다. ::
 
-        table_1
-        table_2
+        public.table_1
+        public.table_2
         ..
-        table_n
+        public.table_n
 
 .. option:: -D output-directory
 

@@ -49,10 +49,10 @@ The following is [options] used in **unloaddb.sh**.
 
     The following example shows an input file (table_list.txt). ::
 
-        table_1
-        table_2
+        public.table_1
+        public.table_2
         ..
-        table_n
+        public.table_n
 
 .. option:: -D output-directory
 

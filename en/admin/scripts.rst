@@ -31,7 +31,7 @@ The following is [options] used in **unloaddb.sh**.
 
 .. option:: -u user
 
-    Specify a user account of a database to be unloaded. If this is not specified, the default is **DBA**. ::
+    Specify a user account of a database to be unloaded. If this is not specified, the default is **DBA** (The **user** must have **DBA privileges**). ::
 
         sh unloaddb.sh -u dba demodb
 

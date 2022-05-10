@@ -39,7 +39,7 @@ The following is [options] used in **unloaddb.sh**.
 
     Number of child processes to run concurrently (default: 8, maximum 16) ::
 
-        sh unloaddb.sh -4 demodb
+        sh unloaddb.sh -t 4 demodb
 
 .. option:: -i input-class-file
 

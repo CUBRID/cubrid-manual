@@ -41,7 +41,7 @@ cubrid 유틸리티의 사용법(구문)은 다음과 같다. ::
         gen_tz [option] [<database-name>]  --- 공유 라이브러리로 컴파일할 수 있는 타임존 데이터가 포함된 C 소스 파일 생성
         dump_tz [option]  --- 타임존 관련 정보 출력
         tde <operation> [option] <database_name> --- TDE 암호화 관리 도구
-
+        flashback [option] <database-name> <owner_name.class_name> --- 커밋된 특정 트랜잭션을 되돌릴 수 있도록 SQL 구문을 제공하는 도구
 cubrid 유틸리티 로깅
 --------------------
  
@@ -3273,6 +3273,138 @@ tde
 .. option:: -p, --dba-password=PASSWORD
 
     이 옵션 뒤에 오는 값은 **DBA** 의 암호이며 생략하면 프롬프트에서 입력해야 한다.
+
+.. _flashback:
+
+flashback
+---------
+
+**cubrid flashback** 유틸리티는 커밋된 트랜잭션을 되돌릴 수 있는 SQL 구문을 제공하며, **DBA** 사용자만 수행할 수 있다. **cubrid flashback** 을 수행하기 위해서는 시스템 파라미터 **supplemental_log** 를 반드시 0보다 큰 값으로 설정해야 하며, **supplemental_log** 가 설정된 후에 실행되는 DML에 대해서만 지원한다. ::
+
+    cubrid flashback [options] database_name owner_name.class_name1 [owner_name.class_name2, ...]
+
+*   **cubrid**: CUBRID 서비스 및 데이터베이스 관리를 위한 통합 유틸리티
+
+*   **flashback**: 커밋된 특정 트랜잭션을 되돌릴 수 있도록 SQL 구문을 제공하는 도구
+
+*   *database_name*: 되돌리고자 하는 트랜잭션이 수행된 데이터베이스 이름
+
+*   *owner_name.class_name*: 되돌리고자 하는 테이블 이름 리스트. 테이블 이름을 명시할 때는 해당 테이블의 소유자명도 함께 명시해야 한다.
+
+다음 예제에서는 사용자가 "cubrid flashback demodb dba.tbl"를 수행했을 때 출력되는 결과를 보여준다.
+
+::
+
+    $ csql -u dba demodb
+
+    csql> CREATE TABLE tbl (a INT);
+    csql> INSERT INTO tbl VALUES (10);
+
+    $ cubrid flashback demodb dba.tbl
+
+    Flashback Summary
+    Number of Transaction: 1
+    Start date - End date: 03-05-2022:10:52:56 - 03-05-2022:11:02:56
+    Transaction id  User name                         Start time            End time              Num_insert  Num_update  Num_delete  Table
+               135  DBA                               03-05-2022:11:02:40   03-05-2022:11:02:41            1           0           0  dba.tbl
+    Enter transaction id (press -1 to quit): 135
+
+    delete from [dba.tbl] where [a] = 10 limit 1;
+
+위의 예에서 **cubrid flashback** 을 실행하면 지정된 기간 내에 수행된 트랜잭션에 대한 정보를 표시한다. 사용자가 기간을 지정하지 않으면 현재 시각으로부터 10분 전까지 수행된 트랜잭션들이 표시된다. 사용자가 Transaction ID를 선택하면, 선택한 트랜잭션 내에서 실행된 DML에 대하여 되돌릴 수 있도록 SQL 구문을 제공한다.
+
+**Flashback Summary** 에 표시된 각 칼럼의 의미는 다음과 같다.
+
+    *   Transaction id : 트랜잭션 식별자
+    *   User name : 트랜잭션을 수행한 사용자
+    *   Start time : 트랜잭션을 시작한 시간 (근삿값)
+    *   End time :  트랜잭션이 완료된 시간
+    *   Num_insert : 트랜잭션 내에서 수행된 삽입(insert) 연산 횟수
+    *   Num_update : 트랜잭션 내에서 수행된 수정(update) 연산 횟수
+    *   Num_delete : 트랜잭션 내에서 수행된 삭제(delete) 연산 횟수
+    *   Table : 트랜잭션 내에서 DML이 수행된 테이블 이름 리스트
+
+.. note::
+		**cubrid flashback** 을 통해 되돌리려는 테이블이 :ref:`trigger-event-target` 일 경우, 사용자가 의도하지 않은 결과를 얻을 수 있다. **cubrid flashback** 을 통해 테이블에 대한 변경 사항을 되돌리기 전에 트리거를 비활성화하는 것이 좋다. 자세한 내용은 :ref:`alter-trigger` 을 참조한다.
+
+다음은 **cubrid flashback** 에서 사용하는 [options]이다.
+
+.. program:: flashback
+
+.. option:: -o, --output-file=FILE
+
+    특정 트랜잭션을 되돌리기 위한 SQL 구문들을 지정된 파일에 저장하는 옵션이며, 파일은 현재 디렉터리에 생성된다. **-o** 옵션을 지정하지 않으면 콘솔 화면에 메시지가 표시된다. ::
+
+        cubrid flashback -o db_output demodb dba.tbl
+
+.. option:: -u, --user=ID
+
+    트랜잭션을 수행한 사용자를 지정하며, 해당 사용자가 수행한 트랜잭션에 대해서만 **Flashback Summary** 에 표시된다. **-u** 옵션을 지정하지 않으면 모든 사용자에 의해 수행된 트랜잭션들이 표시된다. ::
+
+        $ csql -u public demodb
+
+        csql> CREATE TABLE tbl (a int);
+        csql> INSERT INTO tbl VALUES (10);
+
+        csql> CALL login ('dba', '') ON CLASS db_user;
+
+        csql> INSERT INTO public.tbl VALUES (20);
+
+        $ cubrid flashback -u public demodb dba.tbl
+
+        Flashback Summary
+        Number of Transaction: 1
+        Start date - End date: 03-05-2022:10:52:56 - 03-05-2022:11:02:56
+        Transaction id  User name                         Start time            End time              Num_insert  Num_update  Num_delete  Table
+                   135  PUBLIC                            03-05-2022:11:02:40   03-05-2022:11:02:41            1           0           0  public.tbl
+        Enter transaction id (press -1 to quit): 135
+
+        delete from [public.tbl] where [a] = 10 limit 1;
+
+.. option:: -p, --dba-password=PASSWORD
+
+    이 옵션 뒤에 오는 값은 **DBA** 의 암호이며 생략하면 프롬프트에서 입력해야 한다.
+
+.. option:: -s, --start-date=DATE
+
+    dd-mm-yyyy:hh:mi:ss (e.g. 28-04-2022:14:10:00) 형식으로 시작 날짜를 지정한다. 커밋된 트랜잭션 중에서 지정된 날짜 이후에 시작했거나 진행중인 트랜잭션들을 찾기 위해 사용된다. ::
+
+        cubrid flashback -s 28-04-2022:14:10:00 demodb dba.tbl
+
+.. option:: -e, --end-date=DATE
+
+    dd-mm-yyyy:hh:mi:ss (e.g. 28-04-2022:14:10:00) 형식으로 종료 날짜를 지정한다. 지정된 날짜 이전에 커밋된 트랜잭션들을 찾기 위해 사용된다.
+
+    시작 날짜를 지정하지 않으면 시작 날짜는 종료 날짜로부터 10분 전 시간으로 설정된다. 또한 종료 날짜가 지정되지 않으면 종료 날짜는 시작 날짜 10분 후 시간으로 설정된다.
+    만약 시작 날짜 및 종료 날짜가 지정되지 않으면, 현재 시각으로부터 10분 전까지 수행된 트랜잭션들이 표시된다. ::
+
+        cubrid flashback -e 28-04-2022:14:10:00 demodb dba.tbl
+
+.. option:: --detail
+
+    트랜잭션을 되돌리기 위한 각 SQL 구문들에 대해 자세한 정보를 보여준다. 트랜잭션 식별자, 트랜잭션을 수행한 사용자, 원본 SQL을 함께 제공한다. 원본 SQL은 사용자가 실행한 정확한 구문이 아니고, 단순히 행 단위로 실행되는 삽입/수정/삭제 문으로 사용자가 수행했던 구문을 나타낸 것이다. 예를 들어, INSERT ... SELECT 문은 여러 개의 삽입 문으로 표현된다.
+    **--detail** 옵션을 지정하지 않으면, 트랜잭션을 되돌리기 위해 사용할 SQL 구문만 표시된다. ::
+
+        cubrid flashback --detail demodb dba.tbl
+
+        Flashback Summary
+        Number of Transaction: 1
+        Start date - End date: 03-05-2022:10:52:56 - 03-05-2022:11:02:56
+        Transaction id  User name                         Start time            End time              Num_insert  Num_update  Num_delete  Table
+                   135  DBA                               03-05-2022:11:02:40   03-05-2022:11:02:41            1           0           0  dba.tbl
+        Enter transaction id (press -1 to quit): 135
+
+        [TRANSACTION ID] 135
+        [USER]           DBA
+        [ORIGINAL]       insert into [dba.tbl] values (10);
+        [FLASHBACK]      delete from [dba.tbl] where [a] = 10 limit 1;
+
+.. option:: --oldest
+
+    지정된 트랜잭션 내에서 수행된 SQL 구문들을 시간 순서로 표시한다. **--oldest** 옵션을 지정하지 않으면, 트랜잭션 내에서 수행된 SQL 구문들을 시간 역순으로 표시한다. ::
+
+        cubrid flashback --oldest demodb dba.tbl
+
 
 HA 명령어
 ---------

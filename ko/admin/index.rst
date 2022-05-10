@@ -127,5 +127,6 @@ CUBRID 운영
     admin_utils.rst
     config.rst
     systemtap.rst
+    scripts.rst
     troubleshoot.rst
     ddl_audit.rst

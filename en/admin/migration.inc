@@ -147,6 +147,10 @@ The following is [options] used in **cubrid unloaddb**.
 
         cubrid unloaddb --datafile-per-class demodb
 
+.. note::
+
+   To shorten the execution time of the unloaddb, it is possible to run multiple **'cubrid unloaddb'** processes concurrently for groups of different tables. (or you can use **unloaddb.sh**, refer :ref:`cubrid_scripts_unloaddb_sh`).
+
 .. _loaddb:
 
 loaddb

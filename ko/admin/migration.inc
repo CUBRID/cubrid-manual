@@ -147,6 +147,10 @@ unloaddb
 
         cubrid unloaddb --datafile-per-class demodb
 
+.. note::
+
+   언로드 시간을 단축하기 위해서 서로 다른 테이블에 대한 언로드는 동시에 실행 가능하며 **unloaddb.sh** 스크립트를 이용하면 이러한 과정을 쉽게 할 수 있다 (:ref:`cubrid_scripts_unloaddb_sh` 참고).
+
 .. _loaddb:
 
 loaddb

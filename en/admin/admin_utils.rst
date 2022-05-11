@@ -3404,7 +3404,7 @@ The following shows [options] available with the **cubrid flashback** utility.
 
 .. option:: -o, --output-file=FILE
 
-    This option is used to store the SQL statements that can rewind a specific transaction in a specified file. The file is created in the current directory. If the **-o** option is not specified, the message is displayed on a console screen. ::
+    This option is used to store the SQL statements that can rewind a specific transaction in a specified file. If the **-o** option is not specified, the message is displayed on a console screen. ::
 
         cubrid flashback -o db_output demodb dba.tbl
 

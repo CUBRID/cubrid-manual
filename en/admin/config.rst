@@ -374,6 +374,8 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               | tde_default_algorithm               | server parameter        |         | string   | AES                            |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | recovery_progress_logging_interval  | server parameter        |         | int      | 0                              |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | supplemental_log                    | client/server parameter |         | int      | 0                              |                       |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 
 .. _lpg:
@@ -2002,6 +2004,8 @@ The following are other parameters. The type and value range for each parameter 
 +-------------------------------------+--------+----------------+----------------+----------------+
 | recovery_progress_logging_interval  | int    | 0 (off)        | 0              | 3600           |
 +-------------------------------------+--------+----------------+----------------+----------------+
+| supplemental_log                    | int    | 0 (off)        | 0              | 2              |
++-------------------------------------+--------+----------------+----------------+----------------+
 
 **access_ip_control**
 
@@ -2181,6 +2185,10 @@ The following are other parameters. The type and value range for each parameter 
 **recovery_progress_logging_interval**
     
     **recovery_progress_logging_interval** is a parameter to decide whether the details of recovery are printed and configure its period in seconds. If it is set bigger than 0, the total works and remained works to do of the three phases of recovery: Analysis, Redo and Undo are printed. When this is set smaller than 5, it is set to 5.
+
+**supplemental_log**
+
+    **supplemental_log** is a parameter to determine whether information needed to support the CDC (Change Data Capture) or :ref:`flashback` is written to the log volume. CDC and flashback must be able to see how transactions logically changed the database through the physical logs. Any additional information required to interpret the physical logs is saved as **supplemental_log** . Setting this parameter bigger than 0 affects performance and log space because more logs are created and stored in addition to the existing transaction logs. If this parameter is set to 1, the information necessary to interpret DML and DDL executed by the user is logged. If it is set to 2, only information necessary to interpret the DML is logged.
 
 .. _broker-configuration:
 

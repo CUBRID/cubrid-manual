@@ -2188,7 +2188,7 @@ The following are other parameters. The type and value range for each parameter 
 
 **supplemental_log**
 
-    **supplemental_log** is a parameter to determines whether information needed to support the Changed Data Capture (CDC) or Flashback function is written to the log volume. CDC and flashback must be able to see how transactions logically changed the database through the physical logs. Any additional information required to interpret the physical logs is saved as **supplemental_log** . Setting this parameter bigger than 0 affects performance because more logs are created and stored in addition to the existing transaction logs. If this parameter is set to 1, the information necessary to interpret DML and DDL executed by the user is logged. If it is set to 2, only information necessary to interpret the DML is logged.
+    **supplemental_log** is a parameter to determines whether information needed to support the Change Data Capture (CDC) or :ref:`flashback` is written to the log volume. CDC and flashback must be able to see how transactions logically changed the database through the physical logs. Any additional information required to interpret the physical logs is saved as **supplemental_log** . Setting this parameter bigger than 0 affects performance because more logs are created and stored in addition to the existing transaction logs. If this parameter is set to 1, the information necessary to interpret DML and DDL executed by the user is logged. If it is set to 2, only information necessary to interpret the DML is logged.
 
 .. _broker-configuration:
 

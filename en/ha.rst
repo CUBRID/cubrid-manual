@@ -3515,7 +3515,7 @@ checksumdb
     
 .. option:: -n, --table-name=STRING
 
-    You can specify a table name to save checksum results. (default: db_ha_checksum)
+    You can specify a table name to save checksum results. (default: dba.db_ha_checksum)
     
 .. option:: -r, --report-only
 

@@ -3512,7 +3512,7 @@ checksumdb
 
 .. option:: -n, --table-name=STRING
 
-     체크섬 결과를 저장할 테이블명을 지정한다. (기본값: db_ha_checksum)
+     체크섬 결과를 저장할 테이블명을 지정한다. (기본값: dba.db_ha_checksum)
 
 .. option:: -r, --report-only
 

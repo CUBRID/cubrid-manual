@@ -900,7 +900,7 @@ The following are parameters related to processing error messages recorded by CU
 
 **error_log_size**
 
-    **error_log_size** is a parameter to configure the maximum number of lines per an error log file. The default value is **512M**. If it reaches up to the specified number, the *<database_name>_<date>_<time>.err.bak* file is created. 
+    **error_log_size** is a parameter to configure the maximum size per an error log file. The default value is **512M**. If it reaches up to the specified size, the *<database_name>_<date>_<time>.err.bak* file is created. 
 
 .. _lock-parameters:
 

@@ -893,7 +893,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
 **error_log_size**
 
-    **error_log_size**  는 에러 로그 파일에서 기록되는 최대 라인 수를 지정하는 파라미터로 기본값은 **512M**  이다. 에러 로그 파일의 라인 수가 이 파라미터의 설정값에 도달하면 *<database_name>_<date>_<time>.err.bak* 파일이 생성된다.
+    **error_log_size**  는 에러 로그 파일에서 기록되는 파일의 크기를 지정하는 파라미터로 기본값은 **512M**  이다. 에러 로그 파일의 크기가 이 파라미터의 설정값에 도달하면 *<database_name>_<date>_<time>.err.bak* 파일이 생성된다.
 
 .. _lock-parameters:
 

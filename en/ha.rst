@@ -761,12 +761,12 @@ See the above description of **ha_delay_limit**.
 
 This is the maximum value of the time in which a node's database server process (cub_server) waits a response from another node's replication-log-copy process (copylogdb). The default is 5(seconds). If this value is -1, this means to be infinite wait. It only works with **SYNC** log copy mode(**ha_copy_sync_mode**) parameter. 
 
-**ha_monitor_disk_failure_interval** 
+**ha_check_disk_failure_interval** 
 
-CUBRID judges the disk failure for each time which is set to the value of this parameter. The default is 30, and the unit is second.
+CUBRID judges the disk failure for each time which is set to the value of this parameter. The default is 15, and the unit is second.
 
-*   If the value of **ha_copy_log_timeout** parameter is -1, the value of **ha_monitor_disk_failure_interval** parameter is ignored and the disk failure is not judged.
-*   If the value of **ha_monitor_disk_failure_interval** parameter is smaller than the value of **ha_copy_log_timeout** parameter, the disk failure is judged for each **ha_copy_log_timeout** + 20 seconds.
+*   If the value of **ha_copy_log_timeout** parameter is -1, the value of **ha_check_disk_failure_interval** parameter is ignored and the disk failure is not judged.
+*   If the value of **ha_check_disk_failure_interval** parameter is smaller than the value of **ha_copy_log_timeout** parameter, the disk failure is judged for each **ha_copy_log_timeout** + 20 seconds.
 
 **ha_unacceptable_proc_restart_timediff**
 

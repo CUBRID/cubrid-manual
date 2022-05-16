@@ -627,10 +627,6 @@ This parameter can be modified dynamically. If you modify the value of this para
 
 **ha_db_list** is a parameter used to configure the name of the database that will run in CUBRID HA mode. The default is **NULL**. You can specify multiple databases by using a comma (,).
 
-.. note::
-
-    The host name of the member nodes specified in this parameter cannot be replaced with the IP. You should use the host names which are registered in **/etc/hosts**. 
-
 Access
 ^^^^^^
 

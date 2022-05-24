@@ -53,7 +53,7 @@ The database volume of CUBRID 11.2 is not compatible with that of CUBRID 11.1 an
 Driver Compatibility
 --------------------
 
-*   The JDBC and CCI driver of CUBRID 11.2 are compatible with the DB server of CUBRID 11.1, 10.2, 10.1, 10.0, 9.3, 9.2, 9.1, 2008 R4.4, R4.3 or R4.1.
+*   The JDBC and CCI driver of CUBRID 11.2 are compatible with the DB server of CUBRID 11.1, 11.0, 10.2, 10.1, 10.0, 9.3, 9.2, 9.1, 2008 R4.4, R4.3 or R4.1.
 *   To upgrade drivers are highly recommended.
 
 For more details on changes, see the :ref:`11_2_changes`. Users of previous versions should check the :ref:`11_2_changes` and :ref:`11_2_new_cautions` sections.
@@ -74,7 +74,7 @@ Cautions
 New Cautions
 ------------
 
-The database volume of CUBRID 11.2 is not compatible with that of CUBRID 10.2 and earlier versions.
+The database volume of CUBRID 11.2 is not compatible with that of CUBRID 11.1 and earlier versions.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Existing Cautions

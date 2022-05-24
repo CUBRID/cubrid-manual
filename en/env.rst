@@ -281,7 +281,7 @@ The connection process between the application and the DB is as follows:
 #.  The cub_broker selects a connectable CAS.
 #.  The application and CAS are connected.
 
-    In Linux, BROKER_PORT, which is used as an application, is connected to CAS through the Unix domain socket. In Windows, since the Unix domain socket cannot be used, an application and CAS are connected through a port of which the number is the sum of the corresponding CAS ID and the APPL_SERVER_PORT value set in the cubrid_broker.conf. If the APPL_SERVER_PORT value has not been set, the port value connected to the first CAS is BROKER_PORT + 1.
+    In Linux, established TCP connection between the **BROKER** and the client will be passed to the **CAS**. Therefore, there is no need for an additional network port for the application to connect to the CAS. However, in **Windows**, when an application connects to a BROKER, the BROKER delivers the network port number to connect to the available CAS to the application. After the client closing the current connection with the BROKER, it connects to the CAS with the received network port number from the BROKER. If the **APPL_SERVER_PORT** parameter is not set, the network port used by the first CAS becomes BROKER_PORT + 1.
 
     For example, if the BROKER_PORT is 33000 and the APPL_SERVER_PORT value has not been set in Windows, the ports used between the application and CAS are as follows:
 

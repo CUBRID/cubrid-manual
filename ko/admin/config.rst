@@ -2439,7 +2439,7 @@ CUBRID 설치 시 생성되는 기본 브로커 설정 파일인 **cubrid_broker
     반면 Windows에서는 모든 CAS가 독립적인 네트워크 포트를 할당받아 네트워크 연결을 기다리고 있으며, 클라이언트가 브로커에 연결하면 브로커는 가용한 CAS로 접속하기 위한 포트 번호를 클라이언트에게 전달한다. 순차적으로 클라이언트는 현재의 브로커와 네트워크 연결을 종료하고 브로커에서 전달받은 포트 번호로 CAS와 새롭게 접속을 하게된다.
 
     **APPL_SERVER_PORT** 를 별도로 설정하지 않으면 이 값은 **BROKER_PORT** 파라미터 값에 1을 더한 값이 된다.
-    예를 들어, **BROKER_PORT** 의 값이 30,000이고 **APPL_SERVER_PORT** 의 값을 설정하지 않은 상태에서 **MIN_NUM_APPL_SERVER** 의 값이 5이면 브로커 초기 구동 시 5개의 CAS가 각각 30,001~30,005의 포트를 사용한다. 같은 조건이고 **APPL_SERVER_PORT** 의 값만 35,000라면 브로커 초기 구동 시 5개의 CAS가 각각 35,000~35,004의 포트를 사용한다.  CAS의 최대 개수가 **cubrid_broker_conf** 의 **MAX_NUM_APPL_SERVER** 파라미터에 의해 제한되므로 설정할 수 있는 CAS의 통신 포트의 개수 역시 최대 **MAX_NUM_APPL_SERVER** 파라미터의 설정값으로 제한된다.
+    예를 들어, **BROKER_PORT** 의 값이 30,000이고 **APPL_SERVER_PORT** 의 값은 미설정 상태에서 **MIN_NUM_APPL_SERVER** 의 값이 5인 경우 브로커 초기 구동 시 5개의 CAS가 각각 30,001~30,005의 포트를 사용한다. 동일 조건 하에 **APPL_SERVER_PORT** 의 값만 35,000라면 브로커 초기 구동 시 5개의 CAS가 각각 35,000~35,004의 포트를 사용한다.  CAS의 최대 개수가 **cubrid_broker_conf** 의 **MAX_NUM_APPL_SERVER** 파라미터에 의해 제한되므로 설정할 수 있는 CAS의 통신 포트의 개수 역시 최대 **MAX_NUM_APPL_SERVER** 파라미터의 설정값으로 제한된다.
  
     Windows 운영체제에서 응용 클라이언트와 CUBRID 브로커 사이에 방화벽이 존재한다면 반드시 **BROKER_PORT** 및 **APPL_SERVER_PORT** 에서 설정된 통신 포트를 열어야 한다.
  

@@ -9,7 +9,7 @@
 Release Notes Information
 =========================
 
-This document includes information on CUBRID 11.2(Build Number: 11.2.0.0645-8cdfd54).
+This document includes information on CUBRID 11.2.
 
 CUBRID 11.2 includes all of the fixed errors and improved features that were detected in the CUBRID 11.0 and were applied to the previous versions.
 

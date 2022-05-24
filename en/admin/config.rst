@@ -2482,7 +2482,7 @@ Broker App. Server(CAS)
 
     **APPL_SERVER_PORT** is a parameter to designate the TCP ports of CAS that communicates with application clients (**Windows only**).
 
-    On Linux, an established TCP connection between the BROKER and the client will be passed to the CAS. Therefore, the client can communicate with the CAS without additional TCP connection requests.
+    On Linux, an established TCP connection between the BROKER and the client will be passed to the CAS. Therefore, the client can communicate with the CAS without additional TCP connection.
 
     On the other hand, in Windows, all available CASes are waiting for a connection on an independent TCP port, for example, 33001/tcp, 33002/tcp. In these circumstances, when a client connects to a BROKER, the BROKER delivers the TCP port number, for example, 33001/tcp, for connecting to an available CAS to the client. In sequence, the client terminates the current network connection with the BROKER and establishes a new connection with the CAS using the port number received from the BROKER.
 

@@ -3515,7 +3515,7 @@ checksumdb
     
 .. option:: -n, --table-name=STRING
 
-    You can specify a table name to save checksum results. The table name must include the owner's name which can only be dba. (default: dba.db_ha_checksum).
+    You can specify a table name to save checksum results. The table name must include the owner's name which can only be dba. (default: dba.db_ha_checksum)
     
 .. option:: -r, --report-only
 

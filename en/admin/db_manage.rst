@@ -52,12 +52,11 @@ An error occurs if an invalid directory path is set in the **CUBRID_DATABASES** 
 Database Volume
 ----------------
 
-The volumes of CUBRID database are classified as permanent volume, temporary volume and backup volume.
+The volumes of CUBRID database are classified as permanent volume, temporary volume, backup volume and log volume.
 
 *   In the permanent volumes,
 
     *   there are data volumes, that usually store permanent data, but can also store temporary data.
-    *   there are log volumes, that can be further classified as: one active log, archive logs and one background archiving log.
     
 *   In the temporary volumes, only temporary data is stored.
 

@@ -125,7 +125,7 @@ Call the published Java stored function as follows:
 
 .. code-block:: sql
 
-    CALL hello() INTO :Hello;
+    SELECT hello();
 
 ::
 
@@ -610,8 +610,6 @@ In CUBRID, you must use **CURSOR** as the data type when you declare a Java stor
     CREATE FUNCTION rset() RETURN CURSOR AS LANGUAGE JAVA
     NAME 'JavaSP2.TResultSet() return java.sql.ResultSet'
 
-Before the Java file returns **java.sql.ResultSet**, it is required to cast to the **CUBRIDResultSet** class and then to call the **setReturnable** () method.
-
 .. code-block:: java
 
     import java.sql.Connection;
@@ -626,12 +624,10 @@ Before the Java file returns **java.sql.ResultSet**, it is required to cast to t
         public static ResultSet TResultSet(){
             try {
                 Connection conn = DriverManager.getConnection("jdbc:default:connection:");
-                ((CUBRIDConnection)conn).setCharset("euc_kr");
                     
                 String sql = "select * from station";
                 Statement stmt=conn.createStatement();
                 ResultSet rs = stmt.executeQuery(sql);
-                ((CUBRIDResultSet)rs).setReturnable();
                     
                 return rs;
             } catch (Exception e) {
@@ -689,7 +685,7 @@ If the set type of the Java stored function/procedure in CUBRID is IN OUT, the v
 
 .. code-block:: java
 
-    public static void SetOID(cubrid.sql.CUBRID[][] set, cubrid.sql.CUBRIDOID aoid){
+    public static void SetOID(cubrid.sql.CUBRIDOID[][] set, cubrid.sql.CUBRIDOID aoid){
         Connection conn=null;
         Statement stmt=null;
         String ret="";

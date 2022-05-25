@@ -40,7 +40,7 @@ CUBRID 11.2
 
 CUBRID 11.2 **improved connectivity** by providing database link between homogeneous and heterogeneous DBMS. In addition, this version provides CDC (Change data capture) function by supporting supplemental logging that can track changed data.
 
-CUBRID 11.2 is **faster**. This version improves query optimization such as predicate pushdown and view transformation, supports Hash List Scan for all subqueries, improves performance of count(*) without conditional clause using cache and improves truncate table to further improve performance.
+CUBRID 11.2 is **faster**. This version improves query optimization such as predicate pushdown and view transformation, supports Hash List Scan for all subqueries, improves performance of count(*) without conditional clause using cache, and improves truncate table to further improve performance.
 
 CUBRID 11.2 **improves administrator convenience** by providing flashback function that can extract the original query of changed data for each transaction.
 

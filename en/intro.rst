@@ -42,7 +42,7 @@ Database Volume Structure
 
 The following diagram illustrates the CUBRID database volume structure. As you can see, the database is divided into three volumes: permanent, temporary and backup. This chapter will examine each volume and its characteristics.
 
-.. image:: /images/image2.png
+.. image:: /images/database_volume_structure.png
 
 For commands to create, add or delete the database volume, see :ref:`creating-database`, :ref:`adding-database-volume` and :ref:`deleting-database`.
 

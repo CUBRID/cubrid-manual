@@ -42,7 +42,7 @@ CUBRID는 객체 관계형 데이터베이스 관리 시스템으로서, 데이�
 
 아래 그림은 CUBRID 데이터베이스 볼륨의 구조를 도식화한 구성도이다. 데이터베이스 볼륨을 크게 영구적 볼륨, 일시적 볼륨, 백업 볼륨으로 분류하고, 아래 구성도를 참고하여 각각에 속하는 볼륨 및 특징을 살펴보기로 한다.
 
-.. image:: /images/image2.png
+.. image:: images/database_volume_structure.png
 
 데이터베이스 볼륨을 생성, 추가, 삭제하는 명령에 관해서는 :ref:`creating-database`, :ref:`adding-database-volume` 그리고 :ref:`deleting-database`\를 참고한다.
 

@@ -163,12 +163,11 @@ CUBRID Services
 Registering Services
 --------------------
 
-You can register database servers, CUBRID brokers, CUBRID Java Stored Procedure servers, CUBRID Manager(s) or CUBRID HA as CUBRID service in the configuration file ( **cubrid.conf** ). To register services, you can input for each **server**, **broker**, **javasp**, **manager** or **heartbeat** as a parameter value, and it is possible to input several values by concatenating them in comma(,).
+You can register database servers, CUBRID brokers, CUBRID Java Stored Procedure servers, CUBRID Manager(s) or CUBRID HA as CUBRID service in the configuration file ( **cubrid.conf** ). To register services, you can input for each **server**, **broker**, **manager** or **heartbeat** as a parameter value, and it is possible to input several values by concatenating them in comma(,).
 
 If you do not register any service, only master process is registered by default. It is convenient for you to view status of all related processes at a glance or start and stop the processes at once with the **cubrid** **service** utility once it is registered as CUBRID service. 
 
 - For details on CUBRID HA configuration, see :ref:`cubrid-service-util`.
-- For details on CUBRID Java Stored Procedure server configuration, see :ref:`cubrid-javasp-server-config`.
 
 The following example shows how to register database server and broker as service in the **cubrid.conf** file and enable databases ( *demodb* and *testdb* ) to start automatically at once when CUBRID server starts running.
 
@@ -180,11 +179,11 @@ The following example shows how to register database server and broker as servic
     [service]
 
     # The list of processes to be started automatically by 'cubrid service start' command
-    # Any combinations are available with server, broker, manager, javasp and heartbeat.
+    # Any combinations are available with server, broker, manager and heartbeat.
     service=server,broker
 
     # The list of database servers in all by 'cubrid service start' command.
-    # This property is effective only when the above 'service' property contains 'server' or 'javasp' keyword.
+    # This property is effective only when the above 'service' property contains 'server' keyword.
     server=demodb,testdb
 
 Starting Services

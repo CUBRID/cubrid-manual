@@ -173,12 +173,11 @@ CUBRID 서비스
 서비스 등록
 -----------
 
-사용자는 임의로 데이터베이스 서버, CUBRID 브로커, CUBRID 자바 저장 프로시저 서버, CUBRID 매니저, CUBRID HA를 데이터베이스 환경 설정 파일(cubrid.conf)에 CUBRID 서비스로 등록할 수 있다. 이를 위해 cubrid.conf의 service 파라미터 값으로 각각 server, broker, javasp, manager, heartbeat를 입력하면 되며, 이들을 쉼표(,)로 구분하여 여러 개를 같이 등록할 수 있다.
+사용자는 임의로 데이터베이스 서버, CUBRID 브로커, CUBRID 자바 저장 프로시저 서버, CUBRID 매니저, CUBRID HA를 데이터베이스 환경 설정 파일(cubrid.conf)에 CUBRID 서비스로 등록할 수 있다. 이를 위해 cubrid.conf의 service 파라미터 값으로 각각 server, broker, manager, heartbeat를 입력하면 되며, 이들을 쉼표(,)로 구분하여 여러 개를 같이 등록할 수 있다.
 
 사용자가 별도로 서비스를 등록하지 않으면, 기본적으로 마스터 프로세스(cub_master)만 등록된다. CUBRID 서비스에 등록되어 있으면 **cubrid service** 유틸리티를 사용해서 한 번에 관련된 프로세스들을 모두 구동, 정지하거나 상태를 알아볼 수 있어 편리하다.
 
 - CUBRID HA를 설정하는 방법은 :ref:`cubrid-service-util`\ 을 참고한다.
-- CUBRID 자바 저장 프로시저 서버를 설정하는 방법은 :ref:`cubrid-javasp-server-config`\ 을 참고한다.
 
 다음은 데이터베이스 환경 설정 파일에서 데이터베이스 서버와 브로커를 서비스로 등록하고, CUBRID 서비스 구동과 함께 *demodb*\ 와 *testdb*\ 라는 데이터베이스를 자동으로 시작하도록 설정한 예이다.
 
@@ -190,11 +189,11 @@ CUBRID 서비스
     [service]
 
     # The list of processes to be started automatically by 'cubrid service start' command
-    # Any combinations are available with server, broker, manager, javasp and heartbeat.
+    # Any combinations are available with server, broker, manager and heartbeat.
     service=server,broker
 
     # The list of database servers in all by 'cubrid service start' command.
-    # This property is effective only when the above 'service' property contains 'server' or 'javasp' keyword.
+    # This property is effective only when the above 'service' property contains 'server' keyword.
     server=demodb,testdb
 
 서비스 구동

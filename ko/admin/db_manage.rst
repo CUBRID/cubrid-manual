@@ -62,8 +62,7 @@ CUBRID 데이터베이스의 볼륨은 크게 영구적 볼륨, 일시적 볼륨
 *   일시적 볼륨 중
 
     *   임시 데이터를 저장할 수 있는 일시적 볼륨(temporary temp volume)이 있다.
-    *   보관 로그를 저장하는 보관 로그(archive log) 볼륨이 있다.
-    *   백그라운드에서 로그 보관 작업을 수행할 때 사용되는 백그라운드 보관 로그(background archive log) 볼륨이 있다.
+    *   보관 로그를 저장하기 위한 보관 로그(archive log) 볼륨과 백그라운드 보관 로그(background archive log) 볼륨이 있다.
 
 볼륨에 대한 자세한 내용은 :ref:`database-volume-structure`\ 를 참고한다.
 

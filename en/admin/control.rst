@@ -48,6 +48,18 @@ One of the following can be specified in <command>:
 
 ::
 
+    # cubrid.conf
+
+    [service]
+
+    ...
+
+    server=demodb,testdb
+
+    ...
+
+::
+
     % cubrid server start
 
     @ cubrid server start: demodb

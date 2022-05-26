@@ -2480,9 +2480,15 @@ Broker App. Server(CAS)
 
 **APPL_SERVER_PORT**
 
-    **APPL_SERVER_PORT** is a parameter to configure the connection port of CAS that communicates with application clients; it is used only in Windows. In Linux, the application clients and CAS use the UNIX domain socket for communication; therefore, **APPL_SERVER_PORT** is not used. The default value is determined by adding plus 1 to the **BROKER_PORT** parameter value. The number of ports used is the same as the number of CAS, starting from the specified port's number plus 1. For example, when the value of **BROKER_PORT** is 30,000 and the **APPL_SERVER_PORT** parameter value has been configured, and if the **MIN_NUM_APPL_SERVER** value is 5, five CASes uses the ports numbering between 30,001 and 30,005, respectively. The maximum number of CAS specified in the **MAX_NUM_APPL_SERVER** parameter in **cubrid_broker_conf**; therefore, the maximum number of connection ports is also determined by the value of **MAX_NUM_APPL_SERVER** parameter.
+    **APPL_SERVER_PORT** is a parameter to designate the TCP ports of CAS that communicates with application clients (**Windows only**).
 
-    On the Windows system, if a firewall exists between an application and a CUBRID broker, the communication port specified in **BROKER_PORT** and **APPL_SERVER_PORT** must be opened.
+    On Linux, an established TCP connection between the BROKER and the client will be passed to the CAS. Therefore, the client can communicate with the CAS without additional TCP connection.
+
+    On the other hand, in Windows, all available CASes are waiting for a connection on an independent TCP port, for example, 33001/tcp, 33002/tcp. In these circumstances, when a client connects to a BROKER, the BROKER delivers the TCP port number, for example, 33001/tcp, for connecting to an available CAS to the client. In sequence, the client terminates the current network connection with the BROKER and establishes a new connection with the CAS using the port number received from the BROKER.
+
+    If the **APPL_SERVER_PORT** parameter is not additionally specified, this value is the value obtained by adding 1 to the value of **BROKER_PORT**. For example, if the value of **BROKER_PORT** is 30,000 and the **APPL_SERVER_PORT** parameter has not been specified, and if the **MIN_NUM_APPL_SERVER** value is 5, then five CASes use the TCP ports between 30,001 and 30,005, respectively. On the other hand, if the value of **APPL_SERVER_PORT** is 35,000 under the same conditions, 5 CASes use TCP ports from 35,000 to 35,004. The maximum number of CAS specified in the **MAX_NUM_APPL_SERVER** parameter in **cubrid_broker_conf**; therefore, the maximum number of connection ports is also determined by the value of **MAX_NUM_APPL_SERVER** parameter.
+
+    On the Windows system, if a firewall system exists between an application and a CUBRID broker, all TCP ports specified in **BROKER_PORT** and **APPL_SERVER_PORT** must be opened.
 
     .. note::
 

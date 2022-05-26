@@ -282,9 +282,9 @@ CUBRID 기본 사용 포트
 #.  cub_broker는 연결 가능한 CAS를 선택한다.
 #.  application과 CAS가 연결된다. 
 
-    Linux에서는 application이 유닉스 도메인 소켓을 통해 CAS와 연결되므로 BROKER_PORT를 사용한다. Windows에서는 유닉스 도메인 소켓을 사용할 수 없으므로 각 CAS마다 cubrid_broker.conf에 설정된 APPL_SERVER_PORT 값을 기준으로 CAS ID를 더한 포트를 통해 연결된다. APPL_SERVER_PORT의 값이 설정되지 않으면 첫번째 CAS와 연결하는 포트 값은 BROKER_PORT + 1이 된다.
+    Linux에서는 application과 브로커의 네트워크 연결을 브로커가 CAS에 그대로 전달한다. 따라서 application이 CAS와 연결을  위한 별도의 네트워크 포트는 필요하지 않다. Windows에서는 Application이 브로커에 연결되면 브로커가 가용한 CAS에 접속하기 위한 네트워크 포트 번호를 application에 전달한다. Application은 브로커와의 연결을 종료한 후, 전달 받은 네트워크 포트 번호로 CAS와 접속하게 된다. APPL_SERVER_PORT의 값이 설정되지 않으면 첫번째 CAS가 사용하는 네트워크 포트는 BROKER_PORT + 1이 된다.
 
-    예를 들어 Windows에서 BROKER_PORT가 33000이고 APPL_SERVER_PORT 가 설정되지 않았으면 application과 CAS 사이에 사용하는 포트는 다음과 같다.
+    예를 들어 Windows에서 BROKER_PORT가 33000이고 APPL_SERVER_PORT 가 설정되지 않았으면 application과 CAS 사이에 사용되는 포트는 다음과 같다.
     
     *   application이 CAS(1)과 접속하는 포트 : 33001
     *   application이 CAS(2)와 접속하는 포트 : 33002

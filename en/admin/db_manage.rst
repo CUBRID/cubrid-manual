@@ -57,9 +57,9 @@ The volumes of CUBRID database are classified as permanent volume, temporary vol
 *   In the permanent volumes,
 
     *   there are data volumes, that usually store permanent data, but can also store temporary data.
-    *   there are log volumes, that can be further classified as: one active log, archive logs and one background archiving log.
+    *   there are log volumes, that can be further classified as: one active log.
     
-*   In the temporary volumes, only temporary data is stored.
+*   In the temporary volumes, temporary data, archive logs and one background archiving log are stored.
 
 For more details on volumes, see :ref:`database-volume-structure`.
 

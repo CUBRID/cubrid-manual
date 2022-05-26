@@ -2305,21 +2305,18 @@ Java 저장 함수/프로시저 서버 설정
 Java 저장 함수/프로시저 환경 설정
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-CUBRID에서 Java 저장 함수/프로시저를 사용하기 위해서는 CUBRID 서버가 설치되는 환경에 Java Runtime Environment (JRE) 1.6 이상 버전이 설치되어야 한다. JRE는 Developer Resources for Java Technology 사이트(`https://www.oracle.com/java/technologies <https://www.oracle.com/java/technologies>`_)에서 다운로드할 수 있다.
+CUBRID에서 Java 저장 함수/프로시저를 사용하기 위해서는 CUBRID 서버가 설치되는 환경에 Java Development Kit (JDK) 1.8 64bit 버전이 설치되어야 한다.    
+JDK는 다음의 경로에서 다운로드할 수 있다.
 
-CUBRID 64비트 버전에는 JRE 64비트 버전이 필요하고, CUBRID 32비트 버전에는 JRE 32비트 버전이 필요하다. JRE 32비트 버전이 설치된 컴퓨터에서 CUBRID 64비트 버전을 실행하면 아래와 같은 에러 메시지가 출력된다. ::
-
-    % cubrid javasp start demodb
-
-    Java 가상 머신 라이브러리를 찾을 수 없습니다:
-        Failed to get 'JVM_PATH' environment variable.
-        Failed to load libjvm from 'JAVA_HOME' environment variable:
-            /usr/java/jdk1.6.0_15/jre/lib/amd64/server/libjvm.so: cannot open shared object file: No such file or directory.
+* `OpenJDK 8 <https://openjdk.java.net/projects/jdk8/>`_
+* `Oracle JDK 8 <https://www.oracle.com/kr/java/technologies/javase/javase8-archive-downloads.html>`_
 
 JRE가 이미 설치되어 있다면, 아래와 같은 명령으로 버전을 확인한다. ::
 
-    % java -version Java(TM) SE Runtime Environment (build 1.6.0_05-b13)
-    Java HotSpot(TM) 64-Bit Server VM (build 10.0-b19, mixed mode)
+    % java -version
+    openjdk version "1.8.0_302"
+    OpenJDK Runtime Environment (build 1.8.0_302-b08)
+    OpenJDK 64-Bit Server VM (build 25.302-b08, mixed mode)
 
 **Windows 환경**
 
@@ -2327,51 +2324,33 @@ CUBRID는 Windows 환경에서 **jvm.dll** 파일을 로딩하여 Java 가상 �
 
 아래와 같이 명령어를 실행하여 **JAVA_HOME** 환경 변수를 설정하고 Java 실행 파일이 있는 디렉터리를 **Path** 환경 변수에 추가할 수 있다. GUI를 이용해서 환경 변수를 설정하는 방법은 JDBC 설치 및 설정을 참고한다.
 
-* JDK 1.6 64비트 버전을 설치하고, 환경 변수를 설정한 예 ::
+* JDK 1.8 환경 변수를 설정한 예 ::
 
-    % set JAVA_HOME=C:\jdk1.6.0
+    % set JAVA_HOME=C:\jdk1.8.0
     % set PATH=%PATH%;%JAVA_HOME%\jre\bin\server
-
-* JDK 1.6 32비트 버전을 설치하고, 환경 변수를 설정한 예 ::
-  
-    % set JAVA_HOME=C:\jdk1.6.0
-    % set PATH=%PATH%;%JAVA_HOME%\jre\bin\client
 
 SUN의 Java 가상 머신을 사용하지 않고 다른 벤더의 구현을 사용하는 경우를 포함하여 명시적으로 Java 가상 머신 (JVM)의 경로를 지정하려면 **jvm.dll** 파일의 경로를 **JVM_PATH** 환경 변수에 추가한다.
 CUBRID는 먼저 **JVM_PATH** 변수에서 **jvm.dll** 파일의 경로를 찾는다. **JVM_PATH** 가 설정되지 않았거나 파일을 로드할 수 없는 경우 위에서 설명한 **JAVA_HOME** 변수에서 **jvm.dll** 을 찾는다.
 
 *   **JVM_PATH** 환경 변수를 설정한 예 ::
     
-    % set JVM_PATH=C:\jdk1.6.0\jre\bin\server\libjvm.dll
+    % set JVM_PATH=C:\jdk1.8.0\jre\bin\server\libjvm.dll
 
 **Linux/Unix 환경**
 
 CUBRID는 Linux/Unix 환경에서 **libjvm.so** 파일을 로딩하여 Java 가상 머신을 실행시킨다. CUBRID는 먼저 **LD_LIBRARY_PATH** 환경 변수에서 **libjvm.so** 파일을 찾아 로딩한다. 만약 찾지 못하면 **JAVA_HOME** 환경 변수를 이용하여 찾는다. 리눅스의 경우 glibc 2.3.4 이상만 지원되며, 아래는 리눅스 환경 설정 파일(예: **.profile**, **.cshrc**, **.bashrc**, **.bash_profile** 등)에 환경 변수를 설정하는 예이다.
 
-*   JDK 1.6 64비트 버전을 설치하고, bash 셸에서 환경 변수를 설정한 예 ::
+*   bash 셸에서 JDK 1.8 환경 변수를 설정한 예 ::
 
-    % JAVA_HOME=/usr/java/jdk1.6.0_10
+    % JAVA_HOME=/usr/java/jdk1.8.0
     % LD_LIBRARY_PATH=$JAVA_HOME/jre/lib/amd64:$JAVA_HOME/jre/lib/amd64/server:$LD_LIBRARY_PATH
     % export JAVA_HOME
     % export LD_LIBRARY_PATH
 
-*   JDK 1.6 32비트 버전을 설치하고, bash 셸에서 환경 변수를 설정한 예 ::
+*   csh 셸에서 JDK 1.8 환경 변수를 설정한 예 ::
 
-    % JAVA_HOME=/usr/java/jdk1.6.0_10
-    % LD_LIBRARY_PATH=$JAVA_HOME/jre/lib/i386/:$JAVA_HOME/jre/lib/i386/client:$LD_LIBRARY_PATH
-    % export JAVA_HOME
-    % export LD_LIBRARY_PATH
-
-*   JDK 1.6 64비트 버전을 설치하고, csh 셸에서 환경 변수를 설정한 예 ::
-
-    % setenv JAVA_HOME /usr/java/jdk1.6.0_10
+    % setenv JAVA_HOME /usr/java/jdk1.8.0
     % setenv LD_LIBRARY_PATH $JAVA_HOME/jre/lib/amd64:$JAVA_HOME/jre/lib/amd64/server:$LD_LIBRARY_PATH
-    % set path=($path $JAVA_HOME/bin .)
-
-*   JDK 1.6 32비트 버전을 설치하고, csh 셸에서 환경 변수를 설정한 예 ::
-
-    % setenv JAVA_HOME /usr/java/jdk1.6.0_10
-    % setenv LD_LIBRARY_PATH $JAVA_HOME/jre/lib/i386:$JAVA_HOME/jre/lib/i386/client:$LD_LIBRARY_PATH
     % set path=($path $JAVA_HOME/bin .)
 
 SUN의 Java 가상 머신을 사용하지 않고 다른 벤더의 구현을 사용하는 경우를 포함하여 명시적으로 Java 가상 머신 (JVM)의 경로를 지정하려면 Java VM( **libjvm.so** ) 파일의 경로를 **JVM_PATH** 환경 변수에 추가한다.
@@ -2380,7 +2359,7 @@ CUBRID는 먼저 **JVM_PATH** 변수에서 **libjvm.so** 파일의 경로를 찾
 
 *   **JVM_PATH** 환경 변수를 설정한 예 ::
     
-    % JVM_PATH=/usr/java/jdk1.6.0_10/jre/lib/amd64/server/libjvm.so
+    % JVM_PATH=/usr/java/jdk1.8.0/jre/lib/amd64/server/libjvm.so
     % export JVM_PATH
 
 .. _cubrid-javasp-system-parameter:

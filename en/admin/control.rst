@@ -2295,21 +2295,18 @@ Configuring for CUBRID Java SP Server
 Environment Configuration for Java Stored Function/Procedure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To use Java-stored functions/procedures in CUBRID, you must have JRE (Java Runtime Environment) 1.6 or later installed in the environment where the CUBRID server is installed. You can download JRE from the Developer Resources for Java Technology (`https://www.oracle.com/java/technologies <https://www.oracle.com/java/technologies>`_).
+To use Java-stored functions/procedures in CUBRID, you must have JDK (Java Development Kit) 1.8 64bit installed in the environment where the CUBRID server is installed. 
+You can download JDK at the following links
 
-CUBRID 64-bit needs a 64-bit Java Runtime Environment, and CUBRID 32-bit needs a 32-bit Java Runtime Environment. For example, when you run CUBRID 64-bit in the system in which a 32-bit JAVA Runtime Environment is installed, the following error may occur. ::
-
-    % cubrid javasp start demodb
-
-    Java VM library is not found:
-        Failed to get 'JVM_PATH' environment variable.
-        Failed to load libjvm from 'JAVA_HOME' environment variable:
-            /usr/java/jdk1.6.0_15/jre/lib/amd64/server/libjvm.so: cannot open shared object file: No such file or directory.
+* `OpenJDK 8 <https://openjdk.java.net/projects/jdk8/>`_
+* `Oracle JDK 8 <https://www.oracle.com/java/technologies/javase/javase8-archive-downloads.html>`_
 
 Execute the following command to check the JRE version if you have it already installed in the system. ::
 
-    % java -version Java(TM) SE Runtime Environment (build 1.6.0_05-b13)
-    Java HotSpot(TM) 64-Bit Server VM (build 10.0-b19, mixed mode)
+    % java -version
+    openjdk version "1.8.0_302"
+    OpenJDK Runtime Environment (build 1.8.0_302-b08)
+    OpenJDK 64-Bit Server VM (build 25.302-b08, mixed mode)
 
 **Windows Environment**
 
@@ -2317,51 +2314,33 @@ For Windows, CUBRID loads the **jvm.dll** file to run the Java Virtual Machine. 
 
 You can configure the **JAVA_HOME** environment variable and add the directory in which the Java executable file is located to **Path**, by executing the command as follows: For information on configuring environment variables using GUI, see Installing and Configuring JDBC.
 
-*   An example of installing 64 Bit JDK 1.6 and configuring the environment variables ::
+*   An example of configuring the JDK 1.8 environment variables ::
 
-    % set JAVA_HOME=C:\jdk1.6.0
+    % set JAVA_HOME=C:\jdk1.8.0
     % set PATH=%PATH%;%JAVA_HOME%\jre\bin\server
-
-*   An example of installing 32 Bit JDK 1.6 and configuring the environment variables ::
-
-    % set JAVA_HOME=C:\jdk1.6.0
-    % set PATH=%PATH%;%JAVA_HOME%\jre\bin\client
 
 If you want to specify the path of Java Virtual Machine (JVM) explicitly including cases to use other vendor's implementation instead of Sun's JVM, add the path of the **jvm.dll** file to the **JVM_PATH** variable during the installation.
 CUBRID first looks for the **jvm.dll** file in the **JVM_PATH** variable. if **JVM_PATH** is not set or if the file cannot be loaded, it looks for the file in the **JAVA_HOME** variable as described above.
 
 *   An example of configuring the **JVM_PATH** environment variable ::
     
-    % set JVM_PATH=C:\jdk1.6.0\jre\bin\server\libjvm.dll
+    % set JVM_PATH=C:\jdk1.8.0\jre\bin\server\libjvm.dll
 
 **Linux/UNIX Environment**
 
 For Linux/UNIX environment, CUBRID loads the **libjvm.so** file to run the Java Virtual Machine. CUBRID first locates the **libjvm.so** file from the **LD_LIBRARY_PATH** environment variable and then loads it. If it cannot find the file, it uses the **JAVA_HOME** environment variable. For Linux, glibc 2.3.4 or later versions are supported. The following example shows how to configure the Linux environment variable (e.g., **.profile**, **.cshrc**, **.bashrc**, **.bash_profile**, etc.).
 
-*   An example of installing 64 Bit JDK 1.6 and configuring the environment variables in a bash shell ::
+*   An example of installing JDK 1.8 and configuring the environment variables in a bash shell ::
 
-    % JAVA_HOME=/usr/java/jdk1.6.0_10
+    % JAVA_HOME=/usr/java/jdk1.8.0
     % LD_LIBRARY_PATH=$JAVA_HOME/jre/lib/amd64:$JAVA_HOME/jre/lib/amd64/server:$LD_LIBRARY_PATH
     % export JAVA_HOME
     % export LD_LIBRARY_PATH
 
-*   An example of installing 32 Bit JDK 1.6 and configuring the environment variables in a bash shell ::
+*   An example of installing JDK 1.8 and configuring the environment variables in a csh shell ::
 
-    % JAVA_HOME=/usr/java/jdk1.6.0_10
-    % LD_LIBRARY_PATH=$JAVA_HOME/jre/lib/i386/:$JAVA_HOME/jre/lib/i386/client:$LD_LIBRARY_PATH
-    % export JAVA_HOME
-    % export LD_LIBRARY_PATH
-
-*   An example of installing 64 Bit JDK 1.6 and configuring the environment variables in a csh shell ::
-
-    % setenv JAVA_HOME /usr/java/jdk1.6.0_10
+    % setenv JAVA_HOME /usr/java/jdk1.8.0
     % setenv LD_LIBRARY_PATH $JAVA_HOME/jre/lib/amd64:$JAVA_HOME/jre/lib/amd64/server:$LD_LIBRARY_PATH
-    % set path=($path $JAVA_HOME/bin .)
-
-*   An example of installing 32 Bit JDK 1.6 and configuring the environment variables in a csh shell ::
-
-    % setenv JAVA_HOME /usr/java/jdk1.6.0_10
-    % setenv LD_LIBRARY_PATH $JAVA_HOME/jre/lib/i386:$JAVA_HOME/jre/lib/i386/client:$LD_LIBRARY_PATH
     % set path=($path $JAVA_HOME/bin .)
 
 If you want to specify the path of Java Virtual Machine (JVM) explicitly including cases to use other vendor's implementation instead of Sun's JVM, add the path of the **libjvm.so** file to the **JVM_PATH** variable during the installation.
@@ -2370,7 +2349,7 @@ CUBRID first looks for the **libjvm.so** file in the **JVM_PATH** variable. if *
 
 *   An example of configuring the **JVM_PATH** environment variable ::
     
-    % JVM_PATH=/usr/java/jdk1.6.0_10/jre/lib/amd64/server/libjvm.so
+    % JVM_PATH=/usr/java/jdk1.8.0/jre/lib/amd64/server/libjvm.so
     % export JVM_PATH
 
 .. _cubrid-javasp-system-parameter:

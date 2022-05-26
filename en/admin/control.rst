@@ -159,12 +159,11 @@ One of the following can be specified in <command>:
 
 ::
 
-    % cubrid javasp start
+::
+
+    % cubrid javasp start demodb
 
     @ cubrid javasp start: demodb
-    ++ cubrid javasp start: success
-
-    @ cubrid javasp start: testdb
     ++ cubrid javasp start: success
 
 .. _control-cubrid-services:

@@ -157,12 +157,9 @@ CUBRID 자바 저장 프로시저 (Java SP) 서버 프로세스를 제어하기 
 
 ::
 
-    % cubrid javasp start
+    % cubrid javasp start demodb
 
     @ cubrid javasp start: demodb
-    ++ cubrid javasp start: success
-
-    @ cubrid javasp start: testdb
     ++ cubrid javasp start: success
 
 .. _control-cubrid-services:

@@ -44,7 +44,7 @@ One of the following can be specified in <command>:
 *   status: check status of a database server process. 
 
 | Every command can specify a database name (**[database_name]**) as an argument.
-| If the database name is not specified, the **status** command displays status information of the Java stored procedure server of every currently running database server.
+| If the database name is not specified, the **status** command displays the currently running database servers' information, and the commands except **status** refer to the database names in the **server** property of the **[service]** section of **cubrid.conf**.
 
 ::
 
@@ -143,7 +143,7 @@ One of the following can be specified in <command>:
 *   status: check status of a Java Stored Procedure server process.
 
 | Every command can specify a database name (**[database_name]**) as an argument.
-| If the database name is not specified, the **status** command displays status information of the Java stored procedure server for all running databases.
+| If the database name is not specified, the **status** command displays status information of the Java stored procedure server of every currently running database server.
 
 ::
 

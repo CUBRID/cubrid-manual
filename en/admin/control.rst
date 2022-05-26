@@ -2301,7 +2301,7 @@ Additionally, The server's PID, port number, and the applied JVM option are show
 Starting the CUBRID Java SP Server together when the database server starts
 ------------------------------------------------------------------------------------------
 
-| If **java_stored_procedure** set to yes for the corresponding database, 
+| If **java_stored_procedure** is set to yes for the corresponding database, 
 | When the database server starts/stops, the Java stored procedure server is started/stopped.
 | The following is an example of Java stored procedure server is started together when the database server starts.
 

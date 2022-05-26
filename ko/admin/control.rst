@@ -2295,6 +2295,56 @@ CUBRID 자바 저장 프로시저 서버 상태 확인
     -Xrs
     -------------------------------------------------
 
+
+.. _cubrid-javasp-with-server:
+
+데이터베이스 서버 구동 시 CUBRID 자바 저장 프로시저 서버 시작
+---------------------------------------------------------------
+
+| **cubrid.conf** 파일에서 해당하는 데이터베이스에 대해 **java_stored_procedure** 설정값이 yes인 경우 
+| 데이터베이스 서버 시작 시 자바 저장 프로시저 서버를 시작하고, 데이터베이스 서버 종료 시 자바 저장 프로시저 서버를 종료한다.    
+| 다음은 데이터베이스 서버 구동 시 자바 저장 프로시저가 함께 시작하는 예시이다.
+
+::
+
+    # cubrid.conf
+
+    ...
+
+    [@demodb]
+    java_stored_procedure=yes
+    
+    [@testdb]
+    java_stored_procedure=no
+
+    ...
+
+::
+
+    -- demodb에 대해 java_stored_procedure 파라미터가 yes로 설정
+    % cubrid server start demodb
+    
+    @ cubrid server start: demodb
+
+    This may take a long time depending on the amount of restore works to do.
+    CUBRID 11.2
+
+    Calling java stored procedure is allowed
+
+::
+
+    -- testdb에 대해 java_stored_procedure 파라미터가 no로 설정
+    % cubrid server start testdb
+    
+    @ cubrid server start: testdb
+
+    This may take a long time depending on the amount of restore works to do.
+    CUBRID 11.2
+
+    java_stored_procedure system parameter is not enabled
+    Calling java stored procedure is not allowed
+
+
 .. _cubrid-javasp-server-config:
 
 Java 저장 함수/프로시저 서버 설정
@@ -2380,71 +2430,6 @@ CUBRID는 먼저 **JVM_PATH** 변수에서 **libjvm.so** 파일의 경로를 찾
 +-------------------------------------+--------+----------------+--------+--------+
 
 이 파라미터에 대한 자세한 사항은 :ref:`cubrid-conf` 를 참고한다.
-
-.. _cubrid-javasp-service-util:
-
-cubrid service에 CUBRID 자바 저장 프로시저 서버 등록
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-CUBRID service에 javasp를 등록하면, **cubrid service** 유틸리티를 사용하여 등록된 모든 자바 저장 프로시저 서버 프로세스 (javasp 프로세스)를 한 번에 시작, 중지 또는 서버의 상태를 확인이 가능하다.
-
-- 먼저 **cubrid.conf** 파일의 [**service**] 섹션의 **service** 파라미터에 **javasp** 를 추가한다.
-- 다음으로 데이터베이스에 대한 javasp 서버를 등록하기 위해 [**service**] 섹션의 **server** 파라미터에 데이터베이스 이름을 추가한다. **server** 파라미터는 데이터베이스 서버와 공유하는 것을 참고한다. javasp 서버는 동일한 데이터베이스 이름을 가진 데이터베이스 서버에 종속된다.
-- 마지막으로 **java_stored_procedure**를 yes로 설정하여 해당 데이터베이스에 대한 **javasp** 서버 구동을 활성화한다.
-
-다음은 **cubrid.conf** 파일에서 **javasp** 서버를 서비스로 등록하는 방법을 보여준다.
-*demodb*와 *testdb*는 모두 **server** 파라미터에 추가되어 있지만, **java_stored_procedure**가 yes로 설정된 demodb만 **cubrid service start** 명령으로 시작된다.
-
-::
-
-    # cubrid.conf
-
-    ...
-
-    [service]
-
-    ...
-
-    service=broker,server,javasp
-
-    # The list of database servers in all by 'cubrid service start' command.
-    # This property is effective only when the above 'service' property contains 'server' or 'javasp' keyword.
-    server=demodb,testdb
-
-    ...
-
-    [common]
-
-    ...
-
-    [@demodb]
-    java_stored_procedure=yes
-
-    [@testdb]
-    java_stored_procedure=no
-
-::
-
-    % cubrid service start
-    
-    @ cubrid master start
-    ++ cubrid master start: success
-    @ cubrid server start: demodb
-
-    This may take a long time depending on the amount of restore works to do.
-    CUBRID 11.0
-    
-    ++ cubrid server start: success
-    @ cubrid server start: testdb
-
-    This may take a long time depending on the amount of recovery works to do.
-    CUBRID 11.0
-
-    ++ cubrid server start: success
-    @ cubrid javasp start: demodb
-    ++ cubrid javasp start: success
-    @ cubrid broker start
-    ++ cubrid broker start: success
 
 .. _cubrid-javasp-server-log:
 

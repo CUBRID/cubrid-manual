@@ -77,23 +77,23 @@ CUBRID 11.2의 데이터베이스 볼륨은 CUBRID 11.1 및 그 이전 버전의
 
 CUBRID 11.2의 데이터베이스 볼륨은 CUBRID 11.1 및 그 이전 버전의 볼륨과 호환되지 않는다. 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-User schema 개념 도입으로 사용자별로 동일한 객체명을 사용할 수 있도록 변경됨
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+User schema 개념 도입으로 사용자 별로 동일한 객체명을 사용할 수 있으며, 지원에 따라 다음 동작이 변경됨
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * 객체명에 "."(dot)을 허용하지 않는다.
 * 질의 또는 유틸리티 명령어 사용 시 "[사용자명].객체명"으로 사용해야 한다. (단, 로그인 된 사용자의 객체를 질의하는 경우에는 사용자명을 생략할 수 있음)
 * info schema, show full tables 결과에 사용자명 포함되도록 변경되었다.
-* 11.2 이전 loaddb 파일은 11.2에서 수행할 수 있도록 user명.table명으로 수정하거나 -no-user-specified-name  옵션을 설정하여 loaddb를 수행할 수있다.
+* 11.2 이전 loaddb 파일은 11.2에서 수행할 수 있도록 user명.table명으로 수정하거나 -no-user-specified-name  옵션을 설정하여 loaddb를 수행할 수 있다.
 
-JavaSP의 defaultconnection 사용 시 다음 함수 및 동작 변경됨
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+JavaSP의 "jdbc:default:connection:" 또는 getDefaultConnection()  사용 시 다음 함수 및 동작 변경됨
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * java.sql.DatabaseMetaData의 모든 function 지원하지 않는다.
 * java.sql.Connection의 createClob(), createBlob() 지원하지 않는다.
 * java.sql.Statement의 addBatch(), clearBatch(), executeBatch(), setMaxRows(), cancel() 지원하지 않는다.
-* 하나의 prepare에 여러개의 질의 수행을 지원하지 않는다.
-* cursor는 not holdable로 변경되었다.
-* Result는 not updatable, not scrollable, not sensitive로 변경되었다.
+* 하나의 prepare (또는 execute)에 multiple sql을지원하지 않는다.
+* cursor는 non-holdable로 변경되었다.
+* ResultSet은 non-updatable, non-scrollable, non-sensitive로 변경되었다.
 
 Truncate table 수행 시 FK의 set null 또는 cascade가 있는 경우 동작이 변경됨
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -106,10 +106,10 @@ Alter change/modify 시 기입하지 않은 컬럼 속성은 유지되게 변경
 
 Multiple SQL는 반드시 세미콜론으로 구분하도록 변경됨
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-CCI Driver 디렉토리가 $CUBRID/lib, $CUBRID/include에서 $CUBRID/cci/lib, $CUBRID/cci/include로 각각 변경됨
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+CUBRID 패키지내의 CCI Driver 디렉토리가 $CUBRID/lib, $CUBRID/include에서 $CUBRID/cci/lib, $CUBRID/cci/include로 각각 변경됨
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* LD_LIBRARY_PATH에 $CUBRID/cci/lib를 추가해야 한다.
+* CCI 사용 시 환경변수 LD_LIBRARY_PATH에 $CUBRID/cci/lib를 추가해야 한다.
 
 백업 시 압축(-z, --compress) 옵션이 기본으로 설정되도록 변경됨
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

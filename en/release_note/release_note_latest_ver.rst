@@ -76,6 +76,44 @@ New Cautions
 
 The database volume of CUBRID 11.2 is not compatible with that of CUBRID 11.1 and earlier versions.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+By introducing the concept of user schema, the same object name can be used for each user, and the behavior is changed as follows
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+ * "." (dot) is not allowed in the object name.
+ * When using a query or utility command, it must be used as "[user name].object name". (However, the user name can be omitted when querying the object of the logged-in user)
+ * Changed to include user name in info schema and show full tables results.
+ * The loaddb file prior to 11.2 must be modified to "user name.table name" so that it can be executed in 11.2, or loaddb can be executed by setting the -no-user-specified-name option.
+
+The following functions and behavior changed when using defaultconnection in JavaSP
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+ * All functions of java.sql.DatabaseMetaData are not supported.
+ * createClob() and createBlob() of java.sql.Connection are not supported.
+ * addBatch(), clearBatch(), executeBatch(), setMaxRows() and cancel() of java.sql.Statement are not supported.
+ * Multiple SQL is not supported for one prepare (or execute).
+ * The cursor is changed to non-holdable.
+ * The ResultSet is changed to non-scrollable, non-sensitive and non-updatable.
+
+The behavior of the TRUNCATE TABLE changed if there is set null or cascade of FK
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Column properties not written during alter change/modify are changed to be maintained, and auto_increment and on update properties cannot be removed with the alter statement
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Changed to handle an error if only the column name exists in the where clause
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+ * If used in the form of UPDATE t1 SET c1 = 9 WHERE c1; , an error occurs.
+
+Multiple SQL must be separated by semicolons
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The CCI Driver directory in the CUBRID package is changed from $CUBRID/lib and $CUBRID/include to $CUBRID/cci/lib and $CUBRID/cci/include, respectively
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* When using CCI, $CUBRID/cci/lib must be added to LD_LIBRARY_PATH in the environment variable.
+
+Changed Compression (-z, --compress) option to default on backup
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+System catalog information changed or added due to the addition of new features
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Existing Cautions
 -----------------

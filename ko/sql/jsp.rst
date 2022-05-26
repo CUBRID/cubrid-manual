@@ -174,6 +174,7 @@ Java 저장 함수/프로시저에서 데이터베이스에 접근하기 위해�
             String sql="INSERT INTO ATHLETE(NAME, GENDER, NATION_CODE, EVENT)" + "VALUES (?, ?, ?, ?)";
             
             try{
+                Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
                 Connection conn = DriverManager.getConnection("jdbc:default:connection:");
                 PreparedStatement pstmt = conn.prepareStatement(sql);
            
@@ -211,6 +212,7 @@ Java 저장 함수/프로시저에서 데이터베이스에 접근하기 위해�
             ResultSet rs = null;
 
             try {
+                Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
                 conn = DriverManager.getConnection("jdbc:CUBRID:localhost:33000:demodb:::","","");
 
                 String sql = "select line_id, line from line";
@@ -590,6 +592,7 @@ CUBRID 데이터베이스에 Phone 클래스를 생성한다.
         public static void Phone(String name, String phoneno) throws Exception{
             String sql="INSERT INTO PHONE(NAME, PHONENO)"+ "VALUES (?, ?)";
             try{
+                Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
                 Connection conn = DriverManager.getConnection("jdbc:default:connection:");
                 PreparedStatement pstmt = conn.prepareStatement(sql);
            
@@ -625,6 +628,7 @@ CUBRID 데이터베이스에 Phone 클래스를 생성한다.
             int i;
 
             try{
+                Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
                 conn = DriverManager.getConnection("jdbc:CUBRID:localhost:33000:demodb:::","","");
 
                 CallableStatement cs;
@@ -718,6 +722,7 @@ Java 파일에서는 **java.sql.ResultSet** 을 반환하기 전에 **CUBRIDResu
     public class JavaSP2 {
         public static ResultSet TResultSet(){
             try {
+                Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
                 Connection conn = DriverManager.getConnection("jdbc:default:connection:");
                 ((CUBRIDConnection)conn).setCharset("euc_kr");
                     
@@ -750,6 +755,7 @@ Java 파일에서는 **java.sql.ResultSet** 을 반환하기 전에 **CUBRIDResu
             Connection conn = null;
      
             try {
+                Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
                 conn = DriverManager.getConnection("jdbc:CUBRID:localhost:31001:tdemodb:::","","");
      
                 CallableStatement cstmt = conn.prepareCall("?=CALL rset()");

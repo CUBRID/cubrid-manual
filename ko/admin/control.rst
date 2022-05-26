@@ -2357,7 +2357,7 @@ JDK는 다음의 경로에서 다운로드할 수 있다.
 * `OpenJDK 8 <https://openjdk.java.net/projects/jdk8/>`_
 * `Oracle JDK 8 <https://www.oracle.com/kr/java/technologies/javase/javase8-archive-downloads.html>`_
 
-JRE가 이미 설치되어 있다면, 아래와 같은 명령으로 버전을 확인한다. ::
+JDK가 이미 설치되어 있다면, 아래와 같은 명령으로 JRE 버전을 확인한다. ::
 
     % java -version
     openjdk version "1.8.0_302"

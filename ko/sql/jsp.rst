@@ -682,7 +682,7 @@ Java 저장 함수/프로시저의 리턴 값과 IN/OUT의 데이터 타입에 �
             }
             return temp;
         }
-    }
+    }``
 
 .. code-block:: sql
 
@@ -835,11 +835,11 @@ CUBRID 저장 프로시저에서 OID 타입의 값을 IN/OUT으로 사용할 경
             stmt.close();
             conn.close();
             
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.err.println("SQLException:" + e.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-            system.err.println("Exception:" + e.getMessage());
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+            System.err.println("SQLException:" + e1.getMessage());
+        } catch (Exception e2) {
+            e2.printStackTrace();
+            system.err.println("Exception:" + e2.getMessage());
         }
     }

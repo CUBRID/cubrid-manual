@@ -839,11 +839,11 @@ In case of using the OID type value for IN/OUT in CUBRID, use the value passed f
             stmt.close();
             conn.close();
             
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.err.println("SQLException:" + e.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-            system.err.println("Exception:" + e.getMessage());
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+            System.err.println("SQLException:" + e1.getMessage());
+        } catch (Exception e2) {
+            e2.printStackTrace();
+            system.err.println("Exception:" + e2.getMessage());
         }
     }

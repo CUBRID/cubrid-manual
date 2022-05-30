@@ -273,12 +273,6 @@ The below is a syntax to only add or change a comment without rebuilding an inde
     
     ALTER INDEX i_game_medal ON game COMMENT 'change index comment' ;
 
-The following is a syntax of renaming an index.
-
-.. code-block:: sql
-
-    ALTER INDEX old_index_name ON table_name RENAME TO new_index_name [COMMENT 'index_comment_string'] ;
-
 The following is a syntax to change the status of an index to **INVISIBLE**/**VISIBLE**. When an index is set as **INVISIBLE**, queries will be executed as like the index does not exist. In this way, the performance of the index may be tested and the impact of its removal be evaluated without actually dropping the index.
 
 .. code-block:: sql

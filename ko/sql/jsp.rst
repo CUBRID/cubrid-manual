@@ -740,7 +740,7 @@ CUBRID에서는 **java.sql.ResultSet** 을 반환하는 Java 저장 함수/프�
             Connection conn = null;
      
             try {
-                conn = DriverManager.getConnection("jdbc:default:connection:");
+                conn = DriverManager.getConnection("jdbc:CUBRID:localhost:33000:demodb:::","","");
      
                 CallableStatement cstmt = conn.prepareCall("?=CALL rset()");
                 cstmt.registerOutParameter(1, Types.JAVA_OBJECT);
@@ -828,7 +828,7 @@ CUBRID 저장 프로시저에서 OID 타입의 값을 IN/OUT으로 사용할 경
             System.out.println("query:"+ query);
 
             while(rs.next()) {
-                oid[0]=(CUBRIDOID) rs.getObject(1);
+                oid[0] = (CUBRIDOID) rs.getObject(1);
                 System.out.println("oid:" + oid[0].getTableName());
             }
             

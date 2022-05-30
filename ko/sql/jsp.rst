@@ -828,8 +828,8 @@ CUBRID 저장 프로시저에서 OID 타입의 값을 IN/OUT으로 사용할 경
             System.out.println("query:"+ query);
 
             while(rs.next()) {
-                oid[0]=(CUBRIDOID)rs.getObject(1);
-                System.out.println("oid:"+oid[0].getTableName());
+                oid[0]=(CUBRIDOID) rs.getObject(1);
+                System.out.println("oid:" + oid[0].getTableName());
             }
             
             stmt.close();

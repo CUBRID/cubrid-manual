@@ -832,8 +832,8 @@ In case of using the OID type value for IN/OUT in CUBRID, use the value passed f
             System.out.println("query:"+ query);
 
             while(rs.next()) {
-                oid[0]=(CUBRIDOID)rs.getObject(1);
-                System.out.println("oid:"+oid[0].getTableName());
+                oid[0] = (CUBRIDOID) rs.getObject(1);
+                System.out.println("oid:" + oid[0].getTableName());
             }
             
             stmt.close();

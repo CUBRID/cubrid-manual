@@ -12,15 +12,17 @@ DELETE
 ::
  
     <DELETE single table>
-    DELETE [FROM] table_name [ WHERE <search_condition> ] [LIMIT row_count]
+    DELETE [FROM] [schema_name.]table_name [ WHERE <search_condition> ] [LIMIT row_count]
      
     <DELETE multiple tables FROM ...>
-    DELETE table_name[, table_name] ... FROM <table_specifications> [ WHERE <search_condition> ]
+    DELETE [schema_name.]table_name [{, [schema_name.]table_name}] FROM <table_specifications> [ WHERE <search_condition> ]
      
     <DELETE FROM multiple tables USING ...>
-    DELETE FROM table_name[, table_name] ... USING <table_specifications> [ WHERE <search_condition> ]
+    DELETE FROM [schema_name.]table_name [{, [schema_name.] table_name}] USING <table_specifications> [ WHERE <search_condition> ]
 
 *   <*table_specifications*>: **SELECT** 문의 **FROM** 절과 같은 형태의 구문을 지정할 수 있으며, 하나 이상의 테이블을 지정할 수 있다.
+
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
 
 *   *table_name*: 삭제할 데이터가 포함되어 있는 테이블의 이름을 지정한다. 테이블의 개수가 한 개일 경우 앞의 **FROM** 키워드를 생략할 수 있다.
 

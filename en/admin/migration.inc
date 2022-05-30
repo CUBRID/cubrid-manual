@@ -44,7 +44,7 @@ The following is [options] used in **cubrid unloaddb**.
 
 .. option:: -i, --input-class-file FILE
 
-    Unload all schema and index of all tables; however, only the data of specified tables in this file are unloaded. ::
+    Unload all schema and index of all tables; however, only the data of specified tables in this file are unloaded. If the schema of the user to be unloaded and the schema of the table are different, the table name must be prefixed with the schema name. ::
 
         cubrid unloaddb -i table_list.txt demodb
 
@@ -306,7 +306,7 @@ The following table shows [options] available with the **cubrid loaddb** utility
 
 .. option:: -t, --table=TABLE
 
-    This option specifies the table name if a table name header is omitted in the data file to be loaded. ::
+    This option specifies the table name if a table name header is omitted in the data file to be loaded. The table name must be prefixed with the schema name. ::
 
         cubrid loaddb -u dba -d demodb_objects -t tbl_name newdb
 
@@ -371,6 +371,18 @@ The following table shows [options] available with the **cubrid loaddb** utility
 
         cubrid loaddb --trigger-file=demodb_triggers -d demodb_objects newdb
 
+.. option:: --no-user-specified-name
+
+    Files unloaded in a version older than 11.2 can be loaded in version 11.2 only if the **--no-user-specified-name** option is used.
+    
+    ::
+
+        cubrid loaddb -u dba -s demodb_schema -d demodb_objects --no-user-specified-name demodb
+
+.. warning::
+
+    The **--no-user-specified-name** option must not be used to load a file unloaded in version 11.2 or after version 11.2.
+
 .. warning::
 
     The **--no-logging** option enables to load data file quickly when **loaddb** is executed by not storing transaction logs; however, it has risk, which data cannot be recovered in case of errors occurred such as incorrect file format or system failure. In this case, you must rebuild database to solve the problem. Thus, in general, it is not recommended to use this option exception of building a new database which does not require data recovery. If you use this option, **loaddb** does not check the errors like unique violation. To use this option, you should consider these issues.
@@ -406,28 +418,28 @@ A command line begins with a percent character (%) and consists of **%class** an
         class_id:
             integer
 
-    The *class_name* specified by the **%id** command is the class name defined in the database, and *class_id* is the numeric identifier which is assigned for object reference.
+    The *class_name* specified by the **%id** command is the class name defined in the database, and *class_id* is the numeric identifier which is assigned for object reference. The **class_name** must be prefixed with the schema name and enclosed in square brackets ([ ]).
 
     ::
 
-        %id employee 2
-        %id office 22
-        %id project 23
-        %id phone 24
+        %id [public.employee] 21
+        %id [public.office] 22
+        %id [public.project] 23
+        %id [public.phone] 24
 
 *   Specifying the Class and Attribute
 
     You can specify the classes (tables) and attributes (columns) upon loading data by using the **%class** command. The data line should be written based on the order of attributes specified. When a class name is provided by using the **-t** option while executing the **cubrid loaddb** utility, you don't have to specify the class and attribute in the data file. However, the order of writing data must comply with the order of the attribute defined when creating a class. ::
 
-        %class class_name ( attr_name [attr_name... ] )
+        %class [schema_name.class_name] ( attr_name [attr_name... ] )
 
     The schema must be pre-defined in the database to be loaded.
 
-    The *class_name* specified by the **%class** command is the class name defined in the database and the *attr_name* is the name of the attribute defined.
+    The *class_name* specified by the **%class** command is the class name defined in the database and the *attr_name* is the name of the attribute defined. The class name must be prefixed with the schema name and enclosed in square brackets ([ ]).
 
     The following example shows how to specify a class and three attributes by using the **%class** command to enter data into a class named *employee*. Three pieces of data should be entered on the data lines after the **%class** command. For this, see :ref:`Configuring Reference Relation <conf-reference-relation>`. ::
 
-        %class employee (name age department)
+        %class [public.employee] (name age department)
 
 Data Line
 +++++++++
@@ -442,7 +454,7 @@ Data for each attribute must be separated by at least one space and be basically
 
     ::
 
-        %class employee (name)
+        %class [public.employee] (name)
         'jordan' 
         'james'  
         'garnett'
@@ -454,7 +466,7 @@ Data for each attribute must be separated by at least one space and be basically
 
     ::
 
-        %class employee (name)
+        %class [public.employee] (name)
         1: 'jordan' 
         2: 'james'  
         3: 'garnett' 
@@ -471,20 +483,20 @@ Data for each attribute must be separated by at least one space and be basically
              class_name
              class_id
 
-    Specify a class name or a class id after the **@** sign, and an instance number after a vertical line (|). Spaces are not allowed before and after a vertical line (|).
+    Specify a class name or a class id after the **@** sign, and an instance number after a vertical line (|). Spaces are not allowed before and after a vertical line (|). The table name must be prefixed with the schema name.
 
     The following example shows how to load class instances into the *paycheck* class. The *name* attribute references an instance of the *employee* class. As in the last line, data is loaded as **NULL** if you configure the reference relation by using an instance number not specified earlier. ::
 
-        %class paycheck(name department salary)
-        @employee|1   'planning'   8000000   
-        @employee|2   'planning'   6000000  
-        @employee|3   'sales'   5000000  
-        @employee|4   'development'   4000000
-        @employee|5   'development'   5000000
+        %class [public.paycheck] (name department salary)
+        @[public.employee]|1   'planning'   8000000   
+        @[public.employee]|2   'planning'   6000000  
+        @[public.employee]|3   'sales'   5000000  
+        @[public.employee]|4   'development'   4000000
+        @[public.employee]|5   'development'   5000000
 
     Since the id 21 was assigned to the *employee* class by using the **%id** command in the :ref:`Assigning an Identifier to a Class <assign-id-to-class>` section, the above example can be written as follows: ::
 
-        %class paycheck(name department salary)
+        %class [public.paycheck] (name department salary)
         @21|1   'planning'   8000000   
         @21|2   'planning'   6000000  
         @21|3   'sales'   5000000  
@@ -543,3 +555,8 @@ The following steps describes migration scenario that can be applied while the e
 .. warning::
 
     When using the TDE feature in CUBRID 11, it does not provide backward compatibility. So, the unloaded file in CUBRID 11 cannot be loaded into a lower version if more the one TDE table exists.
+
+.. warning:: 
+
+   Data unloaded from a version older than 11.2 can be loaded from version 11.2 or version 11.2 or later only if the --no-user-specified-name option is used.
+   The --no-user-specified-name option should not be used when loading data unloaded in version 11.2 or after version 11.2.

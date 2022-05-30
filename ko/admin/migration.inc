@@ -44,7 +44,7 @@ unloaddb
 
 .. option:: -i, --input-class-file=FILE
 
-    모든 테이블의 스키마와 인덱스를 언로드하되, 파일에 명시된 테이블의 데이터만 언로드한다. ::
+    모든 테이블의 스키마와 인덱스를 언로드하되, 파일에 명시된 테이블의 데이터만 언로드한다. 언로딩할 사용자의 스키마와 테이블의 스키마가 다른 경우 테이블 이름은 스키마 이름을 접두사로 사용해야 한다. ::
 
         cubrid unloaddb -i table_list.txt demodb
 
@@ -302,7 +302,7 @@ loaddb
 
 .. option:: -t, --table=TABLE
 
-    로딩할 데이터 파일에 테이블 이름 헤더가 생략되어 있는 경우, 이 옵션 뒤에 테이블 이름을 지정한다. ::
+    로딩할 데이터 파일에 테이블 이름 헤더가 생략되어 있는 경우, 이 옵션 뒤에 테이블 이름을 지정한다. 테이블 이름은 스키마 이름을 접두사로 사용해야 한다. ::
 
         cubrid loaddb -u dba -d demodb_objects -t tbl_name newdb
 
@@ -367,6 +367,18 @@ loaddb
 
         cubrid loaddb --trigger-file=demodb_triggers -d demodb_objects newdb
 
+.. option:: --no-user-specified-name
+
+    11.2 이전 버전에서 언로드된 파일은 **--no-user-specified-name** 옵션을 사용하는 경우에만 11.2 버전에서 로드할 수 있다.
+    
+    ::
+
+        cubrid loaddb -u dba -s demodb_schema -d demodb_objects --no-user-specified-name demodb
+
+.. warning::
+
+    **--no-user-specified-name** 옵션은 11.2버전 또는 11.2 이후 버전에서 언로드된 파일을 로드할 때 사용하면 안 된다.
+
 .. warning::
 
     **--no-logging** 옵션을 사용하면 **loaddb** 를 수행하면서 트랜잭션 로그를 저장하지 않으므로 데이터 파일을 빠르게 로드할 수 있다. 그러나 로드 도중 파일 형식이 잘못되거나 시스템이 다운되는 등의 문제가 발생했을 때 데이터를 복구할 수 없으므로 데이터베이스를 새로 구축해야 한다. 즉, 데이터를 복구할 필요가 없는 새로운 데이터베이스를 구축하는 경우를 제외하고는 사용하지 않도록 주의한다. 이 옵션을 사용하면 고유 위반 등의 오류를 검사하지 않아 기본 키에 값이 중복되는 경우 등이 발생할 수 있으므로, 사용 시 이러한 문제를 반드시 감안해야 한다.
@@ -402,28 +414,28 @@ CUBRID에서는 주석은 두 개의 연속된 하이픈(--)을 이용하여 처
         class_id:
             integer
 
-    **%id** 명령어에 의해 명시된 *class_name* 은 해당 데이터베이스에 정의된 클래스 이름이며, *class_id* 는 객체 참조를 위해 부여한 숫자형 식별자를 의미한다.
+    **%id** 명령어에 의해 명시된 *class_name* 은 해당 데이터베이스에 정의된 클래스 이름이며, *class_id* 는 객체 참조를 위해 부여한 숫자형 식별자를 의미한다. 클래스 이름은 스키마 이름을 접두사로 사용하고, 대괄호([ ])로 묶어야 한다.
 
     ::
 
-        %id employee 2
-        %idoffice 22
-        %id project 23
-        %id phone 24
+        %id [public.employee] 21
+        %id [public.office] 22
+        %id [public.project] 23
+        %id [public.phone] 24
 
 *   클래스 및 속성 명시
 
     **%class** 명령어를 이용하여 데이터가 로딩될 클래스(테이블) 및 속성(칼럼)을 명시하며, 명시된 속성의 순서에 따라 데이터 라인이 작성되어야 한다. **cubrid loaddb** 유틸리티를 실행할 때 **-t** 옵션으로 클래스 이름을 제공하는 경우에는 데이터 파일에 클래스 및 속성을 명시하지 않아도 된다. 단, 데이터가 작성되는 순서는 클래스 생성 시의 속성 순서를 따라야 한다. ::
 
-    %class class_name ( attr_name [attr_name... ] )
+    %class [schema_name.class_name] ( attr_name [attr_name... ] )
 
 데이터를 로딩하고자 하는 데이터베이스에는 이미 스키마가 정의되어 있어야 한다.
 
-**%class** 명령어에 의해 명시된 *class_name* 은 해당 데이터베이스에 정의된 클래스 이름이며, *attr_name* 는 정의된 속성 이름을 의미한다.
+**%class** 명령어에 의해 명시된 *class_name* 은 해당 데이터베이스에 정의된 클래스 이름이며, *attr_name* 는 정의된 속성 이름을 의미한다. 클래스 이름은 스키마 이름을 접두사로 사용하고, 대괄호([ ])로 감싸야 한다.
 
 다음은 *employee* 라는 클래스에 데이터를 입력하기 위하여 **%class** 명령으로 클래스 및 3개의 속성을 명시한 예제이다. **%class** 명령 다음에 나오는 데이터 라인에서는 3개의 데이터가 입력되어야 하며, 이는 :ref:`참조 관계 설정 <conf-reference-relation>`\을 참조한다. ::
 
-    %class employee (name age department)
+    %class [public.employee] (name age department)
 
 데이터 라인
 +++++++++++
@@ -438,7 +450,7 @@ CUBRID에서는 주석은 두 개의 연속된 하이픈(--)을 이용하여 처
 
     ::
 
-        %class employee (name)
+        %class [public.employee] (name)
         'jordan' 
         'james'  
         'garnett'
@@ -450,7 +462,7 @@ CUBRID에서는 주석은 두 개의 연속된 하이픈(--)을 이용하여 처
 
     ::
 
-        %class employee (name)
+        %class [public.employee] (name)
         1: 'jordan' 
         2: 'james'  
         3: 'garnett' 
@@ -467,20 +479,20 @@ CUBRID에서는 주석은 두 개의 연속된 하이픈(--)을 이용하여 처
              class_name
              class_id
 
-    **@** 다음에는 클래스명 또는 클래스 id를 명시하고, 수직바(|) 다음에는 인스턴스 번호를 명시한다. 수직바(|)의 양쪽에는 공백을 허용하지 않는다.
+    **@** 다음에는 클래스명 또는 클래스 id를 명시하고, 수직바(|) 다음에는 인스턴스 번호를 명시한다. 수직바(|)의 양쪽에는 공백을 허용하지 않는다. 테이블 이름은 스키마 이름을 접두사로 사용해야 한다.
 
     다음은 *paycheck* 클래스에 인스턴스를 입력하는 예제이며, *name* 속성은 *employee* 클래스의 인스턴스를 참조한다. 마지막 라인과 같이 앞에서 정의되지 아니한 인스턴스 번호를 이용하여 참조 관계를 설정하는 경우 해당 데이터는 **NULL** 로 입력된다. ::
 
-        %class paycheck(name department salary)
-        @employee|1   'planning'   8000000   
-        @employee|2   'planning'   6000000  
-        @employee|3   'sales'   5000000  
-        @employee|4   'development'   4000000
-        @employee|5   'development'   5000000
+        %class [public.paycheck] (name department salary)
+        @[public.employee]|1   'planning'   8000000   
+        @[public.employee]|2   'planning'   6000000  
+        @[public.employee]|3   'sales'   5000000  
+        @[public.employee]|4   'development'   4000000
+        @[public.employee]|5   'development'   5000000
 
     :ref:`클래스에 식별자 부여 <assign-id-to-class>`\ 에서 **%id** 명령어로 *employee* 클래스에 21이라는 식별자를 부여했으므로, 위의 예를 다음과 같이 작성할 수 있다. ::
 
-        %class paycheck(name department salary)
+        %class [public.paycheck] (name department salary)
         @21|1   'planning'   8000000   
         @21|2   'planning'   6000000  
         @21|3   'sales'   5000000  
@@ -539,3 +551,8 @@ CUBRID에서는 주석은 두 개의 연속된 하이픈(--)을 이용하여 처
 .. warning::
  
     CUBRID 11버전에서 TDE 기능을 사용할 경우 하위호환성을 제공하지 않아, 언로드된 파일로 더 낮은 버전에서 로드할 수 없다.
+
+.. warning:: 
+
+   11.2 이전 버전에서 언로드된 데이터는 --no-user-specified-name 옵션을 사용하는 경우에만 11.2 버전 또는 11.2 이후 버전에서 로드할 수 있다.
+   11.2 버전 또는 11.2 이후 버전에서 언로드된 데이터를 로드할 때는 --no-user-specified-name 옵션을 사용하면 안 된다.

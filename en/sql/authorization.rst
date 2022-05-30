@@ -100,7 +100,7 @@ In CUBRID, the smallest grant unit of authorization is a table. You must grant a
 
 You don't need to grant authorization individually because the members of the granted group have the same authorization. The access to the (virtual) table created by a **PUBLIC** user is allowed to all users. You can grant access authorization to a user by using the **GRANT** statement. ::
 
-    GRANT operation [ { ,operation } ... ] ON table_name [ { ,table_name } ... ]
+    GRANT operation [ { ,operation } ... ] ON [schema_name.]table_name [ { , [schema_name.]table_name } ... ]
     TO user [ { ,user } ... ] [ WITH GRANT OPTION ] ; 
 
 * *operation*: Specifies an operation that can be used when granting authorization. The following table shows operations.
@@ -114,6 +114,7 @@ You don't need to grant authorization individually because the members of the gr
     *   **EXECUTE**: Allows to call table methods or instance methods.
     *   **ALL PRIVILEGES**: Includes all permissions described above.
 
+* *schema_name*: Specifies the schema name of the table or virtual table. If omitted, the schema name of the user is used.
 * *table_name*: Specifies the name of a table or virtual table to be granted.
 * *user*: Specifies the name of a user (group) to be granted. Enter the login name of the database user or **PUBLIC**, a system-defined user. If **PUBLIC** is specified, all database users are granted with the permission.
 * **WITH GRANT OPTION**: **WITH GRANT OPTION** allows the grantee of authorization to grant that same authorization to another user.
@@ -159,10 +160,11 @@ You can revoke authorization using the **REVOKE** statement. The authorization g
 
 If the authorization (**WITH GRANT OPTION**) is revoked from the grantor, the authorization granted to the grantee by that grantor is also revoked. ::
 
-    REVOKE operation [ { , operation } ... ] ON table_name [ { , class_name } ... ]
+    REVOKE operation [ { , operation } ... ] ON [schema_name.]table_name [ { , [schema_name.]table_name } ... ]
     FROM user [ { , user } ... ] ;
 
 *   *operation*: Indicates an operation that can be used when granting authorization (see **Syntax** in :ref:`granting-authorization` for details).
+*   *schema_name*: Specifies the schema name of the table or virtual table. If omitted, the schema name of the user is used.
 *   *table_name*: Specifies the name of the table or virtual table to be granted.
 *   *user*: Specifies the name of the user (group) to be granted.
 
@@ -191,8 +193,9 @@ ALTER ... OWNER
 
 Database Administrator (**DBA**) or a member of the **DBA** group can change the owner of table, view, trigger, and Java stored functions/procedures by using the following query. ::
 
-    ALTER [TABLE | CLASS | VIEW | VCLASS | TRIGGER | PROCEDURE | FUNCTION] name OWNER TO user_id;
+    ALTER [TABLE | CLASS | VIEW | VCLASS | TRIGGER | PROCEDURE | FUNCTION] [schema_name.]name OWNER TO user_id;
 
+*   *schema_name*: Specifies the schema of the object. If omitted, the schema name of the user is used.
 *   *name*: The name of schema object of which owner is to be changed
 *   *user_id*: User ID
 
@@ -274,12 +277,12 @@ This method is an instance method that can call each user instance, and it is us
 
 **change_owner() method**
 
-As a class method of **db_authorizations** class, this method is used to change the owner of a class. The name of a class for which you want to change the owner, and the name of a new owner are given as arguments. At this time, the class and owner that are specified as an argument must exist in a database. Otherwise, an error occurs. **change_owner( )** can be called only by **DBA** or members of **DBA** group. The **ALTER ... OWNER** query has the same role as the method. See :ref:`change-owner`.
+As a class method of **db_authorizations** class, this method is used to change the owner of a class. The name of a class for which you want to change the owner, and the name of a new owner are given as arguments. The table name must be prefixed with the schema name. If omitted, the schema name of the user is used. At this time, the class and owner that are specified as an argument must exist in a database. Otherwise, an error occurs. **change_owner( )** can be called only by **DBA** or members of **DBA** group. The **ALTER ... OWNER** query has the same role as the method. See :ref:`change-owner`.
 
 .. code-block:: sql
 
-    -- Change the owner of table_1 to user_4
-    CALL change_owner ('table_1', 'user_4') ON CLASS db_authorizations;
+    -- Change the owner of table_1 owned by user_1 to user_4
+    CALL change_owner ('user_1.table_1', 'user_4') ON CLASS db_authorizations;
 
 The following example shows a **CALL** statement that calls the find_user method defined in the system table **db_user**. It is called to determine whether the database user entered as the **find_user** exists. The first statement calls the table method defined in the **db_user** class. The name (**db_user** in this case) is stored in x if the user is registered in the database. Otherwise, **NULL** is stored.
 

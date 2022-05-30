@@ -11,15 +11,17 @@ You can delete records in the table by using the **DELETE** statement. You can s
 ::
  
     <DELETE single table>
-    DELETE [FROM] table_name [ WHERE <search_condition> ] [LIMIT row_count]
+    DELETE [FROM] [schema_name.]table_name [ WHERE <search_condition> ] [LIMIT row_count]
      
     <DELETE multiple tables FROM ...>
-    DELETE table_name[, table_name] ... FROM <table_specifications> [ WHERE <search_condition> ]
+    DELETE [schema_name.]table_name [{, [schema_name.]table_name}] FROM <table_specifications> [ WHERE <search_condition> ]
      
     <DELETE FROM multiple tables USING ...>
-    DELETE FROM table_name[, table_name] ... USING <table_specifications> [ WHERE <search_condition> ]
+    DELETE FROM [schema_name.]table_name [{, [schema_name.]table_name}] USING <table_specifications> [ WHERE <search_condition> ]
 
 *   <*table_specifications*>: You can specify the statement such as **FROM** clause of the **SELECT** statement and one or more tables can be specified.
+
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the user is used.
 
 *   *table_name*: Specifies the name of a table where the data to be deleted is contained. If the number of table is one, the **FROM** keyword can be omitted.
 

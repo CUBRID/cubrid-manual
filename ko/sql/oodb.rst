@@ -60,7 +60,7 @@ INHERIT 절
     INHERIT resolution [ {, resolution }_ ]
 
     resolution:
-    { column_name | method_name } OF superclass_name [ AS alias ]
+    { column_name | method_name } OF [schema_name.]superclass_name [ AS alias ]
 
 **INHERIT** 구문에 상속하고 싶은 수퍼클래스의 속성이나 메서드 이름을 지정한다. **AS** 절을 사용하여 새로운 이름으로 상속받을 수도 있으므로, 다중 상속 구문에서 이름 충돌이 발생할 경우에서 충돌을 해결할 수 있다.
 
@@ -75,12 +75,12 @@ ADD SUPERCLASS 절
     .
     .
     .
-    ADD SUPERCLASS [ user_name.]class_name [ { , [ user_name.]class_name }_ ]
+    ADD SUPERCLASS [schema_name.]superclass_name [ { , [schema_name.]superclass_name }_ ]
     [ INHERIT resolution [ {, resolution }_ ] ] [ ; ]
     resolution:
-    { column_name | method_name } OF superclass_name [ AS alias ]
+    { column_name | method_name } OF [schema_name.]superclass_name [ AS alias ]
 
-수퍼클래스를 추가할 클래스의 이름을 첫 번째 *class_name* 에 지정한다. 위 구문을 사용하여 수퍼클래스의 속성과 메서드를 상속할 수 있다.
+추가할 수퍼클래스의 이름을 *superclass_name* 에 지정한다. 위 구문을 사용하여 수퍼클래스의 속성과 메서드를 상속할 수 있다.
 
 새로운 수퍼클래스를 추가할 경우 이름 충돌이 발생할 수 있다. 데이터베이스 시스템의 의해서 이름 충돌이 자동으로 해결될 수 없는 경우, **INHERIT** 구문을 사용하여 수퍼클래스에서 상속받을 속성이나 메서드를 지정할 수 있다. 충돌이 발생한 속성이나 메서드를 모두 상속 받기 위해서는 별칭을 사용할 수 있다. 수퍼클래스에서 발생하는 이름 충돌에 대한 자세한 설명은 :ref:`class-conflict-resolution`\ 을 참조한다.
 
@@ -99,13 +99,13 @@ DROP SUPERCLASS 절
     .
     .
     .
-    DROP SUPERCLASS class_name [ { , class_name }_ ]
+    DROP SUPERCLASS [schema_name.]superclass_name [ { , [schema_name.]superclass_name }_ ]
     [ INHERIT resolution [ {, resolution }_ ] ] [ ; ]
      
     resolution:
-    { column_name | method_name } OF superclass_name [ AS alias ]
+    { column_name | method_name } OF [schema_name.]superclass_name [ AS alias ]
 
-첫 번째 *class_name* 에는 수정할 클래스의 이름을 지정하고 두 번째 *class_name* 에는 삭제할 수퍼클래스의 이름을 지정한다. 수퍼클래스의 삭제에 의해 이름 충돌이 발생할 경우, 해결 방법은 :ref:`class-conflict-resolution` 을 참조한다.
+삭제할 수퍼클래스의 이름을 *superclass_name* 에 지정한다. 수퍼클래스의 삭제에 의해 이름 충돌이 발생할 경우, 해결 방법은 :ref:`class-conflict-resolution` 을 참조한다.
 
 다음은 *female_event* 클래스가 *event* 클래스를 상속받은 예이다.
 
@@ -145,11 +145,11 @@ DROP SUPERCLASS 절
 
 다음에서 충돌과 관련하여 논의하고 있는 사항은 속성과 메서드에 공통적으로 적용된다. ::
 
-    ALTER [ class_type ] class_name alter_clause
+    ALTER [ class_type ] [schema_name.]class_name alter_clause
     [ INHERIT resolution [ {, resolution }_ ] ] [ ; ]
 
     resolution:
-    { column_name | method_name } OF superclass_name [ AS alias ]
+    { column_name | method_name } OF [schema_name.]superclass_name [ AS alias ]
 
 수퍼클래스 충돌
 ---------------

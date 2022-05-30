@@ -41,10 +41,10 @@ SELECT
 
     <correlation> ::= [AS] <identifier> [(<identifier_comma_list>)]
      
-    <single_table_spec> ::= [ONLY] <table_name> |
-                          ALL <table_name> [ EXCEPT <table_name> ]
+    <single_table_spec> ::= [ONLY] [schema_name.]table_name |
+                          ALL [schema_name.]table_name [ EXCEPT [schema_name.]table_name ]
      
-    <metaclass_specification> ::= CLASS <class_name>
+    <metaclass_specification> ::= CLASS [schema_name.]class_name
      
     <join_table_specification> ::=
         {
@@ -71,6 +71,8 @@ SELECT
     *   *expression_comma_list* : *expression* 은 칼럼 이름이나 경로 표현식(예: *tbl_name.col_name*), 변수, 테이블 이름이 될 수 있으며 산술 연산을 포함하는 일반적인 표현식도 모두 사용될 수 있다. 쉼표(,)는 리스트에서 개별 표현식을 구분하는데 사용된다. 조회하고자 하는 칼럼 또는 연산식에 대해 **AS** 키워드를 사용하여 별칭(alias)를 지정할 수 있으며, 지정된 별칭은 칼럼 이름으로 사용되어 **GROUP BY**, **HAVING**, **ORDER BY** 절 내에서 사용될 수 있다. 칼럼의 위치 인덱스(position)는 칼럼이 명시된 순서대로 부여되며, 시작 값은 1이다.
 
         *expression*\ 에는 **AVG**, **COUNT**, **MAX**, **MIN**, **SUM** 과 같이 조회된 데이터를 조작하는 집계 함수가 사용될 수 있다. 
+
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
 
 *   *table_name*.\*: 테이블 이름을 지정한다. \*을 사용하면 명시한 테이블의 모든 칼럼을 지정하는 것과 같다.
 
@@ -163,10 +165,10 @@ FROM 절
      
     <correlation> ::= [AS] <identifier> [(<identifier_comma_list>)]
      
-    <single_table_spec> ::= [ONLY] <table_name> |
-                          ALL <table_name> [EXCEPT <table_name>]
+    <single_table_spec> ::= [ONLY] [schema_name.]table_name |
+                          ALL [schema_name.]table_name [EXCEPT [schema_name.]table_name]
      
-    <metaclass_specification> ::= CLASS <class_name>
+    <metaclass_specification> ::= CLASS [schema_name.]class_name
      
 
 *   <*select_expressions*>: 조회하고자 하는 칼럼 또는 연산식을 하나 이상 지정할 수 있으며, 테이블 내 모든 칼럼을 조회할 때에는 * 를 지정한다. 조회하고자 하는 칼럼 또는 연산식에 대해 **AS** 키워드를 사용하여 별칭(alias)를 지정할 수 있으며, 지정된 별칭은 칼럼 이름으로 사용되어 **GROUP BY**, **HAVING**, **ORDER BY** 절 내에서 사용될 수 있다. 칼럼의 위치 인덱스(position)는 칼럼이 명시된 순서대로 부여되며, 시작 값은 1이다.
@@ -1166,7 +1168,7 @@ FOR UPDATE
     SELECT ... [FOR UPDATE [OF <spec_name_comma_list>]]
 
         <spec_name_comma_list> ::= <spec_name> [, <spec_name>, ... ]
-            <spec_name> ::= table_name | view_name 
+            <spec_name> ::= [schema_name.]table_name | [schema_name.]view_name 
          
 * <*spec_name_comma_list*>: **FROM** 절에서 참조하는 테이블/뷰들의 목록
 

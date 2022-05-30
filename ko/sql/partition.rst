@@ -65,7 +65,7 @@
 
 테이블은 **CREATE** 또는 **ALTER** 문에서 **PARTITION BY RANGE** 절을 사용하여 분할될 수 있다. ::
 
-    CREATE TABLE table_name (
+    CREATE TABLE [schema_name.]table_name (
        ...
     )
     PARTITION BY RANGE ( <partitioning_key> ) (
@@ -74,7 +74,7 @@
         ... 
     )
     
-    ALTER TABLE table_name 
+    ALTER TABLE [schema_name.]table_name 
     PARTITION BY RANGE ( <partitioning_key> ) (
         PARTITION partition_name VALUES LESS THAN ( <range_value> ) [COMMENT 'comment_string'] ,
         PARTITION partition_name VALUES LESS THAN ( <range_value> ) [COMMENT 'comment_string'] ,
@@ -138,13 +138,13 @@
 
 **CREATE** 또는 **ALTER** 문에서 **PARTITION BY HASH** 절을 사용하여 해시 분할을 할 수 있다. ::
 
-    CREATE TABLE table_name (
+    CREATE TABLE [schema_name.]table_name (
        ...
     )
     PARTITION BY HASH ( <partitioning_key> )
     PARTITIONS ( number_of_partitions )
 
-    ALTER TABLE table_name 
+    ALTER TABLE [schema_name.]table_name 
     PARTITION BY HASH (<partitioning_key>)
     PARTITIONS (number_of_partitions)
 
@@ -174,7 +174,7 @@
 
 **CREATE** 또는 **ALTER** 문에서 **PARTITION BY LIST** 절을 사용하여 리스트 분할을 할 수 있다. ::
 
-    CREATE TABLE table_name (
+    CREATE TABLE [schema_name.]table_name (
       ...
     )
     PARTITION BY LIST ( <partitioning_key> ) (
@@ -183,7 +183,7 @@
       ... 
     )
     
-    ALTER TABLE table_name
+    ALTER TABLE [schema_name.]table_name
     PARTITION BY LIST ( <partitioning_key> ) (
       PARTITION partition_name VALUES IN ( <values_list> ) [COMMENT 'comment_string'],
       PARTITION partition_name VALUES IN ( <values_list> ) [COMMENT 'comment_string'],
@@ -243,7 +243,7 @@
 
 .. code-block:: sql
 
-    SHOW CREATE TABLE table_name;
+    SHOW CREATE TABLE [schema_name.]table_name;
     SELECT class_name, partition_name, COMMENT FROM db_partition WHERE class_name ='table_name';
 
 또는 CSQL 인터프리터에서 테이블의 스키마를 출력하는 ;sc 명령으로 인덱스의 커멘트를 확인할 수 있다.
@@ -345,8 +345,9 @@
 
 분할 테이블을 일반 테이블로 변경하려면 **ALTER TABLE** 문을 이용한다. ::
 
-    ALTER {TABLE | CLASS} table_name REMOVE PARTITIONING
+    ALTER {TABLE | CLASS} [schema_name.]table_name REMOVE PARTITIONING
 
+*   *schema_name*: 테이블의 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
 *   *table_name*: 변경하고자 하는 테이블의 이름을 지정한다.
 
 분할 설정을 제거하면 각 분할에 있던 모든 데이터가 분할 테이블로 이동된다. 이는 비용이 많이 드는 작업으로 주의해서 계획해야 한다.
@@ -358,13 +359,14 @@
 
 분할 재구성은 하나의 분할을 더 작은 분할들로 나누거나 한 그룹의 분할들을 하나의 분할로 병합하는 작업이다. 이를 수행하려면 **ALTER** 문의 **REORGANIZE PARTITION** 절을 사용한다. ::
 
-    ALTER {TABLE | CLASS} table_name
+    ALTER {TABLE | CLASS} [schema_name.]table_name
     REORGANIZE PARTITION <alter_partition_name_comma_list>
     INTO ( <partition_definition_comma_list> )
      
     partition_definition_comma_list ::=
     PARTITION partition_name VALUES LESS THAN ( <range_value> ), ... 
 
+*   *schema_name*: 테이블의 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
 *   *table_name*: 재정의할 테이블의 이름을 지정한다.
 *   *alter_partition_name_comma_list*: 재정의할 현재 분할들을 지정한다. 여러 개의 분할은 쉼표(,)로 구분된다.
 *   *partition_definition_comma_list*: 새 분할들을 지정한다. 여러 개의 분할은 쉼표(,)로 구분된다.
@@ -423,9 +425,10 @@
 
 *ALTER* 문의 *ADD PARTITION* 절을 사용하여 분할 테이블에 분할을 추가할 수 있다. ::
 
-    ALTER {TABLE | CLASS} table_name
+    ALTER {TABLE | CLASS} [schema_name.]table_name
     ADD PARTITION (<partition_definitions_comma_list>)
 
+*   *schema_name*: 테이블의 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
 *   *table_name*: 분할이 추가될 테이블 이름을 지정한다. 
 *   *partition_definitions_comma_list*: 추가될 분할 이름을 지정한다. 여러 개인 경우 쉼표(,)로 구분한다.
 
@@ -452,9 +455,10 @@
 
 **ALTER** 문의 **DROP PARTITION** 절을 이용하여 분할 테이블에서 분할을 제거(drop)할 수 있다. ::
 
-    ALTER {TABLE | CLASS} table_name
+    ALTER {TABLE | CLASS} [schema_name.]table_name
     DROP PARTITION partition_name_list
 
+*   *schema_name*: 테이블의 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
 *   *table_name*: 분할 테이블 이름을 지정한다.
 *   *partition_name_list*: 제거할 분할 이름을 지정한다. 여러 개인 경우 쉼표(,)로 구분한다.
 
@@ -481,9 +485,10 @@
 
 해시 분할 테이블에 정의된 분할 개수는 **ALTER** 문의 **COALESCE PARTITION** 절을 이용하여 줄일 수 있다. ::
 
-    ALTER {TABLE | CLASS} table_name
+    ALTER {TABLE | CLASS} [schema_name.]table_name
     COALESCE PARTITION number_of_shrinking_partitions
 
+*   *schema_name*: 테이블의 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
 *   *table_name* : 재정의할 테이블의 이름을 지정한다.
 *   *number_of_shrinking_partitions* : 삭제하려는 분할 개수를 지정한다.
 
@@ -495,9 +500,10 @@
 
 **ALTER** 문의 **ADD PARTITION** 절을 사용하여 **ALTER** 해시 분할 테이블에 정의된 분할 개수를 늘릴 수 있다. ::
 
-    ALTER {TABLE | CLASS} table_name
+    ALTER {TABLE | CLASS} [schema_name.]table_name
     ADD PARTITION PARTITIONS number
 
+*   *schema_name*: 테이블의 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
 *   *table_name* : 분할 개수를 재정의할 테이블의 이름을 지정한다.
 *   *number* : 추가할 분할 개수를 지정한다.
 
@@ -528,7 +534,7 @@
 
 분할을 승격하는 구문은 다음과 같다. ::
 
-    ALTER TABLE table_name PROMOTE PARTITION <partition_name_list>
+    ALTER TABLE [schema_name.]table_name PROMOTE PARTITION <partition_name_list>
 
 *   <*partition_name_list*> :  승격할 분할 이름으로, 여러 개를 쉼표(,)로 구분한다.
 

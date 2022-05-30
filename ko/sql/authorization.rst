@@ -100,7 +100,7 @@ CUBRID에서 권한 부여의 최소 단위는 테이블이다. 자신이 만든
 
 권한이 부여된 그룹에 속한 모든 멤버는 같은 권한을 소유하므로 모든 멤버에게 개별적으로 권한을 부여할 필요는 없다. **PUBLIC** 사용자가 생성한 (가상) 테이블은 모든 사용자에게 접근이 허용된다. **GRANT** 문을 사용하여 사용자에게 접근 권한을 부여할 수 있다. ::
 
-    GRANT operation [ { ,operation } ... ] ON table_name [ { ,table_name } ... ]
+    GRANT operation [ { ,operation } ... ] ON [schema_name.]table_name [ { , [schema_name.]table_name } ... ]
     TO user [ { ,user } ... ] [ WITH GRANT OPTION ] ; 
 
 *   *operation*: 권한을 부여할 때 사용 가능한 연산을 나타낸다.
@@ -114,6 +114,7 @@ CUBRID에서 권한 부여의 최소 단위는 테이블이다. 자신이 만든
     *   **EXECUTE**: 테이블 메서드 혹은 인스턴스 메서드를 호출할 수 있는 권한.
     *   **ALL PRIVILEGES**: 앞서 설명한 7가지 권한을 모두 포함.
 
+* *schema_name*: 테이블 혹은 뷰의 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
 * *table_name*: 권한을 부여할 테이블 혹은 뷰의 이름을 지정한다.
 * *user*: 권한을 부여할 사용자나 그룹의 이름을 지정한다. 데이터베이스 사용자의 로그인 이름을 입력하거나 시스템 정의 사용자인 **PUBLIC** 을 입력할 수 있다. **PUBLIC** 이 명시되면 데이터베이스의 모든 사용자는 부여한 권한을 가진다.
 * **WITH GRANT OPTION**: **WITH GRANT OPTION** 을 이용하면 권한을 부여받은 사용자가 부여받은 권한을 다른 사용자에게 부여할 수 있다.
@@ -159,10 +160,11 @@ REVOKE
 
 권한을 부여한 사용자에게서 권한(**WITH GRANT OPTION**)을 해지하면, 권한을 해지당한 사용자로부터 권한을 받은 사용자도 권한을 해지당한다. ::
 
-    REVOKE operation [ { , operation } ... ] ON table_name [ { , class_name } ... ]
+    REVOKE operation [ { , operation } ... ] ON [schema_name.]table_name [ { , [schema_name.]table_name } ... ]
     FROM user [ { , user } ... ] ;
 
 *   *operation*: 권한을 부여할 때 부여할 수 있는 연산의 종류이다(자세한 내용은 :ref:`granting-authorization` 참조).
+*   *schema_name*: 테이블 혹은 뷰의 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
 *   *table_name*: 권한을 부여할 테이블 혹은 뷰의 이름을 지정한다.
 *   *user*: 권한을 부여할 사용자나 그룹의 이름을 지정한다.
 
@@ -191,8 +193,9 @@ ALTER ... OWNER
 
 데이터베이스 관리자(**DBA**) 또는 **DBA** 그룹의 멤버는 다음의 질의를 통해 테이블, 뷰, 트리거, Java 저장 함수/프로시저의 소유자를 변경할 수 있다. ::
 
-    ALTER [TABLE | CLASS | VIEW | VCLASS | TRIGGER | PROCEDURE | FUNCTION] name OWNER TO user_id;
+    ALTER [TABLE | CLASS | VIEW | VCLASS | TRIGGER | PROCEDURE | FUNCTION] [schema_name.]name OWNER TO user_id;
 
+*   *schema_name*: 객체의 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
 *   *name*: 소유자를 변경할 스키마 객체의 이름
 *   *user_id*: 사용자 ID
 
@@ -274,12 +277,12 @@ ALTER ... OWNER
 
 **change_owner() 메서드**
 
-**change_owner** () 메서드는 **db_authorizations** 클래스의 클래스 메서드로서, 클래스 소유자를 변경할 때 사용된다. 소유자를 변경하고자 하는 클래스 이름과 새로운 소유자의 이름이 각각 인자로 주어진다. 이때, 데이터베이스에 존재하는 클래스와 소유자가 인자로 지정되어야 하며, 그렇지 않은 경우 에러가 발생한다. **change_owner** () 메서드는 **DBA** 와 **DBA** 그룹의 멤버만 호출할 수 있다. 이 메서드와 같은 역할을 하는 질의로 **ALTER ... OWNER** 가 있다. 이에 대한 내용은 :ref:`change-owner` 절을 참고한다.
+**change_owner** () 메서드는 **db_authorizations** 클래스의 클래스 메서드로서, 클래스 소유자를 변경할 때 사용된다. 소유자를 변경하고자 하는 클래스 이름과 새로운 소유자의 이름이 각각 인자로 주어진다. 테이블 이름은 스키마 이름을 접두사로 사용해야 한다. 생략하면 해당 사용자의 스키마 이름을 사용한다. 이때, 데이터베이스에 존재하는 클래스와 소유자가 인자로 지정되어야 하며, 그렇지 않은 경우 에러가 발생한다. **change_owner** () 메서드는 **DBA** 와 **DBA** 그룹의 멤버만 호출할 수 있다. 이 메서드와 같은 역할을 하는 질의로 **ALTER ... OWNER** 가 있다. 이에 대한 내용은 :ref:`change-owner` 절을 참고한다.
 
 .. code-block:: sql
 
-    -- table_1의 소유자를 user_4로 변경하기
-    CALL change_owner ('table_1', 'user_4') ON CLASS db_authorizations;
+    -- user_1이 소유하고 있는 table_1의 소유자를 user_4로 변경하기
+    CALL change_owner ('user_1.table_1', 'user_4') ON CLASS db_authorizations;
 
 다음 예제는 특정 데이터베이스 사용자의 존재 여부를 판단하기 위해 시스템 클래스인 **db_user** 에 등록된 메서드인 **find_user** 를 호출하는 **CALL** 문의 수행을 보여준다. 첫 번째 문장은 **db_user** 클래스에 정의된 클래스 메서드를 호출한다. 찾고자 하는 대상 사용자가 데이터베이스에 등록되어 있을 경우 x에는 해당 클래스 이름(여기에서는 **db_user**)이 저장되고, 없을 경우엔 **NULL** 이 저장된다.
 

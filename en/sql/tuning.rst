@@ -11,7 +11,7 @@ Statistics for tables and indexes enables queries of the database system to proc
 
 ::
 
-    UPDATE STATISTICS ON class-name[, class-name, ...] [WITH FULLSCAN]; 
+    UPDATE STATISTICS ON [schema_name.]class-name[, [schema_name.]class-name, ...] [WITH FULLSCAN]; 
      
     UPDATE STATISTICS ON ALL CLASSES [WITH FULLSCAN]; 
   
@@ -63,6 +63,7 @@ You can check the statistics Information with the session command of the CSQL In
 
     csql> ;info stats table_name
 
+*   *schema_name*: Specifies the schema of the table. If omitted, the schema name of the user is used.
 *   *table_name*: Table name to check the statistics Information
 
 The following shows the statistical information of *t1* table in CSQL interpreter.
@@ -640,7 +641,7 @@ Using hints can affect the performance of query execution. You can allow the que
     QUERY_CACHE
 
     <spec_name_comma_list> ::= <spec_name> [, <spec_name>, ... ]
-        <spec_name> ::= table_name | view_name
+        <spec_name> ::= [schema_name.]table_name | [schema_name.]view_name
     
     <merge_statement_hint> ::=
     USE_UPDATE_INDEX (<update_index_list>) |
@@ -950,11 +951,11 @@ Filtered Index
 The filtered index is used to sort, search, or operate a well-defined partials set for one table. It is called the partial index since only some data that satisfy the condition are kept in that index. ::
 
     CREATE /*+ hints */ INDEX index_name
-    ON table_name (col1, col2, ...) 
+    ON [schema_name.]table_name (col1, col2, ...) 
     WHERE <filter_predicate>;
      
     ALTER  /*+ hints */ INDEX index_name
-    [ ON table_name (col1, col2, ...) 
+    [ ON [schema_name.]table_name (col1, col2, ...) 
     [ WHERE <filter_predicate> ] ]
     REBUILD;
      
@@ -1184,10 +1185,10 @@ Function-based Index
 Function-based index is used to sort or find the data based on the combination of values of table rows by using a specific function. For example, to find the space-ignored string, it can be used to optimize the query by using the function that provides the feature. In addition, it is useful to search the non-case-sensitive names. ::
 
     CREATE /*+ hints */ INDEX index_name
-    ON table_name (function_name (argument_list));
+    ON [schema_name.]table_name (function_name (argument_list));
     
     ALTER /*+ hints */ INDEX index_name
-    [ ON table_name (function_name (argument_list)) ]
+    [ ON [schema_name.]table_name (function_name (argument_list)) ]
     REBUILD;
 
 After the following indexes have been created, the **SELECT** query automatically uses the function-based index.

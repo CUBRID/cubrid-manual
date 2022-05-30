@@ -15,7 +15,7 @@ CREATE SERVER
 
 **CREATE SERVER** 문을 사용하여 원격 접속 정보를 생성한다. 
 생성된 서버는 **DBLINK**\를 이용하는 :doc:`/sql/query/select` 질의를 수행 할 때 원격 서버를 지정하는데 사용한다.
-준비된 서버의 사용 방법은 `DBLINK </sql/query/select.html#dblink-clause>`_ 를 참고한다.
+준비된 서버의 사용 방법은 :ref:`dblink-clause` 를 참고한다.
 
 ::
 

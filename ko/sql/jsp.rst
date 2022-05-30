@@ -139,7 +139,7 @@ Java 저장 함수/프로시저 호출
 
 .. code-block:: sql
 
-    CALL hello() INTO :Hello;
+    SELECT hello();
 
 ::
 
@@ -154,7 +154,6 @@ Java 저장 함수/프로시저에서 데이터베이스에 접근하기 위해�
 
 .. code-block:: java
 
-    Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
     Connection conn = DriverManager.getConnection("jdbc:default:connection:");
 
 또는
@@ -174,7 +173,6 @@ Java 저장 함수/프로시저에서 데이터베이스에 접근하기 위해�
             String sql="INSERT INTO ATHLETE(NAME, GENDER, NATION_CODE, EVENT)" + "VALUES (?, ?, ?, ?)";
             
             try{
-                Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
                 Connection conn = DriverManager.getConnection("jdbc:default:connection:");
                 PreparedStatement pstmt = conn.prepareStatement(sql);
            
@@ -212,7 +210,6 @@ Java 저장 함수/프로시저에서 데이터베이스에 접근하기 위해�
             ResultSet rs = null;
 
             try {
-                Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
                 conn = DriverManager.getConnection("jdbc:CUBRID:localhost:33000:demodb:::","","");
 
                 String sql = "select line_id, line from line";
@@ -592,7 +589,6 @@ CUBRID 데이터베이스에 Phone 클래스를 생성한다.
         public static void Phone(String name, String phoneno) throws Exception{
             String sql="INSERT INTO PHONE(NAME, PHONENO)"+ "VALUES (?, ?)";
             try{
-                Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
                 Connection conn = DriverManager.getConnection("jdbc:default:connection:");
                 PreparedStatement pstmt = conn.prepareStatement(sql);
            
@@ -628,7 +624,6 @@ CUBRID 데이터베이스에 Phone 클래스를 생성한다.
             int i;
 
             try{
-                Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
                 conn = DriverManager.getConnection("jdbc:CUBRID:localhost:33000:demodb:::","","");
 
                 CallableStatement cs;
@@ -707,8 +702,6 @@ CUBRID에서는 **java.sql.ResultSet** 을 반환하는 Java 저장 함수/프�
     CREATE FUNCTION rset() RETURN CURSOR AS LANGUAGE JAVA
     NAME 'JavaSP2.TResultSet() return java.sql.ResultSet'
 
-Java 파일에서는 **java.sql.ResultSet** 을 반환하기 전에 **CUBRIDResultSet** 클래스로 캐스팅 후 **setReturnable** () 메서드를 호출해야 한다.
-
 .. code-block:: java
 
     import java.sql.Connection;
@@ -722,14 +715,11 @@ Java 파일에서는 **java.sql.ResultSet** 을 반환하기 전에 **CUBRIDResu
     public class JavaSP2 {
         public static ResultSet TResultSet(){
             try {
-                Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
                 Connection conn = DriverManager.getConnection("jdbc:default:connection:");
-                ((CUBRIDConnection)conn).setCharset("euc_kr");
                     
                 String sql = "select * from station";
                 Statement stmt=conn.createStatement();
                 ResultSet rs = stmt.executeQuery(sql);
-                ((CUBRIDResultSet)rs).setReturnable();
                     
                 return rs;
             } catch (Exception e) {
@@ -755,7 +745,6 @@ Java 파일에서는 **java.sql.ResultSet** 을 반환하기 전에 **CUBRIDResu
             Connection conn = null;
      
             try {
-                Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
                 conn = DriverManager.getConnection("jdbc:CUBRID:localhost:31001:tdemodb:::","","");
      
                 CallableStatement cstmt = conn.prepareCall("?=CALL rset()");
@@ -788,7 +777,7 @@ CUBRID의 Java 저장 함수/프로시저에서 Set 타입이 IN OUT인 경우 J
 
 .. code-block:: java
 
-    public static void SetOID(cubrid.sql.CUBRID[][] set, cubrid.sql.CUBRIDOID aoid){
+    public static void SetOID(cubrid.sql.CUBRIDOID[][] set, cubrid.sql.CUBRIDOID aoid){
         Connection conn=null;
         Statement stmt=null;
         String ret="";

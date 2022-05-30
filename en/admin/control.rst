@@ -154,28 +154,16 @@ One of the following can be specified in <command>:
 *   restart: restart a Java Stored Procedure server process.
 *   status: check status of a Java Stored Procedure server process.
 
-Every command can specify a database name (**[database_name]**) as an argument. If the database name is not specified, the command is executed by referring to the database names in the **server** property of the **[service]** section of **cubrid.conf**.
+| Every command can specify a database name (**[database_name]**) as an argument.
+| If the database name is not specified, the **status** command displays status information of the Java stored procedure server of every currently running database server.
 
 ::
 
-    # cubrid.conf
-
-    [service]
-
-    ...
-
-    server=demodb,testdb
-
-    ...
-
 ::
 
-    % cubrid javasp start
+    % cubrid javasp start demodb
 
     @ cubrid javasp start: demodb
-    ++ cubrid javasp start: success
-
-    @ cubrid javasp start: testdb
     ++ cubrid javasp start: success
 
 .. _control-cubrid-services:
@@ -186,12 +174,11 @@ CUBRID Services
 Registering Services
 --------------------
 
-You can register database servers, CUBRID brokers, CUBRID Java Stored Procedure servers, CUBRID Manager(s) or CUBRID HA as CUBRID service in the configuration file ( **cubrid.conf** ). To register services, you can input for each **server**, **broker**, **javasp**, **manager** or **heartbeat** as a parameter value, and it is possible to input several values by concatenating them in comma(,).
+You can register database servers, CUBRID brokers, CUBRID Manager(s) or CUBRID HA as CUBRID service in the configuration file ( **cubrid.conf** ). To register services, you can input for each **server**, **broker**, **manager** or **heartbeat** as a parameter value, and it is possible to input several values by concatenating them in comma(,).
 
 If you do not register any service, only master process is registered by default. It is convenient for you to view status of all related processes at a glance or start and stop the processes at once with the **cubrid** **service** utility once it is registered as CUBRID service. 
 
 - For details on CUBRID HA configuration, see :ref:`cubrid-service-util`.
-- For details on CUBRID Java Stored Procedure server configuration, see :ref:`cubrid-javasp-server-config`.
 
 The following example shows how to register database server and broker as service in the **cubrid.conf** file and enable databases ( *demodb* and *testdb* ) to start automatically at once when CUBRID server starts running.
 
@@ -203,11 +190,11 @@ The following example shows how to register database server and broker as servic
     [service]
 
     # The list of processes to be started automatically by 'cubrid service start' command
-    # Any combinations are available with server, broker, manager, javasp and heartbeat.
+    # Any combinations are available with server, broker, manager and heartbeat.
     service=server,broker
 
     # The list of database servers in all by 'cubrid service start' command.
-    # This property is effective only when the above 'service' property contains 'server' or 'javasp' keyword.
+    # This property is effective only when the above 'service' property contains 'server' keyword.
     server=demodb,testdb
 
 Starting Services
@@ -2308,6 +2295,56 @@ Additionally, The server's PID, port number, and the applied JVM option are show
     -Xrs
     -------------------------------------------------
 
+
+.. _cubrid-javasp-with-server:
+
+Starting the CUBRID Java SP Server together when the database server starts
+------------------------------------------------------------------------------------------
+
+| If **java_stored_procedure** is set to yes for the corresponding database, 
+| When the database server starts/stops, the Java stored procedure server is started/stopped.
+| The following is an example of Java stored procedure server and database server both are started simultaneously.
+
+::
+
+    # cubrid.conf
+
+    ...
+
+    [@demodb]
+    java_stored_procedure=yes
+    
+    [@testdb]
+    java_stored_procedure=no
+
+    ...
+
+::
+
+    -- demodb's java_stored_procedure is set to yes
+    % cubrid server start demodb
+    
+    @ cubrid server start: demodb
+
+    This may take a long time depending on the amount of restore works to do.
+    CUBRID 11.2
+
+    Calling java stored procedure is allowed
+
+::
+
+    -- testdb's java_stored_procedure is set to no
+    % cubrid server start testdb
+    
+    @ cubrid server start: testdb
+
+    This may take a long time depending on the amount of restore works to do.
+    CUBRID 11.2
+
+    java_stored_procedure system parameter is not enabled
+    Calling java stored procedure is not allowed
+
+
 .. _cubrid-javasp-server-config:
 
 Configuring for CUBRID Java SP Server
@@ -2318,21 +2355,18 @@ Configuring for CUBRID Java SP Server
 Environment Configuration for Java Stored Function/Procedure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To use Java-stored functions/procedures in CUBRID, you must have JRE (Java Runtime Environment) 1.6 or later installed in the environment where the CUBRID server is installed. You can download JRE from the Developer Resources for Java Technology (`https://www.oracle.com/java/technologies <https://www.oracle.com/java/technologies>`_).
+To use Java-stored functions/procedures in CUBRID, you must have JDK (Java Development Kit) 1.8 64bit installed in the environment where the CUBRID server is installed. 
+You can download JDK at the following links
 
-CUBRID 64-bit needs a 64-bit Java Runtime Environment, and CUBRID 32-bit needs a 32-bit Java Runtime Environment. For example, when you run CUBRID 64-bit in the system in which a 32-bit JAVA Runtime Environment is installed, the following error may occur. ::
-
-    % cubrid javasp start demodb
-
-    Java VM library is not found:
-        Failed to get 'JVM_PATH' environment variable.
-        Failed to load libjvm from 'JAVA_HOME' environment variable:
-            /usr/java/jdk1.6.0_15/jre/lib/amd64/server/libjvm.so: cannot open shared object file: No such file or directory.
+* `OpenJDK 8 <https://openjdk.java.net/projects/jdk8/>`_
+* `Oracle JDK 8 <https://www.oracle.com/java/technologies/javase/javase8-archive-downloads.html>`_
 
 Execute the following command to check the JRE version if you have it already installed in the system. ::
 
-    % java -version Java(TM) SE Runtime Environment (build 1.6.0_05-b13)
-    Java HotSpot(TM) 64-Bit Server VM (build 10.0-b19, mixed mode)
+    % java -version
+    openjdk version "1.8.0_302"
+    OpenJDK Runtime Environment (build 1.8.0_302-b08)
+    OpenJDK 64-Bit Server VM (build 25.302-b08, mixed mode)
 
 **Windows Environment**
 
@@ -2340,51 +2374,33 @@ For Windows, CUBRID loads the **jvm.dll** file to run the Java Virtual Machine. 
 
 You can configure the **JAVA_HOME** environment variable and add the directory in which the Java executable file is located to **Path**, by executing the command as follows: For information on configuring environment variables using GUI, see Installing and Configuring JDBC.
 
-*   An example of installing 64 Bit JDK 1.6 and configuring the environment variables ::
+*   An example of configuring the JDK 1.8 environment variables ::
 
-    % set JAVA_HOME=C:\jdk1.6.0
+    % set JAVA_HOME=C:\jdk1.8.0
     % set PATH=%PATH%;%JAVA_HOME%\jre\bin\server
-
-*   An example of installing 32 Bit JDK 1.6 and configuring the environment variables ::
-
-    % set JAVA_HOME=C:\jdk1.6.0
-    % set PATH=%PATH%;%JAVA_HOME%\jre\bin\client
 
 If you want to specify the path of Java Virtual Machine (JVM) explicitly including cases to use other vendor's implementation instead of Sun's JVM, add the path of the **jvm.dll** file to the **JVM_PATH** variable during the installation.
 CUBRID first looks for the **jvm.dll** file in the **JVM_PATH** variable. if **JVM_PATH** is not set or if the file cannot be loaded, it looks for the file in the **JAVA_HOME** variable as described above.
 
 *   An example of configuring the **JVM_PATH** environment variable ::
     
-    % set JVM_PATH=C:\jdk1.6.0\jre\bin\server\libjvm.dll
+    % set JVM_PATH=C:\jdk1.8.0\jre\bin\server\libjvm.dll
 
 **Linux/UNIX Environment**
 
 For Linux/UNIX environment, CUBRID loads the **libjvm.so** file to run the Java Virtual Machine. CUBRID first locates the **libjvm.so** file from the **LD_LIBRARY_PATH** environment variable and then loads it. If it cannot find the file, it uses the **JAVA_HOME** environment variable. For Linux, glibc 2.3.4 or later versions are supported. The following example shows how to configure the Linux environment variable (e.g., **.profile**, **.cshrc**, **.bashrc**, **.bash_profile**, etc.).
 
-*   An example of installing 64 Bit JDK 1.6 and configuring the environment variables in a bash shell ::
+*   An example of installing JDK 1.8 and configuring the environment variables in a bash shell ::
 
-    % JAVA_HOME=/usr/java/jdk1.6.0_10
+    % JAVA_HOME=/usr/java/jdk1.8.0
     % LD_LIBRARY_PATH=$JAVA_HOME/jre/lib/amd64:$JAVA_HOME/jre/lib/amd64/server:$LD_LIBRARY_PATH
     % export JAVA_HOME
     % export LD_LIBRARY_PATH
 
-*   An example of installing 32 Bit JDK 1.6 and configuring the environment variables in a bash shell ::
+*   An example of installing JDK 1.8 and configuring the environment variables in a csh shell ::
 
-    % JAVA_HOME=/usr/java/jdk1.6.0_10
-    % LD_LIBRARY_PATH=$JAVA_HOME/jre/lib/i386/:$JAVA_HOME/jre/lib/i386/client:$LD_LIBRARY_PATH
-    % export JAVA_HOME
-    % export LD_LIBRARY_PATH
-
-*   An example of installing 64 Bit JDK 1.6 and configuring the environment variables in a csh shell ::
-
-    % setenv JAVA_HOME /usr/java/jdk1.6.0_10
+    % setenv JAVA_HOME /usr/java/jdk1.8.0
     % setenv LD_LIBRARY_PATH $JAVA_HOME/jre/lib/amd64:$JAVA_HOME/jre/lib/amd64/server:$LD_LIBRARY_PATH
-    % set path=($path $JAVA_HOME/bin .)
-
-*   An example of installing 32 Bit JDK 1.6 and configuring the environment variables in a csh shell ::
-
-    % setenv JAVA_HOME /usr/java/jdk1.6.0_10
-    % setenv LD_LIBRARY_PATH $JAVA_HOME/jre/lib/i386:$JAVA_HOME/jre/lib/i386/client:$LD_LIBRARY_PATH
     % set path=($path $JAVA_HOME/bin .)
 
 If you want to specify the path of Java Virtual Machine (JVM) explicitly including cases to use other vendor's implementation instead of Sun's JVM, add the path of the **libjvm.so** file to the **JVM_PATH** variable during the installation.
@@ -2393,7 +2409,7 @@ CUBRID first looks for the **libjvm.so** file in the **JVM_PATH** variable. if *
 
 *   An example of configuring the **JVM_PATH** environment variable ::
     
-    % JVM_PATH=/usr/java/jdk1.6.0_10/jre/lib/amd64/server/libjvm.so
+    % JVM_PATH=/usr/java/jdk1.8.0/jre/lib/amd64/server/libjvm.so
     % export JVM_PATH
 
 .. _cubrid-javasp-system-parameter:
@@ -2414,71 +2430,6 @@ The following table shows the server paramters related to Java SP server availab
 +-------------------------------------+--------+----------------+-----+-------+
 
 For more details on these paramters, see :ref:`cubrid-conf`.
-
-.. _cubrid-javasp-service-util:
-
-Registering CUBRID Java SP Server to cubrid service
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-If you register javasp to CUBRID service, you can use the utilities of **cubrid service** to start, stop or check all the registered javasp processes at once.
-
-- First, add **javasp** to the **service** parameter in the [**service**] section of the **cubrid.conf** file.
-- Second, To register the javasp server for a database, add the name of the database to the **server** parameter in the [**service**] section. Note that it shares the **server** parameter with the database server. a javasp server is dependent on the database server that has the same database name.
-- Finally, set **java_stored_procedure** as yes to enable starting the javasp server for the database.
-
-The following example shows how to register **javasp** server as service in the **cubrid.conf** file.
-Both *demodb* and *testdb* are present in the **server** property, but only demodb with **java_stored_procedure** set to yes is started by the **cubrid service start** command.
-
-::
-
-    # cubrid.conf
-
-    ...
-
-    [service]
-
-    ...
-
-    service=broker,server,javasp
-
-    # The list of database servers in all by 'cubrid service start' command.
-    # This property is effective only when the above 'service' property contains 'server' or 'javasp' keyword.
-    server=demodb,testdb
-
-    ...
-
-    [common]
-
-    ...
-
-    [@demodb]
-    java_stored_procedure=yes
-
-    [@testdb]
-    java_stored_procedure=no
-
-::
-
-    % cubrid service start
-    
-    @ cubrid master start
-    ++ cubrid master start: success
-    @ cubrid server start: demodb
-
-    This may take a long time depending on the amount of restore works to do.
-    CUBRID 11.0
-
-    ++ cubrid server start: success
-    @ cubrid server start: testdb
-
-    This may take a long time depending on the amount of recovery works to do.
-    CUBRID 11.0
-
-    ++ cubrid server start: success
-    @ cubrid javasp start: demodb
-    ++ cubrid javasp start: success
-    @ cubrid broker start
-    ++ cubrid broker start: success
 
 .. _cubrid-javasp-server-log:
 

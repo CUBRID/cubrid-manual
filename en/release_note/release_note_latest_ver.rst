@@ -40,7 +40,7 @@ CUBRID 11.2
 
 CUBRID 11.2 **improved connectivity** by providing database link between homogeneous and heterogeneous DBMS. In addition, this version provides CDC (Change data capture) function by supporting supplemental logging that can track changed data.
 
-CUBRID 11.2 is **faster**. This version improves query optimization such as predicate pushdown and view transformation, supports Hash List Scan for all subqueries, improves performance of count(*) without conditional clause using cache, and improves truncate table to further improve performance.
+CUBRID 11.2 is **faster**. This version improves query optimization such as predicate pushdown and view transformation, supports Hash List Scan for all subqueries, improves performance of count(\*) without conditional clause using cache, and improves truncate table to further improve performance.
 
 CUBRID 11.2 **improves administrator convenience** by providing flashback function that can extract the original query of changed data for each transaction.
 
@@ -84,8 +84,8 @@ By introducing the concept of user schema, the same object name can be used for 
  * Changed to include user name in info schema and show full tables results.
  * The loaddb file prior to 11.2 must be modified to "user name.table name" so that it can be executed in 11.2, or loaddb can be executed by setting the -no-user-specified-name option.
 
-The following functions and behavior changed when using defaultconnection in JavaSP
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The following functions and behavior changed when using "jdbc\:default\:connection\:" or calling getDefaultConnection() in JavaSP.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
  * All functions of java.sql.DatabaseMetaData are not supported.
  * createClob() and createBlob() of java.sql.Connection are not supported.

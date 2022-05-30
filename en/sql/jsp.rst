@@ -125,7 +125,7 @@ Call the published Java stored function as follows:
 
 .. code-block:: sql
 
-    CALL hello() INTO :Hello;
+    SELECT hello();
 
 ::
 
@@ -140,7 +140,6 @@ To access the database from a Java stored function/procedure, you must use the s
 
 .. code-block:: java
 
-    Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
     Connection conn = DriverManager.getConnection("jdbc:default:connection:");
 
 or
@@ -160,7 +159,6 @@ If you connect to the database using the JDBC driver as shown above, the transac
             String sql="INSERT INTO ATHLETE(NAME, GENDER, NATION_CODE, EVENT)" + "VALUES (?, ?, ?, ?)";
             
             try{
-                Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
                 Connection conn = DriverManager.getConnection("jdbc:default:connection:");
                 PreparedStatement pstmt = conn.prepareStatement(sql);
            
@@ -198,7 +196,6 @@ If you connect to other databases, the connection to the CUBRID database does no
             ResultSet rs = null;
 
             try {
-                Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
                 conn = DriverManager.getConnection("jdbc:CUBRID:localhost:33000:demodb:::","","");
 
                 String sql = "select line_id, line from line";
@@ -500,7 +497,6 @@ Compile the following **PhoneNumber.java** file, load the Java class file into C
         public static void Phone(String name, String phoneno) throws Exception{
             String sql="INSERT INTO PHONE(NAME, PHONENO)"+ "VALUES (?, ?)";
             try{
-                Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
                 Connection conn = DriverManager.getConnection("jdbc:default:connection:");
                 PreparedStatement pstmt = conn.prepareStatement(sql);
            
@@ -536,7 +532,6 @@ Create and run the following Java application.
             int i;
 
             try{
-                Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
                 conn = DriverManager.getConnection("jdbc:CUBRID:localhost:33000:demodb:::","","");
 
                 CallableStatement cs;
@@ -615,8 +610,6 @@ In CUBRID, you must use **CURSOR** as the data type when you declare a Java stor
     CREATE FUNCTION rset() RETURN CURSOR AS LANGUAGE JAVA
     NAME 'JavaSP2.TResultSet() return java.sql.ResultSet'
 
-Before the Java file returns **java.sql.ResultSet**, it is required to cast to the **CUBRIDResultSet** class and then to call the **setReturnable** () method.
-
 .. code-block:: java
 
     import java.sql.Connection;
@@ -630,14 +623,11 @@ Before the Java file returns **java.sql.ResultSet**, it is required to cast to t
     public class JavaSP2 {
         public static ResultSet TResultSet(){
             try {
-                Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
                 Connection conn = DriverManager.getConnection("jdbc:default:connection:");
-                ((CUBRIDConnection)conn).setCharset("euc_kr");
                     
                 String sql = "select * from station";
                 Statement stmt=conn.createStatement();
                 ResultSet rs = stmt.executeQuery(sql);
-                ((CUBRIDResultSet)rs).setReturnable();
                     
                 return rs;
             } catch (Exception e) {
@@ -663,7 +653,6 @@ In the calling block, you must set the OUT argument with **Types.JAVA_OBJECT**, 
             Connection conn = null;
      
             try {
-                Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
                 conn = DriverManager.getConnection("jdbc:CUBRID:localhost:31001:tdemodb:::","","");
      
                 CallableStatement cstmt = conn.prepareCall("?=CALL rset()");
@@ -696,7 +685,7 @@ If the set type of the Java stored function/procedure in CUBRID is IN OUT, the v
 
 .. code-block:: java
 
-    public static void SetOID(cubrid.sql.CUBRID[][] set, cubrid.sql.CUBRIDOID aoid){
+    public static void SetOID(cubrid.sql.CUBRIDOID[][] set, cubrid.sql.CUBRIDOID aoid){
         Connection conn=null;
         Statement stmt=null;
         String ret="";

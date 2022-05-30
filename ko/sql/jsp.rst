@@ -168,13 +168,16 @@ Java 저장 함수/프로시저에서 데이터베이스에 접근하기 위해�
 
     import java.sql.*;
 
-    public class Athlete{
-        public static void Athlete(String name, String gender, String nation_code, String event) throws SQLException{
-            String sql="INSERT INTO ATHLETE(NAME, GENDER, NATION_CODE, EVENT)" + "VALUES (?, ?, ?, ?)";
+    public class Athlete {
+        public static void insertAthlete(String name, String gender, String nation_code, String event) throws SQLException {
+            String sql = "INSERT INTO ATHLETE(NAME, GENDER, NATION_CODE, EVENT)" + "VALUES (?, ?, ?, ?)";
             
+            Connection conn = null;
+            PreparedStatement pstmt = null;
+
             try{
-                Connection conn = DriverManager.getConnection("jdbc:default:connection:");
-                PreparedStatement pstmt = conn.prepareStatement(sql);
+                conn = DriverManager.getConnection("jdbc:default:connection:");
+                pstmt = conn.prepareStatement(sql);
            
                 pstmt.setString(1, name);
                 pstmt.setString(2, gender);
@@ -187,6 +190,9 @@ Java 저장 함수/프로시저에서 데이터베이스에 접근하기 위해�
                 conn.close();
             } catch (Exception e) {
                 System.err.println(e.getMessage());
+            } finally {
+                if (pstmt != null) pstmt.close();
+                if (conn != null) conn.close();
             }
         }
     }
@@ -204,7 +210,6 @@ Java 저장 함수/프로시저에서 데이터베이스에 접근하기 위해�
 
     public class SelectData {
         public static void SearchSubway(String[] args) throws Exception {
-
             Connection conn = null;
             Statement stmt = null;
             ResultSet rs = null;
@@ -226,14 +231,13 @@ Java 저장 함수/프로시저에서 데이터베이스에 접근하기 위해�
                 }
                 
                 rs.close();
-                stmt.close();
-                conn.close();
-            } catch ( SQLException e ) {
+            } catch (SQLException e) {
                 System.err.println(e.getMessage());
-            } catch ( Exception e ) {
+            } catch (Exception e) {
                 System.err.println(e.getMessage());
             } finally {
-                if ( conn != null ) conn.close();
+                if (stmt != null) stmt.close();
+                if (conn != null) conn.close();
             }
         }
     }
@@ -586,7 +590,7 @@ CUBRID 데이터베이스에 Phone 클래스를 생성한다.
     import java.io.*;
 
     public class PhoneNumber{
-        public static void Phone(String name, String phoneno) throws Exception{
+        public static void Phone(String name, String phoneno) throws Exception {
             String sql="INSERT INTO PHONE(NAME, PHONENO)"+ "VALUES (?, ?)";
             try{
                 Connection conn = DriverManager.getConnection("jdbc:default:connection:");
@@ -616,8 +620,8 @@ CUBRID 데이터베이스에 Phone 클래스를 생성한다.
 
     import java.sql.*;
 
-    public class StoredJDBC{
-        public static void main(){
+    public class StoredJDBC {
+        public static void main() {
             Connection conn = null;
             Statement stmt= null;
             int result;
@@ -670,11 +674,12 @@ Java 저장 함수/프로시저의 리턴 값과 IN/OUT의 데이터 타입에 �
 
 .. code-block:: java
 
-    public class JavaSP1{
-        public static String typestring(){
+    public class JavaSP1 {
+        public static String typestring() {
             String temp = " ";
-            for(int i=0 i< 1 i++)
+            for(int i = 0; i < 1; i++) {
                 temp = temp + "1234567890";
+            }
             return temp;
         }
     }
@@ -704,13 +709,7 @@ CUBRID에서는 **java.sql.ResultSet** 을 반환하는 Java 저장 함수/프�
 
 .. code-block:: java
 
-    import java.sql.Connection;
-    import java.sql.DriverManager;
-    import java.sql.ResultSet;
-    import java.sql.Statement;
-     
-    import cubrid.jdbc.driver.CUBRIDConnection;
-    import cubrid.jdbc.driver.CUBRIDResultSet;
+    import java.sql.*;
 
     public class JavaSP2 {
         public static ResultSet TResultSet(){
@@ -734,18 +733,14 @@ CUBRID에서는 **java.sql.ResultSet** 을 반환하는 Java 저장 함수/프�
 
 .. code-block:: java
 
-    import java.sql.CallableStatement;
-    import java.sql.Connection;
-    import java.sql.DriverManager;
-    import java.sql.ResultSet;
-    import java.sql.Types;
+    import java.sql.*;
      
     public class TestResultSet{
         public static void main(String[] args) {
             Connection conn = null;
      
             try {
-                conn = DriverManager.getConnection("jdbc:CUBRID:localhost:31001:tdemodb:::","","");
+                conn = DriverManager.getConnection("jdbc:default:connection:");
      
                 CallableStatement cstmt = conn.prepareCall("?=CALL rset()");
                 cstmt.registerOutParameter(1, Types.JAVA_OBJECT);
@@ -777,29 +772,29 @@ CUBRID의 Java 저장 함수/프로시저에서 Set 타입이 IN OUT인 경우 J
 
 .. code-block:: java
 
-    public static void SetOID(cubrid.sql.CUBRIDOID[][] set, cubrid.sql.CUBRIDOID aoid){
-        Connection conn=null;
-        Statement stmt=null;
+    import cubrid.sql.CUBRIDOID;
+
+    public static void SetOID(CUBRIDOID[][] set, CUBRIDOID aoid) {
         String ret="";
         Vector v = new Vector();
 
-        cubrid.sql.CUBRIDOID[] set1 = set[0];
+        CUBRIDOID[] set1 = set[0];
 
         try {
-            if(set1!=null) {
+            if(set1 != null) {
                 int len = set1.length;
                 int i = 0;
                 
-                for (i=0 i< len i++)
+                for (i = 0; i < len; i++)
                     v.add(set1[i]);
             }
             
             v.add(aoid);
-            set[0]=(cubrid.sql.CUBRIDOID[]) v.toArray(new cubrid.sql.CUBRIDOID[]{});
+            set[0] = (CUBRIDOID[]) v.toArray(new CUBRIDOID[]{});
             
         } catch(Exception e) {
             e.printStackTrace();
-            System.err.pirntln("SQLException:"+e.getMessage());
+            System.err.println("SQLException:"+e.getMessage());
         }
     }
 
@@ -815,15 +810,17 @@ CUBRID 저장 프로시저에서 OID 타입의 값을 IN/OUT으로 사용할 경
 
 .. code-block:: java
 
+    import java.sql.*;
+    import cubrid.sql.CUBRIDOID;
+
     public static void tOID(CUBRIDOID[] oid, String query)
     {
-        Connection conn=null;
-        Statement stmt=null;
-        String ret="";
+        Connection conn = null;
+        Statement stmt = null;
+        String ret = "";
 
         try {
-            Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
-            conn=DriverManager.getConnection("jdbc:default:connection:");
+            conn = DriverManager.getConnection("jdbc:default:connection:");
 
             conn.setAutoCommit(false);
             stmt = conn.createStatement();
@@ -840,9 +837,9 @@ CUBRID 저장 프로시저에서 OID 타입의 값을 IN/OUT으로 사용할 경
             
         } catch (SQLException e) {
             e.printStackTrace();
-            System.err.println("SQLException:"+e.getMessage());
+            System.err.println("SQLException:" + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
-            system.err.println("Exception:"+ e.getMessage());
+            system.err.println("Exception:" + e.getMessage());
         }
     }

@@ -28,7 +28,7 @@ The **MERGE** statement is used to select rows from a source and to update or to
     /*+ [ USE_UPDATE_IDX (<update_index_list>) ] [ USE_INSERT_IDX (<insert_index_list>) ] */
 
 *   <*target*>: Target table to be updated or inserted. Several tables or views are available.
-*   <*source*>: Source table to get the data. a single table or a single view is available and a sub-query is available, too.
+*   <*source*>: Source table to get the data. A single table or a single view is available and a sub-query is available, too.
 *   <*join_condition*>: Specifies the updated conditions
 *   <*merge_update_clause*>: If <*join_condition*> is TRUE, the new column value of a target table will be specified.
 

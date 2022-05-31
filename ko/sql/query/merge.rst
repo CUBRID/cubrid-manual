@@ -6,12 +6,12 @@
 MERGE
 *****
 
-**MERGE** 문은 하나 또는 그 이상의 원본으로부터 행들을 선택하여 하나의 테이블 또는 뷰로 갱신이나 삽입을 수행하기 위해 사용되며, 대상 테이블 또는 뷰에 갱신할지 또는 삽입할지 결정하는 조건을 지정할 수 있다. **MERGE** 문은 결정적 문장(deterministic statement)으로, 하나의 문장 내에서 대상 테이블의 같은 행을 여러 번 갱신할 수 없다.
+**MERGE** 문은 하나의 원본으로부터 행들을 선택하여 하나의 테이블 또는 뷰로 갱신이나 삽입을 수행하기 위해 사용되며, 대상 테이블 또는 뷰에 갱신할지 또는 삽입할지 결정하는 조건을 지정할 수 있다. **MERGE** 문은 결정적 문장(deterministic statement)으로, 하나의 문장 내에서 대상 테이블의 같은 행을 여러 번 갱신할 수 없다.
 
 ::
 
     MERGE [<merge_hint>] INTO <target> [[AS] <alias>]
-    USING <source> [[AS] <alias>], <source> [[AS] <alias>], ...
+    USING <source> [[AS] <alias>]
     ON <join_condition>
     [ <merge_update_clause> ]
     [ <merge_insert_clause> ]
@@ -28,7 +28,7 @@ MERGE
     /*+ [ USE_UPDATE_IDX (<update_index_list>) ] [ USE_INSERT_IDX (<insert_index_list>) ] */
 
 *   <*target*>: 갱신하거나 삽입할 대상 테이블. 여러 개의 테이블 또는 뷰가 될 수 있다.
-*   <*source*>: 데이터를 가져올 원본 테이블. 여러 개의 테이블 또는 뷰가 될 수 있으며, 부질의(subquery)도 가능하다.
+*   <*source*>: 데이터를 가져올 원본 테이블. 하나의 테이블 또는 뷰가 될 수 있으며, 부질의(subquery)도 가능하다.
 *   <*join_condition*>: 갱신할 조건을 명시한다.
 *   <*merge_update_clause*>: <*join_condition*> 조건이 TRUE이면 대상 테이블의 새로운 칼럼 값들을 지정한다.
 

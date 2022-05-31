@@ -272,12 +272,6 @@ ALTER INDEX
     
     ALTER INDEX i_game_medal ON game COMMENT 'change index comment' ;
 
-다음은 인덱스 이름을 바꾸는 구문이다. 
-
-.. code-block:: sql
-
-    ALTER INDEX old_index_name ON table_name RENAME TO new_index_name [COMMENT 'index_comment_string'] ;
-
 다음은 인덱스의 상태를 **INVISIBLE**/**VISIBLE** 로 변경하기 위한 구문이다. 인덱스의 상태가 **INVISIBLE** 인 경우, 질의 실행은 인덱스가 없는 것처럼 수행된다. 이 방법으로 인덱스의 성능 측정이 가능하며, 실제로 인덱스를 제거하지 않고 인덱스 제거에 따른 영향도를 측정할 수있다.
 
 .. code-block:: sql

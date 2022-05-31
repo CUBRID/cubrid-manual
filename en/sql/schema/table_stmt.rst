@@ -1658,7 +1658,7 @@ Changes of Table Attributes based on Changes of Column Type
 Changes of Values based on Changes of Column Type
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The **alter_table_change_type_strict** parameter determines whether the value conversion is allowed according to the type change. If the value is no, it can be changed when you change a column type or add a **NOT NULL** constraint. The default value is **no**.
+The **alter_table_change_type_strict** parameter determines whether the value conversion is allowed according to the type change. If the value is no, it can be changed when you change a column type or add a **NOT NULL** constraint. The default value is **yes**.
 
 When the value of the parameter, **alter_table_change_type_strict** is no, it will operate depending on the conditions as follows:
 

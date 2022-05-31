@@ -548,6 +548,8 @@ By default, the index created by defining the primary key is created in ascendin
         PRIMARY KEY (host_year, event_code, athlete_code, medal)
     );
 
+.. _foreign-key-constraint:
+
 FOREIGN KEY Constraint
 ^^^^^^^^^^^^^^^^^^^^^^
 

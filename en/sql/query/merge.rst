@@ -6,12 +6,12 @@
 MERGE
 *****
 
-The **MERGE** statement is used to select rows from one or more sources and to update or to insert the rows onto one table or view. You can specify the condition whether to update or to insert the rows onto the target table or view. The **MERGE** statement is a deterministic statement, so you cannot update the same rows on the target table several times within one sentence.
+The **MERGE** statement is used to select rows from a source and to update or to insert the rows onto one table or view. You can specify the condition whether to update or to insert the rows onto the target table or view. The **MERGE** statement is a deterministic statement, so you cannot update the same rows on the target table several times within one sentence.
 
 ::
 
     MERGE [<merge_hint>] INTO <target> [[AS] <alias>]
-    USING <source> [[AS] <alias>], <source> [[AS] <alias>], ...
+    USING <source> [[AS] <alias>]
     ON <join_condition>
     [ <merge_update_clause> ]
     [ <merge_insert_clause> ]
@@ -28,7 +28,7 @@ The **MERGE** statement is used to select rows from one or more sources and to u
     /*+ [ USE_UPDATE_IDX (<update_index_list>) ] [ USE_INSERT_IDX (<insert_index_list>) ] */
 
 *   <*target*>: Target table to be updated or inserted. Several tables or views are available.
-*   <*source*>: Source table to get the data. Several tables or views are available and sub-query is available, too.
+*   <*source*>: Source table to get the data. a single table or a single view is available and a sub-query is available, too.
 *   <*join_condition*>: Specifies the updated conditions
 *   <*merge_update_clause*>: If <*join_condition*> is TRUE, the new column value of a target table will be specified.
 
@@ -179,4 +179,4 @@ The following shows how to use index hints in **MERGE** statement.
     INTO target t USING source s ON t.i=s.i 
     WHEN MATCHED THEN UPDATE SET t.j=s.j WHERE s.i <> 1
     WHEN NOT MATCHED THEN INSERT VALUES (i,j);
-     
+

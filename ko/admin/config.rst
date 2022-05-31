@@ -1264,7 +1264,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
 **alter_table_change_type_strict**
 
-    **alter_table_change_type_strict**\는 타입 변경에 따른 해당 칼럼 값들의 변환 허용 여부를 지정하는 파라미터로서, 기본값은 **yes**\이다. 이 파라미터 값이 **yes**\이면 칼럼의 타입 변경이나 **NOT NULL** 제약 조건을 추가할 때 값의 변경이 발생하며, **yes**\이면 값의 변경이 발생하지 않는다. 자세한 내용은 **ALTER TABLE** 문의 :ref:`change-column` 을 참고한다.
+    **alter_table_change_type_strict**\는 타입 변경에 따른 해당 칼럼 값들의 변환 허용 여부를 지정하는 파라미터로서, 기본값은 **yes**\이다. 이 파라미터 값이 **no**\이면 칼럼의 타입 변경이나 **NOT NULL** 제약 조건을 추가할 때 값의 변경이 발생할 수 있으며, **yes**\이면 값의 변경이 발생하지 않는다. 자세한 내용은 **ALTER TABLE** 문의 :ref:`change-column` 을 참고한다.
 	
 **allow_truncated_string**
 

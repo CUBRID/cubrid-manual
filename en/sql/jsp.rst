@@ -42,7 +42,7 @@ Check the cubrid.conf file
 --------------------------
 
 By default, the **java_stored_procedure** is set to **no** in the **cubrid.conf** file.   
-To use a Java stored function/procedure, this value must be changed to **yes**. For details on this value, see `Other Parameters <#pm_pm_db_classify_etc_htm>`_ in Database Server Configuration.
+To use a Java stored function/procedure, this value must be changed to **yes**. For details on this value, see :ref:`other-parameters` in Database Server Configuration.
 
 .. _jsp-starting-javasp:
 

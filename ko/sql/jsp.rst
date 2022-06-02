@@ -33,14 +33,14 @@ Java 저장 함수/프로시저를 사용할 때 얻을 수 있는 이점은 다
 
 Java 저장함수/프로시저를 사용하기 위해서 다음의 사항이 준비되어 있어야 한다.
 
-*   **cubrid.conf**에 있는 **java_stored_procedure** 값을 **yes** 로 설정해야한다.
+*   **cubrid.conf**\에 있는 **java_stored_procedure** 값을 **yes** 로 설정해야한다.
 *   Java 저장 프로시저/함수를 사용하려는 데이터베이스에 대해 Java 저장 프로시저 서버 (Java SP 서버) 를 시작해야한다.
 
 cubrid.conf 확인
 ----------------
 
 **cubrid.conf** 에 있는 **java_stored_procedure** 의 설정값은 **no** 가 기본이다.     
-Java 저장함수/프로시저를 사용하기 위해서는 이 값을 **yes** 로 변경해야 한다. 이 값과 관련한 자세한 설명은 데이터베이스 서버 설정의 `기타 파라미터 <#pm_pm_db_classify_etc_htm>`_ 를 참조한다.
+Java 저장함수/프로시저를 사용하기 위해서는 이 값을 **yes** 로 변경해야 한다. 이 값과 관련한 자세한 설명은 데이터베이스 서버 설정의 :ref:`other-parameters` 를 참조한다.
 
 .. _jsp-starting-javasp:
 

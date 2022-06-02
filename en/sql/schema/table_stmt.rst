@@ -1611,7 +1611,7 @@ the configuration parameter allow_truncated_string also affect the similar as al
 Changes of Table Attributes based on Changes of Column Type
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-*   Type Change : If the value of the system parameter **alter_table_change_type_strict** is set to no, then changing values to other types is allowed, but if it is set to yes then changing is not allowed. The default value of the parameter is **no**. You can change values to all types allowed by the **CAST** operator. Changing object types is allowed only by the upper classes (tables) of the objects.
+*   Type Change : If the value of the system parameter **alter_table_change_type_strict** is set to no, then changing values to other types is allowed, but if it is set to yes then changing is not allowed. The default value of the parameter is **yes**. You can change values to all types allowed by the **CAST** operator. Changing object types is allowed only by the upper classes (tables) of the objects. Also, if the system parameter **allow_truncated_string** is **no** when changing to a string such as **char** or **varchar**, the overflowed string cannot be changed. The default value for the parameter is **no**.
 
 *   **NOT NULL**
 

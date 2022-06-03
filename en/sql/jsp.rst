@@ -235,10 +235,10 @@ If you connect to other databases, the connection to the CUBRID database does no
                 }
                 
                 rs.close();
-            } catch (SQLException e) {
-                System.err.println(e.getMessage());
-            } catch (Exception e) {
-                System.err.println(e.getMessage());
+            } catch (SQLException e1) {
+                System.err.println(e1.getMessage());
+            } catch (Exception e2) {
+                System.err.println(e2.getMessage());
             } finally {
                 if (stmt != null) stmt.close();
                 if (conn != null) conn.close();

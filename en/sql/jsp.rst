@@ -6,6 +6,11 @@
 Java Stored Function/Procedure
 ******************************
 
+.. _jsp-introduction:
+
+Introduction to Java Stored Function/Procedure
+==============================================
+
 Stored functions and procedures are used to implement complicated program logic that is not possible with SQL. They allow users to manipulate data more easily. Stored functions/procedures are blocks of code that have a flow of commands for data manipulation and are easy to manipulate and administer.
 
 CUBRID supports to develop stored functions and procedures in Java. Java stored functions/procedures are executed on the JVM (Java Virtual Machine) hosted by CUBRID.
@@ -21,10 +26,28 @@ The advantages of using Java stored functions/procedures are as follows:
 
     *   The other languages except Java do not support stored function/procedure. In CUBRID, only Java can implement stored function/procedure.
 
+.. _jsp-prerequisites:
+
+Prerequisites
+==============================================
+
+To use Java stored function/procedure, the following must be ready
+
+*   **java_stored_procedure** must be set to **yes** in the **cubrid.conf** file.
+*   Java Stored Procedure server (Java SP server) must be started for the database that you want to use Java stored function/procedures.
+
+.. _jsp-system-prm:
+
+Check the cubrid.conf file
+--------------------------
+
+By default, the **java_stored_procedure** is set to **no** in the **cubrid.conf** file.   
+To use a Java stored function/procedure, this value must be changed to **yes**. For details on this value, see :ref:`other-parameters` in Database Server Configuration.
+
 .. _jsp-starting-javasp:
 
-Starting Java Stored Procedure Server
-=====================================
+Start Java SP Server
+---------------------------------
 
 You need to start a Java Stored Procedure server (Java SP server) for the database you want to use Java-stored procedures/functions.
 
@@ -55,11 +78,6 @@ How to Write Java Stored Function/Procedure
 ===========================================
 
 The following is an example to write a Java stored function/procedure.
-
-Check the cubrid.conf file
---------------------------
-
-By default, the **java_stored_procedure** is set to **no** in the **cubrid.conf** file. To use a Java stored function/procedure, this value must be changed to **yes**. For details on this value, see `Other Parameters <#pm_pm_db_classify_etc_htm>`_ in Database Server Configuration.
 
 Write and compile the Java source code
 --------------------------------------
@@ -154,13 +172,16 @@ If you connect to the database using the JDBC driver as shown above, the transac
 
     import java.sql.*;
 
-    public class Athlete{
-        public static void Athlete(String name, String gender, String nation_code, String event) throws SQLException{
-            String sql="INSERT INTO ATHLETE(NAME, GENDER, NATION_CODE, EVENT)" + "VALUES (?, ?, ?, ?)";
+    public class Athlete {
+        public static void insertAthlete(String name, String gender, String nation_code, String event) throws SQLException {
+            String sql = "INSERT INTO ATHLETE(NAME, GENDER, NATION_CODE, EVENT)" + "VALUES (?, ?, ?, ?)";
             
+            Connection conn = null;
+            PreparedStatement pstmt = null;
+
             try{
-                Connection conn = DriverManager.getConnection("jdbc:default:connection:");
-                PreparedStatement pstmt = conn.prepareStatement(sql);
+                conn = DriverManager.getConnection("jdbc:default:connection:");
+                pstmt = conn.prepareStatement(sql);
            
                 pstmt.setString(1, name);
                 pstmt.setString(2, gender);
@@ -173,6 +194,9 @@ If you connect to the database using the JDBC driver as shown above, the transac
                 conn.close();
             } catch (Exception e) {
                 System.err.println(e.getMessage());
+            } finally {
+                if (pstmt != null) pstmt.close();
+                if (conn != null) conn.close();
             }
         }
     }
@@ -190,7 +214,6 @@ If you connect to other databases, the connection to the CUBRID database does no
 
     public class SelectData {
         public static void SearchSubway(String[] args) throws Exception {
-
             Connection conn = null;
             Statement stmt = null;
             ResultSet rs = null;
@@ -212,14 +235,13 @@ If you connect to other databases, the connection to the CUBRID database does no
                 }
                 
                 rs.close();
-                stmt.close();
-                conn.close();
-            } catch ( SQLException e ) {
-                System.err.println(e.getMessage());
-            } catch ( Exception e ) {
-                System.err.println(e.getMessage());
+            } catch (SQLException e1) {
+                System.err.println(e1.getMessage());
+            } catch (Exception e2) {
+                System.err.println(e2.getMessage());
             } finally {
-                if ( conn != null ) conn.close();
+                if (stmt != null) stmt.close();
+                if (conn != null) conn.close();
             }
         }
     }
@@ -296,31 +318,109 @@ When a Java stored function/procedure is published, it is not checked whether th
 Data Type Mapping
 -----------------
 
-In call specifications, the data types SQL must correspond to the data types of Java parameter and return value. The following table shows SQL/Java data types allowed in CUBRID.
+In call specifications, the data types of SQL must correspond to the data types of Java parameter and return value.
+In addition, when implementing a Java stored function/procedure, the data types of Java must match the data types of query result (ResultSet).
+The following table shows SQL/Java data types allowed in CUBRID.
 
 **Data Type Mapping**
 
-+-----------------+------------------------------------------------------------------------------------------------------------------------------------------+
-| SQL Type        | Java Type                                                                                                                                |
-+=================+==========================================================================================================================================+
-| CHAR, VARCHAR   | java.lang.String, java.sql.Date, java.sql.Time, java.sql.Timestamp, java.lang.Byte, java.lang.Short, java.lang.Integer, java.lang.Long,  |
-|                 | java.lang.Float, java.lang.Double, java.math.BigDecimal, byte, short, int, long, float, double                                           |
-+-----------------+------------------------------------------------------------------------------------------------------------------------------------------+
-| NUMERIC, SHORT, | java.lang.Byte, java.lang.Short, java.lang.Integer, java.lang.Long, java.lang.Float, java.lang.Double, java.math.BigDecimal,             |
-| INT, FLOAT,     | java.lang.String, byte, short, int, long, float, double                                                                                  |
-| DOUBLE,         |                                                                                                                                          |
-| CURRENCY        |                                                                                                                                          |
-+-----------------+------------------------------------------------------------------------------------------------------------------------------------------+
-| DATE, TIME,     | java.sql.Date, java.sql.Time, java.sql.Timestamp, java.lang.String                                                                       |
-| TIMESTAMP       |                                                                                                                                          |
-+-----------------+------------------------------------------------------------------------------------------------------------------------------------------+
-| SET, MULTISET,  | java.lang.Object[], java primitive type array, java.lang.Integer[] ...                                                                   |
-| SEQUENCE        |                                                                                                                                          |
-+-----------------+------------------------------------------------------------------------------------------------------------------------------------------+
-| OBJECT          | cubrid.sql.CUBRIDOID                                                                                                                     |
-+-----------------+------------------------------------------------------------------------------------------------------------------------------------------+
-| CURSOR          | cubrid.jdbc.driver.CUBRIDResultSet                                                                                                       |
-+-----------------+------------------------------------------------------------------------------------------------------------------------------------------+
+    +------------------------+--------------------------+-------------------------------------------------------------------------+
+    | Category               | SQL Type                 | Java Type                                                               |
+    +========================+==========================+=========================================================================+
+    | Numeric Types          | SHORT, SMALLINT          | short, java.lang.Short                                                  |
+    |                        +--------------------------+-------------------------------------------------------------------------+
+    |                        | INT, INTEGER             | int, java.lang.Integer                                                  |
+    |                        +--------------------------+-------------------------------------------------------------------------+
+    |                        | BIGINT                   | long, java.lang.Long                                                    |
+    |                        +--------------------------+-------------------------------------------------------------------------+
+    |                        | NUMERIC, DECIMAL         | java.math.BigDecimal                                                    |
+    |                        +--------------------------+-------------------------------------------------------------------------+
+    |                        | FLOAT, REAL              | float, java.lang.Float                                                  |
+    |                        +--------------------------+-------------------------------------------------------------------------+
+    |                        | DOUBLE, DOUBLE PRECISION | double, java.lang.Double                                                |
+    +------------------------+--------------------------+-------------------------------------------------------------------------+
+    | Date/Time Types        | DATE                     | java.sql.Date                                                           |
+    |                        +--------------------------+-------------------------------------------------------------------------+
+    |                        | TIME                     | java.sql.Time                                                           |
+    |                        +--------------------------+-------------------------------------------------------------------------+
+    |                        | TIMESTAMP                | java.sql.Timestamp                                                      |
+    |                        +--------------------------+-------------------------------------------------------------------------+
+    |                        | DATETIME                 | java.sql.Timestamp                                                      |
+    |                        +--------------------------+-------------------------------------------------------------------------+
+    |                        | TIMESTAMPLTZ             | X (not supported)                                                       |
+    |                        +--------------------------+-------------------------------------------------------------------------+
+    |                        | TIMESTAMPTZ              | X (not supported)                                                       |
+    |                        +--------------------------+-------------------------------------------------------------------------+
+    |                        | DATETIMELTZ              | X (not supported)                                                       |
+    |                        +--------------------------+-------------------------------------------------------------------------+
+    |                        | DATETIMETZ               | X (not supported)                                                       |
+    +------------------------+--------------------------+-------------------------------------------------------------------------+
+    | Bit String  Types      | BIT                      | X (not supported)                                                       |
+    |                        +--------------------------+-------------------------------------------------------------------------+
+    |                        | VARBIT                   | X (not supported)                                                       |
+    +------------------------+--------------------------+-------------------------------------------------------------------------+
+    | Character String Types | CHAR                     | java.lang.String                                                        |
+    |                        +--------------------------+-------------------------------------------------------------------------+
+    |                        | VARCHAR                  | java.lang.String                                                        |
+    +------------------------+--------------------------+-------------------------------------------------------------------------+
+    | Enum Type              | ENUM                     | X (not supported)                                                       |
+    +------------------------+--------------------------+-------------------------------------------------------------------------+
+    | LOB Types              | CLOB, BLOB               | X (not supported)                                                       |
+    +------------------------+--------------------------+-------------------------------------------------------------------------+
+    | Collection Types       | SET, MULTISET, SEQUENCE  | java.lang.Object[], java primitive type array, java wrapper class array |
+    +------------------------+--------------------------+-------------------------------------------------------------------------+
+    | Special Types          | JSON                     | X (not supported)                                                       |
+    |                        +--------------------------+-------------------------------------------------------------------------+
+    |                        | OBJECT, OID              | cubrid.sql.CUBRIDOID <interface>                                        |
+    |                        +--------------------------+-------------------------------------------------------------------------+
+    |                        | CURSOR                   | java.sql.ResultSet <interface>                                          |
+    +------------------------+--------------------------+-------------------------------------------------------------------------+
+
+**Implicit Data Type Conversion**
+
+If the data type of SQL and the data type of Java do not correspond as shown in the table above, CUBRID implicitly attempts data type conversion according to the following table.
+Please note that implicit data conversion may result in data loss.
+
+    +-------------------------+----------------+-----------------+-------------------+-----------------+-----------------+------------------+----------------------+------------------+---------------+--------------------+
+    |                         | **Java Data Types**                                                                                                                                                                        |
+    |                         +----------------+-----------------+-------------------+-----------------+-----------------+------------------+----------------------+------------------+---------------+--------------------+
+    |                         | byte,          | short,          | int,              | long,           | float,          | double,          |                      |                  |               |                    |
+    | **SQL Data Types**      | java.lang.Byte | java.lang.Short | java.lang.Integer | java.lang.Long  | java.lang.Float | java.lang.Double | java.math.BigDecimal | java.lang.String | java.sql.Time | java.sql.Timestamp |
+    +=========================+================+=================+===================+=================+=================+==================+======================+==================+===============+====================+
+    | **SHORT, SMALLINT**     | O              | O               | O                 | O               | O               | O                | O                    | O                | X             | X                  |
+    +-------------------------+----------------+-----------------+-------------------+-----------------+-----------------+------------------+----------------------+------------------+---------------+--------------------+
+    | **INT, INTEGER**        | O              | O               | O                 | O               | O               | O                | O                    | O                | X             | X                  |
+    +-------------------------+----------------+-----------------+-------------------+-----------------+-----------------+------------------+----------------------+------------------+---------------+--------------------+
+    | **BIGINT**              | O              | O               | O                 | O               | O               | O                | O                    | O                | X             | X                  |
+    +-------------------------+----------------+-----------------+-------------------+-----------------+-----------------+------------------+----------------------+------------------+---------------+--------------------+
+    | **NUMERIC, DECIMAL**    | O              | O               | O                 | O               | O               | O                | O                    | O                | X             | X                  |
+    +-------------------------+----------------+-----------------+-------------------+-----------------+-----------------+------------------+----------------------+------------------+---------------+--------------------+
+    | **FLOAT, REAL**         | O              | O               | O                 | O               | O               | O                | O                    | O                | X             | X                  |
+    +-------------------------+----------------+-----------------+-------------------+-----------------+-----------------+------------------+----------------------+------------------+---------------+--------------------+
+    | **DOUBLE**              | O              | O               | O                 | O               | O               | O                | O                    | O                | X             | X                  |
+    | **DOUBLE PRECISION**    |                |                 |                   |                 |                 |                  |                      |                  |               |                    |
+    +-------------------------+----------------+-----------------+-------------------+-----------------+-----------------+------------------+----------------------+------------------+---------------+--------------------+
+    | **DATE**                | X              | X               | X                 | X               | X               | X                | X                    | O                | O             | O                  |
+    +-------------------------+                |                 |                   |                 |                 |                  |                      |                  |               |                    |
+    | **TIME**                |                |                 |                   |                 |                 |                  |                      |                  |               |                    |
+    +-------------------------+                |                 |                   |                 |                 |                  |                      |                  |               |                    |
+    | **TIMESTAMP**           |                |                 |                   |                 |                 |                  |                      |                  |               |                    |
+    +-------------------------+                |                 |                   |                 |                 |                  |                      |                  |               |                    |
+    | **DATETIME**            |                |                 |                   |                 |                 |                  |                      |                  |               |                    |
+    +-------------------------+----------------+-----------------+-------------------+-----------------+-----------------+------------------+----------------------+------------------+---------------+--------------------+
+    | **CHAR**                | O              | O               | O                 | O               | O               | O                | O                    | O                | O             | O                  |
+    +-------------------------+                |                 |                   |                 |                 |                  |                      |                  |               |                    |
+    | **VARCHAR**             |                |                 |                   |                 |                 |                  |                      |                  |               |                    |
+    +-------------------------+----------------+-----------------+-------------------+-----------------+-----------------+------------------+----------------------+------------------+---------------+--------------------+
+    | **SET**                 | X              | X               | X                 | X               | X               | X                | X                    | X                | X             | X                  |
+    +-------------------------+                |                 |                   |                 |                 |                  |                      |                  |               |                    |
+    | **MULTISET**            |                |                 |                   |                 |                 |                  |                      |                  |               |                    |
+    +-------------------------+                |                 |                   |                 |                 |                  |                      |                  |               |                    |
+    | **SEQUENCE**            |                |                 |                   |                 |                 |                  |                      |                  |               |                    |
+    +-------------------------+----------------+-----------------+-------------------+-----------------+-----------------+------------------+----------------------+------------------+---------------+--------------------+
+
+    - X: Conversion not allowed
+    - O: Implicit conversion
 
 Checking the Published Java Stored Function/Procedure Information
 -----------------------------------------------------------------
@@ -578,11 +678,12 @@ Take a look at the following **typestring** () Java stored function.
 
 .. code-block:: java
 
-    public class JavaSP1{
-        public static String typestring(){
+    public class JavaSP1 {
+        public static String typestring() {
             String temp = " ";
-            for(int i=0 i< 1 i++)
+            for(int i = 0; i < 1; i++) {
                 temp = temp + "1234567890";
+            }
             return temp;
         }
     }
@@ -612,13 +713,7 @@ In CUBRID, you must use **CURSOR** as the data type when you declare a Java stor
 
 .. code-block:: java
 
-    import java.sql.Connection;
-    import java.sql.DriverManager;
-    import java.sql.ResultSet;
-    import java.sql.Statement;
-     
-    import cubrid.jdbc.driver.CUBRIDConnection;
-    import cubrid.jdbc.driver.CUBRIDResultSet;
+    import java.sql.*;
 
     public class JavaSP2 {
         public static ResultSet TResultSet(){
@@ -642,18 +737,14 @@ In the calling block, you must set the OUT argument with **Types.JAVA_OBJECT**, 
 
 .. code-block:: java
 
-    import java.sql.CallableStatement;
-    import java.sql.Connection;
-    import java.sql.DriverManager;
-    import java.sql.ResultSet;
-    import java.sql.Types;
+    import java.sql.*;
      
     public class TestResultSet{
         public static void main(String[] args) {
             Connection conn = null;
      
             try {
-                conn = DriverManager.getConnection("jdbc:CUBRID:localhost:31001:tdemodb:::","","");
+                conn = DriverManager.getConnection("jdbc:default:connection:");
      
                 CallableStatement cstmt = conn.prepareCall("?=CALL rset()");
                 cstmt.registerOutParameter(1, Types.JAVA_OBJECT);
@@ -685,29 +776,29 @@ If the set type of the Java stored function/procedure in CUBRID is IN OUT, the v
 
 .. code-block:: java
 
-    public static void SetOID(cubrid.sql.CUBRIDOID[][] set, cubrid.sql.CUBRIDOID aoid){
-        Connection conn=null;
-        Statement stmt=null;
+    import cubrid.sql.CUBRIDOID;
+
+    public static void SetOID(CUBRIDOID[][] set, CUBRIDOID aoid) {
         String ret="";
         Vector v = new Vector();
 
-        cubrid.sql.CUBRIDOID[] set1 = set[0];
+        CUBRIDOID[] set1 = set[0];
 
         try {
-            if(set1!=null) {
+            if(set1 != null) {
                 int len = set1.length;
                 int i = 0;
                 
-                for (i=0 i< len i++)
+                for (i = 0; i < len; i++)
                     v.add(set1[i]);
             }
             
             v.add(aoid);
-            set[0]=(cubrid.sql.CUBRIDOID[]) v.toArray(new cubrid.sql.CUBRIDOID[]{});
+            set[0] = (CUBRIDOID[]) v.toArray(new CUBRIDOID[]{});
             
         } catch(Exception e) {
             e.printStackTrace();
-            System.err.pirntln("SQLException:"+e.getMessage());
+            System.err.println("SQLException:"+e.getMessage());
         }
     }
 
@@ -723,15 +814,17 @@ In case of using the OID type value for IN/OUT in CUBRID, use the value passed f
 
 .. code-block:: java
 
+    import java.sql.*;
+    import cubrid.sql.CUBRIDOID;
+
     public static void tOID(CUBRIDOID[] oid, String query)
     {
-        Connection conn=null;
-        Statement stmt=null;
-        String ret="";
+        Connection conn = null;
+        Statement stmt = null;
+        String ret = "";
 
         try {
-            Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
-            conn=DriverManager.getConnection("jdbc:default:connection:");
+            conn = DriverManager.getConnection("jdbc:default:connection:");
 
             conn.setAutoCommit(false);
             stmt = conn.createStatement();
@@ -739,18 +832,18 @@ In case of using the OID type value for IN/OUT in CUBRID, use the value passed f
             System.out.println("query:"+ query);
 
             while(rs.next()) {
-                oid[0]=(CUBRIDOID)rs.getObject(1);
-                System.out.println("oid:"+oid[0].getTableName());
+                oid[0] = (CUBRIDOID) rs.getObject(1);
+                System.out.println("oid:" + oid[0].getTableName());
             }
             
             stmt.close();
             conn.close();
             
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.err.println("SQLException:"+e.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-            system.err.println("Exception:"+ e.getMessage());
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+            System.err.println("SQLException:" + e1.getMessage());
+        } catch (Exception e2) {
+            e2.printStackTrace();
+            system.err.println("Exception:" + e2.getMessage());
         }
     }

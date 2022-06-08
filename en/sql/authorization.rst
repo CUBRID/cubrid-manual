@@ -114,7 +114,7 @@ You don't need to grant authorization individually because the members of the gr
     *   **EXECUTE**: Allows to call table methods or instance methods.
     *   **ALL PRIVILEGES**: Includes all permissions described above.
 
-* *schema_name*: Specifies the schema name of the table or virtual table. If omitted, the schema name of current session is used.
+* *schema_name*: Specifies the schema name of the table or virtual table. If omitted, the schema name of the current session is used.
 * *table_name*: Specifies the name of a table or virtual table to be granted.
 * *user*: Specifies the name of a user (group) to be granted. Enter the login name of the database user or **PUBLIC**, a system-defined user. If **PUBLIC** is specified, all database users are granted with the permission.
 * **WITH GRANT OPTION**: **WITH GRANT OPTION** allows the grantee of authorization to grant that same authorization to another user.
@@ -164,7 +164,7 @@ If the authorization (**WITH GRANT OPTION**) is revoked from the grantor, the au
     FROM user [{, user}] ;
 
 *   *operation*: Indicates an operation that can be used when granting authorization (see **Syntax** in :ref:`granting-authorization` for details).
-*   *schema_name*: Specifies the schema name of the table or virtual table. If omitted, the schema name of current session is used.
+*   *schema_name*: Specifies the schema name of the table or virtual table. If omitted, the schema name of the current session is used.
 *   *table_name*: Specifies the name of the table or virtual table to be granted.
 *   *user*: Specifies the name of the user (group) to be granted.
 
@@ -195,7 +195,7 @@ Database Administrator (**DBA**) or a member of the **DBA** group can change the
 
     ALTER (TABLE | CLASS | VIEW | VCLASS | TRIGGER | PROCEDURE | FUNCTION) [schema_name.]name OWNER TO user_id;
 
-*   *schema_name*: Specifies the schema of the object. If omitted, the schema name of current session is used.
+*   *schema_name*: Specifies the schema of the object. If omitted, the schema name of the current session is used.
 *   *name*: The name of schema object of which owner is to be changed
 *   *user_id*: User ID
 
@@ -277,7 +277,7 @@ This method is an instance method that can call each user instance, and it is us
 
 **change_owner() method**
 
-As a class method of **db_authorizations** class, this method is used to change the owner of a class. The name of a class for which you want to change the owner, and the name of a new owner are given as arguments. The table name must be prefixed with the schema name. If omitted, the schema name of current session is used. At this time, the class and owner that are specified as an argument must exist in a database. Otherwise, an error occurs. **change_owner( )** can be called only by **DBA** or members of **DBA** group. The **ALTER ... OWNER** query has the same role as the method. See :ref:`change-owner`.
+As a class method of **db_authorizations** class, this method is used to change the owner of a class. The name of a class for which you want to change the owner, and the name of a new owner are given as arguments. The table name must be prefixed with the schema name. If omitted, the schema name of the current session is used. At this time, the class and owner that are specified as an argument must exist in a database. Otherwise, an error occurs. **change_owner( )** can be called only by **DBA** or members of **DBA** group. The **ALTER ... OWNER** query has the same role as the method. See :ref:`change-owner`.
 
 .. code-block:: sql
 

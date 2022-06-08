@@ -25,7 +25,7 @@ It has the following advantages over using the **DELETE FROM** *[schema_name.]ta
 
     TRUNCATE [ TABLE ] [schema_name.]table_name [ CASCADE ]
 
-*   *schema_name*: Specifies the schema name. If omitted, the schema name of current session is used.
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *table_name* : Specifies the name of the table that contains the data to be deleted.
 *   **CASCADE** : Deletes all records in all tables referring to the specified table with a foreign key. This is propagated to all tables in the foreign key relationship. A **PRIMARY KEY** constraint has to be defined in the table and this has to be referred to by one or more **FOREIGN KEY**, and the foreign key action has to be **ON DELETE**. It fails without this option when a foreign key referring to the specified table is defined. It also fails when even one **ON DELETE** action is not **CASCADE** in all foreign key relationships. See :ref:`foreign-key-constraint` for more information about the foreign key constraint. 
 

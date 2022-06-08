@@ -29,7 +29,7 @@ You can create a serial object in the database by using the **CREATE SERIAL** st
     [CACHE cached_num | NOCACHE]
     [COMMENT 'comment_string'];
 
-*   *schema_name*: Specifies the schema name of the serial(maximum: 31 bytes). If omitted, the schema name of current session is used.
+*   *schema_name*: Specifies the schema name of the serial(maximum: 31 bytes). If omitted, the schema name of the current session is used.
 *   *serial_name*: specifies the name of the serial to be generated(maximum: 222 bytes).
 
 *   **START WITH** *initial*: Specifies the initial value of serial. The range of this value is between -1,000,000,000,000,000,000,000,000,000,000,000,000(-10^36) and    9,999,999,999,999,999,999,999,999,999,999,999,999(10^37-1). The default value of ascending serial is 1 and that of descending serial is -1.
@@ -131,7 +131,7 @@ With the **ALTER SERIAL** statement, you can update the increment of the serial 
     [CACHE cached_num | NOCACHE]
     [COMMENT 'comment_string'];
 
-*   *schema_name*: Specifies the schema name of the serial(maximum: 31 bytes). If omitted, the schema name of current session is used.
+*   *schema_name*: Specifies the schema name of the serial(maximum: 31 bytes). If omitted, the schema name of the current session is used.
 *   *serial_name*: specifies the name of the serial to be created(maximum: 222 bytes).
 
 *   **INCREMENT BY** *interval*: specifies the increment of the serial. For the *interval*, you can specify any integer with 38 digits or less except zero. The absolute value of the *interval* must be smaller than the difference between **MAXVALUE** and **MINVALUE**. If a negative number is specified, the serial is in descending order; otherwise, it is in ascending order. The default value is **1**.
@@ -202,7 +202,7 @@ If you also specify **IF EXISTS** clause, no error will be happened even if a ta
 
     DROP SERIAL [ IF EXISTS ] [schema_name.]serial_name ;
 
-*   *schema_name*: Specifies the schema name of the serial. If omitted, the schema name of current session is used.
+*   *schema_name*: Specifies the schema name of the serial. If omitted, the schema name of the current session is used.
 *   *serial_name*: Specifies the name of the serial to be dropped.
 
 The following example shows how to drop the *order_no* serial.
@@ -223,7 +223,7 @@ You can access and update a serial by serial name and a pseudocolumn pair. ::
     [schema_name.]serial_name.CURRENT_VALUE
     [schema_name.]serial_name.NEXT_VALUE
 
-*   *schema_name*: Specifies the schema name of the serial. If omitted, the schema name of current session is used.
+*   *schema_name*: Specifies the schema name of the serial. If omitted, the schema name of the current session is used.
 *   *[schema_name.]serial_name*.\ **CURRENT_VALUE**: Returns the current serial value.
 *   *[schema_name.]serial_name*.\ **NEXT_VALUE**: Increments the serial value and returns the result.
 

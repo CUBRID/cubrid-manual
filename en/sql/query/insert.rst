@@ -28,7 +28,7 @@ You can insert a new record into a table in a database by using the **INSERT** s
         SELECT...
         [ON DUPLICATE KEY UPDATE column_name = expr, ... ]
 
-*   *schema_name*: Specifies the schema name. If omitted, the schema name of current session is used.
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 
 *   *table_name*: Specifies the name of the target table into which you want to insert a new record.
 

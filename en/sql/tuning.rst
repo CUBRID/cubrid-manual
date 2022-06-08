@@ -63,7 +63,7 @@ You can check the statistics Information with the session command of the CSQL In
 
     csql> ;info stats table_name
 
-*   *schema_name*: Specifies the schema of the table. If omitted, the schema name of current session is used.
+*   *schema_name*: Specifies the schema of the table. If omitted, the schema name of the current session is used.
 *   *table_name*: Table name to check the statistics Information
 
 The following shows the statistical information of *t1* table in CSQL interpreter.

@@ -71,7 +71,7 @@ The **SELECT** statement specifies columns that you want to retrieve from a tabl
 
         As **AVG**, **COUNT**, **MAX**, **MIN**, or **SUM**, an aggregate function that manipulates the retrieved data can also be used in the *expression*. 
 
-*   *schema_name*: Specifies the schema name. If omitted, the schema name of current session is used.
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 
 *   *table_name*.\*: Specifies the table name and using \* has the same effect as specifying all columns for the given table.
 

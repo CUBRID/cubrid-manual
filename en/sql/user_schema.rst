@@ -9,7 +9,7 @@ To access the object, the user must use the path expression of "schema_name.tabl
 
 .. note::
 
-    Since version 11.2, "Schema ≒ Database" has been changed to "Schema ≒ User". Before version 11.2, there was only a single schema in the database. Since version 11.2, users are used as a single schema. It is not possible to access a table owned by another user only by the table name. Tables can be accessed using the schema (owner) name as a prefix.
+    Since version 11.2, "Schema ≒ Database" has been changed to "Schema ≒ User". Before version 11.2, there was only a single schema in the database. Since version 11.2, schema is available for each user. It is not possible to access a table owned by another user only by the table name. Tables can be accessed using the schema (owner) name as a prefix.
 
     The following difference occurs in demodb, which is the default example database.
 

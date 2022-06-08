@@ -21,7 +21,7 @@ You can delete records in the table by using the **DELETE** statement. You can s
 
 *   <*table_specifications*>: You can specify the statement such as **FROM** clause of the **SELECT** statement and one or more tables can be specified.
 
-*   *schema_name*: Specifies the schema name. If omitted, the schema name of current session is used.
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 
 *   *table_name*: Specifies the name of a table where the data to be deleted is contained. If the number of table is one, the **FROM** keyword can be omitted.
 

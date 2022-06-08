@@ -83,7 +83,7 @@ To create a table, use the **CREATE TABLE** statement.
                                ENCRYPT [=] [AES | ARIA]
 
 *   IF NOT EXISTS: If an identically named table already exists, a new table will not be created without an error.
-*   *schema_name*: Specifies the schema name(maximum: 31 bytes). If omitted, the schema name of current session is used.
+*   *schema_name*: Specifies the schema name(maximum: 31 bytes). If omitted, the schema name of the current session is used.
 *   *table_name*: specifies the name of the table to be created (maximum: 222 bytes).
 *   *column_name*: specifies the name of the column to be created (maximum: 254 bytes).
 *   *column_type*: specifies the data type of the column.
@@ -565,7 +565,7 @@ A foreign key is a column or a set of columns that references the primary key in
 *   *foreign_key_name*: Specifies a name of the **FOREIGN KEY** constraint. You can skip the name specification. However, if you specify this value, *constraint_name* will be ignored, and the specified value will be used.
 
 *   <*column_name_comma_list1*>: Specifies the name of the column to be defined as a foreign key after the **FOREIGN KEY** keyword. The column number of foreign keys defined and primary keys must be same.
-*   *schema_name*: Specifies the schema name. If omitted, the schema name of current session is used.
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *referenced_table_name*: Specifies the name of the table to be referenced.
 *   <*column_name_comma_list2*>: Specifies the name of the referred primary key column after the **FOREIGN KEY** keyword.
 *   <*referential_triggered_action*>: Specifies the trigger action that responds to a certain operation in order to maintain referential integrity. **ON UPDATE** or **ON DELETE** can be specified. Each action can be defined multiple times, and the definition order is not significant.
@@ -812,7 +812,7 @@ You cannot create the column definition because the **CREATE TABLE ... LIKE** st
 
     CREATE {TABLE | CLASS} [schema_name.]new_table_name LIKE [schema_name.]source_table_name;
 
-*   *schema_name*: Specifies the schema name. If omitted, the schema name of current session is used.
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *new_table_name*: A table name to be created
 *   *source_table_name*: The name of the original table that already exists in the database. The following tables cannot be specified as original tables in the **CREATE TABLE ... LIKE** statement.
 
@@ -891,7 +891,7 @@ You can create a new table that contains the result records of the **SELECT** st
 
     CREATE {TABLE | CLASS} [schema_name.]table_name [(<column_definition> [,<table_constraint>], ...)] [REPLACE] AS <select_statement>;
 
-*   *schema_name*: Specifies the schema name. If omitted, the schema name of current session is used.
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *table_name*: a name of the table to be created.
 *   <*column_definition*>: defines a column. If this is omitted, the column schema of **SELECT** statement is replicated; however, the constraint or the **AUTO_INCREMENT** attribute is not replicated.
 *   <*table_constraint*>: defines table constraint.
@@ -1110,7 +1110,7 @@ You can add a new column by using the **ADD COLUMN** clause. You can specify the
 
                         <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
 
-*   *schema_name*: Specifies the schema name. If omitted, the schema name of current session is used.
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *table_name*: specifies the name of a table that has a column to be added.
 *   <*column_definition*>: specifies the name(max 254 bytes), data type, and constraints of a column to be added.
 *   **AFTER** *oid_column_name*: specifies the name of an existing column before the column to be added.
@@ -1229,7 +1229,7 @@ By default, the index created when you add **PRIMARY KEY** constraints is create
 
                         <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
 
-*   *schema_name*: Specifies the schema name. If omitted, the schema name of current session is used.
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *table_name*: Specifies the name of a table that has a constraint to be added.
 *   *constraint_name*: Specifies the name of a constraint to be added, or it can be omitted. If omitted, a name is automatically assigned(maximum: 254 bytes).
 *   *foreign_key_name*: Specifies a name of the **FOREIGN KEY** constraint. You can skip the name specification. However, if you specify this value, *constraint_name* will be ignored, and the specified value will be used.
@@ -1251,7 +1251,7 @@ You can define the index attributes for a specific column by using the **ADD IND
      
         <index_col_name> ::= column_name [(length)] [ ASC | DESC ]
 
-*   *schema_name*: Specifies the schema name. If omitted, the schema name of current session is used.
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *table_name* : Specifies the name of a table to be modified.
 *   *index_name* : Specifies the name of an index(maximum: 254 bytes). If omitted, a name is automatically assigned.
 *   *index_col_name* : Specifies the column that has an index to be defined. **ASC** or **DESC** can be specified for a column option.
@@ -1298,7 +1298,7 @@ You can specify a new default value for a column that has no default value or mo
 
     ALTER [TABLE | CLASS] [schema_name.]table_name ALTER [COLUMN] column_name SET DEFAULT value ;
 
-*   *schema_name*: Specifies the schema name. If omitted, the schema name of current session is used.
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *table_name* : Specifies the name of a table that has a column whose default value is to be modified.
 *   *column_name* : Specifies the name of a column whose default value is to be modified.
 *   *value* : Specifies a new default value.
@@ -1383,7 +1383,7 @@ The **AUTO_INCREMENT** clause can change the initial value of the increment valu
 
     ALTER TABLE [schema_name.]table_name AUTO_INCREMENT = initial_value ;
 
-*   *schema_name*: Specifies the schema name. If omitted, the schema name of current session is used.
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *table_name* : Table name
 *   *initial_value* : Initial value to alter
 
@@ -1438,7 +1438,7 @@ the configuration parameter allow_truncated_string also affect the similar as al
               | MODIFY [COLUMN | CLASS ATTRIBUTE] col_name <column_definition>
                          [FIRST | AFTER col_name]
 
-*   *schema_name*: Specifies the schema name. If omitted, the schema name of current session is used.
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *tbl_name*: specifies the name of the table including the column to change.
 *   *old_col_name*: specifies the existing column name.
 *   *new_col_name*: specifies the column name to change
@@ -1763,7 +1763,7 @@ You can change the name of the column by using the **RENAME COLUMN** clause. ::
     ALTER [ TABLE | CLASS | VCLASS | VIEW ] [schema_name.]table_name
     RENAME [ COLUMN | ATTRIBUTE ] old_column_name { AS | TO } new_column_name ;
 
-*   *schema_name*: Specifies the schema name. If omitted, the schema name of current session is used.
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *table_name* : Specifies the name of a table that has a column to be renamed.
 *   *old_column_name* : Specifies the name of a column.
 *   *new_column_name* : Specifies a new column name after the **AS** keyword(maximum: 254 bytes).
@@ -1781,7 +1781,7 @@ You can delete a column in a table by using the **DROP COLUMN** clause. You can 
     ALTER [TABLE | CLASS | VCLASS | VIEW] [schema_name.]table_name
     DROP [COLUMN | ATTRIBUTE] column_name, ... ;
 
-*   *schema_name*: Specifies the schema name. If omitted, the schema name of current session is used.
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *table_name* : Specifies the name of a table that has a column to be deleted.
 *   *column_ name* : Specifies the name of a column to be deleted. Multiple columns can be specified by separating them with commas (,).
 
@@ -1797,7 +1797,7 @@ You can drop the constraints pre-defined for the table, such as **UNIQUE**, **PR
     ALTER [TABLE | CLASS] [schema_name.]table_name
     DROP CONSTRAINT constraint_name ;
 
-*   *schema_name*: Specifies the schema name. If omitted, the schema name of current session is used.
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *table_name* : Specifies the name of a table that has a constraint to be dropped.
 *   *constraint_name* : Specifies the name of a constraint to be dropped.
 
@@ -1831,7 +1831,7 @@ You can delete an index defined for a column by using the **DROP INDEX** clause.
 
     ALTER [TABLE | CLASS] [schema_name.]table_name DROP INDEX index_name ;
 
-*   *schema_name*: Specifies the schema name. If omitted, the schema name of current session is used.
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *table_name* : Specifies the name of a table of which constraints will be deleted.
 *   *index_name* : Specifies the name of an index to be deleted.
 
@@ -1846,7 +1846,7 @@ You can delete a primary key constraint defined for a table by using the **DROP 
 
     ALTER [TABLE | CLASS] [schema_name.]table_name DROP PRIMARY KEY ;
 
-*   *schema_name*: Specifies the schema name. If omitted, the schema name of current session is used.
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *table_name* : Specifies the name of a table that has a primary key constraint to be deleted.
 
 .. code-block:: sql
@@ -1860,7 +1860,7 @@ You can drop a foreign key constraint defined for a table using the **DROP FOREI
 
     ALTER [TABLE | CLASS] [schema_name.]table_name DROP FOREIGN KEY constraint_name ;
 
-*   *schema_name*: Specifies the schema name. If omitted, the schema name of current session is used.
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *table_name* : Specifies the name of a table whose constraint is to be deleted.
 *   *constraint_name* : Specifies the name of foreign key constraint to be deleted.
 
@@ -1885,7 +1885,7 @@ You can drop an existing table by the **DROP** statement. Multiple tables can be
                 | [ONLY] [schema_name.]table_name 
                 | ALL [schema_name.]table_name [( EXCEPT [schema_name.]table_name, ... )] 
 
-*   *schema_name*: Specifies the schema name. If omitted, the schema name of current session is used.
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *table_name* : Specifies the name of the table to be dropped. You can delete multiple tables simultaneously by separating them with commas.
 *   If a super class name is specified after the **ONLY** keyword, only the super class, not the sub classes inheriting from it, is deleted. If a super class name is specified after the **ALL** keyword, the super classes as well as the sub classes inheriting from it are all deleted. You can specify the list of sub classes not to be deleted after the **EXCEPT** keyword.
 *   If sub classes that inherit from the super class specified after the **ALL** keyword are specified after the **EXCEPT** keyword, they are not deleted.
@@ -1931,7 +1931,7 @@ You can change the name of a table by using the **RENAME TABLE** statement and s
 
     RENAME  [TABLE | CLASS] [schema_name.]old_table_name {AS | TO} [schema_name.]new_table_name [{, [schema_name.]old_table_name {AS | TO} [schema_name.]new_table_name}];
 
-*   *schema_name*: Specifies the schema name. If omitted, the schema name of current session is used. The schema of the table to be changed and the schema of the new table must be the same.
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used. The schema of the table to be changed and the schema of the new table must be the same.
 *   *old_table_name* : Specifies the old table name to be renamed.
 *   *new_table_name* : Specifies a new table name(maximum: 254 bytes).
 

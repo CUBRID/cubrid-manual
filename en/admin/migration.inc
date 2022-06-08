@@ -44,7 +44,7 @@ The following is [options] used in **cubrid unloaddb**.
 
 .. option:: -i, --input-class-file FILE
 
-    Unload all schema and index of all tables; however, only the data of specified tables in this file are unloaded. If the schema (See the -u option) of the user to be unloaded and the schema of the table are different, the table name must be prefixed with the schema name.
+    Unload all schema and index of all tables; however, only the data of specified tables in this file are unloaded. If the to-be-unloaded schema (See the -u option) of the user and the schema of the table are different, the table name must be prefixed with the schema name.
     
     ::
 

@@ -22,7 +22,7 @@ REPLACE
     REPLACE [INTO] [schema_name.]table_name [(column_name, ...)]
         SELECT...
 
-*   *schema_name*: 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 
 *   *table_name*: 새로운 레코드를 삽입할 대상 테이블 이름을 지정한다.
 

@@ -61,7 +61,7 @@ When a class is created as a sub class, the class inherits all attributes and me
     .
     .
     .
-    INHERIT resolution [{, resolution}]
+    INHERIT resolution [{, resolution}] ;
 
     resolution:
     [column_name | method_name] OF [schema_name.]superclass_name [AS alias]
@@ -80,7 +80,7 @@ To extend class inheritance, add a super class to a class. A relationship betwee
     .
     .
     ADD SUPERCLASS [schema_name.]superclass_name [{, [schema_name.]superclass_name}]
-    [INHERIT resolution [{, resolution}]]
+    [INHERIT resolution [{, resolution}]] ;
 
     resolution:
     [column_name | method_name] OF [schema_name.]superclass_name [AS alias]
@@ -105,7 +105,7 @@ Deleting a super class from a class means removing the relationship between two 
     .
     .
     DROP SUPERCLASS [schema_name.]superclass_name [{, [schema_name.]superclass_name}]
-    [INHERIT resolution [{, resolution}]]
+    [INHERIT resolution [{, resolution}]] ;
      
     resolution:
     [column_name | method_name] OF [schema_name.]superclass_name [AS alias]
@@ -151,7 +151,7 @@ When the system resolves the conflict automatically, basically, the existing inh
 What will be discussed concerning conflicts is applied commonly to both attributes and methods. ::
 
     ALTER [class_type] [schema_name.]class_name alter_clause
-    [INHERIT resolution [{, resolution }]]
+    [INHERIT resolution [{, resolution }]] ;
 
     resolution:
     [column_name | method_name] OF [schema_name.]superclass_name [AS alias]

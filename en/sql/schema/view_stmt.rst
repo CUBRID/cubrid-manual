@@ -28,7 +28,7 @@ Use **CREATE VIEW** statement to create a view. Regarding writing view name, see
 
 *   **OR REPLACE**: If the keyword **OR REPLACE** is specified after **CREATE**, the existing view is replaced by a new one without displaying any error message, even when the *view_name* overlaps with the existing view name.
 
-*   *schema_name*: Specifies the schema name. If omitted, the schema name of the user is used.
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of current session is used.
 *   *view_name*: specifies the name of a view to be created. It must be unique in a database.
 *   *view_column_name*: defines the column of a view.
 *   **AS** <*select_statement*>: A valid **SELECT** statement must be specified. A view is created based on this.
@@ -164,7 +164,7 @@ You can add a new query to a query specification by using the **ADD QUERY** clau
      
         <resolution> ::= {column_name} OF [schema_name.]superclass_name [AS alias]
 
-*   *schema_name*: Specifies the schema name. If omitted, the schema name of the user is used.
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of current session is used.
 *   *view_name*: specifies the name of a view where the query to be added.
 *   <*select_statement*>: specifies the query to be added.
 
@@ -206,7 +206,7 @@ You can change the **SELECT** query defined in the virtual table by using the **
 
     ALTER [VIEW | VCLASS] [schema_name.]view_name AS <select_statement> ;
 
-*   *schema_name*: Specifies the schema name. If omitted, the schema name of the user is used.
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of current session is used.
 *   *view_name*: specifies the name of a view to be modified.
 *   <*select_statement*>: specifies the new query statement to replace the **SELECT** statement defined when a view is created.
 
@@ -231,7 +231,7 @@ You can change the query defined in the query specification by using the **CHANG
     ALTER [VIEW | VCLASS] [schema_name.]view_name
     CHANGE QUERY [integer] <select_statement> ;
 
-*   *schema_name*: Specifies the schema name. If omitted, the schema name of the user is used.
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of current session is used.
 *   *view_name*: specifies the name of a view to be modified.
 *   *integer*: specifies the number value of the query to be modified. The default value is 1.
 *   <*select_statement*>: specifies the new query statement to replace the query whose query number is *integer*.
@@ -308,7 +308,7 @@ You can change a view's comment, columns' comment, or attributes' comment with *
 
         <column_comment_definition> ::= column_name [=] 'column_comment_string'
 
-*   *schema_name*: Specifies the schema name. If omitted, the schema name of the user is used.
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of current session is used.
 *   *view_name*: Specifies the name of a view to be modified.
 *   *column_name*: Specifies the name of a column to be modified.
 *   *view_comment_string*: Specifies a view's comment.
@@ -356,7 +356,7 @@ You can drop a view by using the **DROP VIEW** clause. The way to drop a view is
 
     DROP [VIEW | VCLASS] [IF EXISTS] [schema_name.]view_name [{, [schema_name.]view_name}] ;
 
-*   *schema_name*: Specifies the schema name. If omitted, the schema name of the user is used.
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of current session is used.
 *   *view_name*: specifies the name of a view to be dropped.
 
 .. code-block:: sql
@@ -370,7 +370,7 @@ You can change the view name by using the **RENAME VIEW** statement. ::
 
     RENAME [VIEW | VCLASS] [schema_name.]old_view_name {AS | TO} [schema_name.]new_view_name [{, [schema_name.]old_view_name {AS | TO} [schema_name.]new_view_name}] ;
 
-*   *schema_name*: Specifies the schema name. If omitted, the schema name of the user is used. The schema of the view to be changed and the schema of the new view must be the same.
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of current session is used. The schema of the view to be changed and the schema of the new view must be the same.
 *   *old_view_name*: specifies the name of a view to be modified.
 *   *new_view_name*: specifies the new name of a view.
 

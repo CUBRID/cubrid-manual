@@ -12,7 +12,7 @@
 
 ::
 
-    UPDATE STATISTICS ON [schema_name.]class-name[, [schema_name.]class-name, ...] [WITH FULLSCAN]; 
+    UPDATE STATISTICS ON [schema_name.]class-name [{, [schema_name.]class-name}] [WITH FULLSCAN]; 
      
     UPDATE STATISTICS ON ALL CLASSES [WITH FULLSCAN]; 
   
@@ -64,7 +64,7 @@ CSQL 인터프리터의 세션 명령어로 지정한 테이블의 통계 정보
 
     csql> ;info stats [schema_name.]table_name
 
-*   *schema_name*: 테이블의 스키마를 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
+*   *schema_name*: 테이블의 스키마를 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 통계 정보를 확인할 테이블 이름
 
 다음은 CSQL 인터프리터에서 *t1* 테이블의 통계 정보를 출력하는 예제이다.

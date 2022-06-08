@@ -2,7 +2,6 @@
 :meta-keywords: table definition, create table, drop table, alter table, column definition, constraint definition, create table like, create table as select, rename table
 :meta-description: Define tables in CUBRID database using create table, alter table, drop table and rename table statements.
 
-
 *************
 테이블 정의문
 *************
@@ -84,7 +83,7 @@ CREATE TABLE
                                ENCRYPT [=] [AES | ARIA]
 
 *   **IF NOT EXISTS**: 생성하려는 테이블이 존재하는 경우 에러 없이 테이블을 생성하지 않는다.
-*   *schema_name*: 스키마 이름을 지정한다(최대 31바이트). 생략하면 해당 사용자의 스키마 이름을 사용한다.
+*   *schema_name*: 스키마 이름을 지정한다(최대 31바이트). 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 생성할 테이블의 이름을 지정한다(최대 222바이트).
 *   *column_name*: 생성할 칼럼의 이름을 지정한다(최대 254바이트).
 *   *column_type*: 칼럼의 데이터 타입을 지정한다.
@@ -566,7 +565,7 @@ FOREIGN KEY 제약
 *   *foreign_key_name*: **FOREIGN KEY** 제약 조건의 이름을 지정한다. 생략할 수 있으며, 이 값을 지정하면 *constraint_name* 을 무시하고 이 이름을 사용한다.
 
 *   <*column_name_comma_list1*>: **FOREIGN KEY** 키워드 뒤에 외래키로 정의하고자 하는 칼럼 이름을 명시한다. 정의되는 외래키의 칼럼 개수는 참조되는 기본키의 칼럼 개수와 동일해야 한다.
-*   *schema_name*: 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *referenced_table_name*: 참조되는 테이블의 이름을 지정한다.
 *   <*column_name_comma_list2*>: **REFERENCES** 키워드 뒤에 참조되는 기본키 칼럼 이름을 지정한다.
 *   <*referential_triggered_action*>: 참조 무결성이 유지되도록 특정 연산에 따라 대응하는 트리거 동작을 정의하는 것이며, **ON UPDATE**, **ON DELETE** 가 올 수 있다. 각각의 동작은 중복하여 정의 가능하며, 정의 순서는 무관하다.
@@ -794,8 +793,7 @@ DONT_REUSE_OID
 
     CREATE TABLE enc_tbl (a INT, b INT) ENCRYPT = AES;
 
-암호화 알고리즘으로 **AES**, **ARIA** 를 지정할 수 있다. 다음과 같이 생략할 경우 시스템 파라미터 **tde_default_algorithm** 으로
-지정된 암호화 알고리즘이 사용 된다. 기본 값은 **AES** 이다.
+암호화 알고리즘으로 **AES**, **ARIA** 를 지정할 수 있다. 다음과 같이 생략할 경우 시스템 파라미터 **tde_default_algorithm** 으로 지정된 암호화 알고리즘이 사용 된다. 기본 값은 **AES** 이다.
 
 .. code-block:: sql
 
@@ -814,7 +812,7 @@ CREATE TABLE LIKE
 
     CREATE {TABLE | CLASS} [schema_name.]new_table_name LIKE [schema_name.]source_table_name;
 
-*   *schema_name*: 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *new_table_name*: 새로 생성할 테이블 이름이다.
 *   *source_table_name*: 데이터베이스에 이미 존재하는 원본 테이블 이름이다. **CREATE TABLE ... LIKE** 문에서 아래의 테이블은 원본 테이블로 지정될 수 없다.
 
@@ -833,7 +831,7 @@ CREATE TABLE LIKE
     -- creating an empty table with the same schema as a_tbl
     CREATE TABLE new_tbl LIKE a_tbl;
     SELECT * FROM new_tbl;
-     
+
 ::
 
     There are no results.
@@ -893,7 +891,7 @@ CREATE TABLE AS SELECT
 
     CREATE {TABLE | CLASS} [schema_name.]table_name [(<column_definition> [,<table_constraint>], ...)] [COMMENT [=] 'comment_string'] [REPLACE] AS <select_statement>;
 
-*   *schema_name*: 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 새로 생성할 테이블 이름이다.
 *   <*column_definition*>: 칼럼을 정의한다. 생략하면 **SELECT** 문의 칼럼 스키마가 복제된다. **SELECT** 문의 칼럼 제약 조건이나 **AUTO_INCREMENT** 속성, 테이블/칼럼의 커멘트는 복제되지 않는다.
 *   <*table_constraint*>: 테이블 제약 조건을 정의한다.
@@ -1112,7 +1110,7 @@ ADD COLUMN 절
 
                         <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
 
-*   *schema_name*: 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 칼럼을 추가할 테이블의 이름을 지정한다.
 *   <*column_definition*>: 새로 추가할 칼럼의 이름(최대 254 바이트), 데이터 타입, 제약 조건을 정의한다.
 *   **AFTER** *old_column_name*: 새로 추가할 칼럼 앞에 위치하는 기존 칼럼 이름을 명시한다.
@@ -1231,7 +1229,7 @@ ADD CONSTRAINT 절
 
                         <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
 
-*   *schema_name*: 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 제약 조건을 추가할 테이블의 이름을 지정한다.
 *   *constraint_name*: 새로 추가할 제약 조건의 이름(최대 254 바이트)을 지정할 수 있으며, 생략할 수 있다. 생략하면 자동으로 부여된다.
 *   *foreign_key_name*: **FOREIGN KEY** 제약 조건의 이름을 지정할 수 있다. 생략할 수 있으며, 지정하면 *constraint_name* 을 무시하고 이 이름을 사용한다.
@@ -1253,7 +1251,7 @@ ADD INDEX 절
      
         <index_col_name> ::= column_name [(length)] [ ASC | DESC ]
 
-*   *schema_name*: 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 변경하고자 하는 테이블의 이름을 지정한다.
 *   *index_name*: 인덱스의 이름을 지정한다(최대 254 바이트).
 *   *index_col_name*: 인덱스를 정의할 대상 칼럼을 지정하며, 이때 칼럼 옵션으로 **ASC** 또는 **DESC** 을 함께 지정할 수 있다.
@@ -1300,7 +1298,7 @@ ALTER COLUMN ... SET DEFAULT 절
 
     ALTER [TABLE | CLASS] [schema_name.]table_name ALTER [COLUMN] column_name SET DEFAULT value ;
 
-*   *schema_name*: 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 기본값을 변경할 칼럼이 속한 테이블의 이름을 지정한다.
 *   *column_name*: 새로운 기본값을 적용할 칼럼의 이름을 지정한다.
 *   *value*: 새로운 기본값을 지정한다.
@@ -1385,7 +1383,7 @@ AUTO_INCREMENT 절
 
     ALTER TABLE [schema_name.]table_name AUTO_INCREMENT = initial_value ;
 
-*   *schema_name*: 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 테이블 이름
 *   *initial_value*: 새로 변경할 초기값
 
@@ -1439,7 +1437,7 @@ CHANGE/MODIFY 절
               | MODIFY [COLUMN | CLASS ATTRIBUTE] col_name <column_definition>
                          [FIRST | AFTER col_name]
 
-*   *schema_name*: 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *tbl_name*: 변경할 칼럼이 속한 테이블의 이름을 지정한다.
 *   *old_col_name*: 기존 칼럼의 이름을 지정한다.
 *   *new_col_name*: 변경할 칼럼의 이름을 지정한다.
@@ -1764,7 +1762,7 @@ RENAME COLUMN 절
     ALTER [TABLE | CLASS | VCLASS | VIEW] [schema_name.]table_name
     RENAME [COLUMN | ATTRIBUTE] old_column_name { AS | TO } new_column_name
 
-*   *schema_name*: 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 이름을 변경할 칼럼의 테이블 이름을 지정한다.
 *   *old_column_name*: 현재의 칼럼 이름을 지정한다.
 *   *new_column_name*: 새로운 칼럼 이름을 **AS** 키워드 뒤에 명시한다(최대 254 바이트).
@@ -1782,7 +1780,7 @@ DROP COLUMN 절
     ALTER [TABLE | CLASS | VCLASS | VIEW] [schema_name.]table_name
     DROP [COLUMN | ATTRIBUTE] column_name, ... ;
 
-*   *schema_name*: 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 삭제할 칼럼의 테이블 이름을 명시한다.
 *   *column_ name*: 삭제할 칼럼의 이름을 명시한다. 쉼표로 구분하여 여러 개의 칼럼을 지정할 수 있다.
 
@@ -1798,7 +1796,7 @@ DROP CONSTRAINT 절
     ALTER [TABLE | CLASS] [schema_name.]table_name
     DROP CONSTRAINT constraint_name ;
 
-*   *schema_name*: 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 제약 조건을 삭제할 테이블의 이름을 지정한다.
 *   *constraint_name*: 삭제할 제약 조건의 이름을 지정한다.
 
@@ -1832,7 +1830,7 @@ DROP INDEX 절
 
     ALTER [TABLE | CLASS] [schema_name.]table_name DROP INDEX index_name ;
 
-*   *schema_name*: 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 제약 조건을 삭제할 테이블의 이름을 지정한다.
 *   *index_name*: 삭제할 인덱스의 이름을 지정한다.
 
@@ -1847,7 +1845,7 @@ DROP PRIMARY KEY 절
 
     ALTER [TABLE | CLASS] [schema_name.]table_name DROP PRIMARY KEY ;
 
-*   *schema_name*: 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 기본키 제약 조건을 삭제할 테이블의 이름을 지정한다.
 
 .. code-block:: sql
@@ -1861,7 +1859,7 @@ DROP FOREIGN KEY 절
 
     ALTER [TABLE | CLASS] [schema_name.]table_name DROP FOREIGN KEY constraint_name ;
 
-*   *schema_name*: 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 제약 조건을 삭제할 테이블의 이름을 지정한다.
 *   *constraint_name*: 삭제할 외래키 제약 조건의 이름을 지정한다.
 
@@ -1886,7 +1884,7 @@ DROP TABLE
                 | [ONLY] [schema_name.]table_name 
                 | ALL [schema_name.]table_name [( EXCEPT [schema_name.]table_name, ... )] 
 
-*   *schema_name*: 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 삭제할 테이블의 이름을 지정한다. 쉼표로 구분하여 여러 개의 테이블을 한 번에 삭제할 수 있다.
 *   **ONLY** 키워드 뒤에 수퍼클래스 이름이 명시되면, 해당 수퍼클래스만 삭제하고 이를 상속받는 서브클래스는 삭제하지 않는다.
 *   **ALL** 키워드 뒤에 수퍼클래스 이름이 지정되면, 해당 수퍼클래스 및 이를 상속받는 서브클래스를 모두 삭제한다.
@@ -1932,7 +1930,7 @@ RENAME TABLE
 
     RENAME  [TABLE | CLASS] [schema_name.]old_table_name {AS | TO} [schema_name.]new_table_name [{, [schema_name.]old_table_name {AS | TO} [schema_name.]new_table_name}];
 
-*   *schema_name*: 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다. 변경할 테이블의 스키마와 새로운 테이블의 스키마가 동일해야 한다.
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다. 변경할 테이블의 스키마와 새로운 테이블의 스키마가 동일해야 한다.
 *   *old_table_name*: 변경할 테이블의 이름을 지정한다.
 *   *new_table_name*: 새로운 테이블 이름을 지정한다(최대 254 바이트).
 

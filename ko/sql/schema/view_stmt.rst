@@ -28,7 +28,7 @@ CREATE VIEW
 
 *   **OR REPLACE**: **CREATE** 뒤에 **OR REPLACE** 키워드가 명시되면, *view_name*\ 이 기존의 뷰와 이름이 중복되더라도 에러를 출력하지 않고 기존의 뷰를 새로운 뷰로 대체한다.
 
-*   *schema_name*: 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *view_name*: 생성하려는 뷰의 이름을 지정한다. 뷰의 이름은 데이터베이스 내에서 고유해야 한다.
 *   *view_column_name*: 생성하려는 뷰의 칼럼 이름을 지정한다.
 *   **AS** <*select_statement*>: 유효한 **SELECT** 문이 명시되어야 한다. 이를 기반으로 뷰가 생성된다.
@@ -164,7 +164,7 @@ ADD QUERY 절
      
         <resolution> ::= {column_name} OF [schema_name.]superclass_name [AS alias]
 
-*   *schema_name*: 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *view_name*: 질의를 추가할 뷰의 이름 명시한다.
 *   <*select_statement*>: 추가할 질의를 명시한다.
 
@@ -206,7 +206,7 @@ AS SELECT 절
 
     ALTER [VIEW | VCLASS] [schema_name.]view_name AS <select_statement> ;
 
-*   *schema_name*: 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *view_name*: 변경할 가상 테이블의 이름을 명시한다.
 *   <*select_statement*>: 가상 테이블 생성 시 정의된 **SELECT** 문을 대체할 새로운 질의문을 명시한다.
 
@@ -231,7 +231,7 @@ CHANGE QUERY 절
     ALTER [VIEW | VCLASS] [schema_name.]view_name
     CHANGE QUERY [integer] <select_statement> ;
 
-*   *schema_name*: 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *view_name*: 변경할 뷰의 이름을 명시한다.
 *   *integer*: 변경할 질의의 번호를 명시한다. 기본값은 1이다.
 *   <*select_statement*>: 질의 번호가 *integer* 인 질의를 대치할 새로운 질의를 명시한다.
@@ -308,7 +308,7 @@ COMMENT 절
 
         <column_comment_definition> ::= column_name [=] 'column_comment_string'
 
-*   *schema_name*: 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *view_name*: 변경할 뷰의 이름을 명시한다.
 *   *column_name*: 변경할 칼럼의 이름을 명시한다.
 *   *view_comment_string*: 뷰의 커멘트를 지정한다.
@@ -356,7 +356,7 @@ DROP VIEW
 
     DROP [VIEW | VCLASS] [IF EXISTS] [schema_name.]view_name [{, [schema_name.]view_name}] ;
 
-*   *schema_name*: 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *view_name* : 삭제하려는 뷰의 이름을 지정한다.
 
 .. code-block:: sql
@@ -370,7 +370,7 @@ RENAME VIEW
 
     RENAME [VIEW | VCLASS] [schema_name.]old_view_name {AS | TO} [schema_name.]new_view_name [{, [schema_name.]old_view_name {AS | TO} [schema_name.]new_view_name}] ;
 
-*   *schema_name*: 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다. 변경할 뷰의 스키마와 새로운 뷰의 스키마는 동일해야 한다.
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다. 변경할 뷰의 스키마와 새로운 뷰의 스키마는 동일해야 한다.
 *   *old_view_name* : 변경할 뷰의 이름을 지정한다.
 *   *new_view_name* : 뷰의 새로운 이름을 지정한다.
 

@@ -22,7 +22,7 @@ The **REPLACE** statement works like :doc:`insert`, but the difference is that i
     REPLACE [INTO] [schema_name.]table_name [(column_name, ...)]
         SELECT...
 
-*   *schema_name*: Specifies the schema name. If omitted, the schema name of the user is used.
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of current session is used.
 
 *   *table_name*: Specifies the name of the target table into which you want to insert a new record.
 

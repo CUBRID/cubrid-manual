@@ -57,7 +57,7 @@ INHERIT 절
     .
     .
     .
-    INHERIT resolution [{, resolution}]
+    INHERIT resolution [{, resolution}] ;
 
     resolution:
     [column_name | method_name] OF [schema_name.]superclass_name [AS alias]
@@ -76,7 +76,7 @@ ADD SUPERCLASS 절
     .
     .
     ADD SUPERCLASS [schema_name.]superclass_name [{, [schema_name.]superclass_name}]
-    [INHERIT resolution [{, resolution}]]
+    [INHERIT resolution [{, resolution}]] ;
 
     resolution:
     [column_name | method_name] OF [schema_name.]superclass_name [AS alias]
@@ -101,7 +101,7 @@ DROP SUPERCLASS 절
     .
     .
     DROP SUPERCLASS [schema_name.]superclass_name [{, [schema_name.]superclass_name}]
-    [INHERIT resolution [{, resolution}]]
+    [INHERIT resolution [{, resolution}]] ;
      
     resolution:
     [column_name | method_name] OF [schema_name.]superclass_name [AS alias]
@@ -147,7 +147,7 @@ DROP SUPERCLASS 절
 다음에서 충돌과 관련하여 논의하고 있는 사항은 속성과 메서드에 공통적으로 적용된다. ::
 
     ALTER [class_type] [schema_name.]class_name alter_clause
-    [INHERIT resolution [{, resolution }]]
+    [INHERIT resolution [{, resolution }]] ;
 
     resolution:
     [column_name | method_name] OF [schema_name.]superclass_name [AS alias]

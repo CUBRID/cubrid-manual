@@ -344,9 +344,9 @@ Modifying a Partitioned Table into a Regular Table
 
 Changing a partitioned table into a regular table can be done using the **REMOVE PARTITIONING** clause of the **ALTER** statement::
 
-    ALTER {TABLE | CLASS} [schema_name.]table_name REMOVE PARTITIONING
+    ALTER [TABLE | CLASS] [schema_name.]table_name REMOVE PARTITIONING
 
-*   *schema_name*: Specifies the schema name of the table. If omitted, the schema name of the user is used.
+*   *schema_name*: Specifies the schema name of the table. If omitted, the schema name of current session is used.
 *   *table_name* : Specifies the name of the table to be altered.
 
 When removing partitioning, CUBRID moves all data from partitions into the partitioned table. This is a costly operation and should be carefully planned.
@@ -358,14 +358,14 @@ Partition Reorganization
 
 Partition reorganization is a process through which a partition can be divided into smaller partitions or a group of partitions can be merged into a single partition. For this purpose, CUBRID implements the **REORGANIZE PARTITION** clause of the **ALTER** statement::
 
-    ALTER {TABLE | CLASS} [schema_name.]table_name
+    ALTER [TABLE | CLASS] [schema_name.]table_name
     REORGANIZE PARTITION <alter_partition_name_comma_list>
-    INTO ( <partition_definition_comma_list> )
+    INTO "(" <partition_definition_comma_list> ")"
      
     partition_definition_comma_list ::=
-    PARTITION partition_name VALUES LESS THAN ( <range_value> ), ... 
+    PARTITION partition_name VALUES LESS THAN "(" <range_value> ")", ... 
 
-*   *schema_name*: Specifies the schema name of the table. If omitted, the schema name of the user is used.
+*   *schema_name*: Specifies the schema name of the table. If omitted, the schema name of current session is used.
 *   *table_name* : Specifies the name of the table to be redefined.
 *   *alter_partition_name_comma_list* : Specifies the partition to be redefined(current partitions). Multiple partitions are separated by commas (,).
 *   *partition_definition_comma_list* : Specifies the redefined partitions(new partitions). Multiple partitions are separated by commas (,).
@@ -424,10 +424,10 @@ Adding Partitions
 
 Partitions can be added to a partitioned table by using the *ADD PARTITION* clause of the *ALTER* statement. ::
 
-    ALTER {TABLE | CLASS} [schema_name.]able_name
-    ADD PARTITION (<partition_definitions_comma_list>)
+    ALTER [TABLE | CLASS] [schema_name.]able_name
+    ADD PARTITION "(" <partition_definitions_comma_list> ")"
 
-*   *schema_name*: Specifies the schema name of the table. If omitted, the schema name of the user is used.
+*   *schema_name*: Specifies the schema name of the table. If omitted, the schema name of current session is used.
 *   *table_name* : Specifies the name of the table to which partitions are added.
 *   *partition_definitions_comma_list* : Specifies the partitions to be added. Multiple partitions are separated by commas (,).
 
@@ -454,10 +454,10 @@ Dropping Partitions
 
 Partitions can be dropped from a partitioned table by using the **DROP PARTITION** clause of the **ALTER** statement. ::
 
-    ALTER {TABLE | CLASS} [schema_name.]table_name
+    ALTER [TABLE | CLASS] [schema_name.]table_name
     DROP PARTITION partition_name_list
 
-*   *schema_name*: Specifies the schema name of the table. If omitted, the schema name of the user is used.
+*   *schema_name*: Specifies the schema name of the table. If omitted, the schema name of current session is used.
 *   *table_name* : Specifies the name of the partitioned table.
 *   <*partition_name_list*> : Specifies the names of the partitions to be dropped, separated by comma(,).
 
@@ -484,10 +484,10 @@ Because data distribution among partitions in a hash-partitioned table is contro
 
 The number of partitions defined on a hash-partitioned table can be reduced using the  **COALESCE PARTITION** clause of the **ALTER** statement. ::
 
-    ALTER {TABLE | CLASS} [schema_name.]table_name
+    ALTER [TABLE | CLASS] [schema_name.]table_name
     COALESCE PARTITION number_of_shrinking_partitions
 
-*   *schema_name*: Specifies the schema name of the table. If omitted, the schema name of the user is used.
+*   *schema_name*: Specifies the schema name of the table. If omitted, the schema name of current session is used.
 *   *table_name* : Specifies the name of the table to be redefined.
 *   *number_of_shrinking_partitions* : Specifies the number of partitions to be deleted.
 
@@ -499,10 +499,10 @@ The following example shows how to decrease the number of partitions in the :ref
 
 The number of partitions defined on a hash partitioned table can be increased using the **ADD PARTITION** clause of the **ALTER** statement. ::
 
-    ALTER {TABLE | CLASS} [schema_name.]table_name
+    ALTER [TABLE | CLASS] [schema_name.]table_name
     ADD PARTITION PARTITIONS number
 
-*   *schema_name*: Specifies the schema name of the table. If omitted, the schema name of the user is used.
+*   *schema_name*: Specifies the schema name of the table. If omitted, the schema name of current session is used.
 *   *table_name* : Specifies the name of the table to be redefined.
 *   *number* : Specifies the number of partitions to be added.
 

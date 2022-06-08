@@ -79,7 +79,7 @@ CREATE TRIGGER
         UPDATE statement |
         DELETE statement
 
-*   *schema_name*: 트리거의 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
+*   *schema_name*: 트리거의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *trigger_name*: 정의하려는 트리거의 이름을 지정한다.
 *   [ **STATUS** { **ACTIVE** | **INACTIVE** } ]: 트리거의 상태를 정의한다(정의하지 않을 경우 기본값은 **ACTIVE** ).
 
@@ -367,7 +367,7 @@ ALTER TRIGGER
         STATUS { ACTIVE | INACTIVE } |
         PRIORITY key
 
-*   *schema_name*: 트리거의 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
+*   *schema_name*: 트리거의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *trigger_name*: 변경할 트리거의 이름을 지정한다.
 *   **STATUS** { **ACTIVE** | **INACTIVE** }: 트리거의 상태를 변경한다.
 *   **PRIORITY** *key*: 우선순위를 변경한다.
@@ -401,7 +401,7 @@ ALTER TRIGGER
     ALTER TRIGGER [schema_name.]trigger_name [trigger_option] 
     [COMMENT ‘comment_string’];
 
-*   *schema_name*: 트리거의 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
+*   *schema_name*: 트리거의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *trigger_name*: 변경할 트리거의 이름을 지정한다.
 *   *comment_string*: 트리거의 커멘트를 지정한다.
 
@@ -420,7 +420,7 @@ DROP TRIGGER
 
     DROP TRIGGER [schema_name.]trigger_name ; 
 
-*   *schema_name*: 트리거의 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
+*   *schema_name*: 트리거의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *trigger_name*: 삭제할 트리거의 이름을 지정한다.
 
 다음은 medal_trig 트리거를 삭제하는 예제이다.
@@ -441,7 +441,7 @@ RENAME TRIGGER
 
     RENAME TRIGGER [schema_name.]old_trigger_name AS [schema_name.]new_trigger_name ;
 
-*   *schema_name*: 트리거의 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다. 현재 트리거의 스키마와 변경할 트리거의 스키마가 동일해야 한다.
+*   *schema_name*: 트리거의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다. 현재 트리거의 스키마와 변경할 트리거의 스키마가 동일해야 한다.
 *   *old_trigger_name*: 트리거의 현재 이름을 입력한다.
 *   *new_trigger_name*: 변경할 트리거의 이름을 지정한다.
 
@@ -451,7 +451,7 @@ RENAME TRIGGER
 
 .. note::
 
-    *   트리거 이름은 사용자가 소유하고 있는 트리거 중에서 유일해야 한다. 하지만 데이터베이스 내의 테이블 이름과 같은 이름을 가질 수는 있다.
+    *   트리거 이름은 사용자가 소유하고 있는 트리거 중에서 유일해야 한다. 하지만 데이터베이스 내의 테이블 이름과 같거나 다른 소유자가 소유하고 있는 트리거의 이름과는 같을 수 있다.
     *   만약 테이블 트리거의 이름을 변경하려면, 트리거의 소유자이거나, 해당 트리거가 있는 테이블에 대해 **ALTER** 권한이 부여되어 있어야 한다. 사용자 트리거는 트리거의 소유자만 이름을 변경할 수 있다.
 
 지연된 트리거
@@ -470,7 +470,7 @@ RENAME TRIGGER
         [schema_name.]trigger_name |
         ALL TRIGGERS
 
-*   *schema_name*: 트리거의 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
+*   *schema_name*: 트리거의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *trigger_name*: 트리거의 이름을 지정하면 지정된 트리거의 지연된 활동이 실행된다.
 *   **ALL TRIGGERS**: 현재 모든 지연된 활동이 실행된다.
 
@@ -485,7 +485,7 @@ RENAME TRIGGER
         [schema_name.]trigger_name |
         ALL TRIGGERS
 
-*   *schema_name*: 트리거의 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
+*   *schema_name*: 트리거의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *trigger_name*: 트리거의 이름을 지정하면 지정된 트리거의 지연된 활동이 취소된다.
 *   **ALL TRIGGERS**: 현재 모든 지연된 활동이 취소된다.
 

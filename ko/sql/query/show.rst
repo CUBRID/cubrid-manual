@@ -17,8 +17,8 @@ DESC, DESCRIBE
 
 ::
 
-    DESC [ schema_name. ] table_name;
-    DESCRIBE [ schema_name. ] table_name;
+    DESC [schema_name.]table_name;
+    DESCRIBE [schema_name.]table_name;
 
 EXPLAIN
 =======
@@ -27,14 +27,14 @@ EXPLAIN
 
 ::
 
-    EXPLAIN [ schema_name. ] table_name;
+    EXPLAIN [schema_name.]table_name;
 
 .. _show-tables-statement:
 
 SHOW TABLES
 ===========
 
-데이터베이스의 전체 테이블 이름 목록을 출력한다. 결과 칼럼의 이름은 *tables_in_<데이터베이스 이름>* 이 되며 하나의 칼럼을 지닌다. **LIKE** 절을 사용하면 이와 매칭되는 테이블 이름을 검색할 수 있으며, **WHERE** 절을 사용하면 좀더 일반적인 조건으로 테이블 이름을 검색할 수 있다. **SHOW FULL TABLES** 는 *owner* 칼럼과 *table_type* 칼럼을 함께 출력한다. *owner* 컬럼은 소유자 이름을 값으로 가진다. *table_type* 칼럼은 테이블이면 **BASE TABLE**, 뷰이면 **VIEW** 를 값으로 가진다.
+데이터베이스의 전체 테이블 이름 목록을 출력한다. 결과 칼럼의 이름은 *tables_in_<데이터베이스 이름>* 이 되며 하나의 칼럼을 지닌다. **LIKE** 절을 사용하면 이와 매칭되는 테이블 이름을 검색할 수 있으며, **WHERE** 절을 사용하면 좀더 일반적인 조건으로 테이블 이름을 검색할 수 있다. **SHOW FULL TABLES** 는 *owner* 칼럼과 *table_type* 칼럼을 함께 출력한다. *owner* 컬럼은 소유자 이름을 값으로 가진다. *table_type* 칼럼은 테이블이면 **BASE TABLE**, 뷰이면 **VIEW**\를 값으로 가진다.
 
 ::
 
@@ -113,7 +113,7 @@ SHOW COLUMNS
 
 ::
 
-    SHOW [ FULL ] COLUMNS { FROM | IN } [ schema_name. ] table_name [ LIKE 'pattern' | WHERE expr ];
+    SHOW [FULL] COLUMNS (FROM | IN) [schema_name.]table_name [LIKE 'pattern' | WHERE expr];
 
 **FULL** 키워드를 사용하면  **collation** 및 **comment** 를 추가로 출력한다.
 
@@ -195,7 +195,7 @@ SHOW INDEX
 
 ::
 
-    SHOW { INDEX | INDEXES | KEYS } { FROM | IN } [ schema_name. ] table_name;
+    SHOW (INDEX | INDEXES | KEYS) (FROM | IN) [schema_name.]table_name;
 
 해당 질의는 다음과 같은 칼럼을 가진다. 
 
@@ -229,9 +229,9 @@ Visible                             VARCHAR         인덱스의 가시성을 �
     
 ::
 
-      Table             Non_unique  Key_name           Seq_in_index  Column_name  Collation  Cardinality  Sub_part  Packed  Null  Index_type  unc  Comment  Visible
+      Table             Non_unique  Key_name           Seq_in_index  Column_name  Collation  Cardinality  Sub_part  Packed  Null  Index_type  func  Comment  Visible
     =================================================================================================================================================================
-      'public.athlete'           0  'pk_athlete_code'             1  'code'       'A'               6677      NULL  NULL    'NO'  'BTREE'     ULL  NULL     'YES'
+      'public.athlete'           0  'pk_athlete_code'             1  'code'       'A'               6677      NULL  NULL    'NO'  'BTREE'     NULL  NULL     'YES'
 
 .. code-block:: sql
 
@@ -268,7 +268,7 @@ SHOW COLLATION
 
 ::
 
-    SHOW COLLATION [ LIKE 'pattern' ];
+    SHOW COLLATION [LIKE 'pattern'];
 
 해당 질의는 다음과 같은 칼럼을 가진다.
 
@@ -335,7 +335,7 @@ SHOW TIMEZONES
 
 ::
 
-    SHOW [ FULL ] TIMEZONES [ LIKE 'pattern' ];
+    SHOW [FULL] TIMEZONES [LIKE 'pattern'];
 
 FULL이 명시되지 않으면 타임 존의 영역 이름을 가진 하나의 칼럼을 출력한다. 칼럼의 이름은 timezone_region이다.
 
@@ -387,7 +387,7 @@ WHERE 조건 없는 LIKE 조건은 첫 번째 칼럼에 적용된다. WHERE 조�
 
 .. code-block:: sql
 
-    SHOW [ FULL ] TIMEZONES [ LIKE 'pattern' ];
+    SHOW FULL TIMEZONES;
 
 ::
 
@@ -456,7 +456,7 @@ SHOW CREATE TABLE
 
 테이블 이름을 지정하면 해당 테이블의 **CREATE TABLE** 문을 출력한다. ::
 
-    SHOW CREATE TABLE [ schema_name. ] table_name;
+    SHOW CREATE TABLE [schema_name.]table_name;
 
 .. code-block:: sql
 
@@ -498,7 +498,7 @@ SHOW ACCESS STATUS
 
 :: 
   
-    SHOW ACCESS STATUS [ LIKE 'pattern' | WHERE expr ]; 
+    SHOW ACCESS STATUS [LIKE 'pattern' | WHERE expr]; 
 
 해당 구문은 다음과 같은 칼럼을 출력한다.
 
@@ -547,7 +547,7 @@ SHOW EXEC STATISTICS
 
 ::
 
-    SHOW EXEC STATISTICS [ ALL ];
+    SHOW EXEC STATISTICS [ALL];
 
 다음은 이 구문을 수행한 예이다.
 
@@ -722,7 +722,7 @@ SHOW LOG HEADER
 
 ::
 
-    SHOW LOG HEADER [ OF file_name ];
+    SHOW LOG HEADER [OF file_name];
     
 OF file_name을 생략하면 메모리의 헤더 정보를 출력하며, OF file_name을 포함하면 file_name의 헤더 정보를 출력한다.
 
@@ -919,7 +919,7 @@ SHOW HEAP HEADER
 
 ::
 
-    SHOW  [ ALL ] HEAP HEADER OF [ schema_name. ] table_name;
+    SHOW  [ALL] HEAP HEADER OF [schema_name.]table_name;
 
 *   ALL: 분할 테이블에서 "ALL" 키워드가 주어지면 기반 테이블과 분할 테이블이 같이 출력된다.
 
@@ -1110,7 +1110,7 @@ SHOW HEAP CAPACITY
 
 ::
 
-    SHOW [ ALL ] HEAP CAPACITY OF [ schema_name. ] table_name;
+    SHOW [ALL] HEAP CAPACITY OF [schema_name.] table_name;
 
 *   ALL: 분할 테이블에서 "ALL" 키워드가 주어지면 기반 테이블과 분할된 테이블이 같이 출력된다.
 
@@ -1245,7 +1245,7 @@ SHOW SLOTTED PAGE HEADER
 
 ::
 
-    SHOW SLOTTED PAGE HEADER { WHERE | OF } VOLUME = volume_num AND PAGE = page_num;
+    SHOW SLOTTED PAGE HEADER (WHERE | OF) VOLUME = volume_num AND PAGE = page_num;
 
 해당 구문은 다음의 칼럼을 출력한다.
 
@@ -1297,7 +1297,7 @@ SHOW SLOTTED PAGE SLOTS
 
 ::
 
-    SHOW SLOTTED PAGE SLOTS { WHERE | OF } VOLUME = volume_num AND PAGE = page_num;
+    SHOW SLOTTED PAGE SLOTS (WHERE | OF) VOLUME = volume_num AND PAGE = page_num;
     
 해당 구문은 다음의 칼럼을 출력한다.
 
@@ -1353,13 +1353,13 @@ SHOW INDEX HEADER
 
 ::
 
-    SHOW INDEX HEADER OF [ schema_name. ] table_name.index_name;
+    SHOW INDEX HEADER OF [schema_name.]table_name.index_name;
 
 ALL 키워드를 사용하고 인덱스 이름을 생략하면 해당 테이블의 전체 인덱스의 헤더 정보를 출력한다.
 
 ::
 
-    SHOW ALL INDEXES HEADER OF [ schema_name. ] table_name;
+    SHOW ALL INDEXES HEADER OF [schema_name.]table_name;
 
 해당 구문은 다음의 칼럼을 출력한다.
 
@@ -1417,13 +1417,13 @@ SHOW INDEX CAPACITY
 
 ::
 
-    SHOW INDEX CAPACITY OF [ schema_name. ] table_name.index_name;
+    SHOW INDEX CAPACITY OF [schema_name.]table_name.index_name;
 
 ALL 키워드를 사용하고 인덱스 이름을 생략하면 해당 테이블의 전체 인덱스의 용량 정보를 출력한다.
 
 ::
 
-    SHOW ALL INDEXES CAPACITY OF [ schema_name. ] table_name;
+    SHOW ALL INDEXES CAPACITY OF [schema_name.]table_name;
 
 해당 구문은 다음의 칼럼을 출력한다.
 

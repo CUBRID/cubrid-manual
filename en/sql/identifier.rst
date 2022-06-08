@@ -43,26 +43,27 @@ Identifiers or reserved keywords shown as below are not allowed. However, if the
 
 ::
 
-    " select"
-    " @lowcost"
-    " low cost"
-    " abc" " def"
+    "select"
+    "@lowcost"
+    "low cost"
+    "abc" "def"
     [position]
 
+.. Warning::
 
-Even identifiers enclosed in double quotation marks, square brackets, or backticks cannot contain square brackets ([ ]) or dots (.).
+    Even identifiers enclosed in double quotation marks, square brackets, or backticks cannot contain square brackets ([ ]) or dots (.).
 
-*  Square brackets are used by default to process reserved words when parsing a query inside.
-*  Dots are used in Path Expressions and JSON, and are also used to separate schema names and object names.
+    *  Square brackets are used by default to process reserved words when parsing a query inside.
+    *  Dots are used in Path Expressions and JSON, and are also used to separate schema names and object names.
 
-Following are identifiers enclosed in double quotation marks (" ") but not allowed.
+    Following are identifiers enclosed in double quotation marks (" ") but not allowed.
 
-::
+    ::
 
-    "he[[o"
-    "wor]d"
-    "hello[]world"
-    "hello.world"
+        "he[[o"
+        "wor]d"
+        "hello[]world"
+        "hello.world"
 
 .. note::
 

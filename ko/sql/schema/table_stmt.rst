@@ -99,7 +99,7 @@ CREATE TABLE
 
 .. note::
 
-    *   **DBA** 와 **DBA** 멤버는 다른 스키마에 테이블을 생성할 수 있다. 사용자가 **DBA** 도 아니고 **DBA** 멤버도 아니면 해당 사용자의 스키마에서만 테이블을 생성할 수 있다.
+    *   **DBA**\와 **DBA** 멤버는 다른 스키마에 테이블을 생성할 수 있다. 사용자가 **DBA**\도 아니고 **DBA** 멤버도 아니면 해당 사용자의 스키마에서만 테이블을 생성할 수 있다.
 
 .. code-block:: sql
 
@@ -1883,7 +1883,7 @@ DROP TABLE
             <single_table_spec> | (<table_specification_comma_list>) 
 
             <single_table_spec> ::= 
-                |[ONLY] [schema_name.]table_name 
+                | [ONLY] [schema_name.]table_name 
                 | ALL [schema_name.]table_name [( EXCEPT [schema_name.]table_name, ... )] 
 
 *   *schema_name*: 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.

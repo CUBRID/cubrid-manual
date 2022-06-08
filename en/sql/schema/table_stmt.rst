@@ -1882,7 +1882,7 @@ You can drop an existing table by the **DROP** statement. Multiple tables can be
             <single_table_spec> | (<table_specification_comma_list>) 
 
             <single_table_spec> ::= 
-                |[ONLY] [schema_name.]table_name 
+                | [ONLY] [schema_name.]table_name 
                 | ALL [schema_name.]table_name [( EXCEPT [schema_name.]table_name, ... )] 
 
 *   *schema_name*: Specifies the schema name. If omitted, the schema name of the user is used.

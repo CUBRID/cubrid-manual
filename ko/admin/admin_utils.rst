@@ -782,7 +782,7 @@ compactdb
 
 **cubrid compactdb** 유틸리티를 수행하면 삭제된 객체에 대한 참조를 **NULL** 로 표시하는데, 이렇게 **NULL** 로 표시된 공간은 OID가 재사용할 수 있는 공간임을 의미한다. ::
 
-    cubrid compactdb [<options>] database_name [schema_name.class_name {, schema_name.class_name}]
+    cubrid compactdb [options] database_name [schema_name.class_name [{, schema_name.class_name}]]
 
 *   **cubrid**: 큐브리드 서비스 및 데이터베이스 관리를 위한 통합 유틸리티이다.
 
@@ -794,7 +794,7 @@ compactdb
 
 클라이언트/서버 모드에서만 **-I**, **-c**, **-d**, **-p** 옵션을 사용할 수 있다.
 
-다음은 **cubrid compactdb** 에 대한 <options>이다.
+다음은 **cubrid compactdb**\에 대한 [options]이다.
 
 .. program:: compactdb
 
@@ -854,7 +854,7 @@ CUBRID의 질의 최적화기가 사용하는 테이블에 있는 객체들의 �
 
 *   *database_name*: 비용기반 질의 최적화용 통계 자료를 업데이트하려는 데이터베이스 이름이다.
 
-다음은 *cubrid optimizedb* 에 대한 <option>이다.
+다음은 *cubrid optimizedb*\에 대한 <option>이다.
 
 .. program:: optimizedb
 
@@ -2998,7 +2998,7 @@ checkdb
 
 ::
 
-    cubrid checkdb [<options>] database_name [schema_name.table_name {, schema_name.table_name}]
+    cubrid checkdb [options] database_name [schema_name.table_name [{, schema_name.table_name}]]
 
 *   **cubrid**: CUBRID 서비스 및 데이터베이스 관리를 위한 통합 유틸리티
 
@@ -3010,7 +3010,7 @@ checkdb
 
 *   *table_name*: 일관성을 확인하거나 복구하려는 테이블 이름을 나열한다.
 
-다음은 **cubrid checkdb** 에 대한 <options>이다.
+다음은 **cubrid checkdb**\에 대한 [options]이다.
 
 .. program:: checkdb
 

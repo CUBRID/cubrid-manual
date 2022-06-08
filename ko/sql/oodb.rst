@@ -57,10 +57,10 @@ INHERIT 절
     .
     .
     .
-    INHERIT resolution [ {, resolution }_ ]
+    INHERIT resolution [{, resolution}]
 
     resolution:
-    { column_name | method_name } OF [schema_name.]superclass_name [ AS alias ]
+    [column_name | method_name] OF [schema_name.]superclass_name [AS alias]
 
 **INHERIT** 구문에 상속하고 싶은 수퍼클래스의 속성이나 메서드 이름을 지정한다. **AS** 절을 사용하여 새로운 이름으로 상속받을 수도 있으므로, 다중 상속 구문에서 이름 충돌이 발생할 경우에서 충돌을 해결할 수 있다.
 
@@ -75,14 +75,15 @@ ADD SUPERCLASS 절
     .
     .
     .
-    ADD SUPERCLASS [schema_name.]superclass_name [ { , [schema_name.]superclass_name }_ ]
-    [ INHERIT resolution [ {, resolution }_ ] ] [ ; ]
+    ADD SUPERCLASS [schema_name.]superclass_name [{, [schema_name.]superclass_name}]
+    [INHERIT resolution [{, resolution}]]
+
     resolution:
-    { column_name | method_name } OF [schema_name.]superclass_name [ AS alias ]
+    [column_name | method_name] OF [schema_name.]superclass_name [AS alias]
 
-추가할 수퍼클래스의 이름을 *superclass_name* 에 지정한다. 위 구문을 사용하여 수퍼클래스의 속성과 메서드를 상속할 수 있다.
+추가할 수퍼클래스의 이름을 *superclass_name*\에 지정한다. 위 구문을 사용하여 수퍼클래스의 속성과 메서드를 상속할 수 있다.
 
-새로운 수퍼클래스를 추가할 경우 이름 충돌이 발생할 수 있다. 데이터베이스 시스템의 의해서 이름 충돌이 자동으로 해결될 수 없는 경우, **INHERIT** 구문을 사용하여 수퍼클래스에서 상속받을 속성이나 메서드를 지정할 수 있다. 충돌이 발생한 속성이나 메서드를 모두 상속 받기 위해서는 별칭을 사용할 수 있다. 수퍼클래스에서 발생하는 이름 충돌에 대한 자세한 설명은 :ref:`class-conflict-resolution`\ 을 참조한다.
+새로운 수퍼클래스를 추가할 경우 이름 충돌이 발생할 수 있다. 데이터베이스 시스템의 의해서 이름 충돌이 자동으로 해결될 수 없는 경우, **INHERIT** 구문을 사용하여 수퍼클래스에서 상속받을 속성이나 메서드를 지정할 수 있다. 충돌이 발생한 속성이나 메서드를 모두 상속 받기 위해서는 별칭을 사용할 수 있다. 수퍼클래스에서 발생하는 이름 충돌에 대한 자세한 설명은 :ref:`class-conflict-resolution`\을 참조한다.
 
 *demodb* 에 포함되어 있는 *event* 클래스를 상속하여 *female_event* 클래스를 생성한다면 다음과 같은 클래스 생성 문장이 수행된다.
 
@@ -99,13 +100,13 @@ DROP SUPERCLASS 절
     .
     .
     .
-    DROP SUPERCLASS [schema_name.]superclass_name [ { , [schema_name.]superclass_name }_ ]
-    [ INHERIT resolution [ {, resolution }_ ] ] [ ; ]
+    DROP SUPERCLASS [schema_name.]superclass_name [{, [schema_name.]superclass_name}]
+    [INHERIT resolution [{, resolution}]]
      
     resolution:
-    { column_name | method_name } OF [schema_name.]superclass_name [ AS alias ]
+    [column_name | method_name] OF [schema_name.]superclass_name [AS alias]
 
-삭제할 수퍼클래스의 이름을 *superclass_name* 에 지정한다. 수퍼클래스의 삭제에 의해 이름 충돌이 발생할 경우, 해결 방법은 :ref:`class-conflict-resolution` 을 참조한다.
+삭제할 수퍼클래스의 이름을 *superclass_name*\에 지정한다. 수퍼클래스의 삭제에 의해 이름 충돌이 발생할 경우, 해결 방법은 :ref:`class-conflict-resolution`\을 참조한다.
 
 다음은 *female_event* 클래스가 *event* 클래스를 상속받은 예이다.
 
@@ -145,11 +146,11 @@ DROP SUPERCLASS 절
 
 다음에서 충돌과 관련하여 논의하고 있는 사항은 속성과 메서드에 공통적으로 적용된다. ::
 
-    ALTER [ class_type ] [schema_name.]class_name alter_clause
-    [ INHERIT resolution [ {, resolution }_ ] ] [ ; ]
+    ALTER [class_type] [schema_name.]class_name alter_clause
+    [INHERIT resolution [{, resolution }]]
 
     resolution:
-    { column_name | method_name } OF [schema_name.]superclass_name [ AS alias ]
+    [column_name | method_name] OF [schema_name.]superclass_name [AS alias]
 
 수퍼클래스 충돌
 ---------------
@@ -159,7 +160,7 @@ DROP SUPERCLASS 절
 
 **ALTER CLASS** 구문에서 **INHERIT** 절은 선택 사항이지만 클래스의 변경에 의해 충돌이 발생할 경우에는 반드시 사용해야 하는 문장이다. **INHERIT** 절 다음에 하나 이상의 해결방법을 명시할 수 있다.
 
-*superclass_name*\ 에는 충돌이 발생했을 때 새로 상속받을 속성(칼럼)이나 메서드를 가지는 수퍼클래스의 이름을 명시하고, *column_name*\ 이나 *method_name*\ 에는 상속받을 속성이나 메서드의 이름을 명시한다. 상속받을 속성이나 메서드의 이름을 변경할 필요가 있는 경우에는 **AS** 절을 이용하여 별칭을 지정할 수 있다.
+*superclass_name*\에는 충돌이 발생했을 때 새로 상속받을 속성(칼럼)이나 메서드를 가지는 수퍼클래스의 이름을 명시하고, *column_name*\이나 *method_name*\에는 상속받을 속성이나 메서드의 이름을 명시한다. 상속받을 속성이나 메서드의 이름을 변경할 필요가 있는 경우에는 **AS** 절을 이용하여 별칭을 지정할 수 있다.
 
 다음 예는 *demodb* 의 *event* 클래스와 *stadium* 클래스를 상속받아서 *soccer_stadium* 클래스를 만든다. *event* 클래스와 *stadium* 클래스는 모두 *name*, *code* 속성을 가지고 있기 때문에 **INHERIT** 을 사용하여 상속받을 속성을 지정해야 한다.
 
@@ -168,9 +169,9 @@ DROP SUPERCLASS 절
     CREATE CLASS soccer_stadium UNDER event, stadium
     INHERIT name OF stadium, code OF stadium;
 
-두 수퍼클래스 *event*, *stadium*\ 이 *name*\ 이라는 속성을 가지고 있고, *soccer_stadium* 클래스가 두 속성을 모두 상속받으려면, *stadium*\ 의 *name*\ 은 그대로 상속 받고 *event* 클래스의 *name*\ 은 **INHERIT**\ 의 **alias** 절을 사용하여 이름을 변경하여 상속받을 수 있다.
+두 수퍼클래스 *event*, *stadium*\이 *name*\이라는 속성을 가지고 있고, *soccer_stadium* 클래스가 두 속성을 모두 상속받으려면, *stadium*\의 *name*\은 그대로 상속 받고 *event* 클래스의 *name*\은 **INHERIT**\의 **alias** 절을 사용하여 이름을 변경하여 상속받을 수 있다.
 
-아래 예는 *stadium* 클래스의 *name*\ 은 그대로 *name*\ 으로 상속받고, *event* 클래스의 *name*\ 은 *purpose*\ 라는 별명으로 상속받는다.
+아래 예는 *stadium* 클래스의 *name*\은 그대로 *name*\으로 상속받고, *event* 클래스의 *name*\은 *purpose*\라는 별명으로 상속받는다.
 
 .. code-block:: sql
 
@@ -180,7 +181,7 @@ DROP SUPERCLASS 절
 수퍼클래스 삭제
 ^^^^^^^^^^^^^^^
 
-**INHERIT**\ 을 사용하여 명시적으로 속성이나 메서드를 상속한 수퍼클래스를 삭제하면 서브클래스에서 다시 이름 충돌이 발생할 수 있다. 이 경우에는 삭제할 때 명시적으로 상속받을 속성이나 메서드를 지정해야 한다.
+**INHERIT**\을 사용하여 명시적으로 속성이나 메서드를 상속한 수퍼클래스를 삭제하면 서브클래스에서 다시 이름 충돌이 발생할 수 있다. 이 경우에는 삭제할 때 명시적으로 상속받을 속성이나 메서드를 지정해야 한다.
 
 .. code-block:: sql
 
@@ -194,7 +195,7 @@ DROP SUPERCLASS 절
     DROP SUPERCLASS b_tbl
     INHERIT b OF a_tbl;
 
-위의 예는 *a_tbl*, *b_tbl*, *c_tbl* 클래스를 상속받아서 *a_b_c* 클래스를 만들고, 그 중 *b_tbl* 클래스를 수퍼클래스에서 제거한다. *b_tbl* 클래스에서 *a* 와 *b*\ 를 명시적으로 상속받았기 때문에, 수퍼클래스에서 제거하기 전에 *a* 와 *b* 의 이름 충돌을 해결해야 한다. 하지만, *a*\ 는 삭제할 *b_tbl* 클래스 외에 *a_tbl* 클래스에만 존재하므로 명시적으로 지정할 필요는 없다.
+위의 예는 *a_tbl*, *b_tbl*, *c_tbl* 클래스를 상속받아서 *a_b_c* 클래스를 만들고, 그 중 *b_tbl* 클래스를 수퍼클래스에서 제거한다. *b_tbl* 클래스에서 *a*\와 *b*\를 명시적으로 상속받았기 때문에, 수퍼클래스에서 제거하기 전에 *a* 와 *b* 의 이름 충돌을 해결해야 한다. 하지만, *a*\는 삭제할 *b_tbl* 클래스 외에 *a_tbl* 클래스에만 존재하므로 명시적으로 지정할 필요는 없다.
 
 호환되는 도메인
 ^^^^^^^^^^^^^^^

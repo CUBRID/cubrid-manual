@@ -23,7 +23,7 @@ It has the following advantages over using the **DELETE FROM** *[schema_name.]ta
 
 ::
 
-    TRUNCATE [ TABLE ] [ schema_name. ] table_name [ CASCADE ]
+    TRUNCATE [ TABLE ] [schema_name.]table_name [ CASCADE ]
 
 *   *schema_name*: Specifies the schema name. If omitted, the schema name of the user is used.
 *   *table_name* : Specifies the name of the table that contains the data to be deleted.

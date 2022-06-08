@@ -23,7 +23,7 @@ TRUNCATE
 
 ::
 
-    TRUNCATE [ TABLE ] [ schema_name. ] table_name [ CASCADE ]
+    TRUNCATE [ TABLE ] [schema_name.]table_name [ CASCADE ]
 
 *   *schema_name*: 스키마 이름을 지정한다. 생략하면 해당 사용자의 스키마 이름을 사용한다.
 *   *table_name* : 삭제할 데이터가 포함되어 있는 테이블의 이름을 지정한다.

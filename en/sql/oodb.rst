@@ -61,10 +61,10 @@ When a class is created as a sub class, the class inherits all attributes and me
     .
     .
     .
-    INHERIT resolution [ {, resolution }_ ]
+    INHERIT resolution [{, resolution}]
 
     resolution:
-    { column_name | method_name } OF [schema_name.]superclass_name [ AS alias ]
+    [column_name | method_name] OF [schema_name.]superclass_name [AS alias]
 
 In the **INHERIT** clause, specify the name of the attribute or method of the super class to inherit. With the **ALIAS** clause, you can resolve a name conflict that occurs in multiple inheritance statements by inheriting a new name.
 
@@ -79,12 +79,13 @@ To extend class inheritance, add a super class to a class. A relationship betwee
     .
     .
     .
-    ADD SUPERCLASS [schema_name.]superclass_name [ { , [schema_name.]superclass_name }_ ]
-    [ INHERIT resolution [ {, resolution }_ ] ] [ ; ]
-    resolution:
-    { column_name | method_name } OF [schema_name.]superclass_name [ AS alias ]
+    ADD SUPERCLASS [schema_name.]superclass_name [{, [schema_name.]superclass_name}]
+    [INHERIT resolution [{, resolution}]]
 
-Specify the name of the superclass to be added in *superclass_name*\ . Attributes and methods of the super class can be inherited by using the syntax above.
+    resolution:
+    [column_name | method_name] OF [schema_name.]superclass_name [AS alias]
+
+Specify the name of the superclass to be added in *superclass_name*\. Attributes and methods of the super class can be inherited by using the syntax above.
 
 Name conflicts can occur when adding a new super class. If a name conflict cannot be resolved by the database system, attributes or methods to inherit from the super class can be specified by using the **INHERIT** clause. You can use aliases to inherit all attributes or methods that cause the conflict. For details on super class name conflicts, see :ref:`class-conflict-resolution`.
 
@@ -103,13 +104,13 @@ Deleting a super class from a class means removing the relationship between two 
     .
     .
     .
-    DROP SUPERCLASS [schema_name.]superclass_name [ { , [schema_name.]superclass_name }_ ]
-    [ INHERIT resolution [ {, resolution }_ ] ] [ ; ]
+    DROP SUPERCLASS [schema_name.]superclass_name [{, [schema_name.]superclass_name}]
+    [INHERIT resolution [{, resolution}]]
      
     resolution:
-    { column_name | method_name } OF [schema_name.]superclass_name [ AS alias ]
+    [column_name | method_name] OF [schema_name.]superclass_name [AS alias]
 
-Specify the name of the superclass to be deleted in *superclass_name*\ . For the second *class_name*, specify the name of the super class to be deleted. If a name conflict occurs after deleting a super class, see the :ref:`class-conflict-resolution` section for the resolution.
+Specify the name of the superclass to be deleted in *superclass_name*\. For the second *class_name*, specify the name of the super class to be deleted. If a name conflict occurs after deleting a super class, see the :ref:`class-conflict-resolution` section for the resolution.
 
 The following example shows how to inherit the *female_event* class from the *event* class.
 
@@ -149,11 +150,11 @@ When the system resolves the conflict automatically, basically, the existing inh
 
 What will be discussed concerning conflicts is applied commonly to both attributes and methods. ::
 
-    ALTER [ class_type ] [schema_name.]class_name alter_clause
-    [ INHERIT resolution [ {, resolution }_ ] ] [ ; ]
+    ALTER [class_type] [schema_name.]class_name alter_clause
+    [INHERIT resolution [{, resolution }]]
 
     resolution:
-    { column_name | method_name } OF [schema_name.]superclass_name [ AS alias ]
+    [column_name | method_name] OF [schema_name.]superclass_name [AS alias]
 
 Superclass Conflict
 -------------------

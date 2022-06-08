@@ -16,8 +16,8 @@ It shows the column information of a table, and it's like a **SHOW COLUMNS** sta
 
 ::
 
-    DESC [ schema_name. ] table_name;
-    DESCRIBE [ schema_name. ] table_name;
+    DESC [schema_name.]table_name;
+    DESCRIBE [schema_name.]table_name;
     
 EXPLAIN
 =======
@@ -26,7 +26,7 @@ It shows the column information of a table, and it's like a **SHOW COLUMNS** sta
 
 ::
 
-    EXPLAIN [ schema_name. ] table_name;
+    EXPLAIN [schema_name.]table_name;
 
 .. _show-tables-statement:
 
@@ -37,7 +37,7 @@ It shows the list of all table names within a database. The name of the result c
 
 ::
 
-    SHOW [ FULL ] TABLES [ LIKE 'pattern' | WHERE expr ];
+    SHOW [FULL] TABLES [LIKE 'pattern' | WHERE expr];
 
 The following shows the examples of this syntax.
 
@@ -112,7 +112,7 @@ It shows the column information of a table. You can use the **LIKE** clause to s
 
 ::
 
-        SHOW [ FULL ] COLUMNS { FROM | IN } [ schema_name. ] table_name [ LIKE 'pattern' | WHERE expr ];
+        SHOW [FULL] COLUMNS (FROM | IN) [schema_name.]table_name [LIKE 'pattern' | WHERE expr];
 
 If a **FULL** keyword is used, it shows the additional information, **collation** and **comment**.
 
@@ -194,7 +194,7 @@ It shows the index information.
 
 ::
 
-    SHOW { INDEX | INDEXES | KEYS } { FROM | IN } [ schema_name. ] table_name;
+    SHOW (INDEX | INDEXES | KEYS) (FROM | IN) [schema_name.]table_name;
 
 This query has the following columns:
 
@@ -228,9 +228,9 @@ The following shows the examples of this syntax.
     
 ::
 
-      Table             Non_unique  Key_name           Seq_in_index  Column_name  Collation  Cardinality  Sub_part  Packed  Null  Index_type  unc  Comment  Visible
+      Table             Non_unique  Key_name           Seq_in_index  Column_name  Collation  Cardinality  Sub_part  Packed  Null  Index_type  func  Comment  Visible
     =================================================================================================================================================================
-      'public.athlete'           0  'pk_athlete_code'             1  'code'       'A'               6677      NULL  NULL    'NO'  'BTREE'     ULL  NULL     'YES'
+      'public.athlete'           0  'pk_athlete_code'             1  'code'       'A'               6677      NULL  NULL    'NO'  'BTREE'     NULL  NULL     'YES'
 
 .. code-block:: sql
 
@@ -267,7 +267,7 @@ It lists collations supported by the database. If LIKE clause is present, it ind
 
 ::
 
-    SHOW COLLATION [ LIKE 'pattern' ];
+    SHOW COLLATION [LIKE 'pattern'];
 
 This query has the following columns:
 
@@ -334,7 +334,7 @@ It shows the timezone information which the current CUBRID supports.
 
 ::
 
-    SHOW [ FULL ] TIMEZONES [ LIKE 'pattern' ];
+    SHOW [FULL] TIMEZONES [LIKE 'pattern'];
 
 If FULL is not specified, one column which has timezone's region names is displayed. The name of this column is timezone_region.
 
@@ -386,7 +386,7 @@ The LIKE condition without the WHERE condition is applied on the first column. T
 
 .. code-block:: sql
 
-    SHOW [ FULL ] TIMEZONES [ LIKE 'pattern' ];
+    SHOW FULL TIMEZONES;
 
 ::
 
@@ -455,7 +455,7 @@ SHOW CREATE TABLE
 
 When a table name is specified, It shows the **CREATE TABLE** statement of the table. ::
 
-    SHOW CREATE TABLE [ schema_name. ] table_name;
+    SHOW CREATE TABLE [schema_name.]table_name;
     
 .. code-block:: sql
 
@@ -497,7 +497,7 @@ SHOW ACCESS STATUS
   
 :: 
   
-    SHOW ACCESS STATUS [ LIKE 'pattern' | WHERE expr ]; 
+    SHOW ACCESS STATUS [LIKE 'pattern' | WHERE expr]; 
 
 This statement displays the following columns.
 
@@ -546,7 +546,7 @@ For details, see :ref:`statdump`.
 
 ::
 
-    SHOW EXEC STATISTICS [ ALL ];
+    SHOW EXEC STATISTICS [ALL];
 
 The following shows the examples of this syntax.
 
@@ -721,7 +721,7 @@ It shows the header information of an active log file.
 
 ::
 
-    SHOW LOG HEADER [ OF file_name ];
+    SHOW LOG HEADER [OF file_name];
     
 If you omit **OF** *file_name*, it shows the header information of a memory; if you include **OF** *file_name*, it shows the header information of *file_name*.
 
@@ -918,7 +918,7 @@ It shows shows the header page of the table.
 
 ::
 
-    SHOW  [ ALL ] HEAP HEADER OF [ schema_name. ] table_name;
+    SHOW  [ALL] HEAP HEADER OF [schema_name.]table_name;
 
 *   ALL: If "ALL" is given in syntax in the partition table, the basic table and its partitioned tables are shown.
 
@@ -1107,7 +1107,7 @@ It shows the capacity of the table.
 
 ::
 
-    SHOW [ ALL ] HEAP CAPACITY OF [ schema_name. ] table_name;
+    SHOW [ALL] HEAP CAPACITY OF [schema_name.]table_name;
 
 *   ALL: If "all" is given in syntax, the basic table and its partition table(s) is shown.
 
@@ -1242,7 +1242,7 @@ It shows the header information of specified slotted page.
 
 ::
 
-    SHOW SLOTTED PAGE HEADER { WHERE | OF } VOLUME = volume_num AND PAGE = page_num;
+    SHOW SLOTTED PAGE HEADER (WHERE | OF) VOLUME = volume_num AND PAGE = page_num;
 
 This query has the following columns:
 
@@ -1292,7 +1292,7 @@ It shows the information of all slots in the specified slotted page.
 
 ::
 
-    SHOW SLOTTED PAGE SLOTS { WHERE | OF } VOLUME = volume_num AND PAGE = page_num;
+    SHOW SLOTTED PAGE SLOTS (WHERE | OF) VOLUME = volume_num AND PAGE = page_num;
     
 This query has the following columns:
 
@@ -1346,13 +1346,13 @@ It shows the index header page of the index of the table.
 
 ::
 
-    SHOW INDEX HEADER OF [ schema_name. ] table_name.index_name;
+    SHOW INDEX HEADER OF [schema_name.]table_name.index_name;
 
 If ALL keyword is used and an index name is omitted, it shows the entire headers of the indexes of the table.
 
 ::
 
-    SHOW ALL INDEXES HEADER OF [ schema_name. ] table_name;
+    SHOW ALL INDEXES HEADER OF [schema_name.]table_name;
 
 This query has the following columns:
 
@@ -1410,13 +1410,13 @@ It shows the index capacity of the index of the table.
 
 ::
 
-    SHOW INDEX CAPACITY OF [ schema_name. ] table_name.index_name;
+    SHOW INDEX CAPACITY OF [schema_name.]table_name.index_name;
 
 If ALL keyword is used and an index name is omitted, it shows the entire capacity of the indexes of the table.
 
 ::
 
-    SHOW ALL INDEXES CAPACITY OF [ schema_name. ] table_name;
+    SHOW ALL INDEXES CAPACITY OF [schema_name.]table_name;
 
 This query has the following columns:
 

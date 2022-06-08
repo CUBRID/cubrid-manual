@@ -15,7 +15,7 @@ CREATE SERVER
 
 **CREATE SERVER** 문을 사용하여 원격 접속 정보를 생성한다. 
 생성된 서버는 **DBLINK**\를 이용하는 :doc:`/sql/query/select` 질의를 수행 할 때 원격 서버를 지정하는데 사용한다.
-준비된 서버의 사용 방법은 :ref:`dblink-clause` 를 참고한다.
+준비된 서버의 사용 방법은 :ref:`dblink-clause`\를 참고한다.
 
 ::
 
@@ -154,7 +154,7 @@ RENAME SERVER
     서버의 소유자 또는 소유 그룹의 멤버만 정보를 변경 할 수 있다. 
     특별히 **DBA** 또는 **DBA** 의 멤버는 모든 서버 정보를 변경할 수 있다.
     
-    변경 후에도 소유자는 동일하게 유지된다. 소유자를 변경하기 위해서는 :ref:`ALTER SERVER 구문<owner_to>`\ 을 참고한다.
+    변경 후에도 소유자는 동일하게 유지된다. 소유자를 변경하기 위해서는 :ref:`ALTER SERVER 구문<owner_to>`\을 참고한다.
 
 
 .. code-block:: sql

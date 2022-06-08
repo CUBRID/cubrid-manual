@@ -1004,25 +1004,26 @@ DB_CLASS
 
 .. code-block:: sql
 
-    SELECT class_name
+    /* CURRENT_USER: PUBLIC */
+    SELECT class_name, owner_name
     FROM db_class
     WHERE owner_name = CURRENT_USER;
 
 ::
 
-      class_name
-    ======================
-      'stadium'
-      'code'
-      'nation'
-      'event'
-      'athlete'
-      'participant'
-      'olympic'
-      'game'
-      'record'
-      'history'
-      'female_event'
+      class_name            owner_name
+    ============================================
+      'stadium'             'PUBLIC'
+      'code'                'PUBLIC'
+      'nation'              'PUBLIC'
+      'event'               'PUBLIC'
+      'athlete'             'PUBLIC'
+      'participant'         'PUBLIC'
+      'olympic'             'PUBLIC'
+      'game'                'PUBLIC'
+      'record'              'PUBLIC'
+      'history'             'PUBLIC'
+      'female_event'        'PUBLIC'
 
 다음 예제에서는 현재 사용자가 접근할 수 있는 가상 클래스를 검색한다.
 
@@ -1036,6 +1037,10 @@ DB_CLASS
 
       class_name
     ======================
+      'db_synonym'
+      'db_server'
+      'db_charset'
+      'db_collation'
       'db_stored_procedure_args'
       'db_stored_procedure'
       'db_partition'
@@ -1053,15 +1058,15 @@ DB_CLASS
       'db_direct_super_class'
       'db_class'
 
-다음 예제에서는 현재 사용자가 접근할 수 있는 시스템 클래스를 검색한다. (사용자는 **PUBLIC** )
+다음 예제에서는 현재 사용자가 접근할 수 있는 시스템 클래스를 검색한다.
 
 .. code-block:: sql
 
     SELECT class_name
     FROM db_class
     WHERE is_system_class = 'YES' AND class_type = 'CLASS'
-    ORDER BY 1;
-    
+    ORDER BY class_name;
+
 ::
 
       class_name
@@ -1079,13 +1084,17 @@ DB_DIRECT_SUPER_CLASS
 
 데이터베이스 내에서 현재 사용자가 접근 권한을 가진 클래스에 대해 상위 클래스가 존재하면 그 클래스명을 보여준다.
 
-+------------------+---------------+-----------------------+
-| 속성명           | 데이터 타입   | 설명                  |
-+==================+===============+=======================+
-| class_name       | VARCHAR (255) | 클래스명              |
-+------------------+---------------+-----------------------+
-| super_class_name | VARCHAR (255) | 한 단계 상위 클래스명 |
-+------------------+---------------+-----------------------+
++------------------+---------------+------------------------------+
+| 속성명           | 데이터 타입   | 설명                         |
++==================+===============+==============================+
+| class_name       | VARCHAR (255) | 클래스명                     |
++------------------+---------------+------------------------------+
+| owner_name       | VARCHAR (255) | 클래스 소유자명              |
++------------------+---------------+------------------------------+
+| super_class_name | VARCHAR (255) | 한 단계 상위 클래스명        |
++------------------+---------------+------------------------------+
+| super_owner_name | VARCHAR (255) | 한 단계 상위 클래스 소유자명 |
++------------------+---------------+------------------------------+
 
 다음 예제에서는 클래스 *female_event* 의 상위 클래스를 검색한다. (:ref:`add-superclass` 참조)
 
@@ -1101,15 +1110,16 @@ DB_DIRECT_SUPER_CLASS
     ======================
       'event'
 
-다음 예제에서는 현재 사용자가 소유하고 있는 클래스의 상위 클래스를 검색한다. (사용자는 **PUBLIC** )
+다음 예제에서는 현재 사용자가 소유하고 있는 클래스의 상위 클래스를 검색한다.
 
 .. code-block:: sql
 
-    SELECT c.class_name, s.super_class_name
-    FROM db_class c, db_direct_super_class s
-    WHERE c.class_name = s.class_name AND c.owner_name = user
-    ORDER BY 1;
-    
+    /* CURRENT_USER: PUBLIC */
+    SELECT class_name, super_class_name
+    FROM  db_direct_super_class
+    WHERE owner_name = CURRENT_USER
+    ORDER BY class_name;
+
 ::
 
       class_name            super_class_name
@@ -1127,6 +1137,8 @@ DB_VCLASS
 | 속성명      | 데이터 타입          | 설명                             | 버전별특성(10.1버전만) |
 +=============+======================+==================================+========================+
 | vclass_name | VARCHAR (255)        | 가상 클래스명                    |                        |
++-------------+----------------------+----------------------------------+------------------------+
+| owner_name  | VARCHAR (255)        | 가상 클래스 소유자명             |                        |
 +-------------+----------------------+----------------------------------+------------------------+
 |             | VARCHAR (1073741823) |                                  | 10.1 Patch 4 이후      |
 + vclass_def  +----------------------+ 가상 클래스의 SQL 정의문         +------------------------+
@@ -1147,7 +1159,7 @@ DB_VCLASS
     
       vclass_def
     ======================
-      'SELECT [c].[class_name], CAST([c].[owner].[name] AS VARCHAR(255)), CASE [c].[class_type] WHEN 0 THEN 'CLASS' WHEN 1 THEN 'VCLASS' ELSE 'UNKNOW' END, CASE WHEN MOD([c].[is_system_class], 2) = 1 THEN 'YES' ELSE 'NO' END, CASE WHEN [c].[sub_classes] IS NULL THEN 'NO' ELSE NVL((SELECT 'YES' FROM [_db_partition] [p] WHERE [p].[class_of] = [c] and [p].[pname] IS NULL), 'NO') END, CASE WHEN MOD([c].[is_system_class] / 8, 2) = 1 THEN 'YES' ELSE 'NO' END FROM [_db_class] [c] WHERE CURRENT_USER = 'DBA' OR {[c].[owner].[name]} SUBSETEQ (  SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{[t].[g].[name]}), SET{})  FROM [db_user] [u], TABLE([groups]) AS [t]([g])  WHERE [u].[name] = CURRENT_USER) OR {[c]} SUBSETEQ (  SELECT SUM(SET{[au].[class_of]}) FROM [_db_auth] [au]  WHERE {[au].[grantee].[name]} SUBSETEQ (  SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{[t].[g].[name]}), SET{})  FROM [db_user] [u], TABLE([groups]) AS [t]([g])  WHERE [u].[name] = CURRENT_USER) AND  [au].[auth_type] = 'SELECT')'
+      'SELECT [c].[class_name], CAST([c].[owner].[name] AS VARCHAR(255)), CASE [c].[class_type] WHEN 0 THEN 'CLASS' WHEN 1 THEN 'VCLASS' ELSE 'UNKNOW' END, CASE WHEN MOD([c].[is_system_class], 2) = 1 THEN 'YES' ELSE 'NO' END, CASE [c].[tde_algorithm] WHEN 0 THEN 'NONE' WHEN 1 THEN 'AES' WHEN 2 THEN 'ARIA' END, CASE WHEN [c].[sub_classes] IS NULL THEN 'NO' ELSE NVL((SELECT 'YES' FROM [_db_partition] [p] WHERE [p].[class_of] = [c] and [p].[pname] IS NULL), 'NO') END, CASE WHEN MOD([c].[is_system_class] / 8, 2) = 1 THEN 'YES' ELSE 'NO' END, [coll].[coll_name], [c].[comment] FROM [_db_class] [c], [_db_collation] [coll] WHERE [c].[collation_id] = [coll].[coll_id] AND (CURRENT_USER = 'DBA' OR {[c].[owner].[name]} SUBSETEQ (SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{[t].[g].[name]}), SET{}) FROM [db_user] [u], TABLE([groups]) AS [t]([g]) WHERE [u].[name] = CURRENT_USER) OR {[c]} SUBSETEQ ( SELECT SUM(SET{[au].[class_of]}) FROM [_db_auth] [au] WHERE {[au].[grantee].[name]} SUBSETEQ ( SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{[t].[g].[name]}), SET{}) FROM [db_user] [u], TABLE([groups]) AS [t]([g]) WHERE [u].[name] = CURRENT_USER) AND [au].[auth_type] = 'SELECT'))'
 
 DB_ATTRIBUTE
 ------------
@@ -1161,11 +1173,15 @@ DB_ATTRIBUTE
 +-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
 | class_name        | VARCHAR (255) | 속성이 속한 클래스명                                                                                          |
 +-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
+| owner_name        | VARCHAR (255) | 속성이 속한 클래스 소유자명                                                                                   |
++-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
 | attr_type         | VARCHAR (8)   | 인스턴스 속성이면 'INSTANCE', 클래스 속성이면 'CLASS', 공유 속성이면 'SHARED'                                 |
 +-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
 | def_order         | INTEGER       | 클래스에서 속성이 정의된 순서로 0부터 시작함. 상속받은 속성이면 그 상위 클래스에서 정의된 순서임.             |
 +-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
 | from_class_name   | VARCHAR (255) | 상속받은 속성이면 그 속성이 정의되어 있는 상위 클래스명이 설정되며, 그렇지 않으면 **NULL**                    |
++-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
+| from_owner_name   | VARCHAR (255) | 상속받은 속성이면 그 속성이 정의되어 있는 상위 클래스의 소유자명이 설정되며, 그렇지 않으면 **NULL**           |
 +-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
 | from_attr_name    | VARCHAR (255) | 상속받은 속성이며, 이름 충돌이 발생하여 이를 해결하기 위해 그 속성명이 바뀐 경우, 상위 클래스에 정의된 원래   |
 |                   |               | 이름임. 그 이외에는 모두 **NULL**                                                                             |
@@ -1183,6 +1199,8 @@ DB_ATTRIBUTE
 | collation         | VARCHAR (32)  | 콜레이션 이름                                                                                                 |
 +-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
 | domain_class_name | VARCHAR (255) | 데이터 타입이 객체 타입인 경우 그 도메인 클래스명. 객체 타입이 아닌 경우 **NULL**                             |
++-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
+| domain_owner_name | VARCHAR (255) | 데이터 타입이 객체 타입인 경우 그 도메인 클래스 소유자명. 객체 타입이 아닌 경우 **NULL**                      |
 +-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
 | default_value     | VARCHAR (255) | 기본값으로서 그 데이터 타입에 관계없이 모두 문자열로 저장. 기본값이 없으면                                    |
 |                   |               | **NULL** , 기본값이 **NULL** 이면 'NULL'로 표현됨.                                                            |
@@ -1232,14 +1250,15 @@ DB_ATTRIBUTE
       'gender'              'event'
       'players'             'event'
 
-다음 예제에서는 현재 사용자가 소유하고 있는 클래스 중에서 속성명이 *name* 과 유사한 클래스를 검색한다. (사용자는 **PUBLIC**)
+다음 예제에서는 현재 사용자가 소유하고 있는 클래스 중에서 속성명이 *name* 과 유사한 클래스를 검색한다.
 
 .. code-block:: sql
 
-    SELECT a.class_name, a.attr_name
-    FROM db_class c join db_attribute a ON c.class_name = a.class_name
-    WHERE c.owner_name = CURRENT_USER AND attr_name like '%name%'
-    ORDER BY 1;
+    /* CURRENT_USER: PUBLIC */
+    SELECT class_name, attr_name
+    FROM db_attribute
+    WHERE owner_name = CURRENT_USER AND attr_name like '%name%'
+    ORDER BY class_name;
     
 ::
 
@@ -1265,6 +1284,8 @@ DB_ATTR_SETDOMAIN_ELM
 +-------------------+---------------+-------------------------------------------------------------------------------+
 | class_name        | VARCHAR (255) | 속성이 속한 클래스명                                                          |
 +-------------------+---------------+-------------------------------------------------------------------------------+
+| owner_name        | VARCHAR (255) | 속성이 속한 클래스 소유자명                                                   |
++-------------------+---------------+-------------------------------------------------------------------------------+
 | attr_type         | VARCHAR (8)   | 인스턴스 속성이면 'INSTANCE', 클래스 속성이면 'CLASS', 공유 속성이면 'SHARED' |
 +-------------------+---------------+-------------------------------------------------------------------------------+
 | data_type         | VARCHAR (9)   | 원소의 데이터 타입                                                            |
@@ -1276,6 +1297,8 @@ DB_ATTR_SETDOMAIN_ELM
 | code_set          | INTEGER       | 원소의 데이터 타입이 문자 타입인 경우 그 문자집합                             |
 +-------------------+---------------+-------------------------------------------------------------------------------+
 | domain_class_name | VARCHAR (255) | 원소의 데이터 타입이 객체 타입인 경우 그 도메인 클래스명                      |
++-------------------+---------------+-------------------------------------------------------------------------------+
+| domain_owner_name | VARCHAR (255) | 원소의 데이터 타입이 객체 타입인 경우 그 도메인 클래스 소유자명               |
 +-------------------+---------------+-------------------------------------------------------------------------------+
 
 예를 들어 클래스 D의 속성 set_attr 이 SET(A, B, C) 타입이면 다음 세 개의 레코드들이 존재하게 된다.
@@ -1302,8 +1325,7 @@ DB_ATTR_SETDOMAIN_ELM
 
       attr_name             attr_type             data_type             domain_class_name
     ==============================================================================
-     
-    'sports'              'INSTANCE'            'STRING'              NULL
+      'sports'              'INSTANCE'            'STRING'              NULL
 
 DB_CHARSET
 ----------
@@ -1355,10 +1377,15 @@ DB_METHOD
 +-----------------+---------------+-------------------------------------------------------------------------------------+
 | class_name      | VARCHAR (255) | 메서드가 속한 클래스명                                                              |
 +-----------------+---------------+-------------------------------------------------------------------------------------+
+| owner_name      | VARCHAR (255) | 메서드가 속한 클래스 소유자명                                                       |
++-----------------+---------------+-------------------------------------------------------------------------------------+
 | meth_type       | VARCHAR (8)   | 인스턴스 메서드이면 'INSTANCE', 클래스 메서드이면 'CLASS'                           |
 +-----------------+---------------+-------------------------------------------------------------------------------------+
 | from_class_name | VARCHAR (255) | 상속받은 메서드이면 그 메서드가 정의되어 있는 상위 클래스명이 설정되며 그렇지       |
 |                 |               | 않으면 **NULL**                                                                     |
++-----------------+---------------+-------------------------------------------------------------------------------------+
+| from_owner_name | VARCHAR (255) | 상속받은 메서드이면 그 메서드가 정의되어 있는 상위 클래스 소유자명이 설정되며       |
+|                 |               | 그렇지 않으면 **NULL**                                                              |
 +-----------------+---------------+-------------------------------------------------------------------------------------+
 | from_meth_name  | VARCHAR (255) | 상속받은 메서드이며, 이름 충돌이 발생하여 이를 해결하기 위해 그 메서드명이 바뀐     |
 |                 |               | 경우, 상위 클래스에 정의된 원래 이름이 설정됨. 그 이외에는 모두 **NULL**            |
@@ -1377,18 +1404,18 @@ DB_METHOD
     
 ::
 
-      meth_name             meth_type             func_name
-    ==================================================================
-      'add_user'            'CLASS'               'au_add_user_method'
-      'drop_user'           'CLASS'               'au_drop_user_method'
-      'find_user'           'CLASS'               'au_find_user_method'
-      'login'               'CLASS'               'au_login_method'
-      'add_member'          'INSTANCE'            'au_add_member_method'
-      'drop_member'         'INSTANCE'            'au_drop_member_method'
-      'print_authorizations'  'INSTANCE'            'au_describe_user_method'
-      'set_password'        'INSTANCE'            'au_set_password_method'
-      'set_password_encoded'  'INSTANCE'            'au_set_password_encoded_method'
-      'set_password_encoded_sha1'  'INSTANCE'            'au_set_password_encoded_sha1_method'
+      meth_name                    meth_type   func_name
+    ==================================================================================
+      'add_user'                   'CLASS'     'au_add_user_method'
+      'drop_user'                  'CLASS'     'au_drop_user_method'
+      'find_user'                  'CLASS'     'au_find_user_method'
+      'login'                      'CLASS'     'au_login_method'
+      'add_member'                 'INSTANCE'  'au_add_member_method'
+      'drop_member'                'INSTANCE'  'au_drop_member_method'
+      'print_authorizations'       'INSTANCE'  'au_describe_user_method'
+      'set_password'               'INSTANCE'  'au_set_password_method'
+      'set_password_encoded'       'INSTANCE'  'au_set_password_encoded_method'
+      'set_password_encoded_sha1'  'INSTANCE'  'au_set_password_encoded_sha1_method'
 
 DB_METH_ARG
 -----------
@@ -1401,6 +1428,8 @@ DB_METH_ARG
 | meth_name         | VARCHAR (255) | 메서드명                                                                 |
 +-------------------+---------------+--------------------------------------------------------------------------+
 | class_name        | VARCHAR (255) | 메서드가 속한 클래스명                                                   |
++-------------------+---------------+--------------------------------------------------------------------------+
+| owner_name        | VARCHAR (255) | 메서드가 속한 클래스 소유자명                                            |
 +-------------------+---------------+--------------------------------------------------------------------------+
 | meth_type         | VARCHAR (8)   | 인스턴스 메서드이면 'INSTANCE', 클래스 메서드이면 'CLASS'                |
 +-------------------+---------------+--------------------------------------------------------------------------+
@@ -1415,6 +1444,8 @@ DB_METH_ARG
 | code_set          | INTEGER       | 인자의 데이터 타입이 문자 타입인 경우 그 문자집합                        |
 +-------------------+---------------+--------------------------------------------------------------------------+
 | domain_class_name | VARCHAR (255) | 인자의 데이터 타입이 객체 타입인 경우 도메인 클래스명                    |
++-------------------+---------------+--------------------------------------------------------------------------+
+| domain_owner_name | VARCHAR (255) | 인자의 데이터 타입이 객체 타입인 경우 도메인 클래스 소유자명             |
 +-------------------+---------------+--------------------------------------------------------------------------+
 
 다음 예제에서는 클래스 *db_user* 의 메서드 입력 인자를 검색한다.
@@ -1443,6 +1474,8 @@ DB_METH_ARG_SETDOMAIN_ELM
 +-------------------+--------------+--------------------------------------------------------------------------+
 | class_name        | VARCHAR(255) | 메서드가 속한 클래스명                                                   |
 +-------------------+--------------+--------------------------------------------------------------------------+
+| owner_name        | VARCHAR(255) | 메서드가 속한 클래스 소유자명                                            |
++-------------------+--------------+--------------------------------------------------------------------------+
 | meth_type         | VARCHAR (8)  | 인스턴스 메서드이면 'INSTANCE', 클래스 메서드이면 'CLASS'                |
 +-------------------+--------------+--------------------------------------------------------------------------+
 | index_of          | INTEGER      | 인자가 함수 정의에 나열된 순서. 리턴 값이면 0, 입력인자이면 1부터 시작함 |
@@ -1455,7 +1488,9 @@ DB_METH_ARG_SETDOMAIN_ELM
 +-------------------+--------------+--------------------------------------------------------------------------+
 | code_set          | INTEGER      | 원소의 데이터 타입이 문자 타입인 경우 그 문자집합                        |
 +-------------------+--------------+--------------------------------------------------------------------------+
-| domain_class_name | VARCHAR(255) | 원소의 데이터 타입이 객체 타입인 경우 도메인 클래스명.                   |
+| domain_class_name | VARCHAR(255) | 원소의 데이터 타입이 객체 타입인 경우 도메인 클래스명                    |
++-------------------+--------------+--------------------------------------------------------------------------+
+| domain_owner_name | VARCHAR(255) | 원소의 데이터 타입이 객체 타입인 경우 도메인 클래스 소유자명             |
 +-------------------+--------------+--------------------------------------------------------------------------+
 
 DB_METH_FILE
@@ -1468,10 +1503,15 @@ DB_METH_FILE
 +=================+==============+========================================================================================+
 | class_name      | VARCHAR(255) | 메서드 파일이 속한 클래스명                                                            |
 +-----------------+--------------+----------------------------------------------------------------------------------------+
+| owner_name      | VARCHAR(255) | 메서드 파일이 속한 클래스 소유자명                                                     |
++-----------------+--------------+----------------------------------------------------------------------------------------+
 | path_name       | VARCHAR(255) | C 함수가 정의된 파일의 경로                                                            |
 +-----------------+--------------+----------------------------------------------------------------------------------------+
-| from_class_name | VARCHAR(255) | 상속받은 메서드이면 그 메서드 파일이 정의되어 있는 상위 클래스명이 설정. 그렇지 않으면 |
-|                 |              | **NULL**                                                                               |
+| from_class_name | VARCHAR(255) | 상속받은 메서드이면 그 메서드 파일이 정의되어 있는 상위 클래스명이 설정.               |
+|                 |              | 그렇지 않으면 **NULL**                                                                 |
++-----------------+--------------+----------------------------------------------------------------------------------------+
+| from_owner_name | VARCHAR(255) | 상속받은 메서드이면 그 메서드 파일이 정의되어 있는 상위 클래스 소유자명이 설정.        |
+|                 |              | 그렇지 않으면 **NULL**                                                                 |
 +-----------------+--------------+----------------------------------------------------------------------------------------+
 
 DB_INDEX
@@ -1489,6 +1529,8 @@ DB_INDEX
 | is_reverse        | VARCHAR(3)   | 역 인덱스(reverse indexd)이면 'YES', 그렇지 않으면 'NO' |
 +-------------------+--------------+---------------------------------------------------------+
 | class_name        | VARCHAR(255) | 인덱스가 속한 클래스명                                  |
++-------------------+--------------+---------------------------------------------------------+
+| owner_name        | VARCHAR(255) | 인덱스가 속한 클래스 소유자명                           |
 +-------------------+--------------+---------------------------------------------------------+
 | key_count         | INTEGER      | 키를 구성하는 속성의 개수                               |
 +-------------------+--------------+---------------------------------------------------------+
@@ -1509,53 +1551,56 @@ DB_INDEX
 
     SELECT class_name, index_name, is_unique
     FROM db_index
-    ORDER BY 1;
+    ORDER BY owner_name, class_name;
     
 ::
 
-      class_name            index_name            is_unique
-    ==================================================================
-      'athlete'             'pk_athlete_code'     'YES'
-      'city'                'pk_city_city_name'   'YES'
-      'db_serial'           'pk_db_serial_name'   'YES'
-      'db_user'             'i_db_user_name'      'NO'
-      'event'               'pk_event_code'       'YES'
-      'female_event'        'pk_event_code'       'YES'
-      'game'                'pk_game_host_year_event_code_athlete_code'  'YES'
-      'game'                'fk_game_event_code'  'NO'
-      'game'                'fk_game_athlete_code'  'NO'
-      'history'             'pk_history_event_code_athlete'  'YES'
-      'nation'              'pk_nation_code'      'YES'
-      'olympic'             'pk_olympic_host_year'  'YES'
-      'participant'         'pk_participant_host_year_nation_code'  'YES'
-      'participant'         'fk_participant_host_year'  'NO'
-      'participant'         'fk_participant_nation_code'  'NO'
+      class_name            index_name                                           is_unique
+    ========================================================================================
+      'db_ha_apply_info'    'u_db_ha_apply_info_db_name_copied_log_path'         'YES'
+      'db_serial'           'pk_db_serial_unique_name'                           'YES'
+      'db_serial'           'u_db_serial_name_owner'                             'YES'
+      'db_user'             'u_db_user_name'                                     'YES'
+      'athlete'             'pk_athlete_code'                                    'YES'
+      'event'               'pk_event_code'                                      'YES'
+      'female_event'        'pk_event_code'                                      'YES'
+      'game'                'pk_game_host_year_event_code_athlete_code'          'YES'
+      'game'                'fk_game_event_code'                                 'NO'
+      'game'                'fk_game_athlete_code'                               'NO'
+      'history'             'pk_history_event_code_athlete'                      'YES'
+      'nation'              'pk_nation_code'                                     'YES'
+      'olympic'             'pk_olympic_host_year'                               'YES'
+      'participant'         'pk_participant_host_year_nation_code'               'YES'
+      'participant'         'fk_participant_host_year'                           'NO'
+      'participant'         'fk_participant_nation_code'                         'NO'
       'record'              'pk_record_host_year_event_code_athlete_code_medal'  'YES'
-      'stadium'             'pk_stadium_code'     'YES'
-    ...
+      'stadium'             'pk_stadium_code'                                    'YES'
+
 
 DB_INDEX_KEY
 ------------
 
 데이터베이스 내에서 현재 사용자가 접근 권한을 가진 클래스에 대해 생성된 인덱스에 대한 키 정보를 보여준다.
 
-+-------------------+--------------+-----------------------------------------------------------+
-| 속성명            | 데이터 타입  | 설명                                                      |
-+===================+==============+===========================================================+
-| index_name        | VARCHAR(255) | 인덱스명                                                  |
-+-------------------+--------------+-----------------------------------------------------------+
-| class_name        | VARCHAR(255) | 인덱스가 속한 클래스명                                    |
-+-------------------+--------------+-----------------------------------------------------------+
-| key_attr_name     | VARCHAR(255) | 키를 구성하는 속성의 이름                                 |
-+-------------------+--------------+-----------------------------------------------------------+
-| key_order         | INTEGER      | 키에서 속성이 위치한 순서. 0부터 시작함                   |
-+-------------------+--------------+-----------------------------------------------------------+
-| asc_desc          | VARCHAR(4)   | 속성 값의 순서가 내림차순이면 'DESC', 그렇지 않으면 'ASC' |
-+-------------------+--------------+-----------------------------------------------------------+
-| key_prefix_length | INTEGER      | 키로 사용할 prefix의 길이                                 |
-+-------------------+--------------+-----------------------------------------------------------+
-| func              | VARCHAR(255) | 함수 기반 인덱스의 함수 표현식                            |
-+-------------------+--------------+-----------------------------------------------------------+
++-------------------+---------------+-----------------------------------------------------------+
+| 속성명            | 데이터 타입   | 설명                                                      |
++===================+===============+===========================================================+
+| index_name        | VARCHAR(255)  | 인덱스명                                                  |
++-------------------+---------------+-----------------------------------------------------------+
+| class_name        | VARCHAR(255)  | 인덱스가 속한 클래스명                                    |
++-------------------+---------------+-----------------------------------------------------------+
+| owner_name        | VARCHAR(255)  | 인덱스가 속한 클래스 소유자명                             |
++-------------------+---------------+-----------------------------------------------------------+
+| key_attr_name     | VARCHAR(255)  | 키를 구성하는 속성의 이름                                 |
++-------------------+---------------+-----------------------------------------------------------+
+| key_order         | INTEGER       | 키에서 속성이 위치한 순서. 0부터 시작함                   |
++-------------------+---------------+-----------------------------------------------------------+
+| asc_desc          | VARCHAR(4)    | 속성 값의 순서가 내림차순이면 'DESC', 그렇지 않으면 'ASC' |
++-------------------+---------------+-----------------------------------------------------------+
+| key_prefix_length | INTEGER       | 키로 사용할 prefix의 길이                                 |
++-------------------+---------------+-----------------------------------------------------------+
+| func              | VARCHAR(1023) | 함수 기반 인덱스의 함수 표현식                            |
++-------------------+---------------+-----------------------------------------------------------+
 
 다음 예제에서는 클래스의 인덱스 키 정보를 검색한다.
 
@@ -1563,20 +1608,33 @@ DB_INDEX_KEY
 
     SELECT class_name, key_attr_name, index_name
     FROM db_index_key
-    ORDER BY class_name, key_order;
+    ORDER BY owner_name, class_name, key_order
+    LIMIT 20;
     
 ::
 
+      class_name            key_attr_name         index_name
+    ==================================================================
+      'db_ha_apply_info'    'db_name'             'u_db_ha_apply_info_db_name_copied_log_path'
+      'db_ha_apply_info'    'copied_log_path'     'u_db_ha_apply_info_db_name_copied_log_path'
+      'db_serial'           'unique_name'         'pk_db_serial_unique_name'
+      'db_serial'           'name'                'u_db_serial_name_owner'
+      'db_serial'           'owner'               'u_db_serial_name_owner'
+      'db_user'             'name'                'u_db_user_name'
       'athlete'             'code'                'pk_athlete_code'
-      'city'                'city_name'           'pk_city_city_name'
-      'db_serial'           'name'                'pk_db_serial_name'
-      'db_user'             'name'                'i_db_user_name'
       'event'               'code'                'pk_event_code'
       'female_event'        'code'                'pk_event_code'
       'game'                'host_year'           'pk_game_host_year_event_code_athlete_code'
       'game'                'event_code'          'fk_game_event_code'
       'game'                'athlete_code'        'fk_game_athlete_code'
-     ...
+      'game'                'event_code'          'pk_game_host_year_event_code_athlete_code'
+      'game'                'athlete_code'        'pk_game_host_year_event_code_athlete_code'
+      'history'             'event_code'          'pk_history_event_code_athlete'
+      'history'             'athlete'             'pk_history_event_code_athlete'
+      'nation'              'code'                'pk_nation_code'
+      'olympic'             'host_year'           'pk_olympic_host_year'
+      'participant'         'host_year'           'pk_participant_host_year_nation_code'
+      'participant'         'host_year'           'fk_participant_host_year'
 
 DB_AUTH
 -------
@@ -1592,6 +1650,8 @@ DB_AUTH
 +--------------+--------------+------------------------------------------------------------------------------------+
 | class_name   | VARCHAR(255) | 권한부여 대상인 클래스명                                                           |
 +--------------+--------------+------------------------------------------------------------------------------------+
+| owner_name   | VARCHAR(255) | 권한부여 대상인 클래스 소유자명                                                    |
++--------------+--------------+------------------------------------------------------------------------------------+
 | auth_type    | VARCHAR(7)   | 부여된 권한 타입명                                                                 |
 +--------------+--------------+------------------------------------------------------------------------------------+
 | is_grantable | VARCHAR(3)   | 권한 받은 클래스에 대해 다른 사용자에게 권한을 부여할 수 있으면 'YES', 아니면 'NO' |
@@ -1604,19 +1664,19 @@ DB_AUTH
     SELECT class_name, auth_type, grantor_name
     FROM db_auth
     WHERE class_name like 'db_a%'
-    ORDER BY 1;
+    ORDER BY owner_name, class_name;
     
 ::
 
-      class_name            auth_type             grantor_name
-    ==================================================================
-      'db_attr_setdomain_elm'  'SELECT'             'DBA'
-      'db_attribute'           'SELECT'             'DBA'
-      'db_auth'                'SELECT'             'DBA'
-      'db_authorization'       'EXECUTE'            'DBA'
-      'db_authorization'       'SELECT'             'DBA'
-      'db_authorizations'      'EXECUTE'            'DBA'
-      'db_authorizations'      'SELECT'             'DBA'
+      class_name               auth_type             grantor_name
+    ===============================================================
+      'db_attr_setdomain_elm'  'SELECT'              'DBA'
+      'db_attribute'           'SELECT'              'DBA'
+      'db_auth'                'SELECT'              'DBA'
+      'db_authorization'       'SELECT'              'DBA'
+      'db_authorization'       'EXECUTE'             'DBA'
+      'db_authorizations'      'SELECT'              'DBA'
+      'db_authorizations'      'EXECUTE'             'DBA'
 
 DB_TRIG
 -------
@@ -1628,7 +1688,9 @@ DB_TRIG
 +===================+==============+=====================================================================================================+
 | trigger_name      | VARCHAR(255) | 트리거명                                                                                            |
 +-------------------+--------------+-----------------------------------------------------------------------------------------------------+
-| target_class_name | VARCHAR(255) | 대상이 되는 클래스                                                                                  |
+| target_class_name | VARCHAR(255) | 대상이 되는 클래스명                                                                                |
++-------------------+--------------+-----------------------------------------------------------------------------------------------------+
+| target_owner_name | VARCHAR(255) | 대상이 되는 클래스 소유자명                                                                         |
 +-------------------+--------------+-----------------------------------------------------------------------------------------------------+
 | target_attr_name  | VARCHAR(255) | 대상이 되는 속성으로서 트리거에 명시되지 않으면 **NULL**                                            |
 +-------------------+--------------+-----------------------------------------------------------------------------------------------------+
@@ -1646,40 +1708,34 @@ DB_PARTITION
 
 데이터베이스 내에서 현재 사용자가 접근 권한을 가진 분할 클래스에 대한 정보를 보여준다.
 
-+----------------------+--------------+-----------------------+
-| 속성명               | 데이터 타입  | 설명                  |
-+======================+==============+=======================+
-| class_name           | VARCHAR(255) | 클래스명              |
-+----------------------+--------------+-----------------------+
-| partition_name       | VARCHAR(255) | 파티션명              |
-+----------------------+--------------+-----------------------+
-| partition_class_name | VARCHAR(255) | 파티션 클래스 명      |
-+----------------------+--------------+-----------------------+
-| partition_type       | VARCHAR(32)  | 파티션 타입           |
-|                      |              | (HASH, RANGE, LIST)   |
-+----------------------+--------------+-----------------------+
-| partition_expr       | VARCHAR(255) | 파티션 표현식         |
-+----------------------+--------------+-----------------------+
-| partition_values     | SEQUENCE OF  | RANGE - MIN/MAX value |
-|                      |              | - 무한의 MIN/MAX는    |
-|                      |              | **NULL**              |
-|                      |              | LIST - value list     |
-+----------------------+--------------+-----------------------+
-| comment              | VARCHAR(1024)| 파티션 설명           |
-+----------------------+--------------+-----------------------+
+==================== ============= =================================================================================
+속성명               데이터 타입   설명
+==================== ============= =================================================================================
+class_name           VARCHAR(255)  클래스명
+owner_name           VARCHAR(255)  클래스 소유자명
+partition_name       VARCHAR(255)  파티션명
+partition_class_name VARCHAR(255)  파티션 클래스 명
+partition_type       VARCHAR(32)   파티션 타입 (HASH, RANGE, LIST)
+partition_expr       VARCHAR(255)  파티션 표현식
+partition_values     SEQUENCE OF   | 파티션 유형이 RANGE인 경우 MIN 및 MAX 값이고, MIN 및 MAX가 무한인 경우 **NULL**
+                                   | 파티션 유형이 LIST인 경우 값 목록
+comment              VARCHAR(1024) 파티션 설명
+==================== ============= =================================================================================
 
 다음 예제에서는 :ref:`participant2 <range-participant2-table>` 클래스의 현재 구성된 분할 정보를 조회한다.
 
 .. code-block:: sql
 
-    SELECT * from db_partition where class_name = 'participant2';
-
+    SELECT *
+    FROM db_partition
+    WHERE class_name = 'participant2';
+    
 ::
 
-      class_name            partition_name        partition_class_name         partition_type   partition_expr        partition_values
-    ====================================================================================================================================
-      'participant2'        'before_2000'         'participant2__p__before_2000'  'RANGE'       'host_year'           {NULL, 2000}
-      'participant2'        'before_2008'         'participant2__p__before_2008'  'RANGE'       'host_year'           {2000, 2008}
+      class_name      owner_name  partition_name  partition_class_name            partition_type  partition_expr  partition_values  comment
+    =========================================================================================================================================
+      'participant2'  'PUBLIC'    'before_2000'   'participant2__p__before_2000'  'RANGE'         '[host_year]'   {NULL, 2000}      NULL
+      'participant2'  'PUBLIC'    'before_2008'   'participant2__p__before_2008'  'RANGE'         '[host_year]'   {2000, 2008}      NULL
 
 DB_STORED_PROCEDURE
 -------------------
@@ -1710,6 +1766,7 @@ DB_STORED_PROCEDURE
 
 .. code-block:: sql
 
+    /* CURRENT_USER: PUBLIC */
     SELECT sp_name, target from db_stored_procedure
     WHERE sp_type = 'FUNCTION' AND owner = CURRENT_USER; 
 

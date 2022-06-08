@@ -795,7 +795,7 @@ The **cubrid compactdb** utility is used to secure unused space of the database 
 
 Reference to the object deleted during compacting is displayed as **NULL**, which means this can be reused by OIDs. ::
 
-    cubrid compactdb [<options>] database_name [schema_name.class_name {, schema_name.class_name}]
+    cubrid compactdb [options] database_name [schema_name.class_name [{, schema_name.class_name}]]
 
 *   **cubrid**: An integrated utility for the CUBRID service and database management.
 
@@ -807,7 +807,7 @@ Reference to the object deleted during compacting is displayed as **NULL**, whic
 
 **-I**, **-c**, **-d**, **-p** options are applied in client/server mode only.
 
-The following shows <options> available with the **cubrid compactdb** utility.
+The following shows [options] available with the **cubrid compactdb** utility.
 
 .. program:: compactdb
 
@@ -3024,7 +3024,7 @@ The **cubrid checkdb** utility is used to check the consistency of a database. Y
 
 ::
 
-    cubrid checkdb [<options>] database_name [schema_name.table_name {, schema_name.table_name}]
+    cubrid checkdb [options] database_name [schema_name.table_name [{, schema_name.table_name}]]
 
 *   **cubrid**: An integrated utility for CUBRID service and database management.
 
@@ -3036,7 +3036,7 @@ The **cubrid checkdb** utility is used to check the consistency of a database. Y
 
 *   *table_name*: List the table names for consistency check or recovery
 
-The following shows <options> available with the **cubrid checkdb** utility.
+The following shows [options] available with the **cubrid checkdb** utility.
 
 .. program:: checkdb
 

@@ -14,6 +14,7 @@ ADDDATE, DATE_ADD
 
 .. function:: ADDDATE (date, INTERVAL expr unit)
 .. function:: ADDDATE (date, days)
+   :noindex:
 .. function:: DATE_ADD (date, INTERVAL expr unit)
 
     The **ADDDATE** function performs an addition or subtraction operation on a specific **DATE** value; **ADDDATE** and **DATE_ADD** are used interchangeably. The return value is a **DATE** or **DATETIME** type. The **DATETIME** type is returned in the following cases.
@@ -546,6 +547,7 @@ DATE_SUB, SUBDATE
 .. function:: DATE_SUB (date, INTERVAL expr unit)
 .. function:: SUBDATE(date, INTERVAL expr unit)
 .. function:: SUBDATE(date, days)
+   :noindex:
 
     The functions **DATE_SUB** and **SUBDATE** () are used interchangeably and they perform an addition or subtraction operation on a specific **DATE** value. The value is returned in **DATE** or **DATETIME** type. If the date resulting from the operation exceeds the last day of the month, the function returns a valid **DATE** value considering the last date of the month.
 

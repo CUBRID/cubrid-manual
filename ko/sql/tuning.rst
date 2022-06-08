@@ -12,7 +12,7 @@
 
 ::
 
-    UPDATE STATISTICS ON class-name[, class-name, ...] [WITH FULLSCAN]; 
+    UPDATE STATISTICS ON [schema_name.]class-name [{, [schema_name.]class-name}] [WITH FULLSCAN]; 
      
     UPDATE STATISTICS ON ALL CLASSES [WITH FULLSCAN]; 
   
@@ -62,8 +62,9 @@ CSQL 인터프리터의 세션 명령어로 지정한 테이블의 통계 정보
 
 ::
 
-    csql> ;info stats table_name
+    csql> ;info stats [schema_name.]table_name
 
+*   *schema_name*: 테이블의 스키마를 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 통계 정보를 확인할 테이블 이름
 
 다음은 CSQL 인터프리터에서 *t1* 테이블의 통계 정보를 출력하는 예제이다.
@@ -640,7 +641,7 @@ SQL 힌트
     RECOMPILE
 
     <spec_name_comma_list> ::= <spec_name> [, <spec_name>, ... ]
-        <spec_name> ::= table_name | view_name
+        <spec_name> ::= [schema_name.]table_name | [schema_name.]view_name
     
     <merge_statement_hint> ::=
     USE_UPDATE_INDEX (<update_index_list>) |
@@ -951,11 +952,11 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
 필터링된 인덱스(filtered index)는 한 테이블에 대해 잘 정의된 부분 집합을 정렬하거나 찾거나 연산해야 할 때 사용되며, 전체 데이터에서 조건에 부합하는 일부 데이터만 인덱스에 유지하므로 부분 인덱스(partial index)라고도 한다. ::
 
     CREATE /*+ hints */ INDEX index_name
-    ON table_name (col1, col2, ...) 
+    ON [schema_name.]table_name (col1, col2, ...) 
     WHERE <filter_predicate>;
      
     ALTER  /*+ hints */ INDEX index_name
-    [ ON table_name (col1, col2, ...) 
+    [ ON [schema_name.]table_name (col1, col2, ...) 
     [ WHERE <filter_predicate> ] ]
     REBUILD;
      
@@ -1185,10 +1186,10 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
 함수 기반 인덱스(function-based index)는 특정 함수를 이용하여 테이블 행들로부터 값의 조합에 기반한 데이터를 정렬하거나 찾고 싶을 때 사용한다. 예를 들어, 공백을 무시한 문자열을 찾는 작업을 하고 싶을 때 이러한 기능을 수행하는 함수를 이용하게 되는데, 함수를 통해 칼럼 값을 변경하게 되면 일반 인덱스를 통해서 인덱스 스캔을 할 수 없다. 이러한 경우에 함수 기반 인덱스를 생성하면 이를 통해 해당 질의 처리를 최적화할 수 있다. 다른 예로, 대소문자를 구분하지 않는 이름을 검색할 때 활용할 수 있다. ::
 
     CREATE /*+ hints */ INDEX index_name
-    ON table_name (function_name (argument_list));
+    ON [schema_name.]table_name (function_name (argument_list));
     
     ALTER /*+ hints */ INDEX index_name
-    [ ON table_name (function_name (argument_list)) ]
+    [ ON [schema_name.]table_name (function_name (argument_list)) ]
     REBUILD;
 
 다음 인덱스가 생성된 이후 **SELECT** 질의는 자동으로 함수 기반 인덱스를 사용한다.

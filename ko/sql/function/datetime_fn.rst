@@ -15,6 +15,7 @@ ADDDATE, DATE_ADD
 
 .. function:: ADDDATE (date, INTERVAL expr unit)
 .. function:: ADDDATE (date, days)
+   :noindex:
 .. function:: DATE_ADD (date, INTERVAL expr unit)
 
     **ADDDATE** 함수와 **DATE_ADD** 함수는 동일하며, 특정 **DATE** 값에 대해 덧셈 또는 뺄셈을 실행한다. 리턴 값은 **DATE** 타입 또는 **DATETIME** 타입이다. **DATETIME** 타입을 반환하는 경우는 다음과 같다.
@@ -239,7 +240,7 @@ CURDATE, CURRENT_DATE
 .. c:macro:: CURRENT_DATE
 
     **CURDATE** (), **CURRENT_DATE** 및 **CURRENT_DATE** () 는 서로 바꿔 사용할 수 있으며 세션의 현재 날짜를 **DATE** 타입(*MM*/*DD*/*YYYY* 또는 *YYYY*-*MM*-*DD*)으로 반환한다. 산술 연산의 단위는 일이다.
-    현재 세션의 타임존이 서버의 타임존과 동일하면 함수는 :c:macro:`SYS_DATE`, :c:macro:`SYSDATE`와 동일하다. 차이점은 :c:macro:`SYS_DATE`, :c:macro:`SYSDATE` 및 다음 예를 참고하고, 함수에 대한 자세한 내용은 :func:`DBTIMEZONE`, :func:`SESSIONTIMEZONE` 을 참고한다.
+    현재 세션의 타임존이 서버의 타임존과 동일하면 함수는 :c:macro:`SYS_DATE`, :c:macro:`SYSDATE` 와 동일하다. 차이점은 :c:macro:`SYS_DATE`, :c:macro:`SYSDATE` 및 다음 예를 참고하고, 함수에 대한 자세한 내용은 :func:`DBTIMEZONE`, :func:`SESSIONTIMEZONE` 을 참고한다.
  
     입력 인자의 연, 월, 일이 모두 0이면 반환되는 값은 **return_null_on_function_errors** 시스템 변수에 의해서 결정된다.  그 변수가 yes로 설정되었으면 **NULL** 이 반환된다. 그 변수가 no로 설정되었으면 오류가 반환된다. 기본값은 **no** 이다.
     
@@ -546,6 +547,7 @@ DATE_SUB, SUBDATE
 .. function:: DATE_SUB (date, INTERVAL expr unit)
 .. function:: SUBDATE(date, INTERVAL expr unit)
 .. function:: SUBDATE(date, days)
+   :noindex:
 
     **DATE_SUB** ()와 **SUBDATE** ()는 동일하며, 특정 **DATE** 값에 대해 뺄셈 또는 덧셈을 실행한다. 리턴 값은 **DATE** 타입 또는 **DATETIME** 타입이다. 연산 결과의 날짜가 해당 월의 마지막 날짜를 초과하면, 해당 월의 말일을 적용하여 유효한 **DATE** 값을 반환한다.
 

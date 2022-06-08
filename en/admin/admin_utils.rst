@@ -795,7 +795,7 @@ The **cubrid compactdb** utility is used to secure unused space of the database 
 
 Reference to the object deleted during compacting is displayed as **NULL**, which means this can be reused by OIDs. ::
 
-    cubrid compactdb [options] database_name [class_name], class_name2, ...]
+    cubrid compactdb [options] database_name [schema_name.class_name [{, schema_name.class_name}]]
 
 *   **cubrid**: An integrated utility for the CUBRID service and database management.
 
@@ -803,7 +803,7 @@ Reference to the object deleted during compacting is displayed as **NULL**, whic
 
 *   *database_name*: The name of the database whose space is to be compacted. The path name to the directory where the database is to be created must not be included.
 
-*   *class_name_list*: You can specify the list of tables names that you want to compact space after a database name; the **-i** option cannot be used together. If you use the lists on client/server mode, it skips securing space taken by objects such as catalog, delete files and tracker, etc. 
+*   *class_name_list*: You can specify the list of tables names that you want to compact space after a database name; the **-i** option cannot be used together. The table name must be prefixed with the schema name. If you use the lists on client/server mode, it skips securing space taken by objects such as catalog, delete files and tracker, etc. 
 
 **-I**, **-c**, **-d**, **-p** options are applied in client/server mode only.
 
@@ -830,7 +830,7 @@ The following shows [options] available with the **cubrid compactdb** utility.
 
 .. option:: -i, --input-class-file=FILE
 
-    You can specify an input file name that contains the table name with this option. Write one table name in a single line; invalid table name is ignored. Note that you cannot specify the list of the table names after a database name in case of you use this option. If you use this option on client/server mode, it skips securing space taken by objects such as catalog, delete files and tracker, etc.
+    You can specify an input file name that contains the table name with this option. Write one table name in a single line; invalid table name is ignored. The table name must be prefixed with the schema name. Note that you cannot specify the list of the table names after a database name in case of you use this option. If you use this option on client/server mode, it skips securing space taken by objects such as catalog, delete files and tracker, etc.
 
 The following options can be used in client/server mode only.
 
@@ -838,7 +838,7 @@ The following options can be used in client/server mode only.
 
     You can specify the number of maximum pages that can be committed once with this option. The default value is 10, the minimum value is 1, and the maximum value is 10. The less option value is specified, the more concurrency is enhanced because the value for class/instance lock is small; however, it causes slowdown on operation, and vice versa. ::
 
-        cubrid compactdb --CS-mode -p 10 testdb tbl1, tbl2, tbl5
+        cubrid compactdb --CS-mode -p 10 testdb public.tbl1, public.tbl2, public.tbl5
 
 .. option:: -d, --delete-old-repr
 
@@ -859,7 +859,7 @@ optimizedb
 
 Updates statistical information such as the number of objects, the number of pages to access, and the distribution of attribute values. ::
 
-    cubrid optimizedb [option] database_name
+    cubrid optimizedb [<option>] database_name
 
 *   **cubrid**: An integrated utility for the CUBRID service and database management.
 
@@ -867,15 +867,17 @@ Updates statistical information such as the number of objects, the number of pag
 
 *   *database_name*: The name of the database whose cost-based query optimization statistics are to be updated.
 
-The following shows [option] available with the **cubrid optimizedb** utility.
+The following shows <option> available with the **cubrid optimizedb** utility.
 
 .. program :: optimizedb
 
 .. option:: -n, --class-name
 
-    The following example shows how to update the query statistics information of the given class by using the **-n** option. ::
+    The following example shows how to update the query statistics information of the given class by using the **-n** option. The table name must be prefixed with the schema name.
+    
+    ::
 
-        cubrid optimizedb -n event_table testdb
+        cubrid optimizedb -n public.event_table testdb
 
 The following example shows how to update the query statistics information of all classes in the database. ::
 
@@ -3022,7 +3024,7 @@ The **cubrid checkdb** utility is used to check the consistency of a database. Y
 
 ::
 
-    cubrid checkdb [options] database_name [table_name1 table_name2 ...]
+    cubrid checkdb [options] database_name [schema_name.table_name [{, schema_name.table_name}]]
 
 *   **cubrid**: An integrated utility for CUBRID service and database management.
 
@@ -3030,7 +3032,9 @@ The **cubrid checkdb** utility is used to check the consistency of a database. Y
 
 *   *database_name*: The name of the database whose consistency status will be either checked or restored.
 
-*   *table_name1 table_name2*: List the table names for consistency check or recovery
+*   *schema_name*: The schema name of the table.
+
+*   *table_name*: List the table names for consistency check or recovery
 
 The following shows [options] available with the **cubrid checkdb** utility.
 
@@ -3074,9 +3078,9 @@ The following shows [options] available with the **cubrid checkdb** utility.
 
     You can specify tables to check the consistency or to restore, by specifying the **-i** *FILE* option or listing the table names after a database name. Both ways can be used together. If a target is not specified, entire database will be a target of consistency check or restoration. ::
 
-        cubrid checkdb demodb tbl1 tbl2
-        cubrid checkdb -r demodb tbl1 tbl2
-        cubrid checkdb -r -i table_list.txt demodb tbl1 tbl2
+        cubrid checkdb demodb public.table_1 public.table_2
+        cubrid checkdb -r demodb public.table_1 public.table_2
+        cubrid checkdb -r -i table_list.txt demodb public.table_1 public.table_2
 
     Empty string, tab, carriage return and comma are separators among table names in the table list file specified by **-i** option. The following example shows the table list file; from t1 to t10, it is recognized as a table for consistency check or restoration. ::
 

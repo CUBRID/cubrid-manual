@@ -40,10 +40,10 @@ The **SELECT** statement specifies columns that you want to retrieve from a tabl
 
     <correlation> ::= [AS] <identifier> [(<identifier_comma_list>)]
      
-    <single_table_spec> ::= [ONLY] <table_name> |
-                          ALL <table_name> [ EXCEPT <table_name> ]
+    <single_table_spec> ::= [ONLY] [schema_name.]table_name |
+                          ALL [schema_name.]table_name [ EXCEPT [schema_name.]table_name ]
      
-    <metaclass_specification> ::= CLASS <class_name>
+    <metaclass_specification> ::= CLASS [schema_name.]class_name
      
     <join_table_specification> ::=
         {
@@ -70,6 +70,8 @@ The **SELECT** statement specifies columns that you want to retrieve from a tabl
     *   *expression_comma_list*: *expression* can be a path expression (ex.: *tbl_name.col_name*), variable or table name. All general expressions including arithmetic operations can also be used. Use a comma (,) to separate each expression in the list. You can specify aliases by using the **AS** keyword for columns or expressions to be queried. Specified aliases are used as column names in **GROUP BY**, **HAVING** and **ORDER BY** clauses. The position index of a column is assigned based on the order in which the column was specified. The starting value is 1.
 
         As **AVG**, **COUNT**, **MAX**, **MIN**, or **SUM**, an aggregate function that manipulates the retrieved data can also be used in the *expression*. 
+
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 
 *   *table_name*.\*: Specifies the table name and using \* has the same effect as specifying all columns for the given table.
 
@@ -162,10 +164,10 @@ The **FROM** clause specifies the table in which data is to be retrieved in the 
      
     <correlation> ::= [AS] <identifier> [(<identifier_comma_list>)]
      
-    <single_table_spec> ::= [ONLY] <table_name> |
-                          ALL <table_name> [EXCEPT <table_name>]
+    <single_table_spec> ::= [ONLY] [schema_name.]table_name |
+                          ALL [schema_name.]table_name [EXCEPT [schema_name.]table_name]
      
-    <metaclass_specification> ::= CLASS <class_name>
+    <metaclass_specification> ::= CLASS [schema_name.]class_name
      
 
 *   <*select_expressions*>: One or more columns or expressions to query is specified. Use * to query all columns in the table. You can also specify an alias for a column or an expression to be queried by using the AS keyword. This keyword can be used in **GROUP BY**, **HAVING** and **ORDER BY** clauses. The position index of the column is given according to the order in which the column was specified. The starting value is 1.
@@ -1161,7 +1163,7 @@ The **FOR UPDATE** clause can be used in **SELECT** statements for locking rows 
     SELECT ... [FOR UPDATE [OF <spec_name_comma_list>]]
 
         <spec_name_comma_list> ::= <spec_name> [, <spec_name>, ... ]
-            <spec_name> ::= table_name | view_name 
+            <spec_name> ::= [schema_name.]table_name | [schema_name.]view_name 
          
 * <*spec_name_comma_list*>: A list of table/view names referenced from the **FROM** clause.
 

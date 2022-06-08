@@ -67,12 +67,12 @@ LIMIT clause limits the sorted result rows; therefore, the below result is the s
     
 ::
 
-                rownum  nation_code
-============================================
-                   143  'URS'
-                    51  'GDR'
-                   145  'USA'
-                    78  'KOR'
+                    rownum  nation_code
+    ============================================
+                       143  'URS'
+                        51  'GDR'
+                       145  'USA'
+                        78  'KOR'
 
 ROWNUM condition in the below limits before sorting; therefore, the result is different from the above.
 
@@ -85,12 +85,12 @@ ROWNUM condition in the below limits before sorting; therefore, the result is di
     
 ::
 
-                rownum  nation_code
-============================================
-                     1  'AFG'
-                     2  'AHO'
-                     3  'AND'
-                     4  'ANG'
+                    rownum  nation_code
+    ============================================
+                         1  'AFG'
+                         2  'AHO'
+                         3  'AND'
+                         4  'ANG'
 
 ORDERBY_NUM
 ===========
@@ -111,11 +111,11 @@ The following example shows how to retrieve athlete names ranked 3rd to 5th and 
     
 ::
 
-         orderby_num()  athlete               score
-==================================================================
-                     3  'Luo Xuejuan'         '01:07.0'
-                     4  'Rodal Vebjorn'       '01:43.0'
-                     5  'Thorpe Ian'          '01:45.0'
+             orderby_num()  athlete               score
+    ==================================================================
+                         3  'Luo Xuejuan'         '01:07.0'
+                         4  'Rodal Vebjorn'       '01:43.0'
+                         5  'Thorpe Ian'          '01:45.0'
 
 The following query using a LIMIT clause outputs the same result with the above query.
 
@@ -161,13 +161,13 @@ The following example shows how to retrieve the fastest record in the previous f
     
 ::
 
-         groupby_num()    host_year  min(score)
-=========================================================
-                     1         1968  '8.9'
-                     2         1980  '01:53.0'
-                     3         1984  '13:06.0'
-                     4         1988  '01:58.0'
-                     5         1992  '02:07.0'
+             groupby_num()    host_year  min(score)
+    =========================================================
+                         1         1968  '8.9'
+                         2         1980  '01:53.0'
+                         3         1984  '13:06.0'
+                         4         1988  '01:58.0'
+                         5         1992  '02:07.0'
 
 The following query using a LIMIT clause outputs the same result with the above query.
 

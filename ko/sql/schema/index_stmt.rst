@@ -16,7 +16,7 @@ CREATE INDEX
 
 ::
 
-    CREATE [UNIQUE] INDEX index_name ON table_name <index_col_desc> ;
+    CREATE [UNIQUE] INDEX index_name ON [schema_name.]table_name <index_col_desc> ;
      
         <index_col_desc> ::=
             { ( column_name [ASC | DESC] [ {, column_name [ASC | DESC]} ...] ) [ WHERE <filter_predicate> ] |
@@ -27,6 +27,7 @@ CREATE INDEX
 *   **UNIQUE**: 유일한 값을 갖는 고유 인덱스를 생성한다.
 *   *index_name*: 생성하려는 인덱스의 이름을 명시한다. 인덱스 이름은 테이블 안에서 고유한 값이어야 한다.
 
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 인덱스를 생성할 테이블의 이름을 명시한다.
 *   *column_name*: 인덱스를 적용할 칼럼의 이름을 명시한다. 다중 칼럼 인덱스를 생성할 경우 둘 이상의 칼럼 이름을 명시한다.
 *   **ASC** | **DESC**: 칼럼의 정렬 방향을 설정한다.
@@ -234,9 +235,10 @@ ALTER INDEX
 
 ::
 
-    ALTER INDEX index_name ON table_name REBUILD;
+    ALTER INDEX index_name ON [schema_name.]table_name REBUILD;
 
 *   *index_name*: 재생성하려는 인덱스의 이름을 명시한다. 인덱스 이름은 테이블 안에서 고유한 값이어야 한다.
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 인덱스를 재생성할 테이블의 이름을 명시한다.
 *   **REBUILD**: 이미 생성된 것과 같은 구조의 인덱스를 재생성한다.
 *   *index_comment_string*: 인덱스의 커멘트를 지정한다.
@@ -285,9 +287,10 @@ DROP INDEX
 
 ::
 
-    DROP INDEX index_name ON table_name ;
+    DROP INDEX index_name ON [schema_name.]table_name ;
 
 *   *index_name*: 삭제할 인덱스의 이름을 지정한다.
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 삭제할 인덱스가 지정된 테이블 이름을 지정한다.
 
 .. warning::

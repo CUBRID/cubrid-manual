@@ -57,11 +57,15 @@ unloaddb
         ..
         table_n
 
-    **-i** 옵션이 **--input-class-only** 와 결합되면, **-i** 옵션의 입력 파일에서 지정된 테이블의 스키마, 인덱스, 데이터 파일만 언로드한다. ::
+    **-i** 옵션이 **--input-class-only** 와 결합되면, **-i** 옵션의 입력 파일에서 지정된 테이블의 스키마, 인덱스, 데이터 파일만 언로드한다.
+    
+    ::
 
         cubrid unloaddb --input-class-only -i table_list.txt demodb
 
-    **-i** 옵션이 **--include-reference** 와 결합되면, 참조되는 테이블도 함께 언로드된다. ::
+    **-i** 옵션이 **--include-reference** 와 결합되면, 참조되는 테이블도 함께 언로드된다.
+    
+    ::
     
         cubrid unloaddb --include-reference -i table_list.txt demodb
 
@@ -75,41 +79,55 @@ unloaddb
 
 .. option:: --estimated-size=NUMBER
 
-    언로드할 데이터베이스의 레코드 저장을 위한 해시 메모리를 사용자 임의로 할당하기 위한 옵션이다. 만약 **--estimated-size** 옵션이 지정되지 않으면 최근의 통계 정보를 기반으로 데이터베이스의 레코드 수를 결정하게 되는데, 만약 최근 통계 정보가 갱신되지 않았거나 해시 메모리를 크게 할당하고 싶은 경우 이 옵션을 이용할 수 있다. 따라서, 옵션의 인수로 너무 적은 레코드 개수를 정의한다면 해시 충돌로 인해 언로드 성능이 저하된다. ::
+    언로드할 데이터베이스의 레코드 저장을 위한 해시 메모리를 사용자 임의로 할당하기 위한 옵션이다. 만약 **--estimated-size** 옵션이 지정되지 않으면 최근의 통계 정보를 기반으로 데이터베이스의 레코드 수를 결정하게 되는데, 만약 최근 통계 정보가 갱신되지 않았거나 해시 메모리를 크게 할당하고 싶은 경우 이 옵션을 이용할 수 있다. 따라서, 옵션의 인수로 너무 적은 레코드 개수를 정의한다면 해시 충돌로 인해 언로드 성능이 저하된다.
+    
+    ::
 
         cubrid unloaddb --estimated-size=1000 demodb
         
 .. option:: --cached-pages=NUMBER
 
-    메모리에 캐시되는 테이블의 페이지 수를 지정하기 위한 옵션이다. 각 페이지는 4,096 바이트이며, 관리자는 메모리의 크기와 속도를 고려하여 캐시되는 페이지 수를 지정할 수 있다. 만약, 이 옵션이 지정되지 않으면 기본값은 100페이지가 된다. ::
+    메모리에 캐시되는 테이블의 페이지 수를 지정하기 위한 옵션이다. 각 페이지는 4,096 바이트이며, 관리자는 메모리의 크기와 속도를 고려하여 캐시되는 페이지 수를 지정할 수 있다. 만약, 이 옵션이 지정되지 않으면 기본값은 100페이지가 된다.
+    
+    ::
 
         cubrid unloaddb --cached-pages 500 demodb
     
 .. option:: -O, --output-path=PATH
 
-    스키마와 객체 파일이 생성될 디렉터리를 지정한다. 옵션이 지정되지 않으면 현재 디렉터리에 생성된다. ::
+    스키마와 객체 파일이 생성될 디렉터리를 지정한다. 옵션이 지정되지 않으면 현재 디렉터리에 생성된다.
+    
+    ::
 
         cubrid unloaddb -O ./CUBRID/Databases/demodb demodb
 
-    지정된 디렉터리가 존재하지 않는 경우 다음과 같은 에러 메시지가 출력된다. ::
+    지정된 디렉터리가 존재하지 않는 경우 다음과 같은 에러 메시지가 출력된다.
+    
+    ::
 
         unloaddb: No such file or directory.
 
 .. option:: -s, --schema-only
 
-    언로드 작업을 통해 생성되는 출력 파일 중 스키마 파일만 생성되도록 지정하는 옵션이다. ::
+    언로드 작업을 통해 생성되는 출력 파일 중 스키마 파일만 생성되도록 지정하는 옵션이다.
+    
+    ::
 
         cubrid unloaddb -s demodb
 
 .. option:: -d, --data-only
 
-    언로드 작업을 통해 생성되는 출력 파일 중 데이터 파일만 생성되도록 지정하는 옵션이다. ::
+    언로드 작업을 통해 생성되는 출력 파일 중 데이터 파일만 생성되도록 지정하는 옵션이다.
+    
+    ::
 
         cubrid unloaddb -d demodb
 
 .. option:: --output-prefix=PREFIX
 
-    언로드 작업에 의해 생성되는 스키마 파일과 객체 파일의 이름 앞에 붙는 prefix를 지정하기 위한 옵션이다. 예제를 수행하면 스키마 파일명은 *abcd_schema* 가 되고, 객체 파일명은 *abcd_objects* 가 된다. 만약, **--output-prefix** 옵션을 지정하지 않으면 언로드할 데이터베이스 이름이 prefix로 사용된다. ::
+    언로드 작업에 의해 생성되는 스키마 파일과 객체 파일의 이름 앞에 붙는 prefix를 지정하기 위한 옵션이다. 예제를 수행하면 스키마 파일명은 *abcd_schema* 가 되고, 객체 파일명은 *abcd_objects* 가 된다. 만약, **--output-prefix** 옵션을 지정하지 않으면 언로드할 데이터베이스 이름이 prefix로 사용된다.
+    
+    ::
 
         cubrid unloaddb --output-prefix abcd demodb
 
@@ -123,7 +141,9 @@ unloaddb
     
 .. option:: -v, --verbose
 
-    언로드 작업이 진행되는 동안 언로드되는 데이터베이스의 테이블 및 인스턴스에 관한 상세 정보를 화면에 출력하는 옵션이다. ::
+    언로드 작업이 진행되는 동안 언로드되는 데이터베이스의 테이블 및 인스턴스에 관한 상세 정보를 화면에 출력하는 옵션이다.
+    
+    ::
 
         cubrid unloaddb -v demodb
 
@@ -133,19 +153,25 @@ unloaddb
         
 .. option:: -S, --SA-mode
 
-    독립 모드에서 데이터베이스를 언로드한다.  ::
+    독립 모드에서 데이터베이스를 언로드한다.
+    
+    ::
     
         cubrid unloaddb -S demodb
 
 .. option:: -C, --CS-mode
 
-    클라이언트/서버 모드에서 데이터베이스를 언로드한다. ::
+    클라이언트/서버 모드에서 데이터베이스를 언로드한다.
+    
+    ::
 
         cubrid unloaddb -C demodb
 
 .. option:: --datafile-per-class
 
-    언로드 작업으로 생성되는 데이터 파일을 각 테이블별로 생성되도록 지정하는 옵션이다. 파일 이름은 *<데이터베이스 이름>_<테이블 이름>*\ **_objects** 로 생성된다. 단, 객체 타입의 칼럼 값은 모두 **NULL** 로 언로드되며, 언로드된 파일에는 %id class_name class_id 부분이 작성되지 않는다. 자세한 내용은 :ref:`howtowrite-loadfile` 을 참고한다. ::
+    언로드 작업으로 생성되는 데이터 파일을 각 테이블별로 생성되도록 지정하는 옵션이다. 파일 이름은 *<데이터베이스 이름>_<테이블 이름>*\ **_objects** 로 생성된다. 단, 객체 타입의 칼럼 값은 모두 **NULL** 로 언로드되며, 언로드된 파일에는 %id class_name class_id 부분이 작성되지 않는다. 자세한 내용은 :ref:`howtowrite-loadfile` 을 참고한다.
+    
+    ::
 
         cubrid unloaddb --datafile-per-class demodb
 

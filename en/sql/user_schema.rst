@@ -3,7 +3,7 @@
 User Schema
 ***********
 
-A schema is a logical collection of database objects. An object can only exist in one schema and cannot exist in another schema at the same time. A schema cannot be created by a user, and when a database user is created, the user owns a single schema with the same name as the user name. A schema contains tables, serials, and triggers. An object in a schema must have a unique name within the same schema, but it can have a name that is duplicated with an object in another schema. Table, serial, and trigger names are prefixed with the schema name, so the schema can be identified by the name.
+A schema is a logical collection of database objects. The object can be identified through the schema name, and the schema object is not stored in a physically separate storage space. An object can only exist in one schema and cannot exist in another schema at the same time. A schema cannot be created by a user, and when a database user is created, the user owns a single schema with the same name as the user name. A schema contains tables, serials, and triggers. An object in a schema must have a unique name within the same schema, but it can have a name that is duplicated with an object in another schema. Table, serial, and trigger names are prefixed with the schema name, so the schema can be identified by the name.
 
 To access the object, the user must use the path expression of "schema_name.table_name". If the user's schema is the same as the object's schema (owner), the schema name can be omitted from the path expression. If the schema name is omitted, the user's schema name is used. Even if the path expression of “schema_name.table_name” is used, the user must have permission to use the object.
 

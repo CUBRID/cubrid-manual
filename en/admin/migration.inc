@@ -57,11 +57,15 @@ The following is [options] used in **cubrid unloaddb**.
         ..
         table_n
 
-    If this option is used together with the **--input-class-only** option, it creates schema, index, and data files of tables only specified in the input file of **-i** option. ::
+    If this option is used together with the **--input-class-only** option, it creates schema, index, and data files of tables only specified in the input file of **-i** option.
+    
+    ::
 
         cubrid unloaddb --input-class-only -i table_list.txt demodb
 
-    If this option is used together with the **--include-reference** option, it unloads the referenced tables as well. ::
+    If this option is used together with the **--include-reference** option, it unloads the referenced tables as well.
+    
+    ::
 
         cubrid unloaddb --include-reference -i table_list.txt demodb
 
@@ -75,41 +79,55 @@ The following is [options] used in **cubrid unloaddb**.
 
 .. option:: --estimated-size=NUMBER
 
-    This option allows you to assign hash memory to store records of the database to be unloaded. If the **--estimated-size** option is not specified, the number of records of the database is determined based on recent statistics information. This option can be used if the recent statistics information has not been updated or if a large amount of hash memory needs to be assigned. Therefore, if the number given as the argument for the option is too small, the unload performance deteriorates due to hash conflicts. ::
+    This option allows you to assign hash memory to store records of the database to be unloaded. If the **--estimated-size** option is not specified, the number of records of the database is determined based on recent statistics information. This option can be used if the recent statistics information has not been updated or if a large amount of hash memory needs to be assigned. Therefore, if the number given as the argument for the option is too small, the unload performance deteriorates due to hash conflicts.
+    
+    ::
 
         cubrid unloaddb --estimated-size=1000 demodb
 
 .. option:: --cached-pages=NUMBER
 
-    The **--cached-pages** option specifies the number of pages of tables to be cached in the memory. Each page is 4,096 bytes. The administrator can configure the number of pages taking into account the memory size and speed. If this option is not specified, the default value is 100 pages. ::
+    The **--cached-pages** option specifies the number of pages of tables to be cached in the memory. Each page is 4,096 bytes. The administrator can configure the number of pages taking into account the memory size and speed. If this option is not specified, the default value is 100 pages.
+    
+    ::
 
         cubrid unloaddb --cached-pages 500 demodb
 
 .. option:: -O, --output-path=PATH
 
-    This option specifies the directory in which to create schema and object files. If this is not specified, files are created in the current directory. ::
+    This option specifies the directory in which to create schema and object files. If this is not specified, files are created in the current directory.
+    
+    ::
 
         cubrid unloaddb -O ./CUBRID/Databases/demodb demodb
 
-    If the specified directory does not exist, the following error message will be displayed. ::
+    If the specified directory does not exist, the following error message will be displayed.
+    
+    ::
 
         unloaddb: No such file or directory.
 
 .. option:: -s, --schema-only
 
-    This option specifies that only the schema file will be created from amongst all the output files which can be created by the unload operation.    ::
+    This option specifies that only the schema file will be created from amongst all the output files which can be created by the unload operation.
+    
+    ::
 
         cubrid unloaddb -s demodb
 
 .. option:: -d, --data-only
 
-    This option specifies that only the data file will be created from amongst all of the output files which can be created by the unload operation. ::
+    This option specifies that only the data file will be created from amongst all of the output files which can be created by the unload operation.
+    
+    ::
 
         cubrid unloaddb -d demodb
 
 .. option:: --output-prefix=PREFIX
 
-    This option specifies the prefix for the names of schema and object files created by the unload operation. Once the example is executed, the schema file name becomes *abcd_schema* and the object file name becomes *abcd_objects*. If the **--output-prefix** option is not specified, the name of the database to be unloaded is used as the prefix. ::
+    This option specifies the prefix for the names of schema and object files created by the unload operation. Once the example is executed, the schema file name becomes *abcd_schema* and the object file name becomes *abcd_objects*. If the **--output-prefix** option is not specified, the name of the database to be unloaded is used as the prefix.
+    
+    ::
 
         cubrid unloaddb --output-prefix abcd demodb
 
@@ -123,7 +141,9 @@ The following is [options] used in **cubrid unloaddb**.
 
 .. option:: -v, --verbose
 
-    This option displays detailed information on the database tables and records being unloaded while the unload operation is under way. ::
+    This option displays detailed information on the database tables and records being unloaded while the unload operation is under way.
+    
+    ::
 
         cubrid unloaddb -v demodb
 
@@ -133,19 +153,25 @@ The following is [options] used in **cubrid unloaddb**.
     
 .. option:: -S, --SA-mode
 
-    The **-S** option performs the unload operation by accessing the database in standalone mode. ::
+    The **-S** option performs the unload operation by accessing the database in standalone mode.
+    
+    ::
     
         cubrid unloaddb -S demodb
 
 .. option:: -C, --CS-mode
 
-    The **-C** option performs the unload operation by accessing the database in client/server mode. ::
+    The **-C** option performs the unload operation by accessing the database in client/server mode.
+    
+    ::
 
         cubrid unloaddb -C demodb
 
 .. option:: --datafile-per-class
 
-    This option specifies that the output file generated through unload operation creates a data file per each table. The file name is generated as *<Database Name>_<Table Name>*\_ **objects** for each table. However, all column values in object types are unloaded as NULL and %id class_name class_id part is not written in the unloaded file (see :ref:`howtowrite-loadfile`). ::
+    This option specifies that the output file generated through unload operation creates a data file per each table. The file name is generated as *<Database Name>_<Table Name>*\_ **objects** for each table. However, all column values in object types are unloaded as NULL and %id class_name class_id part is not written in the unloaded file (see :ref:`howtowrite-loadfile`).
+    
+    ::
 
         cubrid unloaddb --datafile-per-class demodb
 

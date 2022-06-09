@@ -10,3 +10,5 @@
     view_stmt.rst
     serial_stmt.rst
     server_stmt.rst
+    procedure_stmt.rst
+    function_stmt.rst

@@ -277,7 +277,7 @@ CUBRID 데이터베이스에 Phone 클래스를 생성한다.
 
 
 
-.. _jsp-server-side-jdbc
+.. _jsp-server-side-jdbc:
 
 서버 내부 JDBC 드라이버 사용
 ============================

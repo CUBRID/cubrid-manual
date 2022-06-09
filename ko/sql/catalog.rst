@@ -727,8 +727,10 @@ Java 저장 함수 인자에 대한 정보이며 sp_name에 대한 인덱스가 
 | comment   | VARCHAR (1024) | 매개변수 설명                    |
 +-----------+----------------+----------------------------------+
 
+.. _db_synonym:
+
 _db_synonym
--------------------------
+-----------
 
 동의어에 대한 대상 객체 정보이며 unique_name에 대한 인덱스와 name, owner에 대한 인덱스가 생성되어 있다.
 
@@ -738,7 +740,7 @@ Attribute Name     Data Type     Description
 unique_name        VARCHAR(255)  스키마 이름이 접두어로 붙은 동의어 이름
 name               VARCHAR(255)  동의어 이름
 owner              db_user       동의어의 소유자
-is_public          INTEGER       공용 동의어이면 1이고, 전용 동의어이면 0
+is_public          INTEGER       공용(Public) 동의어이면 1이고, 전용(Private) 동의어이면 0
 target_unique_name VARCHAR(255)  스키마 이름이 접두어로 붙은 대상 객체 이름
 target_name        VARCHAR(255)  대상 객체 이름
 target_owner       db_user       대상 객체 소유자
@@ -747,7 +749,7 @@ comment            VARCHAR(2048) 동의어 설명
 
 .. warning::
     
-    아직은 공용 동의어를 지원하지 않는다.
+    아직은 공용(Public) 동의어를 지원하지 않는다.
 
 db_user
 -------
@@ -1836,8 +1838,10 @@ DB_STORED_PROCEDURE_ARGS
                 0  'name'                'STRING'              'IN'
                 1  'phoneno'             'STRING'              'IN'
 
+.. db_synonym:
+
 DB_SYNONYM
--------------------------
+----------
 
 데이터베이스 내에서 현재 사용자가 접근 권한을 가진 동의어에 대한 대상 객체 정보를 나타낸다.
 
@@ -1846,7 +1850,7 @@ Attribute Name     Data Type     Description
 ================== ============= =======================================================
 synonym_name       VARCHAR(255)  동의어 이름
 synonym_owner_name VARCHAR(255)  동의어의 소유자 이름
-is_public_synonym  VARCHAR(3)    공용 동의어이면 "YES"이고, 전용 동의어이면 "NO"
+is_public_synonym  VARCHAR(3)    공용(Public) 동의어이면 "YES"이고, 전용(Private) 동의어이면 "NO"
 target_name        VARCHAR(255)  대상 객체 이름
 target_owner_name  VARCHAR(255)  대상 객체의 소유자 이름
 comment            VARCHAR(2048) 동의어 설명
@@ -1854,7 +1858,7 @@ comment            VARCHAR(2048) 동의어 설명
 
 .. warning::
     
-    아직은 공용 동의어를 지원하지 않는다.
+    아직은 공용(Public) 동의어를 지원하지 않는다.
 
 카탈로그 클래스/가상 클래스 사용 권한
 =====================================

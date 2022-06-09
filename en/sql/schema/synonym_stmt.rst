@@ -10,7 +10,7 @@ CREATE SYONYM
 Create another new name to use for an object that already exists in the database. The user can use the object with the name specified when creating the database object, and can also use the object as a synonym.
 
     * The user can only create private synonym, and private synonym can only be used in the schema for the user.
-    * The information of the created synonym can be found in the **db_synonym** system virtual class.
+    * The information of the created synonym can be found in the :ref:`db_synonym <db_synonym>` system virtual class.
     * **GRANT** and **REVOKE** cannot be done for synonyms.
 
 ::
@@ -28,7 +28,7 @@ Create another new name to use for an object that already exists in the database
 *   *synonym_name*: Specifies the name of the synonym.
 *   *schema_name_of_target*: Specifies the schema name of the target object. If omitted, the schema name of the current session is used.
 *   *object_name*: Specifies the name of the target object.
-*   *comment_string*: Specifies a comment of a synonym.
+*   *synonym_comment_string*: Specifies a comment of a synonym.
 
 .. warning::
     
@@ -37,7 +37,7 @@ Create another new name to use for an object that already exists in the database
 SYONYM NAME
 -----------
 
-Synonym names cannot be duplicated with table or view names. If a table or view already exists with the same name, a synonym cannot be created with that name.
+If a table or view already exists with the same name, a synonym cannot be created with that name.
 
 .. code-block:: sql
 
@@ -97,7 +97,7 @@ ALTER SYONYM
 *   *synonym_name*: Specifies the name of the synonym.
 *   *schema_name_of_target*: Specifies the schema name of the target object. If omitted, the schema name of the current session is used.
 *   *object_name*: Specifies the name of the target object.
-*   *comment_string*: Specifies a comment of a synonym.
+*   *synonym_comment_string*: Specifies a comment of a synonym.
 
 Change target object
 --------------------

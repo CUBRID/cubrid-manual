@@ -9,9 +9,9 @@ CREATE SYONYM
 
 이미 데이터베이스에 존재하는 객체를 사용할 수 있는 또 다른 새로운 이름을 만든다. 사용자는 데이터베이스 객체를 생성할 때 지정한 이름으로 객체를 사용할 수 있고, 동의어로도 객체를 사용할 수 있다.
 
-    * 사용자는 전용 동의어만 생성할 수 있으며, 전용 동의어는 사용자의 스키마에서만 사용할 수 있다.
-    * 생성된 동의어의 정보는 **db_synonym** 시스템 가상 클래스에서 조회할 수 있다.
-    * 동의어는 **GRANT** 및 **REVOKE**\를 할 수 없다.
+    * 사용자는 전용(Private) 동의어만 생성할 수 있으며, 전용(Private) 동의어는 사용자의 스키마에서만 사용할 수 있다.
+    * 생성된 동의어의 정보는 :ref:`db_synonym <db_synonym>` 시스템 가상 클래스에서 조회할 수 있다.
+    * 동의어를 대상으로 **GRANT** 및 **REVOKE**\를 할 수 없다.
 
 ::
 
@@ -23,21 +23,21 @@ CREATE SYONYM
 
     *  새 동의어를 생성하기 전에 기존 동의어는 삭제된다.
 
-*   **PRIVATE**: 전용 동의어를 생성하도록 지정한다. 생략해도 기본값으로 전용 동의어를 생성한다.
+*   **PRIVATE**: 전용(Private) 동의어를 생성하도록 지정한다. 생략해도 기본값으로 전용(Private) 동의어를 생성한다.
 *   *schema_name_of_synonym*: 동의어의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *synonym_name*: 동의어의 이름을 지정한다.
 *   *schema_name_of_target*: 대상 객체의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *object_name*: 대상 객체의 이름을 지정한다.
-*   *comment_string*: 동의어의 커멘트를 지정한다.
+*   *synonym_comment_string*: 동의어의 커멘트를 지정한다.
 
 .. warning::
     
-    아직은 공용 동의어를 지원하지 않는다.
+    아직은 공용(Public) 동의어를 지원하지 않는다.
 
 동의어 이름
 -----------
 
-동의어 이름은 테이블, 뷰 이름과 중복될 수 없다. 동일한 이름의 테이블이나 뷰가 이미 존재하는 경우 해당 이름으로 동의어를 생성할 수 없다.
+동일한 이름의 테이블이나 뷰가 이미 존재하는 경우 해당 이름으로 동의어를 생성할 수 없다.
 
 .. code-block:: sql
 
@@ -88,16 +88,16 @@ ALTER SYONYM
 
 ::
 
-    ALTER [PRIVATE] SYNONYM [schema_name.]synonym_name
-    FOR [schema_name.]object_name
+    ALTER [PRIVATE] SYNONYM [schema_name_of_synonym.]synonym_name
+    FOR [schema_name_of_target.]object_name
     [COMMENT 'synonym_comment_string'] ;
 
-*   **PRIVATE**: 전용 동의어를 변경하도록 지정한다. 생략해도 기본값으로 전용 동의어를 생성한다.
+*   **PRIVATE**: 전용(Private) 동의어를 변경하도록 지정한다. 생략해도 기본값으로 전용(Private) 동의어를 생성한다.
 *   *schema_name_of_synonym*: 동의어의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *synonym_name*: 동의어의 이름을 지정한다.
 *   *schema_name_of_target*: 대상 객체의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *object_name*: 대상 객체의 이름을 지정한다.
-*   *comment_string*: 동의어의 커멘트를 지정한다.
+*   *synonym_comment_string*: 동의어의 커멘트를 지정한다.
 
 대상 객체 변경
 --------------
@@ -189,7 +189,7 @@ DROP SYONYM
 
     DROP [PRIVATE] SYNONYM [IF EXISTS] [schema_name.]synonym_name ;
 
-*   **PRIVATE**: 전용 동의어를 삭제하도록 지정한다. 생략해도 기본값으로 전용 동의어를 생성한다.
+*   **PRIVATE**: 전용(Private) 동의어를 삭제하도록 지정한다. 생략해도 기본값으로 전용(Private) 동의어를 생성한다.
 *   **IF EXISTS**: 스키마에 *synonym_name*\이 존재하지 않더라도 에러가 발생하지 않는다.
 *   *schema_name*: 동의어의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *synonym_name*: 동의어의 이름을 지정한다.
@@ -225,7 +225,7 @@ RENAME SYONYM
     RENAME [PRIVATE] SYNONYM [schema_name_of_old_synonym.]old_synonym_name
     [AS | TO] [schema_name_of_new_synonym.]new_synonym_name ;
 
-*   **PRIVATE**: 전용 동의어를 변경하도록 지정한다. 생략해도 기본값으로 전용 동의어를 생성한다.
+*   **PRIVATE**: 전용(Private) 동의어를 변경하도록 지정한다. 생략해도 기본값으로 전용(Private) 동의어를 생성한다.
 *   *schema_name_of_old_synonym*: 이름을 바꿀 동의어의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *old_synonym_name*: 이름을 바꿀 동의어의 이름을 지정한다.
 *   *schema_name_of_new_synonym*: 새로운 이름의 동의어에 대한 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.

@@ -727,8 +727,10 @@ Represents Java stored procedure argument information. An index for sp_name is c
 | comment            | VARCHAR (1024) | Comment to describe the argument |
 +--------------------+----------------+----------------------------------+
 
+.. _db_synonym:
+
 _db_synonym
--------------------------
+-----------
 
 Represents target object information for the synonym. An index for unique_name and an index for name and owner are created.
 
@@ -1834,8 +1836,10 @@ The following example shows how to retrieve arguments the 'phone_info' Java stor
                 0  'name'                'STRING'              'IN'
                 1  'phoneno'             'STRING'              'IN'
 
+.. db_synonym:
+
 DB_SYNONYM
--------------------------
+----------
 
 Represents target object information for the synonym to which the current user has access authorization in the database.
 

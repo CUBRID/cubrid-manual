@@ -178,6 +178,10 @@ It is not possible to change the comment without specifying the target object ye
     ========================================================================================
       's1'                  'PUBLIC'              'NO'                  'The comment was changed.'
 
+.. warning::
+    
+    When the **ALTER**, **DROP**, **RENAME** statements for a synonym are executed, be careful because all query plans using the target object are deleted from the query plan cache.
+
 DROP SYONYM
 ===========
 

@@ -34,8 +34,6 @@ CREATE SYONYM
     
     아직은 공용 동의어를 지원하지 않는다.
 
-
-
 동의어 이름
 -----------
 
@@ -179,6 +177,10 @@ ALTER SYONYM
       synonym_name          synonym_owner_name    is_public_synonym     comment
     ========================================================================================
       's1'                  'PUBLIC'              'NO'                  'The comment was changed.'
+
+.. warning::
+    
+    동의어에 대한 **ALTER**, **DROP**, **RENAME** 문이 실행되면 쿼리 계획 캐시에서 대상 객체를 사용하는 쿼리 계획을 모두 삭제하므로 주의해야 한다.
 
 DROP SYONYM
 ===========

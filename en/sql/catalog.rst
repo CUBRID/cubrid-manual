@@ -727,6 +727,28 @@ Represents Java stored procedure argument information. An index for sp_name is c
 | comment            | VARCHAR (1024) | Comment to describe the argument |
 +--------------------+----------------+----------------------------------+
 
+_db_synonym
+-------------------------
+
+Represents target object information for the synonym. An index for unique_name and an index for name and owner are created.
+
+================== ============= =======================================================
+Attribute Name     Data Type     Description
+================== ============= =======================================================
+unique_name        VARCHAR(255)  Name prefixed with the schema name of the synonym
+name               VARCHAR(255)  The name of the synonym
+owner              db_user       The owner of the synonym
+is_public          INTEGER       1 for a public synonym, and 0 for a private synonym.
+target_unique_name VARCHAR(255)  Name prefixed with the schema name of the target object
+target_name        VARCHAR(255)  The name of the target object
+target_owner       db_user       The owner name of the target object
+comment            VARCHAR(2048) Comment to describe the synonym
+================== ============= =======================================================
+
+.. warning::
+    
+    It does not support public synonym yet.
+
 db_user
 -------
 
@@ -1812,7 +1834,25 @@ The following example shows how to retrieve arguments the 'phone_info' Java stor
                 0  'name'                'STRING'              'IN'
                 1  'phoneno'             'STRING'              'IN'
 
+DB_SYNONYM
+-------------------------
 
+Represents target object information for the synonym to which the current user has access authorization in the database.
+
+================== ============= =======================================================
+Attribute Name     Data Type     Description
+================== ============= =======================================================
+synonym_name       VARCHAR(255)  The name of the synonym
+synonym_owner_name VARCHAR(255)  The owner of the synonym
+is_public_synonym  VARCHAR(3)    "YES" for a public synonym, and "NO" for a private synonym.
+target_name        VARCHAR(255)  The name of the target object
+target_owner_name  VARCHAR(255)  The owner name of the target object
+comment            VARCHAR(2048) Comment to describe the synonym
+================== ============= =======================================================
+
+.. warning::
+    
+    It does not support public synonym yet.
 
 Catalog Class/Virtual Class Authorization
 =========================================

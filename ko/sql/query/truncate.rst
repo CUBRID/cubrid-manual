@@ -8,7 +8,7 @@ TRUNCATE
 
 **TRUNCATE** 문은 명시된 테이블의 모든 레코드들을 삭제한다.
 
-**WHERE** 조건이 없는 **DELETE FROM** *table_name* 문을 사용하는 것에 비해 일반적으로 다음의 이점을 지닌다.
+**WHERE** 조건이 없는 **DELETE FROM** *[schema_name.]table_name* 문을 사용하는 것에 비해 일반적으로 다음의 이점을 지닌다.
 
 * 인덱스와 제약사항 사전 처리, 레코드들 일괄 삭제로 성능면에서 훨씬 뛰어나다.
 * 레코드들을 개별 삭제하는 것이 아니기 때문에 각 레코드에 대한 VACUUM 비용이 없다.
@@ -23,8 +23,9 @@ TRUNCATE
 
 ::
 
-    TRUNCATE [ TABLE ] <table_name> [ CASCADE ]
+    TRUNCATE [ TABLE ] [schema_name.]table_name [ CASCADE ]
 
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name* : 삭제할 데이터가 포함되어 있는 테이블의 이름을 지정한다.
 *   **CASCADE** : 외래 키 (Foreign Key) 참조 관계에 있는 모든 테이블들의 데이터를 삭제한다. 대상 테이블에 **PRIMARY KEY** 제약 조건이 정의되어 있고, 이 **PRIMARY KEY** 를 하나 이상의 외래 키가 참조하고 있어야 한다. 이 때 외래 키의 **ON DELETE** 동작은 **CASCADE** 로 정의되어 있어야 한다. 외래 키 참조가 있는 경우 **CASCADE** 옵션을 사용하지 않으면, **TRUNCATE** 는 실패한다. 또한, 여러 테이블이 외래 키 참조로 연결되어 있고, 하나라도 **ON DELETE** 동작이 **CASCADE** 가 아닌 경우 역시 실패한다. 외래 키 제약 조건에 대한 자세한 내용은 :ref:`foreign-key-constraint` 을 참고한다.
 

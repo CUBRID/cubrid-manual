@@ -14,8 +14,8 @@ Server Definition
 ------------------
 
 Create remote access information using the **CREATE SERVER** statement.
-The created server is used to designate a remote server when executing a :doc:`/sql/query/select` query using **DBLINK**\.
-For how to use the prepared server, refer to `DBLINK </sql/query/select.html#dblink-clause>`_.
+The created server is used to designate a remote server when executing a :doc:`/sql/query/select` query using **DBLINK**.
+For how to use the prepared server, refer to :ref:`dblink-clause`.
 
 ::
 

@@ -39,6 +39,8 @@ The main topics covered in this chapter are as follows:
 
 *   Database Administration: Describes about user management, SET and SHOW statements.
 
+*   User Schema: Describes a logical collection of objects in a database that is created with users.
+
 *   System Catalog: Describes the CUBRID system catalog, the internal information of the CUBRID database.
 
 .. toctree::
@@ -58,5 +60,6 @@ The main topics covered in this chapter are as follows:
     method.rst
     oodb.rst
     db_admin.rst
+    user_schema.rst
     catalog.rst
     

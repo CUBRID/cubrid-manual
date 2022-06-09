@@ -14,7 +14,7 @@ UPDATE
 ::
 
     <UPDATE single table>
-    UPDATE table_name|view_name SET column_name = {<expr> | DEFAULT} [, column_name = {<expr> | DEFAULT} ...]
+    UPDATE [schema_name.]table_name|view_name SET column_name = {<expr> | DEFAULT} [, column_name = {<expr> | DEFAULT} ...]
         [WHERE <search_condition>]
         [ORDER BY {col_name | <expr>}]
         [LIMIT row_count]

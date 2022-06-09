@@ -363,10 +363,10 @@ Java 저장 함수/프로시저에서 데이터베이스에 접근하기 위해�
                 }
                 
                 rs.close();
-            } catch (SQLException e) {
-                System.err.println(e.getMessage());
-            } catch (Exception e) {
-                System.err.println(e.getMessage());
+            } catch (SQLException e1) {
+                System.err.println(e1.getMessage());
+            } catch (Exception e2) {
+                System.err.println(e2.getMessage());
             } finally {
                 if (stmt != null) stmt.close();
                 if (conn != null) conn.close();

@@ -13,20 +13,22 @@ You can insert a new record into a table in a database by using the **INSERT** s
 ::
 
     <INSERT ... VALUES statement>
-    INSERT [INTO] table_name [(column_name, ...)]
+    INSERT [INTO] [schema_name.]table_name [(column_name, ...)]
         {VALUES | VALUE}({expr | DEFAULT}, ...)[,({expr | DEFAULT}, ...),...]
         [ON DUPLICATE KEY UPDATE column_name = expr, ... ]
-    INSERT [INTO] table_name DEFAULT [ VALUES ]
+    INSERT [INTO] [schema_name.]table_name DEFAULT [ VALUES ]
      
     <INSERT ... SET statement>
-    INSERT [INTO] table_name
+    INSERT [INTO] [schema_name.]table_name
         SET column_name = {expr | DEFAULT}[, column_name = {expr | DEFAULT},...]
         [ON DUPLICATE KEY UPDATE column_name = expr, ... ]
      
     <INSERT ... SELECT statement>
-    INSERT [INTO] table_name [(column_name, ...)]
+    INSERT [INTO] [schema_name.]table_name [(column_name, ...)]
         SELECT...
         [ON DUPLICATE KEY UPDATE column_name = expr, ... ]
+
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 
 *   *table_name*: Specifies the name of the target table into which you want to insert a new record.
 
@@ -159,7 +161,7 @@ If you use the **SELECT** query in the **INSERT** statement, you can insert quer
 
 ::
 
-    INSERT [INTO] table_name [(column_name, ...)]
+    INSERT [INTO] [schema_name.]table_name [(column_name, ...)]
         SELECT...
         [ON DUPLICATE KEY UPDATE column_name = expr, ... ]
 

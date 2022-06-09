@@ -17,9 +17,9 @@ DESC, DESCRIBE
 
 ::
 
-    DESC tbl_name;
-    DESCRIBE tbl_name;
-    
+    DESC [schema_name.]table_name;
+    DESCRIBE [schema_name.]table_name;
+
 EXPLAIN
 =======
 
@@ -27,16 +27,18 @@ EXPLAIN
 
 ::
 
-    EXPLAIN tbl_name;
+    EXPLAIN [schema_name.]table_name;
 
 .. _show-tables-statement:
 
 SHOW TABLES
 ===========
 
-데이터베이스의 전체 테이블 이름 목록을 출력한다. 결과 칼럼의 이름은 *tables_in_<데이터베이스 이름>* 이 되며 하나의 칼럼을 지닌다. **LIKE** 절을 사용하면 이와 매칭되는 테이블 이름을 검색할 수 있으며, **WHERE** 절을 사용하면 좀더 일반적인 조건으로 테이블 이름을 검색할 수 있다. **SHOW FULL TABLES** 는 *table_type* 이라는 이름의 두 번째 칼럼을 함께 출력하며, 테이블은 **BASE TABLE**, 뷰는 **VIEW** 라는 값을 가진다. ::
+데이터베이스의 전체 테이블 이름 목록을 출력한다. 결과 칼럼의 이름은 *tables_in_<데이터베이스 이름>* 이 되며 하나의 칼럼을 지닌다. **LIKE** 절을 사용하면 이와 매칭되는 테이블 이름을 검색할 수 있으며, **WHERE** 절을 사용하면 좀더 일반적인 조건으로 테이블 이름을 검색할 수 있다. **SHOW FULL TABLES** 는 *owner* 칼럼과 *table_type* 칼럼을 함께 출력한다. *owner* 컬럼은 소유자 이름을 값으로 가진다. *table_type* 칼럼은 테이블이면 **BASE TABLE**, 뷰이면 **VIEW**\를 값으로 가진다.
 
-    SHOW [FULL] TABLES [LIKE 'pattern' | WHERE expr]
+::
+
+    SHOW [ FULL ] TABLES [ LIKE 'pattern' | WHERE expr ];
 
 다음은 이 구문을 수행한 예이다.
 
@@ -62,45 +64,45 @@ SHOW TABLES
 .. code-block:: sql
 
     SHOW FULL TABLES;
-    
+
 ::
 
-      Tables_in_demodb     Table_type
-    ============================================
-      'athlete'             'BASE TABLE'
-      'code'                'BASE TABLE'
-      'event'               'BASE TABLE'
-      'game'                'BASE TABLE'
-      'history'             'BASE TABLE'
-      'nation'              'BASE TABLE'
-      'olympic'             'BASE TABLE'
-      'participant'         'BASE TABLE'
-      'record'              'BASE TABLE'
-      'stadium'             'BASE TABLE'
-     
+      Tables_in_demodb      Owner                 Table_type
+    ==================================================================
+      'athlete'             'PUBLIC'              'BASE TABLE'
+      'code'                'PUBLIC'              'BASE TABLE'
+      'event'               'PUBLIC'              'BASE TABLE'
+      'game'                'PUBLIC'              'BASE TABLE'
+      'history'             'PUBLIC'              'BASE TABLE'
+      'nation'              'PUBLIC'              'BASE TABLE'
+      'olympic'             'PUBLIC'              'BASE TABLE'
+      'participant'         'PUBLIC'              'BASE TABLE'
+      'record'              'PUBLIC'              'BASE TABLE'
+      'stadium'             'PUBLIC'              'BASE TABLE'
+
 .. code-block:: sql
 
     SHOW FULL TABLES LIKE '%c%';
-    
+
 ::
 
-      Tables_in_demodb      Table_type
-    ============================================
-      'code'                'BASE TABLE'
-      'olympic'             'BASE TABLE'
-      'participant'         'BASE TABLE'
-      'record'              'BASE TABLE'
-     
+      Tables_in_demodb      Owner                 Table_type
+    ==================================================================
+      'code'                'PUBLIC'              'BASE TABLE'
+      'olympic'             'PUBLIC'              'BASE TABLE'
+      'participant'         'PUBLIC'              'BASE TABLE'
+      'record'              'PUBLIC'              'BASE TABLE'
+
 .. code-block:: sql
 
     SHOW FULL TABLES WHERE table_type = 'BASE TABLE' and TABLES_IN_demodb LIKE '%co%';
-    
+
 ::
 
-      Tables_in_demodb      Table_type
-    ============================================
-      'code'                'BASE TABLE'
-      'record'              'BASE TABLE'
+      Tables_in_demodb      Owner                 Table_type
+    ==================================================================
+      'code'                'PUBLIC'              'BASE TABLE'
+      'record'              'PUBLIC'              'BASE TABLE'
 
 .. _show-columns-statement:
 
@@ -111,7 +113,7 @@ SHOW COLUMNS
 
 ::
 
-    SHOW [FULL] COLUMNS {FROM | IN} tbl_name [LIKE 'pattern' | WHERE expr];
+    SHOW [FULL] COLUMNS (FROM | IN) [schema_name.]table_name [LIKE 'pattern' | WHERE expr];
 
 **FULL** 키워드를 사용하면  **collation** 및 **comment** 를 추가로 출력한다.
 
@@ -193,7 +195,7 @@ SHOW INDEX
 
 ::
 
-    SHOW {INDEX | INDEXES | KEYS } {FROM | IN} tbl_name;
+    SHOW (INDEX | INDEXES | KEYS) (FROM | IN) [schema_name.]table_name;
 
 해당 질의는 다음과 같은 칼럼을 가진다. 
 
@@ -227,9 +229,9 @@ Visible                             VARCHAR         인덱스의 가시성을 �
     
 ::
 
-       Table     Non_unique   Key_name       Seq_in_index  Column_name    Collation     Cardinality   Sub_part  Packed   Null   Index_type  Func   Comment   Visible
-    ======================================================================================================================================================================
-     'athlete'     0      'pk_athlete_code'     1          'code'           'A'           6677          NULL      NULL    'NO'    'BTREE'     NULL   NULL       'YES
+      Table             Non_unique  Key_name           Seq_in_index  Column_name  Collation  Cardinality  Sub_part  Packed  Null  Index_type  func  Comment  Visible
+    =================================================================================================================================================================
+      'public.athlete'           0  'pk_athlete_code'             1  'code'       'A'               6677      NULL  NULL    'NO'  'BTREE'     NULL  NULL     'YES'
 
 .. code-block:: sql
 
@@ -246,16 +248,16 @@ Visible                             VARCHAR         인덱스의 가시성을 �
     
 ::
 
-      Table  Non_unique  Key_name       Seq_in_index  Column_name  Collation  Cardinality     Sub_part  Packed  Null    Index_type   Func   Comment   Visible
-    =========================================================================================================================================================
-      'tbl1'          1  'i_tbl1_i1'               1  'i1'         'D'                  0         NULL    NULL    'YES'   'BTREE'      NULL   NULL       'YES'
-      'tbl1'          1  'i_tbl1_i1_s1'            1  'i1'         'A'                  0         NULL    NULL    'YES'   'BTREE'      NULL   NULL       'YES'
-      'tbl1'          1  'i_tbl1_i1_s1'            2  's1'         'A'                  0         NULL    NULL    'YES'   'BTREE'      NULL   NULL       'YES'
-      'tbl1'          0  'i_tbl1_i2_s2'            1  'i2'         'A'                  0         NULL    NULL    'NO'    'BTREE'      NULL   NULL       'YES'
-      'tbl1'          0  'i_tbl1_i2_s2'            2  's2'         'A'                  0         NULL    NULL    'YES'   'BTREE'      NULL   NULL       'YES'
-      'tbl1'          1  'i_tbl1_s1'               1  's1'         'A'                  0         NULL    NULL    'YES'   'BTREE'      NULL   NULL       'YES'
-      'tbl1'          0  'u_tbl1_i3'               1  'i3'         'A'                  0         NULL    NULL    'YES'   'BTREE'      NULL   NULL       'YES'
-      'tbl1'          0  'u_tbl1_s3'               1  's3'         'A'                  0         NULL    NULL    'YES'   'BTREE'      NULL   NULL       'YES'
+      Table          Non_unique  Key_name        Seq_in_index  Column_name  Collation  Cardinality  Sub_part  Packed  Null   Index_type  Func  Comment  Visible
+    =============================================================================================================================================================
+      'public.tbl1'           1  'i_tbl1_i1'                1  'i1'         'D'                  0      NULL  NULL    'YES'  'BTREE'     NULL  NULL     'YES'
+      'public.tbl1'           1  'i_tbl1_i1_s1'             1  'i1'         'A'                  0      NULL  NULL    'YES'  'BTREE'     NULL  NULL     'YES'
+      'public.tbl1'           1  'i_tbl1_i1_s1'             2  's1'         'A'                  0      NULL  NULL    'YES'  'BTREE'     NULL  NULL     'YES'
+      'public.tbl1'           0  'i_tbl1_i2_s2'             1  'i2'         'A'                  0      NULL  NULL    'NO'   'BTREE'     NULL  NULL     'YES'
+      'public.tbl1'           0  'i_tbl1_i2_s2'             2  's2'         'A'                  0      NULL  NULL    'YES'  'BTREE'     NULL  NULL     'YES'
+      'public.tbl1'           1  'i_tbl1_s1'                1  's1'         'A'                  0         7  NULL    'YES'  'BTREE'     NULL  NULL     'NO'
+      'public.tbl1'           0  'u_tbl1_i3'                1  'i3'         'A'                  0      NULL  NULL    'YES'  'BTREE'     NULL  NULL     'YES'
+      'public.tbl1'           0  'u_tbl1_s3'                1  's3'         'A'                  0      NULL  NULL    'YES'  'BTREE'     NULL  NULL     'YES'
 
 .. _show-collation-statement:
  
@@ -266,7 +268,7 @@ SHOW COLLATION
 
 ::
 
-    SHOW COLLATION [ LIKE 'pattern' ];
+    SHOW COLLATION [LIKE 'pattern'];
 
 해당 질의는 다음과 같은 칼럼을 가진다.
 
@@ -333,7 +335,7 @@ SHOW TIMEZONES
 
 ::
 
-    SHOW [FULL] TIMEZONES [ LIKE 'pattern' ];
+    SHOW [FULL] TIMEZONES [LIKE 'pattern'];
 
 FULL이 명시되지 않으면 타임 존의 영역 이름을 가진 하나의 칼럼을 출력한다. 칼럼의 이름은 timezone_region이다.
 
@@ -385,7 +387,7 @@ WHERE 조건 없는 LIKE 조건은 첫 번째 칼럼에 적용된다. WHERE 조�
 
 .. code-block:: sql
 
-    SHOW [FULL] TIMEZONES [ LIKE 'pattern' ];
+    SHOW FULL TIMEZONES;
 
 ::
 
@@ -425,9 +427,11 @@ WHERE 조건 없는 LIKE 조건은 첫 번째 칼럼에 적용된다. WHERE 조�
 SHOW GRANTS
 ===========
 
-데이터베이스의 사용자 계정에 부여된 권한을 출력한다. ::
+데이터베이스의 사용자 계정에 부여된 권한을 출력한다.
 
-    SHOW GRANTS FOR 'user';
+::
+
+    SHOW GRANTS FOR user_name;
     
 다음은 이 구문을 수행한 예이다.
 
@@ -452,7 +456,7 @@ SHOW CREATE TABLE
 
 테이블 이름을 지정하면 해당 테이블의 **CREATE TABLE** 문을 출력한다. ::
 
-    SHOW CREATE TABLE table_name;
+    SHOW CREATE TABLE [schema_name.]table_name;
 
 .. code-block:: sql
 
@@ -462,10 +466,7 @@ SHOW CREATE TABLE
 
       TABLE                 CREATE TABLE
     ============================================
-      'nation'               'CREATE TABLE [nation] ([code] CHARACTER(3) NOT NULL, 
-    [name] CHARACTER VARYING(40) NOT NULL, [continent] CHARACTER VARYING(10), 
-    [capital] CHARACTER VARYING(30),  CONSTRAINT [pk_nation_code] PRIMARY KEY  ([code])) 
-    COLLATE iso88591_bin'
+      'public.nation'       'CREATE TABLE [nation] ([code] CHARACTER(3) NOT NULL, [name] CHARACTER VARYING(40) NOT NULL, [continent] CHARACTER VARYING(10), [capital] CHARACTER VARYING(30), CONSTRAINT [pk_nation_code] PRIMARY KEY  ([code])) DONT_REUSE_OID, COLLATE iso88591_bin'
 
 **SHOW CREATE TABLE** 문은 사용자가 입력한 구문을 그대로 출력하지는 않는다. 예를 들어, 사용자가 입력한 커멘트를 출력하지 않으며, 테이블 명이나 칼럼 명은 항상 소문자로 출력한다.
     
@@ -486,16 +487,9 @@ SHOW CREATE VIEW
      
 ::
 
-      View              Create View
-    ========================================
-      'db_class'       'SELECT c.class_name, CAST(c.owner.name AS VARCHAR(255)), CASE c.class_type WHEN 0 THEN 'CLASS' WHEN 1 THEN 'VCLASS' ELSE
-                       'UNKNOW' END, CASE WHEN MOD(c.is_system_class, 2) = 1 THEN 'YES' ELSE 'NO' END, CASE WHEN c.sub_classes IS NULL THEN 'NO'
-                       ELSE NVL((SELECT 'YES' FROM _db_partition p WHERE p.class_of = c and p.pname IS NULL), 'NO') END, CASE WHEN
-                       MOD(c.is_system_class / 8, 2) = 1 THEN 'YES' ELSE 'NO' END FROM _db_class c WHERE CURRENT_USER = 'DBA' OR {c.owner.name}
-                       SUBSETEQ (  SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{t.g.name}), SET{})  FROM db_user u, TABLE(groups) AS t(g)  WHERE
-                       u.name = CURRENT_USER) OR {c} SUBSETEQ (  SELECT SUM(SET{au.class_of})  FROM _db_auth au  WHERE {au.grantee.name} SUBSETEQ
-                       (  SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{t.g.name}), SET{})  FROM db_user u, TABLE(groups) AS t(g)  WHERE u.name =
-                       CURRENT_USER) AND  au.auth_type = 'SELECT')'
+      View                  Create View
+    ============================================
+      'db_class'            'SELECT [c].[class_name], CAST([c].[owner].[name] AS VARCHAR(255)), CASE [c].[class_type] WHEN 0 THEN 'CLASS' WHEN 1 THEN 'VCLASS' ELSE 'UNKNOW' END, CASE WHEN MOD([c].[is_system_class], 2) = 1 THEN 'YES' ELSE 'NO' END, CASE [c].[tde_algorithm] WHEN 0 THEN 'NONE' WHEN 1 THEN 'AES' WHEN 2 THEN 'ARIA' END, CASE WHEN [c].[sub_classes] IS NULL THEN 'NO' ELSE NVL((SELECT 'YES' FROM [_db_partition] [p] WHERE [p].[class_of] = [c] and [p].[pname] IS NULL), 'NO') END, CASE WHEN MOD([c].[is_system_class] / 8, 2) = 1 THEN 'YES' ELSE 'NO' END, [coll].[coll_name], [c].[comment] FROM [_db_class] [c], [_db_collation] [coll] WHERE [c].[collation_id] = [coll].[coll_id] AND (CURRENT_USER = 'DBA' OR {[c].[owner].[name]} SUBSETEQ(SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{[t].[g].[name]}), SET{}) FROM [db_user] [u], TABLE([groups]) AS [t]([g]) WHERE [u].[name] = CURRENT_USER) OR {[c]} SUBSETEQ ( SELECT SUM(SET{[au].[class_of]}) FROM [_db_auth] [au] WHERE {[au].[grantee].[name]} SUBSETEQ ( SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{[t].[g].[name]}), SET{}) FROM [db_user] [u], TABLE([groups]) AS [t]([g]) WHERE [u].[name] = CURRENT_USER) AND [au].[auth_type] = 'SELECT'))'
 
 SHOW ACCESS STATUS 
 ==================
@@ -504,7 +498,7 @@ SHOW ACCESS STATUS
 
 :: 
   
-    SHOW ACCESS STATUS [LIKE 'pattern' | WHERE expr] ; 
+    SHOW ACCESS STATUS [LIKE 'pattern' | WHERE expr]; 
 
 해당 구문은 다음과 같은 칼럼을 출력한다.
 
@@ -925,7 +919,7 @@ SHOW HEAP HEADER
 
 ::
 
-    SHOW [ALL] HEAP HEADER OF table_name;
+    SHOW  [ALL] HEAP HEADER OF [schema_name.]table_name;
 
 *   ALL: 분할 테이블에서 "ALL" 키워드가 주어지면 기반 테이블과 분할 테이블이 같이 출력된다.
 
@@ -1116,7 +1110,7 @@ SHOW HEAP CAPACITY
 
 ::
 
-    SHOW [ALL] HEAP CAPACITY OF table_name;
+    SHOW [ALL] HEAP CAPACITY OF [schema_name.] table_name;
 
 *   ALL: 분할 테이블에서 "ALL" 키워드가 주어지면 기반 테이블과 분할된 테이블이 같이 출력된다.
 
@@ -1251,7 +1245,7 @@ SHOW SLOTTED PAGE HEADER
 
 ::
 
-    SHOW SLOTTED PAGE HEADER { WHERE|OF } VOLUME = volume_num AND PAGE = page_num;
+    SHOW SLOTTED PAGE HEADER (WHERE | OF) VOLUME = volume_num AND PAGE = page_num;
 
 해당 구문은 다음의 칼럼을 출력한다.
 
@@ -1303,7 +1297,7 @@ SHOW SLOTTED PAGE SLOTS
 
 ::
 
-    SHOW SLOTTED PAGE SLOTS { WHERE|OF } VOLUME = volume_num AND PAGE = page_num;
+    SHOW SLOTTED PAGE SLOTS (WHERE | OF) VOLUME = volume_num AND PAGE = page_num;
     
 해당 구문은 다음의 칼럼을 출력한다.
 
@@ -1359,13 +1353,13 @@ SHOW INDEX HEADER
 
 ::
 
-    SHOW INDEX HEADER OF table_name.index_name;
+    SHOW INDEX HEADER OF [schema_name.]table_name.index_name;
 
 ALL 키워드를 사용하고 인덱스 이름을 생략하면 해당 테이블의 전체 인덱스의 헤더 정보를 출력한다.
 
 ::
 
-    SHOW ALL INDEXES HEADER OF table_name;
+    SHOW ALL INDEXES HEADER OF [schema_name.]table_name;
 
 해당 구문은 다음의 칼럼을 출력한다.
 
@@ -1423,13 +1417,13 @@ SHOW INDEX CAPACITY
 
 ::
 
-    SHOW INDEX CAPACITY OF table_name.index_name;
+    SHOW INDEX CAPACITY OF [schema_name.]table_name.index_name;
 
 ALL 키워드를 사용하고 인덱스 이름을 생략하면 해당 테이블의 전체 인덱스의 용량 정보를 출력한다.
 
 ::
 
-    SHOW ALL INDEXES CAPACITY OF table_name;
+    SHOW ALL INDEXES CAPACITY OF [schema_name.]table_name;
 
 해당 구문은 다음의 칼럼을 출력한다.
 
@@ -1596,7 +1590,7 @@ SHOW TRANSACTION TABLES
 
 .. code-block:: sql
 
-    SHOW { TRAN | TRANSACTION } TABLES [ WHERE EXPR ];
+    SHOW { TRAN | TRANSACTION } TABLES [ WHERE expr ];
 
 해당 구문은 다음의 칼럼을 출력한다.
 
@@ -1733,7 +1727,7 @@ SA MODE일 경우 이 구문은 아무런 결과도 출력하지 않는다.
 
 .. code-block:: sql
 
-    SHOW THREADS [ WHERE EXPR ];
+    SHOW THREADS [ WHERE expr ];
 
 해당 구문은 다음의 칼럼을 출력한다.
 

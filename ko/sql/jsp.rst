@@ -130,7 +130,7 @@ Java 클래스 로드
 저장 함수/프로시저 등록
 -----------------------
 
-CUBRID는 클라이언트나 SQL 문이나 Java 응용 프로그램에서 Java 메서드를 호출할 수 있도록 Java 클래스를 등록(publish)하는 과정이 필요하다.
+CUBRID는 SQL 문이나 Java 응용 프로그램에서 Java 메서드를 호출할 수 있도록 Java 클래스를 등록(publish)하는 과정이 필요하다.
 다음과 같이 CUBRID 저장 함수를 생성하여 Java 클래스를 등록한다.
 자세한 내용은 :ref:`call-specification`\을 참조한다.
 

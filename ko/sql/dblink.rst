@@ -377,7 +377,7 @@ Cubrid DBLink 사용 방법
 제약사항
 ==============================================
 
-*   CUBRID DBLink는 utf-8만 지원 한다.
+*   CUBRID Hetergeneous DBLink는 utf-8만 지원 한다.
 *   1개 컬럼의 문자열 최대 길이는 16M까지만 지원한다.
 *	Mysql의 경우, 대용량 테이블인 경우 cache를 사용하는 경우 Gateway CAS의 메모리 사용량이 증가하므로 PREFETCH, NO_CACHE=1 사용을 권장한다.
 *	ODBC 미지원 타입은 SQL_INTERVAL,SQL_GUID,SQL_BIT,SQL_BINARY,SQL_VARBINARY,SQL_LONGVARBINARY 이다.

@@ -82,7 +82,6 @@ Java Call Specification 작성 방법에 대해서는 :ref:`call-specification`\
     
 ::
     
-    sp_name     sp_type   return_type    arg_count
     sp_name               sp_type               return_type             arg_count  lang target                owner
     ================================================================================
     'athlete_add'         'PROCEDURE'           'void'                          4  'JAVA''Athlete.Athlete(java.lang.String, java.lang.String, java.lang.String, java.lang.String)'  'DBA'
@@ -194,7 +193,6 @@ Java Call Specification 작성 방법에 대해서는 :ref:`call-specification`\
     
 ::
     
-    sp_name     sp_type   return_type    arg_count
     sp_name               sp_type               return_type             arg_count  lang target                owner
     ================================================================================
     'hello'               'FUNCTION'            'STRING'                        0  'JAVA''SpCubrid.HelloCubrid() return java.lang.String'  'DBA'

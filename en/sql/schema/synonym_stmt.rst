@@ -45,7 +45,7 @@ Create another new name to use for an object that already exists in the database
 1. Private synonym
 ------------------
 
-In the example below, user u1 and user u2 have created a synonym with the same name, but use different target objects.
+In the example below, user u1 and user u2 have created a synonym with the same name but use different target objects.
 
 .. code-block:: sql
 

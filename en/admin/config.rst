@@ -285,6 +285,8 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | thread_worker_pooling               | server parameter        |         | bool     | yes                            |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | thread_core_count                   | server parameter        |         | int      | # of system cores              |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | thread_worker_timeout_seconds       | server parameter        |         | int      | 300                            |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | loaddb_worker_count                 | server parameter        |         | int      | 8                              |                       |
@@ -1726,6 +1728,8 @@ Thread management can be configured by threads parameters. The type and value ra
 +---------------------------------------+--------+-------------------+----------+----------+
 | thread_worker_pooling                 | bool   | true              |          |          |
 +---------------------------------------+--------+-------------------+----------+----------+
+| thread_core_count                     | int    | # of system core  | 1        | 1024     |
++---------------------------------------+--------+-------------------+----------+----------+
 | thread_worker_timeout_seconds         | int    | 300               | -1       | 3600     |
 +---------------------------------------+--------+-------------------+----------+----------+
 | loaddb_worker_count                   | bool   | 8                 | 2        | 64       |
@@ -1749,6 +1753,11 @@ Thread management can be configured by threads parameters. The type and value ra
 **thread_worker_pooling**
 
     If **thread_worker_pooling** parameter is true, all threads used for client requests execution are pooled on server boot.
+
+**thread_core_count**
+
+    The number of groups of pooled threads is configured according to the **thread_core_count** parameter. The default value is set to the number of system cores.
+    If the number of threads in a group does not reach 3 or more according to the parameter value, the system adjusts this value so that at least 3 threads belong to each group.
 
 **thread_worker_timeout_seconds**
 

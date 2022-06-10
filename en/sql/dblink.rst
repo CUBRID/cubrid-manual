@@ -361,7 +361,8 @@ The Query statement below is a Query statement that inquires the remote_t table 
 	SELECT * FROM DBLINK (192.168.0.1:53000:demodb:user:password:','SELECT col1, col2 FROM remote_t') AS t(col1 int, col2 varchar(32));
 
 
-Second, if you look at the above DBLINK Query, information for accessing other databases is the most basic information. Therefore, there is a risk that user information (id, password) may be exposed to the outside and the inconvenience of having to write each time a Query is written.
+Second, if you look at the above DBLINK Query, information for accessing other databases is the most basic information. Therefore, there is a risk that user information (id, password) may be exposed to the outside and there will be an inconvenience of having to write each time a Query is written.
+
 If you use the CREATE SERVER statement for such trouble and information protection, it is simpler than the Query statement and helps to protect user information.
 
 

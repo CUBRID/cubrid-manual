@@ -397,7 +397,7 @@ To load a compiled Java or JAR (Java Archive) file into CUBRID, use the **loadja
 
     loadjava [option] database-name java-class-file
 
-*   *database-name*: The name of the database where the Java file is to be loaded.
+*   *database-name*: The name of the database where the Java file to be loaded.
 *   *java-class-file*: The name of the Java class or jar file to be loaded.
 *   [*option*]
 

@@ -36,6 +36,8 @@ Java 저장함수/프로시저를 사용하기 위해서 다음의 사항이 준
 *   **cubrid.conf**\에 있는 **java_stored_procedure** 값을 **yes** 로 설정해야한다.
 *   Java 저장 프로시저/함수를 사용하려는 데이터베이스에 대해 Java 저장 프로시저 서버 (Java SP 서버) 를 시작해야한다.
 
+.. _jsp-system-prm:
+
 cubrid.conf 확인
 ----------------
 
@@ -59,6 +61,8 @@ Java 저장 프로시저/함수를 사용하려는 데이터베이스에 대해 
 Java SP 서버가 성공적으로 시작되었는지 다음의 명령어로 확인할 수 있다.
 
 **cubrid javasp** **status** *db_name* 을 실행한다 ::
+
+    % cubrid javasp status demodb
 
     @ cubrid javasp status: demodb
     Java Stored Procedure Server (demodb, pid 9220, port 38408)
@@ -165,6 +169,12 @@ CALL 문으로 다음과 같이 Java 저장 프로시저/함수를 호출하여 
 .. code-block:: sql
 
     CALL Hello() INTO :HELLO;
+
+::
+
+      Result
+    ======================
+    'Hello, Cubrid !!'
 
 SQL 문에서 호출
 ---------------
@@ -275,8 +285,6 @@ CUBRID 데이터베이스에 Phone 클래스를 생성한다.
     name                  phoneno
     ============================================
         'Jane'                '010-111-1111'   
-
-
 
 .. _jsp-server-side-jdbc:
 
@@ -391,8 +399,6 @@ loadjava 유틸리티
 *   [*option*]
 
     *   **-y**: 이름이 같은 클래스 파일이 존재하면 자동으로 덮어쓰기 한다. 기본값은 **no** 이다. 만약 **-y** 옵션을 명시하지 않고 로드할 때 이름이 같은 클래스 파일이 존재하면 덮어쓰기를 할 것인지 묻는다.
-
-.. _jsp-publish:
 
 주의 사항
 =========

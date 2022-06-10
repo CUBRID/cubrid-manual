@@ -80,7 +80,7 @@ How to Write and Load Java Stored Function/Procedure
 To use a Java stored function/procedure, you can write and publish Java stored function/procedure as follows.
 
     *   **Step 1: Write the Java source code**
-    *   **Step 2: Comiple the Java source code**
+    *   **Step 2: Compile the Java source code**
     *   **Step 3: Load Java Class**
     *   **Step 4: Publish Stored function/procedure**
 

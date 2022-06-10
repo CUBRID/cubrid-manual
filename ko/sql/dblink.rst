@@ -34,7 +34,7 @@ CUBRID DBLink는 동일기종 간에 DBLink와 이기종 간의 DBLink를 지원
 -----------------------------
 
 이기종 데이터베이스의 정보를 조회하기 위한 구성도를 보면 GATEWAY를 통해서 이기종 데이터베이스의 정보를 조회할 수 있다. 
-GATWAY는 ODBC(Open DataBase Connectivity)를 이용하고 있다.
+GATEWAY는 ODBC(Open DataBase Connectivity)를 이용하고 있다.
 
 .. image:: /images/dblink_heter.png
 

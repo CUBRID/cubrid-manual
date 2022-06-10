@@ -176,7 +176,8 @@ GATEWAY Parameter
 
 **CGW_LINK_SERVER**
 
-    **CGW_LINK_SERVER** should set the name of the external databaseto be used by connecting to CAS_CGW. Currently supported databases are Oracle and MySQL.
+    **CGW_LINK_SERVER** should set the name of the external database to be used by connecting to CAS_CGW. Currently, supported databases are Oracle and MySQL.
+
 
 **CGW_LINK_SERVER_IP**
 

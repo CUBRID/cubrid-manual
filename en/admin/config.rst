@@ -1757,7 +1757,7 @@ Thread management can be configured by threads parameters. The type and value ra
 **thread_core_count**
 
     The number of groups of pooled threads is configured according to the **thread_core_count** parameter. The default value is set to the number of system cores.
-    If the number of threads in a group does not reach 3 or more according to the parameter value, the system adjusts this value so that at least 3 thread belong to each group.
+    If the number of threads in a group does not reach 3 or more according to the parameter value, the system adjusts this value so that at least 3 threads belong to each group.
 
 **thread_worker_timeout_seconds**
 

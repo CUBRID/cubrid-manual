@@ -123,7 +123,8 @@ Enter the below command to restart the whole GATEWAY.
 Checking GATEWAY Status
 --------------------------------
 
-**cubrid gateway status**  The cubrid gateway status utility allows you to check the gateway status such as number of completed jobs and the number of standby jobs by providing various options.
+**cubrid gateway status**  The cubrid gateway status utility allows you to check the gateway status such as the number of completed jobs and the number of standby jobs by providing various options.
+
 GATEWAY status is the same as broker, so refer to :ref:`broker-status`\.
 
 ::

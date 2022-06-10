@@ -90,7 +90,8 @@ The following message is returned if the GATEWAY is already running.
     @ cubrid gateway start
     ++ cubrid gateway is running.
 
-Stpping GATEWAY
+Stopping GATEWAY
+
 -------------------------
 
 Enter the below command to stop the GATEWAY.

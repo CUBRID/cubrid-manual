@@ -27,7 +27,8 @@ CUBRID DBLink supports DBLink between homogeneous and heterogeneous DBLinks.
 Homogeneous DBLink diagram
 -----------------------------
 
-If you look at the configuration diagram for inquiring information of homogeneous database, you can use CCI in Database Server to connect to homogeneous brokers and inquire information from external database.
+If you look at the configuration diagram for inquiring information of a homogeneous database, you can use CCI in Database Server to connect to homogeneous brokers and inquire information from an external database.
+
 
 .. image:: /images/dblink_homo.png
 

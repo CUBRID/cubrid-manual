@@ -20,7 +20,7 @@ Java 저장 함수/프로시저는 SQL에서도 호출할 수 있으며, JDBC를
 Java 저장 함수/프로시저를 사용할 때 얻을 수 있는 이점은 다음과 같다.
 
 *   **생산성과 사용성**: Java 저장 함수/프로시저는 한번 만들어 놓으면 계속해서 사용할 수 있다. 사용자가 저장 함수와 저장 프로시저를 SQL에서도 호출하여 사용할 수 있고, JDBC를 사용하여 쉽게 Java 응용 프로그램에서 호출할 수 있다.
-*   **뛰어난 상호 운용성, 이식성**: Java 저장 함수/프로시저는 Java 가상 머신을 사용하므로, 시스템에 Java 가상 머신을 사용할 수만 있다면 언제 어디서나 사용할 수 있다.
+*   **뛰어난 상호 운용성과 이식성**: Java 저장 함수/프로시저는 Java 가상 머신을 사용하므로, 시스템에 Java 가상 머신을 사용할 수만 있다면 언제 어디서나 사용할 수 있다.
 
 .. note::
 
@@ -35,6 +35,8 @@ Java 저장함수/프로시저를 사용하기 위해서 다음의 사항이 준
 
 *   **cubrid.conf**\에 있는 **java_stored_procedure** 값을 **yes** 로 설정해야한다.
 *   Java 저장 프로시저/함수를 사용하려는 데이터베이스에 대해 Java 저장 프로시저 서버 (Java SP 서버) 를 시작해야한다.
+
+.. _jsp-system-prm:
 
 cubrid.conf 확인
 ----------------
@@ -60,6 +62,8 @@ Java SP 서버가 성공적으로 시작되었는지 다음의 명령어로 확�
 
 **cubrid javasp** **status** *db_name* 을 실행한다 ::
 
+    % cubrid javasp status demodb
+
     @ cubrid javasp status: demodb
     Java Stored Procedure Server (demodb, pid 9220, port 38408)
     Java VM arguments :
@@ -68,17 +72,23 @@ Java SP 서버가 성공적으로 시작되었는지 다음의 명령어로 확�
     -Xrs
     -------------------------------------------------
 
-자바 저장 프로시저 서버에 대한 보다 자세한 내용은 :ref:`cubrid-javasp-server` 와 :ref:`cubrid-javasp-server-config` 을 참고한다.
+자바 저장 프로시저 서버에 대한 자세한 내용은 :ref:`cubrid-javasp-server` 와 :ref:`cubrid-javasp-server-config` 을 참고한다.
 
-함수/프로시저 작성
-==================
+자바 저장 함수/프로시저 작성과 로드
+=======================================
+
+자바 저장 함수/프로시저를 사용하기 위해서는 다음의 순서에 따라 자바 저장 함수/프로시저를 작성하고 등록한다.
+
+    *   **Step 1: Java 소스 작성**
+    *   **Step 2: Java 소스 컴파일**
+    *   **Step 3: Java 클래스 로드**
+    *   **Step 4: 저장 함수/프로시저 등록**
+
+Java 소스 작성
+------------------
 
 다음은 Java 저장 함수/프로시저를 작성하는 예이다.
-
-Java 소스 작성 및 컴파일
-------------------------
-
-다음과 같이 SpCubrid.java를 컴파일 한다.
+구현하는 Java 클래스의 메서드는 반드시 **public static**\이어야 한다.
 
 .. code-block:: java
 
@@ -96,25 +106,37 @@ Java 소스 작성 및 컴파일
         }
     }
 
+Java 저장 함수/프로시저에서 데이터베이스에 접근하기 위해서는 서버 측 JDBC 드라이버를 사용해야한다.
+:ref:`jsp-server-side-jdbc`\를 참조하여 서버 측 JDBC 드라이버 사용한다.
+
+Java 소스 컴파일
+------------------
+
+다음과 같이 SpCubrid.java를 컴파일 한다.
+
 ::
 
     javac SpCubrid.java
 
-이 때, Java 클래스의 메서드는 반드시 public static이어야 한다.
-
 .. _jsp-loadjava:
 
-컴파일된 Java 클래스 로드
--------------------------
+Java 클래스 로드
+-------------------
 
-컴파일된 Java 클래스를 CUBRID로 로딩한다. ::
+컴파일된 Java 클래스를 loadjava 유틸리티를 사용해 CUBRID로 로딩한다.
+:ref:`jsp-load-java`\를 참조하여 사용한다.
+
+::
 
     % loadjava demodb SpCubrid.class
 
-로딩한 Java 클래스 등록
+
+저장 함수/프로시저 등록
 -----------------------
 
+CUBRID는 SQL 문이나 Java 응용 프로그램에서 Java 메서드를 호출할 수 있도록 Java 클래스를 등록(publish)하는 과정이 필요하다.
 다음과 같이 CUBRID 저장 함수를 생성하여 Java 클래스를 등록한다.
+자세한 내용은 :ref:`call-specification`\을 참조한다.
 
 .. code-block:: sql
 
@@ -130,423 +152,29 @@ Java 소스 작성 및 컴파일
 
     CREATE OR REPLACE FUNCTION hello() RETURN STRING
     AS LANGUAGE JAVA
-    NAME 'SpCubrid.HelloCubrid() return java.lang.String';    
+    NAME 'SpCubrid.HelloCubrid() return java.lang.String'; 
 
 Java 저장 함수/프로시저 호출
-----------------------------
+============================
 
-다음과 같이 등록된 Java 저장 함수를 호출한다.
+등록된 Java 저장 함수/프로시저는 **CALL** 문을 사용하거나, SQL 문에서 호출하거나, Java 응용프로그램에서 호출될 수 있다.
+Java 저장 함수/프로시저를 호출하여 수행 중 exception이 발생하면 *dbname*\ **_java.log** 파일에 exception 내용이 기록되어 저장된다. 만약 화면으로 exception 내용을 확인하고자 할 경우는 **$CUBRID/java/logging.properties** 파일의 handlers 값을 "java.lang.logging.ConsoleHandler"로 수정하면 화면으로 exception 내용을 출력한다.
+
+CALL 문
+-------
+
+CALL 문으로 다음과 같이 Java 저장 프로시저/함수를 호출하여 사용할 수 있다. 
+자세한 내용은 :doc:`/sql/query/call`\을 참조한다.
 
 .. code-block:: sql
 
-    SELECT hello();
+    CALL Hello() INTO :HELLO;
 
 ::
 
       Result
     ======================
     'Hello, Cubrid !!'
-
-서버 내부 JDBC 드라이버 사용
-============================
-
-Java 저장 함수/프로시저에서 데이터베이스에 접근하기 위해서는 서버 측 JDBC 드라이버(Server-Side JDBC Driver)를 사용해야 한다. Java 저장 함수/프로시저가 데이터베이스 내에서 실행되기 때문에 서버 측 JDBC 드라이버는 다시 연결을 설정할 필요가 없다. 서버 측 JDBC 드라이버로 해당 데이터베이스의 Connection을 얻는 방법은 아래와 같다. 첫 번째 방법은 JDBC 연결 URL로 "**jdbc:default:connection:**" 을 사용하는 것이고, 두 번째는 **cubrid.jdbc.driver.CUBRIDDriver** 클래스의 **getDefaultConnection** () 메서드를 호출하는 것이다.
-
-.. code-block:: java
-
-    Connection conn = DriverManager.getConnection("jdbc:default:connection:");
-
-또는
-
-.. code-block:: java
-
-    cubrid.jdbc.driver.CUBRIDDriver.getDefaultConnection();
-
-서버 측 JDBC Driver에서 위와 같은 방법으로 데이터베이스에 연결하면 Java 저장 함수/프로시저 내에 존재하는 트랜잭션 관련 사항이 무시된다. 즉, Java 저장 함수/프로시저에서 수행되는 데이터베이스 연산은 Java 저장 함수/프로시저를 호출한 트랜잭션에 포함된다는 것을 의미한다. 아래의 Athlete 클래스에서 conn.commit()은 무시된다.
-
-.. code-block:: java
-
-    import java.sql.*;
-
-    public class Athlete {
-        public static void insertAthlete(String name, String gender, String nation_code, String event) throws SQLException {
-            String sql = "INSERT INTO ATHLETE(NAME, GENDER, NATION_CODE, EVENT)" + "VALUES (?, ?, ?, ?)";
-            
-            Connection conn = null;
-            PreparedStatement pstmt = null;
-
-            try{
-                conn = DriverManager.getConnection("jdbc:default:connection:");
-                pstmt = conn.prepareStatement(sql);
-           
-                pstmt.setString(1, name);
-                pstmt.setString(2, gender);
-                pstmt.setString(3, nation_code);
-                pstmt.setString(4, event);;
-                pstmt.executeUpdate();
-     
-                pstmt.close();
-                conn.commit();
-                conn.close();
-            } catch (Exception e) {
-                System.err.println(e.getMessage());
-            } finally {
-                if (pstmt != null) pstmt.close();
-                if (conn != null) conn.close();
-            }
-        }
-    }
-
-다른 데이터베이스 연결
-======================
-
-서버 측 JDBC 드라이버를 사용하더라도 현재 연결된 데이터베이스를 사용하지 않고, 외부의 다른 데이터베이스에 연결할 수도 있다. 외부의 데이터베이스에 대한 Connection을 얻는 것은 일반적인 JDBC Connection과 다르지 않다. 이에 대한 자세한 내용은 JDBC API를 참조한다.
-
-다른 데이터베이스에 연결하는 경우, Java 메서드의 수행이 종료되더라도 CUBRID 데이터베이스와의 Connection이 자동으로 종료되지 않는다. 따라서, 반드시 Connection 종료를 명시해주어야 **COMMIT**, **ROLLBACK** 과 같은 트랜잭션 연산이 해당 데이터베이스에 반영된다. 즉, Java 저장 함수/프로시저를 호출한 데이터베이스와 실제 연결된 데이터베이스가 다르기 때문에 별도의 트랜잭션으로 수행되는 것이다.
-
-.. code-block:: java
-
-    import java.sql.*;
-
-    public class SelectData {
-        public static void SearchSubway(String[] args) throws Exception {
-            Connection conn = null;
-            Statement stmt = null;
-            ResultSet rs = null;
-
-            try {
-                conn = DriverManager.getConnection("jdbc:CUBRID:localhost:33000:demodb:::","","");
-
-                String sql = "select line_id, line from line";
-                stmt = conn.createStatement();
-                rs = stmt.executeQuery(sql);
-                
-                while(rs.next()) {
-                    int host_year = rs.getString("host_year");
-                    String host_nation = rs.getString("host_nation");
-                    
-                    System.out.println("Host Year ==> " + host_year);
-                    System.out.println(" Host Nation==> " + host_nation);
-                    System.out.println("\n=========\n");
-                }
-                
-                rs.close();
-            } catch (SQLException e1) {
-                System.err.println(e1.getMessage());
-            } catch (Exception e2) {
-                System.err.println(e2.getMessage());
-            } finally {
-                if (stmt != null) stmt.close();
-                if (conn != null) conn.close();
-            }
-        }
-    }
-
-수행 중인 Java 저장 함수/프로시저가 데이터베이스 서버의 JVM에서만 구동되어야 할 때, Java 프로그램 소스에서 System.getProperty("cubrid.server.version")를 호출함으로써 어디서 수행되는 지를 점검할 수 있다. 결과 값은 데이터베이스에서 호출하면 데이터베이스 버전이 되고, 그 외는 **NULL** 이 된다.
-
-loadjava 유틸리티
-=================
-
-컴파일된 Java 파일이나 JAR(Java Archive) 파일을 CUBRID로 로드하기 위해서 **loadjava** 유틸리티를 사용한다. **loadjava** 유틸리티를 사용하여 Java \*.class 파일이나 \*.jar 파일을 로드하면 해당 파일이 해당 데이터베이스 경로로 이동한다. ::
-
-    loadjava [option] database-name java-class-file
-
-*   *database-name*: Java 파일을 로드하려고 하는 데이터베이스 이름
-*   *java-class-file*: 로드하려는 Java 클래스 파일 이름 또는 jar 파일 이름
-*   [*option*]
-
-    *   **-y**: 이름이 같은 클래스 파일이 존재하면 자동으로 덮어쓰기 한다. 기본값은 **no** 이다. 만약 **-y** 옵션을 명시하지 않고 로드할 때 이름이 같은 클래스 파일이 존재하면 덮어쓰기를 할 것인지 묻는다.
-
-로딩한 Java 클래스 등록
-=======================
-
-CUBRID는 클라이언트나 SQL 문이나 Java 응용 프로그램에서 Java 메서드를 호출할 수 있도록 Java 클래스를 등록(publish)하는 과정이 필요하다. Java 클래스를 로딩했을 때 SQL 문이나 Java 응용 프로그램에서 클래스 내의 함수를 어떻게 호출할지 모르기 때문에 Call Specifications를 사용하여 등록해야 한다.
-
-Call Specifications
--------------------
-
-CUBRID에서 Java 저장 함수/프로시저를 사용하기 위해서는 Call Specifications를 작성해야 한다. Call Specifications는 Java 함수 이름과 인자 타입 그리고 리턴 값과 리턴 값의 타입을 SQL 문이나 Java 응용프로그램에서 접근할 수 있도록 해주는 역할을 한다. Call Specifications를 작성하는 구문은 **CREATE FUNCTION** 또는 **CREATE PROCEDURE** 구문을 사용하여 작성한다. Java 저장 함수/프로시저의 이름은 대소문자를 구별하지 않는다. Java 저장 함수/프로시저 이름의 최대 길이는 254바이트이다. 또한 하나의 Java 저장 함수/프로시저가 가질 수 있는 인자의 최대 개수는 64개이다. 
-
-리턴 값이 있으면 함수, 없으면 프로시저로 구분한다.
-
-.. CREATE OR REPLACE FUNCTION is allowed from 10.0: CUBRIDSUS-6542
-
-::
-
-    CREATE [OR REPLACE] FUNCTION function_name[(param [COMMENT 'param_comment_string'] [, param [COMMENT 'param_comment_string']]...)] RETURN sql_type
-    {IS | AS} LANGUAGE JAVA
-    NAME 'method_fullname (java_type_fullname [,java_type_fullname]...) [return java_type_fullname]'
-    COMMENT 'sp_comment';
-
-    CREATE [OR REPLACE] PROCEDURE procedure_name[(param [COMMENT 'param_comment_string'][, param [COMMENT 'param_comment_string']] ...)]
-    {IS | AS} LANGUAGE JAVA
-    NAME 'method_fullname (java_type_fullname [,java_type_fullname]...) [return java_type_fullname]';
-    COMMENT 'sp_comment_string';
-
-    parameter_name [IN|OUT|IN OUT|INOUT] sql_type
-       (default IN)
-
-*   *param_comment_string*: 인자 커멘트 문자열을 지정한다.
-*   *sp_comment_string*: 자바 저장 함수/프로시저의 커멘트 문자열을 지정한다.
-
-Java 저장 함수/프로시저의 인자를 **OUT** 으로 설정한 경우 길이가 1인 1차원 배열로 전달된다. 그러므로 Java 메서드는 배열의 첫번째 공간에 전달할 값을 저장해야 한다.
-
-.. code-block:: sql
-
-    CREATE FUNCTION Hello() RETURN VARCHAR
-    AS LANGUAGE JAVA
-    NAME 'SpCubrid.HelloCubrid() return java.lang.String';
-
-    CREATE FUNCTION Sp_int(i int) RETURN int
-    AS LANGUAGE JAVA
-    NAME 'SpCubrid.SpInt(int) return int';
-
-    CREATE PROCEDURE Athlete_Add(name varchar,gender varchar, nation_code varchar, event varchar)
-    AS LANGUAGE JAVA
-    NAME 'Athlete.Athlete(java.lang.String, java.lang.String, java.lang.String, java.lang.String)';
-
-    CREATE PROCEDURE test_out(x OUT STRING)
-    AS LANGUAGE JAVA
-    NAME 'SpCubrid.outTest(java.lang.String[] o)';
-
-Java 저장 함수/프로시저를 등록할 때, Java 저장 함수/프로시저의 반환 정의와 Java 파일의 선언부의 반환 정의가 일치하는지에 대해서는 검사하지 않는다. 따라서, Java 저장 함수/프로시저의 경우 등록할 때의 *sql_type* 반환 정의를 따르고, Java 파일 선언부의 반환 정의는 사용자 정의 정보로서만 의미를 가지게 된다.
-
-데이터 타입 매핑
-----------------
-
-Call Specifications에서는 SQL의 데이터 타입과 Java의 매개변수, 리턴 값의 데이터 타입이 맞게 대응되어야 한다.
-또한 Java 저장함수/프로시저 구현 시, 질의 결과 (ResultSet)의 데이터 타입과 Java의 데이터 타입이 맞게 대응되어야 한다.
-CUBRID에서 허용되는 SQL과 Java의 데이터 타입의 관계는 다음의 표와 같다.
-
-**데이터 타입 매핑**
-
-    +------------------------+--------------------------+-------------------------------------------------------------------------+
-    | Category               | SQL Type                 | Java Type                                                               |
-    +========================+==========================+=========================================================================+
-    | Numeric Types          | SHORT, SMALLINT          | short, java.lang.Short                                                  |
-    |                        +--------------------------+-------------------------------------------------------------------------+
-    |                        | INT, INTEGER             | int, java.lang.Integer                                                  |
-    |                        +--------------------------+-------------------------------------------------------------------------+
-    |                        | BIGINT                   | long, java.lang.Long                                                    |
-    |                        +--------------------------+-------------------------------------------------------------------------+
-    |                        | NUMERIC, DECIMAL         | java.math.BigDecimal                                                    |
-    |                        +--------------------------+-------------------------------------------------------------------------+
-    |                        | FLOAT, REAL              | float, java.lang.Float                                                  |
-    |                        +--------------------------+-------------------------------------------------------------------------+
-    |                        | DOUBLE, DOUBLE PRECISION | double, java.lang.Double                                                |
-    +------------------------+--------------------------+-------------------------------------------------------------------------+
-    | Date/Time Types        | DATE                     | java.sql.Date                                                           |
-    |                        +--------------------------+-------------------------------------------------------------------------+
-    |                        | TIME                     | java.sql.Time                                                           |
-    |                        +--------------------------+-------------------------------------------------------------------------+
-    |                        | TIMESTAMP                | java.sql.Timestamp                                                      |
-    |                        +--------------------------+-------------------------------------------------------------------------+
-    |                        | DATETIME                 | java.sql.Timestamp                                                      |
-    |                        +--------------------------+-------------------------------------------------------------------------+
-    |                        | TIMESTAMPLTZ             | X (not supported)                                                       |
-    |                        +--------------------------+-------------------------------------------------------------------------+
-    |                        | TIMESTAMPTZ              | X (not supported)                                                       |
-    |                        +--------------------------+-------------------------------------------------------------------------+
-    |                        | DATETIMELTZ              | X (not supported)                                                       |
-    |                        +--------------------------+-------------------------------------------------------------------------+
-    |                        | DATETIMETZ               | X (not supported)                                                       |
-    +------------------------+--------------------------+-------------------------------------------------------------------------+
-    | Bit String  Types      | BIT                      | X (not supported)                                                       |
-    |                        +--------------------------+-------------------------------------------------------------------------+
-    |                        | VARBIT                   | X (not supported)                                                       |
-    +------------------------+--------------------------+-------------------------------------------------------------------------+
-    | Character String Types | CHAR                     | java.lang.String                                                        |
-    |                        +--------------------------+-------------------------------------------------------------------------+
-    |                        | VARCHAR                  | java.lang.String                                                        |
-    +------------------------+--------------------------+-------------------------------------------------------------------------+
-    | Enum Type              | ENUM                     | X (not supported)                                                       |
-    +------------------------+--------------------------+-------------------------------------------------------------------------+
-    | LOB Types              | CLOB, BLOB               | X (not supported)                                                       |
-    +------------------------+--------------------------+-------------------------------------------------------------------------+
-    | Collection Types       | SET, MULTISET, SEQUENCE  | java.lang.Object[], java primitive type array, java wrapper class array |
-    +------------------------+--------------------------+-------------------------------------------------------------------------+
-    | Special Types          | JSON                     | X (not supported)                                                       |
-    |                        +--------------------------+-------------------------------------------------------------------------+
-    |                        | OBJECT, OID              | cubrid.sql.CUBRIDOID <interface>                                        |
-    |                        +--------------------------+-------------------------------------------------------------------------+
-    |                        | CURSOR                   | java.sql.ResultSet <interface>                                          |
-    +------------------------+--------------------------+-------------------------------------------------------------------------+
-
-**묵시적 데이터 타입 변환**
-
-위의 표와 같이 SQL의 데이터 타입과 Java의 데이터 타입이 일치하지 않는 경우, CUBRID는 다음 표에 따라 묵시적으로 데이터 타입 변환을 시도한다.
-묵시적 데이터 변환으로 인해 데이터가 손실될 수 있음을 주의해야한다.
-
-    +-------------------------+----------------+-----------------+-------------------+-----------------+-----------------+------------------+----------------------+------------------+---------------+--------------------+
-    |                         | **Java Data Types**                                                                                                                                                                        |
-    |                         +----------------+-----------------+-------------------+-----------------+-----------------+------------------+----------------------+------------------+---------------+--------------------+
-    |                         | byte,          | short,          | int,              | long,           | float,          | double,          |                      |                  |               |                    |
-    | **SQL Data Types**      | java.lang.Byte | java.lang.Short | java.lang.Integer | java.lang.Long  | java.lang.Float | java.lang.Double | java.math.BigDecimal | java.lang.String | java.sql.Time | java.sql.Timestamp |
-    +=========================+================+=================+===================+=================+=================+==================+======================+==================+===============+====================+
-    | **SHORT, SMALLINT**     | O              | O               | O                 | O               | O               | O                | O                    | O                | X             | X                  |
-    +-------------------------+----------------+-----------------+-------------------+-----------------+-----------------+------------------+----------------------+------------------+---------------+--------------------+
-    | **INT, INTEGER**        | O              | O               | O                 | O               | O               | O                | O                    | O                | X             | X                  |
-    +-------------------------+----------------+-----------------+-------------------+-----------------+-----------------+------------------+----------------------+------------------+---------------+--------------------+
-    | **BIGINT**              | O              | O               | O                 | O               | O               | O                | O                    | O                | X             | X                  |
-    +-------------------------+----------------+-----------------+-------------------+-----------------+-----------------+------------------+----------------------+------------------+---------------+--------------------+
-    | **NUMERIC, DECIMAL**    | O              | O               | O                 | O               | O               | O                | O                    | O                | X             | X                  |
-    +-------------------------+----------------+-----------------+-------------------+-----------------+-----------------+------------------+----------------------+------------------+---------------+--------------------+
-    | **FLOAT, REAL**         | O              | O               | O                 | O               | O               | O                | O                    | O                | X             | X                  |
-    +-------------------------+----------------+-----------------+-------------------+-----------------+-----------------+------------------+----------------------+------------------+---------------+--------------------+
-    | **DOUBLE**              | O              | O               | O                 | O               | O               | O                | O                    | O                | X             | X                  |
-    | **DOUBLE PRECISION**    |                |                 |                   |                 |                 |                  |                      |                  |               |                    |
-    +-------------------------+----------------+-----------------+-------------------+-----------------+-----------------+------------------+----------------------+------------------+---------------+--------------------+
-    | **DATE**                | X              | X               | X                 | X               | X               | X                | X                    | O                | O             | O                  |
-    +-------------------------+                |                 |                   |                 |                 |                  |                      |                  |               |                    |
-    | **TIME**                |                |                 |                   |                 |                 |                  |                      |                  |               |                    |
-    +-------------------------+                |                 |                   |                 |                 |                  |                      |                  |               |                    |
-    | **TIMESTAMP**           |                |                 |                   |                 |                 |                  |                      |                  |               |                    |
-    +-------------------------+                |                 |                   |                 |                 |                  |                      |                  |               |                    |
-    | **DATETIME**            |                |                 |                   |                 |                 |                  |                      |                  |               |                    |
-    +-------------------------+----------------+-----------------+-------------------+-----------------+-----------------+------------------+----------------------+------------------+---------------+--------------------+
-    | **CHAR**                | O              | O               | O                 | O               | O               | O                | O                    | O                | O             | O                  |
-    +-------------------------+                |                 |                   |                 |                 |                  |                      |                  |               |                    |
-    | **VARCHAR**             |                |                 |                   |                 |                 |                  |                      |                  |               |                    |
-    +-------------------------+----------------+-----------------+-------------------+-----------------+-----------------+------------------+----------------------+------------------+---------------+--------------------+
-    | **SET**                 | X              | X               | X                 | X               | X               | X                | X                    | X                | X             | X                  |
-    +-------------------------+                |                 |                   |                 |                 |                  |                      |                  |               |                    |
-    | **MULTISET**            |                |                 |                   |                 |                 |                  |                      |                  |               |                    |
-    +-------------------------+                |                 |                   |                 |                 |                  |                      |                  |               |                    |
-    | **SEQUENCE**            |                |                 |                   |                 |                 |                  |                      |                  |               |                    |
-    +-------------------------+----------------+-----------------+-------------------+-----------------+-----------------+------------------+----------------------+------------------+---------------+--------------------+
-
-    - X: 묵시적 변환을 허용하지 않음
-    - O: 묵시적 변환 발생
-
-등록된 Java 저장 함수/프로시저의 정보 확인
-------------------------------------------
-
-등록된 Java 저장 함수/프로시저의 정보는 **db_stored_procedure** 시스템 가상 클래스와 **db_stored_procedure_args** 시스템 가상 클래스에서 확인할 수 있다. **db_stored_procedure** 시스템 가상 클래스에서는 저장 함수/프로시저의 이름과 타입, 반환 타입, 인자의 수, Java 클래스에 대한 명세, Java 저장 함수/프로시저의 소유자에 대한 정보를 확인할 수 있다. **db_stored_procedure_args** 시스템 가상 클래스에서는 저장 함수/프로시저에서 사용하는 인자에 대한 정보를 확인할 수 있다.
-
-.. code-block:: sql
-
-    SELECT * FROM db_stored_procedure;
-    
-::
-    
-    sp_name     sp_type   return_type    arg_count
-    sp_name               sp_type               return_type             arg_count  lang target                owner
-    ================================================================================
-    'hello'               'FUNCTION'            'STRING'                        0  'JAVA''SpCubrid.HelloCubrid() return java.lang.String'  'DBA'
-     
-    'sp_int'              'FUNCTION'            'INTEGER'                       1  'JAVA''SpCubrid.SpInt(int) return int'  'DBA'
-     
-    'athlete_add'         'PROCEDURE'           'void'                          4  'JAVA''Athlete.Athlete(java.lang.String, java.lang.String, java.lang.String, java.lang.String)'  'DBA'
-
-.. code-block:: sql
-    
-    SELECT * FROM db_stored_procedure_args;
-    
-::
-    
-    sp_name   index_of  arg_name  data_type      mode
-    =================================================
-     'sp_int'                        0  'i'                   'INTEGER'             'IN'
-     'athlete_add'                   0  'name'                'STRING'              'IN'
-     'athlete_add'                   1  'gender'              'STRING'              'IN'
-     'athlete_add'                   2  'nation_code'         'STRING'              'IN'
-     'athlete_add'                   3  'event'               'STRING'              'IN'
-
-Java 저장 함수/프로시저의 삭제 
-------------------------------
-
-CUBRID에서는 등록한 Java 함수/저장 프로시저를 삭제할 수 있다. **DROP FUNCTION** *function_name* 또는 **DROP PROCEDURE** *procedure_name* 구문을 사용하여 Java 저장 프로시저를 삭제할 수 있다. 또한 여러 개의 *function_name* 이나 *procedure_name* 을 콤마(,)로 구분하여 한꺼번에 여러 개의 Java 저장 함수/프로시저를 삭제할 수 있다.
-
-Java 저장 함수/프로시저의 삭제는 Java 저장 함수/프로시저를 등록한 사용자와 DBA의 구성원만 삭제할 수 있다. 예를 들어 'sp_int' Java 저장 함수를 **PUBLIC** 이 등록했다면, **PUBLIC** 또는 **DBA** 의 구성원만이 'sp_int' Java 저장 함수를 삭제할 수 있다.
-
-.. code-block:: sql
-
-    DROP FUNCTION hello, sp_int;
-    DROP PROCEDURE Athlete_Add;
-
-Java 저장 함수/프로시저의 커멘트
---------------------------------
-
-저장 함수 또는 프로시저의 커멘트를 다음과 같이 제일 뒤에 지정할 수 있다. 
-
-.. code-block:: sql
-
-
-    CREATE FUNCTION Hello() RETURN VARCHAR
-    AS LANGUAGE JAVA
-    NAME 'SpCubrid.HelloCubrid() return java.lang.String'
-    COMMENT 'function comment';
-
-저장 함수의 인자 뒤에는 다음과 같이 지정할 수 있다.
-
-.. code-block:: sql
-
-    CREATE OR REPLACE FUNCTION test(i in number COMMENT 'arg i') 
-    RETURN NUMBER AS LANGUAGE JAVA NAME 'SpTest.testInt(int) return int' COMMENT 'function test';
-
-저장 함수 또는 프로시저의 커멘트는 다음 구문을 실행하여 확인할 수 있다.
-
-.. code-block:: sql
-
-    SELECT sp_name, comment FROM db_stored_procedure; 
-
-함수 인자의 커멘트는 다음 구문을 실행하여 확인할 수 있다.
-
-.. code-block:: sql
-          
-    SELECT sp_name, arg_name, comment FROM db_stored_procedure_args;
-
-Java 저장 함수/프로시저 호출
-============================
-
-CALL 문
--------
-
-등록된 Java 저장 함수/프로시저는 **CALL** 문을 사용하거나, SQL 문에서 호출하거나, Java 응용프로그램에서 호출될 수 있다. 다음과 같이 **CALL** 문을 사용하여 호출할 수 있다. **CALL** 문에서 호출되는 Java 저장 함수/프로시저의 이름은 대소문자를 구분하지 않는다. ::
-
-    CALL {procedure_name ([param[, param]...]) | function_name ([param[, param]...]) INTO :host_variable
-    param {literal | :host_variable}
-
-.. code-block:: sql
-
-    CALL Hello() INTO :HELLO;
-    CALL Sp_int(3) INTO :i;
-    CALL phone_info('Tom','016-111-1111');
-
-CUBRID에서는 Java 저장 함수/프로시저를 같은 **CALL** 문을 이용해 호출한다. 따라서 다음과 같이 **CALL** 문을 처리하게 된다.
-
-*   **CALL** 문에 대상 클래스가 있는 경우 메서드로 처리한다.
-*   **CALL** 문에 대상 클래스가 없는 경우 먼저 Java 저장 함수/프로시저 수행 여부를 검사하고 Java 저장 함수/프로시저가 존재하면 Java 저장 함수/프로시저를 수행한다.
-*   2에서 Java 저장 함수/프로시저가 존재하지 않으면 메서드 수행 여부를 검사하여 같은 이름이 존재하면 수행한다.
-
-만약 존재하지 않는 Java 저장 함수/프로시저를 호출하는 경우에는 다음과 같은 에러가 나타난다.
-
-.. code-block:: sql
-
-    CALL deposit();
-    
-::
-
-    ERROR: Stored procedure/function 'deposit' does not exist.
-
-.. code-block:: sql
-
-    CALL deposit('Tom', 3000000);
-    
-::
-
-    ERROR: Methods require an object as their target.
-
-**CALL** 문에 인자가 없는 경우는 메서드와 구분되므로 "ERROR: Stored procedure/function 'deposit' does not exist."라는 오류 메시지가 나타난다. 하지만, **CALL** 문에 인자가 있는 경우에는 메서드와 구분할 수 없기 때문에 "ERROR: Methods require an object as their target."이라는 메시지가 나타난다.
-
-그리고, 아래와 같이 Java 저장 함수/프로시저를 호출하는 **CALL** 문 안에 **CALL** 문이 중첩되는 경우와 **CALL** 문을 사용하여 Java 저장 함수/프로시저 호출 시 인자로 서브 질의를 사용할 경우 **CALL** 문은 수행이 되지 않는다.
-
-.. code-block:: sql
-
-    CALL phone_info('Tom', CALL sp_int(999));
-    CALL phone_info((SELECT * FROM Phone WHERE id='Tom'));
-
-Java 저장 함수/프로시저를 호출하여 수행 중 exception이 발생하면 *dbname*\ **_java.log** 파일에 exception 내용이 기록되어 저장된다. 만약 화면으로 exception 내용을 확인하고자 할 경우는 **$CUBRID/java/logging.properties** 파일의 handlers 값을 " java.lang.logging.ConsoleHandler" 로 수정하면 화면으로 exception 내용을 출력한다.
 
 SQL 문에서 호출
 ---------------
@@ -656,7 +284,123 @@ CUBRID 데이터베이스에 Phone 클래스를 생성한다.
 
     name                  phoneno
     ============================================
-        'Jane'                '010-111-1111'
+        'Jane'                '010-111-1111'   
+
+.. _jsp-server-side-jdbc:
+
+서버 내부 JDBC 드라이버 사용
+============================
+
+Java 저장 함수/프로시저에서 데이터베이스에 접근하기 위해서는 서버 측 JDBC 드라이버(Server-Side JDBC Driver)를 사용해야 한다. Java 저장 함수/프로시저가 데이터베이스 내에서 실행되기 때문에 서버 측 JDBC 드라이버는 다시 연결을 설정할 필요가 없다.
+
+| 서버 측 JDBC 드라이버로 해당 데이터베이스의 Connection을 얻는 방법은 아래와 같다. 첫 번째 방법은 JDBC 연결 URL로 "**jdbc:default:connection:**" 을 사용하는 것이고, 두 번째는 **cubrid.jdbc.driver.CUBRIDDriver** 클래스의 **getDefaultConnection** () 메서드를 호출하는 것이다.
+
+.. code-block:: java
+
+    Connection conn = DriverManager.getConnection("jdbc:default:connection:");
+
+또는
+
+.. code-block:: java
+
+    Connection conn = cubrid.jdbc.driver.CUBRIDDriver.getDefaultConnection();
+
+서버 측 JDBC Driver에서 위와 같은 방법으로 데이터베이스에 연결하면 Java 저장 함수/프로시저 내에 존재하는 트랜잭션 관련 사항이 무시된다. 즉, Java 저장 함수/프로시저에서 수행되는 데이터베이스 연산은 Java 저장 함수/프로시저를 호출한 트랜잭션에 포함된다는 것을 의미한다. 아래의 Athlete 클래스에서 conn.commit()은 무시된다.
+
+.. code-block:: java
+
+    import java.sql.*;
+
+    public class Athlete {
+        public static void insertAthlete(String name, String gender, String nation_code, String event) throws SQLException {
+            String sql = "INSERT INTO ATHLETE(NAME, GENDER, NATION_CODE, EVENT)" + "VALUES (?, ?, ?, ?)";
+            
+            Connection conn = null;
+            PreparedStatement pstmt = null;
+
+            try{
+                conn = DriverManager.getConnection("jdbc:default:connection:");
+                pstmt = conn.prepareStatement(sql);
+           
+                pstmt.setString(1, name);
+                pstmt.setString(2, gender);
+                pstmt.setString(3, nation_code);
+                pstmt.setString(4, event);;
+                pstmt.executeUpdate();
+     
+                pstmt.close();
+                conn.commit();
+                conn.close();
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
+            } finally {
+                if (pstmt != null) pstmt.close();
+                if (conn != null) conn.close();
+            }
+        }
+    }
+
+다른 데이터베이스 연결
+======================
+
+서버 측 JDBC 드라이버를 사용하더라도 현재 연결된 데이터베이스를 사용하지 않고, 외부의 다른 데이터베이스에 연결할 수도 있다. 외부의 데이터베이스에 대한 Connection을 얻는 것은 일반적인 JDBC Connection과 다르지 않다. 이에 대한 자세한 내용은 JDBC API를 참조한다.
+
+다른 데이터베이스에 연결하는 경우, Java 메서드의 수행이 종료되더라도 CUBRID 데이터베이스와의 Connection이 자동으로 종료되지 않는다. 따라서, 반드시 Connection 종료를 명시해주어야 **COMMIT**, **ROLLBACK** 과 같은 트랜잭션 연산이 해당 데이터베이스에 반영된다. 즉, Java 저장 함수/프로시저를 호출한 데이터베이스와 실제 연결된 데이터베이스가 다르기 때문에 별도의 트랜잭션으로 수행되는 것이다.
+
+.. code-block:: java
+
+    import java.sql.*;
+
+    public class SelectData {
+        public static void SearchSubway(String[] args) throws Exception {
+            Connection conn = null;
+            Statement stmt = null;
+            ResultSet rs = null;
+
+            try {
+                conn = DriverManager.getConnection("jdbc:CUBRID:localhost:33000:demodb:::","","");
+
+                String sql = "select line_id, line from line";
+                stmt = conn.createStatement();
+                rs = stmt.executeQuery(sql);
+                
+                while(rs.next()) {
+                    int host_year = rs.getString("host_year");
+                    String host_nation = rs.getString("host_nation");
+                    
+                    System.out.println("Host Year ==> " + host_year);
+                    System.out.println(" Host Nation==> " + host_nation);
+                    System.out.println("\n=========\n");
+                }
+                
+                rs.close();
+            } catch (SQLException e1) {
+                System.err.println(e1.getMessage());
+            } catch (Exception e2) {
+                System.err.println(e2.getMessage());
+            } finally {
+                if (stmt != null) stmt.close();
+                if (conn != null) conn.close();
+            }
+        }
+    }
+
+수행 중인 Java 저장 함수/프로시저가 데이터베이스 서버의 JVM에서만 구동되어야 할 때, Java 프로그램 소스에서 System.getProperty("cubrid.server.version")를 호출함으로써 어디서 수행되는 지를 점검할 수 있다. 결과 값은 데이터베이스에서 호출하면 데이터베이스 버전이 되고, 그 외는 **NULL** 이 된다.
+
+.. _jsp-load-java:
+
+loadjava 유틸리티
+=================
+
+컴파일된 Java 파일이나 JAR(Java Archive) 파일을 CUBRID로 로드하기 위해서 **loadjava** 유틸리티를 사용한다. **loadjava** 유틸리티를 사용하여 Java \*.class 파일이나 \*.jar 파일을 로드하면 해당 파일이 해당 데이터베이스 경로로 이동한다. ::
+
+    loadjava [option] database-name java-class-file
+
+*   *database-name*: Java 파일을 로드하려고 하는 데이터베이스 이름
+*   *java-class-file*: 로드하려는 Java 클래스 파일 이름 또는 jar 파일 이름
+*   [*option*]
+
+    *   **-y**: 이름이 같은 클래스 파일이 존재하면 자동으로 덮어쓰기 한다. 기본값은 **no** 이다. 만약 **-y** 옵션을 명시하지 않고 로드할 때 이름이 같은 클래스 파일이 존재하면 덮어쓰기를 할 것인지 묻는다.
 
 주의 사항
 =========
@@ -758,7 +502,9 @@ CUBRID에서는 **java.sql.ResultSet** 을 반환하는 Java 저장 함수/프�
         }
     }
 
-**ResultSet** 은 입력 인자로 사용할 수 없으며, 이를 IN 인자로 전달할 경우에는 에러가 발생한다. Java가 아닌 환경에서 **ResultSet** 을 반환하는 함수를 호출할 경우에도 에러가 발생한다.
+.. note::
+
+    **ResultSet** 은 입력 인자로 사용할 수 없으며, 이를 IN 인자로 전달할 경우에는 에러가 발생한다. Java가 아닌 환경에서 **ResultSet** 을 반환하는 함수를 호출할 경우에도 에러가 발생한다.
 
 Java 저장 함수/프로시저에서 Set 타입의 IN/OUT
 ---------------------------------------------

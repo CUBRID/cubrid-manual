@@ -182,7 +182,7 @@ A comment for a parameter of a function can be shown by running the following sy
     SELECT sp_name, arg_name, comment FROM db_stored_procedure_args;
 
 Checking the Published Java Stored Function Information
-------------------------------------------
+---------------------------------------------------------
 
 You can check the information on the published Java stored function.
 The **db_stored_procedure** system virtual table provides the information on stored names and types, return types, number of parameters, Java class specifications, and the owner.
@@ -238,7 +238,7 @@ Java Call Specification
 You must publish Java classes by using call specifications because it is not known how a function in a class will be called by SQL statements or Java applications when Java classes are loaded.
 
 With call specifications, Java function names, parameter types, return values and their types can be accessed by SQL statements or Java applications.
-To write call specifications, use :ref:`create-function`or :ref:`create-procedure` statement. 
+To write call specifications, use :ref:`create-function` or :ref:`create-procedure` statement. 
 
 * Java stored function/procedure names are not case sensitive. 
 * The maximum number of characters a Java stored function/procedure can have is 254 bytes.
@@ -256,7 +256,7 @@ Therefore, a Java method must store its value to pass in the first space of the 
 .. _jsp-type-mapping:
 
 Data Type Mapping
-----------------
+------------------
 
 When a Java stored function/procedure is published, it is not checked whether the return definition of the Java stored function/procedure coincides with the one in the declaration of the Java file.
 Therefore, the Java stored function/procedure follows the return definition (SQL Type) provided at the time of registration. The return definition in the declaration is significant only as user-defined information.

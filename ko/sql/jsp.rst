@@ -283,7 +283,9 @@ CUBRID 데이터베이스에 Phone 클래스를 생성한다.
 서버 내부 JDBC 드라이버 사용
 ============================
 
-Java 저장 함수/프로시저에서 데이터베이스에 접근하기 위해서는 서버 측 JDBC 드라이버(Server-Side JDBC Driver)를 사용해야 한다. Java 저장 함수/프로시저가 데이터베이스 내에서 실행되기 때문에 서버 측 JDBC 드라이버는 다시 연결을 설정할 필요가 없다. 서버 측 JDBC 드라이버로 해당 데이터베이스의 Connection을 얻는 방법은 아래와 같다. 첫 번째 방법은 JDBC 연결 URL로 "**jdbc:default:connection:**" 을 사용하는 것이고, 두 번째는 **cubrid.jdbc.driver.CUBRIDDriver** 클래스의 **getDefaultConnection** () 메서드를 호출하는 것이다.
+Java 저장 함수/프로시저에서 데이터베이스에 접근하기 위해서는 서버 측 JDBC 드라이버(Server-Side JDBC Driver)를 사용해야 한다. Java 저장 함수/프로시저가 데이터베이스 내에서 실행되기 때문에 서버 측 JDBC 드라이버는 다시 연결을 설정할 필요가 없다.
+
+| 서버 측 JDBC 드라이버로 해당 데이터베이스의 Connection을 얻는 방법은 아래와 같다. 첫 번째 방법은 JDBC 연결 URL로 "**jdbc:default:connection:**" 을 사용하는 것이고, 두 번째는 **cubrid.jdbc.driver.CUBRIDDriver** 클래스의 **getDefaultConnection** () 메서드를 호출하는 것이다.
 
 .. code-block:: java
 

@@ -9,4 +9,5 @@ Data Definition Statements
     index_stmt.rst
     view_stmt.rst
     serial_stmt.rst
+    synonym_stmt.rst
     server_stmt.rst

@@ -55,8 +55,7 @@ A cubrid system including a gateway has a multi-hierarchical structure including
 cub_cas_cgw
 ----------------
 
-cub_cas_cgw(CAS Gateway)는 CUBRID Database Server에서 외부의 Database의 연결을 요청하는 공용 서버 역할을 한다. 또한, cub_cas_cgw는 데이터베이스 서버의 클라이언트로 동작하여 CUBRID Database Server의 요청에 의해 외부 데이터베이스 서버와 연결을 제공한다. 서비스 풀(service pool) 내에서 구동되는 cub_cas_cgw의 개수는 cubrid_gateway.conf 설정 파일에 지정할 수 있으며, cub_gateway에 의해 동적으로 조정된다.
-cub_cas_cgw (CUBRID Common Application Server and broker application server (CAS in short)) acts as a common application server used by all the application clients that request connections. cub_cas_cgw also acts as the database server’s client and provides the connection to the database server upon the client’s request. The number of cub_cas_cgw(s) running in the service pool can be specified in the cubrid_broker.conf file, and this number is dynamically adjusted by cub_gateway.
+cub_cas_cgw (CAS Gateway) acts as a common application server used by all the application clients that request connections. cub_cas_cgw also acts as the database server’s client and provides the connection to the database server upon the client’s request. The number of cub_cas_cgw(s) running in the service pool can be specified in the cubrid_broker.conf file, and this number is dynamically adjusted by cub_gateway.
 
 cub_gateway
 ----------------
@@ -65,7 +64,7 @@ cub_broker relays the connection between the application client and the cub_cas_
 
 The cub_gateway는 also manages the server load by adjusting the number of cub_cas_cgw (s) in the service pool and monitors and manages the status of the cub_cas_cgw. If the cub_gateway는 delivers the request to cub_cas_cgw but the connection to cub_cas_cgw 1 fails because of an abnormal termination, it sends an error message about the connection failure to the application client and restarts cub_cas_cgw 1. Restarted cub_cas_cgw 1 is now in a normal stand-by mode, and will be reconnected by a new request from a new application client.
 
-공유 메모리
+Shared memory
 -----------------
 
 The status information of the cub_cas_cgw의 is stored in the shared memory, and the cub_broker refers to this information to relay the connection to the application client. With the status information stored in the shared memory, the system manager can identify which task the cub_cas_cgw의 is currently performing or which application client’s request is currently being processed.
@@ -79,16 +78,13 @@ Enter the command below to start the GATEWAY.
 ::
 
     $ cubrid gateway start
-    @ cubrid gateway start
-    ++ cubrid gateway start: success
+
 
 The following message is returned if the GATEWAY is already running.
 
 ::
 
-    cubrid gateway start
-    @ cubrid gateway start
-    ++ cubrid gateway is running.
+    $ cubrid gateway start
 
 Stopping GATEWAY
 
@@ -99,8 +95,6 @@ Enter the below command to stop the GATEWAY.
 ::
 
     $ cubrid gateway stop
-    @ cubrid gateway stop
-    ++ cubrid gateway stop: success
 
 The following message is returned if the GATEWAY has stopped.
 

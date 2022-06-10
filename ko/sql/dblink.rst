@@ -75,16 +75,12 @@ GATEWAY를 구동하기 위하여 다음과 같이 입력한다.
 ::
 
     $ cubrid gateway start
-    @ cubrid gateway start
-    ++ cubrid gateway start: success
 
 이미 GATEWAY가 구동 중이라면 다음과 같은 메시지가 출력된다.
 
 ::
 
     cubrid gateway start
-    @ cubrid gateway start
-    ++ cubrid gateway is running.
 
 GATEWAY 종료
 ---------------
@@ -94,8 +90,6 @@ GATEWAY가를 종료하기 위하여 다음과 같이 입력한다.
 ::
 
     $ cubrid gateway stop
-    @ cubrid gateway stop
-    ++ cubrid gateway stop: success
 
 이미 GATEWAY가 종료되었다면 다음과 같은 메시지가 출력된다.
 

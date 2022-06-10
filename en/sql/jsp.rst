@@ -386,7 +386,7 @@ If you connect to other databases, the connection to the CUBRID database does no
         }
     }
 
-When the Java stored function/procedure being executed should run only on JVM located in the database server, you can check where it is running by calling System.getProperty ("cubrid.server.version") from the Java program source. The result value is the database version if it is called from the database; otherwise, it is **NULL**.
+When the Java stored function/procedure is executed, it should run only on JVM located in the database server, you can check where it is running by calling System.getProperty ("cubrid.server.version") from the Java program source. The result value is the database version if it is called from the database; otherwise, it is **NULL**.
 
 .. _jsp-load-java:
 

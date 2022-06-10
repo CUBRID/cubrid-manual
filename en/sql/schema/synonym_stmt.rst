@@ -182,7 +182,7 @@ If a table or view already exists with the same name, a synonym cannot be create
 4. Synonym for synonym
 ----------------------
 
-When creating a synonym, it is not checked whether the target object exists, so the user can create a new synonym by specifying an existing synonym as the target object. However, if a synonym is used, the target object of the synonym, which is the target object, is not found again.
+When creating a synonym, it does not check whether the target object exists, so the user can create a new synonym by specifying an existing synonym as the target object. However, if a synonym is used, the target object of the synonym, which is the target object, is not found again.
 
 .. code-block:: sql
 

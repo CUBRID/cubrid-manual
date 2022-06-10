@@ -57,6 +57,7 @@ The main topics covered in this chapter are as follows:
     transaction_index.rst
     trigger.rst
     jsp.rst
+    dblink.rst
     method.rst
     oodb.rst
     db_admin.rst

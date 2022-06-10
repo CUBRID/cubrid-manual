@@ -57,6 +57,7 @@ CUBRID SQL
     transaction_index.rst
     trigger.rst
     jsp.rst
+    dblink.rst
     method.rst
     oodb.rst
     db_admin.rst

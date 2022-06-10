@@ -112,7 +112,7 @@ The following message is returned if the GATEWAY has stopped.
 Restarting GATEWAY
 ---------------------------
 
-Enter the command below to restart the whole GATEWAY.
+Enter the below command to restart the whole GATEWAY.
 
 ::
 

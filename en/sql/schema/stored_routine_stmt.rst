@@ -215,7 +215,7 @@ DROP FUNCTION
 ==============
 
 In CUBRID, A stored function can be deleted using the **DROP FUNCTION** statement.
-Also, you can delete multiple stored functions at a time with several *function_name*s separated by a comma (,).
+Also, you can delete multiple stored functions at the same time with several *function_name*s separated by a comma (,).
 
 ::
 

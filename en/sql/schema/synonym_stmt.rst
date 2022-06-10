@@ -14,7 +14,7 @@ Create another new name to use for an object that already exists in the database
     #. The user can only create private synonym, and private synonym can only be used in the schema for the user.
     #. The information of the created synonym can be found in the :ref:`db_synonym <db_synonym>` system virtual class.
     #. If a table or view already exists with the same name, a synonym cannot be created with that name.
-    #. When creating a synonym, it checks if the schema of the target object exists, but does not check if the target object exists. If the target object does not exist, an error occurs when using a synonym.
+    #. When creating a synonym, it checks whether the schema of the target object exists, but it does not check whether the target object exists. If the target object does not exist, an error occurs when using a synonym.
     #. The user can create a synonym only in the schema of the user, but **DBA** and members of **DBA** can create synonyms by specifying schema.
 
 ::

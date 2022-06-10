@@ -147,7 +147,7 @@ See details of how to use Stored Function, please refer to the :doc:`/sql/jsp`.
 *   *java_method_name*: Specifies the name of Java method name, including the name of the class it belongs to.
 *   *java_type*: Specifies the Java data type. See details on the Java data types that can be used to return, refer to the :ref:`jsp-type-mapping`.
 
-You must publish Java classes by using Java Call Specifications (<*java_call_specification*>) becuase it is not known how a function in a class will be called by SQL statements or Java applications when Java classes are loaded.
+You must publish Java classes by using Java Call Specifications (<*java_call_specification*>) because it is unknown how a function in a class will be called by SQL statements or Java applications when Java classes are loaded.
 See details on how to write Java Call Specifications, refer to the :ref:`call-specification`.
 
 COMMENT of Java Stored Function

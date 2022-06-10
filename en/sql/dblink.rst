@@ -348,7 +348,8 @@ unixODBC website: http://www.unixodbc.org/
 How to use Cubrid DBLink
 ==============================================
 
-If you set up homogeneous brokers and heterogeneous gateways, let's look at how to write Query statements to inquire about database information.
+In the case of setting up homogeneous brokers and heterogeneous gateways, let's look at how to write Query statements to inquire about database information.
+
 
 There are two ways to write DBLINK Query statement for data inquiry.
 

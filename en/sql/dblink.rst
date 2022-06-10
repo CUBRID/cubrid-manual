@@ -46,7 +46,8 @@ GATWAY uses ODBC (Open DataBase Connectivity).
 GATEWAY
 ==============================================
 
-A gateway is a middleware that relays to connect to an external database server and is similar to a broker. The gateway connects the CUBRID Database Server to an external server, that is, Oracle/MySQL, retrieves information from the external server and delivers it to the CUBRID Database Server.
+A gateway is a middleware that relays to connect to an external database server and is similar to a broker. The gateway connects the CUBRID Database Server to an external server which is Oracle/MySQL, to retrieve information from the external server and deliver it to the CUBRID Database Server.
+
 A cubrid system including a gateway has a multi-hierarchical structure including cubrid_gateway, cub_gateway, and cub_cas_cgw as shown in the figure below.
 
 .. image:: /images/gateway.png

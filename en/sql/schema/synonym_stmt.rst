@@ -579,8 +579,8 @@ In the example below, an error occurs because the name to be changed is already 
 
       synonym_name          synonym_owner_name    is_public_synonym     target_name           target_owner_name     comment
     ====================================================================================================================================
-      's_s1'                'DBA'                 'NO'                  't2'                  'DBA'                 NULL
-      's1'                  'DBA'                 'NO'                  't1'                  'DBA'                 NULL
+      's_s1'                'PUBLIC'              'NO'                  't2'                  'PUBLIC'              NULL
+      's1'                  'PUBLIC'              'NO'                  't1'                  'PUBLIC'              NULL
 
       c1
     ======================
@@ -623,8 +623,8 @@ In the example below, an error occurs because the name to be changed is already 
 
       synonym_name          synonym_owner_name    is_public_synonym     target_name           target_owner_name     comment
     ====================================================================================================================================
-      's_s1'                'DBA'                 'NO'                  't2'                  'DBA'                 NULL
-      's2'                  'DBA'                 'NO'                  't1'                  'DBA'                 NULL
+      's_s1'                'PUBLIC'              'NO'                  't2'                  'PUBLIC'              NULL
+      's2'                  'PUBLIC'              'NO'                  't1'                  'PUBLIC'              NULL
 
       c1
     ======================

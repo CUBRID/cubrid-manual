@@ -223,7 +223,7 @@ CREATE SYONYM
 5. 스키마 지정 동의어 생성
 --------------------------
 
-**DBA**와 **DBA**의 멤버가 스키마를 지정하여 동의어를 생성하면, 동의어는 지정한 스키마에 만들어진다.
+**DBA**\와 **DBA**\의 멤버가 스키마를 지정하여 동의어를 생성하면, 동의어는 지정한 스키마에 만들어진다.
 
 .. code-block:: sql
 
@@ -579,8 +579,8 @@ RENAME SYONYM
 
       synonym_name          synonym_owner_name    is_public_synonym     target_name           target_owner_name     comment
     ====================================================================================================================================
-      's_s1'                'DBA'                 'NO'                  't2'                  'DBA'                 NULL
-      's1'                  'DBA'                 'NO'                  't1'                  'DBA'                 NULL
+      's_s1'                'PUBLIC'              'NO'                  't2'                  'PUBLIC'              NULL
+      's1'                  'PUBLIC'              'NO'                  't1'                  'PUBLIC'              NULL
 
       c1
     ======================
@@ -623,8 +623,8 @@ RENAME SYONYM
 
       synonym_name          synonym_owner_name    is_public_synonym     target_name           target_owner_name     comment
     ====================================================================================================================================
-      's_s1'                'DBA'                 'NO'                  't2'                  'DBA'                 NULL
-      's2'                  'DBA'                 'NO'                  't1'                  'DBA'                 NULL
+      's_s1'                'PUBLIC'              'NO'                  't2'                  'PUBLIC'              NULL
+      's2'                  'PUBLIC'              'NO'                  't1'                  'PUBLIC'              NULL
 
       c1
     ======================

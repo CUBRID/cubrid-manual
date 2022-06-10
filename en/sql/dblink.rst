@@ -200,7 +200,8 @@ GATEWAY Parameter
 
 **CGW_LINK_CONNECT_URL_PROPERTY**
 
-    **CGW_LINK_CONNECT_URL_PROPERTY** creates a property used in the connection string when connecting CAS_CGW to an external 
+    **CGW_LINK_CONNECT_URL_PROPERTY** creates a property used in the connection string when connecting CAS_CGW to an external database. 
+
 
 .. note::
     

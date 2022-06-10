@@ -105,7 +105,7 @@ DROP PROCEDURE
 ==============
 
 In CUBRID, A stored proceudre can be deleted using the **DROP PROCEDURE** statement.
-Also, you can delete multiple stored procedures at a time with several *procedure_name*s separated by a comma (,).
+Also, you can delete multiple stored procedures at the same time with several *procedure_name*s separated by a comma (,).
 
 ::
 

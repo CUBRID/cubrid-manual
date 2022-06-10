@@ -93,7 +93,7 @@ The following message is returned if the GATEWAY is already running.
 Stpping GATEWAY
 -------------------------
 
-Enter the command below to stop the GATEWAY.
+Enter the below command to stop the GATEWAY.
 
 ::
 

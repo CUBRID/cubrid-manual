@@ -291,9 +291,20 @@ CUBRID 데이터베이스에 Phone 클래스를 생성한다.
 서버 내부 JDBC 드라이버 사용
 ============================
 
-Java 저장 함수/프로시저에서 데이터베이스에 접근하기 위해서는 서버 측 JDBC 드라이버(Server-Side JDBC Driver)를 사용해야 한다. Java 저장 함수/프로시저가 데이터베이스 내에서 실행되기 때문에 서버 측 JDBC 드라이버는 다시 연결을 설정할 필요가 없다.
+Java 저장 함수/프로시저에서 데이터베이스에 접근하기 위해서는 서버 측 JDBC 드라이버(Server-Side JDBC Driver)를 사용해야 한다.
+서버 측 JDBC 드라이버로 다음의 기능이 가능하다.
 
-| 서버 측 JDBC 드라이버로 해당 데이터베이스의 Connection을 얻는 방법은 아래와 같다. 첫 번째 방법은 JDBC 연결 URL로 "**jdbc:default:connection:**" 을 사용하는 것이고, 두 번째는 **cubrid.jdbc.driver.CUBRIDDriver** 클래스의 **getDefaultConnection** () 메서드를 호출하는 것이다.
+*    **질의문 수행**
+*    **질의 결과셋 처리**
+
+Java 저장 함수/프로시저가 데이터베이스 내에서 실행되기 때문에 서버 측 JDBC 드라이버는 다시 연결을 설정할 필요가 없다.
+
+Connection 생성
+----------------
+
+서버 측 JDBC 드라이버로 해당 데이터베이스의 Connection을 얻는 방법은 아래와 같다. 
+첫 번째 방법은 JDBC 연결 URL로 "**jdbc:default:connection:**" 을 사용하는 것이고, 
+두 번째는 **cubrid.jdbc.driver.CUBRIDDriver** 클래스의 **getDefaultConnection** () 메서드를 호출하는 것이다.
 
 .. code-block:: java
 
@@ -305,7 +316,11 @@ Java 저장 함수/프로시저에서 데이터베이스에 접근하기 위해�
 
     Connection conn = cubrid.jdbc.driver.CUBRIDDriver.getDefaultConnection();
 
-서버 측 JDBC Driver에서 위와 같은 방법으로 데이터베이스에 연결하면 Java 저장 함수/프로시저 내에 존재하는 트랜잭션 관련 사항이 무시된다. 즉, Java 저장 함수/프로시저에서 수행되는 데이터베이스 연산은 Java 저장 함수/프로시저를 호출한 트랜잭션에 포함된다는 것을 의미한다. 아래의 Athlete 클래스에서 conn.commit()은 무시된다.
+질의문 수행
+--------------
+
+서버 측 JDBC Driver에서 위와 같은 방법으로 데이터베이스에 연결하면 Java 저장 함수/프로시저 내에 존재하는 트랜잭션 관련 사항이 무시된다. 
+즉, Java 저장 함수/프로시저에서 수행되는 데이터베이스 연산은 Java 저장 함수/프로시저를 호출한 트랜잭션에 포함된다는 것을 의미한다. 아래의 Athlete 클래스에서 conn.commit()은 무시된다.
 
 .. code-block:: java
 
@@ -339,107 +354,6 @@ Java 저장 함수/프로시저에서 데이터베이스에 접근하기 위해�
             }
         }
     }
-
-다른 데이터베이스 연결
-======================
-
-서버 측 JDBC 드라이버를 사용하더라도 현재 연결된 데이터베이스를 사용하지 않고, 외부의 다른 데이터베이스에 연결할 수도 있다. 외부의 데이터베이스에 대한 Connection을 얻는 것은 일반적인 JDBC Connection과 다르지 않다. 이에 대한 자세한 내용은 JDBC API를 참조한다.
-
-다른 데이터베이스에 연결하는 경우, Java 메서드의 수행이 종료되더라도 CUBRID 데이터베이스와의 Connection이 자동으로 종료되지 않는다. 따라서, 반드시 Connection 종료를 명시해주어야 **COMMIT**, **ROLLBACK** 과 같은 트랜잭션 연산이 해당 데이터베이스에 반영된다. 즉, Java 저장 함수/프로시저를 호출한 데이터베이스와 실제 연결된 데이터베이스가 다르기 때문에 별도의 트랜잭션으로 수행되는 것이다.
-
-.. code-block:: java
-
-    import java.sql.*;
-
-    public class SelectData {
-        public static void SearchSubway(String[] args) throws Exception {
-            Connection conn = null;
-            Statement stmt = null;
-            ResultSet rs = null;
-
-            try {
-                conn = DriverManager.getConnection("jdbc:CUBRID:localhost:33000:demodb:::","","");
-
-                String sql = "select line_id, line from line";
-                stmt = conn.createStatement();
-                rs = stmt.executeQuery(sql);
-                
-                while(rs.next()) {
-                    int host_year = rs.getString("host_year");
-                    String host_nation = rs.getString("host_nation");
-                    
-                    System.out.println("Host Year ==> " + host_year);
-                    System.out.println(" Host Nation==> " + host_nation);
-                    System.out.println("\n=========\n");
-                }
-                
-                rs.close();
-            } catch (SQLException e1) {
-                System.err.println(e1.getMessage());
-            } catch (Exception e2) {
-                System.err.println(e2.getMessage());
-            } finally {
-                if (stmt != null) stmt.close();
-                if (conn != null) conn.close();
-            }
-        }
-    }
-
-수행 중인 Java 저장 함수/프로시저가 데이터베이스 서버의 JVM에서만 구동되어야 할 때, Java 프로그램 소스에서 System.getProperty("cubrid.server.version")를 호출함으로써 어디서 수행되는 지를 점검할 수 있다. 결과 값은 데이터베이스에서 호출하면 데이터베이스 버전이 되고, 그 외는 **NULL** 이 된다.
-
-.. _jsp-load-java:
-
-loadjava 유틸리티
-=================
-
-컴파일된 Java 파일이나 JAR(Java Archive) 파일을 CUBRID로 로드하기 위해서 **loadjava** 유틸리티를 사용한다. **loadjava** 유틸리티를 사용하여 Java \*.class 파일이나 \*.jar 파일을 로드하면 해당 파일이 해당 데이터베이스 경로로 이동한다. ::
-
-    loadjava [option] database-name java-class-file
-
-*   *database-name*: Java 파일을 로드하려고 하는 데이터베이스 이름
-*   *java-class-file*: 로드하려는 Java 클래스 파일 이름 또는 jar 파일 이름
-*   [*option*]
-
-    *   **-y**: 이름이 같은 클래스 파일이 존재하면 자동으로 덮어쓰기 한다. 기본값은 **no** 이다. 만약 **-y** 옵션을 명시하지 않고 로드할 때 이름이 같은 클래스 파일이 존재하면 덮어쓰기를 할 것인지 묻는다.
-
-주의 사항
-=========
-
-Java 저장 함수/프로시저의 리턴 값 및 IN/OUT에 대한 타입 자릿수
---------------------------------------------------------------
-
-Java 저장 함수/프로시저의 리턴 값과 IN/OUT의 데이터 타입에 자릿수를 한정하는 경우, CUBRID에서는 다음과 같이 처리한다.
-
-*   Java 저장 함수/프로시저의 sql_type을 기준으로 확인한다.
-
-*   Java 저장 함수/프로시저 생성 시 정의한 자릿수는 무시하고 타입만 맞추어 Java에서 반환하는 값을 그대로 데이터베이스에 전달한다. 전달한 데이터에 대한 조작은 사용자가 데이터베이스에서 직접 처리하는 것을 원칙으로 한다.
-
-다음과 같은 **typestring** () Java 저장 함수를 살펴보자.
-
-.. code-block:: java
-
-    public class JavaSP1 {
-        public static String typestring() {
-            String temp = " ";
-            for(int i = 0; i < 1; i++) {
-                temp = temp + "1234567890";
-            }
-            return temp;
-        }
-    }``
-
-.. code-block:: sql
-
-    CREATE FUNCTION typestring() RETURN CHAR(5) AS LANGUAGE JAVA
-    NAME 'JavaSP1.typestring() return java.lang.String';
-
-    CALL typestring();
-    
-::
-
-      Result
-    ======================
-      ' 1234567890'
 
 Java 저장 프로시저에서의 java.sql.ResultSet 반환
 ------------------------------------------------
@@ -589,3 +503,107 @@ CUBRID 저장 프로시저에서 OID 타입의 값을 IN/OUT으로 사용할 경
             system.err.println("Exception:" + e2.getMessage());
         }
     }
+
+
+다른 데이터베이스 연결
+======================
+
+서버 측 JDBC 드라이버를 사용하더라도 현재 연결된 데이터베이스를 사용하지 않고, 외부의 다른 데이터베이스에 연결할 수도 있다. 
+외부의 데이터베이스에 대한 Connection을 얻는 것은 일반적인 JDBC Connection과 다르지 않다. 이에 대한 자세한 내용은 JDBC API를 참조한다.
+
+다른 데이터베이스에 연결하는 경우, Java 메서드의 수행이 종료되더라도 CUBRID 데이터베이스와의 Connection이 자동으로 종료되지 않는다. 
+따라서, 반드시 Connection 종료를 명시해주어야 **COMMIT**, **ROLLBACK** 과 같은 트랜잭션 연산이 해당 데이터베이스에 반영된다. 즉, Java 저장 함수/프로시저를 호출한 데이터베이스와 실제 연결된 데이터베이스가 다르기 때문에 별도의 트랜잭션으로 수행되는 것이다.
+
+.. code-block:: java
+
+    import java.sql.*;
+
+    public class SelectData {
+        public static void SearchSubway(String[] args) throws Exception {
+            Connection conn = null;
+            Statement stmt = null;
+            ResultSet rs = null;
+
+            try {
+                conn = DriverManager.getConnection("jdbc:CUBRID:localhost:33000:demodb:::","","");
+
+                String sql = "select line_id, line from line";
+                stmt = conn.createStatement();
+                rs = stmt.executeQuery(sql);
+                
+                while(rs.next()) {
+                    int host_year = rs.getString("host_year");
+                    String host_nation = rs.getString("host_nation");
+                    
+                    System.out.println("Host Year ==> " + host_year);
+                    System.out.println(" Host Nation==> " + host_nation);
+                    System.out.println("\n=========\n");
+                }
+                
+                rs.close();
+            } catch (SQLException e1) {
+                System.err.println(e1.getMessage());
+            } catch (Exception e2) {
+                System.err.println(e2.getMessage());
+            } finally {
+                if (stmt != null) stmt.close();
+                if (conn != null) conn.close();
+            }
+        }
+    }
+
+수행 중인 Java 저장 함수/프로시저가 데이터베이스 서버의 JVM에서만 구동되어야 할 때, Java 프로그램 소스에서 System.getProperty("cubrid.server.version")를 호출함으로써 어디서 수행되는 지를 점검할 수 있다. 결과 값은 데이터베이스에서 호출하면 데이터베이스 버전이 되고, 그 외는 **NULL** 이 된다.
+
+.. _jsp-load-java:
+
+loadjava 유틸리티
+=================
+
+컴파일된 Java 파일이나 JAR(Java Archive) 파일을 CUBRID로 로드하기 위해서 **loadjava** 유틸리티를 사용한다. **loadjava** 유틸리티를 사용하여 Java \*.class 파일이나 \*.jar 파일을 로드하면 해당 파일이 해당 데이터베이스 경로로 이동한다. ::
+
+    loadjava [option] database-name java-class-file
+
+*   *database-name*: Java 파일을 로드하려고 하는 데이터베이스 이름
+*   *java-class-file*: 로드하려는 Java 클래스 파일 이름 또는 jar 파일 이름
+*   [*option*]
+
+    *   **-y**: 이름이 같은 클래스 파일이 존재하면 자동으로 덮어쓰기 한다. 기본값은 **no** 이다. 만약 **-y** 옵션을 명시하지 않고 로드할 때 이름이 같은 클래스 파일이 존재하면 덮어쓰기를 할 것인지 묻는다.
+
+주의 사항
+=========
+
+Java 저장 함수/프로시저의 리턴 값 및 IN/OUT에 대한 타입 자릿수
+--------------------------------------------------------------
+
+Java 저장 함수/프로시저의 리턴 값과 IN/OUT의 데이터 타입에 자릿수를 한정하는 경우, CUBRID에서는 다음과 같이 처리한다.
+
+*   Java 저장 함수/프로시저의 sql_type을 기준으로 확인한다.
+
+*   Java 저장 함수/프로시저 생성 시 정의한 자릿수는 무시하고 타입만 맞추어 Java에서 반환하는 값을 그대로 데이터베이스에 전달한다. 전달한 데이터에 대한 조작은 사용자가 데이터베이스에서 직접 처리하는 것을 원칙으로 한다.
+
+다음과 같은 **typestring** () Java 저장 함수를 살펴보자.
+
+.. code-block:: java
+
+    public class JavaSP1 {
+        public static String typestring() {
+            String temp = " ";
+            for(int i = 0; i < 1; i++) {
+                temp = temp + "1234567890";
+            }
+            return temp;
+        }
+    }``
+
+.. code-block:: sql
+
+    CREATE FUNCTION typestring() RETURN CHAR(5) AS LANGUAGE JAVA
+    NAME 'JavaSP1.typestring() return java.lang.String';
+
+    CALL typestring();
+    
+::
+
+      Result
+    ======================
+      ' 1234567890'

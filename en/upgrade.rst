@@ -55,7 +55,7 @@ Please confirm :ref:`11_2_changes` in the release notes.
 *   **Java SP server** should be started before using Java stored procedure/function. See :ref:`jsp-starting-javasp`.
 
 Upgrading from CUBRID 9.2/9.3/10.0/10.1/10.2/11.0 to CUBRID 11.2
-------------------------------------------------------------
+----------------------------------------------------------------
 
 Users who are using versions CUBRID 9.2/9.3/10.0/10.1/10.2/11.0 should install 11.2 in the different directory, migrate the databases to 11.2 and modify parameter values in the previous environment configuration file.
 

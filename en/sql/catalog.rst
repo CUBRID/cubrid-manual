@@ -678,6 +678,25 @@ Represents partition information. An index for class_of and pname is created.
 | comment            | VARCHAR(1024) | Comment to describe the partition |
 +--------------------+---------------+-----------------------------------+
 
+.. _db_server:
+
+_db_server
+----------
+
+============== =================== ========================================
+Attribute Name Data Type           Description
+============== =================== ========================================
+link_name      VARCHAR(255)        Connection name
+host           VARCHAR(255)        Hostname of a server
+port           INTEGER             Connection port of a server
+db_name        VARCHAR(255)        Database name of a server
+user_name      VARCHAR(255)        Database user name of a server
+password       VARCHAR(1073741823) Database user password of a server
+properties     VARCHAR(2048)       Property information used for connection
+owner          db_user             The owner of this connection information
+comment        VARCHAR(1024)       Comment to describe the server
+============== =================== ========================================
+
 _db_stored_procedure
 --------------------
 
@@ -1759,6 +1778,24 @@ The following example shows how to retrieve the partition information currently 
       'participant2'  'PUBLIC'    'before_2000'   'participant2__p__before_2000'  'RANGE'         '[host_year]'   {NULL, 2000}      NULL
       'participant2'  'PUBLIC'    'before_2008'   'participant2__p__before_2008'  'RANGE'         '[host_year]'   {2000, 2008}      NULL
 
+.. db_server:
+
+DB_SERVER
+---------
+
+============== ============= ====================================================
+Attribute Name Data Type     Description
+============== ============= ====================================================
+link_name      VARCHAR(255)  Connection name
+host           VARCHAR(255)  Hostname of a server
+port           INTEGER       Connection port of a server
+db_name        VARCHAR(255)  Database name of a server
+user_name      VARCHAR(255)  Database user name of a server
+properties     VARCHAR(2048) Property information used for connection
+owner          VARCHAR(256)  The name of the owner of this connection information
+comment        VARCHAR(1024) Comment to describe the server
+============== ============= ====================================================
+
 DB_STORED_PROCEDURE
 -------------------
 
@@ -1843,16 +1880,16 @@ DB_SYNONYM
 
 Represents target object information for the synonym to which the current user has access authorization in the database.
 
-================== ============= =======================================================
+================== ============= ==========================================================
 Attribute Name     Data Type     Description
-================== ============= =======================================================
+================== ============= ==========================================================
 synonym_name       VARCHAR(255)  The name of the synonym
 synonym_owner_name VARCHAR(255)  The owner of the synonym
-is_public_synonym  VARCHAR(3)    "YES" for a public synonym, and "NO" for a private synonym.
+is_public_synonym  VARCHAR(3)    "YES" for a public synonym, and "NO" for a private synonym
 target_name        VARCHAR(255)  The name of the target object
 target_owner_name  VARCHAR(255)  The owner name of the target object
 comment            VARCHAR(2048) Comment to describe the synonym
-================== ============= =======================================================
+================== ============= ==========================================================
 
 .. warning::
     

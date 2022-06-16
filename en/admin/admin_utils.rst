@@ -148,7 +148,7 @@ The following shows [options] available with the **cubrid** **createdb** utility
 
 .. option:: -B, --lob-base-path=PATH
 
-    This option specifies a directory where **LOB** data files are stored when **BLOB/CLOB** data is used. If the **--lob-base-path** option is not specified, LOB data files are store in <*location of database volumes created*>/**lob** directory. 
+    This option specifies a directory where **LOB** data files are stored when **BLOB/CLOB** data is used. If the **-\-lob-base-path** option is not specified, LOB data files are store in <*location of database volumes created*>/**lob** directory. 
 
     The following example shows how to create a database named *testdb* in the working directory and specify /home/data1 of local file system as a location of LOB data files. ::
 
@@ -206,7 +206,7 @@ The following shows [options] available with the **cubrid** **createdb** utility
 .. option:: --user-definition-file=FILE
 
     This option adds users who have access to the database to be created. It adds a user based on the specification contained in the user information file specified by the parameter. 
-    Instead of using the **--user-definition-file** option, you can add a user by using the **CREATE USER** statement (for details, see :ref:`create-user`).
+    Instead of using the **-\-user-definition-file** option, you can add a user by using the **CREATE USER** statement (for details, see :ref:`create-user`).
 
     The following example shows how to create a database named *testdb* and add users to *testdb* based on the user information defined in the **user_info.txt** file. ::
 
@@ -228,7 +228,7 @@ The following shows [options] available with the **cubrid** **createdb** utility
 
     *   The **MEMBERS** clause is optional. The *member_name* is the name of the lower level member that belongs to the *user_name* . Here, the *member_name* can be multiply specified and must be defined as **USER** in advance.
 
-    Comments can be used in a user information file. A comment line must begin with a consecutive hyphen lines (--). Blank lines are ignored.
+    Comments can be used in a user information file. A comment line must begin with a consecutive hyphen lines (-\-). Blank lines are ignored.
 
     The following example shows a user information in which *grandeur* and *sonata* are included in *sedan* group, *tuscan* is included in *suv* group, and *i30* is included in *hatchback* group. The name of the user information file is **user_info.txt**. ::
 
@@ -336,7 +336,7 @@ The following shows [options] available with the **cubrid addvoldb** utility.
 
 .. option:: --db-volume-size=SIZE
 
-    **--db-volume-size** is an option that specifies the size of the volume to be added to a specified database. If the **--db-volume-size** option is omitted, the value of the system parameter **db_volume_size** is used by default. You can set units as K, M, G and T, which stand for kilobytes (KB), megabytes (MB), gigabytes (GB), and terabytes (TB) respectively. If you omit the unit, bytes will be applied. The size of the database is always rounded up to 64 disk sectors, which depends on the size of a page and can be 16M, 32M or 64M for page size 4k, 8k and 16k respectively.
+    **-\-db-volume-size** is an option that specifies the size of the volume to be added to a specified database. If the **-\-db-volume-size** option is omitted, the value of the system parameter **db_volume_size** is used by default. You can set units as K, M, G and T, which stand for kilobytes (KB), megabytes (MB), gigabytes (GB), and terabytes (TB) respectively. If you omit the unit, bytes will be applied. The size of the database is always rounded up to 64 disk sectors, which depends on the size of a page and can be 16M, 32M or 64M for page size 4k, 8k and 16k respectively.
 
     The following example shows how to add a volume for which 256 MB are assigned to the *testdb* database. ::
 
@@ -398,7 +398,7 @@ The following shows [options] available with the **cubrid addvoldb** utility.
 
 .. option:: --max-writesize-in-sec=SIZE
 
-    The **--max-writesize-in-sec** is used to limit the impact of  system operating when you add a volume to the database. This can limit the maximum writing size per second. The unit of this option is K(kilobytes) and M(megabytes). The minimum value is 160K. If you set this value as less than 160K, it is changed as 160K. It can be used only in client/server mode.
+    The **-\-max-writesize-in-sec** is used to limit the impact of  system operating when you add a volume to the database. This can limit the maximum writing size per second. The unit of this option is K(kilobytes) and M(megabytes). The minimum value is 160K. If you set this value as less than 160K, it is changed as 160K. It can be used only in client/server mode.
     
     The below is an example to limit the writing size of the 2GB volume as 1MB. Consuming time will be about 35 minutes(= (2048MB/1MB) /60 sec.). ::
     
@@ -555,7 +555,7 @@ The following shows [options] available with the **cubrid copydb** utility.
 
 .. option:: --server-name=HOST
 
-    The *--server-name* option specifies a host name of new database. The host name is registered in the **databases.txt** file. If this option is omitted, a local host is registered. ::
+    The **-\-server-name** option specifies a host name of new database. The host name is registered in the **databases.txt** file. If this option is omitted, a local host is registered. ::
     
         cubrid copydb --server-name=cub_server1 demodb new_demodb
 
@@ -611,13 +611,13 @@ The following shows [options] available with the **cubrid copydb** utility.
 
 .. option:: --copy-lob-path=PATH
 
-    If the **--copy-lob-path** option is specified, a new directory path for LOB files is created and a source database is copied into a new directory path. If this option is omitted, the directory path is not created. Therefore, the **lob-base-path** of the **databases.txt** file should be modified separately. This option cannot be used with the **-B** option. ::
+    If the **-\-copy-lob-path** option is specified, a new directory path for LOB files is created and a source database is copied into a new directory path. If this option is omitted, the directory path is not created. Therefore, the **lob-base-path** of the **databases.txt** file should be modified separately. This option cannot be used with the **-B** option. ::
 
         cubrid copydb --copy-lob-path demodb new_demodb
 
 .. option:: -B, --lob-base-path=PATH
 
-    If the **-B** option is specified, a specified directory is specified as for LOB files of a new database and a source database is copied. This option cannot be used with the **--copy-lob-path** option. ::
+    If the **-B** option is specified, a specified directory is specified as for LOB files of a new database and a source database is copied. This option cannot be used with the **-\-copy-lob-path** option. ::
 
         cubrid copydb -B /home/usr/CUBRID/databases/new_lob demodb new_demodb
 
@@ -2998,7 +2998,7 @@ The following shows [options] available with the **cubrid killtran** utility.
 
 .. option:: -p, --dba-password=PASSWORD
 
-    This option can only be used, if using killing option such as -i and --kill options.
+    This option can only be used, if using killing option such as **-i** and **-\-kill** options.
     A value followed by the -p option is a password of the **DBA**, and should be entered in the prompt.
 
 .. option:: -q, --query-exec-info
@@ -3020,7 +3020,7 @@ The following shows [options] available with the **cubrid killtran** utility.
 checkdb
 -------
 
-The **cubrid checkdb** utility is used to check the consistency of a database. You can use **cubrid checkdb** to identify data structures that are different from indexes by checking the internal physical consistency of the data and log volumes. If the **cubrid checkdb** utility reveals any inconsistencies, you must try automatic repair by using the --**repair** option.
+The **cubrid checkdb** utility is used to check the consistency of a database. You can use **cubrid checkdb** to identify data structures that are different from indexes by checking the internal physical consistency of the data and log volumes. If the **cubrid checkdb** utility reveals any inconsistencies, you must try automatic repair by using the **-\-repair** option.
 
 ::
 
@@ -3177,7 +3177,7 @@ The following shows [options] available with the **cubrid diagdb** utility.
 
 .. option:: --emergency
 
-    Use **--emergency** option to suppress recovery. **This option is meant ONLY for debugging, if there are recovery issues. It is recommended to backup your database before using this option.**
+    Use **-\-emergency** option to suppress recovery. **This option is meant ONLY for debugging, if there are recovery issues. It is recommended to backup your database before using this option.**
 
 .. _paramdump:
 
@@ -3271,7 +3271,7 @@ The following table shows <operation> available with the cubrid tde utility.
 
 .. option:: -n, --generate-new-key
 
-    This option is used to add a new key to the key file (up to 128). If it is successful, the index of the added key is displayed, and this index is used to identify the key when changing or removing the key later. Information of added keys can be checked by \\-\\-show-keys. ::
+    This option is used to add a new key to the key file (up to 128). If it is successful, the index of the added key is displayed, and this index is used to identify the key when changing or removing the key later. Information of added keys can be checked by **-\-show-keys**. ::
 
         $ cubrid tde -n testdb
         Key File: /home/usr/CUBRID/databases/testdb/testdb_keys
@@ -3297,7 +3297,7 @@ The following table shows <operation> available with the cubrid tde utility.
         Trying to change the key from the key (index: 0) to the key (index: 2)..
         SUCCESS: The key has been changed from the key (index: 0) to the key (index: 2)
 
-    To change the key set on the database, a user must first create a key to be set by the \\-\\-generate-new-key option. The user can create a new key to change, or create multiple keys in advance for changing the key according to their own security plans.
+    To change the key set on the database, a user must first create a key to be set by the **-\-generate-new-key** option. The user can create a new key to change, or create multiple keys in advance for changing the key according to their own security plans.
 
 The following table shows [options] available with the cubrid tde utility.
 
@@ -3458,7 +3458,7 @@ The following shows [options] available with the **cubrid flashback** utility.
 .. option:: --detail
 
     This option is used to display the detailed information for each SQL statement. Transaction ID, transaction user, and original SQL statements are displayed with the SQL statements for flashback. The original SQL statement is not the exact syntax user executed. It simply represents the user-executed statement as INSERT/UPDATE/DELETE statements that are executed row-by-row. For example, An INSERT … SELECT statement is expressed as multiple INSERT statements.
-    If the **--detail** option is not specified, only the SQL statements for flashback is displayed. ::
+    If the **-\-detail** option is not specified, only the SQL statements for flashback is displayed. ::
 
         cubrid flashback --detail demodb dba.tbl
 
@@ -3476,7 +3476,7 @@ The following shows [options] available with the **cubrid flashback** utility.
 
 .. option:: --oldest
 
-    This option is used to display the SQL statements executed within the specified transaction in chronological order. If the **--oldest** is not specified, the SQL statements executed within the transaction are displayed in reverse chronological order. ::
+    This option is used to display the SQL statements executed within the specified transaction in chronological order. If the **-\-oldest** is not specified, the SQL statements executed within the transaction are displayed in reverse chronological order. ::
 
         cubrid flashback --oldest demodb dba.tbl
 

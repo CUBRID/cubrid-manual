@@ -373,6 +373,6 @@ Perform steps C1~C10 above, then perform step C11 below:
 +=====================================================+===============================================================================+
 | Step C11: Change the previous Linux heartbeat       | Perform the following task in the master and slave nodes from a root account. |
 |           auto start settings                       |                                                                               |
-|                                                     |   [root\ @master ~]# chkconfig --del heartbeat                                |
+|                                                     |   [root\ @master ~]# chkconfig -\-del heartbeat                               |
 |                                                     |   // Performing the same job in the slave node                                |
 +-----------------------------------------------------+-------------------------------------------------------------------------------+

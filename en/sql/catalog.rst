@@ -135,7 +135,7 @@ The following example shows how to retrieve all sub classes under the class owne
 
 .. note::
 
-    All examples of system catalog classes have been written in the csql utility. In this example, **--no-auto-commit** (inactive mode of auto-commit) and **-u** (specifying user DBA) options are used. ::
+    All examples of system catalog classes have been written in the csql utility. In this example, **-\-no-auto-commit** (inactive mode of auto-commit) and **-u** (specifying user DBA) options are used. ::
     
         % csql --no-auto-commit -u dba demodb
 

@@ -44,7 +44,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'CUBRID'
-copyright = u'2017, Search Solution Corporation'
+copyright = u'2016, CUBRID Corparation'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -227,7 +227,7 @@ latex_elements = {
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
   ('index', 'cubrid.tex', u'CUBRID Documentation',
-   u'Search Solution Corporation', 'manual'),
+   u'CUBRID Corparation', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -257,7 +257,7 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     ('index', 'cubrid', u'CUBRID Documentation',
-     [u'Search Solution Corporation'], 1)
+     [u'CUBRID Corparation'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -271,7 +271,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
   ('index', 'cubrid', u'CUBRID Documentation',
-   u'Search Solution Corporation', 'cubrid', 'One line description of project.',
+   u'CUBRID Corparation', 'cubrid', 'One line description of project.',
    'Miscellaneous'),
 ]
 

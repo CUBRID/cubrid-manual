@@ -215,6 +215,7 @@ AVG
 
 .. function:: AVG ([ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression)
 .. function:: AVG ([ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression) OVER (<analytic_clause>)
+   :noindex:
 
     **AVG** 함수는 집계 함수 또는 분석 함수로 사용되며, 모든 행에 대한 연산식 값의 산술 평균을 구한다. 하나의 연산식 *expression* 만 인자로 지정되며, 연산식 앞에 **DISTINCT** 또는 **UNIQUE** 키워드를 포함시키면 연산식 값 중 중복을 제거한 후 평균을 구하고, 키워드가 생략되거나 **ALL** 인 경우에는 모든 값에 대해서 평균을 구한다.
 
@@ -287,15 +288,18 @@ COUNT
 
 .. function:: COUNT (*)
 .. function:: COUNT (*) OVER (<analytic_clause>)
+   :noindex:
 .. function:: COUNT ([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression)
+   :noindex:
 .. function:: COUNT ([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression) OVER (<analytic_clause>)
+   :noindex:
 
-    **COUNT** 함수는 집계 함수 또는 분석 함수로 사용되며,  질의문이 반환하는 결과 행들의 개수를 반환한다. 별표(*)를 지정하면 조건을 만족하는 모든 행(**NULL** 값을 가지는 행 포함)의 개수를 반환하며, **DISTINCT** 또는 **UNIQUE** 키워드를 연산식 앞에 지정하면 중복을 제거한 후 유일한 값을 가지는 행(**NULL** 값을 가지는 행은 포함하지 않음)의 개수만 반환한다. 따라서, 반환되는 값은 항상 정수이며, **NULL** 은 반환되지 않는다.
+    **COUNT** 함수는 집계 함수 또는 분석 함수로 사용되며,  질의문이 반환하는 결과 행들의 개수를 반환한다. 별표(*)를 지정하면 조건을 만족하는 모든 행(**NULL** 값을 가지는 행 포함)의 개수를 반환하며, **DISTINCT** 또는 **UNIQUE** 키워드를 연산식 앞에 지정하면 중복을 제거한 후 유일한 값을 가지는 행(**NULL** 값을 가지는 행은 포함하지 않음)의 개수만 반환한다. 따라서, 반환되는 값은 항상 큰 정수 타입이며, **NULL** 은 반환되지 않는다.
 
     :param expression: 임의의 연산식이다.
     :param ALL: 주어진 expression의 모든 행의 개수를 구하기 위해 사용되며, 기본값이다.
     :param DISTINCT,DISTINCTROW,UNIQUE: 중복이 제거된 유일한 값을 가지는 행의 개수를 구하기 위해 사용된다.
-    :rtype: INT
+    :rtype: BIGINT
     
 연산식 *expression* 은 수치형 또는 문자열 타입은 물론, 컬렉션 타입 칼럼과 오브젝트 도메인(사용자 정의 클래스)을 가지는 칼럼도 지정될 수 있다.
 
@@ -309,9 +313,9 @@ COUNT
     
 ::
 
-         count(*)
-    =============
-                9
+                  count(*)
+    ======================
+                         9
 
 다음은 *demodb* 에서 nation_code가 'AUT'인 국가의 참가 선수의 종목(event)별 인원 수를 종목이 바뀔 때마다 누적하여 출력한 예제이다. 가장 마지막 줄에는 모든 인원 수가 출력된다.
 
@@ -322,32 +326,33 @@ COUNT
     
 ::
 
-       nation_code           event                 name                           co
-    ===============================================================================
-      'AUT'                 'Athletics'           'Kiesl Theresia'                2
-      'AUT'                 'Athletics'           'Graf Stephanie'                2
-      'AUT'                 'Equestrian'          'Boor Boris'                    6
-      'AUT'                 'Equestrian'          'Fruhmann Thomas'               6
-      'AUT'                 'Equestrian'          'Munzner Joerg'                 6
-      'AUT'                 'Equestrian'          'Simon Hugo'                    6
-      'AUT'                 'Judo'                'Heill Claudia'                 9
-      'AUT'                 'Judo'                'Seisenbacher Peter'            9
-      'AUT'                 'Judo'                'Hartl Roswitha'                9
-      'AUT'                 'Rowing'              'Jonke Arnold'                 11
-      'AUT'                 'Rowing'              'Zerbst Christoph'             11
-      'AUT'                 'Sailing'             'Hagara Roman'                 15
-      'AUT'                 'Sailing'             'Steinacher Hans Peter'        15
-      'AUT'                 'Sailing'             'Sieber Christoph'             15
-      'AUT'                 'Sailing'             'Geritzer Andreas'             15
-      'AUT'                 'Shooting'            'Waibel Wolfram Jr.'           17
-      'AUT'                 'Shooting'            'Planer Christian'             17
-      'AUT'                 'Swimming'            'Rogan Markus'                 18
+      nation_code           event                 name                                    co
+    ========================================================================================
+      'AUT'                 'Athletics'           'Kiesl Theresia'                         2
+      'AUT'                 'Athletics'           'Graf Stephanie'                         2
+      'AUT'                 'Equestrian'          'Boor Boris'                             6
+      'AUT'                 'Equestrian'          'Fruhmann Thomas'                        6
+      'AUT'                 'Equestrian'          'Munzner Joerg'                          6
+      'AUT'                 'Equestrian'          'Simon Hugo'                             6
+      'AUT'                 'Judo'                'Heill Claudia'                          9
+      'AUT'                 'Judo'                'Seisenbacher Peter'                     9
+      'AUT'                 'Judo'                'Hartl Roswitha'                         9
+      'AUT'                 'Rowing'              'Jonke Arnold'                          11
+      'AUT'                 'Rowing'              'Zerbst Christoph'                      11
+      'AUT'                 'Sailing'             'Hagara Roman'                          15
+      'AUT'                 'Sailing'             'Steinacher Hans Peter'                 15
+      'AUT'                 'Sailing'             'Sieber Christoph'                      15
+      'AUT'                 'Sailing'             'Geritzer Andreas'                      15
+      'AUT'                 'Shooting'            'Waibel Wolfram Jr.'                    17
+      'AUT'                 'Shooting'            'Planer Christian'                      17
+      'AUT'                 'Swimming'            'Rogan Markus'                          18
 
 CUME_DIST
 =========
 
 .. function:: CUME_DIST(expression[, expression] ...) WITHIN GROUP (<order_by_clause>)
 .. function:: CUME_DIST() OVER ([<partition_by_clause>] <order_by_clause>)
+   :noindex:
 
     **CUME_DIST** 함수는 집계 함수 또는 분석 함수로 사용되며, 그룹의 값 내에서 명시한 값의 누적 분포 값을 반환한다. **CUME_DIST**\ 에 의해 반환되는 값의 범위는 0보다 크고 1보다 작거나 같다. 같은 값의 입력 인자에 대한 **CUME_DIST** 함수의 반환 값은 항상 같은 누적 분포 값으로 평가된다.
 
@@ -894,6 +899,7 @@ MAX
 
 .. function:: MAX([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression)
 .. function:: MAX([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression) OVER (<analytic_clause>)
+   :noindex:
 
     **MAX** 함수는 집계 함수 또는 분석 함수로 사용되며,  모든 행에 대하여 연산식 값 중 최대 값을 구한다. 하나의 연산식 *expression* 만 인자로 지정된다. 문자열을 반환하는 연산식에 대해서는 사전 순서를 기준으로 뒤에 나오는 문자열이 최대 값이 되고, 수치를 반환하는 연산식에 대해서는 크기가 가장 큰 값이 최대 값이다.
 
@@ -944,6 +950,7 @@ MEDIAN
 
 .. function:: MEDIAN(expression)
 .. function:: MEDIAN(expression) OVER ([<partition_by_clause>])
+   :noindex:
 
     **MEDIAN** 함수는 집계 함수 또는 분석 함수로 사용되며, 중앙값(median value)을 반환한다. 중앙값은 데이터의 최소값과 최대값의 중앙에 위치하게 되는 값을 말한다.
     
@@ -997,6 +1004,7 @@ MIN
 
 .. function:: MIN([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression)
 .. function:: MIN([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression) OVER (<analytic_clause>)
+   :noindex:
 
     **MIN** 함수는 집계 함수 또는 분석 함수로 사용되며,  모든 행에 대하여 연산식 값 중 최소 값을 구한다. 하나의 연산식 *expression* 만 인자로 지정된다. 문자열을 반환하는 연산식에 대해서는 사전 순서를 기준으로 앞에 나오는 문자열이 최소 값이 되고, 수치를 반환하는 연산식에 대해서는 크기가 가장 작은 값이 최소 값이다.
 
@@ -1191,6 +1199,7 @@ PERCENT_RANK
 
 .. function:: PERCENT_RANK(expression[, expression] ...) WITHIN GROUP (<order_by_clause>)
 .. function:: PERCENT_RANK() OVER ([<partition_by_clause>] <order_by_clause>)
+   :noindex:
 
     PERCENT_RANK 함수는 집계 함수 또는 분석 함수로 사용되며, 그룹에서 행의 상대적인 위치를 순위 퍼센트로 반환한다. CUME_DIST 함수(누적 분포 값을 반환)와 유사하다. PERCENT_RANK가 반환하는 값의 범위는 0부터 1까지이다. PERCENT_RANK의 첫번째 값은 항상 0이다. 
 
@@ -1687,8 +1696,11 @@ STDDEV, STDDEV_POP
 
 .. function:: STDDEV([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression)
 .. function:: STDDEV_POP([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression)
+   :noindex:
 .. function:: STDDEV([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression) OVER (<analytic_clause>)
+   :noindex:
 .. function:: STDDEV_POP([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression) OVER (<analytic_clause>)
+   :noindex:
 
     **STDDEV** 함수와 **STDDEV_POP** 함수는 동일하며, 이 함수는 집계 함수 또는 분석 함수로 사용된다. 이 함수는 모든 행에 대한 연산식 값들에 대한 표준편차, 즉 모표준 편차를 반환한다. **STDDEV_POP** 함수가 SQL:1999 표준이다. 하나의 연산식 *expression* 만 인자로 지정되며, 연산식 앞에 **DISTINCT** 또는 **UNIQUE** 키워드를 포함시키면 연산식 값 중 중복을 제거한 후, 모표준 편차를 구하고, 키워드가 생략되거나 **ALL** 인 경우에는 모든 값에 대해 모표준 편차를 구한다.
 
@@ -1761,6 +1773,7 @@ STDDEV_SAMP
 
 .. function:: STDDEV_SAMP([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression)
 .. function:: STDDEV_SAMP([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression) OVER (<analytic_clause>)
+   :noindex:
 
     **STDDEV_SAMP** 함수는 집계 함수 또는 분석 함수로 사용되며, 표본 표준편차를 구한다. 하나의 연산식 *expression* 만 인자로 지정되며, 연산식 앞에 **DISTINCT** 또는 **UNIQUE** 키워드를 포함시키면 연산식 값 중 중복을 제거한 후, 표본 표준편차를 구하고, 키워드가 생략되거나 **ALL** 인 경우에는 모든 값에 대해 표본 표준편차를 구한다.
 
@@ -1831,6 +1844,7 @@ SUM
 
 .. function:: SUM ( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
 .. function:: SUM ( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression ) OVER (<analytic_clause>)
+   :noindex:
 
     **SUM** 함수는 집계 함수 또는 분석 함수로 사용되며, 모든 행에 대한 연산식 값들의 합계를 반환한다. 하나의 연산식 *expression* 만 인자로 지정되며, 연산식 앞에 **DISTINCT** 또는 **UNIQUE** 키워드를 포함시키면 연산식 값 중 중복을 제거한 후 합계를 구하고, 키워드가 생략되거나 **ALL** 인 경우에는 모든 값에 대해 합계를 구한다. 단일 값 수식을 **SUM** 함수의 입력으로 사용할 수 있다.
 
@@ -1917,7 +1931,9 @@ VARIANCE, VAR_POP
 .. function:: VARIANCE([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression)
 .. function:: VAR_POP([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression)
 .. function:: VARIANCE([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression) OVER (<analytic_clause>)
+   :noindex:
 .. function:: VAR_POP([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression) OVER (<analytic_clause>)
+   :noindex:
 
     **VARIANCE** 함수와 **VAR_POP** 함수는 동일하며, 집계 함수 또는 분석 함수로 사용된다. 이 함수는 모든 행에 대한 연산식 값들에 대한 분산, 즉 모분산을 반환한다. 분모는 모든 행의 개수이다. 하나의 연산식 *expression* 만 인자로 지정되며, 연산식 앞에 **DISTINCT** 또는 **UNIQUE** 키워드를 포함시키면 연산식 값 중 중복을 제거한 후, 모분산을 구하고, 키워드가 생략되거나 **ALL** 인 경우에는 모든 값에 대해 모분산을 구한다.
 
@@ -1987,6 +2003,7 @@ VAR_SAMP
 
 .. function:: VAR_SAMP([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression)
 .. function:: VAR_SAMP([DISTINCT | DISTINCTROW | UNIQUE | ALL] expression) OVER (<analytic_clause>)
+   :noindex:
 
     **VAR_SAMP** 함수는 집계 함수 또는 분석 함수로 사용되며, 표본 분산을 반환한다. 분모는 모든 행의 개수 - 1이다. 하나의 *expression*\ 만 인자로 지정되며, *expression* 앞에 **DISTINCT** 또는 **UNIQUE** 키워드를 포함시키면 연산식 값 중 중복을 제거한 후, 표본 분산을 구하고, 키워드가 생략되거나 **ALL** 인 경우에는 모든 값에 대해 표본 분산을 구한다.
 

@@ -16,3 +16,4 @@ Data Manipulation Statements
     prepare.rst
     do.rst
     cte.rst
+    call.rst

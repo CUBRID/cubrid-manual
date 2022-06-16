@@ -41,7 +41,7 @@ CREATE TRIGGER
 
 **CREATE TRIGGER** 문을 사용하여 새로운 트리거를 생성하고, 트리거 대상, 실행 조건과 수행할 내용을 정의할 수 있다. 트리거는 데이터베이스 객체로서, 특정 이벤트가 대상 테이블에 대해 발생하면 정의된 동작을 수행한다. ::
 
-    CREATE TRIGGER trigger_name
+    CREATE TRIGGER [schema_name.]trigger_name
     [ STATUS { ACTIVE | INACTIVE } ]
     [ PRIORITY key ]
     <event_time> <event_type> [<event_target>]
@@ -65,8 +65,8 @@ CREATE TRIGGER
         COMMIT
      
     <event_target> ::=
-        ON table_name |
-        ON table_name [ (column_name) ]
+        ON [schema_name.]table_name |
+        ON [schema_name.]table_name [ (column_name) ]
      
     <condition> ::=
         expression
@@ -79,6 +79,7 @@ CREATE TRIGGER
         UPDATE statement |
         DELETE statement
 
+*   *schema_name*: 트리거의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *trigger_name*: 정의하려는 트리거의 이름을 지정한다.
 *   [ **STATUS** { **ACTIVE** | **INACTIVE** } ]: 트리거의 상태를 정의한다(정의하지 않을 경우 기본값은 **ACTIVE** ).
 
@@ -94,6 +95,10 @@ CREATE TRIGGER
 *   <*condition*>: 트리거의 조건영역을 지정한다. 자세한 내용은 :ref:`trigger-condition` 을 참조한다.
 *   <*action*>: 트리거의 실행영역을 지정한다. 자세한 내용은 :ref:`trigger-action` 을 참조한다.
 *   *trigger_comment*: 트리거의 커멘트를 지정한다.
+
+.. note::
+
+    *   **DBA** 와 **DBA** 멤버는 다른 스키마에 트리거를 생성할 수 있다. 사용자가 **DBA** 도 아니고 **DBA** 멤버도 아니면 해당 사용자의 스키마에서만 트리거를 생성할 수 있다.
 
 다음은 *participant* 테이블의 레코드를 갱신할 때 획득 메달의 개수가 0보다 작을 경우 갱신을 거절하는 트리거를 생성하는 예제이다.
 2004년도 올림픽에 한국이 획득한 금메달의 개수를 음수로 갱신할 경우 갱신이 거절되는 것을 알 수 있다.
@@ -356,12 +361,13 @@ ALTER TRIGGER
 
 ::
 
-    ALTER TRIGGER trigger_name <trigger_option> ;
+    ALTER TRIGGER [schema_name.]trigger_name <trigger_option> ;
 
     <trigger_option> ::=
         STATUS { ACTIVE | INACTIVE } |
         PRIORITY key
 
+*   *schema_name*: 트리거의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *trigger_name*: 변경할 트리거의 이름을 지정한다.
 *   **STATUS** { **ACTIVE** | **INACTIVE** }: 트리거의 상태를 변경한다.
 *   **PRIORITY** *key*: 우선순위를 변경한다.
@@ -392,9 +398,11 @@ ALTER TRIGGER
 
 ::
 
-    ALTER TRIGGER trigger_name [trigger_option] 
+    ALTER TRIGGER [schema_name.]trigger_name [trigger_option] 
     [COMMENT ‘comment_string’];
 
+*   *schema_name*: 트리거의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
+*   *trigger_name*: 변경할 트리거의 이름을 지정한다.
 *   *comment_string*: 트리거의 커멘트를 지정한다.
 
 트리거의 커멘트만 변경하는 경우 트리거 옵션(trigger_option)을 생략할 수 있다.
@@ -410,8 +418,9 @@ DROP TRIGGER
 
 **DROP TRIGGER** 구문을 이용하여 트리거를 삭제한다. ::
 
-    DROP TRIGGER trigger_name ; 
+    DROP TRIGGER [schema_name.]trigger_name ; 
 
+*   *schema_name*: 트리거의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *trigger_name*: 삭제할 트리거의 이름을 지정한다.
 
 다음은 medal_trig 트리거를 삭제하는 예제이다.
@@ -430,8 +439,9 @@ RENAME TRIGGER
 
 트리거의 이름은 **RENAME** 구문의 **TRIGGER** 예약어를 이용해서 변경한다. ::
 
-    RENAME TRIGGER old_trigger_name AS new_trigger_name ;
+    RENAME TRIGGER [schema_name.]old_trigger_name AS [schema_name.]new_trigger_name ;
 
+*   *schema_name*: 트리거의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다. 현재 트리거의 스키마와 변경할 트리거의 스키마가 동일해야 한다.
 *   *old_trigger_name*: 트리거의 현재 이름을 입력한다.
 *   *new_trigger_name*: 변경할 트리거의 이름을 지정한다.
 
@@ -441,7 +451,7 @@ RENAME TRIGGER
 
 .. note::
 
-    *   트리거 이름은 모든 트리거 사이에서 유일해야 한다. 하지만 데이터베이스 내의 테이블 이름과 같은 이름을 가질 수는 있다.
+    *   트리거 이름은 사용자가 소유하고 있는 트리거 중에서 유일해야 한다. 하지만 데이터베이스 내의 테이블 이름과 같거나 다른 소유자가 소유하고 있는 트리거의 이름과는 같을 수 있다.
     *   만약 테이블 트리거의 이름을 변경하려면, 트리거의 소유자이거나, 해당 트리거가 있는 테이블에 대해 **ALTER** 권한이 부여되어 있어야 한다. 사용자 트리거는 트리거의 소유자만 이름을 변경할 수 있다.
 
 지연된 트리거
@@ -457,9 +467,10 @@ RENAME TRIGGER
     EXECUTE DEFERRED TRIGGER <trigger_identifier> ;
 
     <trigger_identifier> ::=
-        trigger_name |
+        [schema_name.]trigger_name |
         ALL TRIGGERS
 
+*   *schema_name*: 트리거의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *trigger_name*: 트리거의 이름을 지정하면 지정된 트리거의 지연된 활동이 실행된다.
 *   **ALL TRIGGERS**: 현재 모든 지연된 활동이 실행된다.
 
@@ -471,9 +482,10 @@ RENAME TRIGGER
     DROP DEFERRED TRIGGER <trigger_identifier> ;
 
     <trigger_identifier> ::=
-        trigger_name |
+        [schema_name.]trigger_name |
         ALL TRIGGERS
 
+*   *schema_name*: 트리거의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *trigger_name*: 트리거의 이름을 지정하면 지정된 트리거의 지연된 활동이 취소된다.
 *   **ALL TRIGGERS**: 현재 모든 지연된 활동이 취소된다.
 

@@ -12,7 +12,7 @@
 
 ::
 
-    UPDATE STATISTICS ON class-name[, class-name, ...] [WITH FULLSCAN]; 
+    UPDATE STATISTICS ON [schema_name.]class-name [{, [schema_name.]class-name}] [WITH FULLSCAN]; 
      
     UPDATE STATISTICS ON ALL CLASSES [WITH FULLSCAN]; 
   
@@ -62,8 +62,9 @@ CSQL 인터프리터의 세션 명령어로 지정한 테이블의 통계 정보
 
 ::
 
-    csql> ;info stats table_name
+    csql> ;info stats [schema_name.]table_name
 
+*   *schema_name*: 테이블의 스키마를 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 통계 정보를 확인할 테이블 이름
 
 다음은 CSQL 인터프리터에서 *t1* 테이블의 통계 정보를 출력하는 예제이다.
@@ -454,7 +455,7 @@ SQL에 대한 성능 분석을 위해서는 질의 프로파일링(profiling) �
     csql> SET TRACE ON;
     csql> SELECT /*+ RECOMPILE ORDERED */ o.host_year, o.host_nation, o.host_city, n.name, SUM(p.gold), SUM(p.silver), SUM(p.bronze)
             FROM OLYMPIC o,
-                 (select * from PARTICIPANT p where p.gold > 10) p,
+                 (select /*+ NO_MERGE */ * from PARTICIPANT p where p.gold > 10) p,
                  NATION n
           WHERE o.host_year = p.host_year AND p.nation_code = n.code
           GROUP BY o.host_nation;
@@ -482,7 +483,7 @@ SQL에 대한 성능 분석을 위해서는 질의 프로파일링(profiling) �
     Trace Statistics:
       SELECT (time: 6, fetch: 880, ioread: 0)
         SCAN (table: olympic), (heap time: 0, fetch: 104, ioread: 0, readrows: 25, rows: 25)
-          SCAN (hash temp buildtime : 0, time: 0, fetch: 0, ioread: 0, readrows: 76, rows: 38)
+          SCAN (hash temp(m), buildtime : 0, time: 0, fetch: 0, ioread: 0, readrows: 76, rows: 38)
             SCAN (index: nation.pk_nation_code), (btree time: 2, fetch: 760, ioread: 0, readkeys: 38, filteredkeys: 0, rows: 38) (lookup time: 0, rows: 38)
         GROUPBY (time: 0, hash: true, sort: true, page: 0, ioread: 0, rows: 5)
         SUBQUERY (uncorrelated)
@@ -515,7 +516,7 @@ SQL에 대한 성능 분석을 위해서는 질의 프로파일링(profiling) �
 
 *   temp: 템프 파일에서 데이터를 스캔하는 작업
 
-    *   hash: 해시 리스트 스캔 사용 여부. :ref:`NO_HASH_LIST_SCAN <no-hash-list-scan>` 힌트를 참고한다.
+    *   hash temp(m): 해시 리스트 스캔 사용 여부. 데이터 양에 따라서, IN-MEMORY(m), HYBRID(h), FILE(f) 해시 자료구조를 사용한다.
     *   buildtime: 해시 테이블 빌드 수행 시 소요된 시간(ms)
     *   time: 해시 테이블 조사 수행 시 소요된 시간(ms)
     *   fetch, ioread: temp file에서 해당 연산 수행 시 소요된 fetch 회수, I/O 읽기 회수
@@ -632,13 +633,15 @@ SQL 힌트
     NO_COVERING_IDX |
     NO_MULTI_RANGE_OPT |
     NO_SORT_LIMIT |
+    NO_PRED_PUSH |
+    NO_MERGE |
     NO_HASH_AGGREGATE |
     NO_HASH_LIST_SCAN |
     NO_LOGGING |
     RECOMPILE
 
     <spec_name_comma_list> ::= <spec_name> [, <spec_name>, ... ]
-        <spec_name> ::= table_name | view_name
+        <spec_name> ::= [schema_name.]table_name | [schema_name.]view_name
     
     <merge_statement_hint> ::=
     USE_UPDATE_INDEX (<update_index_list>) |
@@ -673,6 +676,8 @@ SQL 힌트는 주석에 더하기 기호(+)를 함께 사용하여 지정한다.
 *   **NO_COVERING_IDX**: 커버링 인덱스 기능을 사용하지 않도록 하는 힌트이다. 자세한 내용은 :ref:`covering-index` 를 참고한다.
 *   **NO_MULTI_RANGE_OPT**: 다중 키 범위 최적화 기능을 사용하지 않도록 하는 힌트이다. 자세한 내용은 :ref:`multi-key-range-opt` 를 참고한다.
 *   **NO_SORT_LIMIT**: SORT-LIMIT 최적화를 사용하지 않기 위한 힌트이다. 자세한 내용은 :ref:`sort-limit-optimization`\ 를 참고한다.
+*   **NO_PRED_PUSH**: PREDICATE-PUSH 최적화를 사용하지 않기 위한 힌트이다.
+*   **NO_MERGE**: VIEW-MERGE 최적화를 사용하지 않기 위한 힌트이다.
 
 .. _no-hash-aggregate:
 
@@ -718,8 +723,8 @@ SQL 힌트는 주석에 더하기 기호(+)를 함께 사용하여 지정한다.
 
 MERGE 문에는 다음과 같은 힌트를 사용할 수 있다. 
 
-*   **USE_INSERT_INDEX** (<*insert_index_list*>): MERGE 문의 INSERT 절에서 사용되는 인덱스 힌트. *insert_index_list*\ 에 INSERT 절을 수행할 때 사용할 인덱스 이름을 나열한다. MERGE 문의 <*join_condition*>에 해당 힌트가 적용된다.
-*   **USE_UPDATE_INDEX** (<*update_index_list*>): MERGE 문의 UPDATE 절에서 사용되는 인덱스 힌트. *update_index_list*\ 에 UPDATE 절을 수행할 때 사용할 인덱스 이름을 나열한다. MERGE 문의 <*join_condition*>과 <*update_condition*>에 해당 힌트가 적용된다.
+*   **USE_INSERT_IDX** (<*insert_index_list*>): MERGE 문의 INSERT 절에서 사용되는 인덱스 힌트. *insert_index_list*\ 에 INSERT 절을 수행할 때 사용할 인덱스 이름을 나열한다. MERGE 문의 <*join_condition*>에 해당 힌트가 적용된다.
+*   **USE_UPDATE_IDX** (<*update_index_list*>): MERGE 문의 UPDATE 절에서 사용되는 인덱스 힌트. *update_index_list*\ 에 UPDATE 절을 수행할 때 사용할 인덱스 이름을 나열한다. MERGE 문의 <*join_condition*>과 <*update_condition*>에 해당 힌트가 적용된다.
 *   **RECOMPILE**: 위의 :ref:`RECOMPILE <recompile>`\ 을 참고한다.
 
 조인 시 사용하는 힌트의 경우 힌트 안에 조인할 테이블이나 뷰 이름을 명시할 수 있는데, 이때 테이블 이름/뷰 이름은 ","로 구분한다.
@@ -947,11 +952,11 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
 필터링된 인덱스(filtered index)는 한 테이블에 대해 잘 정의된 부분 집합을 정렬하거나 찾거나 연산해야 할 때 사용되며, 전체 데이터에서 조건에 부합하는 일부 데이터만 인덱스에 유지하므로 부분 인덱스(partial index)라고도 한다. ::
 
     CREATE /*+ hints */ INDEX index_name
-    ON table_name (col1, col2, ...) 
+    ON [schema_name.]table_name (col1, col2, ...) 
     WHERE <filter_predicate>;
      
     ALTER  /*+ hints */ INDEX index_name
-    [ ON table_name (col1, col2, ...) 
+    [ ON [schema_name.]table_name (col1, col2, ...) 
     [ WHERE <filter_predicate> ] ]
     REBUILD;
      
@@ -1181,10 +1186,10 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
 함수 기반 인덱스(function-based index)는 특정 함수를 이용하여 테이블 행들로부터 값의 조합에 기반한 데이터를 정렬하거나 찾고 싶을 때 사용한다. 예를 들어, 공백을 무시한 문자열을 찾는 작업을 하고 싶을 때 이러한 기능을 수행하는 함수를 이용하게 되는데, 함수를 통해 칼럼 값을 변경하게 되면 일반 인덱스를 통해서 인덱스 스캔을 할 수 없다. 이러한 경우에 함수 기반 인덱스를 생성하면 이를 통해 해당 질의 처리를 최적화할 수 있다. 다른 예로, 대소문자를 구분하지 않는 이름을 검색할 때 활용할 수 있다. ::
 
     CREATE /*+ hints */ INDEX index_name
-    ON table_name (function_name (argument_list));
+    ON [schema_name.]table_name (function_name (argument_list));
     
     ALTER /*+ hints */ INDEX index_name
-    [ ON table_name (function_name (argument_list)) ]
+    [ ON [schema_name.]table_name (function_name (argument_list)) ]
     REBUILD;
 
 다음 인덱스가 생성된 이후 **SELECT** 질의는 자동으로 함수 기반 인덱스를 사용한다.

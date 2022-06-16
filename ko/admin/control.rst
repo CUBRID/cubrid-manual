@@ -152,28 +152,14 @@ CUBRID 자바 저장 프로시저 (Java SP) 서버 프로세스를 제어하기 
 *   restart: 자바 저장 프로시저 서버 프로세스 재시작
 *   status: 자바 저장 프로시저 서버 프로세스 상태 확인
 
-모든 명령어는 특정 데이터베이스 이름 (**[database_name]**) 을 인수로 지정할 수 있으며, 데이터베이스 이름을 지정하지 않으면 cubrid.conf의 **[service]** 섹션의 **server** 프로퍼티에서 데이터베이스 이름을 참조한다.
+| 모든 명령어는 특정 데이터베이스 이름 (**[database_name]**) 을 인수로 지정할 수 있다.
+| 데이터베이스 이름을 지정하지 않으면 **status** 명령어는 구동 중인 모든 데이터베이스에 대해 자바 저장 프로시저 서버의 상태 정보를 표시한다.
 
 ::
 
-    # cubrid.conf
-
-    [service]
-
-    ...
-
-    server=demodb,testdb
-
-    ...
-
-::
-
-    % cubrid javasp start
+    % cubrid javasp start demodb
 
     @ cubrid javasp start: demodb
-    ++ cubrid javasp start: success
-
-    @ cubrid javasp start: testdb
     ++ cubrid javasp start: success
 
 .. _control-cubrid-services:
@@ -184,12 +170,11 @@ CUBRID 서비스
 서비스 등록
 -----------
 
-사용자는 임의로 데이터베이스 서버, CUBRID 브로커, CUBRID 자바 저장 프로시저 서버, CUBRID 매니저, CUBRID HA를 데이터베이스 환경 설정 파일(cubrid.conf)에 CUBRID 서비스로 등록할 수 있다. 이를 위해 cubrid.conf의 service 파라미터 값으로 각각 server, broker, javasp, manager, heartbeat를 입력하면 되며, 이들을 쉼표(,)로 구분하여 여러 개를 같이 등록할 수 있다.
+사용자는 임의로 데이터베이스 서버, CUBRID 브로커, CUBRID 매니저, CUBRID HA를 데이터베이스 환경 설정 파일(cubrid.conf)에 CUBRID 서비스로 등록할 수 있다. 이를 위해 cubrid.conf의 service 파라미터 값으로 각각 server, broker, manager, heartbeat를 입력하면 되며, 이들을 쉼표(,)로 구분하여 여러 개를 같이 등록할 수 있다.
 
 사용자가 별도로 서비스를 등록하지 않으면, 기본적으로 마스터 프로세스(cub_master)만 등록된다. CUBRID 서비스에 등록되어 있으면 **cubrid service** 유틸리티를 사용해서 한 번에 관련된 프로세스들을 모두 구동, 정지하거나 상태를 알아볼 수 있어 편리하다.
 
 - CUBRID HA를 설정하는 방법은 :ref:`cubrid-service-util`\ 을 참고한다.
-- CUBRID 자바 저장 프로시저 서버를 설정하는 방법은 :ref:`cubrid-javasp-server-config`\ 을 참고한다.
 
 다음은 데이터베이스 환경 설정 파일에서 데이터베이스 서버와 브로커를 서비스로 등록하고, CUBRID 서비스 구동과 함께 *demodb*\ 와 *testdb*\ 라는 데이터베이스를 자동으로 시작하도록 설정한 예이다.
 
@@ -201,11 +186,11 @@ CUBRID 서비스
     [service]
 
     # The list of processes to be started automatically by 'cubrid service start' command
-    # Any combinations are available with server, broker, manager, javasp and heartbeat.
+    # Any combinations are available with server, broker, manager and heartbeat.
     service=server,broker
 
     # The list of database servers in all by 'cubrid service start' command.
-    # This property is effective only when the above 'service' property contains 'server' or 'javasp' keyword.
+    # This property is effective only when the above 'service' property contains 'server' keyword.
     server=demodb,testdb
 
 서비스 구동
@@ -2306,6 +2291,56 @@ CUBRID 자바 저장 프로시저 서버 상태 확인
     -Xrs
     -------------------------------------------------
 
+
+.. _cubrid-javasp-with-server:
+
+데이터베이스 서버 구동 시 CUBRID 자바 저장 프로시저 함께 구동
+-----------------------------------------------------------------
+
+| **cubrid.conf** 파일에서 해당하는 데이터베이스에 대해 **java_stored_procedure** 설정값이 yes인 경우 
+| 데이터베이스 서버 시작 시 자바 저장 프로시저 서버를 시작하고, 데이터베이스 서버 종료 시 자바 저장 프로시저 서버를 종료한다.
+| 다음은 데이터베이스 서버 구동 시 자바 저장 프로시저 서버가 함께 시작하는 예시이다.
+
+::
+
+    # cubrid.conf
+
+    ...
+
+    [@demodb]
+    java_stored_procedure=yes
+    
+    [@testdb]
+    java_stored_procedure=no
+
+    ...
+
+::
+
+    -- demodb에 대해 java_stored_procedure 파라미터가 yes로 설정
+    % cubrid server start demodb
+    
+    @ cubrid server start: demodb
+
+    This may take a long time depending on the amount of restore works to do.
+    CUBRID 11.2
+
+    Calling java stored procedure is allowed
+
+::
+
+    -- testdb에 대해 java_stored_procedure 파라미터가 no로 설정
+    % cubrid server start testdb
+    
+    @ cubrid server start: testdb
+
+    This may take a long time depending on the amount of restore works to do.
+    CUBRID 11.2
+
+    java_stored_procedure system parameter is not enabled
+    Calling java stored procedure is not allowed
+
+
 .. _cubrid-javasp-server-config:
 
 Java 저장 함수/프로시저 서버 설정
@@ -2316,21 +2351,18 @@ Java 저장 함수/프로시저 서버 설정
 Java 저장 함수/프로시저 환경 설정
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-CUBRID에서 Java 저장 함수/프로시저를 사용하기 위해서는 CUBRID 서버가 설치되는 환경에 Java Runtime Environment (JRE) 1.6 이상 버전이 설치되어야 한다. JRE는 Developer Resources for Java Technology 사이트(`https://www.oracle.com/java/technologies <https://www.oracle.com/java/technologies>`_)에서 다운로드할 수 있다.
+CUBRID에서 Java 저장 함수/프로시저를 사용하기 위해서는 CUBRID 서버가 설치되는 환경에 Java Development Kit (JDK) 1.8 64bit 버전이 설치되어야 한다.    
+JDK는 다음의 경로에서 다운로드할 수 있다.
 
-CUBRID 64비트 버전에는 JRE 64비트 버전이 필요하고, CUBRID 32비트 버전에는 JRE 32비트 버전이 필요하다. JRE 32비트 버전이 설치된 컴퓨터에서 CUBRID 64비트 버전을 실행하면 아래와 같은 에러 메시지가 출력된다. ::
+* `OpenJDK 8 <https://openjdk.java.net/projects/jdk8/>`_
+* `Oracle JDK 8 <https://www.oracle.com/kr/java/technologies/javase/javase8-archive-downloads.html>`_
 
-    % cubrid javasp start demodb
+JDK가 이미 설치되어 있다면, 아래와 같은 명령으로 JRE 버전을 확인한다. ::
 
-    Java 가상 머신 라이브러리를 찾을 수 없습니다:
-        Failed to get 'JVM_PATH' environment variable.
-        Failed to load libjvm from 'JAVA_HOME' environment variable:
-            /usr/java/jdk1.6.0_15/jre/lib/amd64/server/libjvm.so: cannot open shared object file: No such file or directory.
-
-JRE가 이미 설치되어 있다면, 아래와 같은 명령으로 버전을 확인한다. ::
-
-    % java -version Java(TM) SE Runtime Environment (build 1.6.0_05-b13)
-    Java HotSpot(TM) 64-Bit Server VM (build 10.0-b19, mixed mode)
+    % java -version
+    openjdk version "1.8.0_302"
+    OpenJDK Runtime Environment (build 1.8.0_302-b08)
+    OpenJDK 64-Bit Server VM (build 25.302-b08, mixed mode)
 
 **Windows 환경**
 
@@ -2338,51 +2370,33 @@ CUBRID는 Windows 환경에서 **jvm.dll** 파일을 로딩하여 Java 가상 �
 
 아래와 같이 명령어를 실행하여 **JAVA_HOME** 환경 변수를 설정하고 Java 실행 파일이 있는 디렉터리를 **Path** 환경 변수에 추가할 수 있다. GUI를 이용해서 환경 변수를 설정하는 방법은 JDBC 설치 및 설정을 참고한다.
 
-* JDK 1.6 64비트 버전을 설치하고, 환경 변수를 설정한 예 ::
+* JDK 1.8 환경 변수를 설정한 예 ::
 
-    % set JAVA_HOME=C:\jdk1.6.0
+    % set JAVA_HOME=C:\jdk1.8.0
     % set PATH=%PATH%;%JAVA_HOME%\jre\bin\server
-
-* JDK 1.6 32비트 버전을 설치하고, 환경 변수를 설정한 예 ::
-  
-    % set JAVA_HOME=C:\jdk1.6.0
-    % set PATH=%PATH%;%JAVA_HOME%\jre\bin\client
 
 SUN의 Java 가상 머신을 사용하지 않고 다른 벤더의 구현을 사용하는 경우를 포함하여 명시적으로 Java 가상 머신 (JVM)의 경로를 지정하려면 **jvm.dll** 파일의 경로를 **JVM_PATH** 환경 변수에 추가한다.
 CUBRID는 먼저 **JVM_PATH** 변수에서 **jvm.dll** 파일의 경로를 찾는다. **JVM_PATH** 가 설정되지 않았거나 파일을 로드할 수 없는 경우 위에서 설명한 **JAVA_HOME** 변수에서 **jvm.dll** 을 찾는다.
 
 *   **JVM_PATH** 환경 변수를 설정한 예 ::
     
-    % set JVM_PATH=C:\jdk1.6.0\jre\bin\server\libjvm.dll
+    % set JVM_PATH=C:\jdk1.8.0\jre\bin\server\libjvm.dll
 
 **Linux/Unix 환경**
 
 CUBRID는 Linux/Unix 환경에서 **libjvm.so** 파일을 로딩하여 Java 가상 머신을 실행시킨다. CUBRID는 먼저 **LD_LIBRARY_PATH** 환경 변수에서 **libjvm.so** 파일을 찾아 로딩한다. 만약 찾지 못하면 **JAVA_HOME** 환경 변수를 이용하여 찾는다. 리눅스의 경우 glibc 2.3.4 이상만 지원되며, 아래는 리눅스 환경 설정 파일(예: **.profile**, **.cshrc**, **.bashrc**, **.bash_profile** 등)에 환경 변수를 설정하는 예이다.
 
-*   JDK 1.6 64비트 버전을 설치하고, bash 셸에서 환경 변수를 설정한 예 ::
+*   bash 셸에서 JDK 1.8 환경 변수를 설정한 예 ::
 
-    % JAVA_HOME=/usr/java/jdk1.6.0_10
+    % JAVA_HOME=/usr/java/jdk1.8.0
     % LD_LIBRARY_PATH=$JAVA_HOME/jre/lib/amd64:$JAVA_HOME/jre/lib/amd64/server:$LD_LIBRARY_PATH
     % export JAVA_HOME
     % export LD_LIBRARY_PATH
 
-*   JDK 1.6 32비트 버전을 설치하고, bash 셸에서 환경 변수를 설정한 예 ::
+*   csh 셸에서 JDK 1.8 환경 변수를 설정한 예 ::
 
-    % JAVA_HOME=/usr/java/jdk1.6.0_10
-    % LD_LIBRARY_PATH=$JAVA_HOME/jre/lib/i386/:$JAVA_HOME/jre/lib/i386/client:$LD_LIBRARY_PATH
-    % export JAVA_HOME
-    % export LD_LIBRARY_PATH
-
-*   JDK 1.6 64비트 버전을 설치하고, csh 셸에서 환경 변수를 설정한 예 ::
-
-    % setenv JAVA_HOME /usr/java/jdk1.6.0_10
+    % setenv JAVA_HOME /usr/java/jdk1.8.0
     % setenv LD_LIBRARY_PATH $JAVA_HOME/jre/lib/amd64:$JAVA_HOME/jre/lib/amd64/server:$LD_LIBRARY_PATH
-    % set path=($path $JAVA_HOME/bin .)
-
-*   JDK 1.6 32비트 버전을 설치하고, csh 셸에서 환경 변수를 설정한 예 ::
-
-    % setenv JAVA_HOME /usr/java/jdk1.6.0_10
-    % setenv LD_LIBRARY_PATH $JAVA_HOME/jre/lib/i386:$JAVA_HOME/jre/lib/i386/client:$LD_LIBRARY_PATH
     % set path=($path $JAVA_HOME/bin .)
 
 SUN의 Java 가상 머신을 사용하지 않고 다른 벤더의 구현을 사용하는 경우를 포함하여 명시적으로 Java 가상 머신 (JVM)의 경로를 지정하려면 Java VM( **libjvm.so** ) 파일의 경로를 **JVM_PATH** 환경 변수에 추가한다.
@@ -2391,7 +2405,7 @@ CUBRID는 먼저 **JVM_PATH** 변수에서 **libjvm.so** 파일의 경로를 찾
 
 *   **JVM_PATH** 환경 변수를 설정한 예 ::
     
-    % JVM_PATH=/usr/java/jdk1.6.0_10/jre/lib/amd64/server/libjvm.so
+    % JVM_PATH=/usr/java/jdk1.8.0/jre/lib/amd64/server/libjvm.so
     % export JVM_PATH
 
 .. _cubrid-javasp-system-parameter:
@@ -2412,71 +2426,6 @@ CUBRID는 먼저 **JVM_PATH** 변수에서 **libjvm.so** 파일의 경로를 찾
 +-------------------------------------+--------+----------------+--------+--------+
 
 이 파라미터에 대한 자세한 사항은 :ref:`cubrid-conf` 를 참고한다.
-
-.. _cubrid-javasp-service-util:
-
-cubrid service에 CUBRID 자바 저장 프로시저 서버 등록
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-CUBRID service에 javasp를 등록하면, **cubrid service** 유틸리티를 사용하여 등록된 모든 자바 저장 프로시저 서버 프로세스 (javasp 프로세스)를 한 번에 시작, 중지 또는 서버의 상태를 확인이 가능하다.
-
-- 먼저 **cubrid.conf** 파일의 [**service**] 섹션의 **service** 파라미터에 **javasp** 를 추가한다.
-- 다음으로 데이터베이스에 대한 javasp 서버를 등록하기 위해 [**service**] 섹션의 **server** 파라미터에 데이터베이스 이름을 추가한다. **server** 파라미터는 데이터베이스 서버와 공유하는 것을 참고한다. javasp 서버는 동일한 데이터베이스 이름을 가진 데이터베이스 서버에 종속된다.
-- 마지막으로 **java_stored_procedure**를 yes로 설정하여 해당 데이터베이스에 대한 **javasp** 서버 구동을 활성화한다.
-
-다음은 **cubrid.conf** 파일에서 **javasp** 서버를 서비스로 등록하는 방법을 보여준다.
-*demodb*와 *testdb*는 모두 **server** 파라미터에 추가되어 있지만, **java_stored_procedure**가 yes로 설정된 demodb만 **cubrid service start** 명령으로 시작된다.
-
-::
-
-    # cubrid.conf
-
-    ...
-
-    [service]
-
-    ...
-
-    service=broker,server,javasp
-
-    # The list of database servers in all by 'cubrid service start' command.
-    # This property is effective only when the above 'service' property contains 'server' or 'javasp' keyword.
-    server=demodb,testdb
-
-    ...
-
-    [common]
-
-    ...
-
-    [@demodb]
-    java_stored_procedure=yes
-
-    [@testdb]
-    java_stored_procedure=no
-
-::
-
-    % cubrid service start
-    
-    @ cubrid master start
-    ++ cubrid master start: success
-    @ cubrid server start: demodb
-
-    This may take a long time depending on the amount of restore works to do.
-    CUBRID 11.0
-    
-    ++ cubrid server start: success
-    @ cubrid server start: testdb
-
-    This may take a long time depending on the amount of recovery works to do.
-    CUBRID 11.0
-
-    ++ cubrid server start: success
-    @ cubrid javasp start: demodb
-    ++ cubrid javasp start: success
-    @ cubrid broker start
-    ++ cubrid broker start: success
 
 .. _cubrid-javasp-server-log:
 

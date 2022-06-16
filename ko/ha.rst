@@ -627,10 +627,6 @@ CUBRID HA 그룹 내에서 사용할 그룹 이름과 레플리카 노드 이름
 
 CUBRID HA 모드로 구동할 데이터베이스 이름을 명시한다. 기본값은 **NULL** 이다. 여러 개의 데이터베이스 이름은 쉼표(,) 또는 콜론(:)으로 구분한다.
 
-.. note::
-
-    이 파라미터에서 명시한 멤버 노드들의 호스트 이름은 IP로 대체할 수 없으며, 사용자는 반드시 **/etc/hosts** 에 등록되어 있는 것을 사용해야 한다. 
-
 접속
 ^^^^
 
@@ -757,7 +753,7 @@ CUBRID HA의 복제 로그 반영 프로세스에서 에러가 발생하면 해�
 
 복제 지연으로 인해 우선 순위가 낮은 DB에 연결된 CAS는 **cubrid_broker.conf**\의 :ref:`RECONNECT_TIME <reconnect_time>` 파라미터로 명시한 시간이 경과하면 복제 지연이 해소되었을 것으로 기대하여, 우선 순위가 높은 standby DB에 재접속을 시도한다. 
 
-**ha_copy_log_timeout**
+**ha_delay_limit_delta**
 
 위에 기술한 **ha_delay_limit** 을 참조하라.
 
@@ -765,12 +761,12 @@ CUBRID HA의 복제 로그 반영 프로세스에서 에러가 발생하면 해�
 
 어떤 노드의 데이터베이스 서버 프로세스가 상대방 노드의 복제 로그 복사 프로세스로부터 응답을 대기하는 최대 시간이다. 기본값은 5(초)이다. 이 값이 -1이면 무한 대기한다. 오직 **SYNC** 로그 복제 모드(**ha_copy_sync_mode**) 파라미터와 함께 작동한다.
 
-**ha_monitor_disk_failure_interval** 
+**ha_check_disk_failure_interval** 
   
-이 파라미터 값에 설정한 시간마다 디스크 장애 여부를 판단한다. 기본값은 30초이며, 단위는 초이다. 
+이 파라미터 값에 설정한 시간마다 디스크 장애 여부를 판단한다. 기본값은 15초이며, 단위는 초이다. 
   
-*   **ha_copy_log_timeout** 파라미터의 값이 -1인 경우, **ha_monitor_disk_failure_interval**\의 값은 무시되며 디스크 장애 여부를 판단하지 않는다. 
-*   **ha_monitor_disk_failure_interval**\의 값이 **ha_copy_log_timeout**\의 값보다 작게 설정된 경우, **ha_copy_log_timeout** + 20초의 시간마다 디스크 장애 여부를 판단한다.
+*   **ha_copy_log_timeout** 파라미터의 값이 -1인 경우, **ha_check_disk_failure_interval**\의 값은 무시되며 디스크 장애 여부를 판단하지 않는다. 
+*   **ha_check_disk_failure_interval**\의 값이 **ha_copy_log_timeout**\의 값보다 작게 설정된 경우, **ha_copy_log_timeout** + 20초의 시간마다 디스크 장애 여부를 판단한다.
 
 **ha_unacceptable_proc_restart_timediff**
 
@@ -3516,7 +3512,7 @@ checksumdb
 
 .. option:: -n, --table-name=STRING
 
-     체크섬 결과를 저장할 테이블명을 지정한다. (기본값: db_ha_checksum)
+     체크섬 결과를 저장할 테이블명을 지정한다. 테이블명 입력 시 "소유자명.테이블명" 형식을 사용해야 하며, 현재는 소유자명으로 dba만 지정할 수 있다. (기본값: dba.db_ha_checksum)
 
 .. option:: -r, --report-only
 

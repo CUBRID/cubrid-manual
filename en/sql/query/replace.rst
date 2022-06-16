@@ -11,16 +11,18 @@ The **REPLACE** statement works like :doc:`insert`, but the difference is that i
 ::
 
     <REPLACE ... VALUES statement>
-    REPLACE [INTO] table_name [(column_name, ...)]
+    REPLACE [INTO] [schema_name.]table_name [(column_name, ...)]
         {VALUES | VALUE}({expr | DEFAULT}, ...)[,({expr | DEFAULT}, ...),...]
      
     <REPLACE ... SET statement>
-    REPLACE [INTO] table_name
+    REPLACE [INTO] [schema_name.]table_name
         SET column_name = {expr | DEFAULT}[, column_name = {expr | DEFAULT},...]
      
     <REPLACE ... SELECT statement>
-    REPLACE [INTO] table_name [(column_name, ...)]
+    REPLACE [INTO] [schema_name.]table_name [(column_name, ...)]
         SELECT...
+
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 
 *   *table_name*: Specifies the name of the target table into which you want to insert a new record.
 

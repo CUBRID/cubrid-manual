@@ -41,6 +41,8 @@ The following shows how to use the cubrid management utilities. ::
         gen_tz [option] [<database-name>]  --- Generates C source file containing timezone data ready to be compiled into a shared library
         dump_tz [option]  --- Displaying timezone related information
         tde <operation> [option] <database-name> --- Managing Transparent Data Encryption (TDE)
+        vacuumdb [option] <database-name>  --- Vacuuming deleted records or unnecessary mvcc related information from records in the database
+        flashback [option] <database-name> <owner_name.class_name> --- Provides statements to rewind a specific transaction.
 
 cubrid Utility Logging
 ----------------------
@@ -793,7 +795,7 @@ The **cubrid compactdb** utility is used to secure unused space of the database 
 
 Reference to the object deleted during compacting is displayed as **NULL**, which means this can be reused by OIDs. ::
 
-    cubrid compactdb [options] database_name [class_name], class_name2, ...]
+    cubrid compactdb [options] database_name [schema_name.class_name [{, schema_name.class_name}]]
 
 *   **cubrid**: An integrated utility for the CUBRID service and database management.
 
@@ -801,7 +803,7 @@ Reference to the object deleted during compacting is displayed as **NULL**, whic
 
 *   *database_name*: The name of the database whose space is to be compacted. The path name to the directory where the database is to be created must not be included.
 
-*   *class_name_list*: You can specify the list of tables names that you want to compact space after a database name; the **-i** option cannot be used together. If you use the lists on client/server mode, it skips securing space taken by objects such as catalog, delete files and tracker, etc. 
+*   *class_name_list*: You can specify the list of tables names that you want to compact space after a database name; the **-i** option cannot be used together. The table name must be prefixed with the schema name. If you use the lists on client/server mode, it skips securing space taken by objects such as catalog, delete files and tracker, etc. 
 
 **-I**, **-c**, **-d**, **-p** options are applied in client/server mode only.
 
@@ -828,7 +830,7 @@ The following shows [options] available with the **cubrid compactdb** utility.
 
 .. option:: -i, --input-class-file=FILE
 
-    You can specify an input file name that contains the table name with this option. Write one table name in a single line; invalid table name is ignored. Note that you cannot specify the list of the table names after a database name in case of you use this option. If you use this option on client/server mode, it skips securing space taken by objects such as catalog, delete files and tracker, etc.
+    You can specify an input file name that contains the table name with this option. Write one table name in a single line; invalid table name is ignored. The table name must be prefixed with the schema name. Note that you cannot specify the list of the table names after a database name in case of you use this option. If you use this option on client/server mode, it skips securing space taken by objects such as catalog, delete files and tracker, etc.
 
 The following options can be used in client/server mode only.
 
@@ -836,7 +838,7 @@ The following options can be used in client/server mode only.
 
     You can specify the number of maximum pages that can be committed once with this option. The default value is 10, the minimum value is 1, and the maximum value is 10. The less option value is specified, the more concurrency is enhanced because the value for class/instance lock is small; however, it causes slowdown on operation, and vice versa. ::
 
-        cubrid compactdb --CS-mode -p 10 testdb tbl1, tbl2, tbl5
+        cubrid compactdb --CS-mode -p 10 testdb public.tbl1, public.tbl2, public.tbl5
 
 .. option:: -d, --delete-old-repr
 
@@ -857,7 +859,7 @@ optimizedb
 
 Updates statistical information such as the number of objects, the number of pages to access, and the distribution of attribute values. ::
 
-    cubrid optimizedb [option] database_name
+    cubrid optimizedb [<option>] database_name
 
 *   **cubrid**: An integrated utility for the CUBRID service and database management.
 
@@ -865,15 +867,17 @@ Updates statistical information such as the number of objects, the number of pag
 
 *   *database_name*: The name of the database whose cost-based query optimization statistics are to be updated.
 
-The following shows [option] available with the **cubrid optimizedb** utility.
+The following shows <option> available with the **cubrid optimizedb** utility.
 
 .. program :: optimizedb
 
 .. option:: -n, --class-name
 
-    The following example shows how to update the query statistics information of the given class by using the **-n** option. ::
+    The following example shows how to update the query statistics information of the given class by using the **-n** option. The table name must be prefixed with the schema name.
+    
+    ::
 
-        cubrid optimizedb -n event_table testdb
+        cubrid optimizedb -n public.event_table testdb
 
 The following example shows how to update the query statistics information of all classes in the database. ::
 
@@ -3020,7 +3024,7 @@ The **cubrid checkdb** utility is used to check the consistency of a database. Y
 
 ::
 
-    cubrid checkdb [options] database_name [table_name1 table_name2 ...]
+    cubrid checkdb [options] database_name [schema_name.table_name [{, schema_name.table_name}]]
 
 *   **cubrid**: An integrated utility for CUBRID service and database management.
 
@@ -3028,7 +3032,9 @@ The **cubrid checkdb** utility is used to check the consistency of a database. Y
 
 *   *database_name*: The name of the database whose consistency status will be either checked or restored.
 
-*   *table_name1 table_name2*: List the table names for consistency check or recovery
+*   *schema_name*: The schema name of the table.
+
+*   *table_name*: List the table names for consistency check or recovery
 
 The following shows [options] available with the **cubrid checkdb** utility.
 
@@ -3072,9 +3078,9 @@ The following shows [options] available with the **cubrid checkdb** utility.
 
     You can specify tables to check the consistency or to restore, by specifying the **-i** *FILE* option or listing the table names after a database name. Both ways can be used together. If a target is not specified, entire database will be a target of consistency check or restoration. ::
 
-        cubrid checkdb demodb tbl1 tbl2
-        cubrid checkdb -r demodb tbl1 tbl2
-        cubrid checkdb -r -i table_list.txt demodb tbl1 tbl2
+        cubrid checkdb demodb public.table_1 public.table_2
+        cubrid checkdb -r demodb public.table_1 public.table_2
+        cubrid checkdb -r -i table_list.txt demodb public.table_1 public.table_2
 
     Empty string, tab, carriage return and comma are separators among table names in the table list file specified by **-i** option. The following example shows the table list file; from t1 to t10, it is recognized as a table for consistency check or restoration. ::
 
@@ -3298,6 +3304,181 @@ The following table shows [options] available with the cubrid tde utility.
 .. option:: -p, --dba-password=PASSWORD
 
     This option specifies the password of the DBA.
+
+.. _vacuumdb:
+
+vacuumdb
+--------
+
+The **cubrid vacuumdb** utility is used to vacuum deleted records and unnecessary mvcc related information from records in the database. And it is also used to get the status information about the vacuum. ::
+
+    cubrid vacuumdb [options] database_name
+
+*   **cubrid**: An integrated utility for the CUBRID service and database management.
+
+*   **vacuumdb**: A utility that vacuum deleted records and unnecessary mvcc related information from records in the database.
+
+*   *database_name*: The name of the database to vacuum.
+
+The following shows [options] available with the **cubrid vacuumdb** utility.
+
+.. program:: vacuumdb
+
+.. option:: -o, --output-file=FILE
+
+    This option is used to store the status information about the vacuum in a specified file. The file is created in the current directory. If the **-o** option is not specified, the message is displayed on a console screen. ::
+
+        cubrid vacuumdb -o db_output demodb
+
+.. option:: --dump
+
+    This option is used to display the status information about the vacuum. It currently displays the first log page ID referenced by the vacuum and the log volume name in which it resides. Users can check the progress of the vacuum operation through the change of the first log page ID and they can know the minimum log volume to keep for the vacuum operation. It can be used with both the standalone mode and the client/server mode. ::
+
+        cubrid vacuumdb --dump demodb
+
+.. option:: -S, --SA-mode
+
+    This option performs vacuuming the database in standalone mode. ::
+
+        cubrid vacuumdb -S demodb
+
+.. option:: -C, --CS-mode
+
+    This option performs vacuuming the database in client/server mode. But it is not currently supported to vacuum in this mode. ::
+
+        cubrid vacuumdb -C demodb
+
+.. _flashback:
+
+flashback
+---------
+
+The **cubrid flashback** utility is used to get SQL statements to rewind a specific committed transaction, and can only be executed by the **DBA** user. The system parameter **supplemental_log** must be turned on, and flashback is supported only for DML executed after the **supplemental_log** is set. ::
+
+    cubrid flashback [options] database_name owner_name.class_name1 [owner_name.class_name2, ...]
+
+*   **cubrid**: An integrated utility for the CUBRID service and database management.
+
+*   **flashback**: A utility that provides statements to rewind a specific transaction.
+
+*   *database_name*: The name of the database whose transaction is to be rewound.
+
+*   *owner_name.class_name*: The classes to rewind. When specifying the class_name, it must be specified along with the owner name.
+
+The following shows what information is displayed when a user runs "cubrid flashback demodb dba.tbl".
+
+::
+
+    $ csql -u dba demodb
+
+    csql> CREATE TABLE tbl (a INT);
+    csql> INSERT INTO tbl VALUES (10);
+
+    $ cubrid flashback demodb dba.tbl
+
+    Flashback Summary
+    Number of Transaction: 1
+    Start date - End date: 03-05-2022:10:52:56 - 03-05-2022:11:02:56
+    Transaction id  User name                         Start time            End time              Num_insert  Num_update  Num_delete  Table
+               135  DBA                               03-05-2022:11:02:40   03-05-2022:11:02:41            1           0           0  dba.tbl
+    Enter transaction id (press -1 to quit): 135
+
+    delete from [dba.tbl] where [a] = 10 limit 1;
+
+In the above example, when the flashback is executed, it displays information about transactions performed within the specified time period. If users do not specify a period, the transaction history up to 10 minutes before the current time is displayed.
+When the user selects a transaction ID, SQL statements are provided to execute the flashback on DML executed within the selected transaction. The user must enter the transaction ID within 300 seconds which can be adjusted using the system parameter **flashback_timeout** .
+
+Each column's meaning in the **Flashback Summary** is as following.
+
+    *   Transaction id : The identifier of the transaction
+    *   User name : Transaction user
+    *   Start time : Transaction start time (approximate time)
+    *   End time :  Transaction end time
+    *   Num_insert : Number of insert operations executed within the transaction
+    *   Num_update : Number of update operations executed within the transaction
+    *   Num_delete : Number of delete operations executed within the transaction
+    *   Table : List of tables for which DMLs have been performed within the transaction
+
+.. note:: 
+		If users attempt to rewind a table on which a trigger is created, unintended results may be obtained. Users are recommended to disable triggers on the table before executing the flashback. For more information, see :ref:`alter-trigger`.
+
+The following shows [options] available with the **cubrid flashback** utility.
+
+.. program:: flashback
+
+.. option:: -o, --output-file=FILE
+
+    This option is used to store the SQL statements that can rewind a specific transaction in a specified file. If the **-o** option is not specified, the message is displayed on a console screen. ::
+
+        cubrid flashback -o db_output demodb dba.tbl
+
+.. option:: -u, --user=ID
+
+    This option is used to specify the user who executed the SQL statements. If the **-u** option is not specified, then it searches for statements executed by all users. ::
+
+        $ csql -u public demodb
+
+        csql> CREATE TABLE tbl (a int);
+        csql> INSERT INTO tbl VALUES (10);
+
+        csql> CALL login ('dba', '') ON CLASS db_user;
+
+        csql> INSERT INTO public.tbl VALUES (20);
+
+        $ cubrid flashback -u public demodb dba.tbl
+
+        Flashback Summary
+        Number of Transaction: 1
+        Start date - End date: 03-05-2022:10:52:56 - 03-05-2022:11:02:56
+        Transaction id  User name                         Start time            End time              Num_insert  Num_update  Num_delete  Table
+                   135  PUBLIC                            03-05-2022:11:02:40   03-05-2022:11:02:41            1           0           0  public.tbl
+        Enter transaction id (press -1 to quit): 135
+
+        delete from [public.tbl] where [a] = 10 limit 1;
+
+.. option:: -p, --dba-password=PASSWORD
+
+    This option specifies the password of the dba. If the **-p** option is not specified, then the password should be entered in the prompt.
+
+.. option:: -s, --start-date=DATE
+
+    This option specifies the start date in the dd-mm-yyyy:hh:mi:ss (e.g. 28-04-2022:14:10:00) format. It finds transactions that started after the specified time or are in progress at the specified time among committed transactions. ::
+
+        cubrid flashback -s 28-04-2022:14:10:00 demodb dba.tbl
+
+.. option:: -e, --end-date=DATE
+
+    This option specifies the end date in the dd-mm-yyyy:hh:mi:ss (e.g. 28-04-2022:14:10:00) format. It finds transactions that have committed before the specified time.
+
+    If no start date is specified, the start date is set to the value of 10 minutes before the end date. Also, if an end date is not specified, the end date is set to 10 minutes after the start date.
+    If neither start date nor end date is set, transactions performed up to 10 minutes before the current time are searched for. ::
+
+        cubrid flashback -e 28-04-2022:14:10:00 demodb dba.tbl
+
+.. option:: --detail
+
+    This option is used to display the detailed information for each SQL statement. Transaction ID, transaction user, and original SQL statements are displayed with the SQL statements for flashback. The original SQL statement is not the exact syntax user executed. It simply represents the user-executed statement as INSERT/UPDATE/DELETE statements that are executed row-by-row. For example, An INSERT … SELECT statement is expressed as multiple INSERT statements.
+    If the **--detail** option is not specified, only the SQL statements for flashback is displayed. ::
+
+        cubrid flashback --detail demodb dba.tbl
+
+        Flashback Summary
+        Number of Transaction: 1
+        Start date - End date: 03-05-2022:10:52:56 - 03-05-2022:11:02:56
+        Transaction id  User name                         Start time            End time              Num_insert  Num_update  Num_delete  Table
+                   135  DBA                               03-05-2022:11:02:40   03-05-2022:11:02:41            1           0           0  dba.tbl
+        Enter transaction id (press -1 to quit): 135
+
+        [TRANSACTION ID] 135
+        [USER]           DBA
+        [ORIGINAL]       insert into [dba.tbl] values (10);
+        [FLASHBACK]      delete from [dba.tbl] where [a] = 10 limit 1;
+
+.. option:: --oldest
+
+    This option is used to display the SQL statements executed within the specified transaction in chronological order. If the **--oldest** is not specified, the SQL statements executed within the transaction are displayed in reverse chronological order. ::
+
+        cubrid flashback --oldest demodb dba.tbl
 
 HA Commands
 -----------

@@ -70,9 +70,9 @@ OS Environment and Java Environment Variables
 
 *   PATH: In the Linux environment, the directory **$CUBRID/bin**, which includes a CUBRID system executable file, must be included in the PATH environment variable.
 
-*   LD_LIBRARY_PATH: In the Linux environment, **$CUBRID/lib**, which is the CUBRID system's dynamic library file (libjvm.so), must be included in the **LD_LIBRARY_PATH** (or **SHLIB_PATH** or **LIBPATH**) environment variable.
+*   LD_LIBRARY_PATH: In the Linux environment, **$CUBRID/lib** and **$CUBRID/cci/lib**, which is the CUBRID system's dynamic library file (libjvm.so), must be included in the **LD_LIBRARY_PATH** (or **SHLIB_PATH** or **LIBPATH**) environment variable.
 
-*   Path: In the Windows environment, the **%CUBRID%\\bin**, which is a directory that contains CUBRID system's execution file, must be included in the **Path** environment variable.
+*   Path: In the Windows environment, the **%CUBRID%\\bin** and **%CUBRID%\\cci\\bin**, which is a directory that contains CUBRID system's execution file, must be included in the **Path** environment variable.
 
 *   JAVA_HOME: To use the Java stored procedure in the CUBRID system, the Java Virtual Machine (JVM) version 1.6 or later must be installed, and the **JAVA_HOME** environment variable must designate the concerned directory. See the :ref:`cubrid-javasp-server-config`.
 
@@ -99,11 +99,11 @@ If the CUBRID system has been installed on Linux, the installation program autom
     
     if [ "$ld_lib_path" = "" ]
     then
-        LD_LIBRARY_PATH=$CUBRID/lib
+        LD_LIBRARY_PATH=$CUBRID/lib:$CUBRID/cci/lib
     else
-        LD_LIBRARY_PATH=$CUBRID/lib:$LD_LIBRARY_PATH
+        LD_LIBRARY_PATH=$CUBRID/lib:$CUBRID/cci/lib:$LD_LIBRARY_PATH
     fi
-    
+
     SHLIB_PATH=$LD_LIBRARY_PATH
     LIBPATH=$LD_LIBRARY_PATH
     PATH=$CUBRID/bin:$CUBRID/cubridmanager:$PATH
@@ -281,7 +281,7 @@ The connection process between the application and the DB is as follows:
 #.  The cub_broker selects a connectable CAS.
 #.  The application and CAS are connected.
 
-    In Linux, BROKER_PORT, which is used as an application, is connected to CAS through the Unix domain socket. In Windows, since the Unix domain socket cannot be used, an application and CAS are connected through a port of which the number is the sum of the corresponding CAS ID and the APPL_SERVER_PORT value set in the cubrid_broker.conf. If the APPL_SERVER_PORT value has not been set, the port value connected to the first CAS is BROKER_PORT + 1.
+    In Linux, established TCP connection between the **BROKER** and the client will be passed to the **CAS**. Therefore, there is no need for an additional network port for the application to connect to the CAS. However, in **Windows**, when an application connects to a BROKER, the BROKER delivers the network port number to connect to the available CAS to the application. After the client closes the current connection with the BROKER, it connects to the CAS with the received network port number from the BROKER. If the **APPL_SERVER_PORT** parameter is not set, the network port used by the first CAS becomes BROKER_PORT + 1.
 
     For example, if the BROKER_PORT is 33000 and the APPL_SERVER_PORT value has not been set in Windows, the ports used between the application and CAS are as follows:
 

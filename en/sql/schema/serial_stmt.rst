@@ -20,7 +20,7 @@ You can create a serial object in the database by using the **CREATE SERIAL** st
 
 ::
 
-    CREATE SERIAL serial_name
+    CREATE SERIAL [schema_name.]serial_name
     [START WITH initial]
     [INCREMENT BY interval]
     [MINVALUE min | NOMINVALUE]
@@ -29,7 +29,8 @@ You can create a serial object in the database by using the **CREATE SERIAL** st
     [CACHE cached_num | NOCACHE]
     [COMMENT 'comment_string'];
 
-*   *serial_identifier*: specifies the name of the serial to be generated(maximum: 254 bytes).
+*   *schema_name*: Specifies the schema name of the serial(maximum: 31 bytes). If omitted, the schema name of the current session is used.
+*   *serial_name*: specifies the name of the serial to be generated(maximum: 222 bytes).
 
 *   **START WITH** *initial*: Specifies the initial value of serial. The range of this value is between -1,000,000,000,000,000,000,000,000,000,000,000,000(-10^36) and    9,999,999,999,999,999,999,999,999,999,999,999,999(10^37-1). The default value of ascending serial is 1 and that of descending serial is -1.
 
@@ -121,7 +122,7 @@ With the **ALTER SERIAL** statement, you can update the increment of the serial 
 
 ::
 
-    ALTER SERIAL serial_identifier
+    ALTER SERIAL [schema_name.]serial_name
     [INCREMENT BY interval]
     [START WITH initial_value]
     [MINVALUE min | NOMINVALUE]
@@ -130,7 +131,8 @@ With the **ALTER SERIAL** statement, you can update the increment of the serial 
     [CACHE cached_num | NOCACHE]
     [COMMENT 'comment_string'];
 
-*   *serial_identifier*: specifies the name of the serial to be created(maximum: 254 bytes).
+*   *schema_name*: Specifies the schema name of the serial(maximum: 31 bytes). If omitted, the schema name of the current session is used.
+*   *serial_name*: specifies the name of the serial to be created(maximum: 222 bytes).
 
 *   **INCREMENT BY** *interval*: specifies the increment of the serial. For the *interval*, you can specify any integer with 38 digits or less except zero. The absolute value of the *interval* must be smaller than the difference between **MAXVALUE** and **MINVALUE**. If a negative number is specified, the serial is in descending order; otherwise, it is in ascending order. The default value is **1**.
 
@@ -198,9 +200,10 @@ If you also specify **IF EXISTS** clause, no error will be happened even if a ta
 
 ::
 
-    DROP SERIAL [ IF EXISTS ] serial_identifier ;
+    DROP SERIAL [ IF EXISTS ] [schema_name.]serial_name ;
 
-*   *serial_identifier*: Specifies the name of the serial to be dropped.
+*   *schema_name*: Specifies the schema name of the serial. If omitted, the schema name of the current session is used.
+*   *serial_name*: Specifies the name of the serial to be dropped.
 
 The following example shows how to drop the *order_no* serial.
 
@@ -217,11 +220,12 @@ Pseudocolumns
 
 You can access and update a serial by serial name and a pseudocolumn pair. ::
 
-    serial_identifier.CURRENT_VALUE
-    serial_identifier.NEXT_VALUE
+    [schema_name.]serial_name.CURRENT_VALUE
+    [schema_name.]serial_name.NEXT_VALUE
 
-*   *serial_identifier*.\ **CURRENT_VALUE**: Returns the current serial value.
-*   *serial_identifier*.\ **NEXT_VALUE**: Increments the serial value and returns the result.
+*   *schema_name*: Specifies the schema name of the serial. If omitted, the schema name of the current session is used.
+*   *[schema_name.]serial_name*.\ **CURRENT_VALUE**: Returns the current serial value.
+*   *[schema_name.]serial_name*.\ **NEXT_VALUE**: Increments the serial value and returns the result.
 
 The following example shows how to create a table *athlete_idx* where athlete numbers and names are stored and how to create the instances by using a serial *order_no*.
 
@@ -251,11 +255,12 @@ The following example shows how to create a table *athlete_idx* where athlete nu
 Functions
 ---------
 
-.. function:: SERIAL_CURRENT_VALUE (serial_name)
-.. function:: SERIAL_NEXT_VALUE (serial_name, number)
+.. function:: SERIAL_CURRENT_VALUE ([schema_name.]serial_name)
+.. function:: SERIAL_NEXT_VALUE ([schema_name.]serial_name, number)
 
     The **Serial** function consists of the **SERIAL_CURRENT_VALUE** and **SERIAL_NEXT_VALUE** functions.
     
+    :param schema_name: The schema name of the serial
     :param serial_name: Serial name
     :param number: The number of serials to be obtained
     :rtype:  NUMERIC(38,0)

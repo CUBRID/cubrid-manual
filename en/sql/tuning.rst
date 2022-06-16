@@ -11,7 +11,7 @@ Statistics for tables and indexes enables queries of the database system to proc
 
 ::
 
-    UPDATE STATISTICS ON class-name[, class-name, ...] [WITH FULLSCAN]; 
+    UPDATE STATISTICS ON [schema_name.]class-name [{, [schema_name.]class-name}] [WITH FULLSCAN]; 
      
     UPDATE STATISTICS ON ALL CLASSES [WITH FULLSCAN]; 
   
@@ -63,6 +63,7 @@ You can check the statistics Information with the session command of the CSQL In
 
     csql> ;info stats table_name
 
+*   *schema_name*: Specifies the schema of the table. If omitted, the schema name of the current session is used.
 *   *table_name*: Table name to check the statistics Information
 
 The following shows the statistical information of *t1* table in CSQL interpreter.
@@ -453,7 +454,7 @@ The following is an example to join 3 tables.
     csql> SET TRACE ON;
     csql> SELECT /*+ RECOMPILE ORDERED */ o.host_year, o.host_nation, o.host_city, n.name, SUM(p.gold), SUM(p.silver), SUM(p.bronze)
             FROM OLYMPIC o,
-                 (select * from PARTICIPANT p where p.gold > 10) p,
+                 (select /*+ NO_MERGE */ * from PARTICIPANT p where p.gold > 10) p,
                  NATION n
           WHERE o.host_year = p.host_year AND p.nation_code = n.code
           GROUP BY o.host_nation;
@@ -481,7 +482,7 @@ The following is an example to join 3 tables.
     Trace Statistics:
       SELECT (time: 6, fetch: 880, ioread: 0)
         SCAN (table: olympic), (heap time: 0, fetch: 104, ioread: 0, readrows: 25, rows: 25)
-          SCAN (hash temp buildtime : 0, time: 0, fetch: 0, ioread: 0, readrows: 76, rows: 38)
+          SCAN (hash temp(m), buildtime : 0, time: 0, fetch: 0, ioread: 0, readrows: 76, rows: 38)
             SCAN (index: nation.pk_nation_code), (btree time: 2, fetch: 760, ioread: 0, readkeys: 38, filteredkeys: 0, rows: 38) (lookup time: 0, rows: 38)
         GROUPBY (time: 0, hash: true, sort: true, page: 0, ioread: 0, rows: 5)
         SUBQUERY (uncorrelated)
@@ -514,7 +515,7 @@ The following are the explanation regarding items of trace statistics.
 
 *   temp: data scanning job with temp file
 
-    *   hash: hash list scan or not. See :ref:`NO_HASH_LIST_SCAN <no-hash-list-scan>` hint.
+    *   hash temp(m): hash list scan or not. depending on the amount of data, the IN-MEMORY(m), HYBRID(h), FILE(f) hash data structure is used.
     *   buildtime: the estimated time(ms) in building hash table.
     *   time: the estimated time(ms) in probing hash table.
     *   fetch, ioread: page fetching count and I/O read count in the temp file of this operation
@@ -631,6 +632,8 @@ Using hints can affect the performance of query execution. You can allow the que
     NO_COVERING_IDX |
     NO_MULTI_RANGE_OPT |
     NO_SORT_LIMIT |
+    NO_PRED_PUSH |
+    NO_MERGE |
     NO_HASH_AGGREGATE |
     NO_HASH_LIST_SCAN |
     NO_LOGGING |
@@ -638,7 +641,7 @@ Using hints can affect the performance of query execution. You can allow the que
     QUERY_CACHE
 
     <spec_name_comma_list> ::= <spec_name> [, <spec_name>, ... ]
-        <spec_name> ::= table_name | view_name
+        <spec_name> ::= [schema_name.]table_name | [schema_name.]view_name
     
     <merge_statement_hint> ::=
     USE_UPDATE_INDEX (<update_index_list>) |
@@ -672,6 +675,8 @@ The following hints can be specified in **UPDATE**, **DELETE** and **SELECT** st
 *   **NO_COVERING_IDX**: This is a hint not to use the covering index. For details, see :ref:`covering-index`.
 *   **NO_MULTI_RANGE_OPT**: This is a hint not to use the multi-key range optimization. For details, see :ref:`multi-key-range-opt`.
 *   **NO_SORT_LIMIT**: This is a hint not to use the SORT-LIMIT optimization. For more details, see :ref:`sort-limit-optimization`.
+*   **NO_PRED_PUSH**: This is a hint not to use the PREDICATE-PUSH optimization.
+*   **NO_MERGE**: This is a hint not to use the VIEW_MERGE optimization.
 
 .. _no-hash-aggregate:
 
@@ -717,8 +722,8 @@ The following hints can be specified in **UPDATE**, **DELETE** and **SELECT** st
 
 MERGE statement can have below hints.
 
-*   **USE_INSERT_INDEX** (<*insert_index_list*>): An index hint which is used in **INSERT** clause of **MERGE** statement. Lists index names to *insert_index_list* to use when executing **INSERT** clause. This hint is applied to  <*join_condition*> of **MERGE** statement.
-*   **USE_UPDATE_INDEX** (<*update_index_list*>): An index hint which is used in **UPDATE** clause of **MERGE** statement. Lists index names to *update_index_list* to use when executing **UPDATE** clause. This hint is applied to <*join_condition*> and <*update_condition*> of **MERGE** statement.
+*   **USE_INSERT_IDX** (<*insert_index_list*>): An index hint which is used in **INSERT** clause of **MERGE** statement. Lists index names to *insert_index_list* to use when executing **INSERT** clause. This hint is applied to  <*join_condition*> of **MERGE** statement.
+*   **USE_UPDATE_IDX** (<*update_index_list*>): An index hint which is used in **UPDATE** clause of **MERGE** statement. Lists index names to *update_index_list* to use when executing **UPDATE** clause. This hint is applied to <*join_condition*> and <*update_condition*> of **MERGE** statement.
 *   **RECOMPILE**: See the above :ref:`RECOMPILE <recompile>`.
 
 Table/view names to join can be specified to the joining hint; at this time, table/view names are separated by ",".
@@ -946,11 +951,11 @@ Filtered Index
 The filtered index is used to sort, search, or operate a well-defined partials set for one table. It is called the partial index since only some data that satisfy the condition are kept in that index. ::
 
     CREATE /*+ hints */ INDEX index_name
-    ON table_name (col1, col2, ...) 
+    ON [schema_name.]table_name (col1, col2, ...) 
     WHERE <filter_predicate>;
      
     ALTER  /*+ hints */ INDEX index_name
-    [ ON table_name (col1, col2, ...) 
+    [ ON [schema_name.]table_name (col1, col2, ...) 
     [ WHERE <filter_predicate> ] ]
     REBUILD;
      
@@ -1180,10 +1185,10 @@ Function-based Index
 Function-based index is used to sort or find the data based on the combination of values of table rows by using a specific function. For example, to find the space-ignored string, it can be used to optimize the query by using the function that provides the feature. In addition, it is useful to search the non-case-sensitive names. ::
 
     CREATE /*+ hints */ INDEX index_name
-    ON table_name (function_name (argument_list));
+    ON [schema_name.]table_name (function_name (argument_list));
     
     ALTER /*+ hints */ INDEX index_name
-    [ ON table_name (function_name (argument_list)) ]
+    [ ON [schema_name.]table_name (function_name (argument_list)) ]
     REBUILD;
 
 After the following indexes have been created, the **SELECT** query automatically uses the function-based index.

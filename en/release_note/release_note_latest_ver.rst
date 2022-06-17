@@ -67,7 +67,7 @@ Please refer to `change logs of CUBRID 11.2 <https://github.com/CUBRID/cubrid/re
 
 
 Cautions
-=========
+========
 
 .. _11_2_new_cautions:
 
@@ -111,7 +111,7 @@ The CCI Driver directory in the CUBRID package is changed from $CUBRID/lib and $
 * When using CCI, $CUBRID/cci/lib must be added to LD_LIBRARY_PATH in the environment variable.
 
 Changed Compression (-z, -\-compress) option to default on backup
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 System catalog information changed or added due to the addition of new features
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

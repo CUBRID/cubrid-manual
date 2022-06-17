@@ -1626,10 +1626,10 @@ Changes of Table Attributes based on Changes of Column Type
 *   **COMMENT** : Even though the **COMMENT** attribute is not specified in the column to change, it will not be removed from a new table if the attribute is present in the existing table. If you want to remove the attribute **COMMENT**, specify the **COMMENT ''** in the statement.
 
 *   **AUTO_INCREMENT** : Even though the **AUTO_INCREMENT** attribute is not specified in the column to change, it will not be removed from a new table if the attribute is present in the existing table.
-        *   caution) The **AUTO_INCREMENT** attribute can not removed from a new table once the attribute is set by ALTER or CREATE.
+        *   caution) The **AUTO_INCREMENT** attribute can not removed from a new table once the attribute is set by CREATE or ALTER.
 
 *   **ON UPDATE** : Even though the **ON UPDATE** attribute is not specified in the column to change, it will not be removed from a new table if the attribute is present in the existing table.
-        *   caution) The **ON UPDATE** attribute can not removed from a new table once the attribute is set by ALTER or CREATE.
+        *   caution) The **ON UPDATE** attribute can not removed from a new table once the attribute is set by CREATE or ALTER.
 
 *   **FOREIGN KEY** : You cannot change the column with the foreign key constraint that is referred to or refers to.
 

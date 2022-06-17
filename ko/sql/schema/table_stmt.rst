@@ -1614,15 +1614,21 @@ CHANGE/MODIFY 절
 
 *   **NOT NULL**
 
-    *   변경할 칼럼에 **NOT NULL** 제약 조건이 지정되지 않으면 기존 테이블에 존재하더라도 새 테이블에서 제거된다.
-    *   변경할 칼럼에 **NOT NULL** 제약 조건이 지정되면 시스템 파라미터 **alter_table_change_type_strict** 의 설정에 따라 결과가 달라진다.
+    *   변경할 칼럼에 **NOT NULL** 속성이 지정되지 않더라도 새 테이블에서 해당 속성이 제거되지 않고 그대로 남아있게 된다. 새 테이블에서 해당 속성을 제거하려면 구문에서 ** NULL **\을 지정하면 된다.
+    *   변경할 칼럼에 **NOT NULL** 속성이 지정되면 시스템 파라미터 **alter_table_change_type_strict** 의 설정에 따라 결과가 달라진다.
 
         *   **alter_table_change_type_strict** 가 yes이면 해당 칼럼의 값을 검사하여 **NULL** 이 존재하면 오류가 발생하고 변경을 수행하지 않는다.
         *   **alter_table_change_type_strict** 가 no이면 존재하는 모든 **NULL** 값을 변경할 타입의 고정 기본값(hard default value)으로 변경한다.
 
-*   **DEFAULT**: 변경할 칼럼에 **DEFAULT** 속성이 지정되지 않으면 이 속성이 기존 테이블에 있더라도 새 테이블에서 제거된다.
+*   **DEFAULT**: 변경할 칼럼에 **DEFAULT** 속성이 지정되지 않더라도 새 테이블에서 해당 속성이 제거되지 않고 그대로 남아있게 된다. 새 테이블에서 해당 속성을 제거하려면 구문에서 ** DEFAULT NULL **\을 지정하면 된다.
 
-*   **AUTO_INCREMENT**: 변경할 칼럼에 **AUTO_INCREMENT** 속성이 지정되지 않으면 이 속성이 기존 테이블에 있더라도 새 테이블에서 제거된다.
+*   **COMMENT**: 변경할 칼럼에 **COMMENT** 속성이 지정되지 않더라도 새 테이블에서 해당 속성이 제거되지 않고 그대로 남아있게 된다. 새 테이블에서 해당 속성을 제거하려면 구문에서 **COMMENT ''**\을 지정하면 된다.
+
+*   **AUTO_INCREMENT**: 변경할 칼럼에 **AUTO_INCREMENT** 속성이 지정되지 않더라도 새 테이블에서 해당 속성이 제거되지 않고 남아있게 된다.
+        *   주의) **AUTO_INCREMENT** 속성은 CREATE나 ALTER로 한 번 설정한 후에는 제거할 수 없다.
+
+*   **ON UPDATE**: 변경할 칼럼에 **ON UPDATE** 속성이 지정되지 않더라도 새 테이블에서 해당 속성이 제거되지 않고 남아있게 된다.
+        *   주의) **ON UPDATE** 속성은 CREATE나 ALTER로 한 번 설정한 후에는 제거할 수 없다.
 
 *   **FOREIGN KEY**: 참조되고 있거나 참조하고 있는 외래키(foreign key) 제약 조건을 지닌 칼럼은 변경할 수 없다.
 

@@ -1615,7 +1615,7 @@ Changes of Table Attributes based on Changes of Column Type
 
 *   **NOT NULL**
 
-    *   Even though the **NOT NULL** constraint is not specified, it will not be removed from a new table if the attribute is present in the existing table. If you want to remove the attribute **NOT NULL**, specify the **NULL** in the statement.
+    *   Even though the **NOT NULL** constraint is not specified, it will not be removed from a new table if the constraint is present in the existing table. If you want to remove the constraint **NOT NULL**, specify the **NULL** in the statement.
     *   If the **NOT NULL** constraint is specified in the column to change, the result varies depending on the configuration of the system parameter, **alter_table_change_type_strict**.
 
         *   If **alter_table_change_type_strict** is set to yes, the column values will be checked. If **NULL** exists, an error will occur, and the change will not be executed.

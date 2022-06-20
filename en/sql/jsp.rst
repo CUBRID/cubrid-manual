@@ -403,6 +403,8 @@ To load a compiled Java or JAR (Java Archive) file into CUBRID, use the **loadja
 
     *   **-y**: Automatically overwrites a class file with the same name, if any. The default value is **no**. If you load the file without specifying the **-y** option, you will be prompted to ask if you want to overwrite the class file with the same name (if any).
 
+.. _jsp-caution:
+
 Caution
 =======
 

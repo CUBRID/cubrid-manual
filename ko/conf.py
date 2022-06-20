@@ -116,7 +116,7 @@ html_theme = 'sphinx_rtd_theme' # 3
 html_theme_options = {
 	"collapse_navigation": False,
 	"display_version": False,
-  "navigation_depth": 5
+	"navigation_depth": 5
 }
 #	"codebgcolor": "#E8E8E8",
 #   "sidebarbgcolor": "#F4F7FA",

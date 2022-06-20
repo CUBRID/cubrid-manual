@@ -551,11 +551,11 @@ The following are [options] for **cubrid dumplocale**.
 
 .. option:: -s, --start-value=CODEPOINT
 
-    Specifies the dump scope. Starting codepoint for **-a, --identifier-alphabet, -c, -w** options. Default value: 0
+    Specifies the dump scope. Starting codepoint for **-a, -\-identifier-alphabet, -c, -w** options. Default value: 0
 
 .. option:: -e, --end-value=CODEPOINT
 
-    Specifies the dump scope. Ending codepoint for **-a, --identifier-alphabet, -c, -w** options. Default value: Max value read from the locale shared library.
+    Specifies the dump scope. Ending codepoint for **-a, -\-identifier-alphabet, -c, -w** options. Default value: Max value read from the locale shared library.
 
 .. option:: -k, --console-conversion
 

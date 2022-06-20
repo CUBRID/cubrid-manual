@@ -57,13 +57,13 @@ The following is [options] used in **cubrid unloaddb**.
         ..
         table_n
 
-    If this option is used together with the **--input-class-only** option, it creates schema, index, and data files of tables only specified in the input file of **-i** option.
+    If this option is used together with the **-\-input-class-only** option, it creates schema, index, and data files of tables only specified in the input file of **-i** option.
     
     ::
 
         cubrid unloaddb --input-class-only -i table_list.txt demodb
 
-    If this option is used together with the **--include-reference** option, it unloads the referenced tables as well.
+    If this option is used together with the **-\-include-reference** option, it unloads the referenced tables as well.
     
     ::
 
@@ -79,7 +79,7 @@ The following is [options] used in **cubrid unloaddb**.
 
 .. option:: --estimated-size=NUMBER
 
-    This option allows you to assign hash memory to store records of the database to be unloaded. If the **--estimated-size** option is not specified, the number of records of the database is determined based on recent statistics information. This option can be used if the recent statistics information has not been updated or if a large amount of hash memory needs to be assigned. Therefore, if the number given as the argument for the option is too small, the unload performance deteriorates due to hash conflicts.
+    This option allows you to assign hash memory to store records of the database to be unloaded. If the **-\-estimated-size** option is not specified, the number of records of the database is determined based on recent statistics information. This option can be used if the recent statistics information has not been updated or if a large amount of hash memory needs to be assigned. Therefore, if the number given as the argument for the option is too small, the unload performance deteriorates due to hash conflicts.
     
     ::
 
@@ -87,7 +87,7 @@ The following is [options] used in **cubrid unloaddb**.
 
 .. option:: --cached-pages=NUMBER
 
-    The **--cached-pages** option specifies the number of pages of tables to be cached in the memory. Each page is 4,096 bytes. The administrator can configure the number of pages taking into account the memory size and speed. If this option is not specified, the default value is 100 pages.
+    The **-\-cached-pages** option specifies the number of pages of tables to be cached in the memory. Each page is 4,096 bytes. The administrator can configure the number of pages taking into account the memory size and speed. If this option is not specified, the default value is 100 pages.
     
     ::
 
@@ -125,7 +125,7 @@ The following is [options] used in **cubrid unloaddb**.
 
 .. option:: --output-prefix=PREFIX
 
-    This option specifies the prefix for the names of schema and object files created by the unload operation. Once the example is executed, the schema file name becomes *abcd_schema* and the object file name becomes *abcd_objects*. If the **--output-prefix** option is not specified, the name of the database to be unloaded is used as the prefix.
+    This option specifies the prefix for the names of schema and object files created by the unload operation. Once the example is executed, the schema file name becomes *abcd_schema* and the object file name becomes *abcd_objects*. If the **-\-output-prefix** option is not specified, the name of the database to be unloaded is used as the prefix.
     
     ::
 
@@ -282,7 +282,7 @@ The following table shows [options] available with the **cubrid loaddb** utility
     
     The recommended commit interval varies depending on the data to be loaded. It is recommended that the parameter of the **-c** option be configured to 50 for schema loading and 1 for index loading. For record loading, the recommended and default value is 10240.
     
-    The previous versions of **CUBRID**, like 10.1 or older, did not have a default value for **--periodic-commit** and would commit the transation only after loading the whole data. With the current approach, if you want to use the replicate the same behavior, you have to set the **--periodic-commit** argument to a very high value, so that the commit is done after loading all the data.
+    The previous versions of **CUBRID**, like 10.1 or older, did not have a default value for **-\-periodic-commit** and would commit the transation only after loading the whole data. With the current approach, if you want to use the replicate the same behavior, you have to set the **-\-periodic-commit** argument to a very high value, so that the commit is done after loading all the data.
 
 ::
 
@@ -367,7 +367,7 @@ The following table shows [options] available with the **cubrid loaddb** utility
 
     *   +DEFAULT: Configures not to ignore errors from 24 to 33.
 
-    If the file that details errors is not specified by using the **--error-control-file** option, the **loaddb** utility is configured to ignore errors from 24 to 33 by default. As a warning error, it indicates that there is no enough space in the database volume. If there is no space in the assigned database volume, a generic volume is automatically created.
+    If the file that details errors is not specified by using the **-\-error-control-file** option, the **loaddb** utility is configured to ignore errors from 24 to 33 by default. As a warning error, it indicates that there is no enough space in the database volume. If there is no space in the assigned database volume, a generic volume is automatically created.
 
     The following example shows a file that details errors.
 
@@ -401,7 +401,7 @@ The following table shows [options] available with the **cubrid loaddb** utility
 
 .. option:: --no-user-specified-name
 
-    Files unloaded in a version older than 11.2 can be loaded in version 11.2 only if the **--no-user-specified-name** option is used.
+    Files unloaded in a version older than 11.2 can be loaded in version 11.2 only if the **-\-no-user-specified-name** option is used.
     
     ::
 
@@ -409,11 +409,11 @@ The following table shows [options] available with the **cubrid loaddb** utility
 
 .. warning::
 
-    The **--no-user-specified-name** option must not be used to load a file unloaded in version 11.2 or after version 11.2.
+    The **-\-no-user-specified-name** option must not be used to load a file unloaded in version 11.2 or after version 11.2.
 
 .. warning::
 
-    The **--no-logging** option enables to load data file quickly when **loaddb** is executed by not storing transaction logs; however, it has risk, which data cannot be recovered in case of errors occurred such as incorrect file format or system failure. In this case, you must rebuild database to solve the problem. Thus, in general, it is not recommended to use this option exception of building a new database which does not require data recovery. If you use this option, **loaddb** does not check the errors like unique violation. To use this option, you should consider these issues.
+    The **-\-no-logging** option enables to load data file quickly when **loaddb** is executed by not storing transaction logs; however, it has risk, which data cannot be recovered in case of errors occurred such as incorrect file format or system failure. In this case, you must rebuild database to solve the problem. Thus, in general, it is not recommended to use this option exception of building a new database which does not require data recovery. If you use this option, **loaddb** does not check the errors like unique violation. To use this option, you should consider these issues.
 
 .. _howtowrite-loadfile:
 
@@ -425,7 +425,7 @@ You can add mass data to the database more rapidly by writing the object input f
 Comment
 +++++++
 
-In CUBRID, a comment is represented by two hyphens (--). ::
+In CUBRID, a comment is represented by two hyphens (-\-). ::
 
     -- This is a comment!
 
@@ -586,5 +586,5 @@ The following steps describes migration scenario that can be applied while the e
 
 .. warning:: 
 
-   Data unloaded from a version older than 11.2 can be loaded from version 11.2 or version 11.2 or later only if the --no-user-specified-name option is used.
-   The --no-user-specified-name option should not be used when loading data unloaded in version 11.2 or after version 11.2.
+   Data unloaded from a version older than 11.2 can be loaded from version 11.2 or version 11.2 or later only if the **-\-no-user-specified-name** option is used.
+   The **-\-no-user-specified-name** option should not be used when loading data unloaded in version 11.2 or after version 11.2.

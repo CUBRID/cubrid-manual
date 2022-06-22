@@ -1629,7 +1629,7 @@ Changes of Table Attributes based on Changes of Column Type
         *   caution) The **AUTO_INCREMENT** attribute can not be removed from a new table once the attribute is set by CREATE or ALTER.
 
 *   **ON UPDATE** : Even though the **ON UPDATE** attribute is not specified in the column to change, it will not be removed from a new table if the attribute is present in the existing table.
-        *   caution) The **ON UPDATE** attribute can not removed from a new table once the attribute is set by CREATE or ALTER.
+        *   caution) The **ON UPDATE** attribute can not be removed from a new table once the attribute is set by CREATE or ALTER.
 
 *   **FOREIGN KEY** : You cannot change the column with the foreign key constraint that is referred to or refers to.
 

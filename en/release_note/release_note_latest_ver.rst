@@ -82,7 +82,7 @@ By introducing the concept of user schema, the same object name can be used for 
  * "." (dot) is not allowed in the object name.
  * When using a query or utility command, it must be used as "[user name].object name". (However, the user name can be omitted when querying the object of the logged-in user)
  * Changed to include user name in info schema and show full tables results.
- * The loaddb file prior to 11.2 must be modified to "user name.table name" so that it can be executed in 11.2, or loaddb can be executed by setting the --no-user-specified-name option.
+ * The loaddb file prior to 11.2 must be modified to "user name.table name" so that it can be executed in 11.2, or loaddb can be executed by setting the -\-no-user-specified-name option.
 
 The following functions and behavior changed when using "jdbc\:default\:connection\:" or calling getDefaultConnection() in JavaSP. (see :ref:`jsp-caution`)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -110,7 +110,7 @@ The CCI Driver directory in the CUBRID package is changed from $CUBRID/lib and $
 
 * When using CCI, $CUBRID/cci/lib must be added to LD_LIBRARY_PATH in the environment variable.
 
-Changed Compression (-z, --compress) option to default on backup (see :ref:`backupdb`)
+Changed Compression (-z, -\-compress) option to default on backup (see :ref:`backupdb`)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 System catalog information changed or added due to the addition of new features (see :doc:`catalog`)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

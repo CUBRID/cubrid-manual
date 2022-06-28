@@ -79,7 +79,7 @@ The following shows options available with the **cubrid backupdb** utility (opti
 
 .. option:: --no-check
 
-    The following shows how to execute backup without checking the consistency of the database by using the **--no-check** option. ::
+    The following shows how to execute backup without checking the consistency of the database by using the **-\-no-check** option. ::
 
         cubrid backupdb --no-check demodb
 
@@ -91,7 +91,7 @@ The following shows options available with the **cubrid backupdb** utility (opti
 
 .. option:: --no-compress
 
-    By default, CUBRID compresses the target database in order to reduce the size of the backup volume and then saves it. If a user wants to eliminate the CPU usage by the compression, they can set the **--no-compress** option not to compress the backup volume. ::
+    By default, CUBRID compresses the target database in order to reduce the size of the backup volume and then saves it. If a user wants to eliminate the CPU usage by the compression, they can set the **-\-no-compress** option not to compress the backup volume. ::
 
         cubrid backupdb --no-compress demodb
 
@@ -181,7 +181,7 @@ From version 11.2 of CUBRID, compress backup is used by default.
 
 A parallel or multi-thread backup is a method of performing as many backups as the number of threads specified. In this way, it reduces backup time significantly. Basically, threads are given as many as the number of CPUs in the system.
 
-To perform a parallel backup, use the **cubrid backupdb -t** | **--thread-count** command.
+To perform a parallel backup, use the **cubrid backupdb -t** | **-\-thread-count** command.
 
 Managing Backup Files
 ^^^^^^^^^^^^^^^^^^^^^
@@ -272,7 +272,7 @@ The following table shows options available with the **cubrid restoredb** utilit
 
         cubrid restoredb --list demodb
 
-    The following example shows how to display backup information by using the **--list** option. You can specify the path to which backup files of the database are originally stored as well as backup levels. ::
+    The following example shows how to display backup information by using the **-\-list** option. You can specify the path to which backup files of the database are originally stored as well as backup levels. ::
 
         *** BACKUP HEADER INFORMATION ***
         Database Name: /local1/testing/demodb
@@ -301,7 +301,7 @@ The following table shows options available with the **cubrid restoredb** utilit
         Database Volume name: /local1/testing/demodb_bkvinf
              Volume Identifier: -3, Size: 132 bytes (1 pages)
 
-    With the backup information displayed by using the **--list** option, you can check that backup files have been created at the backup level 1 as well as the point where the full backup of backup level 0 has been performed. Therefore, to restore the database in the example, you must prepare backup files for backup levels 0 and 1.
+    With the backup information displayed by using the **-\-list** option, you can check that backup files have been created at the backup level 1 as well as the point where the full backup of backup level 0 has been performed. Therefore, to restore the database in the example, you must prepare backup files for backup levels 0 and 1.
 
 .. option:: -B, --backup-file-path=PATH
 

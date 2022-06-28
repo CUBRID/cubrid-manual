@@ -115,7 +115,8 @@ html_theme = 'sphinx_rtd_theme' # 3
 # html theme for default
 html_theme_options = {
 	"collapse_navigation": False,
-	"display_version": False
+	"display_version": False,
+	"navigation_depth": 5
 }
 #	"codebgcolor": "#E8E8E8",
 #   "sidebarbgcolor": "#F4F7FA",
@@ -162,7 +163,7 @@ html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 html_static_path = ['_static']
 
 def setup(app):
-  app.add_stylesheet('style.css')
+  app.add_css_file('style.css')
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.

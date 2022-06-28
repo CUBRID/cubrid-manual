@@ -1615,15 +1615,21 @@ Changes of Table Attributes based on Changes of Column Type
 
 *   **NOT NULL**
 
-    *   If the **NOT NULL** constraint is not specified, it will be removed from a new table even though it is present in the existing table.
+    *   Even though the **NOT NULL** constraint is not specified, it will not be removed from a new table if the constraint is present in the existing table. If you want to remove the constraint **NOT NULL**, specify the **NULL** in the statement.
     *   If the **NOT NULL** constraint is specified in the column to change, the result varies depending on the configuration of the system parameter, **alter_table_change_type_strict**.
 
         *   If **alter_table_change_type_strict** is set to yes, the column values will be checked. If **NULL** exists, an error will occur, and the change will not be executed.
         *   If the **alter_table_change_type_strict** is set to no, every existing **NULL** value will be changed to a hard default value of the type to change.
 
-*   **DEFAULT** : If the **DEFAULT** attribute is not specified in the column to change, it will be removed from a new table even though the attribute is present in the existing table.
+*   **DEFAULT** : Even though the **DEFAULT** attribute is not specified in the column to change, it will not be removed from a new table if the attribute is present in the existing table. If you want to remove the attribute **DEFAULT**, specify the **DEFAULT NULL** in the statement.
 
-*   **AUTO_INCREMENT** : If the **AUTO_INCREMENT** attribute is not specified in the column to change, it will be removed from a new table even though the attribute is present in the existing table.
+*   **COMMENT** : Even though the **COMMENT** attribute is not specified in the column to change, it will not be removed from a new table if the attribute is present in the existing table. If you want to remove the attribute **COMMENT**, specify the **COMMENT ''** in the statement.
+
+*   **AUTO_INCREMENT** : Even though the **AUTO_INCREMENT** attribute is not specified in the column to change, it will not be removed from a new table if the attribute is present in the existing table.
+        *   caution) The **AUTO_INCREMENT** attribute can not be removed from a new table once the attribute is set by CREATE or ALTER.
+
+*   **ON UPDATE** : Even though the **ON UPDATE** attribute is not specified in the column to change, it will not be removed from a new table if the attribute is present in the existing table.
+        *   caution) The **ON UPDATE** attribute can not be removed from a new table once the attribute is set by CREATE or ALTER.
 
 *   **FOREIGN KEY** : You cannot change the column with the foreign key constraint that is referred to or refers to.
 

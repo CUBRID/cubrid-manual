@@ -67,7 +67,7 @@ Please refer to `change logs of CUBRID 11.2 <https://github.com/CUBRID/cubrid/re
 
 
 Cautions
-=========
+========
 
 .. _11_2_new_cautions:
 
@@ -270,9 +270,9 @@ The default value for the CCI_DEFAULT_AUTOCOMMIT broker parameter, which affects
 From the 2008 R4.0 version, the options and parameters that use the unit of pages were changed to use the unit of volume size(CUBRIDSUS-5136)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The options (-p, -l, -s), which use page units to specify the database volume size and log volume size of the cubrid createdb utility, will be removed. Instead, the new options, added after 2008 R4.0 Beta (--db-volume-size, --log-volume-size, --db-page-size, --log-page-size), are used.
+The options (-p, -l, -s), which use page units to specify the database volume size and log volume size of the cubrid createdb utility, will be removed. Instead, the new options, added after 2008 R4.0 Beta (-\-db-volume-size, -\-log-volume-size, -\-db-page-size, -\-log-page-size), are used.
 
-To specify the database volume size of the cubrid addvoldb utility, use the newly-added option (--db-volume-size) after 2008 R4.0 Beta instead of using the page unit.
+To specify the database volume size of the cubrid addvoldb utility, use the newly-added option (-\-db-volume-size) after 2008 R4.0 Beta instead of using the page unit.
 It is recommended to use the new system parameters in bytes because the page-unit system parameters will be removed. For details on the related system parameters, see the below.
 
 Be cautious when setting db volume size if you are a user of a version before 2008 R4.0 Beta(CUBRIDSUS-4222)

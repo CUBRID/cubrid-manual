@@ -207,7 +207,7 @@ If there are encrypted data in data volumes and log volumes, they are also store
 
 **Backup Key File**
 
-The backup volume contains the key file by default. If the backup volume, including the key file, is leaked, meaning the master key is also leaked. There may be a security problem even though the data in the volume is encrypted. To prevent this, you can backup the key file separately by using the **\\-\\-separate-keys** option. However, in the case of separating the key file, it must be managed carefully to prevent losing the key file for database restore. The separated backup key file is created in the same directory path as the backup volume and has the name **<database_name>_bk<backup_level>_keys**.
+The backup volume contains the key file by default. If the backup volume, including the key file, is leaked, meaning the master key is also leaked. There may be a security problem even though the data in the volume is encrypted. To prevent this, you can backup the key file separately by using the **-\-separate-keys** option. However, in the case of separating the key file, it must be managed carefully to prevent losing the key file for database restore. The separated backup key file is created in the same directory path as the backup volume and has the name **<database_name>_bk<backup_level>_keys**.
 
 .. code-block:: bash
 
@@ -219,35 +219,35 @@ The backup volume contains the key file by default. If the backup volume, includ
 
 **The key file used to restore**
 
-The key file separated during backup can be given as the key file for restoration by using the **\\-\\-keys-file-path** option (restoredb). If the valid key file does not exist in the specified path, restore fails.
+The key file separated during backup can be given as the key file for restoration by using the **-\-keys-file-path** option (restoredb). If the valid key file does not exist in the specified path, restore fails.
 
-If the \\-\\-keys-file-path option is not given, the key file to be used is searched according to the following priority. If the valid key file cannot be found, restore fails.
+If the **-\-keys-file-path** option is not given, the key file to be used is searched according to the following priority. If the valid key file cannot be found, restore fails.
 
 *Key file classification*
 
 - Server key file: A key file that is generally used when running the server. It can be set with the tde_keys_file_path system parameter or in the default path same as the data volume.
-- Backup key file: A key file created during backup included in the backup volume or separated by \\-\\-separate-keys option.
+- Backup key file: A key file created during backup included in the backup volume or separated by **-\-separate-keys** option.
 
 *The priority of the key file to use for restore*
 
 #.  The backup key file that the backup volume contains.
-#.  The backup key file created with the **\\-\\-separate-keys** option during backup (e.g. testdb_bk0_keys). This key file must exist in the same path as the backup volume.
+#.  The backup key file created with the **-\-separate-keys** option during backup (e.g. testdb_bk0_keys). This key file must exist in the same path as the backup volume.
 #.  The server key file in the path specified by the **tde-keys-file-path** system parameter.
 #.  The server key file in the same path as the data volume (e.g., testdb_keys).
 
  .. note::
 
-  In the case of \(1\), If the backup volume contains a backup key file, the backup key file is copied with the same name as the one created by --separate-keys during restore.
+  In the case of \(1\), If the backup volume contains a backup key file, the backup key file is copied with the same name as the one created by **-\-separate-keys** during restore.
 
   Even if the valid key file is not found, restore could be successful if there is no encrypted data in the backup volume. However, since the key file does not exist, you cannot use TDE functions later.
 
 .. note:: **Incremental Backup**
 
-  When performing restoration using multiple level backup volumes by incremental backup, the backup key file of the level specified by the \\-\\-level option is used. If the \\-\\-level option is not specified, the highest level backup key file is used. If only the key file to be used exists, restore can succeed.
+  When performing restoration using multiple level backup volumes by incremental backup, the backup key file of the level specified by the **-\-level** option is used. If the **-\-level** option is not specified, the highest level backup key file is used. If only the key file to be used exists, restore can succeed.
 
 .. note:: **Loss of the backup key file**
 
-  If the backup key file is lost, the restore would fail. However, if the key is not changed, the backup key file of the previous volume can be used by using the \\-\\-keys-file-path option. Also, if the key at the backup time exists in the server key, it can be used for backup recovery. Generally, restore can succeed if any key file that has the key intactly at the backup time is given.
+  If the backup key file is lost, the restore would fail. However, if the key is not changed, the backup key file of the previous volume can be used by using the **-\-keys-file-path** option. Also, if the key at the backup time exists in the server key, it can be used for backup recovery. Generally, restore can succeed if any key file that has the key intactly at the backup time is given.
 
 .. note:: **The case in which the key is changed automatically after restore**
 

@@ -71,7 +71,7 @@ CREATE SYONYM
     create synonym s1 for dba.t1;
     select * from s1;
 
-.. code-block::
+::
 
       c1
     ======================
@@ -85,7 +85,7 @@ CREATE SYONYM
     create synonym s1 for dba.t2;
     select * from s1;
 
-.. code-block::
+::
 
       c1
     ======================
@@ -103,7 +103,7 @@ CREATE SYONYM
     /* current_user: dba */
     select * from db_synonym;
 
-.. code-block::
+::
 
       synonym_name          synonym_owner_name    is_public_synonym     target_name           target_owner_name     comment
     ====================================================================================================================================
@@ -117,7 +117,7 @@ CREATE SYONYM
     /* current_user: u1 */
     select * from db_synonym;
 
-.. code-block::
+::
 
       synonym_name          synonym_owner_name    is_public_synonym     target_name           target_owner_name     comment
     ====================================================================================================================================
@@ -130,7 +130,7 @@ CREATE SYONYM
     /* current_user: u2 */
     select * from db_synonym;
 
-.. code-block::
+::
 
       synonym_name          synonym_owner_name    is_public_synonym     target_name           target_owner_name     comment
     ====================================================================================================================================
@@ -153,7 +153,7 @@ CREATE SYONYM
     /* Already used as a table name. */
     create synonym s1 for t1;
 
-.. code-block::
+::
 
     ERROR: before ' ; '
     Class public.s1 already exists.
@@ -163,7 +163,7 @@ CREATE SYONYM
     /* Already used as a view name. */
     create synonym s2 for t1;
 
-.. code-block::
+::
 
     ERROR: before ' ; '
     Class public.s2 already exists.
@@ -173,7 +173,7 @@ CREATE SYONYM
     create synonym s3 for t1;
     select * from s3;
 
-.. code-block::
+::
 
       c1
     ======================
@@ -194,7 +194,7 @@ CREATE SYONYM
     create synonym s2 for s1;
     select * from db_synonym;
 
-.. code-block::
+::
 
       synonym_name          synonym_owner_name    is_public_synonym     target_name           target_owner_name     comment
     ====================================================================================================================================
@@ -205,7 +205,7 @@ CREATE SYONYM
 
     select * from s2;
 
-.. code-block::
+::
 
     ERROR: before ' ; '
     Unknown class "public.s1".
@@ -214,7 +214,7 @@ CREATE SYONYM
 
     select * from s1;
 
-.. code-block::
+::
 
       c1
     ======================
@@ -246,7 +246,7 @@ CREATE SYONYM
 
     select * from db_synonym;
 
-.. code-block::
+::
 
       synonym_name          synonym_owner_name    is_public_synonym     target_name           target_owner_name     comment
     ====================================================================================================================================
@@ -260,7 +260,7 @@ CREATE SYONYM
     /* current_user: u1 */
     select * from s1;
 
-.. code-block::
+::
 
       c1
     ======================
@@ -273,7 +273,7 @@ CREATE SYONYM
     /* current_user: u2 */
     select * from s1;
 
-.. code-block::
+::
 
       c1
     ======================
@@ -321,7 +321,7 @@ ALTER SYONYM
     select * from db_synonym;
     select * from s1;
 
-.. code-block::
+::
 
       synonym_name          synonym_owner_name    is_public_synonym     target_name           target_owner_name     comment
     ====================================================================================================================================
@@ -337,7 +337,7 @@ ALTER SYONYM
     select * from db_synonym;
     select * from s1;
 
-.. code-block::
+::
 
       synonym_name          synonym_owner_name    is_public_synonym     target_name           target_owner_name     comment
     ====================================================================================================================================
@@ -361,7 +361,7 @@ ALTER SYONYM
     create synonym s1 for t1 comment 'It is a synonym for the t1 table.';
     select synonym_name, synonym_owner_name, is_public_synonym, comment from db_synonym;
 
-.. code-block::
+::
 
       synonym_name          synonym_owner_name    is_public_synonym     comment
     ========================================================================================
@@ -373,7 +373,7 @@ ALTER SYONYM
 
     alter synonym s1 comment 'the comment was changed.';
 
-.. code-block::
+::
 
     ERROR: Invalid alter synonym.
       ALTER [PRIVATE] SYNONYM [<user_name>.]<synonym_name> FOR [<user_name>.]<target_name> [COMMENT 'comment_string']
@@ -383,7 +383,7 @@ ALTER SYONYM
     alter synonym s1 for t1 comment 'the comment was changed.';
     select synonym_name, synonym_owner_name, is_public_synonym, comment from db_synonym;
 
-.. code-block::
+::
 
       synonym_name          synonym_owner_name    is_public_synonym     comment
     ========================================================================================
@@ -417,7 +417,7 @@ DROP SYONYM
     select synonym_name, synonym_owner_name, is_public_synonym, comment from db_synonym;
     select * from s1;
 
-.. code-block::
+::
 
       synonym_name          synonym_owner_name    is_public_synonym     comment
     ========================================================================================
@@ -432,7 +432,7 @@ DROP SYONYM
     drop synonym s1;
     select synonym_name, synonym_owner_name, is_public_synonym, comment from db_synonym;
 
-.. code-block::
+::
 
     There are no results.
     0 row selected.
@@ -441,7 +441,7 @@ DROP SYONYM
 
     select * from s1;
 
-.. code-block::
+::
 
     ERROR: before ' ; '
     Unknown class "public.s1".
@@ -450,7 +450,7 @@ DROP SYONYM
 
     select * from t1;
 
-.. code-block::
+::
 
       c1
     ======================
@@ -502,7 +502,7 @@ RENAME SYONYM
     select synonym_name, synonym_owner_name, is_public_synonym, comment from db_synonym;
     select * from s1;
 
-.. code-block::
+::
 
       synonym_name          synonym_owner_name    is_public_synonym     comment
     ========================================================================================
@@ -517,7 +517,7 @@ RENAME SYONYM
     rename synonym s1 as u2.s2;
     rename synonym u1.s1 as u2.s2;
 
-.. code-block::
+::
 
     ERROR: before ' ; '
     Rename cannot change owner.
@@ -529,7 +529,7 @@ RENAME SYONYM
     /* current_user: dba */
     rename synonym u1.s1 as u2.s2;
 
-.. code-block::
+::
 
     ERROR: before ' ; '
     Rename cannot change owner.
@@ -543,7 +543,7 @@ RENAME SYONYM
     select synonym_name, synonym_owner_name, is_public_synonym, comment from db_synonym;
     select * from s2;
 
-.. code-block::
+::
 
       synonym_name          synonym_owner_name    is_public_synonym     comment
     ========================================================================================
@@ -575,7 +575,7 @@ RENAME SYONYM
     select * from db_synonym;
     select * from s1;
 
-.. code-block::
+::
 
       synonym_name          synonym_owner_name    is_public_synonym     target_name           target_owner_name     comment
     ====================================================================================================================================
@@ -590,7 +590,7 @@ RENAME SYONYM
 
     rename synonym s1 as s_t1;
 
-.. code-block::
+::
 
     ERROR: before ' ; '
     Class dba.s_t1 already exists.
@@ -599,7 +599,7 @@ RENAME SYONYM
 
     rename synonym s1 as s_v1;
 
-.. code-block::
+::
 
     ERROR: before ' ; '
     Class dba.s_v1 already exists.
@@ -608,7 +608,7 @@ RENAME SYONYM
 
     rename synonym s1 as s_s1;
 
-.. code-block::
+::
 
     ERROR: before ' ; '
     Synonym "dba.s_s1" already exists.
@@ -619,7 +619,7 @@ RENAME SYONYM
     select * from db_synonym;
     select * from s2;
 
-.. code-block::
+::
 
       synonym_name          synonym_owner_name    is_public_synonym     target_name           target_owner_name     comment
     ====================================================================================================================================
@@ -659,7 +659,7 @@ RENAME SYONYM
     create synonym s1 for t1;
     select * from s1;
 
-.. code-block::
+::
 
       c1
     ======================
@@ -673,7 +673,7 @@ RENAME SYONYM
     select * from s1;
     select * from u1.s1;
 
-.. code-block::
+::
 
     ERROR: before ' ; '
     Unknown class "u2.s1".
@@ -695,7 +695,7 @@ RENAME SYONYM
     select * from db_synonym;
     select * from s1;
 
-.. code-block::
+::
 
       synonym_name          synonym_owner_name    is_public_synonym     target_name           target_owner_name     comment
     ====================================================================================================================================
@@ -709,7 +709,7 @@ RENAME SYONYM
 
    alter table s1 add column c2 int;
 
-.. code-block::
+::
 
     ERROR: before '  add column c2 int; '
     Class public.s1 does not exist.
@@ -718,7 +718,7 @@ RENAME SYONYM
 
    drop table s1;
 
-.. code-block::
+::
 
     ERROR: before ' ; '
     Class public.s1 does not exist.
@@ -727,7 +727,7 @@ RENAME SYONYM
 
    rename table s1 to s2;
 
-.. code-block::
+::
 
     ERROR: before ' ; '
     Class public.s1 does not exist.
@@ -736,7 +736,7 @@ RENAME SYONYM
 
    truncate s1;
 
-.. code-block::
+::
 
     ERROR: before ' ; '
     Class public.s1 does not exist.
@@ -745,7 +745,7 @@ RENAME SYONYM
 
    select * from s1;
 
-.. code-block::
+::
 
       c1
     ======================

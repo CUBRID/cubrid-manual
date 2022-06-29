@@ -101,7 +101,7 @@ For the scope of **client** and **server parameters**, see :ref:`scope-server-co
 
 You can change the parameters that are capable of changing dynamically the setting value through the **SET SYSTEM PARAMETERS** statement or a session command of the CSQL Interpreter, **;set** while running the DB. If you are a DBA, you can change parameters regardless of the applied classification. However, if you are not a DBA, you can only change "session" parameters. (on the below table, a parameter of which "session" item's value is O.)
 
-On the below table, if "Applied" is "server parameter", that parameter affects to cub_server process; If "client parameter", that parameter affects to CAS, CSQL or "cubrid" utilities which run on client/server mode (--CS-mode). "Client/server parameter" affects to all of cub_server, CAS, CSQL and "cubrid" utilities.
+On the below table, if "Applied" is "server parameter", that parameter affects to cub_server process; If "client parameter", that parameter affects to CAS, CSQL or "cubrid" utilities which run on client/server mode (-\-CS-mode). "Client/server parameter" affects to all of cub_server, CAS, CSQL and "cubrid" utilities.
 
 "Dynamic Change" and "Session or not" are marked on the below table. The affected range of the parameter which "Dynamic Change" is "available" depends on "Applied" and "Session" items.
 
@@ -382,12 +382,12 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 
 .. _lpg:
 
-*   **log_page_size**: A log volume page size specified by **--log-page-size** option when you are :ref:`creating database<creating-database>`. Default: 16KB. log page related parameter's value is rounded off by page unit. 
+*   **log_page_size**: A log volume page size specified by **-\-log-page-size** option when you are :ref:`creating database<creating-database>`. Default: 16KB. log page related parameter's value is rounded off by page unit. 
     For example, the value of checkpoint_every_size is divided by 16KB and its decimal point is dropped, then it is multiplied by 16KB.
 
 .. _dpg:
 
-*   **db_page_size**: A DB volume page size specified by **--db-page-size** option when you are :ref:`creating database<creating-database>`. Default: 16KB. DB page related parameter's value is rounded off by page unit. 
+*   **db_page_size**: A DB volume page size specified by **-\-db-page-size** option when you are :ref:`creating database<creating-database>`. Default: 16KB. DB page related parameter's value is rounded off by page unit. 
     For example, the value of data_buffer_size is divided by 16KB and its decimal point is dropped, then it is multiplied by 16KB.
 
 Section by Parameter
@@ -398,7 +398,7 @@ Parameters specified in **cubrid.conf** have the following four sections:
 *   Used when the CUBRID service starts: [service] section
 *   Applied commonly to all databases: [common] section
 *   Applied individually to each database: [@<*database*>] section
-*   Used only when the cubrid utilities are run with stand-alone mode(--SA-mode): [standalone] section
+*   Used only when the cubrid utilities are run with stand-alone mode(-\-SA-mode): [standalone] section
 
 Where <*database*> is the name of the database to which each parameter applies. If a parameter configured in [common] is the same as the one configured in [@<*database*>], the one configured in [@<*database*>] is applied.
 
@@ -415,7 +415,7 @@ Where <*database*> is the name of the database to which each parameter applies. 
     ..... 
 
 Configuration defined in [standalone] is used only when cubrid utilities started with "cubrid" are run with stand-alone mode.
-For example, on the above configuration, if DB is started with --CS-mode(default)(cubrid databases start db_name), "sort_buffer_size=2M" is applied. However, if DB is stopped and "cubrid loaddb --SA-mode" is executed, "sort_buffer_size=256M" is applied. If you run "cubrid loaddb --SA-mode", bigger size of sort buffer will be required during index creation; therefore, increasing sort buffer size will be better for the performance of "loaddb" execution.
+For example, on the above configuration, if DB is started with -\-CS-mode(default)(cubrid databases start db_name), "sort_buffer_size=2M" is applied. However, if DB is stopped and "cubrid loaddb -\-SA-mode" is executed, "sort_buffer_size=256M" is applied. If you run "cubrid loaddb -\-SA-mode", bigger size of sort buffer will be required during index creation; therefore, increasing sort buffer size will be better for the performance of "loaddb" execution.
 
 Default Parameters
 ^^^^^^^^^^^^^^^^^^
@@ -686,7 +686,7 @@ The following are disk-related parameters for defining database volumes and stor
 
     **db_volume_size** is a parameter to configure the following values. You can set a unit as B, K, M, G or T, which stand for bytes, kilobytes (KB), megabytes (MB), gigabytes (GB), and terabytes (TB) respectively. If you omit the unit, bytes will be applied. The default value is **512M**.
 
-    *   The default database volume size when **cubrid createdb** and **cubrid addvoldb** utility is used without **--db-volume-size** option.
+    *   The default database volume size when **cubrid createdb** and **cubrid addvoldb** utility is used without **-\-db-volume-size** option.
     *   The default size of volume that is added automatically when database is full.
 
 .. note::
@@ -699,7 +699,7 @@ The following are disk-related parameters for defining database volumes and stor
 
 **log_volume_size**
 
-    **log_volume_size** is a parameter to configure the default size of log volume file when the **cubrid createdb** utility is used without **--log-volume-size** option. You can set a unit as B, K, M, G or T, which stand for bytes, kilobytes (KB), megabytes (MB), gigabytes (GB) and terabytes (TB) respectively. If you omit the unit, bytes will be applied. The default value is **512M**.
+    **log_volume_size** is a parameter to configure the default size of log volume file when the **cubrid createdb** utility is used without **-\-log-volume-size** option. You can set a unit as B, K, M, G or T, which stand for bytes, kilobytes (KB), megabytes (MB), gigabytes (GB) and terabytes (TB) respectively. If you omit the unit, bytes will be applied. The default value is **512M**.
 
 **temp_file_max_size_in_pages**
 

@@ -651,7 +651,7 @@ Using hints can affect the performance of query execution. You can allow the que
 SQL hints are specified by using a plus sign(+) to comments. To use a hint, there are three styles as being introduced on :doc:`comment`. Therefore, also SQL hint can be used as three styles.
 
 *  /\*+ hint \*/
-*   --+ hint
+*   -\-+ hint
 *   //+ hint
 
 The hint comment must appear after the keyword such as **SELECT**, **UPDATE** or **DELETE**, and the comment must begin with a plus sign (+), following the comment delimiter.  When you specify several hints, they are  separated by blanks.

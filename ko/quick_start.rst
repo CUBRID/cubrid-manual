@@ -29,13 +29,13 @@ Linux 환경 또는 Windows 환경에서 아래와 같은 셸 명령어로 CUBRI
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 11.0
+    CUBRID 11.2
 
     ++ cubrid server start: success
 
     @ cubrid server status
 
-    Server demodb (rel 11.0, pid 31322)
+    Server demodb (rel 11.2, pid 31322)
 
 CUBRIDService 또는 CUBRID Service Tray
 --------------------------------------
@@ -60,7 +60,7 @@ Windows 환경에서는 다음과 같은 방법으로 CUBRID 서비스를 시작
 데이터베이스 생성
 -----------------
 
-데이터베이스 볼륨 및 로그 볼륨이 위치할 디렉터리에서 **cubrid createdb** 유틸리티를 실행하여 데이터베이스를 생성할 수 있다. **--db-volume-size** 또는 **--log-volume-size** 와 같은 추가 옵션을 지정하지 않으면 기본적으로 1.5GB 크기의 볼륨 파일이 생성된다(데이터 볼륨 512MB, 활성 로그 512MB, 백그라운드 보관 로그 512MB로 설정됨). ::
+데이터베이스 볼륨 및 로그 볼륨이 위치할 디렉터리에서 **cubrid createdb** 유틸리티를 실행하여 데이터베이스를 생성할 수 있다. **-\-db-volume-size** 또는 **-\-log-volume-size** 와 같은 추가 옵션을 지정하지 않으면 기본적으로 1.5GB 크기의 볼륨 파일이 생성된다(데이터 볼륨 512MB, 활성 로그 512MB, 백그라운드 보관 로그 512MB로 설정됨). ::
 
     % cd testdb
     % cubrid createdb testdb en_US

@@ -393,7 +393,7 @@ Connection 생성
     *    클라이언트 측 JDBC 드라이버의 경우 질의 결과셋을 생성하면 기본적으로 :ref:`커서 유지(cursor holdability) <cursor-holding>`\를 한다.
          서버 측 JDBC 드라이버에서는 자원을 서버에서 관리하므로 질의 결과셋은 커서를 유지하지 않고 저장 함수/프로시저 종료 시에 내부적으로 정리한다.
 
-또한 질의 결과셋으로 부터 **getMetaData()** 함수를 이용하여 결과셋 메타 데이터 (**java.sql.ResultSetMetaData**)를 생성할 수 있다.
+또한 질의 결과셋으로 부터 **getMetaData()** 함수를 이용하여 결과셋 메타 데이터(**java.sql.ResultSetMetaData**)를 생성할 수 있다.
 
 .. code-block:: sql
 

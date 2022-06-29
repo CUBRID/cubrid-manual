@@ -456,23 +456,11 @@ Connection 생성
 
         private static void readColumn(int idx, ResultSetMetaData rsmd, ResultSet rs, StringBuilder stringBuilder) throws SQLException {
             switch (rsmd.getColumnType(idx)) {
-                case java.sql.Types.ARRAY:
-                    stringBuilder.append(rs.getArray(idx));
-                    break;
-                case java.sql.Types.BOOLEAN:
-                    stringBuilder.append(rs.getBoolean(idx));
-                    break;
-                case java.sql.Types.BLOB:
-                    stringBuilder.append(rs.getBlob(idx));
-                    break;
                 case java.sql.Types.DOUBLE:
                     stringBuilder.append(rs.getDouble(idx));
                     break;
                 case java.sql.Types.FLOAT:
                     stringBuilder.append(rs.getFloat(idx));
-                    break;
-                case java.sql.Types.NVARCHAR:
-                    stringBuilder.append("\"").append(rs.getNString(idx)).append("\"");
                     break;
                 case java.sql.Types.VARCHAR:
                     stringBuilder.append("\"").append(rs.getString(idx)).append("\"");

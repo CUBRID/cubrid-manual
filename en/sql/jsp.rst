@@ -393,7 +393,7 @@ The query result can be processed using the executed query result set (**java.sq
 .. note::
 
      * java.sql.ResultSet is forward-only and read-only.
-     * In the case of the client-side JDBC driver, when a query result set is created, :ref:`cursor holdability <cursor-holding>`\ is performed by default.
+     * In the case of the client-side JDBC driver, when a query result set is created, :ref:`cursor holdability <cursor-holding>` is performed by default.
        In the server-side JDBC driver, resources are managed by the server, so the query result set is internally closed at the end of the stored function/procedure without maintaining a cursor.
 
 Also, result set metadata (**java.sql.ResultSetMetaData**) can be created from the query result set by using the **getMetaData()** function.

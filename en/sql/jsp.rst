@@ -740,8 +740,10 @@ Getting information about connection client
                 conn = DriverManager.getConnection("jdbc:default:connection:");
      
                 Properties props = conn.getClientInfo();
+
                 // How to get from the Properties
                 // String user = props.getProperty ("user");
+
                 result = props.toString ();
             } catch (Exception e) {
                 result = e.getMessage ();

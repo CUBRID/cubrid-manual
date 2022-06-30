@@ -106,7 +106,7 @@ Here, the Java class method must be **public static**.
         }
     }
 
-To access the database from a Java stored function/procedure, you must use the server-side JDBC driver.
+To access the database from a Java stored function/procedure, you must create a Connection object.
 See details on how to use the server-side JDBC driver, refer to the :ref:`jsp-server-side-jdbc`.
 
 Compile the Java source code
@@ -117,6 +117,13 @@ Compile the SpCubrid.java file as follows:
 ::
 
     javac SpCubrid.java
+
+When using the server-side JDBC driver, you must compile as follows by specifying the path of JDBC using the **classpath(cp)** option.
+Note that you must use the latest JDBC driver of the database server to be loaded.
+
+::
+
+    javac SpCubrid.java -cp $CUBRID/jdbc/cubrid_jdbc.jar
 
 .. _jsp-loadjava:
 
@@ -292,9 +299,39 @@ Retrieve the phone class after executing the program above; the following result
 Using Server-side Internal JDBC Driver
 ======================================
 
-To access the database from a Java stored function/procedure, you must use the server-side JDBC driver. As Java stored functions/procedures are executed within the database, there is no need to make the connection to the server-side JDBC driver again. 
+To access the database from a Java stored function/procedure, you must use the server-side JDBC driver.
+The following are possible with the server-side JDBC driver.
 
-|  To acquire a connection to the database using the server-side JDBC driver, you can either use "**jdbc:default:connection:**" as the URL for JDBC connection, or call the **getDefaultConnection** () method of the **cubrid.jdbc.driver.CUBRIDDriver** class.
+
+*    **Executing SQL Statements**
+*    **Processing Query Result**
+
+The following classes are supported by the server-side JDBC driver. For details on JDBC API support, refer to :ref:`jsp-appendix`.
+
+*    **java.sql.Connection**
+*    **java.sql.Statement**
+*    **java.sql.PreparedStatement**
+*    **java.sql.CallableStatement**
+*    **java.sql.ResultSet**
+*    **java.sql.ResultSetMetaData**
+
+.. warning::
+    
+    **java.sql.DatabaseMetaData** is not supported yet.
+
+Database operations using the server-side JDBC have the following characteristics.
+
+* Database operations executed in the Java stored function/procedure belongs to the transaction that is called the Java stored function/procedure.
+* Transaction-related APIs are ignored.
+* There is no need to make the connection to the server-side JDBC driver again. 
+
+.. _jsp-server-side-jdbc-connection:
+
+Creating Connection
+---------------------
+
+To access the database from a Java stored function/procedure, you must use the server-side JDBC driver.
+To acquire a connection to the database using the server-side JDBC driver, you can either use "**jdbc:default:connection:**" as the URL for JDBC connection, or call the **getDefaultConnection** () method of the **cubrid.jdbc.driver.CUBRIDDriver** class.
 
 .. code-block:: java
 
@@ -304,9 +341,171 @@ or
 
 .. code-block:: java
 
-    cubrid.jdbc.driver.CUBRIDDriver.getDefaultConnection();
+    Connection conn = cubrid.jdbc.driver.CUBRIDDriver.getDefaultConnection();
 
-If you connect to the database using the JDBC driver as shown above, the transaction in the Java stored function/procedure is ignored. That is, database operations executed in the Java stored function/procedure belong to the transaction that called the Java stored function/procedure. In the following example, **conn.commit()** method of the **Athlete** class is ignored.
+.. note::
+
+    The server-side JDBC is already registered, and you do not need to call "Class.forName("cubrid.jdbc.driver.CUBRIDDriver")"
+
+.. _jsp-execute-statement:
+
+Executing SQL Statements
+----------------------------
+
+When implementing Java stored functions/procedures, queries can be executed using the following JDBC interface in the same way as developing Java applications.
+
+*    **java.sql.Statement**
+*    **java.sql.PreparedStatement**
+*    **java.sql.CallableStatement**
+
+The following are the queries that can be executed using the above class.
+
+*    **DML (Data Manipulation Language)**: :doc:`/sql/query/index`
+*    **DDL (Data Definition Language)**: :doc:`/sql/schema/index`
+
+.. note::
+
+    The JDBC Statement objects must contain only one SQL statement.
+    Therefore, an error occurs in the following cases:
+
+    ::
+
+        stmt = new Statement ("select * from t1;select * from t2;");
+
+The following statements are not supported.
+
+* **TCL (Transaction Control Language)**: :ref:`database-transaction`
+
+.. note::
+
+     * *commit()*, *rollback()* JDBC API methods corresponding to **COMMIT** and **ROLLBACK** statements respectively are ignored.
+     * JDBC API methods corresponding to **SAVEPOINT** statement are not supported.
+
+The example of executing statements
+-------------------------------------
+
+**Execute a query that returns a result set and process the query result set**
+
+The following example shows how to execute a **SELECT** statement that returns a result set.
+**SELECT** statement can be executed by creating a **java.sql.Statement** or **java.sql.PreparedStatement** object.
+The query result can be processed using the result set (**java.sql.ResultSet**).
+
+.. note::
+
+     * java.sql.ResultSet is forward-only and read-only.
+     * In the case of the client-side JDBC driver, when a query result set is created, :ref:`cursor holdability <cursor-holding>` is performed by default.
+       In the server-side JDBC driver, resources are managed by the server, so the query result set is internally closed at the end of the stored function/procedure without maintaining a cursor.
+
+Also, result set metadata (**java.sql.ResultSetMetaData**) can be created from the query result set by using the **getMetaData()** function.
+
+
+.. code-block:: sql
+
+    CREATE OR REPLACE FUNCTION sp_get_athlete_by_ncode (nc STRING) RETURN STRING as language java name 'TestQuery.printAthelete(java.lang.String) return java.lang.String'; 
+
+.. code-block:: java
+    
+    import java.sql.*;
+
+    public class TestQuery {
+        public static String printAthelete(String nation_code_filter) throws SQLException {
+            String sql = "SELECT * FROM public.athlete WHERE nation_code = ?";
+
+            StringBuilder builder = new StringBuilder();
+            Connection conn = null;
+            PreparedStatement pstmt = null;
+
+            try {
+                conn = DriverManager.getConnection("jdbc:default:connection:");
+                pstmt = conn.prepareStatement(sql);
+
+                pstmt.setString(1, nation_code_filter);
+
+                ResultSet rs = pstmt.executeQuery();
+                ResultSetMetaData rsmd = rs.getMetaData();
+
+                builder.append("<Column Details>:\n");
+                int colCount = rsmd.getColumnCount();
+                for (int i = 1; i <= colCount; i++) {
+                    String colName = rsmd.getColumnName(i);
+                    String colType = rsmd.getColumnTypeName(i);
+                    builder.append(colName + "," + colType);
+
+                    if (i != colCount) builder.append("|");
+                }
+                
+                builder.append("\n<Rows>:\n");
+                while (rs.next()) {
+                    for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+                        Object object = rs.getObject(i);
+                        if (object != null) {
+                            readColumn(i, rsmd, rs, builder);
+                        }
+                        
+                        if (i != rsmd.getColumnCount()) builder.append ("|");
+                    }
+                    builder.append("\n");
+                }
+
+                rs.close();
+            } catch (Exception e) {
+                builder.append(e.getMessage());
+            } finally {
+                if (pstmt != null) pstmt.close();
+                if (conn != null) conn.close();
+            }
+
+            return builder.toString();
+        }
+
+        private static void readColumn(int idx, ResultSetMetaData rsmd, ResultSet rs, StringBuilder stringBuilder) throws SQLException {
+            switch (rsmd.getColumnType(idx)) {
+                case java.sql.Types.DOUBLE:
+                    stringBuilder.append(rs.getDouble(idx));
+                    break;
+                case java.sql.Types.FLOAT:
+                    stringBuilder.append(rs.getFloat(idx));
+                    break;
+                case java.sql.Types.VARCHAR:
+                    stringBuilder.append("\"").append(rs.getString(idx)).append("\"");
+                    break;
+                case java.sql.Types.INTEGER:
+                case java.sql.Types.TINYINT:
+                case java.sql.Types.SMALLINT:
+                case java.sql.Types.BIGINT:
+                    stringBuilder.append(rs.getInt(idx));
+                    break;
+                case java.sql.Types.DATE:
+                    stringBuilder.append("\"").append(rs.getDate(idx)).append("\"");
+                    break;
+                case java.sql.Types.TIMESTAMP:
+                    stringBuilder.append("\"").append(rs.getTimestamp(idx)).append("\"");
+                    break;
+                default:
+                    stringBuilder.append(rs.getObject(idx));
+                    break;
+            }
+        }
+    }
+.. code-block:: sql
+
+    SELECT sp_get_athlete_by_ncode ('ESP');
+
+    sp_get_athlete_by_ncode('ESP')
+    ======================
+    '<Column Details>:
+    code,INTEGER|name,VARCHAR|gender,CHAR|nation_code,CHAR|event,VARCHAR
+    <Rows>:
+    10999|"Fernandez Jesus"|M|ESP|"Handball"
+    10997|"Fernandez Isabel"|W|ESP|"Judo"
+    10994|"Fernandez Abelardo"|M|ESP|"Football"
+    10948|"Etxaburu Aitor"|M|ESP|"Handball"
+    10941|"Estiarte Manuel"|M|ESP|"Water Polo"
+    ...
+
+**INSERT, UPDATE, DELETE**
+
+The following is an example of executing the **INSERT** statement. **INSERT**, **UPDATE**, **DELETE** statements can be executed through the **executeUpdate()** function.
 
 .. code-block:: java
 
@@ -341,113 +540,126 @@ If you connect to the database using the JDBC driver as shown above, the transac
         }
     }
 
-Connecting to Other Database
-============================
+.. note::
 
-You can connect to another outside database instead of the currently connected one even when the server-side JDBC driver is being used. Acquiring a connection to an outside database is not different from a generic JDBC connection. For details, see JDBC API.
+    conn.commit() is ignored at the Athlete class example above.
 
-If you connect to other databases, the connection to the CUBRID database does not terminate automatically even when the execution of the Java method ends. Therefore, the connection must be explicitly closed so that the result of transaction operations such as **COMMIT** or **ROLLBACK** will be reflected in the database. That is, a separate transaction will be performed because the database that called the Java stored function/procedure is different from the one where the actual connection is made.
+
+OUT Parameters of Primitive Types
+--------------------------------------------------------------
+
+When changing an argument value in Java in a Java stored function/procedure of CUBRID, the changed value must be passed when an argument is passed as an OUT argument as a one-dimensional array.
+
+.. code-block:: sql
+
+    CREATE PROCEDURE sp_increment_me(x IN OUT INT) AS LANGUAGE JAVA NAME 'OutTest.incrementInt(int[])';
+
+.. code-block:: java
+
+    public class OutTest {
+        public static void incrementInt(int[] arg) {
+            arg[0] = arg[0] + 1;
+        }
+    }
+
+OUT Parameters of Set Types
+----------------------------------------------------
+
+Parameters of Java methods corresponding to an OUT (or IN OUT) parameter of an SQL set type must be declared as an two-dimensional array of an appropriate type.
+
+.. code-block:: sql
+
+    CREATE PROCEDURE setoid(x in out set, z object) AS LANGUAGE JAVA 
+    NAME 'SetOIDTest.SetOID(cubrid.sql.CUBRIDOID[][], cubrid.sql.CUBRIDOID)';
+
+.. code-block:: java
+
+    import cubrid.sql.CUBRIDOID;
+
+    public class SetOIDTest {
+        public static void SetOID(CUBRIDOID[][] set, CUBRIDOID aoid) {
+            String ret="";
+            Vector v = new Vector();
+
+            CUBRIDOID[] set1 = set[0];
+
+            try {
+                if(set1 != null) {
+                    int len = set1.length;
+                    int i = 0;
+                    
+                    for (i = 0; i < len; i++)
+                        v.add(set1[i]);
+                }
+                
+                v.add(aoid);
+                set[0] = (CUBRIDOID[]) v.toArray(new CUBRIDOID[]{});
+                
+            } catch(Exception e) {
+                e.printStackTrace();
+                System.err.println("SQLException:"+e.getMessage());
+            }
+        }
+    }
+
+
+OUT Parameters of CUBRID OID type
+-------------------------------------------
+
+In case of using an OUT (or IN OUT) parameter of CUBRID OID type, declare the corresponding parameter of the Java method as an array of CUBRIDOID class (cubrid.sql.CUBRIDOID).
+
+.. code-block:: sql
+
+    CREATE PROCEDURE tOID(i inout object, q string) AS LANGUAGE JAVA
+    NAME 'OIDtest.tOID(cubrid.sql.CUBRIDOID[], java.lang.String)';
 
 .. code-block:: java
 
     import java.sql.*;
+    import cubrid.sql.CUBRIDOID;
 
-    public class SelectData {
-        public static void SearchSubway(String[] args) throws Exception {
+    public class OIDtest {
+        public static void tOID(CUBRIDOID[] oid, String query)
+        {
             Connection conn = null;
             Statement stmt = null;
-            ResultSet rs = null;
+            String ret = "";
 
             try {
-                conn = DriverManager.getConnection("jdbc:CUBRID:localhost:33000:demodb:::","","");
+                conn = DriverManager.getConnection("jdbc:default:connection:");
 
-                String sql = "select line_id, line from line";
+                conn.setAutoCommit(false);
                 stmt = conn.createStatement();
-                rs = stmt.executeQuery(sql);
-                
+                ResultSet rs = stmt.executeQuery(query);
+                System.out.println("query:"+ query);
+
                 while(rs.next()) {
-                    int host_year = rs.getString("host_year");
-                    String host_nation = rs.getString("host_nation");
-                    
-                    System.out.println("Host Year ==> " + host_year);
-                    System.out.println(" Host Nation==> " + host_nation);
-                    System.out.println("\n=========\n");
+                    oid[0] = (CUBRIDOID) rs.getObject(1);
+                    System.out.println("oid:" + oid[0].getTableName());
                 }
                 
-                rs.close();
+                stmt.close();
+                conn.close();
+                
             } catch (SQLException e1) {
-                System.err.println(e1.getMessage());
+                e1.printStackTrace();
+                System.err.println("SQLException:" + e1.getMessage());
             } catch (Exception e2) {
-                System.err.println(e2.getMessage());
-            } finally {
-                if (stmt != null) stmt.close();
-                if (conn != null) conn.close();
+                e2.printStackTrace();
+                system.err.println("Exception:" + e2.getMessage());
             }
         }
     }
-
-When the Java stored function/procedure is executed, it should run only on JVM located in the database server, you can check where it is running by calling System.getProperty ("cubrid.server.version") from the Java program source. The result value is the database version if it is called from the database; otherwise, it is **NULL**.
-
-.. _jsp-load-java:
-
-loadjava Utility
-================
-
-To load a compiled Java or JAR (Java Archive) file into CUBRID, use the **loadjava** utility. If you load a Java \*.class or \*.jar file using the **loadjava** utility, the file is moved to the specified database path. ::
-
-    loadjava [option] database-name java-class-file
-
-*   *database-name*: The name of the database where the Java file to be loaded.
-*   *java-class-file*: The name of the Java class or jar file to be loaded.
-*   [*option*]
-
-    *   **-y**: Automatically overwrites a class file with the same name, if any. The default value is **no**. If you load the file without specifying the **-y** option, you will be prompted to ask if you want to overwrite the class file with the same name (if any).
-
-.. _jsp-caution:
-
-Caution
-=======
-
-Returning Value of Java Stored Function/Procedure and Precision Type on IN/OUT
-------------------------------------------------------------------------------
-
-To limit the return value of Java stored function/procedure and precision type on IN/OUT, CUBRID processes as follows:
-
-*   Checks the sql_type of the Java stored function/procedure.
-
-*   Passes the value returned by Java to the database with only the type converted if necessary, ignoring the number of digits defined during creating the Java stored function/procedure. In principle, the user manipulates directly the data which is passed to the database.
-
-Take a look at the following **typestring** () Java stored function.
-
-.. code-block:: java
-
-    public class JavaSP1 {
-        public static String typestring() {
-            String temp = " ";
-            for(int i = 0; i < 1; i++) {
-                temp = temp + "1234567890";
-            }
-            return temp;
-        }
-    }
-
-.. code-block:: sql
-
-    CREATE FUNCTION typestring() RETURN CHAR(5) AS LANGUAGE JAVA
-    NAME 'JavaSP1.typestring() return java.lang.String';
-
-    CALL typestring();
-    
-::
-
-      Result
-    ======================
-      ' 1234567890'
 
 Returning java.sql.ResultSet in Java Stored Procedure
 -----------------------------------------------------
 
-In CUBRID, you must use **CURSOR** as the data type when you declare a Java stored function/procedure that returns a **java.sql.ResultSet**.
+In CUBRID, a query result set (**java.sql.ResultSet**) can be returned, and **CURSOR** is used as the returned data type when declared.
+
+.. note::
+
+     * **java.sql.ResultSet** cannot be used as an input argument of a function, and an error occurs if it is passed as an IN argument.
+     * An error also occurs when calling a function that returns **ResultSet** in a non-Java environment.
 
 .. code-block:: sql
 
@@ -505,90 +717,432 @@ In the calling block, you must set the OUT argument with **Types.JAVA_OBJECT**, 
         }
     }
 
-.. note::
-    
-    You cannot use the **ResultSet** as an input argument. If you pass it to an IN argument, an error occurs. An error also occurs when calling a function that returns **ResultSet** in a non-Java environment.
+.. _jsp-get-client-info:
 
-IN/OUT of Set Type in Java Stored Function/Procedure
-----------------------------------------------------
-
-If the set type of the Java stored function/procedure in CUBRID is IN OUT, the value of the argument changed in Java must be applied to IN OUT. When the set type is passed to the OUT argument, it must be passed as a two-dimensional array.
+Getting information about connection client
+---------------------------------------------
 
 .. code-block:: sql
 
-    CREATE PROCEDURE setoid(x in out set, z object) AS LANGUAGE JAVA 
-    NAME 'SetOIDTest.SetOID(cubrid.sql.CUBRIDOID[][], cubrid.sql.CUBRIDOID';
+    CREATE OR REPLACE FUNCTION sp_client_info () RETURN STRING as language java name 'SpTestClientInfo.getClientInfo() return java.lang.String'; 
 
 .. code-block:: java
 
-    import cubrid.sql.CUBRIDOID;
+    import java.util.Properties;
+    import java.sql.*;
+     
+    public class SpTestClientInfo {
+        public static String getClientInfo() {
+            Connection conn = null;
+            String result = "";
+     
+            try {
+                conn = DriverManager.getConnection("jdbc:default:connection:");
+     
+                Properties props = conn.getClientInfo();
 
-    public static void SetOID(CUBRIDOID[][] set, CUBRIDOID aoid) {
-        String ret="";
-        Vector v = new Vector();
+                // How to get from the Properties
+                // String user = props.getProperty ("user");
 
-        CUBRIDOID[] set1 = set[0];
-
-        try {
-            if(set1 != null) {
-                int len = set1.length;
-                int i = 0;
-                
-                for (i = 0; i < len; i++)
-                    v.add(set1[i]);
+                result = props.toString ();
+            } catch (Exception e) {
+                result = e.getMessage ();
             }
-            
-            v.add(aoid);
-            set[0] = (CUBRIDOID[]) v.toArray(new CUBRIDOID[]{});
-            
-        } catch(Exception e) {
-            e.printStackTrace();
-            System.err.println("SQLException:"+e.getMessage());
+            return result;
         }
     }
-
-Using OID in Java Stored Function/Procedure
--------------------------------------------
-
-In case of using the OID type value for IN/OUT in CUBRID, use the value passed from the server.
-
 .. code-block:: sql
 
-    CREATE PROCEDURE tOID(i inout object, q string) AS LANGUAGE JAVA
-    NAME 'OIDtest.tOID(cubrid.sql.CUBRIDOID[], java.lang.String)';
+    SELECT sp_client_info ();
+
+    sp_client_info()
+    ======================
+    '{pid=200270, user=DBA, login=cubrid, program=csql, type=2, host=cubrid, ip=192.168.2.201}'
+
+Connecting to Other Databases
+==============================
+
+You can connect to another outside database instead of the currently connected one even when the server-side JDBC driver is being used. Acquiring a connection to an outside database is not different from a generic JDBC connection. For details, see JDBC API.
+
+.. warning::
+
+    If you connect to other databases, the connection to the CUBRID database does not terminate automatically even when the execution of the Java method ends. 
+    Therefore, the connection must be explicitly closed so that the result of transaction operations such as **COMMIT** or **ROLLBACK** will be reflected in the database.
+    That is, a separate transaction will be performed because the database that called the Java stored function/procedure is different from the one where the actual connection is made.
 
 .. code-block:: java
 
     import java.sql.*;
-    import cubrid.sql.CUBRIDOID;
 
-    public static void tOID(CUBRIDOID[] oid, String query)
-    {
-        Connection conn = null;
-        Statement stmt = null;
-        String ret = "";
+    public class SelectData {
+        public static void SearchSubway(String[] args) throws Exception {
+            Connection conn = null;
+            Statement stmt = null;
+            ResultSet rs = null;
 
-        try {
-            conn = DriverManager.getConnection("jdbc:default:connection:");
+            try {
+                conn = DriverManager.getConnection("jdbc:CUBRID:localhost:33000:demodb:::","","");
 
-            conn.setAutoCommit(false);
-            stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
-            System.out.println("query:"+ query);
-
-            while(rs.next()) {
-                oid[0] = (CUBRIDOID) rs.getObject(1);
-                System.out.println("oid:" + oid[0].getTableName());
+                String sql = "select line_id, line from line";
+                stmt = conn.createStatement();
+                rs = stmt.executeQuery(sql);
+                
+                while(rs.next()) {
+                    int host_year = rs.getString("host_year");
+                    String host_nation = rs.getString("host_nation");
+                    
+                    System.out.println("Host Year ==> " + host_year);
+                    System.out.println(" Host Nation==> " + host_nation);
+                    System.out.println("\n=========\n");
+                }
+                
+                rs.close();
+            } catch (SQLException e1) {
+                System.err.println(e1.getMessage());
+            } catch (Exception e2) {
+                System.err.println(e2.getMessage());
+            } finally {
+                if (stmt != null) stmt.close();
+                if (conn != null) conn.close();
             }
-            
-            stmt.close();
-            conn.close();
-            
-        } catch (SQLException e1) {
-            e1.printStackTrace();
-            System.err.println("SQLException:" + e1.getMessage());
-        } catch (Exception e2) {
-            e2.printStackTrace();
-            system.err.println("Exception:" + e2.getMessage());
         }
     }
+
+When Java stored functions/procedures are executed, they should run only on a JVM located in the database server. You can check where they are running by calling System.getProperty ("cubrid.server.version") from the Java programs. The result is the database version if it is called from the database; otherwise, it is **NULL**.
+
+.. _jsp-load-java:
+
+loadjava Utility
+================
+
+You can load a Java \*.class or \*.jar file using **loadjava** utility. The file is moved to a database internal path.
+
+    loadjava [option] database-name java-class-file
+
+*   *database-name*: The name of the database where the Java file to be loaded.
+*   *java-class-file*: The name of the Java class or jar file to be loaded.
+*   [*option*]
+
+    *   **-y**: automatically overwrites a file with the same name, if any. If you do not use this option, you will get a prompt asking if you want to overwrite the file with the same name, if any.
+
+.. _jsp-caution:
+
+Caution
+=======
+
+* java.sql.DatabaseMetaData is not supported.
+* JDBC API related to BLOB/CLOB type is not supported.
+* Functions not related to query execution and used only in client-side JDBC are not supported. For details, refer to :ref:`jsp-appendix`\.
+* Multiple SQL statements are not supported when executing a query with one JDBC object.
+* ResultSet created by query execution is non-updatable, non-scrollable, and non-sensitive.
+* Java ignores precision, scale, and length parts of SQL types of IN/OUT parameters, matches only the type name parts, and delivers values as they are.
+* A stored procedure can call another stored procedure or call itself recursively. The maximum nesting depth is 16.
+
+Limitations on the precision of IN/OUT parameters and a return value
+-----------------------------------------------------------------------------------
+
+To limit the return value of Java stored function/procedure and precision type on IN/OUT, CUBRID processes as follows:
+
+*   Checks the SQL type of the Java stored function/procedure.
+*   Passes the value returned by Java to the database with only the type converted if necessary, ignoring the number of digits defined during creating the Java stored function/procedure. 
+*   In principle, the user should directly manipulates the data which is passed to the database.
+
+Take a look at the following **typestring** () Java stored function.
+
+.. code-block:: java
+
+    public class JavaSP1 {
+        public static String typestring() {
+            String temp = " ";
+            for(int i = 0; i < 1; i++) {
+                temp = temp + "1234567890";
+            }
+            return temp;
+        }
+    }
+
+.. code-block:: sql
+
+    CREATE FUNCTION typestring() RETURN CHAR(5) AS LANGUAGE JAVA
+    NAME 'JavaSP1.typestring() return java.lang.String';
+
+    CALL typestring();
+    
+::
+
+      Result
+    ======================
+      ' 1234567890'
+
+
+.. _jsp-appendix:
+
+Appendix
+========================
+
+Table of Supproting JDBC API 
+------------------------------
+
+=========================== =========================================================
+JDBC Interface              Support/Unsupport                                               
+=========================== =========================================================
+java.sql.CallableStatement  Support                                               
+java.sql.Connection         Support                                               
+java.sql.Driver             Support (:ref:`jsp-server-side-jdbc-connection`)
+java.sql.PreparedStatement  Support                                               
+java.sql.ResultSet          Support                                               
+java.sql.ResultSetMetaData  Support                                               
+CUBRIDOID                   Support                                               
+java.sql.Statement          Support
+java.sql.DriverManager      Support                                               
+Java.sql.SQLException       Support                                               
+java.sql.Array              Unsupport                                           
+java.sql.Blob               Unsupport                                               
+java.sql.Clob               Unsupport                                               
+java.sql.DatabaseMetaData   Unsupport                                               
+java.sql.ParameterMetaData  Unsupport                                           
+java.sql.Ref                Unsupport                                           
+java.sql.Savepoint          Unsupport                                           
+java.sql.SQLData            Unsupport                                           
+java.sql.SQLInput           Unsupport                                           
+java.sql.Struct             Unsupport                                           
+=========================== =========================================================
+
+.. note::
+
+    JDBC APIs not specified in the table below are not supported and return SQLException.
+
+java.sql.Connection
+^^^^^^^^^^^^^^^^^^^^^^
+
+.. csv-table::
+   :header: "Method", "Description"
+   :widths: auto
+
+    "Properties getClientInfo()", :ref:`jsp-get-client-info`
+    "void rollback()", "do nothing"
+    "Statement createStatement()", :ref:`jsp-execute-statement`
+    "Statement createStatement(int resultSetType, int resultSetConcurrency)", :ref:`jsp-execute-statement`
+    "Statement createStatement(int resultSetType, int resultSetConcurrency, int resultSetHoldability)", :ref:`jsp-execute-statement`
+    "CallableStatement prepareCall(String sql)", :ref:`jsp-execute-statement`
+    "CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency)", :ref:`jsp-execute-statement`
+    "CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability)", :ref:`jsp-execute-statement`
+    "PreparedStatement prepareStatement(String sql)", :ref:`jsp-execute-statement`
+    "PreparedStatement prepareStatement(String sql, int autoGeneratedKeys)", :ref:`jsp-execute-statement`
+    "PreparedStatement prepareStatement(String sql, int[] columnIndexes)", :ref:`jsp-execute-statement`
+    "PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency)", :ref:`jsp-execute-statement`
+    "PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability)", :ref:`jsp-execute-statement`
+    "PreparedStatement prepareStatement(String sql, String[] columnNames)", :ref:`jsp-execute-statement`
+    "void clearWarnings()", "do nothing"
+    "void close()", "close all statements"
+    "void commit()", "do nothing"
+    "boolean getAutoCommit()", "return false"
+    "String getCatalog()", "return "
+    "int getHoldability()", "return ResultSet.HOLD_CURSORS_OVER_COMMIT;"
+    "int getTransactionIsolation()", ""
+    "SQLWarning getWarnings()", "return null"
+    "boolean isClosed()", "return false"
+    "boolean isReadOnly()", "return false"
+    "boolean isValid(int timeout)", "return true"
+    "void setAutoCommit(boolean autoCommit)", "do nothing"
+    "void setCatalog(String catalog)", "do nothing"
+    "void setHoldability(int holdability)", "do nothing"
+    "void setReadOnly(boolean readOnly)", "do nothing"
+    "void setTransactionIsolation(int level)", "do nothing"
+
+java.sql.Statement
+^^^^^^^^^^^^^^^^^^^^^^
+
+.. csv-table::
+   :header: "Method", "Description"
+   :widths: auto
+
+    "Connection getConnection()", ""
+    "int getFetchDirection()", "retruns ResultSet.FETCH_FORWARD"
+    "int getFetchSize()", ""
+    "int getMaxFieldSize()", ""
+    "int getMaxRows()", ""
+    "int getQueryTimeout()", "retruns 0"
+    "int getResultSetConcurrency()", "retruns ResultSet.CONCUR_UPDATABLE"
+    "int getResultSetHoldability()", "return ResultSet.HOLD_CURSORS_OVER_COMMIT or ResultSet.CLOSE_CURSORS_AT_COMMIT"
+    "int getResultSetType()", "return ResultSet.TYPE_FORWARD_ONLY"
+    "int getUpdateCount()", "return -1"
+    "boolean isClosed()", ""
+    "void setFetchDirection(int direction)", ""
+    "void setFetchSize(int rows)", ""
+    "void setMaxFieldSize(int max)", ""
+    "void setMaxRows(int max)", ""
+    "void setQueryTimeout(int seconds)", ""
+    "void close()", ""
+    "boolean execute(String sql)", ""
+    "boolean execute(String sql, int autoGeneratedKeys)", ""
+    "boolean execute(String sql, int[] columnIndexes)", ""
+    "boolean execute(String sql, String[] columnNames)", ""
+    "executeBatch()", "throws SQLException"
+    "ResultSet executeQuery(String sql)", ""
+    "int executeUpdate(String sql)", ""
+    "int executeUpdate(String sql, int autoGeneratedKeys)", ""
+    "int executeUpdate(String sql, int[] columnIndexes)", ""
+    "int executeUpdate(String sql, String[] columnNames)", ""
+    "ResultSet getGeneratedKeys()", ""
+    "boolean getMoreResults()", ""
+    "ResultSet getResultSet()", ""
+    "void cancel()", "do nothing"
+    "void clearWarnings()", ""
+    "SQLWarning getWarnings()", ""
+    "void setCursorName(String name)", ""
+    "void setEscapeProcessing(boolean enable)", ""
+
+java.sql.PreparedStatement
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. csv-table::
+   :header: "Method", "Description"
+   :widths: auto
+
+    "boolean execute()", ""
+    "ResultSet executeQuery()", ""
+    "int executeUpdate()", ""
+    "ResultSetMetaData getMetaData()", ""
+    "void setBigDecimal(int parameterIndex, BigDecimal x)", ""
+    "void setBoolean(int parameterIndex, boolean x)", ""
+    "void setByte(int parameterIndex, byte x)", ""
+    "void setBytes(int parameterIndex, byte[] x)", ""
+    "void setDate(int parameterIndex, Date x)", ""
+    "void setDate(int parameterIndex, Date x, Calendar cal)", ""
+    "void setDouble(int parameterIndex, double x)", ""
+    "void setFloat(int parameterIndex, float x)", ""
+    "void setInt(int parameterIndex, int x)", ""
+    "void setLong(int parameterIndex, long x)", ""
+    "void setNull(int parameterIndex, int sqlType)", ""
+    "void setNull(int parameterIndex, int sqlType, String typeName)", ""
+    "void setObject(int parameterIndex, Object x)", ""
+    "void setObject(int parameterIndex, Object x, int targetSqlType)", ""
+    "void setObject(int parameterIndex, Object x, int targetSqlType, int scaleOrLength)", ""
+    "void setShort(int parameterIndex, short x)", ""
+    "void setString(int parameterIndex, String x)", ""
+    "void setTime(int parameterIndex, Time x)", ""
+    "void setTime(int parameterIndex, Time x, Calendar cal)", ""
+    "void setTimestamp(int parameterIndex, Timestamp x)", ""
+    "void setTimestamp(int parameterIndex, Timestamp x, Calendar cal)", ""
+
+
+java.sql.CallableStatement
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. csv-table::
+   :header: "Method", "Description"
+   :widths: auto
+
+    "BigDecimal getBigDecimal(int parameterIndex)", ""
+    "boolean getBoolean(int parameterIndex)", ""
+    "byte getByte(int parameterIndex)", ""
+    "byte[] getBytes(int parameterIndex)", ""
+    "Date getDate(int parameterIndex)", ""
+    "Date getDate(int parameterIndex, Calendar cal)", ""
+    "double getDouble(int parameterIndex)", ""
+    "getFloat(int parameterIndex)", ""
+    "getInt(int parameterIndex)", ""
+    "getLong(int parameterIndex)", ""
+    "getObject(int parameterIndex)", ""
+    "getShort(int parameterIndex)", ""
+    "getString(int parameterIndex)", ""
+    "getTime(int parameterIndex)", ""
+    "getTime(int parameterIndex, Calendar cal)", ""
+    "getTimestamp(int parameterIndex)", ""
+    "getTimestamp(int parameterIndex, Calendar cal)", ""
+    "registerOutParameter(int parameterIndex, int sqlType)", ""
+    "registerOutParameter(int parameterIndex, int sqlType, int scale)", ""
+    "registerOutParameter(int parameterIndex, int sqlType, String typeName)", ""
+    "wasNull()", ""
+
+java.sql.ResultSet
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. csv-table::
+   :header: "Method", "Description"
+   :widths: auto
+
+    "clearWarnings()", ""
+    "close()", ""
+    "deleteRow()", "throws SQLException"
+    "findColumn(String columnLabel)", ""
+    "first()", "throws SQLException"
+    "getBoolean(int columnIndex)", ""
+    "getBoolean(String columnLabel)", ""
+    "getByte(int columnIndex)", ""
+    "getByte(String columnLabel)", ""
+    "getBytes(int columnIndex)", ""
+    "getBytes(String columnLabel)", ""
+    "getConcurrency()", "return ResultSet.CONCUR_READ_ONLY;"
+    "getDate(int columnIndex)", ""
+    "getDate(int columnIndex, Calendar cal)", ""
+    "getDate(String columnLabel)", ""
+    "getDate(String columnLabel, Calendar cal)", ""
+    "getDouble(int columnIndex)", ""
+    "getDouble(String columnLabel)", ""
+    "getFetchDirection()", ""
+    "getFetchSize()", ""
+    "getFloat(int columnIndex)", ""
+    "getFloat(String columnLabel)", ""
+    "getHoldability()", ""
+    "getInt(int columnIndex)", ""
+    "getInt(String columnLabel)", ""
+    "getLong(int columnIndex)", ""
+    "getLong(String columnLabel)", ""
+    "getMetaData()", ""
+    "getObject(int columnIndex)", ""
+    "getObject(String columnLabel)", ""
+    "getRow()", ""
+    "getShort(int columnIndex)", ""
+    "getShort(String columnLabel)", ""
+    "getStatement()", ""
+    "getString(int columnIndex)", ""
+    "getString(String columnLabel)", ""
+    "getTime(int columnIndex)", ""
+    "getTime(int columnIndex, Calendar cal)", ""
+    "getTime(String columnLabel)", ""
+    "getTime(String columnLabel, Calendar cal)", ""
+    "getTimestamp(int columnIndex)", ""
+    "getTimestamp(int columnIndex, Calendar cal)", ""
+    "getTimestamp(String columnLabel)", ""
+    "getTimestamp(String columnLabel, Calendar cal)", ""
+    "getType()", "retruns ResultSet.TYPE_FORWARD_ONLY"
+    "isAfterLast()", ""
+    "isBeforeFirst()", ""
+    "isClosed()", "return false"
+    "isFirst()", ""
+    "isLast()", ""
+    "wasNull()", ""
+    "getCursorName()", "return "
+    "getWarnings()", "return null"
+
+
+java.sql.ResultSetMetaData
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. csv-table::
+   :header: "Method", "Description"
+   :widths: auto
+
+    "getCatalogName (int column)", "return"
+    "getColumnClassName(int column)", ""
+    "getColumnCount()", ""
+    "getColumnDisplaySize(int column)", ""
+    "getColumnLabel(int column)", ""
+    "getColumnName(int column)", ""
+    "getColumnType(int column)", ""
+    "getColumnTypeName(int column)", ""
+    "getPrecision(int column)", ""
+    "getScale(int column)", ""
+    "getSchemaName(int column)", "return "
+    "getTableName(int column)", ""
+    "isAutoIncrement(int column)", ""
+    "isCaseSensitive(int column)", ""
+    "isCurrency(int column)", ""
+    "isDefinitelyWritable(int column)", "return false"
+    "isNullable(int column)", ""
+    "isReadOnly(int column)", "return false"
+    "isSearchable(int column)", "return true"
+    "isSigned(int column)", ""
+    "isWritable(int column)", "return true"

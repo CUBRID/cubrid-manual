@@ -341,7 +341,7 @@ or
 
 .. code-block:: java
 
-    cubrid.jdbc.driver.CUBRIDDriver.getDefaultConnection();
+    Connection conn = cubrid.jdbc.driver.CUBRIDDriver.getDefaultConnection();
 
 .. note::
 

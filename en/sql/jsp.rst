@@ -835,7 +835,7 @@ Caution
 * Functions not related to query execution and used only in client-side JDBC are not supported. For details, refer to :ref:`jsp-appendix`\.
 * Multiple SQL statements are not supported when executing a query with one JDBC object.
 * ResultSet created by query execution is non-updatable, non-scrollable, and non-sensitive.
-* Java ignores the return value and type digits of IN/OUT parameters, matches only the type, and delivers it to the database as it is.
+* Java ignores precision, scale, and length parts of SQL types of IN/OUT parameters, matches only the type name parts, and delivers values as they are.
 * A stored procedure can call another stored procedure or call itself recursively. The maximum nesting depth is 16.
 
 Returning Value of Java Stored Function/Procedure and Precision Type on IN/OUT

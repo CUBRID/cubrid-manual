@@ -352,7 +352,7 @@ or
 Executing SQL Statements
 ----------------------------
 
-When implementing Java stored/procedures, queries can be executed using the following JDBC interface in the same way as developing Java applications.
+When implementing Java stored functions/procedures, queries can be executed using the following JDBC interface in the same way as developing Java applications.
 
 *    **java.sql.Statement**
 *    **java.sql.PreparedStatement**

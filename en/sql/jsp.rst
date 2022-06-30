@@ -365,7 +365,7 @@ The following are the queries that can be executed using the above class.
 
 .. note::
 
-    The JDBC object created when executing a query must contain only one SQL statement.
+    The JDBC Statement objects must contain only one SQL statement.
     Therefore, an error occurs in the following cases:
 
     ::
@@ -379,7 +379,7 @@ The following statements are not supported.
 .. note::
 
      * *commit()*, *rollback()* JDBC API methods corresponding to **COMMIT** and **ROLLBACK** statements respectively are ignored.
-     * JDBC API methods corresponding to the **SAVEPOINT** statement is not supported.
+     * JDBC API methods corresponding to **SAVEPOINT** statement are not supported.
 
 The example of executing statements
 -------------------------------------
@@ -388,7 +388,7 @@ The example of executing statements
 
 The following example shows how to execute a **SELECT** statement that returns a result set.
 **SELECT** statement can be executed by creating a **java.sql.Statement** or **java.sql.PreparedStatement** object.
-The query result can be processed using the executed query result set (**java.sql.ResultSet**).
+The query result can be processed using the result set (**java.sql.ResultSet**).
 
 .. note::
 
@@ -545,7 +545,7 @@ The following is an example of executing the **INSERT** statement. **INSERT**, *
     conn.commit() is ignored at the Athlete class example above.
 
 
-IN/OUT of Primitive Types in Java Stored Function/Procedure
+OUT Parameters of Primitive Types
 --------------------------------------------------------------
 
 When changing an argument value in Java in a Java stored function/procedure of CUBRID, the changed value must be passed when an argument is passed as an OUT argument as a one-dimensional array.
@@ -562,15 +562,15 @@ When changing an argument value in Java in a Java stored function/procedure of C
         }
     }
 
-IN/OUT of Set Type in Java Stored Function/Procedure
+OUT Parameters of Set Types
 ----------------------------------------------------
 
-If the set type of the Java stored function/procedure in CUBRID is IN OUT, the value of the argument changed in Java must be applied to IN OUT. When the set type is passed to the OUT argument, it must be passed as a two-dimensional array.
+Parameters of Java methods corresponding to an OUT (or IN OUT) parameter of an SQL set type must be declared as an two-dimensional array of an appropriate type.
 
 .. code-block:: sql
 
     CREATE PROCEDURE setoid(x in out set, z object) AS LANGUAGE JAVA 
-    NAME 'SetOIDTest.SetOID(cubrid.sql.CUBRIDOID[][], cubrid.sql.CUBRIDOID';
+    NAME 'SetOIDTest.SetOID(cubrid.sql.CUBRIDOID[][], cubrid.sql.CUBRIDOID)';
 
 .. code-block:: java
 
@@ -603,7 +603,7 @@ If the set type of the Java stored function/procedure in CUBRID is IN OUT, the v
     }
 
 
-Using OID in Java Stored Function/Procedure
+OUT Parameters of CUBRID OID type
 -------------------------------------------
 
 In case of using the OID type value for IN/OUT in CUBRID, use the value passed from the server.
@@ -808,14 +808,14 @@ You can connect to another outside database instead of the currently connected o
         }
     }
 
-When the Java stored function/procedure is executed, it should run only on JVM located in the database server, you can check where it is running by calling System.getProperty ("cubrid.server.version") from the Java program source. The result value is the database version if it is called from the database; otherwise, it is **NULL**.
+When Java stored functions/procedures are executed, they should run only on a JVM located in the database server. You can check where they are running by calling System.getProperty ("cubrid.server.version") from the Java programs. The result is the database version if it is called from the database; otherwise, it is **NULL**.
 
 .. _jsp-load-java:
 
 loadjava Utility
 ================
 
-To load a compiled Java or JAR (Java Archive) file into CUBRID, use the **loadjava** utility. If you load a Java \*.class or \*.jar file using the **loadjava** utility, the file is moved to the specified database path. ::
+You can load a Java \*.class or \*.jar file using **loadjava** utility. The file is moved to a database internal path.
 
     loadjava [option] database-name java-class-file
 
@@ -823,7 +823,7 @@ To load a compiled Java or JAR (Java Archive) file into CUBRID, use the **loadja
 *   *java-class-file*: The name of the Java class or jar file to be loaded.
 *   [*option*]
 
-    *   **-y**: Automatically overwrites a class file with the same name, if any. The default value is **no**. If you load the file without specifying the **-y** option, you will be prompted to ask if you want to overwrite the class file with the same name (if any).
+    *   **-y**: automatically overwrites a file with the same name, if any. If you do not use this option, you will get a prompt asking if you want to overwrite the file with the same name, if any.
 
 .. _jsp-caution:
 

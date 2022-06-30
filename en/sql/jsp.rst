@@ -361,7 +361,7 @@ When implementing Java stored/procedures, queries can be executed using the foll
 The following is a query that can be executed using the above class.
 
 *    **DML (Data Manipulation Language)**: :doc:`/sql/query/index`
-*    **DDL (Data Definition Language)**: :doc:`/sql/query/index`
+*    **DDL (Data Definition Language)**: :doc:`/sql/schema/index`
 
 .. note::
 

@@ -378,7 +378,7 @@ The following statements are not supported.
 
 .. note::
 
-     * *commit()*, *rollback()*\ JDBC API methods corresponding to **COMMIT** and **ROLLBACK** statements respectively are ignored.
+     * *commit()*, *rollback()* JDBC API methods corresponding to **COMMIT** and **ROLLBACK** statements respectively are ignored.
      * JDBC API methods corresponding to the **SAVEPOINT** statement is not supported.
 
 The example of executing statements

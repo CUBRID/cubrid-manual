@@ -122,7 +122,7 @@ Java 소스 컴파일
 이때 로드 할 데이터베이스 서버의 최신 JDBC 드라이버를 사용해야 한다.
 
 ::
-    
+
     javac SpCubrid.java -cp $CUBRID/jdbc/cubrid_jdbc.jar
 
 .. _jsp-loadjava:
@@ -549,7 +549,7 @@ CUBRID의 Java 저장 함수/프로시저에서 Java에서 인자 값을 변경�
 
 .. code-block:: sql
 
-    CREATE PROCEDURE sp_increment_me(x INT OUT INT) AS LANGUAGE JAVA NAME 'OutTest.incrementInt(int[])';
+    CREATE PROCEDURE sp_increment_me(x IN OUT INT) AS LANGUAGE JAVA NAME 'OutTest.incrementInt(int[])';
 
 .. code-block:: java
 

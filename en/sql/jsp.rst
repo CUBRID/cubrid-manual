@@ -540,7 +540,7 @@ When changing an argument value in Java in a Java stored function/procedure of C
 
 .. code-block:: sql
 
-    CREATE PROCEDURE sp_increment_me(x INT OUT INT) AS LANGUAGE JAVA NAME 'OutTest.incrementInt(int[])';
+    CREATE PROCEDURE sp_increment_me(x IN OUT INT) AS LANGUAGE JAVA NAME 'OutTest.incrementInt(int[])';
 
 
 .. code-block:: java

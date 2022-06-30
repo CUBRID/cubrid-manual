@@ -759,8 +759,8 @@ Getting information about connection client
     ======================
     '{pid=200270, user=DBA, login=cubrid, program=csql, type=2, host=cubrid, ip=192.168.2.201}'
 
-Connecting to Other Database
-============================
+Connecting to Other Databases
+==============================
 
 You can connect to another outside database instead of the currently connected one even when the server-side JDBC driver is being used. Acquiring a connection to an outside database is not different from a generic JDBC connection. For details, see JDBC API.
 
@@ -838,14 +838,14 @@ Caution
 * Java ignores precision, scale, and length parts of SQL types of IN/OUT parameters, matches only the type name parts, and delivers values as they are.
 * A stored procedure can call another stored procedure or call itself recursively. The maximum nesting depth is 16.
 
-Returning Value of Java Stored Function/Procedure and Precision Type on IN/OUT
+Limitations on the precision of IN/OUT parameters and a return value
 -----------------------------------------------------------------------------------
 
 To limit the return value of Java stored function/procedure and precision type on IN/OUT, CUBRID processes as follows:
 
 *   Checks the SQL type of the Java stored function/procedure.
-
-*   Passes the value returned by Java to the database with only the type converted if necessary, ignoring the number of digits defined during creating the Java stored function/procedure. In principle, the user should directly manipulates the data which is passed to the database.
+*   Passes the value returned by Java to the database with only the type converted if necessary, ignoring the number of digits defined during creating the Java stored function/procedure. 
+*   In principle, the user should directly manipulates the data which is passed to the database.
 
 Take a look at the following **typestring** () Java stored function.
 

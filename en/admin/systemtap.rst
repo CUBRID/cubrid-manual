@@ -168,7 +168,7 @@ The below is an example of running buffer_access.stp file.
 
 ::
 
-    cd $CUBRID/share/systemtap/scripts
+    cd $CUBRID/share/systemtap/tapset/scripts
     stap -k buffer_access.stp -o result.txt
 
 Printing Results

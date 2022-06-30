@@ -168,7 +168,7 @@ CUBRID에서 SystemTap 스크립트 예제는 $CUBRID/share/systemtap 이하 디
 
 ::
 
-    cd $CUBRID/share/systemtap/scripts
+    cd $CUBRID/share/systemtap/tapset/scripts
     stap -k buffer_access.stp -o result.txt
 
 결과 출력

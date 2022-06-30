@@ -106,7 +106,7 @@ Here, the Java class method must be **public static**.
         }
     }
 
-To access the database from a Java stored function/procedure, you must use the server-side JDBC driver.
+To access the database from a Java stored function/procedure, you must create a Connection object.
 See details on how to use the server-side JDBC driver, refer to the :ref:`jsp-server-side-jdbc`.
 
 Compile the Java source code

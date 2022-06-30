@@ -366,7 +366,9 @@ The following is a query that can be executed using the above class.
 .. note::
 
     The JDBC object created when executing a query must contain only one SQL statement.
-        Therefore, an error occurs in the following cases:
+    Therefore, an error occurs in the following cases:
+
+    ::
 
         stmt = new Statement ("select * from t1;select * from t2;");
 

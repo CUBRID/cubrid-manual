@@ -406,24 +406,31 @@ Also, result set metadata (**java.sql.ResultSetMetaData**) can be created from t
 .. code-block:: java
     
     import java.sql.*;
+
     public class TestQuery {
         public static String printAthelete(String nation_code_filter) throws SQLException {
             String sql = "SELECT * FROM public.athlete WHERE nation_code = ?";
+
             StringBuilder builder = new StringBuilder();
             Connection conn = null;
             PreparedStatement pstmt = null;
+
             try {
                 conn = DriverManager.getConnection("jdbc:default:connection:");
                 pstmt = conn.prepareStatement(sql);
+
                 pstmt.setString(1, nation_code_filter);
+
                 ResultSet rs = pstmt.executeQuery();
                 ResultSetMetaData rsmd = rs.getMetaData();
+
                 builder.append("<Column Details>:\n");
                 int colCount = rsmd.getColumnCount();
                 for (int i = 1; i <= colCount; i++) {
                     String colName = rsmd.getColumnName(i);
                     String colType = rsmd.getColumnTypeName(i);
                     builder.append(colName + "," + colType);
+
                     if (i != colCount) builder.append("|");
                 }
                 
@@ -439,6 +446,7 @@ Also, result set metadata (**java.sql.ResultSetMetaData**) can be created from t
                     }
                     builder.append("\n");
                 }
+
                 rs.close();
             } catch (Exception e) {
                 builder.append(e.getMessage());
@@ -446,8 +454,10 @@ Also, result set metadata (**java.sql.ResultSetMetaData**) can be created from t
                 if (pstmt != null) pstmt.close();
                 if (conn != null) conn.close();
             }
+
             return builder.toString();
         }
+
         private static void readColumn(int idx, ResultSetMetaData rsmd, ResultSet rs, StringBuilder stringBuilder) throws SQLException {
             switch (rsmd.getColumnType(idx)) {
                 case java.sql.Types.DOUBLE:

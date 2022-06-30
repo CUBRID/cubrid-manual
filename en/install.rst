@@ -15,7 +15,7 @@ The platforms supported by CUBRID and hardware/software requirements for the ins
 +---------------------------------------------------------------------+------------------+---------------------+--------------------------------------+
 | Supported Platforms                                                 | Required Memory  | Required Disk Space | Required Software                    |
 +=====================================================================+==================+=====================+======================================+
-| * Windows 32/64 Bit Windows 7                                       | 1GB or more      | 2GB or more(\*)     | JDK 1.8                              |
+| * Windows 64 Bit Windows 7 or higher                                | 1GB or more      | 2GB or more(\*)     | JDK 1.8                              |
 |                                                                     |                  |                     | (Required when Java Stored Procedure |
 | * Linux family 64 Bit(Linux kernel 2.4, glibc 2.3.4 or higher)      |                  |                     | is required)                         |
 +---------------------------------------------------------------------+------------------+---------------------+--------------------------------------+

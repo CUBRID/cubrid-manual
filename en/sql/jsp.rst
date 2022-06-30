@@ -321,7 +321,7 @@ The following classes are supported by the server-side JDBC driver. For details 
 
 Database opertions using the server-side JDBC have the following characteristics.
 
-* Database operations executed in the Java stored function/procedure belongs to the transaction that called the Java stored function/procedure.
+* Database operations executed in the Java stored function/procedure belongs to the transaction that is called the Java stored function/procedure.
 * Transaction-related APIs are ignored.
 * There is no need to make the connection to the server-side JDBC driver again. 
 

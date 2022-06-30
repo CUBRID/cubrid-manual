@@ -321,8 +321,8 @@ The following classes are supported by the server-side JDBC driver. For details 
 
 Database opertions using the server-side JDBC have the following characteristics.
 
-* Database operations executed in the Java stored function/procedure belong to the transaction that called the Java stored function/procedure.
-* Transaction related APIs are ignored.
+* Database operations executed in the Java stored function/procedure belongs to the transaction that called the Java stored function/procedure.
+* Transaction-related APIs are ignored.
 * There is no need to make the connection to the server-side JDBC driver again. 
 
 .. _jsp-server-side-jdbc-connection:
@@ -345,7 +345,7 @@ or
 
 .. note::
 
-    The server-side JDBC is already registered, you don't need to call "Class.forName("cubrid.jdbc.driver.CUBRIDDriver")"
+    The server-side JDBC is already registered, you do not need to call "Class.forName("cubrid.jdbc.driver.CUBRIDDriver")"
 
 .. _jsp-execute-statement:
 
@@ -536,11 +536,12 @@ The following is an example of executing the **INSERT** statement. **INSERT**, *
 IN/OUT of Primitive Types in Java Stored Function/Procedure
 --------------------------------------------------------------
 
-***? When changing an argument value in Java in a Java stored function/procedure of CUBRID, the changed value must be passed when an argument is passed as an OUT argument as a one-dimensional array.
+When changing an argument value in Java in a Java stored function/procedure of CUBRID, the changed value must be passed when an argument is passed as an OUT argument as a one-dimensional array.
 
 .. code-block:: sql
 
     CREATE PROCEDURE sp_increment_me(x INT OUT INT) AS LANGUAGE JAVA NAME 'OutTest.incrementInt(int[])';
+
 
 .. code-block:: java
     public class OutTest {
@@ -713,6 +714,7 @@ Getting information about connection client
 
     CREATE OR REPLACE FUNCTION sp_client_info () RETURN STRING as language java name 'SpTestClientInfo.getClientInfo() return java.lang.String'; 
 
+
 .. code-block:: java
     import java.util.Properties;
     import java.sql.*;
@@ -750,9 +752,9 @@ You can connect to another outside database instead of the currently connected o
 
 .. warning::
 
-If you connect to other databases, the connection to the CUBRID database does not terminate automatically even when the execution of the Java method ends. 
-  Therefore, the connection must be explicitly closed so that the result of transaction operations such as **COMMIT** or **ROLLBACK** will be reflected in the database.
-  That is, a separate transaction will be performed because the database that called the Java stored function/procedure is different from the one where the actual connection is made.
+    If you connect to other databases, the connection to the CUBRID database does not terminate automatically even when the execution of the Java method ends. 
+    Therefore, the connection must be explicitly closed so that the result of transaction operations such as **COMMIT** or **ROLLBACK** will be reflected in the database.
+    That is, a separate transaction will be performed because the database that called the Java stored function/procedure is different from the one where the actual connection is made.
 
 .. code-block:: java
 

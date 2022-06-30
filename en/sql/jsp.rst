@@ -845,7 +845,7 @@ To limit the return value of Java stored function/procedure and precision type o
 
 *   Checks the SQL type of the Java stored function/procedure.
 
-*   Passes the value returned by Java to the database with only the type converted if necessary, ignoring the number of digits defined during creating the Java stored function/procedure. In principle, the user manipulates directly the data which is passed to the database.
+*   Passes the value returned by Java to the database with only the type converted if necessary, ignoring the number of digits defined during creating the Java stored function/procedure. In principle, the user should directly manipulates the data which is passed to the database.
 
 Take a look at the following **typestring** () Java stored function.
 

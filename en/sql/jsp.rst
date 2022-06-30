@@ -319,7 +319,7 @@ The following classes are supported by the server-side JDBC driver. For details 
     
     **java.sql.DatabaseMetaData** is not supported yet.
 
-Database opertions using the server-side JDBC have the following characteristics.
+Database operations using the server-side JDBC have the following characteristics.
 
 * Database operations executed in the Java stored function/procedure belongs to the transaction that is called the Java stored function/procedure.
 * Transaction-related APIs are ignored.

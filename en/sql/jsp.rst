@@ -831,7 +831,7 @@ Returning Value of Java Stored Function/Procedure and Precision Type on IN/OUT
 
 To limit the return value of Java stored function/procedure and precision type on IN/OUT, CUBRID processes as follows:
 
-*   Checks the sql_type of the Java stored function/procedure.
+*   Checks the SQL type of the Java stored function/procedure.
 
 *   Passes the value returned by Java to the database with only the type converted if necessary, ignoring the number of digits defined during creating the Java stored function/procedure. In principle, the user manipulates directly the data which is passed to the database.
 

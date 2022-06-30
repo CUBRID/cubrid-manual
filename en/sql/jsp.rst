@@ -606,7 +606,7 @@ Parameters of Java methods corresponding to an OUT (or IN OUT) parameter of an S
 OUT Parameters of CUBRID OID type
 -------------------------------------------
 
-In case of using the OID type value for IN/OUT in CUBRID, use the value passed from the server.
+In case of using an OUT (or IN OUT) parameter of CUBRID OID type, declare the corresponding parameter of the Java method as an array of CUBRIDOID class (cubrid.sql.CUBRIDOID).
 
 .. code-block:: sql
 

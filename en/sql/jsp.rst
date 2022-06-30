@@ -345,7 +345,7 @@ or
 
 .. note::
 
-    The server-side JDBC is already registered, you do not need to call "Class.forName("cubrid.jdbc.driver.CUBRIDDriver")"
+    The server-side JDBC is already registered, and you do not need to call "Class.forName("cubrid.jdbc.driver.CUBRIDDriver")"
 
 .. _jsp-execute-statement:
 
@@ -358,7 +358,7 @@ When implementing Java stored/procedures, queries can be executed using the foll
 *    **java.sql.PreparedStatement**
 *    **java.sql.CallableStatement**
 
-The following is a query that can be executed using the above class.
+The following are the queries that can be executed using the above class.
 
 *    **DML (Data Manipulation Language)**: :doc:`/sql/query/index`
 *    **DDL (Data Definition Language)**: :doc:`/sql/query/index`

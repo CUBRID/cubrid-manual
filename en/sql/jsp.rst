@@ -554,8 +554,8 @@ When changing an argument value in Java in a Java stored function/procedure of C
 
     CREATE PROCEDURE sp_increment_me(x IN OUT INT) AS LANGUAGE JAVA NAME 'OutTest.incrementInt(int[])';
 
-
 .. code-block:: java
+
     public class OutTest {
         public static void incrementInt(int[] arg) {
             arg[0] = arg[0] + 1;
@@ -728,6 +728,7 @@ Getting information about connection client
 
 
 .. code-block:: java
+
     import java.util.Properties;
     import java.sql.*;
      

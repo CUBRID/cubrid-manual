@@ -726,7 +726,6 @@ Getting information about connection client
 
     CREATE OR REPLACE FUNCTION sp_client_info () RETURN STRING as language java name 'SpTestClientInfo.getClientInfo() return java.lang.String'; 
 
-
 .. code-block:: java
 
     import java.util.Properties;

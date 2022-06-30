@@ -341,7 +341,7 @@ or
 
 .. code-block:: java
 
-    cubrid.jdbc.driver.CUBRIDDriver.getDefaultConnection();
+    Connection conn = cubrid.jdbc.driver.CUBRIDDriver.getDefaultConnection();
 
 .. note::
 
@@ -352,7 +352,7 @@ or
 Executing SQL Statements
 ----------------------------
 
-When implementing Java stored/procedures, queries can be executed using the following JDBC interface in the same way as developing Java applications.
+When implementing Java stored functions/procedures, queries can be executed using the following JDBC interface in the same way as developing Java applications.
 
 *    **java.sql.Statement**
 *    **java.sql.PreparedStatement**
@@ -361,12 +361,14 @@ When implementing Java stored/procedures, queries can be executed using the foll
 The following are the queries that can be executed using the above class.
 
 *    **DML (Data Manipulation Language)**: :doc:`/sql/query/index`
-*    **DDL (Data Definition Language)**: :doc:`/sql/query/index`
+*    **DDL (Data Definition Language)**: :doc:`/sql/schema/index`
 
 .. note::
 
     The JDBC object created when executing a query must contain only one SQL statement.
-        Therefore, an error occurs in the following cases:
+    Therefore, an error occurs in the following cases:
+
+    ::
 
         stmt = new Statement ("select * from t1;select * from t2;");
 
@@ -376,7 +378,7 @@ The following statements are not supported.
 
 .. note::
 
-     * *commit()*, *rollback()*\ JDBC API methods corresponding to **COMMIT** and **ROLLBACK** statements respectively are ignored.
+     * *commit()*, *rollback()* JDBC API methods corresponding to **COMMIT** and **ROLLBACK** statements respectively are ignored.
      * JDBC API methods corresponding to the **SAVEPOINT** statement is not supported.
 
 The example of executing statements
@@ -391,8 +393,8 @@ The query result can be processed using the executed query result set (**java.sq
 .. note::
 
      * java.sql.ResultSet is forward-only and read-only.
-     * In the case of the client-side JDBC driver, when a query result set is created, :ref:`cursor holdability <cursor-holding>`\ is performed by default.
-          In the server-side JDBC driver, resources are managed by the server, so the query result set is internally organized at the end of the stored function/procedure without maintaining a cursor.
+     * In the case of the client-side JDBC driver, when a query result set is created, :ref:`cursor holdability <cursor-holding>` is performed by default.
+       In the server-side JDBC driver, resources are managed by the server, so the query result set is internally closed at the end of the stored function/procedure without maintaining a cursor.
 
 Also, result set metadata (**java.sql.ResultSetMetaData**) can be created from the query result set by using the **getMetaData()** function.
 
@@ -404,24 +406,31 @@ Also, result set metadata (**java.sql.ResultSetMetaData**) can be created from t
 .. code-block:: java
     
     import java.sql.*;
+
     public class TestQuery {
         public static String printAthelete(String nation_code_filter) throws SQLException {
             String sql = "SELECT * FROM public.athlete WHERE nation_code = ?";
+
             StringBuilder builder = new StringBuilder();
             Connection conn = null;
             PreparedStatement pstmt = null;
+
             try {
                 conn = DriverManager.getConnection("jdbc:default:connection:");
                 pstmt = conn.prepareStatement(sql);
+
                 pstmt.setString(1, nation_code_filter);
+
                 ResultSet rs = pstmt.executeQuery();
                 ResultSetMetaData rsmd = rs.getMetaData();
+
                 builder.append("<Column Details>:\n");
                 int colCount = rsmd.getColumnCount();
                 for (int i = 1; i <= colCount; i++) {
                     String colName = rsmd.getColumnName(i);
                     String colType = rsmd.getColumnTypeName(i);
                     builder.append(colName + "," + colType);
+
                     if (i != colCount) builder.append("|");
                 }
                 
@@ -437,6 +446,7 @@ Also, result set metadata (**java.sql.ResultSetMetaData**) can be created from t
                     }
                     builder.append("\n");
                 }
+
                 rs.close();
             } catch (Exception e) {
                 builder.append(e.getMessage());
@@ -444,8 +454,10 @@ Also, result set metadata (**java.sql.ResultSetMetaData**) can be created from t
                 if (pstmt != null) pstmt.close();
                 if (conn != null) conn.close();
             }
+
             return builder.toString();
         }
+
         private static void readColumn(int idx, ResultSetMetaData rsmd, ResultSet rs, StringBuilder stringBuilder) throws SQLException {
             switch (rsmd.getColumnType(idx)) {
                 case java.sql.Types.DOUBLE:
@@ -728,8 +740,10 @@ Getting information about connection client
                 conn = DriverManager.getConnection("jdbc:default:connection:");
      
                 Properties props = conn.getClientInfo();
+
                 // How to get from the Properties
                 // String user = props.getProperty ("user");
+
                 result = props.toString ();
             } catch (Exception e) {
                 result = e.getMessage ();
@@ -821,7 +835,7 @@ Caution
 * Functions not related to query execution and used only in client-side JDBC are not supported. For details, refer to :ref:`jsp-appendix`\.
 * Multiple SQL statements are not supported when executing a query with one JDBC object.
 * ResultSet created by query execution is non-updatable, non-scrollable, and non-sensitive.
-* Java ignores the return value and type digits of IN/OUT parameters, matches only the type, and delivers it to the database as it is.
+* Java ignores precision, scale, and length parts of SQL types of IN/OUT parameters, matches only the type name parts, and delivers values as they are.
 * A stored procedure can call another stored procedure or call itself recursively. The maximum nesting depth is 16.
 
 Returning Value of Java Stored Function/Procedure and Precision Type on IN/OUT
@@ -829,9 +843,9 @@ Returning Value of Java Stored Function/Procedure and Precision Type on IN/OUT
 
 To limit the return value of Java stored function/procedure and precision type on IN/OUT, CUBRID processes as follows:
 
-*   Checks the sql_type of the Java stored function/procedure.
+*   Checks the SQL type of the Java stored function/procedure.
 
-*   Passes the value returned by Java to the database with only the type converted if necessary, ignoring the number of digits defined during creating the Java stored function/procedure. In principle, the user manipulates directly the data which is passed to the database.
+*   Passes the value returned by Java to the database with only the type converted if necessary, ignoring the number of digits defined during creating the Java stored function/procedure. In principle, the user should directly manipulates the data which is passed to the database.
 
 Take a look at the following **typestring** () Java stored function.
 

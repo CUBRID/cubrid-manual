@@ -365,10 +365,12 @@ Connection 생성
 
 .. note::
 
-    질의를 수행할 때 생성하는 JDBC 객체는 하나의 SQL 구문만 포함해야한다
-    따라서 다음의 경우에 에러가 발생한다
+    질의를 수행할 때 생성하는 JDBC 객체는 하나의 SQL 구문만 포함해야한다.
+    따라서 다음의 경우에 에러가 발생한다.
     
-    stmt = new Statement ("select * from t1;select * from t2;");
+    ::
+
+        stmt = new Statement ("select * from t1;select * from t2;");
 
 다음의 구문에 해당하는 기능은 지원하지 않는다.
 

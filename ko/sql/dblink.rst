@@ -129,7 +129,7 @@ CUBRID DBLink를 사용하기 위한 설정은 동일기종 DBLink와 이기종 
 동일기종 DBLink 설정
 -----------------------
 
-위의 동일기종 구성도를 보면 원격지의 데이터베이스의 Broker에 연결을 해야 하므로 원격지의 데이터베이스데 Broker 설정이 필요 하다. 
+위의 동일기종 구성도를 보면 원격지 데이터베이스의 Broker에 연결을 해야 하므로 원격지 데이터베이스의 Broker 설정이 필요 하다. 
 이 설정은 일반적인 Broker 설정과 동일하다.
 
 이기종 DBLink 설정
@@ -342,7 +342,7 @@ Cubrid DBLink 사용 방법
 
 ::
     
-	SELECT * FROM DBLINK (192.168.0.1:53000:demodb:user:password:','SELECT col1, col2 FROM remote_t') AS t(col1 int, col2 varchar(32));
+	SELECT * FROM DBLINK ('192.168.0.1:53000:demodb:user:password:','SELECT col1, col2 FROM remote_t') AS t(col1 int, col2 varchar(32));
 
 
 두번째, 위의 DBLINK Query를 보면 타 데이터베이스에 접속하기 위한 정보는 가장 기본적인 정보다. 그래서 Query를 작성할 때 마다 매번 작성해야 하는 번거로움과 사용자 정보(id, password) 가 외부로 노출될 우려가 있다.

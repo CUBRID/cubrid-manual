@@ -279,7 +279,7 @@ The result can be obtained by executing a query in a separate DBMS located at a 
     The attributes of the column supported by DBLINK are as follows.
     
     * INT, BIGINT, SHORT, FLOAT, DOUBLE, MONETARY, NUMERIC
-    * VARCHAR, VARNCHAR, CHAR, NCHAR
+    * VARCHAR, CHAR
     * DATE, TIME, TIMESTAMP, DATETIME
     * DATETIMETZ, DATETIMELTZ, TIMESTAMPTZ, TIMESTAMPLTZ
 

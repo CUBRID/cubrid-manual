@@ -20,7 +20,7 @@ Create another new name to use for an object that already exists in the database
 ::
 
     CREATE [OR REPLACE] [PRIVATE] SYNONYM [schema_name_of_synonym.]synonym_name
-    FOR [schema_name_of_target.]object_name
+    FOR [schema_name_of_target.]target_name
     [COMMENT 'synonym_comment_string'] ;
 
 *   **OR REPLACE**: The existing synonym is replaced by a new one without error, even if *synonym_name* already exists in the schema.
@@ -31,7 +31,7 @@ Create another new name to use for an object that already exists in the database
 *   *schema_name_of_synonym*: Specifies the schema name of the synonym. If omitted, the schema name of the current session is used.
 *   *synonym_name*: Specifies the name of the synonym.
 *   *schema_name_of_target*: Specifies the schema name of the target object. If omitted, the schema name of the current session is used.
-*   *object_name*: Specifies the name of the target object.
+*   *target_name*: Specifies the name of the target object.
 *   *synonym_comment_string*: Specifies a comment of a synonym.
 
 .. warning::
@@ -48,6 +48,8 @@ Create another new name to use for an object that already exists in the database
 In the example below, user u1 and user u2 have created a synonym with the same name but use different target objects.
 
 .. code-block:: sql
+
+    call login ('dba') on class db_user;
 
     /* current_user: dba */
     create user u1;
@@ -100,6 +102,8 @@ In the example below, the user can find the information of a synonym in the :ref
 
     /* There should be the result of example 1. */
 
+    call login ('dba') on class db_user;
+
     /* current_user: dba */
     select * from db_synonym;
 
@@ -136,12 +140,29 @@ In the example below, the user can find the information of a synonym in the :ref
     ====================================================================================================================================
       's1'                  'U2'                  'NO'                  't2'                  'DBA'                 NULL
 
+.. code-block:: sql
+
+    /* clean */
+
+    call login ('dba') on class db_user;
+
+    /* current_user: dba */
+    drop synonym if exists u1.s1;
+    drop synonym if exists u2.s1;
+    drop user u1;
+    drop user u2;
+
+    drop table if exists t1;
+    drop table if exists t2;
+
 3. Synonym name
 ---------------
 
 If a table or view already exists with the same name, a synonym cannot be created with that name.
 
 .. code-block:: sql
+
+    call login ('public') on class db_user;
 
     /* current_user: public */
     create table t1 (c1 varchar(100));
@@ -179,12 +200,28 @@ If a table or view already exists with the same name, a synonym cannot be create
     ======================
       'table for user public.'
 
+.. code-block:: sql
+
+    /* clean */
+
+    call login ('public') on class db_user;
+
+    /* current_user: public */
+    drop synonym if exists s1;
+    drop synonym if exists s2;
+    drop synonym if exists s3;
+    drop view if exists s2;
+    drop table if exists t1;
+    drop table if exists s1;
+
 4. Synonym for synonym
 ----------------------
 
 When creating a synonym, it does not check whether the target object exists, so the user can create a new synonym by specifying an existing synonym as the target object. However, if a synonym is used, the target object of the synonym, which is the target object, is not found again.
 
 .. code-block:: sql
+
+    call login ('public') on class db_user;
 
     /* current_user: public */
     create table t1 (c1 varchar(100));
@@ -220,12 +257,25 @@ When creating a synonym, it does not check whether the target object exists, so 
     ======================
       'synonym for synonym.'
 
+.. code-block:: sql
+
+    /* clean */
+
+    call login ('public') on class db_user;
+
+    /* current_user: public */
+    drop synonym if exists s1;
+    drop synonym if exists s2;
+    drop table if exists t1;
+
 5. Creating schema-specified synonyms
 -------------------------------------
 
 When **DBA** and members of **DBA** create a synonym by specifying a schema, the synonym is created in the specified schema.
 
 .. code-block:: sql
+
+    call login ('dba') on class db_user;
 
     /* current_user: dba */
     create user u1;
@@ -279,6 +329,21 @@ When **DBA** and members of **DBA** create a synonym by specifying a schema, the
     ======================
       'private synonym for user u2.'
 
+.. code-block:: sql
+
+    /* clean */
+
+    call login ('dba') on class db_user;
+
+    /* current_user: dba */
+    drop synonym if exists u1.s1;
+    drop synonym if exists u2.s1;
+    drop user u1;
+    drop user u2;
+
+    drop table if exists t1;
+    drop table if exists t2;
+
 ALTER SYONYM
 ============
 
@@ -287,14 +352,16 @@ Change the target object or comment of a synonym. The synonym in use cannot be c
 ::
 
     ALTER [PRIVATE] SYNONYM [schema_name_of_synonym.]synonym_name
-    FOR [schema_name_of_target.]object_name
-    [COMMENT 'synonym_comment_string'] ;
+    {
+	FOR [<schema_name_of_target>.]<target_name> [COMMENT 'comment_string'] |
+	COMMENT 'synonym_comment_string'
+    } ;
 
 *   **PRIVATE**: Specifies to alter a private synonym. Even if omitted, a private synonym is created by default.
 *   *schema_name_of_synonym*: Specifies the schema name of the synonym. If omitted, the schema name of the current session is used.
 *   *synonym_name*: Specifies the name of the synonym.
 *   *schema_name_of_target*: Specifies the schema name of the target object. If omitted, the schema name of the current session is used.
-*   *object_name*: Specifies the name of the target object.
+*   *target_name*: Specifies the name of the target object.
 *   *synonym_comment_string*: Specifies a comment of a synonym.
 
 .. warning::
@@ -309,6 +376,8 @@ Change target object
 In the example below, the target object is changed.
 
 .. code-block:: sql
+
+    call login ('public') on class db_user;
 
     /* current_user: public */
     create table t1 (c1 varchar(100));
@@ -347,12 +416,25 @@ In the example below, the target object is changed.
     ======================
       'target table after change.'
 
+.. code-block:: sql
+
+    /* clean */
+
+    call login ('public') on class db_user;
+
+    /* current_user: public */
+    drop synonym if exists s1;
+    drop table if exists t1;
+    drop table if exists t2;
+
 Change comment
 --------------
 
 In the example below, the user changes the comment of a synonym.
 
 .. code-block:: sql
+
+    call login ('public') on class db_user;
 
     /* current_user: public */
     create table t1 (c1 varchar(100));
@@ -367,20 +449,11 @@ In the example below, the user changes the comment of a synonym.
     ========================================================================================
       's1'                  'PUBLIC'              'NO'                  'It is a synonym for the t1 table.'
 
-It is not possible to change the comment without specifying the target object yet.
+It is possible to change the comment without specifying the target object.
 
 .. code-block:: sql
 
     alter synonym s1 comment 'the comment was changed.';
-
-::
-
-    ERROR: Invalid alter synonym.
-      ALTER [PRIVATE] SYNONYM [<user_name>.]<synonym_name> FOR [<user_name>.]<target_name> [COMMENT 'comment_string']
-
-.. code-block:: sql
-
-    alter synonym s1 for t1 comment 'the comment was changed.';
     select synonym_name, synonym_owner_name, is_public_synonym, comment from db_synonym;
 
 ::
@@ -388,6 +461,39 @@ It is not possible to change the comment without specifying the target object ye
       synonym_name          synonym_owner_name    is_public_synonym     comment
     ========================================================================================
       's1'                  'PUBLIC'              'NO'                  'the comment was changed.'
+
+If both the target object and comment are not specified, an error occurs.
+
+.. code-block:: sql
+
+    alter synonym s1;
+
+::
+
+    ERROR: No options specified for ALTER SYNONYM.
+
+To change a comment to **NULL**, change the comment to an empty string.
+
+.. code-block:: sql
+
+    alter synonym s1 comment '';
+    select synonym_name, synonym_owner_name, is_public_synonym, comment from db_synonym;
+
+::
+
+      synonym_name          synonym_owner_name    is_public_synonym     comment
+    ========================================================================================
+      's1'                  'PUBLIC'              'NO'                  NULL
+
+.. code-block:: sql
+
+    /* clean */
+
+    call login ('public') on class db_user;
+
+    /* current_user: public */
+    drop synonym if exists s1;
+    drop table if exists t1;
 
 DROP SYONYM
 ===========
@@ -408,6 +514,8 @@ Drop the synonym. The synonym in use cannot be dropped. Even if a synonym is dro
     When the **ALTER**, **DROP**, **RENAME** statements for a synonym are executed, be careful because all query plans using the target object are deleted from the query plan cache.
 
 .. code-block:: sql
+
+    call login ('public') on class db_user;
 
     /* current_user: public */
     create table t1 (c1 varchar(100));
@@ -456,6 +564,16 @@ Drop the synonym. The synonym in use cannot be dropped. Even if a synonym is dro
     ======================
       'The target object of the to-be-deleted synonym.'
 
+.. code-block:: sql
+
+    /* clean */
+
+    call login ('public') on class db_user;
+
+    /* current_user: public */
+    drop synonym if exists s1;
+    drop table if exists t1;
+
 RENAME SYONYM
 =============
 
@@ -464,14 +582,10 @@ Change the name of the synonym. The name of the synonym in use cannot be changed
     #. The user cannot change the schema of the synonym when renaming a synonym.
     #. If a table, view, or synonym already exists with the name to be changed, the name cannot be changed.
 
-.. warning::
-    
-    When the **ALTER**, **DROP**, **RENAME** statements for a synonym are executed, be careful because all query plans using the target object are deleted from the query plan cache.
-
 ::
 
     RENAME [PRIVATE] SYNONYM [schema_name_of_old_synonym.]old_synonym_name
-    [AS | TO] [schema_name_of_new_synonym.]new_synonym_name ;
+    {AS | TO} [schema_name_of_new_synonym.]new_synonym_name ;
 
 *   **PRIVATE**: Specifies to rename a private synonym. Even if omitted, a private synonym is created by default.
 *   *schema_name_of_old_synonym*: Specifies the schema name of the to-be-renamed synonym. If omitted, the schema name of the current session is used.
@@ -479,12 +593,18 @@ Change the name of the synonym. The name of the synonym in use cannot be changed
 *   *schema_name_of_new_synonym*: Specifies the schema name of synonym for new name. If omitted, the schema name of the current session is used.
 *   *new_synonym_name*: Specifies the new name of the new-named synonym.
 
+.. warning::
+    
+    When the **ALTER**, **DROP**, **RENAME** statements for a synonym are executed, be careful because all query plans using the target object are deleted from the query plan cache.
+
 1. Cannot change schema
 -----------------------
 
 In the example below, an error occurs when a schema name is specified differently when renamed.
 
 .. code-block:: sql
+
+    call login ('dba') on class db_user;
 
     /* current_user: dba */
     create user u1;
@@ -553,12 +673,28 @@ In the example below, an error occurs when a schema name is specified differentl
     ======================
       'private synonym for user u1.'
 
+.. code-block:: sql
+
+    /* clean */
+
+    call login ('dba') on class db_user;
+
+    /* current_user: dba */
+    drop synonym if exists u1.s1;
+    drop synonym if exists u1.s2;
+    drop synonym if exists u2.s2;
+    drop table if exists u1.t1;
+    drop user u1;
+    drop user u2;
+
 2. Name already in use
 ----------------------
 
 In the example below, an error occurs because the name to be changed is already in use.
 
 .. code-block:: sql
+
+    call login ('public') on class db_user;
 
     /* current_user: public */
     create table t1 (c1 varchar(100));
@@ -630,6 +766,21 @@ In the example below, an error occurs because the name to be changed is already 
     ======================
       'first table for user u1.'
 
+.. code-block:: sql
+
+    /* clean */
+
+    call login ('public') on class db_user;
+
+    /* current_user: public */
+    drop synonym if exists s1;
+    drop synonym if exists s2;
+    drop synonym if exists s_s1;
+    drop table if exists t1;
+    drop table if exists t2;
+    drop table if exists s_t1;
+    drop table if exists s_v1;
+
 USE SYNONYM
 =============
 
@@ -642,6 +793,8 @@ The synonym can be used only if table names and view names are available. When u
 ----------------------------------
 
 .. code-block:: sql
+
+    call login ('dba') on class db_user;
 
     /* current_user: dba */
     create user u1;
@@ -682,10 +835,24 @@ The synonym can be used only if table names and view names are available. When u
     ======================
       'first table for user u1.'
 
+.. code-block:: sql
+
+    /* clean */
+
+    call login ('dba') on class db_user;
+
+    /* current_user: dba */
+    drop synonym if exists u1.s1;
+    drop table if exists u1.t1;
+    drop user u1;
+    drop user u2;
+
 2. Statements where synonyms cannot be used
 -------------------------------------------
 
 .. code-block:: sql
+
+    call login ('public') on class db_user;
 
     /* current_user: public */
     create table t1 (c1 varchar(100));
@@ -750,3 +917,14 @@ The synonym can be used only if table names and view names are available. When u
       c1
     ======================
       'first table for user public.'
+
+.. code-block:: sql
+
+    /* clean */
+
+    call login ('public') on class db_user;
+
+    /* current_user: public */
+    drop synonym if exists s1;
+    drop table if exists t1;
+    drop table if exists s2;

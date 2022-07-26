@@ -142,7 +142,7 @@ You can change the server name using the **RENAME SERVER** syntax.
 
 ::
 
-    RENAME SERVER [owner_name.] old_server_name AS new_server_name ;
+    RENAME SERVER [owner_name.] old_server_name {AS | TO} new_server_name ;
             
         
 *   *owner_name*: Specify the owner name of the target server to be renamed.

@@ -1006,11 +1006,11 @@ You can modify the structure of a table by using the **ALTER** statement. You ca
             ADD <alter_add> [INHERIT <resolution>, ...]  | 
             ADD {KEY | INDEX} <index_name> (<index_col_name>, ... ) [COMMENT 'index_comment_string'] |
             ALTER [COLUMN] column_name SET DEFAULT <value_specification> |
-            DROP <alter_drop> [ INHERIT <resolution>, ... ] |
+            DROP <alter_drop> [INHERIT <resolution>, ...] |
             DROP {KEY | INDEX} index_name |
             DROP FOREIGN KEY constraint_name |
             DROP PRIMARY KEY |                   
-            RENAME <alter_rename> [ INHERIT <resolution>, ... ] |
+            RENAME <alter_rename> [INHERIT <resolution>, ...] |
             CHANGE <alter_change> |
             MODIFY <alter_modify> |            
             INHERIT <resolution>, ... |
@@ -1766,8 +1766,8 @@ RENAME COLUMN Clause
 
 You can change the name of the column by using the **RENAME COLUMN** clause. ::
 
-    ALTER [ TABLE | CLASS | VCLASS | VIEW ] [schema_name.]table_name
-    RENAME [ COLUMN | ATTRIBUTE ] old_column_name { AS | TO } new_column_name ;
+    ALTER [TABLE | CLASS | VCLASS | VIEW] [schema_name.]table_name
+    RENAME [COLUMN | ATTRIBUTE] old_column_name {AS | TO} new_column_name ;
 
 *   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *table_name* : Specifies the name of a table that has a column to be renamed.

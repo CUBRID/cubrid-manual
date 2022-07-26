@@ -439,7 +439,7 @@ RENAME TRIGGER
 
 You can change a trigger name by using the **TRIGGER** reserved word in the **RENAME** statement. ::
 
-    RENAME TRIGGER [schema_name.]old_trigger_name AS [schema_name.]new_trigger_name ;
+    RENAME TRIGGER [schema_name.]old_trigger_name {AS | TO} [schema_name.]new_trigger_name ;
 
 *   *schema_name*: Specifies the schema name of the trigger. If omitted, the schema name of the current session is used. The schema of the current trigger and the schema of the trigger to be changed must be the same.
 *   *old_trigger_name*: specifies the current name of the trigger.

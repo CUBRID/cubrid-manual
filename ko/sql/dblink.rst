@@ -40,7 +40,7 @@ GATEWAY는 ODBC(Open DataBase Connectivity)를 이용하고 있다.
 .. image:: /images/dblink_heter.png
 
 
-.. _gateway:
+.. _gateway-info:
 
 DBLink를 위한 GATEWAY
 ==============================================
@@ -108,7 +108,7 @@ GATEWAY 재시작
 
     $ cubrid gateway restart
 
-.. _gateway-status:
+.. _gateway-status-command:
 
 GATEWAY 상태 확인
 -------------------
@@ -119,6 +119,20 @@ GATEWAY 상태는 브로커와 동일 하므로 :ref:`broker-status`\을 참조 
 ::
 
     cubrid gateway status [options] [expr]
+
+
+CUBRID 서비스 시작시 게이트웨이 함께 시작
+----------------------------------------------
+
+CUBRID 서비스 시작(**cubrid service start**) 시 *게이트웨* 를 같이 시작되게 하려면, **cubrid.conf** 파일의 **service** 파라메터에 *gateway* 를 설정한다. ::
+
+    # cubrid.conf
+
+    [service]
+
+    service=server,broker,gateway,manager
+
+    ...
 
 
 CUBRID DBLINK 설정

@@ -41,7 +41,7 @@ GATWAY uses ODBC (Open DataBase Connectivity).
 .. image:: /images/dblink_heter.png
 
 
-.. _gateway:
+.. _gateway-info:
 
 GATEWAY
 ==============================================
@@ -113,7 +113,7 @@ Enter the below command to restart the whole GATEWAY.
 
     $ cubrid gateway restart
 
-.. _gateway-status:
+.. _gateway-status-command:
 
 Checking GATEWAY Status
 --------------------------------
@@ -126,6 +126,18 @@ GATEWAY status is the same as broker, so refer to :ref:`broker-status`\.
 
     cubrid gateway status [options] [expr]
 
+Starting the GATEWAY together when the CUBRID service starts
+---------------------------------------------------------------------------------
+
+To have *GATEWAY* started upon startup of the CUBRID service (cubrid service start), configure *gateway* in the **service**  parameter of the **cubrid.conf**  file. ::
+
+    # cubrid.conf
+
+    [service]
+
+    service=server,broker,gateway,manager
+
+    ...
 
 CUBRID DBLINK settings
 ==============================================

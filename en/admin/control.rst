@@ -1,6 +1,6 @@
 
-:meta-keywords: cubrid server process, cub_server, cubrid broker, cubrid cas, cubrid manager server, cubrid HA, cubrid services, cubrid logging, cubrid errors, cubrid server access, cubrid status, cubrid manager, cubrid javasp, cub_javasp
-:meta-description: How to control and check CUBRID services and processes (server, broker), logging files, access, errors, CUBRID Manager and CUBRID Java SP Server.
+:meta-keywords: cubrid server process, cub_server, cubrid broker, cubrid gateway,cubrid cas, cubrid manager server, cubrid HA, cubrid services, cubrid logging, cubrid errors, cubrid server access, cubrid status, cubrid manager, cubrid javasp, cub_javasp
+:meta-description: How to control and check CUBRID services and processes (server, broker, gateway), logging files, access, errors, CUBRID Manager and CUBRID Java SP Server.
 
 .. _control-cubrid-processes:
 
@@ -104,6 +104,32 @@ The following **cubrid** utility syntax shows how to control CUBRID broker proce
 *   reset: reset the connection to broker.
 *   info: display the broker configuration information.
 
+Controlling Gateway
+-------------------
+
+The following **cubrid** utility syntax shows how to control CUBRID gateway process. 
+
+::
+
+    cubrid gateway <command> 
+    <command>: start
+               |stop
+               |restart
+               |status [options] [gateway_name_expr]
+               |acl {status|reload} gateway_name
+               |on <gateway_name> |off <gateway_name>
+               |reset gateway_name 
+               |info
+
+*   start: start gateway processes.
+*   stop: stop gateway processes. 
+*   restart: restart gateway processes. 
+*   status: check status of gateway processes.  
+*   acl: limit gateway access.
+*   on/off: enable/disable the specified gateway.
+*   reset: reset the connection to gateway.
+*   info: display the gateway configuration information.
+
 Controlling CUBRID Manager Server
 ---------------------------------
 
@@ -174,13 +200,13 @@ CUBRID Services
 Registering Services
 --------------------
 
-You can register database servers, CUBRID brokers, CUBRID Manager(s) or CUBRID HA as CUBRID service in the configuration file ( **cubrid.conf** ). To register services, you can input for each **server**, **broker**, **manager** or **heartbeat** as a parameter value, and it is possible to input several values by concatenating them in comma(,).
+You can register database servers, CUBRID brokers, CUBRID gateways, CUBRID Manager(s) or CUBRID HA as CUBRID service in the configuration file ( **cubrid.conf** ). To register services, you can input for each **server**, **broker**, **gateway**, **manager** or **heartbeat** as a parameter value, and it is possible to input several values by concatenating them in comma(,).
 
 If you do not register any service, only master process is registered by default. It is convenient for you to view status of all related processes at a glance or start and stop the processes at once with the **cubrid** **service** utility once it is registered as CUBRID service. 
 
 - For details on CUBRID HA configuration, see :ref:`cubrid-service-util`.
 
-The following example shows how to register database server and broker as service in the **cubrid.conf** file and enable databases ( *demodb* and *testdb* ) to start automatically at once when CUBRID server starts running.
+The following example shows how to register database server and broker, gateway as service in the **cubrid.conf** file and enable databases ( *demodb* and *testdb* ) to start automatically at once when CUBRID server starts running.
 
 ::
 
@@ -190,8 +216,8 @@ The following example shows how to register database server and broker as servic
     [service]
 
     # The list of processes to be started automatically by 'cubrid service start' command
-    # Any combinations are available with server, broker, manager and heartbeat.
-    service=server,broker
+    # Any combinations are available with server, broker, gateway, manager and heartbeat.
+    service=server,broker,gateway
 
     # The list of database servers in all by 'cubrid service start' command.
     # This property is effective only when the above 'service' property contains 'server' keyword.
@@ -228,7 +254,7 @@ The following message is returned if master process fails to run. The example sh
     cub_master: '/tmp/CUBRID1523' file for UNIX domain socket exist.... Operation not permitted
     ++ cubrid master start: fail
 
-After registering service as explained in :ref:`control-cubrid-services`, enter the code below to start the service. You can verify that database server process and broker as well as registered *demodb* and *testdb* are starting at once. 
+After registering service as explained in :ref:`control-cubrid-services`, enter the code below to start the service. You can verify that database server process and broker, gateway as well as registered *demodb* and *testdb* are starting at once. 
 
 ::
 
@@ -250,6 +276,8 @@ After registering service as explained in :ref:`control-cubrid-services`, enter 
     ++ cubrid server start: success
     @ cubrid broker start
     ++ cubrid broker start: success
+    @ cubrid gateway start
+    ++ cubrid gateway start: success
 
 Stopping Services
 -----------------
@@ -262,7 +290,7 @@ Enter code below to stop CUBRID service. If no services are registered by a user
     @ cubrid master stop
     ++ cubrid master stop: success
 
-Enter code below to stop registered CUBRID service. You can verify that server process, broker process, and master process as well as *demodb* and *testdb* stop at once. 
+Enter code below to stop registered CUBRID service. You can verify that server process, broker process, gateway process and master process as well as *demodb* and *testdb* stop at once. 
 
 ::
 
@@ -278,6 +306,10 @@ Enter code below to stop registered CUBRID service. You can verify that server p
     ++ cubrid server stop: success
     @ cubrid broker stop
     ++ cubrid broker stop: success
+    @ cubrid gateway stop
+    ++ cubrid gateway stop: success
+    @ cubrid master stop
+    ++ cubrid master stop: success
     @ cubrid master stop
     ++ cubrid master stop: success
 
@@ -296,7 +328,7 @@ Enter code below to restart CUBRID service. If no services are registered by a u
     ++ cubrid master start: success
 
 
-Enter code below to restart registered CUBRID service. You can verify that server process, broker process, and master process as well as *demodb* and *testdb* stop and then restart at once. 
+Enter code below to restart registered CUBRID service. You can verify that server process, broker process, gateway process and master process as well as *demodb* and *testdb* stop and then restart at once. 
 
 ::
 
@@ -312,6 +344,8 @@ Enter code below to restart registered CUBRID service. You can verify that serve
     ++ cubrid server stop: success
     @ cubrid broker stop
     ++ cubrid broker stop: success
+    @ cubrid gateway stop
+    ++ cubrid gateway stop: success
     @ cubrid master stop
     ++ cubrid master stop: success
     @ cubrid master start
@@ -332,6 +366,8 @@ Enter code below to restart registered CUBRID service. You can verify that serve
     ++ cubrid server start: success
     @ cubrid broker start
     ++ cubrid broker start: success
+    @ cubrid gateway start
+    ++ cubrid gateway start: success
 
 Managing Service Status
 -----------------------
@@ -350,17 +386,15 @@ The following example shows how to check the status of master process and databa
     Server demodb (rel 11.2, pid 30950)
 
     @ cubrid broker status
-    % query_editor
-    ----------------------------------------
-    ID   PID   QPS   LQS PSIZE STATUS
-    ----------------------------------------
-     1 15465     0     0 48032 IDLE
-     2 15466     0     0 48036 IDLE
-     3 15467     0     0 48036 IDLE
-     4 15468     0     0 48036 IDLE
-     5 15469     0     0 48032 IDLE
-
-    % broker1 OFF
+    NAME                   PID  PORT    AS   JQ                  TPS                  QPS   SELECT   INSERT   UPDATE   DELETE   OTHERS     LONG-T     LONG-Q         ERR-Q  UNIQUE-ERR-Q  #CONNECT   #REJECT
+    ===========================================================================================================================================================================================================
+    * query_editor         10877 30000     5    0                    0                    0        0        0        0        0        0     0/60.0     0/60.0             0             0         0         0
+    * broker1              10889 33000     5    0                    0                    0        0        0        0        0        0     0/60.0     0/60.0             0             0         0         0
+    @ cubrid gateway status
+    NAME                   PID  PORT    AS   JQ                  TPS                  QPS   SELECT   INSERT   UPDATE   DELETE   OTHERS     LONG-T     LONG-Q         ERR-Q  UNIQUE-ERR-Q  #CONNECT   #REJECT
+    ===========================================================================================================================================================================================================
+    * oracle_gateway       10903 53000     5    0                    0                    0        0        0        0        0        0     0/60.0     0/60.0             0             0         0         0
+    * mysql_gateway        OFF
 
     @ cubrid manager server status
     ++ cubrid manager server is not running.
@@ -950,7 +984,7 @@ The **cubrid broker status** utility allows you to check the broker status such 
 
 *   *expr*: A part of the broker name or "SERVICE=ON|OFF"
 
-Specifying *expr* performs that the status of specific brokers which include *expr* in their names is monitored; specifying no argument means that status of all brokers which are registered in the broker environment configuration file ( **cubrid_broker.conf** ) is monitored.  
+Specifying *expr* performs that the status of specific brokers which include *expr* in their names is monitored; specifying no argument means that status of all brokers which are registered in the broker environment configuration file ( **cubrid_broker.conf** ) is monitored.
 
 If "SERVICE=ON" is specified on *expr*, only the status of working brokers is displayed; if "SERVICE=OFF" is specified, only the status of stopped brokers is displayed.
 
@@ -969,20 +1003,20 @@ The following [options] are available with the **cubrid broker status** utility.
 .. option:: -f
 
     Displays information of DB and host accessed by broker.
-    
+
     If it is used with the **-b** option, additional information on CAS is displayed. But SELECT, INSERT, UPDATE, DELETE, OTHERS items which shown on **-b** option are excluded.
-  
+
     If it is used with the **-P** option, STMT-POOL-RATIO is additionally printed. This item shows the ratio to use statements in the pool when you are using prepared statements.
     
 .. option:: -l SECOND
 
-    The **-l** option is only used with -f option together. It specifies accumulation period (unit: sec.) when displaying the number of application servers whose client status is Waiting or Busy. If it is omitted, the default value (1 second) is specified. 
+    The **-l** option is only used with -f option together. It specifies accumulation period (unit: sec.) when displaying the number of application servers whose client status is Waiting or Busy. If it is omitted, the default value (1 second) is specified.
 
 .. option:: -t
 
     Displays results in tty mode on the screen. The output can be redirected and used as a file. 
 
-.. option:: -s SECOND    
+.. option:: -s SECOND
 
     Regularly displays the status of broker based on specified period. It returns to a command prompt if q is entered.
 
@@ -1001,7 +1035,7 @@ If you do not specify options or arguments, the status of all brokers is display
      3 28436     0     0 50144 IDLE
      4 28437     0     0 50140 IDLE
      5 28438     0     0 50144 IDLE
-     
+
     % broker1 OFF
 
 *   % query_editor: The broker name
@@ -1323,6 +1357,8 @@ This certificate, **'self-signed'** certificate, was created with the OpenSSL co
     $ openssl x509 -req -days 365 -in my_cert.csr -signkey my_cert.key -out my_cert.crt  # create a certificate valid for 1 year.
 
 And replace **my_cert.key** and **my_cert.crt** with $CUBRID/conf/cas_ssl_cert.key and $CUBRID/conf/cas_ssl_cert.crt respectively.
+
+.. _managing_specific_broker:
 
 Managing a Specific Broker
 --------------------------
@@ -1792,6 +1828,263 @@ If there is only one message, they are the same, but if there are two messages, 
 +--------------------------------------------------+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------+
 | CAS_ER_IS(-10200)                                |  None / Authentication failure                                      |                                                                                                                      |
 +--------------------------------------------------+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+
+.. _gateway:
+
+Gateway
+=======
+
+Starting Gateway
+----------------
+
+Enter the command below to start the gateway.
+
+::
+
+    $ cubrid gateway start
+    @ cubrid gateway start
+    ++ cubrid gateway start: success
+
+The following message is returned if the gateway is already running. 
+
+::
+
+    $ cubrid gateway start
+    @ cubrid gateway start
+    ++ cubrid gateway is running.
+
+Stopping Gateway
+----------------
+
+Enter the command below to stop the gateway.
+
+::
+
+    $ cubrid gateway stop
+    @ cubrid gateway stop
+    ++ cubrid gateway stop: success
+
+The following message is returned if the gateway has stopped. 
+
+::
+
+    $ cubrid gateway stop
+    @ cubrid gateway stop
+    ++ cubrid gateway is not running.
+
+Restarting Gateway
+------------------
+
+Enter the command below to restart the whole gateways.
+
+::
+
+    $ cubrid gateway restart
+
+.. _gateway-status:
+
+Checking Gateway Status
+-----------------------
+
+The **cubrid gateway status** utility allows you to check the gateway status such as number of completed jobs and the number of standby jobs by providing various options. 
+
+::
+
+    cubrid gateway status [options] [expr]
+
+*   *expr*: A part of the gateway name or "SERVICE=ON|OFF"
+
+Specifying *expr* performs that the status of specific gateways which include *expr* in their names is monitored; specifying no argument means that status of all gateways which are registered in the gateway environment configuration file ( **cubrid_gateway.conf** ) is monitored.
+
+If "SERVICE=ON" is specified on *expr*, only the status of working gateways is displayed; if "SERVICE=OFF" is specified, only the status of stopped gateways is displayed.
+
+The following [options] are available with the **cubrid gateway status** utility. -b, -q, -c, -m, -S, -P and -f are options to define the information to print; -s, -l and -t are options to control printing. All of these are possible to use as combining each other.
+
+.. program:: gateway_status
+
+.. option:: -b
+
+    Displays the status information of a gateway but does not display information on gateway application server.
+
+.. option:: -q
+
+    Displays standby jobs in the job queue.
+
+.. option:: -f
+
+    Displays information of DB and host accessed by gateway.
+
+    If it is used with the **-b** option, additional information on CAS is displayed. But SELECT, INSERT, UPDATE, DELETE, OTHERS items which shown on **-b** option are excluded.
+  
+    If it is used with the **-P** option, STMT-POOL-RATIO is additionally printed. This item shows the ratio to use statements in the pool when you are using prepared statements.
+
+.. option:: -l SECOND
+
+    The **-l** option is only used with -f option together. It specifies accumulation period (unit: sec.) when displaying the number of application servers whose client status is Waiting or Busy. If it is omitted, the default value (1 second) is specified.
+
+.. option:: -t
+
+    Displays results in tty mode on the screen. The output can be redirected and used as a file. 
+
+.. option:: -s SECOND
+
+    Regularly displays the status of gateway based on specified period. It returns to a command prompt if q is entered.
+
+If you do not specify options or arguments, the status of all gateways is displayed. 
+
+::
+
+    $ cubrid gateway status
+    @ cubrid gateway status
+    % oracle_gateway
+    ----------------------------------------
+    ID   PID   QPS   LQS PSIZE STATUS
+    ----------------------------------------
+     1 28434     0     0 50144 IDLE
+     2 28435     0     0 50144 IDLE
+     3 28436     0     0 50144 IDLE
+     4 28437     0     0 50140 IDLE
+     5 28438     0     0 50144 IDLE
+
+    % mysql_gateway OFF
+
+*   % oracle_gateway: The gateway name
+*   ID: Serial number of CAS within the gateway
+*   PID: CAS process ID within the gateway
+*   QPS:  The number of queries processed per second
+*   LQS: The number of long-duration queries processed per second
+*   PSIZE: Size of CAS
+*   STATUS: The current status of CAS (BUSY, IDLE, CLIENT_WAIT, CLOSE_WAIT)
+*   % mysql_gateway OFF: mysql_gateway's SERVICE parameter is set to OFF. So, mysql_gateway is not started.
+
+The following shows the detail status of gateway for 5 seconds. The display will reset per 5 seconds as the new status information. To escape the display of the status, press <Q>.
+
+::
+
+    $ cubrid gateway status -b -s 5
+    @ cubrid gateway status
+
+     NAME                    PID  PORT   AS   JQ    TPS    QPS   SELECT   INSERT   UPDATE   DELETE   OTHERS     LONG-T     LONG-Q   ERR-Q  UNIQUE-ERR-Q  #CONNECT  #REJECT
+    =======================================================================================================================================================================
+    * oracle_gateway         13200 30000    5    0      0      0        0        0        0        0        0     0/60.0     0/60.0       0             0         0        0
+    * mysql_gateway        OFF
+
+*   NAME: The gateway name
+*   PID: Process ID of the gateway
+*   PORT: Port number of the gateway
+*   AS: The number of CAS
+*   JQ: The number of standby jobs in the job queue
+*   TPS: The number of transactions processed per second (calculated only when the option is configured to "-b -s <sec>")
+*   QPS: The number of queries processed per second (calculated only when the option is configured to "-b -s <sec>")
+*   SELECT: The number of SELECT queries after staring of the gateway. When there is an option of "-b -s <sec>", it is updated every time with the number of SELECTs which have been executed during the seconds specified by this option.
+*   INSERT: The number of INSERT queries after staring of the gateway. When there is an option of "-b -s <sec>", it is updated every time with the number of INSERTs which have been executed during the seconds specified by this option.
+*   UPDATE: The number of UPDATE queries after staring of the gateway. When there is an option of "-b -s <sec>", it is updated every time with the number of UPDATEs which have been executed during the seconds specified by this option.
+*   DELETE: The number of DELETE queries after staring of the gateway. When there is an option of "-b -s <sec>", it is updated every time with the number of DELETEs which have been executed during the seconds specified by this option.
+*   OTHERS: The number of queries like CREATE and DROP except for SELECT, INSERT, UPDATE, DELETE. When there is an option of "-b -s <sec>", it is updated every time with the number of queries which have been executed during the seconds specified by this option.
+*   LONG-T: The number of transactions which exceed LONG_TRANSACTION_TIME. / the value of the LONG_TRANSACTION_TIME parameter. When there is an option of "-b -s <sec>", it is updated every time with the number of transactions which have been executed during the seconds specified by this option.
+*   LONG-Q: The number of queries which exceed LONG_QUERY_TIME. / the value of the LONG_QUERY_TIME parameter. When there is an option of "-b -s <sec>", it is updated every time with the number of queries which have been executed during the seconds specified by this option.
+*   ERR-Q: The number of queries with errors found. When there is an option of "-b -s <sec>", it is updated every time with the number of errors which have occurred during the seconds specified by this option. 
+*   UNIQUE-ERR-Q: The number of queries with unique key errors found. When there is an option of "-b -s <sec>", it is updated every time with the number of unique key errors which have occurred during the seconds specified by this option.
+*   #CONNECT: The number of connections that an application client accesses to CAS after starting the gateway. 
+*   #REJECT: The count that an application client excluded from ACL IP list is rejected to access a CAS. Regarding ACL setting, see :ref:`limiting-broker-access`.
+
+The following checks the status of gateway whose name includes oracle_gateway and job status of a specific gateway in the job queue with the **-q** option. If you do not specify oracle_gateway as an argument, list of jobs in the job queue for all gateways is displayed. 
+
+::
+
+    % cubrid gateway status -q oracle_gateway
+    @ cubrid gateway status
+    % oracle_gateway
+    ----------------------------------------
+    ID   PID   QPS   LQS PSIZE STATUS
+    ----------------------------------------
+     1 28444     0     0 50144 IDLE
+     2 28445     0     0 50140 IDLE
+     3 28446     0     0 50144 IDLE
+     4 28447     0     0 50144 IDLE
+     5 28448     0     0 50144 IDLE
+
+The following monitors the status of a gateway whose name includes oracle_gateway with the **-s** option. If you do not specify oracle_gateway as an argument, monitoring status for all gateways is performed regularly. It returns to a command prompt if q is not entered. 
+
+::
+
+    % cubrid gateway status -s 5 oracle_gateway
+    % oracle_gateway
+    ----------------------------------------
+    ID   PID   QPS   LQS PSIZE STATUS
+    ----------------------------------------
+     1 28444     0     0 50144 IDLE
+     2 28445     0     0 50140 IDLE
+     3 28446     0     0 50144 IDLE
+     4 28447     0     0 50144 IDLE
+     5 28448     0     0 50144 IDLE
+
+With the **-t** option, it display information of TPS and QPS to a file. To cancel displaying, press <Ctrl+C> to stop program.
+
+::
+
+    % cubrid gateway status -b -t -s 1 > log_file
+
+The following views information of server/database accessed by gateway, the last access times of applications, the IP addresses accessed to CAS and the versions of drivers etc.  with the **-f** option.
+
+::
+
+    $ cubrid gateway status -f oracle_gateway
+    @ cubrid gateway status
+    % oracle_gateway 
+    ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    ID   PID   QPS   LQS PSIZE STATUS         LAST ACCESS TIME      DB       HOST   LAST CONNECT TIME       CLIENT IP   CLIENT VERSION    SQL_LOG_MODE   TRANSACTION STIME  #CONNECT  #RESTART
+    ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     1 26946     0     0 51168 IDLE         2011/11/16 16:23:42  demodb  localhost 2011/11/16 16:23:40      10.0.1.101     9.2.0.0062              NONE 2011/11/16 16:23:42         0         0
+     2 26947     0     0 51172 IDLE         2011/11/16 16:23:34      -          -                   -          0.0.0.0                                -                   -         0         0
+     3 26948     0     0 51172 IDLE         2011/11/16 16:23:34      -          -                   -          0.0.0.0                                -                   -         0         0
+     4 26949     0     0 51172 IDLE         2011/11/16 16:23:34      -          -                   -          0.0.0.0                                -                   -         0         0
+     5 26950     0     0 51172 IDLE         2011/11/16 16:23:34      -          -                   -          0.0.0.0                                -                   -         0         0
+
+Meaning of each column in code above is as follows:
+
+*   LAST ACCESS TIME: Time when CAS runs or the latest time when an application client accesses CAS
+*   DB: Name of a database which CAS accesses most recently
+*   HOST: Name of a which CAS accesses most recently
+*   LAST CONNECT TIME: Most recent time when CAS accesses a database
+*   CLIENT IP: IP of an application clients currently being connected to an application server(CAS). If no application client is connected, 0.0.0.0 is displayed.
+*   CLIENT VERSION: A driver's version of an application client currently being connected to a CAS
+*   SQL_LOG_MODE: SQL logging mode of CAS. If the mode is same as the mode configured in the gateway, "-" is displayed.
+*   TRANSACTION STIME: Transaction start time
+*   #CONNECT: The number of connections that an application client accesses to CAS after starting the gateway
+*   #RESTART: The number of connection that CAS is re-running after starting the gateway
+
+.. _gaweway-detail:
+
+Enter the command below with the **-b** and **-f** options to display AS(T W B Ns-W Ns-B) and CANCELED additionally.
+
+::
+
+    // The -f option is added upon execution of gateway status information. Configuring Ns-W and Ns-B are displayed as long as N seconds by using the -l.
+    % cubrid gateway status -b -f -l 2
+    @ cubrid gateway status
+    NAME          PID    PSIZE PORT  AS(T W B 2s-W 2s-B) JQ TPS QPS LONG-T LONG-Q  ERR-Q UNIQUE-ERR-Q CANCELED ACCESS_MODE SQL_LOG  #CONNECT #REJECT
+    ================================================================================================================================================
+    oracle_gateway 16784 56700 30000      5 0 0     0   0   0  16  29 0/60.0 0/60.0      1            1        0          RW     ALL         4       1
+
+Meaning of added columns in code above is as follows:
+
+*   AS(T): Total number of CAS being executed
+*   AS(W): The number of CAS in the status of Waiting
+*   AS(B): The number of CAS in the status of Busy
+*   AS(Ns-W): The number of CAS that the client belongs to has been waited for N seconds.
+*   AS(Ns-B): The number of CAS that the client belongs to has been Busy for N seconds.
+*   CANCELED: The number of queries have cancelled by user interruption since the gateway starts (if it is used with the **-l** *N* option, it specifies the number of accumulations for *N* seconds).
+
+.. note::
+
+    Gateway is almost similar to broker, see below for more information on gateway
+
+    *   :ref:`limiting-server-access`
+    *   :ref:`encrypted_connections`
+    *   :ref:`managing_specific_broker`
+    *   :ref:`broker-configuration-info`
+    *   :ref:`broker-logs`
 
 .. _cubrid-manager-server:
 

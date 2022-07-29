@@ -2665,6 +2665,8 @@ Logging
 
     **SLOW_LOG_DIR** is a parameter to configure the location of directory where the log file is generated. The default value is **log/broker/sql_log**.
 
+.. _sql-log:
+
 **SQL_LOG**
 
     **SQL_LOG** is a parameter to configure whether to leave logs for SQL statements processed by CAS when CAS handles requests from a client. The default value is **ON**. When this parameter is configured to **ON**, all logs are stored. The log file name becomes *broker_name_id.sql.log*. The file is created in the **log/broker/sql_log** directory under the installation directory. The parameter values are as follows:

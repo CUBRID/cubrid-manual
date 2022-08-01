@@ -1131,8 +1131,8 @@ Meaning of added columns in code above is as follows:
 *   AS(Ns-W): The number of CAS that the client belongs to has been waited for N seconds.
 *   AS(Ns-B): The number of CAS that the client belongs to has been Busy for N seconds.
 *   CANCELED: The number of queries have cancelled by user interruption since the broker starts (if it is used with the **-l** *N* option, it specifies the number of accumulations for *N* seconds).
-*   ACCESS_MODE: The mode in which the broker connects to the DB. Broker mode is divided into three types: Read Write, Read Only, and Standby Only. For details, see :ref:`broker-mode`.
-*   SQL_LOG: SQL logging mode of CAS. SQL LOG is divided into five types: ALL, OFF, ERROR, NOTICE, and TIMEOUT. For details, see :ref:`SQL_LOG <sql-log>` .
+*   ACCESS_MODE: The mode in which the broker connects to the DB. Broker mode is classified into three types: Read Write, Read Only, and Standby Only. For details, see :ref:`broker-mode`.
+*   SQL_LOG: SQL logging mode of CAS. SQL LOG is classified into five types: ALL, OFF, ERROR, NOTICE, and TIMEOUT. For details, see :ref:`SQL_LOG <sql-log>` .
 
 .. _limiting-broker-access:
 

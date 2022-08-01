@@ -1,6 +1,6 @@
 
-:meta-keywords: cubrid server process, cub_server, cubrid broker, cubrid cas, cubrid manager server, cubrid HA, cubrid services, cubrid logging, cubrid errors, cubrid server access, cubrid status, cubrid manager, cubrid javasp, cub_javasp
-:meta-description: How to control and check CUBRID services and processes (server, broker), logging files, access, errors, and CUBRID Manager and CUBRID Java SP Server.
+:meta-keywords: cubrid server process, cub_server, cubrid broker, cubrid gateway, cubrid cas, cubrid manager server, cubrid HA, cubrid services, cubrid logging, cubrid errors, cubrid server access, cubrid status, cubrid manager, cubrid javasp, cub_javasp
+:meta-description: How to control and check CUBRID services and processes (server, broker, gateway), logging files, access, errors, and CUBRID Manager and CUBRID Java SP Server.
 
 .. _control-cubrid-processes:
 
@@ -103,6 +103,32 @@ CUBRID 브로커 프로세스를 제어하기 위한 **cubrid** 유틸리티 구
 *   reset: 브로커 접속을 리셋함
 *   info: 브로커 설정 정보 출력
 
+게이트웨이 제어
+---------------
+
+CUBRID 게이트웨이 프로세스를 제어하기 위한 **cubrid** 유틸리티 구문은 다음과 같다.
+
+::
+
+    cubrid gateway <command> 
+    <command>: start
+               |stop
+               |restart
+               |status [options] [gateway_name_expr]
+               |acl {status|reload} gateway_name
+               |on <gateway_name> |off <gateway_name>
+               |reset gateway_name 
+               |info
+
+*   start: 게이트웨이 프로세스 구동
+*   stop: 게이트웨이 프로세스 종료
+*   restart: 게이트웨이 프로세스 재시작
+*   status: 게이트웨이 상태 확인
+*   acl: 게이트웨이 접속 제한
+*   on/off: 명시한 게이트웨이만 사용 가능하게 하거나 불가능하게 함
+*   reset: 게이트웨이 접속을 리셋함
+*   info: 게이트웨이 설정 정보 출력
+
 
 CUBRID 매니저 서버 제어
 -----------------------
@@ -170,7 +196,7 @@ CUBRID 서비스
 서비스 등록
 -----------
 
-사용자는 임의로 데이터베이스 서버, CUBRID 브로커, CUBRID 매니저, CUBRID HA를 데이터베이스 환경 설정 파일(cubrid.conf)에 CUBRID 서비스로 등록할 수 있다. 이를 위해 cubrid.conf의 service 파라미터 값으로 각각 server, broker, manager, heartbeat를 입력하면 되며, 이들을 쉼표(,)로 구분하여 여러 개를 같이 등록할 수 있다.
+사용자는 임의로 데이터베이스 서버, CUBRID 브로커, CUBRID 게이트웨이, CUBRID 매니저, CUBRID HA를 데이터베이스 환경 설정 파일(cubrid.conf)에 CUBRID 서비스로 등록할 수 있다. 이를 위해 cubrid.conf의 service 파라미터 값으로 각각 server, broker, gateway, manager, heartbeat를 입력하면 되며, 이들을 쉼표(,)로 구분하여 여러 개를 같이 등록할 수 있다.
 
 사용자가 별도로 서비스를 등록하지 않으면, 기본적으로 마스터 프로세스(cub_master)만 등록된다. CUBRID 서비스에 등록되어 있으면 **cubrid service** 유틸리티를 사용해서 한 번에 관련된 프로세스들을 모두 구동, 정지하거나 상태를 알아볼 수 있어 편리하다.
 
@@ -186,8 +212,8 @@ CUBRID 서비스
     [service]
 
     # The list of processes to be started automatically by 'cubrid service start' command
-    # Any combinations are available with server, broker, manager and heartbeat.
-    service=server,broker
+    # Any combinations are available with server, broker, gateway, manager and heartbeat.
+    service=server,broker,gateway
 
     # The list of database servers in all by 'cubrid service start' command.
     # This property is effective only when the above 'service' property contains 'server' keyword.
@@ -224,7 +250,7 @@ Windows 환경에서는 시스템 권한을 가진 사용자로 로그인한 경
     cub_master: '/tmp/CUBRID1523' file for UNIX domain socket exist.... Operation not permitted
     ++ cubrid master start: fail
 
-:ref:`control-cubrid-services` 에 설명된 대로 서비스를 등록한 후, 서비스를 구동하기 위해 다음과 같이 입력한다. 마스터 프로세스, 데이터베이스 서버 프로세스, 브로커 및 등록된 *demodb*, *testdb*\가 한 번에 구동됨을 확인할 수 있다. 
+:ref:`control-cubrid-services` 에 설명된 대로 서비스를 등록한 후, 서비스를 구동하기 위해 다음과 같이 입력한다. 마스터 프로세스, 데이터베이스 서버 프로세스, 브로커, 게이트웨이 및 등록된 *demodb*, *testdb*\가 한 번에 구동됨을 확인할 수 있다. 
 
 ::
 
@@ -246,6 +272,8 @@ Windows 환경에서는 시스템 권한을 가진 사용자로 로그인한 경
     ++ cubrid server start: success
     @ cubrid broker start
     ++ cubrid broker start: success
+    @ cubrid gateway start
+    ++ cubrid gateway start: success
 
 서비스 종료
 -----------
@@ -258,7 +286,7 @@ CUBRID 서비스를 종료하려면 다음과 같이 입력한다. 사용자에 
     @ cubrid master stop
     ++ cubrid master stop: success
 
-등록된 CUBRID 서비스를 종료하려면 다음과 같이 입력한다. *demodb*, *testdb*\ 는 물론, 서버 프로세스, 브로커 프로세스, 마스터 프로세스가 모두 종료됨을 확인할 수 있다. 
+등록된 CUBRID 서비스를 종료하려면 다음과 같이 입력한다. *demodb*, *testdb*\ 는 물론, 서버 프로세스, 브로커 프로세스, 게이트웨이 프로세스, 마스터 프로세스가 모두 종료됨을 확인할 수 있다. 
 
 ::
 
@@ -274,6 +302,8 @@ CUBRID 서비스를 종료하려면 다음과 같이 입력한다. 사용자에 
     ++ cubrid server stop: success
     @ cubrid broker stop
     ++ cubrid broker stop: success
+    @ cubrid gateway stop
+    ++ cubrid gateway stop: success
     @ cubrid master stop
     ++ cubrid master stop: success
 
@@ -292,7 +322,7 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
     ++ cubrid master start: success
 
 등록된 CUBRID 서비스를 다음과 같이 입력한다.
-*demodb*, *testdb*\는 물론, 서버 프로세스, 브로커 프로세스, 마스터 프로세스가 모두 종료된 후 재구동되는 것을 확인할 수 있다. 
+*demodb*, *testdb*\는 물론, 서버 프로세스, 브로커 프로세스, 게이트웨이 프로세스, 마스터 프로세스가 모두 종료된 후 재구동되는 것을 확인할 수 있다. 
 
 ::
 
@@ -308,6 +338,8 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
     ++ cubrid server stop: success
     @ cubrid broker stop
     ++ cubrid broker stop: success
+    @ cubrid gateway stop
+    ++ cubrid gateway stop: success
     @ cubrid master stop
     ++ cubrid master stop: success
     @ cubrid master start
@@ -328,6 +360,8 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
     ++ cubrid server start: success
     @ cubrid broker start
     ++ cubrid broker start: success
+    @ cubrid gateway start
+    ++ cubrid gateway start: success
 
 서비스 상태 관리
 ----------------
@@ -346,17 +380,15 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
     Server demodb (rel 11.2, pid 30950)
 
     @ cubrid broker status
-    % query_editor
-    ----------------------------------------
-    ID   PID   QPS   LQS PSIZE STATUS
-    ----------------------------------------
-     1 15465     0     0 48032 IDLE
-     2 15466     0     0 48036 IDLE
-     3 15467     0     0 48036 IDLE
-     4 15468     0     0 48036 IDLE
-     5 15469     0     0 48032 IDLE
-
-    % broker1 OFF
+    NAME                   PID  PORT    AS   JQ                  TPS                  QPS   SELECT   INSERT   UPDATE   DELETE   OTHERS     LONG-T     LONG-Q         ERR-Q  UNIQUE-ERR-Q  #CONNECT   #REJECT
+    ===========================================================================================================================================================================================================
+    * query_editor         10877 30000     5    0                    0                    0        0        0        0        0        0     0/60.0     0/60.0             0             0         0         0
+    * broker1              10889 33000     5    0                    0                    0        0        0        0        0        0     0/60.0     0/60.0             0             0         0         0
+    @ cubrid gateway status
+    NAME                   PID  PORT    AS   JQ                  TPS                  QPS   SELECT   INSERT   UPDATE   DELETE   OTHERS     LONG-T     LONG-Q         ERR-Q  UNIQUE-ERR-Q  #CONNECT   #REJECT
+    ===========================================================================================================================================================================================================
+    * oracle_gateway       10903 53000     5    0                    0                    0        0        0        0        0        0     0/60.0     0/60.0             0             0         0         0
+    * mysql_gateway        OFF
 
     @ cubrid manager server status
     ++ cubrid manager server is not running.
@@ -1281,6 +1313,8 @@ QUERY_EDITOR 브로커는 다음과 같은 응용의 접속 요청만을 허용�
 .. note:: 
 
     데이터베이스 서버에서의 접속 제한을 위해서는 :ref:`limiting-server-access` 을 참고한다.
+
+.. _encrypted_connections:
     
 패킷 암호화
 -----------
@@ -1318,6 +1352,7 @@ QUERY_EDITOR 브로커는 다음과 같은 응용의 접속 요청만을 허용�
       
 위에서 생성된 **my_cert.key** 와 **my_cert.crt** 를 각각 $CUBRID/conf/cas_ssl_cert.key와 $CUBRID/conf/cas_ssl_cert.crt로 대체하면 된다.
 
+.. _managing_specific_broker:
 
 특정 브로커 관리
 ----------------
@@ -1787,6 +1822,264 @@ CAS 에러는 브로커 응용 서버(CAS) 프로세스에서 발생하는 에�
 +--------------------------------------------------+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------+
 | CAS_ER_IS(-10200)                                |  None / Authentication failure                                      |                                                                                                                      |
 +--------------------------------------------------+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+
+
+.. _gateway:
+
+게이트웨이
+==========
+
+게이트웨이 구동
+----------------
+
+게이트웨이를 구동하기 위하여 다음과 같이 입력한다.
+
+::
+
+    $ cubrid gateway start
+    @ cubrid gateway start
+    ++ cubrid gateway start: success
+
+이미 게이트웨이가 구동 중이라면 다음과 같은 메시지가 출력된다.
+
+::
+
+    cubrid gateway start
+    @ cubrid gateway start
+    ++ cubrid gateway is running.
+
+게이트웨이 종료
+---------------
+
+게이트웨이를 종료하기 위하여 다음과 같이 입력한다.
+
+::
+
+    $ cubrid gateway stop
+    @ cubrid gateway stop
+    ++ cubrid gateway stop: success
+
+이미 게이트웨이가 종료되었다면 다음과 같은 메시지가 출력된다.
+
+::
+
+    $ cubrid gateway stop
+    @ cubrid gateway stop
+    ++ cubrid gateway is not running.
+
+게이트웨이 재시작
+-----------------
+
+전체 게이트웨이를 재시작하기 위하여 다음과 같이 입력한다.
+
+::
+
+    $ cubrid gateway restart
+
+.. _gateway-status:
+
+게이트웨이 상태 확인
+--------------------
+
+**cubrid gateway status**  는 여러 옵션을 제공하여, 각 게이트웨이의 처리 완료된 작업 수, 처리 대기중인 작업 수를 포함한 게이트웨이 상태 정보를 확인할 수 있도록 한다. 
+
+::
+
+    cubrid gateway status [options] [expr]
+
+*   *expr* : 게이트웨이 이름의 일부 또는 "SERVICE=ON|OFF"
+
+*expr* 이 명시되면 이름이 *expr* 을 포함하는 게이트웨이에 대한 상태 모니터링을 수행하고, 생략되면 CUBRID 게이트웨이 환경 설정 파일( **cubrid_gateway.conf** )에 등록된 전체 게이트웨이에 대해 상태 모니터링을 수행한다. 
+
+*expr* 에 "SERVICE=ON"이 명시되면 구동 중인 게이트웨이의 상태만 출력하며, "SERVICE=OFF"가 명시되면 멈춰있는 게이트웨이의 이름만 출력한다.
+
+cubrid gateway status에서 사용하는 [options]는 다음과 같다. 이들 중 -b, -q, -c, -m, -S, -P, -f는 출력할 정보를 정의하는 모니터링 옵션이고, -s, -l, -t는 출력을 제어하는 옵션이다. 이 모든 옵션들은 상호 조합하여 사용할 수 있다.
+
+.. program:: gateway_status
+
+.. option:: -b
+
+    게이트웨이 응용 서버(CAS)에 관한 정보는 포함하지 않고, 게이트웨이에 관한 상태 정보만 출력한다.
+
+.. option:: -q
+
+    작업 큐에 대기 중인 작업을 출력한다.
+
+.. option:: -f
+
+    게이트웨이가 접속한 DB 및 호스트 정보를 출력한다.
+
+    **-b** 옵션과 함께 쓰이는 경우, CAS 정보를 추가로 출력한다. 하지만 -b 옵션에서 나타나는 SELECT, INSERT, UPDATE, DELETE, OTHERS 항목은 제외된다.
+
+    **-P** 옵션과 함께 쓰이는 경우, STMT-POOL-RATIO 항목을 추가로 출력한다. 이 항목은 prepare statement 사용 시 pool에서 statement를 사용하는 비율을 나타낸다.
+
+.. option:: -l SECOND
+
+    **-l** 옵션은 **-f** 옵션과만 함께 쓰이며, 클라이언트 Waiting/Busy 상태인 CAS의 개수를 출력할 때 누적 주기(단위: 초)를 지정하기 위해 사용한다. **-l** *SECOND* 옵션을 생략하면 기본값은 1초이다.
+
+.. option:: -t
+
+    화면 출력시 tty mode 로 출력한다. 출력 내용을 리다이렉션하여 파일로 쓸 수 있다.
+
+.. option:: -s SECOND
+
+    게이트웨이에 관한 상태 정보를 지정된 시간마다 주기적으로 출력한다. q를 입력하면 명령 프롬프트로 복귀한다.
+
+옵션 및 인수를 입력하지 않으면 전체 게이트웨이 상태 정보를 출력한다.
+
+::
+
+    $ cubrid gateway status
+    @ cubrid gateway status
+    % oracle_gateway
+    ----------------------------------------
+    ID   PID   QPS   LQS PSIZE STATUS
+    ----------------------------------------
+     1 28434     0     0 50144 IDLE
+     2 28435     0     0 50144 IDLE
+     3 28436     0     0 50144 IDLE
+     4 28437     0     0 50140 IDLE
+     5 28438     0     0 50144 IDLE
+
+    % mysql_gateway OFF
+
+*   % oracle_gateway: 브로커의 이름
+*   ID: 게이트웨이 내에서 순차적으로 부여한 CAS의 일련 번호
+*   PID: 게이트웨이 내 CAS 프로세스의 ID
+*   QPS: 초당 처리된 질의의 수
+*   LQS: 초당 처리되는 장기 실행 질의의 수
+*   PSIZE: CAS 프로세스 크기
+*   STATUS: CAS의 현재 상태로서, BUSY/IDLE/CLIENT_WAIT/CLOSE_WAIT가 있다.
+*   % mysql_gateway OFF: mysql_gateway의 SERVICE 파라미터가 OFF이다. 따라서, mysql_gateway은 구동되지 않는다.
+
+다음은 **-b** 옵션을 사용하여 브로커에 관해 5초 간격으로 상세한 상태 정보를 출력한다. 화면이 5초 간격마다 새로운 상태 정보로 갱신되며, 상태 정보 화면을 벗어나려면 <Q>를 누른다.
+
+::
+
+    $ cubrid gateway status -b -s 5
+    @ cubrid gateway status
+
+     NAME                    PID  PORT   AS   JQ    TPS    QPS   SELECT   INSERT   UPDATE   DELETE   OTHERS     LONG-T     LONG-Q   ERR-Q  UNIQUE-ERR-Q  #CONNECT  #REJECT
+    =======================================================================================================================================================================
+    * oracle_gateway         13200 30000    5    0      0      0        0        0        0        0        0     0/60.0     0/60.0       0             0         0        0
+    * mysql_gateway        OFF
+
+*   NAME: 게이트웨이 이름
+*   PID: 게이트웨이의 프로세스 ID
+*   PORT: 게이트웨이의 포트 번호
+*   AS: CAS 개수
+*   JQ: 작업 큐에서 대기 중인 작업 개수
+*   TPS: 초당 처리된 트랜잭션의 수(옵션이 "-b -s <sec>"일 때만 해당 구간 계산)
+*   QPS: 초당 처리된 질의의 수(옵션이 "-b -s <sec>"일 때만 해당 구간 계산)
+*   SELECT: 게이트웨이 시작 이후 SELECT 개수. 옵션이 "-b -s <sec>"인 경우 -s 옵션으로 지정한 초 동안의 SELECT 개수로 매번 갱신됨.
+*   INSERT: 게이트웨이 시작 이후 INSERT 개수. 옵션이 "-b -s <sec>"인 경우 -s 옵션으로 지정한 초 동안의 INSERT 개수로 매번 갱신됨.
+*   UPDATE: 게이트웨이 시작 이후 UPDATE 개수. 옵션이 "-b -s <sec>"인 경우 -s 옵션으로 지정한 초 동안의 UPDATE 개수로 매번 갱신됨.
+*   DELETE: 게이트웨이 시작 이후 DELETE 개수. 옵션이 "-b -s <sec>"인 경우 -s 옵션으로 지정한 초 동안의 DELETE 개수로 매번 갱신됨.
+*   OTHERS: 게이트웨이 시작 이후 SELECT, INSERT, UPDATE, DELETE를 제외한 CREATE, DROP 등의 질의 개수. 옵션이 "-b -s <sec>"인 경우 -s 옵션으로 지정한 초 동안의 질의 개수로 매번 갱신됨. 
+*   LONG-T: LONG_TRANSACTION_TIME 시간을 초과한 트랜잭션 개수 / LONG_TRANSACTION_TIME 파라미터의 값. 옵션이 "-b -s <sec>"인 경우 -s 옵션으로 지정한 초 동안의 트랜잭션 개수로 매번 갱신됨.
+*   LONG-Q: LONG_QUERY_TIME 시간을 초과한 질의의 개수 / LONG_QUERY_TIME 파라미터의 값. 옵션이 "-b -s <sec>"인 경우 -s 옵션으로 지정한 초 동안의 질의 개수로 매번 갱신됨.
+*   ERR-Q: 에러가 발생한 질의의 개수. 옵션이 "-b -s <sec>"인 경우 -s 옵션으로 지정한 초 동안의 에러 개수로 매번 갱신됨.
+*   UNIQUE-ERR-Q: 고유 키 에러가 발생한 질의의 개수. 옵션이 "-b -s <sec>"인 경우 -s 옵션으로 지정한 초 동안의 고유 키 에러 개수로 매번 갱신됨.
+*   #CONNECT: 게이트웨이 시작 후 응용 클라이언트가 CAS에 접속한 회수
+*   #REJECT: 게이트웨이 시작 후 ACL에 포함되지 않은 IP로부터 접속하는 응용 클라이언트가 CAS에 접속하는 것을 거부당한 회수. ACL 설정과 관련하여 :ref:`limiting-broker-access`\ 를 참고한다.
+
+다음은 **-q** 옵션을 이용하여, oracle_gateway을 포함하는 이름을 가진 게이트웨이의 상태 정보를 확인하고 해당 게이트웨이의 작업 큐에 대기 중인 작업 상태를 확인한다. 인자로 oracle_gateway을 입력하지 않으면 모든 게이트웨이에 대하여 작업 큐에 대기 중인 작업 리스트가 출력된다.
+
+::
+
+    % cubrid gateway status -q oracle_gateway
+    @ cubrid gateway status
+    % oracle_gateway
+    ----------------------------------------
+    ID   PID   QPS   LQS PSIZE STATUS
+    ----------------------------------------
+     1 28444     0     0 50144 IDLE
+     2 28445     0     0 50140 IDLE
+     3 28446     0     0 50144 IDLE
+     4 28447     0     0 50144 IDLE
+     5 28448     0     0 50144 IDLE
+
+다음은 **-s** 옵션을 이용하여 oracle_gateway을 포함하는 이름을 가진 게이트웨이의 상태를 주기적으로 모니터링한다. 인자로 oracle_gateway을 입력하지 않으면 모든 게이트웨이에 대하여 상태 모니터링이 주기적으로 수행된다. 또한, q를 입력하면 모니터링 화면에서 명령 프롬프트로 복귀한다.
+
+::
+
+    % cubrid gateway status -s 5 oracle_gateway
+    % oracle_gateway
+    ----------------------------------------
+    ID   PID   QPS   LQS PSIZE STATUS
+    ----------------------------------------
+     1 28444     0     0 50144 IDLE
+     2 28445     0     0 50140 IDLE
+     3 28446     0     0 50144 IDLE
+     4 28447     0     0 50144 IDLE
+     5 28448     0     0 50144 IDLE
+
+**-t** 옵션을 이용하여 TPS와 QPS 정보를 파일로 출력한다. 파일로 출력하는 것을 중단하려면 <Ctrl+C>를 눌러서 프로그램을 정지시킨다.
+
+::
+
+    % cubrid gateway status -b -t -s 1 > log_file
+
+다음은 **-f** 옵션을 이용하여 게이트웨이가 연결한 서버/데이터베이스 정보와 응용 클라이언트의 최근 접속 시각, CAS에 접속하는 클라이언트의 IP 주소와 드라이버의 버전 등을 출력한다.
+
+::
+
+    $ cubrid gateway status -f oracle_gateway
+    @ cubrid gateway status
+    % oracle_gateway
+    ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    ID   PID   QPS   LQS PSIZE STATUS         LAST ACCESS TIME      DB       HOST   LAST CONNECT TIME       CLIENT IP   CLIENT VERSION    SQL_LOG_MODE   TRANSACTION STIME  #CONNECT  #RESTART
+    ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     1 26946     0     0 51168 IDLE         2011/11/16 16:23:42  demodb  localhost 2011/11/16 16:23:40      10.0.1.101     9.2.0.0062              NONE 2011/11/16 16:23:42         0         0
+     2 26947     0     0 51172 IDLE         2011/11/16 16:23:34      -          -                   -          0.0.0.0                                -                   -         0         0
+     3 26948     0     0 51172 IDLE         2011/11/16 16:23:34      -          -                   -          0.0.0.0                                -                   -         0         0
+     4 26949     0     0 51172 IDLE         2011/11/16 16:23:34      -          -                   -          0.0.0.0                                -                   -         0         0
+     5 26950     0     0 51172 IDLE         2011/11/16 16:23:34      -          -                   -          0.0.0.0                                -                   -         0         0
+
+각 칼럼에 대한 설명은 다음과 같다.
+
+*   LAST ACCESS TIME: CAS가 구동한 시각 또는 응용 클라이언트의 CAS에 최근 접속한 시각
+*   DB: CAS의 최근 접속 데이터베이스 이름
+*   HOST: CAS의 최근 접속 호스트 이름
+*   LAST CONNECT TIME: CAS의 DB 서버 최근 접속 시각
+*   CLIENT IP: 현재 CAS에 접속 중인 응용 클라이언트의 IP 주소. 현재 접속 중인 응용 클라이언트가 없으면 0.0.0.0으로 출력
+*   CLIENT VERSION: 현재 CAS에 접속 중인 응용 클라이언트의 드라이버 버전
+*   SQL_LOG_MODE: CAS의 SQL 로그 기록 모드. 게이트웨이에 설정된 모드와 동일한 경우 "-"으로 출력
+*   TRANSACTION STIME: 트랜잭션 시작 시간
+*   #CONNECT: 게이트웨이 시작 후 응용 클라이언트가 CAS에 접속한 회수
+*   #RESTART: 게이트웨이 시작 후 CAS의 재구동 회수
+
+.. _gaweway-detail:
+
+**-b** 옵션에 **-f** 옵션을 추가하여 AS(T W B Ns-W Ns-B), CANCELED 정보를 추가로 출력한다.
+
+::
+
+    // 게이트웨이 상태 정보 실행 시 -f 옵션 추가. -l 옵션으로 N초 동안의 Ns-W, Ns-B를 출력하도록 초를 설정
+    % cubrid gateway status -b -f -l 2
+    @ cubrid gateway status
+    NAME          PID    PSIZE PORT  AS(T W B 2s-W 2s-B) JQ TPS QPS LONG-T LONG-Q  ERR-Q UNIQUE-ERR-Q CANCELED ACCESS_MODE SQL_LOG  #CONNECT #REJECT
+    ================================================================================================================================================
+    oracle_gateway 16784 56700 30000      5 0 0     0   0   0  16  29 0/60.0 0/60.0      1            1        0          RW     ALL         4       1
+
+추가된 칼럼에 대한 설명은 다음과 같다.
+
+*   AS(T): 실행 중인 CAS의 전체 개수
+*   AS(W): 현재 클라이언트 대기(Waiting) 상태인 CAS의 개수
+*   AS(B): 현재 클라이언트 수행(Busy) 상태인 CAS의 개수
+*   AS(Ns-W): N초 동안 클라이언트 대기(Waiting) 상태였던 CAS의 개수
+*   AS(Ns-B): N초 동안 클라이언트 수행(Busy) 상태였던 CAS의 개수
+*   CANCELED: 게이트웨이가 시작된 이후 사용자 인터럽트로 인해 취소된 질의의 개수 (-l N 옵션과 함께 사용하면 N초 동안 누적된 개수).
+
+.. note::
+
+    게이트웨이는 브로커와 거의 유사 하므로, 게이트웨이의 더 많은 정보는 아래의 내용을 참조한다.
+
+    *   :ref:`limiting-server-access`
+    *   :ref:`encrypted_connections`
+    *   :ref:`managing_specific_broker`
+    *   :ref:`broker-configuration-info`
+    *   :ref:`broker-logs`
 
 .. _cubrid-manager-server:
 

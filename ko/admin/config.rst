@@ -2619,6 +2619,8 @@ CUBRID 설치 시 생성되는 기본 브로커 설정 파일인 **cubrid_broker
 
     SLOW SQL 로그 파일이 생성되는 디렉터리를 지정한다. 기본값은 **log/broker/sql_log** 이다.
 
+.. _sql-log:
+
 **SQL_LOG**
 
     **SQL_LOG** 는 응용 클라이언트의 요청에 따라 CAS가 처리한 SQL 문에 대해 어떤 로그를 기록할 것인지 결정하는 파라미터로 기본값은 **ON** 이다. 이 파라미터가 **ON** 으로 설정되면, 모든 로그를 기록한다. SQL 로그가 기록되는 파일명은 *broker_name_id.sql.log* 이며, 설치 디렉터리의 **log/broker/sql_log** 디렉터리에 생성된다. 파라미터 값은 다음과 같다.

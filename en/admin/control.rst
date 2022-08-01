@@ -1139,7 +1139,7 @@ Meaning of each column in code above is as follows:
 *   LAST CONNECT TIME: Most recent time when CAS accesses a database
 *   CLIENT IP: IP of an application clients currently being connected to an application server(CAS). If no application client is connected, 0.0.0.0 is displayed.
 *   CLIENT VERSION: A driver's version of an application client currently being connected to a CAS
-*   SQL_LOG_MODE: SQL logging mode of CAS. If the mode is same as the mode configured in the broker, "-" is displayed.
+*   SQL_LOG_MODE: SQL logging mode of CAS. If the mode is same as the mode configured in the broker, "-" is displayed. For details, see :ref:`SQL_LOG <sql-log>` .
 *   TRANSACTION STIME: Transaction start time
 *   #CONNECT: The number of connections that an application client accesses to CAS after starting the broker
 *   #RESTART: The number of connection that CAS is re-running after starting the broker
@@ -1165,6 +1165,8 @@ Meaning of added columns in code above is as follows:
 *   AS(Ns-W): The number of CAS that the client belongs to has been waited for N seconds.
 *   AS(Ns-B): The number of CAS that the client belongs to has been Busy for N seconds.
 *   CANCELED: The number of queries have cancelled by user interruption since the broker starts (if it is used with the **-l** *N* option, it specifies the number of accumulations for *N* seconds).
+*   ACCESS_MODE: The mode in which the broker connects to the DB. Broker mode is classified into three types: Read Write, Read Only, and Standby Only. For details, see :ref:`broker-mode`.
+*   SQL_LOG: SQL logging mode of CAS. SQL LOG is classified into five types: ALL, OFF, ERROR, NOTICE, and TIMEOUT. For details, see :ref:`SQL_LOG <sql-log>` .
 
 .. _limiting-broker-access:
 

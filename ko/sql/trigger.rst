@@ -439,7 +439,7 @@ RENAME TRIGGER
 
 트리거의 이름은 **RENAME** 구문의 **TRIGGER** 예약어를 이용해서 변경한다. ::
 
-    RENAME TRIGGER [schema_name.]old_trigger_name AS [schema_name.]new_trigger_name ;
+    RENAME TRIGGER [schema_name.]old_trigger_name {AS | TO} [schema_name.]new_trigger_name ;
 
 *   *schema_name*: 트리거의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다. 현재 트리거의 스키마와 변경할 트리거의 스키마가 동일해야 한다.
 *   *old_trigger_name*: 트리거의 현재 이름을 입력한다.

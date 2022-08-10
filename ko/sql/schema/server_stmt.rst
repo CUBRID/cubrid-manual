@@ -142,7 +142,7 @@ RENAME SERVER
 
 ::
 
-    RENAME SERVER [owner_name.] old_server_name AS new_server_name ;
+    RENAME SERVER [owner_name.] old_server_name {AS | TO} new_server_name ;
             
         
 *   *owner_name*: 이름을 변경할 대상 서버의 소유자 이름을 지정한다.

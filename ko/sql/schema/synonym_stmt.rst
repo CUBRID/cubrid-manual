@@ -20,7 +20,7 @@ CREATE SYONYM
 ::
 
     CREATE [OR REPLACE] [PRIVATE] SYNONYM [schema_name_of_synonym.]synonym_name
-    FOR [schema_name_of_target.]object_name
+    FOR [schema_name_of_target.]target_name
     [COMMENT 'synonym_comment_string'] ;
 
 *   **OR REPLACE**: 스키마에 *synonym_name*\이 이미 존재하더라도 에러를 출력하지 않고 기존의 동의어가 새로운 동의어로 대체된다.
@@ -31,7 +31,7 @@ CREATE SYONYM
 *   *schema_name_of_synonym*: 동의어의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *synonym_name*: 동의어의 이름을 지정한다.
 *   *schema_name_of_target*: 대상 객체의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
-*   *object_name*: 대상 객체의 이름을 지정한다.
+*   *target_name*: 대상 객체의 이름을 지정한다.
 *   *synonym_comment_string*: 동의어의 커멘트를 지정한다.
 
 .. warning::
@@ -48,6 +48,8 @@ CREATE SYONYM
 아래 예제에서 u1 사용자와 u2 사용자는 같은 이름으로 동의어를 생성했지만 다른 대상 객체를 사용한다.
 
 .. code-block:: sql
+
+    call login ('dba') on class db_user;
 
     /* current_user: dba */
     create user u1;
@@ -100,6 +102,8 @@ CREATE SYONYM
 
     /* There should be the result of example 1. */
 
+    call login ('dba') on class db_user;
+
     /* current_user: dba */
     select * from db_synonym;
 
@@ -136,12 +140,29 @@ CREATE SYONYM
     ====================================================================================================================================
       's1'                  'U2'                  'NO'                  't2'                  'DBA'                 NULL
 
+.. code-block:: sql
+
+    /* clean */
+
+    call login ('dba') on class db_user;
+
+    /* current_user: dba */
+    drop synonym if exists u1.s1;
+    drop synonym if exists u2.s1;
+    drop user u1;
+    drop user u2;
+
+    drop table if exists t1;
+    drop table if exists t2;
+
 3. 동의어 이름
 --------------
 
 같은 이름의 테이블이나 뷰가 이미 존재하는 경우 해당 이름으로 동의어를 생성할 수 없다.
 
 .. code-block:: sql
+
+    call login ('public') on class db_user;
 
     /* current_user: public */
     create table t1 (c1 varchar(100));
@@ -179,12 +200,28 @@ CREATE SYONYM
     ======================
       'table for user public.'
 
+.. code-block:: sql
+
+    /* clean */
+
+    call login ('public') on class db_user;
+
+    /* current_user: public */
+    drop synonym if exists s1;
+    drop synonym if exists s2;
+    drop synonym if exists s3;
+    drop view if exists s2;
+    drop table if exists t1;
+    drop table if exists s1;
+
 4. 동의어에 대한 동의어
 -----------------------
 
 동의어를 생성할 때 대상 객체가 존재하는지는 확인하지 않으므로, 사용자가 기존 동의어를 대상 객체로 지정하여 새로운 동의어를 만들 수 있다. 하지만 동의어를 사용할 때 대상 객체인 동의어의 대상 객체를 다시 찾지 않는다.
 
 .. code-block:: sql
+
+    call login ('public') on class db_user;
 
     /* current_user: public */
     create table t1 (c1 varchar(100));
@@ -220,12 +257,25 @@ CREATE SYONYM
     ======================
       'synonym for synonym.'
 
+.. code-block:: sql
+
+    /* clean */
+
+    call login ('public') on class db_user;
+
+    /* current_user: public */
+    drop synonym if exists s1;
+    drop synonym if exists s2;
+    drop table if exists t1;
+
 5. 스키마 지정 동의어 생성
 --------------------------
 
 **DBA**\와 **DBA**\의 멤버가 스키마를 지정하여 동의어를 생성하면, 동의어는 지정한 스키마에 만들어진다.
 
 .. code-block:: sql
+
+    call login ('dba') on class db_user;
 
     /* current_user: dba */
     create user u1;
@@ -279,6 +329,21 @@ CREATE SYONYM
     ======================
       'private synonym for user u2.'
 
+.. code-block:: sql
+
+    /* clean */
+
+    call login ('dba') on class db_user;
+
+    /* current_user: dba */
+    drop synonym if exists u1.s1;
+    drop synonym if exists u2.s1;
+    drop user u1;
+    drop user u2;
+
+    drop table if exists t1;
+    drop table if exists t2;
+
 ALTER SYONYM
 ============
 
@@ -287,14 +352,16 @@ ALTER SYONYM
 ::
 
     ALTER [PRIVATE] SYNONYM [schema_name_of_synonym.]synonym_name
-    FOR [schema_name_of_target.]object_name
-    [COMMENT 'synonym_comment_string'] ;
+    {
+	FOR [<schema_name_of_target>.]<target_name> [COMMENT 'comment_string'] |
+	COMMENT 'synonym_comment_string'
+    } ;
 
 *   **PRIVATE**: 전용(Private) 동의어를 변경하도록 지정한다. 생략해도 기본값으로 전용(Private) 동의어를 생성한다.
 *   *schema_name_of_synonym*: 동의어의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *synonym_name*: 동의어의 이름을 지정한다.
 *   *schema_name_of_target*: 대상 객체의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
-*   *object_name*: 대상 객체의 이름을 지정한다.
+*   *target_name*: 대상 객체의 이름을 지정한다.
 *   *synonym_comment_string*: 동의어의 커멘트를 지정한다.
 
 .. warning::
@@ -309,6 +376,8 @@ ALTER SYONYM
 아래 예제에서 대상 객체를 변경한다.
 
 .. code-block:: sql
+
+    call login ('public') on class db_user;
 
     /* current_user: public */
     create table t1 (c1 varchar(100));
@@ -347,12 +416,25 @@ ALTER SYONYM
     ======================
       'target table after change.'
 
+.. code-block:: sql
+
+    /* clean */
+
+    call login ('public') on class db_user;
+
+    /* current_user: public */
+    drop synonym if exists s1;
+    drop table if exists t1;
+    drop table if exists t2;
+
 커멘트 변경
 ------------
 
 아래 예제에서 사용자는 동의어의 커멘트를 변경한다.
 
 .. code-block:: sql
+
+    call login ('public') on class db_user;
 
     /* current_user: public */
     create table t1 (c1 varchar(100));
@@ -367,20 +449,11 @@ ALTER SYONYM
     ========================================================================================
       's1'                  'PUBLIC'              'NO'                  'It is a synonym for the t1 table.'
 
-아직은 대상 객체를 지정하지 않고 커멘트를 변경할 수 없다.
+대상 객체를 지정하지 않고 커멘트를 변경할 수 있다.
 
 .. code-block:: sql
 
     alter synonym s1 comment 'the comment was changed.';
-
-::
-
-    ERROR: Invalid alter synonym.
-      ALTER [PRIVATE] SYNONYM [<user_name>.]<synonym_name> FOR [<user_name>.]<target_name> [COMMENT 'comment_string']
-
-.. code-block:: sql
-
-    alter synonym s1 for t1 comment 'the comment was changed.';
     select synonym_name, synonym_owner_name, is_public_synonym, comment from db_synonym;
 
 ::
@@ -388,6 +461,39 @@ ALTER SYONYM
       synonym_name          synonym_owner_name    is_public_synonym     comment
     ========================================================================================
       's1'                  'PUBLIC'              'NO'                  'the comment was changed.'
+
+대상 객체와 커멘트를 모두 지정하지 않으면 에러가 발생한다.
+
+.. code-block:: sql
+
+    alter synonym s1;
+
+::
+
+    ERROR: No options specified for ALTER SYNONYM.
+
+커멘트를 **NULL**\로 변경하려면, 커멘트를 빈 문자열로 변경하면 된다.
+
+.. code-block:: sql
+
+    alter synonym s1 comment '';
+    select synonym_name, synonym_owner_name, is_public_synonym, comment from db_synonym;
+
+::
+
+      synonym_name          synonym_owner_name    is_public_synonym     comment
+    ========================================================================================
+      's1'                  'PUBLIC'              'NO'                  NULL
+
+.. code-block:: sql
+
+    /* clean */
+
+    call login ('public') on class db_user;
+
+    /* current_user: public */
+    drop synonym if exists s1;
+    drop table if exists t1;
 
 DROP SYONYM
 ===========
@@ -408,6 +514,8 @@ DROP SYONYM
     동의어에 대한 **ALTER**, **DROP**, **RENAME** 문이 실행되면 쿼리 계획 캐시에서 대상 객체를 사용하는 쿼리 계획을 모두 삭제하므로 주의해야 한다.
 
 .. code-block:: sql
+
+    call login ('public') on class db_user;
 
     /* current_user: public */
     create table t1 (c1 varchar(100));
@@ -456,6 +564,16 @@ DROP SYONYM
     ======================
       'The target object of the to-be-deleted synonym.'
 
+.. code-block:: sql
+
+    /* clean */
+
+    call login ('public') on class db_user;
+
+    /* current_user: public */
+    drop synonym if exists s1;
+    drop table if exists t1;
+
 RENAME SYONYM
 =============
 
@@ -467,7 +585,7 @@ RENAME SYONYM
 ::
 
     RENAME [PRIVATE] SYNONYM [schema_name_of_old_synonym.]old_synonym_name
-    [AS | TO] [schema_name_of_new_synonym.]new_synonym_name ;
+    {AS | TO} [schema_name_of_new_synonym.]new_synonym_name ;
 
 *   **PRIVATE**: 전용(Private) 동의어를 변경하도록 지정한다. 생략해도 기본값으로 전용(Private) 동의어를 생성한다.
 *   *schema_name_of_old_synonym*: 이름을 바꿀 동의어의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
@@ -485,6 +603,8 @@ RENAME SYONYM
 아래 예제에서 rename 시 스키마 이름을 다르게 지정할 때 에러가 발생한다.
 
 .. code-block:: sql
+
+    call login ('dba') on class db_user;
 
     /* current_user: dba */
     create user u1;
@@ -553,12 +673,28 @@ RENAME SYONYM
     ======================
       'private synonym for user u1.'
 
+.. code-block:: sql
+
+    /* clean */
+
+    call login ('dba') on class db_user;
+
+    /* current_user: dba */
+    drop synonym if exists u1.s1;
+    drop synonym if exists u1.s2;
+    drop synonym if exists u2.s2;
+    drop table if exists u1.t1;
+    drop user u1;
+    drop user u2;
+
 2. 이미 사용 중인 이름
 ----------------------
 
 아래 예제에서 변경할 이름이 이미 사용중이기 때문에 에러가 발생한다.
 
 .. code-block:: sql
+
+    call login ('public') on class db_user;
 
     /* current_user: public */
     create table t1 (c1 varchar(100));
@@ -630,6 +766,21 @@ RENAME SYONYM
     ======================
       'first table for user u1.'
 
+.. code-block:: sql
+
+    /* clean */
+
+    call login ('public') on class db_user;
+
+    /* current_user: public */
+    drop synonym if exists s1;
+    drop synonym if exists s2;
+    drop synonym if exists s_s1;
+    drop table if exists t1;
+    drop table if exists t2;
+    drop table if exists s_t1;
+    drop table if exists s_v1;
+
 동의어 사용
 ===========
 
@@ -642,6 +793,8 @@ RENAME SYONYM
 ------------------------------
 
 .. code-block:: sql
+
+    call login ('dba') on class db_user;
 
     /* current_user: dba */
     create user u1;
@@ -682,10 +835,24 @@ RENAME SYONYM
     ======================
       'first table for user u1.'
 
+.. code-block:: sql
+
+    /* clean */
+
+    call login ('dba') on class db_user;
+
+    /* current_user: dba */
+    drop synonym if exists u1.s1;
+    drop table if exists u1.t1;
+    drop user u1;
+    drop user u2;
+
 2. 동의어를 사용할 수 없는 구문
 -------------------------------
 
 .. code-block:: sql
+
+    call login ('public') on class db_user;
 
     /* current_user: public */
     create table t1 (c1 varchar(100));
@@ -750,3 +917,14 @@ RENAME SYONYM
       c1
     ======================
       'first table for user public.'
+
+.. code-block:: sql
+
+    /* clean */
+
+    call login ('public') on class db_user;
+
+    /* current_user: public */
+    drop synonym if exists s1;
+    drop table if exists t1;
+    drop table if exists s2;

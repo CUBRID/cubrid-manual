@@ -1006,11 +1006,11 @@ ALTER TABLE
             ADD <alter_add> [INHERIT <resolution>, ...]  | 
             ADD {KEY | INDEX} <index_name> (<index_col_name>, ... ) [COMMENT 'index_comment_string'] |
             ALTER [COLUMN] column_name SET DEFAULT <value_specification> |
-            DROP <alter_drop> [ INHERIT <resolution>, ... ] |
+            DROP <alter_drop> [INHERIT <resolution>, ...] |
             DROP {KEY | INDEX} index_name |
             DROP FOREIGN KEY constraint_name |
             DROP PRIMARY KEY |                   
-            RENAME <alter_rename> [ INHERIT <resolution>, ... ] |
+            RENAME <alter_rename> [INHERIT <resolution>, ...] |
             CHANGE <alter_change> |
             MODIFY <alter_modify> |            
             INHERIT <resolution>, ... |
@@ -1766,7 +1766,7 @@ RENAME COLUMN 절
 **RENAME COLUMN** 절을 사용하여 칼럼의 이름을 변경할 수 있다. ::
 
     ALTER [TABLE | CLASS | VCLASS | VIEW] [schema_name.]table_name
-    RENAME [COLUMN | ATTRIBUTE] old_column_name { AS | TO } new_column_name
+    RENAME [COLUMN | ATTRIBUTE] old_column_name {AS | TO} new_column_name
 
 *   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 이름을 변경할 칼럼의 테이블 이름을 지정한다.

@@ -53,6 +53,7 @@ CUBRID 11.2 사용자 매뉴얼
     start.rst
     csql.rst
     sql/index.rst
+    pl_index.rst
     admin/index.rst
     ha.rst
     security.rst

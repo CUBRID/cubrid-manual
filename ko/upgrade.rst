@@ -85,7 +85,7 @@ DB 마이그레이션
 |                                    | cubrid unload 유틸리티를 실행하고 이 때 생성된 파일을 별도 디렉토리에 보관한다.(C3b)          |
 |                                    |                                                                                               |
 |                                    |                                                                                               |
-|                                    |   % cubrid unloaddb -S testdb                                                                 |
+|                                    |   % cubrid unloaddb -S -u dbatestdb                                                           |
 |                                    |                                                                                               |
 |                                    | 이전 DB 를 제거 한다. (C3c)                                                                   |
 |                                    |                                                                                               |
@@ -104,7 +104,7 @@ DB 마이그레이션
 |                                    |                                                                                               |
 |                                    | (C3b)에서 생성한 파일을 가지고cubrid loaddb 유틸리티를 실행한다. (C5b)                        |
 |                                    |                                                                                               |
-|                                    |   % cubrid loaddb -s testdb_schema -d testdb_objects -i testdb_indexes testdb                 |
+|                                    |   % cubrid loaddb -u dba -s testdb_schema -d testdb_objects -i testdb_indexes testdb          |
 +------------------------------------+-----------------------------------------------------------------------------------------------+
 | Step C6: 새 버전의 DB 백업         |   % cubrid backupdb -S testdb                                                                 |
 |                                    |                                                                                               |

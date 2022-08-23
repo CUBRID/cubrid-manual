@@ -738,7 +738,7 @@ JSON_MERGE_PATCH
 .. function:: JSON_MERGE_PATCH (json_doc, json_doc [, json_doc] ...)
 
 **JSON_MERGE_PATCH** 함수는 둘 이상의 json 문서를 병합하고 병합된 결과 json을 반환한다. **JSON_MERGE_PATCH** 는 병합 충돌 시 두 번째 인자를 사용하는 점에서 **JSON_MERGE_PRESERVE** 와 다르다. 
-**JSON_MERGE_PATCH** 함수는 `RFC 7396 <https://tools.ietf.org/html/rfc7396/>` 을 준수한다.
+**JSON_MERGE_PATCH** 함수는 `RFC 7396 <https://www.rfc-editor.org/info/rfc7396>` 을 준수한다.
 
 두 개의 json 문서 병합은 다음 규칙에 따라 재귀적으로 수행된다:
 

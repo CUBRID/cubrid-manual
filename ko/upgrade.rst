@@ -85,7 +85,7 @@ DB 마이그레이션
 |                                    | cubrid unload 유틸리티를 실행하고 이 때 생성된 파일을 별도 디렉토리에 보관한다.(C3b)          |
 |                                    |                                                                                               |
 |                                    |                                                                                               |
-|                                    |   % cubrid unloaddb -S -u dbatestdb                                                           |
+|                                    |   % cubrid unloaddb -S -u dba testdb                                                          |
 |                                    |                                                                                               |
 |                                    | 이전 DB 를 제거 한다. (C3c)                                                                   |
 |                                    |                                                                                               |

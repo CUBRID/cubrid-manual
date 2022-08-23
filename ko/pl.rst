@@ -33,8 +33,8 @@ PL/CUBSQL은 Stored Procedure, 즉 프로시저와 함수를 생성하는데 사
         a_name VARCHAR,
         a_gender VARCHAR,
         a_nation_code VARCHAR,
-        a_event VARCHAR) AS
-
+        a_event VARCHAR)
+    AS
         PRAGMA AUTONOMOUS_TRANSACTION;
     BEGIN
         INSERT INTO athlete (name, gender, nation_code, event)
@@ -46,7 +46,8 @@ PL/CUBSQL은 Stored Procedure, 즉 프로시저와 함수를 생성하는데 사
 
 .. code-block:: sql
 
-    CREATE FUNCTION delete_athlete(c INTEGER) RETURN INTEGER AS
+    CREATE FUNCTION delete_athlete(c INTEGER) RETURN INTEGER
+    AS
         n_deleted INTEGER;
     BEGIN
         DELETE FROM athlete WHERE athlete.code = c;
@@ -58,7 +59,8 @@ PL/CUBSQL은 Stored Procedure, 즉 프로시저와 함수를 생성하는데 사
 
 .. code-block:: sql
 
-    CREATE OR REPLACE FUNCTION fibonacci(n INTEGER) RETURN INTEGER IS
+    CREATE OR REPLACE FUNCTION fibonacci(n INTEGER) RETURN INTEGER
+    IS
         invalid_input EXCEPTION;
     BEGIN
         IF n <= 0 THEN
@@ -72,7 +74,7 @@ PL/CUBSQL은 Stored Procedure, 즉 프로시저와 함수를 생성하는데 사
         END IF;
     EXCEPTION
         WHEN invalid_input THEN
-            PUT_LINE('invalid input: ' || n);
+            put_line('invalid input: ' || n);
             RETURN -1;
         WHEN OTHERS THEN
             put_line('unknown exception');
@@ -88,7 +90,7 @@ SQL 구문 중에 다음에 해당하는 것들을 PL/CUBSQL 실행문으로 직
 그러한 경우를 Static SQL 문이라고 부른다.
 
 * SELECT
-* INSERT, UPDATE, DELETE, MERGE
+* INSERT, UPDATE, DELETE, MERGE, REPLACE
 * COMMIT, ROLLBACK
 
 위 목록에 포함되지 않는 다른 SQL 문들은 직접 사용할 수는 없으나,
@@ -105,7 +107,8 @@ SQL 구문의 문법과 의미는 CUBRID 매뉴얼 중
 
 .. code-block:: sql
 
-    CREATE FUNCTION get_medal_count(name VARCHAR, medal CHAR) RETURN INTEGER AS
+    CREATE FUNCTION get_medal_count(name VARCHAR, medal CHAR) RETURN INTEGER
+    AS
         n INTEGER;
     BEGIN
         -- 일반 실행문으로서의 SELECT 문
@@ -117,7 +120,8 @@ SQL 구문의 문법과 의미는 CUBRID 매뉴얼 중
 
 .. code-block:: sql
 
-    CREATE PROCEDURE athlete_history(name VARCHAR) AS
+    CREATE PROCEDURE athlete_history(name VARCHAR)
+    AS
     BEGIN
         -- For 루프 안에서의 SELECT 문
         FOR r IN (SELECT host_year, score FROM history WHERE athlete = name) LOOP
@@ -127,7 +131,8 @@ SQL 구문의 문법과 의미는 CUBRID 매뉴얼 중
 
 .. code-block:: sql
 
-    CREATE PROCEDURE athlete_history(name VARCHAR) AS
+    CREATE PROCEDURE athlete_history(name VARCHAR)
+    AS
         -- 커서 정의에서의 SELECT 문
         CURSOR my_cursor IS SELECT host_year, score FROM history WHERE athlete = name;
     BEGIN
@@ -154,7 +159,8 @@ Dynamic SQL은 다음 두 가지 경우에 필요하다.
 
 .. code-block:: sql
 
-    CREATE PROCEDURE collect_athlete_history(name VARCHAR) AS
+    CREATE PROCEDURE collect_athlete_history(name VARCHAR)
+    AS
         new_table VARCHAR := name || '_history';
     BEGIN
         EXECUTE IMMEDIATE 'drop table if exists ' || new_table;
@@ -330,7 +336,8 @@ Static/Dynamic SQL 밖의 PL/CUBSQL문에서 문자열 타입 CHAR와 VARCHAR를
 
 .. code-block:: sql
 
-    CREATE FUNCTION get_athlete_name(code INTEGER) RETURN VARCHAR(40) AS
+    CREATE FUNCTION get_athlete_name(code INTEGER) RETURN VARCHAR(40)
+    AS
         name VARCHAR(40);
     BEGIN
         SELECT a.name INTO name FROM athlete a WHERE a.code = code;
@@ -366,7 +373,8 @@ PL/CUBSQL 실행문에서도 사용할 수 있음을 보여준다.
 
 .. code-block:: sql
 
-    CREATE PROCEDURE swap_family_name AS
+    CREATE PROCEDURE swap_family_name
+    AS
         delim INTEGER;
         family_name VARCHAR;
         given_name VARCHAR;
@@ -421,7 +429,8 @@ PL/CUBSQL은 다른 많은 프로그래밍 언어와 마찬가지로 Exception �
 
 .. code-block:: sql
 
-    CREATE FUNCTION athlete_code(name VARCHAR) RETURN integer AS
+    CREATE FUNCTION athlete_code(name VARCHAR) RETURN integer
+    AS
         c INTEGER;
     BEGIN
         -- SELECT INTO 문은 단 하나, 그리고 오직 하나의 Row를 결과로 가져야 함
@@ -429,14 +438,29 @@ PL/CUBSQL은 다른 많은 프로그래밍 언어와 마찬가지로 Exception �
         RETURN c;
     EXCEPTION
         WHEN NO_DATA_FOUND THEN
-            PUT_LINE('error: no rows found for athlete name ' || name);
+            put_line('error: no rows found for athlete name ' || name);
             RETURN -1;
         WHEN TOO_MANY_ROWS THEN
-            PUT_LINE('error: more than one rows found for athlete name ' || name);
+            put_line('error: more than one rows found for athlete name ' || name);
             RETURN -1;
     END;
 
 .. _decl:
+
+서버 설정 적용 예외
+==========================
+
+Static/Dynamic SQL 문의 동작은 각종 `서버 설정 <https://www.cubrid.org/manual/ko/11.2/admin/config.html#id2>`_\의 영향을 받는다.
+
+그러나, Static/Dynamic SQL 밖에서 PL/CUBSQL 문의 동작은 서버 설정 파라미터 적용에 몇 가지 예외가 있다.
+
+* no_backslash_escapes 설정 파라미터값과 관계 없이 backslash 문자는 escape 문자로 사용되지 않는다.
+* oracle_style_empty_string 설정 파라미터값과 관계 없이 빈 문자열을 NULL과 동일시하지 않는다.
+* pipes_as_concat 설정 파라미터값과 상관없이 ||는 논리합(OR) 연산자로 사용할 수 없다.
+* plus_as_concat 설정 파라미터값과 상관없이 +는 문자열 병합 연산자로 사용할 수 없다.
+
+위 네 가지 파라미터에 대한 자세한 내용은
+`구문/타입 관련 파라미터 <https://www.cubrid.org/manual/ko/11.2/admin/config.html#stmt-type-parameters>`_\를 참고한다.
 
 ******************
 선언문
@@ -477,7 +501,8 @@ NOT NULL 조건이 지정된 경우 반드시 NULL이 아닌 초기값이 함께
 
 .. code-block:: sql
 
-    CREATE PROCEDURE test_proc AS
+    CREATE PROCEDURE test_proc
+    AS
         a INT NOT NULL := 3;
         b VARCHAR := 's';
         c FLOAT;        -- c = NULL
@@ -493,17 +518,19 @@ NOT NULL 조건이 지정된 경우 반드시 NULL이 아닌 초기값이 함께
 
 .. code-block:: sql
 
-    CREATE PROCEDURE outer_proc AS
+    CREATE PROCEDURE outer_proc
+    AS
         a INT := 3;
         b VARCHAR;
 
         -- 내부 프로시저
-        PROCEDURE inner_proc AS
+        PROCEDURE inner_proc
+        AS
             a INT := 5;
             b FLOAT;
-        begin
+        BEGIN
             -- 여기서 a = 5, b는 FLOAT 타입
-        end;
+        END;
 
     BEGIN
         -- 여기서 a = 3, b는 VARCHAR 타입
@@ -534,7 +561,8 @@ NOT NULL 조건이 지정된 경우 반드시 NULL이 아닌 초기값이 함께
 
 .. code-block:: sql
 
-    CREATE PROCEDURE test_proc AS
+    CREATE PROCEDURE test_proc
+    AS
         a CONSTANT INT NOT NULL := 3;
         b CONSTANT VARCHAR := 's';
         c CONSTANT FLOAT;        -- 에러
@@ -555,7 +583,8 @@ Exception 선언
 
 .. code-block:: sql
 
-    CREATE FUNCTION my_func(n INT) RETURN INT AS
+    CREATE FUNCTION my_func(n INT) RETURN INT
+    AS
         negative_argument EXCEPTION;
         too_big_argument EXCEPTION;
     BEGIN
@@ -596,7 +625,8 @@ Exception 선언
 
 .. code-block:: sql
 
-    CREATE PROCEDURE test_proc(name VARCHAR, year INTEGER) AS
+    CREATE PROCEDURE test_proc(name VARCHAR, year INTEGER)
+    AS
 
         CURSOR my_cursor(a VARCHAR, y INTEGER) IS SELECT host_year, score FROM history
             WHERE athlete = a and host_year >= y;
@@ -619,7 +649,8 @@ Exception 선언
 
 .. code-block:: sql
 
-    CREATE PROCEDURE test_proc(name VARCHAR, year INTEGER) AS
+    CREATE PROCEDURE test_proc(name VARCHAR, year INTEGER)
+    AS
 
         CURSOR my_cursor(a VARCHAR, y INTEGER) IS SELECT host_year, score FROM history
             WHERE athlete = a and host_year >= y;
@@ -666,16 +697,18 @@ Exception 선언
 함수가 *body* 끝에 도달할 때까지 RETURN 문을 만나지 못하면 에러가 발생한다.
 프로시저의 RETURN 문에 반환값을 지정하면 에러이다.
 
-(내부) 프로시저/함수를 선언하면 자기 자신을 실행부에서 참조할 수 있다. 즉, 재귀호출이 가능하다.
+(내부) 프로시저/함수를 선언하면 자기 자신을 실행부에서 참조할 수 있다. 즉, 재귀 호출이 가능하다.
 
 .. code-block:: sql
 
-    CREATE FUNCTION choose(m INT, n INT) RETURN INT AS
+    CREATE FUNCTION choose(m INT, n INT) RETURN INT
+    AS
 
         invalid_argument EXCEPTION;
 
         -- 내부 함수 선언
-        FUNCTION factorial(n INT) RETURN INT AS
+        FUNCTION factorial(n INT) RETURN INT
+        AS
         BEGIN
             IF n < 0 THEN
                 RAISE invalid_argument;
@@ -683,7 +716,7 @@ Exception 선언
                 RETURN 1;
             ELSE
                 RETURN n * factorial(n - 1);    -- 재귀 호출
-            end if;
+            END IF;
         END;
     BEGIN
         IF n > m OR n < 0 THEN
@@ -693,25 +726,35 @@ Exception 선언
         END IF;
     END;
 
-동일한 선언부에서 선언된 내부 프로시저/함수끼리는 상호 재귀호출도 가능하다.
+동일한 선언부에서 선언된 내부 프로시저/함수끼리는 상호 재귀 호출도 가능하다.
 
 .. code-block:: sql
 
-    CREATE PROCEDURE ping_pong AS
-
-        PROCEDURE ping AS
+    CREATE PROCEDURE ping_pong(cnt INT)
+    AS
+        PROCEDURE ping(n INT)
+        AS
         BEGIN
-            put_line('ping ->');
-            pong();     -- 상호 재귀 호출
+            IF n <= 0 THEN
+                put_line('-- end --');
+            ELSE
+                put_line('ping ->');
+                pong(n - 1);     -- 상호 재귀 호출
+            END IF;
         END;
 
-        PROCEDURE pong AS
+        PROCEDURE pong(n INT)
+        AS
         BEGIN
-            put_line('      <- pong');
-            ping();     -- 상호 재귀 호출
+            IF n <= 0 THEN
+                put_line('-- end --');
+            ELSE
+                put_line('      <- pong');
+                ping(n - 1);     -- 상호 재귀 호출
+            END IF;
         END;
     BEGIN
-        ping();
+        ping(cnt);
     END;
 
 .. _auto_tran:
@@ -729,11 +772,11 @@ Autonomous Transaction 선언
 그리고, COMMIT이나 ROLLBACK을 실행해도 호출한 쪽의 트랜잭션의 진행에는 영향을 미치지 않는다.
 
 Autonomous Transaction으로 선언되지 않은 스토어드 프로시저/함수는 호출한 쪽의 트랜잭션 안에 포함된다.
-이 경우에는 스토어드 프로시저/함수 안에서 호출한 COMMIT이나 ROLLBACK이 아무 동작도 하지 않고 무시된다.
+이 경우에는 스토어드 프로시저/함수 안에서 호출한 COMMIT이나 ROLLBACK이 아무 동작도 하지 않고 무시되고,
+호출한 쪽에서 COMMIT하거나 ROLLBACL을 해야 변경 내용이 반영되거나 취소된다.
 
 이 선언문은 최상위 선언부에서만 사용할 수 있다.
 즉, 내부 프로시저/함수나 BLOCK 실행문의 선언부에서는 사용할 수 없다.
-
 
 .. _stmt:
 
@@ -790,7 +833,8 @@ BLOCK에서 선언된 아이템이 바깥 scope에서 선언된 다른 아이템
 
 .. code-block:: sql
 
-    CREATE PROCEDURE test_proc IS
+    CREATE PROCEDURE test_proc
+    IS
         a INT := 3;
         b INT := 3;
         c INT := 3;
@@ -815,7 +859,7 @@ Static SQL
 ==========
 
 :ref:`Static SQL <static_sql>` 절에서 설명한대로 SQL 문 중에서
-SELECT, INSERT, UPDATE, DELETE, MERGE, COMMIT, ROLLBACK 문은 프로그램의 실행문으로서 직접 사용 가능하다.
+SELECT, INSERT, UPDATE, DELETE, MERGE, REPLACE, COMMIT, ROLLBACK 문은 프로그램의 실행문으로서 직접 사용 가능하다.
 
 이 중에서 COMMIT과 ROLLBACK은 :ref:`Autonomous Transaction <auto_tran>`\으로
 선언되었는지 아닌지의 여부에 따라 달리 동작한다.
@@ -852,7 +896,8 @@ SELECT, INSERT, UPDATE, DELETE, MERGE, COMMIT, ROLLBACK 문은 프로그램의 �
 
 .. code-block:: sql
 
-    CREATE PROCEDURE test_proc(name VARCHAR, year INTEGER) AS
+    CREATE PROCEDURE test_proc(name VARCHAR, year INTEGER)
+    AS
 
         CURSOR my_cursor(a VARCHAR, y INTEGER) IS SELECT host_year, score FROM history
             WHERE athlete = a and host_year >= y;
@@ -875,14 +920,16 @@ SYS_REFCURSOR 변수에 연결하고 그 SELECT 문의 결과를 조회해 오�
 
 .. code-block:: sql
 
-    CREATE PROCEDURE test_proc(name VARCHAR) AS
+    CREATE PROCEDURE test_proc(name VARCHAR)
+    AS
 
         my_refcursor SYS_REFCURSOR;
 
         target_year INT;
         target_score VARCHAR(10);
 
-        PROCEDURE open_refcursor(athlete_name VARCHAR, rc OUT SYS_REFCURSOR) AS
+        PROCEDURE open_refcursor(athlete_name VARCHAR, rc OUT SYS_REFCURSOR)
+        AS
             refcursor SYS_REFCURSOR;
         BEGIN
             OPEN refcursor FOR SELECT host_year, score FROM history WHERE athlete = athlete_name;
@@ -926,7 +973,8 @@ INTO 절을 써서 SELECT 문의 조회 결과를 프로그램의 변수나 OUT 
 
 .. code-block:: sql
 
-    CREATE PROCEDURE collect_athlete_history(name VARCHAR) AS
+    CREATE PROCEDURE collect_athlete_history(name VARCHAR)
+    AS
         new_table VARCHAR := name || '_history';
     BEGIN
         EXECUTE IMMEDIATE 'drop table if exists ' || new_table;
@@ -967,7 +1015,8 @@ WHEN 절이 있는 경우 BOOLEAN 타입의 *expression*\이 TRUE로 계산될 �
 
 .. code-block:: sql
 
-    CREATE PROCEDURE test_proc AS
+    CREATE PROCEDURE test_proc
+    AS
         i INT := 0;
     BEGIN
         LOOP
@@ -988,10 +1037,20 @@ NULL
     <null_statement> ::=
         NULL
 
-어떤 경우에는 아무 일도 하지 않는다는 것을 명시적으로 표시하고 싶을 때 NULL을 실행문으로 사용할 수 있다.
+아무 일도 하지 않는다는 것을 명시적으로 표시하고 싶을 경우,
+혹은 나중에 구현할 실행문 자리를 임시로 채워 넣고 싶을 경우 등에 NULL을 사용할 수 있다.
 문법상 실행문 자리를 채우기 위한 place holder 구문이다.
 
 .. _raise:
+
+.. code-block:: sql
+
+    CASE medal
+        WHEN 'G' THEN put_line('Gold');
+        WHEN 'S' THEN put_line('Silver');
+        WHEN 'B' THEN put_line('Bronze');
+        ELSE NULL;
+    END;
 
 RAISE
 =====
@@ -1006,7 +1065,8 @@ Exception 이름 *identifier*\가 생략되는 경우는 RAISE 문의 위치가 
 
 .. code-block:: sql
 
-    CREATE OR REPLACE FUNCTION fibonacci(n INTEGER) RETURN INTEGER IS
+    CREATE OR REPLACE FUNCTION fibonacci(n INTEGER) RETURN INTEGER
+    IS
         invalid_input EXCEPTION;
     BEGIN
         IF n <= 0 THEN
@@ -1020,7 +1080,7 @@ Exception 이름 *identifier*\가 생략되는 경우는 RAISE 문의 위치가 
         END IF;
     EXCEPTION
         WHEN invalid_input THEN
-            PUT_LINE('invalid input: ' || n);
+            put_line('invalid input: ' || n);
             RAISE;      -- 현재 처리 중인 invalid_input을 다시 일으킴
         WHEN OTHERS THEN
             put_line('unknown exception');
@@ -1078,7 +1138,7 @@ PL/CUBSQL이 제공하는 루프문은 아래와 같이 여섯 가지 형태가 
         | <label_declaration>? FOR <for_static_sql> LOOP <seq_of_statements> END LOOP     # for-static-sql-loop
         | <label_declaration>? FOR <for_dynamic_sql> LOOP <seq_of_statements> END LOOP    # for-dynamic-sql-loop
 
-    <label_declaration> ::= << <identifier> >>
+    <label_declaration> ::= '<<' <identifier> '>>'
 
     <iterator> ::= <identifier> IN [ REVERSE ] <lower_bound> .. <upper_bound> [ BY <step> ]
 
@@ -1095,7 +1155,8 @@ PL/CUBSQL이 제공하는 루프문은 아래와 같이 여섯 가지 형태가 
 
 .. code-block:: sql
 
-    CREATE PROCEDURE mult_tables AS
+    CREATE PROCEDURE mult_tables
+    AS
     BEGIN
         FOR i IN 2 .. 9 LOOP
             put_line('table ' || i);
@@ -1112,7 +1173,8 @@ PL/CUBSQL이 제공하는 루프문은 아래와 같이 여섯 가지 형태가 
 
 .. code-block:: sql
 
-    CREATE PROCEDURE athlete_history(name VARCHAR) AS
+    CREATE PROCEDURE athlete_history(name VARCHAR)
+    AS
         CURSOR my_cursor IS SELECT host_year, score FROM history WHERE athlete = name;
     BEGIN
         -- For-Cursor Loop
@@ -1140,8 +1202,8 @@ CASE 문은 여러 개의 조건을 순차적으로 검사해서 가장 처음 �
 ::
 
     <case_statement> ::=
-          CASE <expression> { WHEN <expression> THEN <seq_of_statements> }+ [ ELSE <seq_of_statements> ] END [ CASE ]
-        | CASE { WHEN <expression> THEN <seq_of_statements> }+ [ ELSE <seq_of_statements> ] END [ CASE ]
+          CASE <expression> { WHEN <expression> THEN <seq_of_statements> }... [ ELSE <seq_of_statements> ] END [ CASE ]
+        | CASE { WHEN <expression> THEN <seq_of_statements> }... [ ELSE <seq_of_statements> ] END [ CASE ]
 
 CASE 문은 두 가지 형태가 있다.
 
@@ -1153,7 +1215,8 @@ CASE 문은 두 가지 형태가 있다.
 
 .. code-block:: sql
 
-    CREATE PROCEDURE print_boolean(b BOOLEAN) AS
+    CREATE PROCEDURE print_boolean(b BOOLEAN)
+    AS
     BEGIN
         CASE b
             WHEN True THEN
@@ -1169,7 +1232,8 @@ CASE 문은 두 가지 형태가 있다.
 
 .. code-block:: sql
 
-    CREATE PROCEDURE print_boolean(b BOOLEAN) AS
+    CREATE PROCEDURE print_boolean(b BOOLEAN)
+    AS
     BEGIN
         CASE
             WHEN b THEN
@@ -1226,8 +1290,9 @@ PL/CUBSQL의 표현식의 종류는 다음 문법으로 요약할 수 있다.
     <unary_op> ::= + | - | NOT
 
     <case_expression> ::=
-          CASE <expression> <case_expression_when_part>+ [ ELSE <expression> ] END [ CASE ]
-        | CASE <case_expression_when_part>+ [ ELSE <expression> ] END [ CASE ]
+          CASE <expression> <case_expression_when_part>... [ ELSE <expression> ] END [ CASE ]
+        | CASE <case_expression_when_part>... [ ELSE <expression> ] END [ CASE ]
+    <case_expression_when_part> ::= WHEN <expression> THEN <expression>
 
 리터럴
 =================
@@ -1250,7 +1315,7 @@ Static SQL 결과 크기
 SQL%ROWCOUNT는 Static SQL을 실행한 직후에 결과 크기를 나타내는 표현식이다.
 
 * SELECT 문의 경우 반드시 INTO 절을 포함하게 되고 조회 결과는 1개이어야 한다. 따라서, 이 SELECT 문이 정상적으로 수행되었을 때 SQL%ROWCOUNT의 값은 1이다. 조회 결과 크기가 0이거나 1을 초과해서 실행시간 에러가 발생했을 때에는 SQL%ROWCOUNT의 값은 정의되지 않는다.
-* INSERT, UPDATE, DELTE, MERGE 문의 경우 영향 받은 레코드 갯수가 된다.
+* INSERT, UPDATE, DELTE, MERGE, REPLACE 문의 경우 영향 받은 레코드 갯수가 된다.
 * COMMIT, ROLLBACK 문에 대해서는 0이 된다.
 
 커서 속성
@@ -1321,7 +1386,8 @@ FOR 문에서 SELECT 결과를 순회하기 위해 암묵적으로 선언되는 
 
 .. code-block:: sql
 
-    CREATE PROCEDURE athlete_history(name VARCHAR) AS
+    CREATE PROCEDURE athlete_history(name VARCHAR)
+    AS
         CURSOR my_cursor IS SELECT host_year, score FROM history WHERE athlete = name;
     BEGIN
         FOR r IN my_cursor LOOP                                                 -- r: 암묵적으로 선언됨
@@ -1352,7 +1418,8 @@ CASE 표현식은 :ref:`CASE 문 <case_stmt>`\(Statement)과 마찬가지로 CAS
 
 .. code-block:: sql
 
-    CREATE PROCEDURE print_boolean(b BOOLEAN) AS
+    CREATE PROCEDURE print_boolean(b BOOLEAN)
+    AS
         s VARCHAR;
     BEGIN
         s := CASE b
@@ -1368,7 +1435,8 @@ CASE 표현식은 :ref:`CASE 문 <case_stmt>`\(Statement)과 마찬가지로 CAS
 
 .. code-block:: sql
 
-    CREATE PROCEDURE print_boolean(b BOOLEAN) AS
+    CREATE PROCEDURE print_boolean(b BOOLEAN)
+    AS
         s VARCHAR;
     BEGIN
         s := CASE

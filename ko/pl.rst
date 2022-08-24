@@ -25,6 +25,13 @@ PL/CUBSQL은 Stored Procedure, 즉 프로시저와 함수를 생성하는데 사
 그 앞의 선언부 *seq_of_declare_specs*\는 실행문들 안에서 사용될 변수, 상수, Exception 등을 선언한다.
 문법 요소들에 대한 자세한 내용은 :ref:`선언문 <decl>`\과 :ref:`실행문 <stmt>` 절을 참고한다.
 
+Stored Procedure는 Auto Commit 기능이 언제나 비활성화 된 상태로 실행된다.
+이는 호출한 세션에서 Auto Commit 기능이 활성화 되어 있어도 마찬가지이다.
+
+Stored Procedure 안에서 실행되는 COMMIT, ROLLBACK 문의 의미는
+그 Stored Procedure가 Autonomous Transaction으로 설정되어 있는가 아닌가에 따라 달라진다.
+관련 내용은 :ref:`Autonomous Transaction 선언 <auto_tran>`\을 참고한다.
+
 다음은 PL/CUBSQL을 사용해서 작성한 프로시저와 함수의 예이다.
 
 .. code-block:: sql
@@ -772,7 +779,7 @@ Autonomous Transaction 선언
 그리고, COMMIT이나 ROLLBACK을 실행해도 호출한 쪽의 트랜잭션의 진행에는 영향을 미치지 않는다.
 
 Autonomous Transaction으로 선언되지 않은 스토어드 프로시저/함수는 호출한 쪽의 트랜잭션 안에 포함된다.
-이 경우에는 스토어드 프로시저/함수 안에서 호출한 COMMIT이나 ROLLBACK이 아무 동작도 하지 않고 무시되고,
+이 경우에는 스토어드 프로시저/함수 안에서 호출한 COMMIT이나 ROLLBACK이 아무 동작도 하지 않고 무시되고 (TODO: 기술 지원팀과 협의 필요),
 호출한 쪽에서 COMMIT하거나 ROLLBACL을 해야 변경 내용이 반영되거나 취소된다.
 
 이 선언문은 최상위 선언부에서만 사용할 수 있다.

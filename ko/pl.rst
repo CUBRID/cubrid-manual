@@ -651,8 +651,12 @@ Exception 선언
         CLOSE my_cursor;
     END;
 
-커서는 위 예제처럼 명시적으로 OPEN, FETCH, CLOSE 실행문을 통해 이용할 수도 있고,
-이들 동작이 암묵적으로 이루어지는 For-Loop 문을 통해서 이용할 수도 있다.
+커서는 위 예제처럼 명시적으로 OPEN, FETCH, CLOSE 실행문을 통해 이용할 수 있다.
+Stored Procedure가 종료될 때까지 닫히지 않고 열린 채로 남아 있는 커서는 시스템에 의해 자동으로 닫히게 되지만,
+커서에 할당된 시스템 자원의 즉각적인 회수를 위해서 커서 사용이 끝났을 때 명시적으로 닫아 주는 것이 좋다.
+
+반면, 아래 예제처럼 OPEN, FETCH, CLOSE 동작이 암묵적으로 이루어지는 For-Loop 문을 통해서 커서를 이용할 수도 있다.
+이 경우에는 사용자가 명시적으로 커서를 닫아줄 필요가 없다.
 
 .. code-block:: sql
 
@@ -763,6 +767,8 @@ Exception 선언
     BEGIN
         ping(cnt);
     END;
+
+재귀 호출을 사용할 때는 무한 루프에 빠지지 않도록 종료 조건을 적절히 주어야 한다.
 
 .. _auto_tran:
 
@@ -1321,7 +1327,7 @@ Static SQL 결과 크기
 ====================
 SQL%ROWCOUNT는 Static SQL을 실행한 직후에 결과 크기를 나타내는 표현식이다.
 
-* SELECT 문의 경우 반드시 INTO 절을 포함하게 되고 조회 결과는 1개이어야 한다. 따라서, 이 SELECT 문이 정상적으로 수행되었을 때 SQL%ROWCOUNT의 값은 1이다. 조회 결과 크기가 0이거나 1을 초과해서 실행시간 에러가 발생했을 때에는 SQL%ROWCOUNT의 값은 정의되지 않는다.
+* 커서와 연관되지 않은 SELECT 문의 경우 반드시 INTO 절을 포함하게 되고 조회 결과는 1개이어야 한다. 따라서, 이 SELECT 문이 정상적으로 수행되었을 때 SQL%ROWCOUNT의 값은 1이다. 조회 결과 크기가 0이거나 1을 초과해서 실행시간 에러가 발생했을 때에는 SQL%ROWCOUNT의 값은 정의되지 않는다.
 * INSERT, UPDATE, DELTE, MERGE, REPLACE 문의 경우 영향 받은 레코드 갯수가 된다.
 * COMMIT, ROLLBACK 문에 대해서는 0이 된다.
 

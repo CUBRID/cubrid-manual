@@ -1,6 +1,6 @@
 
-:meta-keywords: cubrid sql, pl/cubsql
-:meta-description: This chapter describes PL/CUBSQL Spec.
+:meta-keywords: cubrid sql, pl/csql
+:meta-description: This chapter describes PL/CSQL Spec.
 
 *****************************
 Overview
@@ -9,8 +9,8 @@ Overview
 Stored Procedure 생성
 ======================
 
-PL/CUBSQL은 Stored Procedure, 즉 프로시저와 함수를 생성하는데 사용된다.
-다음 문법을 따르는 CREATE PROCEDURE 문과 CREATE FUNCTION 문의 AS (또는 IS) 키워드 뒤에 PL/CUBSQL 코드를 써서
+PL/CSQL은 Stored Procedure, 즉 프로시저와 함수를 생성하는데 사용된다.
+다음 문법을 따르는 CREATE PROCEDURE 문과 CREATE FUNCTION 문의 AS (또는 IS) 키워드 뒤에 PL/CSQL 코드를 써서
 현재 생성하고 있는 Stored Procedure의 동작을 기술한다.
 ::
 
@@ -21,7 +21,7 @@ PL/CUBSQL은 Stored Procedure, 즉 프로시저와 함수를 생성하는데 사
         CREATE [ OR REPLACE ] FUNCTION <identifier> [ ( <seq_of_parameters> ) ] RETURN <type_spec>
         { IS | AS } [ <seq_of_declare_specs> ] <body> ;
 
-위 문법에서 프로시저나 함수의 *body*\는 PL/CUBSQL 실행문들을 포함하고
+위 문법에서 프로시저나 함수의 *body*\는 PL/CSQL 실행문들을 포함하고
 그 앞의 선언부 *seq_of_declare_specs*\는 실행문들 안에서 사용될 변수, 상수, Exception 등을 선언한다.
 문법 요소들에 대한 자세한 내용은 :ref:`선언문 <decl>`\과 :ref:`실행문 <stmt>` 절을 참고한다.
 
@@ -32,7 +32,7 @@ Stored Procedure 안에서 실행되는 COMMIT, ROLLBACK 문의 의미는
 그 Stored Procedure가 Autonomous Transaction으로 설정되어 있는가 아닌가에 따라 달라진다.
 관련 내용은 :ref:`Autonomous Transaction 선언 <auto_tran>`\을 참고한다.
 
-다음은 PL/CUBSQL을 사용해서 작성한 프로시저와 함수의 예이다.
+다음은 PL/CSQL을 사용해서 작성한 프로시저와 함수의 예이다.
 
 .. code-block:: sql
 
@@ -93,7 +93,7 @@ Stored Procedure 안에서 실행되는 COMMIT, ROLLBACK 문의 의미는
 Static SQL
 ==================
 
-SQL 구문 중에 다음에 해당하는 것들을 PL/CUBSQL 실행문으로 직접 사용할 수 있으며,
+SQL 구문 중에 다음에 해당하는 것들을 PL/CSQL 실행문으로 직접 사용할 수 있으며,
 그러한 경우를 Static SQL 문이라고 부른다.
 
 * SELECT
@@ -182,14 +182,14 @@ Dynamic SQL은 다음 두 가지 경우에 필요하다.
 식별자, 예약어, 주석, 리터럴을 작성할 때 Static/Dynamic SQL 안에서는
 `CUBRID SQL의 작성 규칙 <https://www.cubrid.org/manual/ko/11.2/sql/syntax.html>`_\을 따른다.
 
-Static/Dynamic SQL 밖의 PL/CUBSQL 문 작성 규칙도 대체로 같은 규칙을 따르지만 다음 몇 가지 예외가 있다.
+Static/Dynamic SQL 밖의 PL/CSQL 문 작성 규칙도 대체로 같은 규칙을 따르지만 다음 몇 가지 예외가 있다.
 
 * CUBRID SQL과 달리 식별자에 '#'을 쓸 수 없다. 즉, 식별자는 영문 대소문자, 숫자, '_'(underscore)로만 이루어져야 한다.
 * 큰따옴표, 대괄호, 백틱 부호로 둘러싸더라도 식별자에 특수 문자를 쓸 수 없다.
   큰따옴표 등의 구분자를 제외하면 영문 대소문자, 숫자, '_'(underscore)만 사용 가능하다.
 * no_backslash_escapes 설정 파라미터값과 관계 없이 backslash 문자는 escape 문자로 사용되지 않는다.
 * oracle_style_empty_string 설정 파라미터값과 관계 없이 빈 문자열을 NULL과 동일시하지 않는다.
-* 비트열 리터럴을 사용할 수 없다. Static/Dynamic SQL 밖의 PL/CUBSQL 문에서는 비트열 타입을 지원하지 않는다.
+* 비트열 리터럴을 사용할 수 없다. Static/Dynamic SQL 밖의 PL/CSQL 문에서는 비트열 타입을 지원하지 않는다.
 
 .. rubric:: 허용되는 식별자
 
@@ -210,9 +210,9 @@ Static/Dynamic SQL 밖의 PL/CUBSQL 문 작성 규칙도 대체로 같은 규칙
     [a@b]           // [ ]로 둘러싸더라도 특수문자 불가
     select          // 예약어
 
-PL/CUBSQL의 예약어는 기존의 `CUBRID SQL의 예약어 <https://www.cubrid.org/manual/ko/11.2/sql/keyword.html#id1>`_\에
+PL/CSQL의 예약어는 기존의 `CUBRID SQL의 예약어 <https://www.cubrid.org/manual/ko/11.2/sql/keyword.html#id1>`_\에
 아래 표에 나열한 내용을 추가한 단어들이다.
-Static/Dynamic SQL 밖의 PL/CUBSQL 문에서 아래 표의 단어들을 변수, 상수, Exception, 내부 함수, 내부 프로시저
+Static/Dynamic SQL 밖의 PL/CSQL 문에서 아래 표의 단어들을 변수, 상수, Exception, 내부 함수, 내부 프로시저
 등의 이름을 나타내는 식별자로 쓸 수 없다.
 단, CUBRID SQL 문에서처럼 큰따옴표(" "), 대괄호([ ]), 백틱(\` \`)으로 감싸면 식별자로 쓸 수 있다.
 
@@ -291,14 +291,14 @@ Static/Dynamic SQL에서는 CUBRID SQL에서 제공하는 모든 데이터 타�
 CUBRID SQL의 데이터 타입 관련해서는
 `데이터 타입 <https://www.cubrid.org/manual/ko/11.2/sql/datatype_index.html>`_\을 참고한다.
 
-반면, Static/Dynamic SQL 밖의 PL/CUBSQL 문에서 사용할 수 있는 데이터 타입은
+반면, Static/Dynamic SQL 밖의 PL/CSQL 문에서 사용할 수 있는 데이터 타입은
 BOOLEAN, SYS_REFCURSOR와 CUBRID SQL에서 제공하는 데이터 타입 중 일부이다.
 
 * BOOLEAN: TRUE, FALSE, NULL을 값으로 가질 수 있다.
 * SYS_REFCURSOR: 커서 변수를 선언할 때 사용한다.
   커서 변수의 용도는 :ref:`OPEN-FOR <cursor_manipulation>` 문을 참고한다.
 
-CUBRID SQL에서 제공하는 데이터 타입 중 PL/CUBSQL에서 지원하는 것과 지원하지 않는 것은 다음과 같다.
+CUBRID SQL에서 제공하는 데이터 타입 중 PL/CSQL에서 지원하는 것과 지원하지 않는 것은 다음과 같다.
 
 +----------------+-------------------------------------+----------------------------------+
 | 유형           | 지원                                | 미지원                           |
@@ -334,12 +334,12 @@ CUBRID SQL에서 제공하는 데이터 타입 중 PL/CUBSQL에서 지원하는 
 |                |                                     | JSON                             |
 +----------------+-------------------------------------+----------------------------------+
 
-Static/Dynamic SQL 밖의 PL/CUBSQL문에서 문자열 타입 CHAR와 VARCHAR를 사용할 때,
+Static/Dynamic SQL 밖의 PL/CSQL문에서 문자열 타입 CHAR와 VARCHAR를 사용할 때,
 타 DBMS와의 호환성과 향후 확장성을 위해 길이를 지정하는 CHAR(n), VARCHAR(n) 형태를 문법적으로 지원한다.
 하지만, 현재까지의 구현에서는 프로그램 동작 중에는 길이 지정 부분 '(n)'가 무시된다.
 예를 들어, 아래 예제에서 VARCHAR(40)은 VARCHAR라고 쓴 것과 동일하게 동작한다.
 
-현재, PL/CUBSQL은 사용자 정의 타입을 지원하지 않는다.
+현재, PL/CSQL은 사용자 정의 타입을 지원하지 않는다.
 
 .. code-block:: sql
 
@@ -360,7 +360,7 @@ Static/Dynamic SQL에서는 CUBRID SQL에서 제공하는 모든 연산자와 �
 (참고: `연산자와 함수 <https://www.cubrid.org/manual/ko/11.2/sql/function/index.html>`_\,
 `구문/타입 관련 파라미터 <https://www.cubrid.org/manual/ko/11.2/admin/config.html#stmt-type-parameters>`_)
 
-반면, Static/Dynamic SQL 밖의 PL/CUBSQL 문에서는 CUBRID SQL에서 제공하는 모든 연산자와 함수를
+반면, Static/Dynamic SQL 밖의 PL/CSQL 문에서는 CUBRID SQL에서 제공하는 모든 연산자와 함수를
 대부분 동일하게 쓸 수 있으나 다음의 몇 가지 예외가 있다.
 
 * 지원하지 않는 타입(BIT (VARYING), ENUM, BLOB/CLOB, JSON)의 값을 인자나 결과로 갖는 연산자와 함수
@@ -376,7 +376,7 @@ Static/Dynamic SQL에서는 CUBRID SQL에서 제공하는 모든 연산자와 �
 * 서버 설정 파라메터 plus_as_concat 값이 yes일지라도 +가 문자열 병합 연산자로 쓰이지 않음
 
 다음 예제는 문자열 함수 locate과 substr, 그리고 문자열 병합 연산자 ||를 Static/Dynamic SQL 밖의
-PL/CUBSQL 실행문에서도 사용할 수 있음을 보여준다.
+PL/CSQL 실행문에서도 사용할 수 있음을 보여준다.
 
 .. code-block:: sql
 
@@ -403,7 +403,7 @@ PL/CUBSQL 실행문에서도 사용할 수 있음을 보여준다.
 시스템 Exception
 ======================
 
-PL/CUBSQL은 다른 많은 프로그래밍 언어와 마찬가지로 Exception 핸들러를 통한 에러 처리를 지원한다
+PL/CSQL은 다른 많은 프로그래밍 언어와 마찬가지로 Exception 핸들러를 통한 에러 처리를 지원한다
 (참고: :ref:`Block 실행문 <block_stmt>`).
 사용자가 프로그램 선언부에서 자신만의 Exception을 정의할 수 있지만,
 주요 예외 상황에 대해서는 다음과 같이 시스템 Exception들이 미리 정의되어 있다.
@@ -459,7 +459,7 @@ PL/CUBSQL은 다른 많은 프로그래밍 언어와 마찬가지로 Exception �
 
 Static/Dynamic SQL 문의 동작은 각종 `서버 설정 <https://www.cubrid.org/manual/ko/11.2/admin/config.html#id2>`_\의 영향을 받는다.
 
-그러나, Static/Dynamic SQL 밖에서 PL/CUBSQL 문의 동작은 서버 설정 파라미터 적용에 몇 가지 예외가 있다.
+그러나, Static/Dynamic SQL 밖에서 PL/CSQL 문의 동작은 서버 설정 파라미터 적용에 몇 가지 예외가 있다.
 
 * no_backslash_escapes 설정 파라미터값과 관계 없이 backslash 문자는 escape 문자로 사용되지 않는다.
 * oracle_style_empty_string 설정 파라미터값과 관계 없이 빈 문자열을 NULL과 동일시하지 않는다.
@@ -797,7 +797,7 @@ Autonomous Transaction으로 선언되지 않은 스토어드 프로시저/함�
 실행문
 ******************
 
-현재 PL/CUBSQL은 다음과 같이 14가지 종류의 실행문을 제공한다.
+현재 PL/CSQL은 다음과 같이 14가지 종류의 실행문을 제공한다.
 ::
 
     <statement> ::=
@@ -1138,7 +1138,7 @@ IF
 
 LOOP
 ====
-PL/CUBSQL이 제공하는 루프문은 아래와 같이 여섯 가지 형태가 있다.
+PL/CSQL이 제공하는 루프문은 아래와 같이 여섯 가지 형태가 있다.
 앞의 세 가지는 일반적인 프로그래밍 언어에서 제공하는 루프문과 유사하다.
 뒤의 세 가지는 SELECT 문의 조회 결과를 순회하는 용도로 사용한다.
 ::
@@ -1261,7 +1261,7 @@ CASE 문은 두 가지 형태가 있다.
 ******************
 표현식
 ******************
-PL/CUBSQL의 표현식의 종류는 다음 문법으로 요약할 수 있다.
+PL/CSQL의 표현식의 종류는 다음 문법으로 요약할 수 있다.
 ::
 
     <expression> ::=
@@ -1297,7 +1297,7 @@ PL/CUBSQL의 표현식의 종류는 다음 문법으로 요약할 수 있다.
 
     <binary_op> ::=
           AND | OR
-        | = | != | <> | ^= | ~= | <= | >= | < | >
+        | = | <=> | != | <> | <= | >= | < | >
         | * | / | + | - | **
         | ||
     <unary_op> ::= + | - | NOT
@@ -1315,7 +1315,7 @@ PL/CUBSQL의 표현식의 종류는 다음 문법으로 요약할 수 있다.
 
 식별자
 =================
-Static/Dynamic SQL 밖의 PL/CUBSQL 문에서 사용할 수 있는 식별자에는 다음 세 가지 종류가 있다.
+Static/Dynamic SQL 밖의 PL/CSQL 문에서 사용할 수 있는 식별자에는 다음 세 가지 종류가 있다.
 
 * 선언부에서 선언된 변수, 상수, 커서, Exception, 내부 프로시저/함수
 * 프로시저/함수의 파라메터
@@ -1345,7 +1345,7 @@ SQL%ROWCOUNT는 Static SQL을 실행한 직후에 결과 크기를 나타내는 
 이항 연산, 단항 연산, 괄호
 ==========================
 
-PL/CUBSQL은 다음과 같이 연산자 우선 순위를 갖는다.
+PL/CSQL은 다음과 같이 연산자 우선 순위를 갖는다.
 
 +--------------------------------------------------------------------+-------------------------------------+
 | 연산자                                                             | 연산                                |
@@ -1393,7 +1393,7 @@ PL/CUBSQL은 다음과 같이 연산자 우선 순위를 갖는다.
 레코드 필드 참조
 =================
 
-PL/CUBSQL에서는 명시적인 레코드 타입과 레코드 변수 선언을 지원하지 않지만,
+PL/CSQL에서는 명시적인 레코드 타입과 레코드 변수 선언을 지원하지 않지만,
 FOR 문에서 SELECT 결과를 순회하기 위해 암묵적으로 선언되는 레코드 변수를 사용할 수 있다.
 즉, FOR 문 iterator에 SELECT 결과 컬럼 이름을 덧붙여 해당 컬럼값을 레코드 필드 참조하듯이 사용할 수 있다.
 

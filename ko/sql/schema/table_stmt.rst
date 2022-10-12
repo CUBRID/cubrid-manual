@@ -20,9 +20,8 @@ CREATE TABLE
 
     CREATE {TABLE | CLASS} [IF NOT EXISTS] [schema_name.]table_name
     [<subclass_definition>]
-    [(<column_definition>, ... [, <table_constraint>, ...])] 
-    [AUTO_INCREMENT = initial_value]
     [CLASS ATTRIBUTE (<column_definition>, ...)]
+    [{[{<table_constraint>}... ,] <column_definition> [{,{<column_definition>|<table_constraint>}}...]}]
     [INHERIT <resolution>, ...]
     [<table_options>]
 
@@ -80,7 +79,8 @@ CREATE TABLE
             <table_option> ::= REUSE_OID | DONT_REUSE_OID |
                                COMMENT [=] 'table_comment_string' |
                                [CHARSET charset_name] [COLLATE collation_name] |
-                               ENCRYPT [=] [AES | ARIA]
+                               ENCRYPT [=] [AES | ARIA] | 
+                               AUTO_INCREMENT = initial_value
 
 *   **IF NOT EXISTS**: 생성하려는 테이블이 존재하는 경우 에러 없이 테이블을 생성하지 않는다.
 *   *schema_name*: 스키마 이름을 지정한다(최대 31바이트). 생략하면 현재 세션의 스키마 이름을 사용한다.
@@ -889,7 +889,7 @@ CREATE TABLE AS SELECT
 
 ::
 
-    CREATE {TABLE | CLASS} [schema_name.]table_name [(<column_definition> [,<table_constraint>], ...)] [COMMENT [=] 'comment_string'] [REPLACE] AS <select_statement>;
+    CREATE {TABLE | CLASS} [schema_name.]table_name [{[{<table_constraint>}... ,] <column_definition> [{,{<column_definition>|<table_constraint>}}...]}] [COMMENT [=] 'comment_string'] [REPLACE] AS <select_statement>;
 
 *   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 새로 생성할 테이블 이름이다.

@@ -616,9 +616,10 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
             192.168.0.31    node4.kr         # Seoul
             192.168.2.31    node5.gov.or.kr  # Daejeon
 
-.. note:: $CUBRID/conf/hosts.conf를 수정하면 CUBRID Service를 **재구동해야 변경된 사항이 적용된다.**
-     최소한, **localhost** 와 Linux 명령어 **'hostname'** 을 실행하면 출력되는 호스트명을 hosts.conf에 포함하는 것을 권고한다.
 
+.. warning::
+
+    $CUBRID/conf/hosts.conf의 수정사항은 반드시 모든 CUBRID 프로세스를 종료 시킨 뒤 **재 구동해야 변경된 사항이 적용된다.** 최소한, **localhost** 와 Linux 명령어 **'hostname'** 을 실행하면 출력되는 호스트명을 hosts.conf에 포함하는 것을 권고한다.
  
 .. _memory-parameters:
 

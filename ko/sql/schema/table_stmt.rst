@@ -21,7 +21,7 @@ CREATE TABLE
     CREATE {TABLE | CLASS} [IF NOT EXISTS] [schema_name.]table_name
     [<subclass_definition>]
     [CLASS ATTRIBUTE (<column_definition>, ...)]
-    [{[{<table_constraint>}... ,] <column_definition> [{,{<column_definition>|<table_constraint>}}...]}]
+    [([{<table_constraint>}... ,] <column_definition> [{,{<column_definition>|<table_constraint>}}...])]
     [INHERIT <resolution>, ...]
     [<table_options>]
 
@@ -889,7 +889,7 @@ CREATE TABLE AS SELECT
 
 ::
 
-    CREATE {TABLE | CLASS} [schema_name.]table_name [{[{<table_constraint>}... ,] <column_definition> [{,{<column_definition>|<table_constraint>}}...]}] [COMMENT [=] 'comment_string'] [REPLACE] AS <select_statement>;
+    CREATE {TABLE | CLASS} [schema_name.]table_name [([{<table_constraint>}... ,] <column_definition> [{,{<column_definition>|<table_constraint>}}...])] [COMMENT [=] 'comment_string'] [REPLACE] AS <select_statement>;
 
 *   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 새로 생성할 테이블 이름이다.

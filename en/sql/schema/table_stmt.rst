@@ -21,7 +21,7 @@ To create a table, use the **CREATE TABLE** statement.
     CREATE {TABLE | CLASS} [IF NOT EXISTS] [schema_name.]table_name
     [<subclass_definition>]
     [CLASS ATTRIBUTE (<column_definition>, ...)]
-    [([{<table_constraint>}... ,] <column_definition> [{,{<column_definition>|<table_constraint>}}...])]
+    [([{<table_constraint>}... ,] <column_definition> [{, {<column_definition> | <table_constraint>}}...])]
     [INHERIT <resolution>, ...]
     [<table_options>]
 
@@ -889,7 +889,7 @@ You can create a new table that contains the result records of the **SELECT** st
 
 ::
 
-    CREATE {TABLE | CLASS} [schema_name.]table_name [([{<table_constraint>}... ,] <column_definition> [{,{<column_definition>|<table_constraint>}}...])] [REPLACE] AS <select_statement>;
+    CREATE {TABLE | CLASS} [schema_name.]table_name [([{<table_constraint>}... ,] <column_definition> [{, {<column_definition> | <table_constraint>}}...])] [REPLACE] AS <select_statement>;
 
 *   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *table_name*: a name of the table to be created.

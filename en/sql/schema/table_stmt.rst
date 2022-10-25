@@ -20,9 +20,8 @@ To create a table, use the **CREATE TABLE** statement.
 
     CREATE {TABLE | CLASS} [IF NOT EXISTS] [schema_name.]table_name
     [<subclass_definition>]
-    [(<column_definition>, ... [, <table_constraint>, ...])] 
-    [AUTO_INCREMENT = initial_value]
     [CLASS ATTRIBUTE (<column_definition>, ...)]
+    [([{<table_constraint>}... ,] <column_definition> [{, {<column_definition> | <table_constraint>}}...])]
     [INHERIT <resolution>, ...]
     [<table_options>]
 
@@ -80,7 +79,8 @@ To create a table, use the **CREATE TABLE** statement.
             <table_option> ::= REUSE_OID | DONT_REUSE_OID |
                                COMMENT [=] 'table_comment_string' |
                                [CHARSET charset_name] [COLLATE collation_name] |
-                               ENCRYPT [=] [AES | ARIA]
+                               ENCRYPT [=] [AES | ARIA] |
+                               AUTO_INCREMENT = initial_value
 
 *   IF NOT EXISTS: If an identically named table already exists, a new table will not be created without an error.
 *   *schema_name*: Specifies the schema name(maximum: 31 bytes). If omitted, the schema name of the current session is used.
@@ -889,7 +889,7 @@ You can create a new table that contains the result records of the **SELECT** st
 
 ::
 
-    CREATE {TABLE | CLASS} [schema_name.]table_name [(<column_definition> [,<table_constraint>], ...)] [REPLACE] AS <select_statement>;
+    CREATE {TABLE | CLASS} [schema_name.]table_name [([{<table_constraint>}... ,] <column_definition> [{, {<column_definition> | <table_constraint>}}...])] [REPLACE] AS <select_statement>;
 
 *   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *table_name*: a name of the table to be created.

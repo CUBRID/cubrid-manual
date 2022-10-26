@@ -590,12 +590,12 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
     .. warning::
 
-        **use_user_hosts** 파라미터는 CUBRID 서비스가 종료된 상태에서 변경하는 것을 권고한다. 서비스가 운영중인 상태에서 파라미터가 변경되면 정상적으로 서비스가 종료되지 않을 수 있다.
+        **use_user_hosts** 파라미터는 서비스 운영 중 변경되면 정상적으로 서비스가 종료되지 않을 수 있으므로, 반드시 CUBRID 서비스가 종료된 상태에서 변경해야 한다.
 
-    *   **$CUBRID/conf/hosts.conf** 파일의 포맷는 **/etc/hosts** 와 같으나 다음과 같은 제약이 있다.
+    *   **$CUBRID/conf/hosts.conf** 파일의 형식은 **/etc/hosts** 와 동일하나 다음과 같은 몇 가지 제약이 있다.
 
         * **IPv4** 주소 만을 허용한다 (**IPv6** 는 허용하지 않는다).
-        * 아래와 같이 공식 호스트명 이외의  **alias** 는 허용하지 않는다 ::
+        * 아래와 같은 형식의 **alias** 는 허용하지 않는다 ::
 
            172.31.0.1 host1 alias1 alias2
 
@@ -619,7 +619,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
 .. warning::
 
-    $CUBRID/conf/hosts.conf의 수정사항은 반드시 모든 CUBRID 프로세스를 종료 시킨 뒤 **재 구동해야 변경된 사항이 적용된다.** 최소한, **localhost** 와 Linux 명령어 **'hostname'** 을 실행하면 출력되는 호스트명을 hosts.conf에 포함하는 것을 권고한다.
+    $CUBRID/conf/hosts.conf는 반드시 모든 CUBRID 프로세스를 종료시킨 후 변경해야 하며, **재 구동 후 변경된 사항이 적용된다.** 또한, **localhost** 와 **'hostname'** (Linux 명령어 중 hostname에 의해 출력되는 호스트명)을 반드시 hosts.conf에 포함해야 한다.
  
 .. _memory-parameters:
 

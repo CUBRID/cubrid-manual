@@ -2017,7 +2017,7 @@ HA 관련 파라미터
 
 **java_stored_procedure_port**
 
-    **java_stored_procedure_port** CAS에서 자바 저장 프로시저를 호출하기 위한 TCP 포트 번호를 설정하는 파라미터이다. 이 값은 65,536보다 작아야한다. 기본값은 **0**이고 이는 임시 포트 범위에서 포트 번호가 자동으로 할당됨을 의미한다. 이 파라미터의 값은 **java_stored_procedure** 파라미터가 **yes** 일 때에만 적용된다. cubrid.conf의 [common]에서 이 파라미터를 설정하면 에러가 발생하므로 주의한다. ::
+    **java_stored_procedure_port** CAS에서 자바 저장 프로시저를 호출하기 위한 TCP 포트 번호를 설정하는 파라미터이다. 이 값은 65,536보다 작아야한다. 기본값은 **0** 이고 이는 임시 포트 범위에서 포트 번호가 자동으로 할당됨을 의미한다. 이 파라미터의 값은 **java_stored_procedure** 파라미터가 **yes** 일 때에만 적용된다. cubrid.conf의 [common]에서 이 파라미터를 설정하면 에러가 발생하므로 주의한다. ::
 
         ..... 
         [common] 

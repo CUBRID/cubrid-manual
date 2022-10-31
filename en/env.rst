@@ -214,7 +214,7 @@ If you use CUBRID for Windows at the broker machine or the DB server machine, al
 | Manager use   | Manager       | application   | 8001                       | 8001                                                | Open                     |                        |
 |               | server        |               |                            |                                                     |                          |                        |
 +---------------+---------------+---------------+----------------------------+-----------------------------------------------------+--------------------------+------------------------+
-| Java SP use   | cub_javasp    | CAS           | java_stored_procedure_port | java_stored_procedure_port                          | Open                     | Keep connected         |
+| Java SP use   | cub_javasp    | cub_server    | java_stored_procedure_port | java_stored_procedure_port                          | Open                     | Keep connected         |
 +---------------+---------------+---------------+----------------------------+-----------------------------------------------------+--------------------------+------------------------+
 
 (*): The machine which has the CAS, CSQL, copylogdb, or applylogdb process

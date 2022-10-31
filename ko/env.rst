@@ -21,7 +21,11 @@ CUBRID 환경 변수
     *  CUBRID Manager 사용자는 DB 서버 노드의 **CUBRID_MSG_LANG** 환경 변수를 **en_US** 로 설정해야만 데이터베이스 관련 작업 이후 출력되는 메시지를 정상적으로 확인할 수 있다.  **CUBRID_MSG_LANG** 환경 변수가 **en_US** 가 아닌 경우 메시지는 비정상적으로 출력되지만 데이터베이스의 작업은 정상적으로 실행된다.
     *  변경한 **CUBRID_MSG_LANG** 을  적용하려면 DB 서버 노드의 CUBRID 시스템이 반드시 재시작(cubrid service stop; cubrid service start)되어야 한다.
 
-*   **CUBRID_TMP**: Linux용 CUBRID에서 cub_master 프로세스와 cub_broker 프로세스의 유닉스 도메인 소켓 파일을 저장하는 위치를 지정하는 환경 변수로, 지정하지 않으면 cub_master 프로세스는 **/tmp** 디렉터리에, cub_broker 프로세스는 **$CUBRID/var/CUBRID_SOCK** 디렉터리에 유닉스 도메인 소켓 파일을 저장한다(Windows용 CUBRID에서는 사용되지 않는다).
+*   **CUBRID_TMP**: Linux용 CUBRID에서 유닉스 도메인 소켓 파일을 저장하는 위치를 지정하는 환경 변수로, 지정하지 않으면 프로세스에 따라 다음의 디렉터리에 유닉스 도메인 소켓 파일을 저장한다 (Windows용 CUBRID에서는 사용되지 않는다).
+    
+    *   cub_master 프로세스: **/tmp** 디렉터리
+    *   cub_broker 프로세스: **$CUBRID/var/CUBRID_SOCK** 디렉터리
+    *   cub_javasp 프로세스: **$CUBRID/var/CUBRID_SOCK** 디렉터리
 
 **CUBRID_TMP** 의 값에는 다음과 같은 제약 사항이 있다.
 

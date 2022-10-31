@@ -21,7 +21,11 @@ CUBRID Environment Variables
     *   A user of CUBRID Manager should specify **CUBRID_MSG_LANG**, an environment variable of DB server node into **en_US** to print out messages normally after running database related features. However, database related features are run normally and just the output messages are broken when **CUBRID_MSG_LANG** is not **en_US**.
     *   To apply the changed **CUBRID_MSG_LANG**, CUBRID system of DB server node should be restarted(cubrid service stop, cubrid service start).
 
-*   **CUBRID_TMP**: The environment variable that specifies the location where the cub_master process and the cub_broker process store the UNIX domain socket file in CUBRID for Linux. If it is not specified, the cub_master process stores the UNIX domain socket file under the **/tmp** directory and the cub_broker process stores the UNIX domain socket file under the **$CUBRID/var/CUBRID_SOCK** directory (not used in CUBRID for Windows).
+*   **CUBRID_TMP**: The environment variable that specifies the location where CUBRID for Linux stores the UNIX domain socket file. If it is not specified, the Unix domain socket file is stored in the following directory according to the process. (not used in CUBRID for Windows)
+
+    *   the cub_master process: under **/tmp** directory
+    *   the cub_broekr process: under **$CUBRID/var/CUBRID_SOCK** directory
+    *   the cub_javasp process: under **$CUBRID/var/CUBRID_SOCK** directory
 
 **CUBRID_TMP** value has some constraints, which are as follows:
 

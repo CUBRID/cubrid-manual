@@ -392,9 +392,7 @@ The following table summarizes the ports, based on the listening processes, used
 +---------------+--------------+----------------------------+--------------------------+
 | Listener      | Requester    | Port                       | Firewall Port Setting    |
 +===============+==============+============================+==========================+
-| cub_javasp    | CAS          | java_stored_procedure_port | Open                     |
+| cub_javasp    | cub_server   | java_stored_procedure_port | Open                     |
 +---------------+--------------+----------------------------+--------------------------+
 
-*   The port is used when the CAS relays between Java SP server (cub_javasp) and cub_server, which CAS receives a call of the java stored procedure from cub_server and then CAS passed the call to the CUBRID Java SP server process through **java_stored_procedure_port** of cubrid.conf.
-*   The default value of **java_stored_procedure_port** is 0, which means a random available port is assigned.
-
+*   The port used when the CUBRID Java stored procedure server (cub_javasp) to communicate with the cub_server is **java_stored_procedure_port** of the cubrid.conf. The default value of **java_stored_procedure_port** is 0, which means a random available port is assigned.

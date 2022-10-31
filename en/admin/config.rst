@@ -2060,7 +2060,7 @@ The following are other parameters. The type and value range for each parameter 
 
 **java_stored_procedure_port**
 
-    **java_stored_procedure_port** is a parameter to configure the port number receiving a request that calls the java stored procedures from CAS. the value must be unique and smaller than 65,535. The default value of **java_stored_procedure_port** is **0** which means the port number is automatically allocated, typically from an ephemeral port range. The value configured in this parameter affects only **java_stored_procedure** is set to **yes**. Note that an error occurs if the parameter is configured in [common]. ::
+    **java_stored_procedure_port** is a parameter to configure the port number receiving a request that calls the java stored procedures from database server. the value must be unique and smaller than 65,535. The default value of **java_stored_procedure_port** is **0** which means the port number is automatically allocated, typically from an ephemeral port range. The value configured in this parameter affects only **java_stored_procedure** is set to **yes**. Note that an error occurs if the parameter is configured in [common]. ::
 
         ..... 
         [common] 

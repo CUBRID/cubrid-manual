@@ -210,7 +210,7 @@ Windows에서 특정 포트를 지정하기 번거로운 경우에도 이 방법
 | Manager 사용  | Manager      | application   | 8001                       | 8001                                                | 개방                     |              |
 |               | 서버         |               |                            |                                                     |                          |              |
 +---------------+--------------+---------------+----------------------------+-----------------------------------------------------+--------------------------+--------------+
-| Java SP 사용  | cub_javasp   | CAS           | java_stored_procedure_port | java_stored_procedure_port                          | 개방                     |              |
+| Java SP 사용  | cub_javasp   | cub_server    | java_stored_procedure_port | java_stored_procedure_port                          | 개방                     | 연결 유지    |
 +---------------+--------------+---------------+----------------------------+-----------------------------------------------------+--------------------------+--------------+
 
 
@@ -393,8 +393,7 @@ CUBRID 자바 저장 프로시저 서버 사용 포트
 +---------------+--------------+----------------------------+--------------------------+
 | Listener      | Requester    | Port                       | 방화벽 존재 시 포트 설정 |
 +===============+==============+============================+==========================+
-| cub_javasp    | CAS          | java_stored_procedure_port | 개방(open)               |
+| cub_javasp    | cub_server   | java_stored_procedure_port | 개방(open)               |
 +---------------+--------------+----------------------------+--------------------------+
 
-*   이 포트는 CAS가 CUBRID 자바 저장 프로시저 서버 (cub_javasp)와 cub_server 사이를 중계 할 때 사용되며, CAS는 cub_server로부터 자바 저장 프로시저 호출을 수신한 후 **cubrid.conf**의 **java_stored_procedure_port** 를 통해 CUBRID 자바 저장 프로시저 서버 프로세스로 호출을 전달한다.
-*   **java_stored_procedure_port** 파라미터의 기본값은 0으로, 사용 가능한 임의의 가용 포트가 할당됨을 의미한다.
+*   CUBRID 자바 저장 프로시저 서버 (cub_javasp)가 cub_server 와 통신할 때 사용하는 포트는 **cubrid.conf**의 **java_stored_procedure_port**\이며 기본값은 0으로, 사용 가능한 임의의 가용 포트가 할당됨을 의미한다.

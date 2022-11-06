@@ -45,7 +45,8 @@ CUBRID DBLink는 동일기종 간에 DBLink와 이기종 간의 DBLink를 지원
 DBLink를 위한 게이트웨이
 ==============================================
 
-게이트웨이는 외부의 데이터베이스 서버에 연결할 수 있도록 중계하는 미들웨어로 Broker와 유사하다. 게이트웨이는 CUBRID Database Server에서 외부의 서버에 즉 Oracle/MySQL에 연결하여 외부 서버의 정보를 조회하여 CUBRID Database Server에 전달하는 역할을 한다.
+게이트웨이는 외부의 데이터베이스 서버에 연결할 수 있도록 중개하는 미들웨어로 Broker와 유사하다. 게이트웨이는 CUBRID Database Server에서 외부의 서버에 즉 Oracle/MySQL에 연결하여 외부 서버의 정보를 조회하여 CUBRID Database Server에 전달하는 역할을 한다.
+
 게이트웨이를 포함하는 큐브리드 시스템은 아래 그림과 같이 cubrid_gateway, cub_gateway, cub_cas_cgw를 포함한 다중 계층 구조를 가진다.
 
 .. image:: /images/gateway.png

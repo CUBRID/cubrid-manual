@@ -332,7 +332,8 @@ ODBC Driver 정보 설정
 
 unixODBC가 설치한 후, 연결할 데이터베이스의 ODBC Driver 정보를 등록해야 한다.
 
-ODBC Driver 정보 등록은 odbcinst.ini에 작성한다.
+ODBC Driver 정보는 odbcinst.ini를 직접 수정해서 등록한다.
+
 
 아래의 내용은 MySQL, Oracle ODBC Driver 정보를 설정한 예제이다.
 

@@ -247,7 +247,8 @@ CUBRID 설치 시 생성되는 기본 게이트웨이 설정 파일인 cubrid_ga
   
 **APPL_SERVER**
 
-    **APPL_SERVER** 는 게이트웨이의 응용 서버 이름을 설정하는 부분으로 외부 서버와 연결을 하기 위해서는 CAS_CGW 로 설정해야 한다.
+    **APPL_SERVER** 는 게이트웨이의 응용 서버 이름을 설정하는 부분으로 반드시 CAS_CGW 로 설정해야 한다.
+
 
 **CGW_LINK_SERVER**
 

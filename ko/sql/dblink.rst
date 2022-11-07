@@ -282,7 +282,8 @@ CUBRID 설치 시 생성되는 기본 게이트웨이 설정 파일인 cubrid_ga
 .. note::
     
     *   Windows 경우, ODBC Driver를 설치한 경우, ODBC 데이터 원본 관리자를 통해 Driver 이름을 알 수 있다.
-    *   Linux의 경우, odbcinit.ini에 직접 Driver 이름을 작성해야 한다.
+    *   Linux는 odbcinit.ini에 직접 Driver 이름을 명시해야 한다.
+
     *   자세한 내용은 :ref:`ODBC Driver 정보 설정 <odbcdriver-info>`\ 을 참고한다.
 
 **CGW_LINK_CONNECT_URL_PROPERTY**

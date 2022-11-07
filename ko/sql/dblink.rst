@@ -532,7 +532,8 @@ Cubrid DBLink 사용 방법
 DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는 이기종 데이터베이스를 위한 게이트웨이 설정이 완료되었다면, DBLink을 이용한 Query문 작성 방법에 대해서 알아본다.
 
 
-데이터 조회를 위한 DBLINK Query문 작성 방법 두가지가 있다.
+데이터 조회를 위한 DBLINK Query문 작성 방법은 두가지이다.
+
 
 **첫번째**, FROM절에 DBLINK 구문을 작성하여 타 데이터베이스의 정보를 조회하는 방법
 아래의 Query문은 IP 192.xxx.xxx.xxx의 타 데이터베이스의 remote_t 테이블 정보를 조회하는 Query문이다.

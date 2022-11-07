@@ -305,7 +305,8 @@ unixODBC 드라이버 관리자는 Linux 및 UNIX 운영 체제에서 ODBC 드�
 
 .. note::
 	
-	Winodws에서는 Microsoft® ODBC 데이터 원본 관리자 를 사용하면 되며, Windows에는 기본으로 설치가 되어 있다.
+	Winodws에서는 기본으로 설치된 Microsoft® ODBC 데이터 원본 관리자 를 사용하면 된다.
+
 
 unixODBC 설치 방법
 

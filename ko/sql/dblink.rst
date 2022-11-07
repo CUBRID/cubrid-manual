@@ -289,7 +289,8 @@ CUBRID 설치 시 생성되는 기본 게이트웨이 설정 파일인 cubrid_ga
 
 **CGW_LINK_CONNECT_URL_PROPERTY**
 
-    **CGW_LINK_CONNECT_URL_PROPERTY** 는 CAS_CGW와 외부 DBMS 연결할 때 Connection String에 사용되는 Property를 작성한다.
+    **CGW_LINK_CONNECT_URL_PROPERTY** 는 외부 DBMS 연결을 위한 연결 문자열(Connection String)에 사용되는 연결 속성(property)을 작성한다.
+
 
 .. note::
     

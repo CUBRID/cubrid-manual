@@ -155,7 +155,8 @@ CUBRID DBLink를 사용하기 위한 설정은 동일기종 DBLink와 이기종 
 이기종 DBLink 설정
 ------------------------
 
-이기종(Oracle/MySQL)에 접속하기 위한 정보 설정이 필요 하며, 이기종 DBLink 설정을 하기 위해서는 cubrid_gataway.conf 와 unixODBC 설치, ODBC Driver 정보 설정이 필요 하다.
+이기종 데이터베이스(Oracle/MySQL)와 연결하기 위해서는 cubrid_gataway.conf 와 unixODBC 설치, ODBC Driver 정보 설정이 필요 하다.
+
 
 
 .. _gatewayconf-info:

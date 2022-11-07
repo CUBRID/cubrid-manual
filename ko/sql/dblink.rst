@@ -294,7 +294,8 @@ CUBRID 설치 시 생성되는 기본 게이트웨이 설정 파일인 cubrid_ga
 
 .. note::
     
-    *   Property는 DBMS별로 각각 다르므로 아래의 사이트를 참조한다.
+    *   연결 속성(property)는 DBMS별로 각각 다르므로 아래의 사이트를 참조한다.
+
     *   Oracle : https://docs.oracle.com/cd/B19306_01/server.102/b15658/app_odbc.htm#UNXAR418
     *   MySQL : https://dev.mysql.com/doc/connector-odbc/en/connector-odbc-configuration-connection-parameters.html#codbc-dsn-option-flags
 

@@ -119,7 +119,8 @@ cub_gateway는 CUBRID Database Server와 cub_cas_cgw 사이의 연결을 중개�
 
 **cubrid gateway status**  는 다양한 옵션을 제공하며, 각 게이트웨이의 처리 완료된 작업 수, 처리 대기중인 작업 수를 포함한 게이트웨이 상태 정보를 확인할 수 있도록 한다. 
 
-게이트웨이 상태는 브로커와 동일 하므로 :ref:`broker-status`\을 참조 한다.
+게이트웨이 상태 정보는 브로커와 동일하므로 :ref:`broker-status`\을 참조 한다.
+
 
 ::
 

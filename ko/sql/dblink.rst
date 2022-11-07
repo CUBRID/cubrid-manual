@@ -46,7 +46,6 @@ DBLink를 위한 게이트웨이
 ==============================================
 
 게이트웨이는 외부의 데이터베이스 서버에 연결할 수 있도록 중개하는 미들웨어로 Broker와 유사하다. 게이트웨이는 CUBRID Database Server에서 외부의 서버에 즉 Oracle/MySQL에 연결하여 외부 서버의 정보를 조회하여 CUBRID Database Server에 전달하는 역할을 한다.
-
 게이트웨이를 포함하는 큐브리드 시스템은 아래 그림과 같이 cubrid_gateway, cub_gateway, cub_cas_cgw를 포함한 다중 계층 구조를 가진다.
 
 .. image:: /images/gateway.png
@@ -59,14 +58,13 @@ cub_cas_cgw(CAS Gateway)는 CUBRID Database Server에서 외부의 Database의 �
 cub_gateway
 ----------------
 
-cub_gateway는 CUBRID Database Server와 cub_cas_cgw 사이의 연결을 중계하는 기능을 수행한다. 즉, CUBRID Database Server가 접근을 요청하면, cub_gateway는 공유 메모리(shared memory)를 통해 cub_cas_cgw의 상태를 파악하여 접근 가능한 cub_cas_cgw에게 요청을 전달하고, 해당 cub_cas_cgw로부터 전달받은 요청에 대한 처리 결과를 CUBRID Database Server에게 반환한다.
+cub_gateway는 CUBRID Database Server와 cub_cas_cgw 사이의 연결을 중개하는 기능을 수행한다. 즉, CUBRID Database Server가 접근을 요청하면, cub_gateway는 공유 메모리(shared memory)를 통해 cub_cas_cgw의 상태를 파악하여 접근 가능한 cub_cas_cgw에게 요청을 전달하고, 해당 cub_cas_cgw로부터 전달받은 요청에 대한 처리 결과를 CUBRID Database Server에게 반환한다.
 또한, cub_gateway는 서비스 풀 내의 cub_cas_cgw 개수를 조정하여 서버 부하를 관리하고, cub_cas_cgw의 구동 상태를 모니터링 및 관리한다. 만약, CUBRID Database Server의 요청을 cub_cas_cgw 1에게 전달하였는데, 비정상적인 종료로 인해 cub_cas_cgw 1과의 연결이 실패하면, cub_gateway는 CUBRID Database Server에게 연결 실패에 관한 에러 메시지를 전송하고 cub_cas_cgw 1을 재구동한다. 새롭게 구동된 cub_cas_cgw 1은 정상적인 대기 상태가 되어, 새로운 응용 클라이언트의 요청에 의해 재연결된다.
 
 공유 메모리
 -----------------
 
 공유 메모리에는 cub_cas_cgw의 상태 정보가 저장되며, cub_gateway는 공유 메모리에 저장된 cub_cas_cgw의 상태 정보를 참조하여 CUBRID Database Server와의 연결을 중개한다. 공유 메모리에 저장된 cub_cas_cgw의 상태 정보를 통해 시스템 관리자는 어떤 cub_cas_cgw가 현재 작업을 수행 중인지 확인할 수 있다.
-
 
 
 게이트웨이 구동
@@ -405,12 +403,9 @@ tnsnames.ora 파일의 기본 형식
 
 
 * net_service_name: 데이터베이스 연결을 위한 네트 서비스 이름이며, connection url의 db_name에 사용하는 이름이다.
-
 * HOST: 데이터베이스에 연결하려는 IP 주소 또는 서버 이름이다.
-
-* PORT: 연결에 필요한 포트입니다. 대부분의 경우 기본 포트는 1521이다.
+* PORT: 연결에 필요한 포트이다. 대부분의 경우 기본 포트는 1521이다.
 * service_name: 연결하려는 데이터베이스의 이름이다.
-
 
 
 .. note::

@@ -364,7 +364,8 @@ DBLink에서 Oracle을 사용 하기위해서는 Oracle Database 환경변수 �
 **Oracle Database 환경변수 설정**
 
 
-Oracle database server 에 아래의 환경변수를 설정 해야 한다.
+Oracle database server 에 아래의 환경변수를 설정해야 한다.
+
 
 ::
 	

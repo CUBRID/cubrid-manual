@@ -477,7 +477,7 @@ MySQL 환경설정
  
 **MySQL ODBC Driver 설치**
 
-게이트웨이에서 MySQL 연결을 하기위해서는 MySQL ODBC Driver가 필요 하다.
+게이트웨이에서 MySQL 연결을 하기위해서는 MySQL Unicode ODBC Driver가 필요 하다.
 아래의 내용은 MYySQL ODBC Drvier 설치 방법이다.
 
 MySQL Yum 저장소 를 사용하여 Connector/ODBC RPM 패키지를 제공합니다. 시스템의 리포지토리 목록에 MySQL Yum 저장소가 있어야 하며,
@@ -494,14 +494,13 @@ Yum을 사용하여 저장소를 업데이트한다.
 
 ::
     
-	$ su root
-	$ yum update mysql-community-release
+	$ sudo yum update mysql-community-release
 
 아래의 명령으로 Connector/ODBC 를 설치한다.
 
 ::
     
-	$ yum install mysql-connector-odbc
+	$ sudo yum install mysql-connector-odbc
 
 자세한 설치 방법은 https://dev.mysql.com/doc/connector-odbc/en/connector-odbc-installation-binary-yum.html 을 참고한다.
 

@@ -430,7 +430,8 @@ tnsnames.ora 파일의 기본 형식
 
 .. note::
     
-        참고로, net_service_name 이 중복으로 작성이 되어도 에러가 발생되지 않는다. 하지만 원치않는 서버에 연결이 되므로, net_service_name 이 중복되지 않도록 주의해야 한다.
+        참고로, net_service_name 이 중복으로 작성이 되어도 에러가 발생되지 않는다. 하지만 중복된 다른 서버에 연결될 수 있으므로, net_service_name 이 반드시 중복되지 않게 설정해야 한다.
+
 
 .. _tns_admin-info:
 

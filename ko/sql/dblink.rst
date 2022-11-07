@@ -452,7 +452,8 @@ TNS_ADMIN는 tnsnames.ora 파일이 있는 디렉토리 경로를 가리킨다.
 
 자세한 :ref:`게이트웨이 설정 파일 <gatewayconf-info>`\ 을 참고한다.
 
-게이트웨이는 oracle에 연결하기 위해서 tnsnames.ora 의 정보를 이용하기 때문에 CGW_LINK_SERVER_IP, CGW_LINK_SERVER_PORT 는 작성하지 않아도 된다.
+게이트웨이는 oracle에 연결하기 위해서 tnsnames.ora 의 정보를 이용하기 때문에  CGW_LINK_SERVER_IP, CGW_LINK_SERVER_PORT 는 작성하지 않아도 된다. 해당 정보를 작성한 경우에도 게이트웨이는 참조하지 않는다.
+
 
 ::
     

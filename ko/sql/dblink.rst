@@ -363,7 +363,8 @@ DBLink를 위한 Oracle 설정
 Oracle 환경설정
 ----------------------------
 
-DBLink에서 Oracle을 사용 하기위해서는 Oracle Database 환경변수 설정과 Oracle Instant Client 설정, 게이트웨이 설정을 해야 한다.
+DBLink에서 Oracle을 사용하기 위해서는 Oracle Instant Client 설치 및 설정, 연결 정보 설정, Oracle Database 환경변수 설정 및 게이트웨이 설정을 반드시 해야 한다.
+
 
 **Oracle Database 환경변수 설정**
 

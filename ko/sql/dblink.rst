@@ -35,7 +35,8 @@ CUBRID DBLink는 동일기종 간에 DBLink와 이기종 간의 DBLink를 지원
 -----------------------------
 
 이기종 데이터베이스의 정보를 조회하기 위한 구성도를 보면 게이트웨이를 통해서 이기종 데이터베이스의 정보를 조회할 수 있다. 
-게이트웨이는 ODBC(Open DataBase Connectivity)를 이용하고 있다.
+게이트웨이는 연결하는 데이터베이스의 ODBC(Open DataBase Connectivity) 드라이버를 이용하고 있다.
+
 
 .. image:: /images/dblink_heter.png
 

@@ -48,7 +48,7 @@ DBLink를 위한 게이트웨이
 
 게이트웨이는 CUBRID 데이터베이스와 이기종 데이터베이스 간의 중개하는 미들웨어로 브로커(Broker)와 유사하다. 게이트웨이는 이기종 데이터베이스 서버 (Oracle/MySQL)에 연결하고 데이터를 조회하여 CUBRID 데이터베이스 서버에 전달하는 역할을 한다.
 
-게이트웨이를 포함하는 큐브리드 시스템은 아래 그림과 같이 cubrid_gateway, cub_gateway, cub_cas_cgw를 포함한 다중 계층 구조를 가진다.
+게이트웨이를 포함하는 큐브리드 시스템은 아래 그림과 같이 cub_gateway, cub_cas_cgw를 포함한 다중 계층 구조를 가진다.
 
 .. image:: /images/gateway.png
 
@@ -261,7 +261,6 @@ CUBRID 설치 시 생성되는 기본 게이트웨이 설정 파일인 cubrid_ga
 .. note::
     
     *   Oracle인 경우, tnsnames.ora의 net_service_name을 이용하므로 해당 파라메터는 사용하지 않는다.
-
     *   자세한 내용은 :ref:`Oracle Database에 연결을 위한 연결정보 설정 <tnsnames-info>`\ 을 참고한다.
         
 
@@ -272,7 +271,6 @@ CUBRID 설치 시 생성되는 기본 게이트웨이 설정 파일인 cubrid_ga
 .. note::
 
     *   Oracle인 경우, tnsnames.ora의 net_service_name을 이용하므로 해당 파라메터는 사용하지 않는다.
-
     *   자세한 내용은 :ref:`Oracle Database에 연결을 위한 연결정보 설정 <tnsnames-info>`\ 을 참고한다.
 
 
@@ -282,9 +280,8 @@ CUBRID 설치 시 생성되는 기본 게이트웨이 설정 파일인 cubrid_ga
 
 .. note::
     
-    *   Windows 경우, ODBC Driver를 설치한 경우, ODBC 데이터 원본 관리자를 통해 Driver 이름을 알 수 있다.
+    *   Windows에서는 해당 이기종 데이터베이스의 ODBC Driver가 설치된 경우, ODBC 데이터 원본 관리자를 통해 Driver 이름을 확인할 수 있다.
     *   Linux는 odbcinit.ini에 직접 Driver 이름을 명시해야 한다.
-
     *   자세한 내용은 :ref:`ODBC Driver 정보 설정 <odbcdriver-info>`\ 을 참고한다.
 
 **CGW_LINK_CONNECT_URL_PROPERTY**
@@ -295,7 +292,6 @@ CUBRID 설치 시 생성되는 기본 게이트웨이 설정 파일인 cubrid_ga
 .. note::
     
     *   연결 속성(property)는 DBMS별로 각각 다르므로 아래의 사이트를 참조한다.
-
     *   Oracle : https://docs.oracle.com/cd/B19306_01/server.102/b15658/app_odbc.htm#UNXAR418
     *   MySQL : https://dev.mysql.com/doc/connector-odbc/en/connector-odbc-configuration-connection-parameters.html#codbc-dsn-option-flags
 
@@ -366,36 +362,6 @@ Oracle 환경설정
 DBLink에서 Oracle을 사용하기 위해서는 Oracle Instant Client 설치 및 설정, 연결 정보 설정, Oracle Database 환경변수 설정 및 게이트웨이 설정을 반드시 해야 한다.
 
 
-**Oracle Database 환경변수 설정**
-
-
-Oracle database server 에 아래의 환경변수를 설정해야 한다.
-
-
-::
-	
-	export ORACLE_SID=XE
-	export ORACLE_BASE=/u01/app/oracle
-	export ORACLE_HOME=$ORACLE_BASE/product/11.2.0/xe
-	export PATH=$ORACLE_HOME/bin:$PATH
-
-
-* ORACLE_SID는 시스템 식별자이다.
-* ORACLE_BASE은 오라클 기본 디렉토리 구조이다.
-* ORACLE_HOME은 오라클 데이터베이스가 설치된 경로이다.	
-
-**오라클 인스턴트 클라이언트 ODBC 설치**
-
-Oracle Instant Client 다운로드 사이트에서 ODBC Package와 Basic Package 다운받아 동일한 디렉토리에 압축을 풉니다.
-
-::
-    
-	unzip instantclient-basic-linux.x64-11.2.0.4.0.zip
-	unzip instantclient-odbc-linux.x64-11.2.0.4.0.zip
-
-Oracle Instant Client 다운로드 사이트: https://www.oracle.com/database/technologies/instant-client/downloads.html
-
-
 **오라클 인스턴트 클라이언트 환경변수 설정**
 
 export ORACLE_INSTANT_CLIENT=/home/user/oracle/instantclient  
@@ -436,6 +402,37 @@ tnsnames.ora 파일의 기본 형식
 .. note::
     
         참고로, net_service_name 이 중복으로 작성이 되어도 에러가 발생되지 않는다. 하지만 중복된 다른 서버에 연결될 수 있으므로, net_service_name 이 반드시 중복되지 않게 설정해야 한다.
+
+
+**Oracle Database 환경변수 설정**
+
+
+Oracle database server 에 아래의 환경변수를 설정해야 한다.
+
+
+::
+	
+	export ORACLE_SID=XE
+	export ORACLE_BASE=/u01/app/oracle
+	export ORACLE_HOME=$ORACLE_BASE/product/11.2.0/xe
+	export PATH=$ORACLE_HOME/bin:$PATH
+
+
+* ORACLE_SID는 시스템 식별자이다.
+* ORACLE_BASE은 오라클 기본 디렉토리 구조이다.
+* ORACLE_HOME은 오라클 데이터베이스가 설치된 경로이다.	
+
+**오라클 인스턴트 클라이언트 ODBC 설치**
+
+Oracle Instant Client 다운로드 사이트에서 ODBC Package와 Basic Package 다운받아 동일한 디렉토리에 압축을 풉니다.
+
+::
+    
+	unzip instantclient-basic-linux.x64-11.2.0.4.0.zip
+	unzip instantclient-odbc-linux.x64-11.2.0.4.0.zip
+
+Oracle Instant Client 다운로드 사이트: https://www.oracle.com/database/technologies/instant-client/downloads.html
+
 
 
 .. _tns_admin-info:
@@ -550,7 +547,6 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
 .. note::
     
 	Oracle의 경우 원격접속 정보 중 ip와 port는 게이트웨이 접속 정보이고, db_name 항목에는 tnsnames.ora의 net_service_name 을 넣어야 한다.
-
 	만약 net_service_name이 ora_test 이라면 아래와 같이 작성하면 된다.
 	SELECT * FROM DBLINK ('192.xxx.xxx.xxx:53000:ora_test:user:password:','SELECT col1, col2 FROM remote_t') AS t(col1 int, col2 varchar(32));
 
@@ -578,13 +574,10 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
 ==============================================
 
 *   이기종 데이터베이스를 위한 DBLink는 utf-8만 지원한다.
-
-*	게이트웨이에서는 반드시 Unicode ODBC Driver만 사용해야 한다.
-
+*   게이트웨이에서는 반드시 Unicode ODBC Driver만 사용해야 한다.
 *   1개 컬럼의 문자열 최대 길이는 16M까지만 지원한다.
-*	Mysql에서 cache를 사용하는 경우 게이트웨이 cub_cas_cgw의 메모리 사용량이 증가하므로 PREFETCH, NO_CACHE=1 사용을 권장한다.
-
-*	ODBC 미지원 타입은 SQL_INTERVAL,SQL_GUID,SQL_BIT,SQL_BINARY,SQL_VARBINARY,SQL_LONGVARBINARY 이다.
+*   Mysql에서 cache를 사용하는 경우 게이트웨이 cub_cas_cgw의 메모리 사용량이 증가하므로 PREFETCH, NO_CACHE=1 사용을 권장한다.
+*   ODBC 미지원 타입은 SQL_INTERVAL,SQL_GUID,SQL_BIT,SQL_BINARY,SQL_VARBINARY,SQL_LONGVARBINARY 이다.
 
 
 

@@ -572,7 +572,8 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
 제약사항
 ==============================================
 
-*   CUBRID Hetergeneous DBLink는 utf-8만 지원한다.
+*   이기종 데이터베이스를 위한 DBLink는 utf-8만 지원한다.
+
 *	게이트웨이에서는 Unicode ODBC Driver만 사용이 가능 하다.
 *   1개 컬럼의 문자열 최대 길이는 16M까지만 지원한다.
 *	Mysql의 경우, 대용량 테이블인 경우 cache를 사용하는 경우 게이트웨이 CAS의 메모리 사용량이 증가하므로 PREFETCH, NO_CACHE=1 사용을 권장한다.

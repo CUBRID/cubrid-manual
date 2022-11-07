@@ -270,7 +270,8 @@ CUBRID 설치 시 생성되는 기본 게이트웨이 설정 파일인 cubrid_ga
 	
 .. note::
 
-    *   Oracle의 경우, tnsnames.ora의 net_service_name을 이용하므로 해당 파라메터는 사용하지 않는다.
+    *   Oracle인 경우, tnsnames.ora의 net_service_name을 이용하므로 해당 파라메터는 사용하지 않는다.
+
     *   자세한 내용은 :ref:`Oracle Database에 연결을 위한 연결정보 설정 <tnsnames-info>`\ 을 참고한다.
 
 

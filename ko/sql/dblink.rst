@@ -549,7 +549,8 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
 	만약 net_service_name이 ora_test 이라면 아래와 같이 작성하면 된다.
 	SELECT * FROM DBLINK ('192.xxx.xxx.xxx:53000:ora_test:user:password:','SELECT col1, col2 FROM remote_t') AS t(col1 int, col2 varchar(32));
 
-**두번째**, 위의 DBLINK Query를 보면 타 데이터베이스에 접속하기 위한 정보는 가장 기본적인 정보다. 그래서 Query를 작성할 때 마다 매번 작성해야 하는 번거로움과 사용자 정보(id, password) 가 외부로 노출될 우려가 있다.
+**두번째**,  Query를 작성할 때 마다 매번 연결 정보를 작성해야 하는 번거로움과 사용자 정보(id, password)의 정보 보호를 위해 CREATE SERVER구문을 이용한다.CREATE SERVER 구문을 이용하는 경우 Query문이 간결해지고 사용자 정보 보호에 도움이 된다.
+
 이런 번거로움과 정보 보호를 위해 CREATE SERVER문을 이용하면, Query문 보다 간단하고, 사용자 정보 보호에 도움이 된다.
 
 

@@ -544,7 +544,8 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
 
 .. note::
     
-	Oracle의 경우 원격접속 정보중 db_name 항목에 tnsnames.ora의 net_service_name 을 넣어야 한다.
+	Oracle의 경우 원격접속 정보 중 ip와 port는 게이트웨이 접속 정보이고, db_name 항목에는 tnsnames.ora의 net_service_name 을 넣어야 한다.
+
 	만약 net_service_name이 ora_test 이라면 아래와 같이 작성하면 된다.
 	SELECT * FROM DBLINK ('192.xxx.xxx.xxx:53000:ora_test:user:password:','SELECT col1, col2 FROM remote_t') AS t(col1 int, col2 varchar(32));
 

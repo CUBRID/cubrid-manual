@@ -152,6 +152,8 @@ CUBRID DBLink를 사용하기 위한 설정은 동일기종 DBLink와 이기종 
 이기종(Oracle/MySQL)에 접속하기 위한 정보 설정이 필요 하며, 이기종 DBLink 설정을 하기 위해서는 cubrid_gataway.conf 와 unixODBC 설치, ODBC Driver 정보 설정이 필요 하다.
 
 
+.. _gatewayconf-info:
+
 게이트웨이 설정 파일
 ------------------------------------------------
 
@@ -428,7 +430,7 @@ TNS_ADMIN는 tnsnames.ora 파일이 있는 디렉토리 경로를 가리킨다.
 **Oracle을 위한 cubrid_gataway.conf 설정**
 
 게이트웨이에서 oracle에 연결하기 위해서는 아래와 같이 몇 가지 설정이 필요 하다.
-자세한 cubrid_gataway.conf 설정은 여기를 참고한다.
+자세한 :ref:`게이트웨이 설정 파일 <gatewayconf-info>`\ 을 참고한다.
 
 게이트웨이는 oracle에 연결하기 위해서 tnsnames.ora 의 정보를 이용하기 때문에 CGW_LINK_SERVER_IP, CGW_LINK_SERVER_PORT 는 작성하지 않아도 된다.
 
@@ -485,7 +487,7 @@ Yum을 사용하여 저장소를 업데이트한다.
 **MySQL을 위한 cubrid_gataway.conf 설정**
 
 게이트웨이에서 MySQL에 연결하기 위해서는 아래와 같이 몇 가지 설정이 필요 하다.
-자세한 cubrid_gataway.conf 설정은 여기를 참고한다.
+자세한 :ref:`게이트웨이 설정 파일 <gatewayconf-info>`\ 을 참고한다.
 
   
 ::

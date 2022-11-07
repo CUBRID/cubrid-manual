@@ -361,6 +361,17 @@ Oracle 환경설정
 
 DBLink에서 Oracle을 사용하기 위해서는 Oracle Instant Client 설치 및 설정, 연결 정보 설정, Oracle Database 환경변수 설정 및 게이트웨이 설정을 반드시 해야 한다.
 
+**오라클 인스턴트 클라이언트 ODBC 설치**
+
+Oracle Instant Client 다운로드 사이트에서 ODBC Package와 Basic Package 다운받아 동일한 디렉토리에 압축을 풉니다.
+
+::
+    
+	unzip instantclient-basic-linux.x64-11.2.0.4.0.zip
+	unzip instantclient-odbc-linux.x64-11.2.0.4.0.zip
+
+Oracle Instant Client 다운로드 사이트: https://www.oracle.com/database/technologies/instant-client/downloads.html
+
 
 **오라클 인스턴트 클라이언트 환경변수 설정**
 
@@ -421,18 +432,6 @@ Oracle database server 에 아래의 환경변수를 설정해야 한다.
 * ORACLE_SID는 시스템 식별자이다.
 * ORACLE_BASE은 오라클 기본 디렉토리 구조이다.
 * ORACLE_HOME은 오라클 데이터베이스가 설치된 경로이다.	
-
-**오라클 인스턴트 클라이언트 ODBC 설치**
-
-Oracle Instant Client 다운로드 사이트에서 ODBC Package와 Basic Package 다운받아 동일한 디렉토리에 압축을 풉니다.
-
-::
-    
-	unzip instantclient-basic-linux.x64-11.2.0.4.0.zip
-	unzip instantclient-odbc-linux.x64-11.2.0.4.0.zip
-
-Oracle Instant Client 다운로드 사이트: https://www.oracle.com/database/technologies/instant-client/downloads.html
-
 
 
 .. _tns_admin-info:

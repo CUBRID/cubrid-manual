@@ -463,8 +463,6 @@ TNS_ADMIN는 tnsnames.ora 파일이 있는 디렉토리 경로를 가리킨다.
 			.
 			.
 	CGW_LINK_SERVER		        =ORACLE
-	CGW_LINK_SERVER_IP      	=localhost
-	CGW_LINK_SERVER_PORT    	=1521
 	CGW_LINK_ODBC_DRIVER_NAME   =Oracle 12c ODBC driver
 	CGW_LINK_CONNECT_URL_PROPERTY =
 

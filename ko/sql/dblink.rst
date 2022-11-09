@@ -562,8 +562,14 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
 
 
 .. note::
-    
-        자세한 DBLink SQL 문법은 :doc:`/sql/query/select` 와 :doc:`/sql/schema/server_stmt` 을 참고한다.
+    DBLINK는 내부적으로 CCI Driver를 사용하므로, 접속 URL에 CCI관련 속성(Properties)을 설정할 수 있다. 상세한 CCI속성은 :ref:`CCI드라이버의 cci_connect_with_url 함수<cci_connect_with_url>`\를 참조한다.
+    DBLINK관련 CCI 속성 중 유용한 속성을 예로 들면, altHosts인데 아래와 같이 설정을 할 수 있다.
+
+    192.168.0.1:53000:testdb:user:password::?altHosts=192.168.0.2:33000,192.168.0.3:33000
+
+    Active 서버인 192.168.0.1에 연결할 수 없는 경우, 그 다음으로 연결을 시도(failover)할 standby 서버의 브로커 정보를 나타낸다. failover할 브로커를 여러 개 지정할 수 있고, altHosts 에 나열한 순서대로 연결을 시도한다.
+
+    CREATE SERVER를 통해서도 PROPERTIES 항목에 속성을 설정할 수 있다. 자세한 DBLink SQL 문법은 :doc:`/sql/query/select` 와 :doc:`/sql/schema/server_stmt` 을 참고한다.
 
 
 제약사항

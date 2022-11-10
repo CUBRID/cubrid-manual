@@ -252,11 +252,11 @@ CUBRID 설치 시 생성되는 기본 게이트웨이 설정 파일인 cubrid_ga
 
 **CGW_LINK_SERVER**
 
-    **CGW_LINK_SERVER** 는 CAS_CGW로 연결하여 사용할 외부 DBMS의 이름을 설정해야 한다. 현재 지원하는 데이타베이스는 Oracle, MySQL이다.
+    **CGW_LINK_SERVER** 는 CAS_CGW로 연결하여 사용할 이기종 데이터베이스의 이름을 설정해야 한다. 현재 지원하는 데이타베이스는 Oracle, MySQL이다.
 
 **CGW_LINK_SERVER_IP**
 
-    **CGW_LINK_SERVER_IP** 는 CAS_CGW와 연결할 외부 DBMS의 IP 주소를 설정해야 한다.
+    **CGW_LINK_SERVER_IP** 는 CAS_CGW와 연결할 이기종 데이터베이스의 IP 주소를 설정해야 한다.
 
 .. note::
     
@@ -266,7 +266,7 @@ CUBRID 설치 시 생성되는 기본 게이트웨이 설정 파일인 cubrid_ga
 
 **CGW_LINK_SERVER_PORT**
 
-    **CGW_LINK_SERVER_PORT** 는 CAS_CGW와 연결할 DBMS의 Port 번호를 설정해야 한다.
+    **CGW_LINK_SERVER_PORT** 는 CAS_CGW와 연결할 이기종 데이터베이스의 Port 번호를 설정해야 한다.
 	
 .. note::
 
@@ -276,7 +276,7 @@ CUBRID 설치 시 생성되는 기본 게이트웨이 설정 파일인 cubrid_ga
 
 **CGW_LINK_ODBC_DRIVER_NAME**
 
-    **CGW_LINK_ODBC_DRIVER_NAME** 는 CAS_CGW와 연결할 때 외부 DBMS에서 제공하는 ODBC Driver 이름을 설정해야 한다.
+    **CGW_LINK_ODBC_DRIVER_NAME** 는 CAS_CGW와 연결할 때 이기종 데이터베이스에서 제공하는 ODBC Driver 이름을 설정해야 한다.
 
 .. note::
     
@@ -286,12 +286,12 @@ CUBRID 설치 시 생성되는 기본 게이트웨이 설정 파일인 cubrid_ga
 
 **CGW_LINK_CONNECT_URL_PROPERTY**
 
-    **CGW_LINK_CONNECT_URL_PROPERTY** 는 외부 DBMS 연결을 위한 연결 문자열(Connection String)에 사용되는 연결 속성(property)을 작성한다.
+    **CGW_LINK_CONNECT_URL_PROPERTY** 는 이기종 데이터베이스 연결을 위한 연결 문자열(Connection String)에 사용되는 연결 속성(property)을 작성한다.
 
 
 .. note::
     
-    *   연결 속성(property)는 DBMS별로 각각 다르므로 아래의 사이트를 참조한다.
+    *   연결 속성(property)는 데이터베이스별로 각각 다르므로 아래의 사이트를 참조한다.
     *   Oracle : https://docs.oracle.com/cd/B19306_01/server.102/b15658/app_odbc.htm#UNXAR418
     *   MySQL : https://dev.mysql.com/doc/connector-odbc/en/connector-odbc-configuration-connection-parameters.html#codbc-dsn-option-flags
 
@@ -564,7 +564,7 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
 .. note::
     DBLINK는 접속 URL에 추가 연결 속성(Properties)을 설정할 수 있다. 상세한 속성 내용은 :ref:`CCI드라이버의 cci_connect_with_url 함수<cci_connect_with_url>`\를 참조한다.
 
-    DBLINK관련 CCI 속성 중 유용한 속성을 예로 들면, altHosts인데 아래와 같이 설정을 할 수 있다.
+    DBLINK 대상 데이터베이스가 HA 환경으로 구성된 경우 altHosts 속성을 이용해서 아래 예제처럼 설정을 할 수 있다.
 
     192.168.0.1:53000:testdb:user:password::?altHosts=192.168.0.2:33000,192.168.0.3:33000
 

@@ -571,7 +571,8 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
     예제는 192.168.0.1 서버가 Active 데이터베이스이고 해당 서버에 연결할 수 없는 경우, 192.168.0.2 서버에 연결 요청하는 설정입니다. 위에 예제처럼 여러개의 altHosts를 지정할 수 있으며, 나열한 순서대로 연결을 시도한다.
 
 
-    CREATE SERVER를 통해서도 PROPERTIES 항목에 속성을 설정할 수 있다. 자세한 DBLink SQL 문법은 :doc:`/sql/query/select` 와 :doc:`/sql/schema/server_stmt` 을 참고한다.
+    CREATE SERVER 구문의 PROPERTIES 항목에 연결 속성을 설정할 수 있다. 자세한 내용은 :doc:`/sql/query/select` 와 :doc:`/sql/schema/server_stmt` 을 참고한다.
+
 
 
 제약사항

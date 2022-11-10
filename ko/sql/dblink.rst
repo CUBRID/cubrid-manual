@@ -562,7 +562,8 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
 
 
 .. note::
-    DBLINK는 내부적으로 CCI Driver를 사용하므로, 접속 URL에 CCI관련 속성(Properties)을 설정할 수 있다. 상세한 CCI속성은 :ref:`CCI드라이버의 cci_connect_with_url 함수<cci_connect_with_url>`\를 참조한다.
+    DBLINK는 접속 URL에 추가 연결 속성(Properties)을 설정할 수 있다. 상세한 속성 내용은 :ref:`CCI드라이버의 cci_connect_with_url 함수<cci_connect_with_url>`\를 참조한다.
+
     DBLINK관련 CCI 속성 중 유용한 속성을 예로 들면, altHosts인데 아래와 같이 설정을 할 수 있다.
 
     192.168.0.1:53000:testdb:user:password::?altHosts=192.168.0.2:33000,192.168.0.3:33000

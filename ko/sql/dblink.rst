@@ -322,6 +322,7 @@ unixODBC 설치 방법
 .. note::
 
 	unixODBC 드라이버 관리자 설치 방법은 아래의 url를 참고 바란다.
+	
 	unixODBC 홈페이지 : http://www.unixodbc.org/ 
 
 
@@ -375,9 +376,11 @@ Oracle Instant Client 다운로드 사이트: https://www.oracle.com/database/te
 
 **오라클 인스턴트 클라이언트 환경변수 설정**
 
-export ORACLE_INSTANT_CLIENT=/home/user/oracle/instantclient  
-export PATH=$ORACLE_INSTANT_CLIENT:$PATH
-export LD_LIBRARY_PATH=$ORACLE_INSTANT_CLIENT:$LD_LIBRARY_PATH
+::
+
+	export ORACLE_INSTANT_CLIENT=/home/user/oracle/instantclient  
+	export PATH=$ORACLE_INSTANT_CLIENT:$PATH
+	export LD_LIBRARY_PATH=$ORACLE_INSTANT_CLIENT:$LD_LIBRARY_PATH
 
 
 .. _tnsnames-info:
@@ -407,7 +410,7 @@ tnsnames.ora 파일의 기본 형식
 * net_service_name: 데이터베이스 연결을 위한 네트 서비스 이름이며, connection url의 db_name에 사용하는 이름이다.
 * HOST: 데이터베이스에 연결하려는 IP 주소 또는 서버 이름이다.
 * PORT: 연결에 필요한 포트이다. 대부분의 경우 기본 포트는 1521이다.
-* service_name: 연결하려는 데이터베이스의 이름이다.
+* SERVICE_NAME: 연결하려는 데이터베이스의 이름이다.
 
 
 .. note::
@@ -534,6 +537,7 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
 
 
 **첫번째**, FROM절에 DBLINK 구문을 작성하여 타 데이터베이스의 정보를 조회하는 방법
+
 아래의 Query문은 IP 192.xxx.xxx.xxx의 타 데이터베이스의 remote_t 테이블 정보를 조회하는 Query문이다.
 
 ::
@@ -544,6 +548,7 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
     
 	Oracle의 경우 원격접속 정보 중 ip와 port는 게이트웨이 접속 정보이고, db_name 항목에는 tnsnames.ora의 net_service_name 을 넣어야 한다.
 	만약 net_service_name이 ora_test 이라면 아래와 같이 작성하면 된다.
+	
 	SELECT * FROM DBLINK ('192.xxx.xxx.xxx:53000:ora_test:user:password:','SELECT col1, col2 FROM remote_t') AS t(col1 int, col2 varchar(32));
 
 **두번째**,  Query를 작성할 때 마다 매번 연결 정보를 작성해야 하는 번거로움과 사용자 정보(id, password)의 정보 보호를 위해 CREATE SERVER구문을 이용한다.CREATE SERVER 구문을 이용하는 경우 Query문이 간결해지고 사용자 정보 보호에 도움이 된다.

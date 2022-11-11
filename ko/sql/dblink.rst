@@ -387,7 +387,7 @@ export LD_LIBRARY_PATH=$ORACLE_INSTANT_CLIENT:$LD_LIBRARY_PATH
 Oracle Database에 연결을 하기 위해서는 연결정보를 가지고 있는 tnsnames.ora 파일을 수정해야 한다.
 아래의 기본 형식에 HOST, PORT, SERVICE_NAME 이 세 항목에 연결정보를 작성해야 한다.
 연결정보를 작성한 tnsnames.ora 파일은 TNS_ADMIN 환경변수에서 디렉토리 경로를 설정해야 한다. 
-TNS_ADMIN설정 방법은 "TNS_ADMIN 환경변수 설정" 참고한다.
+TNS_ADMIN설정 방법은 :ref:`TNS_ADMIN 환경변수 설정 <tns_admin-info>`\을 참고한다.
 
 
 tnsnames.ora 파일의 기본 형식
@@ -451,7 +451,7 @@ TNS_ADMIN는 tnsnames.ora 파일이 있는 디렉토리 경로를 가리킨다.
 
 게이트웨이에서 oracle에 연결하기 위해서는 아래와 같이 몇 가지 설정이 필요하다.
 
-자세한 :ref:`게이트웨이 설정 파일 <gatewayconf-info>`\ 을 참고한다.
+자세한 내용은 :ref:`게이트웨이 설정 파일 <gatewayconf-info>`\ 을 참고한다.
 
 게이트웨이는 oracle에 연결하기 위해서 tnsnames.ora 의 정보를 이용하기 때문에  CGW_LINK_SERVER_IP, CGW_LINK_SERVER_PORT 는 작성하지 않아도 된다. 해당 정보를 작성한 경우에도 게이트웨이는 참조하지 않는다.
 
@@ -507,7 +507,7 @@ Yum을 사용하여 저장소를 업데이트한다.
 
 게이트웨이에서 MySQL에 연결하기 위해서는 아래와 같이 몇 가지 설정이 필요하다.
 
-자세한 :ref:`게이트웨이 설정 파일 <gatewayconf-info>`\ 을 참고한다.
+자세한 내용은 :ref:`게이트웨이 설정 파일 <gatewayconf-info>`\ 을 참고한다.
 
   
 ::

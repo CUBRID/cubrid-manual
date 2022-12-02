@@ -146,7 +146,8 @@ CUBRID DBLINK settings
 The settings for using CUBRID DBLink are different from those of homogeneous DBLink and heterogeneous DBLink.
 
 
-homogeneous DBLink Setting
+Homogeneous DBLink Setting
+
 ---------------------------------------
 
 If you look at the homogeneous DBlink diagram above, you need to connect to the broker in the remote database, so you need to set up the broker in the remote database.

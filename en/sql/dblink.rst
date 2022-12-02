@@ -46,7 +46,8 @@ The gateway uses the ODBC (Open DataBase Connectivity) driver of the connecting 
 GATEWAY
 ==============================================
 
-A gateway is a middleware that mediates between the CUBRID database and heterogeneous databases and is similar to a broker. The gateway connects to a heterogeneous database server (Oracle/MySQL), retrieves data, and delivers it to the CUBRID database server.
+A gateway is a middleware that mediates between the CUBRID database and heterogeneous databases and is similar to a broker. The gateway connects to a heterogeneous database server (Oracle/MySQL etc), retrieves data, and delivers it to the CUBRID database server.
+
 
 A cubrid system including a gateway has a multi-hierarchical structure including cub_gateway and cub_cas_cgw as shown in the figure below.
 

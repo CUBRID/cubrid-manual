@@ -54,13 +54,15 @@ To create a table, use the **CREATE TABLE** statement.
 
                         <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
                         
-        <table_constraint> ::=
-            [CONSTRAINT [constraint_name]] 
+        <table_constraint> ::= 
             { 
-                UNIQUE [KEY|INDEX](column_name, ...) |
-                {KEY|INDEX} [constraint_name](column_name, ...) |
-                PRIMARY KEY (column_name, ...) |
-                <referential_constraint>
+                {KEY|INDEX} index_name (column_name, ...) |
+                [CONSTRAINT [constraint_name]]
+                   {
+                      UNIQUE [KEY|INDEX](column_name, ...) |
+                      PRIMARY KEY (column_name, ...) |
+                      <referential_constraint>
+                   }
             } COMMENT 'index_comment_string'
          
             <referential_constraint> ::= FOREIGN KEY [<foreign_key_name>](column_name, ...) <referential_definition>
@@ -425,13 +427,15 @@ You can define **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** as the
 
     <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] <referential_definition> }
 
-    <table_constraint> ::=
-        [CONSTRAINT [constraint_name]] 
+    <table_constraint> ::=         
         { 
-            UNIQUE [KEY|INDEX](column_name, ...) |
-            {KEY|INDEX} [constraint_name](column_name, ...) |
-            PRIMARY KEY (column_name, ...) |
-            <referential_constraint>
+            {KEY|INDEX} index_name (column_name, ...) |
+            [CONSTRAINT [constraint_name]]
+                {
+                      UNIQUE [KEY|INDEX](column_name, ...) |
+                      PRIMARY KEY (column_name, ...) |
+                      <referential_constraint>
+                }
         }
      
         <referential_constraint> ::= FOREIGN KEY [<foreign_key_name>](column_name, ...) <referential_definition>
@@ -1209,13 +1213,15 @@ By default, the index created when you add **PRIMARY KEY** constraints is create
     ALTER [ TABLE | CLASS | VCLASS | VIEW ] [schema_name.]table_name
     ADD <table_constraint> ;
     
-        <table_constraint> ::=
-            [CONSTRAINT [constraint_name]] 
+        <table_constraint> ::=             
             { 
-                UNIQUE [KEY|INDEX](column_name, ...) |
-                {KEY|INDEX} [constraint_name](column_name, ...) |
-                PRIMARY KEY (column_name, ...) |
-                <referential_constraint>
+                {KEY|INDEX} index_name (column_name, ...) |
+                [CONSTRAINT [constraint_name]]
+                   {
+                      UNIQUE [KEY|INDEX](column_name, ...) |
+                      PRIMARY KEY (column_name, ...) |
+                      <referential_constraint>
+                   }
             }
      
             <referential_constraint> ::= FOREIGN KEY [foreign_key_name](column_name, ...) <referential_definition>

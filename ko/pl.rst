@@ -1296,11 +1296,13 @@ PL/CSQL의 표현식의 종류는 다음 문법으로 요약할 수 있다.
     <cursor_attribute> ::= { %ISOPEN | %FOUND | %NOTFOUND | %ROWCOUNT }
 
     <binary_op> ::=
-          AND | OR
+          AND | XOR | OR
         | = | <=> | != | <> | <= | >= | < | >
         | * | / | + | -
+        | >> | << | & | ^ | '|'
+        | SETEQ | SETNEQ | SUPERSET | SUBSET | SUPERSETEQ | SUBSETEQ
         | ||
-    <unary_op> ::= + | - | NOT
+    <unary_op> ::= + | - | NOT | ~
 
     <case_expression> ::=
           CASE <expression> <case_expression_when_part>... [ ELSE <expression> ] END [ CASE ]

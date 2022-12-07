@@ -20,9 +20,8 @@ CREATE TABLE
 
     CREATE {TABLE | CLASS} [IF NOT EXISTS] [schema_name.]table_name
     [<subclass_definition>]
-    [(<column_definition>, ... [, <table_constraint>, ...])] 
-    [AUTO_INCREMENT = initial_value]
     [CLASS ATTRIBUTE (<column_definition>, ...)]
+    [([{<table_constraint>}... ,] <column_definition> [{, {<column_definition> | <table_constraint>}}...])]
     [INHERIT <resolution>, ...]
     [<table_options>]
 
@@ -55,13 +54,15 @@ CREATE TABLE
 
                         <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
                         
-        <table_constraint> ::=
-            [CONSTRAINT [constraint_name]] 
+        <table_constraint> ::=             
             { 
-                UNIQUE [KEY|INDEX](column_name, ...) |
-                {KEY|INDEX} [constraint_name](column_name, ...) |
-                PRIMARY KEY (column_name, ...) |
-                <referential_constraint>
+                {KEY|INDEX} index_name (column_name, ...) |
+                [CONSTRAINT [constraint_name]]
+                   {
+                      UNIQUE [KEY|INDEX](column_name, ...) |
+                      PRIMARY KEY (column_name, ...) |
+                      <referential_constraint>
+                   }
             } COMMENT 'index_comment_string'
          
             <referential_constraint> ::= FOREIGN KEY [<foreign_key_name>](column_name, ...) <referential_definition>
@@ -80,7 +81,8 @@ CREATE TABLE
             <table_option> ::= REUSE_OID | DONT_REUSE_OID |
                                COMMENT [=] 'table_comment_string' |
                                [CHARSET charset_name] [COLLATE collation_name] |
-                               ENCRYPT [=] [AES | ARIA]
+                               ENCRYPT [=] [AES | ARIA] | 
+                               AUTO_INCREMENT = initial_value
 
 *   **IF NOT EXISTS**: 생성하려는 테이블이 존재하는 경우 에러 없이 테이블을 생성하지 않는다.
 *   *schema_name*: 스키마 이름을 지정한다(최대 31바이트). 생략하면 현재 세션의 스키마 이름을 사용한다.
@@ -425,13 +427,15 @@ ON UPDATE
 
     <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] <referential_definition> }
 
-    <table_constraint> ::=
-        [CONSTRAINT [constraint_name]] 
+    <table_constraint> ::=         
         { 
-            UNIQUE [KEY|INDEX](column_name, ...) |
-            {KEY|INDEX} [constraint_name](column_name, ...) |
-            PRIMARY KEY (column_name, ...) |
-            <referential_constraint>
+            {KEY|INDEX} index_name (column_name, ...) |
+            [CONSTRAINT [constraint_name]]
+               {
+                      UNIQUE [KEY|INDEX](column_name, ...) |
+                      PRIMARY KEY (column_name, ...) |
+                      <referential_constraint>
+               }
         }
      
         <referential_constraint> ::= FOREIGN KEY [<foreign_key_name>](column_name, ...) <referential_definition>
@@ -889,7 +893,7 @@ CREATE TABLE AS SELECT
 
 ::
 
-    CREATE {TABLE | CLASS} [schema_name.]table_name [(<column_definition> [,<table_constraint>], ...)] [COMMENT [=] 'comment_string'] [REPLACE] AS <select_statement>;
+    CREATE {TABLE | CLASS} [schema_name.]table_name [([{<table_constraint>}... ,] <column_definition> [{ ,{<column_definition> | <table_constraint>}}...])] [COMMENT [=] 'comment_string'] [REPLACE] AS <select_statement>;
 
 *   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 새로 생성할 테이블 이름이다.
@@ -1209,13 +1213,15 @@ ADD CONSTRAINT 절
     ALTER [TABLE | CLASS | VCLASS | VIEW] [schema_name.]table_name
     ADD <table_constraint> ;
     
-        <table_constraint> ::=
-            [CONSTRAINT [constraint_name]] 
+        <table_constraint> ::=             
             { 
-                UNIQUE [KEY|INDEX](column_name, ...) |
-                {KEY|INDEX} [constraint_name](column_name, ...) |
-                PRIMARY KEY (column_name, ...) |
-                <referential_constraint>
+                {KEY|INDEX} index_name (column_name, ...) |
+                [CONSTRAINT [constraint_name]]
+                   {
+                      UNIQUE [KEY|INDEX](column_name, ...) |
+                      PRIMARY KEY (column_name, ...) |
+                      <referential_constraint>
+                   }
             }
      
             <referential_constraint> ::= FOREIGN KEY [foreign_key_name](column_name, ...) <referential_definition>

@@ -337,6 +337,8 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | java_stored_procedure_port          | server parameter        |         | int      | 0                              |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | java_stored_procedure_uds           | server parameter        |         | bool     | yes                            |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | java_stored_procedure_jvm_options   | server parameter        |         | string   |                                |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | multi_range_optimization_limit      | server parameter        | O       | int      | 100                            | DBA only              |
@@ -1971,6 +1973,8 @@ The following are other parameters. The type and value range for each parameter 
 +-------------------------------------+--------+----------------+----------------+----------------+
 | java_stored_procedure_port          | int    | 0              | 0              | 65535          |
 +-------------------------------------+--------+----------------+----------------+----------------+
+| java_stored_procedure_uds           | bool   | yes            |                |                |
++-------------------------------------+--------+----------------+----------------+----------------+
 | java_stored_procedure_jvm_options   | string |                |                |                |
 +-------------------------------------+--------+----------------+----------------+----------------+
 | multi_range_optimization_limit      | int    | 100            | 0              | 10,000         |
@@ -2060,7 +2064,7 @@ The following are other parameters. The type and value range for each parameter 
 
 **java_stored_procedure_port**
 
-    **java_stored_procedure_port** is a parameter to configure the port number receiving a request that calls the java stored procedures from CAS. the value must be unique and smaller than 65,535. The default value of **java_stored_procedure_port** is **0** which means the port number is automatically allocated, typically from an ephemeral port range. The value configured in this parameter affects only **java_stored_procedure** is set to **yes**. Note that an error occurs if the parameter is configured in [common]. ::
+    **java_stored_procedure_port** is a parameter to configure the port number receiving a request that calls the java stored procedures from database server. the value must be unique and smaller than 65,535. The default value of **java_stored_procedure_port** is **0** which means the port number is automatically allocated, typically from an ephemeral port range. The value configured in this parameter affects only **java_stored_procedure** is set to **yes**. Note that an error occurs if the parameter is configured in [common]. ::
 
         ..... 
         [common] 
@@ -2073,6 +2077,14 @@ The following are other parameters. The type and value range for each parameter 
         # the parameter is configured successfully for testdb
         java_stored_procedure_port=4334
         .....
+
+**java_stored_procedure_uds**
+
+    **java_stored_procedure_uds** is a parameter to connect between the cub_javasp process and the cub_server process through a Unix domain socket instead of TCP when calling a Java stored procedure. The default value of **java_stored_procedure_uds** is **yes**. For Windows, regardless of the value of the parameter, TCP connection is used.
+
+    .. note::
+
+        For the **CUBRID_TMP** environment variable that specifies the UNIX domain socket file path of *cub_javasp** processes, see :doc:`/env`.
 
 **java_stored_procedure_jvm_options**
 

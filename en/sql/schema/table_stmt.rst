@@ -20,9 +20,8 @@ To create a table, use the **CREATE TABLE** statement.
 
     CREATE {TABLE | CLASS} [IF NOT EXISTS] [schema_name.]table_name
     [<subclass_definition>]
-    [(<column_definition>, ... [, <table_constraint>, ...])] 
-    [AUTO_INCREMENT = initial_value]
     [CLASS ATTRIBUTE (<column_definition>, ...)]
+    [([{<table_constraint>}... ,] <column_definition> [{, {<column_definition> | <table_constraint>}}...])]
     [INHERIT <resolution>, ...]
     [<table_options>]
 
@@ -55,13 +54,15 @@ To create a table, use the **CREATE TABLE** statement.
 
                         <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
                         
-        <table_constraint> ::=
-            [CONSTRAINT [constraint_name]] 
+        <table_constraint> ::= 
             { 
-                UNIQUE [KEY|INDEX](column_name, ...) |
-                {KEY|INDEX} [constraint_name](column_name, ...) |
-                PRIMARY KEY (column_name, ...) |
-                <referential_constraint>
+                {KEY|INDEX} index_name (column_name, ...) |
+                [CONSTRAINT [constraint_name]]
+                   {
+                      UNIQUE [KEY|INDEX](column_name, ...) |
+                      PRIMARY KEY (column_name, ...) |
+                      <referential_constraint>
+                   }
             } COMMENT 'index_comment_string'
          
             <referential_constraint> ::= FOREIGN KEY [<foreign_key_name>](column_name, ...) <referential_definition>
@@ -80,7 +81,8 @@ To create a table, use the **CREATE TABLE** statement.
             <table_option> ::= REUSE_OID | DONT_REUSE_OID |
                                COMMENT [=] 'table_comment_string' |
                                [CHARSET charset_name] [COLLATE collation_name] |
-                               ENCRYPT [=] [AES | ARIA]
+                               ENCRYPT [=] [AES | ARIA] |
+                               AUTO_INCREMENT = initial_value
 
 *   IF NOT EXISTS: If an identically named table already exists, a new table will not be created without an error.
 *   *schema_name*: Specifies the schema name(maximum: 31 bytes). If omitted, the schema name of the current session is used.
@@ -425,13 +427,15 @@ You can define **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** as the
 
     <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] <referential_definition> }
 
-    <table_constraint> ::=
-        [CONSTRAINT [constraint_name]] 
+    <table_constraint> ::=         
         { 
-            UNIQUE [KEY|INDEX](column_name, ...) |
-            {KEY|INDEX} [constraint_name](column_name, ...) |
-            PRIMARY KEY (column_name, ...) |
-            <referential_constraint>
+            {KEY|INDEX} index_name (column_name, ...) |
+            [CONSTRAINT [constraint_name]]
+                {
+                      UNIQUE [KEY|INDEX](column_name, ...) |
+                      PRIMARY KEY (column_name, ...) |
+                      <referential_constraint>
+                }
         }
      
         <referential_constraint> ::= FOREIGN KEY [<foreign_key_name>](column_name, ...) <referential_definition>
@@ -889,7 +893,7 @@ You can create a new table that contains the result records of the **SELECT** st
 
 ::
 
-    CREATE {TABLE | CLASS} [schema_name.]table_name [(<column_definition> [,<table_constraint>], ...)] [REPLACE] AS <select_statement>;
+    CREATE {TABLE | CLASS} [schema_name.]table_name [([{<table_constraint>}... ,] <column_definition> [{, {<column_definition> | <table_constraint>}}...])] [REPLACE] AS <select_statement>;
 
 *   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *table_name*: a name of the table to be created.
@@ -1209,13 +1213,15 @@ By default, the index created when you add **PRIMARY KEY** constraints is create
     ALTER [ TABLE | CLASS | VCLASS | VIEW ] [schema_name.]table_name
     ADD <table_constraint> ;
     
-        <table_constraint> ::=
-            [CONSTRAINT [constraint_name]] 
+        <table_constraint> ::=             
             { 
-                UNIQUE [KEY|INDEX](column_name, ...) |
-                {KEY|INDEX} [constraint_name](column_name, ...) |
-                PRIMARY KEY (column_name, ...) |
-                <referential_constraint>
+                {KEY|INDEX} index_name (column_name, ...) |
+                [CONSTRAINT [constraint_name]]
+                   {
+                      UNIQUE [KEY|INDEX](column_name, ...) |
+                      PRIMARY KEY (column_name, ...) |
+                      <referential_constraint>
+                   }
             }
      
             <referential_constraint> ::= FOREIGN KEY [foreign_key_name](column_name, ...) <referential_definition>

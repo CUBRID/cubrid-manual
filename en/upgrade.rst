@@ -85,7 +85,7 @@ The following table shows how to perform the migration using the reserved word d
 |                                    | Execute the cubrid unloaddb utility and store the file generated at this point in a           |
 |                                    | separate directory (C3b).                                                                     |
 |                                    |                                                                                               |
-|                                    |   % cubrid unloaddb -S testdb                                                                 |
+|                                    |   % cubrid unloaddb -S -u dba testdb                                                          |
 |                                    |                                                                                               |
 |                                    | Delete the existing database (C3c).                                                           |
 |                                    |                                                                                               |
@@ -104,7 +104,7 @@ The following table shows how to perform the migration using the reserved word d
 |                                    |                                                                                               |
 |                                    | Execute the cubrid loaddb utility with the stored files in (C3b). (C5b)                       |
 |                                    |                                                                                               |
-|                                    |   % cubrid loaddb -s testdb_schema -d testdb_objects -i testdb_indexes testdb                 |
+|                                    |   % cubrid loaddb -u dba -s testdb_schema -d testdb_objects -i testdb_indexes testdb          |
 +------------------------------------+-----------------------------------------------------------------------------------------------+
 | Step C6: Back up the new version   |   % cubrid backupdb -S testdb                                                                 |
 |          of the DB                 |                                                                                               |

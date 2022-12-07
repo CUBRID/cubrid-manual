@@ -21,7 +21,11 @@ CUBRID Environment Variables
     *   A user of CUBRID Manager should specify **CUBRID_MSG_LANG**, an environment variable of DB server node into **en_US** to print out messages normally after running database related features. However, database related features are run normally and just the output messages are broken when **CUBRID_MSG_LANG** is not **en_US**.
     *   To apply the changed **CUBRID_MSG_LANG**, CUBRID system of DB server node should be restarted(cubrid service stop, cubrid service start).
 
-*   **CUBRID_TMP**: The environment variable that specifies the location where the cub_master process and the cub_broker process store the UNIX domain socket file in CUBRID for Linux. If it is not specified, the cub_master process stores the UNIX domain socket file under the **/tmp** directory and the cub_broker process stores the UNIX domain socket file under the **$CUBRID/var/CUBRID_SOCK** directory (not used in CUBRID for Windows).
+*   **CUBRID_TMP**: The environment variable that specifies the location where CUBRID for Linux stores the UNIX domain socket file. If it is not specified, the Unix domain socket file is stored in the following directory according to the process. (not used in CUBRID for Windows)
+
+    *   the cub_master process: under **/tmp** directory
+    *   the cub_broekr process: under **$CUBRID/var/CUBRID_SOCK** directory
+    *   the cub_javasp process: under **$CUBRID/var/CUBRID_SOCK** directory
 
 **CUBRID_TMP** value has some constraints, which are as follows:
 
@@ -210,7 +214,7 @@ If you use CUBRID for Windows at the broker machine or the DB server machine, al
 | Manager use   | Manager       | application   | 8001                       | 8001                                                | Open                     |                        |
 |               | server        |               |                            |                                                     |                          |                        |
 +---------------+---------------+---------------+----------------------------+-----------------------------------------------------+--------------------------+------------------------+
-| Java SP use   | cub_javasp    | CAS           | java_stored_procedure_port | java_stored_procedure_port                          | Open                     | Keep connected         |
+| Java SP use   | cub_javasp    | cub_server    | java_stored_procedure_port | java_stored_procedure_port                          | Open                     | Keep connected         |
 +---------------+---------------+---------------+----------------------------+-----------------------------------------------------+--------------------------+------------------------+
 
 (*): The machine which has the CAS, CSQL, copylogdb, or applylogdb process
@@ -392,9 +396,7 @@ The following table summarizes the ports, based on the listening processes, used
 +---------------+--------------+----------------------------+--------------------------+
 | Listener      | Requester    | Port                       | Firewall Port Setting    |
 +===============+==============+============================+==========================+
-| cub_javasp    | CAS          | java_stored_procedure_port | Open                     |
+| cub_javasp    | cub_server   | java_stored_procedure_port | Open                     |
 +---------------+--------------+----------------------------+--------------------------+
 
-*   The port is used when the CAS relays between Java SP server (cub_javasp) and cub_server, which CAS receives a call of the java stored procedure from cub_server and then CAS passed the call to the CUBRID Java SP server process through **java_stored_procedure_port** of cubrid.conf.
-*   The default value of **java_stored_procedure_port** is 0, which means a random available port is assigned.
-
+*   The port used when the CUBRID Java stored procedure server (cub_javasp) to communicate with the cub_server is **java_stored_procedure_port** of the cubrid.conf. The default value of **java_stored_procedure_port** is 0, which means a random available port is assigned.

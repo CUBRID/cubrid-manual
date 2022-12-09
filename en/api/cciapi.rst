@@ -871,7 +871,7 @@ cci_connect_with_url
     
     *   **login_timeout** | **loginTimeout**: Timeout value (unit: msec.) for database login. Upon timeout, a **CCI_ER_LOGIN_TIMEOUT** (-38) error is returned. The default value is  **30,000**\ (30 sec.). If this value is 0, it means infinite waiting. This value is also applied when internal reconnection occurs after the initial connection.
 
-    *   **query_timeout** | **queryTimeout**: If time specified in these properties has expired when calling :c:func:`cci_prepare`, :c:func:`cci_execute`, etc. a cancellation message for query request which was sent to a server will be delivered and called function returns a **CCI_ER_QUERY_TIMEOUT** (-39) error. The value returned upon timeout may vary depending on a value specified in **disconnect_on_query_timeout**. For details, see **disconnect_on_query_timeout**.
+    *   **query_timeout** | **queryTimeout**: If time specified in these properties has expired when calling :c:func:`cci_prepare`, :c:func:`cci_execute`, etc. a cancellation message for query request which was sent to a server will be delivered and called function returns a **CCI_ER_QUERY_TIMEOUT** (-39) error. The default value is 0. If this value is 0, it means infinite waiting. The value returned upon timeout may vary depending on a value specified in **disconnect_on_query_timeout**. For details, see **disconnect_on_query_timeout**.
 
         .. note:: If you use :c:func:`cci_execute_batch` or :c:func:`cci_execute_array`\ function, or set **CCI_EXEC_QUERY_ALL** in :c:func:`cci_execute` function to run multiple queries at once, query timeout is applied to one function, not to one query. In other words, if query timeout occurs after the start of a function, a function running is quit.
 
@@ -1255,14 +1255,16 @@ cci_execute_array
     :param req_handle: (IN) Request handle of the prepared statement
     :param query_result: (OUT) Query results
     :param err_buf: (OUT) Database error buffer
-    :return: Success: The number of executed queries, Failure: Negative number
+    :return: 
+         * Success: It has nothing to do with the success/failure of query execution, only the number of queries executed.
+         * Failure: Negative number
     
-        *   **CCI_ER_REQ_HANDLE**
-        *   **CCI_ER_BIND**
-        *   **CCI_ER_DBMS**
-        *   **CCI_ER_COMMUNICATION**
-        *   **CCI_ER_QUERY_TIMEOUT**
-        *   **CCI_ER_LOGIN_TIMEOUT**
+            *   **CCI_ER_REQ_HANDLE**
+            *   **CCI_ER_BIND**
+            *   **CCI_ER_DBMS**
+            *   **CCI_ER_COMMUNICATION**
+            *   **CCI_ER_QUERY_TIMEOUT**
+            *   **CCI_ER_LOGIN_TIMEOUT**
        
     To bind the data, call the :c:func:`cci_bind_param_array_size` function to specify the size of the array, bind each value to the variable by using the :c:func:`cci_bind_param_array` function, and execute the query by calling the :c:func:`cci_execute_array` function. The query result will be stored on the array of **T_CCI_QUERY_RESULT** structure.
 
@@ -1377,15 +1379,17 @@ cci_execute_batch
     :param sql_stmt: (IN) SQL statement array
     :param query_result: (OUT) The results of *sql_stmt*
     :param err_buf: (OUT) Database error buffer
-    :return: Success: The number of executed queries, Failure: Negative number
-    
-        *   **CCI_ER_CON_HANDLE**
-        *   **CCI_ER_DBMS**
-        *   **CCI_ER_COMMUNICATION**
-        *   **CCI_ER_NO_MORE_MEMORY**
-        *   **CCI_ER_CONNECT**
-        *   **CCI_ER_QUERY_TIMEOUT**
-        *   **CCI_ER_LOGIN_TIMEOUT**
+    :return: 
+         * Success: It has nothing to do with the success/failure of query execution, only the number of queries executed.
+         * Failure: Negative number
+
+            *   **CCI_ER_CON_HANDLE**
+            *   **CCI_ER_DBMS**
+            *   **CCI_ER_COMMUNICATION**
+            *   **CCI_ER_NO_MORE_MEMORY**
+            *   **CCI_ER_CONNECT**
+            *   **CCI_ER_QUERY_TIMEOUT**
+            *   **CCI_ER_LOGIN_TIMEOUT**
 
     Executes *sql_stmt* as many times as *num_sql_stmt* specified as a parameter and returns the number of queries executed with the query_result variable. You can use :c:macro:`CCI_QUERY_RESULT_RESULT`, c:macro:`CCI_QUERY_RESULT_ERR_NO`, :c:macro:`CCI_QUERY_RESULT_ERR_MSG` and :c:macro:`CCI_QUERY_RESULT_STMT_TYPE` macros to get the result of each query. Regarding the summary of these macros, see the :c:func:`cci_execute_array` function.
     

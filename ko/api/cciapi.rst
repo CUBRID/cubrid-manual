@@ -1258,16 +1258,14 @@ cci_execute_array
     :param req_handle: (IN) prepared statement의 요청 핸들
     :param query_result: (OUT) 질의 결과
     :param err_buf: (OUT) 데이터베이스 에러 버퍼
-    :return:
-        * 성공 : 질의의 수행 성공/실패와는 아무런 관련이 없으며, 오직 질의의 수행된 개수 이다.
-        * 실패 : 에러 코드
+    :return: 수행된 질의의 개수(성공), 에러 코드(실패)
     
-            *   **CCI_ER_REQ_HANDLE**
-            *   **CCI_ER_BIND**
-            *   **CCI_ER_DBMS**
-            *   **CCI_ER_COMMUNICATION**
-            *   **CCI_ER_QUERY_TIMEOUT**
-            *   **CCI_ER_LOGIN_TIMEOUT**
+        *   **CCI_ER_REQ_HANDLE**
+        *   **CCI_ER_BIND**
+        *   **CCI_ER_DBMS**
+        *   **CCI_ER_COMMUNICATION**
+        *   **CCI_ER_QUERY_TIMEOUT**
+        *   **CCI_ER_LOGIN_TIMEOUT**
     
     데이터를 바인딩하기 위해서는 :c:func:`cci_bind_param_array_size` 함수를 호출하여 배열의 크기를 지정한 후, :c:func:`cci_bind_param_array` 함수를 이용하여 각각의 값을 변수에 바인딩하고, :c:func:`cci_execute_array` 함수를 호출하여 질의를 실행한다. 질의 결과는 T_CCI_QUERY_RESULT 구조체의 배열에 저장된다.
 
@@ -1382,17 +1380,15 @@ cci_execute_batch
     :param sql_stmt: (IN) SQL 문 array
     :param query_result: (OUT) *sql_stmt* 의 결과
     :param err_buf: (OUT) 데이터베이스 에러 버퍼
-    :return:
-        * 성공 : 질의의 수행 성공/실패와는 아무런 관련이 없으며, 오직 질의의 수행된 개수 이다.
-        * 실패 : 에러 코드
-         
-            *   **CCI_ER_CON_HANDLE**
-            *   **CCI_ER_DBMS**
-            *   **CCI_ER_COMMUNICATION**
-            *   **CCI_ER_NO_MORE_MEMORY**
-            *   **CCI_ER_CONNECT**
-            *   **CCI_ER_QUERY_TIMEOUT**
-            *   **CCI_ER_LOGIN_TIMEOUT**
+    :return: 수행된 질의의 개수(성공), 에러 코드(실패)
+    
+        *   **CCI_ER_CON_HANDLE**
+        *   **CCI_ER_DBMS**
+        *   **CCI_ER_COMMUNICATION**
+        *   **CCI_ER_NO_MORE_MEMORY**
+        *   **CCI_ER_CONNECT**
+        *   **CCI_ER_QUERY_TIMEOUT**
+        *   **CCI_ER_LOGIN_TIMEOUT**
     
     인자로 지정된 *num_sql_stmt* 개의 *sql_stmt* 를 수행하며, *query_result* 변수로 수행된 질의 개수를 반환한다. 각각의 질의에 대한 결과는 :c:macro:`CCI_QUERY_RESULT_RESULT`, :c:macro:`CCI_QUERY_RESULT_ERR_NO`, :c:macro:`CCI_QUERY_RESULT_ERR_MSG`, :c:macro:`CCI_QUERY_RESULT_STMT_TYPE`\ 매크로를 이용할 수 있다. 전체 매크로에 대한 요약 설명은 :c:func:`cci_execute_array`\ 를 참고한다.
     

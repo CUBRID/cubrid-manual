@@ -1259,7 +1259,7 @@ cci_execute_array
     :param query_result: (OUT) 질의 결과
     :param err_buf: (OUT) 데이터베이스 에러 버퍼
     :return:
-        * 성공 : 질의의 수행 성공/실패와는 아무런 관련이 없으며, 오직 질의의 수행된 개수 이다.
+        * 성공 : 수행된 질의의 개수(질의의 수행 성공/실패와는 아무런 관련이 없음)
         * 실패 : 에러 코드
     
             *   **CCI_ER_REQ_HANDLE**
@@ -1383,7 +1383,7 @@ cci_execute_batch
     :param query_result: (OUT) *sql_stmt* 의 결과
     :param err_buf: (OUT) 데이터베이스 에러 버퍼
     :return:
-        * 성공 : 질의의 수행 성공/실패와는 아무런 관련이 없으며, 오직 질의의 수행된 개수 이다.
+        * 성공 : 수행된 질의의 개수(질의의 수행 성공/실패와는 아무런 관련이 없음)
         * 실패 : 에러 코드
          
             *   **CCI_ER_CON_HANDLE**

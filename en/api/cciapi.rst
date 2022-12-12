@@ -1256,7 +1256,7 @@ cci_execute_array
     :param query_result: (OUT) Query results
     :param err_buf: (OUT) Database error buffer
     :return: 
-         * Success: It has nothing to do with the success/failure of query execution, only the number of queries executed.
+         * Success: The number of executed queries (it has nothing to do with query execution success/failure.)
          * Failure: Negative number
     
             *   **CCI_ER_REQ_HANDLE**
@@ -1380,7 +1380,7 @@ cci_execute_batch
     :param query_result: (OUT) The results of *sql_stmt*
     :param err_buf: (OUT) Database error buffer
     :return: 
-         * Success: It has nothing to do with the success/failure of query execution, only the number of queries executed.
+         * Success: The number of executed queries (it has nothing to do with query execution success/failure.)
          * Failure: Negative number
 
             *   **CCI_ER_CON_HANDLE**

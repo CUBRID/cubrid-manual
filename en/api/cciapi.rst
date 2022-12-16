@@ -871,7 +871,7 @@ cci_connect_with_url
     
     *   **login_timeout** | **loginTimeout**: Timeout value (unit: msec.) for database login. Upon timeout, a **CCI_ER_LOGIN_TIMEOUT** (-38) error is returned. The default value is  **30,000**\ (30 sec.). If this value is 0, it means infinite waiting. This value is also applied when internal reconnection occurs after the initial connection.
 
-    *   **query_timeout** | **queryTimeout**: If time specified in these properties has expired when calling :c:func:`cci_prepare`, :c:func:`cci_execute`, etc. a cancellation message for query request which was sent to a server will be delivered and called function returns a **CCI_ER_QUERY_TIMEOUT** (-39) error. The value returned upon timeout may vary depending on a value specified in **disconnect_on_query_timeout**. For details, see **disconnect_on_query_timeout**.
+    *   **query_timeout** | **queryTimeout**: If time specified in these properties has expired when calling :c:func:`cci_prepare`, :c:func:`cci_execute`, etc. a cancellation message for query request which was sent to a server will be delivered and called function returns a **CCI_ER_QUERY_TIMEOUT** (-39) error. The default value is 0. If this value is 0, it means infinite waiting. The value returned upon timeout may vary depending on a value specified in **disconnect_on_query_timeout**. For details, see **disconnect_on_query_timeout**.
 
         .. note:: If you use :c:func:`cci_execute_batch` or :c:func:`cci_execute_array`\ function, or set **CCI_EXEC_QUERY_ALL** in :c:func:`cci_execute` function to run multiple queries at once, query timeout is applied to one function, not to one query. In other words, if query timeout occurs after the start of a function, a function running is quit.
 

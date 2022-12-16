@@ -871,7 +871,7 @@ cci_connect_with_url
     
     *   **login_timeout** | **loginTimeout**: 데이터베이스에 로그인 시 타임아웃 값 (단위: msec). 이 시간을 초과하면 **CCI_ER_LOGIN_TIMEOUT** (-38) 에러를 반환한다. 기본값은 **30,000**\ (30초)이다. 이 값이 0인 경우 무한 대기를 의미한다. 이 값은 최초 접속 이후 내부적인 재접속이 발생하는 경우에도 적용된다.
 
-    *   **query_timeout** | **queryTimeout**: :c:func:`cci_prepare`, :c:func:`cci_execute` 등의 함수를 호출했을 때 이 값으로 설정한 시간이 지나면 서버로 보낸 질의 요청에 대한 취소 메시지를 보내고 호출된 함수는 **CCI_ER_QUERY_TIMEOUT** (-39) 에러를 반환한다. 질의를 수행한 함수에서 타임아웃 발생 시 함수의 반환 값은 **disconnect_on_query_timeout**\ 의 설정에 따라 달라질 수 있다. 자세한 내용은 다음의 **disconnect_on_query_timeout**\ 을 참고한다. 
+    *   **query_timeout** | **queryTimeout**: :c:func:`cci_prepare`, :c:func:`cci_execute` 등의 함수를 호출했을 때 이 값으로 설정한 시간이 지나면 서버로 보낸 질의 요청에 대한 취소 메시지를 보내고 호출된 함수는 **CCI_ER_QUERY_TIMEOUT** (-39) 에러를 반환한다. 기본값은 0이며, 0인 경우 무한 대기를 의미한다. 질의를 수행한 함수에서 타임아웃 발생 시 함수의 반환 값은 **disconnect_on_query_timeout**\ 의 설정에 따라 달라질 수 있다. 자세한 내용은 다음의 **disconnect_on_query_timeout**\ 을 참고한다. 
     
         .. note:: :c:func:`cci_execute`\ 에 CCI_EXEC_QUERY_ALL 플래그를 설정하거나 :c:func:`cci_execute_batch` 또는 :c:func:`cci_execute_array`\ 를 사용하여 여러 개의 질의를 한 번에 실행하는 경우, 질의 타임 아웃은 질의 하나에 대해 적용되는 것이 아니라 함수 하나에 대해 적용된다. 즉, 함수 시작 이후 타임아웃이 발생하면 함수 수행이 중단된다.
 

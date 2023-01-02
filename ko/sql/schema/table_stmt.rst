@@ -2,7 +2,6 @@
 :meta-keywords: table definition, create table, drop table, alter table, column definition, constraint definition, create table like, create table as select, rename table
 :meta-description: Define tables in CUBRID database using create table, alter table, drop table and rename table statements.
 
-
 *************
 테이블 정의문
 *************
@@ -19,15 +18,14 @@ CREATE TABLE
 
 ::
 
-    CREATE {TABLE | CLASS} [IF NOT EXISTS] table_name
+    CREATE {TABLE | CLASS} [IF NOT EXISTS] [schema_name.]table_name
     [<subclass_definition>]
-    [(<column_definition>, ... [, <table_constraint>, ...])] 
-    [AUTO_INCREMENT = initial_value]
     [CLASS ATTRIBUTE (<column_definition>, ...)]
+    [([{<table_constraint>}... ,] <column_definition> [{, {<column_definition> | <table_constraint>}}...])]
     [INHERIT <resolution>, ...]
     [<table_options>]
 
-        <subclass_definition> ::= {UNDER | AS SUBCLASS OF} table_name, ...
+        <subclass_definition> ::= {UNDER | AS SUBCLASS OF} [schema_name.]superclass_name, ...
         
         <column_definition> ::= 
             column_name <data_type> [{<default_or_shared_or_ai> | <on_update> | <column_constraint>}] [COMMENT 'column_comment_string']
@@ -45,10 +43,10 @@ CREATE TABLE
 
                 <on_update> ::= [ON UPDATE <value_specification>]
          
-            <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition> }
+            <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] <referential_definition> }
 
                 <referential_definition> ::=
-                    REFERENCES [referenced_table_name] (column_name, ...) [<referential_triggered_action> ...]
+                    REFERENCES [schema_name.]referenced_table_name (column_name, ...) [<referential_triggered_action> ...]
          
                     <referential_triggered_action> ::=
                         ON UPDATE <referential_action> |
@@ -56,19 +54,21 @@ CREATE TABLE
 
                         <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
                         
-        <table_constraint> ::=
-            [CONSTRAINT [constraint_name]] 
+        <table_constraint> ::=             
             { 
-                UNIQUE [KEY|INDEX](column_name, ...) |
-                {KEY|INDEX} [constraint_name](column_name, ...) |
-                PRIMARY KEY (column_name, ...) |
-                <referential_constraint>
+                {KEY|INDEX} index_name (column_name, ...) |
+                [CONSTRAINT [constraint_name]]
+                   {
+                      UNIQUE [KEY|INDEX](column_name, ...) |
+                      PRIMARY KEY (column_name, ...) |
+                      <referential_constraint>
+                   }
             } COMMENT 'index_comment_string'
          
             <referential_constraint> ::= FOREIGN KEY [<foreign_key_name>](column_name, ...) <referential_definition>
          
                 <referential_definition> ::=
-                    REFERENCES [referenced_table_name] (column_name, ...) [<referential_triggered_action> ...]
+                    REFERENCES [schema_name.]referenced_table_name (column_name, ...) [<referential_triggered_action> ...]
          
                     <referential_triggered_action> ::=
                         ON UPDATE <referential_action> |
@@ -76,15 +76,17 @@ CREATE TABLE
         
                         <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
      
-        <resolution> ::= [CLASS] {column_name} OF superclass_name [AS alias]
+        <resolution> ::= [CLASS] {column_name} OF [schema_name.]superclass_name [AS alias]
         <table_options> ::= <table_option> [[,] <table_option> ...] 
             <table_option> ::= REUSE_OID | DONT_REUSE_OID |
                                COMMENT [=] 'table_comment_string' |
                                [CHARSET charset_name] [COLLATE collation_name] |
-                               ENCRYPT [=] [AES | ARIA]
+                               ENCRYPT [=] [AES | ARIA] | 
+                               AUTO_INCREMENT = initial_value
 
-*   **IF NOT EXISTS**: 생성하려는 테이블이 존재하는 경우 에러 없이 테이블을 생성하지 않는다. 
-*   *table_name*: 생성할 테이블의 이름을 지정한다(최대 254바이트).
+*   **IF NOT EXISTS**: 생성하려는 테이블이 존재하는 경우 에러 없이 테이블을 생성하지 않는다.
+*   *schema_name*: 스키마 이름을 지정한다(최대 31바이트). 생략하면 현재 세션의 스키마 이름을 사용한다.
+*   *table_name*: 생성할 테이블의 이름을 지정한다(최대 222바이트).
 *   *column_name*: 생성할 칼럼의 이름을 지정한다(최대 254바이트).
 *   *column_type*: 칼럼의 데이터 타입을 지정한다.
 *   [**SHARED** *value* | **DEFAULT** *value*]: 칼럼의 초기값을 지정한다.
@@ -95,6 +97,10 @@ CREATE TABLE
 *   *table_comment_string*: 테이블의 커멘트를 지정한다.
 *   *column_comment_string*: 칼럼의 커멘트를 지정한다.
 *   *index_comment_string*: 인덱스의 커멘트를 지정한다.
+
+.. note::
+
+    *   **DBA**\와 **DBA** 멤버는 다른 스키마에 테이블을 생성할 수 있다. 사용자가 **DBA**\도 아니고 **DBA** 멤버도 아니면 해당 사용자의 스키마에서만 테이블을 생성할 수 있다.
 
 .. code-block:: sql
 
@@ -157,7 +163,7 @@ CREATE TABLE
 
         <on_update> ::= [ON UPDATE <value_specification>]
 
-        <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition>}
+        <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] <referential_definition>}
 
 칼럼 이름
 ^^^^^^^^^
@@ -300,14 +306,14 @@ CREATE TABLE
 
 ::
 
-    CREATE TABLE table_name (id INT AUTO_INCREMENT[(seed, increment)]);
+    CREATE TABLE [schema_name.]table_name (id INT AUTO_INCREMENT[(seed, increment)]);
 
-    CREATE TABLE table_name (id INT AUTO_INCREMENT) AUTO_INCREMENT = seed ;
+    CREATE TABLE [schema_name.]table_name (id INT AUTO_INCREMENT) AUTO_INCREMENT = seed ;
 
 *   *seed*: 번호가 시작하는 초기값이다. 모든 정수가 허용되며 기본값은 **1** 이다.
 *   *increment*: 행마다 증가되는 증가값이다. 양의 정수만 허용되며 기본값은 **1** 이다.
 
-**CREATE TABLE** *table_name* (id int **AUTO_INCREMENT**) **AUTO_INCREMENT** = *seed*; 구문을 사용할 때에는 다음과 같은 제약 사항이 있다.
+**CREATE TABLE** *[schema_name.]table_name* (id int **AUTO_INCREMENT**) **AUTO_INCREMENT** = *seed*; 구문을 사용할 때에는 다음과 같은 제약 사항이 있다.
 
 *   **AUTO_INCREMENT** 속성을 갖는 칼럼은 하나만 정의해야 한다.
 *   (*seed*, *increment*)와 **AUTO_INCREMENT** = *seed* 는 같이 사용하지 않는다.
@@ -419,21 +425,23 @@ ON UPDATE
 
 ::
 
-    <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition> }
+    <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] <referential_definition> }
 
-    <table_constraint> ::=
-        [CONSTRAINT [constraint_name]] 
+    <table_constraint> ::=         
         { 
-            UNIQUE [KEY|INDEX](column_name, ...) |
-            {KEY|INDEX} [constraint_name](column_name, ...) |
-            PRIMARY KEY (column_name, ...) |
-            <referential_constraint>
+            {KEY|INDEX} index_name (column_name, ...) |
+            [CONSTRAINT [constraint_name]]
+               {
+                      UNIQUE [KEY|INDEX](column_name, ...) |
+                      PRIMARY KEY (column_name, ...) |
+                      <referential_constraint>
+               }
         }
      
         <referential_constraint> ::= FOREIGN KEY [<foreign_key_name>](column_name, ...) <referential_definition>
      
             <referential_definition> ::=
-                REFERENCES [referenced_table_name] (column_name, ...) [<referential_triggered_action> ...]
+                REFERENCES [schema_name.]referenced_table_name (column_name, ...) [<referential_triggered_action> ...]
      
                 <referential_triggered_action> ::=
                     ON UPDATE <referential_action> |
@@ -544,12 +552,14 @@ PRIMARY KEY 제약
         PRIMARY KEY (host_year, event_code, athlete_code, medal)
     );
 
+.. _foreign-key-constraint:
+
 FOREIGN KEY 제약
 ^^^^^^^^^^^^^^^^
 
 외래키(foreign key)란 참조 관계에 있는 다른 테이블의 기본키를 참조하는 칼럼 또는 칼럼들의 집합을 말한다. 외래키와 참조되는 기본키는 동일한 데이터 타입을 가져야 한다. 외래키가 기본키를 참조함에 따라 연관되는 두 테이블 사이에는 일관성이 유지되는데, 이를 참조 무결성(referential integrity)이라 한다. ::
 
-    [CONSTRAINT constraint_name] FOREIGN KEY [foreign_key_name] (<column_name_comma_list1>) REFERENCES [referenced_table_name] (<column_name_comma_list2>) [<referential_triggered_action> ...]
+    [CONSTRAINT constraint_name] FOREIGN KEY [foreign_key_name] (<column_name_comma_list1>) REFERENCES [schema_name.]referenced_table_name (<column_name_comma_list2>) [<referential_triggered_action> ...]
      
         <referential_triggered_action> ::= ON UPDATE <referential_action> | ON DELETE <referential_action>
 
@@ -559,6 +569,7 @@ FOREIGN KEY 제약
 *   *foreign_key_name*: **FOREIGN KEY** 제약 조건의 이름을 지정한다. 생략할 수 있으며, 이 값을 지정하면 *constraint_name* 을 무시하고 이 이름을 사용한다.
 
 *   <*column_name_comma_list1*>: **FOREIGN KEY** 키워드 뒤에 외래키로 정의하고자 하는 칼럼 이름을 명시한다. 정의되는 외래키의 칼럼 개수는 참조되는 기본키의 칼럼 개수와 동일해야 한다.
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *referenced_table_name*: 참조되는 테이블의 이름을 지정한다.
 *   <*column_name_comma_list2*>: **REFERENCES** 키워드 뒤에 참조되는 기본키 칼럼 이름을 지정한다.
 *   <*referential_triggered_action*>: 참조 무결성이 유지되도록 특정 연산에 따라 대응하는 트리거 동작을 정의하는 것이며, **ON UPDATE**, **ON DELETE** 가 올 수 있다. 각각의 동작은 중복하여 정의 가능하며, 정의 순서는 무관하다.
@@ -786,8 +797,7 @@ DONT_REUSE_OID
 
     CREATE TABLE enc_tbl (a INT, b INT) ENCRYPT = AES;
 
-암호화 알고리즘으로 **AES**, **ARIA** 를 지정할 수 있다. 다음과 같이 생략할 경우 시스템 파라미터 **tde_default_algorithm** 으로
-지정된 암호화 알고리즘이 사용 된다. 기본 값은 **AES** 이다.
+암호화 알고리즘으로 **AES**, **ARIA** 를 지정할 수 있다. 다음과 같이 생략할 경우 시스템 파라미터 **tde_default_algorithm** 으로 지정된 암호화 알고리즘이 사용 된다. 기본 값은 **AES** 이다.
 
 .. code-block:: sql
 
@@ -804,8 +814,9 @@ CREATE TABLE LIKE
 
 ::
 
-    CREATE {TABLE | CLASS} <new_table_name> LIKE <source_table_name>;
+    CREATE {TABLE | CLASS} [schema_name.]new_table_name LIKE [schema_name.]source_table_name;
 
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *new_table_name*: 새로 생성할 테이블 이름이다.
 *   *source_table_name*: 데이터베이스에 이미 존재하는 원본 테이블 이름이다. **CREATE TABLE ... LIKE** 문에서 아래의 테이블은 원본 테이블로 지정될 수 없다.
 
@@ -824,7 +835,7 @@ CREATE TABLE LIKE
     -- creating an empty table with the same schema as a_tbl
     CREATE TABLE new_tbl LIKE a_tbl;
     SELECT * FROM new_tbl;
-     
+
 ::
 
     There are no results.
@@ -882,8 +893,9 @@ CREATE TABLE AS SELECT
 
 ::
 
-    CREATE {TABLE | CLASS} table_name [(<column_definition> [,<table_constraint>], ...)] [COMMENT [=] 'comment_string'] [REPLACE] AS <select_statement>;
+    CREATE {TABLE | CLASS} [schema_name.]table_name [([{<table_constraint>}... ,] <column_definition> [{ ,{<column_definition> | <table_constraint>}}...])] [COMMENT [=] 'comment_string'] [REPLACE] AS <select_statement>;
 
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 새로 생성할 테이블 이름이다.
 *   <*column_definition*>: 칼럼을 정의한다. 생략하면 **SELECT** 문의 칼럼 스키마가 복제된다. **SELECT** 문의 칼럼 제약 조건이나 **AUTO_INCREMENT** 속성, 테이블/칼럼의 커멘트는 복제되지 않는다.
 *   <*table_constraint*>: 테이블 제약 조건을 정의한다.
@@ -992,17 +1004,17 @@ ALTER TABLE
 
 ::
 
-    ALTER [TABLE | CLASS] table_name <alter_clause> [, <alter_clause>] ... ;
+    ALTER [TABLE | CLASS] [schema_name.]table_name <alter_clause> [, <alter_clause>] ... ;
      
         <alter_clause> ::= 
             ADD <alter_add> [INHERIT <resolution>, ...]  | 
             ADD {KEY | INDEX} <index_name> (<index_col_name>, ... ) [COMMENT 'index_comment_string'] |
             ALTER [COLUMN] column_name SET DEFAULT <value_specification> |
-            DROP <alter_drop> [ INHERIT <resolution>, ... ] |
+            DROP <alter_drop> [INHERIT <resolution>, ...] |
             DROP {KEY | INDEX} index_name |
             DROP FOREIGN KEY constraint_name |
             DROP PRIMARY KEY |                   
-            RENAME <alter_rename> [ INHERIT <resolution>, ... ] |
+            RENAME <alter_rename> [INHERIT <resolution>, ...] |
             CHANGE <alter_change> |
             MODIFY <alter_modify> |            
             INHERIT <resolution>, ... |
@@ -1015,7 +1027,7 @@ ALTER TABLE
                 CLASS ATTRIBUTE <column_definition>, ... |
                 CONSTRAINT <constraint_name> <column_constraint> (column_name) |
                 QUERY <select_statement> |
-                SUPERCLASS <class_name>, ...
+                SUPERCLASS [schema_name.]superclass_name, ...
                             
                 <class_element> ::= <column_definition> | <table_constraint>
      
@@ -1026,7 +1038,7 @@ ALTER TABLE
                 {
                     column_name, ... |
                     QUERY [<unsigned_integer_literal>] |
-                    SUPERCLASS class_name, ... |
+                    SUPERCLASS [schema_name.]superclass_name, ... |
                     CONSTRAINT constraint_name
                 }
                              
@@ -1051,7 +1063,7 @@ ALTER TABLE
               | MODIFY [COLUMN | CLASS ATTRIBUTE] col_name <column_definition>
                     [FIRST | AFTER col_name2]
 
-            <resolution> ::= column_name OF superclass_name [AS alias]
+            <resolution> ::= column_name OF [schema_name.]superclass_name [AS alias]
 
             <index_col_name> ::= column_name [(length)] [ASC | DESC]
 
@@ -1072,7 +1084,7 @@ ADD COLUMN 절
 
 ::
 
-    ALTER [TABLE | CLASS] table_name
+    ALTER [TABLE | CLASS] [schema_name.]table_name
     ADD [COLUMN | ATTRIBUTE] [(] <column_definition> [FIRST | AFTER old_column_name] [)];
 
         <column_definition> ::= 
@@ -1091,10 +1103,10 @@ ADD COLUMN 절
 
             <on_update> ::= [ON UPDATE <value_specification>]
             
-            <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition>}
+            <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] <referential_definition>}
 
                 <referential_definition> ::=
-                    REFERENCES [referenced_table_name] (column_name, ...) [<referential_triggered_action> ...]
+                    REFERENCES [schema_name.]referenced_table_name (column_name, ...) [<referential_triggered_action> ...]
          
                     <referential_triggered_action> ::=
                         ON UPDATE <referential_action> |
@@ -1102,6 +1114,7 @@ ADD COLUMN 절
 
                         <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
 
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 칼럼을 추가할 테이블의 이름을 지정한다.
 *   <*column_definition*>: 새로 추가할 칼럼의 이름(최대 254 바이트), 데이터 타입, 제약 조건을 정의한다.
 *   **AFTER** *old_column_name*: 새로 추가할 칼럼 앞에 위치하는 기존 칼럼 이름을 명시한다.
@@ -1197,22 +1210,24 @@ ADD CONSTRAINT 절
 
 **PRIMARY KEY** 제약 조건을 추가할 때 생성되는 인덱스는 기본적으로 오름차순으로 생성되며, 칼럼 이름 뒤에 **ASC** 또는 **DESC** 키워드를 명시하여 키의 정렬 순서를 지정할 수 있다. ::
 
-    ALTER [TABLE | CLASS | VCLASS | VIEW] table_name
+    ALTER [TABLE | CLASS | VCLASS | VIEW] [schema_name.]table_name
     ADD <table_constraint> ;
     
-        <table_constraint> ::=
-            [CONSTRAINT [constraint_name]] 
+        <table_constraint> ::=             
             { 
-                UNIQUE [KEY|INDEX](column_name, ...) |
-                {KEY|INDEX} [constraint_name](column_name, ...) |
-                PRIMARY KEY (column_name, ...) |
-                <referential_constraint>
+                {KEY|INDEX} index_name (column_name, ...) |
+                [CONSTRAINT [constraint_name]]
+                   {
+                      UNIQUE [KEY|INDEX](column_name, ...) |
+                      PRIMARY KEY (column_name, ...) |
+                      <referential_constraint>
+                   }
             }
      
             <referential_constraint> ::= FOREIGN KEY [foreign_key_name](column_name, ...) <referential_definition>
          
                 <referential_definition> ::=
-                    REFERENCES [referenced_table_name] (column_name, ...) [<referential_triggered_action> ...]
+                    REFERENCES [schema_name.]referenced_table_name (column_name, ...) [<referential_triggered_action> ...]
          
                     <referential_triggered_action> ::=
                         ON UPDATE <referential_action> |
@@ -1220,6 +1235,7 @@ ADD CONSTRAINT 절
 
                         <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
 
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 제약 조건을 추가할 테이블의 이름을 지정한다.
 *   *constraint_name*: 새로 추가할 제약 조건의 이름(최대 254 바이트)을 지정할 수 있으며, 생략할 수 있다. 생략하면 자동으로 부여된다.
 *   *foreign_key_name*: **FOREIGN KEY** 제약 조건의 이름을 지정할 수 있다. 생략할 수 있으며, 지정하면 *constraint_name* 을 무시하고 이 이름을 사용한다.
@@ -1237,10 +1253,11 @@ ADD INDEX 절
 
 **ADD INDEX** 절은 특정 칼럼에 대해 인덱스 속성을 추가로 정의할 수 있다. ::
 
-    ALTER [TABLE | CLASS] table_name ADD {KEY | INDEX} index_name (<index_col_name>) ;
+    ALTER [TABLE | CLASS] [schema_name.]table_name ADD {KEY | INDEX} index_name (<index_col_name>) ;
      
         <index_col_name> ::= column_name [(length)] [ ASC | DESC ]
 
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 변경하고자 하는 테이블의 이름을 지정한다.
 *   *index_name*: 인덱스의 이름을 지정한다(최대 254 바이트).
 *   *index_col_name*: 인덱스를 정의할 대상 칼럼을 지정하며, 이때 칼럼 옵션으로 **ASC** 또는 **DESC** 을 함께 지정할 수 있다.
@@ -1285,8 +1302,9 @@ ALTER COLUMN ... SET DEFAULT 절
 
 ::
 
-    ALTER [TABLE | CLASS] table_name ALTER [COLUMN] column_name SET DEFAULT value ;
+    ALTER [TABLE | CLASS] [schema_name.]table_name ALTER [COLUMN] column_name SET DEFAULT value ;
 
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 기본값을 변경할 칼럼이 속한 테이블의 이름을 지정한다.
 *   *column_name*: 새로운 기본값을 적용할 칼럼의 이름을 지정한다.
 *   *value*: 새로운 기본값을 지정한다.
@@ -1369,8 +1387,9 @@ AUTO_INCREMENT 절
 
 **AUTO_INCREMENT** 절은 기존에 정의한 자동 증가값의 초기값을 변경할 수 있다. 단, 테이블 내에 **AUTO_INCREMENT** 칼럼이 한 개만 정의되어 있어야 한다. ::
 
-    ALTER TABLE table_name AUTO_INCREMENT = initial_value ;
+    ALTER TABLE [schema_name.]table_name AUTO_INCREMENT = initial_value ;
 
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 테이블 이름
 *   *initial_value*: 새로 변경할 초기값
 
@@ -1407,13 +1426,13 @@ CHANGE/MODIFY 절
 
 .. warning::
 
-    *   CUBRID 2008 R3.1 이하 버전에서 사용되었던 **ALTER TABLE** *table_name* **CHANGE** *column_name* **DEFAULT** *default_value* 구문은 더 이상 지원하지 않는다.
+    *   CUBRID 2008 R3.1 이하 버전에서 사용되었던 **ALTER TABLE** *[schema_name.]table_name* **CHANGE** *column_name* **DEFAULT** *default_value* 구문은 더 이상 지원하지 않는다.
     *   숫자를 문자 타입으로 변환할 때, alter_table_change_type_strict=no이고 해당 문자열의 길이가 숫자의 길이보다 짧으면 변환되는 문자 타입의 길이에 맞추어 문자열이 잘린 상태로 저장된다. alter_table_change_type_strict=yes이면 오류를 발생한다.
     *   테이블의 칼럼 타입, 콜레이션 등 칼럼 속성을 변경하는 경우 변경된 속성이 변경 전의 테이블을 이용하여 생성한 뷰에 반영되지는 않는다. 따라서 테이블의 칼럼 속성을 변경하는 경우 뷰를 재생성할 것을 권장한다.
 
 ::
 
-    ALTER [/*+ SKIP_UPDATE_NULL */] TABLE tbl_name <table_options> ;
+    ALTER [/*+ SKIP_UPDATE_NULL */] TABLE [schema_name.]tbl_name <table_options> ;
      
         <table_options> ::=
             <table_option>[, <table_option>, ...]
@@ -1424,6 +1443,7 @@ CHANGE/MODIFY 절
               | MODIFY [COLUMN | CLASS ATTRIBUTE] col_name <column_definition>
                          [FIRST | AFTER col_name]
 
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *tbl_name*: 변경할 칼럼이 속한 테이블의 이름을 지정한다.
 *   *old_col_name*: 기존 칼럼의 이름을 지정한다.
 *   *new_col_name*: 변경할 칼럼의 이름을 지정한다.
@@ -1596,19 +1616,25 @@ CHANGE/MODIFY 절
 칼럼의 타입 변경에 따른 테이블 속성의 변경
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-*   타입 변경: 시스템 파라미터 **alter_table_change_type_strict** 의 값이 no이면 다른 타입으로 값 변경을 허용하고, yes이면 허용하지 않는다. 기본값은 **no** 이며, **CAST** 연산자로 허용되는 모든 타입으로 변경이 허용된다. 객체 타입의 변경은 객체의 상위 클래스(테이블)에 의해서만 허용된다.
+*   타입 변경: 시스템 파라미터 **alter_table_change_type_strict**\의 값이 no이면 다른 타입으로 값 변경을 허용하고, yes이면 허용하지 않는다. 기본값은 **yes**\이며, **CAST** 연산자로 허용되는 모든 타입으로 변경이 허용된다. 객체 타입의 변경은 객체의 상위 클래스(테이블)에 의해서만 허용된다. 또한 **char**, **varchar**\처럼 스트링 타입으로 변경 시 시스템 파라미터 **allow_truncated_string**\이 **no**\인 경우 오버플로된 스트링은 허용하지 않는다. 기본값은 **no**\이다.
 
 *   **NOT NULL**
 
-    *   변경할 칼럼에 **NOT NULL** 제약 조건이 지정되지 않으면 기존 테이블에 존재하더라도 새 테이블에서 제거된다.
+    *   변경할 칼럼에 **NOT NULL** 제약 조건이 지정되지 않더라도 새 테이블에서 해당 제약 조건이 제거되지 않고 그대로 남아있게 된다. 새 테이블에서 해당 제약 조건을 제거하려면 구문에서 **NULL**\을 지정하면 된다.
     *   변경할 칼럼에 **NOT NULL** 제약 조건이 지정되면 시스템 파라미터 **alter_table_change_type_strict** 의 설정에 따라 결과가 달라진다.
 
         *   **alter_table_change_type_strict** 가 yes이면 해당 칼럼의 값을 검사하여 **NULL** 이 존재하면 오류가 발생하고 변경을 수행하지 않는다.
         *   **alter_table_change_type_strict** 가 no이면 존재하는 모든 **NULL** 값을 변경할 타입의 고정 기본값(hard default value)으로 변경한다.
 
-*   **DEFAULT**: 변경할 칼럼에 **DEFAULT** 속성이 지정되지 않으면 이 속성이 기존 테이블에 있더라도 새 테이블에서 제거된다.
+*   **DEFAULT**: 변경할 칼럼에 **DEFAULT** 속성이 지정되지 않더라도 새 테이블에서 해당 속성이 제거되지 않고 그대로 남아있게 된다. 새 테이블에서 해당 속성을 제거하려면 구문에서 **DEFAULT NULL**\을 지정하면 된다.
 
-*   **AUTO_INCREMENT**: 변경할 칼럼에 **AUTO_INCREMENT** 속성이 지정되지 않으면 이 속성이 기존 테이블에 있더라도 새 테이블에서 제거된다.
+*   **COMMENT**: 변경할 칼럼에 **COMMENT** 속성이 지정되지 않더라도 새 테이블에서 해당 속성이 제거되지 않고 그대로 남아있게 된다. 새 테이블에서 해당 속성을 제거하려면 구문에서 **COMMENT ''**\을 지정하면 된다.
+
+*   **AUTO_INCREMENT**: 변경할 칼럼에 **AUTO_INCREMENT** 속성이 지정되지 않더라도 새 테이블에서 해당 속성이 제거되지 않고 남아있게 된다.
+        *   주의) **AUTO_INCREMENT** 속성은 CREATE나 ALTER로 한 번 설정한 후에는 제거할 수 없다.
+
+*   **ON UPDATE**: 변경할 칼럼에 **ON UPDATE** 속성이 지정되지 않더라도 새 테이블에서 해당 속성이 제거되지 않고 남아있게 된다.
+        *   주의) **ON UPDATE** 속성은 CREATE나 ALTER로 한 번 설정한 후에는 제거할 수 없다.
 
 *   **FOREIGN KEY**: 참조되고 있거나 참조하고 있는 외래키(foreign key) 제약 조건을 지닌 칼럼은 변경할 수 없다.
 
@@ -1643,7 +1669,7 @@ CHANGE/MODIFY 절
 칼럼의 타입 변경에 따른 값의 변경
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-**alter_table_change_type_strict** 파라미터는 타입 변경에 따른 값의 변환을 허용하는지 여부를 결정한다. 값이 no이면 칼럼의 타입을 변경하거나 **NOT NULL** 제약 조건을 추가할 때 값이 변경될 수 있다. 기본값은 **no** 이다.
+**alter_table_change_type_strict** 파라미터는 타입 변경에 따른 값의 변환을 허용하는지 여부를 결정한다. 값이 no이면 칼럼의 타입을 변경하거나 **NOT NULL** 제약 조건을 추가할 때 값이 변경될 수 있다. 기본값은 **yes** 이다.
 
 **alter_table_change_type_strict** 파라미터의 값이 no이면 상황에 따라 다음과 같이 동작한다. 
 
@@ -1745,9 +1771,10 @@ RENAME COLUMN 절
 
 **RENAME COLUMN** 절을 사용하여 칼럼의 이름을 변경할 수 있다. ::
 
-    ALTER [TABLE | CLASS | VCLASS | VIEW] table_name
-    RENAME [COLUMN | ATTRIBUTE] old_column_name { AS | TO } new_column_name
+    ALTER [TABLE | CLASS | VCLASS | VIEW] [schema_name.]table_name
+    RENAME [COLUMN | ATTRIBUTE] old_column_name {AS | TO} new_column_name
 
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 이름을 변경할 칼럼의 테이블 이름을 지정한다.
 *   *old_column_name*: 현재의 칼럼 이름을 지정한다.
 *   *new_column_name*: 새로운 칼럼 이름을 **AS** 키워드 뒤에 명시한다(최대 254 바이트).
@@ -1762,9 +1789,10 @@ DROP COLUMN 절
 
 **DROP COLUMN** 절을 사용하여 테이블에 존재하는 칼럼을 삭제할 수 있다. 삭제하고자 하는 칼럼들을 쉼표(,)로 구분하여 여러 개의 칼럼을 한 번에 삭제할 수 있다. ::
 
-    ALTER [TABLE | CLASS | VCLASS | VIEW] table_name
+    ALTER [TABLE | CLASS | VCLASS | VIEW] [schema_name.]table_name
     DROP [COLUMN | ATTRIBUTE] column_name, ... ;
 
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 삭제할 칼럼의 테이블 이름을 명시한다.
 *   *column_ name*: 삭제할 칼럼의 이름을 명시한다. 쉼표로 구분하여 여러 개의 칼럼을 지정할 수 있다.
 
@@ -1777,9 +1805,10 @@ DROP CONSTRAINT 절
 
 **DROP CONSTRAINT** 절을 사용하여, 테이블에 이미 정의된 **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** 제약 조건을 삭제할 수 있다. 삭제할 제약 조건 이름을 지정해야 하며, 이는 CSQL 명령어( **;schema table_name** )를 사용하여 확인할 수 있다. ::
 
-    ALTER [TABLE | CLASS] table_name
+    ALTER [TABLE | CLASS] [schema_name.]table_name
     DROP CONSTRAINT constraint_name ;
 
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 제약 조건을 삭제할 테이블의 이름을 지정한다.
 *   *constraint_name*: 삭제할 제약 조건의 이름을 지정한다.
 
@@ -1811,8 +1840,9 @@ DROP INDEX 절
 
 ::
 
-    ALTER [TABLE | CLASS] table_name DROP INDEX index_name ;
+    ALTER [TABLE | CLASS] [schema_name.]table_name DROP INDEX index_name ;
 
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 제약 조건을 삭제할 테이블의 이름을 지정한다.
 *   *index_name*: 삭제할 인덱스의 이름을 지정한다.
 
@@ -1825,8 +1855,9 @@ DROP PRIMARY KEY 절
 
 **DROP PRIMARY KEY** 절을 사용하여 테이블에 정의된 기본키 제약 조건을 삭제할 수 있다. 하나의 테이블에는 하나의 기본키만 정의될 수 있으므로 기본키 제약 조건 이름을 지정하지 않아도 된다. ::
 
-    ALTER [TABLE | CLASS] table_name DROP PRIMARY KEY ;
+    ALTER [TABLE | CLASS] [schema_name.]table_name DROP PRIMARY KEY ;
 
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 기본키 제약 조건을 삭제할 테이블의 이름을 지정한다.
 
 .. code-block:: sql
@@ -1838,8 +1869,9 @@ DROP FOREIGN KEY 절
 
 **DROP FOREIGN KEY** 절을 사용하여 테이블에 정의된 외래키 제약 조건을 모두 삭제할 수 있다. ::
 
-    ALTER [TABLE | CLASS] table_name DROP FOREIGN KEY constraint_name ;
+    ALTER [TABLE | CLASS] [schema_name.]table_name DROP FOREIGN KEY constraint_name ;
 
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 제약 조건을 삭제할 테이블의 이름을 지정한다.
 *   *constraint_name*: 삭제할 외래키 제약 조건의 이름을 지정한다.
 
@@ -1861,9 +1893,10 @@ DROP TABLE
             <single_table_spec> | (<table_specification_comma_list>) 
 
             <single_table_spec> ::= 
-                |[ONLY] table_name 
-                | ALL table_name [( EXCEPT table_name, ... )] 
+                | [ONLY] [schema_name.]table_name 
+                | ALL [schema_name.]table_name [( EXCEPT [schema_name.]table_name, ... )] 
 
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 삭제할 테이블의 이름을 지정한다. 쉼표로 구분하여 여러 개의 테이블을 한 번에 삭제할 수 있다.
 *   **ONLY** 키워드 뒤에 수퍼클래스 이름이 명시되면, 해당 수퍼클래스만 삭제하고 이를 상속받는 서브클래스는 삭제하지 않는다.
 *   **ALL** 키워드 뒤에 수퍼클래스 이름이 지정되면, 해당 수퍼클래스 및 이를 상속받는 서브클래스를 모두 삭제한다.
@@ -1907,8 +1940,9 @@ RENAME TABLE
 
 **RENAME TABLE** 구문을 사용하여 테이블 이름을 변경할 수 있으며, 여러 개의 테이블 이름을 변경하는 경우 테이블 이름 리스트를 명시할 수 있다. ::
 
-    RENAME  [TABLE | CLASS] old_table_name {AS | TO} new_table_name [, old_table_name {AS | TO} new_table_name, ...] ;
+    RENAME  [TABLE | CLASS] [schema_name.]old_table_name {AS | TO} [schema_name.]new_table_name [{, [schema_name.]old_table_name {AS | TO} [schema_name.]new_table_name}];
 
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다. 변경할 테이블의 스키마와 새로운 테이블의 스키마가 동일해야 한다.
 *   *old_table_name*: 변경할 테이블의 이름을 지정한다.
 *   *new_table_name*: 새로운 테이블 이름을 지정한다(최대 254 바이트).
 

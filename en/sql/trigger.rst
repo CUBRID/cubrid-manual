@@ -41,7 +41,7 @@ Trigger Definition
 
 A trigger is created by defining a trigger target, condition and action to be performed in the **CREATE TRIGGER** statement. A trigger is a database object that performs a defined action when a specific event occurs in the target table. ::
 
-    CREATE TRIGGER trigger_name
+    CREATE TRIGGER [schema_name.]trigger_name
     [ STATUS { ACTIVE | INACTIVE } ]
     [ PRIORITY key ]
     <event_time> <event_type> [<event_target>]
@@ -65,8 +65,8 @@ A trigger is created by defining a trigger target, condition and action to be pe
         COMMIT
      
     <event_target> ::=
-        ON table_name |
-        ON table_name [ (column_name) ]
+        ON [schema_name.]table_name |
+        ON [schema_name.]table_name [ (column_name) ]
      
     <condition> ::=
         expression
@@ -79,6 +79,7 @@ A trigger is created by defining a trigger target, condition and action to be pe
         UPDATE statement |
         DELETE statement
 
+*   *schema_name*: Specifies the schema name of the trigger. If omitted, the schema name of the current session is used.
 *   *trigger_name*: specifies the name of the trigger to be defined.
 *   [ **STATUS** { **ACTIVE** | **INACTIVE** } ]: Defines the state of the trigger (if not defined, the default value is **ACTIVE**).
 
@@ -94,6 +95,10 @@ A trigger is created by defining a trigger target, condition and action to be pe
 *   <*condition*>: specifies the trigger condition. For details, see the :ref:`trigger-condition` section.
 *   <*action*>: specifies the trigger action. For details, see the :ref:`trigger-action` section.
 *   *trigger_comment*: specifies a trigger's comment.
+
+.. note::
+
+    *   **DBA** and **DBA** members can create triggers in different schemas. If a user is neither **DBA** nor **DBA** member, triggers can only be created in the schema of that user.
 
 The following example shows how to create a trigger that rejects the update if the number of medals won is smaller than 0 when an instance of the *participant* table is updated.
 As shown below, the update is rejected if you try to change the number of gold (*gold*) medals that Korea won in the 2004 Olympic Games to a negative number.
@@ -356,12 +361,13 @@ In the trigger definition, **STATUS** and **PRIORITY** options can be changed by
 
 ::
 
-    ALTER TRIGGER trigger_name <trigger_option> ;
+    ALTER TRIGGER [schema_name.]trigger_name <trigger_option> ;
 
     <trigger_option> ::=
         STATUS { ACTIVE | INACTIVE } |
         PRIORITY key
 
+*   *schema_name*: Specifies the schema name of the trigger. If omitted, the schema name of the current session is used.
 *   *trigger_name*: specifies the name of the trigger to be changed.
 *   **STATUS** { **ACTIVE** | **INACTIVE** }: changes the status of the trigger.
 *   **PRIORITY** *key*: changes the priority.
@@ -392,9 +398,11 @@ You can change a trigger's comment by running **ALTER TRIGGER** syntax as below.
 
 ::
 
-    ALTER TRIGGER trigger_name [trigger_option] 
+    ALTER TRIGGER [schema_name.]trigger_name [trigger_option] 
     [COMMENT ‘comment_string’];
 
+*   *schema_name*: Specifies the schema name of the trigger. If omitted, the schema name of the current session is used.
+*   *trigger_name*: specifies the name of the trigger to be changed.
 *   *comment_string*: specifies a trigger's comment.
 
 If you want to change only trigger's comment, you can omit trigger options (*trigger_option*).
@@ -410,8 +418,9 @@ DROP TRIGGER
 
 You can drop a trigger by using the **DROP TRIGGER** statement. ::
 
-    DROP TRIGGER trigger_name ; 
+    DROP TRIGGER [schema_name.]trigger_name ; 
 
+*   *schema_name*: Specifies the schema name of the trigger. If omitted, the schema name of the current session is used.
 *   *trigger_name*: specifies the name of the trigger to be dropped.
 
 The following example shows how to drop the medal_trig trigger.
@@ -430,8 +439,9 @@ RENAME TRIGGER
 
 You can change a trigger name by using the **TRIGGER** reserved word in the **RENAME** statement. ::
 
-    RENAME TRIGGER old_trigger_name AS new_trigger_name [ ; ]
+    RENAME TRIGGER [schema_name.]old_trigger_name {AS | TO} [schema_name.]new_trigger_name ;
 
+*   *schema_name*: Specifies the schema name of the trigger. If omitted, the schema name of the current session is used. The schema of the current trigger and the schema of the trigger to be changed must be the same.
 *   *old_trigger_name*: specifies the current name of the trigger.
 *   *new_trigger_name*: specifies the name of the trigger to be modified.
 
@@ -441,7 +451,7 @@ You can change a trigger name by using the **TRIGGER** reserved word in the **RE
 
 .. note::
 
-    *   A trigger name must be unique among all trigger names. The name of a trigger can be the same as the table name in the database.
+    *   A trigger name must be unique among triggers owned by the user. However, it can be the same as the table name in the database or the name of a trigger owned by another owner.
     *   To rename a table trigger, you must be the trigger owner or granted the **ALTER** authorization on the table where the trigger belongs. A user trigger can only be renamed by its user.
 
 Deferred Condition and Action
@@ -457,9 +467,10 @@ Executes the deferred condition or action of a trigger immediately. ::
     EXECUTE DEFERRED TRIGGER <trigger_identifier> ;
 
     <trigger_identifier> ::=
-        trigger_name |
+        [schema_name.]trigger_name |
         ALL TRIGGERS
 
+*   *schema_name*: Specifies the schema name of the trigger. If omitted, the schema name of the current session is used.
 *   *trigger_name*: executes the deferred action of the trigger when a trigger name is specified.
 *   **ALL TRIGGERS**: executes all currently deferred actions.
 
@@ -468,12 +479,13 @@ Dropping Deferred Condition and Action
 
 Drops the deferred condition and action of a trigger. ::
 
-    DROP DEFERRED TRIGGER trigger_identifier [ ; ]
+    DROP DEFERRED TRIGGER trigger_identifier ;
 
     <trigger_identifier> ::=
-        trigger_name |
-        ALL TRIGGERS
+        [schema_name.]trigger_name |
+        ALL TRIGGER
 
+*   *schema_name*: Specifies the schema name of the trigger. If omitted, the schema name of the current session is used.
 *   *trigger_name* : Cancels the deferred action of the trigger when a trigger name is specified.
 *   **ALL TRIGGERS** : Cancels currently deferred actions.
 

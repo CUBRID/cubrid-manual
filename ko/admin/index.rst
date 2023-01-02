@@ -34,6 +34,10 @@ CUBRID 운영
 
     *   :ref:`cubrid broker <broker>`
 
+*   게이트웨이 유틸리티: 게이트웨이 프로세스 및 응용서버(CAS) 프로세스를 구동 및 관리한다.
+
+    *   :ref:`cubrid gateway <gateway>`
+
 *   매니저 유틸리티: 매니저 서버 프로세스를 구동 및 관리한다.
 
     *   :ref:`cubrid manager <cubrid-manager-server>`
@@ -127,5 +131,6 @@ CUBRID 운영
     admin_utils.rst
     config.rst
     systemtap.rst
+    scripts.rst
     troubleshoot.rst
     ddl_audit.rst

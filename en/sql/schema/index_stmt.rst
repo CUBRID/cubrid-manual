@@ -15,17 +15,18 @@ For how to use indexes on the **SELECT** statement like Using SQL Hint, Descendi
 
 ::
 
-    CREATE [UNIQUE] INDEX index_name ON table_name <index_col_desc> ;
+    CREATE [UNIQUE] INDEX index_name ON [schema_name.]table_name <index_col_desc> ;
      
         <index_col_desc> ::=
             { ( column_name [ASC | DESC] [ {, column_name [ASC | DESC]} ...] ) [ WHERE <filter_predicate> ] | 
-            (function_name (argument_list) ) } 
-                { [[WITH ONLINE [PARALLEL parallel_count]] | [INVISIBLE] | [VISIBLE]] }
+            (function_name (argument_list) ) }
                 [COMMENT 'index_comment_string']
+                { [[WITH ONLINE [PARALLEL parallel_count]] | [INVISIBLE] | [VISIBLE]] }
 
 *   **UNIQUE**: creates an index with unique values.
 *   *index_name*: specifies the name of the index to be created. The index name must be unique in the table.
 
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *table_name*: specifies the name of the table where the index is to be created.
 *   *column_name*: specifies the name of the column where the index is to be applied. To create a composite index, specify two or more column names.
 *   **ASC** | **DESC**: specifies the sorting order of columns. 
@@ -237,9 +238,10 @@ The following is a syntax of rebuilding an index.
 
 ::
 
-    ALTER INDEX index_name ON table_name REBUILD;
+    ALTER INDEX index_name ON [schema_name.]table_name REBUILD;
 
 *   *index_name*: specifies the name of the index to be recreated. The index name must be unique in the table.
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *table_name*: specifies the name of the table where the index is recreated.
 *   **REBUILD**:  recreate an index with the same structure as the one already created.
 *   *index_comment_string*: specifies a comment of an index.
@@ -273,12 +275,6 @@ The below is a syntax to only add or change a comment without rebuilding an inde
     
     ALTER INDEX i_game_medal ON game COMMENT 'change index comment' ;
 
-The following is a syntax of renaming an index.
-
-.. code-block:: sql
-
-    ALTER INDEX old_index_name ON table_name RENAME TO new_index_name [COMMENT 'index_comment_string'] ;
-
 The following is a syntax to change the status of an index to **INVISIBLE**/**VISIBLE**. When an index is set as **INVISIBLE**, queries will be executed as like the index does not exist. In this way, the performance of the index may be tested and the impact of its removal be evaluated without actually dropping the index.
 
 .. code-block:: sql
@@ -295,9 +291,10 @@ Use the **DROP INDEX** statement to drop an index. An index also can be dropped 
 
 ::
 
-    DROP INDEX index_name ON table_name ;
+    DROP INDEX index_name ON [schema_name.]table_name ;
 
 *   *index_name*: specifies the name of the index to be dropped.
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *table_name*: specifies the name of the table whose index is dropped.
 
 .. warning::

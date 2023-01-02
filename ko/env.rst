@@ -21,7 +21,11 @@ CUBRID 환경 변수
     *  CUBRID Manager 사용자는 DB 서버 노드의 **CUBRID_MSG_LANG** 환경 변수를 **en_US** 로 설정해야만 데이터베이스 관련 작업 이후 출력되는 메시지를 정상적으로 확인할 수 있다.  **CUBRID_MSG_LANG** 환경 변수가 **en_US** 가 아닌 경우 메시지는 비정상적으로 출력되지만 데이터베이스의 작업은 정상적으로 실행된다.
     *  변경한 **CUBRID_MSG_LANG** 을  적용하려면 DB 서버 노드의 CUBRID 시스템이 반드시 재시작(cubrid service stop; cubrid service start)되어야 한다.
 
-*   **CUBRID_TMP**: Linux용 CUBRID에서 cub_master 프로세스와 cub_broker 프로세스의 유닉스 도메인 소켓 파일을 저장하는 위치를 지정하는 환경 변수로, 지정하지 않으면 cub_master 프로세스는 **/tmp** 디렉터리에, cub_broker 프로세스는 **$CUBRID/var/CUBRID_SOCK** 디렉터리에 유닉스 도메인 소켓 파일을 저장한다(Windows용 CUBRID에서는 사용되지 않는다).
+*   **CUBRID_TMP**: Linux용 CUBRID에서 유닉스 도메인 소켓 파일을 저장하는 위치를 지정하는 환경 변수로, 지정하지 않으면 프로세스에 따라 다음의 디렉터리에 유닉스 도메인 소켓 파일을 저장한다 (Windows용 CUBRID에서는 사용되지 않는다).
+    
+    *   cub_master 프로세스: **/tmp** 디렉터리
+    *   cub_broker 프로세스: **$CUBRID/var/CUBRID_SOCK** 디렉터리
+    *   cub_javasp 프로세스: **$CUBRID/var/CUBRID_SOCK** 디렉터리
 
 **CUBRID_TMP** 의 값에는 다음과 같은 제약 사항이 있다.
 
@@ -70,9 +74,9 @@ OS 환경 변수 및 Java 환경 변수
 
 *   PATH: Linux 환경에서 PATH 환경 변수에는 CUBRID 시스템의 실행 파일이 있는 디렉터리인 **$CUBRID/bin** 이 포함되어 있어야 한다.
 
-*   LD_LIBRARY_PATH: Linux 환경에서는 **LD_LIBRARY_PATH** (혹은 **SHLIB_PATH** 나 **LIBPATH**) 환경 변수에 CUBRID 시스템의 동적 라이브러리 파일(libjvm.so)이 있는 디렉터리인 **$CUBRID/lib** 이 포함되어 있어야 한다.
+*   LD_LIBRARY_PATH: Linux 환경에서는 **LD_LIBRARY_PATH** (혹은 **SHLIB_PATH** 나 **LIBPATH**) 환경 변수에 CUBRID 시스템의 동적 라이브러리 파일(libjvm.so)이 있는 디렉터리인 **$CUBRID/lib** 과 **$CUBRID/cci/lib** 이 포함되어 있어야 한다.
 
-*   Path: Windows 환경에서 Path 환경 변수에는 CUBRID 시스템의 실행 파일이 있는 디렉터리인 **%CUBRID%\\bin** 이 포함되어 있어야 한다.
+*   Path: Windows 환경에서 Path 환경 변수에는 CUBRID 시스템의 실행 파일이 있는 디렉터리인 **%CUBRID%\\bin** 과 **%CUBRID%\\cci\\bin** 이 포함되어 있어야 한다.
 
 *   JAVA_HOME: CUBRID 시스템에서 자바 저장 프로시저 기능을 사용하기 위해서는 Java Runtime Environment (JRE) 1.6 이상 버전이 설치되어야 하고 **JAVA_HOME** 환경 변수에 해당 디렉터리가 지정되어야 한다. :ref:`cubrid-javasp-server-config` 을 참고한다.
 
@@ -99,11 +103,11 @@ Linux 환경에서 CUBRID 시스템을 설치한 경우는 설치 프로그램�
     
     if [ "$ld_lib_path" = "" ]
     then
-        LD_LIBRARY_PATH=$CUBRID/lib
+        LD_LIBRARY_PATH=$CUBRID/lib:$CUBRID/cci/lib
     else
-        LD_LIBRARY_PATH=$CUBRID/lib:$LD_LIBRARY_PATH
+        LD_LIBRARY_PATH=$CUBRID/lib:$CUBRID/cci/lib:$LD_LIBRARY_PATH
     fi
-    
+
     SHLIB_PATH=$LD_LIBRARY_PATH
     LIBPATH=$LD_LIBRARY_PATH
     PATH=$CUBRID/bin:$CUBRID/cubridmanager:$PATH
@@ -210,7 +214,7 @@ Windows에서 특정 포트를 지정하기 번거로운 경우에도 이 방법
 | Manager 사용  | Manager      | application   | 8001                       | 8001                                                | 개방                     |              |
 |               | 서버         |               |                            |                                                     |                          |              |
 +---------------+--------------+---------------+----------------------------+-----------------------------------------------------+--------------------------+--------------+
-| Java SP 사용  | cub_javasp   | CAS           | java_stored_procedure_port | java_stored_procedure_port                          | 개방                     |              |
+| Java SP 사용  | cub_javasp   | cub_server    | java_stored_procedure_port | java_stored_procedure_port                          | 개방                     | 연결 유지    |
 +---------------+--------------+---------------+----------------------------+-----------------------------------------------------+--------------------------+--------------+
 
 
@@ -282,9 +286,9 @@ CUBRID 기본 사용 포트
 #.  cub_broker는 연결 가능한 CAS를 선택한다.
 #.  application과 CAS가 연결된다. 
 
-    Linux에서는 application이 유닉스 도메인 소켓을 통해 CAS와 연결되므로 BROKER_PORT를 사용한다. Windows에서는 유닉스 도메인 소켓을 사용할 수 없으므로 각 CAS마다 cubrid_broker.conf에 설정된 APPL_SERVER_PORT 값을 기준으로 CAS ID를 더한 포트를 통해 연결된다. APPL_SERVER_PORT의 값이 설정되지 않으면 첫번째 CAS와 연결하는 포트 값은 BROKER_PORT + 1이 된다.
+    Linux에서는 application과 브로커의 네트워크 연결을 브로커가 CAS에 그대로 전달한다. 따라서 application이 CAS와 연결을  위한 별도의 네트워크 포트는 필요하지 않다. Windows에서는 Application이 브로커에 연결되면 브로커가 가용한 CAS에 접속하기 위한 네트워크 포트 번호를 application에 전달한다. Application은 브로커와의 연결을 종료한 후, 전달 받은 네트워크 포트 번호로 CAS와 접속하게 된다. APPL_SERVER_PORT의 값이 설정되지 않으면 첫번째 CAS가 사용하는 네트워크 포트는 BROKER_PORT + 1이 된다.
 
-    예를 들어 Windows에서 BROKER_PORT가 33000이고 APPL_SERVER_PORT 가 설정되지 않았으면 application과 CAS 사이에 사용하는 포트는 다음과 같다.
+    예를 들어 Windows에서 BROKER_PORT가 33000이고 APPL_SERVER_PORT 가 설정되지 않았으면 application과 CAS 사이에 사용되는 포트는 다음과 같다.
     
     *   application이 CAS(1)과 접속하는 포트 : 33001
     *   application이 CAS(2)와 접속하는 포트 : 33002
@@ -393,8 +397,7 @@ CUBRID 자바 저장 프로시저 서버 사용 포트
 +---------------+--------------+----------------------------+--------------------------+
 | Listener      | Requester    | Port                       | 방화벽 존재 시 포트 설정 |
 +===============+==============+============================+==========================+
-| cub_javasp    | CAS          | java_stored_procedure_port | 개방(open)               |
+| cub_javasp    | cub_server   | java_stored_procedure_port | 개방(open)               |
 +---------------+--------------+----------------------------+--------------------------+
 
-*   이 포트는 CAS가 CUBRID 자바 저장 프로시저 서버 (cub_javasp)와 cub_server 사이를 중계 할 때 사용되며, CAS는 cub_server로부터 자바 저장 프로시저 호출을 수신한 후 **cubrid.conf**의 **java_stored_procedure_port** 를 통해 CUBRID 자바 저장 프로시저 서버 프로세스로 호출을 전달한다.
-*   **java_stored_procedure_port** 파라미터의 기본값은 0으로, 사용 가능한 임의의 가용 포트가 할당됨을 의미한다.
+*   CUBRID 자바 저장 프로시저 서버 (cub_javasp)가 cub_server 와 통신할 때 사용하는 포트는 **cubrid.conf**의 **java_stored_procedure_port**\이며 기본값은 0으로, 사용 가능한 임의의 가용 포트가 할당됨을 의미한다.

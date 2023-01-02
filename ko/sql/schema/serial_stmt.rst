@@ -17,11 +17,11 @@ CREATE SERIAL
 *   **PUBLIC** 을 포함하여 모든 사용자가 시리얼 객체를 생성할 수 있다. 일단 생성되면 모든 사용자들이 **CURRENT_VALUE**, **NEXT_VALUE** 를 통해 시리얼 숫자를 가져갈 수 있다.
 *   시리얼 객체의 소유자와 **DBA** 만 시리얼 객체를 갱신하고 삭제할 수 있다. 소유자가 **PUBLIC** 이면 모든 사용자가 갱신하거나 삭제할 수 있다.
 
-**CREATE SERIAL** 문을 이용하여 데이터베이스에 시리얼 객체를 생성한다. 시리얼 이름 작성 원칙은 :doc:`/sql/identifier`\ 를 참고한다.
+**CREATE SERIAL** 문을 이용하여 데이터베이스에 시리얼 객체를 생성한다. 시리얼 이름 작성 원칙은 :doc:`/sql/identifier`\를 참고한다.
 
 ::
 
-    CREATE SERIAL serial_name
+    CREATE SERIAL [schema_name.]serial_name
     [START WITH initial]
     [INCREMENT BY interval]
     [MINVALUE min | NOMINVALUE]
@@ -30,17 +30,18 @@ CREATE SERIAL
     [CACHE cached_num | NOCACHE]
     [COMMENT 'comment_string'];
 
-*   *serial_identifier*: 생성할 시리얼의 이름을 지정한다(최대 254 바이트).
+*   *schema_name*: 시리얼의 스키마 이름을 지정한다(최대 31 바이트). 생략하면 현재 세션의 스키마 이름을 사용한다.
+*   *serial_name*: 생성할 시리얼의 이름을 지정한다(최대 222 바이트).
 
 *   **START WITH** *initial*: 처음 생성되는 시리얼 숫자를 지정한다. 이 값의 범위는 -1,000,000,000,000,000,000,000,000,000,000,000,000(-10^36)와   9,999,999,999,999,999,999,999,999,999,999,999,999(10^37-1) 사이이다. 오름차순 시리얼의 경우 기본값은 1이며 내림차순 시리얼의 경우 기본값은 -1이다.
 
 *   **INCREMENT BY** *interval*: 시리얼 숫자 간의 간격을 지정한다. *interval* 값으로 0을 제외하고 -9,999,999,999,999,999,999,999,999,999,999,999,999(-10^37+1)와 9,999,999,999,999,999,999,999,999,999,999,999,999(10^37-1) 사이의 어느 정수라도 올 수 있다.  *interval* 의 절대값은 **MAXVALUE** 와 **MINVALUE** 의 차이와 같거나 작아야 한다. 음수가 설정되면 시리얼은 내림차순이 되고 양수가 설정되면 오름차순이 된다. 기본값은 **1** 이다.
 
-*   **MINVALUE**: 시리얼의 최소값을 지정한다. 이 값의 범위는 -1,000,000,000,000,000,000,000,000,000,000,000,000(-10^36)와 9,999,999,999,999,999,999,999,999,999,999,999,999(10^37-1) 사이이다. **MINVALUE**\ 는 초기값보다 작거나 같아야 하고 최대값보다 작아야 한다.
+*   **MINVALUE**: 시리얼의 최소값을 지정한다. 이 값의 범위는 -1,000,000,000,000,000,000,000,000,000,000,000,000(-10^36)와 9,999,999,999,999,999,999,999,999,999,999,999,999(10^37-1) 사이이다. **MINVALUE**\는 초기값보다 작거나 같아야 하고 최대값보다 작아야 한다.
 
 *   **NOMINVALUE**: 오름차순 시리얼에 대해서는 1, 내림차순 시리얼에 대해서는 -1,000,000,000,000,000,000,000,000,000,000,000,000(-10^36) 이 최소값으로 자동 지정된다.
 
-*   **MAXVALUE**: 시리얼의 최대값을 지정한다. 이 값의 범위는 -999,999,999,999,999,999,999,999,999,999,999,999(-10^36+1)와 10,000,000,000,000,000,000,000,000,000,000,000,000(10^37) 사이이다. **MAXVALUE**\ 는 초기값보다 크거나 같아야 하고 최소값보다 커야 한다.
+*   **MAXVALUE**: 시리얼의 최대값을 지정한다. 이 값의 범위는 -999,999,999,999,999,999,999,999,999,999,999,999(-10^36+1)와 10,000,000,000,000,000,000,000,000,000,000,000,000(10^37) 사이이다. **MAXVALUE**\는 초기값보다 크거나 같아야 하고 최소값보다 커야 한다.
 
 *   **NOMAXVALUE**: 오름차순 시리얼에 대해서는 10,000,000,000,000,000,000,000,000,000,000,000,000(10^37), 내림차순 시리얼에 대해서는 -1이 최대값으로 자동 지정된다.
 
@@ -122,7 +123,7 @@ ALTER SERIAL
 
 ::
 
-    ALTER SERIAL serial_identifier
+    ALTER SERIAL [schema_name.]serial_name
     [INCREMENT BY interval]
     [START WITH initial_value]
     [MINVALUE min | NOMINVALUE]
@@ -131,7 +132,8 @@ ALTER SERIAL
     [CACHE cached_num | NOCACHE]
     [COMMENT 'comment_string'];
 
-*   *serial_identifier*: 생성할 시리얼의 이름을 지정한다(최대 254 바이트).
+*   *schema_name*: 시리얼의 스키마 이름을 지정한다(최대 31 바이트). 생략하면 현재 세션의 스키마 이름을 사용한다.
+*   *serial_name*: 생성할 시리얼의 이름을 지정한다(최대 222 바이트).
 
 *   **INCREMENT BY** *interval*: 시리얼 숫자간의 간격을 지정한다. *interval* 값으로 0을 제외한 38자리 이하의 어떤 정수도 지정할 수 있다. *interval* 의 절대값은 **MAXVALUE** 와 **MINVALUE** 의 차이보다 작아야 한다. 음수가 설정되면 시리얼은 내림차순이 되고 양수가 설정되면 오름차순이 된다. 기본값은 **1** 이다.
 
@@ -199,9 +201,10 @@ DROP SERIAL
 
 ::
 
-    DROP SERIAL [ IF EXISTS ] serial_identifier ;
+    DROP SERIAL [ IF EXISTS ] [schema_name.]serial_name ;
 
-*   *serial_identifier*: 삭제할 시리얼의 이름을 지정한다.
+*   *schema_name*: 시리얼의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
+*   *serial_name*: 삭제할 시리얼의 이름을 지정한다.
 
 다음 예는 *order_no* 시리얼을 삭제하는 예제이다.
 
@@ -218,11 +221,12 @@ DROP SERIAL
 
 시리얼 이름과 의사 칼럼(pseudo column)을 통해서 해당 시리얼을 읽고 갱신할 수 있다. ::
 
-    serial_identifier.CURRENT_VALUE
-    serial_identifier.NEXT_VALUE
+    [schema_name.]serial_name.CURRENT_VALUE
+    [schema_name.]serial_name.NEXT_VALUE
 
-*   *serial_identifier*.\ **CURRENT_VALUE**: 시리얼의 현재 값을 반환한다.
-*   *serial_identifier*.\ **NEXT_VALUE**: 시리얼 값을 증가시키고 그 값을 반환한다.
+*   *schema_name*: 시리얼의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
+*   *[schema_name.]serial_name*.\ **CURRENT_VALUE**: 시리얼의 현재 값을 반환한다.
+*   *[schema_name.]serial_name*.\ **NEXT_VALUE**: 시리얼 값을 증가시키고 그 값을 반환한다.
 
 다음은 선수 번호와 이름을 저장하는 *athlete_idx* 테이블을 생성하고 *order_no* 시리얼을 이용하여 인스턴스를 생성하는 예제이다.
 
@@ -252,11 +256,12 @@ DROP SERIAL
 함수
 ----
 
-.. function:: SERIAL_CURRENT_VALUE (serial_name)
-.. function:: SERIAL_NEXT_VALUE (serial_name, number)
+.. function:: SERIAL_CURRENT_VALUE ([schema_name.]serial_name)
+.. function:: SERIAL_NEXT_VALUE ([schema_name.]serial_name, number)
 
     시리얼 함수에는 **SERIAL_CURRENT_VALUE** 함수와 **SERIAL_NEXT_VALUE** 함수가 있다.
     
+    :param schema_name: 시리얼의 스키마 이름
     :param serial_name: 시리얼 이름
     :param number: 얻고자 하는 시리얼 개수
     :rtype:  NUMERIC(38,0)

@@ -56,10 +56,14 @@ The volumes of CUBRID database are classified as permanent volume, temporary vol
 
 *   In the permanent volumes,
 
-    *   there are data volumes, that usually store permanent data, but can also store temporary data.
-    *   there are log volumes, that can be further classified as: one active log, archive logs and one background archiving log.
+    *   there are data volumes that usually store permanent data, but can also store temporary data.
+    *   there is the active log volume that includes late changes of database.
     
-*   In the temporary volumes, only temporary data is stored.
+*   In the temporary volumes,
+
+    *   there are temporary temp volumes that store temporary data.
+    *   there are archive log volumes that store exhausted logs from the active log.
+    *   there is one background archive log volume that stores archive log in the background.
 
 For more details on volumes, see :ref:`database-volume-structure`.
 
@@ -113,7 +117,7 @@ The following is an example of files related to the database when *testdb* datab
 *   Database volume file
 
     *  In the table above, *testdb*, *testdb_perm*, *testdb_temp*, *testdb_x003* ~ *testdb_x006* are classified as the database volume files.
-    *  File size is determined by **db_volume_size** in **cubrid.conf** or the **--db-volume-size** option of **cubrid createdb** and **cubrid addvoldb**.
+    *  File size is determined by **db_volume_size** in **cubrid.conf** or the **-\-db-volume-size** option of **cubrid createdb** and **cubrid addvoldb**.
     *  When database remains out of space, it automatically expands existing volumes and creates new volumes.
 
 *   Temporary volume
@@ -124,7 +128,7 @@ The following is an example of files related to the database when *testdb* datab
 *   Log volume file
 
     *   In the above, *testdb_lgar_t*, *testdb_lgar224* and *testdb_lgat* are classified as the log volume files.
-    *   File size is determined by **log_volume_size** in **cubrid.conf** or the **--log-volume-size** option of **cubrid createdb**.
+    *   File size is determined by **log_volume_size** in **cubrid.conf** or the **-\-log-volume-size** option of **cubrid createdb**.
 
 *   Double write buffer file
     *   Double write buffer file is a storage area used to protect against I/O errors (partial writes).

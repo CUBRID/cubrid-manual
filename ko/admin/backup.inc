@@ -89,11 +89,11 @@ backupdb
 
         cubrid backupdb -t 4 demodb
 
-.. option:: -z, --compress
+.. option:: --no-compress
 
-    대상 데이터베이스를 압축하여 백업 파일에 저장한다. **-z** 옵션을 사용하면, 백업 파일의 크기 및 백업 시간을 단축시킬 수 있다. ::
+    기본적으로 큐브리드는 백업 볼륨의 크기를 줄이기 위해서, 대상 데이터베이스를 압축한 뒤 저장한다. 백업 파일 압축 실행 시 발생하는 CPU 사용량을 없애고 싶다면, **-\-no-compress** 옵션을 통해 백업 볼륨을 압축하지 않을 수 있다. ::
 
-        cubrid backupdb -z demodb
+        cubrid backupdb --no-compress demodb
 
 .. option:: --sleep-msecs=NUMBER
 
@@ -175,13 +175,13 @@ backupdb
 
 압축 백업(compress backup)은 데이터베이스를 압축하여 백업을 수행하기 때문에 백업 볼륨의 크기가 줄어들어 디스크 I/O 비용을 감소시킬 수 있고, 디스크 공간을 절약할 수 있다.
 
-압축 백업을 하려면 **cubrid backupdb -z** | **--compress** 명령어를 사용한다.
+큐브리드 11.2버전부터는 압축 백업 모드가 기본값으로 설정되어 있다.
 
 **병렬 백업 모드**
 
 병렬 백업 또는 다중 백업(multi-thread backup)은 지정된 스레드 개수만큼 동시 백업을 수행하기 때문에 백업 시간을 크게 단축시켜 준다. 기본적으로 시스템의 CPU 수만큼 스레드를 부여하게 된다.
 
-병렬 백업을 하려면 **cubrid backupdb -t** | **--thread-count** 명령어를 사용한다.
+병렬 백업을 하려면 **cubrid backupdb -t** | **-\-thread-count** 명령어를 사용한다.
 
 백업 파일 관리
 ^^^^^^^^^^^^^^
@@ -272,7 +272,7 @@ restoredb
 
         cubrid restoredb --list demodb
 
-    다음은 **--list** 옵션에 의해 출력되는 백업 정보의 예로서, 복구 작업을 수행하기 전에 대상 데이터베이스의 백업 파일이 최초 저장된 경로와 백업 수준을 검증할 수 있다. ::
+    다음은 **-\-list** 옵션에 의해 출력되는 백업 정보의 예로서, 복구 작업을 수행하기 전에 대상 데이터베이스의 백업 파일이 최초 저장된 경로와 백업 수준을 검증할 수 있다. ::
 
         *** BACKUP HEADER INFORMATION ***
         Database Name: /local1/testing/demodb
@@ -301,7 +301,7 @@ restoredb
         Database Volume name: /local1/testing/demodb_bkvinf
              Volume Identifier: -3, Size: 132 bytes (1 pages)
      
-    **--list** 옵션을 이용하여 출력된 백업 정보를 확인하면, 백업 파일이 백업 수준 1로 생성되었고, 앞의 백업 수준 0의 전체 백업이 수행된 시점을 확인할 수 있다. 따라서, 예시된 데이터베이스의 복구를 위해서는 백업 수준 0인 백업 파일과 백업 수준 1인 백업 파일이 준비되어야 한다.
+    **-\-list** 옵션을 이용하여 출력된 백업 정보를 확인하면, 백업 파일이 백업 수준 1로 생성되었고, 앞의 백업 수준 0의 전체 백업이 수행된 시점을 확인할 수 있다. 따라서, 예시된 데이터베이스의 복구를 위해서는 백업 수준 0인 백업 파일과 백업 수준 1인 백업 파일이 준비되어야 한다.
 
 .. option:: -B, --backup-file-path=PATH
 

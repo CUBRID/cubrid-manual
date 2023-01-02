@@ -11,19 +11,20 @@ CCI(C Client Interface)는 CUBRID 브로커와 응용 클라이언트 사이에 
 
 CCI를 사용하기 위해서는 헤더 파일과 라이브러리 파일이 필요하다.
 
-+-----------------+-------------------+-------------------+
-|                 | **Windows**       | **Unix/Linux**    |
-+=================+===================+===================+
-| C 헤더 파일     | include/cas_cci.h | include/cas_cci.h |
-+-----------------+-------------------+-------------------+
-| 정적 라이브러리 | lib/cascci.lib    | lib/libcascci.a   |
-+-----------------+-------------------+-------------------+
-| 동적 라이브러리 | bin/cascci.dll    | lib/libcascci.so  |
-+-----------------+-------------------+-------------------+
++-----------------+-----------------------+-----------------------+
+|                 | **Windows**           | **Unix/Linux**        |
++=================+=======================+=======================+
+| C 헤더 파일     | cci/include/cas_cci.h | cci/include/cas_cci.h |
++-----------------+-----------------------+-----------------------+
+| 정적 라이브러리 | cci/lib/cascci.lib    | cci/lib/libcascci.a   |
++-----------------+-----------------------+-----------------------+
+| 동적 라이브러리 | cci/bin/cascci.dll    | cci/lib/libcascci.so  |
++-----------------+-----------------------+-----------------------+
 
 .. note::
 
     *   Windows의 경우 CCI 드라이버를 사용하려면 Microsoft Visual C ++ 2015 재배포 가능 패키지(x86 또는 x64)를 설치해야 한다.
+    *   11.2 버전부터는 CCI 드라이버에 대한 경로가 변경되었다. (cci/inculde, cci/lib, cci/bin)
 
 CCI 드라이버는 CUBRID에서 제공되는 C 언어 인터페이스로, CUBRID 설치 패키지에 포함되어 있다. CCI는 브로커를 통해서 접속하므로 다른 인터페이스인 JDBC, PHP, ODBC, Python, Ruby 등과 동일하게 관리될 수 있다. 실제로 PHP, ODBC, Python, Ruby 인터페이스는 CCI를 기반으로 개발되었다. 단, JDBC는 CCI를 기반으로 개발되지 않았다.
 
@@ -70,7 +71,7 @@ CCI를 이용하는 응용 프로그램은 기본적으로 CAS와 연결하기, 
 .. code-block:: c
 
     // Example to execute a simple query
-    // In Linux: gcc -o simple simple.c -m64 -I${CUBRID}/include -lnsl ${CUBRID}/lib/libcascci.so -lpthread
+    // In Linux: gcc -o simple simple.c -m64 -I${CUBRID}/cci/include -lnsl ${CUBRID}/cci/lib/libcascci.so -lpthread
     
     #include <stdio.h>
     #include "cas_cci.h"  
@@ -193,7 +194,7 @@ CCI를 이용하는 응용 프로그램은 기본적으로 CAS와 연결하기, 
 .. code-block:: c
 
     // Example to execute a query with a bind variable
-    // In Linux: gcc -o cci_bind cci_bind.c -m64 -I${CUBRID}/include -lnsl ${CUBRID}/lib/libcascci.so -lpthread
+    // In Linux: gcc -o cci_bind cci_bind.c -m64 -I${CUBRID}/cci/include -lnsl ${CUBRID}/cci/lib/libcascci.so -lpthread
 
     #include <stdio.h>
     #include <string.h>
@@ -345,7 +346,7 @@ CCI를 이용하는 응용 프로그램은 기본적으로 CAS와 연결하기, 
 .. code-block:: c
 
     // Example to use connection/statement pool in CCI
-    // In Linux: gcc -o cci_pool cci_pool.c -m64 -I${CUBRID}/include -lnsl ${CUBRID}/lib/libcascci.so -lpthread
+    // In Linux: gcc -o cci_pool cci_pool.c -m64 -I${CUBRID}/cci/include -lnsl ${CUBRID}/cci/lib/libcascci.so -lpthread
 
     #include <stdio.h>
     #include "cas_cci.h"
@@ -478,8 +479,9 @@ CCI를 이용한 응용 프로그램을 작성했다면 프로그램 특성에 �
 다음은 유닉스/Linux에서 동적인 라이브러리를 사용하여 링크하는 Makefile의 예제이다. ::
 
     CC=gcc
-    CFLAGS = -g -Wall -I. -I$CUBRID/include
-    LDFLAGS = -L$CUBRID/lib -lcascci -lnsl
+    CFLAGS = -g -Wall -I. -I$(CUBRID)/cci/include
+    LDFLAGS = -L$(CUBRID)/cci/lib -lcascci -lnsl
+
     TEST_OBJS = test.o
     EXES = test
     all: $(EXES)
@@ -661,7 +663,7 @@ CCI API 함수는 에러 발생 시 반환 값이 음수인 CCI 에러 코드 �
 
 .. code-block:: c
 
-    // gcc -o err err.c -m64 -I${CUBRID}/include -lnsl ${CUBRID}/lib/libcascci.so -lpthread
+    // gcc -o err err.c -m64 -I${CUBRID}/cci/include -lnsl ${CUBRID}/cci/lib/libcascci.so -lpthread
     #include <stdio.h>
     #include "cas_cci.h"
      
@@ -1220,7 +1222,7 @@ CCI 예제 프로그램
 
 다음은 Linux에서 **make** 를 사용하지 않고 동적인 라이브러리를 사용하여 테스트 프로그램을 빌드하는 명령 행의 예제이다. ::
 
-    cc -o test test.c -I$CUBRID/include -L$CUBRID/lib -lnsl -lcascci
+    cc -o test test.c -I$CUBRID/cci/include -L$CUBRID/cci/lib -lnsl -lcascci
 
 **예제 코드**
 

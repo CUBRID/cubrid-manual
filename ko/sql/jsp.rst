@@ -6,6 +6,11 @@
 Java 저장 함수/프로시저
 ***********************
 
+.. _jsp-introduction:
+
+Java 저장 함수/프로시저 소개
+==============================================
+
 저장 함수와 저장 프로시저를 사용하면 SQL로 구현하지 못하는 복잡한 프로그램의 로직을 구현할 수 있으며, 사용자가 보다 쉽게 데이터를 조작하게 할 수 있다. 함수와 프로시저는 데이터를 조작하기 위해 실행 명령의 흐름이 있고, 쉽게 조작할 수 있고, 관리할 수 있는 블록 단위라고 할 수 있다.
 
 CUBRID는 Java로 저장 함수와 프로시저를 개발할 수 있도록 지원한다. Java 저장 함수와 프로시저는 CUBRID에서 호스팅한 Java 가상 머신(JVM, Java Virtual Machine)에서 실행된다.
@@ -15,16 +20,34 @@ Java 저장 함수/프로시저는 SQL에서도 호출할 수 있으며, JDBC를
 Java 저장 함수/프로시저를 사용할 때 얻을 수 있는 이점은 다음과 같다.
 
 *   **생산성과 사용성**: Java 저장 함수/프로시저는 한번 만들어 놓으면 계속해서 사용할 수 있다. 사용자가 저장 함수와 저장 프로시저를 SQL에서도 호출하여 사용할 수 있고, JDBC를 사용하여 쉽게 Java 응용 프로그램에서 호출할 수 있다.
-*   **뛰어난 상호 운용성, 이식성**: Java 저장 함수/프로시저는 Java 가상 머신을 사용하므로, 시스템에 Java 가상 머신을 사용할 수만 있다면 언제 어디서나 사용할 수 있다.
+*   **뛰어난 상호 운용성과 이식성**: Java 저장 함수/프로시저는 Java 가상 머신을 사용하므로, 시스템에 Java 가상 머신을 사용할 수만 있다면 언제 어디서나 사용할 수 있다.
 
 .. note::
 
     *   Java를 제외한 다른 언어에서는 저장 함수/프로시저를 지원하지 않는다. CUBRID에서 저장 함수/프로시저는 오직 Java로만 구현 가능하다.
 
+.. _jsp-prerequisites:
+
+기능 사용을 위한 준비
+==============================================
+
+Java 저장함수/프로시저를 사용하기 위해서 다음의 사항이 준비되어 있어야 한다.
+
+*   **cubrid.conf**\에 있는 **java_stored_procedure** 값을 **yes** 로 설정해야한다.
+*   Java 저장 프로시저/함수를 사용하려는 데이터베이스에 대해 Java 저장 프로시저 서버 (Java SP 서버) 를 시작해야한다.
+
+.. _jsp-system-prm:
+
+cubrid.conf 확인
+----------------
+
+**cubrid.conf** 에 있는 **java_stored_procedure** 의 설정값은 **no** 가 기본이다.     
+Java 저장함수/프로시저를 사용하기 위해서는 이 값을 **yes** 로 변경해야 한다. 이 값과 관련한 자세한 설명은 데이터베이스 서버 설정의 :ref:`other-parameters` 를 참조한다.
+
 .. _jsp-starting-javasp:
 
-자바 저장 프로시저 서버 구동하기
-===================================
+자바 저장 프로시저 서버 구동
+-------------------------------
 
 Java 저장 프로시저/함수를 사용하려는 데이터베이스에 대해 Java 저장 프로시저 서버 (Java SP 서버)를 시작해야 한다.
 
@@ -39,6 +62,8 @@ Java SP 서버가 성공적으로 시작되었는지 다음의 명령어로 확�
 
 **cubrid javasp** **status** *db_name* 을 실행한다 ::
 
+    % cubrid javasp status demodb
+
     @ cubrid javasp status: demodb
     Java Stored Procedure Server (demodb, pid 9220, port 38408)
     Java VM arguments :
@@ -47,22 +72,23 @@ Java SP 서버가 성공적으로 시작되었는지 다음의 명령어로 확�
     -Xrs
     -------------------------------------------------
 
-자바 저장 프로시저 서버에 대한 보다 자세한 내용은 :ref:`cubrid-javasp-server` 와 :ref:`cubrid-javasp-server-config` 을 참고한다.
+자바 저장 프로시저 서버에 대한 자세한 내용은 :ref:`cubrid-javasp-server` 와 :ref:`cubrid-javasp-server-config` 을 참고한다.
 
-함수/프로시저 작성
-==================
+자바 저장 함수/프로시저 작성과 로드
+=======================================
+
+자바 저장 함수/프로시저를 사용하기 위해서는 다음의 순서에 따라 자바 저장 함수/프로시저를 작성하고 등록한다.
+
+    *   **Step 1: Java 소스 작성**
+    *   **Step 2: Java 소스 컴파일**
+    *   **Step 3: Java 클래스 로드**
+    *   **Step 4: 저장 함수/프로시저 등록**
+
+Java 소스 작성
+------------------
 
 다음은 Java 저장 함수/프로시저를 작성하는 예이다.
-
-cubrid.conf 확인
-----------------
-
-**cubrid.conf** 에 있는 **java_stored_procedure** 의 설정값은 **no** 가 기본이다. Java 저장함수/프로시저를 사용하기 위해서는 이 값을 **yes** 로 변경해야 한다. 이 값과 관련한 자세한 설명은 데이터베이스 서버 설정의 `기타 파라미터 <#pm_pm_db_classify_etc_htm>`_ 를 참조한다.
-
-Java 소스 작성 및 컴파일
-------------------------
-
-다음과 같이 SpCubrid.java를 컴파일 한다.
+구현하는 Java 클래스의 메서드는 반드시 **public static**\이어야 한다.
 
 .. code-block:: java
 
@@ -80,25 +106,44 @@ Java 소스 작성 및 컴파일
         }
     }
 
+Java 저장 함수/프로시저에서 데이터베이스에 접근하기 위해서는 서버 측 JDBC 드라이버를 사용해야한다.
+:ref:`jsp-server-side-jdbc`\를 참조하여 서버 측 JDBC 드라이버 사용한다.
+
+Java 소스 컴파일
+------------------
+
+다음과 같이 SpCubrid.java를 컴파일 한다.
+
 ::
 
     javac SpCubrid.java
 
-이 때, Java 클래스의 메서드는 반드시 public static이어야 한다.
+서버 측 JDBC 드라이버를 사용하는 경우 **classpath(cp)** 옵션을 사용하여 JDBC의 경로를 지정하여 다음과 같이 컴파일 해야한다.
+이때 로드 할 데이터베이스 서버의 최신 JDBC 드라이버를 사용해야 한다.
+
+::
+
+    javac SpCubrid.java -cp $CUBRID/jdbc/cubrid_jdbc.jar
 
 .. _jsp-loadjava:
 
-컴파일된 Java 클래스 로드
--------------------------
+Java 클래스 로드
+-------------------
 
-컴파일된 Java 클래스를 CUBRID로 로딩한다. ::
+컴파일된 Java 클래스를 loadjava 유틸리티를 사용해 CUBRID로 로딩한다.
+:ref:`jsp-load-java`\를 참조하여 사용한다.
+
+::
 
     % loadjava demodb SpCubrid.class
 
-로딩한 Java 클래스 등록
+
+저장 함수/프로시저 등록
 -----------------------
 
+CUBRID는 SQL 문이나 Java 응용 프로그램에서 Java 메서드를 호출할 수 있도록 Java 클래스를 등록(publish)하는 과정이 필요하다.
 다음과 같이 CUBRID 저장 함수를 생성하여 Java 클래스를 등록한다.
+자세한 내용은 :ref:`call-specification`\을 참조한다.
 
 .. code-block:: sql
 
@@ -114,344 +159,29 @@ Java 소스 작성 및 컴파일
 
     CREATE OR REPLACE FUNCTION hello() RETURN STRING
     AS LANGUAGE JAVA
-    NAME 'SpCubrid.HelloCubrid() return java.lang.String';    
+    NAME 'SpCubrid.HelloCubrid() return java.lang.String'; 
 
 Java 저장 함수/프로시저 호출
-----------------------------
+============================
 
-다음과 같이 등록된 Java 저장 함수를 호출한다.
+등록된 Java 저장 함수/프로시저는 **CALL** 문을 사용하거나, SQL 문에서 호출하거나, Java 응용프로그램에서 호출될 수 있다.
+Java 저장 함수/프로시저를 호출하여 수행 중 exception이 발생하면 *dbname*\ **_java.log** 파일에 exception 내용이 기록되어 저장된다. 만약 화면으로 exception 내용을 확인하고자 할 경우는 **$CUBRID/java/logging.properties** 파일의 handlers 값을 "java.lang.logging.ConsoleHandler"로 수정하면 화면으로 exception 내용을 출력한다.
+
+CALL 문
+-------
+
+CALL 문으로 다음과 같이 Java 저장 프로시저/함수를 호출하여 사용할 수 있다. 
+자세한 내용은 :doc:`/sql/query/call`\을 참조한다.
 
 .. code-block:: sql
 
-    CALL hello() INTO :Hello;
+    CALL Hello() INTO :HELLO;
 
 ::
 
       Result
     ======================
     'Hello, Cubrid !!'
-
-서버 내부 JDBC 드라이버 사용
-============================
-
-Java 저장 함수/프로시저에서 데이터베이스에 접근하기 위해서는 서버 측 JDBC 드라이버(Server-Side JDBC Driver)를 사용해야 한다. Java 저장 함수/프로시저가 데이터베이스 내에서 실행되기 때문에 서버 측 JDBC 드라이버는 다시 연결을 설정할 필요가 없다. 서버 측 JDBC 드라이버로 해당 데이터베이스의 Connection을 얻는 방법은 아래와 같다. 첫 번째 방법은 JDBC 연결 URL로 "**jdbc:default:connection:**" 을 사용하는 것이고, 두 번째는 **cubrid.jdbc.driver.CUBRIDDriver** 클래스의 **getDefaultConnection** () 메서드를 호출하는 것이다.
-
-.. code-block:: java
-
-    Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
-    Connection conn = DriverManager.getConnection("jdbc:default:connection:");
-
-또는
-
-.. code-block:: java
-
-    cubrid.jdbc.driver.CUBRIDDriver.getDefaultConnection();
-
-서버 측 JDBC Driver에서 위와 같은 방법으로 데이터베이스에 연결하면 Java 저장 함수/프로시저 내에 존재하는 트랜잭션 관련 사항이 무시된다. 즉, Java 저장 함수/프로시저에서 수행되는 데이터베이스 연산은 Java 저장 함수/프로시저를 호출한 트랜잭션에 포함된다는 것을 의미한다. 아래의 Athlete 클래스에서 conn.commit()은 무시된다.
-
-.. code-block:: java
-
-    import java.sql.*;
-
-    public class Athlete{
-        public static void Athlete(String name, String gender, String nation_code, String event) throws SQLException{
-            String sql="INSERT INTO ATHLETE(NAME, GENDER, NATION_CODE, EVENT)" + "VALUES (?, ?, ?, ?)";
-            
-            try{
-                Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
-                Connection conn = DriverManager.getConnection("jdbc:default:connection:");
-                PreparedStatement pstmt = conn.prepareStatement(sql);
-           
-                pstmt.setString(1, name);
-                pstmt.setString(2, gender);
-                pstmt.setString(3, nation_code);
-                pstmt.setString(4, event);;
-                pstmt.executeUpdate();
-     
-                pstmt.close();
-                conn.commit();
-                conn.close();
-            } catch (Exception e) {
-                System.err.println(e.getMessage());
-            }
-        }
-    }
-
-다른 데이터베이스 연결
-======================
-
-서버 측 JDBC 드라이버를 사용하더라도 현재 연결된 데이터베이스를 사용하지 않고, 외부의 다른 데이터베이스에 연결할 수도 있다. 외부의 데이터베이스에 대한 Connection을 얻는 것은 일반적인 JDBC Connection과 다르지 않다. 이에 대한 자세한 내용은 JDBC API를 참조한다.
-
-다른 데이터베이스에 연결하는 경우, Java 메서드의 수행이 종료되더라도 CUBRID 데이터베이스와의 Connection이 자동으로 종료되지 않는다. 따라서, 반드시 Connection 종료를 명시해주어야 **COMMIT**, **ROLLBACK** 과 같은 트랜잭션 연산이 해당 데이터베이스에 반영된다. 즉, Java 저장 함수/프로시저를 호출한 데이터베이스와 실제 연결된 데이터베이스가 다르기 때문에 별도의 트랜잭션으로 수행되는 것이다.
-
-.. code-block:: java
-
-    import java.sql.*;
-
-    public class SelectData {
-        public static void SearchSubway(String[] args) throws Exception {
-
-            Connection conn = null;
-            Statement stmt = null;
-            ResultSet rs = null;
-
-            try {
-                Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
-                conn = DriverManager.getConnection("jdbc:CUBRID:localhost:33000:demodb:::","","");
-
-                String sql = "select line_id, line from line";
-                stmt = conn.createStatement();
-                rs = stmt.executeQuery(sql);
-                
-                while(rs.next()) {
-                    int host_year = rs.getString("host_year");
-                    String host_nation = rs.getString("host_nation");
-                    
-                    System.out.println("Host Year ==> " + host_year);
-                    System.out.println(" Host Nation==> " + host_nation);
-                    System.out.println("\n=========\n");
-                }
-                
-                rs.close();
-                stmt.close();
-                conn.close();
-            } catch ( SQLException e ) {
-                System.err.println(e.getMessage());
-            } catch ( Exception e ) {
-                System.err.println(e.getMessage());
-            } finally {
-                if ( conn != null ) conn.close();
-            }
-        }
-    }
-
-수행 중인 Java 저장 함수/프로시저가 데이터베이스 서버의 JVM에서만 구동되어야 할 때, Java 프로그램 소스에서 System.getProperty("cubrid.server.version")를 호출함으로써 어디서 수행되는 지를 점검할 수 있다. 결과 값은 데이터베이스에서 호출하면 데이터베이스 버전이 되고, 그 외는 **NULL** 이 된다.
-
-loadjava 유틸리티
-=================
-
-컴파일된 Java 파일이나 JAR(Java Archive) 파일을 CUBRID로 로드하기 위해서 **loadjava** 유틸리티를 사용한다. **loadjava** 유틸리티를 사용하여 Java \*.class 파일이나 \*.jar 파일을 로드하면 해당 파일이 해당 데이터베이스 경로로 이동한다. ::
-
-    loadjava [option] database-name java-class-file
-
-*   *database-name*: Java 파일을 로드하려고 하는 데이터베이스 이름
-*   *java-class-file*: 로드하려는 Java 클래스 파일 이름 또는 jar 파일 이름
-*   [*option*]
-
-    *   **-y**: 이름이 같은 클래스 파일이 존재하면 자동으로 덮어쓰기 한다. 기본값은 **no** 이다. 만약 **-y** 옵션을 명시하지 않고 로드할 때 이름이 같은 클래스 파일이 존재하면 덮어쓰기를 할 것인지 묻는다.
-
-로딩한 Java 클래스 등록
-=======================
-
-CUBRID는 클라이언트나 SQL 문이나 Java 응용 프로그램에서 Java 메서드를 호출할 수 있도록 Java 클래스를 등록(publish)하는 과정이 필요하다. Java 클래스를 로딩했을 때 SQL 문이나 Java 응용 프로그램에서 클래스 내의 함수를 어떻게 호출할지 모르기 때문에 Call Specifications를 사용하여 등록해야 한다.
-
-Call Specifications
--------------------
-
-CUBRID에서 Java 저장 함수/프로시저를 사용하기 위해서는 Call Specifications를 작성해야 한다. Call Specifications는 Java 함수 이름과 인자 타입 그리고 리턴 값과 리턴 값의 타입을 SQL 문이나 Java 응용프로그램에서 접근할 수 있도록 해주는 역할을 한다. Call Specifications를 작성하는 구문은 **CREATE FUNCTION** 또는 **CREATE PROCEDURE** 구문을 사용하여 작성한다. Java 저장 함수/프로시저의 이름은 대소문자를 구별하지 않는다. Java 저장 함수/프로시저 이름의 최대 길이는 254바이트이다. 또한 하나의 Java 저장 함수/프로시저가 가질 수 있는 인자의 최대 개수는 64개이다. 
-
-리턴 값이 있으면 함수, 없으면 프로시저로 구분한다.
-
-.. CREATE OR REPLACE FUNCTION is allowed from 10.0: CUBRIDSUS-6542
-
-::
-
-    CREATE [OR REPLACE] FUNCTION function_name[(param [COMMENT 'param_comment_string'] [, param [COMMENT 'param_comment_string']]...)] RETURN sql_type
-    {IS | AS} LANGUAGE JAVA
-    NAME 'method_fullname (java_type_fullname [,java_type_fullname]...) [return java_type_fullname]'
-    COMMENT 'sp_comment';
-
-    CREATE [OR REPLACE] PROCEDURE procedure_name[(param [COMMENT 'param_comment_string'][, param [COMMENT 'param_comment_string']] ...)]
-    {IS | AS} LANGUAGE JAVA
-    NAME 'method_fullname (java_type_fullname [,java_type_fullname]...) [return java_type_fullname]';
-    COMMENT 'sp_comment_string';
-
-    parameter_name [IN|OUT|IN OUT|INOUT] sql_type
-       (default IN)
-
-*   *param_comment_string*: 인자 커멘트 문자열을 지정한다.
-*   *sp_comment_string*: 자바 저장 함수/프로시저의 커멘트 문자열을 지정한다.
-
-Java 저장 함수/프로시저의 인자를 **OUT** 으로 설정한 경우 길이가 1인 1차원 배열로 전달된다. 그러므로 Java 메서드는 배열의 첫번째 공간에 전달할 값을 저장해야 한다.
-
-.. code-block:: sql
-
-    CREATE FUNCTION Hello() RETURN VARCHAR
-    AS LANGUAGE JAVA
-    NAME 'SpCubrid.HelloCubrid() return java.lang.String';
-
-    CREATE FUNCTION Sp_int(i int) RETURN int
-    AS LANGUAGE JAVA
-    NAME 'SpCubrid.SpInt(int) return int';
-
-    CREATE PROCEDURE Athlete_Add(name varchar,gender varchar, nation_code varchar, event varchar)
-    AS LANGUAGE JAVA
-    NAME 'Athlete.Athlete(java.lang.String, java.lang.String, java.lang.String, java.lang.String)';
-
-    CREATE PROCEDURE test_out(x OUT STRING)
-    AS LANGUAGE JAVA
-    NAME 'SpCubrid.outTest(java.lang.String[] o)';
-
-Java 저장 함수/프로시저를 등록할 때, Java 저장 함수/프로시저의 반환 정의와 Java 파일의 선언부의 반환 정의가 일치하는지에 대해서는 검사하지 않는다. 따라서, Java 저장 함수/프로시저의 경우 등록할 때의 *sql_type* 반환 정의를 따르고, Java 파일 선언부의 반환 정의는 사용자 정의 정보로서만 의미를 가지게 된다.
-
-데이터 타입 매핑
-----------------
-
-Call Specifications에는 SQL의 데이터 타입과 Java의 매개변수와 리턴 값의 데이터 타입이 맞게 대응되어야 한다. CUBRID에서 허용되는 SQL과 Java의 데이터 타입의 관계는 다음의 표와 같다.
-
-**데이터 타입 매핑**
-
-+-----------------+------------------------------------------------------------------------------------------------------------------------------------------+
-| SQL Type        | Java Type                                                                                                                                |
-+=================+==========================================================================================================================================+
-| CHAR, VARCHAR   | java.lang.String, java.sql.Date, java.sql.Time, java.sql.Timestamp, java.lang.Byte, java.lang.Short, java.lang.Integer, java.lang.Long,  |
-|                 | java.lang.Float, java.lang.Double, java.math.BigDecimal, byte, short, int, long, float, double                                           |
-+-----------------+------------------------------------------------------------------------------------------------------------------------------------------+
-| NUMERIC, SHORT, | java.lang.Byte, java.lang.Short, java.lang.Integer, java.lang.Long, java.lang.Float, java.lang.Double, java.math.BigDecimal,             |
-| INT, FLOAT,     | java.lang.String, byte, short, int, long, float, double                                                                                  |
-| DOUBLE,         |                                                                                                                                          |
-| CURRENCY        |                                                                                                                                          |
-+-----------------+------------------------------------------------------------------------------------------------------------------------------------------+
-| DATE, TIME,     | java.sql.Date, java.sql.Time, java.sql.Timestamp, java.lang.String                                                                       |
-| TIMESTAMP       |                                                                                                                                          |
-+-----------------+------------------------------------------------------------------------------------------------------------------------------------------+
-| SET, MULTISET,  | java.lang.Object[], java primitive type array, java.lang.Integer[] ...                                                                   |
-| SEQUENCE        |                                                                                                                                          |
-+-----------------+------------------------------------------------------------------------------------------------------------------------------------------+
-| OBJECT          | cubrid.sql.CUBRIDOID                                                                                                                     |
-+-----------------+------------------------------------------------------------------------------------------------------------------------------------------+
-| CURSOR          | cubrid.jdbc.driver.CUBRIDResultSet                                                                                                       |
-+-----------------+------------------------------------------------------------------------------------------------------------------------------------------+
-
-등록된 Java 저장 함수/프로시저의 정보 확인
-------------------------------------------
-
-등록된 Java 저장 함수/프로시저의 정보는 **db_stored_procedure** 시스템 가상 클래스와 **db_stored_procedure_args** 시스템 가상 클래스에서 확인할 수 있다. **db_stored_procedure** 시스템 가상 클래스에서는 저장 함수/프로시저의 이름과 타입, 반환 타입, 인자의 수, Java 클래스에 대한 명세, Java 저장 함수/프로시저의 소유자에 대한 정보를 확인할 수 있다. **db_stored_procedure_args** 시스템 가상 클래스에서는 저장 함수/프로시저에서 사용하는 인자에 대한 정보를 확인할 수 있다.
-
-.. code-block:: sql
-
-    SELECT * FROM db_stored_procedure;
-    
-::
-    
-    sp_name     sp_type   return_type    arg_count
-    sp_name               sp_type               return_type             arg_count  lang target                owner
-    ================================================================================
-    'hello'               'FUNCTION'            'STRING'                        0  'JAVA''SpCubrid.HelloCubrid() return java.lang.String'  'DBA'
-     
-    'sp_int'              'FUNCTION'            'INTEGER'                       1  'JAVA''SpCubrid.SpInt(int) return int'  'DBA'
-     
-    'athlete_add'         'PROCEDURE'           'void'                          4  'JAVA''Athlete.Athlete(java.lang.String, java.lang.String, java.lang.String, java.lang.String)'  'DBA'
-
-.. code-block:: sql
-    
-    SELECT * FROM db_stored_procedure_args;
-    
-::
-    
-    sp_name   index_of  arg_name  data_type      mode
-    =================================================
-     'sp_int'                        0  'i'                   'INTEGER'             'IN'
-     'athlete_add'                   0  'name'                'STRING'              'IN'
-     'athlete_add'                   1  'gender'              'STRING'              'IN'
-     'athlete_add'                   2  'nation_code'         'STRING'              'IN'
-     'athlete_add'                   3  'event'               'STRING'              'IN'
-
-Java 저장 함수/프로시저의 삭제 
-------------------------------
-
-CUBRID에서는 등록한 Java 함수/저장 프로시저를 삭제할 수 있다. **DROP FUNCTION** *function_name* 또는 **DROP PROCEDURE** *procedure_name* 구문을 사용하여 Java 저장 프로시저를 삭제할 수 있다. 또한 여러 개의 *function_name* 이나 *procedure_name* 을 콤마(,)로 구분하여 한꺼번에 여러 개의 Java 저장 함수/프로시저를 삭제할 수 있다.
-
-Java 저장 함수/프로시저의 삭제는 Java 저장 함수/프로시저를 등록한 사용자와 DBA의 구성원만 삭제할 수 있다. 예를 들어 'sp_int' Java 저장 함수를 **PUBLIC** 이 등록했다면, **PUBLIC** 또는 **DBA** 의 구성원만이 'sp_int' Java 저장 함수를 삭제할 수 있다.
-
-.. code-block:: sql
-
-    DROP FUNCTION hello, sp_int;
-    DROP PROCEDURE Athlete_Add;
-
-Java 저장 함수/프로시저의 커멘트
---------------------------------
-
-저장 함수 또는 프로시저의 커멘트를 다음과 같이 제일 뒤에 지정할 수 있다. 
-
-.. code-block:: sql
-
-
-    CREATE FUNCTION Hello() RETURN VARCHAR
-    AS LANGUAGE JAVA
-    NAME 'SpCubrid.HelloCubrid() return java.lang.String'
-    COMMENT 'function comment';
-
-저장 함수의 인자 뒤에는 다음과 같이 지정할 수 있다.
-
-.. code-block:: sql
-
-    CREATE OR REPLACE FUNCTION test(i in number COMMENT 'arg i') 
-    RETURN NUMBER AS LANGUAGE JAVA NAME 'SpTest.testInt(int) return int' COMMENT 'function test';
-
-저장 함수 또는 프로시저의 커멘트는 다음 구문을 실행하여 확인할 수 있다.
-
-.. code-block:: sql
-
-    SELECT sp_name, comment FROM db_stored_procedure; 
-
-함수 인자의 커멘트는 다음 구문을 실행하여 확인할 수 있다.
-
-.. code-block:: sql
-          
-    SELECT sp_name, arg_name, comment FROM db_stored_procedure_args;
-
-Java 저장 함수/프로시저 호출
-============================
-
-CALL 문
--------
-
-등록된 Java 저장 함수/프로시저는 **CALL** 문을 사용하거나, SQL 문에서 호출하거나, Java 응용프로그램에서 호출될 수 있다. 다음과 같이 **CALL** 문을 사용하여 호출할 수 있다. **CALL** 문에서 호출되는 Java 저장 함수/프로시저의 이름은 대소문자를 구분하지 않는다. ::
-
-    CALL {procedure_name ([param[, param]...]) | function_name ([param[, param]...]) INTO :host_variable
-    param {literal | :host_variable}
-
-.. code-block:: sql
-
-    CALL Hello() INTO :HELLO;
-    CALL Sp_int(3) INTO :i;
-    CALL phone_info('Tom','016-111-1111');
-
-CUBRID에서는 Java 저장 함수/프로시저를 같은 **CALL** 문을 이용해 호출한다. 따라서 다음과 같이 **CALL** 문을 처리하게 된다.
-
-*   **CALL** 문에 대상 클래스가 있는 경우 메서드로 처리한다.
-*   **CALL** 문에 대상 클래스가 없는 경우 먼저 Java 저장 함수/프로시저 수행 여부를 검사하고 Java 저장 함수/프로시저가 존재하면 Java 저장 함수/프로시저를 수행한다.
-*   2에서 Java 저장 함수/프로시저가 존재하지 않으면 메서드 수행 여부를 검사하여 같은 이름이 존재하면 수행한다.
-
-만약 존재하지 않는 Java 저장 함수/프로시저를 호출하는 경우에는 다음과 같은 에러가 나타난다.
-
-.. code-block:: sql
-
-    CALL deposit();
-    
-::
-
-    ERROR: Stored procedure/function 'deposit' does not exist.
-
-.. code-block:: sql
-
-    CALL deposit('Tom', 3000000);
-    
-::
-
-    ERROR: Methods require an object as their target.
-
-**CALL** 문에 인자가 없는 경우는 메서드와 구분되므로 "ERROR: Stored procedure/function 'deposit' does not exist."라는 오류 메시지가 나타난다. 하지만, **CALL** 문에 인자가 있는 경우에는 메서드와 구분할 수 없기 때문에 "ERROR: Methods require an object as their target."이라는 메시지가 나타난다.
-
-그리고, 아래와 같이 Java 저장 함수/프로시저를 호출하는 **CALL** 문 안에 **CALL** 문이 중첩되는 경우와 **CALL** 문을 사용하여 Java 저장 함수/프로시저 호출 시 인자로 서브 질의를 사용할 경우 **CALL** 문은 수행이 되지 않는다.
-
-.. code-block:: sql
-
-    CALL phone_info('Tom', CALL sp_int(999));
-    CALL phone_info((SELECT * FROM Phone WHERE id='Tom'));
-
-Java 저장 함수/프로시저를 호출하여 수행 중 exception이 발생하면 *dbname*\ **_java.log** 파일에 exception 내용이 기록되어 저장된다. 만약 화면으로 exception 내용을 확인하고자 할 경우는 **$CUBRID/java/logging.properties** 파일의 handlers 값을 " java.lang.logging.ConsoleHandler" 로 수정하면 화면으로 exception 내용을 출력한다.
 
 SQL 문에서 호출
 ---------------
@@ -495,10 +225,9 @@ CUBRID 데이터베이스에 Phone 클래스를 생성한다.
     import java.io.*;
 
     public class PhoneNumber{
-        public static void Phone(String name, String phoneno) throws Exception{
+        public static void Phone(String name, String phoneno) throws Exception {
             String sql="INSERT INTO PHONE(NAME, PHONENO)"+ "VALUES (?, ?)";
             try{
-                Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
                 Connection conn = DriverManager.getConnection("jdbc:default:connection:");
                 PreparedStatement pstmt = conn.prepareStatement(sql);
            
@@ -526,15 +255,14 @@ CUBRID 데이터베이스에 Phone 클래스를 생성한다.
 
     import java.sql.*;
 
-    public class StoredJDBC{
-        public static void main(){
+    public class StoredJDBC {
+        public static void main() {
             Connection conn = null;
             Statement stmt= null;
             int result;
             int i;
 
             try{
-                Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
                 conn = DriverManager.getConnection("jdbc:CUBRID:localhost:33000:demodb:::","","");
 
                 CallableStatement cs;
@@ -563,79 +291,392 @@ CUBRID 데이터베이스에 Phone 클래스를 생성한다.
 
     name                  phoneno
     ============================================
-        'Jane'                '010-111-1111'
+        'Jane'                '010-111-1111'   
 
-주의 사항
-=========
+.. _jsp-server-side-jdbc:
 
-Java 저장 함수/프로시저의 리턴 값 및 IN/OUT에 대한 타입 자릿수
---------------------------------------------------------------
+서버 내부 JDBC 드라이버 사용
+============================
 
-Java 저장 함수/프로시저의 리턴 값과 IN/OUT의 데이터 타입에 자릿수를 한정하는 경우, CUBRID에서는 다음과 같이 처리한다.
+Java 저장 함수/프로시저에서 데이터베이스에 접근하기 위해서는 서버 측 JDBC 드라이버(Server-Side JDBC Driver)를 사용해야 한다.
+서버 측 JDBC 드라이버로 다음의 기능이 가능하다.
 
-*   Java 저장 함수/프로시저의 sql_type을 기준으로 확인한다.
+*    **질의문 수행**
+*    **질의 결과셋 처리**
 
-*   Java 저장 함수/프로시저 생성 시 정의한 자릿수는 무시하고 타입만 맞추어 Java에서 반환하는 값을 그대로 데이터베이스에 전달한다. 전달한 데이터에 대한 조작은 사용자가 데이터베이스에서 직접 처리하는 것을 원칙으로 한다.
+다음은 서버측 JDBC 드라이버에서 지원하는 클래스이다. JDBC API 지원에 대한 자세한 내용은 :ref:`jsp-appendix`\를 참고한다.
 
-다음과 같은 **typestring** () Java 저장 함수를 살펴보자.
+*    **java.sql.Connection**
+*    **java.sql.Statement**
+*    **java.sql.PreparedStatement**
+*    **java.sql.CallableStatement**
+*    **java.sql.ResultSet**
+*    **java.sql.ResultSetMetaData**
+
+.. warning::
+
+    **java.sql.DatabaseMetaData** 의 기능은 지원하지 않는다.
+
+서버측 JDBC 드라이버를 사용하는 데이터베이스 연산은 다음의 특징을 가진다.
+
+*    수행되는 데이터베이스 연산은 Java 저장 함수/프로시저를 호출한 트랜잭션에 포함된다
+*    트랜잭션 관련 API는 무시된다.
+*    서버 측 JDBC 드라이버의 연결을 다시 설정할 필요가 없다
+
+.. _jsp-server-side-jdbc-connection:
+
+Connection 생성
+----------------
+
+데이터베이스에 접근하기 위해서 서버 측 JDBC Connection을 생성해야한다.
+서버 측 JDBC 드라이버로 해당 데이터베이스의 Connection을 얻는 방법은 아래와 같다.
+첫 번째 방법은 JDBC 연결 URL로 "**jdbc:default:connection:**" 을 사용하는 것이고, 
+두 번째는 **cubrid.jdbc.driver.CUBRIDDriver** 클래스의 **getDefaultConnection** () 메서드를 호출하는 것이다.
 
 .. code-block:: java
 
-    public class JavaSP1{
-        public static String typestring(){
-            String temp = " ";
-            for(int i=0 i< 1 i++)
-                temp = temp + "1234567890";
-            return temp;
+    Connection conn = DriverManager.getConnection("jdbc:default:connection:");
+
+또는
+
+.. code-block:: java
+
+    Connection conn = cubrid.jdbc.driver.CUBRIDDriver.getDefaultConnection();
+
+.. note::
+
+    서버 측 JDBC 드라이버는 이미 등록되어 있기 때문에 Class.forName("cubrid.jdbc.driver.CUBRIDDriver")\를 호출하지 않아도 된다
+
+.. _jsp-execute-statement:
+
+질의문 수행
+--------------
+
+자바 저장/프로시저를 구현할 때 자바 어플리케이션을 개발하는 것과 동일하게 다음의 JDBC 인터페이스를 이용하여 질의문을 수행할 수 있다.
+
+    *    **java.sql.Statement**
+    *    **java.sql.PreparedStatement**
+    *    **java.sql.CallableStatement**
+
+다음은 위의 클래스를 사용하여 수행할 수 있는 질의문이다.
+
+*   **DML (Data Manipulation Language)**: :doc:`/sql/query/index`
+*   **DDL (Data Definition Language)**: :doc:`/sql/schema/index`
+
+.. note::
+
+    질의를 수행할 때 생성하는 JDBC 객체는 하나의 SQL 구문만 포함해야한다.
+    따라서 다음의 경우에 에러가 발생한다.
+    
+    ::
+
+        stmt = new Statement ("select * from t1;select * from t2;");
+
+다음의 구문에 해당하는 기능은 지원하지 않는다.
+
+*   **TCL (Transaction Control Language)**: :ref:`database-transaction`
+
+.. note::
+
+    *    **COMMIT**, **ROLLBACK** 구문에 해당하는 함수인 *commit()*, *rollback()*\은 무시된다.
+    *    **SAVEPOINT** 구문에 해당하는 함수는 지원하지 않는다.
+
+질의문 수행 예시
+^^^^^^^^^^^^^^^^^
+
+**결과셋을 반환하는 질의 수행과 질의 결과셋 처리**
+
+다음 예시는 결과셋을 반환하는 **SELECT** 문을 실행하는 방법이다.
+**SELECT** 문은 **java.sql.Statement** 또는 **java.sql.PreparedStatement** 객체를 생성하여 수행할 수 있다.
+수행한 질의 결과셋 (**java.sql.ResultSet**) 을 사용하여 수행한 질의의 결과를 처리할 수 있다.
+
+.. note::
+
+    *    java.sql.ResultSet은 forward-only, read-only 이다.
+    *    클라이언트 측 JDBC 드라이버의 경우 질의 결과셋을 생성하면 기본적으로 :ref:`커서 유지(cursor holdability) <cursor-holding>`\를 한다.
+         서버 측 JDBC 드라이버에서는 자원을 서버에서 관리하므로 질의 결과셋은 커서를 유지하지 않고 저장 함수/프로시저 종료 시에 내부적으로 정리한다.
+
+또한 질의 결과셋으로부터 **getMetaData()** 함수를 이용하여 결과셋 메타 데이터(**java.sql.ResultSetMetaData**)를 생성할 수 있다.
+
+.. code-block:: sql
+
+    CREATE OR REPLACE FUNCTION sp_get_athlete_by_ncode (nc STRING) RETURN STRING as language java name 'TestQuery.printAthelete(java.lang.String) return java.lang.String'; 
+
+.. code-block:: java
+    
+    import java.sql.*;
+
+    public class TestQuery {
+        public static String printAthelete(String nation_code_filter) throws SQLException {
+            String sql = "SELECT * FROM public.athlete WHERE nation_code = ?";
+
+            StringBuilder builder = new StringBuilder();
+            Connection conn = null;
+            PreparedStatement pstmt = null;
+
+            try {
+                conn = DriverManager.getConnection("jdbc:default:connection:");
+                pstmt = conn.prepareStatement(sql);
+
+                pstmt.setString(1, nation_code_filter);
+
+                ResultSet rs = pstmt.executeQuery();
+                ResultSetMetaData rsmd = rs.getMetaData();
+
+                builder.append("<Column Details>:\n");
+                int colCount = rsmd.getColumnCount();
+                for (int i = 1; i <= colCount; i++) {
+                    String colName = rsmd.getColumnName(i);
+                    String colType = rsmd.getColumnTypeName(i);
+                    builder.append(colName + "," + colType);
+
+                    if (i != colCount) builder.append("|");
+                }
+                
+                builder.append("\n<Rows>:\n");
+                while (rs.next()) {
+                    for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+                        Object object = rs.getObject(i);
+                        if (object != null) {
+                            readColumn(i, rsmd, rs, builder);
+                        }
+                        
+                        if (i != rsmd.getColumnCount()) builder.append ("|");
+                    }
+                    builder.append("\n");
+                }
+
+                rs.close();
+            } catch (Exception e) {
+                builder.append(e.getMessage());
+            } finally {
+                if (pstmt != null) pstmt.close();
+                if (conn != null) conn.close();
+            }
+
+            return builder.toString();
+        }
+
+        private static void readColumn(int idx, ResultSetMetaData rsmd, ResultSet rs, StringBuilder stringBuilder) throws SQLException {
+            switch (rsmd.getColumnType(idx)) {
+                case java.sql.Types.DOUBLE:
+                    stringBuilder.append(rs.getDouble(idx));
+                    break;
+                case java.sql.Types.FLOAT:
+                    stringBuilder.append(rs.getFloat(idx));
+                    break;
+                case java.sql.Types.VARCHAR:
+                    stringBuilder.append("\"").append(rs.getString(idx)).append("\"");
+                    break;
+                case java.sql.Types.INTEGER:
+                case java.sql.Types.TINYINT:
+                case java.sql.Types.SMALLINT:
+                case java.sql.Types.BIGINT:
+                    stringBuilder.append(rs.getInt(idx));
+                    break;
+                case java.sql.Types.DATE:
+                    stringBuilder.append("\"").append(rs.getDate(idx)).append("\"");
+                    break;
+                case java.sql.Types.TIMESTAMP:
+                    stringBuilder.append("\"").append(rs.getTimestamp(idx)).append("\"");
+                    break;
+                default:
+                    stringBuilder.append(rs.getObject(idx));
+                    break;
+            }
         }
     }
 
 .. code-block:: sql
 
-    CREATE FUNCTION typestring() RETURN CHAR(5) AS LANGUAGE JAVA
-    NAME 'JavaSP1.typestring() return java.lang.String';
+    SELECT sp_get_athlete_by_ncode ('ESP');
 
-    CALL typestring();
-    
-::
-
-      Result
+    sp_get_athlete_by_ncode('ESP')
     ======================
-      ' 1234567890'
+    '<Column Details>:
+    code,INTEGER|name,VARCHAR|gender,CHAR|nation_code,CHAR|event,VARCHAR
+    <Rows>:
+    10999|"Fernandez Jesus"|M|ESP|"Handball"
+    10997|"Fernandez Isabel"|W|ESP|"Judo"
+    10994|"Fernandez Abelardo"|M|ESP|"Football"
+    10948|"Etxaburu Aitor"|M|ESP|"Handball"
+    10941|"Estiarte Manuel"|M|ESP|"Water Polo"
+    ...
 
-Java 저장 프로시저에서의 java.sql.ResultSet 반환
-------------------------------------------------
+**INSERT, UPDATE, DELETE**
 
-CUBRID에서는 **java.sql.ResultSet** 을 반환하는 Java 저장 함수/프로시저를 선언할 때는 데이터 타입으로 **CURSOR** 를 사용해야 한다.
+다음은 **INSERT** 문을 수행하는 예시이다. **INSERT**, **UPDATE**, **DELETE** 문은 **executeUpdate()** 함수를 통해 수행한다.
+
+.. code-block:: java
+
+    import java.sql.*;
+
+    public class Athlete {
+        public static void insertAthlete(String name, String gender, String nation_code, String event) throws SQLException {
+            String sql = "INSERT INTO ATHLETE(NAME, GENDER, NATION_CODE, EVENT)" + "VALUES (?, ?, ?, ?)";
+            
+            Connection conn = null;
+            PreparedStatement pstmt = null;
+
+            try{
+                conn = DriverManager.getConnection("jdbc:default:connection:");
+                pstmt = conn.prepareStatement(sql);
+           
+                pstmt.setString(1, name);
+                pstmt.setString(2, gender);
+                pstmt.setString(3, nation_code);
+                pstmt.setString(4, event);;
+                pstmt.executeUpdate();
+     
+                pstmt.close();
+                conn.commit();
+                conn.close();
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
+            } finally {
+                if (pstmt != null) pstmt.close();
+                if (conn != null) conn.close();
+            }
+        }
+    }
+
+.. note::
+
+    위의 Athlete 클래스 예시에서 conn.commit()은 무시된다.
+
+OUT, IN/OUT 정의
+---------------------------------------------
+
+CUBRID의 Java 저장 함수/프로시저에서 Java에서 인자 값을 변경할 경우 변경 값이 전달이 되도록 인자가 OUT 인자로 전달될 때는 1차원 배열로 전달해야 한다.
+
+.. code-block:: sql
+
+    CREATE PROCEDURE sp_increment_me(x IN OUT INT) AS LANGUAGE JAVA NAME 'OutTest.incrementInt(int[])';
+
+.. code-block:: java
+
+    public class OutTest {
+        public static void incrementInt(int[] arg) {
+            arg[0] = arg[0] + 1;
+        }
+    }
+
+Set 타입의 IN/OUT 정의
+---------------------------------------------
+
+CUBRID의 Java 저장 함수/프로시저에서 Set 타입이 IN OUT인 경우 Java에서 인자 값을 변경할 경우 변경 값이 전달이 되도록 Set 타입이 OUT 인자로 전달될 때는 2차원 배열로 전달해야 한다.
+
+.. code-block:: sql
+
+    CREATE PROCEDURE setoid(x in out set, z object) AS LANGUAGE JAVA 
+    NAME 'SetOIDTest.SetOID(cubrid.sql.CUBRIDOID[][], cubrid.sql.CUBRIDOID';
+
+.. code-block:: java
+
+    import cubrid.sql.CUBRIDOID;
+
+    public class SetOIDTest {
+        public static void SetOID(CUBRIDOID[][] set, CUBRIDOID aoid) {
+            String ret="";
+            Vector v = new Vector();
+
+            CUBRIDOID[] set1 = set[0];
+
+            try {
+                if(set1 != null) {
+                    int len = set1.length;
+                    int i = 0;
+                    
+                    for (i = 0; i < len; i++)
+                        v.add(set1[i]);
+                }
+                
+                v.add(aoid);
+                set[0] = (CUBRIDOID[]) v.toArray(new CUBRIDOID[]{});
+                
+            } catch(Exception e) {
+                e.printStackTrace();
+                System.err.println("SQLException:"+e.getMessage());
+            }
+        }
+    }
+
+Java 저장 함수/프로시저에서 OID 사용
+------------------------------------
+
+CUBRID 저장 프로시저에서 OID 타입의 값을 IN/OUT으로 사용할 경우 서버의 값을 전달 받아 사용한다.
+
+.. code-block:: sql
+
+    CREATE PROCEDURE tOID(i inout object, q string) AS LANGUAGE JAVA
+    NAME 'OIDtest.tOID(cubrid.sql.CUBRIDOID[], java.lang.String)';
+
+.. code-block:: java
+
+    import java.sql.*;
+    import cubrid.sql.CUBRIDOID;
+
+    public class OIDTest {
+        public static void tOID(CUBRIDOID[] oid, String query)
+        {
+            Connection conn = null;
+            Statement stmt = null;
+            String ret = "";
+
+            try {
+                conn = DriverManager.getConnection("jdbc:default:connection:");
+
+                conn.setAutoCommit(false);
+                stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(query);
+                System.out.println("query:"+ query);
+
+                while(rs.next()) {
+                    oid[0] = (CUBRIDOID) rs.getObject(1);
+                    System.out.println("oid:" + oid[0].getTableName());
+                }
+                
+                stmt.close();
+                conn.close();
+                
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+                System.err.println("SQLException:" + e1.getMessage());
+            } catch (Exception e2) {
+                e2.printStackTrace();
+                system.err.println("Exception:" + e2.getMessage());
+            }
+        }
+    }
+
+
+질의 결과셋 반환
+-----------------
+
+CUBRID에서는 질의 결과셋 (**java.sql.ResultSet**)을 반환할 수 있고, 선언 시 반환하는 데이터 타입으로 **CURSOR** 를 사용한다.
+
+.. note::
+
+    *    **java.sql.ResultSet** 은 함수의 입력 인자로 사용할 수 없으며, 이를 IN 인자로 전달할 경우에는 에러가 발생한다.
+    *    Java가 아닌 환경에서 **ResultSet** 을 반환하는 함수를 호출할 경우에도 에러가 발생한다.
 
 .. code-block:: sql
 
     CREATE FUNCTION rset() RETURN CURSOR AS LANGUAGE JAVA
     NAME 'JavaSP2.TResultSet() return java.sql.ResultSet'
 
-Java 파일에서는 **java.sql.ResultSet** 을 반환하기 전에 **CUBRIDResultSet** 클래스로 캐스팅 후 **setReturnable** () 메서드를 호출해야 한다.
-
 .. code-block:: java
 
-    import java.sql.Connection;
-    import java.sql.DriverManager;
-    import java.sql.ResultSet;
-    import java.sql.Statement;
-     
-    import cubrid.jdbc.driver.CUBRIDConnection;
-    import cubrid.jdbc.driver.CUBRIDResultSet;
+    import java.sql.*;
 
     public class JavaSP2 {
         public static ResultSet TResultSet(){
             try {
-                Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
                 Connection conn = DriverManager.getConnection("jdbc:default:connection:");
-                ((CUBRIDConnection)conn).setCharset("euc_kr");
                     
                 String sql = "select * from station";
                 Statement stmt=conn.createStatement();
                 ResultSet rs = stmt.executeQuery(sql);
-                ((CUBRIDResultSet)rs).setReturnable();
                     
                 return rs;
             } catch (Exception e) {
@@ -650,19 +691,14 @@ Java 파일에서는 **java.sql.ResultSet** 을 반환하기 전에 **CUBRIDResu
 
 .. code-block:: java
 
-    import java.sql.CallableStatement;
-    import java.sql.Connection;
-    import java.sql.DriverManager;
-    import java.sql.ResultSet;
-    import java.sql.Types;
+    import java.sql.*;
      
     public class TestResultSet{
         public static void main(String[] args) {
             Connection conn = null;
      
             try {
-                Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
-                conn = DriverManager.getConnection("jdbc:CUBRID:localhost:31001:tdemodb:::","","");
+                conn = DriverManager.getConnection("jdbc:CUBRID:localhost:33000:demodb:::","","");
      
                 CallableStatement cstmt = conn.prepareCall("?=CALL rset()");
                 cstmt.registerOutParameter(1, Types.JAVA_OBJECT);
@@ -680,86 +716,432 @@ Java 파일에서는 **java.sql.ResultSet** 을 반환하기 전에 **CUBRIDResu
         }
     }
 
-**ResultSet** 은 입력 인자로 사용할 수 없으며, 이를 IN 인자로 전달할 경우에는 에러가 발생한다. Java가 아닌 환경에서 **ResultSet** 을 반환하는 함수를 호출할 경우에도 에러가 발생한다.
+.. _jsp-get-client-info:
 
-Java 저장 함수/프로시저에서 Set 타입의 IN/OUT
----------------------------------------------
-
-CUBRID의 Java 저장 함수/프로시저에서 Set 타입이 IN OUT인 경우 Java에서 인자 값을 변경할 경우 변경 값이 전달이 되도록 Set 타입이 OUT 인자로 전달될 때는 2차원 배열로 전달하도록 해야 한다.
+연결 중인 클라이언트 정보 획득
+--------------------------------
 
 .. code-block:: sql
 
-    CREATE PROCEDURE setoid(x in out set, z object) AS LANGUAGE JAVA 
-    NAME 'SetOIDTest.SetOID(cubrid.sql.CUBRIDOID[][], cubrid.sql.CUBRIDOID';
+    CREATE OR REPLACE FUNCTION sp_client_info () RETURN STRING as language java name 'SpTestClientInfo.getClientInfo() return java.lang.String'; 
 
 .. code-block:: java
 
-    public static void SetOID(cubrid.sql.CUBRID[][] set, cubrid.sql.CUBRIDOID aoid){
-        Connection conn=null;
-        Statement stmt=null;
-        String ret="";
-        Vector v = new Vector();
+    import java.util.Properties;
+    import java.sql.*;
+     
+    public class SpTestClientInfo {
+        public static String getClientInfo() {
+            Connection conn = null;
+            String result = "";
+     
+            try {
+                conn = DriverManager.getConnection("jdbc:default:connection:");
+     
+                Properties props = conn.getClientInfo();
 
-        cubrid.sql.CUBRIDOID[] set1 = set[0];
+                // How to get from the Properties
+                // String user = props.getProperty ("user");
 
-        try {
-            if(set1!=null) {
-                int len = set1.length;
-                int i = 0;
+                result = props.toString ();
+            } catch (Exception e) {
+                result = e.getMessage ();
+            }
+            return result;
+        }
+    }
+
+.. code-block:: sql
+
+    SELECT sp_client_info ();
+
+    sp_client_info()
+    ======================
+    '{pid=200270, user=DBA, login=cubrid, program=csql, type=2, host=cubrid, ip=192.168.2.201}'
+
+다른 데이터베이스 연결
+======================
+
+서버 측 JDBC 드라이버를 사용하더라도 현재 연결된 데이터베이스를 사용하지 않고, 외부의 다른 데이터베이스에 연결할 수도 있다. 
+외부의 데이터베이스에 대한 Connection을 얻는 것은 일반적인 JDBC Connection과 다르지 않다. 이에 대한 자세한 내용은 JDBC API를 참조한다.
+
+.. warning::
+
+    다른 데이터베이스에 연결하는 경우, Java 메서드의 수행이 종료되더라도 CUBRID 데이터베이스와의 Connection이 자동으로 종료되지 않는다.
+    따라서, 반드시 Connection 종료를 명시해주어야 **COMMIT**, **ROLLBACK** 과 같은 트랜잭션 연산이 해당 데이터베이스에 반영된다. 
+    즉, Java 저장 함수/프로시저를 호출한 데이터베이스와 실제 연결된 데이터베이스가 다르기 때문에 **별도의 트랜잭션**\으로 수행되는 것이다.
+
+.. code-block:: java
+
+    import java.sql.*;
+
+    public class SelectData {
+        public static void SearchSubway(String[] args) throws Exception {
+            Connection conn = null;
+            Statement stmt = null;
+            ResultSet rs = null;
+
+            try {
+                conn = DriverManager.getConnection("jdbc:CUBRID:localhost:33000:demodb:::","","");
+
+                String sql = "select line_id, line from line";
+                stmt = conn.createStatement();
+                rs = stmt.executeQuery(sql);
                 
-                for (i=0 i< len i++)
-                    v.add(set1[i]);
+                while(rs.next()) {
+                    int host_year = rs.getString("host_year");
+                    String host_nation = rs.getString("host_nation");
+                    
+                    System.out.println("Host Year ==> " + host_year);
+                    System.out.println(" Host Nation==> " + host_nation);
+                    System.out.println("\n=========\n");
+                }
+                
+                rs.close();
+            } catch (SQLException e1) {
+                System.err.println(e1.getMessage());
+            } catch (Exception e2) {
+                System.err.println(e2.getMessage());
+            } finally {
+                if (stmt != null) stmt.close();
+                if (conn != null) conn.close();
             }
-            
-            v.add(aoid);
-            set[0]=(cubrid.sql.CUBRIDOID[]) v.toArray(new cubrid.sql.CUBRIDOID[]{});
-            
-        } catch(Exception e) {
-            e.printStackTrace();
-            System.err.pirntln("SQLException:"+e.getMessage());
         }
     }
 
-Java 저장 함수/프로시저에서 OID 사용
-------------------------------------
+수행 중인 Java 저장 함수/프로시저가 데이터베이스 서버의 JVM에서만 구동되어야 할 때, Java 프로그램 소스에서 System.getProperty("cubrid.server.version")를 호출함으로써 어디서 수행되는 지를 점검할 수 있다. 결과 값은 데이터베이스에서 호출하면 데이터베이스 버전이 되고, 그 외는 **NULL** 이 된다.
 
-CUBRID 저장 프로시저에서 OID 타입의 값을 IN/OUT으로 사용할 경우 서버의 값을 전달 받아 사용한다.
+.. _jsp-load-java:
 
-.. code-block:: sql
+loadjava 유틸리티
+=================
 
-    CREATE PROCEDURE tOID(i inout object, q string) AS LANGUAGE JAVA
-    NAME 'OIDtest.tOID(cubrid.sql.CUBRIDOID[], java.lang.String)';
+컴파일된 Java 파일이나 JAR(Java Archive) 파일을 CUBRID로 로드하기 위해서 **loadjava** 유틸리티를 사용한다. **loadjava** 유틸리티를 사용하여 Java \*.class 파일이나 \*.jar 파일을 로드하면 해당 파일이 해당 데이터베이스 경로로 이동한다. ::
+
+    loadjava [option] database-name java-class-file
+
+*   *database-name*: Java 파일을 로드하려고 하는 데이터베이스 이름
+*   *java-class-file*: 로드하려는 Java 클래스 파일 이름 또는 jar 파일 이름
+*   [*option*]
+
+    *   **-y**: 이름이 같은 클래스 파일이 존재하면 자동으로 덮어쓰기 한다. 기본값은 **no** 이다. 만약 **-y** 옵션을 명시하지 않고 로드할 때 이름이 같은 클래스 파일이 존재하면 덮어쓰기를 할 것인지 묻는다.
+
+.. _jsp-caution:
+
+주의 사항
+=========
+
+* java.sql.DatabaseMetaData는 지원하지 않는다.
+* BLOB/CLOB 타입과 관련한 JDBC API 지원하지 않는다.
+* 질의 수행과 관련 없고 클라이언트 측 JDBC에서만 사용하는 기능은 지원하지 않는다. 자세한 내용은 :ref:`jsp-appendix`\를 참조한다.
+* 하나의 JDBC 객체로 질의 수행 시 여러 SQL 구문을 지원하지 않는다.
+* 질의 수행으로 만들어지는 ResultSet은 non-updatable, non-scrollable, non-sensitive이다.
+* 리턴 값 및 IN/OUT 파라미터의 타입 자릿수는 Java에서 무시하고 타입만 맞추어 그대로 데이터베이스에 전달한다.
+* 저장 프로시저는 다른 저장 프로시저를 호출하거나 재귀적으로 자신을 호출할 수 있다. 최대 중첩 깊이는 16이다.
+
+리턴 값 및 IN/OUT 파라미터에 대한 타입 자릿수 제한사항
+--------------------------------------------------------
+
+리턴 값과 IN/OUT의 데이터 타입에 자릿수를 한정하는 경우, 
+Java 저장 함수/프로시저 생성 시 정의한 자릿수는 무시하고 타입만 맞추어 Java에서 반환하는 값을 그대로 데이터베이스에 전달한다. 
+전달한 데이터에 대한 조작은 사용자가 데이터베이스에서 직접 처리하는 것을 원칙으로 한다.
+
+다음과 같은 **typestring** () Java 저장 함수를 살펴보자.
 
 .. code-block:: java
 
-    public static void tOID(CUBRIDOID[] oid, String query)
-    {
-        Connection conn=null;
-        Statement stmt=null;
-        String ret="";
-
-        try {
-            Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
-            conn=DriverManager.getConnection("jdbc:default:connection:");
-
-            conn.setAutoCommit(false);
-            stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
-            System.out.println("query:"+ query);
-
-            while(rs.next()) {
-                oid[0]=(CUBRIDOID)rs.getObject(1);
-                System.out.println("oid:"+oid[0].getTableName());
+    public class JavaSP1 {
+        public static String typestring() {
+            String temp = " ";
+            for(int i = 0; i < 1; i++) {
+                temp = temp + "1234567890";
             }
-            
-            stmt.close();
-            conn.close();
-            
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.err.println("SQLException:"+e.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-            system.err.println("Exception:"+ e.getMessage());
+            return temp;
         }
     }
+
+.. code-block:: sql
+
+    CREATE FUNCTION typestring() RETURN CHAR(5) AS LANGUAGE JAVA
+    NAME 'JavaSP1.typestring() return java.lang.String';
+
+    CALL typestring();
+    
+::
+
+      Result
+    ======================
+      ' 1234567890'
+
+.. _jsp-appendix:
+
+부록
+========================
+
+JDBC API 지원표
+----------------------------
+
+=========================== =========================================================
+JDBC 인터페이스              지원 여부                                               
+=========================== =========================================================
+java.sql.CallableStatement  지원                                               
+java.sql.Connection         지원                                               
+java.sql.Driver             지원 (:ref:`jsp-server-side-jdbc-connection`)
+java.sql.PreparedStatement  지원                                               
+java.sql.ResultSet          지원                                               
+java.sql.ResultSetMetaData  지원                                               
+CUBRIDOID                   지원                                               
+java.sql.Statement          지원
+java.sql.DriverManager      지원                                               
+Java.sql.SQLException       지원                                               
+java.sql.Array              미지원                                           
+java.sql.Blob               미지원                                               
+java.sql.Clob               미지원                                               
+java.sql.DatabaseMetaData   미지원                                               
+java.sql.ParameterMetaData  미지원                                           
+java.sql.Ref                미지원                                           
+java.sql.Savepoint          미지원                                           
+java.sql.SQLData            미지원                                           
+java.sql.SQLInput           미지원                                           
+java.sql.Struct             미지원                                           
+=========================== =========================================================
+
+.. note::
+
+    다음의 표에서 지정하지 않은 JDBC API는 지원하지 않고 SQLException을 반환한다.
+
+java.sql.Connection
+^^^^^^^^^^^^^^^^^^^^^^
+
+.. csv-table::
+   :header: "Method", "Description"
+   :widths: auto
+
+    "Properties getClientInfo()", :ref:`jsp-get-client-info`
+    "void rollback()", "do nothing"
+    "Statement createStatement()", :ref:`jsp-execute-statement`
+    "Statement createStatement(int resultSetType, int resultSetConcurrency)", :ref:`jsp-execute-statement`
+    "Statement createStatement(int resultSetType, int resultSetConcurrency, int resultSetHoldability)", :ref:`jsp-execute-statement`
+    "CallableStatement prepareCall(String sql)", :ref:`jsp-execute-statement`
+    "CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency)", :ref:`jsp-execute-statement`
+    "CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability)", :ref:`jsp-execute-statement`
+    "PreparedStatement prepareStatement(String sql)", :ref:`jsp-execute-statement`
+    "PreparedStatement prepareStatement(String sql, int autoGeneratedKeys)", :ref:`jsp-execute-statement`
+    "PreparedStatement prepareStatement(String sql, int[] columnIndexes)", :ref:`jsp-execute-statement`
+    "PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency)", :ref:`jsp-execute-statement`
+    "PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability)", :ref:`jsp-execute-statement`
+    "PreparedStatement prepareStatement(String sql, String[] columnNames)", :ref:`jsp-execute-statement`
+    "void clearWarnings()", "do nothing"
+    "void close()", "close all statements"
+    "void commit()", "do nothing"
+    "boolean getAutoCommit()", "return false"
+    "String getCatalog()", "return "
+    "int getHoldability()", "return ResultSet.HOLD_CURSORS_OVER_COMMIT;"
+    "int getTransactionIsolation()", ""
+    "SQLWarning getWarnings()", "return null"
+    "boolean isClosed()", "return false"
+    "boolean isReadOnly()", "return false"
+    "boolean isValid(int timeout)", "return true"
+    "void setAutoCommit(boolean autoCommit)", "do nothing"
+    "void setCatalog(String catalog)", "do nothing"
+    "void setHoldability(int holdability)", "do nothing"
+    "void setReadOnly(boolean readOnly)", "do nothing"
+    "void setTransactionIsolation(int level)", "do nothing"
+
+java.sql.Statement
+^^^^^^^^^^^^^^^^^^^^^^
+
+.. csv-table::
+   :header: "Method", "Description"
+   :widths: auto
+
+    "Connection getConnection()", ""
+    "int getFetchDirection()", "retruns ResultSet.FETCH_FORWARD"
+    "int getFetchSize()", ""
+    "int getMaxFieldSize()", ""
+    "int getMaxRows()", ""
+    "int getQueryTimeout()", "retruns 0"
+    "int getResultSetConcurrency()", "retruns ResultSet.CONCUR_UPDATABLE"
+    "int getResultSetHoldability()", "return ResultSet.HOLD_CURSORS_OVER_COMMIT or ResultSet.CLOSE_CURSORS_AT_COMMIT"
+    "int getResultSetType()", "return ResultSet.TYPE_FORWARD_ONLY"
+    "int getUpdateCount()", "return -1"
+    "boolean isClosed()", ""
+    "void setFetchDirection(int direction)", ""
+    "void setFetchSize(int rows)", ""
+    "void setMaxFieldSize(int max)", ""
+    "void setMaxRows(int max)", ""
+    "void setQueryTimeout(int seconds)", ""
+    "void close()", ""
+    "boolean execute(String sql)", ""
+    "boolean execute(String sql, int autoGeneratedKeys)", ""
+    "boolean execute(String sql, int[] columnIndexes)", ""
+    "boolean execute(String sql, String[] columnNames)", ""
+    "executeBatch()", "throws SQLException"
+    "ResultSet executeQuery(String sql)", ""
+    "int executeUpdate(String sql)", ""
+    "int executeUpdate(String sql, int autoGeneratedKeys)", ""
+    "int executeUpdate(String sql, int[] columnIndexes)", ""
+    "int executeUpdate(String sql, String[] columnNames)", ""
+    "ResultSet getGeneratedKeys()", ""
+    "boolean getMoreResults()", ""
+    "ResultSet getResultSet()", ""
+    "void cancel()", "do nothing"
+    "void clearWarnings()", ""
+    "SQLWarning getWarnings()", ""
+    "void setCursorName(String name)", ""
+    "void setEscapeProcessing(boolean enable)", ""
+
+java.sql.PreparedStatement
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. csv-table::
+   :header: "Method", "Description"
+   :widths: auto
+
+    "boolean execute()", ""
+    "ResultSet executeQuery()", ""
+    "int executeUpdate()", ""
+    "ResultSetMetaData getMetaData()", ""
+    "void setBigDecimal(int parameterIndex, BigDecimal x)", ""
+    "void setBoolean(int parameterIndex, boolean x)", ""
+    "void setByte(int parameterIndex, byte x)", ""
+    "void setBytes(int parameterIndex, byte[] x)", ""
+    "void setDate(int parameterIndex, Date x)", ""
+    "void setDate(int parameterIndex, Date x, Calendar cal)", ""
+    "void setDouble(int parameterIndex, double x)", ""
+    "void setFloat(int parameterIndex, float x)", ""
+    "void setInt(int parameterIndex, int x)", ""
+    "void setLong(int parameterIndex, long x)", ""
+    "void setNull(int parameterIndex, int sqlType)", ""
+    "void setNull(int parameterIndex, int sqlType, String typeName)", ""
+    "void setObject(int parameterIndex, Object x)", ""
+    "void setObject(int parameterIndex, Object x, int targetSqlType)", ""
+    "void setObject(int parameterIndex, Object x, int targetSqlType, int scaleOrLength)", ""
+    "void setShort(int parameterIndex, short x)", ""
+    "void setString(int parameterIndex, String x)", ""
+    "void setTime(int parameterIndex, Time x)", ""
+    "void setTime(int parameterIndex, Time x, Calendar cal)", ""
+    "void setTimestamp(int parameterIndex, Timestamp x)", ""
+    "void setTimestamp(int parameterIndex, Timestamp x, Calendar cal)", ""
+
+
+java.sql.CallableStatement
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. csv-table::
+   :header: "Method", "Description"
+   :widths: auto
+
+    "BigDecimal getBigDecimal(int parameterIndex)", ""
+    "boolean getBoolean(int parameterIndex)", ""
+    "byte getByte(int parameterIndex)", ""
+    "byte[] getBytes(int parameterIndex)", ""
+    "Date getDate(int parameterIndex)", ""
+    "Date getDate(int parameterIndex, Calendar cal)", ""
+    "double getDouble(int parameterIndex)", ""
+    "getFloat(int parameterIndex)", ""
+    "getInt(int parameterIndex)", ""
+    "getLong(int parameterIndex)", ""
+    "getObject(int parameterIndex)", ""
+    "getShort(int parameterIndex)", ""
+    "getString(int parameterIndex)", ""
+    "getTime(int parameterIndex)", ""
+    "getTime(int parameterIndex, Calendar cal)", ""
+    "getTimestamp(int parameterIndex)", ""
+    "getTimestamp(int parameterIndex, Calendar cal)", ""
+    "registerOutParameter(int parameterIndex, int sqlType)", ""
+    "registerOutParameter(int parameterIndex, int sqlType, int scale)", ""
+    "registerOutParameter(int parameterIndex, int sqlType, String typeName)", ""
+    "wasNull()", ""
+
+java.sql.ResultSet
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. csv-table::
+   :header: "Method", "Description"
+   :widths: auto
+
+    "clearWarnings()", ""
+    "close()", ""
+    "deleteRow()", "throws SQLException"
+    "findColumn(String columnLabel)", ""
+    "first()", "throws SQLException"
+    "getBoolean(int columnIndex)", ""
+    "getBoolean(String columnLabel)", ""
+    "getByte(int columnIndex)", ""
+    "getByte(String columnLabel)", ""
+    "getBytes(int columnIndex)", ""
+    "getBytes(String columnLabel)", ""
+    "getConcurrency()", "return ResultSet.CONCUR_READ_ONLY;"
+    "getDate(int columnIndex)", ""
+    "getDate(int columnIndex, Calendar cal)", ""
+    "getDate(String columnLabel)", ""
+    "getDate(String columnLabel, Calendar cal)", ""
+    "getDouble(int columnIndex)", ""
+    "getDouble(String columnLabel)", ""
+    "getFetchDirection()", ""
+    "getFetchSize()", ""
+    "getFloat(int columnIndex)", ""
+    "getFloat(String columnLabel)", ""
+    "getHoldability()", ""
+    "getInt(int columnIndex)", ""
+    "getInt(String columnLabel)", ""
+    "getLong(int columnIndex)", ""
+    "getLong(String columnLabel)", ""
+    "getMetaData()", ""
+    "getObject(int columnIndex)", ""
+    "getObject(String columnLabel)", ""
+    "getRow()", ""
+    "getShort(int columnIndex)", ""
+    "getShort(String columnLabel)", ""
+    "getStatement()", ""
+    "getString(int columnIndex)", ""
+    "getString(String columnLabel)", ""
+    "getTime(int columnIndex)", ""
+    "getTime(int columnIndex, Calendar cal)", ""
+    "getTime(String columnLabel)", ""
+    "getTime(String columnLabel, Calendar cal)", ""
+    "getTimestamp(int columnIndex)", ""
+    "getTimestamp(int columnIndex, Calendar cal)", ""
+    "getTimestamp(String columnLabel)", ""
+    "getTimestamp(String columnLabel, Calendar cal)", ""
+    "getType()", "retruns ResultSet.TYPE_FORWARD_ONLY"
+    "isAfterLast()", ""
+    "isBeforeFirst()", ""
+    "isClosed()", "return false"
+    "isFirst()", ""
+    "isLast()", ""
+    "wasNull()", ""
+    "getCursorName()", "return "
+    "getWarnings()", "return null"
+
+
+java.sql.ResultSetMetaData
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. csv-table::
+   :header: "Method", "Description"
+   :widths: auto
+
+    "getCatalogName (int column)", "return"
+    "getColumnClassName(int column)", ""
+    "getColumnCount()", ""
+    "getColumnDisplaySize(int column)", ""
+    "getColumnLabel(int column)", ""
+    "getColumnName(int column)", ""
+    "getColumnType(int column)", ""
+    "getColumnTypeName(int column)", ""
+    "getPrecision(int column)", ""
+    "getScale(int column)", ""
+    "getSchemaName(int column)", "return "
+    "getTableName(int column)", ""
+    "isAutoIncrement(int column)", ""
+    "isCaseSensitive(int column)", ""
+    "isCurrency(int column)", ""
+    "isDefinitelyWritable(int column)", "return false"
+    "isNullable(int column)", ""
+    "isReadOnly(int column)", "return false"
+    "isSearchable(int column)", "return true"
+    "isSigned(int column)", ""
+    "isWritable(int column)", "return true"
+

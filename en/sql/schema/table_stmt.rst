@@ -18,15 +18,14 @@ To create a table, use the **CREATE TABLE** statement.
 
 ::
 
-    CREATE {TABLE | CLASS} [IF NOT EXISTS] table_name
+    CREATE {TABLE | CLASS} [IF NOT EXISTS] [schema_name.]table_name
     [<subclass_definition>]
-    [(<column_definition>, ... [, <table_constraint>, ...])] 
-    [AUTO_INCREMENT = initial_value]
     [CLASS ATTRIBUTE (<column_definition>, ...)]
+    [([{<table_constraint>}... ,] <column_definition> [{, {<column_definition> | <table_constraint>}}...])]
     [INHERIT <resolution>, ...]
     [<table_options>]
 
-        <subclass_definition> ::= {UNDER | AS SUBCLASS OF} table_name, ...
+        <subclass_definition> ::= {UNDER | AS SUBCLASS OF} [schema_name.]superclass_name, ...
         
         <column_definition> ::= 
             column_name <data_type> [{<default_or_shared_or_ai> | <on_update> | <column_constraint>}] [COMMENT 'column_comment_string']
@@ -44,10 +43,10 @@ To create a table, use the **CREATE TABLE** statement.
 
             <on_update> ::= [ON UPDATE <value_specification>]
 
-            <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition> }
+            <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] <referential_definition> }
 
                 <referential_definition> ::=
-                    REFERENCES [referenced_table_name] (column_name, ...) [<referential_triggered_action> ...]
+                    REFERENCES [schema_name.]referenced_table_name (column_name, ...) [<referential_triggered_action> ...]
          
                     <referential_triggered_action> ::=
                         ON UPDATE <referential_action> |
@@ -55,19 +54,21 @@ To create a table, use the **CREATE TABLE** statement.
 
                         <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
                         
-        <table_constraint> ::=
-            [CONSTRAINT [constraint_name]] 
+        <table_constraint> ::= 
             { 
-                UNIQUE [KEY|INDEX](column_name, ...) |
-                {KEY|INDEX} [constraint_name](column_name, ...) |
-                PRIMARY KEY (column_name, ...) |
-                <referential_constraint>
+                {KEY|INDEX} index_name (column_name, ...) |
+                [CONSTRAINT [constraint_name]]
+                   {
+                      UNIQUE [KEY|INDEX](column_name, ...) |
+                      PRIMARY KEY (column_name, ...) |
+                      <referential_constraint>
+                   }
             } COMMENT 'index_comment_string'
          
             <referential_constraint> ::= FOREIGN KEY [<foreign_key_name>](column_name, ...) <referential_definition>
          
                 <referential_definition> ::=
-                    REFERENCES [referenced_table_name] (column_name, ...) [<referential_triggered_action> ...]
+                    REFERENCES [schema_name.]referenced_table_name (column_name, ...) [<referential_triggered_action> ...]
          
                     <referential_triggered_action> ::=
                         ON UPDATE <referential_action> |
@@ -75,15 +76,17 @@ To create a table, use the **CREATE TABLE** statement.
         
                         <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
      
-        <resolution> ::= [CLASS] {column_name} OF superclass_name [AS alias]
+        <resolution> ::= [CLASS] {column_name} OF [schema_name.]superclass_name [AS alias]
         <table_options> ::= <table_option> [[,] <table_option> ...] 
             <table_option> ::= REUSE_OID | DONT_REUSE_OID |
                                COMMENT [=] 'table_comment_string' |
                                [CHARSET charset_name] [COLLATE collation_name] |
-                               ENCRYPT [=] [AES | ARIA]
+                               ENCRYPT [=] [AES | ARIA] |
+                               AUTO_INCREMENT = initial_value
 
 *   IF NOT EXISTS: If an identically named table already exists, a new table will not be created without an error.
-*   *table_name*: specifies the name of the table to be created (maximum: 254 bytes).
+*   *schema_name*: Specifies the schema name(maximum: 31 bytes). If omitted, the schema name of the current session is used.
+*   *table_name*: specifies the name of the table to be created (maximum: 222 bytes).
 *   *column_name*: specifies the name of the column to be created (maximum: 254 bytes).
 *   *column_type*: specifies the data type of the column.
 *   [**SHARED** *value* | **DEFAULT** *value*]: specifies the initial value of the column.
@@ -94,6 +97,10 @@ To create a table, use the **CREATE TABLE** statement.
 *   *table_comment_string*: specifies a table's comment
 *   *column_comment_string*: specifies a column's comment.
 *   *index_comment_string*: specifies an index's comment.
+
+.. note::
+
+    *   **DBA** and **DBA** members can create tables in different schemas. If a user is neither **DBA** nor **DBA** member, tables can only be created in the schema of that user.
 
 .. code-block:: sql
 
@@ -154,7 +161,7 @@ A column is a set of data values of a particular simple type, one for each row o
 
         <on_update> ::= [ON UPDATE <value_specification>]
 
-        <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition>}
+        <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] <referential_definition>}
 
 Column Name
 ^^^^^^^^^^^
@@ -297,14 +304,14 @@ You can change the initial value of **AUTO_INCREMENT** by using the **ALTER TABL
 
 ::
 
-    CREATE TABLE table_name (id INT AUTO_INCREMENT[(seed, increment)]);
+    CREATE TABLE [schema_name.]table_name (id INT AUTO_INCREMENT[(seed, increment)]);
 
-    CREATE TABLE table_name (id INT AUTO_INCREMENT) AUTO_INCREMENT = seed ;
+    CREATE TABLE [schema_name.]table_name (id INT AUTO_INCREMENT) AUTO_INCREMENT = seed ;
 
 *   *seed* : The initial value from which the number starts. All integers (positive, negative, and zero) are allowed. The default value is **1**.
 *   *increment* : The increment value of each row. Only positive integers are allowed. The default value is **1**.
 
-When you use the **CREATE TABLE** *table_name* (id INT **AUTO_INCREMENT**) **AUTO_INCREMENT** = *seed*; statement, the constraints are as follows:
+When you use the **CREATE TABLE** *[schema_name.]table_name* (id INT **AUTO_INCREMENT**) **AUTO_INCREMENT** = *seed*; statement, the constraints are as follows:
 
 *   You should define only one column with the **AUTO_INCREMENT** attribute.
 *   Don't use (*seed*, *increment*) and AUTO_INCREMENT = *seed* together.
@@ -418,21 +425,23 @@ You can define **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** as the
 
 ::
 
-    <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition> }
+    <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] <referential_definition> }
 
-    <table_constraint> ::=
-        [CONSTRAINT [constraint_name]] 
+    <table_constraint> ::=         
         { 
-            UNIQUE [KEY|INDEX](column_name, ...) |
-            {KEY|INDEX} [constraint_name](column_name, ...) |
-            PRIMARY KEY (column_name, ...) |
-            <referential_constraint>
+            {KEY|INDEX} index_name (column_name, ...) |
+            [CONSTRAINT [constraint_name]]
+                {
+                      UNIQUE [KEY|INDEX](column_name, ...) |
+                      PRIMARY KEY (column_name, ...) |
+                      <referential_constraint>
+                }
         }
      
         <referential_constraint> ::= FOREIGN KEY [<foreign_key_name>](column_name, ...) <referential_definition>
      
             <referential_definition> ::=
-                REFERENCES [referenced_table_name] (column_name, ...) [<referential_triggered_action> ...]
+                REFERENCES [schema_name.]referenced_table_name (column_name, ...) [<referential_triggered_action> ...]
      
                 <referential_triggered_action> ::=
                     ON UPDATE <referential_action> |
@@ -543,12 +552,14 @@ By default, the index created by defining the primary key is created in ascendin
         PRIMARY KEY (host_year, event_code, athlete_code, medal)
     );
 
+.. _foreign-key-constraint:
+
 FOREIGN KEY Constraint
 ^^^^^^^^^^^^^^^^^^^^^^
 
 A foreign key is a column or a set of columns that references the primary key in other tables in order to maintain reference relationship. The foreign key and the referenced primary key must have the same data type. Consistency between two tables is maintained by the foreign key referencing the primary key, which is called referential integrity. ::
 
-    [CONSTRAINT constraint_name] FOREIGN KEY [foreign_key_name] (<column_name_comma_list1>) REFERENCES [referenced_table_name] (<column_name_comma_list2>) [<referential_triggered_action> ...]
+    [CONSTRAINT constraint_name] FOREIGN KEY [foreign_key_name] (<column_name_comma_list1>) REFERENCES [schema_name.]referenced_table_name (<column_name_comma_list2>) [<referential_triggered_action> ...]
      
         <referential_triggered_action> ::= ON UPDATE <referential_action> | ON DELETE <referential_action>
 
@@ -558,6 +569,7 @@ A foreign key is a column or a set of columns that references the primary key in
 *   *foreign_key_name*: Specifies a name of the **FOREIGN KEY** constraint. You can skip the name specification. However, if you specify this value, *constraint_name* will be ignored, and the specified value will be used.
 
 *   <*column_name_comma_list1*>: Specifies the name of the column to be defined as a foreign key after the **FOREIGN KEY** keyword. The column number of foreign keys defined and primary keys must be same.
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *referenced_table_name*: Specifies the name of the table to be referenced.
 *   <*column_name_comma_list2*>: Specifies the name of the referred primary key column after the **FOREIGN KEY** keyword.
 *   <*referential_triggered_action*>: Specifies the trigger action that responds to a certain operation in order to maintain referential integrity. **ON UPDATE** or **ON DELETE** can be specified. Each action can be defined multiple times, and the definition order is not significant.
@@ -802,10 +814,11 @@ You cannot create the column definition because the **CREATE TABLE ... LIKE** st
 
 ::
 
-    CREATE {TABLE | CLASS} <new_table_name> LIKE <source_table_name>;
+    CREATE {TABLE | CLASS} [schema_name.]new_table_name LIKE [schema_name.]source_table_name;
 
-* *new_table_name*: A table name to be created
-* *source_table_name*: The name of the original table that already exists in the database. The following tables cannot be specified as original tables in the **CREATE TABLE ... LIKE** statement.
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
+*   *new_table_name*: A table name to be created
+*   *source_table_name*: The name of the original table that already exists in the database. The following tables cannot be specified as original tables in the **CREATE TABLE ... LIKE** statement.
 
     * Partition table
     * Table that contains an **AUTO_INCREMENT** column
@@ -822,7 +835,7 @@ You cannot create the column definition because the **CREATE TABLE ... LIKE** st
     -- creating an empty table with the same schema as a_tbl
     CREATE TABLE new_tbl LIKE a_tbl;
     SELECT * FROM new_tbl;
-     
+
 ::
 
     There are no results.
@@ -880,8 +893,9 @@ You can create a new table that contains the result records of the **SELECT** st
 
 ::
 
-    CREATE {TABLE | CLASS} table_name [(<column_definition> [,<table_constraint>], ...)] [REPLACE] AS <select_statement>;
+    CREATE {TABLE | CLASS} [schema_name.]table_name [([{<table_constraint>}... ,] <column_definition> [{, {<column_definition> | <table_constraint>}}...])] [REPLACE] AS <select_statement>;
 
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *table_name*: a name of the table to be created.
 *   <*column_definition*>: defines a column. If this is omitted, the column schema of **SELECT** statement is replicated; however, the constraint or the **AUTO_INCREMENT** attribute is not replicated.
 *   <*table_constraint*>: defines table constraint.
@@ -990,17 +1004,17 @@ You can modify the structure of a table by using the **ALTER** statement. You ca
 
 ::
 
-    ALTER [TABLE | CLASS] table_name <alter_clause> [, <alter_clause>] ... ;
+    ALTER [TABLE | CLASS] [schema_name.]table_name <alter_clause> [, <alter_clause>] ... ;
      
         <alter_clause> ::= 
             ADD <alter_add> [INHERIT <resolution>, ...]  | 
             ADD {KEY | INDEX} <index_name> (<index_col_name>, ... ) [COMMENT 'index_comment_string'] |
             ALTER [COLUMN] column_name SET DEFAULT <value_specification> |
-            DROP <alter_drop> [ INHERIT <resolution>, ... ] |
+            DROP <alter_drop> [INHERIT <resolution>, ...] |
             DROP {KEY | INDEX} index_name |
             DROP FOREIGN KEY constraint_name |
             DROP PRIMARY KEY |                   
-            RENAME <alter_rename> [ INHERIT <resolution>, ... ] |
+            RENAME <alter_rename> [INHERIT <resolution>, ...] |
             CHANGE <alter_change> |
             MODIFY <alter_modify> |            
             INHERIT <resolution>, ... |
@@ -1013,7 +1027,7 @@ You can modify the structure of a table by using the **ALTER** statement. You ca
                 CLASS ATTRIBUTE <column_definition>, ... |
                 CONSTRAINT <constraint_name> <column_constraint> (column_name) |
                 QUERY <select_statement> |
-                SUPERCLASS <class_name>, ...
+                SUPERCLASS [schema_name.]superclass_name, ...
                             
                 <class_element> ::= <column_definition> | <table_constraint>
      
@@ -1024,7 +1038,7 @@ You can modify the structure of a table by using the **ALTER** statement. You ca
                 {
                     column_name, ... |
                     QUERY [<unsigned_integer_literal>] |
-                    SUPERCLASS class_name, ... |
+                    SUPERCLASS [schema_name.]superclass_name, ... |
                     CONSTRAINT constraint_name
                 }
                              
@@ -1049,7 +1063,7 @@ You can modify the structure of a table by using the **ALTER** statement. You ca
               | MODIFY [COLUMN | CLASS ATTRIBUTE] col_name <column_definition>
                     [FIRST | AFTER col_name2]
 
-            <resolution> ::= column_name OF superclass_name [AS alias]
+            <resolution> ::= column_name OF [schema_name.]superclass_name [AS alias]
 
             <index_col_name> ::= column_name [(length)] [ASC | DESC]
 
@@ -1070,7 +1084,7 @@ You can add a new column by using the **ADD COLUMN** clause. You can specify the
 
 ::
 
-    ALTER [TABLE | CLASS] table_name
+    ALTER [TABLE | CLASS] [schema_name.]table_name
     ADD [COLUMN | ATTRIBUTE] [(] <column_definition> [FIRST | AFTER old_column_name] [)];
 
         <column_definition> ::= 
@@ -1089,10 +1103,10 @@ You can add a new column by using the **ADD COLUMN** clause. You can specify the
 
             <on_update> ::= [ON UPDATE <value_specification>]
 
-            <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition>}
+            <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] <referential_definition>}
 
                 <referential_definition> ::=
-                    REFERENCES [referenced_table_name] (column_name, ...) [<referential_triggered_action> ...]
+                    REFERENCES [schema_name.]referenced_table_name (column_name, ...) [<referential_triggered_action> ...]
          
                     <referential_triggered_action> ::=
                         ON UPDATE <referential_action> |
@@ -1100,6 +1114,7 @@ You can add a new column by using the **ADD COLUMN** clause. You can specify the
 
                         <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
 
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *table_name*: specifies the name of a table that has a column to be added.
 *   <*column_definition*>: specifies the name(max 254 bytes), data type, and constraints of a column to be added.
 *   **AFTER** *oid_column_name*: specifies the name of an existing column before the column to be added.
@@ -1195,22 +1210,24 @@ You can add a new constraint by using the **ADD CONSTRAINT** clause.
 
 By default, the index created when you add **PRIMARY KEY** constraints is created in ascending order, and you can define the key sorting order by specifying the **ASC** or **DESC** keyword next to the column name. ::
 
-    ALTER [ TABLE | CLASS | VCLASS | VIEW ] table_name
+    ALTER [ TABLE | CLASS | VCLASS | VIEW ] [schema_name.]table_name
     ADD <table_constraint> ;
     
-        <table_constraint> ::=
-            [CONSTRAINT [constraint_name]] 
+        <table_constraint> ::=             
             { 
-                UNIQUE [KEY|INDEX](column_name, ...) |
-                {KEY|INDEX} [constraint_name](column_name, ...) |
-                PRIMARY KEY (column_name, ...) |
-                <referential_constraint>
+                {KEY|INDEX} index_name (column_name, ...) |
+                [CONSTRAINT [constraint_name]]
+                   {
+                      UNIQUE [KEY|INDEX](column_name, ...) |
+                      PRIMARY KEY (column_name, ...) |
+                      <referential_constraint>
+                   }
             }
      
             <referential_constraint> ::= FOREIGN KEY [foreign_key_name](column_name, ...) <referential_definition>
          
                 <referential_definition> ::=
-                    REFERENCES [referenced_table_name] (column_name, ...) [<referential_triggered_action> ...]
+                    REFERENCES [schema_name.]referenced_table_name (column_name, ...) [<referential_triggered_action> ...]
          
                     <referential_triggered_action> ::=
                         ON UPDATE <referential_action> |
@@ -1218,6 +1235,7 @@ By default, the index created when you add **PRIMARY KEY** constraints is create
 
                         <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
 
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *table_name*: Specifies the name of a table that has a constraint to be added.
 *   *constraint_name*: Specifies the name of a constraint to be added, or it can be omitted. If omitted, a name is automatically assigned(maximum: 254 bytes).
 *   *foreign_key_name*: Specifies a name of the **FOREIGN KEY** constraint. You can skip the name specification. However, if you specify this value, *constraint_name* will be ignored, and the specified value will be used.
@@ -1235,10 +1253,11 @@ ADD INDEX Clause
 
 You can define the index attributes for a specific column by using the **ADD INDEX** clause. ::
 
-    ALTER [TABLE | CLASS] table_name ADD {KEY | INDEX} index_name (<index_col_name>) ;
+    ALTER [TABLE | CLASS] [schema_name.]table_name ADD {KEY | INDEX} index_name (<index_col_name>) ;
      
         <index_col_name> ::= column_name [(length)] [ ASC | DESC ]
 
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *table_name* : Specifies the name of a table to be modified.
 *   *index_name* : Specifies the name of an index(maximum: 254 bytes). If omitted, a name is automatically assigned.
 *   *index_col_name* : Specifies the column that has an index to be defined. **ASC** or **DESC** can be specified for a column option.
@@ -1283,8 +1302,9 @@ You can specify a new default value for a column that has no default value or mo
 
 ::
 
-    ALTER [TABLE | CLASS] table_name ALTER [COLUMN] column_name SET DEFAULT value ;
+    ALTER [TABLE | CLASS] [schema_name.]table_name ALTER [COLUMN] column_name SET DEFAULT value ;
 
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *table_name* : Specifies the name of a table that has a column whose default value is to be modified.
 *   *column_name* : Specifies the name of a column whose default value is to be modified.
 *   *value* : Specifies a new default value.
@@ -1367,8 +1387,9 @@ AUTO_INCREMENT Clause
 
 The **AUTO_INCREMENT** clause can change the initial value of the increment value that is currently defined. However, there should be only one **AUTO_INCREMENT** column defined. ::
 
-    ALTER TABLE table_name AUTO_INCREMENT = initial_value ;
+    ALTER TABLE [schema_name.]table_name AUTO_INCREMENT = initial_value ;
 
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *table_name* : Table name
 *   *initial_value* : Initial value to alter
 
@@ -1406,13 +1427,13 @@ the configuration parameter allow_truncated_string also affect the similar as al
 
 .. warning::
 
-    *   **ALTER TABLE** *table_name* **CHANGE** *column_name* **DEFAULT** *default_value* syntax supported in CUBRID 2008 R3.1 or earlier version is no longer supported.
+    *   **ALTER TABLE** *[schema_name.]table_name* **CHANGE** *column_name* **DEFAULT** *default_value* syntax supported in CUBRID 2008 R3.1 or earlier version is no longer supported.
     *   When converting a number type to character type, if alter_table_change_type_strict=no and the length of the string is shorter than that of the number, the string is truncated and saved according to the length of the converted character type. If alter_table_change_type_strict=yes, it returns an error.
     *   If the column attributes like a type, a collation, etc. are changed, the changed attributes are not applied into the view created with the table before the change. Therefore, if you change the attributes of a table, it is recommended to recreate the related views.
 
 ::
 
-    ALTER [/*+ SKIP_UPDATE_NULL */] TABLE tbl_name <table_options> ;
+    ALTER [/*+ SKIP_UPDATE_NULL */] TABLE [schema_name.]tbl_name <table_options> ;
      
         <table_options> ::=
             <table_option>[, <table_option>, ...]
@@ -1423,6 +1444,7 @@ the configuration parameter allow_truncated_string also affect the similar as al
               | MODIFY [COLUMN | CLASS ATTRIBUTE] col_name <column_definition>
                          [FIRST | AFTER col_name]
 
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *tbl_name*: specifies the name of the table including the column to change.
 *   *old_col_name*: specifies the existing column name.
 *   *new_col_name*: specifies the column name to change
@@ -1595,19 +1617,25 @@ the configuration parameter allow_truncated_string also affect the similar as al
 Changes of Table Attributes based on Changes of Column Type
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-*   Type Change : If the value of the system parameter **alter_table_change_type_strict** is set to no, then changing values to other types is allowed, but if it is set to yes then changing is not allowed. The default value of the parameter is **no**. You can change values to all types allowed by the **CAST** operator. Changing object types is allowed only by the upper classes (tables) of the objects.
+*   Type Change : If the value of the system parameter **alter_table_change_type_strict** is set to no, then changing values to other types is allowed, but if it is set to yes then changing is not allowed. The default value of the parameter is **yes**. You can change values to all types allowed by the **CAST** operator. Changing object types is allowed only by the upper classes (tables) of the objects. Also, if the system parameter **allow_truncated_string** is **no** when changing to a string such as **char** or **varchar**, the overflowed string cannot be changed. The default value for the parameter is **no**.
 
 *   **NOT NULL**
 
-    *   If the **NOT NULL** constraint is not specified, it will be removed from a new table even though it is present in the existing table.
+    *   Even though the **NOT NULL** constraint is not specified, it will not be removed from a new table if the constraint is present in the existing table. If you want to remove the constraint **NOT NULL**, specify the **NULL** in the statement.
     *   If the **NOT NULL** constraint is specified in the column to change, the result varies depending on the configuration of the system parameter, **alter_table_change_type_strict**.
 
         *   If **alter_table_change_type_strict** is set to yes, the column values will be checked. If **NULL** exists, an error will occur, and the change will not be executed.
         *   If the **alter_table_change_type_strict** is set to no, every existing **NULL** value will be changed to a hard default value of the type to change.
 
-*   **DEFAULT** : If the **DEFAULT** attribute is not specified in the column to change, it will be removed from a new table even though the attribute is present in the existing table.
+*   **DEFAULT** : Even though the **DEFAULT** attribute is not specified in the column to change, it will not be removed from a new table if the attribute is present in the existing table. If you want to remove the attribute **DEFAULT**, specify the **DEFAULT NULL** in the statement.
 
-*   **AUTO_INCREMENT** : If the **AUTO_INCREMENT** attribute is not specified in the column to change, it will be removed from a new table even though the attribute is present in the existing table.
+*   **COMMENT** : Even though the **COMMENT** attribute is not specified in the column to change, it will not be removed from a new table if the attribute is present in the existing table. If you want to remove the attribute **COMMENT**, specify the **COMMENT ''** in the statement.
+
+*   **AUTO_INCREMENT** : Even though the **AUTO_INCREMENT** attribute is not specified in the column to change, it will not be removed from a new table if the attribute is present in the existing table.
+        *   caution) The **AUTO_INCREMENT** attribute can not be removed from a new table once the attribute is set by CREATE or ALTER.
+
+*   **ON UPDATE** : Even though the **ON UPDATE** attribute is not specified in the column to change, it will not be removed from a new table if the attribute is present in the existing table.
+        *   caution) The **ON UPDATE** attribute can not be removed from a new table once the attribute is set by CREATE or ALTER.
 
 *   **FOREIGN KEY** : You cannot change the column with the foreign key constraint that is referred to or refers to.
 
@@ -1642,7 +1670,7 @@ Changes of Table Attributes based on Changes of Column Type
 Changes of Values based on Changes of Column Type
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The **alter_table_change_type_strict** parameter determines whether the value conversion is allowed according to the type change. If the value is no, it can be changed when you change a column type or add a **NOT NULL** constraint. The default value is **no**.
+The **alter_table_change_type_strict** parameter determines whether the value conversion is allowed according to the type change. If the value is no, it can be changed when you change a column type or add a **NOT NULL** constraint. The default value is **yes**.
 
 When the value of the parameter, **alter_table_change_type_strict** is no, it will operate depending on the conditions as follows:
 
@@ -1744,9 +1772,10 @@ RENAME COLUMN Clause
 
 You can change the name of the column by using the **RENAME COLUMN** clause. ::
 
-    ALTER [ TABLE | CLASS | VCLASS | VIEW ] table_name
-    RENAME [ COLUMN | ATTRIBUTE ] old_column_name { AS | TO } new_column_name ;
+    ALTER [TABLE | CLASS | VCLASS | VIEW] [schema_name.]table_name
+    RENAME [COLUMN | ATTRIBUTE] old_column_name {AS | TO} new_column_name ;
 
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *table_name* : Specifies the name of a table that has a column to be renamed.
 *   *old_column_name* : Specifies the name of a column.
 *   *new_column_name* : Specifies a new column name after the **AS** keyword(maximum: 254 bytes).
@@ -1761,9 +1790,10 @@ DROP COLUMN Clause
 
 You can delete a column in a table by using the **DROP COLUMN** clause. You can specify multiple columns to delete simultaneously by separating them with commas (,). ::
 
-    ALTER [TABLE | CLASS | VCLASS | VIEW] table_name
+    ALTER [TABLE | CLASS | VCLASS | VIEW] [schema_name.]table_name
     DROP [COLUMN | ATTRIBUTE] column_name, ... ;
 
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *table_name* : Specifies the name of a table that has a column to be deleted.
 *   *column_ name* : Specifies the name of a column to be deleted. Multiple columns can be specified by separating them with commas (,).
 
@@ -1776,9 +1806,10 @@ DROP CONSTRAINT Clause
 
 You can drop the constraints pre-defined for the table, such as **UNIQUE**, **PRIMARY KEY** and **FOREIGN KEY** by using the **DROP CONSTRAINT** clause. In this case, you must specify a constraint name. You can check these names by using the CSQL command (**;schema table_name**). ::
 
-    ALTER [TABLE | CLASS] table_name
+    ALTER [TABLE | CLASS] [schema_name.]table_name
     DROP CONSTRAINT constraint_name ;
 
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *table_name* : Specifies the name of a table that has a constraint to be dropped.
 *   *constraint_name* : Specifies the name of a constraint to be dropped.
 
@@ -1810,8 +1841,9 @@ You can delete an index defined for a column by using the **DROP INDEX** clause.
 
 ::
 
-    ALTER [TABLE | CLASS] table_name DROP INDEX index_name ;
+    ALTER [TABLE | CLASS] [schema_name.]table_name DROP INDEX index_name ;
 
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *table_name* : Specifies the name of a table of which constraints will be deleted.
 *   *index_name* : Specifies the name of an index to be deleted.
 
@@ -1824,8 +1856,9 @@ DROP PRIMARY KEY Clause
 
 You can delete a primary key constraint defined for a table by using the **DROP PRIMARY KEY** clause. You do have to specify the name of the primary key constraint because only one primary key can be defined by table. ::
 
-    ALTER [TABLE | CLASS] table_name DROP PRIMARY KEY ;
+    ALTER [TABLE | CLASS] [schema_name.]table_name DROP PRIMARY KEY ;
 
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *table_name* : Specifies the name of a table that has a primary key constraint to be deleted.
 
 .. code-block:: sql
@@ -1837,8 +1870,9 @@ DROP FOREIGN KEY Clause
 
 You can drop a foreign key constraint defined for a table using the **DROP FOREIGN KEY** clause. ::
 
-    ALTER [TABLE | CLASS] table_name DROP FOREIGN KEY constraint_name ;
+    ALTER [TABLE | CLASS] [schema_name.]table_name DROP FOREIGN KEY constraint_name ;
 
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *table_name* : Specifies the name of a table whose constraint is to be deleted.
 *   *constraint_name* : Specifies the name of foreign key constraint to be deleted.
 
@@ -1860,9 +1894,10 @@ You can drop an existing table by the **DROP** statement. Multiple tables can be
             <single_table_spec> | (<table_specification_comma_list>) 
 
             <single_table_spec> ::= 
-                |[ONLY] table_name 
-                | ALL table_name [( EXCEPT table_name, ... )] 
+                | [ONLY] [schema_name.]table_name 
+                | ALL [schema_name.]table_name [( EXCEPT [schema_name.]table_name, ... )] 
 
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *table_name* : Specifies the name of the table to be dropped. You can delete multiple tables simultaneously by separating them with commas.
 *   If a super class name is specified after the **ONLY** keyword, only the super class, not the sub classes inheriting from it, is deleted. If a super class name is specified after the **ALL** keyword, the super classes as well as the sub classes inheriting from it are all deleted. You can specify the list of sub classes not to be deleted after the **EXCEPT** keyword.
 *   If sub classes that inherit from the super class specified after the **ALL** keyword are specified after the **EXCEPT** keyword, they are not deleted.
@@ -1906,8 +1941,9 @@ RENAME TABLE
 
 You can change the name of a table by using the **RENAME TABLE** statement and specify a list of the table name to change the names of multiple tables. ::
 
-    RENAME  [TABLE | CLASS] old_table_name {AS | TO} new_table_name [, old_table_name {AS | TO} new_table_name, ...] ;
+    RENAME  [TABLE | CLASS] [schema_name.]old_table_name {AS | TO} [schema_name.]new_table_name [{, [schema_name.]old_table_name {AS | TO} [schema_name.]new_table_name}];
 
+*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used. The schema of the table to be changed and the schema of the new table must be the same.
 *   *old_table_name* : Specifies the old table name to be renamed.
 *   *new_table_name* : Specifies a new table name(maximum: 254 bytes).
 

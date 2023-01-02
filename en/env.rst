@@ -21,7 +21,11 @@ CUBRID Environment Variables
     *   A user of CUBRID Manager should specify **CUBRID_MSG_LANG**, an environment variable of DB server node into **en_US** to print out messages normally after running database related features. However, database related features are run normally and just the output messages are broken when **CUBRID_MSG_LANG** is not **en_US**.
     *   To apply the changed **CUBRID_MSG_LANG**, CUBRID system of DB server node should be restarted(cubrid service stop, cubrid service start).
 
-*   **CUBRID_TMP**: The environment variable that specifies the location where the cub_master process and the cub_broker process store the UNIX domain socket file in CUBRID for Linux. If it is not specified, the cub_master process stores the UNIX domain socket file under the **/tmp** directory and the cub_broker process stores the UNIX domain socket file under the **$CUBRID/var/CUBRID_SOCK** directory (not used in CUBRID for Windows).
+*   **CUBRID_TMP**: The environment variable that specifies the location where CUBRID for Linux stores the UNIX domain socket file. If it is not specified, the Unix domain socket file is stored in the following directory according to the process. (not used in CUBRID for Windows)
+
+    *   the cub_master process: under **/tmp** directory
+    *   the cub_broekr process: under **$CUBRID/var/CUBRID_SOCK** directory
+    *   the cub_javasp process: under **$CUBRID/var/CUBRID_SOCK** directory
 
 **CUBRID_TMP** value has some constraints, which are as follows:
 
@@ -70,9 +74,9 @@ OS Environment and Java Environment Variables
 
 *   PATH: In the Linux environment, the directory **$CUBRID/bin**, which includes a CUBRID system executable file, must be included in the PATH environment variable.
 
-*   LD_LIBRARY_PATH: In the Linux environment, **$CUBRID/lib**, which is the CUBRID system's dynamic library file (libjvm.so), must be included in the **LD_LIBRARY_PATH** (or **SHLIB_PATH** or **LIBPATH**) environment variable.
+*   LD_LIBRARY_PATH: In the Linux environment, **$CUBRID/lib** and **$CUBRID/cci/lib**, which is the CUBRID system's dynamic library file (libjvm.so), must be included in the **LD_LIBRARY_PATH** (or **SHLIB_PATH** or **LIBPATH**) environment variable.
 
-*   Path: In the Windows environment, the **%CUBRID%\\bin**, which is a directory that contains CUBRID system's execution file, must be included in the **Path** environment variable.
+*   Path: In the Windows environment, the **%CUBRID%\\bin** and **%CUBRID%\\cci\\bin**, which is a directory that contains CUBRID system's execution file, must be included in the **Path** environment variable.
 
 *   JAVA_HOME: To use the Java stored procedure in the CUBRID system, the Java Virtual Machine (JVM) version 1.6 or later must be installed, and the **JAVA_HOME** environment variable must designate the concerned directory. See the :ref:`cubrid-javasp-server-config`.
 
@@ -99,11 +103,11 @@ If the CUBRID system has been installed on Linux, the installation program autom
     
     if [ "$ld_lib_path" = "" ]
     then
-        LD_LIBRARY_PATH=$CUBRID/lib
+        LD_LIBRARY_PATH=$CUBRID/lib:$CUBRID/cci/lib
     else
-        LD_LIBRARY_PATH=$CUBRID/lib:$LD_LIBRARY_PATH
+        LD_LIBRARY_PATH=$CUBRID/lib:$CUBRID/cci/lib:$LD_LIBRARY_PATH
     fi
-    
+
     SHLIB_PATH=$LD_LIBRARY_PATH
     LIBPATH=$LD_LIBRARY_PATH
     PATH=$CUBRID/bin:$CUBRID/cubridmanager:$PATH
@@ -210,7 +214,7 @@ If you use CUBRID for Windows at the broker machine or the DB server machine, al
 | Manager use   | Manager       | application   | 8001                       | 8001                                                | Open                     |                        |
 |               | server        |               |                            |                                                     |                          |                        |
 +---------------+---------------+---------------+----------------------------+-----------------------------------------------------+--------------------------+------------------------+
-| Java SP use   | cub_javasp    | CAS           | java_stored_procedure_port | java_stored_procedure_port                          | Open                     | Keep connected         |
+| Java SP use   | cub_javasp    | cub_server    | java_stored_procedure_port | java_stored_procedure_port                          | Open                     | Keep connected         |
 +---------------+---------------+---------------+----------------------------+-----------------------------------------------------+--------------------------+------------------------+
 
 (*): The machine which has the CAS, CSQL, copylogdb, or applylogdb process
@@ -281,7 +285,7 @@ The connection process between the application and the DB is as follows:
 #.  The cub_broker selects a connectable CAS.
 #.  The application and CAS are connected.
 
-    In Linux, BROKER_PORT, which is used as an application, is connected to CAS through the Unix domain socket. In Windows, since the Unix domain socket cannot be used, an application and CAS are connected through a port of which the number is the sum of the corresponding CAS ID and the APPL_SERVER_PORT value set in the cubrid_broker.conf. If the APPL_SERVER_PORT value has not been set, the port value connected to the first CAS is BROKER_PORT + 1.
+    In Linux, established TCP connection between the **BROKER** and the client will be passed to the **CAS**. Therefore, there is no need for an additional network port for the application to connect to the CAS. However, in **Windows**, when an application connects to a BROKER, the BROKER delivers the network port number to connect to the available CAS to the application. After the client closes the current connection with the BROKER, it connects to the CAS with the received network port number from the BROKER. If the **APPL_SERVER_PORT** parameter is not set, the network port used by the first CAS becomes BROKER_PORT + 1.
 
     For example, if the BROKER_PORT is 33000 and the APPL_SERVER_PORT value has not been set in Windows, the ports used between the application and CAS are as follows:
 
@@ -392,9 +396,7 @@ The following table summarizes the ports, based on the listening processes, used
 +---------------+--------------+----------------------------+--------------------------+
 | Listener      | Requester    | Port                       | Firewall Port Setting    |
 +===============+==============+============================+==========================+
-| cub_javasp    | CAS          | java_stored_procedure_port | Open                     |
+| cub_javasp    | cub_server   | java_stored_procedure_port | Open                     |
 +---------------+--------------+----------------------------+--------------------------+
 
-*   The port is used when the CAS relays between Java SP server (cub_javasp) and cub_server, which CAS receives a call of the java stored procedure from cub_server and then CAS passed the call to the CUBRID Java SP server process through **java_stored_procedure_port** of cubrid.conf.
-*   The default value of **java_stored_procedure_port** is 0, which means a random available port is assigned.
-
+*   The port used when the CUBRID Java stored procedure server (cub_javasp) to communicate with the cub_server is **java_stored_procedure_port** of the cubrid.conf. The default value of **java_stored_procedure_port** is 0, which means a random available port is assigned.

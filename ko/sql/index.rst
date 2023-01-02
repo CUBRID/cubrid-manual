@@ -39,6 +39,8 @@ CUBRID SQL
 
 *   데이터베이스 관리: 사용자 관리, SET, SHOW 문에 대해 설명한다.
 
+*   사용자 스키마: 사용자와 함께 생성되는 데이터베이스의 논리적인 객체 모음을 설명한다.
+
 *   시스템 카탈로그: CUBRID 데이터베이스의 내부 정보인 시스템 카탈로그에 대해 설명한다.
 
 .. toctree::
@@ -55,8 +57,10 @@ CUBRID SQL
     transaction_index.rst
     trigger.rst
     jsp.rst
+    dblink.rst
     method.rst
     oodb.rst
     db_admin.rst
+    user_schema.rst
     catalog.rst
     

@@ -16,3 +16,4 @@
     prepare.rst
     do.rst
     cte.rst
+    call.rst

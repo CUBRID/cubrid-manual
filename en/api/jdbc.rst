@@ -29,7 +29,7 @@ You can verify the version of JDBC driver as follows: ::
     cubrid/sql/
     cubrid/jdbc/driver/CUBRIDBlob.class
     ...
-    CUBRID-JDBC-11.0.0.0248
+    CUBRID-JDBC-11.1.0.0027
 
 **Registering CUBRID JDBC Driver**
 
@@ -140,7 +140,10 @@ The **getConnection** method returns the **Connection** object and it is used to
                  | useLazyConnection=<bool_type>
                  | useSSL=<bool_type>
                  | clientCacheSize=<unit_size>
-                 
+                 | usePreparedStmtCache=<bool_type>
+                 | preparedStmtCacheSize=<unit_size>
+                 | preparedStmtCacheSqlLimit=<unit_size>
+
         <alternative_hosts> ::=
         <standby_broker1_host>:<port> [,<standby_broker2_host>:<port>]
         <behavior_type> ::= exception | round | convertToNull
@@ -196,6 +199,11 @@ The **getConnection** method returns the **Connection** object and it is used to
        *   the range is 1 ~ 1024 (1 mega-byte to 1 giga-byte)
        *   the default value is 1
 
+    *  **usePreparedStmtCache**: Prepared Statement Cache mode (Default: false)
+    *  **preparedStmtCacheSize**: If usePreparedStmtCache is TRUE, the number of SQLs that can be cached (Default:25, Min:1, Max:2147483647)
+    *  **preparedStmtCacheSqlLimit**: If usePreparedStmtCache is TRUE, length of SQL that can be cached (Default:256, Min:1, Max:2147483647)
+
+
 **Example 1** ::
 
     --connection URL string when user name and password omitted
@@ -227,6 +235,9 @@ The **getConnection** method returns the **Connection** object and it is used to
 
     --connection URL string when clientCacheSize property specified for result-cache
     URL=jdbc:CUBRID:192.168.0.1:33000:demodb:public::?clientCacheSize=1
+
+    --connection URL string when usePreparedStmtCache property specified for prepared stament cache
+    URL=jdbc:CUBRID:192.168.0.1:33000:demodb:public::?usePreparedStmtCache=true&preparedStmtCacheSize=100&preparedStmtCacheSqlLimit=1024"
 
 **Example 2**
 

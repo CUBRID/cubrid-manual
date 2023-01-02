@@ -94,6 +94,9 @@ In the [Config CUBRID Data Sources] dialog box, enter information as follows:
 
 .. image:: /images/image80.png
 
+*   **Charset** : The name of the database charset.
+*   **Autocommit** : Autocommit mode. Default is OFF.
+*   **Omit Schema** : This feature provides only the schema information created by the logged-in user when a user requests catalog information in a database server of version 11.2 or higher that supports the schema concept. This feature is required when **ERWin**:sup:`TM` uses CUBRID 11.2 or higher (omit_schema=yes). If **YES**, only information on the Tables/Views/Primary Keys/Foreign Keys owned by the logged-in user are provided, and the owner's name is removed on these objects. Default is **NO**.
 *   **FETCH_SIZE** : A value configures the number of records fetched from server whenever the **cci_fetch** () function of CCI library (which CUBRID ODBC driver internally uses) is called.
 
 After you filled out every field, click the [OK] button. You will notice that data source is added in the [User Data Sources] as shown below.
@@ -139,10 +142,14 @@ When you are programming CUBRID ODBC, write the connection strings as follows:
 +--------------+-----------------------+-----------------------------------------------------------+
 | CHARSET      | utf-8                 | Character set                                             |
 +--------------+-----------------------+-----------------------------------------------------------+
+| AUTOCOMMIT   | ON                    | Autocommit mode                                           |
++--------------+-----------------------+-----------------------------------------------------------+
+| OMIT_SCHEMA  | NO                    | Single Schema feature (applicable only 11.2 or higher)    |
++--------------+-----------------------+-----------------------------------------------------------+
 
 The following shows the result of using connection strings above. ::
 
-    "DRIVER={CUBRID Driver Unicode};UID=PUBLIC;PWD=xxx;FETCH_SIZE=100;PORT=33000;SERVER=127.0.0.1;DB_NAME=demodb;DESCRIPTION=cubrid_test;CHARSET=utf-8"
+    "DRIVER={CUBRID Driver Unicode};UID=PUBLIC;PWD=xxx;FETCH_SIZE=100;PORT=33000;SERVER=127.0.0.1;DB_NAME=demodb;DESCRIPTION=cubrid_test;CHARSET=utf-8;OMIT_SCHEMA=YES"
 
 If you use UTF-8 unicode, install a driver for unicode and input the driver name in the connection string as "Driver={CUBRID Driver Unicode}". Unicode is only supported in 9.3.0.0002 or higher version of CUBRID ODBC driver.
 

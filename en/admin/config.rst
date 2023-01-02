@@ -101,7 +101,7 @@ For the scope of **client** and **server parameters**, see :ref:`scope-server-co
 
 You can change the parameters that are capable of changing dynamically the setting value through the **SET SYSTEM PARAMETERS** statement or a session command of the CSQL Interpreter, **;set** while running the DB. If you are a DBA, you can change parameters regardless of the applied classification. However, if you are not a DBA, you can only change "session" parameters. (on the below table, a parameter of which "session" item's value is O.)
 
-On the below table, if "Applied" is "server parameter", that parameter affects to cub_server process; If "client parameter", that parameter affects to CAS, CSQL or "cubrid" utilities which run on client/server mode (--CS-mode). "Client/server parameter" affects to all of cub_server, CAS, CSQL and "cubrid" utilities.
+On the below table, if "Applied" is "server parameter", that parameter affects to cub_server process; If "client parameter", that parameter affects to CAS, CSQL or "cubrid" utilities which run on client/server mode (-\-CS-mode). "Client/server parameter" affects to all of cub_server, CAS, CSQL and "cubrid" utilities.
 
 "Dynamic Change" and "Session or not" are marked on the below table. The affected range of the parameter which "Dynamic Change" is "available" depends on "Applied" and "Session" items.
 
@@ -138,7 +138,7 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | max_agg_hash_size                   | server parameter        |         | byte     | 2,097,152(2M)                  |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | max_hash_list_scan_size             | server parameter        |         | byte     | 4,194,304(4M)                  |                       |
+|                               | max_hash_list_scan_size             | server parameter        |         | byte     | 8,388,608(8M)                  |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | sort_buffer_size                    | server parameter        |         | byte     | 128 *                          |                       |
 |                               |                                     |                         |         |          | :ref:`db_page_size <dpg>`      |                       |
@@ -227,7 +227,7 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 | :ref:`stmt-type-parameters`   | add_column_update_hard_default      | client/server parameter | O       | bool     | no                             | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | alter_table_change_type_strict      | client/server parameter | O       | bool     | yes                             | available            |
+|                               | alter_table_change_type_strict      | client/server parameter | O       | bool     | yes                            | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | allow_truncated_string              | client/server parameter | O       | bool     | no                             | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -285,6 +285,8 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | thread_worker_pooling               | server parameter        |         | bool     | yes                            |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | thread_core_count                   | server parameter        |         | int      | # of system cores              |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | thread_worker_timeout_seconds       | server parameter        |         | int      | 300                            |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | loaddb_worker_count                 | server parameter        |         | int      | 8                              |                       |
@@ -303,10 +305,9 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | max_filter_pred_cache_entries       | client/server parameter |         | int      | 1,000                          |                       |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-| :ref:`query-cache-parameters` | max_query_cache_entries             | server parameter        |         | int      | 0                            | available             |
+| :ref:`query-cache-parameters` | max_query_cache_entries             | server parameter        |         | int      | 0                              | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | query_cache_size_in_pages           | server parameter        |         | int      | 0                            | available             |
-|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | query_cache_size_in_pages           | server parameter        |         | int      | 0                              | available             |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 | :ref:`utility-parameters`     | backup_volume_max_size_bytes        | server parameter        |         | byte     | 0                              |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -335,6 +336,8 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               | java_stored_procedure               | server parameter        |         | bool     | no                             |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | java_stored_procedure_port          | server parameter        |         | int      | 0                              |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | java_stored_procedure_uds           | server parameter        |         | bool     | yes                            |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | java_stored_procedure_jvm_options   | server parameter        |         | string   |                                |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -372,16 +375,20 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               | tde_keys_file_path                  | server parameter        |         | string   | NULL                           |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | tde_default_algorithm               | server parameter        |         | string   | AES                            |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | recovery_progress_logging_interval  | server parameter        |         | int      | 0                              |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | supplemental_log                    | client/server parameter |         | int      | 0                              |                       |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 
 .. _lpg:
 
-*   **log_page_size**: A log volume page size specified by **--log-page-size** option when you are :ref:`creating database<creating-database>`. Default: 16KB. log page related parameter's value is rounded off by page unit. 
+*   **log_page_size**: A log volume page size specified by **-\-log-page-size** option when you are :ref:`creating database<creating-database>`. Default: 16KB. log page related parameter's value is rounded off by page unit. 
     For example, the value of checkpoint_every_size is divided by 16KB and its decimal point is dropped, then it is multiplied by 16KB.
 
 .. _dpg:
 
-*   **db_page_size**: A DB volume page size specified by **--db-page-size** option when you are :ref:`creating database<creating-database>`. Default: 16KB. DB page related parameter's value is rounded off by page unit. 
+*   **db_page_size**: A DB volume page size specified by **-\-db-page-size** option when you are :ref:`creating database<creating-database>`. Default: 16KB. DB page related parameter's value is rounded off by page unit. 
     For example, the value of data_buffer_size is divided by 16KB and its decimal point is dropped, then it is multiplied by 16KB.
 
 Section by Parameter
@@ -392,7 +399,7 @@ Parameters specified in **cubrid.conf** have the following four sections:
 *   Used when the CUBRID service starts: [service] section
 *   Applied commonly to all databases: [common] section
 *   Applied individually to each database: [@<*database*>] section
-*   Used only when the cubrid utilities are run with stand-alone mode(--SA-mode): [standalone] section
+*   Used only when the cubrid utilities are run with stand-alone mode(-\-SA-mode): [standalone] section
 
 Where <*database*> is the name of the database to which each parameter applies. If a parameter configured in [common] is the same as the one configured in [@<*database*>], the one configured in [@<*database*>] is applied.
 
@@ -409,7 +416,7 @@ Where <*database*> is the name of the database to which each parameter applies. 
     ..... 
 
 Configuration defined in [standalone] is used only when cubrid utilities started with "cubrid" are run with stand-alone mode.
-For example, on the above configuration, if DB is started with --CS-mode(default)(cubrid databases start db_name), "sort_buffer_size=2M" is applied. However, if DB is stopped and "cubrid loaddb --SA-mode" is executed, "sort_buffer_size=256M" is applied. If you run "cubrid loaddb --SA-mode", bigger size of sort buffer will be required during index creation; therefore, increasing sort buffer size will be better for the performance of "loaddb" execution.
+For example, on the above configuration, if DB is started with -\-CS-mode(default)(cubrid databases start db_name), "sort_buffer_size=2M" is applied. However, if DB is stopped and "cubrid loaddb -\-SA-mode" is executed, "sort_buffer_size=256M" is applied. If you run "cubrid loaddb -\-SA-mode", bigger size of sort buffer will be required during index creation; therefore, increasing sort buffer size will be better for the performance of "loaddb" execution.
 
 Default Parameters
 ^^^^^^^^^^^^^^^^^^
@@ -579,7 +586,7 @@ The following are parameters related to the memory used by the database server o
 +--------------------------------+--------+---------------------------+---------------------------+---------------------------+
 | max_agg_hash_size              | byte   | 2,097,152(2M)             | 32,768(32K)               | 134,217,728(128MB)        |
 +--------------------------------+--------+---------------------------+---------------------------+---------------------------+
-| max_hash_list_scan_size        | byte   | 4,194,304(4M)             | 0                         | 128MB                     |
+| max_hash_list_scan_size        | byte   | 8,388,608(8M)             | 0                         | 128MB                     |
 +--------------------------------+--------+---------------------------+---------------------------+---------------------------+
 | sort_buffer_size               | byte   | 128 *                     | 1 *                       | 2G(32bit),                |
 |                                |        | :ref:`db_page_size <dpg>` | :ref:`db_page_size <dpg>` | INT_MAX *                 |
@@ -617,7 +624,7 @@ The following are parameters related to the memory used by the database server o
 
 **max_hash_list_scan_size**
 
-    **max_hash_list_scan_size** is a parameter to configure the maximum memory per transaction allocated for building hash table in a query containing subquerys. The default is 4MB, the minimum size is 0, and the maximum size is 128MB.
+    **max_hash_list_scan_size** is a parameter to configure the maximum memory per transaction allocated for building hash table in a query containing subquerys. The default is 8MB, the minimum size is 0, and the maximum size is 128MB.
 
     If this parameter is set to 0 or If :ref:`NO_HASH_LIST_SCAN <no-hash-list-scan>` hint is specified, hash list scan will not be used.
 
@@ -680,7 +687,7 @@ The following are disk-related parameters for defining database volumes and stor
 
     **db_volume_size** is a parameter to configure the following values. You can set a unit as B, K, M, G or T, which stand for bytes, kilobytes (KB), megabytes (MB), gigabytes (GB), and terabytes (TB) respectively. If you omit the unit, bytes will be applied. The default value is **512M**.
 
-    *   The default database volume size when **cubrid createdb** and **cubrid addvoldb** utility is used without **--db-volume-size** option.
+    *   The default database volume size when **cubrid createdb** and **cubrid addvoldb** utility is used without **-\-db-volume-size** option.
     *   The default size of volume that is added automatically when database is full.
 
 .. note::
@@ -693,7 +700,7 @@ The following are disk-related parameters for defining database volumes and stor
 
 **log_volume_size**
 
-    **log_volume_size** is a parameter to configure the default size of log volume file when the **cubrid createdb** utility is used without **--log-volume-size** option. You can set a unit as B, K, M, G or T, which stand for bytes, kilobytes (KB), megabytes (MB), gigabytes (GB) and terabytes (TB) respectively. If you omit the unit, bytes will be applied. The default value is **512M**.
+    **log_volume_size** is a parameter to configure the default size of log volume file when the **cubrid createdb** utility is used without **-\-log-volume-size** option. You can set a unit as B, K, M, G or T, which stand for bytes, kilobytes (KB), megabytes (MB), gigabytes (GB) and terabytes (TB) respectively. If you omit the unit, bytes will be applied. The default value is **512M**.
 
 **temp_file_max_size_in_pages**
 
@@ -896,7 +903,7 @@ The following are parameters related to processing error messages recorded by CU
 
 **error_log_size**
 
-    **error_log_size** is a parameter to configure the maximum number of lines per an error log file. The default value is **512M**. If it reaches up to the specified number, the *<database_name>_<date>_<time>.err.bak* file is created. 
+    **error_log_size** is a parameter to configure the maximum size per an error log file. The default value is **512M**. If it reaches up to the specified size, the *<database_name>_<date>_<time>.err.bak* file is created. 
 
 .. _lock-parameters:
 
@@ -1030,7 +1037,7 @@ The following are parameters related to logs used for database backup and restor
    
     You can distribute disk I/O overload at the checkpoint by specifying lower size in the **checkpoint_every_size** parameter, especially in the environment where **INSERT** / **UPDATE** are heavily loaded at a specific time.
 
-    Checkpoint is a job to record every modified page in data buffers to database volumes (disk) at a specific point. Checkpoint can shrink a restore time after the database failure because this makes the transaction logs which have been generated previously than the checkpoint time needless when the restore is processed.
+    Checkpoint is a job to record every modified page except for the temp page in data buffers to database volumes (disk) at a specific point. Checkpoint can shrink a restore time after the database failure because this makes the transaction logs which have been generated previously than the checkpoint time needless when the restore is processed.
     However, an efficient checkpoint interval should be properly considered because this job can occur a lot of disk I/O.
     
     .. note::
@@ -1722,6 +1729,8 @@ Thread management can be configured by threads parameters. The type and value ra
 +---------------------------------------+--------+-------------------+----------+----------+
 | thread_worker_pooling                 | bool   | true              |          |          |
 +---------------------------------------+--------+-------------------+----------+----------+
+| thread_core_count                     | int    | # of system core  | 1        | 1024     |
++---------------------------------------+--------+-------------------+----------+----------+
 | thread_worker_timeout_seconds         | int    | 300               | -1       | 3600     |
 +---------------------------------------+--------+-------------------+----------+----------+
 | loaddb_worker_count                   | bool   | 8                 | 2        | 64       |
@@ -1745,6 +1754,11 @@ Thread management can be configured by threads parameters. The type and value ra
 **thread_worker_pooling**
 
     If **thread_worker_pooling** parameter is true, all threads used for client requests execution are pooled on server boot.
+
+**thread_core_count**
+
+    The number of groups of pooled threads is configured according to the **thread_core_count** parameter. The default value is set to the number of system cores.
+    If the number of threads in a group does not reach 3 or more according to the parameter value, the system adjusts this value so that at least 3 threads belong to each group.
 
 **thread_worker_timeout_seconds**
 
@@ -1843,7 +1857,6 @@ The following are the parameters related to the query cache functionality. The t
 +-------------------------------+--------+----------+----------+----------+
 | Parameter Name                | Type   | Default  | Min      | Max      |
 +===============================+========+==========+==========+==========+
-+-------------------------------+--------+----------+----------+----------+
 | max_query_cache_entries       | int    | 0        | 0        | INT_MAX  |
 +-------------------------------+--------+----------+----------+----------+
 | query_cache_size_in_pages     | int    | 0        | 0        | INT_MAX  |
@@ -1960,6 +1973,8 @@ The following are other parameters. The type and value range for each parameter 
 +-------------------------------------+--------+----------------+----------------+----------------+
 | java_stored_procedure_port          | int    | 0              | 0              | 65535          |
 +-------------------------------------+--------+----------------+----------------+----------------+
+| java_stored_procedure_uds           | bool   | yes            |                |                |
++-------------------------------------+--------+----------------+----------------+----------------+
 | java_stored_procedure_jvm_options   | string |                |                |                |
 +-------------------------------------+--------+----------------+----------------+----------------+
 | multi_range_optimization_limit      | int    | 100            | 0              | 10,000         |
@@ -1997,6 +2012,10 @@ The following are other parameters. The type and value range for each parameter 
 | tde_keys_file_path                  | string | NULL           |                |                |
 +-------------------------------------+--------+----------------+----------------+----------------+
 | tde_default_algorithm               | string | AES            |                |                |
++-------------------------------------+--------+----------------+----------------+----------------+
+| recovery_progress_logging_interval  | int    | 0 (off)        | 0              | 3600           |
++-------------------------------------+--------+----------------+----------------+----------------+
+| supplemental_log                    | int    | 0 (off)        | 0              | 2              |
 +-------------------------------------+--------+----------------+----------------+----------------+
 
 **access_ip_control**
@@ -2045,7 +2064,7 @@ The following are other parameters. The type and value range for each parameter 
 
 **java_stored_procedure_port**
 
-    **java_stored_procedure_port** is a parameter to configure the port number receiving a request that calls the java stored procedures from CAS. the value must be unique and smaller than 65,535. The default value of **java_stored_procedure_port** is **0** which means the port number is automatically allocated, typically from an ephemeral port range. The value configured in this parameter affects only **java_stored_procedure** is set to **yes**. Note that an error occurs if the parameter is configured in [common]. ::
+    **java_stored_procedure_port** is a parameter to configure the port number receiving a request that calls the java stored procedures from database server. the value must be unique and smaller than 65,535. The default value of **java_stored_procedure_port** is **0** which means the port number is automatically allocated, typically from an ephemeral port range. The value configured in this parameter affects only **java_stored_procedure** is set to **yes**. Note that an error occurs if the parameter is configured in [common]. ::
 
         ..... 
         [common] 
@@ -2058,6 +2077,14 @@ The following are other parameters. The type and value range for each parameter 
         # the parameter is configured successfully for testdb
         java_stored_procedure_port=4334
         .....
+
+**java_stored_procedure_uds**
+
+    **java_stored_procedure_uds** is a parameter to connect between the cub_javasp process and the cub_server process through a Unix domain socket instead of TCP when calling a Java stored procedure. The default value of **java_stored_procedure_uds** is **yes**. For Windows, regardless of the value of the parameter, TCP connection is used.
+
+    .. note::
+
+        For the **CUBRID_TMP** environment variable that specifies the UNIX domain socket file path of *cub_javasp** processes, see :doc:`/env`.
 
 **java_stored_procedure_jvm_options**
 
@@ -2173,6 +2200,14 @@ The following are other parameters. The type and value range for each parameter 
 **tde_default_algorithm**
 
     **tde_default_algorithm** is a parameter that configures the default algorithm used when creating the TDE encryption table. Log and temporary data are always encrypted using the algorithm set with this parameter when they have to be encrypted. **AES** or **ARIA** can be set. For more information on encryption algorithms, refer to :ref:`tde-algorithm`.
+
+**recovery_progress_logging_interval**
+    
+    **recovery_progress_logging_interval** is a parameter to decide whether the details of recovery are printed and configure its period in seconds. If it is set bigger than 0, the total works and remained works to do of the three phases of recovery: Analysis, Redo and Undo are printed. When this is set smaller than 5, it is set to 5.
+
+**supplemental_log**
+
+    **supplemental_log** is a parameter to determine whether information needed to support the CDC (Change Data Capture) or :ref:`flashback` is written to the log volume. CDC and flashback must be able to see how transactions logically changed the database through the physical logs. Any additional information required to interpret the physical logs is saved as **supplemental_log** . Setting this parameter bigger than 0 affects performance and log space because more logs are created and stored in addition to the existing transaction logs. If this parameter is set to 1, the information necessary to interpret DML and DDL executed by the user is logged. If it is set to 2, only information necessary to interpret the DML is logged.
 
 .. _broker-configuration:
 
@@ -2464,9 +2499,15 @@ Broker App. Server(CAS)
 
 **APPL_SERVER_PORT**
 
-    **APPL_SERVER_PORT** is a parameter to configure the connection port of CAS that communicates with application clients; it is used only in Windows. In Linux, the application clients and CAS use the UNIX domain socket for communication; therefore, **APPL_SERVER_PORT** is not used. The default value is determined by adding plus 1 to the **BROKER_PORT** parameter value. The number of ports used is the same as the number of CAS, starting from the specified port's number plus 1. For example, when the value of **BROKER_PORT** is 30,000 and the **APPL_SERVER_PORT** parameter value has been configured, and if the **MIN_NUM_APPL_SERVER** value is 5, five CASes uses the ports numbering between 30,001 and 30,005, respectively. The maximum number of CAS specified in the **MAX_NUM_APPL_SERVER** parameter in **cubrid_broker_conf**; therefore, the maximum number of connection ports is also determined by the value of **MAX_NUM_APPL_SERVER** parameter.
+    **APPL_SERVER_PORT** is a parameter to designate the TCP ports of CAS that communicates with application clients (**Windows only**).
 
-    On the Windows system, if a firewall exists between an application and a CUBRID broker, the communication port specified in **BROKER_PORT** and **APPL_SERVER_PORT** must be opened.
+    On Linux, an established TCP connection between the BROKER and the client will be passed to the CAS. Therefore, the client can communicate with the CAS without additional TCP connection.
+
+    On the other hand, in Windows, all available CASes are waiting for a connection on an independent TCP port, for example, 33001/tcp, 33002/tcp. In these circumstances, when a client connects to a BROKER, the BROKER delivers the TCP port number, for example, 33001/tcp, for connecting to an available CAS to the client. In sequence, the client terminates the current network connection with the BROKER and establishes a new connection with the CAS using the port number received from the BROKER.
+
+    If the **APPL_SERVER_PORT** parameter is not additionally specified, this value is the value obtained by adding 1 to the value of **BROKER_PORT**. For example, if the value of **BROKER_PORT** is 30,000 and the **APPL_SERVER_PORT** parameter has not been specified, and if the **MIN_NUM_APPL_SERVER** value is 5, then five CASes use the TCP ports between 30,001 and 30,005, respectively. On the other hand, if the value of **APPL_SERVER_PORT** is 35,000 under the same conditions, 5 CASes use TCP ports from 35,000 to 35,004. The maximum number of CAS specified in the **MAX_NUM_APPL_SERVER** parameter in **cubrid_broker_conf**; therefore, the maximum number of connection ports is also determined by the value of **MAX_NUM_APPL_SERVER** parameter.
+
+    On the Windows system, if a firewall system exists between an application and a CUBRID broker, all TCP ports specified in **BROKER_PORT** and **APPL_SERVER_PORT** must be opened.
 
     .. note::
 
@@ -2635,6 +2676,8 @@ Logging
 **SLOW_LOG_DIR**
 
     **SLOW_LOG_DIR** is a parameter to configure the location of directory where the log file is generated. The default value is **log/broker/sql_log**.
+
+.. _sql-log:
 
 **SQL_LOG**
 

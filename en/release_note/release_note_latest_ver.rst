@@ -1,7 +1,7 @@
 :tocdepth: 3
 
 ******************
-11.0 Release Notes
+11.2 Release Notes
 ******************
 
 .. contents::
@@ -9,9 +9,11 @@
 Release Notes Information
 =========================
 
-This document includes information on CUBRID 11.0(Build Number: 11.0.0.0248-b53ae4a).
+This document includes information on CUBRID 11.2.
 
-CUBRID 11.0 includes all of the fixed errors and improved features that were detected in the CUBRID 10.2 and were applied to the previous versions.
+CUBRID 11.2 includes all of the fixed errors and improved features that were detected in the CUBRID 11.0 and were applied to the previous versions.
+
+For CUBRID 11.0, please find https://www.cubrid.org/manual/en/11.0/release_note/index.html.
 
 For CUBRID 10.2, please find https://www.cubrid.org/manual/en/10.2/release_note/index.html.
 
@@ -24,70 +26,108 @@ For CUBRID 9.3, please find https://www.cubrid.org/manual/en/9.3.0/release_note/
 Overview
 ========
 
-CUBRID 11.0 is the latest stable version that includes new features, significant changes and enhancements.
+CUBRID 11.2 is the latest stable version that includes new features, significant changes and enhancements.
 
 .. TODO: UPDATE WITH DETAILS.
 
-CUBRID 11.0
+CUBRID 11.2
 
-* is a version with improved security.
+* is a version with improved connectivity.
 * is more stable, faster, and more convenient for administrators.
 * fixes a large number of critical bugs.
-* includes useful SQL extensions: Supporting RVC (Row Value Constructor) and various REGEXP functions.
+* includes useful SQL extensions: User Schema concept and Synonym are supported.
 * includes code refactoring and modernization.
 
-CUBRID 11.0 **improves security** by providing data encryption and packet encryption. This version prevents abnormal data loss by supporting table-based TDE (Transparent Data Encryption) and packet encryption between the driver and server.
+CUBRID 11.2 **improved connectivity** by providing database link between homogeneous and heterogeneous DBMS. In addition, this version provides CDC (Change data capture) function by supporting supplemental logging that can track changed data.
 
-CUBRID 11.0 is **faster**. This version supports hash scan and improves the performances by up to 10 times in join query that could not perform index scans. By supporting the cache of search query results through hints, data change is minimal, and the performance of the workload with complex queries is maximized.
+CUBRID 11.2 is **faster**. This version improves query optimization such as predicate pushdown and view transformation, supports Hash List Scan for all subqueries, improves performance of count(\*) without conditional clause using cache, and improves truncate table to further improve performance.
 
-CUBRID 11.0 **improves administrator convenience** by providing new functions for administrators. This version supports statement based replication through hints on the HA environment, improving the replication time when deleting and updating a large amount of data. By separating the Java SP server from the DB server, the influence of the DB server is minimized from the start/stop of the Java SP server. In addition, the DDL audit function is provided so that DDL change can be tracked.
+CUBRID 11.2 **improves administrator convenience** by providing flashback function that can extract the original query of changed data for each transaction.
 
-The database volume of CUBRID 11.0 is not compatible with that of CUBRID 10.2 and earlier versions. Therefore, if you use CUBRID 10.1 or earlier, you must **migrate your databases**. Regarding this, see :doc:`/upgrade`.
+CUBRID 11.2 **expands SQL** for database link, user schema, and synonym and supports multiple filtered indexes on the same column.
+
+The database volume of CUBRID 11.2 is not compatible with that of CUBRID 11.1 and earlier versions. Therefore, if you use CUBRID 11.1 or earlier, you must **migrate your databases**. Regarding this, see :doc:`/upgrade`.
 
 .. TODO: coming soon 
 
 Driver Compatibility
 --------------------
 
-*   The JDBC and CCI driver of CUBRID 11.0 are compatible with the DB server of CUBRID 10.2, 10.1, 10.0, 9.3, 9.2, 9.1, 2008 R4.4, R4.3 or R4.1.
+*   The JDBC and CCI driver of CUBRID 11.2 are compatible with the DB server of CUBRID 11.1, 11.0, 10.2, 10.1, 10.0, 9.3, 9.2, 9.1, 2008 R4.4, R4.3 or R4.1.
 *   To upgrade drivers are highly recommended.
 
-As new features such as result cache have been improved in the CUBRID 11.0 driver, CUBRID 11.0 users are strongly recommended to upgrade the driver. 
+For more details on changes, see the :ref:`11_2_changes`. Users of previous versions should check the :ref:`11_2_changes` and :ref:`11_2_new_cautions` sections.
 
-For more details on changes, see the :ref:`11_0_changes`. Users of previous versions should check the :ref:`11_0_changes` and :ref:`11_0_new_cautions` sections.
+.. _11_2_changes:
 
-.. _11_0_changes:
-
-11.0 Changes
+11.2 Changes
 ============
 
-Please refer to `change logs of CUBRID 11.0 <https://github.com/CUBRID/cubrid/releases/tag/v11.0>`_.
+Please refer to `change logs of CUBRID 11.2 <https://github.com/CUBRID/cubrid/releases/tag/v11.2>`_.
 
 
 Cautions
-=========
+========
 
-.. _11_0_new_cautions:
+.. _11_2_new_cautions:
 
 New Cautions
 ------------
 
-The database volume of CUBRID 11.0 is not compatible with that of CUBRID 10.2 and earlier versions.
+The database volume of CUBRID 11.2 is not compatible with that of CUBRID 11.1 and earlier versions.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-When creating a table without an option, it is created as a reuse_oid table.
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-The maximum length of the CHAR data type has been changed to 256M character string.
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Modified to occur error when the input string length is longer than the set length of the string data type.
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Modified to recognize the space character at the end of the string, it is recognized as a different character string according to the space character at the end of the string.
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Due to the change in the statistics collection method, it is necessary to perform periodic statistics collection.
+By introducing the concept of user schema, the same object name can be used for each user, and the behavior is changed as follows
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+ * "." (dot) is not allowed in the object name.
+ * When using a query or utility command, it must be used as "[user name].object name". (However, the user name can be omitted when querying the object of the logged-in user) (see :doc:`/sql/user_schema`)
+ * Changed to include user name in info schema and show full tables results. (see :doc:`/sql/query/show`)
+ * The loaddb file prior to 11.2 must be modified to "user name.table name" so that it can be executed in 11.2, or loaddb can be executed by setting the -\-no-user-specified-name option. (see :ref:`loaddb`)
+
+The following functions and behavior changed when using "jdbc\:default\:connection\:" or calling getDefaultConnection() in JavaSP. (see :ref:`JavaSP Caution <jsp-caution>`)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+ * All functions of java.sql.DatabaseMetaData are not supported.
+ * createClob() and createBlob() of java.sql.Connection are not supported.
+ * addBatch(), clearBatch(), executeBatch(), setMaxRows() and cancel() of java.sql.Statement are not supported.
+ * Multiple SQL is not supported for one prepare (or execute).
+ * The cursor is changed to non-holdable.
+ * The ResultSet is changed to non-scrollable, non-sensitive and non-updatable.
+
+The behavior of the TRUNCATE TABLE changed if there is set null or cascade of FK (see :doc:`/sql/query/truncate`)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Column properties not written during alter change/modify are changed to be maintained, and auto_increment and on update properties cannot be removed with the alter statement (see :ref:`change-column`)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Changed to handle an error if only the column name exists in the where clause
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+ * If used in the form of UPDATE t1 SET c1 = 9 WHERE c1; , an error occurs.
+
+Multiple SQL must be separated by semicolons
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The CCI Driver directory in the CUBRID package is changed from $CUBRID/lib and $CUBRID/include to $CUBRID/cci/lib and $CUBRID/cci/include, respectively (see :ref:`CCI Overview <cci-overview>`)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* When using CCI, $CUBRID/cci/lib must be added to LD_LIBRARY_PATH in the environment variable.
+
+Changed Compression (-z, -\-compress) option to default on backup (see :ref:`backupdb`)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+System catalog information changed or added due to the addition of new features (see :doc:`/sql/catalog`)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Existing Cautions
 -----------------
 
+When creating a table without an option, it is created as a reuse_oid table
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The maximum length of the CHAR data type has been changed to 256M character string
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Modified to occur error when the input string length is longer than the set length of the string data type
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Modified to recognize the space character at the end of the string, it is recognized as a different character string according to the space character at the end of the string
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Due to the change in the statistics collection method, it is necessary to perform periodic statistics collection
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Locale(language and charset) is specified when creating DB
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -230,9 +270,9 @@ The default value for the CCI_DEFAULT_AUTOCOMMIT broker parameter, which affects
 From the 2008 R4.0 version, the options and parameters that use the unit of pages were changed to use the unit of volume size(CUBRIDSUS-5136)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The options (-p, -l, -s), which use page units to specify the database volume size and log volume size of the cubrid createdb utility, will be removed. Instead, the new options, added after 2008 R4.0 Beta (--db-volume-size, --log-volume-size, --db-page-size, --log-page-size), are used.
+The options (-p, -l, -s), which use page units to specify the database volume size and log volume size of the cubrid createdb utility, will be removed. Instead, the new options, added after 2008 R4.0 Beta (-\-db-volume-size, -\-log-volume-size, -\-db-page-size, -\-log-page-size), are used.
 
-To specify the database volume size of the cubrid addvoldb utility, use the newly-added option (--db-volume-size) after 2008 R4.0 Beta instead of using the page unit.
+To specify the database volume size of the cubrid addvoldb utility, use the newly-added option (-\-db-volume-size) after 2008 R4.0 Beta instead of using the page unit.
 It is recommended to use the new system parameters in bytes because the page-unit system parameters will be removed. For details on the related system parameters, see the below.
 
 Be cautious when setting db volume size if you are a user of a version before 2008 R4.0 Beta(CUBRIDSUS-4222)

@@ -543,7 +543,7 @@ CUBRID HA 기능을 사용하면 기본적으로 복제 로그 복사 프로세�
 
 *   **log_buffer_size** : 로그 버퍼 크기. 서버와 로그를 복사하는 **copylogdb** 간 프로토콜에 영향을 주는 부분이므로 반드시 동일해야 한다.
 
-*   **log_volume_size** : 로그 볼륨 크기. CUBRID HA는 원본 트랜잭션 로그와 복제 로그의 형태와 내용이 동일하므로 반드시 동일해야 한다. 그 외 각 노드에서 별도로 DB를 생성하는 경우 **cubrid createdb** 옵션(**--db-volume-size**, **--db-page-size**, **--log-volume-size**, **--log-page-size** 등)이 동일해야 한다.
+*   **log_volume_size** : 로그 볼륨 크기. CUBRID HA는 원본 트랜잭션 로그와 복제 로그의 형태와 내용이 동일하므로 반드시 동일해야 한다. 그 외 각 노드에서 별도로 DB를 생성하는 경우 **cubrid createdb** 옵션(**-\-db-volume-size**, **-\-db-page-size**, **-\-log-volume-size**, **-\-log-page-size** 등)이 동일해야 한다.
 
 *   **cubrid_port_id** : 서버와의 연결 생성을 위한 TCP 포트 번호. 서버와 로그를 복사하는 **copylogdb** 의 연결을 위해 반드시 동일해야 한다.
 
@@ -626,10 +626,6 @@ CUBRID HA 그룹 내에서 사용할 그룹 이름과 레플리카 노드 이름
 **ha_db_list**
 
 CUBRID HA 모드로 구동할 데이터베이스 이름을 명시한다. 기본값은 **NULL** 이다. 여러 개의 데이터베이스 이름은 쉼표(,) 또는 콜론(:)으로 구분한다.
-
-.. note::
-
-    이 파라미터에서 명시한 멤버 노드들의 호스트 이름은 IP로 대체할 수 없으며, 사용자는 반드시 **/etc/hosts** 에 등록되어 있는 것을 사용해야 한다. 
 
 접속
 ^^^^
@@ -757,7 +753,7 @@ CUBRID HA의 복제 로그 반영 프로세스에서 에러가 발생하면 해�
 
 복제 지연으로 인해 우선 순위가 낮은 DB에 연결된 CAS는 **cubrid_broker.conf**\의 :ref:`RECONNECT_TIME <reconnect_time>` 파라미터로 명시한 시간이 경과하면 복제 지연이 해소되었을 것으로 기대하여, 우선 순위가 높은 standby DB에 재접속을 시도한다. 
 
-**ha_copy_log_timeout**
+**ha_delay_limit_delta**
 
 위에 기술한 **ha_delay_limit** 을 참조하라.
 
@@ -765,12 +761,12 @@ CUBRID HA의 복제 로그 반영 프로세스에서 에러가 발생하면 해�
 
 어떤 노드의 데이터베이스 서버 프로세스가 상대방 노드의 복제 로그 복사 프로세스로부터 응답을 대기하는 최대 시간이다. 기본값은 5(초)이다. 이 값이 -1이면 무한 대기한다. 오직 **SYNC** 로그 복제 모드(**ha_copy_sync_mode**) 파라미터와 함께 작동한다.
 
-**ha_monitor_disk_failure_interval** 
+**ha_check_disk_failure_interval** 
   
-이 파라미터 값에 설정한 시간마다 디스크 장애 여부를 판단한다. 기본값은 30초이며, 단위는 초이다. 
+이 파라미터 값에 설정한 시간마다 디스크 장애 여부를 판단한다. 기본값은 15초이며, 단위는 초이다. 
   
-*   **ha_copy_log_timeout** 파라미터의 값이 -1인 경우, **ha_monitor_disk_failure_interval**\의 값은 무시되며 디스크 장애 여부를 판단하지 않는다. 
-*   **ha_monitor_disk_failure_interval**\의 값이 **ha_copy_log_timeout**\의 값보다 작게 설정된 경우, **ha_copy_log_timeout** + 20초의 시간마다 디스크 장애 여부를 판단한다.
+*   **ha_copy_log_timeout** 파라미터의 값이 -1인 경우, **ha_check_disk_failure_interval**\의 값은 무시되며 디스크 장애 여부를 판단하지 않는다. 
+*   **ha_check_disk_failure_interval**\의 값이 **ha_copy_log_timeout**\의 값보다 작게 설정된 경우, **ha_copy_log_timeout** + 20초의 시간마다 디스크 장애 여부를 판단한다.
 
 **ha_unacceptable_proc_restart_timediff**
 
@@ -1597,7 +1593,7 @@ CUBRID HA의 서버 상태를 확인하고 변경한다. ::
     
     *   서버의 상태가 **maintenance**\이면 **standby**\로 변경할 수 있다.
     
-    *   서버의 상태가 **to-be-active**이면 **active**\로 변경할 수 있다. 단, --force 옵션과 함께 사용해야 한다. 아래 --force 옵션의 설명을 참고한다.
+    *   서버의 상태가 **to-be-active**이면 **active**\로 변경할 수 있다. 단, **-\-force** 옵션과 함께 사용해야 한다. 아래 **-\-force** 옵션의 설명을 참고한다.
 
 .. option:: -f, --force
 
@@ -2051,7 +2047,7 @@ CUBRID HA에서 **LOB** 칼럼 메타 데이터(Locator)는 복제되고, **LOB*
     10.0 부터는 UPDATE STATISTICS 문이 복제된다. 
  
     10.0 미만 버전에서는 UPDATE STATISTICS 문이 복제되지 않으므로 슬레이브/레플리카 노드에 별도로 수행해야 한다. 
-    10.0 미만 버전의 슬레이브/레플리카 노드에서 "UPDATE STATISTICS" 구문을 적용하려면 CSQL에서 --sysadm 옵션과 --write_on_slave 옵션을 추가한 후 이 구문을 수행해야 한다. 
+    10.0 미만 버전의 슬레이브/레플리카 노드에서 "UPDATE STATISTICS" 구문을 적용하려면 CSQL에서 **-\-sysadm** 옵션과 **-\-write_on_slave** 옵션을 추가한 후 이 구문을 수행해야 한다. 
 
 운영 시나리오
 =============
@@ -2593,7 +2589,7 @@ HA 서비스 운영 중 슬레이브를 새로 추가하려면 기존의 마스�
         
         .. note::
         
-            --sleep-msecs는 1MB의 백업 파일이 쓰여질 때마다 쉬는 시간을 설정하는 옵션으로, 단위는 밀리초이다. 백업할 장비의 디스크 I/O 부하가 심한 경우 이 값을 설정하는 것을 고려하되, 이 값이 클수록 백업 시간이 길어지므로 가급적이면 부하가 적은 시간대에 백업하고 이 값은 작게 설정할 것을 권장한다.
+            **-\-sleep-msecs**\는 1MB의 백업 파일이 쓰여질 때마다 쉬는 시간을 설정하는 옵션으로, 단위는 밀리초이다. 백업할 장비의 디스크 I/O 부하가 심한 경우 이 값을 설정하는 것을 고려하되, 이 값이 클수록 백업 시간이 길어지므로 가급적이면 부하가 적은 시간대에 백업하고 이 값은 작게 설정할 것을 권장한다.
             
             *nodeB*\의 부하가 전혀 없는 상태라면 이 옵션을 생략해도 무방하다.
             
@@ -2840,7 +2836,7 @@ HA 서비스 운영 중 슬레이브를 새로 추가하려면 기존의 마스�
             
     *   *nodeA*, *nodeB*\에서 *nodeC*\에 대한 복제 정보 제거
     
-        csql 실행 시 --sysadm 옵션과 --write-on-standby 옵션을 주어야 슬레이브에서 DELETE 연산을 수행할 수 있다.
+        csql 실행 시 **-\-sysadm** 옵션과 **-\-write-on-standby** 옵션을 주어야 슬레이브에서 DELETE 연산을 수행할 수 있다.
         ::
         
             $ csql -u dba --sysadm --write-on-standby testdb@localhost
@@ -3516,7 +3512,7 @@ checksumdb
 
 .. option:: -n, --table-name=STRING
 
-     체크섬 결과를 저장할 테이블명을 지정한다. (기본값: db_ha_checksum)
+     체크섬 결과를 저장할 테이블명을 지정한다. 테이블명 입력 시 "소유자명.테이블명" 형식을 사용해야 하며, 현재는 소유자명으로 dba만 지정할 수 있다. (기본값: dba.db_ha_checksum)
 
 .. option:: -r, --report-only
 

@@ -98,6 +98,9 @@ CUBRID ODBC Driver가 확인되었다면 응용 프로그램에서 접속하려�
 
   .. image:: /images/image80.png
 
+* **Charset** : 데이터베이스의 문자셋(charSet) 입력한다.
+* **Autocommit** : Autocommit mode를 입력한다. 기본값은 OFF이다.
+* **Omit Schema** : 스키마 개념을 지원하는 11.2 버전 이상의 데이터베이스 서버에서 스키마 정보 관련 함수 사용시 로그인한 사용자가 생성한 스키마만을  제공하는 기능이다. 이 기능은 **ERWin**:sup:`TM` 이 CUBRID 11.2 버전 이상을 사용할 경우 필요하다 (omit_schema=yes). **YES** 인 경우 로그인한 사용자가 소유한 테이블/뷰/Primary Key/Foreign Key만 제공되며, 이때 소유자의 이름은 제거된다. 기본값은 **NO** 이다
 * **FETCH_SIZE** : ODBC 드라이버가 내부적으로 사용하는 CCI 라이브러리의 :c:func:`cci_fetch` 함수를 호출할 때마다 서버로부터 fetch하는 레코드의 개수를 설정한다.
 
 위와 같이 입력한 후 [확인]을 클릭하면 다음과 같이 [User Data Sources]에 데이터 원본이 추가된 것을 확인할 수 있다.
@@ -143,10 +146,14 @@ CUBRID ODBC 프로그래밍을 할 때 연결 문자열(connection string)은 �
 +--------------+-----------------------+-----------------------------------------------------------+
 | CHARSET      | utf-8                 | 문자셋                                                    |
 +--------------+-----------------------+-----------------------------------------------------------+
+| AUTOCOMMIT   | ON                    | Autocommit mode                                           |
++--------------+-----------------------+-----------------------------------------------------------+
+| OMIT_SCHEMA  | NO                    | 단일 스키마 특징 제공 (11.2버전 이상만 적용)              |
++--------------+-----------------------+-----------------------------------------------------------+
 
 위의 예를 이용한 연결 문자열은 다음과 같다. ::
 
-    "DRIVER={CUBRID Driver Unicode};UID=PUBLIC;PWD=xxx;FETCH_SIZE=100;PORT=33000;SERVER=127.0.0.1;DB_NAME=demodb;DESCRIPTION=cubrid_test;CHARSET=utf-8"
+    "DRIVER={CUBRID Driver Unicode};UID=PUBLIC;PWD=xxx;FETCH_SIZE=100;PORT=33000;SERVER=127.0.0.1;DB_NAME=demodb;DESCRIPTION=cubrid_test;CHARSET=utf-8;OMIT_SCHEMA=YES"
 
 UTF-8 유니코드를 사용하는 경우, 파일 이름 중간에 "unicode"가 쓰여있는 유니코드 전용 드라이버를 설치하고, 연결 문자열에서 드라이버의 이름을 "Driver={CUBRID Driver Unicode}"와 같이 입력한다. 유니코드는 9.3.0.0002 버전 이상에서만 지원된다.
 

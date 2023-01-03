@@ -129,6 +129,8 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               | max_clients                         | server parameter        |         | int      | 100                            |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | tcp_keepalive                       | client/server parameter |         | bool     | yes                            |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | use_user_hosts                      | client/server parameter |         | bool     | off                            |                       |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 | :ref:`memory-parameters`      | data_buffer_size                    | server parameter        |         | byte     | 32,768 *                       |                       |
 |                               |                                     |                         |         |          | :ref:`db_page_size <dpg>`      |                       |
@@ -510,6 +512,8 @@ The following are parameters related to the database server. The type and value 
 +---------------------------------+--------+----------+----------+----------+
 | tcp_keepalive                   | bool   | yes      |          |          |
 +---------------------------------+--------+----------+----------+----------+
+| use_user_hosts                  | bool   | off      |          |          |
++---------------------------------+--------+----------+----------+----------+
 
 **cubrid_port_id**
 
@@ -566,6 +570,63 @@ The following are parameters related to the database server. The type and value 
   
     **tcp_keepalive** is a parameter which specifies if you apply SO_KEEPALIVE option to TCP network protocol or not. The default is **yes**. If this value is **no**, DB server-side connection can be disconnected when transaction logs are not copied for a long time in the firewall environment between master and slave.
  
+
+**use_user_hosts** 
+
+    **use_user_hosts** is a system paramter to use to select the host look up between **hostname** and **IP address**, required by the CUBRID service from the services below. The default value is **OFF**.
+
+    * The host/IP address look-up library that **OS** provides. (**glibc**, Linux)
+    * **The host/IP address look-up library** that **CUBRID** provides.
+
+    use_user_hosts=off (default)
+
+    * Looks up between IP address and hostname using by system library.
+    * In general, provides /etc/hosts host look-up, DNS Query commonly
+
+    use_user_hosts=on
+
+    * Looks up between IP address and hostname using by CUBRID host look-up library.
+    * Uses **$CUBRID/conf/cubrid_hosts.conf** file to look up between IP address and hostname.
+    * executes regardless of the read permission of /etc/hosts, /etc/nsswitch.conf file.
+
+    .. warning::
+
+        If **use_user_hosts** parameter is changed during service operation, CUBRID service cannot terminate normally. So, the user must change the parameter after CUBRID service terminates.
+
+    *   The format of **$CUBRID/conf/hosts.conf** is same as **/etc/hosts** but there are some restrictions as follows.
+
+        * Allow **IPv4** format address only. (Not allow **IPv6** format address)
+        * Not allow below **alias** format. ::
+
+           172.31.0.1 host1 alias1 alias2
+
+        * Allow below **alias** format. ::
+
+           172.31.0.1 host1
+           172.31.0.1 alias1
+
+        * Not allow more than two IP address for one hostname. ::
+
+            172.31.0.1 host1
+            178.31.0.2 host1
+
+    * The following is an example of $CUBRID/conf/hosts.conf. ::
+
+            #
+            # hosts file for CUBRID user specific host service
+            #
+            127.0.0.1       localhost
+            172.31.0.1      node1
+            172.31.0.1      node2
+            172.31.0.1      node3
+            192.168.0.31    node4.kr         # Seoul
+            192.168.2.31    node5.gov.or.kr  # Daejeon
+
+
+.. warning::
+
+    You must change $CUBRID/conf/hosts.conf after terminating all CUBRID processes, and **the changes will be applied after restarting.** In addition, you must write included **localhost** and **'hostname'** (The output of hostname command by among Linux commands) in the hosts.conf.
+
 .. _memory-parameters:
 
 Memory-Related Parameters

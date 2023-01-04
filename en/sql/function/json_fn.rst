@@ -748,7 +748,7 @@ JSON_MERGE_PATCH
 .. function:: JSON_MERGE_PATCH (json_doc, json_doc [, json_doc] ...)
 
 The **JSON_MERGE_PATCH** function merges two or more json docs and returns the resulting merged json. **JSON_MERGE_PATCH** differs from **JSON_MERGE_PRESERVE** in that it will take the second argument when encountering merging conflicts. **JSON_MERGE_PATCH** is compliant with
-`RFC 7396 <https://tools.ietf.org/html/rfc7396/>`_.
+`RFC 7396 <https://www.rfc-editor.org/info/rfc7396>`_.
 
 The merging of two json documents is performed with the following rules, recursively:
 

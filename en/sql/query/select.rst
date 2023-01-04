@@ -14,9 +14,9 @@ The **SELECT** statement specifies columns that you want to retrieve from a tabl
         [WHERE <search_condition>]
         [GROUP BY {col_name | expr} [ASC | DESC], ...[WITH ROLLUP]]
         [HAVING  <search_condition> ]
-        [ORDER BY {col_name | expr} [ASC | DESC], ... [NULLS {FIRST | LAST}]
-        [LIMIT [offset,] row_count]
         [USING INDEX { index_name [,index_name, ...] | NONE }]
+        [ORDER BY {col_name | expr} [ASC | DESC], ... [NULLS {FIRST | LAST}]
+        [LIMIT [offset,] row_count]        
         [FOR UPDATE [OF <spec_name_comma_list>]]
         
         <qualifier> ::= ALL | DISTINCT | DISTINCTROW | UNIQUE

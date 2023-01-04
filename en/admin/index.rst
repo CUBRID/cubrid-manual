@@ -34,6 +34,9 @@ The service management utilities are as follows:
 
     *   :ref:`cubrid broker <broker>`
 
+*   Gateway utility : Operates and manages the gateway process and application server (CAS) process.
+    *   :ref:`cubrid gateway <gateway>`
+	
 *   Manager utility : Operates and manages the manager server process.
 
     *   :ref:`cubrid manager <cubrid-manager-server>`

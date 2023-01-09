@@ -249,7 +249,7 @@ Groups allow to apply quantifiers to a sequence of characters (instead of a sing
       'hello! cubrid!'
 
 When a group creates a backreference, the characters that represent the subpattern in a string are stored as a submatch. Each submatch is numbered after the order of appearance of their opening parenthesis (the first submatch is number 1, the second is number 2, and so on...).
-These submatches can be used in the regular expression itself to specify that the entire subpattern should appear again somewhere else (see \int in the special characters list). They can also be used in the replacement string or retrieved in the match_results object filled by some regex operations.
+These submatches can be used in the regular expression itself to specify that the entire subpattern should appear again somewhere else (see \int in the special characters list). They can also be used in the replacement string in the REGEXP_REPLACE function.
 
 .. code-block:: sql
 
@@ -285,7 +285,7 @@ Assertions are conditions that do not consume characters in a string: they do no
 +-----------------+-----------------------------------------------------------------------------------------------------------------------+
 | \\B             | The previous and next characters are both word characters or both are non-word characters.                            |
 +-----------------+-----------------------------------------------------------------------------------------------------------------------+
-| (?=subpattern)  | Positive lookahead. The characters following the charcter must match subpattern, but no characters are consumed.      |
+| (?=subpattern)  | Positive lookahead. The characters following the character must match subpattern, but no characters are consumed.     |
 +-----------------+-----------------------------------------------------------------------------------------------------------------------+
 | (?!subpattern)  | Negative lookahead. The characters following the assertion must not match subpattern, but no characters are consumed. |
 +-----------------+-----------------------------------------------------------------------------------------------------------------------+

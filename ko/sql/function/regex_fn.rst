@@ -25,7 +25,7 @@ ECMAScript 정규 표현식 문법
   **호환성 고려사항**
   
   CUBRID 11 이전 버전에서 CUBRID는 Henry Spencer의 정규식 구현을 사용하였다.
-  CUBRID 11부터 CUBRID는 C++ <regex> 표준 라이브러리를 사용하여 정규식 함수와 연산자를 지원한다.
+  CUBRID 11 부터 CUBRID는 C++ <regex> 표준 라이브러리를 사용하여 정규식 함수와 연산자를 지원한다.
 
   \1. Henry Spencer의 정규식 구현은 바이트 방식으로 작동한다. 따라서 REGEXP 및 RLIKE는 멀티바이트를 지원하지 않았다.
   따라서 인자의 콜레이션을 고려하지 않고 ASCII 인코딩으로만 작동했다.
@@ -33,9 +33,9 @@ ECMAScript 정규 표현식 문법
   \2. Henry Spencer 라이브러리는 POSIX의 *collating sequence* (*[.character.]*) 표현식을 지원했지만 더 이상 지원하지 않는다.
   또한 *character equivalents* (*[=word=]*) 문법도 지워낳지 않는다. 이러한 문법을 가진 표현식이 주어지면 CUBRID는 에러를 반환한다.
   
-  \3. Henry Spencer 라이브러리는 점 연산자 (.)로 line-terminator를 매치한다. 그러나 C++ <regex>는 매치되지 않는다.
+  \3. Henry Spencer 라이브러리는 점 연산자 (.)로 행 종결자를 매치한다. 그러나 C++ <regex>는 매치되지 않는다.
 
-  \4. word-beginning boundary 와 word-end boundary (각각 [[:<:]] 와 [[:>:]]) 문법을 지원하지 않는다. 대신, word boundary notation (\\b) 을 사용할 수 있다.
+  \4. 단어-시작 경계 와 단어-끝 경계 (각각 [[:<:]] 와 [[:>:]]) 문법을 지원하지 않는다. 대신, 단어 경계 표기 (\\b) 를 사용할 수 있다.
 
 .. note::
 
@@ -43,63 +43,62 @@ ECMAScript 정규 표현식 문법
 
   C++ <regex>는 시스템 로케일에 따라 C++ <locale>에 의해 멀티바이트 비교를 수행한다. 따라서 로케일에 민감한 기능을 사용하려면 해당 시스템 로케일이 설치되어 있어야 합니다.
 
-Special Pattern Characters
+특수 패턴 문자
 ---------------------------
 
-Special pattern characters are characters (or sequences of characters) that have a special meaning when they appear in a regular expression pattern, 
-either to represent a character that is difficult to express in a string, or to represent a category of characters. 
-Each of these special pattern characters is matched in a string against a single character (unless a quantifier specifies otherwise).
+특수 패턴 문자는 문자열로 표현하기 어려운 문자를 나타내거나 문자 범위 (예: [a-z] 범위) 를 나타내기 위해 정규식 패턴에 나타날 때 특별한 의미를 갖는 문자(또는 문자 시퀀스) 이다.
+이러한 각 특수 패턴 문자는 단일 문자에 대해 매칭을 수행한다 (수량자 기호 제외).
 
 +----------------+----------------------------------------------------------------------------------------------------------+
-| Characters     | Description                                                                                              |
+| 문자           | 설명                                                                                                     |
 +================+==========================================================================================================+
-| .              | Any character except line terminators (LF, CR, LS, PS).                                                  |
+| .              | 행 종결자를 제외한 모든 문자 (LF, CR, LS, PS).                                                           |
 +----------------+----------------------------------------------------------------------------------------------------------+
-| \\t            | A horizontal tab character (same as \\u0009).                                                            |
+| \\t            | 수평 탭 문자 (\\u0009 와 동일).                                                                          |
 +----------------+----------------------------------------------------------------------------------------------------------+
-| \\n            | A newline (line feed) character (same as \\u000A).                                                       |
+| \\n            | 개행(줄 바꿈) 문자 (\\u000A 와 동일).                                                                    |
 +----------------+----------------------------------------------------------------------------------------------------------+
-| \\v            | A vertical tab character (same as \\u000B).                                                              |
+| \\v            | 세로 탭 문자 (\\u000B 와 동일).                                                                          |
 +----------------+----------------------------------------------------------------------------------------------------------+
-| \\f            | A form feed character (same as \\u000C).                                                                 |
+| \\f            | 폼 피드 문자 (\\u000C 와 동일).                                                                          |
 +----------------+----------------------------------------------------------------------------------------------------------+
-| \\r            | A carriage return character (same as \\u000D)                                                            |
+| \\r            | 캐리지 리턴 문자 (\\u000D 와 동일)                                                                       |
 +----------------+----------------------------------------------------------------------------------------------------------+
-| \\c\ *letter*  | A control code character whose code unit value is the same as the remainder of dividing                  |
-|                | the code unit value of *letter* by 32.                                                                   |
+| \\c\ *letter*  | 코드 단위 값이 *letter*의 코드 단위 값을                                                                 |
+|                | 32로 나눈 나머지와 같은 제어 코드 문자.                                                                  |
 +----------------+----------------------------------------------------------------------------------------------------------+
-| \\x\ *hh*      | A a character whose code unit value has an hex value equivalent to the two hex digits *hh*.              |
+| \\x\ *hh*      | 코드 단위 값이 2개의 16진수 *hh*에 해당하는 16진수 값을 갖는 문자                                        |
 +----------------+----------------------------------------------------------------------------------------------------------+
-| \\u\ *hhhh*    | A character whose code unit value has an hex value equivalent to the four hex digits *hhhh*.             |
+| \\u\ *hhhh*    | 코드 단위 값이 4자리 16진수 *hhhh*에 해당하는 16진수 값을 갖는 문자                                      |
 +----------------+----------------------------------------------------------------------------------------------------------+
-| \\0            | A null character (same as \\u0000).                                                                      |
+| \\0            | 널 문자 (\\u0000와 동일).                                                                                |
 +----------------+----------------------------------------------------------------------------------------------------------+
-| \\\ *num*      | The result of the submatch whose opening parenthesis is the *num*-th. See groups below for more info.    |
+| \\\ *num*      | 여는 괄호가 *num*번째인 부분 일치의 결과. 자세한 내용은 아래 그룹을 참조.                                |
 +----------------+----------------------------------------------------------------------------------------------------------+
-| \\d            | A decimal digit character (same as [[:digit:]]).                                                         |
+| \\d            | 10진수 문자 ([[:digit:]] 와 동일).                                                                       |
 +----------------+----------------------------------------------------------------------------------------------------------+
-| \\D            | Any character that is not a decimal digit character (same as [^[:digit:]]).                              |
+| \\D            | 10진수 문자가 아닌 모든 문자 ([^[:digit:]] 와 동일).                                                     |
 +----------------+----------------------------------------------------------------------------------------------------------+
-| \\s            | A whitespace character (same as [[:space:]]).                                                            |
+| \\s            | 공백 문자 ([[:space:]] 와 동일).                                                                         |
 +----------------+----------------------------------------------------------------------------------------------------------+
-| \\S            | Any character that is not a whitespace character (same as [^[:space:]]).                                 |
+| \\S            | 공백 문자가 아닌 모든 문자 ([^[:space:]] 와 동일).                                                       |
 +----------------+----------------------------------------------------------------------------------------------------------+
-| \\w            | An alphanumeric or underscore character (same as [_[:alnum:]]).                                          |
+| \\w            | 영숫자 또는 밑줄 문자 ([_[:alnum:]] 와 동일).                                                            |
 +----------------+----------------------------------------------------------------------------------------------------------+
-| \\W            | Any character that is not an alphanumeric or underscore character (same as [^_[:alnum:]]).               |
+| \\W            | 영숫자 또는 밑줄 문자가 아닌 모든 문자 ([^_[:alnum:]] 와 동일).                                          |
 +----------------+----------------------------------------------------------------------------------------------------------+
-|                | | The *character* character as it is, without interpreting its special meaning within a regex expression.|
-| \\\ *character*| | Any character can be escaped except those which form any of the special character sequences above.     |
-|                | | Needed for: ^ $ \\ . * + ? ( ) [ ] { } \|                                                              |
+|                | | 정규 표현식 내에서 특별한 의미를 해석하지 않고 있는 그대로 *character* 문자                            |
+| \\\ *character*| | 위의 특수 문자 시퀀스를 형성하는 문자를 제외한 모든 문자를 이스케이프 한다.                            |
+|                | | 필요한 대상: ^ $ \\ . * + ? ( ) [ ] { } \|                                                             |
 +----------------+----------------------------------------------------------------------------------------------------------+
-| \[\ *class*\]  | A string is part of the *class*. see **POSIX-based character classes** below.                            |
+| \[\ *class*\]  | *class*의 일부인 문자열. 아래의 **POSIX 기반 문자 클래스**를 참조.                                       |
 +----------------+----------------------------------------------------------------------------------------------------------+
-| \[^\ *class*\] | A string is not part of the *class*. see **POSIX-based character classes** below.                        |
+| \[^\ *class*\] | *class*의 일부가 아닌 문자열. 아래의 **POSIX 기반 문자 클래스**를 참조.                                  |
 +----------------+----------------------------------------------------------------------------------------------------------+
 
 .. code-block:: sql
 
-    -- .: match any character
+    -- .: 모든 문자와 일치
     SELECT ('cubrid dbms' REGEXP '^c.*$');
     
 ::
@@ -108,12 +107,12 @@ Each of these special pattern characters is matched in a string against a single
     ================================
       1
 
-To match special characters such as "\\n", "\\t", "\\r", and "\\\\", some must be escaped with the backslash (\\) by specifying the value of **no_backslash_escapes** (default: yes) to **no**. 
-For details on **no_backslash_escapes**, see :ref:`escape-characters`.
+"\\n", "\\t", "\\r" 및 "\\\\"와 같은 특수 문자를 매칭하려면 일부는 **no_backslash_escapes** (기본값: yes) 값을 **no**\로 지정하여 백슬래시(\\)로 이스케이프해야 한다.
+**no_backslash_escapes**\에 대한 자세한 내용은 :ref:`escape-characters`\를 참조한다.
 
 .. code-block:: sql
 
-    -- \n : match a special character, when no_backslash_escapes=yes (default)
+    -- \n : no_backslash_escapes=yes(기본값)인 경우 \n 특수 문자와 일치
     SELECT ('new\nline' REGEXP 'new\\nline'); 
 
 ::
@@ -124,7 +123,7 @@ For details on **no_backslash_escapes**, see :ref:`escape-characters`.
 
 .. code-block:: sql
 
-    -- \n : match a special character, when no_backslash_escapes=no
+    -- \n : no_backslash_escapes=no일 때 \n 특수 문자와 일치
     SELECT ('new\nline' REGEXP 'new
     line');
 
@@ -136,30 +135,30 @@ For details on **no_backslash_escapes**, see :ref:`escape-characters`.
     =====================================
       1
 
-Quantifiers
+수량자
 ------------
 
-Quantifiers follow a character or a special pattern character. They can modify the amount of times that character is repeated in the match:
+수량자 문자 또는 특수 패턴 문자 뒤에 지정합니다. 정규표현식 매칭에서 캐릭터가 반복되는 횟수를 지정할 수 있다:
 
 +----------------+-------------------------------------------------------------------------+
 | Characters     | Description                                                             |
 +================+=========================================================================+
-| \*             | The preceding is matched 0 or more times.                               |
+| \*             | 선행하는 문자 또는 패턴이 0회 이상 일치                                 |
 +----------------+-------------------------------------------------------------------------+
-| \+             | The preceding is matched 1 or more times.                               |
+| \+             | 선행하는 문자 또는 패턴이 1회 이상 일치                                 |
 +----------------+-------------------------------------------------------------------------+
-| ?              | The preceding is optional (matched either 0 times or once).             |
+| ?              | 선행하는 문자 또는 패턴이 선택사항 (0회 또는 1회 일치)                  |
 +----------------+-------------------------------------------------------------------------+
-| {*num*}        | The preceding is matched exactly *num* times.                           |
+| {*num*}        | 선행하는 문자 또는 패턴이 정확히 *num* 회 일치                          |
 +----------------+-------------------------------------------------------------------------+
-| {*num,*}       | The preceding is matched *num* or more times.                           |
+| {*num,*}       | 선행하는 문자 또는 패턴이 정확히 *num* 회 또는 그 이상 일치             |
 +----------------+-------------------------------------------------------------------------+
-| {*min,max*}    | The preceding is matched at least *min* times, but not more than *max*. |
+| {*min,max*}    | 선행하는 문자 또는 패턴이 최소 *min* 회 일치하지만 *max*를 넘지 않음    |
 +----------------+-------------------------------------------------------------------------+
 
 .. code-block:: sql
 
-    -- a+ : match any sequence of one or more a characters. case insensitive.
+    -- a+ : 하나 이상의 a 문자 시퀀스와 일치. 대소문자 구분하지 않음.
     SELECT ('Aaaapricot' REGEXP '^A+pricot');
     
 ::
@@ -170,7 +169,7 @@ Quantifiers follow a character or a special pattern character. They can modify t
 
 .. code-block:: sql
 
-    -- a? : match either zero or one a character.
+    -- a? : 0 또는 1개의 문자와 일치
     SELECT ('Apricot' REGEXP '^Aa?pricot');
     
 ::
@@ -201,7 +200,7 @@ Quantifiers follow a character or a special pattern character. They can modify t
 
 .. code-block:: sql
 
-    -- (cub)* : match zero or more instances of the sequence abc.
+    -- (cub)* : 시퀀스 abc의 0개 이상의 인스턴스와 일치
     SELECT ('cubcub' REGEXP '^(cub)*$');
     
 ::
@@ -210,12 +209,12 @@ Quantifiers follow a character or a special pattern character. They can modify t
     ==========================
       1
 
-By default, all these quantifiers perform in a *greedy* way which takes as many characters that meet the condition as possible. 
-And this behavior can be overridden to *non-greedy* by adding a question mark (?) after the quantifier.
+기본적으로 이러한 모든 수량자는 가능한 한 조건을 충족하는 많은 문자를 사용하는 *greedy* 방식으로 수행된다.
+그리고 이 동작은 한정자 뒤에 물음표(?)를 추가하여 *non-greedy*로 재정의할 수 있다.
 
 .. code-block:: sql
 
-    -- (a+), (a+?) : match with quantifiers performs greedy and ungreedy respectively.
+    -- (a+), (a+?) : greedy 또는 non-greedy로 수량자를 사용해 각각 매칭 수행.
     SELECT REGEXP_SUBSTR ('aardvark', '(a+)'), REGEXP_SUBSTR ('aardvark', '(a+?)');
     
 ::
@@ -224,22 +223,22 @@ And this behavior can be overridden to *non-greedy* by adding a question mark (?
     ============================================
       'aa'                  'a'
 
-Groups
+그룹
 ------
 
-Groups allow to apply quantifiers to a sequence of characters (instead of a single character). There are two kinds of groups:
+그룹을 사용하면 단일 문자 대신 일련의 문자에 레이블 (예 $1)을 적용할 수 있다. 두 종류의 그룹이 있다.
 
 +--------------------+-------------------------------------------------------+
-| Characters         | Description                                           |
+| 문자               | 설명                                                  |
 +====================+=======================================================+
-| (\ *subpattern*)   | Group which creates a backreference.                  |
+| (\ *subpattern*)   | 역참조를 생성하는 그룹                                |
 +--------------------+-------------------------------------------------------+
-| (?:\ *subpattern*) | Passive group which does not create a backreference.  |
+| (?:\ *subpattern*) | 역참조를 생성하지 않는 패시브 그룹                    |
 +--------------------+-------------------------------------------------------+
 
 .. code-block:: sql
 
-    -- The captured group can be referenced with $int
+    -- 캡쳐된 그룹은 $int로 참조할 수 있다
     SELECT REGEXP_REPLACE ('hello cubrid','([[:alnum:]]+)','$1!');
 
 ::
@@ -248,15 +247,15 @@ Groups allow to apply quantifiers to a sequence of characters (instead of a sing
     ==========================
       'hello! cubrid!'
 
-When a group creates a backreference, the characters that represent the subpattern in a string are stored as a submatch. Each submatch is numbered after the order of appearance of their opening parenthesis (the first submatch is number 1, the second is number 2, and so on...).
-These submatches can be used in the regular expression itself to specify that the entire subpattern should appear again somewhere else (see \int in the special characters list). They can also be used in the replacement string or retrieved in the match_results object filled by some regex operations.
+그룹이 역참조를 생성하면, 문자열에서 하위 패턴을 나타내는 문자가 하위 일치로 저장된다. 각 하위 일치 항목은 여는 괄호가 나타나는 순서에 따라 번호가 매겨진다 (첫 번째 하위 일치 항목은 1번, 두 번째 하위 일치 항목은 2번 등...).
+이러한 하위 일치는 전체 하위 패턴이 다른 곳에 다시 나타나도록 지정하기 위해 정규식 자체에서 사용할 수 있는데 (특수 문자 목록의 \int 참조), REGEXP_REPLACE 함수의 대체 문자열에서 사용할 수 있다.
 
 .. code-block:: sql
 
-    -- performs regexp_substr without groups. the following is the case that fully matched.
+    -- 그룹 없이 regexp_substr을 수행한다. 다음은 완전히 일치하는 경우이다.
     SELECT REGEXP_SUBSTR ('abckabcjabc', '[a-c]{3}k[a-c]{3}j[a-c]{3}');
 
-    -- ([a-c]{3}) creates a backreference, \1
+    -- ([a-c]{3}) 는 \1 역참조를 생성한다
     SELECT REGEXP_SUBSTR ('abckabcjabc', '([a-c]{3})k\1j\1');
 
 ::
@@ -269,30 +268,30 @@ These submatches can be used in the regular expression itself to specify that th
     ======================
       'abckabcjabc'
 
-Assertions
+어서션
 ----------
 
-Assertions are conditions that do not consume characters in a string: they do not describe a character, but a condition that must be fulfilled before or after a character.
+어서션은 문자열의 문자를 사용하지 않는 조건이다. 즉, 문자를 나타내지는 않지만 문자의 앞이나 뒤에 충족되어야 하는 조건이다.
 
 +-----------------+-----------------------------------------------------------------------------------------------------------------------+
-| Characters      | Description                                                                                                           |
+| 문자            | 설명                                                                                                                  |
 +=================+=======================================================================================================================+
-| ^               | The beginning of a string, or follows a line terminator                                                               |
+| ^               | 문자열의 시작이나 행 종결자 다음                                                                                      |
 +-----------------+-----------------------------------------------------------------------------------------------------------------------+
-| $               | The end of a string, or precedes a line terminator                                                                    |
+| $               | 문자열의 끝이나 행 종결자 이전                                                                                        |
 +-----------------+-----------------------------------------------------------------------------------------------------------------------+
-| \\b             | The previous character is a word character and the next is a non-word character (or vice-versa).                      |
+| \\b             | 이전 문자는 단어 문자이고 다음 문자는 단어가 아닌 문자(또는 그 반대)                                                  |
 +-----------------+-----------------------------------------------------------------------------------------------------------------------+
-| \\B             | The previous and next characters are both word characters or both are non-word characters.                            |
+| \\B             | 이전 및 다음 문자는 모두 단어 문자이거나 둘 다 단어가 아닌 문자                                                       |
 +-----------------+-----------------------------------------------------------------------------------------------------------------------+
-| (?=subpattern)  | Positive lookahead. The characters following the charcter must match subpattern, but no characters are consumed.      |
+| (?=subpattern)  | Positive lookahead. 이 문자 다음의 문자열은 하위 패턴과 일치해야 하지만 어떤 문자도 소비되지 않음                     |
 +-----------------+-----------------------------------------------------------------------------------------------------------------------+
-| (?!subpattern)  | Negative lookahead. The characters following the assertion must not match subpattern, but no characters are consumed. |
+| (?!subpattern)  | Negative lookahead. 어서션 다음의 문자열은 하위 패턴과 일치하지 않아야 하지만 어떤 문자도 소비되지 않음               |
 +-----------------+-----------------------------------------------------------------------------------------------------------------------+
 
 .. code-block:: sql
 
-    -- ^ : match the beginning of a string
+    -- ^ : 문자열의 시작과 매칭
     SELECT ('cubrid dbms' REGEXP '^cub');
     
 ::
@@ -303,7 +302,7 @@ Assertions are conditions that do not consume characters in a string: they do no
 
 .. code-block:: sql
 
-    -- $ : match the end of a string
+    -- $ : 문자열의 끝과 매칭
     SELECT ('this is cubrid dbms' REGEXP 'dbms$');
     
 ::
@@ -330,20 +329,20 @@ Assertions are conditions that do not consume characters in a string: they do no
    ======================
      'CUBRID dbms cubrid sql CUBRID rdbms'
 
-Alternatives
+구분자
 ------------
 
-A pattern can include different alternatives:
+패턴에 여러 구분자를 포함할 수 있다:
 
 +-----------------+------------------------------------------------------+
-| Characters      | Description                                          | 
+| 문자            | 설명                                                 |
 +=================+======================================================+
-| \|              | Separates two alternative patterns or subpatterns.   |
+| \|              | 두 개의 대체 패턴 또는 하위 패턴을 분리              |
 +-----------------+------------------------------------------------------+
 
 .. code-block:: sql
 
-    -- a|b : matches any character that is either a or b.
+    -- a|b : a 또는 b인 모든 문자열 매칭
     SELECT ('a' REGEXP 'a|b');
     SELECT ('d' REGEXP 'a|b');
     
@@ -357,8 +356,9 @@ A pattern can include different alternatives:
     ==============================
       0
 
-A regular expression can contain multiple alternative patterns simply by separating them with the separator operator (|): The regular expression will match if any of the alternatives match, and as soon as one does.
-Subpatterns (in groups or assertions) can also use the separator operator to separate different alternatives.
+정규식은 구분자 연산자(alternatvies, |)로 간단히 구분하여 여러 대체 패턴을 포함할 수 있다.
+정규식은 대체 패턴이 일치하는 경우 일치하는 즉시 매칭한다.
+하위 패턴(그룹 또는 어서션)은 구분자 연산자를 사용하여 여러 다른 패턴을 구분할 수도 있다.
 
 .. code-block:: sql
 
@@ -376,18 +376,18 @@ Subpatterns (in groups or assertions) can also use the separator operator to sep
     ==============================
       0
 
-Character classes
+문자 클래스
 -----------------
 
-Character classes syntax matches one of characters or a category of characters within square brackets.
+문자 클래스 문법은 문자 하나 또는 대괄호 내의 문자 범주와 매칭한다.
 
-**Individual characters** 
+**개별 문자**
 
-Any character specified is considered part of the class (except the characters \\, [, ]).
+지정된 모든 문자는 클래스의 일부로 간주된다 (\\, [, ] 제외).
 
 .. code-block:: sql
 
-    -- [abc] : matches any character that is either a, b or c.
+    -- [abc] : a, b 또는 c인 모든 문자와 일치.
     SELECT ('a' REGEXP '[abc]');
     SELECT ('d' REGEXP '[abc]');
     
@@ -401,10 +401,10 @@ Any character specified is considered part of the class (except the characters \
     ==============================
       0
 
-**Ranges** 
+**범위**
 
-To represent a range of characters, use the dash character (-) between two valid characters. 
-For example, "[a-z]" matches any alphabet letter whereas "[0-9]" matches any single number.
+문자 범위를 나타내기 위해 유효한 두 문자 사이에 대시 문자(-)를 사용한다.
+예를 들어 "[a-z]"는 모든 알파벳 문자와 일치하지만 "[0-9]"는 단일 숫자와 일치한다.
 
 .. code-block:: sql
 
@@ -423,7 +423,7 @@ For example, "[a-z]" matches any alphabet letter whereas "[0-9]" matches any sin
 
 .. code-block:: sql
 
-    -- [0-9]+: matches number sequence in a string
+    -- [0-9]+: 문자열의 숫자 시퀀스와 일치
     SELECT REGEXP_SUBSTR ('aas200gjb', '[0-9]+');
     
 ::
@@ -442,42 +442,42 @@ For example, "[a-z]" matches any alphabet letter whereas "[0-9]" matches any sin
     ================================
       1
 
-**POSIX-based character classes**
+**POSIX 기반 문자 클래스**
 
-The POSIX-based character class (*[:classname:]*) defines categories of characters as shown below. [:d:], [:w:] and [:s:] are an extension to the ECMAScript grammar.
+POSIX 기반 문자 클래스(*[:classname:]*)는 아래와 같이 문자의 범주를 정의한다. [:d:], [:w:] 및 [:s:]는 ECMAScript 문법의 확장이다.
 
 +------------+-----------------------------------------+
 | Class      | Description                             |
 +============+=========================================+
-| [:alnum:]  | Alpha-numerical character               |
+| [:alnum:]  | 영숫자 문자                             |
 +------------+-----------------------------------------+
-| [:alpha:]  | Alphabetic character                    |
+| [:alpha:]  | 알파벳 문자                             |
 +------------+-----------------------------------------+
-| [:blank:]  | Blank character                         |
+| [:blank:]  | 빈 문자                                 |
 +------------+-----------------------------------------+
-| [:cntrl:]  | Control character                       |
+| [:cntrl:]  | 제어 문자                               |
 +------------+-----------------------------------------+
-| [:digit:]  | Decimal digit character                 |
+| [:digit:]  | 십진수 문자                             |
 +------------+-----------------------------------------+
-| [:graph:]  | Character with graphical representation |
+| [:graph:]  | 표시할 수 있는 문자                     |
 +------------+-----------------------------------------+
-| [:lower:]  | Lowercase letter                        |
+| [:lower:]  | 소문자                                  |
 +------------+-----------------------------------------+
-| [:print:]  | Printable character                     |
+| [:print:]  | 인쇄 가능한 문자                        |
 +------------+-----------------------------------------+
-| [:punct:]  | Punctuation mark character              |
+| [:punct:]  | 구두점 문자                             |
 +------------+-----------------------------------------+
-| [:space:]  | Whitespace character                    |
+| [:space:]  | 공백 문자                               |
 +------------+-----------------------------------------+
-| [:upper:]  | Uppercase letter                        |
+| [:upper:]  | 대문자                                  |
 +------------+-----------------------------------------+
-| [:xdigit:] | Hexadecimal digit character             |
+| [:xdigit:] | 16진수 문자                             |
 +------------+-----------------------------------------+
-| [:d:]      | Decimal digit character                 |
+| [:d:]      | 숫자 (0-9)                              |
 +------------+-----------------------------------------+
-| [:w:]      | Word character                          |
+| [:w:]      | 단어                                    |
 +------------+-----------------------------------------+
-| [:s:]      | Whitespace character                    |
+| [:s:]      | 공백                                    |
 +------------+-----------------------------------------+
 
 .. code-block:: sql
@@ -527,12 +527,12 @@ REGEXP, RLIKE
 
 .. code-block:: sql
 
-    -- [a-dX], [^a-dX] : matches any character that is (or is not, if ^ is used) either a, b, c, d or X.
-    SELECT ('aXbc' REGEXP '^[a-dXYZ]+');
+    -- [a-dX], [^a-dX] : a, b, c, d 또는 X인 모든 문자와 매칭됨.
+    SELECT ('aXbc' REGEXP '[a-dX]');
 
 ::
     
-    ('aXbc' regexp '^[a-dXYZ]+')
+    ('aXbc' regexp '[a-dX]')
     ==============================
     1
 
@@ -775,13 +775,13 @@ REGEXP_REPLACE
 
 .. function:: REGEXP_REPLACE (string, pattern_string, replacement_string [, position [, occurrence [, match_type]]])
 
-    The **REGEXP_REPLACE** function searches for a regular expression pattern, *pattern_string*, within a given character string, *string*, and replaces it with a character string, *replacement_string*. If **NULL** is specified as an argument, **NULL** is returned.
+    **REGEXP_REPLACE** 함수는 주어진 문자열 *string* 내에서 정규식 패턴 *pattern_string*을 검색하여 문자열 *replacement_string*으로 바꾼다. **NULL**이 인수로 지정된 경우 **NULL**을 반환한다.
 
     :param string: 입력 문자열을 지정한다. 값이 **NULL**\이면 **NULL**\을 반환한다
     :param pattern_string: 매칭을 수행할 정규식 패턴 문자열을 지정한다. 값이 **NULL**\이면 **NULL**\을 반환한다.
     :param replacement_string: Specifies the string to replace the matched string by *pattern_string*. 값이 **NULL**\이면 **NULL**\을 반환한다.
     :param position: 매칭을 수행할 *string*\의 위치를 지정한다. 값을 생략하면 기본값 1이 적용된다. 값이 음수이거나 0이면 에러를 반환한다. 값이 **NULL**\이면 **NULL**\을 반환한다
-    :param occurrence: 몇 번째 매칭을 사용할 지 지정한다. 값을 생략하면 기본값 1을 적용한다. If the value is ommitted, the default value 0 is applied. 값이 음수이면 에러를 반환한다. 값이 **NULL**\이면 **NULL**\을 반환한다.
+    :param occurrence: 몇 번째 매칭을 사용할 지 지정한다. 값을 생략하면 기본값 1을 적용한다. 만약 값을 생략하면 기본값 0이 적용된다. 값이 음수이면 에러를 반환한다. 값이 **NULL**\이면 **NULL**\을 반환한다.
     :param match_type: 함수의 매칭 옵션을 설정할 문자열을 지정한다.  값을 생략하면 기본값 'i'가 적용된다. 값이 'c' 또는 'i'가 아닌 경우 에러를 반환한다. 값이 **NULL**\이면 **NULL**\을 반환한다.
     :rtype: STRING
 

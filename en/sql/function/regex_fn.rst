@@ -526,12 +526,12 @@ The difference between **REGEXP** and **LIKE** are as follows:
 
 .. code-block:: sql
 
-    -- [a-dX], [^a-dX] : matches any character that is (or is not, if ^ is used) either a, b, c, d or X.
-    SELECT ('aXbc' REGEXP '^[a-dXYZ]+');
+    -- [a-dX] : matches any character that is either a, b, c, d or X.
+    SELECT ('aXbc' REGEXP '[a-dX]');
 
 ::
     
-    ('aXbc' regexp '^[a-dXYZ]+')
+    ('aXbc' regexp '[a-dX]')
     ==============================
     1
 

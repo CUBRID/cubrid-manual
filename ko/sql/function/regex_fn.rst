@@ -31,7 +31,7 @@ ECMAScript 정규 표현식 문법
   따라서 인자의 콜레이션을 고려하지 않고 ASCII 인코딩으로만 작동했다.
   
   \2. Henry Spencer 라이브러리는 POSIX의 *collating sequence* (*[.character.]*) 표현식을 지원했지만 더 이상 지원하지 않는다.
-  또한 *character equivalents* (*[=word=]*) 문법도 지워낳지 않는다. 이러한 문법을 가진 표현식이 주어지면 CUBRID는 에러를 반환한다.
+  또한 *character equivalents* (*[=word=]*) 문법도 지원하지 않는다. 이러한 문법을 가진 표현식이 주어지면 CUBRID는 에러를 반환한다.
   
   \3. Henry Spencer 라이브러리는 점 연산자 (.)로 행 종결자를 매치한다. 그러나 C++ <regex>는 매치되지 않는다.
 

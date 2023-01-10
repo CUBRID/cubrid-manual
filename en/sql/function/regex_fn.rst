@@ -12,9 +12,9 @@ The functions and operators described in this section performs regular expressio
 
 .. contents::
 
-.. _regex-ecmascript:
+.. _regex-syntax:
 
-ECMAScript Regular Expressions Pattern Syntax
+Regular Expressions Pattern Syntax
 ==============================================
 
 To implement regular expression support, CUBRID uses the standard C++ <regex> library, which conforms `the ECMA-262 RegExp grammar <http://ecma-international.org/ecma-262/5.1/#sec-15.10>`_.
@@ -25,7 +25,8 @@ The following sub-sections describes supported regular expression grammars with 
   **Compatibility Considerations**
 
   In the prior version of CUBRID 11, CUBRID used Henry Spencer’s implementation of regular expressions.
-  From the CUBRID 11, CUBRID uses C++ <regex> standard library to support regular expression functions and operators.
+  From the CUBRID 11.0, CUBRID removes the Henry Spencer library and uses C++ <regex> standard library to support regular expression functions and operators.
+  From the CUBRID 11.2, CUBRID has added the Google RE2 library. Either C++ <regex> or Google RE2 can be used by setting the system parameter.
 
   \1. The Henry Spencer’s implementation of regular expressions operates in byte-wise fashion. So the REGEXP and RLIKE were not multibyte safe, 
   they only worked as ASCII encoding without considering the collation of operands.
@@ -36,6 +37,14 @@ The following sub-sections describes supported regular expression grammars with 
   \3. The Spencer library matches line-terminator characters for the dot operator (.) But it does not.
   
   \4. The word-beginning and word-end boundary ([[:<:]] and [[:>:]]) doesn't support anymore. Instead, the word boundary notation (\\b) can be used.
+
+.. warning::
+
+  **C++ <regex> library caveats**
+
+  There is an issue with the C++ <regex> library that can cause excessive recursive calls when the input string is long or the regular expression pattern is complex.
+  Therefore, it is recommended to use Google RE2 instead of C++ <regex>. 
+  C++ <regex> is reserved for backwards compatibility and has been deprecated.
 
 .. note::
 

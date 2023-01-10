@@ -12,9 +12,9 @@
 
 .. contents::
 
-.. _regex-ecmascript:
+.. _regex-syntax:
 
-ECMAScript 정규 표현식 문법
+정규 표현식 문법
 ==============================================
 
 정규 표현식을 구현하기 위해 CUBRID는 `ECMA-262 정규식 문법 <http://ecma-international.org/ecma-262/5.1/#sec-15.10>`_ 을 따르는 C++ <regex> 표준 라이브러리르 사용한다.
@@ -25,17 +25,26 @@ ECMAScript 정규 표현식 문법
   **호환성 고려사항**
   
   CUBRID 11 이전 버전에서 CUBRID는 Henry Spencer의 정규식 구현을 사용하였다.
-  CUBRID 11 부터 CUBRID는 C++ <regex> 표준 라이브러리를 사용하여 정규식 함수와 연산자를 지원한다.
+  CUBRID 11.0 부터 CUBRID는 Henry Spencer 라이브러리를 제거하고 C++ <regex> 표준 라이브러리를 사용하여 정규식 함수와 연산자를 지원한다.
+  CUBRID 11.2 부터 CUBRID는 Google RE2 라이브러리를 추가로 지원한다. 시스템 파라미터를 설정하여 C++ <regex> 또는 Google RE2를 선택하여 사용할 수 있다.
 
   \1. Henry Spencer의 정규식 구현은 바이트 방식으로 작동한다. 따라서 REGEXP 및 RLIKE는 멀티바이트를 지원하지 않았다.
   따라서 인자의 콜레이션을 고려하지 않고 ASCII 인코딩으로만 작동했다.
   
   \2. Henry Spencer 라이브러리는 POSIX의 *collating sequence* (*[.character.]*) 표현식을 지원했지만 더 이상 지원하지 않는다.
-  또한 *character equivalents* (*[=word=]*) 문법도 지워낳지 않는다. 이러한 문법을 가진 표현식이 주어지면 CUBRID는 에러를 반환한다.
+  또한 *character equivalents* (*[=word=]*) 문법도 지원하지 않는다. 이러한 문법을 가진 표현식이 주어지면 CUBRID는 에러를 반환한다.
   
   \3. Henry Spencer 라이브러리는 점 연산자 (.)로 행 종결자를 매치한다. 그러나 C++ <regex>는 매치되지 않는다.
 
   \4. 단어-시작 경계 와 단어-끝 경계 (각각 [[:<:]] 와 [[:>:]]) 문법을 지원하지 않는다. 대신, 단어 경계 표기 (\\b) 를 사용할 수 있다.
+
+.. warning::
+
+  **C++ <regex> 라이브러리 주의사항**
+
+  입력 문자열이 길거나 정규 표현식 패턴이 복잡한 경우 C++ <regex> 라이브러리에서 과도한 재귀 호출이 발생할 수 있는 문제가 있다.
+  따라서 C++ <regex> 대신 Google RE2를 사용하는 것을 권장한다.
+  C++ <regex>는 하위 호환성을 지원하기 위해 남겨두었으며 이후 버전에서 제거될 예정이다. (deprecated)
 
 .. note::
 

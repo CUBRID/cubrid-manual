@@ -1,6 +1,6 @@
 
-:meta-keywords: cubrid sql, pl/cubsql
-:meta-description: This chapter describes PL/CUBSQL Spec.
+:meta-keywords: cubrid sql, pl/csql
+:meta-description: This chapter describes PL/CSQL Spec.
 
 *****************************
 Overview
@@ -9,8 +9,8 @@ Overview
 Stored Procedure 생성
 ======================
 
-PL/CUBSQL은 Stored Procedure, 즉 프로시저와 함수를 생성하는데 사용된다.
-다음 문법을 따르는 CREATE PROCEDURE 문과 CREATE FUNCTION 문의 AS (또는 IS) 키워드 뒤에 PL/CUBSQL 코드를 써서
+PL/CSQL은 Stored Procedure, 즉 프로시저와 함수를 생성하는데 사용된다.
+다음 문법을 따르는 CREATE PROCEDURE 문과 CREATE FUNCTION 문의 AS (또는 IS) 키워드 뒤에 PL/CSQL 코드를 써서
 현재 생성하고 있는 Stored Procedure의 동작을 기술한다.
 ::
 
@@ -21,7 +21,7 @@ PL/CUBSQL은 Stored Procedure, 즉 프로시저와 함수를 생성하는데 사
         CREATE [ OR REPLACE ] FUNCTION <identifier> [ ( <seq_of_parameters> ) ] RETURN <type_spec>
         { IS | AS } [ <seq_of_declare_specs> ] <body> ;
 
-위 문법에서 프로시저나 함수의 *body*\는 PL/CUBSQL 실행문들을 포함하고
+위 문법에서 프로시저나 함수의 *body*\는 PL/CSQL 실행문들을 포함하고
 그 앞의 선언부 *seq_of_declare_specs*\는 실행문들 안에서 사용될 변수, 상수, Exception 등을 선언한다.
 문법 요소들에 대한 자세한 내용은 :ref:`선언문 <decl>`\과 :ref:`실행문 <stmt>` 절을 참고한다.
 
@@ -32,7 +32,7 @@ Stored Procedure 안에서 실행되는 COMMIT, ROLLBACK 문의 의미는
 그 Stored Procedure가 Autonomous Transaction으로 설정되어 있는가 아닌가에 따라 달라진다.
 관련 내용은 :ref:`Autonomous Transaction 선언 <auto_tran>`\을 참고한다.
 
-다음은 PL/CUBSQL을 사용해서 작성한 프로시저와 함수의 예이다.
+다음은 PL/CSQL을 사용해서 작성한 프로시저와 함수의 예이다.
 
 .. code-block:: sql
 
@@ -93,7 +93,7 @@ Stored Procedure 안에서 실행되는 COMMIT, ROLLBACK 문의 의미는
 Static SQL
 ==================
 
-SQL 구문 중에 다음에 해당하는 것들을 PL/CUBSQL 실행문으로 직접 사용할 수 있으며,
+SQL 구문 중에 다음에 해당하는 것들을 PL/CSQL 실행문으로 직접 사용할 수 있으며,
 그러한 경우를 Static SQL 문이라고 부른다.
 
 * SELECT
@@ -182,14 +182,14 @@ Dynamic SQL은 다음 두 가지 경우에 필요하다.
 식별자, 예약어, 주석, 리터럴을 작성할 때 Static/Dynamic SQL 안에서는
 `CUBRID SQL의 작성 규칙 <https://www.cubrid.org/manual/ko/11.2/sql/syntax.html>`_\을 따른다.
 
-Static/Dynamic SQL 밖의 PL/CUBSQL 문 작성 규칙도 대체로 같은 규칙을 따르지만 다음 몇 가지 예외가 있다.
+Static/Dynamic SQL 밖의 PL/CSQL 문 작성 규칙도 대체로 같은 규칙을 따르지만 다음 몇 가지 예외가 있다.
 
-* CUBRID SQL과 달리 식별자에 '#'을 쓸 수 없다. 즉, 식별자는 영문 대소문자, 숫자, '_'(underscore)로만 이루어져야 한다.
+* CUBRID SQL과 달리 식별자에 '#'을 쓸 수 없다. 즉, 식별자는 영문 대소문자, 한글, 숫자, '_'(underscore)로만 이루어져야 한다.
 * 큰따옴표, 대괄호, 백틱 부호로 둘러싸더라도 식별자에 특수 문자를 쓸 수 없다.
   큰따옴표 등의 구분자를 제외하면 영문 대소문자, 숫자, '_'(underscore)만 사용 가능하다.
 * no_backslash_escapes 설정 파라미터값과 관계 없이 backslash 문자는 escape 문자로 사용되지 않는다.
 * oracle_style_empty_string 설정 파라미터값과 관계 없이 빈 문자열을 NULL과 동일시하지 않는다.
-* 비트열 리터럴을 사용할 수 없다. Static/Dynamic SQL 밖의 PL/CUBSQL 문에서는 비트열 타입을 지원하지 않는다.
+* 비트열 리터럴을 사용할 수 없다. Static/Dynamic SQL 밖의 PL/CSQL 문에서는 비트열 타입을 지원하지 않는다.
 
 .. rubric:: 허용되는 식별자
 
@@ -210,9 +210,9 @@ Static/Dynamic SQL 밖의 PL/CUBSQL 문 작성 규칙도 대체로 같은 규칙
     [a@b]           // [ ]로 둘러싸더라도 특수문자 불가
     select          // 예약어
 
-PL/CUBSQL의 예약어는 기존의 `CUBRID SQL의 예약어 <https://www.cubrid.org/manual/ko/11.2/sql/keyword.html#id1>`_\에
+PL/CSQL의 예약어는 기존의 `CUBRID SQL의 예약어 <https://www.cubrid.org/manual/ko/11.2/sql/keyword.html#id1>`_\에
 아래 표에 나열한 내용을 추가한 단어들이다.
-Static/Dynamic SQL 밖의 PL/CUBSQL 문에서 아래 표의 단어들을 변수, 상수, Exception, 내부 함수, 내부 프로시저
+Static/Dynamic SQL 밖의 PL/CSQL 문에서 아래 표의 단어들을 변수, 상수, Exception, 내부 함수, 내부 프로시저
 등의 이름을 나타내는 식별자로 쓸 수 없다.
 단, CUBRID SQL 문에서처럼 큰따옴표(" "), 대괄호([ ]), 백틱(\` \`)으로 감싸면 식별자로 쓸 수 있다.
 
@@ -291,14 +291,14 @@ Static/Dynamic SQL에서는 CUBRID SQL에서 제공하는 모든 데이터 타�
 CUBRID SQL의 데이터 타입 관련해서는
 `데이터 타입 <https://www.cubrid.org/manual/ko/11.2/sql/datatype_index.html>`_\을 참고한다.
 
-반면, Static/Dynamic SQL 밖의 PL/CUBSQL 문에서 사용할 수 있는 데이터 타입은
+반면, Static/Dynamic SQL 밖의 PL/CSQL 문에서 사용할 수 있는 데이터 타입은
 BOOLEAN, SYS_REFCURSOR와 CUBRID SQL에서 제공하는 데이터 타입 중 일부이다.
 
 * BOOLEAN: TRUE, FALSE, NULL을 값으로 가질 수 있다.
 * SYS_REFCURSOR: 커서 변수를 선언할 때 사용한다.
   커서 변수의 용도는 :ref:`OPEN-FOR <cursor_manipulation>` 문을 참고한다.
 
-CUBRID SQL에서 제공하는 데이터 타입 중 PL/CUBSQL에서 지원하는 것과 지원하지 않는 것은 다음과 같다.
+CUBRID SQL에서 제공하는 데이터 타입 중 PL/CSQL에서 지원하는 것과 지원하지 않는 것은 다음과 같다.
 
 +----------------+-------------------------------------+----------------------------------+
 | 유형           | 지원                                | 미지원                           |
@@ -334,12 +334,12 @@ CUBRID SQL에서 제공하는 데이터 타입 중 PL/CUBSQL에서 지원하는 
 |                |                                     | JSON                             |
 +----------------+-------------------------------------+----------------------------------+
 
-Static/Dynamic SQL 밖의 PL/CUBSQL문에서 문자열 타입 CHAR와 VARCHAR를 사용할 때,
+Static/Dynamic SQL 밖의 PL/CSQL문에서 문자열 타입 CHAR와 VARCHAR를 사용할 때,
 타 DBMS와의 호환성과 향후 확장성을 위해 길이를 지정하는 CHAR(n), VARCHAR(n) 형태를 문법적으로 지원한다.
 하지만, 현재까지의 구현에서는 프로그램 동작 중에는 길이 지정 부분 '(n)'가 무시된다.
 예를 들어, 아래 예제에서 VARCHAR(40)은 VARCHAR라고 쓴 것과 동일하게 동작한다.
 
-현재, PL/CUBSQL은 사용자 정의 타입을 지원하지 않는다.
+현재, PL/CSQL은 사용자 정의 타입을 지원하지 않는다.
 
 .. code-block:: sql
 
@@ -360,7 +360,7 @@ Static/Dynamic SQL에서는 CUBRID SQL에서 제공하는 모든 연산자와 �
 (참고: `연산자와 함수 <https://www.cubrid.org/manual/ko/11.2/sql/function/index.html>`_\,
 `구문/타입 관련 파라미터 <https://www.cubrid.org/manual/ko/11.2/admin/config.html#stmt-type-parameters>`_)
 
-반면, Static/Dynamic SQL 밖의 PL/CUBSQL 문에서는 CUBRID SQL에서 제공하는 모든 연산자와 함수를
+반면, Static/Dynamic SQL 밖의 PL/CSQL 문에서는 CUBRID SQL에서 제공하는 모든 연산자와 함수를
 대부분 동일하게 쓸 수 있으나 다음의 몇 가지 예외가 있다.
 
 * 지원하지 않는 타입(BIT (VARYING), ENUM, BLOB/CLOB, JSON)의 값을 인자나 결과로 갖는 연산자와 함수
@@ -376,7 +376,7 @@ Static/Dynamic SQL에서는 CUBRID SQL에서 제공하는 모든 연산자와 �
 * 서버 설정 파라메터 plus_as_concat 값이 yes일지라도 +가 문자열 병합 연산자로 쓰이지 않음
 
 다음 예제는 문자열 함수 locate과 substr, 그리고 문자열 병합 연산자 ||를 Static/Dynamic SQL 밖의
-PL/CUBSQL 실행문에서도 사용할 수 있음을 보여준다.
+PL/CSQL 실행문에서도 사용할 수 있음을 보여준다.
 
 .. code-block:: sql
 
@@ -403,7 +403,7 @@ PL/CUBSQL 실행문에서도 사용할 수 있음을 보여준다.
 시스템 Exception
 ======================
 
-PL/CUBSQL은 다른 많은 프로그래밍 언어와 마찬가지로 Exception 핸들러를 통한 에러 처리를 지원한다
+PL/CSQL은 다른 많은 프로그래밍 언어와 마찬가지로 Exception 핸들러를 통한 에러 처리를 지원한다
 (참고: :ref:`Block 실행문 <block_stmt>`).
 사용자가 프로그램 선언부에서 자신만의 Exception을 정의할 수 있지만,
 주요 예외 상황에 대해서는 다음과 같이 시스템 Exception들이 미리 정의되어 있다.
@@ -413,8 +413,6 @@ PL/CUBSQL은 다른 많은 프로그래밍 언어와 마찬가지로 Exception �
 +---------------------+------------------------------------------------------------------+
 | CURSOR_ALREADY_OPEN | 이미 열려 있는 커서에 다시 열기 시도                             |
 +---------------------+------------------------------------------------------------------+
-| DUP_VAL_ON_INDEX    | Unique 조건이 걸려 있는 테이블 컬럼에 중복값 저장 시도           |
-+---------------------+------------------------------------------------------------------+
 | INVALID_CURSOR      | 허용되지 않는 커서 조작 (예: 열려 있지 않은 커서를 닫으려고 함)  |
 +---------------------+------------------------------------------------------------------+
 | LOGIN_DENIED        | 유효하지 않는 사용자 이름이나 암호로 DBMS에 로그인 시도          |
@@ -423,13 +421,13 @@ PL/CUBSQL은 다른 많은 프로그래밍 언어와 마찬가지로 Exception �
 +---------------------+------------------------------------------------------------------+
 | PROGRAM_ERROR       | 시스템 내부 에러                                                 |
 +---------------------+------------------------------------------------------------------+
-| ROWTYPE_MISMATCH    | 조회 결과와 결과를 담을 호스트 변수 사이에 타입이 호환되지 않음  |
-+---------------------+------------------------------------------------------------------+
 | STORAGE_ERROR       | 메모리 부족으로 인한 할당 실패                                   |
++---------------------+------------------------------------------------------------------+
+| SQL_ERROR           | Static/Dynamic SQL 실행 실패                                     |
 +---------------------+------------------------------------------------------------------+
 | TOO_MANY_ROWS       | SELECT INTO 문 실행 결과 2개 이상의 Row가 반환됨                 |
 +---------------------+------------------------------------------------------------------+
-| VALUE_ERROR         | 명시적/암묵적 형변환 실패                                        |
+| VALUE_ERROR         | 잘못된 값에 의한 에러                                            |
 +---------------------+------------------------------------------------------------------+
 | ZERO_DIVIDE         | 0으로 나누기 시도                                                |
 +---------------------+------------------------------------------------------------------+
@@ -459,7 +457,7 @@ PL/CUBSQL은 다른 많은 프로그래밍 언어와 마찬가지로 Exception �
 
 Static/Dynamic SQL 문의 동작은 각종 `서버 설정 <https://www.cubrid.org/manual/ko/11.2/admin/config.html#id2>`_\의 영향을 받는다.
 
-그러나, Static/Dynamic SQL 밖에서 PL/CUBSQL 문의 동작은 서버 설정 파라미터 적용에 몇 가지 예외가 있다.
+그러나, Static/Dynamic SQL 밖에서 PL/CSQL 문의 동작은 서버 설정 파라미터 적용에 몇 가지 예외가 있다.
 
 * no_backslash_escapes 설정 파라미터값과 관계 없이 backslash 문자는 escape 문자로 사용되지 않는다.
 * oracle_style_empty_string 설정 파라미터값과 관계 없이 빈 문자열을 NULL과 동일시하지 않는다.
@@ -702,7 +700,7 @@ Stored Procedure가 종료될 때까지 닫히지 않고 열린 채로 남아 �
 * *declare_spec*: 변수, 상수, Exception, 커서, Autonomous Transaction, 내부 프로시저, 내부 함수 선언 중 하나
 * *statement*: 아래 실행문 절 참조
 * *handler*: OR로 연결된 하나 이상의 Exception 이름들에 대하여 실행할 실행문들을 지정한다.
-* *exception_name*: OTHER인 경우 아직까지 매치되지 않은 모든 Exception에 매치된다. 아닌 경우는 시스템 Exception이거나 사용자 정의 Exception을 나타낸다.
+* *exception_name*: OTHER인 경우 아직까지 매치되지 않은 모든 Exception에 매치되며 OR로 다른 exception 이름과 연결할 수 없다.  OTHER가 아닌 경우는 시스템 Exception이거나 사용자 정의 Exception을 나타낸다.
 
 함수 *body*\에서는 RETURN 절에 지정된 타입에 맞는 값을 반환해야 한다.
 함수가 *body* 끝에 도달할 때까지 RETURN 문을 만나지 못하면 에러가 발생한다.
@@ -797,7 +795,7 @@ Autonomous Transaction으로 선언되지 않은 스토어드 프로시저/함�
 실행문
 ******************
 
-현재 PL/CUBSQL은 다음과 같이 14가지 종류의 실행문을 제공한다.
+현재 PL/CSQL은 다음과 같이 14가지 종류의 실행문을 제공한다.
 ::
 
     <statement> ::=
@@ -1136,9 +1134,11 @@ IF
 
 일반적인 프로그래밍 언어가 제공하는 If-Then-Else 문을 제공한다.
 
+.. _loop:
+
 LOOP
 ====
-PL/CUBSQL이 제공하는 루프문은 아래와 같이 여섯 가지 형태가 있다.
+PL/CSQL이 제공하는 루프문은 아래와 같이 여섯 가지 형태가 있다.
 앞의 세 가지는 일반적인 프로그래밍 언어에서 제공하는 루프문과 유사하다.
 뒤의 세 가지는 SELECT 문의 조회 결과를 순회하는 용도로 사용한다.
 ::
@@ -1160,7 +1160,7 @@ PL/CUBSQL이 제공하는 루프문은 아래와 같이 여섯 가지 형태가 
     <for_dynamic_sql> ::= <record> IN ( EXECUTE IMMEDIATE <dynamic_sql> [ <using_clause> ] )
 
 * *label_declaration*: 오직 루프문 시작 부분에서만 라벨 선언을 할 수 있다. 이 라벨은 루프 바디 안 쪽의 CONTINUE 문이나 EXIT 문이 분기 기준이 될 루프를 지정하는데 사용된다.
-* *for-iter-loop* 형태의 루프에서 *lower_bound*, *upper_bound*, *step*\은 모두 INTEGER 타입을 갖는다. 루프 변수 *identifier*\는 루프 바디 안에서 INTEGER 타입 변수로 사용될 수 있다.
+* *for-iter-loop* 형태의 루프에서 *lower_bound*, *upper_bound*, *step*\은 모두 INTEGER 타입을 갖는다. step은 1보다 크거나 같아야 한다. REVERSE가 지정되지 않은 경우, *identifier*\는 *lower_bound*\로 초기화 된 후 *upper_bound*\보다 작거나 같다는 조건을 만족하면 루프 바디를 한번 실행하고 그 이후는 *step* 만큼 증가한 값이 *upper_bound*\보다 작거나 같다는 조건을 만족하는 한 반복한다.  REVERSE가 지정된 경우에는, *identifier*\는 *upper_bound*\로 초기화 된 후 *lower_bound*\보다 크거나 같다는 조건을 만족하면 루프 바디를 한번 실행하고 그 이후는 *step*\만큼 감소한 값이 *lower_bound*\보다 크거나 같다는 조건을 만족하는 한 반복한다. 루프 변수 *identifier*\는 루프 바디 안에서 INTEGER 타입 변수로 사용될 수 있다.
 * *for-cursor-loop*, *for-static-sql-loop*, *for-dynamic-sql-loop* 형태의 FOR 루프는 *record* IN 다음에 기술하는 SELECT 문의 조회 결과들을 순회하기 위해 사용된다. 매 iteration 마다 조회 결과가 한 row 씩 *record*\에 할당된 상태로 루프 바디가 실행된다. 이 때, 결과 row의 각 컬럼들은 루프 바디 안에서 *record*. *column* 모양으로 참조할 수 있다.
 * *for-dynamic-sql-loop* 문 안에서의 *using_clause*\는 EXECUTE IMMEDIATE 문에서와는 달리 OUT 키워드를 지정할 수 없다.
 
@@ -1208,8 +1208,8 @@ PL/CUBSQL이 제공하는 루프문은 아래와 같이 여섯 가지 형태가 
 
 .. _case_stmt:
 
-CASE
-====
+CASE 실행문
+===========
 CASE 문은 여러 개의 조건을 순차적으로 검사해서 가장 처음 만족하는 조건에 연관되어 있는 실행문들을 실행한다.
 
 ::
@@ -1261,7 +1261,7 @@ CASE 문은 두 가지 형태가 있다.
 ******************
 표현식
 ******************
-PL/CUBSQL의 표현식의 종류는 다음 문법으로 요약할 수 있다.
+PL/CSQL의 표현식의 종류는 다음 문법으로 요약할 수 있다.
 ::
 
     <expression> ::=
@@ -1277,7 +1277,7 @@ PL/CUBSQL의 표현식의 종류는 다음 문법으로 요약할 수 있다.
         | <case_expression>                         # CASE 표현식
         | <expression> IS [ NOT ] NULL              # IS NULL 표현식
         | <expression> [ NOT ] BETWEEN <expression> AND <expression>        # BETWEEN 표현식
-        | <expression> [ NOT ] IN <expression> [ , <expression>, ... ]      # IN 표현식
+        | <expression> [ NOT ] IN ( <expression> [ , <expression>, ... ] )  # IN 표현식
         | <expression> [ NOT ] LIKE <expression> [ ESCAPE <expression> ]    # LIKE 표현식
 
     <literal> ::=
@@ -1296,11 +1296,13 @@ PL/CUBSQL의 표현식의 종류는 다음 문법으로 요약할 수 있다.
     <cursor_attribute> ::= { %ISOPEN | %FOUND | %NOTFOUND | %ROWCOUNT }
 
     <binary_op> ::=
-          AND | OR
-        | = | != | <> | ^= | ~= | <= | >= | < | >
-        | * | / | + | - | **
+          AND | XOR | OR
+        | = | <=> | != | <> | <= | >= | < | >
+        | * | / | + | -
+        | >> | << | & | ^ | '|'
+        | SETEQ | SETNEQ | SUPERSET | SUBSET | SUPERSETEQ | SUBSETEQ
         | ||
-    <unary_op> ::= + | - | NOT
+    <unary_op> ::= + | - | NOT | ~
 
     <case_expression> ::=
           CASE <expression> <case_expression_when_part>... [ ELSE <expression> ] END [ CASE ]
@@ -1309,17 +1311,16 @@ PL/CUBSQL의 표현식의 종류는 다음 문법으로 요약할 수 있다.
 
 리터럴
 =================
-리터럴에는 날짜/시간(DATE, TIME, DATETIME, TIMESTAMP), 숫자, 문자열, 컬렉션, NULL, TRUE, FALSE 값이 있다.
-비트열을 사용할 수 없다는 점을 제외하고
-`CUBRID SQL 리터럴 <https://www.cubrid.org/manual/ko/11.2/sql/literal.html#>`_\과 동일하다.
+리터럴에는 날짜/시간(DATE, TIME, TIMESTAMP, DATETIME, TIMESTAMPTZ, TIMESTAMPLTZ, DATETIMETZ, DATETIMELTZ), 숫자, 문자열, 컬렉션, NULL, TRUE, FALSE 값이 있다.
+비트열을 사용할 수 없다는 점을 제외하고 `CUBRID SQL 리터럴 <https://www.cubrid.org/manual/ko/11.2/sql/literal.html#>`_\과 동일하다.
 
 식별자
 =================
-Static/Dynamic SQL 밖의 PL/CUBSQL 문에서 사용할 수 있는 식별자에는 다음 세 가지 종류가 있다.
+Static/Dynamic SQL 밖의 PL/CSQL 문에서 사용할 수 있는 식별자에는 다음 세 가지 종류가 있다.
 
 * 선언부에서 선언된 변수, 상수, 커서, Exception, 내부 프로시저/함수
 * 프로시저/함수의 파라메터
-* 암묵적으로 선언된 For 루프의 iterator
+* 암묵적으로 선언된 :ref:`For 루프<loop>`\의 iterator - integer와 record
 
 명시적 혹은 암묵적 선언 없이 식별자를 사용하면 컴파일 에러가 발생한다.
 
@@ -1345,13 +1346,11 @@ SQL%ROWCOUNT는 Static SQL을 실행한 직후에 결과 크기를 나타내는 
 이항 연산, 단항 연산, 괄호
 ==========================
 
-PL/CUBSQL은 다음과 같이 연산자 우선 순위를 갖는다.
+PL/CSQL은 다음과 같이 연산자 우선 순위를 갖는다.
 
 +--------------------------------------------------------------------+-------------------------------------+
 | 연산자                                                             | 연산                                |
 +====================================================================+=====================================+
-| \*\*                                                               | 거듭제곱                            |
-+--------------------------------------------------------------------+-------------------------------------+
 | +, -, ~                                                            | 부호, 비트역 (단항)                 |
 +--------------------------------------------------------------------+-------------------------------------+
 | \*, /, DIV, MOD                                                    | 곱하기, 나누기, 정수 나누기, 나머지 |
@@ -1366,8 +1365,15 @@ PL/CUBSQL은 다음과 같이 연산자 우선 순위를 갖는다.
 +--------------------------------------------------------------------+-------------------------------------+
 | \|                                                                 | 비트합                              |
 +--------------------------------------------------------------------+-------------------------------------+
+| IS NULL                                                            | NULL 테스트                         |
++--------------------------------------------------------------------+-------------------------------------+
+| LIKE                                                               | 문자열 패턴 테스트                  |
++--------------------------------------------------------------------+-------------------------------------+
+| BETWEEN                                                            | 값 범위 테스트                      |
++--------------------------------------------------------------------+-------------------------------------+
+| IN                                                                 | 값 포함 테스트                      |
++--------------------------------------------------------------------+-------------------------------------+
 | | =, <=>, <, >, <=, >=, <>, !=,                                    | 비교                                |
-| | IS NULL, LIKE, BETWEEN, IN,                                      |                                     |
 | | SETEQ, SETNEQ, SUPERSET, SUBSET,                                 |                                     |
 | | SUPERSETEQ, SUBSETEQ                                             |                                     |
 +--------------------------------------------------------------------+-------------------------------------+
@@ -1393,7 +1399,7 @@ PL/CUBSQL은 다음과 같이 연산자 우선 순위를 갖는다.
 레코드 필드 참조
 =================
 
-PL/CUBSQL에서는 명시적인 레코드 타입과 레코드 변수 선언을 지원하지 않지만,
+PL/CSQL에서는 명시적인 레코드 타입과 레코드 변수 선언을 지원하지 않지만,
 FOR 문에서 SELECT 결과를 순회하기 위해 암묵적으로 선언되는 레코드 변수를 사용할 수 있다.
 즉, FOR 문 iterator에 SELECT 결과 컬럼 이름을 덧붙여 해당 컬럼값을 레코드 필드 참조하듯이 사용할 수 있다.
 
@@ -1421,7 +1427,7 @@ CASE 표현식
 
 CASE 표현식은 여러 개의 조건을 순차적으로 검사해서 가장 처음 만족하는 조건에 연관되어 있는 값을 갖는다.
 
-CASE 표현식은 :ref:`CASE 문 <case_stmt>`\(Statement)과 마찬가지로 CASE 키워드 직후에 표현식을 갖는 형태와 갖지 않는 형태가 있다.
+CASE 표현식은 :ref:`CASE 실행문 <case_stmt>`\(Statement)과 마찬가지로 CASE 키워드 직후에 표현식을 갖는 형태와 갖지 않는 형태가 있다.
 
 * CASE 키워드 직후에 표현식을 갖는 형태에서는 우선 이 최초 표현식을 계산한 다음, WHEN 절들의 표현식을 하나씩 차례로 계산해서 최초 표현식과 일치하는 값을 찾고, 해당 THEN 절의 표현식을 계산해서 CASE문의 최종값으로 한다. 최초 표현식은 단 한번 계산된다.
 * CASE 키워드 직후에 표현식을 갖지 않는 형태에서는 CASE 키워드 이후 여러 개의 WHEN 절의 표현식은 BOOLEAN 타입을 가져야 한다. 이들 표현식을 하나씩 차례로 계산하다가 처음으로 TRUE 값이 되는 표현식이 발견되면 해당 THEN 절의 표현식을 계산해서 CASE문의 최종값으로 한다.

@@ -25,7 +25,7 @@ The following sub-sections describes supported regular expression grammars with 
   **Compatibility Considerations**
 
   In the prior version of CUBRID 11, CUBRID used Henry Spencer’s implementation of regular expressions.
-  From the CUBRID 12, CUBRID uses C++ <regex> standard library to support regular expression functions and operators.
+  From the CUBRID 11, CUBRID uses C++ <regex> standard library to support regular expression functions and operators.
 
   \1. The Henry Spencer’s implementation of regular expressions operates in byte-wise fashion. So the REGEXP and RLIKE were not multibyte safe, 
   they only worked as ASCII encoding without considering the collation of operands.
@@ -38,6 +38,7 @@ The following sub-sections describes supported regular expression grammars with 
   \4. The word-beginning and word-end boundary ([[:<:]] and [[:>:]]) doesn't support anymore. Instead, the word boundary notation (\\b) can be used.
 
 .. note::
+
   **Multibyte Character Comparision Considerations**
 
   C++ <regex> performs multibyte comparision by C++ <locale> standard dependent on system-supplied locales. Therefore, system locale should be installed on your system for locale-sensitive functions.
@@ -248,7 +249,7 @@ Groups allow to apply quantifiers to a sequence of characters (instead of a sing
       'hello! cubrid!'
 
 When a group creates a backreference, the characters that represent the subpattern in a string are stored as a submatch. Each submatch is numbered after the order of appearance of their opening parenthesis (the first submatch is number 1, the second is number 2, and so on...).
-These submatches can be used in the regular expression itself to specify that the entire subpattern should appear again somewhere else (see \int in the special characters list). They can also be used in the replacement string or retrieved in the match_results object filled by some regex operations.
+These submatches can be used in the regular expression itself to specify that the entire subpattern should appear again somewhere else (see \int in the special characters list). They can also be used in the replacement string in the REGEXP_REPLACE function.
 
 .. code-block:: sql
 
@@ -284,7 +285,7 @@ Assertions are conditions that do not consume characters in a string: they do no
 +-----------------+-----------------------------------------------------------------------------------------------------------------------+
 | \\B             | The previous and next characters are both word characters or both are non-word characters.                            |
 +-----------------+-----------------------------------------------------------------------------------------------------------------------+
-| (?=subpattern)  | Positive lookahead. The characters following the charcter must match subpattern, but no characters are consumed.      |
+| (?=subpattern)  | Positive lookahead. The characters following the character must match subpattern, but no characters are consumed.     |
 +-----------------+-----------------------------------------------------------------------------------------------------------------------+
 | (?!subpattern)  | Negative lookahead. The characters following the assertion must not match subpattern, but no characters are consumed. |
 +-----------------+-----------------------------------------------------------------------------------------------------------------------+
@@ -525,12 +526,12 @@ The difference between **REGEXP** and **LIKE** are as follows:
 
 .. code-block:: sql
 
-    -- [a-dX], [^a-dX] : matches any character that is (or is not, if ^ is used) either a, b, c, d or X.
-    SELECT ('aXbc' REGEXP '^[a-dXYZ]+');
+    -- [a-dX] : matches any character that is either a, b, c, d or X.
+    SELECT ('aXbc' REGEXP '[a-dX]');
 
 ::
     
-    ('aXbc' regexp '^[a-dXYZ]+')
+    ('aXbc' regexp '[a-dX]')
     ==============================
     1
 
@@ -565,8 +566,8 @@ REGEXP_COUNT
 
     :param string: Specifies the original string. If the value is **NULL**, **NULL** is returned.
     :param pattern_string: Specifies the regular expression pattern string to be searched. If the value is **NULL**, **NULL** is returned.
-    :param position: Specifies the position of the *string* to start the search. If the value is ommitted, the default value 1 is applied. If the value is negative or zero, an error will be returned. If the value is **NULL**, **NULL** is returned
-    :param match_type: Specifies the string to change default matching behavior of the function. If the value is ommitted, the default value 'i' is applied. If the value is other than 'c' or 'i', an error will be returned. If the value is **NULL**, **NULL** is returned.
+    :param position: Specifies the position of the *string* to start the search. If the value is omitted, the default value 1 is applied. If the value is negative or zero, an error will be returned. If the value is **NULL**, **NULL** is returned
+    :param match_type: Specifies the string to change default matching behavior of the function. If the value is omitted, the default value 'i' is applied. If the value is other than 'c' or 'i', an error will be returned. If the value is **NULL**, **NULL** is returned.
     :rtype: INT
 
 .. code-block:: sql
@@ -639,14 +640,14 @@ REGEXP_INSTR
 
 .. function:: REGEXP_INSTR (string, pattern_string [, position [, occurrence [, return_option [, match_type]]]])
 
-    The **REGEXP_INSTR** function returns the beginning or ending position by searching for a regular expression pattern, *pattern_string*, within a given character string, *string*, and replaces it with a character string. If **NULL** is specified as an argument, **NULL** is returned.
+    The **REGEXP_INSTR** function returns the beginning or ending position by searching for a regular expression pattern, *pattern_string*, within a given character string, *string*. If **NULL** is specified as an argument, **NULL** is returned.
 
     :param string: Specifies the original string. If the value is **NULL**, **NULL** is returned.
     :param pattern_string: Specifies the regular expression pattern string to be searched. If the value is **NULL**, **NULL** is returned.
-    :param position: Specifies the position of the *string* to start the search. If the value is ommitted, the default value 1 is applied. If the value is negative or zero, an error will be returned. If the value is **NULL**, **NULL** is returned
-    :param occurrence: Specifies the occurrence of replacement. If the value is ommitted, the default value 1 is applied. If the value is negative, an error will be returned. If the value is **NULL**, **NULL** is returned.
-    :param return_option: Specifies whether to return the position of the match. If the value is 0, the position of the first character of the match is returned. If the value is 1, the position of the character following the match is returned. If the value is ommitted, the default value 0 is applied. If the value is other than 0 or 1, an error will be returned. If the value is **NULL**, **NULL** is returned.
-    :param match_type: Specifies the string to change default matching behavior of the function. If the value is ommitted, the default value 'i' is applied. If the value is other than 'c' or 'i', an error will be returned. If the value is **NULL**, **NULL** is returned.
+    :param position: Specifies the position of the *string* to start the search. If the value is omitted, the default value 1 is applied. If the value is negative or zero, an error will be returned. If the value is **NULL**, **NULL** is returned
+    :param occurrence: Specifies the occurrence of the match to use. If the value is omitted, the default value 1 is applied. If the value is negative, an error will be returned. If the value is **NULL**, **NULL** is returned.
+    :param return_option: Specifies whether to return the position of the start or end of the matched string. If the value is 0, the position of the first character of the match is returned. If the value is 0, the starting position of the matched string is returned. If the value is 1, the end position of the matched string is returned. If the value is other than 0 or 1, an error will be returned. If the value is **NULL**, **NULL** is returned.
+    :param match_type: Specifies the string to change default matching behavior of the function. If the value is omitted, the default value 'i' is applied. If the value is other than 'c' or 'i', an error will be returned. If the value is **NULL**, **NULL** is returned.
     :rtype: INT
 
 .. code-block:: sql
@@ -716,7 +717,7 @@ REGEXP_LIKE
 
     :param string: Specifies the original string. If the value is **NULL**, **NULL** is returned.
     :param pattern_string: Specifies the regular expression pattern string to be searched. If the value is **NULL**, **NULL** is returned.
-    :param match_type: Specifies the string to change default matching behavior of the function. If the value is ommitted, the default value 'i' is applied. If the value is other than 'c' or 'i', an error will be returned. If the value is **NULL**, **NULL** is returned.
+    :param match_type: Specifies the string to change default matching behavior of the function. If the value is omitted, the default value 'i' is applied. If the value is other than 'c' or 'i', an error will be returned. If the value is **NULL**, **NULL** is returned.
     :rtype: INT
 
 .. code-block:: sql
@@ -778,9 +779,9 @@ REGEXP_REPLACE
     :param string: Specifies the original string. If the value is **NULL**, **NULL** is returned.
     :param pattern_string: Specifies the regular expression pattern string to be searched. If the value is **NULL**, **NULL** is returned.
     :param replacement_string: Specifies the string to replace the matched string by *pattern_string*. If the value is **NULL**, **NULL** is returned.
-    :param position: Specifies the position of the *string* to start the search. If the value is ommitted, the default value 1 is applied. If the value is negative or zero, an error will be returned. If the value is **NULL**, **NULL** is returned
-    :param occurrence: Specifies the occurrence of replacement. If the value is ommitted, the default value 0 is applied. If the value is negative, an error will be returned. If the value is **NULL**, **NULL** is returned.
-    :param match_type: Specifies the string to change default matching behavior of the function. If the value is ommitted, the default value 'i' is applied. If the value is other than 'c' or 'i', an error will be returned. If the value is **NULL**, **NULL** is returned.
+    :param position: Specifies the position of the *string* to start the search. If the value is omitted, the default value 1 is applied. If the value is negative or zero, an error will be returned. If the value is **NULL**, **NULL** is returned
+    :param occurrence: Specifies the occurrence of the pattern to use. If the value is omitted, the default value 0 is applied. If the value is negative, an error will be returned. If the value is **NULL**, **NULL** is returned.
+    :param match_type: Specifies the string to change default matching behavior of the function. If the value is omitted, the default value 'i' is applied. If the value is other than 'c' or 'i', an error will be returned. If the value is **NULL**, **NULL** is returned.
     :rtype: STRING
 
 .. code-block:: sql
@@ -856,9 +857,9 @@ REGEXP_SUBSTR
 
     :param string: Specifies the original string. If the value is **NULL**, **NULL** is returned.
     :param pattern_string: Specifies the regular expression pattern string to be searched. If the value is **NULL**, **NULL** is returned.
-    :param position: Specifies the position of the *string* to start the search. If the value is ommitted, the default value 1 is applied. If the value is negative or zero, an error will be returned. If the value is **NULL**, **NULL** is returned
-    :param occurrence: Specifies the occurrence of replacement. If the value is ommitted, the default value 0 is applied. If the value is negative, an error will be returned. If the value is **NULL**, **NULL** is returned.
-    :param match_type: Specifies the string to change default matching behavior of the function. If the value is ommitted, the default value 'i' is applied. If the value is other than 'c' or 'i', an error will be returned. If the value is **NULL**, **NULL** is returned.
+    :param position: Specifies the position of the *string* to start the search. If the value is omitted, the default value 1 is applied. If the value is negative or zero, an error will be returned. If the value is **NULL**, **NULL** is returned
+    :param occurrence: Specifies the occurrence of the pattern to use. If the value is omitted, the default value 0 is applied. If the value is negative, an error will be returned. If the value is **NULL**, **NULL** is returned.
+    :param match_type: Specifies the string to change default matching behavior of the function. If the value is omitted, the default value 'i' is applied. If the value is other than 'c' or 'i', an error will be returned. If the value is **NULL**, **NULL** is returned.
     :rtype: STRING
 
 .. code-block:: sql

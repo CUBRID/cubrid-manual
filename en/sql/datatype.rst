@@ -1140,7 +1140,7 @@ When the length of a character string exceeds *n*, they may be truncated in the 
 
 **CHAR** (*n*) and **CHARACTER** (*n*) are used interchangeably.
 
-.. note:: In the earlier versions of CUBRID 9.0, *n* represents bite length, not the number of characters.
+.. note:: In the earlier versions of CUBRID 9.0, *n* represents byte length, not the number of characters.
 
 *   *n* is an integer between 1 and 268,435,455 (256M).
 
@@ -1166,7 +1166,7 @@ When the length of a character string exceeds *n*, they may be truncated in the 
 
 **VARCHAR** (*n*), **CHARACTER, VARYING** (*n*), and **CHAR VARYING** (*n*) are used interchangeably.
 
-.. note:: In the earlier versions of CUBRID 9.0, *n* represents bite length, not the number of characters.
+.. note:: In the earlier versions of CUBRID 9.0, *n* represents byte length, not the number of characters.
 
 *   **STRING** is the same as the **VARCHAR** (maximum length).
 *   *n* is an integer between 1 and 1,073,741,823 (1G).

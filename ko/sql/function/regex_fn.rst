@@ -15,7 +15,7 @@
 .. _regex-syntax:
 
 정규 표현식 문법
-==============================================
+=======
 
 정규 표현식을 구현하기 위해 CUBRID는 `ECMA-262 정규식 문법 <http://ecma-international.org/ecma-262/5.1/#sec-15.10>`_ 을 따르는 C++ <regex> 표준 라이브러리르 사용한다.
 다음 하위 섹션에서 지원되는 정규식 문법을 예시와 함께 설명한다.
@@ -549,7 +549,8 @@ REGEXP, RLIKE
 
     -- SELECT 리스트에서 REGEXP를 사용하는 경우 괄호로 묶어야 한다.
     -- 단, WHERE 절에서는 괄호가 필요하지 않다.
-    -- BINARY와 함께 사요하는 경우를 제외하고 대소문자를 구분하지 않는다.
+    -- BINARY와 함께 사용하는 경우를 제외하고 대소문자를 구분하지 않는다.
+
     SELECT name FROM athlete where name REGEXP '^[a-d]';
 
 ::

@@ -871,7 +871,7 @@ cci_connect_with_url
     
     *   **login_timeout** | **loginTimeout**: 데이터베이스에 로그인 시 타임아웃 값 (단위: msec). 이 시간을 초과하면 **CCI_ER_LOGIN_TIMEOUT** (-38) 에러를 반환한다. 기본값은 **30,000**\ (30초)이다. 이 값이 0인 경우 무한 대기를 의미한다. 이 값은 최초 접속 이후 내부적인 재접속이 발생하는 경우에도 적용된다.
 
-    *   **query_timeout** | **queryTimeout**: :c:func:`cci_prepare`, :c:func:`cci_execute` 등의 함수를 호출했을 때 이 값으로 설정한 시간이 지나면 서버로 보낸 질의 요청에 대한 취소 메시지를 보내고 호출된 함수는 **CCI_ER_QUERY_TIMEOUT** (-39) 에러를 반환한다. 질의를 수행한 함수에서 타임아웃 발생 시 함수의 반환 값은 **disconnect_on_query_timeout**\ 의 설정에 따라 달라질 수 있다. 자세한 내용은 다음의 **disconnect_on_query_timeout**\ 을 참고한다. 
+    *   **query_timeout** | **queryTimeout**: :c:func:`cci_prepare`, :c:func:`cci_execute` 등의 함수를 호출했을 때 이 값으로 설정한 시간이 지나면 서버로 보낸 질의 요청에 대한 취소 메시지를 보내고 호출된 함수는 **CCI_ER_QUERY_TIMEOUT** (-39) 에러를 반환한다. 기본값은 0이며, 0인 경우 무한 대기를 의미한다. 질의를 수행한 함수에서 타임아웃 발생 시 함수의 반환 값은 **disconnect_on_query_timeout**\ 의 설정에 따라 달라질 수 있다. 자세한 내용은 다음의 **disconnect_on_query_timeout**\ 을 참고한다. 
     
         .. note:: :c:func:`cci_execute`\ 에 CCI_EXEC_QUERY_ALL 플래그를 설정하거나 :c:func:`cci_execute_batch` 또는 :c:func:`cci_execute_array`\ 를 사용하여 여러 개의 질의를 한 번에 실행하는 경우, 질의 타임 아웃은 질의 하나에 대해 적용되는 것이 아니라 함수 하나에 대해 적용된다. 즉, 함수 시작 이후 타임아웃이 발생하면 함수 수행이 중단된다.
 
@@ -1258,14 +1258,16 @@ cci_execute_array
     :param req_handle: (IN) prepared statement의 요청 핸들
     :param query_result: (OUT) 질의 결과
     :param err_buf: (OUT) 데이터베이스 에러 버퍼
-    :return: 수행된 질의의 개수(성공), 에러 코드(실패)
+    :return:
+        * 성공 : 수행된 질의의 개수(질의 수행 성공/실패 여부와 상관없음)
+        * 실패 : 에러 코드
     
-        *   **CCI_ER_REQ_HANDLE**
-        *   **CCI_ER_BIND**
-        *   **CCI_ER_DBMS**
-        *   **CCI_ER_COMMUNICATION**
-        *   **CCI_ER_QUERY_TIMEOUT**
-        *   **CCI_ER_LOGIN_TIMEOUT**
+            *   **CCI_ER_REQ_HANDLE**
+            *   **CCI_ER_BIND**
+            *   **CCI_ER_DBMS**
+            *   **CCI_ER_COMMUNICATION**
+            *   **CCI_ER_QUERY_TIMEOUT**
+            *   **CCI_ER_LOGIN_TIMEOUT**
     
     데이터를 바인딩하기 위해서는 :c:func:`cci_bind_param_array_size` 함수를 호출하여 배열의 크기를 지정한 후, :c:func:`cci_bind_param_array` 함수를 이용하여 각각의 값을 변수에 바인딩하고, :c:func:`cci_execute_array` 함수를 호출하여 질의를 실행한다. 질의 결과는 T_CCI_QUERY_RESULT 구조체의 배열에 저장된다.
 
@@ -1380,15 +1382,17 @@ cci_execute_batch
     :param sql_stmt: (IN) SQL 문 array
     :param query_result: (OUT) *sql_stmt* 의 결과
     :param err_buf: (OUT) 데이터베이스 에러 버퍼
-    :return: 수행된 질의의 개수(성공), 에러 코드(실패)
-    
-        *   **CCI_ER_CON_HANDLE**
-        *   **CCI_ER_DBMS**
-        *   **CCI_ER_COMMUNICATION**
-        *   **CCI_ER_NO_MORE_MEMORY**
-        *   **CCI_ER_CONNECT**
-        *   **CCI_ER_QUERY_TIMEOUT**
-        *   **CCI_ER_LOGIN_TIMEOUT**
+    :return:
+        * 성공 : 수행된 질의의 개수(질의 수행 성공/실패 여부와 상관없음)
+        * 실패 : 에러 코드
+         
+            *   **CCI_ER_CON_HANDLE**
+            *   **CCI_ER_DBMS**
+            *   **CCI_ER_COMMUNICATION**
+            *   **CCI_ER_NO_MORE_MEMORY**
+            *   **CCI_ER_CONNECT**
+            *   **CCI_ER_QUERY_TIMEOUT**
+            *   **CCI_ER_LOGIN_TIMEOUT**
     
     인자로 지정된 *num_sql_stmt* 개의 *sql_stmt* 를 수행하며, *query_result* 변수로 수행된 질의 개수를 반환한다. 각각의 질의에 대한 결과는 :c:macro:`CCI_QUERY_RESULT_RESULT`, :c:macro:`CCI_QUERY_RESULT_ERR_NO`, :c:macro:`CCI_QUERY_RESULT_ERR_MSG`, :c:macro:`CCI_QUERY_RESULT_STMT_TYPE`\ 매크로를 이용할 수 있다. 전체 매크로에 대한 요약 설명은 :c:func:`cci_execute_array`\ 를 참고한다.
     

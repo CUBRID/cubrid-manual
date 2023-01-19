@@ -604,7 +604,7 @@ Exception 선언
         WHEN negative_argument THEN
             put_line('error: negative argument ' || n);
             return -1;
-        WHEN negative_argument THEN
+        WHEN too_big_argument THEN
             put_line('error: too big argument ' || n);
             return -2;
     END;
@@ -692,7 +692,7 @@ Stored Procedure가 종료될 때까지 닫히지 않고 열린 채로 남아 �
     <seq_of_statements> ::= <statement> ; [ <statement> ; ... ]
     <seq_of_handlers> ::= <handler> [ <handler> ... ]
     <handler> ::= WHEN <exception_name> [ OR <exeption_name> OR ... ] THEN <seq_of_statements>
-    <exception_name> ::= OTHER | identifier
+    <exception_name> ::= OTHERS | identifier
 
 * *parameter*: 파라메터는 IN, IN OUT, OUT 세 가지 경우로 선언할 수 있다.
 * *type_spec*: :ref:`데이터 타입 <types>` 절에서 설명한 시스템 제공 타입
@@ -700,7 +700,7 @@ Stored Procedure가 종료될 때까지 닫히지 않고 열린 채로 남아 �
 * *declare_spec*: 변수, 상수, Exception, 커서, Autonomous Transaction, 내부 프로시저, 내부 함수 선언 중 하나
 * *statement*: 아래 실행문 절 참조
 * *handler*: OR로 연결된 하나 이상의 Exception 이름들에 대하여 실행할 실행문들을 지정한다.
-* *exception_name*: OTHER인 경우 아직까지 매치되지 않은 모든 Exception에 매치되며 OR로 다른 exception 이름과 연결할 수 없다.  OTHER가 아닌 경우는 시스템 Exception이거나 사용자 정의 Exception을 나타낸다.
+* *exception_name*: OTHERS인 경우 아직까지 매치되지 않은 모든 Exception에 매치되며 OR로 다른 exception 이름과 연결할 수 없다.  OTHERS가 아닌 경우는 시스템 Exception이거나 사용자 정의 Exception을 나타낸다.
 
 함수 *body*\에서는 RETURN 절에 지정된 타입에 맞는 값을 반환해야 한다.
 함수가 *body* 끝에 도달할 때까지 RETURN 문을 만나지 못하면 에러가 발생한다.
@@ -830,13 +830,13 @@ BLOCK은 프로시저/함수와 마찬가지로 예외처리 구조를 가질 �
     <seq_of_statements> ::= <statement> ; [ <statement> ; ... ]
     <seq_of_handlers> ::= <handler> [ <handler> ... ]
     <handler> ::= WHEN <exception_name> [ OR <exeption_name> OR ... ] THEN <seq_of_statements>
-    <exception_name> ::= OTHER | identifier
+    <exception_name> ::= OTHERS | identifier
 
 
 * *body*: 필수적으로 하나 이상의 실행문과 선택적으로 몇 개의 Exception 핸들러로 구성된다.
 * *declare_spec*: 변수, 상수, Exception, 커서, Autonomous Transaction, 내부 프로시저, 내부 함수 선언 중 하나
 * *handler*: OR로 연결된 하나 이상의 Exception 이름들에 대하여 실행할 실행문들을 지정한다.
-* *exception_name*: OTHER인 경우 아직까지 매치되지 않은 모든 Exception에 매치된다. 아닌 경우는 시스템 Exception이거나 사용자 정의 Exception을 나타낸다.
+* *exception_name*: OTHERS인 경우 아직까지 매치되지 않은 모든 Exception에 매치된다. 아닌 경우는 시스템 Exception이거나 사용자 정의 Exception을 나타낸다.
 
 BLOCK 안에서 선언된 아이템들은 그 BLOCK을 벗어나면 참조할 수 없다.
 BLOCK에서 선언된 아이템이 바깥 scope에서 선언된 다른 아이템과 이름이 겹칠 경우

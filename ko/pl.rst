@@ -37,31 +37,36 @@ Stored Procedure 안에서 실행되는 COMMIT, ROLLBACK 문의 의미는
 .. code-block:: sql
 
     CREATE PROCEDURE insert_athlete(
-        a_name VARCHAR,
-        a_gender VARCHAR,
-        a_nation_code VARCHAR,
-        a_event VARCHAR)
+        p_name VARCHAR,
+        p_gender VARCHAR,
+        p_nation_code VARCHAR,
+        p_event VARCHAR)
     AS
         PRAGMA AUTONOMOUS_TRANSACTION;
     BEGIN
         INSERT INTO athlete (name, gender, nation_code, event)
-            VALUES (a_name, a_gender, a_nation_code, a_event);
+        VALUES (p_name, p_gender, p_nation_code, p_event);
+
         COMMIT;
     EXCEPTION
-        WHEN OTHERS THEN ROLLBACK;
+        WHEN OTHERS THEN
+            ROLLBACK;
     END;
 
 .. code-block:: sql
 
-    CREATE FUNCTION delete_athlete(c INTEGER) RETURN INTEGER
+    CREATE PROCEDURE delete_athlete(c INTEGER)
     AS
         n_deleted INTEGER;
     BEGIN
-        DELETE FROM athlete WHERE athlete.code = c;
-        n_deleted := SQL%ROWCOUNT;   // number of deleted rows
-        RETURN n_deleted;
+        DELETE FROM athlete
+        WHERE code = c;
+
+        n_deleted := SQL%ROWCOUNT;   -- number of deleted rows
+        put_line(n_deleted || ' rows deleted');
     EXCEPTION
-        WHEN OTHERS THEN RETURN -1;
+        WHEN OTHERS THEN
+            put_line('exception occurred');
     END;
 
 .. code-block:: sql
@@ -114,34 +119,40 @@ SQL 구문의 문법과 의미는 CUBRID 매뉴얼 중
 
 .. code-block:: sql
 
-    CREATE FUNCTION get_medal_count(name VARCHAR, medal CHAR) RETURN INTEGER
+    CREATE FUNCTION get_medal_count(p_name VARCHAR, p_medal CHAR) RETURN INTEGER
     AS
         n INTEGER;
     BEGIN
         -- 일반 실행문으로서의 SELECT 문
-        SELECT COUNT(medal) INTO n FROM athlete a, record r
-            WHERE a.name = name AND a.code = r.athlete_code AND r.medal = medal;
+        SELECT COUNT(medal)
+        INTO n
+        FROM athlete a, record r
+        WHERE a.code = r.athlete_code   /* 조인 조건 */
+        AND a.name = p_name AND r.medal = p_medal;    /* 필터 조건 */
 
         RETURN n;
     END;
 
 .. code-block:: sql
 
-    CREATE PROCEDURE athlete_history(name VARCHAR)
+    CREATE PROCEDURE athlete_history(p_name VARCHAR)
     AS
     BEGIN
         -- For 루프 안에서의 SELECT 문
-        FOR r IN (SELECT host_year, score FROM history WHERE athlete = name) LOOP
+        FOR r IN (SELECT host_year, score FROM history WHERE athlete = p_name) LOOP
             put_line('host_year: ' || r.host_year || ' score: ' || r.score);
         END LOOP;
     END;
 
 .. code-block:: sql
 
-    CREATE PROCEDURE athlete_history(name VARCHAR)
+    CREATE PROCEDURE athlete_history(p_name VARCHAR)
     AS
         -- 커서 정의에서의 SELECT 문
-        CURSOR my_cursor IS SELECT host_year, score FROM history WHERE athlete = name;
+        CURSOR my_cursor IS
+        SELECT host_year, score
+        FROM history
+        WHERE athlete = p_name;
     BEGIN
         FOR r IN my_cursor LOOP
             put_line('host_year: ' || r.host_year || ' score: ' || r.score);
@@ -166,14 +177,14 @@ Dynamic SQL은 다음 두 가지 경우에 필요하다.
 
 .. code-block:: sql
 
-    CREATE PROCEDURE collect_athlete_history(name VARCHAR)
+    CREATE PROCEDURE collect_athlete_history(p_name VARCHAR)
     AS
-        new_table VARCHAR := name || '_history';
+        new_table VARCHAR := p_name || '_history';
     BEGIN
         EXECUTE IMMEDIATE 'drop table if exists ' || new_table;
         EXECUTE IMMEDIATE 'create table ' || new_table || ' like history';
         EXECUTE IMMEDIATE 'insert into ' || new_table || ' select * from history where athlete = ?'
-            USING name;
+        USING p_name;
     END;
 
 작성 규칙
@@ -343,11 +354,15 @@ Static/Dynamic SQL 밖의 PL/CSQL문에서 문자열 타입 CHAR와 VARCHAR를 �
 
 .. code-block:: sql
 
-    CREATE FUNCTION get_athlete_name(code INTEGER) RETURN VARCHAR(40)
+    CREATE FUNCTION get_athlete_name(p_code INTEGER) RETURN VARCHAR(40)
     AS
         name VARCHAR(40);
     BEGIN
-        SELECT a.name INTO name FROM athlete a WHERE a.code = code;
+        SELECT a.name
+        INTO name
+        FROM athlete a
+        WHERE a.code = p_code;
+
         RETURN name;
     END;
 
@@ -434,19 +449,23 @@ PL/CSQL은 다른 많은 프로그래밍 언어와 마찬가지로 Exception 핸
 
 .. code-block:: sql
 
-    CREATE FUNCTION athlete_code(name VARCHAR) RETURN integer
+    CREATE FUNCTION athlete_code(p_name VARCHAR) RETURN integer
     AS
         c INTEGER;
     BEGIN
         -- SELECT INTO 문은 단 하나, 그리고 오직 하나의 Row를 결과로 가져야 함
-        SELECT code INTO c FROM athlete a WHERE a.name = name;
+        SELECT code
+        INTO c
+        FROM athlete a
+        WHERE a.name = p_name;
+
         RETURN c;
     EXCEPTION
         WHEN NO_DATA_FOUND THEN
-            put_line('error: no rows found for athlete name ' || name);
+            put_line('error: no rows found for athlete name ' || p_name);
             RETURN -1;
         WHEN TOO_MANY_ROWS THEN
-            put_line('error: more than one rows found for athlete name ' || name);
+            put_line('error: more than one rows found for athlete name ' || p_name);
             RETURN -1;
     END;
 
@@ -630,17 +649,17 @@ Exception 선언
 
 .. code-block:: sql
 
-    CREATE PROCEDURE test_proc(name VARCHAR, year INTEGER)
+    CREATE PROCEDURE test_proc(p_name VARCHAR, p_year INTEGER)
     AS
-
-        CURSOR my_cursor(a VARCHAR, y INTEGER) IS SELECT host_year, score FROM history
-            WHERE athlete = a and host_year >= y;
+        CURSOR my_cursor(a VARCHAR, y INTEGER) IS
+        SELECT host_year, score
+        FROM history
+        WHERE athlete = a AND host_year >= y;
 
         target_year INT;
         target_score VARCHAR(10);
     BEGIN
-
-        OPEN my_cursor(name, year);
+        OPEN my_cursor(p_name, p_year);
         LOOP
             FETCH my_cursor INTO target_year, target_score;
             EXIT WHEN my_cursor%NOTFOUND;
@@ -658,14 +677,14 @@ Stored Procedure가 종료될 때까지 닫히지 않고 열린 채로 남아 �
 
 .. code-block:: sql
 
-    CREATE PROCEDURE test_proc(name VARCHAR, year INTEGER)
+    CREATE PROCEDURE test_proc(p_name VARCHAR, p_year INTEGER)
     AS
-
-        CURSOR my_cursor(a VARCHAR, y INTEGER) IS SELECT host_year, score FROM history
-            WHERE athlete = a and host_year >= y;
+        CURSOR my_cursor(a VARCHAR, y INTEGER) IS
+        SELECT host_year, score
+        FROM history
+        WHERE athlete = a AND host_year >= y;
     BEGIN
-
-        FOR r IN my_cursor(name, year) LOOP
+        FOR r IN my_cursor(p_name, p_year) LOOP
             put_line('host_year: ' || r.host_year || ' score: ' || r.score);
         END LOOP;
     END;
@@ -712,7 +731,6 @@ Stored Procedure가 종료될 때까지 닫히지 않고 열린 채로 남아 �
 
     CREATE FUNCTION choose(m INT, n INT) RETURN INT
     AS
-
         invalid_argument EXCEPTION;
 
         -- 내부 함수 선언
@@ -907,17 +925,18 @@ SELECT, INSERT, UPDATE, DELETE, MERGE, REPLACE, COMMIT, ROLLBACK 문은 프로�
 
 .. code-block:: sql
 
-    CREATE PROCEDURE test_proc(name VARCHAR, year INTEGER)
+    CREATE PROCEDURE test_proc(p_name VARCHAR, p_year INTEGER)
     AS
-
-        CURSOR my_cursor(a VARCHAR, y INTEGER) IS SELECT host_year, score FROM history
-            WHERE athlete = a and host_year >= y;
+        CURSOR my_cursor(a VARCHAR, y INTEGER) IS
+        SELECT host_year, score
+        FROM history
+        WHERE athlete = a AND host_year >= y;
 
         target_year INT;
         target_score VARCHAR(10);
     BEGIN
 
-        OPEN my_cursor(name, year);
+        OPEN my_cursor(p_name, p_year);
         LOOP
             FETCH my_cursor INTO target_year, target_score;
             EXIT WHEN my_cursor%NOTFOUND;
@@ -931,9 +950,8 @@ SYS_REFCURSOR 변수에 연결하고 그 SELECT 문의 결과를 조회해 오�
 
 .. code-block:: sql
 
-    CREATE PROCEDURE test_proc(name VARCHAR)
+    CREATE PROCEDURE test_proc(p_name VARCHAR)
     AS
-
         my_refcursor SYS_REFCURSOR;
 
         target_year INT;
@@ -946,10 +964,8 @@ SYS_REFCURSOR 변수에 연결하고 그 SELECT 문의 결과를 조회해 오�
             OPEN refcursor FOR SELECT host_year, score FROM history WHERE athlete = athlete_name;
             rc := refcursor;
         END;
-
     BEGIN
-
-        open_refcursor(name, my_refcursor);
+        open_refcursor(p_name, my_refcursor);
         LOOP
             FETCH my_refcursor INTO target_year, target_score;
             EXIT WHEN my_refcursor%NOTFOUND;
@@ -984,14 +1000,14 @@ INTO 절을 써서 SELECT 문의 조회 결과를 프로그램의 변수나 OUT 
 
 .. code-block:: sql
 
-    CREATE PROCEDURE collect_athlete_history(name VARCHAR)
+    CREATE PROCEDURE collect_athlete_history(p_name VARCHAR)
     AS
-        new_table VARCHAR := name || '_history';
+        new_table VARCHAR := p_name || '_history';
     BEGIN
         EXECUTE IMMEDIATE 'drop table if exists ' || new_table;
         EXECUTE IMMEDIATE 'create table ' || new_table || ' like history';
         EXECUTE IMMEDIATE 'insert into ' || new_table || ' select * from history where athlete = ?'
-            USING name;
+        USING p_name;
     END;
 
 대입문
@@ -1057,11 +1073,15 @@ NULL
 .. code-block:: sql
 
     CASE medal
-        WHEN 'G' THEN put_line('Gold');
-        WHEN 'S' THEN put_line('Silver');
-        WHEN 'B' THEN put_line('Bronze');
-        ELSE NULL;
-    END;
+        WHEN 'G' THEN
+            put_line('Gold');
+        WHEN 'S' THEN
+            put_line('Silver');
+        WHEN 'B' THEN
+            put_line('Bronze');
+        ELSE
+            NULL;
+    END CASE;
 
 RAISE
 =====
@@ -1186,9 +1206,12 @@ PL/CSQL이 제공하는 루프문은 아래와 같이 여섯 가지 형태가 �
 
 .. code-block:: sql
 
-    CREATE PROCEDURE athlete_history(name VARCHAR)
+    CREATE PROCEDURE athlete_history(p_name VARCHAR)
     AS
-        CURSOR my_cursor IS SELECT host_year, score FROM history WHERE athlete = name;
+        CURSOR my_cursor IS
+        SELECT host_year, score
+        FROM history
+        WHERE athlete = p_name;
     BEGIN
         -- For-Cursor Loop
         FOR r IN my_cursor LOOP
@@ -1196,12 +1219,12 @@ PL/CSQL이 제공하는 루프문은 아래와 같이 여섯 가지 형태가 �
         END LOOP;
 
         -- For-Select Loop
-        FOR r IN (SELECT host_year, score FROM history WHERE athlete = name) LOOP
+        FOR r IN (SELECT host_year, score FROM history WHERE athlete = p_name) LOOP
             put_line('host_year: ' || r.host_year || ' score: ' || r.score);
         END LOOP;
 
         -- For-Dynamic-SQL Loop
-        FOR r IN (EXECUTE IMMEDIATE 'SELECT host_year, score FROM history WHERE athlete = ?' USING name) LOOP
+        FOR r IN (EXECUTE IMMEDIATE 'SELECT host_year, score FROM history WHERE athlete = ?' USING p_name) LOOP
             put_line('host_year: ' || r.host_year || ' score: ' || r.score);
         END LOOP;
     END;
@@ -1215,8 +1238,8 @@ CASE 문은 여러 개의 조건을 순차적으로 검사해서 가장 처음 �
 ::
 
     <case_statement> ::=
-          CASE <expression> { WHEN <expression> THEN <seq_of_statements> }... [ ELSE <seq_of_statements> ] END [ CASE ]
-        | CASE { WHEN <expression> THEN <seq_of_statements> }... [ ELSE <seq_of_statements> ] END [ CASE ]
+          CASE <expression> { WHEN <expression> THEN <seq_of_statements> }... [ ELSE <seq_of_statements> ] END CASE
+        | CASE { WHEN <expression> THEN <seq_of_statements> }... [ ELSE <seq_of_statements> ] END CASE
 
 CASE 문은 두 가지 형태가 있다.
 
@@ -1238,7 +1261,7 @@ CASE 문은 두 가지 형태가 있다.
                 put_line('FALSE');
             ELSE
                 put_line('NULL');
-        END;
+        END CASE;
     END;
 
 다음은 유사한 동작을 하는 두 번째 형태의 CASE 문 예제이다.
@@ -1255,7 +1278,7 @@ CASE 문은 두 가지 형태가 있다.
                 put_line('FALSE');
             WHEN b IS NULL THEN
                 put_line('NULL');
-        END;
+        END CASE;
     END;
 
 ******************
@@ -1305,8 +1328,8 @@ PL/CSQL의 표현식의 종류는 다음 문법으로 요약할 수 있다.
     <unary_op> ::= + | - | NOT | ~
 
     <case_expression> ::=
-          CASE <expression> <case_expression_when_part>... [ ELSE <expression> ] END [ CASE ]
-        | CASE <case_expression_when_part>... [ ELSE <expression> ] END [ CASE ]
+          CASE <expression> <case_expression_when_part>... [ ELSE <expression> ] END
+        | CASE <case_expression_when_part>... [ ELSE <expression> ] END
     <case_expression_when_part> ::= WHEN <expression> THEN <expression>
 
 리터럴
@@ -1405,11 +1428,14 @@ FOR 문에서 SELECT 결과를 순회하기 위해 암묵적으로 선언되는 
 
 .. code-block:: sql
 
-    CREATE PROCEDURE athlete_history(name VARCHAR)
+    CREATE PROCEDURE athlete_history(p_name VARCHAR)
     AS
-        CURSOR my_cursor IS SELECT host_year, score FROM history WHERE athlete = name;
+        CURSOR my_cursor IS
+        SELECT host_year, score
+        FROM history
+        WHERE athlete = p_name;
     BEGIN
-        FOR r IN my_cursor LOOP                                                 -- r: 암묵적으로 선언됨
+        FOR r IN my_cursor LOOP     -- r: 암묵적으로 선언됨
             put_line('host_year: ' || r.host_year || ' score: ' || r.score);    -- r.<column-name>
         END LOOP;
     END;

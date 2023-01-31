@@ -573,19 +573,19 @@ The following are parameters related to the database server. The type and value 
 
 **use_user_hosts** 
 
-    **use_user_hosts** is a system paramter to use to select the host look up between **hostname** and **IP address**, required by the CUBRID service from the services below. The default value is **OFF**.
+    **use_user_hosts** is a system parameter that is used to select the host look up between **hostname** and **IP address**, required by the CUBRID service from the services below. The default value is **OFF**.
 
     * The host/IP address look-up library that **OS** provides. (**glibc**, Linux)
     * **The host/IP address look-up library** that **CUBRID** provides.
 
     use_user_hosts=off (default)
 
-    * Looks up between IP address and hostname using by system library.
+    * Looks up between IP address and hostname using the system library.
     * In general, provides /etc/hosts host look-up, DNS Query commonly
 
     use_user_hosts=on
 
-    * Looks up between IP address and hostname using by CUBRID host look-up library.
+    * Looks up between IP address and hostname using CUBRID host look-up library.
     * Uses **$CUBRID/conf/cubrid_hosts.conf** file to look up between IP address and hostname.
     * executes regardless of the read permission of /etc/hosts, /etc/nsswitch.conf file.
 
@@ -625,7 +625,7 @@ The following are parameters related to the database server. The type and value 
 
 .. warning::
 
-    You must change $CUBRID/conf/hosts.conf after terminating all CUBRID processes, and **the changes will be applied after restarting.** In addition, you must write included **localhost** and **'hostname'** (The output of hostname command by among Linux commands) in the hosts.conf.
+    You must change $CUBRID/conf/hosts.conf after terminating all CUBRID processes, and **the changes will be applied after restarting.** In addition, you must write including **localhost** and **'hostname'** (The output of hostname command by among Linux commands) in the hosts.conf.
 
 .. _memory-parameters:
 

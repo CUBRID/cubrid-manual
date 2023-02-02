@@ -15,7 +15,7 @@
 .. _regex-syntax:
 
 정규 표현식 문법
-==============================================
+=======
 
 정규 표현식을 구현하기 위해 CUBRID는 Google RE2 라이브러리와 C++ <regex> 표준 라이브러리를 사용한다.
 **regexp_engine** 시스템 파라미터를 설정하여 정규 표현식 라이브러리를 선택할 수 있고 Google RE2 라이브러리를 기본으로 사용한다.
@@ -920,7 +920,8 @@ REGEXP, RLIKE
 
     -- SELECT 리스트에서 REGEXP를 사용하는 경우 괄호로 묶어야 한다.
     -- 단, WHERE 절에서는 괄호가 필요하지 않다.
-    -- BINARY와 함께 사요하는 경우를 제외하고 대소문자를 구분하지 않는다.
+    -- BINARY와 함께 사용하는 경우를 제외하고 대소문자를 구분하지 않는다.
+
     SELECT name FROM athlete where name REGEXP '^[a-d]';
 
 ::

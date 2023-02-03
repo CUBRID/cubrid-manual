@@ -15,7 +15,7 @@
 .. _regex-syntax:
 
 정규 표현식 문법
-=======
+================
 
 정규 표현식을 구현하기 위해 CUBRID는 Google RE2 라이브러리와 C++ <regex> 표준 라이브러리를 사용한다.
 **regexp_engine** 시스템 파라미터를 설정하여 정규 표현식 라이브러리를 선택할 수 있고 Google RE2 라이브러리를 기본으로 사용한다.
@@ -26,9 +26,9 @@
 
   **호환성 고려사항**
   
-  - CUBRID 11 이전 버전에서 CUBRID는 Henry Spencer의 정규식 구현을 사용하였다.  
-  - CUBRID 11.0 부터 CUBRID는 Henry Spencer 라이브러리를 제거하고 C++ <regex> 표준 라이브러리를 사용하여 정규식 함수와 연산자를 지원한다.  
-  - CUBRID 11.2 부터 CUBRID는 Google RE2 라이브러리를 추가로 지원한다. 시스템 파라미터를 설정하여 C++ <regex> 또는 Google RE2를 선택하여 사용할 수 있다.  
+  - CUBRID 11 이전 버전에서 CUBRID는 Henry Spencer의 정규식 구현을 사용하였다.
+  - CUBRID 11.0 부터 CUBRID는 Henry Spencer 라이브러리를 제거하고 C++ <regex> 표준 라이브러리를 사용하여 정규식 함수와 연산자를 지원한다.
+  - CUBRID 11.2 부터 CUBRID는 Google RE2 라이브러리를 추가로 지원한다. 시스템 파라미터를 설정하여 C++ <regex> 또는 Google RE2를 선택하여 사용할 수 있다.
 
   \1. Henry Spencer의 정규식 구현은 바이트 방식으로 작동한다. 따라서 REGEXP 및 RLIKE는 멀티바이트를 지원하지 않았다.
   따라서 인자의 콜레이션을 고려하지 않고 ASCII 인코딩으로만 작동했다.

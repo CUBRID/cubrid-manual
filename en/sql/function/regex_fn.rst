@@ -27,8 +27,8 @@ The following sub-sections describes supported regular expression grammars with 
   **Compatibility Considerations**
 
   - In the prior version of CUBRID 11, CUBRID used Henry Spencer’s implementation of regular expressions.
-  - From the CUBRID 11.0, CUBRID removes the Henry Spencer library and uses C++ <regex> standard library to support regular expression functions and operators.    
-  - From the CUBRID 11.2, CUBRID has added the Google RE2 library. Either C++ <regex> or Google RE2 can be used by setting the system parameter.  
+  - From the CUBRID 11.0, CUBRID removes the Henry Spencer library and uses C++ <regex> standard library to support regular expression functions and operators.
+  - From the CUBRID 11.2, CUBRID has added the Google RE2 library. Either C++ <regex> or Google RE2 can be used by setting the system parameter.
 
   \1. The Henry Spencer’s implementation of regular expressions operates in byte-wise fashion. So the REGEXP and RLIKE were not multibyte safe, 
   they only worked as ASCII encoding without considering the collation of operands.

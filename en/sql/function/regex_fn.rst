@@ -533,6 +533,7 @@ The POSIX-based character class (*[:classname:]*) defines categories of characte
 
 .. code-block:: sql
 
+    -- ;set regexp_engine=cppstd
     SET NAMES utf8 COLLATE utf8_ko_cs;
     SELECT REGEXP_REPLACE ('가나다 가나 가나다라', '\b[[:alpha:]]{2}\b', '#');
     
@@ -879,7 +880,6 @@ For example, to match Korean characters, you can use **\\p{Hangul}**.
 +-------------------------+
 | Zanabazar_Square        |
 +-------------------------+
-
 
 .. code-block:: sql
 

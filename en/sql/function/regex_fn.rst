@@ -36,7 +36,7 @@ The following sub-sections describes supported regular expression grammars with 
   \2. The Spencer library supports the POSIX *collating sequence* expressions (*[.character.]*). But it does not support anymore.
   Also, *character equivalents* (*[=word=]*) does not support. CUBRID occurs an error when these collating element syntax is given.
   
-  \3. The Spencer library matches line-terminator characters for the dot operator (.) But it does not.
+  \3. The Spencer library matches line-terminator characters for the dot operator (.). But it does not.
   
   \4. The word-beginning and word-end boundary ([[:<:]] and [[:>:]]) doesn't support anymore. Instead, the word boundary notation (\\b) can be used.
 
@@ -57,8 +57,7 @@ The following sub-sections describes supported regular expression grammars with 
 Special Pattern Characters
 ---------------------------
 
-Special pattern characters are characters (or sequences of characters) that have a special meaning when they appear in a regular expression pattern, 
-either to represent a character that is difficult to express in a string, or to represent a category of characters. 
+Special pattern characters are characters (or sequences of characters) that have a special meaning when they appear in a regular expression pattern, either to represent a character that is difficult to express in a string, or to represent a category of characters. 
 Each of these special pattern characters is matched in a string against a single character (unless a quantifier specifies otherwise).
 
 +----------------+------------------------------------------------------------------------------------------------------------------------------+
@@ -149,7 +148,7 @@ For details on **no_backslash_escapes**, see :ref:`escape-characters`.
     line' regexp 'new
     line')
     =====================================
-      1
+      0
 
 Quantifiers
 ------------
@@ -255,7 +254,7 @@ Groups allow to apply quantifiers to a sequence of characters (instead of a sing
 .. code-block:: sql
 
     -- The captured group can be referenced with $int
-    SELECT REGEXP_REPLACE ('hello cubrid','([[:alnum:]]+)','$1!');
+    SELECT REGEXP_REPLACE ('hello cubrid','\([[:alnum:]]+\)','$1!');
 
 ::
 
@@ -397,7 +396,7 @@ Character classes
 Character classes syntax matches one of characters or a category of characters within square brackets.
 
 Individual characters
-~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
 
 Any character specified is considered part of the class (except the characters \\, [, ]).
 
@@ -464,7 +463,11 @@ For example, "[a-z]" matches any alphabet letter whereas "[0-9]" matches any sin
 POSIX-based character classes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The POSIX-based character class (*[:classname:]*) defines categories of characters as shown below. [:d:], [:w:] and [:s:] are an extension to the ECMAScript grammar.
+The POSIX-based character class (*[:classname:]*) defines categories of characters as shown below.
+
+.. note::
+
+    Google RE2 matches only ASCII characters, and C++ <regex> matches Unicode characters as well.
 
 +------------+-----------------------------------------+
 | Class      | Description                             |
@@ -493,11 +496,17 @@ The POSIX-based character class (*[:classname:]*) defines categories of characte
 +------------+-----------------------------------------+
 | [:xdigit:] | Hexadecimal digit character             |
 +------------+-----------------------------------------+
-| [:d:]      | Decimal digit character                 |
+
+[:d:], [:w:] and [:s:] are an extension to the ECMAScript grammar. C++ <regex> 에서만 사용할 수 있다.
+
 +------------+-----------------------------------------+
-| [:w:]      | Word character                          |
+| 클래스     | 설명                                    |
++============+=========================================+
+| [:d:]      | 숫자 (0-9)                              |
 +------------+-----------------------------------------+
-| [:s:]      | Whitespace character                    |
+| [:w:]      | 단어                                    |
++------------+-----------------------------------------+
+| [:s:]      | 공백                                    |
 +------------+-----------------------------------------+
 
 .. code-block:: sql
@@ -506,7 +515,7 @@ The POSIX-based character class (*[:classname:]*) defines categories of characte
     
 ::
 
-    regexp_substr('Samseong-ro 86-gil, Gangnam-gu, Seoul 06178', '[[:digit:]]{5}')
+    regexp_substr('Samseong-ro 86-gil, Gangnam-gu, Seoul 06178', '[[:digit:]]\{5\}')
     ================================
       '06178'
 
@@ -517,7 +526,7 @@ The POSIX-based character class (*[:classname:]*) defines categories of characte
     
 ::
 
-    regexp_replace('가나다 가나 가나다라', '\b[[:alpha:]]{2}\b', '#')
+    regexp_replace('가나다 가나 가나다라', '\b[[:alpha:]]\{2\}\b', '#')
     ======================
       '가나다 # 가나다라'
 
@@ -910,7 +919,7 @@ The difference between **REGEXP** and **LIKE** are as follows:
     -- When REGEXP is used in SELECT list, enclosing this with parentheses is required. 
     -- But used in WHERE clause, no need parentheses.
     -- case insensitive, except when used with BINARY.
-    SELECT name FROM athlete where name REGEXP '^[a-d]';
+    SELECT name FROM public.athlete where name REGEXP '^[a-d]';
 
 ::
     
@@ -1000,7 +1009,7 @@ REGEXP_COUNT
 
     regexp_count('가나123abc가다abc가가','[가-나]+')
     ======================
-      2
+      3
 
 
 .. _regex-instr:
@@ -1063,7 +1072,7 @@ REGEXP_INSTR
 
     regexp_instr('12354abc5','[:alpha:]+', 1, 1, 1);
     ======================
-      9
+      7
 
 .. code-block:: sql
 
@@ -1267,10 +1276,10 @@ REGEXP_SUBSTR
 .. code-block:: sql
 
     SET NAMES utf8 COLLATE utf8_ko_cs;
-    SELECT REGEXP_SUBSTR('삼성로, 강남구, 서울특별시','[[:alpha:]]+',1,2);
+    SELECT REGEXP_SUBSTR('삼성로, 강남구, 서울특별시','\p{Hangul}+',1,2);
     
 ::
 
-    regexp_substr('삼성로, 강남구, 서울특별시', [[:alpha:]]+', 1, 2);
+    regexp_substr('삼성로, 강남구, 서울특별시', \p{Hangul}+', 1, 2);
     ======================
       '강남구'

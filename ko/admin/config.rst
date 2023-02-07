@@ -2055,9 +2055,9 @@ HA 관련 파라미터
 
 **java_stored_procedure_uds**
 
-    **java_stored_procedure_uds** 는 자바 저장 프로시저를 호출하는 cub_javasp 프로세스와 cub_server 프로세스 간에 TCP 연결 대신 유닉스 도메인 소켓을 통한 연결을 사용하기 위한 파라미터이다. 기본값은 **yes**이고 Windows의 경우 파라미터의 값과 관련 없이 **no**로 동작한다.
+    **java_stored_procedure_uds** 는 자바 저장 프로시저를 호출하는 cub_javasp 프로세스와 cub_server 프로세스 간에 TCP 연결 대신 유닉스 도메인 소켓을 통한 연결을 사용하기 위한 파라미터이다. 기본값은 **yes**\이고 Windows의 경우 파라미터의 값과 관련 없이 **no**\로 동작한다.
         
-        .. note:: 
+    .. note:: 
 
         cub_javasp 프로세스의 유닉스 도메인 소켓 파일 경로를 지정하는 **CUBRID_TMP** 환경 변수에 대한 내용은 :doc:`/env` 을 참고한다.
 
@@ -2186,7 +2186,7 @@ HA 관련 파라미터
 
 **regexp_engine**
 
- **regexp_engine** 는 정규식 연산자와 함수가 수행할 라이브러리를 선택하는 파라미터이다. **cppstd** 또는 **re2**를 설정할 수 있고 기본값은 **re2**이다. 정규 표현식 기능에 관한 자세한 내용은 :doc:`/sql/function/regex_fn` 을 참고한다.
+ **regexp_engine** 는 정규식 연산자와 함수가 수행할 라이브러리를 선택하는 파라미터이다. **cppstd** 또는 **re2**\를 설정할 수 있고 기본값은 **re2**\이다. 정규 표현식 기능에 관한 자세한 내용은 :doc:`/sql/function/regex_fn` 을 참고한다.
 
 .. _broker-configuration:
 

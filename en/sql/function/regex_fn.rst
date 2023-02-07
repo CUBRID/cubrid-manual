@@ -243,6 +243,10 @@ Groups
 
 Groups allow to apply quantifiers to a sequence of characters (instead of a single character). There are two kinds of groups:
 
+.. warning::
+
+    a backreference syntax using $int is supported only in C++ <regex>.
+
 +--------------------+-------------------------------------------------------+
 | Characters         | Description                                           |
 +====================+=======================================================+
@@ -295,6 +299,14 @@ Assertions are conditions that do not consume characters in a string: they do no
 +-----------------+-----------------------------------------------------------------------------------------------------------------------+
 | $               | The end of a string, or precedes a line terminator                                                                    |
 +-----------------+-----------------------------------------------------------------------------------------------------------------------+
+
+.. note::
+    
+    The following syntax is supported only in C++ <regex>.
+
++-----------------+-----------------------------------------------------------------------------------------------------------------------+
+| Characters      | Description                                                                                                           |
++=================+=======================================================================================================================+
 | \\b             | The previous character is a word character and the next is a non-word character (or vice-versa).                      |
 +-----------------+-----------------------------------------------------------------------------------------------------------------------+
 | \\B             | The previous and next characters are both word characters or both are non-word characters.                            |

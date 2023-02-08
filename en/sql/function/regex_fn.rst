@@ -509,16 +509,16 @@ The POSIX-based character class (*[:classname:]*) defines categories of characte
 | [:xdigit:] | Hexadecimal digit character             |
 +------------+-----------------------------------------+
 
-[:d:], [:w:] and [:s:] are an extension to the ECMAScript grammar. C++ <regex> 에서만 사용할 수 있다.
+[:d:], [:w:] and [:s:] are an extension to the ECMAScript grammar. Only available in C++ <regex>.
 
 +------------+-----------------------------------------+
-| 클래스     | 설명                                    |
+| Class      | Description                             |
 +============+=========================================+
-| [:d:]      | 숫자 (0-9)                              |
+| [:d:]      | Decimal digit character (0-9)           |
 +------------+-----------------------------------------+
-| [:w:]      | 단어                                    |
+| [:w:]      | Word character                          |
 +------------+-----------------------------------------+
-| [:s:]      | 공백                                    |
+| [:s:]      | Whitespace character                    |
 +------------+-----------------------------------------+
 
 .. code-block:: sql

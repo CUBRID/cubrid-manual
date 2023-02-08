@@ -12,20 +12,23 @@ The functions and operators described in this section performs regular expressio
 
 .. contents::
 
-.. _regex-ecmascript:
+.. _regex-syntax:
 
-ECMAScript Regular Expressions Pattern Syntax
+Regular Expressions Pattern Syntax
 ==============================================
 
-To implement regular expression support, CUBRID uses the standard C++ <regex> library, which conforms `the ECMA-262 RegExp grammar <http://ecma-international.org/ecma-262/5.1/#sec-15.10>`_.
+To implement regular expressions, CUBRID uses the Google RE2 library and the C++ <regex> standard library.
+You can select the regular expression library to use by setting the **regexp_engine** system parameter, and the Google RE2 library is used as a default.
+
 The following sub-sections describes supported regular expression grammars with several examples.
 
 .. note::
 
   **Compatibility Considerations**
 
-  In the prior version of CUBRID 11, CUBRID used Henry Spencer’s implementation of regular expressions.
-  From the CUBRID 11, CUBRID uses C++ <regex> standard library to support regular expression functions and operators.
+  - In the prior version of CUBRID 11, CUBRID used Henry Spencer’s implementation of regular expressions.
+  - From the CUBRID 11.0, CUBRID removes the Henry Spencer library and uses C++ <regex> standard library to support regular expression functions and operators.
+  - From the CUBRID 11.2, CUBRID has added the Google RE2 library. Either C++ <regex> or Google RE2 can be used by setting the system parameter.
 
   \1. The Henry Spencer’s implementation of regular expressions operates in byte-wise fashion. So the REGEXP and RLIKE were not multibyte safe, 
   they only worked as ASCII encoding without considering the collation of operands.
@@ -33,9 +36,17 @@ The following sub-sections describes supported regular expression grammars with 
   \2. The Spencer library supports the POSIX *collating sequence* expressions (*[.character.]*). But it does not support anymore.
   Also, *character equivalents* (*[=word=]*) does not support. CUBRID occurs an error when these collating element syntax is given.
   
-  \3. The Spencer library matches line-terminator characters for the dot operator (.) But it does not.
+  \3. The Spencer library matches line-terminator characters for the dot operator (.). But it does not.
   
   \4. The word-beginning and word-end boundary ([[:<:]] and [[:>:]]) doesn't support anymore. Instead, the word boundary notation (\\b) can be used.
+
+.. warning::
+
+  **C++ <regex> library caveats**
+
+  There is an issue with the C++ <regex> library that can cause excessive recursive calls when the input string is long or the regular expression pattern is complex.
+  Therefore, it is recommended to use Google RE2 instead of C++ <regex>. 
+  C++ <regex> is reserved for backwards compatibility and has been deprecated.
 
 .. note::
 
@@ -46,56 +57,59 @@ The following sub-sections describes supported regular expression grammars with 
 Special Pattern Characters
 ---------------------------
 
-Special pattern characters are characters (or sequences of characters) that have a special meaning when they appear in a regular expression pattern, 
-either to represent a character that is difficult to express in a string, or to represent a category of characters. 
+Special pattern characters are characters (or sequences of characters) that have a special meaning when they appear in a regular expression pattern, either to represent a character that is difficult to express in a string, or to represent a category of characters. 
 Each of these special pattern characters is matched in a string against a single character (unless a quantifier specifies otherwise).
 
-+----------------+----------------------------------------------------------------------------------------------------------+
-| Characters     | Description                                                                                              |
-+================+==========================================================================================================+
-| .              | Any character except line terminators (LF, CR, LS, PS).                                                  |
-+----------------+----------------------------------------------------------------------------------------------------------+
-| \\t            | A horizontal tab character (same as \\u0009).                                                            |
-+----------------+----------------------------------------------------------------------------------------------------------+
-| \\n            | A newline (line feed) character (same as \\u000A).                                                       |
-+----------------+----------------------------------------------------------------------------------------------------------+
-| \\v            | A vertical tab character (same as \\u000B).                                                              |
-+----------------+----------------------------------------------------------------------------------------------------------+
-| \\f            | A form feed character (same as \\u000C).                                                                 |
-+----------------+----------------------------------------------------------------------------------------------------------+
-| \\r            | A carriage return character (same as \\u000D)                                                            |
-+----------------+----------------------------------------------------------------------------------------------------------+
-| \\c\ *letter*  | A control code character whose code unit value is the same as the remainder of dividing                  |
-|                | the code unit value of *letter* by 32.                                                                   |
-+----------------+----------------------------------------------------------------------------------------------------------+
-| \\x\ *hh*      | A a character whose code unit value has an hex value equivalent to the two hex digits *hh*.              |
-+----------------+----------------------------------------------------------------------------------------------------------+
-| \\u\ *hhhh*    | A character whose code unit value has an hex value equivalent to the four hex digits *hhhh*.             |
-+----------------+----------------------------------------------------------------------------------------------------------+
-| \\0            | A null character (same as \\u0000).                                                                      |
-+----------------+----------------------------------------------------------------------------------------------------------+
-| \\\ *num*      | The result of the submatch whose opening parenthesis is the *num*-th. See groups below for more info.    |
-+----------------+----------------------------------------------------------------------------------------------------------+
-| \\d            | A decimal digit character (same as [[:digit:]]).                                                         |
-+----------------+----------------------------------------------------------------------------------------------------------+
-| \\D            | Any character that is not a decimal digit character (same as [^[:digit:]]).                              |
-+----------------+----------------------------------------------------------------------------------------------------------+
-| \\s            | A whitespace character (same as [[:space:]]).                                                            |
-+----------------+----------------------------------------------------------------------------------------------------------+
-| \\S            | Any character that is not a whitespace character (same as [^[:space:]]).                                 |
-+----------------+----------------------------------------------------------------------------------------------------------+
-| \\w            | An alphanumeric or underscore character (same as [_[:alnum:]]).                                          |
-+----------------+----------------------------------------------------------------------------------------------------------+
-| \\W            | Any character that is not an alphanumeric or underscore character (same as [^_[:alnum:]]).               |
-+----------------+----------------------------------------------------------------------------------------------------------+
-|                | | The *character* character as it is, without interpreting its special meaning within a regex expression.|
-| \\\ *character*| | Any character can be escaped except those which form any of the special character sequences above.     |
-|                | | Needed for: ^ $ \\ . * + ? ( ) [ ] { } \|                                                              |
-+----------------+----------------------------------------------------------------------------------------------------------+
-| \[\ *class*\]  | A string is part of the *class*. see **POSIX-based character classes** below.                            |
-+----------------+----------------------------------------------------------------------------------------------------------+
-| \[^\ *class*\] | A string is not part of the *class*. see **POSIX-based character classes** below.                        |
-+----------------+----------------------------------------------------------------------------------------------------------+
++----------------+------------------------------------------------------------------------------------------------------------------------------+
+| Characters     | Description                                                                                                                  |
++================+==============================================================================================================================+
+| .              | Any character except line terminators (LF, CR, LS, PS).                                                                      |
++----------------+------------------------------------------------------------------------------------------------------------------------------+
+| \\t            | A horizontal tab character (same as \\u0009).                                                                                |
++----------------+------------------------------------------------------------------------------------------------------------------------------+
+| \\n            | A newline (line feed) character (same as \\u000A).                                                                           |
++----------------+------------------------------------------------------------------------------------------------------------------------------+
+| \\v            | A vertical tab character (same as \\u000B).                                                                                  |
++----------------+------------------------------------------------------------------------------------------------------------------------------+
+| \\f            | A form feed character (same as \\u000C).                                                                                     |
++----------------+------------------------------------------------------------------------------------------------------------------------------+
+| \\r            | A carriage return character (same as \\u000D)                                                                                |
++----------------+------------------------------------------------------------------------------------------------------------------------------+
+| \\c\ *letter*  | A control code character whose code unit value is the same as the remainder of dividing                                      |
+|                | the code unit value of *letter* by 32.                                                                                       |
++----------------+------------------------------------------------------------------------------------------------------------------------------+
+| \\x\ *hh*      | A a character whose code unit value has an hex value equivalent to the two hex digits *hh*.                                  |
++----------------+------------------------------------------------------------------------------------------------------------------------------+
+| \\u\ *hhhh*    | A character whose code unit value has an hex value equivalent to the four hex digits *hhhh*. *Only supported in C++ <regex>* |
++----------------+------------------------------------------------------------------------------------------------------------------------------+
+| \\x\ {*digits*}| A hex character code corresponds to the value of *digits* *Only supported in Google RE2*                                     |
++----------------+------------------------------------------------------------------------------------------------------------------------------+
+| \\0            | A null character (same as \\u0000). *Only supported in C++ <regex>*                                                          |
++----------------+------------------------------------------------------------------------------------------------------------------------------+
+| \\\ *num*      | The result of the submatch whose opening parenthesis is the *num*-th. See groups below for more info.                        |
++----------------+------------------------------------------------------------------------------------------------------------------------------+
+| \\d            | A decimal digit character (same as [[:digit:]]).                                                                             |
++----------------+------------------------------------------------------------------------------------------------------------------------------+
+| \\D            | Any character that is not a decimal digit character (same as [^[:digit:]]).                                                  |
++----------------+------------------------------------------------------------------------------------------------------------------------------+
+| \\s            | A whitespace character (same as [[:space:]]).                                                                                |
++----------------+------------------------------------------------------------------------------------------------------------------------------+
+| \\S            | Any character that is not a whitespace character (same as [^[:space:]]).                                                     |
++----------------+------------------------------------------------------------------------------------------------------------------------------+
+| \\w            | An alphanumeric or underscore character (same as [_[:alnum:]]).                                                              |
++----------------+------------------------------------------------------------------------------------------------------------------------------+
+| \\W            | Any character that is not an alphanumeric or underscore character (same as [^_[:alnum:]]).                                   |
++----------------+------------------------------------------------------------------------------------------------------------------------------+
+|                | | The *character* character as it is, without interpreting its special meaning within a regex expression.                    |
+| \\\ *character*| | Any character can be escaped except those which form any of the special character sequences above.                         |
+|                | | Needed for: ^ $ \\ . * + ? ( ) [ ] { } \|                                                                                  |
++----------------+------------------------------------------------------------------------------------------------------------------------------+
+| \[\ *class*\]  | A string is part of the *class*. see :ref:`regex-posix-character-class`.                                                     |
++----------------+------------------------------------------------------------------------------------------------------------------------------+
+| \[^\ *class*\] | A string is not part of the *class*. see :ref:`regex-posix-character-class`.                                                 |
++----------------+------------------------------------------------------------------------------------------------------------------------------+
+| \\p{*class*}   | A string is range of Unicode range of *class*. see :ref:`regex-unicode-character-class`.                                     |
++----------------+------------------------------------------------------------------------------------------------------------------------------+
 
 .. code-block:: sql
 
@@ -134,7 +148,7 @@ For details on **no_backslash_escapes**, see :ref:`escape-characters`.
     line' regexp 'new
     line')
     =====================================
-      1
+      0
 
 Quantifiers
 ------------
@@ -229,6 +243,10 @@ Groups
 
 Groups allow to apply quantifiers to a sequence of characters (instead of a single character). There are two kinds of groups:
 
+.. warning::
+
+    a backreference syntax using $int is supported only in C++ <regex>.
+
 +--------------------+-------------------------------------------------------+
 | Characters         | Description                                           |
 +====================+=======================================================+
@@ -281,6 +299,14 @@ Assertions are conditions that do not consume characters in a string: they do no
 +-----------------+-----------------------------------------------------------------------------------------------------------------------+
 | $               | The end of a string, or precedes a line terminator                                                                    |
 +-----------------+-----------------------------------------------------------------------------------------------------------------------+
+
+.. note::
+    
+    The following syntax is supported only in C++ <regex>.
+
++-----------------+-----------------------------------------------------------------------------------------------------------------------+
+| Characters      | Description                                                                                                           |
++=================+=======================================================================================================================+
 | \\b             | The previous character is a word character and the next is a non-word character (or vice-versa).                      |
 +-----------------+-----------------------------------------------------------------------------------------------------------------------+
 | \\B             | The previous and next characters are both word characters or both are non-word characters.                            |
@@ -381,7 +407,8 @@ Character classes
 
 Character classes syntax matches one of characters or a category of characters within square brackets.
 
-**Individual characters** 
+Individual characters
+~~~~~~~~~~~~~~~~~~~~~
 
 Any character specified is considered part of the class (except the characters \\, [, ]).
 
@@ -401,7 +428,8 @@ Any character specified is considered part of the class (except the characters \
     ==============================
       0
 
-**Ranges** 
+Ranges
+~~~~~~~~~~~~~~~~~~~~~~~ 
 
 To represent a range of characters, use the dash character (-) between two valid characters. 
 For example, "[a-z]" matches any alphabet letter whereas "[0-9]" matches any single number.
@@ -442,9 +470,16 @@ For example, "[a-z]" matches any alphabet letter whereas "[0-9]" matches any sin
     ================================
       1
 
-**POSIX-based character classes**
+.. _regex-posix-character-class:
 
-The POSIX-based character class (*[:classname:]*) defines categories of characters as shown below. [:d:], [:w:] and [:s:] are an extension to the ECMAScript grammar.
+POSIX-based character classes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The POSIX-based character class (*[:classname:]*) defines categories of characters as shown below.
+
+.. note::
+
+    Google RE2 matches only ASCII characters, and C++ <regex> matches Unicode characters as well.
 
 +------------+-----------------------------------------+
 | Class      | Description                             |
@@ -473,7 +508,13 @@ The POSIX-based character class (*[:classname:]*) defines categories of characte
 +------------+-----------------------------------------+
 | [:xdigit:] | Hexadecimal digit character             |
 +------------+-----------------------------------------+
-| [:d:]      | Decimal digit character                 |
+
+[:d:], [:w:] and [:s:] are an extension to the ECMAScript grammar. Only available in C++ <regex>.
+
++------------+-----------------------------------------+
+| Class      | Description                             |
++============+=========================================+
+| [:d:]      | Decimal digit character (0-9)           |
 +------------+-----------------------------------------+
 | [:w:]      | Word character                          |
 +------------+-----------------------------------------+
@@ -487,19 +528,369 @@ The POSIX-based character class (*[:classname:]*) defines categories of characte
 ::
 
     regexp_substr('Samseong-ro 86-gil, Gangnam-gu, Seoul 06178', '[[:digit:]]{5}')
-    ================================
+    ======================
       '06178'
 
 .. code-block:: sql
 
+    -- ;set regexp_engine=cppstd
     SET NAMES utf8 COLLATE utf8_ko_cs;
-    SELECT REGEXP_REPLACE ('가나다 가나 가나다라', '\b[[:alpha:]]{2}\b', '#');
+    SELECT REGEXP_REPLACE ('가나다 가나 가나다라', '\b([[:alpha:]]{2})\b', '#');
     
 ::
 
-    regexp_replace('가나다 가나 가나다라', '\b[[:alpha:]]{2}\b', '#')
+    regexp_replace('가나다 가나 가나다라' collate utf8_ko_cs, '\b([[:alpha:]]{2})\b' collate utf8_ko_cs, '#' collate utf8_ko_cs)
     ======================
-      '가나다 # 가나다라'
+    '가나다 # 가나다라'
+
+.. _regex-unicode-character-class:
+
+Unicode Character Class
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Unicode character classes (*\\p{classname}*) are only supported by Google RE2. The Unicode class name can be specified as shown in the table below.
+For example, to match Korean characters, you can use **\\p{Hangul}**.
+
++-------------------------+
+| Unicode Character Class |
++=========================+
+| Adlam                   |
++-------------------------+
+| Ahom                    |
++-------------------------+
+| Anatolian_Hieroglyphs   |
++-------------------------+
+| Arabic                  |
++-------------------------+
+| Armenian                |
++-------------------------+
+| Avestan                 |
++-------------------------+
+| Balinese                |
++-------------------------+
+| Bamum                   |
++-------------------------+
+| Bassa_Vah               |
++-------------------------+
+| Batak                   |
++-------------------------+
+| Bengali                 |
++-------------------------+
+| Bhaiksuki               |
++-------------------------+
+| Bopomofo                |
++-------------------------+
+| Brahmi                  |
++-------------------------+
+| Braille                 |
++-------------------------+
+| Buginese                |
++-------------------------+
+| Buhid                   |
++-------------------------+
+| Canadian_Aboriginal     |
++-------------------------+
+| Carian                  |
++-------------------------+
+| Caucasian_Albanian      |
++-------------------------+
+| Chakma                  |
++-------------------------+
+| Cham                    |
++-------------------------+
+| Cherokee                |
++-------------------------+
+| Chorasmian              |
++-------------------------+
+| Common                  |
++-------------------------+
+| Coptic                  |
++-------------------------+
+| Cuneiform               |
++-------------------------+
+| Cypriot                 |
++-------------------------+
+| Cypro_Minoan            |
++-------------------------+
+| Cyrillic                |
++-------------------------+
+| Deseret                 |
++-------------------------+
+| Devanagari              |
++-------------------------+
+| Dives_Akuru             |
++-------------------------+
+| Dogra                   |
++-------------------------+
+| Duployan                |
++-------------------------+
+| Egyptian_Hieroglyphs    |
++-------------------------+
+| Elbasan                 |
++-------------------------+
+| Elymaic                 |
++-------------------------+
+| Ethiopic                |
++-------------------------+
+| Georgian                |
++-------------------------+
+| Glagolitic              |
++-------------------------+
+| Gothic                  |
++-------------------------+
+| Grantha                 |
++-------------------------+
+| Greek                   |
++-------------------------+
+| Gujarati                |
++-------------------------+
+| Gunjala_Gondi           |
++-------------------------+
+| Gurmukhi                |
++-------------------------+
+| Han                     |
++-------------------------+
+| Hangul                  |
++-------------------------+
+| Hanifi_Rohingya         |
++-------------------------+
+| Hanunoo                 |
++-------------------------+
+| Hatran                  |
++-------------------------+
+| Hebrew                  |
++-------------------------+
+| Hiragana                |
++-------------------------+
+| Imperial_Aramaic        |
++-------------------------+
+| Inherited               |
++-------------------------+
+| Inscriptional_Pahlavi   |
++-------------------------+
+| Inscriptional_Parthian  |
++-------------------------+
+| Javanese                |
++-------------------------+
+| Kaithi                  |
++-------------------------+
+| Kannada                 |
++-------------------------+
+| Katakana                |
++-------------------------+
+| Kawi                    |
++-------------------------+
+| Kayah_Li                |
++-------------------------+
+| Kharoshthi              |
++-------------------------+
+| Khitan_Small_Script     |
++-------------------------+
+| Khmer                   |
++-------------------------+
+| Khojki                  |
++-------------------------+
+| Khudawadi               |
++-------------------------+
+| Lao                     |
++-------------------------+
+| Latin                   |
++-------------------------+
+| Lepcha                  |
++-------------------------+
+| Limbu                   |
++-------------------------+
+| Linear_A                |
++-------------------------+
+| Linear_B                |
++-------------------------+
+| Lisu                    |
++-------------------------+
+| Lycian                  |
++-------------------------+
+| Lydian                  |
++-------------------------+
+| Mahajani                |
++-------------------------+
+| Makasar                 |
++-------------------------+
+| Malayalam               |
++-------------------------+
+| Mandaic                 |
++-------------------------+
+| Manichaean              |
++-------------------------+
+| Marchen                 |
++-------------------------+
+| Masaram_Gondi           |
++-------------------------+
+| Medefaidrin             |
++-------------------------+
+| Meetei_Mayek            |
++-------------------------+
+| Mende_Kikakui           |
++-------------------------+
+| Meroitic_Cursive        |
++-------------------------+
+| Meroitic_Hieroglyphs    |
++-------------------------+
+| Miao                    |
++-------------------------+
+| Modi                    |
++-------------------------+
+| Mongolian               |
++-------------------------+
+| Mro                     |
++-------------------------+
+| Multani                 |
++-------------------------+
+| Myanmar                 |
++-------------------------+
+| Nabataean               |
++-------------------------+
+| Nag_Mundari             |
++-------------------------+
+| Nandinagari             |
++-------------------------+
+| New_Tai_Lue             |
++-------------------------+
+| Newa                    |
++-------------------------+
+| Nko                     |
++-------------------------+
+| Nushu                   |
++-------------------------+
+| Nyiakeng_Puachue_Hmong  |
++-------------------------+
+| Ogham                   |
++-------------------------+
+| Ol_Chiki                |
++-------------------------+
+| Old_Hungarian           |
++-------------------------+
+| Old_Italic              |
++-------------------------+
+| Old_North_Arabian       |
++-------------------------+
+| Old_Permic              |
++-------------------------+
+| Old_Persian             |
++-------------------------+
+| Old_Sogdian             |
++-------------------------+
+| Old_South_Arabian       |
++-------------------------+
+| Old_Turkic              |
++-------------------------+
+| Old_Uyghur              |
++-------------------------+
+| Oriya                   |
++-------------------------+
+| Osage                   |
++-------------------------+
+| Osmanya                 |
++-------------------------+
+| Pahawh_Hmong            |
++-------------------------+
+| Palmyrene               |
++-------------------------+
+| Pau_Cin_Hau             |
++-------------------------+
+| Phags_Pa                |
++-------------------------+
+| Phoenician              |
++-------------------------+
+| Psalter_Pahlavi         |
++-------------------------+
+| Rejang                  |
++-------------------------+
+| Runic                   |
++-------------------------+
+| Samaritan               |
++-------------------------+
+| Saurashtra              |
++-------------------------+
+| Sharada                 |
++-------------------------+
+| Shavian                 |
++-------------------------+
+| Siddham                 |
++-------------------------+
+| SignWriting             |
++-------------------------+
+| Sinhala                 |
++-------------------------+
+| Sogdian                 |
++-------------------------+
+| Sora_Sompeng            |
++-------------------------+
+| Soyombo                 |
++-------------------------+
+| Sundanese               |
++-------------------------+
+| Syloti_Nagri            |
++-------------------------+
+| Syriac                  |
++-------------------------+
+| Tagalog                 |
++-------------------------+
+| Tagbanwa                |
++-------------------------+
+| Tai_Le                  |
++-------------------------+
+| Tai_Tham                |
++-------------------------+
+| Tai_Viet                |
++-------------------------+
+| Takri                   |
++-------------------------+
+| Tamil                   |
++-------------------------+
+| Tangsa                  |
++-------------------------+
+| Tangut                  |
++-------------------------+
+| Telugu                  |
++-------------------------+
+| Thaana                  |
++-------------------------+
+| Thai                    |
++-------------------------+
+| Tibetan                 |
++-------------------------+
+| Tifinagh                |
++-------------------------+
+| Tirhuta                 |
++-------------------------+
+| Toto                    |
++-------------------------+
+| Ugaritic                |
++-------------------------+
+| Vai                     |
++-------------------------+
+| Vithkuqi                |
++-------------------------+
+| Wancho                  |
++-------------------------+
+| Warang_Citi             |
++-------------------------+
+| Yezidi                  |
++-------------------------+
+| Yi                      |
++-------------------------+
+| Zanabazar_Square        |
++-------------------------+
+
+.. code-block:: sql
+
+    -- ;set regexp_engine=re2
+    SELECT REGEXP_COUNT('가나 가나다라 마바사아 자차카타 파하', '\p{Hangul}+');
+
+::
+
+    regexp_count(_utf8'가나 가나다라 마바사아 자차카타 파하' collate utf8_ko_cs, _utf8'\p{Hangul}+' collate utf8_ko_cs)
+    ==============================
+    5
 
 .. _regex-rlike:
 
@@ -540,7 +931,7 @@ The difference between **REGEXP** and **LIKE** are as follows:
     -- When REGEXP is used in SELECT list, enclosing this with parentheses is required. 
     -- But used in WHERE clause, no need parentheses.
     -- case insensitive, except when used with BINARY.
-    SELECT name FROM athlete where name REGEXP '^[a-d]';
+    SELECT name FROM public.athlete where name REGEXP '^[a-d]';
 
 ::
     
@@ -628,9 +1019,9 @@ REGEXP_COUNT
     
 ::
 
-    regexp_count('가나123abc가다abc가가','[가-나]+')
-    ======================
-      2
+    regexp_count('가나123abc가다abc가가' collate utf8_ko_cs, '[가-나]+' collate utf8_ko_cs)
+    =================================================================================================
+                                                                                                    3
 
 
 .. _regex-instr:
@@ -693,7 +1084,7 @@ REGEXP_INSTR
 
     regexp_instr('12354abc5','[:alpha:]+', 1, 1, 1);
     ======================
-      9
+      7
 
 .. code-block:: sql
 
@@ -702,9 +1093,9 @@ REGEXP_INSTR
     
 ::
 
-    regexp_instr('12345가나다라마가나다라마바','[가-다]+');
-    ======================
-      6
+    regexp_instr('12345가나다라마가나다라마바' collate utf8_ko_cs, '[가-다]+' collate utf8_ko_cs)
+    ============================================================================================================
+                                                                                                            6
 
 .. _regex-like:
 
@@ -759,13 +1150,13 @@ REGEXP_LIKE
     
 ::
 
-    regexp_like('가나다', '가나?다')
-    ===============================
-      1
+    regexp_like('가나다' collate utf8_ko_cs, '가나?다' collate utf8_ko_cs)
+    ==============================================================================
+                                                                                1
 
-    regexp_like('가나라다, '가나?다')
-    ================================
-      0
+    regexp_like('가나라다' collate utf8_ko_cs, '가나?다' collate utf8_ko_cs)
+    =================================================================================
+                                                                                    0
 
 .. _regex-replace:
 
@@ -842,9 +1233,9 @@ REGEXP_REPLACE
     
 ::
 
-    regexp_replace('a1가b2나다라', '[가-다]', '#', 6);
+    regexp_replace('a1가b2나다라' collate utf8_ko_cs, '[가-다]' collate utf8_ko_cs, '#' collate utf8_ko_cs, 6)
     ======================
-      'a1가b2##라'
+    'a1가b2##라'
 
 .. _regex-substr:
 
@@ -897,10 +1288,10 @@ REGEXP_SUBSTR
 .. code-block:: sql
 
     SET NAMES utf8 COLLATE utf8_ko_cs;
-    SELECT REGEXP_SUBSTR('삼성로, 강남구, 서울특별시','[[:alpha:]]+',1,2);
+    SELECT REGEXP_SUBSTR('삼성로, 강남구, 서울특별시','\p{Hangul}+',1,2);
     
 ::
 
-    regexp_substr('삼성로, 강남구, 서울특별시', [[:alpha:]]+', 1, 2);
+    regexp_substr('삼성로, 강남구, 서울특별시' collate utf8_ko_cs, '\p{Hangul}+' collate utf8_ko_cs, 1, 2)
     ======================
-      '강남구'
+    '강남구'

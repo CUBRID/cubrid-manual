@@ -535,13 +535,13 @@ POSIX 기반 문자 클래스(*[:classname:]*)는 아래와 같이 문자의 범
 
     -- ;set regexp_engine=cppstd
     SET NAMES utf8 COLLATE utf8_ko_cs;
-    SELECT REGEXP_REPLACE ('가나다 가나 가나다라', '\b[[:alpha:]]{2}\b', '#');
+    SELECT REGEXP_REPLACE ('가나다 가나 가나다라', '\b([[:alpha:]]{2})\b', '#');
     
 ::
 
-    regexp_replace('가나다 가나 가나다라', '\b[[:alpha:]]{2}\b', '#')
+    regexp_replace('가나다 가나 가나다라' collate utf8_ko_cs, '\b([[:alpha:]]{2})\b' collate utf8_ko_cs, '#' collate utf8_ko_cs)
     ======================
-      '가나다 # 가나다라'
+    '가나다 # 가나다라'
 
 .. _regex-unicode-character-class:
 

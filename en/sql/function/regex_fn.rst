@@ -527,8 +527,8 @@ The POSIX-based character class (*[:classname:]*) defines categories of characte
     
 ::
 
-    regexp_substr('Samseong-ro 86-gil, Gangnam-gu, Seoul 06178', '[[:digit:]]\{5\}')
-    ================================
+    regexp_substr('Samseong-ro 86-gil, Gangnam-gu, Seoul 06178', '[[:digit:]]{5}')
+    ======================
       '06178'
 
 .. code-block:: sql

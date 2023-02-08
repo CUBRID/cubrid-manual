@@ -1431,15 +1431,21 @@ Total_value                         INT             Total number of values store
 Avg_num_value_per_key               INT             Average number of values (OIDs) per key
 Num_leaf_page                       INT             Leaf page count
 Num_non_leaf_page                   INT             NonLeaf page count
+Num_ovf_page                        INT             OID overflow page count
 Num_total_page                      INT             Total page count
 Height                              INT             Height of the tree
 Avg_key_len                         INT             Average key length
 Avg_rec_len                         INT             Average page record length
 Total_space                         VARCHAR(64)     Total space occupied by index
-Total_used_space                    VARCHAR(64)     Total used space in index
-Total_free_space                    VARCHAR(64)     Total free space in index
-Avg_num_page_key                    INT             Average page key count (in leaf pages)
-Avg_page_free_space                 VARCHAR(64)     Average page free space
+Total_used_space_non_ovf            VARCHAR(64)     Total used space in index
+Total_free_space_non_ovf            VARCHAR(64)     Total free space in index
+Total_used_space_ovf                VARCHAR(64)     Total OID overflow used space in index
+Total_free_space_ovf                VARCHAR(64)     Total OID overflow free space in index
+Avg_num_key_per_page_non_ovf        INT             Average page key count (in leaf pages)
+Avg_free_space_per_page_non_ovf     VARCHAR(64)     Average page free space
+Avg_num_ovf_page_per_key            INT             Average page key count (in leaf pages)
+Avg_free_space_per_page_ovf         VARCHAR(64)     Average page free space
+Max_num_ovf_page_a_key              INT             Maximum number of OID overflow pages for one key
 =================================== =============== ======================================================================================================================================
 
 The following shows the examples of this syntax.
@@ -1457,25 +1463,30 @@ The following shows the examples of this syntax.
     SHOW INDEX CAPACITY OF tbl1.index_a;
     
 ::
-    
-    <00001> Table_name           : 'tbl1'
-            Index_name           : 'index_a'
-            Btid                 : '(0|378|950)'
-            Num_distinct_key     : 0
-            Total_value          : 0
-            Avg_num_value_per_key: 0
-            Num_leaf_page        : 1
-            Num_non_leaf_page    : 0
-            Num_total_page       : 1
-            Height               : 1
-            Avg_key_len          : 0
-            Avg_rec_len          : 0
-            Total_space          : '16.0K'
-            Total_used_space     : '116.0B'
-            Total_free_space     : '15.9K'
-            Avg_num_page_key     : 0
-            Avg_page_free_space  : '15.9K'
 
+    <00001> Table_name                     : 'dba.tbl1'
+            Index_name                     : 'index_a'
+            Btid                           : '(0|4160|4161)'
+            Num_distinct_key               : 0
+            Total_value                    : 0
+            Avg_num_value_per_key          : 0
+            Num_leaf_page                  : 1
+            Num_non_leaf_page              : 0
+            Num_ovf_page                   : 0
+            Num_total_page                 : 1
+            Height                         : 1
+            Avg_key_len                    : 0
+            Avg_rec_len                    : 0
+            Total_space                    : '16.0K'
+            Total_used_space_non_ovf       : '120.0B'
+            Total_free_space_non_ovf       : '15.8K'
+            Total_used_space_ovf           : '0.0B'
+            Total_free_space_ovf           : '0.0B'
+            Avg_num_key_per_page_non_ovf   : 0
+            Avg_free_space_per_page_non_ovf: '15.8K'
+            Avg_num_ovf_page_per_key       : 0
+            Avg_free_space_per_page_ovf    : '0.0B'
+            Max_num_ovf_page_a_key         : 0
 
 .. code-block:: sql
       
@@ -1483,40 +1494,53 @@ The following shows the examples of this syntax.
     
 ::
 
-    <00001> Table_name           : 'tbl1'
-            Index_name           : 'index_a'
-            Btid                 : '(0|378|950)'
-            Num_distinct_key     : 0
-            Total_value          : 0
-            Avg_num_value_per_key: 0
-            Num_leaf_page        : 1
-            Num_non_leaf_page    : 0
-            Num_total_page       : 1
-            Height               : 1
-            Avg_key_len          : 0
-            Avg_rec_len          : 0
-            Total_space          : '16.0K'
-            Total_used_space     : '116.0B'
-            Total_free_space     : '15.9K'
-            Avg_num_page_key     : 0
-            Avg_page_free_space  : '15.9K'
-    <00002> Table_name           : 'tbl1'
-            Index_name           : 'index_b'
-            Btid                 : '(0|381|960)'
-            Num_distinct_key     : 0
-            Total_value          : 0
-            Avg_num_value_per_key: 0
-            Num_leaf_page        : 1
-            Num_non_leaf_page    : 0
-            Num_total_page       : 1
-            Height               : 1
-            Avg_key_len          : 0
-            Avg_rec_len          : 0
-            Total_space          : '16.0K'
-            Total_used_space     : '120.0B'
-            Total_free_space     : '15.9K'
-            Avg_num_page_key     : 0
-            Avg_page_free_space  : '15.9K'
+    <00001> Table_name                     : 'dba.tbl1'
+            Index_name                     : 'index_a'
+            Btid                           : '(0|4160|4161)'
+            Num_distinct_key               : 0
+            Total_value                    : 0
+            Avg_num_value_per_key          : 0
+            Num_leaf_page                  : 1
+            Num_non_leaf_page              : 0
+            Num_ovf_page                   : 0
+            Num_total_page                 : 1
+            Height                         : 1
+            Avg_key_len                    : 0
+            Avg_rec_len                    : 0
+            Total_space                    : '16.0K'
+            Total_used_space_non_ovf       : '120.0B'
+            Total_free_space_non_ovf       : '15.8K'
+            Total_used_space_ovf           : '0.0B'
+            Total_free_space_ovf           : '0.0B'
+            Avg_num_key_per_page_non_ovf   : 0
+            Avg_free_space_per_page_non_ovf: '15.8K'
+            Avg_num_ovf_page_per_key       : 0
+            Avg_free_space_per_page_ovf    : '0.0B'
+            Max_num_ovf_page_a_key         : 0
+    <00002> Table_name                     : 'dba.tbl1'
+            Index_name                     : 'index_b'
+            Btid                           : '(0|4224|4225)'
+            Num_distinct_key               : 0
+            Total_value                    : 0
+            Avg_num_value_per_key          : 0
+            Num_leaf_page                  : 1
+            Num_non_leaf_page              : 0
+            Num_ovf_page                   : 0
+            Num_total_page                 : 1
+            Height                         : 1
+            Avg_key_len                    : 0
+            Avg_rec_len                    : 0
+            Total_space                    : '16.0K'
+            Total_used_space_non_ovf       : '124.0B'
+            Total_free_space_non_ovf       : '15.8K'
+            Total_used_space_ovf           : '0.0B'
+            Total_free_space_ovf           : '0.0B'
+            Avg_num_key_per_page_non_ovf   : 0
+            Avg_free_space_per_page_non_ovf: '15.8K'
+            Avg_num_ovf_page_per_key       : 0
+            Avg_free_space_per_page_ovf    : '0.0B'
+            Max_num_ovf_page_a_key         : 0
+
 
 SHOW CRITICAL SECTIONS
 ----------------------

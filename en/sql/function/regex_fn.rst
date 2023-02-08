@@ -535,13 +535,13 @@ The POSIX-based character class (*[:classname:]*) defines categories of characte
 
     -- ;set regexp_engine=cppstd
     SET NAMES utf8 COLLATE utf8_ko_cs;
-    SELECT REGEXP_REPLACE ('가나다 가나 가나다라', '\b[[:alpha:]]{2}\b', '#');
+    SELECT REGEXP_REPLACE ('가나다 가나 가나다라', '\b([[:alpha:]]{2})\b', '#');
     
 ::
 
-    regexp_replace('가나다 가나 가나다라', '\b[[:alpha:]]{2}\b', '#')
+    regexp_replace('가나다 가나 가나다라' collate utf8_ko_cs, '\b([[:alpha:]]{2})\b' collate utf8_ko_cs, '#' collate utf8_ko_cs)
     ======================
-      '가나다 # 가나다라'
+    '가나다 # 가나다라'
 
 .. _regex-unicode-character-class:
 
@@ -1019,9 +1019,9 @@ REGEXP_COUNT
     
 ::
 
-    regexp_count('가나123abc가다abc가가','[가-나]+')
-    ======================
-      3
+    regexp_count('가나123abc가다abc가가' collate utf8_ko_cs, '[가-나]+' collate utf8_ko_cs)
+    =================================================================================================
+                                                                                                    3
 
 
 .. _regex-instr:
@@ -1093,9 +1093,9 @@ REGEXP_INSTR
     
 ::
 
-    regexp_instr('12345가나다라마가나다라마바','[가-다]+');
-    ======================
-      6
+    regexp_instr('12345가나다라마가나다라마바' collate utf8_ko_cs, '[가-다]+' collate utf8_ko_cs)
+    ============================================================================================================
+                                                                                                            6
 
 .. _regex-like:
 
@@ -1150,13 +1150,13 @@ REGEXP_LIKE
     
 ::
 
-    regexp_like('가나다', '가나?다')
-    ===============================
-      1
+    regexp_like('가나다' collate utf8_ko_cs, '가나?다' collate utf8_ko_cs)
+    ==============================================================================
+                                                                                1
 
-    regexp_like('가나라다, '가나?다')
-    ================================
-      0
+    regexp_like('가나라다' collate utf8_ko_cs, '가나?다' collate utf8_ko_cs)
+    =================================================================================
+                                                                                    0
 
 .. _regex-replace:
 
@@ -1233,9 +1233,9 @@ REGEXP_REPLACE
     
 ::
 
-    regexp_replace('a1가b2나다라', '[가-다]', '#', 6);
+    regexp_replace('a1가b2나다라' collate utf8_ko_cs, '[가-다]' collate utf8_ko_cs, '#' collate utf8_ko_cs, 6)
     ======================
-      'a1가b2##라'
+    'a1가b2##라'
 
 .. _regex-substr:
 
@@ -1292,6 +1292,6 @@ REGEXP_SUBSTR
     
 ::
 
-    regexp_substr('삼성로, 강남구, 서울특별시', \p{Hangul}+', 1, 2);
+    regexp_substr('삼성로, 강남구, 서울특별시' collate utf8_ko_cs, '\p{Hangul}+' collate utf8_ko_cs, 1, 2)
     ======================
-      '강남구'
+    '강남구'

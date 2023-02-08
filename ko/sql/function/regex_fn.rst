@@ -225,7 +225,7 @@
       1
 
 기본적으로 이러한 모든 수량자는 가능한 한 조건을 충족하는 많은 문자를 사용하는 *greedy* 방식으로 수행된다.
-그리고 이 동작은 한정자 뒤에 물음표(?)를 추가하여 *non-greedy*로 재정의할 수 있다.
+그리고 이 동작은 한정자 뒤에 물음표(?)를 추가하여 *non-greedy*\로 재정의할 수 있다.
 
 .. code-block:: sql
 
@@ -898,7 +898,7 @@ REGEXP, RLIKE
 =============
 
 **REGEXP**, **RLIKE**\ 는 동일한 의미로 사용되며, 정규 표현식을 이용한 패턴을 매칭한다. 아래의 문법에서, *expression*\이 *pattern*\과 일치하면 1을 반환한다. 그렇지 않으면 0을 반환한다.
-*expression* 또는 *pattern*이 **NULL**\이면 **NULL**\을 반환한다. 두 번째 구문은 두 구문 모두 **NOT**\을 사용하는 세 번째 구문과 동일한 의미를 갖는다.
+*expression* 또는 *pattern*\이 **NULL**\이면 **NULL**\을 반환한다. 두 번째 구문은 두 구문 모두 **NOT**\을 사용하는 세 번째 구문과 동일한 의미를 갖는다.
 
 ::
 
@@ -1165,7 +1165,7 @@ REGEXP_REPLACE
 
 .. function:: REGEXP_REPLACE (string, pattern_string, replacement_string [, position [, occurrence [, match_type]]])
 
-    **REGEXP_REPLACE** 함수는 주어진 문자열 *string* 내에서 정규식 패턴 *pattern_string*\을 검색하여 문자열 *replacement_string*으로 바꾼다. **NULL**\이 인수로 지정된 경우 **NULL**\을 반환한다.
+    **REGEXP_REPLACE** 함수는 주어진 문자열 *string* 내에서 정규식 패턴 *pattern_string*\을 검색하여 문자열 *replacement_string*\으로 바꾼다. **NULL**\이 인수로 지정된 경우 **NULL**\을 반환한다.
 
     :param string: 입력 문자열을 지정한다. 값이 **NULL**\이면 **NULL**\을 반환한다
     :param pattern_string: 매칭을 수행할 정규식 패턴 문자열을 지정한다. 값이 **NULL**\이면 **NULL**\을 반환한다.

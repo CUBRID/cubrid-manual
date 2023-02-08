@@ -258,7 +258,7 @@ Groups allow to apply quantifiers to a sequence of characters (instead of a sing
 .. code-block:: sql
 
     -- The captured group can be referenced with $int
-    SELECT REGEXP_REPLACE ('hello cubrid','\([[:alnum:]]+\)','$1!');
+    SELECT REGEXP_REPLACE ('hello cubrid','([[:alnum:]]+)','$1!');
 
 ::
 
@@ -539,7 +539,7 @@ The POSIX-based character class (*[:classname:]*) defines categories of characte
     
 ::
 
-    regexp_replace('가나다 가나 가나다라', '\b[[:alpha:]]\{2\}\b', '#')
+    regexp_replace('가나다 가나 가나다라', '\b[[:alpha:]]{2}\b', '#')
     ======================
       '가나다 # 가나다라'
 

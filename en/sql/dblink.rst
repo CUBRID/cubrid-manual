@@ -575,7 +575,7 @@ Restrictions
 *   The maximum string length of one column is supported up to 16M.
 *   When using cache in Mysql, it is recommended to use PREFETCH, NO_CACHE=1 because the memory usage of the gateway cub_cas_cgw increases.
 *   ODBC non-supported types are SQL_INTERVAL, SQL_GUID, SQL_BIT, SQL_BINARY, SQL_VARBINARY, SQL_LONGVARBINARY.
-*   When using DBLink between heterogeneous types (Oracle/MySQL), you must use Oracle/MySQL's Unicode dedicated ODBC driver.
+*   When using DBLink with heterogeneous types (Oracle/MySQL), you must use Oracle/MySQL's Unicode ODBC driver.
 
 
 

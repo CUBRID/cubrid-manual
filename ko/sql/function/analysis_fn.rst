@@ -653,9 +653,9 @@ GROUP_CONCAT
     :param SEPARATOR: 결과 값 사이에 구분할 구분자를 지정한다. 생략하면 기본값인 쉼표(,)를 구분자로 사용한다.
     :rtype: STRING
 
-리턴 값의 최대 크기는 시스템 파라미터 **group_concat_max_len** 의 설정을 따른다. 기본값은 **1024** 바이트이며, 최소값은 4바이트, 최대값은 33,554,432바이트이다.
+리턴 값의 최대 크기는 시스템 파라미터 **group_concat_max_len** 의 설정을 따른다. 기본값은 **1024** 바이트이며, 최소값은 4바이트, 최대값은 INT_MAX(약2G)바이트이다.
 
-이 함수는 **string_max_size_bytes** 파라미터의 영향을 받는데,  **group_concat_max_len**\의 값이 **string_max_size_bytes**\의 값보다 크고 **GROUP_CONCAT** 함수의 결과가 **string_max_size_bytes**\의 크기 제한을 넘으면 오류가 반환된다.
+이 함수는 **string_max_size_bytes** 파라미터의 영향을 받으며,  **group_concat_max_len**\의 값을 **string_max_size_bytes** 보다 크게 설정한 경우 **GROUP_CONCAT** 결과가 **string_max_size_bytes** 값을 초과하면 오류가 발생한다.
 
 중복되는 값을 제거하려면 **DISTINCT** 절을 사용하면 된다. 그룹 결과의 값 사이에 사용되는 기본 구분자는 쉼표(,)이며, 구분자를 명시적으로 표현하려면 **SEPARATOR** 절과 그 뒤에 구분자로 사용할 문자열을 추가한다. 구분자를 제거하려면 **SEPARATOR** 절 뒤에 빈 문자열(empty string)을 입력한다.
 

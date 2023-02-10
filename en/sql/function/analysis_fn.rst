@@ -652,7 +652,7 @@ GROUP_CONCAT
     :param SEPARATOR: Specifies the separator to divide the result values. If it is omitted, the default character, comma (,) will be used as a separator.
     :rtype: STRING
 
-The maximum size of the return value follows the configuration of the system parameter, **group_concat_max_len**. The default is **1024** bytes, the minimum value is 4 bytes and the maximum value is 33,554,432 bytes.
+The maximum size of the return value follows the configuration of the system parameter, **group_concat_max_len**. The default is **1024** bytes, the minimum value is 4 bytes and the maximum value is IN_MAX(about 2G) bytes.
 
 This function is affected by **string_max_size_bytes** parameter; if the value of **group_concat_max_len** is larger than the value **string_max_size_bytes** and the result size of **GROUP_CONCAT** exceeds the value of **string_max_size_bytes**, an error occurs.
 

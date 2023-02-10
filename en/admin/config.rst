@@ -1203,7 +1203,7 @@ The following are parameters related to SQL statements and data types supported 
 +---------------------------------+--------+------------+------------+------------+
 | default_week_format             | int    | 0          |            |            |
 +---------------------------------+--------+------------+------------+------------+
-| group_concat_max_len            | byte   | 1,024      | 4          | 33,554,432 |
+| group_concat_max_len            | byte   | 1,024      | 4          | INT_MAX    |
 +---------------------------------+--------+------------+------------+------------+
 | intl_check_input_string         | bool   | no         |            |            |
 +---------------------------------+--------+------------+------------+------------+
@@ -1324,7 +1324,7 @@ The following are parameters related to SQL statements and data types supported 
 **group_concat_max_len**
 
     **group_concat_max_len** is a parameter used to limit the return value size of the :func:`GROUP_CONCAT` function.
-    You can set a unit as B, K, M, G or T, which stands for bytes, kilobytes(KB), megabytes(MB), gigabytes(GB) or terabytes(TB) respectively. If you omit the unit, bytes will be applied. The default value is **1,024**. The minimum value is 4 and the maximum value is 33,554,432 bytes. 
+    You can set a unit as B, K, M, G or T, which stands for bytes, kilobytes(KB), megabytes(MB), gigabytes(GB) or terabytes(TB) respectively. If you omit the unit, bytes will be applied. The default value is **1,024**. The minimum value is 4 and the maximum value is INT_MAX (about 2G) bytes. 
     
     This function is affected by **string_max_size_bytes** parameter; if the value of **group_concat_max_len** is greater than the value **string_max_size_bytes** and the result size of **GROUP_CONCAT** exceeds the value of **string_max_size_bytes**, an error occurs.
 

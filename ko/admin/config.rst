@@ -1200,7 +1200,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 +---------------------------------+--------+------------+------------+------------+
 | default_week_format             | int    | 0          |            |            |
 +---------------------------------+--------+------------+------------+------------+
-| group_concat_max_len            | byte   | 1,024      | 4          | 33,554,432 |
+| group_concat_max_len            | byte   | 1,024      | 4          | INT_MAX    |
 +---------------------------------+--------+------------+------------+------------+
 | intl_check_input_string         | bool   | no         |            |            |
 +---------------------------------+--------+------------+------------+------------+
@@ -1315,9 +1315,9 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 **group_concat_max_len**
 
     **group_concat_max_len**  은 :func:`GROUP_CONCAT` 함수의 리턴 값의 크기를 제한하는 파라미터이다.
-    값 뒤에 B, K, M, G, T로 단위를 붙일 수 있으며, 각각 Bytes, Kilobytes, Megabytes, Gigabytes, Terabytes를 의미한다. 단위를 생략하면 바이트 단위가 적용된다. 기본값은 **1,024** 바이트이며, 최소값은 4 바이트, 최대값은 33,554,432 바이트이다. :func:`GROUP_CONCAT` 함수의 결과가 제한을 넘으면 오류가 반환된다.
+    값 뒤에 B, K, M, G, T로 단위를 붙일 수 있으며, 각각 Bytes, Kilobytes, Megabytes, Gigabytes, Terabytes를 의미한다. 단위를 생략하면 바이트 단위가 적용된다. 기본값은 **1,024** 바이트이며, 최소값은 4 바이트, 최대값은INT_MAX 바이트(약2G)이다. :func:`GROUP_CONCAT` 함수의 결과가 제한을 넘으면 오류가 반환된다.
 
-    이 함수는 **string_max_size_bytes** 파라미터의 영향을 받으며, **string_max_size_bytes** 보다 **group_concat_max_len** 이 크고 :func:`GROUP_CONCAT` 함수의 결과가 **string_max_size_bytes** 의 크기 제한을 넘으면 오류가 반환된다.
+    이 함수는 **string_max_size_bytes** 파라미터의 영향을 받으며, **group_concat_max_len** 값을 **string_max_size_bytes** 보다 크게 설정한 경우 :func:`GROUP_CONCAT` 결과가 **string_max_size_bytes** 값을 초과하면 오류가 발생한다.
 
 **intl_check_input_string**
 

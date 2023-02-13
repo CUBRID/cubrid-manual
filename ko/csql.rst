@@ -815,3 +815,10 @@ CSQL 인터프리터에서 작업 중인 데이터베이스 이름 및 호스트
 
     csql> ;editor_cmd emacs
     csql> ;edit
+
+**싱글 라인 모드 설정(;SINGLEline)**
+
+싱글 라인 모드를 **ON** 또는 **OFF** 로 설정하는 명령어이다. 싱글 라인 모드란, CSQL 실행 중 입력한 SQL 문이 바로 실행하는 것을 의미한다. 싱글 라인 모드를 꺼둔다면, CSQL 시작 옵션 중 --no-single-line 과 같이 ;xrun 혹은 ;run 세션 명령어로 SQL 문 여러 개를 한꺼번에 수행한다. 만약, **ON** 또는 **OFF** 를 지정하지 않으면 현재 설정된 값을 보여준다. 만약, **OFF** 모드 중에서 ;xrun 혹은 ;run을 실행시키지 않고, 싱글 라인 모드를 바꾼다면 그다음 CSQL 명령어 실행 시, 저장된 SQL 과 함께 실행된다. 참고로 CSQL 인터프리터는 기본값이 **ON** 이다. ::
+
+    csql> ;singleline off
+    SINGLE IS OFF

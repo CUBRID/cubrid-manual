@@ -381,6 +381,8 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               | recovery_progress_logging_interval  | server parameter        |         | int      | 0                              |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | supplemental_log                    | client/server parameter |         | int      | 0                              |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | regexp_engine                       | client/server parameter |         | string   | re2                            | available             |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 
 .. _lpg:
@@ -1262,7 +1264,7 @@ The following are parameters related to SQL statements and data types supported 
 +---------------------------------+--------+------------+------------+------------+
 | default_week_format             | int    | 0          |            |            |
 +---------------------------------+--------+------------+------------+------------+
-| group_concat_max_len            | byte   | 1,024      | 4          | 33,554,432 |
+| group_concat_max_len            | byte   | 1,024      | 4          | INT_MAX    |
 +---------------------------------+--------+------------+------------+------------+
 | intl_check_input_string         | bool   | no         |            |            |
 +---------------------------------+--------+------------+------------+------------+
@@ -1383,7 +1385,7 @@ The following are parameters related to SQL statements and data types supported 
 **group_concat_max_len**
 
     **group_concat_max_len** is a parameter used to limit the return value size of the :func:`GROUP_CONCAT` function.
-    You can set a unit as B, K, M, G or T, which stands for bytes, kilobytes(KB), megabytes(MB), gigabytes(GB) or terabytes(TB) respectively. If you omit the unit, bytes will be applied. The default value is **1,024**. The minimum value is 4 and the maximum value is 33,554,432 bytes. 
+    You can set a unit as B, K, M, G or T, which stands for bytes, kilobytes(KB), megabytes(MB), gigabytes(GB) or terabytes(TB) respectively. If you omit the unit, bytes will be applied. The default value is **1,024**. The minimum value is 4 and the maximum value is INT_MAX (about 2G) bytes. 
     
     This function is affected by **string_max_size_bytes** parameter; if the value of **group_concat_max_len** is greater than the value **string_max_size_bytes** and the result size of **GROUP_CONCAT** exceeds the value of **string_max_size_bytes**, an error occurs.
 
@@ -2078,6 +2080,8 @@ The following are other parameters. The type and value range for each parameter 
 +-------------------------------------+--------+----------------+----------------+----------------+
 | supplemental_log                    | int    | 0 (off)        | 0              | 2              |
 +-------------------------------------+--------+----------------+----------------+----------------+
+| regexp_engine                       | string | re2            |                |                |
++-------------------------------------+--------+----------------+----------------+----------------+
 
 **access_ip_control**
 
@@ -2269,6 +2273,10 @@ The following are other parameters. The type and value range for each parameter 
 **supplemental_log**
 
     **supplemental_log** is a parameter to determine whether information needed to support the CDC (Change Data Capture) or :ref:`flashback` is written to the log volume. CDC and flashback must be able to see how transactions logically changed the database through the physical logs. Any additional information required to interpret the physical logs is saved as **supplemental_log** . Setting this parameter bigger than 0 affects performance and log space because more logs are created and stored in addition to the existing transaction logs. If this parameter is set to 1, the information necessary to interpret DML and DDL executed by the user is logged. If it is set to 2, only information necessary to interpret the DML is logged.
+
+**regexp_engine**
+
+    **regexp_engine** is a parameter to choose a library in which regular expression operators and functions will perform. **cppstd** or **re2** can be set and the default value is **re2**. For more information on regular expression functionalities, refer to :doc:`/sql/function/regex_fn`.
 
 .. _broker-configuration:
 

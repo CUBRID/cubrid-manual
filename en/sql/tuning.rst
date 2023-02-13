@@ -632,7 +632,7 @@ Using hints can affect the performance of query execution. You can allow the que
     NO_COVERING_IDX |
     NO_MULTI_RANGE_OPT |
     NO_SORT_LIMIT |
-    NO_PRED_PUSH |
+    NO_PUSH_PRED |
     NO_MERGE |
     NO_HASH_AGGREGATE |
     NO_HASH_LIST_SCAN |
@@ -675,7 +675,7 @@ The following hints can be specified in **UPDATE**, **DELETE** and **SELECT** st
 *   **NO_COVERING_IDX**: This is a hint not to use the covering index. For details, see :ref:`covering-index`.
 *   **NO_MULTI_RANGE_OPT**: This is a hint not to use the multi-key range optimization. For details, see :ref:`multi-key-range-opt`.
 *   **NO_SORT_LIMIT**: This is a hint not to use the SORT-LIMIT optimization. For more details, see :ref:`sort-limit-optimization`.
-*   **NO_PRED_PUSH**: This is a hint not to use the PREDICATE-PUSH optimization.
+*   **NO_PUSH_PRED**: This is a hint not to use the PREDICATE-PUSH optimization.
 *   **NO_MERGE**: This is a hint not to use the VIEW_MERGE optimization.
 
 .. _no-hash-aggregate:

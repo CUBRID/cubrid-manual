@@ -431,26 +431,152 @@ When the methods above are called, the ResultSet consisting of 14 columns listed
 
 .. code-block:: java
 
-    ResultSet rs = null;
-    DatabaseMetaData dbmd = conn.getMetaData();
+	import java.sql.*;
+	import java.lang.*;
+	import cubrid.jdbc.driver.*;
 
-    System.out.println("\n===== Test getImportedKeys");
-    System.out.println("=====");
-    rs = dbmd.getImportedKeys(null, null, "pk_table");
-    Test.printFkInfo(rs);
-    rs.close();
-     
-    System.out.println("\n===== Test getExportedKeys");
-    System.out.println("=====");
-    rs = dbmd.getExportedKeys(null, null, "fk_table");
-    Test.printFkInfo(rs);
-    rs.close();
-     
-    System.out.println("\n===== Test getCrossReference");
-    System.out.println("=====");
-    rs = dbmd.getCrossReference(null, null, "pk_table", null, null, "fk_table");
-    Test.printFkInfo(rs);
-    rs.close();
+
+	public class Metadata_Sample
+	{
+		public static String getRuleName(String rule) {
+			int r = Integer.parseInt(rule);
+			switch(r) {
+				case DatabaseMetaData.importedKeyCascade:
+					return "cascade (" + rule + ")";
+				case DatabaseMetaData.importedKeyRestrict:
+					return "restrict (" + rule + ")";
+				case DatabaseMetaData.importedKeySetNull:
+					return "set null (" + rule + ")";
+				case DatabaseMetaData.importedKeyNoAction:
+					return "no action (" + rule + ")";
+				case DatabaseMetaData.importedKeySetDefault:
+					return "set default (" + rule + ")";
+				default:
+					return "unknown (" + rule + ")";
+			}
+		}
+
+		public static String getDeferrabilityName(String deferrability) {
+			int d = Integer.parseInt(deferrability);
+			switch(d) {
+				case DatabaseMetaData.importedKeyInitiallyDeferred:
+					return "initially deferred (" + deferrability + ")";
+				case DatabaseMetaData.importedKeyInitiallyImmediate:
+					return "initially immediate (" + deferrability + ")";
+				case DatabaseMetaData.importedKeyNotDeferrable:
+					return "not deferrable (" + deferrability + ")";
+				default:
+					return "unknown (" + deferrability + ")";
+			}
+		}
+
+		public static void printFkInfo(ResultSet rs) throws Exception {
+			while(rs.next()) {
+				System.out.println("\n<" + rs.getString("FK_NAME") + ">");
+				System.out.println("01. PKTABLE_CAT   : " + rs.getString("PKTABLE_CAT"));
+				System.out.println("02. PKTABLE_SCHEM : " + rs.getString("PKTABLE_SCHEM"));
+				System.out.println("03. PKTABLE_NAME  : " + rs.getString("PKTABLE_NAME"));
+				System.out.println("04. PKCOLUMN_NAME : " + rs.getString("PKCOLUMN_NAME"));
+				System.out.println("05. FKTABLE_CAT   : " + rs.getString("FKTABLE_CAT"));
+				System.out.println("06. FKTABLE_SCHEM : " + rs.getString("FKTABLE_SCHEM"));
+				System.out.println("07. FKTABLE_NAME  : " + rs.getString("FKTABLE_NAME"));
+				System.out.println("08. FKCOLUMN_NAME : " + rs.getString("FKCOLUMN_NAME"));
+				System.out.println("09. KEY_SEQ       : " + rs.getString("KEY_SEQ"));
+				System.out.println("10. UPDATE_RULE   : " + getRuleName(rs.getString("UPDATE_RULE")));
+				System.out.println("11. DELETE_RULE   : " + getRuleName(rs.getString("DELETE_RULE")));
+				System.out.println("12. FK_NAME       : " + rs.getString("FK_NAME"));
+				System.out.println("13. PK_NAME       : " + rs.getString("PK_NAME"));
+				System.out.println("14. DEFERRABILITY : " + getDeferrabilityName(rs.getString("DEFERRABILITY")));
+			}
+		}
+		public static void main (String args []) {
+			Connection conn = null;
+			Statement stmt;
+			DatabaseMetaData dbmd;
+			ResultSet rs;
+
+			try {
+				conn = (CUBRIDConnection)DriverManager.getConnection("jdbc:cubrid:127.0.0.1:25011:demodb:dba::", "dba", "");
+
+				stmt = conn.createStatement();
+
+				dbmd = conn.getMetaData();
+
+				stmt.executeUpdate("drop table if exists refer_1");
+				stmt.executeUpdate("drop table if exists refer_2");
+				stmt.executeUpdate("drop table if exists referred_1");
+				stmt.executeUpdate("drop table if exists referred_2");
+
+				stmt.executeUpdate("create table referred_1 ("
+						+ "pk1 int,"
+						+ "pk2 int,"
+						+ "primary key (pk1, pk2))");
+
+				stmt.executeUpdate("create table referred_2 ("
+						+ "pk int primary key)");
+
+				stmt.executeUpdate("create table refer_1 ("
+						+ "pk int primary key,"
+						+ "fk1 int,"
+						+ "fk2 int,"
+						+ "fk3 int,"
+						+ "constraint refer_1_fk1_2_fk foreign key (fk1, fk2) references referred_1(pk1, pk2),"
+						+ "constraint refer_1_fk3_fk foreign key (fk3) references referred_2(pk))");
+
+				stmt.executeUpdate("create table refer_2 ("
+						+ "pk int primary key,"
+						+ "fk1 int,"
+						+ "fk2 int,"
+						+ "fk3 int,"
+						+ "constraint refer_2_fk1_2_fk foreign key (fk1, fk2) references referred_1(pk1, pk2) "
+						+ "on update set null on delete no action,"
+						+ "constraint refer_2_fk3_fk foreign key (fk3) references referred_2(pk) "
+						+ "on update restrict on delete cascade)");
+
+				System.out.println("\n============== getImportedKeys() ==================");
+
+				rs = dbmd.getImportedKeys(null, null, "refer_1");
+				printFkInfo(rs);
+				rs.close();
+
+				rs = dbmd.getImportedKeys(null, null, "refer_2");
+				printFkInfo(rs);
+				rs.close();
+
+				System.out.println("\n=============== getExportedKeys() =================");
+				rs = dbmd.getExportedKeys(null, null, "referred_1");
+				printFkInfo(rs);
+				rs.close();
+
+				rs = dbmd.getExportedKeys(null, null, "referred_2");
+				printFkInfo(rs);
+				rs.close();
+
+				System.out.println("\n=============== getCrossReference() =================");
+				rs = dbmd.getCrossReference(null, null, "referred_1", null, null, "refer_1");
+				printFkInfo(rs);
+				rs.close();
+
+				rs = dbmd.getCrossReference(null, null, "referred_1", null, null, "refer_2");
+				printFkInfo(rs);
+				rs.close();
+
+				rs = dbmd.getCrossReference(null, null, "referred_2", null, null, "refer_1");
+				printFkInfo(rs);
+				rs.close();
+
+				rs = dbmd.getCrossReference(null, null, "referred_2", null, null, "refer_2");
+				printFkInfo(rs);
+				rs.close();
+
+				rs = dbmd.getCrossReference(null, null, "refer_1", null, null, "refer_2");
+				printFkInfo(rs);
+				rs.close();
+			} catch (Exception e) {
+			   e.printStackTrace();
+			}
+		}
+	}
 
 Using Object Identifiers (OIDs) and Collections
 -----------------------------------------------

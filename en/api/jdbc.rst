@@ -496,7 +496,7 @@ When the methods above are called, the ResultSet consisting of 14 columns listed
 			ResultSet rs;
 
 			try {
-				conn = (CUBRIDConnection)DriverManager.getConnection("jdbc:cubrid:127.0.0.1:25011:demodb:dba::", "dba", "");
+				conn = (CUBRIDConnection)DriverManager.getConnection("jdbc:cubrid:localhost:33000:demodb:::", "dba", "");
 
 				stmt = conn.createStatement();
 

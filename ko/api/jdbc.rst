@@ -498,7 +498,7 @@ cubrid.jdbc.driver.CUBRIDConnection 클래스의 toString() 메서드를 사용�
 			ResultSet rs;
 
 			try {
-				conn = (CUBRIDConnection)DriverManager.getConnection("jdbc:cubrid:127.0.0.1:25011:demodb:dba::", "dba", "");
+				conn = (CUBRIDConnection)DriverManager.getConnection("jdbc:cubrid:localhost:33000:demodb:::", "dba", "");
 
 				stmt = conn.createStatement();
 

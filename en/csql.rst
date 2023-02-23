@@ -298,7 +298,7 @@ To display the option list in the prompt, execute the **csql** utilities without
 
 .. option:: --no-single-line
 
-    The following example shows how to keep storing multiple SQL statements and execute them at once with the **;xr** or **;r** session command. If you do not specify this option, SQL statements are executed without **;xr** or **;r** session command. ::
+    The following example shows how to keep storing multiple SQL statements and execute them at once with the **;xr** or **;r** session command. If you do not specify this option, SQL statements are executed without **;xr** or **;r** session command. ;Singleline command will also have the same result. ::
 
         csql --no-single-line demodb
 
@@ -815,3 +815,12 @@ This command specifies the editor to be used with **;EDIT** session command. As 
 
     csql> ;editor_cmd emacs
     csql> ;edit
+
+**Specifying the single line mode (;SIngleline)**
+
+This command sets single line mode to **ON** or **OFF** (default value is **ON**). If you type semi-colon(;) and ENTER key in the single line ON mode, SQL statements are executed. If single line mode is set to **OFF**, multiple SQL statements are retrieved and executed at once with the **;xr** or **;r** session command. If any value is not specified, current configured value is applied by default. ::
+
+    csql> ;singleline off
+    SINGLE IS OFF
+    csql> ;singleline
+    SINGLE IS OFF

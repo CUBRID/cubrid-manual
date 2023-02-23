@@ -803,9 +803,11 @@ CSQL 인터프리터에서 작업 중인 데이터베이스 이름 및 호스트
 
     csql> ;historyread 1
 
-**기본 편집기를 호출(;EDIT)**
+**기본 편집기를 호출(;EDIT [format/fmt])**
 
-지정된 편집기를 호출하는 세션 명령어이다. 기본 편집기는 Linux에서는 vi이고, Windows에서는 메모장이다. 다른 편집기로 지정하려면 **;EDITOR_Cmd** 명령어를 이용한다. ::
+지정된 편집기를 호출하는 세션 명령어이다. 기본 편집기는 Linux에서는 vi이고, Windows에서는 메모장이다. 다른 편집기로 지정하려면 **;EDITOR_Cmd** 명령어를 이용한다.
+
+**format** 또는 **fmt** 옵션을 통해 편집 내용 SQL 문을 포맷할 수 있다. 포맷터 등록은 **;FOrmatter_cmd** 명령어를 이용한다. ::
 
     csql> ;edit
 
@@ -815,3 +817,16 @@ CSQL 인터프리터에서 작업 중인 데이터베이스 이름 및 호스트
 
     csql> ;editor_cmd emacs
     csql> ;edit
+
+**포맷터 설정(;FOrmatter_cmd)**
+
+**;EDIT** 세션 명령어에서 옵션으로 사용될 포맷터를 지정한다. 예제와 같이 사용자가 설정하여 사용할 수 있고, OS 환경변수(FORMATTER)를 미리 설정하여 사용할 수 있다. ::
+
+    csql> ;formatter_cmd /home/cubrid/formatter/fsqlf
+    csql> ;edit format
+
+.. note::
+    
+        Free SQL Formatter 사용을 권고합니다.
+
+        다운로드 url: https://sourceforge.net/projects/fsqlf/

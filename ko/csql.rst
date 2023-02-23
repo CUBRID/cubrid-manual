@@ -298,7 +298,7 @@ CSQL 시작 옵션
 
 .. option:: --no-single-line
 
-    **-\-no-single-line** 옵션을 이용하면 SQL 문 여러 개를 저장해 두었다가 **;xr** 혹은 **;r** 세션 명령어로 한꺼번에 수행한다. 이 옵션을 지정하지 않으면 **;xr** 혹은 **;r** 세션 명령어 없이 SQL 문이 바로 실행된다. ::
+    **-\-no-single-line** 옵션을 이용하면 SQL 문 여러 개를 저장해 두었다가 **;xr** 혹은 **;r** 세션 명령어로 한꺼번에 수행한다. 이 옵션을 지정하지 않으면 **;xr** 혹은 **;r** 세션 명령어 없이 SQL 문이 바로 실행된다. 또한, ;SIngleline 세션 명령을 통해 동일한 결과를 얻을 수 있다. ::
 
         csql --no-single-line demodb
 
@@ -815,3 +815,12 @@ CSQL 인터프리터에서 작업 중인 데이터베이스 이름 및 호스트
 
     csql> ;editor_cmd emacs
     csql> ;edit
+
+**싱글 라인 모드 설정(;SIngleline)**
+
+싱글 라인 모드를 **ON** 또는 **OFF** 로 설정하는 명령어이다 (기본값 **ON**). 싱글 라인 모드 ON에서는 세미콜론(;)과 ENTER를 입력하면 SQL문이 바로 실행된다. 싱글 라인 모드 OFF에서는 여러 개의 SQL 문을 저장해 두었다가 ;xr 혹은 ;r 세션 명령어로 한꺼번에 수행한다. 만약, ON 또는 OFF 를 지정하지 않으면 현재 설정된 값을 보여준다. ::
+
+    csql> ;singleline off
+    SINGLE IS OFF
+    csql> ;singleline
+    SINGLE IS OFF

@@ -809,10 +809,30 @@ CSQL 인터프리터에서 작업 중인 데이터베이스 이름 및 호스트
 
 .. option:: format / fmt
 
-**format** 또는 **fmt** 옵션을 통해 편집 내용 SQL 문을 포맷할 수 있다. 포맷터 등록은 **;FOrmatter_cmd** 명령어를 이용한다. ::
+**format** 또는 **fmt** 옵션을 통해 SQL문을 포맷한 후 편집할 수 있다. 포맷터 등록은 **;FOrmatter_cmd** 세션 명령어를 이용한다. ::
 
     csql> ;edit
+    SELECT * FROM t1
+
     csql> ;edit format
+    SELECT
+     *
+    FROM
+     t1
+
+**포맷터 설정(;FOrmatter_cmd)**
+
+**;EDIT** 세션 명령어에서 옵션으로 사용될 포맷터를 지정한다. 예제와 같이 사용자가 설정하여 사용할 수 있고, OS 환경변수(FORMATTER)를 미리 설정하여 사용할 수 있다. ::
+
+    csql> ;formatter_cmd /usr/local/bin/fsqlf
+
+    $ setenv FORMATTER /home/cubrid/bin/fsqlf
+
+.. note::
+    
+        Free SQL Formatter 사용을 권고합니다.
+
+        다운로드 URL: https://sourceforge.net/projects/fsqlf/
 
 **편집기 설정(;EDITOR_Cmd)**
 
@@ -820,19 +840,6 @@ CSQL 인터프리터에서 작업 중인 데이터베이스 이름 및 호스트
 
     csql> ;editor_cmd emacs
     csql> ;edit
-
-**포맷터 설정(;FOrmatter_cmd)**
-
-**;EDIT** 세션 명령어에서 옵션으로 사용될 포맷터를 지정한다. 예제와 같이 사용자가 설정하여 사용할 수 있고, OS 환경변수(FORMATTER)를 미리 설정하여 사용할 수 있다. ::
-
-    csql> ;formatter_cmd /home/cubrid/formatter/fsqlf
-    csql> ;edit format
-
-.. note::
-    
-        Free SQL Formatter 사용을 권고합니다.
-
-        다운로드 url: https://sourceforge.net/projects/fsqlf/
         
 **싱글 라인 모드 설정(;SIngleline)**
 

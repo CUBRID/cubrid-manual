@@ -805,9 +805,34 @@ You can use **;HISTORYRead** session command to read input with history number i
 
 **Calling the default editor (;EDIT)**
 
-This command calls the specified editor. The default editor is **vi** on Linux **Notepad** on Windows environment. Use **;EDITOR_Cmd** command to specify a different editor. ::
+This command calls the specified editor. The default editor is **vi** on Linux **Notepad** on Windows environment. Use **;EDITOR_Cmd** command to specify a different editor.
+
+.. option:: format / fmt
+
+The **format** or **fmt** option allows you to edit after formatting the SQL statement. Formatter registration uses the **;FOrmatter_cmd** session command. ::
 
     csql> ;edit
+    SELECT * FROM t1
+
+    csql> ;edit format
+    SELECT
+     *
+    FROM
+     t1
+
+**Specifying the formatter(;FOrmatter_cmd)**
+
+This command specifics the formatter to be used with **;EDIT** session command. As shown in the example below, you can specify formatter path directly or OS environment variable(FORMATTER) can be set in advance. ::
+
+    csql> ;formatter_cmd /usr/local/bin/fsqlf
+
+    $ setenv FORMATTER /home/cubrid/bin/fsqlf
+
+.. note::
+
+        The use of Free SQL Formatter is recommended.
+
+        Download url: https://sourceforge.net/projects/fsqlf/
 
 **Specifying the editor (;EDITOR_Cmd)**
 

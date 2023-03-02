@@ -824,3 +824,20 @@ CSQL 인터프리터에서 작업 중인 데이터베이스 이름 및 호스트
     SINGLE IS OFF
     csql> ;singleline
     SINGLE IS OFF
+
+**원하는 유저/데이터베이스/호스트에 연결(;Connect)**
+
+CSQL 세션 내에서 특정 유저/ 데이터베이스/호스트에 접속을 시도하는 명령어이다. 해당 유저가 없거나, 잘못된 비밀번호를 입력하거나, 데이터베이스가 구동을 하지 않거나, 잘못된 데이터베이스 이름, 잘못된 호스트의 이름을 입력하여 접속하는 경우에는 명령어 실행이 실패한다. 실행이 실패한 경우 세션이 종료되고, 다시 올바른 값을 입력하여 접속을 시도하면 CSQL 세션에 연결이 된다. (dba --SYSADM 옵션에서는 작동하지 않는다.) ::
+
+     csql> ;connect public
+     Warning: current CSQL session is disconnected.
+     Connected.
+     csql> ;connect Peter demodb@host
+     Enter Password : Wrong password
+     
+     ERROR: Incorrect or missing password.
+
+     !csql>
+     csql> ;connect Peter demodb@host
+     Enter Password : Correct password
+     Connected.

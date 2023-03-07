@@ -832,8 +832,8 @@ CSQL을 종료하지 않고 다른 사용자로 접속을 전환하기 위한 �
 
 
 * user: 접속할 사용자 이름 
-* database: 접속할 데이터베이스 이름 (현재 접속된 DB와 다른 DB로 접속할 경우)
-* host: 데이터베이스 서버가 구동중인 호스트 이름::
+* database: 접속할 데이터베이스 이름 (생략 시, 현재 접속한 데이터베이스)
+* host: 접속할 호스트 이름 (생략 시, localhost)::
 
      csql> ;connect public
      csql> ;connect dba
@@ -847,5 +847,5 @@ CSQL을 종료하지 않고 다른 사용자로 접속을 전환하기 위한 �
 .. warning::
 
      #. ';connect' 세션 명령어를 실행하면 새로운 세션 연결 성공 여부와 관계 없이 현재의 CSQL 세션 연결은 해제된다.
-     #. CSQL이 시스템 관리자 모드 에 있는 경우 ';connect' 세션 명령어는 사용할 수 없다.(csql -u dba --sysadm demodb 형태의 명령으로 CSQL 진입한 경우)
+     #. CSQL이 시스템 관리자 모드에 있는 경우 ';connect' 세션 명령어는 사용할 수 없다 (csql -u dba --sysadm demodb 형태의 명령으로 CSQL 진입한 경우).
 

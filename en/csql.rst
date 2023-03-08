@@ -824,3 +824,27 @@ This command sets single line mode to **ON** or **OFF** (default value is **ON**
     SINGLE IS OFF
     csql> ;singleline
     SINGLE IS OFF
+
+**Connecting new csql session(;Connect)**
+
+This is a session command to switch the connection to another user without terminating CSQL. The command format is as follows.
+
+* user: Username to connect
+* database: Database name to connect (if omitted, currently connected database)
+* host: Hostname to connect to (if omitted, localhost)::
+
+     csql> ;connect public
+     csql> ;connect dba
+
+     csql> ;connect public testdb
+     csql> ;connect dba demodb
+
+     csql> ;connect Peter testdb@192.168.0.1
+     csql> ;connect public demodb@localhost
+
+.. warning::
+
+     #. When ';connect' session command executes, the current CSQL session connection is disconnect regardless of whether the new session connection succeeds or not. 
+     #. When CSQL is in system administrator mode, ';connect' session command cannot be used (When entering CSQL with an csql -u dba --sysadm demodb form command).
+
+

@@ -822,7 +822,7 @@ The **format** or **fmt** option allows you to edit after formatting the SQL sta
 
 **Specifying the formatter(;FOrmatter_cmd)**
 
-This command specifics the formatter to be used with **;EDIT** session command. As shown in the example below, you can specify formatter path directly or OS environment variable(FORMATTER) can be set in advance. ::
+This command specifies the formatter to be used with **;EDIT** session command. The user can set it up and use it as shown in the example, and OS environment variable(FORMATTER) can be set up in advance for use. ::
 
     csql> ;formatter_cmd /usr/local/bin/fsqlf
 
@@ -832,7 +832,7 @@ This command specifics the formatter to be used with **;EDIT** session command. 
 
         The use of Free SQL Formatter is recommended.
 
-        Download url: https://sourceforge.net/projects/fsqlf/
+        Download url: https://github.com/CUBRID/fsqlf/releases/download/v.1.0.0-csql.1/fsqlf-1.0.0.csql.1.gz
 
 **Specifying the editor (;EDITOR_Cmd)**
 

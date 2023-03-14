@@ -831,7 +831,7 @@ This is a session command to switch the connection to another user without termi
 
 * user: Username to connect
 * database: Database name to connect (if omitted, currently connected database)
-* host: Hostname to connect to (if omitted, localhost)::
+* host: Hostname to connect to (if omitted, localhost) ::
 
      csql> ;connect public
      csql> ;connect dba

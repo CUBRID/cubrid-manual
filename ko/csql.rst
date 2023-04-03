@@ -805,9 +805,34 @@ CSQL 인터프리터에서 작업 중인 데이터베이스 이름 및 호스트
 
 **기본 편집기를 호출(;EDIT)**
 
-지정된 편집기를 호출하는 세션 명령어이다. 기본 편집기는 Linux에서는 vi이고, Windows에서는 메모장이다. 다른 편집기로 지정하려면 **;EDITOR_Cmd** 명령어를 이용한다. ::
+지정된 편집기를 호출하는 세션 명령어이다. 기본 편집기는 Linux에서는 vi이고, Windows에서는 메모장이다. 다른 편집기로 지정하려면 **;EDITOR_Cmd** 명령어를 이용한다.
+
+.. option:: format / fmt
+
+**format** 또는 **fmt** 옵션을 통해 SQL문을 포맷한 후 편집할 수 있다. 포맷터 등록은 **;FOrmatter_cmd** 세션 명령어를 이용한다. ::
 
     csql> ;edit
+    SELECT * FROM t1
+
+    csql> ;edit format
+    SELECT
+     *
+    FROM
+     t1
+
+**포맷터 설정(;FOrmatter_cmd)**
+
+**;EDIT** 세션 명령어에서 옵션으로 사용될 포맷터를 지정한다. 예제와 같이 사용자가 설정하여 사용할 수 있고, OS 환경변수(FORMATTER)를 미리 설정하여 사용할 수 있다. ::
+
+    csql> ;formatter_cmd /usr/local/bin/fsqlf
+
+    $ setenv FORMATTER /home/cubrid/bin/fsqlf
+
+.. note::
+    
+        Free SQL Formatter 사용을 권고합니다.
+
+        다운로드 URL: https://github.com/CUBRID/fsqlf/releases/download/v.1.0.0-csql.1/fsqlf-1.0.0.csql.1.gz
 
 **편집기 설정(;EDITOR_Cmd)**
 
@@ -815,7 +840,7 @@ CSQL 인터프리터에서 작업 중인 데이터베이스 이름 및 호스트
 
     csql> ;editor_cmd emacs
     csql> ;edit
-
+        
 **싱글 라인 모드 설정(;SIngleline)**
 
 싱글 라인 모드를 **ON** 또는 **OFF** 로 설정하는 명령어이다 (기본값 **ON**). 싱글 라인 모드 ON에서는 세미콜론(;)과 ENTER를 입력하면 SQL문이 바로 실행된다. 싱글 라인 모드 OFF에서는 여러 개의 SQL 문을 저장해 두었다가 ;xr 혹은 ;r 세션 명령어로 한꺼번에 수행한다. 만약, ON 또는 OFF 를 지정하지 않으면 현재 설정된 값을 보여준다. ::

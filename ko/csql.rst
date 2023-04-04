@@ -850,7 +850,7 @@ CSQL 인터프리터에서 작업 중인 데이터베이스 이름 및 호스트
     csql> ;singleline
     SINGLE IS OFF
 
-**새로운 csql 세션 연결(;Connect)**
+**csql 세션 전환(;Connect)**
 
 CSQL을 종료하지 않고 다른 사용자로 접속을 전환하기 위한 세션 명령어이다. 명령어 형식은 다음과 같다. 
 
@@ -869,6 +869,6 @@ CSQL을 종료하지 않고 다른 사용자로 접속을 전환하기 위한 �
 
 .. warning::
 
-     #. ';connect' 세션 명령어를 실행하면 새로운 세션 연결 성공 여부와 관계 없이 현재의 CSQL 세션 연결은 해제된다.
-     #. CSQL이 시스템 관리자 모드에 있는 경우 ';connect' 세션 명령어는 사용할 수 없다 (csql -u dba --sysadm demodb 형태의 명령으로 CSQL 진입한 경우).
+     #. ';connect' 세션 명령어를 실행하면 세션 전환 성공 여부와 관계 없이 현재의 CSQL 세션 연결은 해제된다.
+     #. CSQL이 시스템 관리자 모드인 경우 ';connect' 세션 명령어는 사용할 수 없다 (csql -u dba --sysadm demodb 형태의 명령으로 CSQL 수행한 경우).
 

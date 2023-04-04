@@ -94,6 +94,7 @@ The following **cubrid** utility syntax shows how to control CUBRID broker proce
                |on <broker_name> |off <broker_name>
                |reset broker_name 
                |info
+               |getid -b <broker_name> [-f] shard_key
 
 *   start: start broker processes.
 *   stop: stop broker processes. 
@@ -103,6 +104,7 @@ The following **cubrid** utility syntax shows how to control CUBRID broker proce
 *   on/off: enable/disable the specified broker.
 *   reset: reset the connection to broker.
 *   info: display the broker configuration information.
+*   getid: Acquire SHARD ID (SHARD database ID) with SHARD key
 
 Controlling Gateway
 -------------------
@@ -120,6 +122,7 @@ The following **cubrid** utility syntax shows how to control CUBRID gateway proc
                |on <gateway_name> |off <gateway_name>
                |reset gateway_name 
                |info
+               |getid -b <broker_name> [-f] shard_key
 
 *   start: start gateway processes.
 *   stop: stop gateway processes. 
@@ -928,7 +931,7 @@ Starting Broker
 ---------------
 
 Enter the command below to start the broker.
-
+The SHARD function is activated when SHARD, which is the broker parameter of cubic_broker.conf, is set to ON.
 ::
 
     $ cubrid broker start
@@ -947,6 +950,7 @@ Stopping Broker
 ---------------
 
 Enter the command below to stop the broker.
+If SHARD, the broker parameter of the cubrid_broker.conf, is set to ON, the SHARD function is stopped.
 
 ::
 
@@ -977,6 +981,7 @@ Checking Broker Status
 ----------------------
 
 The **cubrid broker status** utility allows you to check the broker status such as number of completed jobs and the number of standby jobs by providing various options. 
+If the SHARD broker parameter in the cubrid_broker.conf is set to ON, you can use the -c and -m options to check the status of the client or SHARD that accessed SHARD. You can also use the -S or -P options to output information separately by shard DB or proxy.
 
 ::
 
@@ -988,7 +993,7 @@ Specifying *expr* performs that the status of specific brokers which include *ex
 
 If "SERVICE=ON" is specified on *expr*, only the status of working brokers is displayed; if "SERVICE=OFF" is specified, only the status of stopped brokers is displayed.
 
-The following [options] are available with the **cubrid broker status** utility. -b, -q, -c, -m, -S, -P and -f are options to define the information to print; -s, -l and -t are options to control printing. All of these are possible to use as combining each other.
+The options used in the cubrid broker status are as follows. Among them, -b, -q, -c, -m, -S, -P, and -f are monitoring options that define information to be output, and -s, -l, and -t are options that control output. In addition, -c, -m, -S, and -P are mainly options applied when using SHARD functions. All of these options can be used in combination with each other.
 
 .. program:: broker_status
 
@@ -1000,11 +1005,31 @@ The following [options] are available with the **cubrid broker status** utility.
 
     Displays standby jobs in the job queue.
 
+.. option:: -c
+
+    When the SHARD of the cubrid_broker.conf is set to ON, client information connected to the proxy is output.
+
+.. option:: -m
+
+    When the SHARD of the cubrid_broker.conf is set to ON, the SHARD state and statistical information are output.
+
+.. option:: -S
+
+    Separated by shard db, the rest of the -b option items except NAME, PID, PORT, JQ, and #CONNECT are output, and ID, SHARD-Q, and #REQUEST are additionally output.
+
+.. option:: -p
+
+    Separated by proxy, the rest of the -b option items except NAME, PID, PORT, and JQ are output, and ID, SHARD-Q, and #RESTART are additionally output.
+
 .. option:: -f
 
     Displays information of DB and host accessed by broker.
 
     If it is used with the **-b** option, additional information on CAS is displayed. But SELECT, INSERT, UPDATE, DELETE, OTHERS items which shown on **-b** option are excluded.
+
+    If it is used with the **-m** option, more detailed SHARD statistics are output.
+
+    If it is used with the **-c** option, each shard proxy additionally outputs CLIENT-ID, CLIENT-IP, CONN-TIME, LAST-REQ-TIME, LAST-RES-TIME, and LAST-REQ-CODE items.
 
     If it is used with the **-P** option, STMT-POOL-RATIO is additionally printed. This item shows the ratio to use statements in the pool when you are using prepared statements.
     
@@ -1047,6 +1072,22 @@ If you do not specify options or arguments, the status of all brokers is display
 *   STATUS: The current status of CAS (BUSY, IDLE, CLIENT_WAIT, CLOSE_WAIT)
 *   % broker1 OFF: broker1's SERVICE parameter is set to OFF. So, broker1 is not started.
 
+.. note::
+
+    The ID information output when checking SHARD status represents a combination of numbers consisting of "(proxy's serial number) - (shard DB's serial number) - (the serial number of the application server (CAS) connecting to the shard DB).
+
+::
+
+    $ cubrid broker status
+    @ cubrid broker status
+    % shard1
+    ----------------------------------------------------------------
+        ID      PID     QPS   LQS PSIZE STATUS
+    ----------------------------------------------------------------
+        1-1-1  2580     100     3 55968 IDLE
+        1-2-1  2581     200     4 55968 IDLE
+
+
 The following shows the detail status of broker for 5 seconds. The display will reset per 5 seconds as the new status information. To escape the display of the status, press <Q>.
 
 ::
@@ -1073,7 +1114,7 @@ The following shows the detail status of broker for 5 seconds. The display will 
 *   OTHERS: The number of queries like CREATE and DROP except for SELECT, INSERT, UPDATE, DELETE. When there is an option of "-b -s <sec>", it is updated every time with the number of queries which have been executed during the seconds specified by this option.
 *   LONG-T: The number of transactions which exceed LONG_TRANSACTION_TIME. / the value of the LONG_TRANSACTION_TIME parameter. When there is an option of "-b -s <sec>", it is updated every time with the number of transactions which have been executed during the seconds specified by this option.
 *   LONG-Q: The number of queries which exceed LONG_QUERY_TIME. / the value of the LONG_QUERY_TIME parameter. When there is an option of "-b -s <sec>", it is updated every time with the number of queries which have been executed during the seconds specified by this option.
-*   ERR-Q: The number of queries with errors found. When there is an option of "-b -s <sec>", it is updated every time with the number of errors which have occurred during the seconds specified by this option. 
+*   ERR-Q: The number of queries with errors found. When there is an option of "-b -s <sec>", it is updated every time with the number of errors which have occurred during the seconds specified by this option. When the SHARD parameter is set to ON, the value of ERR-Q increases even when an error occurs in the proxy.
 *   UNIQUE-ERR-Q: The number of queries with unique key errors found. When there is an option of "-b -s <sec>", it is updated every time with the number of unique key errors which have occurred during the seconds specified by this option.
 *   #CONNECT: The number of connections that an application client accesses to CAS after starting the broker. 
 *   #REJECT: The count that an application client excluded from ACL IP list is rejected to access a CAS. Regarding ACL setting, see :ref:`limiting-broker-access`.
@@ -1168,7 +1209,263 @@ Meaning of added columns in code above is as follows:
 *   ACCESS_MODE: The mode in which the broker connects to the DB. Broker mode is classified into three types: Read Write, Read Only, and Standby Only. For details, see :ref:`broker-mode`.
 *   SQL_LOG: SQL logging mode of CAS. SQL LOG is classified into five types: ALL, OFF, ERROR, NOTICE, and TIMEOUT. For details, see :ref:`SQL_LOG <sql-log>` .
 
+Use the -m option to output SHARD status and statistics. Refer to :ref:`broker-configuration` for information on the parameters of cubrid_broker.conf.
+
+::
+
+    $ cubrid broker status -m
+    @ cubrid broker status
+    % shard1
+    MODULAR : 256, LIBRARY_NAME : NOT DEFINED, FUNCTION_NAME : NOT DEFINED
+    ACTIVE-PROXY : 1, NUM-NO-HINT-ERR-Q : 0
+
+    SHARD STATISTICS
+    ID  NUM-KEY-Q   NUM-ID-Q   NUM-NO-HINT-Q             SUM
+    ------------------------------------------------------------
+        0       1281          0               0            1281
+        1       1281          0               0            1281
+        2       1281          0               0            1281
+        3       1281          0               0            1281
+
+    NUM_SHARD_Q
+    PROXY_ID      1
+    SHARD_ID
+    ------------------
+    0                1
+    1                0
+    2                0
+    3                2
+
+
+The description of each column is as follows.
+
+*   shard1: broker name
+*   MODULAR: **SHARD_KEY_MODULS** parameter value of **cubrid_broker.conf**\
+*   LIBRARY_NAME: **SHARD_KEY_LIBRARY_NAME** parameter value of **cubrid_broker.conf**\
+*   FUNCTION_NAME: **cubrid_broker.conf**\ 의 **SHARD_KEY_FUNCTION_NAME** 파라미터 값
+*   ACTIVE-PROXY: number of proxy processes running
+*   NUM-NO-HINT-ERR-Q: number of queries that failed because the query did not have a shard hint
+*   SHARD STATISTICS: shard ID query information
+
+    *   ID: shard DB serial number (shard ID)
+    *   NUM-KEY-Q: number of query requests with shard key
+    *   NUM-ID-Q: number of query requests with shard ID
+    *   NUM-NO-HINT-Q: Number of requests processed by load balancing without hint when SHARD_IGNORE_HINT is set
+    *   SUM: NUM-KEY-Q + NUM-ID-Q
+    
+*   NUM_SHARD_Q: Number of query execution requests waiting for SHARD-Q
+
+    *   PROXY_ID: serial number of proxy
+    *   SHARD_ID: serial number of shard DB
+
+.. _shard-q:
+
+SHARD-Q stands for Shard Waiting Queue. If the SHARD proxy process requests the execution of a query, but there is no SHARD CAS process to handle it, the request for execution of the query is briefly queued at SHARD-Q. As this value increases, it means that the query execution cannot be processed immediately and there are more waiting cases, so it is considered to set the number of MAX_NUM_APPL_SERVER.
+
+The following outputs more detailed SHARD statistics using the **-m** and **-f** options. See:ref:`broker-configuration`\ for information on the parameters of the cubrid_broker.conf
+
+::
+
+    $ cubrid broker status -m -f
+    @ cubrid broker status
+    % shard1 
+    MODULAR : 256, LIBRARY_NAME : NOT DEFINED, FUNCTION_NAME : NOT DEFINED
+    SHARD : 0 [HostA] [shard1], 1 [HostB] [shard1], 2 [HostC] [shard1], 3 [HostD] [shard1]
+    ACTIVE-PROXY : 1, NUM-NO-HINT-ERR-Q : 0
+
+    SHARD STATISTICS
+           ID  NUM-KEY-Q   NUM-ID-Q   NUM-NO-HINT-Q             SUM
+        ------------------------------------------------------------
+            0       2309          0               0            2309
+            1       2309          0               0            2309
+            2       2309          0               0            2309
+            3       2309          0               0            2309
+
+    NUM_SHARD_Q
+       PROXY_ID      1
+    SHARD_ID
+    ------------------
+    0                1
+    1                0
+    2                0
+    3                2
+
+    RANGE STATISTICS : user_no
+          MIN ~   MAX :      SHARD     NUM-Q
+        ------------------------------------
+            0 ~    31 :          0      1157
+           32 ~    63 :          1      1157
+           64 ~    95 :          2      1157
+           96 ~   127 :          3      1157
+          128 ~   159 :          0      1152
+          160 ~   191 :          1      1152
+          192 ~   223 :          2      1152
+          224 ~   255 :          3      1152
+
+    DB Alias : shard1 [USER : shard, PASSWD : shard123]
+
+A description of the added column is as follows.
+
+*   SHARD: About shard DB within proxy
+
+    *   0: shard DB serial number (shard ID)
+    *   [HostA]: shard Connection Information
+    *   [shard1]: Physical DB Name
+
+*   RANGE STATISTICS: shard key query information
+
+    *   user_no: shard key name
+    *   MIN: shard key minimum range
+    *   MAX: shard key maximum range
+    *   SHARD: shard DB serial number (shard ID)
+    *   NUM-Q: Number of query requests with shard key
+
+Use the **-c** option to output client information connected to the proxy.
+
+::
+
+    $ cubrid broker status -c
+    @ cubrid broker status
+    % shard1(0), MAX-CLIENT : 50, CUR-CLIENT : 0
+    % shard1(1), MAX-CLIENT : 50, CUR-CLIENT : 0
+
+*   MAX-CLIENT: Maximum number of application clients that can access that proxy
+*   CUR-CLIENT: Number of application clients connected to that proxy
+    
+Adding the **-f** option to the **-c** option will output more detailed client information.
+
+::
+
+    $ cubrid broker status -c -f
+    @ cubrid broker status
+    % shardqa(0), MAX-CLIENT : 50, CUR-CLIENT : 0
+    ---------------------------------------------------------------------------------------------------------------
+     CLIENT-ID           CLIENT-IP             CONN-TIME         LAST-REQ-TIME         LAST-RES-TIME  LAST-REQ-CODE
+    ---------------------------------------------------------------------------------------------------------------
+             2           127.0.0.1   2014/01/21 18:07:29   2014/01/21 18:07:56   2014/01/21 18:07:56              2
+    % shardqa(1), MAX-CLIENT : 50, CUR-CLIENT : 0
+    ---------------------------------------------------------------------------------------------------------------
+     CLIENT-ID           CLIENT-IP             CONN-TIME         LAST-REQ-TIME         LAST-RES-TIME  LAST-REQ-CODE
+    ---------------------------------------------------------------------------------------------------------------
+    
+A description of the added column is as follows.
+
+*   CLIENT-ID: Client serial numbers assigned sequentially within the proxy
+*   CLIENT-IP: Client IP address
+*   CONN-TIME: Time of access to proxy
+*   LAST-REQ-TIME: Last time a query was requested from proxy
+*   LAST-RES-TIME: Last time a response was received from proxy
+*   LAST-REQ-CODE: Code of the last function performed. The functions corresponding to the main code are as follows.
+
+    *   0:  end_tran(Termination of transaction)
+    *   1:  prepare
+    *   2:  execute
+    *   7:  fetch
+    
+Next, the shard DB-specific information is output using the **-S** option.
+
+::
+    
+    $ cubrid broker status -S
+    @ cubrid broker status
+    % shard1
+      SHARD_ID    AS SHARD-Q     TPS      QPS   SELECT   INSERT   UPDATE   DELETE   OTHERS     LONG-T     LONG-Q   ERR-Q  UNIQUE-ERR-Q  #REQUEST
+    =============================================================================================================================================
+             0     2       0    3200     3772      956      960      928      928        0     0/60.0     0/60.0     700             0      6978
+             1     2       0    3200     3776      960      960      928      928        0     0/60.0     0/60.0     704             0      6983
+             2     2       0    3200     3762      960      960      928      914        0     0/60.0     0/60.0     690             0      6968
+             3     2       0    3200     3776      960      960      928      928        0     0/60.0     0/60.0     704             0      6983
+
+A description of the added column is as follows.
+
+*   SHARD_ID: Start with index.0 in shard.
+*   SHARD-Q: Number of query execution requests waiting for SHARD-Q for that shard (see :ref:`SHARD-Q <shard-q>`)
+*   #REQUEST: The total number of requests received from the application client by the CAS belonging to the shard (the request includes all requests, including connection requests, as well as performing queries)
+             
+When you add the **-f** option to the **-S** option, AS items are divided into (TWB 1s-W 1s-B) and printed out in detail. For a detailed description of the AS item, see :ref:`AS <as-detail>`\.
+
+The following outputs proxy-specific information using the **-P** option.
+
+::
+
+    $ cubrid broker status -P
+    % shard1
+      PROXY_ID    AS SHARD-Q     TPS      QPS   SELECT   INSERT   UPDATE   DELETE   OTHERS     LONG-T     LONG-Q   ERR-Q  UNIQUE-ERR-Q  #CONNECT  #REJECT  #RESTART
+    ================================================================================================================================================================
+             1     4       0   22174    26160    26160        0        0        0        0     0/60.0     0/60.0    5256             0       165        0         0
+             2     4       0   35257    37903    23599     5152     4576     4576        0     0/60.0     0/60.0    4300             0       264        1         0
+                                                                                                                                                                                   
+When using the **-P** option, the additional column information output compared to the **-b** option is as follows.
+
+*   PROXY_ID: Start with index. 1 of proxy.
+*   SHARD-Q: Number of query execution requests waiting for SHARD-Q on proxy (see :ref:`SHARD-Q <shard-q>`)
+*   #CONNECT: Number of times the application client attempted to access the proxy
+*   #REJECT: The number of times that an application client accessing from an IP that is not included in the ACL has been denied access to that proxy. With regard to ACL configuration, see :ref:`limiting-broker-access`\.
+*   #RESTART: Number of times proxy has restarted
+
+Adding the **-f** option to the **-S** option splits AS items into (TWB 1s-W 1s-B) for detailed output, and adds STMT-POOL-RATIO items. For a detailed description of the AS item, see :ref:`AS <as-detail>`\.
+
+::
+
+    $ cubrid broker status -P -f
+    % shard1
+      PROXY_ID  AS(T      W      B   1s-W  1s-B) SHARD-Q   TPS   QPS   LONG-T   LONG-Q  ERR-Q  UNIQUE-ERR-Q  #CONNECT  #REJECT  #RESTART  STMT-POOL-RATIO (%)
+    ==========================================================================================================================================================
+             1     4      0      0      0      0       0     0     0   0/60.0   0/60.0      0             0       165        0         0                    -
+             2     4      0      0      0      0       0     0     0   0/60.0   0/60.0      0             0       264        1         0                    -
+                                                                                                                                               
+A description of the added column is as follows.
+
+*   STMT-POOL-RATIO: Percentage of use of statements in the pool when using prepare statements
+
+When the **-b**, **-S**, **-P** options are used at the same time, the output is as follows.
+
+::
+
+    $ cubrid broker status -b -S -P
+
+    @ cubrid broker status
+      NAME          PID  PORT    AS   JQ       TPS      QPS   SELECT   INSERT   UPDATE   DELETE   OTHERS     LONG-T     LONG-Q   ERR-Q  UNIQUE-ERR-Q  #CONNECT #REJECT  
+    ====================================================================================================================================================================
+    * shard1      10204 56001     8    0     57431    64063    49759     5152     4576     4576        0     0/60.0     0/60.0    9556             0       429       0  
+    * shard2      10221 56002     8    0     51913    58979    49844        0     4687     4448        0     0/60.0     0/60.0    9862             0       429       2  
+    % broker1 OFF                                                                                                                                
+
+    <SHARD INFO>
+    % shard1
+      SHARD_ID    AS SHARD-Q     TPS       QPS   SELECT   INSERT   UPDATE   DELETE   OTHERS     LONG-T     LONG-Q         ERR-Q  UNIQUE-ERR-Q    #REQUEST
+    ======================================================================================================================================================
+             0     2       0   14464     16165    12613     1312     1120     1120        0     0/60.0     0/60.0          2437             0       30645
+             1     2       0   14464     15926    12310     1248     1184     1184        0     0/60.0     0/60.0          2198             0       30403
+             2     2       0   14464     16347    12795     1312     1120     1120        0     0/60.0     0/60.0          2619             0       30824
+             3     2       0   14039     15625    12041     1280     1152     1152        0     0/60.0     0/60.0          2302             0       29681
+    % shard2
+      SHARD_ID    AS SHARD-Q     TPS       QPS   SELECT   INSERT   UPDATE   DELETE   OTHERS     LONG-T     LONG-Q         ERR-Q  UNIQUE-ERR-Q    #REQUEST
+    ======================================================================================================================================================
+             0     2       0   13085     14884    12580        0     1184     1120        0     0/60.0     0/60.0          2503             0       27985
+             1     2       0   13056     14808    12507        0     1181     1120        0     0/60.0     0/60.0          2456             0       27878
+             2     2       0   13056     14743    12453        0     1170     1120        0     0/60.0     0/60.0          2391             0       27812
+             3     2       0   12716     14544    12304        0     1152     1088        0     0/60.0     0/60.0          2512             0       27273
+
+    % broker1 OFF
+
+    <PROXY INFO>
+    % shard1
+      PROXY_ID    AS SHARD-Q      TPS     QPS   SELECT   INSERT   UPDATE   DELETE   OTHERS     LONG-T     LONG-Q  ERR-Q  UNIQUE-ERR-Q  #CONNECT  #REJECT  #RESTART
+    ===============================================================================================================================================================
+             1     4       0    22174   26160    26160        0        0        0        0     0/60.0     0/60.0   5256             0       165        0         0
+             2     4       0    35257   37903    23599     5152     4576     4576        0     0/60.0     0/60.0   4300             0       264        1         0
+    % shard2                                                                                                                        
+      PROXY_ID    AS SHARD-Q      TPS     QPS   SELECT   INSERT   UPDATE   DELETE   OTHERS     LONG-T     LONG-Q  ERR-Q  UNIQUE-ERR-Q  #CONNECT  #REJECT  #RESTART
+    ===============================================================================================================================================================
+             1     4       0    21590   25586    25586        0        0        0        0     0/60.0     0/60.0   5266             0       165        0         0
+             2     4       0    30323   33393    24258        0     4687     4448        0     0/60.0     0/60.0   4596             0       264        1         0
+    % broker1 OFF                                                                                                                    
+
 .. _limiting-broker-access:
+
+
+
 
 Limiting Broker Access
 ----------------------
@@ -1437,6 +1734,360 @@ Broker configuration information
     % cubrid broker info
 
 As a reference, to see the configuration information of the currently "working" system(cubrid.conf), use **cubrid paramdump** *database_name* command. By **SET SYSTEM PARAMETERS** syntax, the configuration information of the system parameters can be changed dynamically; with **cubrid broker info** command, you can see the configuration information of the system parameters.
+
+Check CUBRID SHARD ID
+--------------------------
+**cubrid broker getid**\ is a command used to know which shard DB a particular key belongs to, and outputs the SHARD ID for the shard key. :: 
+
+    cubrid broker getid -b <broker-name> [-f] shard-key
+    
+*   -b <*broker-name*>: broker name
+*   -f: print detail information
+*   *shard-key*: shard key
+
+The following is an example of outputting the SHARD ID for key 1 from the shard1 broker.
+
+::
+
+    $ cubrid broker getid -b shard1 1
+    @ cubrid broker getid
+    % shard1
+     SHARD_ID : 0, SHARD_KEY: 1
+
+The following is an example of outputting detailed information using the -f option.
+
+::
+    
+    $ cubrid broker getid -b shard1 -f 1
+    @ cubrid broker getid
+    % shard1
+     SHARD_ID : 0, SHARD_KEY : 1, KEY_COLUMN : student_no
+     MODULAR : 256, LIBRARY_NAME : NOT DEFINED, FUNCTION_NAME : NOT DEFINED
+     RANGE STATISTICS : student_no
+          MIN ~   MAX :      SHARD
+        ---------------------------
+            0 ~    31 :          0
+
+     SHARD CONNECTION :
+        SHARD_ID          DB NAME          CONNECTION_INFO
+        ---------------------------------------------------
+               0           shard1                192.168.10.1
+
+.. _broker-test: 
+
+Broker to DB Connection Test 
+------------------------------
+
+**cubrid broker test**\ is a command to perform user-defined queries on a DB that connects to a specified broker. When the shard function is activated, query all SHARD DBs. After performing the query, the transaction is rolled back. This command allows you to check the success of the query for each SHARD DB by performing a query to all SHARD DBs accessing the specified broker, and if you set the SHARD HASH function, you can check on which SHARD DB the query you entered was performed.
+
+::
+
+    cubrid broker test <broker_name> [-D <db_name>] [-u <db_user>] [-p <db_password>] {-c <query> | -i <input_file>} [-o <output_file>] [-s] [-v] 
+
+*   db_name: DB name 
+*   db_user: DB user account 
+*   db_password: DB user password 
+*   query: query 
+*   input_file: File that stores the query you want to enter
+*   output_file: File to save the results
+
+**cubrid broker test**\ has the following options.
+
+.. program:: broker_test 
+
+.. option:: -D DB_NAME 
+     
+    Specifies the DB name to be tested. When this option is omitted, the value of the SHARD parameter in cubrid_broker.conf is ON, then the value of the SHARD_DB_NAME parameter is used. An error occurs when the value of the SHARD parameter is OFF.
+     
+.. option:: -u DB_USER 
+
+    Specifies the DB user account to be tested. When this option is omitted, if the SHARD parameter value of the cubrid_broker.conf is ON, the value of the SHARD_DB_USER parameter is used. If the value of the SHARD parameter is OFF, "public" is entered.
+     
+.. option:: -p DB_PASSWORD 
+
+    Specifies the password for the DB user account to be tested. If this option is omitted when the value of the SHARD parameter in cubrid_broker.conf is ON, the value of the SHARD_DB_PASSWORD parameter is used. If the value of the SHARD parameter is OFF, an empty string ("") is entered.
+     
+.. option:: -c QUERY 
+
+    Specifies the query string. The **-c** or **-i** option may be used to specify the query. If the **-c** and **-i** options are omitted, only the broker and DB connections are printed.
+     
+.. option:: -i FILE_NAME 
+
+    Specifies a file in which queries to be entered are stored. The **-c** or **-i** option may be used to specify the query. If the **-c** and **-i** options are omitted, only the broker and DB connections are printed.
+     
+.. option:: -o FILE_NAME 
+
+    Specifies the file name to store the results of the action output on the screen. If this option is omitted, the result of the action is output only to the screen.
+     
+.. option:: -s 
+
+    Queries containing SHARD hints are performed only in the corresponding SHARD DB. If this option is omitted, queries are performed on all SHARD DBs.
+     
+    If the SHARD parameter value is OFF, this parameter is not affected. 
+
+.. option:: -v 
+
+    The error message and the result set of the SELECT are output together with the following information.
+     
+    *   RESULT: Error returned after performing query. output [OK | FAIL] 
+    *   SHARD_ID: ID of the SHARD DB where the query was performed (if the SHARD parameter value is OFF, the item is not output)
+    *   ROW COUNT: Number of rows affected by DML, or number of rows in case of SELECT query. Outputs -1 in case of query execution error 
+    *   EXECUTION TIME: Time the query was performed 
+    *   QUERY: Queries entered by the user
+     
+    If this option is omitted, only "RESULT, SHARD_ID, ROW COUNT, EXECUTION TIME, QUERY" will be output.
+
+The following is an example of using the above options.
+
+*   Query to DB 
+
+    **When the SHARD parameter value of the cubrid_broker.conf is OFF** 
+     
+    Check if the DB connection is good.
+
+    :: 
+
+        $ cubrid broker test shard1 -D shard -u shard -p shard123 -c "select 1 from db_root where charset = 3" 
+     
+        @ cubrid broker test 
+        @ [OK] CONNECT broker1 DB [demodb] USER [shard] 
+
+        @ SHARD OFF 
+
+        RESULT ROW COUNT EXECUTION TIME QUERY 
+        ======================================================== 
+        OK 1 0.011341 sec select 1,'a' from db_root where charset = 3 
+        @ [OK] QUERY TEST 
+         
+    **When the SHARD parameter value of the cubrid_broker.conf is ON** 
+
+    Make sure all SHARD DBs are well connected.
+
+    :: 
+     
+        $ cubrid broker test shard1 -D shard -u shard -p shard123 -c "select 1 from db_root where charset = 3" 
+
+        @ cubrid broker test 
+        @ [OK] CONNECT shard1 DB [shard] USER [shard] 
+
+        @ SHARD ON 
+
+        RESULT SHARD_ID ROW COUNT EXECUTION TIME QUERY 
+        ================================================================== 
+        OK 0 1 0.003436 sec select 1 from db_root where charset = 3 
+        OK 1 1 0.003010 sec select 1 from db_root where charset = 3 
+        OK 2 1 0.003039 sec select 1 from db_root where charset = 3 
+        OK 3 1 0.002916 sec select 1 from db_root where charset = 3 
+        @ [OK] QUERY TEST 
+
+*   Check User Permissions
+
+    **User do not have INSERT privileges on one of the SHARD DBs** 
+     
+    If user you do not have INSERT privileges, RESULT is displayed as FAIL.
+     
+    :: 
+     
+        $ cubrid broker test shard1 -c "insert into foo values (1,"a") " -v 
+         
+        @ cubrid broker test 
+        @ [OK] CONNECT shard1 DB [shard] USER [shard] 
+
+        @ SHARD ON 
+
+        RESULT SHARD_ID ROW COUNT EXECUTION TIME QUERY 
+        ================================================================== 
+        OK 0 1 0.001322 sec insert into foo values(1,'a') 
+        FAIL(-494) -1 -1 0.001608 sec insert into foo values(1,'a') 
+        <Error> 
+        ERROR CODE : -494 
+        Semantic: INSERT is not authorized on foo. insert into foo foo (foo.a, foo.b) values (1, cast('a' as v...[CAS INFO - 127.0.0.1:52002, 1, 18145]. 
+
+        OK 2 1 0.001334 sec insert into foo values(1,'a') 
+        OK 3 1 0.001325 sec insert into foo values(1,'a') 
+        @ [FAIL] QUERY TEST 
+     
+    **One of the DBs accessing the broker does not have UPDATE privileges** 
+     
+    If DB do not have UPDATE privileges, RESULT is displayed as FAIL. 
+     
+    :: 
+     
+        $ vi dml.txt 
+     
+        #query 
+        select a from foo 
+        insert into foo(b) values(3) 
+        update foo set c = 2 where b = 3 
+        delete foo where b = 3 
+     
+    :: 
+     
+        $ cubrid broker test broker1 -D demodb -u shard -p shard123 -i dml.txt -v 
+
+        @ cubrid broker test 
+        @ [OK] CONNECT broker1 DB [demodb] USER [shard] 
+
+        @ SHARD OFF 
+
+        RESULT ROW COUNT EXECUTION TIME QUERY 
+        ======================================================== 
+        OK 1 0.001612 sec select a from foo 
+        <Result of SELECT Command> 
+          a 
+        ------------ 
+          1 
+
+        OK 1 0.001215 sec insert into foo(b) values(3) 
+        FAIL(-494) -1 0.001291 sec update foo set c = 2 where b = 3 
+        <Error> 
+        ERROR CODE : -494 
+        Semantic: UPDATE is not authorized on foo. update foo foo set foo.c=2 where foo.b=3[CAS INFO - 127.0.0.1:52001, 1, 18139]. 
+
+        OK 0 0.001534 sec delete foo where b = 3 
+        @ [FAIL] QUERY TEST 
+
+*   Check SHARD HASH normal operation 
+
+    Check if the hashing is good for a specific key. 
+
+    :: 
+     
+        $ vi test_query.txt 
+         
+        #query 
+        select number from demo_db where key = /*+ shard_key */ 14 
+        select number from demo_db where key = /*+ shard_key */ 50 
+        select number from demo_db where key = /*+ shard_key */ 80 
+        select number from demo_db where key = /*+ shard_key */ 120 
+        .. 
+
+    :: 
+     
+        $ cubrid broker test shard1 -D shard -u shard -p shard123 -i shard_key.txt -v -s 
+
+        @ cubrid broker test 
+        @ [OK] CONNECT shard1 DB [shard] USER [shard] 
+
+        @ SHARD ON 
+
+        RESULT SHARD_ID ROW COUNT EXECUTION TIME QUERY 
+        ================================================================== 
+        OK 0 1 0.002225 sec select * from foo where a = /*+ shard_key */ 10 
+        <Result of SELECT Command> 
+          a b 
+        ---------------------------------- 
+          10 'aaaa' 
+
+        OK 1 1 0.001870 sec select * from foo where a = /*+ shard_key */ 40 
+        <Result of SELECT Command> 
+          a b 
+        ---------------------------------- 
+          40 'bbb' 
+
+        OK 2 1 0.002004 sec select * from foo where a = /*+ shard_key */ 70 
+        <Result of SELECT Command> 
+          a b 
+        ---------------------------------- 
+          70 'cccc' 
+
+        OK 3 1 0.002025 sec select * from foo where a = /*+ shard_key */ 100 
+        <Result of SELECT Command> 
+          a b 
+        ---------------------------------- 
+          100 'dddd' 
+
+        @ [OK] QUERY TEST 
+         
+*   Whether to using the -v option 
+
+    **When using -v option** 
+     
+    When the SELECT query is successful, the result set is output, and when the SELECT query is unsuccessful, an error message is output.
+     
+    :: 
+     
+        $ cubrid broker test broker1 -D demodb -u shard -p shard123 -i dml.txt -v 
+        @ cubrid broker test 
+        @ [OK] CONNECT broker1 DB [demodb] USER [shard] 
+
+        @ SHARD OFF 
+
+        RESULT ROW COUNT EXECUTION TIME QUERY 
+        OK 1 0.001311 sec select a from foo 
+        <Result of SELECT Command> 
+          a 
+        ------------ 
+          1 
+
+        OK 1 0.001083 sec insert into foo(b) values(3) 
+        FAIL(-494) -1 0.001166 sec update foo set c = 2 where b = 3 
+        <Error> 
+        ERROR CODE : -494 
+        Semantic: UPDATE is not authorized on foo. update foo foo set foo.c=2 where foo.b=3[CAS INFO - 127.0.0.1:52001, 1, 18139]. 
+
+        OK 0 0.001399 sec delete foo where b = 3 
+        @ [FAIL] QUERY TEST 
+         
+    **When not using the -v option** 
+
+    It only prints the success or failure of the query. 
+     
+    :: 
+     
+        $ cubrid broker test broker1 -D demodb -u shard -p shard123 -i dml.txt 
+         
+        @ cubrid broker test 
+        @ [OK] CONNECT broker1 DB [demodb] USER [shard] 
+
+        @ SHARD OFF 
+
+        RESULT ROW COUNT EXECUTION TIME QUERY 
+        OK 1 0.001485 sec select a from foo 
+        OK 1 0.001123 sec insert into foo(b) values(3) 
+        FAIL(-494) -1 0.001180 sec update foo set c = 2 where b = 3 
+        OK 0 0.001393 sec delete foo where b = 3 
+        @ [FAIL] QUERY TEST 
+         
+*   Check SHARD key value 
+
+    Given a SHARD key hint with the -s option, queries the SHARD DB and outputs the result. You can check which SHARD DB the query was performed in with SHARD_ID.
+     
+    :: 
+     
+        $ cubrid broker test shard1 -i shard_key.txt -s -v 
+         
+        @ cubrid broker test 
+        @ [OK] CONNECT shard1 DB [shard1] USER [shard] 
+
+        @ SHARD ON 
+
+        RESULT SHARD_ID ROW COUNT EXECUTION TIME QUERY 
+        OK 0 1 0.144730 sec select * from foo where a = /*+ shard_key */ 10 
+        <Result of SELECT Command> 
+          a b 
+        ---------------------------------- 
+          10 'aaaa' 
+
+        OK 1 1 0.001870 sec select * from foo where a = /*+ shard_key */ 40 
+        <Result of SELECT Command> 
+          a b 
+        ---------------------------------- 
+          40 'bbb' 
+
+        OK 2 1 0.002004 sec select * from foo where a = /*+ shard_key */ 70 
+        <Result of SELECT Command> 
+          a b 
+        ---------------------------------- 
+          70 'cccc' 
+
+        OK 3 1 0.002025 sec select * from foo where a = /*+ shard_key */ 100 
+        <Result of SELECT Command> 
+          a b 
+        ---------------------------------- 
+          100 'dddd' 
+
+        @ [OK] QUERY TEST
 
 .. _broker-logs:
 

@@ -850,7 +850,7 @@ This command sets single line mode to **ON** or **OFF** (default value is **ON**
     csql> ;singleline
     SINGLE IS OFF
 
-**Connecting new csql session(;Connect)**
+**Switching csql session(;Connect)**
 
 This is a session command to switch the connection to another user without terminating CSQL. The command format is as follows.
 
@@ -869,7 +869,7 @@ This is a session command to switch the connection to another user without termi
 
 .. warning::
 
-     #. When ';connect' session command executes, the current CSQL session connection is disconnect regardless of whether the new session connection succeeds or not. 
+     #. When ';connect' session command executes, the current CSQL session connection is disconnect regardless of session transition success or not. 
      #. When CSQL is in system administrator mode, ';connect' session command cannot be used (When entering CSQL with an csql -u dba --sysadm demodb form command).
 
 

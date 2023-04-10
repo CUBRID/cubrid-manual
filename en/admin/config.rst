@@ -2804,147 +2804,148 @@ Logging
     *   If the size of the SQL log file, which is created when the **SQL_LOG** parameter is configured to **ON**, reaches to the size configured by the parameter, *broker_name_id.sql.log.bak* is created.
     *   If the size of the SLOW SQL log file, which is created when the **SLOW_LOG** parameter is configured to **ON**, reaches to the size configured by the parameter, *broker_name_id.slow.log.bak* is created.
 
-Shard
-^^^^^^^^
+SHARD
+^^^^^
 
-To use the SHARD function, the following parameters must be set in **cubrid_broker.conf.shard**\ with reference to **cubrid_broker.conf**\.
+To use SHARD feature, configure the below parameters in **cubrid_broker.conf** as referring to **cubrid_broker.conf.shard**.
 
 **SHARD**
 
-    This parameter specifies whether the SHARD function is activated or not. Set to **ON** or **OFF**\. default is **OFF**\.
+    It specifies to activate/deactivate SHARD feature. You can set this value as **ON** or **OFF**. The default is **OFF**.
 
 **SHARD_CONNECTION_FILE**
 
-    The path to the shard connection file. The shard connection file must be located within **$CUBRID/conf**. Refer to :ref:`shard connection file <shard-connection-file>` for detailed description.
+    The path of the shard connection file. The shard connection file should be located in **$CUBRID/conf**. For more information, see the :ref:`shard connection file <shard-connection-file>`.
 
 **SHARD_DB_NAME**
 
-    The name of the shard DB is used to check whether the connection request of the application is valid.
+    The name of the shard DB, used to verify the request for connection from an application.
     
 **SHARD_DB_PASSWORD**
 
-    The user password of the backend shard DB is used to perform a connection with the backend DBMS in the CAS process, and is also used to check whether an application's connection request is valid. User passwords for all shard DBs must be the same.
+    The user password of the backend shard DB, used to connect to the backend DBMS for the CAS process as well as to verify the request for connection from an application. Passwords of all shard DBs should be identical.
     
-    If you do not want to expose the value **SHARD_DB_PASSWORD**\ to the subrid_broker.conf, you can use the environment variable. The format of the environment variable name is <*broker_name*>\ **_SHARD_DB_PASSWORD**\, and the <*broker_name*> must always be capitalized. For example, if the broker's name is *shard1*\, the environment variable that sets the shard DB password is **SHARD1_SHARD_DB_PASSWORD**\. However, if the SHARD function is restarted with the "cubrid broker restart" command, the environment variable of **SHARD_DB_PASSWORD**\ or the value of **SHARD_DB_PASSWORD** parameter of cubrid_broker.conf must be set.
-
+    The environment variable can be used when you don't want to expose **SHARD_DB_PASSWORD** to cubrid_broker.conf. The format of this environment variable name is <*broker_name*>\ **_SHARD_DB_PASSWORD**, and <*broker_name*> always should be changed as upper cases. For example, if the name of broker is *shard1*, the name of an environment variable which configures the shard DB password will be **SHARD1_SHARD_DB_PASSWORD**. But, if the SHARD feature is restarted by "cubrid broker restart" command, the environment variable of **SHARD_DB_PASSWORD** or the value of **SHARD_DB_PASSWORD** in cubrid_broker.conf must be configured.
+    
     ::
 
         export SHARD1_SHARD_DB_PASSWORD=shard123
 
-    .. note:: SHARD_DB_USER/SHARD_DB_PASSWORD parameter is deprecated, so it is recommended that you enter connection information through the application.
-
-**SHARD_DB_USER** 
-
-    The user name of the backend shard DB, which is used to perform a connection with the backend DBMS in the CAS process, and also to verify that the connection request of the application is valid. All shard DBs must have the same username.
+    .. note:: SHARD_DB_USER/SHARD_DB_PASSWORD parameters is deprecated. Therefore, it is recommended to deliver the connection information in an application.
     
-    .. note:: SHARD_DB_USER/SHARD_DB_PASSWORD parameter is deprecated, so it is recommended that you enter connection information through the application.
+**SHARD_DB_USER**
+
+    The name of the backend shard DB user, used to connect to the backend DBMS for the CAS process as well as to verify the request for connection from an application. User names on all shard DBs should be identical.
+
+    .. note:: SHARD_DB_USER/SHARD_DB_PASSWORD parameters is deprecated. Therefore, it is recommended to deliver the connection information in an application.
 
 **SHARD_IGNORE_HINT**
 
-    If this value is ON, the hint provided to connect to a particular shard is ignored, and the database to be accessed is selected according to the established rules. The default is **OFF**. This is a method that can be used to automatically load balance the read load and process it while all databases are replicated with the same data. For example, if you want to connect an application's load to one of several replication nodes, the proxy automatically determines which node (database) to connect to if you provide only one connection to a particular shard.
-
+    When this value is **ON**, the hint provided to connect to a specific shard is ignored and the database to connect is selected based on the defined rule. The default value is **OFF**. It can be used to balance the read load while all databases are copied with the same data. For example, to give the load of an application to only one node among several replication nodes, the proxy automatically determines the node (database) with one connection to a specific shard.
+    
 **SHARD_KEY_FILE**
 
-    shard key 설정 정보 파일의 경로이다. shard key 설정 파일은 **$CUBRID/conf** 내에 위치해야 한다. 자세한 설명은 :ref:`shard key 설정 파일 <shard-key-configuration-file>` 을 참고한다. 
-    The path to the shard key configuration information file. The hard key configuration file must be located within **$CUBRID/conf**. For a detailed description, refer to :ref:`hard key configuration file <shard-key-configuration-file>`.
-
+    The path of the shard key configuration file. The shard key configuration file should be located in **$CUBRID/conf**. For more information, see the :ref:`shard key configuration file <shard-key-configuration-file>`.
+    
 **SHARD_KEY_FUNCTION_NAME**
 
-    Parameter for specifying the name of the user hash function for the shard key. For more information, see :ref:`setting-user-defined-hash-function`.
+    The parameter to specify the name of the user hash function for shard key. For more information, see :ref:`setting-user-defined-hash-function`.
 
 **SHARD_KEY_LIBRARY_NAME**
 
-    Specifies a library path that can be loaded at runtime to specify a user hash function for the shard key. **SHARD_KEY_LIBRARY_NAME** If the parameter is set, the parameter **SHARD_KEY_FUNCTION_NAME** must also be set. For more information, see :ref:`setting-user-defined-hash-function`.
+    Specify the library path loadable at runtime to specify the user hash function for the shard key. If the **SHARD_KEY_LIBRARY_NAME** parameter is set, the **SHARD_KEY_FUNCTION_NAME** parameter should also be set. For more information, see :ref:`setting-user-defined-hash-function`.
 
-**SHARD_KEY_MODULAR** 
+**SHARD_KEY_MODULAR**
 
-    As a parameter for specifying the range of built-in shard key hash function results, the result of the basic shard key hash function is shard_key (integer) % SHARD_KEY_MODULAR. The minimum value is 1 and the maximum value is 256. Refer to:ref:`hard key configuration file <shard-key-configuration-file>` and:ref:`setting-user-defined-hash-function` for related information.
+    The parameter to specify the range of results of the default shard key hash function. The result of the function is shard_key(integer) % SHARD_KEY_MODULAR.  The minimum value is 1, and the maximum value is 256. For related issues, see :ref:`shard key configuration file <shard-key-configuration-file>` and :ref:`setting-user-defined-hash-function`.
 
 **SHARD_MAX_CLIENTS**
 
-    The number of applications that can be concurrently connected to proxy. The default value is 256, and the maximum value is 10,000 per proxy.
+    The number of applications that can be concurrently connected by using the proxy. The default value is 256 and the maximum value is 10,000 per proxy.
     
 .. _shard-max-prepared-stmt-count:
 
 **SHARD_MAX_PREPARED_STMT_COUNT**
 
-    The maximum size of the statement pool managed by the proxy. The default is 10,000.
-
+    The maximum size of statement pool managed by proxy. The default is 10,000.
+    
 **SHARD_NUM_PROXY**
 
-    Number of proxy processes. The default value is 1 and the maximum value is 8.
+    The number of proxy processes.
 
 **SHARD_PROXY_CONN_WAIT_TIMEOUT**
 
-    If there is no request for the time specified by this parameter, the CAS disconnects from the DB. The default value is **8h**\. Units of ms, s, min, and h can be specified after the value, and it means milliseconds, seconds, minutes, and hours, respectively. If the unit is omitted, it is specified as s. CAS with old password information is no longer available and should be terminated, which prevents these CAS from being unnecessarily maintained.
-    
+    If there is no request anymore during the time specified in this parameter, CAS disconnect with DB. The default is **8h**. You can set a unit as ms, s, min or h, which stands for milliseconds, seconds, minutes or hours respectively. If you omit the unit, second(s) will be applied.
+    CAS which has a previous password should be exit because it cannot be used anymore; this feature protects that CAS is still kept unnecessarily.
+
 **SHARD_PROXY_LOG**
 
-    The proxy log level can be set to one of the following values.
-    Proxy log level policy: Setting the higher level leaves all the lower logs.
-    
-        *   Example) When SCHEDULE is set, ERROR | TIMEOUT | NOTICE | SHARD | SCHEDULE log is left.
+    The proxy log level. It can be set to one of the following values:
 
-    *   **ALL**: Write all logs
-    *   **ON**: Write all logs
-    *   **SHARD**: Write logs for shard DB selection and processing
-    *   **SCHEDULE**: Write logs for job assignments
-    *   **NOTICE**: Write logs for major alerts
-    *   **TIMEOUT**: Write logs for critical timeout
-    *   **ERROR**: Write Error Log
-    *   **NONE**: Do not log
-    *   **OFF**: Do not log
+    Proxy log level policy: Setting the higher level leaves all the lower logs.
+
+    * Example) When SCHEDULE is set, ERROR | TIMEOUT | NOTICE | SHARD | SCHEDULE log is left.
+
+    *   **ALL** : All logs
+    *   **ON** : All logs
+    *   **SHARD** : Logs for selecting and processing shard DBs.
+    *   **SCHEDULE** : Logs for scheduling tasks.
+    *   **NOTICE** : Logs for key notices.
+    *   **TIMEOUT** : Logs for timeouts.
+    *   **ERROR** : Logs for errors.
+    *   **NONE** : No logs recorded.
+    *   **OFF** : No logs recorded.
 
 **SHARD_PROXY_LOG_DIR**
 
-    Directory path to store proxy logs.
+    The directory path where the proxy logs will be saved.
 
 **SHARD_PROXY_LOG_MAX_SIZE**
 
-    Maximum size of proxy log file. Units of B, K, M, and G can be specified after the value, and it means Bytes, Kilobytes, Megabites, and Gigabites, respectively. If the unit is omitted, it is designated as K. It can be set up to 1,000,000 (KB).
+    The maximum size of the proxy log file. You can set a unit as B, K, M or G, which stands for bytes, kilobytes(KB) or megabytes(MB) or gigabytes(GB) respectively. If you omit the unit, K will be applied. The maximum value is 1,000,000(KB).
 
 **SHARD_PROXY_SHM_ID**
 
-    It is a parameter for specifying the shared memory ID used by the proxy and must be the only value in the system.
-
+    A parameter to configure the ID of shared memory used by proxy
+    
 **SHARD_PROXY_TIMEOUT**
 
-    The maximum amount of time that the proxy waits for the CAS to become available or for the statement to be prepared. Error handling driver requests when wait time expires. Default: 30 seconds. If this value is 0, the latency is determined by the value of the system parameter query_timeout, and if the value of query_timeout is 0, it waits indefinitely. If the value of SHARD_PROXY_TIMEOUT is greater than 0, the waiting time is determined by the larger value of the query_timeout value and the SHARD_PROXY_TIMEOUT value. Units of ms, s, min, and h can be specified after the value, and it means milliseconds, seconds, minutes, and hours, respectively. If the unit is omitted, it is specified as s.
+    The maximum waiting time by which the statement is prepared or CAS is available to use. The default value is 30(seconds). If this value is 0, the waiting time is decided by the value of the query_timeout system parameter; if the value of query_timeout is also 0, the waiting time is infinite. IF the value SHARD_PROXY_TIMEOUT is larger than 0, the maximum value between query_timeout and SHARD_PROXY_TIMEOUT decides the waiting time. You can set a unit as ms, s, min or h, which stands for milliseconds, seconds, minutes or hours respectively. If you omit the unit, s will be applied.
 
-.. note:: **Parameters required to set proxy**
+.. note:: **Required parameters for configuring proxy**
 
-    The settings of SHARD_MAX_CLIENTS, MAX_NUM_APPL_SERVER, and SHARD_NUM_PROXY are required to set CUBRID proxy.
+    To configure CUBRID proxy, you should specify SHARD_MAX_CLIENTS, MAX_NUM_APPL_SERVER and SHARD_NUM_PROXY.
      
-    *   The file descriptor (fd) used per proxy process on Linux is limited to the following.
+    *   In Linux, the number of file descriptors(fd) per proxy process is limited as follows.
 
         *   "((SHARD_MAX_CLIENTS + MAX_NUM_APPL_SERVER) / SHARD_NUM_PROXY) + 256" <= 10,000
      
-    The above formula is described in detail as follows.
+    The following are detail descriptions on above formulas.
      
-    *   SHARD_MAX_CLIENTS represents the maximum number of connections of applications accessing the SHARD configuration system.
-    *   MAX_NUM_APPL_SERVER represents the maximum number of connections of all CASs connected to the proxy system.
-    *   SHARD_NUM_PROXY represents the number of proxy processes used by the SHARD configuration system.
-    *   "SHARD_MAX_CLIENTS / SHARD_NUM_PROXY" is the maximum number of connections for each proxy process.
-    *   "MAX_NUM_APPL_SERVER / SHARD_NUM_PROXY" is the maximum number of CAS connections per proxy process.
-    *   256 is the number of fds internally used per proxy process on Linux.
+    *   SHARD_MAX_CLIENTS is the maximum number of applications which access the SHARD system.
+    *   MAX_NUM_APPL_SERVER is the maximum number of all CASes which can access proxy system.
+    *   SHARD_NUM_PROXY is the maximum number of proxy processes which can use on the SHARD system.
+    *   "SHARD_MAX_CLIENTS / SHARD_NUM_PROXY" is the maximum number of applications which can access per proxy process.
+    *   "MAX_NUM_APPL_SERVER / SHARD_NUM_PROXY" is the maximum number of CASes which can access per proxy process.
+    *   256 is the number of file descriptors which are used internally per process on Linux.
 
-    As an example of setting the SHARD parameter in a Linux system, if the maximum number of simultaneous connections for applications (SHARD_MAX_CLIENTS) is 5,000, the maximum number of CAS (MAX_NUM_APPL_SERVER) is 200, and the maximum number of proxy processes (SHARD_NUM_PROXY) is 1, (5,000 + 200)/1 + 256 = 5,456, which is smaller than 10,000, so this setting is possible.
+    As an example of configuring SHARD parameters in Linux system, if you specify the maximum concurrent access number of applications (SHARD_MAX_CLIENTS) as 5,000, the maximum number of CASes(MAX_NUM_APPL_SERVER) as 200 and the maximum number of proxy process(SHARD_NUM_PROXY) as 1, then file descriptors per proxy process becomes (5,000 + 200)/1 + 256 = 5,456, and it is less than 10,000; it is possible configuration.
+     
+    Regarding above, the following is the connection-relationship between each process. "proxy" intermediates a connection between "app. client" and "CAS".
 
-    In this regard, the connection relationship between each process is as follows. "proxy" serves to mediate the connection between "application client" and "CAS".
-
-    Below, [] represents the process, and -> represents the direction in which the request is made.
+    In the below, [] indicates a process, and -> indicates the requesting direction.
 
     ::
      
-        [aplication client]  --(first connection request)--------------->  [broker] (select proxy)
-                       <--(Inform proxy to connect)----
-                       --------------------------------->  [proxy] --(select CAS)--> [CAS] ---> [DB server]
-                       <---------------------------------          <--------------       <--- 
-                       <--(Use the same proxy afterwards)-------->          <------------->       <-->
+        [app. client]   --(initial access request)-----------> [broker] (select proxy)
+                        <--(announce proxy to access)---
+                        -------------------------------------> [proxy] --(select CAS)--> [CAS] ---> [DB server]
+                        <-------------------------------------         <----------------       <--- 
+                        <--(now use the same proxy)---------->         <--------------->       <-->
 
-    The broker is used only once to select proxy when the application client first requests access, and then the CUBRID maintains a connection between [application client] - [proxy] - [CAS] - [DB Server].
+    broker is used only once when the application client requires the initial access, and then CUBRID keep connections among "[app. client] - [proxy] - [CAS] - [DB Server]".
 
-    In addition, the CAS maintains a connection after connecting to the DB server.
+    Also, CAS keeps connection with DB server after DB connection is completed.
 
 Etc
 ^^^^^^
@@ -2978,6 +2979,6 @@ Regarding HA configuration, see :ref:`ha-configuration`.
 
 
 SHARD Configuration
-=======================
+===================
 
-For SHARD settings, see:ref:`default-shard-conf'\.
+Regarding SHARD configuration, see :ref:`default-shard-conf`.

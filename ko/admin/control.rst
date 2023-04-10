@@ -105,6 +105,8 @@ CUBRID 브로커 프로세스를 제어하기 위한 **cubrid** 유틸리티 구
 *   info: 브로커 설정 정보 출력
 *   getid: SHARD key를 가지고 SHARD ID(SHARD 데이터베이스 ID) 획득
 
+SHARD 기능은 브로커가 구동되고 cubrid_broker.conf의 SHARD라는 브로커 파라미터 값이 ON일 때만 사용할 수 있다.
+
 게이트웨이 제어
 ---------------
 
@@ -1005,11 +1007,11 @@ cubrid broker status에서 사용하는 [options]는 다음과 같다. 이들 �
 
 .. option:: -c
 
-    cubrid_broker.conf의 SHARD가 ON으로 설정된 경우 proxy에 접속한 클라이언트 정보를 출력한다.
+    cubrid_broker.conf의 **SHARD**\ 가 ON으로 설정된 경우 proxy에 접속한 클라이언트 정보를 출력한다.
 
 .. option:: -m
 
-    cubrid_broker.conf의 SHARD가 ON으로 설정된 경우 SHARD 상태 및 통계 정보를 출력한다.
+    cubrid_broker.conf의 **SHARD**\ 가 ON으로 설정된 경우 SHARD 상태 및 통계 정보를 출력한다. 
 
 .. option:: -S
 
@@ -1693,6 +1695,10 @@ QUERY_EDITOR 브로커는 다음과 같은 응용의 접속 요청만을 허용�
 
 브로커 구동 중에 브로커 파라미터를 변경하기 위한 **broker_changer** 유틸리티의 구문은 다음과 같다. *broker_name*\ 에는 구동 중인 브로커 이름을 입력하면 되고 *parameter*\ 는 동적으로 변경할 수 있는 브로커 파라미터에 한정된다. 변경하고자 하는 파라미터에 따라 *value*\ 가 지정되어야 한다. 브로커 응용 서버 식별자( *cas_id* )를 지정하여 특정 브로커 응용 서버(CAS)에만 변경을 적용할 수도 있다.
 
+.. note::
+
+    CUBRID SHARD 기능이 활성화된 경우(cubrid_broker.conf에서 SHARD=ON) 응용 서버 식별자(cas_id)를 지정하여 특정 응용 서버(CAS)에만 변경을 적용할 수 없다.
+
 *cas_id*\ 는 **cubrid broker status** 명령에서 출력되는 ID이다.
 
 ::
@@ -2091,6 +2097,8 @@ CUBRID SHARD ID 확인
 
 브로커 구동과 관련된 로그에는 접속 로그, 에러 로그, SQL 로그가 있다. 각각의 로그는 설치 디렉터리의 log 디렉터리에서 확인할 수 있으며, 저장 디렉터리의 변경은 브로커 환경 설정 파일( **cubrid_broker.conf** )의 **LOG_DIR** 파라미터와 **ERROR_LOG_DIR** 파라미터를 통해 설정할 수 있다.
 
+SHARD = ON 인 경우, CUBRID proxy의 로그 디렉터리는 **SHARD_PROXY_LOG_DIR** 파라미터를 통해 설정할 수 있다. 
+
 접속 로그 확인
 ^^^^^^^^^^^^^^
 
@@ -2388,7 +2396,7 @@ cubrid_replay
 :: 
   
     EXEC TIME (REPLAY / SQL_LOG / DIFF): 0.003 / 0.001 / 0.002 
-    SQL: UPDATE NDV_QUOTA_INFO SET last_mod_date = now() , used_quota = ( SELECT IFNULL(sum(file_size),0) FROM NDV_RECYCLED_FILE_INFO WHERE user_id = ? ) + ( SELECT IFNULL(sum(file_size),0) FROM NDV_FILE_INFO WHERE user_id = ? ) WHERE user_id = ? /* SQL : NDVMUpdResetUsedQuota */ 
+    SQL: UPDATE NDV_QUOTA_INFO SET last_mod_date = now() , used_quota = ( SELECT IFNULL(sum(file_size),0) FROM NDV_RECYCLED_FILE_INFO WHERE user_id = ? ) + ( SELECT IFNULL(sum(file_size),0) FROM NDV_FILE_INFO WHERE user_id = ? ) WHERE user_id = ? /+shard_val(6900403)/ /* SQL : NDVMUpdResetUsedQuota */ 
     REWRITE SQL: select NDV_QUOTA_INFO, class NDV_QUOTA_INFO, cast( SYS_DATETIME as datetime), cast((select ifnull(sum(NDV_RECYCLED_FILE_INFO.file_size), 0) from NDV_RECYCLED_FILE_INFO NDV_RECYCLED_FILE_INFO where (NDV_RECYCLED_FILE_INFO.user_id= ?:0 ))+(select ifnull(sum(NDV_FILE_INFO.file_size), 0) from NDV_FILE_INFO NDV_FILE_INFO where (NDV_FILE_INFO.user_id= ?:1 )) as bigint) from NDV_QUOTA_INFO NDV_QUOTA_INFO where (NDV_QUOTA_INFO.user_id= ?:2 ) 
     BIND 1: 'babaemo' 
     BIND 2: 'babaemo' 

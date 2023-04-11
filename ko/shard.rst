@@ -25,7 +25,6 @@ CUBRID SHARD는 database sharding을 위한 미들웨어로, 다음과 같은 �
 
 *   기존 응용의 변경을 최소화하기 위한 미들웨어 형태로서, 흔히 사용되는 JDBC(Java Database Connectivity)나 CUBRID C API인 CCI(CUBRID C Interface)를 이용하여 투명하게 sharding된 데이터에 접근할 수 있다.
 *   힌트를 이용하여 실제 질의 수행할 shard를 선택하는 방식으로, 기존 사용하던 질의에 힌트를 추가하여 사용할 수 있다.
-*   CUBRID 외에 MySQL을 backend shard DB로 구성할 수 있다.
 *   일부 트랜잭션의 특성을 보장한다.
 
 .. _shard-terminologies:
@@ -214,27 +213,6 @@ CUBRID SHARD는 SQL 힌트 구문에 포함된 힌트와 설정 정보를 이용
 
     여러 개의 값을 바인딩하는 배열로 질의를 일괄 처리하는 드라이버 함수(예: JDBC의 executeBatch, CCI의 cci_execute_array, cci_execute_batch)에서 다른 shard에 접근하는 값이 존재하면 오류 처리한다.
 
-다양한 DBMS 사용 가능
----------------------
-
-CUBRID SHARD는 CUBRID와 MySQL에서 사용할 수 있다.
-
-**CUBRID SHARD with CUBRID**
-
-아래의 그림은 3개의 CUBRID SHARD DB를 사용하는 경우 CUBRID SHARD 의 구조이다.
-
-.. image:: /images/image47.png
-
-**CUBRID SHARD with MySQL**
-
-아래의 그림은 3개의 MySQL shard DB를 사용하는 경우 CUBRID SHARD 의 구조이다.
-
-.. image:: /images/image48.png
-
-.. note::
-
-    하나의 CUBRID SHARD를 통해 다른 종류의 DBMS를 동시에 사용하는 것은 불가능하며, 필요하다면 각 DBMS별로 CUBRID SHARD 인스턴스를 분리하여 구성할 수는 있다.
-
 트랜잭션 지원
 -------------
 
@@ -354,7 +332,6 @@ shard 구성 데이터베이스 설정 파일인 **shard_connection.txt** 파일
 
     # shard-id  real-db-name  connection-info
     #                         * cubrid : hostname, hostname, ...
-    #                         * mysql  : hostname:port
     0           shard1        HostA
     1           shard1        HostB
     2           shard1        HostC
@@ -572,10 +549,6 @@ cubrid_broker.conf
 
 **cubrid_broker.conf** 는 CUBRID SHARD 기능을 설정할 때 사용한다. 설정 시 **cubrid_broker.conf.shard**\ 를 참고하며, **cubrid_broker.conf**\ 에 대한 자세한 내용은 :ref:`broker-configuration`\ 을 참고한다.
 
-**대상 shard DB 설정** 
-
-**APPL_SERVER** 파라미터에 의해 대상 shard DB를 설정할 수 있다. CUBRID를 사용하는 경우는 별도의 설정이 필요없지만, MySQL을 사용하고자 하는 경우 이 값을 반드시 설정해야 한다. 설정 방법은 :ref:`APPL_SERVER <appl_server>`\ 를 참고한다. 
-
 .. _shard-connection-file:
 
 shard 연결 파일(SHARD_CONNECTION_FILE)
@@ -594,7 +567,6 @@ shard 연결 설정 파일의 기본적인 예와 형식은 아래와 같다. ::
     #
     # shard-id      real-db-name    connection-info
     #                               * cubrid : hostname, hostname, ...
-    #                               * mysql  : hostname:port
      
     # CUBRID
     0               shard1          HostA  
@@ -602,12 +574,6 @@ shard 연결 설정 파일의 기본적인 예와 형식은 아래와 같다. ::
     2               shard1          HostC
     3               shard1          HostD
      
-    # mysql
-    #0              shard1         HostA:3306
-    #1              shard1         HostB:3306
-    #2              shard1         HostC:3306
-    #3              shard1         HostD:3306
-
 .. note:: 일반적인 CUBRID 설정과 마찬가지로 # 이후 내용은 주석으로 처리된다.
 
 **CUBRID**
@@ -631,19 +597,6 @@ CUBRID의 경우 별도의 backend shard DB의 포트 번호를 위 설정 파�
     
     # TCP port id for the CUBRID programs (used by all clients).
     cubrid_port_id=41523
-
-**MySQL**
-
-backend shard DB가 MySQL인 경우 연결 설정 파일의 형식은 다음과 같다. ::
-
-    # mysql
-    # shard-id      real-db-name            connection-info
-    # shard 식별자( >0 )        각 backend shard DB 의 실제 이름    호스트 이름:포트 번호
-     
-    0           shard_db_1          host1:1234
-    1           shard_db_2          host2:1234
-    2           shard_db_3          host3:1234
-    3           shard_db_4          host4:1234
 
 .. _shard-key-configuration-file:
 
@@ -988,7 +941,3 @@ SHARD 구성 환경에서는 SET NAMES 문이 정상 동작하지 않을 수 있
 **auto increment는 각 shard DB 내에서만 유효**
 
 auto increment 속성 또는 SERIAL 등의 값이 각 shard DB 내에서만 유효하므로, 의도한 것과 다른 값을 반환할 수 있다.
-
-**서로 다른 제품의 DB끼리 SHARD 구성 불가**
-
-서로 다른 제품의 DB끼리는 SHARD 구성이 불가하다. 예를 들어 CUBRID와 MySQL을 하나의 SHARD 시스템으로 구성할 수 없다.

@@ -25,7 +25,6 @@ The CUBRID SHARD is middleware for database sharding and its characteristics are
 
 *   Middleware that is used to minimize changes in existing applications, allowing access to transparently sharded data by using Java Database Connectivity (JDBC), a popular choice, or CUBRID C Interface (CCI), which is CUBRID C API.
 *   In this function, a hint may be added to an existing query to indicate a shard in which the query would be executed.
-*   MySQL, as well as CUBRID can be configured on backend shard DBs.
 *   It guarantees the unique characteristics of certain transactions.
 
 .. _shard-terminologies:
@@ -214,27 +213,6 @@ Ex) When the query is performed in shard DB #3, queries students whose value of 
 
     On the driver functions which do a batch query processing with the array which binds several values(ex. executeBatch in JDBC, cci_execute_array and cci_execute_batch in CCI ), they fail to run if there is a value which accesses to a different shard.
 
-Various DBMSs Available
------------------------
-
-The CUBRID SHARD can be used on a variety of DBMSs such as CUBRID and MySQL.
-
-**CUBRID SHARD with CUBRID**
-
-The following image shows the structure of CUBRID SHARD when using three CUBRID SHARD DBs.
-
-.. image:: /images/image47.png
-
-**CUBRID SHARD with MySQL**
-
-The following image shows the structure of CUBRID SHARD when using three MySQL shard DBs.
-
-.. image:: /images/image48.png
-
-.. note::
-
-    It is impossible to use the different DBMSs on one CUBRID SHARD concurrently; if it is required, separate the CUBRID SHARD instances per DBMS.
-
 Transaction Support
 -------------------
 
@@ -354,7 +332,6 @@ Configure the **shard_connection.txt** file which is shard database configuratio
 
     # shard-id  real-db-name  connection-info
     #                         * cubrid : hostname, hostname, ...
-    #                         * mysql  : hostname:port
     0           shard1        HostA
     1           shard1        HostB
     2           shard1        HostC
@@ -572,10 +549,6 @@ cubrid_broker.conf
 
 The **cubrid_broker.conf** file is used for setting the CUBRID SHARD feature. Refer to **cubrid_broker.conf.shard** when configuring **cubrid_broker.conf**. For details of **cubrid_broker.conf**, see :ref:`broker-configuration`.
 
-**Specifying the target shard DB** 
-
-You can specify the target shard DB by **APPL_SERVER** parameter. There is no need to specify when you use CUBRID, but if you use MySQL, this value should be set. For how to configure, see :ref:`APPL_SERVER <appl_server>`. 
-
 .. _shard-connection-file:
 
 Shard Connection File(SHARD_CONNECTION_FILE)
@@ -594,19 +567,12 @@ The basic example and format of a shard connection configuration file are as fol
     #
     # shard-id      real-db-name    connection-info
     #                               * cubrid : hostname, hostname, ...
-    #                               * mysql  : hostname:port
      
     # CUBRID
     0               shard1          HostA  
     1               shard1          HostB
     2               shard1          HostC
     3               shard1          HostD
-     
-    # mysql
-    #0              shard1         HostA:3306
-    #1              shard1         HostB:3306
-    #2              shard1         HostC:3306
-    #3              shard1         HostD:3306
 
 .. note:: As shown in the general CUBRID settings, the content after # is converted to comment.
 
@@ -631,19 +597,6 @@ For CUBRID, a separate backend shard DB port number is not specified in the abov
 
     # TCP port id for the CUBRID programs (used by all clients).
     cubrid_port_id=41523
-
-**MySQL**
-
-When the backend shard DB is MySQL, the format of the connection configuration file is as follows: ::
-
-    # mysql
-    # shard-id      real-db-name            connection-info
-    # shard identifier (>0 )        Actual name of each backend shard DB    Host name: port number
-
-    0           shard_db_1          host1:1234
-    1           shard_db_2          host2:1234
-    2           shard_db_3          host3:1234
-    3           shard_db_4          host4:1234
 
 .. _shard-key-configuration-file:
 
@@ -988,7 +941,3 @@ In SHARD environment, SET NAMES statement is not recommended to use because it c
 **auto increment is valid only in each shard DB**
 
 The auto increment attribute or SERIAL is valid within each shard DB only. So a result different from the intended result may be returned.
-
-**Configuring SHARD is impossible between heterogeneous databases**
-
-Configuring SHARD is impossible between heterogeneous databases. For example, CUBRID and MySQL cannot be configured as one SHARD system.

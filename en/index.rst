@@ -55,6 +55,7 @@ Table of Contents
     admin/index.rst
     ha.rst
     security.rst
+    shard.rst
     api/index.rst
     release_note/index.rst
 

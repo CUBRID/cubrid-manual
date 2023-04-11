@@ -2351,6 +2351,43 @@ cubrid_broker.conf 설정 파일과 기본 제공 파라미터
 |                                 |                         | SQL_LOG                         | string | ON                           | 가능      |
 |                                 |                         +---------------------------------+--------+------------------------------+-----------+
 |                                 |                         | SQL_LOG_MAX_SIZE                | KB     | 10000                        | 가능      |
+|                                 | 샤드                    | SHARD                           | string | OFF                          |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_CONNECTION_FILE           | string | shard_connection.txt         |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_DB_NAME                   | string |                              |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_DB_PASSWORD               | string |                              |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_DB_USER                   | string |                              |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_IGNORE_HINT               | string | OFF                          |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_KEY_FILE                  | string | shard_key.txt                |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_KEY_FUNCTION_NAME         | string |                              |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_KEY_LIBRARY_NAME          | string |                              |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_KEY_MODULAR               | int    | 256                          |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_MAX_CLIENTS               | int    | 256                          |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_MAX_PREPARED_STMT_COUNT   | int    | 10,000                       |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_NUM_PROXY                 | int    | 1                            |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_PROXY_CONN_WAIT_TIMEOUT   | sec    | 8h                           |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_PROXY_LOG                 | string | ERROR                        | 가능      |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_PROXY_LOG_DIR             | string | log/broker/proxy_log         |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_PROXY_LOG_MAX_SIZE        | KB     | 100,000                      | 가능      |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_PROXY_SHM_ID              | int    |                              |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_PROXY_TIMEOUT             | sec    | 30(초)                       |           |
 |                                 +-------------------------+---------------------------------+--------+------------------------------+-----------+
 |                                 | 기타                    | MAX_STRING_LENGTH               | int    | -1                           |           |
 |                                 |                         +---------------------------------+--------+------------------------------+-----------+
@@ -2737,6 +2774,149 @@ CUBRID 설치 시 생성되는 기본 브로커 설정 파일인 **cubrid_broker
     *   **SQL_LOG** 파라미터가 **ON** 으로 설정된 경우에 생성되는 SQL 로그 파일의 크기가 파라미터의 설정값에 도달하면 *broker_name_id.sql.log.bak* 이 생성된다.
     *   **SLOW_LOG** 파라미터가 **ON** 으로 설정된 경우에 생성되는 SLOW SQL 로그 파일의 크기가 이 파라미터의 설정값에 도달하면 *broker_name_id.slow.log.bak* 이 생성된다.
 
+샤드
+^^^^
+
+SHARD 기능을 사용하려면 **cubrid_broker.conf.shard**\ 를 참고하여 **cubrid_broker.conf**\ 에 다음 파라미터들을 설정해야 한다.
+
+**SHARD**
+
+    SHARD 기능의 활성화 여부를 지정하는 파라미터이다. **ON** 또는 **OFF**\로 설정하며, 기본값은 **OFF**\ 이다.
+
+**SHARD_CONNECTION_FILE**
+
+    shard 연결 파일의 경로이다. shard 연결 파일은 **$CUBRID/conf** 내에 위치해야 한다. 자세한 설명은 :ref:`shard 연결 파일 <shard-connection-file>` 을 참고한다. 
+
+**SHARD_DB_NAME**
+
+    shard DB의 이름으로서 응용의 연결 요청이 유효한지 검사하는 데 사용된다.
+    
+**SHARD_DB_PASSWORD**
+
+    backend shard DB의 사용자 비밀번호로서, CAS 프로세스에서 backend DBMS와 연결을 수행하는데 사용되며, 응용의 연결 요청이 유효한지 검사하는 데에도 사용된다. 모든 shard DB의 사용자 비밀번호는 동일해야 한다.
+    
+    cubrid_broker.conf에 **SHARD_DB_PASSWORD**\ 의 값을 노출시키고 싶지 않은 경우 환경 변수를 사용할 수 있다. 환경 변수 이름의 포맷은 <*broker_name*>\ **_SHARD_DB_PASSWORD**\
+     이고, <*broker_name*>은 항상 대문자로 변환되어야 한다. 예를 들어, 브로커의 이름이 *shard1*\ 이라면 shard DB 암호를 설정하는 환경 변수 이름은 **SHARD1_SHARD_DB_PASSWORD**\ 가 된다. 단, "cubrid broker restart" 명령으로 SHARD 기능이 재구동되는 경우 **SHARD_DB_PASSWORD**\ 의 환경 변수 또는 cubrid_broker.conf의 **SHARD_DB_PASSWORD** 파라미터 값이 반드시 설정되어 있어야 한다.
+
+    ::
+
+        export SHARD1_SHARD_DB_PASSWORD=shard123
+
+    .. note:: SHARD_DB_USER/SHARD_DB_PASSWORD 파라미터는 제거될 예정(deprecated)이므로, 응용 프로그램을 통해 접속 정보를 입력할 것을 권장한다. 
+
+**SHARD_DB_USER** 
+
+    backend shard DB의 사용자 이름으로서, CAS 프로세스에서 backend DBMS와 연결을 수행하는데 사용되며, 응용의 연결 요청이 유효한지 검사하는 데에도 사용된다. 모든 shard DB의 사용자 이름은 동일해야 한다.
+    
+    .. note:: SHARD_DB_USER/SHARD_DB_PASSWORD 파라미터는 제거될 예정(deprecated)이므로, 응용 프로그램을 통해 접속 정보를 입력할 것을 권장한다. 
+
+**SHARD_IGNORE_HINT**
+
+    이 값이 ON이면 특정 shard로 연결하기 위해 제공되는 힌트가 무시되고, 정해진 규칙에 따라 접속할 데이터베이스를 선택한다. 기본값은 **OFF** 이다. 모든 데이터베이스가 같은 데이터로 복제되어 있는 상태에서 읽기 부하를 자동으로 로드 밸런싱하여 처리하고자 할 때 사용할 수 있는 방식이다. 예를 들어 응용 프로그램의 부하를 여러 개의 복제 노드 중 하나에 접속하고자 할 때 특정 shard 하나의 연결만 제공하면 어느 노드(데이터베이스)에 연결할지는 proxy가 자동으로 결정한다.
+
+**SHARD_KEY_FILE**
+
+    shard key 설정 정보 파일의 경로이다. shard key 설정 파일은 **$CUBRID/conf** 내에 위치해야 한다. 자세한 설명은 :ref:`shard key 설정 파일 <shard-key-configuration-file>` 을 참고한다. 
+
+**SHARD_KEY_FUNCTION_NAME**
+
+    shard key에 대한 사용자 해시 함수의 이름을 지정하기 위한 파라미터이다. 자세한 내용은 :ref:`setting-user-defined-hash-function` 를 참고한다.
+
+**SHARD_KEY_LIBRARY_NAME**
+
+    shard key에 대한 사용자 해시 함수를 지정하기 위해 실행 시간에 로딩 가능한 라이브러리 경로를 지정한다. **SHARD_KEY_LIBRARY_NAME** 파라미터가 설정된 경우 반드시 **SHARD_KEY_FUNCTION_NAME** 파라미터도 설정되어야 한다. 자세한 내용은 :ref:`setting-user-defined-hash-function` 을 참고한다.
+    
+**SHARD_KEY_MODULAR** 
+
+    내장된 shard key 해시 함수 결과의 범위를 지정하기 위한 파라미터로서, 기본 shard key 해시 함수의 결과는 shard_key(정수형) % SHARD_KEY_MODULAR이다. 최소값은 1, 최대값은 256이다. 관련된 내용은 :ref:`shard key 설정 파일 <shard-key-configuration-file>` 과 :ref:`setting-user-defined-hash-function` 을 참고한다.
+
+**SHARD_MAX_CLIENTS**
+
+    proxy로 동시에 연결 가능한 응용의 개수이다. 기본값은 256이며, 최대값은 proxy 당 10,000이다.
+    
+.. _shard-max-prepared-stmt-count:
+
+**SHARD_MAX_PREPARED_STMT_COUNT**
+
+    proxy가 관리하는 statement pool의 최대 크기이다. 기본값은 10,000이다.
+
+**SHARD_NUM_PROXY**
+
+    proxy 프로세스의 개수이다. 기본값은 1 이며, 최대값은 8이다.
+
+**SHARD_PROXY_CONN_WAIT_TIMEOUT**
+  
+    이 파라미터로 명시한 시간 동안 아무런 요청이 없으면 CAS가 DB와의 접속을 끊는다. 기본값은 **8h**\ 이다. 값 뒤에 ms, s, min, h의 단위 지정이 가능하며, 각각 milliseconds, seconds, minutes, hours를 의미한다. 단위가 생략되면 s로 지정된다. 
+    예전 비밀번호 정보를 지닌 CAS는 더 이상 사용할 수 없으므로 종료되어야 되는데, 이 기능은 이러한 CAS가 불필요하게 계속 유지되는 것을 방지한다.
+    
+**SHARD_PROXY_LOG**
+
+    proxy 로그 레벨로서 다음의 값 중 하나로 설정 가능하다.
+    프록시 로그 레벨 정책: 상위 level을 설정하면 하위의 모든 로그가 남는다.
+    
+        *   예) SCHEDULE을 설정하면, ERROR | TIMEOUT | NOTICE | SHARD | SCHEDULE 로그를 모두 남긴다.
+
+    *   **ALL**: 모든 로그 기록
+    *   **ON**: 모든 로그 기록
+    *   **SHARD**: shard DB 선택과 처리에 대한 로그 기록
+    *   **SCHEDULE**: 작업 할당에 대한 로그 기록
+    *   **NOTICE**: 주요한 알림에 대한 로그 기록
+    *   **TIMEOUT**: 임계 시간 초과에 대한 로그 기록
+    *   **ERROR**: 에러 로그 기록
+    *   **NONE**: 로그 기록하지 않음
+    *   **OFF**: 로그 기록하지 않음
+
+**SHARD_PROXY_LOG_DIR**
+
+    proxy 로그를 저장할 디렉터리 경로이다.
+
+**SHARD_PROXY_LOG_MAX_SIZE**
+
+    proxy 로그 파일의 최대크기이다. 값 뒤에 B, K, M, G의 단위 지정이 가능하며, 각각 Bytes, Kilobytes, Megabytes, Gigabytes를 의미한다. 단위 생략 시 K로 지정된다. 최대 1,000,000(KB)까지 설정할 수 있다.
+
+**SHARD_PROXY_SHM_ID**
+
+    proxy가 이용하는 공유 메모리 ID 를 지정하기 위한 파라미터로 시스템 내에서 유일한 값이어야 한다. 
+
+**SHARD_PROXY_TIMEOUT**
+
+    proxy에서 CAS가 사용 가능해지기를 기다리거나 statement가 준비(prepare)되기를 기다리는 최대 시간. 대기 시간이 만료되면 드라이버의 요청을 에러 처리함. 기본값: 30(초). 이 값이 0이면 시스템 파라미터 query_timeout의 값에 의해 대기 시간이 결정되며, query_timeout의 값도 0이면 무한 대기한다. SHARD_PROXY_TIMEOUT의 값이 0보다 크면 query_timeout 값과 SHARD_PROXY_TIMEOUT 값 중 큰 값에 의해 대기 시간이 결정된다. 값 뒤에 ms, s, min, h의 단위 지정이 가능하며, 각각 milliseconds, seconds, minutes, hours를 의미한다. 단위가 생략되면 s로 지정된다.
+
+.. note:: **proxy 설정을 위해 필요한 파라미터**
+
+    CUBRID proxy 설정을 위해서는 SHARD_MAX_CLIENTS, MAX_NUM_APPL_SERVER, SHARD_NUM_PROXY의 설정이 필요하다.
+     
+    *   Linux에서 proxy 프로세스 한 개당 사용되는 파일 디스크립터(fd)는 다음과 같이 제한된다.
+
+        *   "((SHARD_MAX_CLIENTS + MAX_NUM_APPL_SERVER) / SHARD_NUM_PROXY) + 256" <= 10,000
+     
+    위의 공식을 자세히 설명하면 다음과 같다.
+     
+    *   SHARD_MAX_CLIENTS는 SHARD 구성 시스템에 접속하는 응용 프로그램들의 최대 접속 개수를 나타낸다.
+    *   MAX_NUM_APPL_SERVER는 proxy 시스템에 접속하는 모든 CAS들의 최대 접속 개수를 나타낸다.
+    *   SHARD_NUM_PROXY는 SHARD 구성 시스템에서 사용하는 proxy 프로세스의 개수를 나타낸다.
+    *   "SHARD_MAX_CLIENTS / SHARD_NUM_PROXY"는 proxy 프로세스 한 개당 접속하는 응용 프로그램들의 최대 접속 개수이다.
+    *   "MAX_NUM_APPL_SERVER / SHARD_NUM_PROXY"는 proxy 프로세스 한 개당 접속하는 CAS들의 최대 접속 개수이다.
+    *   256은 Linux에서 proxy 프로세스 한 개당 내부적으로 사용되는 fd의 개수이다.
+
+    Linux 시스템에서 SHARD 파라미터를 설정하는 예로, 응용 프로그램의 최대 동시 접속 개수(SHARD_MAX_CLIENTS)를 5,000으로 하고, CAS의 최대 개수(MAX_NUM_APPL_SERVER)를 200으로 하며, proxy 프로세스의 최대 개수(SHARD_NUM_PROXY)를 1로 하면,(5,000 + 200)/1 + 256 = 5,456 이 되어 10,000보다 작으므로 이러한 설정은 가능하다.
+     
+    이와 관련하여 각 프로세스 간 연결 관계를 살펴보면 다음과 같다. "proxy"는 "응용 client"와 "CAS" 사이에서 연결을 중재하는 역할을 수행한다.
+
+    아래에서 []는 프로세스를 나타내며, ->는 요청하는 방향을 나타낸다.
+
+    ::
+     
+        [응용 client]  --(최초 접속 요청)--------------->  [broker] (proxy 선택)
+                       <--(연결할 proxy 알려줌)----
+                       --------------------------------->  [proxy] --(CAS 선택)--> [CAS] ---> [DB server]
+                       <---------------------------------          <--------------       <--- 
+                       <--(이후 같은 proxy 사용)-------->          <------------->       <-->
+
+    broker는 응용 client가 최초 접속을 요청할 때 proxy를 선택하기 위해 한 번만 사용되고, 이후 CUBRID는 [응용 client] - [proxy] - [CAS] - [DB Server]의 연결을 유지한다.
+
+    또한, CAS는 DB server와 연결된 이후 계속 연결을 유지한다.
+
 기타
 ^^^^
 
@@ -2766,3 +2946,8 @@ HA 설정
 =======
 
 HA 설정은 :ref:`ha-configuration`\ 을 참고한다.
+
+SHARD 설정
+==========
+
+SHARD 설정은 :ref:`default-shard-conf`\ 을 참고한다.

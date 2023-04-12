@@ -943,8 +943,7 @@ cubrid_broker.conf 의 브로커 파라미터인 SHARD가 ON으로 설정된 경
     ++ cubrid broker is running.
 
 .. warning::
-    On Linux systems, the number of file descriptors (fd) required to run shards is moderately higher than SHARD_MAX_CLIENTS set in subrid_broker.conf, so when limiting the number of fds with "ulimit -n", it should be set appropriately larger than SHARD_MAX_CLIENTS.
-    Linux 시스템의 fd 개수 제약이 SHARD에서 필요한 fd 개수보다 작게 설정된 경우, SHARD 구동에 실패하면서 출력되는 오류 메시지에는 SHARD에서 필요한 fd 개수가 표시된다.
+    Linux 시스템에서 샤드 구동 시 필요한 파일 디스크립터(file descriptor, fd) 개수는 cubrid_broker.conf에서 설정하는 SHARD_MAX_CLIENTS보다 적당히 많은 정도이므로, "ulimit -n"으로 fd의 개수를 제약할 때 SHARD_MAX_CLIENTS보다 적당히 크게 설정해야 한다. Linux 시스템의 fd 개수 제약이 SHARD에서 필요한 fd 개수보다 작게 설정된 경우, SHARD 구동에 실패하면서 출력되는 오류 메시지에는 SHARD에서 필요한 fd 개수가 표시된다.
 
 브로커 종료
 -----------
@@ -1730,8 +1729,6 @@ HA 환경에서 브로커의 **ACCESS_MODE**\를 Read Only로 변경하고 해�
     % cubrid broker info
 
 참고로 현재 "실행 중"인 시스템 파라미터의 설정 정보(cubrid.conf)를 확인하려면 **cubrid paramdump** *database_name* 명령을 사용한다. **SET SYSTEM PARAMETERS** 구문에 의해 시스템 파라미터의 설정 정보가 동적으로 변경될 수 있는데, **cubrid broker info** 명령으로 동작 중인 시스템의 설정 정보를 확인할 수 있다.
-
-.. _broker-logs:
     
 CUBRID SHARD ID 확인
 --------------------

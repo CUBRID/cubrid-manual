@@ -289,7 +289,7 @@ loaddb
 
 .. note::
 
-    CS Mode에서는 -d 옵션만 사용이 가능하다.
+    **client-server** 모드(-C, --CS-MODE)에서는 -d 옵션만 사용이 가능하다.
 
 .. option:: --data-file-check-only
 

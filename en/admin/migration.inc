@@ -212,8 +212,7 @@ The following is [options] used in **cubrid unloaddb**.
     
     ::
 
-        cubrid unloaddb --as-dba demodb
-
+        cubrid unloaddb -u u1_dba_group --as-dba demodb
 
 .. note::
 

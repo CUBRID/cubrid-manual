@@ -19,6 +19,9 @@ unloaddb
 *   객체 파일(*database-name*\ **_objects**): 해당 데이터베이스에 포함된 인스턴스 정보를 포함하는 파일이다.
 *   인덱스 파일(*database-name*\ **_indexes**): 해당 데이터베이스에 정의된 인덱스 정보를 포함하는 파일이다.
 *   트리거 파일(*database-name*\ **_trigger**): 해당 데이터베이스에 정의된 트리거 정보를 포함하는 파일이다. 만약 데이터를 로딩하는 동안 트리거가 구동되는 것을 원치 않는다면, 데이터 로딩을 완료한 후에 트리거 정의를 로딩하면 된다.
+*   분할된 스키마 파일(*database-name*\ **_schema**\ **_objecttype**): --split-schema-files 옵션을 사용할 경우 해당 데이터베이스에 정의된 스키마 정보를 오브젝트 단위로 분할하여 해당 오브젝트 정보만 가지고 있는 파일들이다. 분할된 파일 목록은 --split-schema-files 옵션을 참고 한다.
+*   스키마 목록 파일(*database-name*\ **_schema**\ **_info**): --split-schema-files 옵션을 사용할 경우 분할된 스키마 정보 파일들의 목록을 가지고 있는 파일이다.
+
 
 이러한 스키마, 객체, 인덱스, 트리거 파일은 같은 디렉터리에 생성된다.
 
@@ -175,6 +178,41 @@ unloaddb
 
         cubrid unloaddb --datafile-per-class demodb
 
+.. option:: --split-schema-files
+
+    스키마 정보를 오브젝트 단위로 분할 생성하고, 분할된 파일 목록을 기록한 파일도 생성한다. 자세한 사용방법은 :ref:`loaddb` 의 --schema-file-list=FILE 를 참조한다.
+    이 옵션을 지정하지 않으면 모든 오브젝트가 포함된 하나의 스키마 파일이 생성된다.
+    ::
+
+        cubrid unloaddb --split-schema-files demodb
+
+    스키마 정보를 오브젝트 단위로 분할하여 생성한 파일 목록 ::
+
+		demodb_schema_user
+		demodb_schema_class
+		demodb_schema_vclass
+		demodb_schema_serial
+		demodb_schema_procedure
+		demodb_schema_server
+		demodb_schema_pk
+		demodb_schema_fk
+		demodb_schema_grant
+		demodb_schema_synonym
+
+    분할된 스키마 파일들의 목록을 가지고 있는 파일명
+    
+    ::
+
+        demodb_schema_info
+
+.. option:: --as-dba
+
+	사용자가 DBA 그룹의 구성원인 경우, DBA 사용자인 경우와 동일한 내용으로 스키마 파일을 생성한다.
+    
+    ::
+
+        cubrid unloaddb -u u1_dba_group --as-dba demodb
+
 .. note::
 
    언로드 시간을 단축하기 위해서 서로 다른 테이블에 대한 언로드는 동시에 실행 가능하며 **unloaddb.sh** 스크립트를 이용하면 이러한 과정을 쉽게 할 수 있다 (:ref:`cubrid_scripts_unloaddb_sh` 참고).
@@ -203,6 +241,7 @@ loaddb
 *   인덱스 파일(*database-name*\ **_indexes**): 언로드 작업에 의해 생성된 파일로서, 데이터베이스에 정의된 인덱스 정보를 포함하는 파일이다.
 *   트리거 파일(*database-name*\ **_trigger**): 언로드 작업에 의해 생성된 파일로서, 데이터베이스에 정의된 트리거 정보를 포함하는 파일이다.
 *   사용자 정의 객체 파일(*user_defined_object_file*) : 대용량 데이터 입력을 위해 사용자가 테이블 형식으로 작성한 입력 파일이다(:ref:`howtowrite-loadfile` 참고).
+*   스키마 목록 파일(*database-name*\ **_schema_info**): --split-schema-files 옵션과 함께 언로드 작업에 의해 생성된 파일로서, 데이터베이스에 정의된 스키마 정보를 오브첵트 단위로 분할된 오브젝트 파일들의 목록을 가지고 있는 파일이다.(:ref:`unloaddb` 의 --split-schema-files 참고)
 
 **입력 파일 처리 순서**
 
@@ -247,6 +286,10 @@ loaddb
     이 옵션에서는 **loaddb** 가 가동중인 데이터베이스 서버 프로세스에 접속한다. **stand-alone** 모드와 다르게 **client-server** 모드에서는 여러 개의 스레드를 사용하여 데이터를 로드할 수있다. 이 모드에서는 동시에 여러 개의 **loaddb** 세션을 연결하며, 대용량의 데이터를 로드할 때 특히 우수한 성능을 발휘한다. 이 모드에서는 오브젝트 참조나 클래스/공유 속성은 제공하지 않는다. ::
 
          cubrid loaddb -C -u dba -d demodb_objects newdb
+
+.. note::
+
+    **client-server** 모드(-C, --CS-MODE)에서는 -d 옵션(data loading)만 사용 가능하다.
 
 .. option:: --data-file-check-only
 
@@ -406,6 +449,22 @@ loaddb
 .. warning::
 
     **-\-no-user-specified-name** 옵션은 11.2버전 또는 11.2 이후 버전에서 언로드된 파일을 로드할 때 사용하면 안 된다.
+
+
+.. option:: --schema-file-list=FILE
+
+    목록에 포함된 모든 스키마 파일들을 한번에 로딩 하는 옵션이다. 스키마 파일 목록이 있어야 하며, 이 목록 파일의 맨 위 스키마 파일부터 아래로 순차적으로 로딩된다. 이 옵션과 -s 옵션은 함께 사용할 수 없다.
+
+    이 목록 파일은 unloaddb에서 --split-schema-files 옵션을 사용할 때 자동으로 생성된다.
+	
+    ::
+
+        cubrid loaddb -u dba --schema-file-list=demodb_schema_info
+
+.. warning::
+
+    이 파일에 작성된 스키마 파일의 순서를 변경할 수 있으나 순서가 잘못된 경우 로딩 오류가 발생할 수 있다. 예를 들어, CLASS 정보가 있는 파일이 로드되지 않은 상태에서 PK 파일을 먼저 로드하면 오류가 발생할 수 있다. 따라서 목록에서 CLASS 정보를 로드하기 위한 파일명이 PK를 로드하기 위한 파일보다 위에 있어야 한다.
+
 
 .. warning::
 

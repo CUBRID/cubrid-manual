@@ -19,6 +19,8 @@ The purposes of loading/unloading databases are as follows:
 *   Object file(*database-name*\ **_objects**): A file that contains information on the records in the database.
 *   Index file(*database-name*\ **_indexes**): A file that contains information on the indexes defined in the database.
 *   Trigger file(*database-name*\ **_trigger**): A file that contains information on the triggers defined in the database. If you don't want triggers to be running while loading the data, load the trigger definitions after the data loading has completed.
+*   Split schema files (*database-name*\ **_schema**\ **_objecttype**): When using the --split-schema-files option, the schema information defined in the database is split into object units and These files contain only object information. For a list of split files, see the --split-schema-files option.
+*   Schema list file (*database-name*\ **_schema**\ **_info**): When using the --split-schema-files option, this file contains a list of split schema information files.
 
 The schema, object, index, and trigger files are created in the same directory.
 
@@ -175,6 +177,43 @@ The following is [options] used in **cubrid unloaddb**.
 
         cubrid unloaddb --datafile-per-class demodb
 
+
+.. option:: --split-schema-files
+
+    Schema information is splited and created in object units, and a file containing a list of splited files is also created. For details, see to :ref:`loaddb` 's --schema-file-list=FILE.
+    If this option is not specified, a single schema file containing all objects is created.
+
+    ::
+
+        cubrid unloaddb --split-schema-files demodb
+
+    List of files created by spliting schema information into object units ::
+	
+        demodb_schema_user
+		demodb_schema_class
+		demodb_schema_vclass
+		demodb_schema_serial
+		demodb_schema_procedure
+		demodb_schema_server
+		demodb_schema_pk
+		demodb_schema_fk
+		demodb_schema_grant
+		demodb_schema_synonym
+
+    Filename containing a list of splited schema files
+    
+    ::
+
+        demodb_schema_info
+
+.. option:: --as-dba
+
+    If the user is a member of the DBA group, create a schema file with the same contents as for the DBA user.
+    
+    ::
+
+        cubrid unloaddb -u u1_dba_group --as-dba demodb
+
 .. note::
 
    To shorten the execution time of the unloaddb, it is possible to run multiple **'cubrid unloaddb'** processes concurrently for groups of different tables. (or you can use **unloaddb.sh**, refer :ref:`cubrid_scripts_unloaddb_sh`).
@@ -202,6 +241,7 @@ In general, the **cubrid loaddb** utility uses files (schema definition, object 
 *   Index file(*database-name*\ **_indexes**): A file created by an unload operation. It contains information on the indexes defined in the database.
 *   Trigger file(*database-name*\ **_trigger**): A file created by an unload operation. It contains information on the triggers defined in the database.
 *   User-defined object file(*user_defined_object_file*): A file in table format written by the user to enter mass data. (For details, see :ref:`howtowrite-loadfile` .)
+*   Schema list file (*database-name*\ **_schema_info**): A file created by unloading with the --split-schema-files option. This is a file that has a list of files in which schema information defined in the database is splited into object units.(For details, see :ref:`unloaddb` 's --split-schema-files .)
 
 **Execution order of input files**
 
@@ -247,6 +287,10 @@ The following table shows [options] available with the **cubrid loaddb** utility
     This option connects to a running server process. Unlike the **stand-alone** mode, the **client-server** mode loads the data using multiple threads, leading to greater performance for large amounts of data. Multiple **loaddb** sessions may run at the same time. Object references and class/shared attributes are not supported in this mode. ::
 
         cubrid loaddb -C -u dba -d demodb_objects newdb
+
+.. note::
+
+    In **client-server** mode (-C, --CS-MODE), only the -d option (data loading) is available.
 
 .. option:: --data-file-check-only
 
@@ -410,6 +454,20 @@ The following table shows [options] available with the **cubrid loaddb** utility
 .. warning::
 
     The **-\-no-user-specified-name** option must not be used to load a file unloaded in version 11.2 or after version 11.2.
+
+.. option:: --schema-file-list=FILE
+
+    This option loads all schema files included in the list at once. There must be a list of schema files, and they are loaded sequentially from the top schema file to the bottom of this list file. This option and the -s option cannot be used together.
+
+    This list file is automatically created when using the --split-schema-files option in unloaddb.
+	
+    ::
+
+        cubrid loaddb -u dba --schema-file-list=demodb_schema_info
+
+.. warning::
+
+    You can change the order of schema files written in this file, but loading errors may occur if the order is wrong. For example, an error may occur if the PK file is loaded first while the file with CLASS information is not loaded. Therefore, in the list, the file name for loading CLASS information must be higher than the file for loading PK.
 
 .. warning::
 

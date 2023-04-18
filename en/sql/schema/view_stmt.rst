@@ -36,6 +36,10 @@ Use **CREATE VIEW** statement to create a view. Regarding writing view name, see
 *   *view_comment_string*: specifies a view's comment.
 *   *column_comment_string*: specifies a column's comment.
 
+.. warning::
+
+    *   If a synonym already exists with the same name, a view cannot be created with that name.
+
 .. code-block:: sql
 
     CREATE TABLE a_tbl (

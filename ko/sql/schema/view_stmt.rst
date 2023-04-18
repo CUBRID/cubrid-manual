@@ -36,6 +36,10 @@ CREATE VIEW
 *   *view_comment_string*: 뷰의 커멘트를 지정한다.
 *   *column_comment_string*: 칼럼의 커멘트를 지정한다.
 
+.. warning::
+
+    *   같은 이름의 동의어가 이미 존재하는 경우 해당 이름으로 뷰를 생성할 수 없다.
+
 .. code-block:: sql
 
     CREATE TABLE a_tbl (

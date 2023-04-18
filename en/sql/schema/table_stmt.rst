@@ -102,6 +102,10 @@ To create a table, use the **CREATE TABLE** statement.
 
     *   **DBA** and **DBA** members can create tables in different schemas. If a user is neither **DBA** nor **DBA** member, tables can only be created in the schema of that user.
 
+.. warning::
+
+    *   If a synonym already exists with the same name, a table or view cannot be created with that name.
+
 .. code-block:: sql
 
     CREATE TABLE olympic2 (

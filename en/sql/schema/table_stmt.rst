@@ -104,7 +104,7 @@ To create a table, use the **CREATE TABLE** statement.
 
 .. warning::
 
-    *   If a synonym already exists with the same name, a table or view cannot be created with that name.
+    *   If a synonym already exists with the same name, a table cannot be created with that name.
 
 .. code-block:: sql
 

@@ -5,9 +5,9 @@
 Updating Statistics
 ===================
 
-Statistics for tables and indexes enables queries of the database system to process efficiently. Statistics are updated automatically when DDL statements such as **CREATE TABLE**, **CREATE**, **DROP INDEX** are executed. However, since it is not automatically updated when DML statements such as **INSERT** and **DELETE** is performed, it is necessary to update the statistics by **UPDATE STATISTICS** statement(See :ref:`info-stats`).
+Statistics for tables and indexes enables queries of the database system to process efficiently. Statistics are not updated automatically for DDL statements such as **CREATE INDEX**, **CREATE TABLE** and DML statements such as **INSERT** and **DELETE**. **UPDATE STATISTICS** statement is the only way to update statistics. So it is necessary to update the statistics by **UPDATE STATISTICS** statement(See :ref:`info-stats`).
 
-**UPDATE STATISTICS** statement is recommended only when a mass of **INSERT** or **DELETE** statements make the big difference between the statistics and the actual information.
+**UPDATE STATISTICS** statement is recommended to be executed periodically. It is also recommended to execute when a new index is added or when a mass of **INSERT** or **DELETE** statements make the big difference between the statistics and the actual information.
 
 ::
 
@@ -17,7 +17,7 @@ Statistics for tables and indexes enables queries of the database system to proc
   
     UPDATE STATISTICS ON CATALOG CLASSES [WITH FULLSCAN]; 
 
-*   **WITH FULLSCAN**: It updates the statistics with all the data in the specified table. If this is omitted, it updates the statistics with sampling data. Most cases are enough to update statistics with sampling data; it is recommended not to use **WITH FULLSCAN** because it can be a burden to the system.
+*   **WITH FULLSCAN**: It updates the statistics with all the data in the specified table. If this is omitted, it updates the statistics with sampling data. The sampling data is 7 pages regardless of total pages of table.
 
     .. note:: 
 

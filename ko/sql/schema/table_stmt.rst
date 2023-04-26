@@ -12,7 +12,7 @@ CREATE TABLE
 테이블 정의
 -----------
 
-**CREATE TABLE** 문을 사용하여 새로운 테이블을 생성한다. 기존 뷰 또는 동의어와 이름이 같은 테이블은 생성할 수 없다.
+**CREATE TABLE** 문을 사용하여 새로운 테이블을 생성한다. 기존 뷰 또는 동의어와 이름이 같은 테이블은 생성할 수 없다. 테이블 이름 작성 원칙은 :doc:`/sql/identifier`\ 를 참고한다.
 
 .. CUBRIDSUS-12366: from 10.0, create table if not exists ...
 

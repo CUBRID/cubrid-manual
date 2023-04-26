@@ -12,7 +12,7 @@ CREATE TABLE
 테이블 정의
 -----------
 
-**CREATE TABLE** 문을 사용하여 새로운 테이블을 생성한다. 
+**CREATE TABLE** 문을 사용하여 새로운 테이블을 생성한다. 기존 뷰 또는 동의어와 이름이 같은 테이블은 생성할 수 없다.
 
 .. CUBRIDSUS-12366: from 10.0, create table if not exists ...
 
@@ -101,10 +101,6 @@ CREATE TABLE
 .. note::
 
     *   **DBA**\와 **DBA** 멤버는 다른 스키마에 테이블을 생성할 수 있다. 사용자가 **DBA**\도 아니고 **DBA** 멤버도 아니면 해당 사용자의 스키마에서만 테이블을 생성할 수 있다.
-
-.. warning::
-
-    *   같은 이름의 동의어가 이미 존재하는 경우 해당 이름으로 테이블을 생성할 수 없다.
 
 .. code-block:: sql
 

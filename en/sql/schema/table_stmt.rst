@@ -12,7 +12,7 @@ CREATE TABLE
 Table Definition
 ----------------
 
-To create a table, use the **CREATE TABLE** statement. 
+To create a table, use the **CREATE TABLE** statement. A table with the same name as an existing view or synonym cannot be created.
 
 .. CUBRIDSUS-12366: from 10.0, create table if not exists ...
 
@@ -101,10 +101,6 @@ To create a table, use the **CREATE TABLE** statement.
 .. note::
 
     *   **DBA** and **DBA** members can create tables in different schemas. If a user is neither **DBA** nor **DBA** member, tables can only be created in the schema of that user.
-
-.. warning::
-
-    *   If a synonym already exists with the same name, a table or view cannot be created with that name.
 
 .. code-block:: sql
 

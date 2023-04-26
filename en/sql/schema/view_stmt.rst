@@ -11,7 +11,7 @@ CREATE VIEW
 
 A view is a virtual table that does not exist physically. You can create a view by using an existing table or a query. **VIEW** and **VCLASS** are used interchangeably.
 
-Use **CREATE VIEW** statement to create a view. Regarding writing view name, see :doc:`/sql/identifier`. 
+Use **CREATE VIEW** statement to create a view. A view with the same name as an existing table or synonym cannot be created. Regarding writing view name, see :doc:`/sql/identifier`. 
 
 ::
 
@@ -35,10 +35,6 @@ Use **CREATE VIEW** statement to create a view. Regarding writing view name, see
 *   **WITH CHECK OPTION**: If this option is specified, the update or insert operation is possible only when the condition specified in the **WHERE** clause of the <*select_statement*> is satisfied. Therefore, this option is used to disallow the update of a virtual table that violates the condition.
 *   *view_comment_string*: specifies a view's comment.
 *   *column_comment_string*: specifies a column's comment.
-
-.. warning::
-
-    *   If a synonym already exists with the same name, a view cannot be created with that name.
 
 .. code-block:: sql
 

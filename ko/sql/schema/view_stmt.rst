@@ -11,7 +11,7 @@ CREATE VIEW
 
 뷰(가상 테이블)는 물리적으로 존재하지 않는 가상의 테이블이며, 기존의 테이블이나 뷰에 대한 질의문을 이용하여 뷰를 생성할 수 있다. **VIEW** 와 **VCLASS** 는 동의어로 사용된다. 
 
-**CREATE VIEW** 문을 이용하여 뷰를 생성한다. 뷰 이름 작성 원칙은 :doc:`/sql/identifier`\ 를 참고한다.
+**CREATE VIEW** 문을 이용하여 뷰를 생성한다. 기존 테이블 또는 동의어와 이름이 같은 뷰는 생성할 수 없다. 뷰 이름 작성 원칙은 :doc:`/sql/identifier`\ 를 참고한다.
 
 ::
 
@@ -35,10 +35,6 @@ CREATE VIEW
 *   **WITH CHECK OPTION**: 이 옵션이 명시되면 <*select_statement*> 내 **WHERE** 절에 명시된 조건식을 만족하는 경우에만 업데이트 또는 삽입이 가능하다. 조건식을 위반하는 가상 테이블에 대한 갱신을 허용하지 않기 위해서 사용한다.
 *   *view_comment_string*: 뷰의 커멘트를 지정한다.
 *   *column_comment_string*: 칼럼의 커멘트를 지정한다.
-
-.. warning::
-
-    *   같은 이름의 동의어가 이미 존재하는 경우 해당 이름으로 뷰를 생성할 수 없다.
 
 .. code-block:: sql
 

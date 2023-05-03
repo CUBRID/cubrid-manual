@@ -351,7 +351,7 @@ The following shows [options] available with the **cubrid addvoldb** utility.
 
         cubrid addvoldb -n testdb_v1 testdb
 
-.. option::  -F, --file-path=PATH
+.. option:: -F, --file-path=PATH
 
     This option specifies the directory path where the volume to be added will be stored. If the **-F** option is omitted, the value of the system parameter **volume_extension_path** is used by default.
 
@@ -869,7 +869,7 @@ Updates statistical information such as the number of objects, the number of pag
 
 The following shows <option> available with the **cubrid optimizedb** utility.
 
-.. program :: optimizedb
+.. program:: optimizedb
 
 .. option:: -n, --class-name
 
@@ -904,7 +904,7 @@ If no option is used, it checks the query plans stored in the cache. ::
 
 The following shows [options] available with the **cubrid plandump** utility.
 
-.. program :: plandump
+.. program:: plandump
 
 .. option:: -d, --drop
  
@@ -2978,7 +2978,7 @@ The following shows [options] available with the **cubrid killtran** utility.
 
         cubrid killtran --kill-user-name=os_user_id demodb
 
-.. option::  --kill-host-name=HOST
+.. option:: --kill-host-name=HOST
 
     This option kills transactions of a specified client host. ::
 

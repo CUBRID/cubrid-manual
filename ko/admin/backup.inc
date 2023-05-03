@@ -233,7 +233,7 @@ backupdb
 
 *   **cubrid backupdb -r** 옵션을 사용하여 명령을 실행하면 삭제된다. 하지만 HA 환경에서는 -r 옵션을 사용하면 안 된다.
 
-즉, 데이터베이스 운영 중에 보관 로그 볼륨을 가급적 남기고 싶지 않다면 **cubrid.conf**의 **log_max_archives** 값을 작은 값 또는 0으로 설정하되, **force_remove_log_archives**\의 값은 HA 환경이면 가급적 no로 설정한다.
+즉, 데이터베이스 운영 중에 보관 로그 볼륨을 가급적 남기고 싶지 않다면 **cubrid.conf**\의 **log_max_archives** 값을 작은 값 또는 0으로 설정하되, **force_remove_log_archives**\의 값은 HA 환경이면 가급적 no로 설정한다.
 
 .. _restoredb:
 

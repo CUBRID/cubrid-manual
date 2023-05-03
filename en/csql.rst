@@ -302,7 +302,7 @@ To display the option list in the prompt, execute the **csql** utilities without
 
         csql --no-single-line demodb
 
-.. option::  --sysadm
+.. option:: --sysadm
 
     This option should be used together with **-u dba**. It is specified when you want to run CSQL in a system administrator's mode.
 
@@ -310,7 +310,7 @@ To display the option list in the prompt, execute the **csql** utilities without
 
         csql -u dba --sysadm demodb
 
-.. option::  --write-on-standby
+.. option:: --write-on-standby
 
     This option should be used together with a system administrator's mode option(**\-\-sysadm**). dba which run CSQL with this option can write directly to the standby DB (slave DB or replica DB). However, the data to be written directly to the replica DB are not replicated.
 
@@ -322,15 +322,15 @@ To display the option list in the prompt, execute the **csql** utilities without
     
         Please note that replication mismatch occurs when you write the data directly to the replica DB.
 
-.. option::  --no-trigger-action
+.. option:: --no-trigger-action
 
     If you specify this option, triggers of the queries executed in this CSQL are not triggered.
 
-.. option::  --delimiter=ARG
+.. option:: --delimiter=ARG
 
     This option should be used together with **-q** and a single character is specified in the argument to separate the column name and value. If multiple characters are specified, the first character is used without displaying an error. (include special characters such as \\t and \\n) 
 
-.. option::  --enclosure=ARG
+.. option:: --enclosure=ARG
 
     This option should be used together with **-q** and a single character is specified in the argument to enclose all values except for numeric types. If multiple characters are specified, the first character is used without displaying an error.
 
@@ -870,6 +870,6 @@ This is a session command to switch the connection to another user without termi
 .. warning::
 
      #. When ';connect' session command executes, the current CSQL session connection is disconnect regardless of session transition success or not. 
-     #. When CSQL is in system administrator mode, ';connect' session command cannot be used (When entering CSQL with an csql -u dba --sysadm demodb form command).
+     #. When CSQL is in system administrator mode, ';connect' session command cannot be used (When entering CSQL with an csql -u dba \-\-sysadm demodb form command).
 
 

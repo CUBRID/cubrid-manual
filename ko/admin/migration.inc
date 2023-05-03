@@ -19,8 +19,8 @@ unloaddb
 *   객체 파일(*database-name*\ **_objects**): 해당 데이터베이스에 포함된 인스턴스 정보를 포함하는 파일이다.
 *   인덱스 파일(*database-name*\ **_indexes**): 해당 데이터베이스에 정의된 인덱스 정보를 포함하는 파일이다.
 *   트리거 파일(*database-name*\ **_trigger**): 해당 데이터베이스에 정의된 트리거 정보를 포함하는 파일이다. 만약 데이터를 로딩하는 동안 트리거가 구동되는 것을 원치 않는다면, 데이터 로딩을 완료한 후에 트리거 정의를 로딩하면 된다.
-*   분할된 스키마 파일(*database-name*\ **_schema**\ **_objecttype**): --split-schema-files 옵션을 사용할 경우 해당 데이터베이스에 정의된 스키마 정보를 오브젝트 단위로 분할하여 해당 오브젝트 정보만 가지고 있는 파일들이다. 분할된 파일 목록은 --split-schema-files 옵션을 참고 한다.
-*   스키마 목록 파일(*database-name*\ **_schema**\ **_info**): --split-schema-files 옵션을 사용할 경우 분할된 스키마 정보 파일들의 목록을 가지고 있는 파일이다.
+*   분할된 스키마 파일(*database-name*\ **_schema**\ **_objecttype**): **\-\-split-schema-files** 옵션을 사용할 경우 해당 데이터베이스에 정의된 스키마 정보를 오브젝트 단위로 분할하여 해당 오브젝트 정보만 가지고 있는 파일들이다. 분할된 파일 목록은 **\-\-split-schema-files** 옵션을 참고 한다.
+*   스키마 목록 파일(*database-name*\ **_schema**\ **_info**): **\-\-split-schema-files** 옵션을 사용할 경우 분할된 스키마 정보 파일들의 목록을 가지고 있는 파일이다.
 
 
 이러한 스키마, 객체, 인덱스, 트리거 파일은 같은 디렉터리에 생성된다.
@@ -241,7 +241,7 @@ loaddb
 *   인덱스 파일(*database-name*\ **_indexes**): 언로드 작업에 의해 생성된 파일로서, 데이터베이스에 정의된 인덱스 정보를 포함하는 파일이다.
 *   트리거 파일(*database-name*\ **_trigger**): 언로드 작업에 의해 생성된 파일로서, 데이터베이스에 정의된 트리거 정보를 포함하는 파일이다.
 *   사용자 정의 객체 파일(*user_defined_object_file*) : 대용량 데이터 입력을 위해 사용자가 테이블 형식으로 작성한 입력 파일이다(:ref:`howtowrite-loadfile` 참고).
-*   스키마 목록 파일(*database-name*\ **_schema_info**): --split-schema-files 옵션과 함께 언로드 작업에 의해 생성된 파일로서, 데이터베이스에 정의된 스키마 정보를 오브첵트 단위로 분할된 오브젝트 파일들의 목록을 가지고 있는 파일이다.(:ref:`unloaddb` 의 --split-schema-files 참고)
+*   스키마 목록 파일(*database-name*\ **_schema_info**): **\-\-split-schema-files** 옵션과 함께 언로드 작업에 의해 생성된 파일로서, 데이터베이스에 정의된 스키마 정보를 오브첵트 단위로 분할된 오브젝트 파일들의 목록을 가지고 있는 파일이다.(:option:`unloaddb --split-schema-files` 참고)
 
 **입력 파일 처리 순서**
 
@@ -289,7 +289,7 @@ loaddb
 
 .. note::
 
-    **client-server** 모드(-C, --CS-MODE)에서는 -d 옵션(data loading)만 사용 가능하다.
+    **client-server** 모드(-C, \-\-CS-MODE)에서는 -d 옵션(data loading)만 사용 가능하다.
 
 .. option:: --data-file-check-only
 
@@ -457,7 +457,7 @@ loaddb
 
     목록에 포함된 모든 스키마 파일들을 한번에 로딩 하는 옵션이다. 스키마 파일 목록이 있어야 하며, 이 목록 파일의 맨 위 스키마 파일부터 아래로 순차적으로 로딩된다. 이 옵션과 -s 옵션은 함께 사용할 수 없다.
 
-    이 목록 파일은 unloaddb에서 --split-schema-files 옵션을 사용할 때 자동으로 생성된다.
+    이 목록 파일은 unloaddb에서 **\-\-split-schema-files** 옵션을 사용할 때 자동으로 생성된다.
 	
     ::
 

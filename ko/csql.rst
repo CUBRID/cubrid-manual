@@ -302,7 +302,7 @@ CSQL 시작 옵션
 
         csql --no-single-line demodb
 
-.. option::  --sysadm
+.. option:: --sysadm
 
     이 옵션은 **-u dba**\와 같이 사용해야 하며, 시스템 관리자 모드로 실행하고자 할 때 지정한다.
 
@@ -310,7 +310,7 @@ CSQL 시작 옵션
 
         csql -u dba --sysadm demodb
 
-.. option::  --write-on-standby
+.. option:: --write-on-standby
 
     이 옵션은 시스템 관리자 모드 옵션(**\-\-sysadm**)과 함께 사용해야 한다. 이 옵션으로 CSQL을 실행한 dba는 standby 상태의 DB 즉, 슬레이브 DB 또는 레플리카 DB에 직접 접속하여 쓰기 작업을 수행할 수 있다. 단, 레플리카에 직접 쓰는 데이터는 복제되지 않는다.
     
@@ -322,15 +322,15 @@ CSQL 시작 옵션
     
         레플리카에 직접 데이터를 쓰는 경우 복제 불일치가 발생함에 주의해야 한다.
         
-.. option::  --no-trigger-action
+.. option:: --no-trigger-action
 
     이 옵션을 지정하면 해당 CSQL에서 수행되는 질의문의 트리거는 동작하지 않는다.
       
-.. option::  --delimiter=ARG
+.. option:: --delimiter=ARG
 
     이 옵션은 **-q**\와 같이 사용해야 하며, 인자에는 컬럼명과 값을 구분하는 단일 문자를 지정한다. 만약 여러개의 문자를 지정하는 경우에는 오류를 발생하지 않고 첫번째 문자를 사용한다. (\\t, \\n 와 같은 특수 문자 지정 가능하며 단일 문자로 취급)
 
-.. option::  --enclosure=ARG
+.. option:: --enclosure=ARG
     
     이 옵션은 **-q**\와 같이 사용해야 하며, 인자에는 숫자형 타입을 제외한 모든 결과값을 둘러싸는 단일 문자를 지정한다. 만약 여러개의 문자를 지정하는 경우에는 오류를 발생하지 않고 첫번째 문자를 사용한다.
 
@@ -870,5 +870,5 @@ CSQL을 종료하지 않고 다른 사용자로 접속을 전환하기 위한 �
 .. warning::
 
      #. ';connect' 세션 명령어를 실행하면 세션 전환 성공 여부와 관계 없이 현재의 CSQL 세션 연결은 해제된다.
-     #. CSQL이 시스템 관리자 모드인 경우 ';connect' 세션 명령어는 사용할 수 없다 (csql -u dba --sysadm demodb 형태의 명령으로 CSQL 수행한 경우).
+     #. CSQL이 시스템 관리자 모드인 경우 ';connect' 세션 명령어는 사용할 수 없다 (csql -u dba \-\-sysadm demodb 형태의 명령으로 CSQL 수행한 경우).
 

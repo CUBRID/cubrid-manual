@@ -19,8 +19,8 @@ The purposes of loading/unloading databases are as follows:
 *   Object file(*database-name*\ **_objects**): A file that contains information on the records in the database.
 *   Index file(*database-name*\ **_indexes**): A file that contains information on the indexes defined in the database.
 *   Trigger file(*database-name*\ **_trigger**): A file that contains information on the triggers defined in the database. If you don't want triggers to be running while loading the data, load the trigger definitions after the data loading has completed.
-*   Split schema files (*database-name*\ **_schema**\ **_objecttype**): When using the --split-schema-files option, the schema information defined in the database is split into object units and These files contain only object information. For a list of split files, see the --split-schema-files option.
-*   Schema list file (*database-name*\ **_schema**\ **_info**): When using the --split-schema-files option, this file contains a list of split schema information files.
+*   Split schema files (*database-name*\ **_schema**\ **_objecttype**): When using the **\-\-split-schema-files** option, the schema information defined in the database is split into object units and These files contain only object information. For a list of split files, see the **\-\-split-schema-files** option.
+*   Schema list file (*database-name*\ **_schema**\ **_info**): When using the **\-\-split-schema-files** option, this file contains a list of split schema information files.
 
 The schema, object, index, and trigger files are created in the same directory.
 
@@ -241,7 +241,7 @@ In general, the **cubrid loaddb** utility uses files (schema definition, object 
 *   Index file(*database-name*\ **_indexes**): A file created by an unload operation. It contains information on the indexes defined in the database.
 *   Trigger file(*database-name*\ **_trigger**): A file created by an unload operation. It contains information on the triggers defined in the database.
 *   User-defined object file(*user_defined_object_file*): A file in table format written by the user to enter mass data. (For details, see :ref:`howtowrite-loadfile` .)
-*   Schema list file (*database-name*\ **_schema_info**): A file created by unloading with the --split-schema-files option. This is a file that has a list of files in which schema information defined in the database is splited into object units.(For details, see :ref:`unloaddb` 's --split-schema-files .)
+*   Schema list file (*database-name*\ **_schema_info**): A file created by unloading with the **\-\-split-schema-files** option. This is a file that has a list of files in which schema information defined in the database is splited into object units.(For details, see :option:`unloaddb --split-schema-files`.)
 
 **Execution order of input files**
 
@@ -290,7 +290,7 @@ The following table shows [options] available with the **cubrid loaddb** utility
 
 .. note::
 
-    In **client-server** mode (-C, --CS-MODE), only the -d option (data loading) is available.
+    In **client-server** mode (-C, \-\-CS-MODE), only the -d option (data loading) is available.
 
 .. option:: --data-file-check-only
 
@@ -447,7 +447,7 @@ The following table shows [options] available with the **cubrid loaddb** utility
 
     Files unloaded in a version older than 11.2 can be loaded in version 11.2 only if the **\-\-no-user-specified-name** option is used.
 
-    This option works if **DBA**\ is specified as the user account of the database with the -u option.
+    This option works if **DBA** is specified as the user account of the database with the -u option.
     
     ::
 
@@ -461,7 +461,7 @@ The following table shows [options] available with the **cubrid loaddb** utility
 
     This option loads all schema files included in the list at once. There must be a list of schema files, and they are loaded sequentially from the top schema file to the bottom of this list file. This option and the -s option cannot be used together.
 
-    This list file is automatically created when using the --split-schema-files option in unloaddb.
+    This list file is automatically created when using the **\-\-split-schema-files** option in unloaddb.
 	
     ::
 

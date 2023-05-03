@@ -224,8 +224,8 @@ Linux
     
         cubrid-php>./configure --with-cubrid --with-php-config=/usr/local/bin/php-config
     
-    * -\-with-cubrid=shared: CUBRID 지원을 포함한다.
-    * -\-with-php-config=PATH: 절대 경로를 포함한 php-config의 파일 이름을 입력한다.
+    * \-\-with-cubrid=shared: CUBRID 지원을 포함한다.
+    * \-\-with-php-config=PATH: 절대 경로를 포함한 php-config의 파일 이름을 입력한다.
     
 #.  프로젝트를 빌드한다. 프로젝트가 성공적으로 빌드되면 **/modules** 디렉터리에 **cubrid.so** 파일이 생성된다.
     
@@ -266,7 +266,7 @@ phpize는 PHP 확장의 컴파일을 준비하는 셸 스크립트로, 일반적
         $> tar zxvf php-<version>.tar.gz (or tar jxvf php-<version>.tar.bz2)
         $> cd php-<version>
     
-#.  프로젝트를 설정하고, 빌드한 후 설치한다. **-\-prefix** 옵션으로 PHP를 설치할 디렉터리를 지정할 수 있다. ::
+#.  프로젝트를 설정하고, 빌드한 후 설치한다. **\-\-prefix** 옵션으로 PHP를 설치할 디렉터리를 지정할 수 있다. ::
     
         php-root> ./configure --prefix=prefix_dir; make; make install
     

@@ -552,11 +552,11 @@ ISO-8859-1 문자셋에서 한국어와 터키어의 월, 요일
 
 .. option:: -s, --start-value=CODEPOINT
 
-    덤프 범위의 시작을 지정한다. **-a** , **-\-identifier-alphabet** , **-c**, **-w** 옵션들에 대한 시작 코드포인트이며, 기본값은 0이다.
+    덤프 범위의 시작을 지정한다. **-a** , **\-\-identifier-alphabet** , **-c**, **-w** 옵션들에 대한 시작 코드포인트이며, 기본값은 0이다.
 
 .. option:: -e, --end-value=CODEPOINT
 
-    덤프 범위의 끝을 지정한다. **-a**, **-\-identifier-alphabet**, **-c**, **-w** 옵션들에 대한 끝 코드포인트이며, 기본값은 로캘 공유 라이브러리에서 읽은 최대값이다.
+    덤프 범위의 끝을 지정한다. **-a**, **\-\-identifier-alphabet**, **-c**, **-w** 옵션들에 대한 끝 코드포인트이며, 기본값은 로캘 공유 라이브러리에서 읽은 최대값이다.
 
 .. option:: -k, --console-conversion
 

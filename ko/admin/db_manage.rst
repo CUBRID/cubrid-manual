@@ -117,7 +117,7 @@ CUBRID 데이터베이스의 볼륨은 크게 영구적 볼륨, 일시적 볼륨
 *   데이터베이스 볼륨 파일
 
     *  위의 표에서 *testdb*, *testdb_perm*, *testdb_temp*, *testdb_x003* ~ *testdb_x006* 은 데이터베이스 볼륨 파일로 분류된다.
-    *  파일 크기는 **cubrid createdb** 및 **cubrid addvoldb** 의 **-\-db-volume-size** 옵션과 **cubrid.conf** 의  **db_volume_size** 에 의해 결정된다.
+    *  파일 크기는 **cubrid createdb** 및 **cubrid addvoldb** 의 **\-\-db-volume-size** 옵션과 **cubrid.conf** 의  **db_volume_size** 에 의해 결정된다.
     *  데이터베이스에 저장 공간이 부족해지면 새 볼륨이 자동 생성된다. 
 
 *   일시적 볼륨 
@@ -128,7 +128,7 @@ CUBRID 데이터베이스의 볼륨은 크게 영구적 볼륨, 일시적 볼륨
 *   로그 볼륨 파일
 
     *   위의 표에서 *testdb_lgar_t*, *testdb_lgar224* 및 *testdb_lgat* 는 로그 볼륨 파일로 분류된다.
-    *   파일 크기는 **cubrid.conf** 의 **log_volume_size** 또는 **cubrid createdb** 의 **-\-log-volume-size** 옵션에 의해 결정된다.
+    *   파일 크기는 **cubrid.conf** 의 **log_volume_size** 또는 **cubrid createdb** 의 **\-\-log-volume-size** 옵션에 의해 결정된다.
 
 *   이중 쓰기 버퍼 (Double Write Buffer, DWB) 파일
       

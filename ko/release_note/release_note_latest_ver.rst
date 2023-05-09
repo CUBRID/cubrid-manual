@@ -83,7 +83,7 @@ User schema 개념 도입으로 사용자 별로 동일한 객체명을 사용�
 * 객체명에 "."(dot)을 허용하지 않는다.
 * 질의 또는 유틸리티 명령어 사용 시 "[사용자명].객체명"으로 사용해야 한다. (단, 로그인 된 사용자의 객체를 질의하는 경우에는 사용자명을 생략할 수 있음) (:doc:`/sql/user_schema` 참조)
 * info schema, show full tables 결과에 사용자명 포함되도록 변경되었다. (:doc:`/sql/query/show` 참조)
-* 11.2 이전 loaddb 파일은 11.2에서 수행할 수 있도록 user명.table명으로 수정하거나 \-\-no-user-specified-name  옵션을 설정하여 loaddb를 수행할 수 있다. (:ref:`loaddb` 참조)
+* 11.2 이전 loaddb 파일은 11.2에서 수행할 수 있도록 user명.table명으로 수정하거나 \-\-no-user-specified-name 옵션을 설정하여 loaddb를 수행할 수 있다. (:ref:`loaddb` 참조)
 
 JavaSP의 "jdbc\:default\:connection\:" 또는 getDefaultConnection()  사용 시 다음 함수 및 동작 변경됨 (:ref:`JavaSP 주의 사항 <jsp-caution>` 참조)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

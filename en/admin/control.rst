@@ -81,7 +81,9 @@ One of the following can be specified in <command>:
 Controlling Broker
 ------------------
 
-The following **cubrid** utility syntax shows how to control CUBRID broker process. 
+The following cubrid utility syntax shows how to control CUBRID broker process. One of the following can be specified in <command>: start is used to run services; stop is used to stop services; restart is used to restart services; status is used to check status; acl is used to limit broker access; on/off is used to enable/disable the specified broker; reset is used to reset the connection to broker; info is used to display the broker configuration information; getid is used to get the SHARD ID(SHARD database ID) with SHARD key.
+
+And more, SHARD feature can be used only after the broker is started and "SHARD", the broker parameter, whose value in cubrid_broker.conf is set to ON.
 
 ::
 
@@ -95,18 +97,6 @@ The following **cubrid** utility syntax shows how to control CUBRID broker proce
                |reset broker_name 
                |info
                |getid -b <broker_name> [-f] shard_key
-
-*   start: start broker processes.
-*   stop: stop broker processes. 
-*   restart: restart broker processes. 
-*   status: check status of broker processes.  
-*   acl: limit broker access.
-*   on/off: enable/disable the specified broker.
-*   reset: reset the connection to broker.
-*   info: display the broker configuration information.
-*   getid: Acquire SHARD ID (SHARD database ID) with SHARD key
-
-And more, SHARD feature can be used only after the broker is started and "SHARD", the broker parameter, whose value in cubrid_broker.conf is set to ON.
 
 Controlling Gateway
 -------------------
@@ -398,7 +388,6 @@ The following example shows how to check the status of master process and databa
     NAME                   PID  PORT    AS   JQ                  TPS                  QPS   SELECT   INSERT   UPDATE   DELETE   OTHERS     LONG-T     LONG-Q         ERR-Q  UNIQUE-ERR-Q  #CONNECT   #REJECT
     ===========================================================================================================================================================================================================
     * oracle_gateway       10903 53000     5    0                    0                    0        0        0        0        0        0     0/60.0     0/60.0             0             0         0         0
-    * mysql_gateway        OFF
 
     @ cubrid manager server status
     ++ cubrid manager server is not running.
@@ -999,7 +988,7 @@ Specifying *expr* performs that the status of specific brokers which include *ex
 
 If "SERVICE=ON" is specified on *expr*, only the status of working brokers is displayed; if "SERVICE=OFF" is specified, only the status of stopped brokers is displayed.
 
-The following [options] are available with the **cubrid broker status** utility. -b, -q, -c, -m, -S, -P and -f are options to define the information to print; -s, -l and -t are options to control printing. All of these are possible to use as combining each other.
+The following [options] are available with the **cubrid broker status** utility. -b, -q, -c, -m, -S, -P and -f are options to define the information to print; -s, -l and -t are options to control printing; -c, -m, -S and -P are options applied when using SHARD feature. All of these are possible to use as combining each other.
 
 .. program:: broker_status
 
@@ -1807,11 +1796,11 @@ The following options are available with the **cubrid broker test** utility.
      
 .. option:: -u DB_USER 
 
-    Specifies the DB account of the test target. When this option is omitted, the value of SHARD_DB_USER parameter is used if the value of a SHARD parameter in cubrid_broker.conf is ON. If the value of a SHARD parameter is OFF, "public" is input in CUBRID, or "root" is input in MySQL.
+    Specifies the DB account of the test target. When this option is omitted, the value of SHARD_DB_USER parameter is used if the value of a SHARD parameter in cubrid_broker.conf is ON. If the value of a SHARD parameter is OFF, "public" is input in CUBRID.
      
 .. option:: -p DB_PASSWORD 
 
-    Specifies the DB password of the test target. When this option is omitted, the value of SHARD_DB_PASSWORD parameter is used if the value of a SHARD parameter in cubrid_broker.conf is ON. If the value of a SHARD parameter is OFF, an empty string("") is input in CUBRID and MySQL.
+    Specifies the DB password of the test target. When this option is omitted, the value of SHARD_DB_PASSWORD parameter is used if the value of a SHARD parameter in cubrid_broker.conf is ON. If the value of a SHARD parameter is OFF, an empty string("") is input in CUBRID.
      
 .. option:: -c QUERY 
 
@@ -2608,8 +2597,6 @@ If you do not specify options or arguments, the status of all gateways is displa
      4 28437     0     0 50140 IDLE
      5 28438     0     0 50144 IDLE
 
-    % mysql_gateway OFF
-
 *   % oracle_gateway: The gateway name
 *   ID: Serial number of CAS within the gateway
 *   PID: CAS process ID within the gateway
@@ -2617,7 +2604,6 @@ If you do not specify options or arguments, the status of all gateways is displa
 *   LQS: The number of long-duration queries processed per second
 *   PSIZE: Size of CAS
 *   STATUS: The current status of CAS (BUSY, IDLE, CLIENT_WAIT, CLOSE_WAIT)
-*   % mysql_gateway OFF: mysql_gateway's SERVICE parameter is set to OFF. So, mysql_gateway is not started.
 
 The following shows the detail status of gateway for 5 seconds. The display will reset per 5 seconds as the new status information. To escape the display of the status, press <Q>.
 
@@ -2629,7 +2615,6 @@ The following shows the detail status of gateway for 5 seconds. The display will
      NAME                    PID  PORT   AS   JQ    TPS    QPS   SELECT   INSERT   UPDATE   DELETE   OTHERS     LONG-T     LONG-Q   ERR-Q  UNIQUE-ERR-Q  #CONNECT  #REJECT
     =======================================================================================================================================================================
     * oracle_gateway         13200 30000    5    0      0      0        0        0        0        0        0     0/60.0     0/60.0       0             0         0        0
-    * mysql_gateway        OFF
 
 *   NAME: The gateway name
 *   PID: Process ID of the gateway

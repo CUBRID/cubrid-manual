@@ -80,7 +80,9 @@ CUBRID 설정 파일에 등록된 서비스를 제어하기 위한 **cubrid** �
 브로커 제어
 -----------
 
-CUBRID 브로커 프로세스를 제어하기 위한 **cubrid** 유틸리티 구문은 다음과 같다.
+CUBRID 브로커 프로세스를 제어하기 위한 cubrid 유틸리티 구문은 다음과 같다. <command>로 올 수 있는 명령어는 브로커 프로세스 구동을 위한 start , 종료를 위한 stop, 재시작을 위한 restart, 상태 확인을 위한 status, 브로커 접속 제한을 위한 acl, 명시한 브로커만 사용 가능하게 하거나 불가능하게 하는 on/off, 브로커 접속을 리셋하기 위한 reset, 설정 정보 출력을 위한 info, SHARD key를 가지고 SHARD ID(SHARD 데이터베이스 ID)를 얻는 getid가 있다.
+
+또한, SHARD 기능은 브로커가 구동되고 cubrid_broker.conf의 SHARD라는 브로커 파라미터 값이 ON일 때만 사용할 수 있다.
 
 ::
 
@@ -94,18 +96,6 @@ CUBRID 브로커 프로세스를 제어하기 위한 **cubrid** 유틸리티 구
                |reset broker_name 
                |info
                |getid -b <broker_name> [-f] shard_key
-
-*   start: 브로커 프로세스 구동
-*   stop: 브로커 프로세스 종료
-*   restart: 브로커 프로세스 재시작
-*   status: 브로커 상태 확인
-*   acl: 브로커 접속 제한
-*   on/off: 명시한 브로커만 사용 가능하게 하거나 불가능하게 함
-*   reset: 브로커 접속을 리셋함
-*   info: 브로커 설정 정보 출력
-*   getid: SHARD key를 가지고 SHARD ID(SHARD 데이터베이스 ID) 획득
-
-SHARD 기능은 브로커가 구동되고 cubrid_broker.conf의 SHARD라는 브로커 파라미터 값이 ON일 때만 사용할 수 있다.
 
 게이트웨이 제어
 ---------------
@@ -132,7 +122,6 @@ CUBRID 게이트웨이 프로세스를 제어하기 위한 **cubrid** 유틸리�
 *   on/off: 명시한 게이트웨이만 사용 가능하게 하거나 불가능하게 함
 *   reset: 게이트웨이 접속을 리셋함
 *   info: 게이트웨이 설정 정보 출력
-
 
 CUBRID 매니저 서버 제어
 -----------------------
@@ -392,7 +381,6 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
     NAME                   PID  PORT    AS   JQ                  TPS                  QPS   SELECT   INSERT   UPDATE   DELETE   OTHERS     LONG-T     LONG-Q         ERR-Q  UNIQUE-ERR-Q  #CONNECT   #REJECT
     ===========================================================================================================================================================================================================
     * oracle_gateway       10903 53000     5    0                    0                    0        0        0        0        0        0     0/60.0     0/60.0             0             0         0         0
-    * mysql_gateway        OFF
 
     @ cubrid manager server status
     ++ cubrid manager server is not running.
@@ -992,7 +980,7 @@ cubrid_broker.conf의 SHARD 브로커 파라미터가 ON으로 설정된 경우 
 
 *expr* 에 "SERVICE=ON"이 명시되면 구동 중인 브로커의 상태만 출력하며, "SERVICE=OFF"가 명시되면 멈춰있는 브로커의 이름만 출력한다.
 
-cubrid broker status에서 사용하는 [options]는 다음과 같다. 이들 중 -b, -q, -c, -m, -S, -P, -f는 출력할 정보를 정의하는 모니터링 옵션이고, -s, -l, -t는 출력을 제어하는 옵션이다. 이 모든 옵션들은 상호 조합하여 사용할 수 있다.
+cubrid broker status에서 사용하는 [options]는 다음과 같다. 이들 중 -b, -q, -c, -m, -S, -P, -f는 출력할 정보를 정의하는 모니터링 옵션이고, -s, -l, -t는 출력을 제어하는 옵션이다. 이 모든 옵션들은 상호 조합하여 사용할 수 있다. 이 모든 옵션들은 서로 조합하여 사용하는 것이 가능하다.
 
 .. program:: broker_status
 
@@ -2597,8 +2585,6 @@ cubrid gateway status에서 사용하는 [options]는 다음과 같다. 이들 �
      4 28437     0     0 50140 IDLE
      5 28438     0     0 50144 IDLE
 
-    % mysql_gateway OFF
-
 *   % oracle_gateway: 브로커의 이름
 *   ID: 게이트웨이 내에서 순차적으로 부여한 CAS의 일련 번호
 *   PID: 게이트웨이 내 CAS 프로세스의 ID
@@ -2606,7 +2592,6 @@ cubrid gateway status에서 사용하는 [options]는 다음과 같다. 이들 �
 *   LQS: 초당 처리되는 장기 실행 질의의 수
 *   PSIZE: CAS 프로세스 크기
 *   STATUS: CAS의 현재 상태로서, BUSY/IDLE/CLIENT_WAIT/CLOSE_WAIT가 있다.
-*   % mysql_gateway OFF: mysql_gateway의 SERVICE 파라미터가 OFF이다. 따라서, mysql_gateway은 구동되지 않는다.
 
 다음은 **-b** 옵션을 사용하여 브로커에 관해 5초 간격으로 상세한 상태 정보를 출력한다. 화면이 5초 간격마다 새로운 상태 정보로 갱신되며, 상태 정보 화면을 벗어나려면 <Q>를 누른다.
 
@@ -2618,7 +2603,6 @@ cubrid gateway status에서 사용하는 [options]는 다음과 같다. 이들 �
      NAME                    PID  PORT   AS   JQ    TPS    QPS   SELECT   INSERT   UPDATE   DELETE   OTHERS     LONG-T     LONG-Q   ERR-Q  UNIQUE-ERR-Q  #CONNECT  #REJECT
     =======================================================================================================================================================================
     * oracle_gateway         13200 30000    5    0      0      0        0        0        0        0        0     0/60.0     0/60.0       0             0         0        0
-    * mysql_gateway        OFF
 
 *   NAME: 게이트웨이 이름
 *   PID: 게이트웨이의 프로세스 ID

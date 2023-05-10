@@ -235,7 +235,7 @@ To display the option list in the prompt, execute the **csql** utilities without
  
 .. option:: -q, --query-output
 
-    This option displays the result for easy use in insert queries, only show column names and values, and works with **-c** or **-i** option. Each column name and value are separated by a comma or a single character of the **-\-delimiter** option; and all results except for numeric types are enclosed by a single quote or a single character of the **-\-enclosure** option. If the enclosure is a single quote, the single quote in the results is replaced with two ones. It is ignored when it is given with **-l** option.
+    This option displays the result for easy use in insert queries, only show column names and values, and works with **-c** or **-i** option. Each column name and value are separated by a comma or a single character of the **\-\-delimiter** option; and all results except for numeric types are enclosed by a single quote or a single character of the **\-\-enclosure** option. If the enclosure is a single quote, the single quote in the results is replaced with two ones. It is ignored when it is given with **-l** option.
 
     ::
 
@@ -286,13 +286,13 @@ To display the option list in the prompt, execute the **csql** utilities without
 
 .. option:: --no-auto-commit
 
-    The following example shows how to stop the auto-commit mode with the **-\-no-auto-commit** option. If you don't configure **-\-no-auto-commit** option, the CSQL Interpreter runs in an auto-commit mode by default, and the SQL statement is committed automatically at every execution. Executing the **;AUtocommit** session command after starting the CSQL Interpreter will also have the same result. ::
+    The following example shows how to stop the auto-commit mode with the **\-\-no-auto-commit** option. If you don't configure **\-\-no-auto-commit** option, the CSQL Interpreter runs in an auto-commit mode by default, and the SQL statement is committed automatically at every execution. Executing the **;AUtocommit** session command after starting the CSQL Interpreter will also have the same result. ::
 
         csql --no-auto-commit demodb
 
 .. option:: --no-pager
 
-    The following example shows how to display the execution results by the CSQL Interpreter at once instead of page-by-page with the **-\-no-pager** option. The results will be output page-by-page if **-\-no-pager** option is not specified. ::
+    The following example shows how to display the execution results by the CSQL Interpreter at once instead of page-by-page with the **\-\-no-pager** option. The results will be output page-by-page if **\-\-no-pager** option is not specified. ::
 
         csql --no-pager demodb
 
@@ -302,7 +302,7 @@ To display the option list in the prompt, execute the **csql** utilities without
 
         csql --no-single-line demodb
 
-.. option::  --sysadm
+.. option:: --sysadm
 
     This option should be used together with **-u dba**. It is specified when you want to run CSQL in a system administrator's mode.
 
@@ -310,9 +310,9 @@ To display the option list in the prompt, execute the **csql** utilities without
 
         csql -u dba --sysadm demodb
 
-.. option::  --write-on-standby
+.. option:: --write-on-standby
 
-    This option should be used together with a system administrator's mode option(**-\-sysadm**). dba which run CSQL with this option can write directly to the standby DB (slave DB or replica DB). However, the data to be written directly to the replica DB are not replicated.
+    This option should be used together with a system administrator's mode option(**\-\-sysadm**). dba which run CSQL with this option can write directly to the standby DB (slave DB or replica DB). However, the data to be written directly to the replica DB are not replicated.
 
     :: 
 
@@ -322,15 +322,15 @@ To display the option list in the prompt, execute the **csql** utilities without
     
         Please note that replication mismatch occurs when you write the data directly to the replica DB.
 
-.. option::  --no-trigger-action
+.. option:: --no-trigger-action
 
     If you specify this option, triggers of the queries executed in this CSQL are not triggered.
 
-.. option::  --delimiter=ARG
+.. option:: --delimiter=ARG
 
     This option should be used together with **-q** and a single character is specified in the argument to separate the column name and value. If multiple characters are specified, the first character is used without displaying an error. (include special characters such as \\t and \\n) 
 
-.. option::  --enclosure=ARG
+.. option:: --enclosure=ARG
 
     This option should be used together with **-q** and a single character is specified in the argument to enclose all values except for numeric types. If multiple characters are specified, the first character is used without displaying an error.
 
@@ -343,7 +343,7 @@ In addition to SQL statements, CSQL Interpreter provides special commands allowi
 
 Enter the **;help** command to display a list of the session commands available in the CSQL Interpreter. Note that only the uppercase letters of each session command are required to make the CSQL Interpreter to recognize it. Session commands are not case-sensitive.
 
-"Query buffer" is a buffer to store the query before running it. If you run CSQL as giving the **-\-no-single-line** option, the query string is kept on the buffer until running **;xr** command.
+"Query buffer" is a buffer to store the query before running it. If you run CSQL as giving the **\-\-no-single-line** option, the query string is kept on the buffer until running **;xr** command.
 
 **Reading SQL statements from a file (;REAd)**
 
@@ -498,7 +498,7 @@ This command sets auto-commit mode to **ON** or **OFF**. If any value is not spe
 
 **CHeckpoint Execution (;CHeckpoint)**
 
-This command executes the checkpoint within the CSQL session. This command can only be executed when a DBA group member, who is specified for the custom option (**-u** *user_name*), connects to the CSQL Interpreter in system administrator mode (**-\-sysadm**).
+This command executes the checkpoint within the CSQL session. This command can only be executed when a DBA group member, who is specified for the custom option (**-u** *user_name*), connects to the CSQL Interpreter in system administrator mode (**\-\-sysadm**).
 
 **Checkpoint** is an operation of flushing all dirty pages except for temp pages within the current data buffer to disks. You can also change the checkpoint interval using a command (**;set** *parameter_name* value) to set the parameter values in the CSQL session. You can see the examples of the parameter related to the checkpoint execution interval (**checkpoint_interval** and **checkpoint_every_size**). For more information, see :ref:`logging-parameters`. ::
 
@@ -507,7 +507,7 @@ This command executes the checkpoint within the CSQL session. This command can o
 
 **Transaction Monitoring Or Termination (;Killtran)**
 
-This command checks the transaction status information or terminates a specific transaction in the CSQL session. This command prints out the status information of all transactions on the screen if a parameter is omitted it terminates the transaction if a specific transaction ID is specified for the parameter. It can only be executed when a DBA group member, who is specified for the custom option (**-u** *user_name*), connects to the CSQL Interpreter in system administrator mode (**-\-sysadm**). ::
+This command checks the transaction status information or terminates a specific transaction in the CSQL session. This command prints out the status information of all transactions on the screen if a parameter is omitted it terminates the transaction if a specific transaction ID is specified for the parameter. It can only be executed when a DBA group member, who is specified for the custom option (**-u** *user_name*), connects to the CSQL Interpreter in system administrator mode (**\-\-sysadm**). ::
 
     sysadm> ;killtran
     Tran index      User name      Host name      Process id      Program name
@@ -759,7 +759,7 @@ This example shows the server statistics information for current connection. For
 
 The **;TIme** session command can be set to display the elapsed time to execute the query. It can be set to **ON** or **OFF**. The current setting is displayed if there is no value specified. The default value is **ON**.
 
-The **SELECT** query includes the time of outputting the fetched records. Therefore, to check the execution time of complete output of all records in the **SELECT** query, use the **-\-no-pager** option while executing the CSQC interpreter. ::
+The **SELECT** query includes the time of outputting the fetched records. Therefore, to check the execution time of complete output of all records in the **SELECT** query, use the **\-\-no-pager** option while executing the CSQC interpreter. ::
 
     $ csql -u dba --no-pager demodb
     csql> ;time ON

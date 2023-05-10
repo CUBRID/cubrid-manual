@@ -80,7 +80,7 @@ OS 환경 변수 및 Java 환경 변수
 
 *   JAVA_HOME: CUBRID 시스템에서 자바 저장 프로시저 기능을 사용하기 위해서는 Java Runtime Environment (JRE) 1.6 이상 버전이 설치되어야 하고 **JAVA_HOME** 환경 변수에 해당 디렉터리가 지정되어야 한다. :ref:`cubrid-javasp-server-config` 을 참고한다.
 
-*   JVM_PATH: CUBRID 시스템에서 자바 저장 프로시저 기능을 사용하기 위해서 **JAVA_HOME**에서 JVM 라이브러리 (**libjvm**)을 찾는 대신 **JVM_PATH** 환경 변수를 설정하여 명시적으로 라이브러리의 경로를 지정할 수 있다. :ref:`cubrid-javasp-server-config` 을 참고한다.
+*   JVM_PATH: CUBRID 시스템에서 자바 저장 프로시저 기능을 사용하기 위해서 **JAVA_HOME**\에서 JVM 라이브러리 (**libjvm**)을 찾는 대신 **JVM_PATH** 환경 변수를 설정하여 명시적으로 라이브러리의 경로를 지정할 수 있다. :ref:`cubrid-javasp-server-config` 을 참고한다.
 
 환경 변수 설정
 --------------
@@ -400,4 +400,4 @@ CUBRID 자바 저장 프로시저 서버 사용 포트
 | cub_javasp    | cub_server   | java_stored_procedure_port | 개방(open)               |
 +---------------+--------------+----------------------------+--------------------------+
 
-*   CUBRID 자바 저장 프로시저 서버 (cub_javasp)가 cub_server 와 통신할 때 사용하는 포트는 **cubrid.conf**의 **java_stored_procedure_port**\이며 기본값은 0으로, 사용 가능한 임의의 가용 포트가 할당됨을 의미한다.
+*   CUBRID 자바 저장 프로시저 서버 (cub_javasp)가 cub_server 와 통신할 때 사용하는 포트는 **cubrid.conf**\의 **java_stored_procedure_port**\이며 기본값은 0으로, 사용 가능한 임의의 가용 포트가 할당됨을 의미한다.

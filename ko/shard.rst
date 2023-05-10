@@ -941,3 +941,17 @@ SHARD 구성 환경에서는 SET NAMES 문이 정상 동작하지 않을 수 있
 **auto increment는 각 shard DB 내에서만 유효**
 
 auto increment 속성 또는 SERIAL 등의 값이 각 shard DB 내에서만 유효하므로, 의도한 것과 다른 값을 반환할 수 있다.
+
+**SHARD 힌트 구문이 작성된 DDL 구문은 지원 안함**
+
+SHARD 구성 환경에서 스키마 생성 및 변경 등의 DDL구문은 SHARD 힌트가 지원 되지 않으므로 각각의 SHARD DB에 접속하여 스키마 생성 및 변경을 처리하여야 한다. shard_id(0)은 정상적으로 처리되며, shard_id(1)부터는 에러를 발생시킨다. 
+
+오류 예시)
+
+::
+
+    CREATE TABLE foo (col1 INT NOT NULL) /*+ SHARD_ID(1) /
+
+::
+
+    DROP TABLE IF EXISTS foo /+ SHARD_ID(1) */

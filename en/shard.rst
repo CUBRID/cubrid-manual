@@ -941,3 +941,17 @@ In SHARD environment, SET NAMES statement is not recommended to use because it c
 **auto increment is valid only in each shard DB**
 
 The auto increment attribute or SERIAL is valid within each shard DB only. So a result different from the intended result may be returned.
+
+**DDL syntax with SHARD hint syntax not supported**
+
+Since DDL phrases such as schema creation and change in the SHARD configuration environment do not support SHARD hints, each SHARD DB must be accessed to process schema creation and change. The shard_id (0) is normally processed, and an error is generated from the shard_id (1).
+
+Error example)
+
+::
+
+    CREATE TABLE foo (col1 INT NOT NULL) /*+ SHARD_ID(1) /
+
+::
+
+    DROP TABLE IF EXISTS foo /+ SHARD_ID(1) */

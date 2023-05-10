@@ -1569,7 +1569,7 @@ SYS_DATE, SYSDATE
 
 .. warning::
     
-    10.0 이후로 **SYS_DATE** 및 **SYSDATE**가 **CURDATE** (), **CURRENT_DATE**, **CURRENT_DATE** ()와 다르다. 9.x 및 그 이전 버전에서는 동일하다.
+    10.0 이후로 **SYS_DATE** 및 **SYSDATE**\가 **CURDATE** (), **CURRENT_DATE**, **CURRENT_DATE** ()와 다르다. 9.x 및 그 이전 버전에서는 동일하다.
 
 SYS_DATETIME, SYSDATETIME
 =========================
@@ -1630,7 +1630,7 @@ SYS_DATETIME, SYSDATETIME
   
 .. warning::
 
-    10.0 이후로 **SYS_DATEIME**, **SYSDATETIME**이 **CURRENT_DATETIME** (), **NOW** ()와 다르다. 9.x 및 그 이전 버전에서는 동일하다.
+    10.0 이후로 **SYS_DATEIME**, **SYSDATETIME**\이 **CURRENT_DATETIME** (), **NOW** ()와 다르다. 9.x 및 그 이전 버전에서는 동일하다.
  
 SYS_TIME, SYSTIME
 =================
@@ -1682,7 +1682,7 @@ SYS_TIME, SYSTIME
 
 .. warning::
 
-    10.0 이후로 **SYS_TIME**, **SYSTIME**이 **CURTIME** (), **CURRENT_TIME** ()과 다르다.  9.x 및 그 이전 버전에서는 동일하다.
+    10.0 이후로 **SYS_TIME**, **SYSTIME**\이 **CURTIME** (), **CURRENT_TIME** ()과 다르다.  9.x 및 그 이전 버전에서는 동일하다.
  
 SYS_TIMESTAMP, SYSTIMESTAMP
 ===========================
@@ -1690,7 +1690,7 @@ SYS_TIMESTAMP, SYSTIMESTAMP
 .. c:macro:: SYS_TIMESTAMP
 .. c:macro:: SYSTIMESTAMP
 
-    **SYS_TIMESTAMP** 및 **SYSTIMESTAMP** 은 서로 바꿔 사용할 수 있으며 서버의 현재 날짜와 시간을 **TIMESTAMP** 타입으로 반환한다. 산술연산의 단위는 초(sec)이다.
+    **SYS_TIMESTAMP** 및 **SYSTIMESTAMP**\은 서로 바꿔 사용할 수 있으며 서버의 현재 날짜와 시간을 **TIMESTAMP** 타입으로 반환한다. 산술연산의 단위는 초(sec)이다.
     현재 세션의 타임존이 서버의 타임존과 동일하면 함수는 :c:macro:`CURRENT_TIMESTAMP`, :func:`CURRENT_TIMESTAMP`, :c:macro:`LOCALTIME`, :func:`LOCALTIME`, :c:macro:`LOCALTIMESTAMP`, :func:`LOCALTIMESTAMP` 와 동일하다. 차이점은 :c:macro:`CURRENT_TIMESTAMP`, :func:`CURRENT_TIMESTAMP`, :c:macro:`LOCALTIME`, :func:`LOCALTIME`, :c:macro:`LOCALTIMESTAMP`, :func:`LOCALTIMESTAMP` 를 참고하고, 함수에 대한 자세한 내용은 :func:`DBTIMEZONE`, :func:`SESSIONTIMEZONE` 을 참고한다.
 
     :rtype: TIMESTAMP
@@ -1733,7 +1733,7 @@ SYS_TIMESTAMP, SYSTIMESTAMP
 
 .. warning::
 
-    10.0 이후로  **SYS_TIMESTAMP** (), **SYSTIMESTAMP**가 **CURRENT_TIMESTAMP**, **CURRENT_TIMESTAMP** (), **LOCALTIME**, **LOCALTIME** (), **LOCALTIMESTAMP** 및 **LOCALTIMESTAMP** ()와 다르다.  9.x 및 그 이전 버전에서는 동일하다.
+    10.0 이후로  **SYS_TIMESTAMP** (), **SYSTIMESTAMP**\가 **CURRENT_TIMESTAMP**, **CURRENT_TIMESTAMP** (), **LOCALTIME**, **LOCALTIME** (), **LOCALTIMESTAMP** 및 **LOCALTIMESTAMP** ()와 다르다.  9.x 및 그 이전 버전에서는 동일하다.
 
 TIME
 ====

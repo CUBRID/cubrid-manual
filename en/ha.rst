@@ -543,7 +543,7 @@ For details about **max_clients**, see :ref:`connection-parameters`.
 
 *   **log_buffer_size** : The size of a log buffer. This must be same for all nodes, as it affects the protocol between **copylogdb** that duplicate the server and logs.
 
-*   **log_volume_size** : The size of a log volume. In CUBRID HA, the format and contents of a transaction log are the same as that of the replica log. Therefore, the parameter must be same for all nodes. If each node creates its own DB, the **cubrid createdb** options (**-\-db-volume-size**, **-\-db-page-size**, **-\-log-volume-size**, **-\-log-page-size**, etc.) must be the same.
+*   **log_volume_size** : The size of a log volume. In CUBRID HA, the format and contents of a transaction log are the same as that of the replica log. Therefore, the parameter must be same for all nodes. If each node creates its own DB, the **cubrid createdb** options (**\-\-db-volume-size**, **\-\-db-page-size**, **\-\-log-volume-size**, **\-\-log-page-size**, etc.) must be the same.
 
 *   **cubrid_port_id** : The TCP port number for creating a server connection. It must be same for all nodes in order to connect **copylogdb** that duplicate the server and logs.
 
@@ -1596,7 +1596,7 @@ The following shows [options] used in **cubrid changemode**.
     
     *   You can change a mode as **standby** if a server's status is **maintenance**.
     
-    *   You can change a mode as **active** if a server's status is **to-be-active**. However, this should be used together with **-\-force** option. See the below descrioption regarding **-\-force** option.
+    *   You can change a mode as **active** if a server's status is **to-be-active**. However, this should be used together with **\-\-force** option. See the below descrioption regarding **\-\-force** option.
     
 .. option:: -f, --force
 
@@ -2050,7 +2050,7 @@ In a CUBRID HA environment, the meta data (Locator) of a **LOB** column is repli
     From 10.0, UPDATE STATISTICS statement is replicated.
      
     In the previous version of 10.0, UPDATE STATISTICS statement is not replicated; therefore, as a separated operation, you should run this statement in the slave/replica node.
-    When you want to apply UPDATE STATISTICS on the slave/replica node in the previous version of 10.0, you should run this in the CSQL with **-\-sysadm** and **-\-write_on_slave** options.
+    When you want to apply UPDATE STATISTICS on the slave/replica node in the previous version of 10.0, you should run this in the CSQL with **\-\-sysadm** and **\-\-write_on_slave** options.
 
 Operational Scenarios
 =====================
@@ -2202,7 +2202,7 @@ restoreslave
     
 .. option:: --list
 
-    This option displays information on backup files of a database; restoration procedure is not performed. For further information, see **-\-list** of :ref:`restoredb`
+    This option displays information on backup files of a database; restoration procedure is not performed. For further information, see **\-\-list** of :ref:`restoredb`
     
 .. option:: -B, --backup-file-path=PATH
 
@@ -2592,7 +2592,7 @@ You can use an existing master or slave if you want to add a new slave during HA
         
         .. note::
         
-            **-\-sleep-msecs** is an option to set the rest time in each cycle when 1MB is written in a backup file.\ The unit is millisecond. Consider setting this option if the disk I/O overhead of a machine to back up is severe; however, it is recommended to set this value as small as possible and do backup when backup overhead is small enough because if this value is bigger, backup time takes longer.  
+            **\-\-sleep-msecs** is an option to set the rest time in each cycle when 1MB is written in a backup file.\ The unit is millisecond. Consider setting this option if the disk I/O overhead of a machine to back up is severe; however, it is recommended to set this value as small as possible and do backup when backup overhead is small enough because if this value is bigger, backup time takes longer.  
                         
             If there is no I/O overhead on *nodeB*, you can omit this option.
             
@@ -2839,7 +2839,7 @@ Let's remove a slave when the HA environment is composed of "master:slave = 1:2"
             
     *   Remove replication information about *nodeC* from *nodeA* and *nodeB*.
     
-        You can run DELELTE operation from a slave node only if you add **-\-sysadm** and **-\-write-on-standby** options on running csql.
+        You can run DELELTE operation from a slave node only if you add **\-\-sysadm** and **\-\-write-on-standby** options on running csql.
         ::
         
             $ csql -u dba --sysadm --write-on-standby testdb@localhost

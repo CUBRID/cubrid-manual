@@ -101,7 +101,7 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
 
 **SET SYSTEM PARAMETERS** 구문이나 CSQL 인터프리터의 세션 명령인 **;set**\ 을 통해 DB 구동 중 동적으로 설정값 변경이 가능한 파라미터를 변경할 수 있다. DB 사용자의 권한이 DBA인 경우 적용 구분에 상관없이 파라미터 값의 변경이 가능하며, DBA가 아닌 경우 "세션" 파라미터(아래 표에서 "세션" 항목의 값이 O인 파라미터)의 값만 변경이 가능하다.
 
-아래 표에서 "적용 구분" 항목이 "서버"인 파라미터는 cub_server 프로세스에 영향을 끼치며, "클라이언트"인 파라미터는 CAS, CSQL 또는 클라이언트/서버 모드(-\-CS-mode)로 실행하는 "cubrid" 유틸리티에 영향을 끼친다. "클라이언트/서버"인 파라미터는 cub_server 프로세스와 CAS, CSQL, "cubrid" 유틸리티에 모두 영향을 끼친다.
+아래 표에서 "적용 구분" 항목이 "서버"인 파라미터는 cub_server 프로세스에 영향을 끼치며, "클라이언트"인 파라미터는 CAS, CSQL 또는 클라이언트/서버 모드(\-\-CS-mode)로 실행하는 "cubrid" 유틸리티에 영향을 끼친다. "클라이언트/서버"인 파라미터는 cub_server 프로세스와 CAS, CSQL, "cubrid" 유틸리티에 모두 영향을 끼친다.
 
 아래 표에는 "동적 변경"과 "세션" 파라미터 여부가 표시되어 있다. "동적 변경"이 "가능"한 파라미터는 "적용 구분"과 "세션" 파라미터 여부에 따라 적용 범위가 다음과 같이 달라진다.
  
@@ -387,12 +387,12 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
 
 .. _lpg:
     
-*   **log_page_size**: :ref:`데이터베이스 생성<creating-database>` 시 **-\-log-page-size** 옵션으로 지정한 로그 볼륨 페이지 크기. 기본값: 16KB. 관련 파라미터의 설정 값은 페이지 단위로 버림된다.
+*   **log_page_size**: :ref:`데이터베이스 생성<creating-database>` 시 **\-\-log-page-size** 옵션으로 지정한 로그 볼륨 페이지 크기. 기본값: 16KB. 관련 파라미터의 설정 값은 페이지 단위로 버림된다.
     예를 들어 checkpoint_every_size 의 값은 16KB로 나누어 소수점 이하를 버림한 값에 16KB를 곱한 값이 된다.
 
 .. _dpg:
 
-*   **db_page_size**: :ref:`데이터베이스 생성<creating-database>` 시 **-\-db-page-size** 옵션으로 지정한 DB 볼륨 페이지 크기. 기본값: 16KB. 관련 파라미터의 설정 값은 페이지 단위로 버림된다. 
+*   **db_page_size**: :ref:`데이터베이스 생성<creating-database>` 시 **\-\-db-page-size** 옵션으로 지정한 DB 볼륨 페이지 크기. 기본값: 16KB. 관련 파라미터의 설정 값은 페이지 단위로 버림된다. 
     예를 들어 data_buffer_size 의 값은 16KB로 나누어 소수점 이하를 버림한 값에 16KB를 곱한 값이 된다.
 
 파라미터의 섹션별 분류
@@ -403,7 +403,7 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
 *   CUBRID 서비스를 시작할 때 사용 : [service] 섹션
 *   전체 데이터베이스에 공통으로 적용 : [common] 섹션
 *   각 데이터베이스에 개별적으로 적용 : [@<*database*>] 섹션
-*   cubrid 유틸리티가 독립 모드(stand-alone, -\-SA-mode)로 구동할 때만 사용 : [standalone] 섹션 
+*   cubrid 유틸리티가 독립 모드(stand-alone, \-\-SA-mode)로 구동할 때만 사용 : [standalone] 섹션 
 
 여기서 <*database*>는 파라미터를 개별적으로 적용할 데이터베이스 이름이며, [common]에 설정된 파라미터가 [@<*database*>]에 설정된 파라미터와 동일한 경우 [@<*database*>]에 설정된 파라미터가 최종 적용된다.
 
@@ -420,7 +420,7 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
     ..... 
 
 [standalone] 섹션에 정의된 설정은 "cubrid"로 시작하는 cubrid 유틸리티들이 독립 모드로 구동할 때만 사용된다. 
-예를 들어, 위와 같이 설정한 상태에서 -\-CS-mode(기본값)으로 DB를 구동(cubrid database start db_name)하면 "sort_buffer_size=2M"가 적용된다. 하지만 DB를 정지하고 "cubrid loaddb -\-SA-mode"를 실행할 때는 "sort_buffer_size=256M"가 적용된다. "cubrid loaddb -\-SA-mode"를 실행할 때 인덱스 생성 과정에서 정렬 버퍼(sort buffer)를 더 많이 사용할 것으로 예상되므로 이를 늘려주는 것이 "loaddb" 수행 성능에 도움이 된다.
+예를 들어, 위와 같이 설정한 상태에서 \-\-CS-mode(기본값)으로 DB를 구동(cubrid database start db_name)하면 "sort_buffer_size=2M"가 적용된다. 하지만 DB를 정지하고 "cubrid loaddb \-\-SA-mode"를 실행할 때는 "sort_buffer_size=256M"가 적용된다. "cubrid loaddb \-\-SA-mode"를 실행할 때 인덱스 생성 과정에서 정렬 버퍼(sort buffer)를 더 많이 사용할 것으로 예상되므로 이를 늘려주는 것이 "loaddb" 수행 성능에 도움이 된다.
 
 기본 제공 파라미터
 ^^^^^^^^^^^^^^^^^^
@@ -750,7 +750,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
     **db_volume_size**\ 는 다음과 같은 값을 설정하는 파라미터이다. 값 뒤에 B, K, M, G, T로 단위를 붙일 수 있으며, 각각 Bytes, Kilobytes, Megabytes, Gigabytes, Terabytes를 의미한다. 단위를 생략하면 바이트 단위가 적용된다. 기본값은 **512M**\ 이다.
 
-    *   **cubrid createdb**\와 **cubrid addvoldb** 유틸리티에서 **-\-db-volume-size** 옵션을 생략했을 때 생성되는 데이터베이스 볼륨의 기본 크기
+    *   **cubrid createdb**\와 **cubrid addvoldb** 유틸리티에서 **\-\-db-volume-size** 옵션을 생략했을 때 생성되는 데이터베이스 볼륨의 기본 크기
     *   데이터베이스 볼륨 공간을 모두 사용하면 자동으로 추가되는 볼륨의 기본 크기
 
 .. note::
@@ -763,13 +763,13 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
 **log_volume_size**
 
-    **log_volume_size**\는 **cubrid createdb** 유틸리티에서 **-\-log-volume-size** 옵션이 생략되었을 때 로그 볼륨 파일의 기본 크기를 설정하는 파라미터이다. 값 뒤에 B, K, M, G, T로 단위를 붙일 수 있으며, 각각 Bytes, Kilobytes, Megabytes, Gigabytes, Terabytes를 의미한다. 단위를 생략하면 바이트 단위가 적용된다. 기본값은 **512M** 이다.
+    **log_volume_size**\는 **cubrid createdb** 유틸리티에서 **\-\-log-volume-size** 옵션이 생략되었을 때 로그 볼륨 파일의 기본 크기를 설정하는 파라미터이다. 값 뒤에 B, K, M, G, T로 단위를 붙일 수 있으며, 각각 Bytes, Kilobytes, Megabytes, Gigabytes, Terabytes를 의미한다. 단위를 생략하면 바이트 단위가 적용된다. 기본값은 **512M** 이다.
 
 **temp_file_max_size_in_pages**
 
     **temp_file_max_size_in_pages** 는 일시적 볼륨을 확장할 수 있는 최대 페이지 수를 설정하는 파라미터이다. 기본값은 **-1** 이며 일시적 볼륨이 무제한 디스크 공간을 차지할 수 있음을 뜻한다. 제한을 두기 위해서는 양수 값으로 설정할 수 있으며 설정된 값을 초과하면 오류가 표시되고 일부 큰 질의가 취소될 수 있다.
 
-    이 파라미터를 **0**으로 설정하면 일시적 볼륨이 자동으로 생성되지 않으며 관리자가 **cubrid addvoldb** 유틸리티를 사용해 일시적 데이터를 저장하기 위한 용도로 영구적 볼륨을 생성해야 한다.
+    이 파라미터를 **0**\으로 설정하면 일시적 볼륨이 자동으로 생성되지 않으며 관리자가 **cubrid addvoldb** 유틸리티를 사용해 일시적 데이터를 저장하기 위한 용도로 영구적 볼륨을 생성해야 한다.
 
     자세한 사항은 다음을 참고하도록 한다.  :ref:`temporary-volumes`
     
@@ -1472,7 +1472,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
 **no_backslash_escapes**
 
-    **no_backslash_escapes** 은 이스케이프 문자로 백슬래시(\\) 사용 여부에 관한 파라미터로서, 기본값은 **yes** 이다. 이 파라미터 값이 **no** 이면 백슬래시(\\)가 이스케이프 문자로 사용되며, **yes** 이면 백슬래시는 일반 문자로 사용된다. 예를 들어, 이 값이 **no** 일 때 "\\n"은 개행(new line) 문자를 의미한다. 그러나 이 값이 **yes** 이면 "\\n"은 "\\"과 "n" 두 개의 문자를 의미한다.  백슬래시가 이스케이프 문자로 사용되는 경우에 대한 자세한 설명은 :ref:`escape-characters` 를 참고한다.
+    **no_backslash_escapes** 은 이스케이프 문자로 백슬래시(\\) 사용 여부에 관한 파라미터로서, 기본값은 **yes** 이다. 이 파라미터 값이 **no** 이면 백슬래시(\\)가 이스케이프 문자로 사용되며, **yes** 이면 백슬래시는 일반 문자로 사용된다. 예를 들어, 이 값이 **no** 일 때 "\\n"은 개행(new line) 문자를 의미한다. 그러나 이 값이 **yes** 이면 "\\n"은 "\\\"과 "n" 두 개의 문자를 의미한다.  백슬래시가 이스케이프 문자로 사용되는 경우에 대한 자세한 설명은 :ref:`escape-characters` 를 참고한다.
 
 **only_full_group_by**
 
@@ -1811,7 +1811,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
 **loaddb_worker_count**
 
-    **loaddb_worker_count**는 **loaddb** 세션에 전용으로 할당되는 최대 스레드 개수를 설정하는 파라미터이다. 단일 **loaddb**세션이 수행되는 경우 모든 스레드가 이 작업을 수행할 수도 있다. 여러 **loaddb** 세션이 동시에 수행되는 경우 모든 세션에 할당된 스레드의 총 수는 이 파라미터 설정값을 초과할 수 없다.
+    **loaddb_worker_count**\는 **loaddb** 세션에 전용으로 할당되는 최대 스레드 개수를 설정하는 파라미터이다. 단일 **loaddb** 세션이 수행되는 경우 모든 스레드가 이 작업을 수행할 수도 있다. 여러 **loaddb** 세션이 동시에 수행되는 경우 모든 세션에 할당된 스레드의 총 수는 이 파라미터 설정값을 초과할 수 없다.
 
 .. _timezone-parameters:
 

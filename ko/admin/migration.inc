@@ -289,7 +289,7 @@ loaddb
 
 .. note::
 
-    **client-server** 모드(-C, \-\-CS-MODE)에서는 -d 옵션(data loading)만 사용 가능하다.
+    **HA** (High Availability) 모드 일때, **client-server** 모드(-C, \-\-CS-MODE)에서는 -d 옵션(data loading)만 사용 가능하다.
 
 .. option:: --data-file-check-only
 

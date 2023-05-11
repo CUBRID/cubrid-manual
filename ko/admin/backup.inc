@@ -91,7 +91,7 @@ backupdb
 
 .. option:: --no-compress
 
-    기본적으로 큐브리드는 백업 볼륨의 크기를 줄이기 위해서, 대상 데이터베이스를 압축한 뒤 저장한다. 백업 파일 압축 실행 시 발생하는 CPU 사용량을 없애고 싶다면, **-\-no-compress** 옵션을 통해 백업 볼륨을 압축하지 않을 수 있다. ::
+    기본적으로 큐브리드는 백업 볼륨의 크기를 줄이기 위해서, 대상 데이터베이스를 압축한 뒤 저장한다. 백업 파일 압축 실행 시 발생하는 CPU 사용량을 없애고 싶다면, **\-\-no-compress** 옵션을 통해 백업 볼륨을 압축하지 않을 수 있다. ::
 
         cubrid backupdb --no-compress demodb
 
@@ -181,7 +181,7 @@ backupdb
 
 병렬 백업 또는 다중 백업(multi-thread backup)은 지정된 스레드 개수만큼 동시 백업을 수행하기 때문에 백업 시간을 크게 단축시켜 준다. 기본적으로 시스템의 CPU 수만큼 스레드를 부여하게 된다.
 
-병렬 백업을 하려면 **cubrid backupdb -t** | **-\-thread-count** 명령어를 사용한다.
+병렬 백업을 하려면 **cubrid backupdb -t** | **\-\-thread-count** 명령어를 사용한다.
 
 백업 파일 관리
 ^^^^^^^^^^^^^^
@@ -233,7 +233,7 @@ backupdb
 
 *   **cubrid backupdb -r** 옵션을 사용하여 명령을 실행하면 삭제된다. 하지만 HA 환경에서는 -r 옵션을 사용하면 안 된다.
 
-즉, 데이터베이스 운영 중에 보관 로그 볼륨을 가급적 남기고 싶지 않다면 **cubrid.conf**의 **log_max_archives** 값을 작은 값 또는 0으로 설정하되, **force_remove_log_archives**\의 값은 HA 환경이면 가급적 no로 설정한다.
+즉, 데이터베이스 운영 중에 보관 로그 볼륨을 가급적 남기고 싶지 않다면 **cubrid.conf**\의 **log_max_archives** 값을 작은 값 또는 0으로 설정하되, **force_remove_log_archives**\의 값은 HA 환경이면 가급적 no로 설정한다.
 
 .. _restoredb:
 
@@ -272,7 +272,7 @@ restoredb
 
         cubrid restoredb --list demodb
 
-    다음은 **-\-list** 옵션에 의해 출력되는 백업 정보의 예로서, 복구 작업을 수행하기 전에 대상 데이터베이스의 백업 파일이 최초 저장된 경로와 백업 수준을 검증할 수 있다. ::
+    다음은 **\-\-list** 옵션에 의해 출력되는 백업 정보의 예로서, 복구 작업을 수행하기 전에 대상 데이터베이스의 백업 파일이 최초 저장된 경로와 백업 수준을 검증할 수 있다. ::
 
         *** BACKUP HEADER INFORMATION ***
         Database Name: /local1/testing/demodb
@@ -301,7 +301,7 @@ restoredb
         Database Volume name: /local1/testing/demodb_bkvinf
              Volume Identifier: -3, Size: 132 bytes (1 pages)
      
-    **-\-list** 옵션을 이용하여 출력된 백업 정보를 확인하면, 백업 파일이 백업 수준 1로 생성되었고, 앞의 백업 수준 0의 전체 백업이 수행된 시점을 확인할 수 있다. 따라서, 예시된 데이터베이스의 복구를 위해서는 백업 수준 0인 백업 파일과 백업 수준 1인 백업 파일이 준비되어야 한다.
+    **\-\-list** 옵션을 이용하여 출력된 백업 정보를 확인하면, 백업 파일이 백업 수준 1로 생성되었고, 앞의 백업 수준 0의 전체 백업이 수행된 시점을 확인할 수 있다. 따라서, 예시된 데이터베이스의 복구를 위해서는 백업 수준 0인 백업 파일과 백업 수준 1인 백업 파일이 준비되어야 한다.
 
 .. option:: -B, --backup-file-path=PATH
 

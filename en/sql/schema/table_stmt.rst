@@ -12,7 +12,7 @@ CREATE TABLE
 Table Definition
 ----------------
 
-To create a table, use the **CREATE TABLE** statement. 
+Use **CREATE TABLE** statement to create a table. A table with the same name as an existing view or synonym cannot be created. Regarding writing table name, see :doc:`/sql/identifier`. 
 
 .. CUBRIDSUS-12366: from 10.0, create table if not exists ...
 

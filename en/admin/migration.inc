@@ -290,7 +290,7 @@ The following table shows [options] available with the **cubrid loaddb** utility
 
 .. note::
 
-    In **client-server** mode (-C, \-\-CS-MODE), only the -d option (data loading) is available.
+    When in **client-server** mode (-C, \-\-CS-MODE) on the **HA** (High Availability), only the -d option (data loading) is available.
 
 .. option:: --data-file-check-only
 

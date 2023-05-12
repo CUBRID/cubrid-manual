@@ -635,6 +635,7 @@ SQL 힌트
     NO_SORT_LIMIT |
     NO_PUSH_PRED |
     NO_MERGE |
+    NO_ELIMINATE_JOIN |
     NO_HASH_AGGREGATE |
     NO_HASH_LIST_SCAN |
     NO_LOGGING |
@@ -678,6 +679,7 @@ SQL 힌트는 주석에 더하기 기호(+)를 함께 사용하여 지정한다.
 *   **NO_SORT_LIMIT**: SORT-LIMIT 최적화를 사용하지 않기 위한 힌트이다. 자세한 내용은 :ref:`sort-limit-optimization`\ 를 참고한다.
 *   **NO_PUSH_PRED**: PREDICATE-PUSH 최적화를 사용하지 않기 위한 힌트이다.
 *   **NO_MERGE**: VIEW-MERGE 최적화를 사용하지 않기 위한 힌트이다.
+*   **NO_ELIMINATE_JOIN**: 조인 제거 최적화를 사용하지 않기 위한 힌트이다.
 
 .. _no-hash-aggregate:
 
@@ -2392,6 +2394,281 @@ SORT-LIMIT 최적화는 **ORDER BY** 절과 LIMIT 절을 명시한 질의에 적
                    cost:  6 card 1000
         sort:  2 asc
         cost:  7 card 0
+
+.. _join-elimination-optimization:
+
+조인 제거 최적화
+----------------
+
+조인 제거 최적화는 1:N 관계의 조인에서 1인 테이블의 컬럼에 대한 참조가 없으면 1인 테이블에 대한 조인을 제거하는 최적화이다.
+
+다음 2가지 조건 중 하나를 만족할 때 조인 제거 최적화를 수행한다.
+
+#. 1인 테이블에는 **PRIMARY KEY**\가 존재하고, N인 테이블에는 1인 테이블의 **PRIMARY KEY**\를 참조하는 **FOREIGN KEY**\가 존재해야 한다. 1인 테이블의 **PRIMARY KEY**\와 N인 테이블의 **FOREIGN KEY**\를 구성하는 컬럼은 모두 조인 조건에 사용되어야 한다.
+
+    * N인 테이블의 **FOREIGN KEY**\를 구성하는 컬럼들은 **NOT NULL** 제약조건이 없을 수 있다. 1인 테이블이 조인에서 제거될 때 **NOT NULL** 제약조건이 없는 컬럼에 대한 **IS NOT NULL** 조건이 자동으로 추가된다.
+    * 1인 테이블의 **PRIMARY KEY**\와 N인 테이블의 **FOREIGN KEY**\를 구성하는 컬럼들이 모두 조인 조건에 사용되더라도 구성하는 순서가 다르면 조인 제거 최적화를 할 수 없다.
+
+#. N:1 관계의 **LEFT OUTER JOIN**\을 한다. 1인 테이블에는 **PRIMARY KEY** 또는 **UNIQUE** 제약조건이 존재해야 한다. **PRIMARY KEY** 또는 **UNIQUE** 제약조건을 구성하는 컬럼은 모두 조인 조건에 사용되어야 한다.
+
+    * 1인 테이블의 **PRIMARY KEY** 또는 **UNIQUE** 제약조건을 구성하는 컬럼들이 모두 조인 조건에 사용되더라도 구성하는 순서가 다르면 조인 제거 최적화를 할 수 없다.
+
+조인 제거 최적화를 하지 않으려면 **NO_ELIMINATE_JOIN** 힌트를 사용해야 한다.
+
+다음은 **PRIMARY KEY**\와 **FOREIGN KEY** 관계에서의 조인 제거 최적화 예제이다.
+
+.. code-block:: sql
+
+    alter table public.history add constraint fk_history_host_year foreign key (host_year) references public.olympic;
+
+    select /*+ recompile */
+        h.event_code, h.athlete, h.host_year, h.score
+    from
+        public.history h
+        inner join public.olympic o on h.host_year = o.host_year
+    where
+        h.unit = 'kg'
+    order by
+        h.event_code;
+
+    alter table public.history drop constraint fk_history_host_year;
+
+::
+
+       event_code  athlete                 host_year  score
+    ======================================================================
+            20318  'Rezazadeh Hossein'          2000  '472.5'
+            20321  'Tang Gonghong'              2004  '305'
+            20326  'Taylan Nurcan'              2004  '210'
+            20328  'Yang Xia'                   2000  '225'
+            20330  'Mutlu Halil'                2000  '305'
+            20331  'Chen Yanqing'               2004  '237.5'
+            20334  'Pechalov Nikolai'           2000  '325'
+            20335  'Chen Xiaomin'               2000  '242.5'
+            20338  'Boevski Galabin'            2000  '357.5'
+            20339  'Liu Chunhong'               2004  '275'
+            20341  'Zabolotnaia Natalia'        2004  '272.5'
+            20344  'Sagir Taner'                2004  '375'
+
+위 질의의 실행 계획을 보면 olympic 테이블이 조인에서 제거된 것을 확인할 수 있다. 그리고 history 테이블의 host_year 컬럼에 **NOT NULL** 제약조건이 없어서 **IS NOT NULL** 조건이 자동으로 추가되었다.
+
+::
+
+    Query plan:
+
+    iscan
+        class: h node[0]
+        index: pk_history_event_code_athlete
+        sargs: term[0] AND term[1]
+        sort:  1 asc, 2 asc
+        cost:  1 card 1
+
+    Query stmt:
+
+    select h.event_code, h.athlete, h.host_year, h.score from [public.history] h where h.unit= ?:0  and h.host_year is not null  order by 1
+
+1인 테이블의 컬럼에 대한 참조가 있으면 조인 제거 최적화를 하지 않는다.
+
+.. code-block:: sql
+
+    alter table public.history add constraint fk_history_host_year foreign key (host_year) references public.olympic;
+
+    select /*+ recompile */
+        h.event_code, h.athlete, h.host_year, h.score, o.host_nation
+    from
+        public.history h
+        inner join public.olympic o on h.host_year = o.host_year
+    where
+        h.unit = 'kg'
+    order by
+        h.event_code;
+
+    alter table public.history drop constraint fk_history_host_year;
+
+::
+
+       event_code  athlete                 host_year  score                 host_nation
+    ============================================================================================
+            20318  'Rezazadeh Hossein'          2000  '472.5'               'Australia'
+            20321  'Tang Gonghong'              2004  '305'                 'Greece'
+            20326  'Taylan Nurcan'              2004  '210'                 'Greece'
+            20328  'Yang Xia'                   2000  '225'                 'Australia'
+            20330  'Mutlu Halil'                2000  '305'                 'Australia'
+            20331  'Chen Yanqing'               2004  '237.5'               'Greece'
+            20334  'Pechalov Nikolai'           2000  '325'                 'Australia'
+            20335  'Chen Xiaomin'               2000  '242.5'               'Australia'
+            20338  'Boevski Galabin'            2000  '357.5'               'Australia'
+            20339  'Liu Chunhong'               2004  '275'                 'Greece'
+            20341  'Zabolotnaia Natalia'        2004  '272.5'               'Greece'
+            20344  'Sagir Taner'                2004  '375'                 'Greece'
+
+위 질의의 실행 계획을 보면 olympic 테이블의 host_nation 컬럼에 대한 참조가 있기 때문에 olympic 테이블이 조인에서 제거되지 않은 것을 확인할 수 있다.
+
+::
+
+    Query plan:
+
+    temp(order by)
+        subplan: idx-join (inner join)
+                     outer: sscan
+                                class: o node[1]
+                                cost:  1 card 25
+                     inner: iscan
+                                class: h node[0]
+                                index: fk_history_host_year term[0]
+                                sargs: term[1]
+                                cost:  1 card 1
+                     cost:  2 card 1
+        sort:  1 asc
+        cost:  8 card 1
+
+    Query stmt:
+
+    select h.event_code, h.athlete, h.host_year, h.score, o.host_nation from [public.history] h, [public.olympic] o where h.host_year=o.host_year and h.unit= ?:0  order by 1
+
+조인 제거 최적화를 하지 않으려면 **NO_ELIMINATE_JOIN** 힌트를 사용해야 한다.
+
+.. code-block:: sql
+
+    alter table public.history add constraint fk_history_host_year foreign key (host_year) references public.olympic;
+
+    select /*+ recompile no_eliminate_join */
+        h.event_code, h.athlete, h.host_year, h.score
+    from
+        public.history h
+        inner join public.olympic o on h.host_year = o.host_year
+    where
+      h.unit = 'kg'
+    order by
+      h.event_code;
+
+    alter table public.history drop constraint fk_history_host_year;
+
+::
+
+       event_code  athlete                 host_year  score
+    ======================================================================
+            20318  'Rezazadeh Hossein'          2000  '472.5'
+            20321  'Tang Gonghong'              2004  '305'
+            20326  'Taylan Nurcan'              2004  '210'
+            20328  'Yang Xia'                   2000  '225'
+            20330  'Mutlu Halil'                2000  '305'
+            20331  'Chen Yanqing'               2004  '237.5'
+            20334  'Pechalov Nikolai'           2000  '325'
+            20335  'Chen Xiaomin'               2000  '242.5'
+            20338  'Boevski Galabin'            2000  '357.5'
+            20339  'Liu Chunhong'               2004  '275'
+            20341  'Zabolotnaia Natalia'        2004  '272.5'
+            20344  'Sagir Taner'                2004  '375'
+
+위 질의의 실행 계획을 보면 **NO_ELIMINATE_JOIN** 힌트가 적용되어서 olympic 테이블이 조인에서 제거되지 않은 것을 확인할 수 있다.
+
+::
+
+    Query plan:
+
+    temp(order by)
+        subplan: idx-join (inner join)
+                     outer: sscan
+                                class: o node[1]
+                                cost:  1 card 25
+                     inner: iscan
+                                class: h node[0]
+                                index: fk_history_host_year term[0]
+                                sargs: term[1]
+                                cost:  1 card 1
+                     cost:  2 card 1
+        sort:  1 asc
+        cost:  8 card 1
+
+    Query stmt:
+
+    select /*+ NO_ELIMINATE_JOIN */ h.event_code, h.athlete, h.host_year, h.score from [public.history] h, [public.olympic] o where h.host_year=o.host_year and h.unit= ?:0  order by 1
+
+1인 테이블의 **PRIMARY KEY**\와 N인 테이블의 **FOREIGN KEY**\를 구성하는 컬럼들이 모두 조인 조건에 사용되더라도 구성하는 순서가 다르면 조인 제거 최적화를 할 수 없다.
+
+.. code-block:: sql
+
+    alter table public.record add constraint fk_record_host_year_event_code_athlete_code foreign key (host_year, event_code, athlete_code) references public.game;
+
+    select /*+ recompile */
+        r.host_year, r.event_code, r.athlete_code, r.medal, r.score, r.unit
+    from
+        public.record r
+        inner join public.game g
+	    on r.host_year = g.host_year
+	       and r.event_code = g.athlete_code
+	       and r.athlete_code = g.event_code;
+
+    alter table public.record drop constraint fk_record_host_year_event_code_athlete_code;
+
+::
+
+    There are no results.
+    0 row selected.
+
+위 질의는 1인 테이블의 **PRIMARY KEY**\를 구성하는 컬럼과 N인 테이블의 **FOREIGN KEY**\를 구성하는 컬럼이 조인 조건에서 사용되는 순서가 다르다. 그래서 위 질의의 실행 계획을 보면 game 테이블이 조인에서 제거되지 않은 것을 확인할 수 있다.
+
+::
+
+    Query plan:
+    
+    idx-join (inner join)
+        outer: sscan
+                   class: r node[0]
+                   cost:  13 card 2000
+        inner: iscan
+                   class: g node[1]
+                   index: pk_game_host_year_event_code_athlete_code term[0] AND term[1] AND term[2] (covers)
+                   cost:  3 card 8653
+        cost:  28 card 1
+    
+    Query stmt:
+    
+    select r.host_year, r.event_code, r.athlete_code, r.medal, r.score, r.unit from [public.record] r, [public.game] g where r.host_year=g.host_year and r.event_code=g.athlete_code and r.athlete_code=g.event_code
+
+다음은 **LEFT OUTER JOIN**\에서의 조인 제거 최적화 예제이다.
+
+.. code-block:: sql
+
+    select /*+ recompile */
+        p.host_year, p.nation_code, p.gold
+    from
+        public.participant p
+        left outer join nation n on n.code = p.nation_code
+    where
+        p.host_year = 1988
+        and p.gold > 30
+    order by
+        p.gold desc;
+
+::
+
+        host_year  nation_code                  gold
+    ================================================
+             1988  'URS'                          55
+             1988  'GDR'                          37
+             1988  'USA'                          36
+
+위의 질의의 실행 계획을 보면 nation 테이블이 조인에서 제거된 것을 확인할 수 있다.
+
+::
+
+    Query plan:
+
+    temp(order by)
+        subplan: iscan
+                     class: p node[0]
+                     index: pk_participant_host_year_nation_code term[1]
+                     sargs: term[0]
+                     sort:  2 asc
+                     cost:  4 card 18
+        sort:  3 desc
+        cost:  10 card 18
+
+    Query stmt:
+
+    select p.host_year, p.nation_code, p.gold from [public.participant] p where (p.gold> ?:0 ) and p.host_year= ?:1  order by 3 desc
 
 .. _query-cache :
 

@@ -634,6 +634,7 @@ Using hints can affect the performance of query execution. You can allow the que
     NO_SORT_LIMIT |
     NO_PUSH_PRED |
     NO_MERGE |
+    NO_ELIMINATE_JOIN |
     NO_HASH_AGGREGATE |
     NO_HASH_LIST_SCAN |
     NO_LOGGING |
@@ -676,7 +677,8 @@ The following hints can be specified in **UPDATE**, **DELETE** and **SELECT** st
 *   **NO_MULTI_RANGE_OPT**: This is a hint not to use the multi-key range optimization. For details, see :ref:`multi-key-range-opt`.
 *   **NO_SORT_LIMIT**: This is a hint not to use the SORT-LIMIT optimization. For more details, see :ref:`sort-limit-optimization`.
 *   **NO_PUSH_PRED**: This is a hint not to use the PREDICATE-PUSH optimization.
-*   **NO_MERGE**: This is a hint not to use the VIEW_MERGE optimization.
+*   **NO_MERGE**: This is a hint not to use the VIEW-MERGE optimization.
+*   **NO_ELIMINATE_JOIN**: This is a hint not to use join elimination optimization.
 
 .. _no-hash-aggregate:
 
@@ -2392,6 +2394,279 @@ The above **SELECT** query's plan is printed out as below; we can see "(sort lim
         cost:  7 card 0
 
 .. _query-cache:
+
+Join Elimination Optimization
+-----------------------------
+
+The join elimination optimization is an optimization that removes the join for the table with 1 if there is no reference to a column of the table with 1 in the join in a 1:N relationship.
+
+If either of the following two conditions is satisfied, perform join elimination optimization.
+
+#. A **PRIMARY KEY** must exist in a table with 1, and a **FOREIGN KEY** that refers to a **PRIMARY KEY** in a table with 1 must exist in a table with N. All columns that make up the **PRIMARY KEY** of the table with 1 and the **FOREIGN KEY** of the table with N must be used in the join condition.
+
+    * Columns that make up the **FOREIGN KEY** of the table with N may not have the **NOT NULL** constraint. When a table with 1 is removed from the join, an **IS NOT NULL** condition is automatically added for columns that do not have a **NOT NULL** constraint.
+    * Even if all of the columns that make up the **PRIMARY KEY** of the table with 1 and the **FOREIGN KEY** with the table with N are used in the join condition, if the order of composition is different, join elimination optimization cannot be performed.
+
+#. Perform the **LEFT OUTER JOIN** of the N:1 relationship. A **PRIMARY KEY** or **UNIQUE** constraint must exist on a table with 1. All columns constituting the **PRIMARY KEY** or **UNIQUE** constraint must be used in the join condition.
+
+    * Even if all of the columns that make up the **PRIMARY KEY** or **UNIQUE** constraint of a table with 1 are used in the join condition, if the order of composition is different, join elimination optimization cannot be performed.
+
+To disable join elimination optimization, use the **NO_ELIMINATE_JOIN** hint.
+
+The following is an example of join elimination optimization in a **PRIMARY KEY** and **FOREIGN KEY** relationship.
+
+.. code-block:: sql
+
+    alter table public.history add constraint fk_history_host_year foreign key (host_year) references public.olympic;
+
+    select /*+ recompile */
+        h.event_code, h.athlete, h.host_year, h.score
+    from
+        public.history h
+        inner join public.olympic o on h.host_year = o.host_year
+    where
+        h.unit = 'kg'
+    order by
+        h.event_code;
+
+    alter table public.history drop constraint fk_history_host_year;
+
+::
+
+       event_code  athlete                 host_year  score
+    ======================================================================
+            20318  'Rezazadeh Hossein'          2000  '472.5'
+            20321  'Tang Gonghong'              2004  '305'
+            20326  'Taylan Nurcan'              2004  '210'
+            20328  'Yang Xia'                   2000  '225'
+            20330  'Mutlu Halil'                2000  '305'
+            20331  'Chen Yanqing'               2004  '237.5'
+            20334  'Pechalov Nikolai'           2000  '325'
+            20335  'Chen Xiaomin'               2000  '242.5'
+            20338  'Boevski Galabin'            2000  '357.5'
+            20339  'Liu Chunhong'               2004  '275'
+            20341  'Zabolotnaia Natalia'        2004  '272.5'
+            20344  'Sagir Taner'                2004  '375'
+
+Looking at the execution plan of the query above, we can see that the olympic table was removed from the join. Additionally, since the host_year column in the history table does not have a **NOT NULL** constraint, the **IS NOT NULL** condition was automatically added.
+
+::
+
+    Query plan:
+
+    iscan
+        class: h node[0]
+        index: pk_history_event_code_athlete
+        sargs: term[0] AND term[1]
+        sort:  1 asc, 2 asc
+        cost:  1 card 1
+
+    Query stmt:
+
+    select h.event_code, h.athlete, h.host_year, h.score from [public.history] h where h.unit= ?:0  and h.host_year is not null  order by 1
+
+If there is a reference to a column of the table with 1, join elimination optimization is not performed.
+
+.. code-block:: sql
+
+    alter table public.history add constraint fk_history_host_year foreign key (host_year) references public.olympic;
+
+    select /*+ recompile */
+        h.event_code, h.athlete, h.host_year, h.score, o.host_nation
+    from
+        public.history h
+        inner join public.olympic o on h.host_year = o.host_year
+    where
+        h.unit = 'kg'
+    order by
+        h.event_code;
+
+    alter table public.history drop constraint fk_history_host_year;
+
+::
+
+       event_code  athlete                 host_year  score                 host_nation
+    ============================================================================================
+            20318  'Rezazadeh Hossein'          2000  '472.5'               'Australia'
+            20321  'Tang Gonghong'              2004  '305'                 'Greece'
+            20326  'Taylan Nurcan'              2004  '210'                 'Greece'
+            20328  'Yang Xia'                   2000  '225'                 'Australia'
+            20330  'Mutlu Halil'                2000  '305'                 'Australia'
+            20331  'Chen Yanqing'               2004  '237.5'               'Greece'
+            20334  'Pechalov Nikolai'           2000  '325'                 'Australia'
+            20335  'Chen Xiaomin'               2000  '242.5'               'Australia'
+            20338  'Boevski Galabin'            2000  '357.5'               'Australia'
+            20339  'Liu Chunhong'               2004  '275'                 'Greece'
+            20341  'Zabolotnaia Natalia'        2004  '272.5'               'Greece'
+            20344  'Sagir Taner'                2004  '375'                 'Greece'
+
+Looking at the execution plan of the query above, we can see that the olympic table was not removed from the join because there is a reference to the host_nation column of the olympic table.
+
+::
+
+    Query plan:
+
+    temp(order by)
+        subplan: idx-join (inner join)
+                     outer: sscan
+                                class: o node[1]
+                                cost:  1 card 25
+                     inner: iscan
+                                class: h node[0]
+                                index: fk_history_host_year term[0]
+                                sargs: term[1]
+                                cost:  1 card 1
+                     cost:  2 card 1
+        sort:  1 asc
+        cost:  8 card 1
+
+    Query stmt:
+
+    select h.event_code, h.athlete, h.host_year, h.score, o.host_nation from [public.history] h, [public.olympic] o where h.host_year=o.host_year and h.unit= ?:0  order by 1
+
+To disable join elimination optimization, use the **NO_ELIMINATE_JOIN** hint.
+
+.. code-block:: sql
+
+    alter table public.history add constraint fk_history_host_year foreign key (host_year) references public.olympic;
+
+    select /*+ recompile no_eliminate_join */
+        h.event_code, h.athlete, h.host_year, h.score
+    from
+        public.history h
+        inner join public.olympic o on h.host_year = o.host_year
+    where
+      h.unit = 'kg'
+    order by
+      h.event_code;
+
+    alter table public.history drop constraint fk_history_host_year;
+
+::
+
+       event_code  athlete                 host_year  score
+    ======================================================================
+            20318  'Rezazadeh Hossein'          2000  '472.5'
+            20321  'Tang Gonghong'              2004  '305'
+            20326  'Taylan Nurcan'              2004  '210'
+            20328  'Yang Xia'                   2000  '225'
+            20330  'Mutlu Halil'                2000  '305'
+            20331  'Chen Yanqing'               2004  '237.5'
+            20334  'Pechalov Nikolai'           2000  '325'
+            20335  'Chen Xiaomin'               2000  '242.5'
+            20338  'Boevski Galabin'            2000  '357.5'
+            20339  'Liu Chunhong'               2004  '275'
+            20341  'Zabolotnaia Natalia'        2004  '272.5'
+            20344  'Sagir Taner'                2004  '375'
+
+Looking at the execution plan of the query above, we can see that the **NO_ELIMINATE_JOIN** hint was applied, and the olympic table was not removed from the join.
+
+::
+
+    Query plan:
+
+    temp(order by)
+        subplan: idx-join (inner join)
+                     outer: sscan
+                                class: o node[1]
+                                cost:  1 card 25
+                     inner: iscan
+                                class: h node[0]
+                                index: fk_history_host_year term[0]
+                                sargs: term[1]
+                                cost:  1 card 1
+                     cost:  2 card 1
+        sort:  1 asc
+        cost:  8 card 1
+
+    Query stmt:
+
+    select /*+ NO_ELIMINATE_JOIN */ h.event_code, h.athlete, h.host_year, h.score from [public.history] h, [public.olympic] o where h.host_year=o.host_year and h.unit= ?:0  order by 1
+
+Even if all of the columns that make up the **PRIMARY KEY** of the table with 1 and the **FOREIGN KEY** with the table with N are used in the join condition, if the order of composition is different, join elimination optimization cannot be performed.
+
+.. code-block:: sql
+
+    alter table public.record add constraint fk_record_host_year_event_code_athlete_code foreign key (host_year, event_code, athlete_code) references public.game;
+
+    select /*+ recompile */
+        r.host_year, r.event_code, r.athlete_code, r.medal, r.score, r.unit
+    from
+        public.record r
+        inner join public.game g
+	    on r.host_year = g.host_year
+	       and r.event_code = g.athlete_code
+	       and r.athlete_code = g.event_code;
+
+    alter table public.record drop constraint fk_record_host_year_event_code_athlete_code;
+
+::
+
+    There are no results.
+    0 row selected.
+
+In the above query, the columns that make up the **PRIMARY KEY** of the table with 1 and the columns that make up the **FOREIGN KEY** of the table with N are different in the order in which they are used in the join condition. So, looking at the execution plan of the query above, we can see that the olympic table was not removed from the join.
+
+::
+
+    Query plan:
+    
+    idx-join (inner join)
+        outer: sscan
+                   class: r node[0]
+                   cost:  13 card 2000
+        inner: iscan
+                   class: g node[1]
+                   index: pk_game_host_year_event_code_athlete_code term[0] AND term[1] AND term[2] (covers)
+                   cost:  3 card 8653
+        cost:  28 card 1
+    
+    Query stmt:
+    
+    select r.host_year, r.event_code, r.athlete_code, r.medal, r.score, r.unit from [public.record] r, [public.game] g where r.host_year=g.host_year and r.event_code=g.athlete_code and r.athlete_code=g.event_code
+
+The following is an example of join elimination optimization in **LEFT OUTER JOIN**.
+
+.. code-block:: sql
+
+    select /*+ recompile */
+        p.host_year, p.nation_code, p.gold
+    from
+        public.participant p
+        left outer join nation n on n.code = p.nation_code
+    where
+        p.host_year = 1988
+        and p.gold > 30
+    order by
+        p.gold desc;
+
+::
+
+        host_year  nation_code                  gold
+    ================================================
+             1988  'URS'                          55
+             1988  'GDR'                          37
+             1988  'USA'                          36
+
+Looking at the execution plan of the query above, we can see that the nation table was removed from the join.
+
+::
+
+    Query plan:
+
+    temp(order by)
+        subplan: iscan
+                     class: p node[0]
+                     index: pk_participant_host_year_nation_code term[1]
+                     sargs: term[0]
+                     sort:  2 asc
+                     cost:  4 card 18
+        sort:  3 desc
+        cost:  10 card 18
+
+    Query stmt:
+
+    select p.host_year, p.nation_code, p.gold from [public.participant] p where (p.gold> ?:0 ) and p.host_year= ?:1  order by 3 desc
 
 QUERY CACHE
 ===========

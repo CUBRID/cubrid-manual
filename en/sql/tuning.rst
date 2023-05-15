@@ -408,7 +408,7 @@ In the above example, under lines of "Trace Statistics:" are the result of traci
 
 *   **SELECT** (time: 1, fetch: 975, ioread: 2)
     
-    *   time: 4 => Total query time took 4ms. 
+    *   time: 1 => Total query time took 4ms. 
     *   fetch: 975 => 975 times were fetched regarding pages. (not the number of pages, but the count of accessing pages. even if the same pages are fetched, the count is increased.).
     *   ioread: disk accessed 2 times.
 

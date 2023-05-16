@@ -522,7 +522,7 @@ A command line begins with a percent character (%) and consists of **%class** an
         %id [project] 23
         %id [phone] 24
 
-    The *schema_name* and *class_name* must be enclosed in square brackets ([ ]). The *schema_name* and *class_name* can be enclosed in square brackets individually or together in square brackets.
+    The *schema_name* and *class_name* must be enclosed in square brackets ([ ]). Each of *schema_name* and *class_name* or together can be enclosed in square brackets .
 
     ::
 
@@ -606,18 +606,18 @@ Data for each attribute must be separated by at least one space and be basically
             [schema_name.]class_name
             class_id
 
-    Specify a class name or a class id after the **@** sign, and an instance number after a vertical line (|). Spaces are not allowed before and after a vertical line (|). The method of wirting *class_ref* is the same as the method of wirting *schema_name* and *class_name* in the :ref:`Command Line <howtowrite-loadfile-command-line>`.
+    Specify a class name or a class id after the **@** sign, and an instance number after a vertical line (|). Spaces are not allowed before and after a vertical line (|). The method of wirting *class_ref* is the same as the method of wirting *schema_name* and *class_name* in the :ref:`Command Line <howtowrite-loadfile-command-line>`. However, enclosing each of *schema_name* and *class_name* in square brackets ([ ]) is not allowed.
 
     The following example shows how to load class instances into the *paycheck* class. The *name* attribute references an instance of the *employee* class. As in the last line, data is loaded as **NULL** if you configure the reference relation by using an instance number not specified earlier.
     
     ::
 
         %class [public].[paycheck] (name department salary)
-        @[public].[employee]|1   'planning'   8000000   
-        @[public].[employee]|2   'planning'   6000000  
-        @[public].[employee]|3   'sales'   5000000  
-        @[public].[employee]|4   'development'   4000000
-        @[public].[employee]|5   'development'   5000000
+        @[public.employee]|1   'planning'   8000000   
+        @[public.employee]|2   'planning'   6000000  
+        @[public.employee]|3   'sales'   5000000  
+        @[public.employee]|4   'development'   4000000
+        @[public.employee]|5   'development'   5000000
 
     Since the id 21 was assigned to the *employee* class by using the **%id** command in the :ref:`Assigning an Identifier to a Class <assign-id-to-class>` section, the above example can be written as follows:
     

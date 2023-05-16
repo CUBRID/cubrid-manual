@@ -519,7 +519,7 @@ CUBRID에서는 주석은 두 개의 연속된 하이픈(\-\-)을 이용하여 �
         %id [project] 23
         %id [phone] 24
 
-    *schema_name*\과 *class_name*\은 대괄호([ ])로 묶어야 한다. *schema_name*\과 *class_name*\은 개별로 대괄호([ ])로 묶거나, 함께 대괄호([ ])로 묶을 수 있다.
+    *schema_name*\과 *class_name*\은 대괄호([ ])로 묶어야 한다. *schema_name*\과 *class_name*\의 각각을 대괄호로 묶거나, 함께 대괄호로 묶을 수 있다.
 
     ::
 
@@ -600,21 +600,21 @@ CUBRID에서는 주석은 두 개의 연속된 하이픈(\-\-)을 이용하여 �
 
         @class_ref | instance_no
         class_ref:
-             [schema_name.]class_name
+             class_name
              class_id
 
-    **@** 다음에는 클래스명 또는 클래스 id를 명시하고, 수직바(|) 다음에는 인스턴스 번호를 명시한다. 수직바(|)의 양쪽에는 공백을 허용하지 않는다. *class_ref*\의 작성 방법은 :ref:`명령 라인 <howtowrite-loadfile-command-line>`\의 *schema_name*\과 *class_name*\의 작성 방법과 동일하다.
+    **@** 다음에는 클래스명 또는 클래스 id를 명시하고, 수직바(|) 다음에는 인스턴스 번호를 명시한다. 수직바(|)의 양쪽에는 공백을 허용하지 않는다. *class_ref*\의 작성 방법은 :ref:`명령 라인 <howtowrite-loadfile-command-line>`\의 *schema_name*\과 *class_name*\의 작성 방법과 동일하다. 하지만 *schema_name*\과 *class_name* 각각을 대괄호([ ])로 묶는 것은 허용하지 않는다.
 
     다음은 *paycheck* 클래스에 인스턴스를 입력하는 예제이며, *name* 속성은 *employee* 클래스의 인스턴스를 참조한다. 마지막 라인과 같이 앞에서 정의되지 아니한 인스턴스 번호를 이용하여 참조 관계를 설정하는 경우 해당 데이터는 **NULL** 로 입력된다.
     
     ::
 
         %class [public].[paycheck] (name department salary)
-        @[public].[employee]|1   'planning'   8000000   
-        @[public].[employee]|2   'planning'   6000000  
-        @[public].[employee]|3   'sales'   5000000  
-        @[public].[employee]|4   'development'   4000000
-        @[public].[employee]|5   'development'   5000000
+        @[public.employee]|1   'planning'   8000000   
+        @[public.employee]|2   'planning'   6000000  
+        @[public.employee]|3   'sales'   5000000  
+        @[public.employee]|4   'development'   4000000
+        @[public.employee]|5   'development'   5000000
 
     :ref:`클래스에 식별자 부여 <assign-id-to-class>`\ 에서 **%id** 명령어로 *employee* 클래스에 21이라는 식별자를 부여했으므로, 위의 예를 다음과 같이 작성할 수 있다.
     

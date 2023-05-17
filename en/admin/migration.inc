@@ -522,7 +522,7 @@ A command line begins with a percent character (%) and consists of **%class** an
         %id [project] 23
         %id [phone] 24
 
-    The *schema_name* and *class_name* must be enclosed in square brackets ([ ]). Each of *schema_name* and *class_name* or together can be enclosed in square brackets .
+    The *schema_name* and *class_name* must be enclosed in square brackets ([ ]). Each of *schema_name* and *class_name* or together can be enclosed in square brackets.
 
     ::
 

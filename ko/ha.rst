@@ -785,7 +785,7 @@ SQL 로깅
 **ha_sql_log_max_size_in_mbytes**\에서 지정한 크기를 초과하면 *<id>*\ 의 값이 하나 증가된 새로운 파일이 생성된다.
 예를 들어, "ha_sql_log_max_size_in_mbytes=100"이면 demodb_nodeA.sql.log.0 파일이 100MB가 되면서 demodb_nodeA.sql.log.1이 새로 생성된다.
 
-이 파라미터를 켜는 경우 SQL 로그 파일이 계속 쌓이므로, 사용자는 디스크 여유 공간을 확보하기 위해 로그 파일들을 직접 삭제해야 한다.
+기본적으로, 2개의 최신 SQL 로그 파일만 유지되며, **ha_sql_log_max_count** 설정을 통해 유지할 최대 파일 개수를 조정할 수 있다.
 
 SQL 로그 형식은 다음과 같다.
 
@@ -830,6 +830,14 @@ SQL 로그 형식은 다음과 같다.
 **ha_sql_log_max_size_in_mbytes**
 
 **applylogdb** 프로세스가 DB에 반영하는 SQL이 로깅될 때 생성하는 파일의 최대 크기이다. 이 크기를 초과하면 새로운 파일이 생성된다. 
+
+**ha_sql_log_max_count**
+
+유지해야할 최대 SQL 로그 파일 개수를 나타내며, SQL 로그 파일이 이를 초과하여 생성될 경우 가장 오래된 로그 파일부터 삭제된다. 이 파라미터의 기본값은 2이며, 2에서 5 범위의 정수값을 설정할 수 있다. **ha_sql_log_max_count**\와 **ha_sql_log_max_size_in_mbytes** 설정을 통해 적절한 양의 SQL 로그를 유지할 수 있다.
+
+**ha_sql_log_path**
+
+SQL 로그 파일이 생성될 디렉터리 경로를 나타내며, 상대 경로 또는 절대 경로로 설정할 수 있다. 상대 경로로 설정되는 경우 **ha_enable_sql_logging**\에서 설명한 복제 로그 디렉터리를 기준으로 상대 경로를 판단한다. 데이터베이스 서버 프로세스(cub_server)는 반드시 지정된 경로에 SQL 로그 파일을 생성할 수 있는 권한이 있어야 한다. 이 파라미터가 설정되지 않은 경우에는 **ha_enable_sql_logging**\에서 설명한 복제 로그 디렉터리 경로에 SQL 로그 파일을 생성한다.
 
 .. _ha-cubrid-broker-conf:
 
@@ -2203,7 +2211,7 @@ restoreslave
     
 .. option:: -B, --backup-file-path=PATH
 
-    이 옵션을 이용해서 백업 파일들이 위치할 디렉토리를 지정할 수 있다. 더 많은 정보는 :ref:`restoredb` 의 -B 옵션을 참고한다.
+    이 옵션을 이용해서 백업 파일들이 위치할 디렉터리를 지정할 수 있다. 더 많은 정보는 :ref:`restoredb` 의 -B 옵션을 참고한다.
     
 .. option:: -o, --output-file=FILE
 

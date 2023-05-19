@@ -105,7 +105,7 @@ A failback means that the previously failed master node automatically becomes a 
 
 .. image:: /images/image19.png
 
-If a heartbeat message fails to deliver, a failover will occur. For this reason, servers with unstable connection may experience failover even though no actual failures occur. To prevent a failover from occurring in the situation described above, configure **ha_ping_hosts**. Configuring **ha_ping_hosts** will send a ping message to a node specified in **ha_ping_hosts** in order to verify whether the network is stable or not when a heartbeat message fails to deliver. For details on configuring **ha_ping_hosts**, see :ref:`cubrid-ha-conf`.
+If a heartbeat message fails to deliver, a failover will occur. For this reason, servers with unstable connection may experience failover even though no actual failures occur. To prevent a failover from occurring in the situation described above, configure **ha_ping_hosts**. Configuring **ha_ping_hosts** will send a ping message to the hosts specified in **ha_ping_hosts** in order to verify whether the network is stable or not when a heartbeat message fails to deliver. For details on configuring **ha_ping_hosts**, see :ref:`cubrid-ha-conf`.
 
 .. _broker-mode:
 
@@ -647,11 +647,11 @@ CUBRID checks hosts specified in **ha_ping_hosts** every hour; if there is a pro
 
 Configuring this parameter can prevent split-brain, a phenomenon in which two master nodes simultaneously exist as a result of the slave node erroneously detecting an abnormal termination of the master node due to unstable network status and then promoting itself as the new master.
 
-However, the "ping check" does not operate normally if the ICMP protocol is disabled. CUBRID provides **ha_tcp_ping_hosts** as an alternative to solve this problem.
+However, the "ping check" does not work if the ICMP protocol is disabled. CUBRID provides **ha_tcp_ping_hosts** as an alternative to address this.
 
 **ha_tcp_ping_hosts**
 
-**ha_tcp_ping_hosts** is a parameter that can be used as an alternative to **ha_ping_hosts** when the ICMP protocol is disabled. **ha_tcp_ping_hosts** operates like **ha_ping_hosts** except that the TCP layer is used instead of the IP layer for the "ping check". The default is **NULL**. A comma(,) is used to separate individual host names, and a colon(:) is used to separate a host name and a port number. So, the format of this parameter is like "ha_tcp_ping_hosts=host1:port1,host2:port2". In order to use the TCP ping normally, the TCP socket that can receive the requests should be opened in advance with the port number on the host set to **ha_tcp_ping_hosts** and the firewall should not block the requests. Additionally, if both **ha_tcp_ping_hosts** and **ha_ping_hosts** are set, **ha_tcp_ping_hosts** is ignored.
+**ha_tcp_ping_hosts** is a parameter that can be used as an alternative to **ha_ping_hosts** when the ICMP protocol is disabled. **ha_tcp_ping_hosts** works like **ha_ping_hosts** except that the TCP layer is used instead of the IP layer for the "ping check". The default is **NULL**. A comma(,) is used to separate individual host names, and a colon(:) is used to separate a host name and a port number. So, the format of this parameter is like "ha_tcp_ping_hosts=host1:port1,host2:port2". In order to use the TCP ping properly, a TCP socket that can receive the requests must be opened in advance with the port number on the host specified in **ha_tcp_ping_hosts** and the firewall must not block the requests. **ha_tcp_ping_hosts** is ignored if the **ha_ping_hosts** is also set.
 
 Replication
 ^^^^^^^^^^^
@@ -3937,7 +3937,7 @@ For rebuilding replications, the following environment must be the same in maste
 *   Environmental variable (**$CUBRID**, **$CUBRID_DATABASES**, **$LD_LIBRARY_PATH, $PATH**)
 *   The paths of database volume, log, and replication
 *   Username and password of the Linux server
-*   HA-related parameters except for **ha_mode** and **ha_copy_sync_mode**, **ha_ping_hosts**, **ha_tcp_ping_hosts**
+*   HA-related parameters except for **ha_mode**, **ha_copy_sync_mode**, **ha_ping_hosts** and **ha_tcp_ping_hosts**
 
 You can rebuild replication by running **ha_make_slavedb.sh** script only in these cases.
 

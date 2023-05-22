@@ -785,14 +785,14 @@ SQL Logging
 
 **ha_enable_sql_logging**
 
-If the value of this parameter is **yes**, CUBRID generates the log file of SQL which **aplylogdb** process applies to the DB volume. The log file is located under the sql_log of the replication log directory(**ha_copy_log_base**). 
+If the value of this parameter is **yes**, CUBRID generates the log file of SQL which **applylogdb** process applies to the DB volume. The log file is located under the sql_log of the replication log directory(**ha_copy_log_base**).
 The default is **no**.
 
 The format of this log file name is *<db name>_<master hostname>*\ **.sql.log.**\ *<id>*, and *<id>* starts from 0.
 If this size is over **ha_sql_log_max_size_in_mbytes**, a new file with "*<id>* + 1" is created.
 For example, if "ha_sql_log_max_size_in_mbytes=100", demodb_nodeA.sql.log.1 is newly created as the size of demodb_nodeA.sql.log.0 file becomes 100MB.
 
-SQL log files are piled up when this parameter is on; therefore, a user should remove log files manually for retaining the free space.
+By default, only two latest SQL log files are maintained, and the maximum number of them can be adjusted through **ha_sql_log_max_count**.
 
 The SQL log format is as follows.
 
@@ -837,6 +837,14 @@ The SQL log format is as follows.
 **ha_sql_log_max_size_in_mbytes**
 
 The value of this parameter is the maximum size of the file which is created when SQL applied to DB by **applylogdb** process is logged. The new file is created when the size of a log file is over this value.
+
+**ha_sql_log_max_count**
+
+The value of this parameter indicates the maximum number of SQL log files to be maintained. The oldest ones are removed when the number of SQL log files exceeds this. This parameter can be set within the range of 2 to 5, and the default is 2. **ha_sql_log_max_count** and **ha_sql_log_max_size_in_mbytes** need to be set properly in order to adjust the amount of SQL log to maintain.
+
+**ha_sql_log_path**
+
+The value of this parameter indicates the path where the SQL log files will be created. The default value is **NULL**. This parameter can be set to an absolute or relative path. If a relative path is set, it is determined based on the replication log directory described in **ha_enable_sql_logging**. The database server process (cub_server) should have appropriate permissions on the path to create SQL log files. If this parameter is not set, the SQL log files will be created on the path described in **ha_enable_sql_logging**
 
 .. _ha-cubrid-broker-conf:
 

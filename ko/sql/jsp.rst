@@ -821,7 +821,7 @@ CUBRID의 Java SP에서는 JNI 기능을 사용할 수 있도록 제공하고 �
 
 다음은 Java 저장 함수에서 JNI를 통해 네이티브 함수를 호출하는 예제이다.
 
-.. code-block:: c
+.. code-block:: cpp
     :caption: HelloJNI.h
 
     #include <jni.h>
@@ -844,7 +844,7 @@ CUBRID의 Java SP에서는 JNI 기능을 사용할 수 있도록 제공하고 �
     #endif
     #endif
 
-.. code-block:: c
+.. code-block:: cpp
     :caption: HelloJNI.c
 
     #include <jni.h>

@@ -821,7 +821,7 @@ Java Stored Procedures (SP) in CUBRID provide support for JNI functionality, but
 
 The following is an example of invoking a native function through JNI in a CUBRID Java stored function:
 
-.. code-block:: c
+.. code-block:: cpp
     :caption: HelloJNI.h
 
     #include <jni.h>
@@ -844,7 +844,7 @@ The following is an example of invoking a native function through JNI in a CUBRI
     #endif
     #endif
 
-.. code-block:: c
+.. code-block:: cpp
     :caption: HelloJNI.c
 
     #include <jni.h>

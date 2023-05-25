@@ -814,7 +814,7 @@ When Java stored functions/procedures are executed, they should run only on a JV
 .. _jsp-jni:
 
 Java Native Interface (JNI) Support
-==================================
+===================================
 
 Using the Java Native Interface (JNI), you can invoke functions in native languages like C/C++ from the Java Virtual Machine (JVM). 
 Java Stored Procedures (SP) in CUBRID provide support for JNI functionality, but you should be cautious when using it because issues in native code can have unexpected impacts on the stored routine server (cub_javasp) process and its operation.

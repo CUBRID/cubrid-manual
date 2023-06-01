@@ -6,9 +6,9 @@
 통계 정보 갱신
 ==============
 
-테이블과 인덱스에 대한 통계 정보는 데이터베이스 시스템이 질의를 효과적으로 처리할 수 있게 한다. 통계 정보는 테이블의 생성, 인덱스의 생성/삭제 등 DDL 문이 수행되면 자동으로 갱신된다. 그러나, INSERT, DELETE 등 DML 문이 수행되면 자동으로 갱신되지 않으므로 필요한 경우 사용자가 직접 **UPDATE STATISTICS** 문을 수행하여 통계 정보를 갱신해야 한다(:ref:`info-stats` 참고)
+테이블과 인덱스에 대한 통계 정보는 데이터베이스 시스템이 질의를 효과적으로 처리할 수 있게 한다. 통계 정보는 인덱스의 생성, 테이블의 생성등 DDL 문과 INSERT, DELETE 등 DML 문에 대해서 자동으로 갱신되지 않는다. **UPDATE STATISTICS** 문만이 통계정보를 갱신하는 유일한 방법이다. 필요한 경우 사용자가 직접 **UPDATE STATISTICS** 문을 수행하여 통계 정보를 갱신해야 한다(:ref:`info-stats` 참고)
 
-**UPDATE STATISTICS** 문은 대량의 **INSERT**, 혹은 **DELETE** 문이 수행되어 실제 정보와 통계 정보 사이에 차이가 커질 때 수행할 것을 권장한다.
+**UPDATE STATISTICS** 문은 주기적으로 수행할 것을 권장한다. 또한 새로운 인덱스가 추가되거나, 대량의 **INSERT**, 혹은 **DELETE** 문이 수행되어 실제 정보와 통계 정보 사이에 차이가 커질 때 수행할 것을 권장한다.
 
 ::
 
@@ -18,7 +18,7 @@
   
     UPDATE STATISTICS ON CATALOG CLASSES [WITH FULLSCAN]; 
 
-*   **WITH FULLSCAN**: 지정된 테이블의 전체 데이터를 가지고 통계 정보를 업데이트한다. 생략 시 샘플링한 데이터를 가지고 통계 정보를 업데이트한다. 대부분 통계 정보 갱신은 샘플링 정보를 업데이트하는 것으로 충분하며, **WITH FULLSCAN** 은 시스템에 부담을 줄 수 있으므로 가급적 사용을 자제할 것을 권장한다. 
+*   **WITH FULLSCAN**: 지정된 테이블의 전체 데이터를 가지고 통계 정보를 업데이트한다. 생략 시 샘플링한 데이터를 가지고 통계 정보를 업데이트한다. 데이터 샘플은 테이블 전체 페이지 수와 상관없이 7페이지이다.
 
     .. note:: 
 
@@ -409,7 +409,7 @@ SQL에 대한 성능 분석을 위해서는 질의 프로파일링(profiling) �
 
 *   **SELECT** (time: 1, fetch: 975, ioread: 2) 
     
-    *   time: 4 => 전체 질의 시간 4ms 소요. 
+    *   time: 1 => 전체 질의 시간 1ms 소요. 
     *   fetch: 975 => 페이지에 대해 975회 fetch(개수가 아닌 접근 회수임. 같은 페이지를 다시 fetch하더라도 회수가 증가함). 
     *   ioread: 2회 디스크 접근.
 
@@ -633,7 +633,7 @@ SQL 힌트
     NO_COVERING_IDX |
     NO_MULTI_RANGE_OPT |
     NO_SORT_LIMIT |
-    NO_PRED_PUSH |
+    NO_PUSH_PRED |
     NO_MERGE |
     NO_HASH_AGGREGATE |
     NO_HASH_LIST_SCAN |
@@ -652,7 +652,7 @@ SQL 힌트
 SQL 힌트는 주석에 더하기 기호(+)를 함께 사용하여 지정한다. 힌트를 사용하는 방법은 :doc:`comment` 절에 소개된 바와 같이 세 가지 방식이 있다. 따라서 SQL 힌트도 다음과 같이 세 가지 방식으로 사용할 수 있다.
 
 *  /\*+ hint \*/
-*   -\-+ hint
+*   \-\-+ hint
 *   //+ hint
 
 힌트 주석은 반드시 키워드 **SELECT**, **UPDATE** or **DELETE** 등의 예약어 다음에 나타나야 하고, 더하기 기호(+)가 주석에서 첫 번째 문자로 시작되어야 한다. 여러 개의 힌트를 지정할 때는 공백이 구분자로 사용된다. 여러 개의 힌트를 지정할 때는 공백이 구분자로 사용된다.
@@ -676,7 +676,7 @@ SQL 힌트는 주석에 더하기 기호(+)를 함께 사용하여 지정한다.
 *   **NO_COVERING_IDX**: 커버링 인덱스 기능을 사용하지 않도록 하는 힌트이다. 자세한 내용은 :ref:`covering-index` 를 참고한다.
 *   **NO_MULTI_RANGE_OPT**: 다중 키 범위 최적화 기능을 사용하지 않도록 하는 힌트이다. 자세한 내용은 :ref:`multi-key-range-opt` 를 참고한다.
 *   **NO_SORT_LIMIT**: SORT-LIMIT 최적화를 사용하지 않기 위한 힌트이다. 자세한 내용은 :ref:`sort-limit-optimization`\ 를 참고한다.
-*   **NO_PRED_PUSH**: PREDICATE-PUSH 최적화를 사용하지 않기 위한 힌트이다.
+*   **NO_PUSH_PRED**: PREDICATE-PUSH 최적화를 사용하지 않기 위한 힌트이다.
 *   **NO_MERGE**: VIEW-MERGE 최적화를 사용하지 않기 위한 힌트이다.
 
 .. _no-hash-aggregate:

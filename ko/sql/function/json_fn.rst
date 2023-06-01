@@ -1188,11 +1188,11 @@ JSON_TABLE
 
 **JSON_TABLE** 은 네 가지 유형의 열을 지원한다:
 
-- *name* **FOR ORDINALITY** :이 유형은 **COLUMNS** 절 내에서 행 번호를 추적한다. 열 유형은 **INTEGER** 이다.
+- *name* **FOR ORDINALITY** : 이 유형은 **COLUMNS** 절 내에서 행 번호를 추적한다. 열 유형은 **INTEGER** 이다.
 - *name* *type* **PATH** *json path* [**on empty**] [**on error**] :이 유형의 열은 지정된 json 경로에서 json_values를 추출하는 데 사용된다. 추출된 json 데이터는 지정된 유형으로 강제 변환된다.
   경로가 존재하지 않으면 **on empty** 절이 자동 수행된다. 추출된 json 값이 대상 유형으로 변환되지 않으면 **on error** 절이 자동 수행된다.
 
-  - **on empty** 은 경로가 존재하지 않는 경우 **JSON_TABLE**의 동작을 결정한다. **on empty** 은 다음 값 중 하나를 가질 수 있다:
+  - **on empty**\은 경로가 존재하지 않는 경우 **JSON_TABLE**\의 동작을 결정한다. **on empty**\은 다음 값 중 하나를 가질 수 있다:
 
     - **NULL ON EMPTY** : 열이 **NULL** 로 설정된다. 이것이 기본 동작이다.
     - **ERROR ON EMPTY**: 오류가 발생한다.
@@ -1259,7 +1259,7 @@ JSON_TABLE
                 1         NULL            0 
 
 아래 예에서 '$. *'경로는 상위 열이 루트 json 객체의 멤버 값을 하나씩 받도록 하는 데 사용된다. 열 a는 처리된 내용을 보여준다.
-그런 다음 루트 오브젝트의 각 멤버 값은 **NESTED** [**PATH**] 절에 의해 추가로 처리된다. **NESTED PATH**는 경로 '$ [*]'를 사용하여 배열의 각 요소를 열에 의해 추가로 처리한다.
+그런 다음 루트 오브젝트의 각 멤버 값은 **NESTED** [**PATH**] 절에 의해 추가로 처리된다. **NESTED PATH**\는 경로 '$ [*]'를 사용하여 배열의 각 요소를 열에 의해 추가로 처리한다.
 **FOR ORDINALITY** 열은 현재 처리된 요소의 수를 추적한다. 예제 결과에서 우리는 열의 각 새로운 요소에 대해 * ord * 열의 값도 증가함을 알 수 있다.
 **FOR ORDINALITY** *nested_ord* 열은 형제 열(sibling columns)에 의해 처리되는 요소 수의 카운터 역할도 한다. 중첩된 **FOR ORDINALITY** 열은 각 일괄 처리가 완료된 후 재설정된다.
 세 번째 멤버의 값인 6은 배열로 취급될 수 없으므로 중첩된 열로 처리할 수 없다. 중첩된 열은 **NULL** 값을 생성한다.

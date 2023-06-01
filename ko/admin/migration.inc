@@ -19,6 +19,9 @@ unloaddb
 *   객체 파일(*database-name*\ **_objects**): 해당 데이터베이스에 포함된 인스턴스 정보를 포함하는 파일이다.
 *   인덱스 파일(*database-name*\ **_indexes**): 해당 데이터베이스에 정의된 인덱스 정보를 포함하는 파일이다.
 *   트리거 파일(*database-name*\ **_trigger**): 해당 데이터베이스에 정의된 트리거 정보를 포함하는 파일이다. 만약 데이터를 로딩하는 동안 트리거가 구동되는 것을 원치 않는다면, 데이터 로딩을 완료한 후에 트리거 정의를 로딩하면 된다.
+*   분할된 스키마 파일(*database-name*\ **_schema**\ **_objecttype**): **\-\-split-schema-files** 옵션을 사용할 경우 해당 데이터베이스에 정의된 스키마 정보를 오브젝트 단위로 분할하여 해당 오브젝트 정보만 가지고 있는 파일들이다. 분할된 파일 목록은 **\-\-split-schema-files** 옵션을 참고 한다.
+*   스키마 목록 파일(*database-name*\ **_schema**\ **_info**): **\-\-split-schema-files** 옵션을 사용할 경우 분할된 스키마 정보 파일들의 목록을 가지고 있는 파일이다.
+
 
 이러한 스키마, 객체, 인덱스, 트리거 파일은 같은 디렉터리에 생성된다.
 
@@ -57,13 +60,13 @@ unloaddb
         ..
         table_n
 
-    **-i** 옵션이 **-\-input-class-only** 와 결합되면, **-i** 옵션의 입력 파일에서 지정된 테이블의 스키마, 인덱스, 데이터 파일만 언로드한다.
+    **-i** 옵션이 **\-\-input-class-only** 와 결합되면, **-i** 옵션의 입력 파일에서 지정된 테이블의 스키마, 인덱스, 데이터 파일만 언로드한다.
     
     ::
 
         cubrid unloaddb --input-class-only -i table_list.txt demodb
 
-    **-i** 옵션이 **-\-include-reference** 와 결합되면, 참조되는 테이블도 함께 언로드된다.
+    **-i** 옵션이 **\-\-include-reference** 와 결합되면, 참조되는 테이블도 함께 언로드된다.
     
     ::
     
@@ -79,7 +82,7 @@ unloaddb
 
 .. option:: --estimated-size=NUMBER
 
-    언로드할 데이터베이스의 레코드 저장을 위한 해시 메모리를 사용자 임의로 할당하기 위한 옵션이다. 만약 **-\-estimated-size** 옵션이 지정되지 않으면 최근의 통계 정보를 기반으로 데이터베이스의 레코드 수를 결정하게 되는데, 만약 최근 통계 정보가 갱신되지 않았거나 해시 메모리를 크게 할당하고 싶은 경우 이 옵션을 이용할 수 있다. 따라서, 옵션의 인수로 너무 적은 레코드 개수를 정의한다면 해시 충돌로 인해 언로드 성능이 저하된다.
+    언로드할 데이터베이스의 레코드 저장을 위한 해시 메모리를 사용자 임의로 할당하기 위한 옵션이다. 만약 **\-\-estimated-size** 옵션이 지정되지 않으면 최근의 통계 정보를 기반으로 데이터베이스의 레코드 수를 결정하게 되는데, 만약 최근 통계 정보가 갱신되지 않았거나 해시 메모리를 크게 할당하고 싶은 경우 이 옵션을 이용할 수 있다. 따라서, 옵션의 인수로 너무 적은 레코드 개수를 정의한다면 해시 충돌로 인해 언로드 성능이 저하된다.
     
     ::
 
@@ -125,7 +128,7 @@ unloaddb
 
 .. option:: --output-prefix=PREFIX
 
-    언로드 작업에 의해 생성되는 스키마 파일과 객체 파일의 이름 앞에 붙는 prefix를 지정하기 위한 옵션이다. 예제를 수행하면 스키마 파일명은 *abcd_schema* 가 되고, 객체 파일명은 *abcd_objects* 가 된다. 만약, **-\-output-prefix** 옵션을 지정하지 않으면 언로드할 데이터베이스 이름이 prefix로 사용된다.
+    언로드 작업에 의해 생성되는 스키마 파일과 객체 파일의 이름 앞에 붙는 prefix를 지정하기 위한 옵션이다. 예제를 수행하면 스키마 파일명은 *abcd_schema* 가 되고, 객체 파일명은 *abcd_objects* 가 된다. 만약, **\-\-output-prefix** 옵션을 지정하지 않으면 언로드할 데이터베이스 이름이 prefix로 사용된다.
     
     ::
 
@@ -175,6 +178,41 @@ unloaddb
 
         cubrid unloaddb --datafile-per-class demodb
 
+.. option:: --split-schema-files
+
+    스키마 정보를 오브젝트 단위로 분할 생성하고, 분할된 파일 목록을 기록한 파일도 생성한다. 자세한 사용방법은 :ref:`loaddb` 의 --schema-file-list=FILE 를 참조한다.
+    이 옵션을 지정하지 않으면 모든 오브젝트가 포함된 하나의 스키마 파일이 생성된다.
+    ::
+
+        cubrid unloaddb --split-schema-files demodb
+
+    스키마 정보를 오브젝트 단위로 분할하여 생성한 파일 목록 ::
+
+		demodb_schema_user
+		demodb_schema_class
+		demodb_schema_vclass
+		demodb_schema_serial
+		demodb_schema_procedure
+		demodb_schema_server
+		demodb_schema_pk
+		demodb_schema_fk
+		demodb_schema_grant
+		demodb_schema_synonym
+
+    분할된 스키마 파일들의 목록을 가지고 있는 파일명
+    
+    ::
+
+        demodb_schema_info
+
+.. option:: --as-dba
+
+	사용자가 DBA 그룹의 구성원인 경우, DBA 사용자인 경우와 동일한 내용으로 스키마 파일을 생성한다.
+    
+    ::
+
+        cubrid unloaddb -u u1_dba_group --as-dba demodb
+
 .. note::
 
    언로드 시간을 단축하기 위해서 서로 다른 테이블에 대한 언로드는 동시에 실행 가능하며 **unloaddb.sh** 스크립트를 이용하면 이러한 과정을 쉽게 할 수 있다 (:ref:`cubrid_scripts_unloaddb_sh` 참고).
@@ -203,6 +241,7 @@ loaddb
 *   인덱스 파일(*database-name*\ **_indexes**): 언로드 작업에 의해 생성된 파일로서, 데이터베이스에 정의된 인덱스 정보를 포함하는 파일이다.
 *   트리거 파일(*database-name*\ **_trigger**): 언로드 작업에 의해 생성된 파일로서, 데이터베이스에 정의된 트리거 정보를 포함하는 파일이다.
 *   사용자 정의 객체 파일(*user_defined_object_file*) : 대용량 데이터 입력을 위해 사용자가 테이블 형식으로 작성한 입력 파일이다(:ref:`howtowrite-loadfile` 참고).
+*   스키마 목록 파일(*database-name*\ **_schema_info**): **\-\-split-schema-files** 옵션과 함께 언로드 작업에 의해 생성된 파일로서, 데이터베이스에 정의된 스키마 정보를 오브첵트 단위로 분할된 오브젝트 파일들의 목록을 가지고 있는 파일이다.(:option:`unloaddb --split-schema-files` 참고)
 
 **입력 파일 처리 순서**
 
@@ -248,6 +287,10 @@ loaddb
 
          cubrid loaddb -C -u dba -d demodb_objects newdb
 
+.. note::
+
+    **HA** (High Availability)환경의 **client-server** 모드(-C, \-\-CS-MODE)에서는 -d 옵션(data loading)만 사용 가능하다.
+
 .. option:: --data-file-check-only
 
      demodb_objects에 포함된 데이터의 구문이 정상인지 확인만 하며 데이터를 데이터베이스에 로딩하지 않는다. ::
@@ -280,7 +323,7 @@ loaddb
 
     권장되는 커밋 주기는 로딩되는 데이터에 따라 다른데, 스키마 로딩의 경우에는 **-c**\ 의 인수를 50으로, 인덱스 로딩의 경우는 인수를 1로 설정하는 것이 권고된다. 레코드 로딩의 경우는 10,240이 권고되며 기본값이다.
 
-    CUBRID 10.1 또는 그 이하의 버전에서 **-\-periodic-commit** 의 기본값은 없으며 따라서 전체 데이터를 로드한 후에 트랜잭션 커밋을 수행할 것이다. 현재 상태에서, 이전과 같이 동작하기를 원한다면 **-\-periodic-commit** 을 매우 큰 값으로 설정하라. 그러면 모든 데이터가 로드된 후에 커밋이 실행될 것이다. ::
+    CUBRID 10.1 또는 그 이하의 버전에서 **\-\-periodic-commit** 의 기본값은 없으며 따라서 전체 데이터를 로드한 후에 트랜잭션 커밋을 수행할 것이다. 현재 상태에서, 이전과 같이 동작하기를 원한다면 **\-\-periodic-commit** 을 매우 큰 값으로 설정하라. 그러면 모든 데이터가 로드된 후에 커밋이 실행될 것이다. ::
 
         cubrid loaddb -c 100 -d demodb_objects newdb
 
@@ -363,7 +406,7 @@ loaddb
 
     *   +DEFAULT : 24번부터 33번까지의 에러를 무시하지 않도록 설정
 
-    **-\-error-control-file** 옵션으로 에러 명세 파일을 설정하지 않을 경우, **loaddb** 유틸리티는 기본적으로 24번부터 33번까지의 에러를 무시하도록 설정되어 있다. 이들은 데이터베이스 볼륨의 여유 공간이 얼마 남지 않았다는 경고성 에러로서, 이후 할당된 데이터베이스 볼륨의 여유 공간이 없어지면 자동으로 범용 볼륨(generic volume)을 생성하게 된다.
+    **\-\-error-control-file** 옵션으로 에러 명세 파일을 설정하지 않을 경우, **loaddb** 유틸리티는 기본적으로 24번부터 33번까지의 에러를 무시하도록 설정되어 있다. 이들은 데이터베이스 볼륨의 여유 공간이 얼마 남지 않았다는 경고성 에러로서, 이후 할당된 데이터베이스 볼륨의 여유 공간이 없어지면 자동으로 범용 볼륨(generic volume)을 생성하게 된다.
 
     다음은 에러 명세 파일을 작성한 예이다.
 
@@ -397,7 +440,9 @@ loaddb
 
 .. option:: --no-user-specified-name
 
-    11.2 이전 버전에서 언로드된 파일은 **-\-no-user-specified-name** 옵션을 사용하는 경우에만 11.2 버전에서 로드할 수 있다.
+    11.2 이전 버전에서 언로드된 파일은 **\-\-no-user-specified-name** 옵션을 사용하는 경우에만 11.2 버전에서 로드할 수 있다.
+
+    이 옵션은 -u 옵션과 함께 데이터베이스의 사용자 계정이 **DBA**\로 지정된 경우에만 동작한다.
     
     ::
 
@@ -405,11 +450,27 @@ loaddb
 
 .. warning::
 
-    **-\-no-user-specified-name** 옵션은 11.2버전 또는 11.2 이후 버전에서 언로드된 파일을 로드할 때 사용하면 안 된다.
+    **\-\-no-user-specified-name** 옵션은 11.2버전 또는 11.2 이후 버전에서 언로드된 파일을 로드할 때 사용하면 안 된다.
+
+
+.. option:: --schema-file-list=FILE
+
+    목록에 포함된 모든 스키마 파일들을 한번에 로딩 하는 옵션이다. 스키마 파일 목록이 있어야 하며, 이 목록 파일의 맨 위 스키마 파일부터 아래로 순차적으로 로딩된다. 이 옵션과 -s 옵션은 함께 사용할 수 없다.
+
+    이 목록 파일은 unloaddb에서 **\-\-split-schema-files** 옵션을 사용할 때 자동으로 생성된다.
+	
+    ::
+
+        cubrid loaddb -u dba --schema-file-list=demodb_schema_info
 
 .. warning::
 
-    **-\-no-logging** 옵션을 사용하면 **loaddb** 를 수행하면서 트랜잭션 로그를 저장하지 않으므로 데이터 파일을 빠르게 로드할 수 있다. 그러나 로드 도중 파일 형식이 잘못되거나 시스템이 다운되는 등의 문제가 발생했을 때 데이터를 복구할 수 없으므로 데이터베이스를 새로 구축해야 한다. 즉, 데이터를 복구할 필요가 없는 새로운 데이터베이스를 구축하는 경우를 제외하고는 사용하지 않도록 주의한다. 이 옵션을 사용하면 고유 위반 등의 오류를 검사하지 않아 기본 키에 값이 중복되는 경우 등이 발생할 수 있으므로, 사용 시 이러한 문제를 반드시 감안해야 한다.
+    이 파일에 작성된 스키마 파일의 순서를 변경할 수 있으나 순서가 잘못된 경우 로딩 오류가 발생할 수 있다. 예를 들어, CLASS 정보가 있는 파일이 로드되지 않은 상태에서 PK 파일을 먼저 로드하면 오류가 발생할 수 있다. 따라서 목록에서 CLASS 정보를 로드하기 위한 파일명이 PK를 로드하기 위한 파일보다 위에 있어야 한다.
+
+
+.. warning::
+
+    **\-\-no-logging** 옵션을 사용하면 **loaddb** 를 수행하면서 트랜잭션 로그를 저장하지 않으므로 데이터 파일을 빠르게 로드할 수 있다. 그러나 로드 도중 파일 형식이 잘못되거나 시스템이 다운되는 등의 문제가 발생했을 때 데이터를 복구할 수 없으므로 데이터베이스를 새로 구축해야 한다. 즉, 데이터를 복구할 필요가 없는 새로운 데이터베이스를 구축하는 경우를 제외하고는 사용하지 않도록 주의한다. 이 옵션을 사용하면 고유 위반 등의 오류를 검사하지 않아 기본 키에 값이 중복되는 경우 등이 발생할 수 있으므로, 사용 시 이러한 문제를 반드시 감안해야 한다.
 
 .. _howtowrite-loadfile:
 
@@ -421,9 +482,11 @@ loaddb
 주석
 ++++
 
-CUBRID에서는 주석은 두 개의 연속된 하이픈(-\-)을 이용하여 처리한다. ::
+CUBRID에서는 주석은 두 개의 연속된 하이픈(\-\-)을 이용하여 처리한다. ::
 
     -- This is a comment!
+
+.. _howtowrite-loadfile-command-line:
 
 명령 라인
 +++++++++
@@ -434,15 +497,36 @@ CUBRID에서는 주석은 두 개의 연속된 하이픈(-\-)을 이용하여 �
 
 *   클래스에 식별자 부여
 
-    **%id** 를 이용하여 참조 관계에 있는 클래스에 식별자를 부여할 수 있다. ::
+    **%id** 를 이용하여 참조 관계에 있는 클래스에 식별자를 부여할 수 있다.
+    
+    ::
 
-        %id class_name class_id
+        %id [schema_name.]class_name class_id
+        schema_name:
+            identifier
         class_name:
             identifier
         class_id:
             integer
 
-    **%id** 명령어에 의해 명시된 *class_name* 은 해당 데이터베이스에 정의된 클래스 이름이며, *class_id* 는 객체 참조를 위해 부여한 숫자형 식별자를 의미한다. 클래스 이름은 스키마 이름을 접두사로 사용하고, 대괄호([ ])로 묶어야 한다.
+    **%id** 명령어에 의해 명시된 *class_name*\은 해당 데이터베이스에 정의된 클래스 이름이다. *class_name*\은 *schema_name*\을 접두사로 사용하며, *schema_name*\은 클래스가 정의된 스키마 이름이다.
+    *schema_name*\은 생략힐 수 있으며, *schema_name*\을 생략하면 -u 옵션과 함께 지정된 데이터베이스의 사용자 이름이 스키마 이름으로 사용된다.
+
+    ::
+
+        %id [employee] 21
+        %id [office] 22
+        %id [project] 23
+        %id [phone] 24
+
+    *schema_name*\과 *class_name*\은 대괄호([ ])로 묶어야 한다. *schema_name*\과 *class_name*\의 각각을 대괄호로 묶거나, 함께 대괄호로 묶을 수 있다.
+
+    ::
+
+        %id [public].[employee] 21
+        %id [public].[office] 22
+        %id [public].[project] 23
+        %id [public].[phone] 24
 
     ::
 
@@ -453,17 +537,27 @@ CUBRID에서는 주석은 두 개의 연속된 하이픈(-\-)을 이용하여 �
 
 *   클래스 및 속성 명시
 
-    **%class** 명령어를 이용하여 데이터가 로딩될 클래스(테이블) 및 속성(칼럼)을 명시하며, 명시된 속성의 순서에 따라 데이터 라인이 작성되어야 한다. **cubrid loaddb** 유틸리티를 실행할 때 **-t** 옵션으로 클래스 이름을 제공하는 경우에는 데이터 파일에 클래스 및 속성을 명시하지 않아도 된다. 단, 데이터가 작성되는 순서는 클래스 생성 시의 속성 순서를 따라야 한다. ::
+    **%class** 명령어를 이용하여 데이터가 로딩될 클래스(테이블) 및 속성(칼럼)을 명시하며, 명시된 속성의 순서에 따라 데이터 라인이 작성되어야 한다. **cubrid loaddb** 유틸리티를 실행할 때 **-t** 옵션으로 클래스 이름을 제공하는 경우에는 데이터 파일에 클래스 및 속성을 명시하지 않아도 된다. 단, 데이터가 작성되는 순서는 클래스 생성 시의 속성 순서를 따라야 한다.
+    
+    ::
 
-    %class [schema_name.class_name] ( attr_name [attr_name... ] )
+        %class [schema_name.]class_name (attr_name [attr_name...])
+        schema_name:
+            identifier
+        class_name:
+            identifier
+        attr_name:
+            identifier
 
-데이터를 로딩하고자 하는 데이터베이스에는 이미 스키마가 정의되어 있어야 한다.
+    데이터를 로딩하고자 하는 데이터베이스에는 클래스가 이미 정의되어 있어야 한다.
 
-**%class** 명령어에 의해 명시된 *class_name* 은 해당 데이터베이스에 정의된 클래스 이름이며, *attr_name* 는 정의된 속성 이름을 의미한다. 클래스 이름은 스키마 이름을 접두사로 사용하고, 대괄호([ ])로 감싸야 한다.
+    **%class** 명령어에 의해 명시된 *class_name*\은 해당 데이터베이스에 정의된 클래스 이름이며, *schema_name*\은 클래스가 정의된 스키마 이름이다. *attr_name*\는 정의된 속성 이름을 의미한다. *schema_name*\과 *class_name*\의 작성 방법은 위와 동일하다.
 
-다음은 *employee* 라는 클래스에 데이터를 입력하기 위하여 **%class** 명령으로 클래스 및 3개의 속성을 명시한 예제이다. **%class** 명령 다음에 나오는 데이터 라인에서는 3개의 데이터가 입력되어야 하며, 이는 :ref:`참조 관계 설정 <conf-reference-relation>`\을 참조한다. ::
+    다음은 *employee*\라는 클래스에 데이터를 입력하기 위하여 **%class** 명령으로 클래스 및 3개의 속성을 명시한 예제이다. **%class** 명령 다음에 나오는 데이터 라인에서는 3개의 데이터가 입력되어야 하며, 이는 :ref:`참조 관계 설정 <conf-reference-relation>`\을 참조한다.
+    
+    ::
 
-    %class [public.employee] (name age department)
+        %class [public].[employee] (name age department)
 
 데이터 라인
 +++++++++++
@@ -478,7 +572,7 @@ CUBRID에서는 주석은 두 개의 연속된 하이픈(-\-)을 이용하여 �
 
     ::
 
-        %class [public.employee] (name)
+        %class [public].[employee] (name)
         'jordan' 
         'james'  
         'garnett'
@@ -490,7 +584,7 @@ CUBRID에서는 주석은 두 개의 연속된 하이픈(-\-)을 이용하여 �
 
     ::
 
-        %class [public.employee] (name)
+        %class [public].[employee] (name)
         1: 'jordan' 
         2: 'james'  
         3: 'garnett' 
@@ -500,27 +594,33 @@ CUBRID에서는 주석은 두 개의 연속된 하이픈(-\-)을 이용하여 �
     
 *   참조 관계 설정
 
-    **@** 다음에 참조하는 클래스를 명시하고, 수직바(|) 다음에 참조하는 인스턴스의 번호를 명시하여 객체 참조 관계를 설정할 수 있다. ::
+    **@** 다음에 참조하는 클래스를 명시하고, 수직바(|) 다음에 참조하는 인스턴스의 번호를 명시하여 객체 참조 관계를 설정할 수 있다.
+    
+    ::
 
         @class_ref | instance_no
         class_ref:
              class_name
              class_id
 
-    **@** 다음에는 클래스명 또는 클래스 id를 명시하고, 수직바(|) 다음에는 인스턴스 번호를 명시한다. 수직바(|)의 양쪽에는 공백을 허용하지 않는다. 테이블 이름은 스키마 이름을 접두사로 사용해야 한다.
+    **@** 다음에는 클래스명 또는 클래스 id를 명시하고, 수직바(|) 다음에는 인스턴스 번호를 명시한다. 수직바(|)의 양쪽에는 공백을 허용하지 않는다. *class_ref*\의 작성 방법은 :ref:`명령 라인 <howtowrite-loadfile-command-line>`\의 *schema_name*\과 *class_name*\의 작성 방법과 동일하다. 하지만 *schema_name*\과 *class_name* 각각을 대괄호([ ])로 묶는 것은 허용하지 않는다.
 
-    다음은 *paycheck* 클래스에 인스턴스를 입력하는 예제이며, *name* 속성은 *employee* 클래스의 인스턴스를 참조한다. 마지막 라인과 같이 앞에서 정의되지 아니한 인스턴스 번호를 이용하여 참조 관계를 설정하는 경우 해당 데이터는 **NULL** 로 입력된다. ::
+    다음은 *paycheck* 클래스에 인스턴스를 입력하는 예제이며, *name* 속성은 *employee* 클래스의 인스턴스를 참조한다. 마지막 라인과 같이 앞에서 정의되지 아니한 인스턴스 번호를 이용하여 참조 관계를 설정하는 경우 해당 데이터는 **NULL** 로 입력된다.
+    
+    ::
 
-        %class [public.paycheck] (name department salary)
+        %class [public].[paycheck] (name department salary)
         @[public.employee]|1   'planning'   8000000   
         @[public.employee]|2   'planning'   6000000  
         @[public.employee]|3   'sales'   5000000  
         @[public.employee]|4   'development'   4000000
         @[public.employee]|5   'development'   5000000
 
-    :ref:`클래스에 식별자 부여 <assign-id-to-class>`\ 에서 **%id** 명령어로 *employee* 클래스에 21이라는 식별자를 부여했으므로, 위의 예를 다음과 같이 작성할 수 있다. ::
+    :ref:`클래스에 식별자 부여 <assign-id-to-class>`\ 에서 **%id** 명령어로 *employee* 클래스에 21이라는 식별자를 부여했으므로, 위의 예를 다음과 같이 작성할 수 있다.
+    
+    ::
 
-        %class [public.paycheck] (name department salary)
+        %class [public].[paycheck] (name department salary)
         @21|1   'planning'   8000000   
         @21|2   'planning'   6000000  
         @21|3   'sales'   5000000  
@@ -579,8 +679,3 @@ CUBRID에서는 주석은 두 개의 연속된 하이픈(-\-)을 이용하여 �
 .. warning::
  
     CUBRID 11버전에서 TDE 기능을 사용할 경우 하위호환성을 제공하지 않아, 언로드된 파일로 더 낮은 버전에서 로드할 수 없다.
-
-.. warning:: 
-
-   11.2 이전 버전에서 언로드된 데이터는 **-\-no-user-specified-name** 옵션을 사용하는 경우에만 11.2 버전 또는 11.2 이후 버전에서 로드할 수 있다.
-   11.2 버전 또는 11.2 이후 버전에서 언로드된 데이터를 로드할 때는 **-\-no-user-specified-name** 옵션을 사용하면 안 된다.

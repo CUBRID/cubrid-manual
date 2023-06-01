@@ -235,7 +235,7 @@ To display the option list in the prompt, execute the **csql** utilities without
  
 .. option:: -q, --query-output
 
-    This option displays the result for easy use in insert queries, only show column names and values, and works with **-c** or **-i** option. Each column name and value are separated by a comma or a single character of the **-\-delimiter** option; and all results except for numeric types are enclosed by a single quote or a single character of the **-\-enclosure** option. If the enclosure is a single quote, the single quote in the results is replaced with two ones. It is ignored when it is given with **-l** option.
+    This option displays the result for easy use in insert queries, only show column names and values, and works with **-c** or **-i** option. Each column name and value are separated by a comma or a single character of the **\-\-delimiter** option; and all results except for numeric types are enclosed by a single quote or a single character of the **\-\-enclosure** option. If the enclosure is a single quote, the single quote in the results is replaced with two ones. It is ignored when it is given with **-l** option.
 
     ::
 
@@ -286,23 +286,23 @@ To display the option list in the prompt, execute the **csql** utilities without
 
 .. option:: --no-auto-commit
 
-    The following example shows how to stop the auto-commit mode with the **-\-no-auto-commit** option. If you don't configure **-\-no-auto-commit** option, the CSQL Interpreter runs in an auto-commit mode by default, and the SQL statement is committed automatically at every execution. Executing the **;AUtocommit** session command after starting the CSQL Interpreter will also have the same result. ::
+    The following example shows how to stop the auto-commit mode with the **\-\-no-auto-commit** option. If you don't configure **\-\-no-auto-commit** option, the CSQL Interpreter runs in an auto-commit mode by default, and the SQL statement is committed automatically at every execution. Executing the **;AUtocommit** session command after starting the CSQL Interpreter will also have the same result. ::
 
         csql --no-auto-commit demodb
 
 .. option:: --no-pager
 
-    The following example shows how to display the execution results by the CSQL Interpreter at once instead of page-by-page with the **-\-no-pager** option. The results will be output page-by-page if **-\-no-pager** option is not specified. ::
+    The following example shows how to display the execution results by the CSQL Interpreter at once instead of page-by-page with the **\-\-no-pager** option. The results will be output page-by-page if **\-\-no-pager** option is not specified. ::
 
         csql --no-pager demodb
 
 .. option:: --no-single-line
 
-    The following example shows how to keep storing multiple SQL statements and execute them at once with the **;xr** or **;r** session command. If you do not specify this option, SQL statements are executed without **;xr** or **;r** session command. ::
+    The following example shows how to keep storing multiple SQL statements and execute them at once with the **;xr** or **;r** session command. If you do not specify this option, SQL statements are executed without **;xr** or **;r** session command. ;Singleline command will also have the same result. ::
 
         csql --no-single-line demodb
 
-.. option::  --sysadm
+.. option:: --sysadm
 
     This option should be used together with **-u dba**. It is specified when you want to run CSQL in a system administrator's mode.
 
@@ -310,9 +310,9 @@ To display the option list in the prompt, execute the **csql** utilities without
 
         csql -u dba --sysadm demodb
 
-.. option::  --write-on-standby
+.. option:: --write-on-standby
 
-    This option should be used together with a system administrator's mode option(**-\-sysadm**). dba which run CSQL with this option can write directly to the standby DB (slave DB or replica DB). However, the data to be written directly to the replica DB are not replicated.
+    This option should be used together with a system administrator's mode option(**\-\-sysadm**). dba which run CSQL with this option can write directly to the standby DB (slave DB or replica DB). However, the data to be written directly to the replica DB are not replicated.
 
     :: 
 
@@ -322,15 +322,15 @@ To display the option list in the prompt, execute the **csql** utilities without
     
         Please note that replication mismatch occurs when you write the data directly to the replica DB.
 
-.. option::  --no-trigger-action
+.. option:: --no-trigger-action
 
     If you specify this option, triggers of the queries executed in this CSQL are not triggered.
 
-.. option::  --delimiter=ARG
+.. option:: --delimiter=ARG
 
     This option should be used together with **-q** and a single character is specified in the argument to separate the column name and value. If multiple characters are specified, the first character is used without displaying an error. (include special characters such as \\t and \\n) 
 
-.. option::  --enclosure=ARG
+.. option:: --enclosure=ARG
 
     This option should be used together with **-q** and a single character is specified in the argument to enclose all values except for numeric types. If multiple characters are specified, the first character is used without displaying an error.
 
@@ -343,7 +343,7 @@ In addition to SQL statements, CSQL Interpreter provides special commands allowi
 
 Enter the **;help** command to display a list of the session commands available in the CSQL Interpreter. Note that only the uppercase letters of each session command are required to make the CSQL Interpreter to recognize it. Session commands are not case-sensitive.
 
-"Query buffer" is a buffer to store the query before running it. If you run CSQL as giving the **-\-no-single-line** option, the query string is kept on the buffer until running **;xr** command.
+"Query buffer" is a buffer to store the query before running it. If you run CSQL as giving the **\-\-no-single-line** option, the query string is kept on the buffer until running **;xr** command.
 
 **Reading SQL statements from a file (;REAd)**
 
@@ -498,7 +498,7 @@ This command sets auto-commit mode to **ON** or **OFF**. If any value is not spe
 
 **CHeckpoint Execution (;CHeckpoint)**
 
-This command executes the checkpoint within the CSQL session. This command can only be executed when a DBA group member, who is specified for the custom option (**-u** *user_name*), connects to the CSQL Interpreter in system administrator mode (**-\-sysadm**).
+This command executes the checkpoint within the CSQL session. This command can only be executed when a DBA group member, who is specified for the custom option (**-u** *user_name*), connects to the CSQL Interpreter in system administrator mode (**\-\-sysadm**).
 
 **Checkpoint** is an operation of flushing all dirty pages except for temp pages within the current data buffer to disks. You can also change the checkpoint interval using a command (**;set** *parameter_name* value) to set the parameter values in the CSQL session. You can see the examples of the parameter related to the checkpoint execution interval (**checkpoint_interval** and **checkpoint_every_size**). For more information, see :ref:`logging-parameters`. ::
 
@@ -507,7 +507,7 @@ This command executes the checkpoint within the CSQL session. This command can o
 
 **Transaction Monitoring Or Termination (;Killtran)**
 
-This command checks the transaction status information or terminates a specific transaction in the CSQL session. This command prints out the status information of all transactions on the screen if a parameter is omitted it terminates the transaction if a specific transaction ID is specified for the parameter. It can only be executed when a DBA group member, who is specified for the custom option (**-u** *user_name*), connects to the CSQL Interpreter in system administrator mode (**-\-sysadm**). ::
+This command checks the transaction status information or terminates a specific transaction in the CSQL session. This command prints out the status information of all transactions on the screen if a parameter is omitted it terminates the transaction if a specific transaction ID is specified for the parameter. It can only be executed when a DBA group member, who is specified for the custom option (**-u** *user_name*), connects to the CSQL Interpreter in system administrator mode (**\-\-sysadm**). ::
 
     sysadm> ;killtran
     Tran index      User name      Host name      Process id      Program name
@@ -685,55 +685,118 @@ This example shows the server statistics information for current connection. For
 
 ::
 
+    csql> ;set communication_histogram=yes
     csql> ;.hist on
+    csql> SELECT name FROM nation LIMIT 5;
     csql> ;.x
     Histogram of client requests:
     Name                            Rcount   Sent size  Recv size , Server time
-     No server requests made
-     
-     *** CLIENT EXECUTION STATISTICS ***
+    LC_FETCHALL                        2 X         72+         0 b,   0.000000 s
+    LC_DOESEXIST                       3 X         84+        36 b,   0.000142 s
+    LC_FETCH_LOCKHINT_CLASSES          1 X         56+         0 b,   0.000000 s
+    BTREE_GET_KEY_TYPE                 5 X        180+        60 b,   0.000111 s
+    QM_QUERY_DROP_ALL_PLANS            1 X        224+        40 b,   0.000080 s
+    QM_QUERY_DUMP_PLANS                1 X         72+       308 b,   0.000355 s
+    ---------------------------------------------------------------------------
+    Totals:                           13 X        688+       444 b    0.001415 s
+
+    Average server response time = 0.000109 secs
+    Average time between client requests = 0.000000 secs
+
+    *** CLIENT EXECUTION STATISTICS ***
     System CPU (sec)              =          0
     User CPU (sec)                =          0
     Elapsed (sec)                 =         20
-     
-     *** SERVER EXECUTION STATISTICS ***
+
+    *** SERVER EXECUTION STATISTICS ***
     Num_file_creates              =          0
     Num_file_removes              =          0
     Num_file_ioreads              =          0
     Num_file_iowrites             =          0
     Num_file_iosynches            =          0
-    Num_data_page_fetches         =         56
-    Num_data_page_dirties         =         14
+    The timer values for file_iosync_all are:
+    Num_file_iosync_all           =          0
+    Total_time_file_iosync_all    =          0
+    Max_time_file_iosync_all      =          0
+    Avg_time_file_iosync_all      =          0
+    Num_file_page_allocs          =          0
+    Num_file_page_deallocs        =          0
+    Num_data_page_fetches         =         58
+    Num_data_page_dirties         =          0
     Num_data_page_ioreads         =          0
     Num_data_page_iowrites        =          0
-    Num_data_page_victims         =          0
-    Num_data_page_iowrites_for_replacement =          0
+    Num_data_page_flushed         =          0
+    Num_data_page_private_quota   =        551
+    Num_data_page_private_count   =          8
+    Num_data_page_fixed           =          1
+    Num_data_page_dirty           =          0
+    Num_data_page_lru1            =         22
+    Num_data_page_lru2            =         14
+    Num_data_page_lru3            =          8
+    Num_data_page_victim_candidate =          8
+    Num_log_page_fetches          =          0
     Num_log_page_ioreads          =          0
     Num_log_page_iowrites         =          0
     Num_log_append_records        =          0
     Num_log_archives              =          0
-    Num_log_checkpoints           =          0
+    Num_log_start_checkpoints     =          0
+    Num_log_end_checkpoints       =          0
     Num_log_wals                  =          0
-    Num_page_locks_acquired       =          2
-    Num_object_locks_acquired     =          2
+    Num_log_page_iowrites_for_replacement =          0
+    Num_log_page_replacements     =          0
+    Num_page_locks_acquired       =          0
+    Num_object_locks_acquired     =          4
     Num_page_locks_converted      =          0
-    Num_object_locks_converted    =          0
+    Num_object_locks_converted    =          2
     Num_page_locks_re-requested   =          0
-    Num_object_locks_re-requested =          1
+    Num_object_locks_re-requested =         11
     Num_page_locks_waits          =          0
     Num_object_locks_waits        =          0
+    Num_object_locks_time_waited_usec =          0
     Num_tran_commits              =          1
     Num_tran_rollbacks            =          0
     Num_tran_savepoints           =          0
-    Num_tran_start_topops         =          3
-    Num_tran_end_topops           =          3
+    Num_tran_start_topops         =          0
+    Num_tran_end_topops           =          0
     Num_tran_interrupts           =          0
+    Num_tran_postpone_cache_hits  =          0
+    Num_tran_postpone_cache_miss  =          0
+    Num_tran_topop_postpone_cache_hits =          0
+    Num_tran_topop_postpone_cache_miss =          0
     Num_btree_inserts             =          0
     Num_btree_deletes             =          0
     Num_btree_updates             =          0
     Num_btree_covered             =          0
     Num_btree_noncovered          =          0
     Num_btree_resumes             =          0
+    Num_btree_multirange_optimization =          0
+    Num_btree_splits              =          0
+    Num_btree_merges              =          0
+    Num_btree_get_stats           =          0
+    The timer values for btree_online_load are:
+    Num_btree_online_load         =          0
+    Total_time_btree_online_load  =          0
+    Max_time_btree_online_load    =          0
+    Avg_time_btree_online_load    =          0
+    The timer values for btree_online_insert_task are:
+    Num_btree_online_insert_task  =          0
+    Total_time_btree_online_insert_task =          0
+    Max_time_btree_online_insert_task =          0
+    Avg_time_btree_online_insert_task =          0
+    The timer values for btree_online_prepare_task are:
+    Num_btree_online_prepare_task =          0
+    Total_time_btree_online_prepare_task =          0
+    Max_time_btree_online_prepare_task =          0
+    Avg_time_btree_online_prepare_task =          0
+    The timer values for btree_online_insert_leaf are:
+    Num_btree_online_insert_leaf  =          0
+    Total_time_btree_online_insert_leaf =          0
+    Max_time_btree_online_insert_leaf =          0
+    Avg_time_btree_online_insert_leaf =          0
+    Num_btree_online_inserts      =          0
+    Num_btree_online_inserts_same_page_hold =          0
+    Num_btree_online_inserts_retry =          0
+    Num_btree_online_inserts_retry_nice =          0
     Num_query_selects             =          1
     Num_query_inserts             =          0
     Num_query_deletes             =          0
@@ -746,20 +809,547 @@ This example shows the server statistics information for current connection. For
     Num_query_nljoins             =          0
     Num_query_mjoins              =          0
     Num_query_objfetches          =          0
-    Num_network_requests          =          8
+    Num_query_holdable_cursors    =          0
+    Num_sort_io_pages             =          0
+    Num_sort_data_pages           =          0
+    Num_network_requests          =         14
     Num_adaptive_flush_pages      =          0
     Num_adaptive_flush_log_pages  =          0
     Num_adaptive_flush_max_pages  =          0
-     
-     *** OTHER STATISTICS ***
+    Num_prior_lsa_list_size       =          0
+    Num_prior_lsa_list_maxed      =          0
+    Num_prior_lsa_list_removed    =          0
+    Time_ha_replication_delay     =          0
+    Num_plan_cache_add            =          0
+    Num_plan_cache_lookup         =          2
+    Num_plan_cache_hit            =          2
+    Num_plan_cache_miss           =          0
+    Num_plan_cache_full           =          0
+    Num_plan_cache_delete         =          0
+    Num_plan_cache_invalid_xasl_id =          0
+    Num_plan_cache_entries        =          1
+    Num_vacuum_log_pages_vacuumed =          0
+    Num_vacuum_log_pages_to_vacuum =          0
+    Num_vacuum_prefetch_requests_log_pages =          0
+    Num_vacuum_prefetch_hits_log_pages =          0
+    Num_heap_home_inserts         =          0
+    Num_heap_big_inserts          =          0
+    Num_heap_assign_inserts       =          0
+    Num_heap_home_deletes         =          0
+    Num_heap_home_mvcc_deletes    =          0
+    Num_heap_home_to_rel_deletes  =          0
+    Num_heap_home_to_big_deletes  =          0
+    Num_heap_rel_deletes          =          0
+    Num_heap_rel_mvcc_deletes     =          0
+    Num_heap_rel_to_home_deletes  =          0
+    Num_heap_rel_to_big_deletes   =          0
+    Num_heap_rel_to_rel_deletes   =          0
+    Num_heap_big_deletes          =          0
+    Num_heap_big_mvcc_deletes     =          0
+    Num_heap_home_updates         =          0
+    Num_heap_home_to_rel_updates  =          0
+    Num_heap_home_to_big_updates  =          0
+    Num_heap_rel_updates          =          0
+    Num_heap_rel_to_home_updates  =          0
+    Num_heap_rel_to_rel_updates   =          0
+    Num_heap_rel_to_big_updates   =          0
+    Num_heap_big_updates          =          0
+    Num_heap_home_vacuums         =          0
+    Num_heap_big_vacuums          =          0
+    Num_heap_rel_vacuums          =          0
+    Num_heap_insid_vacuums        =          0
+    Num_heap_remove_vacuums       =          0
+    The timer values for heap_insert_prepare are:
+    Num_heap_insert_prepare       =          0
+    Total_time_heap_insert_prepare =          0
+    Max_time_heap_insert_prepare  =          0
+    Avg_time_heap_insert_prepare  =          0
+    The timer values for heap_insert_execute are:
+    Num_heap_insert_execute       =          0
+    Total_time_heap_insert_execute =          0
+    Max_time_heap_insert_execute  =          0
+    Avg_time_heap_insert_execute  =          0
+    The timer values for heap_insert_log are:
+    Num_heap_insert_log           =          0
+    Total_time_heap_insert_log    =          0
+    Max_time_heap_insert_log      =          0
+    Avg_time_heap_insert_log      =          0
+    The timer values for heap_delete_prepare are:
+    Num_heap_delete_prepare       =          0
+    Total_time_heap_delete_prepare =          0
+    Max_time_heap_delete_prepare  =          0
+    Avg_time_heap_delete_prepare  =          0
+    The timer values for heap_delete_execute are:
+    Num_heap_delete_execute       =          0
+    Total_time_heap_delete_execute =          0
+    Max_time_heap_delete_execute  =          0
+    Avg_time_heap_delete_execute  =          0
+    The timer values for heap_delete_log are:
+    Num_heap_delete_log           =          0
+    Total_time_heap_delete_log    =          0
+    Max_time_heap_delete_log      =          0
+    Avg_time_heap_delete_log      =          0
+    The timer values for heap_update_prepare are:
+    Num_heap_update_prepare       =          0
+    Total_time_heap_update_prepare =          0
+    Max_time_heap_update_prepare  =          0
+    Avg_time_heap_update_prepare  =          0
+    The timer values for heap_update_execute are:
+    Num_heap_update_execute       =          0
+    Total_time_heap_update_execute =          0
+    Max_time_heap_update_execute  =          0
+    Avg_time_heap_update_execute  =          0
+    The timer values for heap_update_log are:
+    Num_heap_update_log           =          0
+    Total_time_heap_update_log    =          0
+    Max_time_heap_update_log      =          0
+    Avg_time_heap_update_log      =          0
+    The timer values for heap_vacuum_prepare are:
+    Num_heap_vacuum_prepare       =          0
+    Total_time_heap_vacuum_prepare =          0
+    Max_time_heap_vacuum_prepare  =          0
+    Avg_time_heap_vacuum_prepare  =          0
+    The timer values for heap_vacuum_execute are:
+    Num_heap_vacuum_execute       =          0
+    Total_time_heap_vacuum_execute =          0
+    Max_time_heap_vacuum_execute  =          0
+    Avg_time_heap_vacuum_execute  =          0
+    The timer values for heap_vacuum_log are:
+    Num_heap_vacuum_log           =          0
+    Total_time_heap_vacuum_log    =          0
+    Max_time_heap_vacuum_log      =          0
+    Avg_time_heap_vacuum_log      =          0
+    The timer values for heap_stats_sync_bestspace are:
+    Num_heap_stats_sync_bestspace =          0
+    Total_time_heap_stats_sync_bestspace =          0
+    Max_time_heap_stats_sync_bestspace =          0
+    Avg_time_heap_stats_sync_bestspace =          0
+    Num_heap_stats_bestspace_entries =          0
+    Num_heap_stats_bestspace_maxed =          0
+    The timer values for bestspace_add are:
+    Num_bestspace_add             =          0
+    Total_time_bestspace_add      =          0
+    Max_time_bestspace_add        =          0
+    Avg_time_bestspace_add        =          0
+    The timer values for bestspace_del are:
+    Num_bestspace_del             =          0
+    Total_time_bestspace_del      =          0
+    Max_time_bestspace_del        =          0
+    Avg_time_bestspace_del        =          0
+    The timer values for bestspace_find are:
+    Num_bestspace_find            =          0
+    Total_time_bestspace_find     =          0
+    Max_time_bestspace_find       =          0
+    Avg_time_bestspace_find       =          0
+    The timer values for heap_find_page_bestspace are:
+    Num_heap_find_page_bestspace  =          0
+    Total_time_heap_find_page_bestspace =          0
+    Max_time_heap_find_page_bestspace =          0
+    Avg_time_heap_find_page_bestspace =          0
+    The timer values for heap_find_best_page are:
+    Num_heap_find_best_page       =          0
+    Total_time_heap_find_best_page =          0
+    Max_time_heap_find_best_page  =          0
+    Avg_time_heap_find_best_page  =          0
+    The timer values for bt_fix_ovf_oids are:
+    Num_bt_fix_ovf_oids           =          0
+    Total_time_bt_fix_ovf_oids    =          0
+    Max_time_bt_fix_ovf_oids      =          0
+    Avg_time_bt_fix_ovf_oids      =          0
+    The timer values for bt_unique_rlocks are:
+    Num_bt_unique_rlocks          =          0
+    Total_time_bt_unique_rlocks   =          0
+    Max_time_bt_unique_rlocks     =          0
+    Avg_time_bt_unique_rlocks     =          0
+    The timer values for bt_unique_wlocks are:
+    Num_bt_unique_wlocks          =          0
+    Total_time_bt_unique_wlocks   =          0
+    Max_time_bt_unique_wlocks     =          0
+    Avg_time_bt_unique_wlocks     =          0
+    The timer values for bt_leaf are:
+    Num_bt_leaf                   =          0
+    Total_time_bt_leaf            =          0
+    Max_time_bt_leaf              =          0
+    Avg_time_bt_leaf              =          0
+    The timer values for bt_traverse are:
+    Num_bt_traverse               =          5
+    Total_time_bt_traverse        =        162
+    Max_time_bt_traverse          =         51
+    Avg_time_bt_traverse          =         32
+    The timer values for bt_find_unique are:
+    Num_bt_find_unique            =          0
+    Total_time_bt_find_unique     =          0
+    Max_time_bt_find_unique       =          0
+    Avg_time_bt_find_unique       =          0
+    The timer values for bt_find_unique_traverse are:
+    Num_bt_find_unique_traverse   =          5
+    Total_time_bt_find_unique_traverse =        165
+    Max_time_bt_find_unique_traverse =         53
+    Avg_time_bt_find_unique_traverse =         33
+    The timer values for bt_range_search are:
+    Num_bt_range_search           =          0
+    Total_time_bt_range_search    =          0
+    Max_time_bt_range_search      =          0
+    Avg_time_bt_range_search      =          0
+    The timer values for bt_range_search_traverse are:
+    Num_bt_range_search_traverse  =          0
+    Total_time_bt_range_search_traverse =          0
+    Max_time_bt_range_search_traverse =          0
+    Avg_time_bt_range_search_traverse =          0
+    The timer values for bt_insert are:
+    Num_bt_insert                 =          0
+    Total_time_bt_insert          =          0
+    Max_time_bt_insert            =          0
+    Avg_time_bt_insert            =          0
+    The timer values for bt_insert_traverse are:
+    Num_bt_insert_traverse        =          0
+    Total_time_bt_insert_traverse =          0
+    Max_time_bt_insert_traverse   =          0
+    Avg_time_bt_insert_traverse   =          0
+    The timer values for bt_delete_obj are:
+    Num_bt_delete_obj             =          0
+    Total_time_bt_delete_obj      =          0
+    Max_time_bt_delete_obj        =          0
+    Avg_time_bt_delete_obj        =          0
+    The timer values for bt_delete_obj_traverse are:
+    Num_bt_delete_obj_traverse    =          0
+    Total_time_bt_delete_obj_traverse =          0
+    Max_time_bt_delete_obj_traverse =          0
+    Avg_time_bt_delete_obj_traverse =          0
+    The timer values for bt_mvcc_delete are:
+    Num_bt_mvcc_delete            =          0
+    Total_time_bt_mvcc_delete     =          0
+    Max_time_bt_mvcc_delete       =          0
+    Avg_time_bt_mvcc_delete       =          0
+    The timer values for bt_mvcc_delete_traverse are:
+    Num_bt_mvcc_delete_traverse   =          0
+    Total_time_bt_mvcc_delete_traverse =          0
+    Max_time_bt_mvcc_delete_traverse =          0
+    Avg_time_bt_mvcc_delete_traverse =          0
+    The timer values for bt_mark_delete are:
+    Num_bt_mark_delete            =          0
+    Total_time_bt_mark_delete     =          0
+    Max_time_bt_mark_delete       =          0
+    Avg_time_bt_mark_delete       =          0
+    The timer values for bt_mark_delete_traverse are:
+    Num_bt_mark_delete_traverse   =          0
+    Total_time_bt_mark_delete_traverse =          0
+    Max_time_bt_mark_delete_traverse =          0
+    Avg_time_bt_mark_delete_traverse =          0
+    The timer values for bt_undo_insert are:
+    Num_bt_undo_insert            =          0
+    Total_time_bt_undo_insert     =          0
+    Max_time_bt_undo_insert       =          0
+    Avg_time_bt_undo_insert       =          0
+    The timer values for bt_undo_insert_traverse are:
+    Num_bt_undo_insert_traverse   =          0
+    Total_time_bt_undo_insert_traverse =          0
+    Max_time_bt_undo_insert_traverse =          0
+    Avg_time_bt_undo_insert_traverse =          0
+    The timer values for bt_undo_delete are:
+    Num_bt_undo_delete            =          0
+    Total_time_bt_undo_delete     =          0
+    Max_time_bt_undo_delete       =          0
+    Avg_time_bt_undo_delete       =          0
+    The timer values for bt_undo_delete_traverse are:
+    Num_bt_undo_delete_traverse   =          0
+    Total_time_bt_undo_delete_traverse =          0
+    Max_time_bt_undo_delete_traverse =          0
+    Avg_time_bt_undo_delete_traverse =          0
+    The timer values for bt_undo_mvcc_delete are:
+    Num_bt_undo_mvcc_delete       =          0
+    Total_time_bt_undo_mvcc_delete =          0
+    Max_time_bt_undo_mvcc_delete  =          0
+    Avg_time_bt_undo_mvcc_delete  =          0
+    The timer values for bt_undo_mvcc_delete_traverse are:
+    Num_bt_undo_mvcc_delete_traverse =          0
+    Total_time_bt_undo_mvcc_delete_traverse =          0
+    Max_time_bt_undo_mvcc_delete_traverse =          0
+    Avg_time_bt_undo_mvcc_delete_traverse =          0
+    The timer values for bt_vacuum are:
+    Num_bt_vacuum                 =          0
+    Total_time_bt_vacuum          =          0
+    Max_time_bt_vacuum            =          0
+    Avg_time_bt_vacuum            =          0
+    The timer values for bt_vacuum_traverse are:
+    Num_bt_vacuum_traverse        =          0
+    Total_time_bt_vacuum_traverse =          0
+    Max_time_bt_vacuum_traverse   =          0
+    Avg_time_bt_vacuum_traverse   =          0
+    The timer values for bt_vacuum_insid are:
+    Num_bt_vacuum_insid           =          0
+    Total_time_bt_vacuum_insid    =          0
+    Max_time_bt_vacuum_insid      =          0
+    Avg_time_bt_vacuum_insid      =          0
+    The timer values for bt_vacuum_insid_traverse are:
+    Num_bt_vacuum_insid_traverse  =          0
+    Total_time_bt_vacuum_insid_traverse =          0
+    Max_time_bt_vacuum_insid_traverse =          0
+    Avg_time_bt_vacuum_insid_traverse =          0
+    The timer values for vacuum_master are:
+    Num_vacuum_master             =          0
+    Total_time_vacuum_master      =          0
+    Max_time_vacuum_master        =          0
+    Avg_time_vacuum_master        =          0
+    The timer values for vacuum_job are:
+    Num_vacuum_job                =          0
+    Total_time_vacuum_job         =          0
+    Max_time_vacuum_job           =          0
+    Avg_time_vacuum_job           =          0
+    The timer values for vacuum_worker_process_log are:
+    Num_vacuum_worker_process_log =          0
+    Total_time_vacuum_worker_process_log =          0
+    Max_time_vacuum_worker_process_log =          0
+    Avg_time_vacuum_worker_process_log =          0
+    The timer values for vacuum_worker_execute are:
+    Num_vacuum_worker_execute     =          0
+    Total_time_vacuum_worker_execute =          0
+    Max_time_vacuum_worker_execute =          0
+    Avg_time_vacuum_worker_execute =          0
+    Time_get_snapshot_acquire_time =          7
+    Count_get_snapshot_retry      =          0
+    Time_tran_complete_time       =          7
+    The timer values for compute_oldest_visible are:
+    Num_compute_oldest_visible    =          0
+    Total_time_compute_oldest_visible =          0
+    Max_time_compute_oldest_visible =          0
+    Avg_time_compute_oldest_visible =          0
+    Count_get_oldest_mvcc_retry   =          0
     Data_page_buffer_hit_ratio    =     100.00
+    Log_page_buffer_hit_ratio     =       0.00
+    Vacuum_data_page_buffer_hit_ratio =       0.00
+    Vacuum_page_efficiency_ratio  =       0.00
+    Vacuum_page_fetch_ratio       =       0.00
+    Data_page_fix_lock_acquire_time_msec =       0.00
+    Data_page_fix_hold_acquire_time_msec =       0.00
+    Data_page_fix_acquire_time_msec =       0.25
+    Data_page_allocate_time_ratio =     100.00
+    Data_page_total_promote_success =       0.00
+    Data_page_total_promote_fail  =       0.00
+    Data_page_total_promote_time_msec =       0.00
+    Num_unfix_void_to_private_top =          0
+    Num_unfix_void_to_private_mid =          0
+    Num_unfix_void_to_shared_mid  =          0
+    Num_unfix_lru1_private_to_shared_mid =          0
+    Num_unfix_lru2_private_to_shared_mid =          0
+    Num_unfix_lru3_private_to_shared_mid =          0
+    Num_unfix_lru2_private_keep   =          0
+    Num_unfix_lru2_shared_keep    =          0
+    Num_unfix_lru2_private_to_top =          0
+    Num_unfix_lru2_shared_to_top  =          0
+    Num_unfix_lru3_private_to_top =          4
+    Num_unfix_lru3_shared_to_top  =          0
+    Num_unfix_lru1_private_keep   =          3
+    Num_unfix_lru1_shared_keep    =         36
+    Num_unfix_void_to_private_mid_vacuum =          0
+    Num_unfix_lru1_any_keep_vacuum =          0
+    Num_unfix_lru2_any_keep_vacuum =          0
+    Num_unfix_lru3_any_keep_vacuum =          0
+    Num_unfix_void_aout_found     =          0
+    Num_unfix_void_aout_not_found =          0
+    Num_unfix_void_aout_found_vacuum =          0
+    Num_unfix_void_aout_not_found_vacuum =          0
+    Num_data_page_hash_anchor_waits =          0
+    Time_data_page_hash_anchor_wait =          0
+    The timer values for flush_collect are:
+    Num_flush_collect             =          0
+    Total_time_flush_collect      =          0
+    Max_time_flush_collect        =          0
+    Avg_time_flush_collect        =          0
+    The timer values for flush_flush are:
+    Num_flush_flush               =          0
+    Total_time_flush_flush        =          0
+    Max_time_flush_flush          =          0
+    Avg_time_flush_flush          =          0
+    The timer values for flush_sleep are:
+    Num_flush_sleep               =          0
+    Total_time_flush_sleep        =          0
+    Max_time_flush_sleep          =          0
+    Avg_time_flush_sleep          =          0
+    The timer values for flush_collect_per_page are:
+    Num_flush_collect_per_page    =          0
+    Total_time_flush_collect_per_page =          0
+    Max_time_flush_collect_per_page =          0
+    Avg_time_flush_collect_per_page =          0
+    The timer values for flush_flush_per_page are:
+    Num_flush_flush_per_page      =          0
+    Total_time_flush_flush_per_page =          0
+    Max_time_flush_flush_per_page =          0
+    Avg_time_flush_flush_per_page =          0
+    Num_data_page_writes          =          0
+    Num_data_page_dirty_to_post_flush =          0
+    Num_data_page_skipped_flush   =          0
+    Num_data_page_skipped_flush_need_wal =          0
+    Num_data_page_skipped_flush_already_flushed =          0
+    Num_data_page_skipped_flush_fixed_or_hot =          0
+    The timer values for compensate_flush are:
+    Num_compensate_flush          =          0
+    Total_time_compensate_flush   =          0
+    Max_time_compensate_flush     =          0
+    Avg_time_compensate_flush     =          0
+    The timer values for assign_direct_bcb are:
+    Num_assign_direct_bcb         =          0
+    Total_time_assign_direct_bcb  =          0
+    Max_time_assign_direct_bcb    =          0
+    Avg_time_assign_direct_bcb    =          0
+    The timer values for wake_flush_waiter are:
+    Num_wake_flush_waiter         =          0
+    Total_time_wake_flush_waiter  =          0
+    Max_time_wake_flush_waiter    =          0
+    Avg_time_wake_flush_waiter    =          0
+    The timer values for alloc_bcb are:
+    Num_alloc_bcb                 =          0
+    Total_time_alloc_bcb          =          0
+    Max_time_alloc_bcb            =          0
+    Avg_time_alloc_bcb            =          0
+    The timer values for alloc_bcb_search_victim are:
+    Num_alloc_bcb_search_victim   =          0
+    Total_time_alloc_bcb_search_victim =          0
+    Max_time_alloc_bcb_search_victim =          0
+    Avg_time_alloc_bcb_search_victim =          0
+    The timer values for alloc_bcb_cond_wait_high_prio are:
+    Num_alloc_bcb_cond_wait_high_prio =          0
+    Total_time_alloc_bcb_cond_wait_high_prio =          0
+    Max_time_alloc_bcb_cond_wait_high_prio =          0
+    Avg_time_alloc_bcb_cond_wait_high_prio =          0
+    The timer values for alloc_bcb_cond_wait_low_prio are:
+    Num_alloc_bcb_cond_wait_low_prio =          0
+    Total_time_alloc_bcb_cond_wait_low_prio =          0
+    Max_time_alloc_bcb_cond_wait_low_prio =          0
+    Avg_time_alloc_bcb_cond_wait_low_prio =          0
+    Num_alloc_bcb_prioritize_vacuum =          0
+    Num_victim_use_invalid_bcb    =          0
+    The timer values for alloc_bcb_get_victim_search_own_private_list are:
+    Num_alloc_bcb_get_victim_search_own_private_list =          0
+    Total_time_alloc_bcb_get_victim_search_own_private_list =          0
+    Max_time_alloc_bcb_get_victim_search_own_private_list =          0
+    Avg_time_alloc_bcb_get_victim_search_own_private_list =          0
+    The timer values for alloc_bcb_get_victim_search_others_private_list are:
+    Num_alloc_bcb_get_victim_search_others_private_list =          0
+    Total_time_alloc_bcb_get_victim_search_others_private_list =          0
+    Max_time_alloc_bcb_get_victim_search_others_private_list =          0
+    Avg_time_alloc_bcb_get_victim_search_others_private_list =          0
+    The timer values for alloc_bcb_get_victim_search_shared_list are:
+    Num_alloc_bcb_get_victim_search_shared_list =          0
+    Total_time_alloc_bcb_get_victim_search_shared_list =          0
+    Max_time_alloc_bcb_get_victim_search_shared_list =          0
+    Avg_time_alloc_bcb_get_victim_search_shared_list =          0
+    Num_victim_assign_direct_vacuum_void =          0
+    Num_victim_assign_direct_vacuum_lru =          0
+    Num_victim_assign_direct_flush =          0
+    Num_victim_assign_direct_panic =          0
+    Num_victim_assign_direct_adjust_lru =          0
+    Num_victim_assign_direct_adjust_lru_to_vacuum =          0
+    Num_victim_assign_direct_search_for_flush =          0
+    Num_victim_shared_lru_success =          0
+    Num_victim_own_private_lru_success =          0
+    Num_victim_other_private_lru_success =          0
+    Num_victim_shared_lru_fail    =          0
+    Num_victim_own_private_lru_fail =          0
+    Num_victim_other_private_lru_fail =          0
+    Num_victim_all_lru_fail       =          0
+    Num_victim_get_from_lru       =          0
+    Num_victim_get_from_lru_was_empty =          0
+    Num_victim_get_from_lru_fail  =          0
+    Num_victim_get_from_lru_bad_hint =          0
+    Num_lfcq_prv_get_total_calls  =          0
+    Num_lfcq_prv_get_empty        =          0
+    Num_lfcq_prv_get_big          =          0
+    Num_lfcq_shr_get_total_calls  =          0
+    Num_lfcq_shr_get_empty        =          0
+    The timer values for DWB_flush_block are:
+    Num_DWB_flush_block           =          0
+    Total_time_DWB_flush_block    =          0
+    Max_time_DWB_flush_block      =          0
+    Avg_time_DWB_flush_block      =          0
+    The timer values for DWB_file_sync_helper are:
+    Num_DWB_file_sync_helper      =          0
+    Total_time_DWB_file_sync_helper =          0
+    Max_time_DWB_file_sync_helper =          0
+    Avg_time_DWB_file_sync_helper =          0
+    The timer values for DWB_flush_block_cond_wait are:
+    Num_DWB_flush_block_cond_wait =          0
+    Total_time_DWB_flush_block_cond_wait =          0
+    Max_time_DWB_flush_block_cond_wait =          0
+    Avg_time_DWB_flush_block_cond_wait =          0
+    The timer values for DWB_flush_block_sort are:
+    Num_DWB_flush_block_sort      =          0
+    Total_time_DWB_flush_block_sort =          0
+    Max_time_DWB_flush_block_sort =          0
+    Avg_time_DWB_flush_block_sort =          0
+    The timer values for DWB_decache_pages_after_write are:
+    Num_DWB_decache_pages_after_write =          0
+    Total_time_DWB_decache_pages_after_write =          0
+    Max_time_DWB_decache_pages_after_write =          0
+    Avg_time_DWB_decache_pages_after_write =          0
+    The timer values for DWB_wait_flush_block are:
+    Num_DWB_wait_flush_block      =          0
+    Total_time_DWB_wait_flush_block =          0
+    Max_time_DWB_wait_flush_block =          0
+    Avg_time_DWB_wait_flush_block =          0
+    The timer values for DWB_wait_file_sync_helper are:
+    Num_DWB_wait_file_sync_helper =          0
+    Total_time_DWB_wait_file_sync_helper =          0
+    Max_time_DWB_wait_file_sync_helper =          0
+    Avg_time_DWB_wait_file_sync_helper =          0
+    The timer values for DWB_flush_force are:
+    Num_DWB_flush_force           =          0
+    Total_time_DWB_flush_force    =          0
+    Max_time_DWB_flush_force      =          0
+    Avg_time_DWB_flush_force      =          0
+    The timer values for Log_LZ4_compress are:
+    Num_Log_LZ4_compress          =          0
+    Total_time_Log_LZ4_compress   =          0
+    Max_time_Log_LZ4_compress     =          0
+    Avg_time_Log_LZ4_compress     =          0
+    The timer values for Log_LZ4_decompress are:
+    Num_Log_LZ4_decompress        =          0
+    Total_time_Log_LZ4_decompress =          0
+    Max_time_Log_LZ4_decompress   =          0
+    Avg_time_Log_LZ4_decompress   =          0
+    Num_alloc_bcb_wait_threads_high_priority =          0
+    Num_alloc_bcb_wait_threads_low_priority =          0
+    Num_flushed_bcbs_wait_for_direct_victim =          0
+    Num_lfcq_big_private_lists    =          0
+    Num_lfcq_private_lists        =          1
+    Num_lfcq_shared_lists         =          0
+    Num_data_page_avoid_dealloc   =          0
+    Num_data_page_avoid_victim    =          0
+    Num_data_page_fix_ext:
+    WORKER,PAGE_HEAP     ,OLD_PAGE_IN_PB    ,READ ,UNCOND      =          8
+    WORKER,PAGE_VOLHEADER,OLD_PAGE_IN_PB    ,READ ,UNCOND      =         30
+    WORKER,PAGE_VOLBITMAP,OLD_PAGE_IN_PB    ,READ ,UNCOND      =         15
+    WORKER,PAGE_BTREE_R  ,OLD_PAGE_IN_PB    ,READ ,UNCOND      =          5
+    Num_data_page_promote_ext:
+    Num_data_page_promote_time_ext:
+    Num_data_page_unfix_ext:
+    WORKER,PAGE_HEAP     ,BUF_NON_DIRTY,HOLDER_NON_DIRTY,READ  =          8
+    WORKER,PAGE_VOLHEADER,BUF_NON_DIRTY,HOLDER_NON_DIRTY,READ  =         30
+    WORKER,PAGE_VOLBITMAP,BUF_NON_DIRTY,HOLDER_NON_DIRTY,READ  =         15
+    WORKER,PAGE_BTREE_R  ,BUF_NON_DIRTY,HOLDER_NON_DIRTY,READ  =          5
+    Time_data_page_lock_acquire_time:
+    Time_data_page_hold_acquire_time:
+    Time_data_page_fix_acquire_time:
+    WORKER,PAGE_HEAP     ,OLD_PAGE_IN_PB    ,READ ,UNCOND      =               27
+    WORKER,PAGE_VOLHEADER,OLD_PAGE_IN_PB    ,READ ,UNCOND      =              167
+    WORKER,PAGE_VOLBITMAP,OLD_PAGE_IN_PB    ,READ ,UNCOND      =               40
+    WORKER,PAGE_BTREE_R  ,OLD_PAGE_IN_PB    ,READ ,UNCOND      =               23
+    Num_mvcc_snapshot_ext:
+    DELETE  ,INS_VACUUMED      ,VISIBLE   =                5
+    SNAPSHOT,INS_VACUUMED      ,VISIBLE   =                5
+    Time_obj_lock_acquire_time:
+    Thread_stats_counters_timers:
+    Thread_pgbuf_daemon_stats_counters_timers:
+    Num_dwb_flushed_block_volumes:
+    Thread_loaddb_stats_counters_timers:
+    
     csql> ;.hist off
 
 **Displaying query execution time (;TIme)**
 
 The **;TIme** session command can be set to display the elapsed time to execute the query. It can be set to **ON** or **OFF**. The current setting is displayed if there is no value specified. The default value is **ON**.
 
-The **SELECT** query includes the time of outputting the fetched records. Therefore, to check the execution time of complete output of all records in the **SELECT** query, use the **-\-no-pager** option while executing the CSQC interpreter. ::
+The **SELECT** query includes the time of outputting the fetched records. Therefore, to check the execution time of complete output of all records in the **SELECT** query, use the **\-\-no-pager** option while executing the CSQC interpreter. ::
 
     $ csql -u dba --no-pager demodb
     csql> ;time ON
@@ -805,9 +1395,34 @@ You can use **;HISTORYRead** session command to read input with history number i
 
 **Calling the default editor (;EDIT)**
 
-This command calls the specified editor. The default editor is **vi** on Linux **Notepad** on Windows environment. Use **;EDITOR_Cmd** command to specify a different editor. ::
+This command calls the specified editor. The default editor is **vi** on Linux **Notepad** on Windows environment. Use **;EDITOR_Cmd** command to specify a different editor.
+
+.. option:: format / fmt
+
+The **format** or **fmt** option allows you to edit after formatting the SQL statement. Formatter registration uses the **;FOrmatter_cmd** session command. ::
 
     csql> ;edit
+    SELECT * FROM t1
+
+    csql> ;edit format
+    SELECT
+     *
+    FROM
+     t1
+
+**Specifying the formatter (;FOrmatter_cmd)**
+
+This command specifies the formatter to be used with **;EDIT** session command. The user can set it up and use it as shown in the example, and OS environment variable(FORMATTER) can be set up in advance for use. ::
+
+    csql> ;formatter_cmd /usr/local/bin/fsqlf
+
+    $ setenv FORMATTER /home/cubrid/bin/fsqlf
+
+.. note::
+
+        The use of Free SQL Formatter is recommended.
+
+        Download URL: https://github.com/CUBRID/fsqlf/releases/download/v.1.0.0-csql.1/fsqlf-1.0.0.csql.1.gz
 
 **Specifying the editor (;EDITOR_Cmd)**
 
@@ -815,3 +1430,36 @@ This command specifies the editor to be used with **;EDIT** session command. As 
 
     csql> ;editor_cmd emacs
     csql> ;edit
+
+**Specifying the single line mode (;SIngleline)**
+
+This command sets single line mode to **ON** or **OFF** (default value is **ON**). If you type semi-colon(;) and ENTER key in the single line ON mode, SQL statements are executed. If single line mode is set to **OFF**, multiple SQL statements are retrieved and executed at once with the **;xr** or **;r** session command. If any value is not specified, current configured value is applied by default. ::
+
+    csql> ;singleline off
+    SINGLE IS OFF
+    csql> ;singleline
+    SINGLE IS OFF
+
+**Switching csql session(;Connect)**
+
+This is a session command to switch the connection to another user without terminating CSQL. The command format is as follows.
+
+* user: Username to connect
+* database: Database name to connect (if omitted, currently connected database)
+* host: Hostname to connect to (if omitted, localhost) ::
+
+     csql> ;connect public
+     csql> ;connect dba
+
+     csql> ;connect public testdb
+     csql> ;connect dba demodb
+
+     csql> ;connect Peter testdb@192.168.0.1
+     csql> ;connect public demodb@localhost
+
+.. warning::
+
+     #. When ';connect' session command executes, the current CSQL session connection is disconnect regardless of session transition success or not. 
+     #. When CSQL is in system administrator mode, ';connect' session command cannot be used (When entering CSQL with an csql -u dba \-\-sysadm demodb form command).
+
+

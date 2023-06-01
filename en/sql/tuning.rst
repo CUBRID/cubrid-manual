@@ -5,9 +5,9 @@
 Updating Statistics
 ===================
 
-Statistics for tables and indexes enables queries of the database system to process efficiently. Statistics are updated automatically when DDL statements such as **CREATE TABLE**, **CREATE**, **DROP INDEX** are executed. However, since it is not automatically updated when DML statements such as **INSERT** and **DELETE** is performed, it is necessary to update the statistics by **UPDATE STATISTICS** statement(See :ref:`info-stats`).
+Statistics for tables and indexes enables queries of the database system to process efficiently. Statistics are not updated automatically for DDL statements such as **CREATE INDEX**, **CREATE TABLE** and DML statements such as **INSERT** and **DELETE**. **UPDATE STATISTICS** statement is the only way to update statistics. So it is necessary to update the statistics by **UPDATE STATISTICS** statement(See :ref:`info-stats`).
 
-**UPDATE STATISTICS** statement is recommended only when a mass of **INSERT** or **DELETE** statements make the big difference between the statistics and the actual information.
+**UPDATE STATISTICS** statement is recommended to be executed periodically. It is also recommended to execute when a new index is added or when a mass of **INSERT** or **DELETE** statements make the big difference between the statistics and the actual information.
 
 ::
 
@@ -17,7 +17,7 @@ Statistics for tables and indexes enables queries of the database system to proc
   
     UPDATE STATISTICS ON CATALOG CLASSES [WITH FULLSCAN]; 
 
-*   **WITH FULLSCAN**: It updates the statistics with all the data in the specified table. If this is omitted, it updates the statistics with sampling data. Most cases are enough to update statistics with sampling data; it is recommended not to use **WITH FULLSCAN** because it can be a burden to the system.
+*   **WITH FULLSCAN**: It updates the statistics with all the data in the specified table. If this is omitted, it updates the statistics with sampling data. The sampling data is 7 pages regardless of total pages of table.
 
     .. note:: 
 
@@ -408,7 +408,7 @@ In the above example, under lines of "Trace Statistics:" are the result of traci
 
 *   **SELECT** (time: 1, fetch: 975, ioread: 2)
     
-    *   time: 4 => Total query time took 4ms. 
+    *   time: 1 => Total query time took 1ms. 
     *   fetch: 975 => 975 times were fetched regarding pages. (not the number of pages, but the count of accessing pages. even if the same pages are fetched, the count is increased.).
     *   ioread: disk accessed 2 times.
 
@@ -632,7 +632,7 @@ Using hints can affect the performance of query execution. You can allow the que
     NO_COVERING_IDX |
     NO_MULTI_RANGE_OPT |
     NO_SORT_LIMIT |
-    NO_PRED_PUSH |
+    NO_PUSH_PRED |
     NO_MERGE |
     NO_HASH_AGGREGATE |
     NO_HASH_LIST_SCAN |
@@ -651,7 +651,7 @@ Using hints can affect the performance of query execution. You can allow the que
 SQL hints are specified by using a plus sign(+) to comments. To use a hint, there are three styles as being introduced on :doc:`comment`. Therefore, also SQL hint can be used as three styles.
 
 *  /\*+ hint \*/
-*   -\-+ hint
+*   \-\-+ hint
 *   //+ hint
 
 The hint comment must appear after the keyword such as **SELECT**, **UPDATE** or **DELETE**, and the comment must begin with a plus sign (+), following the comment delimiter.  When you specify several hints, they are  separated by blanks.
@@ -675,7 +675,7 @@ The following hints can be specified in **UPDATE**, **DELETE** and **SELECT** st
 *   **NO_COVERING_IDX**: This is a hint not to use the covering index. For details, see :ref:`covering-index`.
 *   **NO_MULTI_RANGE_OPT**: This is a hint not to use the multi-key range optimization. For details, see :ref:`multi-key-range-opt`.
 *   **NO_SORT_LIMIT**: This is a hint not to use the SORT-LIMIT optimization. For more details, see :ref:`sort-limit-optimization`.
-*   **NO_PRED_PUSH**: This is a hint not to use the PREDICATE-PUSH optimization.
+*   **NO_PUSH_PRED**: This is a hint not to use the PREDICATE-PUSH optimization.
 *   **NO_MERGE**: This is a hint not to use the VIEW_MERGE optimization.
 
 .. _no-hash-aggregate:

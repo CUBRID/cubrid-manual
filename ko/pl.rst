@@ -6,30 +6,31 @@
 Overview
 *****************************
 
-Stored Procedure 생성
-======================
+Stored Procedure/Function 생성
+==============================
 
-PL/CSQL은 Stored Procedure, 즉 프로시저와 함수를 생성하는데 사용된다.
+PL/CSQL은 Stored Procedure/Function을 생성하는데 사용된다.
 다음 문법을 따르는 CREATE PROCEDURE 문과 CREATE FUNCTION 문의 AS (또는 IS) 키워드 뒤에 PL/CSQL 코드를 써서
-현재 생성하고 있는 Stored Procedure의 동작을 기술한다.
+현재 생성하고 있는 Stored Procedure/Function의 동작을 기술한다.
+
 ::
 
     <create_procedure> ::=
         CREATE [ OR REPLACE ] PROCEDURE <identifier> [ ( <seq_of_parameters> ) ]
-        { IS | AS } [ <seq_of_declare_specs> ] <body> ;
+        { IS | AS } [ LANGUAGE PLCSQL ] [ <seq_of_declare_specs> ] <body> ;
     <create_function> ::=
         CREATE [ OR REPLACE ] FUNCTION <identifier> [ ( <seq_of_parameters> ) ] RETURN <type_spec>
-        { IS | AS } [ <seq_of_declare_specs> ] <body> ;
+        { IS | AS } [ LANGUAGE PLCSQL ] [ <seq_of_declare_specs> ] <body> ;
 
 위 문법에서 프로시저나 함수의 *body*\는 PL/CSQL 실행문들을 포함하고
 그 앞의 선언부 *seq_of_declare_specs*\는 실행문들 안에서 사용될 변수, 상수, Exception 등을 선언한다.
-문법 요소들에 대한 자세한 내용은 :ref:`선언문 <decl>`\과 :ref:`실행문 <stmt>` 절을 참고한다.
+이들 문법 요소에 대한 자세한 내용은 :ref:`선언문 <decl>`\과 :ref:`실행문 <stmt>` 절을 참고한다.
 
-Stored Procedure는 Auto Commit 기능이 언제나 비활성화 된 상태로 실행된다.
+Stored Procedure/Function은 Auto Commit 기능이 언제나 비활성화 된 상태로 실행된다.
 이는 호출한 세션에서 Auto Commit 기능이 활성화 되어 있어도 마찬가지이다.
 
-Stored Procedure 안에서 실행되는 COMMIT, ROLLBACK 문의 의미는
-그 Stored Procedure가 Autonomous Transaction으로 설정되어 있는가 아닌가에 따라 달라진다.
+Stored Procedure/Function 안에서 실행되는 COMMIT, ROLLBACK 문의 의미는
+그 Stored Procedure/Function이 Autonomous Transaction으로 설정되어 있는가 아닌가에 따라 달라진다.
 관련 내용은 :ref:`Autonomous Transaction 선언 <auto_tran>`\을 참고한다.
 
 다음은 PL/CSQL을 사용해서 작성한 프로시저와 함수의 예이다.
@@ -63,10 +64,10 @@ Stored Procedure 안에서 실행되는 COMMIT, ROLLBACK 문의 의미는
         WHERE code = c;
 
         n_deleted := SQL%ROWCOUNT;   -- number of deleted rows
-        put_line(n_deleted || ' rows deleted');
+        DBMS_OUTPUT.put_line(n_deleted || ' rows deleted');
     EXCEPTION
         WHEN OTHERS THEN
-            put_line('exception occurred');
+            DBMS_OUTPUT.put_line('exception occurred');
     END;
 
 .. code-block:: sql
@@ -86,10 +87,10 @@ Stored Procedure 안에서 실행되는 COMMIT, ROLLBACK 문의 의미는
         END IF;
     EXCEPTION
         WHEN invalid_input THEN
-            put_line('invalid input: ' || n);
+            DBMS_OUTPUT.put_line('invalid input: ' || n);
             RETURN -1;
         WHEN OTHERS THEN
-            put_line('unknown exception');
+            DBMS_OUTPUT.put_line('unknown exception');
             RETURN -1;
     END;
 
@@ -104,6 +105,7 @@ SQL 구문 중에 다음에 해당하는 것들을 PL/CSQL 실행문으로 직�
 * SELECT
 * INSERT, UPDATE, DELETE, MERGE, REPLACE
 * COMMIT, ROLLBACK
+* TRUNCATE
 
 위 목록에 포함되지 않는 다른 SQL 문들은 직접 사용할 수는 없으나,
 아래에서 설명하는 Dynamic SQL 문을 써서 실행할 수 있다.
@@ -140,7 +142,7 @@ SQL 구문의 문법과 의미는 CUBRID 매뉴얼 중
     BEGIN
         -- For 루프 안에서의 SELECT 문
         FOR r IN (SELECT host_year, score FROM history WHERE athlete = p_name) LOOP
-            put_line('host_year: ' || r.host_year || ' score: ' || r.score);
+            DBMS_OUTPUT.put_line('host_year: ' || r.host_year || ' score: ' || r.score);
         END LOOP;
     END;
 
@@ -155,7 +157,7 @@ SQL 구문의 문법과 의미는 CUBRID 매뉴얼 중
         WHERE athlete = p_name;
     BEGIN
         FOR r IN my_cursor LOOP
-            put_line('host_year: ' || r.host_year || ' score: ' || r.score);
+            DBMS_OUTPUT.put_line('host_year: ' || r.host_year || ' score: ' || r.score);
         END LOOP;
     END;
 
@@ -164,9 +166,9 @@ SQL 구문의 문법과 의미는 CUBRID 매뉴얼 중
 Dynamic SQL
 ==================
 
-Dynamic SQL은 실행 시간에 SQL 구문에 해당하는 문자열을 조합하여
+Dynamic SQL은 실행 시간에 SQL 구문에 해당하는 문자열을 만들어
 :ref:`EXECUTE IMMEDIATE <exec_imme>` 문으로 실행하는 방식이다.
-Dynamic SQL은 다음 두 가지 경우에 필요하다.
+Dynamic SQL은 주로 다음 두 가지 경우에 필요하다.
 
 * 실행하려는 SQL 구문을 프로그램 작성 시에 결정하는 것이 어렵거나 불가능한 경우
 * DDL 문처럼 Static SQL이 지원하지 않는 구문을 실행해야 할 경우
@@ -191,18 +193,18 @@ Dynamic SQL은 다음 두 가지 경우에 필요하다.
 ==================
 
 식별자, 예약어, 주석, 리터럴을 작성할 때 Static/Dynamic SQL 안에서는
-`CUBRID SQL의 작성 규칙 <https://www.cubrid.org/manual/ko/11.2/sql/syntax.html>`_\을 따른다.
+`SQL의 작성 규칙 <https://www.cubrid.org/manual/ko/11.2/sql/syntax.html>`_\을 따른다.
 
 Static/Dynamic SQL 밖의 PL/CSQL 문 작성 규칙도 대체로 같은 규칙을 따르지만 다음 몇 가지 예외가 있다.
 
-* CUBRID SQL과 달리 식별자에 '#'을 쓸 수 없다. 즉, 식별자는 영문 대소문자, 한글, 숫자, '_'(underscore)로만 이루어져야 한다.
+* SQL과 달리 식별자에 '#'을 쓸 수 없다. 즉, 식별자는 영문 대소문자, 한글, 숫자, '_'(underscore)로만 이루어져야 한다.
 * 큰따옴표, 대괄호, 백틱 부호로 둘러싸더라도 식별자에 특수 문자를 쓸 수 없다.
-  큰따옴표 등의 구분자를 제외하면 영문 대소문자, 숫자, '_'(underscore)만 사용 가능하다.
-* no_backslash_escapes 설정 파라미터값과 관계 없이 backslash 문자는 escape 문자로 사용되지 않는다.
-* oracle_style_empty_string 설정 파라미터값과 관계 없이 빈 문자열을 NULL과 동일시하지 않는다.
+  영문 대소문자, 한글, 숫자, '_'(underscore)만 사용 가능하다.
+* no_backslash_escapes 설정 파라메터 값과 관계 없이 backslash 문자는 escape 문자로 사용되지 않는다.
+* oracle_style_empty_string 설정 파라메터 값과 관계 없이 빈 문자열을 NULL과 동일시하지 않는다.
 * 비트열 리터럴을 사용할 수 없다. Static/Dynamic SQL 밖의 PL/CSQL 문에서는 비트열 타입을 지원하지 않는다.
 
-.. rubric:: 허용되는 식별자
+.. rubric:: 허용되는 식별자의 예
 
 ::
 
@@ -211,7 +213,7 @@ Static/Dynamic SQL 밖의 PL/CSQL 문 작성 규칙도 대체로 같은 규칙�
     athleteName2
     "select"        // " "로 둘러싸인 예약어
 
-.. rubric:: 허용되지 않는 식별자
+.. rubric:: 허용되지 않는 식별자의 예
 
 ::
 
@@ -221,73 +223,51 @@ Static/Dynamic SQL 밖의 PL/CSQL 문 작성 규칙도 대체로 같은 규칙�
     [a@b]           // [ ]로 둘러싸더라도 특수문자 불가
     select          // 예약어
 
-PL/CSQL의 예약어는 기존의 `CUBRID SQL의 예약어 <https://www.cubrid.org/manual/ko/11.2/sql/keyword.html#id1>`_\에
+PL/CSQL의 예약어는 기존의 `SQL의 예약어 <https://www.cubrid.org/manual/ko/11.2/sql/keyword.html#id1>`_\에
 아래 표에 나열한 내용을 추가한 단어들이다.
-Static/Dynamic SQL 밖의 PL/CSQL 문에서 아래 표의 단어들을 변수, 상수, Exception, 내부 함수, 내부 프로시저
+Static/Dynamic SQL 밖의 PL/CSQL 문에서 아래 표의 단어들을 변수, 상수, Exception, 내부 프로시저, 내부 함수
 등의 이름을 나타내는 식별자로 쓸 수 없다.
-단, CUBRID SQL 문에서처럼 큰따옴표(" "), 대괄호([ ]), 백틱(\` \`)으로 감싸면 식별자로 쓸 수 있다.
+단, SQL 문에서처럼 큰따옴표(" "), 대괄호([ ]), 백틱(\` \`)으로 감싸면 식별자로 쓸 수 있다.
 
-+-------------------+-------------------+-------------------+
-| AND               | AS                | BEGIN             |
-+-------------------+-------------------+-------------------+
-| BETWEEN           | BIGINT            | BOOLEAN           |
-+-------------------+-------------------+-------------------+
-| BY                | CASE              | CHAR              |
-+-------------------+-------------------+-------------------+
-| CLOSE             | COMMIT            | CONSTANT          |
-+-------------------+-------------------+-------------------+
-| CONTINUE          | CREATE            | CURSOR            |
-+-------------------+-------------------+-------------------+
-| DATE              | DATETIME          | DATETIMELTZ       |
-+-------------------+-------------------+-------------------+
-| DATETIMETZ        | DEC               | DECIMAL           |
-+-------------------+-------------------+-------------------+
-| DECLARE           | DEFAULT           | DIV               |
-+-------------------+-------------------+-------------------+
-| DOUBLE            | ELSE              | ELSIF             |
-+-------------------+-------------------+-------------------+
-| END               | ESCAPE            | EXCEPTION         |
-+-------------------+-------------------+-------------------+
-| EXECUTE           | EXIT              | FALSE             |
-+-------------------+-------------------+-------------------+
-| FETCH             | FLOAT             | FOR               |
-+-------------------+-------------------+-------------------+
-| FUNCTION          | IF                | IMMEDIATE         |
-+-------------------+-------------------+-------------------+
-| IN                | INT               | INTEGER           |
-+-------------------+-------------------+-------------------+
-| INTO              | IS                | LIKE              |
-+-------------------+-------------------+-------------------+
-| LIST              | LOOP              | MOD               |
-+-------------------+-------------------+-------------------+
-| MULTISET          | NOT               | NULL              |
-+-------------------+-------------------+-------------------+
-| NUMERIC           | OPEN              | OR                |
-+-------------------+-------------------+-------------------+
-| OUT               | PRAGMA            | PROCEDURE         |
-+-------------------+-------------------+-------------------+
-| RAISE             | REAL              | REPLACE           |
-+-------------------+-------------------+-------------------+
-| RETURN            | REVERSE           | ROLLBACK          |
-+-------------------+-------------------+-------------------+
-| SEQUENCE          | SET               | SETEQ             |
-+-------------------+-------------------+-------------------+
-| SETNEQ            | SHORT             | SMALLINT          |
-+-------------------+-------------------+-------------------+
-| SQL               | STRING            | SUBSET            |
-+-------------------+-------------------+-------------------+
-| SUBSETEQ          | SUPERSET          | SUPERSETEQ        |
-+-------------------+-------------------+-------------------+
-| SYS_REFCURSOR     | THEN              | TIME              |
-+-------------------+-------------------+-------------------+
-| TIMESTAMP         | TIMESTAMPLTZ      | TIMESTAMPTZ       |
-+-------------------+-------------------+-------------------+
-| TRUE              | USING             | VARCHAR           |
-+-------------------+-------------------+-------------------+
-| WHEN              | WHILE             | WORK              |
-+-------------------+-------------------+-------------------+
-| XOR               |                   |                   |
-+-------------------+-------------------+-------------------+
++---------------------------------------------------------------------------------------+
+|   AND, AS, AUTONOMOUS_TRANSACTION                                                     |
++---------------------------------------------------------------------------------------+
+|   BEGIN, BETWEEN, BIGINT, BOOLEAN, BY                                                 |
++---------------------------------------------------------------------------------------+
+|   CASE, CHAR, CHARACTER, CLOSE, COMMIT, CONSTANT, CONTINUE, CREATE, CURSOR            |
++---------------------------------------------------------------------------------------+
+|   DATE, DATETIME, DBMS_OUTPUT, DEC, DECIMAL, DECLARE, DEFAULT, DELETE, DIV, DOUBLE    |
++---------------------------------------------------------------------------------------+
+|   ELSE, ELSIF, END, ESCAPE, EXCEPTION, EXECUTE, EXIT                                  |
++---------------------------------------------------------------------------------------+
+|   FALSE, FETCH, FLOAT, FOR, FUNCTION                                                  |
++---------------------------------------------------------------------------------------+
+|   IF, IMMEDIATE, IN, INOUT, INSERT, INT, INTEGER, INTO, IS                            |
++---------------------------------------------------------------------------------------+
+|   LANGUAGE, LIKE, LOOP                                                                |
++---------------------------------------------------------------------------------------+
+|   MERGE, MOD                                                                          |
++---------------------------------------------------------------------------------------+
+|   NOT, NULL, NUMERIC                                                                  |
++---------------------------------------------------------------------------------------+
+|   OF, OPEN, OR, OUT                                                                   |
++---------------------------------------------------------------------------------------+
+|   PLCSQL, PRAGMA, PRECISION, PROCEDURE                                                |
++---------------------------------------------------------------------------------------+
+|   RAISE, REAL, REPLACE, RETURN, REVERSE, ROLLBACK                                     |
++---------------------------------------------------------------------------------------+
+|   SELECT, SHORT, SMALLINT, SQL, SQLCODE, SQLERRM, STRING, SYS_REFCURSOR               |
++---------------------------------------------------------------------------------------+
+|   THEN, TIME, TIMESTAMP, TRUE, TRUNCATE                                               |
++---------------------------------------------------------------------------------------+
+|   UPDATE, USING                                                                       |
++---------------------------------------------------------------------------------------+
+|   VARCHAR, VARYING                                                                    |
++---------------------------------------------------------------------------------------+
+|   WHEN, WHILE, WITH, WORK                                                             |
++---------------------------------------------------------------------------------------+
+|   XOR                                                                                 |
++---------------------------------------------------------------------------------------+
 
 ..
     (TODO) examples on comments and literals
@@ -298,18 +278,21 @@ Static/Dynamic SQL 밖의 PL/CSQL 문에서 아래 표의 단어들을 변수, �
 데이터 타입
 ==================
 
-Static/Dynamic SQL에서는 CUBRID SQL에서 제공하는 모든 데이터 타입을 쓸 수 있다.
-CUBRID SQL의 데이터 타입 관련해서는
-`데이터 타입 <https://www.cubrid.org/manual/ko/11.2/sql/datatype_index.html>`_\을 참고한다.
+Static/Dynamic SQL에서는 SQL에서 제공하는 모든
+`데이터 타입 <https://www.cubrid.org/manual/ko/11.2/sql/datatype_index.html>`_\을 쓸 수 있다.
 
 반면, Static/Dynamic SQL 밖의 PL/CSQL 문에서 사용할 수 있는 데이터 타입은
-BOOLEAN, SYS_REFCURSOR와 CUBRID SQL에서 제공하는 데이터 타입 중 일부이다.
+SQL에서 제공하는 데이터 타입 중 일부와 BOOLEAN, SYS_REFCURSOR이다.
 
 * BOOLEAN: TRUE, FALSE, NULL을 값으로 가질 수 있다.
+  CREATE PROCEDURE/FUNCTION 문에서 파라메터 타입이나 리턴 타입으로 BOOLEAN을 사용할 수는 없다.
+  왜냐하면 SQL에 BOOLEAN 타입이 정의되어 있지 않기 때문이다.
+  단, :ref:`내부 프로시저/함수 <local_routine_decl>`\를 선언할 때에는 파라메터 타입이나 리턴 타입으로
+  BOOLEAN을 사용할 수 있다.
 * SYS_REFCURSOR: 커서 변수를 선언할 때 사용한다.
   커서 변수의 용도는 :ref:`OPEN-FOR <cursor_manipulation>` 문을 참고한다.
 
-CUBRID SQL에서 제공하는 데이터 타입 중 PL/CSQL에서 지원하는 것과 지원하지 않는 것은 다음과 같다.
+SQL에서 제공하는 데이터 타입 중 PL/CSQL에서 지원하는 것과 지원하지 않는 것은 다음과 같다.
 
 +----------------+-------------------------------------+----------------------------------+
 | 유형           | 지원                                | 미지원                           |
@@ -326,15 +309,12 @@ CUBRID SQL에서 제공하는 데이터 타입 중 PL/CSQL에서 지원하는 �
 +                +-------------------------------------+                                  +
 |                | DOUBLE, DOUBLE PRECISION,           |                                  |
 +----------------+-------------------------------------+----------------------------------+
-| 날짜/시간      | DATE, TIME, TIMESTAMP, DATETIME,    |                                  |
-+                +-------------------------------------+                                  +
-|                | TIMESTAMPLTZ, TIMESTAMPTZ,          |                                  |
-+                +-------------------------------------+                                  +
-|                | DATETIMELTZ, DATETIMETZ             |                                  |
+| 날짜/시간      | DATE, TIME, TIMESTAMP, DATETIME,    | | TIMESTAMPLTZ, TIMESTAMPTZ,     |
+|                |                                     | | DATETIMELTZ, DATETIMETZ        |
 +----------------+-------------------------------------+----------------------------------+
-| 문자열         | CHAR, VARCHAR, STRING               |                                  |
+| 문자열         | CHAR, VARCHAR, STRING, CHAR VARYING |                                  |
 +----------------+-------------------------------------+----------------------------------+
-| 컬렉션         | SET, MULTISET, LIST, SEQUENCE       |                                  |
+| 컬렉션         |                                     | SET, MULTISET, LIST, SEQUENCE    |
 +----------------+-------------------------------------+----------------------------------+
 | 기타           |                                     | BIT, BIT VARYING,                |
 +                +                                     +----------------------------------+
@@ -352,11 +332,14 @@ Static/Dynamic SQL 밖의 PL/CSQL문에서 문자열 타입 CHAR와 VARCHAR를 �
 
 현재, PL/CSQL은 사용자 정의 타입을 지원하지 않는다.
 
+변수, 상수, 프로시저/함수, 커서를 선언할 때 위에서 열거된 지원 타입을 쓸 수 있다.
+혹은, 변수나 테이블 컬럼 이름 뒤에 '%TYPE'을 덧붙여 해당 변수나 컬럼의 선언 타입을 나타낼 수도 있다.
+
 .. code-block:: sql
 
     CREATE FUNCTION get_athlete_name(p_code INTEGER) RETURN VARCHAR(40)
     AS
-        name VARCHAR(40);
+        name athlete.name%TYPE
     BEGIN
         SELECT a.name
         INTO name
@@ -370,22 +353,22 @@ Static/Dynamic SQL 밖의 PL/CSQL문에서 문자열 타입 CHAR와 VARCHAR를 �
 연산자와 함수
 ==================
 
-Static/Dynamic SQL에서는 CUBRID SQL에서 제공하는 모든 연산자와 함수를 쓸 수 있다.
-그리고, 연산자 ||와 +의 의미도 기존 SQL과 동일하게 서버 설정 파라미터 pipes_as_concat 값과 plus_as_concat 값을 따른다.
+Static/Dynamic SQL에서는 SQL에서 제공하는 모든 연산자와 함수를 쓸 수 있다.
+그리고, 연산자 ||와 +의 의미도 기존 SQL과 동일하게 서버 설정 파라메터 pipes_as_concat 값과 plus_as_concat 값을 따른다.
 (참고: `연산자와 함수 <https://www.cubrid.org/manual/ko/11.2/sql/function/index.html>`_\,
-`구문/타입 관련 파라미터 <https://www.cubrid.org/manual/ko/11.2/admin/config.html#stmt-type-parameters>`_)
+`구문/타입 관련 파라메터 <https://www.cubrid.org/manual/ko/11.2/admin/config.html#stmt-type-parameters>`_)
 
-반면, Static/Dynamic SQL 밖의 PL/CSQL 문에서는 CUBRID SQL에서 제공하는 모든 연산자와 함수를
-대부분 동일하게 쓸 수 있으나 다음의 몇 가지 예외가 있다.
+반면, Static/Dynamic SQL 밖의 PL/CSQL 문에서는 SQL에서 제공하는 모든 연산자와 함수를
+대부분 동일하게 쓸 수 있으나 다음의 몇 가지 예외들은 쓸 수 없다.
 
-* 지원하지 않는 타입(BIT (VARYING), ENUM, BLOB/CLOB, JSON)의 값을 인자나 결과로 갖는 연산자와 함수
+* 지원하지 않는 타입(BIT, ENUM, BLOB/CLOB, JSON, 등)의 값을 인자나 결과로 갖는 연산자와 함수
 * 나머지 연산자 %
 
-  + 동일한 의미의 MOD를 대신 쓸 수 있음
+  + 단, 동일한 의미의 MOD를 대신 쓸 수 있음
 
 * 논리 연산자 &&, ||, !
 
-  + 각각 동일한 의미의 AND, OR, NOT을 대신 쓸 수 있음
+  + 단, 각각 동일한 의미의 AND, OR, NOT을 대신 쓸 수 있음
   + 특히, ||는 서버 설정 파라메터 pipes_as_concat 값이 no일지라도 논리합 연산자로 쓰이지 않음
 
 * 서버 설정 파라메터 plus_as_concat 값이 yes일지라도 +가 문자열 병합 연산자로 쓰이지 않음
@@ -405,7 +388,7 @@ PL/CSQL 실행문에서도 사용할 수 있음을 보여준다.
             delim := locate(' ', r.name);                   -- 함수 locate
             family_name := substr(r.name, 1, delim - 1);    -- 함수 substr
             given_name := substr(r.name, delim + 1);        -- 함수 substr
-            put_line(given_name || ' ' || family_name);     -- 문자열 병합 연산자 ||
+            DBMS_OUTPUT.put_line(given_name || ' ' || family_name);     -- 문자열 병합 연산자 ||
         END LOOP;
     END;
 
@@ -462,29 +445,29 @@ PL/CSQL은 다른 많은 프로그래밍 언어와 마찬가지로 Exception 핸
         RETURN c;
     EXCEPTION
         WHEN NO_DATA_FOUND THEN
-            put_line('error: no rows found for athlete name ' || p_name);
+            DBMS_OUTPUT.put_line('error: no rows found for athlete name ' || p_name);
             RETURN -1;
         WHEN TOO_MANY_ROWS THEN
-            put_line('error: more than one rows found for athlete name ' || p_name);
+            DBMS_OUTPUT.put_line('error: more than one rows found for athlete name ' || p_name);
             RETURN -1;
     END;
-
-.. _decl:
 
 서버 설정 적용 예외
 ==========================
 
 Static/Dynamic SQL 문의 동작은 각종 `서버 설정 <https://www.cubrid.org/manual/ko/11.2/admin/config.html#id2>`_\의 영향을 받는다.
 
-그러나, Static/Dynamic SQL 밖에서 PL/CSQL 문의 동작은 서버 설정 파라미터 적용에 몇 가지 예외가 있다.
+그러나, Static/Dynamic SQL 밖에서 PL/CSQL 문의 동작은 서버 설정 파라메터 적용에 몇 가지 예외가 있다.
 
-* no_backslash_escapes 설정 파라미터값과 관계 없이 backslash 문자는 escape 문자로 사용되지 않는다.
-* oracle_style_empty_string 설정 파라미터값과 관계 없이 빈 문자열을 NULL과 동일시하지 않는다.
-* pipes_as_concat 설정 파라미터값과 상관없이 ||는 논리합(OR) 연산자로 사용할 수 없다.
-* plus_as_concat 설정 파라미터값과 상관없이 +는 문자열 병합 연산자로 사용할 수 없다.
+* no_backslash_escapes 설정 파라메터값과 관계 없이 backslash 문자는 escape 문자로 사용되지 않는다.
+* oracle_style_empty_string 설정 파라메터값과 관계 없이 빈 문자열을 NULL과 동일시하지 않는다.
+* pipes_as_concat 설정 파라메터값과 상관없이 ||는 논리합(OR) 연산자로 사용할 수 없다.
+* plus_as_concat 설정 파라메터값과 상관없이 +는 문자열 병합 연산자로 사용할 수 없다.
 
-위 네 가지 파라미터에 대한 자세한 내용은
-`구문/타입 관련 파라미터 <https://www.cubrid.org/manual/ko/11.2/admin/config.html#stmt-type-parameters>`_\를 참고한다.
+위 네 가지 파라메터에 대한 자세한 내용은
+`구문/타입 관련 파라메터 <https://www.cubrid.org/manual/ko/11.2/admin/config.html#stmt-type-parameters>`_\를 참고한다.
+
+.. _decl:
 
 ******************
 선언문
@@ -493,7 +476,8 @@ Static/Dynamic SQL 문의 동작은 각종 `서버 설정 <https://www.cubrid.or
 프로시저나 함수 선언문, 그리고 Block 실행문에는 선언부 *seq_of_declare_specs*\가 존재한다.
 선언부에서는 아래 문법에서 정의하는 바와 같이 변수, 상수, Exception, 커서,
 내부 프로시저/함수, Autonomous Transaction 여부를 선언할 수 있다.
-선언된 각 항목들은 해당 선언부를 뒤따르는 *body* 안에서 참조할 수 있다.
+선언된 각 항목들은 선언부를 뒤따르는 *body* 안에서 참조할 수 있다.
+
 ::
 
     <seq_of_declare_specs> ::= <declare_spec> [ <declare_spec> ... ]
@@ -510,14 +494,19 @@ Static/Dynamic SQL 문의 동작은 각종 `서버 설정 <https://www.cubrid.or
 
 변수 선언
 =========
+
 ::
 
     <variable_decl> ::=
         <identifier> <type_spec> [ [ NOT NULL ] <initial_value_part> ] ;
 
+    <type_spec> ::=
+          <builtin_type>
+        | <variable>%TYPE
+        | <table>.<column>%TYPE
     <initial_value_part> ::= { := | DEFAULT } <expression>
 
-* *type_spec*: :ref:`데이터 타입 <types>` 절에서 설명한 시스템 제공 타입
+* *builtin_type*: :ref:`데이터 타입 <types>` 절에서 설명한 시스템 제공 타입
 
 변수 선언에 선택적으로 NOT NULL 조건과 초기값을 지정할 수 있다.
 NOT NULL 조건이 지정된 경우 반드시 NULL이 아닌 초기값이 함께 지정되어야 한다.
@@ -577,9 +566,13 @@ NOT NULL 조건이 지정된 경우 반드시 NULL이 아닌 초기값이 함께
     <constant_decl> ::=
         <identifier> CONSTANT <type_spec> [ NOT_NULL ] <value_part> ;
 
+    <type_spec> ::=
+          <builtin_type>
+        | <variable>%TYPE
+        | <table>.<column>%TYPE
     <value_part> ::= { := | DEFAULT } <expression>
 
-* *type_spec*: :ref:`데이터 타입 <types>` 절에서 설명한 시스템 제공 타입
+* *builtin_type*: :ref:`데이터 타입 <types>` 절에서 설명한 시스템 제공 타입
 
 상수 선언에는 필수적으로 값 지정이 포함되어야 한다.
 
@@ -621,10 +614,10 @@ Exception 선언
 
     EXCEPTION
         WHEN negative_argument THEN
-            put_line('error: negative argument ' || n);
+            DBMS_OUTPUT.put_line('error: negative argument ' || n);
             return -1;
         WHEN too_big_argument THEN
-            put_line('error: too big argument ' || n);
+            DBMS_OUTPUT.put_line('error: too big argument ' || n);
             return -2;
     END;
 
@@ -639,8 +632,12 @@ Exception 선언
 
     <seq_of_cursor_parameters> ::= <cursor_parameter> [, <cursor_parameter>, ...]
     <cursor_parameter> ::= <identifier> [ IN ] <type_spec>
+    <type_spec> ::=
+          <builtin_type>
+        | <variable>%TYPE
+        | <table>.<column>%TYPE
 
-* *type_spec*: :ref:`데이터 타입 <types>` 절에서 설명한 시스템 제공 타입
+* *builtin_type*: :ref:`데이터 타입 <types>` 절에서 설명한 시스템 제공 타입
 
 커서에도 프로시저/함수와 유사하게 파라메터를 선언할 수 있지만 오직 IN 파라메터만 선언할 수 있다는 차이가 있다.
 이 파라메터를 *select_statement* 문 안에서 참조할 수 있다.
@@ -663,15 +660,12 @@ Exception 선언
         LOOP
             FETCH my_cursor INTO target_year, target_score;
             EXIT WHEN my_cursor%NOTFOUND;
-            put_line('host_year: ' || target_year || ' score: ' || target_score);
+            DBMS_OUTPUT.put_line('host_year: ' || target_year || ' score: ' || target_score);
         END LOOP;
         CLOSE my_cursor;
     END;
 
 커서는 위 예제처럼 명시적으로 OPEN, FETCH, CLOSE 실행문을 통해 이용할 수 있다.
-Stored Procedure가 종료될 때까지 닫히지 않고 열린 채로 남아 있는 커서는 시스템에 의해 자동으로 닫히게 되지만,
-커서에 할당된 시스템 자원의 즉각적인 회수를 위해서 커서 사용이 끝났을 때 명시적으로 닫아 주는 것이 좋다.
-
 반면, 아래 예제처럼 OPEN, FETCH, CLOSE 동작이 암묵적으로 이루어지는 For-Loop 문을 통해서 커서를 이용할 수도 있다.
 이 경우에는 사용자가 명시적으로 커서를 닫아줄 필요가 없다.
 
@@ -685,15 +679,16 @@ Stored Procedure가 종료될 때까지 닫히지 않고 열린 채로 남아 �
         WHERE athlete = a AND host_year >= y;
     BEGIN
         FOR r IN my_cursor(p_name, p_year) LOOP
-            put_line('host_year: ' || r.host_year || ' score: ' || r.score);
+            DBMS_OUTPUT.put_line('host_year: ' || r.host_year || ' score: ' || r.score);
         END LOOP;
     END;
 
+.. _local_routine_decl:
 
 내부 프로시저/함수 선언
 ========================
 
-정의 중인 스토어드 프로시저/함수에서만 사용할 내부 프로시저/함수를 다음 문법에 따라 정의할 수 있다.
+정의 중인 스토어드 프로시저/함수 안에서만 사용할 내부 프로시저/함수를 다음 문법에 따라 정의할 수 있다.
 어느 정도 규모를 이루거나 두 번 이상 반복되는 연관된 실행 과정을 내부 프로시저나 함수로 묶어 모듈화하면
 프로그램 가독성이 높아지고 유지 보수에 도움이 된다.
 
@@ -705,7 +700,11 @@ Stored Procedure가 종료될 때까지 닫히지 않고 열린 채로 남아 �
         FUNCTION <identifier> [ ( <seq_of_parameters> ) ] RETURN <type_spec> { IS | AS } [ <seq_of_declare_specs> ] <body> ;
 
     <seq_of_parameters> ::= <parameter> [, <parameter> ...]
-    <parameter> ::= <identifier> [ { IN | IN OUT | OUT } ] <type_spec>
+    <parameter> ::= <identifier> [ { IN | IN OUT | INOUT | OUT } ] <type_spec>
+    <type_spec> ::=
+          <builtin_type>
+        | <variable>%TYPE
+        | <table>.<column>%TYPE
     <body> ::= BEGIN <seq_of_statements> [ EXCEPTION <seq_of_handlers> ] END [ <label_name> ]
     <seq_of_declare_specs> ::= <declare_spec> [ <declare_spec> ... ]
     <seq_of_statements> ::= <statement> ; [ <statement> ; ... ]
@@ -713,12 +712,12 @@ Stored Procedure가 종료될 때까지 닫히지 않고 열린 채로 남아 �
     <handler> ::= WHEN <exception_name> [ OR <exeption_name> OR ... ] THEN <seq_of_statements>
     <exception_name> ::= OTHERS | identifier
 
-* *parameter*: 파라메터는 IN, IN OUT, OUT 세 가지 경우로 선언할 수 있다.
-* *type_spec*: :ref:`데이터 타입 <types>` 절에서 설명한 시스템 제공 타입
+* *parameter*: 파라메터는 IN, IN OUT, INOUT, OUT 네 가지 경우로 선언할 수 있다.
+* *builtin_type*: :ref:`데이터 타입 <types>` 절에서 설명한 시스템 제공 타입
 * *body*: 필수적으로 하나 이상의 실행문과 선택적으로 몇 개의 Exception 핸들러로 구성된다.
 * *declare_spec*: 변수, 상수, Exception, 커서, Autonomous Transaction, 내부 프로시저, 내부 함수 선언 중 하나
-* *statement*: 아래 실행문 절 참조
-* *handler*: OR로 연결된 하나 이상의 Exception 이름들에 대하여 실행할 실행문들을 지정한다.
+* *statement*: 아래 :ref:`실행문 <stmt>` 절 참조
+* *handler*: 지정된 Exception이 발생했을 때 실행할 실행문들을 지정한다.
 * *exception_name*: OTHERS인 경우 아직까지 매치되지 않은 모든 Exception에 매치되며 OR로 다른 exception 이름과 연결할 수 없다.  OTHERS가 아닌 경우는 시스템 Exception이거나 사용자 정의 Exception을 나타낸다.
 
 함수 *body*\에서는 RETURN 절에 지정된 타입에 맞는 값을 반환해야 한다.
@@ -763,9 +762,9 @@ Stored Procedure가 종료될 때까지 닫히지 않고 열린 채로 남아 �
         AS
         BEGIN
             IF n <= 0 THEN
-                put_line('-- end --');
+                DBMS_OUTPUT.put_line('-- end --');
             ELSE
-                put_line('ping ->');
+                DBMS_OUTPUT.put_line('ping ->');
                 pong(n - 1);     -- 상호 재귀 호출
             END IF;
         END;
@@ -774,9 +773,9 @@ Stored Procedure가 종료될 때까지 닫히지 않고 열린 채로 남아 �
         AS
         BEGIN
             IF n <= 0 THEN
-                put_line('-- end --');
+                DBMS_OUTPUT.put_line('-- end --');
             ELSE
-                put_line('      <- pong');
+                DBMS_OUTPUT.put_line('      <- pong');
                 ping(n - 1);     -- 상호 재귀 호출
             END IF;
         END;
@@ -801,8 +800,7 @@ Autonomous Transaction 선언
 그리고, COMMIT이나 ROLLBACK을 실행해도 호출한 쪽의 트랜잭션의 진행에는 영향을 미치지 않는다.
 
 Autonomous Transaction으로 선언되지 않은 스토어드 프로시저/함수는 호출한 쪽의 트랜잭션 안에 포함된다.
-이 경우에는 스토어드 프로시저/함수 안에서 호출한 COMMIT이나 ROLLBACK이 아무 동작도 하지 않고 무시되고 (TODO: 기술 지원팀과 협의 필요),
-호출한 쪽에서 COMMIT하거나 ROLLBACL을 해야 변경 내용이 반영되거나 취소된다.
+이 경우에는 스토어드 프로시저/함수 안에서 호출한 COMMIT이나 ROLLBACK은 호출한 쪽의 트랜잭션에 대해서 동작한다.
 
 이 선언문은 최상위 선언부에서만 사용할 수 있다.
 즉, 내부 프로시저/함수나 BLOCK 실행문의 선언부에서는 사용할 수 없다.
@@ -852,8 +850,8 @@ BLOCK은 프로시저/함수와 마찬가지로 예외처리 구조를 가질 �
 
 
 * *body*: 필수적으로 하나 이상의 실행문과 선택적으로 몇 개의 Exception 핸들러로 구성된다.
-* *declare_spec*: 변수, 상수, Exception, 커서, Autonomous Transaction, 내부 프로시저, 내부 함수 선언 중 하나
-* *handler*: OR로 연결된 하나 이상의 Exception 이름들에 대하여 실행할 실행문들을 지정한다.
+* *declare_spec*: 변수, 상수, Exception, 커서, Autonomous Transaction, 내부 프로시저, 내부 함수 선언. (참조: :ref:`선언문 <decl>`)
+* *handler*:  지정된 Exception이 발생했을 때 실행할 실행문들을 지정한다.
 * *exception_name*: OTHERS인 경우 아직까지 매치되지 않은 모든 Exception에 매치된다. 아닌 경우는 시스템 Exception이거나 사용자 정의 Exception을 나타낸다.
 
 BLOCK 안에서 선언된 아이템들은 그 BLOCK을 벗어나면 참조할 수 없다.
@@ -875,26 +873,20 @@ BLOCK에서 선언된 아이템이 바깥 scope에서 선언된 다른 아이템
             DECLARE
                 a INT := 7;
             BEGIN
-                put_line(a || b || c);  -- '753'
+                DBMS_OUTPUT.put_line(a || b || c);  -- '753'
             END;
 
-            put_line(a || b || c);      -- '553'
+            DBMS_OUTPUT.put_line(a || b || c);      -- '553'
         END;
 
-        put_line(a || b || c);          -- '333'
+        DBMS_OUTPUT.put_line(a || b || c);          -- '333'
     END;
 
 Static SQL
 ==========
 
-:ref:`Static SQL <static_sql>` 절에서 설명한대로 SQL 문 중에서
-SELECT, INSERT, UPDATE, DELETE, MERGE, REPLACE, COMMIT, ROLLBACK 문은 프로그램의 실행문으로서 직접 사용 가능하다.
-
-이 중에서 COMMIT과 ROLLBACK은 :ref:`Autonomous Transaction <auto_tran>`\으로
-선언되었는지 아닌지의 여부에 따라 달리 동작한다.
-
-* Autonomous Transaction 일 때 - 원래 SQL 규약의 COMMIT, ROLLBACK 의미대로 동작
-* Autonomous Transaction 이 아닐 때 - 아무 일도 하지 않는 NULL 실행문처럼 동작
+:ref:`Static SQL <static_sql>` 절에서 설명한대로 SQL 문 중에서 SELECT, INSERT, UPDATE, DELETE, MERGE, REPLACE,
+COMMIT, ROLLBACK, TRUNCATE 문은 프로그램의 실행문으로서 직접 사용 가능하다.
 
 .. _cursor_manipulation:
 
@@ -940,7 +932,7 @@ SELECT, INSERT, UPDATE, DELETE, MERGE, REPLACE, COMMIT, ROLLBACK 문은 프로�
         LOOP
             FETCH my_cursor INTO target_year, target_score;
             EXIT WHEN my_cursor%NOTFOUND;
-            put_line('host_year: ' || target_year || ' score: ' || target_score);
+            DBMS_OUTPUT.put_line('host_year: ' || target_year || ' score: ' || target_score);
         END LOOP;
         CLOSE my_cursor;
     END;
@@ -969,7 +961,7 @@ SYS_REFCURSOR 변수에 연결하고 그 SELECT 문의 결과를 조회해 오�
         LOOP
             FETCH my_refcursor INTO target_year, target_score;
             EXIT WHEN my_refcursor%NOTFOUND;
-            put_line('host_year: ' || target_year || ' score: ' || target_score);
+            DBMS_OUTPUT.put_line('host_year: ' || target_year || ' score: ' || target_score);
         END LOOP;
         CLOSE my_refcursor;
     END;
@@ -983,17 +975,20 @@ EXECUTE IMMEDIATE
 실행 시간에 임의의 SQL을 문자열로 구성하여 EXECUTE IMMDIATE 문을 통해 실행할 수 있다.
 USING 절을 써서 프로그램 상의 어떤 값을 SQL문의 호스트 변수 자리에 채우는 것이 가능하고,
 INTO 절을 써서 SELECT 문의 조회 결과를 프로그램의 변수나 OUT 파라메터에 담아오는 것도 가능하다.
+
 ::
 
     <execute_immediate> ::=
         EXECUTE IMMEDIATE <dynamic_sql> { [ <into_clause> ] [ <using_clause> ] | <using_clause> <into_clause> }
         <using_clause> ::= USING <using_element> [ , <using_element>, ... ]
-        <using_element> ::= [ { IN | IN OUT | OUT } ] <expression>
+        <using_element> ::= [ { IN | IN OUT | INOUT | OUT } ] <expression>
         <into_clause> ::= INTO <identifier> [ , <identifier>, ... ]
 
 
-* *dynamic_sql*: 문자열 타입을 갖는 표현식. 표현식은 CUBRID SQL 규약에 맞는 SQL 구문 문자열을 계산 결과로 가져야 한다.  SQL 구문 중간중간 값을 필요로 하는 자리에 ?(물음표)를 대신 쓸 수 있으며 이러한 ?의 갯수와 *using_clause*\에 포함된 표현식의 갯수는 일치해야 한다.
-* *using_clause*: *dynamic_sql*\을 실행할 때 문자열의 ? 자리에 채워질 값들을 지정한다.  IN, IN OUT, OUT 세 가지 타입으로 지정할 수 있다.
+* *dynamic_sql*: 문자열 타입을 갖는 표현식. 표현식은 SQL 규약에 맞는 SQL 구문 문자열을 계산 결과로 가져야 한다.
+  SQL 구문 중간중간 값을 필요로 하는 자리에 ?(물음표)를 대신 쓸 수 있으며 이러한 ?의 갯수와 *using_clause*\에
+  포함된 표현식의 갯수는 일치해야 한다.
+* *using_clause*: *dynamic_sql*\을 실행할 때 문자열의 ? 자리에 채워질 값들을 지정한다.  IN, IN OUT, INOUT, OUT 네 가지 타입으로 지정할 수 있다.
 * *into_clause*: *dynamic_sql*\이 SELECT문을 나타내는 경우에 조회 결과를 담을 변수나 OUT 파라메터를 지정한다.
 
 다음은 EXECUTE IMMEDIATE의 사용예이다.
@@ -1047,14 +1042,14 @@ WHEN 절이 있는 경우 BOOLEAN 타입의 *expression*\이 TRUE로 계산될 �
         i INT := 0;
     BEGIN
         LOOP
-            put_line(i);            -- 0, 1, 2, 3, 4, 5
+            DBMS_OUTPUT.put_line(i);            -- 0, 1, 2, 3, 4, 5
             i := i + 1;
             CONTINUE WHEN i < 3;
-            put_line(i);            -- 3, 4, 5
+            DBMS_OUTPUT.put_line(i);            -- 3, 4, 5
             EXIT WHEN i = 5;
         END LOOP;
 
-        put_line(i);                -- 5
+        DBMS_OUTPUT.put_line(i);                -- 5
     END;
 
 NULL
@@ -1074,11 +1069,11 @@ NULL
 
     CASE medal
         WHEN 'G' THEN
-            put_line('Gold');
+            DBMS_OUTPUT.put_line('Gold');
         WHEN 'S' THEN
-            put_line('Silver');
+            DBMS_OUTPUT.put_line('Silver');
         WHEN 'B' THEN
-            put_line('Bronze');
+            DBMS_OUTPUT.put_line('Bronze');
         ELSE
             NULL;
     END CASE;
@@ -1111,10 +1106,10 @@ Exception 이름 *identifier*\가 생략되는 경우는 RAISE 문의 위치가 
         END IF;
     EXCEPTION
         WHEN invalid_input THEN
-            put_line('invalid input: ' || n);
+            DBMS_OUTPUT.put_line('invalid input: ' || n);
             RAISE;      -- 현재 처리 중인 invalid_input을 다시 일으킴
         WHEN OTHERS THEN
-            put_line('unknown exception');
+            DBMS_OUTPUT.put_line('unknown exception');
             RAISE;      -- 현재 처리 중인 Exception을 다시 일으킴
     END;
 
@@ -1192,13 +1187,13 @@ PL/CSQL이 제공하는 루프문은 아래와 같이 여섯 가지 형태가 �
     AS
     BEGIN
         FOR i IN 2 .. 9 LOOP
-            put_line('table ' || i);
+            DBMS_OUTPUT.put_line('table ' || i);
 
             FOR j IN 1 .. 9 LOOP
-                put_line(i || ' x ' || j || ' = ' || i*j);
+                DBMS_OUTPUT.put_line(i || ' x ' || j || ' = ' || i*j);
             END LOOP;
 
-            put_line('');
+            DBMS_OUTPUT.put_line('');
         END LOOP;
     END;
 
@@ -1215,17 +1210,17 @@ PL/CSQL이 제공하는 루프문은 아래와 같이 여섯 가지 형태가 �
     BEGIN
         -- For-Cursor Loop
         FOR r IN my_cursor LOOP
-            put_line('host_year: ' || r.host_year || ' score: ' || r.score);
+            DBMS_OUTPUT.put_line('host_year: ' || r.host_year || ' score: ' || r.score);
         END LOOP;
 
         -- For-Select Loop
         FOR r IN (SELECT host_year, score FROM history WHERE athlete = p_name) LOOP
-            put_line('host_year: ' || r.host_year || ' score: ' || r.score);
+            DBMS_OUTPUT.put_line('host_year: ' || r.host_year || ' score: ' || r.score);
         END LOOP;
 
         -- For-Dynamic-SQL Loop
         FOR r IN (EXECUTE IMMEDIATE 'SELECT host_year, score FROM history WHERE athlete = ?' USING p_name) LOOP
-            put_line('host_year: ' || r.host_year || ' score: ' || r.score);
+            DBMS_OUTPUT.put_line('host_year: ' || r.host_year || ' score: ' || r.score);
         END LOOP;
     END;
 
@@ -1256,11 +1251,11 @@ CASE 문은 두 가지 형태가 있다.
     BEGIN
         CASE b
             WHEN True THEN
-                put_line('TRUE');
+                DBMS_OUTPUT.put_line('TRUE');
             WHEN False THEN
-                put_line('FALSE');
+                DBMS_OUTPUT.put_line('FALSE');
             ELSE
-                put_line('NULL');
+                DBMS_OUTPUT.put_line('NULL');
         END CASE;
     END;
 
@@ -1273,11 +1268,11 @@ CASE 문은 두 가지 형태가 있다.
     BEGIN
         CASE
             WHEN b THEN
-                put_line('TRUE');
+                DBMS_OUTPUT.put_line('TRUE');
             WHEN NOT b THEN
-                put_line('FALSE');
+                DBMS_OUTPUT.put_line('FALSE');
             WHEN b IS NULL THEN
-                put_line('NULL');
+                DBMS_OUTPUT.put_line('NULL');
         END CASE;
     END;
 
@@ -1290,7 +1285,7 @@ PL/CSQL의 표현식의 종류는 다음 문법으로 요약할 수 있다.
     <expression> ::=
           <literal>                                 # 상수
         | <identifier>                              # 식별자
-        | SQL %ROWCOUNT                             # Static SQL 결과 크기
+        | SQL%ROWCOUNT                              # Static SQL 결과 크기
         | <cursor_expression> <cursor_attribute>    # 커서 속성
         | <expression> <binary_op> <expression>     # 이항 연산
         | <unary_op> <expression>                   # 단항 연산
@@ -1298,6 +1293,8 @@ PL/CSQL의 표현식의 종류는 다음 문법으로 요약할 수 있다.
         | <identifier>.<identifier>                 # 레코드 필드 참조
         | <identifier> <function_argument>          # 함수 호출
         | <case_expression>                         # CASE 표현식
+        | SQLCODE                                   # Exception 코드
+        | SQLERRM                                   # Exception 메시지
         | <expression> IS [ NOT ] NULL              # IS NULL 표현식
         | <expression> [ NOT ] BETWEEN <expression> AND <expression>        # BETWEEN 표현식
         | <expression> [ NOT ] IN ( <expression> [ , <expression>, ... ] )  # IN 표현식
@@ -1306,8 +1303,8 @@ PL/CSQL의 표현식의 종류는 다음 문법으로 요약할 수 있다.
     <literal> ::=
           DATE <quoted_string>
         | TIME <quoted_string>
-        | (DATETIME | DATETIMETZ | DATETIMELTZ ) <quoted_string>
-        | (TIMESTAMP | TIMESTAMPTZ | TIMESTAMPLTZ ) <quoted_string>
+        | DATETIME <quoted_string>
+        | TIMESTAMP <quoted_string>
         | <numeric>
         | <quoted_string>
         | { [ <literal> [, <literal> ... ] ] }
@@ -1323,7 +1320,6 @@ PL/CSQL의 표현식의 종류는 다음 문법으로 요약할 수 있다.
         | = | <=> | != | <> | <= | >= | < | >
         | * | / | + | -
         | >> | << | & | ^ | '|'
-        | SETEQ | SETNEQ | SUPERSET | SUBSET | SUPERSETEQ | SUBSETEQ
         | ||
     <unary_op> ::= + | - | NOT | ~
 
@@ -1334,8 +1330,8 @@ PL/CSQL의 표현식의 종류는 다음 문법으로 요약할 수 있다.
 
 리터럴
 =================
-리터럴에는 날짜/시간(DATE, TIME, TIMESTAMP, DATETIME, TIMESTAMPTZ, TIMESTAMPLTZ, DATETIMETZ, DATETIMELTZ), 숫자, 문자열, 컬렉션, NULL, TRUE, FALSE 값이 있다.
-비트열을 사용할 수 없다는 점을 제외하고 `CUBRID SQL 리터럴 <https://www.cubrid.org/manual/ko/11.2/sql/literal.html#>`_\과 동일하다.
+리터럴에는 날짜/시간(DATE, TIME, TIMESTAMP, DATETIME), 숫자, 문자열, 컬렉션, NULL, TRUE, FALSE 값이 있다.
+비트열을 사용할 수 없다는 점을 제외하고 `SQL 리터럴 <https://www.cubrid.org/manual/ko/11.2/sql/literal.html#>`_\과 동일하다.
 
 식별자
 =================
@@ -1352,7 +1348,7 @@ Static SQL 결과 크기
 SQL%ROWCOUNT는 Static SQL을 실행한 직후에 결과 크기를 나타내는 표현식이다.
 
 * 커서와 연관되지 않은 SELECT 문의 경우 반드시 INTO 절을 포함하게 되고 조회 결과는 1개이어야 한다. 따라서, 이 SELECT 문이 정상적으로 수행되었을 때 SQL%ROWCOUNT의 값은 1이다. 조회 결과 크기가 0이거나 1을 초과해서 실행시간 에러가 발생했을 때에는 SQL%ROWCOUNT의 값은 정의되지 않는다.
-* INSERT, UPDATE, DELTE, MERGE, REPLACE 문의 경우 영향 받은 레코드 갯수가 된다.
+* INSERT, UPDATE, DELETE, MERGE, REPLACE, TRUNCATE 문의 경우 영향 받은 레코드 갯수가 된다.
 * COMMIT, ROLLBACK 문에 대해서는 0이 된다.
 
 커서 속성
@@ -1364,7 +1360,7 @@ SQL%ROWCOUNT는 Static SQL을 실행한 직후에 결과 크기를 나타내는 
 * %ISOPEN: 커서가 열려 있는지 여부 (BOOLEAN)
 * %FOUND: 첫 번째 FETCH 이전이면 NULL. 아니면 마지막 FETCH가 1개의 ROW를 결과로 갖는지 여부 (BOOLEAN)
 * %NOTFOUND: 첫 번째 FETCH 이전이면 NULL. 아니면 마지막 FETCH가 0개의 ROW를 결과로 갖는지 여부 (BOOLEAN)
-* %ROWCOUNT: 첫 번째 FETCH 이전이면 NULL. 아니면 현재까지 FETCH된 ROW의 갯수 (INTEGER)
+* %ROWCOUNT: 첫 번째 FETCH 이전이면 NULL. 아니면 현재까지 FETCH된 ROW의 갯수 (BIGINT)
 
 이항 연산, 단항 연산, 괄호
 ==========================
@@ -1396,9 +1392,7 @@ PL/CSQL은 다음과 같이 연산자 우선 순위를 갖는다.
 +--------------------------------------------------------------------+-------------------------------------+
 | IN                                                                 | 값 포함 테스트                      |
 +--------------------------------------------------------------------+-------------------------------------+
-| | =, <=>, <, >, <=, >=, <>, !=,                                    | 비교                                |
-| | SETEQ, SETNEQ, SUPERSET, SUBSET,                                 |                                     |
-| | SUPERSETEQ, SUBSETEQ                                             |                                     |
+| =, <=>, <, >, <=, >=, <>, !=,                                      | 비교                                |
 +--------------------------------------------------------------------+-------------------------------------+
 | NOT                                                                | 논리역                              |
 +--------------------------------------------------------------------+-------------------------------------+
@@ -1411,8 +1405,8 @@ PL/CSQL은 다음과 같이 연산자 우선 순위를 갖는다.
 
 * %는 Static/Dynamic SQL 밖에서는 MOD와 동일한 의미의 나머지 연산자로 사용할 수 없다.
 * &&, !은 Static/Dynamic SQL 밖에서는 AND, NOT과 동일한 의미의 논리 연산자로 사용할 수 없다.
-* ||는 서버 설정 파라미터 pipes_as_concat 값과 상관없이 Static/Dynamic SQL 밖에서는 논리합(OR) 연산자로 사용할 수 없다.
-* +는 서버 설정 파라미터 plus_as_concat 값과 상관없이 Static/Dynamic SQL 밖에서는 문자열 병합 연산자로 사용할 수 없다.
+* ||는 서버 설정 파라메터 pipes_as_concat 값과 상관없이 Static/Dynamic SQL 밖에서는 논리합(OR) 연산자로 사용할 수 없다.
+* +는 서버 설정 파라메터 plus_as_concat 값과 상관없이 Static/Dynamic SQL 밖에서는 문자열 병합 연산자로 사용할 수 없다.
 * Static/Dynamic SQL 밖에서의 문자열은 DB 설정과 관계 없이 UTF8 encoding을 따르며
   이들 문자열들 사이의 비교는 해당 Unicode 배열들 사이의 사전식 비교법을 따른다.
   Static/Dynamic SQL 안에서의 문자열의 encoding과 비교는 DB와 테이블 설정을 따른다.
@@ -1436,7 +1430,7 @@ FOR 문에서 SELECT 결과를 순회하기 위해 암묵적으로 선언되는 
         WHERE athlete = p_name;
     BEGIN
         FOR r IN my_cursor LOOP     -- r: 암묵적으로 선언됨
-            put_line('host_year: ' || r.host_year || ' score: ' || r.score);    -- r.<column-name>
+            DBMS_OUTPUT.put_line('host_year: ' || r.host_year || ' score: ' || r.score);    -- r.<column-name>
         END LOOP;
     END;
 
@@ -1457,7 +1451,7 @@ CASE 표현식은 :ref:`CASE 실행문 <case_stmt>`\(Statement)과 마찬가지�
 
 * CASE 키워드 직후에 표현식을 갖는 형태에서는 우선 이 최초 표현식을 계산한 다음, WHEN 절들의 표현식을 하나씩 차례로 계산해서 최초 표현식과 일치하는 값을 찾고, 해당 THEN 절의 표현식을 계산해서 CASE문의 최종값으로 한다. 최초 표현식은 단 한번 계산된다.
 * CASE 키워드 직후에 표현식을 갖지 않는 형태에서는 CASE 키워드 이후 여러 개의 WHEN 절의 표현식은 BOOLEAN 타입을 가져야 한다. 이들 표현식을 하나씩 차례로 계산하다가 처음으로 TRUE 값이 되는 표현식이 발견되면 해당 THEN 절의 표현식을 계산해서 CASE문의 최종값으로 한다.
-* 두 형태 모두 선택적으로 ELSE 절을 가질 수 있다. 이는 조건을 만족하는 WHEN 이후 표현식을 찾지 못했을 경우에 값으로 가질 표현식을  지정한다. 조건을 만족하는 WHEN 절이 없고 ELSE 절도 없을 때는 CASE_NOT_FOUND라는 시스템 예외가 발생한다.
+* 두 형태 모두 선택적으로 ELSE 절을 가질 수 있다. 이는 조건을 만족하는 WHEN 이후 표현식을 찾지 못했을 경우에 값으로 가질 표현식을  지정한다. 조건을 만족하는 WHEN 절이 없고 ELSE 절도 없을 때 전체 CASE 표현식은 NULL 값을 갖는다.
 
 다음은 첫 번째 형태의 CASE 표현식 예제이다.
 
@@ -1473,7 +1467,7 @@ CASE 표현식은 :ref:`CASE 실행문 <case_stmt>`\(Statement)과 마찬가지�
             ELSE 'NULL'
         END;
 
-        put_line(s);
+        DBMS_OUTPUT.put_line(s);
     END;
 
 다음은 유사한 동작을 하는 두 번째 형태의 CASE 표현식 예제이다.
@@ -1490,7 +1484,22 @@ CASE 표현식은 :ref:`CASE 실행문 <case_stmt>`\(Statement)과 마찬가지�
             WHEN b IS NULL THEN 'NULL'
         END;
 
-        put_line(s);
+        DBMS_OUTPUT.put_line(s);
     END;
 
+SQLCODE, SQLERRM
+=================
 
+예외 처리 블럭 안에서 SQLCODE와 SQLERRM은 각각 현재 처리 중인 예외의 코드(INTEGER 타입)와 메시지(STRING 타입)를 나타낸다. 예외 처리 블럭 밖에서 SQLCODE와 SQLERRM은 각각 0과 'no error' 값을 갖는다.
+
+.. code-block:: sql
+
+    CREATE PROCEDURE test()
+        ...
+    BEGIN
+        ...
+    EXCEPTION
+        WHEN OTHERS THEN
+            DBMS_OUTPUT.put_line('code=' || SQLCODE);
+            DBMS_OUTPUT.put_line('error message' || SQLERRM);
+    END;

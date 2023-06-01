@@ -82,7 +82,7 @@ By introducing the concept of user schema, the same object name can be used for 
  * "." (dot) is not allowed in the object name.
  * When using a query or utility command, it must be used as "[user name].object name". (However, the user name can be omitted when querying the object of the logged-in user) (see :doc:`/sql/user_schema`)
  * Changed to include user name in info schema and show full tables results. (see :doc:`/sql/query/show`)
- * The loaddb file prior to 11.2 must be modified to "user name.table name" so that it can be executed in 11.2, or loaddb can be executed by setting the -\-no-user-specified-name option. (see :ref:`loaddb`)
+ * The loaddb file prior to 11.2 must be modified to "user name.table name" so that it can be executed in 11.2, or loaddb can be executed by setting the \-\-no-user-specified-name option. (see :ref:`loaddb`)
 
 The following functions and behavior changed when using "jdbc\:default\:connection\:" or calling getDefaultConnection() in JavaSP. (see :ref:`JavaSP Caution <jsp-caution>`)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -110,8 +110,8 @@ The CCI Driver directory in the CUBRID package is changed from $CUBRID/lib and $
 
 * When using CCI, $CUBRID/cci/lib must be added to LD_LIBRARY_PATH in the environment variable.
 
-Changed Compression (-z, -\-compress) option to default on backup (see :ref:`backupdb`)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Changed Compression (-z, \-\-compress) option to default on backup (see :ref:`backupdb`)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 System catalog information changed or added due to the addition of new features (see :doc:`/sql/catalog`)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -270,9 +270,9 @@ The default value for the CCI_DEFAULT_AUTOCOMMIT broker parameter, which affects
 From the 2008 R4.0 version, the options and parameters that use the unit of pages were changed to use the unit of volume size(CUBRIDSUS-5136)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The options (-p, -l, -s), which use page units to specify the database volume size and log volume size of the cubrid createdb utility, will be removed. Instead, the new options, added after 2008 R4.0 Beta (-\-db-volume-size, -\-log-volume-size, -\-db-page-size, -\-log-page-size), are used.
+The options (-p, -l, -s), which use page units to specify the database volume size and log volume size of the cubrid createdb utility, will be removed. Instead, the new options, added after 2008 R4.0 Beta (\-\-db-volume-size, \-\-log-volume-size, \-\-db-page-size, \-\-log-page-size), are used.
 
-To specify the database volume size of the cubrid addvoldb utility, use the newly-added option (-\-db-volume-size) after 2008 R4.0 Beta instead of using the page unit.
+To specify the database volume size of the cubrid addvoldb utility, use the newly-added option (\-\-db-volume-size) after 2008 R4.0 Beta instead of using the page unit.
 It is recommended to use the new system parameters in bytes because the page-unit system parameters will be removed. For details on the related system parameters, see the below.
 
 Be cautious when setting db volume size if you are a user of a version before 2008 R4.0 Beta(CUBRIDSUS-4222)

@@ -101,7 +101,7 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
 
 **SET SYSTEM PARAMETERS** 구문이나 CSQL 인터프리터의 세션 명령인 **;set**\ 을 통해 DB 구동 중 동적으로 설정값 변경이 가능한 파라미터를 변경할 수 있다. DB 사용자의 권한이 DBA인 경우 적용 구분에 상관없이 파라미터 값의 변경이 가능하며, DBA가 아닌 경우 "세션" 파라미터(아래 표에서 "세션" 항목의 값이 O인 파라미터)의 값만 변경이 가능하다.
 
-아래 표에서 "적용 구분" 항목이 "서버"인 파라미터는 cub_server 프로세스에 영향을 끼치며, "클라이언트"인 파라미터는 CAS, CSQL 또는 클라이언트/서버 모드(-\-CS-mode)로 실행하는 "cubrid" 유틸리티에 영향을 끼친다. "클라이언트/서버"인 파라미터는 cub_server 프로세스와 CAS, CSQL, "cubrid" 유틸리티에 모두 영향을 끼친다.
+아래 표에서 "적용 구분" 항목이 "서버"인 파라미터는 cub_server 프로세스에 영향을 끼치며, "클라이언트"인 파라미터는 CAS, CSQL 또는 클라이언트/서버 모드(\-\-CS-mode)로 실행하는 "cubrid" 유틸리티에 영향을 끼친다. "클라이언트/서버"인 파라미터는 cub_server 프로세스와 CAS, CSQL, "cubrid" 유틸리티에 모두 영향을 끼친다.
 
 아래 표에는 "동적 변경"과 "세션" 파라미터 여부가 표시되어 있다. "동적 변경"이 "가능"한 파라미터는 "적용 구분"과 "세션" 파라미터 여부에 따라 적용 범위가 다음과 같이 달라진다.
  
@@ -129,6 +129,8 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
 |                               | max_clients                         | 서버                    |         | int      | 100                            |                 |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------+
 |                               | tcp_keepalive                       | 클라이언트/서버         |         | bool     | yes                            |                 |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------+
+|                               | use_user_hosts                      | 클라이언트/서버         |         | bool     | off                            |                 |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------+
 | :ref:`memory-parameters`      | data_buffer_size                    | 서버                    |         | byte     | 32,768 *                       |                 |
 |                               |                                     |                         |         |          | :ref:`db_page_size <dpg>`      |                 |
@@ -379,16 +381,18 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
 |                               | recovery_progress_logging_interval  | 서버                    |         | int      | 0                              |                 |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------+
 |                               | supplemental_log                    | 클라이언트/서버         |         | int      | 0                              |                 |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------+
+|                               | regexp_engine                       | 클라이언트/서버         |         | string   | re2                            | 가능            |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------+
 
 .. _lpg:
     
-*   **log_page_size**: :ref:`데이터베이스 생성<creating-database>` 시 **-\-log-page-size** 옵션으로 지정한 로그 볼륨 페이지 크기. 기본값: 16KB. 관련 파라미터의 설정 값은 페이지 단위로 버림된다.
+*   **log_page_size**: :ref:`데이터베이스 생성<creating-database>` 시 **\-\-log-page-size** 옵션으로 지정한 로그 볼륨 페이지 크기. 기본값: 16KB. 관련 파라미터의 설정 값은 페이지 단위로 버림된다.
     예를 들어 checkpoint_every_size 의 값은 16KB로 나누어 소수점 이하를 버림한 값에 16KB를 곱한 값이 된다.
 
 .. _dpg:
 
-*   **db_page_size**: :ref:`데이터베이스 생성<creating-database>` 시 **-\-db-page-size** 옵션으로 지정한 DB 볼륨 페이지 크기. 기본값: 16KB. 관련 파라미터의 설정 값은 페이지 단위로 버림된다. 
+*   **db_page_size**: :ref:`데이터베이스 생성<creating-database>` 시 **\-\-db-page-size** 옵션으로 지정한 DB 볼륨 페이지 크기. 기본값: 16KB. 관련 파라미터의 설정 값은 페이지 단위로 버림된다. 
     예를 들어 data_buffer_size 의 값은 16KB로 나누어 소수점 이하를 버림한 값에 16KB를 곱한 값이 된다.
 
 파라미터의 섹션별 분류
@@ -399,7 +403,7 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
 *   CUBRID 서비스를 시작할 때 사용 : [service] 섹션
 *   전체 데이터베이스에 공통으로 적용 : [common] 섹션
 *   각 데이터베이스에 개별적으로 적용 : [@<*database*>] 섹션
-*   cubrid 유틸리티가 독립 모드(stand-alone, -\-SA-mode)로 구동할 때만 사용 : [standalone] 섹션 
+*   cubrid 유틸리티가 독립 모드(stand-alone, \-\-SA-mode)로 구동할 때만 사용 : [standalone] 섹션 
 
 여기서 <*database*>는 파라미터를 개별적으로 적용할 데이터베이스 이름이며, [common]에 설정된 파라미터가 [@<*database*>]에 설정된 파라미터와 동일한 경우 [@<*database*>]에 설정된 파라미터가 최종 적용된다.
 
@@ -416,7 +420,7 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
     ..... 
 
 [standalone] 섹션에 정의된 설정은 "cubrid"로 시작하는 cubrid 유틸리티들이 독립 모드로 구동할 때만 사용된다. 
-예를 들어, 위와 같이 설정한 상태에서 -\-CS-mode(기본값)으로 DB를 구동(cubrid database start db_name)하면 "sort_buffer_size=2M"가 적용된다. 하지만 DB를 정지하고 "cubrid loaddb -\-SA-mode"를 실행할 때는 "sort_buffer_size=256M"가 적용된다. "cubrid loaddb -\-SA-mode"를 실행할 때 인덱스 생성 과정에서 정렬 버퍼(sort buffer)를 더 많이 사용할 것으로 예상되므로 이를 늘려주는 것이 "loaddb" 수행 성능에 도움이 된다.
+예를 들어, 위와 같이 설정한 상태에서 \-\-CS-mode(기본값)으로 DB를 구동(cubrid database start db_name)하면 "sort_buffer_size=2M"가 적용된다. 하지만 DB를 정지하고 "cubrid loaddb \-\-SA-mode"를 실행할 때는 "sort_buffer_size=256M"가 적용된다. "cubrid loaddb \-\-SA-mode"를 실행할 때 인덱스 생성 과정에서 정렬 버퍼(sort buffer)를 더 많이 사용할 것으로 예상되므로 이를 늘려주는 것이 "loaddb" 수행 성능에 도움이 된다.
 
 기본 제공 파라미터
 ^^^^^^^^^^^^^^^^^^
@@ -510,6 +514,8 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 +--------------------+----------+-------------------+---------+---------+
 | tcp_keepalive      | bool     | yes               |         |         |
 +--------------------+----------+-------------------+---------+---------+
+| use_user_hosts     | bool     | off               |         |         |
++--------------------+----------+-------------------+---------+---------+
 
 **cubrid_port_id**
 
@@ -565,6 +571,62 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 **tcp_keepalive** 
   
     **tcp_keepalive**\ 는 TCP 네트워크 프로토콜에 SO_KEEPALIVE 옵션을 적용할지 여부를 지정하는 파라미터로, 기본값은 **yes*\ 이다. 이 값이 **no**\ 이면 마스터 노드와 슬레이브 노드 간 방화벽이 설정되어 있는 환경에서 장시간 동안 트랜잭션 로그가 복사되지 않을 때 DB 서버 쪽 연결이 종료되는 현상이 발생할 수 있다. 
+
+**use_user_hosts** 
+
+    **use_user_hosts** 시스템 파라미터는 CUBRID 서비스에서 필요한 **호스트명**, **IP 주소** 검색 기능을 아래 서비스 중에서 선택하기 위해 사용한다. 기본값은 **OFF** 이다.
+
+    * **시스템** 에서 제공하는 호스트, IP 주소 검색 라이브러리 (Linux의 경우 **glibc**)
+    * **CUBRID** 에서 제공하는 **호스트/IP 주소 검색 라이브러리** 
+
+    use_user_hosts=off (기본값)
+
+    * 시스템 라이브러리를 사용하여 IP 주소, 호스트명을 검색한다.
+    * 일반적으로 /etc/hosts 파일 검색, DNS Query 등이 사용된다.
+
+    use_user_hosts=on
+
+    * CUBRID 호스트 검색 라이브러리를 이용하여 IP 주소/호스트명을 검색한다.
+    * **$CUBRID/conf/cubrid_hosts.conf** 파일을 이용하여,  호스트명과 IP 주소을 검색한다
+    * 시스템의 /etc/hosts, /etc/nsswitch.conf 파일에 대한 읽기 권한 등과 관계 없이 동작한다.
+
+    .. warning::
+
+        **use_user_hosts** 파라미터는 서비스 운영 중 변경되면 정상적으로 서비스가 종료되지 않을 수 있으므로, 반드시 CUBRID 서비스가 종료된 상태에서 변경해야 한다.
+
+    *   **$CUBRID/conf/hosts.conf** 파일의 형식은 **/etc/hosts** 와 동일하나 다음과 같은 몇 가지 제약이 있다.
+
+        * **IPv4** 주소 만을 허용한다 (**IPv6** 는 허용하지 않는다).
+        * 아래와 같은 형식의 **alias** 는 허용하지 않는다. ::
+
+           172.31.0.1 host1 alias1 alias2
+
+        * 아래와 같은 형식의 **alias** 는 허용한다. ::
+
+           172.31.0.1 host1
+           172.31.0.1 alias1
+
+        * 하나의 호스트명에 대해서 두개 이상의 IP는 허용하지 않는다. ::
+
+            172.31.0.1 host1
+            178.31.0.2 host1
+
+    * 다음은 $CUBRID/conf/hosts.conf의 예시이다. ::
+
+            #
+            # hosts file for CUBRID user specific host service
+            #
+            127.0.0.1       localhost
+            172.31.0.1      node1
+            172.31.0.1      node2
+            172.31.0.1      node3
+            192.168.0.31    node4.kr         # Seoul
+            192.168.2.31    node5.gov.or.kr  # Daejeon
+
+
+.. warning::
+
+    $CUBRID/conf/hosts.conf는 반드시 모든 CUBRID 프로세스를 종료시킨 후 변경해야 하며, **재 구동 후 변경된 사항이 적용된다.** 또한, **localhost** 와 **'hostname'** (Linux 명령어 중 hostname에 의해 출력되는 호스트명)을 반드시 hosts.conf에 포함해야 한다.
  
 .. _memory-parameters:
 
@@ -688,7 +750,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
     **db_volume_size**\ 는 다음과 같은 값을 설정하는 파라미터이다. 값 뒤에 B, K, M, G, T로 단위를 붙일 수 있으며, 각각 Bytes, Kilobytes, Megabytes, Gigabytes, Terabytes를 의미한다. 단위를 생략하면 바이트 단위가 적용된다. 기본값은 **512M**\ 이다.
 
-    *   **cubrid createdb**\와 **cubrid addvoldb** 유틸리티에서 **-\-db-volume-size** 옵션을 생략했을 때 생성되는 데이터베이스 볼륨의 기본 크기
+    *   **cubrid createdb**\와 **cubrid addvoldb** 유틸리티에서 **\-\-db-volume-size** 옵션을 생략했을 때 생성되는 데이터베이스 볼륨의 기본 크기
     *   데이터베이스 볼륨 공간을 모두 사용하면 자동으로 추가되는 볼륨의 기본 크기
 
 .. note::
@@ -701,13 +763,13 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
 **log_volume_size**
 
-    **log_volume_size**\는 **cubrid createdb** 유틸리티에서 **-\-log-volume-size** 옵션이 생략되었을 때 로그 볼륨 파일의 기본 크기를 설정하는 파라미터이다. 값 뒤에 B, K, M, G, T로 단위를 붙일 수 있으며, 각각 Bytes, Kilobytes, Megabytes, Gigabytes, Terabytes를 의미한다. 단위를 생략하면 바이트 단위가 적용된다. 기본값은 **512M** 이다.
+    **log_volume_size**\는 **cubrid createdb** 유틸리티에서 **\-\-log-volume-size** 옵션이 생략되었을 때 로그 볼륨 파일의 기본 크기를 설정하는 파라미터이다. 값 뒤에 B, K, M, G, T로 단위를 붙일 수 있으며, 각각 Bytes, Kilobytes, Megabytes, Gigabytes, Terabytes를 의미한다. 단위를 생략하면 바이트 단위가 적용된다. 기본값은 **512M** 이다.
 
 **temp_file_max_size_in_pages**
 
     **temp_file_max_size_in_pages** 는 일시적 볼륨을 확장할 수 있는 최대 페이지 수를 설정하는 파라미터이다. 기본값은 **-1** 이며 일시적 볼륨이 무제한 디스크 공간을 차지할 수 있음을 뜻한다. 제한을 두기 위해서는 양수 값으로 설정할 수 있으며 설정된 값을 초과하면 오류가 표시되고 일부 큰 질의가 취소될 수 있다.
 
-    이 파라미터를 **0**으로 설정하면 일시적 볼륨이 자동으로 생성되지 않으며 관리자가 **cubrid addvoldb** 유틸리티를 사용해 일시적 데이터를 저장하기 위한 용도로 영구적 볼륨을 생성해야 한다.
+    이 파라미터를 **0**\으로 설정하면 일시적 볼륨이 자동으로 생성되지 않으며 관리자가 **cubrid addvoldb** 유틸리티를 사용해 일시적 데이터를 저장하기 위한 용도로 영구적 볼륨을 생성해야 한다.
 
     자세한 사항은 다음을 참고하도록 한다.  :ref:`temporary-volumes`
     
@@ -1198,7 +1260,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 +---------------------------------+--------+------------+------------+------------+
 | default_week_format             | int    | 0          |            |            |
 +---------------------------------+--------+------------+------------+------------+
-| group_concat_max_len            | byte   | 1,024      | 4          | 33,554,432 |
+| group_concat_max_len            | byte   | 1,024      | 4          | INT_MAX    |
 +---------------------------------+--------+------------+------------+------------+
 | intl_check_input_string         | bool   | no         |            |            |
 +---------------------------------+--------+------------+------------+------------+
@@ -1313,9 +1375,9 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 **group_concat_max_len**
 
     **group_concat_max_len**  은 :func:`GROUP_CONCAT` 함수의 리턴 값의 크기를 제한하는 파라미터이다.
-    값 뒤에 B, K, M, G, T로 단위를 붙일 수 있으며, 각각 Bytes, Kilobytes, Megabytes, Gigabytes, Terabytes를 의미한다. 단위를 생략하면 바이트 단위가 적용된다. 기본값은 **1,024** 바이트이며, 최소값은 4 바이트, 최대값은 33,554,432 바이트이다. :func:`GROUP_CONCAT` 함수의 결과가 제한을 넘으면 오류가 반환된다.
+    값 뒤에 B, K, M, G, T로 단위를 붙일 수 있으며, 각각 Bytes, Kilobytes, Megabytes, Gigabytes, Terabytes를 의미한다. 단위를 생략하면 바이트 단위가 적용된다. 기본값은 **1,024** 바이트이며, 최소값은 4 바이트, 최대값은INT_MAX 바이트(약2G)이다. :func:`GROUP_CONCAT` 함수의 결과가 제한을 넘으면 오류가 반환된다.
 
-    이 함수는 **string_max_size_bytes** 파라미터의 영향을 받으며, **string_max_size_bytes** 보다 **group_concat_max_len** 이 크고 :func:`GROUP_CONCAT` 함수의 결과가 **string_max_size_bytes** 의 크기 제한을 넘으면 오류가 반환된다.
+    이 함수는 **string_max_size_bytes** 파라미터의 영향을 받으며, **group_concat_max_len** 값을 **string_max_size_bytes** 보다 크게 설정한 경우 :func:`GROUP_CONCAT` 결과가 **string_max_size_bytes** 값을 초과하면 오류가 발생한다.
 
 **intl_check_input_string**
 
@@ -1410,7 +1472,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
 **no_backslash_escapes**
 
-    **no_backslash_escapes** 은 이스케이프 문자로 백슬래시(\\) 사용 여부에 관한 파라미터로서, 기본값은 **yes** 이다. 이 파라미터 값이 **no** 이면 백슬래시(\\)가 이스케이프 문자로 사용되며, **yes** 이면 백슬래시는 일반 문자로 사용된다. 예를 들어, 이 값이 **no** 일 때 "\\n"은 개행(new line) 문자를 의미한다. 그러나 이 값이 **yes** 이면 "\\n"은 "\\"과 "n" 두 개의 문자를 의미한다.  백슬래시가 이스케이프 문자로 사용되는 경우에 대한 자세한 설명은 :ref:`escape-characters` 를 참고한다.
+    **no_backslash_escapes** 은 이스케이프 문자로 백슬래시(\\) 사용 여부에 관한 파라미터로서, 기본값은 **yes** 이다. 이 파라미터 값이 **no** 이면 백슬래시(\\)가 이스케이프 문자로 사용되며, **yes** 이면 백슬래시는 일반 문자로 사용된다. 예를 들어, 이 값이 **no** 일 때 "\\n"은 개행(new line) 문자를 의미한다. 그러나 이 값이 **yes** 이면 "\\n"은 "\\\"과 "n" 두 개의 문자를 의미한다.  백슬래시가 이스케이프 문자로 사용되는 경우에 대한 자세한 설명은 :ref:`escape-characters` 를 참고한다.
 
 **only_full_group_by**
 
@@ -1749,7 +1811,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
 **loaddb_worker_count**
 
-    **loaddb_worker_count**는 **loaddb** 세션에 전용으로 할당되는 최대 스레드 개수를 설정하는 파라미터이다. 단일 **loaddb**세션이 수행되는 경우 모든 스레드가 이 작업을 수행할 수도 있다. 여러 **loaddb** 세션이 동시에 수행되는 경우 모든 세션에 할당된 스레드의 총 수는 이 파라미터 설정값을 초과할 수 없다.
+    **loaddb_worker_count**\는 **loaddb** 세션에 전용으로 할당되는 최대 스레드 개수를 설정하는 파라미터이다. 단일 **loaddb** 세션이 수행되는 경우 모든 스레드가 이 작업을 수행할 수도 있다. 여러 **loaddb** 세션이 동시에 수행되는 경우 모든 세션에 할당된 스레드의 총 수는 이 파라미터 설정값을 초과할 수 없다.
 
 .. _timezone-parameters:
 
@@ -1988,6 +2050,8 @@ HA 관련 파라미터
 +-------------------------------------+--------+----------------+----------------+----------------+
 | supplemental_log                    | int    | 0 (off)        | 0              | 2              |
 +-------------------------------------+--------+----------------+----------------+----------------+
+| regexp_engine                       | string | re2            |                |                |
++-------------------------------------+--------+----------------+----------------+----------------+
 
 **access_ip_control**
 
@@ -2051,9 +2115,9 @@ HA 관련 파라미터
 
 **java_stored_procedure_uds**
 
-    **java_stored_procedure_uds** 는 자바 저장 프로시저를 호출하는 cub_javasp 프로세스와 cub_server 프로세스 간에 TCP 연결 대신 유닉스 도메인 소켓을 통한 연결을 사용하기 위한 파라미터이다. 기본값은 **yes**이고 Windows의 경우 파라미터의 값과 관련 없이 **no**로 동작한다.
+    **java_stored_procedure_uds** 는 자바 저장 프로시저를 호출하는 cub_javasp 프로세스와 cub_server 프로세스 간에 TCP 연결 대신 유닉스 도메인 소켓을 통한 연결을 사용하기 위한 파라미터이다. 기본값은 **yes**\이고 Windows의 경우 파라미터의 값과 관련 없이 **no**\로 동작한다.
         
-        .. note:: 
+    .. note:: 
 
         cub_javasp 프로세스의 유닉스 도메인 소켓 파일 경로를 지정하는 **CUBRID_TMP** 환경 변수에 대한 내용은 :doc:`/env` 을 참고한다.
 
@@ -2180,6 +2244,10 @@ HA 관련 파라미터
 
  **supplemental_log** 는 CDC (Change Data Capture) 또는 :ref:`flashback` 지원에 필요한 정보를 로그 볼륨에 기록할지 여부를 결정한다. CDC와 flashback은 물리적 로그를 해석하여 트랜잭션이 데이터베이스를 논리적으로 어떻게 변경했는지 추론한다. 이때 물리적 로그를 해석하기 위해서는 추가 정보가 필요하고 이를 위해 **supplemental_log** 를 사용한다. 이 시스템 파라미터를 0보다 크게 설정하면 기존 트랜잭션 로그 외에도 더 많은 로그가 생성되고 저장되므로 성능과 로그 저장공간에 영향을 끼친다. 이 시스템 파라미터를 1로 설정하면 사용자가 실행한 DML 및 DDL을 해석하는 데 필요한 정보가 기록된다. 또한 이 시스템 파라미터를 2로 설정하면 DML 해석에 필요한 정보만 기록된다.
 
+**regexp_engine**
+
+ **regexp_engine** 는 정규식 연산자와 함수가 수행할 라이브러리를 선택하는 파라미터이다. **cppstd** 또는 **re2**\를 설정할 수 있고 기본값은 **re2**\이다. 정규 표현식 기능에 관한 자세한 내용은 :doc:`/sql/function/regex_fn` 을 참고한다.
+
 .. _broker-configuration:
 
 브로커 설정
@@ -2283,6 +2351,44 @@ cubrid_broker.conf 설정 파일과 기본 제공 파라미터
 |                                 |                         | SQL_LOG                         | string | ON                           | 가능      |
 |                                 |                         +---------------------------------+--------+------------------------------+-----------+
 |                                 |                         | SQL_LOG_MAX_SIZE                | KB     | 10000                        | 가능      |
+|                                 +-------------------------+---------------------------------+--------+------------------------------+-----------+
+|                                 | 샤드                    | SHARD                           | string | OFF                          |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_CONNECTION_FILE           | string | shard_connection.txt         |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_DB_NAME                   | string |                              |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_DB_PASSWORD               | string |                              |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_DB_USER                   | string |                              |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_IGNORE_HINT               | string | OFF                          |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_KEY_FILE                  | string | shard_key.txt                |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_KEY_FUNCTION_NAME         | string |                              |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_KEY_LIBRARY_NAME          | string |                              |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_KEY_MODULAR               | int    | 256                          |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_MAX_CLIENTS               | int    | 256                          |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_MAX_PREPARED_STMT_COUNT   | int    | 10,000                       |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_NUM_PROXY                 | int    | 1                            |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_PROXY_CONN_WAIT_TIMEOUT   | sec    | 8h                           |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_PROXY_LOG                 | string | ERROR                        | 가능      |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_PROXY_LOG_DIR             | string | log/broker/proxy_log         |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_PROXY_LOG_MAX_SIZE        | KB     | 100,000                      | 가능      |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_PROXY_SHM_ID              | int    |                              |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_PROXY_TIMEOUT             | sec    | 30(초)                       |           |
 |                                 +-------------------------+---------------------------------+--------+------------------------------+-----------+
 |                                 | 기타                    | MAX_STRING_LENGTH               | int    | -1                           |           |
 |                                 |                         +---------------------------------+--------+------------------------------+-----------+
@@ -2669,6 +2775,149 @@ CUBRID 설치 시 생성되는 기본 브로커 설정 파일인 **cubrid_broker
     *   **SQL_LOG** 파라미터가 **ON** 으로 설정된 경우에 생성되는 SQL 로그 파일의 크기가 파라미터의 설정값에 도달하면 *broker_name_id.sql.log.bak* 이 생성된다.
     *   **SLOW_LOG** 파라미터가 **ON** 으로 설정된 경우에 생성되는 SLOW SQL 로그 파일의 크기가 이 파라미터의 설정값에 도달하면 *broker_name_id.slow.log.bak* 이 생성된다.
 
+샤드
+^^^^
+
+SHARD 기능을 사용하려면 **cubrid_broker.conf.shard**\ 를 참고하여 **cubrid_broker.conf**\ 에 다음 파라미터들을 설정해야 한다.
+
+**SHARD**
+
+    SHARD 기능의 활성화 여부를 지정하는 파라미터이다. **ON** 또는 **OFF**\로 설정하며, 기본값은 **OFF**\ 이다.
+
+**SHARD_CONNECTION_FILE**
+
+    shard 연결 파일의 경로이다. shard 연결 파일은 **$CUBRID/conf** 내에 위치해야 한다. 자세한 설명은 :ref:`shard 연결 파일 <shard-connection-file>` 을 참고한다. 
+
+**SHARD_DB_NAME**
+
+    shard DB의 이름으로서 응용의 연결 요청이 유효한지 검사하는 데 사용된다.
+    
+**SHARD_DB_PASSWORD**
+
+    backend shard DB의 사용자 비밀번호로서, CAS 프로세스에서 backend DBMS와 연결을 수행하는데 사용되며, 응용의 연결 요청이 유효한지 검사하는 데에도 사용된다. 모든 shard DB의 사용자 비밀번호는 동일해야 한다.
+    
+    cubrid_broker.conf에 **SHARD_DB_PASSWORD**\ 의 값을 노출시키고 싶지 않은 경우 환경 변수를 사용할 수 있다. 환경 변수 이름의 포맷은 <*broker_name*>\ **_SHARD_DB_PASSWORD**\
+     이고, <*broker_name*>은 항상 대문자로 변환되어야 한다. 예를 들어, 브로커의 이름이 *shard1*\ 이라면 shard DB 암호를 설정하는 환경 변수 이름은 **SHARD1_SHARD_DB_PASSWORD**\ 가 된다. 단, "cubrid broker restart" 명령으로 SHARD 기능이 재구동되는 경우 **SHARD_DB_PASSWORD**\ 의 환경 변수 또는 cubrid_broker.conf의 **SHARD_DB_PASSWORD** 파라미터 값이 반드시 설정되어 있어야 한다.
+
+    ::
+
+        export SHARD1_SHARD_DB_PASSWORD=shard123
+
+    .. note:: SHARD_DB_USER/SHARD_DB_PASSWORD 파라미터는 제거될 예정(deprecated)이므로, 응용 프로그램을 통해 접속 정보를 입력할 것을 권장한다. 
+
+**SHARD_DB_USER** 
+
+    backend shard DB의 사용자 이름으로서, CAS 프로세스에서 backend DBMS와 연결을 수행하는데 사용되며, 응용의 연결 요청이 유효한지 검사하는 데에도 사용된다. 모든 shard DB의 사용자 이름은 동일해야 한다.
+    
+    .. note:: SHARD_DB_USER/SHARD_DB_PASSWORD 파라미터는 제거될 예정(deprecated)이므로, 응용 프로그램을 통해 접속 정보를 입력할 것을 권장한다. 
+
+**SHARD_IGNORE_HINT**
+
+    이 값이 ON이면 특정 shard로 연결하기 위해 제공되는 힌트가 무시되고, 정해진 규칙에 따라 접속할 데이터베이스를 선택한다. 기본값은 **OFF** 이다. 모든 데이터베이스가 같은 데이터로 복제되어 있는 상태에서 읽기 부하를 자동으로 로드 밸런싱하여 처리하고자 할 때 사용할 수 있는 방식이다. 예를 들어 응용 프로그램의 부하를 여러 개의 복제 노드 중 하나에 접속하고자 할 때 특정 shard 하나의 연결만 제공하면 어느 노드(데이터베이스)에 연결할지는 proxy가 자동으로 결정한다.
+
+**SHARD_KEY_FILE**
+
+    shard key 설정 정보 파일의 경로이다. shard key 설정 파일은 **$CUBRID/conf** 내에 위치해야 한다. 자세한 설명은 :ref:`shard key 설정 파일 <shard-key-configuration-file>` 을 참고한다. 
+
+**SHARD_KEY_FUNCTION_NAME**
+
+    shard key에 대한 사용자 해시 함수의 이름을 지정하기 위한 파라미터이다. 자세한 내용은 :ref:`setting-user-defined-hash-function` 를 참고한다.
+
+**SHARD_KEY_LIBRARY_NAME**
+
+    shard key에 대한 사용자 해시 함수를 지정하기 위해 실행 시간에 로딩 가능한 라이브러리 경로를 지정한다. **SHARD_KEY_LIBRARY_NAME** 파라미터가 설정된 경우 반드시 **SHARD_KEY_FUNCTION_NAME** 파라미터도 설정되어야 한다. 자세한 내용은 :ref:`setting-user-defined-hash-function` 을 참고한다.
+    
+**SHARD_KEY_MODULAR** 
+
+    내장된 shard key 해시 함수 결과의 범위를 지정하기 위한 파라미터로서, 기본 shard key 해시 함수의 결과는 shard_key(정수형) % SHARD_KEY_MODULAR이다. 최소값은 1, 최대값은 256이다. 관련된 내용은 :ref:`shard key 설정 파일 <shard-key-configuration-file>` 과 :ref:`setting-user-defined-hash-function` 을 참고한다.
+
+**SHARD_MAX_CLIENTS**
+
+    proxy로 동시에 연결 가능한 응용의 개수이다. 기본값은 256이며, 최대값은 proxy 당 10,000이다.
+    
+.. _shard-max-prepared-stmt-count:
+
+**SHARD_MAX_PREPARED_STMT_COUNT**
+
+    proxy가 관리하는 statement pool의 최대 크기이다. 기본값은 10,000이다.
+
+**SHARD_NUM_PROXY**
+
+    proxy 프로세스의 개수이다. 기본값은 1 이며, 최대값은 8이다.
+
+**SHARD_PROXY_CONN_WAIT_TIMEOUT**
+  
+    이 파라미터로 명시한 시간 동안 아무런 요청이 없으면 CAS가 DB와의 접속을 끊는다. 기본값은 **8h**\ 이다. 값 뒤에 ms, s, min, h의 단위 지정이 가능하며, 각각 milliseconds, seconds, minutes, hours를 의미한다. 단위가 생략되면 s로 지정된다. 
+    예전 비밀번호 정보를 지닌 CAS는 더 이상 사용할 수 없으므로 종료되어야 되는데, 이 기능은 이러한 CAS가 불필요하게 계속 유지되는 것을 방지한다.
+    
+**SHARD_PROXY_LOG**
+
+    proxy 로그 레벨로서 다음의 값 중 하나로 설정 가능하다.
+    프록시 로그 레벨 정책: 상위 level을 설정하면 하위의 모든 로그가 남는다.
+    
+        *   예) SCHEDULE을 설정하면, ERROR | TIMEOUT | NOTICE | SHARD | SCHEDULE 로그를 모두 남긴다.
+
+    *   **ALL**: 모든 로그 기록
+    *   **ON**: 모든 로그 기록
+    *   **SHARD**: shard DB 선택과 처리에 대한 로그 기록
+    *   **SCHEDULE**: 작업 할당에 대한 로그 기록
+    *   **NOTICE**: 주요한 알림에 대한 로그 기록
+    *   **TIMEOUT**: 임계 시간 초과에 대한 로그 기록
+    *   **ERROR**: 에러 로그 기록
+    *   **NONE**: 로그 기록하지 않음
+    *   **OFF**: 로그 기록하지 않음
+
+**SHARD_PROXY_LOG_DIR**
+
+    proxy 로그를 저장할 디렉터리 경로이다.
+
+**SHARD_PROXY_LOG_MAX_SIZE**
+
+    proxy 로그 파일의 최대크기이다. 값 뒤에 B, K, M, G의 단위 지정이 가능하며, 각각 Bytes, Kilobytes, Megabytes, Gigabytes를 의미한다. 단위 생략 시 K로 지정된다. 최대 1,000,000(KB)까지 설정할 수 있다.
+
+**SHARD_PROXY_SHM_ID**
+
+    proxy가 이용하는 공유 메모리 ID 를 지정하기 위한 파라미터로 시스템 내에서 유일한 값이어야 한다. 
+
+**SHARD_PROXY_TIMEOUT**
+
+    proxy에서 CAS가 사용 가능해지기를 기다리거나 statement가 준비(prepare)되기를 기다리는 최대 시간. 대기 시간이 만료되면 드라이버의 요청을 에러 처리함. 기본값: 30(초). 이 값이 0이면 시스템 파라미터 query_timeout의 값에 의해 대기 시간이 결정되며, query_timeout의 값도 0이면 무한 대기한다. SHARD_PROXY_TIMEOUT의 값이 0보다 크면 query_timeout 값과 SHARD_PROXY_TIMEOUT 값 중 큰 값에 의해 대기 시간이 결정된다. 값 뒤에 ms, s, min, h의 단위 지정이 가능하며, 각각 milliseconds, seconds, minutes, hours를 의미한다. 단위가 생략되면 s로 지정된다.
+
+.. note:: **proxy 설정을 위해 필요한 파라미터**
+
+    CUBRID proxy 설정을 위해서는 SHARD_MAX_CLIENTS, MAX_NUM_APPL_SERVER, SHARD_NUM_PROXY의 설정이 필요하다.
+     
+    *   Linux에서 proxy 프로세스 한 개당 사용되는 파일 디스크립터(fd)는 다음과 같이 제한된다.
+
+        *   "((SHARD_MAX_CLIENTS + MAX_NUM_APPL_SERVER) / SHARD_NUM_PROXY) + 256" <= 10,000
+     
+    위의 공식을 자세히 설명하면 다음과 같다.
+     
+    *   SHARD_MAX_CLIENTS는 SHARD 구성 시스템에 접속하는 응용 프로그램들의 최대 접속 개수를 나타낸다.
+    *   MAX_NUM_APPL_SERVER는 proxy 시스템에 접속하는 모든 CAS들의 최대 접속 개수를 나타낸다.
+    *   SHARD_NUM_PROXY는 SHARD 구성 시스템에서 사용하는 proxy 프로세스의 개수를 나타낸다.
+    *   "SHARD_MAX_CLIENTS / SHARD_NUM_PROXY"는 proxy 프로세스 한 개당 접속하는 응용 프로그램들의 최대 접속 개수이다.
+    *   "MAX_NUM_APPL_SERVER / SHARD_NUM_PROXY"는 proxy 프로세스 한 개당 접속하는 CAS들의 최대 접속 개수이다.
+    *   256은 Linux에서 proxy 프로세스 한 개당 내부적으로 사용되는 fd의 개수이다.
+
+    Linux 시스템에서 SHARD 파라미터를 설정하는 예로, 응용 프로그램의 최대 동시 접속 개수(SHARD_MAX_CLIENTS)를 5,000으로 하고, CAS의 최대 개수(MAX_NUM_APPL_SERVER)를 200으로 하며, proxy 프로세스의 최대 개수(SHARD_NUM_PROXY)를 1로 하면,(5,000 + 200)/1 + 256 = 5,456 이 되어 10,000보다 작으므로 이러한 설정은 가능하다.
+     
+    이와 관련하여 각 프로세스 간 연결 관계를 살펴보면 다음과 같다. "proxy"는 "응용 client"와 "CAS" 사이에서 연결을 중재하는 역할을 수행한다.
+
+    아래에서 []는 프로세스를 나타내며, ->는 요청하는 방향을 나타낸다.
+
+    ::
+     
+        [응용 client]  --(최초 접속 요청)--------------->  [broker] (proxy 선택)
+                       <--(연결할 proxy 알려줌)----
+                       --------------------------------->  [proxy] --(CAS 선택)--> [CAS] ---> [DB server]
+                       <---------------------------------          <--------------       <--- 
+                       <--(이후 같은 proxy 사용)-------->          <------------->       <-->
+
+    broker는 응용 client가 최초 접속을 요청할 때 proxy를 선택하기 위해 한 번만 사용되고, 이후 CUBRID는 [응용 client] - [proxy] - [CAS] - [DB Server]의 연결을 유지한다.
+
+    또한, CAS는 DB server와 연결된 이후 계속 연결을 유지한다.
+
 기타
 ^^^^
 
@@ -2698,3 +2947,8 @@ HA 설정
 =======
 
 HA 설정은 :ref:`ha-configuration`\ 을 참고한다.
+
+SHARD 설정
+==========
+
+SHARD 설정은 :ref:`default-shard-conf`\ 을 참고한다.

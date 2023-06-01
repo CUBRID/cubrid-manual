@@ -35,10 +35,42 @@ To define a catalog virtual class, define a catalog class first. The figure belo
 
 Added catalog classes represent information about all classes, attributes and methods in the database. Catalog classes are made up of class composition hierarchy and designed to have OIDs of catalog class instances for cross reference.
 
+================================ =======================================================================
+Class Name                       Description
+================================ =======================================================================
+:ref:`-db-class`                 Class information
+:ref:`-db-attribute`             Attribute information
+:ref:`-db-domain`                Domain information
+:ref:`-db-charset`               Charset information
+:ref:`-db-collation`             Collation information
+:ref:`-db-method`                Method information
+:ref:`-db-meth-sig`              Configuration information of C functions on the method
+:ref:`-db-meth-arg`              Method argument information
+:ref:`-db-meth-file`             File information in which the method is defined
+:ref:`-db-query-spec`            The SQL statement of a virtual class
+:ref:`-db-index`                 Index information
+:ref:`-db-index-key`             Key information on an index
+:ref:`-db-auth`                  User authorization information of classes
+:ref:`-db-data-type`             The data type supported by CUBRID
+:ref:`-db-partition`             Partition information
+:ref:`-db-stored-procedure`      Java stored procedure information
+:ref:`-db-stored-procedure-args` Java stored procedure argument information
+:ref:`-db-server`                Server information for DBLink
+:ref:`-db-synonym`               Target object information of synonyms
+:ref:`db-user`                   User information
+:ref:`db-authorization`          User authorization information of classes
+:ref:`db-serial`                 Serial information
+:ref:`db-trigger`                Trigger information
+:ref:`db-ha-apply-info`          The progress status the **applylogdb** utility applies replication logs
+:ref:`dual`                      Dummy table
+================================ =======================================================================
+
+.. _-db-class:
+
 _db_class
 ---------
 
-Represents class information. An index for class_name is created.
+Represents class information. An index for unique_name and an index for class_name and owner are created.
 
 +--------------------+---------------------------+------------------------------------------------------------------------------------------+
 |   Attribute Name   |   Data Type               |   Description                                                                            |
@@ -135,11 +167,11 @@ The following example shows how to retrieve all sub classes under the class owne
 
 .. note::
 
-    All examples of system catalog classes have been written in the csql utility. In this example, **-\-no-auto-commit** (inactive mode of auto-commit) and **-u** (specifying user DBA) options are used. ::
+    All examples of system catalog classes have been written in the csql utility. In this example, **\-\-no-auto-commit** (inactive mode of auto-commit) and **-u** (specifying user DBA) options are used. ::
     
         % csql --no-auto-commit -u dba demodb
 
-.. _db-attribute:
+.. _-db-attribute:
 
 _db_attribute
 -------------
@@ -258,6 +290,8 @@ The following example shows how to retrieve user classes (from_class_of.is_syste
       'female_event'        'gender'
       'female_event'        'players'
 
+.. _-db-domain:
+
 _db_domain
 ----------
 
@@ -269,7 +303,7 @@ Represents domain information. Indexes for object_of and data_type are created.
 | object_of          | object                 | Attribute that refers to the domain, which can be a method parameter or domain                          |
 +--------------------+------------------------+---------------------------------------------------------------------------------------------------------+
 | data_type          | INTEGER                | Data type of the domain (a value in the "Value" column of the "Data Types Supported by CUBRID" table in |
-|                    |                        | :ref:`db-attribute`)                                                                                    |
+|                    |                        | :ref:`-db-attribute`)                                                                                   |
 |                    |                        |                                                                                                         |
 +--------------------+------------------------+---------------------------------------------------------------------------------------------------------+
 | prec               | INTEGER                | Precision of the data type. 0 is used if the precision is not specified.                                |
@@ -282,7 +316,7 @@ Represents domain information. Indexes for object_of and data_type are created.
 |                    |                        | **NULL** otherwise.                                                                                     |
 +--------------------+------------------------+---------------------------------------------------------------------------------------------------------+
 | code_set           | INTEGER                | Character set (value of table "character sets supported by CUBRID" in                                   |
-|                    |                        | :ref:`db-attribute`)                                                                                    |
+|                    |                        | :ref:`-db-attribute`)                                                                                   |
 |                    |                        | if it is character data type. 0 otherwise.                                                              |
 |                    |                        |                                                                                                         |
 +--------------------+------------------------+---------------------------------------------------------------------------------------------------------+
@@ -297,6 +331,8 @@ Represents domain information. Indexes for object_of and data_type are created.
 |                    |                        | otherwise.                                                                                              |
 +--------------------+------------------------+---------------------------------------------------------------------------------------------------------+
 
+.. _-db-charset:
+
 _db_charset
 -----------
 
@@ -310,6 +346,8 @@ charset_name        CHARACTER VARYING(32)    Charset name
 default_collation   INTEGER                  Default collation ID
 char_size           INTEGER                  One character's byte size
 =================== ======================== ==========================
+
+.. _-db-collation:
 
 _db_collation
 -------------
@@ -335,6 +373,8 @@ The information on collation.
 +--------------------+---------------+-----------------------------------------------------------------------------+
 | checksum           | VARCHAR(32)   | Checksum of a collation file                                                |
 +--------------------+---------------+-----------------------------------------------------------------------------+
+
+.. _-db-method:
 
 _db_method
 ----------
@@ -382,6 +422,8 @@ The following example shows how to retrieve class methods of the class with a cl
       'db_root'             {'add_user', 'drop_user', 'find_user', 'print_authorizations', 'info', 'change_owner', 'change_trigg
     r_owner', 'get_owner', 'change_sp_owner'}
 
+.. _-db-meth-sig:
+
 _db_meth_sig
 ------------
 
@@ -401,6 +443,8 @@ Represents configuration information of C functions on the method. An index for 
 | arguments          | SEQUENCE OF _db_meth_arg | Input arguments of the function               |
 +--------------------+--------------------------+-----------------------------------------------+
 
+.. _-db-meth-arg:
+
 _db_meth_arg
 ------------
 
@@ -413,12 +457,14 @@ Represents method argument information. An index for meth_sig_of is created.
 | meth_sig_of        | _db_meth_sig           | Information of the function to which the argument belongs                                                                         |
 +--------------------+------------------------+-----------------------------------------------------------------------------------------------------------------------------------+
 | data_type          | INTEGER                | Data type of the argument (a value in the "Value" column of the "Data Types Supported by CUBRID" in                               |
-|                    |                        | :ref:`db-attribute`)                                                                                                              |
+|                    |                        | :ref:`-db-attribute`)                                                                                                             |
 +--------------------+------------------------+-----------------------------------------------------------------------------------------------------------------------------------+
 | index_of           | INTEGER                | Order of the argument listed in the function definition. Begins with 0 if it is a return value, and 1 if it is an input argument. |
 +--------------------+------------------------+-----------------------------------------------------------------------------------------------------------------------------------+
 | domains            | SEQUENCE OF _db_domain | Domain of the argument                                                                                                            |
 +--------------------+------------------------+-----------------------------------------------------------------------------------------------------------------------------------+
+
+.. _-db-meth-file:
 
 _db_meth_file
 -------------
@@ -435,6 +481,8 @@ Represents information of a file in which a function is defined. An index for cl
 +--------------------+---------------+-------------------------------------------------------------------------------------------------+
 | path_name          | VARCHAR(255)  | File path in which the method is located                                                        |
 +--------------------+---------------+-------------------------------------------------------------------------------------------------+
+
+.. _-db-query-spec:
 
 _db_query_spec
 --------------
@@ -453,7 +501,7 @@ The data type of attribute 'spec' is VARCHAR (4096) for prior versions including
 |                    | VARCHAR(4096)       |                                               | 10.1 Patch 3 or earlier       |
 +--------------------+---------------------+-----------------------------------------------+-------------------------------+
 
-.. _db-index:
+.. _-db-index:
 
 _db_index
 ---------
@@ -531,6 +579,8 @@ The following example shows how to retrieve names of indexes that belong to the 
       'record'              'pk_record_host_year_event_code_athlete_code_medal'
       'stadium'             'pk_stadium_code'
 
+.. _-db-index-key:
+
 _db_index_key
 -------------
 
@@ -575,6 +625,8 @@ The following example shows how to retrieve the names of index that belongs to t
       'record'              {'host_year', 'event_code', 'athlete_code', 'medal'}
       'history'             {'event_code', 'athlete'}
 
+.. _-db-auth:
+
 _db_auth
 --------
 
@@ -618,10 +670,12 @@ The following example shows how to retrieve authorization information defined in
     ==================================================================
       'DBA'                 'PUBLIC'              'SELECT'
 
+.. _-db-data-type:
+
 _db_data_type
 -------------
 
-Represents the data type supported by CUBRID (see the "Data Types Supported by CUBRID" table in :ref:`db-attribute`).
+Represents the data type supported by CUBRID (see the "Data Types Supported by CUBRID" table in :ref:`-db-attribute`).
 
 +--------------------+---------------+--------------------------------------------------------------------------------------------------------+
 |   Attribute Name   |   Data Type   |   Description                                                                                          |
@@ -649,6 +703,8 @@ The following example shows how to retrieve attributes and type names of the *ev
       'name'                'STRING'
       'gender'              'CHAR'
       'players'             'INTEGER'
+
+.. _-db-partition:
 
 _db_partition
 -------------
@@ -678,24 +734,7 @@ Represents partition information. An index for class_of and pname is created.
 | comment            | VARCHAR(1024) | Comment to describe the partition |
 +--------------------+---------------+-----------------------------------+
 
-.. _db_server:
-
-_db_server
-----------
-
-============== =================== ========================================
-Attribute Name Data Type           Description
-============== =================== ========================================
-link_name      VARCHAR(255)        Connection name
-host           VARCHAR(255)        Hostname of a server
-port           INTEGER             Connection port of a server
-db_name        VARCHAR(255)        Database name of a server
-user_name      VARCHAR(255)        Database user name of a server
-password       VARCHAR(1073741823) Database user password of a server
-properties     VARCHAR(2048)       Property information used for connection
-owner          db_user             The owner of this connection information
-comment        VARCHAR(1024)       Comment to describe the server
-============== =================== ========================================
+.. _-db-stored-procedure:
 
 _db_stored_procedure
 --------------------
@@ -725,6 +764,8 @@ Represents Java stored procedure information. An index for sp_name is created.
 | comment            | VARCHAR (1024)                        | Comment to describe the stored procedure  |
 +--------------------+---------------------------------------+-------------------------------------------+
 
+.. _-db-stored-procedure-args:
+
 _db_stored_procedure_args
 -------------------------
 
@@ -746,12 +787,31 @@ Represents Java stored procedure argument information. An index for sp_name is c
 | comment            | VARCHAR (1024) | Comment to describe the argument |
 +--------------------+----------------+----------------------------------+
 
-.. _db_synonym:
+.. _-db-server:
+
+_db_server
+----------
+
+============== =================== ========================================
+Attribute Name Data Type           Description
+============== =================== ========================================
+link_name      VARCHAR(255)        Connection name
+host           VARCHAR(255)        Hostname of a server
+port           INTEGER             Connection port of a server
+db_name        VARCHAR(255)        Database name of a server
+user_name      VARCHAR(255)        Database user name of a server
+password       VARCHAR(1073741823) Database user password of a server
+properties     VARCHAR(2048)       Property information used for connection
+owner          db_user             The owner of this connection information
+comment        VARCHAR(1024)       Comment to describe the server
+============== =================== ========================================
+
+.. _-db-synonym:
 
 _db_synonym
 -----------
 
-Represents target object information for the synonym. An index for unique_name and an index for name and owner are created.
+Represents target object information of synonyms. An index for unique_name and an index for name owner, and is_public are created.
 
 ================== ============= =======================================================
 Attribute Name     Data Type     Description
@@ -769,6 +829,8 @@ comment            VARCHAR(2048) Comment to describe the synonym
 .. warning::
     
     It does not support public synonym yet.
+
+.. _db-user:
 
 db_user
 -------
@@ -806,6 +868,8 @@ db_user
 *   **find_user** ()
 *   **login** ()
 
+.. _db-authorization:
+
 db_authorization
 ----------------
 
@@ -821,8 +885,10 @@ db_authorization
 
 *   **check_authorization** (varchar(255), integer)
 
+.. _db-serial:
+
 db_serial
-----------
+---------
 
 +-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
 |   Attribute Name  |   Data Type          |   Description                                                                                       |
@@ -852,6 +918,8 @@ db_serial
 +-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
 | comment           | VARCHAR (1024)       | Comment to describe the serial.                                                                     |
 +-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
+
+.. _db-trigger:
 
 db_trigger
 ----------
@@ -892,6 +960,8 @@ db_trigger
 +------------------------+---------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | comment                | VARCHAR (1024)      | Comment to describe the trigger                                                                                                                            |
 +------------------------+---------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+.. _db-ha-apply-info:
 
 db_ha_apply_info
 ----------------
@@ -968,6 +1038,8 @@ A table that stores the progress status every time the **applylogdb** utility ap
 | start_time           | DATETIME        | Time when the applylogdb process accessed the slave database                                                                                       |
 +----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
 
+.. _dual:
+
 dual
 ----
 
@@ -1013,6 +1085,33 @@ System Catalog Virtual Class
 ============================
 
 General users can only see information of classes for which they have authorization through system catalog virtual classes. This section explains which information each system catalog virtual class represents, and virtual class definition statements.
+
+================================ ==============================================================================
+Virtual Class Name               Description
+================================ ==============================================================================
+:ref:`db-class`                  Class information
+:ref:`db-direct-super-class`     Super class information
+:ref:`db-vclass`                 The SQL statement of a virtual class
+:ref:`db-attribute`              Attribute information
+:ref:`db-attr-setdomain-elm`     Data type for elements of collection type (SET, MULTISET, SEQUENCE) attributes
+:ref:`db-charset`                Charset information
+:ref:`db-collation`              Collation information
+:ref:`db-method`                 Method information
+:ref:`db-meth-arg`               Method argument information
+:ref:`db-meth-arg-setdomain-elm` Data type for elements of collection type (SET, MULTISET, SEQUENCE) argument
+:ref:`db-meth-file`              File information in which the method is defined
+:ref:`db-index`                  Index information
+:ref:`db-index-key`              Key information on an index
+:ref:`db-auth`                   User authorization information of classes
+:ref:`db-trig`                   Trigger information
+:ref:`db-partition`              Partition information
+:ref:`db-stored-procedure`       Java stored procedure information
+:ref:`db-stored-procedure-args`  Java stored procedure argument information
+:ref:`db-server`                 Server information for DBLink
+:ref:`db-synonym`                Target object information of synonyms
+================================ ==============================================================================
+
+.. _db-class:
 
 DB_CLASS
 --------
@@ -1120,6 +1219,8 @@ The following example shows how to retrieve system classes that can be accessed 
       'db_user'
       'dual'
 
+.. _db-direct-super-class:
+
 DB_DIRECT_SUPER_CLASS
 ---------------------
 
@@ -1167,6 +1268,8 @@ The following example shows how to retrieve super classes of the class owned by 
     ============================================
       'female_event'        'event'
 
+.. _db-vclass:
+
 DB_VCLASS
 ---------
 
@@ -1202,6 +1305,8 @@ The following example shows how to retrieve SQL definition statements of the *db
     ======================
       'SELECT [c].[class_name], CAST([c].[owner].[name] AS VARCHAR(255)), CASE [c].[class_type] WHEN 0 THEN 'CLASS' WHEN 1 THEN 'VCLASS' ELSE 'UNKNOW' END, CASE WHEN MOD([c].[is_system_class], 2) = 1 THEN 'YES' ELSE 'NO' END, CASE [c].[tde_algorithm] WHEN 0 THEN 'NONE' WHEN 1 THEN 'AES' WHEN 2 THEN 'ARIA' END, CASE WHEN [c].[sub_classes] IS NULL THEN 'NO' ELSE NVL((SELECT 'YES' FROM [_db_partition] [p] WHERE [p].[class_of] = [c] and [p].[pname] IS NULL), 'NO') END, CASE WHEN MOD([c].[is_system_class] / 8, 2) = 1 THEN 'YES' ELSE 'NO' END, [coll].[coll_name], [c].[comment] FROM [_db_class] [c], [_db_collation] [coll] WHERE [c].[collation_id] = [coll].[coll_id] AND (CURRENT_USER = 'DBA' OR {[c].[owner].[name]} SUBSETEQ (SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{[t].[g].[name]}), SET{}) FROM [db_user] [u], TABLE([groups]) AS [t]([g]) WHERE [u].[name] = CURRENT_USER) OR {[c]} SUBSETEQ ( SELECT SUM(SET{[au].[class_of]}) FROM [_db_auth] [au] WHERE {[au].[grantee].[name]} SUBSETEQ ( SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{[t].[g].[name]}), SET{}) FROM [db_user] [u], TABLE([groups]) AS [t]([g]) WHERE [u].[name] = CURRENT_USER) AND [au].[auth_type] = 'SELECT'))'
 
+.. _db-attribute:
+
 DB_ATTRIBUTE
 ------------
 
@@ -1230,7 +1335,7 @@ Represents the attribute information of a class for which the current user has a
 |                   |               | defined in the super class is used. Otherwise, **NULL**.                                                      |
 +-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
 | data_type         | VARCHAR(9)    | Data type of the attribute (one in the "Meaning" column of the "Data Types Supported by CUBRID" table in      |
-|                   |               | :ref:`db-attribute`)                                                                                          |
+|                   |               | :ref:`-db-attribute`)                                                                                         |
 +-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
 | prec              | INTEGER       | Precision of the data type. 0 is used if the precision is not specified.                                      |
 +-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
@@ -1314,6 +1419,8 @@ The following example shows how to retrieve classes whose attribute names are si
       'nation'              'name'
       'stadium'             'name'
 
+.. _db-attr-setdomain-elm:
+
 DB_ATTR_SETDOMAIN_ELM
 ---------------------
 
@@ -1369,6 +1476,8 @@ The following example shows how to retrieve collection type attributes and data 
     ==============================================================================
       'sports'              'INSTANCE'            'STRING'              NULL
 
+.. _db-charset:
+
 DB_CHARSET
 ----------
 
@@ -1382,6 +1491,8 @@ charset_name        CHARACTER VARYING(32)    Charset name
 default_collation   CHARACTER VARYING(32)    Default collation name
 char_size           INTEGER                  One character's byte size
 =================== ======================== ==========================
+
+.. _db-collation:
 
 DB_COLLATION
 ------------
@@ -1406,6 +1517,8 @@ The information on collation.
 | uca_strength       | VARCHAR(255)  | Weight strength                                                               |
 |                    |               | (Not applicable, Primary, Secondary, Tertiary, Quaternary, Identity, Unknown) |
 +--------------------+---------------+-------------------------------------------------------------------------------+
+
+.. _db-method:
 
 DB_METHOD
 ---------
@@ -1459,6 +1572,8 @@ The following example shows how to retrieve methods of the *db_user* class.
       'set_password_encoded'       'INSTANCE'  'au_set_password_encoded_method'
       'set_password_encoded_sha1'  'INSTANCE'  'au_set_password_encoded_sha1_method'
 
+.. _db-meth-arg:
+
 DB_METH_ARG
 -----------
 
@@ -1504,6 +1619,8 @@ The following example shows how to retrieve input arguments of the method of the
     =========================================================
       'append_data'         'STRING'               1073741823
 
+.. _db-meth-arg-setdomain-elm:
+
 DB_METH_ARG_SETDOMAIN_ELM
 -------------------------
 
@@ -1535,6 +1652,8 @@ If the data type of the input/output argument of the method of the class is a se
 | domain_owner_name  | VARCHAR(255)  | Owner name of the domain class if the data type of the element is an object                                                    |
 +--------------------+---------------+--------------------------------------------------------------------------------------------------------------------------------+
 
+.. _db-meth-file:
+
 DB_METH_FILE
 ------------
 
@@ -1555,6 +1674,8 @@ Represents information of a file in which the method of the class for which the 
 | from_owner_name    | VARCHAR(255)  | Owner Name of the super class in which the method file is defined if the method is inherited,         |
 |                    |               | and otherwise **NULL**                                                                                |
 +--------------------+---------------+-------------------------------------------------------------------------------------------------------+
+
+.. _db-index:
 
 DB_INDEX
 --------
@@ -1618,6 +1739,8 @@ The following example shows how to retrieve index information of the class.
       'record'              'pk_record_host_year_event_code_athlete_code_medal'  'YES'
       'stadium'             'pk_stadium_code'                                    'YES'
 
+.. _db-index-key:
+
 DB_INDEX_KEY
 ------------
 
@@ -1677,6 +1800,8 @@ The following example shows how to retrieve index key information of the class.
       'participant'         'host_year'           'pk_participant_host_year_nation_code'
       'participant'         'host_year'           'fk_participant_host_year'
 
+.. _db-auth:
+
 DB_AUTH
 -------
 
@@ -1719,6 +1844,8 @@ The following example how to retrieve authorization information of the classes w
       'db_authorizations'      'SELECT'              'DBA'
       'db_authorizations'      'EXECUTE'             'DBA'
 
+.. _db-trig:
+
 DB_TRIG
 -------
 
@@ -1743,6 +1870,8 @@ Represents information of a trigger that has the class for which the current use
 +--------------------+---------------+-------------------------------------------------------------------------------------------------------------------------------+
 | comment            | VARCHAR(1024) | Comment to describe the trigger.                                                                                              |
 +--------------------+---------------+-------------------------------------------------------------------------------------------------------------------------------+
+
+.. _db-partition:
 
 DB_PARTITION
 ------------
@@ -1778,23 +1907,7 @@ The following example shows how to retrieve the partition information currently 
       'participant2'  'PUBLIC'    'before_2000'   'participant2__p__before_2000'  'RANGE'         '[host_year]'   {NULL, 2000}      NULL
       'participant2'  'PUBLIC'    'before_2008'   'participant2__p__before_2008'  'RANGE'         '[host_year]'   {2000, 2008}      NULL
 
-.. db_server:
-
-DB_SERVER
----------
-
-============== ============= ====================================================
-Attribute Name Data Type     Description
-============== ============= ====================================================
-link_name      VARCHAR(255)  Connection name
-host           VARCHAR(255)  Hostname of a server
-port           INTEGER       Connection port of a server
-db_name        VARCHAR(255)  Database name of a server
-user_name      VARCHAR(255)  Database user name of a server
-properties     VARCHAR(2048) Property information used for connection
-owner          VARCHAR(256)  The name of the owner of this connection information
-comment        VARCHAR(1024) Comment to describe the server
-============== ============= ====================================================
+.. _db-stored-procedure:
 
 DB_STORED_PROCEDURE
 -------------------
@@ -1836,6 +1949,8 @@ The following example shows how to retrieve Java stored procedures owned by the 
       'hello'               'SpCubrid.HelloCubrid() return java.lang.String'
       'sp_int'              'SpCubrid.SpInt(int) return int'
 
+.. _db-stored-procedure-args:
+
 DB_STORED_PROCEDURE_ARGS
 ------------------------
 
@@ -1873,7 +1988,25 @@ The following example shows how to retrieve arguments the 'phone_info' Java stor
                 0  'name'                'STRING'              'IN'
                 1  'phoneno'             'STRING'              'IN'
 
-.. db_synonym:
+.. _db-server:
+
+DB_SERVER
+---------
+
+============== ============= ====================================================
+Attribute Name Data Type     Description
+============== ============= ====================================================
+link_name      VARCHAR(255)  Connection name
+host           VARCHAR(255)  Hostname of a server
+port           INTEGER       Connection port of a server
+db_name        VARCHAR(255)  Database name of a server
+user_name      VARCHAR(255)  Database user name of a server
+properties     VARCHAR(2048) Property information used for connection
+owner          VARCHAR(256)  The name of the owner of this connection information
+comment        VARCHAR(1024) Comment to describe the server
+============== ============= ====================================================
+
+.. _db-synonym:
 
 DB_SYNONYM
 ----------

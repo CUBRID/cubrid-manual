@@ -61,7 +61,7 @@ cub_cas_cgw (CAS Gateway) acts as a common application server used by all the ap
 cub_gateway
 ----------------
 
-cub_gateway mediates the connection between the application client and the cub_cas_cgw. That is, when an application client requests access, the cub_broker checks the status of the cub_cas_cgw through the shared memory, and then delivers the request to an accessible cub_cas_cgw . It then returns the processing results of the request from the cub_cas_cgw to the application client.
+cub_gateway mediates the connection between the application client and the cub_cas_cgw. That is, when an application client requests access, the cub_broker checks the status of the cub_cas_cgw through the shared memory, and then delivers the request to an accessible cub_cas_cgws. It then returns the processing results of the request from the cub_cas_cgw to the application client.
 
 The cub_gateway also manages the server load by adjusting the number of cub_cas_cgw (s) in the service pool and monitors and manages the status of the cub_cas_cgw. If the cub_gateway delivers the request to cub_cas_cgw but the connection to cub_cas_cgw 1 fails because of an abnormal termination, it sends an error message about the connection failure to the application client and restarts cub_cas_cgw 1. Restarted cub_cas_cgw 1 is now in a normal stand-by mode, and will be reconnected by a new request from a new application client.
 
@@ -575,7 +575,7 @@ Restrictions
 *   The maximum string length of one column is supported up to 16M.
 *   When using cache in Mysql, it is recommended to use PREFETCH, NO_CACHE=1 because the memory usage of the gateway cub_cas_cgw increases.
 *   ODBC non-supported types are SQL_INTERVAL, SQL_GUID, SQL_BIT, SQL_BINARY, SQL_VARBINARY, SQL_LONGVARBINARY.
-
+*   When using DBLink with heterogeneous types (Oracle/MySQL), you must use Oracle/MySQL's Unicode ODBC driver.
 
 
 

@@ -810,6 +810,126 @@ You can connect to another outside database instead of the currently connected o
 
 When Java stored functions/procedures are executed, they should run only on a JVM located in the database server. You can check where they are running by calling System.getProperty ("cubrid.server.version") from the Java programs. The result is the database version if it is called from the database; otherwise, it is **NULL**.
 
+
+.. _jsp-jni:
+
+Java Native Interface (JNI) Support
+===================================
+
+Using the Java Native Interface (JNI), you can invoke functions in native languages like C/C++ from the Java Virtual Machine (JVM). 
+Java Stored Procedures (SP) in CUBRID provide support for JNI functionality, but you should be cautious when using it because issues in native code can have unexpected impacts on the stored routine server (cub_javasp) process and its operation.
+
+The following is an example of invoking a native function through JNI in a CUBRID Java stored function:
+
+.. code-block:: cpp
+    :caption: HelloJNI.h
+
+    #include <jni.h>
+    
+    #ifndef _Included_HelloJNI
+    #define _Included_HelloJNI
+    #ifdef __cplusplus
+    extern "C" {
+    #endif
+    
+    /*
+    * Class:     HelloJNI
+    * Method:    sayHello
+    * Signature: ()V
+    */
+    JNIEXPORT jstring JNICALL Java_HelloJNI_sayHello(JNIEnv *, jobject, jstring);
+    
+    #ifdef __cplusplus
+    }
+    #endif
+    #endif
+
+.. code-block:: cpp
+    :caption: HelloJNI.c
+
+    #include <jni.h>
+    #include <stdio.h>
+    #include <string.h>
+    #include "HelloJNI.h"
+
+    // Implementation of native method sayHello() of HelloJNI class
+    JNIEXPORT jstring JNICALL Java_HelloJNI_sayHello(JNIEnv *env, jobject thisObj, jstring javaString) {
+        const char *nativeString = (*env)->GetStringUTFChars(env, javaString, 0);
+        // printf("Java_HelloJNI_sayHello : %sn", nativeString);
+        const char *greeting = " Hello!";
+        char cap[1024];
+        strcpy(cap, nativeString);
+        strcat(cap, greeting);
+        (*env)->ReleaseStringUTFChars(env, javaString, nativeString);
+        return (*env)->NewStringUTF(env, cap);
+    }
+
+.. code-block:: java
+    :caption: HelloJNI.java
+
+    import java.io.File;
+
+    public class HelloJNI {
+        static {
+            try {
+                String cubridPath = System.getenv("CUBRID"); // get $CUBRID
+                System.load(
+                    cubridPath 
+                    + File.separator 
+                    + "jni" 
+                    + File.separator 
+                    + "libhello.so"); // $CUBRID/jni/libhello.so
+            } catch(UnsatisfiedLinkError e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Declare
+        private native String sayHello(String string);
+
+        // CUBRID
+        public static String cubridSayHello(String string) {
+            return new HelloJNI().sayHello(string); // invoke the native method
+        }
+    }
+
+.. code-block:: bash
+
+    -- compile and copy HelloJNI.c
+    gcc -fPIC -I${JAVA_HOME}/include -I${JAVA_HOME}/include/linux -shared -o libhello.so HelloJNI.c
+    mkdir -p $CUBRID/jni
+    cp libhello.so $CUBRID/jni
+
+    -- loadjava
+    javac HelloJNI.java
+    loadjava demodb HelloJNI.class
+
+
+.. code-block:: sql
+
+    CREATE FUNCTION hello(str VARCHAR) RETURN VARCHAR AS LANGUAGE JAVA NAME 'HelloJNI.cubridSayHello(java.lang.String) return java.lang.String';
+    
+    SELECT hello ('CUBRID');
+
+::
+
+    hello('CUBRID')     
+    ======================
+    'CUBRID Hello!'
+
+.. warning::
+
+    When executing Java stored procedures/functions that invoke JNI, you may encounter a java.lang.UnsatisfiedLinkError.
+    To address this issue, please consider the following:
+
+    * If you are loading multiple Java class files that call System.load() for the same native library path:
+       * Modify the Java class files to load the native library from only one class file
+       * Restart the javasp utility.
+
+    * If you are overwriting a previously loaded Java class file using loadjava:
+       * Note that the class file will be reloaded through a new class loader, leading to the same problem mentioned in scenario 1.
+       * Restart the javasp utility.
+
 .. _jsp-load-java:
 
 loadjava Utility

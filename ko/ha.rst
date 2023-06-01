@@ -543,7 +543,7 @@ CUBRID HA 기능을 사용하면 기본적으로 복제 로그 복사 프로세�
 
 *   **log_buffer_size** : 로그 버퍼 크기. 서버와 로그를 복사하는 **copylogdb** 간 프로토콜에 영향을 주는 부분이므로 반드시 동일해야 한다.
 
-*   **log_volume_size** : 로그 볼륨 크기. CUBRID HA는 원본 트랜잭션 로그와 복제 로그의 형태와 내용이 동일하므로 반드시 동일해야 한다. 그 외 각 노드에서 별도로 DB를 생성하는 경우 **cubrid createdb** 옵션(**-\-db-volume-size**, **-\-db-page-size**, **-\-log-volume-size**, **-\-log-page-size** 등)이 동일해야 한다.
+*   **log_volume_size** : 로그 볼륨 크기. CUBRID HA는 원본 트랜잭션 로그와 복제 로그의 형태와 내용이 동일하므로 반드시 동일해야 한다. 그 외 각 노드에서 별도로 DB를 생성하는 경우 **cubrid createdb** 옵션(**\-\-db-volume-size**, **\-\-db-page-size**, **\-\-log-volume-size**, **\-\-log-page-size** 등)이 동일해야 한다.
 
 *   **cubrid_port_id** : 서버와의 연결 생성을 위한 TCP 포트 번호. 서버와 로그를 복사하는 **copylogdb** 의 연결을 위해 반드시 동일해야 한다.
 
@@ -554,6 +554,7 @@ CUBRID HA 기능을 사용하면 기본적으로 복제 로그 복사 프로세�
     *   레플리카 노드의 **ha_mode** 파라미터
     *   **ha_copy_sync_mode** 파라미터
     *   **ha_ping_hosts** 파라미터
+    *   **ha_tcp_ping_hosts** 파라미터
 
 **예시**
 
@@ -645,6 +646,12 @@ CUBRID HA 그룹 내의 노드들이 heartbeat 메시지를 주고 받으며 노
 CUBRID는 1시간 주기로 **ha_ping_hosts**\에 명시된 호스트를 점검하여 모든 호스트가 문제 있을 경우 일시적으로 핑 체크(ping check)를 중지하고 5분 단위로 해당 호스트들이 정상화되었는지 검사한다. 
 
 이 파라미터를 설정하면 불안정한 네트워크로 인해 상대 마스터 노드가 비정상 종료된 것으로 오인한 슬레이브 노드가 마스터 노드로 역할이 변경되면서 동시에 두 개의 마스터 노드가 존재하게 되는 split-brain 현상을 방지할 수 있다.
+
+그러나 ICMP 프로토콜이 비활성화 되어 있는 경우 핑 체크는 정상적으로 동작하지 않는다. CUBRID는 이 경우를 대비하여 **ha_tcp_ping_hosts**\를 지원한다.
+
+**ha_tcp_ping_hosts**
+
+**ha_tcp_ping_hosts**\는 ICMP 프로토콜이 비활성화 되어 **ha_ping_hosts**\를 사용할 수 없는 경우 대안으로 사용될 수 있다. **ha_tcp_ping_hosts**\는 **ha_ping_hosts**\와 똑같이 동작하지만 핑 체크를 위해 IP 계층 대신 TCP 계층을 사용한다는 차이가 있다. 기본값은 **NULL**\이며, 여러 개의 호스트 이름은 쉼표(,)로 호스트 이름과 포트 번호는 콜론(:)으로 구분한다. 예를들어, "ha_tcp_ping_hosts=host1:port1,host2:port2"와 같은 형식으로 설정할 수 있다. TCP 계층을 이용한 핑 체크가 정상적으로 동작하기 위해서는 반드시 **ha_tcp_ping_hosts**\에 설정된 호스트 상에서 해당 포트 번호를 갖는 소켓이 네트워크 요청을 정상적으로 수신할 수 있어야 하며, 방화벽에 의해 네트워크 요청이 차단되지 않아야 한다. **ha_ping_hosts**\가 설정된 경우 **ha_tcp_ping_hosts**\는 사용되지 않고 무시된다.
 
 복제
 ^^^^
@@ -785,7 +792,7 @@ SQL 로깅
 **ha_sql_log_max_size_in_mbytes**\에서 지정한 크기를 초과하면 *<id>*\ 의 값이 하나 증가된 새로운 파일이 생성된다.
 예를 들어, "ha_sql_log_max_size_in_mbytes=100"이면 demodb_nodeA.sql.log.0 파일이 100MB가 되면서 demodb_nodeA.sql.log.1이 새로 생성된다.
 
-이 파라미터를 켜는 경우 SQL 로그 파일이 계속 쌓이므로, 사용자는 디스크 여유 공간을 확보하기 위해 로그 파일들을 직접 삭제해야 한다.
+기본적으로, 2개의 최신 SQL 로그 파일만 유지되며, **ha_sql_log_max_count** 설정을 통해 유지할 최대 파일 개수를 조정할 수 있다.
 
 SQL 로그 형식은 다음과 같다.
 
@@ -830,6 +837,14 @@ SQL 로그 형식은 다음과 같다.
 **ha_sql_log_max_size_in_mbytes**
 
 **applylogdb** 프로세스가 DB에 반영하는 SQL이 로깅될 때 생성하는 파일의 최대 크기이다. 이 크기를 초과하면 새로운 파일이 생성된다. 
+
+**ha_sql_log_max_count**
+
+유지해야할 최대 SQL 로그 파일 개수를 나타내며, SQL 로그 파일이 이를 초과하여 생성될 경우 가장 오래된 로그 파일부터 삭제된다. 이 파라미터의 기본값은 2이며, 2에서 5 범위의 정수값을 설정할 수 있다. **ha_sql_log_max_count**\와 **ha_sql_log_max_size_in_mbytes** 설정을 통해 적절한 양의 SQL 로그를 유지할 수 있다.
+
+**ha_sql_log_path**
+
+SQL 로그 파일이 생성될 디렉터리 경로를 나타내며, 상대 경로 또는 절대 경로로 설정할 수 있다. 상대 경로로 설정되는 경우 **ha_enable_sql_logging**\에서 설명한 복제 로그 디렉터리를 기준으로 상대 경로를 판단한다. 데이터베이스 서버 프로세스(cub_server)는 반드시 지정된 경로에 SQL 로그 파일을 생성할 수 있는 권한이 있어야 한다. 이 파라미터가 설정되지 않은 경우에는 **ha_enable_sql_logging**\에서 설명한 복제 로그 디렉터리 경로에 SQL 로그 파일을 생성한다.
 
 .. _ha-cubrid-broker-conf:
 
@@ -1593,7 +1608,7 @@ CUBRID HA의 서버 상태를 확인하고 변경한다. ::
     
     *   서버의 상태가 **maintenance**\이면 **standby**\로 변경할 수 있다.
     
-    *   서버의 상태가 **to-be-active**이면 **active**\로 변경할 수 있다. 단, **-\-force** 옵션과 함께 사용해야 한다. 아래 **-\-force** 옵션의 설명을 참고한다.
+    *   서버의 상태가 **to-be-active**\이면 **active**\로 변경할 수 있다. 단, **\-\-force** 옵션과 함께 사용해야 한다. 아래 **\-\-force** 옵션의 설명을 참고한다.
 
 .. option:: -f, --force
 
@@ -2047,7 +2062,7 @@ CUBRID HA에서 **LOB** 칼럼 메타 데이터(Locator)는 복제되고, **LOB*
     10.0 부터는 UPDATE STATISTICS 문이 복제된다. 
  
     10.0 미만 버전에서는 UPDATE STATISTICS 문이 복제되지 않으므로 슬레이브/레플리카 노드에 별도로 수행해야 한다. 
-    10.0 미만 버전의 슬레이브/레플리카 노드에서 "UPDATE STATISTICS" 구문을 적용하려면 CSQL에서 **-\-sysadm** 옵션과 **-\-write_on_slave** 옵션을 추가한 후 이 구문을 수행해야 한다. 
+    10.0 미만 버전의 슬레이브/레플리카 노드에서 "UPDATE STATISTICS" 구문을 적용하려면 CSQL에서 **\-\-sysadm** 옵션과 **\-\-write_on_slave** 옵션을 추가한 후 이 구문을 수행해야 한다. 
 
 운영 시나리오
 =============
@@ -2203,7 +2218,7 @@ restoreslave
     
 .. option:: -B, --backup-file-path=PATH
 
-    이 옵션을 이용해서 백업 파일들이 위치할 디렉토리를 지정할 수 있다. 더 많은 정보는 :ref:`restoredb` 의 -B 옵션을 참고한다.
+    이 옵션을 이용해서 백업 파일들이 위치할 디렉터리를 지정할 수 있다. 더 많은 정보는 :ref:`restoredb` 의 -B 옵션을 참고한다.
     
 .. option:: -o, --output-file=FILE
 
@@ -2589,7 +2604,7 @@ HA 서비스 운영 중 슬레이브를 새로 추가하려면 기존의 마스�
         
         .. note::
         
-            **-\-sleep-msecs**\는 1MB의 백업 파일이 쓰여질 때마다 쉬는 시간을 설정하는 옵션으로, 단위는 밀리초이다. 백업할 장비의 디스크 I/O 부하가 심한 경우 이 값을 설정하는 것을 고려하되, 이 값이 클수록 백업 시간이 길어지므로 가급적이면 부하가 적은 시간대에 백업하고 이 값은 작게 설정할 것을 권장한다.
+            **\-\-sleep-msecs**\는 1MB의 백업 파일이 쓰여질 때마다 쉬는 시간을 설정하는 옵션으로, 단위는 밀리초이다. 백업할 장비의 디스크 I/O 부하가 심한 경우 이 값을 설정하는 것을 고려하되, 이 값이 클수록 백업 시간이 길어지므로 가급적이면 부하가 적은 시간대에 백업하고 이 값은 작게 설정할 것을 권장한다.
             
             *nodeB*\의 부하가 전혀 없는 상태라면 이 옵션을 생략해도 무방하다.
             
@@ -2836,7 +2851,7 @@ HA 서비스 운영 중 슬레이브를 새로 추가하려면 기존의 마스�
             
     *   *nodeA*, *nodeB*\에서 *nodeC*\에 대한 복제 정보 제거
     
-        csql 실행 시 **-\-sysadm** 옵션과 **-\-write-on-standby** 옵션을 주어야 슬레이브에서 DELETE 연산을 수행할 수 있다.
+        csql 실행 시 **\-\-sysadm** 옵션과 **\-\-write-on-standby** 옵션을 주어야 슬레이브에서 DELETE 연산을 수행할 수 있다.
         ::
         
             $ csql -u dba --sysadm --write-on-standby testdb@localhost

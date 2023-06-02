@@ -203,7 +203,7 @@ The **getConnection** method returns the **Connection** object and it is used to
     *  **usePreparedStmtCache**: Prepared Statement Cache mode (Default: false)
     *  **preparedStmtCacheSize**: If usePreparedStmtCache is TRUE, the number of SQLs that can be cached (Default:25, Min:1, Max:2147483647)
     *  **preparedStmtCacheSqlLimit**: If usePreparedStmtCache is TRUE, length of SQL that can be cached (Default:256, Min:1, Max:2147483647)
-    *  **hold_cursor**: Cursor holdability setting (default: false). If this value is false, CLOSE_CURSORS_AT_COMMIT is set, and if true, HOLD_CURSORS_OVER_COMMIT is set. For details, see :ref:`cursor-holding`\ .
+    *  **hold_cursor**: Cursor holdability setting (default: true). If this value is false, CLOSE_CURSORS_AT_COMMIT is set, and if true, HOLD_CURSORS_OVER_COMMIT is set. For details, see :ref:`cursor-holding`\ .
 
 
 **Example 1** ::

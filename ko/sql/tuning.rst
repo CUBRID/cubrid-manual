@@ -409,7 +409,7 @@ SQL에 대한 성능 분석을 위해서는 질의 프로파일링(profiling) �
 
 *   **SELECT** (time: 1, fetch: 975, ioread: 2) 
     
-    *   time: 4 => 전체 질의 시간 4ms 소요. 
+    *   time: 1 => 전체 질의 시간 1ms 소요. 
     *   fetch: 975 => 페이지에 대해 975회 fetch(개수가 아닌 접근 회수임. 같은 페이지를 다시 fetch하더라도 회수가 증가함). 
     *   ioread: 2회 디스크 접근.
 

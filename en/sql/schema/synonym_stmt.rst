@@ -6,8 +6,8 @@
 SYNONYM DEFINITION STATEMENTS
 *****************************
 
-CREATE SYONYM
-=============
+CREATE SYNONYM
+==============
 
 Create another new name to use for an object that already exists in the database. The user can use the object with the name specified when creating the database object, and can also use the object as a synonym.
 
@@ -303,6 +303,7 @@ When **DBA** and members of **DBA** create a synonym by specifying a schema, the
       's1'                  'U1'                  'NO'                  't1'                  'DBA'                 NULL
       's1'                  'U2'                  'NO'                  't2'                  'DBA'                 NULL
 
+
 .. code-block:: sql
 
     call login ('u1') on class db_user;
@@ -329,6 +330,20 @@ When **DBA** and members of **DBA** create a synonym by specifying a schema, the
     ======================
       'private synonym for user u2.'
 
+The user can create a synonym only in the schema of the user.
+
+.. code-block:: sql
+
+    call login ('u1') on class db_user;
+
+    /* current_user: u1 */
+    create synonym u2.s2 for dba.t1;
+
+::
+
+    ERROR: before ' ; '
+    DBA, members of DBA group, and owner can perform CREATE SYNONYM.
+
 .. code-block:: sql
 
     /* clean */
@@ -344,8 +359,8 @@ When **DBA** and members of **DBA** create a synonym by specifying a schema, the
     drop table if exists t1;
     drop table if exists t2;
 
-ALTER SYONYM
-============
+ALTER SYNONYM
+=============
 
 Change the target object or comment of a synonym. The synonym in use cannot be changed.
 
@@ -495,8 +510,8 @@ To change a comment to **NULL**, change the comment to an empty string.
     drop synonym if exists s1;
     drop table if exists t1;
 
-DROP SYONYM
-===========
+DROP SYNONYM
+============
 
 Drop the synonym. The synonym in use cannot be dropped. Even if a synonym is dropped, the target object is not dropped.
 
@@ -574,8 +589,8 @@ Drop the synonym. The synonym in use cannot be dropped. Even if a synonym is dro
     drop synonym if exists s1;
     drop table if exists t1;
 
-RENAME SYONYM
-=============
+RENAME SYNONYM
+==============
 
 Change the name of the synonym. The name of the synonym in use cannot be changed.
 

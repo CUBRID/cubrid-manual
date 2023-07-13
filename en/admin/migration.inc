@@ -290,7 +290,7 @@ The following table shows [options] available with the **cubrid loaddb** utility
 
 .. note::
 
-    In **client-server** mode (-C, \-\-CS-MODE), only the -d option (data loading) is available.
+    When in **client-server** mode (-C, \-\-CS-MODE) on the **HA** (High Availability), only the -d option (data loading) is available.
 
 .. option:: --data-file-check-only
 
@@ -489,6 +489,8 @@ In CUBRID, a comment is represented by two hyphens (\-\-). ::
 
     -- This is a comment!
 
+.. _howtowrite-loadfile-command-line:
+
 Command Line
 ++++++++++++
 
@@ -498,15 +500,36 @@ A command line begins with a percent character (%) and consists of **%class** an
 
 *   Assigning an Identifier to a Class
 
-    You can assign an identifier to class reference relations by using the **%id** command. ::
+    You can assign an identifier to class reference relations by using the **%id** command.
+    
+    ::
 
-        %id class_name class_id
+        %id [schema_name.]class_name class_id
+        schema_name:
+            identifier
         class_name:
             identifier
         class_id:
             integer
 
-    The *class_name* specified by the **%id** command is the class name defined in the database, and *class_id* is the numeric identifier which is assigned for object reference. The **class_name** must be prefixed with the schema name and enclosed in square brackets ([ ]).
+    The *class_name* specified by the **%id** command is the class name defined in the database, and *class_id* is the numeric identifier which is assigned for object reference. The *class_name* uses the *schema_name* as a prefix and the *schema_name* is the name of the schema in which the class is defined.
+    The *schema_name* can be omitted, and if the *schema_name* is omitted, the user name of the database specified with the -u option is used as the schema name.
+
+    ::
+
+        %id [employee] 21
+        %id [office] 22
+        %id [project] 23
+        %id [phone] 24
+
+    The *schema_name* and *class_name* must be enclosed in square brackets ([ ]). Each of *schema_name* and *class_name* or together can be enclosed in square brackets.
+
+    ::
+
+        %id [public].[employee] 21
+        %id [public].[office] 22
+        %id [public].[project] 23
+        %id [public].[phone] 24
 
     ::
 
@@ -517,17 +540,27 @@ A command line begins with a percent character (%) and consists of **%class** an
 
 *   Specifying the Class and Attribute
 
-    You can specify the classes (tables) and attributes (columns) upon loading data by using the **%class** command. The data line should be written based on the order of attributes specified. When a class name is provided by using the **-t** option while executing the **cubrid loaddb** utility, you don't have to specify the class and attribute in the data file. However, the order of writing data must comply with the order of the attribute defined when creating a class. ::
+    You can specify the classes (tables) and attributes (columns) upon loading data by using the **%class** command. The data line should be written based on the order of attributes specified. When a class name is provided by using the **-t** option while executing the **cubrid loaddb** utility, you don't have to specify the class and attribute in the data file. However, the order of writing data must comply with the order of the attribute defined when creating a class.
+    
+    ::
 
-        %class [schema_name.class_name] ( attr_name [attr_name... ] )
+        %class [schema_name.]class_name (attr_name [attr_name...])
+        schema_name:
+            identifier
+        class_name:
+            identifier
+        attr_name:
+            identifier
 
-    The schema must be pre-defined in the database to be loaded.
+    The class must be pre-defined in the database to be loaded.
 
-    The *class_name* specified by the **%class** command is the class name defined in the database and the *attr_name* is the name of the attribute defined. The class name must be prefixed with the schema name and enclosed in square brackets ([ ]).
+    The *class_name* specified by the **%class** command is the class name defined in the database and the *schema_name* is the name of the schema in which the class is defined. The *attr_name* is the name of the attribute defined. The method of writing *schema_name* and *class_name* is the same as above.
 
-    The following example shows how to specify a class and three attributes by using the **%class** command to enter data into a class named *employee*. Three pieces of data should be entered on the data lines after the **%class** command. For this, see :ref:`Configuring Reference Relation <conf-reference-relation>`. ::
+    The following example shows how to specify a class and three attributes by using the **%class** command to enter data into a class named *employee*. Three pieces of data should be entered on the data lines after the **%class** command. For this, see :ref:`Configuring Reference Relation <conf-reference-relation>`.
+    
+    ::
 
-        %class [public.employee] (name age department)
+        %class [public].[employee] (name age department)
 
 Data Line
 +++++++++
@@ -542,7 +575,7 @@ Data for each attribute must be separated by at least one space and be basically
 
     ::
 
-        %class [public.employee] (name)
+        %class [public].[employee] (name)
         'jordan' 
         'james'  
         'garnett'
@@ -554,7 +587,7 @@ Data for each attribute must be separated by at least one space and be basically
 
     ::
 
-        %class [public.employee] (name)
+        %class [public].[employee] (name)
         1: 'jordan' 
         2: 'james'  
         3: 'garnett' 
@@ -564,27 +597,33 @@ Data for each attribute must be separated by at least one space and be basically
     
 *   Configuring Reference Relation
 
-    You can configure the object reference relation by specifying the reference class after an "at sign (**@**)" and the instance number after the "vertical line (|)." ::
+    You can configure the object reference relation by specifying the reference class after an "at sign (**@**)" and the instance number after the "vertical line (|)."
+    
+    ::
 
         @class_ref | instance_no
         class_ref:
-             class_name
-             class_id
+            [schema_name.]class_name
+            class_id
 
-    Specify a class name or a class id after the **@** sign, and an instance number after a vertical line (|). Spaces are not allowed before and after a vertical line (|). The table name must be prefixed with the schema name.
+    Specify a class name or a class id after the **@** sign, and an instance number after a vertical line (|). Spaces are not allowed before and after a vertical line (|). The method of wirting *class_ref* is the same as the method of wirting *schema_name* and *class_name* in the :ref:`Command Line <howtowrite-loadfile-command-line>`. However, enclosing each of *schema_name* and *class_name* in square brackets ([ ]) is not allowed.
 
-    The following example shows how to load class instances into the *paycheck* class. The *name* attribute references an instance of the *employee* class. As in the last line, data is loaded as **NULL** if you configure the reference relation by using an instance number not specified earlier. ::
+    The following example shows how to load class instances into the *paycheck* class. The *name* attribute references an instance of the *employee* class. As in the last line, data is loaded as **NULL** if you configure the reference relation by using an instance number not specified earlier.
+    
+    ::
 
-        %class [public.paycheck] (name department salary)
+        %class [public].[paycheck] (name department salary)
         @[public.employee]|1   'planning'   8000000   
         @[public.employee]|2   'planning'   6000000  
         @[public.employee]|3   'sales'   5000000  
         @[public.employee]|4   'development'   4000000
         @[public.employee]|5   'development'   5000000
 
-    Since the id 21 was assigned to the *employee* class by using the **%id** command in the :ref:`Assigning an Identifier to a Class <assign-id-to-class>` section, the above example can be written as follows: ::
+    Since the id 21 was assigned to the *employee* class by using the **%id** command in the :ref:`Assigning an Identifier to a Class <assign-id-to-class>` section, the above example can be written as follows:
+    
+    ::
 
-        %class [public.paycheck] (name department salary)
+        %class [public].[paycheck] (name department salary)
         @21|1   'planning'   8000000   
         @21|2   'planning'   6000000  
         @21|3   'sales'   5000000  

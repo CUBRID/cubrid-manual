@@ -56,6 +56,7 @@ CUBRID 11.2 사용자 매뉴얼
     admin/index.rst
     ha.rst
     security.rst
+    shard.rst
     api/index.rst
     release_note/index.rst
 

@@ -811,6 +811,125 @@ CUBRID에서는 질의 결과셋 (**java.sql.ResultSet**)을 반환할 수 있�
 
 수행 중인 Java 저장 함수/프로시저가 데이터베이스 서버의 JVM에서만 구동되어야 할 때, Java 프로그램 소스에서 System.getProperty("cubrid.server.version")를 호출함으로써 어디서 수행되는 지를 점검할 수 있다. 결과 값은 데이터베이스에서 호출하면 데이터베이스 버전이 되고, 그 외는 **NULL** 이 된다.
 
+.. _jsp-jni:
+
+Java Native Interface (JNI) 지원
+==================================
+
+Java Native Interface (JNI)를 사용하여 JVM\에서 C/C++ 와 같은 네이티브 언어의 함수를 호출할 수 있다.
+CUBRID의 Java SP에서는 JNI 기능을 사용할 수 있도록 제공하고 있지만 네이티브 코드의 문제가 저장 프로시저 서버 (cub_javasp) 프로세스 및 그 동작에 예상하지 못한 영향을 줄 수 있으므로 주의해서 사용해야 한다.
+
+다음은 Java 저장 함수에서 JNI를 통해 네이티브 함수를 호출하는 예제이다.
+
+.. code-block:: cpp
+    :caption: HelloJNI.h
+
+    #include <jni.h>
+    
+    #ifndef _Included_HelloJNI
+    #define _Included_HelloJNI
+    #ifdef __cplusplus
+    extern "C" {
+    #endif
+    
+    /*
+    * Class:     HelloJNI
+    * Method:    sayHello
+    * Signature: ()V
+    */
+    JNIEXPORT jstring JNICALL Java_HelloJNI_sayHello(JNIEnv *, jobject, jstring);
+    
+    #ifdef __cplusplus
+    }
+    #endif
+    #endif
+
+.. code-block:: cpp
+    :caption: HelloJNI.c
+
+    #include <jni.h>
+    #include <stdio.h>
+    #include <string.h>
+    #include "HelloJNI.h"
+
+    // Implementation of native method sayHello() of HelloJNI class
+    JNIEXPORT jstring JNICALL Java_HelloJNI_sayHello(JNIEnv *env, jobject thisObj, jstring javaString) {
+        const char *nativeString = (*env)->GetStringUTFChars(env, javaString, 0);
+        // printf("Java_HelloJNI_sayHello : %sn", nativeString);
+        const char *greeting = " Hello!";
+        char cap[1024];
+        strcpy(cap, nativeString);
+        strcat(cap, greeting);
+        (*env)->ReleaseStringUTFChars(env, javaString, nativeString);
+        return (*env)->NewStringUTF(env, cap);
+    }
+
+.. code-block:: java
+    :caption: HelloJNI.java
+
+    import java.io.File;
+
+    public class HelloJNI {
+        static {
+            try {
+                String cubridPath = System.getenv("CUBRID"); // get $CUBRID
+                System.load(
+                    cubridPath 
+                    + File.separator 
+                    + "jni" 
+                    + File.separator 
+                    + "libhello.so"); // $CUBRID/jni/libhello.so
+            } catch(UnsatisfiedLinkError e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Declare
+        private native String sayHello(String string);
+
+        // CUBRID
+        public static String cubridSayHello(String string) {
+            return new HelloJNI().sayHello(string); // invoke the native method
+        }
+    }
+
+.. code-block:: bash
+
+    -- compile and copy HelloJNI.c
+    gcc -fPIC -I${JAVA_HOME}/include -I${JAVA_HOME}/include/linux -shared -o libhello.so HelloJNI.c
+    mkdir -p $CUBRID/jni
+    cp libhello.so $CUBRID/jni
+
+    -- loadjava
+    javac HelloJNI.java
+    loadjava demodb HelloJNI.class
+
+
+.. code-block:: sql
+
+    CREATE FUNCTION hello(str VARCHAR) RETURN VARCHAR AS LANGUAGE JAVA NAME 'HelloJNI.cubridSayHello(java.lang.String) return java.lang.String';
+    
+    SELECT hello ('CUBRID');
+
+::
+
+    hello('CUBRID')     
+    ======================
+    'CUBRID Hello!'
+
+.. warning::
+
+    JNI를 호출하는 자바 저장 프로시저/함수 실행 시 java.lang.UnsatisfiedLinkError가 발생할 수 있다.
+    다음의 사항을 확인한다.
+
+    * 동일한 네이티브 라이브러리 경로에 대해 System.load () 를 호출하는 자바 클래스 파일을 여러 개 로드하는 경우
+       * 하나의 자바 클래스 파일만 네이티브 라이브리러리를 로드하도록 수정한다
+       * javasp 유틸리티를 재시작한다
+
+    * 이미 로드된 자바 클래스 파일을 loadjava로 다시 덮어쓰는 경우
+       * 클래스 파일이 새로운 클래스 로더를 통해 다시 로드 되므로 위와 동일한 문제가 발생한다
+       * javasp 유틸리티를 재시작한다
+
 .. _jsp-load-java:
 
 loadjava 유틸리티

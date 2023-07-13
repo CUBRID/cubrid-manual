@@ -289,7 +289,7 @@ loaddb
 
 .. note::
 
-    **client-server** 모드(-C, \-\-CS-MODE)에서는 -d 옵션(data loading)만 사용 가능하다.
+    **HA** (High Availability)환경의 **client-server** 모드(-C, \-\-CS-MODE)에서는 -d 옵션(data loading)만 사용 가능하다.
 
 .. option:: --data-file-check-only
 
@@ -486,6 +486,8 @@ CUBRID에서는 주석은 두 개의 연속된 하이픈(\-\-)을 이용하여 �
 
     -- This is a comment!
 
+.. _howtowrite-loadfile-command-line:
+
 명령 라인
 +++++++++
 
@@ -495,15 +497,36 @@ CUBRID에서는 주석은 두 개의 연속된 하이픈(\-\-)을 이용하여 �
 
 *   클래스에 식별자 부여
 
-    **%id** 를 이용하여 참조 관계에 있는 클래스에 식별자를 부여할 수 있다. ::
+    **%id** 를 이용하여 참조 관계에 있는 클래스에 식별자를 부여할 수 있다.
+    
+    ::
 
-        %id class_name class_id
+        %id [schema_name.]class_name class_id
+        schema_name:
+            identifier
         class_name:
             identifier
         class_id:
             integer
 
-    **%id** 명령어에 의해 명시된 *class_name* 은 해당 데이터베이스에 정의된 클래스 이름이며, *class_id* 는 객체 참조를 위해 부여한 숫자형 식별자를 의미한다. 클래스 이름은 스키마 이름을 접두사로 사용하고, 대괄호([ ])로 묶어야 한다.
+    **%id** 명령어에 의해 명시된 *class_name*\은 해당 데이터베이스에 정의된 클래스 이름이다. *class_name*\은 *schema_name*\을 접두사로 사용하며, *schema_name*\은 클래스가 정의된 스키마 이름이다.
+    *schema_name*\은 생략힐 수 있으며, *schema_name*\을 생략하면 -u 옵션과 함께 지정된 데이터베이스의 사용자 이름이 스키마 이름으로 사용된다.
+
+    ::
+
+        %id [employee] 21
+        %id [office] 22
+        %id [project] 23
+        %id [phone] 24
+
+    *schema_name*\과 *class_name*\은 대괄호([ ])로 묶어야 한다. *schema_name*\과 *class_name*\의 각각을 대괄호로 묶거나, 함께 대괄호로 묶을 수 있다.
+
+    ::
+
+        %id [public].[employee] 21
+        %id [public].[office] 22
+        %id [public].[project] 23
+        %id [public].[phone] 24
 
     ::
 
@@ -514,17 +537,27 @@ CUBRID에서는 주석은 두 개의 연속된 하이픈(\-\-)을 이용하여 �
 
 *   클래스 및 속성 명시
 
-    **%class** 명령어를 이용하여 데이터가 로딩될 클래스(테이블) 및 속성(칼럼)을 명시하며, 명시된 속성의 순서에 따라 데이터 라인이 작성되어야 한다. **cubrid loaddb** 유틸리티를 실행할 때 **-t** 옵션으로 클래스 이름을 제공하는 경우에는 데이터 파일에 클래스 및 속성을 명시하지 않아도 된다. 단, 데이터가 작성되는 순서는 클래스 생성 시의 속성 순서를 따라야 한다. ::
+    **%class** 명령어를 이용하여 데이터가 로딩될 클래스(테이블) 및 속성(칼럼)을 명시하며, 명시된 속성의 순서에 따라 데이터 라인이 작성되어야 한다. **cubrid loaddb** 유틸리티를 실행할 때 **-t** 옵션으로 클래스 이름을 제공하는 경우에는 데이터 파일에 클래스 및 속성을 명시하지 않아도 된다. 단, 데이터가 작성되는 순서는 클래스 생성 시의 속성 순서를 따라야 한다.
+    
+    ::
 
-    %class [schema_name.class_name] ( attr_name [attr_name... ] )
+        %class [schema_name.]class_name (attr_name [attr_name...])
+        schema_name:
+            identifier
+        class_name:
+            identifier
+        attr_name:
+            identifier
 
-데이터를 로딩하고자 하는 데이터베이스에는 이미 스키마가 정의되어 있어야 한다.
+    데이터를 로딩하고자 하는 데이터베이스에는 클래스가 이미 정의되어 있어야 한다.
 
-**%class** 명령어에 의해 명시된 *class_name* 은 해당 데이터베이스에 정의된 클래스 이름이며, *attr_name* 는 정의된 속성 이름을 의미한다. 클래스 이름은 스키마 이름을 접두사로 사용하고, 대괄호([ ])로 감싸야 한다.
+    **%class** 명령어에 의해 명시된 *class_name*\은 해당 데이터베이스에 정의된 클래스 이름이며, *schema_name*\은 클래스가 정의된 스키마 이름이다. *attr_name*\는 정의된 속성 이름을 의미한다. *schema_name*\과 *class_name*\의 작성 방법은 위와 동일하다.
 
-다음은 *employee* 라는 클래스에 데이터를 입력하기 위하여 **%class** 명령으로 클래스 및 3개의 속성을 명시한 예제이다. **%class** 명령 다음에 나오는 데이터 라인에서는 3개의 데이터가 입력되어야 하며, 이는 :ref:`참조 관계 설정 <conf-reference-relation>`\을 참조한다. ::
+    다음은 *employee*\라는 클래스에 데이터를 입력하기 위하여 **%class** 명령으로 클래스 및 3개의 속성을 명시한 예제이다. **%class** 명령 다음에 나오는 데이터 라인에서는 3개의 데이터가 입력되어야 하며, 이는 :ref:`참조 관계 설정 <conf-reference-relation>`\을 참조한다.
+    
+    ::
 
-    %class [public.employee] (name age department)
+        %class [public].[employee] (name age department)
 
 데이터 라인
 +++++++++++
@@ -539,7 +572,7 @@ CUBRID에서는 주석은 두 개의 연속된 하이픈(\-\-)을 이용하여 �
 
     ::
 
-        %class [public.employee] (name)
+        %class [public].[employee] (name)
         'jordan' 
         'james'  
         'garnett'
@@ -551,7 +584,7 @@ CUBRID에서는 주석은 두 개의 연속된 하이픈(\-\-)을 이용하여 �
 
     ::
 
-        %class [public.employee] (name)
+        %class [public].[employee] (name)
         1: 'jordan' 
         2: 'james'  
         3: 'garnett' 
@@ -561,27 +594,33 @@ CUBRID에서는 주석은 두 개의 연속된 하이픈(\-\-)을 이용하여 �
     
 *   참조 관계 설정
 
-    **@** 다음에 참조하는 클래스를 명시하고, 수직바(|) 다음에 참조하는 인스턴스의 번호를 명시하여 객체 참조 관계를 설정할 수 있다. ::
+    **@** 다음에 참조하는 클래스를 명시하고, 수직바(|) 다음에 참조하는 인스턴스의 번호를 명시하여 객체 참조 관계를 설정할 수 있다.
+    
+    ::
 
         @class_ref | instance_no
         class_ref:
              class_name
              class_id
 
-    **@** 다음에는 클래스명 또는 클래스 id를 명시하고, 수직바(|) 다음에는 인스턴스 번호를 명시한다. 수직바(|)의 양쪽에는 공백을 허용하지 않는다. 테이블 이름은 스키마 이름을 접두사로 사용해야 한다.
+    **@** 다음에는 클래스명 또는 클래스 id를 명시하고, 수직바(|) 다음에는 인스턴스 번호를 명시한다. 수직바(|)의 양쪽에는 공백을 허용하지 않는다. *class_ref*\의 작성 방법은 :ref:`명령 라인 <howtowrite-loadfile-command-line>`\의 *schema_name*\과 *class_name*\의 작성 방법과 동일하다. 하지만 *schema_name*\과 *class_name* 각각을 대괄호([ ])로 묶는 것은 허용하지 않는다.
 
-    다음은 *paycheck* 클래스에 인스턴스를 입력하는 예제이며, *name* 속성은 *employee* 클래스의 인스턴스를 참조한다. 마지막 라인과 같이 앞에서 정의되지 아니한 인스턴스 번호를 이용하여 참조 관계를 설정하는 경우 해당 데이터는 **NULL** 로 입력된다. ::
+    다음은 *paycheck* 클래스에 인스턴스를 입력하는 예제이며, *name* 속성은 *employee* 클래스의 인스턴스를 참조한다. 마지막 라인과 같이 앞에서 정의되지 아니한 인스턴스 번호를 이용하여 참조 관계를 설정하는 경우 해당 데이터는 **NULL** 로 입력된다.
+    
+    ::
 
-        %class [public.paycheck] (name department salary)
+        %class [public].[paycheck] (name department salary)
         @[public.employee]|1   'planning'   8000000   
         @[public.employee]|2   'planning'   6000000  
         @[public.employee]|3   'sales'   5000000  
         @[public.employee]|4   'development'   4000000
         @[public.employee]|5   'development'   5000000
 
-    :ref:`클래스에 식별자 부여 <assign-id-to-class>`\ 에서 **%id** 명령어로 *employee* 클래스에 21이라는 식별자를 부여했으므로, 위의 예를 다음과 같이 작성할 수 있다. ::
+    :ref:`클래스에 식별자 부여 <assign-id-to-class>`\ 에서 **%id** 명령어로 *employee* 클래스에 21이라는 식별자를 부여했으므로, 위의 예를 다음과 같이 작성할 수 있다.
+    
+    ::
 
-        %class [public.paycheck] (name department salary)
+        %class [public].[paycheck] (name department salary)
         @21|1   'planning'   8000000   
         @21|2   'planning'   6000000  
         @21|3   'sales'   5000000  

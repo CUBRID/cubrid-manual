@@ -105,7 +105,7 @@ A failback means that the previously failed master node automatically becomes a 
 
 .. image:: /images/image19.png
 
-If a heartbeat message fails to deliver, a failover will occur. For this reason, servers with unstable connection may experience failover even though no actual failures occur. To prevent a failover from occurring in the situation described above, configure **ha_ping_ports**. Configuring **ha_ping_ports** will send a ping message to a node specified in **ha_ping_ports** in order to verify whether the network is stable or not when a heartbeat message fails to deliver. For details on configuring **ha_ping_ports**, see :ref:`cubrid-ha-conf`.
+If a heartbeat message fails to deliver, a failover will occur. For this reason, servers with unstable connection may experience failover even though no actual failures occur. To prevent a failover from occurring in the situation described above, configure **ha_ping_hosts**. Configuring **ha_ping_hosts** will send a ping message to the hosts specified in **ha_ping_hosts** in order to verify whether the network is stable or not when a heartbeat message fails to deliver. For details on configuring **ha_ping_hosts**, see :ref:`cubrid-ha-conf`.
 
 .. _broker-mode:
 
@@ -554,6 +554,7 @@ For details about **max_clients**, see :ref:`connection-parameters`.
     *   The **ha_mode** parameter in replica node
     *   The **ha_copy_sync_mode** parameter
     *   The **ha_ping_hosts** parameter
+    *   The **ha_tcp_ping_hosts** parameter
 
 **Example**
 
@@ -645,6 +646,12 @@ The host name of the member nodes specified in this parameter can be replaced wi
 CUBRID checks hosts specified in **ha_ping_hosts** every hour; if there is a problem on a host, "ping check" is paused temporarily and checks every 5 minutes if the host is normalized or not.
 
 Configuring this parameter can prevent split-brain, a phenomenon in which two master nodes simultaneously exist as a result of the slave node erroneously detecting an abnormal termination of the master node due to unstable network status and then promoting itself as the new master.
+
+However, the "ping check" does not work if the ICMP protocol is disabled. CUBRID provides **ha_tcp_ping_hosts** as an alternative to address this.
+
+**ha_tcp_ping_hosts**
+
+**ha_tcp_ping_hosts** is a parameter that can be used as an alternative to **ha_ping_hosts** when the ICMP protocol is disabled. **ha_tcp_ping_hosts** works like **ha_ping_hosts** except that the TCP layer is used instead of the IP layer for the "ping check". The default is **NULL**. A comma(,) is used to separate individual host names, and a colon(:) is used to separate a host name and a port number. So, the format of this parameter is like "ha_tcp_ping_hosts=host1:port1,host2:port2". In order to use the TCP ping properly, a TCP socket that can receive the requests must be opened in advance with the port number on the host specified in **ha_tcp_ping_hosts** and the firewall must not block the requests. **ha_tcp_ping_hosts** is ignored if the **ha_ping_hosts** is also set.
 
 Replication
 ^^^^^^^^^^^
@@ -778,14 +785,14 @@ SQL Logging
 
 **ha_enable_sql_logging**
 
-If the value of this parameter is **yes**, CUBRID generates the log file of SQL which **aplylogdb** process applies to the DB volume. The log file is located under the sql_log of the replication log directory(**ha_copy_log_base**). 
+If the value of this parameter is **yes**, CUBRID generates the log file of SQL which **applylogdb** process applies to the DB volume. The log file is located under the sql_log of the replication log directory(**ha_copy_log_base**).
 The default is **no**.
 
 The format of this log file name is *<db name>_<master hostname>*\ **.sql.log.**\ *<id>*, and *<id>* starts from 0.
 If this size is over **ha_sql_log_max_size_in_mbytes**, a new file with "*<id>* + 1" is created.
 For example, if "ha_sql_log_max_size_in_mbytes=100", demodb_nodeA.sql.log.1 is newly created as the size of demodb_nodeA.sql.log.0 file becomes 100MB.
 
-SQL log files are piled up when this parameter is on; therefore, a user should remove log files manually for retaining the free space.
+By default, only two latest SQL log files are maintained, and the maximum number of them can be adjusted through **ha_sql_log_max_count**.
 
 The SQL log format is as follows.
 
@@ -830,6 +837,14 @@ The SQL log format is as follows.
 **ha_sql_log_max_size_in_mbytes**
 
 The value of this parameter is the maximum size of the file which is created when SQL applied to DB by **applylogdb** process is logged. The new file is created when the size of a log file is over this value.
+
+**ha_sql_log_max_count**
+
+The value of this parameter indicates the maximum number of SQL log files to be maintained. The oldest ones are removed when the number of SQL log files exceeds this. This parameter can be set within the range of 2 to 5, and the default is 2. **ha_sql_log_max_count** and **ha_sql_log_max_size_in_mbytes** need to be set properly in order to adjust the amount of SQL log to maintain.
+
+**ha_sql_log_path**
+
+The value of this parameter indicates the path where the SQL log files will be created. The default value is **NULL**. This parameter can be set to an absolute or relative path. If a relative path is set, it is determined based on the replication log directory described in **ha_enable_sql_logging**. The database server process (cub_server) should have appropriate permissions on the path to create SQL log files. If this parameter is not set, the SQL log files will be created on the path described in **ha_enable_sql_logging**
 
 .. _ha-cubrid-broker-conf:
 
@@ -3930,7 +3945,7 @@ For rebuilding replications, the following environment must be the same in maste
 *   Environmental variable (**$CUBRID**, **$CUBRID_DATABASES**, **$LD_LIBRARY_PATH, $PATH**)
 *   The paths of database volume, log, and replication
 *   Username and password of the Linux server
-*   HA-related parameters except for **ha_mode** and **ha_copy_sync_mode**, **ha_ping_hosts**
+*   HA-related parameters except for **ha_mode**, **ha_copy_sync_mode**, **ha_ping_hosts** and **ha_tcp_ping_hosts**
 
 You can rebuild replication by running **ha_make_slavedb.sh** script only in these cases.
 

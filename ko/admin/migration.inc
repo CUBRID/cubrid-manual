@@ -188,17 +188,17 @@ unloaddb
 
     스키마 정보를 오브젝트 단위로 분할하여 생성한 파일 목록 ::
 
-		demodb_schema_user
-		demodb_schema_class
-		demodb_schema_vclass
-		demodb_schema_synonym
-		demodb_schema_vclass_query_spec
-		demodb_schema_serial
-		demodb_schema_procedure
-		demodb_schema_server
-		demodb_schema_pk
-		demodb_schema_fk
-		demodb_schema_grant
+        demodb_schema_user
+        demodb_schema_class
+        demodb_schema_vclass
+        demodb_schema_synonym
+        demodb_schema_vclass_query_spec
+        demodb_schema_serial
+        demodb_schema_procedure
+        demodb_schema_server
+        demodb_schema_pk
+        demodb_schema_fk
+        demodb_schema_grant
 
     분할된 스키마 파일들의 목록을 가지고 있는 파일명
     

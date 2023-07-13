@@ -190,15 +190,16 @@ The following is [options] used in **cubrid unloaddb**.
     List of files created by spliting schema information into object units ::
 	
         demodb_schema_user
-		demodb_schema_class
-		demodb_schema_vclass
-		demodb_schema_serial
-		demodb_schema_procedure
-		demodb_schema_server
-		demodb_schema_pk
-		demodb_schema_fk
-		demodb_schema_grant
-		demodb_schema_synonym
+        demodb_schema_class
+        demodb_schema_vclass
+        demodb_schema_synonym
+        demodb_schema_vclass_query_spec
+        demodb_schema_serial
+        demodb_schema_procedure
+        demodb_schema_server
+        demodb_schema_pk
+        demodb_schema_fk
+        demodb_schema_grant
 
     Filename containing a list of splited schema files
     

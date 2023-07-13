@@ -19,7 +19,7 @@ CUBRID has two types of users by default: **DBA** and **PUBLIC**. At initial ins
 
 .. note::
 
-    *   From version 11.3 of CUBRID, **DBA** members can also query objects of all users in the system catalog virtual class.
+    From version 11.3 of CUBRID, **DBA** members can also query objects of all users in the system catalog virtual class.
 
 .. _create-user:
 

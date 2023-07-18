@@ -563,13 +563,13 @@ MariaDB 환경설정
 게이트웨이에서 MariaDB 연결을 하기위해서는 MariaDB ODBC Driver가 필요하다.
 아래의 내용은 MariaDB ODBC Drvier 설치 방법이다.
 
-MariaDB Connector/ODBC 패키지는 아래의 페이지에서 버전을 선택하여 다운로드할 수 있습니다.
+MariaDB Connector/ODBC 패키지는 아래의 페이지에서 버전을 선택하여 다운로드할 수 있다.
 
 https://mariadb.com/downloads/connectors/
 
 
 다운로드한 tarball 패키지에서 파일을 추출한다. 그리고 드라이버의 공유 라이브러리를 시스템의 적절한 위치에 설치 한다.
-설치한 드라이버는 odbcinst.ini에 드라이버 정보를 등록 해야 한다. 등록 방법은 :ref:`ODBC Driver 정보 설정 <odbcdriver-info>`\ 을 참고 한다.
+설치한 드라이버는 odbcinst.ini에 드라이버 정보를 설정해야 한다. 설정 방법은 :ref:`ODBC Driver 정보 설정 <odbcdriver-info>`\ 을 참고 한다.
 
 ::
     

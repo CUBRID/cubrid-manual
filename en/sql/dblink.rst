@@ -316,7 +316,8 @@ The meaning of each parameter is slightly different for each heterogeneous datab
     *   Connection properties are different for each database, so refer to the site below.
     *   Oracle : https://docs.oracle.com/cd/B19306_01/server.102/b15658/app_odbc.htm#UNXAR418
     *   MySQL : https://dev.mysql.com/doc/connector-odbc/en/connector-odbc-configuration-connection-parameters.html#codbc-dsn-option-flags
-    *   MaridDB : https://mariadb.com/kb/en/about-mariadb-connector-odbc/#general-connection-parameters
+    *   MariaDB : https://mariadb.com/kb/en/about-mariadb-connector-odbc/#general-connection-parameters
+
 
 
 Install unixODBC

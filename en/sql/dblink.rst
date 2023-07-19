@@ -275,7 +275,8 @@ The meaning of each parameter is slightly different for each heterogeneous datab
 
 **CGW_LINK_SERVER**
 
-    **CGW_LINK_SERVER** should set the name of the heterogeneous database to be used by connecting to CAS_CGW. Currently, supported databases are Oracle and MySQL, MariaDB.
+    **CGW_LINK_SERVER** should set the name of the heterogeneous database to be used by connecting to CAS_CGW. Currently, supported databases are Oracle, MySQL and MariaDB.
+
 
 
 **CGW_LINK_SERVER_IP**

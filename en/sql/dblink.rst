@@ -13,7 +13,8 @@ Introduction to CUBRID DBLink
 
 When retrieving information from a database, it is often necessary to retrieve information from an external database.
 In this way, if you use CUBRID DBLink to inquire information in an external database, you can access information in other databases.
-CUBRID DBLink provides a function to inquire information in the databases of homogeneous CUBRID and heterogeneous Oracle and MySQL, MariaDB.
+CUBRID DBLink provides a function to inquire information in the databases of homogeneous CUBRID and heterogeneous Oracle, MySQL and MariaDB.
+
 It has the advantage of being able to directly inquire information from an external database.
 However, it is possible to set up multiple external databases, but when searching for information, it is possible to inquire information from only one other database.
 

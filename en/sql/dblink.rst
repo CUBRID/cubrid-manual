@@ -552,7 +552,8 @@ MariaDB Environment Configuration
  
 **Install MariaDB ODBC Driver**
 
-MariaDB ODBC Driver is required to connect to MySQL from the gateway.
+MariaDB ODBC Driver is required to connect to MariaDB from the gateway.
+
 The following is how to install MariaDB ODBC Driver.
 
 MariaDB Connector/ODBC package can be downloaded by selecting the version from the page below.

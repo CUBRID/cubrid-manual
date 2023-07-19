@@ -2428,7 +2428,7 @@ To eliminate the **INNER JOIN**, the following conditions must be satisfied:
     #. The primary key (**PK**) column must be used in the same join condition as a foreign key (**FK**) column that refers to the corresponding primary key (**PK**) column.
     #. All join conditions must use the equality (=) comparison.
     #. There must be no references to the parent table other than the join conditions.
-    #. In the **FROM** clause, only the **ONLY** keyword must be used for the parent or the child tables.
+    #. The **ALL** keyword must not be used when querying the tables that have an inheritance relationship.
 
 When eliminating the join with the parent table, if the foreign key (**FK**) column in the child table does not have the **NOT NULL** constraint, the **IS NOT NULL** condition is added to that column.
 
@@ -2974,12 +2974,10 @@ The join with the *parent_tbl* table was eliminated because the condition being 
 
 .. _eliminate-inner-join-6:
 
-In the **FROM** clause, only the **ONLY** keyword must be used for the parent or the child tables.
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+The **ALL** keyword must not be used when querying the tables that have an inheritance relationship.
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-If the **ALL** keyword is used on either the parent or the child table, the join with the parent table cannot be eliminated.
-The join with the parent table can only be eliminated if the **ONLY** keyword is used.
-Not using any keyword is equivalent to using the **ONLY** keyword.
+If the **ALL** keyword is used on either the parent or the child table that has an inheritance relationship, the join with the parent table cannot be eliminated.
 
 The following is an example where the **ALL** keyword is used on the *child_tbl* table.
 
@@ -3106,7 +3104,7 @@ To eliminate the **LEFT OUTER JOIN**, the following conditions must be satisfied
     #. All columns of the primary key (**PK**) or the **UNIQUE** constraint must be used in the join conditions.
     #. All join conditions must use the equality (=) comparison.
     #. There must be no references to the right table ther than the join conditions.
-    #. In the **FROM** clause, only the **ONLY** keyword must be used for the right table.
+    #. The **ALL** keyword must not be used when querying the tables that have an inheritance relationship.
 
 The following is an example of eliminating the **LEFT OUTER JOIN**.
 
@@ -3680,12 +3678,10 @@ The join with the *right_tbl* table was not eliminated because it is sorting the
 
 .. _eliminate-left-outer-join-5:
 
-In the **FROM** clause, only the **ONLY** keyword must be used for the right table.
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+The **ALL** keyword must not be used when querying the tables that have an inheritance relationship.
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-If the **ALL** keyword is used on the right table, the join with the right table cannot be eliminated.
-The join with the parent right can only be eliminated if the **ONLY** keyword is used.
-Not using any keyword is the same as using the **ONLY** keyword.
+If the **ALL** keyword is used on the right table that has an inheritance relationship, the join with the right table cannot be eliminated.
 
 The following is an example where the **ALL** keyword is used on the *right_tbl* table.
 

@@ -377,7 +377,8 @@ ODBC Driver 정보는 odbcinst.ini를 직접 수정해서 등록한다.
 
 .. note::
     
-        참고로, 위의 예제에서 드라이버 이름은 각각 "MySQL ODBC 8.0 Unicode Driver" 와 "Oracle 11g ODBC driver", "mariadb odbc 3.1.13 driver" 이다.
+        참고로, 위의 예제에서 드라이버 이름은 각각 "MySQL ODBC 8.0 Unicode Driver", "Oracle 11g ODBC driver" 와 "mariadb odbc 3.1.13 driver" 이다.
+
 
 
 DBLink를 위한 Oracle 설정

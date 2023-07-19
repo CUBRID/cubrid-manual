@@ -372,7 +372,8 @@ The following is an example of setting MySQL and Oracle, MariaDB ODBC Driver inf
 
 .. note::
     
-        For reference, in the example above, the driver names are "MySQL ODBC 8.0 Unicode Driver" and "Oracle 11g ODBC driver", "mariadb odbc 3.1.13 driver" respectively.
+        For reference, in the example above, the driver names are "MySQL ODBC 8.0 Unicode Driver", "Oracle 11g ODBC driver" and "mariadb odbc 3.1.13 driver" respectively.
+
 
 
 Oracle Setting for DBLink

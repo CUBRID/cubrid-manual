@@ -354,7 +354,8 @@ After unixODBC is installed, the ODBC Driver information of the database to be c
 
 ODBC Driver information is registered by directly modifying odbcinst.ini.
 
-The following is an example of setting MySQL and Oracle, MariaDB ODBC Driver information.
+The following is an example of setting MySQL, Oracle and MariaDB ODBC Driver information.
+
 
 ::
 		

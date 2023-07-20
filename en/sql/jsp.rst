@@ -331,7 +331,7 @@ Creating Connection
 ---------------------
 
 To access the database from a Java stored function/procedure, you must use the server-side JDBC driver.
-To acquire a connection to the database using the server-side JDBC driver, you can either use "**jdbc:default:connection:**" as the URL for JDBC connection.
+To acquire a connection to the database using the server-side JDBC driver, you can use "**jdbc:default:connection:**" as the URL for JDBC connection.
 
 .. code-block:: java
 

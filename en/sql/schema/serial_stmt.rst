@@ -301,6 +301,6 @@ For example, if you create a serial starting 101 and increasing by 1 and call **
 
     120
 
-.. note:: \
+.. note::
 
     If you create a serial and calls the **SERIAL_NEXT_VALUE** function for the first time, a value of (serial interval) * (desired number of serials - 1) added to the current value is returned. If you call the **SERIAL_NEXT_VALUE** function in succession, a value of (serial interval) * (desired number of serials) added to the current is returned (see the example above).

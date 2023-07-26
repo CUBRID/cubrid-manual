@@ -144,7 +144,7 @@ The following example shows how to delete the user-defined variable *a* and *use
     DEALLOCATE VARIABLE @a, @user_defined_variable;
     DROP VARIABLE @a, @user_defined_variable;
 
-.. note:: \
+.. note::
 
     The user-defined variables that are defined by the **SET** statement start by connecting an application to a server and will be maintained until the application terminates the connection. The connection maintained during this period is called a session. When an application terminates the connection or when there are no requests for a certain period of time, the session will expire, and the user-defined variables will be deleted as a result. You can set the session time with the **session_state_timeout** parameter of **cubrid.conf**; the default value is **21600** seconds (=6 hours).
 

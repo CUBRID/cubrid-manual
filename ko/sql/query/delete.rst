@@ -32,7 +32,7 @@ DELETE
 
 삭제할 테이블이 한 개인 경우에 한하여, :ref:`limit-clause`\ 을 지정할 수 있다. :ref:`limit-clause`\ 을 명시하면 삭제할 레코드 수를 한정할 수 있다. :ref:`where-clause`\ 을 만족하는 레코드 개수가 *row_count*\ 를 초과하면 *row_count* 개의 레코드만 삭제된다.
 
-.. note:: \
+.. note::
 
     *   여러 개의 테이블이 있는(multiple table) **DELETE** 문에서는 <*table_specifications*> 내에서만 테이블 별칭(alias)을 정의할 수 있고, <*table_specifications*> 밖에서는 <*table_specifications*> 내에서 정의한 테이블 별칭만 사용할 수 있다.
 

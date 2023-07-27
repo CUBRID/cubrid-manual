@@ -339,6 +339,12 @@ To acquire a connection to the database using the server-side JDBC driver, you c
 
 .. note::
 
+    From the CUBRID 11.2, Acquiring a connection in the following way is no longer supported:
+    
+        Connection conn = cubrid.jdbc.driver.CUBRIDDriver.getDefaultConnection();
+
+.. note::
+
     The server-side JDBC is already registered, and you do not need to call "Class.forName("cubrid.jdbc.driver.CUBRIDDriver")"
 
 .. _jsp-execute-statement:

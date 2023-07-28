@@ -338,6 +338,12 @@ JDBC 연결 URL로 "**jdbc:default:connection:**" 을 사용한다.
 
 .. note::
 
+    CUBRID 11.2 버전부터 다음과 같은 방법으로 Connection을 얻는 방법은 더이상 지원하지 않는다.
+
+        Connection conn = cubrid.jdbc.driver.CUBRIDDriver.getDefaultConnection();
+
+.. note::
+
     서버 측 JDBC 드라이버는 이미 등록되어 있기 때문에 Class.forName("cubrid.jdbc.driver.CUBRIDDriver")\를 호출하지 않아도 된다
 
 .. _jsp-execute-statement:

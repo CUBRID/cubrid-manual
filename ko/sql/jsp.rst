@@ -329,19 +329,18 @@ Connection 생성
 ----------------
 
 데이터베이스에 접근하기 위해서 서버 측 JDBC Connection을 생성해야한다.
-서버 측 JDBC 드라이버로 해당 데이터베이스의 Connection을 얻는 방법은 아래와 같다.
-첫 번째 방법은 JDBC 연결 URL로 "**jdbc:default:connection:**" 을 사용하는 것이고, 
-두 번째는 **cubrid.jdbc.driver.CUBRIDDriver** 클래스의 **getDefaultConnection** () 메서드를 호출하는 것이다.
+서버 측 JDBC 드라이버로 해당 데이터베이스의 Connection을 얻는 방법은 아래와 같이
+JDBC 연결 URL로 "**jdbc:default:connection:**" 을 사용한다.
 
 .. code-block:: java
 
     Connection conn = DriverManager.getConnection("jdbc:default:connection:");
 
-또는
+.. note::
 
-.. code-block:: java
+    CUBRID 11.2 버전부터 다음과 같은 방법으로 Connection을 얻는 방법은 더이상 지원하지 않는다.
 
-    Connection conn = cubrid.jdbc.driver.CUBRIDDriver.getDefaultConnection();
+        Connection conn = cubrid.jdbc.driver.CUBRIDDriver.getDefaultConnection();
 
 .. note::
 

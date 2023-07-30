@@ -634,6 +634,7 @@ Using hints can affect the performance of query execution. You can allow the que
     NO_SORT_LIMIT |
     NO_PUSH_PRED |
     NO_MERGE |
+    NO_ELIMINATE_JOIN |
     NO_HASH_AGGREGATE |
     NO_HASH_LIST_SCAN |
     NO_LOGGING |
@@ -676,7 +677,8 @@ The following hints can be specified in **UPDATE**, **DELETE** and **SELECT** st
 *   **NO_MULTI_RANGE_OPT**: This is a hint not to use the multi-key range optimization. For details, see :ref:`multi-key-range-opt`.
 *   **NO_SORT_LIMIT**: This is a hint not to use the SORT-LIMIT optimization. For more details, see :ref:`sort-limit-optimization`.
 *   **NO_PUSH_PRED**: This is a hint not to use the PREDICATE-PUSH optimization.
-*   **NO_MERGE**: This is a hint not to use the VIEW_MERGE optimization.
+*   **NO_MERGE**: This is a hint not to use the VIEW-MERGE optimization.
+*   **NO_ELIMINATE_JOIN**: This is a hint not to use join elimination optimization. For more details, see :ref:`join-elimination-optimization`.
 
 .. _no-hash-aggregate:
 
@@ -1303,7 +1305,7 @@ Function-based indexes cannot become multiple-columns indexes. The example will 
 
 .. _tuning-index:
 
-Optimization using indexes
+Optimization Using Indexes
 ========================== 
 
 .. _covering-index:
@@ -2390,6 +2392,1402 @@ The above **SELECT** query's plan is printed out as below; we can see "(sort lim
                    cost:  6 card 1000
         sort:  2 asc
         cost:  7 card 0
+
+.. _tuning-rewrite:
+
+Optimization Using Rewrite
+==========================
+
+.. _join-elimination-optimization:
+
+Join Elimination Optimization
+-----------------------------
+
+The join elimination optimization is a method to reduce join operations and improve the query performance by eliminating the joins with the tables that do not affect the query results.
+
+In the join elimination optimization, there are two operations:
+
+    #. Eliminating **INNER JOIN**
+    #. Eliminating **LEFT OUTER JOIN**
+
+To disable the join elimination optimization, use the **NO_ELIMINATE_JOIN** hint.
+
+.. _eliminate-inner-join:
+
+Eliminating **INNER JOIN**
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The relationship between a table with a primary key (**PK**) and a table with a foreign key (**FK**) that refers to that primary key (**PK**) is called a parent-child relationship.
+In **INNER JOIN** of a parent-child relationship, if there are no references to the parent table other than the join conditions, eliminating the join with the parent table does not affect the query results.
+In this case, by elimination the join with the parent table, the join operation is reduced and the query performance is improved.
+
+To eliminate the **INNER JOIN**, the following conditions must be satisfied:
+
+    #. Perform the **INNER JOIN** of the parent-child relationship.
+    #. All columns of the primary key (**PK**) and the foreign key (**FK**) must be used in the join condition.
+    #. The primary key (**PK**) column must be used in the same join condition as a foreign key (**FK**) column that refers to the corresponding primary key (**PK**) column.
+    #. All join conditions must use the equality (=) comparison.
+    #. There must be no references to the parent table other than the join conditions.
+    #. The **ALL** keyword must not be used when querying the tables that have an inheritance relationship.
+
+When eliminating the join with the parent table, if the foreign key (**FK**) column in the child table does not have the **NOT NULL** constraint, the **IS NOT NULL** condition is added to that column.
+
+The following is an example of eliminating the **INNER JOIN**.
+
+.. code-block:: sql
+
+    call login ('public') on class db_user;
+
+    /* current_user: public */
+    drop table if exists child_tbl, parent_tbl;
+
+    create table parent_tbl (
+        id int,
+        sub_id int,
+        name varchar (100),
+        filter int,
+        primary key (id, sub_id)
+    );
+
+    insert into parent_tbl
+    select
+        ((rownum - 1) / 10) + 1 as id,
+        (((rownum - 1) % 10) + 1) * 10 as sub_id,
+        'Parent-' || lpad (rownum, 3) as name,
+        ((rownum - 1) % 10) + 1 as filter
+    from db_root
+    connect by level <= 100;
+
+    create table child_tbl (
+        id int,
+        name varchar (100),
+        filter int,
+        parent_id int not null,
+        parent_sub_id int,
+        primary key (id),
+        foreign key (parent_id, parent_sub_id) references parent_tbl (id, sub_id)
+    );
+
+    insert into child_tbl
+    select
+        rownum as id,
+        'Child-' || lpad (rownum, 5) as name,
+        ((rownum - 1) % 100) + 1 as filter,
+        id as parent_id,
+        sub_id as parent_sub_id
+    from parent, (select level from db_root connect by level <= 100);
+
+    update statistics on parent_tbl, child_tbl with fullscan;
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    select /*+ recompile */
+        c.id, c.name, c.filter, c.parent_id, c.parent_sub_id
+    from
+        parent_tbl p
+        inner join child_tbl c on p.id = c.parent_id and p.sub_id = c.parent_sub_id
+    where
+        c.filter = 1 and c.parent_id = 1
+    order by
+        c.name;
+
+The join with the *parent_tbl* table has been eliminated, and the **IS NOT NULL** condition for the *parent_sub_id* column of the *child_tbl* table has been added.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: iscan
+                     class: c node[0]
+                     index: fk_child_tbl_parent_id_parent_sub_id term[1]
+                     filtr: term[2]
+                     sargs: term[0]
+                     sort:  5 asc
+                     cost:  8 card 1
+        sort:  2 asc
+        cost:  14 card 1
+    
+    Query stmt:
+    
+    select c.id, c.[name], c.filter, c.parent_id, c.parent_sub_id from child_tbl c where c.parent_id= ?:0  and c.filter= ?:1  and c.parent_sub_id is not null  order by 2
+
+::
+
+               id  name                       filter    parent_id  parent_sub_id
+    ============================================================================
+                1  'Child-    1'                   1            1             10
+              101  'Child-  101'                   1            1             20
+              201  'Child-  201'                   1            1             30
+              301  'Child-  301'                   1            1             40
+              401  'Child-  401'                   1            1             50
+              501  'Child-  501'                   1            1             60
+              601  'Child-  601'                   1            1             70
+              701  'Child-  701'                   1            1             80
+              801  'Child-  801'                   1            1             90
+              901  'Child-  901'                   1            1            100
+
+The following is an example of using the **NO_ELIMINATE_JOIN** hint.
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    select /*+ recompile no_eliminate_join */
+        c.id, c.name, c.filter, c.parent_id, c.parent_sub_id
+    from
+        parent_tbl p
+        inner join child_tbl c on p.id = c.parent_id and p.sub_id = c.parent_sub_id
+    where
+        c.filter = 1 and c.parent_id = 1
+    order by
+        c.name;
+
+The join with the *parent_tbl* table was not eliminated because the **NO_ELIMINATE_JOIN** hint was used.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: idx-join (inner join)
+                     outer: iscan
+                                class: p node[0]
+                                index: pk_parent_tbl_id_sub_id term[4] (covers)
+                                cost:  1 card 10
+                     inner: iscan
+                                class: c node[1]
+                                index: fk_child_tbl_parent_id_parent_sub_id term[1] AND term[3]
+                                sargs: term[2]
+                                cost:  3 card 1
+                     cost:  4 card 1
+        sort:  2 asc
+        cost:  10 card 1
+    
+    Query stmt:
+    
+    select /*+ NO_ELIMINATE_JOIN */ c.id, c.[name], c.filter, c.parent_id, c.parent_sub_id from parent_tbl p, child_tbl c where p.sub_id=c.parent_sub_id and p.id= ?:0  and c.parent_id= ?:1  and c.filter= ?:2  and p.id=c.parent_id order by 2
+
+::
+
+               id  name                       filter    parent_id  parent_sub_id
+    ============================================================================
+                1  'Child-    1'                   1            1             10
+              101  'Child-  101'                   1            1             20
+              201  'Child-  201'                   1            1             30
+              301  'Child-  301'                   1            1             40
+              401  'Child-  401'                   1            1             50
+              501  'Child-  501'                   1            1             60
+              601  'Child-  601'                   1            1             70
+              701  'Child-  701'                   1            1             80
+              801  'Child-  801'                   1            1             90
+              901  'Child-  901'                   1            1            100
+
+.. _eliminate-inner-join-1:
+
+All columns of the primary key (**PK**) and the foreign key (**FK**) must be used in the join condition.
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+The following is an example where only the *id* column of the *parent_tbl* table and the *parent_id* column of the *child_tbl* table are used as the join conditions.
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    select /*+ recompile */
+        c.id, c.name, c.filter, c.parent_id, c.parent_sub_id
+    from
+        parent_tbl p
+        inner join child_tbl c on p.id = c.parent_id
+    where
+        c.filter = 2 and c.parent_id = 2 and c.parent_sub_id = 20
+    order by
+        c.name;
+
+The join with the *parent_tbl* table was not eliminated because the *sub_id* column of the *parent_tbl* table and the *parent_sub_id* column of the *child_tbl* table were not used as join conditions.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: nl-join (cross join)
+                     outer: iscan
+                                class: c node[1]
+                                index: fk_child_tbl_parent_id_parent_sub_id term[2] AND term[3]
+                                sargs: term[1]
+                                cost:  3 card 1
+                     inner: iscan
+                                class: p node[0]
+                                index: pk_parent_tbl_id_sub_id term[4] (covers)
+                                cost:  1 card 10
+                     cost:  4 card 10
+        sort:  2 asc
+        cost:  10 card 10
+    
+    Query stmt:
+    
+    select c.id, c.[name], c.filter, c.parent_id, c.parent_sub_id from parent_tbl p, child_tbl c where p.id= ?:0  and c.parent_sub_id= ?:1  and c.parent_id= ?:2  and c.filter= ?:3  and p.id=c.parent_id order by 2
+
+::
+
+               id  name                       filter    parent_id  parent_sub_id
+    ============================================================================
+             1102  'Child- 1102'                   2            2             20
+             1102  'Child- 1102'                   2            2             20
+             1102  'Child- 1102'                   2            2             20
+             1102  'Child- 1102'                   2            2             20
+             1102  'Child- 1102'                   2            2             20
+             1102  'Child- 1102'                   2            2             20
+             1102  'Child- 1102'                   2            2             20
+             1102  'Child- 1102'                   2            2             20
+             1102  'Child- 1102'                   2            2             20
+             1102  'Child- 1102'                   2            2             20
+
+.. _eliminate-inner-join-2:
+
+The primary key (**PK**) column must be used in the same join condition as the foreign key (**FK**) column that refers to the corresponding primary key (**PK**).
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+The following is an example where the join conditions compare the *id* column with the *parent_sub_id* column, and the *sub_id column* with the *parent_id* column.
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    select /*+ recompile */
+        c.id, c.name, c.filter, c.parent_id, c.parent_sub_id
+    from
+        parent_tbl p
+        inner join child_tbl c on p.id = c.parent_sub_id and p.sub_id = c.parent_id
+    where
+        c.filter = 3 and c.parent_id = 3
+    order by
+        c.name;
+
+The join with the *parent_tbl* table was not eliminated because the *id* column was not compared to the *parent_id* column, and the *sub_id* column was not compared to the *parent_sub_id* column.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: idx-join (inner join)
+                     outer: sscan
+                                class: p node[0]
+                                sargs: term[3]
+                                cost:  1 card 1
+                     inner: iscan
+                                class: c node[1]
+                                index: fk_child_tbl_parent_id_parent_sub_id term[0] AND term[4]
+                                sargs: term[2]
+                                cost:  3 card 1
+                     cost:  5 card 1
+        sort:  2 asc
+        cost:  11 card 1
+    
+    Query stmt:
+    
+    select c.id, c.[name], c.filter, c.parent_id, c.parent_sub_id from parent_tbl p, child_tbl c where p.id=c.parent_sub_id and p.sub_id= ?:0  and c.parent_id= ?:1  and c.filter= ?:2  and p.sub_id=c.parent_id order by 2
+
+::
+
+    There are no results.
+    0 row selected.
+
+.. _eliminate-inner-join-3:
+
+All join conditions must use the equality (=) comparison.
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+The following is an example where the join conditions do not use the equality (=) comparison.
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    select /*+ recompile */
+        c.id, c.name, c.filter, c.parent_id, c.parent_sub_id
+    from
+        parent_tbl p
+        inner join child_tbl c on p.id = c.parent_id and p.sub_id < c.parent_sub_id
+    where
+        c.filter = 4 and c.parent_id = 4 and c.parent_sub_id = 40
+    order by
+        c.name;
+
+The join with the *parent_tbl* table was not eliminated because the comparison between the *sub_id* column of the *parent_tbl* table and the *parent_sub_id* column of the *child_tbl* table in the join condition does not use the equality (=) comparison.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: nl-join (cross join)
+                     outer: iscan
+                                class: p node[0]
+                                index: pk_parent_tbl_id_sub_id term[5] AND term[6] (covers)
+                                cost:  1 card 1
+                     inner: iscan
+                                class: c node[1]
+                                index: fk_child_tbl_parent_id_parent_sub_id term[3] AND term[4]
+                                sargs: term[2]
+                                cost:  3 card 1
+                     cost:  4 card 1
+        sort:  2 asc
+        cost:  10 card 1
+    
+    Query stmt:
+    
+    select c.id, c.[name], c.filter, c.parent_id, c.parent_sub_id from parent_tbl p, child_tbl c where (p.sub_id< ?:0 ) and p.id= ?:1  and c.parent_sub_id= ?:2  and c.parent_id= ?:3  and c.filter= ?:4  and p.id=c.parent_id and (p.sub_id<c.parent_sub_id) order by 2
+
+::
+
+               id  name                       filter    parent_id  parent_sub_id
+    ============================================================================
+             3304  'Child- 3304'                   4            4             40
+             3304  'Child- 3304'                   4            4             40
+             3304  'Child- 3304'                   4            4             40
+
+.. _eliminate-inner-join-4:
+
+There must be no references to the parent table other than the join conditions.
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+The following is an example that retrieves the *name* column from the *parent_tbl* table.
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    select /*+ recompile */
+        c.id, c.name, c.filter, c.parent_id, c.parent_sub_id, p.name
+    from
+        parent_tbl p
+        inner join child_tbl c on p.id = c.parent_id and p.sub_id = c.parent_sub_id
+    where
+        c.filter = 5 and c.parent_id = 5
+    order by
+        c.name;
+
+The join with the *parent_tbl* table was not eliminated because it is retrieving the values from the *name* column of the *parent_tbl* table.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: idx-join (inner join)
+                     outer: iscan
+                                class: p node[0]
+                                index: pk_parent_tbl_id_sub_id term[4]
+                                cost:  1 card 10
+                     inner: iscan
+                                class: c node[1]
+                                index: fk_child_tbl_parent_id_parent_sub_id term[1] AND term[3]
+                                sargs: term[2]
+                                cost:  3 card 1
+                     cost:  4 card 1
+        sort:  2 asc
+        cost:  10 card 1
+    
+    Query stmt:
+    
+    select c.id, c.[name], c.filter, c.parent_id, c.parent_sub_id, p.[name] from parent_tbl p, child_tbl c where p.sub_id=c.parent_sub_id and p.id= ?:0  and c.parent_id= ?:1  and c.filter= ?:2  and p.id=c.parent_id order by 2
+
+::
+
+               id  name                       filter    parent_id  parent_sub_id  name
+    ==================================================================================================
+             4005  'Child- 4005'                   5            5             10  'Parent- 41'
+             4105  'Child- 4105'                   5            5             20  'Parent- 42'
+             4205  'Child- 4205'                   5            5             30  'Parent- 43'
+             4305  'Child- 4305'                   5            5             40  'Parent- 44'
+             4405  'Child- 4405'                   5            5             50  'Parent- 45'
+             4505  'Child- 4505'                   5            5             60  'Parent- 46'
+             4605  'Child- 4605'                   5            5             70  'Parent- 47'
+             4705  'Child- 4705'                   5            5             80  'Parent- 48'
+             4805  'Child- 4805'                   5            5             90  'Parent- 49'
+             4905  'Child- 4905'                   5            5            100  'Parent- 50'
+
+The following is an example with a condition on the *filter* column of the *parent_tbl* table.
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    select /*+ recompile */
+        c.id, c.name, c.filter, c.parent_id, c.parent_sub_id
+    from
+        parent_tbl p
+        inner join child_tbl c on p.id = c.parent_id and p.sub_id = c.parent_sub_id
+    where
+        c.filter = 5 and c.parent_id = 5 and p.filter = 5
+    order by
+        c.name;
+
+The join with the *parent_tbl* table was not eliminated because it is retrieving the records where the *filter* column of the *parent_tbl* table has a value of 5.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: idx-join (inner join)
+                     outer: iscan
+                                class: p node[0]
+                                index: pk_parent_tbl_id_sub_id term[5]
+                                sargs: term[3]
+                                cost:  1 card 1
+                     inner: iscan
+                                class: c node[1]
+                                index: fk_child_tbl_parent_id_parent_sub_id term[1] AND term[4]
+                                sargs: term[2]
+                                cost:  3 card 1
+                     cost:  4 card 1
+        sort:  2 asc
+        cost:  10 card 1
+    
+    Query stmt:
+    
+    select c.id, c.[name], c.filter, c.parent_id, c.parent_sub_id from parent_tbl p, child_tbl c where p.sub_id=c.parent_sub_id and p.id= ?:0  and p.filter= ?:1  and c.parent_id= ?:2  and c.filter= ?:3  and p.id=c.parent_id order by 2
+
+::
+
+               id  name                       filter    parent_id  parent_sub_id
+    ============================================================================
+             4405  'Child- 4405'                   5            5             50
+
+The following is an example that sorts the results based on the *name* column of the *parent_tbl* table.
+
+.. code-block:: sql
+
+    select /*+ recompile */
+        c.id, c.name, c.filter, c.parent_id, c.parent_sub_id
+    from
+        parent_tbl p
+        inner join child_tbl c on p.id = c.parent_id and p.sub_id = c.parent_sub_id
+    where
+        c.filter = 5 and c.parent_id = 5
+    order by
+        p.name desc;
+
+The join with the *parent_tbl* table was not eliminated because it is sorting the results based on the *name* column of the *parent_tbl* table in descending order.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: idx-join (inner join)
+                     outer: iscan
+                                class: p node[0]
+                                index: pk_parent_tbl_id_sub_id term[4]
+                                cost:  1 card 10
+                     inner: iscan
+                                class: c node[1]
+                                index: fk_child_tbl_parent_id_parent_sub_id term[1] AND term[3]
+                                sargs: term[2]
+                                cost:  3 card 1
+                     cost:  4 card 1
+        sort:  6 desc
+        cost:  10 card 1
+    
+    Query stmt:
+    
+    select c.id, c.[name], c.filter, c.parent_id, c.parent_sub_id, p.[name] from parent_tbl p, child_tbl c where p.sub_id=c.parent_sub_id and p.id= ?:0  and c.parent_id= ?:1  and c.filter= ?:2  and p.id=c.parent_id order by 6 desc
+
+::
+
+               id  name                       filter    parent_id  parent_sub_id
+    ============================================================================
+             4905  'Child- 4905'                   5            5            100
+             4805  'Child- 4805'                   5            5             90
+             4705  'Child- 4705'                   5            5             80
+             4605  'Child- 4605'                   5            5             70
+             4505  'Child- 4505'                   5            5             60
+             4405  'Child- 4405'                   5            5             50
+             4305  'Child- 4305'                   5            5             40
+             4205  'Child- 4205'                   5            5             30
+             4105  'Child- 4105'                   5            5             20
+             4005  'Child- 4005'                   5            5             10
+
+.. _eliminate-inner-join-5:
+
+Implicit Equality (=)
++++++++++++++++++++++
+
+Even if there are conditions related to the parent table in the **WHERE** clause other than the join conditions, if the column used in the join conditions is also used in those conditions, the join with the parent table can be eliminated based on implicit equality (=).
+That condition must use an equality (=) comparison and be compared to a constant value.
+
+The following is an example with an equality (=) comparison condition on the *sub_id* column of the *parent_tbl* table.
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    select /*+ recompile */
+        c.id, c.name, c.filter, c.parent_id, c.parent_sub_id
+    from
+        parent_tbl p
+        inner join child_tbl c on p.id = c.parent_id and p.sub_id = c.parent_sub_id
+    where
+        c.filter = 6 and c.parent_id = 6 and p.sub_id = 60
+    order by
+        c.name;
+
+The join with the *parent_tbl* table was eliminated because the condition being queried, which retrieves records where the *sub_id* column of the *parent_tbl* table has a value of 60, is equivalent to the condition where the *parent_sub_id* column of the *child_tbl* table has a value of 60.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: iscan
+                     class: c node[0]
+                     index: fk_child_tbl_parent_id_parent_sub_id term[1] AND term[2]
+                     filtr: term[3]
+                     sargs: term[0]
+                     cost:  3 card 1
+        sort:  2 asc
+        cost:  9 card 1
+    
+    Query stmt:
+    
+    select c.id, c.[name], c.filter, c.parent_id, c.parent_sub_id from child_tbl c where c.parent_sub_id= ?:0  and c.parent_id= ?:1  and c.filter= ?:2  and c.parent_sub_id is not null  order by 2
+
+::
+
+               id  name                       filter    parent_id  parent_sub_id
+    ============================================================================
+             5506  'Child- 5506'                   6            6             60
+
+.. _eliminate-inner-join-6:
+
+The **ALL** keyword must not be used when querying the tables that have an inheritance relationship.
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+If the **ALL** keyword is used on either the parent or the child table that has an inheritance relationship, the join with the parent table cannot be eliminated.
+
+The following is an example where the **ALL** keyword is used on the *child_tbl* table.
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    select /*+ recompile */
+        c.id, c.name, c.filter, c.parent_id, c.parent_sub_id
+    from
+        parent_tbl p
+        inner join all child_tbl c on p.id = c.parent_id and p.sub_id = c.parent_sub_id
+    where
+        c.filter = 7 and c.parent_id = 7
+    order by
+        c.name;
+
+The join with the *parent_tbl* table was not eliminated.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: idx-join (inner join)
+                     outer: iscan
+                                class: p node[0]
+                                index: pk_parent_tbl_id_sub_id term[4] (covers)
+                                cost:  1 card 10
+                     inner: iscan
+                                class: c node[1]
+                                index: fk_child_tbl_parent_id_parent_sub_id term[1] AND term[3]
+                                sargs: term[2]
+                                cost:  3 card 1
+                     cost:  4 card 1
+        sort:  2 asc
+        cost:  10 card 1
+    
+    Query stmt:
+    
+    select c.id, c.[name], c.filter, c.parent_id, c.parent_sub_id from parent_tbl p,  all child_tbl c where p.sub_id=c.parent_sub_id and p.id= ?:0  and c.parent_id= ?:1  and c.filter= ?:2  and p.id=c.parent_id order by 2
+
+::
+
+               id  name                       filter    parent_id  parent_sub_id
+    ============================================================================
+             6007  'Child- 6007'                   7            7             10
+             6107  'Child- 6107'                   7            7             20
+             6207  'Child- 6207'                   7            7             30
+             6307  'Child- 6307'                   7            7             40
+             6407  'Child- 6407'                   7            7             50
+             6507  'Child- 6507'                   7            7             60
+             6607  'Child- 6607'                   7            7             70
+             6707  'Child- 6707'                   7            7             80
+             6807  'Child- 6807'                   7            7             90
+             6907  'Child- 6907'                   7            7            100
+
+The following is an example where the **ONLY** keyword is used on both the *parent_tbl* table and the *child_tbl* table.
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    select /*+ recompile */
+        c.id, c.name, c.filter, c.parent_id, c.parent_sub_id
+    from
+        only parent_tbl p
+        inner join only child_tbl c on p.id = c.parent_id and p.sub_id = c.parent_sub_id
+    where
+        c.filter = 7 and c.parent_id = 7
+    order by
+        c.name;
+
+The join with the *parent_tbl* table was eliminated.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: iscan
+                     class: c node[0]
+                     index: fk_child_tbl_parent_id_parent_sub_id term[1]
+                     filtr: term[2]
+                     sargs: term[0]
+                     sort:  5 asc
+                     cost:  8 card 1
+        sort:  2 asc
+        cost:  14 card 1
+    
+    Query stmt:
+    
+    select c.id, c.[name], c.filter, c.parent_id, c.parent_sub_id from child_tbl c where c.parent_id= ?:0  and c.filter= ?:1  and c.parent_sub_id is not null  order by 2
+
+::
+
+               id  name                       filter    parent_id  parent_sub_id
+    ============================================================================
+             6007  'Child- 6007'                   7            7             10
+             6107  'Child- 6107'                   7            7             20
+             6207  'Child- 6207'                   7            7             30
+             6307  'Child- 6307'                   7            7             40
+             6407  'Child- 6407'                   7            7             50
+             6507  'Child- 6507'                   7            7             60
+             6607  'Child- 6607'                   7            7             70
+             6707  'Child- 6707'                   7            7             80
+             6807  'Child- 6807'                   7            7             90
+             6907  'Child- 6907'                   7            7            100
+
+.. _eliminate-left-outer-join:
+
+Eliminating **LEFT OUTER JOIN**
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In **LEFT OUTER JOIN** of an N:1 relationship, if there are no references to the right table other than the join conditions, eliminating the join with the right table does not affect the query result.
+In this case, by elimination the join with the right table, the join operation is reduced and the query performance is improved.
+
+To eliminate the **LEFT OUTER JOIN**, the following conditions must be satisfied:
+
+    #. Perform the **LEFT OUTER JOIN**.
+    #. The right table must have the primary key (**PK**) or the **UNIQUE** constraint.
+    #. All columns of the primary key (**PK**) or the **UNIQUE** constraint must be used in the join conditions.
+    #. All join conditions must use the equality (=) comparison.
+    #. There must be no references to the right table ther than the join conditions.
+    #. The **ALL** keyword must not be used when querying the tables that have an inheritance relationship.
+
+The following is an example of eliminating the **LEFT OUTER JOIN**.
+
+.. code-block:: sql
+
+    call login ('public') on class db_user;
+
+    /* current_user: public */
+    drop table if exists left_tbl, right_tbl;
+
+    create table left_tbl (
+        id int,
+        sub_id int,
+        other_id int,
+        name varchar (100),
+        filter int,
+        primary key (id, sub_id, other_id)
+    );
+
+    insert into left_tbl
+    select
+        ((rownum - 1) / 100) + 1 as id,
+        (((rownum - 1) % 10) + 1) * 10 as sub_id,
+        (((rownum - 1) % 100) + 1) * 100 as other_id,
+        'Left-' || lpad (rownum, 4) as name,
+        ((rownum - 1) % 100) + 1 as filter
+    from db_root
+    connect by level <= 1000;
+
+    create table right_tbl (
+        id int,
+        sub_id int,
+        name varchar (100),
+        filter int,
+        primary key (id, sub_id)
+    );
+
+    insert into right_tbl
+    select
+        id as id,
+        sub_id as sub_id,
+        'Right-' || lpad (rownum, 3) as name,
+        ((rownum - 1) % 10) + 1 as filter
+    from (select distinct id, sub_id from left_tbl);
+
+    update statistics on left_tbl, right_tbl with fullscan;
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    select /*+ recompile */
+        l.id, l.sub_id, l.other_id, l.name, l.filter
+    from
+        left_tbl as l
+        left outer join right_tbl as r on l.id = r.id and l.sub_id = r.sub_id
+    where
+        l.filter = 1
+    order by
+        l.name;
+
+The join with the *right_tbl* table was eliminated.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: sscan
+                     class: l node[0]
+                     sargs: term[0]
+                     cost:  6 card 1
+        sort:  4 asc
+        cost:  13 card 1
+    
+    Query stmt:
+    
+    select l.id, l.sub_id, l.other_id, l.[name], l.filter from left_tbl l where l.filter= ?:0  order by 4
+
+::
+
+               id       sub_id     other_id  name                       filter
+    ==========================================================================
+                1           10          100  'Left-   1'                     1
+                2           10          100  'Left- 101'                     1
+                3           10          100  'Left- 201'                     1
+                4           10          100  'Left- 301'                     1
+                5           10          100  'Left- 401'                     1
+                6           10          100  'Left- 501'                     1
+                7           10          100  'Left- 601'                     1
+                8           10          100  'Left- 701'                     1
+                9           10          100  'Left- 801'                     1
+               10           10          100  'Left- 901'                     1
+
+The following is an example of using the **NO_ELIMINATE_JOIN** hint.
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    select /*+ recompile no_eliminate_join */
+        l.id, l.sub_id, l.other_id, l.name, l.filter
+    from
+        left_tbl as l
+        left outer join right_tbl as r on l.id = r.id and l.sub_id = r.sub_id
+    where
+        l.filter = 1
+    order by
+        l.name;
+
+The join with the *right_tbl* table was not eliminated because the **NO_ELIMINATE_JOIN** hint was used.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: idx-join (left outer join)
+                     outer: sscan
+                                class: l node[0]
+                                sargs: term[2]
+                                cost:  6 card 1
+                     inner: iscan
+                                class: r node[1]
+                                index: pk_right_tbl_id_sub_id term[0] AND term[1] (covers)
+                                cost:  1 card 100
+                     cost:  9 card 1
+        sort:  4 asc
+        cost:  15 card 1
+    
+    Query stmt:
+    
+    select /*+ NO_ELIMINATE_JOIN */ l.id, l.sub_id, l.other_id, l.[name], l.filter from left_tbl l left outer join right_tbl r on l.sub_id=r.sub_id and l.id=r.id where l.filter= ?:0  order by 4
+
+::
+
+               id       sub_id     other_id  name                       filter
+    ==========================================================================
+                1           10          100  'Left-   1'                     1
+                2           10          100  'Left- 101'                     1
+                3           10          100  'Left- 201'                     1
+                4           10          100  'Left- 301'                     1
+                5           10          100  'Left- 401'                     1
+                6           10          100  'Left- 501'                     1
+                7           10          100  'Left- 601'                     1
+                8           10          100  'Left- 701'                     1
+                9           10          100  'Left- 801'                     1
+               10           10          100  'Left- 901'                     1
+
+.. _eliminate-left-outer-join-1:
+
+The right table must have the primary key (**PK**) or the **UNIQUE** constraint.
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+If the right table does not have the primary key (**PK**) or the **UNIQUE** constraint, it is not an N:1 relationship for the **LEFT OUTER JOIN**, and therefore the join with the right table cannot be eliminated.
+
+The following is an example where the primary key (**PK**) of the *right_tbl* table is removed, and a general index is created on the *id* and the *sub_id* columns.
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    alter table right_tbl drop primary key;
+    alter table right_tbl add index i_right_id_sub_id (id, sub_id);
+    update statistics on right_tbl with fullscan;
+
+    select /*+ recompile */
+        l.id, l.sub_id, l.other_id, l.name, l.filter
+    from
+        left_tbl as l
+        left outer join right_tbl as r on l.id = r.id and l.sub_id = r.sub_id
+    where
+        l.filter = 2
+    order by
+        l.name;
+
+    drop index i_right_id_sub_id on right_tbl;
+    alter table right_tbl add primary key (id, sub_id);
+    update statistics on right_tbl with fullscan;
+
+The join with the *right_tbl* table was not eliminated because the *right_tbl* table does not have the primary key (**PK**) or the **UNIQUE** constraint.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: idx-join (left outer join)
+                     outer: sscan
+                                class: l node[0]
+                                sargs: term[2]
+                                cost:  6 card 1
+                     inner: iscan
+                                class: r node[1]
+                                index: i_right_id_sub_id term[0] AND term[1] (covers)
+                                cost:  1 card 100
+                     cost:  9 card 1
+        sort:  4 asc
+        cost:  15 card 1
+    
+    Query stmt:
+    
+    select l.id, l.sub_id, l.other_id, l.[name], l.filter from left_tbl l left outer join right_tbl r on l.sub_id=r.sub_id and l.id=r.id where l.filter= ?:0  order by 4
+
+::
+
+               id       sub_id     other_id  name                       filter
+    ==========================================================================
+                1           20          200  'Left-   2'                     2
+                2           20          200  'Left- 102'                     2
+                3           20          200  'Left- 202'                     2
+                4           20          200  'Left- 302'                     2
+                5           20          200  'Left- 402'                     2
+                6           20          200  'Left- 502'                     2
+                7           20          200  'Left- 602'                     2
+                8           20          200  'Left- 702'                     2
+                9           20          200  'Left- 802'                     2
+               10           20          200  'Left- 902'                     2
+
+The following is an example of removing the primary key (**PK**) of the *right_tbl* table and creating the **UNIQUE** constraint consisting of the *id* column and the *sub_id* column.
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    alter table right_tbl drop primary key;
+    alter table right_tbl add constraint unique (id, sub_id);
+    update statistics on right_tbl with fullscan;
+
+    select /*+ recompile */
+        l.id, l.sub_id, l.other_id, l.name, l.filter
+    from
+        left_tbl as l
+        left outer join right_tbl as r on l.id = r.id and l.sub_id = r.sub_id
+    where
+        l.filter = 2
+    order by
+        l.name;
+
+    alter table right_tbl drop constraint u_right_tbl_id_sub_id;
+    alter table right_tbl add primary key (id, sub_id);
+    update statistics on right_tbl with fullscan;
+
+The join with the *right_tbl* table was eliminated because the *right_tbl* table does not have the primary key (**PK**) or the **UNIQUE** constraint.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: sscan
+                     class: l node[0]
+                     sargs: term[0]
+                     cost:  6 card 1
+        sort:  4 asc
+        cost:  13 card 1
+    
+    Query stmt:
+    
+    select l.id, l.sub_id, l.other_id, l.[name], l.filter from left_tbl l where l.filter= ?:0  order by 4
+
+::
+
+               id       sub_id     other_id  name                       filter
+    ==========================================================================
+                1           20          200  'Left-   2'                     2
+                2           20          200  'Left- 102'                     2
+                3           20          200  'Left- 202'                     2
+                4           20          200  'Left- 302'                     2
+                5           20          200  'Left- 402'                     2
+                6           20          200  'Left- 502'                     2
+                7           20          200  'Left- 602'                     2
+                8           20          200  'Left- 702'                     2
+                9           20          200  'Left- 802'                     2
+               10           20          200  'Left- 902'                     2
+
+.. _eliminate-left-outer-join-2:
+
+All columns of the primary key (**PK**) or the **UNIQUE** constraint must be used in the join conditions.
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+The following is an example where only the *id* column of the *left_tbl* table and the *id* column of the *right_tbl* table are used as the join conditions.
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    select /*+ recompile */
+        l.id, l.sub_id, l.other_id, l.name, l.filter
+    from
+        left_tbl as l
+        left outer join right_tbl as r on l.id = r.id
+    where
+        l.filter = 3 and l.id = 3
+    order by
+        l.name;
+
+The join with the *right_tbl* table was not eliminated because the *sub_id* column of the *left_tbl* table and the *sub_id* column of the *right_tbl* table were not used as the join conditions.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: idx-join (left outer join)
+                     outer: iscan
+                                class: l node[0]
+                                index: pk_left_tbl_id_sub_id_other_id term[2]
+                                sargs: term[1]
+                                cost:  3 card 1
+                     inner: iscan
+                                class: r node[1]
+                                index: pk_right_tbl_id_sub_id term[0] (covers)
+                                filtr: term[3]
+                                cost:  1 card 10
+                     sort:  2 asc, 3 asc
+                     cost:  4 card 1
+        sort:  4 asc
+        cost:  10 card 1
+    
+    Query stmt:
+    
+    select l.id, l.sub_id, l.other_id, l.[name], l.filter from left_tbl l left outer join right_tbl r on l.id=r.id and r.id= ?:0  where l.id= ?:1  and l.filter= ?:2  order by 4
+
+::
+
+               id       sub_id     other_id  name                       filter
+    ==========================================================================
+                3           30          300  'Left- 203'                     3
+                3           30          300  'Left- 203'                     3
+                3           30          300  'Left- 203'                     3
+                3           30          300  'Left- 203'                     3
+                3           30          300  'Left- 203'                     3
+                3           30          300  'Left- 203'                     3
+                3           30          300  'Left- 203'                     3
+                3           30          300  'Left- 203'                     3
+                3           30          300  'Left- 203'                     3
+                3           30          300  'Left- 203'                     3
+
+.. _eliminate-left-outer-join-3:
+
+All join conditions must use the equality (=) comparison.
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+The following is an example where the join conditions do not use the equality (=) comparison.
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    select /*+ recompile */
+        l.id, l.sub_id, l.other_id, l.name, l.filter
+    from
+        left_tbl as l
+        left outer join right_tbl as r on l.id = r.id and l.sub_id < r.sub_id
+    where
+        l.filter = 4 and l.id = 4
+    order by
+        l.name;
+
+The join with the *right_tbl* table was not eliminated because the comparison between the *sub_id* column of the *left_tbl* table and the *sub_id* column of the *right_tbl* table in the join conditions does not use the equality (=) comparison.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: idx-join (left outer join)
+                     outer: iscan
+                                class: l node[0]
+                                index: pk_left_tbl_id_sub_id_other_id term[3]
+                                sargs: term[2]
+                                cost:  3 card 1
+                     inner: iscan
+                                class: r node[1]
+                                index: pk_right_tbl_id_sub_id term[0] (covers)
+                                filtr: term[1] AND term[4]
+                                cost:  1 card 10
+                     sort:  2 asc, 3 asc
+                     cost:  4 card 1
+        sort:  4 asc
+        cost:  10 card 1
+    
+    Query stmt:
+    
+    select l.id, l.sub_id, l.other_id, l.[name], l.filter from left_tbl l left outer join right_tbl r on l.id=r.id and r.id= ?:0  and (l.sub_id<r.sub_id) where l.id= ?:1  and l.filter= ?:2  order by 4
+
+::
+
+               id       sub_id     other_id  name                       filter
+    ==========================================================================
+                4           40          400  'Left- 304'                     4
+                4           40          400  'Left- 304'                     4
+                4           40          400  'Left- 304'                     4
+                4           40          400  'Left- 304'                     4
+                4           40          400  'Left- 304'                     4
+                4           40          400  'Left- 304'                     4
+
+.. _eliminate-left-outer-join-4:
+
+There must be no references to the right table ther than the join conditions.
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+The following is an example that retrieves the *name* column from the *right_tbl* table.
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    select /*+ recompile */
+        l.id, l.sub_id, l.other_id, l.name, l.filter, r.name
+    from
+        left_tbl as l
+        left outer join right_tbl as r on l.id = r.id and l.sub_id = r.sub_id
+    where
+        l.filter = 5
+    order by
+        l.name;
+
+The join with the *right_tbl* table was not eliminated because it is retrieving the values from the *name* column of the *right_tbl* table.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: idx-join (left outer join)
+                     outer: sscan
+                                class: l node[0]
+                                sargs: term[2]
+                                cost:  6 card 1
+                     inner: iscan
+                                class: r node[1]
+                                index: pk_right_tbl_id_sub_id term[0] AND term[1]
+                                cost:  1 card 100
+                     cost:  9 card 1
+        sort:  4 asc
+        cost:  15 card 1
+    
+    Query stmt:
+    
+    select l.id, l.sub_id, l.other_id, l.[name], l.filter, r.[name] from left_tbl l left outer join right_tbl r on l.sub_id=r.sub_id and l.id=r.id where l.filter= ?:0  order by 4
+
+::
+
+               id       sub_id     other_id  name                       filter  name
+    ================================================================================================
+                1           50          500  'Left-   5'                     5  'Right-  5'
+                2           50          500  'Left- 105'                     5  'Right- 15'
+                3           50          500  'Left- 205'                     5  'Right- 25'
+                4           50          500  'Left- 305'                     5  'Right- 35'
+                5           50          500  'Left- 405'                     5  'Right- 45'
+                6           50          500  'Left- 505'                     5  'Right- 55'
+                7           50          500  'Left- 605'                     5  'Right- 65'
+                8           50          500  'Left- 705'                     5  'Right- 75'
+                9           50          500  'Left- 805'                     5  'Right- 85'
+               10           50          500  'Left- 905'                     5  'Right- 95'
+
+The following is an example where there are conditions on the *filter* column of the *right_tbl* table before performing the **LEFT OUTER JOIN**.
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    select /*+ recompile */
+        l.id, l.sub_id, l.other_id, l.name, l.filter
+    from
+        left_tbl as l
+        left outer join right_tbl as r on l.id = r.id and l.sub_id = r.sub_id and r.filter = 5
+    where
+        l.filter = 5
+    order by
+        l.name;
+
+The join with the *right_tbl* table was eliminated because the query is filtering the records to retrieve only those where the *filter* column of the *right_tbl* table has a value of 5 before performing the **LEFT OUTER JOIN**.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: sscan
+                     class: l node[0]
+                     sargs: term[0]
+                     cost:  6 card 1
+        sort:  4 asc
+        cost:  13 card 1
+    
+    Query stmt:
+    
+    select l.id, l.sub_id, l.other_id, l.[name], l.filter from left_tbl l where l.filter= ?:0  order by 4
+
+::
+
+               id       sub_id     other_id  name                       filter
+    ==========================================================================
+                1           50          500  'Left-   5'                     5
+                2           50          500  'Left- 105'                     5
+                3           50          500  'Left- 205'                     5
+                4           50          500  'Left- 305'                     5
+                5           50          500  'Left- 405'                     5
+                6           50          500  'Left- 505'                     5
+                7           50          500  'Left- 605'                     5
+                8           50          500  'Left- 705'                     5
+                9           50          500  'Left- 805'                     5
+               10           50          500  'Left- 905'                     5
+
+The following is an example that sorts the results based on the *name* column of the *right_tbl* table.
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    select /*+ recompile */
+        l.id, l.sub_id, l.other_id, l.name, l.filter, r.name
+    from
+        left_tbl as l
+        left outer join right_tbl as r on l.id = r.id and l.sub_id = r.sub_id
+    where
+        l.filter = 5
+    order by
+        r.name desc;
+
+The join with the *right_tbl* table was not eliminated because it is sorting the results based on the *name* column of the *right_tbl* table in descending order.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: idx-join (left outer join)
+                     outer: sscan
+                                class: l node[0]
+                                sargs: term[2]
+                                cost:  6 card 1
+                     inner: iscan
+                                class: r node[1]
+                                index: pk_right_tbl_id_sub_id term[0] AND term[1]
+                                cost:  1 card 100
+                     cost:  9 card 1
+        sort:  6 desc
+        cost:  15 card 1
+    
+    Query stmt:
+    
+    select l.id, l.sub_id, l.other_id, l.[name], l.filter, r.[name] from left_tbl l left outer join right_tbl r on l.sub_id=r.sub_id and l.id=r.id where l.filter= ?:0  order by 6 desc
+
+::
+
+               id       sub_id     other_id  name                       filter  name
+    ================================================================================================
+               10           50          500  'Left- 905'                     5  'Right- 95'
+                9           50          500  'Left- 805'                     5  'Right- 85'
+                8           50          500  'Left- 705'                     5  'Right- 75'
+                7           50          500  'Left- 605'                     5  'Right- 65'
+                6           50          500  'Left- 505'                     5  'Right- 55'
+                5           50          500  'Left- 405'                     5  'Right- 45'
+                4           50          500  'Left- 305'                     5  'Right- 35'
+                3           50          500  'Left- 205'                     5  'Right- 25'
+                2           50          500  'Left- 105'                     5  'Right- 15'
+                1           50          500  'Left-   5'                     5  'Right-  5'
+
+.. _eliminate-left-outer-join-5:
+
+The **ALL** keyword must not be used when querying the tables that have an inheritance relationship.
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+If the **ALL** keyword is used on the right table that has an inheritance relationship, the join with the right table cannot be eliminated.
+
+The following is an example where the **ALL** keyword is used on the *right_tbl* table.
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    select /*+ recompile */
+        l.id, l.sub_id, l.other_id, l.name, l.filter
+    from
+        left_tbl as l
+        left outer join all right_tbl as r on l.id = r.id and l.sub_id = r.sub_id
+    where
+        l.filter = 6
+    order by
+        l.name;
+
+The join with the *right_tbl* table was not eliminated.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: idx-join (left outer join)
+                     outer: sscan
+                                class: l node[0]
+                                sargs: term[2]
+                                cost:  6 card 1
+                     inner: iscan
+                                class: r node[1]
+                                index: pk_right_tbl_id_sub_id term[0] AND term[1] (covers)
+                                cost:  1 card 100
+                     cost:  9 card 1
+        sort:  4 asc
+        cost:  15 card 1
+    
+    Query stmt:
+    
+    select l.id, l.sub_id, l.other_id, l.[name], l.filter from left_tbl l left outer join  all right_tbl r on l.sub_id=r.sub_id and l.id=r.id where l.filter= ?:0  order by 4
+
+::
+
+               id       sub_id     other_id  name                       filter
+    ==========================================================================
+                1           60          600  'Left-   6'                     6
+                2           60          600  'Left- 106'                     6
+                3           60          600  'Left- 206'                     6
+                4           60          600  'Left- 306'                     6
+                5           60          600  'Left- 406'                     6
+                6           60          600  'Left- 506'                     6
+                7           60          600  'Left- 606'                     6
+                8           60          600  'Left- 706'                     6
+                9           60          600  'Left- 806'                     6
+               10           60          600  'Left- 906'                     6
+
+The following is an example where the **ONLY** keyword is used on both the *left_tbl* table and the *right_tbl* table.
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    select /*+ recompile */
+        l.id, l.sub_id, l.other_id, l.name, l.filter
+    from
+        only left_tbl as l
+        left outer join only right_tbl as r on l.id = r.id and l.sub_id = r.sub_id
+    where
+        l.filter = 6
+    order by
+        l.name;
+
+The join with the *right_tbl* table was eliminated.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: sscan
+                     class: l node[0]
+                     sargs: term[0]
+                     cost:  6 card 1
+        sort:  4 asc
+        cost:  13 card 1
+    
+    Query stmt:
+    
+    select l.id, l.sub_id, l.other_id, l.[name], l.filter from left_tbl l where l.filter= ?:0  order by 4
+
+::
+
+               id       sub_id     other_id  name                       filter
+    ==========================================================================
+                1           60          600  'Left-   6'                     6
+                2           60          600  'Left- 106'                     6
+                3           60          600  'Left- 206'                     6
+                4           60          600  'Left- 306'                     6
+                5           60          600  'Left- 406'                     6
+                6           60          600  'Left- 506'                     6
+                7           60          600  'Left- 606'                     6
+                8           60          600  'Left- 706'                     6
+                9           60          600  'Left- 806'                     6
+               10           60          600  'Left- 906'                     6
 
 .. _query-cache:
 

@@ -164,7 +164,7 @@ When rpm is executed, CUBRID is installed in the "cubrid" home directory (/opt/c
 
     $ cubrid service start
 
-.. note:: \
+.. note::
 
     *   **RPM and dependency**
     

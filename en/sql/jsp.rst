@@ -331,17 +331,17 @@ Creating Connection
 ---------------------
 
 To access the database from a Java stored function/procedure, you must use the server-side JDBC driver.
-To acquire a connection to the database using the server-side JDBC driver, you can either use "**jdbc:default:connection:**" as the URL for JDBC connection, or call the **getDefaultConnection** () method of the **cubrid.jdbc.driver.CUBRIDDriver** class.
+To acquire a connection to the database using the server-side JDBC driver, you can use "**jdbc:default:connection:**" as the URL for JDBC connection.
 
 .. code-block:: java
 
     Connection conn = DriverManager.getConnection("jdbc:default:connection:");
 
-or
+.. note::
 
-.. code-block:: java
-
-    Connection conn = cubrid.jdbc.driver.CUBRIDDriver.getDefaultConnection();
+    From the CUBRID 11.2, Acquiring a connection in the following way is no longer supported:
+    
+        Connection conn = cubrid.jdbc.driver.CUBRIDDriver.getDefaultConnection();
 
 .. note::
 

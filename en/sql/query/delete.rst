@@ -31,7 +31,7 @@ You can delete records in the table by using the **DELETE** statement. You can s
 
 When a table to delete records is only one, :ref:`limit-clause` can be specified. You can limit the number of records by specifying the :ref:`limit-clause`.  If the number of records satisfying the :ref:`where-clause` exceeds *row_count*, only the number of records specified in *row_count* will be deleted.
 
-.. note:: \
+.. note::
 
     *   On the **DELETE** statement with multiple tables, the table alias can be defined within <*table_specifications*> only. At the outside of <*table_specifications*>, the table alias defined in <*table_specifications*> can be used.
 

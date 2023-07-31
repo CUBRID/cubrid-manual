@@ -20,10 +20,6 @@
 
 *   **WITH FULLSCAN**: 지정된 테이블의 전체 데이터를 가지고 통계 정보를 업데이트한다. 생략 시 샘플링한 데이터를 가지고 통계 정보를 업데이트한다. 대부분 통계 정보 갱신은 샘플링 정보를 업데이트하는 것으로 충분하며, **WITH FULLSCAN** 은 시스템에 부담을 줄 수 있으므로 가급적 사용을 자제할 것을 권장한다. 
 
-    .. note:: 
-
-        10.0 부터는 HA 환경의 마스터에서 수행한 **UPDATE STATISTICS** 문이 슬레이브/레플리카에 복제된다.
-        
 *   **ALL CLASSES**: 모든 테이블의 통계 정보를 업데이트한다. 
 
 *   **CATALOG CLASSES**: 카탈로그 테이블에 대한 통계 정보를 업데이트한다.
@@ -52,6 +48,27 @@
 
     Time: 05/07/13 15:06:25.053 - NOTIFICATION *** file ../../src/storage/statistics_sr.c, line 330  CODE = -1115 Tran = 1, CLIENT = testhost:csql(21060), EID = 5
     Finished to update statistics (class "code", oid : 0|522|3, error code : 0).
+
+.. note:: 
+
+    CUBRID 10.0 부터는 HA 환경의 마스터에서 수행한 **UPDATE STATISTICS** 문이 슬레이브/레플리카에 복제된다.
+
+.. note:: 
+
+    CUBRID 11.3부터는 **UPDATE STATISTICS** 문을 실행할 때 동의어를 사용할 수 없다.
+
+    .. code-block:: sql
+    
+        /* CURRENT_USER: PUBLIC */
+        CREATE TABLE t (c int);
+        CREATE SYNONYM s for t;
+
+	UPDATE STATISTICS ON t;
+        /* Execute OK. */
+
+	UPDATE STATISTICS ON s;
+	/* ERROR: before ' ; '
+         * Class public.s does not exist. */
 
 .. _info-stats:
 

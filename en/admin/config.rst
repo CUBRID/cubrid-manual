@@ -598,14 +598,15 @@ The following are parameters related to the database server. The type and value 
     *   The format of **$CUBRID/conf/hosts.conf** is same as **/etc/hosts** but there are some restrictions as follows.
 
         * Allow **IPv4** format address only. (Not allow **IPv6** format address)
-        * Not allow below **alias** format. ::
+        * Not allow **alias**. ::
 
            172.31.0.1 host1 alias1 alias2
 
-        * Allow below **alias** format. ::
+        * If there are multiple IP addresses, the top of information ,{ip, hostname}, is used except others. ::
 
            172.31.0.1 host1
            172.31.0.1 alias1
+           172.31.0.1 alias2
 
         * Not allow more than two IP address for one hostname. ::
 
@@ -628,6 +629,22 @@ The following are parameters related to the database server. The type and value 
 .. warning::
 
     You must change $CUBRID/conf/hosts.conf after terminating all CUBRID processes, and **the changes will be applied after restarting.** In addition, you must write including **localhost** and **'hostname'** (The output of hostname command by among Linux commands) in the hosts.conf.
+
+.. warning::
+
+    The hostname adheres the following format in the $CUBRID/conf/hosts.conf (The Linux hostname naming rule).
+
+    * Only English letters, numbers (0 to 9), hyphen ('-'), and dot (".") characters can be used for the hostname.
+    * The first character of the hostname must be an English letter.
+    * The last character of the hostname must be an English letter and a number.
+    * FQDN (Full Qualified Domain Name) format hostname can be used (Example: www.cubrid.com). 
+
+    Allow the following hostname.
+
+    ::
+
+      cubrid-dev1
+      CUB2.dev
 
 .. _memory-parameters:
 

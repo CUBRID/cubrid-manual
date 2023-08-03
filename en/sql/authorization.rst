@@ -114,7 +114,7 @@ You don't need to grant authorization individually because the members of the gr
     *   **UPDATE**: Allows to modify the records already existing in the table.
     *   **DELETE**: Allows to delete records in the table.
     *   **ALTER**: Allows to modify the table definition, rename or delete the table.
-    *   **INDEX**: Allows to call table methods or instance methods.
+    *   **INDEX**: Allows to create indexes on columns to speed up searches.
     *   **EXECUTE**: Allows to call table methods or instance methods.
     *   **ALL PRIVILEGES**: Includes all permissions described above.
 

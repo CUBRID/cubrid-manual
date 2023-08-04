@@ -768,7 +768,7 @@ The following are disk-related parameters for defining database volumes and stor
     **db_volume_size** is a parameter to configure the following values. You can set a unit as B, K, M, G or T, which stand for bytes, kilobytes (KB), megabytes (MB), gigabytes (GB), and terabytes (TB) respectively. If you omit the unit, bytes will be applied. The default value is **512M**.
 
     *   The default database volume size when **cubrid createdb** and **cubrid addvoldb** utility is used without **\-\-db-volume-size** option.
-    *   The default size of volume that is added automatically when database is full.
+    *   The default size of volume that is maximum size of an automatically added volume when the database is full. (The auto-added volume is incrementally increased by the needed amount, and another volume is created when the volume exceeds db_volume_size.)
 
 .. note::
 

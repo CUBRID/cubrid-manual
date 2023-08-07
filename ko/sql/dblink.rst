@@ -13,7 +13,7 @@ CUBRID DBLink 소개
 
 데이터베이스에서 정보를 조회하다 보면 종종 외부 데이타베이스의 정보 조회가 필요한 경우가 있다. 이렇게 외부 데이터베이스의 정보를 조회하기 위해서 CUBRID DBLink를 이용하면 타 데이터베이스의 정보를 조회할 수 있다.
 
-CUBRID DBLink는 동일 기종인 CUBRID와 이기종인 Oracle, MySQL의 데이타베이스의 정보를 조회할 수 있도록 기능을 제공하고 있다.
+CUBRID DBLink는 동일 기종인 CUBRID와 이기종인 Oracle, MySQL, MariaDB의 데이타베이스의 정보를 조회할 수 있도록 기능을 제공하고 있다.
 외부 데이타베이스의 정보를 마치 하나의 데이터베이스에서 조회하는 것과 같은 효과를 발휘한다. 단 외부 데이타베이스를 여러 개 설정은 가능 하나, 정보를 조회할 때는 한 개의 타 데이타베이스의 정보만 조회가 가능하다.
 
 
@@ -46,7 +46,7 @@ CUBRID DBLink는 동일기종 간에 DBLink와 이기종 간의 DBLink를 지원
 DBLink를 위한 게이트웨이
 ==============================================
 
-게이트웨이는 CUBRID 데이터베이스와 이기종 데이터베이스 간의 중개하는 미들웨어로 브로커(Broker)와 유사하다. 게이트웨이는 이기종 데이터베이스 서버 (Oracle/MySQL 등)에 연결하고 데이터를 조회하여 CUBRID 데이터베이스 서버에 전달하는 역할을 한다.
+게이트웨이는 CUBRID 데이터베이스와 이기종 데이터베이스 간의 중개하는 미들웨어로 브로커(Broker)와 유사하다. 게이트웨이는 이기종 데이터베이스 서버 (Oracle/MySQL/MariaDB 등)에 연결하고 데이터를 조회하여 CUBRID 데이터베이스 서버에 전달하는 역할을 한다.
 
 
 게이트웨이를 포함하는 큐브리드 시스템은 아래 그림과 같이 cub_gateway, cub_cas_cgw를 포함한 다중 계층 구조를 가진다.
@@ -156,7 +156,7 @@ CUBRID DBLink를 사용하기 위한 설정은 동일기종 DBLink와 이기종 
 이기종 DBLink 설정
 ------------------------
 
-이기종 데이터베이스(Oracle/MySQL)와 연결하기 위해서는 cubrid_gataway.conf 와 unixODBC 설치, ODBC Driver 정보 설정이 필요 하다.
+이기종 데이터베이스(Oracle/MySQL/MariaDB)와 연결하기 위해서는 cubrid_gataway.conf 와 unixODBC 설치, ODBC Driver 정보 설정이 필요 하다.
 
 
 
@@ -220,6 +220,27 @@ CUBRID 설치 시 생성되는 기본 게이트웨이 설정 파일인 cubrid_ga
 	CGW_LINK_ODBC_DRIVER_NAME   =MySQL_ODBC_Driver
 	CGW_LINK_CONNECT_URL_PROPERTY       ="charset=utf8;PREFETCH=100;NO_CACHE=1"
 
+	[%mariadb_gateway]
+	SERVICE                 =OFF
+	SSL			=OFF
+	APPL_SERVER             =CAS_CGW
+	BROKER_PORT             =59000
+	MIN_NUM_APPL_SERVER     =5
+	MAX_NUM_APPL_SERVER     =40
+	APPL_SERVER_SHM_ID      =59000
+	LOG_DIR                 =log/gateway/sql_log
+	ERROR_LOG_DIR           =log/gateway/error_log
+	SQL_LOG                 =ON
+	TIME_TO_KILL            =120
+	SESSION_TIMEOUT         =300
+	KEEP_CONNECTION         =AUTO
+	CCI_DEFAULT_AUTOCOMMIT  =ON
+	APPL_SERVER_MAX_SIZE    =256
+	CGW_LINK_SERVER		=MARIADB
+	CGW_LINK_SERVER_IP      =localhost
+	CGW_LINK_SERVER_PORT    =3306 
+	CGW_LINK_ODBC_DRIVER_NAME   =MariaDB_ODBC_Driver
+	CGW_LINK_CONNECT_URL_PROPERTY       =
 
 게이트웨이 파라메터
 ------------------------
@@ -253,7 +274,7 @@ CUBRID 설치 시 생성되는 기본 게이트웨이 설정 파일인 cubrid_ga
 
 **CGW_LINK_SERVER**
 
-    **CGW_LINK_SERVER** 는 CAS_CGW로 연결하여 사용할 이기종 데이터베이스의 이름을 설정해야 한다. 현재 지원하는 데이타베이스는 Oracle, MySQL이다.
+    **CGW_LINK_SERVER** 는 CAS_CGW로 연결하여 사용할 이기종 데이터베이스의 이름을 설정해야 한다. 현재 지원하는 데이타베이스는 Oracle, MySQL, MariaDB이다.
 
 **CGW_LINK_SERVER_IP**
 
@@ -295,6 +316,8 @@ CUBRID 설치 시 생성되는 기본 게이트웨이 설정 파일인 cubrid_ga
     *   연결 속성(property)는 데이터베이스별로 각각 다르므로 아래의 사이트를 참조한다.
     *   Oracle : https://docs.oracle.com/cd/B19306_01/server.102/b15658/app_odbc.htm#UNXAR418
     *   MySQL : https://dev.mysql.com/doc/connector-odbc/en/connector-odbc-configuration-connection-parameters.html#codbc-dsn-option-flags
+    *   MariaDB : https://mariadb.com/kb/en/about-mariadb-connector-odbc/#general-connection-parameters
+
 
 
 unixODBC 설치
@@ -337,7 +360,7 @@ unixODBC가 설치한 후, 연결할 데이터베이스의 ODBC Driver 정보를
 ODBC Driver 정보는 odbcinst.ini를 직접 수정해서 등록한다.
 
 
-아래의 내용은 MySQL, Oracle ODBC Driver 정보를 설정한 예제이다.
+아래의 내용은 MySQL, Oracle, MariaDB ODBC Driver 정보를 설정한 예제이다.
 
 ::
 		
@@ -348,11 +371,15 @@ ODBC Driver 정보는 odbcinst.ini를 직접 수정해서 등록한다.
 	[Oracle 11g ODBC driver]
 	Description = Oracle ODBC driver v11g
 	Driver = /home/user/oracle/instantclient/libsqora.so.11.1
-	
+
+	[mariadb odbc 3.1.13 driver]
+	Description= mariadb odbc driver 3.1.13
+	Driver=/home/user/mariadb-odbc-3.1.13/lib64/mariadb/libmaodbc.so
 
 .. note::
     
-        참고로, 위의 예제에서 드라이버 이름은 각각 "MySQL ODBC 8.0 Unicode Driver" 와 "Oracle 11g ODBC driver" 이다.
+        참고로, 위의 예제에서 드라이버 이름은 각각 "MySQL ODBC 8.0 Unicode Driver", "Oracle 11g ODBC driver" 와 "mariadb odbc 3.1.13 driver" 이다.
+
 
 
 DBLink를 위한 Oracle 설정
@@ -527,6 +554,51 @@ Yum을 사용하여 저장소를 업데이트한다.
 	CGW_LINK_CONNECT_URL_PROPERTY ="charset=utf8;PREFETCH=100;NO_CACHE=1"
 
 
+DBLink를 위한 MariaDB 설정
+=======================================
+
+MariaDB 환경설정
+-------------------------
+ 
+**MariaDB ODBC Driver 설치**
+
+게이트웨이에서 MariaDB 연결을 하기위해서는 MariaDB ODBC Driver가 필요하다.
+아래의 내용은 MariaDB ODBC Drvier 설치 방법이다.
+
+MariaDB Connector/ODBC 패키지는 아래의 페이지에서 버전을 선택하여 다운로드할 수 있다.
+
+https://mariadb.com/downloads/connectors/
+
+
+다운로드한 tarball 패키지에서 파일을 추출한다. 그리고 드라이버의 공유 라이브러리를 시스템의 적절한 위치에 설치 한다.
+설치한 드라이버는 odbcinst.ini에 드라이버 정보를 설정해야 한다. 설정 방법은 :ref:`ODBC Driver 정보 설정 <odbcdriver-info>`\ 을 참고 한다.
+
+::
+    
+	$ mariadb-connector-odbc-3.1.13-centos7-amd64.tar.gz -C mariadb-odbc-3.1.13
+
+자세한 설치 방법은 https://mariadb.com/kb/en/about-mariadb-connector-odbc/#installing-mariadb-connectorodbc-on-linux 을 참고한다.
+
+
+**MariaDB 위한 cubrid_gataway.conf 설정**
+
+게이트웨이에서 MariaDB에 연결하기 위해서는 아래와 같이 몇 가지 설정이 필요하다.
+
+자세한 내용은 :ref:`게이트웨이 설정 파일 <gatewayconf-info>`\ 을 참고한다.
+
+  
+::
+    
+	APPL_SERVER                  =CAS_CGW
+			.
+			.
+			.	
+	CGW_LINK_SERVER		         =MARIADB
+	CGW_LINK_SERVER_IP           =localhost
+	CGW_LINK_SERVER_PORT         =3306 
+	CGW_LINK_ODBC_DRIVER_NAME    =mariadb odbc 3.1.13 driver
+
+
 
 Cubrid DBLink 사용 방법
 ==============================================
@@ -589,7 +661,7 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
 *   1개 컬럼의 문자열 최대 길이는 16M까지만 지원한다.
 *   Mysql에서 cache를 사용하는 경우 게이트웨이 cub_cas_cgw의 메모리 사용량이 증가하므로 PREFETCH, NO_CACHE=1 사용을 권장한다.
 *   ODBC 미지원 타입은 SQL_INTERVAL,SQL_GUID,SQL_BIT,SQL_BINARY,SQL_VARBINARY,SQL_LONGVARBINARY 이다.
-*   이기종(Oracle/MySQL)간 DBLink 사용시 반드시 Oracle/MySQL의 유니코드 전용 ODBC Drvier를 사용해야 한다.
-
+*   이기종(Oracle/MySQL/MariaDB)간 DBLink 사용시 반드시 Oracle/MySQL/MariaDB의 유니코드 전용 ODBC Drvier를 사용해야 한다.
+*   MySQL/MariaDB에서 repeat() 함수가 포함된 쿼리를 수행하면 문자열의 일부가 잘리거나, 문자열을 읽어오지 못할 수 있다.
 
 

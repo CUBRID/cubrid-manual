@@ -13,7 +13,8 @@ Introduction to CUBRID DBLink
 
 When retrieving information from a database, it is often necessary to retrieve information from an external database.
 In this way, if you use CUBRID DBLink to inquire information in an external database, you can access information in other databases.
-CUBRID DBLink provides a function to inquire information in the databases of homogeneous CUBRID and heterogeneous Oracle and MySQL.
+CUBRID DBLink provides a function to inquire information in the databases of homogeneous CUBRID and heterogeneous Oracle, MySQL and MariaDB.
+
 It has the advantage of being able to directly inquire information from an external database.
 However, it is possible to set up multiple external databases, but when searching for information, it is possible to inquire information from only one other database.
 
@@ -46,7 +47,7 @@ The gateway uses the ODBC (Open DataBase Connectivity) driver of the connecting 
 GATEWAY
 ==============================================
 
-A gateway is a middleware that mediates between the CUBRID database and heterogeneous databases and is similar to a broker. The gateway connects to a heterogeneous database server (Oracle/MySQL etc), retrieves data, and delivers it to the CUBRID database server.
+A gateway is a middleware that mediates between the CUBRID database and heterogeneous databases and is similar to a broker. The gateway connects to a heterogeneous database server (Oracle/MySQL/MariaDB etc), retrieves data, and delivers it to the CUBRID database server.
 
 
 A cubrid system including a gateway has a multi-hierarchical structure including cub_gateway and cub_cas_cgw as shown in the figure below.
@@ -157,7 +158,7 @@ This setting is the same as the general broker setting.
 Heterogeneous DBLink Setting
 ---------------------------------------
 
-To connect to a heterogeneous database (Oracle/MySQL), cubrid_gataway.conf, unixODBC installation, and ODBC Driver information settings are required.
+To connect to a heterogeneous database (Oracle/MySQL/MariaDB), cubrid_gataway.conf, unixODBC installation, and ODBC Driver information settings are required.
 
 .. _gatewayconf-info:
 
@@ -222,6 +223,27 @@ The following is the content of the cubrid_gateway.conf file provided by default
 	CGW_LINK_ODBC_DRIVER_NAME   =MySQL_ODBC_Driver
 	CGW_LINK_CONNECT_URL_PROPERTY       ="charset=utf8;PREFETCH=100;NO_CACHE=1"
 
+	[%mariadb_gateway]
+	SERVICE                 =OFF
+	SSL			=OFF
+	APPL_SERVER             =CAS_CGW
+	BROKER_PORT             =59000
+	MIN_NUM_APPL_SERVER     =5
+	MAX_NUM_APPL_SERVER     =40
+	APPL_SERVER_SHM_ID      =59000
+	LOG_DIR                 =log/gateway/sql_log
+	ERROR_LOG_DIR           =log/gateway/error_log
+	SQL_LOG                 =ON
+	TIME_TO_KILL            =120
+	SESSION_TIMEOUT         =300
+	KEEP_CONNECTION         =AUTO
+	CCI_DEFAULT_AUTOCOMMIT  =ON
+	APPL_SERVER_MAX_SIZE    =256
+	CGW_LINK_SERVER		=MARIADB
+	CGW_LINK_SERVER_IP      =localhost
+	CGW_LINK_SERVER_PORT    =3306 
+	CGW_LINK_ODBC_DRIVER_NAME   =MariaDB_ODBC_Driver
+	CGW_LINK_CONNECT_URL_PROPERTY       =
 
 
 GATEWAY Parameter
@@ -254,7 +276,8 @@ The meaning of each parameter is slightly different for each heterogeneous datab
 
 **CGW_LINK_SERVER**
 
-    **CGW_LINK_SERVER** should set the name of the heterogeneous database to be used by connecting to CAS_CGW. Currently, supported databases are Oracle and MySQL.
+    **CGW_LINK_SERVER** should set the name of the heterogeneous database to be used by connecting to CAS_CGW. Currently, supported databases are Oracle, MySQL and MariaDB.
+
 
 
 **CGW_LINK_SERVER_IP**
@@ -295,6 +318,8 @@ The meaning of each parameter is slightly different for each heterogeneous datab
     *   Connection properties are different for each database, so refer to the site below.
     *   Oracle : https://docs.oracle.com/cd/B19306_01/server.102/b15658/app_odbc.htm#UNXAR418
     *   MySQL : https://dev.mysql.com/doc/connector-odbc/en/connector-odbc-configuration-connection-parameters.html#codbc-dsn-option-flags
+    *   MariaDB : https://mariadb.com/kb/en/about-mariadb-connector-odbc/#general-connection-parameters
+
 
 
 Install unixODBC
@@ -332,7 +357,8 @@ After unixODBC is installed, the ODBC Driver information of the database to be c
 
 ODBC Driver information is registered by directly modifying odbcinst.ini.
 
-The following is an example of setting MySQL and Oracle ODBC Driver information.
+The following is an example of setting MySQL, Oracle and MariaDB ODBC Driver information.
+
 
 ::
 		
@@ -343,11 +369,15 @@ The following is an example of setting MySQL and Oracle ODBC Driver information.
 	[Oracle 11g ODBC driver]
 	Description = Oracle ODBC driver v11g
 	Driver = /home/user/oracle/instantclient/libsqora.so.11.1
-	
+
+	[mariadb odbc 3.1.13 driver]
+	Description= mariadb odbc driver 3.1.13
+	Driver=/home/user/mariadb-odbc-3.1.13/lib64/mariadb/libmaodbc.so	
 
 .. note::
     
-        For reference, in the example above, the driver names are "MySQL ODBC 8.0 Unicode Driver" and "Oracle 11g ODBC driver", respectively.
+        For reference, in the example above, the driver names are "MySQL ODBC 8.0 Unicode Driver", "Oracle 11g ODBC driver" and "mariadb odbc 3.1.13 driver" respectively.
+
 
 
 Oracle Setting for DBLink
@@ -519,6 +549,52 @@ For details, refer to :ref:`gateway configuration file <gatewayconf-info>`\.
 	CGW_LINK_CONNECT_URL_PROPERTY ="charset=utf8;PREFETCH=100;NO_CACHE=1"
 
 
+MariaDB Configuration for DBLink
+=======================================
+
+MariaDB Environment Configuration
+---------------------------------------
+ 
+**Install MariaDB ODBC Driver**
+
+MariaDB ODBC Driver is required to connect to MariaDB from the gateway.
+
+The following is how to install MariaDB ODBC Driver.
+
+MariaDB Connector/ODBC package can be downloaded by selecting the version from the page below.
+
+https://mariadb.com/downloads/connectors/
+
+
+Extract the files from the downloaded tarball package. Then, install the driver's shared library in an appropriate location in the system.
+The installed driver must register driver information in odbcinst.ini. For settings method, refer to :ref: `ODBC Driver Information Settings <odbcdriver-info>`\.
+
+::
+    
+	$ mariadb-connector-odbc-3.1.13-centos7-amd64.tar.gz -C mariadb-odbc-3.1.13
+
+For detailed installation instructions, refer to  https://mariadb.com/kb/en/about-mariadb-connector-odbc/#installing-mariadb-connectorodbc-on-linux.
+
+
+**Configuring cubrid_gataway.conf for MariaDB**
+
+In order to connect to MariaDB from the gateway, several settings are required as below.
+
+For details, refer to :ref:`gateway configuration file <gatewayconf-info>`\.
+
+  
+::
+    
+	APPL_SERVER                  =CAS_CGW
+			.
+			.
+			.	
+	CGW_LINK_SERVER		         =MARIADB
+	CGW_LINK_SERVER_IP           =localhost
+	CGW_LINK_SERVER_PORT         =3306 
+	CGW_LINK_ODBC_DRIVER_NAME    =mariadb odbc 3.1.13 driver
+
+
 
 How to use Cubrid DBLink
 ==============================================
@@ -575,8 +651,8 @@ Restrictions
 *   The maximum string length of one column is supported up to 16M.
 *   When using cache in Mysql, it is recommended to use PREFETCH, NO_CACHE=1 because the memory usage of the gateway cub_cas_cgw increases.
 *   ODBC non-supported types are SQL_INTERVAL, SQL_GUID, SQL_BIT, SQL_BINARY, SQL_VARBINARY, SQL_LONGVARBINARY.
-*   When using DBLink with heterogeneous types (Oracle/MySQL), you must use Oracle/MySQL's Unicode ODBC driver.
-
+*   When using DBLink with heterogeneous types (Oracle/MySQL/MariaDB), you must use Oracle/MySQL/MariaDB's Unicode ODBC driver.
+*   When performing a query that includes the repeat() function in MySQL/MariaDB, part of the string may be cut off or the string may not be read.
 
 
 

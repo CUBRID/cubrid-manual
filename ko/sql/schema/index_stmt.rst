@@ -21,8 +21,8 @@ CREATE INDEX
         <index_col_desc> ::=
             { ( column_name [ASC | DESC] [ {, column_name [ASC | DESC]} ...] ) [ WHERE <filter_predicate> ] |
             (function_name (argument_list) ) }
-                [COMMENT 'index_comment_string']
                 { [[WITH ONLINE [PARALLEL parallel_count]] | [INVISIBLE] | [VISIBLE]] }
+                [COMMENT 'index_comment_string']
 
 *   **UNIQUE**: 유일한 값을 갖는 고유 인덱스를 생성한다.
 *   *index_name*: 생성하려는 인덱스의 이름을 명시한다. 인덱스 이름은 테이블 안에서 고유한 값이어야 한다.

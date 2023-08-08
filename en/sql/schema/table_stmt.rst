@@ -748,6 +748,18 @@ If you specify REUSE_OID together with the collation of table, it can be placed 
     *   Instance methods cannot be called from OID reusable tables. Also, instance methods cannot be called if a sub class inherited from the class where the method is defined is defined as an OID reusable table.
     *   OID reusable tables are supported only by CUBRID 2008 R2.2 or above, and backward compatibility is not ensured. That is, the database in which the OID reusable table is located cannot be accessed from a lower version database.
     *   OID reusable tables can be managed as partitioned tables and can be replicated.
+    *   The updating query with a view can be faced with error when the view includes any OID reusable table.
+
+.. code-block:: sql
+
+   CREATE TABLE t1 (c1 INT) REUSE_OID;
+   CREATE VIEW v3 AS SELECT c1 FROM t1;
+
+   insert into v3(c1) values (1);
+
+::
+
+   ERROR: Vclass v3 is not updatable. Please check if any of its related classes are marked as REUSE_OID.
 
 .. _dont-reuse-oid:
 

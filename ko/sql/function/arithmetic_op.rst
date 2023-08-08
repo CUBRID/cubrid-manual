@@ -112,6 +112,7 @@
 |                       | | Pt = (Pt > 38) ? 38 : Pt                  | | St = (Pt > 38) ? min(9, St - (Pt - 38)) : St |
 +-----------------------+---------------------------------------------+------------------------------------------------+
 
+산술 연산자가 '/'인 경우 시스템 파라미터 oracle_compat_number_behavior의 설정에 따라 결과의 타입이 달라진다. 즉, 정수/정수의 경우 oracle_compat_number_behavior가 yes로 설정된 경우, 결과의 타입은 numeric이 되고 **no**\로 설정된 경우는 **피연산자의 타입별 결과 데이터 타입** 규칙에 따른다.
 **예제**
 
 .. code-block:: sql
@@ -234,6 +235,8 @@
                                                1.524157875322756e+024
      
 .. code-block:: sql
+    csql> ;get oracle_compat_number_behavior
+    oracle_compat_number_behavior=n
 
     -- int / int returns int type without type conversion or rounding
     SELECT 100100/100000;
@@ -245,6 +248,8 @@
                   1
      
 .. code-block:: sql
+    csql> ;get oracle_compat_number_behavior
+    oracle_compat_number_behavior=n
 
     -- int / int returns int type without type conversion or rounding
     SELECT 100100/200200;
@@ -255,6 +260,17 @@
     ===============
                   0
      
+.. code-block:: sql
+    csql> ;get oracle_compat_number_behavior
+    oracle_compat_number_behavior=y
+
+    -- int / int returns numeric type with oracle_compat_number_behavior
+    SELECT 1/2;
+::
+    1/2
+   ===============
+               0.5
+
 .. code-block:: sql
 
     -- int / zero returns error

@@ -748,6 +748,18 @@ OID(Object Identifier)는 볼륨 번호, 페이지 번호, 슬롯 번호와 같�
     *   OID 재사용 테이블에서 인스턴스 메서드를 호출할 수 없다. 메서드가 정의된 클래스를 상속받은 서브클래스가 OID 재사용 테이블로 정의되어도 마찬가지로 인스턴스 메서드를 호출할 수 없다.
     *   OID 재사용 테이블은 CUBRID 2008 R2.2 버전 이상에서만 지원되며, 하위 호환성을 보장하지 않는다. 즉, 더 낮은 버전의 데이터베이스 서버에서 OID 재사용 테이블이 존재하는 데이터베이스에 접근할 수 없다.
     *   OID 재사용 테이블은 분할 테이블로 관리될 수 있으며, 복제될 수 있다.
+    *   OID 재사용 테이블이 포함된 뷰의 업데이트 질의는 아래와 같은 오류가 발생한다.
+
+.. code-block:: sql
+
+   CREATE TABLE t1 (c1 INT) REUSE_OID;
+   CREATE VIEW v3 AS SELECT c1 FROM t1;
+
+   insert into v3(c1) values (1);
+
+::
+
+   ERROR: Vclass v3 is not updatable. Please check if any of its related classes are marked as REUSE_OID.
 
 .. _dont-reuse-oid:
 

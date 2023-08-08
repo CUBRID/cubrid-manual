@@ -47,6 +47,15 @@ For how to use the prepared server, refer to :ref:`dblink-clause`.
     *   *password_string*: Password string for *user_name* used to connect to the database to be accessed remotely.
     *   *properties_string*: Property information string used when connecting to the database to be accessed remotely. (up to 2047 bytes)	
     *   *server_comment_string*: Specifies comments about server information. (up to 1023 bytes)
+
+.. note::
+
+    db_name and user_name can be described in both identifier form and string literal form.
+    Example identifier format
+          t123db  "123db"   `123db`  [124db]
+    Example of string format
+          't123db' '123db'
+
   
 .. code-block:: sql
 

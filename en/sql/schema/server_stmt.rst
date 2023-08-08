@@ -51,10 +51,11 @@ For how to use the prepared server, refer to :ref:`dblink-clause`.
 .. note::
 
     db_name and user_name can be described in both identifier form and string literal form.
-    Example identifier format
-          t123db  "123db"   `123db`  [124db]
-    Example of string format
-          't123db' '123db'
+    
+    * Example identifier format
+             t123db, "123db", `123db`, [124db]
+    * Example of string format
+             't123db', '123db'
 
   
 .. code-block:: sql

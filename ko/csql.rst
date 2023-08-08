@@ -1422,7 +1422,7 @@ CSQL 인터프리터에서 작업 중인 데이터베이스 이름 및 호스트
     
         Free SQL Formatter 사용을 권고합니다.
 
-        다운로드 URL: https://github.com/CUBRID/fsqlf/releases/download/v.1.0.0-csql.1/fsqlf-1.0.0.csql.1.gz
+        다운로드 URL: https://github.com/CUBRID/fsqlf/releases/download/v.1.1.0-csql/fsqlf-1.1.0.csql.tar.gz
 
 **편집기 설정(;EDITOR_Cmd)**
 

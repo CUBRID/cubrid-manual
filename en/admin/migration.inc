@@ -19,6 +19,8 @@ The purposes of loading/unloading databases are as follows:
 *   Object file(*database-name*\ **_objects**): A file that contains information on the records in the database.
 *   Index file(*database-name*\ **_indexes**): A file that contains information on the indexes defined in the database.
 *   Trigger file(*database-name*\ **_trigger**): A file that contains information on the triggers defined in the database. If you don't want triggers to be running while loading the data, load the trigger definitions after the data loading has completed.
+*   Split schema files (*database-name*\ **_schema**\ **_objecttype**): When using the **\-\-split-schema-files** option, the schema information defined in the database is split into object units and These files contain only object information. For a list of split files, see the **\-\-split-schema-files** option.
+*   Schema list file (*database-name*\ **_schema**\ **_info**): When using the **\-\-split-schema-files** option, this file contains a list of split schema information files.
 
 The schema, object, index, and trigger files are created in the same directory.
 
@@ -57,13 +59,13 @@ The following is [options] used in **cubrid unloaddb**.
         ..
         table_n
 
-    If this option is used together with the **-\-input-class-only** option, it creates schema, index, and data files of tables only specified in the input file of **-i** option.
+    If this option is used together with the **\-\-input-class-only** option, it creates schema, index, and data files of tables only specified in the input file of **-i** option.
     
     ::
 
         cubrid unloaddb --input-class-only -i table_list.txt demodb
 
-    If this option is used together with the **-\-include-reference** option, it unloads the referenced tables as well.
+    If this option is used together with the **\-\-include-reference** option, it unloads the referenced tables as well.
     
     ::
 
@@ -79,7 +81,7 @@ The following is [options] used in **cubrid unloaddb**.
 
 .. option:: --estimated-size=NUMBER
 
-    This option allows you to assign hash memory to store records of the database to be unloaded. If the **-\-estimated-size** option is not specified, the number of records of the database is determined based on recent statistics information. This option can be used if the recent statistics information has not been updated or if a large amount of hash memory needs to be assigned. Therefore, if the number given as the argument for the option is too small, the unload performance deteriorates due to hash conflicts.
+    This option allows you to assign hash memory to store records of the database to be unloaded. If the **\-\-estimated-size** option is not specified, the number of records of the database is determined based on recent statistics information. This option can be used if the recent statistics information has not been updated or if a large amount of hash memory needs to be assigned. Therefore, if the number given as the argument for the option is too small, the unload performance deteriorates due to hash conflicts.
     
     ::
 
@@ -87,7 +89,7 @@ The following is [options] used in **cubrid unloaddb**.
 
 .. option:: --cached-pages=NUMBER
 
-    The **-\-cached-pages** option specifies the number of pages of tables to be cached in the memory. Each page is 4,096 bytes. The administrator can configure the number of pages taking into account the memory size and speed. If this option is not specified, the default value is 100 pages.
+    The **\-\-cached-pages** option specifies the number of pages of tables to be cached in the memory. Each page is 4,096 bytes. The administrator can configure the number of pages taking into account the memory size and speed. If this option is not specified, the default value is 100 pages.
     
     ::
 
@@ -125,7 +127,7 @@ The following is [options] used in **cubrid unloaddb**.
 
 .. option:: --output-prefix=PREFIX
 
-    This option specifies the prefix for the names of schema and object files created by the unload operation. Once the example is executed, the schema file name becomes *abcd_schema* and the object file name becomes *abcd_objects*. If the **-\-output-prefix** option is not specified, the name of the database to be unloaded is used as the prefix.
+    This option specifies the prefix for the names of schema and object files created by the unload operation. Once the example is executed, the schema file name becomes *abcd_schema* and the object file name becomes *abcd_objects*. If the **\-\-output-prefix** option is not specified, the name of the database to be unloaded is used as the prefix.
     
     ::
 
@@ -175,6 +177,44 @@ The following is [options] used in **cubrid unloaddb**.
 
         cubrid unloaddb --datafile-per-class demodb
 
+
+.. option:: --split-schema-files
+
+    Schema information is splited and created in object units, and a file containing a list of splited files is also created. For details, see to :ref:`loaddb` 's --schema-file-list=FILE.
+    If this option is not specified, a single schema file containing all objects is created.
+
+    ::
+
+        cubrid unloaddb --split-schema-files demodb
+
+    List of files created by spliting schema information into object units ::
+	
+        demodb_schema_user
+        demodb_schema_class
+        demodb_schema_vclass
+        demodb_schema_synonym
+        demodb_schema_vclass_query_spec
+        demodb_schema_serial
+        demodb_schema_procedure
+        demodb_schema_server
+        demodb_schema_pk
+        demodb_schema_fk
+        demodb_schema_grant
+
+    Filename containing a list of splited schema files
+    
+    ::
+
+        demodb_schema_info
+
+.. option:: --as-dba
+
+    If the user is a member of the DBA group, create a schema file with the same contents as for the DBA user.
+    
+    ::
+
+        cubrid unloaddb -u u1_dba_group --as-dba demodb
+
 .. note::
 
    To shorten the execution time of the unloaddb, it is possible to run multiple **'cubrid unloaddb'** processes concurrently for groups of different tables. (or you can use **unloaddb.sh**, refer :ref:`cubrid_scripts_unloaddb_sh`).
@@ -202,6 +242,7 @@ In general, the **cubrid loaddb** utility uses files (schema definition, object 
 *   Index file(*database-name*\ **_indexes**): A file created by an unload operation. It contains information on the indexes defined in the database.
 *   Trigger file(*database-name*\ **_trigger**): A file created by an unload operation. It contains information on the triggers defined in the database.
 *   User-defined object file(*user_defined_object_file*): A file in table format written by the user to enter mass data. (For details, see :ref:`howtowrite-loadfile` .)
+*   Schema list file (*database-name*\ **_schema_info**): A file created by unloading with the **\-\-split-schema-files** option. This is a file that has a list of files in which schema information defined in the database is splited into object units.(For details, see :option:`unloaddb --split-schema-files`.)
 
 **Execution order of input files**
 
@@ -248,6 +289,10 @@ The following table shows [options] available with the **cubrid loaddb** utility
 
         cubrid loaddb -C -u dba -d demodb_objects newdb
 
+.. note::
+
+    When in **client-server** mode (-C, \-\-CS-MODE) on the **HA** (High Availability), only the -d option (data loading) is available.
+
 .. option:: --data-file-check-only
 
     This option checks only the syntax of the data contained in demodb_objects, and does not load the data to the database. ::
@@ -282,7 +327,7 @@ The following table shows [options] available with the **cubrid loaddb** utility
     
     The recommended commit interval varies depending on the data to be loaded. It is recommended that the parameter of the **-c** option be configured to 50 for schema loading and 1 for index loading. For record loading, the recommended and default value is 10240.
     
-    The previous versions of **CUBRID**, like 10.1 or older, did not have a default value for **-\-periodic-commit** and would commit the transation only after loading the whole data. With the current approach, if you want to use the replicate the same behavior, you have to set the **-\-periodic-commit** argument to a very high value, so that the commit is done after loading all the data.
+    The previous versions of **CUBRID**, like 10.1 or older, did not have a default value for **\-\-periodic-commit** and would commit the transation only after loading the whole data. With the current approach, if you want to use the replicate the same behavior, you have to set the **\-\-periodic-commit** argument to a very high value, so that the commit is done after loading all the data.
 
 ::
 
@@ -367,7 +412,7 @@ The following table shows [options] available with the **cubrid loaddb** utility
 
     *   +DEFAULT: Configures not to ignore errors from 24 to 33.
 
-    If the file that details errors is not specified by using the **-\-error-control-file** option, the **loaddb** utility is configured to ignore errors from 24 to 33 by default. As a warning error, it indicates that there is no enough space in the database volume. If there is no space in the assigned database volume, a generic volume is automatically created.
+    If the file that details errors is not specified by using the **\-\-error-control-file** option, the **loaddb** utility is configured to ignore errors from 24 to 33 by default. As a warning error, it indicates that there is no enough space in the database volume. If there is no space in the assigned database volume, a generic volume is automatically created.
 
     The following example shows a file that details errors.
 
@@ -401,7 +446,9 @@ The following table shows [options] available with the **cubrid loaddb** utility
 
 .. option:: --no-user-specified-name
 
-    Files unloaded in a version older than 11.2 can be loaded in version 11.2 only if the **-\-no-user-specified-name** option is used.
+    Files unloaded in a version older than 11.2 can be loaded in version 11.2 only if the **\-\-no-user-specified-name** option is used.
+
+    This option works if **DBA** is specified as the user account of the database with the -u option.
     
     ::
 
@@ -409,11 +456,25 @@ The following table shows [options] available with the **cubrid loaddb** utility
 
 .. warning::
 
-    The **-\-no-user-specified-name** option must not be used to load a file unloaded in version 11.2 or after version 11.2.
+    The **\-\-no-user-specified-name** option must not be used to load a file unloaded in version 11.2 or after version 11.2.
+
+.. option:: --schema-file-list=FILE
+
+    This option loads all schema files included in the list at once. There must be a list of schema files, and they are loaded sequentially from the top schema file to the bottom of this list file. This option and the -s option cannot be used together.
+
+    This list file is automatically created when using the **\-\-split-schema-files** option in unloaddb.
+	
+    ::
+
+        cubrid loaddb -u dba --schema-file-list=demodb_schema_info
 
 .. warning::
 
-    The **-\-no-logging** option enables to load data file quickly when **loaddb** is executed by not storing transaction logs; however, it has risk, which data cannot be recovered in case of errors occurred such as incorrect file format or system failure. In this case, you must rebuild database to solve the problem. Thus, in general, it is not recommended to use this option exception of building a new database which does not require data recovery. If you use this option, **loaddb** does not check the errors like unique violation. To use this option, you should consider these issues.
+    You can change the order of schema files written in this file, but loading errors may occur if the order is wrong. For example, an error may occur if the PK file is loaded first while the file with CLASS information is not loaded. Therefore, in the list, the file name for loading CLASS information must be higher than the file for loading PK.
+
+.. warning::
+
+    The **\-\-no-logging** option enables to load data file quickly when **loaddb** is executed by not storing transaction logs; however, it has risk, which data cannot be recovered in case of errors occurred such as incorrect file format or system failure. In this case, you must rebuild database to solve the problem. Thus, in general, it is not recommended to use this option exception of building a new database which does not require data recovery. If you use this option, **loaddb** does not check the errors like unique violation. To use this option, you should consider these issues.
 
 .. _howtowrite-loadfile:
 
@@ -425,9 +486,11 @@ You can add mass data to the database more rapidly by writing the object input f
 Comment
 +++++++
 
-In CUBRID, a comment is represented by two hyphens (-\-). ::
+In CUBRID, a comment is represented by two hyphens (\-\-). ::
 
     -- This is a comment!
+
+.. _howtowrite-loadfile-command-line:
 
 Command Line
 ++++++++++++
@@ -438,15 +501,36 @@ A command line begins with a percent character (%) and consists of **%class** an
 
 *   Assigning an Identifier to a Class
 
-    You can assign an identifier to class reference relations by using the **%id** command. ::
+    You can assign an identifier to class reference relations by using the **%id** command.
+    
+    ::
 
-        %id class_name class_id
+        %id [schema_name.]class_name class_id
+        schema_name:
+            identifier
         class_name:
             identifier
         class_id:
             integer
 
-    The *class_name* specified by the **%id** command is the class name defined in the database, and *class_id* is the numeric identifier which is assigned for object reference. The **class_name** must be prefixed with the schema name and enclosed in square brackets ([ ]).
+    The *class_name* specified by the **%id** command is the class name defined in the database, and *class_id* is the numeric identifier which is assigned for object reference. The *class_name* uses the *schema_name* as a prefix and the *schema_name* is the name of the schema in which the class is defined.
+    The *schema_name* can be omitted, and if the *schema_name* is omitted, the user name of the database specified with the -u option is used as the schema name.
+
+    ::
+
+        %id [employee] 21
+        %id [office] 22
+        %id [project] 23
+        %id [phone] 24
+
+    The *schema_name* and *class_name* must be enclosed in square brackets ([ ]). Each of *schema_name* and *class_name* or together can be enclosed in square brackets.
+
+    ::
+
+        %id [public].[employee] 21
+        %id [public].[office] 22
+        %id [public].[project] 23
+        %id [public].[phone] 24
 
     ::
 
@@ -457,17 +541,27 @@ A command line begins with a percent character (%) and consists of **%class** an
 
 *   Specifying the Class and Attribute
 
-    You can specify the classes (tables) and attributes (columns) upon loading data by using the **%class** command. The data line should be written based on the order of attributes specified. When a class name is provided by using the **-t** option while executing the **cubrid loaddb** utility, you don't have to specify the class and attribute in the data file. However, the order of writing data must comply with the order of the attribute defined when creating a class. ::
+    You can specify the classes (tables) and attributes (columns) upon loading data by using the **%class** command. The data line should be written based on the order of attributes specified. When a class name is provided by using the **-t** option while executing the **cubrid loaddb** utility, you don't have to specify the class and attribute in the data file. However, the order of writing data must comply with the order of the attribute defined when creating a class.
+    
+    ::
 
-        %class [schema_name.class_name] ( attr_name [attr_name... ] )
+        %class [schema_name.]class_name (attr_name [attr_name...])
+        schema_name:
+            identifier
+        class_name:
+            identifier
+        attr_name:
+            identifier
 
-    The schema must be pre-defined in the database to be loaded.
+    The class must be pre-defined in the database to be loaded.
 
-    The *class_name* specified by the **%class** command is the class name defined in the database and the *attr_name* is the name of the attribute defined. The class name must be prefixed with the schema name and enclosed in square brackets ([ ]).
+    The *class_name* specified by the **%class** command is the class name defined in the database and the *schema_name* is the name of the schema in which the class is defined. The *attr_name* is the name of the attribute defined. The method of writing *schema_name* and *class_name* is the same as above.
 
-    The following example shows how to specify a class and three attributes by using the **%class** command to enter data into a class named *employee*. Three pieces of data should be entered on the data lines after the **%class** command. For this, see :ref:`Configuring Reference Relation <conf-reference-relation>`. ::
+    The following example shows how to specify a class and three attributes by using the **%class** command to enter data into a class named *employee*. Three pieces of data should be entered on the data lines after the **%class** command. For this, see :ref:`Configuring Reference Relation <conf-reference-relation>`.
+    
+    ::
 
-        %class [public.employee] (name age department)
+        %class [public].[employee] (name age department)
 
 Data Line
 +++++++++
@@ -482,7 +576,7 @@ Data for each attribute must be separated by at least one space and be basically
 
     ::
 
-        %class [public.employee] (name)
+        %class [public].[employee] (name)
         'jordan' 
         'james'  
         'garnett'
@@ -494,7 +588,7 @@ Data for each attribute must be separated by at least one space and be basically
 
     ::
 
-        %class [public.employee] (name)
+        %class [public].[employee] (name)
         1: 'jordan' 
         2: 'james'  
         3: 'garnett' 
@@ -504,27 +598,33 @@ Data for each attribute must be separated by at least one space and be basically
     
 *   Configuring Reference Relation
 
-    You can configure the object reference relation by specifying the reference class after an "at sign (**@**)" and the instance number after the "vertical line (|)." ::
+    You can configure the object reference relation by specifying the reference class after an "at sign (**@**)" and the instance number after the "vertical line (|)."
+    
+    ::
 
         @class_ref | instance_no
         class_ref:
-             class_name
-             class_id
+            [schema_name.]class_name
+            class_id
 
-    Specify a class name or a class id after the **@** sign, and an instance number after a vertical line (|). Spaces are not allowed before and after a vertical line (|). The table name must be prefixed with the schema name.
+    Specify a class name or a class id after the **@** sign, and an instance number after a vertical line (|). Spaces are not allowed before and after a vertical line (|). The method of wirting *class_ref* is the same as the method of wirting *schema_name* and *class_name* in the :ref:`Command Line <howtowrite-loadfile-command-line>`. However, enclosing each of *schema_name* and *class_name* in square brackets ([ ]) is not allowed.
 
-    The following example shows how to load class instances into the *paycheck* class. The *name* attribute references an instance of the *employee* class. As in the last line, data is loaded as **NULL** if you configure the reference relation by using an instance number not specified earlier. ::
+    The following example shows how to load class instances into the *paycheck* class. The *name* attribute references an instance of the *employee* class. As in the last line, data is loaded as **NULL** if you configure the reference relation by using an instance number not specified earlier.
+    
+    ::
 
-        %class [public.paycheck] (name department salary)
+        %class [public].[paycheck] (name department salary)
         @[public.employee]|1   'planning'   8000000   
         @[public.employee]|2   'planning'   6000000  
         @[public.employee]|3   'sales'   5000000  
         @[public.employee]|4   'development'   4000000
         @[public.employee]|5   'development'   5000000
 
-    Since the id 21 was assigned to the *employee* class by using the **%id** command in the :ref:`Assigning an Identifier to a Class <assign-id-to-class>` section, the above example can be written as follows: ::
+    Since the id 21 was assigned to the *employee* class by using the **%id** command in the :ref:`Assigning an Identifier to a Class <assign-id-to-class>` section, the above example can be written as follows:
+    
+    ::
 
-        %class [public.paycheck] (name department salary)
+        %class [public].[paycheck] (name department salary)
         @21|1   'planning'   8000000   
         @21|2   'planning'   6000000  
         @21|3   'sales'   5000000  
@@ -583,8 +683,3 @@ The following steps describes migration scenario that can be applied while the e
 .. warning::
 
     When using the TDE feature in CUBRID 11, it does not provide backward compatibility. So, the unloaded file in CUBRID 11 cannot be loaded into a lower version if more the one TDE table exists.
-
-.. warning:: 
-
-   Data unloaded from a version older than 11.2 can be loaded from version 11.2 or version 11.2 or later only if the **-\-no-user-specified-name** option is used.
-   The **-\-no-user-specified-name** option should not be used when loading data unloaded in version 11.2 or after version 11.2.

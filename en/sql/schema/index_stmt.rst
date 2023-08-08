@@ -20,8 +20,8 @@ For how to use indexes on the **SELECT** statement like Using SQL Hint, Descendi
         <index_col_desc> ::=
             { ( column_name [ASC | DESC] [ {, column_name [ASC | DESC]} ...] ) [ WHERE <filter_predicate> ] | 
             (function_name (argument_list) ) }
-                [COMMENT 'index_comment_string']
                 { [[WITH ONLINE [PARALLEL parallel_count]] | [INVISIBLE] | [VISIBLE]] }
+                [COMMENT 'index_comment_string']
 
 *   **UNIQUE**: creates an index with unique values.
 *   *index_name*: specifies the name of the index to be created. The index name must be unique in the table.
@@ -62,7 +62,7 @@ For how to use indexes on the **SELECT** statement like Using SQL Hint, Descendi
 
         * Updating the index status as NORMAL INDEX; this is performed after promoting the table lock back to SCH_M_LOCK (promotion is guaranteed).
     
-    *   The online index being built is displayed by SHOW statements from other transactions. It is not visible from other transactions in :ref:`db-index` system table due to MVCC snapshot (other transactions can only see committed entries in this table).
+    *   The online index being built is displayed by SHOW statements from other transactions. It is not visible from other transactions in :ref:`-db-index` system table due to MVCC snapshot (other transactions can only see committed entries in this table).
 
     *   Transactions running in parallel with online index building which performs operations causing unique violations in index are allowed to commit. The online index will continue to progress and check before final step (setting NORMAL INDEX status in schema) the validity of unique constraint. The index creation will be aborted in case of unique violation. The user needs to restart the operation after making sure the unique constraint is ensured.
 

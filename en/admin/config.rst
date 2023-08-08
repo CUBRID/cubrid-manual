@@ -101,7 +101,7 @@ For the scope of **client** and **server parameters**, see :ref:`scope-server-co
 
 You can change the parameters that are capable of changing dynamically the setting value through the **SET SYSTEM PARAMETERS** statement or a session command of the CSQL Interpreter, **;set** while running the DB. If you are a DBA, you can change parameters regardless of the applied classification. However, if you are not a DBA, you can only change "session" parameters. (on the below table, a parameter of which "session" item's value is O.)
 
-On the below table, if "Applied" is "server parameter", that parameter affects to cub_server process; If "client parameter", that parameter affects to CAS, CSQL or "cubrid" utilities which run on client/server mode (-\-CS-mode). "Client/server parameter" affects to all of cub_server, CAS, CSQL and "cubrid" utilities.
+On the below table, if "Applied" is "server parameter", that parameter affects to cub_server process; If "client parameter", that parameter affects to CAS, CSQL or "cubrid" utilities which run on client/server mode (\-\-CS-mode). "Client/server parameter" affects to all of cub_server, CAS, CSQL and "cubrid" utilities.
 
 "Dynamic Change" and "Session or not" are marked on the below table. The affected range of the parameter which "Dynamic Change" is "available" depends on "Applied" and "Session" items.
 
@@ -129,6 +129,8 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               | max_clients                         | server parameter        |         | int      | 100                            |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | tcp_keepalive                       | client/server parameter |         | bool     | yes                            |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | use_user_hosts                      | client/server parameter |         | bool     | off                            |                       |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 | :ref:`memory-parameters`      | data_buffer_size                    | server parameter        |         | byte     | 32,768 *                       |                       |
 |                               |                                     |                         |         |          | :ref:`db_page_size <dpg>`      |                       |
@@ -347,8 +349,6 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | use_stat_estimation                 | server parameter        |         | bool     | no                             |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | pthread_scope_process               | server parameter        |         | bool     | yes                            |                       |
-|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | server                              | server parameter        |         | string   |                                |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | service                             | server parameter        |         | string   |                                |                       |
@@ -385,12 +385,12 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 
 .. _lpg:
 
-*   **log_page_size**: A log volume page size specified by **-\-log-page-size** option when you are :ref:`creating database<creating-database>`. Default: 16KB. log page related parameter's value is rounded off by page unit. 
+*   **log_page_size**: A log volume page size specified by **\-\-log-page-size** option when you are :ref:`creating database<creating-database>`. Default: 16KB. log page related parameter's value is rounded off by page unit. 
     For example, the value of checkpoint_every_size is divided by 16KB and its decimal point is dropped, then it is multiplied by 16KB.
 
 .. _dpg:
 
-*   **db_page_size**: A DB volume page size specified by **-\-db-page-size** option when you are :ref:`creating database<creating-database>`. Default: 16KB. DB page related parameter's value is rounded off by page unit. 
+*   **db_page_size**: A DB volume page size specified by **\-\-db-page-size** option when you are :ref:`creating database<creating-database>`. Default: 16KB. DB page related parameter's value is rounded off by page unit. 
     For example, the value of data_buffer_size is divided by 16KB and its decimal point is dropped, then it is multiplied by 16KB.
 
 Section by Parameter
@@ -401,7 +401,7 @@ Parameters specified in **cubrid.conf** have the following four sections:
 *   Used when the CUBRID service starts: [service] section
 *   Applied commonly to all databases: [common] section
 *   Applied individually to each database: [@<*database*>] section
-*   Used only when the cubrid utilities are run with stand-alone mode(-\-SA-mode): [standalone] section
+*   Used only when the cubrid utilities are run with stand-alone mode(\-\-SA-mode): [standalone] section
 
 Where <*database*> is the name of the database to which each parameter applies. If a parameter configured in [common] is the same as the one configured in [@<*database*>], the one configured in [@<*database*>] is applied.
 
@@ -418,7 +418,7 @@ Where <*database*> is the name of the database to which each parameter applies. 
     ..... 
 
 Configuration defined in [standalone] is used only when cubrid utilities started with "cubrid" are run with stand-alone mode.
-For example, on the above configuration, if DB is started with -\-CS-mode(default)(cubrid databases start db_name), "sort_buffer_size=2M" is applied. However, if DB is stopped and "cubrid loaddb -\-SA-mode" is executed, "sort_buffer_size=256M" is applied. If you run "cubrid loaddb -\-SA-mode", bigger size of sort buffer will be required during index creation; therefore, increasing sort buffer size will be better for the performance of "loaddb" execution.
+For example, on the above configuration, if DB is started with \-\-CS-mode(default)(cubrid databases start db_name), "sort_buffer_size=2M" is applied. However, if DB is stopped and "cubrid loaddb \-\-SA-mode" is executed, "sort_buffer_size=256M" is applied. If you run "cubrid loaddb \-\-SA-mode", bigger size of sort buffer will be required during index creation; therefore, increasing sort buffer size will be better for the performance of "loaddb" execution.
 
 Default Parameters
 ^^^^^^^^^^^^^^^^^^
@@ -512,6 +512,8 @@ The following are parameters related to the database server. The type and value 
 +---------------------------------+--------+----------+----------+----------+
 | tcp_keepalive                   | bool   | yes      |          |          |
 +---------------------------------+--------+----------+----------+----------+
+| use_user_hosts                  | bool   | off      |          |          |
++---------------------------------+--------+----------+----------+----------+
 
 **cubrid_port_id**
 
@@ -568,6 +570,80 @@ The following are parameters related to the database server. The type and value 
   
     **tcp_keepalive** is a parameter which specifies if you apply SO_KEEPALIVE option to TCP network protocol or not. The default is **yes**. If this value is **no**, DB server-side connection can be disconnected when transaction logs are not copied for a long time in the firewall environment between master and slave.
  
+
+**use_user_hosts** 
+
+    **use_user_hosts** is a system parameter that is used to select the host look up between **hostname** and **IP address**, required by the CUBRID service from the services below. The default value is **OFF**.
+
+    * The host/IP address look-up library that **OS** provides. (**glibc**, Linux)
+    * **The host/IP address look-up library** that **CUBRID** provides.
+
+    use_user_hosts=off (default)
+
+    * Looks up between IP address and hostname using the system library.
+    * In general, provides /etc/hosts host look-up, DNS Query commonly
+
+    use_user_hosts=on
+
+    * Looks up between IP address and hostname using CUBRID host look-up library.
+    * Uses **$CUBRID/conf/cubrid_hosts.conf** file to look up between IP address and hostname.
+    * executes regardless of the read permission of /etc/hosts, /etc/nsswitch.conf file.
+
+    .. warning::
+
+        If **use_user_hosts** parameter is changed during service operation, CUBRID service cannot terminate normally. So, the user must change the parameter after CUBRID service terminates.
+
+    *   The format of **$CUBRID/conf/hosts.conf** is same as **/etc/hosts** but there are some restrictions as follows.
+
+        * Allow **IPv4** format address only. (Not allow **IPv6** format address)
+        * Not allow **alias**. ::
+
+           172.31.0.1 host1 alias1 alias2
+
+        * If there are multiple IP addresses, the top of information ,{ip, hostname}, is used except others. ::
+
+           172.31.0.1 host1
+           172.31.0.1 alias1
+           172.31.0.1 alias2
+
+        * Not allow more than two IP address for one hostname. ::
+
+            172.31.0.1 host1
+            178.31.0.2 host1
+
+    * The following is an example of $CUBRID/conf/hosts.conf. ::
+
+            #
+            # hosts file for CUBRID user specific host service
+            #
+            127.0.0.1       localhost
+            172.31.0.1      node1
+            172.31.0.1      node2
+            172.31.0.1      node3
+            192.168.0.31    node4.kr         # Seoul
+            192.168.2.31    node5.gov.or.kr  # Daejeon
+
+
+.. warning::
+
+    You must change $CUBRID/conf/hosts.conf after terminating all CUBRID processes, and **the changes will be applied after restarting.** In addition, you must write including **localhost** and **'hostname'** (The output of hostname command by among Linux commands) in the hosts.conf.
+
+.. warning::
+
+    The hostname adheres the following format in the $CUBRID/conf/hosts.conf (The Linux hostname naming rule).
+
+    * Only English letters, numbers (0 to 9), hyphen ('-'), and dot (".") characters can be used for the hostname.
+    * The first character of the hostname must be an English letter.
+    * The last character of the hostname must be an English letter and a number.
+    * FQDN (Full Qualified Domain Name) format hostname can be used (Example: www.cubrid.com). 
+
+    Allow the following hostname.
+
+    ::
+
+      cubrid-dev1
+      CUB2.dev
+
 .. _memory-parameters:
 
 Memory-Related Parameters
@@ -689,8 +765,8 @@ The following are disk-related parameters for defining database volumes and stor
 
     **db_volume_size** is a parameter to configure the following values. You can set a unit as B, K, M, G or T, which stand for bytes, kilobytes (KB), megabytes (MB), gigabytes (GB), and terabytes (TB) respectively. If you omit the unit, bytes will be applied. The default value is **512M**.
 
-    *   The default database volume size when **cubrid createdb** and **cubrid addvoldb** utility is used without **-\-db-volume-size** option.
-    *   The default size of volume that is added automatically when database is full.
+    *   The default database volume size when **cubrid createdb** and **cubrid addvoldb** utility is used without **\-\-db-volume-size** option.
+    *   The default size of volume that is maximum size of an automatically added volume when the database is full. (The auto-added volume is incrementally increased by the needed amount, and another volume is created when the volume exceeds db_volume_size.)
 
 .. note::
 
@@ -702,7 +778,7 @@ The following are disk-related parameters for defining database volumes and stor
 
 **log_volume_size**
 
-    **log_volume_size** is a parameter to configure the default size of log volume file when the **cubrid createdb** utility is used without **-\-log-volume-size** option. You can set a unit as B, K, M, G or T, which stand for bytes, kilobytes (KB), megabytes (MB), gigabytes (GB) and terabytes (TB) respectively. If you omit the unit, bytes will be applied. The default value is **512M**.
+    **log_volume_size** is a parameter to configure the default size of log volume file when the **cubrid createdb** utility is used without **\-\-log-volume-size** option. You can set a unit as B, K, M, G or T, which stand for bytes, kilobytes (KB), megabytes (MB), gigabytes (GB) and terabytes (TB) respectively. If you omit the unit, bytes will be applied. The default value is **512M**.
 
 **temp_file_max_size_in_pages**
 
@@ -1203,7 +1279,7 @@ The following are parameters related to SQL statements and data types supported 
 +---------------------------------+--------+------------+------------+------------+
 | default_week_format             | int    | 0          |            |            |
 +---------------------------------+--------+------------+------------+------------+
-| group_concat_max_len            | byte   | 1,024      | 4          | 33,554,432 |
+| group_concat_max_len            | byte   | 1,024      | 4          | INT_MAX    |
 +---------------------------------+--------+------------+------------+------------+
 | intl_check_input_string         | bool   | no         |            |            |
 +---------------------------------+--------+------------+------------+------------+
@@ -1324,7 +1400,7 @@ The following are parameters related to SQL statements and data types supported 
 **group_concat_max_len**
 
     **group_concat_max_len** is a parameter used to limit the return value size of the :func:`GROUP_CONCAT` function.
-    You can set a unit as B, K, M, G or T, which stands for bytes, kilobytes(KB), megabytes(MB), gigabytes(GB) or terabytes(TB) respectively. If you omit the unit, bytes will be applied. The default value is **1,024**. The minimum value is 4 and the maximum value is 33,554,432 bytes. 
+    You can set a unit as B, K, M, G or T, which stands for bytes, kilobytes(KB), megabytes(MB), gigabytes(GB) or terabytes(TB) respectively. If you omit the unit, bytes will be applied. The default value is **1,024**. The minimum value is 4 and the maximum value is INT_MAX (about 2G) bytes. 
     
     This function is affected by **string_max_size_bytes** parameter; if the value of **group_concat_max_len** is greater than the value **string_max_size_bytes** and the result size of **GROUP_CONCAT** exceeds the value of **string_max_size_bytes**, an error occurs.
 
@@ -1985,8 +2061,6 @@ The following are other parameters. The type and value range for each parameter 
 +-------------------------------------+--------+----------------+----------------+----------------+
 | use_stat_estimation                 | bool   | no             |                |                |
 +-------------------------------------+--------+----------------+----------------+----------------+
-| pthread_scope_process               | bool   | yes            |                |                |
-+-------------------------------------+--------+----------------+----------------+----------------+
 | server                              | string |                |                |                |
 +-------------------------------------+--------+----------------+----------------+----------------+
 | service                             | string |                |                |                |
@@ -2122,10 +2196,6 @@ The following are other parameters. The type and value range for each parameter 
 **use_stat_estimation**
 
     **use_stat_estimation** is a parameter to specify whether to use the estimated information in calculating statistics or not. The default is no. The estimated information generated by the heap manager while processing DML is associated with the number of added objects. it is relatively accurate for the number of total objects, NOT for the number of distinct values.
-
-**pthread_scope_process**
-
-    **pthread_scope_process** is a parameter to configure the contention scope of threads. It only applies to AIX systems. If the parameter is set to **no**, the contention scope becomes **PTHREAD_SCOPE_SYSTEM**; if it is set to **yes**, it becomes **PTHREAD_SCOPE_PROCESS**. The default value is **yes**.
 
 **server**
 
@@ -2320,6 +2390,44 @@ The following table shows the broker parameters available in the broker configur
 |                                 |                         | SQL_LOG                         | string | ON                           | available |
 |                                 |                         +---------------------------------+--------+------------------------------+-----------+
 |                                 |                         | SQL_LOG_MAX_SIZE                | KB     | 10,000                       | available |
+|                                 +-------------------------+---------------------------------+--------+------------------------------+-----------+
+|                                 | Shard                   | SHARD                           | string | OFF                          |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_CONNECTION_FILE           | string | shard_connection.txt         |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_DB_NAME                   | string |                              |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_DB_PASSWORD               | string |                              |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_DB_USER                   | string |                              |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_IGNORE_HINT               | string | OFF                          |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_KEY_FILE                  | string | shard_key.txt                |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_KEY_FUNCTION_NAME         | string |                              |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_KEY_LIBRARY_NAME          | string |                              |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_KEY_MODULAR               | int    | 256                          |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_MAX_CLIENTS               | int    | 256                          |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_MAX_PREPARED_STMT_COUNT   | int    | 10,000                       |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_NUM_PROXY                 | int    | 1                            |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_PROXY_CONN_WAIT_TIMEOUT   | sec    | 8h                           |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_PROXY_LOG                 | string | ERROR                        | available |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_PROXY_LOG_DIR             | string | log/broker/proxy_log         |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_PROXY_LOG_MAX_SIZE        | KB     | 100,000                      | available |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_PROXY_SHM_ID              | int    |                              |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_PROXY_TIMEOUT             | sec    | 30(second)                   |           |
 |                                 +-------------------------+---------------------------------+--------+------------------------------+-----------+
 |                                 | Etc                     | MAX_STRING_LENGTH               | int    | -1                           |           |
 |                                 |                         +---------------------------------+--------+------------------------------+-----------+
@@ -2704,7 +2812,151 @@ Logging
     
     *   If the size of the SQL log file, which is created when the **SQL_LOG** parameter is configured to **ON**, reaches to the size configured by the parameter, *broker_name_id.sql.log.bak* is created.
     *   If the size of the SLOW SQL log file, which is created when the **SLOW_LOG** parameter is configured to **ON**, reaches to the size configured by the parameter, *broker_name_id.slow.log.bak* is created.
-  
+
+SHARD
+^^^^^
+
+To use SHARD feature, configure the below parameters in **cubrid_broker.conf** as referring to **cubrid_broker.conf.shard**.
+
+**SHARD**
+
+    It specifies to activate/deactivate SHARD feature. You can set this value as **ON** or **OFF**. The default is **OFF**.
+
+**SHARD_CONNECTION_FILE**
+
+    The path of the shard connection file. The shard connection file should be located in **$CUBRID/conf**. For more information, see the :ref:`shard connection file <shard-connection-file>`.
+
+**SHARD_DB_NAME**
+
+    The name of the shard DB, used to verify the request for connection from an application.
+    
+**SHARD_DB_PASSWORD**
+
+    The user password of the backend shard DB, used to connect to the backend DBMS for the CAS process as well as to verify the request for connection from an application. Passwords of all shard DBs should be identical.
+    
+    The environment variable can be used when you don't want to expose **SHARD_DB_PASSWORD** to cubrid_broker.conf. The format of this environment variable name is <*broker_name*>\ **_SHARD_DB_PASSWORD**, and <*broker_name*> always should be changed as upper cases. For example, if the name of broker is *shard1*, the name of an environment variable which configures the shard DB password will be **SHARD1_SHARD_DB_PASSWORD**. But, if the SHARD feature is restarted by "cubrid broker restart" command, the environment variable of **SHARD_DB_PASSWORD** or the value of **SHARD_DB_PASSWORD** in cubrid_broker.conf must be configured.
+    
+    ::
+
+        export SHARD1_SHARD_DB_PASSWORD=shard123
+
+    .. note:: SHARD_DB_USER/SHARD_DB_PASSWORD parameters is deprecated. Therefore, it is recommended to deliver the connection information in an application.
+    
+**SHARD_DB_USER**
+
+    The name of the backend shard DB user, used to connect to the backend DBMS for the CAS process as well as to verify the request for connection from an application. User names on all shard DBs should be identical.
+
+    .. note:: SHARD_DB_USER/SHARD_DB_PASSWORD parameters is deprecated. Therefore, it is recommended to deliver the connection information in an application.
+
+**SHARD_IGNORE_HINT**
+
+    When this value is **ON**, the hint provided to connect to a specific shard is ignored and the database to connect is selected based on the defined rule. The default value is **OFF**. It can be used to balance the read load while all databases are copied with the same data. For example, to give the load of an application to only one node among several replication nodes, the proxy automatically determines the node (database) with one connection to a specific shard.
+    
+**SHARD_KEY_FILE**
+
+    The path of the shard key configuration file. The shard key configuration file should be located in **$CUBRID/conf**. For more information, see the :ref:`shard key configuration file <shard-key-configuration-file>`.
+    
+**SHARD_KEY_FUNCTION_NAME**
+
+    The parameter to specify the name of the user hash function for shard key. For more information, see :ref:`setting-user-defined-hash-function`.
+
+**SHARD_KEY_LIBRARY_NAME**
+
+    Specify the library path loadable at runtime to specify the user hash function for the shard key. If the **SHARD_KEY_LIBRARY_NAME** parameter is set, the **SHARD_KEY_FUNCTION_NAME** parameter should also be set. For more information, see :ref:`setting-user-defined-hash-function`.
+
+**SHARD_KEY_MODULAR**
+
+    The parameter to specify the range of results of the default shard key hash function. The result of the function is shard_key(integer) % SHARD_KEY_MODULAR.  The minimum value is 1, and the maximum value is 256. For related issues, see :ref:`shard key configuration file <shard-key-configuration-file>` and :ref:`setting-user-defined-hash-function`.
+
+**SHARD_MAX_CLIENTS**
+
+    The number of applications that can be concurrently connected by using the proxy. The default value is 256 and the maximum value is 10,000 per proxy.
+    
+.. _shard-max-prepared-stmt-count:
+
+**SHARD_MAX_PREPARED_STMT_COUNT**
+
+    The maximum size of statement pool managed by proxy. The default is 10,000.
+    
+**SHARD_NUM_PROXY**
+
+    The number of proxy processes.
+
+**SHARD_PROXY_CONN_WAIT_TIMEOUT**
+
+    If there is no request anymore during the time specified in this parameter, CAS disconnect with DB. The default is **8h**. You can set a unit as ms, s, min or h, which stands for milliseconds, seconds, minutes or hours respectively. If you omit the unit, second(s) will be applied.
+    CAS which has a previous password should be exit because it cannot be used anymore; this feature protects that CAS is still kept unnecessarily.
+
+**SHARD_PROXY_LOG**
+
+    The proxy log level. It can be set to one of the following values:
+
+    Proxy log level policy: Setting the higher level leaves all the lower logs.
+
+    * Example) When SCHEDULE is set, ERROR | TIMEOUT | NOTICE | SHARD | SCHEDULE log is left.
+
+    *   **ALL** : All logs
+    *   **ON** : All logs
+    *   **SHARD** : Logs for selecting and processing shard DBs.
+    *   **SCHEDULE** : Logs for scheduling tasks.
+    *   **NOTICE** : Logs for key notices.
+    *   **TIMEOUT** : Logs for timeouts.
+    *   **ERROR** : Logs for errors.
+    *   **NONE** : No logs recorded.
+    *   **OFF** : No logs recorded.
+
+**SHARD_PROXY_LOG_DIR**
+
+    The directory path where the proxy logs will be saved.
+
+**SHARD_PROXY_LOG_MAX_SIZE**
+
+    The maximum size of the proxy log file. You can set a unit as B, K, M or G, which stands for bytes, kilobytes(KB) or megabytes(MB) or gigabytes(GB) respectively. If you omit the unit, K will be applied. The maximum value is 1,000,000(KB).
+
+**SHARD_PROXY_SHM_ID**
+
+    A parameter to configure the ID of shared memory used by proxy
+    
+**SHARD_PROXY_TIMEOUT**
+
+    The maximum waiting time by which the statement is prepared or CAS is available to use. The default value is 30(seconds). If this value is 0, the waiting time is decided by the value of the query_timeout system parameter; if the value of query_timeout is also 0, the waiting time is infinite. IF the value SHARD_PROXY_TIMEOUT is larger than 0, the maximum value between query_timeout and SHARD_PROXY_TIMEOUT decides the waiting time. You can set a unit as ms, s, min or h, which stands for milliseconds, seconds, minutes or hours respectively. If you omit the unit, s will be applied.
+
+.. note:: **Required parameters for configuring proxy**
+
+    To configure CUBRID proxy, you should specify SHARD_MAX_CLIENTS, MAX_NUM_APPL_SERVER and SHARD_NUM_PROXY.
+     
+    *   In Linux, the number of file descriptors(fd) per proxy process is limited as follows.
+
+        *   "((SHARD_MAX_CLIENTS + MAX_NUM_APPL_SERVER) / SHARD_NUM_PROXY) + 256" <= 10,000
+     
+    The following are detail descriptions on above formulas.
+     
+    *   SHARD_MAX_CLIENTS is the maximum number of applications which access the SHARD system.
+    *   MAX_NUM_APPL_SERVER is the maximum number of all CASes which can access proxy system.
+    *   SHARD_NUM_PROXY is the maximum number of proxy processes which can use on the SHARD system.
+    *   "SHARD_MAX_CLIENTS / SHARD_NUM_PROXY" is the maximum number of applications which can access per proxy process.
+    *   "MAX_NUM_APPL_SERVER / SHARD_NUM_PROXY" is the maximum number of CASes which can access per proxy process.
+    *   256 is the number of file descriptors which are used internally per process on Linux.
+
+    As an example of configuring SHARD parameters in Linux system, if you specify the maximum concurrent access number of applications (SHARD_MAX_CLIENTS) as 5,000, the maximum number of CASes(MAX_NUM_APPL_SERVER) as 200 and the maximum number of proxy process(SHARD_NUM_PROXY) as 1, then file descriptors per proxy process becomes (5,000 + 200)/1 + 256 = 5,456, and it is less than 10,000; it is possible configuration.
+     
+    Regarding above, the following is the connection-relationship between each process. "proxy" intermediates a connection between "app. client" and "CAS".
+
+    In the below, [] indicates a process, and -> indicates the requesting direction.
+
+    ::
+     
+        [app. client]   --(initial access request)-----------> [broker] (select proxy)
+                        <--(announce proxy to access)---
+                        -------------------------------------> [proxy] --(select CAS)--> [CAS] ---> [DB server]
+                        <-------------------------------------         <----------------       <--- 
+                        <--(now use the same proxy)---------->         <--------------->       <-->
+
+    broker is used only once when the application client requires the initial access, and then CUBRID keep connections among "[app. client] - [proxy] - [CAS] - [DB Server]".
+
+    Also, CAS keeps connection with DB server after DB connection is completed.
+
+
 Etc
 ^^^
 
@@ -2734,3 +2986,8 @@ HA Configuration
 ================
 
 Regarding HA configuration, see :ref:`ha-configuration`.
+
+SHARD Configuration
+===================
+
+Regarding SHARD configuration, see :ref:`default-shard-conf`.

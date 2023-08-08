@@ -164,11 +164,11 @@ When rpm is executed, CUBRID is installed in the "cubrid" home directory (/opt/c
 
     $ cubrid service start
 
-.. note:: \
+.. note::
 
     *   **RPM and dependency**
     
-        You must check RPM dependency when installing with RPM. If you ignore (-\-nodeps) dependency, it may not be executed. 
+        You must check RPM dependency when installing with RPM. If you ignore (\-\-nodeps) dependency, it may not be executed. 
 
     *   **cubrid account and DB exists even if you remove RPM package**
         

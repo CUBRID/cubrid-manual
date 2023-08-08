@@ -203,7 +203,7 @@ CSQL 인터프리터에서 자동 커밋 모드를 설정하는 세션 명령어
 
 CCI 로 개발된 응용 프로그램 역시 커서 유지가 기본 동작이며, 연결 수준에서 커서를 유지하지 않도록 설정한 경우 질의를 prepare할 때 **CCI_PREPARE_HOLDABLE** 플래그를 명시하면 해당 질의 수준에서 커서를 유지한다. CCI로 개발된 드라이버(PHP, PDO, ODBC, OLE DB, ADO.NET, Perl, Python, Ruby) 역시 커서 유지가 기본 동작이며, 커서 유지 여부의 설정을 지원하는지에 대해서는 해당 드라이버의 **PREPARE** 함수를 참고한다.
 
-.. note:: \
+.. note::
 
     *   CUBRID 9.0 미만 버전까지는 커서 유지를 지원하지 않으며, 커밋이 발생하면 커서가 자동으로 닫히는 것이 기본 동작이다.
     *   CUBRID는 현재 java.sql.XAConnection 인터페이스에서 ResultSet.HOLD_CURSORS_OVER_COMMIT을 지원하지 않는다.
@@ -685,7 +685,7 @@ VACUUM 데이터
 VACUUM 작업 
 +++++++++++
 
-VACCUM 작업 실행 단계는 다음과 같다. 
+VACUUM 작업 실행 단계는 다음과 같다.
 
   1. **로그 프리패치** : vacuum Master 또는 Worker가 작업으로 처리할 로그 페이지를 프리패치한다.
   2. **각 로그 레코드에 대해 다음 작업을 반복한다**.

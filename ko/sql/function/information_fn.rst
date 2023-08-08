@@ -109,7 +109,7 @@ CURRENT_USER, USER
 
     **CURRENT_USER**\ 와 **USER** 의사 칼럼(pseudo column)은 동일하며, 현재 데이터베이스에 로그인한 사용자의 이름을 문자열로 반환한다.
 
-    기능이 비슷한 :func:`SYSTEM_USER` 함수와 :func:`USER` 함수는 사용자 이름을 호스트 이름과 함께 반환한다.
+    기능이 비슷한 :func:`SYSTEM_USER` 함수와 :func:`USER` 함수는 사용자 이름을 CSQL 또는 CAS가 실행된 호스트 이름과 함께 반환한다.
 
     :rtype: STRING
     
@@ -644,7 +644,7 @@ USER, SYSTEM_USER
 
 .. function:: SYSTEM_USER()
 
-    **USER** 함수와 **SYSTEM_USER** 함수는 동일하며, 사용자 이름을 호스트 이름과 함께 반환한다.
+    **USER** 함수와 **SYSTEM_USER** 함수는 동일하며, 사용자 이름을 CSQL 또는 CAS가 실행된 호스트 이름과 함께 반환한다.
 
     기능이 비슷한 :c:macro:`USER`\ 와 :c:macro:`CURRENT_USER` 의사 칼럼(pseudo column)은 현재 데이터베이스에 로그인한 사용자의 이름을 문자열로 반환한다.
 

@@ -235,6 +235,7 @@ When the arithmetic operator is '/', the result type differs depending on the se
                                                1.524157875322756e+024
      
 .. code-block:: sql
+
     csql> ;get oracle_compat_number_behavior
     oracle_compat_number_behavior=n
 
@@ -248,6 +249,7 @@ When the arithmetic operator is '/', the result type differs depending on the se
                   1
 
 .. code-block:: sql
+
     csql> ;get oracle_compat_number_behavior
     oracle_compat_number_behavior=n
 
@@ -261,13 +263,16 @@ When the arithmetic operator is '/', the result type differs depending on the se
                   0
 
 .. code-block:: sql
+
     csql> ;get oracle_compat_number_behavior
     oracle_compat_number_behavior=y
 
     -- int / int returns numeric type with oracle_compat_number_behavior
     SELECT 1/2;
+
 ::
-    1/2
+
+               1/2
    ===============
                0.5
 

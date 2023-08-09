@@ -3308,7 +3308,7 @@ vacuumdb
 .. option:: --dump
 
     이 옵션은 vacuum에 대한 상태 정보를 표시하는 데 사용된다. 현재는 vacuum에서 참조하는 첫 번째 로그 페이지 ID와 vacuum이 참조하는 로그 볼륨 이름을 표시한다. 사용자는 첫 번째 로그 페이지 ID의 변경을 통해 vacuum 작업의 진행 상황을 확인할 수 있으며, vacuum 작업을 위해 유지해야 하는 최소 로그 볼륨을 확인할 수 있다. 독립형 모드와 클라이언트/서버 모드 모두에서 사용할 수 있다.
-    **\-C** 옵션과 함께 지정되면 단말 노드의 임계값 이상의 오버플로우 페이지 읽기가 발생한 인덱스에 대한 정보를 함께 표시 한다. 이와 관련된 시스템 파라미터는**vacuum_ovfp_check_duration**\과  **vacuum_ovfp_check_threshold**\가 있다.   ::
+    **\-C** 옵션과 함께 지정되면 인덱스 vacuum시 단말 노드의 임계값 이상의 오버플로우 페이지 읽기가 발생한 인덱스에 대한 정보를 함께 표시 한다. 이와 관련된 시스템 파라미터는**vacuum_ovfp_check_duration**\과  **vacuum_ovfp_check_threshold**\가 있다.   ::
 
         cubrid vacuumdb --dump demodb
 

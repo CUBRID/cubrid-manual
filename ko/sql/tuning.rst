@@ -550,6 +550,7 @@ SQL에 대한 성능 분석을 위해서는 질의 프로파일링(profiling) �
     *   agl: aggregate lookup을 의미하며, aggreate 연산을 위해 사용된 인덱스 리스트
 
         다음은 noscan, agl에대한 예제이다.
+
 ::
 
         SET TRACE ON;

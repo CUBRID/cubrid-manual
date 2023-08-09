@@ -3320,7 +3320,7 @@ vacuumdb
 
 .. option:: -C, --CS-mode
 
-    이 옵션은 독립 클라이언트/서버 모드인 데이터베이스에서 vacuumdb 동작을 수행하도록 한다. 그렇지만 현재는 이 모드에서 vacuum을 지원하지 않는다. ::
+    이 옵션은 독립 클라이언트/서버 모드인 데이터베이스에서 vacuumdb 동작을 수행하도록 한다. 그러나 현재는 vacuum이 동작되지 않는다. ::
 
         cubrid vacuumdb -C demodb
 

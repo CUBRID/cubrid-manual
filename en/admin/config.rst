@@ -1517,7 +1517,7 @@ The following are parameters related to SQL statements and data types supported 
 
 **oracle_compat_number_behavior**
 
-    **oracle_style_empty_string** is a parameter used to improve compatibility with other DBMS (Database Management Systems); for NUMERIC type, DOUBLE, and FLOAT types, it does not display decimal point trailing 0, and in case of DOUBLE and FLOAT, it does not display the exponent. For example, if this parameter setting value is **no**, the result of a query that searches the a_double table composed of double types is displayed in the form of an exponent as shown below, but if the parameter setting value is **yes**, only decimal point is displayed.
+    **oracle_style_empty_string** is a parameter used to improve compatibility with other DBMS (Database Management Systems); for NUMERIC type, DOUBLE and FLOAT types, it does not display decimal point trailing 0, and in case of DOUBLE and FLOAT, it does not display the exponent. For example, if this parameter setting value is **no**, the result of a query that searches the a_double table composed of DOUBLE types is displayed in the form of an exponent as shown below, but if the parameter setting value is **yes**, only decimal point is displayed.
 
     .. code-block:: sql
 

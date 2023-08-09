@@ -1446,7 +1446,7 @@ Avg_rec_len                         INT             평균 페이지 레코드 �
 Total_space                         VARCHAR(64)     인덱스에 의해 점유되는 전체 공간
 Total_used_space_non_ovf            VARCHAR(64)     할당된 페이지에서 사용된 총 공간(단말 노드의 오버플로우 페이지는 제외)
 Total_free_space_non_ovf            VARCHAR(64)     할당된 페이지에서 사용되지 않은 총 공간(단말 노드의 오버플로우 페이지는 제외)
-Total_used_space_ovf                VARCHAR(64)     단말 노드의 오버플로우에 할당된 페이지에서 사용된 총 공간
+Total_used_space_ovf                VARCHAR(64)     단말 노드의 할당된 오버플로우 페이지에서 사용된 총 공간
 Total_free_space_ovf                VARCHAR(64)     단말 노드의 할당된 오버플로우 페이지에서 사용되지 않은 총 공간
 Avg_num_key_per_page_non_ovf        INT             단말 노드 페이지에서 페이지 당 평균 키 개수
 Avg_free_space_per_page_non_ovf     VARCHAR(64)     단말 노드 페이지에서 페이지 당 평균 여유 공간

@@ -263,6 +263,8 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | only_full_group_by                  | client parameter        | O       | bool     | no                             | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | oracle_compat_number_behavior       | server parameter        |         | bool     | no                             |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | oracle_style_empty_string           | client parameter        |         | bool     | no                             |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | pipes_as_concat                     | client parameter        |         | bool     | yes                            |                       |
@@ -1295,6 +1297,8 @@ The following are parameters related to SQL statements and data types supported 
 +---------------------------------+--------+------------+------------+------------+
 | only_full_group_by              | bool   | no         |            |            |
 +---------------------------------+--------+------------+------------+------------+
+| oracle_compat_number_behavior   | bool   | no         |            |            |
++---------------------------------+--------+------------+------------+------------+
 | oracle_style_empty_string       | bool   | no         |            |            |
 +---------------------------------+--------+------------+------------+------------+
 | pipes_as_concat                 | bool   | yes        |            |            |
@@ -1508,6 +1512,76 @@ The following are parameters related to SQL statements and data types supported 
     The default value is **no**. Therefore, specify the **only_full_group_by** parameter value to **yes** to execute queries by SQL standards. Because the extended syntax is not applied in this case, an error below is displayed. ::
 
         ERROR: Attributes exposed in aggregate queries must also appear in the group by clause.
+
+.. _oracle_compat_number_behavior:
+
+**oracle_compat_number_behavior**
+
+    **oracle_style_empty_string** is a parameter used to improve compatibility with other DBMS (Database Management Systems); for NUMERIC type, DOUBLE, and FLOAT types, it does not display decimal point trailing 0, and in case of DOUBLE and FLOAT, it does not display the exponent. For example, if this parameter setting value is **no**, the result of a query that searches the a_double table composed of double types is displayed in the form of an exponent as shown below, but if the parameter setting value is **yes**, only decimal point is displayed.
+
+    .. code-block:: sql
+
+        csql> ;Get oracle_compat_number_behavior
+
+        === Get Param Input ===
+
+        oracle_compat_number_behavior=n
+
+        SELECT a FROM a_double;
+
+    ::
+
+                                 a
+        ==========================
+             1.234567890123457e+19
+             1.234567890123457e-08
+             1.230000000000000e-08
+             1.000000000000000e+00
+             1.200000000000000e+00
+            -4.939030300000000e-03
+            -1.293934894993939e+18
+            -1.938943893939394e+16
+
+    ::
+
+        csql> ;Get oracle_compat_number_behavior
+
+        === Get Param Input ===
+
+        oracle_compat_number_behavior=y
+
+        SELECT a FROM a_double;
+
+    ::
+
+                                 a
+        ==========================
+              12345678901234570000
+          0.00000001234567890123457
+                      0.0000000123
+                                 1
+                               1.2
+                     -0.0049390303
+              -1293934894993939000
+                -19389438939393940
+
+    Also, when **oracle_compat_number_behavior** is set to **yes**, the type of division operation for integer numbers becomes a real number type, that is, a NUMERIC type, not an integer type. In the example below, if this parameter is **yes**, applicable integer types are all INT, SHORT, and BIGINT.
+
+    .. code-block:: sql
+
+        csql> ;Get oracle_compat_number_behavior
+
+        === Get Param Input ===
+
+        oracle_compat_number_behavior=y
+
+        SELECT 1/2;
+
+    ::
+
+               1/2
+        ==========
+               0.5
 
 .. _oracle_style_empty_string:
 

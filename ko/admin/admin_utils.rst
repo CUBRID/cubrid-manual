@@ -3285,7 +3285,7 @@ tde
 vacuumdb
 --------
 
- **cubrid vacuumdb** 유틸리티는 삭제된 레코드와 불필요한 mvcc 관련 정보를 데이터베이스의 레코드에서 vacuum하는 데 사용됩니다. 그리고 vacuum에 대한 상태 정보를 얻기 위해서도 사용됩니다. ::
+ **cubrid vacuumdb** 유틸리티는 삭제된 레코드와 불필요한 mvcc 관련 정보를 정리하기 위해 vacuum을 수행하거나, vacuum 관련 상태 정보를 얻기 위해 사용된다. ::
 
     cubrid vacuumdb [options] database_name
 

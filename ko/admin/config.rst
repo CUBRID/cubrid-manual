@@ -1507,7 +1507,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
 **oracle_compat_number_behavior**
 
-    **oracle_compat_number_behavior**\는 다른 DBMS(Database Management System)와의 호환성을 향상시키기 위한 파라미터로, NUMERIC 타입과 DOUBLE, FLOAT 타입에 대해 소숫점 이하 0을 출력하지 않도록하며, DOUBLE과 FLOAT의 경우 지수 또한 표시하지 않는다.  예를 들면, 이 파라미터 설정 값이 **no**\인 경우, double타입으로 구성된 a_double테이블을 조회하는 쿼리의 결과는 아래와 같이 지수 형태로 표시되지만, 파라미터 설정 값이 **yes**\인 경우 소수점으로만 표시된다.
+    **oracle_compat_number_behavior**\는 다른 DBMS(Database Management System)와의 호환성 향상을 위한 파라미터로, NUMERIC, DOUBLE 과 FLOAT 타입에 대해 소숫점 이하 0을 출력하지 않도록 하며, DOUBLE과 FLOAT인 경우 지수 형식으로 표시하지 않는다.  예를 들면, 이 파라미터 설정 값이 **no**\인 경우, DOUBLE 타입으로 구성된 a_double 테이블을 조회하는 쿼리의 결과는 아래와 같이 지수 형태로 표시되지만, 파라미터 설정 값이 **yes**\인 경우 소수점으로만 표시된다.
 
     .. code-block:: sql
 

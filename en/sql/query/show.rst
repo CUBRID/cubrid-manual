@@ -1431,21 +1431,21 @@ Total_value                         INT             Total number of values store
 Avg_num_value_per_key               INT             Average number of values (OIDs) per key
 Num_leaf_page                       INT             Leaf page count
 Num_non_leaf_page                   INT             NonLeaf page count
-Num_ovf_page                        INT             OID overflow page count
+Num_ovf_page                        INT             Leaf's overflow page count
 Num_total_page                      INT             Total page count
 Height                              INT             Height of the tree
 Avg_key_len                         INT             Average key length
 Avg_rec_len                         INT             Average page record length
 Total_space                         VARCHAR(64)     Total space occupied by index
-Total_used_space_non_ovf            VARCHAR(64)     Total used space in index
-Total_free_space_non_ovf            VARCHAR(64)     Total free space in index
-Total_used_space_ovf                VARCHAR(64)     Total OID overflow used space in index
-Total_free_space_ovf                VARCHAR(64)     Total OID overflow free space in index
+Total_used_space_non_ovf            VARCHAR(64)     Total space used in allocated pages (excluded leaf's overflow pages)
+Total_free_space_non_ovf            VARCHAR(64)     Total space unused in allocated pages (excluded leaf's overflow pages)
+Total_used_space_ovf                VARCHAR(64)     Total space used in pages allocated to leaf's overflow
+Total_free_space_ovf                VARCHAR(64)     Total space unused in pages allocated to leaf's overflow
 Avg_num_key_per_page_non_ovf        INT             Average page key count (in leaf pages)
 Avg_free_space_per_page_non_ovf     VARCHAR(64)     Average page free space
 Avg_num_ovf_page_per_key            INT             Average page key count (in leaf pages)
 Avg_free_space_per_page_ovf         VARCHAR(64)     Average page free space
-Max_num_ovf_page_a_key              INT             Maximum number of OID overflow pages for one key
+Max_num_ovf_page_a_key              INT             Maximum number of leaf's overflow pages for one key
 =================================== =============== ======================================================================================================================================
 
 The following shows the examples of this syntax.

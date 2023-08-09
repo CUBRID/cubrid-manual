@@ -1438,21 +1438,21 @@ Total_value                         INT             트리에 저장된 값의 �
 Avg_num_value_per_key               INT             키당 OID 값의 평균 개수
 Num_leaf_page                       INT             단말 노드(leaf) 페이지 개수
 Num_non_leaf_page                   INT             비단말(NonLeaf) 노드 페이지 개수
-Num_ovf_page                        INT             OID Overflow 페이지 개수
+Num_ovf_page                        INT             단말 노드의 오버플로우 페이지 개수
 Num_total_page                      INT             전체 페이지 개수
 Height                              INT             트리의 높이
 Avg_key_len                         INT             평균 키 길이
 Avg_rec_len                         INT             평균 페이지 레코드 길이
 Total_space                         VARCHAR(64)     인덱스에 의해 점유되는 전체 공간
-Total_used_space_non_ovf            VARCHAR(64)     인덱스의 전체 사용 공간
-Total_free_space_non_ovf            VARCHAR(64)     인덱스의 전체 여유 공간
-Total_used_space_ovf                VARCHAR(64)     인덱스의 전체 OID Overflow 사용 공간
-Total_free_space_ovf                VARCHAR(64)     인덱스의 전체 OID Overflow 여유 공간
+Total_used_space_non_ovf            VARCHAR(64)     할당된 페이지에서 사용된 총 공간(단말 노드의 오버플로우 페이지는 제외)
+Total_free_space_non_ovf            VARCHAR(64)     할당된 페이지에서 사용되지 않은 총 공간(단말 노드의 오버플로우 페이지는 제외)
+Total_used_space_ovf                VARCHAR(64)     단말 노드의 오버플로우에 할당된 페이지에서 사용된 총 공간
+Total_free_space_ovf                VARCHAR(64)     단말 노드의 오버플로우에 할당된 페이지에서 사용되지 않은 총 공간
 Avg_num_key_per_page_non_ovf        INT             단말 노드 페이지에서 페이지 당 평균 키 개수
 Avg_free_space_per_page_non_ovf     VARCHAR(64)     단말 노드 페이지에서 페이지 당 평균 여유 공간
-Avg_num_key_per_page_ovf            INT             OID Overflow 페이지에서 페이지 당 평균 키 개수
-Avg_free_space_per_page_ovf         VARCHAR(64)     OID Overflow 페이지 당 평균 여유 공간
-Max_num_ovf_page_a_key              INT             하나의 키에 대해 연결된 OID Overflow 페이지의 최대 개수
+Avg_num_key_per_page_ovf            INT             단말 노드의 오버플로우 페이지에서 페이지 당 평균 키 개수
+Avg_free_space_per_page_ovf         VARCHAR(64)     단말 노드의 오버플로우 페이지 당 평균 여유 공간
+Max_num_ovf_page_a_key              INT             하나의 키에 대해 연결된 단말 노드의 오버플로우 페이지의 최대 개수
 =================================== =============== ======================================================================================================================================
 
 다음은 이 구문을 수행한 예이다.

@@ -545,6 +545,27 @@ SQL에 대한 성능 분석을 위해서는 질의 프로파일링(profiling) �
     *   time: 해당 연산 수행 시 소요된 시간(ms)
     *   rows: 해당 연산에 대한 결과 행의 개수로, 데이터 필터가 적용된 결과 행의 개수
 
+*   noscan: aggregate 연산 시 스캔 없이 인텍스 헤더의 통계 정보를 이용하는 작업 (aggregate: count, min, max)
+    *   agl: aggregate lookup을 의미하며, aggreate 연산을 위해 사용된 인덱스 리스트
+
+        다음은 noscan, agl에대한 예제이다.
+::
+
+        SET TRACE ON;
+        CREATE TABLE agl_tbl (id INTEGER PRIMARY KEY, phone VARCHAR(20));
+        INSERT INTO agl_tbl VALUES (1, '123-456-789');
+        INSERT INTO agl_tbl VALUES (999, '999-999-999');
+
+        SELECT count(*), min(id), max(id) FROM agl_tbl;
+
+        SHOW TRACE;
+
+::
+
+        Trace Statistics:
+          SELECT (time: 0, fetch: 16, ioread: 0)
+            SCAN (table: agl_tbl), (noscan time: 0, fetch: 0, ioread: 0, readrows: 0, rows: 0, agl: pk_agl_tbl_id)
+
 **GROUPBY**    
 
 *   time: 해당 연산 수행 시 소요된 시간(ms)

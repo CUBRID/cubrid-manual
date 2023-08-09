@@ -1521,7 +1521,7 @@ The following are parameters related to SQL statements and data types supported 
 
     .. code-block:: sql
 
-        csql> ;Get oracle_compat_number_behavior
+        csql> ;get oracle_compat_number_behavior
 
         === Get Param Input ===
 
@@ -1544,7 +1544,7 @@ The following are parameters related to SQL statements and data types supported 
 
     ::
 
-        csql> ;Get oracle_compat_number_behavior
+        csql> ;get oracle_compat_number_behavior
 
         === Get Param Input ===
 
@@ -1569,7 +1569,7 @@ The following are parameters related to SQL statements and data types supported 
 
     .. code-block:: sql
 
-        csql> ;Get oracle_compat_number_behavior
+        csql> ;get oracle_compat_number_behavior
 
         === Get Param Input ===
 

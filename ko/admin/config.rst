@@ -1511,7 +1511,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
     .. code-block:: sql
 
-        csql> ;Get oracle_compat_number_behavior
+        csql> ;get oracle_compat_number_behavior
 
         === Get Param Input ===
 
@@ -1534,7 +1534,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
     ::
 
-        csql> ;Get oracle_compat_number_behavior
+        csql> ;get oracle_compat_number_behavior
 
         === Get Param Input ===
 
@@ -1559,7 +1559,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
     .. code-block:: sql
 
-        csql> ;Get oracle_compat_number_behavior
+        csql> ;get oracle_compat_number_behavior
 
         === Get Param Input ===
 

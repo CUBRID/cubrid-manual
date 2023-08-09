@@ -2297,7 +2297,7 @@ The following are other parameters. The type and value range for each parameter 
 
 **vacuum_ovfp_check_threshold**
 
- **vacuum_ovfp_check_threshold** collects information as a management target when the number of overflow pages of a terminal node that must be read to process one key in BTREE is greater than the specified value. The default is 1000.
+ **vacuum_ovfp_check_threshold** collects index information when the number of leaf's overflow pages to be read is greater than the value, when index vacuum is performed. The default is 1000 pages.
 
 **vacuum_ovfp_check_duration**
 

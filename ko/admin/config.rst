@@ -1555,7 +1555,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
               -1293934894993939000
                 -19389438939393940
 
-    또한, **oracle_compat_number_behavior**\가 **yes**\로 설정된 경우, 정수 타입 수치에 대한 나누기 연산의 타입은 정수 타입이 아니라 실수 타입, 즉 NUMERIC 타입이 된다. 아래의 예는 이 파라미터가 **yes**\로 설정된 경우로, 적용되는 정수 타입은 INT, SHORT, BIGINT 모두 해당된다.
+    또한, **oracle_compat_number_behavior**\이 **yes**\로 설정된 경우, 정수 타입의 나누기 연산 결과가 정수 타입이 아닌 실수 타입 (즉, NUMERIC 타입)이 된다. 아래의 예는 이 파라미터가 **yes**\로 설정된 경우로, 적용되는 정수 타입은 INT, SHORT, BIGINT 이다.
 
     .. code-block:: sql
 

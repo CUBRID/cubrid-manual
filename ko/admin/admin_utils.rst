@@ -3293,7 +3293,7 @@ vacuumdb
 
 *   **vacuumdb**: 데이터베이스의 레코드에서 삭제된 레코드와 불필요한 mvcc 관련 정보 정리 및 관련 정보를 확인하는 유틸리티이다.
 
-*   *database_name*: 파라미터 정보를 출력할 데이터베이스 이름이다.
+*   *database_name*: vacuum을 수행할 데이터베이스 이름이다.
 
 다음은 **cubrid vacuumdb**\에서 사용할 수 있는 옵션들이다.
 

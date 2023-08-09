@@ -2267,7 +2267,7 @@ HA 관련 파라미터
 
 **vacuum_ovfp_check_threshold**
 
- **vacuum_ovfp_check_threshold**\는 인덱스 vacuum을 위해 읽어야 하는 단말 노드의 오버플로우 페이지의 개수가 해당 값보다 큰 경우 관리 대상으로 정보를 수집한다. 기본값은 1000 페이지이다.
+인덱스 vacuum 과정에서 읽은 하나의 단말 노드 (leaf node) 에 연결된 오버플로우 페이지의 개수가 어떤 임계값 보다 큰 경우 관리 대상으로 정보를 수집한다. **vacuum_ovfp_check_threshold**\ 로 이 임계 값을 지정할 수 있다. 기본값은 1000 페이지이다.
 
 **vacuum_ovfp_check_duration**
 

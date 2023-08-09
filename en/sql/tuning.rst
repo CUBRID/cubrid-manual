@@ -544,7 +544,7 @@ The following are the explanation regarding items of trace statistics.
     *   time: the estimated time(ms) in this operation
     *   rows: the number of the result rows in this operation; the number of result rows to which the data filter is applied
 
-* noscan: An operation that uses statistical information of index headers without scanning when calculating aggregate (aggregate: count, min, max)
+* noscan: An operation that uses statistical information of index headers without scanning when executing an aggregate operation. (aggregate: count, min, max)
 
     *   agl: aggregate lookup, index list used for aggregate operation
 

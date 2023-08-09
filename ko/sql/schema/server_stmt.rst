@@ -50,7 +50,7 @@ CREATE SERVER
 
 .. note::
 
-    db_name과 user_name은식별자 형식과 문자열 리터럴 형식으로 모두 기술 할 수 있다.
+    db_name과 user_name은 식별자 형식과 문자열 리터럴 형식으로 모두 기술할 수 있다.
     
     * 식별자 형식의 예  
              t123db,  "123db",  `123db`,  [124db]

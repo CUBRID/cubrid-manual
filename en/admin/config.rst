@@ -2301,7 +2301,7 @@ The following are other parameters. The type and value range for each parameter 
 
 **vacuum_ovfp_check_duration**
 
- **vacuum_ovfp_check_duration** sets the period to keep the information collected by the **vacuum_ovfp_check_threshold** setting. Information that has not been newly updated within the set period is deleted. The unit of the input value is seconds, and the default value is 2678400, which corresponds to 31 days.
+ **vacuum_ovfp_check_duration** sets the period to keep the information collected by the **vacuum_ovfp_check_threshold**. Information that has not been updated within the setting period is deleted. The unit of the input value is seconds, and the default value is 2678400 seconds, which corresponds to 31 days.
 
 .. _broker-configuration:
 

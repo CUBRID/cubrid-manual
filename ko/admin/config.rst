@@ -1503,6 +1503,76 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
         ERROR: Attributes exposed in aggregate queries must also appear in the group by clause.
 
+.. _oracle_compat_number_behavior:
+
+**oracle_compat_number_behavior**
+
+    **oracle_compat_number_behavior** 는 다른 DBMS(Database Management System)와의 호환성을 향상시키기 위한 파라미터로, NUMERIC 타입과 DOUBLE, FLOAT 타입에 대해 소숫점 이하 0을 출력하지 않도록하며, DOUBLE과 FLOAT의 경우 지수 또한 표시하지 않는다.  예를 들면, 이 파라미터 설정 값이 **no** 인 경우, double타입으로 구성된 a_double테이블을 조회하는 쿼리의 결과는 아래와 같이 지수 형태로 표시되지만, 파라미터 설정 값이 **yes** 인 경우 소수점으로만 표시된다.
+
+    .. code-block:: sql
+
+        csql> ;Get oracle_compat_number_behavior
+
+        === Get Param Input ===
+
+        oracle_compat_number_behavior=n
+
+        SELECT a FROM a_double;
+
+    ::
+
+                                 a
+        ==========================
+             1.234567890123457e+19
+             1.234567890123457e-08
+             1.230000000000000e-08
+             1.000000000000000e+00
+             1.200000000000000e+00
+            -4.939030300000000e-03
+            -1.293934894993939e+18
+            -1.938943893939394e+16
+
+    ::
+
+        csql> ;Get oracle_compat_number_behavior
+
+        === Get Param Input ===
+
+        oracle_compat_number_behavior=y
+
+        SELECT a FROM a_double;
+
+    ::
+
+                                 a
+        ==========================
+              12345678901234570000
+          0.00000001234567890123457
+                      0.0000000123
+                                 1
+                               1.2
+                     -0.0049390303
+              -1293934894993939000
+                -19389438939393940
+
+    또한, oracle_compat_number_behavior가 **yes**로 설정된 경우, 정수 타입 수치에 대한 나누기 연산의 타입은 정수 타입이 아니라 실수 타입, 즉 NUMERIC 타입이 된다. 아래의 예는 이 파라미터가 **yes** 로 성정된 경우로, 적용되는 정수 타입은 INT, SHORT, BIGINT 모두 해당된다.
+
+    .. code-block:: sql
+
+        csql> ;Get oracle_compat_number_behavior
+
+        === Get Param Input ===
+
+        oracle_compat_number_behavior=y
+
+        SELECT 1/2;
+
+    ::
+
+               1/2
+        ==========
+               0.5
+
 .. _oracle_style_empty_string:
 
 **oracle_style_empty_string**
@@ -1560,74 +1630,6 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
             SELECT REPLACE ('abc', 'a', '');
         
         위의 질의에 대해 10.0 이상 버전에서는 빈 문자열 입력을 빈 문자열로 처리하여 'bc'를 출력하지만, 10.0 미만 버전에서는 빈 문자열 입력을 NULL로 처리하여 NULL을 출력한다.
-
-.. _oracle_compat_number_behavior:
-
-**oracle_compat_number_behavior**
-
-    **oracle_compat_number_behavior** 는 다른 DBMS(Database Management System)와의 호환성을 향상시키기 위한 파라미터로, NUMERIC 타입과 DOUBLE, FLOAT 타입에 대해 소숫점 이하 0을 출력하지 않도록하며, DOUBLE과 FLOAT의 경우 지수 또한 표시하지 않는다.  예를 들면, 이 파라미터 설정 값이 **no** 인 경우, double타입으로 구성된 a_double테이블을 조회하는 쿼리의 결과는 아래와 같이 지수 형태로 표시되지만, 파라미터 설정 값이 **yes** 인 경우 소수점으로만 표시된다.
-
-    .. code-block:: sql
-
-        csql> ;Get oracle_compat_number_behavior
-
-        === Get Param Input ===
-
-        oracle_compat_number_behavior=n
-
-        SELECT a FROM a_double;
-
-    ::
-
-                                 a
-        ==========================
-             1.234567890123457e+19
-             1.234567890123457e-08
-             1.230000000000000e-08
-             1.000000000000000e+00
-             1.200000000000000e+00
-            -4.939030300000000e-03
-            -1.293934894993939e+18
-            -1.938943893939394e+16
-
-        csql> ;Get oracle_compat_number_behavior
-
-        === Get Param Input ===
-
-        oracle_compat_number_behavior=y
-
-        SELECT a FROM a_double;
-
-    ::
-
-                                 a
-        ==========================
-              12345678901234570000
-          0.00000001234567890123457
-                      0.0000000123
-                                 1
-                               1.2
-                     -0.0049390303
-              -1293934894993939000
-                -19389438939393940
-
-    또한, oracle_compat_number_behavior가 **yes**로 설정된 경우, 정수 타입 수치에 대한 나누기 연산의 타입은 정수 타입이 아니라 실수 타입, 즉 NUMERIC 타입이 된다. 아래의 예는 이 파라미터가 **yes** 로 성정된 경우로, 적용되는 정수 타입은 INT, SHORT, BIGINT 모두 해당된다.
-
-    .. code-block:: sql
-
-        csql> ;Get oracle_compat_number_behavior
-
-        === Get Param Input ===
-
-        oracle_compat_number_behavior=y
-
-        SELECT 1/2;
-
-    ::
-
-               1/2
-        ==========
-               0.5
 
 **pipes_as_concat**
 

@@ -1507,7 +1507,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
 **oracle_compat_number_behavior**
 
-    **oracle_compat_number_behavior** 는 다른 DBMS(Database Management System)와의 호환성을 향상시키기 위한 파라미터로, NUMERIC 타입과 DOUBLE, FLOAT 타입에 대해 소숫점 이하 0을 출력하지 않도록하며, DOUBLE과 FLOAT의 경우 지수 또한 표시하지 않는다.  예를 들면, 이 파라미터 설정 값이 **no** 인 경우, double타입으로 구성된 a_double테이블을 조회하는 쿼리의 결과는 아래와 같이 지수 형태로 표시되지만, 파라미터 설정 값이 **yes** 인 경우 소수점으로만 표시된다.
+    **oracle_compat_number_behavior**\는 다른 DBMS(Database Management System)와의 호환성을 향상시키기 위한 파라미터로, NUMERIC 타입과 DOUBLE, FLOAT 타입에 대해 소숫점 이하 0을 출력하지 않도록하며, DOUBLE과 FLOAT의 경우 지수 또한 표시하지 않는다.  예를 들면, 이 파라미터 설정 값이 **no**\인 경우, double타입으로 구성된 a_double테이블을 조회하는 쿼리의 결과는 아래와 같이 지수 형태로 표시되지만, 파라미터 설정 값이 **yes**\인 경우 소수점으로만 표시된다.
 
     .. code-block:: sql
 
@@ -1555,7 +1555,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
               -1293934894993939000
                 -19389438939393940
 
-    또한, oracle_compat_number_behavior가 **yes**로 설정된 경우, 정수 타입 수치에 대한 나누기 연산의 타입은 정수 타입이 아니라 실수 타입, 즉 NUMERIC 타입이 된다. 아래의 예는 이 파라미터가 **yes** 로 성정된 경우로, 적용되는 정수 타입은 INT, SHORT, BIGINT 모두 해당된다.
+    또한, **oracle_compat_number_behavior**\가 **yes**\로 설정된 경우, 정수 타입 수치에 대한 나누기 연산의 타입은 정수 타입이 아니라 실수 타입, 즉 NUMERIC 타입이 된다. 아래의 예는 이 파라미터가 **yes**\로 성정된 경우로, 적용되는 정수 타입은 INT, SHORT, BIGINT 모두 해당된다.
 
     .. code-block:: sql
 

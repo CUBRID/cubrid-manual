@@ -1443,7 +1443,7 @@ Total_used_space_ovf                VARCHAR(64)     Total space used in pages al
 Total_free_space_ovf                VARCHAR(64)     Total space unused in pages allocated to leaf's overflow
 Avg_num_key_per_page_non_ovf        INT             Average page key count (in leaf pages)
 Avg_free_space_per_page_non_ovf     VARCHAR(64)     Average page free space
-Avg_num_ovf_page_per_key            INT             Average page key count (in leaf pages)
+Avg_num_ovf_page_per_key            INT             Average page key count in leaf pages
 Avg_free_space_per_page_ovf         VARCHAR(64)     Average page free space in leaf's overflow pages
 Max_num_ovf_page_a_key              INT             Maximum number of leaf's overflow pages for one key
 =================================== =============== ======================================================================================================================================

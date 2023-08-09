@@ -546,9 +546,9 @@ The following are the explanation regarding items of trace statistics.
 
 * noscan: An operation that uses statistical information of index headers without scanning when calculating aggregate (aggregate: count, min, max)
 
-     * agl: aggregate lookup, index list used for aggregate operation
+    *   agl: aggregate lookup, index list used for aggregate operation
 
-         The following is an example for noscan and agl.
+        The following is an example for noscan and agl.
 
 ::
 

@@ -1565,7 +1565,7 @@ The following are parameters related to SQL statements and data types supported 
               -1293934894993939000
                 -19389438939393940
 
-    Also, when **oracle_compat_number_behavior** is set to **yes**, the type of division operation for integer numbers becomes a real number type, that is, a NUMERIC type, not an integer type. In the example below, if this parameter is **yes**, applicable integer types are all INT, SHORT, and BIGINT.
+    Also, when **oracle_compat_number_behavior** is set to **yes**, the type of division operation for integer numbers becomes a real number type (that is, a NUMERIC type) not an integer type. In the example below, if this parameter is **yes**, affected integer types are INT, SHORT and BIGINT.
 
     .. code-block:: sql
 

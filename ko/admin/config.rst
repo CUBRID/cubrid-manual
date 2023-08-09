@@ -2271,7 +2271,7 @@ HA 관련 파라미터
 
 **vacuum_ovfp_check_duration**
 
- **vacuum_ovfp_check_duration**\는 **vacuum_ovfp_check_threshold**\ 설정에 의해 수집된 정보를 보관할 기간을 설정한다. 설정한 기간 내에 새롭게 업데이트되지 않은 정보는 삭제된다. 입력값의 단위는 초이며 기본값은 31일에 해당하는 2678400이다.
+ **vacuum_ovfp_check_duration**\는 **vacuum_ovfp_check_threshold**\ 설정에 의해 수집된 정보를 보관할 기간을 설정한다. 설정한 기간 내에 업데이트되지 않은 정보는 삭제된다. 입력값의 단위는 초이며 기본값은 31일에 해당하는 2678400 초이다.
 
 .. _broker-configuration:
 

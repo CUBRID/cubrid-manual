@@ -3295,13 +3295,13 @@ vacuumdb
 
 *   *database_name*: 파라미터 정보를 출력할 데이터베이스 이름이다.
 
-다음은 **cubrid vacuumdb**에서 사용할 수 있는 옵션들이다.
+다음은 **cubrid vacuumdb**\에서 사용할 수 있는 옵션들이다.
 
 .. program:: vacuumdb
 
 .. option:: -o, --output-file=FILE
 
-    이 옵션은 vacuum에 대한 상태 정보를 저장할 파일명을 지정한다. 파일은 현재 디렉토리에 생성된다. **-o** 옵션을 지정하지 않으면 콘솔 화면에 메시지가 표시된다. ::
+    이 옵션은 vacuum에 대한 상태 정보를 저장할 파일명을 지정한다. 파일은 현재 디렉토리에 생성된다.  **-o** 옵션을 지정하지 않으면 콘솔 화면에 메시지가 표시된다. ::
 
         cubrid vacuumdb -o db_output demodb
 

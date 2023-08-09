@@ -41,7 +41,7 @@ cubrid 유틸리티의 사용법(구문)은 다음과 같다. ::
         gen_tz [option] [<database-name>]  --- 공유 라이브러리로 컴파일할 수 있는 타임존 데이터가 포함된 C 소스 파일 생성
         dump_tz [option]  --- 타임존 관련 정보 출력
         tde <operation> [option] <database_name> --- TDE 암호화 관리 도구
-        vacuumdb [option] <database-name>  --- 데이터베이스의 삭제된 레코드 또는 불필요한 mvcc 관련 정보를 제거하여 정리하는 도구
+        vacuumdb [option] <database-name>  --- 데이터베이스의 삭제된 레코드 또는 불필요한 mvcc 관련 정보를 정리 및 관련 정보 확인하는 도구
         flashback [option] <database-name> <owner_name.class_name> --- 커밋된 특정 트랜잭션을 되돌릴 수 있도록 SQL 구문을 제공하는 도구
 
 cubrid 유틸리티 로깅

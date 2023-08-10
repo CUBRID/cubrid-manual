@@ -1444,7 +1444,7 @@ When changing the type of a column for which a default value is specified, if th
      CREATE TABLE t_def (a bigint default 123456789012, b varchar(20));
      ALTER TABLE t_def a a int;
 
- ::
+::
 
      ERROR: A domain conflict exists on attribute "a".
 

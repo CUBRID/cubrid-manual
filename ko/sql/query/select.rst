@@ -295,6 +295,32 @@ DBLINK 구문으로 재작성된 쿼리는 아래와 같다.
    SELECT *
    FROM DBLINK(remote_server, 'SELECT id, name FROM remote_tbl WHERE id < 3') AS dbl (id INT, name VARCHAR(32));
 
+.. note::
+
+테이블 확장명에 허용되는 객체는 일반 테이블, 시노님, 그리고 뷰가 있다. 아래의 예는 세가지 형태의 테이블 확장명을 보여주고 있다.
+
+-- at remote-side
+CREATE TABLE remote_table (
+  id INT,
+  phone VARCHAR(12)
+};
+
+CREATE SYNONYM a_remote_tbl FOR user_a.remote_table
+CREATE VIEW v_remote_tbl(r_phone) AS SELECT phone FROM remote_tble WHERE id > 10;
+
+-- at local-side
+
+-- remote-table
+SELECT phone FROM user_a.remote_table@server1 WHERE id > 10;
+
+-- remote-synonym
+SELECT phone FROM a_remote_tbl@server1 WHERE id > 10;
+
+-- remote-view
+SELECT r_phone FROM v_remote_tbl@server1;
+
+위 3개의 쿼리는 모두 동일한 결과를 리턴한다.
+
 DBLINK
 --------
 

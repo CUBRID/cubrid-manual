@@ -1438,7 +1438,7 @@ CHANGE/MODIFY 절
 
 default값이 지정된 칼럼를 대상으로 그 칼럼의 타입을 변경할 때, 원래 지정되었던 default값이 변경된 타입으로 형변환이 불가능한 경우 아래의 예처럼 에러가 발생한다. 
 
-.. code-blok:: sql
+.. code-block:: sql
 
     CREATE TABLE t_def (a bigint default 123456789012, b varchar(20));
     ALTER TABLE t_def a a int;

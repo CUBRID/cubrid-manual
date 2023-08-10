@@ -1439,7 +1439,7 @@ the configuration parameter allow_truncated_string also affect the similar as al
 
 When changing the type of a column for which a default value is specified, if the original default value cannot be coerced to the changed type, an error occurs as shown in the example below.
 
-.. code-blok:: sql
+.. code-block:: sql
 
      CREATE TABLE t_def (a bigint default 123456789012, b varchar(20));
      ALTER TABLE t_def a a int;

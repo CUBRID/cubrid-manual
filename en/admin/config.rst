@@ -384,7 +384,7 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | vacuum_ovfp_check_threshold         | server parameter        |         | int      | 1000                           |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | vacuum_ovfp_check_duration          | server parameter        |         | int      | 2678400                        |                       |
+|                               | vacuum_ovfp_check_duration          | server parameter        |         | int      | 744H                           |                       |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 
 .. _lpg:
@@ -2101,7 +2101,7 @@ The following are other parameters. The type and value range for each parameter 
 +-------------------------------------+--------+----------------+----------------+----------------+
 | vacuum_ovfp_check_threshold         | int    | 1000           | 2              | INT_MAX        |
 +-------------------------------------+--------+----------------+----------------+----------------+
-| vacuum_ovfp_check_duration          | int    | 2678400        | 60             | INT_MAX        |
+| vacuum_ovfp_check_duration          | int    | 744H           | 1MIN           | INT_MAX        |
 +-------------------------------------+--------+----------------+----------------+----------------+
 
 **access_ip_control**
@@ -2301,7 +2301,7 @@ The following are other parameters. The type and value range for each parameter 
 
 **vacuum_ovfp_check_duration**
 
- **vacuum_ovfp_check_duration** sets the period to keep the information collected by the **vacuum_ovfp_check_threshold**. Information that has not been updated within the setting period is deleted. The unit of the input value is seconds, and the default value is 2678400 seconds, which corresponds to 31 days.
+ **vacuum_ovfp_check_duration** sets the period to keep the information collected by the **vacuum_ovfp_check_threshold**. Information that has not been updated within the setting period is deleted. If the unit of the input value is omitted, it is millisecond, and the default value is 744 hours, which corresponds to 31 days. When setting, you can use ms/s/min/h as the unit.
 
 .. _broker-configuration:
 

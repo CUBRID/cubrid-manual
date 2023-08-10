@@ -16,7 +16,7 @@ CUBRID DBLink 소개
 CUBRID DBLink는 동일 기종인 CUBRID와 이기종인 Oracle, MySQL, MariaDB의 데이타베이스의 정보를 조회할 수 있도록 기능을 제공하고 있다.
 외부 데이타베이스의 정보를 마치 하나의 데이터베이스에서 조회하는 것과 같은 효과를 발휘한다. 단 외부 데이타베이스를 여러 개 설정은 가능 하나, 정보를 조회할 때는 한 개의 타 데이타베이스의 정보만 조회가 가능하다.
 
-CUBRID DBLink는 FROM절에 DBLINK키워드를 이용하여 연결될 서버를 명시하고, 원격 서버에서 실행될 쿼리를 명시하는 형태로 사용할 수 있으며, 테이블 확장명 형태로도 사용이 가능하다. INSERT/UPDATE/DELETE/MERGE와 같은 DML 질의는 반드리 테이블 확장명으로만 사용할 수 있다.
+CUBRID DBLink는 FROM절에 DBLINK키워드를 이용하여 연결될 서버를 명시하고, 원격 서버에서 실행될 질의를 명시하는 형태로 사용할 수 있으며, 테이블 확장명 형태로도 사용이 가능하다. INSERT/UPDATE/DELETE/MERGE와 같은 DML 질의는 반드시 테이블 확장명으로만 사용할 수 있다.
 
 .. _dblink-diagram:
 

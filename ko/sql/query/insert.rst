@@ -219,7 +219,7 @@ INSERT 문에 원격 테이블을 명시하여 SELECT 질의를 사용하면 하
     --inserting column value with SELECT subquery specified in the value list
     INSERT INTO a_tbl2@server1 VALUES(8, SELECT name FROM a_tbl1@server1 WHERE name <'bbb', DEFAULT);
 
-    SELECT * FROM a_tbl2;
+    SELECT * FROM a_tbl2@server1;
 
 ::
 

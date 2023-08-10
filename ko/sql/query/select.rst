@@ -146,6 +146,7 @@ FROM 절
 *   개별 테이블(single table)
 *   부질의(subquery)
 *   유도 테이블(derived table)
+*   원격 테이블(remote table)
 
 ::
 
@@ -158,6 +159,7 @@ FROM 절
      
     <table_specification> ::=
         <single_table_spec> [<correlation>] |
+        <remote_table_spec> [<correlation>] |
         <metaclass_specification> [<correlation>] |
         <subquery> <correlation> |
         TABLE (<expression>) <correlation> |
@@ -167,6 +169,8 @@ FROM 절
      
     <single_table_spec> ::= [ONLY] [schema_name.]table_name |
                           ALL [schema_name.]table_name [EXCEPT [schema_name.]table_name]
+
+    <remote_table_spec> ::= [schema_name.]table_name@server_name
      
     <metaclass_specification> ::= CLASS [schema_name.]class_name
      
@@ -253,6 +257,43 @@ FROM 절
 
 .. _dblink-clause:
 
+원격 테이블
+-----------
+
+FROM절에 원격지 테이블을 명시할 수 있으며, 원격지 서버의 테이블을 명시할 때는 '@'를 사용하여table_name@server_name처럼 테이블 확장명을 사용한다. 원격지 서버는CUBRID 뿐만아니라 ORACLE이나 MySQL 혹은 MariaDB가 될 수 있다. 원격테이블은 최적화 단계를 거치면서 DBLINK 구문으로 재작성되어 실행된다.
+
+.. code-block:: sql
+
+   -- at remote-side, "remote_server"
+   CREATE TABLE remote_tbl (
+     id INT,
+     name VARCHAR(32)
+   );
+
+   INSERT INTO remote_tbl VALUES (1, 'Kim');
+   INSERT INTO remote_tbl VALUES (2, 'Lee');
+   INSERT INTO remote_tbl VALUES (3, 'Park');
+
+::
+
+   -- at local-side
+   SELECT *
+   FROM remote_tbl@remote_server rem
+   WHERE id < 3;
+
+::
+
+       id       name
+   ===================
+        1       Kim
+        2       Lee
+
+DBLINK 구문으로 재작성된 쿼리는 아래와 같다.
+
+.. code-block:: sql
+
+   SELECT *
+   FROM DBLINK(remote_server, 'SELECT id, name FROM remote_tbl WHERE id < 3') AS dbl (id INT, name VARCHAR(32));
 
 DBLINK
 --------

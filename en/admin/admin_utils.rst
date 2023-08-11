@@ -606,7 +606,7 @@ The following shows [options] available with the **cubrid copydb** utility.
   -i, --control-file=FILE         copying volumes over several locations written in the control file
   -r, --replace                   replace an existing database
   -d, --delete-source             delete a source database
-      --copy-lob-path             copy external storage PATH for LOB data from source database. cannot be used with -B option
+      --copy-lob-path=PATH        copy external storage PATH for LOB data from source database
   -B, --lob-base-path=PATH        base directory PATH for external LOB data
 
 
@@ -3399,10 +3399,10 @@ The following table shows <operation> available with the cubrid tde utility.
 
 ::
 
-    -s, --show-keys               print key information set on the database and the key file 
-    -n, --generate-new-key        generate a new key in the key file 
-    -d, --delete-key=KEY_INDEX    delete a key in the key file 
-    -c, --change-key=KEY_INDEX    change the key set on the database for another key in the key file 
+    -s, --show-keys               print key information set on the database and the key file (_keys)
+    -n, --generate-new-key        generate a new key in the key file (_keys)
+    -d, --delete-key=KEY_INDEX    delete a key in the key file (_keys)
+    -c, --change-key=KEY_INDEX    change the key set on the database for another key in the key file (_keys)
 
 
 .. option:: -s, --show-keys

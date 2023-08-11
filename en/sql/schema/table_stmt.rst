@@ -1437,7 +1437,7 @@ If you set the type, size, and attribute to apply to a new column with the **CHA
 When you change data types using the **CHANGE** clause or the **MODIFY** clause, the data can be modified. For example, if you shorten the length of a column, the character string may be truncated if the value of configuration parameter alter_table_change_type_strict is set to **no**. But if the parameter value is set to **yes**, the change or modify is not allowed and it returns an error.
 the configuration parameter allow_truncated_string also affect the similar as alter_table_change_type_strict.
 
-When changing the type of a column for which a default value is specified, if the original default value cannot be coerced to the changed type, an error occurs as shown in the example below.
+When changing the type of a column specified  a default value, if the default value can't be coerced to the changed type, an error occurs as shown in the example below.
 
 .. code-block:: sql
 

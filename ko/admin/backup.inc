@@ -15,6 +15,21 @@ backupdb
 
 .. program:: backupdb
 
+::
+
+  -D, --destination-path=<백업> 볼륨이 저장될 디렉터리 경로
+  -r, --remove-archive         불필요한 로그 파일을 지움
+  -l, --level=LEVEL            백업 수준
+  -o, --output-file=<파일>     자세한 백업 메시지를 파일에 출력합니다.
+  -S, --SA-mode                독립 모드 실행
+  -C, --CS-mode                클라이언트 서버 모드 실행
+      --no-check               데이터베이스의 정합성 확인 작업을 수행하지 않습니다
+  -t, --thread-count=COUNT     백업을 수행하는 스레드 개수
+      --no-compress            백업 볼륨을 압축하지 않습니다
+      --sleep-msecs=N          매 1M 읽기 마다 N 밀리초를 쉽니다
+  -k, --separate-keys          TDE에 사용되는 Key File (_keys)을 백업볼륨에 포함하지 않고 별개의 파일로 분리합니다.
+
+
 .. option:: -D, --destination-path=PATH
 
     지정된 디렉터리에 백업 파일이 저장되도록 하며, 현재 존재하는 디렉터리가 지정되어야 한다. 그렇지 않으면 지정한 이름의 백업 파일이 생성된다. **-D** 옵션이 지정되지 않으면 백업 파일은 해당 데이터베이스의 위치 정보를 저장하는 파일인 **databases.txt** 에 명시된 로그 디렉터리에 생성된다. ::
@@ -253,6 +268,18 @@ restoredb
 다음은 **cubrid restoredb** 유틸리티와 결합할 수 있는 옵션을 정리한 표이다. 대소문자가 구분됨을 주의한다.
 
 .. program:: restoredb
+
+::
+
+  -d, --up-to-date=DATE             주어진 시간으로 데이터베이스 상태를 복구
+      --list                        복구를 하지 않고 모든 백업 볼륨을 나열
+  -B, --backup-file-path=PATH       백업된 볼륨이 존재하는 디렉터리 경로
+  -l, --level=LEVEL                 복구에 사용될 백업의 레벨
+  -p, --partial-recovery            archive 로그가 존재하지 않으면 강제로 partial recovery 수행함
+  -o, --output-file=FILE            출력 메시지가 저장될 파일
+  -u, --use-database-location-path  데이터베이스 위치 파일에 설정된 경로에 데이터베이스 볼륨과 로그 볼륨을 복구
+  -k, --keys-file-path              복구에 사용될 키 파일 (_keys)의 경로
+
 
 .. option:: -d, --up-to-date=DATE
 

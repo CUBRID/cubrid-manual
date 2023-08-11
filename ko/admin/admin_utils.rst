@@ -88,6 +88,25 @@ createdb
 
 .. program:: createdb
 
+::
+
+      --db-volume-size=SIZE           처음 생성되는 볼륨(generic)의 크기
+      --db-page-size=SIZE             바이트 단위의 데이터베이스 페이지 크기
+      --log-volume-size=SIZE          로그 볼륨의 크기
+      --log-page-size=SIZE            바이트 단위의 로그 페이지 크기
+      --comment=COMMENT               데이터베이스에 관한 설명
+  -F, --file-path=PATH                데이터베이스가 생성되는 디렉터리 경로
+  -L, --log-path=PATH                 로그 볼륨이 저장되는 디렉터리 경로
+  -B, --lob-base-path=PATH            LOB 파일이 저장되는 디렉터리 경로
+      --server-name=HOST              서버 호스트 이름
+  -r, --replace                       같은 이름의 데이터베이스가 존재하면 덮어쓰기
+      --more-volume-file=FILE         추가로 확장될 볼륨에 대한 제어 파일
+      --user-definition-file=FILE     데이터베이스 사용자를 정의하는 파일
+      --csql-initialization-file=FILE 데이터베이스 생성 후 CSQL에서 FILE에 저장된 질의문을 실행
+  -o, --output-file=FILE              출력 메시지를 파일에 저장
+  -v, --verbose                       상세한 상태 정보를 화면 출력
+
+
 .. option:: --db-volume-size=SIZE
 
     생성될 데이터베이스 볼륨의 크기를 지정한다. 기본값은 시스템 파라미터 **db_volume_size** 에 지정된 값이다. 단위는 K, M, G 및 T로 설정할 수 있으며, 각각 킬로바이트(KB), 메가바이트(MB), 기가바이트(GB) 및 테라바이트(TB)를 나타낸다. 단위를 생략하면 바이트 단위가 적용된다. 데이터베이스의 크기는 항상 64개 디스크 섹터의 배수로 올림된다. 이 값은 페이지의 크기에 따라 달라질 수 있으며, 페이지 크기가 각각 4k, 8k 및 16k인 경우 16M, 32M 또는 64M이 될 수 있다.
@@ -328,6 +347,18 @@ CUBRID 볼륨을 세부적으로 관리하려면 addvoldb 를 사용하면 된�
 
 .. program:: addvoldb
 
+::
+
+      --db-volume-size=SIZE        추가될 볼륨의 크기
+  -n, --volume-name=NAME           볼륨 이름
+  -F, --file-path=PATH             데이터베이스 파일에 대한 볼륨경로
+      --comment=COMMENT            볼륨 주석
+  -p, --purpose=PURPOSE            볼륨 사용 용도
+  -S, --SA-mode                    독립 모드 실행
+  -C, --CS-mode                    클라이언트 서버 모드 실행
+      --max-writesize-in-sec=SIZE  초당 추가될 볼륨의 크기
+
+
 .. option:: --db-volume-size=SIZE
 
     **\-\-db-volume-size** 지정한 데이터베이스에 추가될 볼륨 크기를 지정하는 옵션이다. **\-\-db-volume-size** 옵션을 생략하면 시스템 파라미터 **db_volume_size** 의 값이 기본값으로 사용된다. 단위는 K, M, G 및 T로 설정할 수 있으며, 각각 킬로바이트(KB), 메가바이트(MB), 기가바이트(GB) 및 테라바이트(TB)를 나타낸다. 단위를 생략하면 바이트 단위가 적용된다. 데이터베이스의 크기는 항상 64개 디스크 섹터의 배수로 올림된다. 이 값은 페이지의 크기에 따라 달라질 수 있으며, 페이지 크기가 각각 4k, 8k 및 16k인 경우 16M, 32M 또는 64M이 될 수 있다
@@ -421,6 +452,12 @@ deletedb
 
 .. program:: deletedb
 
+::
+
+  -o, --output-file=FILE       출력 메시지가 저장될 파일
+  -d, --delete-backup          백업 볼륨을 지움
+
+
 .. option:: -o, --output-file=FILE
 
     데이터베이스를 삭제하면서 출력되는 메시지를 인자로 지정한 파일에 기록하는 명령이다. **cubrid deletedb** 유틸리티를 사용하면 데이터베이스 위치 정보 파일( **databases.txt** )에 기록된 데이터베이스 정보가 함께 삭제된다. ::
@@ -460,6 +497,13 @@ renamedb
 다음은 **cubrid renamedb** 에 대한 [options]이다.
 
 .. program:: renamedb
+
+::
+
+  -E, --extended-volume-path=PATH 확장 볼륨이 저장되는 디렉터리 경로
+  -i, --control-file=FILE         여러 개의 볼륨들이 각각 저장되는 디렉터리 경로를 지정하는 제어 파일
+  -d, --delete-backup             백업 볼륨을 지움
+
 
 .. option:: -E, --extented-volume-path=PATH
 
@@ -546,6 +590,19 @@ copydb
 **cubrid copydb** 에 대한 [options]는 다음과 같다.
 
 .. program:: copydb
+
+::
+
+      --server-name=HOST          서버 호스트 이름
+  -F, --file-path=PATH            데이터베이스가 저장되는 디렉터리 경로
+  -L, --log-path=PATH             로그 볼륨이 저장되는 디렉터리 경로
+  -E, --extended-volume-path=PATH 확장 볼륨이 저장되는 디렉터리 경로
+  -i, --control-file=FILE         여러 개의 볼륨들이 각각 저장되는 디렉터리 경로를 지정하는 제어 파일
+  -r, --replace                   같은 이름의 데이터베이스가 존재하면 덮어쓰기
+  -d, --delete-source             복사 후 원본 데이터베이스 삭제
+      --copy-lob-path=PATH        원본 데이터베이스의 LOB 파일 디렉터리 경로를 복사. -B 옵션과 같이 사용할 수 없음
+  -B, --lob-base-path=PATH        LOB 파일이 저장되는 디렉토리 경로
+
 
 .. option:: --server-name=HOST
 
@@ -638,11 +695,24 @@ installdb
 
 .. program:: installdb
 
+::
+
+      --server-name=HOST       서버 호스트 이름
+  -F, --file-path=PATH         데이터베이스 볼륨을 위한 디렉터리 경로
+  -L, --log-path=PATH          로그 볼륨을 위한 디렉터리 경로
+
+
 .. option:: --server-name=HOST
 
     대상 데이터베이스의 서버 호스트 정보를 지정된 호스트 명으로 **databases.txt** 에 등록한다. 이 옵션을 생략하면, 현재의 호스트 정보가 등록된다.  ::
 
         cubrid installdb --server-name=cub_server1 testdb
+
+.. option:: --file-path=PATH
+
+    대상 데이터베이스의 데이터베이스 볼륨을 위한 디렉토리 경로를 **databases.txt** 에 등록한다. 이 옵션을 생략하면 현재 작업 디렉토리 경로가 등록된다. ::
+
+        cubrid installdb -F /home/cubrid/CUBRID/databases/testdb testdb
 
 .. option:: -L, --log-path=PATH
 
@@ -675,6 +745,16 @@ spacedb
 다음은 **cubrid spacedb** 에 대한 [options]이다.
 
 .. program:: spacedb
+
+::
+
+  -o, --output-file=FILE       파일로 출력을 재지정
+  -S, --SA-mode                독립 모드 실행
+  -C, --CS-mode                클라이언트 서버 모드 실행
+      --size-unit={PAGE|M|G|T|H} 출력 단위(page, mega, giga, tera, human readable) 설정
+  -s, --summarize              볼륨 용도별 합계 결과 출력
+  -p, --purpose                각 볼륨의 목적별 (데이터/인덱스/임시) 사용량을 출력
+
 
 .. option:: -o FILE
 
@@ -799,6 +879,17 @@ compactdb
 
 .. program:: compactdb
 
+::
+
+  -v, --verbose                     많은 상태 정보 출력
+  -S, --SA-mode                     독립 모드 실행
+  -C, --CS-mode                     클라이언트 서버 모드 실행
+  -i, --input-class-file=FILE       테이블 이름을 포함하는 FILE 이름
+  -p, --pages-commited-once=NUMBER  한 번에 커밋할 수 있는 최대 페이지 개수
+  -d, --delete-old-repr             카탈로그에서 과거 테이블 표현을 삭제
+  -I, --Instance-lock-timeout       인스턴스 잠금에 대한 타임아웃
+  -c, --class-lock-timeout          클래스 잠금에 대한 타임아웃
+
 .. option:: -v, --verbose
 
     어느 클래스가 현재 정리되고 있는지, 얼마나 많은 인스턴스가 그 클래스를 위하여 처리되었는지를 알리는 메시지를 화면에 출력할 수 있다. ::
@@ -894,6 +985,12 @@ plandump
 
 .. program:: plandump
 
+::
+
+  -d, --drop                   서버 케시에 있는 모든 플랜 삭제
+  -o, --output-file=FILE       출력 메시지를 재지정할 파일
+
+
 .. option:: -d, --drop
 
     캐시에 저장된 질의 수행 계획을 제거한다. ::
@@ -928,6 +1025,14 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
 다음은 **cubrid statdump** 에 대한 [options]이다.
 
 .. program:: statdump
+
+::
+
+  -i, --interval=S             매 S 초마다 통계를 출력
+  -o, --output-file=FILE       출력 메시지를 재지정할 파일
+  -c, --cumulative             누적값을 출력
+  -s, --substr=STRING          지정한 문자열이 포함된 항목만 출력
+
 
 .. option:: -i, --interval=SECOND
 
@@ -2835,6 +2940,13 @@ tranlist
 
 .. program:: tranlist
 
+::
+
+  -s, --summary                질의정보 및 락 정보 생략
+      --sort-key=COLUMN_NUMBER 정렬할 컬럼번호
+      --reverse                내림차순 정렬수행
+
+
 .. option:: -s, --summary
 
     요약 정보만 출력한다(질의 수행 정보 또는 잠금 관련 정보를 생략).
@@ -2931,6 +3043,19 @@ killtran
 
 .. program:: killtran
 
+::
+
+  -i, --kill-transaction-index=INDEX로 지정되는 해당 트랜잭션 종료
+      --kill-user-name=ID            ID로 지정되는 사용자의 모든 트랜잭션 종료
+      --kill-host-name=HOST          HOST로 지정되는 클라이언트의 모든 트랜잭션 종료
+      --kill-program-name=NAME       NAME으로 지정되는 모든 트랜잭션 종료
+      --kill-sql-id=SQL_ID           SQL_ID에 해당하는 질의를 실행중인 모든 트랜잭션 종료
+  -p, --dba-password=PASS            DBA 패스워드
+  -q, --query-exec-info              현재 활성화된 트랜잭션에 대한 질의 수행정보를 보여줌
+  -d, --display-information          현재 활성화된 트랜잭션에 대한 정보 보여줌
+  -f, --force                        사용자 확인 없이 지정된 트랜잭션 종료
+
+
 .. option:: -i, --kill-transaction-index=ID1,ID2,ID3
 
     지정한 인덱스에 해당하는 트랜잭션을 제거한다.  쉼표(,)로 구분하여 제거하고자 하는 트랜잭션 ID 여러 개를 지정할 수 있다. 제거할 트랜잭션 리스트에 유효하지 않은 트랜잭션 ID가 지정되면 무시된다.::
@@ -3014,6 +3139,23 @@ checkdb
 다음은 **cubrid checkdb**\에 대한 [options]이다.
 
 .. program:: checkdb
+
+::
+
+  -S, --SA-mode                독립 모드 실행
+  -C, --CS-mode                클라이언트 서버 모드 실행
+  -r, --repair                 비 일관성 발견 시 복구
+      --check-prev-link        인덱스 링크의 오류를 검사
+      --repair-prev-link       인덱스 링크가 잘못된 경우 복구 수행
+  -i, --input-class-file=FILE  클래스 이름이 나열된 입력 파일 명시
+      --check-file-tracker     파일 트랙커의 모든 파일의 페이지를 검사
+      --check-heap             모든 힙 파일 검사
+      --check-catalog          카타로그 정보에 일관성 검사
+      --check-btree            모든 인덱스 유효 검사
+      --check-class-name       클래스 정보의 일치 여부 검사
+      --check-btree-entries    모든 인덱스 엔트리의 일관성 검사
+  -I, --index-name=INDEX_NAME  검사할 인덱스 지정
+
 
 .. option:: -S, --SA-mode
 
@@ -3112,6 +3254,13 @@ diagdb
 
 .. program:: diagdb
 
+::
+
+  -d, --dump-type=TYPE         출력 범위 지정
+  -o, --output-file=FILE       출력 메시지를 재지정할 파일
+      --emergency              비상시 재시작
+
+
 .. option:: -d, --dump-type=TYPE
 
     데이터베이스의 전체 파일에 대한 기록 상태를 출력할 때 출력 범위를 지정한다. 생략하면 기본값인 -1이 지정된다. ::
@@ -3173,6 +3322,14 @@ paramdump
 
 .. program:: paramdump
 
+::
+
+  -o, --output-file=FILE       출력 메시지를 재지정할 파일
+  -b, --both                   서버/클라이언트 프로세스에 사용하는 파라미터 정보 출력
+  -S, --SA-mode                독립 모드 실행
+  -C, --CS-mode                클라이언트 서버 모드 실행
+
+
 .. option:: -o, --output-file=FILE
 
     데이터베이스의 서버/클라이언트 프로세스에서 사용하는 파라미터 정보를 지정된 파일에 저장하는 옵션이며, 파일은 현재 디렉터리에 생성된다. **-o** 옵션이 지정되지 않으면 메시지는 콘솔 화면에 출력한다. ::
@@ -3219,6 +3376,14 @@ tde
 다음은 **cubrid tde** 에 대한 오퍼레이션 (operation)에 대한 설명이다. 다음 중 하나의 작업이 주어져야 한다.
 
 .. program:: tde
+
+::
+
+    -s, --show-keys               데이터베이스에 등록된 키, 키 파일 (_keys)내의 키들에 대한 정보를 출력
+    -n, --generate-new-key        키 파일 (_keys)에 새로운 키를 추가; 최대 갯수: 128
+    -d, --delete-key=KEY_INDEX    키 파일 (_keys)의 한 키를 제거
+    -c, --change-key=KEY_INDEX    데이터베이스에 등록된 키를 키 파일 (_keys)에 존재하는 다른 키로 변경
+
 
 .. option:: -s, --show-keys
 
@@ -3381,6 +3546,17 @@ flashback
 다음은 **cubrid flashback** 에서 사용하는 [options]이다.
 
 .. program:: flashback
+
+::
+
+    -o, --output-file=FILE      출력 메시지를 FILE로 리디렉션합니다. 
+    -u, --user=ID               플래시백할 SQL 문을 실행한 사용자를 지정합니다
+    -p, --dba-password          DBA 사용자의 비밀번호
+    -s, --start-date=DATE       플래시백의 시작 날짜를 지정합니다. 
+    -e, --end-date=DATE         플래시백의 종료 날짜를 지정합니다. 
+    --detail                    각 SQL 문에 대한 자세한 정보를 출력합니다.
+    --oldest                    시작 시간부터 종료 시간까지 수행된 SQL문에 대하여 시간 순으로 플래시백을 수행합니다.
+
 
 .. option:: -o, --output-file=FILE
 

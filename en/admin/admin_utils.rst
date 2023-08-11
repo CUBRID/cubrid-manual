@@ -88,6 +88,25 @@ The following shows [options] available with the **cubrid** **createdb** utility
 
 .. program:: createdb
 
+::
+
+      --db-volume-size=SIZE           size of first information volume
+      --db-page-size=SIZE             database page SIZE in bytes
+      --log-volume-size=SIZE          size of log archives
+      --log-page-size=SIZE            log page SIZE in bytes
+      --comment=COMMENT               COMMENT for a database
+  -F, --file-path=PATH                directory PATH for database volumes
+  -L, --log-path=PATH                 directory PATH for log volumes
+  -B, --lob-base-path=PATH            base directory PATH for external LOB data
+      --server-name=HOST              server's HOST name
+  -r, --replace                       replace an existing database
+      --more-volume-file=FILE         FILE contain specifications for creation of additional volumes
+      --user-definition-file=FILE     FILE contain user definitions
+      --csql-initialization-file=FILE FILE contain SQLs for an initialization of the database
+  -o, --output-file=FILE              redirect output messages to FILE
+  -v, --verbose                       enable verbose status messages
+
+
 .. option:: --db-volume-size=SIZE
 
     This option specifies the size of the database volume that will be created first. The default value is the value of the system parameter **db_volume_size**. You can set units as K, M, G and T, which stand for kilobytes (KB), megabytes (MB), gigabytes (GB), and terabytes (TB) respectively; if you omit the unit, bytes will be applied. The size of the database is always rounded up to 64 disk sectors, which depends on the size of a page and can be 16M, 32M or 64M for page size 4k, 8k and 16k respectively.
@@ -334,6 +353,18 @@ The following shows [options] available with the **cubrid addvoldb** utility.
 
 .. program:: addvoldb
 
+::
+
+      --db-volume-size=SIZE        size of additional volume
+  -n, --volume-name=NAME           NAME of information volume
+  -F, --file-path=PATH             PATH for adding volume file
+      --comment=COMMENT            COMMENT for adding volume file
+  -p, --purpose=PURPOSE            PURPOSE for adding volume file
+  -S, --SA-mode                    stand-alone mode execution
+  -C, --CS-mode                    client-server mode execution
+      --max-writesize-in-sec=SIZE  the amount of volume written per second
+
+
 .. option:: --db-volume-size=SIZE
 
     **\-\-db-volume-size** is an option that specifies the size of the volume to be added to a specified database. If the **\-\-db-volume-size** option is omitted, the value of the system parameter **db_volume_size** is used by default. You can set units as K, M, G and T, which stand for kilobytes (KB), megabytes (MB), gigabytes (GB), and terabytes (TB) respectively. If you omit the unit, bytes will be applied. The size of the database is always rounded up to 64 disk sectors, which depends on the size of a page and can be 16M, 32M or 64M for page size 4k, 8k and 16k respectively.
@@ -427,6 +458,12 @@ The following shows [options] available with the **cubrid deletedb** utility.
 
 .. program:: deletedb
 
+::
+
+  -o, --output-file=FILE       redirect output messages to FILE
+  -d, --delete-backup          delete backup volumes
+
+
 .. option:: -o, --output-file=FILE
 
     This option specifies the file name for writing messages::
@@ -466,6 +503,13 @@ In contrast, the **cubrid alterdbhost** utility configures or changes the host n
 The following shows [options] available with the **cubrid renamedb** utility.
 
 .. program:: renamedb
+
+::
+
+  -E, --extended-volume-path=PATH directory PATH for extended information volumes
+  -i, --control-file=FILE         renaming volumes over several locations written in the control file
+  -d, --delete-backup             delete backup volumes
+
 
 .. option:: -E, --extended-volume-path=PATH
 
@@ -552,6 +596,19 @@ If options are omitted, a target database is copied into the same directory of a
 The following shows [options] available with the **cubrid copydb** utility.
 
 .. program:: copydb
+
+::
+
+      --server-name=HOST          server's HOST name
+  -F, --file-path=PATH            directory PATH for database volumes
+  -L, --log-path=PATH             directory PATH for log volumes
+  -E, --extended-volume-path=PATH directory PATH for extended information volumes
+  -i, --control-file=FILE         copying volumes over several locations written in the control file
+  -r, --replace                   replace an existing database
+  -d, --delete-source             delete a source database
+      --copy-lob-path             copy external storage PATH for LOB data from source database. cannot be used with -B option
+  -B, --lob-base-path=PATH        base directory PATH for external LOB data
+
 
 .. option:: --server-name=HOST
 
@@ -644,6 +701,13 @@ The following shows [options] available with the **cubrid installdb** utility.
 
 .. program:: installdb
 
+::
+
+      --server-name=HOST       server HOST name
+  -F, --file-path=PATH         directory PATH for database volumes
+  -L, --log-path=PATH          directory PATH for log volumes
+
+
 .. option:: --server-name=HOST
 
     This option registers the server host information of a database to **databases.txt** with a specific host name. If this is not specified, the current host information is registered. ::
@@ -687,6 +751,16 @@ The tool can show brief aggregated information on database space usage, or detai
 The following shows [options] available with the **cubrid spacedb** utility.
 
 .. program:: spacedb
+
+::
+
+  -o, --output-file=FILE       redirect output messages to FILE
+  -S, --SA-mode                stand-alone mode execution
+  -C, --CS-mode                client-server mode execution
+      --size-unit={PAGE|M|G|T|H} set the display unit (page, mega, giga, tera, human readable)
+  -s, --summarize              display only a summary for each volume purpose
+  -p, --purpose                display the used size of each purpose(data/index/temp) of each volume
+
 
 .. option:: -o FILE
 
@@ -811,6 +885,18 @@ The following shows [options] available with the **cubrid compactdb** utility.
 
 .. program:: compactdb
 
+::
+
+  -v, --verbose                     enable verbose status messages
+  -S, --SA-mode                     stand-alone mode execution
+  -C, --CS-mode                     client-server mode execution
+  -i, --input-class-file=FILE       input FILE of table names
+  -p, --pages-commited-once=NUMBER  maximum number of pages to commit once
+  -d, --delete-old-repr             delete old class representations from catalog
+  -I, --Instance-lock-timeout       timeout for instance lock
+  -c, --class-lock-timeout          timeout for class lock
+
+
 .. option:: -v, --verbose
 
     You can output messages that shows which class is currently being compacted and how many instances have been processed for the class by using the **-v** option. ::
@@ -906,6 +992,12 @@ The following shows [options] available with the **cubrid plandump** utility.
 
 .. program:: plandump
 
+::
+
+  -d, --drop                   drop all plans in the server's cache
+  -o, --output-file=FILE       redirect output messages to FILE
+
+
 .. option:: -d, --drop
  
     This option drops the query plans stored in the cache. ::
@@ -940,6 +1032,14 @@ You can also use CSQL's session commands to check the statistics information onl
 The following shows [options] available with the **cubrid statdump** utility.
 
 .. program:: statdump
+
+::
+
+  -i, --interval=S             print stats every S secs
+  -o, --output-file=FILE       redirect output message to FILE
+  -c, --cumulative             print cumulative stats
+  -s, --substr=STRING          print stat item only that match the substring
+
 
 .. option:: -i, --interval=SECOND
 
@@ -2860,6 +2960,13 @@ The following shows [options] available with the **cubrid tranlist** utility.
 
 .. program:: tranlist
 
+::
+
+  -s, --summary                print summarized information of transaction
+      --sort-key=COLUMN_NUMBER column number to be sorted
+      --reverse                reverse the sort result
+
+
 .. option:: -s, --summary
 
     This option outputs only summarized information(it omits query execution information or locking information).
@@ -2956,6 +3063,19 @@ The following shows [options] available with the **cubrid killtran** utility.
 
 .. program:: killtran
 
+::
+
+  -i, --kill-transaction-index=INDEX kill transaction with transaction INDEX
+      --kill-user-name=ID            kill all transactions with user ID
+      --kill-host-name=HOST          kill all transactions with client HOST
+      --kill-program-name=NAME       kill all transactions with client program NAME
+      --kill-sql-id=SQL_ID           kill all transactions with SQL_ID
+  -p, --dba-password=PASS            password of the DBA user
+  -q, --query-exec-info              display information about query execution information of active transactions
+  -d, --display-information          display information about active transactions
+  -f, --force                        kill the transaction without a prompt for verification
+
+
 .. option:: -i, --kill-transaction-index=ID1,ID2,ID3
 
     This option kills transactions in a specified index. Several transaction indexes can be specified by separating with comma(,). If there is an invalid transaction ID among several IDs, it is ignored. ::
@@ -3039,6 +3159,23 @@ The **cubrid checkdb** utility is used to check the consistency of a database. Y
 The following shows [options] available with the **cubrid checkdb** utility.
 
 .. program:: checkdb
+
+::
+
+  -S, --SA-mode                stand-alone mode execution
+  -C, --CS-mode                client-server mode execution
+  -r, --repair                 repair when inconsistency is found
+      --check-prev-link        check only previous links of indices
+      --repair-prev-link       repair previous links of indices
+  -i, --input-class-file=FILE  input FILE of class names
+      --check-file-tracker     check all allocated pages of file
+      --check-heap             check all pages of heap files
+      --check-catalog          check catalog consistency
+      --check-btree            check all btree indices
+      --check-class-name       check class name consistency
+      --check-btree-entries    check entries of btree consistency
+  -I, --index-name=INDEX_NAME  index name that will be checked only
+
 
 .. option:: -S, --SA-mode
 
@@ -3137,6 +3274,13 @@ The following shows [options] available with the **cubrid diagdb** utility.
 
 .. program:: diagdb
 
+::
+
+  -d, --dump-type=TYPE         TYPE of dump
+  -o, --output-file=FILE       redirect output messages to FILE
+      --emergency              emergency restart
+
+
 .. option:: -d, --dump-type=TYPE
 
     This option specifies the output range when you display the information of all files in the *demodb* database. If any option is not specified, the default value of -1 is used. ::
@@ -3198,6 +3342,14 @@ The following shows [options] available with the **cubrid paramdump** utility.
 
 .. program:: paramdump
 
+::
+
+  -o, --output-file=FILE       redirect output message to FILE
+  -b, --both                   dump both client and server parameters
+  -S, --SA-mode                stand-alone mode execution
+  -C, --CS-mode                client-server mode execution
+
+
 .. option:: -o, --output-file=FILE
 
     The **-o** option is used to store information of the parameters used in the server/client process of the database into a specified file. The file is created in the current directory. If the **-o** option is not specified, the message is displayed on a console screen. ::
@@ -3244,6 +3396,14 @@ The **cubrid tde** utility is used to manage the TDE encryption of the database 
 The following table shows <operation> available with the cubrid tde utility.
 
 .. program:: tde
+
+::
+
+    -s, --show-keys               print key information set on the database and the key file 
+    -n, --generate-new-key        generate a new key in the key file 
+    -d, --delete-key=KEY_INDEX    delete a key in the key file 
+    -c, --change-key=KEY_INDEX    change the key set on the database for another key in the key file 
+
 
 .. option:: -s, --show-keys
 
@@ -3323,6 +3483,14 @@ The **cubrid vacuumdb** utility is used to vacuum deleted records and unnecessar
 The following shows [options] available with the **cubrid vacuumdb** utility.
 
 .. program:: vacuumdb
+
+::
+
+  -o, --output-file=FILE       redirect output messages to FILE
+      --dump                   dump current state of vacuum
+  -S, --SA-mode                stand-alone mode execution
+  -C, --CS-mode                client-server mode execution
+
 
 .. option:: -o, --output-file=FILE
 
@@ -3406,6 +3574,17 @@ Each column's meaning in the **Flashback Summary** is as following.
 The following shows [options] available with the **cubrid flashback** utility.
 
 .. program:: flashback
+
+::
+
+    -o, --output-file=FILE        redirect output message to FILE
+    -u, --user=ID                 specify the user who executed the SQL statement to flashback
+    -p, --dba-password            password of the DBA user
+    -s, --start-date=DATE         specify starting DATE for flashback
+    -e, --end-date=DATE           specify end DATE for the flashback
+    --detail                      output a detailed information for each SQL statement.
+    --oldest                      flashback is performed in chronological order for SQL statements executed from start time to end time;
+
 
 .. option:: -o, --output-file=FILE
 

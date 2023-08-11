@@ -483,7 +483,7 @@ loaddb
 
         cubrid loaddb --ignore-class-file=skip_class_list -d demodb_objects newdb
 
-.. option:: --trigger-file=FILE
+.. option:: --trigger-file=FILE[:LINE]
 
     트리거 파일의 LINE번째부터 정의된 트리거 정보를 새로 생성한 newdb에 로딩하는 구문이다. ::
 

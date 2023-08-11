@@ -487,7 +487,7 @@ The following table shows [options] available with the **cubrid loaddb** utility
 
         cubrid loaddb --ignore-class-file=skip_class_list -d demodb_objects newdb
 
-.. option:: --trigger-file=FILE
+.. option:: --trigger-file=FILE[:LINE]
 
     This option loads the trigger information defined in the trigger file, from the LINE-th. ::
 

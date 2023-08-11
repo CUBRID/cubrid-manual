@@ -42,7 +42,7 @@ The following is [options] used in **cubrid unloaddb**.
   -d, --data-only             dump objects only
       --output-prefix=PREFIEX PREFIX for output files
       --hash-file=FILE        FILE for hash
-      --latest-image          when dumping objects, it dumps the latest image of objects in data volumes, not referring to log volumes (ignoring MVCC)
+      --latest-image          when dumping objects, it dumps the latest image of objects in data volumes.
   -v, --verbose               enable verbose status messages
       --use-delimiter         use '"' where an identifier begins and ends
   -S, --SA-mode               stand-alone mode execution

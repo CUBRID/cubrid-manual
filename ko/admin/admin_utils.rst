@@ -600,7 +600,7 @@ copydb
   -i, --control-file=FILE         여러 개의 볼륨들이 각각 저장되는 디렉터리 경로를 지정하는 제어 파일
   -r, --replace                   같은 이름의 데이터베이스가 존재하면 덮어쓰기
   -d, --delete-source             복사 후 원본 데이터베이스 삭제
-      --copy-lob-path=PATH        원본 데이터베이스의 LOB 파일 디렉터리 경로를 복사. -B 옵션과 같이 사용할 수 없음
+      --copy-lob-path=PATH        원본 데이터베이스의 LOB 파일 디렉터리 경로를 복사
   -B, --lob-base-path=PATH        LOB 파일이 저장되는 디렉토리 경로
 
 
@@ -3463,6 +3463,14 @@ vacuumdb
 다음은 **cubrid vacuumdb**\에서 사용할 수 있는 옵션들이다.
 
 .. program:: vacuumdb
+
+::
+
+  -o, --output-file=FILE       출력 메시지를 재지정할 파일
+      --dump                   현재 vacuum 상태 덤프
+  -S, --SA-mode                독립 모드 실행
+  -C, --CS-mode                클라이언트 서버 모드 실행
+
 
 .. option:: -o, --output-file=FILE
 

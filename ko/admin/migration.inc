@@ -392,7 +392,7 @@ loaddb
 
 .. option:: -s, --schema-file=FILE[:LINE]
 
-    스키마 파일 또는 트리거 파일의 LINE번째부터 정의된 스키마 정보 또는 트리거 정보를 새로 생성한 newdb에 로딩하는 구문이다. **-s** 옵션을 이용하여 스키마 정보를 먼저 로딩한 후, 실제 레코드를 로딩할 수 있다. 
+    스키마 파일의 LINE번째부터 정의된 스키마 정보를 새로 생성한 newdb에 로딩하는 구문이다. **-s** 옵션을 이용하여 스키마 정보를 먼저 로딩한 후, 실제 레코드를 로딩할 수 있다. 
 
     다음 예제에서 demodb_schema 파일은 언로드 작업에 의해 생성된 파일이며 언로드된 데이터베이스의 스키마 정보를 포함한다.
 
@@ -485,7 +485,7 @@ loaddb
 
 .. option:: --trigger-file=FILE
 
-    데이터베이스에 로드할 트리거가 포함된 파일을 지정할 수있다. ::
+    트리거 파일의 LINE번째부터 정의된 트리거 정보를 새로 생성한 newdb에 로딩하는 구문이다. ::
 
         cubrid loaddb --trigger-file=demodb_triggers -d demodb_objects newdb
 

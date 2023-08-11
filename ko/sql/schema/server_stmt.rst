@@ -47,6 +47,16 @@ CREATE SERVER
     *   *password_string*: 원격 접속할 데이터베이스에 접속할 때 사용하는 *user_name*\에 대한 패스워드 문자열.
     *   *properties_string*: 원격 접속할 데이터베이스에 접속할 때 사용하는 property 정보 문자열.(최대 2047바이트)	
     *   *server_comment_string*: 서버 정보에 대한 커멘트를 지정한다.(최대 1023바이트)
+
+.. note::
+
+    db_name과 user_name은 식별자 형식과 문자열 리터럴 형식으로 모두 기술할 수 있다.
+    
+    * 식별자 형식의 예  
+             t123db,  "123db",  `123db`,  [124db]
+    * 문자열 형식의 예  
+             't123db', '123db'
+
   
 .. code-block:: sql
 

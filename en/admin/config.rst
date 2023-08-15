@@ -2301,7 +2301,7 @@ The following are other parameters. The type and value range for each parameter 
 
 **vacuum_ovfp_check_duration**
 
- **vacuum_ovfp_check_duration** sets the period to keep the information collected by the **vacuum_ovfp_check_threshold**. Information that has not been updated within the setting period is deleted. The unit of the input value is minutes.
+**vacuum_ovfp_check_duration** specifies the duration for which data related to the count of index overflow pages, gathered by vacuum threads, is retained. Data that remains unchanged within the specified duration will be automatically removed. The value of **vacuum_ovfp_check_duration** is measured in minutes.
 
 .. _broker-configuration:
 

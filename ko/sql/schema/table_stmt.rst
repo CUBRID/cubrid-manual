@@ -82,7 +82,7 @@ CREATE TABLE
                                ENCRYPT [=] [AES | ARIA] | 
                                AUTO_INCREMENT = initial_value
 
-      <index_with_option> ::= {DEDUPLICATE ‘=‘ dedup_level }
+      <index_with_option> ::= {DEDUPLICATE ‘=‘ deduplicate_level }
 
 
 *   **IF NOT EXISTS**: 생성하려는 테이블이 존재하는 경우 에러 없이 테이블을 생성하지 않는다.
@@ -98,7 +98,7 @@ CREATE TABLE
 *   *table_comment_string*: 테이블의 커멘트를 지정한다.
 *   *column_comment_string*: 칼럼의 커멘트를 지정한다.
 *   *index_comment_string*: 인덱스의 커멘트를 지정한다.
-*   *dedup_level*: deduplicate 레벨을 지정한다(0 ~ 14). 자세한 설명은 :ref:`deduplicate_overview`\를 참고한다.
+*   *deduplicate_level*: deduplicate 레벨을 지정한다(0 ~ 14). 자세한 내용은 :ref:`deduplicate_overview`\를 참고한다.
 
 .. note::
 
@@ -106,7 +106,7 @@ CREATE TABLE
 
 .. note::
 
-    *dedup_level*\은 0부터 14까지의 정수이다. 0은 **DEDUPLICATE** 옵션이 없었던 이전 버전과 동일한 구성의 인덱스를 의미한다.
+    *deduplicate_level*\은 0부터 14까지의 정수이다. 0은 **DEDUPLICATE** 옵션이 없었던 이전 버전과 동일한 구성의 인덱스를 의미한다.
 
 
 .. code-block:: sql
@@ -455,6 +455,8 @@ ON UPDATE
                     ON DELETE <referential_action> 
     
                     <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
+                    
+        <index_with_option> ::= {DEDUPLICATE ‘=‘ deduplicate_level}
 
 NOT NULL 제약
 ^^^^^^^^^^^^^
@@ -571,6 +573,8 @@ FOREIGN KEY 제약
         <referential_triggered_action> ::= ON UPDATE <referential_action> | ON DELETE <referential_action>
 
             <referential_action> ::= CASCADE | RESTRICT | NO ACTION  | SET NULL
+          
+        <index_with_option> ::= {DEDUPLICATE ‘=‘ deduplicate_level}
 
 *   *constraint_name*: 제약 조건의 이름을 지정한다.
 *   *foreign_key_name*: **FOREIGN KEY** 제약 조건의 이름을 지정한다. 생략할 수 있으며, 이 값을 지정하면 *constraint_name* 을 무시하고 이 이름을 사용한다.
@@ -590,6 +594,7 @@ FOREIGN KEY 제약
     *   **RESTRICT**: 기본키 값이 삭제되거나 업데이트되지 않도록 제한한다. 삭제 또는 업데이트를 시도하는 트랜잭션은 롤백된다.
     *   **SET NULL**: 기본키가 삭제되거나 업데이트되면, 이를 참조하는 외래키 칼럼 값을 **NULL** 로 업데이트한다.
     *   **NO ACTION**: **RESTRICT** 옵션과 동일하게 동작한다.
+*   *deduplicate_level*: deduplicate 레벨을 지정한다(0 ~ 14). 자세한 내용은 :ref:`deduplicate_overview`\를 참고한다.
 
 참조하는 테이블의 각 R1 행에 대해 참조되는 테이블의 R2 행이 있어야 하며, R1의 참조하는 각 컬럼의 값이 **NULL** 이거나 R2의 참조되는 해당 컬럼의 값과 동일해야 한다.
 
@@ -1133,14 +1138,14 @@ ADD COLUMN 절
 
                         <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
 
-                <index_with_option> ::= {DEDUPLICATE ‘=‘ dedup_level}
+                <index_with_option> ::= {DEDUPLICATE ‘=‘ deduplicate_level}
 
 *   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 칼럼을 추가할 테이블의 이름을 지정한다.
 *   <*column_definition*>: 새로 추가할 칼럼의 이름(최대 254 바이트), 데이터 타입, 제약 조건을 정의한다.
 *   **AFTER** *old_column_name*: 새로 추가할 칼럼 앞에 위치하는 기존 칼럼 이름을 명시한다.
 *   *comment_string*: 칼럼의 커멘트를 지정한다.
-*   *dedup_level*: deduplicate 레벨을 지정한다(0 ~ 14). 자세한 설명은 :ref:`deduplicate_overview`\를 참고한다.
+*   *deduplicate_level*: deduplicate 레벨을 지정한다(0 ~ 14). 자세한 내용은 :ref:`deduplicate_overview`\를 참고한다.
 
 .. code-block:: sql
 

@@ -29,7 +29,7 @@ CREATE INDEX
                   [COMMENT 'index_comment_string’]
 
              <index_with_clause> ::= {ONLINE [PARALLEL parallel_count]} | <index_with_option>
-             <index_with_option> ::= {DEDUPLICATE ‘=‘ dedup_level}
+             <index_with_option> ::= {DEDUPLICATE ‘=‘ deduplicate_level}
 
 
 *   **UNIQUE**: 유일한 값을 갖는 고유 인덱스를 생성한다.
@@ -38,11 +38,11 @@ CREATE INDEX
 *   *table_name*: 인덱스를 생성할 테이블의 이름을 명시한다.
 *   *column_name*: 인덱스를 적용할 칼럼의 이름을 명시한다. 다중 칼럼 인덱스를 생성할 경우 둘 이상의 칼럼 이름을 명시한다.
 *   **ASC** | **DESC**: 칼럼의 정렬 방향을 설정한다.
-*   *dedup_level*: deduplicate 레벨을 지정한다(0 ~ 14). 자세한 설명은 `DEDUPLICATE`_\를 참고한다.
+*   *deduplicate_level*: deduplicate 레벨을 지정한다(0 ~ 14). 자세한 내용은 `DEDUPLICATE`_\를 참고한다.
 
 .. note::
 
-    *dedup_level*\은 0부터 14까지의 정수이다. 0은 **DEDUPLICATE** 옵션이 없었던 이전 버전과 동일한 구성의 인덱스를 의미한다.
+    *deduplicate_level*\은 0부터 14까지의 정수이다. 0은 **DEDUPLICATE** 옵션이 없었던 이전 버전과 동일한 구성의 인덱스를 의미한다.
     
 
 *   <*filter_predicate*>: 필터링된 인덱스를 만드는 조건을 명시한다. 컬럼과 상수 간 비교 조건이 여러 개인 경우 **AND** 로 연결된 경우에만 필터링이 될 수 있다. 자세한 내용은 :ref:`filtered-index` 를 참고한다.
@@ -266,9 +266,13 @@ DEDUPLICATE
         CREATE INDEX i_tbl_b on tbl (b) WITH DEDUPLICATE=3 COMMENT 'for deduplicate level 3';
         CREATE INDEX i_tbl_b_c on tbl (b,c) WITH DEDUPLICATE=7 COMMENT 'for deduplicate level 1';
 
-.. note::
+.. warning::
 
-    * **deduplicate_key_level**\이 **\-1**\인 경우는 명시적인 방법으로 지정을 해도 내부적으로 무시되어 적용되지 않는다. 즉 이 경우에는 모든 인덱스는 *deduplicate level*\이 **0**\으로 생성된다.    
+    * **deduplicate_key_level**\이 **\-1**\인 경우는 명시적인 방법으로 지정을 해도 내부적으로 무시되어 적용되지 않는다. 즉 이 경우에는 모든 인덱스는 *deduplicate level*\이 **0**\으로 생성된다.
+
+
+.. note::
+    
     * 인덱스를 생성하는 시점의 키 필드의 구성이 UNIQUE를 보장 받는다면 사용자의 의도는 무시되고  *deduplicate level*\은 **0**\으로 생성된다.
         * 키 필드가 특정한 Primary Key 또는 Unique Index를 구성하는 키필드를 모두 포함하고 있는 경우
         * 단, 함수의 인수로 사용된 경우는 제외

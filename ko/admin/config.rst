@@ -2271,9 +2271,7 @@ HA 관련 파라미터
 
 **vacuum_ovfp_check_duration**
 
- **vacuum_ovfp_check_duration**\는 vacuum 쓰레드에 의해 수집된 인덱스 오버플로우 수와 그 관련 정보를 유지하는 기간을 지정한다. 설정한 기간 내에 업데이트되지 않은 정보는 제거된다. 값의 단위는 분이다.
-     
-     값의 단위는 분이다.
+ **vacuum_ovfp_check_duration**\는 vacuum 쓰레드에 의해 수집된 인덱스 오버플로우 수와 그 관련 정보를 유지하는 기간을 지정한다. 설정한 기간 내에 업데이트되지 않은 정보는 제거된다. 값의 단위는 분이다. 값의 단위는 분이다.
 
 .. _broker-configuration:
 

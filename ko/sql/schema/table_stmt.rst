@@ -1424,6 +1424,17 @@ CHANGE/MODIFY 절
 
 **CHANGE** 절이나 **MODIFY** 절로 칼럼에 데이터 타입을 변경할 때, 기존의 칼럼 값이 변경되면서 데이터가 변형될 수 있다. 예를 들어 문자열 칼럼의 길이를 줄이면 문자열이 잘릴 수 있으므로 주의해야 한다. 단, **alter_table_change_type_strict** 설정 값이 **yes** 인 경우 에러가 발생한다. 마찬가지로 **allow_truncated_string** 설정 값이 **no** 인 경우에도 에러가 발생한다.
 
+default값이 지정된 칼럼의 타입을 변경할 때, 지정된 default값이 변경된 타입으로 형변환이 불가능한 경우 아래의 예처럼 에러가 발생한다. 
+
+.. code-block:: sql
+
+    CREATE TABLE t_def (a bigint default 123456789012, b varchar(20));
+    ALTER TABLE t_def a a int;
+
+::
+
+    ERROR: A domain conflict exists on attribute "a".
+
 .. warning::
 
     *   CUBRID 2008 R3.1 이하 버전에서 사용되었던 **ALTER TABLE** *[schema_name.]table_name* **CHANGE** *column_name* **DEFAULT** *default_value* 구문은 더 이상 지원하지 않는다.

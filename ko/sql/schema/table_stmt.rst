@@ -1448,6 +1448,17 @@ AUTO_INCREMENT 속성의 컬럼 타입을 변경할 경우, AUTO_INCREMENT 속�
     ERROR: before '  varchar; '
     The domain of the attribute 'a' having an auto increment constraint is invalid.
 
+default값이 지정된 칼럼의 타입을 변경할 때, 지정된 default값이 변경된 타입으로 형변환이 불가능한 경우 아래의 예처럼 에러가 발생한다. 
+
+.. code-block:: sql
+
+    CREATE TABLE t_def (a bigint default 123456789012, b varchar(20));
+    ALTER TABLE t_def a a int;
+
+::
+
+    ERROR: A domain conflict exists on attribute "a".
+
 .. warning::
 
     *   CUBRID 2008 R3.1 이하 버전에서 사용되었던 **ALTER TABLE** *[schema_name.]table_name* **CHANGE** *column_name* **DEFAULT** *default_value* 구문은 더 이상 지원하지 않는다.

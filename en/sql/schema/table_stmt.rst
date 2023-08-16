@@ -1449,6 +1449,17 @@ When changing the type of the column specified AUTO_INCREMENT, it cannot be chan
     ERROR: before '  varchar; '
     The domain of the attribute 'a' having an auto increment constraint is invalid.
 
+When changing the type of a column specified  a default value, if the default value can't be coerced to the changed type, an error occurs as shown in the example below.
+
+.. code-block:: sql
+
+     CREATE TABLE t_def (a bigint default 123456789012, b varchar(20));
+     ALTER TABLE t_def a a int;
+
+::
+
+     ERROR: A domain conflict exists on attribute "a".
+
 .. warning::
 
     *   **ALTER TABLE** *[schema_name.]table_name* **CHANGE** *column_name* **DEFAULT** *default_value* syntax supported in CUBRID 2008 R3.1 or earlier version is no longer supported.

@@ -544,6 +544,29 @@ The following are the explanation regarding items of trace statistics.
     *   time: the estimated time(ms) in this operation
     *   rows: the number of the result rows in this operation; the number of result rows to which the data filter is applied
 
+* noscan: An operation that uses statistical information of index headers without scanning when executing an aggregate operation. (aggregate: count, min, max)
+
+    *   agl: aggregate lookup, index list used for aggregate operation
+
+        The following is an example for noscan and agl.
+
+::
+
+        SET TRACE ON;
+        CREATE TABLE agl_tbl (id INTEGER PRIMARY KEY, phone VARCHAR(20));
+        INSERT INTO agl_tbl VALUES (1, '123-456-789');
+        INSERT INTO agl_tbl VALUES (999, '999-999-999');
+
+        SELECT count(*), min(id), max(id) FROM agl_tbl;
+
+        SHOW TRACE;
+
+::
+
+        Trace Statistics:
+          SELECT (time: 0, fetch: 16, ioread: 0)
+            SCAN (table: agl_tbl), (noscan time: 0, fetch: 0, ioread: 0, readrows: 0, rows: 0, agl: pk_agl_tbl_id)
+
 **GROUPBY**    
 
 *   time: the estimated time(ms) in this operation

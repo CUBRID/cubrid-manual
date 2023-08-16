@@ -41,6 +41,7 @@ cubrid 유틸리티의 사용법(구문)은 다음과 같다. ::
         gen_tz [option] [<database-name>]  --- 공유 라이브러리로 컴파일할 수 있는 타임존 데이터가 포함된 C 소스 파일 생성
         dump_tz [option]  --- 타임존 관련 정보 출력
         tde <operation> [option] <database_name> --- TDE 암호화 관리 도구
+        vacuumdb [option] <database-name>  --- 데이터베이스의 삭제된 레코드 또는 불필요한 mvcc 관련 정보를 정리 및 관련 정보 확인하는 도구
         flashback [option] <database-name> <owner_name.class_name> --- 커밋된 특정 트랜잭션을 되돌릴 수 있도록 SQL 구문을 제공하는 도구
 
 cubrid 유틸리티 로깅
@@ -3278,6 +3279,50 @@ tde
 .. option:: -p, --dba-password=PASSWORD
 
     이 옵션 뒤에 오는 값은 **DBA** 의 암호이며 생략하면 프롬프트에서 입력해야 한다.
+
+.. _vacuumdb:
+
+vacuumdb
+--------
+
+ **cubrid vacuumdb** 유틸리티는 삭제된 레코드와 불필요한 mvcc 관련 정보를 정리하기 위해 vacuum을 수행하거나, vacuum 관련 상태 정보를 얻기 위해 사용된다. ::
+
+    cubrid vacuumdb [options] database_name
+
+*   **cubrid**: CUBRID 서비스 및 데이터베이스 관리를 위한 통합 유틸리티이다.
+
+*   **vacuumdb**: 데이터베이스의 레코드에서 삭제된 레코드와 불필요한 mvcc 관련 정보 정리 및 관련 정보를 확인하는 유틸리티이다.
+
+*   *database_name*: vacuum을 수행할 데이터베이스 이름이다.
+
+다음은 **cubrid vacuumdb**\에서 사용할 수 있는 옵션들이다.
+
+.. program:: vacuumdb
+
+.. option:: -o, --output-file=FILE
+
+    이 옵션은 vacuum에 대한 상태 정보를 저장할 파일명을 지정한다. 파일은 현재 디렉토리에 생성된다.  **-o** 옵션을 지정하지 않으면 콘솔 화면에 메시지가 표시된다. ::
+
+        cubrid vacuumdb -o db_output demodb
+
+.. option:: --dump
+
+    이 옵션은 vacuum에 대한 상태 정보를 표시하는 데 사용된다. 현재는 vacuum에서 참조하는 첫 번째 로그 페이지 ID와 로그 볼륨 이름을 표시한다. 사용자는 첫 번째 로그 페이지 ID의 변경을 통해 vacuum 작업의 진행 상황을 확인할 수 있으며, vacuum 작업을 위해 유지해야 하는 최소 로그 볼륨을 확인할 수 있다. 독립형 모드와 클라이언트/서버 모드 모두에서 사용할 수 있다.
+    **\-C** 옵션과 함께 지정되면 인덱스 vacuum시 인덱스 단말 노드 (leaf node) 의 임계값 이상의 오버플로우 페이지 읽기가 발생한 인덱스에 대한 정보를 함께 표시 한다. 이와 관련된 시스템 파라미터는 **vacuum_ovfp_check_duration**\과  **vacuum_ovfp_check_threshold**\가 있다.   ::
+
+        cubrid vacuumdb --dump demodb
+
+.. option:: -S, --SA-mode
+
+    이 옵션은 독립 실행형 모드인 데이터베이스에서 vacuumdb 동작을 수행하도록 한다. ::
+
+        cubrid vacuumdb -S demodb
+
+.. option:: -C, --CS-mode
+
+    이 옵션은 클라이언트/서버 모드에서 vacuumdb 동작을 수행하도록 한다. 이 모드에서는 vacuum은 수행할 수 없고 --dump 옵션과 함께 사용 해야한다. ::
+
+        cubrid vacuumdb -C demodb
 
 .. _flashback:
 

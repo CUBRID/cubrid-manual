@@ -381,6 +381,10 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               | supplemental_log                    | client/server parameter |         | int      | 0                              |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | regexp_engine                       | client/server parameter |         | string   | re2                            | available             |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | vacuum_ovfp_check_threshold         | server parameter        |         | int      | 1000                           |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | vacuum_ovfp_check_duration          | server parameter        |         | int      | 45000                          |                       |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 
 .. _lpg:
@@ -2095,6 +2099,10 @@ The following are other parameters. The type and value range for each parameter 
 +-------------------------------------+--------+----------------+----------------+----------------+
 | regexp_engine                       | string | re2            |                |                |
 +-------------------------------------+--------+----------------+----------------+----------------+
+| vacuum_ovfp_check_threshold         | int    | 1000           | 2              | INT_MAX        |
++-------------------------------------+--------+----------------+----------------+----------------+
+| vacuum_ovfp_check_duration          | int    | 45000          | 1              | 600000         |
++-------------------------------------+--------+----------------+----------------+----------------+
 
 **access_ip_control**
 
@@ -2286,6 +2294,14 @@ The following are other parameters. The type and value range for each parameter 
 **regexp_engine**
 
     **regexp_engine** is a parameter to choose a library in which regular expression operators and functions will perform. **cppstd** or **re2** can be set and the default value is **re2**. For more information on regular expression functionalities, refer to :doc:`/sql/function/regex_fn`.
+
+**vacuum_ovfp_check_threshold**
+
+ **vacuum_ovfp_check_threshold** collects index information when the number of leaf's overflow pages to be read is greater than the value, when index vacuum is performed. The default is 1000 pages.
+
+**vacuum_ovfp_check_duration**
+
+**vacuum_ovfp_check_duration** specifies the duration for which data related to the count of index overflow pages, gathered by vacuum threads, is retained. Data that remains unchanged within the specified duration will be automatically removed. The unit of it's value is minutes.
 
 .. _broker-configuration:
 

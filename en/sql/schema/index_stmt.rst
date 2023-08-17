@@ -37,7 +37,7 @@ For how to use indexes on the **SELECT** statement like Using SQL Hint, Descendi
 *   *table_name*: specifies the name of the table where the index is to be created.
 *   *column_name*: specifies the name of the column where the index is to be applied. To create a composite index, specify two or more column names.
 *   **ASC** | **DESC**: specifies the sorting order of columns.
-*   *deduplicate_level*: Specifies the deduplicate level (0 to 14). For details, see `DEDUPLICATE`_.
+*   *deduplicate_level*: specifies the deduplicate level (0 to 14). For details, see `DEDUPLICATE`_.
 
 .. note::
 

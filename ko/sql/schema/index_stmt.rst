@@ -282,9 +282,9 @@ DEDUPLICATE
         * 키 필드가 특정한 Primary Key 또는 Unique Index를 구성하는 키필드를 모두 포함하고 있는 경우
         * 단, 함수의 인수로 사용된 경우는 제외
 
-중복된 인덱스 
+중복된 인덱스
 
-    *deduplicate level*\을 제외한 모든 키 필드 및 필터 조건이 동일한 복수개의 인덱스를 정의 할 수 있다. 
+    *deduplicate level*\을 제외한 모든 키 필드 및 필터 조건이 동일한 복수개의 인덱스를 정의 할 수 있다.
 
     .. code-block:: sql
 

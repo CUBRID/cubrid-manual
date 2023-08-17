@@ -27,8 +27,8 @@ MERGE
     <merge_hint> ::=
     /*+ [ USE_UPDATE_IDX (<update_index_list>) ] [ USE_INSERT_IDX (<insert_index_list>) ] */
 
-*   <*target*>: 갱신하거나 삽입할 대상 테이블. 여러 개의 테이블 또는 뷰가 될 수 있다.
-*   <*source*>: 데이터를 가져올 원본 테이블. 하나의 테이블 또는 뷰가 될 수 있으며, 부질의(subquery)도 가능하다.
+*   <*target*>: 갱신하거나 삽입할 대상 테이블. 여러 개의 테이블 또는 뷰가 될 수 있으며 table-name@server-name처럼 원격 테이블도 지정할 수 있다.
+*   <*source*>: 데이터를 가져올 원본 테이블. 하나의 테이블 또는 뷰가 될 수 있으며, 부질의(subquery)도 가능하다. *target*\이 원격 테이블인 경우, *source*\도 *targe*\과 동일한 서버로 지정된 원격 테이블이거나 뷰이어야 한다. 혹은, target에 지정된 서버가 포함된 부질의이어야 한다.
 *   <*join_condition*>: 갱신할 조건을 명시한다.
 *   <*merge_update_clause*>: <*join_condition*> 조건이 TRUE이면 대상 테이블의 새로운 칼럼 값들을 지정한다.
 
@@ -180,3 +180,108 @@ MERGE
     WHEN MATCHED THEN UPDATE SET t.j=s.j WHERE s.i <> 1
     WHEN NOT MATCHED THEN INSERT VALUES (i,j);
      
+MERGE 문을 실행하기 위해서는 원본 테이블에 대해 SELECT 권한을 가져야 하며, 대상 테이블에 대해 UPDATE 절이 포함되어 있으면 UPDATE 권한, DELETE 절이 포함되어 있으면 DELETE 권한, INSERT 절이 포함되어 있으면 INSERT 권한을 가져야 한다.
+
+다음은 원격 서버의 source_table 값을 원격 서버의 target_table에 합치는 예이다.
+
+.. code-block:: sql
+
+    -- at remote server
+    -- source_table
+    CREATE TABLE source_table (a INT, b INT, c INT);
+    CREATE TABLE target_table (a INT, b INT, c INT);
+
+    -- at local server
+    -- source table
+    INSERT INTO source_table@srv1 VALUES (1, 1, 1);
+    INSERT INTO source_table@srv1 VALUES (1, 3, 2);
+    INSERT INTO source_table@srv1 VALUES (2, 4, 5);
+    INSERT INTO source_table@srv1 VALUES (3, 1, 3);
+
+    -- target_table
+    INSERT INTO target_table@srv1 VALUES (1, 1, 4);
+    INSERT INTO target_table@srv1 VALUES (1, 2, 5);
+    INSERT INTO target_table@srv1 VALUES (1, 3, 2);
+    INSERT INTO target_table@srv1 VALUES (3, 1, 6);
+    INSERT INTO target_table@srv1 VALUES (5, 5, 2);
+
+    MERGE INTO target_table@srv1 tt USING source_table@srv1 st
+    ON (st.a=tt.a AND st.b=tt.b)
+    WHEN MATCHED THEN UPDATE SET tt.c=st.c
+         DELETE WHERE tt.c = 1
+    WHEN NOT MATCHED THEN INSERT VALUES (st.a, st.b, st.c);
+
+    -- the result of above query
+    SELECT * FROM target_table@srv1;
+
+            a            b            c
+    =======================================
+            1            2            5
+            1            3            2
+            3            1            3
+            5            5            2
+            2            4            5
+
+다음은 원격 서버의 source_table 값을 로컬 서버의 target_table에 합치는 예이다.
+
+.. code-block:: sql
+
+    -- at remote server
+    -- source_table
+    CREATE TABLE source_table (a INT, b INT, c INT);
+
+    -- at local server
+    CREATE TABLE target_table (a INT, b INT, c INT);
+
+    -- source table insert
+    INSERT INTO source_table@srv1 VALUES (1, 1, 1);
+    INSERT INTO source_table@srv1 VALUES (1, 3, 2);
+    INSERT INTO source_table@srv1 VALUES (2, 4, 5);
+    INSERT INTO source_table@srv1 VALUES (3, 1, 3);
+
+    -- target_table insert
+    INSERT INTO target_table VALUES (1, 1, 4);
+    INSERT INTO target_table VALUES (1, 2, 5);
+    INSERT INTO target_table VALUES (1, 3, 2);
+    INSERT INTO target_table VALUES (3, 1, 6);
+    INSERT INTO target_table VALUES (5, 5, 2);
+
+    MERGE INTO target_table tt USING source_table@srv1 st
+    ON (st.a=tt.a AND st.b=tt.b)
+    WHEN MATCHED THEN UPDATE SET tt.c=st.c
+         DELETE WHERE tt.c = 1
+    WHEN NOT MATCHED THEN INSERT VALUES (st.a, st.b, st.c);
+
+    -- the result of above query
+    SELECT * FROM target_table;
+
+            a            b            c
+    =======================================
+            1            2            5
+            1            3            2
+            3            1            3
+            5            5            2
+            2            4            5
+
+.. warning::
+
+아래의 예처럼 target이 remote이고 source가 local인 경우는 에러가 발생한다.
+
+.. code-block:: sql
+
+    MERGE INTO target_table@srv1 tt USING source_table st
+    ON (st.a=tt.a AND st.b=tt.b)
+    WHEN MATCHED THEN UPDATE SET tt.c=st.c
+         DELETE WHERE tt.c = 1
+    WHEN NOT MATCHED THEN INSERT VALUES (st.a, st.b, st.c);
+
+또한 아래의 예처럼 target과 source가 각각 다른 서버인 경우도 에러가 발생한다.
+
+.. code-block:: sql
+
+    MERGE INTO target_table@srv1 tt USING source_table@srv2 st
+    ON (st.a=tt.a AND st.b=tt.b)
+    WHEN MATCHED THEN UPDATE SET tt.c=st.c
+         DELETE WHERE tt.c = 1
+    WHEN NOT MATCHED THEN INSERT VALUES (st.a, st.b, st.c);
+

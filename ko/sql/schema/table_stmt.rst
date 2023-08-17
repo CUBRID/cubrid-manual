@@ -1436,6 +1436,18 @@ CHANGE/MODIFY 절
 
 **CHANGE** 절이나 **MODIFY** 절로 칼럼에 데이터 타입을 변경할 때, 기존의 칼럼 값이 변경되면서 데이터가 변형될 수 있다. 예를 들어 문자열 칼럼의 길이를 줄이면 문자열이 잘릴 수 있으므로 주의해야 한다. 단, **alter_table_change_type_strict** 설정 값이 **yes** 인 경우 에러가 발생한다. 마찬가지로 **allow_truncated_string** 설정 값이 **no** 인 경우에도 에러가 발생한다.
 
+AUTO_INCREMENT 속성의 컬럼 타입을 변경할 경우, AUTO_INCREMENT 속성으로 사용할 수 없는 타입으로 변경할 수 없다. 예를 들면 아래와 같이 ALTER 구문으로 AUTO_INCREMENT 속성 컬럼인 a를 int에서 varchar 타입으로 변경시 에러가 발생한다.
+
+.. code-block:: sql
+
+    CREATE a_tbl (a int AUTO_INCREMENT, b VARCHAR);
+    ALTER TABLE a_tbl MODIFY COLUMN a VARCHAR;
+
+::
+
+    ERROR: before '  varchar; '
+    The domain of the attribute 'a' having an auto increment constraint is invalid.
+
 default값이 지정된 칼럼의 타입을 변경할 때, 지정된 default값이 변경된 타입으로 형변환이 불가능한 경우 아래의 예처럼 에러가 발생한다. 
 
 .. code-block:: sql

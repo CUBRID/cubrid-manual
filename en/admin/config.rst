@@ -385,6 +385,10 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               | vacuum_ovfp_check_threshold         | server parameter        |         | int      | 1000                           |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | vacuum_ovfp_check_duration          | server parameter        |         | int      | 45000                          |                       |
++                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | deduplicate_key_level               | client/server parameter |         | int      | -1                             |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | print_index_detail                  | client/server parameter |         | bool     | no                             |                       |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 
 .. _lpg:
@@ -2103,6 +2107,10 @@ The following are other parameters. The type and value range for each parameter 
 +-------------------------------------+--------+----------------+----------------+----------------+
 | vacuum_ovfp_check_duration          | int    | 45000          | 1              | 600000         |
 +-------------------------------------+--------+----------------+----------------+----------------+
+| deduplicate_key_level               | int    | -1             | -1             | 14             |
++-------------------------------------+--------+----------------+----------------+----------------+
+| print_index_detail                  | bool   | no             |                |                |
++-------------------------------------+--------+----------------+----------------+----------------+
 
 **access_ip_control**
 
@@ -2302,6 +2310,20 @@ The following are other parameters. The type and value range for each parameter 
 **vacuum_ovfp_check_duration**
 
 **vacuum_ovfp_check_duration** specifies the duration for which data related to the count of index overflow pages, gathered by vacuum threads, is retained. Data that remains unchanged within the specified duration will be automatically removed. The unit of it's value is minutes.
+
+**deduplicate_key_level**
+
+ Specifies the *deduplicate level* value implicitly specified in the index creation statement. Default is -1. See :doc:`/sql/schema/table_stmt`\ and :doc:`/sql/schema/index_stmt`.
+ 
+.. note::
+
+    *   If **deduplicate_key_level** is set to **-1**, even if the *deduplicate level* is explicitly specified in the CREATE INDEX statement, it is ignored and the *deduplicate level* is forced to 0.
+
+
+**print_index_detail**
+
+ Specifies whether option information in the **WITH** clause is displayed when index syntax information is displayed, such as in the SHOW CREATE TABLE statement. Default is NO. However, the unloaddb tool is not affected by this setting.
+
 
 .. _broker-configuration:
 

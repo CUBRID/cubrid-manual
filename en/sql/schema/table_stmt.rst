@@ -1425,6 +1425,29 @@ If you set the type, size, and attribute to apply to a new column with the **CHA
 When you change data types using the **CHANGE** clause or the **MODIFY** clause, the data can be modified. For example, if you shorten the length of a column, the character string may be truncated if the value of configuration parameter alter_table_change_type_strict is set to **no**. But if the parameter value is set to **yes**, the change or modify is not allowed and it returns an error.
 the configuration parameter allow_truncated_string also affect the similar as alter_table_change_type_strict.
 
+When changing the type of the column specified AUTO_INCREMENT, it cannot be changed to a column type that is not allowed to used with the AUTO_INCREMENT. For example, if you try to change the column type of "a" from INT to VARCHAR with the ALTER statement as shown below, an error occurs.
+
+.. code-block:: sql
+
+    CREATE a_tbl (a int AUTO_INCREMENT, b VARCHAR);
+    ALTER TABLE a_tbl MODIFY COLUMN a VARCHAR;
+
+::
+
+    ERROR: before '  varchar; '
+    The domain of the attribute 'a' having an auto increment constraint is invalid.
+
+When changing the type of a column specified  a default value, if the default value can't be coerced to the changed type, an error occurs as shown in the example below.
+
+.. code-block:: sql
+
+     CREATE TABLE t_def (a bigint default 123456789012, b varchar(20));
+     ALTER TABLE t_def a a int;
+
+::
+
+     ERROR: A domain conflict exists on attribute "a".
+
 .. warning::
 
     *   **ALTER TABLE** *[schema_name.]table_name* **CHANGE** *column_name* **DEFAULT** *default_value* syntax supported in CUBRID 2008 R3.1 or earlier version is no longer supported.

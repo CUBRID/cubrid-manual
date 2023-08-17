@@ -602,7 +602,7 @@ A foreign key is a column or a set of columns that references the primary key in
     *   **SET NULL**: When a specific record is being deleted or updated, the column value of the foreign key is updated to **NULL**.
     *   **NO ACTION**: Its behavior is the same as that of the **RESTRICT** option.
 
-*   *deduplicate_level*: Specifies the deduplicate level (0 to 14). For details, see :ref:`deduplicate_overview`.
+*   *deduplicate_level*: specifies the deduplicate level (0 to 14). For details, see :ref:`deduplicate_overview`.
 
 For each row R1 of the referencing table, there should be some row R2 of the referenced table such that the value of each referencing column in R1 is either **NULL** or is equal to the value of the corresponding referenced column in R2.
 

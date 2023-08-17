@@ -106,7 +106,7 @@ Use **CREATE TABLE** statement to create a table. A table with the same name as 
 *   *table_comment_string*: specifies a table's comment
 *   *column_comment_string*: specifies a column's comment.
 *   *index_comment_string*: specifies an index's comment.
-*   *deduplicate_level*: Specifies the deduplicate level (0 to 14). For details, see :ref:`deduplicate_overview`.
+*   *deduplicate_level*: specifies the deduplicate level (0 to 14). For details, see :ref:`deduplicate_overview`.
 
 .. note::
 

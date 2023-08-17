@@ -1148,7 +1148,7 @@ You can add a new column by using the **ADD COLUMN** clause. You can specify the
                         
                 <index_with_option> ::= {DEDUPLICATE ‘=‘ deduplicate_level}                        
 
-*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
+*   *schema_name*: specifies the schema name. If omitted, the schema name of the current session is used.
 *   *table_name*: specifies the name of a table that has a column to be added.
 *   <*column_definition*>: specifies the name(max 254 bytes), data type, and constraints of a column to be added.
 *   **AFTER** *oid_column_name*: specifies the name of an existing column before the column to be added.

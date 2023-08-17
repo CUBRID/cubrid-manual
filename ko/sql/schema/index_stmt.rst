@@ -295,7 +295,7 @@ DEDUPLICATE
 
     * FK의 경우에는 *deduplicate level*\만 다른 FK가 이미 존재한다면 중복해서 생성 할 수 없다.
     * 중복된 인덱스가 허용되더라도 동일한 구성의 PK나 UK가 있다면 중복 생성되지 않는다.    
-    * ALTER INDEX REBUILD 구문으로는 인덱스의 *deduplicate level*\을 변경할 수 없다. 필요하다면 drop 후에 재생성해야 한다.
+    * ALTER INDEX REBUILD 구문으로는 인덱스의 *deduplicate level*\을 변경할 수 없다. 필요하다면 인덱스 삭제후 재생성해야 한다.
 
 
 .. _alter-index:

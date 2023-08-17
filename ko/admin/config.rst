@@ -263,6 +263,8 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------+
 |                               | only_full_group_by                  | 클라이언트              | O       | bool     | no                             | 가능            |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------+
+|                               | oracle_compat_number_behavior       | 서버                    |         | bool     | no                             |                 |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------+
 |                               | oracle_style_empty_string           | 클라이언트/서버         |         | bool     | no                             |                 |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------+
 |                               | pipes_as_concat                     | 클라이언트              |         | bool     | yes                            |                 |
@@ -1295,6 +1297,8 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 +---------------------------------+--------+------------+------------+------------+
 | only_full_group_by              | bool   | no         |            |            |
 +---------------------------------+--------+------------+------------+------------+
+| oracle_compat_number_behavior   | bool   | no         |            |            |
++---------------------------------+--------+------------+------------+------------+
 | oracle_style_empty_string       | bool   | no         |            |            |
 +---------------------------------+--------+------------+------------+------------+
 | pipes_as_concat                 | bool   | yes        |            |            |
@@ -1502,6 +1506,76 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
     기본값은 **no** 이므로, SQL 표준에 따라 질의를 수행하려면 **only_full_group_by** 파라미터 값을 yes로 설정한다. 이 경우에는 확장된 문법이 적용되지 않으므로 실행 결과로 아래와 같은 에러가 출력된다. ::
 
         ERROR: Attributes exposed in aggregate queries must also appear in the group by clause.
+
+.. _oracle_compat_number_behavior:
+
+**oracle_compat_number_behavior**
+
+    **oracle_compat_number_behavior**\는 다른 DBMS(Database Management System)와의 호환성 향상을 위한 파라미터로, NUMERIC, DOUBLE 과 FLOAT 타입에 대해 소숫점 이하 0을 출력하지 않도록 하며, DOUBLE과 FLOAT인 경우 지수 형식으로 표시하지 않는다.  예를 들면, 이 파라미터 설정 값이 **no**\인 경우, DOUBLE 타입으로 구성된 a_double 테이블을 조회하는 쿼리의 결과는 아래와 같이 지수 형태로 표시되지만, 파라미터 설정 값이 **yes**\인 경우 소수점으로만 표시된다.
+
+    .. code-block:: sql
+
+        csql> ;get oracle_compat_number_behavior
+
+        === Get Param Input ===
+
+        oracle_compat_number_behavior=n
+
+        SELECT a FROM a_double;
+
+    ::
+
+                                 a
+        ==========================
+             1.234567890123457e+19
+             1.234567890123457e-08
+             1.230000000000000e-08
+             1.000000000000000e+00
+             1.200000000000000e+00
+            -4.939030300000000e-03
+            -1.293934894993939e+18
+            -1.938943893939394e+16
+
+    ::
+
+        csql> ;get oracle_compat_number_behavior
+
+        === Get Param Input ===
+
+        oracle_compat_number_behavior=y
+
+        SELECT a FROM a_double;
+
+    ::
+
+                                 a
+        ==========================
+              12345678901234570000
+          0.00000001234567890123457
+                      0.0000000123
+                                 1
+                               1.2
+                     -0.0049390303
+              -1293934894993939000
+                -19389438939393940
+
+    또한, **oracle_compat_number_behavior**\이 **yes**\로 설정된 경우, 정수 타입의 나누기 연산 결과가 정수 타입이 아닌 실수 타입 (즉, NUMERIC 타입)이 된다. 아래의 예는 이 파라미터가 **yes**\로 설정된 경우로, 적용되는 정수 타입은 INT, SHORT, BIGINT 이다.
+
+    .. code-block:: sql
+
+        csql> ;get oracle_compat_number_behavior
+
+        === Get Param Input ===
+
+        oracle_compat_number_behavior=y
+
+        SELECT 1/2;
+
+    ::
+
+               1/2
+        ==========
+               0.5
 
 .. _oracle_style_empty_string:
 

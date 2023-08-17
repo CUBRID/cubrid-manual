@@ -1010,6 +1010,8 @@ CREATE TABLE AS SELECT
         3            3
 
 
+아래와 같이 원격 테이블로 부터 데이터를 읽어서 테이블을 만들 수 있다.
+
 .. code-block:: sql
 
     -- column values are replicated from remote_tbl

@@ -13,24 +13,29 @@ You can insert a new record into a table in a database by using the **INSERT** s
 ::
 
     <INSERT ... VALUES statement>
-    INSERT [INTO] [schema_name.]table_name [(column_name, ...)]
+    INSERT [INTO] <table_specification> [(column_name, ...)]
         {VALUES | VALUE}({expr | DEFAULT}, ...)[,({expr | DEFAULT}, ...),...]
         [ON DUPLICATE KEY UPDATE column_name = expr, ... ]
-    INSERT [INTO] [schema_name.]table_name DEFAULT [ VALUES ]
-     
+    INSERT [INTO] <table-specification> DEFAULT [ VALUES ]
+
     <INSERT ... SET statement>
-    INSERT [INTO] [schema_name.]table_name
+    INSERT [INTO] <table_specification>
         SET column_name = {expr | DEFAULT}[, column_name = {expr | DEFAULT},...]
         [ON DUPLICATE KEY UPDATE column_name = expr, ... ]
-     
+
     <INSERT ... SELECT statement>
-    INSERT [INTO] [schema_name.]table_name [(column_name, ...)]
+    INSERT [INTO] <table_specification> [(column_name, ...)]
         SELECT...
         [ON DUPLICATE KEY UPDATE column_name = expr, ... ]
+
+    <table_specification> ::= [schema_name.]table_name | <remote_table_spec>
+    <remote_table_spec> ::= [schema_name.]table_name@[shema_name.]server_name
 
 *   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 
 *   *table_name*: Specifies the name of the target table into which you want to insert a new record.
+
+*   *server_name*: Specifies the name of the remote server to connect to with dblink.
 
 *   *column_name*: Specifies the name of the column into which you want to insert the value. If you omit to specify the column name, it is considered that all columns defined in the table have been specified. Therefore, you must specify the values for all columns next to the **VALUES** keyword. If you do not specify all the columns defined in the table, a **DEFAULT** value is assigned to the non-specified columns; if the **DEFAULT** value is not defined, a **NULL** value is assigned.
 
@@ -192,6 +197,55 @@ The **SELECT** statement can be used in place of the **VALUES** keyword, or be i
                 6  'eee'                 '000-0000'
                 7  NULL                  '777-7777'
                 8  'aaa'                 '000-0000'
+
+INSERT INTO <remote-table-spec>… SELECT statement
+=========================================
+
+If a remote table of the same remote server used in the SELECT query is used in the INSERT statement, query results that satisfy specific search conditions from one or more remote tables can be inserted into the remote table. However, an error occurs when the remote table of the INSERT statement among the tables specified in the SELECT statement and the table of another server (local table or table of another remote server) are used.
+
+.. code-block:: sql
+
+    --at remote-side
+    --creating an empty table which schema replicated from a_tbl1
+    CREATE TABLE a_tbl2 LIKE a_tbl1;
+
+    --at local-side
+    --inserting multiple rows from SELECT query results
+    INSERT INTO a_tbl2@server1 SELECT * FROM a_tbl1@server1 WHERE id IS NOT NULL;
+
+    --inserting column value with SELECT subquery specified in the value list
+    INSERT INTO a_tbl2@server1 VALUES(8, SELECT name FROM a_tbl1@server1 WHERE name <'bbb', DEFAULT);
+
+    SELECT * FROM a_tbl2@server1;
+
+::
+
+               id  name                  phone
+    =========================================================
+                1  'aaa'                 '000-0000'
+                2  'bbb'                 '000-0000'
+                3  'ccc'                 '333-3333'
+                4  NULL                  '000-0000'
+                5  NULL                  '000-0000'
+                6  'eee'                 '000-0000'
+                7  NULL                  '777-7777'
+                8  'aaa'                 '000-0000'
+
+Data from a remote table can be inserted into a local table, but queries that insert data from a local table into a remote table cannot be used, so care must be taken when using it. The query below throws an error.
+
+.. code-block:: sql
+    --inserting multiple rows from SELECT query results
+    INSERT INTO a_tbl2@server1 SELECT * FROM a_tbl1 WHERE id IS NOT NULL;
+
+    dblink: local mixed remote DML is not allowed
+
+Also, if the server of the remote table used in the INSERT statement and the SELECT statement are different, query execution is not allowed. The query below throws an error.
+
+.. code-block:: sql
+    --inserting multiple rows from SELECT query results
+    INSERT INTO a_tbl2@server1 SELECT * FROM a_tbl1@server2 WHERE id IS NOT NULL;
+
+    dblink: multi-remote DML is not allowed
 
 ON DUPLICATE KEY UPDATE Clause
 ==============================

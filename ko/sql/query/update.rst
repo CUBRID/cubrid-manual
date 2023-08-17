@@ -176,7 +176,9 @@ UPDATE
     1, NULL
     
 테이블 확장명을 사용해서 로컬 서버 뿐만아니라 원격 서버의 테이블에 대해서도 업데이트를 수행할 수 있다. 다음은 원격 테이블에 대해 업데이트를 수행하는 예이다.
+
 .. code-block:: sql
+
     --at remote srv1
     --creating a new table having all records copied from a_tbl1
     --origin is a local server
@@ -205,7 +207,9 @@ UPDATE
                 6  'eee'                 '000-0000'
 
 다음은 원격 테이블을 포함한 여러 개의 테이블들에 대해 조인한 후 업데이트를 수행하는 예이다.
+
 .. code-block:: sql
+
     --at remote srv1
     --creating a table b_tbl
     CREATE TABLE b_tbl(rate_id INT, rate DOUBLE);

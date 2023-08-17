@@ -27,8 +27,8 @@ The **MERGE** statement is used to select rows from a source and to update or to
     <merge_hint> ::=
     /*+ [ USE_UPDATE_IDX (<update_index_list>) ] [ USE_INSERT_IDX (<insert_index_list>) ] */
 
-*   <*target*>: Target table to be updated or inserted. Several tables or views are available.
-*   <*source*>: Source table to get the data. A single table or a single view is available and a sub-query is available, too.
+*   <*target*>: The target table to update or insert into. It can be multiple tables or views, and you can also specify remote tables like table-name@server-name.
+*   <*source*>: The source table from which to import data. It can be a single table or view, and a subquery is also possible. If *target* is a remote table, *source* must also be a remote table or view specified on the same server as *targe*. Or, it must be a subquery that includes the server specified in the target.
 *   <*join_condition*>: Specifies the updated conditions
 *   <*merge_update_clause*>: If <*join_condition*> is TRUE, the new column value of a target table will be specified.
 
@@ -180,3 +180,105 @@ The following shows how to use index hints in **MERGE** statement.
     WHEN MATCHED THEN UPDATE SET t.j=s.j WHERE s.i <> 1
     WHEN NOT MATCHED THEN INSERT VALUES (i,j);
 
+To execute the MERGE statement, you must have SELECT privilege on the source table, UPDATE privilege if the UPDATE clause is included, DELETE privilege if the DELETE clause is included, and INSERT privilege if the INSERT clause is included on the target table.
+
+The following is an example of combining source_table values of the remote server with target_table of the remote server.
+
+.. code-block:: sql
+
+    -- at remote server
+    -- source_table
+    CREATE TABLE source_table (a INT, b INT, c INT);
+    CREATE TABLE target_table (a INT, b INT, c INT);
+
+    -- at local server
+    -- source table
+    INSERT INTO source_table@srv1 VALUES (1, 1, 1);
+    INSERT INTO source_table@srv1 VALUES (1, 3, 2);
+    INSERT INTO source_table@srv1 VALUES (2, 4, 5);
+    INSERT INTO source_table@srv1 VALUES (3, 1, 3);
+
+    -- target_table
+    INSERT INTO target_table@srv1 VALUES (1, 1, 4);
+    INSERT INTO target_table@srv1 VALUES (1, 2, 5);
+    INSERT INTO target_table@srv1 VALUES (1, 3, 2);
+    INSERT INTO target_table@srv1 VALUES (3, 1, 6);
+    INSERT INTO target_table@srv1 VALUES (5, 5, 2);
+
+    MERGE INTO target_table@srv1 tt USING source_table@srv1 st
+    ON (st.a=tt.a AND st.b=tt.b)
+    WHEN MATCHED THEN UPDATE SET tt.c=st.c
+         DELETE WHERE tt.c = 1
+    WHEN NOT MATCHED THEN INSERT VALUES (st.a, st.b, st.c);
+
+    -- the result of above query
+    SELECT * FROM target_table@srv1;
+            a            b            c
+    =======================================
+            1            2            5
+            1            3            2
+            3            1            3
+            5            5            2
+            2            4            5
+
+The following is an example of combining source_table values of the remote server with target_table of the local server.
+
+.. code-block:: sql
+
+    -- at remote server
+    -- source_table
+    CREATE TABLE source_table (a INT, b INT, c INT);
+
+    -- at local server
+    CREATE TABLE target_table (a INT, b INT, c INT);
+
+    -- source table insert
+    INSERT INTO source_table@srv1 VALUES (1, 1, 1);
+    INSERT INTO source_table@srv1 VALUES (1, 3, 2);
+    INSERT INTO source_table@srv1 VALUES (2, 4, 5);
+    INSERT INTO source_table@srv1 VALUES (3, 1, 3);
+
+    -- target_table insert
+    INSERT INTO target_table VALUES (1, 1, 4);
+    INSERT INTO target_table VALUES (1, 2, 5);
+    INSERT INTO target_table VALUES (1, 3, 2);
+    INSERT INTO target_table VALUES (3, 1, 6);
+    INSERT INTO target_table VALUES (5, 5, 2);
+
+    MERGE INTO target_table tt USING source_table@srv1 st
+    ON (st.a=tt.a AND st.b=tt.b)
+    WHEN MATCHED THEN UPDATE SET tt.c=st.c
+         DELETE WHERE tt.c = 1
+    WHEN NOT MATCHED THEN INSERT VALUES (st.a, st.b, st.c);
+
+    -- the result of above query
+    SELECT * FROM target_table;
+            a            b            c
+    =======================================
+            1            2            5
+            1            3            2
+            3            1            3
+            5            5            2
+            2            4            5
+
+.. warning::
+
+As in the example below, if the target is remote and the source is local, an error occurs.
+
+.. code-block:: sql
+
+    MERGE INTO target_table@srv1 tt USING source_table st
+    ON (st.a=tt.a AND st.b=tt.b)
+    WHEN MATCHED THEN UPDATE SET tt.c=st.c
+         DELETE WHERE tt.c = 1
+    WHEN NOT MATCHED THEN INSERT VALUES (st.a, st.b, st.c);
+
+Also, an error occurs when the target and source are different servers, as in the example below.
+
+.. code-block:: sql
+
+    MERGE INTO target_table@srv1 tt USING source_table@srv2 st
+    ON (st.a=tt.a AND st.b=tt.b)
+    WHEN MATCHED THEN UPDATE SET tt.c=st.c
+         DELETE WHERE tt.c = 1
+    WHEN NOT MATCHED THEN INSERT VALUES (st.a, st.b, st.c);

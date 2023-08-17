@@ -273,7 +273,7 @@ DEDUPLICATE
 
 .. note::
     
-    * 인덱스를 생성하는 시점의 키 필드의 구성이 UNIQUE를 보장 받는다면 사용자의 의도는 무시되고  *deduplicate level*\은 **0**\으로 생성된다.
+    * 인덱스 생성시 키 필드의 구성이 UNIQUE를 보장 받는다면 사용자가 설정한 DEDUPLICATE 설정이 무시되며  *deduplicate level*\은 **0**\으로 생성된다.
         * 키 필드가 특정한 Primary Key 또는 Unique Index를 구성하는 키필드를 모두 포함하고 있는 경우
         * 단, 함수의 인수로 사용된 경우는 제외
 

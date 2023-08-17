@@ -260,7 +260,7 @@ FROM 절
 원격 테이블
 -----------
 
-FROM절에 원격지 테이블을 명시할 수 있으며, 원격지 서버의 테이블을 명시할 때는 '@'를 사용하여table_name@server_name처럼 테이블 확장명을 사용한다. 원격지 서버는CUBRID 뿐만아니라 ORACLE이나 MySQL 혹은 MariaDB가 될 수 있다. 원격테이블은 최적화 단계를 거치면서 DBLINK 구문으로 재작성되어 실행된다.
+M절에 원격 테이블 (remote table) 을 명시할 수 있으며, 원격 테이블을 명시할 때는 '@'를 사용하여 table_name@server_name와 같은 테이블 확장명을 사용한다. 원격 서버는 CUBRID 뿐만아니라 타 DBMS(ORACLE, MySQL 또는 MariaDB)을 사용할 수 있다. 원격 테이블은 최적화 단계를 거치면서 DBLINK 구문으로 재 작성되어 실행된다.
 
 .. code-block:: sql
 
@@ -288,7 +288,7 @@ FROM절에 원격지 테이블을 명시할 수 있으며, 원격지 서버의 �
         1       Kim
         2       Lee
 
-DBLINK 구문으로 재작성된 쿼리는 아래와 같다.
+최적화 단계에서 원격테이블에 대해 DBLINK 구문으로 재 작성된 쿼리는 아래와 같다.
 
 .. code-block:: sql
 

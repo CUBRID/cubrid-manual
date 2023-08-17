@@ -29,6 +29,32 @@ unloaddb
 
 .. program:: unloaddb
 
+::
+
+  -u, --user=ID               데이터베이스 접근에 관한 사용자 이름
+  -p, --password=PASS         사용자 패스워드
+  -i, --input-class-file=FILE 테이블 이름이 기입된 파일
+      --include-reference     참조되는 테이블 포함
+      --input-class-only      명세한 클래스만 처리
+      --estimated-size=NUMBER 인스턴스의 대략적인 개수
+      --cached-pages=NUMBER   cached 페이지 개수
+  -O, --output-path=PATH      출력 디렉터리 경로
+  -s, --schema-only           스키마만 처리
+  -d, --data-only             오브젝트만 처리
+      --output-prefix=PREFIEX 출력 파일의 prefix
+      --hash-file=FILE        해쉬 파일이름
+      --latest-image          오브젝트 (객체)를 언로드할 때, 데이터 볼륨의 최신 이미지를 언로드합니다. 
+                              커밋되지않은 데이터와 제거되었지만 배큠되지 않은 데이터가 포함될 수 있습니다
+  -v, --verbose               많은 상태 메시지를 출력
+      --use-delimiter         식별자 처음과 끝에 '"' 사용
+  -S, --SA-mode               독립 모드 실행
+  -C, --CS-mode               클라이언트 서버 모드 실행
+      --datafile-per-class    각 클래스별 오브젝트 파일 생성
+      --split-schema-files    스키마 정보를 오브젝트별로 분리하여 각각의 파일로 생성
+      --skip-index-detail     인덱스를 생성할 때 지정된 WITH 절 옵션을 인쇄하지 않음
+      --as-dba                로그인 사용자가 DBA 그룹의 구성원인 경우 DBA와 동일한 스키마 파일을 추출합니다.
+
+
 .. option:: -u, --user=ID
 
     언로딩할 데이터베이스의 사용자 계정을 지정한다. 옵션을 지정하지 않으면 기본값은 **DBA**\가 된다.
@@ -264,6 +290,30 @@ loaddb
 
 .. program:: loaddb
 
+::
+
+  -u, --user=ID                  데이터베이스 접근에 관한 사용자 이름
+  -p, --password=PASS            사용자 패스워드
+  -S, --SA-mode                  독립 모드 실행
+  -C, --CS-mode                  클라이언트 서버 모드 실행
+      --data-file-check-only     데이터 파일을 로딩하지 않고 신택스만 검사
+  -l, --load-only                신택스 체크없이 데이터 파일 로딩
+      --estimated-size=NUMBER    인스턴스의 대략적인 개수
+  -v, --verbose                  많은 상태 정보를 출력
+  -c, --periodic-commit=COUNT    주기적인 커밋에 대한 카운트
+      --no-oid                   OID 사용 안 함
+      --no-statistics            로딩 후에 통계 정보 갱신하지 않음
+  -s, --schema-file=FILE[:LINE]  파일[:라인] 정보로 스키마 생성
+  -i, --index-file=FILE[:LINE]   파일[:라인] 정보로 인덱스 생성
+  -d, --data-file=FILE           적재할 데이터 파일
+  -t, --table=TABLE              데이터를 적재할 테이블 이름
+      --error-control-file=FILE  적재 시 발생하는 에러에 대한 제어 파일
+      --ignore-class-file=FILE   적재하지 않을 클래스 이름이 있는 파일
+      --trigger-file=FILE[:LINE] 파일[:라인] 정보로 트리거 생성
+      --no-user-specified-name   소유자 이름 없이 객체 이름으로 CLASS, SERIAL 및 TRIGGER를 찾음.
+      --schema-file-list=FILE    이 파일의 내용은 loaddb에서 사용할 스키마 파일 이름 목록이다.
+
+
 .. option:: -u, --user=ID
 
     레코드를 로딩할 데이터베이스의 사용자 계정을 지정한다. 옵션을 지정하지 않으면 기본값은 **PUBLIC** 이 된다. ::
@@ -342,7 +392,7 @@ loaddb
 
 .. option:: -s, --schema-file=FILE[:LINE]
 
-    스키마 파일 또는 트리거 파일의 LINE번째부터 정의된 스키마 정보 또는 트리거 정보를 새로 생성한 newdb에 로딩하는 구문이다. **-s** 옵션을 이용하여 스키마 정보를 먼저 로딩한 후, 실제 레코드를 로딩할 수 있다. 
+    스키마 파일의 LINE번째부터 정의된 스키마 정보를 새로 생성한 newdb에 로딩하는 구문이다. **-s** 옵션을 이용하여 스키마 정보를 먼저 로딩한 후, 실제 레코드를 로딩할 수 있다. 
 
     다음 예제에서 demodb_schema 파일은 언로드 작업에 의해 생성된 파일이며 언로드된 데이터베이스의 스키마 정보를 포함한다.
 
@@ -433,9 +483,9 @@ loaddb
 
         cubrid loaddb --ignore-class-file=skip_class_list -d demodb_objects newdb
 
-.. option:: --trigger-file=FILE
+.. option:: --trigger-file=FILE[:LINE]
 
-    데이터베이스에 로드할 트리거가 포함된 파일을 지정할 수있다. ::
+    트리거 파일의 LINE번째부터 정의된 트리거 정보를 새로 생성한 newdb에 로딩하는 구문이다. ::
 
         cubrid loaddb --trigger-file=demodb_triggers -d demodb_objects newdb
 

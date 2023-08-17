@@ -28,6 +28,31 @@ The following is [options] used in **cubrid unloaddb**.
 
 .. program:: unloaddb
 
+::
+
+  -u, --user=ID               user ID for database access
+  -p, --password=PASS         user password
+  -i, --input-class-file=FILE input FILE of table names
+      --include-reference     include referenced tables
+      --input-class-only      include specified class only
+      --estimated-size=NUMBER estimated NUMBER of instances
+      --cached-pages=NUMBER   NUMBER of cached pages
+  -O, --output-path=PATH      PATH of output directory
+  -s, --schema-only           dump schema only
+  -d, --data-only             dump objects only
+      --output-prefix=PREFIEX PREFIX for output files
+      --hash-file=FILE        FILE for hash
+      --latest-image          when dumping objects, it dumps the latest image of objects in data volumes.
+  -v, --verbose               enable verbose status messages
+      --use-delimiter         use '"' where an identifier begins and ends
+  -S, --SA-mode               stand-alone mode execution
+  -C, --CS-mode               client-server mode execution
+      --datafile-per-class    create a object file for each class
+      --split-schema-files    split schema information by object and generate each file
+      --skip-index-detail     Do not print the specified WITH clause options when creating the index
+      --as-dba                If the login user is a member of the DBA group, extract the same schema file as the DBA.
+
+
 .. option:: -u, --user=ID
 
     Specify a user account of a database to be unloaded. If this is not specified, the default is **DBA**.
@@ -265,6 +290,30 @@ The following table shows [options] available with the **cubrid loaddb** utility
 
 .. program:: loaddb
 
+::
+
+  -u, --user=ID                  user ID for database access
+  -p, --password=PASS            user password
+  -S, --SA-mode                  standalone mode execution
+  -C, --CS-mode                  client-server mode execution
+      --data-file-check-only     check syntax for data file without load
+  -l, --load-only                load data file without prior syntax checking
+      --estimated-size=NUMBER    estimated NUMBER of instances
+  -v, --verbose                  enable verbose status messages
+  -c, --periodic-commit=COUNT    insertion COUNT for periodic commit
+      --no-oid                   don't use OID
+      --no-statistics            do not update the statistics while loading
+  -s, --schema-file=FILE[:LINE]  create schema from LINE with FILE
+  -i, --index-file=FILE[:LINE]   create index from LINE with FILE
+  -d, --data-file=FILE           load data with FILE
+  -t, --table=TABLE              table name that is substituted for missing class header in data file
+      --error-control-file=FILE  FILE to control error(s) during loading
+      --ignore-class-file=FILE   input file of class names that skip load
+      --trigger-file=FILE[:LINE] create trigger from LINE with FILE
+      --no-user-specified-name   Find classes, serials, and triggers by their object names without their owner names.
+      --schema-file-list=FILE    The content of this file is a list of schema file names to be used in loaddb.
+
+
 .. option:: -u, --user=ID
 
     This option specifies the user account of a database where records are loaded. If the option is not specified, the default value is **PUBLIC**. ::
@@ -347,7 +396,7 @@ The following table shows [options] available with the **cubrid loaddb** utility
 
 .. option:: -s, --schema-file=FILE[:LINE]
 
-    This option loads the schema information or the trigger information defined in the schema file or the trigger file, from the LINE-th. You can load the actual records after loading the schema information first by using the **-s** option.
+    This option loads the schema information defined in the schema file, from the LINE-th. You can load the actual records after loading the schema information first by using the **-s** option.
 
     On the following example, demodb_schema is a file created by the unload operation and contains the schema information of the unloaded database.
     
@@ -438,9 +487,9 @@ The following table shows [options] available with the **cubrid loaddb** utility
 
         cubrid loaddb --ignore-class-file=skip_class_list -d demodb_objects newdb
 
-.. option:: --trigger-file=FILE
+.. option:: --trigger-file=FILE[:LINE]
 
-    You can specify a file that contains triggers that need to be loaded into a database. ::
+    This option loads the trigger information defined in the trigger file, from the LINE-th. ::
 
         cubrid loaddb --trigger-file=demodb_triggers -d demodb_objects newdb
 

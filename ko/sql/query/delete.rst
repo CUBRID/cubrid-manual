@@ -110,6 +110,8 @@ DELETE
 
 조인 구문에 대한 자세한 설명은 :ref:`join-query`\ 를 참고한다.
 
+확장 테이블명을 사용해서 원격 테이르블 데이터를 삭제할 수도 있다. 아래의 질의는 원격 테이블 데이터를 삭제하기 위한 질의이다.
+
 .. code-block:: sql
 
     --at remote srv1
@@ -194,7 +196,8 @@ DELETE
     DELETE FROM a, b USING a_tbl a INNER JOIN b_tbl b ON a.id=b.id
     INNER JOIN c_tbl@srv1 c ON b.id=c.id;
 
-.. warning::
+주의 사항
+==========
 
 아래와 같이 로컬 테이블과 원격 테이블이 포함되어 있고, 원격 테이블이 삭제되는 DELETE … JOIN 쿼리는 허용하지 않는다.
 

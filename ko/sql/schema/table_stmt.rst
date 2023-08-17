@@ -84,7 +84,6 @@ CREATE TABLE
 
       <index_with_option> ::= {DEDUPLICATE ‘=‘ deduplicate_level }
 
-
 *   **IF NOT EXISTS**: 생성하려는 테이블이 존재하는 경우 에러 없이 테이블을 생성하지 않는다.
 *   *schema_name*: 스키마 이름을 지정한다(최대 31바이트). 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 생성할 테이블의 이름을 지정한다(최대 222바이트).
@@ -107,7 +106,6 @@ CREATE TABLE
 .. note::
 
     *deduplicate_level*\은 0부터 14까지의 정수이다. 0은 **DEDUPLICATE** 옵션이 없었던 CUBRID 11.2 또는 이하 버전과 동일한 구성의 인덱스를 의미한다.
-
 
 .. code-block:: sql
 

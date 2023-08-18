@@ -253,7 +253,7 @@ If the value of *deduplicate level* is specified as 1 or higher, a hidden index 
 
     * In general, the number of key values that can be assigned by the system doubles whenever *deduplicate level*\ increases by one. Therefore, the length of the linked list on the overflow page will be halved.
     * The key value given by the system is obtained through the remainder operation for the page number among the OID information of the record. Therefore, the distribution of key values actually given by the system is determined by the number of pages where records are stored.
-    * Since the linked list of overflow pages is more advantageous in search performance, it is not desirable to increase the *deduplicate level* to prevent overflow pages from being created. (Adjust the length of the OID overflow page for one key to be within tens or hundreds of pages)
+    * The overflow page-linked list is disadvantageous in terms of add, delete, and update performance, but advantageous in terms of retrieval performance. Therefore, it is not desirable to increase the *deduplicate level* to prevent overflow pages from being created. (Adjust the length of the OID overflow page for one key to be within tens or hundreds of pages)
 
 
 There are two ways to specify *deduplicate level* when creating an index.

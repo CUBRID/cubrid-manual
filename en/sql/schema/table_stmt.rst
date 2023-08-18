@@ -114,7 +114,8 @@ Use **CREATE TABLE** statement to create a table. A table with the same name as 
 
 .. note::
 
-    *deduplicate_level*\ is an integer from 0 to 14. When this parameter is set to 0, it indicates an index configuration where data deduplication within indexes is not performed. This configuration is the same as that in CUBRID 11.2 or an earlier version.
+    *   *deduplicate_level* is an integer from 0 to 14. 
+    *   When this parameter is set to 0, it indicates an index configuration where data deduplication within indexes is not performed. This configuration is the same as that in CUBRID 11.2 or an earlier version.
 
 .. code-block:: sql
 

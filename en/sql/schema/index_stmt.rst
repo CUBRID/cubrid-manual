@@ -41,7 +41,8 @@ For how to use indexes on the **SELECT** statement like Using SQL Hint, Descendi
 
 .. note::
 
-    *deduplicate_level* is an integer from 0 to 14. 0 means an index with the same configuration as CUBRID 11.2 or earlier without the **DEDUPLICATE** option.
+    *   *deduplicate_level* is an integer from 0 to 14. 
+    *   When this parameter is set to 0, it indicates an index configuration where data deduplication within indexes is not performed. This configuration is the same as that in CUBRID 11.2 or an earlier version.
 
 *   <*filter_predicate*>: defines the conditions to create filtered indexes. When there are several comparison conditions between a column and a constant, filtering is available only when the conditions are connected by using **AND**. Refer to :ref:`filtered-index` for more details.
 *   *function_name* (*argument_list*): Defines the conditions to create function-based indexes. Regarding this, definitely watch :ref:`function-index`.
@@ -301,7 +302,7 @@ Duplicated index
 .. note::
 
     * If an FK with the same index column differing only in *deduplicate level* already exists, it cannot be duplicated.
-    * Even if duplicate indexes are allowed, if there is a PK or UK with the same configuration, duplicate indexes are not created.
+    * Even if duplicate indexes are allowed, if there is a Primary key or Unique Index with the same configuration, duplicate indexes are not created.
     * You cannot change the *deduplicate level* of an index with the ALTER INDEX REBUILD statement. If necessary, delete the index and recreate it.
 
 .. _alter-index:

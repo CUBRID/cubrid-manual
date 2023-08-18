@@ -223,7 +223,7 @@ The following is [options] used in **cubrid unloaddb**.
 
         cubrid unloaddb --skip-index-detail demodb
 
-    In the example below, you can see the difference depending on whether this option is specified or not.
+    In the example below, you can see the difference whether this option is specified or not.
     
     Schema file
     

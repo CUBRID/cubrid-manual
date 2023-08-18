@@ -2322,7 +2322,7 @@ The following are other parameters. The type and value range for each parameter 
 
 **print_index_detail**
 
- Specifies whether option information in the **WITH** clause is displayed when index syntax information is displayed, such as in the SHOW CREATE TABLE statement. Default is NO. However, the unloaddb tool is not affected by this setting.
+ It specifies whether option information in the **WITH** clause is displayed when index syntax information is displayed, such as in the SHOW CREATE TABLE statement. Default is NO. However, the unloaddb tool is not affected by this setting.
 
 
 .. _broker-configuration:

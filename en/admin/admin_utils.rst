@@ -3332,8 +3332,11 @@ The following shows [options] available with the **cubrid vacuumdb** utility.
 
 .. option:: --dump
 
-    This option is used to display the status information about the vacuum. It currently displays the first log page ID referenced by the vacuum and the log volume name in which it resides. Users can check the progress of the vacuum operation through the change of the first log page ID and they can know the minimum log volume to keep for the vacuum operation. It can be used with both the standalone mode and the client/server mode.
-    If specified together with the **\-C** option, information on indexes that have read more leaf's overflow pages than the threshold is also displayed, when the index is vacuumed. The related system parameters are **vacuum_ovfp_check_duration** and **vacuum_ovfp_check_threshold**. ::
+    This option is used to display the status information about the vacuum. It currently displays the first log page ID referenced by the vacuum and the log volume name in which it resides. 
+    Users can check the progress of the vacuum operation through the change of the first log page ID and they can know the minimum log volume to keep for the vacuum operation. 
+    It can be used with both the standalone mode and the client/server mode.
+    If specified together with the **\-C** option, information on indexes that have read more :ref:`leaf's overflow pages <deduplicate_overflow_page>` than the threshold is also displayed, when the index is vacuumed. 
+    The related system parameters are **vacuum_ovfp_check_duration** and **vacuum_ovfp_check_threshold**. ::
 
         cubrid vacuumdb --dump demodb
 

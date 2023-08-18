@@ -245,15 +245,15 @@ Online unique index while other transactions inserts violates uniqueness
 DEDUPLICATE 
 -----------
 
-If you use the **DEDUPLICATE** option, you can improve performance degradation that can occur when modifying index data due to skewed data that is biased toward a specific key value. The value of this option can be adjusted to mitigate the OID overflow page's linked list for a specific key value from being made too long, thereby improving insert/delete/update and vacuum performance. However, since an index column hidden by the system is added, the number of terminal nodes in the index and the height of the tree may increase, increasing the size of the index and affecting search performance. In particular, if the index data is uniformly distributed with respect to key values, care must be taken because only the size of the index may increase without improving performance.
+If you use the **DEDUPLICATE** option, you can improve performance degradation that can occur when modifying index data due to skewed data that is biased toward a specific key value. The value of this option can be adjusted to mitigate the overflow page's linked list for a specific key value from being made too long, thereby improving insert/delete/update and vacuum performance. However, since an index column hidden by the system is added, the number of terminal nodes in the index and the height of the tree may increase, increasing the size of the index and affecting search performance. In particular, if the index data is uniformly distributed with respect to key values, care must be taken because only the size of the index may increase without improving performance.
 
 If the value of *deduplicate level* is specified as 1 or higher, a hidden index column used internally by the system is added in addition to the index column specified by the user when creating the index. This value is used to reduce redundancy so that it is not biased toward a specific key value. do. The larger the *deduplicate level* value, the more diverse this system value is, and the more relaxed the redundancy is, the shorter the length of the linked list of overflow pages that can be created for a specific key value.
 
 .. note::
 
-    * In general, the number of key values that can be assigned by the system doubles whenever *deduplicate level*\ increases by one. Therefore, the length of the linked list on the overflow page will be halved.
+    * In general, the number of key values that can be assigned by the system doubles whenever *deduplicate level* increases by one. Therefore, the length of the linked list on the overflow page will be halved.
     * The key value given by the system is obtained through the remainder operation for the page number among the OID information of the record. Therefore, the distribution of key values actually given by the system is determined by the number of pages where records are stored.
-    * The overflow page-linked list is disadvantageous in terms of add, delete, and update performance, but advantageous in terms of retrieval performance. Therefore, it is not desirable to increase the *deduplicate level* to prevent overflow pages from being created. (Adjust the length of the OID overflow page for one key to be within tens or hundreds of pages)
+    * The overflow page-linked list is disadvantageous in terms of add, delete, and update performance, but advantageous in terms of retrieval performance. Therefore, it is not desirable to increase the *deduplicate level* to prevent overflow pages from being created. (Adjust the length of the overflow page for one key to be within tens or hundreds of pages)
 
 
 There are two ways to specify *deduplicate level* when creating an index.
@@ -304,6 +304,18 @@ Duplicated index
     * If an FK with the same index column differing only in *deduplicate level* already exists, it cannot be duplicated.
     * Even if duplicate indexes are allowed, if there is a Primary key or Unique Index with the same configuration, duplicate indexes are not created.
     * You cannot change the *deduplicate level* of an index with the ALTER INDEX REBUILD statement. If necessary, delete the index and recreate it.
+
+
+.. _deduplicate_overflow_page:
+
+OVERFLOW PAGE
+~~~~~~~~~~~~~~~~~~~
+
+    * What is the overflow page?
+       An index consists of a non-terminal node and a terminal node, and a terminal node is composed of a set of index key information.
+       At this time, one index key information is a pair of a key value and a set of record's OIDs corresponding to the key value.
+       If there are many records with a specific key value, the OIDs of all the records cannot be stored in the terminal node, so they are separated and managed in a separate storage structure, which is called an overflow page.
+       Also, when even overflow pages are full, new overflow pages are created and these pages are maintained as a linked list.
 
 .. _alter-index:
 

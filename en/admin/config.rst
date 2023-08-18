@@ -2313,7 +2313,7 @@ The following are other parameters. The type and value range for each parameter 
 
 **deduplicate_key_level**
 
- Specifies the *deduplicate level* value implicitly specified in the index creation statement. Default is -1. See :doc:`/sql/schema/table_stmt`\ and :doc:`/sql/schema/index_stmt`.
+ **deduplicate_key_level** determines the automatic inclusion and value setting of the WITH DEDUPLICATE statement within the index creation statement. For details on DEDUPLICATE, see :ref:`deduplicate_overview`. The default is -1(which means that the WITH DEDUPLICATE is not included implicitly).
  
 .. note::
 

@@ -3830,6 +3830,77 @@ N:1 관계의 **LEFT OUTER JOIN**\에서 조인 조건 외에 오른쪽 테이�
                 8           60          600  'Left- 706'                     6
                 9           60          600  'Left- 806'                     6
                10           60          600  'Left- 906'                     6
+.. _pred_push
+
+조건절 푸시 최적화
+-----------------------
+조건절 푸시(Predicate Push)는 뷰를 조인하기 전에 먼저 조건절을 적용한다. 
+
+이를 통해 조건에 만족하는 더 적은 양의 데이터만 조인되도록 하여 전체 처리량을 줄일 수 있다.
+
+
+예를 들어 **GROUP BY**\절을 포함한 아래 뷰를 처리할 때, 쿼리 블록 밖에 있는 조건절을 쿼리 블록 안쪽에 밀어 넣을 수 있다면
+**GROUP BY**\  해야할 데이터양을 줄일 수 있다. 
+
+
+.. code-block:: sql
+
+
+    SELECT b.deptno, b.dname, a.avg_sal
+
+    FROM (SELECT deptno, avg(sal) avg_sal FROM emp GROUP BY deptno) a
+
+        , dept b
+
+    WHERE a.deptno = b.deptno
+
+    AND a.deptno = 30;
+
+
+위 쿼리에 정의한 뷰 내부에는 조건절이 없다. 만약 쿼리 변환이 작동하지 않는다면,
+*emp*\  테이블을 Full Scan 하고서 **GROUP BY**\ 이후에 *deptno = 30*\ 조건을
+필터링했을 것이다. 
+
+하지만 조건절 푸시를 통해서 다음과 같이 쿼리가 변환된다면, 더 적은 양의
+데이터만 조인되도록 최적화할 수 있다.
+
+
+.. code-block:: sql
+
+
+    SELECT b.deptno, b.dname, a.avg_sal
+
+    FROM (SELECT deptno, avg(sal) avg_sal FROM emp GROUP BY deptno WHERE deptno = 30) a
+
+        , dept b
+
+    WHERE a.deptno = b.deptno
+
+    AND a.deptno = 30;
+
+다음의 경우엔 조건절 푸시 최적화가 수행되지 않는다.
+
+    #. **CONNECT BY PRIOR**\문을 사용한 계층적 쿼리인 경우
+
+    #. 서브쿼리에 **ROWNUM, LIMIT**\이 사용된 경우
+
+    #. 서브쿼리에 **GROUP BY, ORDER BY**\가 사용된 경우
+
+    #. 분석 함수가 사용된 경우
+
+    #. **JOIN ~ ON**\ 절을 이용하여 OUTER JOIN.... **ON**\절의 조건에 푸시될 조건절이 and로 결합되어 있는 경우
+
+    #. **WHERE**\ 절에서 **NVL()**\ 함수의 반환값을 상수와 비교하는 경우 
+
+    #. 조건절에 쿼리가 사용된 경우
+
+    #. 서브쿼리에 메소드가 사용된 경우
+
+    #. 서브쿼리의 **SELECT**\ 리스트에 **SELECT**\ 문이 포함된 경우
+
+    #. correlated subquery 내부에 **GROUP BY**\절이 사용된 경우
+
+    #. **NO_PUSH_PRED**\ 힌트가 사용된 경우
 
 .. _query-cache:
 

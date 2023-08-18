@@ -217,7 +217,7 @@ The following is [options] used in **cubrid unloaddb**.
 
 .. option:: --skip-index-detail
 
-	Instructs not to output specified WITH clause options when creating an index. The default operation of unloaddb is to always print the WITH clause options regardless of the **print_index_detail** setting. If this option is specified, options in the WITH clause are omitted and printed. Affected output files are schema file (*database-name*\_schema) and index file (*database-name*\_indexes). If this option is omitted, even if *deduplicate level* is **0**, it will always be output explicitly.
+	This option doesn't output of the WITH clause options specified when creating the index. The default operation of unloaddb is to always print the WITH clause options regardless of the **print_index_detail** setting. If this option is specified, options of indexes in the WITH clause are omitted and printed. Affected output files are schema file (*database-name*\_schema) and index file (*database-name*\_indexes). If this option is omitted, even if *deduplicate level* is **0**, it will always be output explicitly.
     
     ::
 

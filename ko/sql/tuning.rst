@@ -3831,6 +3831,161 @@ N:1 관계의 **LEFT OUTER JOIN**\에서 조인 조건 외에 오른쪽 테이�
                 9           60          600  'Left- 806'                     6
                10           60          600  'Left- 906'                     6
 
+.. _view_merge:
+
+View Merging 최적화
+-----------------------
+View Merging은 쿼리 처리 시간과 오버헤드를 줄이는데 초점을 둔다. 쿼리가 뷰를 사용할 때, 시스템은 일반적으로 새로운 임시 테이블을 생성한다. 
+
+그러나 이렇게 생성된 임시 테이블은 인덱스를 사용하기 어렵고, 뷰를 생성하는 과정 자체가 시스템에 불필요한 부하를 준다. 
+
+따라서 View Merging은 뷰를 원래 테이블로 대체하여 이러한 오버헤드를 피하고, 원래 테이블의
+인덱스를 활용하여 더 효율적인 쿼리 처리를 가능하게 한다.
+
+아래 쿼리 1 처럼 인라인 뷰를 사용하면, 쿼리 내용을 파악하기가 더 쉽다. 
+
+또한 서브쿼리로 표현하면 조인문보다 더 직관적으로 읽힌다.
+
+.. code-block:: sql
+
+
+    /* 쿼리 1 */
+    SELECT *
+    FROM (SELECT * FROM emp WHERE job = 'SALESMAN') a
+         (SELECT * FROM dept WHERE loc = 'CHICAGO') b
+    WHERE a.deptno = b.deptno
+
+
+그러나 옵티마이저는 최적화를 위해 인라인 뷰 *a*\와 인라인 뷰 *b*\를 미리 처리하여 임시 저장
+공간에 보관하고, 해당 데이터를 바탕으로 조인을 수행한다. 
+
+이 경우, 임시 저장 공간에 저장된
+데이터는 인덱스 사용이 불가능하여 많은 성능 저하가 발생한다.
+
+
+.. code-block:: sql
+
+
+    /* 쿼리 2 */
+    SELECT *
+    FROM emp a, dept b
+    WHERE a.deptno = b.deptno
+    AND a.job = 'SALESMAN'
+    AND b.loc = 'CHICAGO'
+
+
+따라서 쿼리 1의 뷰 쿼리 블록은 뷰를 참조하는 쿼리 블록과의 머지(merge) 과정을 거쳐
+쿼리 2와 같은 형태로 변환된다. 
+
+이를 **View Merging**\이라고 한다. 이 과정을 거치면 옵티마이저는 더 많은 액세스 경로를 조사 대상으로 삼을 수 있다.
+
+
+현재 큐브리드에서는 쿼리가 다음 조건에 해당하면 **View Merging**\을 수행할 수 없다.
+
+
+    #. **CONNECT BY**\를 포함한 경우
+
+    #. 서브쿼리가 **DISTINCT**\ 문을 포함한 경우
+
+    #. **CTE**\(Common Table Expressions)가 쿼리에 포함되어 있는 경우
+    
+    #. 뷰를 **OUTER JOIN**\ 하는 경우
+
+    #. 집계함수나 통계함수를 사용하는 경우
+
+    #. **INST_NUM()**\ 또는 **ORDERBY_NUM()**\ 을 사용하는 경우
+
+    #. **correlated subquery**\ 를 사용하여 작성된 경우
+
+    #. 서브 쿼리에 **FROM**\ 절이 없는 경우
+
+    #. 서브 쿼리가 메소드를 포함한 경우
+
+다음은 **CONNECY BY**\를 포함한 예시이다.
+
+.. code-block:: sql
+
+    SELECT *
+    FROM (SELECT * FROM tree WHERE BirthYear = 1973) t
+    CONNECT BY PRIOR t.id=t.mgrid; 
+
+
+위 쿼리에서는 **CONNECY BY**\절을 사용하기 때문에 **View Merging**\을 수행할 수 없다.
+
+다음은 서브쿼리가 **DISTINCT**\문을 포함한 예시이다.
+
+.. code-block:: sql
+
+    SELECT * FROM (SELECT DISTINCT BirthYear FROM Tree) T;
+
+위 쿼리의 서브쿼리 내부에 **DISTINCT**\문이 사용되어 **View Merging**\을 수행할 수 없다.
+
+
+다음은 **CTE**\(Common Table Expressions)가 쿼리에 포함되어 있는 예시이다.
+
+
+.. code-block:: sql
+
+    WITH cte AS (SELECT * FROM emp WHERE job = 'SALESMAN')
+    SELECT * FROM cte WHERE cte.deptno = 10;
+
+위와 같이 **CTE**\를 포함한 쿼리는 **View Merging**\을 수행할 수 없다.
+
+다음은 뷰를 **OUTER JOIN**\ 하는 예시이다.
+
+.. code-block:: sql
+
+    SELECT * FROM emp a 
+    LEFT OUTER JOIN (SELECT * FROM dept WHERE loc = 'CHICAGO') b 
+    ON a.deptno = b.deptno;
+
+위와 같이 명시적으로 **OUTER JOIN**\을 수행하는 경우에는 **View Merging**\을 수행할 수 없다.
+
+다음은 집계함수나 통계함수를 사용하는 예시이다.
+
+.. code-block:: sql
+
+    SELECT *
+    FROM (SELECT AVG(salary) FROM emp WHERE job = 'SALESMAN') a;
+
+집계함수나 통계함수를 포함한 쿼리의 경우 **View Merging**\의 대상이 되지 않는다.
+
+다음은 **INST_NUM()**\ 또는 **ORDERBY_NUM()**\ 을 사용하는 예시이다.
+
+.. code-block:: sql
+
+    SELECT *
+    FROM (SELECT name, inst_num() FROM athlete WHERE inst_num() < 15) a
+    WHERE inst_num() < 5;
+
+**INST_NUM()**\ 또는 **ORDERBY_NUM()**\ 함수를 사용한 쿼리의 경우 **View Merging**\이 불가능하다.
+
+다음은 **correlated subquery**\ 를 사용하여 작성된 예시이다
+
+.. code-block:: sql
+
+    SELECT * FROM emp a 
+    WHERE EXISTS (SELECT 1 FROM dept b WHERE a.deptno = b.deptno);
+
+**correlated subquery**\를 사용한 쿼리의 경우 **View Merging**\이 불가능하다.
+
+다음은 서브 쿼리에 **FROM**\ 절이 없는 예시이다.
+
+.. code-block:: sql
+
+    SELECT 1 + (SELECT 2);
+
+서브 쿼리에 **FROM**\절이 없는 경우 **View Merging** 하여 인덱스 스캔을 사용 가능하게 하는 등의 성능 최적화가 불가능하여 **View Merging**\이 불가하다.
+
+다음은 서브 쿼리가 메소드를 포함한 예시이다. 
+
+.. code-block:: sql
+
+    SELECT * FROM emp 
+    WHERE salary > (SELECT AVG(salary) FROM dept_view);
+
+서브쿼리에 메소드를 포함한 경우에 **View Merging**\이 불가하다.
+
 .. _query-cache:
 
 쿼리 캐시

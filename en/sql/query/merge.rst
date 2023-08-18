@@ -263,7 +263,7 @@ The following is an example of combining source_table values of the remote serve
 
 .. warning::
 
-As in the example below, if the target is remote and the source is local, an error occurs.
+    As in the example below, if the target is remote and the source is local, an error occurs.
 
 .. code-block:: sql
 

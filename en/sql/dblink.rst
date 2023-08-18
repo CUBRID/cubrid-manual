@@ -645,8 +645,8 @@ The Query statement below is a Query statement that inquires the remote_t table 
 
 Caution
 ==============================================
-* The table extension format (object@server) can only be used for tables, views, and synonyms, and serial, built-in functions, and stored functions cannot be used. For example, the sp_func() stored function of the remote server (server1) cannot be used in the form of sp_func@server1(arg1, ...).
-* Therefore, all functions (including built-in functions and stored functions including SYSDATE) used in the SELECT query operate locally.
+* The table extension format (object@server) can only be used for tables, views, and synonyms, but serial, built-in functions, and stored functions cannot be used. For example, the sp_func() stored function of the remote server (server1) cannot be used in the form of sp_func@server1(arg1, ...).
+* Therefore, all functions (including built-in functions as like SYSDATE and stored functions) used in the SELECT query operate locally.
 * However, unlike SELECT queries, all functions used in INSERT/UPDATE/DELETE/MERGE queries operate on the remote server.
 * If you need to use a remote server function in a SELECT query, you can use the DBLINK statement.
 * Since the functions used in INSERT/UPDATE/DELETE/MERGE queries are executed on the remote server, care must be taken when using the functions. (In other words, when using CUBRID built-in functions, note that the remote DBMS may not have the corresponding built-in function or the usage may be different.)

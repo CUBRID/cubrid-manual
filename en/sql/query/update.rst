@@ -208,6 +208,7 @@ Table extensions can be used to perform updates on tables on the remote server a
 The following is an example of performing an update after joining multiple tables, including remote tables.
 
 .. code-block:: sql
+
     --at remote srv1
     --creating a table b_tbl
     CREATE TABLE b_tbl(rate_id INT, rate DOUBLE);

@@ -266,6 +266,7 @@ A remote table can be specified in the FROM clause, and when specifying a remote
    INSERT INTO remote_tbl VALUES (1, 'Kim');
    INSERT INTO remote_tbl VALUES (2, 'Lee');
    INSERT INTO remote_tbl VALUES (3, 'Park');
+
 ::
 
    -- at local-side
@@ -289,7 +290,7 @@ The query rewritten with the DBLINK statement for the remote table in the optimi
 
 .. note::
 
-Objects allowed for table extensions include general tables, synonyms, and views. The example below shows three types of table extensions.
+    Objects allowed for table extensions include general tables, synonyms, and views. The example below shows three types of table extensions.
 
 .. code-block:: sql
 

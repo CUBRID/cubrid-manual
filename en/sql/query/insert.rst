@@ -199,7 +199,7 @@ The **SELECT** statement can be used in place of the **VALUES** keyword, or be i
                 8  'aaa'                 '000-0000'
 
 INSERT INTO <remote-table-spec>… SELECT statement
-=========================================
+==================================================
 
 If a remote table of the same remote server used in the SELECT query is used in the INSERT statement, query results that satisfy specific search conditions from one or more remote tables can be inserted into the remote table. However, an error occurs when the remote table of the INSERT statement among the tables specified in the SELECT statement and the table of another server (local table or table of another remote server) are used.
 
@@ -234,16 +234,22 @@ If a remote table of the same remote server used in the SELECT query is used in 
 Data from a remote table can be inserted into a local table, but queries that insert data from a local table into a remote table cannot be used, so care must be taken when using it. The query below throws an error.
 
 .. code-block:: sql
+
     --inserting multiple rows from SELECT query results
     INSERT INTO a_tbl2@server1 SELECT * FROM a_tbl1 WHERE id IS NOT NULL;
+
+::
 
     dblink: local mixed remote DML is not allowed
 
 Also, if the server of the remote table used in the INSERT statement and the SELECT statement are different, query execution is not allowed. The query below throws an error.
 
 .. code-block:: sql
+
     --inserting multiple rows from SELECT query results
     INSERT INTO a_tbl2@server1 SELECT * FROM a_tbl1@server2 WHERE id IS NOT NULL;
+
+::
 
     dblink: multi-remote DML is not allowed
 

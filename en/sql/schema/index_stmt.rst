@@ -285,7 +285,8 @@ Explicit method
         * When the key field includes all key fields constituting a specific Primary Key or Unique Index
         * However, except when used as an argument of a function
 
-Duplicated index
+Allowing multiple indexes on the same column in the same order
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         
     Multiple indexes can be defined with all key fields and filter conditions identical except for *deduplicate level*\.
 
@@ -309,7 +310,7 @@ Duplicated index
 .. _deduplicate_overflow_page:
 
 OVERFLOW PAGE
-~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
 
     * What is the overflow page?
        An index consists of a non-terminal node and a terminal node, and a terminal node is composed of a set of index key information.

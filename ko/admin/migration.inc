@@ -216,7 +216,9 @@ unloaddb
 
 .. option:: --skip-index-detail
 
-	인덱스를 생성할 때 지정된 WITH 절 옵션들을 출력하지 않도록 지시한다. unloaddb는 **print_index_detail** 설정값에 상관없이 항상 WITH 절의 옵션들을 출력하는 것이 기본적인 동작이다. 이 옵션이 지정되면 WITH 절의 옵션들은 생략하고 출력하게 된다. 영향을 받는 출력 파일은 스키마파일(*database-name*\_schema)과 인덱스파일(*database-name*\_indexes)이다. 이 옵션이 생략되면 *deduplicate level*\이 **0**\이더라도 반드시 명시적으로 출력된다.
+	이 옵션은 인덱스 생성시 지정된 WITH 절 옵션들을 출력하지 않는다. unloaddb는 **print_index_detail** 설정값에 상관없이 항상 WITH 절의 옵션들을 출력하는 것이 기본적인 동작이다. 
+        이 옵션이 지정되면 WITH 절의 옵션들은 생략하고 출력하게 된다. 영향을 받는 출력 파일은 스키마파일(*database-name*\_schema)과 인덱스파일(*database-name*\_indexes)이다. 
+        이 옵션이 생략되면 *deduplicate level*\이 **0**\이더라도 반드시 명시적으로 출력된다.
     
     ::
 

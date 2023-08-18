@@ -227,9 +227,10 @@ UPDATE
 
 .. warning::
 
-아래와 같이 로컬 테이블과 원격 테이블이 포함되어 있고, 원격 테이블이 업데이트되는 UPDATE ... JOIN 쿼리는 허용하지 않는다. 
+    아래와 같이 로컬 테이블과 원격 테이블이 포함되어 있고, 원격 테이블이 업데이트되는 UPDATE ... JOIN 쿼리는 허용하지 않는다. 
 
 .. code-block:: sql
+
     UPDATE
      a_tbl INNER JOIN b_tbl@srv1 b_tbl ON a_tbl.id=b_tbl.rate_id
     SET

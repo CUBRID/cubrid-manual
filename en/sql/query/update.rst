@@ -223,7 +223,7 @@ The following is an example of performing an update after joining multiple table
 
 .. warning::
 
-As shown below, UPDATE ... JOIN queries that include local and remote tables and update the remote table are not allowed.
+    As shown below, UPDATE ... JOIN queries that include local and remote tables and update the remote table are not allowed.
 
 .. code-block:: sql
 

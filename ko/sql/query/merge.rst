@@ -265,7 +265,7 @@ MERGE 문을 실행하기 위해서는 원본 테이블에 대해 SELECT 권한�
 
 .. warning::
 
-아래의 예처럼 target이 remote이고 source가 local인 경우는 에러가 발생한다.
+    아래의 예처럼 target이 remote이고 source가 local인 경우는 에러가 발생한다.
 
 .. code-block:: sql
 

@@ -845,7 +845,8 @@ cci_connect_with_url
                      | logSlowQueries=true|false[&slowQueryThresholdMillis=<milli_sec>]
                      | logTraceApi=true|false
                      | logTraceNetwork=true|false
-                     | useSSL=<bool_type>
+                     | useSSL=true|false
+                     | oracleStyleNumberReturn=true|false
 
         <alternative_hosts> ::= <host>:<port> [,<host>:<port>]
          
@@ -891,6 +892,8 @@ cci_connect_with_url
        *   패킷 암호화: useSSL = true
        *   일반 평문: useSSL = false
 
+    *   **oracleStyleNumberReturn**: oracleStyleNumberReturn가 true인 경우, double, float 타입의 결과 값에서 소수점 이하의 0을 제거, false이면 소수점 이하 0을 제거하지 않는다.
+	
     **예제** ::
 
         --connection URL string when a property(altHosts) is specified for HA
@@ -904,6 +907,9 @@ cci_connect_with_url
 
         --connection URL string when useSSL property specified for encrypted connection
         URL = "cci:cubrid:192.168.0.1:33000:demodb:::?useSSL=true
+		
+        --connection URL string when oracleStyleNumberReturn property is specified for remove decimal zeros from the result value
+        URL = "cci:cubrid:192.168.0.1:33000:demodb:::?oracleStyleNumberReturn=true
 
     .. warning::
 

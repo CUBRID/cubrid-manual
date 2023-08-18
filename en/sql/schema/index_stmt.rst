@@ -247,7 +247,7 @@ DEDUPLICATE
 
 If you use the **DEDUPLICATE** option, you can improve performance of modifying skewed index. The value of this option can be adjusted to mitigate the overflow page's linked list for a specific key value from being made too long, thereby improving insert/delete/update and vacuum performance. However, since an index column hidden by the system is added, the number of leaf nodes in the index and the height of the b-tree may increase, increasing the size of the index and affecting search performance. In particular, if the index data is uniformly distributed with respect to key values, you are careful to use this option because only the size of the index may increase without improving performance.
 
-If the value of *deduplicate level* is specified as 1 or higher, a hidden index column used internally by the system is added in addition to the index column specified by the user when creating the index. This value is used to reduce redundancy so that it is not biased toward a specific key value. do. The larger the *deduplicate level* value, the more diverse this system value is, and the more relaxed the redundancy is, the shorter the length of the linked list of overflow pages that can be created for a specific key value.
+If the value of *deduplicate level* is specified as 1 or higher, a hidden index column used internally by the system is added when creating the index. The value of column is used to reduce redundancy so that it is not biased toward a specific key value.  A higher *deduplicate level* value, it will be mitigated redundancy and a smaller overflow page for a specific  key.
 
 .. note::
 

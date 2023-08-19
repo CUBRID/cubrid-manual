@@ -281,7 +281,7 @@ Explicit method
 
 .. note::
 
-    * When creating an index, if the composition of the key field is guaranteed to be UNIQUE, the DEDUPLICATE setting set by the user is ignored and *deduplicate level* is created as **0**.
+    * When creating an index, if the composition of the key field is guaranteed to be UNIQUE, the DEDUPLICATE specified by the user is ignored and *deduplicate level* is created as **0**.
         * When the key field includes all key fields constituting a specific Primary Key or Unique Index
         * However, except when used as an argument of a function
 

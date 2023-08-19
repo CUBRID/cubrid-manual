@@ -303,7 +303,7 @@ Allowing multiple indexes on the same column in the same order
 .. note::
 
     * If an FK with the same index column differing only in *deduplicate level* already exists, it cannot be duplicated.
-    * Even if duplicate indexes are allowed, if there is a Primary key or Unique Index with the same configuration, duplicate indexes are not created.
+    * If columns of index includes a primary key or unique index, indexes that differ only in the deduplicate level can't be created. (Even if duplicate indexes are allowed.)
     * You cannot change the *deduplicate level* of an index with the ALTER INDEX REBUILD statement. If necessary, delete the index and recreate it.
 
 

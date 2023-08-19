@@ -298,7 +298,7 @@ Allowing multiple indexes on the same column in the same order
         CREATE UNIQUE INDEX idx_uk ON tbl(b); 
         CREATE INDEX idx3 ON tbl(b, c) WITH DEDUPLICATE=7;
 
-    In the example above, idx1 and idx2 have the specified *deduplicate level*. However, since idx3 is guaranteed that column b is unique by idx_uk, *deduplicate level* is created as **0**, ignoring the user's designation.
+    In the example above, idx1 and idx2 have the specified *deduplicate level*. However, since idx3 is guaranteed by idx_uk that column b is unique, it is created *duplicate level* as **0** and ignore user's specified option.
         
 .. note::
 

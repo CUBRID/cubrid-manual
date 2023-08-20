@@ -251,8 +251,6 @@ If the value of *deduplicate level* is specified as 1 or higher, a hidden index 
 
 .. note::
 
-    * In general, whenever *deduplicate level* increases by one, the number of overflow page of specific key will be halved.
-    * The key value given by the system is obtained through the remainder operation for the page number among the OID information of the record. Therefore, the distribution of key values actually given by the system is determined by the number of pages where records are stored.
     * The overflow page have a disadvantage in add, delete, and update performance, but are beneficial in search performance. Therefore, it is better to adjust the length of the overflow page for one key to be within tens or hundreds of pages, rather than setting the *deduplication level* high so that overflow pages are not created when creating an index with that option.
 
 

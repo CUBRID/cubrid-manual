@@ -282,7 +282,7 @@ Explicit method
 .. note::
 
     * When creating an index, if the composition of the key field is guaranteed to be UNIQUE, the DEDUPLICATE specified by the user is ignored and *deduplicate level* is created as **0**.
-        * When the key field includes all key fields constituting a specific Primary Key or Unique Index
+        * If the columns of index includes all columns of Primary Key or Unique Index.
         * However, except if columns of Primary key or Unique index used as an argument of a function index.
 
 Allowing multiple indexes on the same column in the same order

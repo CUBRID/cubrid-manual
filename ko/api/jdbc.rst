@@ -245,7 +245,7 @@ JDBC 프로그래밍
     --connection URL string when hold_cursor property specified for cursor holdability
     URL=jdbc:CUBRID:192.168.0.1:33000:demodb:public::?hold_cursor=true
 	
-    --connection URL string when oracleStyleNumberReturn property is specified for remove decimal zeros from the result value
+    --connection URL string when oracleStyleNumberReturn property is specified to remove trailing zeros after the decimal point from the result value
     URL=jdbc:CUBRID:192.168.0.1:33000:demodb:public::?oracleStyleNumberReturn=true
 
 **예제 2**

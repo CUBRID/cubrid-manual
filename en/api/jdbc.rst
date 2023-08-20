@@ -245,9 +245,9 @@ The **getConnection** method returns the **Connection** object and it is used to
     --connection URL string when hold_cursor property specified for cursor holdability
     URL=jdbc:CUBRID:192.168.0.1:33000:demodb:public::?hold_cursor=true    
 
-    --connection URL string when oracleStyleNumberReturn property is specified for remove decimal zeros from the result value 
-    URL = "cci:cubrid:192.168.0.1:33000:demodb:::?oracleStyleNumberReturn=true
-	
+    --connection URL string when oracleStyleNumberReturn property is specified to remove trailing zeros after the decimal point from the result value
+    URL=jdbc:CUBRID:192.168.0.1:33000:demodb:public::?oracleStyleNumberReturn=true
+
 **Example 2**
 
 .. code-block:: java

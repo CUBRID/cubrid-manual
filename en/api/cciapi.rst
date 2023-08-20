@@ -908,7 +908,7 @@ cci_connect_with_url
         --connection URL string when useSSL property specified for encrypted connection
         URL = "cci:cubrid:192.168.0.1:33000:demodb:::?useSSL=true
 
-        --connection URL string when oracleStyleNumberReturn property is specified for remove decimal zeros from the result value
+        --connection URL string when oracleStyleNumberReturn property is specified to remove trailing zeros after the decimal point from the result value
         URL = "cci:cubrid:192.168.0.1:33000:demodb:::?oracleStyleNumberReturn=true
 
     .. warning::

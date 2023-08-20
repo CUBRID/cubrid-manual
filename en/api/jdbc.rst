@@ -205,7 +205,7 @@ The **getConnection** method returns the **Connection** object and it is used to
     *  **preparedStmtCacheSize**: If usePreparedStmtCache is TRUE, the number of SQLs that can be cached (Default:25, Min:1, Max:2147483647)
     *  **preparedStmtCacheSqlLimit**: If usePreparedStmtCache is TRUE, length of SQL that can be cached (Default:256, Min:1, Max:2147483647)
     *  **hold_cursor**: Cursor holdability setting (default: true). If this value is false, CLOSE_CURSORS_AT_COMMIT is set, and if true, HOLD_CURSORS_OVER_COMMIT is set. For details, see :ref:`cursor-holding`\ .
-    *  **oracleStyleNumberReturn**: If oracleStyleNumberReturn is true, zeros after the decimal point are removed from double and float type results. If it is false, zeros after the decimal point are not removed.
+    *  **oracleStyleNumberReturn**: If oracleStyleNumberReturn is true, trailing zeros after the decimal point are removed from double and float type results (eg. 0.12). If it is false, trailing zeros after the decimal point are not removed (eg. 0.1200000)
 
 **Example 1** ::
 

@@ -892,7 +892,7 @@ cci_connect_with_url
        *   Packet encryption: useSSL = true
        *   Plain text: useSSL = false
 
-    *   **oracleStyleNumberReturn**: If oracleStyleNumberReturn is true, zeros after the decimal point are removed from double and float type results. If it is false, zeros after the decimal point are not removed.
+    *   **oracleStyleNumberReturn**: If oracleStyleNumberReturn is true, trailing zeros after the decimal point are removed from double and float type results (eg. 0.12). If it is false, trailing zeros after the decimal point are not removed (eg. 0.1200000)
 
     **Example** ::
 

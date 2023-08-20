@@ -892,7 +892,7 @@ cci_connect_with_url
        *   패킷 암호화: useSSL = true
        *   일반 평문: useSSL = false
 
-    *   **oracleStyleNumberReturn**: oracleStyleNumberReturn가 true인 경우, double, float 타입의 결과 값에서 소수점 이하의 0을 제거, false이면 소수점 이하 0을 제거하지 않는다.
+    *   **oracleStyleNumberReturn**: oracleStyleNumberReturn가 true인 경우, double, float 타입의 결과 값에서 소수점 이하의 후행 0을 억제 (예: 0.12), false이면 후행 0가 그대로 표시된다 (예: 0.12000000)
 	
     **예제** ::
 

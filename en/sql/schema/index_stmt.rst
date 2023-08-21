@@ -15,13 +15,20 @@ For how to use indexes on the **SELECT** statement like Using SQL Hint, Descendi
 
 ::
 
-    CREATE [UNIQUE] INDEX index_name ON [schema_name.]table_name <index_col_desc> ;
+    CREATE [UNIQUE] INDEX index_name ON [schema_name.]table_name <index_col_desc2> ;
      
-        <index_col_desc> ::=
-            { ( column_name [ASC | DESC] [ {, column_name [ASC | DESC]} ...] ) [ WHERE <filter_predicate> ] | 
-            (function_name (argument_list) ) }
-                { [[WITH ONLINE [PARALLEL parallel_count]] | [INVISIBLE] | [VISIBLE]] }
-                [COMMENT 'index_comment_string']
+        <index_col_desc2> ::=
+                  {
+                     (  {column_name | function_name (argument_list)} [ASC | DESC]
+                       [{, {column_name | function_name (argument_list)} [ASC | DESC]} ...] )
+                  }
+                  [WHERE <filter_predicate> ]
+                  [WITH <index_with_clause> [{, <index_with_clause>]} ...]
+                  [INVISIBLE]
+                  [COMMENT 'index_comment_string’]
+
+             <index_with_clause> ::= {ONLINE [PARALLEL parallel_count]} | <index_with_option>
+             <index_with_option> ::= {DEDUPLICATE ‘=‘ deduplicate_level}
 
 *   **UNIQUE**: creates an index with unique values.
 *   *index_name*: specifies the name of the index to be created. The index name must be unique in the table.
@@ -29,7 +36,13 @@ For how to use indexes on the **SELECT** statement like Using SQL Hint, Descendi
 *   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *table_name*: specifies the name of the table where the index is to be created.
 *   *column_name*: specifies the name of the column where the index is to be applied. To create a composite index, specify two or more column names.
-*   **ASC** | **DESC**: specifies the sorting order of columns. 
+*   **ASC** | **DESC**: specifies the sorting order of columns.
+*   *deduplicate_level*: specifies the deduplicate level (0 to 14). For details, see `DEDUPLICATE`_.
+
+.. note::
+
+    *   *deduplicate_level* is an integer from 0 to 14. 
+    *   When this parameter is set to 0, it indicates an index configuration where data deduplication within indexes is not performed. This configuration is the same as that in CUBRID 11.2 or an earlier version.
 
 *   <*filter_predicate*>: defines the conditions to create filtered indexes. When there are several comparison conditions between a column and a constant, filtering is available only when the conditions are connected by using **AND**. Refer to :ref:`filtered-index` for more details.
 *   *function_name* (*argument_list*): Defines the conditions to create function-based indexes. Regarding this, definitely watch :ref:`function-index`.
@@ -226,6 +239,82 @@ Online unique index while other transactions inserts violates uniqueness
 |   CLASS t1(CLASS_OID: 0|202|7). key: *UNKNOWN-KEY*.               |                                                                                   |
 |                                                                   |                                                                                   |
 +-------------------------------------------------------------------+-----------------------------------------------------------------------------------+
+
+.. _deduplicate_overview:
+
+DEDUPLICATE 
+-----------
+
+If you use the **DEDUPLICATE** option, you can improve performance of modifying skewed index. The value of this option can be adjusted to mitigate the overflow page's linked list for a specific key value from being made too long, thereby improving insert/delete/update and vacuum performance. However, since an index column hidden by the system is added, the number of leaf nodes in the index and the height of the b-tree may increase, increasing the size of the index and affecting search performance. In particular, if the index data is uniformly distributed with respect to key values, you are careful to use this option because only the size of the index may increase without improving performance.
+
+If the value of *deduplicate level* is specified as 1 or higher, a hidden index column used internally by the system is added when creating the index. The value of column is used to reduce redundancy so that it is not biased toward a specific key value.  A higher *deduplicate level* value, it will be mitigated redundancy and a smaller overflow page for a specific  key.
+
+.. note::
+
+    * The overflow page have a disadvantage in add, delete, and update performance, but are beneficial in search performance. Therefore, it is better to adjust the length of the overflow page for one key to be within tens or hundreds of pages, rather than setting the *deduplication level* high so that overflow pages are not created when creating an index with that option.
+
+
+There are two ways to specify *deduplicate level* when creating an index.
+
+Implicit method
+
+    This method automatically specifies *deduplicate level* when there is no explicit DEDUPLICATE option specified in the SQL statement. This method is affected by the set value of the system parameter **deduplicate_key_level**.
+    If **deduplicate_key_level** is greater than or equal to 1, *deduplicate level* is automatically set to **deduplicate_key_level**. 
+
+Explicit method
+
+    This is a method in which the user explicitly specifies the **DEDUPLICATE** option in the SQL statement. Regardless of the **deduplicate_key_level** set value, the *deduplicate level* specified by the user is applied.
+    As in the example below, specify the DEDUPLICATE statement directly.
+    
+    .. code-block:: sql
+    
+        CREATE TABLE tbl (a int default 0, b int, c int);
+        CREATE INDEX i_tbl_b on tbl (b) WITH DEDUPLICATE=3 COMMENT 'for deduplicate level 3';
+        CREATE INDEX i_tbl_b_c on tbl (b,c) WITH DEDUPLICATE=7 COMMENT 'for deduplicate level 1';
+
+.. warning::
+
+    * If **deduplicate_key_level** is **\-1**\, it is internally ignored and not applied even if it is specified explicitly. That is, in this case, all indexes are created with *deduplicate level* as **0**.
+    * A column name that begins with "**_dedup_**" cannot be created.
+
+.. note::
+
+    * When creating an index, if the composition of the key field is guaranteed to be UNIQUE, the DEDUPLICATE specified by the user is ignored and *deduplicate level* is created as **0**.
+        * If the columns of index includes all columns of Primary Key or Unique Index.
+        * However, except if columns of Primary key or Unique index used as an argument of a function index.
+
+Allowing multiple indexes on the same column in the same order
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        
+    Multiple indexes can be defined with all key fields and filter conditions identical except for *deduplicate level*\.
+
+    .. code-block:: sql
+    
+        CREATE TABLE tbl (a int primary key, b int, c int);
+        CREATE INDEX idx1 ON tbl(b, c) WITH DEDUPLICATE=3;
+        CREATE INDEX idx2 ON tbl(b, c) WITH DEDUPLICATE=5;
+        CREATE UNIQUE INDEX idx_uk ON tbl(b); 
+        CREATE INDEX idx3 ON tbl(b, c) WITH DEDUPLICATE=7;
+
+    In the example above, idx1 and idx2 have the specified *deduplicate level*. However, since idx3 is guaranteed by idx_uk that column b is unique, it is created *duplicate level* as **0** and ignore user's specified option.
+        
+.. note::
+
+    * If an FK already exists with the same index column that differs only in *deduplication level*, it can't be duplicated.
+    * If columns of index includes a primary key or unique index, indexes that differ only in the deduplicate level can't be created. (Even if duplicate indexes are allowed.)
+    * You cannot change the *deduplicate level* of an index with the ALTER INDEX REBUILD statement. If necessary, delete the index and recreate it.
+
+
+.. _deduplicate_overflow_page:
+
+OVERFLOW PAGE
+~~~~~~~~~~~~~~~
+
+    * What is the overflow page?
+       An index consists of non-leaf nodes and leaf nodes, and a leaf node is composed of a set of index key information.
+       At this time, one index key information is a pair of a key value and a set of record's OIDs corresponding to the key value.
+       If there are many records with a specific key value, the OIDs of all the records can't be stored in the leaf node, so they are separated and managed in a separate page, which is called an overflow page.
+       Also, when even overflow pages are full, new overflow pages are created and these pages are maintained as a linked list.
 
 .. _alter-index:
 

@@ -240,6 +240,32 @@ The following is [options] used in **cubrid unloaddb**.
 
         cubrid unloaddb -u u1_dba_group --as-dba demodb
 
+.. option:: --skip-index-detail
+
+	This option doesn't output of the WITH clause options specified when creating the index. The default operation of unloaddb is to always print the WITH clause options regardless of the **print_index_detail** setting. If this option is specified, options of indexes in the WITH clause are omitted and printed. Affected output files are schema file (*database-name*\_schema) and index file (*database-name*\_indexes). If this option is omitted, even if *deduplicate level* is **0**, it will always be output explicitly.
+    
+    ::
+
+        cubrid unloaddb --skip-index-detail demodb
+
+    In the example below, you can see the difference whether this option is specified or not.
+    
+    Schema file
+    
+    +-----------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
+    | -–skip-index-detail not specified | ALTER CLASS [dba].[ts] ADD CONSTRAINT [fk_ts_fid] FOREIGN KEY([fid]) WITH DEDUPLICATE=0 REFERENCES [dba].[tm] ON DELETE RESTRICT ON UPDATE RESTRICT ;  |
+    +-----------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
+    | -–skip-index-detail specified     | ALTER CLASS [dba].[ts] ADD CONSTRAINT [fk_ts_fid] FOREIGN KEY([fid]) REFERENCES [dba].[tm] ON DELETE RESTRICT ON UPDATE RESTRICT ;                     |
+    +-----------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
+    
+    Index file
+    
+    +-----------------------------------+-------------------------------------------------------------------+
+    | -–skip-index-detail not specified | CREATE INDEX [idx_val] ON [dba].[ts] ([val]) WITH DEDUPLICATE=0;  |
+    +-----------------------------------+-------------------------------------------------------------------+
+    | -–skip-index-detail specified     | CREATE INDEX [idx_val] ON [dba].[ts] ([val]);                     |
+    +-----------------------------------+-------------------------------------------------------------------+
+
 .. note::
 
    To shorten the execution time of the unloaddb, it is possible to run multiple **'cubrid unloaddb'** processes concurrently for groups of different tables. (or you can use **unloaddb.sh**, refer :ref:`cubrid_scripts_unloaddb_sh`).

@@ -240,6 +240,35 @@ unloaddb
 
         cubrid unloaddb -u u1_dba_group --as-dba demodb
 
+.. option:: --skip-index-detail
+
+	이 옵션은 인덱스 생성시 지정된 WITH 절 옵션들을 출력하지 않는다. unloaddb는 **print_index_detail** 설정값에 상관없이 항상 WITH 절의 옵션들을 출력하는 것이 기본적인 동작이다. 
+        이 옵션이 지정되면 WITH 절의 옵션들은 생략하고 출력하게 된다. 영향을 받는 출력 파일은 스키마파일(*database-name*\_schema)과 인덱스파일(*database-name*\_indexes)이다. 
+        이 옵션이 생략되면 *deduplicate level*\이 **0**\이더라도 반드시 명시적으로 출력된다.
+    
+    ::
+
+        cubrid unloaddb --skip-index-detail demodb
+
+    아래 예시에서 이 옵션의 지정 여부에 따른 차이를 확인해 볼 수 있다.
+    
+    스키마파일
+    
+    +----------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
+    | -–skip-index-detail 미지정 | ALTER CLASS [dba].[ts] ADD CONSTRAINT [fk_ts_fid] FOREIGN KEY([fid]) WITH DEDUPLICATE=0 REFERENCES [dba].[tm] ON DELETE RESTRICT ON UPDATE RESTRICT ;  |
+    +----------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
+    | -–skip-index-detail 지정   | ALTER CLASS [dba].[ts] ADD CONSTRAINT [fk_ts_fid] FOREIGN KEY([fid]) REFERENCES [dba].[tm] ON DELETE RESTRICT ON UPDATE RESTRICT ;                     |
+    +----------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
+    
+    인덱스파일
+    
+    +----------------------------+-------------------------------------------------------------------+
+    | -–skip-index-detail 미지정 | CREATE INDEX [idx_val] ON [dba].[ts] ([val]) WITH DEDUPLICATE=0;  |
+    +----------------------------+-------------------------------------------------------------------+
+    | -–skip-index-detail 지정   | CREATE INDEX [idx_val] ON [dba].[ts] ([val]);                     |
+    +----------------------------+-------------------------------------------------------------------+
+
+
 .. note::
 
    언로드 시간을 단축하기 위해서 서로 다른 테이블에 대한 언로드는 동시에 실행 가능하며 **unloaddb.sh** 스크립트를 이용하면 이러한 과정을 쉽게 할 수 있다 (:ref:`cubrid_scripts_unloaddb_sh` 참고).

@@ -3887,7 +3887,7 @@ View Merging은 쿼리 처리 시간과 오버헤드를 줄이는데 초점을 �
     
     #. 뷰를 **OUTER JOIN**\ 하는 경우
 
-    #. 집계함수나 통계함수를 사용하는 경우
+    #. 집계함수나 분석함수를 사용하는 경우
 
     #. **INST_NUM()**\ 또는 **ORDERBY_NUM()**\ 을 사용하는 경우
 
@@ -3908,13 +3908,13 @@ View Merging은 쿼리 처리 시간과 오버헤드를 줄이는데 초점을 �
 
 위 쿼리에서는 **CONNECY BY**\절을 사용하기 때문에 **View Merging**\을 수행할 수 없다.
 
-다음은 서브쿼리가 **DISTINCT**\문을 포함한 예시이다.
+다음은 인라인 뷰가 **DISTINCT**\문을 포함한 예시이다.
 
 .. code-block:: sql
 
     SELECT * FROM (SELECT DISTINCT BirthYear FROM Tree) T;
 
-위 쿼리의 서브쿼리 내부에 **DISTINCT**\문이 사용되어 **View Merging**\을 수행할 수 없다.
+위 쿼리의 인라인 뷰 내부에 **DISTINCT**\문이 사용되어 **View Merging**\을 수행할 수 없다.
 
 
 다음은 **CTE**\(Common Table Expressions)가 쿼리에 포함되어 있는 예시이다.
@@ -3937,14 +3937,14 @@ View Merging은 쿼리 처리 시간과 오버헤드를 줄이는데 초점을 �
 
 위와 같이 명시적으로 **OUTER JOIN**\을 수행하는 경우에는 **View Merging**\을 수행할 수 없다.
 
-다음은 집계함수나 통계함수를 사용하는 예시이다.
+다음은 집계함수나 분석함수를 사용하는 예시이다.
 
 .. code-block:: sql
 
     SELECT *
     FROM (SELECT AVG(salary) FROM emp WHERE job = 'SALESMAN') a;
 
-집계함수나 통계함수를 포함한 쿼리의 경우 **View Merging**\의 대상이 되지 않는다.
+집계함수나 분석함수를 포함한 쿼리의 경우 **View Merging**\의 대상이 되지 않는다.
 
 다음은 **INST_NUM()**\ 또는 **ORDERBY_NUM()**\ 을 사용하는 예시이다.
 
@@ -3965,22 +3965,22 @@ View Merging은 쿼리 처리 시간과 오버헤드를 줄이는데 초점을 �
 
 **correlated subquery**\를 사용한 쿼리의 경우 **View Merging**\이 불가능하다.
 
-다음은 서브 쿼리에 **FROM**\ 절이 없는 예시이다.
+다음은 인라인 뷰에 **FROM**\ 절이 없는 예시이다.
 
 .. code-block:: sql
 
     SELECT 1 + (SELECT 2);
 
-서브 쿼리에 **FROM**\절이 없는 경우 **View Merging** 하여 인덱스 스캔을 사용 가능하게 하는 등의 성능 최적화가 불가능하여 **View Merging**\이 불가하다.
+인라인 뷰에 **FROM**\절이 없는 경우 **View Merging** 하여 인덱스 스캔을 사용 가능하게 하는 등의 성능 최적화가 불가능하여 **View Merging**\이 불가하다.
 
-다음은 서브 쿼리가 메소드를 포함한 예시이다. 
+다음은 인라인 뷰가 메소드를 포함한 예시이다. 
 
 .. code-block:: sql
 
     SELECT * FROM emp 
     WHERE salary > (SELECT AVG(salary) FROM dept_view);
 
-서브쿼리에 메소드를 포함한 경우에 **View Merging**\이 불가하다.
+인라인 뷰에 메소드를 포함한 경우에 **View Merging**\이 불가하다.
 
 .. _query-cache:
 

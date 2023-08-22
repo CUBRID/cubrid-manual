@@ -845,7 +845,8 @@ cci_connect_with_url
                      | logSlowQueries=true|false[&slowQueryThresholdMillis=<milli_sec>]
                      | logTraceApi=true|false
                      | logTraceNetwork=true|false
-                     | useSSL=<bool_type>
+                     | useSSL=true|false
+                     | oracleStyleNumberReturn=true|false
          
         <alternative_hosts> ::= <host>:<port> [,<host>:<port>]
          
@@ -891,6 +892,8 @@ cci_connect_with_url
        *   Packet encryption: useSSL = true
        *   Plain text: useSSL = false
 
+    *   **oracleStyleNumberReturn**: If oracleStyleNumberReturn is true, trailing zeros after the decimal point are removed from double and float type results (eg. 0.12). If it is false, trailing zeros after the decimal point are not removed (eg. 0.1200000)
+
     **Example** ::
 
         --connection URL string when a property(altHosts) is specified for HA
@@ -904,6 +907,9 @@ cci_connect_with_url
 
         --connection URL string when useSSL property specified for encrypted connection
         URL = "cci:cubrid:192.168.0.1:33000:demodb:::?useSSL=true
+
+        --connection URL string when oracleStyleNumberReturn property is specified to remove trailing zeros after the decimal point from the result value
+        URL = "cci:cubrid:192.168.0.1:33000:demodb:::?oracleStyleNumberReturn=true
 
     .. warning::
 

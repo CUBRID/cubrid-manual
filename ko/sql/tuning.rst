@@ -3836,24 +3836,20 @@ N:1 관계의 **LEFT OUTER JOIN**\에서 조인 조건 외에 오른쪽 테이�
 View Merging 최적화
 -----------------------
 View Merging은 쿼리 처리 시간과 오버헤드를 줄이는데 초점을 둔다. 쿼리가 뷰를 사용할 때, 시스템은 일반적으로 새로운 임시 테이블을 생성한다. 
-
 그러나 이렇게 생성된 임시 테이블은 인덱스를 사용하기 어렵고, 뷰를 생성하는 과정 자체가 시스템에 불필요한 부하를 준다. 
-
 따라서 View Merging은 뷰를 원래 테이블로 대체하여 이러한 오버헤드를 피하고, 원래 테이블의
 인덱스를 활용하여 더 효율적인 쿼리 처리를 가능하게 한다.
 
-아래 쿼리 1 처럼 인라인 뷰를 사용하면, 쿼리 내용을 파악하기가 더 쉽다. 
-
-또한 서브쿼리로 표현하면 조인문보다 더 직관적으로 읽힌다.
+아래 쿼리 1 처럼 인라인 뷰를 사용하면, 쿼리 내용을 파악하기가 더 쉽다.
 
 .. code-block:: sql
 
 
     /* 쿼리 1 */
     SELECT *
-    FROM (SELECT * FROM emp WHERE job = 'SALESMAN') a
-         (SELECT * FROM dept WHERE loc = 'CHICAGO') b
-    WHERE a.deptno = b.deptno
+    FROM (SELECT * FROM athlete WHERE nation_code = 'USA') a
+         (SELECT * FROM record WHERE megal = 'G') b
+    WHERE a.code = b.athlete_code
 
 
 그러나 옵티마이저는 최적화를 위해 인라인 뷰 *a*\와 인라인 뷰 *b*\를 미리 처리하여 임시 저장

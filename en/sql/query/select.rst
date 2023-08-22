@@ -145,6 +145,7 @@ The **FROM** clause specifies the table in which data is to be retrieved in the 
 *   Single table
 *   Subquery
 *   Derived table
+*   Remote table
 
 ::
 
@@ -252,6 +253,68 @@ The following example shows *nation_code*, *host_year* and *gold* records whose 
 
 .. _dblink-clause:
 
+A remote table can be specified in the FROM clause, and when specifying a remote table, '@' is used and a table extension such as table_name@server_name is used. The remote server can use not only CUBRID but also other DBMS (ORACLE, MySQL, and MariaDB). The query for remote table is recreated and executed using the DBLINK statement while going through an optimization step.
+
+.. code-block:: sql
+
+   -- at remote-side, "remote_server"
+   CREATE TABLE remote_tbl (
+     id INT,
+     name VARCHAR(32)
+   );
+
+   INSERT INTO remote_tbl VALUES (1, 'Kim');
+   INSERT INTO remote_tbl VALUES (2, 'Lee');
+   INSERT INTO remote_tbl VALUES (3, 'Park');
+
+::
+
+   -- at local-side
+   SELECT *
+   FROM remote_tbl@remote_server rem
+   WHERE id < 3;
+
+::
+
+       id       name
+   ===================
+        1       Kim
+        2       Lee
+
+The query rewritten with the DBLINK statement for the remote table in the optimization stage is as follows.
+
+.. code-block:: sql
+
+   SELECT *
+   FROM DBLINK(remote_server, 'SELECT id, name FROM remote_tbl WHERE id < 3') AS dbl (id INT, name VARCHAR(32));
+
+.. note::
+
+    Objects allowed for table extensions include general tables, synonyms, and views. The example below shows three types of table extensions.
+
+.. code-block:: sql
+
+    -- at remote-side
+    CREATE TABLE remote_table (
+      id INT,
+      phone VARCHAR(12)
+    };
+
+    CREATE SYNONYM a_remote_tbl FOR user_a.remote_table
+    CREATE VIEW v_remote_tbl(r_phone) AS SELECT phone FROM remote_tble WHERE id > 10;
+
+    -- at local-side
+
+    -- remote-table
+    SELECT phone FROM user_a.remote_table@server1 WHERE id > 10;
+
+    -- remote-synonym
+    SELECT phone FROM a_remote_tbl@server1 WHERE id > 10;
+
+    -- remote-view
+    SELECT r_phone FROM v_remote_tbl@server1;
+
+All three queries above return the same result.
 
 DBLINK
 --------

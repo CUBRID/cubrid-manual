@@ -923,6 +923,7 @@ CREATE TABLE AS SELECT
 *   <*column_definition*>: 칼럼을 정의한다. 생략하면 **SELECT** 문의 칼럼 스키마가 복제된다. **SELECT** 문의 칼럼 제약 조건이나 **AUTO_INCREMENT** 속성, 테이블/칼럼의 커멘트는 복제되지 않는다.
 *   <*table_constraint*>: 테이블 제약 조건을 정의한다.
 *   <*select_statement*>: 데이터베이스에 이미 존재하는 원본 테이블을 대상으로 하는 **SELECT** 문이다.
+*   <*select statement*>은 tbl@srver1처럼 원격 테이블을 포함할 수 있다.
 
 .. code-block:: sql
 
@@ -1018,6 +1019,27 @@ CREATE TABLE AS SELECT
         1            3
         2            3
         3            3
+
+
+아래와 같이 원격 테이블로 부터 데이터를 읽어서 테이블을 만들 수 있다.
+
+.. code-block:: sql
+
+    -- column values are replicated from remote_tbl
+    CREATE TABLE new_tbl_rem (
+      id INT NON NULL;
+      phone VARCHAR;
+      localtion VARCHAR;
+    ) AS SELECT id, phone, 'remote' FROM a_tbl@server1 WHERE id < 3;
+
+    SELECT * FROM new_tbl_rem;
+
+::
+
+      id  phone       location
+    ===================================
+       1  '111-1111'  'remote'
+       2  '222-2222'  'remote'
 
 
 ALTER TABLE

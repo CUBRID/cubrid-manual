@@ -933,6 +933,7 @@ You can create a new table that contains the result records of the **SELECT** st
 *   <*column_definition*>: defines a column. If this is omitted, the column schema of **SELECT** statement is replicated; however, the constraint or the **AUTO_INCREMENT** attribute is not replicated.
 *   <*table_constraint*>: defines table constraint.
 *   <*select_statement*>: a **SELECT** statement targeting a source table that already exists in the database.
+*   <*select statement*> can include remote tables like tbl@srver1.
 
 .. code-block:: sql
 
@@ -1029,6 +1030,25 @@ You can create a new table that contains the result records of the **SELECT** st
         2            3
         3            3
 
+You can create a table by selecting data from a remote table as below statement.
+
+.. code-block:: sql
+
+    -- column values are replicated from remote_tbl
+    CREATE TABLE new_tbl_rem (
+      id INT NON NULL;
+      phone VARCHAR;
+      localtion VARCHAR;
+    ) AS SELECT id, phone, 'remote' FROM a_tbl@server1 WHERE id < 3;
+
+    SELECT * FROM new_tbl_rem;
+
+::
+
+      id  phone       location
+    ===================================
+       1  '111-1111'  'remote'
+       2  '222-2222'  'remote'
 
 ALTER TABLE
 ===========

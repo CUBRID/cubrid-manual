@@ -3963,8 +3963,8 @@ View Merging은 쿼리 처리 시간과 오버헤드를 줄이는데 초점을 �
 .. code-block:: sql
 
     SELECT *
-    FROM (SELECT rownum FROM athlete) a
-    WHERE a.rownum < 15;
+    FROM (SELECT gender, rownum FROM athlete WHERE rownum < 15) a
+    WHERE gender = 'M';
 
 **ROWNUM, LIMIT**\ 또는 **GROUPBY_NUM ()**\을 사용한 쿼리의 경우 **View Merging**\이 불가능하다.
 
@@ -3983,7 +3983,7 @@ View Merging은 쿼리 처리 시간과 오버헤드를 줄이는데 초점을 �
 
     SELECT 1 + (SELECT 2);
 
-인라인 뷰에 **FROM**\절이 없는 경우 **View Merging** 하여 인덱스 스캔을 사용 가능하게 하는 등의 성능 최적화가 불가능하여 **View Merging**\이 불가하다.
+인라인 뷰에 **FROM**\절이 없는 경우 **View Merging** 하여 인덱스 스캔을 사용 가능하게 하는 등의 성능 최적화가 불가능하여 **View Merging**\을 수행하지 않는다.
 
 .. _query-cache:
 

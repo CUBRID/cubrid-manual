@@ -123,7 +123,7 @@ DELETE
     --at local
     --delete one record only from remote a_tbl
     DELETE FROM a_tbl@srv1 WHERE phone IS NULL LIMIT 1;
-    SELECT * FROM a_tbl;
+    SELECT * FROM a_tbl@srv1;
                id  phone
     ===================================
                 1  '111-1111'
@@ -134,7 +134,7 @@ DELETE
     --delete all records from remote a_tbl
     DELETE FROM a_tbl@srv1;
 
-아래 테이블들은 원격DELETE JOIN을 설명하기 위해 생성한 것이다.
+아래 테이블들은 원격 DELETE JOIN을 설명하기 위해 생성한 것이다.
 
 .. code-block:: sql
 
@@ -199,7 +199,7 @@ DELETE
 주의 사항
 ==========
 
-아래와 같이 로컬 테이블과 원격 테이블이 포함되어 있고, 원격 테이블이 삭제되는 DELETE … JOIN 쿼리는 허용하지 않는다.
+아래와 같이 로컬 테이블과 원격 테이블이 포함되어 있고, 원격 테이블이 삭제되는 DELETE … JOIN 쿼리는 허용하지 않는다. 로컬 데이터를 원격으로 보내지 않기 때문이다.
 
 .. code-block:: sql
 

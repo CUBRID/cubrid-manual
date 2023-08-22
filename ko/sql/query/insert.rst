@@ -243,7 +243,7 @@ INSERT 문에 SELECT 질의에서 사용한 동일 원격 서버의 원격 테�
 
     dblink: local mixed remote DML is not allowed
 
-또한 INSERT 구문와 SELECT 구문에서 사용한 원격 테이블의 서버가 다른 경우 질의 수행이 허용되지 않는다. 아래의 질의는 에러가 발생한다.
+또한 INSERT 구문과 SELECT 구문에서 사용한 원격 테이블의 서버가 다른 경우 질의 수행이 허용되지 않는다. 아래의 질의는 에러가 발생한다.
 
 .. code-block:: sql
 

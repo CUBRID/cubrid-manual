@@ -122,7 +122,7 @@ You can also delete remote table data using the extended table name. The query b
     --at local
     --delete one record only from remote a_tbl
     DELETE FROM a_tbl@srv1 WHERE phone IS NULL LIMIT 1;
-    SELECT * FROM a_tbl;
+    SELECT * FROM a_tbl@srv1;
                id  phone
     ===================================
                 1  '111-1111'
@@ -178,7 +178,7 @@ The following queries perform deletion after joining tables including remote tab
 Caution
 ==========
 
-As shown below, DELETE JOIN queries that include local tables and remote tables and delete remote tables are not allowed.
+As shown below, DELETE JOIN queries that include local tables and remote tables and delete remote tables are not allowed. This is because it does not send local data to the remote.
 
 .. code-block:: sql
 

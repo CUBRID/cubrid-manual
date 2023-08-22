@@ -3946,7 +3946,7 @@ View Merging은 쿼리 처리 시간과 오버헤드를 줄이는데 초점을 �
 
 집계함수나 분석함수를 포함한 쿼리의 경우 **View Merging**\의 대상이 되지 않는다.
 
-다음은 **ROWNUM, LIMIT**\ 또는 **GROUPBY_NUM ()**\ 을 사용하는 예시이다.
+다음은 **ROWNUM, LIMIT**\ 또는 **GROUPBY_NUM ()**\을 사용하는 예시이다.
 
 .. code-block:: sql
 
@@ -3954,7 +3954,7 @@ View Merging은 쿼리 처리 시간과 오버헤드를 줄이는데 초점을 �
     FROM (SELECT rownum FROM athlete) a
     WHERE a.rownum < 15;
 
-**INST_NUM()**\ 또는 **ORDERBY_NUM()**\ 함수를 사용한 쿼리의 경우 **View Merging**\이 불가능하다.
+**ROWNUM, LIMIT**\ 또는 **GROUPBY_NUM ()**\을 사용한 쿼리의 경우 **View Merging**\이 불가능하다.
 
 다음은 **correlated subquery**\ 를 사용하여 작성된 예시이다
 

@@ -603,7 +603,7 @@ The following are parameters related to the database server. The type and value 
 
         If **use_user_hosts** parameter is changed during service operation, CUBRID service cannot terminate normally. So, the user must change the parameter after CUBRID service terminates.
 
-    *   The format of **$CUBRID/conf/hosts.conf** is same as **/etc/hosts** but there are some restrictions as follows.
+    *   The format of **$CUBRID/conf/cubrid_hosts.conf** is same as **/etc/hosts** but there are some restrictions as follows.
 
         * Allow **IPv4** format address only. (Not allow **IPv6** format address)
         * Not allow **alias**. ::
@@ -621,31 +621,29 @@ The following are parameters related to the database server. The type and value 
             172.31.0.1 host1
             178.31.0.2 host1
 
-    * The following is an example of $CUBRID/conf/hosts.conf. ::
+    * The following is an example of $CUBRID/conf/cubrid_hosts.conf. ::
 
             #
             # hosts file for CUBRID user specific host service
             #
             127.0.0.1       localhost
             172.31.0.1      node1
-            172.31.0.1      node2
-            172.31.0.1      node3
             192.168.0.31    node4.kr         # Seoul
             192.168.2.31    node5.gov.or.kr  # Daejeon
 
 
 .. warning::
 
-    You must change $CUBRID/conf/hosts.conf after terminating all CUBRID processes, and **the changes will be applied after restarting.** In addition, you must write including **localhost** and **'hostname'** (The output of hostname command by among Linux commands) in the hosts.conf.
+    You must change $CUBRID/conf/cubrid_hosts.conf after terminating all CUBRID processes, and **the changes will be applied after restarting.** In addition, you must write including **localhost** and **'hostname'** (The output of hostname command by among Linux commands) in the cubrid_hosts.conf.
 
 .. warning::
 
-    The hostname adheres the following format in the $CUBRID/conf/hosts.conf (The Linux hostname naming rule).
+    The hostname adheres the following format in the $CUBRID/conf/cubrid_hosts.conf (The Linux hostname naming rule).
 
     * Only English letters, numbers (0 to 9), hyphen ('-'), and dot (".") characters can be used for the hostname.
     * The first character of the hostname must be an English letter.
     * The last character of the hostname must be an English letter and a number.
-    * FQDN (Full Qualified Domain Name) format hostname can be used (Example: www.cubrid.com). 
+    * FQDN (Fully Qualified Domain Name) format hostname can be used (Example: www.cubrid.com). 
 
     Allow the following hostname.
 

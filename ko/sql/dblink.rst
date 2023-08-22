@@ -662,12 +662,12 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
 *   SELECT 질의에서 원격서버의 함수를 사용해야 하는 경우, DBLINK 구문을 사용할 수 있다.
 *   INSERT/UPDATE/DELETE/MERGE 질의에서 사용한 함수들은 원격 서버에서 수행되기때문에 함수 사용시 주의해야 한다. (즉, CUBRID 내장 함수 사용시 원격 DBMS에서 해당 내장 함수가 없거나 사용법이 다를 수 있음을 주의해야 한다.)
 *   미지원 타입
-dblink는 원격 DB의 ODBC 드라이버를 통하여 처리되며, 원격DB의 ODBC 드라이버에서 미지원하는 타입은 지원하지 않는다. 단, INSERT, UPDATE, DELETE, MERGE와 같은 DML 구문에서는 입력값만 원격으로 전달하므로 미지원타입도 처리가 가능하다.
+    dblink는 원격 DB의 ODBC 드라이버를 통하여 처리되며, 원격DB의 ODBC 드라이버에서 미지원하는 타입은 지원하지 않는다. 단, INSERT, UPDATE, DELETE, MERGE와 같은 DML 구문에서는 입력값만 원격으로 전달하므로 미지원타입도 처리가 가능하다.
 조회 시에는 원격 DB의 ODBC 드라이버를 거치게 되어 미지원 타입의 데이터 조회는 지원하지 않는다.
-※ 단, SET, ENUM, BOOLEAN 타입은 SELECT 시에 정상 조회 되며, 이는 ODBC에서 해당 타입의 리턴 타입을 문자로 처리하고 있어서 가능한 것이다.
+    ※ 단, SET, ENUM, BOOLEAN 타입은 SELECT 시에 정상 조회 되며, 이는 ODBC에서 해당 타입의 리턴 타입을 문자로 처리하고 있어서 가능한 것이다.
 
 *   타임존
-Oracle ODBC에서는 타임존 타입을 지원하지 않는다. 따라서 Oracle DB의 타임존 데이터를 조회하는 경우, 타임존을 나타내는 부분이 시간으로 계산되어 timestamp 타입으로 변환되어 리턴된다. 아래는 Oracle DB의 타임존 데이터를 ODBC로 조회하면 로컬타임존으로 변환되는 예이다.
+    Oracle ODBC에서는 타임존 타입을 지원하지 않는다. 따라서 Oracle DB의 타임존 데이터를 조회하는 경우, 타임존을 나타내는 부분이 시간으로 계산되어 timestamp 타입으로 변환되어 리턴된다. 아래는 Oracle DB의 타임존 데이터를 ODBC로 조회하면 로컬타임존으로 변환되는 예이다.
 
 .. code-block:: sql
 
@@ -689,7 +689,7 @@ Oracle ODBC에서는 타임존 타입을 지원하지 않는다. 따라서 Oracl
 
     2021-07-25 19:34:56.000 +09:00
 
-입력한 타임존 "+01:00"이고, 로컬타임존 "+09:00"로 변환하여 "PM 08시"로 출력함
+    입력한 타임존 "+01:00"이고, 로컬타임존 "+09:00"로 변환하여 "PM 08시"로 출력함
 
 *   REPLACE 구문은 ORACLE처럼 원격DB가 지원하지 않는 경우에 오류가 발생한다.
 *   TRUNCATE 구문은 지원하지 않는다.
@@ -697,30 +697,29 @@ Oracle ODBC에서는 타임존 타입을 지원하지 않는다. 따라서 Oracl
 *   CREATE TABLE ... LIKE 테이블명@server명 구문은 지원하지 않는다.
 *   TRIGGER 구문에서 dblink는 지원하지 않는다.
 *   SERIAL
-원격DB의 serial은 dblink() 구문으로 사용할 수 있다.
+    원격DB의 serial은 dblink() 구문으로 사용할 수 있다.
 
 .. code-block:: sql
 
     SELECT * FROM dblink('remote-conn-url', 'select remote_serial.next_value from db_root') t(a int);
 
-INSERT, UPDATE, DELETE, MERGE 구문의 serial은 원격DB의 serial이 사용된다.
+    INSERT, UPDATE, DELETE, MERGE 구문의 serial은 원격DB의 serial이 사용된다.
 
 .. code-block:: sql
 
     INSERT INTO t1@srv1(a, b) VALUES(remote_serial.next_value, 'remote_serial');
 
-@server 구문의 select에서는 로컬DB의 serial이 사용된다.
+    @server 구문의 select에서는 로컬DB의 serial이 사용된다.
 
 *   SYNONYM
-원격DB의 테이블을 로컬DB의 synonym으로 생성 가능하고,
-원격DB의 synonym을 로컬DB의 synonym으로 생성이 가능하다.
+    원격DB의 테이블을 로컬DB의 synonym으로 생성 가능하고, 원격DB의 synonym을 로컬DB의 synonym으로 생성이 가능하다.
 
 .. code-block:: sql
 
-create synonym synonym_1 for t1@srv1;
+    create synonym synonym_1 for t1@srv1;
 
 *   트랜재션
-로컬DB와 원격DB의 트랜잭션(commit, rollback)은 동시에 함께 처리되지 않는다. 원격DB에서 처리하는 INSERT/UPDATE/DELETE/MERGE 구문은 auto commit으로 동작한다.
+    로컬DB와 원격DB의 트랜잭션(commit, rollback)은 동시에 함께 처리되지 않는다. 원격DB에서 처리하는 INSERT/UPDATE/DELETE/MERGE 구문은 auto commit으로 동작한다.
 아래 예시와 같이 처리하는 경우, 원격DB에는 데이터가 입력되고, 로컬DB에는 rollback 되어 데이터가 입력되지 않는다.
 
 .. code-block:: sql
@@ -739,7 +738,7 @@ create synonym synonym_1 for t1@srv1;
     there's no result
 
 *   예약어
-CUBRID
+    CUBRID
 
 .. code-block:: sql
 
@@ -766,7 +765,7 @@ CUBRID
     SELECT * FROM dblink(srv1, 'select `COLUMN`,`ADD`,`ALTER` from `TABLE` ') AS t(a varchar, b varchar, c varchar );
 
 *   함수, 상수 등은 local DB에서 실행된다.
-아래 쿼리의 경우 rewrite 쿼리에 작성 된 dblink 내의 쿼리가 원격DB에서 실행된다.
+    아래 쿼리의 경우 rewrite 쿼리에 작성 된 dblink 내의 쿼리가 원격DB에서 실행된다.
 
 .. code-block:: sql
 
@@ -784,10 +783,10 @@ CUBRID
          ) A (id, parentid, [text])
 
 *   predicate push
-@server 구문으로 작성한 SELECT 구문은 dblink구문으로 변경 된다. 이때 dblink 구문 내로 조건절이 함께 처리되어 데이터의 처리범위가 줄어들어 성능향상을 기대할 수 있다. dblink-dml에서는 where절의 조건문이 dblink로 push되며  push가 되는 조건은 비교연산자( =, >, <, between 등 ), LIKE, 논리연산자이다. 단, 조건절의 내장함수, 사용자 정의함수는 push되지 않으며 원격DB에서 수행하지 않고, 로컬DB에서 수행된다.
+    @server 구문으로 작성한 SELECT 구문은 dblink구문으로 변경 된다. 이때 dblink 구문 내로 조건절이 함께 처리되어 데이터의 처리범위가 줄어들어 성능향상을 기대할 수 있다. dblink-dml에서는 where절의 조건문이 dblink로 push되며  push가 되는 조건은 비교연산자( =, >, <, between 등 ), LIKE, 논리연산자이다. 단, 조건절의 내장함수, 사용자 정의함수는 push되지 않으며 원격DB에서 수행하지 않고, 로컬DB에서 수행된다.
 
 *   성능 유의 사항
-connect by절, group by절, having절, limit절에서 사용한 경우, 성능이 느려질 수 있다.  where조건, group by절, having절, limit절이 원격DB에서 실행되지 않고, 전체 데이터를 로컬DB로 가져와서 처리하는 형태로 동작한다.
+    connect by절, group by절, having절, limit절에서 사용한 경우, 성능이 느려질 수 있다.  where조건, group by절, having절, limit절이 원격DB에서 실행되지 않고, 전체 데이터를 로컬DB로 가져와서 처리하는 형태로 동작한다.
 
 .. code-block:: sql
 
@@ -826,7 +825,7 @@ connect by절, group by절, having절, limit절에서 사용한 경우, 성능�
     WHERE col1>= SYS_DATE
 
 *   @server구문으로 스칼라 서브쿼리, 서브쿼리, EXIST 구문사용
-아래의 예와 같이 스칼라서브쿼리는 전체데이터를 조회하고, 조회한 전체데이터에서 조인컬럼에 해당하는 데이터를 찾는다. 이를 대상 데이터만큼 반복한다. 즉, 원격DB 테이블의 전체데이터를 스칼라쿼리 수행 회수만큼 호출한다.
+    아래의 예와 같이 스칼라서브쿼리는 전체데이터를 조회하고, 조회한 전체데이터에서 조인컬럼에 해당하는 데이터를 찾는다. 이를 대상 데이터만큼 반복한다. 즉, 원격DB 테이블의 전체데이터를 스칼라쿼리 수행 회수만큼 호출한다.
 
 .. code-block:: sql
 
@@ -849,23 +848,23 @@ connect by절, group by절, having절, limit절에서 사용한 경우, 성능�
     WHERE (T1.a< ?:0 )
 
 *   DBMS별 특징
-mysql, mariadb는 delete 구문에서 테이블 alias명을 명시하는 경우 오류가 발생한다.
+    mysql, mariadb는 delete 구문에서 테이블 alias명을 명시하는 경우 오류가 발생한다.
 
 .. code-block:: sql
 
     DELETE FROM tbl a WHERE a.col1='123';
 
-타 DB는 가능하나, Oracle에서는 order by절에서 오류 발생
+    타 DB는 가능하나, Oracle에서는 order by절에서 오류 발생
 
 .. code-block:: sql
 
     SELECT a, a, a FROM tbl ORDER BY a;
 
 *   타입의 범위
-오라클의 date, number 타입의 처리범위가 CUBRID보다 넓어서 CUBRID의 타입범위에 해당하는 데이터는 정상 조회가 되나, 이를 벗어나는 데이터는 오류 발생
+    오라클의 date, number 타입의 처리범위가 CUBRID보다 넓어서 CUBRID의 타입범위에 해당하는 데이터는 정상 조회가 되나, 이를 벗어나는 데이터는 오류 발생
 
 *   파라미터와 문자셋 처리
-cubrid to cubrid에서 로컬DB와 원격DB의 파라미터가 다른경우, 예를 들어 oracle_style_empty_string이 서버마다 다른 경우 원격DB의 데이터를 조회하여, 로컬DB에서 처리 시점에 로컬DB의 설정값으로 변경되어 처리된다.  문자셋의 경우, 원격DB의 문자셋을 로컬DB의 문자셋으로 통합하여 처리하며 원격DB가 euc_kr, 로컬DB utf8인경우 utf8로 전달한다. 
+    cubrid to cubrid에서 로컬DB와 원격DB의 파라미터가 다른경우, 예를 들어 oracle_style_empty_string이 서버마다 다른 경우 원격DB의 데이터를 조회하여, 로컬DB에서 처리 시점에 로컬DB의 설정값으로 변경되어 처리된다.  문자셋의 경우, 원격DB의 문자셋을 로컬DB의 문자셋으로 통합하여 처리하며 원격DB가 euc_kr, 로컬DB utf8인경우 utf8로 전달한다. 
 
 제약사항
 ==============================================

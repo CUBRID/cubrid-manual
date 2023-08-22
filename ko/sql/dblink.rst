@@ -660,26 +660,26 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
 *   하지만, SELECT질의와 다르게 INSERT/UPDATE/DELETE/MERGE 질의에 사용된 모든 함수들은 모두 원격 서버에서 동작한다.
 *   SELECT 질의에서 원격서버의 함수를 사용해야 하는 경우, DBLINK 구문을 사용할 수 있다.
 *   INSERT/UPDATE/DELETE/MERGE 질의에서 사용한 함수들은 원격 서버에서 수행되기때문에 함수 사용시 주의해야 한다. (즉, CUBRID 내장 함수 사용시 원격 DBMS에서 해당 내장 함수가 없거나 사용법이 다를 수 있음을 주의해야 한다.)
-*   미지원 타입, SELECT구문에서 지원하지 않는 타입은 다음과 같다.
-    CUBRID의 ENUM, BLOB, CLOB, SET타입, Oracle의 long, interval day to se, interval year to month, blob, clob 타입, MySQL과 MariaDB의 longtext, bit, blob, longblob, 타입은 select 구문에서 지원하지 않는다. 단, INSERT, UPDATE, DELETE구문에서는 SELECT구문에서 지원하지 않는 타입을 지원한다. gateway를 사용하는 dblink는 원격 DB의 ODBC 드라이버를 통하여 처리되어, 사용하는 ODBC 드라이버에서 미지원하는 타입은 지원하지 않는다. 그러나, INSERT, UPDATE, DELETE, MERGE와 같은 DML 구문에서는 입력값만 원격으로 전달하므로 미지원타입도 처리가 가능하다. 조회 시에는 원격 DB의 ODBC 드라이버를 거치게 되어 미지원 타입의 데이터 조회는 지원하지 않는다. ※ 단, SET, ENUM, BOOLEAN 타입은 SELECT 시에 정상 조회 되며, 이는 ODBC에서 해당 타입의 리턴 타입을 문자로 처리하고 있어서 가능한 것이다.
+*   미지원 타입
+CUBRID의 ENUM, BLOB, CLOB, SET타입, Oracle의 long, interval day to se, interval year to month, blob, clob 타입, MySQL과 MariaDB의 longtext, bit, blob, longblob, 타입은 select 구문에서 지원하지 않는다. 단, INSERT, UPDATE, DELETE구문에서는 SELECT구문에서 지원하지 않는 타입을 지원한다. 추가로 Oracle, MySQL과 MariaDB와 같이 gateway를 사용하는 dblink는 해당 DB의 ODBC가 지원하지 않은 타입은 지원하지 않으며, SET, ENUM, BOOLEAN 타입은 ODBC에서 문자열로 변환하여 처리하고 있어 정상 조회된다.
 
 .. code-block:: sql
 
-   -- INSERT 구문에서는 values절의 입력데이타로 지원한다.
+   -- INSERT 구문에서는 values절의 입력데이터로 지원한다.
    insert into type_unsupport@srv1 (t_long) values('long');
    
    -- UPDATE 구문에서는 SET절의 value값과 where절의 조건값으로 지원한다.
    update type_unsupport@srv1 set t_long = 'update long' where t_long is not null;
    update type_unsupport@srv1 set t_clob = empty_clob() where t_clob is null;
 
-*   @server구문을 포함한 INSERT, UPDATE, DELETE, MERGE 구문에서 원격DB와 CUBRID와 중복되는 함수는 작성포맷이 달라도 원격DB에서 실행이 가능하다. 단, CUBRID에서 미지원하는 함수중 function(파라미터1, ..., 파라미터N)과 형식이 다른 함수는 처리가 불가능 하다.
+*  INSERT, UPDATE, DELETE, MERGE 와 같은 DML 구문에서 CUBRID가 미지원하는 내장 함수 중 아래와 같이 function(파라미터1, ..., 파라미터N)의 형식이 아닌 경우에는 질의 오류가 발생한다.
 
 .. code-block:: sql
 
     MySQL, MariaDB의 convert 함수 : convert('binary' using binary)
 
 *   타임존
-    Oracle ODBC에서는 타임존 타입을 지원하지 않는다. 따라서 Oracle DB의 타임존 데이터를 조회하는 경우, 타임존을 나타내는 부분이 로컬 시간으로 계산되어 timestamp 타입으로 변환되어 리턴된다. 아래는 Oracle DB의 타임존 데이터를 ODBC로 조회하면 로컬타임존으로 변환되는 예이다.
+    Oracle ODBC에서는 타임존 타입을 지원하지 않는다. 따라서 Oracle DB의 타임존 데이터를 조회하는 경우, 타임존을 나타내는 부분이 로컬 시간으로 계산되어 timestamp 타입으로 변환되어 리턴된다. 아래는 Oracle DB의 타임존 데이터를 ODBC로 조회시 로컬타임존으로 변환되는 예이다.
 
 .. code-block:: sql
 
@@ -703,13 +703,13 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
 
     입력한 타임존 "+02:00"이고, 로컬타임존 "+09:00"로 변환하여 "PM 08시"로 출력함
 
-*   REPLACE 구문은 ORACLE처럼 원격DB가 지원하지 않는 경우에 오류가 발생한다. MySQL과 MariaDB은 REPLACE 구문 사용이 가능하다.
+*   REPLACE 구문은 REPLACE 구문은 MySQL과 MariaDB은 지원 가능하나 Oracle에서 REPLACE 구문 미지원으로 오류가 발생한다.
 *   TRUNCATE 구문은 지원하지 않는다.
 *   CREATE TABLE ... AS SELECT FROM 테이블명@server명 구문은 지원한다.
 *   CREATE TABLE ... LIKE 테이블명@server명 구문은 지원하지 않는다.
-*   TRIGGER 구문에서 dblink 관련 구문인 dblink()와 @server는 사용 할 수 없다.
-*   SERIAL
-    원격DB의 serial은 dblink() 구문으로 사용할 수 있다.
+*   TRIGGER 구문에서 dblink 관련 구문인 dblink()와 원격 테이블(@server)는 사용 할 수 없다.
+*   씨리얼
+    원격DB의 씨리얼은 dblink() 구문으로 사용할 수 있다.
 
 .. code-block:: sql
 
@@ -723,8 +723,8 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
 
     @server 구문의 select에서는 로컬DB의 serial이 사용된다.
 
-*   SYNONYM
-    원격DB의 테이블을 로컬DB의 synonym으로 생성 가능하고, 원격DB의 synonym을 로컬DB의 synonym으로 생성이 가능하다.
+*   동의어
+    원격DB의 테이블을 로컬DB의 동의어로 생성 가능하고, 원격DB의 synonym을 로컬DB의 synonym으로 생성이 가능하다.
 
 .. code-block:: sql
 
@@ -732,8 +732,7 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
     create synonym synonym_2 for remote_synonym@srv1;
 
 *   트랜잭션
-    로컬DB와 원격DB의 트랜잭션(commit, rollback)은 동시에 함께 처리되지 않는다. 원격DB에서 처리하는 INSERT/UPDATE/DELETE/MERGE 구문은 auto commit으로 동작한다.
-아래 예시와 같이 처리하는 경우, 원격DB에는 데이터가 입력되고, 로컬DB에는 rollback 되어 데이터가 입력되지 않는다.
+    로컬DB와 원격DB의 트랜잭션(commit, rollback)은 동시에 함께 처리되지 않는다. 원격DB에서 처리하는 INSERT/UPDATE/DELETE/MERGE 구문은 auto commit으로 동작한다. 아래 예시와 같이 처리하는 경우, 원격DB에는 데이터가 입력되고, 로컬DB에는 rollback 되어 데이터가 입력되지 않는다.
 
 .. code-block:: sql
 
@@ -750,7 +749,8 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
 
     there's no result
 
-*   예약어
+*   예약어 처리
+    원격DB에서 예약어를 식별자로 사용하고 있는 경우에는 원격DB에서 정하는 문자와 함께 대괄호 ([ ])로 감싸야 한다.
     CUBRID
 
 .. code-block:: sql
@@ -760,7 +760,7 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
 
 ::
 
-    오라클 DB에서 사용한 예약어 컬럼을 조회하기 위해서는 " 문자로 감싸야 한다.
+    오라클에서 예약어를 식별자로 사용하기 위한 문자는 큰따옴표(" ")문자이다.
 
 .. code-block:: sql
 
@@ -769,8 +769,7 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
 
 ::
 
-    MySQL, MariaDB에서 사용한 예약어 컬럼을 조회하기 위해서는 "`"(back quote) 문자로 감싸야 한다.
-
+    MySQL, MariaDB에서 예약어를 식별자로 사용하기 위한 문자는 백쿼트(` `) 이다.
 
 .. code-block:: sql
 
@@ -798,7 +797,7 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
     @server 구문으로 작성한 SELECT 구문은 dblink구문으로 변경 된다. 이때 dblink 구문 내로 조건절이 함께 처리되어 데이터의 처리범위가 줄어들어 성능향상을 기대할 수 있다. dblink-dml에서는 where절의 조건문이 dblink로 push되며  push가 되는 조건은 비교연산자( =, >, <, between 등 ), LIKE, 논리연산자이다. 단, 조건절의 내장함수, 사용자 정의함수는 push되지 않으며 원격DB에서 수행하지 않고, 로컬DB에서 수행된다.
 
 *   성능 유의 사항
-    connect by절, group by절, having절, limit절에서 사용한 경우, 성능이 느려질 수 있다.  where조건, group by절, having절, limit절이 원격DB에서 실행되지 않고, 전체 데이타를 로컬DB로 가져와서 조건을 처리한다. 아래 예시는 count()를 처리하기 위해서 원격DB의 tree 테이블의 전체데이타를 로컬DB로 가져온 후에 group by절을 처리한다.
+    connect by절, group by절, having절, limit절에서 사용한 경우, 성능이 느려질 수 있다.  where조건, group by절, having절, limit절이 원격DB에서 실행되지 않고, 전체 데이터를 로컬DB로 가져와서 조건을 처리한다. 아래 예시는 count()를 처리하기 위해서 원격DB의 tree 테이블의 전체데이터를 로컬DB로 가져온 후에 group by절을 처리한다.
 
 .. code-block:: sql
 

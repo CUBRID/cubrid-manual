@@ -602,7 +602,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
         **use_user_hosts** 파라미터는 서비스 운영 중 변경되면 정상적으로 서비스가 종료되지 않을 수 있으므로, 반드시 CUBRID 서비스가 종료된 상태에서 변경해야 한다.
 
-    *   **$CUBRID/conf/hosts.conf** 파일의 형식은 **/etc/hosts** 와 동일하나 다음과 같은 몇 가지 제약이 있다.
+    *   **$CUBRID/conf/cubrid_hosts.conf** 파일의 형식은 **/etc/hosts** 와 동일하나 다음과 같은 몇 가지 제약이 있다.
 
         * **IPv4** 주소 만을 허용한다 (**IPv6** 는 허용하지 않는다).
         * **alias** 는 허용하지 않는다. ::
@@ -620,31 +620,29 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
             172.31.0.1 host1
             178.31.0.2 host1
 
-    * 다음은 $CUBRID/conf/hosts.conf의 예시이다. ::
+    * 다음은 $CUBRID/conf/cubrid_hosts.conf의 예시이다. ::
 
             #
             # hosts file for CUBRID user specific host service
             #
             127.0.0.1       localhost
             172.31.0.1      node1
-            172.31.0.1      node2
-            172.31.0.1      node3
             192.168.0.31    node4.kr         # Seoul
             192.168.2.31    node5.gov.or.kr  # Daejeon
 
 
 .. warning::
 
-    $CUBRID/conf/hosts.conf는 반드시 모든 CUBRID 프로세스를 종료시킨 후 변경해야 하며, **재 구동 후 변경된 사항이 적용된다.** 또한, **localhost** 와 **'hostname'** (Linux 명령어 중 hostname에 의해 출력되는 호스트명)을 반드시 hosts.conf에 포함해야 한다.
+    $CUBRID/conf/cubrid_hosts.conf는 반드시 모든 CUBRID 프로세스를 종료시킨 후 변경해야 하며, **재 구동 후 변경된 사항이 적용된다.** 또한, **localhost** 와 **'hostname'** (Linux 명령어 중 hostname에 의해 출력되는 호스트명)을 반드시 cubrid_hosts.conf에 포함해야 한다.
  
 .. warning::
 
-    $CUBRID/conf/hosts.conf 파일에서 호스트 이름은 다음과 같은 형식을 따른다 (Linux 호스트명 작성 규칙).
+    $CUBRID/conf/cubrid_hosts.conf 파일에서 호스트 이름은 다음과 같은 형식을 따른다 (Linux 호스트명 작성 규칙).
 
     * 호스트 이름으로는 오직 영문자, 숫자(0 ~ 9), 하이픈('-'), 점 (".") 문자만 사용할 수 있다.
     * 호스트 이름의 첫 문자는 영문자이어야 한다.
     * 호스트 이름의 마지막 문자는 영문자와 숫자이어야 한다.
-    * FQDN (Full Qualified Domain Name) 형태의 호스트명이 사용 가능하다 (예: www.cubrid.com).
+    * FQDN (Fully Qualified Domain Name) 형태의 호스트명이 사용 가능하다 (예: www.cubrid.com).
     
     다음과 같은 호스트 이름은 허용한다.
 

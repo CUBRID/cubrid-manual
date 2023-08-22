@@ -3901,6 +3901,18 @@ View Merging은 쿼리 처리 시간과 오버헤드를 줄이는데 초점을 �
 
 .. code-block:: sql
 
+    -- Creating tree table and then inserting data
+    CREATE TABLE tree(ID INT, MgrID INT, Name VARCHAR(32), BirthYear INT);
+
+    INSERT INTO tree VALUES (1,NULL,'Kim', 1963);
+    INSERT INTO tree VALUES (2,NULL,'Moy', 1958);
+    INSERT INTO tree VALUES (3,1,'Jonas', 1976);
+    INSERT INTO tree VALUES (4,1,'Smith', 1974);
+    INSERT INTO tree VALUES (5,2,'Verma', 1973);
+    INSERT INTO tree VALUES (6,2,'Foster', 1972);
+    INSERT INTO tree VALUES (7,6,'Brown', 1981);
+
+    -- Executing a hierarchical query with CONNECT BY clause
     SELECT *
     FROM (SELECT * FROM tree WHERE BirthYear = 1973) t
     CONNECT BY PRIOR t.id=t.mgrid; 

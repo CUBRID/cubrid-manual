@@ -3970,8 +3970,9 @@ View Merging 최적화가 되지 않는다면, 인라인 뷰 *a*\와 인라인 �
 
 .. code-block:: sql
 
-    SELECT * FROM emp a 
-    WHERE EXISTS (SELECT 1 FROM dept b WHERE a.deptno = b.deptno);
+    SELECT COUNT(*)
+    FROM athlete a,
+     (SELECT * FROM record r WHERE a.code = r.athlete_code) b;
 
 **Correlated Subquery**\를 사용한 질의문의 경우 **View Merging**\이 불가능하다.
 

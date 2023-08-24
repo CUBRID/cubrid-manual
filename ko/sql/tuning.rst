@@ -3947,7 +3947,7 @@ View Merging 최적화가 되지 않는다면, 인라인 뷰 *a*\와 인라인 �
     LEFT OUTER JOIN (SELECT * FROM dept WHERE loc = 'CHICAGO') b 
     ON a.deptno = b.deptno;
 
-위와 같이 명시적으로 **OUTER JOIN**\을 수행하는 경우에는 **View Merging**\을 수행할 수 없다.
+위와 같이 **OUTER JOIN**\을 수행하는 경우에는 **View Merging**\을 수행할 수 없다.
 
 다음은 집계함수나 분석함수를 사용하는 예시이다.
 

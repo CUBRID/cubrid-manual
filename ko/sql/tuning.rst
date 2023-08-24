@@ -3895,6 +3895,8 @@ View Merging 최적화가 되지 않는다면, 인라인 뷰 *a*\와 인라인 �
 
     #. 뷰가 메소드를 포함한 경우
 
+    #. 뷰가 **RANDOM (), DRANDOM (), SYS_GUID ()**\를 포함한 경우
+
 다음은 **CONNECY BY**\를 포함한 예시이다.
 
 .. code-block:: sql
@@ -3975,6 +3977,17 @@ View Merging 최적화가 되지 않는다면, 인라인 뷰 *a*\와 인라인 �
      (SELECT * FROM record r WHERE a.code = r.athlete_code) b;
 
 **Correlated Subquery**\를 사용한 질의문의 경우 **View Merging**\이 불가능하다.
+
+다음은 뷰가 **RANDOM (), DRANDOM (), SYS_GUID ()**\를 포함한 예시이다.
+
+.. code-block:: sql
+
+    SELECT *
+    FROM (SELECT RANDOM (), code FROM athlete WHERE nation_code = 'USA') a,
+         (SELECT SYS_GUID (), athlete_code FROM record WHERE medal = 'G') b
+    WHERE a.code = b.athlete_code;
+
+뷰가 **RANDOM (), DRANDOM (), SYS_GUID ()**\를 포함한 질의문의 경우 **View Merging**\이 불가능하다.
 
 .. _query-cache:
 

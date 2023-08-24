@@ -3881,7 +3881,7 @@ View Merging 최적화가 되지 않는다면, 인라인 뷰 *a*\와 인라인 �
 
     #. **CONNECT BY**\를 포함한 경우
 
-    #. 인라인 뷰가 **DISTINCT**\ 문을 포함한 경우
+    #. 뷰가 **DISTINCT**\ 문을 포함한 경우
 
     #. **CTE**\(Common Table Expressions)가 질의문에 포함되어 있는 경우
     
@@ -3893,7 +3893,7 @@ View Merging 최적화가 되지 않는다면, 인라인 뷰 *a*\와 인라인 �
 
     #. **correlated subquery**\ 를 사용하여 작성된 경우
 
-    #. 인라인 뷰에 **FROM**\ 절이 없는 경우
+    #. 뷰에 **FROM**\ 절이 없는 경우
 
     #. 뷰가 메소드를 포함한 경우
 
@@ -3920,13 +3920,13 @@ View Merging 최적화가 되지 않는다면, 인라인 뷰 *a*\와 인라인 �
 
 위 질의문에서는 **CONNECY BY**\절을 사용하기 때문에 **View Merging**\을 수행할 수 없다.
 
-다음은 인라인 뷰가 **DISTINCT**\문을 포함한 예시이다.
+다음은 뷰가 **DISTINCT**\문을 포함한 예시이다.
 
 .. code-block:: sql
 
     SELECT * FROM (SELECT DISTINCT BirthYear FROM Tree) T;
 
-위 질의문의 인라인 뷰 내부에 **DISTINCT**\문이 사용되어 **View Merging**\을 수행할 수 없다.
+위 질의문의 뷰 내부에 **DISTINCT**\문이 사용되어 **View Merging**\을 수행할 수 없다.
 
 
 다음은 **CTE**\(Common Table Expressions)가 질의문에 포함되어 있는 예시이다.
@@ -3977,13 +3977,13 @@ View Merging 최적화가 되지 않는다면, 인라인 뷰 *a*\와 인라인 �
 
 **correlated subquery**\를 사용한 질의문의 경우 **View Merging**\이 불가능하다.
 
-다음은 인라인 뷰에 **FROM**\ 절이 없는 예시이다.
+다음은 뷰에 **FROM**\ 절이 없는 예시이다.
 
 .. code-block:: sql
 
     SELECT 1 + (SELECT 2);
 
-인라인 뷰에 **FROM**\절이 없는 경우 **View Merging** 하여 인덱스 스캔을 사용 가능하게 하는 등의 성능 최적화가 불가능하여 **View Merging**\을 수행하지 않는다.
+뷰에 **FROM**\절이 없는 경우 **View Merging** 하여 인덱스 스캔을 사용 가능하게 하는 등의 성능 최적화가 불가능하여 **View Merging**\을 수행하지 않는다.
 
 .. _query-cache:
 

@@ -3893,8 +3893,6 @@ View Merging 최적화가 되지 않는다면, 인라인 뷰 *a*\와 인라인 �
 
     #. **Correlated Subquery**\ 를 사용하여 작성된 경우
 
-    #. 뷰에 **FROM**\ 절이 없는 경우
-
     #. 뷰가 메소드를 포함한 경우
 
 다음은 **CONNECY BY**\를 포함한 예시이다.
@@ -3976,14 +3974,6 @@ View Merging 최적화가 되지 않는다면, 인라인 뷰 *a*\와 인라인 �
     WHERE EXISTS (SELECT 1 FROM dept b WHERE a.deptno = b.deptno);
 
 **Correlated Subquery**\를 사용한 질의문의 경우 **View Merging**\이 불가능하다.
-
-다음은 뷰에 **FROM**\ 절이 없는 예시이다.
-
-.. code-block:: sql
-
-    SELECT 1 + (SELECT 2);
-
-뷰에 **FROM**\절이 없는 경우 **View Merging** 하여 인덱스 스캔을 사용 가능하게 하는 등의 성능 최적화가 불가능하여 **View Merging**\을 수행하지 않는다.
 
 .. _query-cache:
 

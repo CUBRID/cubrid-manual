@@ -3835,12 +3835,12 @@ N:1 관계의 **LEFT OUTER JOIN**\에서 조인 조건 외에 오른쪽 테이�
 
 View Merging 최적화
 -----------------------
-View Merging은 쿼리 처리 시간과 오버헤드를 줄이는데 초점을 둔다. 쿼리가 뷰를 사용할 때, 시스템은 일반적으로 새로운 임시 테이블을 생성한다. 
+View Merging은 질의 처리 시간과 오버헤드를 줄이는데 초점을 둔다. 질의가 뷰를 사용할 때, 시스템은 일반적으로 새로운 임시 테이블을 생성한다. 
 그러나 이렇게 생성된 임시 테이블은 인덱스를 사용하기 어렵고, 뷰를 생성하는 과정 자체가 시스템에 불필요한 부하를 준다. 
 따라서 View Merging은 뷰를 원래 테이블로 대체하여 이러한 오버헤드를 피하고, 원래 테이블의
-인덱스를 활용하여 더 효율적인 쿼리 처리를 가능하게 한다.
+인덱스를 활용하여 더 효율적인 질의 처리를 가능하게 한다.
 
-아래 쿼리 1 처럼 인라인 뷰를 사용하면, 쿼리 내용을 파악하기가 더 쉽다.
+아래 질의문 1 처럼 인라인 뷰를 사용하면, 질의 내용을 파악하기가 더 쉽다.
 
 .. code-block:: sql
 
@@ -3862,7 +3862,7 @@ View Merging은 쿼리 처리 시간과 오버헤드를 줄이는데 초점을 �
 .. code-block:: sql
 
 
-    /* 쿼리 2 */
+    /* 질의문 2 */
     SELECT *
     FROM emp a, dept b
     WHERE a.deptno = b.deptno
@@ -3870,20 +3870,20 @@ View Merging은 쿼리 처리 시간과 오버헤드를 줄이는데 초점을 �
     AND b.loc = 'CHICAGO'
 
 
-따라서 쿼리 1의 뷰 쿼리 블록은 뷰를 참조하는 쿼리 블록과의 머지(merge) 과정을 거쳐
-쿼리 2와 같은 형태로 변환된다. 
+따라서 질의문 1의 뷰 쿼리 블록은 뷰를 참조하는 쿼리 블록과의 머지(merge) 과정을 거쳐
+질의문 2와 같은 형태로 변환된다. 
 
 이를 **View Merging**\이라고 한다. 이 과정을 거치면 옵티마이저는 더 많은 액세스 경로를 조사 대상으로 삼을 수 있다.
 
 
-현재 큐브리드에서는 쿼리가 다음 조건에 해당하면 **View Merging**\을 수행할 수 없다.
+현재 큐브리드에서는 질의가 다음 조건에 해당하면 **View Merging**\을 수행할 수 없다.
 
 
     #. **CONNECT BY**\를 포함한 경우
 
     #. 인라인 뷰가 **DISTINCT**\ 문을 포함한 경우
 
-    #. **CTE**\(Common Table Expressions)가 쿼리에 포함되어 있는 경우
+    #. **CTE**\(Common Table Expressions)가 질의문에 포함되어 있는 경우
     
     #. 뷰를 **OUTER JOIN**\ 하는 경우
 
@@ -3918,7 +3918,7 @@ View Merging은 쿼리 처리 시간과 오버헤드를 줄이는데 초점을 �
     CONNECT BY PRIOR t.id=t.mgrid; 
 
 
-위 쿼리에서는 **CONNECY BY**\절을 사용하기 때문에 **View Merging**\을 수행할 수 없다.
+위 질의문에서는 **CONNECY BY**\절을 사용하기 때문에 **View Merging**\을 수행할 수 없다.
 
 다음은 인라인 뷰가 **DISTINCT**\문을 포함한 예시이다.
 
@@ -3926,10 +3926,10 @@ View Merging은 쿼리 처리 시간과 오버헤드를 줄이는데 초점을 �
 
     SELECT * FROM (SELECT DISTINCT BirthYear FROM Tree) T;
 
-위 쿼리의 인라인 뷰 내부에 **DISTINCT**\문이 사용되어 **View Merging**\을 수행할 수 없다.
+위 질의문의 인라인 뷰 내부에 **DISTINCT**\문이 사용되어 **View Merging**\을 수행할 수 없다.
 
 
-다음은 **CTE**\(Common Table Expressions)가 쿼리에 포함되어 있는 예시이다.
+다음은 **CTE**\(Common Table Expressions)가 질의문에 포함되어 있는 예시이다.
 
 
 .. code-block:: sql
@@ -3937,7 +3937,7 @@ View Merging은 쿼리 처리 시간과 오버헤드를 줄이는데 초점을 �
     WITH cte AS (SELECT * FROM emp WHERE job = 'SALESMAN')
     SELECT * FROM cte WHERE cte.deptno = 10;
 
-위와 같이 **CTE**\를 포함한 쿼리는 **View Merging**\을 수행할 수 없다.
+위와 같이 **CTE**\를 포함한 질의문은 **View Merging**\을 수행할 수 없다.
 
 다음은 뷰를 **OUTER JOIN**\ 하는 예시이다.
 
@@ -3956,7 +3956,7 @@ View Merging은 쿼리 처리 시간과 오버헤드를 줄이는데 초점을 �
     SELECT *
     FROM (SELECT AVG(salary) FROM emp WHERE job = 'SALESMAN') a;
 
-집계함수나 분석함수를 포함한 쿼리의 경우 **View Merging**\의 대상이 되지 않는다.
+집계함수나 분석함수를 포함한 질의문의 경우 **View Merging**\의 대상이 되지 않는다.
 
 다음은 **ROWNUM, LIMIT**\ 또는 **GROUPBY_NUM ()**\을 사용하는 예시이다.
 
@@ -3966,7 +3966,7 @@ View Merging은 쿼리 처리 시간과 오버헤드를 줄이는데 초점을 �
     FROM (SELECT gender, rownum FROM athlete WHERE rownum < 15) a
     WHERE gender = 'M';
 
-**ROWNUM, LIMIT**\ 또는 **GROUPBY_NUM ()**\을 사용한 쿼리의 경우 **View Merging**\이 불가능하다.
+**ROWNUM, LIMIT**\ 또는 **GROUPBY_NUM ()**\을 사용한 질의문의 경우 **View Merging**\이 불가능하다.
 
 다음은 **correlated subquery**\ 를 사용하여 작성된 예시이다
 
@@ -3975,7 +3975,7 @@ View Merging은 쿼리 처리 시간과 오버헤드를 줄이는데 초점을 �
     SELECT * FROM emp a 
     WHERE EXISTS (SELECT 1 FROM dept b WHERE a.deptno = b.deptno);
 
-**correlated subquery**\를 사용한 쿼리의 경우 **View Merging**\이 불가능하다.
+**correlated subquery**\를 사용한 질의문의 경우 **View Merging**\이 불가능하다.
 
 다음은 인라인 뷰에 **FROM**\ 절이 없는 예시이다.
 

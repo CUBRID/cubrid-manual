@@ -3891,7 +3891,7 @@ View Merging 최적화가 되지 않는다면, 인라인 뷰 *a*\와 인라인 �
 
     #. **ROWNUM, LIMIT**\ 또는 **GROUPBY_NUM ()**\ 을 사용하는 경우
 
-    #. **correlated subquery**\ 를 사용하여 작성된 경우
+    #. **Correlated Subquery**\ 를 사용하여 작성된 경우
 
     #. 뷰에 **FROM**\ 절이 없는 경우
 
@@ -3968,14 +3968,14 @@ View Merging 최적화가 되지 않는다면, 인라인 뷰 *a*\와 인라인 �
 
 **ROWNUM, LIMIT**\ 또는 **GROUPBY_NUM ()**\을 사용한 질의문의 경우 **View Merging**\이 불가능하다.
 
-다음은 **correlated subquery**\ 를 사용하여 작성된 예시이다
+다음은 **Correlated Subquery**\ 를 사용하여 작성된 예시이다
 
 .. code-block:: sql
 
     SELECT * FROM emp a 
     WHERE EXISTS (SELECT 1 FROM dept b WHERE a.deptno = b.deptno);
 
-**correlated subquery**\를 사용한 질의문의 경우 **View Merging**\이 불가능하다.
+**Correlated Subquery**\를 사용한 질의문의 경우 **View Merging**\이 불가능하다.
 
 다음은 뷰에 **FROM**\ 절이 없는 예시이다.
 

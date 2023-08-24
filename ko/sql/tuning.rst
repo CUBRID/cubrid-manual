@@ -3845,7 +3845,7 @@ View Merging은 쿼리 처리 시간과 오버헤드를 줄이는데 초점을 �
 .. code-block:: sql
 
 
-    /* 쿼리 1 */
+    /* 질의문 1 */
     SELECT *
     FROM (SELECT * FROM athlete WHERE nation_code = 'USA') a
          (SELECT * FROM record WHERE megal = 'G') b

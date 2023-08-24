@@ -3847,9 +3847,9 @@ View Merging은 질의 처리 시간과 오버헤드를 줄이는데 초점을 �
 
     /* 질의문 1 */
     SELECT *
-    FROM (SELECT * FROM athlete WHERE nation_code = 'USA') a
-         (SELECT * FROM record WHERE megal = 'G') b
-    WHERE a.code = b.athlete_code
+    FROM (SELECT * FROM athlete WHERE nation_code = 'USA') a,
+         (SELECT * FROM record WHERE medal = 'G') b
+    WHERE a.code = b.athlete_code;
 
 
 View Merging 최적화가 되지 않는다면, 인라인 뷰 *a*\와 인라인 뷰 *b*\를 미리 처리하여 임시 저장

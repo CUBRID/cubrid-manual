@@ -3880,27 +3880,49 @@ N:1 관계의 **LEFT OUTER JOIN**\에서 조인 조건 외에 오른쪽 테이�
 
 다음의 경우엔 조건절 푸시 최적화가 수행되지 않는다.
 
-    #. **CONNECT BY PRIOR**\문을 사용한 계층적 쿼리인 경우
+    #. **CONNECT BY**\를 포함한 경우
 
-    #. 서브쿼리에 **ROWNUM, LIMIT**\이 사용된 경우
+    #. 집계함수나 분석함수를 사용하는 경우
 
-    #. 서브쿼리에 **GROUP BY, ORDER BY**\가 사용된 경우
+    #. **ROWNUM, LIMIT**\ 또는 **GROUPBY_NUM (), INST_NUM (), ORDERBY_NUM ()**\ 을 사용하는 경우
 
-    #. 분석 함수가 사용된 경우
+    #. **Correlated Subquery**\ 를 사용하여 작성된 경우
 
-    #. **JOIN ~ ON**\ 절을 이용하여 OUTER JOIN.... **ON**\절의 조건에 푸시될 조건절이 and로 결합되어 있는 경우
+    #. **JOIN ~ ON**\ 절을 이용하여 OUTER JOIN을 수행할 때 **ON**\절의 조건에 푸시될 조건절이 and로 결합되어 있는 경우
 
     #. **WHERE**\ 절에서 **NVL()**\ 함수의 반환값을 상수와 비교하는 경우 
 
     #. 조건절에 쿼리가 사용된 경우
 
-    #. 서브쿼리에 메소드가 사용된 경우
+    #. 뷰가 메소드를 포함한 경우
 
-    #. 서브쿼리의 **SELECT**\ 리스트에 **SELECT**\ 문이 포함된 경우
+    #. 뷰의 **SELECT**\ 리스트에 **SELECT**\ 문이 포함된 경우
 
-    #. correlated subquery 내부에 **GROUP BY**\절이 사용된 경우
+    #. 뷰가 **RANDOM (), DRANDOM (), SYS_GUID ()**\를 포함한 경우
 
-    #. **NO_PUSH_PRED**\ 힌트가 사용된 경우
+다음은 질의가 **JOIN ~ ON**\ 절을 이용하여 OUTER JOIN을 수행할 때 **ON**\절의 조건에 푸시될 조건절이 and로 결합되어 있는 예시이다.
+
+.. code-block:: sql
+
+        SELECT a.name, r.score 
+        FROM athlete a
+        LEFT OUTER JOIN record r 
+        ON a.code = r.athlete_code AND a.nation_code = 'KOR'
+        WHERE r.medal = 'G';
+
+이 경우, a.nation_code = 'KOR'는 LEFT OUTER JOIN 수행 시 ON 절에 있는데, 이러한 형태로 ON 절에 조건절이 포함되면 조건절 푸시 최적화가 일어나지 않을 수 있다.
+
+다음 질의는 OUTER JOIN 시 WHERE 절에서 NVL() 함수의 반환값을 상수와 비교하는 예시이다.
+
+.. code-block:: sql
+
+        SELECT a.name, r.score 
+        FROM public.athlete a
+        LEFT OUTER JOIN public.record r 
+        ON a.code = r.athlete_code
+        WHERE NVL(r.score, '0') = '0';
+
+OUTER JOIN 시 WHERE 절에서 NVL() 함수의 반환값을 상수와 비교하는 경우, 조건절 푸시 최적화가 일어나지 않을 수 있다.
 
 .. _query-cache:
 

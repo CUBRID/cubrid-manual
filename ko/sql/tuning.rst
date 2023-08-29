@@ -3890,15 +3890,15 @@ N:1 관계의 **LEFT OUTER JOIN**\에서 조인 조건 외에 오른쪽 테이�
 
     #. OUTER JOIN의 **ON**\절에 조건절이 작성된 경우
 
-    #. OUTER JOIN을 수행할 때 푸시될 조건절이나 뷰 내부의 조건절 푸시 대상 항에 NULL 변환 함수를 사용하는 경우
+    #. OUTER JOIN을 수행할 때 푸시될 조건절이나 뷰 내부의 조건절 푸시 대상에 NULL 변환 함수를 사용할 경우
 
     #. 조건절에 부질의가 사용된 경우
 
     #. 뷰가 메소드를 포함한 경우
 
-    #. OUTER JOIN을 수행할 때 푸시될 조건절이나 뷰 내부의 조건절 푸시 대상 항에 부질의를 사용하는 경우
+    #. OUTER JOIN을 수행할 때 푸시될 조건절이나 뷰 내부의 조건절 푸시 대상에 부질의를 사용하는 경우
 
-    #. OUTER JOIN을 수행할 때 푸시될 조건절이나 뷰 내부의 조건절 푸시 대상 항에 **RANDOM (), DRANDOM (), SYS_GUID ()**를 사용하는 경우
+    #. OUTER JOIN을 수행할 때 푸시될 조건절이나 뷰 내부의 조건절 푸시 대상에 **RANDOM (), DRANDOM (), SYS_GUID ()**를 사용하는 경우
 
 다음은 질의가 OUTER JOIN을 수행할 때 **ON**\절의 조건에 푸시될 조건절이 있는 예시이다.
 
@@ -3911,7 +3911,7 @@ N:1 관계의 **LEFT OUTER JOIN**\에서 조인 조건 외에 오른쪽 테이�
 
 이 경우, a.nation_code = 'KOR'는 LEFT OUTER JOIN 수행 시 ON 절에 있는데, 이러한 형태로 ON 절의 조건절은 조건절 푸시 대상이 아니다.
 
-다음 질의는 OUTER JOIN을 수행할 때 푸시될 조건절이나 뷰 내부의 조건절 푸시 대상 항에 NULL 변환 함수를 사용하는 예시이다.
+다음 질의는 OUTER JOIN을 수행할 때 푸시될 조건절이나 뷰 내부의 조건절 푸시 대상에 NULL 변환 함수를 사용하는 예시이다.
 
 .. code-block:: sql
 
@@ -3921,7 +3921,9 @@ N:1 관계의 **LEFT OUTER JOIN**\에서 조인 조건 외에 오른쪽 테이�
         ON a.code = r.athlete_code
         WHERE NVL(r.score, '0') = '0';
 
-OUTER JOIN을 수행할 때 푸시될 조건절이나 뷰 내부의 조건절 푸시 대상 항에 NULL 변환 함수를 사용한 경우 조건절 푸시 대상이 아니다.
+OUTER JOIN을 수행할 때 푸시될 조건절이나 뷰 내부의 조건절 푸시 대상에 NULL 변환 함수를 사용한 경우 조건절 푸시 대상이 아니다.
+NULL 변환 함수에는 **COALESCE (), NVL (), NVL2 (), DECODE (), IF (), IFNULL (), CONCAT_WS ()** 가 포함된다.
+또한 **IS NULL, CASE** 문 또한 NULL 변환 함수로 취급된다.
 
 .. _query-cache:
 

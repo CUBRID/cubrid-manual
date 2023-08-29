@@ -3910,7 +3910,7 @@ N:1 관계의 **LEFT OUTER JOIN**\에서 조인 조건 외에 오른쪽 테이�
         ON a.code = r.athlete_code AND a.nation_code = 'KOR'
         WHERE r.medal = 'G';
 
-이 경우, a.nation_code = 'KOR'는 LEFT OUTER JOIN 수행 시 ON 절에 있는데, 이러한 형태로 ON 절에 조건절이 포함되면 조건절 푸시 최적화가 일어나지 않을 수 있다.
+이 경우, a.nation_code = 'KOR'는 LEFT OUTER JOIN 수행 시 ON 절에 있는데, 이러한 형태로 ON 절에 조건절은 조건절 푸시 대상이 아니다.
 
 다음 질의는 OUTER JOIN 시 WHERE 절에서 NVL() 함수의 반환값을 상수와 비교하는 예시이다.
 

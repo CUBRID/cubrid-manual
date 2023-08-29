@@ -1060,7 +1060,7 @@ The following example shows a bug tracking system that maintains bugs/issues. Af
     CREATE TABLE bugs
     (
         bugID BIGINT NOT NULL,
-        CreationDate TIMESTAMP,
+        CreationDate TIMESTAMP NOT NULL,
         Author VARCHAR(255),
         Subject VARCHAR(255),
         Description VARCHAR(255),

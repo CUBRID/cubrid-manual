@@ -3865,9 +3865,9 @@ View Merging 최적화가 되지 않는다면, 인라인 뷰 *a*\와 인라인 �
     /* 질의문 2 */
     SELECT *
     FROM emp a, dept b
-    WHERE a.deptno = b.deptno
-    AND a.job = 'SALESMAN'
-    AND b.loc = 'CHICAGO'
+    WHERE a.code = b.athlete_code
+    AND a.nation_code = 'USA'
+    AND b.medal = 'G'
 
 
 따라서 질의문 1의 뷰 쿼리 블록은 뷰를 참조하는 쿼리 블록과의 머지(merge) 과정을 거쳐
@@ -3924,7 +3924,7 @@ View Merging 최적화가 되지 않는다면, 인라인 뷰 *a*\와 인라인 �
 
 .. code-block:: sql
 
-    SELECT * FROM (SELECT DISTINCT BirthYear FROM Tree) T;
+        SELECT * FROM (SELECT DISTINCT host_year FROM record) T;
 
 위 질의문의 뷰 내부에 **DISTINCT**\문이 사용되어 **View Merging**\을 수행할 수 없다.
 
@@ -3934,8 +3934,8 @@ View Merging 최적화가 되지 않는다면, 인라인 뷰 *a*\와 인라인 �
 
 .. code-block:: sql
 
-    WITH cte AS (SELECT * FROM emp WHERE job = 'SALESMAN')
-    SELECT * FROM cte WHERE cte.deptno = 10;
+        WITH cte AS (SELECT * FROM athlete WHERE gender = 'M') 
+        SELECT * FROM cte WHERE cte.nation_code = 'USA';
 
 위와 같이 **CTE**\를 포함한 질의문은 **View Merging**\을 수행할 수 없다.
 
@@ -3943,9 +3943,10 @@ View Merging 최적화가 되지 않는다면, 인라인 뷰 *a*\와 인라인 �
 
 .. code-block:: sql
 
-    SELECT * FROM emp a 
-    LEFT OUTER JOIN (SELECT * FROM dept WHERE loc = 'CHICAGO') b 
-    ON a.deptno = b.deptno;
+        SELECT * 
+        FROM athlete a 
+        LEFT OUTER JOIN (SELECT * FROM record WHERE host_year = 2020) b 
+        ON a.code = b.athlete_code;
 
 위와 같이 **OUTER JOIN**\을 수행하는 경우에는 **View Merging**\을 수행할 수 없다.
 
@@ -3953,8 +3954,8 @@ View Merging 최적화가 되지 않는다면, 인라인 뷰 *a*\와 인라인 �
 
 .. code-block:: sql
 
-    SELECT *
-    FROM (SELECT AVG(salary) FROM emp WHERE job = 'SALESMAN') a;
+        SELECT * 
+        FROM (SELECT AVG(host_year) FROM record WHERE medal = 'G') a;
 
 집계함수나 분석함수를 포함한 질의문의 경우 **View Merging**\의 대상이 되지 않는다.
 
@@ -3962,9 +3963,9 @@ View Merging 최적화가 되지 않는다면, 인라인 뷰 *a*\와 인라인 �
 
 .. code-block:: sql
 
-    SELECT *
-    FROM (SELECT gender, rownum FROM athlete WHERE rownum < 15) a
-    WHERE gender = 'M';
+        SELECT *
+        FROM (SELECT gender, rownum FROM athlete WHERE rownum < 15) a
+        WHERE gender = 'M';
 
 **ROWNUM, LIMIT**\ 또는 **GROUPBY_NUM (), INST_NUM (), ORDERBY_NUM ()**\을 사용한 질의문의 경우 **View Merging**\이 불가능하다.
 
@@ -3972,9 +3973,9 @@ View Merging 최적화가 되지 않는다면, 인라인 뷰 *a*\와 인라인 �
 
 .. code-block:: sql
 
-    SELECT COUNT(*)
-    FROM athlete a,
-     (SELECT * FROM record r WHERE a.code = r.athlete_code) b;
+        SELECT COUNT(*)
+        FROM athlete a,
+        (SELECT * FROM record r WHERE a.code = r.athlete_code) b;
 
 **Correlated Subquery**\를 사용한 질의문의 경우 **View Merging**\이 불가능하다.
 
@@ -3982,10 +3983,10 @@ View Merging 최적화가 되지 않는다면, 인라인 뷰 *a*\와 인라인 �
 
 .. code-block:: sql
 
-    SELECT *
-    FROM (SELECT RANDOM (), code FROM athlete WHERE nation_code = 'USA') a,
-         (SELECT SYS_GUID (), athlete_code FROM record WHERE medal = 'G') b
-    WHERE a.code = b.athlete_code;
+        SELECT *
+        FROM    (SELECT RANDOM (), code FROM athlete WHERE nation_code = 'USA') a,
+                (SELECT SYS_GUID (), athlete_code FROM record WHERE medal = 'G') b
+        WHERE a.code = b.athlete_code;
 
 뷰가 **RANDOM (), DRANDOM (), SYS_GUID ()**\를 포함한 질의문의 경우 **View Merging**\이 불가능하다.
 

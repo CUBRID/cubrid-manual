@@ -3829,6 +3829,157 @@ The join with the *right_tbl* table was eliminated.
                 9           60          600  'Left- 806'                     6
                10           60          600  'Left- 906'                     6
 
+.. _view_merge:
+
+View Merging
+============
+
+View Merging focuses on reducing query processing time and overhead. 
+When a query uses a view, the system typically creates a new temporary table. 
+However, these newly created temporary tables are difficult to use index, and the process of creating a view 
+itself imposes unnecessary overhead on the system. 
+Therefore, View Merging replaces views with the original tables to avoid such overhead, 
+enabling more efficient query processing by utilizing the index of the original table.
+
+Queries like Query 1 below, which use inline views, make it easier to understand the content of the query.
+
+.. code-block:: sql
+
+        /* Query 1 */
+        SELECT *
+        FROM (SELECT * FROM athlete WHERE nation_code = 'USA') a,
+        (SELECT * FROM record WHERE medal = 'G') b
+        WHERE a.code = b.athlete_code;
+
+If View Merging optimization isn't applied, the inline views a and b are processed in advance and stored in temporary storage, 
+and a join operation is performed based on this data.
+
+In this case, the data stored in temporary storage can't use indexes, resulting in significant performance degradation.
+
+.. code-block:: sql
+
+        /* Query 2 */
+        SELECT *
+        FROM emp a, dept b
+        WHERE a.code = b.athlete_code
+        AND a.nation_code = 'USA'
+        AND b.medal = 'G'
+
+Therefore, the view query block in Query 1 undergoes a merge process with the query block 
+that references the view and is transformed into the form of Query 2.
+
+This is referred to as View Merging. Going through this process allows the optimizer to consider more access paths.
+
+In CUBRID, View Merging can't be performed if the query meets the following conditions:
+
+#. Contains **CONNECT BY**.
+
+#. The view includes a **DISTINCT** clause.
+
+#. **CTE** (Common Table Expressions) is included in the query.
+
+#. Using **OUTER JOIN** with a view.
+
+#. Using aggregation or analytical functions.
+
+#. Using **ROWNUM, LIMIT**, or **GROUPBY_NUM(), INST_NUM(), ORDERBY_NUM()**.
+
+#. Written using **Correlated Subquery**.
+
+#. The view includes methods.
+
+#. The view includes **RANDOM(), DRANDOM(), SYS_GUID()**.
+
+The following is an example that includes the **CONNECT BY** clause.
+
+.. code-block:: sql
+
+        -- Creating a tree table and then inserting data
+        CREATE TABLE tree(ID INT, MgrID INT, Name VARCHAR(32), BirthYear INT);
+
+        INSERT INTO tree VALUES (1,NULL,'Kim', 1963);
+        INSERT INTO tree VALUES (2,NULL,'Moy', 1958);
+        INSERT INTO tree VALUES (3,1,'Jonas', 1976);
+        INSERT INTO tree VALUES (4,1,'Smith', 1974);
+        INSERT INTO tree VALUES (5,2,'Verma', 1973);
+        INSERT INTO tree VALUES (6,2,'Foster', 1972);
+        INSERT INTO tree VALUES (7,6,'Brown', 1981);
+
+        -- Executing a hierarchical query with the CONNECT BY clause
+        SELECT *
+        FROM (SELECT * FROM tree WHERE BirthYear = 1973) t
+        CONNECT BY PRIOR t.id=t.mgrid;
+
+Due to the use of the CONNECT BY clause in the above query, View Merging cannot be performed.
+
+The following is an example where a view includes the DISTINCT clause.
+
+.. code-block:: sql
+
+        SELECT * FROM (SELECT DISTINCT host_year FROM record) T;
+
+Due to the DISTINCT clause used within the view in the above query, View Merging cannot be performed.
+
+The following is an example that includes CTE (Common Table Expressions) in the query.
+
+.. code-block:: sql
+
+        WITH cte AS (SELECT * FROM athlete WHERE gender = 'M') 
+        SELECT * FROM cte WHERE cte.nation_code = 'USA';
+
+Queries that contain CTE like the above cannot undergo View Merging.
+
+The following is an example performing an OUTER JOIN with a view.
+
+.. code-block:: sql
+
+        SELECT * 
+        FROM athlete a 
+        LEFT OUTER JOIN (SELECT * FROM record WHERE host_year = 2020) b 
+        ON a.code = b.athlete_code;
+
+In cases where an OUTER JOIN is performed as above, View Merging cannot be executed.
+
+The following is an example using aggregate or analytical functions.
+
+.. code-block:: sql
+
+        SELECT * 
+        FROM (SELECT AVG(host_year) FROM record WHERE medal = 'G') a;
+
+Queries that include aggregate or analytical functions do not qualify for View Merging.
+
+The following is an example using ROWNUM, LIMIT or GROUPBY_NUM(), INST_NUM(), ORDERBY_NUM().
+
+.. code-block:: sql
+
+        SELECT *
+        FROM (SELECT gender, rownum FROM athlete WHERE rownum < 15) a
+        WHERE gender = 'M';
+
+Queries that utilize ROWNUM, LIMIT or GROUPBY_NUM(), INST_NUM(), ORDERBY_NUM() cannot undergo View Merging.
+
+The following is an example crafted using a Correlated Subquery.
+
+.. code-block:: sql
+
+        SELECT COUNT(*)
+        FROM athlete a,
+        (SELECT * FROM record r WHERE a.code = r.athlete_code) b;
+
+For queries using a Correlated Subquery, View Merging is not possible.
+
+The following is an example where a view includes RANDOM(), DRANDOM(), SYS_GUID().
+
+.. code-block:: sql
+
+        SELECT *
+        FROM    (SELECT RANDOM (), code FROM athlete WHERE nation_code = 'USA') a,
+                (SELECT SYS_GUID (), athlete_code FROM record WHERE medal = 'G') b
+        WHERE a.code = b.athlete_code;
+
+Queries that contain a view with RANDOM(), DRANDOM(), SYS_GUID() cannot undergo View Merging.
+
 .. _query-cache:
 
 QUERY CACHE

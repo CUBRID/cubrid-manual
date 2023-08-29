@@ -3900,7 +3900,7 @@ N:1 관계의 **LEFT OUTER JOIN**\에서 조인 조건 외에 오른쪽 테이�
 
     #. 뷰가 **RANDOM (), DRANDOM (), SYS_GUID ()**\를 포함한 경우
 
-다음은 질의가 **JOIN ~ ON**\ 절을 이용하여 OUTER JOIN을 수행할 때 **ON**\절의 조건에 푸시될 조건절이 and로 결합되어 있는 예시이다.
+다음은 질의가 OUTER JOIN을 수행할 때 **ON**\절의 조건에 푸시될 조건절이 있는 예시이다.
 
 .. code-block:: sql
 

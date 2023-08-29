@@ -3888,7 +3888,7 @@ N:1 관계의 **LEFT OUTER JOIN**\에서 조인 조건 외에 오른쪽 테이�
 
     #. **Correlated Subquery**\ 를 사용하여 작성된 경우
 
-    #. **JOIN ~ ON**\ 절을 이용하여 OUTER JOIN을 수행할 때 **ON**\절의 조건에 푸시될 조건절이 and로 결합되어 있는 경우
+    #. OUTER JOIN의 **ON**\절에 조건절이 작성된 경우
 
     #. **WHERE**\ 절에서 **NVL()**\ 함수의 반환값을 상수와 비교하는 경우 
 

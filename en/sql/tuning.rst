@@ -3834,11 +3834,11 @@ The join with the *right_tbl* table was eliminated.
 View Merging
 ============
 
-View Merging focuses on reducing query processing time and overhead. 
+**View Merging** focuses on reducing query processing time and overhead. 
 When a query uses a view, the system typically creates a new temporary table. 
 However, these newly created temporary tables are difficult to use index, and the process of creating a view 
 itself imposes unnecessary overhead on the system. 
-Therefore, View Merging replaces views with the original tables to avoid such overhead, 
+Therefore, **View Merging** replaces views with the original tables to avoid such overhead, 
 enabling more efficient query processing by utilizing the index of the original table.
 
 Queries like Query 1 below, which use inline views, make it easier to understand the content of the query.
@@ -3851,7 +3851,7 @@ Queries like Query 1 below, which use inline views, make it easier to understand
         (SELECT * FROM record WHERE medal = 'G') b
         WHERE a.code = b.athlete_code;
 
-If View Merging optimization isn't applied, the inline views a and b are processed in advance and stored in temporary storage, 
+If **View Merging** optimization isn't applied, the inline views a and b are processed in advance and stored in temporary storage, 
 and a join operation is performed based on this data.
 
 In this case, the data stored in temporary storage can't use indexes, resulting in significant performance degradation.
@@ -3868,9 +3868,9 @@ In this case, the data stored in temporary storage can't use indexes, resulting 
 Therefore, the view query block in Query 1 undergoes a merge process with the query block 
 that references the view and is transformed into the form of Query 2.
 
-This is referred to as View Merging. Going through this process allows the optimizer to consider more access paths.
+This is referred to as **View Merging**. Going through this process allows the optimizer to consider more access paths.
 
-In CUBRID, View Merging can't be performed if the query meets the following conditions:
+In CUBRID, **View Merging** can't be performed if the query meets the following conditions:
 
 #. Contains **CONNECT BY**.
 
@@ -3918,7 +3918,7 @@ The following is an example where a view includes the **DISTINCT** clause.
 
         SELECT * FROM (SELECT DISTINCT host_year FROM record) T;
 
-Due to the **DISTINCT** clause used within the view in the above query, View Merging cannot be performed.
+Due to the **DISTINCT** clause used within the view in the above query, **View Merging** cannot be performed.
 
 The following is an example that includes **CTE** (Common Table Expressions) in the query.
 
@@ -3927,7 +3927,7 @@ The following is an example that includes **CTE** (Common Table Expressions) in 
         WITH cte AS (SELECT * FROM athlete WHERE gender = 'M') 
         SELECT * FROM cte WHERE cte.nation_code = 'USA';
 
-Queries that contain **CTE** like the above cannot undergo View Merging.
+Queries that contain **CTE** like the above cannot undergo **View Merging**.
 
 The following is an example performing an **OUTER JOIN** with a view.
 
@@ -3938,7 +3938,7 @@ The following is an example performing an **OUTER JOIN** with a view.
         LEFT OUTER JOIN (SELECT * FROM record WHERE host_year = 2020) b 
         ON a.code = b.athlete_code;
 
-In cases where an **OUTER JOIN** is performed as above, View Merging cannot be executed.
+In cases where an **OUTER JOIN** is performed as above, **View Merging** cannot be executed.
 
 The following is an example using aggregate or analytical functions.
 
@@ -3947,7 +3947,7 @@ The following is an example using aggregate or analytical functions.
         SELECT * 
         FROM (SELECT AVG(host_year) FROM record WHERE medal = 'G') a;
 
-Queries that include aggregate or analytical functions do not qualify for View Merging.
+Queries that include aggregate or analytical functions do not qualify for **View Merging**.
 
 The following is an example using **ROWNUM, LIMIT** or **GROUPBY_NUM(), INST_NUM(), ORDERBY_NUM()**.
 
@@ -3957,7 +3957,7 @@ The following is an example using **ROWNUM, LIMIT** or **GROUPBY_NUM(), INST_NUM
         FROM (SELECT gender, rownum FROM athlete WHERE rownum < 15) a
         WHERE gender = 'M';
 
-Queries that utilize ROWNUM, LIMIT or GROUPBY_NUM(), INST_NUM(), ORDERBY_NUM() cannot undergo View Merging.
+Queries that utilize ROWNUM, LIMIT or GROUPBY_NUM(), INST_NUM(), ORDERBY_NUM() cannot undergo **View Merging**.
 
 The following is an example crafted using a **Correlated Subquery**.
 
@@ -3967,7 +3967,7 @@ The following is an example crafted using a **Correlated Subquery**.
         FROM athlete a,
         (SELECT * FROM record r WHERE a.code = r.athlete_code) b;
 
-For queries using a **Correlated Subquery**, View Merging is not possible.
+For queries using a **Correlated Subquery**, **View Merging** is not possible.
 
 The following is an example where a view includes **RANDOM(), DRANDOM(), SYS_GUID()**.
 
@@ -3978,7 +3978,7 @@ The following is an example where a view includes **RANDOM(), DRANDOM(), SYS_GUI
                 (SELECT SYS_GUID (), athlete_code FROM record WHERE medal = 'G') b
         WHERE a.code = b.athlete_code;
 
-Queries that contain a view with **RANDOM(), DRANDOM(), SYS_GUID()** cannot undergo View Merging.
+Queries that contain a view with **RANDOM(), DRANDOM(), SYS_GUID()** cannot undergo **View Merging**.
 
 .. _query-cache:
 

@@ -3897,8 +3897,7 @@ Predicate Push는 뷰를 조회하기 전에 먼저 조건절을 적용한다.
 
         SELECT a.name, r.score 
         FROM (SELECT * FROM athlete WHERE gender = 'M') a
-        LEFT OUTER JOIN record r 
-        ON a.code = r.athlete_code
+                LEFT OUTER JOIN record r ON a.code = r.athlete_code
         AND a.nation_code = 'KOR';
 
 이 경우, a.nation_code = 'KOR'는 LEFT **OUTER JOIN** 수행 시 ON 절에 있는데, 이러한 형태로 ON 절의 조건절은 Predicate Push 대상이 아니다.
@@ -3909,8 +3908,7 @@ Predicate Push는 뷰를 조회하기 전에 먼저 조건절을 적용한다.
 
         SELECT a.name, r.score 
         FROM athlete a
-        LEFT OUTER JOIN (SELECT * FROM record WHERE medal = 'G') r 
-        ON a.code = r.athlete_code
+                LEFT OUTER JOIN (SELECT * FROM record WHERE medal = 'G') r ON a.code = r.athlete_code
         WHERE NVL(r.score, '0') = '0';
 
 **OUTER JOIN**\을 수행할 때 푸시될 조건절이나 뷰 내부의 Predicate Push 대상에 NULL 변환 함수를 사용한 경우 Predicate Push 대상이 아니다.

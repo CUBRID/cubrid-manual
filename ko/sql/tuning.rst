@@ -3909,7 +3909,7 @@ Predicate Push는 뷰를 조회하기 전에 먼저 조건절을 적용한다.
 
         SELECT a.name, r.score 
         FROM athlete a
-        LEFT OUTER JOIN (SELECT * FROM record) r 
+        LEFT OUTER JOIN (SELECT * FROM record WHERE medal = 'G') r 
         ON a.code = r.athlete_code
         WHERE NVL(r.score, '0') = '0';
 

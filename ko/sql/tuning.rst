@@ -3885,13 +3885,13 @@ Predicate Push는 뷰를 조회하기 전에 먼저 조건절을 적용한다.
 
     #. 뷰가 메소드를 포함한 경우
 
-    #. OUTER JOIN을 수행할 때 푸시될 조건절이나 뷰 내부의 Predicate Push 대상에 NULL 변환 함수를 사용할 경우
+    #. **OUTER JOIN**을 수행할 때 푸시될 조건절이나 뷰 내부의 Predicate Push 대상에 NULL 변환 함수를 사용할 경우
 
-    #. OUTER JOIN을 수행할 때 푸시될 조건절이나 뷰 내부의 Predicate Push 대상에 부질의를 사용하는 경우
+    #. **OUTER JOIN**을 수행할 때 푸시될 조건절이나 뷰 내부의 Predicate Push 대상에 부질의를 사용하는 경우
 
-    #. OUTER JOIN을 수행할 때 푸시될 조건절이나 뷰 내부의 Predicate Push 대상에 **RANDOM (), DRANDOM (), SYS_GUID ()**\를 사용하는 경우
+    #. **OUTER JOIN**을 수행할 때 푸시될 조건절이나 뷰 내부의 Predicate Push 대상에 **RANDOM (), DRANDOM (), SYS_GUID ()**\를 사용하는 경우
 
-다음은 질의가 OUTER JOIN을 수행할 때 **ON**\절의 조건에 푸시될 조건절이 있는 예시이다.
+다음은 질의가 **OUTER JOIN**을 수행할 때 **ON**\절의 조건에 푸시될 조건절이 있는 예시이다.
 
 .. code-block:: sql
 
@@ -3901,9 +3901,9 @@ Predicate Push는 뷰를 조회하기 전에 먼저 조건절을 적용한다.
         ON a.code = r.athlete_code
         AND a.nation_code = 'KOR';
 
-이 경우, a.nation_code = 'KOR'는 LEFT OUTER JOIN 수행 시 ON 절에 있는데, 이러한 형태로 ON 절의 조건절은 Predicate Push 대상이 아니다.
+이 경우, a.nation_code = 'KOR'는 LEFT **OUTER JOIN** 수행 시 ON 절에 있는데, 이러한 형태로 ON 절의 조건절은 Predicate Push 대상이 아니다.
 
-다음 질의는 OUTER JOIN을 수행할 때 푸시될 조건절이나 뷰 내부의 Predicate Push 대상에 NULL 변환 함수를 사용하는 예시이다.
+다음 질의는 **OUTER JOIN**\을 수행할 때 푸시될 조건절이나 뷰 내부의 Predicate Push 대상에 NULL 변환 함수를 사용하는 예시이다.
 
 .. code-block:: sql
 
@@ -3913,7 +3913,7 @@ Predicate Push는 뷰를 조회하기 전에 먼저 조건절을 적용한다.
         ON a.code = r.athlete_code
         WHERE NVL(r.score, '0') = '0';
 
-OUTER JOIN을 수행할 때 푸시될 조건절이나 뷰 내부의 Predicate Push 대상에 NULL 변환 함수를 사용한 경우 Predicate Push 대상이 아니다.
+**OUTER JOIN**\을 수행할 때 푸시될 조건절이나 뷰 내부의 Predicate Push 대상에 NULL 변환 함수를 사용한 경우 Predicate Push 대상이 아니다.
 NULL 변환 함수에는 **COALESCE (), NVL (), NVL2 (), DECODE (), IF (), IFNULL (), CONCAT_WS ()** 가 포함된다.
 또한 **IS NULL, CASE** 문 또한 Predicate Push 대상이 아니다.
 

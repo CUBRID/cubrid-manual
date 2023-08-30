@@ -3835,7 +3835,7 @@ N:1 관계의 **LEFT OUTER JOIN**\에서 조인 조건 외에 오른쪽 테이�
 
 Predicate Push
 -----------------------
-**Predicate Push**는 뷰를 조회하기 전에 먼저 조건절을 적용한다. 
+**Predicate Push**\는 뷰를 조회하기 전에 먼저 조건절을 적용한다. 
 
 이를 통해 조건에 만족하는 더 적은 양의 데이터만 조회되도록 하여 전체 처리량을 줄일 수 있다.
 
@@ -3857,7 +3857,7 @@ Predicate Push
 *emp* 테이블을 Full Scan 하고서 **GROUP BY** 이후에 *deptno = 30* 조건을
 필터링했을 것이다. 
 
-하지만 **Predicate Push**를 통해서 다음과 같이 쿼리가 변환된다면, 더 적은 양의
+하지만 **Predicate Push**\를 통해서 다음과 같이 쿼리가 변환된다면, 더 적은 양의
 데이터만 조회되도록 최적화할 수 있다.
 
 
@@ -3869,7 +3869,7 @@ Predicate Push
         WHERE a.code = r.athlete_code
         AND a.nation_code = 'KOR';
 
-다음의 경우엔 **Predicate Push**가 수행되지 않는다.
+다음의 경우엔 **Predicate Push**\가 수행되지 않는다.
 
     #. **CONNECT BY**\를 포함한 경우
 

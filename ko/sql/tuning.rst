@@ -3889,7 +3889,7 @@ N:1 관계의 **LEFT OUTER JOIN**\에서 조인 조건 외에 오른쪽 테이�
 
     #. **Correlated Subquery**\ 를 사용하여 작성된 경우
 
-    #. OUTER JOIN의 **ON**\절에 조건절이 작성된 경우
+    #. **OUTER JOIN**\의 **ON**\절에 조건절이 작성된 경우
 
     #. OUTER JOIN을 수행할 때 푸시될 조건절이나 뷰 내부의 조건절 푸시 대상에 NULL 변환 함수를 사용할 경우
 

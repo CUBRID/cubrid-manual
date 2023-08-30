@@ -3896,7 +3896,7 @@ Predicate Push는 뷰를 조회하기 전에 먼저 조건절을 적용한다.
 .. code-block:: sql
 
         SELECT a.name, r.score 
-        FROM (SELECT * FROM athlete) a
+        FROM (SELECT * FROM athlete WHERE gender = 'M') a
         LEFT OUTER JOIN record r 
         ON a.code = r.athlete_code
         AND a.nation_code = 'KOR';

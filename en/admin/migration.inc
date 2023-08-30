@@ -218,13 +218,13 @@ The following is [options] used in **cubrid unloaddb**.
         demodb_schema_class
         demodb_schema_vclass
         demodb_schema_synonym
-        demodb_schema_vclass_query_spec
         demodb_schema_serial
         demodb_schema_procedure
         demodb_schema_server
         demodb_schema_pk
         demodb_schema_fk
         demodb_schema_grant
+        demodb_schema_vclass_query_spec
 
     Filename containing a list of splited schema files
     

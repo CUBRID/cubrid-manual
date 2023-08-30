@@ -3833,9 +3833,9 @@ N:1 관계의 **LEFT OUTER JOIN**\에서 조인 조건 외에 오른쪽 테이�
 
 .. _pred_push
 
-조건절 푸시 최적화
+Predicate Push
 -----------------------
-조건절 푸시(Predicate Push)는 뷰를 조회하기 전에 먼저 조건절을 적용한다. 
+Predicate Push는 뷰를 조회하기 전에 먼저 조건절을 적용한다. 
 
 이를 통해 조건에 만족하는 더 적은 양의 데이터만 조회되도록 하여 전체 처리량을 줄일 수 있다.
 
@@ -3862,7 +3862,7 @@ N:1 관계의 **LEFT OUTER JOIN**\에서 조인 조건 외에 오른쪽 테이�
 *emp* 테이블을 Full Scan 하고서 **GROUP BY** 이후에 *deptno = 30* 조건을
 필터링했을 것이다. 
 
-하지만 조건절 푸시를 통해서 다음과 같이 쿼리가 변환된다면, 더 적은 양의
+하지만 Predicate Push를 통해서 다음과 같이 쿼리가 변환된다면, 더 적은 양의
 데이터만 조회되도록 최적화할 수 있다.
 
 
@@ -3879,7 +3879,7 @@ N:1 관계의 **LEFT OUTER JOIN**\에서 조인 조건 외에 오른쪽 테이�
 
     AND a.deptno = 30;
 
-다음의 경우엔 조건절 푸시 최적화가 수행되지 않는다.
+다음의 경우엔 Predicate Push가 수행되지 않는다.
 
     #. **CONNECT BY**\를 포함한 경우
 
@@ -3891,15 +3891,15 @@ N:1 관계의 **LEFT OUTER JOIN**\에서 조인 조건 외에 오른쪽 테이�
 
     #. **OUTER JOIN**\의 **ON**\절에 조건절이 작성된 경우
 
-    #. OUTER JOIN을 수행할 때 푸시될 조건절이나 뷰 내부의 조건절 푸시 대상에 NULL 변환 함수를 사용할 경우
+    #. OUTER JOIN을 수행할 때 푸시될 조건절이나 뷰 내부의 Predicate Push 대상에 NULL 변환 함수를 사용할 경우
 
     #. 조건절에 부질의가 사용된 경우
 
     #. 뷰가 메소드를 포함한 경우
 
-    #. OUTER JOIN을 수행할 때 푸시될 조건절이나 뷰 내부의 조건절 푸시 대상에 부질의를 사용하는 경우
+    #. OUTER JOIN을 수행할 때 푸시될 조건절이나 뷰 내부의 Predicate Push 대상에 부질의를 사용하는 경우
 
-    #. OUTER JOIN을 수행할 때 푸시될 조건절이나 뷰 내부의 조건절 푸시 대상에 **RANDOM (), DRANDOM (), SYS_GUID ()**\를 사용하는 경우
+    #. OUTER JOIN을 수행할 때 푸시될 조건절이나 뷰 내부의 Predicate Push 대상에 **RANDOM (), DRANDOM (), SYS_GUID ()**\를 사용하는 경우
 
 다음은 질의가 OUTER JOIN을 수행할 때 **ON**\절의 조건에 푸시될 조건절이 있는 예시이다.
 
@@ -3910,9 +3910,9 @@ N:1 관계의 **LEFT OUTER JOIN**\에서 조인 조건 외에 오른쪽 테이�
         LEFT OUTER JOIN record r 
         ON a.code = r.athlete_code;
 
-이 경우, a.nation_code = 'KOR'는 LEFT OUTER JOIN 수행 시 ON 절에 있는데, 이러한 형태로 ON 절의 조건절은 조건절 푸시 대상이 아니다.
+이 경우, a.nation_code = 'KOR'는 LEFT OUTER JOIN 수행 시 ON 절에 있는데, 이러한 형태로 ON 절의 조건절은 Predicate Push 대상이 아니다.
 
-다음 질의는 OUTER JOIN을 수행할 때 푸시될 조건절이나 뷰 내부의 조건절 푸시 대상에 NULL 변환 함수를 사용하는 예시이다.
+다음 질의는 OUTER JOIN을 수행할 때 푸시될 조건절이나 뷰 내부의 Predicate Push 대상에 NULL 변환 함수를 사용하는 예시이다.
 
 .. code-block:: sql
 
@@ -3922,7 +3922,7 @@ N:1 관계의 **LEFT OUTER JOIN**\에서 조인 조건 외에 오른쪽 테이�
         ON a.code = r.athlete_code
         WHERE NVL(r.score, '0') = '0';
 
-OUTER JOIN을 수행할 때 푸시될 조건절이나 뷰 내부의 조건절 푸시 대상에 NULL 변환 함수를 사용한 경우 조건절 푸시 대상이 아니다.
+OUTER JOIN을 수행할 때 푸시될 조건절이나 뷰 내부의 Predicate Push 대상에 NULL 변환 함수를 사용한 경우 Predicate Push 대상이 아니다.
 NULL 변환 함수에는 **COALESCE (), NVL (), NVL2 (), DECODE (), IF (), IFNULL (), CONCAT_WS ()** 가 포함된다.
 또한 **IS NULL, CASE** 문 또한 NULL 변환 함수로 취급된다.
 

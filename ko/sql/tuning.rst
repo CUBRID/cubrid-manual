@@ -3885,7 +3885,7 @@ N:1 관계의 **LEFT OUTER JOIN**\에서 조인 조건 외에 오른쪽 테이�
 
     #. 집계함수나 분석함수를 사용하는 경우
 
-    #. **ROWNUM, LIMIT**\ 또는 **GROUPBY_NUM (), INST_NUM (), ORDERBY_NUM ()**\ 을 사용하는 경우
+    #. **ROWNUM, LIMIT** 또는 **GROUPBY_NUM (), INST_NUM (), ORDERBY_NUM ()**\ 을 사용하는 경우
 
     #. **Correlated Subquery**\ 를 사용하여 작성된 경우
 

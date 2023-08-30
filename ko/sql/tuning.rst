@@ -3915,7 +3915,7 @@ Predicate Push는 뷰를 조회하기 전에 먼저 조건절을 적용한다.
 
 OUTER JOIN을 수행할 때 푸시될 조건절이나 뷰 내부의 Predicate Push 대상에 NULL 변환 함수를 사용한 경우 Predicate Push 대상이 아니다.
 NULL 변환 함수에는 **COALESCE (), NVL (), NVL2 (), DECODE (), IF (), IFNULL (), CONCAT_WS ()** 가 포함된다.
-또한 **IS NULL, CASE** 문 또한 NULL 변환 함수로 취급된다.
+또한 **IS NULL, CASE** 문 또한 Predicate Push 대상이 아니다.
 
 .. _query-cache:
 

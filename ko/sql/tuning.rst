@@ -3899,7 +3899,7 @@ N:1 관계의 **LEFT OUTER JOIN**\에서 조인 조건 외에 오른쪽 테이�
 
     #. OUTER JOIN을 수행할 때 푸시될 조건절이나 뷰 내부의 조건절 푸시 대상에 부질의를 사용하는 경우
 
-    #. OUTER JOIN을 수행할 때 푸시될 조건절이나 뷰 내부의 조건절 푸시 대상에 **RANDOM (), DRANDOM (), SYS_GUID ()**를 사용하는 경우
+    #. OUTER JOIN을 수행할 때 푸시될 조건절이나 뷰 내부의 조건절 푸시 대상에 **RANDOM (), DRANDOM (), SYS_GUID ()**\를 사용하는 경우
 
 다음은 질의가 OUTER JOIN을 수행할 때 **ON**\절의 조건에 푸시될 조건절이 있는 예시이다.
 

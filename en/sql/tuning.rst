@@ -3895,7 +3895,7 @@ The following is an example that includes the **CONNECT BY** clause.
 .. code-block:: sql
 
         -- Creating a tree table and then inserting data
-        CREATE TABLE tree(ID INT, MgrID INT, Name VARCHAR(32), BirthYear INT);
+        CREATE TABLE tree(id INT, mgrid INT, name VARCHAR(32), birthyear INT);
 
         INSERT INTO tree VALUES (1,NULL,'Kim', 1963);
         INSERT INTO tree VALUES (2,NULL,'Moy', 1958);
@@ -3905,10 +3905,10 @@ The following is an example that includes the **CONNECT BY** clause.
         INSERT INTO tree VALUES (6,2,'Foster', 1972);
         INSERT INTO tree VALUES (7,6,'Brown', 1981);
 
-        -- Executing a hierarchical query with the CONNECT BY clause
+        -- Executing a hierarchical query with CONNECT BY clause
         SELECT *
-        FROM (SELECT * FROM tree WHERE BirthYear = 1973) t
-        CONNECT BY PRIOR t.id=t.mgrid;
+        FROM (SELECT * FROM tree WHERE birthyear = 1973) t
+        CONNECT BY PRIOR t.id=t.mgrid; 
 
 Due to the use of the **CONNECT BY** clause in the above query, **View Merging** cannot be performed.
 

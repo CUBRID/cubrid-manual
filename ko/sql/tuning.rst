@@ -3902,7 +3902,7 @@ View Merging 최적화가 되지 않는다면, 인라인 뷰 *a*\와 인라인 �
 .. code-block:: sql
 
     -- Creating tree table and then inserting data
-    CREATE TABLE tree(ID INT, MgrID INT, Name VARCHAR(32), BirthYear INT);
+    CREATE TABLE tree(id INT, mgrid INT, name VARCHAR(32), birthyear INT);
 
     INSERT INTO tree VALUES (1,NULL,'Kim', 1963);
     INSERT INTO tree VALUES (2,NULL,'Moy', 1958);
@@ -3914,7 +3914,7 @@ View Merging 최적화가 되지 않는다면, 인라인 뷰 *a*\와 인라인 �
 
     -- Executing a hierarchical query with CONNECT BY clause
     SELECT *
-    FROM (SELECT * FROM tree WHERE BirthYear = 1973) t
+    FROM (SELECT * FROM tree WHERE birthyear = 1973) t
     CONNECT BY PRIOR t.id=t.mgrid; 
 
 

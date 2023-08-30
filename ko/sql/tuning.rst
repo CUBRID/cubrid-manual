@@ -3906,9 +3906,10 @@ Predicate Push는 뷰를 조회하기 전에 먼저 조건절을 적용한다.
 .. code-block:: sql
 
         SELECT a.name, r.score 
-        FROM (SELECT * FROM athlete WHERE nation_code = 'KOR') a
+        FROM (SELECT * FROM athlete) a
         LEFT OUTER JOIN record r 
-        ON a.code = r.athlete_code;
+        ON a.code = r.athlete_code
+        AND a.nation_code = 'KOR';
 
 이 경우, a.nation_code = 'KOR'는 LEFT OUTER JOIN 수행 시 ON 절에 있는데, 이러한 형태로 ON 절의 조건절은 Predicate Push 대상이 아니다.
 

@@ -3891,11 +3891,11 @@ Predicate Push는 뷰를 조회하기 전에 먼저 조건절을 적용한다.
 
     #. **OUTER JOIN**\의 **ON**\절에 조건절이 작성된 경우
 
-    #. OUTER JOIN을 수행할 때 푸시될 조건절이나 뷰 내부의 Predicate Push 대상에 NULL 변환 함수를 사용할 경우
-
     #. 조건절에 부질의가 사용된 경우
 
     #. 뷰가 메소드를 포함한 경우
+
+    #. OUTER JOIN을 수행할 때 푸시될 조건절이나 뷰 내부의 Predicate Push 대상에 NULL 변환 함수를 사용할 경우
 
     #. OUTER JOIN을 수행할 때 푸시될 조건절이나 뷰 내부의 Predicate Push 대상에 부질의를 사용하는 경우
 

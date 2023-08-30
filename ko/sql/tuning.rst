@@ -3847,15 +3847,10 @@ Predicate Push는 뷰를 조회하기 전에 먼저 조건절을 적용한다.
 .. code-block:: sql
 
 
-    SELECT b.deptno, b.dname, a.avg_sal
-
-    FROM (SELECT deptno, avg(sal) avg_sal FROM emp GROUP BY deptno) a
-
-        , dept b
-
-    WHERE a.deptno = b.deptno
-
-    AND a.deptno = 30;
+        SELECT a.name, r.score 
+        FROM (SELECT * FROM athlete) a
+        WHERE a.code = r.athlete_code
+        AND a.nation_code = 'KOR';
 
 
 위 쿼리에 정의한 뷰 내부에는 조건절이 없다. 만약 쿼리 변환이 작동하지 않는다면,
@@ -3869,15 +3864,10 @@ Predicate Push는 뷰를 조회하기 전에 먼저 조건절을 적용한다.
 .. code-block:: sql
 
 
-    SELECT b.deptno, b.dname, a.avg_sal
-
-    FROM (SELECT deptno, avg(sal) avg_sal FROM emp GROUP BY deptno WHERE deptno = 30) a
-
-        , dept b
-
-    WHERE a.deptno = b.deptno
-
-    AND a.deptno = 30;
+        SELECT a.name, r.score 
+        FROM (SELECT * FROM athlete WHERE a.nation_code = 'KOR') a
+        WHERE a.code = r.athlete_code
+        AND a.nation_code = 'KOR';
 
 다음의 경우엔 Predicate Push가 수행되지 않는다.
 

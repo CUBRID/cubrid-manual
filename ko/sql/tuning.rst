@@ -2517,7 +2517,7 @@ SORT-LIMIT 최적화는 **ORDER BY** 절과 LIMIT 절을 명시한 질의에 적
         ((rownum - 1) % 100) + 1 as filter,
         id as parent_id,
         sub_id as parent_sub_id
-    from parent, (select level from db_root connect by level <= 100);
+    from parent_tbl, (select level from db_root connect by level <= 100);
 
     update statistics on parent_tbl, child_tbl with fullscan;
 

@@ -2515,7 +2515,7 @@ The following is an example of eliminating the **INNER JOIN**.
         ((rownum - 1) % 100) + 1 as filter,
         id as parent_id,
         sub_id as parent_sub_id
-    from parent, (select level from db_root connect by level <= 100);
+    from parent_tbl, (select level from db_root connect by level <= 100);
 
     update statistics on parent_tbl, child_tbl with fullscan;
 

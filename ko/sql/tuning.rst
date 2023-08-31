@@ -3913,7 +3913,7 @@ Predicate Push
                 LEFT OUTER JOIN (SELECT * FROM record WHERE medal = 'G') r ON a.code = r.athlete_code
         WHERE NVL(r.score, '0') = '0';
 
-**OUTER JOIN**\을 수행할 때 푸시될 조건절이나 뷰 내부의 **Predicate Push** 대상에 NULL 변환 함수를 사용한 경우 **Predicate Push** 대상이 아니다.
+**OUTER JOIN**\을 수행할 때 푸시될 조건절이나 뷰 내부의 **Predicate Push** 대상에 **NULL** 변환 함수를 사용한 경우 **Predicate Push** 대상이 아니다.
 NULL 변환 함수에는 **COALESCE (), NVL (), NVL2 (), DECODE (), IF (), IFNULL (), CONCAT_WS ()** 가 포함된다.
 또한 **IS NULL, CASE** 문 또한 **Predicate Push** 대상이 아니다.
 

@@ -3883,7 +3883,7 @@ Predicate Push
 
     #. 뷰가 메소드를 포함한 경우
 
-또한 **OUTER JOIN**\을 수행할 때 다음의 경우 **Predicate Push**가 수행되지 않는다.
+또한 **OUTER JOIN**\을 수행할 때 다음의 경우 **Predicate Push**\가 수행되지 않는다.
 
     #. **OUTER JOIN**\의 **ON**\절에 조건절이 작성된 경우
 

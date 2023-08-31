@@ -3899,8 +3899,7 @@ Predicate Push
 
         SELECT a.name, r.score 
         FROM (SELECT * FROM athlete WHERE gender = 'M') a
-                LEFT OUTER JOIN record r ON a.code = r.athlete_code
-        AND a.nation_code = 'KOR';
+            LEFT OUTER JOIN record r ON a.code = r.athlete_code AND a.nation_code = 'KOR';
 
 이 경우, *a.nation_code = 'KOR'*\는 LEFT **OUTER JOIN** 수행 시 **ON** 절에 있는데, 이러한 형태로 **ON** 절의 조건절은 **Predicate Push** 대상이 아니다.
 

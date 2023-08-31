@@ -3902,7 +3902,7 @@ Predicate Push
                 LEFT OUTER JOIN record r ON a.code = r.athlete_code
         AND a.nation_code = 'KOR';
 
-이 경우, a.nation_code = 'KOR'는 LEFT **OUTER JOIN** 수행 시 ON 절에 있는데, 이러한 형태로 ON 절의 조건절은 **Predicate Push** 대상이 아니다.
+이 경우, *a.nation_code = 'KOR'*\는 LEFT **OUTER JOIN** 수행 시 **ON** 절에 있는데, 이러한 형태로 **ON** 절의 조건절은 **Predicate Push** 대상이 아니다.
 
 다음 질의는 **OUTER JOIN**\을 수행할 때 푸시될 조건절이나 뷰 내부의 **Predicate Push** 대상에 **NULL** 변환 함수를 사용하는 예시이다.
 

@@ -3893,7 +3893,7 @@ Predicate Push
 
     #. 푸시될 조건절이나 뷰 내부의 **Predicate Push** 대상에 **RANDOM (), DRANDOM (), SYS_GUID ()**\를 사용하는 경우
 
-다음은 질의가 **OUTER JOIN**을 수행할 때 **ON**\절의 조건에 푸시될 조건절이 있는 예시이다.
+다음은 질의가 **OUTER JOIN**\을 수행할 때 **ON**\절의 조건에 푸시될 조건절이 있는 예시이다.
 
 .. code-block:: sql
 

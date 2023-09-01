@@ -3854,7 +3854,7 @@ Predicate Push
 
 
 위 쿼리에 정의한 뷰 내부에는 조건절이 없다. 만약 쿼리 변환이 작동하지 않는다면,
-*emp* 테이블을 Full Scan 하고서 **GROUP BY** 이후에 *deptno = 30* 조건을
+*athlete* 테이블을 Full Scan 하고서 **GROUP BY** 이후에 *a.nation_code = 'KOR'* 조건을
 필터링했을 것이다. 
 
 하지만 **Predicate Push**\를 통해서 다음과 같이 쿼리가 변환된다면, 더 적은 양의

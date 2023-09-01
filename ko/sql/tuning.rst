@@ -3864,8 +3864,7 @@ Predicate Push
 
         SELECT a.name, r.score 
         FROM (SELECT name, nation_code, count(*) cnt FROM athlete WHERE nation_code = 'KOR' GROUP BY name, nation_code ) a, record r
-        WHERE a.code = r.athlete_code
-        AND a.nation_code = 'KOR';
+        WHERE a.code = r.athlete_code;
 
 다음의 경우에는 **Predicate Push**\가 수행되지 않는다.
 

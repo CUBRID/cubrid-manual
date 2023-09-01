@@ -3885,11 +3885,9 @@ Predicate Push
 
     #. 푸시될 조건절이나 뷰 내부의 **Predicate Push** 대상에 부질의를 사용하는 경우
 
-또한 **OUTER JOIN**\을 수행할 때 다음의 경우 **Predicate Push**\가 수행되지 않는다.
-
-    #. **OUTER JOIN**\의 **ON**\절에 조건절이 작성된 경우
-
-    #. 푸시될 조건절이나 뷰 내부의 **Predicate Push** 대상에 **NULL** 변환 함수를 사용할 경우
+    #. **OUTER JOIN**\을 수행할 때 푸시될 조건절이나 뷰 내부의 **Predicate Push** 대상에 다음을 사용하는 경우:
+            * **ON**\절에 조건절이 작성된 경우
+            * **NULL** 변환 함수
 
 다음은 질의가 **OUTER JOIN**\을 수행할 때 **ON**\절의 조건에 푸시될 조건절이 있는 예시이다.
 

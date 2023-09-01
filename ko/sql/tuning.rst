@@ -3867,7 +3867,7 @@ Predicate Push
         WHERE a.code = r.athlete_code
         AND a.nation_code = 'KOR';
 
-다음의 경우엔 **Predicate Push**\가 수행되지 않는다.
+다음의 경우에는 **Predicate Push**\가 수행되지 않는다.
 
     #. **CONNECT BY**\를 포함한 경우
 

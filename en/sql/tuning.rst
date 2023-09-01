@@ -19,10 +19,6 @@ Statistics for tables and indexes enables queries of the database system to proc
 
 *   **WITH FULLSCAN**: It updates the statistics with all the data in the specified table. If this is omitted, it updates the statistics with sampling data. Most cases are enough to update statistics with sampling data; it is recommended not to use **WITH FULLSCAN** because it can be a burden to the system.
 
-    .. note:: 
-
-        From 10.0 version, on the HA environment, **UPDATE STATISTICS** on the master node is replicated to the slave/replica node.
-
 *   **ALL CLASSES**: If the **ALL CLASSES** keyword is specified, the statistics on all the tables existing in the database are updated.
 
 *   **CATALOG CLASSES**: It updates the statistics of the catalog tables.
@@ -51,6 +47,27 @@ When starting and ending an update of statistics information, NOTIFICATION messa
 
     Time: 05/07/13 15:06:25.053 - NOTIFICATION *** file ../../src/storage/statistics_sr.c, line 330  CODE = -1115 Tran = 1, CLIENT = testhost:csql(21060), EID = 5
     Finished to update statistics (class "code", oid : 0|522|3, error code : 0).
+
+.. note::
+
+    From version 10.0 of CUBRID, on the HA environment, **UPDATE STATISTICS** on the master node is replicated to the slave/replica node.
+
+.. note::
+
+    From version 11.3 of CUBRID, synonyms cannot be used when executing **UPDATE STATISTICS** statement.
+
+    .. code-block:: sql
+    
+        /* CURRENT_USER: PUBLIC */
+        CREATE TABLE t (c int);
+        CREATE SYNONYM s for t;
+
+	UPDATE STATISTICS ON t;
+        /* Execute OK. */
+
+	UPDATE STATISTICS ON s;
+	/* ERROR: before ' ; '
+         * Class public.s does not exist. */
 
 .. _info-stats:
 

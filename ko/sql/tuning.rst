@@ -3847,7 +3847,7 @@ Predicate Push
 
 
         SELECT a.name, r.score 
-        FROM (SELECT * FROM athlete) a, record r
+        FROM (SELECT name, count(*) cnt FROM athlete GROUP BY name) a, record r
         WHERE a.code = r.athlete_code
         AND a.nation_code = 'KOR';
 

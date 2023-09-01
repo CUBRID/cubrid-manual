@@ -3848,7 +3848,7 @@ Predicate Push
 
 
         SELECT a.name, r.score 
-        FROM (SELECT * FROM athlete) a
+        FROM (SELECT * FROM athlete) a, record r
         WHERE a.code = r.athlete_code
         AND a.nation_code = 'KOR';
 
@@ -3865,7 +3865,7 @@ Predicate Push
 
 
         SELECT a.name, r.score 
-        FROM (SELECT * FROM athlete WHERE a.nation_code = 'KOR') a
+        FROM (SELECT * FROM athlete WHERE a.nation_code = 'KOR') a, record r
         WHERE a.code = r.athlete_code
         AND a.nation_code = 'KOR';
 

@@ -3829,6 +3829,76 @@ The join with the *right_tbl* table was eliminated.
                 9           60          600  'Left- 806'                     6
                10           60          600  'Left- 906'                     6
 
+.. _pred-push:
+
+Predicate Push
+-----------------------
+**Predicate Push** is an optimization that pushes external predicates into a view.
+
+This allows for fewer amounts of data that meet the condition to be queried, thereby reducing the overall processing volume.
+
+For instance, when performing a join using the join condition *a.code = r.athlete_code* as in the query below, if the external predicate can be pushed into the query block, the amount of data to be joined can be reduced.
+
+.. code-block:: sql
+
+        SELECT a.name, r.score 
+        FROM (SELECT name, count(*) cnt FROM athlete GROUP BY name) a, record r
+        WHERE a.code = r.athlete_code
+        AND a.nation_code = 'KOR';
+
+There are no predicates defined within the view of the query above. If the query transformation doesn't work, 
+the *athlete* table would have been fully scanned and joined before filtering with the condition *a.nation_code = 'KOR'*.
+
+However, with **Predicate Push**, if the query is transformed as follows, the optimization ensures that only fewer amounts of data are queried.
+
+.. code-block:: sql
+
+        SELECT a.name, r.score 
+        FROM (SELECT name, count(*) cnt FROM athlete WHERE nation_code = 'KOR' GROUP BY name ) a, record r
+        WHERE a.code = r.athlete_code
+        AND a.nation_code = 'KOR';
+
+In CUBRID, **Predicate Push** can't be performed if the query meets the following conditions:
+
+#. Contains **CONNECT BY**.
+    
+#. Using aggregation or analytical functions.
+
+#. Using **ROWNUM, LIMIT**, or **GROUPBY_NUM(), INST_NUM(), ORDERBY_NUM()**.
+    
+#. Written using **Correlated Subquery**.
+
+#. When subqueries are used in predicates.
+
+#. The view includes methods.
+
+#. When the predicate to be pushed or the target for **Predicate Push** within the view uses **RANDOM (), DRANDOM (), SYS_GUID ()**\.
+
+#. When performing an **OUTER JOIN** and either the predicate to be pushed or the target for **Predicate Push** within the view uses:
+        * Predicates written in the **ON** clause.
+        * NULL transformation functions.
+
+The following is an example that performs an **OUTER JOIN** with the predicate to be pushed in the **ON** clause condition.
+
+.. code-block:: sql
+
+        SELECT a.name, r.score 
+        FROM (SELECT * FROM athlete WHERE gender = 'M') a
+            LEFT OUTER JOIN record r ON a.code = r.athlete_code AND a.nation_code = 'KOR';
+
+In this case, *a.nation_code = 'KOR'* exists in the **ON** clause during the LEFT **OUTER JOIN**. Such a predicate within the **ON** clause is not a target for **Predicate Push**.
+
+The following is an example that performs an **OUTER JOIN** where either the predicate to be pushed or the target for **Predicate Push** within the view uses the NULL transformation function.
+
+.. code-block:: sql
+
+        SELECT a.name, r.score 
+        FROM athlete a
+                LEFT OUTER JOIN (SELECT * FROM record WHERE medal = 'G') r ON a.code = r.athlete_code
+        WHERE NVL(r.score, '0') = '0';
+
+When performing an **OUTER JOIN** and either the predicate to be pushed or the target for **Predicate Push** within the view uses a NULL transformation function, it's not a target for **Predicate Push**. This includes **COALESCE (), NVL (), NVL2 (), DECODE (), IF (), IFNULL (), CONCAT_WS ()**. Furthermore, **IS NULL ,CASE** statements are also not targets for **Predicate Push**.
+
 .. _query-cache:
 
 QUERY CACHE

@@ -1591,11 +1591,11 @@ The following are parameters related to SQL statements and data types supported 
 
     .. note:: 
 
-        If oracle_compat_number_behavior is set to yes, the data must be read in String format to prevent JDBC/CCI from outputting decimal point trailing zeros for NUMERIC, DOUBLE, and FLOAT types. Please refer to the usage instructions below.
+        The oracle_compat_number_behavior is only applied, when reading NUMERIC, DOUBLE, and FLOAT type data in string format in JDBC/CCI.  The related functions of JDBC/CCI are as follows.
 
-        * In JDBC, you must use the getString(int columnIndex) or getString(String columnLabel) and getObject(int columnIndex) or getObject(String columnLabel) methods.
+        * JDBC : getString(int columnIndex), getString(String columnLabel), getObject(int columnIndex) , getObject(String columnLabel)
 
-        * In CCI, CCI_A_TYPE_STR must be used in cci_get_data(...). Example) cci_get_data(req, i, CCI_A_TYPE_STR, &data, &ind);
+        * CCI :  cci_get_data (CCI_A_TYPE_STR as type), Example) cci_get_data(req, i, CCI_A_TYPE_STR, &data, &ind)
 		 
 .. _oracle_style_empty_string:
 

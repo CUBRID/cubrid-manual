@@ -1581,11 +1581,11 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
     .. note:: 
 
-        oracle_compat_number_behavior가 yes로 설정되어 있는 경우, JDBC/CCI에서 NUMERIC, DOUBLE 및 FLOAT 타입에 대해 소숫점 이하 0을 출력하지 않도록 하려면 데이터를 String 형태로 읽어야 합니다. 아래의 사용방법을 참고 한다.
+        JDBC/CCI에서 NUMERIC, DOUBLE 및 FLOAT 타입의 데이터를 문자열 형태로 읽을 경우만 oracle_compat_number_behavior 설정값이 적용된다. 아래는 설정값이 적용되는 JDBC/CCI함수이다.
 		
-        *   JDBC 에서는 getString(int columnIndex) 또는 getString(String columnLabel)과 getObject(int columnIndex) 또는 getObject(String columnLabel) 메쏘드를 사용해야 한다.
+        *   JDBC : getString(int columnIndex), getString(String columnLabel), getObject(int columnIndex), getObject(String columnLabel)
 		
-        *   CCI 에서는 cci_get_data(...) 에서 CCI_A_TYPE_STR을 사용해야 한다. 예) cci_get_data(req, i, CCI_A_TYPE_STR, &data, &ind);
+        *   CCI : cci_get_data(CCI_A_TYPE_STR type을 사용한 경우), 예) cci_get_data(req, i, CCI_A_TYPE_STR, &data, &ind)
 
 
 .. _oracle_style_empty_string:

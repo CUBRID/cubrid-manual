@@ -3508,6 +3508,29 @@ The following shows [options] available with the **cubrid vacuumdb** utility.
 
         cubrid vacuumdb --dump demodb
 
+    ::
+
+        $ cubrid vacuumdb -C --dump demodb
+
+        *** Vacuum Dump ***
+        First log page ID referenced = 85653 (in demodb_lgar013)
+        
+        *** Exceeding read threshold (1000 pages) for OID overflow pages (OVFP), Since 09/04/23 08:53:50 ***
+          Class name            Index name            Count         Num of OVFP recent read    Max num of OVFP read
+        ================================================================================================================
+          dba.tm                v_idx                       272451    1089 (09/04/23 10:49:52)    1478 (09/04/23 10:28:46)
+          dba.tbl               idx                         322728    1023 (09/04/23 09:53:47)    1475 (09/04/23 09:29:29)
+        
+        $ 
+
+    - "Exceeding read threshold (**1000** pages) for OID overflow pages (OVFP), Since **09/04/23 08:53:50**"
+        - Shows the vacuum_ovfp_check_threshold parameter and the time information when OVFP monitoring started.
+    - Class name: Class name(table name), Includes the owner's name.
+    - Index name: Index name
+    - Count: The number of times the number of overflow pages read for one record exceeds the threshold (vacuum_ovfp_check_threshold) during vacuum operation.
+    - Num of OVFP recent read: The most recent record of reading overflow pages above the threshold (vacuum_ovfp_check_threshold) for one record during vacuum operation.
+    - Max num of OVFP read: A record of the point in time when the maximum number of overflow pages read for one record exceeding the threshold (vacuum_ovfp_check_threshold) occurred during vacuum operation.
+
 .. option:: -S, --SA-mode
 
     This option performs vacuuming the database in standalone mode. ::

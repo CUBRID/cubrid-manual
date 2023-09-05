@@ -3872,6 +3872,8 @@ This is referred to as **View Merging**. Going through this process allows the o
 
 In CUBRID, **View Merging** can't be performed if the query meets the following conditions:
 
+#. Using **NO_MERGE** hint on a view.
+
 #. Contains **CONNECT BY**.
 
 #. The view includes a **DISTINCT** clause.
@@ -3889,6 +3891,17 @@ In CUBRID, **View Merging** can't be performed if the query meets the following 
 #. The view includes methods.
 
 #. The view includes **RANDOM(), DRANDOM(), SYS_GUID()**.
+
+The following is an example that uses **NO_MERGE** hint on a view.
+
+.. code-block:: sql
+
+    SELECT *
+    FROM (SELECT /*+ NO_MERGE*/ * FROM athlete WHERE nation_code = 'USA') a,
+    (SELECT /*+ NO_MERGE*/ * FROM record WHERE medal = 'G') b
+    WHERE a.code = b.athlete_code;
+
+If the **NO_MERGE** hint is used on a view, **View Merging** is not applied.
 
 The following is an example that includes the **CONNECT BY** clause.
 

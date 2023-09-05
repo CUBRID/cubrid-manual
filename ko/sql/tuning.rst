@@ -3875,9 +3875,9 @@ View Merging 최적화가 되지 않는다면, 인라인 뷰 *a*\와 인라인 �
 
 이를 **View Merging**\이라고 한다. 이 과정을 거치면 옵티마이저는 더 많은 액세스 경로를 조사 대상으로 삼을 수 있다.
 
-
 큐브리드에서는 질의가 다음 조건에 해당하면 **View Merging**\을 수행할 수 없다.
 
+    #. 뷰에 **NO_MERGE** 힌트가 사용된 경우
 
     #. **CONNECT BY**\를 포함한 경우
 
@@ -3896,6 +3896,17 @@ View Merging 최적화가 되지 않는다면, 인라인 뷰 *a*\와 인라인 �
     #. 뷰가 메소드를 포함한 경우
 
     #. 뷰가 **RANDOM (), DRANDOM (), SYS_GUID ()**\를 포함한 경우
+
+다음은 뷰에 **NO_MERGE** 힌트가 사용된 예시이다.
+
+.. code-block:: sql
+
+    SELECT *
+    FROM (SELECT /*+ NO_MERGE*/ * FROM athlete WHERE nation_code = 'USA') a,
+    (SELECT /*+ NO_MERGE*/ * FROM record WHERE medal = 'G') b
+    WHERE a.code = b.athlete_code;
+
+뷰에 **NO_MERGE** 힌트를 사용할 경우, 해당 뷰는 **View Merging**\의 대상이 되지 않는다.
 
 다음은 **CONNECY BY**\를 포함한 예시이다.
 

@@ -3876,7 +3876,7 @@ In CUBRID, **Predicate Push** can't be performed if the query meets the followin
 
 #. When performing an **OUTER JOIN** and either the predicate to be pushed or the target for **Predicate Push** within the view uses:
         * Predicates written in the **ON** clause.
-        * NULL transformation functions.
+        * **NULL** transformation functions.
 
 The following is an example that performs an **OUTER JOIN** with the predicate to be pushed in the **ON** clause condition.
 

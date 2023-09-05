@@ -3886,7 +3886,7 @@ The following is an example that performs an **OUTER JOIN** with the predicate t
         FROM (SELECT * FROM athlete WHERE gender = 'M') a
             LEFT OUTER JOIN record r ON a.code = r.athlete_code AND a.nation_code = 'KOR';
 
-In this case, *a.nation_code = 'KOR'* exists in the **ON** clause during the LEFT **OUTER JOIN**. Such a predicate within the **ON** clause is not a target for **Predicate Push**.
+In this case, *a.nation_code = 'KOR'* exists in the **ON** clause during the **LEFT OUTER JOIN**. Such a predicate within the **ON** clause is not a target for **Predicate Push**.
 
 The following is an example that performs an **OUTER JOIN** where either the predicate to be pushed or the target for **Predicate Push** within the view uses the **NULL** transformation function.
 

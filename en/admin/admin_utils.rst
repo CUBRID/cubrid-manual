@@ -3527,9 +3527,9 @@ The following shows [options] available with the **cubrid vacuumdb** utility.
     - Since **09/04/23 08:53:50** : Shows the time information when OVFP monitoring started
     - Class name: Class name(table name), included the owner's name.
     - Index name: Index name
-    - Count: The number of times the number of overflow pages read for one record exceeds the threshold (vacuum_ovfp_check_threshold) during vacuum operation.
-    - Num of OVFP recent read: The most recent record of reading overflow pages above the threshold (vacuum_ovfp_check_threshold) for one record during vacuum operation.
-    - Max num of OVFP read: A record of the point in time when the maximum number of overflow pages read for one record exceeding the threshold (vacuum_ovfp_check_threshold) occurred during vacuum operation.
+    - Count: The number of times the number of overflow pages read for one record exceeds the threshold (vacuum_ovfp_check_threshold) during index vacuum operation.
+    - Num of OVFP recent read: The most recent record of reading overflow pages above the threshold (vacuum_ovfp_check_threshold) for one record during index vacuum operation.
+    - Max num of OVFP read: A record of the point in time when the maximum number of overflow pages read for one record exceeding the threshold (vacuum_ovfp_check_threshold) occurred during index vacuum operation.
 
 .. option:: -S, --SA-mode
 

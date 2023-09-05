@@ -3842,7 +3842,7 @@ For instance, when performing a join using the join condition *a.code = r.athlet
 .. code-block:: sql
 
         SELECT a.name, r.score 
-        FROM (SELECT name, count(*) cnt FROM athlete GROUP BY name) a, record r
+        FROM (SELECT name, nation_code, code, count(*) cnt FROM athlete GROUP BY name, nation_code) a, record r
         WHERE a.code = r.athlete_code
         AND a.nation_code = 'KOR';
 
@@ -3854,11 +3854,12 @@ However, with **Predicate Push**, if the query is transformed as follows, the op
 .. code-block:: sql
 
         SELECT a.name, r.score 
-        FROM (SELECT name, count(*) cnt FROM athlete WHERE nation_code = 'KOR' GROUP BY name ) a, record r
-        WHERE a.code = r.athlete_code
-        AND a.nation_code = 'KOR';
+        FROM (SELECT name, nation_code, code, count(*) cnt FROM athlete WHERE nation_code = 'KOR' GROUP BY name, nation_code ) a, record r
+        WHERE a.code = r.athlete_code;
 
 In CUBRID, **Predicate Push** can't be performed if the query meets the following conditions:
+
+#. Using **NO_PUSH_PRED** hint on main query.
 
 #. Contains **CONNECT BY**.
     
@@ -3877,6 +3878,17 @@ In CUBRID, **Predicate Push** can't be performed if the query meets the followin
 #. When performing an **OUTER JOIN** and either the predicate to be pushed or the target for **Predicate Push** within the view uses:
         * Predicates written in the **ON** clause.
         * **NULL** transformation functions.
+
+The following is an example that uses **NO_PUSH_PRED** hint on main query.
+
+.. code-block:: sql
+
+        SELECT /*+ NO_PUSH_PRED*/ a.name, r.score 
+        FROM (SELECT name, nation_code, code, count(*) cnt FROM athlete GROUP BY name, nation_code) a, record r
+        WHERE a.code = r.athlete_code
+        AND a.nation_code = 'KOR';
+
+If the **NO_PUSH_PRED** hint is used on main query, **Predicate Push** is not applied."
 
 The following is an example that performs an **OUTER JOIN** with the predicate to be pushed in the **ON** clause condition.
 

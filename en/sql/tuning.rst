@@ -3970,7 +3970,7 @@ The following is an example using **ROWNUM, LIMIT** or **GROUPBY_NUM(), INST_NUM
         FROM (SELECT gender, rownum FROM athlete WHERE rownum < 15) a
         WHERE gender = 'M';
 
-In cases where Query includes ROWNUM, LIMIT or GROUPBY_NUM(), INST_NUM(), ORDERBY_NUM(), **View Merging** cannot be executed.
+In cases where Query includes **ROWNUM, LIMIT** or **GROUPBY_NUM(), INST_NUM(), ORDERBY_NUM()**, **View Merging** cannot be executed.
 
 The following is an example crafted using a **Correlated Subquery**.
 

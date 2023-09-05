@@ -3525,7 +3525,7 @@ The following shows [options] available with the **cubrid vacuumdb** utility.
 
     - Exceeding read threshold (**1000** pages) : Shows vacuum_ovfp_check_threshold parameter.
     - Since **09/04/23 08:53:50** : Shows the time information when OVFP monitoring started
-    - Class name: Class name(table name), Includes the owner's name.
+    - Class name: Class name(table name), included the owner's name.
     - Index name: Index name
     - Count: The number of times the number of overflow pages read for one record exceeds the threshold (vacuum_ovfp_check_threshold) during vacuum operation.
     - Num of OVFP recent read: The most recent record of reading overflow pages above the threshold (vacuum_ovfp_check_threshold) for one record during vacuum operation.

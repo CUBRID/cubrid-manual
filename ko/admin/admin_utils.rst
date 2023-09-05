@@ -3506,7 +3506,7 @@ vacuumdb
     - Class name: 클래스 이름(테이블 이름), 소유자 이름을 포함합니다.
     - Index name: 인덱스 이름
     - Count: 인덱스 베큠(vacuum) 처리시 임계값(vacuum_ovfp_check_threshold)을 초과해서 인덱스 오버플로우 페이지를 읽은 횟수
-    - Num of OVFP recent read: vacuum 작업시 하나의 레코드에 대해 임계값(vacuum_ovfp_check_threshold) 이상의 오버플로우 페이지를 읽은 가장 최근의 기록
+    - Num of OVFP recent read: 인덱스 베큠 처리시 임계값(vacuum_ovfp_check_threshold) 이상의 인덱스 오버플로우 페이지를 읽은 가장 최근의 기록
     - Max num of OVFP read: vacuum 작업시 하나의 레코드에 대해 임계값(vacuum_ovfp_check_threshold) 이상의 오버플로우 페이지를 읽은 개수의 최대값이 발생했던 시점의 기록
 
 .. option:: -S, --SA-mode

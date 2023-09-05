@@ -1589,6 +1589,14 @@ The following are parameters related to SQL statements and data types supported 
         ==========
                0.5
 
+    .. note:: 
+
+        The oracle_compat_number_behavior is only applied, when reading NUMERIC, DOUBLE, and FLOAT type data in string format in JDBC/CCI.  The related functions of JDBC/CCI are as follows.
+
+        * JDBC : getString(int columnIndex), getString(String columnLabel), getObject(int columnIndex) , getObject(String columnLabel)
+
+        * CCI :  cci_get_data (CCI_A_TYPE_STR as type), Example) cci_get_data(req, i, CCI_A_TYPE_STR, &data, &ind)
+		 
 .. _oracle_style_empty_string:
 
 **oracle_style_empty_string**

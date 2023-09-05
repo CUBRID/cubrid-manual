@@ -144,7 +144,6 @@ The **getConnection** method returns the **Connection** object and it is used to
                  | preparedStmtCacheSize=<unit_size>
                  | preparedStmtCacheSqlLimit=<unit_size>
                  | hold_cursor=<bool_type>
-                 | oracleStyleNumberReturn=<bool_type>
 
         <alternative_hosts> ::=
         <standby_broker1_host>:<port> [,<standby_broker2_host>:<port>]
@@ -205,7 +204,6 @@ The **getConnection** method returns the **Connection** object and it is used to
     *  **preparedStmtCacheSize**: If usePreparedStmtCache is TRUE, the number of SQLs that can be cached (Default:25, Min:1, Max:2147483647)
     *  **preparedStmtCacheSqlLimit**: If usePreparedStmtCache is TRUE, length of SQL that can be cached (Default:256, Min:1, Max:2147483647)
     *  **hold_cursor**: Cursor holdability setting (default: true). If this value is false, CLOSE_CURSORS_AT_COMMIT is set, and if true, HOLD_CURSORS_OVER_COMMIT is set. For details, see :ref:`cursor-holding`\ .
-    *  **oracleStyleNumberReturn**: If oracleStyleNumberReturn is true, trailing zeros after the decimal point are removed from double and float type results (eg. 0.12). If it is false, trailing zeros after the decimal point are not removed (eg. 0.1200000)
 
 **Example 1** ::
 
@@ -244,9 +242,6 @@ The **getConnection** method returns the **Connection** object and it is used to
     
     --connection URL string when hold_cursor property specified for cursor holdability
     URL=jdbc:CUBRID:192.168.0.1:33000:demodb:public::?hold_cursor=true    
-
-    --connection URL string when oracleStyleNumberReturn property is specified to remove trailing zeros after the decimal point from the result value
-    URL=jdbc:CUBRID:192.168.0.1:33000:demodb:public::?oracleStyleNumberReturn=true
 
 **Example 2**
 

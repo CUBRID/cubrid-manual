@@ -3503,7 +3503,6 @@ vacuumdb
 
     - Exceeding read threshold (**1000** pages) : vacuum_ovfp_check_threshold 설정값을 보여준다.
     - Since **09/04/23 08:53:50** : OVFP 모니터링이 시작된 시각 정보를 보여준다. 
-        - vacuum_ovfp_check_threshold 설정값과 OVFP 모니터링이 시작된 시각정보를 보여준다.
     - Class name: 클래스 이름(테이블 이름), 소유자 이름을 포함합니다.
     - Index name: 인덱스 이름
     - Count: vacuum 작업 시 하나의 레코드에 대해 읽은 오버플로우 페이지의 개수가 임계값(vacuum_ovfp_check_threshold)을 초과한 횟수

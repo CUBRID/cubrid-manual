@@ -3529,7 +3529,7 @@ The following shows [options] available with the **cubrid vacuumdb** utility.
     - Index name: Index name
     - Count: The number of times an index's overflow pages were read by exceeding the threshold (vacuum_ovfp_check_threshold) during  index vacuum operation.
     - Num of OVFP recent read: The latest time an index's overflow page was read by exceeded the threshold (vacuum_ovfp_check_threshold) during index vacuum operation.
-    - Max num of OVFP read: A record of the point in time when the maximum number of overflow pages read for one record exceeding the threshold (vacuum_ovfp_check_threshold) occurred during index vacuum operation.
+    - Max num of OVFP read: The latest time an index's overflow page was maximally read by exceeding the threshold (vacuum_ovfp_check_threshold) during index vacuum operation.
 
 .. option:: -S, --SA-mode
 

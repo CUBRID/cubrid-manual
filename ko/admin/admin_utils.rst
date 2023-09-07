@@ -3486,6 +3486,29 @@ vacuumdb
 
         cubrid vacuumdb --dump demodb
 
+    ::
+
+        $ cubrid vacuumdb -C --dump demodb
+
+        *** Vacuum Dump ***
+        First log page ID referenced = 85653 (in demodb_lgar013)
+        
+        *** Exceeding read threshold (1000 pages) for OID overflow pages (OVFP), Since 09/04/23 08:53:50 ***
+          Class name            Index name            Count         Num of OVFP recent read    Max num of OVFP read
+        ================================================================================================================
+          dba.tm                v_idx                       272451    1089 (09/04/23 10:49:52)    1478 (09/04/23 10:28:46)
+          dba.tbl               idx                         322728    1023 (09/04/23 09:53:47)    1475 (09/04/23 09:29:29)
+        
+        $ 
+
+    - Exceeding read threshold (**1000** pages) : vacuum_ovfp_check_threshold 설정값을 보여준다.
+    - Since **09/04/23 08:53:50** : OVFP 모니터링이 시작된 시각 정보를 보여준다. 
+    - Class name: 클래스 이름(테이블 이름), 소유자 이름을 포함합니다.
+    - Index name: 인덱스 이름
+    - Count: 인덱스 베큠(vacuum) 처리시 임계값(vacuum_ovfp_check_threshold)을 초과해서 인덱스 오버플로우 페이지를 읽은 횟수
+    - Num of OVFP recent read: 인덱스 베큠 처리시 임계값(vacuum_ovfp_check_threshold) 이상의 인덱스 오버플로우 페이지를 읽은 가장 최근의 기록
+    - Max num of OVFP read: 인덱스 베큠 작업시 임계값(vacuum_ovfp_check_threshold) 이상의 인덱스 오버플로우 페이지를 최대로 읽은 시점의 기록
+
 .. option:: -S, --SA-mode
 
     이 옵션은 독립 실행형 모드인 데이터베이스에서 vacuumdb 동작을 수행하도록 한다. ::

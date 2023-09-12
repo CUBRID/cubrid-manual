@@ -3852,7 +3852,7 @@ Predicate Push
         AND a.nation_code = 'KOR';
 
 
-위 쿼리에 정의한 뷰 내부에는 조건절이 없다. 만약 쿼리 변환이 작동하지 않는다면,
+위 질의 중 인라인 뷰 내부에는 조건절이 없다. 만약 쿼리 변환이 수행되지 않았다면,
 *athlete* 테이블을 Full Scan 하고서 조인을 수행한 이후에 *a.nation_code = 'KOR'* 조건을
 필터링했을 것이다. 
 

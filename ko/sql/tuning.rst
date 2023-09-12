@@ -3867,7 +3867,7 @@ Predicate Push
 
 다음의 경우에는 **Predicate Push**\가 수행되지 않는다.
 
-    #. 주질의에 **NO_PUSH_PRED** 힌트가 사용된 경우
+    #. 주 질의에 **NO_PUSH_PRED** 힌트가 사용된 경우
 
     #. **CONNECT BY**\를 포함한 경우
 

@@ -3856,7 +3856,7 @@ Predicate Push
 *athlete* 테이블을 full scan하여 결과와 record 테이블을 조인 수행후에 *a.nation_code = 'KOR'* 조건을
 필터링했을 것이다. 
 
-하지만 **Predicate Push**\를 통해서 다음과 같이 쿼리가 변환된다면, 더 적은 양의
+하지만 **Predicate Push**\를 통해서 다음과 같이 질의가 변환된다면, 더 적은 양의
 데이터만 조회되도록 최적화할 수 있다.
 
 .. code-block:: sql

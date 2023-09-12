@@ -3887,7 +3887,7 @@ Predicate Push
             * **ON**\절에 조건절이 작성된 경우
             * **NULL** 변환 함수
 
-다음은 주 질의에 NO_PUSH_PRED 힌트가 사용된 예시이다.
+다음은 주 질의에 **NO_PUSH_PRED** 힌트가 사용된 예시이다.
 
 .. code-block:: sql
 
@@ -3896,7 +3896,7 @@ Predicate Push
         WHERE a.code = r.athlete_code
         AND a.nation_code = 'KOR';
 
-주 질의에 NO_PUSH_PRED 힌트가 사용된 경우, **Predicate Push**\가 수행되지 않는다.
+주 질의에 **NO_PUSH_PRED** 힌트가 사용된 경우, **Predicate Push**\가 수행되지 않는다.
 
 다음은 질의가 **OUTER JOIN**\을 수행할 때 **ON**\절의 조건에 푸시될 조건절이 있는 예시이다.
 

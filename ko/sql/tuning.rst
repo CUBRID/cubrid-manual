@@ -3887,7 +3887,7 @@ Predicate Push
             * **ON**\절에 조건절이 작성된 경우
             * **NULL** 변환 함수
 
-다음은 주질의에 NO_PUSH_PRED 힌트가 사용된 예시이다.
+다음은 주 질의에 NO_PUSH_PRED 힌트가 사용된 예시이다.
 
 .. code-block:: sql
 

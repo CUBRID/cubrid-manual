@@ -3853,7 +3853,7 @@ Predicate Push
 
 
 위 질의 중 인라인 뷰 내부에는 조건절이 없다. 만약 쿼리 변환이 수행되지 않았다면,
-*athlete* 테이블을 Full Scan 하고서 조인을 수행한 이후에 *a.nation_code = 'KOR'* 조건을
+*athlete* 테이블을 full scan하여 결과와 record 테이블을 조인 수행후에 *a.nation_code = 'KOR'* 조건을
 필터링했을 것이다. 
 
 하지만 **Predicate Push**\를 통해서 다음과 같이 쿼리가 변환된다면, 더 적은 양의

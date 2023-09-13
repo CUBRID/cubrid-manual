@@ -3902,7 +3902,7 @@ View Merging은 질의 처리 시간과 오버헤드를 줄이는데 초점을 �
 
 뷰에 **NO_MERGE** 힌트를 사용할 경우, 해당 뷰는 **View Merging**\의 대상이 되지 않는다.
 
-다음은 **CONNECY BY**\를 포함한 예시이다.
+다음은 **CONNECT BY**\를 포함한 예시이다.
 
 .. code-block:: sql
 
@@ -3923,7 +3923,7 @@ View Merging은 질의 처리 시간과 오버헤드를 줄이는데 초점을 �
     CONNECT BY PRIOR t.id=t.mgrid; 
 
 
-위 질의문에서는 **CONNECY BY**\절을 사용하기 때문에 **View Merging**\을 수행할 수 없다.
+위 질의문에서는 **CONNECT BY**\절을 사용하기 때문에 **View Merging**\을 수행할 수 없다.
 
 다음은 뷰가 **DISTINCT**\문을 포함한 예시이다.
 

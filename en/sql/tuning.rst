@@ -3861,7 +3861,7 @@ In this case, the data stored in temporary storage cannot use indexes, resulting
         FROM emp a, dept b
         WHERE a.code = b.athlete_code
         AND a.nation_code = 'USA'
-        AND b.medal = 'G'
+        AND b.medal = 'G';
 
 Therefore, the view query block in Query 1 undergoes a merge process with the query block 
 that references the view and is transformed into the form of Query 2.

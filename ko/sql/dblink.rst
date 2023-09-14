@@ -652,7 +652,7 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
 
     CREATE SERVER 구문의 PROPERTIES 항목에 연결 속성을 설정할 수 있다. 자세한 내용은 :doc:`/sql/query/select` 와 :doc:`/sql/schema/server_stmt` 을 참고한다.
 
-.. note::
+::
 
     유의 사항
     ==========
@@ -674,7 +674,7 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
 
 ::
 
-*   예약어 처리 : 원격DB의 예약어를 식별자로 사용하는 경우 원격DB에서 예약어 처리 문자와 함께 대괄호 ([ ])로 감싸야 한다. CUBRID에서 예약어를 식별자로 사용하기 위한 문자는 큰따옴표(" ")문자이다.
+    *   예약어 처리 : 원격DB의 예약어를 식별자로 사용하는 경우 원격DB에서 예약어 처리 문자와 함께 대괄호 ([ ])로 감싸야 한다. CUBRID에서 예약어를 식별자로 사용하기 위한 문자는 큰따옴표(" ")문자이다.
 
 .. code-block::sql
 
@@ -699,7 +699,6 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
 
 ::
 
-.. note::
     제약 사항
     =========
 ::
@@ -710,7 +709,7 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
     *   테이블 확장 형식 (object@server)
         -   테이블, 뷰, 동의어만 지원
         -   시리얼, 내장함수, 저장함수은 미지원
-            (예 : 원격서버(server1)의 sp_func() 저장 함수는 sp_func@server1(arg1, …) 형식으로 사용할 수 없음)
+        |   (예 : 원격서버(server1)의 sp_func() 저장 함수는 sp_func@server1(arg1, …) 형식으로 사용할 수 없음)
     *   SELECT 질의의 모든 함수들(SYSDATE를 포함한 내장 함수, 저장 함수), serial관련 함수 및 시스템 상수는 모두 로컬에서 실행된다.. (함수 또는 serial를 원격DB에서 수행 필요한 경우에는 DBLINK 구문으로 사용해야 함)
     예를 들어 아래와 같이 원격 테이블 대상 select 질의에 대해 옵티마이저가 재작성한 질의를 보면 DBLINK() 안의 질의만 원격DB에서 실행된다.
 ::

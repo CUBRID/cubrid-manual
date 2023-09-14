@@ -654,10 +654,10 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
 
 .. note::
 
-유의 사항
-==========
+    유의 사항
+    ==========
 
-*   동의어 생성 : 원격 테이블과 원격 동의어를 대상으로 로컬 동의어가 생성이 가능하다. 단, CUBRID가 아닌 타 DBMS의 경우, user명이나 db명을 병기해야 한다.
+    *   동의어 생성 : 원격 테이블과 원격 동의어를 대상으로 로컬 동의어가 생성이 가능하다. 단, CUBRID가 아닌 타 DBMS의 경우, user명이나 db명을 병기해야 한다.
 
 .. code-block::sql
 
@@ -700,19 +700,18 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
 ::
 
 .. note::
-
-제약 사항
-=========
+    제약 사항
+    =========
 ::
-공통 제약 사항
---------------
+    공통 제약 사항
+    --------------
 ::
-*   DBLink에서 사용하는 원격 데이터베이스의 문자셋(charset)은utf-8만 지원한다.
-*   테이블 확장 형식 (object@server)
-    -   테이블, 뷰, 동의어만 지원
-    -   시리얼, 내장함수, 저장함수은 미지원
-    (예 : 원격서버(server1)의 sp_func() 저장 함수는 sp_func@server1(arg1, …) 형식으로 사용할 수 없음)
-*   SELECT 질의의 모든 함수들(SYSDATE를 포함한 내장 함수, 저장 함수), serial관련 함수 및 시스템 상수는 모두 로컬에서 실행된다.. (함수 또는 serial를 원격DB에서 수행 필요한 경우에는 DBLINK 구문으로 사용해야 함)
+    *   DBLink에서 사용하는 원격 데이터베이스의 문자셋(charset)은utf-8만 지원한다.
+    *   테이블 확장 형식 (object@server)
+        -   테이블, 뷰, 동의어만 지원
+        -   시리얼, 내장함수, 저장함수은 미지원
+            (예 : 원격서버(server1)의 sp_func() 저장 함수는 sp_func@server1(arg1, …) 형식으로 사용할 수 없음)
+    *   SELECT 질의의 모든 함수들(SYSDATE를 포함한 내장 함수, 저장 함수), serial관련 함수 및 시스템 상수는 모두 로컬에서 실행된다.. (함수 또는 serial를 원격DB에서 수행 필요한 경우에는 DBLINK 구문으로 사용해야 함)
     예를 들어 아래와 같이 원격 테이블 대상 select 질의에 대해 옵티마이저가 재작성한 질의를 보면 DBLINK() 안의 질의만 원격DB에서 실행된다.
 ::
 .. code-block::sql
@@ -727,9 +726,8 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
                     'SELECT * FROM tree A') AS [_dbl](id integer, parentid integer, [text] varchar(32)) -- at remote
          ) A (id, parentid, [text])
 ::
-
-*   INSERT/UPDATE/DELETE/MERGE 질의의 모든 함수들, serial 관련 함수 및 시스템 상수는 모두 원격 서버에서 실행되므로 내장함수 사용시 주의 필요하다. (즉, CUBRID의 내장함수가 원격 DBMS의 지원하지 않거나 사용법이 틀려 오류 등의 오동작 발생할 수 있으므로 주의 요망)
-*   트랜잭션 : 로컬DB와 원격DB의 트랜잭션(commit, rollback)은 하나의 트랜잭션으로 처리되지 않는다. 원격DB의 DML(INSERT/UPDATE/DELETE/MERGE 구문) 질의는 로컬 DB의 트랜잭션과 별개로 auto commit으로 동작한다. 
+    *   INSERT/UPDATE/DELETE/MERGE 질의의 모든 함수들, serial 관련 함수 및 시스템 상수는 모두 원격 서버에서 실행되므로 내장함수 사용시 주의 필요하다. (즉, CUBRID의 내장함수가 원격 DBMS의 지원하지 않거나 사용법이 틀려 오류 등의 오동작 발생할 수 있으므로 주의 요망)
+    *   트랜잭션 : 로컬DB와 원격DB의 트랜잭션(commit, rollback)은 하나의 트랜잭션으로 처리되지 않는다. 원격DB의 DML(INSERT/UPDATE/DELETE/MERGE 구문) 질의는 로컬 DB의 트랜잭션과 별개로 auto commit으로 동작한다. 
     아래 예시 처럼 질의 수행시, 원격DB에는 데이터가 입력되고, 로컬DB에는 rollback 되어 데이터가 입력되지 않는다.
 ::
 .. code-block::sql
@@ -744,15 +742,13 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
 
     SELECT a, b FROM t1, t2@srv1 t2 WHERE t1.a = t2.a;
     there’s no result
-
 ::
-
-*   TRUNCATE 구문 미지원
-*   CREATE TABLE … LIKE 테이블명@server명 구문 미지원 (참고로 CREATE TABLE … AS SELECT FROM 테이블명@server명 구문은 지원)
-*   TRIGGER 구문에서 dblink()와 원격 테이블(@server) 미지원
-*   predicate push : 테이블 확장 형식(@server) 구문으로 작성된 SELECT 구문은 옵티마이저가 DBLINK()구문으로 재작성하는데, 성능 향상을 위해 원격 DB에서 처리 가능한 조건절을 함께 push 하여 재작성한다. 단, 조건절의 내장함수, 사용자 정의함수를 사용한 경우에는 push에서 제외한다. 
-*   성능 유의 사항 
-    -   테이블 확장 형식(@server)의 SELECT 구문에서connect by절, group by절, having절, limit절을 사용한 경우, where조건, group by절, having절, limit절이 원격DB에서 실행되지 않고, 전체 데이터를 로컬DB로 가져온 후 해당 조건에 맞는 작업을 수행함으로 성능이 느려질 수 있다. 
+    *   TRUNCATE 구문 미지원
+    *   CREATE TABLE … LIKE 테이블명@server명 구문 미지원 (참고로 CREATE TABLE … AS SELECT FROM 테이블명@server명 구문은 지원)
+    *   TRIGGER 구문에서 dblink()와 원격 테이블(@server) 미지원
+    *   predicate push : 테이블 확장 형식(@server) 구문으로 작성된 SELECT 구문은 옵티마이저가 DBLINK()구문으로 재작성하는데, 성능 향상을 위해 원격 DB에서 처리 가능한 조건절을 함께 push 하여 재작성한다. 단, 조건절의 내장함수, 사용자 정의함수를 사용한 경우에는 push에서 제외한다. 
+    *   성능 유의 사항 
+        -   테이블 확장 형식(@server)의 SELECT 구문에서connect by절, group by절, having절, limit절을 사용한 경우, where조건, group by절, having절, limit절이 원격DB에서 실행되지 않고, 전체 데이터를 로컬DB로 가져온 후 해당 조건에 맞는 작업을 수행함으로 성능이 느려질 수 있다. 
     아래는 count()를 처리하기 위해서 원격DB의 tree 테이블의 전체데이터를 로컬DB로 가져온 후에 group by절을 처리하는 예시이다.
 ::
 .. code-block::sql
@@ -786,7 +782,7 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
          ) tbl (col1, col2)
     WHERE col1>= SYS_DATE
 ::
--   테이블 확장 형식(@server)구문으로 co-related 조건의 스칼라 서브쿼리, 서브쿼리, EXIST 구문의 부질의 사용시 원격 질의가 매번 전체데이터를 로컬 DB로 가지고 와서 조인컬럼에 해당하는 데이터를 찾는 작업을 수행하게 되어 급격한 성능 저하가 발생한다. 아래 예시는 스칼라 서브 퀴리의 조건으로 T1.a를 사용하고 있어, T1.a < 4 만큼의svr1의 tree table의 전체 데이터를 로컬 DB로 가지고 와서 적합한 데이터를 찾기때문에 수행이 느려질 수 있다.
+        -   테이블 확장 형식(@server)구문으로 co-related 조건의 스칼라 서브쿼리, 서브쿼리, EXIST 구문의 부질의 사용시 원격 질의가 매번 전체데이터를 로컬 DB로 가지고 와서 조인컬럼에 해당하는 데이터를 찾는 작업을 수행하게 되어 급격한 성능 저하가 발생한다. 아래 예시는 스칼라 서브 퀴리의 조건으로 T1.a를 사용하고 있어, T1.a < 4 만큼의svr1의 tree table의 전체 데이터를 로컬 DB로 가지고 와서 적합한 데이터를 찾기때문에 수행이 느려질 수 있다.
 ::
 .. code-block::sql
 
@@ -807,26 +803,26 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
     WHERE (T1.a< ?:0 )
 ::
 .. note::
-CUBRID 제약 사항
------------------
+    CUBRID 제약 사항
+    -----------------
 
-*   SELECT 구문에서 ENUM, BLOB, CLOB, SET타입 미지원
-*   로컬 DB와 원격 DB의 설정된 파라미터가 다른 경우 원하지 않는 결과가 발생할 수 있다.
-
-.. note::
-이기종 DBMS 공통 제약 사항
-----------------------------
-*   게이트웨이에서는 반드시 이기종 원격 데이터베이스(Oracle/MySQL/MariaDB)의 유니코드 전용 ODBC Driver를 사용해야 한다.
-*   ODBC 타입 중 SQL_INTERVAL,SQL_GUID,SQL_BIT,SQL_BINARY,SQL_VARBINARY,SQL_LONGVARBINARY 는 미지원 타입이다.
-*   1개 컬럼의 문자열 최대 길이는 16M까지만 지원한다.
-*   INSERT, UPDATE, DELETE, MERGE 와 같은 DML 구문에서 CUBRID가 미지원하는 내장 함수 중 아래와 같이 function(파라미터1, …, 파라미터N)의 형식이 아닌 경우에는 질의 오류가 발생한다.
-    예시: MySQL, MariaDB의 convert 함수 : convert('binary' using binary)  오류 발생
+    *   SELECT 구문에서 ENUM, BLOB, CLOB, SET타입 미지원
+    *   로컬 DB와 원격 DB의 설정된 파라미터가 다른 경우 원하지 않는 결과가 발생할 수 있다.
 
 .. note::
-Oracle 제약 사항
------------------
-*   SELECT 구문에서 long, interval day to se, interval year to month, blob, clob타입 미지원
-*   Oracle ODBC는 타임존 데이터 조회시 timestamp 타입의 로컬 시간으로 변환하여 반환된다. (타임존 데이터 타입 미지원) 
+    이기종 DBMS 공통 제약 사항
+    ----------------------------
+    *   게이트웨이에서는 반드시 이기종 원격 데이터베이스(Oracle/MySQL/MariaDB)의 유니코드 전용 ODBC Driver를 사용해야 한다.
+    *   ODBC 타입 중 SQL_INTERVAL,SQL_GUID,SQL_BIT,SQL_BINARY,SQL_VARBINARY,SQL_LONGVARBINARY 는 미지원 타입이다.
+    *   1개 컬럼의 문자열 최대 길이는 16M까지만 지원한다.
+    *   INSERT, UPDATE, DELETE, MERGE 와 같은 DML 구문에서 CUBRID가 미지원하는 내장 함수 중 아래와 같이 function(파라미터1, …, 파라미터N)의 형식이 아닌 경우에는 질의 오류가 발생한다.
+        예시: MySQL, MariaDB의 convert 함수 : convert('binary' using binary)  오류 발생
+
+.. note::
+    Oracle 제약 사항
+    -----------------
+    *   SELECT 구문에서 long, interval day to se, interval year to month, blob, clob타입 미지원
+    *   Oracle ODBC는 타임존 데이터 조회시 timestamp 타입의 로컬 시간으로 변환하여 반환된다. (타임존 데이터 타입 미지원) 
     아래는 Oracle DB의 타임존 데이터를 ODBC로 조회시 로컬타임존으로 변환되는 예이다.
 
 .. code-block::sql
@@ -840,14 +836,14 @@ Oracle 제약 사항
     SELECT to_char(t_timestamp_timezone2, 'yyyy-mm-dd hh24:mi:ss.ff tzh:tzm') FROM tbl@server;
     2021-07-25 19:34:56.000 +09:00
 ::
-*   입력한 타임존 "+02:00"이고, 로컬타임존 "+09:00"로 변환하여 "PM 08시"로 출력함
-*   미지원 구문인 REPLACE 구문은 사용시 오류 발생
-*   CUBRID의 타입범위를 벗어나는 오라클의 date,  number 타입 데이터는 오류 발생
+    *   입력한 타임존 "+02:00"이고, 로컬타임존 "+09:00"로 변환하여 "PM 08시"로 출력함
+    *   미지원 구문인 REPLACE 구문은 사용시 오류 발생
+    *   CUBRID의 타입범위를 벗어나는 오라클의 date,  number 타입 데이터는 오류 발생
 
 .. note::
-MySQL/MariaDB제약 사항
------------------------
-*   MySQL에서 cache를 사용하는 경우 게이트웨이 프로세스(cub_cas_cgw)의 메모리 사용량이 증가하므로 PREFETCH, NO_CACHE=1 사용을 권장한다.
-*   MySQL/MariaDB에서 repeat() 함수가 포함된 쿼리를 수행시 문자열의 일부가 잘리거나, 문자열을 읽어오지 못할 수 있다.
-*   SELECT 구문에서 longtext, bit, blob, longblob 타입 미지원
+    MySQL/MariaDB제약 사항
+    -----------------------
+    *   MySQL에서 cache를 사용하는 경우 게이트웨이 프로세스(cub_cas_cgw)의 메모리 사용량이 증가하므로 PREFETCH, NO_CACHE=1 사용을 권장한다.
+    *   MySQL/MariaDB에서 repeat() 함수가 포함된 쿼리를 수행시 문자열의 일부가 잘리거나, 문자열을 읽어오지 못할 수 있다.
+    *   SELECT 구문에서 longtext, bit, blob, longblob 타입 미지원
 

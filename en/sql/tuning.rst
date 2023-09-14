@@ -3849,10 +3849,10 @@ Queries like Query 1 below, which use inline views, make it easier to understand
         (SELECT * FROM record WHERE medal = 'G') b
         WHERE a.code = b.athlete_code;
 
-If **View Merging** optimization isn't applied, the inline views a and b are processed in advance and stored in temporary storage, 
+If **View Merging** optimization is not applied, the inline views a and b are processed in advance and stored in temporary storage, 
 and a join operation is performed based on this data.
 
-In this case, the data stored in temporary storage can't use indexes, resulting in significant performance degradation.
+In this case, the data stored in temporary storage cannot use indexes, resulting in significant performance degradation.
 
 .. code-block:: sql
 
@@ -3868,7 +3868,7 @@ that references the view and is transformed into the form of Query 2.
 
 This is referred to as **View Merging**. Going through this process allows the optimizer to consider more access paths.
 
-In CUBRID, **View Merging** can't be performed if the query meets the following conditions:
+In CUBRID, View Merging cannot be performed if the query meets the following conditions: 
 
 #. Using **NO_MERGE** hint on a view.
 

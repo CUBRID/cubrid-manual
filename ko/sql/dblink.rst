@@ -653,8 +653,10 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
     CREATE SERVER 구문의 PROPERTIES 항목에 연결 속성을 설정할 수 있다. 자세한 내용은 :doc:`/sql/query/select` 와 :doc:`/sql/schema/server_stmt` 을 참고한다.
 
 .. note::
+
 유의 사항
 ==========
+
 *   동의어 생성 : 원격 테이블과 원격 동의어를 대상으로 로컬 동의어가 생성이 가능하다. 단, CUBRID가 아닌 타 DBMS의 경우, user명이나 db명을 병기해야 한다.
 
 .. code-block::sql
@@ -698,6 +700,7 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
 ::
 
 .. note::
+
 제약 사항
 =========
 ::

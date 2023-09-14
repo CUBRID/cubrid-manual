@@ -672,13 +672,13 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
 
 ::
 
-*   예약어 처리 : 원격DB의 예약어를 식별자로 사용하는 경우 원격DB에서 예약어 처리 문자와 함께 대괄호 ([ ])로 감싸야 한다. 
-    CUBRID에서 예약어를 식별자로 사용하기 위한 문자는 큰따옴표(" ")문자이다.
+*   예약어 처리 : 원격DB의 예약어를 식별자로 사용하는 경우 원격DB에서 예약어 처리 문자와 함께 대괄호 ([ ])로 감싸야 한다. CUBRID에서 예약어를 식별자로 사용하기 위한 문자는 큰따옴표(" ")문자이다.
 
 .. code-block::sql
 
     SELECT ["COLUMN"],["ADD"],["ALTER"] FROM ["TABLE"]@srv1 ;
     SELECT * FROM dblink(srv1, 'select "COLUMN","ADD","ALTER" from "TABLE" ') AS t(a varchar, b varchar, c varchar );
+
 ::
     오라클에서 예약어를 식별자로 사용하기 위한 문자는 큰따옴표(" ")문자이다.
 
@@ -686,6 +686,7 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
 
     SELECT ["COLUMN"],["ADD"],["ALTER"] FROM ["TABLE"]@srv1 ;
     SELECT * FROM dblink(srv1, 'select "COLUMN","ADD","ALTER" from "TABLE" ') AS t(a varchar, b varchar, c varchar );
+
 ::
     MySQL, MariaDB에서 예약어를 식별자로 사용하기 위한 문자는 백쿼트(` `) 이다.
 
@@ -693,6 +694,7 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
 
     SELECT [`COLUMN`],[`ADD`],[`ALTER`] FROM [`TABLE`]@srv1 ;
     SELECT * FROM dblink(srv1, 'select `COLUMN`,`ADD`,`ALTER` from `TABLE` ') AS t(a varchar, b varchar, c varchar );
+
 ::
 
 .. note::
@@ -704,8 +706,8 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
 ::
 *   DBLink에서 사용하는 원격 데이터베이스의 문자셋(charset)은utf-8만 지원한다.
 *   테이블 확장 형식 (object@server)
--   테이블, 뷰, 동의어만 지원
--   시리얼, 내장함수, 저장함수은 미지원
+    -   테이블, 뷰, 동의어만 지원
+    -   시리얼, 내장함수, 저장함수은 미지원
     (예 : 원격서버(server1)의 sp_func() 저장 함수는 sp_func@server1(arg1, …) 형식으로 사용할 수 없음)
 *   SELECT 질의의 모든 함수들(SYSDATE를 포함한 내장 함수, 저장 함수), serial관련 함수 및 시스템 상수는 모두 로컬에서 실행된다.. (함수 또는 serial를 원격DB에서 수행 필요한 경우에는 DBLINK 구문으로 사용해야 함)
     예를 들어 아래와 같이 원격 테이블 대상 select 질의에 대해 옵티마이저가 재작성한 질의를 보면 DBLINK() 안의 질의만 원격DB에서 실행된다.
@@ -722,6 +724,7 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
                     'SELECT * FROM tree A') AS [_dbl](id integer, parentid integer, [text] varchar(32)) -- at remote
          ) A (id, parentid, [text])
 ::
+
 *   INSERT/UPDATE/DELETE/MERGE 질의의 모든 함수들, serial 관련 함수 및 시스템 상수는 모두 원격 서버에서 실행되므로 내장함수 사용시 주의 필요하다. (즉, CUBRID의 내장함수가 원격 DBMS의 지원하지 않거나 사용법이 틀려 오류 등의 오동작 발생할 수 있으므로 주의 요망)
 *   트랜잭션 : 로컬DB와 원격DB의 트랜잭션(commit, rollback)은 하나의 트랜잭션으로 처리되지 않는다. 원격DB의 DML(INSERT/UPDATE/DELETE/MERGE 구문) 질의는 로컬 DB의 트랜잭션과 별개로 auto commit으로 동작한다. 
     아래 예시 처럼 질의 수행시, 원격DB에는 데이터가 입력되고, 로컬DB에는 rollback 되어 데이터가 입력되지 않는다.
@@ -738,13 +741,15 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
 
     SELECT a, b FROM t1, t2@srv1 t2 WHERE t1.a = t2.a;
     there’s no result
+
 ::
+
 *   TRUNCATE 구문 미지원
 *   CREATE TABLE … LIKE 테이블명@server명 구문 미지원 (참고로 CREATE TABLE … AS SELECT FROM 테이블명@server명 구문은 지원)
 *   TRIGGER 구문에서 dblink()와 원격 테이블(@server) 미지원
 *   predicate push : 테이블 확장 형식(@server) 구문으로 작성된 SELECT 구문은 옵티마이저가 DBLINK()구문으로 재작성하는데, 성능 향상을 위해 원격 DB에서 처리 가능한 조건절을 함께 push 하여 재작성한다. 단, 조건절의 내장함수, 사용자 정의함수를 사용한 경우에는 push에서 제외한다. 
 *   성능 유의 사항 
--   테이블 확장 형식(@server)의 SELECT 구문에서connect by절, group by절, having절, limit절을 사용한 경우, where조건, group by절, having절, limit절이 원격DB에서 실행되지 않고, 전체 데이터를 로컬DB로 가져온 후 해당 조건에 맞는 작업을 수행함으로 성능이 느려질 수 있다. 
+    -   테이블 확장 형식(@server)의 SELECT 구문에서connect by절, group by절, having절, limit절을 사용한 경우, where조건, group by절, having절, limit절이 원격DB에서 실행되지 않고, 전체 데이터를 로컬DB로 가져온 후 해당 조건에 맞는 작업을 수행함으로 성능이 느려질 수 있다. 
     아래는 count()를 처리하기 위해서 원격DB의 tree 테이블의 전체데이터를 로컬DB로 가져온 후에 group by절을 처리하는 예시이다.
 ::
 .. code-block::sql

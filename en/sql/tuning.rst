@@ -3834,12 +3834,10 @@ The join with the *right_tbl* table was eliminated.
 View Merging
 ============
 
-**View Merging** focuses on reducing query processing time and overhead. 
-When a query uses a view, the system typically creates a new temporary table. 
-However, these newly created temporary tables are difficult to use index, and the process of creating a view 
-itself imposes unnecessary overhead on the system. 
-Therefore, **View Merging** replaces views with the original tables to avoid such overhead, 
-enabling more efficient query processing by utilizing the index of the original table.
+**View Merging** is an optimization for reducing overhead that occur during the processing of view or inline view. 
+When a query includes a view, there is an overhead of creating a temporary table for that view. 
+And it's impossible to perform index scan on temporary tables, leading to performance degradation.
+But, by using **View Merging** to merge the view with table in main query, performance can be improved because index scan is available.
 
 Queries like Query 1 below, which use inline views, make it easier to understand the content of the query.
 

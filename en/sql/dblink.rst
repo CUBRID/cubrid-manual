@@ -642,23 +642,199 @@ The Query statement below is a Query statement that inquires the remote_t table 
 
     For detailed DBLink SQL syntax, refer to :doc:`/sql/query/select` and :doc:`/sql/schema/server_stmt`.
 
+Notice
+======
 
-Caution
-==============================================
-* The table extension format (object@server) can only be used for tables, views, and synonyms, but serial, built-in functions, and stored functions cannot be used. For example, the sp_func() stored function of the remote server (server1) cannot be used in the form of sp_func@server1(arg1, ...).
-* Therefore, all functions (including built-in functions as like SYSDATE and stored functions) used in the SELECT query execute locally.
-* However, unlike SELECT queries, all functions used in INSERT/UPDATE/DELETE/MERGE queries execute on the remote server.
-* If you need to use a remote server function in a SELECT query, you can use the DBLINK statement.
-* Since the functions used in INSERT/UPDATE/DELETE/MERGE queries are executed on the remote server, care must be taken when using the functions. (In other words, when using CUBRID built-in functions, note that the remote DBMS may not have the corresponding built-in function or the usage may be different.)
+*   Synonym creation: Local synonyms can be created for remote tables and remote synonyms.
+
+.. code-block:: sql
+
+    -- for CUBRID
+    create synonym synonym_1 for t1@srv1;
+    create synonym synonym_2 for remote_synonym@srv1;
+
+    -- for ORACLE
+    create synonym synonym_ora for user_ora.t1@srv_ora;
+
+    -- for MySQL and MariaDB
+    create synonym synonym_my for my_db.t1@srv_mysql;
+    create synonym synonym_maria for maria_db.t1@srv_maria;
+
+*   Reserved word processing: When using a reserved word in the remote DB as an identifier, it must be enclosed in square brackets ([ ]) along with the reserved word processing characters in the remote DB.
+
+.. code-block:: sql
+
+    SELECT ["COLUMN"],["ADD"],["ALTER"] FROM ["TABLE"]@srv1 ;
+    SELECT * FROM dblink(srv1, 'select "COLUMN","ADD","ALTER" from "TABLE" ') AS t(a varchar, b varchar, c varchar );
+
+*   The character used to use reserved words as identifiers in Oracle is the double quotation mark (" ") character.
+
+.. code-block:: sql
+
+SELECT ["COLUMN"],["ADD"],["ALTER"] FROM ["TABLE"]@srv1 ;
+SELECT * FROM dblink(srv1, 'select "COLUMN","ADD","ALTER" from "TABLE" ') AS t(a varchar, b varchar, c varchar );
+
+*   The character used to use reserved words as identifiers in MySQL and MariaDB is the backquote (\` \`).
+
+.. code-block:: sql
+
+SELECT [`COLUMN`],[`ADD`],[`ALTER`] FROM [`TABLE`]@srv1 ;
+SELECT * FROM dblink(srv1, 'select `COLUMN`,`ADD`,`ALTER` from `TABLE` ') AS t(a varchar, b varchar, c varchar );
 
 
-Restrictions
-=============================================
+Constraints
+===========
 
-*   DBLink for heterogeneous databases only supports utf-8.
-*   Only Unicode ODBC Driver must be used in the gateway.
-*   The maximum string length of one column is supported up to 16M.
-*   When using cache in Mysql, it is recommended to use PREFETCH, NO_CACHE=1 because the memory usage of the gateway cub_cas_cgw increases.
-*   ODBC non-supported types are SQL_INTERVAL, SQL_GUID, SQL_BIT, SQL_BINARY, SQL_VARBINARY, SQL_LONGVARBINARY.
-*   When using DBLink with heterogeneous types (Oracle/MySQL/MariaDB), you must use Oracle/MySQL/MariaDB's Unicode ODBC driver.
-*   When performing a query that includes the repeat() function in MySQL/MariaDB, part of the string may be cut off or the string may not be read.
+Common Constraints
+------------------
+
+*   The charset of the remote database used in DBLink supports only utf-8.
+*   Table extension format (object@server)
+        -   Supports only tables, views, and synonyms
+        -   Serial, built-in functions, and stored functions are not supported.
+
+            (Example: sp_func() stored function of remote server (server1) cannot be used in sp_func@server1(arg1, …) format.)
+*   All functions of the SELECT query (built-in functions, stored functions, including SYSDATE), serial-related functions, and system constants all operate locally (if a function or serial is executed in a remote DB, the DBLINK statement must be used)
+    For example, when a select query is made targeting the remote table as below, only the queries in DBLINK() among the rewritten queries are executed in the remote DB.
+
+
+.. code-block:: sql
+
+    SELECT A.*, rownum rn, '' empty, null null_col, SYSDATE
+    FROM t1@srv1 A ;
+    -- rewritten query
+
+    SELECT A.id, A.parentid, A.[text], rownum, '', null, SYS_DATE -- at local
+    FROM ( SELECT [_dbl].id, [_dbl].parentid, [_dbl].[text]
+           FROM DBLINK( srv1 /\* '192.168.1.125:33000:remotedb1:dba:*:' \*/ ,
+                  'SELECT * FROM tree A') AS [_dbl](id integer, parentid integer, [text] varchar(32)) -- at remote
+         ) A (id, parentid, [text])
+
+
+*   All functions of INSERT/UPDATE/DELETE/MERGE queries, serial-related functions, and system constants are executed on the remote server, so be careful when using built-in functions (i.e., CUBRID's built-in functions may not be supported by the remote DBMS or have different usage instructions)
+*   Transaction: Transactions (commit, rollback) between local DB and remote DB are not processed as one transaction. DML (INSERT/UPDATE/DELETE/MERGE syntax) queries in the remote DB are excuted as auto commits separately from transactions in the local DB.
+    As in the example below, when performing a query, data is inserted into the remote DB, but it is rolled back and no data is entered into the local DB.
+
+.. code-block:: sql
+
+    -- local input
+    INSERT INTO t1(a, b) VALUES (1, 'local');
+
+    -- remote input
+    INSERT INTO t2@srv1(a, b) VALUES (1, 'remote');
+
+    rollback;
+
+    SELECT a, b FROM t1, t2@srv1 t2 WHERE t1.a = t2.a;
+    there’s no result
+
+*   TRUNCATE statement is not supported.
+*   CREATE TABLE … LIKE table@server syntax is not supported (For reference, CREATE TABLE … AS SELECT FROM table@server syntax is supported)
+*   dblink() and remote table (@server) are not supported in the TRIGGER statement.
+*   predicate push: The SELECT statement written in table extension format (@server) syntax is internally rewritten as DBLINK() syntax. To improve performance, it is rewritten by pushing conditional clauses that can be processed into the query to be performed in the remote DB. However, if a built-in function or user-defined function in a conditional clause is used, it is excluded from push.
+*   Performance notes
+
+    .. note::
+        When the connect by clause, group by clause, having clause, and limit clause are used in the SELECT statement in table extension format (@server), the where condition, group by clause, having clause, and limit clause are not executed in the remote DB. After tranferring to the local DB, performance may be slowed by performing tasks that meet the conditions.
+
+
+    Below is an example of processing the group by clause after transferring all data from the remote DB's tree table to the local DB in order to process count().
+
+    .. code-block:: sql
+
+        -- original query
+        SELECT A.parentid, count()
+        FROM tree@srv1 A
+        GROUP BY A.parentid ;
+        -- rewritten query
+        SELECT A.parentid, count()
+        FROM ( SELECT [_dbl].parentid
+               FROM DBLINK( srv1 /\* '192.168.1.125:33000:remotedb1:dba::' \*/ ,
+                            'SELECT parentid FROM tree A'
+                          ) AS [_dbl](parentid integer)
+             ) A (parentid)
+        GROUP BY A.parentid
+
+*   The SYSDATE function used in the table extension format (@server) syntax is performed in the local DB, so caution is required if the time between servers is different.
+
+    .. code-block:: sql
+
+        -- original query
+        SELECT * FROM tbl@srv1 WHERE col1 >= sysdate;
+        -- rewritten query
+        SELECT *
+        FROM ( SELECT col1, col2
+               FROM DBLINK( srv1 /\* '192.168.1.125:33000:remotedb1:dba::' \*/ ,
+                            'SELECT col1, col2 FROM tbl'
+                          ) AS [_dbl](col1 date, col2 varchar)
+             ) tbl (col1, col2)
+        WHERE col1>= SYS_DATE
+
+*   When using a scalar subquery with a co-related condition in the table extension format (@server) syntax, a subquery, or a SELECT query with an EXIST statement, the remote query brings the entire data to the local DB every time and performs the task of finding data corresponding to the join column. As a result, a rapid decrease in performance occurs. The example below uses T1.a as a condition for a scalar subquery, and is a query that finds suitable data by bringing all the data from svr1's tree table as much as T1.a < 4 to the local DB.
+
+    .. code-block:: sql
+
+        -- original query
+        SELECT T1.a,
+               (SELECT A.text FROM tree@srv1 A WHERE A.id = T1.a ) remote_text
+        FROM hangul_t1 T1
+        WHERE T1.a < 4;
+
+        -- rewritten query
+        SELECT T1.a,
+               (SELECT A.[text] from (select [_dbl].[text], [_dbl].id
+                FROM DBLINK(srv1 /\* '192.168.1.125:33000:remotedb1:dba::' \*/ ,
+                            'SELECT [text], id FROM tree A'
+                           ) AS [_dbl]([text] varchar(32), id integer)
+                WHERE [_dbl].id=T1.a) A ([text], id))
+        FROM hangul_t1 T1
+        WERE (T1.a < ?:0)
+
+CUBRID Constraints
+------------------
+*   ENUM, BLOB, CLOB, and SET types are not supported in the select statement.
+*   If the set parameters of the local DB and remote DB are different, undesirable results may occur.
+
+.. note::
+    Heterogeneous DBMS common constraints
+
+
+    *   The gateway must use the Unicode-only ODBC Driver of the heterogeneous remote database (Oracle/MySQL/MariaDB).
+    *   Among ODBC types, SQL_INTERVAL, SQL_GUID, SQL_BIT, SQL_BINARY, SQL_VARBINARY, and SQL_LONGVARBINARY are not supported types. (graph)
+    *   The maximum string length for one column is only 16M.
+    *   In DML statements such as INSERT, UPDATE, DELETE, and MERGE, if the built-in functions not supported by CUBRID are not in the form of function (parameter 1, …, parameter N) as shown below, a query error occurs.
+
+        Example: the convert function of MySQL and MariaDB: convert('binary' using binary)
+
+.. note::
+    Oracle Constraints
+
+
+    *   Long, interval day to se, interval year to month, blob, and clob types are not supported in the select statement.
+    *   Oracle ODBC does not support the time zone type, so when searching time zone data, the part representing the time zone is calculated as the local time, converted to timestamp type, and returned.
+
+    Below is an example of converting Oracle DB's time zone data to a local time zone when querying it with ODBC.
+
+    .. code-block:: sql
+
+        -- oracle input
+        INSERT INTO tbl VALUES (to_timestamp_tz('2021-07-25 12:34:56 +02:00', 'yyyy-mm-dd hh24:mi:ss tzh:tzm'));
+        -- local
+        SELECT t_timestamp_timezone2 FROM tbl@server;
+        07:34:56.000 PM 07/25/2021
+        SELECT to_char(t_timestamp_timezone2, 'yyyy-mm-dd hh24:mi:ss.ff tzh:tzm') FROM tbl@server;
+        2021-07-25 19:34:56.000 +09:00
+        The entered time zone is "+02:00", converted to local time zone "+09:00", and output as "PM 08:00".
+
+        The entered time zone is "+02:00", converted to local time zone "+09:00", and output as "PM 08:00".
+
+    *   REPLACE syntax is not supported and an error occurs when used.
+    *   Oracle's processing range of date and number types is larger than CUBRID's, so data that falls outside of CUBRID's type range will result in an error.
+
+.. note::
+    MySQL/MariaDB limitations
+
+
+    *   When using cache in Mysql, the memory usage of gateway cub_cas_cgw increases, so it is recommended to use PREFETCH, NO_CACHE=1.
+    *   When performing a query that includes the repeat() function in MySQL/MariaDB, part of the string may be truncated or the string may not be read.
+    *   Longtext, bit, blob, and longblob types are not supported in the select statement.

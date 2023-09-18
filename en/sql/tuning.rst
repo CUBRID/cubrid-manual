@@ -3915,7 +3915,7 @@ The following is an example that includes the **CONNECT BY** clause.
         FROM (SELECT * FROM tree WHERE birthyear = 1973) t
         CONNECT BY PRIOR t.id=t.mgrid; 
 
-Due to the use of the **CONNECT BY** clause in the above query, **View Merging** cannot be performed.
+Due to the use of the **CONNECT BY** in the above query, **View Merging** cannot be performed.
 
 The following is an example where a view includes the **DISTINCT** clause.
 

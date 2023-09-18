@@ -3862,7 +3862,7 @@ If the query is executed without **View Merging** optimization being performed, 
 
 When **View Merging** optimization is performed, *Query 1* is transformed into *Query 2*.
 
-In CUBRID, View Merging cannot be performed if the query meets the following conditions: 
+In the following cases, **View Merging** is not performed:
 
 #. Using **NO_MERGE** hint on a view.
 

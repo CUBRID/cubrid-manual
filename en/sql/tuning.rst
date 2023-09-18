@@ -3836,7 +3836,7 @@ Predicate Push
 
 **Predicate Push** is an optimization that pushes the predicate of the main query into the view.
 
-By applying **Predicate Push** to the subquery, the amount of data queried in the main query is reduced.
+By applying **Predicate Push** to the subquery, the amount of data queried in the subquery is reduced.
 
 For instance, when performing a join using the join condition *a.code = r.athlete_code* as in the query below, if the external predicate can be pushed into the query block, the amount of data to be joined can be reduced.
 
@@ -3848,7 +3848,7 @@ For instance, when performing a join using the join condition *a.code = r.athlet
         AND a.nation_code = 'KOR';
 
 There are no predicates in the inline-view of the query above. If the query transformation doesn't work, 
-the *athlete* table would have been fully scanned and joined before filtering with the condition *a.nation_code = 'KOR'*.
+the *athlete* table would have been fully scanned, creating a temporary result, joined, and filtering with the condition *a.nation_code = 'KOR'*.
 
 However, if the query is transformed as follows by using **Predicate Push**, it can be optimized to reduce the amount of data being queried.
 

@@ -3864,7 +3864,7 @@ In the following cases, **Predicate Push** is not performed:
 
 #. Contains **CONNECT BY**.
     
-#. Using aggregation or analytical functions.
+#. Using aggregate or analytic functions.
 
 #. Using **ROWNUM, LIMIT**, or **GROUPBY_NUM(), INST_NUM(), ORDERBY_NUM()**.
     

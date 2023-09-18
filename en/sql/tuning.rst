@@ -3945,7 +3945,7 @@ The following is an example performing an **OUTER JOIN** with a view.
 
 In cases where an **OUTER JOIN** is performed as above, **View Merging** cannot be executed.
 
-The following is an example using aggregate or analytical functions.
+The following is an example using aggregate or analytic functions.
 
 .. code-block:: sql
 

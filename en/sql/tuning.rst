@@ -3943,7 +3943,7 @@ The following is an example performing an **OUTER JOIN** with a view.
         LEFT OUTER JOIN (SELECT * FROM record WHERE host_year = 2020) b 
         ON a.code = b.athlete_code;
 
-In cases where an **OUTER JOIN** is performed as above, **View Merging** cannot be executed.
+In cases where an **OUTER JOIN** is performed as above, **View Merging** cannot be performed.
 
 The following is an example using aggregate or analytic functions.
 

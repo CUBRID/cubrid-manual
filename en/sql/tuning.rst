@@ -3932,7 +3932,7 @@ The following is an example that includes **CTE** in the query.
         WITH cte AS (SELECT * FROM athlete WHERE gender = 'M') 
         SELECT * FROM cte WHERE cte.nation_code = 'USA';
 
-Queries that contain **CTE** like the above cannot undergo **View Merging**.
+When using **CTE** as above, **View Merging** optimization cannot be performed.
 
 The following is an example performing an **OUTER JOIN** with a view.
 

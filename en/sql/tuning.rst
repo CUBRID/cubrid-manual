@@ -3862,11 +3862,11 @@ In the following cases, **Predicate Push** is not performed:
 
 #. Using **NO_PUSH_PRED** hint on main query.
 
-#. Contains **CONNECT BY**.
+#. Contains **CONNECT BY** on main query.
     
-#. Using aggregate or analytic functions.
+#. Using aggregate or analytic functions on view.
 
-#. Using **ROWNUM, LIMIT**, or **GROUPBY_NUM(), INST_NUM(), ORDERBY_NUM()**.
+#. Using **ROWNUM, LIMIT**, or **GROUPBY_NUM(), INST_NUM(), ORDERBY_NUM()** on view.
     
 #. Written using **Correlated Subquery**.
 

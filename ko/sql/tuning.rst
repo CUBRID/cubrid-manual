@@ -3869,11 +3869,11 @@ Predicate Push
 
     #. 주 질의에 **NO_PUSH_PRED** 힌트가 사용된 경우
 
-    #. **CONNECT BY**\를 포함한 경우
+    #. 주 질의가 **CONNECT BY**\를 포함한 경우
 
-    #. 집계함수나 분석함수를 사용하는 경우
+    #. 뷰에 집계함수나 분석함수를 사용하는 경우
 
-    #. **ROWNUM, LIMIT** 또는 **GROUPBY_NUM (), INST_NUM (), ORDERBY_NUM ()**\ 을 사용하는 경우
+    #. 뷰에 **ROWNUM, LIMIT** 또는 **GROUPBY_NUM (), INST_NUM (), ORDERBY_NUM ()**\ 을 사용하는 경우
 
     #. **Correlated Subquery**\ 를 사용하여 작성된 경우
 

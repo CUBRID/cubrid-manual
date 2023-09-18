@@ -3850,7 +3850,7 @@ For instance, when performing a join using the join condition *a.code = r.athlet
 There are no predicates in the inline-view of the query above. If the query transformation doesn't work, 
 the *athlete* table would have been fully scanned and joined before filtering with the condition *a.nation_code = 'KOR'*.
 
-However, with **Predicate Push**, if the query is transformed as follows, the optimization ensures that only fewer amounts of data are queried.
+However, if the query is transformed as follows by using **Predicate Push**, it can be optimized to reduce the amount of data being queried.
 
 .. code-block:: sql
 

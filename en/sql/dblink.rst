@@ -671,15 +671,15 @@ Notice
 
 .. code-block:: sql
 
-SELECT ["COLUMN"],["ADD"],["ALTER"] FROM ["TABLE"]@srv1 ;
-SELECT * FROM dblink(srv1, 'select "COLUMN","ADD","ALTER" from "TABLE" ') AS t(a varchar, b varchar, c varchar );
+    SELECT ["COLUMN"],["ADD"],["ALTER"] FROM ["TABLE"]@srv1 ;
+    SELECT * FROM dblink(srv1, 'select "COLUMN","ADD","ALTER" from "TABLE" ') AS t(a varchar, b varchar, c varchar );
 
 *   The character used to use reserved words as identifiers in MySQL and MariaDB is the backquote (\` \`).
 
 .. code-block:: sql
 
-SELECT [`COLUMN`],[`ADD`],[`ALTER`] FROM [`TABLE`]@srv1 ;
-SELECT * FROM dblink(srv1, 'select `COLUMN`,`ADD`,`ALTER` from `TABLE` ') AS t(a varchar, b varchar, c varchar );
+    SELECT [`COLUMN`],[`ADD`],[`ALTER`] FROM [`TABLE`]@srv1 ;
+    SELECT * FROM dblink(srv1, 'select `COLUMN`,`ADD`,`ALTER` from `TABLE` ') AS t(a varchar, b varchar, c varchar );
 
 
 Constraints
@@ -706,7 +706,7 @@ Common Constraints
 
     SELECT A.id, A.parentid, A.[text], rownum, '', null, SYS_DATE -- at local
     FROM ( SELECT [_dbl].id, [_dbl].parentid, [_dbl].[text]
-           FROM DBLINK( srv1 /\* '192.168.1.125:33000:remotedb1:dba:*:' \*/ ,
+           FROM DBLINK( srv1 /* '192.168.1.125:33000:remotedb1:dba:*:' */ ,
                   'SELECT * FROM tree A') AS [_dbl](id integer, parentid integer, [text] varchar(32)) -- at remote
          ) A (id, parentid, [text])
 

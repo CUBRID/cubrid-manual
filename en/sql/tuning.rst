@@ -3972,7 +3972,7 @@ The following is an example crafted using a **Correlated Subquery**.
         FROM athlete a,
         (SELECT * FROM record r WHERE a.code = r.athlete_code) b;
 
-For queries using a **Correlated Subquery**, **View Merging** is not possible.
+When using **Correlated Subquery** as above, **View Merging** optimization cannot be performed.
 
 The following is an example where a view includes **RANDOM(), DRANDOM(), SYS_GUID()**.
 

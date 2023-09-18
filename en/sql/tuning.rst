@@ -3952,7 +3952,7 @@ The following is an example using aggregate or analytic functions.
         SELECT * 
         FROM (SELECT AVG(host_year) FROM record WHERE medal = 'G') a;
 
-Queries that include aggregate or analytical functions do not qualify for **View Merging**.
+When using aggregate or analytic functions in views as above, **View Merging** optimization cannot be performed.
 
 The following is an example using **ROWNUM, LIMIT** or **GROUPBY_NUM(), INST_NUM(), ORDERBY_NUM()**.
 

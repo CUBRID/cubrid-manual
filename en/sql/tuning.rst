@@ -3858,7 +3858,7 @@ However, if the query is transformed as follows by using **Predicate Push**, it 
         FROM (SELECT name, nation_code, code, count(*) cnt FROM athlete WHERE nation_code = 'KOR' GROUP BY name, nation_code ) a, record r
         WHERE a.code = r.athlete_code;
 
-In CUBRID, **Predicate Push** can't be performed if the query meets the following conditions:
+In the following cases, **Predicate Push** is not performed:
 
 #. Using **NO_PUSH_PRED** hint on main query.
 

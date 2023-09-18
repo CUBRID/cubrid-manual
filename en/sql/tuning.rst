@@ -3925,7 +3925,7 @@ The following is an example where a view includes the **DISTINCT** clause.
 
 Due to the **DISTINCT** clause used within the view in the above query, **View Merging** cannot be performed.
 
-The following is an example that includes **CTE** (Common Table Expressions) in the query.
+The following is an example that includes **CTE** in the query.
 
 .. code-block:: sql
 

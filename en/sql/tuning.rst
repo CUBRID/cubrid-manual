@@ -3889,7 +3889,7 @@ The following is an example that uses **NO_PUSH_PRED** hint on main query.
         WHERE a.code = r.athlete_code
         AND a.nation_code = 'KOR';
 
-If the **NO_PUSH_PRED** hint is used on main query, **Predicate Push** is not applied.
+If the **NO_PUSH_PRED** hint is used on main query, **Predicate Push** is not performed.
 
 The following is an example that performs an **OUTER JOIN** with the predicate to be pushed in the **ON** clause condition.
 

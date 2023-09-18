@@ -3983,7 +3983,7 @@ The following is an example where a view includes **RANDOM(), DRANDOM(), SYS_GUI
                 (SELECT SYS_GUID (), athlete_code FROM record WHERE medal = 'G') b
         WHERE a.code = b.athlete_code;
 
-Queries that contain a view with **RANDOM(), DRANDOM(), SYS_GUID()** cannot undergo **View Merging** optimization.
+When using **RANDOM(), DRANDOM(), SYS_GUID()** in views as above, **View Merging** optimization cannot be performed.
 
 .. _query-cache:
 

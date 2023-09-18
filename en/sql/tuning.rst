@@ -3870,7 +3870,7 @@ In the following cases, **View Merging** is not performed:
 
 #. The view includes a **DISTINCT** clause.
 
-#. **CTE** (Common Table Expressions) is included in the query.
+#. The view is **CTE** (Common Table Expressions).
 
 #. Using **OUTER JOIN** with a view.
 
@@ -3925,7 +3925,7 @@ The following is an example where a view includes the **DISTINCT** clause.
 
 Due to the **DISTINCT** clause used within the view in the above query, **View Merging** cannot be performed.
 
-The following is an example that includes **CTE** in the query.
+The following is an example that the view is **CTE** (Common Table Expressions).
 
 .. code-block:: sql
 

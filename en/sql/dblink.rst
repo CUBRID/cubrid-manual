@@ -749,7 +749,7 @@ Common Constraints
         -- rewritten query
         SELECT A.parentid, count()
         FROM ( SELECT [_dbl].parentid
-               FROM DBLINK( srv1 /\* '192.168.1.125:33000:remotedb1:dba::' \*/ ,
+               FROM DBLINK( srv1 /* '192.168.1.125:33000:remotedb1:dba::' */,
                             'SELECT parentid FROM tree A'
                           ) AS [_dbl](parentid integer)
              ) A (parentid)
@@ -764,7 +764,7 @@ Common Constraints
         -- rewritten query
         SELECT *
         FROM ( SELECT col1, col2
-               FROM DBLINK( srv1 /\* '192.168.1.125:33000:remotedb1:dba::' \*/ ,
+               FROM DBLINK( srv1 /* '192.168.1.125:33000:remotedb1:dba::' */,
                             'SELECT col1, col2 FROM tbl'
                           ) AS [_dbl](col1 date, col2 varchar)
              ) tbl (col1, col2)
@@ -783,7 +783,7 @@ Common Constraints
         -- rewritten query
         SELECT T1.a,
                (SELECT A.[text] from (select [_dbl].[text], [_dbl].id
-                FROM DBLINK(srv1 /\* '192.168.1.125:33000:remotedb1:dba::' \*/ ,
+                FROM DBLINK(srv1 /* '192.168.1.125:33000:remotedb1:dba::' */,
                             'SELECT [text], id FROM tree A'
                            ) AS [_dbl]([text] varchar(32), id integer)
                 WHERE [_dbl].id=T1.a) A ([text], id))

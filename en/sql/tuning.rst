@@ -3849,10 +3849,7 @@ Queries like Query 1 below, which use inline views, make it easier to understand
         (SELECT * FROM record WHERE medal = 'G') b
         WHERE a.code = b.athlete_code;
 
-If **View Merging** optimization is not applied, the inline views a and b are processed in advance and stored in temporary storage, 
-and a join operation is performed based on this data.
-
-In this case, the data stored in temporary storage cannot use indexes, resulting in significant performance degradation.
+If the query is executed without **View Merging** optimization being performed, the join is performed with the temporary results of executing each of the inline views *a* and *b*. Temporary results cannot use indexes, resulting in performance degradation.
 
 .. code-block:: sql
 

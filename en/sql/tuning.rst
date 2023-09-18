@@ -3964,7 +3964,7 @@ The following is an example using **ROWNUM, LIMIT** or **GROUPBY_NUM(), INST_NUM
 
 When using **ROWNUM, LIMIT** or **GROUPBY_NUM(), INST_NUM(), ORDERBY_NUM()** in views as above, **View Merging** optimization cannot be performed.
 
-The following is an example crafted using a **Correlated Subquery**.
+The following is an example using **Correlated Subquery**.
 
 .. code-block:: sql
 

@@ -3860,10 +3860,7 @@ If the query is executed without **View Merging** optimization being performed, 
         AND a.nation_code = 'USA'
         AND b.medal = 'G';
 
-Therefore, the view query block in Query 1 undergoes a merge process with the query block 
-that references the view and is transformed into the form of Query 2.
-
-This is referred to as **View Merging**. Going through this process allows the optimizer to consider more access paths.
+When **View Merging** optimization is performed, *Query 1* is transformed into *Query 2*.
 
 In CUBRID, View Merging cannot be performed if the query meets the following conditions: 
 

@@ -3868,7 +3868,7 @@ In the following cases, **Predicate Push** is not performed:
 
 #. Using **ROWNUM, LIMIT**, or **GROUPBY_NUM(), INST_NUM(), ORDERBY_NUM()** on view.
     
-#. Written using **Correlated Subquery**.
+#. Using **Correlated Subquery**.
 
 #. When subqueries are used in predicates.
 

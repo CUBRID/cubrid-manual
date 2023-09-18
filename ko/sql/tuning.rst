@@ -3873,17 +3873,17 @@ View Merging 최적화
 
     #. 뷰에 **NO_MERGE** 힌트가 사용된 경우
 
-    #. **CONNECT BY**\를 포함한 경우
+    #. 뷰가 **CONNECT BY**\를 포함한 경우
 
     #. 뷰가 **DISTINCT**\ 문을 포함한 경우
 
-    #. **CTE**\(Common Table Expressions)가 질의문에 포함되어 있는 경우
+    #. 뷰가 **CTE**\(Common Table Expressions)인 경우
     
     #. 뷰를 **OUTER JOIN**\ 하는 경우
 
-    #. 집계함수나 분석함수를 사용하는 경우
+    #. 뷰에 집계함수나 분석함수를 사용하는 경우
 
-    #. **ROWNUM, LIMIT**\ 또는 **GROUPBY_NUM (), INST_NUM (), ORDERBY_NUM ()**\ 을 사용하는 경우
+    #. 뷰에 **ROWNUM, LIMIT**\ 또는 **GROUPBY_NUM (), INST_NUM (), ORDERBY_NUM ()**\ 을 사용하는 경우
 
     #. **Correlated Subquery**\ 를 사용하여 작성된 경우
 
@@ -3902,7 +3902,7 @@ View Merging 최적화
 
 뷰에 **NO_MERGE** 힌트를 사용할 경우, 해당 뷰는 **View Merging**\의 대상이 되지 않는다.
 
-다음은 **CONNECT BY**\를 포함한 예시이다.
+다음은 뷰가 **CONNECT BY**\를 포함한 예시이다.
 
 .. code-block:: sql
 
@@ -3934,7 +3934,7 @@ View Merging 최적화
 위 질의문의 뷰 내부에 **DISTINCT**\문이 사용되어 **View Merging**\을 수행할 수 없다.
 
 
-다음은 **CTE**\(Common Table Expressions)가 질의문에 포함되어 있는 예시이다.
+다음은 뷰가 **CTE**\(Common Table Expressions)인 예시이다.
 
 
 .. code-block:: sql
@@ -3955,16 +3955,16 @@ View Merging 최적화
 
 위와 같이 **OUTER JOIN**\을 수행하는 경우에는 **View Merging**\을 수행할 수 없다.
 
-다음은 집계함수나 분석함수를 사용하는 예시이다.
+다음은 뷰에 집계함수나 분석함수를 사용하는 예시이다. 
 
 .. code-block:: sql
 
         SELECT * 
         FROM (SELECT AVG(host_year) FROM record WHERE medal = 'G') a;
 
-집계함수나 분석함수를 포함한 질의문의 경우 **View Merging**\의 대상이 되지 않는다.
+뷰에 집계함수나 분석함수를 포함한 질의문의 경우 **View Merging**\의 대상이 되지 않는다.
 
-다음은 **ROWNUM, LIMIT**\ 또는 **GROUPBY_NUM (), INST_NUM (), ORDERBY_NUM ()**\을 사용하는 예시이다.
+다음은 뷰에 **ROWNUM, LIMIT**\ 또는 **GROUPBY_NUM (), INST_NUM (), ORDERBY_NUM ()**\ 을 사용하는 예시이다.
 
 .. code-block:: sql
 
@@ -3972,7 +3972,7 @@ View Merging 최적화
         FROM (SELECT gender, rownum FROM athlete WHERE rownum < 15) a
         WHERE gender = 'M';
 
-**ROWNUM, LIMIT**\ 또는 **GROUPBY_NUM (), INST_NUM (), ORDERBY_NUM ()**\을 사용한 질의문의 경우 **View Merging**\이 불가능하다.
+뷰에 **ROWNUM, LIMIT**\ 또는 **GROUPBY_NUM (), INST_NUM (), ORDERBY_NUM ()**\을 사용한 질의문의 경우 **View Merging**\이 불가능하다.
 
 다음은 **Correlated Subquery**\ 를 사용하여 작성된 예시이다
 

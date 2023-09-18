@@ -3893,7 +3893,7 @@ The following is an example that uses **NO_MERGE** hint on a view.
     (SELECT /*+ NO_MERGE*/ * FROM record WHERE medal = 'G') b
     WHERE a.code = b.athlete_code;
 
-If the **NO_MERGE** hint is used on a view, **View Merging** is not applied.
+If the **NO_MERGE** hint is used on a view, **View Merging** is not performed.
 
 The following is an example that includes the **CONNECT BY** clause.
 

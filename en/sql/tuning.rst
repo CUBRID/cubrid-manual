@@ -3874,11 +3874,11 @@ In the following cases, **View Merging** is not performed:
 
 #. Using **OUTER JOIN** with a view.
 
-#. Using aggregation or analytical functions.
+#. The view using aggregate or analytic functions.
 
 #. Using **ROWNUM, LIMIT**, or **GROUPBY_NUM(), INST_NUM(), ORDERBY_NUM()**.
 
-#. Written using **Correlated Subquery**.
+#. The view using **Correlated Subquery**.
 
 #. The view includes methods.
 

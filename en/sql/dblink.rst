@@ -712,8 +712,8 @@ Common Constraints
 
 
 *   All functions, serial-related functions, and system constants of INSERT/UPDATE/DELETE/MERGE queries are all executed on the remote server, so be careful when using built-in functions (i.e., CUBRID's built-in functions may not be supported by the remote DBMS or have different usage instructions)
-*   Transaction: Transactions (commit, rollback) between local DB and remote DB are not processed as one transaction. DML (INSERT/UPDATE/DELETE/MERGE syntax) queries in the remote DB are excuted as auto commits separately from transactions in the local DB.
-    As in the example below, when performing a query, data is inserted into the remote DB, but it is rolled back and no data is entered into the local DB.
+*   Transaction: Transactions (commit, rollback) between local DB and remote DB are not processed as one transaction. DML (INSERT/UPDATE/DELETE/MERGE) queries in the remote DB are excuted as auto commits separately from transactions in the local DB.
+    As in the example below, when performing a transaction, data is inserted into the remote DB, but no data is entered into the local DB, because doing rollback.
 
 .. code-block:: sql
 
@@ -730,8 +730,8 @@ Common Constraints
 
 *   TRUNCATE statement is not supported.
 *   CREATE TABLE … LIKE table@server syntax is not supported (For reference, CREATE TABLE … AS SELECT FROM table@server syntax is supported)
-*   dblink() and remote table (@server) are not supported in the TRIGGER statement.
-*   predicate push: The SELECT statement written in table extension format (@server) syntax is internally rewritten as DBLINK() syntax. To improve performance, it is rewritten by pushing conditional clauses that can be processed into the query to be performed in the remote DB. However, if a built-in function or user-defined function in a conditional clause is used, it is excluded from push.
+*   dblink() and remote table (@server) are not allowed in the TRIGGER statement.
+*   predicate push: The SELECT statement written in table extension format (@server) is internally rewritten to  DBLINK() by the optimizer. To improve performance, It push with conditional clauses that can be performed in the remote DB. However, if a built-in function or user-defined function in a conditional clause is used, it is excluded from pushing.
 *   Performance notes
 
     .. note::

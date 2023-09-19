@@ -3847,10 +3847,10 @@ For instance, when performing a join using the join condition *a.code = r.athlet
         WHERE a.code = r.athlete_code
         AND a.nation_code = 'KOR';
 
-There are no predicates in the inline-view of the query above. If the query transformation doesn't work, 
+There are no predicates in the inline-view of the query above. If the query rewrite doesn't work, 
 the *athlete* table would have been fully scanned, creating a temporary result, joined, and filtering with the condition *a.nation_code = 'KOR'*.
 
-However, if the query is transformed as follows by using **Predicate Push**, it can be optimized to reduce the amount of data being queried.
+However, if the query is rewritten as follows by using **Predicate Push**, it can be optimized to reduce the amount of data being queried.
 
 .. code-block:: sql
 
@@ -3870,7 +3870,7 @@ In the following cases, **Predicate Push** is not performed:
     
 #. Using **Correlated Subquery**.
 
-#. When subqueries are used in predicates.
+#. Using subqueries in predicates.
 
 #. The view includes methods.
 

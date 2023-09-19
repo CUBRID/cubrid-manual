@@ -3849,7 +3849,7 @@ Like *Query 1* below, which use inline views, make it easier to understand the i
         (SELECT * FROM record WHERE medal = 'G') b
         WHERE a.code = b.athlete_code;
 
-If the query is executed without **View Merging** optimization being performed, the join is performed with the temporary results of executing each of the inline views *a* and *b*. Temporary results cannot use indexes, resulting in performance degradation.
+If the query is executed without **View Merging** optimization, the join is performed with the temporary results of executing each of the inline views *a* and *b*. Temporary results cannot use indexes, resulting in performance degradation.
 
 .. code-block:: sql
 

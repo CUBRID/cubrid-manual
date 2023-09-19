@@ -3866,7 +3866,7 @@ In the following cases, **View Merging** is not performed:
 
 #. Using **NO_MERGE** hint on a view.
 
-#. Contains **CONNECT BY**.
+#. The view includes a **CONNECT BY** clause.
 
 #. The view includes a **DISTINCT** clause.
 

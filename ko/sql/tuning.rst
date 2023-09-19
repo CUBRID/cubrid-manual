@@ -1061,7 +1061,7 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
     CREATE TABLE bugs
     (
         bugID BIGINT NOT NULL,
-        CreationDate TIMESTAMP,
+        CreationDate TIMESTAMP NOT NULL,
         Author VARCHAR(255),
         Subject VARCHAR(255),
         Description VARCHAR(255),

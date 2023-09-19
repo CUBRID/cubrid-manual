@@ -387,6 +387,10 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               | vacuum_ovfp_check_threshold         | server parameter        |         | int      | 1000                           |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | vacuum_ovfp_check_duration          | server parameter        |         | int      | 45000                          |                       |
++                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | deduplicate_key_level               | client/server parameter |         | int      | -1                             |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | print_index_detail                  | client/server parameter |         | bool     | no                             |                       |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 
 .. _lpg:
@@ -599,7 +603,7 @@ The following are parameters related to the database server. The type and value 
 
         If **use_user_hosts** parameter is changed during service operation, CUBRID service cannot terminate normally. So, the user must change the parameter after CUBRID service terminates.
 
-    *   The format of **$CUBRID/conf/hosts.conf** is same as **/etc/hosts** but there are some restrictions as follows.
+    *   The format of **$CUBRID/conf/cubrid_hosts.conf** is same as **/etc/hosts** but there are some restrictions as follows.
 
         * Allow **IPv4** format address only. (Not allow **IPv6** format address)
         * Not allow **alias**. ::
@@ -617,31 +621,29 @@ The following are parameters related to the database server. The type and value 
             172.31.0.1 host1
             178.31.0.2 host1
 
-    * The following is an example of $CUBRID/conf/hosts.conf. ::
+    * The following is an example of $CUBRID/conf/cubrid_hosts.conf. ::
 
             #
             # hosts file for CUBRID user specific host service
             #
             127.0.0.1       localhost
             172.31.0.1      node1
-            172.31.0.1      node2
-            172.31.0.1      node3
             192.168.0.31    node4.kr         # Seoul
             192.168.2.31    node5.gov.or.kr  # Daejeon
 
 
 .. warning::
 
-    You must change $CUBRID/conf/hosts.conf after terminating all CUBRID processes, and **the changes will be applied after restarting.** In addition, you must write including **localhost** and **'hostname'** (The output of hostname command by among Linux commands) in the hosts.conf.
+    You must change $CUBRID/conf/cubrid_hosts.conf after terminating all CUBRID processes, and **the changes will be applied after restarting.** In addition, you must write including **localhost** and **'hostname'** (The output of hostname command by among Linux commands) in the cubrid_hosts.conf.
 
 .. warning::
 
-    The hostname adheres the following format in the $CUBRID/conf/hosts.conf (The Linux hostname naming rule).
+    The hostname adheres the following format in the $CUBRID/conf/cubrid_hosts.conf (The Linux hostname naming rule).
 
     * Only English letters, numbers (0 to 9), hyphen ('-'), and dot (".") characters can be used for the hostname.
     * The first character of the hostname must be an English letter.
     * The last character of the hostname must be an English letter and a number.
-    * FQDN (Full Qualified Domain Name) format hostname can be used (Example: www.cubrid.com). 
+    * FQDN (Fully Qualified Domain Name) format hostname can be used (Example: www.cubrid.com). 
 
     Allow the following hostname.
 
@@ -1587,6 +1589,14 @@ The following are parameters related to SQL statements and data types supported 
         ==========
                0.5
 
+    .. note:: 
+
+        The oracle_compat_number_behavior is only applied, when reading NUMERIC, DOUBLE, and FLOAT type data in string format in JDBC/CCI.  The related functions of JDBC/CCI are as follows.
+
+        * JDBC : getString(int columnIndex), getString(String columnLabel), getObject(int columnIndex) , getObject(String columnLabel)
+
+        * CCI :  cci_get_data (CCI_A_TYPE_STR as type), Example) cci_get_data(req, i, CCI_A_TYPE_STR, &data, &ind)
+		 
 .. _oracle_style_empty_string:
 
 **oracle_style_empty_string**
@@ -2177,6 +2187,10 @@ The following are other parameters. The type and value range for each parameter 
 +-------------------------------------+--------+----------------+----------------+----------------+
 | vacuum_ovfp_check_duration          | int    | 45000          | 1              | 600000         |
 +-------------------------------------+--------+----------------+----------------+----------------+
+| deduplicate_key_level               | int    | -1             | -1             | 14             |
++-------------------------------------+--------+----------------+----------------+----------------+
+| print_index_detail                  | bool   | no             |                |                |
++-------------------------------------+--------+----------------+----------------+----------------+
 
 **access_ip_control**
 
@@ -2376,6 +2390,20 @@ The following are other parameters. The type and value range for each parameter 
 **vacuum_ovfp_check_duration**
 
 **vacuum_ovfp_check_duration** specifies the duration for which data related to the count of index overflow pages, gathered by vacuum threads, is retained. Data that remains unchanged within the specified duration will be automatically removed. The unit of it's value is minutes.
+
+**deduplicate_key_level**
+
+ **deduplicate_key_level** determines the automatic inclusion and value setting of the WITH DEDUPLICATE statement within the index creation statement. For details on DEDUPLICATE, see :ref:`deduplicate_overview`. The default is -1(which means that the WITH DEDUPLICATE is not included implicitly).
+ 
+.. note::
+
+    *   If **deduplicate_key_level** is set to **-1**, even if the *deduplicate level* is explicitly specified in the CREATE INDEX statement, it is ignored and the *deduplicate level* is forced to 0.
+
+
+**print_index_detail**
+
+ It specifies whether option information in the **WITH** clause is displayed when index syntax information is displayed, such as in the SHOW CREATE TABLE statement. Default is NO. However, the unloaddb tool is not affected by this setting.
+
 
 .. _broker-configuration:
 

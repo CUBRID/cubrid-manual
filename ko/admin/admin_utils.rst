@@ -3481,9 +3481,33 @@ vacuumdb
 .. option:: --dump
 
     이 옵션은 vacuum에 대한 상태 정보를 표시하는 데 사용된다. 현재는 vacuum에서 참조하는 첫 번째 로그 페이지 ID와 로그 볼륨 이름을 표시한다. 사용자는 첫 번째 로그 페이지 ID의 변경을 통해 vacuum 작업의 진행 상황을 확인할 수 있으며, vacuum 작업을 위해 유지해야 하는 최소 로그 볼륨을 확인할 수 있다. 독립형 모드와 클라이언트/서버 모드 모두에서 사용할 수 있다.
-    **\-C** 옵션과 함께 지정되면 인덱스 vacuum시 인덱스 단말 노드 (leaf node) 의 임계값 이상의 오버플로우 페이지 읽기가 발생한 인덱스에 대한 정보를 함께 표시 한다. 이와 관련된 시스템 파라미터는 **vacuum_ovfp_check_duration**\과  **vacuum_ovfp_check_threshold**\가 있다.   ::
+    **\-C** 옵션과 함께 지정되면 인덱스 vacuum시 인덱스 단말 노드 (leaf node) 의 임계값 이상의 :ref:`오버플로우 페이지 <deduplicate_overflow_page>` 읽기가 발생한 인덱스에 대한 정보를 함께 표시 한다. 이와 관련된 시스템 파라미터는 **vacuum_ovfp_check_duration**\과  **vacuum_ovfp_check_threshold**\가 있다.   
+    ::
 
         cubrid vacuumdb --dump demodb
+
+    ::
+
+        $ cubrid vacuumdb -C --dump demodb
+
+        *** Vacuum Dump ***
+        First log page ID referenced = 85653 (in demodb_lgar013)
+        
+        *** Exceeding read threshold (1000 pages) for OID overflow pages (OVFP), Since 09/04/23 08:53:50 ***
+          Class name            Index name            Count         Num of OVFP recent read    Max num of OVFP read
+        ================================================================================================================
+          dba.tm                v_idx                       272451    1089 (09/04/23 10:49:52)    1478 (09/04/23 10:28:46)
+          dba.tbl               idx                         322728    1023 (09/04/23 09:53:47)    1475 (09/04/23 09:29:29)
+        
+        $ 
+
+    - Exceeding read threshold (**1000** pages) : vacuum_ovfp_check_threshold 설정값을 보여준다.
+    - Since **09/04/23 08:53:50** : OVFP 모니터링이 시작된 시각 정보를 보여준다. 
+    - Class name: 클래스 이름(테이블 이름), 소유자 이름을 포함합니다.
+    - Index name: 인덱스 이름
+    - Count: 인덱스 베큠(vacuum) 처리시 임계값(vacuum_ovfp_check_threshold)을 초과해서 인덱스 오버플로우 페이지를 읽은 횟수
+    - Num of OVFP recent read: 인덱스 베큠 처리시 임계값(vacuum_ovfp_check_threshold) 이상의 인덱스 오버플로우 페이지를 읽은 가장 최근의 기록
+    - Max num of OVFP read: 인덱스 베큠 작업시 임계값(vacuum_ovfp_check_threshold) 이상의 인덱스 오버플로우 페이지를 최대로 읽은 시점의 기록
 
 .. option:: -S, --SA-mode
 

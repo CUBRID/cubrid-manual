@@ -143,7 +143,7 @@ JDBC 프로그래밍
                  | usePreparedStmtCache=<bool_type>
                  | preparedStmtCacheSize=<unit_size>
                  | preparedStmtCacheSqlLimit=<unit_size>
-                 | hold_cursor=<bool_type>				 
+                 | hold_cursor=<bool_type>
 
         <alternative_hosts> ::=
         <standby_broker1_host>:<port> [,<standby_broker2_host>:<port>]
@@ -205,6 +205,7 @@ JDBC 프로그래밍
     *  **preparedStmtCacheSqlLimit**: usePreparedStmtCache가 TRUE일 경우, 캐싱할 수 있는 SQL의 길이 (기본:256, 최소:1, 최대:2147483647)
     *  **hold_cursor**: 커서 유지 기능 설정(기본값: true). 이 값이 false 이면 CLOSE_CURSORS_AT_COMMIT이 설정되고, true 이면 HOLD_CURSORS_OVER_COMMIT이 설정된다. 자세한 내용은 :ref:`cursor-holding`\ 을 참고한다.
 
+		
 **예제 1** ::
 
     --connection URL string when user name and password omitted

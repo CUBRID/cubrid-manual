@@ -845,7 +845,7 @@ cci_connect_with_url
                      | logSlowQueries=true|false[&slowQueryThresholdMillis=<milli_sec>]
                      | logTraceApi=true|false
                      | logTraceNetwork=true|false
-                     | useSSL=<bool_type>
+                     | useSSL=true|false
 
         <alternative_hosts> ::= <host>:<port> [,<host>:<port>]
          
@@ -891,6 +891,7 @@ cci_connect_with_url
        *   패킷 암호화: useSSL = true
        *   일반 평문: useSSL = false
 
+
     **예제** ::
 
         --connection URL string when a property(altHosts) is specified for HA
@@ -904,6 +905,7 @@ cci_connect_with_url
 
         --connection URL string when useSSL property specified for encrypted connection
         URL = "cci:cubrid:192.168.0.1:33000:demodb:::?useSSL=true
+		
 
     .. warning::
 

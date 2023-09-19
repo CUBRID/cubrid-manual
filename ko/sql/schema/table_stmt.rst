@@ -43,20 +43,11 @@ CREATE TABLE
 
                 <on_update> ::= [ON UPDATE <value_specification>]
          
-            <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] <referential_definition> }
-
-                <referential_definition> ::=
-                    REFERENCES [schema_name.]referenced_table_name (column_name, ...) [<referential_triggered_action> ...]
-         
-                    <referential_triggered_action> ::=
-                        ON UPDATE <referential_action> |
-                        ON DELETE <referential_action> 
-
-                        <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
+            <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] [WITH <index_with_option>] <referential_definition> }
                         
         <table_constraint> ::=             
             { 
-                {KEY|INDEX} index_name (column_name, ...) |
+                {KEY|INDEX} index_name  <index_col_desc> |
                 [CONSTRAINT [constraint_name]]
                    {
                       UNIQUE [KEY|INDEX](column_name, ...) |
@@ -64,8 +55,15 @@ CREATE TABLE
                       <referential_constraint>
                    }
             } COMMENT 'index_comment_string'
+
+          <index_col_desc> ::=
+              { ( {column_name | function_name (argument_list)} [ASC | DESC] [{, {column_name | function_name (argument_list)} [ASC | DESC]} ...] ) }
+              [WHERE <filter_predicate>]
+              [WITH <index_with_option>]
+              [INVISIBLE]
+              [COMMENT 'index_comment_string’]
          
-            <referential_constraint> ::= FOREIGN KEY [<foreign_key_name>](column_name, ...) <referential_definition>
+            <referential_constraint> ::= FOREIGN KEY [<foreign_key_name>](column_name, ...) [WITH <index_with_option>] <referential_definition>
          
                 <referential_definition> ::=
                     REFERENCES [schema_name.]referenced_table_name (column_name, ...) [<referential_triggered_action> ...]
@@ -84,6 +82,8 @@ CREATE TABLE
                                ENCRYPT [=] [AES | ARIA] | 
                                AUTO_INCREMENT = initial_value
 
+      <index_with_option> ::= {DEDUPLICATE ‘=‘ deduplicate_level }
+
 *   **IF NOT EXISTS**: 생성하려는 테이블이 존재하는 경우 에러 없이 테이블을 생성하지 않는다.
 *   *schema_name*: 스키마 이름을 지정한다(최대 31바이트). 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 생성할 테이블의 이름을 지정한다(최대 222바이트).
@@ -97,10 +97,15 @@ CREATE TABLE
 *   *table_comment_string*: 테이블의 커멘트를 지정한다.
 *   *column_comment_string*: 칼럼의 커멘트를 지정한다.
 *   *index_comment_string*: 인덱스의 커멘트를 지정한다.
+*   *deduplicate_level*: deduplicate 레벨을 지정한다(0 ~ 14). 자세한 내용은 :ref:`deduplicate_overview`\를 참고한다.
 
 .. note::
 
     *   **DBA**\와 **DBA** 멤버는 다른 스키마에 테이블을 생성할 수 있다. 사용자가 **DBA**\도 아니고 **DBA** 멤버도 아니면 해당 사용자의 스키마에서만 테이블을 생성할 수 있다.
+
+.. note::
+
+    *deduplicate_level*\은 0부터 14까지의 정수이다. 0은 **DEDUPLICATE** 옵션이 없었던 CUBRID 11.2 또는 이하 버전과 동일한 구성의 인덱스를 의미한다.
 
 .. code-block:: sql
 
@@ -163,7 +168,7 @@ CREATE TABLE
 
         <on_update> ::= [ON UPDATE <value_specification>]
 
-        <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] <referential_definition>}
+        <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] [WITH <index_with_option>] <referential_definition>}
 
 칼럼 이름
 ^^^^^^^^^
@@ -425,11 +430,11 @@ ON UPDATE
 
 ::
 
-    <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] <referential_definition> }
+    <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] [WITH <index_with_option>] <referential_definition> }
 
     <table_constraint> ::=         
         { 
-            {KEY|INDEX} index_name (column_name, ...) |
+            {KEY|INDEX} index_name <index_col_desc>  |
             [CONSTRAINT [constraint_name]]
                {
                       UNIQUE [KEY|INDEX](column_name, ...) |
@@ -438,7 +443,7 @@ ON UPDATE
                }
         }
      
-        <referential_constraint> ::= FOREIGN KEY [<foreign_key_name>](column_name, ...) <referential_definition>
+        <referential_constraint> ::= FOREIGN KEY [<foreign_key_name>](column_name, ...) [WITH <index_with_option>] <referential_definition>
      
             <referential_definition> ::=
                 REFERENCES [schema_name.]referenced_table_name (column_name, ...) [<referential_triggered_action> ...]
@@ -448,6 +453,8 @@ ON UPDATE
                     ON DELETE <referential_action> 
     
                     <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
+                    
+        <index_with_option> ::= {DEDUPLICATE ‘=‘ deduplicate_level}
 
 NOT NULL 제약
 ^^^^^^^^^^^^^
@@ -559,11 +566,13 @@ FOREIGN KEY 제약
 
 외래키(foreign key)란 참조 관계에 있는 다른 테이블의 기본키를 참조하는 칼럼 또는 칼럼들의 집합을 말한다. 외래키와 참조되는 기본키는 동일한 데이터 타입을 가져야 한다. 외래키가 기본키를 참조함에 따라 연관되는 두 테이블 사이에는 일관성이 유지되는데, 이를 참조 무결성(referential integrity)이라 한다. ::
 
-    [CONSTRAINT constraint_name] FOREIGN KEY [foreign_key_name] (<column_name_comma_list1>) REFERENCES [schema_name.]referenced_table_name (<column_name_comma_list2>) [<referential_triggered_action> ...]
+    [CONSTRAINT constraint_name] FOREIGN KEY [foreign_key_name] (<column_name_comma_list1>) [WITH <index_with_option>] REFERENCES [schema_name.]referenced_table_name (<column_name_comma_list2>) [<referential_triggered_action> ...]
      
         <referential_triggered_action> ::= ON UPDATE <referential_action> | ON DELETE <referential_action>
 
             <referential_action> ::= CASCADE | RESTRICT | NO ACTION  | SET NULL
+          
+        <index_with_option> ::= {DEDUPLICATE ‘=‘ deduplicate_level}
 
 *   *constraint_name*: 제약 조건의 이름을 지정한다.
 *   *foreign_key_name*: **FOREIGN KEY** 제약 조건의 이름을 지정한다. 생략할 수 있으며, 이 값을 지정하면 *constraint_name* 을 무시하고 이 이름을 사용한다.
@@ -583,6 +592,8 @@ FOREIGN KEY 제약
     *   **RESTRICT**: 기본키 값이 삭제되거나 업데이트되지 않도록 제한한다. 삭제 또는 업데이트를 시도하는 트랜잭션은 롤백된다.
     *   **SET NULL**: 기본키가 삭제되거나 업데이트되면, 이를 참조하는 외래키 칼럼 값을 **NULL** 로 업데이트한다.
     *   **NO ACTION**: **RESTRICT** 옵션과 동일하게 동작한다.
+
+*   *deduplicate_level*: deduplicate 레벨을 지정한다(0 ~ 14). 자세한 내용은 :ref:`deduplicate_overview`\를 참고한다.
 
 참조하는 테이블의 각 R1 행에 대해 참조되는 테이블의 R2 행이 있어야 하며, R1의 참조하는 각 컬럼의 값이 **NULL** 이거나 R2의 참조되는 해당 컬럼의 값과 동일해야 한다.
 
@@ -912,6 +923,7 @@ CREATE TABLE AS SELECT
 *   <*column_definition*>: 칼럼을 정의한다. 생략하면 **SELECT** 문의 칼럼 스키마가 복제된다. **SELECT** 문의 칼럼 제약 조건이나 **AUTO_INCREMENT** 속성, 테이블/칼럼의 커멘트는 복제되지 않는다.
 *   <*table_constraint*>: 테이블 제약 조건을 정의한다.
 *   <*select_statement*>: 데이터베이스에 이미 존재하는 원본 테이블을 대상으로 하는 **SELECT** 문이다.
+*   <*select statement*>은 tbl@srver1처럼 원격 테이블을 포함할 수 있다.
 
 .. code-block:: sql
 
@@ -1009,6 +1021,27 @@ CREATE TABLE AS SELECT
         3            3
 
 
+아래와 같이 원격 테이블로 부터 데이터를 읽어서 테이블을 만들 수 있다.
+
+.. code-block:: sql
+
+    -- column values are replicated from remote_tbl
+    CREATE TABLE new_tbl_rem (
+      id INT NON NULL;
+      phone VARCHAR;
+      localtion VARCHAR;
+    ) AS SELECT id, phone, 'remote' FROM a_tbl@server1 WHERE id < 3;
+
+    SELECT * FROM new_tbl_rem;
+
+::
+
+      id  phone       location
+    ===================================
+       1  '111-1111'  'remote'
+       2  '222-2222'  'remote'
+
+
 ALTER TABLE
 ===========
 
@@ -1020,7 +1053,7 @@ ALTER TABLE
      
         <alter_clause> ::= 
             ADD <alter_add> [INHERIT <resolution>, ...]  | 
-            ADD {KEY | INDEX} <index_name> (<index_col_name>, ... ) [COMMENT 'index_comment_string'] |
+            ADD {KEY | INDEX} <index_name> <index_col_desc> |
             ALTER [COLUMN] column_name SET DEFAULT <value_specification> |
             DROP <alter_drop> [INHERIT <resolution>, ...] |
             DROP {KEY | INDEX} index_name |
@@ -1115,7 +1148,7 @@ ADD COLUMN 절
 
             <on_update> ::= [ON UPDATE <value_specification>]
             
-            <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] <referential_definition>}
+            <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] [WITH <index_with_option>] <referential_definition>}
 
                 <referential_definition> ::=
                     REFERENCES [schema_name.]referenced_table_name (column_name, ...) [<referential_triggered_action> ...]
@@ -1126,11 +1159,14 @@ ADD COLUMN 절
 
                         <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
 
+                <index_with_option> ::= {DEDUPLICATE ‘=‘ deduplicate_level}
+
 *   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 칼럼을 추가할 테이블의 이름을 지정한다.
 *   <*column_definition*>: 새로 추가할 칼럼의 이름(최대 254 바이트), 데이터 타입, 제약 조건을 정의한다.
 *   **AFTER** *old_column_name*: 새로 추가할 칼럼 앞에 위치하는 기존 칼럼 이름을 명시한다.
 *   *comment_string*: 칼럼의 커멘트를 지정한다.
+*   *deduplicate_level*: deduplicate 레벨을 지정한다(0 ~ 14). 자세한 내용은 :ref:`deduplicate_overview`\를 참고한다.
 
 .. code-block:: sql
 

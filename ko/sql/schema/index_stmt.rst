@@ -16,21 +16,34 @@ CREATE INDEX
 
 ::
 
-    CREATE [UNIQUE] INDEX index_name ON [schema_name.]table_name <index_col_desc> ;
+    CREATE [UNIQUE] INDEX index_name ON [schema_name.]table_name <index_col_desc2> ;
      
-        <index_col_desc> ::=
-            { ( column_name [ASC | DESC] [ {, column_name [ASC | DESC]} ...] ) [ WHERE <filter_predicate> ] |
-            (function_name (argument_list) ) }
-                { [[WITH ONLINE [PARALLEL parallel_count]] | [INVISIBLE] | [VISIBLE]] }
-                [COMMENT 'index_comment_string']
+        <index_col_desc2> ::=
+                  {
+                    (  {column_name | function_name (argument_list)} [ASC | DESC]
+                       [{, {column_name | function_name (argument_list)} [ASC | DESC]} ...] )
+                  }
+                  [WHERE <filter_predicate> ]
+                  [WITH <index_with_clause> [{, <index_with_clause>]} ...]
+                  [INVISIBLE]
+                  [COMMENT 'index_comment_string’]
+
+             <index_with_clause> ::= {ONLINE [PARALLEL parallel_count]} | <index_with_option>
+             <index_with_option> ::= {DEDUPLICATE ‘=‘ deduplicate_level}
+
 
 *   **UNIQUE**: 유일한 값을 갖는 고유 인덱스를 생성한다.
 *   *index_name*: 생성하려는 인덱스의 이름을 명시한다. 인덱스 이름은 테이블 안에서 고유한 값이어야 한다.
-
 *   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 인덱스를 생성할 테이블의 이름을 명시한다.
 *   *column_name*: 인덱스를 적용할 칼럼의 이름을 명시한다. 다중 칼럼 인덱스를 생성할 경우 둘 이상의 칼럼 이름을 명시한다.
 *   **ASC** | **DESC**: 칼럼의 정렬 방향을 설정한다.
+*   *deduplicate_level*: deduplicate 레벨을 지정한다(0 ~ 14). 자세한 내용은 `DEDUPLICATE`_\를 참고한다.
+
+.. note::
+
+    *deduplicate_level*\은 0부터 14까지의 정수이다. 0은 **DEDUPLICATE** 옵션이 없었던 CUBRID 11.2 또는 이하 버전과 동일한 구성의 인덱스를 의미한다.
+    
 
 *   <*filter_predicate*>: 필터링된 인덱스를 만드는 조건을 명시한다. 컬럼과 상수 간 비교 조건이 여러 개인 경우 **AND** 로 연결된 경우에만 필터링이 될 수 있다. 자세한 내용은 :ref:`filtered-index` 를 참고한다.
 
@@ -223,6 +236,79 @@ CREATE INDEX
 |   CLASS t1(CLASS_OID: 0|202|7). key: *UNKNOWN-KEY*.               |                                                                                   |
 |                                                                   |                                                                                   |
 +-------------------------------------------------------------------+-----------------------------------------------------------------------------------+
+
+.. _deduplicate_overview:
+
+DEDUPLICATE 
+-----------
+
+**DEDUPLICATE** 옵션을 사용하면 특정 키값에 치우쳐진 비대칭 데이터(skewed data)인덱스의 데이터 수정 시 발생할 수 있는 성능 저하를 개선할 수 있다. 이 옵션 값으로 특정 키 값에 대한 오버플로우 페이지의 연결 리스트가 너무 길게 만들어지지 않게 완화하도록 조정할 수 있으며 그에 따라 삽입/삭제/갱신 및 vacuum 성능을 개선한다. 하지만 시스템에 의해 숨겨진 인덱스 칼럼이 추가되었으므로 인덱스의 단말 노드의 개수와 트리의 높이가 증가 할 수 있어 인덱스의 크기가 커지며 조회 성능에 영향을 줄 수 있으므로 주의해야 한다. 특히, 인덱스 데이터가 키 값에 대하여 균일하게 분포하는 경우에는 성능 개선 효과 없이 인덱스의 크기만 커질 수 있으므로 주의해야 한다.
+
+*deduplicate level*\의 값이 1 이상 지정되면 인덱스 생성 시 사용자가 명시한 인덱스 칼럼에 더하여 시스템 내부적으로 사용하는 숨겨진 인덱스 칼럼이 하나 추가되는데, 이 값을 사용하여 특정 키값에 치우치지 않도록 중복도를 완화한다. *deduplicate level*\ 값이 커질수록 중복도를 더 완화하게 되며, 특정 키값의 오버플로우 페이지의 연결 리스트 길이가 짧아지게 된다.
+
+.. note::
+        
+    * 오버플로우 페이지 연결 리스트는 추가, 삭제, 갱신 성능 면에서는 불리하지만 조회 성능 면에서는 유리하다. 그러므로, *deduplicate level*\을 무조건 크게 해서 오버플로우 페이지 자체가 생성되지 않도록 유도하는 것은 바람직하지 않으며 중복도를 고려해서 적당한 값을 지정해야 한다. (하나의 키에 대한 오버플로우 페이지의 길이는 수십 혹은 수백 페이지 이내가 되도록 조정한다)
+
+인덱스를 생성할 때 *deduplicate level*\를 지정해 주는 방법은 두 가지이다.
+ 
+묵시적인 방법
+
+    SQL 구문에 명시적인 DEDUPLICATE 옵션 지정이 없는 경우에 *deduplicate level*\를 자동으로 지정해 주는 방식이다. 이 방식은 시스템 파라메터 **deduplicate_key_level** 설정값의 영향을 받는다.
+    **deduplicate_key_level**\이 1 이상이면 *deduplicate level*\은 자동으로  **deduplicate_key_level**\값으로 지정된다.    
+
+명시적인 방법
+
+    SQL 구문에 사용자가 명시적으로 **DEDUPLICATE** 옵션을 지정하는 방식이다. **deduplicate_key_level** 설정값과 상관없이 사용자가 지정한 *deduplicate level*\를 적용한다.
+    아래 예시와 같이 DEDUPLICATE 구문을 직접 기술해서 명시한다.
+
+    .. code-block:: sql
+
+        CREATE TABLE tbl (a int default 0, b int, c int);
+        CREATE INDEX i_tbl_b on tbl (b) WITH DEDUPLICATE=3 COMMENT 'for deduplicate level 3';
+        CREATE INDEX i_tbl_b_c on tbl (b,c) WITH DEDUPLICATE=7 COMMENT 'for deduplicate level 1';
+
+.. warning::
+
+    * **deduplicate_key_level**\이 **\-1**\인 경우는 명시적인 방법으로 지정을 해도 내부적으로 무시되어 적용되지 않는다. 즉 이 경우에는 모든 인덱스는 *deduplicate level*\이 **0**\으로 생성된다.
+    * "**_dedup_**"\로 시작되는 컬럼명을 생성할 수 없다.
+
+.. note::
+    
+    * 인덱스 생성시 키 필드의 구성이 UNIQUE를 보장 받는다면 사용자가 설정한 DEDUPLICATE 설정이 무시되며  *deduplicate level*\은 **0**\으로 생성된다.
+        * 키 필드가 특정한 Primary Key 또는 Unique Index를 구성하는 키필드를 모두 포함하고 있는 경우
+        * 단, 인덱스의 함수 인수로 Primary Key 또는 Unique Index의 컬럼이 사용된 경우는 제외
+
+동일한 구성을 갖는 복수의 인덱스 허용
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    *deduplicate level*\을 제외한 모든 키 필드 및 필터 조건이 동일한 복수개의 인덱스를 정의 할 수 있다.
+
+    .. code-block:: sql
+
+        CREATE TABLE tbl (a int primary key, b int, c int);
+        CREATE INDEX idx1 ON tbl(b, c) WITH DEDUPLICATE=3;
+        CREATE INDEX idx2 ON tbl(b, c) WITH DEDUPLICATE=5;
+        CREATE UNIQUE INDEX idx_uk ON tbl(b); 
+        CREATE INDEX idx3 ON tbl(b, c) WITH DEDUPLICATE=7;
+
+    위 예시에서 idx1과 idx2는 지정된 *deduplicate level*\을 갖는다. 그렇지만 idx3는 b 컬럼이 idx_uk에 의해 Unique 할 것을 보장 받기 때문에 사용자의 지정을 무시하고 *deduplicate level*\이 **0**\으로 생성된다.
+
+.. note::
+
+    * *deduplicate level*\만 다른 동일한 인덱스 칼럼을 가진 FK가 이미 존재한다면 중복해서 생성 할 수 없다.
+    * 중복된 인덱스가 허용되더라도 동일한 구성의 Primary Key나 Unique Index가 있다면 중복 생성되지 않는다.    
+    * ALTER INDEX REBUILD 구문으로는 인덱스의 *deduplicate level*\을 변경할 수 없다. 필요하다면 인덱스 삭제후 재생성해야 한다.
+
+.. _deduplicate_overflow_page:
+
+오버플로우 페이지
+~~~~~~~~~~~~~~~~~~~
+
+    * 오버플로우 페이지란?
+       인덱스는 크게 비단말 노드, 단말 노드로 구성되는데 단말 노드는 인덱스 키 정보의 집합으로 구성된다. 이때 하나의 인덱스 키 정보는 키값과 그 키값에 해당하는 레코드의 OID들의 집합을 쌍으로 묶은 것이다. 
+       특정 키값을 갖는 레코드가 많아지면 그 모든 레코드의 OID들을 단말노드에 담을 수 없기 때문에 별도의 저장 구조로 분리해서 관리하는데 이것을 오버플로우 페이지라고 부른다.
+       또한 오버플로우 페이지마저도 가득 차게 되면 새로운 오버플로우 페이지를 생성하고 이 페이지들을 연결 리스트로 유지 관리한다.  
 
 .. _alter-index:
 

@@ -89,6 +89,8 @@ The following message is returned if the GATEWAY is already running.
 ::
 
     $ cubrid gateway start
+    @ cubrid gateway start
+    ++ cubrid gateway is running.
 
 Stopping GATEWAY
 
@@ -370,7 +372,7 @@ The following is an example of setting MySQL, Oracle and MariaDB ODBC Driver inf
 
 	[Oracle 11g ODBC driver]
 	Description = Oracle ODBC driver v11g
-	Driver = /home/user/oracle/instantclient/libsqora.so.11.1
+	Driver = /home/user/oracle/instantclient/libsqora.so.19.1
 
 	[mariadb odbc 3.1.13 driver]
 	Description= mariadb odbc driver 3.1.13
@@ -396,8 +398,8 @@ Download ODBC Package and Basic Package from the Oracle Instant Client download 
 
 ::
     
-	unzip instantclient-basic-linux.x64-11.2.0.4.0.zip
-	unzip instantclient-odbc-linux.x64-11.2.0.4.0.zip
+	unzip instantclient-basic-linux.x64-19.20.0.0.0dbru.zip
+	unzip instantclient-odbc-linux.x64-19.20.0.0.0dbru.zip
 
 Oracle Instant Client Download Site: https://www.oracle.com/database/technologies/instant-client/downloads.html
 
@@ -491,7 +493,7 @@ Because the gateway uses the information in tnsnames.ora to connect to oracle, i
 			.
 			.	
 	CGW_LINK_SERVER		        =ORACLE
-	CGW_LINK_ODBC_DRIVER_NAME   =Oracle 12c ODBC driver
+	CGW_LINK_ODBC_DRIVER_NAME   =Oracle 19c ODBC driver
 	CGW_LINK_CONNECT_URL_PROPERTY =
 
 

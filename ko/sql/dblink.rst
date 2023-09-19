@@ -14,9 +14,9 @@ CUBRID DBLink 소개
 데이터베이스에서 정보를 조회하다 보면 종종 외부 데이터베이스의 정보 조회가 필요한 경우가 있다. 이렇게 외부 데이터베이스의 정보를 조회하기 위해서 CUBRID DBLink를 이용하면 타 데이터베이스의 정보를 조회할 수 있다.
 
 CUBRID DBLink는 동일 기종인 CUBRID와 이기종인 Oracle, MySQL, MariaDB의 데이터베이스의 정보를 조회할 수 있도록 기능을 제공하고 있다.
-외부 데이터베이스의 정보를 마치 하나의 데이터베이스에서 조회하는 것과 같은 효과를 발휘한다. 단 외부 데이터베이스를 여러 개 설정은 가능 하나, 정보를 조회할 때는 한 개의 타 데이터베이스의 정보만 조회가 가능하다.
+외부 데이터베이스의 정보를 마치 하나의 데이터베이스에서 조회하는 것과 같은 효과를 발휘한다. 단 외부 데이터베이스를 여러 개 설정은 가능 하나, 정보를 조회할 때는 한 개의 타 데이터베이스의 정보만 조회할 수 있다.
 
-CUBRID DBLink는 SELECT의 FROM절에 연결될 서버와 실행될 질의를 명시한 DBLINK 구문 형식과 원격 테이블 (테이블 확장명) 형식으로 사용 가능하며, INSERT/REPLACE/UPDATE/DELETE/MERGE에 원격 테이블 형식만 사용 가능하다.
+CUBRID DBLink는 SELECT의 FROM절에 연결될 서버와 실행될 질의를 명시한 DBLINK 구문 형식과 원격 테이블 (테이블 확장명) 형식으로 사용 가능하며, INSERT/REPLACE/UPDATE/DELETE/MERGE구문은 원격 테이블 형식만 사용할 수 있다.
 
 .. _dblink-diagram:
 
@@ -85,7 +85,8 @@ cub_gateway는 CUBRID Database Server와 cub_cas_cgw 사이의 연결을 중개�
 
 ::
 
-    cubrid gateway start
+    $ cubrid gateway start
+    @cubrid gateway is running.
 
 게이트웨이 종료
 ---------------
@@ -371,7 +372,7 @@ ODBC Driver 정보는 odbcinst.ini를 직접 수정해서 등록한다.
 
 	[Oracle 11g ODBC driver]
 	Description = Oracle ODBC driver v11g
-	Driver = /home/user/oracle/instantclient/libsqora.so.11.1
+	Driver = /home/user/oracle/instantclient/libsqora.so.19.1
 
 	[mariadb odbc 3.1.13 driver]
 	Description= mariadb odbc driver 3.1.13
@@ -397,8 +398,8 @@ Oracle Instant Client 다운로드 사이트에서 ODBC Package와 Basic Package
 
 ::
     
-	unzip instantclient-basic-linux.x64-11.2.0.4.0.zip
-	unzip instantclient-odbc-linux.x64-11.2.0.4.0.zip
+	unzip instantclient-basic-linux.x64-19.20.0.0.0dbru.zip
+	unzip instantclient-odbc-linux.x64-19.20.0.0.0dbru.zip
 
 Oracle Instant Client 다운로드 사이트: https://www.oracle.com/database/technologies/instant-client/downloads.html
 
@@ -495,7 +496,7 @@ TNS_ADMIN는 tnsnames.ora 파일이 있는 디렉토리 경로를 가리킨다.
 			.
 			.
 	CGW_LINK_SERVER		        =ORACLE
-	CGW_LINK_ODBC_DRIVER_NAME   =Oracle 12c ODBC driver
+	CGW_LINK_ODBC_DRIVER_NAME   =Oracle 19c ODBC driver
 	CGW_LINK_CONNECT_URL_PROPERTY =
 
 
@@ -647,7 +648,7 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
 
     192.168.0.1:53000:testdb:user:password::?altHosts=192.168.0.2:33000,192.168.0.3:33000
 
-    예제는 192.168.0.1 서버가 Active 데이터베이스이고 해당 서버에 연결할 수 없는 경우, 192.168.0.2 서버에 연결 요청하는 설정입니다. 위에 예제처럼 여러개의 altHosts를 지정할 수 있으며, 나열한 순서대로 연결을 시도한다.
+    예제는 192.168.0.1 서버가 Active 데이터베이스이고 해당 서버에 연결할 수 없는 경우, 192.168.0.2 서버에 연결 요청하는 설정이다. 위의 예시처럼 여러개의 altHosts를 지정할 수 있으며, 나열한 순서대로 연결을 시도한다.
 
 
     CREATE SERVER 구문의 PROPERTIES 항목에 연결 속성을 설정할 수 있다. 자세한 내용은 :doc:`/sql/query/select` 와 :doc:`/sql/schema/server_stmt` 을 참고한다.
@@ -707,7 +708,7 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
        -   시리얼, 내장함수, 저장함수은 미지원
 
            (예 : 원격서버(server1)의 sp_func() 저장 함수는 sp_func@server1(arg1, …) 형식으로 사용할 수 없음)       
-*   SELECT 질의의 모든 함수들(SYSDATE를 포함한 내장 함수, 저장 함수), serial관련 함수 및 시스템 상수는 모두 로컬에서 실행된다. (원결DB에서 함수 또는 serial 수행이 필요한 경우에는 DBLINK 구문을 사용해야 한다.)
+*   SELECT 질의의 모든 함수들(SYSDATE를 포함한 내장 함수, 저장 함수), serial 관련 함수 및 시스템 상수는 모두 로컬에서 실행된다. (원격DB에서 함수 또는 serial 수행이 필요한 경우에는 DBLINK 구문을 사용해야 한다.)
     예를 들어 아래와 같이 원격 테이블 대상 select 질의에 대해 옵티마이저가 재작성한 질의를 보면 DBLINK() 안의 질의만 원격DB에서 실행된다.
 
 
@@ -724,7 +725,7 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
          ) A (id, parentid, [text])
 
 
-*   INSERT/UPDATE/DELETE/MERGE 질의의 모든 함수들, serial 관련 함수 및 시스템 상수는 모두 원격 서버에서 실행되므로 내장함수 사용시 주의 필요하다. (즉, CUBRID의 내장함수가 원격 DBMS의 지원하지 않거나 사용법이 틀려 오류 등의 오동작 발생할 수 있으므로 주의 요망)
+*   INSERT/UPDATE/DELETE/MERGE 질의에서 사용하는 모든 함수와, serial 관련 함수 및 시스템 상수는 모두 원격 서버에서 실행되므로 사용 시 주의가 필요하다. (즉, CUBRID의 내장함수가 원격 DBMS에서는 지원하지 않거나 사용법이 달라 오류 등의 오동작이 발생할 수 있으므로 주의 요망)
 *   트랜잭션 : 로컬DB와 원격DB의 트랜잭션(commit, rollback)은 하나의 트랜잭션으로 처리되지 않는다. 원격DB의 DML(INSERT/UPDATE/DELETE/MERGE 구문) 질의는 로컬 DB의 트랜잭션과 별개로 auto commit으로 동작한다. 
     아래 예시 처럼 트랜잭션을 수행하는 경우, 원격DB에는 insert 수행과 함께 커밋 처리되어 데이터가 입력되고, 로컬DB에는 명시적 롤백 질의에 의해 insert 수행했던 데이터가 롤백되어 입력되지 않는다.
 
@@ -744,7 +745,7 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
 *   TRUNCATE 구문 미지원
 *   CREATE TABLE … LIKE 테이블명@server명 구문 미지원 (참고로 CREATE TABLE … AS SELECT FROM 테이블명@server명 구문은 지원)
 *   TRIGGER 구문에서 dblink()와 원격 테이블(@server)를 사용한 질의는 사용시 오류 발생 
-*   predicate push 처리: 테이블 확장 형식(@server) 구문으로 작성된 SELECT 구문은 옵티마이저가 DBLINK()구문으로 재작성하는데, 성능 향상을 위해 원격 DB에서 처리 가능한 조건절을 함께 push 하여 재작성한다. 단, 조건절에서 사용한 내장함수와 사용자 정의함수는 push에서 제외한다. 
+*   predicate push 처리: 테이블 확장 형식(@server) 구문으로 작성된 SELECT 구문은 옵티마이저가 DBLINK()구문으로 재작성하는데, 성능 향상을 위해 원격 DB에서 처리 가능한 조건절을 함께 push 하여 재작성한다. 단, 조건절에서 사용한 내장함수와 사용자 정의함수는 push에서 제외되고, 로컬DB에서 실행된다. 
 *   성능 유의 사항 
 
     .. note::
@@ -784,7 +785,7 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
              ) tbl (col1, col2)
         WHERE col1>= SYS_DATE
 
-*   테이블 확장 형식(@server)구문으로 co-related 조건의 스칼라 서브쿼리, 서브쿼리 및 EXIST 구문의 부질의 사용하는 경우, 반복되는 원격 질의 수행시 전체 데이터를 로컬 DB로 가지고 온 후 조인 조건에 맞는 데이터찾는 작업을 수행하게 되어 급격한 성능 저하가 발생할 수 있다. 아래 예시는 스칼라 서브 퀴리의 조건으로 T1.a를 사용하고 있어, T1.a < 4 만큼의 svr1의 tree table의 데이터를 로컬 DB로 가지고 와서 적합한 데이터를 찾기때문에 수행이 느려질 수 있다.
+*   테이블 확장 형식(@server)구문으로 co-related 조건의 스칼라 서브쿼리, 서브쿼리 및 EXIST 구문의 부질의 사용하는 경우, 반복되는 원격 질의 수행시 전체 데이터를 로컬 DB로 가지고 온 후 조인 조건에 맞는 데이터찾는 작업을 수행하게 되어 급격한 성능 저하가 발생할 수 있다. 아래 예시는 스칼라 서브 퀴리의 조건으로 T1.a를 사용하고 있어, T1.a < 4 만큼의 svr1의 tree table의 데이터를 로컬 DB로 가지고 와서 적합한 데이터를 찾는 작업을 하기 때문에 수행이 느려질 수 있다.
 
     .. code-block:: sql
     
@@ -828,7 +829,7 @@ CUBRID 제약 사항
     *   SELECT 구문에서 long, interval day to se, interval year to month, blob, clob타입 미지원
     *   Oracle ODBC는 타임존 데이터 조회시 timestamp 타입의 로컬 시간으로 변환하여 반환된다. (타임존 데이터 타입 미지원) 
     
-    아래는 Oracle DB의 타임존 데이터를 ODBC로 조회시 로컬타임존으로 변환되는 예이, 입력한 타임존 "+02:00"이지만, DBLink을 통해 select 하는 경우 로컬타임존 "+09:00"로 변환하여 "PM 08시"로 출력된다.
+    아래는 Oracle DB의 타임존 데이터를 ODBC로 조회시 로컬타임존으로 변환되는 예시이다. 입력한 타임존 "+02:00"이지만, DBLink을 통해 select 하는 경우 로컬타임존 "+09:00"로 변환하여 "PM 08시"로 출력된다.
 
     .. code-block:: sql
     
@@ -843,7 +844,7 @@ CUBRID 제약 사항
     
     
     *   미지원 구문인 REPLACE 구문은 사용시 오류 발생
-    *   CUBRID의 타입 범위를 벗어나는 오라클의 date,  number 타입 데이터는 오류 발생
+    *   CUBRID의 타입 범위를 벗어나는 오라클의 date, number 타입 데이터는 입력은 가능하나 조회 시에는 오류가 발생한다.
 
 .. note::
     MySQL/MariaDB제약 사항    

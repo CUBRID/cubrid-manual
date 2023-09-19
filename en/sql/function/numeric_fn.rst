@@ -511,7 +511,7 @@ MOD
 
     :param m: Represents a dividend. It is an expression that returns a numeric value.
     :param n: Represents a divisor. It is an expression that returns a numeric value.
-    :rtype: result type of m/n
+    :rtype: Result type of m/n
 
 .. code-block:: sql
 

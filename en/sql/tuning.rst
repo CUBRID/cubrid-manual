@@ -3839,7 +3839,7 @@ When a query includes a view, there is an overhead of creating a temporary table
 And it's impossible to perform index scan on temporary tables, leading to performance degradation.
 But, by using **View Merging** to merge the view with table in main query, performance can be improved because index scan is available.
 
-Like *Query 1* below, which use inline views, make it easier to understand the content of the query.
+Like *Query 1* below, which use inline views, make it easier to understand the intent of the query.
 
 .. code-block:: sql
 

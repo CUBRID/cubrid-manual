@@ -735,10 +735,10 @@ Common Constraints
 *   Performance notes
 
     .. note::
-        When the connect by clause, group by clause, having clause, and limit clause are used in the SELECT statement in table extension format (@server), the where condition, group by clause, having clause, and limit clause are not executed in the remote DB. After tranferring to the local DB, performance may be slowed by performing tasks that meet the conditions.
+        When the connect by clause, group by clause, having clause, and limit clause are used in the SELECT statement in table extension format (@server), the where condition, group by clause, having clause, and limit clause are not executed in the remote DB. After executing exclude the statement in the remote DB and sending the performed results to the local DB, performance may be slowed due to execute the statement in the local DB.
 
 
-    Below is an example of processing the group by clause after transferring all data from the remote DB's tree table to the local DB in order to process count().
+    Below is an example of processing the "*group by*" and "*count()*" after transferring all data from the remote DB's *tree* table to the local DB.
 
     .. code-block:: sql
 
@@ -755,7 +755,7 @@ Common Constraints
              ) A (parentid)
         GROUP BY A.parentid
 
-*   The SYSDATE function used in the table extension format (@server) syntax is performed in the local DB, so caution is required if the time between servers is different.
+*   The SYSDATE function used in the table extension format (@server) is performed in the local DB, so caution is required if the time between servers is different.
 
     .. code-block:: sql
 
@@ -770,7 +770,7 @@ Common Constraints
              ) tbl (col1, col2)
         WHERE col1>= SYS_DATE
 
-*   When using a scalar subquery with a co-related condition in the table extension format (@server) syntax, a subquery, or a SELECT query with an EXIST statement, the remote query brings the entire data to the local DB every time and performs the task of finding data corresponding to the join column. As a result, a rapid decrease in performance occurs. The example below uses T1.a as a condition for a scalar subquery, and is a query that finds suitable data by bringing all the data from svr1's tree table as much as T1.a < 4 to the local DB.
+*   When using a scalar subquery, subquery and EXIST clause  with a co-related condition in the table extension format (@server),  the remote query brings the whole data to the local DB every time and performs to find data corresponding to the join column.  As a result, a rapid decrease in performance occurs. The example below uses T1.a as a condition for a scalar subquery, and all data as T1.a < 4 of svr1's tree table is sent to the local DB to find suitable data per executing scalar subquey, so it may degrade performance.
 
     .. code-block:: sql
 
@@ -793,16 +793,16 @@ Common Constraints
 CUBRID Constraints
 ------------------
 *   ENUM, BLOB, CLOB, and SET types are not supported in the select statement.
-*   If the set parameters of the local DB and remote DB are different, undesirable results may occur.
+*   If the system parameters of the local DB and remote DB are different, undesirable results may occur.
 
 .. note::
-    Heterogeneous DBMS common constraints
+    Common constraints of Heterogeneous DBMS.
 
 
     *   The gateway must use the Unicode-only ODBC Driver of the heterogeneous remote database (Oracle/MySQL/MariaDB).
-    *   Among ODBC types, SQL_INTERVAL, SQL_GUID, SQL_BIT, SQL_BINARY, SQL_VARBINARY, and SQL_LONGVARBINARY are not supported types. (graph)
-    *   The maximum string length for one column is only 16M.
-    *   In DML statements such as INSERT, UPDATE, DELETE, and MERGE, if the built-in functions not supported by CUBRID are not in the form of function (parameter 1, …, parameter N) as shown below, a query error occurs.
+    *   Among ODBC types, SQL_INTERVAL, SQL_GUID, SQL_BIT, SQL_BINARY, SQL_VARBINARY, and SQL_LONGVARBINARY are not supported types.
+    *   The maximum string length for one column is 16M.
+    *   In DML statements such as INSERT, UPDATE, DELETE, and MERGE, if the built-in functions not supported by CUBRID and are not in the form of function (parameter 1, …, parameter N) as below, the query results error.
 
         Example: the convert function of MySQL and MariaDB: convert('binary' using binary)
 
@@ -811,7 +811,7 @@ CUBRID Constraints
 
 
     *   Long, interval day to se, interval year to month, blob, and clob types are not supported in the select statement.
-    *   Oracle ODBC does not support the time zone type, so when searching time zone data, the part representing the time zone is calculated as the local time, converted to timestamp type, and returned.
+    *   Oracle ODBC does not support the time zone type, so when SELECTing time zone data, the time zone is calculated as a local time, converted to timestamp type, and returned.
 
     Below is an example of converting Oracle DB's time zone data to a local time zone when querying it with ODBC.
 

@@ -645,7 +645,7 @@ The Query statement below is a Query statement that inquires the remote_t table 
 Notice
 ======
 
-*   Synonym creation: Local synonyms can be created for remote tables and remote synonyms.
+*   Synonym creation: Local synonyms can be created for remote tables and remote synonyms. In the case of DBMSs other than CUBRID, the user name or db name must be added to the original table name.
 
 .. code-block:: sql
 
@@ -660,21 +660,21 @@ Notice
     create synonym synonym_my for my_db.t1@srv_mysql;
     create synonym synonym_maria for maria_db.t1@srv_maria;
 
-*   Reserved word processing: When using a reserved word in the remote DB as an identifier, it must be enclosed in square brackets ([ ]) along with the reserved word processing characters in the remote DB.
+*   The reserved word processing character for CUBRID is the double quotation mark (" ") as like the following.
 
 .. code-block:: sql
 
     SELECT ["COLUMN"],["ADD"],["ALTER"] FROM ["TABLE"]@srv1 ;
     SELECT * FROM dblink(srv1, 'select "COLUMN","ADD","ALTER" from "TABLE" ') AS t(a varchar, b varchar, c varchar );
 
-*   The character used to use reserved words as identifiers in Oracle is the double quotation mark (" ") character.
+*   The reserved word processing character for ORACLE is the double quotation mark (" ") as like the following.
 
 .. code-block:: sql
 
     SELECT ["COLUMN"],["ADD"],["ALTER"] FROM ["TABLE"]@srv1 ;
     SELECT * FROM dblink(srv1, 'select "COLUMN","ADD","ALTER" from "TABLE" ') AS t(a varchar, b varchar, c varchar );
 
-*   The character used to use reserved words as identifiers in MySQL and MariaDB is the backquote (\` \`).
+*   The reserved word processing character for MySQL and MariaDB is the backquote (\` \`) as like the following.
 
 .. code-block:: sql
 
@@ -688,14 +688,14 @@ Constraints
 Common Constraints
 ------------------
 
-*   The charset of the remote database used in DBLink supports only utf-8.
-*   Table extension format (object@server)
+*   The charset of the remote database must be unicode (utf-8).
+*   Table extension style (object@server)
         -   Supports only tables, views, and synonyms
         -   Serial, built-in functions, and stored functions are not supported.
 
-            (Example: sp_func() stored function of remote server (server1) cannot be used in sp_func@server1(arg1, …) format.)
-*   All functions of the SELECT query (built-in functions, stored functions, including SYSDATE), serial-related functions, and system constants all operate locally (if a function or serial is executed in a remote DB, the DBLINK statement must be used)
-    For example, when a select query is made targeting the remote table as below, only the queries in DBLINK() among the rewritten queries are executed in the remote DB.
+            (Example: stored function sp_func() of remote server (server1) cannot be used in sp_func@server1(arg1, …) format.)
+*   All functions (stored functions, built-in functions including SYSDATE), serial-related functions and system constants in the SELECT query all operate locally. (If you need to execute a function or serial in a remote DB, you should use the DBLINK statement.)
+    For example, when the select query for remote table is requested and the optimizer rewrite query as below, you look the queries in DBLINK() are only executed in the remote DB.
 
 
 .. code-block:: sql
@@ -711,7 +711,7 @@ Common Constraints
          ) A (id, parentid, [text])
 
 
-*   All functions of INSERT/UPDATE/DELETE/MERGE queries, serial-related functions, and system constants are executed on the remote server, so be careful when using built-in functions (i.e., CUBRID's built-in functions may not be supported by the remote DBMS or have different usage instructions)
+*   All functions, serial-related functions, and system constants of INSERT/UPDATE/DELETE/MERGE queries are all executed on the remote server, so be careful when using built-in functions (i.e., CUBRID's built-in functions may not be supported by the remote DBMS or have different usage instructions)
 *   Transaction: Transactions (commit, rollback) between local DB and remote DB are not processed as one transaction. DML (INSERT/UPDATE/DELETE/MERGE syntax) queries in the remote DB are excuted as auto commits separately from transactions in the local DB.
     As in the example below, when performing a query, data is inserted into the remote DB, but it is rolled back and no data is entered into the local DB.
 

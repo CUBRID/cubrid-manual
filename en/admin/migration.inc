@@ -553,7 +553,7 @@ The following table shows [options] available with the **cubrid loaddb** utility
 
 .. warning::
 
-    When running **loaddb**, foreign key constraints are not checked to ensure performance for loading large amounts of data and to minimize dependencies between loaded data. So, the data inconsistencies with the master node may occur because foreign key constraints are checked during the replication process of the slave or replica node in the HA environment if the -C option is used.
+    When running **loaddb**, foreign key constraints are not checked to ensure performance for loading large amounts of data and to minimize dependencies between loaded data. So, the data inconsistencies with the master node may occur because foreign key constraints are checked during the replication process of the slave or replica node in the HA environment if the **-C** option is used.
 
 .. _howtowrite-loadfile:
 

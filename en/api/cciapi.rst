@@ -845,7 +845,7 @@ cci_connect_with_url
                      | logSlowQueries=true|false[&slowQueryThresholdMillis=<milli_sec>]
                      | logTraceApi=true|false
                      | logTraceNetwork=true|false
-                     | useSSL=<bool_type>
+                     | useSSL=true|false
          
         <alternative_hosts> ::= <host>:<port> [,<host>:<port>]
          

@@ -43,7 +43,7 @@ Use **CREATE TABLE** statement to create a table. A table with the same name as 
 
             <on_update> ::= [ON UPDATE <value_specification>]
 
-            <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] <referential_definition> }
+            <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] [WITH <index_with_option>] <referential_definition> }
 
                 <referential_definition> ::=
                     REFERENCES [schema_name.]referenced_table_name (column_name, ...) [<referential_triggered_action> ...]
@@ -56,7 +56,7 @@ Use **CREATE TABLE** statement to create a table. A table with the same name as 
                         
         <table_constraint> ::= 
             { 
-                {KEY|INDEX} index_name (column_name, ...) |
+                {KEY|INDEX} index_name <index_col_desc> |
                 [CONSTRAINT [constraint_name]]
                    {
                       UNIQUE [KEY|INDEX](column_name, ...) |
@@ -65,7 +65,14 @@ Use **CREATE TABLE** statement to create a table. A table with the same name as 
                    }
             } COMMENT 'index_comment_string'
          
-            <referential_constraint> ::= FOREIGN KEY [<foreign_key_name>](column_name, ...) <referential_definition>
+            <index_col_desc> ::=
+              { ( {column_name | function_name (argument_list)} [ASC | DESC] [{, {column_name | function_name (argument_list)} [ASC | DESC]} ...] ) }
+              [WHERE <filter_predicate>]
+              [WITH <index_with_option>]
+              [INVISIBLE]
+              [COMMENT 'index_comment_string’]
+         
+            <referential_constraint> ::= FOREIGN KEY [<foreign_key_name>](column_name, ...) [WITH <index_with_option>] <referential_definition>
          
                 <referential_definition> ::=
                     REFERENCES [schema_name.]referenced_table_name (column_name, ...) [<referential_triggered_action> ...]
@@ -83,6 +90,8 @@ Use **CREATE TABLE** statement to create a table. A table with the same name as 
                                [CHARSET charset_name] [COLLATE collation_name] |
                                ENCRYPT [=] [AES | ARIA] |
                                AUTO_INCREMENT = initial_value
+                               
+       <index_with_option> ::= {DEDUPLICATE ‘=‘ deduplicate_level }
 
 *   IF NOT EXISTS: If an identically named table already exists, a new table will not be created without an error.
 *   *schema_name*: Specifies the schema name(maximum: 31 bytes). If omitted, the schema name of the current session is used.
@@ -97,10 +106,16 @@ Use **CREATE TABLE** statement to create a table. A table with the same name as 
 *   *table_comment_string*: specifies a table's comment
 *   *column_comment_string*: specifies a column's comment.
 *   *index_comment_string*: specifies an index's comment.
+*   *deduplicate_level*: specifies the deduplicate level (0 to 14). For details, see :ref:`deduplicate_overview`.
 
 .. note::
 
     *   **DBA** and **DBA** members can create tables in different schemas. If a user is neither **DBA** nor **DBA** member, tables can only be created in the schema of that user.
+
+.. note::
+
+    *   *deduplicate_level* is an integer from 0 to 14. 
+    *   When this parameter is set to 0, it indicates an index configuration where data deduplication within indexes is not performed. This configuration is the same as that in CUBRID 11.2 or an earlier version.
 
 .. code-block:: sql
 
@@ -161,7 +176,7 @@ A column is a set of data values of a particular simple type, one for each row o
 
         <on_update> ::= [ON UPDATE <value_specification>]
 
-        <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] <referential_definition>}
+        <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] [WITH <index_with_option>] <referential_definition>}
 
 Column Name
 ^^^^^^^^^^^
@@ -425,11 +440,11 @@ You can define **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** as the
 
 ::
 
-    <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] <referential_definition> }
+    <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] [WITH <index_with_option>] <referential_definition> }
 
     <table_constraint> ::=         
         { 
-            {KEY|INDEX} index_name (column_name, ...) |
+            {KEY|INDEX} index_name <index_col_desc> |
             [CONSTRAINT [constraint_name]]
                 {
                       UNIQUE [KEY|INDEX](column_name, ...) |
@@ -438,7 +453,7 @@ You can define **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** as the
                 }
         }
      
-        <referential_constraint> ::= FOREIGN KEY [<foreign_key_name>](column_name, ...) <referential_definition>
+        <referential_constraint> ::= FOREIGN KEY [<foreign_key_name>](column_name, ...) [WITH <index_with_option>] <referential_definition>
      
             <referential_definition> ::=
                 REFERENCES [schema_name.]referenced_table_name (column_name, ...) [<referential_triggered_action> ...]
@@ -448,6 +463,8 @@ You can define **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** as the
                     ON DELETE <referential_action> 
     
                     <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
+                    
+        <index_with_option> ::= {DEDUPLICATE ‘=‘ deduplicate_level}
 
 NOT NULL Constraint
 ^^^^^^^^^^^^^^^^^^^
@@ -559,11 +576,13 @@ FOREIGN KEY Constraint
 
 A foreign key is a column or a set of columns that references the primary key in other tables in order to maintain reference relationship. The foreign key and the referenced primary key must have the same data type. Consistency between two tables is maintained by the foreign key referencing the primary key, which is called referential integrity. ::
 
-    [CONSTRAINT constraint_name] FOREIGN KEY [foreign_key_name] (<column_name_comma_list1>) REFERENCES [schema_name.]referenced_table_name (<column_name_comma_list2>) [<referential_triggered_action> ...]
+    [CONSTRAINT constraint_name] FOREIGN KEY [foreign_key_name] (<column_name_comma_list1>) [WITH <index_with_option>] REFERENCES [schema_name.]referenced_table_name (<column_name_comma_list2>) [<referential_triggered_action> ...]
      
         <referential_triggered_action> ::= ON UPDATE <referential_action> | ON DELETE <referential_action>
 
             <referential_action> ::= CASCADE | RESTRICT | NO ACTION  | SET NULL
+
+        <index_with_option> ::= {DEDUPLICATE ‘=‘ deduplicate_level}
 
 *   *constraint_name*: Specifies the name of the table to be created.
 *   *foreign_key_name*: Specifies a name of the **FOREIGN KEY** constraint. You can skip the name specification. However, if you specify this value, *constraint_name* will be ignored, and the specified value will be used.
@@ -583,6 +602,8 @@ A foreign key is a column or a set of columns that references the primary key in
     *   **RESTRICT**: Prevents the value of the primary key from being deleted or updated, and rolls back any transaction that has been attempted.
     *   **SET NULL**: When a specific record is being deleted or updated, the column value of the foreign key is updated to **NULL**.
     *   **NO ACTION**: Its behavior is the same as that of the **RESTRICT** option.
+
+*   *deduplicate_level*: specifies the deduplicate level (0 to 14). For details, see :ref:`deduplicate_overview`.
 
 For each row R1 of the referencing table, there should be some row R2 of the referenced table such that the value of each referencing column in R1 is either **NULL** or is equal to the value of the corresponding referenced column in R2.
 
@@ -912,6 +933,7 @@ You can create a new table that contains the result records of the **SELECT** st
 *   <*column_definition*>: defines a column. If this is omitted, the column schema of **SELECT** statement is replicated; however, the constraint or the **AUTO_INCREMENT** attribute is not replicated.
 *   <*table_constraint*>: defines table constraint.
 *   <*select_statement*>: a **SELECT** statement targeting a source table that already exists in the database.
+*   <*select statement*> can include remote tables like tbl@srver1.
 
 .. code-block:: sql
 
@@ -1008,6 +1030,25 @@ You can create a new table that contains the result records of the **SELECT** st
         2            3
         3            3
 
+You can create a table by selecting data from a remote table as below statement.
+
+.. code-block:: sql
+
+    -- column values are replicated from remote_tbl
+    CREATE TABLE new_tbl_rem (
+      id INT NON NULL;
+      phone VARCHAR;
+      localtion VARCHAR;
+    ) AS SELECT id, phone, 'remote' FROM a_tbl@server1 WHERE id < 3;
+
+    SELECT * FROM new_tbl_rem;
+
+::
+
+      id  phone       location
+    ===================================
+       1  '111-1111'  'remote'
+       2  '222-2222'  'remote'
 
 ALTER TABLE
 ===========
@@ -1020,7 +1061,7 @@ You can modify the structure of a table by using the **ALTER** statement. You ca
      
         <alter_clause> ::= 
             ADD <alter_add> [INHERIT <resolution>, ...]  | 
-            ADD {KEY | INDEX} <index_name> (<index_col_name>, ... ) [COMMENT 'index_comment_string'] |
+            ADD {KEY | INDEX} <index_name> <index_col_desc> |
             ALTER [COLUMN] column_name SET DEFAULT <value_specification> |
             DROP <alter_drop> [INHERIT <resolution>, ...] |
             DROP {KEY | INDEX} index_name |
@@ -1115,7 +1156,7 @@ You can add a new column by using the **ADD COLUMN** clause. You can specify the
 
             <on_update> ::= [ON UPDATE <value_specification>]
 
-            <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] <referential_definition>}
+            <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] [WITH <index_with_option>] <referential_definition>}
 
                 <referential_definition> ::=
                     REFERENCES [schema_name.]referenced_table_name (column_name, ...) [<referential_triggered_action> ...]
@@ -1125,12 +1166,15 @@ You can add a new column by using the **ADD COLUMN** clause. You can specify the
                         ON DELETE <referential_action> 
 
                         <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
+                        
+                <index_with_option> ::= {DEDUPLICATE ‘=‘ deduplicate_level}                        
 
-*   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
+*   *schema_name*: specifies the schema name. If omitted, the schema name of the current session is used.
 *   *table_name*: specifies the name of a table that has a column to be added.
 *   <*column_definition*>: specifies the name(max 254 bytes), data type, and constraints of a column to be added.
 *   **AFTER** *oid_column_name*: specifies the name of an existing column before the column to be added.
 *   *comment_string*: specifies a column's comment.
+*   *deduplicate_level*: Specifies the deduplicate level (0 to 14). For details, see :ref:`deduplicate_overview`.
 
 .. code-block:: sql
 

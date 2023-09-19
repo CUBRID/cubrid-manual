@@ -387,6 +387,10 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
 |                               | vacuum_ovfp_check_threshold         | 서버                    |         | int      | 1000                           |                 |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------+
 |                               | vacuum_ovfp_check_duration          | 서버                    |         | int      | 45000                          |                 |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------+
+|                               | deduplicate_key_level               | 클라이언트/서버         |         | int      | -1                             |                 |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------+
+|                               | print_index_detail                  | 클라이언트/서버         |         | bool     | no                             |                 |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------+
 
 .. _lpg:
@@ -598,7 +602,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
         **use_user_hosts** 파라미터는 서비스 운영 중 변경되면 정상적으로 서비스가 종료되지 않을 수 있으므로, 반드시 CUBRID 서비스가 종료된 상태에서 변경해야 한다.
 
-    *   **$CUBRID/conf/hosts.conf** 파일의 형식은 **/etc/hosts** 와 동일하나 다음과 같은 몇 가지 제약이 있다.
+    *   **$CUBRID/conf/cubrid_hosts.conf** 파일의 형식은 **/etc/hosts** 와 동일하나 다음과 같은 몇 가지 제약이 있다.
 
         * **IPv4** 주소 만을 허용한다 (**IPv6** 는 허용하지 않는다).
         * **alias** 는 허용하지 않는다. ::
@@ -616,31 +620,29 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
             172.31.0.1 host1
             178.31.0.2 host1
 
-    * 다음은 $CUBRID/conf/hosts.conf의 예시이다. ::
+    * 다음은 $CUBRID/conf/cubrid_hosts.conf의 예시이다. ::
 
             #
             # hosts file for CUBRID user specific host service
             #
             127.0.0.1       localhost
             172.31.0.1      node1
-            172.31.0.1      node2
-            172.31.0.1      node3
             192.168.0.31    node4.kr         # Seoul
             192.168.2.31    node5.gov.or.kr  # Daejeon
 
 
 .. warning::
 
-    $CUBRID/conf/hosts.conf는 반드시 모든 CUBRID 프로세스를 종료시킨 후 변경해야 하며, **재 구동 후 변경된 사항이 적용된다.** 또한, **localhost** 와 **'hostname'** (Linux 명령어 중 hostname에 의해 출력되는 호스트명)을 반드시 hosts.conf에 포함해야 한다.
+    $CUBRID/conf/cubrid_hosts.conf는 반드시 모든 CUBRID 프로세스를 종료시킨 후 변경해야 하며, **재 구동 후 변경된 사항이 적용된다.** 또한, **localhost** 와 **'hostname'** (Linux 명령어 중 hostname에 의해 출력되는 호스트명)을 반드시 cubrid_hosts.conf에 포함해야 한다.
  
 .. warning::
 
-    $CUBRID/conf/hosts.conf 파일에서 호스트 이름은 다음과 같은 형식을 따른다 (Linux 호스트명 작성 규칙).
+    $CUBRID/conf/cubrid_hosts.conf 파일에서 호스트 이름은 다음과 같은 형식을 따른다 (Linux 호스트명 작성 규칙).
 
     * 호스트 이름으로는 오직 영문자, 숫자(0 ~ 9), 하이픈('-'), 점 (".") 문자만 사용할 수 있다.
     * 호스트 이름의 첫 문자는 영문자이어야 한다.
     * 호스트 이름의 마지막 문자는 영문자와 숫자이어야 한다.
-    * FQDN (Full Qualified Domain Name) 형태의 호스트명이 사용 가능하다 (예: www.cubrid.com).
+    * FQDN (Fully Qualified Domain Name) 형태의 호스트명이 사용 가능하다 (예: www.cubrid.com).
     
     다음과 같은 호스트 이름은 허용한다.
 
@@ -1577,6 +1579,15 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
         ==========
                0.5
 
+    .. note:: 
+
+        JDBC/CCI에서 NUMERIC, DOUBLE 및 FLOAT 타입의 데이터를 문자열 형태로 읽을 경우만 oracle_compat_number_behavior 설정값이 적용된다. 아래는 설정값이 적용되는 JDBC/CCI함수이다.
+		
+        *   JDBC : getString(int columnIndex), getString(String columnLabel), getObject(int columnIndex), getObject(String columnLabel)
+		
+        *   CCI : cci_get_data(CCI_A_TYPE_STR type을 사용한 경우), 예) cci_get_data(req, i, CCI_A_TYPE_STR, &data, &ind)
+
+
 .. _oracle_style_empty_string:
 
 **oracle_style_empty_string**
@@ -2147,6 +2158,10 @@ HA 관련 파라미터
 +-------------------------------------+--------+----------------+----------------+----------------+
 | vacuum_ovfp_check_duration          | int    | 45000          | 1              | 600000         |
 +-------------------------------------+--------+----------------+----------------+----------------+
+| deduplicate_key_level               | int    | -1             | -1             | 14             |
++-------------------------------------+--------+----------------+----------------+----------------+
+| print_index_detail                  | bool   | no             |                |                |
++-------------------------------------+--------+----------------+----------------+----------------+
 
 **access_ip_control**
 
@@ -2346,6 +2361,19 @@ HA 관련 파라미터
 **vacuum_ovfp_check_duration**
 
  **vacuum_ovfp_check_duration**\는 vacuum 쓰레드에 의해 수집된 인덱스 오버플로우 수와 그 관련 정보를 유지하는 기간을 지정한다. 설정한 기간 내에 업데이트되지 않은 정보는 제거된다. 값의 단위는 분이다. 
+
+**deduplicate_key_level**
+
+ 인덱스 생성 구문에서 묵시적으로 지정되는 *deduplicate level*\값을 지정한다. 기본값은 **\-1**\이다. :doc:`/sql/schema/table_stmt`\, :doc:`/sql/schema/index_stmt`\를  참고한다.
+
+.. note::
+
+    *   **deduplicate_key_level**\를  **\-1**\로 지정하는 경우에는 CREATE INDEX 구문에서 명시적으로 *deduplicate level*\을 지정하더라도 무시되고 *deduplicate level*\은 0으로 강제 설정된다.
+
+  
+**print_index_detail**
+
+ **SHOW CREATE TABLE** 구문과 같이 인덱스 구문 정보를 보여줄 때 **WITH** 절의 옵션 정보의 출력 여부를 지정한다. 기본값은 NO이다. 단, unloaddb 툴에서는 이 설정값의 영향을 받지 않는다.
 
 .. _broker-configuration:
 

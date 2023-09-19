@@ -18,6 +18,8 @@ CUBRID DBLink provides a function to inquire information in the databases of hom
 It has the advantage of being able to directly inquire information from an external database.
 However, it is possible to set up multiple external databases, but when searching for information, it is possible to inquire information from only one other database.
 
+CUBRID DBLink can be used in the form of a DBLINK statement specifying the server to be connected and the query to be executed in the FROM clause of SELECT and in the form of a remote table (table extension), and only remote table forms can be used in INSERT/UPDATE/DELETE/MERGE.
+
 .. _dblink-diagram:
 
 CUBRID DBLink diagram
@@ -641,10 +643,17 @@ The Query statement below is a Query statement that inquires the remote_t table 
     For detailed DBLink SQL syntax, refer to :doc:`/sql/query/select` and :doc:`/sql/schema/server_stmt`.
 
 
+Caution
+==============================================
+* The table extension format (object@server) can only be used for tables, views, and synonyms, but serial, built-in functions, and stored functions cannot be used. For example, the sp_func() stored function of the remote server (server1) cannot be used in the form of sp_func@server1(arg1, ...).
+* Therefore, all functions (including built-in functions as like SYSDATE and stored functions) used in the SELECT query execute locally.
+* However, unlike SELECT queries, all functions used in INSERT/UPDATE/DELETE/MERGE queries execute on the remote server.
+* If you need to use a remote server function in a SELECT query, you can use the DBLINK statement.
+* Since the functions used in INSERT/UPDATE/DELETE/MERGE queries are executed on the remote server, care must be taken when using the functions. (In other words, when using CUBRID built-in functions, note that the remote DBMS may not have the corresponding built-in function or the usage may be different.)
 
 
 Restrictions
-==============================================
+=============================================
 
 *   DBLink for heterogeneous databases only supports utf-8.
 *   Only Unicode ODBC Driver must be used in the gateway.
@@ -653,9 +662,3 @@ Restrictions
 *   ODBC non-supported types are SQL_INTERVAL, SQL_GUID, SQL_BIT, SQL_BINARY, SQL_VARBINARY, SQL_LONGVARBINARY.
 *   When using DBLink with heterogeneous types (Oracle/MySQL/MariaDB), you must use Oracle/MySQL/MariaDB's Unicode ODBC driver.
 *   When performing a query that includes the repeat() function in MySQL/MariaDB, part of the string may be cut off or the string may not be read.
-
-
-
-
-
-

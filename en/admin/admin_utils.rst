@@ -3500,10 +3500,36 @@ The following shows [options] available with the **cubrid vacuumdb** utility.
 
 .. option:: --dump
 
-    This option is used to display the status information about the vacuum. It currently displays the first log page ID referenced by the vacuum and the log volume name in which it resides. Users can check the progress of the vacuum operation through the change of the first log page ID and they can know the minimum log volume to keep for the vacuum operation. It can be used with both the standalone mode and the client/server mode.
-    If specified together with the **\-C** option, information on indexes that have read more leaf's overflow pages than the threshold is also displayed, when the index is vacuumed. The related system parameters are **vacuum_ovfp_check_duration** and **vacuum_ovfp_check_threshold**. ::
+    This option is used to display the status information about the vacuum. It currently displays the first log page ID referenced by the vacuum and the log volume name in which it resides. 
+    Users can check the progress of the vacuum operation through the change of the first log page ID and they can know the minimum log volume to keep for the vacuum operation. 
+    It can be used with both the standalone mode and the client/server mode.
+    If specified together with the **\-C** option, information on indexes that have read more :ref:`leaf's overflow pages <deduplicate_overflow_page>` than the threshold is also displayed, when the index is vacuumed. 
+    The related system parameters are **vacuum_ovfp_check_duration** and **vacuum_ovfp_check_threshold**. ::
 
         cubrid vacuumdb --dump demodb
+
+    ::
+
+        $ cubrid vacuumdb -C --dump demodb
+
+        *** Vacuum Dump ***
+        First log page ID referenced = 85653 (in demodb_lgar013)
+        
+        *** Exceeding read threshold (1000 pages) for OID overflow pages (OVFP), Since 09/04/23 08:53:50 ***
+          Class name            Index name            Count         Num of OVFP recent read    Max num of OVFP read
+        ================================================================================================================
+          dba.tm                v_idx                       272451    1089 (09/04/23 10:49:52)    1478 (09/04/23 10:28:46)
+          dba.tbl               idx                         322728    1023 (09/04/23 09:53:47)    1475 (09/04/23 09:29:29)
+        
+        $ 
+
+    - Exceeding read threshold (**1000** pages) : Shows vacuum_ovfp_check_threshold parameter.
+    - Since **09/04/23 08:53:50** : Shows the time information when OVFP monitoring started
+    - Class name: Class name(table name), included the owner's name.
+    - Index name: Index name
+    - Count: The number of times an index's overflow pages were read by exceeding the threshold (vacuum_ovfp_check_threshold) during  index vacuum operation.
+    - Num of OVFP recent read: The latest time an index's overflow page was read by exceeded the threshold (vacuum_ovfp_check_threshold) during index vacuum operation.
+    - Max num of OVFP read: The latest time an index's overflow page was maximally read by exceeding the threshold (vacuum_ovfp_check_threshold) during index vacuum operation.
 
 .. option:: -S, --SA-mode
 

@@ -3829,6 +3829,105 @@ The join with the *right_tbl* table was eliminated.
                 9           60          600  'Left- 806'                     6
                10           60          600  'Left- 906'                     6
 
+.. _pred-push:
+
+Predicate Push
+-----------------------
+
+**Predicate Push** is an optimization that pushes the predicate of the main query into the view.
+
+By applying **Predicate Push** to the subquery, the amount of data queried in the subquery is reduced.
+
+For instance, when performing a join using the join condition *a.code = r.athlete_code* as in the query below, if the external predicate can be pushed into the query block, the amount of data to be joined can be reduced.
+
+.. code-block:: sql
+
+        SELECT a.name, r.score 
+        FROM (SELECT name, nation_code, code, count(*) cnt FROM athlete GROUP BY name, nation_code) a, record r
+        WHERE a.code = r.athlete_code
+        AND a.nation_code = 'KOR';
+
+There are no predicates in the inline-view of the query above. If the query rewrite doesn't work, 
+the *athlete* table would have been fully scanned, creating a temporary result, joined, and filtering with the condition *a.nation_code = 'KOR'*.
+
+However, if the query is rewritten as follows by using **Predicate Push**, it can be optimized to reduce the amount of data being queried.
+
+.. code-block:: sql
+
+        SELECT a.name, r.score 
+        FROM (SELECT name, nation_code, code, count(*) cnt FROM athlete WHERE nation_code = 'KOR' GROUP BY name, nation_code ) a, record r
+        WHERE a.code = r.athlete_code;
+
+In the following cases, **Predicate Push** is not performed:
+
+#. Using **NO_PUSH_PRED** hint on main query.
+
+#. Contains **CONNECT BY** on main query.
+    
+#. Using aggregate or analytic functions on view.
+
+#. Using **ROWNUM, LIMIT**, or **GROUPBY_NUM(), INST_NUM(), ORDERBY_NUM()** on view.
+    
+#. Using **Correlated Subquery**.
+
+#. Using subqueries in predicates.
+
+#. The view includes methods.
+
+#. When the predicate to be pushed or the target for **Predicate Push** within the view uses **RANDOM (), DRANDOM (), SYS_GUID ()**\.
+
+#. When performing an **OUTER JOIN** and either the predicate to be pushed or the target for **Predicate Push** within the view uses:
+
+        * Predicates written in the **ON** clause.
+        * Using **NULL** transformation functions. This includes **COALESCE (), NVL (), NVL2 (), DECODE (), IF (), IFNULL (), CONCAT_WS ()**. 
+        * **IS NULL ,CASE** statements are also not targets for **Predicate Push**.
+
+.. note::
+
+     **NULL** transformation function includes the following functions:
+
+     *   **COALESCE ()**
+     *   **NVL ()**
+     *   **NVL2 ()**
+     *   **DECODE ()**
+     *   **IF ()**
+     *   **IFNULL ()**
+     *   **CONCAT_WS ()**
+
+     Furthermore, **IS NULL ,CASE** statements are also not targets for **Predicate Push**.
+
+The following is an example that uses **NO_PUSH_PRED** hint on main query.
+
+.. code-block:: sql
+
+        SELECT /*+ NO_PUSH_PRED*/ a.name, r.score 
+        FROM (SELECT name, nation_code, code, count(*) cnt FROM athlete GROUP BY name, nation_code) a, record r
+        WHERE a.code = r.athlete_code
+        AND a.nation_code = 'KOR';
+
+If the **NO_PUSH_PRED** hint is used on main query, **Predicate Push** is not performed.
+
+The following is an example that performs an **OUTER JOIN** with the predicate to be pushed in the **ON** clause condition.
+
+.. code-block:: sql
+
+        SELECT a.name, r.score 
+        FROM (SELECT * FROM athlete WHERE gender = 'M') a
+            LEFT OUTER JOIN record r ON a.code = r.athlete_code AND a.nation_code = 'KOR';
+
+In this case, *a.nation_code = 'KOR'* exists in the **ON** clause during the **LEFT OUTER JOIN**. Such a predicate within the **ON** clause is not a target for **Predicate Push**.
+
+The following is an example that performs an **OUTER JOIN** where either the predicate to be pushed or the target for **Predicate Push** within the view uses the **NULL** transformation function.
+
+.. code-block:: sql
+
+        SELECT a.name, r.score 
+        FROM athlete a
+                LEFT OUTER JOIN (SELECT * FROM record WHERE medal = 'G') r ON a.code = r.athlete_code
+        WHERE NVL(r.score, '0') = '0';
+
+When performing an **OUTER JOIN** and either the predicate to be pushed or the target for **Predicate Push** within the view uses a **NULL** transformation function, it's not a target for **Predicate Push**.
+
 .. _query-cache:
 
 QUERY CACHE

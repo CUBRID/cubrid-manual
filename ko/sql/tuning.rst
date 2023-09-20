@@ -3831,6 +3831,96 @@ N:1 관계의 **LEFT OUTER JOIN**\에서 조인 조건 외에 오른쪽 테이�
                 9           60          600  'Left- 806'                     6
                10           60          600  'Left- 906'                     6
 
+.. _pred-push:
+
+Predicate Push
+-----------------------
+**Predicate Push**\는 외부의 조건절을 뷰 안으로 밀어 넣는 최적화이다.
+
+이를 통해 뷰 수행시 추가된 조건에 의해 더 적은 양의 데이터만 조회할 수 있어 전체 처리량을 줄일 수 있다.
+
+
+예를 들어 아래 질의 처럼 인라인 뷰와 테이블을 *a.code = r.athlete_code*\의 조인 조건으로 조인을 처리할 때, 조건절 중 인라인 뷰에 해당되는 조건절들을 인라인 뷰 안쪽에 밀어 넣을 수 있다면
+조인해야 할 데이터양을 줄일 수 있다. 
+
+.. code-block:: sql
+
+
+        SELECT a.name, r.score 
+        FROM (SELECT name, nation_code, code, count(*) cnt FROM athlete GROUP BY name, nation_code) a, record r
+        WHERE a.code = r.athlete_code
+        AND a.nation_code = 'KOR';
+
+
+위 질의 중 인라인 뷰 내부에는 조건절이 없다. 만약 쿼리 변환이 수행되지 않았다면,
+*athlete* 테이블을 full scan하여 생성된 임시 결과와 record 테이블을 조인 수행후에 *a.nation_code = 'KOR'* 조건을
+필터링했을 것이다. 
+
+하지만 **Predicate Push**\를 통해서 다음과 같이 질의가 변환된다면, 더 적은 양의
+데이터만 조회되도록 최적화할 수 있다.
+
+.. code-block:: sql
+
+        SELECT a.name, r.score 
+        FROM (SELECT name, nation_code, code, count(*) cnt FROM athlete WHERE nation_code = 'KOR' GROUP BY name, nation_code ) a, record r
+        WHERE a.code = r.athlete_code;
+
+다음의 경우에는 **Predicate Push**\가 수행되지 않는다.
+
+    #. 주 질의에 **NO_PUSH_PRED** 힌트가 사용된 경우
+
+    #. 주 질의가 **CONNECT BY**\를 포함한 경우
+
+    #. 뷰에 집계함수나 분석함수를 사용하는 경우
+
+    #. 뷰에 **ROWNUM, LIMIT** 또는 **GROUPBY_NUM (), INST_NUM (), ORDERBY_NUM ()**\ 을 사용하는 경우
+
+    #. **Correlated Subquery**\ 를 사용하여 작성된 경우
+
+    #. 조건절에 부질의가 사용된 경우
+
+    #. 뷰가 메소드를 포함한 경우
+
+    #. 푸시될 조건절이나 뷰 내부의 **Predicate Push** 대상에 **RANDOM (), DRANDOM (), SYS_GUID ()**\를 사용하는 경우
+
+    #. **OUTER JOIN**\을 수행할 때 푸시될 조건절이나 뷰 내부의 **Predicate Push** 대상에 다음을 사용하는 경우:
+    
+            * **ON**\절에 조건절이 작성된 경우
+            * **NULL** 변환 함수 (**COALESCE (), NVL (), NVL2 (), DECODE (), IF (), IFNULL (), CONCAT_WS ()**)
+            * **IS NULL, CASE** 문
+
+다음은 주 질의에 **NO_PUSH_PRED** 힌트가 사용된 예시이다.
+
+.. code-block:: sql
+
+        SELECT /*+ NO_PUSH_PRED*/ a.name, r.score 
+        FROM (SELECT name, nation_code, code, count(*) cnt FROM athlete GROUP BY name, nation_code) a, record r
+        WHERE a.code = r.athlete_code
+        AND a.nation_code = 'KOR';
+
+주 질의에 **NO_PUSH_PRED** 힌트가 사용된 경우, **Predicate Push**\가 수행되지 않는다.
+
+다음은 질의가 **OUTER JOIN**\을 수행할 때 **ON**\절의 조건에 푸시될 조건절이 있는 예시이다.
+
+.. code-block:: sql
+
+        SELECT a.name, r.score 
+        FROM (SELECT * FROM athlete WHERE gender = 'M') a
+            LEFT OUTER JOIN record r ON a.code = r.athlete_code AND a.nation_code = 'KOR';
+
+이 경우, *a.nation_code = 'KOR'*\는 **LEFT OUTER JOIN** 수행 시 **ON** 절에 있는데, 이러한 형태로 **ON** 절의 조건절은 **Predicate Push** 대상이 아니다.
+
+다음 질의는 **OUTER JOIN**\을 수행할 때 푸시될 조건절이나 뷰 내부의 **Predicate Push** 대상에 **NULL** 변환 함수를 사용하는 예시이다.
+
+.. code-block:: sql
+
+        SELECT a.name, r.score 
+        FROM athlete a
+                LEFT OUTER JOIN (SELECT * FROM record WHERE medal = 'G') r ON a.code = r.athlete_code
+        WHERE NVL(r.score, '0') = '0';
+
+**OUTER JOIN**\을 수행할 때 푸시될 조건절이나 뷰 내부의 **Predicate Push** 대상에 **NULL** 변환 함수를 사용한 경우 **Predicate Push** 대상이 아니다.
+
 .. _query-cache:
 
 쿼리 캐시

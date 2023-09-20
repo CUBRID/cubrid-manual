@@ -253,6 +253,9 @@ The following example shows *nation_code*, *host_year* and *gold* records whose 
 
 .. _dblink-clause:
 
+Remote Table
+------------
+
 A remote table can be specified in the FROM clause, and when specifying a remote table, '@' is used and a table extension such as table_name@server_name is used. The remote server can use not only CUBRID but also other DBMS (ORACLE, MySQL, and MariaDB). The query for remote table is recreated and executed using the DBLINK statement while going through an optimization step.
 
 .. code-block:: sql

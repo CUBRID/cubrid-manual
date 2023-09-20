@@ -3887,6 +3887,20 @@ Predicate Push
             * **ON**\절에 조건절이 작성된 경우
             * **NULL** 변환 함수
 
+.. note::
+
+    **NULL** 변환 함수에는 다음 함수들이 포함된다.
+
+    *   **COALESCE ()**
+    *   **NVL ()**
+    *   **NVL2 ()**
+    *   **DECODE ()**
+    *   **IF ()**
+    *   **IFNULL ()**
+    *   **CONCAT_WS ()**
+
+    또한 **IS NULL, CASE** 문 또한 **Predicate Push** 대상이 아니다.
+
 다음은 주 질의에 **NO_PUSH_PRED** 힌트가 사용된 예시이다.
 
 .. code-block:: sql
@@ -3918,17 +3932,6 @@ Predicate Push
         WHERE NVL(r.score, '0') = '0';
 
 **OUTER JOIN**\을 수행할 때 푸시될 조건절이나 뷰 내부의 **Predicate Push** 대상에 **NULL** 변환 함수를 사용한 경우 **Predicate Push** 대상이 아니다.
-**NULL** 변환 함수에는 다음 함수들이 포함된다.
-
-*   **COALESCE ()**
-*   **NVL ()**
-*   **NVL2 ()**
-*   **DECODE ()**
-*   **IF ()**
-*   **IFNULL ()**
-*   **CONCAT_WS ()**
-
-또한 **IS NULL, CASE** 문 또한 **Predicate Push** 대상이 아니다.
 
 .. _query-cache:
 

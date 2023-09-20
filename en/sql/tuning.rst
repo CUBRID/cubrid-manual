@@ -3880,6 +3880,20 @@ In the following cases, **Predicate Push** is not performed:
         * Predicates written in the **ON** clause.
         * **NULL** transformation functions.
 
+.. note::
+
+     **NULL** transformation function includes the following functions:
+
+     *   **COALESCE ()**
+     *   **NVL ()**
+     *   **NVL2 ()**
+     *   **DECODE ()**
+     *   **IF ()**
+     *   **IFNULL ()**
+     *   **CONCAT_WS ()**
+
+     Furthermore, **IS NULL ,CASE** statements are also not targets for **Predicate Push**.
+
 The following is an example that uses **NO_PUSH_PRED** hint on main query.
 
 .. code-block:: sql
@@ -3910,17 +3924,7 @@ The following is an example that performs an **OUTER JOIN** where either the pre
                 LEFT OUTER JOIN (SELECT * FROM record WHERE medal = 'G') r ON a.code = r.athlete_code
         WHERE NVL(r.score, '0') = '0';
 
-When performing an **OUTER JOIN** and either the predicate to be pushed or the target for **Predicate Push** within the view uses a **NULL** transformation function, it's not a target for **Predicate Push**. This includes the following functions:
-
-*   **COALESCE ()**
-*   **NVL ()**
-*   **NVL2 ()**
-*   **DECODE ()**
-*   **IF ()**
-*   **IFNULL ()**
-*   **CONCAT_WS ()**
-
-Furthermore, **IS NULL ,CASE** statements are also not targets for **Predicate Push**.
+When performing an **OUTER JOIN** and either the predicate to be pushed or the target for **Predicate Push** within the view uses a **NULL** transformation function, it's not a target for **Predicate Push**.
 
 .. _query-cache:
 

@@ -3829,161 +3829,104 @@ The join with the *right_tbl* table was eliminated.
                 9           60          600  'Left- 806'                     6
                10           60          600  'Left- 906'                     6
 
-.. _view_merge:
+.. _pred-push:
 
-View Merging Optimization
-=========================
+Predicate Push
+-----------------------
 
-**View Merging** is an optimization for reducing overhead that occur during the processing of view or inline view. 
-When a query includes a view, there is an overhead of creating a temporary table for that view. 
-And it's impossible to perform index scan on temporary tables, leading to performance degradation.
-But, by using **View Merging** to merge the view with table in main query, performance can be improved because index scan is available.
+**Predicate Push** is an optimization that pushes the predicate of the main query into the view.
 
-Like *Query 1* below, which use inline views, make it easier to understand the intent of the query.
+By applying **Predicate Push** to the subquery, the amount of data queried in the subquery is reduced.
 
-.. code-block:: sql
-
-        /* Query 1 */
-        SELECT *
-        FROM (SELECT * FROM athlete WHERE nation_code = 'USA') a,
-        (SELECT * FROM record WHERE medal = 'G') b
-        WHERE a.code = b.athlete_code;
-
-If the query is executed without **View Merging** optimization, the join is performed with the temporary results of executing each of the inline views *a* and *b*. Temporary results cannot use indexes, resulting in performance degradation.
+For instance, when performing a join using the join condition *a.code = r.athlete_code* as in the query below, if the external predicate can be pushed into the query block, the amount of data to be joined can be reduced.
 
 .. code-block:: sql
 
-        /* Query 2 */
-        SELECT *
-        FROM emp a, dept b
-        WHERE a.code = b.athlete_code
-        AND a.nation_code = 'USA'
-        AND b.medal = 'G';
+        SELECT a.name, r.score 
+        FROM (SELECT name, nation_code, code, count(*) cnt FROM athlete GROUP BY name, nation_code) a, record r
+        WHERE a.code = r.athlete_code
+        AND a.nation_code = 'KOR';
 
-When **View Merging** optimization is performed, *Query 1* is transformed into *Query 2*.
+There are no predicates in the inline-view of the query above. If the query rewrite doesn't work, 
+the *athlete* table would have been fully scanned, creating a temporary result, joined, and filtering with the condition *a.nation_code = 'KOR'*.
 
-In the following cases, **View Merging** is not performed:
+However, if the query is rewritten as follows by using **Predicate Push**, it can be optimized to reduce the amount of data being queried.
 
-#. Using **NO_MERGE** hint on a view.
+.. code-block:: sql
 
-#. The view includes a **CONNECT BY** clause.
+        SELECT a.name, r.score 
+        FROM (SELECT name, nation_code, code, count(*) cnt FROM athlete WHERE nation_code = 'KOR' GROUP BY name, nation_code ) a, record r
+        WHERE a.code = r.athlete_code;
 
-#. The view includes a **DISTINCT** clause.
+In the following cases, **Predicate Push** is not performed:
 
-#. The view is **CTE** (Common Table Expressions).
+#. Using **NO_PUSH_PRED** hint on main query.
 
-#. Using **OUTER JOIN** with a view.
+#. Contains **CONNECT BY** on main query.
+    
+#. Using aggregate or analytic functions on view.
 
-#. The view using aggregate or analytic functions.
+#. Using **ROWNUM, LIMIT**, or **GROUPBY_NUM(), INST_NUM(), ORDERBY_NUM()** on view.
+    
+#. Using **Correlated Subquery**.
 
-#. Using **ROWNUM, LIMIT**, or **GROUPBY_NUM(), INST_NUM(), ORDERBY_NUM()**.
-
-#. The view using **Correlated Subquery**.
+#. Using subqueries in predicates.
 
 #. The view includes methods.
 
-#. The view includes **RANDOM(), DRANDOM(), SYS_GUID()**.
+#. When the predicate to be pushed or the target for **Predicate Push** within the view uses **RANDOM (), DRANDOM (), SYS_GUID ()**\.
 
-The following is an example that uses **NO_MERGE** hint on a view.
+#. When performing an **OUTER JOIN** and either the predicate to be pushed or the target for **Predicate Push** within the view uses:
 
-.. code-block:: sql
+        * Predicates written in the **ON** clause.
+        * Using **NULL** transformation functions. This includes **COALESCE (), NVL (), NVL2 (), DECODE (), IF (), IFNULL (), CONCAT_WS ()**. 
+        * **IS NULL ,CASE** statements are also not targets for **Predicate Push**.
 
-    SELECT *
-    FROM (SELECT /*+ NO_MERGE*/ * FROM athlete WHERE nation_code = 'USA') a,
-    (SELECT /*+ NO_MERGE*/ * FROM record WHERE medal = 'G') b
-    WHERE a.code = b.athlete_code;
+.. note::
 
-If the **NO_MERGE** hint is used on a view, **View Merging** is not performed.
+     **NULL** transformation function includes the following functions:
 
-The following is an example that includes the **CONNECT BY** clause.
+     *   **COALESCE ()**
+     *   **NVL ()**
+     *   **NVL2 ()**
+     *   **DECODE ()**
+     *   **IF ()**
+     *   **IFNULL ()**
+     *   **CONCAT_WS ()**
 
-.. code-block:: sql
+     Furthermore, **IS NULL ,CASE** statements are also not targets for **Predicate Push**.
 
-        -- Creating a tree table and then inserting data
-        CREATE TABLE tree(id INT, mgrid INT, name VARCHAR(32), birthyear INT);
-
-        INSERT INTO tree VALUES (1,NULL,'Kim', 1963);
-        INSERT INTO tree VALUES (2,NULL,'Moy', 1958);
-        INSERT INTO tree VALUES (3,1,'Jonas', 1976);
-        INSERT INTO tree VALUES (4,1,'Smith', 1974);
-        INSERT INTO tree VALUES (5,2,'Verma', 1973);
-        INSERT INTO tree VALUES (6,2,'Foster', 1972);
-        INSERT INTO tree VALUES (7,6,'Brown', 1981);
-
-        -- Executing a hierarchical query with CONNECT BY clause
-        SELECT *
-        FROM (SELECT * FROM tree WHERE birthyear = 1973) t
-        CONNECT BY PRIOR t.id=t.mgrid; 
-
-Due to the use of the **CONNECT BY** in the above query, **View Merging** cannot be performed.
-
-The following is an example where a view includes the **DISTINCT** clause.
+The following is an example that uses **NO_PUSH_PRED** hint on main query.
 
 .. code-block:: sql
 
-        SELECT * FROM (SELECT DISTINCT host_year FROM record) T;
+        SELECT /*+ NO_PUSH_PRED*/ a.name, r.score 
+        FROM (SELECT name, nation_code, code, count(*) cnt FROM athlete GROUP BY name, nation_code) a, record r
+        WHERE a.code = r.athlete_code
+        AND a.nation_code = 'KOR';
 
-Due to the **DISTINCT** clause used within the view in the above query, **View Merging** cannot be performed.
+If the **NO_PUSH_PRED** hint is used on main query, **Predicate Push** is not performed.
 
-The following is an example that the view is **CTE** (Common Table Expressions).
-
-.. code-block:: sql
-
-        WITH cte AS (SELECT * FROM athlete WHERE gender = 'M') 
-        SELECT * FROM cte WHERE cte.nation_code = 'USA';
-
-When using **CTE** as above, **View Merging** optimization cannot be performed.
-
-The following is an example performing an **OUTER JOIN** with a view.
+The following is an example that performs an **OUTER JOIN** with the predicate to be pushed in the **ON** clause condition.
 
 .. code-block:: sql
 
-        SELECT * 
-        FROM athlete a 
-        LEFT OUTER JOIN (SELECT * FROM record WHERE host_year = 2020) b 
-        ON a.code = b.athlete_code;
+        SELECT a.name, r.score 
+        FROM (SELECT * FROM athlete WHERE gender = 'M') a
+            LEFT OUTER JOIN record r ON a.code = r.athlete_code AND a.nation_code = 'KOR';
 
-In cases where an **OUTER JOIN** is performed as above, **View Merging** cannot be performed.
+In this case, *a.nation_code = 'KOR'* exists in the **ON** clause during the **LEFT OUTER JOIN**. Such a predicate within the **ON** clause is not a target for **Predicate Push**.
 
-The following is an example using aggregate or analytic functions.
-
-.. code-block:: sql
-
-        SELECT * 
-        FROM (SELECT AVG(host_year) FROM record WHERE medal = 'G') a;
-
-When using aggregate or analytic functions in views as above, **View Merging** optimization cannot be performed.
-
-The following is an example using **ROWNUM, LIMIT** or **GROUPBY_NUM(), INST_NUM(), ORDERBY_NUM()**.
+The following is an example that performs an **OUTER JOIN** where either the predicate to be pushed or the target for **Predicate Push** within the view uses the **NULL** transformation function.
 
 .. code-block:: sql
 
-        SELECT *
-        FROM (SELECT gender, rownum FROM athlete WHERE rownum < 15) a
-        WHERE gender = 'M';
+        SELECT a.name, r.score 
+        FROM athlete a
+                LEFT OUTER JOIN (SELECT * FROM record WHERE medal = 'G') r ON a.code = r.athlete_code
+        WHERE NVL(r.score, '0') = '0';
 
-When using **ROWNUM, LIMIT** or **GROUPBY_NUM(), INST_NUM(), ORDERBY_NUM()** in views as above, **View Merging** optimization cannot be performed.
-
-The following is an example using **Correlated Subquery**.
-
-.. code-block:: sql
-
-        SELECT COUNT(*)
-        FROM athlete a,
-        (SELECT * FROM record r WHERE a.code = r.athlete_code) b;
-
-When using **Correlated Subquery** as above, **View Merging** optimization cannot be performed.
-
-The following is an example where a view includes **RANDOM(), DRANDOM(), SYS_GUID()**.
-
-.. code-block:: sql
-
-        SELECT *
-        FROM    (SELECT RANDOM (), code FROM athlete WHERE nation_code = 'USA') a,
-                (SELECT SYS_GUID (), athlete_code FROM record WHERE medal = 'G') b
-        WHERE a.code = b.athlete_code;
-
-When using **RANDOM(), DRANDOM(), SYS_GUID()** in views as above, **View Merging** optimization cannot be performed.
+When performing an **OUTER JOIN** and either the predicate to be pushed or the target for **Predicate Push** within the view uses a **NULL** transformation function, it's not a target for **Predicate Push**.
 
 .. _query-cache:
 

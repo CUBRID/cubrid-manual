@@ -704,8 +704,8 @@ Common Constraints
 
     SELECT A.*, rownum rn, '' empty, null null_col, SYSDATE
     FROM t1@srv1 A ;
-    -- rewritten query
 
+    -- rewritten query
     SELECT A.id, A.parentid, A.[text], rownum, '', null, SYS_DATE -- at local
     FROM ( SELECT [_dbl].id, [_dbl].parentid, [_dbl].[text]
            FROM DBLINK( srv1 /* '192.168.1.125:33000:remotedb1:dba:*:' */ ,
@@ -763,6 +763,7 @@ Common Constraints
 
         -- original query
         SELECT * FROM tbl@srv1 WHERE col1 >= sysdate;
+
         -- rewritten query
         SELECT *
         FROM ( SELECT col1, col2
@@ -815,20 +816,19 @@ CUBRID Constraints
     *   Long, interval day to se, interval year to month, blob, and clob types are not supported in the select statement.
     *   Oracle ODBC does not support the time zone type, so when SELECTing time zone data, the time zone is calculated as a local time, converted to timestamp type, and returned.
 
-    Below is an example of converting Oracle DB's time zone data to a local time zone when querying it with ODBC.
+    Below is an example of converting Oracle DB's time zone data to a local time zone when querying it with ODBC. The entered time zone is "+02:00", converted to local time zone "+09:00", and output as "PM 08:00".
 
     .. code-block:: sql
 
         -- oracle input
         INSERT INTO tbl VALUES (to_timestamp_tz('2021-07-25 12:34:56 +02:00', 'yyyy-mm-dd hh24:mi:ss tzh:tzm'));
+
         -- local
         SELECT t_timestamp_timezone2 FROM tbl@server;
         07:34:56.000 PM 07/25/2021
+
         SELECT to_char(t_timestamp_timezone2, 'yyyy-mm-dd hh24:mi:ss.ff tzh:tzm') FROM tbl@server;
         2021-07-25 19:34:56.000 +09:00
-        The entered time zone is "+02:00", converted to local time zone "+09:00", and output as "PM 08:00".
-
-        The entered time zone is "+02:00", converted to local time zone "+09:00", and output as "PM 08:00".
 
     *   REPLACE syntax is not supported and an error occurs when used.
     *   Oracle's processing range of date and number types is larger than CUBRID's, so data that falls outside of CUBRID's type range will result in an error.

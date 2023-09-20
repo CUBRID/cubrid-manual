@@ -716,8 +716,8 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
 
     SELECT A.*, rownum rn, '' empty, null null_col, SYSDATE
     FROM t1@srv1 A ;
-    -- rewritten query
 
+    -- rewritten query
     SELECT A.id, A.parentid, A.[text], rownum, '', null, SYS_DATE -- at local
     FROM ( SELECT [_dbl].id, [_dbl].parentid, [_dbl].[text]
            FROM DBLINK( srv1 /* '192.168.1.125:33000:remotedb1:dba::' */,
@@ -744,7 +744,7 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
 
 *   TRUNCATE 구문 미지원
 *   CREATE TABLE … LIKE 테이블명@server명 구문 미지원 (참고로 CREATE TABLE … AS SELECT FROM 테이블명@server명 구문은 지원)
-*   TRIGGER 구문에서 dblink()와 원격 테이블(@server)를 사용한 질의는 사용시 오류 발생 
+*   TRIGGER 구문에서 DBLINK() 혹은 원격 테이블(@server)을 사용한 질의는 오류가 발생한다.
 *   predicate push 처리: 테이블 확장 형식(@server) 구문으로 작성된 SELECT 구문은 옵티마이저가 DBLINK()구문으로 재작성하는데, 성능 향상을 위해 원격 DB에서 처리 가능한 조건절을 함께 push 하여 재작성한다. 단, 조건절에서 사용한 내장함수와 사용자 정의함수는 push에서 제외되고, 로컬DB에서 실행된다. 
 *   성능 유의 사항 
 
@@ -760,6 +760,7 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
         SELECT A.parentid, count()
         FROM tree@srv1 A
         GROUP BY A.parentid ;
+
         -- rewritten query
         SELECT A.parentid, count()
         FROM ( SELECT [_dbl].parentid
@@ -785,7 +786,7 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
              ) tbl (col1, col2)
         WHERE col1>= SYS_DATE
 
-*   테이블 확장 형식(@server)구문으로 co-related 조건의 스칼라 서브쿼리, 서브쿼리 및 EXIST 구문의 부질의 사용하는 경우, 반복되는 원격 질의 수행시 전체 데이터를 로컬 DB로 가지고 온 후 조인 조건에 맞는 데이터찾는 작업을 수행하게 되어 급격한 성능 저하가 발생할 수 있다. 아래 예시는 스칼라 서브 퀴리의 조건으로 T1.a를 사용하고 있어, T1.a < 4 만큼의 svr1의 tree table의 데이터를 로컬 DB로 가지고 와서 적합한 데이터를 찾는 작업을 하기 때문에 수행이 느려질 수 있다.
+*   테이블 확장 형식(@server)구문으로 co-related 조건의 스칼라 서브쿼리, 서브쿼리 및 EXIST 구문의 부질의 사용하는 경우, 반복되는 원격 질의 수행시 전체 데이터를 로컬 DB로 가지고 온 후 조인 조건에 맞는 데이터를 찾는 작업을 수행하게 되어 급격한 성능 저하가 발생할 수 있다. 아래 예시는 스칼라 서브 퀴리의 조건으로 T1.a를 사용하고 있어, T1.a < 4 만큼의 svr1의 tree table의 데이터를 로컬 DB로 가지고 와서 적합한 데이터를 찾는 작업을 하기 때문에 수행이 느려질 수 있다.
 
     .. code-block:: sql
     
@@ -819,7 +820,7 @@ CUBRID 제약 사항
     *   1개 컬럼의 문자열 최대 길이는 16M이다.
     *   INSERT, UPDATE, DELETE, MERGE 와 같은 DML 구문에서 CUBRID가 미지원하는 내장 함수 중 function(파라미터1, …, 파라미터N)의 형식이 아닌 경우에는 질의 오류가 발생한다.
     
-        예시: MySQL, MariaDB의 convert 함수 : convert('binary' using binary)  오류 발생
+        예시: MySQL, MariaDB의 convert 함수 : convert('binary' using binary) -- 오류 발생
 
 
 .. note::

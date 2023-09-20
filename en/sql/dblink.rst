@@ -732,7 +732,7 @@ Common Constraints
 
 *   TRUNCATE statement is not supported.
 *   CREATE TABLE … LIKE table@server syntax is not supported (For reference, CREATE TABLE … AS SELECT FROM table@server syntax is supported)
-*   dblink() and remote table (@server) are not allowed in the TRIGGER statement.
+*   DBLINK() and remote table (@server) are not allowed in the TRIGGER statement.
 *   predicate push: The SELECT statement written in table extension format (@server) is internally rewritten to  DBLINK() by the optimizer. To improve performance, It push with conditional clauses that can be performed in the remote DB. However, if a built-in function or user-defined function in a conditional clause is used, it is excluded from pushing.
 *   Performance notes
 
@@ -748,6 +748,7 @@ Common Constraints
         SELECT A.parentid, count()
         FROM tree@srv1 A
         GROUP BY A.parentid ;
+
         -- rewritten query
         SELECT A.parentid, count()
         FROM ( SELECT [_dbl].parentid

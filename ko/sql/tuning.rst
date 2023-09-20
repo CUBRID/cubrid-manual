@@ -2517,7 +2517,7 @@ SORT-LIMIT 최적화는 **ORDER BY** 절과 LIMIT 절을 명시한 질의에 적
         ((rownum - 1) % 100) + 1 as filter,
         id as parent_id,
         sub_id as parent_sub_id
-    from parent, (select level from db_root connect by level <= 100);
+    from parent_tbl, (select level from db_root connect by level <= 100);
 
     update statistics on parent_tbl, child_tbl with fullscan;
 
@@ -3830,6 +3830,170 @@ N:1 관계의 **LEFT OUTER JOIN**\에서 조인 조건 외에 오른쪽 테이�
                 8           60          600  'Left- 706'                     6
                 9           60          600  'Left- 806'                     6
                10           60          600  'Left- 906'                     6
+
+.. _view_merge:
+
+View Merging 최적화
+-----------------------
+**View Merging**\은 질의 처리 시간과 오버헤드를 줄이는데 초점을 둔다. 질의에서 뷰(인라인 뷰 포함)를 사용할 때, 시스템은 일반적으로 새로운 임시 테이블을 생성한다. 
+이렇게 생성된 임시 테이블은 인덱스를 사용할 수 없을 뿐만아니라, 임시 테이블을 생성하는 과정 자체가 시스템에 불필요한 부하를 발생하게 된다.
+따라서 **View Merging**\은 뷰를 원래 테이블로 대체하여 뷰 수행시 발생하는 오버헤드를 피하고, 원래 테이블의 인덱스를 활용하여 더 효율적인 질의 처리를 가능하게 한다.
+
+아래 질의문 1 처럼 인라인 뷰를 사용하면, 질의 내용을 파악하기 쉽다.
+
+.. code-block:: sql
+
+
+    /* 질의문 1 */
+    SELECT *
+    FROM (SELECT * FROM athlete WHERE nation_code = 'USA') a,
+         (SELECT * FROM record WHERE medal = 'G') b
+    WHERE a.code = b.athlete_code;
+
+
+하지만, View Merging 최적화가 처리 되지 않는다면, 인라인 뷰 *a*\와 인라인 뷰 *b*\를 각각 수행후 결과를 임시 저장 공간에 보관하고, 임시 저장된 결과를 바탕으로 조인을 수행한다.
+
+이 경우, 임시 저장 공간에 저장된 결과는 인덱스 사용이 불가능하여 많은 성능 저하가 발생한다.
+
+.. code-block:: sql
+
+
+    /* 질의문 2 */
+    SELECT *
+    FROM emp a, dept b
+    WHERE a.code = b.athlete_code
+    AND a.nation_code = 'USA'
+    AND b.medal = 'G'
+
+
+따라서 질의문 1의 뷰 질의들은 뷰를 참조하는 질의와의 머지(merge) 과정을 거쳐 질의문 2와 같은 형태로 변환된다.
+이를 **View Merging**\이라고 한다.
+
+큐브리드에서는 질의가 다음 조건에 해당하면 **View Merging**\을 수행할 수 없다.
+
+    #. 뷰에 **NO_MERGE** 힌트가 사용된 경우
+
+    #. 뷰가 **CONNECT BY**\를 포함한 경우
+
+    #. 뷰가 **DISTINCT**\ 문을 포함한 경우
+
+    #. 뷰가 **CTE**\(Common Table Expressions)인 경우
+    
+    #. 뷰를 **OUTER JOIN**\ 하는 경우
+
+    #. 뷰에 집계함수나 분석함수를 사용하는 경우
+
+    #. 뷰에 **ROWNUM, LIMIT**\ 또는 **GROUPBY_NUM (), INST_NUM (), ORDERBY_NUM ()**\ 을 사용하는 경우
+
+    #. **Correlated Subquery**\ 를 사용하여 작성된 경우
+
+    #. 뷰가 메소드를 포함한 경우
+
+    #. 뷰가 **RANDOM (), DRANDOM (), SYS_GUID ()**\를 포함한 경우
+
+다음은 뷰에 **NO_MERGE** 힌트가 사용된 예시이다.
+
+.. code-block:: sql
+
+    SELECT *
+    FROM (SELECT /*+ NO_MERGE*/ * FROM athlete WHERE nation_code = 'USA') a,
+    (SELECT /*+ NO_MERGE*/ * FROM record WHERE medal = 'G') b
+    WHERE a.code = b.athlete_code;
+
+뷰에 **NO_MERGE** 힌트를 사용할 경우, 해당 뷰는 **View Merging**\의 대상이 되지 않는다.
+
+다음은 뷰가 **CONNECT BY**\를 포함한 예시이다.
+
+.. code-block:: sql
+
+    -- Creating tree table and then inserting data
+    CREATE TABLE tree(id INT, mgrid INT, name VARCHAR(32), birthyear INT);
+
+    INSERT INTO tree VALUES (1,NULL,'Kim', 1963);
+    INSERT INTO tree VALUES (2,NULL,'Moy', 1958);
+    INSERT INTO tree VALUES (3,1,'Jonas', 1976);
+    INSERT INTO tree VALUES (4,1,'Smith', 1974);
+    INSERT INTO tree VALUES (5,2,'Verma', 1973);
+    INSERT INTO tree VALUES (6,2,'Foster', 1972);
+    INSERT INTO tree VALUES (7,6,'Brown', 1981);
+
+    -- Executing a hierarchical query with CONNECT BY clause
+    SELECT *
+    FROM (SELECT * FROM tree WHERE birthyear = 1973) t
+    CONNECT BY PRIOR t.id=t.mgrid; 
+
+
+위 질의문에서는 **CONNECT BY**\절을 사용하기 때문에 **View Merging**\을 수행할 수 없다.
+
+다음은 뷰가 **DISTINCT**\문을 포함한 예시이다.
+
+.. code-block:: sql
+
+        SELECT * FROM (SELECT DISTINCT host_year FROM record) T;
+
+위 질의문의 뷰 내부에 **DISTINCT**\문이 사용되어 **View Merging**\을 수행할 수 없다.
+
+
+다음은 뷰가 **CTE**\(Common Table Expressions)인 예시이다.
+
+
+.. code-block:: sql
+
+        WITH cte AS (SELECT * FROM athlete WHERE gender = 'M') 
+        SELECT * FROM cte WHERE cte.nation_code = 'USA';
+
+위와 같이 **CTE**\를 포함한 질의문은 **View Merging**\을 수행할 수 없다.
+
+다음은 뷰를 **OUTER JOIN**\ 하는 예시이다.
+
+.. code-block:: sql
+
+        SELECT * 
+        FROM athlete a 
+        LEFT OUTER JOIN (SELECT * FROM record WHERE host_year = 2020) b 
+        ON a.code = b.athlete_code;
+
+위와 같이 **OUTER JOIN**\을 수행하는 경우에는 **View Merging**\을 수행할 수 없다.
+
+다음은 뷰에 집계함수나 분석함수를 사용하는 예시이다. 
+
+.. code-block:: sql
+
+        SELECT * 
+        FROM (SELECT AVG(host_year) FROM record WHERE medal = 'G') a;
+
+뷰에 집계함수나 분석함수를 포함한 질의문의 경우 **View Merging**\의 대상이 되지 않는다.
+
+다음은 뷰에 **ROWNUM, LIMIT**\ 또는 **GROUPBY_NUM (), INST_NUM (), ORDERBY_NUM ()**\ 을 사용하는 예시이다.
+
+.. code-block:: sql
+
+        SELECT *
+        FROM (SELECT gender, rownum FROM athlete WHERE rownum < 15) a
+        WHERE gender = 'M';
+
+뷰에 **ROWNUM, LIMIT**\ 또는 **GROUPBY_NUM (), INST_NUM (), ORDERBY_NUM ()**\을 사용한 질의문의 경우 **View Merging**\이 불가능하다.
+
+다음은 **Correlated Subquery**\ 를 사용하여 작성된 예시이다
+
+.. code-block:: sql
+
+        SELECT COUNT(*)
+        FROM athlete a,
+        (SELECT * FROM record r WHERE a.code = r.athlete_code) b;
+
+**Correlated Subquery**\를 사용한 질의문의 경우 **View Merging**\이 불가능하다.
+
+다음은 뷰가 **RANDOM (), DRANDOM (), SYS_GUID ()**\를 포함한 예시이다.
+
+.. code-block:: sql
+
+        SELECT *
+        FROM    (SELECT RANDOM (), code FROM athlete WHERE nation_code = 'USA') a,
+                (SELECT SYS_GUID (), athlete_code FROM record WHERE medal = 'G') b
+        WHERE a.code = b.athlete_code;
+
+뷰가 **RANDOM (), DRANDOM (), SYS_GUID ()**\를 포함한 질의문의 경우 **View Merging**\이 불가능하다.
 
 .. _pred-push:
 

@@ -2515,7 +2515,7 @@ The following is an example of eliminating the **INNER JOIN**.
         ((rownum - 1) % 100) + 1 as filter,
         id as parent_id,
         sub_id as parent_sub_id
-    from parent, (select level from db_root connect by level <= 100);
+    from parent_tbl, (select level from db_root connect by level <= 100);
 
     update statistics on parent_tbl, child_tbl with fullscan;
 
@@ -3828,6 +3828,162 @@ The join with the *right_tbl* table was eliminated.
                 8           60          600  'Left- 706'                     6
                 9           60          600  'Left- 806'                     6
                10           60          600  'Left- 906'                     6
+
+.. _view_merge:
+
+View Merging Optimization
+=========================
+
+**View Merging** is an optimization for reducing overhead that occur during the processing of view or inline view. 
+When a query includes a view, there is an overhead of creating a temporary table for that view. 
+And it's impossible to perform index scan on temporary tables, leading to performance degradation.
+But, by using **View Merging** to merge the view with table in main query, performance can be improved because index scan is available.
+
+Like *Query 1* below, which use inline views, make it easier to understand the intent of the query.
+
+.. code-block:: sql
+
+        /* Query 1 */
+        SELECT *
+        FROM (SELECT * FROM athlete WHERE nation_code = 'USA') a,
+        (SELECT * FROM record WHERE medal = 'G') b
+        WHERE a.code = b.athlete_code;
+
+If the query is executed without **View Merging** optimization, the join is performed with the temporary results of executing each of the inline views *a* and *b*. Temporary results cannot use indexes, resulting in performance degradation.
+
+.. code-block:: sql
+
+        /* Query 2 */
+        SELECT *
+        FROM emp a, dept b
+        WHERE a.code = b.athlete_code
+        AND a.nation_code = 'USA'
+        AND b.medal = 'G';
+
+When **View Merging** optimization is performed, *Query 1* is transformed into *Query 2*.
+
+In the following cases, **View Merging** is not performed:
+
+#. Using **NO_MERGE** hint on a view.
+
+#. The view includes a **CONNECT BY** clause.
+
+#. The view includes a **DISTINCT** clause.
+
+#. The view is **CTE** (Common Table Expressions).
+
+#. Using **OUTER JOIN** with a view.
+
+#. The view using aggregate or analytic functions.
+
+#. Using **ROWNUM, LIMIT**, or **GROUPBY_NUM(), INST_NUM(), ORDERBY_NUM()**.
+
+#. The view using **Correlated Subquery**.
+
+#. The view includes methods.
+
+#. The view includes **RANDOM(), DRANDOM(), SYS_GUID()**.
+
+The following is an example that uses **NO_MERGE** hint on a view.
+
+.. code-block:: sql
+
+    SELECT *
+    FROM (SELECT /*+ NO_MERGE*/ * FROM athlete WHERE nation_code = 'USA') a,
+    (SELECT /*+ NO_MERGE*/ * FROM record WHERE medal = 'G') b
+    WHERE a.code = b.athlete_code;
+
+If the **NO_MERGE** hint is used on a view, **View Merging** is not performed.
+
+The following is an example that includes the **CONNECT BY** clause.
+
+.. code-block:: sql
+
+        -- Creating a tree table and then inserting data
+        CREATE TABLE tree(id INT, mgrid INT, name VARCHAR(32), birthyear INT);
+
+        INSERT INTO tree VALUES (1,NULL,'Kim', 1963);
+        INSERT INTO tree VALUES (2,NULL,'Moy', 1958);
+        INSERT INTO tree VALUES (3,1,'Jonas', 1976);
+        INSERT INTO tree VALUES (4,1,'Smith', 1974);
+        INSERT INTO tree VALUES (5,2,'Verma', 1973);
+        INSERT INTO tree VALUES (6,2,'Foster', 1972);
+        INSERT INTO tree VALUES (7,6,'Brown', 1981);
+
+        -- Executing a hierarchical query with CONNECT BY clause
+        SELECT *
+        FROM (SELECT * FROM tree WHERE birthyear = 1973) t
+        CONNECT BY PRIOR t.id=t.mgrid; 
+
+Due to the use of the **CONNECT BY** in the above query, **View Merging** cannot be performed.
+
+The following is an example where a view includes the **DISTINCT** clause.
+
+.. code-block:: sql
+
+        SELECT * FROM (SELECT DISTINCT host_year FROM record) T;
+
+Due to the **DISTINCT** clause used within the view in the above query, **View Merging** cannot be performed.
+
+The following is an example that the view is **CTE** (Common Table Expressions).
+
+.. code-block:: sql
+
+        WITH cte AS (SELECT * FROM athlete WHERE gender = 'M') 
+        SELECT * FROM cte WHERE cte.nation_code = 'USA';
+
+When using **CTE** as above, **View Merging** optimization cannot be performed.
+
+The following is an example performing an **OUTER JOIN** with a view.
+
+.. code-block:: sql
+
+        SELECT * 
+        FROM athlete a 
+        LEFT OUTER JOIN (SELECT * FROM record WHERE host_year = 2020) b 
+        ON a.code = b.athlete_code;
+
+In cases where an **OUTER JOIN** is performed as above, **View Merging** cannot be performed.
+
+The following is an example using aggregate or analytic functions.
+
+.. code-block:: sql
+
+        SELECT * 
+        FROM (SELECT AVG(host_year) FROM record WHERE medal = 'G') a;
+
+When using aggregate or analytic functions in views as above, **View Merging** optimization cannot be performed.
+
+The following is an example using **ROWNUM, LIMIT** or **GROUPBY_NUM(), INST_NUM(), ORDERBY_NUM()**.
+
+.. code-block:: sql
+
+        SELECT *
+        FROM (SELECT gender, rownum FROM athlete WHERE rownum < 15) a
+        WHERE gender = 'M';
+
+When using **ROWNUM, LIMIT** or **GROUPBY_NUM(), INST_NUM(), ORDERBY_NUM()** in views as above, **View Merging** optimization cannot be performed.
+
+The following is an example using **Correlated Subquery**.
+
+.. code-block:: sql
+
+        SELECT COUNT(*)
+        FROM athlete a,
+        (SELECT * FROM record r WHERE a.code = r.athlete_code) b;
+
+When using **Correlated Subquery** as above, **View Merging** optimization cannot be performed.
+
+The following is an example where a view includes **RANDOM(), DRANDOM(), SYS_GUID()**.
+
+.. code-block:: sql
+
+        SELECT *
+        FROM    (SELECT RANDOM (), code FROM athlete WHERE nation_code = 'USA') a,
+                (SELECT SYS_GUID (), athlete_code FROM record WHERE medal = 'G') b
+        WHERE a.code = b.athlete_code;
+
+When using **RANDOM(), DRANDOM(), SYS_GUID()** in views as above, **View Merging** optimization cannot be performed.
 
 .. _pred-push:
 

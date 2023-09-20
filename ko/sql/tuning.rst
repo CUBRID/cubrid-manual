@@ -3884,6 +3884,7 @@ Predicate Push
     #. 푸시될 조건절이나 뷰 내부의 **Predicate Push** 대상에 **RANDOM (), DRANDOM (), SYS_GUID ()**\를 사용하는 경우
 
     #. **OUTER JOIN**\을 수행할 때 푸시될 조건절이나 뷰 내부의 **Predicate Push** 대상에 다음을 사용하는 경우:
+    
             * **ON**\절에 조건절이 작성된 경우
             * **NULL** 변환 함수
 

@@ -3877,6 +3877,7 @@ In the following cases, **Predicate Push** is not performed:
 #. When the predicate to be pushed or the target for **Predicate Push** within the view uses **RANDOM (), DRANDOM (), SYS_GUID ()**\.
 
 #. When performing an **OUTER JOIN** and either the predicate to be pushed or the target for **Predicate Push** within the view uses:
+
         * Predicates written in the **ON** clause.
         * **NULL** transformation functions.
 

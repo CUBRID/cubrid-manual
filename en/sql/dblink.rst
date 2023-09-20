@@ -845,7 +845,7 @@ CUBRID Constraints
 	|                       |                        | MULTIPOLYGON           | MULTIPOLYGON           |
 	+-----------------------+------------------------+------------------------+------------------------+
 	
-    *   The maximum string length for one column is supported only up to 16M.
+    *   The maximum string length for one column is 16M.
 
 	+------------------+---------------------------+
 	| DBMS Name        | Type                      |

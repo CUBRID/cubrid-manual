@@ -3879,7 +3879,8 @@ In the following cases, **Predicate Push** is not performed:
 #. When performing an **OUTER JOIN** and either the predicate to be pushed or the target for **Predicate Push** within the view uses:
 
         * Predicates written in the **ON** clause.
-        * **NULL** transformation functions.
+        * Using **NULL** transformation functions. This includes **COALESCE (), NVL (), NVL2 (), DECODE (), IF (), IFNULL (), CONCAT_WS ()**. 
+        * **IS NULL ,CASE** statements are also not targets for **Predicate Push**.
 
 .. note::
 

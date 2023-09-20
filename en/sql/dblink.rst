@@ -733,11 +733,11 @@ Common Constraints
 *   TRUNCATE statement is not supported.
 *   CREATE TABLE … LIKE table@server syntax is not supported (For reference, CREATE TABLE … AS SELECT FROM table@server syntax is supported)
 *   DBLINK() and remote table (@server) are not allowed in the TRIGGER statement.
-*   predicate push: The SELECT statement written in table extension format (@server) is internally rewritten to  DBLINK() by the optimizer. To improve performance, It push with conditional clauses that can be performed in the remote DB. However, if a built-in function or user-defined function in a conditional clause is used, it is excluded from pushing.
+*   predicate push: The SELECT statement written in table extension style (@server) is internally rewritten to  DBLINK() by the optimizer. To improve performance, It push with conditional clauses that can be performed in the remote DB. However, if a built-in function or user-defined function in a conditional clause is used, it is excluded from pushing.
 *   Performance notes
 
     .. note::
-        When the connect by clause, group by clause, having clause, and limit clause are used in the SELECT statement in table extension format (@server), the where condition, group by clause, having clause, and limit clause are not executed in the remote DB. After executing exclude the statement in the remote DB and sending the performed results to the local DB, performance may be slowed due to execute the statement in the local DB.
+        When the connect by clause, group by clause, having clause, and limit clause are used in the SELECT statement in table extension style (@server), the where condition, group by clause, having clause, and limit clause are not executed in the remote DB. After executing exclude the statement in the remote DB and sending the performed results to the local DB, performance may be slowed due to execute the statement in the local DB.
 
 
     Below is an example of processing the "*group by*" and "*count()*" after transferring all data from the remote DB's *tree* table to the local DB.
@@ -758,7 +758,7 @@ Common Constraints
              ) A (parentid)
         GROUP BY A.parentid
 
-*   The SYSDATE function used in the table extension format (@server) is performed in the local DB, so caution is required if the time between servers is different.
+*   The SYSDATE function used in the table extension style (@server) is performed in the local DB, so caution is required if the time between servers is different.
 
     .. code-block:: sql
 
@@ -774,7 +774,7 @@ Common Constraints
              ) tbl (col1, col2)
         WHERE col1>= SYS_DATE
 
-*   When using a scalar subquery, subquery and EXIST clause  with a co-related condition in the table extension format (@server),  the remote query brings the whole data to the local DB every time and performs to find data corresponding to the join column.  As a result, a rapid decrease in performance occurs. The example below uses T1.a as a condition for a scalar subquery, and all data as T1.a < 4 of svr1's tree table is sent to the local DB to find suitable data per executing scalar subquey, so it may degrade performance.
+*   When using a scalar subquery, subquery and EXIST clause  with a co-related condition in the table extension style (@server),  the remote query brings the whole data to the local DB every time and performs to find data corresponding to the join column.  As a result, a rapid decrease in performance occurs. The example below uses T1.a as a condition for a scalar subquery, and all data as T1.a < 4 of svr1's tree table is sent to the local DB to find suitable data per executing scalar subquey, so it may degrade performance.
 
     .. code-block:: sql
 

@@ -799,13 +799,64 @@ CUBRID Constraints
 *   ENUM, BLOB, CLOB, and SET types are not supported in the select statement.
 *   If the system parameters of the local DB and remote DB are different, undesirable results may occur.
 
-.. note::
-    Common constraints of Heterogeneous DBMS.
+.. _heterogen-restrict:
+
+    **Common constraints of Heterogeneous DBMS.**
 
 
     *   The gateway must use the Unicode-only ODBC Driver of the heterogeneous remote database (Oracle/MySQL/MariaDB).
     *   Among ODBC types, SQL_INTERVAL, SQL_GUID, SQL_BIT, SQL_BINARY, SQL_VARBINARY, and SQL_LONGVARBINARY are not supported types.
-    *   The maximum string length for one column is 16M.
+
+	+-----------------------+------------------------+------------------------+------------------------+
+	| SQL Type              |  Oracle Data Type      |  MySQL Data Type       |  MariaDB Data Type     |
+	+=======================+========================+========================+========================+
+	| SQL_LONGVARCHAR       | LONG,  CLOB            | LONGTEXT               | LONGTEXT               |
+	+-----------------------+------------------------+------------------------+------------------------+
+	| SQL_WLONGVARCHAR      | NCLOB                  |                        |                        |
+	+-----------------------+------------------------+------------------------+------------------------+
+	| SQL_BIT               |                        | BIT                    | BIT                    |
+	+-----------------------+------------------------+------------------------+------------------------+
+	| SQL_BINARY            | RAW                    | BINARY                 | BINARY                 |
+	+-----------------------+------------------------+------------------------+------------------------+
+	| SQL_VARBINARY         |                        | VARBINARY              | VARBINARY              |
+	+-----------------------+------------------------+------------------------+------------------------+
+	| SQL_LONGVARBINARY     | LONG RAW               | LONG VARBINARY         | LONG VARBINARY         |
+	|                       +------------------------+------------------------+------------------------+
+	|                       | BLOB                   | BLOB                   | BLOB                   |
+	|                       +------------------------+------------------------+------------------------+
+	|                       | BFILE                  | TINYBLOB               | TINYBLOB               |
+	|                       +------------------------+------------------------+------------------------+
+	|                       |                        | MEDIUMBLOB             | MEDIUMBLOB             |
+	|                       +------------------------+------------------------+------------------------+
+	|                       |                        | LONGBLOB               | LONGBLOB               |
+	|                       +------------------------+------------------------+------------------------+
+	|                       |                        | GEOMETRY               | GEOMETRY               |
+	|                       +------------------------+------------------------+------------------------+
+	|                       |                        | POINT                  | POINT                  |
+	|                       +------------------------+------------------------+------------------------+
+	|                       |                        | POLGON                 | POLGON                 |
+	|                       +------------------------+------------------------+------------------------+
+	|                       |                        | GEOMETRYCOLLECTION     | GEOMETRYCOLLECTION     |
+	|                       +------------------------+------------------------+------------------------+
+	|                       |                        | MULTILINESTRING        | MULTILINESTRING        |
+	|                       +------------------------+------------------------+------------------------+
+	|                       |                        | MULTIPOINT             | MULTIPOINT             |
+	|                       +------------------------+------------------------+------------------------+
+	|                       |                        | MULTIPOLYGON           | MULTIPOLYGON           |
+	+-----------------------+------------------------+------------------------+------------------------+
+	
+    *   The maximum string length for one column is supported only up to 16M.
+
+	+------------------+---------------------------+
+	| DBMS Name        | Type                      |
+	+==================+===========================+
+	| Oracle           | LONG, NCLOB, CLOB         |
+	+------------------+---------------------------+
+	| MySQL            | LONGTEXT                  |
+	+------------------+---------------------------+
+	| MariaDB          | LONGTEXT                  |
+	+------------------+---------------------------+
+
     *   In DML statements such as INSERT, UPDATE, DELETE, and MERGE, if the built-in functions not supported by CUBRID and are not in the form of function (parameter 1, …, parameter N) as below, the query results error.
 
         Example: the convert function of MySQL and MariaDB: convert('binary' using binary)
@@ -814,7 +865,8 @@ CUBRID Constraints
     Oracle Constraints
 
 
-    *   Long, interval day to se, interval year to month, blob, and clob types are not supported in the select statement.
+    *   LONG, INTERVAL DAY TO SECOND, INTERVAL YEAR TO MONTH, BLOB, and CLOB types are not supported in the select statement. For more information, refer to :ref:`Unsupported Types of Common constraints of Heterogeneous DBMS <heterogen-restrict>`\
+    *   The INTERVAL DAY TO SECOND and INTERVAL YEAR TO MONTH types are not supported by Oracle ODBC. For more information, see "Using the Oracle ODBC Driver" (https://docs.oracle.com/en/database/oracle/oracle-database/19/adfns/odbc-driver.html#GUID-3FE69BEF-F8D2-4152-9B1A-877186C47028).
     *   Oracle ODBC does not support the time zone type, so when SELECTing time zone data, the time zone is calculated as a local time, converted to timestamp type, and returned.
 
     Below is an example of converting Oracle DB's time zone data to a local time zone when querying it with ODBC. The entered time zone is "+02:00", converted to local time zone "+09:00", and output as "PM 08:00".
@@ -840,4 +892,4 @@ CUBRID Constraints
 
     *   When using cache in Mysql, the memory usage of gateway cub_cas_cgw increases, so it is recommended to use PREFETCH, NO_CACHE=1.
     *   When performing a query that includes the repeat() function in MySQL/MariaDB, part of the string may be truncated or the string may not be read.
-    *   Longtext, bit, blob, and longblob types are not supported in the select statement.
+    *   LONGTEXT, BIT, BLOB, and LONGBLOB types are not supported in the select statement. For more information, refer to :ref:`Unsupported Types of Common constraints of Heterogeneous DBMS <heterogen-restrict>`\

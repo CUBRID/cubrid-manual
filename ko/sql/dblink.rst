@@ -879,7 +879,7 @@ CUBRID 제약 사항
     Oracle 제약 사항
     
     
-    *   SELECT 구문에서 LONG, INTERVAL DAY TO SECOND, INTERVAL YEAR TO MONTH, BLOB, CLOB타입 미지원. 자세한 내용은 :ref:`이기종 DBMS 공통 제약 사항의 미지원 타입 <heterogen-restrict>`\ 을 참고한다.
+    *   SELECT 구문에서 LONG, INTERVAL DAY TO SECOND, INTERVAL YEAR TO MONTH, BLOB, CLOB 타입 미지원. 자세한 내용은 :ref:`이기종 DBMS 공통 제약 사항의 미지원 타입 <heterogen-restrict>`\ 을 참고한다.
     *	INTERVAL DAY TO SECOND, INTERVAL YEAR TO MONTH 타입은 Oracle ODBC에서 지원하지 않는 타입이다. 자세한 내용은 "Using the Oracle ODBC Driver"(https://docs.oracle.com/en/database/oracle/oracle-database/19/adfns/odbc-driver.html#GUID-3FE69BEF-F8D2-4152-9B1A-877186C47028) 참고한다.
     *   Oracle ODBC는 타임존 데이터 조회시 timestamp 타입의 로컬 시간으로 변환하여 반환된다. (타임존 데이터 타입 미지원) 
     

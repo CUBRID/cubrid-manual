@@ -879,8 +879,8 @@ CUBRID 제약 사항
     Oracle 제약 사항
     
     
-    *   SELECT 구문에서 LONG, INTERVAL DAY TO SECOND, INTERVAL YEAR TO MONTH, BLOB, CLOB 타입 미지원. 자세한 내용은 :ref:`이기종 DBMS 공통 제약 사항의 미지원 타입 <heterogen-restrict>`\ 을 참고한다.
-    *	INTERVAL DAY TO SECOND, INTERVAL YEAR TO MONTH 타입은 Oracle ODBC에서 지원하지 않는 타입이다. 자세한 내용은 "Using the Oracle ODBC Driver"(https://docs.oracle.com/en/database/oracle/oracle-database/19/adfns/odbc-driver.html#GUID-3FE69BEF-F8D2-4152-9B1A-877186C47028) 참고한다.
+    *   SELECT 구문에서 LONG, INTERVAL DAY TO SECOND, INTERVAL YEAR TO MONTH, BLOB, CLOB 타입 미지원. 자세한 내용은 :ref:`이기종 DBMS 공통 제약 사항의 미지원 타입<heterogen-restrict>`\을 참고한다.
+    *	INTERVAL DAY TO SECOND, INTERVAL YEAR TO MONTH 타입은 Oracle ODBC에서 지원하지 않는 타입이다. 자세한 내용은 "Using the Oracle ODBC Driver"(https://docs.oracle.com/en/database/oracle/oracle-database/19/adfns/odbc-driver.html#GUID-3FE69BEF-F8D2-4152-9B1A-877186C47028)를 참고한다.
     *   Oracle ODBC는 타임존 데이터 조회시 timestamp 타입의 로컬 시간으로 변환하여 반환된다. (타임존 데이터 타입 미지원) 
     
     아래는 Oracle DB의 타임존 데이터를 ODBC로 조회시 로컬타임존으로 변환되는 예시이다. 입력한 타임존 "+02:00"이지만, DBLink을 통해 select 하는 경우 로컬타임존 "+09:00"로 변환하여 "PM 08시"로 출력된다.
@@ -906,5 +906,5 @@ CUBRID 제약 사항
 
     *   MySQL에서 cache를 사용하는 경우 게이트웨이 프로세스(cub_cas_cgw)의 메모리 사용량이 증가하므로 PREFETCH, NO_CACHE=1 사용을 권장한다.
     *   MySQL/MariaDB에서 repeat() 함수가 포함된 질의 수행 시 문자열의 일부가 잘리거나, 문자열을 읽어오지 못할 수 있다.
-    *   SELECT 구문에서 LONGTEXT, BIT, BLOB, LONGBLOB 타입은 미지원 한다. 자세한 내용은 :ref:`이기종 DBMS 공통 제약 사항의 미지원 타입 <heterogen-restrict>`\ 을 참고한다.
+    *   SELECT 구문에서 LONGTEXT, BIT, BLOB, LONGBLOB 타입은 미지원 한다. 자세한 내용은 :ref:`이기종 DBMS 공통 제약 사항의 미지원 타입 <heterogen-restrict>`\을 참고한다.
 

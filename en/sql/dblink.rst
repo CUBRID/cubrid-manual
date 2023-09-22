@@ -865,7 +865,7 @@ CUBRID Constraints
     Oracle Constraints
 
 
-    *   LONG, INTERVAL DAY TO SECOND, INTERVAL YEAR TO MONTH, BLOB, and CLOB types are not supported in the select statement. For more information, refer to :ref:`Unsupported Types of Common constraints of Heterogeneous DBMS <heterogen-restrict>`\
+    *   LONG, INTERVAL DAY TO SECOND, INTERVAL YEAR TO MONTH, BLOB, and CLOB types are not supported in the select statement. For more information, refer to :ref:`Unsupported Types of Common constraints of Heterogeneous DBMS <heterogen-restrict>`
     *   The INTERVAL DAY TO SECOND and INTERVAL YEAR TO MONTH types are not supported by Oracle ODBC. For more information, see "Using the Oracle ODBC Driver" (https://docs.oracle.com/en/database/oracle/oracle-database/19/adfns/odbc-driver.html#GUID-3FE69BEF-F8D2-4152-9B1A-877186C47028).
     *   Oracle ODBC does not support the time zone type, so when SELECTing time zone data, the time zone is calculated as a local time, converted to timestamp type, and returned.
 
@@ -892,4 +892,4 @@ CUBRID Constraints
 
     *   When using cache in Mysql, the memory usage of gateway cub_cas_cgw increases, so it is recommended to use PREFETCH, NO_CACHE=1.
     *   When performing a query that includes the repeat() function in MySQL/MariaDB, part of the string may be truncated or the string may not be read.
-    *   LONGTEXT, BIT, BLOB, and LONGBLOB types are not supported in the select statement. For more information, refer to :ref:`Unsupported Types of Common constraints of Heterogeneous DBMS <heterogen-restrict>`\
+    *   LONGTEXT, BIT, BLOB, and LONGBLOB types are not supported in the select statement. For more information, refer to :ref:`Unsupported Types of Common constraints of Heterogeneous DBMS <heterogen-restrict>`

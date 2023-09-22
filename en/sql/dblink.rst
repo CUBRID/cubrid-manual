@@ -805,10 +805,10 @@ CUBRID Constraints
 
 
     *   The gateway must use the Unicode-only ODBC Driver of the heterogeneous remote database (Oracle/MySQL/MariaDB).
-    *   Among ODBC types, SQL_INTERVAL, SQL_GUID, SQL_BIT, SQL_BINARY, SQL_VARBINARY, and SQL_LONGVARBINARY are not supported types.
+    *   Among ODBC types, SQL_INTERVAL, SQL_GUID, SQL_BIT, SQL_BINARY, SQL_VARBINARY, SQL_LONGVARBINARY, SQL_LONGVARCHAR, and SQL_WLONGVARCHAR are not supported types.
 
 	+-----------------------+------------------------+------------------------+------------------------+
-	| SQL Type              |  Oracle Data Type      |  MySQL Data Type       |  MariaDB Data Type     |
+	| ODBC SQL Type         |  Oracle Data Type      |  MySQL Data Type       |  MariaDB Data Type     |
 	+=======================+========================+========================+========================+
 	| SQL_LONGVARCHAR       | LONG,  CLOB            | LONGTEXT               | LONGTEXT               |
 	+-----------------------+------------------------+------------------------+------------------------+
@@ -816,9 +816,9 @@ CUBRID Constraints
 	+-----------------------+------------------------+------------------------+------------------------+
 	| SQL_BIT               |                        | BIT                    | BIT                    |
 	+-----------------------+------------------------+------------------------+------------------------+
-	| SQL_BINARY            | RAW                    | BINARY                 | BINARY                 |
+	| SQL_BINARY            |                        | BINARY                 | BINARY                 |
 	+-----------------------+------------------------+------------------------+------------------------+
-	| SQL_VARBINARY         |                        | VARBINARY              | VARBINARY              |
+	| SQL_VARBINARY         | RAW                    | VARBINARY              | VARBINARY              |
 	+-----------------------+------------------------+------------------------+------------------------+
 	| SQL_LONGVARBINARY     | LONG RAW               | LONG VARBINARY         | LONG VARBINARY         |
 	|                       +------------------------+------------------------+------------------------+
@@ -844,11 +844,15 @@ CUBRID Constraints
 	|                       +------------------------+------------------------+------------------------+
 	|                       |                        | MULTIPOLYGON           | MULTIPOLYGON           |
 	+-----------------------+------------------------+------------------------+------------------------+
+	| SQL_INTERVAL          | INTERVAL YEAR TO MONTH |                        |                        |
+	|                       +------------------------+------------------------+------------------------+
+	|                       | INTERVAL DAY TO SECOND |                        |                        |
+	+-----------------------+------------------------+------------------------+------------------------+
 	
-    *   The maximum string length for one column is 16M.
+    *   The maximum string length for one column is 16M. The table below shows the data type for each DBMS with a data length of 16M or more.
 
 	+------------------+---------------------------+
-	| DBMS Name        | Type                      |
+	| DBMS Name        | Data Type                 |
 	+==================+===========================+
 	| Oracle           | LONG, NCLOB, CLOB         |
 	+------------------+---------------------------+

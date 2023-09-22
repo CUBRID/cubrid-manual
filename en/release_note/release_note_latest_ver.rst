@@ -34,18 +34,18 @@ CUBRID 11.3 is the latest stable version that includes new features, significant
 
 CUBRID 11.3
 
-* improves connectivity by improving database links.
+* improves connectivity by enhancing database links.
 * is more stable, faster, and more convenient for administrators.
 * fixes a large number of critical bugs.
 * includes code refactoring and modernization.
 
-CUBRID 11.3 provided user convenience by providing a table extension format (object@server) for database links, and **improved connectivity** by providing the ability to insert, modify, and delete data as well as query data for remote DB.
+CUBRID 11.3 provided user convenience by providing a table extension style (object@server) for database links, and **improved connectivity** by providing the ability to insert, modify, and delete data as well as retrieve data for remote DB.
 
-CUBRID 11.3 is **faster**. This version further improves performance through improvements to query optimization and aggregation functions (min, max group_concat), such as predicate pushdown, view transformation, and removal of unnecessary join tables. Additionally, performance problems caused by skewed indexes were improved by providing a deduplication option when creating an index (or foreign key).
+CUBRID 11.3 is **faster**. This version further improves performance through improve aggregation functions (min, max group_concat) and query optimization, such as predicate pushdown, view transformation, and removal of unnecessary join tables. Additionally, performance problems caused by skewed indexes were improved by providing a deduplication option when creating an index (or foreign key).
 
 CUBRID 11.3 **improved administrator convenience** by improving the csql, unloaddb, and loaddb utilities.
 
-The database volume of CUBRID 11.3 is compatible with the CUBRID 11.2 volume. (However, when a volume created in CUBRID 11.2 is used in CUBRID 11.3 due to a change in view query spec of db_index and db_vclass among catalog views, unexpected results may be obtained when executing a corresponding catalog view query.)
+The database volume of CUBRID 11.3 is compatible with the CUBRID 11.2 volume. (However, when a volume created in CUBRID 11.2 is used in CUBRID 11.3 due to a change in view query spec of db_index and db_vclass among catalog views, unexpected results may be obtained when executing a query related the catalog view.)
 
 .. TODO: coming soon 
 
@@ -76,8 +76,8 @@ New Cautions
 The query optimizer's statistical information is not automatically updated when DDL statement is executed, the user must manually execute UPDATE STATISTICS statement to update the statistical information. (see :doc:`/sql/tuning`)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-When changing the column type of the AUTO_INCREMENT property in the ALTER TABLE statement, it cannot be changed to a type that cannot be used as the AUTO_INCREMENT property. When changing the type of a column where the default value is specified, an error occurs if type conversion of the specified default value to the changed type is not possible. (see :ref:`change-column`)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+When changing the type of a column included the AUTO_INCREMENT property or default value in the ALTER TABLE statement, an error occurs if the changed type cannot have the AUTO_INCREMENT property or is a type whose existing default value cannot be changed. (see :ref:`change-column`)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Unable to get Connection object through cubrid.jdbc.driver.CUBRIDDriver.getDefaultConnection() from server-side JDBC. Instead, you should use DriverManager.getConnection("jdbc\:default\:connection\:"). (see :ref:`jsp-server-side-jdbc-connection`)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

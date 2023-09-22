@@ -1,7 +1,7 @@
 :tocdepth: 3
 
 ******************
-11.2 Release Notes
+11.3 Release Notes
 ******************
 
 .. contents::
@@ -9,9 +9,11 @@
 Release Notes Information
 =========================
 
-This document includes information on CUBRID 11.2.
+This document includes information on CUBRID 11.3.
 
-CUBRID 11.2 includes all of the fixed errors and improved features that were detected in the CUBRID 11.0 and were applied to the previous versions.
+CUBRID 11.3 includes all of the fixed errors and improved features that were detected in the CUBRID 11.2 and were applied to the previous versions.
+
+For CUBRID 11.2, please find https://www.cubrid.org/manual/en/11.2/release_note/index.html.
 
 For CUBRID 11.0, please find https://www.cubrid.org/manual/en/11.0/release_note/index.html.
 
@@ -26,56 +28,69 @@ For CUBRID 9.3, please find https://www.cubrid.org/manual/en/9.3.0/release_note/
 Overview
 ========
 
-CUBRID 11.2 is the latest stable version that includes new features, significant changes and enhancements.
+CUBRID 11.3 is the latest stable version that includes new features, significant changes and enhancements.
 
 .. TODO: UPDATE WITH DETAILS.
 
-CUBRID 11.2
+CUBRID 11.3
 
-* is a version with improved connectivity.
+* improves connectivity by improving database links.
 * is more stable, faster, and more convenient for administrators.
 * fixes a large number of critical bugs.
-* includes useful SQL extensions: User Schema concept and Synonym are supported.
 * includes code refactoring and modernization.
 
-CUBRID 11.2 **improved connectivity** by providing database link between homogeneous and heterogeneous DBMS. In addition, this version provides CDC (Change data capture) function by supporting supplemental logging that can track changed data.
+CUBRID 11.3 provided user convenience by providing a table extension format (object@server) for database links, and **improved connectivity** by providing the ability to insert, modify, and delete data as well as query data for remote DB.
 
-CUBRID 11.2 is **faster**. This version improves query optimization such as predicate pushdown and view transformation, supports Hash List Scan for all subqueries, improves performance of count(\*) without conditional clause using cache, and improves truncate table to further improve performance.
+CUBRID 11.3 is **faster**. This version further improves performance through improvements to query optimization and aggregation functions (min, max group_concat), such as predicate pushdown, view transformation, and removal of unnecessary join tables. Additionally, performance problems caused by skewed indexes were improved by providing a deduplication option when creating an index (or foreign key).
 
-CUBRID 11.2 **improves administrator convenience** by providing flashback function that can extract the original query of changed data for each transaction.
+CUBRID 11.3 **improved administrator convenience** by improving the csql, unloaddb, and loaddb utilities.
 
-CUBRID 11.2 **expands SQL** for database link, user schema, and synonym and supports multiple filtered indexes on the same column.
-
-The database volume of CUBRID 11.2 is not compatible with that of CUBRID 11.1 and earlier versions. Therefore, if you use CUBRID 11.1 or earlier, you must **migrate your databases**. Regarding this, see :doc:`/upgrade`.
+The database volume of CUBRID 11.3 is compatible with the CUBRID 11.2 volume. (However, when a volume created in CUBRID 11.2 is used in CUBRID 11.3 due to a change in view query spec of db_index and db_vclass among catalog views, unexpected results may be obtained when executing a corresponding catalog view query.)
 
 .. TODO: coming soon 
 
 Driver Compatibility
 --------------------
 
-*   The JDBC and CCI driver of CUBRID 11.2 are compatible with the DB server of CUBRID 11.1, 11.0, 10.2, 10.1, 10.0, 9.3, 9.2, 9.1, 2008 R4.4, R4.3 or R4.1.
+*   The JDBC and CCI driver of CUBRID 11.3 are compatible with the DB server of CUBRID 11.2, 11.1, 11.0, 10.2, 10.1, 10.0, 9.3, 9.2, 9.1, 2008 R4.4, R4.3 or R4.1.
 *   To upgrade drivers are highly recommended.
 
-For more details on changes, see the :ref:`11_2_changes`. Users of previous versions should check the :ref:`11_2_changes` and :ref:`11_2_new_cautions` sections.
+For more details on changes, see the :ref:`11_3_changes`. Users of previous versions should check the :ref:`11_3_changes` and :ref:`11_3_new_cautions` sections.
 
-.. _11_2_changes:
+.. _11_3_changes:
 
-11.2 Changes
+11.3 Changes
 ============
 
-Please refer to `change logs of CUBRID 11.2 <https://github.com/CUBRID/cubrid/releases/tag/v11.2>`_.
+Please refer to `change logs of CUBRID 11.3 <https://github.com/CUBRID/cubrid/releases/tag/v11.3>`_.
 
 
 Cautions
 ========
 
-.. _11_2_new_cautions:
+.. _11_3_new_cautions:
 
 New Cautions
 ------------
 
-The database volume of CUBRID 11.2 is not compatible with that of CUBRID 11.1 and earlier versions.
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The query optimizer's statistical information is not automatically updated when DDL statement is executed, the user must manually execute UPDATE STATISTICS statement to update the statistical information. (see :doc:`/sql/tuning`)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When changing the column type of the AUTO_INCREMENT property in the ALTER TABLE statement, it cannot be changed to a type that cannot be used as the AUTO_INCREMENT property. When changing the type of a column where the default value is specified, an error occurs if type conversion of the specified default value to the changed type is not possible. (see :ref:`change-column`)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Unable to get Connection object through cubrid.jdbc.driver.CUBRIDDriver.getDefaultConnection() from server-side JDBC. Instead, you should use DriverManager.getConnection("jdbc:default:connection:"). (see :ref:`jsp-server-side-jdbc-connection`)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If an invalid index name or table name is specified in the USE INDEX (USING INDEX) statement, it is ignored without processing an error. However, if the parameter error_log_warning is set to yes, it is left in the log file.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When writing the CREATE INDEX statement, COMMENT was placed before the WITH clause or INVISIBLE designation, but was changed to be placed at the very end of the statement. (see :doc:`/sql/schema/index_stmt`)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Existing Cautions
+-----------------
+
 By introducing the concept of user schema, the same object name can be used for each user, and the behavior is changed as follows
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -114,10 +129,6 @@ Changed Compression (-z, \-\-compress) option to default on backup (see :ref:`ba
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 System catalog information changed or added due to the addition of new features (see :doc:`/sql/catalog`)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Existing Cautions
------------------
-
 When creating a table without an option, it is created as a reuse_oid table
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 The maximum length of the CHAR data type has been changed to 256M character string

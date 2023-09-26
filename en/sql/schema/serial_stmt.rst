@@ -13,7 +13,7 @@ Serial is an object that creates a unique sequence number, and has the following
 
 *   The serial is useful in creating a unique sequence number in multi-user environment.
 *   Generated serial numbers are not related with table so, you can use the same serial in multiple tables.
-*   All users including **PUBLIC** can create a serial object. Once it is created, all users can get the number by using **CURRENT_VALUE** and **NEXT_VALUE**.
+*   All users including **PUBLIC** can create a serial object. Once it is created, all users can get the number by using **CURRENT_VALUE(equivalent to CURRVAL)** and **NEXT_VALUE(equivalent to NEXTVAL)**.
 *   Only owner of a created serial object and **DBA** can update or delete a serial object. If an owner is **PUBLIC**, all users can update or delete it.
 
 You can create a serial object in the database by using the **CREATE SERIAL** statement. Regarding writing serial name, :doc:`/sql/identifier`. 
@@ -221,11 +221,14 @@ Pseudocolumns
 You can access and update a serial by serial name and a pseudocolumn pair. ::
 
     [schema_name.]serial_name.CURRENT_VALUE
+    [schema_name.]serial_name.CURRVAL
+
     [schema_name.]serial_name.NEXT_VALUE
+    [schema_name.]serial_name.NEXTVAL
 
 *   *schema_name*: Specifies the schema name of the serial. If omitted, the schema name of the current session is used.
-*   *[schema_name.]serial_name*.\ **CURRENT_VALUE**: Returns the current serial value.
-*   *[schema_name.]serial_name*.\ **NEXT_VALUE**: Increments the serial value and returns the result.
+*   *[schema_name.]serial_name*.\ **CURRENT_VALUE**, *[schema_name.]serial_name*.\ **CURRVAL**: Returns the current serial value.
+*   *[schema_name.]serial_name*.\ **NEXT_VALUE**, *[schema_name.]serial_name*.\ **NEXTVAL**: Increments the serial value and returns the result.
 
 The following example shows how to create a table *athlete_idx* where athlete numbers and names are stored and how to create the instances by using a serial *order_no*.
 
@@ -238,7 +241,7 @@ The following example shows how to create a table *athlete_idx* where athlete nu
     INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Choo');
     INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Lee');
     SELECT * FROM athlete_idx;
-    
+    SELECT order_no.CURRENT_VALUE;
 ::
      
              code  name
@@ -248,6 +251,9 @@ The following example shows how to create a table *athlete_idx* where athlete nu
             10004  'Choo'
             10006  'Lee'
 
+            serial_current_value(order_no)
+    ======================
+            10006
 .. note:: 
 
     When you use a serial for the first time after creating it, **NEXT_VALUE** returns the initial value. Subsequently, the sum of the current value and the increment are returned.

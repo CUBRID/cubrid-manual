@@ -14,7 +14,7 @@ CREATE SERIAL
 
 *   시리얼은 다중 사용자 환경에서 고유한 순번을 생성하는데 용이하다.
 *   시리얼 번호는 테이블과 독립적으로 생성된다. 따라서 하나 이상의 테이블에 동일한 시리얼을 사용할 수 있다.
-*   **PUBLIC** 을 포함하여 모든 사용자가 시리얼 객체를 생성할 수 있다. 일단 생성되면 모든 사용자들이 **CURRENT_VALUE**, **NEXT_VALUE** 를 통해 시리얼 숫자를 가져갈 수 있다.
+*   **PUBLIC** 을 포함하여 모든 사용자가 시리얼 객체를 생성할 수 있다. 일단 생성되면 모든 사용자들이 **CURRENT_VALUE (CURRVAL과 동일)**, **NEXT_VALUE (NEXTVAL 동일)** 를 통해 시리얼 숫자를 가져갈 수 있다.
 *   시리얼 객체의 소유자와 **DBA** 만 시리얼 객체를 갱신하고 삭제할 수 있다. 소유자가 **PUBLIC** 이면 모든 사용자가 갱신하거나 삭제할 수 있다.
 
 **CREATE SERIAL** 문을 이용하여 데이터베이스에 시리얼 객체를 생성한다. 시리얼 이름 작성 원칙은 :doc:`/sql/identifier`\를 참고한다.
@@ -222,11 +222,14 @@ DROP SERIAL
 시리얼 이름과 의사 칼럼(pseudo column)을 통해서 해당 시리얼을 읽고 갱신할 수 있다. ::
 
     [schema_name.]serial_name.CURRENT_VALUE
+    [schema_name.]serial_name.CURRVAL
+
     [schema_name.]serial_name.NEXT_VALUE
+    [schema_name.]serial_name.NEXTVAL
 
 *   *schema_name*: 시리얼의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
-*   *[schema_name.]serial_name*.\ **CURRENT_VALUE**: 시리얼의 현재 값을 반환한다.
-*   *[schema_name.]serial_name*.\ **NEXT_VALUE**: 시리얼 값을 증가시키고 그 값을 반환한다.
+*   *[schema_name.]serial_name*.\ **CURRENT_VALUE**, *[schema_name.]serial_name*.\ **CURRVAL**: 시리얼의 현재 값을 반환한다.
+*   *[schema_name.]serial_name*.\ **NEXT_VALUE**, *[schema_name.]serial_name*.\ **NEXTVAL**: 시리얼 값을 증가시키고 그 값을 반환한다.
 
 다음은 선수 번호와 이름을 저장하는 *athlete_idx* 테이블을 생성하고 *order_no* 시리얼을 이용하여 인스턴스를 생성하는 예제이다.
 
@@ -239,7 +242,7 @@ DROP SERIAL
     INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Choo');
     INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Lee');
     SELECT * FROM athlete_idx;
-    
+    SELECT order_no.CURRENT_VALUE;
 ::
      
              code  name
@@ -249,6 +252,9 @@ DROP SERIAL
             10004  'Choo'
             10006  'Lee'
 
+            serial_current_value(order_no)
+    ======================
+            10006
 .. note:: 
 
     시리얼을 생성하고 처음 사용할 때 **NEXT_VALUE** 를 이용하면 초기 값을 반환한다. 그 이후에는 현재 값에 증가 값이 추가되어 반환된다.

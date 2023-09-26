@@ -811,13 +811,69 @@ CUBRID 제약 사항
 *   SELECT 구문에서 ENUM, BLOB, CLOB, SET 타입 미지원
 *   로컬 DB와 원격 DB의 설정된 파라미터가 다른 경우 원하지 않는 결과가 발생할 수 있다.
 
-.. note::
-    이기종 DBMS 공통 제약 사항
-    
+
+.. _heterogen-restrict:
+
+    **이기종 DBMS 공통 제약 사항**
+
     
     *   게이트웨이에서는 반드시 이기종 원격 데이터베이스(Oracle/MySQL/MariaDB)의 유니코드 전용 ODBC Driver를 사용해야 한다.
-    *   ODBC 타입 중 SQL_INTERVAL,SQL_GUID,SQL_BIT,SQL_BINARY,SQL_VARBINARY,SQL_LONGVARBINARY 는 미지원 타입이다.
-    *   1개 컬럼의 문자열 최대 길이는 16M이다.
+    *   ODBC 타입 중 SQL_INTERVAL,SQL_GUID,SQL_BIT,SQL_BINARY,SQL_VARBINARY,SQL_LONGVARBINARY, SQL_LONGVARCHAR, SQL_WLONGVARCHAR 는 미지원 타입이다.
+
+	+-----------------------+------------------------+------------------------+------------------------+
+	| ODBC SQL Type         |  Oracle Data Type      |  MySQL Data Type       |  MariaDB Data Type     |
+	+=======================+========================+========================+========================+
+	| SQL_LONGVARCHAR       | LONG,  CLOB            | LONGTEXT               | LONGTEXT               |
+	+-----------------------+------------------------+------------------------+------------------------+
+	| SQL_WLONGVARCHAR      | NCLOB                  |                        |                        |
+	+-----------------------+------------------------+------------------------+------------------------+
+	| SQL_BIT               |                        | BIT                    | BIT                    |
+	+-----------------------+------------------------+------------------------+------------------------+
+	| SQL_BINARY            |                        | BINARY                 | BINARY                 |
+	+-----------------------+------------------------+------------------------+------------------------+
+	| SQL_VARBINARY         | RAW                    | VARBINARY              | VARBINARY              |
+	+-----------------------+------------------------+------------------------+------------------------+
+	| SQL_LONGVARBINARY     | LONG RAW               | LONG VARBINARY         | LONG VARBINARY         |
+	|                       +------------------------+------------------------+------------------------+
+	|                       | BLOB                   | BLOB                   | BLOB                   |
+	|                       +------------------------+------------------------+------------------------+
+	|                       | BFILE                  | TINYBLOB               | TINYBLOB               |
+	|                       +------------------------+------------------------+------------------------+
+	|                       |                        | MEDIUMBLOB             | MEDIUMBLOB             |
+	|                       +------------------------+------------------------+------------------------+
+	|                       |                        | LONGBLOB               | LONGBLOB               |
+	|                       +------------------------+------------------------+------------------------+
+	|                       |                        | GEOMETRY               | GEOMETRY               |
+	|                       +------------------------+------------------------+------------------------+
+	|                       |                        | POINT                  | POINT                  |
+	|                       +------------------------+------------------------+------------------------+
+	|                       |                        | POLGON                 | POLGON                 |
+	|                       +------------------------+------------------------+------------------------+
+	|                       |                        | GEOMETRYCOLLECTION     | GEOMETRYCOLLECTION     |
+	|                       +------------------------+------------------------+------------------------+
+	|                       |                        | MULTILINESTRING        | MULTILINESTRING        |
+	|                       +------------------------+------------------------+------------------------+
+	|                       |                        | MULTIPOINT             | MULTIPOINT             |
+	|                       +------------------------+------------------------+------------------------+
+	|                       |                        | MULTIPOLYGON           | MULTIPOLYGON           |
+	+-----------------------+------------------------+------------------------+------------------------+
+	| SQL_INTERVAL          | INTERVAL YEAR TO MONTH |                        |                        |
+	|                       +------------------------+------------------------+------------------------+
+	|                       | INTERVAL DAY TO SECOND |                        |                        |
+	+-----------------------+------------------------+------------------------+------------------------+
+
+    *   1개 컬럼의 문자열 최대 길이는 16M이다. 아래의 표는 DBMS별 Data의 길이가 16M 이상인 Data Type 이다.
+
+	+------------------+---------------------------+
+	| DBMS Name        | Data Type                 |
+	+==================+===========================+
+	| Oracle           | LONG, NCLOB, CLOB         |
+	+------------------+---------------------------+
+	| MySQL            | LONGTEXT                  |
+	+------------------+---------------------------+
+	| MariaDB          | LONGTEXT                  |
+	+------------------+---------------------------+
+
     *   INSERT, UPDATE, DELETE, MERGE 와 같은 DML 구문에서 CUBRID가 미지원하는 내장 함수 중 function(파라미터1, …, 파라미터N)의 형식이 아닌 경우에는 질의 오류가 발생한다.
     
         예시: MySQL, MariaDB의 convert 함수 : convert('binary' using binary) -- 오류 발생
@@ -827,7 +883,8 @@ CUBRID 제약 사항
     Oracle 제약 사항
     
     
-    *   SELECT 구문에서 long, interval day to se, interval year to month, blob, clob타입 미지원
+    *   SELECT 구문에서 LONG, INTERVAL DAY TO SECOND, INTERVAL YEAR TO MONTH, BLOB, CLOB 타입은 지원하지 않는다. 자세한 내용은 :ref:`이기종 DBMS 공통 제약 사항의 미지원 타입<heterogen-restrict>`\을 참고한다.
+    *	INTERVAL DAY TO SECOND, INTERVAL YEAR TO MONTH 타입은 Oracle ODBC에서 지원하지 않는 타입이다. 자세한 내용은 "Using the Oracle ODBC Driver"(https://docs.oracle.com/en/database/oracle/oracle-database/19/adfns/odbc-driver.html#GUID-3FE69BEF-F8D2-4152-9B1A-877186C47028)를 참고한다.
     *   Oracle ODBC는 타임존 데이터 조회시 timestamp 타입의 로컬 시간으로 변환하여 반환된다. (타임존 데이터 타입 미지원) 
     
     아래는 Oracle DB의 타임존 데이터를 ODBC로 조회시 로컬타임존으로 변환되는 예시이다. 입력한 타임존 "+02:00"이지만, DBLink을 통해 select 하는 경우 로컬타임존 "+09:00"로 변환하여 "PM 08시"로 출력된다.
@@ -853,5 +910,5 @@ CUBRID 제약 사항
 
     *   MySQL에서 cache를 사용하는 경우 게이트웨이 프로세스(cub_cas_cgw)의 메모리 사용량이 증가하므로 PREFETCH, NO_CACHE=1 사용을 권장한다.
     *   MySQL/MariaDB에서 repeat() 함수가 포함된 질의 수행 시 문자열의 일부가 잘리거나, 문자열을 읽어오지 못할 수 있다.
-    *   SELECT 구문에서 longtext, bit, blob, longblob 타입 미지원
+    *   SELECT 구문에서 LONGTEXT, BIT, BLOB, LONGBLOB 타입은 지원하지 않는다. 자세한 내용은 :ref:`이기종 DBMS 공통 제약 사항의 미지원 타입 <heterogen-restrict>`\을 참고한다.
 

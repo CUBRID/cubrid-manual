@@ -255,6 +255,7 @@ DROP SERIAL
             serial_current_value(order_no)
     ======================
             10006
+
 .. note:: 
 
     시리얼을 생성하고 처음 사용할 때 **NEXT_VALUE** 를 이용하면 초기 값을 반환한다. 그 이후에는 현재 값에 증가 값이 추가되어 반환된다.

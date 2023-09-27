@@ -254,6 +254,7 @@ The following example shows how to create a table *athlete_idx* where athlete nu
             serial_current_value(order_no)
     ======================
             10006
+
 .. note:: 
 
     When you use a serial for the first time after creating it, **NEXT_VALUE** returns the initial value. Subsequently, the sum of the current value and the increment are returned.

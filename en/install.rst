@@ -51,7 +51,7 @@ Compatibility
 
 *   Drivers for 2008 R2.2 and higher versions are included in CUBRID Manager by default, which you can download separately from the https://www.cubrid.org Website.
 
-.. note:: Old version users should upgrade all of driver, broker, DB server; Data migration should be done because its DB volume is not compatible with 11.3 version.
+.. note:: Old version users should upgrade all of driver, broker, DB server; Data migration should be done because 11.1 or early version's DB volume is not compatible with 11.3 version.
     For upgrade and data migration, see :doc:`/upgrade`.
 
 **Interoperability between CUBRID DB server and broker**

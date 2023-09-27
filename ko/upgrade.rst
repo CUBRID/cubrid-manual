@@ -37,7 +37,7 @@
 
 **DB 마이그레이션**
 
-*   CUBRID 11.3은 CUBRID 11.2 및 이전 버전들과 DB 볼륨이 호환되지 않으므로, cubrid unloaddb/loaddb 유틸리티를 이용해서 마이그레이션을 해야 한다. 자세한 절차는 :ref:`migration-from-41` 을 참고하면 된다.
+*   CUBRID 11.3은 CUBRID 11.1 및 이전 버전들과 DB 볼륨이 호환되지 않으므로, cubrid unloaddb/loaddb 유틸리티를 이용해서 마이그레이션을 해야 한다. 자세한 절차는 :ref:`migration-from-41` 을 참고하면 된다.
 *   CUBRID 2008 R3.1부터 GLO를 지원하지 않으며 LOB 타입이 GLO 기능을 대체하게 되었으므로, GLO를 이용한 응용 및 스키마는 LOB 타입에 맞게 수정해야 한다.
 
 .. note::

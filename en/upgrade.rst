@@ -37,7 +37,7 @@ Please confirm :ref:`11_3_changes` in the release notes.
 
 **DB migration**
 
-*   Since the DB volume of CUBRID 11.2 and earlier versions are not compatible with the DB volume of CUBRID 11.3, it should be migrated with cubrid unloaddb/loaddb utility. For more detail procedure, see :ref:`migration-from-41`.
+*   Since the DB volume of CUBRID 11.1 and earlier versions are not compatible with the DB volume of CUBRID 11.3, it should be migrated with cubrid unloaddb/loaddb utility. For more detail procedure, see :ref:`migration-from-41`.
 *   CUBRID 2008 R3.1 and later don't support GLO and the LOB type replaces the GLO feature. For this reason, applications or schemas that use GLO must be modified to be compatible with LOB.
 
 .. note::

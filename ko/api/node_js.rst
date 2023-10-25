@@ -16,7 +16,7 @@ Node.js는 다음의 특징을 가지고 있다.
 * 동시에 여러 종류의 많은 I/O를 다루는데 적합하다.
 * 블로킹 없는(non-blocking) I/O 모델이라 경량이며 효율적이다.
 
-보다 자세한 사항은 https://nodejs.org/ko/ 를 참고한다.
+보다 자세한 사항은 https://nodejs.org 를 참고한다.
 
 큐브리드 Node.js 드라이버를 다운로그하거나 최신의 정보를 찾고자 할 때는 아래의 사이트를 참고한다. 
 
@@ -30,11 +30,11 @@ Node.js 설치
 **기본 환경**
 
 *   CUBRID 8.4.1 Patch 2 이상
-*   `Node.js <https://nodejs.org/ko/>`_
+*   `Node.js <https://nodejs.org/>`_
 
 **설치**
 
-CUBRID Node.js 드라이버는 먼저 https://nodejs.org/ko/download/ 에서 node.js를 설치한 후, npm(Node Packaged Modules) install 명령을 사용하여 설치할 수 있다. ::
+CUBRID Node.js 드라이버는 먼저 https://nodejs.org/en/download/ 에서 node.js를 설치한 후, npm(Node Packaged Modules) install 명령을 사용하여 설치할 수 있다. ::
 
     npm install node-cubrid
 

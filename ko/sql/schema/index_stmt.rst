@@ -323,7 +323,7 @@ ALTER INDEX
 
     ALTER INDEX index_name ON [schema_name.]table_name {{[COMMENT index_comment_string] REBUILD} | {COMMENT index_comment_string} | VISIBLE | INVISIBLE};
     
-*   *index_name*: 재생성하려는 인덱스의 이름을 명시한다. 인덱스 이름은 테이블 안에서 고유한 값이어야 한다.
+*   *index_name*: 변경 혹은 재생성하려는 인덱스의 이름을 명시한다. 인덱스 이름은 테이블 안에서 고유한 값이어야 한다.
 *   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 인덱스를 재생성할 테이블의 이름을 명시한다.
 *   **REBUILD**: 이미 생성된 것과 같은 구조의 인덱스를 재생성한다.

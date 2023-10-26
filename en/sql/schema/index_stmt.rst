@@ -329,10 +329,10 @@ The following is a syntax of rebuilding an index.
 
     ALTER INDEX index_name ON [schema_name.]table_name {{[COMMENT index_comment_string] REBUILD} | {COMMENT index_comment_string} | VISIBLE | INVISIBLE};
 
-*   *index_name*: specifies the name of the index to be altered or recreated. The index name must be unique in the table.
+*   *index_name*: specifies the name of the index to be altered or rebuilt. The index name must be unique in the table.
 *   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
-*   *table_name*: specifies the name of the table where the index is recreated.
-*   **REBUILD**:  recreate an index with the same structure as the one already created.
+*   *table_name*: specifies the name of the table where the index is rebuilt.
+*   **REBUILD**:  rebuild an index with the same structure as the one already created.
 *   *index_comment_string*: specifies a comment of an index.
 
 .. note::

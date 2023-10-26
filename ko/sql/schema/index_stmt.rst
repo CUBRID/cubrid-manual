@@ -317,16 +317,16 @@ ALTER INDEX
 
 **ALTER INDEX** 문은 인덱스의 특성을 변경한다. 주석 또는 상태만 변경된 경우를 제외하고 인덱스가 재구성된다. 인덱스 재구성은 인덱스를 제거하고 다시 생성하는 작업이다.
 
-다음은 인덱스를 재생성하는 구문이다.
+다음은 인덱스를 재구성하는 구문이다.
 
 ::
 
     ALTER INDEX index_name ON [schema_name.]table_name {{[COMMENT index_comment_string] REBUILD} | {COMMENT index_comment_string} | VISIBLE | INVISIBLE};
     
-*   *index_name*: 변경 혹은 재생성하려는 인덱스의 이름을 명시한다. 인덱스 이름은 테이블 안에서 고유한 값이어야 한다.
+*   *index_name*: 변경 혹은 재구성하려는 인덱스의 이름을 명시한다. 인덱스 이름은 테이블 안에서 고유한 값이어야 한다.
 *   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
-*   *table_name*: 인덱스를 재생성할 테이블의 이름을 명시한다.
-*   **REBUILD**: 이미 생성된 것과 같은 구조의 인덱스를 재생성한다.
+*   *table_name*: 인덱스를 재구성할 테이블의 이름을 명시한다.
+*   **REBUILD**: 기존과 동일한 구조의 인덱스로 재구성한다.
 *   *index_comment_string*: 인덱스의 커멘트를 지정한다.
 
 .. note::
@@ -345,13 +345,13 @@ ALTER INDEX
     CREATE INDEX i_game_medal ON game(medal);
     ALTER INDEX i_game_medal ON game COMMENT 'rebuild index comment' REBUILD ;
 
-인덱스를 재생성하지 않고 인덱스의 커멘트를 추가하거나 변경하려는 경우 다음과 같이 **COMMENT** 절을 추가하고 **REBUILD** 키워드를 제거한다.
+인덱스를 재구성하지 않고 인덱스의 커멘트를 추가하거나 변경하려는 경우 다음과 같이 **COMMENT** 절을 추가하고 **REBUILD** 키워드를 제거한다.
 
 .. code-block:: sql
 
     ALTER INDEX index_name ON table_name COMMENT 'index_comment_string' ;
     
-다음은 인덱스 재생성 없이 커멘트만 추가 또는 변경하는 구문이다.
+다음은 인덱스 재구성 없이 커멘트만 추가 또는 변경하는 구문이다.
 
 .. code-block:: sql
     

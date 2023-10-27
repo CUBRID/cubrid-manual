@@ -342,6 +342,8 @@ The following is a syntax of rebuilding an index.
     *   From CUBRID 10.0, table name should not be omitted.
     
     *   From CUBRID 10.0, even if you add column names at the end of a table name, these will be ignored and recreated with the same columns with the previous index.
+
+    *   From CUBRID 11.4, an error occurs if you add a column name after the table name.
     
 
 The following is an example of recreating index.

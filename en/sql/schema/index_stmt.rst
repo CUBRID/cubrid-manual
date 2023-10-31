@@ -327,12 +327,12 @@ The following is a syntax of rebuilding an index.
 
 ::
 
-    ALTER INDEX index_name ON [schema_name.]table_name REBUILD;
+    ALTER INDEX index_name ON [schema_name.]table_name {{[COMMENT index_comment_string] REBUILD} | {COMMENT index_comment_string} | VISIBLE | INVISIBLE};
 
-*   *index_name*: specifies the name of the index to be recreated. The index name must be unique in the table.
+*   *index_name*: specifies the name of the index to be altered or rebuilt. The index name must be unique in the table.
 *   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
-*   *table_name*: specifies the name of the table where the index is recreated.
-*   **REBUILD**:  recreate an index with the same structure as the one already created.
+*   *table_name*: specifies the name of the table where the index is rebuilt.
+*   **REBUILD**:  rebuild an index with the same structure as the one already created.
 *   *index_comment_string*: specifies a comment of an index.
 
 .. note::
@@ -343,7 +343,8 @@ The following is a syntax of rebuilding an index.
     
     *   From CUBRID 10.0, even if you add column names at the end of a table name, these will be ignored and recreated with the same columns with the previous index.
 
-    *   Prefix index feature is deprecated, so it is not recommended anymore.
+    *   From CUBRID 11.4, an error occurs if you add a column name after the table name.
+    
 
 The following is an example of recreating index.
 

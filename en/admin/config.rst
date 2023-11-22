@@ -616,7 +616,7 @@ The following are parameters related to the database server. The type and value 
            172.31.0.1 alias1
            172.31.0.1 alias2
 
-        * Not allow more than two IP address for one hostname. ::
+        * If you use the same hostname for more than one IP, only the topmost IP will be applied. ::
 
             172.31.0.1 host1
             178.31.0.2 host1

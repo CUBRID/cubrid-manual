@@ -2178,7 +2178,7 @@ JSON 데이터로의 변환은 내장된 유효성 검사를 수행하고
 `JSON 스키마 표준 초안 (draft JSON Schema standard) <https://json-schema.org/specification.html>`_ 를 사용하여 정의할 수 있다.
 만약 JSON 스키마를 다루어본 적이 없다면
 `JSON 스키마의 이해 (Understanding JSON Schema)
-<https://json-schema.org/understanding-json-schema/index.html>`_ 를 참고하면 된다.
+<https://json-schema.org/understanding-json-schema>`_ 를 참고하면 된다.
 
 
 다음은 스키마 사용 방법에 대한 간단한 예제이다.:

@@ -1412,11 +1412,11 @@ The **format** or **fmt** option allows you to edit after formatting the SQL sta
 
 **Specifying the formatter (;FOrmatter_cmd)**
 
-This command specifies the formatter to be used with **;EDIT** session command. The user can set it up and use it as shown in the example, and OS environment variable(FORMATTER) can be set up in advance for use. ::
+This command specifies the formatter to be used with **;EDIT** session command. The user can set it up and use it as shown in the example, and OS environment variable(CUBRID_CSQL_FORMATTER) can be set up in advance for use. ::
 
     csql> ;formatter_cmd /usr/local/bin/fsqlf
 
-    $ setenv FORMATTER /home/cubrid/bin/fsqlf
+    $ setenv CUBRID_CSQL_FORMATTER /home/cubrid/bin/fsqlf
 
 .. note::
 

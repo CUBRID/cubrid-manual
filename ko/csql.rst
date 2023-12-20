@@ -1412,11 +1412,11 @@ CSQL 인터프리터에서 작업 중인 데이터베이스 이름 및 호스트
 
 **포맷터 설정(;FOrmatter_cmd)**
 
-**;EDIT** 세션 명령어에서 옵션으로 사용될 포맷터를 지정한다. 예제와 같이 사용자가 설정하여 사용할 수 있고, OS 환경변수(FORMATTER)를 미리 설정하여 사용할 수 있다. ::
+**;EDIT** 세션 명령어에서 옵션으로 사용될 포맷터를 지정한다. 예제와 같이 사용자가 설정하여 사용할 수 있고, OS 환경변수(CUBRID_CSQL_FORMATTER)를 미리 설정하여 사용할 수 있다. ::
 
     csql> ;formatter_cmd /usr/local/bin/fsqlf
 
-    $ setenv FORMATTER /home/cubrid/bin/fsqlf
+    $ setenv CUBRID_CSQL_FORMATTER /home/cubrid/bin/fsqlf
 
 .. note::
     

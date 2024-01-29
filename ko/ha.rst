@@ -1382,7 +1382,7 @@ CUBRID HA 그룹 정보와 CUBRID HA 구성 요소의 정보를 확인할 수 �
      
      
      HA-Process Info (master 2143, state slave)
-       Applylogdb testdb@localhost:/home/cubrid/DB/testdb_nodeB (pid 2510, state registered)
+       Applylogdb testdb@localhost:/home/cubrid/DB/testdb_nodeA (pid 2510, state registered)
        Copylogdb testdb@nodeA:/home/cubrid/DB/testdb_nodeA (pid 2505, state registered)
        Server testdb (pid 2393, state registered_and_standby)
 

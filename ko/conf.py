@@ -291,6 +291,7 @@ linkcheck_ignore = [
   r'https://github.com/CUBRID/cubrid/.*', 
   r'http://jira.cubrid.org/browse/.*',
   r'https://www.apachelounge.com/download/win64/binaries/.*'
+  r'https://linux.die.net/man/2/posix_fadvise'
 ]
 
 linkcheck_timeout = 30

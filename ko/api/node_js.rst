@@ -30,7 +30,7 @@ Node.js 설치
 **기본 환경**
 
 *   CUBRID 8.4.1 Patch 2 이상
-*   `Node.js <https://nodejs.org/ko/>`_
+*   `Node.js <https://nodejs.org/>`_
 
 **설치**
 

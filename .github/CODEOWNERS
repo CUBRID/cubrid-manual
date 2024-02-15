@@ -16,10 +16,10 @@
 # 
 
 # assign reviewers about all files
-* @mhoh3963 @kwonhoil
+* @mhoh3963 @kwonhoil @kavin0718
 
 # required reviewers for korean manual
-/ko/ @mhoh3963 @kwonhoil
+/ko/ @mhoh3963 @kwonhoil @kavin0718 @bagus-kim @hiclass
 
 # required reviewers for english manual
-/en/ @mhoh3963 @kwonhoil @sungc-cubrid
+/en/ @mhoh3963 @kwonhoil @sungc-cubrid @kavin0718 @bagus-kim @hiclass

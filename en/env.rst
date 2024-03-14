@@ -29,7 +29,7 @@ CUBRID Environment Variables
 
 .. note::
 
-    The **CUBRID_TMP** environment variable also affects the **java.io.tmpdir**, specifying the path for temporary files created by the Java VM running in the cub_javasp process. 
+    The **CUBRID_TMP** environment variable affects the **java.io.tmpdir**, specifying the path for temporary files created by the Java VM running in the cub_javasp process. 
     If the **CUBRID_TMP** environment variable is set, the path for temporary files is designated to the path of the CUBRID_TMP environment variable, to properly store Unix domain socket files.
     Therefore, even if a user specifies the value of **java.io.tmpdir** through the **java_stored_procedure_jvm_options** parameter, it will be ignored. 
     This behavior applies only to CUBRID for Linux, which supports Unix domain sockets, and not to CUBRID for Windows.

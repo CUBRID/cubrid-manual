@@ -29,7 +29,7 @@ CUBRID 환경 변수
 
 .. note::
 
-    **CUBRID_TMP** 환경 변수는 cub_javasp 프로세스에서 실행하는 Java VM에서 생성하는 임시 파일의 저장 경로를 지정하는 **java.io.tmpdir** 에 마찬가지로 영향을 준다.
+    **CUBRID_TMP** 환경 변수는 cub_javasp 프로세스 구동하는 Java VM에서 생성하는 임시 파일의 저장 경로를 지정하기 위한 **java.io.tmpdir** 환경 변수에 영향을 준다.
     만약 **CUBRID_TMP** 환경 변수가 설정된 경우, 임시 파일의 저장 경로는 유닉스 도메인 소켓 파일을 올바르게 저장하기 위해 **CUBRID_TMP** 환경 변수의 경로로 지정된다.
     따라서 사용자가 **java_stored_procedure_jvm_options** 파라미터를 통해 **java.io.tmpdir** 의 값을 지정하더라도 무시된다.
     이 동작은 오직 유닉스 도메인 소켓을 지원하는 Linux용 CUBRID에서만 해당하며, Windows용 CUBRID에서는 해당하지 않는다.

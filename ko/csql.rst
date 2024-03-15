@@ -403,6 +403,12 @@ CSQL 인터프리터에는 SQL 문 이외에 CSQL 인터프리터를 제어하�
     drwxr-xr-x  4 DBA cubrid   4096 Jul 29 16:14 cubridmanager
     csql>
 
+OS 환경변수(CUBRID_CSQL_SHELL, SHELL)를 미리 등록하여 사용할 수도 있다. ::
+
+   $ export CUBRID_CSQL_SHELL='ls -la'
+   또는
+   $ export SHELL='ls -la'
+
 **페이저 명령어 등록(;PAger_cmd)**
 
 ;PAger_cmd를 사용하여 질의 실행 결과를 출력하는 페이저 명령어를 등록한다. 등록되는 명령어에 따라 출력되는 방식이 결정된다. 기본 명령어는 **more** 이며, **cat**, **less** 등이 사용될 수 있다. 단, 이 명령어는 Linux에서만 정상 동작한다.
@@ -1412,11 +1418,13 @@ CSQL 인터프리터에서 작업 중인 데이터베이스 이름 및 호스트
 
 **포맷터 설정(;FOrmatter_cmd)**
 
-**;EDIT** 세션 명령어에서 옵션으로 사용될 포맷터를 지정한다. 예제와 같이 사용자가 설정하여 사용할 수 있고, OS 환경변수(FORMATTER)를 미리 설정하여 사용할 수 있다. ::
+**;EDIT** 세션 명령어에서 옵션으로 사용될 포맷터를 지정한다. 예제와 같이 사용자가 설정하여 사용할 수 있고, OS 환경변수(CUBRID_CSQL_FORMATTER 또는 FORMATTER)를 미리 설정하여 사용할 수 있다. ::
 
     csql> ;formatter_cmd /usr/local/bin/fsqlf
 
-    $ setenv FORMATTER /home/cubrid/bin/fsqlf
+    $ export CUBRID_CSQL_FORMATTER=/home/cubrid/bin/fsqlf
+    또는
+    $ export FORMATTER=/home/cubrid/bin/fsqlf
 
 .. note::
     
@@ -1430,6 +1438,12 @@ CSQL 인터프리터에서 작업 중인 데이터베이스 이름 및 호스트
 
     csql> ;editor_cmd emacs
     csql> ;edit
+
+OS 환경변수(CUBRID_CSQL_EDITOR, EDITOR)를 미리 등록하여 사용할 수도 있다. ::
+
+   export CUBRID_CSQL_EDITOR=emacs
+   또는
+   export EDITOR=emacs
         
 **싱글 라인 모드 설정(;SIngleline)**
 

@@ -370,7 +370,7 @@ CSQL에서 ";plan detail" 명령 입력 또는 "SET OPTIMIZATION LEVEL 513;"을 
 SQL에 대한 성능 분석을 위해서는 질의 프로파일링(profiling) 기능을 사용할 수 있다. 
 질의 프로파일링을 위해서는 **SET TRACE ON** 구문으로 SQL 트레이스를 설정해야 하며, 프로파일링 결과를 출력하려면 **SHOW TRACE** 구문을 수행해야 한다.
  
-또한 **SHOW TRACE** 결과 출력 시 질의 실행 계획을 항상 포함하려면 /\*+ RECOMPLIE \*/ 힌트를 추가해야 한다.
+또한 **SHOW TRACE** 결과 출력 시 질의 실행 계획을 항상 포함하려면 /\*+ RECOMPILE \*/ 힌트를 추가해야 한다.
 
 **SET TRACE ON** 구문의 형식은 다음과 같다.
  

@@ -23,34 +23,32 @@ CUBRID는 기본적으로 **DBA** 와 **PUBLIC** 두 종류의 사용자를 제�
 
 .. _create-user:
 
-CREATE/ALTER/DROP USER
-======================
+CREATE USER
+===========
 
-**DBA** 와 **DBA** 의 멤버는 SQL 문을 사용하여 사용자를 생성, 변경, 삭제할 수 있다. ::
+CREATE USER 문을 사용하여 사용자를 생성할 수 있다. 초기 설치 시에는 사용자의 비밀번호가 구성되지 않습니다. ::
 
     CREATE USER user_name
     [PASSWORD password]
     [GROUPS user_name [{, user_name } ... ]]
     [MEMBERS user_name [{, user_name } ... ]] 
     [COMMENT 'comment_string'];
-    
-    ALTER USER user_name PASSWORD password;
-    
-    DROP USER user_name;
 
 *   *user_name*: 생성, 삭제, 변경할 사용자 이름을 지정한다.
 *   *password*: 생성 혹은 변경할 사용자의 비밀번호를 지정한다.
 *   *comment_string*: 사용자에 대한 커멘트를 지정한다.
 
-다음은 사용자 *Fred* 를 생성하고 비밀번호를 변경한 후에 *Fred* 를 삭제하는 예제이다.
+.. note::
+
+    **DBA** 와 **DBA** 의 멤버만 CREATE USER 문을 사용하여 사용자를 생성할 수 있다.
+
+다음은 사용자 test_user1 을 생성하며 비밀번호를 지정하는 예제이다. 
 
 .. code-block:: sql
 
-    CREATE USER Fred;
-    ALTER USER Fred PASSWORD '1234';
-    DROP USER Fred;
+    CREATE USER test_user1 PASSWORD 'password';
 
-다음은 사용자를 생성하고 생성된 사용자에 멤버를 추가하는 예제이다. 다음 문장을 통해 *company* 는 *engineering*, *marketing*, *design* 을 멤버로 가지는 그룹이 된다. *marketing* 은 *smith*, *jones* 를, *design* 은 *smith* 를, *engineering* 은 *brown* 을 멤버로 가지는 그룹이 된다.
+다음은 사용자 생성과 동시에 멤버를 추가하는 예제이다. 다음 문장을 통해 *company* 는 *engineering*, *marketing*, *design* 을 멤버로 가지는 그룹이 된다. *marketing* 은 *smith*, *jones* 를, *design* 은 *smith* 를, *engineering* 은 *brown* 을 멤버로 가지는 그룹이 된다.
 
 .. code-block:: sql
 
@@ -72,28 +70,117 @@ CREATE/ALTER/DROP USER
     CREATE USER engineering MEMBERS brown;
     CREATE USER marketing MEMBERS smith, jones;
     CREATE USER design MEMBERS smith;
-    CREATE USER company MEMBERS engineering, marketing, design;
+    CREATE USER company MEMBERS engineering, marketing, design; 
 
 사용자의 커멘트
 ---------------
 
-사용자에 대한 커멘트는 다음과 같이 지정한다.
+다음은 사용자 test_user1 을 생성하며 비밀번호 와 커멘트를 추가하는 예제이다.
 
 .. code-block:: sql
 
-    CREATE USER designer GROUPS dbms, qa COMMENT 'user comment';
+    CREATE USER test_user1 PASSWORD 'password' COMMENT 'new user';
 
-사용자에 대한 커멘트는 ALTER USER 문을 사용하여 다음과 같이 변경이 가능하다.
-
-.. code-block:: sql
-    
-    ALTER USER DESIGNER COMMENT 'new comment';
-    
-다음 구문으로 사용자에 대한 커멘트를 확인할 수 있다.
+사용자의 커멘트를 확인하려면 다음의 구문을 실행한다.
 
 .. code-block:: sql
 
     SELECT name, comment FROM db_user;
+
+사용자의 커멘트 변경은 ALTER USER 문의 설명을 참고한다.
+
+.. _alter-user:
+
+ALTER USER
+==========
+
+ALTER USER 문을 사용하여 생성된 사용자의 패스워드, 멤버, 커멘트를 변경할 수 있다. ::
+
+    ALTER USER user_name 
+    [PASSWORD password] |
+    [ADD MEMBERS user_name [{, user_name } ... ]] |
+    [DROP MEMBERS user_name [{, user_name } ... ]] |
+    [COMMENT 'comment_string'];
+
+*   *user_name*: 생성, 삭제, 변경할 사용자 이름을 지정한다.
+*   *password*: 생성 혹은 변경할 사용자의 비밀번호를 지정한다.
+*   *comment_string*: 사용자에 대한 커멘트를 지정한다.
+
+.. note::
+
+    **DBA** 와 **DBA** 의 멤버는 ALTER USER 문을 사용하여 **모든 사용자** 의 패스워드, 멤버, 커멘트를 변경할 수 있다.
+
+    **일반 사용자** 는 ALTER USER 문을 사용하여 **본인** 의 패스워드, 멤버, 커멘트를 변경할 수 있다.
+
+다음은 사용자 test_user1 을 생성하고 비밀번호를 변경하는 예제이다. 
+
+.. code-block:: sql
+
+    CREATE USER test_user1;
+    ALTER USER test_user1 PASSWORD '1234';
+
+다음은 사용자를 생성하고 생성된 사용자에 멤버를 추가하는 예제이다. CREATE USER .. MEMBERS .. 의 예제와 동일하게 수행하는 예제이다.
+
+.. code-block:: sql
+
+    CREATE USER company;
+    CREATE USER engineering;
+    CREATE USER marketing;
+    CREATE USER design;
+    CREATE USER smith;
+    CREATE USER jones;
+    CREATE USER brown;
+
+    ALTER USER engineering ADD MEMBERS brown;
+    ALTER USER marketing ADD MEMBERS smith, jones;
+    ALTER USER design ADD MEMBERS smith;
+    ALTER USER company ADD MEMBERS engineering, marketing, design;
+
+다음은 생성된 사용자 그룹의 멤버를 삭제하는 예제이다. 다음 문장을 통해 company 그룹에서 marketing 멤버를 삭제하고, marketing 그룹은 smith, jones 를 멤버에서 삭제 한다.
+
+.. code-block:: sql
+
+    ALTER USER company DROP MEMBERS marketing;
+    ALTER USER marketing DROP MEMBERS smith, jones;
+
+사용자의 커멘트 변경
+--------------------
+
+다음은 생성된 사용자의 커멘트를 변경하는 예제이다.
+
+.. code-block:: sql
+
+    CREATE USER test_user1 COMMENT 'new user';
+    ALTER USER test_user1 COMMENT 'old user';
+
+사용자의 변경된 커멘트를 확인하려면 다음의 구문을 실행한다.
+
+.. code-block:: sql
+      
+    SELECT name, comment FROM db_user;
+
+.. _drop-user:
+
+DROP USER
+=========
+
+DROP USER 문을 사용하여 사용자를 삭제할 수 있다. 사용 중인 사용자는 삭제할 수 없다. ::
+
+    DROP USER user_name;
+
+*   *user_name*: 생성, 삭제, 변경할 사용자 이름을 지정한다.
+
+.. note::
+
+    **DBA** 와 **DBA** 의 멤버만 DROP USER 문을 사용하여 사용자를 삭제할 수 있다.
+
+다음은 사용자 Fred 를 생성하고 비밀번호를 변경한 후에 Fred 를 삭제하는 예제이다.
+
+.. code-block:: sql
+
+    CREATE USER Fred;
+    ALTER USER Fred PASSWORD '1234';
+    DROP USER Fred; 
 
 .. _granting-authorization:
 

@@ -136,7 +136,7 @@ ALTER USER 문을 사용하여 생성된 사용자의 패스워드, 멤버, 커�
     ALTER USER design ADD MEMBERS smith;
     ALTER USER company ADD MEMBERS engineering, marketing, design;
 
-다음은 생성된 사용자 그룹의 멤버를 삭제하는 예제이다. 다음 문장을 통해 company 그룹에서 marketing 멤버를 삭제하고, marketing 그룹은 smith, jones 를 멤버에서 삭제 한다.
+다음은 생성된 사용자 그룹의 멤버를 삭제하는 예제이다. 다음 문장을 통해 *company* 그룹에서 *marketing* 멤버를 삭제하고, *marketing* 그룹은 *smith*, *jones* 를 멤버에서 삭제 한다.
 
 .. code-block:: sql
 

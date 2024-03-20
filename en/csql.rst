@@ -403,6 +403,12 @@ The **;SHELL_Cmd** command registers a shell command to execute with the **SHELL
     drwxr-xr-x  4 DBA cubrid   4096 Jul 29 16:14 cubridmanager
     csql>
 
+The OS environment variable(CUBRID_CSQL_SHELL, SHELL) may be registered and used in advance. ::
+  
+   $ export CUBRID_CSQL_SHELL='ls -la'
+   or
+   $ export SHELL='ls -la'
+
 **Registering a pager command (;PAger_cmd)**
 
 The ;PAger_cmd command registers a pager command to display the query result. The way of displaying is decided by the registered command. The default is **more**. Also **cat** and **less** can be used. But ;Pager_cmd command works well only on Linux.
@@ -1412,11 +1418,13 @@ The **format** or **fmt** option allows you to edit after formatting the SQL sta
 
 **Specifying the formatter (;FOrmatter_cmd)**
 
-This command specifies the formatter to be used with **;EDIT** session command. The user can set it up and use it as shown in the example, and OS environment variable(FORMATTER) can be set up in advance for use. ::
+This command specifies the formatter to be used with **;EDIT** session command. The user can set it up and use it as shown in the example, and OS environment variable(CUBRID_CSQL_FORMATTER or FORMATTER) can be set up in advance for use. ::
 
     csql> ;formatter_cmd /usr/local/bin/fsqlf
 
-    $ setenv FORMATTER /home/cubrid/bin/fsqlf
+    $ export CUBRID_CSQL_FORMATTER=/home/cubrid/bin/fsqlf
+    or
+    $ export FORMATTER=/home/cubrid/bin/fsqlf
 
 .. note::
 
@@ -1430,6 +1438,12 @@ This command specifies the editor to be used with **;EDIT** session command. As 
 
     csql> ;editor_cmd emacs
     csql> ;edit
+
+The OS environment variable(CUBRID_CSQL_EDITOR, EDITOR) may be registered and used in advance. ::
+
+    export CUBRID_CSQL_EDITOR=emacs
+    or
+    export EDITOR=emacs
 
 **Specifying the single line mode (;SIngleline)**
 

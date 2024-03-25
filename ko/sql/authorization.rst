@@ -26,7 +26,7 @@ CUBRID는 기본적으로 **DBA** 와 **PUBLIC** 두 종류의 사용자를 제�
 CREATE USER
 ===========
 
-CREATE USER 문을 사용하여 사용자를 생성할 수 있다. 기본으로 제공되는 **DBA**, **PUBLIC** 사용자는 비밀번호가 없이 생성됩니다. ::
+CREATE USER 문을 사용하여 사용자를 생성할 수 있다. 기본으로 제공되는 **DBA**, **PUBLIC** 사용자는 비밀번호가 없이 생성된다. ::
 
     CREATE USER user_name
     [PASSWORD password]
@@ -36,13 +36,13 @@ CREATE USER 문을 사용하여 사용자를 생성할 수 있다. 기본으로 
 
 *   *user_name*: 생성할 사용자 이름을 지정한다.
 *   *password*: 생성할 사용자의 비밀번호를 지정한다.
-*   *comment_string*: 사용자에 대한 커멘트를 지정한다.
+*   *comment_string*: 생성할 사용자에 대한 커멘트를 지정한다.
 
 .. note::
 
     **DBA** 와 **DBA** 의 멤버만 CREATE USER 문을 사용하여 사용자를 생성할 수 있다.
 
-다음은 test_user1 사용자를 생성하면서 비밀번호를 설정하는 예제이다.
+다음은 test_user1 사용자를 생성하고 비밀번호를 설정하는 예제이다.
 
 .. code-block:: sql
 
@@ -75,7 +75,7 @@ CREATE USER 문을 사용하여 사용자를 생성할 수 있다. 기본으로 
 사용자의 커멘트
 ---------------
 
-다음은 test_user1 사용자를 생성하며 비밀번호 와 커멘트를 설정하는 예제이다.
+다음은 test_user1 사용자를 생성하고 비밀번호와 커멘트를 설정하는 예제이다.
 
 .. code-block:: sql
 
@@ -104,7 +104,7 @@ ALTER USER 문을 사용하여 사용자의 비밀번호, 멤버, 커멘트를 �
 
 *   *user_name*: 변경할 사용자 이름을 지정한다.
 *   *password*: 변경할 사용자의 비밀번호를 지정한다.
-*   *comment_string*: 사용자에 대한 커멘트를 지정한다.
+*   *comment_string*: 변경할 사용자에 대한 커멘트를 지정한다.
 
 .. note::
 
@@ -136,7 +136,7 @@ ALTER USER 문을 사용하여 사용자의 비밀번호, 멤버, 커멘트를 �
     ALTER USER design ADD MEMBERS smith;
     ALTER USER company ADD MEMBERS engineering, marketing, design;
 
-다음은 생성된 사용자 그룹의 멤버를 삭제하는 예제이다. 다음 문장을 통해 *company* 그룹에서 *marketing* 멤버를 삭제하고, *marketing* 그룹은 *smith*, *jones* 를 멤버에서 삭제 한다.
+다음은 생성된 사용자 그룹의 멤버를 삭제하는 예제이다. 다음 문장을 통해 *company* 그룹에서 *marketing* 멤버를 삭제하고, *marketing* 그룹은 *smith*, *jones* 를 멤버에서 삭제한다.
 
 .. code-block:: sql
 
@@ -158,7 +158,7 @@ ALTER USER 문을 사용하여 사용자의 비밀번호, 멤버, 커멘트를 �
 DROP USER
 =========
 
-DROP USER 문을 사용하여 사용자를 삭제할 수 있다. 테이블, 뷰, 트리거 등의 객체를 소유한 사용자는 삭제할 수 없다. ::
+DROP USER 문을 사용하여 사용자를 삭제할 수 있다. 테이블, 뷰, 트리거, 저장 함수/프로시저, 시리얼, 동의어, 서버의 객체를 소유한 사용자는 삭제할 수 없다. ::
 
     DROP USER user_name;
 
@@ -168,13 +168,13 @@ DROP USER 문을 사용하여 사용자를 삭제할 수 있다. 테이블, 뷰,
 
     **DBA** 와 **DBA** 의 멤버만 DROP USER 문을 사용하여 사용자를 삭제할 수 있다.
 
-다음은 사용자 Fred 를 생성하고 비밀번호를 변경한 후에 Fred 를 삭제하는 예제이다.
+다음은 test_user1 사용자를 생성하고 비밀번호 변경 후 test_user1 사용자를 삭제하는 예제이다.
 
 .. code-block:: sql
 
-    CREATE USER Fred;
-    ALTER USER Fred PASSWORD '1234';
-    DROP USER Fred; 
+    CREATE USER test_user1;
+    ALTER USER test_user1 PASSWORD '1234';
+    DROP USER test_user1; 
 
 .. _granting-authorization:
 

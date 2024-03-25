@@ -36,7 +36,7 @@ You can create a user using the CREATE USER statement. The default DBA, PUBLIC u
 
 *   *user_name*: specifies the user name to create.
 *   *password*: specifies the user password to create.
-*   *comment_string*: specifies a comment for the user.
+*   *comment_string*: specifies the user comment to create.
 
 .. note::
 
@@ -104,7 +104,7 @@ You can use the ALTER USER statement to change the password, members and comment
 
 *   *user_name*: specifies the user name to change.
 *   *password*: specifies the user password to change.
-*   *comment_string*: specifies a comment for the user.
+*   *comment_string*: specifies the user comment to change.
 
 .. note::
 
@@ -158,7 +158,7 @@ The following example changes the comment for the created user.
 DROP USER
 =========
 
-You can delete a user using the DROP USER statement. Users who own objects such as table, view, and trigger cannot delete them. ::
+You can delete a user using the DROP USER statement. Users who own objects in table, view, trigger, stored function/procedure, serial, synonym, and server cannot delete them. ::
 
     DROP USER user_name;
 
@@ -168,13 +168,13 @@ You can delete a user using the DROP USER statement. Users who own objects such 
 
     Only **DBA** and **DBA** members can delete users using the DROP USER statement.
 
-The following example shows how to create a user (*Fred*), change a password, and delete the user.
+The following example shows how to create a user (*test_user1*), change a password, and delete the user.
 
 .. code-block:: sql
 
-    CREATE USER Fred;
-    ALTER USER Fred PASSWORD '1234';
-    DROP USER Fred; 
+    CREATE USER test_user1;
+    ALTER USER test_user1 PASSWORD '1234';
+    DROP USER test_user1; 
 
 .. _granting-authorization:
 

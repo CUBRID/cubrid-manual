@@ -18,7 +18,7 @@
   
     UPDATE STATISTICS ON CATALOG CLASSES [WITH FULLSCAN]; 
 
-*   **WITH FULLSCAN**: 지정된 테이블의 전체 데이터를 가지고 통계 정보를 업데이트한다. 생략 시 샘플링한 데이터를 가지고 통계 정보를 업데이트한다. 데이터 샘플은 테이블 전체 페이지 수와 상관없이 7페이지이다.
+*   **WITH FULLSCAN**: 지정된 테이블의 전체 데이터를 가지고 통계 정보를 업데이트한다. 생략 시 샘플링한 데이터를 가지고 통계 정보를 업데이트한다. 데이터 샘플은 테이블 전체 페이지 수와 상관없이 5000페이지이다.
 
 *   **ALL CLASSES**: 모든 테이블의 통계 정보를 업데이트한다. 
 
@@ -70,6 +70,10 @@
 	/* ERROR: before ' ; '
          * Class public.s does not exist. */
 
+.. note::
+
+    CUBRID 11.4 부터는  **UPDATE STATISTICS** 문을 실행할 때 **SELECT** 권한이 필요하다.
+
 .. _info-stats:
 
 통계 정보 확인
@@ -96,20 +100,20 @@ CSQL 인터프리터의 세션 명령어로 지정한 테이블의 통계 정보
 ::
 
     ;info stats t1
-    CLASS STATISTICS
-    ****************
-     Class name: t1 Timestamp: Mon Mar 14 16:26:40 2011
-     Total pages in class heap: 1
-     Total objects: 5
-     Number of attributes: 1
-     Attribute: code
-        id: 0
-        Type: DB_TYPE_INTEGER
-        Minimum value: 1
-        Maximum value: 5
-        B+tree statistics:
-            BTID: { 0 , 1049 }
-            Cardinality: 5 (5) , Total pages: 2 , Leaf pages: 1 , Height: 2
+   CLASS STATISTICS
+   ****************
+    Class name: t1 Timestamp: Mon Mar 25 17:56:10 2024
+    Total pages in class heap: 1
+    Total objects: 5
+    Number of attributes: 1
+    Attribute: code (integer)
+       Number of Distinct Values: 5
+       B+tree statistics:
+           BTID: { 1 , 832 }
+           Cardinality: 5 (5) , Total pages: 3 , Leaf pages: 1 , Height: 2
+
+*   *Number of Distinct Values*: 중복이 제거된 값의 개수이다. 옵티마이저에서 선택도를 산정하는데 사용된다.
+*   *B+tree Cardinality*: 인덱스 key값의 누적된 중복이 제거된 값의 개수이다. 옵티마이저에서 최소 선택도로 사용된다.
 
 .. _viewing-query-plan:
 
@@ -416,7 +420,7 @@ SQL에 대한 성능 분석을 위해서는 질의 프로파일링(profiling) �
       rewritten query: select o.host_year, o.host_nation, o.host_city, sum(p.gold) from OLYMPIC o, PARTICIPANT p where o.host_year=p.host_year and (p.gold> ?:0 ) group by o.host_nation
 
     Trace Statistics:
-      SELECT (time: 1, fetch: 975, ioread: 2)
+      SELECT (time: 2, fetch: 975, fetch_time: 1, ioread: 2)
         SCAN (table: olympic), (heap time: 0, fetch: 26, ioread: 0, readrows: 25, rows: 25)
           SCAN (index: participant.fk_participant_host_year), (btree time: 1, fetch: 941, ioread: 2, readkeys: 5, filteredkeys: 5, rows: 916) (lookup time: 0, rows: 14)
         GROUPBY (time: 0, sort: true, page: 0, ioread: 0, rows: 5)
@@ -424,10 +428,11 @@ SQL에 대한 성능 분석을 위해서는 질의 프로파일링(profiling) �
 
 위에서 "Trace Statistics:" 이하가 트레이스 결과를 출력한 것이며 트레이스 결과의 각 항목을 설명하면 다음과 같다.
 
-*   **SELECT** (time: 1, fetch: 975, ioread: 2) 
+*   **SELECT** (time: 2, fetch: 975, fetch_time: 1, ioread: 2)
     
-    *   time: 1 => 전체 질의 시간 1ms 소요. 
+    *   time: 2 => 전체 질의 시간 2ms 소요.
     *   fetch: 975 => 페이지에 대해 975회 fetch(개수가 아닌 접근 회수임. 같은 페이지를 다시 fetch하더라도 회수가 증가함). 
+    *   fetch_time: 1 => fetch 시간 1ms 소요.
     *   ioread: 2회 디스크 접근.
 
     : SELECT 질의에 대한 전체 통계이다. fetch 회수와 ioread 회수는 질의를 재실행하면 질의 결과의 일부를 버퍼에서 가져오게 되면서 줄어들 수 있다.
@@ -498,7 +503,7 @@ SQL에 대한 성능 분석을 위해서는 질의 프로파일링(profiling) �
     
     
     Trace Statistics:
-      SELECT (time: 6, fetch: 880, ioread: 0)
+      SELECT (time: 6, fetch: 880, fetch_time: 2, ioread: 0)
         SCAN (table: olympic), (heap time: 0, fetch: 104, ioread: 0, readrows: 25, rows: 25)
           SCAN (hash temp(m), buildtime : 0, time: 0, fetch: 0, ioread: 0, readrows: 76, rows: 38)
             SCAN (index: nation.pk_nation_code), (btree time: 2, fetch: 760, ioread: 0, readkeys: 38, filteredkeys: 0, rows: 38) (lookup time: 0, rows: 38)
@@ -514,6 +519,7 @@ SQL에 대한 성능 분석을 위해서는 질의 프로파일링(profiling) �
  
 *   time: 해당 질의에 대한 전체 수행 시간(ms)
 *   fetch: 해당 질의에 대해 페이지를 fetch한 회수
+*   fetch_time : 해당 질의에 대해 페이지 fetch 수행 시간(ms)
 *   ioread: 해당 질의에 대한 전체 I/O 읽기 회수. 데이터를 읽을 때 물리적으로 디스크에 접근한 회수
 
 **SCAN**
@@ -565,7 +571,7 @@ SQL에 대한 성능 분석을 위해서는 질의 프로파일링(profiling) �
 ::
 
         Trace Statistics:
-          SELECT (time: 0, fetch: 16, ioread: 0)
+          SELECT (time: 0, fetch: 16, fetch_time: 0, ioread: 0)
             SCAN (table: agl_tbl), (noscan time: 0, fetch: 0, ioread: 0, readrows: 0, rows: 0, agl: pk_agl_tbl_id)
 
 **GROUPBY**    
@@ -665,6 +671,7 @@ SQL 힌트
     USE_IDX [ (<spec_name_comma_list>) ] |
     USE_MERGE [ (<spec_name_comma_list>) ] |
     ORDERED |
+    LEADING |
     USE_DESC_IDX |
     USE_SBR |
     INDEX_SS [ (<spec_name_comma_list>) ] |
@@ -703,6 +710,13 @@ SQL 힌트는 주석에 더하기 기호(+)를 함께 사용하여 지정한다.
 *   **USE_NL**: 테이블 조인과 관련한 힌트로서, 질의 최적화기 중첩 루프 조인 실행 계획을 만든다.
 *   **USE_MERGE**: 테이블 조인과 관련한 힌트로서, 질의 최적화기는 정렬 병합 조인 실행 계획을 만든다.
 *   **ORDERED**: 테이블 조인과 관련한 힌트로서, 질의 최적화기는 **FROM** 절에 명시된 테이블의 순서대로 조인하는 실행 계획을 만든다. **FROM** 절에서 왼쪽 테이블은 조인의 외부 테이블이 되고, 오른쪽 테이블은 내부 테이블이 된다.
+*   **LEADING**: 테이블 조인과 관련한 힌트로서, 질의 최적화기는 LEADING 힌트에 명시된 테이블의 순서대로 조인하는 실행 계획을 만든다.
+
+.. note::
+
+    **ORDERED**이 **LEADING**과 함께 지정될 경우 **LEADING** 힌트는 무시된다.
+    **LEADING**힌트가 여러게 지정될 경우 첫번째 **LEADING** 힌트만 적용된다.
+
 *   **USE_IDX**: 인덱스 관련한 힌트로서, 질의 최적화기는 명시된 테이블에 대해 인덱스 조인 실행 계획을 만든다.
 *   **USE_DESC_IDX**: 내림차순 스캔을 위한 힌트이다. 자세한 내용은 :ref:`index-descending-scan`\을 참고한다.
 *   **USE_SBR**: 구문 기반 복제(statement-based replication)를 위한 힌트로서, 기본키가 설정되지 않은 테이블에 대한 데이터 복제도 지원한다.

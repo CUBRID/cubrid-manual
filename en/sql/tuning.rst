@@ -99,17 +99,17 @@ The following shows the statistical information of *t1* table in CSQL interprete
 ::
 
     ;info stats t1
-   CLASS STATISTICS
-   ****************
-    Class name: t1 Timestamp: Mon Mar 25 17:56:10 2024
-    Total pages in class heap: 1
-    Total objects: 5
-    Number of attributes: 1
-    Attribute: code (integer)
-       Number of Distinct Values: 5
-       B+tree statistics:
-           BTID: { 1 , 832 }
-           Cardinality: 5 (5) , Total pages: 3 , Leaf pages: 1 , Height: 2
+    CLASS STATISTICS
+    ****************
+     Class name: t1 Timestamp: Mon Mar 25 17:56:10 2024
+     Total pages in class heap: 1
+     Total objects: 5
+     Number of attributes: 1
+     Attribute: code (integer)
+        Number of Distinct Values: 5
+        B+tree statistics:
+            BTID: { 1 , 832 }
+            Cardinality: 5 (5) , Total pages: 3 , Leaf pages: 1 , Height: 2
 
 *   *Number of Distinct Values*: The number of values from which duplicates have been removed. It is for calculating selectivity in the optimizer.
 *   *B+tree Cardinality*: The number of accumulated distinct values. It is for calculating minimum selectivity in the optimizer.

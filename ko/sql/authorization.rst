@@ -26,7 +26,7 @@ CUBRID는 기본적으로 **DBA** 와 **PUBLIC** 두 종류의 사용자를 제�
 CREATE USER
 ===========
 
-CREATE USER 문을 사용하여 사용자를 생성할 수 있다. 초기 설치 시에는 사용자의 비밀번호가 구성되지 않습니다. ::
+CREATE USER 문을 사용하여 사용자를 생성할 수 있다. 기본으로 제공되는 **DBA**, **PUBLIC** 사용자는 비밀번호가 없이 생성됩니다. ::
 
     CREATE USER user_name
     [PASSWORD password]
@@ -34,15 +34,15 @@ CREATE USER 문을 사용하여 사용자를 생성할 수 있다. 초기 설치
     [MEMBERS user_name [{, user_name } ... ]] 
     [COMMENT 'comment_string'];
 
-*   *user_name*: 생성, 삭제, 변경할 사용자 이름을 지정한다.
-*   *password*: 생성 혹은 변경할 사용자의 비밀번호를 지정한다.
+*   *user_name*: 생성할 사용자 이름을 지정한다.
+*   *password*: 생성할 사용자의 비밀번호를 지정한다.
 *   *comment_string*: 사용자에 대한 커멘트를 지정한다.
 
 .. note::
 
     **DBA** 와 **DBA** 의 멤버만 CREATE USER 문을 사용하여 사용자를 생성할 수 있다.
 
-다음은 사용자 test_user1 을 생성하며 비밀번호를 지정하는 예제이다. 
+다음은 test_user1 사용자를 생성하면서 비밀번호를 설정하는 예제이다.
 
 .. code-block:: sql
 
@@ -75,7 +75,7 @@ CREATE USER 문을 사용하여 사용자를 생성할 수 있다. 초기 설치
 사용자의 커멘트
 ---------------
 
-다음은 사용자 test_user1 을 생성하며 비밀번호 와 커멘트를 추가하는 예제이다.
+다음은 test_user1 사용자를 생성하며 비밀번호 와 커멘트를 설정하는 예제이다.
 
 .. code-block:: sql
 
@@ -94,25 +94,25 @@ CREATE USER 문을 사용하여 사용자를 생성할 수 있다. 초기 설치
 ALTER USER
 ==========
 
-ALTER USER 문을 사용하여 생성된 사용자의 패스워드, 멤버, 커멘트를 변경할 수 있다. ::
+ALTER USER 문을 사용하여 사용자의 비밀번호, 멤버, 커멘트를 변경할 수 있다. ::
 
     ALTER USER user_name 
     [PASSWORD password] |
     [ADD MEMBERS user_name [{, user_name } ... ]] |
-    [DROP MEMBERS user_name [{, user_name } ... ]] |
+    [DROP MEMBERS user_name [{, user_name } ... ]]
     [COMMENT 'comment_string'];
 
-*   *user_name*: 생성, 삭제, 변경할 사용자 이름을 지정한다.
-*   *password*: 생성 혹은 변경할 사용자의 비밀번호를 지정한다.
+*   *user_name*: 변경할 사용자 이름을 지정한다.
+*   *password*: 변경할 사용자의 비밀번호를 지정한다.
 *   *comment_string*: 사용자에 대한 커멘트를 지정한다.
 
 .. note::
 
-    **DBA** 와 **DBA** 의 멤버는 ALTER USER 문을 사용하여 **모든 사용자** 의 패스워드, 멤버, 커멘트를 변경할 수 있다.
+    **DBA** 와 **DBA** 의 멤버는 ALTER USER 문을 사용하여 **모든 사용자** 의 비밀번호, 멤버, 커멘트를 변경할 수 있다.
 
-    **일반 사용자** 는 ALTER USER 문을 사용하여 **본인** 의 패스워드, 멤버, 커멘트를 변경할 수 있다.
+    **일반 사용자** 는 ALTER USER 문을 사용하여 **본인** 의 비밀번호, 멤버, 커멘트를 변경할 수 있다.
 
-다음은 사용자 test_user1 을 생성하고 비밀번호를 변경하는 예제이다. 
+다음은 test_user1 사용자를 생성하고 비밀번호를 변경하는 예제이다. 
 
 .. code-block:: sql
 
@@ -153,22 +153,16 @@ ALTER USER 문을 사용하여 생성된 사용자의 패스워드, 멤버, 커�
     CREATE USER test_user1 COMMENT 'new user';
     ALTER USER test_user1 COMMENT 'old user';
 
-사용자의 변경된 커멘트를 확인하려면 다음의 구문을 실행한다.
-
-.. code-block:: sql
-      
-    SELECT name, comment FROM db_user;
-
 .. _drop-user:
 
 DROP USER
 =========
 
-DROP USER 문을 사용하여 사용자를 삭제할 수 있다. 사용 중인 사용자는 삭제할 수 없다. ::
+DROP USER 문을 사용하여 사용자를 삭제할 수 있다. 테이블, 뷰, 트리거 등의 객체를 소유한 사용자는 삭제할 수 없다. ::
 
     DROP USER user_name;
 
-*   *user_name*: 생성, 삭제, 변경할 사용자 이름을 지정한다.
+*   *user_name*: 삭제할 사용자 이름을 지정한다.
 
 .. note::
 

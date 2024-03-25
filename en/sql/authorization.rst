@@ -26,7 +26,7 @@ CUBRID has two types of users by default: **DBA** and **PUBLIC**. At initial ins
 CREATE USER
 ===========
 
-You can create a user using the CREATE USER statement. At the initial installation, passwords for users are not configured. ::
+You can create a user using the CREATE USER statement. The default DBA, PUBLIC user is created without a password. ::
 
     CREATE USER user_name
     [PASSWORD password]
@@ -34,8 +34,8 @@ You can create a user using the CREATE USER statement. At the initial installati
     [MEMBERS user_name [{, user_name } ... ]] 
     [COMMENT 'comment_string'];
 
-*   *user_name*: specifies the user name to create, delete or change.
-*   *password*: specifies the user password to create or change.
+*   *user_name*: specifies the user name to create.
+*   *password*: specifies the user password to create.
 *   *comment_string*: specifies a comment for the user.
 
 .. note::
@@ -99,11 +99,11 @@ You can use the ALTER USER statement to change the password, members and comment
     ALTER USER user_name 
     [PASSWORD password] |
     [ADD MEMBERS user_name [{, user_name } ... ]] |
-    [DROP MEMBERS user_name [{, user_name } ... ]] |
+    [DROP MEMBERS user_name [{, user_name } ... ]]
     [COMMENT 'comment_string'];
 
-*   *user_name*: specifies the user name to create, delete or change.
-*   *password*: specifies the user password to create or change.
+*   *user_name*: specifies the user name to change.
+*   *password*: specifies the user password to change.
 *   *comment_string*: specifies a comment for the user.
 
 .. note::
@@ -153,22 +153,16 @@ The following example changes the comment for the created user.
     CREATE USER test_user1 COMMENT 'new user';
     ALTER USER test_user1 COMMENT 'old user';
 
-To see the changed comment, use the following syntax.
-
-.. code-block:: sql
-         
-    SELECT name, comment FROM db_user;
-
 .. _drop-user:
 
 DROP USER
 =========
 
-You can delete a user using the DROP USER statement. Users who are currently in use cannot be deleted. ::
+You can delete a user using the DROP USER statement. Users who own objects such as table, view, and trigger cannot delete them. ::
 
     DROP USER user_name;
 
-*   *user_name*: specifies the user name to create, delete or change.
+*   *user_name*: specifies the user name to delete.
 
 .. note::
 

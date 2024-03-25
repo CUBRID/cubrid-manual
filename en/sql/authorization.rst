@@ -195,7 +195,7 @@ The following example shows how to execute the **REVOKE** statement revoking all
 ALTER ... OWNER
 ===============
 
-Database Administrator (**DBA**) or a member of the **DBA** group can change the owner of table, view, trigger, Java stored functions/procedures, and serial by using the following query. ::
+Database Administrator (**DBA**) or a member of the **DBA** group can change the owner of table, view, trigger, stored functions/procedures, and serial by using the following query. ::
 
     ALTER (TABLE | CLASS | VIEW | VCLASS | TRIGGER | PROCEDURE | FUNCTION | SERIAL) [schema_name.]name OWNER TO user_id;
 

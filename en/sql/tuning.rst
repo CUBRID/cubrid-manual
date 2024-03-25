@@ -431,7 +431,7 @@ In the above example, under lines of "Trace Statistics:" are the result of traci
     
     *   time: 2 => Total query time took 2ms.
     *   fetch: 975 => 975 times were fetched regarding pages. (not the number of pages, but the count of accessing pages. even if the same pages are fetched, the count is increased.).
-    *   fetch_time: 21=> Total fetch time took 1ms.
+    *   fetch_time: 1=> Total fetch time took 1ms.
     *   ioread: disk accessed 2 times.
 
     : Total statistics regarding SELECT query. If the query is rerun, fetching count and ioread count can be shrinken because some of query result are read from buffer.

@@ -100,17 +100,17 @@ CSQL 인터프리터의 세션 명령어로 지정한 테이블의 통계 정보
 ::
 
     ;info stats t1
-   CLASS STATISTICS
-   ****************
-    Class name: t1 Timestamp: Mon Mar 25 17:56:10 2024
-    Total pages in class heap: 1
-    Total objects: 5
-    Number of attributes: 1
-    Attribute: code (integer)
-       Number of Distinct Values: 5
-       B+tree statistics:
-           BTID: { 1 , 832 }
-           Cardinality: 5 (5) , Total pages: 3 , Leaf pages: 1 , Height: 2
+    CLASS STATISTICS
+    ****************
+     Class name: t1 Timestamp: Mon Mar 25 17:56:10 2024
+     Total pages in class heap: 1
+     Total objects: 5
+     Number of attributes: 1
+     Attribute: code (integer)
+        Number of Distinct Values: 5
+        B+tree statistics:
+            BTID: { 1 , 832 }
+            Cardinality: 5 (5) , Total pages: 3 , Leaf pages: 1 , Height: 2
 
 *   *Number of Distinct Values*: 중복이 제거된 값의 개수이다. 옵티마이저에서 선택도를 산정하는데 사용된다.
 *   *B+tree Cardinality*: 인덱스 key값의 누적된 중복이 제거된 값의 개수이다. 옵티마이저에서 최소 선택도로 사용된다.

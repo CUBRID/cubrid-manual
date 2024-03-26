@@ -26,29 +26,27 @@ CUBRID has two types of users by default: **DBA** and **PUBLIC**. At initial ins
 CREATE USER
 ===========
 
-**DBA** and **DBA** members can create, drop and alter users by using SQL statements. At the initial installation, passwords for users are not configured. ::
+You can create a user using the CREATE USER statement. The default DBA, PUBLIC user is created without a password. ::
 
     CREATE USER user_name
     [PASSWORD password]
     [GROUPS user_name [{, user_name } ... ]]
     [MEMBERS user_name [{, user_name } ... ]] 
     [COMMENT 'comment_string'];
-    
-    DROP USER user_name;
-    
-    ALTER USER user_name PASSWORD password;
 
-*   *user_name*: specifies the user name to create, delete or change.
-*   *password*: specifies the user password to create or change.
-*   *comment_string*: specifies a comment for the user.
+*   *user_name*: specifies the user name to create.
+*   *password*: specifies the user password to create.
+*   *comment_string*: specifies the user comment to create.
 
-The following example shows how to create a user (*Fred*), change a password, and delete the user.
+.. note::
+
+    Only **DBA** and **DBA** members can create users using the CREATE USER statement.
+
+The following example creates a user test_user1 and specifies a password.
 
 .. code-block:: sql
 
-    CREATE USER Fred;
-    ALTER USER Fred PASSWORD '1234';
-    DROP USER Fred;
+    CREATE USER test_user1 PASSWORD 'password';
 
 The following example shows how to create a user and add member to the user. By the following statement, *company* becomes a group that has *engineering*, *marketing* and *design* as its members. *marketing* becomes a group with members *smith* and *jones*, *design* becomes a group with a member *smith*, and *engineering* becomes a group with a member *brown*.
 
@@ -77,23 +75,106 @@ The following example shows how to create the same groups as above but use the *
 User's COMMENT
 --------------
 
-A comment for a user can be written as follows.
+The following example creates a user test_user1 and adds a password and a comment.
 
 .. code-block:: sql
 
-    CREATE USER designer GROUPS dbms, qa COMMENT 'user comment';
-
-A comment for a user can be changed as the following ALTER USER statement.
-
-.. code-block:: sql
-    
-    ALTER USER DESIGNER COMMENT 'new comment';
+    CREATE USER test_user1 PASSWORD 'password' COMMENT 'new user';
     
 You can see a comment for a user with this syntax.
 
 .. code-block:: sql
 
     SELECT name, comment FROM db_user;
+
+To change user comment, refer to the description of the ALTER USER statement.
+
+.. _alter-user:
+
+ALTER USER
+==========
+
+You can use the ALTER USER statement to change the password, members and comment of a created user. ::
+
+    ALTER USER user_name 
+    [PASSWORD password] |
+    [ADD MEMBERS user_name [{, user_name } ... ]] |
+    [DROP MEMBERS user_name [{, user_name } ... ]]
+    [COMMENT 'comment_string'];
+
+*   *user_name*: specifies the user name to change.
+*   *password*: specifies the user password to change.
+*   *comment_string*: specifies the user comment to change.
+
+.. note::
+
+    **DBA** and **DBA** members can use the ALTER USER statement to change the password, members and comment of **all users**.
+
+    **General users** can change **their own** password, member and comment using the ALTER USER statement.
+
+The following example creates a user test_user1 and changes the password.
+
+.. code-block:: sql
+
+    CREATE USER test_user1;
+    ALTER USER test_user1 PASSWORD '1234';
+
+The following example creates a user and adds members to the created user. This example does the same thing as the example in CREATE USER .. MEMBERS ..
+
+.. code-block:: sql
+
+    CREATE USER company;
+    CREATE USER engineering;
+    CREATE USER marketing;
+    CREATE USER design;
+    CREATE USER smith;
+    CREATE USER jones;
+    CREATE USER brown;
+
+    ALTER USER engineering ADD MEMBERS brown;
+    ALTER USER marketing ADD MEMBERS smith, jones;
+    ALTER USER design ADD MEMBERS smith;
+    ALTER USER company ADD MEMBERS engineering, marketing, design;
+
+The following example deletes the members of a created user group. The *marketing* member is deleted from the *company* group through the following sentence and the *marketing* group deletes *smith* and *jones* from the member.
+
+.. code-block:: sql
+
+    ALTER USER company DROP MEMBERS marketing;
+    ALTER USER marketing DROP MEMBERS smith, jones;
+
+User's COMMENT Change
+---------------------
+
+The following example changes the comment for the created user.
+
+.. code-block:: sql
+
+    CREATE USER test_user1 COMMENT 'new user';
+    ALTER USER test_user1 COMMENT 'old user';
+
+.. _drop-user:
+
+DROP USER
+=========
+
+You can delete a user using the DROP USER statement. Users who own objects in table, view, trigger, stored function/procedure, serial, synonym, and server cannot delete them. ::
+
+    DROP USER user_name;
+
+*   *user_name*: specifies the user name to delete.
+
+.. note::
+
+    Only **DBA** and **DBA** members can delete users using the DROP USER statement.
+
+The following example shows how to create a user (*test_user1*), change a password, and delete the user.
+
+.. code-block:: sql
+
+    CREATE USER test_user1;
+    ALTER USER test_user1 PASSWORD '1234';
+    DROP USER test_user1; 
 
 .. _granting-authorization:
 

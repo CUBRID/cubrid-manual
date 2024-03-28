@@ -712,11 +712,6 @@ SQL 힌트는 주석에 더하기 기호(+)를 함께 사용하여 지정한다.
 *   **ORDERED**: 테이블 조인과 관련한 힌트로서, 질의 최적화기는 **FROM** 절에 명시된 테이블의 순서대로 조인하는 실행 계획을 만든다. **FROM** 절에서 왼쪽 테이블은 조인의 외부 테이블이 되고, 오른쪽 테이블은 내부 테이블이 된다.
 *   **LEADING**: 테이블 조인과 관련한 힌트로서, 질의 최적화기는 LEADING 힌트에 명시된 테이블의 순서대로 조인하는 실행 계획을 만든다.
 
-.. note::
-
-    **ORDERED**이 **LEADING**과 함께 지정될 경우 **LEADING** 힌트는 무시된다.
-    **LEADING**힌트가 여러게 지정될 경우 첫번째 **LEADING** 힌트만 적용된다.
-
 *   **USE_IDX**: 인덱스 관련한 힌트로서, 질의 최적화기는 명시된 테이블에 대해 인덱스 조인 실행 계획을 만든다.
 *   **USE_DESC_IDX**: 내림차순 스캔을 위한 힌트이다. 자세한 내용은 :ref:`index-descending-scan`\을 참고한다.
 *   **USE_SBR**: 구문 기반 복제(statement-based replication)를 위한 힌트로서, 기본키가 설정되지 않은 테이블에 대한 데이터 복제도 지원한다.
@@ -776,6 +771,27 @@ SQL 힌트는 주석에 더하기 기호(+)를 함께 사용하여 지정한다.
     위와 같은 질의를 수행한다면 테이블 a와 b가 조인될 때는 **USE_NL**\ 이 적용되고 테이블 c가 조인될 때도 **USE_NL**\ 이 적용되며, 테이블 d가 조인될 때는 **USE_MERGE**\ 가 적용된다.
 
     <*spec_name*>\ 이 주어지지 않고 **USE_NL**\ 과 **USE_MERGE**\ 가 함께 지정된 경우 주어진 힌트는 무시된다. 일부 경우에 질의 최적화기는 주어진 힌트에 따라 질의 실행 계획을 만들지 못할 수 있다. 예를 들어 오른쪽 외부 조인에 대해 **USE_NL**\ 을 지정한 경우 이 질의는 내부적으로 왼쪽 외부 조인 질의로 변환이 되어 조인 순서는 보장되지 않을 수 있다.
+
+.. note::
+
+    **ORDERED**이 **LEADING**과 함께 지정될 경우 **LEADING** 힌트는 무시된다.
+    **LEADING**힌트가 여러게 지정될 경우 첫번째 **LEADING** 힌트만 적용된다.
+
+    .. code-block:: sql
+
+        SELECT /*+ ORDERED LEADING(b, d) */ *
+        FROM a INNER JOIN b ON a.col=b.col
+        INNER JOIN c ON b.col=c.col INNER JOIN d ON c.col=d.col;
+
+    위와 같은 질의를 수행한다면 **LEADING** 힌트는 무시되며, **ORDERED** 힌트에 따라서 **FROM**절의 순서인, 테이블 a, b, c, d의 순서로 조인된다.
+
+    .. code-block:: sql
+
+        SELECT /*+ LEADING(b, d) LEADING(c, d) */ *
+        FROM a INNER JOIN b ON a.col=b.col
+        INNER JOIN c ON b.col=c.col INNER JOIN d ON c.col=d.col;
+
+    위와 같은 질의를 수행한다면 두번째 **LEADING** 힌트는 무시되며, 테이블 b와 d가 첫번째로 조인되는 조인순서가 생성된다.
 
 MERGE 문에는 다음과 같은 힌트를 사용할 수 있다. 
 

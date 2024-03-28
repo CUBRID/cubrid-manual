@@ -710,12 +710,6 @@ The following hints can be specified in **UPDATE**, **DELETE** and **SELECT** st
 *   **USE_MERGE**: Related to a table join, the query optimizer creates a sort merge join execution plan with this hint.
 *   **ORDERED**: Related to a table join, the query optimizer create a join execution plan with this hint, based on the order of tables specified in the **FROM** clause. The left table in the **FROM** clause becomes the outer table; the right one becomes the inner table.
 *   **LEADING**: Related to a table join, the query optimizer create a join execution plan with this hint, based on the order of tables specified in the **LEADING** hint.
-
-.. note::
-
-    If you specify the **ORDERED** hint, all **LEADING** hint is ignored.
-    If you specify two or more **LEADING** hints, then only the first one is activated and all of them except the first are ignored.
-
 *   **USE_IDX**: Related to an index, the query optimizer creates an index join execution plan corresponding to a specified table with this hint.
 *   **USE_DESC_IDX**: This is a hint for the scan in descending index. For more information, see :ref:`index-descending-scan`.
 *   **USE_SBR**: This is a hint for the statement-based replication. It supports data replication for tables without a primary key.
@@ -775,6 +769,27 @@ The following hints can be specified in **UPDATE**, **DELETE** and **SELECT** st
     If you run the above query, **USE_NL** is applied when A and B are joined; **USE_NL** is applied when C is joined, too; **USE_MERGE** is applied when D is joined.
 
     If **USE_NL** and **USE_MERGE** are specified together without <*spec_name*>, the given hint is ignored. In some cases, the query optimizer cannot create a query execution plan based on the given hint. For example, if **USE_NL** is specified for a right outer join, the query is converted to a left outer join internally, and the join order may not be guaranteed.
+
+.. note::
+
+    If you specify the **ORDERED** hint, all **LEADING** hint is ignored.
+    If you specify two or more **LEADING** hints, then only the first one is activated and all of them except the first are ignored.
+
+    .. code-block:: sql
+
+        SELECT /*+ ORDERED LEADING(b, d) */ *
+        FROM a INNER JOIN b ON a.col=b.col
+        INNER JOIN c ON b.col=c.col INNER JOIN d ON c.col=d.col;
+
+    If you run the above query, the **LEADING** hint is ignored, and tables a, b, c, and d are joined in the order of the **FROM** clause according to the **ORDERED** hint.
+
+    .. code-block:: sql
+
+        SELECT /*+ LEADING(b, d) LEADING(c, d) */ *
+        FROM a INNER JOIN b ON a.col=b.col
+        INNER JOIN c ON b.col=c.col INNER JOIN d ON c.col=d.col;
+
+    If you run the above query, the second **LEADING** hint is ignored, and join order in which tables b and d are joined first is generated.
 
 MERGE statement can have below hints.
 

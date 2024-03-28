@@ -17,7 +17,7 @@ Statistics for tables and indexes enables queries of the database system to proc
   
     UPDATE STATISTICS ON CATALOG CLASSES [WITH FULLSCAN]; 
 
-*   **WITH FULLSCAN**: It updates the statistics with all the data in the specified table. If this is omitted, it updates the statistics with sampling data. The sampling data is 7 pages regardless of total pages of table.
+*   **WITH FULLSCAN**: It updates the statistics with all the data in the specified table. If this is omitted, it updates the statistics with sampling data. The sampling data is 5000 pages regardless of total pages of table.
 
 *   **ALL CLASSES**: If the **ALL CLASSES** keyword is specified, the statistics on all the tables existing in the database are updated.
 
@@ -69,6 +69,10 @@ When starting and ending an update of statistics information, NOTIFICATION messa
 	/* ERROR: before ' ; '
          * Class public.s does not exist. */
 
+.. note::
+
+    From version 11.4 of CUBRID,  **SELECT** authorization is required when executing **UPDATE STATISTICS** statement.
+
 .. _info-stats:
 
 Checking Statistics Information
@@ -97,18 +101,18 @@ The following shows the statistical information of *t1* table in CSQL interprete
     ;info stats t1
     CLASS STATISTICS
     ****************
-     Class name: t1 Timestamp: Mon Mar 14 16:26:40 2011
+     Class name: t1 Timestamp: Mon Mar 25 17:56:10 2024
      Total pages in class heap: 1
      Total objects: 5
      Number of attributes: 1
-     Attribute: code
-        id: 0
-        Type: DB_TYPE_INTEGER
-        Minimum value: 1
-        Maximum value: 5
+     Attribute: code (integer)
+        Number of Distinct Values: 5
         B+tree statistics:
-            BTID: { 0 , 1049 }
-            Cardinality: 5 (5) , Total pages: 2 , Leaf pages: 1 , Height: 2
+            BTID: { 1 , 832 }
+            Cardinality: 5 (5) , Total pages: 3 , Leaf pages: 1 , Height: 2
+
+*   *Number of Distinct Values*: The number of values from which duplicates have been removed. It is for calculating selectivity in the optimizer.
+*   *B+tree Cardinality*: The number of accumulated distinct values. It is for calculating minimum selectivity in the optimizer.
 
 .. _viewing-query-plan:
 
@@ -415,7 +419,7 @@ Below is an example that prints out the query tracing result after setting SQL t
       rewritten query: select o.host_year, o.host_nation, o.host_city, sum(p.gold) from OLYMPIC o, PARTICIPANT p where o.host_year=p.host_year and (p.gold> ?:0 ) group by o.host_nation
 
     Trace Statistics:
-      SELECT (time: 1, fetch: 975, ioread: 2)
+      SELECT (time: 2, fetch: 975, fetch_time: 1, ioread: 2)
         SCAN (table: olympic), (heap time: 0, fetch: 26, ioread: 0, readrows: 25, rows: 25)
           SCAN (index: participant.fk_participant_host_year), (btree time: 1, fetch: 941, ioread: 2, readkeys: 5, filteredkeys: 5, rows: 916) (lookup time: 0, rows: 14)
         GROUPBY (time: 0, sort: true, page: 0, ioread: 0, rows: 5)
@@ -423,10 +427,11 @@ Below is an example that prints out the query tracing result after setting SQL t
 
 In the above example, under lines of "Trace Statistics:" are the result of tracing. Each items of tracing result are as below.
 
-*   **SELECT** (time: 1, fetch: 975, ioread: 2)
+*   **SELECT** (time: 2, fetch: 975, fetch_time: 1, ioread: 2)
     
-    *   time: 1 => Total query time took 1ms. 
+    *   time: 2 => Total query time took 2ms.
     *   fetch: 975 => 975 times were fetched regarding pages. (not the number of pages, but the count of accessing pages. even if the same pages are fetched, the count is increased.).
+    *   fetch_time: 1=> Total fetch time took 1ms.
     *   ioread: disk accessed 2 times.
 
     : Total statistics regarding SELECT query. If the query is rerun, fetching count and ioread count can be shrinken because some of query result are read from buffer.
@@ -497,7 +502,7 @@ The following is an example to join 3 tables.
     
     
     Trace Statistics:
-      SELECT (time: 6, fetch: 880, ioread: 0)
+      SELECT (time: 6, fetch: 880, fetch_time: 2, ioread: 0)
         SCAN (table: olympic), (heap time: 0, fetch: 104, ioread: 0, readrows: 25, rows: 25)
           SCAN (hash temp(m), buildtime : 0, time: 0, fetch: 0, ioread: 0, readrows: 76, rows: 38)
             SCAN (index: nation.pk_nation_code), (btree time: 2, fetch: 760, ioread: 0, readkeys: 38, filteredkeys: 0, rows: 38) (lookup time: 0, rows: 38)
@@ -513,6 +518,7 @@ The following are the explanation regarding items of trace statistics.
  
 *   time: total estimated time when this query is performed(ms)
 *   fetch: total page fetching count about this query
+*   fetch_time : total fetch time when this query is performed(ms)
 *   ioread: total I/O read count about this query. disk access count when the data is read
 
 **SCAN**
@@ -564,7 +570,7 @@ The following are the explanation regarding items of trace statistics.
 ::
 
         Trace Statistics:
-          SELECT (time: 0, fetch: 16, ioread: 0)
+          SELECT (time: 0, fetch: 16, fetch_time: 0, ioread: 0)
             SCAN (table: agl_tbl), (noscan time: 0, fetch: 0, ioread: 0, readrows: 0, rows: 0, agl: pk_agl_tbl_id)
 
 **GROUPBY**    
@@ -664,6 +670,7 @@ Using hints can affect the performance of query execution. You can allow the que
     USE_IDX [ (<spec_name_comma_list>) ] |
     USE_MERGE [ (<spec_name_comma_list>) ] |
     ORDERED |
+    LEADING |
     USE_DESC_IDX |
     USE_SBR |
     INDEX_SS [ (<spec_name_comma_list>) ] |
@@ -702,6 +709,7 @@ The following hints can be specified in **UPDATE**, **DELETE** and **SELECT** st
 *   **USE_NL**: Related to a table join, the query optimizer creates a nested loop join execution plan with this hint.
 *   **USE_MERGE**: Related to a table join, the query optimizer creates a sort merge join execution plan with this hint.
 *   **ORDERED**: Related to a table join, the query optimizer create a join execution plan with this hint, based on the order of tables specified in the **FROM** clause. The left table in the **FROM** clause becomes the outer table; the right one becomes the inner table.
+*   **LEADING**: Related to a table join, the query optimizer create a join execution plan with this hint, based on the order of tables specified in the **LEADING** hint.
 *   **USE_IDX**: Related to an index, the query optimizer creates an index join execution plan corresponding to a specified table with this hint.
 *   **USE_DESC_IDX**: This is a hint for the scan in descending index. For more information, see :ref:`index-descending-scan`.
 *   **USE_SBR**: This is a hint for the statement-based replication. It supports data replication for tables without a primary key.
@@ -761,6 +769,27 @@ The following hints can be specified in **UPDATE**, **DELETE** and **SELECT** st
     If you run the above query, **USE_NL** is applied when A and B are joined; **USE_NL** is applied when C is joined, too; **USE_MERGE** is applied when D is joined.
 
     If **USE_NL** and **USE_MERGE** are specified together without <*spec_name*>, the given hint is ignored. In some cases, the query optimizer cannot create a query execution plan based on the given hint. For example, if **USE_NL** is specified for a right outer join, the query is converted to a left outer join internally, and the join order may not be guaranteed.
+
+.. note::
+
+    If you specify the **ORDERED** hint, all **LEADING** hint is ignored.
+    If you specify two or more **LEADING** hints, then only the first one is activated and all of them except the first are ignored.
+
+    .. code-block:: sql
+
+        SELECT /*+ ORDERED LEADING(b, d) */ *
+        FROM a INNER JOIN b ON a.col=b.col
+        INNER JOIN c ON b.col=c.col INNER JOIN d ON c.col=d.col;
+
+    If you run the above query, the **LEADING** hint is ignored, and tables a, b, c, and d are joined in the order of the **FROM** clause according to the **ORDERED** hint.
+
+    .. code-block:: sql
+
+        SELECT /*+ LEADING(b, d) LEADING(c, d) */ *
+        FROM a INNER JOIN b ON a.col=b.col
+        INNER JOIN c ON b.col=c.col INNER JOIN d ON c.col=d.col;
+
+    If you run the above query, the second **LEADING** hint is ignored, and join order in which tables b and d are joined first is generated.
 
 MERGE statement can have below hints.
 

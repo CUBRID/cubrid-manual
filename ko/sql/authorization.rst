@@ -48,7 +48,7 @@ CREATE USER 문을 사용하여 사용자를 생성할 수 있다. 기본으로 
 
     CREATE USER test_user1 PASSWORD 'password';
 
-다음은 사용자 생성과 동시에 멤버를 추가하는 예제이다. 다음 문장을 통해 *company* 는 *engineering*, *marketing*, *design* 을 멤버로 가지는 그룹이 된다. *marketing* 은 *smith*, *jones* 를, *design* 은 *smith* 를, *engineering* 은 *brown* 을 멤버로 가지는 그룹이 된다.
+다음은 사용자 생성과 함께 멤버를 추가하는 예제이다. 다음 문장을 통해 *company* 는 *engineering*, *marketing*, *design* 을 멤버로 가지는 그룹이 된다. *marketing* 은 *smith*, *jones* 를, *design* 은 *smith* 를, *engineering* 은 *brown* 을 멤버로 가지는 그룹이 된다.
 
 .. code-block:: sql
 
@@ -94,7 +94,7 @@ CREATE USER 문을 사용하여 사용자를 생성할 수 있다. 기본으로 
 ALTER USER
 ==========
 
-ALTER USER 문을 사용하여 사용자의 비밀번호, 멤버, 커멘트를 변경할 수 있다. ::
+ALTER USER 문을 사용하여 사용자의 비밀번호, 멤버 및 커멘트를 변경할 수 있다. ::
 
     ALTER USER user_name 
     [PASSWORD password] |
@@ -108,9 +108,9 @@ ALTER USER 문을 사용하여 사용자의 비밀번호, 멤버, 커멘트를 �
 
 .. note::
 
-    **DBA** 와 **DBA** 의 멤버는 ALTER USER 문을 사용하여 **모든 사용자** 의 비밀번호, 멤버, 커멘트를 변경할 수 있다.
+    **DBA** 와 **DBA** 의 멤버는 ALTER USER 문을 사용하여 **모든 사용자** 의 비밀번호, 멤버 및 커멘트를 변경할 수 있다.
 
-    **일반 사용자** 는 ALTER USER 문을 사용하여 **본인** 의 비밀번호, 멤버, 커멘트를 변경할 수 있다.
+    **일반 사용자** 는 ALTER USER 문을 사용하여 **본인** 의 비밀번호, 멤버 및 커멘트를 변경할 수 있다.
 
 다음은 test_user1 사용자를 생성하고 비밀번호를 변경하는 예제이다. 
 

@@ -158,7 +158,7 @@ The following example changes the comment for the created user.
 DROP USER
 =========
 
-You can delete a user using the DROP USER statement. Users who own objects in table, view, trigger, stored function/procedure, serial, synonym, and server cannot delete them. ::
+You can delete a user using the DROP USER statement. Users who own objects in table, view, trigger, stored function/procedure, serial, synonym, and server cannot be dropped. ::
 
     DROP USER user_name;
 

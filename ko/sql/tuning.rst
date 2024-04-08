@@ -774,8 +774,8 @@ SQL 힌트는 주석에 더하기 기호(+)를 함께 사용하여 지정한다.
 
 .. note::
 
-    **ORDERED**이 **LEADING**과 함께 지정될 경우 **LEADING** 힌트는 무시된다.
-    **LEADING**힌트가 여러게 지정될 경우 첫번째 **LEADING** 힌트만 적용된다.
+    **ORDERED**\가 **LEADING**\과 함께 지정될 경우 **LEADING** 힌트는 무시된다.
+    **LEADING** 힌트가 여러게 지정될 경우 첫번째 **LEADING** 힌트만 적용된다.
 
     .. code-block:: sql
 

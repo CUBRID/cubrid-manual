@@ -903,7 +903,7 @@ The following is an example of invoking a native function through JNI in a CUBRI
 
     -- loadjava
     javac HelloJNI.java
-    loadjava demodb HelloJNI.class
+    loadjava -j demodb HelloJNI.class
 
 
 .. code-block:: sql

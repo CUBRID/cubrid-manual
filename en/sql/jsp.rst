@@ -920,7 +920,7 @@ The following is an example of invoking a native function through JNI in a CUBRI
 
 .. warning::
 
-    Registering and executing Java stored procedures/functions that invoke JNI without the **-j** option may result in ajava.lang.UnsatisfiedLinkError.
+    Registering and executing Java stored procedures/functions that invoke JNI without the **-j** option may result in a java.lang.UnsatisfiedLinkError.
     To address this issue, please consider the following:
 
     * If you are loading multiple Java class files that call System.load() for the same native library path:

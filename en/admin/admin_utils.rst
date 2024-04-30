@@ -3548,7 +3548,7 @@ The following shows [options] available with the **cubrid vacuumdb** utility.
 flashback
 ---------
 
-The **cubrid flashback** utility is used to get SQL statements to rewind a specific committed transaction, and can only be executed by the **DBA** user. The system parameter **supplemental_log** must be turned on, and flashback is supported only for DML executed after the **supplemental_log** is set. ::
+The **cubrid flashback** utility is used to get SQL statements to rewind a specific committed transaction, and can only be executed by the **DBA** user. The system parameter **supplemental_log** must be turned on, and flashback is supported only for DML executed after the **supplemental_log** is set. The utility is perfomed in only client/server mode and can't be performed more than one at same time. ::
 
     cubrid flashback [options] database_name owner_name.class_name1 [owner_name.class_name2, ...]
 

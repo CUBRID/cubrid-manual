@@ -2344,7 +2344,7 @@ HA 관련 파라미터
 
 **recovery_progress_logging_interval**
     
- **recovery_progress_logging_interval** 는 복구 (recovery) 의 상세과정을 로그에 출력할지 여부와 출력 주기를 설정한다. 분석(analysis), 리두(redo), 언두(undo) 각 단계별 전체 작업량과 현재 작업량, 앞으로 남은 시간 예상치를 출력한다. 5초보다 작게 설정될 경우 5초로 설정된다.
+ **recovery_progress_logging_interval** 는 복구 (recovery) 의 상세과정을 로그에 출력할지 여부와 출력 주기를 설정한다. 분석(analysis), 리두(redo), 언두(undo) 각 단계별 전체 작업량과 현재 작업량, 앞으로 남은 시간 예상치를 출력한다. 5초보다 작게 설정될 경우 5초로 설정되고 크게 설정한 경우 설정값(sec) 주기로 출력된다.
 
 **supplemental_log**
 
@@ -2368,7 +2368,7 @@ HA 관련 파라미터
 
 .. note::
 
-    *   **deduplicate_key_level**\를  **\-1**\로 지정하는 경우에는 CREATE INDEX 구문에서 명시적으로 *deduplicate level*\을 지정하더라도 무시되고 *deduplicate level*\은 0으로 강제 설정된다.
+    *   **deduplicate_key_level**\를  **\-1**\로 지정하는 경우에는 CREATE INDEX 구문에서 명시적으로 *deduplicate level*\을 지정하더라도 무시된다.
 
   
 **print_index_detail**

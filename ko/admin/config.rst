@@ -2368,7 +2368,7 @@ HA 관련 파라미터
 
 .. note::
 
-    *   **deduplicate_key_level**\를  **\-1**\로 지정하는 경우에는 CREATE INDEX 구문에서 명시적으로 *deduplicate level*\을 지정하더라도 무시되고 *deduplicate level*\은 0으로 강제 설정된다.
+    *   **deduplicate_key_level**\를  **\-1**\로 지정하는 경우에는 CREATE INDEX 구문에서 명시적으로 *deduplicate level*\을 지정하더라도 무시된다.
 
   
 **print_index_detail**

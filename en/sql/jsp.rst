@@ -947,7 +947,7 @@ You can load a Java \*.class or \*.jar file using **loadjava** utility. The file
 *   [*option*]
 
     *   **-y**: automatically overwrites a file with the same name, if any. If you do not use this option, you will get a prompt asking if you want to overwrite the file with the same name, if any.
-    *   **-j**: moves to the path for statically loading Java \*.class files or \*.jar files. This option should be used when loading native libraries for JNI to ensure they are loaded correctly.
+    *   **-j(or --jni)**: moves to the path for statically loading Java \*.class files or \*.jar files. This option should be used to prevent native library loading errors when loading classes that include JNI (native libraries).
 
 .. _jsp-caution:
 

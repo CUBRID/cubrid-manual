@@ -3526,7 +3526,7 @@ vacuumdb
 flashback
 ---------
 
-**cubrid flashback** 유틸리티는 커밋된 트랜잭션을 되돌릴 수 있는 SQL 구문을 제공하며, **DBA** 사용자만 수행할 수 있다. **cubrid flashback** 을 수행하기 위해서는 시스템 파라미터 **supplemental_log** 를 반드시 0보다 큰 값으로 설정해야 하며, **supplemental_log** 가 설정된 후에 실행되는 DML에 대해서만 지원한다. ::
+**cubrid flashback** 유틸리티는 커밋된 트랜잭션을 되돌릴 수 있는 SQL 구문을 제공하며, **DBA** 사용자만 수행할 수 있다. **cubrid flashback** 을 수행하기 위해서는 시스템 파라미터 **supplemental_log** 를 반드시 0보다 큰 값으로 설정해야 하며, **supplemental_log** 가 설정된 후에 실행되는 DML에 대해서만 지원한다. 이 유틸리티는 클라이언트/서버 모드에서만 동작하고 동시에 두개 이상 수행할 수 없다:.::
 
     cubrid flashback [options] database_name owner_name.class_name1 [owner_name.class_name2, ...]
 

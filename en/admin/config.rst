@@ -2397,7 +2397,7 @@ The following are other parameters. The type and value range for each parameter 
  
 .. note::
 
-    *   If **deduplicate_key_level** is set to **-1**, even if the *deduplicate level* is explicitly specified in the CREATE INDEX statement, it is ignored and the *deduplicate level* is forced to 0.
+    *   If **deduplicate_key_level** is set to **-1**, even if the *deduplicate level* is explicitly specified in the CREATE INDEX statement, it is ignored.
 
 
 **print_index_detail**

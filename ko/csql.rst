@@ -103,7 +103,7 @@ CSQL 시작 옵션
 
     $ csql
     A database-name is missing.
-    interactive SQL utility, version 11.2
+    interactive SQL utility, version 11.3
     usage: csql [OPTION] database-name[@host]
 
     valid options:
@@ -298,7 +298,7 @@ CSQL 시작 옵션
 
 .. option:: --no-single-line
 
-    **\-\-no-single-line** 옵션을 이용하면 SQL 문 여러 개를 저장해 두었다가 **;xr** 혹은 **;r** 세션 명령어로 한꺼번에 수행한다. 이 옵션을 지정하지 않으면 **;xr** 혹은 **;r** 세션 명령어 없이 SQL 문이 바로 실행된다. 또한, ;SIngleline 세션 명령을 통해 동일한 결과를 얻을 수 있다. ::
+    **\-\-no-single-line** 옵션을 이용하면 SQL 문 여러 개를 저장해 두었다가 **;xr** 혹은 **;ru** 세션 명령어로 한꺼번에 수행한다. 이 옵션을 지정하지 않으면 **;xr** 혹은 **;ru** 세션 명령어 없이 SQL 문이 바로 실행된다. 또한, ;SIngleline 세션 명령을 통해 동일한 결과를 얻을 수 있다. ::
 
         csql --no-single-line demodb
 
@@ -402,6 +402,12 @@ CSQL 인터프리터에는 SQL 문 이외에 CSQL 인터프리터를 제어하�
     drwxr-xr-x  2 DBA cubrid   4096 Jul 29 16:17 conf
     drwxr-xr-x  4 DBA cubrid   4096 Jul 29 16:14 cubridmanager
     csql>
+
+OS 환경변수(CUBRID_CSQL_SHELL 또는 SHELL, 두 환경변수가 설정된 경우 CUBRID_CSQL_SHELL 사용)를 미리 등록하여 사용할 수도 있다. ::
+
+   $ export CUBRID_CSQL_SHELL='ls -la'
+   또는
+   $ export SHELL='ls -la'
 
 **페이저 명령어 등록(;PAger_cmd)**
 
@@ -1412,17 +1418,19 @@ CSQL 인터프리터에서 작업 중인 데이터베이스 이름 및 호스트
 
 **포맷터 설정(;FOrmatter_cmd)**
 
-**;EDIT** 세션 명령어에서 옵션으로 사용될 포맷터를 지정한다. 예제와 같이 사용자가 설정하여 사용할 수 있고, OS 환경변수(FORMATTER)를 미리 설정하여 사용할 수 있다. ::
+**;EDIT** 세션 명령어에서 옵션으로 사용될 포맷터를 지정한다. 예제와 같이 사용자가 설정하여 사용할 수 있고, OS 환경변수(CUBRID_CSQL_FORMATTER 또는 FORMATTER, 두 환경변수가 설정된 경우 CUBRID_CSQL_FORMATTER를 사용)를 미리 등록하여 사용할 수 있다. ::
 
     csql> ;formatter_cmd /usr/local/bin/fsqlf
 
-    $ setenv FORMATTER /home/cubrid/bin/fsqlf
+    $ export CUBRID_CSQL_FORMATTER=/home/cubrid/bin/fsqlf
+    또는
+    $ export FORMATTER=/home/cubrid/bin/fsqlf
 
 .. note::
     
         Free SQL Formatter 사용을 권고합니다.
 
-        다운로드 URL: https://github.com/CUBRID/fsqlf/releases/download/v.1.0.0-csql.1/fsqlf-1.0.0.csql.1.gz
+        다운로드 URL: https://github.com/CUBRID/fsqlf/releases/download/v.1.1.0-csql/fsqlf-1.1.0.csql.tar.gz
 
 **편집기 설정(;EDITOR_Cmd)**
 
@@ -1430,10 +1438,16 @@ CSQL 인터프리터에서 작업 중인 데이터베이스 이름 및 호스트
 
     csql> ;editor_cmd emacs
     csql> ;edit
+
+OS 환경변수(CUBRID_CSQL_EDITOR 또는 EDITOR, 두 환경변수가 설정된 경우 CUBRID_CSQL_EDITOR를 사용)를 미리 등록하여 사용할 수도 있다. ::
+
+   export CUBRID_CSQL_EDITOR=emacs
+   또는
+   export EDITOR=emacs
         
 **싱글 라인 모드 설정(;SIngleline)**
 
-싱글 라인 모드를 **ON** 또는 **OFF** 로 설정하는 명령어이다 (기본값 **ON**). 싱글 라인 모드 ON에서는 세미콜론(;)과 ENTER를 입력하면 SQL문이 바로 실행된다. 싱글 라인 모드 OFF에서는 여러 개의 SQL 문을 저장해 두었다가 ;xr 혹은 ;r 세션 명령어로 한꺼번에 수행한다. 만약, ON 또는 OFF 를 지정하지 않으면 현재 설정된 값을 보여준다. ::
+싱글 라인 모드를 **ON** 또는 **OFF** 로 설정하는 명령어이다 (기본값 **ON**). 싱글 라인 모드 ON에서는 세미콜론(;)과 ENTER를 입력하면 SQL문이 바로 실행된다. 싱글 라인 모드 OFF에서는 여러 개의 SQL 문을 저장해 두었다가 ;xr 혹은 ;ru 세션 명령어로 한꺼번에 수행한다. 만약, ON 또는 OFF 를 지정하지 않으면 현재 설정된 값을 보여준다. ::
 
     csql> ;singleline off
     SINGLE IS OFF

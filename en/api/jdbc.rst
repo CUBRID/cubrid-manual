@@ -29,7 +29,7 @@ You can verify the version of JDBC driver as follows: ::
     cubrid/sql/
     cubrid/jdbc/driver/CUBRIDBlob.class
     ...
-    CUBRID-JDBC-11.1.0.0027
+    CUBRID-JDBC-11.2.0.0035
 
 **Registering CUBRID JDBC Driver**
 
@@ -143,7 +143,7 @@ The **getConnection** method returns the **Connection** object and it is used to
                  | usePreparedStmtCache=<bool_type>
                  | preparedStmtCacheSize=<unit_size>
                  | preparedStmtCacheSqlLimit=<unit_size>
-                 | hold_cursor=<bool_type>		 
+                 | hold_cursor=<bool_type>
 
         <alternative_hosts> ::=
         <standby_broker1_host>:<port> [,<standby_broker2_host>:<port>]
@@ -203,8 +203,7 @@ The **getConnection** method returns the **Connection** object and it is used to
     *  **usePreparedStmtCache**: Prepared Statement Cache mode (Default: false)
     *  **preparedStmtCacheSize**: If usePreparedStmtCache is TRUE, the number of SQLs that can be cached (Default:25, Min:1, Max:2147483647)
     *  **preparedStmtCacheSqlLimit**: If usePreparedStmtCache is TRUE, length of SQL that can be cached (Default:256, Min:1, Max:2147483647)
-    *  **hold_cursor**: Cursor holdability setting (default: false). If this value is false, CLOSE_CURSORS_AT_COMMIT is set, and if true, HOLD_CURSORS_OVER_COMMIT is set. For details, see :ref:`cursor-holding`\ .
-
+    *  **hold_cursor**: Cursor holdability setting (default: true). If this value is false, CLOSE_CURSORS_AT_COMMIT is set, and if true, HOLD_CURSORS_OVER_COMMIT is set. For details, see :ref:`cursor-holding`\ .
 
 **Example 1** ::
 

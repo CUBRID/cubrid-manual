@@ -146,7 +146,7 @@ SQL 문 내에서 ':=' 연산자를 사용하여 사용자 정의 변수를 선�
     DEALLOCATE VARIABLE @a, @user_defined_variable;
     DROP VARIABLE @a, @user_defined_variable;
 
-.. note:: \
+.. note::
 
     **SET** 문에 의해 정의되는 사용자 정의 변수는 응용 프로그램이 서버에 연결하면서 시작되어 응용 프로그램이 연결을 종료할 때까지 유지되며, 이 기간동안 유지되는 연결을 세션(session)이라고 한다. 사용자 정의 변수는 응용 프로그램이 연결을 종료하거나 일정 기간 동안 요청이 없어 세션 기간이 만료될(expired) 때 삭제된다. 세션 기간은 **cubrid.conf** 의 **session_state_timeout** 파라미터로 설정할 수 있으며, 기본값은 **21600** 초(=6시간)이다.
 

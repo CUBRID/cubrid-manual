@@ -488,7 +488,7 @@ MOD
 
 .. function:: MOD (m, n)
 
-    The **MOD** function returns the remainder of the first parameter *m* divided by the second parameter *n*. If *n* is 0, *m* is returned without the division operation being performed. When you input the string which cannot be transformed into the number, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
+    The **MOD** function returns the remainder of the first parameter *m* divided by the second parameter *n*. If *n* is 0 or greater than *m*, *m* is returned without the division operation being performed. When you input the string which cannot be transformed into the number, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
     
     Note that if the dividend, the parameter m of the **MOD** function, is a negative number, the function operates differently from a typical operation (classical modulus) method. 
 
@@ -511,7 +511,7 @@ MOD
 
     :param m: Represents a dividend. It is an expression that returns a numeric value.
     :param n: Represents a divisor. It is an expression that returns a numeric value.
-    :rtype: INT
+    :rtype: Result type of m/n
 
 .. code-block:: sql
 

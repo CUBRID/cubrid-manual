@@ -1435,18 +1435,26 @@ Index_name                          VARCHAR(256)    인덱스 이름
 Btid                                VARCHAR(64)     BTID (volid|fileid|root_pageid)
 Num_distinct_key                    INT             단말 노드(leaf) 페이지의 Distinct key 개수
 Total_value                         INT             트리에 저장된 값의 총 개수
+Deduplicate_distinct_key            INT             단말 노드(leaf) 페이지의 Deduplicated Distinct key 개수
 Avg_num_value_per_key               INT             키당 OID 값의 평균 개수
+Avg_num_value_per_deduplicate_key   INT             Deduplicated된 키당 OID 값의 평균 개수
 Num_leaf_page                       INT             단말 노드(leaf) 페이지 개수
 Num_non_leaf_page                   INT             비단말(NonLeaf) 노드 페이지 개수
+Num_ovf_page                        INT             단말 노드의 오버플로우 페이지 개수
 Num_total_page                      INT             전체 페이지 개수
 Height                              INT             트리의 높이
 Avg_key_len                         INT             평균 키 길이
 Avg_rec_len                         INT             평균 페이지 레코드 길이
 Total_space                         VARCHAR(64)     인덱스에 의해 점유되는 전체 공간
-Total_used_space                    VARCHAR(64)     인덱스의 전체 사용 공간
-Total_free_space                    VARCHAR(64)     인덱스의 전체 여유 공간
-Avg_num_page_key                    INT             단말 노드 페이지에서 페이지 당 평균 키 개수
-Avg_page_free_space                 VARCHAR(64)     페이지 당 평균 여유 공간
+Total_used_space_non_ovf            VARCHAR(64)     할당된 페이지에서 사용된 총 공간(단말 노드의 오버플로우 페이지는 제외)
+Total_free_space_non_ovf            VARCHAR(64)     할당된 페이지에서 사용되지 않은 총 공간(단말 노드의 오버플로우 페이지는 제외)
+Total_used_space_ovf                VARCHAR(64)     단말 노드의 할당된 오버플로우 페이지에서 사용된 총 공간
+Total_free_space_ovf                VARCHAR(64)     단말 노드의 할당된 오버플로우 페이지에서 사용되지 않은 총 공간
+Avg_num_key_per_page_non_ovf        INT             단말 노드 페이지에서 페이지 당 평균 키 개수
+Avg_free_space_per_page_non_ovf     VARCHAR(64)     단말 노드 페이지에서 페이지 당 평균 여유 공간
+Avg_num_key_per_page_ovf            INT             단말 노드의 오버플로우 페이지에서 페이지 당 평균 키 개수
+Avg_free_space_per_page_ovf         VARCHAR(64)     단말 노드의 오버플로우 페이지 당 평균 여유 공간
+Max_num_ovf_page_a_key              INT             하나의 키에 대해 연결된 단말 노드의 오버플로우 페이지의 최대 개수
 =================================== =============== ======================================================================================================================================
 
 다음은 이 구문을 수행한 예이다.
@@ -1464,25 +1472,32 @@ Avg_page_free_space                 VARCHAR(64)     페이지 당 평균 여유 
     SHOW INDEX CAPACITY OF tbl1.index_a;
     
 ::
-    
-    <00001> Table_name           : 'tbl1'
-            Index_name           : 'index_a'
-            Btid                 : '(0|378|950)'
-            Num_distinct_key     : 0
-            Total_value          : 0
-            Avg_num_value_per_key: 0
-            Num_leaf_page        : 1
-            Num_non_leaf_page    : 0
-            Num_total_page       : 1
-            Height               : 1
-            Avg_key_len          : 0
-            Avg_rec_len          : 0
-            Total_space          : '16.0K'
-            Total_used_space     : '116.0B'
-            Total_free_space     : '15.9K'
-            Avg_num_page_key     : 0
-            Avg_page_free_space  : '15.9K'
 
+    <00001> Table_name                       : 'dba.tbl1'
+            Index_name                       : 'index_a'
+            Btid                             : '(0|4160|4161)'
+            Num_distinct_key                 : 0
+            Total_value                      : 0
+            Deduplicate_distinct_key         : 0
+            Avg_num_value_per_key            : 0
+            Avg_num_value_per_deduplicate_key: 0
+            Num_leaf_page                    : 1
+            Num_non_leaf_page                : 0
+            Num_ovf_page                     : 0
+            Num_total_page                   : 1
+            Height                           : 1
+            Avg_key_len                      : 0
+            Avg_rec_len                      : 0
+            Total_space                      : '16.0K'
+            Total_used_space_non_ovf         : '120.0B'
+            Total_free_space_non_ovf         : '15.8K'
+            Total_used_space_ovf             : '0.0B'
+            Total_free_space_ovf             : '0.0B'
+            Avg_num_key_per_page_non_ovf     : 0
+            Avg_free_space_per_page_non_ovf  : '15.8K'
+            Avg_num_ovf_page_per_key         : 0
+            Avg_free_space_per_page_ovf      : '0.0B'
+            Max_num_ovf_page_a_key           : 0
 
 .. code-block:: sql
       
@@ -1490,40 +1505,56 @@ Avg_page_free_space                 VARCHAR(64)     페이지 당 평균 여유 
     
 ::
 
-    <00001> Table_name           : 'tbl1'
-            Index_name           : 'index_a'
-            Btid                 : '(0|378|950)'
-            Num_distinct_key     : 0
-            Total_value          : 0
-            Avg_num_value_per_key: 0
-            Num_leaf_page        : 1
-            Num_non_leaf_page    : 0
-            Num_total_page       : 1
-            Height               : 1
-            Avg_key_len          : 0
-            Avg_rec_len          : 0
-            Total_space          : '16.0K'
-            Total_used_space     : '116.0B'
-            Total_free_space     : '15.9K'
-            Avg_num_page_key     : 0
-            Avg_page_free_space  : '15.9K'
-    <00002> Table_name           : 'tbl1'
-            Index_name           : 'index_b'
-            Btid                 : '(0|381|960)'
-            Num_distinct_key     : 0
-            Total_value          : 0
-            Avg_num_value_per_key: 0
-            Num_leaf_page        : 1
-            Num_non_leaf_page    : 0
-            Num_total_page       : 1
-            Height               : 1
-            Avg_key_len          : 0
-            Avg_rec_len          : 0
-            Total_space          : '16.0K'
-            Total_used_space     : '120.0B'
-            Total_free_space     : '15.9K'
-            Avg_num_page_key     : 0
-            Avg_page_free_space  : '15.9K'
+    <00001> Table_name                       : 'dba.tbl1'
+            Index_name                       : 'index_a'
+            Btid                             : '(0|4160|4161)'
+            Num_distinct_key                 : 0
+            Total_value                      : 0
+            Deduplicate_distinct_key         : 0
+            Avg_num_value_per_key            : 0
+            Avg_num_value_per_deduplicate_key: 0
+            Num_leaf_page                    : 1
+            Num_non_leaf_page                : 0
+            Num_ovf_page                     : 0
+            Num_total_page                   : 1
+            Height                           : 1
+            Avg_key_len                      : 0
+            Avg_rec_len                      : 0
+            Total_space                      : '16.0K'
+            Total_used_space_non_ovf         : '120.0B'
+            Total_free_space_non_ovf         : '15.8K'
+            Total_used_space_ovf             : '0.0B'
+            Total_free_space_ovf             : '0.0B'
+            Avg_num_key_per_page_non_ovf     : 0
+            Avg_free_space_per_page_non_ovf  : '15.8K'
+            Avg_num_ovf_page_per_key         : 0
+            Avg_free_space_per_page_ovf      : '0.0B'
+            Max_num_ovf_page_a_key           : 0
+    <00002> Table_name                       : 'dba.tbl1'
+            Index_name                       : 'index_b'
+            Btid                             : '(0|4224|4225)'
+            Num_distinct_key                 : 0
+            Total_value                      : 0
+            Deduplicate_distinct_key         : 0
+            Avg_num_value_per_key            : 0
+            Avg_num_value_per_deduplicate_key: 0
+            Num_leaf_page                    : 1
+            Num_non_leaf_page                : 0
+            Num_ovf_page                     : 0
+            Num_total_page                   : 1
+            Height                           : 1
+            Avg_key_len                      : 0
+            Avg_rec_len                      : 0
+            Total_space                      : '16.0K'
+            Total_used_space_non_ovf         : '124.0B'
+            Total_free_space_non_ovf         : '15.8K'
+            Total_used_space_ovf             : '0.0B'
+            Total_free_space_ovf             : '0.0B'
+            Avg_num_key_per_page_non_ovf     : 0
+            Avg_free_space_per_page_non_ovf  : '15.8K'
+            Avg_num_ovf_page_per_key         : 0
+            Avg_free_space_per_page_ovf      : '0.0B'
+            Max_num_ovf_page_a_key           : 0
 
 SHOW CRITICAL SECTIONS
 ----------------------

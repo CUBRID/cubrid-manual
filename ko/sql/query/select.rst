@@ -146,6 +146,7 @@ FROM 절
 *   개별 테이블(single table)
 *   부질의(subquery)
 *   유도 테이블(derived table)
+*   원격 테이블(remote table)
 
 ::
 
@@ -158,6 +159,7 @@ FROM 절
      
     <table_specification> ::=
         <single_table_spec> [<correlation>] |
+        <remote_table_spec> [<correlation>] |
         <metaclass_specification> [<correlation>] |
         <subquery> <correlation> |
         TABLE (<expression>) <correlation> |
@@ -167,6 +169,8 @@ FROM 절
      
     <single_table_spec> ::= [ONLY] [schema_name.]table_name |
                           ALL [schema_name.]table_name [EXCEPT [schema_name.]table_name]
+
+    <remote_table_spec> ::= [schema_name.]table_name@server_name
      
     <metaclass_specification> ::= CLASS [schema_name.]class_name
      
@@ -253,6 +257,73 @@ FROM 절
 
 .. _dblink-clause:
 
+원격 테이블
+-----------
+
+FROM절에 원격 테이블 (remote table) 을 명시할 수 있으며, 원격 테이블을 명시할 때는 '@'를 사용하여 table_name@server_name와 같은 테이블 확장명을 사용한다. 원격 서버는 CUBRID 뿐만아니라 타 DBMS(ORACLE, MySQL 또는 MariaDB)을 사용할 수 있다. 원격 테이블은 최적화 단계를 거치면서 DBLINK 구문으로 재 작성되어 실행된다.
+
+.. code-block:: sql
+
+   -- at remote-side, "remote_server"
+   CREATE TABLE remote_tbl (
+     id INT,
+     name VARCHAR(32)
+   );
+
+   INSERT INTO remote_tbl VALUES (1, 'Kim');
+   INSERT INTO remote_tbl VALUES (2, 'Lee');
+   INSERT INTO remote_tbl VALUES (3, 'Park');
+
+::
+
+   -- at local-side
+   SELECT *
+   FROM remote_tbl@remote_server rem
+   WHERE id < 3;
+
+::
+
+       id       name
+   ===================
+        1       Kim
+        2       Lee
+
+최적화 단계에서 원격테이블에 대해 DBLINK 구문으로 재 작성된 쿼리는 아래와 같다.
+
+.. code-block:: sql
+
+   SELECT *
+   FROM DBLINK(remote_server, 'SELECT id, name FROM remote_tbl WHERE id < 3') AS dbl (id INT, name VARCHAR(32));
+
+.. note::
+
+    테이블 확장명에 허용되는 객체는 일반 테이블, 동의어(synonym), 그리고 뷰가 있다. 아래의 예는 세가지 형태의 테이블 확장명을 보여주고 있다.
+
+.. code-block:: sql
+
+    -- at remote-side
+    CREATE TABLE remote_table (
+      id INT,
+      phone VARCHAR(12)
+    };
+
+    CREATE SYNONYM a_remote_tbl FOR user_a.remote_table
+    CREATE VIEW v_remote_tbl(r_phone) AS SELECT phone FROM remote_tble WHERE id > 10;
+
+::
+
+    -- at local-side
+
+    -- remote-table
+    SELECT phone FROM user_a.remote_table@server1 WHERE id > 10;
+
+    -- remote-synonym
+    SELECT phone FROM a_remote_tbl@server1 WHERE id > 10;
+
+    -- remote-view
+    SELECT r_phone FROM v_remote_tbl@server1;
+
+위 3개의 쿼리는 모두 동일한 결과를 리턴한다.
 
 DBLINK
 --------

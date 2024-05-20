@@ -13,16 +13,19 @@ You can update the column value of a record stored in the target table or view t
 ::
 
     <UPDATE single table>
-    UPDATE [schema_name.]table_name|view_name SET column_name = {<expr> | DEFAULT} [, column_name = {<expr> | DEFAULT} ...]
+    UPDATE [schema_name.]table_name | <remote_table_spec> | view_name SET column_name = {<expr> | DEFAULT} [, column_name = {<expr> | DEFAULT} ...]
         [WHERE <search_condition>]
         [ORDER BY {col_name | <expr>}]
         [LIMIT row_count]
      
+    <remote_table_spec> ::= [schema_name.]table_name@[schema.name.]server_name [correlation>]
     <UPDATE multiple tables>
     UPDATE <table_specifications> SET column_name = {<expr> | DEFAULT} [, column_name = {<expr> | DEFAULT} ...]
         [WHERE <search_condition>]
 
 *   <*table_specifications*>: You can specify the statement such as **FROM** clause of the **SELECT** statement and one or more tables can be specified.
+
+*   *server_name*: Used when specifying a table of a remote server connected by dblink, not the current server.
 
 *   *column_name*: Specifies the column name to be updated. Columns for one or more tables can be specified.
 
@@ -170,3 +173,62 @@ If the value of this parameter is no, the updated value of "b" from the above UP
 :: 
   
     1, NULL
+
+Table extensions can be used to perform updates on tables on the remote server as well as on the local server. The following is an example of updating a remote table.
+
+.. code-block:: sql
+
+    --at remote srv1
+    --creating a new table having all records copied from a_tbl1
+    --origin is a local server
+    CREATE TABLE a_tbl5 AS SELECT * FROM a_tbl1@origin;
+
+    --at local
+    SELECT * FROM a_tbl5@srv1 WHERE name IS NULL;
+               id  name                  phone
+    =========================================================
+             NULL  NULL                  '000-0000'
+                4  NULL                  '000-0000'
+                5  NULL                  '000-0000'
+                7  NULL                  '777-7777'
+
+    --at local
+    UPDATE a_tbl5@srv1 SET name='yyy', phone='999-9999' WHERE name IS NULL LIMIT 3;
+    SELECT * FROM a_tbl5@srv1;
+               id  name                  phone
+    =========================================================
+             NULL  'yyy'                 '999-9999'
+                1  'aaa'                 '000-0000'
+                2  'bbb'                 '000-0000'
+                3  'ccc'                 '333-3333'
+                4  'yyy'                 '999-9999'
+                5  'yyy'                 '999-9999'
+                6  'eee'                 '000-0000'
+
+The following is an example of performing an update after joining multiple tables, including remote tables.
+
+.. code-block:: sql
+
+    --at remote srv1
+    --creating a table b_tbl
+    CREATE TABLE b_tbl(rate_id INT, rate DOUBLE);
+    --at local
+    INSERT INTO a_tbl VALUES (1, 100.0), (2, 1000.0), (3, 10000.0);
+    INSERT INTO b_tbl@srv1 VALUES (1, 0.1), (2, 0.0), (3, 0.2), (3, 0.5);
+    UPDATE
+     a_tbl INNER JOIN b_tbl@srv1 b_tbl ON a_tbl.id=b_tbl.rate_id
+    SET
+      a_tbl.charge = a_tbl.charge * (1 + b_tbl.rate)
+    WHERE a_tbl.charge > 900.0;
+
+.. warning::
+
+    As shown below, UPDATE ... JOIN queries that include local and remote tables and update the remote table are not allowed.
+
+.. code-block:: sql
+
+    UPDATE
+     a_tbl INNER JOIN b_tbl@srv1 b_tbl ON a_tbl.id=b_tbl.rate_id
+    SET
+      b_tbl.charge = a_tbl.charge * (1 + b_tbl.rate)
+    WHERE a_tbl.charge > 900.0;

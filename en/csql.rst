@@ -103,7 +103,7 @@ To display the option list in the prompt, execute the **csql** utilities without
 
     $ csql
     A database-name is missing.
-    interactive SQL utility, version 11.2
+    interactive SQL utility, version 11.3
     usage: csql [OPTION] database-name[@host]
 
     valid options:
@@ -298,7 +298,7 @@ To display the option list in the prompt, execute the **csql** utilities without
 
 .. option:: --no-single-line
 
-    The following example shows how to keep storing multiple SQL statements and execute them at once with the **;xr** or **;r** session command. If you do not specify this option, SQL statements are executed without **;xr** or **;r** session command. ;Singleline command will also have the same result. ::
+    The following example shows how to keep storing multiple SQL statements and execute them at once with the **;xr** or **;ru** session command. If you do not specify this option, SQL statements are executed without **;xr** or **;ru** session command. ;Singleline command will also have the same result. ::
 
         csql --no-single-line demodb
 
@@ -402,6 +402,12 @@ The **;SHELL_Cmd** command registers a shell command to execute with the **SHELL
     drwxr-xr-x  2 DBA cubrid   4096 Jul 29 16:17 conf
     drwxr-xr-x  4 DBA cubrid   4096 Jul 29 16:14 cubridmanager
     csql>
+
+The OS environment variable(CUBRID_CSQL_SHELL or SHELL; CUBRID_CSQL_SHELL is used if both environment variables are set) may be registered and used in advance. ::
+  
+   $ export CUBRID_CSQL_SHELL='ls -la'
+   or
+   $ export SHELL='ls -la'
 
 **Registering a pager command (;PAger_cmd)**
 
@@ -1412,17 +1418,19 @@ The **format** or **fmt** option allows you to edit after formatting the SQL sta
 
 **Specifying the formatter (;FOrmatter_cmd)**
 
-This command specifies the formatter to be used with **;EDIT** session command. The user can set it up and use it as shown in the example, and OS environment variable(FORMATTER) can be set up in advance for use. ::
+This command specifies the formatter to be used with **;EDIT** session command. The user can set it up and use it as shown in the example, and the OS environment variable(CUBRID_CSQL_FORMATTER or FORMATTER; CUBRID_CSQL_FORMATTER is used if both environment variables are set) can be configured in advance for use. ::
 
     csql> ;formatter_cmd /usr/local/bin/fsqlf
 
-    $ setenv FORMATTER /home/cubrid/bin/fsqlf
+    $ export CUBRID_CSQL_FORMATTER=/home/cubrid/bin/fsqlf
+    or
+    $ export FORMATTER=/home/cubrid/bin/fsqlf
 
 .. note::
 
         The use of Free SQL Formatter is recommended.
 
-        Download URL: https://github.com/CUBRID/fsqlf/releases/download/v.1.0.0-csql.1/fsqlf-1.0.0.csql.1.gz
+        Download URL: https://github.com/CUBRID/fsqlf/releases/download/v.1.1.0-csql/fsqlf-1.1.0.csql.tar.gz
 
 **Specifying the editor (;EDITOR_Cmd)**
 
@@ -1431,9 +1439,15 @@ This command specifies the editor to be used with **;EDIT** session command. As 
     csql> ;editor_cmd emacs
     csql> ;edit
 
+The OS environment variable(CUBRID_CSQL_EDITOR or EDITOR; CUBRID_CSQL_EDITOR is used if both environment variables are set) may be registered and used in advance. ::
+
+    export CUBRID_CSQL_EDITOR=emacs
+    or
+    export EDITOR=emacs
+
 **Specifying the single line mode (;SIngleline)**
 
-This command sets single line mode to **ON** or **OFF** (default value is **ON**). If you type semi-colon(;) and ENTER key in the single line ON mode, SQL statements are executed. If single line mode is set to **OFF**, multiple SQL statements are retrieved and executed at once with the **;xr** or **;r** session command. If any value is not specified, current configured value is applied by default. ::
+This command sets single line mode to **ON** or **OFF** (default value is **ON**). If you type semi-colon(;) and ENTER key in the single line ON mode, SQL statements are executed. If single line mode is set to **OFF**, multiple SQL statements are retrieved and executed at once with the **;xr** or **;ru** session command. If any value is not specified, current configured value is applied by default. ::
 
     csql> ;singleline off
     SINGLE IS OFF

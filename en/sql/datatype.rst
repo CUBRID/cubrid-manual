@@ -2180,7 +2180,7 @@ JSON type columns with stricter validation rules can be defined using the
 `draft JSON Schema standard <https://json-schema.org/specification.html>`_.
 If you are not familiar with JSON Schema, you may refer to
 `Understanding JSON Schema
-<https://json-schema.org/understanding-json-schema/index.html>`_.
+<https://json-schema.org/understanding-json-schema>`_.
 
 A simple example of how schema can be used:
 

@@ -263,6 +263,8 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | only_full_group_by                  | client parameter        | O       | bool     | no                             | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | oracle_compat_number_behavior       | server parameter        |         | bool     | no                             |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | oracle_style_empty_string           | client parameter        |         | bool     | no                             |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | pipes_as_concat                     | client parameter        |         | bool     | yes                            |                       |
@@ -349,8 +351,6 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | use_stat_estimation                 | server parameter        |         | bool     | no                             |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | pthread_scope_process               | server parameter        |         | bool     | yes                            |                       |
-|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | server                              | server parameter        |         | string   |                                |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | service                             | server parameter        |         | string   |                                |                       |
@@ -383,6 +383,14 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               | supplemental_log                    | client/server parameter |         | int      | 0                              |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | regexp_engine                       | client/server parameter |         | string   | re2                            | available             |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | vacuum_ovfp_check_threshold         | server parameter        |         | int      | 1000                           |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | vacuum_ovfp_check_duration          | server parameter        |         | int      | 45000                          |                       |
++                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | deduplicate_key_level               | client/server parameter |         | int      | -1                             |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | print_index_detail                  | client/server parameter |         | bool     | no                             |                       |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 
 .. _lpg:
@@ -595,39 +603,54 @@ The following are parameters related to the database server. The type and value 
 
         If **use_user_hosts** parameter is changed during service operation, CUBRID service cannot terminate normally. So, the user must change the parameter after CUBRID service terminates.
 
-    *   The format of **$CUBRID/conf/hosts.conf** is same as **/etc/hosts** but there are some restrictions as follows.
+    *   The format of **$CUBRID/conf/cubrid_hosts.conf** is same as **/etc/hosts** but there are some restrictions as follows.
 
         * Allow **IPv4** format address only. (Not allow **IPv6** format address)
-        * Not allow below **alias** format. ::
+        * Not allow **alias**. ::
 
            172.31.0.1 host1 alias1 alias2
 
-        * Allow below **alias** format. ::
+        * If there are multiple IP addresses, the top of information ,{ip, hostname}, is used except others. ::
 
            172.31.0.1 host1
            172.31.0.1 alias1
+           172.31.0.1 alias2
 
-        * Not allow more than two IP address for one hostname. ::
+        * If you use the same hostname for more than one IP, only the topmost IP will be applied. ::
 
             172.31.0.1 host1
             178.31.0.2 host1
 
-    * The following is an example of $CUBRID/conf/hosts.conf. ::
+    * The following is an example of $CUBRID/conf/cubrid_hosts.conf. ::
 
             #
             # hosts file for CUBRID user specific host service
             #
             127.0.0.1       localhost
             172.31.0.1      node1
-            172.31.0.1      node2
-            172.31.0.1      node3
             192.168.0.31    node4.kr         # Seoul
             192.168.2.31    node5.gov.or.kr  # Daejeon
 
 
 .. warning::
 
-    You must change $CUBRID/conf/hosts.conf after terminating all CUBRID processes, and **the changes will be applied after restarting.** In addition, you must write including **localhost** and **'hostname'** (The output of hostname command by among Linux commands) in the hosts.conf.
+    You must change $CUBRID/conf/cubrid_hosts.conf after terminating all CUBRID processes, and **the changes will be applied after restarting.** In addition, you must write including **localhost** and **'hostname'** (The output of hostname command by among Linux commands) in the cubrid_hosts.conf.
+
+.. warning::
+
+    The hostname adheres the following format in the $CUBRID/conf/cubrid_hosts.conf (The Linux hostname naming rule).
+
+    * Only English letters, numbers (0 to 9), hyphen ('-'), and dot (".") characters can be used for the hostname.
+    * The first character of the hostname must be an English letter.
+    * The last character of the hostname must be an English letter and a number.
+    * FQDN (Fully Qualified Domain Name) format hostname can be used (Example: www.cubrid.com). 
+
+    Allow the following hostname.
+
+    ::
+
+      cubrid-dev1
+      CUB2.dev
 
 .. _memory-parameters:
 
@@ -751,7 +774,7 @@ The following are disk-related parameters for defining database volumes and stor
     **db_volume_size** is a parameter to configure the following values. You can set a unit as B, K, M, G or T, which stand for bytes, kilobytes (KB), megabytes (MB), gigabytes (GB), and terabytes (TB) respectively. If you omit the unit, bytes will be applied. The default value is **512M**.
 
     *   The default database volume size when **cubrid createdb** and **cubrid addvoldb** utility is used without **\-\-db-volume-size** option.
-    *   The default size of volume that is added automatically when database is full.
+    *   The default size of volume that is maximum size of an automatically added volume when the database is full. (The auto-added volume is incrementally increased by the needed amount, and another volume is created when the volume exceeds db_volume_size.)
 
 .. note::
 
@@ -1280,6 +1303,8 @@ The following are parameters related to SQL statements and data types supported 
 +---------------------------------+--------+------------+------------+------------+
 | only_full_group_by              | bool   | no         |            |            |
 +---------------------------------+--------+------------+------------+------------+
+| oracle_compat_number_behavior   | bool   | no         |            |            |
++---------------------------------+--------+------------+------------+------------+
 | oracle_style_empty_string       | bool   | no         |            |            |
 +---------------------------------+--------+------------+------------+------------+
 | pipes_as_concat                 | bool   | yes        |            |            |
@@ -1494,6 +1519,84 @@ The following are parameters related to SQL statements and data types supported 
 
         ERROR: Attributes exposed in aggregate queries must also appear in the group by clause.
 
+.. _oracle_compat_number_behavior:
+
+**oracle_compat_number_behavior**
+
+    **oracle_compat_number_behavior** is a parameter used to improve compatibility with other DBMS (Database Management Systems); for NUMERIC type, DOUBLE and FLOAT types, it does not display decimal point trailing 0, and in case of DOUBLE and FLOAT, it does not display the exponent. For example, if this parameter setting value is **no**, the result of a query that searches the a_double table composed of DOUBLE types is displayed in the form of an exponent as shown below, but if the parameter setting value is **yes**, only decimal point is displayed.
+
+    .. code-block:: sql
+
+        csql> ;get oracle_compat_number_behavior
+
+        === Get Param Input ===
+
+        oracle_compat_number_behavior=n
+
+        SELECT a FROM a_double;
+
+    ::
+
+                                 a
+        ==========================
+             1.234567890123457e+19
+             1.234567890123457e-08
+             1.230000000000000e-08
+             1.000000000000000e+00
+             1.200000000000000e+00
+            -4.939030300000000e-03
+            -1.293934894993939e+18
+            -1.938943893939394e+16
+
+    ::
+
+        csql> ;get oracle_compat_number_behavior
+
+        === Get Param Input ===
+
+        oracle_compat_number_behavior=y
+
+        SELECT a FROM a_double;
+
+    ::
+
+                                 a
+        ==========================
+              12345678901234570000
+          0.00000001234567890123457
+                      0.0000000123
+                                 1
+                               1.2
+                     -0.0049390303
+              -1293934894993939000
+                -19389438939393940
+
+    Also, when **oracle_compat_number_behavior** is set to **yes**, the type of division operation for integer numbers becomes a real number type (that is, a NUMERIC type) not an integer type. In the example below, if this parameter is **yes**, affected integer types are INT, SHORT and BIGINT.
+
+    .. code-block:: sql
+
+        csql> ;get oracle_compat_number_behavior
+
+        === Get Param Input ===
+
+        oracle_compat_number_behavior=y
+
+        SELECT 1/2;
+
+    ::
+
+               1/2
+        ==========
+               0.5
+
+    .. note:: 
+
+        The oracle_compat_number_behavior is only applied, when reading NUMERIC, DOUBLE, and FLOAT type data in string format in JDBC/CCI.  The related functions of JDBC/CCI are as follows.
+
+        * JDBC : getString(int columnIndex), getString(String columnLabel), getObject(int columnIndex) , getObject(String columnLabel)
+
+        * CCI :  cci_get_data (CCI_A_TYPE_STR as type), Example) cci_get_data(req, i, CCI_A_TYPE_STR, &data, &ind)
+		 
 .. _oracle_style_empty_string:
 
 **oracle_style_empty_string**
@@ -2046,8 +2149,6 @@ The following are other parameters. The type and value range for each parameter 
 +-------------------------------------+--------+----------------+----------------+----------------+
 | use_stat_estimation                 | bool   | no             |                |                |
 +-------------------------------------+--------+----------------+----------------+----------------+
-| pthread_scope_process               | bool   | yes            |                |                |
-+-------------------------------------+--------+----------------+----------------+----------------+
 | server                              | string |                |                |                |
 +-------------------------------------+--------+----------------+----------------+----------------+
 | service                             | string |                |                |                |
@@ -2081,6 +2182,14 @@ The following are other parameters. The type and value range for each parameter 
 | supplemental_log                    | int    | 0 (off)        | 0              | 2              |
 +-------------------------------------+--------+----------------+----------------+----------------+
 | regexp_engine                       | string | re2            |                |                |
++-------------------------------------+--------+----------------+----------------+----------------+
+| vacuum_ovfp_check_threshold         | int    | 1000           | 2              | INT_MAX        |
++-------------------------------------+--------+----------------+----------------+----------------+
+| vacuum_ovfp_check_duration          | int    | 45000          | 1              | 600000         |
++-------------------------------------+--------+----------------+----------------+----------------+
+| deduplicate_key_level               | int    | -1             | -1             | 14             |
++-------------------------------------+--------+----------------+----------------+----------------+
+| print_index_detail                  | bool   | no             |                |                |
 +-------------------------------------+--------+----------------+----------------+----------------+
 
 **access_ip_control**
@@ -2184,10 +2293,6 @@ The following are other parameters. The type and value range for each parameter 
 
     **use_stat_estimation** is a parameter to specify whether to use the estimated information in calculating statistics or not. The default is no. The estimated information generated by the heap manager while processing DML is associated with the number of added objects. it is relatively accurate for the number of total objects, NOT for the number of distinct values.
 
-**pthread_scope_process**
-
-    **pthread_scope_process** is a parameter to configure the contention scope of threads. It only applies to AIX systems. If the parameter is set to **no**, the contention scope becomes **PTHREAD_SCOPE_SYSTEM**; if it is set to **yes**, it becomes **PTHREAD_SCOPE_PROCESS**. The default value is **yes**.
-
 **server**
 
     **server** is a parameter used to register the name of database server process which will run automatically when CUBRID server starts.
@@ -2277,6 +2382,28 @@ The following are other parameters. The type and value range for each parameter 
 **regexp_engine**
 
     **regexp_engine** is a parameter to choose a library in which regular expression operators and functions will perform. **cppstd** or **re2** can be set and the default value is **re2**. For more information on regular expression functionalities, refer to :doc:`/sql/function/regex_fn`.
+
+**vacuum_ovfp_check_threshold**
+
+ **vacuum_ovfp_check_threshold** collects index information when the number of leaf's overflow pages to be read is greater than the value, when index vacuum is performed. The default is 1000 pages.
+
+**vacuum_ovfp_check_duration**
+
+**vacuum_ovfp_check_duration** specifies the duration for which data related to the count of index overflow pages, gathered by vacuum threads, is retained. Data that remains unchanged within the specified duration will be automatically removed. The unit of it's value is minutes.
+
+**deduplicate_key_level**
+
+ **deduplicate_key_level** determines the automatic inclusion and value setting of the WITH DEDUPLICATE statement within the index creation statement. For details on DEDUPLICATE, see :ref:`deduplicate_overview`. The default is -1(which means that the WITH DEDUPLICATE is not included implicitly).
+ 
+.. note::
+
+    *   If **deduplicate_key_level** is set to **-1**, even if the *deduplicate level* is explicitly specified in the CREATE INDEX statement, it is ignored.
+
+
+**print_index_detail**
+
+ It specifies whether option information in the **WITH** clause is displayed when index syntax information is displayed, such as in the SHOW CREATE TABLE statement. Default is NO. However, the unloaddb tool is not affected by this setting.
+
 
 .. _broker-configuration:
 

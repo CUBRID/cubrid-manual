@@ -36,10 +36,10 @@ jobs:
       uses: ammaraskar/sphinx-action@master
       with:
         docs-folder: ${{ matrix.lang }}
-        pre-build-command: "pip install sphinx_rtd_theme"
+        pre-build-command: "pip install sphinx-rtd-theme==1.3.0"
     - name: Check link
       uses: ammaraskar/sphinx-action@master
       with:
         docs-folder: ${{ matrix.lang }}
-        pre-build-command: "pip install sphinx_rtd_theme"
+        pre-build-command: "pip install sphinx-rtd-theme==1.3.0"
         build-command: make linkcheck

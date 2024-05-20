@@ -27,6 +27,13 @@ CUBRID Environment Variables
     *   the cub_broekr process: under **$CUBRID/var/CUBRID_SOCK** directory
     *   the cub_javasp process: under **$CUBRID/var/CUBRID_SOCK** directory
 
+.. note::
+
+    The **CUBRID_TMP** environment variable affects the **java.io.tmpdir**, specifying the path for temporary files created by the Java VM running in the cub_javasp process. 
+    If the **CUBRID_TMP** environment variable is set, the path for temporary files is designated to the path of the CUBRID_TMP environment variable, to properly store Unix domain socket files.
+    Therefore, even if a user specifies the value of **java.io.tmpdir** through the **java_stored_procedure_jvm_options** parameter, it will be ignored. 
+    This behavior applies only to CUBRID for Linux, which supports Unix domain sockets, and not to CUBRID for Windows.
+
 **CUBRID_TMP** value has some constraints, which are as follows:
 
 *   Since the maximum length of the UNIX socket path is 108, when a path longer than 108 is entered in **$CUBRID_TMP**, an error is displayed. 

@@ -15,6 +15,21 @@ The following shows options available with the **cubrid backupdb** utility (opti
 
 .. program:: backupdb
 
+::
+
+  -D, --destination-path=PATH  store backup volumes to directory PATH
+  -r, --remove-archive         delete unnecessary log-archives
+  -l, --level=LEVEL            backup level
+  -o, --output-file=FILE       print detailed backup messages to FILE
+  -S, --SA-mode                stand-alone mode execution
+  -C, --CS-mode                client-server mode execution
+      --no-check               don't check a consistency of the database
+  -t, --thread-count=COUNT     number of threads
+      --no-compress            don't compress backup volumes
+      --sleep-msecs=N          sleep N millisecond per 1M read
+  -k, --separate-keys          keys file (_keys) for TDE is not included in the backup volume, but is separated into a file instead
+
+
 .. option:: -D, --destination-path=PATH
 
     The following shows how to use the **-D** option to store backup files in the specified directory. The backup file directory must be specified before performing this job. If the **-D** option is not specified, backup files are stored in the log directory specified in the **databases.txt** file which stores database location information. ::
@@ -253,6 +268,18 @@ If no option is specified, a database is restored to the point of the last commi
 The following table shows options available with the **cubrid restoredb** utility (options are case sensitive).
 
 .. program:: restoredb
+
+::
+
+  -d, --up-to-date=DATE             restore the database up to its condition at given DATE
+      --list                        display a list of backup volumes without restoring
+  -B, --backup-file-path=PATH       PATH is a directory of backup volumes to be restored
+  -l, --level=LEVEL                 LEVEL of backup to be restored; see backup usage
+  -p, --partial-recovery            perform partial recovery if any log archive is absent
+  -o, --output-file=FILE            redirect output messages to FILE
+  -u, --use-database-location-path  restore the database and log volumes to the path specified in the database location file
+  -k, --keys-file-path              Path of key file (_keys) for TDE to be used during restoring
+
 
 .. option:: -d, --up-to-date=DATE
 

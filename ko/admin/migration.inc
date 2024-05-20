@@ -29,6 +29,32 @@ unloaddb
 
 .. program:: unloaddb
 
+::
+
+  -u, --user=ID               데이터베이스 접근에 관한 사용자 이름
+  -p, --password=PASS         사용자 패스워드
+  -i, --input-class-file=FILE 테이블 이름이 기입된 파일
+      --include-reference     참조되는 테이블 포함
+      --input-class-only      명세한 클래스만 처리
+      --estimated-size=NUMBER 인스턴스의 대략적인 개수
+      --cached-pages=NUMBER   cached 페이지 개수
+  -O, --output-path=PATH      출력 디렉터리 경로
+  -s, --schema-only           스키마만 처리
+  -d, --data-only             오브젝트만 처리
+      --output-prefix=PREFIEX 출력 파일의 prefix
+      --hash-file=FILE        해쉬 파일이름
+      --latest-image          오브젝트 (객체)를 언로드할 때, 데이터 볼륨의 최신 이미지를 언로드합니다. 
+                              커밋되지않은 데이터와 제거되었지만 배큠되지 않은 데이터가 포함될 수 있습니다
+  -v, --verbose               많은 상태 메시지를 출력
+      --use-delimiter         식별자 처음과 끝에 '"' 사용
+  -S, --SA-mode               독립 모드 실행
+  -C, --CS-mode               클라이언트 서버 모드 실행
+      --datafile-per-class    각 클래스별 오브젝트 파일 생성
+      --split-schema-files    스키마 정보를 오브젝트별로 분리하여 각각의 파일로 생성
+      --skip-index-detail     인덱스를 생성할 때 지정된 WITH 절 옵션을 인쇄하지 않음
+      --as-dba                로그인 사용자가 DBA 그룹의 구성원인 경우 DBA와 동일한 스키마 파일을 추출합니다.
+
+
 .. option:: -u, --user=ID
 
     언로딩할 데이터베이스의 사용자 계정을 지정한다. 옵션을 지정하지 않으면 기본값은 **DBA**\가 된다.
@@ -188,16 +214,18 @@ unloaddb
 
     스키마 정보를 오브젝트 단위로 분할하여 생성한 파일 목록 ::
 
-		demodb_schema_user
-		demodb_schema_class
-		demodb_schema_vclass
-		demodb_schema_serial
-		demodb_schema_procedure
-		demodb_schema_server
-		demodb_schema_pk
-		demodb_schema_fk
-		demodb_schema_grant
-		demodb_schema_synonym
+        demodb_schema_user
+        demodb_schema_class
+        demodb_schema_vclass
+        demodb_schema_synonym
+        demodb_schema_serial
+        demodb_schema_procedure
+        demodb_schema_server
+        demodb_schema_pk
+        demodb_schema_fk
+        demodb_schema_uk
+        demodb_schema_grant
+        demodb_schema_vclass_query_spec
 
     분할된 스키마 파일들의 목록을 가지고 있는 파일명
     
@@ -212,6 +240,35 @@ unloaddb
     ::
 
         cubrid unloaddb -u u1_dba_group --as-dba demodb
+
+.. option:: --skip-index-detail
+
+	이 옵션은 인덱스 생성시 지정된 WITH 절 옵션들을 출력하지 않는다. unloaddb는 **print_index_detail** 설정값에 상관없이 항상 WITH 절의 옵션들을 출력하는 것이 기본적인 동작이다. 
+        이 옵션이 지정되면 WITH 절의 옵션들은 생략하고 출력하게 된다. 영향을 받는 출력 파일은 스키마파일(*database-name*\_schema)과 인덱스파일(*database-name*\_indexes)이다. 
+        이 옵션이 생략되면 *deduplicate level*\이 **0**\이더라도 반드시 명시적으로 출력된다.
+    
+    ::
+
+        cubrid unloaddb --skip-index-detail demodb
+
+    아래 예시에서 이 옵션의 지정 여부에 따른 차이를 확인해 볼 수 있다.
+    
+    스키마파일
+    
+    +----------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
+    | -–skip-index-detail 미지정 | ALTER CLASS [dba].[ts] ADD CONSTRAINT [fk_ts_fid] FOREIGN KEY([fid]) WITH DEDUPLICATE=0 REFERENCES [dba].[tm] ON DELETE RESTRICT ON UPDATE RESTRICT ;  |
+    +----------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
+    | -–skip-index-detail 지정   | ALTER CLASS [dba].[ts] ADD CONSTRAINT [fk_ts_fid] FOREIGN KEY([fid]) REFERENCES [dba].[tm] ON DELETE RESTRICT ON UPDATE RESTRICT ;                     |
+    +----------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
+    
+    인덱스파일
+    
+    +----------------------------+-------------------------------------------------------------------+
+    | -–skip-index-detail 미지정 | CREATE INDEX [idx_val] ON [dba].[ts] ([val]) WITH DEDUPLICATE=0;  |
+    +----------------------------+-------------------------------------------------------------------+
+    | -–skip-index-detail 지정   | CREATE INDEX [idx_val] ON [dba].[ts] ([val]);                     |
+    +----------------------------+-------------------------------------------------------------------+
+
 
 .. note::
 
@@ -262,6 +319,30 @@ loaddb
 다음은 **cubrid loaddb** 에서 사용하는 [options]이다. 
 
 .. program:: loaddb
+
+::
+
+  -u, --user=ID                  데이터베이스 접근에 관한 사용자 이름
+  -p, --password=PASS            사용자 패스워드
+  -S, --SA-mode                  독립 모드 실행
+  -C, --CS-mode                  클라이언트 서버 모드 실행
+      --data-file-check-only     데이터 파일을 로딩하지 않고 신택스만 검사
+  -l, --load-only                신택스 체크없이 데이터 파일 로딩
+      --estimated-size=NUMBER    인스턴스의 대략적인 개수
+  -v, --verbose                  많은 상태 정보를 출력
+  -c, --periodic-commit=COUNT    주기적인 커밋에 대한 카운트
+      --no-oid                   OID 사용 안 함
+      --no-statistics            로딩 후에 통계 정보 갱신하지 않음
+  -s, --schema-file=FILE[:LINE]  파일[:라인] 정보로 스키마 생성
+  -i, --index-file=FILE[:LINE]   파일[:라인] 정보로 인덱스 생성
+  -d, --data-file=FILE           적재할 데이터 파일
+  -t, --table=TABLE              데이터를 적재할 테이블 이름
+      --error-control-file=FILE  적재 시 발생하는 에러에 대한 제어 파일
+      --ignore-class-file=FILE   적재하지 않을 클래스 이름이 있는 파일
+      --trigger-file=FILE[:LINE] 파일[:라인] 정보로 트리거 생성
+      --no-user-specified-name   소유자 이름 없이 객체 이름으로 CLASS, SERIAL 및 TRIGGER를 찾음.
+      --schema-file-list=FILE    이 파일의 내용은 loaddb에서 사용할 스키마 파일 이름 목록이다.
+
 
 .. option:: -u, --user=ID
 
@@ -341,7 +422,7 @@ loaddb
 
 .. option:: -s, --schema-file=FILE[:LINE]
 
-    스키마 파일 또는 트리거 파일의 LINE번째부터 정의된 스키마 정보 또는 트리거 정보를 새로 생성한 newdb에 로딩하는 구문이다. **-s** 옵션을 이용하여 스키마 정보를 먼저 로딩한 후, 실제 레코드를 로딩할 수 있다. 
+    스키마 파일의 LINE번째부터 정의된 스키마 정보를 새로 생성한 newdb에 로딩하는 구문이다. **-s** 옵션을 이용하여 스키마 정보를 먼저 로딩한 후, 실제 레코드를 로딩할 수 있다. 
 
     다음 예제에서 demodb_schema 파일은 언로드 작업에 의해 생성된 파일이며 언로드된 데이터베이스의 스키마 정보를 포함한다.
 
@@ -432,9 +513,9 @@ loaddb
 
         cubrid loaddb --ignore-class-file=skip_class_list -d demodb_objects newdb
 
-.. option:: --trigger-file=FILE
+.. option:: --trigger-file=FILE[:LINE]
 
-    데이터베이스에 로드할 트리거가 포함된 파일을 지정할 수있다. ::
+    트리거 파일의 LINE번째부터 정의된 트리거 정보를 새로 생성한 newdb에 로딩하는 구문이다. ::
 
         cubrid loaddb --trigger-file=demodb_triggers -d demodb_objects newdb
 
@@ -471,6 +552,10 @@ loaddb
 .. warning::
 
     **\-\-no-logging** 옵션을 사용하면 **loaddb** 를 수행하면서 트랜잭션 로그를 저장하지 않으므로 데이터 파일을 빠르게 로드할 수 있다. 그러나 로드 도중 파일 형식이 잘못되거나 시스템이 다운되는 등의 문제가 발생했을 때 데이터를 복구할 수 없으므로 데이터베이스를 새로 구축해야 한다. 즉, 데이터를 복구할 필요가 없는 새로운 데이터베이스를 구축하는 경우를 제외하고는 사용하지 않도록 주의한다. 이 옵션을 사용하면 고유 위반 등의 오류를 검사하지 않아 기본 키에 값이 중복되는 경우 등이 발생할 수 있으므로, 사용 시 이러한 문제를 반드시 감안해야 한다.
+
+.. warning::
+
+    **loaddb** 실행 시 대량의 데이터 로딩에 대한 성능 보장과 로딩 데이터 간의 의존성을 최소화하기 위해 외래키 제약 조건에 대한 검사를 수행하지 않는다. 그러므로, HA 환경에서 **-C** 옵션을 이용하여 데이터를 로딩할 경우 슬레이브 또는 레플리카 노드 복제 과정에서 외래키 제약 조건 검사가 수행 되어 마스터 노드와 데이터 불일치가 발생할 수 있다.
 
 .. _howtowrite-loadfile:
 
@@ -510,7 +595,7 @@ CUBRID에서는 주석은 두 개의 연속된 하이픈(\-\-)을 이용하여 �
             integer
 
     **%id** 명령어에 의해 명시된 *class_name*\은 해당 데이터베이스에 정의된 클래스 이름이다. *class_name*\은 *schema_name*\을 접두사로 사용하며, *schema_name*\은 클래스가 정의된 스키마 이름이다.
-    *schema_name*\은 생략힐 수 있으며, *schema_name*\을 생략하면 -u 옵션과 함께 지정된 데이터베이스의 사용자 이름이 스키마 이름으로 사용된다.
+    *schema_name*\은 생략할 수 있으며, *schema_name*\을 생략하면 -u 옵션과 함께 지정된 데이터베이스의 사용자 이름이 스키마 이름으로 사용된다.
 
     ::
 

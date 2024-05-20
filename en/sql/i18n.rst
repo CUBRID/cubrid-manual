@@ -726,7 +726,7 @@ If not explicitly set otherwise at column creation, the charset and collation of
 The charset and collation are taken (in order in is found first) from the client.
 If the result of an expression is a character data type, gets the collation and charset by the collation inference with the operands of the expression.
 
-.. note:: \
+.. note::
 
     In CUBRID, collations are supported for a number of languages, including European and Asian. In addition to the different alphabets, some of these languages may require the definition of expansions or contractions for some characters or character groups. Most of these aspects have been put together by the Unicode Consortium into The Unicode Standard (up to version 6.1.0 in 2012). Most of the information is stored in the DUCET file `http://www.unicode.org/Public/UCA/latest/allkeys.txt <http://www.unicode.org/Public/UCA/latest/allkeys.txt>`_ which contains all characters required by most languages.
 

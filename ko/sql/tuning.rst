@@ -18,12 +18,8 @@
   
     UPDATE STATISTICS ON CATALOG CLASSES [WITH FULLSCAN]; 
 
-*   **WITH FULLSCAN**: 지정된 테이블의 전체 데이터를 가지고 통계 정보를 업데이트한다. 생략 시 샘플링한 데이터를 가지고 통계 정보를 업데이트한다. 데이터 샘플은 테이블 전체 페이지 수와 상관없이 7페이지이다.
+*   **WITH FULLSCAN**: 지정된 테이블의 전체 데이터를 가지고 통계 정보를 업데이트한다. 생략 시 샘플링한 데이터를 가지고 통계 정보를 업데이트한다. 데이터 샘플은 테이블 전체 페이지 수와 상관없이 5000페이지이다.
 
-    .. note:: 
-
-        10.0 부터는 HA 환경의 마스터에서 수행한 **UPDATE STATISTICS** 문이 슬레이브/레플리카에 복제된다.
-        
 *   **ALL CLASSES**: 모든 테이블의 통계 정보를 업데이트한다. 
 
 *   **CATALOG CLASSES**: 카탈로그 테이블에 대한 통계 정보를 업데이트한다.
@@ -53,6 +49,31 @@
     Time: 05/07/13 15:06:25.053 - NOTIFICATION *** file ../../src/storage/statistics_sr.c, line 330  CODE = -1115 Tran = 1, CLIENT = testhost:csql(21060), EID = 5
     Finished to update statistics (class "code", oid : 0|522|3, error code : 0).
 
+.. note:: 
+
+    CUBRID 10.0 부터는 HA 환경의 마스터에서 수행한 **UPDATE STATISTICS** 문이 슬레이브/레플리카에 복제된다.
+
+.. note:: 
+
+    CUBRID 11.3부터는 **UPDATE STATISTICS** 문을 실행할 때 동의어를 사용할 수 없다.
+
+    .. code-block:: sql
+    
+        /* CURRENT_USER: PUBLIC */
+        CREATE TABLE t (c int);
+        CREATE SYNONYM s for t;
+
+	UPDATE STATISTICS ON t;
+        /* Execute OK. */
+
+	UPDATE STATISTICS ON s;
+	/* ERROR: before ' ; '
+         * Class public.s does not exist. */
+
+.. note::
+
+    CUBRID 11.4 부터는  **UPDATE STATISTICS** 문을 실행할 때 **SELECT** 권한이 필요하다.
+
 .. _info-stats:
 
 통계 정보 확인
@@ -81,18 +102,18 @@ CSQL 인터프리터의 세션 명령어로 지정한 테이블의 통계 정보
     ;info stats t1
     CLASS STATISTICS
     ****************
-     Class name: t1 Timestamp: Mon Mar 14 16:26:40 2011
+     Class name: t1 Timestamp: Mon Mar 25 17:56:10 2024
      Total pages in class heap: 1
      Total objects: 5
      Number of attributes: 1
-     Attribute: code
-        id: 0
-        Type: DB_TYPE_INTEGER
-        Minimum value: 1
-        Maximum value: 5
+     Attribute: code (integer)
+        Number of Distinct Values: 5
         B+tree statistics:
-            BTID: { 0 , 1049 }
-            Cardinality: 5 (5) , Total pages: 2 , Leaf pages: 1 , Height: 2
+            BTID: { 1 , 832 }
+            Cardinality: 5 (5) , Total pages: 3 , Leaf pages: 1 , Height: 2
+
+*   *Number of Distinct Values*: 중복이 제거된 값의 개수이다. 옵티마이저에서 선택도를 산정하는데 사용된다.
+*   *B+tree Cardinality*: 인덱스 key값의 누적된 중복이 제거된 값의 개수이다. 옵티마이저에서 최소 선택도로 사용된다.
 
 .. _viewing-query-plan:
 
@@ -353,7 +374,7 @@ CSQL에서 ";plan detail" 명령 입력 또는 "SET OPTIMIZATION LEVEL 513;"을 
 SQL에 대한 성능 분석을 위해서는 질의 프로파일링(profiling) 기능을 사용할 수 있다. 
 질의 프로파일링을 위해서는 **SET TRACE ON** 구문으로 SQL 트레이스를 설정해야 하며, 프로파일링 결과를 출력하려면 **SHOW TRACE** 구문을 수행해야 한다.
  
-또한 **SHOW TRACE** 결과 출력 시 질의 실행 계획을 항상 포함하려면 /\*+ RECOMPLIE \*/ 힌트를 추가해야 한다.
+또한 **SHOW TRACE** 결과 출력 시 질의 실행 계획을 항상 포함하려면 /\*+ RECOMPILE \*/ 힌트를 추가해야 한다.
 
 **SET TRACE ON** 구문의 형식은 다음과 같다.
  
@@ -399,7 +420,7 @@ SQL에 대한 성능 분석을 위해서는 질의 프로파일링(profiling) �
       rewritten query: select o.host_year, o.host_nation, o.host_city, sum(p.gold) from OLYMPIC o, PARTICIPANT p where o.host_year=p.host_year and (p.gold> ?:0 ) group by o.host_nation
 
     Trace Statistics:
-      SELECT (time: 1, fetch: 975, ioread: 2)
+      SELECT (time: 2, fetch: 975, fetch_time: 1, ioread: 2)
         SCAN (table: olympic), (heap time: 0, fetch: 26, ioread: 0, readrows: 25, rows: 25)
           SCAN (index: participant.fk_participant_host_year), (btree time: 1, fetch: 941, ioread: 2, readkeys: 5, filteredkeys: 5, rows: 916) (lookup time: 0, rows: 14)
         GROUPBY (time: 0, sort: true, page: 0, ioread: 0, rows: 5)
@@ -407,10 +428,11 @@ SQL에 대한 성능 분석을 위해서는 질의 프로파일링(profiling) �
 
 위에서 "Trace Statistics:" 이하가 트레이스 결과를 출력한 것이며 트레이스 결과의 각 항목을 설명하면 다음과 같다.
 
-*   **SELECT** (time: 1, fetch: 975, ioread: 2) 
+*   **SELECT** (time: 2, fetch: 975, fetch_time: 1, ioread: 2)
     
-    *   time: 1 => 전체 질의 시간 1ms 소요. 
+    *   time: 2 => 전체 질의 시간 2ms 소요.
     *   fetch: 975 => 페이지에 대해 975회 fetch(개수가 아닌 접근 회수임. 같은 페이지를 다시 fetch하더라도 회수가 증가함). 
+    *   fetch_time: 1 => fetch 시간 1ms 소요.
     *   ioread: 2회 디스크 접근.
 
     : SELECT 질의에 대한 전체 통계이다. fetch 회수와 ioread 회수는 질의를 재실행하면 질의 결과의 일부를 버퍼에서 가져오게 되면서 줄어들 수 있다.
@@ -481,7 +503,7 @@ SQL에 대한 성능 분석을 위해서는 질의 프로파일링(profiling) �
     
     
     Trace Statistics:
-      SELECT (time: 6, fetch: 880, ioread: 0)
+      SELECT (time: 6, fetch: 880, fetch_time: 2, ioread: 0)
         SCAN (table: olympic), (heap time: 0, fetch: 104, ioread: 0, readrows: 25, rows: 25)
           SCAN (hash temp(m), buildtime : 0, time: 0, fetch: 0, ioread: 0, readrows: 76, rows: 38)
             SCAN (index: nation.pk_nation_code), (btree time: 2, fetch: 760, ioread: 0, readkeys: 38, filteredkeys: 0, rows: 38) (lookup time: 0, rows: 38)
@@ -497,6 +519,7 @@ SQL에 대한 성능 분석을 위해서는 질의 프로파일링(profiling) �
  
 *   time: 해당 질의에 대한 전체 수행 시간(ms)
 *   fetch: 해당 질의에 대해 페이지를 fetch한 회수
+*   fetch_time : 해당 질의에 대해 페이지 fetch 수행 시간(ms)
 *   ioread: 해당 질의에 대한 전체 I/O 읽기 회수. 데이터를 읽을 때 물리적으로 디스크에 접근한 회수
 
 **SCAN**
@@ -527,6 +550,29 @@ SQL에 대한 성능 분석을 위해서는 질의 프로파일링(profiling) �
 
     *   time: 해당 연산 수행 시 소요된 시간(ms)
     *   rows: 해당 연산에 대한 결과 행의 개수로, 데이터 필터가 적용된 결과 행의 개수
+
+*   noscan: aggregate 연산 시 스캔 없이 인덱스 헤더의 통계 정보를 이용하는 작업 (aggregate: count, min, max)
+
+    *   agl: aggregate lookup을 의미하며, aggreate 연산을 위해 사용된 인덱스 리스트
+
+        다음은 noscan, agl에대한 예제이다.
+
+::
+
+        SET TRACE ON;
+        CREATE TABLE agl_tbl (id INTEGER PRIMARY KEY, phone VARCHAR(20));
+        INSERT INTO agl_tbl VALUES (1, '123-456-789');
+        INSERT INTO agl_tbl VALUES (999, '999-999-999');
+
+        SELECT count(*), min(id), max(id) FROM agl_tbl;
+
+        SHOW TRACE;
+
+::
+
+        Trace Statistics:
+          SELECT (time: 0, fetch: 16, fetch_time: 0, ioread: 0)
+            SCAN (table: agl_tbl), (noscan time: 0, fetch: 0, ioread: 0, readrows: 0, rows: 0, agl: pk_agl_tbl_id)
 
 **GROUPBY**    
 
@@ -625,6 +671,7 @@ SQL 힌트
     USE_IDX [ (<spec_name_comma_list>) ] |
     USE_MERGE [ (<spec_name_comma_list>) ] |
     ORDERED |
+    LEADING |
     USE_DESC_IDX |
     USE_SBR |
     INDEX_SS [ (<spec_name_comma_list>) ] |
@@ -635,6 +682,7 @@ SQL 힌트
     NO_SORT_LIMIT |
     NO_PUSH_PRED |
     NO_MERGE |
+    NO_ELIMINATE_JOIN |
     NO_HASH_AGGREGATE |
     NO_HASH_LIST_SCAN |
     NO_LOGGING |
@@ -662,8 +710,10 @@ SQL 힌트는 주석에 더하기 기호(+)를 함께 사용하여 지정한다.
 *   **USE_NL**: 테이블 조인과 관련한 힌트로서, 질의 최적화기 중첩 루프 조인 실행 계획을 만든다.
 *   **USE_MERGE**: 테이블 조인과 관련한 힌트로서, 질의 최적화기는 정렬 병합 조인 실행 계획을 만든다.
 *   **ORDERED**: 테이블 조인과 관련한 힌트로서, 질의 최적화기는 **FROM** 절에 명시된 테이블의 순서대로 조인하는 실행 계획을 만든다. **FROM** 절에서 왼쪽 테이블은 조인의 외부 테이블이 되고, 오른쪽 테이블은 내부 테이블이 된다.
+*   **LEADING**: 테이블 조인과 관련한 힌트로서, 질의 최적화기는 LEADING 힌트에 명시된 테이블의 순서대로 조인하는 실행 계획을 만든다.
+
 *   **USE_IDX**: 인덱스 관련한 힌트로서, 질의 최적화기는 명시된 테이블에 대해 인덱스 조인 실행 계획을 만든다.
-*   **USE_DESC_IDX**: 내림차순 스캔을 위한 힌트이다. 자세한 내용은 :ref:`index-descending-scan`\ 을 참고한다.
+*   **USE_DESC_IDX**: 내림차순 스캔을 위한 힌트이다. 자세한 내용은 :ref:`index-descending-scan`\을 참고한다.
 *   **USE_SBR**: 구문 기반 복제(statement-based replication)를 위한 힌트로서, 기본키가 설정되지 않은 테이블에 대한 데이터 복제도 지원한다.
 
     .. note::
@@ -673,11 +723,12 @@ SQL 힌트는 주석에 더하기 기호(+)를 함께 사용하여 지정한다.
 *   **INDEX_SS**: index skip scan 실행 계획을 고려한다. 자세한 내용은 :ref:`index-skip-scan`\을 참고한다.
 *   **INDEX_LS**: loose index scan 실행 계획을 고려한다. 자세한 내용은 :ref:`loose-index-scan`\을 참고한다.
 *   **NO_DESC_IDX**: 내림차순 스캔을 사용하지 않도록 하는 힌트이다.
-*   **NO_COVERING_IDX**: 커버링 인덱스 기능을 사용하지 않도록 하는 힌트이다. 자세한 내용은 :ref:`covering-index` 를 참고한다.
-*   **NO_MULTI_RANGE_OPT**: 다중 키 범위 최적화 기능을 사용하지 않도록 하는 힌트이다. 자세한 내용은 :ref:`multi-key-range-opt` 를 참고한다.
-*   **NO_SORT_LIMIT**: SORT-LIMIT 최적화를 사용하지 않기 위한 힌트이다. 자세한 내용은 :ref:`sort-limit-optimization`\ 를 참고한다.
+*   **NO_COVERING_IDX**: 커버링 인덱스 기능을 사용하지 않도록 하는 힌트이다. 자세한 내용은 :ref:`covering-index`\를 참고한다.
+*   **NO_MULTI_RANGE_OPT**: 다중 키 범위 최적화 기능을 사용하지 않도록 하는 힌트이다. 자세한 내용은 :ref:`multi-key-range-opt`\를 참고한다.
+*   **NO_SORT_LIMIT**: SORT-LIMIT 최적화를 사용하지 않기 위한 힌트이다. 자세한 내용은 :ref:`sort-limit-optimization`\를 참고한다.
 *   **NO_PUSH_PRED**: PREDICATE-PUSH 최적화를 사용하지 않기 위한 힌트이다.
 *   **NO_MERGE**: VIEW-MERGE 최적화를 사용하지 않기 위한 힌트이다.
+*   **NO_ELIMINATE_JOIN**: 조인 제거 최적화를 사용하지 않기 위한 힌트이다. 자세한 내용은 :ref:`join-elimination-optimization`\를 참고한다.
 
 .. _no-hash-aggregate:
 
@@ -720,6 +771,27 @@ SQL 힌트는 주석에 더하기 기호(+)를 함께 사용하여 지정한다.
     위와 같은 질의를 수행한다면 테이블 a와 b가 조인될 때는 **USE_NL**\ 이 적용되고 테이블 c가 조인될 때도 **USE_NL**\ 이 적용되며, 테이블 d가 조인될 때는 **USE_MERGE**\ 가 적용된다.
 
     <*spec_name*>\ 이 주어지지 않고 **USE_NL**\ 과 **USE_MERGE**\ 가 함께 지정된 경우 주어진 힌트는 무시된다. 일부 경우에 질의 최적화기는 주어진 힌트에 따라 질의 실행 계획을 만들지 못할 수 있다. 예를 들어 오른쪽 외부 조인에 대해 **USE_NL**\ 을 지정한 경우 이 질의는 내부적으로 왼쪽 외부 조인 질의로 변환이 되어 조인 순서는 보장되지 않을 수 있다.
+
+.. note::
+
+    **ORDERED**\가 **LEADING**\과 함께 지정될 경우 **LEADING** 힌트는 무시된다.
+    **LEADING** 힌트가 여러게 지정될 경우 첫번째 **LEADING** 힌트만 적용된다.
+
+    .. code-block:: sql
+
+        SELECT /*+ ORDERED LEADING(b, d) */ *
+        FROM a INNER JOIN b ON a.col=b.col
+        INNER JOIN c ON b.col=c.col INNER JOIN d ON c.col=d.col;
+
+    위와 같은 질의를 수행한다면 **LEADING** 힌트는 무시되며, **ORDERED** 힌트에 따라서 **FROM**절의 순서인, 테이블 a, b, c, d의 순서로 조인된다.
+
+    .. code-block:: sql
+
+        SELECT /*+ LEADING(b, d) LEADING(c, d) */ *
+        FROM a INNER JOIN b ON a.col=b.col
+        INNER JOIN c ON b.col=c.col INNER JOIN d ON c.col=d.col;
+
+    위와 같은 질의를 수행한다면 두번째 **LEADING** 힌트는 무시되며, 테이블 b와 d가 첫번째로 조인되는 조인순서가 생성된다.
 
 MERGE 문에는 다음과 같은 힌트를 사용할 수 있다. 
 
@@ -1019,7 +1091,7 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
     CREATE TABLE bugs
     (
         bugID BIGINT NOT NULL,
-        CreationDate TIMESTAMP,
+        CreationDate TIMESTAMP NOT NULL,
         Author VARCHAR(255),
         Subject VARCHAR(255),
         Description VARCHAR(255),
@@ -2393,7 +2465,1657 @@ SORT-LIMIT 최적화는 **ORDER BY** 절과 LIMIT 절을 명시한 질의에 적
         sort:  2 asc
         cost:  7 card 0
 
-.. _query-cache :
+.. _tuning-rewrite:
+
+재작성을 활용한 최적화
+======================
+
+.. _join-elimination-optimization:
+
+조인 제거 최적화
+----------------
+
+조인 제거 최적화는 쿼리 결과에 영향을 주지 않는 테이블과의 조인을 제거하여 조인 연산을 줄이고, 쿼리 성능을 향상시키는 방법이다.
+
+조인 제거 최적화에는 두 가지 동작이 있다:
+
+    #. **INNER JOIN** 제거
+    #. **LEFT OUTER JOIN** 제거
+
+조인 제거 최적화를 하지 않으려면 **NO_ELIMINATE_JOIN** 힌트를 사용해야 한다.
+
+.. _eliminate-inner-join:
+
+**INNER JOIN** 제거
+^^^^^^^^^^^^^^^^^^^
+
+기본키(**PK**)가 있는 테이블과 그 기본키(**PK**)를 참조하는 외래키(**FK**)가 있는 테이블 간의 관계를 부모-자식 관계라고 한다.
+부모-자식 관계의 **INNER JOIN**\에서 조인 조건 외에 부모 테이블에 대한 참조가 없는 경우에는 부모 테이블과의 조인을 제거해도 쿼리 결과에 영향을 주지 않는다.
+이러한 경우에는 부모 테이블과의 조인을 제거하여 조인 연산을 줄이고, 쿼리 성능을 향상시킨다.
+
+**INNER JOIN**\을 제거하기 위해서는 다음 조건을 만족해야 한다:
+
+    #. 부모-자식 관계의 **INNER JOIN**\을 한다.
+    #. 기본키(**PK**)와 외래키(**FK**)의 모든 컬럼은 조인 조건에 사용되어야 한다.
+    #. 기본키(**PK**) 컬럼은 해당 기본키(**PK**) 컬럼을 참조하는 외래키(**FK**) 컬럼과 동일한 조인 조건에 사용되어야 한다.
+    #. 모든 조인 조건은 동등(=) 비교를 사용해야 한다.
+    #. 조인 조건 외에 부모 테이블에 대한 참조가 없어야 한다.
+    #. 상속 관계가 있는 테이블을 조회하는 경우에는 **ALL** 키워드를 사용하지 않아야 한다.
+
+부모 테이블과의 조인을 제거할 때 자식 테이블의 외래키(**FK**) 컬럼에 **NOT NULL** 제약 조건이 없는 경우에는 해당 컬럼에 대한 **IS NOT NULL** 조건이 추가된다.
+
+다음은 **INNER JOIN**\을 제거하는 예제이다.
+
+.. code-block:: sql
+
+    call login ('public') on class db_user;
+
+    /* current_user: public */
+    drop table if exists child_tbl, parent_tbl;
+
+    create table parent_tbl (
+        id int,
+        sub_id int,
+        name varchar (100),
+        filter int,
+        primary key (id, sub_id)
+    );
+
+    insert into parent_tbl
+    select
+        ((rownum - 1) / 10) + 1 as id,
+        (((rownum - 1) % 10) + 1) * 10 as sub_id,
+        'Parent-' || lpad (rownum, 3) as name,
+        ((rownum - 1) % 10) + 1 as filter
+    from db_root
+    connect by level <= 100;
+
+    create table child_tbl (
+        id int,
+        name varchar (100),
+        filter int,
+        parent_id int not null,
+        parent_sub_id int,
+        primary key (id),
+        foreign key (parent_id, parent_sub_id) references parent_tbl (id, sub_id)
+    );
+
+    insert into child_tbl
+    select
+        rownum as id,
+        'Child-' || lpad (rownum, 5) as name,
+        ((rownum - 1) % 100) + 1 as filter,
+        id as parent_id,
+        sub_id as parent_sub_id
+    from parent_tbl, (select level from db_root connect by level <= 100);
+
+    update statistics on parent_tbl, child_tbl with fullscan;
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    select /*+ recompile */
+        c.id, c.name, c.filter, c.parent_id, c.parent_sub_id
+    from
+        parent_tbl p
+        inner join child_tbl c on p.id = c.parent_id and p.sub_id = c.parent_sub_id
+    where
+        c.filter = 1 and c.parent_id = 1
+    order by
+        c.name;
+
+*parent_tbl* 테이블과의 조인이 제거되었고, *child_tbl* 테이블의 *parent_sub_id* 컬럼에 대한 **IS NOT NULL** 조건이 추가되었다.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: iscan
+                     class: c node[0]
+                     index: fk_child_tbl_parent_id_parent_sub_id term[1]
+                     filtr: term[2]
+                     sargs: term[0]
+                     sort:  5 asc
+                     cost:  8 card 1
+        sort:  2 asc
+        cost:  14 card 1
+    
+    Query stmt:
+    
+    select c.id, c.[name], c.filter, c.parent_id, c.parent_sub_id from child_tbl c where c.parent_id= ?:0  and c.filter= ?:1  and c.parent_sub_id is not null  order by 2
+
+::
+
+               id  name                       filter    parent_id  parent_sub_id
+    ============================================================================
+                1  'Child-    1'                   1            1             10
+              101  'Child-  101'                   1            1             20
+              201  'Child-  201'                   1            1             30
+              301  'Child-  301'                   1            1             40
+              401  'Child-  401'                   1            1             50
+              501  'Child-  501'                   1            1             60
+              601  'Child-  601'                   1            1             70
+              701  'Child-  701'                   1            1             80
+              801  'Child-  801'                   1            1             90
+              901  'Child-  901'                   1            1            100
+
+다음은 **NO_ELIMINATE_JOIN** 힌트를 사용하는 예제이다.
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    select /*+ recompile no_eliminate_join */
+        c.id, c.name, c.filter, c.parent_id, c.parent_sub_id
+    from
+        parent_tbl p
+        inner join child_tbl c on p.id = c.parent_id and p.sub_id = c.parent_sub_id
+    where
+        c.filter = 1 and c.parent_id = 1
+    order by
+        c.name;
+
+**NO_ELIMINATE_JOIN** 힌트를 사용했기 때문에 *parent_tbl* 테이블과의 조인이 제거되지 않았다.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: idx-join (inner join)
+                     outer: iscan
+                                class: p node[0]
+                                index: pk_parent_tbl_id_sub_id term[4] (covers)
+                                cost:  1 card 10
+                     inner: iscan
+                                class: c node[1]
+                                index: fk_child_tbl_parent_id_parent_sub_id term[1] AND term[3]
+                                sargs: term[2]
+                                cost:  3 card 1
+                     cost:  4 card 1
+        sort:  2 asc
+        cost:  10 card 1
+    
+    Query stmt:
+    
+    select /*+ NO_ELIMINATE_JOIN */ c.id, c.[name], c.filter, c.parent_id, c.parent_sub_id from parent_tbl p, child_tbl c where p.sub_id=c.parent_sub_id and p.id= ?:0  and c.parent_id= ?:1  and c.filter= ?:2  and p.id=c.parent_id order by 2
+
+::
+
+               id  name                       filter    parent_id  parent_sub_id
+    ============================================================================
+                1  'Child-    1'                   1            1             10
+              101  'Child-  101'                   1            1             20
+              201  'Child-  201'                   1            1             30
+              301  'Child-  301'                   1            1             40
+              401  'Child-  401'                   1            1             50
+              501  'Child-  501'                   1            1             60
+              601  'Child-  601'                   1            1             70
+              701  'Child-  701'                   1            1             80
+              801  'Child-  801'                   1            1             90
+              901  'Child-  901'                   1            1            100
+
+.. _eliminate-inner-join-1:
+
+기본키(**PK**)와 외래키(**FK**)의 모든 컬럼은 조인 조건에 사용되어야 한다.
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+다음은 *parent_tbl* 테이블의 *id* 컬럼과 *child_tbl* 테이블의 *parent_id* 컬럼만 조인 조건으로 사용된 예제이다.
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    select /*+ recompile */
+        c.id, c.name, c.filter, c.parent_id, c.parent_sub_id
+    from
+        parent_tbl p
+        inner join child_tbl c on p.id = c.parent_id
+    where
+        c.filter = 2 and c.parent_id = 2 and c.parent_sub_id = 20
+    order by
+        c.name;
+
+*parent_tbl* 테이블의 *sub_id* 컬럼과 *child_tbl* 테이블의 *parent_sub_id* 컬럼이 조인 조건으로 사용되지 않았기 때문에 *parent_tbl* 테이블과의 조인이 제거되지 않았다.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: nl-join (cross join)
+                     outer: iscan
+                                class: c node[1]
+                                index: fk_child_tbl_parent_id_parent_sub_id term[2] AND term[3]
+                                sargs: term[1]
+                                cost:  3 card 1
+                     inner: iscan
+                                class: p node[0]
+                                index: pk_parent_tbl_id_sub_id term[4] (covers)
+                                cost:  1 card 10
+                     cost:  4 card 10
+        sort:  2 asc
+        cost:  10 card 10
+    
+    Query stmt:
+    
+    select c.id, c.[name], c.filter, c.parent_id, c.parent_sub_id from parent_tbl p, child_tbl c where p.id= ?:0  and c.parent_sub_id= ?:1  and c.parent_id= ?:2  and c.filter= ?:3  and p.id=c.parent_id order by 2
+
+::
+
+               id  name                       filter    parent_id  parent_sub_id
+    ============================================================================
+             1102  'Child- 1102'                   2            2             20
+             1102  'Child- 1102'                   2            2             20
+             1102  'Child- 1102'                   2            2             20
+             1102  'Child- 1102'                   2            2             20
+             1102  'Child- 1102'                   2            2             20
+             1102  'Child- 1102'                   2            2             20
+             1102  'Child- 1102'                   2            2             20
+             1102  'Child- 1102'                   2            2             20
+             1102  'Child- 1102'                   2            2             20
+             1102  'Child- 1102'                   2            2             20
+
+.. _eliminate-inner-join-2:
+
+기본키(**PK**) 컬럼은 해당 기본키(**PK**)를 참조하는 외래키(**FK**) 컬럼과 동일한 조인 조건에 사용되어야 한다.
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+다음은 조인 조건에서 *id* 컬럼을 *parent_sub_id* 컬럼과 비교하고, *sub_id* 컬럼을 *parent_id* 컬럼과 비교하는 예제이다.
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    select /*+ recompile */
+        c.id, c.name, c.filter, c.parent_id, c.parent_sub_id
+    from
+        parent_tbl p
+        inner join child_tbl c on p.id = c.parent_sub_id and p.sub_id = c.parent_id
+    where
+        c.filter = 3 and c.parent_id = 3
+    order by
+        c.name;
+
+*id* 컬럼이 *parent_id* 컬럼과 비교되지 않았고, *sub_id* 컬럼이 *parent_sub_id* 컬럼과 비교되지 않았기 때문에 *parent* 테이블과의 조인이 제거되지 않았다.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: idx-join (inner join)
+                     outer: sscan
+                                class: p node[0]
+                                sargs: term[3]
+                                cost:  1 card 1
+                     inner: iscan
+                                class: c node[1]
+                                index: fk_child_tbl_parent_id_parent_sub_id term[0] AND term[4]
+                                sargs: term[2]
+                                cost:  3 card 1
+                     cost:  5 card 1
+        sort:  2 asc
+        cost:  11 card 1
+    
+    Query stmt:
+    
+    select c.id, c.[name], c.filter, c.parent_id, c.parent_sub_id from parent_tbl p, child_tbl c where p.id=c.parent_sub_id and p.sub_id= ?:0  and c.parent_id= ?:1  and c.filter= ?:2  and p.sub_id=c.parent_id order by 2
+
+::
+
+    There are no results.
+    0 row selected.
+
+.. _eliminate-inner-join-3:
+
+모든 조인 조건은 동등(=) 비교를 사용해야 한다.
+++++++++++++++++++++++++++++++++++++++++++++++
+
+다음은 조인 조건으로 동등(=) 비교를 사용하지 않는 예제이다.
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    select /*+ recompile */
+        c.id, c.name, c.filter, c.parent_id, c.parent_sub_id
+    from
+        parent_tbl p
+        inner join child_tbl c on p.id = c.parent_id and p.sub_id < c.parent_sub_id
+    where
+        c.filter = 4 and c.parent_id = 4 and c.parent_sub_id = 40
+    order by
+        c.name;
+
+조인 조건에서 *parent_tbl* 테이블의 *sub_id* 컬럼과 *child_tbl* 테이블의 *parent_sub_id* 컬럼을 비교할 때 동등(=) 비교를 사용하지 않았기 때문에 *parent* 테이블과의 조인이 제거되지 않았다.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: nl-join (cross join)
+                     outer: iscan
+                                class: p node[0]
+                                index: pk_parent_tbl_id_sub_id term[5] AND term[6] (covers)
+                                cost:  1 card 1
+                     inner: iscan
+                                class: c node[1]
+                                index: fk_child_tbl_parent_id_parent_sub_id term[3] AND term[4]
+                                sargs: term[2]
+                                cost:  3 card 1
+                     cost:  4 card 1
+        sort:  2 asc
+        cost:  10 card 1
+    
+    Query stmt:
+    
+    select c.id, c.[name], c.filter, c.parent_id, c.parent_sub_id from parent_tbl p, child_tbl c where (p.sub_id< ?:0 ) and p.id= ?:1  and c.parent_sub_id= ?:2  and c.parent_id= ?:3  and c.filter= ?:4  and p.id=c.parent_id and (p.sub_id<c.parent_sub_id) order by 2
+
+::
+
+               id  name                       filter    parent_id  parent_sub_id
+    ============================================================================
+             3304  'Child- 3304'                   4            4             40
+             3304  'Child- 3304'                   4            4             40
+             3304  'Child- 3304'                   4            4             40
+
+.. _eliminate-inner-join-4:
+
+조인 조건 외에 부모 테이블에 대한 참조가 없어야 한다.
++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+다음은 *parent_tbl* 테이블의 *name* 컬럼을 조회하는 예제이다.
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    select /*+ recompile */
+        c.id, c.name, c.filter, c.parent_id, c.parent_sub_id, p.name
+    from
+        parent_tbl p
+        inner join child_tbl c on p.id = c.parent_id and p.sub_id = c.parent_sub_id
+    where
+        c.filter = 5 and c.parent_id = 5
+    order by
+        c.name;
+
+*parent_tbl* 테이블의 *name* 컬럼의 값을 조회하고 있기 때문에 *parent_tbl* 테이블과의 조인이 제거되지 않았다.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: idx-join (inner join)
+                     outer: iscan
+                                class: p node[0]
+                                index: pk_parent_tbl_id_sub_id term[4]
+                                cost:  1 card 10
+                     inner: iscan
+                                class: c node[1]
+                                index: fk_child_tbl_parent_id_parent_sub_id term[1] AND term[3]
+                                sargs: term[2]
+                                cost:  3 card 1
+                     cost:  4 card 1
+        sort:  2 asc
+        cost:  10 card 1
+    
+    Query stmt:
+    
+    select c.id, c.[name], c.filter, c.parent_id, c.parent_sub_id, p.[name] from parent_tbl p, child_tbl c where p.sub_id=c.parent_sub_id and p.id= ?:0  and c.parent_id= ?:1  and c.filter= ?:2  and p.id=c.parent_id order by 2
+
+::
+
+               id  name                       filter    parent_id  parent_sub_id  name
+    ==================================================================================================
+             4005  'Child- 4005'                   5            5             10  'Parent- 41'
+             4105  'Child- 4105'                   5            5             20  'Parent- 42'
+             4205  'Child- 4205'                   5            5             30  'Parent- 43'
+             4305  'Child- 4305'                   5            5             40  'Parent- 44'
+             4405  'Child- 4405'                   5            5             50  'Parent- 45'
+             4505  'Child- 4505'                   5            5             60  'Parent- 46'
+             4605  'Child- 4605'                   5            5             70  'Parent- 47'
+             4705  'Child- 4705'                   5            5             80  'Parent- 48'
+             4805  'Child- 4805'                   5            5             90  'Parent- 49'
+             4905  'Child- 4905'                   5            5            100  'Parent- 50'
+
+다음은 *parent* 테이블의 *filter* 컬럼에 대한 조건이 있는 예제이다.
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    select /*+ recompile */
+        c.id, c.name, c.filter, c.parent_id, c.parent_sub_id
+    from
+        parent_tbl p
+        inner join child_tbl c on p.id = c.parent_id and p.sub_id = c.parent_sub_id
+    where
+        c.filter = 5 and c.parent_id = 5 and p.filter = 5
+    order by
+        c.name;
+
+*parent_tbl* 테이블의 *filter* 컬럼의 값이 5인 레코드를 조회하고 있기 때문에 *parent_tbl* 테이블과의 조인이 제거되지 않았다.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: idx-join (inner join)
+                     outer: iscan
+                                class: p node[0]
+                                index: pk_parent_tbl_id_sub_id term[5]
+                                sargs: term[3]
+                                cost:  1 card 1
+                     inner: iscan
+                                class: c node[1]
+                                index: fk_child_tbl_parent_id_parent_sub_id term[1] AND term[4]
+                                sargs: term[2]
+                                cost:  3 card 1
+                     cost:  4 card 1
+        sort:  2 asc
+        cost:  10 card 1
+    
+    Query stmt:
+    
+    select c.id, c.[name], c.filter, c.parent_id, c.parent_sub_id from parent_tbl p, child_tbl c where p.sub_id=c.parent_sub_id and p.id= ?:0  and p.filter= ?:1  and c.parent_id= ?:2  and c.filter= ?:3  and p.id=c.parent_id order by 2
+
+::
+
+               id  name                       filter    parent_id  parent_sub_id
+    ============================================================================
+             4405  'Child- 4405'                   5            5             50
+
+다음은 *parent_tbl* 테이블의 *name* 컬럼을 기준으로 결과를 정렬하는 예제이다.
+
+.. code-block:: sql
+
+    select /*+ recompile */
+        c.id, c.name, c.filter, c.parent_id, c.parent_sub_id
+    from
+        parent_tbl p
+        inner join child_tbl c on p.id = c.parent_id and p.sub_id = c.parent_sub_id
+    where
+        c.filter = 5 and c.parent_id = 5
+    order by
+        p.name desc;
+
+*parent_tbl* 테이블의 *nmae* 컬럼을 기준으로 결과를 내림차순 정렬하고 있기 때문에 *parent_tbl* 테이블과의 조인이 제거되지 않았다.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: idx-join (inner join)
+                     outer: iscan
+                                class: p node[0]
+                                index: pk_parent_tbl_id_sub_id term[4]
+                                cost:  1 card 10
+                     inner: iscan
+                                class: c node[1]
+                                index: fk_child_tbl_parent_id_parent_sub_id term[1] AND term[3]
+                                sargs: term[2]
+                                cost:  3 card 1
+                     cost:  4 card 1
+        sort:  6 desc
+        cost:  10 card 1
+    
+    Query stmt:
+    
+    select c.id, c.[name], c.filter, c.parent_id, c.parent_sub_id, p.[name] from parent_tbl p, child_tbl c where p.sub_id=c.parent_sub_id and p.id= ?:0  and c.parent_id= ?:1  and c.filter= ?:2  and p.id=c.parent_id order by 6 desc
+
+::
+
+               id  name                       filter    parent_id  parent_sub_id
+    ============================================================================
+             4905  'Child- 4905'                   5            5            100
+             4805  'Child- 4805'                   5            5             90
+             4705  'Child- 4705'                   5            5             80
+             4605  'Child- 4605'                   5            5             70
+             4505  'Child- 4505'                   5            5             60
+             4405  'Child- 4405'                   5            5             50
+             4305  'Child- 4305'                   5            5             40
+             4205  'Child- 4205'                   5            5             30
+             4105  'Child- 4105'                   5            5             20
+             4005  'Child- 4005'                   5            5             10
+
+.. _eliminate-inner-join-5:
+
+묵시적인 동등(=)
+++++++++++++++++
+
+**WHERE**\절에서 조인 조건 외에 부모 테이블에 대한 조건이 있더라도 조인 조건에 사용된 컬럼이 해당 조건에 사용된 경우에는 묵시적인 동등(=)에 의해 부모 테이블과의 조인을 제거할 수 있다.
+해당 조건은 동등(=) 비교를 사용해야 하고, 상수와 비교되어야 한다.
+
+다음은 *parent_tbl* 테이블의 *sub_id* 컬럼에 대한 동등(=) 비교 조건이 있는 예제이다.
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    select /*+ recompile */
+        c.id, c.name, c.filter, c.parent_id, c.parent_sub_id
+    from
+        parent_tbl p
+        inner join child_tbl c on p.id = c.parent_id and p.sub_id = c.parent_sub_id
+    where
+        c.filter = 6 and c.parent_id = 6 and p.sub_id = 60
+    order by
+        c.name;
+
+*parent_tbl* 테이블의 *sub_id* 컬럼의 값이 60인 레코드를 조회하고 있지만 조인 조건에 의해 해당 조건은 *child_tbl* 테이블의 *parent_sub_id* 컬럼의 값이 60인 조건과 동등하기 때문에 *parent_tbl* 테이블과의 조인이 제거되었다.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: iscan
+                     class: c node[0]
+                     index: fk_child_tbl_parent_id_parent_sub_id term[1] AND term[2]
+                     filtr: term[3]
+                     sargs: term[0]
+                     cost:  3 card 1
+        sort:  2 asc
+        cost:  9 card 1
+    
+    Query stmt:
+    
+    select c.id, c.[name], c.filter, c.parent_id, c.parent_sub_id from child_tbl c where c.parent_sub_id= ?:0  and c.parent_id= ?:1  and c.filter= ?:2  and c.parent_sub_id is not null  order by 2
+
+::
+
+               id  name                       filter    parent_id  parent_sub_id
+    ============================================================================
+             5506  'Child- 5506'                   6            6             60
+
+.. _eliminate-inner-join-6:
+
+상속 관계가 있는 테이블을 조회하는 경우에는 **ALL** 키워드를 사용하지 않아야 한다.
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+상속 관계가 있는 부모 또는 자식 테이블에 **ALL** 키워드를 사용하면 부모 테이블과의 조인을 제거할 수 없다.
+
+다음은 *child_tbl* 테이블에 **ALL** 키워드를 사용하는 예제이다.
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    select /*+ recompile */
+        c.id, c.name, c.filter, c.parent_id, c.parent_sub_id
+    from
+        parent_tbl p
+        inner join all child_tbl c on p.id = c.parent_id and p.sub_id = c.parent_sub_id
+    where
+        c.filter = 7 and c.parent_id = 7
+    order by
+        c.name;
+
+*parent_tbl* 테이블과의 조인이 제거되지 않았다.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: idx-join (inner join)
+                     outer: iscan
+                                class: p node[0]
+                                index: pk_parent_tbl_id_sub_id term[4] (covers)
+                                cost:  1 card 10
+                     inner: iscan
+                                class: c node[1]
+                                index: fk_child_tbl_parent_id_parent_sub_id term[1] AND term[3]
+                                sargs: term[2]
+                                cost:  3 card 1
+                     cost:  4 card 1
+        sort:  2 asc
+        cost:  10 card 1
+    
+    Query stmt:
+    
+    select c.id, c.[name], c.filter, c.parent_id, c.parent_sub_id from parent_tbl p,  all child_tbl c where p.sub_id=c.parent_sub_id and p.id= ?:0  and c.parent_id= ?:1  and c.filter= ?:2  and p.id=c.parent_id order by 2
+
+::
+
+               id  name                       filter    parent_id  parent_sub_id
+    ============================================================================
+             6007  'Child- 6007'                   7            7             10
+             6107  'Child- 6107'                   7            7             20
+             6207  'Child- 6207'                   7            7             30
+             6307  'Child- 6307'                   7            7             40
+             6407  'Child- 6407'                   7            7             50
+             6507  'Child- 6507'                   7            7             60
+             6607  'Child- 6607'                   7            7             70
+             6707  'Child- 6707'                   7            7             80
+             6807  'Child- 6807'                   7            7             90
+             6907  'Child- 6907'                   7            7            100
+
+다음은 *parent_tbl* 테이블과 *child_tbl* 테이블에 **ONLY** 키워드를 사용하는 예제이다.
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    select /*+ recompile */
+        c.id, c.name, c.filter, c.parent_id, c.parent_sub_id
+    from
+        only parent_tbl p
+        inner join only child_tbl c on p.id = c.parent_id and p.sub_id = c.parent_sub_id
+    where
+        c.filter = 7 and c.parent_id = 7
+    order by
+        c.name;
+
+*parent_tbl* 테이블과의 조인이 제거되었다.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: iscan
+                     class: c node[0]
+                     index: fk_child_tbl_parent_id_parent_sub_id term[1]
+                     filtr: term[2]
+                     sargs: term[0]
+                     sort:  5 asc
+                     cost:  8 card 1
+        sort:  2 asc
+        cost:  14 card 1
+    
+    Query stmt:
+    
+    select c.id, c.[name], c.filter, c.parent_id, c.parent_sub_id from child_tbl c where c.parent_id= ?:0  and c.filter= ?:1  and c.parent_sub_id is not null  order by 2
+
+::
+
+               id  name                       filter    parent_id  parent_sub_id
+    ============================================================================
+             6007  'Child- 6007'                   7            7             10
+             6107  'Child- 6107'                   7            7             20
+             6207  'Child- 6207'                   7            7             30
+             6307  'Child- 6307'                   7            7             40
+             6407  'Child- 6407'                   7            7             50
+             6507  'Child- 6507'                   7            7             60
+             6607  'Child- 6607'                   7            7             70
+             6707  'Child- 6707'                   7            7             80
+             6807  'Child- 6807'                   7            7             90
+             6907  'Child- 6907'                   7            7            100
+
+.. _eliminate-left-outer-join:
+
+**LEFT OUTER JOIN** 제거
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+N:1 관계의 **LEFT OUTER JOIN**\에서 조인 조건 외에 오른쪽 테이블에 대한 참조가 없는 경우에는 오른쪽 테이블과의 조인을 제거해도 쿼리 결과에 영향을 주지 않는다.
+이러한 경우에는 오른쪽 테이블과의 조인을 제거하여 조인 연산을 줄이고, 쿼리 성능을 향상시킨다.
+
+**LEFT OUTER JOIN** 제거를 하기 위해서는 다음 조건을 만족해야 한다:
+
+    #. **LEFT OUTER JOIN**\을 한다.
+    #. 오른쪽 테이블은 기본키(**PK**) 또는 **UNIQUE** 제약조건이 있어야 한다.
+    #. 기본키(**PK**) 또는 **UNIQUE** 제약조건의 모든 컬럼은 조인 조건에 사용되어야 한다.
+    #. 모든 조인 조건은 동등(=) 비교를 사용해야 한다.
+    #. 조인 조건 외에 오른쪽 테이블에 대한 참조가 없어야 한다.
+    #. 상속 관계가 있는 테이블을 조회하는 경우에는 **ALL** 키워드를 사용하지 않아야 한다.
+
+다음은 **LEFT OUTER JOIN** 제거를 하는 예제이다.
+
+.. code-block:: sql
+
+    call login ('public') on class db_user;
+
+    /* current_user: public */
+    drop table if exists left_tbl, right_tbl;
+
+    create table left_tbl (
+        id int,
+        sub_id int,
+        other_id int,
+        name varchar (100),
+        filter int,
+        primary key (id, sub_id, other_id)
+    );
+
+    insert into left_tbl
+    select
+        ((rownum - 1) / 100) + 1 as id,
+        (((rownum - 1) % 10) + 1) * 10 as sub_id,
+        (((rownum - 1) % 100) + 1) * 100 as other_id,
+        'Left-' || lpad (rownum, 4) as name,
+        ((rownum - 1) % 100) + 1 as filter
+    from db_root
+    connect by level <= 1000;
+
+    create table right_tbl (
+        id int,
+        sub_id int,
+        name varchar (100),
+        filter int,
+        primary key (id, sub_id)
+    );
+
+    insert into right_tbl
+    select
+        id as id,
+        sub_id as sub_id,
+        'Right-' || lpad (rownum, 3) as name,
+        ((rownum - 1) % 10) + 1 as filter
+    from (select distinct id, sub_id from left_tbl);
+
+    update statistics on left_tbl, right_tbl with fullscan;
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    select /*+ recompile */
+        l.id, l.sub_id, l.other_id, l.name, l.filter
+    from
+        left_tbl as l
+        left outer join right_tbl as r on l.id = r.id and l.sub_id = r.sub_id
+    where
+        l.filter = 1
+    order by
+        l.name;
+
+*right_tbl* 테이블과의 조인이 제거되었다.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: sscan
+                     class: l node[0]
+                     sargs: term[0]
+                     cost:  6 card 1
+        sort:  4 asc
+        cost:  13 card 1
+    
+    Query stmt:
+    
+    select l.id, l.sub_id, l.other_id, l.[name], l.filter from left_tbl l where l.filter= ?:0  order by 4
+
+::
+
+               id       sub_id     other_id  name                       filter
+    ==========================================================================
+                1           10          100  'Left-   1'                     1
+                2           10          100  'Left- 101'                     1
+                3           10          100  'Left- 201'                     1
+                4           10          100  'Left- 301'                     1
+                5           10          100  'Left- 401'                     1
+                6           10          100  'Left- 501'                     1
+                7           10          100  'Left- 601'                     1
+                8           10          100  'Left- 701'                     1
+                9           10          100  'Left- 801'                     1
+               10           10          100  'Left- 901'                     1
+
+다음은 **NO_ELIMINATE_JOIN** 힌트를 사용하는 예제이다.
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    select /*+ recompile no_eliminate_join */
+        l.id, l.sub_id, l.other_id, l.name, l.filter
+    from
+        left_tbl as l
+        left outer join right_tbl as r on l.id = r.id and l.sub_id = r.sub_id
+    where
+        l.filter = 1
+    order by
+        l.name;
+
+**NO_ELIMINATE_JOIN** 힌트를 사용했기 때문에 *right_tbl* 테이블과의 조인을 제거되지 않았다.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: idx-join (left outer join)
+                     outer: sscan
+                                class: l node[0]
+                                sargs: term[2]
+                                cost:  6 card 1
+                     inner: iscan
+                                class: r node[1]
+                                index: pk_right_tbl_id_sub_id term[0] AND term[1] (covers)
+                                cost:  1 card 100
+                     cost:  9 card 1
+        sort:  4 asc
+        cost:  15 card 1
+    
+    Query stmt:
+    
+    select /*+ NO_ELIMINATE_JOIN */ l.id, l.sub_id, l.other_id, l.[name], l.filter from left_tbl l left outer join right_tbl r on l.sub_id=r.sub_id and l.id=r.id where l.filter= ?:0  order by 4
+
+::
+
+               id       sub_id     other_id  name                       filter
+    ==========================================================================
+                1           10          100  'Left-   1'                     1
+                2           10          100  'Left- 101'                     1
+                3           10          100  'Left- 201'                     1
+                4           10          100  'Left- 301'                     1
+                5           10          100  'Left- 401'                     1
+                6           10          100  'Left- 501'                     1
+                7           10          100  'Left- 601'                     1
+                8           10          100  'Left- 701'                     1
+                9           10          100  'Left- 801'                     1
+               10           10          100  'Left- 901'                     1
+
+.. _eliminate-left-outer-join-1:
+
+오른쪽 테이블은 기본키(**PK**) 또는 **UNIQUE** 제약조건이 있어야 한다.
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+오른쪽 테이블에 기본키(**PK**) 또는 **UNIQUE** 제약조건이 없으면 N:1 관계의 **LEFT OUTER JOIN**\이 아니기 때문에 오른쪽 테이블과의 조인을 제거할 수 없다.
+
+다음은 *right_tbl* 테이블의 기본키(**PK**)를 제거하고 *id* 컬럼과 *sub_id* 컬럼으로 구성된 일반 인덱스를 생성해놓은 예제이다.
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    alter table right_tbl drop primary key;
+    alter table right_tbl add index i_right_id_sub_id (id, sub_id);
+    update statistics on right_tbl with fullscan;
+
+    select /*+ recompile */
+        l.id, l.sub_id, l.other_id, l.name, l.filter
+    from
+        left_tbl as l
+        left outer join right_tbl as r on l.id = r.id and l.sub_id = r.sub_id
+    where
+        l.filter = 2
+    order by
+        l.name;
+
+    drop index i_right_id_sub_id on right_tbl;
+    alter table right_tbl add primary key (id, sub_id);
+    update statistics on right_tbl with fullscan;
+
+*right_tbl* 테이블에 기본키(**PK**) 또는 **UNIQUE** 제약조건이 없기 때문에 *right_tbl* 테이블과의 조인이 제거되지 않았다.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: idx-join (left outer join)
+                     outer: sscan
+                                class: l node[0]
+                                sargs: term[2]
+                                cost:  6 card 1
+                     inner: iscan
+                                class: r node[1]
+                                index: i_right_id_sub_id term[0] AND term[1] (covers)
+                                cost:  1 card 100
+                     cost:  9 card 1
+        sort:  4 asc
+        cost:  15 card 1
+    
+    Query stmt:
+    
+    select l.id, l.sub_id, l.other_id, l.[name], l.filter from left_tbl l left outer join right_tbl r on l.sub_id=r.sub_id and l.id=r.id where l.filter= ?:0  order by 4
+
+::
+
+               id       sub_id     other_id  name                       filter
+    ==========================================================================
+                1           20          200  'Left-   2'                     2
+                2           20          200  'Left- 102'                     2
+                3           20          200  'Left- 202'                     2
+                4           20          200  'Left- 302'                     2
+                5           20          200  'Left- 402'                     2
+                6           20          200  'Left- 502'                     2
+                7           20          200  'Left- 602'                     2
+                8           20          200  'Left- 702'                     2
+                9           20          200  'Left- 802'                     2
+               10           20          200  'Left- 902'                     2
+
+다음은 *right_tbl* 테이블의 기본키(**PK**)를 제거하고 *id* 컬럼과 *sub_id* 컬럼으로 구성된 **UNIQUE** 제약조건을 생성해놓은 예제이다.
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    alter table right_tbl drop primary key;
+    alter table right_tbl add constraint unique (id, sub_id);
+    update statistics on right_tbl with fullscan;
+
+    select /*+ recompile */
+        l.id, l.sub_id, l.other_id, l.name, l.filter
+    from
+        left_tbl as l
+        left outer join right_tbl as r on l.id = r.id and l.sub_id = r.sub_id
+    where
+        l.filter = 2
+    order by
+        l.name;
+
+    alter table right_tbl drop constraint u_right_tbl_id_sub_id;
+    alter table right_tbl add primary key (id, sub_id);
+    update statistics on right_tbl with fullscan;
+
+*right_tbl* 테이블에 기본키(**PK**) 또는 **UNIQUE** 제약조건이 없기 때문에 *right_tbl* 테이블과의 조인이 제거되었다.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: sscan
+                     class: l node[0]
+                     sargs: term[0]
+                     cost:  6 card 1
+        sort:  4 asc
+        cost:  13 card 1
+    
+    Query stmt:
+    
+    select l.id, l.sub_id, l.other_id, l.[name], l.filter from left_tbl l where l.filter= ?:0  order by 4
+
+::
+
+               id       sub_id     other_id  name                       filter
+    ==========================================================================
+                1           20          200  'Left-   2'                     2
+                2           20          200  'Left- 102'                     2
+                3           20          200  'Left- 202'                     2
+                4           20          200  'Left- 302'                     2
+                5           20          200  'Left- 402'                     2
+                6           20          200  'Left- 502'                     2
+                7           20          200  'Left- 602'                     2
+                8           20          200  'Left- 702'                     2
+                9           20          200  'Left- 802'                     2
+               10           20          200  'Left- 902'                     2
+
+.. _eliminate-left-outer-join-2:
+
+기본키(**PK**) 또는 **UNIQUE** 제약조건의 모든 컬럼을 조인 조건에 사용해야 한다.
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+다음은 *left_tbl* 테이블의 *id* 컬럼과 *right_tbl* 테이블의 *id* 컬럼만 조인 조건으로 사용된 예제이다.
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    select /*+ recompile */
+        l.id, l.sub_id, l.other_id, l.name, l.filter
+    from
+        left_tbl as l
+        left outer join right_tbl as r on l.id = r.id
+    where
+        l.filter = 3 and l.id = 3
+    order by
+        l.name;
+
+*left_tbl* 테이블의 *sub_id* 컬럼과 *right_tbl* 테이블의 *sub_id* 컬럼이 조인 조건으로 사용되지 않았기 때문에 *right_tbl* 테이블과의 조인이 제거되지 않았다.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: idx-join (left outer join)
+                     outer: iscan
+                                class: l node[0]
+                                index: pk_left_tbl_id_sub_id_other_id term[2]
+                                sargs: term[1]
+                                cost:  3 card 1
+                     inner: iscan
+                                class: r node[1]
+                                index: pk_right_tbl_id_sub_id term[0] (covers)
+                                filtr: term[3]
+                                cost:  1 card 10
+                     sort:  2 asc, 3 asc
+                     cost:  4 card 1
+        sort:  4 asc
+        cost:  10 card 1
+    
+    Query stmt:
+    
+    select l.id, l.sub_id, l.other_id, l.[name], l.filter from left_tbl l left outer join right_tbl r on l.id=r.id and r.id= ?:0  where l.id= ?:1  and l.filter= ?:2  order by 4
+
+::
+
+               id       sub_id     other_id  name                       filter
+    ==========================================================================
+                3           30          300  'Left- 203'                     3
+                3           30          300  'Left- 203'                     3
+                3           30          300  'Left- 203'                     3
+                3           30          300  'Left- 203'                     3
+                3           30          300  'Left- 203'                     3
+                3           30          300  'Left- 203'                     3
+                3           30          300  'Left- 203'                     3
+                3           30          300  'Left- 203'                     3
+                3           30          300  'Left- 203'                     3
+                3           30          300  'Left- 203'                     3
+
+.. _eliminate-left-outer-join-3:
+
+모든 조인 조건은 동등(=) 비교를 사용해야 한다.
+++++++++++++++++++++++++++++++++++++++++++++++
+
+다음은 조인 조건으로 동등(=) 비교를 사용하지 않는 예제이다.
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    select /*+ recompile */
+        l.id, l.sub_id, l.other_id, l.name, l.filter
+    from
+        left_tbl as l
+        left outer join right_tbl as r on l.id = r.id and l.sub_id < r.sub_id
+    where
+        l.filter = 4 and l.id = 4
+    order by
+        l.name;
+
+조인 조건에서 *left_tbl* 테이블의 *sub_id* 컬럼과 *right_tbl* 테이블의 *sub_id* 컬럼을 비교할 때 동등(=) 비교를 사용하지 않았기 때문에 *right_tbl* 테이블과의 조인이 제거되지 않았다.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: idx-join (left outer join)
+                     outer: iscan
+                                class: l node[0]
+                                index: pk_left_tbl_id_sub_id_other_id term[3]
+                                sargs: term[2]
+                                cost:  3 card 1
+                     inner: iscan
+                                class: r node[1]
+                                index: pk_right_tbl_id_sub_id term[0] (covers)
+                                filtr: term[1] AND term[4]
+                                cost:  1 card 10
+                     sort:  2 asc, 3 asc
+                     cost:  4 card 1
+        sort:  4 asc
+        cost:  10 card 1
+    
+    Query stmt:
+    
+    select l.id, l.sub_id, l.other_id, l.[name], l.filter from left_tbl l left outer join right_tbl r on l.id=r.id and r.id= ?:0  and (l.sub_id<r.sub_id) where l.id= ?:1  and l.filter= ?:2  order by 4
+
+::
+
+               id       sub_id     other_id  name                       filter
+    ==========================================================================
+                4           40          400  'Left- 304'                     4
+                4           40          400  'Left- 304'                     4
+                4           40          400  'Left- 304'                     4
+                4           40          400  'Left- 304'                     4
+                4           40          400  'Left- 304'                     4
+                4           40          400  'Left- 304'                     4
+
+.. _eliminate-left-outer-join-4:
+
+조인 조건 외에 오른쪽 테이블에 대한 참조가 없어야 한다.
++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+다음은 *right_tbl* 테이블의 *name* 컬럼을 조회하는 예제이다.
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    select /*+ recompile */
+        l.id, l.sub_id, l.other_id, l.name, l.filter, r.name
+    from
+        left_tbl as l
+        left outer join right_tbl as r on l.id = r.id and l.sub_id = r.sub_id
+    where
+        l.filter = 5
+    order by
+        l.name;
+
+*right_tbl* 테이블의 *name* 컬럼의 값을 조회하고 있기 때문에 *right_tbl* 테이블과의 조인이 제거되지 않았다.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: idx-join (left outer join)
+                     outer: sscan
+                                class: l node[0]
+                                sargs: term[2]
+                                cost:  6 card 1
+                     inner: iscan
+                                class: r node[1]
+                                index: pk_right_tbl_id_sub_id term[0] AND term[1]
+                                cost:  1 card 100
+                     cost:  9 card 1
+        sort:  4 asc
+        cost:  15 card 1
+    
+    Query stmt:
+    
+    select l.id, l.sub_id, l.other_id, l.[name], l.filter, r.[name] from left_tbl l left outer join right_tbl r on l.sub_id=r.sub_id and l.id=r.id where l.filter= ?:0  order by 4
+
+::
+
+               id       sub_id     other_id  name                       filter  name
+    ================================================================================================
+                1           50          500  'Left-   5'                     5  'Right-  5'
+                2           50          500  'Left- 105'                     5  'Right- 15'
+                3           50          500  'Left- 205'                     5  'Right- 25'
+                4           50          500  'Left- 305'                     5  'Right- 35'
+                5           50          500  'Left- 405'                     5  'Right- 45'
+                6           50          500  'Left- 505'                     5  'Right- 55'
+                7           50          500  'Left- 605'                     5  'Right- 65'
+                8           50          500  'Left- 705'                     5  'Right- 75'
+                9           50          500  'Left- 805'                     5  'Right- 85'
+               10           50          500  'Left- 905'                     5  'Right- 95'
+
+다음은 **LEFT OUTER JOIN**\을 하기 전에 *right_tbl* 테이블의 *filter* 컬럼에 대한 조건이 있는 예제이다.
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    select /*+ recompile */
+        l.id, l.sub_id, l.other_id, l.name, l.filter
+    from
+        left_tbl as l
+        left outer join right_tbl as r on l.id = r.id and l.sub_id = r.sub_id and r.filter = 5
+    where
+        l.filter = 5
+    order by
+        l.name;
+
+*right_tbl* 테이블의 *filter* 컬럼의 값이 5인 레코드를 조회하고 있지만 **LEFT OUTER JOIN**\을 하기 전이기 때문에 *right_tbl* 테이블과의 조인이 제거되었다.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: sscan
+                     class: l node[0]
+                     sargs: term[0]
+                     cost:  6 card 1
+        sort:  4 asc
+        cost:  13 card 1
+    
+    Query stmt:
+    
+    select l.id, l.sub_id, l.other_id, l.[name], l.filter from left_tbl l where l.filter= ?:0  order by 4
+
+::
+
+               id       sub_id     other_id  name                       filter
+    ==========================================================================
+                1           50          500  'Left-   5'                     5
+                2           50          500  'Left- 105'                     5
+                3           50          500  'Left- 205'                     5
+                4           50          500  'Left- 305'                     5
+                5           50          500  'Left- 405'                     5
+                6           50          500  'Left- 505'                     5
+                7           50          500  'Left- 605'                     5
+                8           50          500  'Left- 705'                     5
+                9           50          500  'Left- 805'                     5
+               10           50          500  'Left- 905'                     5
+
+다음은 *right_tbl* 테이블의 *name* 컬럼으로 결과를 정렬하는 예제이다.
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    select /*+ recompile */
+        l.id, l.sub_id, l.other_id, l.name, l.filter, r.name
+    from
+        left_tbl as l
+        left outer join right_tbl as r on l.id = r.id and l.sub_id = r.sub_id
+    where
+        l.filter = 5
+    order by
+        r.name desc;
+
+*right_tbl* 테이블의 *name* 컬럼을 기준으로 결과를 내림차순 정렬하고 있기 때문에 *right_tbl* 테이블과의 조인이 제거되지 않았다.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: idx-join (left outer join)
+                     outer: sscan
+                                class: l node[0]
+                                sargs: term[2]
+                                cost:  6 card 1
+                     inner: iscan
+                                class: r node[1]
+                                index: pk_right_tbl_id_sub_id term[0] AND term[1]
+                                cost:  1 card 100
+                     cost:  9 card 1
+        sort:  6 desc
+        cost:  15 card 1
+    
+    Query stmt:
+    
+    select l.id, l.sub_id, l.other_id, l.[name], l.filter, r.[name] from left_tbl l left outer join right_tbl r on l.sub_id=r.sub_id and l.id=r.id where l.filter= ?:0  order by 6 desc
+
+::
+
+               id       sub_id     other_id  name                       filter  name
+    ================================================================================================
+               10           50          500  'Left- 905'                     5  'Right- 95'
+                9           50          500  'Left- 805'                     5  'Right- 85'
+                8           50          500  'Left- 705'                     5  'Right- 75'
+                7           50          500  'Left- 605'                     5  'Right- 65'
+                6           50          500  'Left- 505'                     5  'Right- 55'
+                5           50          500  'Left- 405'                     5  'Right- 45'
+                4           50          500  'Left- 305'                     5  'Right- 35'
+                3           50          500  'Left- 205'                     5  'Right- 25'
+                2           50          500  'Left- 105'                     5  'Right- 15'
+                1           50          500  'Left-   5'                     5  'Right-  5'
+
+.. _eliminate-left-outer-join-5:
+
+상속 관계가 있는 테이블을 조회하는 경우에는 **ALL** 키워드를 사용하지 않아야 한다.
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+상속 관계가 있는 오른쪽 테이블에 **ALL** 키워드를 사용하면 부모 테이블과의 조인을 제거할 수 없다.
+
+다음은 *right_tbl* 테이블에 **ALL** 키워드를 사용하는 예제이다.
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    select /*+ recompile */
+        l.id, l.sub_id, l.other_id, l.name, l.filter
+    from
+        left_tbl as l
+        left outer join all right_tbl as r on l.id = r.id and l.sub_id = r.sub_id
+    where
+        l.filter = 6
+    order by
+        l.name;
+
+*right_tbl* 테이블과의 조인이 제거되지 않았다.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: idx-join (left outer join)
+                     outer: sscan
+                                class: l node[0]
+                                sargs: term[2]
+                                cost:  6 card 1
+                     inner: iscan
+                                class: r node[1]
+                                index: pk_right_tbl_id_sub_id term[0] AND term[1] (covers)
+                                cost:  1 card 100
+                     cost:  9 card 1
+        sort:  4 asc
+        cost:  15 card 1
+    
+    Query stmt:
+    
+    select l.id, l.sub_id, l.other_id, l.[name], l.filter from left_tbl l left outer join  all right_tbl r on l.sub_id=r.sub_id and l.id=r.id where l.filter= ?:0  order by 4
+
+::
+
+               id       sub_id     other_id  name                       filter
+    ==========================================================================
+                1           60          600  'Left-   6'                     6
+                2           60          600  'Left- 106'                     6
+                3           60          600  'Left- 206'                     6
+                4           60          600  'Left- 306'                     6
+                5           60          600  'Left- 406'                     6
+                6           60          600  'Left- 506'                     6
+                7           60          600  'Left- 606'                     6
+                8           60          600  'Left- 706'                     6
+                9           60          600  'Left- 806'                     6
+               10           60          600  'Left- 906'                     6
+
+다음은 *left_tbl* 테이블과 *right_tbl* 테이블에 **ONLY** 키워드를 사용하는 예제이다.
+
+.. code-block:: sql
+
+    /* current_user: public */
+    set optimization level 513;
+
+    select /*+ recompile */
+        l.id, l.sub_id, l.other_id, l.name, l.filter
+    from
+        only left_tbl as l
+        left outer join only right_tbl as r on l.id = r.id and l.sub_id = r.sub_id
+    where
+        l.filter = 6
+    order by
+        l.name;
+
+*right* 테이블과의 조인이 제거되었다.
+
+::
+
+    Query plan:
+    
+    temp(order by)
+        subplan: sscan
+                     class: l node[0]
+                     sargs: term[0]
+                     cost:  6 card 1
+        sort:  4 asc
+        cost:  13 card 1
+    
+    Query stmt:
+    
+    select l.id, l.sub_id, l.other_id, l.[name], l.filter from left_tbl l where l.filter= ?:0  order by 4
+
+::
+
+               id       sub_id     other_id  name                       filter
+    ==========================================================================
+                1           60          600  'Left-   6'                     6
+                2           60          600  'Left- 106'                     6
+                3           60          600  'Left- 206'                     6
+                4           60          600  'Left- 306'                     6
+                5           60          600  'Left- 406'                     6
+                6           60          600  'Left- 506'                     6
+                7           60          600  'Left- 606'                     6
+                8           60          600  'Left- 706'                     6
+                9           60          600  'Left- 806'                     6
+               10           60          600  'Left- 906'                     6
+
+.. _view_merge:
+
+View Merging 최적화
+-----------------------
+**View Merging**\은 질의 처리 시간과 오버헤드를 줄이는데 초점을 둔다. 질의에서 뷰(인라인 뷰 포함)를 사용할 때, 시스템은 일반적으로 새로운 임시 테이블을 생성한다. 
+이렇게 생성된 임시 테이블은 인덱스를 사용할 수 없을 뿐만아니라, 임시 테이블을 생성하는 과정 자체가 시스템에 불필요한 부하를 발생하게 된다.
+따라서 **View Merging**\은 뷰를 원래 테이블로 대체하여 뷰 수행시 발생하는 오버헤드를 피하고, 원래 테이블의 인덱스를 활용하여 더 효율적인 질의 처리를 가능하게 한다.
+
+아래 질의문 1 처럼 인라인 뷰를 사용하면, 질의 내용을 파악하기 쉽다.
+
+.. code-block:: sql
+
+
+    /* 질의문 1 */
+    SELECT *
+    FROM (SELECT * FROM athlete WHERE nation_code = 'USA') a,
+         (SELECT * FROM record WHERE medal = 'G') b
+    WHERE a.code = b.athlete_code;
+
+
+하지만, View Merging 최적화가 처리 되지 않는다면, 인라인 뷰 *a*\와 인라인 뷰 *b*\를 각각 수행후 결과를 임시 저장 공간에 보관하고, 임시 저장된 결과를 바탕으로 조인을 수행한다.
+
+이 경우, 임시 저장 공간에 저장된 결과는 인덱스 사용이 불가능하여 많은 성능 저하가 발생한다.
+
+.. code-block:: sql
+
+
+    /* 질의문 2 */
+    SELECT *
+    FROM emp a, dept b
+    WHERE a.code = b.athlete_code
+    AND a.nation_code = 'USA'
+    AND b.medal = 'G'
+
+
+따라서 질의문 1의 뷰 질의들은 뷰를 참조하는 질의와의 머지(merge) 과정을 거쳐 질의문 2와 같은 형태로 변환된다.
+이를 **View Merging**\이라고 한다.
+
+큐브리드에서는 질의가 다음 조건에 해당하면 **View Merging**\을 수행할 수 없다.
+
+    #. 뷰에 **NO_MERGE** 힌트가 사용된 경우
+
+    #. 뷰가 **CONNECT BY**\를 포함한 경우
+
+    #. 뷰가 **DISTINCT**\ 문을 포함한 경우
+
+    #. 뷰가 **CTE**\(Common Table Expressions)인 경우
+    
+    #. 뷰를 **OUTER JOIN**\ 하는 경우
+
+    #. 뷰에 집계함수나 분석함수를 사용하는 경우
+
+    #. 뷰에 **ROWNUM, LIMIT**\ 또는 **GROUPBY_NUM (), INST_NUM (), ORDERBY_NUM ()**\ 을 사용하는 경우
+
+    #. **Correlated Subquery**\ 를 사용하여 작성된 경우
+
+    #. 뷰가 메소드를 포함한 경우
+
+    #. 뷰가 **RANDOM (), DRANDOM (), SYS_GUID ()**\를 포함한 경우
+
+다음은 뷰에 **NO_MERGE** 힌트가 사용된 예시이다.
+
+.. code-block:: sql
+
+    SELECT *
+    FROM (SELECT /*+ NO_MERGE*/ * FROM athlete WHERE nation_code = 'USA') a,
+    (SELECT /*+ NO_MERGE*/ * FROM record WHERE medal = 'G') b
+    WHERE a.code = b.athlete_code;
+
+뷰에 **NO_MERGE** 힌트를 사용할 경우, 해당 뷰는 **View Merging**\의 대상이 되지 않는다.
+
+다음은 뷰가 **CONNECT BY**\를 포함한 예시이다.
+
+.. code-block:: sql
+
+    -- Creating tree table and then inserting data
+    CREATE TABLE tree(id INT, mgrid INT, name VARCHAR(32), birthyear INT);
+
+    INSERT INTO tree VALUES (1,NULL,'Kim', 1963);
+    INSERT INTO tree VALUES (2,NULL,'Moy', 1958);
+    INSERT INTO tree VALUES (3,1,'Jonas', 1976);
+    INSERT INTO tree VALUES (4,1,'Smith', 1974);
+    INSERT INTO tree VALUES (5,2,'Verma', 1973);
+    INSERT INTO tree VALUES (6,2,'Foster', 1972);
+    INSERT INTO tree VALUES (7,6,'Brown', 1981);
+
+    -- Executing a hierarchical query with CONNECT BY clause
+    SELECT *
+    FROM (SELECT * FROM tree WHERE birthyear = 1973) t
+    CONNECT BY PRIOR t.id=t.mgrid; 
+
+
+위 질의문에서는 **CONNECT BY**\절을 사용하기 때문에 **View Merging**\을 수행할 수 없다.
+
+다음은 뷰가 **DISTINCT**\문을 포함한 예시이다.
+
+.. code-block:: sql
+
+        SELECT * FROM (SELECT DISTINCT host_year FROM record) T;
+
+위 질의문의 뷰 내부에 **DISTINCT**\문이 사용되어 **View Merging**\을 수행할 수 없다.
+
+
+다음은 뷰가 **CTE**\(Common Table Expressions)인 예시이다.
+
+
+.. code-block:: sql
+
+        WITH cte AS (SELECT * FROM athlete WHERE gender = 'M') 
+        SELECT * FROM cte WHERE cte.nation_code = 'USA';
+
+위와 같이 **CTE**\를 포함한 질의문은 **View Merging**\을 수행할 수 없다.
+
+다음은 뷰를 **OUTER JOIN**\ 하는 예시이다.
+
+.. code-block:: sql
+
+        SELECT * 
+        FROM athlete a 
+        LEFT OUTER JOIN (SELECT * FROM record WHERE host_year = 2020) b 
+        ON a.code = b.athlete_code;
+
+위와 같이 **OUTER JOIN**\을 수행하는 경우에는 **View Merging**\을 수행할 수 없다.
+
+다음은 뷰에 집계함수나 분석함수를 사용하는 예시이다. 
+
+.. code-block:: sql
+
+        SELECT * 
+        FROM (SELECT AVG(host_year) FROM record WHERE medal = 'G') a;
+
+뷰에 집계함수나 분석함수를 포함한 질의문의 경우 **View Merging**\의 대상이 되지 않는다.
+
+다음은 뷰에 **ROWNUM, LIMIT**\ 또는 **GROUPBY_NUM (), INST_NUM (), ORDERBY_NUM ()**\ 을 사용하는 예시이다.
+
+.. code-block:: sql
+
+        SELECT *
+        FROM (SELECT gender, rownum FROM athlete WHERE rownum < 15) a
+        WHERE gender = 'M';
+
+뷰에 **ROWNUM, LIMIT**\ 또는 **GROUPBY_NUM (), INST_NUM (), ORDERBY_NUM ()**\을 사용한 질의문의 경우 **View Merging**\이 불가능하다.
+
+다음은 **Correlated Subquery**\ 를 사용하여 작성된 예시이다
+
+.. code-block:: sql
+
+        SELECT COUNT(*)
+        FROM athlete a,
+        (SELECT * FROM record r WHERE a.code = r.athlete_code) b;
+
+**Correlated Subquery**\를 사용한 질의문의 경우 **View Merging**\이 불가능하다.
+
+다음은 뷰가 **RANDOM (), DRANDOM (), SYS_GUID ()**\를 포함한 예시이다.
+
+.. code-block:: sql
+
+        SELECT *
+        FROM    (SELECT RANDOM (), code FROM athlete WHERE nation_code = 'USA') a,
+                (SELECT SYS_GUID (), athlete_code FROM record WHERE medal = 'G') b
+        WHERE a.code = b.athlete_code;
+
+뷰가 **RANDOM (), DRANDOM (), SYS_GUID ()**\를 포함한 질의문의 경우 **View Merging**\이 불가능하다.
+
+.. _pred-push:
+
+Predicate Push
+-----------------------
+**Predicate Push**\는 외부의 조건절을 뷰 안으로 밀어 넣는 최적화이다.
+
+이를 통해 뷰 수행시 추가된 조건에 의해 더 적은 양의 데이터만 조회할 수 있어 전체 처리량을 줄일 수 있다.
+
+
+예를 들어 아래 질의 처럼 인라인 뷰와 테이블을 *a.code = r.athlete_code*\의 조인 조건으로 조인을 처리할 때, 조건절 중 인라인 뷰에 해당되는 조건절들을 인라인 뷰 안쪽에 밀어 넣을 수 있다면
+조인해야 할 데이터양을 줄일 수 있다. 
+
+.. code-block:: sql
+
+
+        SELECT a.name, r.score 
+        FROM (SELECT name, nation_code, code, count(*) cnt FROM athlete GROUP BY name, nation_code) a, record r
+        WHERE a.code = r.athlete_code
+        AND a.nation_code = 'KOR';
+
+
+위 질의 중 인라인 뷰 내부에는 조건절이 없다. 만약 쿼리 변환이 수행되지 않았다면,
+*athlete* 테이블을 full scan하여 생성된 임시 결과와 record 테이블을 조인 수행후에 *a.nation_code = 'KOR'* 조건을
+필터링했을 것이다. 
+
+하지만 **Predicate Push**\를 통해서 다음과 같이 질의가 변환된다면, 더 적은 양의
+데이터만 조회되도록 최적화할 수 있다.
+
+.. code-block:: sql
+
+        SELECT a.name, r.score 
+        FROM (SELECT name, nation_code, code, count(*) cnt FROM athlete WHERE nation_code = 'KOR' GROUP BY name, nation_code ) a, record r
+        WHERE a.code = r.athlete_code;
+
+다음의 경우에는 **Predicate Push**\가 수행되지 않는다.
+
+    #. 주 질의에 **NO_PUSH_PRED** 힌트가 사용된 경우
+
+    #. 주 질의가 **CONNECT BY**\를 포함한 경우
+
+    #. 뷰에 집계함수나 분석함수를 사용하는 경우
+
+    #. 뷰에 **ROWNUM, LIMIT** 또는 **GROUPBY_NUM (), INST_NUM (), ORDERBY_NUM ()**\ 을 사용하는 경우
+
+    #. **Correlated Subquery**\ 를 사용하여 작성된 경우
+
+    #. 조건절에 부질의가 사용된 경우
+
+    #. 뷰가 메소드를 포함한 경우
+
+    #. 푸시될 조건절이나 뷰 내부의 **Predicate Push** 대상에 **RANDOM (), DRANDOM (), SYS_GUID ()**\를 사용하는 경우
+
+    #. **OUTER JOIN**\을 수행할 때 푸시될 조건절이나 뷰 내부의 **Predicate Push** 대상에 다음을 사용하는 경우:
+    
+            * **ON**\절에 조건절이 작성된 경우
+            * **NULL** 변환 함수 (**COALESCE (), NVL (), NVL2 (), DECODE (), IF (), IFNULL (), CONCAT_WS ()**)
+            * **IS NULL, CASE** 문
+
+다음은 주 질의에 **NO_PUSH_PRED** 힌트가 사용된 예시이다.
+
+.. code-block:: sql
+
+        SELECT /*+ NO_PUSH_PRED*/ a.name, r.score 
+        FROM (SELECT name, nation_code, code, count(*) cnt FROM athlete GROUP BY name, nation_code) a, record r
+        WHERE a.code = r.athlete_code
+        AND a.nation_code = 'KOR';
+
+주 질의에 **NO_PUSH_PRED** 힌트가 사용된 경우, **Predicate Push**\가 수행되지 않는다.
+
+다음은 질의가 **OUTER JOIN**\을 수행할 때 **ON**\절의 조건에 푸시될 조건절이 있는 예시이다.
+
+.. code-block:: sql
+
+        SELECT a.name, r.score 
+        FROM (SELECT * FROM athlete WHERE gender = 'M') a
+            LEFT OUTER JOIN record r ON a.code = r.athlete_code AND a.nation_code = 'KOR';
+
+이 경우, *a.nation_code = 'KOR'*\는 **LEFT OUTER JOIN** 수행 시 **ON** 절에 있는데, 이러한 형태로 **ON** 절의 조건절은 **Predicate Push** 대상이 아니다.
+
+다음 질의는 **OUTER JOIN**\을 수행할 때 푸시될 조건절이나 뷰 내부의 **Predicate Push** 대상에 **NULL** 변환 함수를 사용하는 예시이다.
+
+.. code-block:: sql
+
+        SELECT a.name, r.score 
+        FROM athlete a
+                LEFT OUTER JOIN (SELECT * FROM record WHERE medal = 'G') r ON a.code = r.athlete_code
+        WHERE NVL(r.score, '0') = '0';
+
+**OUTER JOIN**\을 수행할 때 푸시될 조건절이나 뷰 내부의 **Predicate Push** 대상에 **NULL** 변환 함수를 사용한 경우 **Predicate Push** 대상이 아니다.
+
+.. _query-cache:
 
 쿼리 캐시
 ===========

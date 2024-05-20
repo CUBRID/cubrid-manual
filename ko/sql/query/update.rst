@@ -14,16 +14,19 @@ UPDATE
 ::
 
     <UPDATE single table>
-    UPDATE [schema_name.]table_name|view_name SET column_name = {<expr> | DEFAULT} [, column_name = {<expr> | DEFAULT} ...]
+    UPDATE [schema_name.]table_name | <remote_table_spec> | view_name SET column_name = {<expr> | DEFAULT} [, column_name = {<expr> | DEFAULT} ...]
         [WHERE <search_condition>]
         [ORDER BY {col_name | <expr>}]
         [LIMIT row_count]
      
+    <remote_table_spec> ::= [schema_name.]table_name@[schema.name.]server_name [correlation>]
     <UPDATE multiple tables>
     UPDATE <table_specifications> SET column_name = {<expr> | DEFAULT} [, column_name = {<expr> | DEFAULT} ...]
         [WHERE <search_condition>]
 
 *   <*table_specifications*> : **SELECT** 문의 **FROM** 절과 같은 형태의 구문을 지정할 수 있으며, 하나 이상의 테이블을 지정할 수 있다.
+
+*   *server_name*: 현재 서버가 아닌 dblink로 연결된 원격 서버의 테이블을 지정할 때 사용한다.
 
 *   *column_name*: 업데이트할 칼럼 이름을 지정한다. 하나 이상의 테이블에 대한 칼럼들을 지정할 수 있다.
 
@@ -172,3 +175,64 @@ UPDATE
   
     1, NULL
     
+테이블 확장명을 사용해서 로컬 서버 뿐만아니라 원격 서버의 테이블에 대해서도 업데이트를 수행할 수 있다. 다음은 원격 테이블에 대해 업데이트를 수행하는 예이다.
+
+.. code-block:: sql
+
+    --at remote srv1
+    --creating a new table having all records copied from a_tbl1
+    --origin is a local server
+    CREATE TABLE a_tbl5 AS SELECT * FROM a_tbl1@origin;
+
+    --at local
+    SELECT * FROM a_tbl5@srv1 WHERE name IS NULL;
+               id  name                  phone
+    =========================================================
+             NULL  NULL                  '000-0000'
+                4  NULL                  '000-0000'
+                5  NULL                  '000-0000'
+                7  NULL                  '777-7777'
+
+    --at local
+    UPDATE a_tbl5@srv1 SET name='yyy', phone='999-9999' WHERE name IS NULL LIMIT 3;
+    SELECT * FROM a_tbl5@srv1;
+               id  name                  phone
+    =========================================================
+             NULL  'yyy'                 '999-9999'
+                1  'aaa'                 '000-0000'
+                2  'bbb'                 '000-0000'
+                3  'ccc'                 '333-3333'
+                4  'yyy'                 '999-9999'
+                5  'yyy'                 '999-9999'
+                6  'eee'                 '000-0000'
+
+다음은 원격 테이블을 포함한 여러 개의 테이블들에 대해 조인한 후 업데이트를 수행하는 예이다.
+
+.. code-block:: sql
+
+    --at remote srv1
+    --creating a table b_tbl
+    CREATE TABLE b_tbl(rate_id INT, rate DOUBLE);
+
+    --at local
+    INSERT INTO a_tbl VALUES (1, 100.0), (2, 1000.0), (3, 10000.0);
+    INSERT INTO b_tbl@srv1 VALUES (1, 0.1), (2, 0.0), (3, 0.2), (3, 0.5);
+
+    UPDATE
+     a_tbl INNER JOIN b_tbl@srv1 b_tbl ON a_tbl.id=b_tbl.rate_id
+    SET
+      a_tbl.charge = a_tbl.charge * (1 + b_tbl.rate)
+    WHERE a_tbl.charge > 900.0;
+
+
+.. warning::
+
+    아래와 같이 로컬 테이블과 원격 테이블이 포함되어 있고, 원격 테이블이 업데이트되는 UPDATE ... JOIN 쿼리는 허용하지 않는다. 
+
+.. code-block:: sql
+
+    UPDATE
+     a_tbl INNER JOIN b_tbl@srv1 b_tbl ON a_tbl.id=b_tbl.rate_id
+    SET
+      b_tbl.charge = a_tbl.charge * (1 + b_tbl.rate)
+    WHERE a_tbl.charge > 900.0;

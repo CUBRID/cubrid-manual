@@ -42,28 +42,33 @@ You can start the CSQL program in the shell as shown below. At the initial insta
        ;EXit                       - exit program.
 
        ;CLear                      - clear command buffer.
-       ;EDIT                       - invoke system editor with command buffer.
+       ;EDIT   [format/fmt]        - invoke system editor [after formatter] with command buffer.
        ;LISt                       - display the content of command buffer.
 
        ;RUn                        - execute sql in command buffer.
        ;Xrun                       - execute sql in command buffer,
                                      and clear the command buffer.
-       ;COmmit                     - commit the current transaction.
+       ;COMmit                     - commit the current transaction.
        ;ROllback                   - roll back the current transaction.
        ;AUtocommit [ON|OFF]        - enable/disable auto commit mode.
-       ;REStart                    - restart database.
+       ;REStart                    - reconnect to the current database in a CSQL session.
+       ;CHeckpoint                 - execute the checkpoint(CSQL with --sysadm only).
+       ;Killtran                   - check transaction status information or end a specific transaction.(CSQL with --sysadm only).
 
-       ;SHELL_Cmd  [shell-cmd]     - set default shell, editor, print and pager
+       ;SHELL_Cmd  [shell-cmd]     - set default shell, editor, print, pager and formatter
        ;EDITOR_Cmd [editor-cmd]      command to new one, or display the current
        ;PRINT_Cmd  [print-cmd]       one, respectively.
        ;PAger_cmd  [pager-cmd]
+       ;FOrmatter_cmd [formatter-cmd]
 
        ;DATE                       - display the local time, date.
        ;DATAbase                   - display the name of database being accessed.
        ;SChema class-name          - display schema information of a class.
-       ;TRigger [`*'|trigger-name] - display trigger definition.
+       ;TRIgger [`*'|trigger-name] - display trigger definition.
        ;Get system_parameter       - get the value of a system parameter.
        ;SEt system_parameter=value - set the value of a system parameter.
+       ;STring-width [width]       - set width that each column which is a string type is displayed.
+       ;COLumn-width [name]=[width]- set width that a specific column is displayed.
        ;PLan [simple/detail/off]   - show query execution plan.
        ;Info <command>             - display internal information.
        ;TIme [ON/OFF]              - enable/disable to display the query
@@ -72,6 +77,13 @@ You can start the CSQL program in the shell as shown below. At the initial insta
        ;HISTORYList                - display list of the executed queries.
        ;HISTORYRead <history_num>  - read entry on the history number into command buffer.
        ;TRAce [ON/OFF] [text/json] - enable/disable sql auto trace.
+       ;SIngleline [ON|OFF]        - enable/disable single-line mode.
+       ;CONnect username [dbname | dbname@hostname]
+                                   - connect to the current or other databases as a username.
+       ;.Hist [ON/OFF]             - start/stop collecting statistics information in CSQL(available DBA only).
+       ;.Clear_hist                - clear the CSQL statistics information in the buffer.
+       ;.Dump_hist                 - display the CSQL statistics information in CSQL.
+       ;.X_hist                    - display the CSQL statistics information in CSQL with statistics data initialized.
        ;HElp                       - display this help message.
 
 **Running SQL with CSQL**

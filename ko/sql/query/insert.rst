@@ -13,24 +13,29 @@ INSERT
 ::
 
     <INSERT ... VALUES statement>
-    INSERT [INTO] [schema_name.]table_name [(column_name, ...)]
+    INSERT [INTO] <table_specification> [(column_name, ...)]
         {VALUES | VALUE}({expr | DEFAULT}, ...)[,({expr | DEFAULT}, ...),...]
         [ON DUPLICATE KEY UPDATE column_name = expr, ... ]
-    INSERT [INTO] [schema_name.]table_name DEFAULT [ VALUES ]
-     
+    INSERT [INTO] <table-specification> DEFAULT [ VALUES ]
+
     <INSERT ... SET statement>
-    INSERT [INTO] [schema_name.]table_name
+    INSERT [INTO] <table_specification>
         SET column_name = {expr | DEFAULT}[, column_name = {expr | DEFAULT},...]
         [ON DUPLICATE KEY UPDATE column_name = expr, ... ]
-     
+
     <INSERT ... SELECT statement>
-    INSERT [INTO] [schema_name.]table_name [(column_name, ...)]
+    INSERT [INTO] <table_specification> [(column_name, ...)]
         SELECT...
         [ON DUPLICATE KEY UPDATE column_name = expr, ... ]
+
+    <table_specification> ::= [schema_name.]table_name | <remote_table_spec>
+    <remote_table_spec> ::= [schema_name.]table_name@[shema_name.]server_name
 
 *   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 
 *   *table_name*: 새로운 레코드를 삽입할 대상 테이블 이름을 지정한다.
+
+*   *server_name*: dblink로 연결할 원격 서버 이름을 지정한다.
 
 *   *column_name*: 값을 삽입할 칼럼 이름을 지정한다. 이 값을 생략하면, 테이블에 정의된 모든 칼럼이 명시된 것으로 간주되므로 모든 칼럼에 대한 값을 **VALUES** 뒤에 명시해야 한다. 테이블에 정의된 칼럼 중 일부 칼럼만 명시하면 나머지 칼럼에는 **DEFAULT** 로 정의된 값이 할당되며, 정의된 기본값이 없는 경우 **NULL** 값이 할당된다.
 
@@ -119,6 +124,7 @@ INSERT
     
 위의 예에서 칼럼 b의 값을 할당할 때, a의 값이 1이므로 b는 2, c는 4가 된다.
  
+
 .. code-block:: sql
  
     CREATE TABLE tbl2 (a INT, b INT, c INT);
@@ -192,6 +198,59 @@ INSERT ... SELECT 문
                 6  'eee'                 '000-0000'
                 7  NULL                  '777-7777'
                 8  'aaa'                 '000-0000'
+
+INSERT INTO <remote-table-spec>… SELECT 문
+============================================
+
+INSERT 문에 SELECT 질의에서 사용한 동일 원격 서버의 원격 테이블을 사용하면 하나 이상의 원격 테이블로부터 특정 검색 조건에 만족하는 질의 결과를 원격 테이블에 삽입할 수 있다. 단, SELECT문에 명시된 테이블 중 INSERT 구문의 원격 테이블과 다른 서버의 테이블 (로컬 테이블 또는 다른 원격 서버의 테이블)을 사용시 에러가 발생한다. 
+
+.. code-block:: sql
+
+    --at remote-side
+
+    --creating an empty table which schema replicated from a_tbl1
+    CREATE TABLE a_tbl2 LIKE a_tbl1;
+
+    --at local-side
+
+    --inserting multiple rows from SELECT query results
+    INSERT INTO a_tbl2@server1 SELECT * FROM a_tbl1@server1 WHERE id IS NOT NULL;
+
+    --inserting column value with SELECT subquery specified in the value list
+    INSERT INTO a_tbl2@server1 VALUES(8, SELECT name FROM a_tbl1@server1 WHERE name <'bbb', DEFAULT);
+
+    SELECT * FROM a_tbl2@server1;
+
+::
+
+               id  name                  phone
+    =========================================================
+                1  'aaa'                 '000-0000'
+                2  'bbb'                 '000-0000'
+                3  'ccc'                 '333-3333'
+                4  NULL                  '000-0000'
+                5  NULL                  '000-0000'
+                6  'eee'                 '000-0000'
+                7  NULL                  '777-7777'
+                8  'aaa'                 '000-0000'
+
+원격 테이블의 데이터는 로컬 테이블로 삽입 가능하나 로컬 테이블의 데이터를 원격 테이블에 삽입하는 질의는 사용할 수 없으므로 사용시 주의해야 한다. 아래의 질의는 에러가 발생한다.
+
+.. code-block:: sql
+
+    --inserting multiple rows from SELECT query results
+    INSERT INTO a_tbl2@server1 SELECT * FROM a_tbl1 WHERE id IS NOT NULL;
+
+    dblink: local mixed remote DML is not allowed
+
+또한 INSERT 구문과 SELECT 구문에서 사용한 원격 테이블의 서버가 다른 경우 질의 수행이 허용되지 않는다. 아래의 질의는 에러가 발생한다.
+
+.. code-block:: sql
+
+    --inserting multiple rows from SELECT query results
+    INSERT INTO a_tbl2@server1 SELECT * FROM a_tbl1@server2 WHERE id IS NOT NULL;
+
+    dblink: multi-remote DML is not allowed
 
 ON DUPLICATE KEY UPDATE 절
 ==========================

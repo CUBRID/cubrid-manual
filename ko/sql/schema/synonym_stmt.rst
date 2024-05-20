@@ -6,8 +6,8 @@
 동의어 정의문
 **************
 
-CREATE SYONYM
-=============
+CREATE SYNONYM
+==============
 
 이미 데이터베이스에 존재하는 객체를 사용할 수 있는 또 다른 새로운 이름을 만든다. 사용자는 데이터베이스 객체를 생성할 때 지정한 이름으로 객체를 사용할 수 있고, 동의어로도 객체를 사용할 수 있다.
 
@@ -329,6 +329,20 @@ CREATE SYONYM
     ======================
       'private synonym for user u2.'
 
+사용자는 해당 사용자의 스키마에서만 동의어를 생성할 수 있다.
+
+.. code-block:: sql
+
+    call login ('u1') on class db_user;
+
+    /* current_user: u1 */
+    create synonym u2.s2 for dba.t1;
+
+::
+
+    ERROR: before ' ; '
+    DBA, members of DBA group, and owner can perform CREATE SYNONYM.
+
 .. code-block:: sql
 
     /* clean */
@@ -344,8 +358,8 @@ CREATE SYONYM
     drop table if exists t1;
     drop table if exists t2;
 
-ALTER SYONYM
-============
+ALTER SYNONYM
+=============
 
 동의어의 대상 객체나 커멘트를 변경한다. 사용 중인 동의어는 변경할 수 없다.
 
@@ -495,8 +509,8 @@ ALTER SYONYM
     drop synonym if exists s1;
     drop table if exists t1;
 
-DROP SYONYM
-===========
+DROP SYNONYM
+============
 
 동의어를 삭제한다. 사용 중인 동의어는 삭제할 수 없다. 동의어를 삭제해도 대상 객체는 삭제되지 않는다.
 
@@ -574,8 +588,8 @@ DROP SYONYM
     drop synonym if exists s1;
     drop table if exists t1;
 
-RENAME SYONYM
-=============
+RENAME SYNONYM
+==============
 
 동의어의 이름을 변경한다. 사용 중인 동의어의 이름은 변경할 수 없다.
 

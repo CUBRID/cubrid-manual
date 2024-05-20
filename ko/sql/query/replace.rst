@@ -11,20 +11,25 @@ REPLACE
 ::
 
     <REPLACE ... VALUES statement>
-    REPLACE [INTO] [schema_name.]table_name [(column_name, ...)]
+    REPLACE [INTO] <table_specification> [(column_name, ...)]
         {VALUES | VALUE}({expr | DEFAULT}, ...)[,({expr | DEFAULT}, ...),...]
      
     <REPLACE ... SET statement>
-    REPLACE [INTO] [schema_name.]table_name
+    REPLACE [INTO] <table_specification>
         SET column_name = {expr | DEFAULT}[, column_name = {expr | DEFAULT},...]
      
     <REPLACE ... SELECT statement>
-    REPLACE [INTO] [schema_name.]table_name [(column_name, ...)]
+    REPLACE [INTO] <table_specification> [column_name, ...)]
         SELECT...
+
+    <table_specfication> ::= [schema_name.]table_name
+                           | [schema_name.]table_name@[schema_name.]server_name
 
 *   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 
 *   *table_name*: 새로운 레코드를 삽입할 대상 테이블 이름을 지정한다.
+
+*   *server_name*: 대상 테이블의 원격지 서버 이름을 지정한다. 로컬 테이블의 경우 *server_name*\을 지정하지 않는다.
 
 *   *column_name*: 값을 삽입할 칼럼 이름을 지정한다. 이 값을 생략하면, 테이블에 정의된 모든 칼럼이 명시된 것으로 간주되므로 모든 칼럼에 대한 값을 **VALUES** 뒤에 명시해야 한다. 테이블에 정의된 칼럼 중 일부 칼럼만 명시하면 나머지 칼럼에는 **DEFAULT**\ 로 정의된 값이 할당되며, 정의된 기본값이 없는 경우 **NULL** 값이 할당된다.
 

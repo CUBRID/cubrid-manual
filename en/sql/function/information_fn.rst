@@ -108,7 +108,7 @@ CURRENT_USER, USER
 
     **CURRENT_USER** and **USER** are pseudo-columns and can be used interchangeably. They return the user name that is currently logged in to the database as a string.
 
-    Please note that :func:`SYSTEM_USER` and :func:`USER` functions return the user name with a host name.
+    Please note that :func:`SYSTEM_USER` and :func:`USER` functions return the user name with a host name where CSQL or CAS was executed.
 
     :rtype: STRING
     
@@ -642,7 +642,7 @@ USER, SYSTEM_USER
 
 .. function:: SYSTEM_USER()
 
-    The functions **USER** and **SYSTEM_USER** are identical and they return the user name together with the host name. 
+    The functions **USER** and **SYSTEM_USER** are identical and they return the user name together with the host name where CSQL or CAS was executed. 
     
     The :c:macro:`USER` and :c:macro:`CURRENT_USER` pseudo-columns return the user names who has logged on to the current database as character strings.
 

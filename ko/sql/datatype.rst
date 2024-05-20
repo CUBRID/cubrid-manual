@@ -969,13 +969,13 @@ CUBRID는 IANA 타임존을 지원하며, CUBRID 설치 패키지에 포함되�
 
 이와 관련하여 :ref:`timezone-library`\을 참고한다.
 
-비트열 데이터 타입
-==================
+비트 문자열 데이터 타입
+=======================
 
-비트열은 0과 1로 이루어진 이진 값의 순열(sequence)이다. CUBRID는 두 가지 비트열을 지원한다.
+비트 문자열은 0과 1로 이루어진 8비트 단위의 이진 값의 순열(sequence)이다. CUBRID는 두 가지 비트 문자열을 지원한다.
 
-*   고정길이 비트열(**BIT**)
-*   가변길이 비트열(**BIT VARYING**)
+*   고정길이 비트 문자열(**BIT**)
+*   가변길이 비트 문자열(**BIT VARYING**)
 
 메서드의 인자나 속성의 타입으로 비트열을 사용할 수 있으며, 비트열 리터럴은 2진수 형식이나 16진수 형식을 사용한다. 2진수 형식으로 사용할 때에는 다음과 같이 문자 **B** 뒤에 0과 1로 이루어진 문자열을 붙이거나, **0b** 뒤에 값을 붙여 표현한다. ::
 
@@ -2178,7 +2178,7 @@ JSON 데이터로의 변환은 내장된 유효성 검사를 수행하고
 `JSON 스키마 표준 초안 (draft JSON Schema standard) <https://json-schema.org/specification.html>`_ 를 사용하여 정의할 수 있다.
 만약 JSON 스키마를 다루어본 적이 없다면
 `JSON 스키마의 이해 (Understanding JSON Schema)
-<https://json-schema.org/understanding-json-schema/index.html>`_ 를 참고하면 된다.
+<https://json-schema.org/understanding-json-schema>`_ 를 참고하면 된다.
 
 
 다음은 스키마 사용 방법에 대한 간단한 예제이다.:

@@ -11,11 +11,12 @@ CUBRID DBLink
 CUBRID DBLink 소개
 ==============================================
 
-데이터베이스에서 정보를 조회하다 보면 종종 외부 데이타베이스의 정보 조회가 필요한 경우가 있다. 이렇게 외부 데이터베이스의 정보를 조회하기 위해서 CUBRID DBLink를 이용하면 타 데이터베이스의 정보를 조회할 수 있다.
+데이터베이스에서 정보를 조회하다 보면 종종 외부 데이터베이스의 정보 조회가 필요한 경우가 있다. 이렇게 외부 데이터베이스의 정보를 조회하기 위해서 CUBRID DBLink를 이용하면 타 데이터베이스의 정보를 조회할 수 있다.
 
-CUBRID DBLink는 동일 기종인 CUBRID와 이기종인 Oracle, MySQL의 데이타베이스의 정보를 조회할 수 있도록 기능을 제공하고 있다.
-외부 데이타베이스의 정보를 마치 하나의 데이터베이스에서 조회하는 것과 같은 효과를 발휘한다. 단 외부 데이타베이스를 여러 개 설정은 가능 하나, 정보를 조회할 때는 한 개의 타 데이타베이스의 정보만 조회가 가능하다.
+CUBRID DBLink는 동일 기종인 CUBRID와 이기종인 Oracle, MySQL, MariaDB의 데이터베이스의 정보를 조회할 수 있도록 기능을 제공하고 있다.
+외부 데이터베이스의 정보를 마치 하나의 데이터베이스에서 조회하는 것과 같은 효과를 발휘한다. 단 외부 데이터베이스를 여러 개 설정은 가능 하나, 정보를 조회할 때는 한 개의 타 데이터베이스의 정보만 조회할 수 있다.
 
+CUBRID DBLink는 SELECT의 FROM절에 연결될 서버와 실행될 질의를 명시한 DBLINK 구문 형식과 원격 테이블 (테이블 확장명) 형식으로 사용 가능하며, INSERT/REPLACE/UPDATE/DELETE/MERGE구문은 원격 테이블 형식만 사용할 수 있다.
 
 .. _dblink-diagram:
 
@@ -46,7 +47,7 @@ CUBRID DBLink는 동일기종 간에 DBLink와 이기종 간의 DBLink를 지원
 DBLink를 위한 게이트웨이
 ==============================================
 
-게이트웨이는 CUBRID 데이터베이스와 이기종 데이터베이스 간의 중개하는 미들웨어로 브로커(Broker)와 유사하다. 게이트웨이는 이기종 데이터베이스 서버 (Oracle/MySQL 등)에 연결하고 데이터를 조회하여 CUBRID 데이터베이스 서버에 전달하는 역할을 한다.
+게이트웨이는 CUBRID 데이터베이스와 이기종 데이터베이스 간의 중개하는 미들웨어로 브로커(Broker)와 유사하다. 게이트웨이는 이기종 데이터베이스 서버 (Oracle/MySQL/MariaDB 등)에 연결하고 데이터를 조회하여 CUBRID 데이터베이스 서버에 전달하는 역할을 한다.
 
 
 게이트웨이를 포함하는 큐브리드 시스템은 아래 그림과 같이 cub_gateway, cub_cas_cgw를 포함한 다중 계층 구조를 가진다.
@@ -84,7 +85,8 @@ cub_gateway는 CUBRID Database Server와 cub_cas_cgw 사이의 연결을 중개�
 
 ::
 
-    cubrid gateway start
+    $ cubrid gateway start
+    @cubrid gateway is running.
 
 게이트웨이 종료
 ---------------
@@ -156,7 +158,7 @@ CUBRID DBLink를 사용하기 위한 설정은 동일기종 DBLink와 이기종 
 이기종 DBLink 설정
 ------------------------
 
-이기종 데이터베이스(Oracle/MySQL)와 연결하기 위해서는 cubrid_gataway.conf 와 unixODBC 설치, ODBC Driver 정보 설정이 필요 하다.
+이기종 데이터베이스(Oracle/MySQL/MariaDB)와 연결하기 위해서는 cubrid_gataway.conf 와 unixODBC 설치, ODBC Driver 정보 설정이 필요 하다.
 
 
 
@@ -220,6 +222,27 @@ CUBRID 설치 시 생성되는 기본 게이트웨이 설정 파일인 cubrid_ga
 	CGW_LINK_ODBC_DRIVER_NAME   =MySQL_ODBC_Driver
 	CGW_LINK_CONNECT_URL_PROPERTY       ="charset=utf8;PREFETCH=100;NO_CACHE=1"
 
+	[%mariadb_gateway]
+	SERVICE                 =OFF
+	SSL			=OFF
+	APPL_SERVER             =CAS_CGW
+	BROKER_PORT             =59000
+	MIN_NUM_APPL_SERVER     =5
+	MAX_NUM_APPL_SERVER     =40
+	APPL_SERVER_SHM_ID      =59000
+	LOG_DIR                 =log/gateway/sql_log
+	ERROR_LOG_DIR           =log/gateway/error_log
+	SQL_LOG                 =ON
+	TIME_TO_KILL            =120
+	SESSION_TIMEOUT         =300
+	KEEP_CONNECTION         =AUTO
+	CCI_DEFAULT_AUTOCOMMIT  =ON
+	APPL_SERVER_MAX_SIZE    =256
+	CGW_LINK_SERVER		=MARIADB
+	CGW_LINK_SERVER_IP      =localhost
+	CGW_LINK_SERVER_PORT    =3306 
+	CGW_LINK_ODBC_DRIVER_NAME   =MariaDB_ODBC_Driver
+	CGW_LINK_CONNECT_URL_PROPERTY       =
 
 게이트웨이 파라메터
 ------------------------
@@ -253,7 +276,7 @@ CUBRID 설치 시 생성되는 기본 게이트웨이 설정 파일인 cubrid_ga
 
 **CGW_LINK_SERVER**
 
-    **CGW_LINK_SERVER** 는 CAS_CGW로 연결하여 사용할 이기종 데이터베이스의 이름을 설정해야 한다. 현재 지원하는 데이타베이스는 Oracle, MySQL이다.
+    **CGW_LINK_SERVER** 는 CAS_CGW로 연결하여 사용할 이기종 데이터베이스의 이름을 설정해야 한다. 현재 지원하는 데이터베이스는 Oracle, MySQL, MariaDB이다.
 
 **CGW_LINK_SERVER_IP**
 
@@ -295,6 +318,8 @@ CUBRID 설치 시 생성되는 기본 게이트웨이 설정 파일인 cubrid_ga
     *   연결 속성(property)는 데이터베이스별로 각각 다르므로 아래의 사이트를 참조한다.
     *   Oracle : https://docs.oracle.com/cd/B19306_01/server.102/b15658/app_odbc.htm#UNXAR418
     *   MySQL : https://dev.mysql.com/doc/connector-odbc/en/connector-odbc-configuration-connection-parameters.html#codbc-dsn-option-flags
+    *   MariaDB : https://mariadb.com/kb/en/about-mariadb-connector-odbc/#general-connection-parameters
+
 
 
 unixODBC 설치
@@ -337,7 +362,7 @@ unixODBC가 설치한 후, 연결할 데이터베이스의 ODBC Driver 정보를
 ODBC Driver 정보는 odbcinst.ini를 직접 수정해서 등록한다.
 
 
-아래의 내용은 MySQL, Oracle ODBC Driver 정보를 설정한 예제이다.
+아래의 내용은 MySQL, Oracle, MariaDB ODBC Driver 정보를 설정한 예제이다.
 
 ::
 		
@@ -347,12 +372,16 @@ ODBC Driver 정보는 odbcinst.ini를 직접 수정해서 등록한다.
 
 	[Oracle 11g ODBC driver]
 	Description = Oracle ODBC driver v11g
-	Driver = /home/user/oracle/instantclient/libsqora.so.11.1
-	
+	Driver = /home/user/oracle/instantclient/libsqora.so.19.1
+
+	[mariadb odbc 3.1.13 driver]
+	Description= mariadb odbc driver 3.1.13
+	Driver=/home/user/mariadb-odbc-3.1.13/lib64/mariadb/libmaodbc.so
 
 .. note::
     
-        참고로, 위의 예제에서 드라이버 이름은 각각 "MySQL ODBC 8.0 Unicode Driver" 와 "Oracle 11g ODBC driver" 이다.
+        참고로, 위의 예제에서 드라이버 이름은 각각 "MySQL ODBC 8.0 Unicode Driver", "Oracle 11g ODBC driver" 와 "mariadb odbc 3.1.13 driver" 이다.
+
 
 
 DBLink를 위한 Oracle 설정
@@ -369,8 +398,8 @@ Oracle Instant Client 다운로드 사이트에서 ODBC Package와 Basic Package
 
 ::
     
-	unzip instantclient-basic-linux.x64-11.2.0.4.0.zip
-	unzip instantclient-odbc-linux.x64-11.2.0.4.0.zip
+	unzip instantclient-basic-linux.x64-19.20.0.0.0dbru.zip
+	unzip instantclient-odbc-linux.x64-19.20.0.0.0dbru.zip
 
 Oracle Instant Client 다운로드 사이트: https://www.oracle.com/database/technologies/instant-client/downloads.html
 
@@ -467,7 +496,7 @@ TNS_ADMIN는 tnsnames.ora 파일이 있는 디렉토리 경로를 가리킨다.
 			.
 			.
 	CGW_LINK_SERVER		        =ORACLE
-	CGW_LINK_ODBC_DRIVER_NAME   =Oracle 12c ODBC driver
+	CGW_LINK_ODBC_DRIVER_NAME   =Oracle 19c ODBC driver
 	CGW_LINK_CONNECT_URL_PROPERTY =
 
 
@@ -527,6 +556,51 @@ Yum을 사용하여 저장소를 업데이트한다.
 	CGW_LINK_CONNECT_URL_PROPERTY ="charset=utf8;PREFETCH=100;NO_CACHE=1"
 
 
+DBLink를 위한 MariaDB 설정
+=======================================
+
+MariaDB 환경설정
+-------------------------
+ 
+**MariaDB ODBC Driver 설치**
+
+게이트웨이에서 MariaDB 연결을 하기위해서는 MariaDB ODBC Driver가 필요하다.
+아래의 내용은 MariaDB ODBC Drvier 설치 방법이다.
+
+MariaDB Connector/ODBC 패키지는 아래의 페이지에서 버전을 선택하여 다운로드할 수 있다.
+
+https://mariadb.com/downloads/connectors/
+
+
+다운로드한 tarball 패키지에서 파일을 추출한다. 그리고 드라이버의 공유 라이브러리를 시스템의 적절한 위치에 설치 한다.
+설치한 드라이버는 odbcinst.ini에 드라이버 정보를 설정해야 한다. 설정 방법은 :ref:`ODBC Driver 정보 설정 <odbcdriver-info>`\ 을 참고 한다.
+
+::
+    
+	$ mariadb-connector-odbc-3.1.13-centos7-amd64.tar.gz -C mariadb-odbc-3.1.13
+
+자세한 설치 방법은 https://mariadb.com/kb/en/about-mariadb-connector-odbc/#installing-mariadb-connectorodbc-on-linux 을 참고한다.
+
+
+**MariaDB 위한 cubrid_gataway.conf 설정**
+
+게이트웨이에서 MariaDB에 연결하기 위해서는 아래와 같이 몇 가지 설정이 필요하다.
+
+자세한 내용은 :ref:`게이트웨이 설정 파일 <gatewayconf-info>`\ 을 참고한다.
+
+  
+::
+    
+	APPL_SERVER                  =CAS_CGW
+			.
+			.
+			.	
+	CGW_LINK_SERVER		         =MARIADB
+	CGW_LINK_SERVER_IP           =localhost
+	CGW_LINK_SERVER_PORT         =3306 
+	CGW_LINK_ODBC_DRIVER_NAME    =mariadb odbc 3.1.13 driver
+
+
 
 Cubrid DBLink 사용 방법
 ==============================================
@@ -574,22 +648,267 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
 
     192.168.0.1:53000:testdb:user:password::?altHosts=192.168.0.2:33000,192.168.0.3:33000
 
-    예제는 192.168.0.1 서버가 Active 데이터베이스이고 해당 서버에 연결할 수 없는 경우, 192.168.0.2 서버에 연결 요청하는 설정입니다. 위에 예제처럼 여러개의 altHosts를 지정할 수 있으며, 나열한 순서대로 연결을 시도한다.
+    예제는 192.168.0.1 서버가 Active 데이터베이스이고 해당 서버에 연결할 수 없는 경우, 192.168.0.2 서버에 연결 요청하는 설정이다. 위의 예시처럼 여러개의 altHosts를 지정할 수 있으며, 나열한 순서대로 연결을 시도한다.
 
 
     CREATE SERVER 구문의 PROPERTIES 항목에 연결 속성을 설정할 수 있다. 자세한 내용은 :doc:`/sql/query/select` 와 :doc:`/sql/schema/server_stmt` 을 참고한다.
 
 
+유의 사항
+==================
 
-제약사항
-==============================================
+*   동의어 생성 : 원격 테이블과 원격 동의어를 대상으로 로컬 동의어가 생성이 가능하다. 단, CUBRID가 아닌 타 DBMS의 경우, user명이나 db명을 병기해야 한다.
 
-*   이기종 데이터베이스를 위한 DBLink는 utf-8만 지원한다.
-*   게이트웨이에서는 반드시 Unicode ODBC Driver만 사용해야 한다.
-*   1개 컬럼의 문자열 최대 길이는 16M까지만 지원한다.
-*   Mysql에서 cache를 사용하는 경우 게이트웨이 cub_cas_cgw의 메모리 사용량이 증가하므로 PREFETCH, NO_CACHE=1 사용을 권장한다.
-*   ODBC 미지원 타입은 SQL_INTERVAL,SQL_GUID,SQL_BIT,SQL_BINARY,SQL_VARBINARY,SQL_LONGVARBINARY 이다.
-*   이기종(Oracle/MySQL)간 DBLink 사용시 반드시 Oracle/MySQL의 유니코드 전용 ODBC Drvier를 사용해야 한다.
+.. code-block:: sql
+
+    -- for CUBRID
+    create synonym synonym_1 for t1@srv1;
+    create synonym synonym_2 for remote_synonym@srv1;
+
+    -- for ORACLE
+    create synonym synonym_ora for user_ora.t1@srv_ora;
+
+    -- for MySQL and MariaDB
+    create synonym synonym_my for my_db.t1@srv_mysql;
+    create synonym synonym_maria for maria_db.t1@srv_maria;
+ 
+        
+*   예약어 처리 : 원격DB의 예약어를 식별자로 사용하는 경우 예약어 처리 문자와 함께 반드시 대괄호 ([ ])로 감싸야 한다. CUBRID의 예약어 처리 문자는 큰따옴표(" ")문자이다.
+
+.. code-block:: sql
+
+    SELECT ["COLUMN"],["ADD"],["ALTER"] FROM ["TABLE"]@srv1 ;
+    SELECT * FROM dblink(srv1, 'select "COLUMN","ADD","ALTER" from "TABLE" ') AS t(a varchar, b varchar, c varchar );
 
 
+*   오라클의 예약어 처리 문자는 큰따옴표(" ")문자이다.
+
+.. code-block:: sql
+
+    SELECT ["COLUMN"],["ADD"],["ALTER"] FROM ["TABLE"]@srv1 ;
+    SELECT * FROM dblink(srv1, 'select "COLUMN","ADD","ALTER" from "TABLE" ') AS t(a varchar, b varchar, c varchar );
+
+*   MySQL, MariaDB 예약어 처리 문자는 백쿼트(\` \`) 이다.
+
+.. code-block:: sql
+
+    SELECT [`COLUMN`],[`ADD`],[`ALTER`] FROM [`TABLE`]@srv1 ;
+    SELECT * FROM dblink(srv1, 'select `COLUMN`,`ADD`,`ALTER` from `TABLE` ') AS t(a varchar, b varchar, c varchar );
+
+
+제약 사항
+==================
+
+공통 제약 사항
+-----------------------
+
+*   원격 DB의 문자셋(charset)은 유니코드(utf-8) 문자셋만 지원한다.
+*   테이블 확장 형식 (object@server) 지원
+       -   테이블, 뷰, 동의어만 지원
+       -   시리얼, 내장함수, 저장함수은 미지원
+
+           (예 : 원격서버(server1)의 sp_func() 저장 함수는 sp_func@server1(arg1, …) 형식으로 사용할 수 없음)       
+*   SELECT 질의의 모든 함수들(SYSDATE를 포함한 내장 함수, 저장 함수), serial 관련 함수 및 시스템 상수는 모두 로컬에서 실행된다. (원격DB에서 함수 또는 serial 수행이 필요한 경우에는 DBLINK 구문을 사용해야 한다.)
+    예를 들어 아래와 같이 원격 테이블 대상 select 질의에 대해 옵티마이저가 재작성한 질의를 보면 DBLINK() 안의 질의만 원격DB에서 실행된다.
+
+
+.. code-block:: sql
+
+    SELECT A.*, rownum rn, '' empty, null null_col, SYSDATE
+    FROM t1@srv1 A ;
+
+    -- rewritten query
+    SELECT A.id, A.parentid, A.[text], rownum, '', null, SYS_DATE -- at local
+    FROM ( SELECT [_dbl].id, [_dbl].parentid, [_dbl].[text]
+           FROM DBLINK( srv1 /* '192.168.1.125:33000:remotedb1:dba::' */,
+                    'SELECT * FROM tree A') AS [_dbl](id integer, parentid integer, [text] varchar(32)) -- at remote
+         ) A (id, parentid, [text])
+
+
+*   INSERT/UPDATE/DELETE/MERGE 질의에서 사용하는 모든 함수와, serial 관련 함수 및 시스템 상수는 모두 원격 서버에서 실행되므로 사용 시 주의가 필요하다. (즉, CUBRID의 내장함수가 원격 DBMS에서는 지원하지 않거나 사용법이 달라 오류 등의 오동작이 발생할 수 있으므로 주의 요망)
+*   트랜잭션 : 로컬DB와 원격DB의 트랜잭션(commit, rollback)은 하나의 트랜잭션으로 처리되지 않는다. 원격DB의 DML(INSERT/UPDATE/DELETE/MERGE 구문) 질의는 로컬 DB의 트랜잭션과 별개로 auto commit으로 동작한다. 
+    아래 예시 처럼 트랜잭션을 수행하는 경우, 원격DB에는 insert 수행과 함께 커밋 처리되어 데이터가 입력되고, 로컬DB에는 명시적 롤백 질의에 의해 insert 수행했던 데이터가 롤백되어 입력되지 않는다.
+
+.. code-block:: sql
+
+    -- local input
+    INSERT INTO t1(a, b) VALUES (1, 'local');
+
+    -- remote input
+    INSERT INTO t2@srv1(a, b) VALUES (1, 'remote');
+
+    rollback;
+
+    SELECT a, b FROM t1, t2@srv1 t2 WHERE t1.a = t2.a;
+    there’s no result
+
+*   TRUNCATE 구문 미지원
+*   CREATE TABLE … LIKE 테이블명@server명 구문 미지원 (참고로 CREATE TABLE … AS SELECT FROM 테이블명@server명 구문은 지원)
+*   TRIGGER 구문에서 DBLINK() 혹은 원격 테이블(@server)을 사용한 질의는 오류가 발생한다.
+*   predicate push 처리: 테이블 확장 형식(@server) 구문으로 작성된 SELECT 구문은 옵티마이저가 DBLINK()구문으로 재작성하는데, 성능 향상을 위해 원격 DB에서 처리 가능한 조건절을 함께 push 하여 재작성한다. 단, 조건절에서 사용한 내장함수와 사용자 정의함수는 push에서 제외되고, 로컬DB에서 실행된다. 
+*   성능 유의 사항 
+
+    .. note::
+        테이블 확장 형식(@server)의 SELECT 구문에서 connect by절, group by절, having절 및 limit절을 사용한 경우, where조건, group by절, having절 및 limit절이 원격DB에서 실행되지 않고, 전체 데이터를 로컬DB로 가져온 후 해당 조건 처리를 수행함으로 성능이 저하될 수 있다.
+
+
+    아래는 count()를 처리하기 위해서 원격DB의 tree 테이블의 전체 데이터를 로컬DB로 가져온 후에 group by절을 처리하는 예시이다.
+
+    .. code-block:: sql
+
+        -- original query
+        SELECT A.parentid, count()
+        FROM tree@srv1 A
+        GROUP BY A.parentid ;
+
+        -- rewritten query
+        SELECT A.parentid, count()
+        FROM ( SELECT [_dbl].parentid
+               FROM DBLINK( srv1 /* '192.168.1.125:33000:remotedb1:dba::' */,
+                            'SELECT parentid FROM tree A'
+                          ) AS [_dbl](parentid integer)
+             ) A (parentid)
+        GROUP BY A.parentid
+
+*   테이블 확장 형식(@server)구문에서 사용하는 sysdate 함수는 로컬DB에서 수행되므로 서버간의 시간이 다른 경우 주의가 필요하다.
+
+    .. code-block:: sql
+    
+        -- original query
+        SELECT * FROM tbl@srv1 WHERE col1 >= sysdate;
+    
+        -- rewritten query
+        SELECT *
+        FROM ( SELECT col1, col2
+               FROM DBLINK( srv1 /* '192.168.1.125:33000:remotedb1:dba::' */,
+                            'SELECT col1, col2 FROM tbl'
+                          ) AS [_dbl](col1 date, col2 varchar)
+             ) tbl (col1, col2)
+        WHERE col1>= SYS_DATE
+
+*   테이블 확장 형식(@server)구문으로 co-related 조건의 스칼라 서브쿼리, 서브쿼리 및 EXIST 구문의 부질의 사용하는 경우, 반복되는 원격 질의 수행시 전체 데이터를 로컬 DB로 가지고 온 후 조인 조건에 맞는 데이터를 찾는 작업을 수행하게 되어 급격한 성능 저하가 발생할 수 있다. 아래 예시는 스칼라 서브 퀴리의 조건으로 T1.a를 사용하고 있어, T1.a < 4 만큼의 svr1의 tree table의 데이터를 로컬 DB로 가지고 와서 적합한 데이터를 찾는 작업을 하기 때문에 수행이 느려질 수 있다.
+
+    .. code-block:: sql
+    
+        -- original query
+        SELECT T1.a,
+               (SELECT A.text FROM tree@srv1 A WHERE A.id = T1.a ) remote_text
+        FROM hangul_t1 T1
+        WHERE T1.a < 4;
+    
+        -- rewritten query
+        SELECT T1.a,
+               (SELECT A.[text] from (select [_dbl].[text], [_dbl].id
+                FROM DBLINK(srv1 /* '192.168.1.125:33000:remotedb1:dba::' */,
+                            'SELECT [text], id FROM tree A'
+                           ) AS [_dbl]([text] varchar(32), id integer)
+                WHERE [_dbl].id=T1.a) A ([text], id))
+        FROM hangul_t1 T1
+        WHERE (T1.a< ?:0 )
+
+CUBRID 제약 사항
+--------------------------
+*   SELECT 구문에서 ENUM, BLOB, CLOB, SET 타입 미지원
+*   로컬 DB와 원격 DB의 설정된 파라미터가 다른 경우 원하지 않는 결과가 발생할 수 있다.
+
+
+.. _heterogen-restrict:
+
+    **이기종 DBMS 공통 제약 사항**
+
+    
+    *   게이트웨이에서는 반드시 이기종 원격 데이터베이스(Oracle/MySQL/MariaDB)의 유니코드 전용 ODBC Driver를 사용해야 한다.
+    *   ODBC 타입 중 SQL_INTERVAL,SQL_GUID,SQL_BIT,SQL_BINARY,SQL_VARBINARY,SQL_LONGVARBINARY, SQL_LONGVARCHAR, SQL_WLONGVARCHAR 는 미지원 타입이다.
+
+	+-----------------------+------------------------+------------------------+------------------------+
+	| ODBC SQL Type         |  Oracle Data Type      |  MySQL Data Type       |  MariaDB Data Type     |
+	+=======================+========================+========================+========================+
+	| SQL_LONGVARCHAR       | LONG,  CLOB            | LONGTEXT               | LONGTEXT               |
+	+-----------------------+------------------------+------------------------+------------------------+
+	| SQL_WLONGVARCHAR      | NCLOB                  |                        |                        |
+	+-----------------------+------------------------+------------------------+------------------------+
+	| SQL_BIT               |                        | BIT                    | BIT                    |
+	+-----------------------+------------------------+------------------------+------------------------+
+	| SQL_BINARY            |                        | BINARY                 | BINARY                 |
+	+-----------------------+------------------------+------------------------+------------------------+
+	| SQL_VARBINARY         | RAW                    | VARBINARY              | VARBINARY              |
+	+-----------------------+------------------------+------------------------+------------------------+
+	| SQL_LONGVARBINARY     | LONG RAW               | LONG VARBINARY         | LONG VARBINARY         |
+	|                       +------------------------+------------------------+------------------------+
+	|                       | BLOB                   | BLOB                   | BLOB                   |
+	|                       +------------------------+------------------------+------------------------+
+	|                       | BFILE                  | TINYBLOB               | TINYBLOB               |
+	|                       +------------------------+------------------------+------------------------+
+	|                       |                        | MEDIUMBLOB             | MEDIUMBLOB             |
+	|                       +------------------------+------------------------+------------------------+
+	|                       |                        | LONGBLOB               | LONGBLOB               |
+	|                       +------------------------+------------------------+------------------------+
+	|                       |                        | GEOMETRY               | GEOMETRY               |
+	|                       +------------------------+------------------------+------------------------+
+	|                       |                        | POINT                  | POINT                  |
+	|                       +------------------------+------------------------+------------------------+
+	|                       |                        | POLGON                 | POLGON                 |
+	|                       +------------------------+------------------------+------------------------+
+	|                       |                        | GEOMETRYCOLLECTION     | GEOMETRYCOLLECTION     |
+	|                       +------------------------+------------------------+------------------------+
+	|                       |                        | MULTILINESTRING        | MULTILINESTRING        |
+	|                       +------------------------+------------------------+------------------------+
+	|                       |                        | MULTIPOINT             | MULTIPOINT             |
+	|                       +------------------------+------------------------+------------------------+
+	|                       |                        | MULTIPOLYGON           | MULTIPOLYGON           |
+	+-----------------------+------------------------+------------------------+------------------------+
+	| SQL_INTERVAL          | INTERVAL YEAR TO MONTH |                        |                        |
+	|                       +------------------------+------------------------+------------------------+
+	|                       | INTERVAL DAY TO SECOND |                        |                        |
+	+-----------------------+------------------------+------------------------+------------------------+
+
+    *   1개 컬럼의 문자열 최대 길이는 16M이다. 아래의 표는 DBMS별 Data의 길이가 16M 이상인 Data Type 이다.
+
+	+------------------+---------------------------+
+	| DBMS Name        | Data Type                 |
+	+==================+===========================+
+	| Oracle           | LONG, NCLOB, CLOB         |
+	+------------------+---------------------------+
+	| MySQL            | LONGTEXT                  |
+	+------------------+---------------------------+
+	| MariaDB          | LONGTEXT                  |
+	+------------------+---------------------------+
+
+    *   INSERT, UPDATE, DELETE, MERGE 와 같은 DML 구문에서 CUBRID가 미지원하는 내장 함수 중 function(파라미터1, …, 파라미터N)의 형식이 아닌 경우에는 질의 오류가 발생한다.
+    
+        예시: MySQL, MariaDB의 convert 함수 : convert('binary' using binary) -- 오류 발생
+
+
+.. note::
+    Oracle 제약 사항
+    
+    
+    *   SELECT 구문에서 LONG, INTERVAL DAY TO SECOND, INTERVAL YEAR TO MONTH, BLOB, CLOB 타입은 지원하지 않는다. 자세한 내용은 :ref:`이기종 DBMS 공통 제약 사항의 미지원 타입<heterogen-restrict>`\을 참고한다.
+    *	INTERVAL DAY TO SECOND, INTERVAL YEAR TO MONTH 타입은 Oracle ODBC에서 지원하지 않는 타입이다. 자세한 내용은 "Using the Oracle ODBC Driver"(https://docs.oracle.com/en/database/oracle/oracle-database/19/adfns/odbc-driver.html#GUID-3FE69BEF-F8D2-4152-9B1A-877186C47028)를 참고한다.
+    *   Oracle ODBC는 타임존 데이터 조회시 timestamp 타입의 로컬 시간으로 변환하여 반환된다. (타임존 데이터 타입 미지원) 
+    
+    아래는 Oracle DB의 타임존 데이터를 ODBC로 조회시 로컬타임존으로 변환되는 예시이다. 입력한 타임존 "+02:00"이지만, DBLink을 통해 select 하는 경우 로컬타임존 "+09:00"로 변환하여 "PM 08시"로 출력된다.
+
+    .. code-block:: sql
+    
+        -- oracle input
+        INSERT INTO tbl VALUES (to_timestamp_tz('2021-07-25 12:34:56 +02:00', 'yyyy-mm-dd hh24:mi:ss tzh:tzm'));
+    
+        -- local
+        SELECT t_timestamp_timezone2 FROM tbl@server;
+        07:34:56.000 PM 07/25/2021
+        SELECT to_char(t_timestamp_timezone2, 'yyyy-mm-dd hh24:mi:ss.ff tzh:tzm') FROM tbl@server;
+        2021-07-25 19:34:56.000 +09:00
+    
+    
+    *   미지원 구문인 REPLACE 구문은 사용시 오류 발생
+    *   CUBRID의 타입 범위를 벗어나는 오라클의 date, number 타입 데이터는 입력은 가능하나 조회 시에는 오류가 발생한다.
+
+.. note::
+    MySQL/MariaDB제약 사항    
+
+
+    *   MySQL에서 cache를 사용하는 경우 게이트웨이 프로세스(cub_cas_cgw)의 메모리 사용량이 증가하므로 PREFETCH, NO_CACHE=1 사용을 권장한다.
+    *   MySQL/MariaDB에서 repeat() 함수가 포함된 질의 수행 시 문자열의 일부가 잘리거나, 문자열을 읽어오지 못할 수 있다.
+    *   SELECT 구문에서 LONGTEXT, BIT, BLOB, LONGBLOB 타입은 지원하지 않는다. 자세한 내용은 :ref:`이기종 DBMS 공통 제약 사항의 미지원 타입 <heterogen-restrict>`\을 참고한다.
 

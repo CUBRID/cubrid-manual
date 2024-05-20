@@ -11,20 +11,25 @@ The **REPLACE** statement works like :doc:`insert`, but the difference is that i
 ::
 
     <REPLACE ... VALUES statement>
-    REPLACE [INTO] [schema_name.]table_name [(column_name, ...)]
+    REPLACE [INTO] <table_specification> [(column_name, ...)]
         {VALUES | VALUE}({expr | DEFAULT}, ...)[,({expr | DEFAULT}, ...),...]
      
     <REPLACE ... SET statement>
-    REPLACE [INTO] [schema_name.]table_name
+    REPLACE [INTO] <table_specification>
         SET column_name = {expr | DEFAULT}[, column_name = {expr | DEFAULT},...]
      
     <REPLACE ... SELECT statement>
-    REPLACE [INTO] [schema_name.]table_name [(column_name, ...)]
+    REPLACE [INTO] <table_specification> [column_name, ...)]
         SELECT...
+
+    <table_specfication> ::= [schema_name.]table_name
+                           | [schema_name.]table_name@[schema_name.]server_name
 
 *   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 
 *   *table_name*: Specifies the name of the target table into which you want to insert a new record.
+
+*   *server_name*: Specifies the remote server name of the target table. For local tables, do not specify *server_name*.
 
 *   *column_name*: Specifies the name of the column into which you want to insert the value. If you omit to specify the column name, it is considered that all columns defined in the table have been specified. Therefore, you must specify the value for the column next to **VALUES**. If you do not specify all the columns defined in the table, a **DEFAULT** value is assigned to the non-specified columns; if the **DEFAULT** value is not defined, a **NULL** value is assigned.
 

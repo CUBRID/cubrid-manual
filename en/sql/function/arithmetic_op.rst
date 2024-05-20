@@ -98,18 +98,20 @@ The following table shows the total number of digits (*p*) and the number of dig
 
 **Result of NUMERIC Type Operation**
 
-+-----------------------+--------------------------------------------------------------------------------------------------------------------------+-------------------+
-| Operation             | Maximum Precision                                                                                                        | Maximum Scale     |
-+=======================+==========================================================================================================================+===================+
-| N(p1, s1) + N(p2, s2) | max(p1-s1, p2-s2)+max(s1, s2) +1                                                                                         | max(s1, s2)       |
-+-----------------------+--------------------------------------------------------------------------------------------------------------------------+-------------------+
-| N(p1, s1) - N(p2, s2) | max(p1-s1, p2-s2)+max(s1, s2)                                                                                            | max(s1, s2)       |
-+-----------------------+--------------------------------------------------------------------------------------------------------------------------+-------------------+
-| N(p1, s1) * N(p2, s2) | p1+p2+1                                                                                                                  | s1+s2             |
-+-----------------------+--------------------------------------------------------------------------------------------------------------------------+-------------------+
-| N(p1, s1) / N(p2, s2) | Let Pt = p1+max(s1, s2) + s2 - s1 when s2 > 0 and Pt = p1 in other cases; St = s1 when s1 > s2 and s2 in other cases;    |                   |
-|                       | the number of decimal places is min(9-St, 38-Pt) + St when St < 9 and St in other cases.                                 |                   |
-+-----------------------+----------------------------------------------------------------------------------------------------------------------------------------------+
++-----------------------+---------------------------------------------+------------------------------------------------+
+| Operation             | Maximum Precision                           | Maximum Scale                                  |
++=======================+=============================================+================================================+
+| N(p1, s1) + N(p2, s2) | max(p1 - s1, p2 - s2) + max(s1, s2) + 1     | max(s1, s2)                                    |
++-----------------------+---------------------------------------------+------------------------------------------------+
+| N(p1, s1) - N(p2, s2) | max(p1 - s1, p2 - s2) + max(s1, s2)         | max(s1, s2)                                    |
++-----------------------+---------------------------------------------+------------------------------------------------+
+| N(p1, s1) * N(p2, s2) | p1 + p2 + 1                                 | s1 + s2                                        |
++-----------------------+---------------------------------------------+------------------------------------------------+
+| N(p1, s1) / N(p2, s2) | | Pt = (p1 - s1) + s2 + max(9, max(s1, s2)) | | St = max(9, max(s1, s2))                     |
+|                       | | Pt = (Pt > 38) ? 38 : Pt                  | | St = (Pt > 38) ? min(9, St - (Pt - 38)) : St |
++-----------------------+---------------------------------------------+------------------------------------------------+
+
+When the arithmetic operator is '/', the result type differs depending on the setting of the system parameter **oracle_compat_number_behavior**.  That is, in case of integer/integer, if **oracle_compat_number_behavior** is set to yes, the result type is NUMERIC. Otherwise, it follows the **result data type for each operand type** rule.
 
 **Example**
 
@@ -234,26 +236,46 @@ The following table shows the total number of digits (*p*) and the number of dig
      
 .. code-block:: sql
 
+    csql> ;get oracle_compat_number_behavior
+    oracle_compat_number_behavior=n
+
     -- int / int returns int type without type conversion or rounding
     SELECT 100100/100000;
-    
+
 ::
 
       100100/100000
     ===============
                   1
-     
+
 .. code-block:: sql
+
+    csql> ;get oracle_compat_number_behavior
+    oracle_compat_number_behavior=n
 
     -- int / int returns int type without type conversion or rounding
     SELECT 100100/200200;
-    
+
 ::
 
       100100/200200
     ===============
                   0
-     
+
+.. code-block:: sql
+
+    csql> ;get oracle_compat_number_behavior
+    oracle_compat_number_behavior=y
+
+    -- int / int returns numeric type with oracle_compat_number_behavior
+    SELECT 1/2;
+
+::
+
+               1/2
+   ===============
+               0.5
+
 .. code-block:: sql
 
     -- int / zero returns error

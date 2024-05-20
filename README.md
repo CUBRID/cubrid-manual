@@ -16,22 +16,21 @@ Documentation for CUBRID RDBMS
 
    1. Install sphinx package and theme
       1. Install python
-      1. Install pip by running command:
 
          ```
-         python get-pip.py
-         ```
-
-      1. Install sphinx
-
-         ```
-         pip install sphinx
+         yum install python3 -y
          ```
 
       1. Install read the docs theme
 
          ```
-         pip install sphinx_rtd_theme
+         pip3 install sphinx_rtd_theme
+         ```
+
+      1. Install make to build
+
+         ```
+         yum install make -y
          ```
 
    1. go to the manual directory (cd ko for Korean; or cd en for English)

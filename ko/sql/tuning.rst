@@ -4191,3 +4191,51 @@ Predicate Push
     }
 
 캐시 된 질의는 결과 화면 중간에 **query_string** 으로 표시되며 각 **n_entries** 및 **n_pages** 는 캐시된 질의 수와 캐시 된 결과의 페이지 수를 나타낸다. **n_entries** 는 파라미터 **max_query_cache_entries** 의 값으로 제한되고 **n_pages** 는 **query_cache_size_in_pages** 의 값으로 제한된다. **n_entries** 가 초과되거나 **n_pages** 가 초과되면 캐시 항목 중 일부가 삭제될 후보로 선택되어 삭제되고, 삭제되는 캐시는 **max_query_cache_entries** 값과 **query_cache_size_in_pages** 값의 약 20% 이다.
+
+11.4 버전부터는 부질의에 대해서도 캐시를 할 수 있으며, 캐시가 가능한 부질의는 아래와 같다.
+
+1) CTE 쿼리
+WITH절에 포함되는 non-recursive쿼리에 query_cache 힌트를 지정한 경우
+
+.. code-block:: sql
+
+        WITH
+         of_drones AS (SELECT /*+ query_cache */ item, 'drones' FROM products WHERE parent_id = 1),
+         of_cars AS (SELECT /*+ query_cache */ item, 'cars' FROM products WHERE parent_id = 5)
+        SELECT * FROM of_drones UNION ALL SELECT * FROM of_cars ORDER BY 1;
+
+단, 아래와 같이 CTE 쿼리 중 recursive로 지정된 쿼리는 캐시되지 않는다.
+
+.. code-block:: sql
+
+        WITH
+         RECURSIVE cars (id, parent_id, item, price) AS (
+                            SELECT /*+ query_cache */ id, parent_id, item, price
+                                FROM products WHERE item LIKE 'Car%'
+                            UNION ALL
+                            SELECT /*+ query_cache */ p.id, p.parent_id, p.item, p.price
+                                FROM products p
+                            INNER JOIN cars rec_cars ON p.parent_id = rec_cars.id)
+        SELECT item, price FROM cars ORDER BY 1;
+
+2) 다른 테이블을 참조하지 않는 부질의에 query_cache 힌트를 지정한 경우
+
+.. code-block:: sql
+
+        SELECT h.host_year, (SELECT /*+ query_cache */ host_nation FROM olympic o WHERE o.host_year > 1994 limit 1) AS host_nation,
+               h.event_code, h.score, h.unit
+        FROM history h;
+
+        SELECT name, capital, list(SELECT /*+ query_cache */ host_city FROM olympic WHERE host_nation like 'K%') AS host_cities
+        FROM nation;
+
+단, 아래와 같이 부질의 내에서 다른 테이블을 참조하는 경우에는 query_cache 힌트를 지정해도 쿼리는 캐시되지 않는다.
+
+.. code-block:: sql
+
+        SELECT h.host_year, (SELECT /*+ query_cache */ host_nation FROM olympic o WHERE o.host_year=h.host_year) AS host_nation,
+               h.event_code, h.score, h.unit
+        FROM history h;
+
+        SELECT name, capital, list(SELECT /*+ query_cache */ host_city FROM olympic WHERE host_nation = name) AS host_cities
+        FROM nation;

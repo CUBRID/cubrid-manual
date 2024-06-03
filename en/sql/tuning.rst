@@ -4208,6 +4208,7 @@ When the query_cache hint is specified in a recursive query included in the WITH
 
         WITH
          RECURSIVE cars (id, parent_id, item, price) AS (
+                            SELECT /*+ query_cache */ id, parent_id, item, price
                                 FROM products WHERE item LIKE 'Car%'
                             UNION ALL
                             SELECT /*+ query_cache */ p.id, p.parent_id, p.item, p.price

@@ -4202,7 +4202,7 @@ When the query_cache hint is specified in a non-recursive query included in the 
          of_cars AS (SELECT /*+ query_cache */ item, 'cars' FROM products WHERE parent_id = 5)
         SELECT * FROM of_drones UNION ALL SELECT * FROM of_cars ORDER BY 1;
 
-However, as shown below, among CTE queries, queries designated as recursive are not cached.
+When the query_cache hint is specified in a recursive query included in the WITH clause and no other CTE is referenced.
 
 .. code-block:: sql
 
@@ -4214,6 +4214,8 @@ However, as shown below, among CTE queries, queries designated as recursive are 
                                 FROM products p
                             INNER JOIN cars rec_cars ON p.parent_id = rec_cars.id)
         SELECT item, price FROM cars ORDER BY 1;
+
+In the UNION query above, the first query is cached, but the second query is not cached because it references another table.
 
 2) When the query_cache hint is specified in a subquery that does not refer to another table
 

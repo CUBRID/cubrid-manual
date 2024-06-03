@@ -4204,7 +4204,7 @@ WITH절에 포함되는 non-recursive쿼리에 query_cache 힌트를 지정한 �
          of_cars AS (SELECT /*+ query_cache */ item, 'cars' FROM products WHERE parent_id = 5)
         SELECT * FROM of_drones UNION ALL SELECT * FROM of_cars ORDER BY 1;
 
-단, 아래와 같이 CTE 쿼리 중 recursive로 지정된 쿼리는 캐시되지 않는다.
+WITH절에 포함되는 recursive쿼리에 query_cache 힌트를 지정하고, 다른 CTE를 참조하지 않는 경우
 
 .. code-block:: sql
 
@@ -4217,6 +4217,8 @@ WITH절에 포함되는 non-recursive쿼리에 query_cache 힌트를 지정한 �
                                 FROM products p
                             INNER JOIN cars rec_cars ON p.parent_id = rec_cars.id)
         SELECT item, price FROM cars ORDER BY 1;
+
+위 UNION 쿼리에서 첫번째 쿼리는 캐시되지만, 두번째 쿼리는 다른 테이블을 참조하기 때문에 캐시되지 않는다.
 
 2) 다른 테이블을 참조하지 않는 부질의에 query_cache 힌트를 지정한 경우
 

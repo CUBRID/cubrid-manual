@@ -12,17 +12,17 @@
 CREATE PROCEDURE
 =================
 
-**CREATE PROCEDURE** 문을 사용하여 저장 프로시저를 등록한다.
-CUBRID는 Java를 제외한 다른 언어에서는 저장 프로시저를 지원하지 않는다. CUBRID에서 저장 프로시저는 오직 Java로만 구현 가능하다.
-등록한 저장 프로시저의 사용 방법은 :doc:`/sql/jsp`\를 참고한다.
+**CREATE PROCEDURE** 문을 사용하여 저장 프로시저를 등록한다. CUBRID는 저장 프로시저/함수를 지원하기 위해 CUBRID SQL의 확장인 PL/CSQL과 Java를 지원한다.
+
+자세한 내용은 :ref:`sql_procedural_langauge`\를 참고한다.
 
 ::
 
     CREATE [OR REPLACE] PROCEDURE procedure_name [(<parameter_definition> [, <parameter_definition>] ...)]
-    {IS | AS} LANGUAGE JAVA <java_call_specification>
-    COMMENT 'sp_comment_string';
+    {IS | AS} LANGUAGE <lang> <body> <comment>;
     
         <parameter_definition> ::= parameter_name [IN|OUT|IN OUT|INOUT] sql_type [COMMENT 'param_comment_string']
+        <lang> ::= [PLCSQL|JAVA|]
         <java_call_specification> ::= NAME 'java_method_name (java_type [,java_type]...) [return java_type]'
 
 *   *procedure_name*: 생성할 저장 프로시저의 이름을 지정한다(최대 254바이트).

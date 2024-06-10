@@ -54,7 +54,6 @@ CUBRID SQL
     i18n_index.rst
     transaction_index.rst
     trigger.rst
-    pl/index.rst
     dblink.rst
     oodb.rst
     db_admin.rst

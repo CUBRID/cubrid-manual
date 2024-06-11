@@ -18,7 +18,7 @@ The DDL Audit log will be created in the $CUBRID/log/ddl_audit directory when dd
 
 .. note::
 
-    If you use a method from the :ref:`catalog` , the DDL Audit Log is not created.
+    If you use a method from the :ref:`catalog` , the DDL Audit Log will not be created.
 
 DDL Audit Log file name convention
 ======================================

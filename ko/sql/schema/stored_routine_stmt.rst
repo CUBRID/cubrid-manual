@@ -12,7 +12,7 @@
 CREATE PROCEDURE
 =================
 
-**CREATE PROCEDURE** 문을 사용하여 저장 프로시저를 등록한다. CUBRID는 저장 프로시저/함수를 지원하기 위해 CUBRID SQL의 확장인 PL/CSQL과 Java를 지원한다.
+**CREATE PROCEDURE** 문을 사용하여 저장 프로시저를 등록한다. CUBRID는 SQL을 절차적 언어의 형식으로 사용할 수 있는 PL/CSQL과 Java 저장 프로시저를 지원한다.
 
 자세한 내용은 :ref:`sql_procedural_langauge`\를 참고한다.
 

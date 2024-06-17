@@ -996,6 +996,7 @@ The following shows [options] available with the **cubrid plandump** utility.
 
   -d, --drop                   drop all plans in the server's cache
   -o, --output-file=FILE       redirect output messages to FILE
+  -s, --sha1=SHA1              drop specific plan in the server's cache
 
 
 .. option:: -d, --drop
@@ -1009,6 +1010,25 @@ The following shows [options] available with the **cubrid plandump** utility.
     This option stores the results of the query plans stored in the cache to a file. ::
 
         cubrid plandump -o output.txt testdb
+
+.. option:: -s, --sha1=SHA1
+
+    This option drops the specific query plans stored in the cache. ::
+
+        $ cubrid plandump testdb
+
+        Entries:
+
+          XASL_ID = {
+                      sha1 = { da9cab5d 597f2fe4 48aa8ae8 66b87d81 49fdd7ca },
+                          time_stored = 1718614753 sec, 257499 usec
+                    }
+          sql info:
+            SQL_ID = 4dfa6d901e048
+            sql user text = select * from game where host_year > '2004'
+            sql plan text = Sequential scan(public.game dba.game)
+
+        cubrid plandump -s 'da9cab5d 597f2fe4 48aa8ae8 66b87d81 49fdd7ca' demodb
 
 .. _statdump:
 
@@ -2798,6 +2818,12 @@ The following shows [options] available with the **cubrid lockdb** utility.
 
         cubrid lockdb -o output.txt testdb
 
+.. option:: -c, --contention
+
+    The **-c** option displays the lock information which has contention. ::
+
+        cubrid lockdb -c testdb
+
 Output Contents
 ^^^^^^^^^^^^^^^
 
@@ -2840,12 +2866,14 @@ Because **cubrid lockdb** utility accesses the database to obtain the lock infor
 
 **Object lock table**
 
-The third section of the output of the **cubrid lockdb** includes the contents of the object lock table. It shows which client has the lock for which object in which mode, and which client is waiting for which object in which mode. The first part of the result of the object lock table shows how many objects are locked.
+The third section of the output of the **cubrid lockdb** includes the contents of the object lock table. It shows which client has the lock for which object in which mode, and which client is waiting for which object in which mode. The first part of the result of the object lock table shows how many objects are locked and how many lock objects are allocated to memory. CUBRID reuses lock objects for performance, but if the number of locks exceeds the **lock_escalation**, the lock objects are freed from memory at the end of the transaction.
 
 ::
 
     Object lock Table:
         Current number of objects which are locked = 2001
+        Current number of objects which are allocated = 1000
+        Current size of objects which are allocated = 242K
 
 **cubrid lockdb** outputs the OID, object type and table name of each object that obtained lock. In addition, it outputs the number of transactions that hold lock for the object (*Num holders*), the number of transactions (*Num blocked-holders*) that hold lock but are blocked since it could not convert the lock to the upper lock (e.g., conversion from **SCH_S_LOCK** to **SCH_M_LOCK**), and the number of different transactions that are waiting for the lock of the object (*Num waiters*). It also outputs the list of client transactions that hold lock, blocked client transactions and waiting client transactions. For rows, but not class, MVCC information is also shown.
 
@@ -2868,7 +2896,7 @@ The example below shows an object in which the object type is a class, that will
                         Start_waiting_at = Wed Feb 3 14:45:14 2016
                         Wait_for_secs = -1
                         
-The next example shows an instance of class, object OID( 2| 50| 1 ), that was inserted by transaction 1 which holds **X_LOCK** on the object. The class has a unique index and the key of inserted instance is about to be modified by transaction 2, which is blocked until transaction 1 is completed.
+The next example shows an instance of class, object OID( 2| 50| 1 ), that was inserted by transaction 1 which holds **X_LOCK** on the object. The class has a unique index and the key of inserted instance is about to be modified by transaction 2, which is blocked until transaction 1 is completed. The **-c** option displays the lock information which has contention.
 
 ::
 

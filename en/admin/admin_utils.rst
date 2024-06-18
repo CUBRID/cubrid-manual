@@ -996,7 +996,7 @@ The following shows [options] available with the **cubrid plandump** utility.
 
   -d, --drop                   drop all plans in the server's cache
   -o, --output-file=FILE       redirect output messages to FILE
-  -s, --sha1=SHA1              drop specific plan in the server's cache
+  -s, --sha1=SHA1              drop specific plan by SHA1 in the server's cache
 
 
 .. option:: -d, --drop
@@ -1013,7 +1013,7 @@ The following shows [options] available with the **cubrid plandump** utility.
 
 .. option:: -s, --sha1=SHA1
 
-    This option drops the specific query plans stored in the cache. ::
+    This option drops the specific query plans by SHA1 in the server's cache. ::
 
         $ cubrid plandump testdb
 

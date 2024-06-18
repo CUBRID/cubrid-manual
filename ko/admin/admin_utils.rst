@@ -989,7 +989,7 @@ plandump
 
   -d, --drop                   서버 캐시에 있는 모든 플랜 삭제
   -o, --output-file=FILE       출력 메시지를 재지정할 파일
-  -s, --sha1=SHA1              서버 캐시에 있는 특정 플랜 삭제
+  -s, --sha1=SHA1              서버 캐시에 있는 SHA1 코드의 특정 플랜 삭제
 
 
 .. option:: -d, --drop
@@ -1006,7 +1006,7 @@ plandump
 
 .. option:: -s, --sha1=SHA1
 
-    캐시에 저장된 특정 질의 수행 계획을 제거한다.::
+    캐시에 저장된 SHA1 코드의 특정 질의 수행 계획을 제거한다.::
 
         $ cubrid plandump testdb
 

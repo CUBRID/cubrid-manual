@@ -727,7 +727,7 @@ SQL 힌트는 주석에 더하기 기호(+)를 함께 사용하여 지정한다.
 *   **NO_COVERING_IDX**: 커버링 인덱스 기능을 사용하지 않도록 하는 힌트이다. 자세한 내용은 :ref:`covering-index`\를 참고한다.
 *   **NO_MULTI_RANGE_OPT**: 다중 키 범위 최적화 기능을 사용하지 않도록 하는 힌트이다. 자세한 내용은 :ref:`multi-key-range-opt`\를 참고한다.
 *   **NO_SORT_LIMIT**: SORT-LIMIT 최적화를 사용하지 않기 위한 힌트이다. 자세한 내용은 :ref:`sort-limit-optimization`\를 참고한다.
-*   **NO_SUBQUERY_CACHE**: SUBQUERY_CACHE 최적화를 사용하지 않기 위한 힌트이다. 
+*   **NO_SUBQUERY_CACHE**: SUBQUERY_CACHE 최적화를 사용하지 않기 위한 힌트이다. 자세한 내용은 :ref:`correlated-subquery-cache`\를 참고한다.
 *   **NO_PUSH_PRED**: PREDICATE-PUSH 최적화를 사용하지 않기 위한 힌트이다.
 *   **NO_MERGE**: VIEW-MERGE 최적화를 사용하지 않기 위한 힌트이다.
 *   **NO_ELIMINATE_JOIN**: 조인 제거 최적화를 사용하지 않기 위한 힌트이다. 자세한 내용은 :ref:`join-elimination-optimization`\를 참고한다.
@@ -4194,7 +4194,7 @@ Predicate Push
 
 캐시 된 질의는 결과 화면 중간에 **query_string** 으로 표시되며 각 **n_entries** 및 **n_pages** 는 캐시된 질의 수와 캐시 된 결과의 페이지 수를 나타낸다. **n_entries** 는 파라미터 **max_query_cache_entries** 의 값으로 제한되고 **n_pages** 는 **query_cache_size_in_pages** 의 값으로 제한된다. **n_entries** 가 초과되거나 **n_pages** 가 초과되면 캐시 항목 중 일부가 삭제될 후보로 선택되어 삭제되고, 삭제되는 캐시는 **max_query_cache_entries** 값과 **query_cache_size_in_pages** 값의 약 20% 이다.
 
-.. _subquery-cache:
+.. _correlated-subquery-cache:
 
 서브 쿼리 캐시 (correlated)
 ------------------------------------
@@ -4206,7 +4206,7 @@ Predicate Push
 
 * 상관 부질의가 상관 부질의를 포함한 경우.
 * 부질의가 SELECT 절에 있지 않은 경우. 
-* 부질의에 클래스 관련 큐브리드 확장 API를 사용하는 경우.
+* 부질의에 컬럼 경로 관련 표현이 포함된 경우.
 * 부질의가 **NO_SUBQUERY_CACHE** 힌트를 포함한 경우.
 * 새로운 결과를 저장할 때 설정한 서브 쿼리 캐시 크기(기본값: 2MB)를 초과하는 경우.
 * random (), sys_guid ()와 같이 실행 시마다 결과가 바뀌는 함수가 포함된 경우.
@@ -4218,6 +4218,26 @@ Predicate Push
 CSQL에서는 아래 예제와 같이 COUNT 함수를 사용하여 질의를 반복적으로 실행할 때 개선된 성능을 쉽게 측정할 수 있다. 
 첫 번째 부질의에 대한 결과는 캐시가 되어 있지 않아서 느리지만, 두 번째 부질의의 결과는 캐시된 영역에서 가져오므로 응답 시간이 이전 질의보다 훨씬 빠르다. ::
     
+    # Prepare data
+    csql> drop table if exists t1;
+    
+    csql> CREATE TABLE t1 AS
+            SELECT
+                    ROWNUM AS t1_pk,
+                    MOD(ROWNUM, 10) AS c1,
+                    MOD(ROWNUM, 100) AS c2,
+                    MOD(ROWNUM, 1000) AS c3
+            FROM 
+                    db_class a, db_class b, db_class c, db_class d, db_class e, db_class f
+            LIMIT 100000;
+    
+    csql> ALTER TABLE t1 ADD CONSTRAINT PRIMARY KEY pk_t1 (t1_pk);
+    
+    csql> update statistics on t1 with fullscan;
+    
+    csql> set trace on;    
+
+    # Target query
     csql> SELECT count(*) from (
             SELECT /*+ recompile no_merge */
             (SELECT /*+ NO_SUBQUERY_CACHE */ t1_pk FROM t1 b WHERE b.t1_pk = a.c3)

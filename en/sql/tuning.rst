@@ -725,7 +725,7 @@ The following hints can be specified in **UPDATE**, **DELETE** and **SELECT** st
 *   **NO_COVERING_IDX**: This is a hint not to use the covering index. For details, see :ref:`covering-index`.
 *   **NO_MULTI_RANGE_OPT**: This is a hint not to use the multi-key range optimization. For details, see :ref:`multi-key-range-opt`.
 *   **NO_SORT_LIMIT**: This is a hint not to use the SORT-LIMIT optimization. For more details, see :ref:`sort-limit-optimization`.
-*   **NO_SUBQUERY_CACHE**: This is a hint not to use the SUBQUERY CACHE optimization.
+*   **NO_SUBQUERY_CACHE**: This is a hint not to use the SUBQUERY CACHE optimization. For more details, see :ref:`correlated-subquery-cache`.
 *   **NO_PUSH_PRED**: This is a hint not to use the PREDICATE-PUSH optimization.
 *   **NO_MERGE**: This is a hint not to use the VIEW-MERGE optimization.
 *   **NO_ELIMINATE_JOIN**: This is a hint not to use join elimination optimization. For more details, see :ref:`join-elimination-optimization`.
@@ -4192,7 +4192,7 @@ The user can check the query to be cached or not by putting the session command 
 
 The cached query is shown as **query_string** in the middle of the result screen. Each of the **n_entries** and **n_pages** represents the number of cached queries and the number of pages in the cached results. The **n_entries** is limited to the value of configuration parameter **max_query_cache_entries** and the **n_pages** is limited to the value of **query_cache_size_in_pages**. If the **n_entries** is overflown or the **n_pages** is overflown, some victims among the cache entries are selected and they are uncached. The number of victims is about 20% of **max_query_cache_entries** value and of the **query_cache_size_in_pages** value.
 
-.. _subquery-cache:
+.. _correlated-subquery-cache:
 
 SUBQUERY CACHE (correlated)
 ------------------------------------
@@ -4204,7 +4204,7 @@ Subquery cache does not operate in the following scenarios:
 
 * When the correlated subquery contains another correlated subquery.
 * When the subquery is not in the SELECT clause.
-* When the subquery uses CUBRID extended APIs related to classes.
+* When the subquery uses path expression.
 * When the subquery includes the NO_SUBQUERY_CACHE hint.
 * When storing new results exceeds the set subquery cache size (default: 2MB).
 * When the subquery contains functions that change results with each execution, such as random() or sys_guid().
@@ -4216,6 +4216,26 @@ If the same column value is found in the cache, the result is retrieved from the
 In CSQL, as shown in the example below, the improved performance can be easily measured when repeatedly executing queries using the COUNT function.
 The result for the first query's subquery is slow because it is not cached, but the result for the second query's subquery is fetched from the cached area, making the response time much faster than the previous query. ::
     
+    # Prepare data
+    csql> drop table if exists t1;
+    
+    csql> CREATE TABLE t1 AS
+            SELECT
+                    ROWNUM AS t1_pk,
+                    MOD(ROWNUM, 10) AS c1,
+                    MOD(ROWNUM, 100) AS c2,
+                    MOD(ROWNUM, 1000) AS c3
+            FROM 
+                    db_class a, db_class b, db_class c, db_class d, db_class e, db_class f
+            LIMIT 100000;
+    
+    csql> ALTER TABLE t1 ADD CONSTRAINT PRIMARY KEY pk_t1 (t1_pk);
+    
+    csql> update statistics on t1 with fullscan;
+    
+    csql> set trace on;    
+
+    # Target query    
     csql> SELECT count(*) from (
             SELECT /*+ recompile no_merge */
             (SELECT /*+ NO_SUBQUERY_CACHE */ t1_pk FROM t1 b WHERE b.t1_pk = a.c3)

@@ -725,7 +725,7 @@ The following hints can be specified in **UPDATE**, **DELETE** and **SELECT** st
 *   **NO_COVERING_IDX**: This is a hint not to use the covering index. For details, see :ref:`covering-index`.
 *   **NO_MULTI_RANGE_OPT**: This is a hint not to use the multi-key range optimization. For details, see :ref:`multi-key-range-opt`.
 *   **NO_SORT_LIMIT**: This is a hint not to use the SORT-LIMIT optimization. For more details, see :ref:`sort-limit-optimization`.
-*   **NO_SUBQUERY_CACHE**: SUBQUERY_CACHE 최적화를 사용하지 않기 위한 힌트이다. 
+*   **NO_SUBQUERY_CACHE**: This is a hint not to use the SUBQUERY CACHE optimization.
 *   **NO_PUSH_PRED**: This is a hint not to use the PREDICATE-PUSH optimization.
 *   **NO_MERGE**: This is a hint not to use the VIEW-MERGE optimization.
 *   **NO_ELIMINATE_JOIN**: This is a hint not to use join elimination optimization. For more details, see :ref:`join-elimination-optimization`.

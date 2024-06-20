@@ -4208,6 +4208,7 @@ Subquery cache does not operate in the following scenarios:
 * When the subquery includes the NO_SUBQUERY_CACHE hint.
 * When storing new results exceeds the set subquery cache size (default: 2MB).
 * When the subquery contains functions that change results with each execution, such as random() or sys_guid().
+
 When a correlated subquery is in the SELECT clause, the subquery cache is used.
 Among the repeatedly executed correlated subqueries, if the column value of the main query referenced by the correlated subquery is the same, the cached result is used to prevent re-execution.
 If the cached query cannot be found, the subquery is processed, and the column value and query result are cached together.

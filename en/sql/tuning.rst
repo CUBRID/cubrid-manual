@@ -679,6 +679,7 @@ Using hints can affect the performance of query execution. You can allow the que
     NO_COVERING_IDX |
     NO_MULTI_RANGE_OPT |
     NO_SORT_LIMIT |
+    NO_SUBQUERY_CACHE |
     NO_PUSH_PRED |
     NO_MERGE |
     NO_ELIMINATE_JOIN |
@@ -724,6 +725,7 @@ The following hints can be specified in **UPDATE**, **DELETE** and **SELECT** st
 *   **NO_COVERING_IDX**: This is a hint not to use the covering index. For details, see :ref:`covering-index`.
 *   **NO_MULTI_RANGE_OPT**: This is a hint not to use the multi-key range optimization. For details, see :ref:`multi-key-range-opt`.
 *   **NO_SORT_LIMIT**: This is a hint not to use the SORT-LIMIT optimization. For more details, see :ref:`sort-limit-optimization`.
+*   **NO_SUBQUERY_CACHE**: SUBQUERY_CACHE 최적화를 사용하지 않기 위한 힌트이다. 
 *   **NO_PUSH_PRED**: This is a hint not to use the PREDICATE-PUSH optimization.
 *   **NO_MERGE**: This is a hint not to use the VIEW-MERGE optimization.
 *   **NO_ELIMINATE_JOIN**: This is a hint not to use join elimination optimization. For more details, see :ref:`join-elimination-optimization`.
@@ -4189,3 +4191,79 @@ The user can check the query to be cached or not by putting the session command 
     }
 
 The cached query is shown as **query_string** in the middle of the result screen. Each of the **n_entries** and **n_pages** represents the number of cached queries and the number of pages in the cached results. The **n_entries** is limited to the value of configuration parameter **max_query_cache_entries** and the **n_pages** is limited to the value of **query_cache_size_in_pages**. If the **n_entries** is overflown or the **n_pages** is overflown, some victims among the cache entries are selected and they are uncached. The number of victims is about 20% of **max_query_cache_entries** value and of the **query_cache_size_in_pages** value.
+
+.. _subquery-cache:
+
+SUBQUERY CACHE (correlated)
+------------------------------------
+
+Subquery cache optimization can be used to enhance the performance of queries containing correlated subqueries, and the results of the subqueries are cached in independent spaces for each subquery.
+To disable subquery cache optimization, use the NO_SUBQUERY_CACHE hint on the target subquery.
+
+Subquery cache does not operate in the following scenarios:
+
+* When the correlated subquery contains another correlated subquery.
+* When the subquery is not in the SELECT clause.
+* When the subquery uses CUBRID extended APIs related to classes.
+* When the subquery includes the NO_SUBQUERY_CACHE hint.
+* When storing new results exceeds the set subquery cache size (default: 2MB).
+* When the subquery contains functions that change results with each execution, such as random() or sys_guid().
+When a correlated subquery is in the SELECT clause, the subquery cache is used.
+Among the repeatedly executed correlated subqueries, if the column value of the main query referenced by the correlated subquery is the same, the cached result is used to prevent re-execution.
+If the cached query cannot be found, the subquery is processed, and the column value and query result are cached together.
+If the same column value is found in the cache, the result is retrieved from the cached area.
+In CSQL, as shown in the example below, the improved performance can be easily measured when repeatedly executing queries using the COUNT function.
+The result for the first query's subquery is slow because it is not cached, but the result for the second query's subquery is fetched from the cached area, making the response time much faster than the previous query. ::
+    
+    csql> SELECT count(*) from (
+            SELECT /*+ recompile no_merge */
+            (SELECT /*+ NO_SUBQUERY_CACHE */ t1_pk FROM t1 b WHERE b.t1_pk = a.c3)
+            FROM
+            t1 a
+            WHERE a.c2 >= 1);
+    === <Result of SELECT Command in Line 2> ===
+
+                  count(*)
+    ======================
+                     99000
+
+    1 row selected. (0.626199 sec) Committed. (0.000011 sec) 
+
+    1 command(s) successfully processed.
+
+    Trace Statistics:
+      SELECT (time: 621, fetch: 397811, fetch_time: 56, ioread: 0)
+        SCAN (temp time: 7, fetch: 142, ioread: 0, readrows: 99000, rows: 99000)
+        SUBQUERY (uncorrelated)
+          SELECT (time: 607, fetch: 397669, fetch_time: 56, ioread: 0)
+            SCAN (table: dba.t1), (heap time: 98, fetch: 100384, ioread: 0, readrows: 100000, rows: 99000)
+            SUBQUERY (correlated)
+              SELECT (time: 460, fetch: 297000, fetch_time: 0, ioread: 0)
+                SCAN (index: dba.t1.pk_t1), (btree time: 243, fetch: 198000, ioread: 0, readkeys: 99000, filteredkeys: 0, rows: 99000, covered: true)
+
+    csql> SELECT count(*) from (
+            SELECT /*+ recompile no_merge */
+            (SELECT t1_pk FROM t1 b WHERE b.t1_pk = a.c3)
+            FROM
+            t1 a
+            WHERE a.c2 >= 1);
+    === <Result of SELECT Command in Line 6> ===
+
+                  count(*)
+    ======================
+                     99000
+
+    1 row selected. (0.128251 sec) Committed. (0.000010 sec) 
+
+    1 command(s) successfully processed.
+
+    Trace Statistics:
+      SELECT (time: 122, fetch: 103781, fetch_time: 13, ioread: 0)
+        SCAN (temp time: 7, fetch: 142, ioread: 0, readrows: 99000, rows: 99000)
+        SUBQUERY (uncorrelated)
+          SELECT (time: 108, fetch: 103639, fetch_time: 13, ioread: 0)
+            SCAN (table: dba.t1), (heap time: 70, fetch: 100384, ioread: 0, readrows: 100000, rows: 99000)
+            SUBQUERY (correlated)
+              SELECT (time: 4, fetch: 2970, fetch_time: 0, ioread: 0)
+                SCAN (index: dba.t1.pk_t1), (btree time: 2, fetch: 1980, ioread: 0, readkeys: 990, filteredkeys: 0, rows: 990, covered: true)
+                SUBQUERY_CACHE (hit: 98010, miss: 990, size: 269384, status: enabled)

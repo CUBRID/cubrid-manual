@@ -148,6 +148,8 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               | temp_file_memory_size_in_pages      | server parameter        |         | int      | 4                              |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | thread_stacksize                    | server parameter        |         | byte     | 1,048,576                      |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | max_subquery_cache_size             | 서버                     |         | byte     | 2,097,152(2M)                  |                       |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 | :ref:`disk-parameters`        | db_volume_size                      | server parameter        |         | byte     | 512M                           |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -683,6 +685,8 @@ The following are parameters related to the memory used by the database server o
 +--------------------------------+--------+---------------------------+---------------------------+---------------------------+
 | thread_stacksize               | byte   | 1,048,576                 | 65,536                    |                           |
 +--------------------------------+--------+---------------------------+---------------------------+---------------------------+
+| max_subquery_cache_size        | byte   | 2,097,152(2M)             | 0                         | 16,777,216(16M)           |
++--------------------------------+--------+---------------------------+---------------------------+---------------------------+
 
 **data_buffer_size**
 
@@ -739,6 +743,12 @@ The following are parameters related to the memory used by the database server o
 **thread_stacksize**
 
     **thread_stacksize** is a parameter to configure the stack size of a thread. The default value is **1048576** bytes. The value of the **thread_stacksize** parameter must not exceed the stack size allowed by the operating system.
+
+**max_subquery_cache_size**
+
+    **max_subquery_cache_size** is a parameter to configure the size of subquery cache (correlated). 
+    The default value is **2097152** bytes.
+    If there is insufficient storage space, no further subquery caching will be possible.
 
 .. _disk-parameters:
 

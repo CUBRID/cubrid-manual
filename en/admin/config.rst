@@ -142,14 +142,14 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | max_hash_list_scan_size             | server parameter        |         | byte     | 8,388,608(8M)                  |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | max_subquery_cache_size             | server parameter        |         | byte     | 2,097,152(2M)                  |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | sort_buffer_size                    | server parameter        |         | byte     | 128 *                          |                       |
 |                               |                                     |                         |         |          | :ref:`db_page_size <dpg>`      |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | temp_file_memory_size_in_pages      | server parameter        |         | int      | 4                              |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | thread_stacksize                    | server parameter        |         | byte     | 1,048,576                      |                       |
-|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | max_subquery_cache_size             | server parameter        |         | byte     | 2,097,152(2M)                  |                       |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 | :ref:`disk-parameters`        | db_volume_size                      | server parameter        |         | byte     | 512M                           |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -676,6 +676,8 @@ The following are parameters related to the memory used by the database server o
 +--------------------------------+--------+---------------------------+---------------------------+---------------------------+
 | max_hash_list_scan_size        | byte   | 8,388,608(8M)             | 0                         | 128MB                     |
 +--------------------------------+--------+---------------------------+---------------------------+---------------------------+
+| max_subquery_cache_size        | byte   | 2,097,152(2M)             | 0                         | 16,777,216(16M)           |
++--------------------------------+--------+---------------------------+---------------------------+---------------------------+
 | sort_buffer_size               | byte   | 128 *                     | 1 *                       | 2G(32bit),                |
 |                                |        | :ref:`db_page_size <dpg>` | :ref:`db_page_size <dpg>` | INT_MAX *                 |
 |                                |        |                           |                           | :ref:`db_page_size <dpg>` |
@@ -684,8 +686,6 @@ The following are parameters related to the memory used by the database server o
 | temp_file_memory_size_in_pages | int    | 4                         | 0                         | 20                        |
 +--------------------------------+--------+---------------------------+---------------------------+---------------------------+
 | thread_stacksize               | byte   | 1,048,576                 | 65,536                    |                           |
-+--------------------------------+--------+---------------------------+---------------------------+---------------------------+
-| max_subquery_cache_size        | byte   | 2,097,152(2M)             | 0                         | 16,777,216(16M)           |
 +--------------------------------+--------+---------------------------+---------------------------+---------------------------+
 
 **data_buffer_size**
@@ -718,6 +718,12 @@ The following are parameters related to the memory used by the database server o
 
     If this parameter is set to 0 or If :ref:`NO_HASH_LIST_SCAN <no-hash-list-scan>` hint is specified, hash list scan will not be used.
 
+**max_subquery_cache_size**
+
+    **max_subquery_cache_size** is a parameter to configure the size of subquery cache (correlated). 
+    The default value is **2097152** bytes.
+    If there is insufficient storage space, no further subquery caching will be possible.
+
 **sort_buffer_size**
 
     **sort_buffer_size** is a parameter to configure the size of buffer to be used when a query is processing sorting. The server assigns one sort buffer for each client's sorting-request, and releases the assigned buffer memory when sorting is complete. A sorting query includes not only SELECT sorting query, but also index-creating query.
@@ -743,12 +749,6 @@ The following are parameters related to the memory used by the database server o
 **thread_stacksize**
 
     **thread_stacksize** is a parameter to configure the stack size of a thread. The default value is **1048576** bytes. The value of the **thread_stacksize** parameter must not exceed the stack size allowed by the operating system.
-
-**max_subquery_cache_size**
-
-    **max_subquery_cache_size** is a parameter to configure the size of subquery cache (correlated). 
-    The default value is **2097152** bytes.
-    If there is insufficient storage space, no further subquery caching will be possible.
 
 .. _disk-parameters:
 

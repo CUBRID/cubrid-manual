@@ -4278,13 +4278,6 @@ CSQL에서는 아래 예제와 같이 COUNT 함수를 사용하여 질의를 반
                 SCAN (index: dba.t1.pk_t1), (btree time: 243, fetch: 198000, ioread: 0, readkeys: 99000, filteredkeys: 0, rows: 99000, covered: true)
 
 또한 SQL 트레이스를 조회하는 경우, 해당하는 부질의의 하위 정보로 서브 쿼리 캐시에 대한 트레이스 정보가 출력된다.
-각 항목에 대한 설명은 다음과 같다.
-
-* **hit** : 질의 실행 대신 캐시된 영역에서 결과를 가져온 횟수.
-* **miss** : 질의를 실행한 후 결과를 캐시한 횟수.
-* **size** : 서브 쿼리 캐시에 사용된 메모리 크기.
-* **status** : 질의 종료 시 서브 쿼리 캐시의 활성화 여부.
-
 다음 예시는 서브 쿼리 캐시가 활성화된 경우 해당하는 부질의의 하위 정보로 서브 쿼리 캐시에 대한 트레이스 정보가 출력되는 예시이다. ::
 
     # Target query #2
@@ -4314,6 +4307,13 @@ CSQL에서는 아래 예제와 같이 COUNT 함수를 사용하여 질의를 반
               SELECT (time: 4, fetch: 2970, fetch_time: 0, ioread: 0)
                 SCAN (index: dba.t1.pk_t1), (btree time: 2, fetch: 1980, ioread: 0, readkeys: 990, filteredkeys: 0, rows: 990, covered: true)
                 SUBQUERY_CACHE (hit: 98010, miss: 990, size: 269384, status: enabled)
+
+각 항목에 대한 설명은 다음과 같다.
+
+* **hit** : 질의 실행 대신 캐시된 영역에서 결과를 가져온 횟수.
+* **miss** : 질의를 실행한 후 결과를 캐시한 횟수.
+* **size** : 서브 쿼리 캐시에 사용된 메모리 크기.
+* **status** : 질의 종료 시 서브 쿼리 캐시의 활성화 여부.
 
 **size**\가 설정해둔 값을 초과하는 경우에는 서브 쿼리 캐시가 질의 수행 도중 비활성화 되며 SQL 트레이스 정보에서 **status**\가 disabled로 출력된다. 또한, **hit**\수에 비해 **miss**\수의 비율이 9보다 높을 경우, 서브 쿼리 캐시의 크기가 설정해둔 값을 초과하지 않더라도 질의 수행 도중 비활성화 될 수 있다. 
 
@@ -4345,7 +4345,6 @@ CSQL에서는 아래 예제와 같이 COUNT 함수를 사용하여 질의를 반
                     SUBQUERY_CACHE (hit: 99, miss: 1, size: 150704, status: enabled)
 
 또한 서브 쿼리 캐시는 상관 부질의에 random (), sys_guid ()와 같이 실행 시마다 결과가 바뀌는 함수가 포함된 경우 비활성화된다. 
-이는 서브 쿼리 캐시를 사용하면 실행 시 마다 다른 결과를 반환해야하는 함수를 포함한 상관 부질의가 캐시된 영역에서 결과를 가져와 매번 같은 결과를 반환하게 되기 때문이다.
 다음 예시는 상관 부질의에 random ()을 포함한 경우의 예시이다. ::
 
     csql> WITH cte_1 AS 

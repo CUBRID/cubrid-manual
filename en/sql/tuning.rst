@@ -4276,13 +4276,6 @@ The results of the first example might be slow as the cache is not activated usi
                 SCAN (index: dba.t1.pk_t1), (btree time: 243, fetch: 198000, ioread: 0, readkeys: 99000, filteredkeys: 0, rows: 99000, covered: true)
 
 When SQL trace is queried, trace information about the subquery cache for the relevant subquery is displayed.
-Descriptions for each item are as follows:
-
-* **hit**: The number of times results were retrieved from the cached area instead of executing the query.
-* **miss**: The number of times results were cached after executing the query.
-* **size**: The memory size used by the subquery cache.
-* **status**: The activation status of the subquery cache at the end of the query.
-
 The following example displays trace information for the subquery cache in a case where the subquery cache is enabled: ::
 
     csql> SELECT count(*) from (
@@ -4311,6 +4304,13 @@ The following example displays trace information for the subquery cache in a cas
               SELECT (time: 4, fetch: 2970, fetch_time: 0, ioread: 0)
                 SCAN (index: dba.t1.pk_t1), (btree time: 2, fetch: 1980, ioread: 0, readkeys: 990, filteredkeys: 0, rows: 990, covered: true)
                 SUBQUERY_CACHE (hit: 98010, miss: 990, size: 269384, status: enabled)
+
+Descriptions for each item are as follows:
+
+* **hit**: The number of times results were retrieved from the cached area instead of executing the query.
+* **miss**: The number of times results were cached after executing the query.
+* **size**: The memory size used by the subquery cache.
+* **status**: The activation status of the subquery cache at the end of the query.
 
 If **size** exceeds the set value, the subquery cache is disabled during the execution of the query, and the SQL trace information shows **status** as disabled. 
 Additionally, if the ratio of **miss** to **hit** is higher than 9, even if the subquery cache size does not exceed the set value, it may be disabled during the execution of the query.
@@ -4345,7 +4345,6 @@ The following example shows a case where a correlated subquery contains another 
                     SUBQUERY_CACHE (hit: 99, miss: 1, size: 150704, status: enabled)
 
 Moreover, subquery cache is disabled in a correlated subquery that includes functions like random (), sys_guid () that produce different results each time they are executed.
-This is because using subquery cache would mean that a correlated subquery that includes functions that should return different results each time would fetch results from the cached area, returning the same results every time.
 The following example shows a case where a correlated subquery includes random (): ::
 
     csql> WITH cte_1 AS 

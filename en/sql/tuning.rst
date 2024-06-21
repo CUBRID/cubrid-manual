@@ -4246,7 +4246,7 @@ First, a query to prepare the data for measuring performance differences is writ
     csql> ;trace on  
  
 In CSQL, the improved performance can be easily measured by repeatedly executing queries using the COUNT function as shown in the example below.
-The results of the first subquery might be slow as the cache is not activated using the **NO_SUBQUERY_CACHE** hint, but from the second execution, it becomes much faster because it retrieves from the cached area: ::
+The results of the first example might be slow as the cache is not activated using the **NO_SUBQUERY_CACHE** hint, but from the second example, it becomes much faster because it retrieves from the cached area: ::
 
     # Target query #1
     csql> SELECT count(*) from (

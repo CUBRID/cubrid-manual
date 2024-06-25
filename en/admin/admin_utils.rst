@@ -2871,7 +2871,7 @@ The third section of the output of the **cubrid lockdb** includes the contents o
 ::
 
     Object lock Table:
-        Current number of objects which are locked = 2001
+        Current number of objects which are locked = 100
         Current number of objects which are allocated = 1000
         Current size of objects which are allocated = 242K
 

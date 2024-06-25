@@ -2866,7 +2866,7 @@ Because **cubrid lockdb** utility accesses the database to obtain the lock infor
 
 **Object lock table**
 
-The third section of the output of the **cubrid lockdb** includes the contents of the object lock table. It shows which client has the lock for which object in which mode, and which client is waiting for which object in which mode. The first part of the result of the object lock table shows how many objects are locked and how many lock objects are allocated to memory. CUBRID reuses lock objects for performance, but if the number of locks exceeds the **lock_escalation**, the lock objects are freed from memory at the end of the transaction.
+The third section of the output of the **cubrid lockdb** includes the contents of the object lock table. It shows which client has the lock for which object in which mode, and which client is waiting for which object in which mode. The first part of the result of the object lock table shows how many objects are locked and how many lock objects are allocated to memory. CUBRID reuses lock objects for performance, but if the number of locks exceeds the **lock_escalation**, the lock objects are freed from memory at the end of the transaction. For more details, see :ref:`lock-parameters`.
 
 ::
 

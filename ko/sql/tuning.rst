@@ -785,7 +785,7 @@ SQL 힌트는 주석에 더하기 기호(+)를 함께 사용하여 지정한다.
         FROM a INNER JOIN b ON a.col=b.col
         INNER JOIN c ON b.col=c.col INNER JOIN d ON c.col=d.col;
 
-    위와 같은 질의를 수행한다면 **LEADING** 힌트는 무시되며, **ORDERED** 힌트에 따라서 **FROM**절의 순서인, 테이블 a, b, c, d의 순서로 조인된다.
+    위와 같은 질의를 수행한다면 **LEADING** 힌트는 무시되며, **ORDERED** 힌트에 따라서 **FROM** 절의 순서인, 테이블 a, b, c, d의 순서로 조인된다.
 
     .. code-block:: sql
 

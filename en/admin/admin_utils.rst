@@ -2896,7 +2896,7 @@ The example below shows an object in which the object type is a class, that will
                         Start_waiting_at = Wed Feb 3 14:45:14 2016
                         Wait_for_secs = -1
                         
-The next example shows an instance of class, object OID( 2| 50| 1 ), that was inserted by transaction 1 which holds **X_LOCK** on the object. The class has a unique index and the key of inserted instance is about to be modified by transaction 2, which is blocked until transaction 1 is completed. The **-c** option displays the lock information which has contention.
+The next example shows an instance of class, object OID( 2| 50| 1 ), that was inserted by transaction 1 which holds **X_LOCK** on the object. The class has a unique index and the key of inserted instance is about to be modified by transaction 2, which is blocked until transaction 1 is completed. The **-c** option displays only the information on locks that are involved in contention.
 
 ::
 

@@ -2820,7 +2820,7 @@ The following shows [options] available with the **cubrid lockdb** utility.
 
 .. option:: -c, --contention
 
-    The **-c** option displays the lock information which has contention. ::
+    The **-c** option displays information on locks that are in contention. ::
 
         cubrid lockdb -c testdb
 

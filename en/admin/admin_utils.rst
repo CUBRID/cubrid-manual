@@ -1013,7 +1013,7 @@ The following shows [options] available with the **cubrid plandump** utility.
 
 .. option:: -s, --sha1=SHA1
 
-    This option drops the specific query plans by SHA1 in the server's cache. ::
+    This option drops specific query plans identified by their SHA1 hashes from the server's cache. ::
 
         $ cubrid plandump testdb
 

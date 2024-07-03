@@ -276,9 +276,9 @@ The following example shows how to execute the **REVOKE** statement revoking all
 ALTER ... OWNER
 ===============
 
-Database Administrator (**DBA**) or a member of the **DBA** group can change the owner of table, view, trigger, and Java stored functions/procedures by using the following query. ::
+Database Administrator (**DBA**) or a member of the **DBA** group can change the owner of table, view, trigger, stored functions/procedures, and serial by using the following query. ::
 
-    ALTER (TABLE | CLASS | VIEW | VCLASS | TRIGGER | PROCEDURE | FUNCTION) [schema_name.]name OWNER TO user_id;
+    ALTER (TABLE | CLASS | VIEW | VCLASS | TRIGGER | PROCEDURE | FUNCTION | SERIAL) [schema_name.]name OWNER TO user_id;
 
 *   *schema_name*: Specifies the schema of the object. If omitted, the schema name of the current session is used.
 *   *name*: The name of schema object of which owner is to be changed
@@ -291,6 +291,7 @@ Database Administrator (**DBA**) or a member of the **DBA** group can change the
     ALTER TRIGGER test_trigger OWNER TO public;
     ALTER FUNCTION test_function OWNER TO public;
     ALTER PROCEDURE test_procedure OWNER TO public;
+    ALTER SERIAL test_serial OWNER TO public;
 
 .. _authorization-method:
 

@@ -276,9 +276,9 @@ REVOKE
 ALTER ... OWNER
 ===============
 
-데이터베이스 관리자(**DBA**) 또는 **DBA** 그룹의 멤버는 다음의 질의를 통해 테이블, 뷰, 트리거, Java 저장 함수/프로시저의 소유자를 변경할 수 있다. ::
+데이터베이스 관리자(**DBA**) 또는 **DBA** 그룹의 멤버는 다음 질의를 통해 테이블, 뷰, 트리거, 저장 함수/프로시저 및 시리얼의 소유자를 변경할 수 있다. ::
 
-    ALTER (TABLE | CLASS | VIEW | VCLASS | TRIGGER | PROCEDURE | FUNCTION) [schema_name.]name OWNER TO user_id;
+    ALTER (TABLE | CLASS | VIEW | VCLASS | TRIGGER | PROCEDURE | FUNCTION | SERIAL) [schema_name.]name OWNER TO user_id;
 
 *   *schema_name*: 객체의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *name*: 소유자를 변경할 스키마 객체의 이름
@@ -291,6 +291,7 @@ ALTER ... OWNER
     ALTER TRIGGER test_trigger OWNER TO public;
     ALTER FUNCTION test_function OWNER TO public;
     ALTER PROCEDURE test_procedure OWNER TO public;
+    ALTER SERIAL test_serial OWNER TO public;    
 
 .. _authorization-method:
 

@@ -818,6 +818,7 @@ Java Native Interface (JNI) Support
 
 Using the Java Native Interface (JNI), you can invoke functions in native languages like C/C++ from the Java Virtual Machine (JVM). 
 Java Stored Procedures (SP) in CUBRID provide support for JNI functionality, but you should be cautious when using it because issues in native code can have unexpected impacts on the stored routine server (cub_javasp) process and its operation.
+Java Classes used for loading native libraries should be registered using the **-j** option of **loadjava** to prevent them from being dynamically loaded. For more details, refer to :ref:jsp-load-java.
 
 The following is an example of invoking a native function through JNI in a CUBRID Java stored function:
 
@@ -902,7 +903,7 @@ The following is an example of invoking a native function through JNI in a CUBRI
 
     -- loadjava
     javac HelloJNI.java
-    loadjava demodb HelloJNI.class
+    loadjava -j demodb HelloJNI.class
 
 
 .. code-block:: sql
@@ -919,15 +920,17 @@ The following is an example of invoking a native function through JNI in a CUBRI
 
 .. warning::
 
-    When executing Java stored procedures/functions that invoke JNI, you may encounter a java.lang.UnsatisfiedLinkError.
+    Registering and executing Java stored procedures/functions that invoke JNI without the **-j** option may result in a java.lang.UnsatisfiedLinkError.
     To address this issue, please consider the following:
 
     * If you are loading multiple Java class files that call System.load() for the same native library path:
-       * Modify the Java class files to load the native library from only one class file
+       * Modify the Java class files to load the native library from only one class file.
+       * Register the class that loads the native library using the **-j** option of loadjava.
        * Restart the javasp utility.
 
     * If you are overwriting a previously loaded Java class file using loadjava:
-       * Note that the class file will be reloaded through a new class loader, leading to the same problem mentioned in scenario 1.
+       * If the class was registered without the -j option, remove that class from the java directory at the respective database path.
+       * Re-register the class using the -j option with loadjava.
        * Restart the javasp utility.
 
 .. _jsp-load-java:
@@ -944,6 +947,7 @@ You can load a Java \*.class or \*.jar file using **loadjava** utility. The file
 *   [*option*]
 
     *   **-y**: automatically overwrites a file with the same name, if any. If you do not use this option, you will get a prompt asking if you want to overwrite the file with the same name, if any.
+    *   **-j(or --jni)**: moves to the path for statically loading Java \*.class files or \*.jar files. This option should be used to prevent native library loading errors when loading classes that include JNI (native libraries).
 
 .. _jsp-caution:
 

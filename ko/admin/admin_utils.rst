@@ -600,7 +600,7 @@ copydb
   -i, --control-file=FILE         여러 개의 볼륨들이 각각 저장되는 디렉터리 경로를 지정하는 제어 파일
   -r, --replace                   같은 이름의 데이터베이스가 존재하면 덮어쓰기
   -d, --delete-source             복사 후 원본 데이터베이스 삭제
-      --copy-lob-path=PATH        원본 데이터베이스의 LOB 파일 디렉터리 경로를 복사
+      --copy-lob-path             원본 데이터베이스의 LOB 대렉터리 경로를 복사. -B 옵션과 함께 사용 불가. 기본값: 복사하지 않음
   -B, --lob-base-path=PATH        LOB 파일이 저장되는 디렉토리 경로
 
 

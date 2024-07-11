@@ -808,7 +808,7 @@ This example specifies the character set and collation for **CREATE TABLE**.
  
 :: 
 
-Please see :res:`collation-charset-table` or :ref:`collation-charset-string` for details.
+Please see :ref:`collation-charset-table` or :ref:`collation-charset-string` for details.
 
 Table's COMMENT
 ^^^^^^^^^^^^^^^

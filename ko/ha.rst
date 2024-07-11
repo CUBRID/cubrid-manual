@@ -369,14 +369,14 @@ CUBRID HA 그룹 내의 각 노드에서 **cubrid heartbeat start**\ 를 수행�
 
 CUBRID HA 그룹 내의 각 노드에서 **cubrid heartbeat status**\ 를 수행하여 구성 상태를 확인한다. ::
 
-    [nodeA]$ cubrid heartbeat status
+    [cubrid@nodeA]$ cubrid heartbeat status
     @ cubrid heartbeat list
-     HA-Node Info (current nodeA-node-name, state master)
+     HA-Node Info (current nodeA, state master)
        Node nodeB-node-name (priority 2, state slave)
        Node nodeA-node-name (priority 1, state master)
      HA-Process Info (nodeA 9289, state nodeA)
-       Applylogdb testdb@localhost:/home1/cubrid1/DB/testdb_nodeB.cub (pid 9423, state registered)
-       Copylogdb testdb@nodeB-node-name:/home1/cubrid1/DB/testdb_nodeB.cub (pid 9418, state registered)
+       Applylogdb testdb@localhost:/home1/cubrid1/DB/testdb_nodeB (pid 9423, state registered)
+       Copylogdb testdb@nodeB-node-name:/home1/cubrid1/DB/testdb_nodeB (pid 9418, state registered)
        Server testdb (pid 9306, state registered_and_active)
      
     [nodeA]$

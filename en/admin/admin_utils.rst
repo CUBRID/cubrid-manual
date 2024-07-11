@@ -606,7 +606,7 @@ The following shows [options] available with the **cubrid copydb** utility.
   -i, --control-file=FILE         copying volumes over several locations written in the control file
   -r, --replace                   replace an existing database
   -d, --delete-source             delete a source database
-      --copy-lob-path             copy external storage PATH for LOB data from source database, default: don't copy
+      --copy-lob-path             copy external storage PATH for LOB data from the source database. By default, the LOB path is not copied
   -B, --lob-base-path=PATH        base directory PATH for external LOB data
 
 

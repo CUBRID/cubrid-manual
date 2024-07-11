@@ -792,7 +792,7 @@ Specifying the **DONT_REUSE_OID** option when creating the table will create a r
 Charset and Collation
 ^^^^^^^^^^^^^^^^^^^^^
 
-The charset and collation of the table can be designated in **CREATE TABLE** statemen     t.
+The charset and collation of the table and colum can be designated in **CREATE TABLE** statement.
 This example specifies the character set and collation for **CREATE TABLE**.
 
 .. code-block:: sql

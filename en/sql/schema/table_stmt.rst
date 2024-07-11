@@ -806,8 +806,6 @@ This example specifies the character set and collation for **CREATE TABLE**.
     CREATE TABLE tblcol (s1 STRING COLLATE utf8_en_cs,s2 STRING COLLATE utf8_bin);
     CREATE TABLE tblcharcol (col STRING CHARSET utf8) COLLATE utf8_en_ci;
  
-:: 
-
 Please see :ref:`collation-charset-table` or :ref:`collation-charset-string` for details.
 
 Table's COMMENT

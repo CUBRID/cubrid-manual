@@ -795,9 +795,8 @@ DONT_REUSE_OID
   
     CREATE TABLE tblcol (s1 STRING COLLATE utf8_en_cs,s2 STRING COLLATE utf8_bin);
     CREATE TABLE tblcharcol (col STRING CHARSET utf8) COLLATE utf8_en_ci;
-::
 
- 이에 관한 자세한 내용은 :ref:`collation-charset-table` 또는 :ref:`collation-charset-string` 절을 참조하면 된다.
+이에 관한 자세한 내용은 :ref:`collation-charset-table` 또는 :ref:`collation-charset-string` 절을 참조하면 된다.
 
 테이블의 커멘트
 ^^^^^^^^^^^^^^^

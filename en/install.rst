@@ -95,7 +95,7 @@ Check the following before installing CUBRID for Linux.
     
     *   Curses Library (rpm -q ncurses)
 
-        CUBRID is packaged with version 5 of Curses library. You may need to install ncurses-compat-libs package if your system has newer version and downgrade is not possible.
+        CUBRID is packaged with version 5 of Curses library. If you have the latest version and you are not able to downgrade your system, you may need to install the ncurses-compat-libs package.
 
     *   gcrypt Library (rpm -q libgcrypt)
     *   stdc++ Library (rpm -q libstdc++)

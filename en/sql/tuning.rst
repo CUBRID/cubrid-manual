@@ -4204,6 +4204,7 @@ Subquery cache does not operate in the following scenarios:
 
 * When the correlated subquery contains another correlated subquery.
 * When the subquery is not in the SELECT clause.
+* When the subquery includes CONNECT BY clause.
 * When the subquery includes OID-related features.
 * When the subquery includes the NO_SUBQUERY_CACHE hint.
 * When storing new results exceeds the set subquery cache size (default: 2MB).

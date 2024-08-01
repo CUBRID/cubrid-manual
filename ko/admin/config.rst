@@ -2304,9 +2304,9 @@ HA 관련 파라미터
 
     **sql_trace_execution_plan** 은 **sql_trace_slow** 파라미터 값의 설정 시간을 초과한 장기 실행 질의(long running query)의 실행 계획을 출력할지 여부를 설정하는 파라미터이다. 기본값은 **no** 이다.
 
-    이 값이 yes이면 서버 에러 로그 파일($CUBRID/log/server 이하의 파일), CAS 로그 파일($CUBRID/log/broker/sql_log 이하의 파일)에 해당 SQL 문, 질의 실행 계획, cubrid statdump 명령의 출력 정보를 기록하며, cubrid plandump를 실행할 때 해당 SQL 문과 질의 실행 계획을 출력한다. 
+    이 값이 yes이면 서버 에러 로그 파일($CUBRID/log/server 이하의 파일), CAS 로그 파일($CUBRID/log/broker/sql_log 이하의 파일)에 해당 SQL 문, 질의 실행 계획, cubrid statdump 명령의 출력 정보를 기록한다.
 
-    이 값이 no면 서버 에러 로그 파일, CAS 로그 파일에 해당 SQL문만 기록하며, cubrid plandump를 실행할 때 해당 SQL 문만 출력한다.
+    이 값이 no면 서버 에러 로그 파일, CAS 로그 파일에 해당 SQL문만 기록한다.
 
     예를 들어 5초를 초과하면 느린 질의(slow query)로 규정하고 해당 질의의 실행 계획을 로그 파일에 출력하고 싶은 경우, **sql_trace_slow** 의 값을 5,000(ms)로 설정하고 **sql_trace_execution_plan** 의 값을 yes로 설정한다. 
         

@@ -2335,7 +2335,7 @@ The following are other parameters. The type and value range for each parameter 
 
     If it is set to yes, a long running SQL, a query plan and the output of cubrid statdump command  are written to the server error log file(located on $CUBRID/log/server directory) and CAS log file(located on $CUBRID/log/broker/sql_log directory) .
 
-    If it is set to no, only a long running SQL is written to the server error log file and CAS log file, and this SQL is displayed when you execute **cubrid statdump** command.
+    If it is set to no, only a long running SQL is written to the server error log file and CAS log file.
 
     For example, if you want to write the execution plan of the slow query to the log file, and specify the query which executes more than 5 seconds as the slow query, then configure the value of the **sql_trace_slow** parameter as 5000(ms) and configure the value of the **sql_trace_execution_plan** parameter as yes.
 

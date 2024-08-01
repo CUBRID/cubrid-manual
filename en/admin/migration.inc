@@ -43,7 +43,7 @@ The following is [options] used in **cubrid unloaddb**.
       --output-prefix=PREFIEX PREFIX for output files
       --hash-file=FILE        FILE for hash
       --latest-image          when dumping objects, it dumps the latest image of objects in data volumes.
-  -t, --thread-count=COUNT    Specifies the number of threads to use when operating in a multi-threaded mode; default: 1 maximum: 127
+  -t, --thread-count=COUNT    number of threads; default: 1 maximum: 127
       --enhanced-estimates    Obtaining the correct number of records; default: disabled (Ignored if -v is not specified)
   -v, --verbose               enable verbose status messages
       --use-delimiter         use '"' where an identifier begins and ends

@@ -43,6 +43,8 @@ The following is [options] used in **cubrid unloaddb**.
       --output-prefix=PREFIEX PREFIX for output files
       --hash-file=FILE        FILE for hash
       --latest-image          when dumping objects, it dumps the latest image of objects in data volumes.
+  -t, --thread-count=COUNT    Specifies the number of threads to use when operating in a multi-threaded mode; default: 1 maximum: 127
+      --enhanced-estimates    Obtaining the correct number of records; default: disabled (Ignored if -v is not specified)
   -v, --verbose               enable verbose status messages
       --use-delimiter         use '"' where an identifier begins and ends
   -S, --SA-mode               stand-alone mode execution
@@ -165,6 +167,26 @@ The following is [options] used in **cubrid unloaddb**.
 .. option:: --latest-image
    
     This option makes it to unload the latest image of objects in data volumes when unloading instances (the MVCC version is ignored and it does not refer to the log volumes). It may include uncommitted data and deleted data that has not been vacuumed.
+
+.. option:: -t, --thread-count=COUNT
+
+    It is performed in parallel using as many threads as the number of COUNT, and COUNT must be in the range of 0 to 127.
+    If the setting is omitted, it is the same as specifying 1, and if it is specified as 0, it does not operate in thread mode.
+    Even if the thread mode is specified, if the table contains an Object type or a Set, MultiSet, or Sequence (List) type that contains an Object type, it will not operate in thread mode for that table.
+    
+    ::
+
+        cubrid unloaddb -t 4 demodb
+
+.. option:: --enhanced-estimates
+
+    -v option must be specified together.
+    When determining the number of total target records, actual values ​​are obtained instead of statistical information. Note that when this option is specified, the execution time to determine the number of records may be longer.
+    
+    ::
+
+        cubrid unloaddb --enhanced-estimates demodb
+
 
 .. option:: -v, --verbose
 

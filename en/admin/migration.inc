@@ -181,7 +181,7 @@ The following is [options] used in **cubrid unloaddb**.
 .. option:: --enhanced-estimates
 
     -v option must be specified together.
-    When determining the number of total target records, actual values ​​are obtained instead of statistical information. Note that when this option is specified, the execution time to determine the number of records may be longer.
+    When determining the number of records in the target table, it obtain the actual number of records instead of statistical information. When using the option, the execution time of unloaddb may be longer because the execution time to calculate the number of records is added, Therefore, this option should be used with caution.
     
     ::
 

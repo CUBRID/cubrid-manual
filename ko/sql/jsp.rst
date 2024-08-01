@@ -817,6 +817,7 @@ Java Native Interface (JNI) 지원
 
 Java Native Interface (JNI)를 사용하여 JVM\에서 C/C++ 와 같은 네이티브 언어의 함수를 호출할 수 있다.
 CUBRID의 Java SP에서는 JNI 기능을 사용할 수 있도록 제공하고 있지만 네이티브 코드의 문제가 저장 프로시저 서버 (cub_javasp) 프로세스 및 그 동작에 예상하지 못한 영향을 줄 수 있으므로 주의해서 사용해야 한다.
+네이티브 라이브러리를 로드하는 클래스는 동적으로 로드되지 않도록 loadjava의 **-j** 옵션을 사용하여 등록한다. 자세한 내용은 :ref:`jsp-load-java`\를 참조한다.
 
 다음은 Java 저장 함수에서 JNI를 통해 네이티브 함수를 호출하는 예제이다.
 
@@ -901,7 +902,7 @@ CUBRID의 Java SP에서는 JNI 기능을 사용할 수 있도록 제공하고 �
 
     -- loadjava
     javac HelloJNI.java
-    loadjava demodb HelloJNI.class
+    loadjava -j demodb HelloJNI.class
 
 
 .. code-block:: sql
@@ -918,15 +919,17 @@ CUBRID의 Java SP에서는 JNI 기능을 사용할 수 있도록 제공하고 �
 
 .. warning::
 
-    JNI를 호출하는 자바 저장 프로시저/함수 실행 시 java.lang.UnsatisfiedLinkError가 발생할 수 있다.
+    JNI를 호출하는 자바 저장 프로시저/함수를 **-j** 옵션 없이 등록한 후 실행 시 java.lang.UnsatisfiedLinkError가 발생할 수 있다.
     다음의 사항을 확인한다.
 
     * 동일한 네이티브 라이브러리 경로에 대해 System.load () 를 호출하는 자바 클래스 파일을 여러 개 로드하는 경우
-       * 하나의 자바 클래스 파일만 네이티브 라이브리러리를 로드하도록 수정한다
+       * 하나의 자바 클래스 파일만 네이티브 라이브러리를 로드하도록 수정한다
+       * 네이티브 라이브러리를 로드하는 클래스를 loadjava의 **-j** 옵션을 사용하여 등록한다
        * javasp 유틸리티를 재시작한다
 
     * 이미 로드된 자바 클래스 파일을 loadjava로 다시 덮어쓰는 경우
-       * 클래스 파일이 새로운 클래스 로더를 통해 다시 로드 되므로 위와 동일한 문제가 발생한다
+       * **-j** 옵션 없이 loadjava로 클래스를 등록한 경우 해당 데이터베이스 경로의 **java** 디렉토리에서 해당 클래스를 제거한다
+       * **-j** 옵션을 사용하여 loadjava로 해당 클래스를 다시 등록한다
        * javasp 유틸리티를 재시작한다
 
 .. _jsp-load-java:
@@ -943,6 +946,7 @@ loadjava 유틸리티
 *   [*option*]
 
     *   **-y**: 이름이 같은 클래스 파일이 존재하면 자동으로 덮어쓰기 한다. 기본값은 **no** 이다. 만약 **-y** 옵션을 명시하지 않고 로드할 때 이름이 같은 클래스 파일이 존재하면 덮어쓰기를 할 것인지 묻는다.
+    *   **-j(또는 --jin)**: Java \*.class 파일이나 \*.jar 파일을 정적으로 로드하기 위한 경로로 이동한다. 네이티브 라이브러리의 로딩 오류를 방지하기 위해서 JNI(네이티브 라이브러리)를 사용한 class는 반드시 이 옵션을 사용하여 로드해야 한다.
 
 .. _jsp-caution:
 

@@ -792,7 +792,21 @@ Specifying the **DONT_REUSE_OID** option when creating the table will create a r
 Charset and Collation
 ^^^^^^^^^^^^^^^^^^^^^
 
-The charset and collation of the table can be designated in **CREATE TABLE** statement. Please see :ref:`collation-charset-string` for details.
+The charset and collation of the table and column can be designated in the **CREATE TABLE** statement.
+This example specifies the character set and collation for **CREATE TABLE**.
+
+.. code-block:: sql
+
+    CREATE TABLE tblutf8(a int, b int) charset utf8;
+    CREATE TABLE tblutf8enci(a int, b int) collate utf8_en_ci;
+
+    CREATE TABLE tbleuckr(a int, b int) charset euckr collate euckr_bin;
+    CREATE TABLE tblcoleuckr(a int, c varchar(100) collate euckr_bin) charset euckr;
+
+    CREATE TABLE tblcol (s1 STRING COLLATE utf8_en_cs,s2 STRING COLLATE utf8_bin);
+    CREATE TABLE tblcharcol (col STRING CHARSET utf8) COLLATE utf8_en_ci;
+ 
+Please see :ref:`collation-charset-table` or :ref:`collation-charset-string` for details.
 
 Table's COMMENT
 ^^^^^^^^^^^^^^^

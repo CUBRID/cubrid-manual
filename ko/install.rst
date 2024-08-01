@@ -97,7 +97,7 @@ Linux 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항�
     
     *   Curses Library (rpm -q ncurses)
 
-        CUBRID는 Curses 라이브러리 버전 5와 함께 패키지된다. 시스템에 최신 버전이 있고 다운 그레이드할 수 없는 경우 ncurses-compat-libs 패키지를 설치해야할 수 있다.
+        CUBRID는 curses 라이브러리를 사용하여 구동되므로 시스템에 curses 라이브러리가 없는 경우 사전에 최신 ncurses-compat-libs 패키지를 설치해야 한다.
 
     *   gcrypt Library (rpm -q libgcrypt)
     *   stdc++ Library (rpm -q libstdc++)

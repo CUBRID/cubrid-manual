@@ -16,6 +16,10 @@ CAS, csql 및 loaddb를 통해 수행된 DDL은 필요에 따라 실행 된 파�
 
 시스템 파라미터의 ddl_audit_log가 yes 이면 $CUBRID/log/ddl_audit 디렉토리에 DDL Audit log가 생성된다. 각 로그 파일의 크기는 ddl_audit_log_size 매개 변수에 지정된 값을 초과 할 수 없다. DDL Audit와 관련된 시스템 매개 변수는 CUBRID 운영의  :doc:`/admin/config` 을 참조 한다.
 
+.. note::
+
+    :ref:`catalog` 의 메서드를 사용하는 경우에는 DDL Audit Log는 생성되지 않는다.
+
 DDL Audit 로그 파일 이름 규칙
 ================================
 

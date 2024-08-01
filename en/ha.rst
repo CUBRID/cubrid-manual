@@ -369,14 +369,14 @@ Execute the **cubrid heartbeat** **start** at each node in the CUBRID HA group. 
 
 Execute **cubrid heartbeat status** at each node in the CUBRID HA group to verify its configuration status. ::
 
-    [nodeA]$ cubrid heartbeat status
+    [cubrid@nodeA]$ cubrid heartbeat status
     @ cubrid heartbeat list
-     HA-Node Info (current nodeA-node-name, state master)
+     HA-Node Info (current nodeA, state master)
        Node nodeB-node-name (priority 2, state slave)
        Node nodeA-node-name (priority 1, state master)
      HA-Process Info (nodeA 9289, state nodeA)
-       Applylogdb testdb@localhost:/home1/cubrid1/DB/testdb_nodeB.cub (pid 9423, state registered)
-       Copylogdb testdb@nodeB-node-name:/home1/cubrid1/DB/testdb_nodeB.cub (pid 9418, state registered)
+       Applylogdb testdb@localhost:/home1/cubrid1/DB/testdb_nodeB (pid 9423, state registered)
+       Copylogdb testdb@nodeB-node-name:/home1/cubrid1/DB/testdb_nodeB (pid 9418, state registered)
        Server testdb (pid 9306, state registered_and_active)
      
     [nodeA]$

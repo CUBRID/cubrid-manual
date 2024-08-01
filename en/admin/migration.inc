@@ -223,6 +223,7 @@ The following is [options] used in **cubrid unloaddb**.
         demodb_schema_server
         demodb_schema_pk
         demodb_schema_fk
+        demodb_schema_uk
         demodb_schema_grant
         demodb_schema_vclass_query_spec
 

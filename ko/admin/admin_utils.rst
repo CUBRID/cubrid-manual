@@ -600,7 +600,7 @@ copydb
   -i, --control-file=FILE         여러 개의 볼륨들이 각각 저장되는 디렉터리 경로를 지정하는 제어 파일
   -r, --replace                   같은 이름의 데이터베이스가 존재하면 덮어쓰기
   -d, --delete-source             복사 후 원본 데이터베이스 삭제
-      --copy-lob-path=PATH        원본 데이터베이스의 LOB 파일 디렉터리 경로를 복사
+      --copy-lob-path             원본 데이터베이스의 LOB 대렉터리 경로를 복사. -B 옵션과 함께 사용 불가. 기본값: 복사하지 않음
   -B, --lob-base-path=PATH        LOB 파일이 저장되는 디렉토리 경로
 
 
@@ -660,11 +660,11 @@ copydb
 
         cubrid copydb -d -F /home/usr/CUBRID/databases demodb new_demodb
 
-.. option:: --copy-lob-path=PATH
+.. option:: --copy-lob-path
 
-    원본 데이터베이스에 대한 **LOB** 파일 디렉터리 경로를 새로운 데이터베이스의 **LOB** 파일 경로로 복사하고, 원본 데이터베이스를 복사한다. 이 옵션을 생략하면, **LOB** 파일 디렉터리 경로를 복사하지 않으므로, **databases.txt** 파일의 **lob-base-path** 항목을 별도로 수정해야 한다. 이 옵션은 **-B** 옵션과 병행할 수 없다. ::
+    이 옵션을 선택하면 대상 데이터베이스의 lob 디렉터리의 위치를 원본 데이터베이스의 lob 디렉토리의 위치와 동일하게 설정한다. 이 옵션이 생력되면 <대상 데이터베이스 디렉토리>/lob 이 대상 데이터베이스의 lob 디렉터리 경로로 설정된다. 이 옵션은 lob 파일을 복사하는 기능이 아니며 **-B** 옵션과 병행할 수 없다. ::
 
-        cubrid copydb --copy-lob-path=/home/usr/CUBRID/databases/new_demodb/lob demodb new_demodb
+        cubrid copydb --copy-lob-path demodb new_demodb
 
 .. option:: -B, --lob-base-path=PATH
 
@@ -989,7 +989,7 @@ plandump
 
   -d, --drop                   서버 캐시에 있는 모든 플랜 삭제
   -o, --output-file=FILE       출력 메시지를 재지정할 파일
-  -s, --sha1=SHA1              서버 캐시에 있는 특정 플랜 삭제
+  -s, --sha1=SHA1              서버 캐시에 있는 SHA1 코드의 특정 플랜 삭제
 
 
 .. option:: -d, --drop
@@ -1006,7 +1006,7 @@ plandump
 
 .. option:: -s, --sha1=SHA1
 
-    캐시에 저장된 특정 질의 수행 계획을 제거한다.::
+    캐시에 저장된 SHA1 코드의 특정 질의 수행 계획을 제거한다.::
 
         $ cubrid plandump testdb
 
@@ -2846,7 +2846,7 @@ lockdb
 
 **객체 잠금 테이블**
 
-**cubrid lockdb** 출력 내용의 세 번째 섹션은 객체 잠금 테이블의 내용을 포함한다. 이것은 어떤 객체에 대해서 어떤 클라이언트가 어떤 모드로 잠금을 가지고 있는지, 어떤 객체에 대해서 어떤 클라이언트가 어떤 모드로 기다리고 있는지를 보여준다. 객체 잠금 테이블 결과물의 첫 부분에는 얼마나 많은 객체가 잠금되었는지가 출력된다. 그리고 현재 메모리에 할당된 잠금의 개수와 크기가 출력된다. 성능을 위하여 잠금을 바로 해제하지 않고 재사용하지만, 메모리에 할당된 잠금 개수가 **lock_escalation** 시스템 파라미터값을 넘을 경우에는 해당 잠금은 트랜잭션이 끝나는 시점에 메모리에서 해제된다.
+**cubrid lockdb** 출력 내용의 세 번째 섹션은 객체 잠금 테이블의 내용을 포함한다. 이것은 어떤 객체에 대해서 어떤 클라이언트가 어떤 모드로 잠금을 가지고 있는지, 어떤 객체에 대해서 어떤 클라이언트가 어떤 모드로 기다리고 있는지를 보여준다. 객체 잠금 테이블 결과물의 첫 부분에는 얼마나 많은 객체가 잠금 되었는지가 출력된다. 그리고 현재 메모리에 할당된 잠금의 개수와 크기가 출력된다. 성능을 위하여 잠금을 바로 해제하지 않고 재사용하지만, 메모리에 할당된 잠금 개수가 **lock_escalation** 시스템 파라미터값을 넘을 경우에는 해당 잠금은 트랜잭션이 끝나는 시점에 메모리에서 해제된다. 관련 시스템 파라미터인 **lock_escalation** 에 대한 설명은 :ref:`lock-parameters` 를 참고한다.
 
 ::
 
@@ -3554,7 +3554,7 @@ vacuumdb
 flashback
 ---------
 
-**cubrid flashback** 유틸리티는 커밋된 트랜잭션을 되돌릴 수 있는 SQL 구문을 제공하며, **DBA** 사용자만 수행할 수 있다. **cubrid flashback** 을 수행하기 위해서는 시스템 파라미터 **supplemental_log** 를 반드시 0보다 큰 값으로 설정해야 하며, **supplemental_log** 가 설정된 후에 실행되는 DML에 대해서만 지원한다. ::
+**cubrid flashback** 유틸리티는 커밋된 트랜잭션을 되돌릴 수 있는 SQL 구문을 제공하며, **DBA** 사용자만 수행할 수 있다. **cubrid flashback** 을 수행하기 위해서는 시스템 파라미터 **supplemental_log** 를 반드시 0보다 큰 값으로 설정해야 하며, **supplemental_log** 가 설정된 후에 실행되는 DML에 대해서만 지원한다. 이 유틸리티는 클라이언트/서버 모드에서만 동작하고 동시에 두개 이상 수행할 수 없다:.::
 
     cubrid flashback [options] database_name owner_name.class_name1 [owner_name.class_name2, ...]
 

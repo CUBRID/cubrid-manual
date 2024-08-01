@@ -215,16 +215,16 @@ Represents attribute information. An index for class_of, attr_name and attr_type
 +-------+-----------+-------+--------------+
 | Value | Meaning   | Value | Meaning      |
 +=======+===========+=======+==============+
-| 1     | INTEGER   | 22    | NUMERIC      |
+| 1     | INTEGER   | 23    | BIT          |
 |       |           |       |              |
 +-------+-----------+-------+--------------+
-| 2     | FLOAT     | 23    | BIT          |
+| 2     | FLOAT     | 24    | VARBIT       |
 |       |           |       |              |
 +-------+-----------+-------+--------------+
-| 3     | DOUBLE    | 24    | VARBIT       |
+| 3     | DOUBLE    | 25    | CHAR         |
 |       |           |       |              |
 +-------+-----------+-------+--------------+
-| 4     | STRING    | 25    | CHAR         |
+| 4     | STRING    | 27    | VARCHAR      |
 |       |           |       |              |
 +-------+-----------+-------+--------------+
 | 5     | OBJECT    | 31    | BIGINT       |
@@ -250,8 +250,11 @@ Represents attribute information. An index for class_of, attr_name and attr_type
 +-------+-----------+-------+--------------+
 | 12    | DATE      | 38    | DATETIMETZ   |
 |       |           |       |              |
-+-------+-----------+-------+--------------+
++-------+-----------+-------+--------------+ 
 | 18    | SHORT     | 39    | DATETIMELTZ  |
+|       |           |       |              |
++-------+-----------+-------+--------------+
+| 22    | NUMERIC   | 40    | JSON         |
 |       |           |       |              |
 +-------+-----------+-------+--------------+
 

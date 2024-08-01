@@ -606,7 +606,7 @@ The following shows [options] available with the **cubrid copydb** utility.
   -i, --control-file=FILE         copying volumes over several locations written in the control file
   -r, --replace                   replace an existing database
   -d, --delete-source             delete a source database
-      --copy-lob-path=PATH        copy external storage PATH for LOB data from source database
+      --copy-lob-path             copy external storage PATH for LOB data from the source database. By default, the LOB path is not copied
   -B, --lob-base-path=PATH        base directory PATH for external LOB data
 
 
@@ -666,9 +666,9 @@ The following shows [options] available with the **cubrid copydb** utility.
 
         cubrid copydb -d -F /home/usr/CUBRID/databases demodb new_demodb
 
-.. option:: --copy-lob-path=PATH
+.. option:: --copy-lob-path
 
-    If the **\-\-copy-lob-path** option is specified, a new directory path for LOB files is created and a source database is copied into a new directory path. If this option is omitted, the directory path is not created. Therefore, the **lob-base-path** of the **databases.txt** file should be modified separately. This option cannot be used with the **-B** option. ::
+    If the **\-\-copy-lob-path** option is specified, the lob directory path of the target database will be set to the lob directory path of the source database. If this option is omitted, the lob directory path of the target database will be set to <target database directory path>/lob. This option does not copy lob files and cannot be used with the **-B** option. ::
 
         cubrid copydb --copy-lob-path demodb new_demodb
 
@@ -996,7 +996,7 @@ The following shows [options] available with the **cubrid plandump** utility.
 
   -d, --drop                   drop all plans in the server's cache
   -o, --output-file=FILE       redirect output messages to FILE
-  -s, --sha1=SHA1              drop specific plan in the server's cache
+  -s, --sha1=SHA1              drop specific plan by SHA1 in the server's cache
 
 
 .. option:: -d, --drop
@@ -1013,7 +1013,7 @@ The following shows [options] available with the **cubrid plandump** utility.
 
 .. option:: -s, --sha1=SHA1
 
-    This option drops the specific query plans stored in the cache. ::
+    This option drops specific query plans identified by their SHA1 hashes from the server's cache. ::
 
         $ cubrid plandump testdb
 
@@ -2820,7 +2820,7 @@ The following shows [options] available with the **cubrid lockdb** utility.
 
 .. option:: -c, --contention
 
-    The **-c** option displays the lock information which has contention. ::
+    The **-c** option displays information on locks that are in contention. ::
 
         cubrid lockdb -c testdb
 
@@ -2866,12 +2866,12 @@ Because **cubrid lockdb** utility accesses the database to obtain the lock infor
 
 **Object lock table**
 
-The third section of the output of the **cubrid lockdb** includes the contents of the object lock table. It shows which client has the lock for which object in which mode, and which client is waiting for which object in which mode. The first part of the result of the object lock table shows how many objects are locked and how many lock objects are allocated to memory. CUBRID reuses lock objects for performance, but if the number of locks exceeds the **lock_escalation**, the lock objects are freed from memory at the end of the transaction.
+The third section of the output of the **cubrid lockdb** includes the contents of the object lock table. It shows which client has the lock for which object in which mode, and which client is waiting for which object in which mode. The first part of the result of the object lock table shows how many objects are locked and how many lock objects are allocated to memory. CUBRID reuses lock objects for performance, but if the number of locks exceeds the value of **lock_escalation**, the lock objects are freed from memory at the end of the transaction. For more details, see :ref:`lock-parameters`.
 
 ::
 
     Object lock Table:
-        Current number of objects which are locked = 2001
+        Current number of objects which are locked = 100
         Current number of objects which are allocated = 1000
         Current size of objects which are allocated = 242K
 
@@ -2896,7 +2896,7 @@ The example below shows an object in which the object type is a class, that will
                         Start_waiting_at = Wed Feb 3 14:45:14 2016
                         Wait_for_secs = -1
                         
-The next example shows an instance of class, object OID( 2| 50| 1 ), that was inserted by transaction 1 which holds **X_LOCK** on the object. The class has a unique index and the key of inserted instance is about to be modified by transaction 2, which is blocked until transaction 1 is completed. The **-c** option displays the lock information which has contention.
+The next example shows an instance of class, object OID( 2| 50| 1 ), that was inserted by transaction 1 which holds **X_LOCK** on the object. The class has a unique index and the key of inserted instance is about to be modified by transaction 2, which is blocked until transaction 1 is completed. The **-c** option displays only the information on locks that are involved in contention.
 
 ::
 
@@ -3576,7 +3576,7 @@ The following shows [options] available with the **cubrid vacuumdb** utility.
 flashback
 ---------
 
-The **cubrid flashback** utility is used to get SQL statements to rewind a specific committed transaction, and can only be executed by the **DBA** user. The system parameter **supplemental_log** must be turned on, and flashback is supported only for DML executed after the **supplemental_log** is set. ::
+The **cubrid flashback** utility is used to get SQL statements to rewind a specific committed transaction, and can only be executed by the **DBA** user. The system parameter **supplemental_log** must be turned on, and flashback is supported only for DML executed after the **supplemental_log** is set. This utility can only be performed in client/server mode and cannot be executed more than once simultaneously. ::
 
     cubrid flashback [options] database_name owner_name.class_name1 [owner_name.class_name2, ...]
 

@@ -4323,6 +4323,7 @@ Additionally, if the ratio of **miss** to **hit** is higher than 9, even if the 
 
 Subquery cache is disabled if the correlated subquery contains another correlated subquery. 
 However, if the included correlated subquery does not contain another correlated subquery, it is enabled. 
+
 The following example shows a case where a correlated subquery contains another correlated subquery: ::
 
     csql> SELECT /*+ recompile */ 

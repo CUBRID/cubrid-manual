@@ -4250,12 +4250,14 @@ In CSQL, the improved performance can be easily measured by repeatedly executing
 The results of the first example might be slow as the cache is not activated using the **NO_SUBQUERY_CACHE** hint, but from the second example, it becomes much faster because it retrieves from the cached area: ::
 
     # Target query #1
-    csql> SELECT count(*) from (
-            SELECT /*+ recompile no_merge */
-            (SELECT /*+ NO_SUBQUERY_CACHE */ t1_pk FROM t1 b WHERE b.t1_pk = a.c3)
-            FROM
-            t1 a
-            WHERE a.c2 >= 1);
+    csql> SELECT COUNT(*)
+            FROM (
+                   SELECT /*+ RECOMPILE NO_MERGE */
+                          (SELECT /*+ NO_SUBQUERY_CACHE */ t1_pk FROM t1 b WHERE b.t1_pk = a.c3)
+                     FROM t1 a
+                    WHERE a.c2 >= 1
+                 );
+
     === <Result of SELECT Command in Line 2> ===
 
                   count(*)

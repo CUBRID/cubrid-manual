@@ -4352,6 +4352,7 @@ The following example shows a case where a correlated subquery contains another 
                     SUBQUERY_CACHE (hit: 99, miss: 1, size: 150704, status: enabled)
 
 Moreover, subquery cache is disabled in a correlated subquery that includes functions like random (), sys_guid () that produce different results each time they are executed.
+
 The following example shows a case where a correlated subquery includes random (): ::
 
     csql> WITH cte_1 AS 

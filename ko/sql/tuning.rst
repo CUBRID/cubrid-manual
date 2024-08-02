@@ -4221,7 +4221,7 @@ Predicate Push
 먼저 성능 차이를 측정하기 위해 데이터를 준비하는 쿼리를 작성한다. ::
     
     # Prepare data
-    csql> drop table if exists t1;
+    csql> DROP TABLE IF EXISTS t1;
     
     csql> CREATE TABLE t1 AS
             SELECT

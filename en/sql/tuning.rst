@@ -4212,7 +4212,7 @@ Subquery cache does not operate in the following scenarios:
 
 If the correlated subquery is in the SELECT clause, subquery cache is utilized.
 Among the recurrently executed correlated subqueries, if the column values referenced in the main query remain the same with previously cached values, the cached results are used to prevent re-execution.
-If no cached value is found, the subquery is processed and its results, along with the column values and query results, are cached.
+If no cached value is found, the subquery is executed and its results, along with the column values and query results, are cached.
 If the same column values are found in the cache, the results are retrieved from the cached area.
 
 The following example measures the performance difference depending on whether the subquery cache is used or not.

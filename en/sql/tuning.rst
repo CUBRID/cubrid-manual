@@ -4279,6 +4279,7 @@ The results of the first example might be slow as the cache is not activated usi
                 SCAN (index: dba.t1.pk_t1), (btree time: 243, fetch: 198000, ioread: 0, readkeys: 99000, filteredkeys: 0, rows: 99000, covered: true)
 
 When SQL trace is queried, trace information about the subquery cache for the relevant subquery is displayed.
+
 The following example displays trace information for the subquery cache in a case where the subquery cache is enabled: ::
 
     csql> SELECT COUNT(*)

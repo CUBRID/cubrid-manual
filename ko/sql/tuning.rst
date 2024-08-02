@@ -4252,12 +4252,14 @@ CSQL에서는 아래 예제와 같이 COUNT 함수를 사용하여 질의를 반
 첫 번째 부질의에 대한 결과는 **NO_SUBQUERY_CACHE** 힌트를 사용하여 캐시가 활성화 되지 않아 느릴 수 있지만, 두 번째 부터는 캐시된 영역에서 가져오므로 응답 시간이 훨씬 빠르다. ::
 
     # Target query #1
-    csql> SELECT count(*) from (
-            SELECT /*+ recompile no_merge */
-            (SELECT /*+ NO_SUBQUERY_CACHE */ t1_pk FROM t1 b WHERE b.t1_pk = a.c3)
-            FROM
-            t1 a
-            WHERE a.c2 >= 1);
+    csql> SELECT COUNT(*)
+            FROM (
+                   SELECT /*+ RECOMPILE NO_MERGE */
+                          (SELECT /*+ NO_SUBQUERY_CACHE */ t1_pk FROM t1 b WHERE b.t1_pk = a.c3)
+                     FROM t1 a
+                    WHERE a.c2 >= 1
+                 );
+
     === <Result of SELECT Command in Line 2> ===
 
                   count(*)

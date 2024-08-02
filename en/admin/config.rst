@@ -722,7 +722,7 @@ The following are parameters related to the memory used by the database server o
 
     **max_subquery_cache_size** parameter is used to set the size of the subquery cache (correlated). The default value is **2,097,152** (2M) bytes, the minimum value is **0**, and the maximum value is **16,777,216** (16M) bytes. The subquery cache is allocated for the number of subqueries in a query and is deallocated when the main query is completed. 
     
-    If max_subquery_cache_size is set to 0, the :ref:`NO_SUBQUERY_CACHE <correlated-subquery-cache>` hint is specified, or there is insufficient storage space, the subquery cache will not be used.
+    If max_subquery_cache_size is set to 0, the :ref:`NO_SUBQUERY_CACHE <correlated-subquery-cache>` hint is specified, or there is insufficient storage space, the subquery cache is not used.
 
 **sort_buffer_size**
 

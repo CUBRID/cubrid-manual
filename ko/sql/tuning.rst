@@ -4281,6 +4281,7 @@ CSQL에서는 아래 예제와 같이 COUNT 함수를 사용하여 질의를 반
                 SCAN (index: dba.t1.pk_t1), (btree time: 243, fetch: 198000, ioread: 0, readkeys: 99000, filteredkeys: 0, rows: 99000, covered: true)
 
 또한 SQL 트레이스를 조회하는 경우, 해당하는 부질의의 하위 정보로 서브 쿼리 캐시에 대한 트레이스 정보가 출력된다.
+
 다음 예시는 서브 쿼리 캐시가 활성화된 경우 해당하는 부질의의 하위 정보로 서브 쿼리 캐시에 대한 트레이스 정보가 출력되는 예시이다. ::
 
     # Target query #2

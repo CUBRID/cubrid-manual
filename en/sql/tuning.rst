@@ -4279,12 +4279,14 @@ The results of the first example might be slow as the cache is not activated usi
 When SQL trace is queried, trace information about the subquery cache for the relevant subquery is displayed.
 The following example displays trace information for the subquery cache in a case where the subquery cache is enabled: ::
 
-    csql> SELECT count(*) from (
-            SELECT /*+ recompile no_merge */
-            (SELECT t1_pk FROM t1 b WHERE b.t1_pk = a.c3)
-            FROM
-            t1 a
-            WHERE a.c2 >= 1);
+    csql> SELECT COUNT(*)
+            FROM (
+                   SELECT /*+ RECOMPILE NO_MERGE */
+                          (SELECT t1_pk FROM t1 b WHERE b.t1_pk = a.c3)
+                     FROM t1 a
+                    WHERE a.c2 >= 1
+                 );
+
     === <Result of SELECT Command in Line 6> ===
 
                   count(*)

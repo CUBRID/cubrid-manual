@@ -4282,12 +4282,14 @@ CSQL에서는 아래 예제와 같이 COUNT 함수를 사용하여 질의를 반
 다음 예시는 서브 쿼리 캐시가 활성화된 경우 해당하는 부질의의 하위 정보로 서브 쿼리 캐시에 대한 트레이스 정보가 출력되는 예시이다. ::
 
     # Target query #2
-    csql> SELECT count(*) from (
-            SELECT /*+ recompile no_merge */
-            (SELECT t1_pk FROM t1 b WHERE b.t1_pk = a.c3)
-            FROM
-            t1 a
-            WHERE a.c2 >= 1);
+    csql> SELECT COUNT(*)
+            FROM (
+                   SELECT /*+ RECOMPILE NO_MERGE */
+                          (SELECT t1_pk FROM t1 b WHERE b.t1_pk = a.c3)
+                     FROM t1 a
+                    WHERE a.c2 >= 1
+                 );
+
     === <Result of SELECT Command in Line 6> ===
 
                   count(*)

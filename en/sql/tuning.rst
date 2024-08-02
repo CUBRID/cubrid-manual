@@ -4219,7 +4219,7 @@ The following example measures the performance difference depending on whether t
 First, a query to prepare the data for measuring performance differences is written: ::
     
     # Prepare data
-    csql> drop table if exists t1;
+    csql> DROP TABLE IF EXISTS t1;
     
     csql> CREATE TABLE t1 AS
             SELECT

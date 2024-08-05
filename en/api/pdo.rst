@@ -133,7 +133,7 @@ Predefined Constants
 
 The constants defined by CUBRID PDO driver are available only when the extension has been either compiled into PHP or dynamically loaded at runtime. In addition, these driver-specific constants should only be used if you are using PDO driver. Using driver-specific attributes with another driver may result in unexpected behavior.
 
-The `PDO::getAttribute() <http://docs.php.net/manual/en/pdo.getattribute.php>`_ function may be used to obtain the **PDO_ATTR_DRIVER_NAME** attribute value to check the driver if your code can run.
+The `PDO::getAttribute() <http://www.php.net/manual/en/pdo.getattribute.php>`_ function may be used to obtain the **PDO_ATTR_DRIVER_NAME** attribute value to check the driver if your code can run.
 
 The constants below can be used with the `PDO::cubrid_schema <https://www.php.net/manual/en/pdo.cubrid-schema.php>`_ function to get schema information.
 
@@ -184,7 +184,7 @@ PDO Sample Program
 Verifying CUBRID PDO Driver Version
 -----------------------------------
 
-If you want to verify that the CUBRID PDO driver is accessible, you can use the `PDO::getAvailableDrivers <http://docs.php.net/manual/en/pdo.getavailabledrivers.php>`_ () function.
+If you want to verify that the CUBRID PDO driver is accessible, you can use the `PDO::getAvailableDrivers <http://www.php.net/manual/en/pdo.getavailabledrivers.php>`_ () function.
 
 .. code-block:: php
 
@@ -253,13 +253,13 @@ Executing a SELECT Statement
 
 In PDO, there is more than one way to execute SQL queries.
 
-*   Using the `query <http://docs.php.net/manual/en/pdo.exec.php>`_ () function
-*   Using prepared statements (see `prepare <http://docs.php.net/manual/en/pdo.prepare.php>`_ ()/ `execute <http://docs.php.net/manual/en/pdostatement.execute.php>`_ ()) functions)
-*   Using the `exec <http://docs.php.net/manual/en/pdo.exec.php>`_ () function
+*   Using the `query <http://www.php.net/manual/en/pdo.query.php>`_ () function
+*   Using prepared statements (see `prepare <http://www.php.net/manual/en/pdo.prepare.php>`_ ()/ `execute <http://www.php.net/manual/en/pdostatement.execute.php>`_ ()) functions)
+*   Using the `exec <http://www.php.net/manual/en/pdo.exec.php>`_ () function
 
-The example script below shows the simplest one - using the `query <http://docs.php.net/manual/en/pdo.exec.php>`_ () function. You can retrieve the return values from the resultset (a PDOStatement object) by using the column names, like $rs["*column_name*"].
+The example script below shows the simplest one - using the `query <http://www.php.net/manual/en/pdo.query.php>`_ () function. You can retrieve the return values from the resultset (a PDOStatement object) by using the column names, like $rs["*column_name*"].
 
-Note that when you use the `query <http://docs.php.net/manual/en/pdo.exec.php>`_ () function, you must ensure that the query code is properly escaped. For information about escaping, see `PDO::quote <https://www.php.net/manual/en/pdo.quote.php>`_ () function.
+Note that when you use the `query <http://www.php.net/manual/en/pdo.query.php>`_ () function, you must ensure that the query code is properly escaped. For information about escaping, see `PDO::quote <https://www.php.net/manual/en/pdo.quote.php>`_ () function.
 
 .. code-block:: php
 
@@ -299,7 +299,7 @@ The output of the script is as follows: ::
 Executing an UPDATE Statement
 -----------------------------
 
-The following example shows how to execute an UPDATE statement by using a prepared statement and parameters. You can use the `exec <http://docs.php.net/manual/en/pdo.exec.php>`_ () function as an alternative.
+The following example shows how to execute an UPDATE statement by using a prepared statement and parameters. You can use the `exec <http://www.php.net/manual/en/pdo.exec.php>`_ () function as an alternative.
 
 .. code-block:: php
 
@@ -465,16 +465,16 @@ The output of the script is as follows: ::
 Using the PDO::getAttribute() Function
 --------------------------------------
 
-The `PDO::getAttribute <http://docs.php.net/manual/en/pdo.getattribute.php>`_ () function is very useful to retrieve the database connection attributes. For example,
+The `PDO::getAttribute <http://www.php.net/manual/en/pdo.getattribute.php>`_ () function is very useful to retrieve the database connection attributes. For example,
 
 *   Driver name
 *   Database version
 *   Auto-commit state
 *   Error mode
 
-Note that if you want to set attributes values (assuming that they are writable), you should use the `PDO::setAttribute <http://docs.php.net/manual/en/pdo.setattribute.php>`_ function.
+Note that if you want to set attributes values (assuming that they are writable), you should use the `PDO::setAttribute <http://www.php.net/manual/en/pdo.setattribute.php>`_ function.
 
-The following example script shows how to retrieve the current versions of client and server by using the `PDO::getAttribute <http://docs.php.net/manual/en/pdo.getattribute.php>`_ () function.
+The following example script shows how to retrieve the current versions of client and server by using the `PDO::getAttribute <http://www.php.net/manual/en/pdo.getattribute.php>`_ () function.
 
 .. code-block:: php
 
@@ -532,6 +532,6 @@ The output of the script is as follows: ::
 PDO API
 =======
 
-For more information about PHP Data Objects (PDO) API, see http://docs.php.net/manual/en/book.pdo.php. The API provided by CUBRID PDO driver is as follows:
+For more information about PHP Data Objects (PDO) API, see http://www.php.net/manual/en/book.pdo.php. The API provided by CUBRID PDO driver is as follows:
 
 For more information about CUBRID PDO API provides, see http://ftp.cubrid.org/CUBRID_Docs/Drivers/PDO/.

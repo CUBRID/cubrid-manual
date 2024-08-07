@@ -4207,6 +4207,34 @@ Predicate Push
 캐시된 값을 찾을 수 없는 경우 부질의가 실행된 다음 결과와 함께 컬럼 값과 질의 결과를 캐시한다. 
 같은 컬럼 값이 캐시에서 발견되면 캐시된 영역에서 결과를 가져온다. 
 
+또한 SQL 트레이스를 조회하는 경우, 해당하는 부질의의 하위 정보로 서브 쿼리 캐시에 대한 트레이스 정보가 출력된다.
+
+다음 예시는 서브 쿼리 캐시가 활성화된 경우 해당하는 부질의의 하위 정보로 서브 쿼리 캐시에 대한 트레이스 정보가 출력되는 예시이다. 
+
+::
+
+    csql> SELECT /*+ RECOMPILE NO_MERGE */
+            (SELECT t1_pk FROM t1 b WHERE b.t1_pk = a.c3)
+          FROM t1 a
+          WHERE a.c2 >= 1;
+
+    Trace Statistics:
+      SELECT (time: 108, fetch: 103639, fetch_time: 13, ioread: 0)
+        SCAN (table: dba.t1), (heap time: 70, fetch: 100384, ioread: 0, readrows: 100000, rows: 99000)
+        SUBQUERY (correlated)
+          SELECT (time: 4, fetch: 2970, fetch_time: 0, ioread: 0)
+            SCAN (index: dba.t1.pk_t1), (btree time: 2, fetch: 1980, ioread: 0, readkeys: 990, filteredkeys: 0, rows: 990, covered: true)
+            SUBQUERY_CACHE (hit: 98010, miss: 990, size: 269384, status: enabled)
+
+각 항목에 대한 설명은 다음과 같다.
+
+* **hit** : 질의 실행 대신 캐시된 영역에서 결과를 가져온 횟수.
+* **miss** : 질의를 실행한 후 결과를 캐시한 횟수.
+* **size** : 서브 쿼리 캐시에 사용된 메모리 크기.
+* **status** : 질의 종료 시 서브 쿼리 캐시의 활성화 여부.
+
+**size**\가 설정해둔 값을 초과하는 경우에는 서브 쿼리 캐시가 질의 수행 도중 비활성화 되며 SQL 트레이스 정보에서 **status**\가 disabled로 출력된다. 또한, **hit** 수에 비해 **miss** 수의 비율이 9보다 높을 경우, 서브 쿼리 캐시의 크기가 설정해둔 값을 초과하지 않더라도 질의 수행 도중 비활성화 될 수 있다. 
+
 다음은 서브 쿼리 캐시의 사용 유무에 따른 성능 차이를 측정하는 예제이다.
 먼저 성능 차이를 측정하기 위해 데이터를 준비하는 쿼리를 작성한다. 
 
@@ -4241,83 +4269,32 @@ Predicate Push
     csql> ;trace on  
 
 CSQL에서는 아래 예제와 같이 COUNT 함수를 사용하여 질의를 반복적으로 실행할 때 개선된 성능을 쉽게 측정할 수 있다. 
-첫 번째 부질의에 대한 결과는 **NO_SUBQUERY_CACHE** 힌트를 사용하여 캐시가 활성화되지 않아 느릴 수 있지만, 두 번째부터는 캐시된 영역에서 가져오므로 응답 시간이 훨씬 빠르다. 
 
-::
+첫 번째 질의는 서브 쿼리 캐시를 사용하므로 응답 시간이 비교적 빠르지만, 두 번째 질의는 **NO_SUBQUERY_CACHE** 힌트를 사용하여 캐시가 활성화되지 않아 응답 시간이 느리다.
 
-    # Target query #1
-    csql> SELECT COUNT(*)
-            FROM (
-                   SELECT /*+ RECOMPILE NO_MERGE */
-                          (SELECT /*+ NO_SUBQUERY_CACHE */ t1_pk FROM t1 b WHERE b.t1_pk = a.c3)
-                     FROM t1 a
-                    WHERE a.c2 >= 1
-                 );
-
-    === <Result of SELECT Command in Line 2> ===
-
-                  count(*)
-    ======================
-                     99000
-
-    1 row selected. (0.626199 sec) Committed. (0.000011 sec) 
-
-    1 command(s) successfully processed.
-
-    Trace Statistics:
-      SELECT (time: 621, fetch: 397811, fetch_time: 56, ioread: 0)
-        SCAN (temp time: 7, fetch: 142, ioread: 0, readrows: 99000, rows: 99000)
-        SUBQUERY (uncorrelated)
-          SELECT (time: 607, fetch: 397669, fetch_time: 56, ioread: 0)
-            SCAN (table: dba.t1), (heap time: 98, fetch: 100384, ioread: 0, readrows: 100000, rows: 99000)
-            SUBQUERY (correlated)
-              SELECT (time: 460, fetch: 297000, fetch_time: 0, ioread: 0)
-                SCAN (index: dba.t1.pk_t1), (btree time: 243, fetch: 198000, ioread: 0, readkeys: 99000, filteredkeys: 0, rows: 99000, covered: true)
-
-또한 SQL 트레이스를 조회하는 경우, 해당하는 부질의의 하위 정보로 서브 쿼리 캐시에 대한 트레이스 정보가 출력된다.
-
-다음 예시는 서브 쿼리 캐시가 활성화된 경우 해당하는 부질의의 하위 정보로 서브 쿼리 캐시에 대한 트레이스 정보가 출력되는 예시이다. 
-
-::
-
-    # Target query #2
-    csql> SELECT COUNT(*)
-            FROM (
-                   SELECT /*+ RECOMPILE NO_MERGE */
-                          (SELECT t1_pk FROM t1 b WHERE b.t1_pk = a.c3)
-                     FROM t1 a
-                    WHERE a.c2 >= 1
-                 );
-
-    === <Result of SELECT Command in Line 6> ===
-
-                  count(*)
-    ======================
-                     99000
-
-    1 row selected. (0.128251 sec) Committed. (0.000010 sec) 
-
-    1 command(s) successfully processed.
-
-    Trace Statistics:
-      SELECT (time: 122, fetch: 103781, fetch_time: 13, ioread: 0)
-        SCAN (temp time: 7, fetch: 142, ioread: 0, readrows: 99000, rows: 99000)
-        SUBQUERY (uncorrelated)
-          SELECT (time: 108, fetch: 103639, fetch_time: 13, ioread: 0)
-            SCAN (table: dba.t1), (heap time: 70, fetch: 100384, ioread: 0, readrows: 100000, rows: 99000)
-            SUBQUERY (correlated)
-              SELECT (time: 4, fetch: 2970, fetch_time: 0, ioread: 0)
-                SCAN (index: dba.t1.pk_t1), (btree time: 2, fetch: 1980, ioread: 0, readkeys: 990, filteredkeys: 0, rows: 990, covered: true)
-                SUBQUERY_CACHE (hit: 98010, miss: 990, size: 269384, status: enabled)
-
-각 항목에 대한 설명은 다음과 같다.
-
-* **hit** : 질의 실행 대신 캐시된 영역에서 결과를 가져온 횟수.
-* **miss** : 질의를 실행한 후 결과를 캐시한 횟수.
-* **size** : 서브 쿼리 캐시에 사용된 메모리 크기.
-* **status** : 질의 종료 시 서브 쿼리 캐시의 활성화 여부.
-
-**size**\가 설정해둔 값을 초과하는 경우에는 서브 쿼리 캐시가 질의 수행 도중 비활성화 되며 SQL 트레이스 정보에서 **status**\가 disabled로 출력된다. 또한, **hit** 수에 비해 **miss** 수의 비율이 9보다 높을 경우, 서브 쿼리 캐시의 크기가 설정해둔 값을 초과하지 않더라도 질의 수행 도중 비활성화 될 수 있다. 
++------------------------------------------------------------------------+------------------------------------------------------------------------------------------------+
+| **Query #1**                                                           | **Query #2**                                                                                   |
++========================================================================+================================================================================================+
+| ::                                                                     | ::                                                                                             |
+|                                                                        |                                                                                                |
+|     csql> SELECT COUNT(*)                                              |     csql> SELECT COUNT(*)                                                                      |
+|            FROM (                                                      |            FROM (                                                                              |
+|                   SELECT /*+ RECOMPILE NO_MERGE */                     |                   SELECT /*+ RECOMPILE NO_MERGE */                                             |
+|                          (SELECT t1_pk FROM t1 b WHERE b.t1_pk = a.c3) |                         (SELECT /*+ NO_SUBQUERY_CACHE */ t1_pk FROM t1 b WHERE b.t1_pk = a.c3) | 
+|                     FROM t1 a                                          |                     FROM t1 a                                                                  |
+|                    WHERE a.c2 >= 1                                     |                    WHERE a.c2 >= 1                                                             |
+|                 );                                                     |                 );                                                                             |
+|                                                                        |                                                                                                |
+|     === <Result of SELECT Command in Line 2> ===                       |     === <Result of SELECT Command in Line 2> ===                                               |
+|                                                                        |                                                                                                |
+|                  count(*)                                              |                  count(*)                                                                      |
+|     ======================                                             |     ======================                                                                     |
+|                     99000                                              |                     99000                                                                      |
+|                                                                        |                                                                                                |
+|     1 row selected. (0.128251 sec) Committed. (0.000010 sec)           |     1 row selected. (0.626199 sec) Committed. (0.000011 sec)                                   |
+|                                                                        |                                                                                                |
+|     1 command(s) successfully processed.                               |     1 command(s) successfully processed.                                                       |
++------------------------------------------------------------------------+------------------------------------------------------------------------------------------------+
 
 서브 쿼리 캐시는 다음과 같은 상황에 동작하지 않는다:
 

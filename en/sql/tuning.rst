@@ -4200,16 +4200,6 @@ SUBQUERY CACHE (correlated)
 Subquery cache optimization can be used to enhance the performance of queries containing correlated subqueries, and the results of the subqueries are cached in independent spaces for each subquery.
 To disable subquery cache optimization, use the NO_SUBQUERY_CACHE hint on the target subquery.
 
-Subquery cache does not operate in the following scenarios:
-
-* When the correlated subquery contains another correlated subquery.
-* When the subquery is not in the SELECT clause.
-* When the subquery includes CONNECT BY clause.
-* When the subquery includes OID-related features.
-* When the subquery includes the NO_SUBQUERY_CACHE hint.
-* When storing new results exceeds the set subquery cache size (default: 2MB).
-* When the subquery contains functions that change results with each execution, such as random() or sys_guid().
-
 If the correlated subquery is in the SELECT clause, subquery cache is utilized.
 Among the recurrently executed correlated subqueries, if the column values referenced in the main query remain the same with previously cached values, the cached results are used to prevent re-execution.
 If no cached value is found, the subquery is executed and its results, along with the column values and query results, are cached.
@@ -4324,6 +4314,16 @@ Descriptions for each item are as follows:
 
 If **size** exceeds the set value, the subquery cache is disabled during the execution of the query, and the SQL trace information shows **status** as disabled. 
 Additionally, if the ratio of **miss** to **hit** is higher than 9, even if the subquery cache size does not exceed the set value, it may be disabled during the execution of the query.
+
+Subquery cache does not operate in the following scenarios:
+
+* When the correlated subquery contains another correlated subquery.
+* When the subquery is not in the SELECT clause.
+* When the subquery includes CONNECT BY clause.
+* When the subquery includes OID-related features.
+* When the subquery includes the NO_SUBQUERY_CACHE hint.
+* When storing new results exceeds the set subquery cache size (default: 2MB).
+* When the subquery contains functions that change results with each execution, such as random() or sys_guid().
 
 Subquery cache is disabled if the correlated subquery contains another correlated subquery. 
 However, if the included correlated subquery does not contain another correlated subquery, it is enabled. 

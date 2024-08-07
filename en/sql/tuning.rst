@@ -4216,7 +4216,9 @@ If no cached value is found, the subquery is executed and its results, along wit
 If the same column values are found in the cache, the results are retrieved from the cached area.
 
 The following example measures the performance difference depending on whether the subquery cache is used or not.
-First, a query to prepare the data for measuring performance differences is written: ::
+First, a query to prepare the data for measuring performance differences is written: 
+
+::
     
     # Prepare data
     csql> DROP TABLE IF EXISTS t1;
@@ -4280,7 +4282,9 @@ The results of the first example might be slow as the cache is not activated usi
 
 When SQL trace is queried, trace information about the subquery cache for the relevant subquery is displayed.
 
-The following example displays trace information for the subquery cache in a case where the subquery cache is enabled: ::
+The following example displays trace information for the subquery cache in a case where the subquery cache is enabled: 
+
+::
 
     csql> SELECT COUNT(*)
             FROM (
@@ -4324,7 +4328,9 @@ Additionally, if the ratio of **miss** to **hit** is higher than 9, even if the 
 Subquery cache is disabled if the correlated subquery contains another correlated subquery. 
 However, if the included correlated subquery does not contain another correlated subquery, it is enabled. 
 
-The following example shows a case where a correlated subquery contains another correlated subquery: ::
+The following example shows a case where a correlated subquery contains another correlated subquery: 
+
+::
 
     csql> SELECT /*+ recompile */ 
             (
@@ -4353,7 +4359,9 @@ The following example shows a case where a correlated subquery contains another 
 
 Moreover, subquery cache is disabled in a correlated subquery that includes functions like random (), sys_guid () that produce different results each time they are executed.
 
-The following example shows a case where a correlated subquery includes random (): ::
+The following example shows a case where a correlated subquery includes random (): 
+
+::
 
     csql> WITH cte_1 AS 
             (SELECT

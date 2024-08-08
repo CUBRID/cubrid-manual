@@ -172,7 +172,7 @@ The following is [options] used in **cubrid unloaddb**.
 
     It is performed in parallel using as many threads as the number of COUNT, and COUNT must be in the range of 0 to 127.
     If this setting is omitted, it is the same as specifying COUNT as 1. If specified as 0, unloaddb does not operate in thread mode.
-    Even if the thread mode is specified, if the table contains an Object type or a Set, MultiSet, or Sequence (List) type that contains an Object type, it will not operate in thread mode for that table.
+    Even if thread mode is specified, if a table contains an Object type or a Set, MultiSet, or Sequence (List) type that contains an Object type, it will not operate in thread mode for that table.
     
     ::
 

@@ -3188,13 +3188,14 @@ Now let's see the case of rebuilding a existing slave node during a service in a
             [nodeB]$ rm testdb/log/*
             
             [nodeB]$ rm -rf testdb_nodeA
+            [nodeB]$ rm $CUBRID/var/APPLYLOGDB/testdb
             
     *   Stop log replication processes of *nodeB* on *nodeA* and *nodeC*.
     
         ::
         
-            [nodeA]$ cubrid heartbeat repl stop testdb nodeB
-            [nodeC]$ cubrid heartbeat repl stop testdb nodeB
+            [nodeA]$ cubrid heartbeat repl stop nodeB
+            [nodeC]$ cubrid heartbeat repl stop nodeB
     
     *   Remove replication logs for *nodeB* from *nodeA* and *nodeC*.
     
@@ -3203,18 +3204,9 @@ Now let's see the case of rebuilding a existing slave node during a service in a
             [nodeA]$ rm -rf $CUBRID_DATABASES/testdb_nodeB
             [nodeC]$ rm -rf $CUBRID_DATABASES/testdb_nodeB
 
-2.  Remove HA catalog table's data, restore *nodeB*'s database from *nodeA*'s backup, and add data to HA catalog table.
+2.  Restore *nodeB*'s database from *nodeA*'s backup, and add data to HA catalog table.
 
-    *   Delete the HA catalog table, db_ha_apply_info's records.
-    
-        Delete all records of db_ha_apply_info of *nodeB* to initialize.
-        
-        ::
-        
-            [nodeB]$ csql --sysadm --write-on-standby -u dba -S testdb 
-            csql> DELETE FROM db_ha_apply_info;
-            
-        Delete db_ha_apply_info data for *nodeB* from *nodeA* and *nodeC*.
+    *    Delete db_ha_apply_info data for *nodeB* from *nodeA* and *nodeC*.
         
         ::
         

@@ -3184,13 +3184,14 @@ HA 서비스 운영 중 슬레이브를 새로 추가하려면 기존의 마스�
             [nodeB]$ rm testdb/log/*
             
             [nodeB]$ rm -rf testdb_nodeA
+            [nodeB]$ rm $CUBRID/var/APPLYLOGDB/testdb
             
     *   *nodeA*\, *nodeC*\에서 *nodeB*\의 로그 복제 정지
     
         ::
         
-            [nodeA]$ cubrid heartbeat repl stop testdb nodeB
-            [nodeC]$ cubrid heartbeat repl stop testdb nodeB
+            [nodeA]$ cubrid heartbeat repl stop nodeB
+            [nodeC]$ cubrid heartbeat repl stop nodeB
     
     *   *nodeA*\, *nodeC*\에서 *nodeB*\에 대한 복제 로그 삭제
     
@@ -3199,17 +3200,8 @@ HA 서비스 운영 중 슬레이브를 새로 추가하려면 기존의 마스�
             [nodeA]$ rm -rf $CUBRID_DATABASES/testdb_nodeB
             [nodeC]$ rm -rf $CUBRID_DATABASES/testdb_nodeB
 
-2.  HA 카탈로그 테이블 삭제, *nodeA*\의 백업 및 *nodeB*\의 복구, HA 카탈로그 테이블에 정보 추가
+2.  *nodeA*\의 백업 및 *nodeB*\의 복구, HA 카탈로그 테이블에 정보 추가
 
-    *   HA 카탈로그 테이블인 db_ha_apply_info의 레코드 삭제
-    
-        *nodeB*\의 db_ha_apply_info 정보를 모두 삭제하여 초기화한다.
-        
-        ::
-        
-            [nodeB]$ csql --sysadm -u dba -S testdb 
-            csql> DELETE FROM db_ha_apply_info;
-            
         *nodeA*, *nodeC*\에서 *nodeB*\에 대한 db_ha_apply_info 정보를 삭제한다.
         
         ::

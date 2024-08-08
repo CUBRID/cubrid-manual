@@ -4338,7 +4338,7 @@ CSQL에서는 아래 예제와 같이 COUNT 함수를 사용하여 질의를 반
                     SCAN (table: dba.t2), (heap time: 0, fetch: 1, ioread: 0, readrows: 10, rows: 1)
                     SUBQUERY_CACHE (hit: 99, miss: 1, size: 150704, status: enabled)
 
-또한 서브 쿼리 캐시는 상관 부질의에 random (), sys_guid ()와 같이 실행될 때마다 결과가 바뀌는 함수가 포함된 경우 비활성화된다. 
+다음은 상관 부질의에 random () 와 같이 실행될 때마다 결과가 바뀌는 함수가 포함된 경우 서브 쿼리 캐시가 비활성화되는 에시이다.. 
 
 다음 예시는 상관 부질의에 random ()을 포함한 경우의 예시이다. 
 

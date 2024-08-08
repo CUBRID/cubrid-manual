@@ -170,7 +170,7 @@ The following is [options] used in **cubrid unloaddb**.
 
 .. option:: -t, --thread-count=COUNT
 
-    It is performed in parallel using as many threads as the number of COUNT, and COUNT must be in the range of 0 to 127.
+    This option sets the number of threads to be used in the unload process. It is performed in parallel using as many threads as the specified COUNT value, which must be in the range of 0 to 127.
     If this setting is omitted, it is the same as specifying COUNT as 1. If specified as 0, unloaddb does not operate in thread mode.
     Even if thread mode is specified, if a table contains an Object type or a Set, MultiSet, or Sequence (List) type that contains an Object type, it will not operate in thread mode for that table.
     

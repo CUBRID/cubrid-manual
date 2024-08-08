@@ -4295,7 +4295,7 @@ Comparing the results of both queries reveals that the use of subquery cache opt
 
 Subquery cache does not operate in the following scenarios:
 
-* When the correlated subquery contains another correlated subquery.
+* When the correlated subquery contains another correlated subquery. (The lowest level correlated subquery is cached, while the correlated subquery that includes another correlated subquery is not cached.)
 * When the subquery is not in the SELECT clause.
 * When the subquery includes CONNECT BY clause.
 * When the subquery includes OID-related features.
@@ -4303,7 +4303,7 @@ Subquery cache does not operate in the following scenarios:
 * When storing new results exceeds the set subquery cache size (default: 2MB).
 * When the subquery contains functions that change results with each execution, such as random() or sys_guid().
 
-The following example shows the execution of a subquery cache being disabled in a scenario where a correlated subquery includes another correlated subquery.
+The following example shows the case where subquery caching is applied only to the lowest level correlated subquery, while the upper level correlated subquery does not utilize subquery caching.
 
 ::
 

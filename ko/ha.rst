@@ -666,9 +666,12 @@ CUBRID는 1시간 주기로 **ha_ping_hosts**\에 명시된 호스트를 점검�
 
 **ha_copy_log_base**
 
-복제 로그를 저장할 위치를 지정한다. 기본값은 **$CUBRID_DATABASES**/\ *<db_name>*\_\ *<host_name>*\ 이다.
+복제 로그를 저장할 경로를 지정한다. 기본값은 $CUBRID_DATABASES 이며, 이 디렉토리 아래 <db_name>_<host_name> 로 디렉토리를 만들어 그것에 해당 서버/데이터베이스에 대한 복제로그를 가져와 저장한다.
 
-자세한 내용은 :ref:`log-multiplexing`\ 를 참고한다.
+경로 수정은 다음과 같이 가능하다.
+
+1. ha_copy_log_base=copylog : 상대 경로로 간주하여 $CUBRID_DATABASES/copylog 를 copylog base 로 사용한다.
+2. ha_copy_log_base=/log/copy_log : 절대 경로로 간주하여 /log/copy_log copylog base로 사용한다.
 
 .. _ha_copy_log_max_archives:
 

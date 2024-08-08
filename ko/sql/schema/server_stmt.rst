@@ -57,6 +57,8 @@ CREATE SERVER
     * 문자열 형식의 예  
              't123db', '123db'
 
+**예제 1**
+가장 기본이 되는 예제로, 필수항목(HOST,PORT,DBNAME,USER)가 있으며, PROPERTIES,COMMENT를 사용하였다.
   
 .. code-block:: sql
 
@@ -70,6 +72,7 @@ CREATE SERVER
 	   COMMENT='this is dblink_srv1'	   
     );
 
+**예제 2**
 다음은 서버 생성 시 최소한의 정보만 포함하는 예제이다.
 원격지의 demodb에 비밀번호가 없는 dev1 계정으로 접속할 것임을 나타내고 있다. 
 srv1, srv2, srv3는 동일한 의미이다.
@@ -98,7 +101,8 @@ srv1, srv2, srv3는 동일한 의미이다.
 	   USER=dev1,
 	   PASSWORD=''       	 
     );
-    
+
+**예제 3**
 다음은 서버 생성 시 소유자를 지정하는 예제이다.
 소유자 지정 없이 CREATE하는 경우에는 현재 사용자가 소유자가 된다.
 추후 ALTER SERVER 구문을 이용해서 소유자를 변경할 수 있다.
@@ -124,6 +128,27 @@ srv1, srv2, srv3는 동일한 의미이다.
 	   PASSWORD='dev2-password',
 	   COMMENT='The owner of this server is cub.'
     );
+
+**예제 4**
+다음은 데이터베이스가 HA 환경으로 구성된 경우 altHosts 속성을 이용해서 아래 예제처럼 설정을 할 수 있다.
+
+CREATE SERVER 구문의 PROPERTIES 항목에 연결 속성을 설정할 수 있다.
+자세한 내용은 :doc:`/sql/query/select` 와 :doc:`/sql/schema/server_stmt` 을 참고한다.
+
+.. code-block:: sql
+
+    CREATE SERVER dblink_srv1 (
+       HOST='192.168.1.8',
+       PORT=3300,
+       DBNAME=demodb,
+       USER=dba,
+       PASSWORD='password1234',
+       PROPERTIES='?altHosts=192.168.1.9:33000',
+       COMMENT='this is dblink_srv1'
+    );
+
+**예제 5**
+다음은 서버명(<dblink_server_name>)를 잘 못 사용한 예제이다. 
 
 .. code-block:: sql
     

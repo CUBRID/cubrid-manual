@@ -58,7 +58,10 @@ For how to use the prepared server, refer to :ref:`dblink-clause`.
     * Example of string format
              't123db', '123db'
 
-  
+**Example 1**
+The most basic example has the required fields (HOST,PORT,DBNAME,USER) and uses PROPERTIES,COMMENT as the 
+used.   
+
 .. code-block:: sql
 
     CREATE SERVER dblink_srv1 (
@@ -71,6 +74,7 @@ For how to use the prepared server, refer to :ref:`dblink-clause`.
 	   COMMENT='this is dblink_srv1'	   
     );
 
+**Example 2**
 The following is an example that includes minimal information when creating a server.
 It indicates that the remote demodb will be connected to the dev1 account without a password.
 srv1, srv2, and srv3 have the same information.
@@ -99,7 +103,8 @@ srv1, srv2, and srv3 have the same information.
 	   USER=dev1,
 	   PASSWORD=''       	 
     );
-    
+
+**Example 3**    
 The following example specifies the owner when creating the server.
 In case of CREATE without designating the owner, the current user becomes the owner.
 Later, you can change the owner using the ALTER SERVER statement.
@@ -125,6 +130,26 @@ In the example below, the two servers have the same name as *srv2*, but have dif
 	   PASSWORD='dev2-password',
 	   COMMENT='The owner of this server is cub.'
     );
+
+**Example 4**
+If your database is configured in an HA environment, you can use the altHosts property to set it up as shown in the example below.
+
+For detailed DBLink SQL syntax, refer to :doc:`/sql/query/select` and :doc:`/sql/schema/server_stmt`.
+
+.. code-block:: sql
+
+    CREATE SERVER dblink_srv1 (
+       HOST='192.168.1.8',
+       PORT=3300,
+       DBNAME=demodb,
+       USER=dba,
+       PASSWORD='password1234',
+       PROPERTIES='?altHosts=192.168.1.9:33000',
+       COMMENT='this is dblink_srv1'
+    );
+
+**Example 5**
+The following is an example of a poor use of the server name (<dblink_server_name>).
 
 .. code-block:: sql
     

@@ -7,9 +7,9 @@
 UPDATE
 ******
 
-**UPDATE** 문을 사용하면 대상 테이블 또는 뷰에 저장된 레코드의 칼럼 값을 새로운 값으로 업데이트할 수 있다. **SET** 절에는 업데이트할 칼럼 이름과 새로운 값을 명시하며, :ref:`where-clause`\ 에는 업데이트할 레코드를 추출하기 위한 조건을 명시한다. 하나의 **UPDATE** 문으로 하나 이상의 테이블 또는 뷰를 업데이트할 수 있다.
-
-.. note:: **JOIN** 구문을 포함하는 뷰에 대한 업데이트는 10.0 버전부터 가능하다.
+**UPDATE** 문을 사용하면 대상 테이블 또는 뷰에 저장된 레코드의 칼럼 값을 새로운 값으로 업데이트할 수 있다.
+**SET** 절에는 업데이트할 칼럼 이름과 새로운 값을 명시하며, :ref:`where-clause`\ 에는 업데이트할 레코드를 추출하기 위한 조건을 명시한다.
+하나의 **UPDATE** 문으로 하나 이상의 테이블 또는 뷰를 업데이트할 수 있다.
 
 ::
 
@@ -38,9 +38,25 @@ UPDATE
 
 *   *row_count*: :ref:`limit-clause` 이후 갱신할 레코드 수를 지정한다. 부호 없는 정수, 호스트 변수 또는 간단한 표현식 중 하나일 수 있다.
 
-업데이트할 테이블이 한 개인 경우에 한하여, :ref:`order-by-clause`\ 이나 :ref:`limit-clause`\ 을 지정할 수 있다. :ref:`limit-clause`\ 을 명시하면 업데이트할 레코드 수를 한정할 수 있다. :ref:`order-by-clause`\ 을 명시하면 해당 칼럼의 순서로 레코드를 업데이트한다. :ref:`order-by-clause`\ 에 의한 업데이트는 트리거의 실행 순서나 잠금 순서를 유지하고자 할 때 유용하게 이용할 수 있다. 
+<*table_specifications*>에 하나의 테이블이 지정된 경우에만 다음이 허용됩니다:
 
-.. note:: CUBRID 9.0 미만 버전에서는 <*table_specifications*>에 한 개의 테이블만 입력할 수 있다.
+* :ref:`order-by-clause`\ 을 지정할 수 있다.
+  :ref:`order-by-clause`\ 을 명시하면 해당 칼럼의 순서로 레코드를 업데이트할 수 있다.
+  이것은 트리거의 실행 순서나 잠금 순서를 유지하고자 할 때 유용하다.
+
+* :ref:`limit-clause`\ 을 지정할 수 있다.
+  :ref:`limit-clause`\ 을 명시하면 업데이트할 레코드 수를 제한할 수 있다.
+
+* **SET** 절의 <*expr*>에 분석 함수를 사용할 수 있다.
+  그러나 <*expr*>에 **SELECT** 질의를 지정한 경우, <*table_specifications*>에 지정된 테이블 수와 관계없이 **SELECT** 질의에서 분석 함수를 사용할 수 있다.
+
+.. note::
+
+    CUBRID 9.0 미만 버전에서는 <*table_specifications*>에 하나의 테이블만 지정할 수 있다.
+
+.. note::
+
+    CUBRID 10.0 버전부터는 **JOIN** 구문을 포함하는 뷰에 대한 업데이트가 가능하다.
 
 다음은 하나의 테이블에 대해 업데이트를 수행하는 예이다.
 
@@ -174,7 +190,63 @@ UPDATE
 :: 
   
     1, NULL
-    
+
+다음은 **UPDATE** 문에 하나의 테이블이 지정되거나 여러 개의 테이블이 지정되는 경우에 **SET** 절에서 분석 함수를 사용하는 예이다.
+
+.. code-block:: sql
+
+    DROP TABLE IF EXISTS a_tbl, b_tbl;
+
+    CREATE TABLE a_tbl (id INT);
+    INSERT INTO a_tbl VALUES (1), (2), (3), (4), (5);
+
+    CREATE TABLE b_tbl (id INT, val INT, update_val DOUBLE, join_update_val DOUBLE);
+    INSERT INTO b_tbl (id, val) SELECT a.id, b.id FROM a_tbl a, a_tbl b WHERE b.id <= a.id;
+
+하나의 테이블이 지정된 경우에는 **SET** 절에서 분석 함수를 사용할 수 있다.
+
+.. code-block:: sql
+
+    -- update using analytic functions when a single table is specified
+    UPDATE b_tbl SET update_val = AVG (val) OVER (PARTITION BY id);
+
+    SELECT DISTINCT id, TO_CHAR (update_val) AS update_val FROM b_tbl;
+
+	           id  update_val
+	===================================
+	            1  '1'
+	            2  '1.5'
+	            3  '2'
+	            4  '2.5'
+	            5  '3'
+
+여러 개의 테이블을 지정한 경우에는 **SET** 절에서 분석 함수를 사용할 수 없다.
+
+.. code-block:: sql
+
+    -- update using analytic functions when multiple tables are specified
+    UPDATE a_tbl a, b_tbl b SET b.join_update_val = AVG (b.val) OVER (PARTITION BY b.id) WHERE a.id = b.id;
+
+	ERROR: before '  where a.id = b.id; '
+	Nested analytic functions are not allowed.
+
+그러나 **SET** 절에 **SELECT** 질의를 지정한 경우, 지정된 테이블 수와 관계없이 **SELECT** 질의에서 분석 함수를 사용할 수 있다.
+
+.. code-block:: sql
+
+    -- update using analytic functions in subqueries
+    UPDATE b_tbl c SET c.join_update_val = (SELECT AVG (b.val) OVER (PARTITION BY b.id) FROM a_tbl a, b_tbl b WHERE a.id = b.id AND a.id = c.id LIMIT 1);
+
+    SELECT DISTINCT id, TO_CHAR (join_update_val) AS join_update_val FROM b_tbl;
+
+	           id  join_update_val
+	===================================
+	            1  '1'
+	            2  '1.5'
+	            3  '2'
+	            4  '2.5'
+	            5  '3'
+
 테이블 확장명을 사용해서 로컬 서버 뿐만아니라 원격 서버의 테이블에 대해서도 업데이트를 수행할 수 있다. 다음은 원격 테이블에 대해 업데이트를 수행하는 예이다.
 
 .. code-block:: sql

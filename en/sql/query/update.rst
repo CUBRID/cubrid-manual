@@ -6,9 +6,9 @@
 UPDATE
 ******
 
-You can update the column value of a record stored in the target table or view to a new one by using the **UPDATE** statement. Specify the name of the column to update and a new value in the **SET** clause, and specify the condition to be used to extract the record to be updated in the :ref:`where-clause`. You can one or more tables only with one **UPDATE** statement.
-
-.. note:: Updating a view with **JOIN** syntax is possible from 10.0 version.
+You can update the column value of a record stored in the target table or view to a new one by using the **UPDATE** statement.
+Specify the name of the column to update and a new value in the **SET** clause, and specify the condition to be used to extract the record to be updated in the :ref:`where-clause`.
+You can one or more tables only with one **UPDATE** statement.
 
 ::
 
@@ -37,9 +37,25 @@ You can update the column value of a record stored in the target table or view t
 
 *   *row_count*: Specifies the number of records to be updated after the :ref:`limit-clause`. It can be one of unsigned integer, a host variable or a simple expression.
 
-In case of only one table is to be updated, you can specify :ref:`order-by-clause` or :ref:`limit-clause`. You can also limit the number of records to be updated in the :ref:`limit-clause`. You can use the update with the :ref:`order-by-clause` if you want to maintain the execution order or lock order of triggers. 
+The following is allowed only when a single table is specified in <*table_specifications*>:
 
-.. note:: Previous versions of CUBRID 9.0 allow only one table for <*table_specifications*>.
+* :ref:`order-by-clause` can be specified.
+  If :ref:`order-by-clause` is specified, records are updated in the order of the specified column.
+  This is useful for maintaining the order of trigger execution and the order of locking.
+
+* :ref:`limit-clause` can be specified.
+  If :ref:`limit-clause` is specified, the number of records to be updated can be limited.
+
+* Analytic functions can be used in the <*expr*> of the **SET** clause.
+  However, if a **SELECT** query is specified in <*expr*>, analytic functions can be used in the **SELECT** query regardless of the number of tables specified in <*table_specifications*>.
+
+.. note::
+
+    In CUBRID versions prior to 9.0, only a single table can be specified in <*table_specifications*>.
+
+.. note::
+
+    From CUBRID 10.0 onward, updates to views containing **JOIN** clauses are possible.
 
 The following example shows how to update one table.
 
@@ -173,6 +189,62 @@ If the value of this parameter is no, the updated value of "b" from the above UP
 :: 
   
     1, NULL
+
+The following is an example of using analytic functions in the **SET** clause when a single table or multiple tables are specified in the **UPDATE** statement
+
+.. code-block:: sql
+
+    DROP TABLE IF EXISTS a_tbl, b_tbl;
+
+    CREATE TABLE a_tbl (id INT);
+    INSERT INTO a_tbl VALUES (1), (2), (3), (4), (5);
+
+    CREATE TABLE b_tbl (id INT, val INT, update_val DOUBLE, join_update_val DOUBLE);
+    INSERT INTO b_tbl (id, val) SELECT a.id, b.id FROM a_tbl a, a_tbl b WHERE b.id <= a.id;
+
+Analytic functions can be used in the **SET** clause when a single table is specified.
+
+.. code-block:: sql
+
+    -- update using analytic functions when a single table is specified
+    UPDATE b_tbl SET update_val = AVG (val) OVER (PARTITION BY id);
+
+    SELECT DISTINCT id, TO_CHAR (update_val) AS update_val FROM b_tbl;
+
+	           id  update_val
+	===================================
+	            1  '1'
+	            2  '1.5'
+	            3  '2'
+	            4  '2.5'
+	            5  '3'
+
+Analytic functions cannot be used in the **SET** clause when multiple tables are specified.
+
+.. code-block:: sql
+
+    -- update using analytic functions when multiple tables are specified
+    UPDATE a_tbl a, b_tbl b SET b.join_update_val = AVG (b.val) OVER (PARTITION BY b.id) WHERE a.id = b.id;
+
+	ERROR: before '  where a.id = b.id; '
+	Nested analytic functions are not allowed.
+
+However, if a **SELECT** query is specified in the **SET** clause, analytic functions can be used in the **SELECT** query regardless of the number of tables specified.
+
+.. code-block:: sql
+
+    -- update using analytic functions in subqueries
+    UPDATE b_tbl c SET c.join_update_val = (SELECT AVG (b.val) OVER (PARTITION BY b.id) FROM a_tbl a, b_tbl b WHERE a.id = b.id AND a.id = c.id LIMIT 1);
+
+    SELECT DISTINCT id, TO_CHAR (join_update_val) AS join_update_val FROM b_tbl;
+
+	           id  join_update_val
+	===================================
+	            1  '1'
+	            2  '1.5'
+	            3  '2'
+	            4  '2.5'
+	            5  '3'
 
 Table extensions can be used to perform updates on tables on the remote server as well as on the local server. The following is an example of updating a remote table.
 

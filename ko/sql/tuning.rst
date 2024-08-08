@@ -4226,7 +4226,7 @@ SQL 트레이스 정보를 요청과 함께 질의 수행시 서브 쿼리 캐�
             SCAN (index: dba.t1.pk_t1), (btree time: 2, fetch: 1980, ioread: 0, readkeys: 990, filteredkeys: 0, rows: 990, covered: true)
             SUBQUERY_CACHE (hit: 98010, miss: 990, size: 269384, status: enabled)
 
-각 항목에 대한 설명은 다음과 같다.
+서브 쿼리 캐시의 트레이스 관련 각 항목에 대한 설명은 다음과 같다.
 
 * **hit** : 질의 실행 대신 캐시된 영역에서 결과를 가져온 횟수.
 * **miss** : 질의를 실행한 후 결과를 캐시한 횟수.

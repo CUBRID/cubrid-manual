@@ -782,7 +782,21 @@ DONT_REUSE_OID
 문자셋과 콜레이션
 ^^^^^^^^^^^^^^^^^
 
-해당 테이블에 적용할 문자셋과 콜레이션을 **CREATE TABLE** 문에 명시할 수 있다. 이에 관한 자세한 내용은 :ref:`collation-charset-string` 절을 참조하면 된다.
+해당 테이블과 컬럼에 적용할 문자셋과 콜레이션을 **CREATE TABLE** 문에 명시할 수 있다.
+다음 예시는 CREATE TABLE시 문자셋과 콜레이션을 지정하는 예문이다.
+ 
+.. code-block:: sql
+    
+    CREATE TABLE tblutf8(a int, b int) charset utf8;
+    CREATE TABLE tblutf8enci(a int, b int) collate utf8_en_ci;
+ 
+    CREATE TABLE tbleuckr(a int, b int) charset euckr collate euckr_bin;
+    CREATE TABLE tblcoleuckr(a int, c varchar(100) collate euckr_bin) charset euckr;
+  
+    CREATE TABLE tblcol (s1 STRING COLLATE utf8_en_cs,s2 STRING COLLATE utf8_bin);
+    CREATE TABLE tblcharcol (col STRING CHARSET utf8) COLLATE utf8_en_ci;
+
+이에 관한 자세한 내용은 :ref:`collation-charset-table` 또는 :ref:`collation-charset-string` 절을 참조하면 된다.
 
 테이블의 커멘트
 ^^^^^^^^^^^^^^^

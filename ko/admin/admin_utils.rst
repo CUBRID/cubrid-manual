@@ -600,7 +600,7 @@ copydb
   -i, --control-file=FILE         여러 개의 볼륨들이 각각 저장되는 디렉터리 경로를 지정하는 제어 파일
   -r, --replace                   같은 이름의 데이터베이스가 존재하면 덮어쓰기
   -d, --delete-source             복사 후 원본 데이터베이스 삭제
-      --copy-lob-path=PATH        원본 데이터베이스의 LOB 파일 디렉터리 경로를 복사
+      --copy-lob-path             원본 데이터베이스의 LOB 대렉터리 경로를 복사. -B 옵션과 함께 사용 불가. 기본값: 복사하지 않음
   -B, --lob-base-path=PATH        LOB 파일이 저장되는 디렉토리 경로
 
 
@@ -660,11 +660,11 @@ copydb
 
         cubrid copydb -d -F /home/usr/CUBRID/databases demodb new_demodb
 
-.. option:: --copy-lob-path=PATH
+.. option:: --copy-lob-path
 
-    원본 데이터베이스에 대한 **LOB** 파일 디렉터리 경로를 새로운 데이터베이스의 **LOB** 파일 경로로 복사하고, 원본 데이터베이스를 복사한다. 이 옵션을 생략하면, **LOB** 파일 디렉터리 경로를 복사하지 않으므로, **databases.txt** 파일의 **lob-base-path** 항목을 별도로 수정해야 한다. 이 옵션은 **-B** 옵션과 병행할 수 없다. ::
+    이 옵션을 선택하면 대상 데이터베이스의 lob 디렉터리의 위치를 원본 데이터베이스의 lob 디렉토리의 위치와 동일하게 설정한다. 이 옵션이 생력되면 <대상 데이터베이스 디렉토리>/lob 이 대상 데이터베이스의 lob 디렉터리 경로로 설정된다. 이 옵션은 lob 파일을 복사하는 기능이 아니며 **-B** 옵션과 병행할 수 없다. ::
 
-        cubrid copydb --copy-lob-path=/home/usr/CUBRID/databases/new_demodb/lob demodb new_demodb
+        cubrid copydb --copy-lob-path demodb new_demodb
 
 .. option:: -B, --lob-base-path=PATH
 
@@ -987,8 +987,9 @@ plandump
 
 ::
 
-  -d, --drop                   서버 케시에 있는 모든 플랜 삭제
+  -d, --drop                   서버 캐시에 있는 모든 플랜 삭제
   -o, --output-file=FILE       출력 메시지를 재지정할 파일
+  -s, --sha1=SHA1              서버 캐시에 있는 SHA1 코드의 특정 플랜 삭제
 
 
 .. option:: -d, --drop
@@ -1002,6 +1003,25 @@ plandump
     캐시에 저장된 질의 수행 계획 결과 파일에 저장 ::
 
         cubrid plandump -o output.txt testdb
+
+.. option:: -s, --sha1=SHA1
+
+    캐시에 저장된 SHA1 코드의 특정 질의 수행 계획을 제거한다.::
+
+        $ cubrid plandump testdb
+
+        Entries:
+
+          XASL_ID = {
+                      sha1 = { da9cab5d 597f2fe4 48aa8ae8 66b87d81 49fdd7ca },
+                          time_stored = 1718614753 sec, 257499 usec
+                    }
+          sql info:
+            SQL_ID = 4dfa6d901e048
+            sql user text = select * from game where host_year > '2004'
+            sql plan text = Sequential scan(public.game dba.game)
+
+        cubrid plandump -s 'da9cab5d 597f2fe4 48aa8ae8 66b87d81 49fdd7ca' demodb
 
 .. _statdump:
 
@@ -2778,6 +2798,12 @@ lockdb
 
         cubrid lockdb -o output.txt testdb
 
+.. option:: -c, --contention
+
+    경합중인 잠금 정보만 출력한다. ::
+
+        cubrid lockdb -c testdb
+
 출력 내용
 ^^^^^^^^^
 
@@ -2820,12 +2846,14 @@ lockdb
 
 **객체 잠금 테이블**
 
-**cubrid lockdb** 출력 내용의 세 번째 섹션은 객체 잠금 테이블의 내용을 포함한다. 이것은 어떤 객체에 대해서 어떤 클라이언트가 어떤 모드로 잠금을 가지고 있는지, 어떤 객체에 대해서 어떤 클라이언트가 어떤 모드로 기다리고 있는지를 보여준다. 객체 잠금 테이블 결과물의 첫 부분에는 얼마나 많은 객체가 잠금되었는지가 출력된다. 
+**cubrid lockdb** 출력 내용의 세 번째 섹션은 객체 잠금 테이블의 내용을 포함한다. 이것은 어떤 객체에 대해서 어떤 클라이언트가 어떤 모드로 잠금을 가지고 있는지, 어떤 객체에 대해서 어떤 클라이언트가 어떤 모드로 기다리고 있는지를 보여준다. 객체 잠금 테이블 결과물의 첫 부분에는 얼마나 많은 객체가 잠금 되었는지가 출력된다. 그리고 현재 메모리에 할당된 잠금의 개수와 크기가 출력된다. 성능을 위하여 잠금을 바로 해제하지 않고 재사용하지만, 메모리에 할당된 잠금 개수가 **lock_escalation** 시스템 파라미터값을 넘을 경우에는 해당 잠금은 트랜잭션이 끝나는 시점에 메모리에서 해제된다. 관련 시스템 파라미터인 **lock_escalation** 에 대한 설명은 :ref:`lock-parameters` 를 참고한다.
 
 ::
 
-    Object lock Table:
-        Current number of ojbects which are locked = 2001
+    Object Lock Table:
+        Current number of objects which are locked    = 100
+        Current number of objects which are allocated = 1000
+        Current size of objects which are allocated = 242K
 
 **cubrid lockdb**\는 잠금을 획득한 각 객체의 OID, 객체 타입 및 테이블명을 출력한다. 또한 객체에 대한 잠금을 보유한 트랜잭션 수(*Num holders*), 잠금을 보유하지만 잠금을 상위 잠금으로 변환(예: **SCH_S_LOCK**\에서 **SCH_M_LOCK**\으로의 변환)할 수 없어 차단된 트랜잭션 수(*Num blocked-holders*) 및 객체의 잠금을 기다리는 다른 트랜잭션의 수(*Num waiters*)를 출력한다. 잠금을 보유한 클라이언트 트랜잭션, 차단된 클라이언트 트랜잭션 및 대기 중인 클라이언트 트랜잭션의 목록도 출력한다. 객체 타입이 클래스가 아닌 행에서는 MVCC 정보도 표시된다.
 
@@ -2848,7 +2876,7 @@ lockdb
                         Start_waiting_at = Wed Feb 3 14:45:14 2016
                         Wait_for_secs = -1
 
-다음 예는 **X_LOCK** 을 보유한 트랜잭션 1에 의해서 삽입된 OID가 ( 2 | 50 | 1)인 클래스의 인스턴스를 보여준다. 트랜잭션1이 삽입한 인스턴스를 수정하기 위해 트랜잭션2가 **X_LOCK** 을 기다리는 것을 보여준다. 
+다음 예는 **X_LOCK** 을 보유한 트랜잭션 1에 의해서 삽입된 OID가 ( 2 | 50 | 1)인 클래스의 인스턴스를 보여준다. 트랜잭션1이 삽입한 인스턴스를 수정하기 위해 트랜잭션2가 **X_LOCK** 을 기다리는 것을 보여준다. **-c** 옵션을 사용하면 경합이 발생한 잠금만 확인할 수 있다.
 
 ::
 

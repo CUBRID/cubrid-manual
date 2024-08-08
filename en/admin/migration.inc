@@ -44,7 +44,7 @@ The following is [options] used in **cubrid unloaddb**.
       --hash-file=FILE        FILE for hash
       --latest-image          when dumping objects, it dumps the latest image of objects in data volumes.
   -t, --thread-count=COUNT    number of threads; default: 1 maximum: 127
-      --enhanced-estimates    Obtaining the exact number of records in the table to unload; default: disabled
+      --enhanced-estimates    obtain the exact number of records in the table to unload; default: disabled
   -v, --verbose               enable verbose status messages
       --use-delimiter         use '"' where an identifier begins and ends
   -S, --SA-mode               stand-alone mode execution

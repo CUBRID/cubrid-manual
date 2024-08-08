@@ -134,7 +134,7 @@ To view a query plan for a CUBRID SQL query, you can use following methods.
     SET OPTIMIZATION LEVEL opt-level [;]
     GET OPTIMIZATION LEVEL [ { TO | INTO } variable ] [;]
 
-*   *opt-level* : A value that specifies the optimization level. It has the following meanings.
+*   *opt-level* : This value specifies the optimisation level and has the following meanings, and any other value will result in an error. 
 
     *   0: Does not perform query optimization. The query is executed using the simplest query plan. This value is used only for debugging.
     

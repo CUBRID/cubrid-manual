@@ -633,9 +633,11 @@ If you don't give a value after **;COL** command, it shows the current setting l
 
 You can use the **;PLan** session command to set the view level of executing query plan the level is composed of **simple**, **detail**, and **off**. Each command refers to the following:
 
-*   **off**: Not displaying the query execution plan
+*   **off**: Not displaying the query execution plan(OPT LEVEL=1)
 *   **simple**: Displaying the query execution plan in simple version (OPT LEVEL=257)
 *   **detail**: Displaying the query execution plan in detailed version (OPT LEVEL=513)
+
+For more information. see :ref:`viewing-query-plan`.
 
 .. _set-autotrace:
  

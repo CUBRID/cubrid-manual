@@ -135,7 +135,7 @@ CUBRID SQL 질의에 대한 실행 계획(query plan)을 보기 위해서는 다
     SET OPTIMIZATION LEVEL opt-level [;]
     GET OPTIMIZATION LEVEL [ { TO | INTO } variable ] [;]
 
-*   *opt-level* : 최적화 수준을 지정하는 값으로 다음과 같은 의미를 갖는다.
+*   *opt-level* : 최적화 수준을 지정하는 값으로 다음과 같은 의미를 갖으며, 이 외에 값을 설정할 경우 에러를 발생한다.
 
     *   0 : 질의 최적화를 수행하지 않는다. 실행하는 질의는 가장 단순한 형태의 실행 계획을 가지고 실행된다. 디버깅의 용도 이외에는 사용되지 않는다.
     

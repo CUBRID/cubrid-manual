@@ -45,7 +45,7 @@ CREATE SERVER
     *   *db_name*: 원격 접속할 데이터베이스 이름.
     *   *user_name*: 원격 접속할 데이터베이스에 접속할 때 사용할 사용자 이름.
     *   *password_string*: 원격 접속할 데이터베이스에 접속할 때 사용하는 *user_name*\에 대한 패스워드 문자열.
-    *   *properties_string*: 원격 접속할 데이터베이스에 접속할 때 사용하는 property 정보 문자열.(최대 2047바이트)	
+    *   *properties_string*: 원격 접속할 데이터베이스에 접속할 때 사용하는 property 정보 문자열(최대 2047바이트)로 broker(또는 gateway)에 연결을 위한 property이다.  상세한 정보는 :ref:`cci-connect-with-url`\ 를 참고한다.	
     *   *server_comment_string*: 서버 정보에 대한 커멘트를 지정한다.(최대 1023바이트)
 
 .. note::

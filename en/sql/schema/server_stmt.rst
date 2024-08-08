@@ -45,7 +45,7 @@ For how to use the prepared server, refer to :ref:`dblink-clause`.
     *   *db_name*: The database name to connect to remotely.
     *   *user_name*: The user name to use when connecting to the database to be accessed remotely.
     *   *password_string*: Password string for *user_name* used to connect to the database to be accessed remotely.
-    *   *properties_string*: Property information string used when connecting to the database to be accessed remotely. (up to 2047 bytes)	
+    *   *properties_string*: Property information string used when connecting to the database to be accessed remotely. (up to 2047 bytes) For detailed attribute details, see `cci-connect-with-url`.	
     *   *server_comment_string*: Specifies comments about server information. (up to 1023 bytes)
 
 .. note::

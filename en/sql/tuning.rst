@@ -4208,7 +4208,7 @@ If the cached value cannot be found in the subquery cache, after executing the s
 
 When executing a query using :ref:`query profiling <query-profiling>`\, the profile results for the subquery cache are displayed as part of the profile for correlated subqueries.
 
-The following example is displayed subquery cache profiling information ,when performing a correlated subquery.
+The following example is displayed subquery cache profiling information, when performing a correlated subquery.
 
 ::
 
@@ -4228,7 +4228,7 @@ The following example is displayed subquery cache profiling information ,when pe
 Descriptions for each item are as follows:
 
 * **hit**: The number of retrieves from the cache without executing the query
-* **miss**: The number of stored into the cache after executing the query. (miss in the cache)
+* **miss**: The number of stored into the cache after executing the query. (the number of not found in the cache)
 * **size**: The memory size used by the subquery cache.
 * **status**: The activation status of the subquery cache at the end of executing the query.
 
@@ -4301,10 +4301,10 @@ Subquery cache optimization does not work in the following scenarios:
 * When the subquery includes CONNECT BY clause.
 * When the subquery includes OID-related features.
 * When the subquery includes the **NO_SUBQUERY_CACHE** hint.
-* When storing new results exceeds the set subquery cache size (default: 2MB).
+* When the using subquery cache memory size exceeds the configured size (default: 2MB).
 * When the subquery contains functions that change results with each execution, such as random() or sys_guid().
 
-The following example shows the case where subquery caching is applied only to the lowest level correlated subquery, while the upper level correlated subquery does not utilize subquery caching.
+The following example shows that subquery caching is enabled only for the innermost correlated subquery and disabled for the outer correlated subquery.
 
 ::
 
@@ -4333,7 +4333,7 @@ The following example shows the case where subquery caching is applied only to t
                     SCAN (table: dba.t2), (heap time: 0, fetch: 1, ioread: 0, readrows: 10, rows: 1)
                     SUBQUERY_CACHE (hit: 99, miss: 1, size: 150704, status: enabled)
 
-The following example shows the deactivation of subquery caching when the correlated subquery includes functions like random(), which yield different results with each execution.
+The following example shows that subquery cache optimization is disabled, when the correlated subquery includes random () functions which yield different results with each execution.
 
 ::
 

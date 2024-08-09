@@ -24,7 +24,7 @@ Installing and Configuring Perl
 
 *   Perl: It is recommended to use an appropriate version of Perl based on your system environment. For example, all Linux and FreeBSD distributions come with Perl. For Windows, ActivePerl is recommended. For details, see https://www.activestate.com/products/perl/ .
 
-*   CUBRID: To build the CUBRID Perl driver, the CCI driver is needed. You can obtain it by installing the CUBRID Engine, which can be downloaded from https://www.cubrid.org/downloads. After downloading and installing a proper version of the CUBRID Engine, you can find the required CCI driver in the installed CUBRID Engine directory, $CUBRID/cci.
+*   CUBRID: To build the CUBRID Perl driver, the CCI driver is needed. You can obtain it by installing the CCI driver, which can be downloaded from https://www.cubrid.org/downloads. 
 
 *   DBI: https://metacpan.org/dist/DBI/
 

@@ -4201,7 +4201,8 @@ Subquery cache optimization can enhance the performance of queries including cor
 This optimization is enabled by default. 
 To disable it during query execution, use the NO_SUBQUERY_CACHE hint on the target subquery.
 
-If the correlated subquery is in the SELECT clause, subquery cache is utilized. 
+When the correlated subquery is in the SELECT clause, subquery cache is enabled. 
+The processing mechanism of the cache is as follows:
 The operational procedure involves using cached results when the values of columns referenced in a rerun correlated subquery match those in the main query. 
 If no cached value is found, the subquery is executed and its results, along with the column values and query results, are cached.
 

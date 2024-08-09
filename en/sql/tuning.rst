@@ -4208,7 +4208,7 @@ If the cached value cannot be found in the subquery cache, after executing the s
 
 When executing a query using query profiling, the profile results for the subquery cache are displayed as part of the profile for correlated subqueries.
 
-The following example displays trace information for the subquery cache in a case where the subquery cache is enabled.
+The following example is displayed subquery cache profiling information ,when performing a correlated subquery.
 
 ::
 
@@ -4296,7 +4296,7 @@ By comparing the results of the two queries, you can see subquery cache optimiza
 
 Subquery cache optimization does not work in the following scenarios:
 
-* When the correlated subquery contains another correlated subquery. (The lowest level correlated subquery is cached, while the correlated subquery that includes another correlated subquery is not cached.)
+* When the correlated subquery contains another correlated subquery. (However, correlated subqueries not included other correlated subqueries is worked subquery cache optimization.)
 * When the subquery is not in the SELECT clause.
 * When the subquery includes CONNECT BY clause.
 * When the subquery includes OID-related features.

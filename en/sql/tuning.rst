@@ -4206,7 +4206,7 @@ The processing mechanism of the cache is as follows:
 If the column values ​​of the search conditions of the re-executed correlated subquery are the same, the cached results are used instead of executing the subquery.
 If the cached value cannot be found in the subquery cache, after executing the subquery, the retrieved column value and results are stored in the subquery cache.
 
-When executing a query using query profiling, the profile results for the subquery cache are displayed as part of the profile for correlated subqueries.
+When executing a query using :ref:`query profiling <query-profiling>`\, the profile results for the subquery cache are displayed as part of the profile for correlated subqueries.
 
 The following example is displayed subquery cache profiling information ,when performing a correlated subquery.
 

@@ -4197,7 +4197,7 @@ The cached query is shown as **query_string** in the middle of the result screen
 SUBQUERY CACHE (correlated)
 ------------------------------------
 
-Subquery cache optimization can enhance the performance of queries including correlated subqueries by caching each subquery's results in separate spaces. 
+Subquery cache optimization can enhance the performance of queries including correlated subqueries by caching each subquery's results in private memory space per subquery. 
 This optimization is enabled by default. 
 To disable it during query execution, use the NO_SUBQUERY_CACHE hint on the target subquery.
 

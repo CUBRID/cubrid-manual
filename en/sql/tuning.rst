@@ -4203,10 +4203,10 @@ To disable it during query execution, use the NO_SUBQUERY_CACHE hint on the targ
 
 When the correlated subquery is in the SELECT clause, subquery cache is enabled. 
 The processing mechanism of the cache is as follows:
-The operational procedure involves using cached results when the values of columns referenced in a rerun correlated subquery match those in the main query. 
-If no cached value is found, the subquery is executed and its results, along with the column values and query results, are cached.
+If the column values ​​of the search conditions of the re-executed correlated subquery are the same, the cached results are used instead of executing the subquery.
+If the cached value cannot be found in the subquery cache, after executing the subquery, the retrieved column value and results are stored in the subquery cache.
 
-When executing queries with a request for SQL trace information, trace details about the subquery cache are displayed as part of the information on the correlated subquery that employs subquery cache optimization.
+When executing a query using query profiling, the profile results for the subquery cache are displayed as part of the profile for correlated subqueries.
 
 The following example displays trace information for the subquery cache in a case where the subquery cache is enabled.
 
@@ -4227,15 +4227,15 @@ The following example displays trace information for the subquery cache in a cas
  
 Descriptions for each item are as follows:
 
-* **hit**: The number of times results were retrieved from the cached area instead of executing the query.
-* **miss**: The number of times results were cached after executing the query.
+* **hit**: The number of retrieves from the cache without executing the query
+* **miss**: The number of stored into the cache after executing the query. (miss in the cache)
 * **size**: The memory size used by the subquery cache.
-* **status**: The activation status of the subquery cache at the end of the query.
+* **status**: The activation status of the subquery cache at the end of executing the query.
 
-If the **size** of the subquery cache exceeds the configured value during query execution, the subquery cache is deactivated, and the **status** is displayed as disabled in the SQL trace information. Additionally, even if the **size** does not exceed the set value, the cache may be deactivated during query execution if **miss**/**hit** ratio exceeds 9, indicating a high rate of cache misses.
+During query execution, if the **size** of the subquery cache exceeds the set value, or the **size** does not exceed the set value, but the **miss**/**hit** ratio exceeds 9 (the miss rate is determined to be high), the subquery cache is disabled, and the **status** of the profiling information is marked as disabled.
 
-The following is an example query designed to count the results of a correlated subquery that is repeatedly executed to assess performance differences with and without the use of subquery caching.
-The following is the query to prepare the data needed to perform the example query is provided.
+The following example is a query that counts the results of a correlated subquery that is executed repeatedly to check performance improvement depending on whether subquery caching is used.
+The following query makes data to perform example queries.
 
 ::
     
@@ -4267,8 +4267,8 @@ The following is the query to prepare the data needed to perform the example que
     
     csql> ;trace on  
 
-Query #1 was executed using subquery cache optimization, while Query #2 was performed with the subquery cache disabled using the NO_SUBQUERY_CACHE hint. 
-Comparing the results of both queries reveals that the use of subquery cache optimization improves response performance.
+Query #1 is executed using subquery cache optimization, while Query #2 is executed without the subquery cache optimization using the NO_SUBQUERY_CACHE hint.
+By comparing the results of the two queries, you can see subquery cache optimization improves response performance.
 
 +------------------------------------------------------------------------+------------------------------------------------------------------------------------------------+
 | **Query #1**                                                           | **Query #2**                                                                                   |
@@ -4294,7 +4294,7 @@ Comparing the results of both queries reveals that the use of subquery cache opt
 |     1 command(s) successfully processed.                               |     1 command(s) successfully processed.                                                       |
 +------------------------------------------------------------------------+------------------------------------------------------------------------------------------------+
 
-Subquery cache does not operate in the following scenarios:
+Subquery cache optimization does not work in the following scenarios:
 
 * When the correlated subquery contains another correlated subquery. (The lowest level correlated subquery is cached, while the correlated subquery that includes another correlated subquery is not cached.)
 * When the subquery is not in the SELECT clause.

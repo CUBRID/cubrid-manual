@@ -245,4 +245,4 @@ Python API
 
 Python Database API는 connect() 모듈 클래스와 Connection 객체, Cursor 객체, 그리고 그 밖의 보조적인 함수들로 이루어진다. 이에 대한 자세한 내용은 https://www.python.org/dev/peps/pep-0249/\를 참고한다.
 
-CUBRID Python API에 대한 자세한 내용은 https://pythonhosted.org/CUBRID-Python/CUBRIDdb-module.html/\을 참고한다.
+CUBRID Python API에 대한 자세한 내용은 https://pythonhosted.org/CUBRID-Python/CUBRIDdb-module.html\을 참고한다.

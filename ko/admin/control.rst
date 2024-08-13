@@ -1043,10 +1043,10 @@ cubrid broker status에서 사용하는 [options]는 다음과 같다. 이들 �
     ID   PID   QPS   LQS PSIZE STATUS
     ----------------------------------------
      1 28434     0     0 50144 IDLE
-     2 28435     0     0 50144 IDLE
-     3 28436     0     0 50144 IDLE
-     4 28437     0     0 50140 IDLE
-     5 28438     0     0 50144 IDLE
+     2 28435     0     0 50144 BUSY
+     3 28436     0     0 50144 CLIENT_WAIT
+     4 28437     0     0 50140 CLOSE_WAIT
+     5 28438     0     0 50144 CLOSE_WAIT
      
     % broker1 OFF
      
@@ -1057,6 +1057,12 @@ cubrid broker status에서 사용하는 [options]는 다음과 같다. 이들 �
 *   LQS: 초당 처리되는 장기 실행 질의의 수
 *   PSIZE: CAS 프로세스 크기
 *   STATUS: CAS의 현재 상태로서, BUSY/IDLE/CLIENT_WAIT/CLOSE_WAIT가 있다.
+
+    *   IDLE: 데이터베이스와 연결되어 있지 않으며, 아무 작업도 수행 중이지 않은 상태이다.
+    *   BUSY: SQL을 수행 중이거나, 응용 프로그램에서 요청한 작업을 처리 중인 상태이다.
+    *   CLIENT_WAIT: 요청한 작업은 완료되었으나 트랜잭션이 끝나지 않은 상태이다,
+    *   CLOSE_WAIT: 트랜잭션이 완료되었지만 연결이 유지된 상태이다, 
+
 *   % broker1 OFF: broker1의 SERVICE 파라미터가 OFF이다. 따라서, broker1은 구동되지 않는다.
 
 .. note::

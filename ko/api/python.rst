@@ -243,6 +243,6 @@ CUBRID Python 드라이버에서는 기본적으로 자동 커밋 모드가 비�
 Python API
 ==========
 
-Python Database API는 connect() 모듈 클래스와 Connection 객체, Cursor 객체, 그리고 그 밖의 보조적인 함수들로 이루어진다. 이에 대한 자세한 내용은 https://www.python.org/dev/peps/pep-0249/ 를 참고한다.
+Python Database API는 connect() 모듈 클래스와 Connection 객체, Cursor 객체, 그리고 그 밖의 보조적인 함수들로 이루어진다. 이에 대한 자세한 내용은 https://www.python.org/dev/peps/pep-0249/\를 참고한다.
 
-CUBRID Python API에 대한 자세한 내용은 http://ftp.cubrid.org/CUBRID_Docs/Drivers/Python/\을 참고한다.
+CUBRID Python API에 대한 자세한 내용은 https://pythonhosted.org/CUBRID-Python/\을 참고한다.

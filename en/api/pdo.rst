@@ -253,13 +253,13 @@ Executing a SELECT Statement
 
 In PDO, there is more than one way to execute SQL queries.
 
-*   Using the `query <http://www.php.net/manual/en/pdo.exec.php>`_ () function
+*   Using the `query <http://www.php.net/manual/en/pdo.query.php>`_ () function
 *   Using prepared statements (see `prepare <http://www.php.net/manual/en/pdo.prepare.php>`_ ()/ `execute <http://www.php.net/manual/en/pdostatement.execute.php>`_ ()) functions)
 *   Using the `exec <http://www.php.net/manual/en/pdo.exec.php>`_ () function
 
-The example script below shows the simplest one - using the `query <http://www.php.net/manual/en/pdo.exec.php>`_ () function. You can retrieve the return values from the resultset (a PDOStatement object) by using the column names, like $rs["*column_name*"].
+The example script below shows the simplest one - using the `query <http://www.php.net/manual/en/pdo.query.php>`_ () function. You can retrieve the return values from the resultset (a PDOStatement object) by using the column names, like $rs["*column_name*"].
 
-Note that when you use the `query <http://www.php.net/manual/en/pdo.exec.php>`_ () function, you must ensure that the query code is properly escaped. For information about escaping, see `PDO::quote <https://www.php.net/manual/en/pdo.quote.php>`_ () function.
+Note that when you use the `query <http://www.php.net/manual/en/pdo.query.php>`_ () function, you must ensure that the query code is properly escaped. For information about escaping, see `PDO::quote <https://www.php.net/manual/en/pdo.quote.php>`_ () function.
 
 .. code-block:: php
 

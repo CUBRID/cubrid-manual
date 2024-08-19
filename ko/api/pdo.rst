@@ -252,13 +252,13 @@ SELECT 실행
 
 PDO에서 SQL 질의를 수행하려면 질의나 응용 프로그램의 성격에 따라 다음 중 하나의 방법을 사용할 수 있다.
 
-*   `query <http://www.php.net/manual/en/pdo.exec.php>`_ () 함수 사용
+*   `query <http://www.php.net/manual/en/pdo.query.php>`_ () 함수 사용
 *   prepared statements( `prepare <http://www.php.net/manual/en/pdo.prepare.php>`_ ()/ `execute <http://www.php.net/manual/en/pdostatement.execute.php>`_ ()) 함수 사용
 *   `exec <http://www.php.net/manual/en/pdo.exec.php>`_ () 함수 사용
 
-다음 예제에서는 가장 간단한 `query <http://www.php.net/manual/en/pdo.exec.php>`_ () 함수를 사용한다. 리턴 값은 PDOStatement 객체인 resultset에서 $rs["column_name"]와 같이 칼럼 이름을 이용하여 얻을 수 있다.
+다음 예제에서는 가장 간단한 `query <http://www.php.net/manual/en/pdo.query.php>`_ () 함수를 사용한다. 리턴 값은 PDOStatement 객체인 resultset에서 $rs["column_name"]와 같이 칼럼 이름을 이용하여 얻을 수 있다.
 
-`query <http://www.php.net/manual/en/pdo.exec.php>`_ () 함수를 사용할 때에는 질의 코드가 제대로 이스케이프되었는지 확인해야 한다. 이스케이프에 대한 내용은 `PDO::quote <https://www.php.net/manual/en/pdo.quote.php>`_ ()를 참고한다.
+`query <http://www.php.net/manual/en/pdo.query.php>`_ () 함수를 사용할 때에는 질의 코드가 제대로 이스케이프되었는지 확인해야 한다. 이스케이프에 대한 내용은 `PDO::quote <https://www.php.net/manual/en/pdo.quote.php>`_ ()를 참고한다.
 
 .. code-block:: php
 

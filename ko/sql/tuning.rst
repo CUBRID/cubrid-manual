@@ -680,6 +680,7 @@ SQL 힌트
     NO_COVERING_IDX |
     NO_MULTI_RANGE_OPT |
     NO_SORT_LIMIT |
+    NO_SUBQUERY_CACHE |
     NO_PUSH_PRED |
     NO_MERGE |
     NO_ELIMINATE_JOIN |
@@ -726,6 +727,7 @@ SQL 힌트는 주석에 더하기 기호(+)를 함께 사용하여 지정한다.
 *   **NO_COVERING_IDX**: 커버링 인덱스 기능을 사용하지 않도록 하는 힌트이다. 자세한 내용은 :ref:`covering-index`\를 참고한다.
 *   **NO_MULTI_RANGE_OPT**: 다중 키 범위 최적화 기능을 사용하지 않도록 하는 힌트이다. 자세한 내용은 :ref:`multi-key-range-opt`\를 참고한다.
 *   **NO_SORT_LIMIT**: SORT-LIMIT 최적화를 사용하지 않기 위한 힌트이다. 자세한 내용은 :ref:`sort-limit-optimization`\를 참고한다.
+*   **NO_SUBQUERY_CACHE**: SUBQUERY_CACHE 최적화를 사용하지 않기 위한 힌트이다. 자세한 내용은 :ref:`correlated-subquery-cache`\를 참고한다.
 *   **NO_PUSH_PRED**: PREDICATE-PUSH 최적화를 사용하지 않기 위한 힌트이다.
 *   **NO_MERGE**: VIEW-MERGE 최적화를 사용하지 않기 위한 힌트이다.
 *   **NO_ELIMINATE_JOIN**: 조인 제거 최적화를 사용하지 않기 위한 힌트이다. 자세한 내용은 :ref:`join-elimination-optimization`\를 참고한다.
@@ -783,7 +785,7 @@ SQL 힌트는 주석에 더하기 기호(+)를 함께 사용하여 지정한다.
         FROM a INNER JOIN b ON a.col=b.col
         INNER JOIN c ON b.col=c.col INNER JOIN d ON c.col=d.col;
 
-    위와 같은 질의를 수행한다면 **LEADING** 힌트는 무시되며, **ORDERED** 힌트에 따라서 **FROM**절의 순서인, 테이블 a, b, c, d의 순서로 조인된다.
+    위와 같은 질의를 수행한다면 **LEADING** 힌트는 무시되며, **ORDERED** 힌트에 따라서 **FROM** 절의 순서인, 테이블 a, b, c, d의 순서로 조인된다.
 
     .. code-block:: sql
 
@@ -4191,3 +4193,165 @@ Predicate Push
     }
 
 캐시 된 질의는 결과 화면 중간에 **query_string** 으로 표시되며 각 **n_entries** 및 **n_pages** 는 캐시된 질의 수와 캐시 된 결과의 페이지 수를 나타낸다. **n_entries** 는 파라미터 **max_query_cache_entries** 의 값으로 제한되고 **n_pages** 는 **query_cache_size_in_pages** 의 값으로 제한된다. **n_entries** 가 초과되거나 **n_pages** 가 초과되면 캐시 항목 중 일부가 삭제될 후보로 선택되어 삭제되고, 삭제되는 캐시는 **max_query_cache_entries** 값과 **query_cache_size_in_pages** 값의 약 20% 이다.
+
+.. _correlated-subquery-cache:
+
+서브 쿼리 캐시 (correlated)
+------------------------------------
+
+서브 쿼리 캐시 최적화는 상관 부질의(correlated subquery)를 포함한 질의 성능을 향상시키는데 사용할 수 있으며, 부질의 결과는 부질의마다 독립적인 공간에 캐시된다. 
+서브 쿼리 캐시 최적화는 기본적으로 적용되므로 질의 수행시 캐시를 사용하지 않으려면 **NO_SUBQUERY_CACHE** 힌트를 해당 부질의에 사용해야 한다.
+
+서브 쿼리 캐시 최적화는 상관 부질의가 SELECT 절에 있는 경우 적용되며, 처리 절차는 다음과 같다. 
+재 실행되는 상관 부질의의 검색 조건 컬럼 값이 동일한 경우 부질의 수행 대신 캐시된 결과를 사용한다.
+만약, 캐시된 값을 찾을 수 없는 경우 부질의 수행 후 참조한 컬럼 값과 결과를 서브 쿼리 캐시에 저장한다. 
+
+:ref:`질의 프로파일링 <query-profiling>` 요청과 함께 질의 수행시 서브 쿼리 캐시 최적화가 적용된 부질의의 하위 정보로 서브 쿼리 캐시에 대한 프로파일링 정보가 출력된다.
+
+다음은 상관 부질의 수행시 서브 쿼리 캐시 프로파일링 정보가 표시되는 예시이다
+
+::
+
+    csql> SELECT /*+ RECOMPILE NO_MERGE */
+            (SELECT t1_pk FROM t1 b WHERE b.t1_pk = a.c3)
+          FROM t1 a
+          WHERE a.c2 >= 1;
+
+    Trace Statistics:
+      SELECT (time: 108, fetch: 103639, fetch_time: 13, ioread: 0)
+        SCAN (table: dba.t1), (heap time: 70, fetch: 100384, ioread: 0, readrows: 100000, rows: 99000)
+        SUBQUERY (correlated)
+          SELECT (time: 4, fetch: 2970, fetch_time: 0, ioread: 0)
+            SCAN (index: dba.t1.pk_t1), (btree time: 2, fetch: 1980, ioread: 0, readkeys: 990, filteredkeys: 0, rows: 990, covered: true)
+            SUBQUERY_CACHE (hit: 98010, miss: 990, size: 269384, status: enabled)
+
+서브 쿼리 캐시의 프로파일링 항목에 대한 설명은 다음과 같다.
+
+* **hit** : 질의 실행 대신 캐시된 영역에서 결과를 가져온 횟수.
+* **miss** : 질의를 실행한 후 결과를 캐시한 횟수.
+* **size** : 서브 쿼리 캐시에 사용된 메모리 크기.
+* **status** : 질의 종료 시 서브 쿼리 캐시의 활성화 여부.
+
+**size**\가 설정해둔 값을 초과하는 경우에는 서브 쿼리 캐시가 질의 수행 도중 비활성화 되며 SQL 트레이스 정보에서 **status**\가 disabled로 출력된다. 또한, **miss**/**hit** 가 9 이상일 경우, 서브 쿼리 캐시의 메모리 크기가 설정해둔 값을 초과하지 않더라도 캐시 miss가 높다고 판단해서 질의 수행 도중 캐시가 비활성화 될 수 있다. 
+
+다음은 서브 쿼리 캐시의 사용 유무에 따른 성능 차이를 확인하기 위해 반복 수행되는 상관 부질의 결과를 count하는 예제 질의이다.
+다음은 예제 질의를 수행하기 위한 데이터를 준비하는 질의이다. 
+
+::
+    
+    # Prepare data
+    csql> DROP TABLE IF EXISTS t1;
+    
+    csql> CREATE TABLE t1 AS
+            SELECT
+                    ROWNUM AS t1_pk,
+                    MOD(ROWNUM, 10) AS c1,
+                    MOD(ROWNUM, 100) AS c2,
+                    MOD(ROWNUM, 1000) AS c3
+            FROM 
+                    db_class a, db_class b, db_class c, db_class d, db_class e, db_class f
+            LIMIT 100000;
+    
+    csql> ALTER TABLE t1 ADD CONSTRAINT PRIMARY KEY pk_t1 (t1_pk);
+
+    csql> CREATE TABLE t2 AS
+            SELECT
+                    ROWNUM as c1,
+                    1 as c2,
+                    TO_CHAR(ROWNUM * 1000, '0999') as code
+            FROM 
+                    db_class a, db_class b
+            LIMIT 10;
+    
+    csql> update statistics on t1 with fullscan;
+    
+    csql> ;trace on  
+
+질의 #1는 서브 쿼리 캐시 최적화를 사용하여 질의를 수행했고, 질의 #2는  **NO_SUBQUERY_CACHE** 힌트를 사용하여 서브 쿼리 캐시를 비 활성화하여 질의를 수행했다. 
+두 질의의 결과를 비교해보면 서브 쿼리 캐시 최적화를 사용한 것이 응답 수행이 개선된 것을 확인할 수 있다. 
+
++------------------------------------------------------------------------+------------------------------------------------------------------------------------------------+
+| **Query #1**                                                           | **Query #2**                                                                                   |
++========================================================================+================================================================================================+
+| ::                                                                     | ::                                                                                             |
+|                                                                        |                                                                                                |
+|     csql> SELECT COUNT(*)                                              |     csql> SELECT COUNT(*)                                                                      |
+|            FROM (                                                      |            FROM (                                                                              |
+|                   SELECT /*+ RECOMPILE NO_MERGE */                     |                   SELECT /*+ RECOMPILE NO_MERGE */                                             |
+|                          (SELECT t1_pk FROM t1 b WHERE b.t1_pk = a.c3) |                         (SELECT /*+ NO_SUBQUERY_CACHE */ t1_pk FROM t1 b WHERE b.t1_pk = a.c3) | 
+|                     FROM t1 a                                          |                     FROM t1 a                                                                  |
+|                    WHERE a.c2 >= 1                                     |                    WHERE a.c2 >= 1                                                             |
+|                 );                                                     |                 );                                                                             |
+|                                                                        |                                                                                                |
+|     === <Result of SELECT Command in Line 2> ===                       |     === <Result of SELECT Command in Line 2> ===                                               |
+|                                                                        |                                                                                                |
+|                  count(*)                                              |                  count(*)                                                                      |
+|     ======================                                             |     ======================                                                                     |
+|                     99000                                              |                     99000                                                                      |
+|                                                                        |                                                                                                |
+|     1 row selected. (0.128251 sec) Committed. (0.000010 sec)           |     1 row selected. (0.626199 sec) Committed. (0.000011 sec)                                   |
+|                                                                        |                                                                                                |
+|     1 command(s) successfully processed.                               |     1 command(s) successfully processed.                                                       |
++------------------------------------------------------------------------+------------------------------------------------------------------------------------------------+
+
+서브 쿼리 캐시는 다음과 같은 상황에 동작하지 않는다:
+
+* 상관 부질의가 상관 부질의를 포함한 경우. (단, 다른 상관 하위 쿼리가 포함되지 않은 최 하단의 상관 부질의는 서브 쿼리 캐시 최적화 작업이 수행됨)
+* 부질의가 SELECT 절에 있지 않은 경우. 
+* 부질의가 CONNECT BY 절을 포함한 경우.
+* 부질의에 OID 관련 기능이 포함된 경우.
+* 부질의가 **NO_SUBQUERY_CACHE** 힌트를 포함한 경우.
+* 새로운 결과를 저장할 때 설정한 서브 쿼리 캐시 크기(기본값: 2MB)를 초과하는 경우.
+* random (), sys_guid ()와 같이 실행될 때마다 결과가 바뀌는 함수가 포함된 경우.
+
+다음 예시는 상관 부질의가 상관 부질의를 포함한 경우, 최하단의 상관부질의만 서브 쿼리 캐시가 사용되고, 상단의 상관 부질의에는 서브 쿼리 캐시가 적용되지 않는 예시이다. 
+
+::
+    
+    csql> SELECT /*+ recompile */ 
+            (
+                SELECT 
+                    (
+                        SELECT c.code
+                        FROM t2 c
+                        WHERE c.c1 = b.c1
+                    ) 
+                FROM t1 b 
+                WHERE b.t1_pk = a.c1
+            ) s
+            FROM t1 a
+            WHERE a.c3 = 1;
+    
+    Trace Statistics:
+        SELECT (time: 56, fetch: 100785, fetch_time: 10, ioread: 0)
+            SCAN (table: dba.t1), (heap time: 55, fetch: 100384, ioread: 0, readrows: 100000, rows: 100)
+            SUBQUERY (correlated)
+            SELECT (time: 0, fetch: 401, fetch_time: 0, ioread: 0)
+                SCAN (index: dba.t1.pk_t1), (btree time: 0, fetch: 300, ioread: 0, readkeys: 100, filteredkeys: 0, rows: 100) (lookup time: 0, rows: 100)
+                SUBQUERY (correlated)
+                SELECT (time: 0, fetch: 1, fetch_time: 0, ioread: 0)
+                    SCAN (table: dba.t2), (heap time: 0, fetch: 1, ioread: 0, readrows: 10, rows: 1)
+                    SUBQUERY_CACHE (hit: 99, miss: 1, size: 150704, status: enabled)
+
+다음은 상관 부질의에 random () 와 같이 실행될 때마다 결과가 바뀌는 함수가 포함된 경우 서브 쿼리 캐시가 비활성화되는 예시이다.
+
+::
+
+    csql> WITH cte_1 AS 
+            (SELECT
+                DISTINCT (SELECT random(1) FROM t2 b WHERE b.c1 = a.c1 AND b.c2 = 1) v
+                FROM t1 a
+                WHERE a.c2 = 1
+            ) SELECT count(*) FROM cte_1;
+    
+    Trace Statistics:
+        SELECT (time: 65, fetch: 101384, fetch_time: 9, ioread: 0)
+            SCAN (temp time: 0, fetch: 0, ioread: 0, readrows: 1000, rows: 1000)
+            SUBQUERY (uncorrelated)
+            CTE (non_recursive_part)
+                SELECT (time: 65, fetch: 101384, fetch_time: 9, ioread: 0)
+                SCAN (table: dba.t1), (heap time: 59, fetch: 100384, ioread: 0, readrows: 100000, rows: 1000)
+                ORDERBY (time: 0, sort: true, page: 0, ioread: 0)
+                SUBQUERY (correlated)
+                    SELECT (time: 4, fetch: 1000, fetch_time: 0, ioread: 0)
+                    SCAN (table: dba.t2), (heap time: 3, fetch: 1000, ioread: 0, readrows: 10000, rows: 1000)

@@ -58,7 +58,7 @@ CREATE SERVER
              't123db', '123db'
 
 **예제 1**
-가장 기본이 되는 예제로, 필수항목(HOST,PORT,DBNAME,USER)가 있으며, PROPERTIES,COMMENT를 사용하였다.
+다음은 필수항목(HOST,PORT,DBNAME,USER) 및 PROPERTIES, COMMENT를 사용한 예제이다.
   
 .. code-block:: sql
 

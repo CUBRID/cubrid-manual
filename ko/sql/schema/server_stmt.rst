@@ -130,7 +130,7 @@ srv1, srv2, srv3는 동일한 의미이다.
     );
 
 **예제 4**
-다음은 데이터베이스가 HA 환경으로 구성된 경우 PROPERTIES항목의 연결 속성에서 altHosts 문을 이용해서 아래 예제처럼 설정을 할 수 있다. 자세한 내용은 :ref:`cci-connect-with-url` 을 참고한다.
+다음은 HA 환경으로 구성된  원격 데이터베이스 사용시 PROPERTIES에 altHosts 속성을 사용하여 원격 데이터베이스의 fail-over에 대비한 설정 예제이다. 자세한 내용은 :ref:`cci-connect-with-url` 을 참고한다.
 
 .. code-block:: sql
 

@@ -133,7 +133,7 @@ srv1, srv2, srv3는 동일한 의미이다.
 다음은 데이터베이스가 HA 환경으로 구성된 경우 altHosts 속성을 이용해서 아래 예제처럼 설정을 할 수 있다.
 
 CREATE SERVER 구문의 PROPERTIES 항목에 연결 속성을 설정할 수 있다.
-자세한 내용은 :doc:`/sql/query/select` 와 :doc:`/sql/schema/server_stmt` 을 참고한다.
+자세한 내용은 :ref:`cci-connect-with-url` 을 참고한다.
 
 .. code-block:: sql
 

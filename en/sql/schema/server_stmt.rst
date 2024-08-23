@@ -45,7 +45,7 @@ For how to use the prepared server, refer to :ref:`dblink-clause`.
     *   *db_name*: The database name to connect to remotely.
     *   *user_name*: The user name to use when connecting to the database to be accessed remotely.
     *   *password_string*: Password string for *user_name* used to connect to the database to be accessed remotely.
-    *   *properties_string*: Property information string used when connecting to the database to be accessed remotely. (up to 2047 bytes) For detailed attribute details, see `cci-connect-with-url`.	
+    *   *properties_string*: A string of property information (up to 2047 bytes) used when connecting to a broker (or gateway) for remote database usage. For detailed attribute information, see :ref:`cci-connect-with-url`.
     *   *server_comment_string*: Specifies comments about server information. (up to 1023 bytes)
 
 .. note::
@@ -59,8 +59,7 @@ For how to use the prepared server, refer to :ref:`dblink-clause`.
              't123db', '123db'
 
 **Example 1**
-The most basic example has the required fields (HOST,PORT,DBNAME,USER) and uses PROPERTIES,COMMENT as the 
-used.   
+The following basic example has the required fields (HOST,PORT,DBNAME,USER) and also contains the PROPERTIES and COMMENT fields.
 
 .. code-block:: sql
 
@@ -132,9 +131,8 @@ In the example below, the two servers have the same name as *srv2*, but have dif
     );
 
 **Example 4**
-If your database is configured in an HA environment, you can use the altHosts property to set it up as shown in the example below.
-
-For detailed DBLink SQL syntax, refer to :doc:`/sql/query/select` and :doc:`/sql/schema/server_stmt`.
+The following is an example of setting up for failover of a remote database by using the altHosts attribute in PROPERTIES when using a remote database configured in an HA environment.
+For more information, see :ref:`cci-connect-with-url`.
 
 .. code-block:: sql
 

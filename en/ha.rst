@@ -666,13 +666,14 @@ For details, see :ref:`log-multiplexing`.
 
 **ha_copy_log_base**
 
-Specifies the path to save replication logs. The default value is $CUBRID_DATABASES, and the path is $CUBRID_DATABASES/<db_name>_<host_name> to save replication logs for the server/database.
+Specifies the parent path for saving replication logs. The default value is the directory path set in the $CUBRID_DATABASES environment variable.
+Replication logs are stored in a subdirectory of <db_name>_<host_name>, depending on the server and database name.
 
-The path can be set as a relative or absolute path as follows.
+The replication log path can be set to either a relative or absolute path.
+The following are examples of each setting.
 
-1. ha_copy_log_base=copylog: It is considered as a relative path and stores replication logs in $CUBRID_DATABASES/copylog.
-
-2. ha_copy_log_base=/log/copy_log: Save replication logs in /log/copy_log as an absolute path.
+ex1) ha_copy_log_base=copylog: Considered a relative path and stores replication logs in $CUBRID_DATABASES/copylog.
+ex2) ha_copy_log_base=/log/copy_log: Saves replication logs in /log/copy_log as an absolute path.
 
 .. _ha_copy_log_max_archives:
 

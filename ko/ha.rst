@@ -666,12 +666,13 @@ CUBRID는 1시간 주기로 **ha_ping_hosts**\에 명시된 호스트를 점검�
 
 **ha_copy_log_base**
 
-복제 로그를 저장할 상위 경로를 지정한다. 기본값은 $CUBRID_DATABASES 환경 변수에 설정한 디렉토리 경로이다. 복제 로그는 서버와 데이터베이스명에 따라  <db_name>_<host_name> 형식 기반으로 하위 디렉토리를 만든 후 해당 복제로그를 저장한다.
+복제 로그를 저장할 상위 경로를 지정한다. 기본값은 $CUBRID_DATABASES 환경 변수에 설정된 디렉토리 경로이다.  복제 로그들은 서버와 데이터베이스명에 따라  <db_name>_<host_name>의 하위 디렉토리에 저장된다.
 
-경로 수정은 다음과 같이 가능하다.
+복제 로그 경로는 상대 경로 또는 절대 경로 설정이 가능하다. 
+다음은 각각의 설정 예제이다.
 
-1. ha_copy_log_base=copylog : 상대 경로로 간주하여 $CUBRID_DATABASES/copylog 를 copylog base 로 사용한다.
-2. ha_copy_log_base=/log/copy_log : 절대 경로로 간주하여 /log/copy_log copylog base로 사용한다.
+예1) ha_copy_log_base=copylog : 상대 경로로 간주되어, 복제 로그 경로로 $CUBRID_DATABASES/copylog가 설정된다.
+예2) ha_copy_log_base=/log/copy_log : 절대 경로로 간주되어, 복제 로그 경로로 /log/copy_log copylog base가 설정된다.
 
 .. _ha_copy_log_max_archives:
 

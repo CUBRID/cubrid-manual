@@ -14,7 +14,7 @@ CUBRID Environment Variables
 
 *   **CUBRID_DATABASES**: The environment variable that designates the location of the **databases.txt** file. The CUBRID system stores the absolute path of database volumes in the **$CUBRID_DATABASES/databases.txt** file. See :ref:`databases-txt-file`.
 
-*   **CUBRID_MSG_LANG**: The environment variable that specifies usage messages and error messages in CUBRID. The initial value upon start is not defined. If it is not defined, it follows the configured locale when :ref:`creating-database`. For more information, see :ref:`language-setting`. 
+*   **CUBRID_MSG_LANG**: The environment variable that specifies usage messages and error messages in CUBRID. The initial value upon start is not defined. If it is not defined, it is set to **en_US**. Values for the environment variables are en_US, en_US.utf8, ko_KR.euckr or  ko_KR.utf8.
 
 .. note:: 
 

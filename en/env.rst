@@ -28,7 +28,7 @@ CUBRID Environment Variables
         * Linux: /tmp
         * Windows: C:\\Windows\\TEMP
 
-    *   **UNIX Domain Socket files**: if this environment variable is not set, UNIX Domain sockets will be created in the directory for each process as follow (Applicable to **Linux** only and does not apply to **Windows**):
+    *   **UNIX Domain Socket files**: If this environment variable is not set, UNIX Domain sockets will be created in the following directories for each process (Applicable to **Linux** only and does not apply to **Windows**):
     
         *   cub_master: **/tmp**
         *   cub_broker process: **$CUBRID/var/CUBRID_SOCK**

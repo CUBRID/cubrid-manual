@@ -36,7 +36,7 @@ UPDATE
 
 *   *row_count*: :ref:`limit-clause` 이후 갱신할 레코드 수를 지정한다. 부호 없는 정수, 호스트 변수 또는 간단한 표현식 중 하나일 수 있다.
 
-<*table_specifications*>에 하나의 테이블이 지정된 경우에만 다음이 허용됩니다:
+<*table_specifications*>에 하나의 테이블이 지정된 경우에만 다음이 허용된다:
 
 * :ref:`order-by-clause`\ 을 지정할 수 있다.
   :ref:`order-by-clause`\ 을 명시하면 해당 칼럼의 순서로 레코드를 업데이트할 수 있다.
@@ -150,7 +150,7 @@ UPDATE
 **UPDATE** 문에서 테이블 **A**\의 레코드가 테이블 **B**\의 여러 레코드와 조인될 때,
 **A**\의 레코드는 **B**\에서 처음으로 일치하는 레코드의 값만 사용하여 업데이트된다.
 
-이 예시에서, *t1* 테이블의 *id*\가 3인 레코드는 *t2* 테이블에서 *rate_id*\가 3인 두 개의 레코드와 조인됩니다.
+이 예시에서, *t1* 테이블의 *id*\가 3인 레코드는 *t2* 테이블에서 *rate_id*\가 3인 두 개의 레코드와 조인된다.
 그러나 *t1* 테이블의 *charge* 칼럼은 *t2* 테이블에서 첫 번째로 일치하는 레코드의 *rate* 칼럼 값만 사용하여 업데이트된다.
 
 .. code-block:: sql
@@ -237,7 +237,7 @@ UPDATE
 
 .. rubric:: 예시 5. update_use_attribute_references 파라미터를 활용한 업데이트
 
-이 예시의 결과는 :ref:`update_use_attribute_references <update_use_attribute_references>` 파라미터의 값에 따라 달라집니다.
+이 예시의 결과는 :ref:`update_use_attribute_references <update_use_attribute_references>` 파라미터의 값에 따라 달라진다.
 
 *   이 파라미터의 값이 yes인 경우, *c1 = 10*\의 영향을 받아 *c2*\의 값이 10으로 갱신된다.
 *   이 파라미터의 값이 no인 경우, *c2*\의 값은 *c1 = 10*\의 영향을 받지 않고, 해당 레코드에 저장된 *c1* 값에 따라 1로 갱신된다.
@@ -451,7 +451,7 @@ UPDATE
 
 .. warning::
 
-    **UPDATE** 문에서 로컬 테이블과 원격 테이블을 조인할 때, 원격 테이블의 레코드는 업데이트할 수 없습니다.
+    **UPDATE** 문에서 로컬 테이블과 원격 테이블을 조인할 때, 원격 테이블의 레코드는 업데이트할 수 없다.
 
     .. code-block:: sql
     

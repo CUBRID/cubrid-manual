@@ -36,7 +36,7 @@ CUBRID Environment Variables
 
 .. note::
 
-    * **java.io.tmpdir** among **java_stored_procedure_jvm_options** is an option that specifies the directory where temporary files of the cub_javasp process (built-in Java VM) are created. If the **CUBRID_TMP** environment variable is set, value of **java.io.tmpdir** is ignored, instead it will use the directory specified by CUBRID_TMP. 
+    * **java.io.tmpdir** among **java_stored_procedure_jvm_options** is an option that specifies the directory where temporary files of the cub_javasp process (built-in Java VM) are created. If the **CUBRID_TMP** environment variable is set, the value of **java.io.tmpdir** is ignored, and the directory specified by CUBRID_TMP will be used instead.
 
     * To set this environment variable in Windows, you must add the CUBRID_TMP key to the registry (refer **%CUBRID%**\\share\\windows_scripts\\cubrid_env.bat).
 

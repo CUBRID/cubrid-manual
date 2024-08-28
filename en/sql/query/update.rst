@@ -6,7 +6,9 @@
 UPDATE
 ******
 
-You can update the column value of a record stored in the target table or view to a new one by using the **UPDATE** statement. Specify the name of the column to update and a new value in the **SET** clause, and specify the condition to be used to extract the record to be updated in the :ref:`where-clause`. You can one or more tables only with one **UPDATE** statement.
+You can update the column value of a record stored in the target table or view to a new one by using the **UPDATE** statement.
+Specify the name of the column to update and a new value in the **SET** clause, and specify the condition to be used to extract the record to be updated in the :ref:`where-clause`.
+You can one or more tables only with one **UPDATE** statement.
 
 ::
 
@@ -55,9 +57,52 @@ The following is allowed only when a single table is specified in <*table_specif
 
     From CUBRID 10.0 onward, updates to views containing **JOIN** clauses are possible.
 
-.. _example_single_table_update:
+.. _example_single_table_update_using_order_by:
 
-.. rubric:: Example 1. Single Table Update
+.. rubric:: Example 1. Single Table Update Using ORDER BY Clause
+
+.. code-block:: sql
+
+    DROP TABLE IF EXISTS t1;
+
+    CREATE TABLE t1 (id INT);
+    INSERT INTO t1 VALUES (11), (1), (12), (13), (2), (3), (14), (4);
+
+    CREATE TRIGGER trigger1 BEFORE UPDATE ON t1 IF NEW.id < 10 EXECUTE PRINT 'trigger1 executed';
+    CREATE TRIGGER trigger2 BEFORE UPDATE ON t1 IF NEW.id > 10 EXECUTE PRINT 'trigger2 executed';
+
+    UPDATE t1  SET id = id + 1;
+
+	trigger2 executed
+	trigger1 executed
+	trigger2 executed
+	trigger2 executed
+	trigger1 executed
+	trigger1 executed
+	trigger2 executed
+	trigger1 executed
+
+Using the :ref:`order-by-clause` can change the order in which records are updated.
+
+.. code-block:: sql
+
+    TRUNCATE TABLE t1;
+    INSERT INTO t1 VALUES (11), (1), (12), (13), (2), (3), (14), (4);
+
+    UPDATE t1  SET id = id + 1 ORDER BY id;
+
+	trigger1 executed
+	trigger1 executed
+	trigger1 executed
+	trigger1 executed
+	trigger2 executed
+	trigger2 executed
+	trigger2 executed
+	trigger2 executed
+
+.. _example_single_table_update_using_limit:
+
+.. rubric:: Example 2. Single Table Update Using LIMIT Clause
 
 This example uses the *LIMIT 3* clause to update only up to 3 records with *name IS NULL*.
 
@@ -98,49 +143,6 @@ This example uses the *LIMIT 3* clause to update only up to 3 records with *name
 	            5  'update'              '999-9999'
 	            6  'ddd'                 '000-0000'
 	            7  NULL                  '777-7777'
-
-.. _example_single_table_update_using_order_by:
-
-.. rubric:: Example 2. Single Table Update Using ORDER BY Clause
-
-.. code-block:: sql
-
-    DROP TABLE IF EXISTS t1;
-
-    CREATE TABLE t1 (id INT);
-    INSERT INTO t1 VALUES (11), (1), (12), (13), (2), (3), (14), (4);
-
-    CREATE TRIGGER trigger1 BEFORE UPDATE ON t1 IF NEW.id < 10 EXECUTE PRINT 'trigger1 executed';
-    CREATE TRIGGER trigger2 BEFORE UPDATE ON t1 IF NEW.id > 10 EXECUTE PRINT 'trigger2 executed';
-
-    UPDATE t1  SET id = id + 1;
-
-	trigger2 executed
-	trigger1 executed
-	trigger2 executed
-	trigger2 executed
-	trigger1 executed
-	trigger1 executed
-	trigger2 executed
-	trigger1 executed
-
-Using the :ref:`order-by-clause` can change the order in which records are updated.
-
-.. code-block:: sql
-
-    TRUNCATE TABLE t1;
-    INSERT INTO t1 VALUES (11), (1), (12), (13), (2), (3), (14), (4);
-
-    UPDATE t1  SET id = id + 1 ORDER BY id;
-
-	trigger1 executed
-	trigger1 executed
-	trigger1 executed
-	trigger1 executed
-	trigger2 executed
-	trigger2 executed
-	trigger2 executed
-	trigger2 executed
 
 .. _example_update_with_joins:
 

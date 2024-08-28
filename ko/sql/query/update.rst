@@ -7,7 +7,9 @@
 UPDATE
 ******
 
-**UPDATE** 문을 사용하면 대상 테이블 또는 뷰에 저장된 레코드의 칼럼 값을 새로운 값으로 업데이트할 수 있다. **SET** 절에는 업데이트할 칼럼 이름과 새로운 값을 명시하며, :ref:`where-clause`\ 에는 업데이트할 레코드를 추출하기 위한 조건을 명시한다. 하나의 **UPDATE** 문으로 하나 이상의 테이블 또는 뷰를 업데이트할 수 있다.
+**UPDATE** 문을 사용하면 대상 테이블 또는 뷰에 저장된 레코드의 칼럼 값을 새로운 값으로 업데이트할 수 있다.
+**SET** 절에는 업데이트할 칼럼 이름과 새로운 값을 명시하며, :ref:`where-clause`\ 에는 업데이트할 레코드를 추출하기 위한 조건을 명시한다.
+하나의 **UPDATE** 문으로 하나 이상의 테이블 또는 뷰를 업데이트할 수 있다.
 
 ::
 
@@ -56,9 +58,52 @@ UPDATE
 
     CUBRID 10.0 버전부터는 **JOIN** 구문을 포함하는 뷰에 대한 업데이트가 가능하다.
 
-.. _example_single_table_update:
+.. _example_single_table_update_using_order_by:
 
-.. rubric:: 예시 1. 단일 테이블 업데이트
+.. rubric:: 예시 1. ORDER BY 절을 이용한 단일 테이블 업데이트
+
+.. code-block:: sql
+
+    DROP TABLE IF EXISTS t1;
+
+    CREATE TABLE t1 (id INT);
+    INSERT INTO t1 VALUES (11), (1), (12), (13), (2), (3), (14), (4);
+
+    CREATE TRIGGER trigger1 BEFORE UPDATE ON t1 IF NEW.id < 10 EXECUTE PRINT 'trigger1 executed';
+    CREATE TRIGGER trigger2 BEFORE UPDATE ON t1 IF NEW.id > 10 EXECUTE PRINT 'trigger2 executed';
+
+    UPDATE t1  SET id = id + 1;
+
+	trigger2 executed
+	trigger1 executed
+	trigger2 executed
+	trigger2 executed
+	trigger1 executed
+	trigger1 executed
+	trigger2 executed
+	trigger1 executed
+
+:ref:`order-by-clause`\을 이용하면 레코드가 업데이트되는 순서를 변경할 수 있다.
+
+.. code-block:: sql
+
+    TRUNCATE TABLE t1;
+    INSERT INTO t1 VALUES (11), (1), (12), (13), (2), (3), (14), (4);
+
+    UPDATE t1  SET id = id + 1 ORDER BY id;
+
+	trigger1 executed
+	trigger1 executed
+	trigger1 executed
+	trigger1 executed
+	trigger2 executed
+	trigger2 executed
+	trigger2 executed
+	trigger2 executed
+
+.. _example_single_table_update_using_limit:
+
+.. rubric:: 예시 2. LIMIT 절을 활용한 단일 테이블 업데이트
 
 이 예시는 *LIMIT 3* 절을 이용하여 *name IS NULL*\인 레코드 중 최대 3개만 업데이트한다.
 
@@ -99,49 +144,6 @@ UPDATE
 	            5  'update'              '999-9999'
 	            6  'ddd'                 '000-0000'
 	            7  NULL                  '777-7777'
-
-.. _example_single_table_update_using_order_by:
-
-.. rubric:: 예시 2. ORDER BY 절을 이용한 단일 테이블 업데이트
-
-.. code-block:: sql
-
-    DROP TABLE IF EXISTS t1;
-
-    CREATE TABLE t1 (id INT);
-    INSERT INTO t1 VALUES (11), (1), (12), (13), (2), (3), (14), (4);
-
-    CREATE TRIGGER trigger1 BEFORE UPDATE ON t1 IF NEW.id < 10 EXECUTE PRINT 'trigger1 executed';
-    CREATE TRIGGER trigger2 BEFORE UPDATE ON t1 IF NEW.id > 10 EXECUTE PRINT 'trigger2 executed';
-
-    UPDATE t1  SET id = id + 1;
-
-	trigger2 executed
-	trigger1 executed
-	trigger2 executed
-	trigger2 executed
-	trigger1 executed
-	trigger1 executed
-	trigger2 executed
-	trigger1 executed
-
-:ref:`order-by-clause`\을 이용하면 레코드가 업데이트되는 순서를 변경할 수 있다.
-
-.. code-block:: sql
-
-    TRUNCATE TABLE t1;
-    INSERT INTO t1 VALUES (11), (1), (12), (13), (2), (3), (14), (4);
-
-    UPDATE t1  SET id = id + 1 ORDER BY id;
-
-	trigger1 executed
-	trigger1 executed
-	trigger1 executed
-	trigger1 executed
-	trigger2 executed
-	trigger2 executed
-	trigger2 executed
-	trigger2 executed
 
 .. _example_update_with_joins:
 

@@ -26,6 +26,33 @@ The following is [options] used in **cubrid unloaddb**.
 
 .. program:: unloaddb
 
+::
+
+  -u, --user=ID               user ID for database access
+  -p, --password=PASS         user password
+  -i, --input-class-file=FILE input FILE of table names
+      --include-reference     include referenced tables
+      --input-class-only      include specified class only
+      --estimated-size=NUMBER estimated NUMBER of instances
+      --cached-pages=NUMBER   NUMBER of cached pages
+  -O, --output-path=PATH      PATH of output directory
+  -s, --schema-only           dump schema only
+  -d, --data-only             dump objects only
+      --output-prefix=PREFIEX PREFIX for output files
+      --hash-file=FILE        FILE for hash
+      --latest-image          when dumping objects, it dumps the latest image of objects in data volumes.
+  -t, --thread-count=COUNT    number of threads; default: 1 maximum: 127
+      --enhanced-estimates    obtain the exact number of records in the table to unload; default: disabled
+  -v, --verbose               enable verbose status messages
+      --use-delimiter         use '"' where an identifier begins and ends
+  -S, --SA-mode               stand-alone mode execution
+  -C, --CS-mode               client-server mode execution
+      --datafile-per-class    create a object file for each class
+      --split-schema-files    split schema information by object and generate each file
+      --skip-index-detail     Do not print the specified WITH clause options when creating the index
+      --as-dba                If the login user is a member of the DBA group, extract the same schema file as the DBA.
+
+
 .. option:: -u, --user=ID
 
     Specify a user account of a database to be unloaded. If this is not specified, the default is **DBA**.
@@ -114,6 +141,30 @@ The following is [options] used in **cubrid unloaddb**.
 .. option:: --hash-file=FILE
     
     This option specifies the name of the hash file.
+
+.. option:: --latest-image
+   
+    This option makes it to unload the latest image of objects in data volumes when unloading instances (the MVCC version is ignored and it does not refer to the log volumes). It may include uncommitted data and deleted data that has not been vacuumed.
+
+.. option:: -t, --thread-count=COUNT
+
+    This option sets the number of threads to be used in the unload process. It is performed in parallel using as many threads as the specified COUNT value, which must be in the range of 0 to 127.
+    If this setting is omitted, it is the same as specifying COUNT as 1. If specified as 0, unloaddb does not operate in thread mode.
+    Even if thread mode is specified, if a table contains an Object type or a Set, MultiSet, or Sequence (List) type that contains an Object type, it will not operate in thread mode for that table.
+    
+    ::
+
+        cubrid unloaddb -t 4 demodb
+
+.. option:: --enhanced-estimates
+
+    The -v option must be specified together.
+    When determining the number of records in the target table, this option obtains the actual number of records instead of relying on statistical information. Using this option may increase the execution time of unloaddb because doing so adds the time needed to calculate the number of records. Therefore, this option should be used with caution.
+    
+    ::
+
+        cubrid unloaddb --enhanced-estimates demodb
+
 
 .. option:: -v, --verbose
 

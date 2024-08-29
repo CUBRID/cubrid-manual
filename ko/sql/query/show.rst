@@ -1436,6 +1436,7 @@ Btid                                VARCHAR(64)     BTID (volid|fileid|root_page
 Num_distinct_key                    INT             단말 노드(leaf) 페이지의 Distinct key 개수
 Total_value                         INT             트리에 저장된 값의 총 개수
 Deduplicate_distinct_key            INT             단말 노드(leaf) 페이지의 Deduplicated Distinct key 개수
+Num_fence_key                       INT             펜스키(Fence-key)의 개수
 Avg_num_value_per_key               INT             키당 OID 값의 평균 개수
 Avg_num_value_per_deduplicate_key   INT             Deduplicated된 키당 OID 값의 평균 개수
 Num_leaf_page                       INT             단말 노드(leaf) 페이지 개수
@@ -1479,6 +1480,7 @@ Max_num_ovf_page_a_key              INT             하나의 키에 대해 연�
             Num_distinct_key                 : 0
             Total_value                      : 0
             Deduplicate_distinct_key         : 0
+            Num_fence_key                    : 0
             Avg_num_value_per_key            : 0
             Avg_num_value_per_deduplicate_key: 0
             Num_leaf_page                    : 1
@@ -1511,6 +1513,7 @@ Max_num_ovf_page_a_key              INT             하나의 키에 대해 연�
             Num_distinct_key                 : 0
             Total_value                      : 0
             Deduplicate_distinct_key         : 0
+            Num_fence_key                    : 0
             Avg_num_value_per_key            : 0
             Avg_num_value_per_deduplicate_key: 0
             Num_leaf_page                    : 1
@@ -1536,6 +1539,7 @@ Max_num_ovf_page_a_key              INT             하나의 키에 대해 연�
             Num_distinct_key                 : 0
             Total_value                      : 0
             Deduplicate_distinct_key         : 0
+            Num_fence_key                    : 0
             Avg_num_value_per_key            : 0
             Avg_num_value_per_deduplicate_key: 0
             Num_leaf_page                    : 1

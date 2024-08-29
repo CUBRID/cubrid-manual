@@ -1429,6 +1429,7 @@ Btid                                VARCHAR(64)     BTID (volid|fileid|root_page
 Num_distinct_key                    INT             Distinct key count (in leaf pages)
 Total_value                         INT             Total number of values stored in tree
 Deduplicate_distinct_key            INT             Deduplicated distinct key count (in leaf pages)
+Num_fence_key                       INT             Number of fence keys
 Avg_num_value_per_key               INT             Average number of values (OIDs) per key
 Avg_num_value_per_deduplicate_key   INT             Average number of values (OIDs) per deduplicated key
 Num_leaf_page                       INT             Leaf page count
@@ -1472,6 +1473,7 @@ The following shows the examples of this syntax.
             Num_distinct_key                 : 0
             Total_value                      : 0
             Deduplicate_distinct_key         : 0
+            Num_fence_key                    : 0
             Avg_num_value_per_key            : 0
             Avg_num_value_per_deduplicate_key: 0
             Num_leaf_page                    : 1
@@ -1504,6 +1506,7 @@ The following shows the examples of this syntax.
             Num_distinct_key                 : 0
             Total_value                      : 0
             Deduplicate_distinct_key         : 0
+            Num_fence_key                    : 0
             Avg_num_value_per_key            : 0
             Avg_num_value_per_deduplicate_key: 0
             Num_leaf_page                    : 1
@@ -1529,6 +1532,7 @@ The following shows the examples of this syntax.
             Num_distinct_key                 : 0
             Total_value                      : 0
             Deduplicate_distinct_key         : 0
+            Num_fence_key                    : 0
             Avg_num_value_per_key            : 0
             Avg_num_value_per_deduplicate_key: 0
             Num_leaf_page                    : 1

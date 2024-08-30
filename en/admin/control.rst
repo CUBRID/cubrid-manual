@@ -1559,6 +1559,8 @@ To configure databases, database user IDs and IPs allowed to access the broker a
 
 *   <BR_NAME>: A broker name. If you specify this value, you can apply the changes only to specified brokers. If you omit it, you can apply the changes to all brokers.
 
+.. note:: Existing connections are not affected by reconfiguration of the access control list using the acl reload command. It means, it is applied only to new connections. To take effect changes on the connected connections, the broker must be restarted.
+
 To display the databases, database user IDs and IPs that are allowed to access the broker in running on the screen, use the following command.  
 
 ::

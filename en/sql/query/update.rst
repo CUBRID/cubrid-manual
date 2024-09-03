@@ -7,8 +7,8 @@ UPDATE
 ******
 
 You can update the column value of a record stored in the target table or view to a new one by using the **UPDATE** statement.
-Specify the name of the column to update and a new value in the **SET** clause, and specify the condition to be used to extract the record to be updated in the :ref:`where-clause`.
-You can one or more tables only with one **UPDATE** statement.
+Specify the name of the column to update and the new value in the **SET** clause, and specify the condition to extract the record to be updated in the :ref:`where-clause`.
+You can update one or more tables with a single **UPDATE** statement.
 
 ::
 
@@ -37,14 +37,14 @@ You can one or more tables only with one **UPDATE** statement.
 
 *   *row_count*: Specifies the number of records to be updated after the :ref:`limit-clause`. It can be one of unsigned integer, a host variable or a simple expression.
 
-The following is allowed only when a single table is specified in <*table_specifications*>:
+The following are allowed only when a single table is specified in <*table_specifications*>:
 
-* :ref:`order-by-clause` can be specified.
-  If :ref:`order-by-clause` is specified, records are updated in the order of the specified column.
+* The :ref:`order-by-clause` can be specified.
+  If the :ref:`order-by-clause` is specified, records are updated in the order of the specified column.
   This is useful for maintaining the order of trigger execution and the order of locking.
 
-* :ref:`limit-clause` can be specified.
-  If :ref:`limit-clause` is specified, the number of records to be updated can be limited.
+* The :ref:`limit-clause` can be specified.
+  If the :ref:`limit-clause` is specified, the number of records to be updated can be limited.
 
 * Analytic functions can be used in the <*expr*> of the **SET** clause.
   However, if a **SELECT** query is specified in <*expr*>, analytic functions can be used in the **SELECT** query regardless of the number of tables specified in <*table_specifications*>.
@@ -151,7 +151,7 @@ This example uses the *LIMIT 3* clause to update only up to 3 records with *name
 When a record in table **A** is joined with multiple records in table **B** in an **UPDATE** statement,
 the record in **A** is updated using only the value from the first matching record in **B**.
 
-In this example, a record in *t1* table with an *id* of 3 is joined with two records in *t2* table where *rate_id* is 3.
+In this example, a record in table *t1* with an *id* of 3 is joined with two records in table *t2* where *rate_id* is 3.
 However, the *charge* column in the *t1* table is updated using only the *rate* value from the first matching record in the *t2* table.
 
 .. code-block:: sql
@@ -241,7 +241,7 @@ For details, see :ref:`join-query`.
 The result of this example depends on the value of the :ref:`update_use_attribute_references <update_use_attribute_references>` parameter.
 
 *   If the value of this parameter is yes, *c2* is updated to 10, influenced by c1 = 10.
-*   If the value of this parameter is no, *c2* is not influenced by *c1 = 10* and is updated to 1 based on the value of c1 stored in the record.
+*   If the value of this parameter is no, *c2* is not influenced by *c1 = 10* and is updated to 1, based on the value of c1 stored in the record.
 
 .. code-block:: sql 
 
@@ -277,9 +277,9 @@ The result of this example depends on the value of the :ref:`update_use_attribut
 
 .. _example_single_table_update_using_analytic_functions:
 
-.. rubric:: Example 6. Single Table Update Using Analytical Functions
+.. rubric:: Example 6. Single Table Update Using Analytic Functions
 
-When only one table is specified in the **UPDATE** statement, analytical functions can be used in the **SET** clause.
+When only one table is specified in the **UPDATE** statement, analytic functions can be used in the **SET** clause.
 
 .. code-block:: sql
 
@@ -305,12 +305,12 @@ When only one table is specified in the **UPDATE** statement, analytical functio
 
 .. _example_multiple_tables_update_using_analytic_functions:
 
-.. rubric:: Example 7. Multiple Tables Update Using Analytical Functions
+.. rubric:: Example 7. Multiple Tables Update Using Analytic Functions
 
-The example continues from :ref:`example_single_table_update_using_analytic_functions`.
+This example continues from :ref:`example_single_table_update_using_analytic_functions`.
 
-when multiple tables are specified in the **UPDATE** statement, analytical functions cannot be used in the **SET** clause.
-However, if a **SELECT** query is specified in the **SET** clause, analytical functions can be used within that **SELECT** query, regardless of the number of tables specified.
+When multiple tables are specified in the **UPDATE** statement, analytic functions cannot be used in the **SET** clause.
+However, if a **SELECT** query is specified in the **SET** clause, analytic functions can be used within that **SELECT** query, regardless of the number of tables specified.
 
 .. code-block:: sql
 
@@ -454,7 +454,7 @@ By using table extension names, it is possible to update tables not only on the 
 
 .. warning::
 
-    In the **UPDATE** statements that join local and remote tables, records in the remote table cannot be updated.
+    In **UPDATE** statements that join local and remote tables, records in the remote table cannot be updated.
 
     .. code-block:: sql
     

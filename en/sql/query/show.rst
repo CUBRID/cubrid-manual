@@ -1451,6 +1451,11 @@ Avg_free_space_per_page_ovf         VARCHAR(64)     Average page free space in l
 Max_num_ovf_page_a_key              INT             Maximum number of leaf's overflow pages for one key
 =================================== =============== ======================================================================================================================================
 
+.. note::
+
+    Fence key is virtual key added to a leaf node to help operate the B-tree index.
+
+
 The following shows the examples of this syntax.
 
 .. code-block:: sql

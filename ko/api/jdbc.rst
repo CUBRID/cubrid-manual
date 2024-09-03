@@ -11,7 +11,7 @@ JDBC 드라이버
 JDBC 개요
 =========
 
-CUBRID JDBC 드라이버(cubrid_jdbc.jar)를 사용하면 Java로 작성된 응용 프로그램에서 CUBRID 데이터베이스에 접속할 수 있다. CUBRID JDBC 드라이버는 <*CUBRID 설치 디렉터리*> **/jdbc** 디렉터리에 위치한다. CUBRID JDBC 드라이버는 JDBC 2.0 스펙을 기준으로 개발되었으며, JDK 1.6에서 컴파일한 것을 기본으로 제공한다.
+CUBRID JDBC 드라이버(cubrid_jdbc.jar)를 사용하면 Java로 작성된 응용 프로그램에서 CUBRID 데이터베이스에 접속할 수 있다. CUBRID JDBC 드라이버는 <*CUBRID 설치 디렉터리*> **/jdbc** 디렉터리에 위치한다. CUBRID JDBC 드라이버는 JDBC 2.0 스펙을 기준으로 개발되었으며, JDK 1.8에서 컴파일한 것을 기본으로 제공한다.
 
 .. FIXME: 별도로 JDBC 드라이버를 다운로드하거나 JDBC 드라이버에 대한 최신 정보를 확인하려면 http://www.cubrid.org/wiki_apis/entry/cubrid-jdbc-driver\ 에 접속한다.
 
@@ -55,19 +55,19 @@ JDBC 설치 및 설정
 
 **기본 환경**
 
-*   JDK 1.6 이상
+*   JDK 1.8 이상
 *   CUBRID 2008 R2.0(8.2.0) 이상
 *   CUBRID JDBC 드라이버 2008 R1.0 이상
 
 **Java 설치 및 환경 변수 설정**
 
-시스템에 Java가 설치되어 있고 **JAVA_HOME** 환경 변수가 등록되어 있어야 한다. Java는 Developer Resources for Java Technology 사이트( https://www.oracle.com/java/technologies/ )에서 다운로드할 수 있다.
+시스템에 Java가 설치되어 있고 **JAVA_HOME** 환경 변수가 등록되어 있어야 한다. Java는 Developer Resources for Java Technology 사이트( https://www.oracle.com/java/technologies/downloads/#java8 )에서 다운로드할 수 있다.
 
 **Windows 환경에서 환경 변수 설정**
 
-Java 설치 후 [내 컴퓨터]를 마우스 오른쪽 버튼 클릭하여 [속성]을 선택하면 [시스템 등록 정보] 대화 상자가 나타난다. [고급] 탭의 [환경 변수]를 클릭하면 나타나는 [환경 변수] 대화 상자가 나타난다.
+Java 설치 후 [내 PC]를 마우스 오른쪽 버튼 클릭하여 [속성]을 선택한 후, 관련 설정의 [고급 시스템 설정]을 클릭하면 시스템 속성의 대화 상자가 나타난다. [고급]탭의 [환경 변수]를 클릭하면 [환경 변수] 대화 상자가 나타난다.
 
-[시스템 변수]에서 [새로 만들기]를 선택한다. [변수 이름]에 **JAVA_HOME** 을 입력하고, 변수 값으로 Java 설치 경로(예: C:\Program Files\Java\jdk1.6.0_16)를 입력한 후 [확인]을 클릭한다.
+[시스템 변수]에서 [새로 만들기]를 선택한다. [변수 이름]에 **JAVA_HOME** 을 입력하고, 변수 값으로 Java 설치 경로(예: C:\\Program Files\\Java\\jdk1.8.0_421)를 입력한 후 [확인]을 클릭한다.
 
 .. image:: /images/image51.png
 
@@ -77,17 +77,17 @@ Java 설치 후 [내 컴퓨터]를 마우스 오른쪽 버튼 클릭하여 [속�
 
 위의 방법을 사용하지 않고 다음과 같이 셸에서 **JAVA_HOME** 과 **PATH** 환경 변수를 설정할 수도 있다. ::
 
-    set JAVA_HOME= C:\Program Files\Java\jdk1.6.0_16
+    set JAVA_HOME= C:\Program Files\Java\jdk1.8.0_421
     set PATH=%PATH%;%JAVA_HOME%\bin
 
 **Linux 환경에서 환경 변수 설정**
 
-다음과 같이 Java가 설치된 **JAVA_HOME** 환경 변수로 디렉터리 경로(예: /usr/java/jdk1.6.0_16)를 설정하고, **PATH** 환경 변수에 **$JAVA_HOME/bin** 을 추가한다. ::
+다음과 같이 Java가 설치된 **JAVA_HOME** 환경 변수로 디렉터리 경로(예: /usr/java/jdk1.8.0_421)를 설정하고, **PATH** 환경 변수에 **$JAVA_HOME/bin** 을 추가한다. ::
 
-    export JAVA_HOME=/usr/java/jdk1.6.0_16     #bash
+    export JAVA_HOME=/usr/java/jdk1.8.0_421    #bash
     export PATH=$JAVA_HOME/bin:$PATH           #bash
      
-    setenv JAVA_HOME /usr/java/jdk1.6.0_16     #csh
+    setenv JAVA_HOME /usr/java/jdk1.8.0_421    #csh
     set path = ($JAVA_HOME/bin $path)          #csh
 
 **JDBC 드라이버 설정**

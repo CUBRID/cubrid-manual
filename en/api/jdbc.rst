@@ -67,7 +67,7 @@ You must already have Java installed and the **JAVA_HOME** environment variable 
 
 After installing Java, right-click on [This PC] and select [Properties]. Then, click on [Advanced system settings] under the Related settings to open the System Properties dialog box. Click on [Environment Variables] in the [Advanced] tab to open the Environment Variables dialog box.
 
-In the [System variables], click [New]. Enter **JAVA_HOME** as the variable name and input the Java installation path (e.g., C:\Porgram Files\Java\jdk1.8.0_421) as the variable value, the click [OK].
+In the [System variables], click [New]. Enter **JAVA_HOME** as the variable name and input the Java installation path (e.g., C:\Program Files\Java\jdk1.8.0_421) as the variable value, the click [OK].
 
 .. image:: /images/image51.png
 

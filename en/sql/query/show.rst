@@ -1453,7 +1453,7 @@ Max_num_ovf_page_a_key              INT             Maximum number of leaf's ove
 
 .. note::
 
-    Fence key is virtual key added to a leaf node to help operate the B-tree index.
+    Fence key is a virtual key added to a leaf node to help operate the B-tree index.
 
 
 The following shows the examples of this syntax.

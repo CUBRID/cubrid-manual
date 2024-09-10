@@ -1398,6 +1398,55 @@ This utility is used to output the information of CUBRID HA group and CUBRID HA 
        Copylogdb testdb@nodeA:/home/cubrid/DB/testdb_nodeA (pid 2505, state registered)
        Server testdb (pid 2393, state registered_and_standby)
 
+The -v option displays detailed information about the node.
+* score: Indicates the priority of the node, with a lower score indicating a higher priority.
+* missed heartbeat: Indicates the loss rate of heartbeat signals sent between nodes configured in a HA environment. If this value is unusually high, the configuration, network, or firewall settings should be inspected.
+
+The event occurrence times for the Applylogdb, Copylogdb, and Server processes are also displayed. If no event has occurred, it is displayed as "00:00:00.000."
+* registered-time: The time when a process startup request was made via a user command.
+* deregistered-time: The time when a remote process stop request was made via a user command (applicable only to copylogdb and applylogdb).
+* shutdown-time: The time the HA process was stopped.
+* start-time: The time the HA process was restarted.
+
+**Example**
+
+::
+
+    $ cubrid heartbeat status -v
+    @ cubrid heartbeat status
+
+    HA-Node Info (current cubrid1, state master)
+      Node cubrid2 (priority 2, state slave)
+        - score 2
+        - missed heartbeat 0
+      Node cubrid1 (priority 1, state master)
+        - score -32767
+        - missed heartbeat 0
+
+    HA-Process Info (master 7392, state master)
+    Copylogdb testdb@cubrid2:/home/cubha/CUBRID-11.3.1.1142-bee7aa8-Linux.x86_64/databases/testdb_cubrid2 (pid 7841, state registered)
+     - exec-path [/home/cubha/CUBRID-11.3.1.1142-bee7aa8-Linux.x86_64/bin/cub_admin]
+     - argv      [cub_admin copylogdb -L /home/cubha/CUBRID-11.3.1.1142-bee7aa8-Linux.x86_64/databases/testdb_cubrid2 -m sync testdb@bagus2 ]
+     - registered-time   08/26/24 14:28:37.019
+     - deregistered-time 00/00/00 00:00:00.000
+     - shutdown-time     08/26/24 14:28:35.010
+     - start-time        08/26/24 14:28:36.012
+    Applylogdb testdb@localhost:/home/cubha/CUBRID-11.3.1.1142-bee7aa8-Linux.x86_64/databases/testdb_cubrid2 (pid 7746, state registered)
+     - exec-path [/home/cubha/CUBRID-11.3.1.1142-bee7aa8-Linux.x86_64/bin/cub_admin]
+     - argv      [cub_admin applylogdb -L /home/cubha/CUBRID-11.3.1.1142-bee7aa8-Linux.x86_64/databases/testdb_cubrid2 --max-mem-size=300 testdb@localhost ]
+      - registered-time   08/26/24 14:27:14.566
+      - deregistered-time 00/00/00 00:00:00.000
+      - shutdown-time     08/26/24 14:27:12.552
+      - start-time        08/26/24 14:27:13.558
+     Server testdb (pid 7904, state registered_and_active)
+      - exec-path [/home/cubha/CUBRID-11.3.1.1142-bee7aa8-Linux.x86_64/bin/cub_server]
+      - argv      [cub_server testdb ]
+      - registered-time   08/26/24 14:29:28.955
+      - deregistered-time 00/00/00 00:00:00.000
+      - shutdown-time     08/26/24 14:29:27.593
+      - start-time        08/26/24 14:29:28.594
+
+
 .. note:: **act**, **deact**, and **deregister** commands which were used in versions lower than CUBRID 9.0 are no longer used.
 
 .. _cubrid-service-util:

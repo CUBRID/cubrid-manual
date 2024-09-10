@@ -1042,7 +1042,7 @@ The following are parameters related to concurrency control and locks of the dat
 
     *   **TRAN_SERIALIZABLE** : This isolation level ensures the highest level of consistency. For details, see :ref:`isolation-level-6`.
 
-    *   **TRAN_REP_READ** : This isolation level can incur phantom read. For details, see :ref:`isolation-level-5`.
+    *   **TRAN_REP_READ** : This isolation level prevents dirty reads, non-repeatable reads, and phantom reads due to snapshot isolation. For details, see :ref:`isolation-level-5`.
 
     *   **TRAN_READ_COMMITTED** : This isolation level can incur unrepeatable read. For details, see :ref:`isolation-level-4`.
 
@@ -2003,13 +2003,17 @@ Query Plan Cache-Related Parameters
 
 The following are parameters related to the query plan cache functionality. The type and value range for each parameter are as follows:
 
-+-------------------------------+--------+----------+----------+----------+
-| Parameter Name                | Type   | Default  | Min      | Max      |
-+===============================+========+==========+==========+==========+
-| max_plan_cache_entries        | int    | 1,000    |          |          |
-+-------------------------------+--------+----------+----------+----------+
-| max_filter_pred_cache_entries | int    | 1,000    |          |          |
-+-------------------------------+--------+----------+----------+----------+
++--------------------------------------+--------+---------+---------+---------+
+| Parameter Name                       | Type   | Default | Min     | Max     |
++======================================+========+=========+=========+=========+
+| max_plan_cache_entries               | int    | 1,000   |         |         |
++--------------------------------------+--------+---------+---------+---------+
+| max_plan_cache_clones                | int    | 1,000   |         |         |
++--------------------------------------+--------+---------+---------+---------+
+| xasl_cache_time_threshold_in_minutes | int    | 360     |         |         |
++--------------------------------------+--------+---------+---------+---------+
+| max_filter_pred_cache_entries        | int    | 1,000   |         |         |
++--------------------------------------+--------+---------+---------+---------+
 
 **max_plan_cache_entries**
 
@@ -2018,6 +2022,13 @@ The following are parameters related to the query plan cache functionality. The 
     The following example shows how to cache up to 1,000 queries. ::
 
         max_plan_cache_entries=1000
+
+**max_plan_cache_clones**
+     The plan cache stores the XASL for a query in a serializable form. When executing the query, the XASL is converted back into its deserialized form, populated with values, and then executed.
+     The clone cache stores deserialized XASL to reuse it instead of discarding. The **max_plan_cache_clones** is a parameter that sets the maximum number of cloned cache entries a single plan can hold, and its default value is set to 1000. When a plan is deleted, its clones are also deleted.
+
+**xasl_cache_time_threshold_in_minutes**
+     **xasl_cache_time_threshold_in_minutes** is a parameter that determines the time threshold for deciding whether to reuse (clean-up) a cached plan. It is also used when searching for a candidate plan to remove when there is no space in the plan cache. This parameter can be set in minutes, with a default value of 360 minutes.
 
 **max_filter_pred_cache_entries**
 

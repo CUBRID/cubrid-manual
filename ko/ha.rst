@@ -1403,8 +1403,8 @@ Applylogdb, Copylogdb, Server 프로세스에 이벤트 발생 시간이며,이�
 
 * registered-time : 명령어를 통하여 프로세스 구동 요청 시간
 * deregistered-time : 명령어를 통하여 원격 프로세스 정지 요청 시간 (copylogdb와 applylogdb만 해당)
-* shutdown-time : 프로세스 정지시간
-* start-time : 프로세스 재 구동시간 
+* shutdown-time : HA 매니저(cub_master)가 프로세스를 정지한 시간
+* start-time : HA 매니저(cub_master)가 프로세스를 재 구동시간 
 
 **예시** 
 

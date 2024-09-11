@@ -1405,8 +1405,8 @@ The -v option displays detailed information about the node.
 The event occurrence times for the Applylogdb, Copylogdb, and Server processes are also displayed. If no event has occurred, it is displayed as "00:00:00.000."
 * registered-time: The time when a process startup request was made via a user command.
 * deregistered-time: The time when a remote process stop request was made via a user command (applicable only to copylogdb and applylogdb).
-* shutdown-time: The time the HA process was stopped.
-* start-time: The time the HA process was restarted.
+* shutdown-time : The time that HA-manager(cub_master) stopped the process
+* start-time : The time that HA-manager(cub_master) restarted the process
 
 **Example**
 

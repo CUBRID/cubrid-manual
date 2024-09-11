@@ -2028,7 +2028,7 @@ The following are parameters related to the query plan cache functionality. The 
      The clone cache stores deserialized XASL to reuse it instead of discarding. The **max_plan_cache_clones** is a parameter that sets the maximum number of cloned cache entries a single plan can hold, and its default value is set to 1000. When a plan is deleted, its clones are also deleted.
 
 **xasl_cache_time_threshold_in_minutes**
-     **xasl_cache_time_threshold_in_minutes** is a parameter that determines the time threshold for deciding whether to reuse (clean-up) a cached plan. It is also used when searching for a candidate plan to remove when there is no space in the plan cache. This parameter can be set in minutes, with a default value of 360 minutes.
+    It is a parameter that determines the time threshold for deciding whether to recompile (clean-up) a cached plan. It is also used when searching for a candidate plan to remove when there is no space in the plan cache. This parameter can be set in minutes, with a default value of 360 minutes.
 
 **max_filter_pred_cache_entries**
 

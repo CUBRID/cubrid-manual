@@ -1996,10 +1996,10 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
         max_plan_cache_entries=1000
 
 **max_plan_cache_clones**
-    plan cache에 query에 대한 xasl이 serializable하게 되어 있는데, query 실행시에는 다시 xasl구조로 변경(deserializable)해서 value를 채워 수행한다. clone cache은 deserializable한 xasl을 버리지 않고 재 사용하기 위한 cache 파라미터 이다. 기본갑은 1000이며, 하나의 plan이 최대로 가질 수 있는 cache값입니다. plan이 삭제되면clone도 함께 삭제된다. 
+    플랜 캐시(plan cache)에는 질의에 대한 직렬화(serializable)된 xasl 저장되어 있는데, 질의 수행기는 플랜 캐시에 저장된 작렬화된 xasl를 역직렬화(deserializable)한 후 사용할 값을 채운 후 수행한다. 클론 캐시(clone cache)는 질의 수행기가  최소한의 역직렬화 수행하기 위해 역직렬화된 xasl을 저장하여 재 사용하기 위한 캐시 파라미터이다. 기본값은 1000이며, 하나의 플랜이 최대로 가질 수 있는 캐시 값입니다. 플랜이 삭제되면 해당 플랜의 클론 캐시에 저장된 역직렬화된 xasl도 함께 삭제된다. 
 
 **xasl_cache_time_threshold_in_minutes**
-     cache된 plan을 재 수행(clean-up)할 것인지 판단하는 시간으로, plan cache에 추가할 공간이 없는 경우에도 제거할 대상을 찾는 부분에서도 사용한다. 분단위로 설정 가능하며, 기본값은 360분이다.
+     캐시된 플랜을 재 수행(clean-up)할 것인지를 판단하는 파라미터로, 해당 파라미터는 플랜 캐시에 추가할 공간이 없는 경우 제거할 대상을 찾기 위해 사용된다. 분단위로 설정 가능하며, 기본값은 360분이다.
 
 **max_filter_pred_cache_entries**
 

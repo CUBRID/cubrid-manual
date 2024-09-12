@@ -3114,7 +3114,7 @@ Etc
 
 **NET_BUF_SIZE**
 
-    **NET_BUF_SIZE** is a parameter to determine the network buffer size used by **CAS** to transmit query results to the client. The query result sets will be buffered into the **CAS** network buffer, and it will be sent to the client when the buffer is full. **NET_BUF_SIZE** is the size of the packet that CAS transmits to the client, and it may affect transmission efficiency.
+    **NET_BUF_SIZE** is a parameter used to determine the network buffer size used by **CAS** to transmit results to the client. The result sets will be buffered into the **CAS** network buffer, and are sent to the client when the buffer is full. **NET_BUF_SIZE** is the size of the packet that CAS transmits to the client, and it may affect transmission efficiency.
 
 HA Configuration
 ================

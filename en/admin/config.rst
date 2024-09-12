@@ -2564,6 +2564,8 @@ The following table shows the broker parameters available in the broker configur
 |                                 |                         | SSL                             | string | OFF                          |           |
 |                                 |                         +---------------------------------+--------+------------------------------+-----------+
 |                                 |                         | SOURCE_ENV                      | string | cubrid.env                   |           |
+|                                 |                         +---------------------------------+--------+------------------------------+-----------+
+|                                 |                         | NET_BUF_SIZE                    | KB     | 16K                          |           |
 +---------------------------------+-------------------------+---------------------------------+--------+------------------------------+-----------+
 
 Default Parameters
@@ -3109,6 +3111,10 @@ Etc
     **SOURCE_ENV** is a parameter used to determine the file where the operating system variable for each broker is configured. The extension of the file must be **env**. All parameters specified in **cubrid.conf** can also be configured by environment variables. For example, the **lock_timeout** parameter in **cubrid.conf** can also be configured by the **CUBRID_LOCK_TIMEOUT** environment variable. As another example, to block execution of DDL statements on broker1, you can configure **CUBRID_BLOCK_DDL_STATEMENT** to 1 in the file specified by **SOURCE_ENV**.
 
     An environment variable, if exists, has priority over **cubrid.conf**. The default value is **cubrid.env**.
+
+**NET_BUF_SIZE**
+
+    **NET_BUF_SIZE** is a parameter to determine the network buffer size used by **CAS** to transmit query results to the client. The query result sets will be buffered into the **CAS** network buffer, and it will be sent to the client when the buffer is full. **NET_BUF_SIZE** is the size of the packet that CAS transmits to the client, and it may affect transmission efficiency.
 
 HA Configuration
 ================

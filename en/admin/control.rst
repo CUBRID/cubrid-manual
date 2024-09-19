@@ -1462,8 +1462,8 @@ Limiting Broker Access
 ----------------------
 
 To limit the client applications accessing the broker, set to **ON** for the **ACCESS_ CONTROL** parameter in the **cubrid_broker.conf** file, and enter a name of the file in which the users and the list of databases and IP addresses allowed to access the **ACCESS_CONTROL_FILE** parameter value are written. 
-The default value of the **ACCESS_CONTROL** broker parameter is **OFF**. 
-The **ACCESS_CONTROL** and **ACCESS_CONTROL_FILE** parameters must be written under [broker] which common parameters are specified.
+The default value of the **ACCESS_CONTROL** broker parameter is **OFF**. If there is no broker name in ACCESS_CONTROL_FILE, all access to that broker will be restricted. In this case, you can allow all access by setting the ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER parameter.
+The **ACCESS_CONTROL** and **ACCESS_CONTROL_FILE** parameters must be written under [broker] which common parameters are specified and **ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER** parameter must be written for each broker.
 
 The format of **ACCESS_CONTROL_FILE** is as follows: 
 
@@ -1491,6 +1491,12 @@ The format of the ip_list_file is as follows:
 *   <ip_addr>: An IP address that is allowed to access the server. If the last digit of the address is specified as \*, all IP addresses in that rage are allowed to access the broker server.
 
 If a value for **ACCESS_CONTROL** is set to ON and a value for **ACCESS_CONTROL_FILE** is not specified, the broker will only allow the access requests from the localhost. 
+However, if **ACCESS_CONTROL_FILE** is not specified, for brokers, if **ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER** is set to ALLOW, the broker will allow all access requests.
+
+Broker access restrictions not specified in **ACCESS_CONTROL_FILE**.
+
+* Allow access only from localhost. (default)
+* If ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER is set to ALLOW, all access is allowed.
 
 If the analysis of **ACCESS_CONTROL_FILE** and ip_list_file fails when starting a broker, the broker will not be run.  
 
@@ -1505,6 +1511,7 @@ If the analysis of **ACCESS_CONTROL_FILE** and ip_list_file fails when starting 
     [%QUERY_EDITOR]
     SERVICE                 =ON
     BROKER_PORT             =30000
+    ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER = ALLOW
     ......
 
 The following example shows the content of **ACCESS_CONTROL_FILE**. The * symbol represents everything, and you can use it when you want to specify database names, database user IDs and IPs in the IP list file which are allowed to access the broker server.  
@@ -1578,6 +1585,7 @@ The below is an example of displaying results.
     ACCESS_CONTROL_FILE=access_file.txt 
   
     [%broker1] 
+    ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER=DENY
     demodb:dba:iplist1.txt 
            CLIENT IP LAST ACCESS TIME 
     ========================================== 
@@ -1591,7 +1599,12 @@ The below is an example of displaying results.
            CLIENT IP LAST ACCESS TIME 
     ========================================== 
                    * 2013-11-08 10:10:12 
-
+    
+    [%broker2]
+    ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER=ALLOW
+	
+    ++ cubrid broker acl: success
+	
 **Broker Logs**
 
     If you try to access brokers through IP addresses that are not allowed, the following logs will be created.

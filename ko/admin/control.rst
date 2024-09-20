@@ -1484,7 +1484,7 @@ ip_list_file의 작성 형식은 다음과 같다.
 *   <ip_addr>: 접근을 허용할 IP 명. 뒷자리를 \*로 입력하면 뒷자리의 모든 IP를 허용한다.
 
 **ACCESS_CONTROL** 값이 ON 상태에서 **ACCESS_CONTROL_FILE**\에 지정되지 않으면 브로커는 localhost에서만 접속을 허용한다. 
-그러나 **ACCESS_CONTROL_FILE** 에 지정되지 않은 브로커의 경우, **ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER** 의 값을 ALLOW로 설정하면, 브로커는 모든 접속 요청을 허용한다.
+그러나 **ACCESS_CONTROL_FILE** 에 지정되지 않은 브로커의 경우, **ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER** 의 값을 ALLOW로 설정한 브로커들에 대해서는 모든 접속 요청을 허용한다.
 
 **ACCESS_CONTROL_FILE** 에 지정되지 않은 브로커 접속 제한 방식.
 

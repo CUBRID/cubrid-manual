@@ -2472,7 +2472,7 @@ The following table shows the broker parameters available in the broker configur
 |                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
 |                                 |                         | REPLICA_ONLY                            | string | OFF                          |           |
 |                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
-|                                 |                         | ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER | string | DENY                         |           |
+|                                 |                         | ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER | bool   | DENY                         |           |
 |                                 +-------------------------+-----------------------------------------+--------+------------------------------+-----------+
 |                                 | Broker App. Server(CAS) | APPL_SERVER_MAX_SIZE                    | MB     | Windows 32bit: 40,           | available |
 |                                 |                         |                                         |        | Windows 64bit: 80,           |           |

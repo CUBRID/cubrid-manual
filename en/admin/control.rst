@@ -1462,8 +1462,8 @@ Limiting Broker Access
 ----------------------
 
 To limit the client applications accessing the broker, set to **ON** for the **ACCESS_ CONTROL** parameter in the **cubrid_broker.conf** file, and enter a name of the file in which the users and the list of databases and IP addresses allowed to access the **ACCESS_CONTROL_FILE** parameter value are written. 
-The default value of the **ACCESS_CONTROL** broker parameter is **OFF**. If there is no broker name in ACCESS_CONTROL_FILE, all access to that broker will be restricted. In this case, you can allow all access by setting the ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER parameter.
-The **ACCESS_CONTROL** and **ACCESS_CONTROL_FILE** parameters must be written under [broker] which common parameters are specified and **ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER** parameter must be written for each broker.
+The default value of the **ACCESS_CONTROL** broker parameter is **OFF**. All access to brokers not listed in **ACCESS_CONTROL_FILE** is restricted. Even not listed in **ACCESS_CONTROL_FILE**, you can allow access to a specific broker by setting **ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER** to **ALLOW** for that broker.
+The **ACCESS_CONTROL** and **ACCESS_CONTROL_FILE** parameters must be written under [broker] which common parameters are specified. On the other hand, **ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER** parameter must be specified for each broker.
 
 The format of **ACCESS_CONTROL_FILE** is as follows: 
 
@@ -1491,7 +1491,7 @@ The format of the ip_list_file is as follows:
 *   <ip_addr>: An IP address that is allowed to access the server. If the last digit of the address is specified as \*, all IP addresses in that rage are allowed to access the broker server.
 
 If a value for **ACCESS_CONTROL** is set to ON and a value for **ACCESS_CONTROL_FILE** is not specified, the broker will only allow the access requests from the localhost. 
-However, if **ACCESS_CONTROL_FILE** is not specified, for brokers, if **ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER** is set to ALLOW, the broker will allow all access requests.
+However, even **ACCESS_CONTROL_FILE** is not specified, all requests are allowed for brokers with **ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER** set to **ALLOW**.
 
 Broker access restrictions not specified in **ACCESS_CONTROL_FILE**.
 

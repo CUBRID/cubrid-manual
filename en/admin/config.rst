@@ -2729,6 +2729,10 @@ Access
 **ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER**	
 	
     If no broker is specified in **ACCESS_CONTROL_FILE** and the value of **ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER** is **ALLOW** , all access to the broker are allowed. The default is **DENY**. For more information, see :ref:`limiting-broker-access`.
+
+    .. note::
+    
+       The settings value ALLOW or DENY for **ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER** is valid only when **ACCESS_CONTROL** is set to **ON**. If it is set to **OFF**, the setting value is not applicable.
 	
 Broker App. Server(CAS)
 ^^^^^^^^^^^^^^^^^^^^^^^

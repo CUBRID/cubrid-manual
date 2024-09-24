@@ -2701,6 +2701,10 @@ CUBRID 설치 시 생성되는 기본 브로커 설정 파일인 **cubrid_broker
 	
     **ACCESS_CONTROL_FILE** 에 지정한 브로커가 없고 **ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER** 의 값이 **ALLOW** 인 경우, 브로커에 접속을 모두 허용한다. 기본값은 **DENY** 이다.  자세한 내용은 :ref:`limiting-broker-access` 을 참고한다.
 
+    .. note::
+    
+       **ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER** 의 설정값 **ALLOW** 또는 **DENY** 는 **ACCESS_CONTROL** 이 **ON** 일 때만 유효하며, **OFF** 일 경우에는 설정값이 적용되지 않습니다.
+
 브로커 응용 서버(CAS)
 ^^^^^^^^^^^^^^^^^^^^^
 

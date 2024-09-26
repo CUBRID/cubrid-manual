@@ -1523,7 +1523,7 @@ The following are parameters related to SQL statements and data types supported 
 
     **max_query_per_tran** is a parameter used to set the maximum number of queries (unclosed queries) that can be held per transaction.
 
-    The default setting is 100, the minimum value is 1, and the maximum value is 32,767. Be careful not to set this value too big, as it may increase the memory used and affect the overall system performance.
+    The default setting is 100, the minimum value is 1, and the maximum value is 32,767. Be careful not to set this value too high, as it may increase memory usage and affect overall system performance.
 
 **no_backslash_escapes**
 

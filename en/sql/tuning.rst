@@ -4297,7 +4297,7 @@ A comparison of the results from the two queries reveals that subquery cache opt
 Subquery cache optimization does not work in the following scenarios:
 
 * When the correlated subquery contains another correlated subquery. (However, subquery cache optimization is performed for the innermost correlated subquery that does not contain other correlated subqueries.)
-* When the subquery is not in the SELECT clause.
+* When the subquery is not scalar subquery.
 * When the subquery includes a CONNECT BY clause.
 * When the subquery includes OID-related features.
 * When the subquery includes the **NO_SUBQUERY_CACHE** hint.

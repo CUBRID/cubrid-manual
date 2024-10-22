@@ -1432,7 +1432,7 @@ This command specifies the formatter to be used with **;EDIT** session command. 
 
         The use of Free SQL Formatter is recommended.
 
-        Download URL: https://github.com/CUBRID/fsqlf/releases/download/v.1.1.0-csql/fsqlf-1.1.0.csql.tar.gz
+        Download URL: https://github.com/CUBRID/fsqlf/releases
 
 **Specifying the editor (;EDITOR_Cmd)**
 

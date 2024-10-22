@@ -1432,7 +1432,7 @@ OPT LEVEL의 상세한 내용은 :ref:`viewing-query-plan`\ 를 참고한다.
     
         Free SQL Formatter 사용을 권고합니다.
 
-        다운로드 URL: https://github.com/CUBRID/fsqlf/releases/download/v.1.1.0-csql/fsqlf-1.1.0.csql.tar.gz
+        다운로드 URL: https://github.com/CUBRID/fsqlf/releases
 
 **편집기 설정(;EDITOR_Cmd)**
 

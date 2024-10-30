@@ -66,7 +66,7 @@ You can start the CSQL program in the shell as shown below. At the initial insta
        ;SChema class-name          - display schema information of a class.
        ;TRIgger [`*'|trigger-name] - display trigger definition.
        ;Get system_parameter       - get the value of a system parameter.
-       ;SEt system_parameter=value - set the value of a system parameter.
+       ;SET system_parameter=value - set the value of a system parameter.
        ;STring-width [width]       - set width that each column which is a string type is displayed.
        ;COLumn-width [name]=[width]- set width that a specific column is displayed.
        ;PLan [simple/detail/off]   - show query execution plan.

@@ -35,11 +35,12 @@ DDL Audit Log file name convention
 DDL Audit Logfile format of CAS
 ======================================
 
-* [Time] [ip_addr]|[user_name]|[result]|[elapsed time]|[auto commit/rollback]|[sql_text]
+* [Time] [ip_addr]|[db_name]|[user_name]|[result]|[elapsed time]|[auto commit/rollback]|[sql_text]
 
 	Description:
 	
 	* [Time]: Time starting execution of the DDL (e.g. 20-12-18 12:08:32.327)
+	* [db_name]: Database name where DDL was executed
 	* [ip_addr]: An IP address of an application client (e.g. 172.31.0.70)
 	* [user_name]: the database user name who issued DDL
 	* [result]: statement execution result. OK if successful, otherwise error code (e.g. ERROR:-494)

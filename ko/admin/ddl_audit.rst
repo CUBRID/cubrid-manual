@@ -36,11 +36,12 @@ DDL Audit 로그 파일 이름 규칙
 CAS의 DDL Audit 로그 파일 형식
 ================================
 
-* [Time] [ip_addr]|[user_name]|[result]|[elapsed time]|[auto commit/rollback]|[sql_text]
+* [Time] [ip_addr]|[db_name]|[user_name]|[result]|[elapsed time]|[auto commit/rollback]|[sql_text]
 
 	설명:
 
 	* [Time] : DDL 실행 시작 시간 (예 : 20-12-18 12 : 08 : 32.327)
+	* [db_name] : DDL이 실행된 데이터베이스 이름
 	* [ip_addr] : 애플리케이션 클라이언트의 IP 주소 (예 : 172.31.0.70)
 	* [user_name] : DDL을 발행 한 데이터베이스 사용자 이름
 	* [result] : 명령문 실행 결과. 성공하면 OK, 그렇지 않으면 오류 코드 (예 : ERROR : -494)

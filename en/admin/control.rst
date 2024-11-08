@@ -1481,6 +1481,9 @@ The format of **ACCESS_CONTROL_FILE** is as follows:
 [%<*broker_name*>] and <*db_name*>:<*db_user*>:<*ip_list_file*> can be specified separately for each broker. A separated line can be specified for the same <*db_name*> and the same <*db_user*>.
 List of IPs can be written up to the maximum of 256 lines per <*db_name*>:<*db_user*> in a broker.
  
+.. note::
+    When using an absolute path name in Windows, the DRIVE name must be specified (for example, C:\\CUBRID\\CONF\\CUBRID_ACL.CONF).
+
 The format of the ip_list_file is as follows:  
 
 ::

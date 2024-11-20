@@ -586,7 +586,7 @@ You can check the parameter value currently set in the CSQL Interpreter using th
 
 **Setting the parameter value (;SET)**
 
-You can use the **;Set** session command to set a specific parameter value. Note that changeable parameter values are only can be changed. To change the server parameter values, you must have DBA authorization. For information on list of changeable parameters, see :ref:`broker-configuration`. ::
+You can use the **;SET** session command to set a specific parameter value. Note that changeable parameter values are only can be changed. To change the server parameter values, you must have DBA authorization. For information on list of changeable parameters, see :ref:`broker-configuration`. ::
 
     csql> ;set block_ddl_statement=1
     === Set Param Input ===

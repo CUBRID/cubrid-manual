@@ -1,85 +1,89 @@
 .. _join-method:
 
-조인 방식
+Join Method
 ========================================
 
-.. 배경 설명
+.. Background Explanation
 
-관계형 데이터베이스에서는 정규화를 통해 데이터를 여러 테이블로 분할하여 저장한다.
-이 과정은 데이터 중복을 줄이고 무결성을 유지하는 데 효과적이지만, 분리된 데이터를 조회하려면 테이블 간의 관계를 결합하는 연산이 필요하다.
-조인은 분산된 데이터를 하나의 테이블처럼 조회할 수 있도록 지원하는 DBMS의 핵심 기능이며, SQL 문법에서 중요한 역할을 한다.
+In relational databases, data is divided and stored across multiple tables through normalization.
+This process is effective for reducing data redundancy and maintaining integrity,
+but joining operations are required to retrieve separated data by combining relationships between tables.
+Joins are a core function of DBMS that allow dispersed data to be queried as if it were a single table, playing a crucial role in SQL syntax.
 
-.. 기본 설명
+.. Basic Explanation
 
-조인 질의는 두 개 이상의 테이블, 뷰, 또는 파생 테이블에서 관련된 데이터를 결합하여 원하는 정보를 추출하는 데 사용된다.
-조인 결과에 포함될 레코드는 선택한 조인 유형에 따라 달라지며, 자세한 내용은 :ref:`join-query`\에서 확인할 수 있다.
+Join queries are used to combine related data from two or more tables, views, or derived tables to extract the desired information.
+The records included in the join result vary depending on the type of join selected.
+Detailed information can be found in :ref:`join-query`.
 
 .. note::
 
-    여기서부터 사용되는 **테이블**\이라는 용어는 실제 테이블뿐만 아니라 뷰(가상 테이블)와 파생 테이블을 포함하는 포괄적인 의미로 사용된다.
+    From this point onward, the term **table** includes not only actual tables but also views (virtual tables) and derived tables as a comprehensive concept.
 
-.. 조인 방식
+.. Join Method
 
-테이블 간의 레코드를 결합하는 방식은 조인 방식에 따라 결정되며, 이는 질의 최적화기가 자동으로 선택한다.
+The way records are combined between tables is determined by the join method, which is automatically selected by the query optimizer.
 
-CUBRID는 다음과 같은 조인 방식을 지원한다:
+CUBRID supports the following join methods:
 
 - :ref:`join-method_nested-loop`
 - :ref:`join-method_sort-merge`
 - :ref:`join-method_hash`
 
-하나의 질의에서 여러 조인이 수행될 수 있으며, 각 조인에 대해 서로 다른 방식이 사용될 수 있다.
-모든 조인 방식은 두 개의 테이블 간 결합만 처리하며, 조인 연산은 순차적으로 진행된다. 즉, 이전 조인이 완료된 후에 다음 조인이 수행된다.
+A single query can involve multiple joins, and different methods may be used for each join.
+All join methods process only the combination of two tables at a time, and the join operations proceed sequentially.
+That is, the next join is performed after the previous one is completed.
 
-질의 최적화기는 데이터베이스가 수집한 통계 정보를 바탕으로 각 방식의 비용을 계산하고, 가장 효율적인 방식(최소 비용)을 선택한다.
-그러나 CUBRID에서는 기본적으로 질의 최적화기가 **정렬 병합 조인**\과 **해시 조인**\을 고려하지 않는다.
-이러한 방식을 사용하려면 **SQL 힌트**\를 명시적으로 추가해야 하며, 자세한 내용은 :ref:`sql-hint`\에서 확인할 수 있다.
+The query optimizer calculates the cost of each method based on statistics collected by the database and selects the most efficient method (minimum cost).
+However, in CUBRID, the query optimizer does not consider sort merge joins and hash joins by default.
+To use these methods, **SQL hints** must be explicitly added, as described in :ref:`sql-hint`.
 
-또한, **optimizer_enable_merge_join** 파라미터를 **yes**(기본값: **no**)로 설정하면, **USE_MERGE** 힌트를 사용하지 않고도 정렬 병합 조인을 수행할 수 있다.
-자세한 내용은 :ref:`other-parameters`\에서 확인할 수 있다.
+Additionally, by setting the **optimizer_enable_merge_join** parameter to **yes** (default: **no**), sort merge joins can be performed without using the **USE_MERGE** hint.
+Further details can be found in :ref:`other-parameters`.
 
 .. _join-method_nested-loop:
 
-중첩 반복(Nested Loop) 조인
+Nested Loop Join
 ----------------------------------------
 
-.. 기본 설명
+.. Basic Explanation
 
-중첩 반복 조인은 외부 테이블에서 레코드를 하나씩 읽고, 내부 테이블에서 해당 레코드와 결합 가능한 레코드를 찾아 결합하는 방식이다.
-이 방식은 프로그래밍의 중첩 반복문과 유사하다.
-외부 반복에서 사용되는 테이블을 드라이빙 테이블, 내부 반복에서 사용되는 테이블을 드리븐 테이블이라고 한다.
+A nested loop join is a method in which records are read one by one from an outer table, and matching records are found and joined from an inner table.
+This method is similar to a nested loop in programming.
+The table used in the outer loop is called the driving table, and the table used in the inner loop is called the driven table.
 
-.. 드라이빙 테이블
+.. Driving Table
 
-두 테이블 중 어느 하나가 드리븐 테이블이 되더라도 임의 접근이 가능하다면, 드라이빙 테이블로는 레코드 수가 적은 테이블을 선택하는 것이 더 효율적이다.
-이는 임의 접근의 처리 비용이 테이블의 레코드 수에 영향을 받지 않고 일정하며, 드라이빙 테이블의 레코드 수가 적을수록 조인 연산 횟수를 줄일 수 있기 때문이다.
-질의 최적화기는 비용을 비교하여 드라이빙 테이블을 자동으로 선택하며, **ORDERED** 또는 **LEADING** 힌트를 사용해 사용자가 직접 드라이빙 테이블을 지정할 수도 있다.
+If either table can be accessed randomly, it is more efficient to choose the table with fewer records as the driving table.
+This is because the cost of random access is independent of the number of records in the table, and having fewer records in the driving table reduces the number of join operations.
+The query optimizer automatically selects the driving table by comparing costs, but users can also specify it explicitly using **ORDERED** or **LEADING** hints.
 
-.. 드리븐 테이블
+.. Driven Table
 
-중첩 반복 조인은 드리븐 테이블에 대해 임의 접근이 가능할 때 효율적이다.
-이를 위해 조인 조건에 맞는 인덱스가 미리 생성되어 있어야 하며, 그렇지 않으면 드리븐 테이블의 모든 레코드를 순차적으로 읽게 되어 성능이 저하될 수 있다.
-인덱스를 통해 드리븐 테이블을 임의로 접근하는 경우, 실행 계획에서는 중첩 반복 조인(**nl-join**\)이 인덱스 조인(**idx-join**\)으로 표시된다.
+A nested loop join is efficient when random access to the driven table is possible.
+To enable this, an index that matches the join condition must be pre-created.
+Otherwise, all records in the driven table will be read sequentially, leading to performance degradation.
+When the driven table is accessed randomly through an index, the execution plan displays the nested loop join (**nl-join**) as an index join (**idx-join**).
 
-.. 부분 범위 처리
+.. Partial Range Processing
 
-중첩 반복 조인은 테이블 레코드를 한 번에 모두 읽지 않고 한 레코드씩 조인 연산을 수행하며 즉시 결과를 반환한다.
-이 방식은 부분 범위 처리가 가능하여, 처음 N개의 결과만 조회하는 경우 조인을 조기에 종료하여 효율적인 조회를 지원한다.
+A nested loop join does not read all table records at once but processes one record at a time and immediately returns the result.
+This allows partial range processing, meaning the join can be terminated early when only the first N results are required, enabling efficient queries.
 
-.. 해시 리스트 스캔
+.. Hash List Scan
 
-CUBRID는 드리븐 테이블에 임의 접근이 불가능한 경우에도 조인 조건이 모두 동등 조건이라면 해시 리스트 스캔을 통해 임의 접근을 지원한다.
-해시 테이블을 생성하고 탐색하는 과정은 해시 조인과 유사하며, 자세한 내용은 :ref:`join-method_hash`\에서 확인할 수 있다.
-해시 조인은 전체 범위 처리만 가능하지만, 해시 리스트 스캔은 중첩 반복 조인과 함께 사용되어 부분 범위 처리를 지원한다는 점에서 차이가 있다.
-해시 리스트 스캔이 사용되었는지는 질의 프로파일링을 통해 확인할 수 있으며, 자세한 내용은 :ref:`query-profiling`\에서 확인할 수 있다.
+Even when random access to the driven table is not possible, CUBRID supports random access via hash list scan, provided all join conditions are equality conditions.
+The process of building and probing the hash table is similar to a hash join, as detailed in :ref:`join-method_hash`.
+While hash joins only support full range processing, hash list scans can be combined with nested loop joins to enable partial range processing.
+Whether a hash list scan is used can be verified through query profiling, as described in :ref:`query-profiling`.
 
 .. _example_join-method_nested-loop_no-index:
 
-.. rubric:: 예시 1. 인덱스가 없는 드리븐 테이블에 대한 중첩 반복 조인
+.. rubric:: Example 1. Nested Loop Join with a Driven Table Without an Index
 
-이 예시는 인덱스가 없는 드리븐 테이블에 대해 중첩 반복 조인이 수행되는 과정을 보여준다.
-**ORDERED** 힌트로 조인 순서가 고정되어, nation 테이블이 드라이빙 테이블, athlete 테이블이 드리븐 테이블로 사용된다.
-조인 조건에 맞는 인덱스가 없기 때문에 nation 테이블의 각 레코드에 대해 athlete 테이블의 모든 레코드를 순차적으로 읽으며 조인 조건을 비교한다.
+This example demonstrates the process of a nested loop join when the driven table lacks an index.
+Using the **ORDERED** hint, the join order is fixed, with the nation table as the driving table and the athlete table as the driven table.
+Since there is no index matching the join condition, all records in the athlete table are read sequentially for each record in the nation table, and the join condition is evaluated.
 
 .. code-block:: sql
 
@@ -117,18 +121,18 @@ CUBRID는 드리븐 테이블에 임의 접근이 불가능한 경우에도 조�
 
 **수행 과정:**
 
-1. nation 테이블에서 필터 조건(n.continent = 'Asia')을 만족하는 레코드를 읽는다.
-2. athlete 테이블에서 필터 조건(a.event = 'Baseball')을 만족하는 레코드를 읽는다.
-3. 두 테이블의 현재 레코드에 대해 조인 조건(n.code = a.nation_code)을 비교하여 조건을 만족하면 두 레코드를 결합하여 결과에 추가한다.
-4. athlete 테이블에서 필터 조건을 만족하는 다음 레코드를 읽고, 3단계를 반복한다.
-5. nation 테이블에서 필터 조건을 만족하는 다음 레코드를 읽고, 2~4단계를 반복한다.
-6. 모든 조인 연산이 완료될 때까지 위 과정을 반복한다.
+1. Read records from the nation table that satisfy the filter condition (n.continent = 'Asia').
+2. Read records from the athlete table that satisfy the filter condition (a.event = 'Baseball').
+3. Compare the current records from both tables against the join condition (n.code = a.nation_code). If the condition is satisfied, combine the two records and add them to the result.
+4. Read the next record from the athlete table that satisfies the filter condition and repeat step 3.
+5. Read the next record from the nation table that satisfies the filter condition and repeat steps 2~4.
+6. Repeat the process until all join operations are complete.
 
 .. _example_join-method_nested-loop_index:
 
-.. rubric:: 예시 2. 인덱스가 있는 드리븐 테이블에 대한 중첩 반복 조인
+.. rubric:: Example 2. Nested Loop Join with an Indexed Driven Table
 
-이 예시에서는 드리븐 테이블에 인덱스를 추가한 후, 중첩 반복 조인을 수행한 결과를 보여준다.
+This example demonstrates the result of performing a nested loop join after adding an index to the driven table.
 
 .. code-block:: sql
 
@@ -161,7 +165,8 @@ CUBRID는 드리븐 테이블에 임의 접근이 불가능한 경우에도 조�
                    cost:  4 card 202
         cost:  68 card 29
 
-:ref:`예시 1 <example_join-method_nested-loop_no-index>`\의 질의 프로파일링 결과와 비교하면, athlete 테이블을 조회할 때 읽은 레코드 수가 크게 감소한 것을 확인할 수 있다. (readrows: 313,819 → rows: 948)
+Compared to the profiling results from :ref:`Example 1 <example_join-method_nested-loop_no-index>`,
+the number of records read from the athlete table has significantly decreased. (readrows: 313,819 -> rows: 948)
 
 ::
 
@@ -172,9 +177,9 @@ CUBRID는 드리븐 테이블에 임의 접근이 불가능한 경우에도 조�
 
 .. _example_join-method_nested-loop_with-leading:
 
-.. rubric:: 예시 3. 드라이빙 테이블의 레코드 수의 차이에 따른 성능 차이
+.. rubric:: Example 3. Performance Difference Based on the Record Count of the Driving Table
 
-이번 예시에서는 **LEADING** 힌트를 사용해 드라이빙 테이블로 athlete 테이블을 사용했을 때 성능 차이를 보여준다.
+This example demonstrates the performance difference when using the athlete table as the driving table, specified with the **LEADING** hint.
 
 .. code-block:: sql
 
@@ -187,7 +192,8 @@ CUBRID는 드리븐 테이블에 임의 접근이 불가능한 경우에도 조�
         n.continent = 'Asia'
         and a.event = 'Baseball';
 
-실행 계획에 따르면, nation 테이블에서 필터 조건(n.continent = 'Asia')을 만족하는 레코드는 31개, athlete 테이블에서 필터 조건(a.event = 'Baseball')을 만족하는 레코드는 202개로 예측된다.
+According to the execution plan, 31 records in the nation table satisfy the filter condition (n.continent = 'Asia'),
+and 202 records in the athlete table satisfy the filter condition (a.event = 'Baseball').
 
 ::
 
@@ -205,7 +211,8 @@ CUBRID는 드리븐 테이블에 임의 접근이 불가능한 경우에도 조�
                    cost:  2 card 31
         cost:  161 card 29
 
-:ref:`예시 2 <example_join-method_nested-loop_index>`\의 질의 프로파일링 결과와 비교하면, 드라이빙 테이블로 athlete 테이블을 사용했을 때, 레코드 수가 많아 성능이 감소했음을 확인할 수 있다.
+Compared to the profiling results in :ref:`예시 2 <example_join-method_nested-loop_index>`,
+using the athlete table as the driving table results in decreased performance due to the higher record count.
 
 ::
 
@@ -214,11 +221,13 @@ CUBRID는 드리븐 테이블에 임의 접근이 불가능한 경우에도 조�
         SCAN (table: public.athlete), (heap time: 5, fetch: 6709, ioread: 0, readrows: 6677, rows: 229)
           SCAN (index: public.nation.pk_nation_code), (btree time: 0, fetch: 458, ioread: 0, readkeys: 229, filteredkeys: 0, rows: 229) (lookup time: 0, rows: 103)
 
-.. rubric:: 예시 4. 해시 리스트 스캔을 수행하는 드리븐 테이블에 대한 중첩 반복 조인 (부분 범위 처리)
+.. _example_join-method_nested-loop_with-hash-list:
 
-이 예시는 해시 리스트 스캔이 수행되는 드리븐 테이블에 대해 중첩 반복 조인이 수행되는 과정을 보여준다.
-해시 리스트 스캔은 뷰 또는 파생 테이블을 대상으로 수행되므로, **NO_MERGE** 힌트를 사용해 뷰 머징 최적화를 방지한다.
-이 질의는 처음 20개의 결과만 조회하기 때문에 부분 범위 처리가 가능하다.
+.. rubric:: Example 4. Nested Loop Join with Hash List Scan (for Partial Range Processing)
+
+This example demonstrates the process of a nested loop join when the driven table uses hash list scan.
+Hash list scans are performed on views or derived tables. To prevent view merge optimization, the **NO_MERGE** hint is used.
+In this query, only the first 20 results are retrieved, allowing partial range processing.
 
 .. code-block:: sql
 
@@ -260,8 +269,8 @@ CUBRID는 드리븐 테이블에 임의 접근이 불가능한 경우에도 조�
         sargs: term[1]
         cost:  148 card 29
 
-해시 테이블을 생성하기 위해서 athlete 테이블에서 필터 조건(a.event = 'Baseball')을 만족하는 모든 레코드를 읽은 것을 확인할 수 있다.
-그 후, nation 테이블의 각 레코드에 대해 athlete 테이블의 해시 테이블을 통해 임의 접근이 수행되며, 처음 20개의 결과만 조회된다.
+The athlete table is fully scanned to create the hash table for records satisfying the filter condition (a.event = 'Baseball').
+Subsequently, random access through the hash table is performed for each record in the nation table, and only the first 20 results are retrieved.
 
 ::
 
@@ -275,34 +284,38 @@ CUBRID는 드리븐 테이블에 임의 접근이 불가능한 경우에도 조�
 
 .. _join-method_sort-merge:
 
-정렬 병합(Sort Merge) 조인
+Sort Merge Join
 ----------------------------------------
 
-.. 기본 설명
+.. Basic Explanation
 
-정렬 병합 조인은 두 테이블의 레코드를 조인 조건에 따라 정렬한 후, 정렬된 레코드를 순차적으로 비교하며 결합하는 방식이다.
-정렬 병합 조인은 조인 조건이 동등 조건일 때만 수행할 수 있다.
+A sort merge join combines records by first sorting the records of two tables based on the join condition and then sequentially comparing the sorted records.
+This method can only be used when the join condition involves equality.
 
-.. 정렬 과정
+.. Sorting Process
 
-조인 전에 두 테이블의 레코드를 정렬하는 과정은 실시간으로 인덱스를 생성하는 것과 유사하며, 정렬된 레코드를 순차적으로 결합하는 과정은 중첩 반복 조인의 동작 방식과 유사하다.
-조인 컬럼과 동일한 정렬 순서를 가진 인덱스가 이미 존재하더라도, 정렬과정을 생략되지 않는다.
-정렬 과정에서 사용되는 버퍼의 크기는 **sort_buffer_size** 파라미터로 설정되며, 자세한 내용은 :ref:`memory-parameters`\에서 확인할 수 있다.
+Before performing the join, the records of both tables are sorted.
+This process is similar to creating an index in real-time.
+The subsequent process of sequentially combining sorted records resembles the operation of a nested loop join.
+Even if an index with the same sorting order as the join column already exists, the sorting step is not skipped.
 
-정렬 병합 조인은 데이터 정렬 과정에서 비용이 많이 발생할 경우 비효율적일 수 있다.
-반면, 중첩 반복 조인은 별도의 선행 작업이 필요 없으며, 해시 조인은 한쪽 테이블의 레코드만 모두 읽어 해시 테이블을 생성하기 때문에, 정렬 병합 조인보다 비용이 낮게 평가될 수 있다.
+The buffer size used during the sorting process can be configured with the **sort_buffer_size** parameter. For more details, refer to :ref:`memory-parameters`.
 
-.. 부분 범위 처리
+While sort merge joins can become inefficient if the sorting process incurs high costs,
+nested loop joins do not require any preparatory steps, and hash joins create a hash table by reading only one table's records.
+Thus, these methods may be evaluated as less costly compared to sort merge joins.
 
-정렬 병합 조인은 두 테이블의 정렬이 모두 완료된 후에 조인을 수행하기 때문에 부분 범위 처리가 불가능하다.
-따라서 처음 N개의 결과만 필요한 경우에도 조인이 모두 완료된 이후에 결과를 조회할 수 있다.
+.. Partial Range Processing
+
+Sort merge joins require that both tables are fully sorted before the join can be performed. As a result, partial range processing is not possible.
+Even if only the first N results are needed, the join must be fully completed before the results can be retrieved.
 
 .. _example_join-method_sort-merge:
 
-.. rubric:: 예시 1. 정렬 병합 조인의 수행 과정
+.. rubric:: Example 1. Execution Process of a Sort Merge Join
 
-이 예시는 정렬 병합 조인의 수행 과정을 설명한다.
-조인 성능에 영향을 미치지는 않지만, 설명과 동일한 순서로 수행되도록 **ORDERED** 힌트를 사용한다.
+This example explains the execution process of a sort merge join.
+Although the **ORDERED** hint does not affect join performance, it is used here to ensure the join is executed in the same order as described.
 
 .. code-block:: sql
 
@@ -361,76 +374,80 @@ CUBRID는 드리븐 테이블에 임의 접근이 불가능한 경우에도 조�
 
 **수행 과정:**
 
-1. nation 테이블에서 필터 조건(n.continent = 'Asia')을 만족하는 레코드를 조회한 뒤, code 컬럼 값을 기준으로 정렬한다.
+1. Retrieve records from the nation table that satisfy the filter condition (n.continent = 'Asia'), and sort them based on the code column.
 
     .. code-block:: sql
 
         select n.code, n.name from nation as n where n.continent = 'Asia' order by n.code;
 
-2. athlete 테이블에서 필터 조건(a.event = 'Baseball')을 만족하는 레코드를 조회한 뒤, natione_code 컬럼 값을 기준으로 정렬한다.
+2. Retrieve records from the athlete table that satisfy the filter condition (a.event = 'Baseball'), and sort them based on the nation_code column.
 
     .. code-block:: sql
 
         select a.nation_code, a.name from athlete as a where a.event = 'Baseball' order by a.nation_code;
 
-3. 두 정렬 결과의 레코드를 순차적으로 읽어 조인 조건(n.code = a.nation_code)을 비교하여 조건을 만족하면 두 레코드를 결합하여 결과에 추가한다.
+3. Sequentially read the sorted results from both tables and compare them against the join condition (n.code = a.nation_code). If the condition is satisfied, combine the two records and add them to the result.
 
 .. _join-method_hash:
 
-해시(Hash) 조인
+Hash Join
 ----------------------------------------
 
-.. 기본 설명
+.. Basic Explanation
 
-해시 조인은 해시 함수를 사용하여 동일한 해시 값을 가지는 두 테이블의 레코드를 결합하는 방식이다.
-이 과정에서 해시 테이블은 동일한 해시 값을 가지는 레코드를 모아 효율적인 비교를 위해 사용된다.
-두 테이블 중 하나는 해시 테이블을 생성하는 데 사용되며, 다른 하나는 생성된 해시 테이블을 탐색하기 위해 사용된다.
-해시 값은 조인 컬럼 값을 입력으로 해시 함수에서 생성된다.
-서로 다른 입력값에서 동일한 해시 값이 생성되는 상황을 해시 충돌이라고 하며, 충돌이 발생한 레코드는 순차적으로 탐색하여 조인 조건을 비교한다.
-해시 조인은 조인 조건이 동등 조건일 때만 수행할 수 있다.
+A hash join combines records from two tables by using a hash function to assign the same hash value to records that meet the join condition.
+During this process, a hash table is created to group records with the same hash value, enabling efficient comparisons.
+One table is used to build the hash table, and the other is used to probe the created hash table.
+Hash values are generated by the hash function based on the values of the join columns.
 
-.. 비용 계산
+If different input values generate the same hash value, this is called a hash collision.
+When collisions occur, the records are sequentially checked against the join condition to ensure correctness.
+Hash joins can only be performed when the join condition is based on equality.
 
-해시 조인의 비용은 해시 테이블을 생성하는 테이블과 해시 테이블을 탐색하는 테이블을 각각 다른 테이블로 설정했을 때의 비용을 모두 계산하여, 최소 비용을 선택한다.
+.. Cost Calculation
 
-.. 해시 테이블을 생성하는 테이블
+The cost of a hash join is calculated for both scenarios:
+Using one table to build the hash table and the other to probe it, and vice versa.
+The optimizer selects the configuration with the minimum cost.
 
-해시 테이블을 생성하는 테이블은 **ORDERED** 또는 **LEADING** 힌트를 사용하여 지정할 수 없다.
-일반적으로 두 테이블 중 레코드 수가 적은 테이블이 선택된다.
-단, 외부 조인의 경우 조인 방향에 따라 해시 테이블을 생성하는 테이블이 고정된다.
+.. Hash Table Build
 
-- 왼쪽 외부 조인: 오른쪽 테이블이 해시 테이블을 생성
-- 오른쪽 외부 조인: 왼쪽 테이블이 해시 테이블을 생성
+The table used to build the hash table cannot be explicitly specified using **ORDERED** or **LEADING** hints.
+Typically, the table with fewer records is selected.
+However, for outer joins, the table used for hash table creation is fixed based on the join direction:
 
-.. 해시 방식
+- Left outer join: The right table builds the hash table.
+- Right outer join: The left table builds the hash table.
 
-해시 테이블을 생성하는 방식은 임시 결과 크기와 해시 테이블의 최대 크기에 따라 결정된다.
-해시 테이블의 최대 크기는 **max_hash_list_scan_size** 파라미터로 설정할 수 있으며, 자세한 내용은 :ref:`memory-parameters`\에서 확인할 수 있다.
+.. Hash Method
 
-CUBRID는 다음과 같은 해시 방식을 지원한다:
+The method for creating a hash table depends on the size of the temporary results and the maximum hash table size.
+The maximum hash table size is controlled by the **max_hash_list_scan_size** parameter. For more details, refer to :ref:`memory-parameters`.
 
-- 메모리 해시: 임시 결과 전체를 해시 테이블에 저장할 수 있을 때 사용한다. **(임시 결과의 페이지 수 * 페이지 크기 <= 해시 테이블 최대 크기)**
-- 하이브리드 해시: **메모리 해시**\가 불가능하고, 해시 테이블에 임시 결과 크기 만큼의 레코드 위치 정보를 저장할 수 있을 때 사용한다. **(임시 결과의 레코드 수 * (해시 엔트리 크기 + 위치 정보 크기) <= 해시 테이블 최대 크기)**
-- 파일 해시: **메모리 해시**\와 **하이브리드 해시**\가 모두 불가능할 때 사용한다.
+CUBRID supports the following hashing methods:
 
-**하이브리드 해시**\와 **파일 해시**\는 해시 테이블에 레코드의 위치 정보를 저장하므로, 추가적으로 레코드를 찾아 읽는 과정이 필요하다.
-**메모리 해시**\와 **하이브리드 해시**\는 메모리에 해시 테이블을 생성하지만, **파일 해시**\는 임시 볼륨의 페이지를 사용하여 해시 테이블을 생성한다.
-임시 볼륨의 페이지 접근 시 래치가 발생하여 성능 저하가 발생할 수 있다.
+- **Memory Hash**: Used when the entire temporary result can fit in the hash table. **(Number of pages in the temporary result * Page size ≤ Maximum hash table size)**
+- **Hybrid Hash**: Used when Memory Hash is not feasible, but the hash table can store location information for all records in the temporary result. **(Number of records in the temporary result * (Hash entry size + Location info size) ≤ Maximum hash table size)**
+- **File Hash**: Used when neither Memory Hash nor Hybrid Hash is feasible.
 
-실제로 사용된 해시 방식은 질의 프로파일링을 통해 확인할 수 있으며, 자세한 내용은 :ref:`query-profiling`\에서 확인할 수 있다.
-질의 수행 도중에도 조인이 완료되면 해시 테이블은 삭제되며, 사용된 메모리는 반환된다.
+**Hybrid Hash** and **File Hash** store location information for records in the hash table, requiring an additional step to fetch and read the actual records.
+While **Memory Hash** and **Hybrid Hash** create the hash table in memory, **File Hash** uses pages from temporary volumes.
+Accessing temporary volume pages may result in latching, leading to performance degradation.
 
-.. 부분 범위 처리
+The actual hashing method used can be verified through query profiling. For details, refer to :ref:`query-profiling`.
+Even during query execution, once the join is complete, the hash table is discarded, and the memory used is released.
 
-해시 조인은 해시 테이블 생성이 완료된 후에 조인을 수행하기 때문에 부분 범위 처리는 불가능하다.
+.. Partial Range Processing
+
+Hash joins cannot support partial range processing because the join operation can only be performed after the hash table is fully built.
 
 .. _example_join-method_hash:
 
-.. rubric:: 예시 1. 해시 조인의 수행 과정
+.. rubric:: Example 1. Execution Process of a Hash Join
 
-이 예시는 해시 조인의 수행 과정을 보여준다.
+This example illustrates the execution process of a hash join.
 
-**ORDERED** 힌트에 의해 조인 순서는 고정되었지만, 해시 테이블을 생성하는 테이블은 고정되지 않는다.
+Although the **ORDERED** hint fixes the join order, the table used to build the hash table is not predetermined.
 
 .. code-block:: sql
 
@@ -459,9 +476,9 @@ CUBRID는 다음과 같은 해시 방식을 지원한다:
                    cost:  49 card 202
         cost:  63 card 29
 
-nation 테이블에서 필터 조건(n.continent = 'Asia')을 만족하는 레코드는 47개이고,
-athlete 테이블에서 필터 조건(a.event = 'Baseball')을 만족하는 레코드는 229개이다.
-따라서 레코드 수가 적은 nation 테이블이 해시 테이블을 생성하는 데 사용된다.
+The nation table contains 47 records that satisfy the filter condition (n.continent = 'Asia'),
+while the athlete table contains 229 records that meet the filter condition (a.event = 'Baseball').
+As a result, the nation table, which has fewer records, is used to build the hash table.
 
 ::
 
@@ -476,69 +493,67 @@ athlete 테이블에서 필터 조건(a.event = 'Baseball')을 만족하는 레�
               SELECT (time: 2, fetch: 32, fetch_time: 0, ioread: 0)
                 SCAN (table: public.athlete), (heap time: 1, fetch: 32, ioread: 0, readrows: 6677, rows: 229)
 
-
-
-**질의 프로파일링 결과:**
+**Query Profiling Results:**
 
 1. **HASHJOIN**
 
-    - time: 해시 조인 수행 시간(ms)
-    - fetch: 해시 조인 중 관련 페이지의 fetch 횟수
-    - fetch_time : 해시 조인 중 페이지 fetch 수행 시간(ms)
-    - ioread: 해시 조인 동안 물리적으로 디스크에 접근한 I/O 읽기 횟수
+    - time: The total time taken to perform the hash join (in milliseconds).
+    - fetch: The number of page fetches during the hash join.
+    - fetch_time : The time spent fetching pages during the hash join (in milliseconds).
+    - ioread: The number of I/O read operations where the disk was physically accessed during the hash join.
 
 2. **BUILD**
 
-    - time: 해시 테이블을 생성하는 테이블을 조회하는 데 걸린 시간(ms)에 build_time이 더해진다.
-    - build_time: 해시 테이블을 생성하는 데 걸린 시간(ms)
-    - fetch: 해시 테이블 빌드 중 페이지 fetch 횟수
-    - fetch_time : 해시 테이블 빌드 중 페이지 fetch 수행 시간(ms)
-    - ioread: 해시 테이블 빌드 중 물리적으로 디스크에 접근한 I/O 읽기 횟수
-    - hash_method: 해시 테이블을 생성하는 방식(memory, hybrid, file, skip 등)
+    - time: The time taken to scan the table used for hash table creation, including the time spent building the hash table (build_time).
+    - build_time: The time taken to construct the hash table (in milliseconds).
+    - fetch: The number of page fetches during the hash table build phase.
+    - fetch_time : The time spent fetching pages during the hash table build phase (in milliseconds).
+    - ioread: The number of I/O read operations where the disk was physically accessed during the hash table build phase.
+    - hash_method: The method used to create the hash table (e.g., memory, hybrid, file, or skip).
 
 3. **PROBE**
 
-    - time: 해시 테이블을 탐색하는 테이블을 조회하는 데 걸린 시간(ms)에 probe_time 더해진다.
-    - probe_time: 해시 테이블을 탐색하는 데 걸린 시간(ms)
-    - fetch: 해시 테이블 탐색 중 페이지 fetch 횟수
-    - fetch_time : 해시 테이블 탐색 중 페이지 fetch 수행 시간(ms)
-    - ioread: 해시 테이블 탐색 중 물리적으로 디스크에 접근한 I/O 읽기 횟수
-    - readkeys: 해시 테이블 탐색 중 해시 값이 동일한 레코드 개수
-    - rows: 해시 테이블 탐색 중 조인 조건을 만족하는 레코드 개수. (rows <= readkeys)
-    - max_collisions: 해시 테이블 탐색 중 해시 값이 동일한 레코드의 최대 개수
+    - time: The time taken to scan the table used for probing the hash table, including the time spent probing (probe_time).
+    - probe_time: The time taken to search the hash table for matching records (in milliseconds).
+    - fetch: The number of page fetches during the hash table probe phase.
+    - fetch_time : The time spent fetching pages during the hash table probe phase (in milliseconds).
+    - ioread: The number of I/O read operations where the disk was physically accessed during the hash table probe phase.
+    - readkeys: The number of records with matching hash values found during the hash table probe.
+    - rows: The number of records satisfying the join condition during the hash table probe phase. (rows <= readkeys)
+    - max_collisions: The maximum number of records with the same hash value during the hash table probe phase.
 
 **수행 과정:**
 
-1. nation 테이블에서 필터 조건(n.continent = 'Asia')을 만족하는 레코드를 조회하여 임시 결과를 생성한다.
+1. Retrieve records from the nation table that satisfy the filter condition (n.continent = 'Asia') and create a temporary result.
 
     .. code-block:: sql
 
         select n.code, n.name from nation as n where n.continent = 'Asia';
 
-2. athlete 테이블에서 필터 조건(a.event = 'Baseball')을 만족하는 레코드를 조회하여 임시 결과를 생성한다.
+2. Retrieve records from the athlete table that satisfy the filter condition (a.event = 'Baseball') and create a temporary result.
 
     .. code-block:: sql
 
         select a.nation_code, a.name from athlete as a where a.event = 'Baseball';
 
-3. nation 테이블의 임시 결과를 읽어 해시 테이블을 생성한다.
-4. athlete 테이블의 임시 결과에서 레코드를 하나씩 읽어 해시 테이블을 탐색한다.
-5. 해시 값이 동일한 레코드를 찾은 후, 조인 조건(n.code = a.nation_code)을 비교하여 조건을 만족하면 두 레코드를 결합하여 결과에 추가한다.
-6. 해시 값이 동일한 다음 레코드에 대해 5단계를 반복한다.
-7. athlete 테이블의 다음 레코드에 대해 4~6단계를 반복한다.
-8. 모든 조인 연산이 완료될 때까지 위 과정을 반복한다.
+3. Read the temporary result from the nation table and build a hash table.
+4. For each record in the temporary result from the athlete table, probe the hash table.
+5. Find records in the hash table with the same hash value, and compare them against the join condition (n.code = a.nation_code). If the condition is satisfied, combine the records and add them to the result.
+6. Repeat step 5 for the next record with the same hash value.
+7. Repeat steps 4~6 for the next record in the athlete table.
+8. Continue until all join operations are complete.
 
 .. _example_join-method_hash_index:
 
-.. rubric:: 예시 2. 중첩 반복 조인과는 인덱스 설계가 다른 해시 조인
+.. rubric:: Example 2. Hash Join with Index Design Differing from Nested Loop Join
 
-이 예시는 중첩 반복 조인과 해시 조인에서 인덱스 설계가 어떻게 달라질 수 있는지를 보여준다.
+This example illustrates how index design can differ between a nested loop join and a hash join.
 
-중첩 반복 조인은 드리븐 테이블을 임의 접근하기 위해 조인 조건에 맞는 인덱스가 필요하다.
-반면, 해시 조인은 조인 조건과 관계없이 필터 조건이 적용된 임시 결과를 먼저 조회하기 때문에 중첩 반복 조인과는 다른 인덱스가 필요하다.
+Nested Loop Join: Requires an index on the driven table that matches the join condition to allow random access.
+Hash Join: Retrieves a temporary result filtered by the filter condition before the join, independent of the join condition, requiring a different indexing approach compared to a nested loop join.
 
-두 조인 방식을 모두 고려하여 인덱스를 설계하는 것이 이상적이지만, 그렇지 않은 경우 **INDEX_SS** 힌트를 사용해 인덱스 스킵 스캔 수행을 고려할 수 있다.
-인덱스 스킵 스캔은 인덱스의 선행 컬럼만 스킵할 수 있으므로, 조인 조건의 컬럼이 여러 개인 경우에는 수행이 제한될 수 있다.
+While designing indexes that support both join methods is ideal, if this is not feasible, the **INDEX_SS** hint can be used to consider performing an index skip scan.
+An index skip scan allows skipping over leading columns of an index, but its usage is limited when the join condition involves multiple columns.
 
 .. code-block:: sql
 
@@ -591,10 +606,10 @@ athlete 테이블에서 필터 조건(a.event = 'Baseball')을 만족하는 레�
 
 .. _example_join-method_hash-right-outer:
 
-.. rubric:: 예시 3. 오른쪽 해시 외부 조인
+.. rubric:: Example 3. Right Outer Hash Join
 
-이 예시는 외부 조인에서 조인 방향에 따라 해시 테이블 생성에 사용되는 테이블이 고정되는 것을 보여준다.
-오른쪽 외부 조인에서는 왼쪽 테이블이 해시 테이블을 생성하는 데 사용된다.
+This example demonstrates how the table used to create the hash table is determined based on the join direction in an outer join.
+In a right outer join, the left table is always used to build the hash table.
 
 .. code-block:: sql
 
@@ -622,10 +637,10 @@ athlete 테이블에서 필터 조건(a.event = 'Baseball')을 만족하는 레�
                    cost:  2 card 31
         cost:  15 card 31
 
-participant 테이블에서 필터 조건(p.gold > 0)을 만족하는 레코드는 228개이고,
-nation 테이블에서 필터 조건(n.continent = 'Asia')을 만족하는 레코드는 47개이다.
-오른쪽 외부 조인에서는 왼쪽 테이블이 해시 테이블을 생성하는 데 사용되므로,
-이 경우 participant 테이블이 해시 테이블을 생성하는 데 사용된다.
+The participant table contains 228 records that satisfy the filter condition (p.gold > 0),
+while the nation table contains 47 records that meet the filter condition (n.continent = 'Asia').
+Since a right outer join always uses the left table to build the hash table,
+the participant table is used to create the hash table in this case.
 
 ::
 
@@ -642,14 +657,14 @@ nation 테이블에서 필터 조건(n.continent = 'Asia')을 만족하는 레�
 
 .. _example_join-method_hash-left-outer:
 
-.. rubric:: 예시 4. 해시 테이블 생성이 생략된 해시 외부 조인
+.. rubric:: Example 4. Hash Outer Join Without Hash Table Creation
 
-이 예시는 외부 조인에서 해시 테이블 생성이 생략되는 경우를 보여준다.
-왼쪽 외부 조인에서는 오른쪽 테이블이 해시 테이블 생성에 사용된다.
+This example illustrates a scenario where hash table creation is skipped during an outer join.
+In a left outer join, the right table is typically used to build the hash table.
 
-만약 두 테이블 중 하나라도 데이터가 없으면 해시 테이블은 생성되지 않는다.
-이 예시에서 participant 테이블에는 필터 조건(p.gold > 100)을 만족하는 레코드가 없으므로, 해시 테이블 생성을 생략된다.
-필터 조건(n.continent = 'Asia')이 적용된 왼쪽 테이블의 결과가 질의 결과로 조회된다.
+If either table contains no data, the hash table is not created.
+In this example, the participant table contains no records satisfying the filter condition (p.gold > 100), so the hash table creation is skipped.
+As a result, only the filtered records from the left table (nation) satisfying the condition (n.continent = 'Asia') are retrieved as the query result.
 
 .. code-block:: sql
 
@@ -677,8 +692,8 @@ nation 테이블에서 필터 조건(n.continent = 'Asia')을 만족하는 레�
                    cost:  5 card 92
         cost:  15 card 31
 
-**BUILD** 항목에서 해시 테이블 생성에 사용된 방식이 hash_method: skip으로 표시된다.
-**skip**\은 해시 테이블 생성이 생략되었음을 의미한다.
+In the **BUILD** section, the hash method used for hash table creation is displayed as hash_method: skip.
+The value **skip** indicates that hash table creation was omitted.
 
 ::
 
@@ -695,11 +710,11 @@ nation 테이블에서 필터 조건(n.continent = 'Asia')을 만족하는 레�
 
 .. _example_join-method_hash-method_hybrid:
 
-.. rubric:: 예시 5. 하이브리드 해시 방식을 사용하는 해시 조인
+.. rubric:: Example 5. Hash Join Using Hybrid Hash Method
 
-이 예시는 하이브리드 해시 방식을 사용하는 해시 조인의 수행 결과를 보여준다.
+This example demonstrates the execution results of a hash join that uses the hybrid hash method.
 
-하이브리드 해시 방식을 사용하기 위해 **max_hash_list_scan_size** 파라미터를 **12K**\(기본값: **8M**)로 설정한다.
+To enable the hybrid hash method, the **max_hash_list_scan_size** parameter is set to **12K** (default: **8M**).
 
 .. code-block:: sql
 
@@ -740,8 +755,8 @@ nation 테이블에서 필터 조건(n.continent = 'Asia')을 만족하는 레�
               SELECT (time: 3, fetch: 53, fetch_time: 0, ioread: 0)
                 SCAN (table: public.athlete), (heap time: 2, fetch: 32, ioread: 0, readrows: 6677, rows: 6677)
 
-다음은 동일한 예시에서 **USE_NL**\과 **USE_HASH** 힌트를 함께 사용했을 때, 질의 최적화기가 어떤 조인 방식을 선택하는지를 보여준다.
-이 경우에도 동일하게 해시 조인이 수행된다.
+The following demonstrates how the query optimizer selects the join method when both **USE_NL** and **USE_HASH** hints are provided in the same query.
+In this case, a hash join is still performed.
 
 .. code-block:: sql
 
@@ -784,10 +799,10 @@ nation 테이블에서 필터 조건(n.continent = 'Asia')을 만족하는 레�
 
 .. _example_join-method_hash-method_file:
 
-.. rubric:: 예시 6. 파일 해시 방식을 사용하는 해시 조인
+.. rubric:: Example 6. Hash Join Using File Hash Method
 
-이 예시는 파일 해시 방식을 사용하는 해시 조인의 수행 결과를 보여준다.
-파일 해시 방식을 사용하기 위해 **max_hash_list_scan_size** 파라미터를 **8K**\(기본값: **8M**)로 설정한다.
+This example demonstrates the execution results of a hash join that uses the file hash method.
+To enable the file hash method, the **max_hash_list_scan_size** parameter is set to **8K** (default: **8M**).
 
 .. code-block:: sql
 
@@ -801,17 +816,17 @@ nation 테이블에서 필터 조건(n.continent = 'Asia')을 만족하는 레�
 
     set system parameters 'max_hash_list_scan_size=8M';
 
-질의 최적화기는 데이터베이스가 수집한 통계 정보를 바탕으로 메모리 해시와 하이브리드 해시 방식을 모두 사용할 수 없음을 판단한다.
+The query optimizer determines, based on database statistics, that neither the memory hash nor the hybrid hash method can be used.
 
 ::
 
-    임시 결과의 레코드 수 * (해시 엔트리 크기 + 위치 정보 크기) <= 해시 테이블 최대 크기
+    Temporary result record count * (Hash entry size + Location info size) <= Maximum hash table size
         => 215 * (32 byte * 16 byte) <= 8,192 byte
 	=> 10,320 <= 8192 byte
 	=> false
 
-임시 결과의 레코드 수가 가장 적은 nation 테이블을 사용하여 해시 테이블을 생성하더라도 해시 테이블의 최대 크기를 초과한다.
-따라서, 파일 해시 방식이 사용되며, 이 경우 임시 볼륨의 페이지를 사용하기 때문에 하이브리드 해시 방식보다 비용이 높다. (400 vs 3,846)
+Even when the nation table, which has the fewest records, is used to build the hash table, the maximum hash table size is exceeded.
+As a result, the file hash method is used. Since this method relies on temporary volume pages, its cost is higher than the hybrid hash method (400 vs. 3,846).
 
 ::
 
@@ -827,7 +842,8 @@ nation 테이블에서 필터 조건(n.continent = 'Asia')을 만족하는 레�
                    cost:  49 card 6677
         cost:  3846 card 6677
 
-:ref:`예시 5 <example_join-method_hash-method_hybrid>`\의 질의 프로파일링 결과와 비교하면, 파일 해시 방식을 사용할 때, 성능이 감소했음을 확인할 수 있다.
+Compared to the query profiling results from :ref:`Example 5 <example_join-method_hash-method_hybrid>`,
+it is evident that performance decreases when the file hash method is used.
 
 ::
 
@@ -842,8 +858,8 @@ nation 테이블에서 필터 조건(n.continent = 'Asia')을 만족하는 레�
               SELECT (time: 2, fetch: 53, fetch_time: 0, ioread: 0)
                 SCAN (table: public.athlete), (heap time: 1, fetch: 32, ioread: 0, readrows: 6677, rows: 6677)
 
-다음은 동일한 예시에서 **USE_NL**과 **USE_HASH** 힌트를 함께 사용했을 때, 질의 최적화기가 어떤 조인 방식을 선택하는지 보여준다.
-파일 해시 방식은 비용이 높기 때문에, 이 경우 중첩 반복 조인이 수행된다.
+The following demonstrates how the query optimizer selects the join method when both **USE_NL** and **USE_HASH** hints are provided in the same query.
+Due to the high cost of the file hash method, a nested loop join is performed in this case.
 
 .. code-block:: sql
 

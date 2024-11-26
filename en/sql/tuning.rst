@@ -266,6 +266,7 @@ The following show the meaning for each term which is printed as a query plan.
     *   nl-join: Nested loop join
     *   m-join: Sort merge join
     *   idx_join: Nested loop join, and it is a join which uses an index in the inner table as reading rows of the outer table.
+    *   hash-join: Hash join
     
 *   Join type: It is printed as "(inner join)" on the above. The following are the join types which are printed on the query plan.
     
@@ -671,6 +672,8 @@ Using hints can affect the performance of query execution. You can allow the que
     USE_NL [ (<spec_name_comma_list>) ] |
     USE_IDX [ (<spec_name_comma_list>) ] |
     USE_MERGE [ (<spec_name_comma_list>) ] |
+    USE_HASH [ (<spec_name_comma_list>) ] |
+    NO_USE_HASH [ (<spec_name_comma_list>) ] |
     ORDERED |
     LEADING |
     USE_DESC_IDX |
@@ -711,6 +714,8 @@ The following hints can be specified in **UPDATE**, **DELETE** and **SELECT** st
 
 *   **USE_NL**: Related to a table join, the query optimizer creates a nested loop join execution plan with this hint.
 *   **USE_MERGE**: Related to a table join, the query optimizer creates a sort merge join execution plan with this hint.
+*   **USE_HASH**: Related to a table join, the query optimizer creates a hash join execution plan with this hint. see :ref:`join-method_hash`.
+*   **NO_USE_HASH**: Related to a table join, The query optimizer does not create anhash join execution plan with this hint. see :ref:`join-method_hash`.
 *   **ORDERED**: Related to a table join, the query optimizer create a join execution plan with this hint, based on the order of tables specified in the **FROM** clause. The left table in the **FROM** clause becomes the outer table; the right one becomes the inner table.
 *   **LEADING**: Related to a table join, the query optimizer create a join execution plan with this hint, based on the order of tables specified in the **LEADING** hint.
 *   **USE_IDX**: Related to an index, the query optimizer creates an index join execution plan corresponding to a specified table with this hint.

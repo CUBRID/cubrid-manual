@@ -775,7 +775,7 @@ SQL 힌트는 주석에 더하기 기호(+)를 함께 사용하여 지정한다.
         SELECT /*+ ORDERED USE_NL(b) USE_NL(c) USE_MERGE(d) */ * 
         FROM a INNER JOIN b ON a.col=b.col 
         INNER JOIN c ON b.col=c.col INNER JOIN d ON c.col=d.col;
-
+        
     위와 같은 질의를 수행한다면 테이블 a와 b가 조인될 때는 **USE_NL**\ 이 적용되고 테이블 c가 조인될 때도 **USE_NL**\ 이 적용되며, 테이블 d가 조인될 때는 **USE_MERGE**\ 가 적용된다.
 
     <*spec_name*>\ 이 주어지지 않고 **USE_NL**\ 과 **USE_MERGE**\ 가 함께 지정된 경우 주어진 힌트는 무시된다. 일부 경우에 질의 최적화기는 주어진 힌트에 따라 질의 실행 계획을 만들지 못할 수 있다. 예를 들어 오른쪽 외부 조인에 대해 **USE_NL**\ 을 지정한 경우 이 질의는 내부적으로 왼쪽 외부 조인 질의로 변환이 되어 조인 순서는 보장되지 않을 수 있다.

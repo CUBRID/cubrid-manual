@@ -1,45 +1,47 @@
 .. _join-method:
 
-Join Method
+Join Methods
 ========================================
 
-.. Background Explanation
+.. Background
 
-In relational databases, data is divided and stored across multiple tables through normalization.
-This process is effective for reducing data redundancy and maintaining integrity,
-but joining operations are required to retrieve separated data by combining relationships between tables.
-Joins are a core function of DBMS that allow dispersed data to be queried as if it were a single table, playing a crucial role in SQL syntax.
+Relational databases store data by dividing it into multiple tables through normalization.
+This approach is effective for reducing data redundancy and maintaining integrity.
+However, retrieving data from separate tables requires combining the data based on the relationships between them.
+Joins are SQL function that combines data from multiple tables using these relationships and provide the result in an integrated form.
 
-.. Basic Explanation
+.. Overview
 
-Join queries are used to combine related data from two or more tables, views, or derived tables to extract the desired information.
-The records included in the join result vary depending on the type of join selected.
-Detailed information can be found in :ref:`join-query`.
+Join queries are used to combine data from multiple tables, views, or derived tables to retrieve the desired information.
+The records included in the result may vary depending on the join type used.
+For more details, refer to :ref:`join-query`.
 
 .. note::
 
-    From this point onward, the term **table** includes not only actual tables but also views (virtual tables) and derived tables as a comprehensive concept.
+    Here, **Table** is used as a broad concept that includes not only actual tables but also views (virtual tables) and derived tables.
 
-.. Join Method
+.. Join Methods in CUBRID
 
-The way records are combined between tables is determined by the join method, which is automatically selected by the query optimizer.
+The way records are combined between tables varies depending on the join method.
+The join method is determined by the query optimizer through cost comparison but can also be specified by the user.
 
-CUBRID supports the following join methods:
+**CUBRID** supports the following join methods:
 
 - :ref:`join-method_nested-loop`
 - :ref:`join-method_sort-merge`
 - :ref:`join-method_hash`
 
-A single query can involve multiple joins, and different methods may be used for each join.
-All join methods process only the combination of two tables at a time, and the join operations proceed sequentially.
+If a query includes two or more joins, each join method can be applied differently.
+All join methods process the join between two tables only, and join operations are performed sequentially.
 That is, the next join is performed after the previous one is completed.
 
-The query optimizer calculates the cost of each method based on statistics collected by the database and selects the most efficient method (minimum cost).
-However, in CUBRID, the query optimizer does not consider sort merge joins and hash joins by default.
-To use these methods, **SQL hints** must be explicitly added, as described in :ref:`sql-hint`.
+The query optimizer calculates the cost of each method based on statistics collected by the database and selects the most efficient method with the lowest cost.
+However, in **CUBRID**, the query optimizer does not consider **Sort Merge Joins** or **Hash Joins** by default.
+To use these methods, **SQL hints** must be explicitly added.
+For more details, refer to :ref:`sql-hint`.
 
-Additionally, by setting the **optimizer_enable_merge_join** parameter to **yes** (default: **no**), sort merge joins can be performed without using the **USE_MERGE** hint.
-Further details can be found in :ref:`other-parameters`.
+Additionally, by setting the **optimizer_enable_merge_join** parameter to **yes** (default: **no**), **Sort Merge Joins** can be performed without using the **USE_MERGE** hint.
+For more details, refer to :ref:`other-parameters`.
 
 .. _join-method_nested-loop:
 

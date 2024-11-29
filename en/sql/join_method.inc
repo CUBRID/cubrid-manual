@@ -92,7 +92,7 @@ whereas hash joindoes not support this functionality.
 For more details, refer to :ref:`join-method_hash`.
 
 Whether hash list scans were used can be confirmed through query profiling.
-For more details, refer to :ref:`query-profilingh`.
+For more details, refer to :ref:`query-profiling`.
 
 .. _example_join-method_nested-loop_no-index:
 

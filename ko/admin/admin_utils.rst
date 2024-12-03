@@ -3575,6 +3575,9 @@ flashback
 .. note::
 		**cubrid flashback** 을 통해 되돌리려는 테이블이 :ref:`trigger-event-target` 일 경우, 사용자가 의도하지 않은 결과를 얻을 수 있다. **cubrid flashback** 을 통해 테이블에 대한 변경 사항을 되돌리기 전에 트리거를 비활성화하는 것이 좋다. 자세한 내용은 :ref:`alter-trigger` 을 참조한다.
 
+.. note::
+		**cubrid flashback** 은 복합 데이터 타입인 SET, MULTISET, LIST, JSON을 지원하지 않는다. **cubrid flashback** 수행 시 대상 클래스가 미지원 데이터 타입을 컬럼으로 갖는 경우 해당 컬럼값은 null로 출력된다. 또한, LOB 타입의 컬럼은 데이터가 아닌 해당 파일의 위치 정보(LOB locator)만 출력된다.
+
 다음은 **cubrid flashback** 에서 사용하는 [options]이다.
 
 .. program:: flashback

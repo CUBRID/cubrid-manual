@@ -226,7 +226,7 @@ The **LEADING** hint is used to specify the join order, making athlete the drivi
         SCAN (table: public.athlete), (heap time: 5, fetch: 6709, ioread: 0, readrows: 6677, rows: 229)
           SCAN (index: public.nation.pk_nation_code), (btree time: 0, fetch: 458, ioread: 0, readkeys: 229, filteredkeys: 0, rows: 229) (lookup time: 0, rows: 103)
 
-Using athlete as the driving table leads to a decreased in performance due to its higher number of records.
+Using athlete as the driving table leads to a decrease in performance due to its higher number of records.
 
 .. _example_join-method_nested-loop_with-hash-list:
 

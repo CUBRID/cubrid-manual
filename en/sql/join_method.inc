@@ -5,7 +5,7 @@ Join Methods
 
 .. Overview
 
-Relational database stores data by dividing it into multiple tables through normalization.
+A Relational database stores data by dividing it into multiple tables through normalization.
 This approach effectively reduces data redundancy and ensures data integrity.
 However, to query the divided data in an integrated manner, relationships between tables must be combined.
 A join operation combines these relationships and returns results as if they were from a single table.
@@ -23,10 +23,10 @@ The way records are combined between tables depends on the join method used. CUB
 - :ref:`join-method_sort-merge`
 - :ref:`join-method_hash`
 
-Join method are determined by the query optimizer based on a cost comparison, though users can also specify them manually.
+Join methods are determined by the query optimizer based on a cost comparison, though users can also specify them manually.
 The query optimizer calculates the cost of each join method using statistics collected by the database.
 It then selects the method with the lowest cost.
-When a query includes two or more joins, different join method can be applied to each join.
+When a query includes two or more joins, different join methods can be applied to each join.
 Each join method operates on only two tables at a time and is executed sequentially.
 In other words, the next join is performed only after the previous one has been completed.
 
@@ -54,7 +54,7 @@ The table used in the outer loop is referred to as the driving table, while the 
 
 .. Driving Table
 
-When selecting a driven table from two tables, it is generally more efficient to choose the table with fewer records.
+When selecting a driving table from two tables, it is generally more efficient to choose the table with fewer records.
 Fewer records in the driving table result in fewer join operations, reducing the overall cost of the join.
 Since random access costs are typically constant, fewer join operations on the driven table lead to lower join costs and better performance.
 The query optimizer automatically selects the driving table by comparing join costs,
@@ -64,7 +64,7 @@ but users can specify the driving table explicitly using **ORDERED** or **LEADIN
 
 A nested loop join performs efficiently when random access to the driven table is possible.
 For random access, an appropriate index must be created on the driven table to satisfy the join condition.
-If no index exists, the driven table is scanned sequentially, resulting in reduced join performance.
+If no such index exists, the driven table is scanned sequentially, resulting in reduced join performance.
 When random access to the driven table is enabled through an index, the execution plan labels the indexed join as **idx-join**.
 
 .. Partial Range Processing
@@ -226,7 +226,7 @@ The **LEADING** hint is used to specify the join order, making athlete the drivi
         SCAN (table: public.athlete), (heap time: 5, fetch: 6709, ioread: 0, readrows: 6677, rows: 229)
           SCAN (index: public.nation.pk_nation_code), (btree time: 0, fetch: 458, ioread: 0, readkeys: 229, filteredkeys: 0, rows: 229) (lookup time: 0, rows: 103)
 
-Using athlete as the driving table leads to decreased performance due to the higher number of records in the athlete table.
+Using athlete as the driving table leads to a decreased in performance due to its higher number of records.
 
 .. _example_join-method_nested-loop_with-hash-list:
 
@@ -555,7 +555,7 @@ Thus, the nation table with fewer records is selected to build the hash table.
         select a.nation_code, a.name from athlete as a where a.event = 'Baseball';
 
 3. Read the temporary result from the nation table and build a hash table.
-4. For each record in the temporary result from the athlete table, probe the hash table.
+4. For each record in the temporary result from the athlete table, probe the hash table of the nation table.
 5. Match records in the hash table with the same hash value and compare them against the join condition (``n.code = a.nation_code``). If the condition is satisfied, combine the records and add them to the result.
 6. Repeat step 5 for subsequent records with the same hash value.
 7. Repeat steps 4-6 for the next record in the athlete table.
@@ -761,7 +761,6 @@ Instead, records from the nation table that satisfy the filter condition (``n.co
                    cost:  5 card 92
         cost:  15 card 31
 
-
 .. code-block:: none
 
     Trace Statistics:
@@ -784,7 +783,7 @@ Instead, the records from the nation table satisfying the filter condition (``n.
 .. rubric:: Example 6. Hash Join Using the Hybrid Hash Method
 
 This example demonstrates how to perform a hybrid hash join.
-To enable the hybrid hash method, the **max_hash_list_scan_size** parameter is set to **12K** (default: **8M**).
+To enable the hybrid hash method, the **max_hash_list_scan_size** parameter must be set to **12K** (default: **8M**).
 
 .. code-block:: sql
 
@@ -872,7 +871,7 @@ When the hybrid hash method is available, a hash join is performed.
 .. rubric:: Example 7. Hash Join Using the File Hash Method
 
 This example demonstrates performing a file hash join.
-To enable the file hash method, the **max_hash_list_scan_size** parameter is set to **8K** (default: **8M**).
+To enable the file hash method, the **max_hash_list_scan_size** parameter must be set to **8K** (default: **8M**).
 
 .. code-block:: sql
 
@@ -910,7 +909,7 @@ The following calculation is used:
 	=> 10,320 <= 8192 byte
 	=> False
 
-Since neither memory nor hybrid methods fit within the maximum hash table size, the file hash method is used.
+Since the calculated size exceeds the maximum size of the hash table, the file hash method is chosen instead of the memory or hybrid method.
 File hash joins are more expensive than other hash methods due to the use of temporary volume pages (cost: 400 vs. 3,846).
 
 .. code-block:: none
@@ -927,7 +926,7 @@ File hash joins are more expensive than other hash methods due to the use of tem
                 SCAN (table: public.athlete), (heap time: 1, fetch: 32, ioread: 0, readrows: 6677, rows: 6677)
 
 When compared with the query profiling results from :ref:`Example 6 <example_join-method_hash-method_hybrid>`,
-performance is worse due to the file hash method's higher overhead.
+It can be seen that the execution time of the file hash method is slow in proportion to the cost.
 
 By using both **USE_NL** and **USE_HASH** hints together, it is possible to observe which join method is chosen by the query optimizer.
 When the hybrid hash method is not available, a nested loop join is performed.

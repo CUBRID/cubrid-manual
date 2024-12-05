@@ -715,7 +715,7 @@ The following hints can be specified in **UPDATE**, **DELETE** and **SELECT** st
 *   **USE_NL**: Related to a table join, the query optimizer creates a nested loop join execution plan with this hint.
 *   **USE_MERGE**: Related to a table join, the query optimizer creates a sort merge join execution plan with this hint.
 *   **USE_HASH**: Related to a table join, the query optimizer creates a hash join execution plan with this hint. see :ref:`join-method_hash`.
-*   **NO_USE_HASH**: Related to a table join, The query optimizer does not create anhash join execution plan with this hint. see :ref:`join-method_hash`.
+*   **NO_USE_HASH**: Related to a table join, The query optimizer does not create a hash join execution plan with this hint. see :ref:`join-method_hash`.
 *   **ORDERED**: Related to a table join, the query optimizer create a join execution plan with this hint, based on the order of tables specified in the **FROM** clause. The left table in the **FROM** clause becomes the outer table; the right one becomes the inner table.
 *   **LEADING**: Related to a table join, the query optimizer create a join execution plan with this hint, based on the order of tables specified in the **LEADING** hint.
 *   **USE_IDX**: Related to an index, the query optimizer creates an index join execution plan corresponding to a specified table with this hint.

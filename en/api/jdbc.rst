@@ -166,13 +166,12 @@ The **getConnection** method returns the **Connection** object and it is used to
         .. note:: Even if there are **RW** and **RO** together in *ACCESS_MODE** setting of brokers of main host and **altHosts**, application decides the target host to access without the relation for the setting of **ACCESS_MODE**. Therefore, you should define the main host and **altHosts** as considering **ACCESS_MODE** of target brokers.
 
     *   **rcTime**: Interval time (in seconds) to try to connect active brokers during failover in the HA environment. See the below URL example.
-    *   **loadBalance**: This property controls the method of connecting to multiple database hosts. Load balancing ensures that client connection requests are distributed across servers instead of being concentrated on a single server. (default value: false)  
+    *   **loadBalance**: When there are multiple hosts that a client can connect to, this is the property that selects the algorithm for determining the target host to connect to. Through load balancing, the client's connection requests can be distributed so that they are not concentrated on a specific server. (default value: false)  
 
         The behavior for each setting is as follows:
 
-        *   **true**: Connects to the specified hosts using the **Round-Robin** method.  
-        *   **false**: Connects to the hosts in the order listed in the connection URL.  
-        *   **rr**: Functions the same as true, using the **Round-Robin** method.  
+        *   **false**: Connect to the hosts in the order listed in the connection URL.
+	*   **true or rr**: Connects to the specified hosts using the **Round-Robin** method.
         *   **sh**: Connects to the specified hosts using the **Random(Shuffle)** method.  
 
     *   **connectTimeout**: Timeout value (in seconds) for database connection. The default value is 30 seconds. If this value is 0, it means infinite waiting. This value is also applied when internal reconnection occurs after the initial connection. The **DriverManger.setLoginTimeout** () method can be used to configure it; however, the value configured in this method will be ignored if a value is configured in the connection URL.

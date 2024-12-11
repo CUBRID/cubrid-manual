@@ -736,4 +736,4 @@ A hierarchical query for table join is optimized using a hash list scan when app
 
 .. note::
 
-    **HASH LIST SCAN** optimization for a hierarchical query with join table is performed starting from CUBRID 11.0.
+    **HASH LIST SCAN** optimization for a hierarchical query with join table is supported starting from CUBRID 11.0.

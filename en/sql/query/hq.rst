@@ -679,7 +679,7 @@ A single-table hierarchical query can improve performance by adding an index to 
 Hierarchical query with join-table
 ----------------------------------
 
-A hierarchical query for table join is optimized using a hash list scan when applying the condition in the **CONNECT BY** clause after performing the table join operation. The following example shows the performance difference between hash list scan and list scan.
+A hierarchical query for table join is optimized using a hash list scan when applying the condition in the **CONNECT BY** clause after performing the table join operation. The following example shows the difference in performance between a hash list scan and a list scan.
 
 .. code-block:: sql
 

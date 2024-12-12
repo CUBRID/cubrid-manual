@@ -406,7 +406,7 @@ When different input values produce the same hash value, a hash collision occurs
 In such cases, records with the same hash value are sequentially examined, and the join condition is checked.
 A hash join can only be performed when all join conditions are equality conditions.
 
-.. Hint
+.. rubric:: SQL Hints
 
 There are two hints associated with hash joins:
 
@@ -416,9 +416,9 @@ There are two hints associated with hash joins:
 Both hints can specify one or more tables.
 The hint applies to the inner (driven) table if a table is explicitly specified.
 If no table is specified, the hint applies to all tables.
-When both **USE_HASH** and **NO_USE_HASH** are used for the same table, only the **NO_USE_HASH** hint is applied.
+If the same table is specified in both the **USE_HASH** and **NO_USE_HASH** hints, the **NO_USE_HASH** hint takes precedence.
 
-.. Cost Calculation
+.. rubric:: Cost Calculation
 
 Each table in a hash join can either be used to build the hash table or to probe it.
 To determine the most efficient approach, the costs of both options are calculated and compared, with the lower cost being selected as the hash join cost.
@@ -427,7 +427,7 @@ For example, the following scenarios are compared, and the one with the lower co
 - Building the hash table with the outer (driving) table and probing it with the inner (driven) table.
 - Building the hash table with the inner (driven) table and probing it with the outer (driving) table.
 
-.. Build Phase
+.. rubric:: Table used to build the hash table
 
 The table used to build the hash table cannot be explicitly specified using **ORDERED** or **LEADING** hints.
 The table with fewer records is typically chosen for building the hash table.
@@ -436,7 +436,7 @@ However, in the case of outer joins, the table used to build the hash table is f
 - **Left Outer Join**: The right table is used to build the hash table.
 - **Right Outer Join**: The left table is used to build the hash table.
 
-.. Hash Method
+.. rubric:: How to build the hash table
 
 The method used to build the hash table depends on the size of the temporary results and the maximum size of the hash table.
 The maximum hash table size can be configured using the **max_hash_list_scan_size** parameter.
@@ -447,18 +447,18 @@ CUBRID supports the following hashing methods:
 - **Memory Hash**: Used when all temporary results can fit in the hash table. **(Number of temporary result pages * Page size ≤ Maximum hash table size)**
 - **Hybrid Hash**: Used when the hash table can store the positions of all temporary result records. **(Number of temporary result records * (Hash entry size + position information size) ≤ Maximum hash table size)**
 - **File Hash**:  Used when neither of the above methods is applicable.
+- **Skip Hash**: If either of the two temporary results is empty or unnecessary (in the case of an outer join), building the hash table is skipped.
 
 **Hybrid Hash** and **File Hash** store record positions in the hash table, requiring an additional step to locate records before reading them.
 
 **Memory Hash** and **Hybrid Hash** use memory pages to build the hash table, whereas **File Hash** uses temporary volume pages.
-Accessing pages in the temporary volume during a **File Hash** operation may cause latches, leading to potential performance degradation.
+Accessing pages in a temporary volume incurs additional logical I/O, which can lead to performance degradation.
 
+During query execution, once the join is complete, the hash table is deleted, and the memory it occupied is released.
 The specific hash method used during a hash join can be identified through query profiling.
 For details, refer to :ref:`query-profiling`.
 
-During query execution, once the join is complete, the hash table is deleted, and the memory it occupied is released.
-
-.. Partial Range Processing
+.. rubric:: Partial Range Processing
 
 Hash joins cannot perform partial range processing because the join can only proceed after the hash table has been fully built.
 

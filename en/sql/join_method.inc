@@ -3,19 +3,17 @@
 Join Methods
 ========================================
 
-.. Overview
-
 A Relational database stores data by dividing it into multiple tables through normalization.
 This approach effectively reduces data redundancy and ensures data integrity.
 However, to query the divided data in an integrated manner, relationships between tables must be combined.
 A join operation combines these relationships and returns results as if they were from a single table.
 
-.. Join Type
+.. rubric:: Join Type
 
 The records included in the join results depend on the specified type of join.
 For more details, refer to :ref:`join-query`.
 
-.. Join Method
+.. rubric:: Join Method
 
 The way records are combined between tables depends on the join method used. CUBRID supports the following join methods:
 
@@ -31,8 +29,7 @@ Each join method operates on only two tables at a time and is executed sequentia
 In other words, the next join is performed only after the previous one has been completed.
 
 By default, CUBRID does not generate execution plans for sort-merge joins or hash joins.
-To enable the optimizer to consider these join methods, SQL hints must be specified.
-For more details, refer to :ref:`sql-hint`.
+To enable the optimizer to consider these join methods, :ref:`SQL hints <sql-hint>` must be specified.
 
 The **optimizer_enable_merge_join** parameter can be set to **yes** (default is **no**) to perform a sort-merge join without using the **USE_MERGE** hint.
 For more details, refer to :ref:`other-parameters`.
@@ -46,13 +43,11 @@ For more details, refer to :ref:`other-parameters`.
 Nested Loop Join
 ----------------------------------------
 
-.. Overview
-
 A nested loop join reads records from the outer table one at a time and combines each record with matching records from the inner table.
 This approach is similar to the concept of nested loops in programming.
 The table used in the outer loop is referred to as the driving table, while the table in the inner loop is called the driven table.
 
-.. Driving Table
+.. rubric:: Driving Table
 
 When selecting a driving table from two tables, it is generally more efficient to choose the table with fewer records.
 Fewer records in the driving table result in fewer join operations, reducing the overall cost of the join.
@@ -60,30 +55,37 @@ Since random access costs are typically constant, fewer join operations on the d
 The query optimizer automatically selects the driving table by comparing join costs,
 but users can specify the driving table explicitly using **ORDERED** or **LEADING** hints.
 
-.. Driven Table
+.. rubric:: Driven Table
 
 A nested loop join performs efficiently when random access to the driven table is possible.
-For random access, an appropriate index must be created on the driven table to satisfy the join condition.
-If no such index exists, the driven table is scanned sequentially, resulting in reduced join performance.
-When random access to the driven table is enabled through an index, the execution plan labels the indexed join as **idx-join**.
+For random access, a join-compatible index must be created on the driven table.
+If no such index exists, all records in the driven table must be read sequentially, which degrades join performance.
+When random access to the driven table is enabled through a join-compatible index,
+the nested loop join is displayed as an index join (**idx-join**\) in the execution plan.
 
-.. Partial Range Processing
+.. rubric:: Partial Range Processing
 
-Nested loop joins do not require reading all records from both tables before performing the join operation.
-The join is executed by reading one record at a time from each table, allowing results to be returned immediately.
-This behavior supports partial range processing, meaning if only the first N results are needed, they are returned as soon as the N results are found.
-This approach avoids unnecessary join operations, improving overall performance.
+Nested loop joins can perform join operations by reading just one record from each table,
+and they maintain join results that can be returned immediately, even if the join is not completed for all records.
+This behavior enables partial range processing: if only the first N results are needed, they are returned as soon as those N results are ready.
+Partial range processing improves overall join performance by avoiding unnecessary join operations.
 
-.. Hash List Scan
+.. rubric:: Hash List Scan
 
-Even when random access to the driven table is not possible, CUBRID supports random access through hash list scanning, provided all join conditions are equality conditions.
-A hash list scan operates similarly to a hash join but builds the hash table using the driven table.
-Unlike a hash join, a hash list scan can be used with nested loop joins, enabling partial range processing.
-Hash joins, by contrast, do not support this capability.
-For more details, refer to :ref:`join-method_hash`.
+If the driven table is a view or a derived table, the index cannot be used,
+so the join is performed using the list scan method, which sequentially reads records from the temporary result.
+Hash list scan is a type of list scan that allows random access to records in the temporary result that satisfy the join condition.
+Since list scan reads records from a temporary result, it cannot be used for physical tables.
+Therefore, hash list scan can only be used when the driven table is a view or a derived table.
+Hash list scan operates similarly to a :ref:`hash join <join-method_hash>` and can be used only when all join conditions are equality conditions.
+The use of hash list scan can be verified through :ref:`query profiling <query-profiling>`.
 
-The use of hash list scanning can be verified through query profiling.
-For more details, refer to :ref:`query-profiling`.
+The differences between hash list scan and hash join are as follows:
+
+1. Hash list scan builds the hash table using only the driven table.
+2. Hash list scan is part of a nested loop join, enabling partial range processing.
+
+The query optimizer does not consider whether a hash list scan is performed when calculating the cost of a join.
 
 .. _example_join-method_nested-loop_no-index:
 
@@ -130,10 +132,10 @@ Since the driven table lacks an index appropriate for the join condition, all re
 **Execution Steps:**
 
 1. Read a record from the nation table that satisfies the filter condition (``n.continent = 'Asia'``).
-2. Read a record from the athlete table that satisfies the filter condition (``a.event = 'Baseball'``).
-3. Compare the join condition (``n.code = a.nation_code``). If the condition is met, combine the two records and add them to the result.
-4. Repeat step 2 for the next record in the athlete table, then step 3.
-5. Repeat steps 1-4 for the next record in the nation table.
+2. Read a record from the athlete table that satisfies both the filter condition (``a.event = 'Baseball'``) and join condition (``n.code = a.nation_code``).
+3. If the condition is met, combine the two records and add them to the result.
+4. Repeat step 2 for the next record in the athlete table.
+5. Repeat steps 1-3 for the next record in the nation table.
 6. Continue until all records from both tables are processed.
 
 .. _example_join-method_nested-loop_index:
@@ -288,27 +290,27 @@ Hash list scans can be confirmed through query profiling but are not explicitly 
 Sort-Merge Join
 ----------------------------------------
 
-.. Overview
-
-A sort-merge join combines records from two tables by first sorting them based on the join condition and then sequentially comparing the sorted records.
+A sort merge join combines records from two tables by first sorting them based on the join condition and then sequentially comparing the sorted records.
 This method can only be performed when the join condition is an equality condition.
 
-.. Sorting Process
-
-The sorting step before the join is similar to creating an index in real time.
-The process of sequentially combining sorted records resembles the behavior of a nested loop join.
-Even if an appropriate index exists for the join condition, the sorting step is not skipped.
-The size of the buffer used during the sorting process can be configured with the **sort_buffer_size** parameter.
+The process of sorting data from two tables before joining is similar to creating an index in real time.
+However, the sorting process is not skipped even if a join-compatible index exists.
+The process of combining the sorted data is similar to a nested loop join
+in that it performs the join operation by reading one record from each of the two sorted temporary results.
+The buffer size used during the sorting process can be set with the **sort_buffer_size** parameter.
 For more details, refer to :ref:`memory-parameters`.
 
-Sort-merge joins can become inefficient when the sorting step incurs significant costs.
-In contrast, nested loop joins require no preprocessing, and hash joins only need to build a hash table using data from one of the tables.
-These methods are often evaluated as having lower costs compared to sort-merge joins, which require sorting both tables.
+.. rubric:: Join Cost
 
-.. Partial Range Processing
+Sort-merge joins can become inefficient when the sorting step incurs a high cost.
+When the query optimizer compares the costs of join methods, nested loop joins are often evaluated as having relatively low cost because they do not require preprocessing,
+Hash joins also tend to have lower cost since they build a hash table using data from only one of the two tables.
+In contrast, sort-merge joins are evaluated as having higher cost because they need to sort the data from both tables.
+
+.. rubric:: Partial Range Processing
 
 Sort-merge joins cannot perform partial range processing because they can only proceed after the sorting of both tables is complete.
-As a result, even if only the first N results are required, the query will return results only after the entire join process is finished.
+As a result, even if only the first N results are needed, the query will return results only after the entire join process has finished.
 
 .. _example_join-method_sort-merge:
 

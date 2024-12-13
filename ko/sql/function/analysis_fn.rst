@@ -702,7 +702,7 @@ GROUP_CONCAT
 
 .. note::
 
-    **GROUP_CONCAT** 으로 많은 행을 처리하는 경우에 대한 성능이 내부 문자열 함수를 최적화하여 CUBRID 11.3 부터 향상된다.
+    CUBRID 11.3 부터 내부 문자열 함수의 최적화를 통해 많은 행을 처리하는 **GROUP_CONCAT**의 성능이 개선되었다. 
 
 LAG
 ===

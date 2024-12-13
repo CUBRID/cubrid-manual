@@ -17,9 +17,9 @@ For more details, refer to :ref:`join-query`.
 
 The way records are combined between tables depends on the join method used. CUBRID supports the following join methods:
 
-- :ref:`join-method_nested-loop`
-- :ref:`join-method_sort-merge`
-- :ref:`join-method_hash`
+  - :ref:`join-method_nested-loop`
+  - :ref:`join-method_sort-merge`
+  - :ref:`join-method_hash`
 
 Join methods are determined by the query optimizer based on a cost comparison, though users can also specify them manually.
 The query optimizer calculates the cost of each join method using statistics collected by the database.
@@ -28,15 +28,14 @@ When a query includes two or more joins, different join methods can be applied t
 Each join method operates on only two tables at a time and is executed sequentially.
 In other words, the next join is performed only after the previous one has been completed.
 
-By default, CUBRID does not generate execution plans for sort-merge joins or hash joins.
-To enable the optimizer to consider these join methods, :ref:`SQL hints <sql-hint>` must be specified.
-
-The **optimizer_enable_merge_join** parameter can be set to **yes** (default is **no**) to perform a sort-merge join without using the **USE_MERGE** hint.
+By default, CUBRID does not generate execution plans for **Sort-Merge Joins** or **Hash Joins**.
+:ref:`SQL hints <sql-hint>` are required for the optimizer to consider these join methods.
+The **optimizer_enable_merge_join** parameter can be set to **yes** (default is **no**) to enable a **Sort-Merge Join** without requiring the **USE_MERGE** hint.
 For more details, refer to :ref:`other-parameters`.
 
 .. note::
 
-    The term **table** here is used broadly to include not only physical tables but also views (virtual tables) and derived tables.
+  The term **table** here is used broadly to include not only physical tables but also views (virtual tables) and derived tables.
 
 .. _join-method_nested-loop:
 
@@ -45,7 +44,7 @@ Nested Loop Join
 
 A nested loop join reads records from the outer table one at a time and combines each record with matching records from the inner table.
 This approach is similar to the concept of nested loops in programming.
-The table used in the outer loop is referred to as the driving table, while the table in the inner loop is called the driven table.
+The table used in the outer loop is referred to as the **driving table**, while the table in the inner loop is called the **driven table**.
 
 .. rubric:: Driving Table
 
@@ -61,7 +60,7 @@ A nested loop join performs efficiently when random access to the driven table i
 For random access, a join-compatible index must be created on the driven table.
 If no such index exists, all records in the driven table must be read sequentially, which degrades join performance.
 When random access to the driven table is enabled through a join-compatible index,
-the nested loop join is displayed as an index join (**idx-join**\) in the execution plan.
+the nested loop join is displayed as an **Index Join (idx-join)** in the execution plan.
 
 .. rubric:: Partial Range Processing
 
@@ -82,8 +81,8 @@ The use of hash list scan can be verified through :ref:`query profiling <query-p
 
 The differences between hash list scan and hash join are as follows:
 
-1. Hash list scan builds the hash table using only the driven table.
-2. Hash list scan is part of a nested loop join, enabling partial range processing.
+  1. Hash list scan builds the hash table using only the driven table.
+  2. Hash list scan is part of a nested loop join, enabling partial range processing.
 
 The query optimizer does not consider whether a hash list scan is performed when calculating the cost of a join.
 
@@ -95,8 +94,8 @@ In this example, the driven table does not utilize an index scan during the nest
 The **ORDERED** hint is applied to enforce the join order, making the nation table the driving table and the athlete table the driven table.
 Since the driven table lacks an index appropriate for the join condition, all records in the athlete table are read sequentially for each record in the nation table.
 
-.. code-block:: sql
-
+  .. code-block:: sql
+  
     select /*+ recompile ordered use_nl */
         n.name, a.name
     from
@@ -105,11 +104,11 @@ Since the driven table lacks an index appropriate for the join condition, all re
     where
         n.continent = 'Asia'
         and a.event = 'Baseball';
-
-.. code-block:: none
-
+  
+  .. code-block:: none
+  
     Query plan:
-
+    
     nl-join (inner join)
         edge:  term[0]
         outer: sscan
@@ -121,9 +120,9 @@ Since the driven table lacks an index appropriate for the join condition, all re
                    sargs: term[0] AND term[1]
                    cost:  49 card 202
         cost:  4697 card 29
-
-.. code-block:: none
-
+  
+  .. code-block:: none
+  
     Trace Statistics:
       SELECT (time: 92, fetch: 1720, fetch_time: 0, ioread: 0)
         SCAN (table: public.nation), (heap time: 0, fetch: 216, ioread: 0, readrows: 215, rows: 47)
@@ -131,12 +130,12 @@ Since the driven table lacks an index appropriate for the join condition, all re
 
 **Execution Steps:**
 
-1. Read a record from the nation table that satisfies the filter condition (``n.continent = 'Asia'``).
-2. Read a record from the athlete table that satisfies both the filter condition (``a.event = 'Baseball'``) and join condition (``n.code = a.nation_code``).
-3. If the condition is met, combine the two records and add them to the result.
-4. Repeat step 2 for the next record in the athlete table.
-5. Repeat steps 1-3 for the next record in the nation table.
-6. Continue until all records from both tables are processed.
+  1. Read a record from the nation table that satisfies the filter condition (``n.continent = 'Asia'``).
+  2. Read a record from the athlete table that satisfies both the filter condition (``a.event = 'Baseball'``) and join condition (``n.code = a.nation_code``).
+  3. If the condition is met, combine the two records and add them to the result.
+  4. Repeat **step 2** for the next record in the athlete table.
+  5. Repeat **steps 1-3** for the next record in the nation table.
+  6. Continue until all records from both tables are processed.
 
 .. _example_join-method_nested-loop_index:
 
@@ -146,10 +145,10 @@ This example demonstrates a nested loop join where the driven table uses an inde
 An index suitable for the join condition is created on the driven table (athlete).
 As a result, not all records in the athlete table need to be scanned for each record in the nation table, enabling random access.
 
-.. code-block:: sql
-
+  .. code-block:: sql
+  
     create index i_athlete_nation_code on athlete (nation_code);
-
+    
     select /*+ recompile ordered use_nl */
         n.name, a.name
     from
@@ -158,13 +157,13 @@ As a result, not all records in the athlete table need to be scanned for each re
     where
         n.continent = 'Asia'
         and a.event = 'Baseball';
-
+    
     drop index i_athlete_nation_code on athlete;
-
-.. code-block:: none
-
+  
+  .. code-block:: none
+  
     Query plan:
-
+    
     idx-join (inner join)
         outer: sscan
                    class: n node[0]
@@ -176,9 +175,9 @@ As a result, not all records in the athlete table need to be scanned for each re
                    sargs: term[1]
                    cost:  4 card 202
         cost:  68 card 29
-
-.. code-block:: none
-
+    
+  .. code-block:: none
+  
     Trace Statistics:
       SELECT (time: 1, fetch: 1265, fetch_time: 0, ioread: 0)
         SCAN (table: public.nation), (heap time: 1, fetch: 216, ioread: 0, readrows: 215, rows: 47)
@@ -194,8 +193,8 @@ the number of records read from the athlete table before comparing the join cond
 This example changes the driving table to athlete, unlike previous examples where nation was the driving table.
 The **LEADING** hint is used to specify the join order, making athlete the driving table and nation the driven table.
 
-.. code-block:: sql
-
+  .. code-block:: sql
+  
     select /*+ recompile leading(a, n) use_nl */
         n.name, a.name
     from
@@ -204,11 +203,11 @@ The **LEADING** hint is used to specify the join order, making athlete the drivi
     where
         n.continent = 'Asia'
         and a.event = 'Baseball';
-
-.. code-block:: none
-
+  
+  .. code-block:: none
+  
     Query plan:
-
+    
     idx-join (inner join)
         outer: sscan
                    class: a node[0]
@@ -220,9 +219,9 @@ The **LEADING** hint is used to specify the join order, making athlete the drivi
                    sargs: term[2]
                    cost:  2 card 31
         cost:  161 card 29
-
-.. code-block:: none
-
+  
+  .. code-block:: none
+  
     Trace Statistics:
       SELECT (time: 5, fetch: 7168, fetch_time: 0, ioread: 0)
         SCAN (table: public.athlete), (heap time: 5, fetch: 6709, ioread: 0, readrows: 6677, rows: 229)
@@ -238,28 +237,28 @@ This example demonstrates a nested loop join where a hash list scan is performed
 By combining the **ORDERED** and **NO_MERGE** hints, an inline view that cannot perform an index scan is used as the driven table.
 Additionally, the query retrieves only the first 20 results, allowing partial range processing to be combined with the hash list scan.
 
-.. code-block:: sql
-
+  .. code-block:: sql
+  
     select /*+ recompile ordered use_nl */
         n.name, v.name
     from
         nation as n
         inner join (
-	        select /*+ no_merge */
-	            a.name, a.nation_code
-	        from
-	            athlete as a
-	        where
-	            a.event = 'Baseball'
-	    ) as v on n.code = v.nation_code
+                select /*+ no_merge */
+                    a.name, a.nation_code
+                from
+                    athlete as a
+                where
+                    a.event = 'Baseball'
+            ) as v on n.code = v.nation_code
     where
         n.continent = 'Asia'
     limit 20;
-
-.. code-block:: none
-
+  
+  .. code-block:: none
+  
     Query plan:
-
+    
     nl-join (inner join)
         edge:  term[0]
         outer: sscan
@@ -272,9 +271,9 @@ Additionally, the query retrieves only the first 20 results, allowing partial ra
                    cost:  2 card 202
         sargs: term[1]
         cost:  148 card 29
-
-.. code-block:: none
-
+  
+  .. code-block:: none
+  
     Trace Statistics:
       SELECT (time: 2, fetch: 33, fetch_time: 0, ioread: 0)
         SCAN (table: public.nation), (heap time: 0, fetch: 1, ioread: 0, readrows: 26, rows: 8)
@@ -319,11 +318,11 @@ As a result, even if only the first N results are needed, the query will return 
 This example demonstrates the steps involved in executing a sort-merge join.
 Although the **ORDERED** hint does not directly impact join performance, it is included here to ensure the join is performed in the specified order.
 
-.. code-block:: sql
-
+  .. code-block:: sql
+  
     create index i_nation_continent_code on nation (continent, code);
     create index i_athlete_event_nation_code on athlete (event, nation_code);
-
+    
     select /*+ recompile ordered use_merge */
         n.name, a.name
     from
@@ -332,14 +331,14 @@ Although the **ORDERED** hint does not directly impact join performance, it is i
     where
         n.continent = 'Asia'
         and a.event = 'Baseball';
-
+    
     drop index i_nation_continent_code on nation;
     drop index i_athlete_event_nation_code on athlete;
-
-.. code-block:: none
-
+  
+  .. code-block:: none
+  
     Query plan:
-
+    
     temp
         order: UNORDERED
         subplan: m-join (inner join)
@@ -360,9 +359,9 @@ Although the **ORDERED** hint does not directly impact join performance, it is i
                                 cost:  8 card 7
                      cost:  17 card 1
         cost:  23 card 1
-
-.. code-block:: none
-
+  
+  .. code-block:: none
+  
     Trace Statistics:
       SELECT (time: 1, fetch: 287, fetch_time: 1, ioread: 0)
         SCAN (temp time: 0, fetch: 0, ioread: 0, readrows: 103, rows: 103)
@@ -378,15 +377,15 @@ Although the **ORDERED** hint does not directly impact join performance, it is i
 
 1. Retrieve records from the nation table that meet the filter condition (``n.continent = 'Asia'``) and sort them by the code column.
 
-    .. code-block:: sql
+  .. code-block:: sql
 
-        select n.code, n.name from nation as n where n.continent = 'Asia' order by n.code;
+    select n.code, n.name from nation as n where n.continent = 'Asia' order by n.code;
 
 2. Retrieve records from the athlete table that meet the filter condition (``a.event = 'Baseball'``) and sort them by the nation_code column.
 
-    .. code-block:: sql
+  .. code-block:: sql
 
-        select a.nation_code, a.name from athlete as a where a.event = 'Baseball' order by a.nation_code;
+    select a.nation_code, a.name from athlete as a where a.event = 'Baseball' order by a.nation_code;
 
 3. Sequentially read records from the two sorted results, compare the join condition (``n.code = a.nation_code``), and if the condition is satisfied, combine the two records and add them to the result.
 4. Repeat this process until all records have been processed and the join is complete.
@@ -396,11 +395,9 @@ Although the **ORDERED** hint does not directly impact join performance, it is i
 Hash Join
 ----------------------------------------
 
-.. Overview
-
 A hash join combines records from two tables by using a hash function to match records with the same hash value.
 To efficiently compare records with the same hash value, a hash table is used.
-One of the two tables is used to build the hash table, while the other is used to probe it.
+One of the two tables is used to **build** the hash table, while the other is used to **probe** it.
 The hash value is generated by applying a hash function to the join column values.
 When different input values produce the same hash value, a hash collision occurs.
 In such cases, records with the same hash value are sequentially examined, and the join condition is checked.
@@ -410,8 +407,8 @@ A hash join can only be performed when all join conditions are equality conditio
 
 There are two hints associated with hash joins:
 
-- **USE_HASH**: Allows the query optimizer to generate an execution plan using a hash join.
-- **NO_USE_HASH**: Prevents the query optimizer from generating an execution plan using a hash join.
+  - **USE_HASH**: Allows the query optimizer to generate an execution plan using a hash join.
+  - **NO_USE_HASH**: Prevents the query optimizer from generating an execution plan using a hash join.
 
 Both hints can specify one or more tables.
 The hint applies to the inner (driven) table if a table is explicitly specified.
@@ -424,8 +421,8 @@ Each table in a hash join can either be used to build the hash table or to probe
 To determine the most efficient approach, the costs of both options are calculated and compared, with the lower cost being selected as the hash join cost.
 For example, the following scenarios are compared, and the one with the lower cost is selected:
 
-- Building the hash table with the outer (driving) table and probing it with the inner (driven) table.
-- Building the hash table with the inner (driven) table and probing it with the outer (driving) table.
+  - Building the hash table with the outer (driving) table and probing it with the inner (driven) table.
+  - Building the hash table with the inner (driven) table and probing it with the outer (driving) table.
 
 .. rubric:: Table used to build the hash table
 
@@ -433,8 +430,8 @@ The table used to build the hash table cannot be explicitly specified using **OR
 The table with fewer records is typically chosen for building the hash table.
 However, in the case of outer joins, the table used to build the hash table is fixed based on the join direction:
 
-- **Left Outer Join**: The right table is used to build the hash table.
-- **Right Outer Join**: The left table is used to build the hash table.
+  - **Left Outer Join**: The right table is used to build the hash table.
+  - **Right Outer Join**: The left table is used to build the hash table.
 
 .. rubric:: How to build the hash table
 
@@ -444,10 +441,20 @@ For more details, refer to :ref:`memory-parameters`.
 
 CUBRID supports the following hashing methods:
 
-- **Memory Hash**: Used when all temporary results can fit in the hash table. **(Number of temporary result pages * Page size ≤ Maximum hash table size)**
-- **Hybrid Hash**: Used when the hash table can store the positions of all temporary result records. **(Number of temporary result records * (Hash entry size + position information size) ≤ Maximum hash table size)**
-- **File Hash**:  Used when neither of the above methods is applicable.
-- **Skip Hash**: If either of the two temporary results is empty or unnecessary (in the case of an outer join), building the hash table is skipped.
+  - **Memory Hash**: Used when all temporary results can fit in the hash table.
+
+    .. code-block:: none
+
+      Number of temporary result pages * Page size <= Maximum hash table size
+
+  - **Hybrid Hash**: Used when the hash table can store the positions of all temporary result records.
+
+    .. code-block:: none
+
+      Number of temporary result records * (Hash entry size + Position information size <= Maximum hash table size
+
+  - **File Hash**:  Used when neither of the above methods is applicable.
+  - **Skip Hash**: If either of the two temporary results is empty or unnecessary (in the case of an outer join), building the hash table is skipped.
 
 **Hybrid Hash** and **File Hash** store record positions in the hash table, requiring an additional step to locate records before reading them.
 
@@ -469,8 +476,8 @@ Hash joins cannot perform partial range processing because the join can only pro
 This example explains the steps involved in performing a hash join.
 Even with the **ORDERED** hint, the table used to build the hash table cannot be explicitly specified.
 
-.. code-block:: sql
-
+  .. code-block:: sql
+  
     select /*+ recompile ordered use_hash */
         n.name, a.name
     from
@@ -479,11 +486,11 @@ Even with the **ORDERED** hint, the table used to build the hash table cannot be
     where
         n.continent = 'Asia'
         and a.event = 'Baseball';
-
-.. code-block:: none
-
+  
+  .. code-block:: none
+  
     Query plan:
-
+    
     hash-join (inner join)
         edge:  term[0]
         outer: sscan
@@ -495,9 +502,9 @@ Even with the **ORDERED** hint, the table used to build the hash table cannot be
                    sargs: term[1]
                    cost:  49 card 202
         cost:  63 card 29
-
-.. code-block:: none
-
+  
+  .. code-block:: none
+  
     Trace Statistics:
       SELECT (time: 2, fetch: 33, fetch_time: 0, ioread: 0)
         SCAN (temp time: 0, fetch: 0, ioread: 0, readrows: 103, rows: 103)
@@ -515,53 +522,60 @@ Thus, the nation table with fewer records is selected to build the hash table.
 
 **Query Profiling Results:**
 
-1. **HASHJOIN**
+This section describes only the query profiling items related to hash joins. For details on other items, refer to :ref:`query-profiling`.
 
-    - time: Total execution time for hash join (ms)
-    - fetch: Pages fetched during the hash join
-    - fetch_time : Time spent fetching pages for the hash join (ms)
-    - ioread: Number of physical I/O reads during page fetches for the hash join
-
-2. **BUILD**
-
-    - time: Total time for building the hash table, including temporary results (ms)
-    - build_time: : Time specifically spent building the hash table (ms)
-    - fetch: Pages fetched during the hash table build
-    - fetch_time : Time spent fetching pages for the hash table build (ms)
-    - ioread: Physical I/O reads during the hash table build
-    - hash_method: Method used to build the hash table (memory, hybrid, file, or skip)
-
-3. **PROBE**
-
-    - time: Total time for probing the hash table, including temporary results (ms)
-    - probe_time: Time specifically spent probing the hash table (ms)
-    - fetch: Pages fetched during the hash table probe
-    - fetch_time : Time spent fetching pages for the hash table probe (ms)
-    - ioread: Physical I/O reads during the hash table probe
-    - readkeys: Number of records with matching hash values during the probe
-    - rows: Number of records satisfying the join condition (rows <= readkeys)
-    - max_collisions: Maximum number of records read for a single hash value during probing
+  1. **HASHJOIN**
+  
+    - **time**: Total execution time for hash join (ms)
+    - **fetch**: Pages fetched during the hash join
+    - **fetch_time**: Time spent fetching pages for the hash join (ms)
+    - **ioread**: Number of physical I/O reads during page fetches for the hash join
+  
+  2. **BUILD**: Except for **time**, the remaining items do not include cumulative information when querying temporary results.
+  
+    - **time**: Total time for building the hash table, including temporary results (ms)
+    - **build_time**: : Time specifically spent building the hash table (ms)
+    - **fetch**: Pages fetched during the hash table build
+    - **fetch_time**: Time spent fetching pages for the hash table build (ms)
+    - **ioread**: Physical I/O reads during the hash table build
+    - **hash_method**: Method used to build the hash table (**memory**, **hybrid**, **file**, or **skip**)
+  
+      - **memory**: Use the memory hashing method
+      - **hybrid**: Use the hybrid hashing method
+      - **file**:  Use the file hashing method
+      - **skip**: Skip building the hash table
+  
+  3. **PROBE**: Except for **time**, the remaining items do not include cumulative information when querying temporary results.
+  
+    - **time**: Total time for probing the hash table, including temporary results (ms)
+    - **probe_time**: Time specifically spent probing the hash table (ms)
+    - **fetch**: Pages fetched during the hash table probe
+    - **fetch_time**: Time spent fetching pages for the hash table probe (ms)
+    - **ioread**: Physical I/O reads during the hash table probe
+    - **readkeys**: Number of records with matching hash values during the probe
+    - **rows**: Number of records satisfying the join condition (**readkeys** >= **rows**)
+    - **max_collisions**: Maximum number of records read for a single hash value during probing
 
 **Execution Steps:**
 
-1. Retrieve records from the nation table that satisfy the filter condition (``n.continent = 'Asia'``) and create a temporary result.
-
+  1. Retrieve records from the nation table that satisfy the filter condition (``n.continent = 'Asia'``) and create a temporary result.
+  
     .. code-block:: sql
-
-        select n.code, n.name from nation as n where n.continent = 'Asia';
-
-2. Retrieve records from the athlete table that satisfy the filter condition (``a.event = 'Baseball'``) and create a temporary result.
-
+  
+      select n.code, n.name from nation as n where n.continent = 'Asia';
+  
+  2. Retrieve records from the athlete table that satisfy the filter condition (``a.event = 'Baseball'``) and create a temporary result.
+  
     .. code-block:: sql
-
-        select a.nation_code, a.name from athlete as a where a.event = 'Baseball';
-
-3. Read the temporary result from the nation table and build a hash table.
-4. For each record in the temporary result from the athlete table, probe the hash table of the nation table.
-5. Match records in the hash table with the same hash value and compare them against the join condition (``n.code = a.nation_code``). If the condition is satisfied, combine the records and add them to the result.
-6. Repeat step 5 for subsequent records with the same hash value.
-7. Repeat steps 4-6 for the next record in the athlete table.
-8. Continue until all join operations are complete.
+  
+      select a.nation_code, a.name from athlete as a where a.event = 'Baseball';
+  
+  3. Read the temporary result from the nation table and build a hash table.
+  4. For each record in the temporary result from the athlete table, probe the hash table of the nation table.
+  5. Match records(``readkeys``) in the hash table with the same hash value and compare them against the join condition (``n.code = a.nation_code``). If the condition is satisfied(``rows``), combine the records and add them to the result.
+  6. Repeat **step 5** for subsequent records with the same hash value.
+  7. Repeat **steps 4-6** for the next record in the athlete table.
+  8. Continue until all join operations are complete.
 
 .. _example_join-method_hash_hint:
 
@@ -570,7 +584,7 @@ Thus, the nation table with fewer records is selected to build the hash table.
 This example demonstrates how to use the **USE_HASH** and **NO_USE_HASH** hints to control which tables perform a hash join.
 The **ORDERED** hint is used to fix the inner table (driven table) for applying the hint.
 
-.. code-block:: sql
+  .. code-block:: sql
 
     select /*+ recompile ordered use_hash no_use_hash(r) */
         n.name, a.name, a.code, r.medal
@@ -583,7 +597,7 @@ The **ORDERED** hint is used to fix the inner table (driven table) for applying 
         and a.event = 'Shooting'
         and r.host_year = 1992;
 
-.. code-block:: none
+  .. code-block:: none
 
     Query plan:
     
@@ -610,7 +624,7 @@ The **USE_HASH** hint specifies that a hash join is performed for the nation and
 
 The **NO_USE_HASH** hint ensures that a hash join is not performed for the record table.
 
-.. code-block:: none
+  .. code-block:: none
 
     Trace Statistics:
       SELECT (time: 5, fetch: 139, fetch_time: 0, ioread: 0)
@@ -630,7 +644,7 @@ The **NO_USE_HASH** hint ensures that a hash join is not performed for the recor
 
 This example demonstrates using an index skip scan to retrieve temporary results during a hash join.
 
-.. code-block:: sql
+  .. code-block:: sql
 
     /* for nested loop join */
     create index i_athlete_nation_code_event on athlete (nation_code, event);
@@ -650,7 +664,7 @@ This example demonstrates using an index skip scan to retrieve temporary results
     drop index i_athlete_nation_code_event on athlete;
     drop index i_nation_continent_code on nation;
 
-.. code-block:: none
+  .. code-block:: none
 
     Query plan:
 
@@ -666,7 +680,7 @@ This example demonstrates using an index skip scan to retrieve temporary results
                    cost:  13 card 202
         cost:  25 card 1
 
-.. code-block:: none
+  .. code-block:: none
 
     Trace Statistics:
       SELECT (time: 1, fetch: 748, fetch_time: 0, ioread: 0)
@@ -685,7 +699,7 @@ This example demonstrates using an index skip scan to retrieve temporary results
 
 This example illustrates how the direction of an outer join determines which table is used to build the hash table.
 
-.. code-block:: sql
+  .. code-block:: sql
 
     select /*+ recompile use_hash */
         n.name, p.host_year, p.gold
@@ -695,7 +709,7 @@ This example illustrates how the direction of an outer join determines which tab
     where
         n.continent = 'Asia';
 
-.. code-block:: none
+  .. code-block:: none
 
     Query plan:
 
@@ -711,7 +725,7 @@ This example illustrates how the direction of an outer join determines which tab
                    cost:  2 card 31
         cost:  15 card 31
 
-.. code-block:: none
+  .. code-block:: none
 
     Trace Statistics:
       SELECT (time: 1, fetch: 4, fetch_time: 0, ioread: 0)
@@ -737,7 +751,7 @@ In a left outer join, the right table is typically used to build the hash table.
 However, since no records in the participant table satisfy the filter condition (``p.gold > 100``), the hash table build is skipped.
 Instead, records from the nation table that satisfy the filter condition (``n.continent = 'Asia'``) are directly returned as the query result.
 
-.. code-block:: sql
+  .. code-block:: sql
 
     select /*+ recompile use_hash */
         n.name, p.host_year, p.gold
@@ -747,7 +761,7 @@ Instead, records from the nation table that satisfy the filter condition (``n.co
     where
         n.continent = 'Asia';
 
-.. code-block:: none
+  .. code-block:: none
 
     Query plan:
 
@@ -763,7 +777,7 @@ Instead, records from the nation table that satisfy the filter condition (``n.co
                    cost:  5 card 92
         cost:  15 card 31
 
-.. code-block:: none
+  .. code-block:: none
 
     Trace Statistics:
       SELECT (time: 1, fetch: 4, fetch_time: 0, ioread: 0)
@@ -776,7 +790,7 @@ Instead, records from the nation table that satisfy the filter condition (``n.co
               SELECT (time: 0, fetch: 1, fetch_time: 0, ioread: 0)
                 SCAN (table: public.nation), (heap time: 0, fetch: 1, ioread: 0, readrows: 215, rows: 47)
 
-In the **BUILD** section, the hash table build method is displayed as **skip**.
+In the **BUILD** section, the hash table build method is displayed as ``hash_method: skip``.
 This indicates that the hash table was not built.
 Instead, the records from the nation table satisfying the filter condition (``n.continent = 'Asia'``) constitute the query result.
 
@@ -784,10 +798,11 @@ Instead, the records from the nation table satisfying the filter condition (``n.
 
 .. rubric:: Example 6. Hash Join Using the Hybrid Hash Method
 
-This example demonstrates how to perform a hybrid hash join.
-To enable the hybrid hash method, the **max_hash_list_scan_size** parameter must be set to **12K** (default: **8M**).
+This example demonstrates how to perform a hash join using the hybrid hash method.
+Because the data set is small, the hash table's maximum size must be reduced to use the hybrid hash method.
+To do this, set the **max_hash_list_scan_size** parameter to **12K** (default: **8M**).
 
-.. code-block:: sql
+  .. code-block:: sql
 
     set system parameters 'max_hash_list_scan_size=12k';
 
@@ -799,7 +814,7 @@ To enable the hybrid hash method, the **max_hash_list_scan_size** parameter must
 
     set system parameters 'max_hash_list_scan_size=8M';
 
-.. code-block:: none
+  .. code-block:: none
 
     Query plan:
 
@@ -813,7 +828,7 @@ To enable the hybrid hash method, the **max_hash_list_scan_size** parameter must
                    cost:  49 card 6677
         cost:  400 card 6677
 
-.. code-block:: none
+  .. code-block:: none
 
     Trace Statistics:
       SELECT (time: 5, fetch: 126, fetch_time: 0, ioread: 0)
@@ -826,10 +841,13 @@ To enable the hybrid hash method, the **max_hash_list_scan_size** parameter must
               SELECT (time: 3, fetch: 53, fetch_time: 0, ioread: 0)
                 SCAN (table: public.athlete), (heap time: 2, fetch: 32, ioread: 0, readrows: 6677, rows: 6677)
 
-By using both **USE_NL** and **USE_HASH** hints together, it is possible to observe which join method is chosen by the query optimizer.
-When the hybrid hash method is available, a hash join is performed.
+When more than one join hint is used on the same table, 
+the query optimizer compares the costs of the specified join methods and selects the one with the lower cost.
+The selected join method can be verified through the generated execution plan.
+The following is an example where the **USE_HASH** and **USE_NL** hints are used together,
+and the query optimizer selects the hybrid hash method, generating and executing the execution plan as a hash join.
 
-.. code-block:: sql
+  .. code-block:: sql
 
     set system parameters 'max_hash_list_scan_size=12k';
 
@@ -841,7 +859,7 @@ When the hybrid hash method is available, a hash join is performed.
 
     set system parameters 'max_hash_list_scan_size=8M';
 
-.. code-block:: none
+  .. code-block:: none
 
     Query plan:
 
@@ -855,7 +873,7 @@ When the hybrid hash method is available, a hash join is performed.
                    cost:  49 card 6677
         cost:  400 card 6677
 
-.. code-block:: none
+  .. code-block:: none
 
     Trace Statistics:
       SELECT (time: 5, fetch: 126, fetch_time: 0, ioread: 0)
@@ -872,10 +890,11 @@ When the hybrid hash method is available, a hash join is performed.
 
 .. rubric:: Example 7. Hash Join Using the File Hash Method
 
-This example demonstrates performing a file hash join.
-To enable the file hash method, the **max_hash_list_scan_size** parameter must be set to **8K** (default: **8M**).
+This example demonstrates how to perform a hash join using the file hash method.
+Because the data set is small, the hash table's maximum size must be reduced to below **12K** to use the file hash method.
+To do this, set the **max_hash_list_scan_size** parameter to **8K** (default: **8M**).
 
-.. code-block:: sql
+  .. code-block:: sql
 
     set system parameters 'max_hash_list_scan_size=8k';
 
@@ -887,7 +906,7 @@ To enable the file hash method, the **max_hash_list_scan_size** parameter must b
 
     set system parameters 'max_hash_list_scan_size=8M';
 
-.. code-block:: none
+  .. code-block:: none
 
     Query plan:
 
@@ -901,20 +920,18 @@ To enable the file hash method, the **max_hash_list_scan_size** parameter must b
                    cost:  49 card 6677
         cost:  3846 card 6677
 
-The query optimizer evaluates whether memory or hybrid hash methods are possible by checking statistics collected by the database.
-The following calculation is used:
+The query optimizer evaluates whether memory hashing or hybrid hashing can be used by calculating based on statistics collected by the database:
 
-.. code-block:: none
+  .. code-block:: none
 
     Temporary result record count * (Hash entry size + Location info size) <= Maximum hash table size
-        => 215 * (32 byte * 16 byte) <= 8,192 byte
-	=> 10,320 <= 8192 byte
-	=> False
+                                  215 * (32 byte * 16 byte) <= 8,192 byte
+                                                     10,320 <= 8192 byte (False)
 
 Since the calculated size exceeds the maximum size of the hash table, the file hash method is chosen instead of the memory or hybrid method.
 File hash joins are more expensive than other hash methods due to the use of temporary volume pages (cost: 400 vs. 3,846).
 
-.. code-block:: none
+  .. code-block:: none
 
     Trace Statistics:
       SELECT (time: 10, fetch: 27510, fetch_time: 3, ioread: 0)
@@ -930,10 +947,10 @@ File hash joins are more expensive than other hash methods due to the use of tem
 When compared with the query profiling results from :ref:`Example 6 <example_join-method_hash-method_hybrid>`,
 It can be seen that the execution time of the file hash method is slow in proportion to the cost.
 
-By using both **USE_NL** and **USE_HASH** hints together, it is possible to observe which join method is chosen by the query optimizer.
-When the hybrid hash method is not available, a nested loop join is performed.
+The following is an example where the **USE_HASH** and **USE_NL** hints are used together,
+and the query optimizer generates and executes a plan with a nested loop join because the cost of a hash join using the file hash method is high.
 
-.. code-block:: sql
+  .. code-block:: sql
 
     set system parameters 'max_hash_list_scan_size=8k';
 
@@ -945,7 +962,7 @@ When the hybrid hash method is not available, a nested loop join is performed.
 
     set system parameters 'max_hash_list_scan_size=8M';
 
-.. code-block:: none
+  .. code-block:: none
 
     Query plan:
 
@@ -959,7 +976,7 @@ When the hybrid hash method is not available, a nested loop join is performed.
                    cost:  2 card 215
         cost:  3405 card 6677
 
-.. code-block:: none
+  .. code-block:: none
 
     Trace Statistics:
       SELECT (time: 19, fetch: 13387, fetch_time: 1, ioread: 0)

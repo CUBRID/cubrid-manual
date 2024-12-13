@@ -1202,12 +1202,12 @@ On the above example, if you use "**USING INDEX** *idx_open_bugs*" or "**USE IND
             CREATE TABLE t (a INT, b INT);
             
             -- IS NULL cannot be used with expressions
-            CREATE INDEX idx ON t (a) WHERE (not a) IS NULL;
+            CREATE INDEX idx ON ta (a) WHERE (not ta.a<>0 ) IS NULL;
 
         ::
         
             ERROR: before ' ; '
-            Invalid filter expression (( not t.a<>0) is null ) for index.
+            Invalid filter expression (( not [dba.ta].a<>0) is null ) for index.
              
         .. code-block:: sql
 

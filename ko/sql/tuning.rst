@@ -1,4 +1,4 @@
-
+CREATE TABLE t (a INT, b INT);
 :meta-keywords: cubrid update statistics, cubrid check statistics, query plan, query profiling, sql hint, cubrid index hint, cubrid special index, cubrid using index
 :meta-description: How to optimize query execution in CUBRID database.
 
@@ -1203,12 +1203,12 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
             CREATE TABLE t (a INT, b INT);
             
             -- IS NULL cannot be used with expressions
-            CREATE INDEX idx ON t (a) WHERE (not a) IS NULL;
+            CREATE INDEX idx ON ta (a) WHERE (not ta.a<>0 ) IS NULL;
 
         ::
         
             ERROR: before ' ; '
-            Invalid filter expression (( not t.a<>0) is null ) for index.
+            Invalid filter expression (( not [dba.ta].a<>0) is null ) for index.
              
         .. code-block:: sql
 

@@ -9,17 +9,19 @@ Reserved Words
 The following keywords are previously reserved as a command, a function name or a type name in CUBRID. You are restricted to use these words for a class name, an attribute name, a variable name. Note than these reserved keywords can be used an identifier when they are enclosed in double quotes, square brackets, or backtick symbol (`).
 
 +--------------------+--------------------+----------------------+
-| ABSOLUTE           | ACTION             | ADD                  |
+| ABSOLUTE           | ACTION             | ACCESS               |
 +--------------------+--------------------+----------------------+
-| ADD_MONTHS         | AFTER              | ALL                  |
+| ADD                | ADD_MONTHS         | AFTER                |
 +--------------------+--------------------+----------------------+
-| ALLOCATE           | ALTER              | AND                  |
+| ALL                | ALLOCATE           | ALTER                |
 +--------------------+--------------------+----------------------+
-| ANY                | ARE                | AS                   |
+| AND                | ANY                | ARE                  |
 +--------------------+--------------------+----------------------+
-| ASC                | ASSERTION          | AT                   |
+| AS                 | ASC                | ASSERTION            |
 +--------------------+--------------------+----------------------+
-| ATTACH             | ATTRIBUTE          | AVG                  |
+| AT                 | ATTACH             | ATTRIBUTE            |
++--------------------+--------------------+----------------------+
+| AVG                |                    |                      |
 +--------------------+--------------------+----------------------+
 | BEFORE             | BETWEEN            | BIGINT               |
 +--------------------+--------------------+----------------------+

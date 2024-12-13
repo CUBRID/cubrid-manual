@@ -1512,7 +1512,7 @@ When changing the type of a column specified  a default value, if the default va
 .. code-block:: sql
 
      CREATE TABLE t_def (a bigint default 123456789012, b varchar(20));
-     ALTER TABLE t_def a a int;
+     ALTER TABLE t_def MODIFY a int;
 
 ::
 

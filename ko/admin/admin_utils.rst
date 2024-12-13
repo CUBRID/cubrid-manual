@@ -314,7 +314,7 @@ createdb
 
 .. note:: **기존 키 파일을 사용하는 데이터베이스 생성**
 
-    데이터베이스가 생성될 때 기본적으로 키 파일이 함께 생성된다. 만약 데이터베이스 생성 시 기존 키 파일을 사용하고 싶다면, 먼저 키 파일을 <database-name>_keys 이름으로 복사해 둔다. 이후 복사한 키 파일의 디렉토리를 **tde_keys_file_path** 시스템 파라미터에 지정하고 **createdb** 유틸리티를 통해 데이터베이스를 생성한다. TDE 키 파일에 관한 자세한 내용은 :ref:`tde-file-based-key` 를 참고한다.
+    데이터베이스가 생성될 때 기본적으로 키 파일이 함께 생성된다. 만약 데이터베이스 생성 시 기존 키 파일을 사용하고 싶다면, 먼저 키 파일을 <database-name>_keys 이름으로 복사해 둔다. 이후 복사한 키 파일의 디렉터리를 **tde_keys_file_path** 시스템 파라미터에 지정하고 **createdb** 유틸리티를 통해 데이터베이스를 생성한다. TDE 키 파일에 관한 자세한 내용은 :ref:`tde-file-based-key` 를 참고한다.
     
 .. _adding-database-volume:    
 
@@ -601,7 +601,7 @@ copydb
   -r, --replace                   같은 이름의 데이터베이스가 존재하면 덮어쓰기
   -d, --delete-source             복사 후 원본 데이터베이스 삭제
       --copy-lob-path             원본 데이터베이스의 LOB 대렉터리 경로를 복사. -B 옵션과 함께 사용 불가. 기본값: 복사하지 않음
-  -B, --lob-base-path=PATH        LOB 파일이 저장되는 디렉토리 경로
+  -B, --lob-base-path=PATH        LOB 파일이 저장되는 디렉터리 경로
 
 
 .. option:: --server-name=HOST
@@ -662,7 +662,7 @@ copydb
 
 .. option:: --copy-lob-path
 
-    이 옵션을 선택하면 대상 데이터베이스의 lob 디렉터리의 위치를 원본 데이터베이스의 lob 디렉토리의 위치와 동일하게 설정한다. 이 옵션이 생력되면 <대상 데이터베이스 디렉토리>/lob 이 대상 데이터베이스의 lob 디렉터리 경로로 설정된다. 이 옵션은 lob 파일을 복사하는 기능이 아니며 **-B** 옵션과 병행할 수 없다. ::
+    이 옵션을 선택하면 대상 데이터베이스의 lob 디렉터리의 위치를 원본 데이터베이스의 lob 디렉터리의 위치와 동일하게 설정한다. 이 옵션이 생력되면 <대상 데이터베이스 디렉터리>/lob 이 대상 데이터베이스의 lob 디렉터리 경로로 설정된다. 이 옵션은 lob 파일을 복사하는 기능이 아니며 **-B** 옵션과 병행할 수 없다. ::
 
         cubrid copydb --copy-lob-path demodb new_demodb
 
@@ -710,7 +710,7 @@ installdb
 
 .. option:: --file-path=PATH
 
-    대상 데이터베이스의 데이터베이스 볼륨을 위한 디렉토리 경로를 **databases.txt** 에 등록한다. 이 옵션을 생략하면 현재 작업 디렉토리 경로가 등록된다. ::
+    대상 데이터베이스의 데이터베이스 볼륨을 위한 디렉터리 경로를 **databases.txt** 에 등록한다. 이 옵션을 생략하면 현재 작업 디렉터리 경로가 등록된다. ::
 
         cubrid installdb -F /home/cubrid/CUBRID/databases/testdb testdb
 
@@ -3502,7 +3502,7 @@ vacuumdb
 
 .. option:: -o, --output-file=FILE
 
-    이 옵션은 vacuum에 대한 상태 정보를 저장할 파일명을 지정한다. 파일은 현재 디렉토리에 생성된다.  **-o** 옵션을 지정하지 않으면 콘솔 화면에 메시지가 표시된다. ::
+    이 옵션은 vacuum에 대한 상태 정보를 저장할 파일명을 지정한다. 파일은 현재 디렉터리에 생성된다.  **-o** 옵션을 지정하지 않으면 콘솔 화면에 메시지가 표시된다. ::
 
         cubrid vacuumdb -o db_output demodb
 
@@ -3587,7 +3587,7 @@ flashback
     delete from [dba.tbl] where [a] = 10 limit 1;
 
 위의 예에서 **cubrid flashback** 을 실행하면 지정된 기간 내에 수행된 트랜잭션에 대한 정보를 표시한다. 사용자가 기간을 지정하지 않으면 현재 시각으로부터 10분 전에 수행된 트랜잭션들부터 표시된다.
-사용자가 트랜잭션 식별자(Transaction ID)를 선택하면, 선택한 트랜잭션 내에서 실행된 DML에 대하여 되돌릴 수 있도록 SQL 구문을 제공한다. 사용자는 300초 이내에 트랜잭션 식별자를 입력해야하며, 해당 제한 시간은 시스템 파라미터 **flashback_timeout** 을 통해 조절할 수 있다.
+사용자가 트랜잭션 식별자를 선택하면, 선택된 트랜잭션이 실행한 DML을 되돌릴 수 있도록 SQL 구문을 제공한다. 사용자는 300초 이내에 트랜잭션 식별자를 선택해야 하며, 해당 제한 시간은 시스템 파라미터 :ref:`flashback_timeout<flashback_timeout>` 을 통해 조절할 수 있다.
 
 **Flashback Summary** 에 표시된 각 칼럼의 의미는 다음과 같다.
 
@@ -3602,6 +3602,9 @@ flashback
 
 .. note::
 		**cubrid flashback** 을 통해 되돌리려는 테이블이 :ref:`trigger-event-target` 일 경우, 사용자가 의도하지 않은 결과를 얻을 수 있다. **cubrid flashback** 을 통해 테이블에 대한 변경 사항을 되돌리기 전에 트리거를 비활성화하는 것이 좋다. 자세한 내용은 :ref:`alter-trigger` 을 참조한다.
+
+.. note::
+		**cubrid flashback** 은 복합 데이터 타입인 SET, MULTISET, LIST, JSON을 지원하지 않는다. **cubrid flashback** 수행 시 대상 클래스가 미지원 데이터 타입을 컬럼으로 갖는 경우 해당 컬럼값은 null로 출력된다. 또한, LOB 타입의 컬럼은 데이터가 아닌 해당 파일의 위치 정보(LOB locator)만 출력된다.
 
 다음은 **cubrid flashback** 에서 사용하는 [options]이다.
 

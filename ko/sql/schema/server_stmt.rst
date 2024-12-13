@@ -45,7 +45,7 @@ CREATE SERVER
     *   *db_name*: 원격 접속할 데이터베이스 이름.
     *   *user_name*: 원격 접속할 데이터베이스에 접속할 때 사용할 사용자 이름.
     *   *password_string*: 원격 접속할 데이터베이스에 접속할 때 사용하는 *user_name*\에 대한 패스워드 문자열.
-    *   *properties_string*: 원격 데이터베이스 사용을 위해 broker(또는 gateway)에 접속시 사용하는 property 정보 문자열 (최대 2047 바이트).  상세한 정보는 :ref:`cci-connect-with-url` 를 참고한다.	
+    *   *properties_string*: 원격 데이터베이스 사용을 위해 broker(또는 gateway)에 접속시 사용하는 property 정보 문자열 (최대 2047 바이트).  상세한 정보는 :ref:`cci_connect_with_url`\를 참고한다.	
     *   *server_comment_string*: 서버 정보에 대한 커멘트를 지정한다.(최대 1023바이트)
 
 .. note::
@@ -130,7 +130,7 @@ srv1, srv2, srv3는 동일한 의미이다.
     );
 
 **예제 4**
-다음은 HA 환경으로 구성된  원격 데이터베이스 사용시 PROPERTIES에 altHosts 속성을 사용하여 원격 데이터베이스의 fail-over에 대비한 설정 예제이다. 자세한 내용은 :ref:`cci-connect-with-url` 을 참고한다.
+다음은 HA 환경으로 구성된  원격 데이터베이스 사용시 PROPERTIES에 altHosts 속성을 사용하여 원격 데이터베이스의 fail-over에 대비한 설정 예제이다. 자세한 내용은 :ref:`cci_connect_with_url`\을 참고한다.
 
 .. code-block:: sql
 

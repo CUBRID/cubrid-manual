@@ -3609,7 +3609,7 @@ The following shows what information is displayed when a user runs "cubrid flash
     delete from [dba.tbl] where [a] = 10 limit 1;
 
 In the above example, when the flashback is executed, it displays information about transactions performed within the specified time period. If users do not specify a period, the transaction history up to 10 minutes before the current time is displayed.
-When the user selects a transaction ID, SQL statements are provided to execute the flashback on DML executed within the selected transaction. The user must enter the transaction ID within 300 seconds which can be adjusted using the system parameter **flashback_timeout** .
+When the user selects a transaction ID, SQL statements are provided to execute the flashback on DML executed within the selected transaction. The user must enter the transaction ID within 300 seconds which can be adjusted using the system parameter :ref:`flashback_timeout<flashback_timeout>` .
 
 Each column's meaning in the **Flashback Summary** is as following.
 
@@ -3624,6 +3624,9 @@ Each column's meaning in the **Flashback Summary** is as following.
 
 .. note:: 
 		If users attempt to rewind a table on which a trigger is created, unintended results may be obtained. Users are recommended to disable triggers on the table before executing the flashback. For more information, see :ref:`alter-trigger`.
+
+.. note::
+		The flashback utility does not support complex data types such as SET, MULTISET, LIST, and JSON. When performing flashback on a class that includes columns with unsupported data types, those columns are displayed as having null values. In addition, for LOB type columns, only the location information of the file(LOB locator) is displayed, not the data itself.
 
 The following shows [options] available with the **cubrid flashback** utility.
 

@@ -853,7 +853,7 @@ Database server error processes use the server error code when an error has occu
 
 *   Every data definition statement starting with **#define ER_** in the **$CUBRID/include/error_code.h** file indicate the server error codes.
 
-*   All message groups under "$set 5 MSGCAT_SET_ERROR" in the **CUBRID/msg/en_US (in Korean, ko_KR.eucKR** or **ko_KR.utf8)/cubrid.msg** $ file indicates the server error messages.
+*   All message groups under "$set 5 MSGCAT_SET_ERROR" in the **$CUBRID/msg/en_US (in Korean, ko_KR.eucKR** or **ko_KR.utf8)/cubrid.msg** $ file indicates the server error messages.
 
 When you write a C code with CCI driver, we recommend you to write a code with an error code name than with an error code number. For example, the error code number for violating the unique key is -670 or -886, but users can easily recognize the error when it is written as **ER_BTREE_UNIQUE_FAILED** or **ER_UNIQUE_VIOLATION_WITHKEY**\.
 

@@ -14,6 +14,8 @@ This chapter covers the following topics:
 
 *   Configuring the database server
 *   Configuring the broker
+*   HA Configuration
+*   SHARD Configuration
 
 Configuring the Database Server
 ===============================
@@ -99,7 +101,7 @@ Database Server System Parameters
 The following are database server system parameters that can be used in the **cubrid.conf** configuration file. On the following table, "Applied" column's "client parameter" means that they are applied to CAS, CSQL, **cubrid** utilities. Its "server parameter" means that they are applied to the DB server (cub_server process).
 For the scope of **client** and **server parameters**, see :ref:`scope-server-conf`.
 
-You can change the parameters that are capable of changing dynamically the setting value through the **SET SYSTEM PARAMETERS** statement or a session command of the CSQL Interpreter, **;set** while running the DB. If you are a DBA, you can change parameters regardless of the applied classification. However, if you are not a DBA, you can only change "session" parameters. (on the below table, a parameter of which "session" item's value is O.)
+You can change the parameters that are capable of changing dynamically the setting value through the **SET SYSTEM PARAMETERS** statement or a session command of the CSQL Interpreter, For more semantics on **;set** see :ref:`viewing-query-plan` .  **;set** while running the DB. If you are a DBA, you can change parameters regardless of the applied classification. However, if you are not a DBA, you can only change "session" parameters. (on the below table, a parameter of which "session" item's value is O.)
 
 On the below table, if "Applied" is "server parameter", that parameter affects to cub_server process; If "client parameter", that parameter affects to CAS, CSQL or "cubrid" utilities which run on client/server mode (\-\-CS-mode). "Client/server parameter" affects to all of cub_server, CAS, CSQL and "cubrid" utilities.
 
@@ -393,6 +395,8 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               | deduplicate_key_level               | client/server parameter |         | int      | -1                             |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | print_index_detail                  | client/server parameter |         | bool     | no                             |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | flashback_timeout                   | client parameter        |         | int      | 300                            |                       |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 
 .. _lpg:
@@ -1385,7 +1389,7 @@ The following are parameters related to SQL statements and data types supported 
 
 **block_ddl_statement**
 
-    **block_ddl_statement** is a parameter used to limit the execution of DDL (Data Definition Language) statements by the client. If the parameter is set to **no**, the given client is allowed to execute DDL statements. If it is set to **yes**, the client is not permitted to execute DDL statements. The default value is **no**.
+    **block_ddl_statement** is a parameter used to limit the execution of DDL (Data Definition Language) statements by the client. If the parameter is set to **no**, the given client is allowed to execute DDL statements. If it is set to **yes**, the client is not permitted to execute DDL statements. If set to Yes, update statistics may also be restricted. The default value is **no**.
 
 .. _block_nowhere_statement:
 
@@ -2212,6 +2216,8 @@ The following are other parameters. The type and value range for each parameter 
 +-------------------------------------+--------+----------------+----------------+----------------+
 | print_index_detail                  | bool   | no             |                |                |
 +-------------------------------------+--------+----------------+----------------+----------------+
+| flashback_timeout                   | int    | 300            | 0              | 3600           |
++-------------------------------------+--------+----------------+----------------+----------------+
 
 **access_ip_control**
 
@@ -2425,6 +2431,11 @@ The following are other parameters. The type and value range for each parameter 
 
  It specifies whether option information in the **WITH** clause is displayed when index syntax information is displayed, such as in the SHOW CREATE TABLE statement. Default is NO. However, the unloaddb tool is not affected by this setting.
 
+.. _flashback_timeout:
+
+**flashback_timeout**
+
+ It specifies the timeout for entering a transaction identifier in the flashback utility. If a transaction to be rewind is not entered within the specified timeout, an error message will be displayed, and the flashback utility will terminate. If there is no timeout, it may cause an issue where the archive log volumes required by the flashback utility are not deleted. Therefore, a method to remove the timeout is not provided. The default value is 300 seconds.
 
 .. _broker-configuration:
 

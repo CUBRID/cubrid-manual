@@ -184,7 +184,7 @@ CUBRID에서는 기본적으로 **정렬 병합 조인** 또는 **해시 조인*
           SCAN (index: public.athlete.i_athlete_nation_code), (btree time: 0, fetch: 1045, ioread: 0, readkeys: 24, filteredkeys: 0, rows: 948) (lookup time: 0, rows: 103)
 
 :ref:`예시 1 <example_join-method_nested-loop_no-index>`\과 비교했을 때,
-조인 조건을 비교하기 전 athlete 테이블에서 읽는 레코드 수가 크게 감소했다 (313,819 → 948).
+조인 조건을 비교하기 전 athlete 테이블에서 읽는 레코드 수가 크게 감소했다 (``readrows: 313,819`` -> ``rows: 948``).
 
 .. _example_join-method_nested-loop_driving:
 
@@ -788,7 +788,7 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
                 SCAN (table: public.participant), (heap time: 1, fetch: 3, ioread: 0, readrows: 916, rows: 0)
             PROBE (time: 0, probe_time: 0, fetch: 0, fetch_time: 0, ioread: 0, readkeys: 0, rows: 47, max_collisions: 0)
               SELECT (time: 0, fetch: 1, fetch_time: 0, ioread: 0)
-                SCAN (table: public.nation), (heap time: 0, fetch: 1, ioread: 0, readrows: 215, rows: 47)]
+                SCAN (table: public.nation), (heap time: 0, fetch: 1, ioread: 0, readrows: 215, rows: 47)
 
 **BUILD** 항목에서는 해시 테이블 빌드 방식이 ``hash_method: skip``\으로 표시된다.
 ``skip``\은 해시 테이블 빌드가 생략되었음을 의미한다.
@@ -929,7 +929,7 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
                                                      10,320 <= 8192 byte (False)
 
 계산 결과가 설정된 메모리 값보다 커서 메모리나 하이브리드 방식 대신 파일 해시 방식이 선택된다.
-파일 해시 조인은 임시 볼륨 페이지를 사용하므로 다른 해시 방식보다 비용이 더 높게 평가된다 (비용: 400 vs. 3,846).
+파일 해시 방식(cost: 3,846)은 임시 볼륨 페이지를 사용하므로 다른 해시 방식(cost: 400)보다 비용이 더 높게 평가된다.
 
   .. code-block:: none
 
@@ -947,8 +947,11 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 :ref:`예시 6 <example_join-method_hash-method_hybrid>`\의 질의 프로파일링 결과와 비교했을 때,
 파일 해시 방식이 비용과 비례해서 수행시간이 느린 것을 확인할 수 있다.
 
+동일한 테이블에 하나 이상의 조인 힌트를 사용하면,
+질의 최적화기는 지정된 조인 방식들의 비용을 비교해 더 비용이 적은 방식을 선택한다.
+생성된 실행 계획을 통해 질의 최적화기가 선택한 조인 방식을 확인할 수 있다.
 다음은 **USE_HASH**\와 **USE_NL** 힌트를 함께 사용했을 때,
-파일 해시 방식의 해시 조인 비용이 높아 질의 최적화기가 중첩 반복 조인으로 실행 계획을 생성하고 수행한 예시이다.
+파일 해시 방식의 해시 조인 비용(cost: 3,846)이 높아 질의 최적화기가 중첩 반복 조인(cost: 3,405)으로 실행 계획을 생성하고 수행한 예시이다.
 
   .. code-block:: sql
 

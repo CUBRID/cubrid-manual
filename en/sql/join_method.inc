@@ -184,7 +184,7 @@ As a result, not all records in the athlete table need to be scanned for each re
           SCAN (index: public.athlete.i_athlete_nation_code), (btree time: 0, fetch: 1045, ioread: 0, readkeys: 24, filteredkeys: 0, rows: 948) (lookup time: 0, rows: 103)
 
 Compared to :ref:`Example 1 <example_join-method_nested-loop_no-index>`,
-the number of records read from the athlete table before comparing the join conditions is significantly reduced (313,819 -> 948).
+the number of records read from the athlete table before comparing the join conditions is significantly reduced (``readrows: 313,819`` -> ``rows: 948``).
 
 .. _example_join-method_nested-loop_driving:
 
@@ -411,7 +411,7 @@ There are two hints associated with hash joins:
   - **NO_USE_HASH**: Prevents the query optimizer from generating an execution plan using a hash join.
 
 Both hints can specify one or more tables.
-The hint applies to the inner (driven) table if a table is explicitly specified.
+The hint applies to the inner table (driven table) if a table is explicitly specified.
 If no table is specified, the hint applies to all tables.
 If the same table is specified in both the **USE_HASH** and **NO_USE_HASH** hints, the **NO_USE_HASH** hint takes precedence.
 
@@ -421,8 +421,8 @@ Each table in a hash join can either be used to build the hash table or to probe
 To determine the most efficient approach, the costs of both options are calculated and compared, with the lower cost being selected as the hash join cost.
 For example, the following scenarios are compared, and the one with the lower cost is selected:
 
-  - Building the hash table with the outer (driving) table and probing it with the inner (driven) table.
-  - Building the hash table with the inner (driven) table and probing it with the outer (driving) table.
+  - Building the hash table with the outer table (driving table) and probing it with the inner table (driven table).
+  - Building the hash table with the inner table (driven table) and probing it with the outer table (driving table).
 
 .. rubric:: Table used to build the hash table
 
@@ -929,7 +929,7 @@ The query optimizer evaluates whether memory hashing or hybrid hashing can be us
                                                                     10,320 <= 8192 byte (False)
 
 Since the calculated size exceeds the maximum size of the hash table, the file hash method is chosen instead of the memory or hybrid method.
-File hash joins are more expensive than other hash methods due to the use of temporary volume pages (cost: 400 vs. 3,846).
+File hash methods (cost: 3,846) are more expensive than other hash methods (cost: 400) due to the use of temporary volume pages.
 
   .. code-block:: none
 
@@ -947,8 +947,11 @@ File hash joins are more expensive than other hash methods due to the use of tem
 When compared with the query profiling results from :ref:`Example 6 <example_join-method_hash-method_hybrid>`,
 It can be seen that the execution time of the file hash method is slow in proportion to the cost.
 
+When more than one join hint is used on the same table,
+the query optimizer compares the costs of the specified join methods and selects the one with the lower cost.
+The selected join method can be verified through the generated execution plan.
 The following is an example where the **USE_HASH** and **USE_NL** hints are used together,
-and the query optimizer generates and executes a plan with a nested loop join because the cost of a hash join using the file hash method is high.
+and the query optimizer generates and executes a plan with a nested loop join (cost: 3,405) because the cost of a hash join (cost: 3,846) using the file hash method) is high.
 
   .. code-block:: sql
 

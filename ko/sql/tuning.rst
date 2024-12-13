@@ -1419,6 +1419,40 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
                 1            2            3
                 4            5            6
 
+
+다음의 예는 커버링 인덱스 사용시 **SELECT** 리스트에 **COUNT(*)**만 있는 경우 불필요한 스캔을 줄여주는 최적화를 보여준다.
+
+.. code-block:: sql
+
+    -- insert dummy data
+    INSERT INTO t select rownum % 8, rownum % 100, rownum % 1000 FROM dual connect by level <= 40000;
+    
+    -- csql> ;trace on
+    
+    -- count(*) optimization
+    SELECT count(*) FROM t WHERE col1 < 9;
+    
+::
+    
+    Trace Statistics:
+      SELECT (time: 1, fetch: 66, fetch_time: 0, ioread: 0)
+        SCAN (index: dba.t.i_t_col1_col2_col3), (btree time: 1, fetch: 65, ioread: 0, readkeys: 1002, filteredkeys: 0, rows: 0, covered: true, count_only: true)
+
+.. code-block:: sql
+
+    -- no count(*) optimization
+    SELECT count(col1) FROM t WHERE col1 < 9;
+    
+::
+    
+    Trace Statistics:
+      SELECT (time: 13, fetch: 180, fetch_time: 0, ioread: 0)
+        SCAN (index: dba.t.i_t_col1_col2_col3), (btree time: 8, fetch: 179, ioread: 0, readkeys: 1002, filteredkeys: 0, rows: 40002, covered: true)
+
+.. note::
+
+    커버링 인덱스 사용시 **COUNT(*)**에 대한 최적화는 CUBRID 11.2 부터 지원된다.
+
 .. warning::
 
     **VARCHAR** 타입의 칼럼에서 값을 가져올 때 커버링 인덱스가 적용되는 경우, 뒤에 따라오는 공백 문자열은 잘리게 된다. 질의 최적화 수행 시 커버링 인덱스가 적용되면 질의 결과 값을 인덱스에서 가져오는데, 인덱스에는 뒤이어 나타나는 공백 문자열을 제거한 채로 값을 저장하기 때문이다.
@@ -2474,17 +2508,63 @@ SORT-LIMIT 최적화는 **ORDER BY** 절과 LIMIT 절을 명시한 질의에 적
 
 .. _join-elimination-optimization:
 
-조인 제거 최적화
+조인 변환 최적화
 ----------------
 
-조인 제거 최적화는 쿼리 결과에 영향을 주지 않는 테이블과의 조인을 제거하여 조인 연산을 줄이고, 쿼리 성능을 향상시키는 방법이다.
+조인 최적화는 질의 결과에 영향을 주지 않는 테이블과의 조인을 변경하여 조인 연산을 줄이고, 질의 성능을 향상시키는 방법이다.
 
-조인 제거 최적화에는 두 가지 동작이 있다:
+조인 최적화는 아래와 같은 동작이 있다:
 
+    #. **OUTER JOIN** 을 **INNER JOIN** 으로 변환
     #. **INNER JOIN** 제거
     #. **LEFT OUTER JOIN** 제거
 
-조인 제거 최적화를 하지 않으려면 **NO_ELIMINATE_JOIN** 힌트를 사용해야 한다.
+조인 제거와 관련된 최적화를 하지 않으려면 **NO_ELIMINATE_JOIN** 힌트를 사용해야 한다.
+
+.. _transform-outer-inner:
+
+**OUTER JOIN**/을 **INNER JOIN**/으로 변환
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+**OUTER JOIN**/은 조인순서가 선행 테이블과 후행 테이블로 이미 정해져 있어 조인 순서 최적화시 순서가 제한된다. **CUBRID**/는 성능을 위하여 후행 테이블에 **NULL** 불가한 조회 조건이 있는 경우 **OUTER JOIN**/을 **INNER JOIN**으로 변환한다. **NULL** 가능한 조회 조건은 이 변환에서 제외되며, 아래 조건을 만족해야 한다.
+    
+    #. **ON**\절에 조건절이 작성된 경우
+    #. **NULL** 변환 함수 (**COALESCE (), NVL (), NVL2 (), DECODE (), IF (), IFNULL (), CONCAT_WS ()**)
+    #. **IS NULL, CASE** 문
+
+다음은 **OUTER JOIN**/을 **INNER JOIN**/으로 변환하는 예제이다.
+
+.. code-block:: sql
+    --create table
+    CREATE TABLE t1 (col1 int, col2 int);
+    INSERT INTO t1 values (1,1),(2,2),(3,2);
+     
+    -- csql> ;plan simple
+    SELECT /*+ recompile */ *
+    FROM t1 a LEFT OUTER JOIN t1 b on a.col1 = b.col2
+    WHERE b.col1 = 2;
+    
+::
+    
+    Query Plan:
+      NESTED LOOPS (inner join)
+        TABLE SCAN (a)
+        TABLE SCAN (b)
+
+다음은 **NULL** 가능한 조회조건 때문에 **INNER JOIN**/으로 변환되지 않는 예제이다.
+
+.. code-block:: sql
+    -- csql> ;plan simple
+    SELECT /*+ recompile */ *
+    FROM t1 a LEFT OUTER JOIN t1 b on a.col1 = b.col2
+    WHERE nvl(b.col1,2) = 2;
+    
+::
+    
+    Query Plan:
+      NESTED LOOPS (left outer join)
+        TABLE SCAN (a)
+        TABLE SCAN (b)
 
 .. _eliminate-inner-join:
 

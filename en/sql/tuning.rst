@@ -1417,6 +1417,39 @@ The following example shows that the index is used as a covering index because c
                 1            2            3
                 4            5            6
 
+The following example shows an optimization that reduces unnecessary scans when the **SELECT** list only contains **COUNT(*)** when using a covering index.
+
+.. code-block:: sql
+
+    -- insert dummy data
+    INSERT INTO t select rownum % 8, rownum % 100, rownum % 1000 FROM dual connect by level <= 40000;
+    
+    -- csql> ;trace on
+    
+    -- count(*) optimization
+    SELECT count(*) FROM t WHERE col1 < 9;
+    
+::
+    
+    Trace Statistics:
+      SELECT (time: 1, fetch: 66, fetch_time: 0, ioread: 0)
+        SCAN (index: dba.t.i_t_col1_col2_col3), (btree time: 1, fetch: 65, ioread: 0, readkeys: 1002, filteredkeys: 0, rows: 0, covered: true, count_only: true)
+
+.. code-block:: sql
+
+    -- no count(*) optimization
+    SELECT count(col1) FROM t WHERE col1 < 9;
+    
+::
+    
+    Trace Statistics:
+      SELECT (time: 13, fetch: 180, fetch_time: 0, ioread: 0)
+        SCAN (index: dba.t.i_t_col1_col2_col3), (btree time: 8, fetch: 179, ioread: 0, readkeys: 1002, filteredkeys: 0, rows: 40002, covered: true)
+
+.. note::
+
+    Optimization for **COUNT(*)** when using covering index is supported from CUBRID 11.2.
+
 .. warning::
 
     If the covering index is applied when you get the values from the **VARCHAR** type column, the empty strings that follow will be truncated. If the covering index is applied to the execution of query optimization, the resulting query value will be retrieved. This is because the value will be stored in the index with the empty string being truncated.
@@ -2471,17 +2504,63 @@ Optimization Using Rewrite
 
 .. _join-elimination-optimization:
 
-Join Elimination Optimization
+Join transforming Optimization
 -----------------------------
 
-The join elimination optimization is a method to reduce join operations and improve the query performance by eliminating the joins with the tables that do not affect the query results.
+The join transforming optimization is a method to reduce join operations and improve the query performance by transforming the joins with the tables that do not affect the query results.
 
-In the join elimination optimization, there are two operations:
+In the join transforming optimization, there are three operations:
 
+    #. Transforming **OUTER JOIN** to **INNER JOIN**
     #. Eliminating **INNER JOIN**
     #. Eliminating **LEFT OUTER JOIN**
 
 To disable the join elimination optimization, use the **NO_ELIMINATE_JOIN** hint.
+
+.. _transform-outer-inner:
+
+Transforming **OUTER JOIN** to **INNER JOIN**
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+**OUTER JOIN** has a predefined join order with the leading table and trailing table, which restricts join order optimization. For performance improvement, **CUBRID** converts **OUTER JOIN** to **INNER JOIN** if there is a predicate which is not nullable on the trailing table. A nullable predicate is excluded from this transformation and satisfy the following conditions:
+
+    #. Predicates written in the **ON** clause.
+    #. Using **NULL** transformation functions. This includes **COALESCE (), NVL (), NVL2 (), DECODE (), IF (), IFNULL (), CONCAT_WS ()**.
+    #. **IS NULL ,CASE** statements are also not targets for **Predicate Push**.
+
+The following example shows an optimization that transform **OUTER JOIN**/ to **INNER JOIN**/.
+
+.. code-block:: sql
+    --create table
+    CREATE TABLE t1 (col1 int, col2 int);
+    INSERT INTO t1 values (1,1),(2,2),(3,2);
+     
+    -- csql> ;plan simple
+    SELECT /*+ recompile */ *
+    FROM t1 a LEFT OUTER JOIN t1 b on a.col1 = b.col2
+    WHERE b.col1 = 2;
+    
+::
+    
+    Query Plan:
+      NESTED LOOPS (inner join)
+        TABLE SCAN (a)
+        TABLE SCAN (b)
+
+The following example shows that can not be transformed from **OUTER JOIN**/ to **INNER JOIN**/ because of the nullable predicate.
+
+.. code-block:: sql
+    -- csql> ;plan simple
+    SELECT /*+ recompile */ *
+    FROM t1 a LEFT OUTER JOIN t1 b on a.col1 = b.col2
+    WHERE nvl(b.col1,2) = 2;
+    
+::
+    
+    Query Plan:
+      NESTED LOOPS (left outer join)
+        TABLE SCAN (a)
+        TABLE SCAN (b)
 
 .. _eliminate-inner-join:
 

@@ -925,8 +925,8 @@ The query optimizer evaluates whether memory hashing or hybrid hashing can be us
   .. code-block:: none
 
     Temporary result record count * (Hash entry size + Location info size) <= Maximum hash table size
-                                  215 * (32 byte * 16 byte) <= 8,192 byte
-                                                     10,320 <= 8192 byte (False)
+                                                 215 * (32 byte * 16 byte) <= 8,192 byte
+                                                                    10,320 <= 8192 byte (False)
 
 Since the calculated size exceeds the maximum size of the hash table, the file hash method is chosen instead of the memory or hybrid method.
 File hash joins are more expensive than other hash methods due to the use of temporary volume pages (cost: 400 vs. 3,846).

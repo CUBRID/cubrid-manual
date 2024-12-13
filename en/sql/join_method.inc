@@ -95,7 +95,7 @@ The **ORDERED** hint is applied to enforce the join order, making the nation tab
 Since the driven table lacks an index appropriate for the join condition, all records in the athlete table are read sequentially for each record in the nation table.
 
   .. code-block:: sql
-  
+
     select /*+ recompile ordered use_nl */
         n.name, a.name
     from
@@ -104,11 +104,11 @@ Since the driven table lacks an index appropriate for the join condition, all re
     where
         n.continent = 'Asia'
         and a.event = 'Baseball';
-  
+
   .. code-block:: none
-  
+
     Query plan:
-    
+
     nl-join (inner join)
         edge:  term[0]
         outer: sscan
@@ -120,9 +120,9 @@ Since the driven table lacks an index appropriate for the join condition, all re
                    sargs: term[0] AND term[1]
                    cost:  49 card 202
         cost:  4697 card 29
-  
+
   .. code-block:: none
-  
+
     Trace Statistics:
       SELECT (time: 92, fetch: 1720, fetch_time: 0, ioread: 0)
         SCAN (table: public.nation), (heap time: 0, fetch: 216, ioread: 0, readrows: 215, rows: 47)
@@ -146,9 +146,9 @@ An index suitable for the join condition is created on the driven table (athlete
 As a result, not all records in the athlete table need to be scanned for each record in the nation table, enabling random access.
 
   .. code-block:: sql
-  
+
     create index i_athlete_nation_code on athlete (nation_code);
-    
+
     select /*+ recompile ordered use_nl */
         n.name, a.name
     from
@@ -157,13 +157,13 @@ As a result, not all records in the athlete table need to be scanned for each re
     where
         n.continent = 'Asia'
         and a.event = 'Baseball';
-    
+
     drop index i_athlete_nation_code on athlete;
-  
+
   .. code-block:: none
-  
+
     Query plan:
-    
+
     idx-join (inner join)
         outer: sscan
                    class: n node[0]
@@ -175,9 +175,9 @@ As a result, not all records in the athlete table need to be scanned for each re
                    sargs: term[1]
                    cost:  4 card 202
         cost:  68 card 29
-    
+
   .. code-block:: none
-  
+
     Trace Statistics:
       SELECT (time: 1, fetch: 1265, fetch_time: 0, ioread: 0)
         SCAN (table: public.nation), (heap time: 1, fetch: 216, ioread: 0, readrows: 215, rows: 47)
@@ -194,7 +194,7 @@ This example changes the driving table to athlete, unlike previous examples wher
 The **LEADING** hint is used to specify the join order, making athlete the driving table and nation the driven table.
 
   .. code-block:: sql
-  
+
     select /*+ recompile leading(a, n) use_nl */
         n.name, a.name
     from
@@ -203,11 +203,11 @@ The **LEADING** hint is used to specify the join order, making athlete the drivi
     where
         n.continent = 'Asia'
         and a.event = 'Baseball';
-  
+
   .. code-block:: none
-  
+
     Query plan:
-    
+
     idx-join (inner join)
         outer: sscan
                    class: a node[0]
@@ -219,9 +219,9 @@ The **LEADING** hint is used to specify the join order, making athlete the drivi
                    sargs: term[2]
                    cost:  2 card 31
         cost:  161 card 29
-  
+
   .. code-block:: none
-  
+
     Trace Statistics:
       SELECT (time: 5, fetch: 7168, fetch_time: 0, ioread: 0)
         SCAN (table: public.athlete), (heap time: 5, fetch: 6709, ioread: 0, readrows: 6677, rows: 229)
@@ -238,7 +238,7 @@ By combining the **ORDERED** and **NO_MERGE** hints, an inline view that cannot 
 Additionally, the query retrieves only the first 20 results, allowing partial range processing to be combined with the hash list scan.
 
   .. code-block:: sql
-  
+
     select /*+ recompile ordered use_nl */
         n.name, v.name
     from
@@ -254,11 +254,11 @@ Additionally, the query retrieves only the first 20 results, allowing partial ra
     where
         n.continent = 'Asia'
     limit 20;
-  
+
   .. code-block:: none
-  
+
     Query plan:
-    
+
     nl-join (inner join)
         edge:  term[0]
         outer: sscan
@@ -271,9 +271,9 @@ Additionally, the query retrieves only the first 20 results, allowing partial ra
                    cost:  2 card 202
         sargs: term[1]
         cost:  148 card 29
-  
+
   .. code-block:: none
-  
+
     Trace Statistics:
       SELECT (time: 2, fetch: 33, fetch_time: 0, ioread: 0)
         SCAN (table: public.nation), (heap time: 0, fetch: 1, ioread: 0, readrows: 26, rows: 8)
@@ -319,10 +319,10 @@ This example demonstrates the steps involved in executing a sort-merge join.
 Although the **ORDERED** hint does not directly impact join performance, it is included here to ensure the join is performed in the specified order.
 
   .. code-block:: sql
-  
+
     create index i_nation_continent_code on nation (continent, code);
     create index i_athlete_event_nation_code on athlete (event, nation_code);
-    
+
     select /*+ recompile ordered use_merge */
         n.name, a.name
     from
@@ -331,14 +331,14 @@ Although the **ORDERED** hint does not directly impact join performance, it is i
     where
         n.continent = 'Asia'
         and a.event = 'Baseball';
-    
+
     drop index i_nation_continent_code on nation;
     drop index i_athlete_event_nation_code on athlete;
-  
+
   .. code-block:: none
-  
+
     Query plan:
-    
+
     temp
         order: UNORDERED
         subplan: m-join (inner join)
@@ -359,9 +359,9 @@ Although the **ORDERED** hint does not directly impact join performance, it is i
                                 cost:  8 card 7
                      cost:  17 card 1
         cost:  23 card 1
-  
+
   .. code-block:: none
-  
+
     Trace Statistics:
       SELECT (time: 1, fetch: 287, fetch_time: 1, ioread: 0)
         SCAN (temp time: 0, fetch: 0, ioread: 0, readrows: 103, rows: 103)
@@ -477,7 +477,7 @@ This example explains the steps involved in performing a hash join.
 Even with the **ORDERED** hint, the table used to build the hash table cannot be explicitly specified.
 
   .. code-block:: sql
-  
+
     select /*+ recompile ordered use_hash */
         n.name, a.name
     from
@@ -486,11 +486,11 @@ Even with the **ORDERED** hint, the table used to build the hash table cannot be
     where
         n.continent = 'Asia'
         and a.event = 'Baseball';
-  
+
   .. code-block:: none
-  
+
     Query plan:
-    
+
     hash-join (inner join)
         edge:  term[0]
         outer: sscan
@@ -502,9 +502,9 @@ Even with the **ORDERED** hint, the table used to build the hash table cannot be
                    sargs: term[1]
                    cost:  49 card 202
         cost:  63 card 29
-  
+
   .. code-block:: none
-  
+
     Trace Statistics:
       SELECT (time: 2, fetch: 33, fetch_time: 0, ioread: 0)
         SCAN (temp time: 0, fetch: 0, ioread: 0, readrows: 103, rows: 103)
@@ -525,28 +525,28 @@ Thus, the nation table with fewer records is selected to build the hash table.
 This section describes only the query profiling items related to hash joins. For details on other items, refer to :ref:`query-profiling`.
 
   1. **HASHJOIN**
-  
+
     - **time**: Total execution time for hash join (ms)
     - **fetch**: Pages fetched during the hash join
     - **fetch_time**: Time spent fetching pages for the hash join (ms)
     - **ioread**: Number of physical I/O reads during page fetches for the hash join
-  
+
   2. **BUILD**: Except for **time**, the remaining items do not include cumulative information when querying temporary results.
-  
+
     - **time**: Total time for building the hash table, including temporary results (ms)
     - **build_time**: : Time specifically spent building the hash table (ms)
     - **fetch**: Pages fetched during the hash table build
     - **fetch_time**: Time spent fetching pages for the hash table build (ms)
     - **ioread**: Physical I/O reads during the hash table build
     - **hash_method**: Method used to build the hash table (**memory**, **hybrid**, **file**, or **skip**)
-  
+
       - **memory**: Use the memory hashing method
       - **hybrid**: Use the hybrid hashing method
       - **file**:  Use the file hashing method
       - **skip**: Skip building the hash table
-  
+
   3. **PROBE**: Except for **time**, the remaining items do not include cumulative information when querying temporary results.
-  
+
     - **time**: Total time for probing the hash table, including temporary results (ms)
     - **probe_time**: Time specifically spent probing the hash table (ms)
     - **fetch**: Pages fetched during the hash table probe
@@ -559,17 +559,17 @@ This section describes only the query profiling items related to hash joins. For
 **Execution Steps:**
 
   1. Retrieve records from the nation table that satisfy the filter condition (``n.continent = 'Asia'``) and create a temporary result.
-  
+
     .. code-block:: sql
-  
+
       select n.code, n.name from nation as n where n.continent = 'Asia';
-  
+
   2. Retrieve records from the athlete table that satisfy the filter condition (``a.event = 'Baseball'``) and create a temporary result.
-  
+
     .. code-block:: sql
-  
+
       select a.nation_code, a.name from athlete as a where a.event = 'Baseball';
-  
+
   3. Read the temporary result from the nation table and build a hash table.
   4. For each record in the temporary result from the athlete table, probe the hash table of the nation table.
   5. Match records(``readkeys``) in the hash table with the same hash value and compare them against the join condition (``n.code = a.nation_code``). If the condition is satisfied(``rows``), combine the records and add them to the result.
@@ -600,7 +600,7 @@ The **ORDERED** hint is used to fix the inner table (driven table) for applying 
   .. code-block:: none
 
     Query plan:
-    
+
     idx-join (inner join)
         outer: hash-join (inner join)
                    edge:  term[0]
@@ -841,7 +841,7 @@ To do this, set the **max_hash_list_scan_size** parameter to **12K** (default: *
               SELECT (time: 3, fetch: 53, fetch_time: 0, ioread: 0)
                 SCAN (table: public.athlete), (heap time: 2, fetch: 32, ioread: 0, readrows: 6677, rows: 6677)
 
-When more than one join hint is used on the same table, 
+When more than one join hint is used on the same table,
 the query optimizer compares the costs of the specified join methods and selects the one with the lower cost.
 The selected join method can be verified through the generated execution plan.
 The following is an example where the **USE_HASH** and **USE_NL** hints are used together,

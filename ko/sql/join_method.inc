@@ -8,7 +8,7 @@
 그러나 나누어진 데이터를 통합적으로 질의하려면 테이블 간의 관계를 결합해야 한다.
 조인 연산은 이러한 관계를 결합하여 마치 단일 테이블에서 가져온 것처럼 결과를 반환한다.
 
-.. rubric:: 조인 유형 
+.. rubric:: 조인 유형
 
 조인 결과에 포함되는 레코드는 지정된 조인 유형에 따라 달라진다.
 자세한 내용은 :ref:`join-query`\에서 확인할 수 있다.
@@ -22,7 +22,7 @@
   - :ref:`join-method_hash`
 
 조인 방식은 질의 최적화기가 비용 비교를 통해 결정하며, 사용자가 직접 지정할 수도 있다.
-질의 최적화기는 데이터베이스가 수집한 통계 정보를 바탕으로 각 조인 방식의 비용을 계산한 뒤 
+질의 최적화기는 데이터베이스가 수집한 통계 정보를 바탕으로 각 조인 방식의 비용을 계산한 뒤
 가장 낮은 비용을 가진 방식을 선택한다.
 질의에 두 개 이상의 조인이 포함된 경우, 각 조인에 다른 조인 방식을 적용할 수 있다.
 각 조인 방식은 한 번에 두 개의 테이블만 처리하며, 순차적으로 수행된다.
@@ -106,9 +106,9 @@ CUBRID에서는 기본적으로 **정렬 병합 조인** 또는 **해시 조인*
         and a.event = 'Baseball';
 
   .. code-block:: none
-  
+
     Query plan:
-    
+
     nl-join (inner join)
         edge:  term[0]
         outer: sscan
@@ -146,9 +146,9 @@ CUBRID에서는 기본적으로 **정렬 병합 조인** 또는 **해시 조인*
 그 결과, nation 테이블의 각 레코드에 대해 athlete 테이블의 모든 레코드를 읽을 필요 없이 랜덤 액세스가 가능하다.
 
   .. code-block:: sql
-  
+
     create index i_athlete_nation_code on athlete (nation_code);
-  
+
     select /*+ recompile ordered use_nl */
         n.name, a.name
     from
@@ -157,13 +157,13 @@ CUBRID에서는 기본적으로 **정렬 병합 조인** 또는 **해시 조인*
     where
         n.continent = 'Asia'
         and a.event = 'Baseball';
-  
+
     drop index i_athlete_nation_code on athlete;
-  
+
   .. code-block:: none
-  
+
     Query plan:
-    
+
     idx-join (inner join)
         outer: sscan
                    class: n node[0]
@@ -175,9 +175,9 @@ CUBRID에서는 기본적으로 **정렬 병합 조인** 또는 **해시 조인*
                    sargs: term[1]
                    cost:  4 card 202
         cost:  68 card 29
-  
+
   .. code-block:: none
-  
+
     Trace Statistics:
       SELECT (time: 1, fetch: 1265, fetch_time: 0, ioread: 0)
         SCAN (table: public.nation), (heap time: 1, fetch: 216, ioread: 0, readrows: 215, rows: 47)
@@ -194,7 +194,7 @@ CUBRID에서는 기본적으로 **정렬 병합 조인** 또는 **해시 조인*
 **LEADING** 힌트를 사용해 조인 순서를 지정했으며, 결과적으로 athlete 테이블이 드라이빙 테이블, nation 테이블이 드리븐 테이블이 된다.
 
   .. code-block:: sql
-  
+
     select /*+ recompile leading(a, n) use_nl */
         n.name, a.name
     from
@@ -203,11 +203,11 @@ CUBRID에서는 기본적으로 **정렬 병합 조인** 또는 **해시 조인*
     where
         n.continent = 'Asia'
         and a.event = 'Baseball';
-  
+
   .. code-block:: none
-  
+
     Query plan:
-    
+
     idx-join (inner join)
         outer: sscan
                    class: a node[0]
@@ -219,9 +219,9 @@ CUBRID에서는 기본적으로 **정렬 병합 조인** 또는 **해시 조인*
                    sargs: term[2]
                    cost:  2 card 31
         cost:  161 card 29
-  
+
   .. code-block:: none
-  
+
     Trace Statistics:
       SELECT (time: 5, fetch: 7168, fetch_time: 0, ioread: 0)
         SCAN (table: public.athlete), (heap time: 5, fetch: 6709, ioread: 0, readrows: 6677, rows: 229)
@@ -238,7 +238,7 @@ athlete 테이블을 드라이빙 테이블로 사용하면 레코드 수가 많
 또한, 질의는 상위 20개의 결과만 조회해 해시 리스트 스캔과 부분 범위 처리를 함께 수행한다.
 
   .. code-block:: sql
-  
+
     select /*+ recompile ordered use_nl */
         n.name, v.name
     from
@@ -254,11 +254,11 @@ athlete 테이블을 드라이빙 테이블로 사용하면 레코드 수가 많
     where
         n.continent = 'Asia'
     limit 20;
-  
+
   .. code-block:: none
-  
+
     Query plan:
-    
+
     nl-join (inner join)
         edge:  term[0]
         outer: sscan
@@ -271,9 +271,9 @@ athlete 테이블을 드라이빙 테이블로 사용하면 레코드 수가 많
                    cost:  2 card 202
         sargs: term[1]
         cost:  148 card 29
-  
+
   .. code-block:: none
-  
+
     Trace Statistics:
       SELECT (time: 2, fetch: 33, fetch_time: 0, ioread: 0)
         SCAN (table: public.nation), (heap time: 0, fetch: 1, ioread: 0, readrows: 26, rows: 8)
@@ -319,10 +319,10 @@ athlete 테이블을 드라이빙 테이블로 사용하면 레코드 수가 많
 **ORDERED** 힌트는 조인 성능에 직접적인 영향을 미치지 않지만, 여기서는 조인이 아래 지정된 순서대로 실행되도록 하기 위해 사용되었다.
 
   .. code-block:: sql
-  
+
     create index i_nation_continent_code on nation (continent, code);
     create index i_athlete_event_nation_code on athlete (event, nation_code);
-    
+
     select /*+ recompile ordered use_merge */
         n.name, a.name
     from
@@ -331,14 +331,14 @@ athlete 테이블을 드라이빙 테이블로 사용하면 레코드 수가 많
     where
         n.continent = 'Asia'
         and a.event = 'Baseball';
-    
+
     drop index i_nation_continent_code on nation;
     drop index i_athlete_event_nation_code on athlete;
-  
+
   .. code-block:: none
-  
+
     Query plan:
-    
+
     temp
         order: UNORDERED
         subplan: m-join (inner join)
@@ -359,9 +359,9 @@ athlete 테이블을 드라이빙 테이블로 사용하면 레코드 수가 많
                                 cost:  8 card 7
                      cost:  17 card 1
         cost:  23 card 1
-  
+
   .. code-block:: none
-  
+
     Trace Statistics:
       SELECT (time: 1, fetch: 287, fetch_time: 1, ioread: 0)
         SCAN (temp time: 0, fetch: 0, ioread: 0, readrows: 103, rows: 103)
@@ -477,7 +477,7 @@ CUBRID는 다음과 같은 해시 방식을 지원한다:
 **ORDERED** 힌트를 사용하더라도 해시 테이블을 빌드할 테이블은 지정할 수 없다.
 
   .. code-block:: sql
-  
+
     select /*+ recompile ordered use_hash */
         n.name, a.name
     from
@@ -486,11 +486,11 @@ CUBRID는 다음과 같은 해시 방식을 지원한다:
     where
         n.continent = 'Asia'
         and a.event = 'Baseball';
-  
+
   .. code-block:: none
-  
+
     Query plan:
-    
+
     hash-join (inner join)
         edge:  term[0]
         outer: sscan
@@ -502,9 +502,9 @@ CUBRID는 다음과 같은 해시 방식을 지원한다:
                    sargs: term[1]
                    cost:  49 card 202
         cost:  63 card 29
-  
+
   .. code-block:: none
-  
+
     Trace Statistics:
       SELECT (time: 2, fetch: 33, fetch_time: 0, ioread: 0)
         SCAN (temp time: 0, fetch: 0, ioread: 0, readrows: 103, rows: 103)
@@ -525,28 +525,28 @@ athlete 테이블에서는 필터 조건(``a.event = 'Baseball'``)을 만족하�
 여기서는 해시 조인과 관련된 항목들만 설명한다. 다른 항목들에 대해서는 :ref:`query-profiling`\에서 확인할 수 있다.
 
   1. **HASHJOIN**
-  
+
     - **time**: 해시 조인 전체 실행 시간(ms)
     - **fetch**: 해시 조인에서 fetch한 페이지 수
     - **fetch_time**: 해시 조인에서 페이지를 fetch하는 데 걸린 시간(ms)
     - **ioread**: 해시 조인에서 페이지를 fetch하는 동안 발생한 물리적 I/O 읽기 횟수
-  
+
   2. **BUILD**: **time**\을 제외하고, 나머지 항목들은 임시 결과를 조회할 때 누적된 정보를 포함하지 않는다.
-  
+
     - **time**: 임시 결과 조회를 포함한 해시 테이블 빌드 시간(ms)
     - **build_time**: 해시 테이블 빌드 시간(ms)
     - **fetch**: 해시 테이블 빌드를 위해 fetch한 페이지 수
     - **fetch_time**: 해시 테이블 빌드에서 페이지를 fetch하는 데 걸린 시간(ms)
     - **ioread**: 해시 테이블 빌드에서 발생한 물리적 I/O 읽기 횟수
     - **hash_method**: 해시 테이블 빌드에 사용된 방식 (**memory**, **hybrid**, **file**, 또는 **skip**)
-    
+
       - **memory**: 메모리 해시 방식 사용
       - **hybrid**: 하이브리드 해시 방식 사용
       - **file**: 파일 해시 방식 사용
       - **skip**: 해시 테이블 빌드를 생략
-  
+
   3. **PROBE**: **time**\을 제외하고, 나머지 항목들은 임시 결과를 조회할 때 누적된 정보를 포함하지 않는다.
-  
+
     - **time**: 임시 결과 조회를 포함한 해시 테이블 프로브 시간(ms)
     - **probe_time**: 해시 테이블 프로브 시간(ms)
     - **fetch**: 해시 테이블 프로브를 위해 fetch한 페이지 수
@@ -559,17 +559,17 @@ athlete 테이블에서는 필터 조건(``a.event = 'Baseball'``)을 만족하�
 **수행 과정:**
 
   1. nation 테이블에서 필터 조건(``n.continent = 'Asia'``)을 만족하는 레코드를 가져와 임시 결과를 생성한다.
-  
+
     .. code-block:: sql
-  
+
       select n.code, n.name from nation as n where n.continent = 'Asia';
-  
+
   2. athlete 테이블에서 필터 조건(``a.event = 'Baseball'``)을 만족하는 레코드를 가져와 임시 결과를 생성한다.
-  
+
     .. code-block:: sql
-  
+
       select a.nation_code, a.name from athlete as a where a.event = 'Baseball';
-  
+
   3. nation 테이블의 임시 결과를 읽어 해시 테이블을 빌드한다.
   4. athlete 테이블의 임시 결과에서 각 레코드에 대해 nation 테이블의 해시 테이블을 프로브한다.
   5. 동일한 해시 값을 가진 레코드를 찾아(``readkeys``) 조인 조건(``n.code = a.nation_code``)을 비교한다. 조건이 만족(``rows``)되면 두 레코드를 결합하여 결과에 추가한다.
@@ -585,7 +585,7 @@ athlete 테이블에서는 필터 조건(``a.event = 'Baseball'``)을 만족하�
 **ORDERED** 힌트를 사용하여 내부 테이블(드리븐 테이블)을 고정한다.
 
   .. code-block:: sql
-  
+
     select /*+ recompile ordered use_hash no_use_hash(r) */
         n.name, a.name, a.code, r.medal
     from
@@ -596,11 +596,11 @@ athlete 테이블에서는 필터 조건(``a.event = 'Baseball'``)을 만족하�
         n.continent = 'Asia'
         and a.event = 'Shooting'
         and r.host_year = 1992;
-  
+
   .. code-block:: none
-  
+
     Query plan:
-    
+
     idx-join (inner join)
         outer: hash-join (inner join)
                    edge:  term[0]

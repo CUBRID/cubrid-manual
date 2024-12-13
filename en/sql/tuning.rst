@@ -1417,6 +1417,39 @@ The following example shows that the index is used as a covering index because c
                 1            2            3
                 4            5            6
 
+The following example shows an optimization that reduces unnecessary scans when the **SELECT** list only contains **COUNT(*)** when using a covering index.
+
+.. code-block:: sql
+
+    -- insert dummy data
+    INSERT INTO t select rownum % 8, rownum % 100, rownum % 1000 FROM dual connect by level <= 40000;
+    
+    -- csql> ;trace on
+    
+    -- count(*) optimization
+    SELECT count(*) FROM t WHERE col1 < 9;
+    
+::
+    
+    Trace Statistics:
+      SELECT (time: 1, fetch: 66, fetch_time: 0, ioread: 0)
+        SCAN (index: dba.t.i_t_col1_col2_col3), (btree time: 1, fetch: 65, ioread: 0, readkeys: 1002, filteredkeys: 0, rows: 0, covered: true, count_only: true)
+
+.. code-block:: sql
+
+    -- no count(*) optimization
+    SELECT count(col1) FROM t WHERE col1 < 9;
+    
+::
+    
+    Trace Statistics:
+      SELECT (time: 13, fetch: 180, fetch_time: 0, ioread: 0)
+        SCAN (index: dba.t.i_t_col1_col2_col3), (btree time: 8, fetch: 179, ioread: 0, readkeys: 1002, filteredkeys: 0, rows: 40002, covered: true)
+
+.. note::
+
+    Optimization for **COUNT(*)** when using covering index is supported from CUBRID 11.2.
+
 .. warning::
 
     If the covering index is applied when you get the values from the **VARCHAR** type column, the empty strings that follow will be truncated. If the covering index is applied to the execution of query optimization, the resulting query value will be retrieved. This is because the value will be stored in the index with the empty string being truncated.

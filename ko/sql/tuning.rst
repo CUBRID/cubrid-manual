@@ -1419,6 +1419,40 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
                 1            2            3
                 4            5            6
 
+
+다음의 예는 커버링 인덱스 사용시 **SELECT** 리스트에 **COUNT(*)**만 있는 경우 불필요한 스캔을 줄여주는 최적화를 보여준다.
+
+.. code-block:: sql
+
+    -- insert dummy data
+    INSERT INTO t select rownum % 8, rownum % 100, rownum % 1000 FROM dual connect by level <= 40000;
+    
+    -- csql> ;trace on
+    
+    -- count(*) optimization
+    SELECT count(*) FROM t WHERE col1 < 9;
+    
+::
+    
+    Trace Statistics:
+      SELECT (time: 1, fetch: 66, fetch_time: 0, ioread: 0)
+        SCAN (index: dba.t.i_t_col1_col2_col3), (btree time: 1, fetch: 65, ioread: 0, readkeys: 1002, filteredkeys: 0, rows: 0, covered: true, count_only: true)
+
+.. code-block:: sql
+
+    -- no count(*) optimization
+    SELECT count(col1) FROM t WHERE col1 < 9;
+    
+::
+    
+    Trace Statistics:
+      SELECT (time: 13, fetch: 180, fetch_time: 0, ioread: 0)
+        SCAN (index: dba.t.i_t_col1_col2_col3), (btree time: 8, fetch: 179, ioread: 0, readkeys: 1002, filteredkeys: 0, rows: 40002, covered: true)
+
+.. note::
+
+    커버링 인덱스 사용시 **COUNT(*)**에 대한 최적화는 CUBRID 11.2 부터 지원된다.
+
 .. warning::
 
     **VARCHAR** 타입의 칼럼에서 값을 가져올 때 커버링 인덱스가 적용되는 경우, 뒤에 따라오는 공백 문자열은 잘리게 된다. 질의 최적화 수행 시 커버링 인덱스가 적용되면 질의 결과 값을 인덱스에서 가져오는데, 인덱스에는 뒤이어 나타나는 공백 문자열을 제거한 채로 값을 저장하기 때문이다.

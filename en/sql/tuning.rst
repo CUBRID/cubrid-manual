@@ -1452,7 +1452,7 @@ The following example shows an optimization that reduces unnecessary scans when 
 
 .. warning::
 
-    If the covering index is applied when you get the values from the **VARCHAR** type column, the empty strings that follow will be truncated. If the covering index is applied to the execution of query optimization, the resulting query value will be retrieved. This is because the value will be stored in the index with the empty string being truncated.
+    When a covering index is applied to retrieve values from a **VARCHAR** type column, any trailing empty strings will be truncated. This occurs because the empty string is stored in the index with the trailing spaces removed, affecting the query results when the index is used for query optimization.
 
     If you don't want this, use the **NO_COVERING_IDX** hint, which does not use the covering index function. If you use the hint, you can get the result value from the data area rather than from the index area.
 

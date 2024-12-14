@@ -1448,7 +1448,7 @@ The following example shows an optimization that reduces unnecessary scans when 
 
 .. note::
 
-    Optimization for **COUNT(*)** when using covering index is supported from CUBRID 11.2.
+    Optimization for **COUNT(*)** when using covering indexes is supported starting from CUBRID 11.2.
 
 .. warning::
 

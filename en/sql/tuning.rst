@@ -4239,7 +4239,7 @@ However, if another table is referenced within a subquery as shown below, the qu
 
         SELECT name, capital, list(SELECT /*+ QUERY_CACHE */ host_city FROM olympic WHERE host_nation = name) AS host_cities
         FROM nation;
-=======
+
 The cached query is shown as **query_string** in the middle of the result screen. Each of the **n_entries** and **n_pages** represents the number of cached queries and the number of pages in the cached results. The **n_entries** is limited to the value of configuration parameter **max_query_cache_entries** and the **n_pages** is limited to the value of **query_cache_size_in_pages**. If the **n_entries** is overflown or the **n_pages** is overflown, some victims among the cache entries are selected and they are uncached. The number of victims is about 20% of **max_query_cache_entries** value and of the **query_cache_size_in_pages** value.
 
 .. _correlated-subquery-cache:

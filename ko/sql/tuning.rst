@@ -4243,7 +4243,7 @@ WITH절에 포함되는 재귀 부분 중 다른 CTE를 참조하는 부질의�
 
         SELECT name, capital, list(SELECT /*+ QUERY_CACHE */ host_city FROM olympic WHERE host_nation = name) AS host_cities
         FROM nation;
-=======
+
 캐시 된 질의는 결과 화면 중간에 **query_string** 으로 표시되며 각 **n_entries** 및 **n_pages** 는 캐시된 질의 수와 캐시 된 결과의 페이지 수를 나타낸다. **n_entries** 는 파라미터 **max_query_cache_entries** 의 값으로 제한되고 **n_pages** 는 **query_cache_size_in_pages** 의 값으로 제한된다. **n_entries** 가 초과되거나 **n_pages** 가 초과되면 캐시 항목 중 일부가 삭제될 후보로 선택되어 삭제되고, 삭제되는 캐시는 **max_query_cache_entries** 값과 **query_cache_size_in_pages** 값의 약 20% 이다.
 
 .. _correlated-subquery-cache:

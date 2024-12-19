@@ -4188,54 +4188,52 @@ The user can check the query to be cached or not by putting the session command 
       deletion_marker = false
     }
 
-The cached query is shown as **query_string** in the middle of the result screen. Each of the **n_entries** and **n_pages** represents the number of cached queries and the number of pages in the cached results. The **n_entries** is limited to the value of configuration parameter **max_query_cache_entries** and the **n_pages** is limited to the value of **query_cache_size_in_pages**. If the **n_entries** is overflown or the **n_pages** is overflown, some victims among the cache entries are selected and they are uncached. The number of victims is about 20% of **max_query_cache_entries** value and of the **query_cache_size_in_pages** value.
+The cached query is shown as **query_string** in the middle of the result screen. **n_entries** and **n_pages** represent the number of cached queries and the number of pages in the cached results, respectively. **n_entries** is limited by the value of the configuration parameter **max_QUERY_CACHE_entries**, and **n_pages** is limited by the value of the configuration parameter **QUERY_CACHE_size_in_pages**. If **n_entries** or **n_pages** overflow, some candidates among the cache entries are selected and uncached. The number of candidates is approximately 20% of the **max_QUERY_CACHE_entries** value and the **QUERY_CACHE_size_in_pages** value.
 
 Since version 11.4, subqueries can also be cached, and the subqueries that can be cached are as follows.
 
 1) CTE query
-When the query_cache hint is specified in a non-recursive query included in the WITH clause
+When the QUERY_CACHE hint is specified in a non-recursive query included in the WITH clause
 
 .. code-block:: sql
 
         WITH
-         of_drones AS (SELECT /*+ query_cache */ item, 'drones' FROM products WHERE parent_id = 1),
-         of_cars AS (SELECT /*+ query_cache */ item, 'cars' FROM products WHERE parent_id = 5)
+         of_drones AS (SELECT /*+ QUERY_CACHE */ item, 'drones' FROM products WHERE parent_id = 1),
+         of_cars AS (SELECT /*+ QUERY_CACHE */ item, 'cars' FROM products WHERE parent_id = 5)
         SELECT * FROM of_drones UNION ALL SELECT * FROM of_cars ORDER BY 1;
 
-When the query_cache hint is specified in a recursive query included in the WITH clause and no other CTE is referenced.
+When the QUERY_CACHE hint is specified in a recursive query included in the WITH clause and no other CTE is referenced.
 
 .. code-block:: sql
 
         WITH
          RECURSIVE cars (id, parent_id, item, price) AS (
-                            SELECT /*+ query_cache */ id, parent_id, item, price
+                            SELECT /*+ QUERY_CACHE */ id, parent_id, item, price
                                 FROM products WHERE item LIKE 'Car%'
                             UNION ALL
-                            SELECT /*+ query_cache */ p.id, p.parent_id, p.item, p.price
+                            SELECT /*+ QUERY_CACHE */ p.id, p.parent_id, p.item, p.price
                                 FROM products p
                             INNER JOIN cars rec_cars ON p.parent_id = rec_cars.id)
         SELECT item, price FROM cars ORDER BY 1;
 
 In the UNION query above, the first query is cached, but the second query is not cached because it references another table.
 
-2) When the query_cache hint is specified in a subquery that does not refer to another table
+2) When the QUERY_CACHE hint is specified in a subquery that does not refer to another table
 
 .. code-block:: sql
 
-        SELECT h.host_year, (SELECT /*+ query_cache */ host_nation FROM olympic o WHERE o.host_year > 1994 limit 1) AS host_n  ation,
-               h.event_code, h.score, h.unit
+        SELECT h.host_year, (SELECT /*+ QUERY_CACHE */ host_nation FROM olympic o WHERE o.host_year > 1994 limit 1) AS host_nation, h.event_code, h.score, h.unit
         FROM history h;
 
-        SELECT name, capital, list(SELECT /*+ query_cache */ host_city FROM olympic WHERE host_nation like 'K%') AS host_citi  es
+        SELECT name, capital, list(SELECT /*+ QUERY_CACHE */ host_city FROM olympic WHERE host_nation like 'K%') AS host_cities
         FROM nation;
 
-However, if another table is referenced within a subquery as shown below, the query is not cached even if the query_cache hint is specified.
+However, if another table is referenced within a subquery as shown below, the query is not cached even if the QUERY_CACHE hint is specified.
 
 .. code-block:: sql
 
-        SELECT h.host_year, (SELECT /*+ query_cache */ host_nation FROM olympic o WHERE o.host_year=h.host_year) AS host_nati  on,
-               h.event_code, h.score, h.unit
+        SELECT h.host_year, (SELECT /*+ QUERY_CACHE */ host_nation FROM olympic o WHERE o.host_year=h.host_year) AS host_nation, h.event_code, h.score, h.unit
         FROM history h;
 
-        SELECT name, capital, list(SELECT /*+ query_cache */ host_city FROM olympic WHERE host_nation = name) AS host_cities
+        SELECT name, capital, list(SELECT /*+ QUERY_CACHE */ host_city FROM olympic WHERE host_nation = name) AS host_cities
         FROM nation;

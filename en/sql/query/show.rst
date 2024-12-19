@@ -1390,7 +1390,7 @@ The following shows the examples of this syntax.
 ::
 
     <00001> Table_name   : 'tbl1'
-            Index_name   : 'index_a'
+            Index_name   : 'index_ab'
             Btid         : '(0|378|950)'
             Node_type    : 'LEAF'
             Max_key_len  : 0
@@ -1429,6 +1429,7 @@ Btid                                VARCHAR(64)     BTID (volid|fileid|root_page
 Num_distinct_key                    INT             Distinct key count (in leaf pages)
 Total_value                         INT             Total number of values stored in tree
 Deduplicate_distinct_key            INT             Deduplicated distinct key count (in leaf pages)
+Num_fence_key                       INT             Number of fence keys
 Avg_num_value_per_key               INT             Average number of values (OIDs) per key
 Avg_num_value_per_deduplicate_key   INT             Average number of values (OIDs) per deduplicated key
 Num_leaf_page                       INT             Leaf page count
@@ -1449,6 +1450,11 @@ Avg_num_ovf_page_per_key            INT             Average page key count in le
 Avg_free_space_per_page_ovf         VARCHAR(64)     Average page free space in leaf's overflow pages
 Max_num_ovf_page_a_key              INT             Maximum number of leaf's overflow pages for one key
 =================================== =============== ======================================================================================================================================
+
+.. note::
+
+    Fence key is a virtual key added to a leaf node to help operate the B-tree index.
+
 
 The following shows the examples of this syntax.
 
@@ -1472,6 +1478,7 @@ The following shows the examples of this syntax.
             Num_distinct_key                 : 0
             Total_value                      : 0
             Deduplicate_distinct_key         : 0
+            Num_fence_key                    : 0
             Avg_num_value_per_key            : 0
             Avg_num_value_per_deduplicate_key: 0
             Num_leaf_page                    : 1
@@ -1504,6 +1511,7 @@ The following shows the examples of this syntax.
             Num_distinct_key                 : 0
             Total_value                      : 0
             Deduplicate_distinct_key         : 0
+            Num_fence_key                    : 0
             Avg_num_value_per_key            : 0
             Avg_num_value_per_deduplicate_key: 0
             Num_leaf_page                    : 1
@@ -1529,6 +1537,7 @@ The following shows the examples of this syntax.
             Num_distinct_key                 : 0
             Total_value                      : 0
             Deduplicate_distinct_key         : 0
+            Num_fence_key                    : 0
             Avg_num_value_per_key            : 0
             Avg_num_value_per_deduplicate_key: 0
             Num_leaf_page                    : 1

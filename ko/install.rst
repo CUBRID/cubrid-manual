@@ -97,7 +97,7 @@ Linux 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항�
     
     *   Curses Library (rpm -q ncurses)
 
-        CUBRID는 Curses 라이브러리 버전 5와 함께 패키지된다. 시스템에 최신 버전이 있고 다운 그레이드할 수 없는 경우 ncurses-compat-libs 패키지를 설치해야할 수 있다.
+        CUBRID는 curses 라이브러리를 사용하여 구동되므로 시스템에 curses 라이브러리가 없는 경우 사전에 최신 ncurses-compat-libs 패키지를 설치해야 한다.
 
     *   gcrypt Library (rpm -q libgcrypt)
     *   stdc++ Library (rpm -q libstdc++)
@@ -356,7 +356,7 @@ Linux 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항�
 
     #.  사용자의 홈 디렉터리(/home1/cub_user) 이하에서 자동으로 실행되는 쉘 스크립트에 아래의 환경 변수를 추가한다.
     
-        **$CUBRID_DATABASES** 변수에 설정된 디렉토리 생성이 필요하다. 적절한 권한이 있는 임의의 디렉토리를 지정할 수 있다.
+        **$CUBRID_DATABASES** 변수에 설정된 디렉터리 생성이 필요하다. 적절한 권한이 있는 임의의 디렉터리를 지정할 수 있다.
 
         다음은 bash 쉘로 수행하는 경우 .bash_profile에 다음을 추가하는 예이다.
 
@@ -429,7 +429,7 @@ Windows 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항
         ::
         
             C:\CUBRID
-    *   **$CUBRID_DATABASES** 변수에 설정된 디렉토리 생성이 필요하다. 적절한 권한이 있는 임의의 디렉터리를 지정할 수 있다.
+    *   **$CUBRID_DATABASES** 변수에 설정된 디렉터리 생성이 필요하다. 적절한 권한이 있는 임의의 디렉터리를 지정할 수 있다.
 
     **환경 변수 설정**
 

@@ -11,7 +11,7 @@ JDBC 드라이버
 JDBC 개요
 =========
 
-CUBRID JDBC 드라이버(cubrid_jdbc.jar)를 사용하면 Java로 작성된 응용 프로그램에서 CUBRID 데이터베이스에 접속할 수 있다. CUBRID JDBC 드라이버는 <*CUBRID 설치 디렉터리*> **/jdbc** 디렉터리에 위치한다. CUBRID JDBC 드라이버는 JDBC 2.0 스펙을 기준으로 개발되었으며, JDK 1.6에서 컴파일한 것을 기본으로 제공한다.
+CUBRID JDBC 드라이버(cubrid_jdbc.jar)를 사용하면 Java로 작성된 응용 프로그램에서 CUBRID 데이터베이스에 접속할 수 있다. CUBRID JDBC 드라이버는 <*CUBRID 설치 디렉터리*> **/jdbc** 디렉터리에 위치한다. CUBRID JDBC 드라이버는 JDBC 2.0 스펙을 기준으로 개발되었으며, JDK 1.8에서 컴파일한 것을 기본으로 제공한다.
 
 .. FIXME: 별도로 JDBC 드라이버를 다운로드하거나 JDBC 드라이버에 대한 최신 정보를 확인하려면 http://www.cubrid.org/wiki_apis/entry/cubrid-jdbc-driver\ 에 접속한다.
 
@@ -55,19 +55,19 @@ JDBC 설치 및 설정
 
 **기본 환경**
 
-*   JDK 1.6 이상
+*   JDK 1.8 이상
 *   CUBRID 2008 R2.0(8.2.0) 이상
 *   CUBRID JDBC 드라이버 2008 R1.0 이상
 
 **Java 설치 및 환경 변수 설정**
 
-시스템에 Java가 설치되어 있고 **JAVA_HOME** 환경 변수가 등록되어 있어야 한다. Java는 Developer Resources for Java Technology 사이트( https://www.oracle.com/java/technologies/ )에서 다운로드할 수 있다.
+시스템에 Java가 설치되어 있고 **JAVA_HOME** 환경 변수가 등록되어 있어야 한다. Java는 Developer Resources for Java Technology 사이트( https://www.oracle.com/java/technologies/downloads/#java8 )에서 다운로드할 수 있다.
 
 **Windows 환경에서 환경 변수 설정**
 
-Java 설치 후 [내 컴퓨터]를 마우스 오른쪽 버튼 클릭하여 [속성]을 선택하면 [시스템 등록 정보] 대화 상자가 나타난다. [고급] 탭의 [환경 변수]를 클릭하면 나타나는 [환경 변수] 대화 상자가 나타난다.
+Java 설치 후 [내 PC]를 마우스 오른쪽 버튼 클릭하여 [속성]을 선택한 후, 관련 설정의 [고급 시스템 설정]을 클릭하면 시스템 속성의 대화 상자가 나타난다. [고급]탭의 [환경 변수]를 클릭하면 [환경 변수] 대화 상자가 나타난다.
 
-[시스템 변수]에서 [새로 만들기]를 선택한다. [변수 이름]에 **JAVA_HOME** 을 입력하고, 변수 값으로 Java 설치 경로(예: C:\Program Files\Java\jdk1.6.0_16)를 입력한 후 [확인]을 클릭한다.
+[시스템 변수]에서 [새로 만들기]를 선택한다. [변수 이름]에 **JAVA_HOME** 을 입력하고, 변수 값으로 Java 설치 경로(예: C:\\Program Files\\Java\\jdk1.8.0_421)를 입력한 후 [확인]을 클릭한다.
 
 .. image:: /images/image51.png
 
@@ -77,17 +77,17 @@ Java 설치 후 [내 컴퓨터]를 마우스 오른쪽 버튼 클릭하여 [속�
 
 위의 방법을 사용하지 않고 다음과 같이 셸에서 **JAVA_HOME** 과 **PATH** 환경 변수를 설정할 수도 있다. ::
 
-    set JAVA_HOME= C:\Program Files\Java\jdk1.6.0_16
+    set JAVA_HOME= C:\Program Files\Java\jdk1.8.0_421
     set PATH=%PATH%;%JAVA_HOME%\bin
 
 **Linux 환경에서 환경 변수 설정**
 
-다음과 같이 Java가 설치된 **JAVA_HOME** 환경 변수로 디렉터리 경로(예: /usr/java/jdk1.6.0_16)를 설정하고, **PATH** 환경 변수에 **$JAVA_HOME/bin** 을 추가한다. ::
+다음과 같이 Java가 설치된 **JAVA_HOME** 환경 변수로 디렉터리 경로(예: /usr/java/jdk1.8.0_421)를 설정하고, **PATH** 환경 변수에 **$JAVA_HOME/bin** 을 추가한다. ::
 
-    export JAVA_HOME=/usr/java/jdk1.6.0_16     #bash
+    export JAVA_HOME=/usr/java/jdk1.8.0_421    #bash
     export PATH=$JAVA_HOME/bin:$PATH           #bash
      
-    setenv JAVA_HOME /usr/java/jdk1.6.0_16     #csh
+    setenv JAVA_HOME /usr/java/jdk1.8.0_421    #csh
     set path = ($JAVA_HOME/bin $path)          #csh
 
 **JDBC 드라이버 설정**
@@ -129,7 +129,7 @@ JDBC 프로그래밍
      
     <property> ::= altHosts=<alternative_hosts>
                  | rcTime=<second>
-                 | loadBalance=<bool_type>
+                 | loadBalance=<balance_mode>
                  | connectTimeout=<second>
                  | queryTimeout=<second>
                  | charSet=<character_set>
@@ -149,7 +149,8 @@ JDBC 프로그래밍
         <standby_broker1_host>:<port> [,<standby_broker2_host>:<port>]
         <behavior_type> ::= exception | round | convertToNull
         <bool_type> ::= true | false
-		<unit_size> ::= multiple of mega byte
+        <unit_size> ::= multiple of mega byte
+        <balance_mode> ::= true | false | rr | sh
 
 *   *host*: CUBRID 브로커가 동작하고 있는 서버의 IP 주소 또는 호스트 이름
 *   *port*: CUBRID 브로커의 포트 번호(기본값: 33000)
@@ -165,7 +166,13 @@ JDBC 프로그래밍
         .. note:: 메인 호스트와 **altHosts** 브로커들의 **ACCESS_MODE**\ 설정에 **RW**\ 와 **RO**\ 가 섞여 있다 하더라도, 응용 프로그램은 **ACCESS_MODE**\ 와 무관하게 접속 대상 호스트를 결정한다. 따라서 사용자는 접속 대상 브로커의 **ACCESS_MODE**\ 를 감안해서 메인 호스트와 **altHosts**\ 를 정해야 한다.
 
     *   **rcTime**: 첫 번째로 접속했던 브로커에 장애가 발생한 이후 altHosts 에 명시한 브로커로 접속한다(failover). 이후, rcTime만큼 시간이 경과할 때마다 원래의 브로커에 재접속을 시도한다(기본값 600초). 입력 방법은 아래 URL 예제를 참고한다.
-    *   **loadBalance**: 이 값이 true면 응용 프로그램이 메인 호스트와 altHosts에 지정한 호스트들에 랜덤한 순서로 연결한다(기본값: false). 
+    *   **loadBalance**: 클라이언트가 접속 가능한 다수의 호스트가 있는 경우, 접속 대상 호스트를 결정하는 알고리즘을 선택하는 속성이다. 로드 밸런싱을 통해 클라이언트의 연결 요청이 특정 서버에 집중되지 않도록 분산할 수 있다.(기본값: false)
+
+        설정값에 따른 동작은 다음과 같다.
+
+        *   **false**: connection URL에 나열된 호스트 순서대로 연결한다
+        *   **true 또는 rr**: 지정한 호스트들을 **Round-Robin** 방식으로 연결한다.
+        *   **sh**: 지정한 호스트들을 **무작위(Shuffle)** 방식으로 연결한다.
 
     *   **connectTimeout**: 데이터베이스 접속에 대한 타임아웃 시간을 초 단위로 설정한다.  기본값은 30초이다. 이 값이 0인 경우 무한 대기를 의미한다. 이 값은 최초 접속 이후 내부적인 재접속이 발생하는 경우에도 적용된다. **DriverManger.setLoginTimeout** () 메서드로 설정할 수도 있으나, 연결 URL에 이 값을 설정하면 메서드로 설정한 값은 무시된다.
 

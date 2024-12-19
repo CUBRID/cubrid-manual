@@ -369,14 +369,14 @@ Execute the **cubrid heartbeat** **start** at each node in the CUBRID HA group. 
 
 Execute **cubrid heartbeat status** at each node in the CUBRID HA group to verify its configuration status. ::
 
-    [nodeA]$ cubrid heartbeat status
+    [cubrid@nodeA]$ cubrid heartbeat status
     @ cubrid heartbeat list
-     HA-Node Info (current nodeA-node-name, state master)
+     HA-Node Info (current nodeA, state master)
        Node nodeB-node-name (priority 2, state slave)
        Node nodeA-node-name (priority 1, state master)
      HA-Process Info (nodeA 9289, state nodeA)
-       Applylogdb testdb@localhost:/home1/cubrid1/DB/testdb_nodeB.cub (pid 9423, state registered)
-       Copylogdb testdb@nodeB-node-name:/home1/cubrid1/DB/testdb_nodeB.cub (pid 9418, state registered)
+       Applylogdb testdb@localhost:/home1/cubrid1/DB/testdb_nodeB (pid 9423, state registered)
+       Copylogdb testdb@nodeB-node-name:/home1/cubrid1/DB/testdb_nodeB (pid 9418, state registered)
        Server testdb (pid 9306, state registered_and_active)
      
     [nodeA]$
@@ -666,9 +666,14 @@ For details, see :ref:`log-multiplexing`.
 
 **ha_copy_log_base**
 
-**ha_copy_log_base** is a parameter used to configure the location of storing the transaction log copy. The default is **$CUBRID_DATABASES**/\ *<db_name>*\_\ *<host_name>*.
+Specifies the parent path for saving replication logs. The default value is the directory path set in the $CUBRID_DATABASES environment variable.
+Replication logs are stored in a subdirectory of <db_name>_<host_name>, depending on the server and database name.
 
-For details, see :ref:`log-multiplexing`.
+The replication log path can be set to either a relative or absolute path.
+The following are examples of each setting.
+
+ex1) ha_copy_log_base=copylog: Considered a relative path and stores replication logs in $CUBRID_DATABASES/copylog.
+ex2) ha_copy_log_base=/log/copy_log: Saves replication logs in /log/copy_log as an absolute path.
 
 .. _ha_copy_log_max_archives:
 
@@ -1392,6 +1397,55 @@ This utility is used to output the information of CUBRID HA group and CUBRID HA 
        Applylogdb testdb@localhost:/home/cubrid/DB/testdb_nodeA (pid 2510, state registered)
        Copylogdb testdb@nodeA:/home/cubrid/DB/testdb_nodeA (pid 2505, state registered)
        Server testdb (pid 2393, state registered_and_standby)
+
+The -v option displays detailed information about the node.
+* score: Indicates the priority of the node, with a lower score indicating a higher priority.
+* missed heartbeat: Indicates the loss rate of heartbeat signals sent between nodes configured in a HA environment. If this value is unusually high, the configuration, network, or firewall settings should be inspected.
+
+The event occurrence times for the Applylogdb, Copylogdb, and Server processes are also displayed. If no event has occurred, it is displayed as "00:00:00.000."
+* registered-time: The time when a process startup request was made via a user command.
+* deregistered-time: The time when a remote process stop request was made via a user command (applicable only to copylogdb and applylogdb).
+* shutdown-time : The time that HA-manager(cub_master) stopped the process
+* start-time : The time that HA-manager(cub_master) restarted the process
+
+**Example**
+
+::
+
+    $ cubrid heartbeat status -v
+    @ cubrid heartbeat status
+
+    HA-Node Info (current cubrid1, state master)
+      Node cubrid2 (priority 2, state slave)
+        - score 2
+        - missed heartbeat 0
+      Node cubrid1 (priority 1, state master)
+        - score -32767
+        - missed heartbeat 0
+
+    HA-Process Info (master 7392, state master)
+    Copylogdb testdb@cubrid2:/home/cubha/CUBRID-11.3.1.1142-bee7aa8-Linux.x86_64/databases/testdb_cubrid2 (pid 7841, state registered)
+     - exec-path [/home/cubha/CUBRID-11.3.1.1142-bee7aa8-Linux.x86_64/bin/cub_admin]
+     - argv      [cub_admin copylogdb -L /home/cubha/CUBRID-11.3.1.1142-bee7aa8-Linux.x86_64/databases/testdb_cubrid2 -m sync testdb@bagus2 ]
+     - registered-time   08/26/24 14:28:37.019
+     - deregistered-time 00/00/00 00:00:00.000
+     - shutdown-time     08/26/24 14:28:35.010
+     - start-time        08/26/24 14:28:36.012
+    Applylogdb testdb@localhost:/home/cubha/CUBRID-11.3.1.1142-bee7aa8-Linux.x86_64/databases/testdb_cubrid2 (pid 7746, state registered)
+     - exec-path [/home/cubha/CUBRID-11.3.1.1142-bee7aa8-Linux.x86_64/bin/cub_admin]
+     - argv      [cub_admin applylogdb -L /home/cubha/CUBRID-11.3.1.1142-bee7aa8-Linux.x86_64/databases/testdb_cubrid2 --max-mem-size=300 testdb@localhost ]
+      - registered-time   08/26/24 14:27:14.566
+      - deregistered-time 00/00/00 00:00:00.000
+      - shutdown-time     08/26/24 14:27:12.552
+      - start-time        08/26/24 14:27:13.558
+     Server testdb (pid 7904, state registered_and_active)
+      - exec-path [/home/cubha/CUBRID-11.3.1.1142-bee7aa8-Linux.x86_64/bin/cub_server]
+      - argv      [cub_server testdb ]
+      - registered-time   08/26/24 14:29:28.955
+      - deregistered-time 00/00/00 00:00:00.000
+      - shutdown-time     08/26/24 14:29:27.593
+      - start-time        08/26/24 14:29:28.594
+
 
 .. note:: **act**, **deact**, and **deregister** commands which were used in versions lower than CUBRID 9.0 are no longer used.
 
@@ -3184,13 +3238,14 @@ Now let's see the case of rebuilding a existing slave node during a service in a
             [nodeB]$ rm testdb/log/*
             
             [nodeB]$ rm -rf testdb_nodeA
+            [nodeB]$ rm $CUBRID/var/APPLYLOGDB/testdb
             
     *   Stop log replication processes of *nodeB* on *nodeA* and *nodeC*.
     
         ::
         
-            [nodeA]$ cubrid heartbeat repl stop testdb nodeB
-            [nodeC]$ cubrid heartbeat repl stop testdb nodeB
+            [nodeA]$ cubrid heartbeat repl stop nodeB
+            [nodeC]$ cubrid heartbeat repl stop nodeB
     
     *   Remove replication logs for *nodeB* from *nodeA* and *nodeC*.
     
@@ -3199,18 +3254,9 @@ Now let's see the case of rebuilding a existing slave node during a service in a
             [nodeA]$ rm -rf $CUBRID_DATABASES/testdb_nodeB
             [nodeC]$ rm -rf $CUBRID_DATABASES/testdb_nodeB
 
-2.  Remove HA catalog table's data, restore *nodeB*'s database from *nodeA*'s backup, and add data to HA catalog table.
+2.  Restore *nodeB*'s database from *nodeA*'s backup, and add data to HA catalog table.
 
-    *   Delete the HA catalog table, db_ha_apply_info's records.
-    
-        Delete all records of db_ha_apply_info of *nodeB* to initialize.
-        
-        ::
-        
-            [nodeB]$ csql --sysadm --write-on-standby -u dba -S testdb 
-            csql> DELETE FROM db_ha_apply_info;
-            
-        Delete db_ha_apply_info data for *nodeB* from *nodeA* and *nodeC*.
+    *    Delete db_ha_apply_info data for *nodeB* from *nodeA* and *nodeC*.
         
         ::
         
@@ -3942,7 +3988,7 @@ When you rebuild only a slave because the slave is abnormal in the environment o
 For rebuilding replications, the following environment must be the same in master, slave and replica nodes.
 
 *   CUBRID version
-*   Environmental variable (**$CUBRID**, **$CUBRID_DATABASES**, **$LD_LIBRARY_PATH, $PATH**)
+*   Environmental variable (**$CUBRID**, **$CUBRID_DATABASES**, **$LD_LIBRARY_PATH**, **$PATH**, **$CUBRID_TMP**, **$TMPDIR**)
 *   The paths of database volume, log, and replication
 *   Username and password of the Linux server
 *   HA-related parameters except for **ha_mode**, **ha_copy_sync_mode**, **ha_ping_hosts** and **ha_tcp_ping_hosts**

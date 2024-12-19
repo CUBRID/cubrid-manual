@@ -1,4 +1,4 @@
-
+A value that specifies the optimization level. It has the following meanings.
 :meta-keywords: csql, cubrid csql, cubrid commands, executing csql, csql options
 :meta-description: CUBRID CSQL is an application that allows users to use SQL statements through a command-driven interface. This section briefly explains how to use the CSQL Interpreter and associated commands.
 
@@ -633,9 +633,11 @@ If you don't give a value after **;COL** command, it shows the current setting l
 
 You can use the **;PLan** session command to set the view level of executing query plan the level is composed of **simple**, **detail**, and **off**. Each command refers to the following:
 
-*   **off**: Not displaying the query execution plan
+*   **off**: Not displaying the query execution plan (OPT LEVEL=1)
 *   **simple**: Displaying the query execution plan in simple version (OPT LEVEL=257)
 *   **detail**: Displaying the query execution plan in detailed version (OPT LEVEL=513)
+
+For more information. see :ref:`viewing-query-plan`.
 
 .. _set-autotrace:
  
@@ -1430,7 +1432,7 @@ This command specifies the formatter to be used with **;EDIT** session command. 
 
         The use of Free SQL Formatter is recommended.
 
-        Download URL: https://github.com/CUBRID/fsqlf/releases/download/v.1.1.0-csql/fsqlf-1.1.0.csql.tar.gz
+        Download URL: https://github.com/CUBRID/fsqlf/releases
 
 **Specifying the editor (;EDITOR_Cmd)**
 

@@ -11,7 +11,7 @@ JDBC Driver
 JDBC Overview
 =============
 
-CUBRID JDBC driver (**cubrid_jdbc.jar**) implements an interface to enable access from applications in Java to CUBRID database server. CUBRID JDBC driver is installed in the <*directory where CUBRID is installed*>/**jdbc** directory. The driver has been developed based on the JDBC 2.0 specification and the default driver provided is complied with JDK 1.6.
+CUBRID JDBC driver (**cubrid_jdbc.jar**) implements an interface to enable access from applications in Java to CUBRID database server. CUBRID JDBC driver is installed in the <*directory where CUBRID is installed*>/**jdbc** directory. The driver has been developed based on the JDBC 2.0 specification and the default driver provided is complied with JDK 1.8.
 
 .. FIXME: To download JDBC driver or get the latest information, please visit http://www.cubrid.org/wiki_apis/entry/cubrid-jdbc-driver\ .
 
@@ -55,19 +55,19 @@ Installing and Configuring JDBC
 
 **Requirements**
 
-*   JDK 1.6 or later
+*   JDK 1.8 or later
 *   CUBRID 2008 R2.0 (8.2.0) or later
 *   CUBRID JDBC driver 2008 R1.0 or later
 
 **Installing Java and Configuring Environment**
 
-You must already have Java installed and the **JAVA_HOME** environment variable configured in your system. You can download Java from the Developer Resources for Java Technology website ( https://www.oracle.com/java/technologies/ ).
+You must already have Java installed and the **JAVA_HOME** environment variable configured in your system. You can download Java from the Developer Resources for Java Technology website ( https://www.oracle.com/java/technologies/downloads/#java8 ).
 
 **Configuring the environment variables for Windows**
 
-After installing Java, right-click [My Computer] and click [System Properties]. In the [Advanced] tab, click [Environment Variables]. The [Environment Variables] dialog will appear.
+After installing Java, right-click on [This PC] and select [Properties]. Then, click on [Advanced system settings] under the Related settings to open the System Properties dialog box. Click on [Environment Variables] in the [Advanced] tab to open the Environment Variables dialog box.
 
-In the [System Variables], click [New]. Enter **JAVA_HOME** and Java installation path such as C:\Program Files\Java\jdk1.6.0_13 and then click [OK].
+In the [System variables], click [New]. Enter **JAVA_HOME** as the variable name and input the Java installation path (e.g., C:\Program Files\Java\jdk1.8.0_421) as the variable value, the click [OK].
 
 .. image:: /images/image51.png
 
@@ -77,17 +77,17 @@ Of system variables, select Path and then click [Edit]. Add **%JAVA_HOME%\\bin**
 
 You can also configure **JAVA_HOME** and **PATH** values in the shell instead of using the way described above. ::
 
-    set JAVA_HOME= C:\Program Files\Java\jdk1.6.0_13
+    set JAVA_HOME= C:\Program Files\Java\jdk1.8.0_421
     set PATH=%PATH%;%JAVA_HOME%\bin
 
 **Configuring the environment variables for Linux**
 
-Specify the directory path where Java is installed (example: /usr/java/jdk1.6.0_13) as a **JAVA_HOME** environment variable and add **$JAVA_HOME/bin** to the **PATH** environment variable. ::
+Specify the directory path where Java is installed (example: /usr/java/jdk1.8.0_4211) as a **JAVA_HOME** environment variable and add **$JAVA_HOME/bin** to the **PATH** environment variable. ::
 
-    export JAVA_HOME=/usr/java/jdk1.6.0_16     #bash
+    export JAVA_HOME=/usr/java/jdk1.8.0_421       #bash
     export PATH=$JAVA_HOME/bin:$PATH           #bash
      
-    setenv JAVA_HOME /usr/java/jdk1.6.0_16     #csh
+    setenv JAVA_HOME /usr/java/jdk1.8.0_421       #csh
     set path = ($JAVA_HOME/bin $path)          #csh
 
 **Configuring JDBC Driver**
@@ -129,7 +129,7 @@ The **getConnection** method returns the **Connection** object and it is used to
      
     <property> ::= altHosts=<alternative_hosts>
                  | rcTime=<second>
-                 | loadBalance=<bool_type>
+                 | loadBalance=<balance_mode>
                  | connectTimeout=<second>
                  | queryTimeout=<second>
                  | charSet=<character_set>
@@ -149,7 +149,8 @@ The **getConnection** method returns the **Connection** object and it is used to
         <standby_broker1_host>:<port> [,<standby_broker2_host>:<port>]
         <behavior_type> ::= exception | round | convertToNull
         <bool_type> ::= true | false
-		<unit_size> ::= multiple of mega byte
+        <unit_size> ::= multiple of mega byte
+        <balance_mode> ::= true | false | rr | sh
 
 *   *host*: IP address or host name where the CUBRID broker is running
 *   *port*: The CUBRID broker port number (default value: 33,000)
@@ -165,7 +166,13 @@ The **getConnection** method returns the **Connection** object and it is used to
         .. note:: Even if there are **RW** and **RO** together in *ACCESS_MODE** setting of brokers of main host and **altHosts**, application decides the target host to access without the relation for the setting of **ACCESS_MODE**. Therefore, you should define the main host and **altHosts** as considering **ACCESS_MODE** of target brokers.
 
     *   **rcTime**: Interval time (in seconds) to try to connect active brokers during failover in the HA environment. See the below URL example.
-    *   **loadBalance**: If this value is true, the application tries to connect with main host and altHosts in random order(default value: false). 
+    *   **loadBalance**: When there are multiple hosts that a client can connect to, this is the property that selects the algorithm for determining the target host to connect to. Through load balancing, the client's connection requests can be distributed so that they are not concentrated on a specific server. (default value: false)  
+
+        The behavior for each setting is as follows:
+
+        *   **false**: Connect to the hosts in the order listed in the connection URL.
+	*   **true or rr**: Connects to the specified hosts using the **Round-Robin** method.
+        *   **sh**: Connects to the specified hosts using the **Random(Shuffle)** method.  
 
     *   **connectTimeout**: Timeout value (in seconds) for database connection. The default value is 30 seconds. If this value is 0, it means infinite waiting. This value is also applied when internal reconnection occurs after the initial connection. The **DriverManger.setLoginTimeout** () method can be used to configure it; however, the value configured in this method will be ignored if a value is configured in the connection URL.
 

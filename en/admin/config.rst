@@ -14,6 +14,8 @@ This chapter covers the following topics:
 
 *   Configuring the database server
 *   Configuring the broker
+*   HA Configuration
+*   SHARD Configuration
 
 Configuring the Database Server
 ===============================
@@ -99,7 +101,7 @@ Database Server System Parameters
 The following are database server system parameters that can be used in the **cubrid.conf** configuration file. On the following table, "Applied" column's "client parameter" means that they are applied to CAS, CSQL, **cubrid** utilities. Its "server parameter" means that they are applied to the DB server (cub_server process).
 For the scope of **client** and **server parameters**, see :ref:`scope-server-conf`.
 
-You can change the parameters that are capable of changing dynamically the setting value through the **SET SYSTEM PARAMETERS** statement or a session command of the CSQL Interpreter, **;set** while running the DB. If you are a DBA, you can change parameters regardless of the applied classification. However, if you are not a DBA, you can only change "session" parameters. (on the below table, a parameter of which "session" item's value is O.)
+You can change the parameters that are capable of changing dynamically the setting value through the **SET SYSTEM PARAMETERS** statement or a session command of the CSQL Interpreter, For more semantics on **;set** see :ref:`viewing-query-plan` .  **;set** while running the DB. If you are a DBA, you can change parameters regardless of the applied classification. However, if you are not a DBA, you can only change "session" parameters. (on the below table, a parameter of which "session" item's value is O.)
 
 On the below table, if "Applied" is "server parameter", that parameter affects to cub_server process; If "client parameter", that parameter affects to CAS, CSQL or "cubrid" utilities which run on client/server mode (\-\-CS-mode). "Client/server parameter" affects to all of cub_server, CAS, CSQL and "cubrid" utilities.
 
@@ -141,6 +143,8 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               | max_agg_hash_size                   | server parameter        |         | byte     | 2,097,152(2M)                  |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | max_hash_list_scan_size             | server parameter        |         | byte     | 8,388,608(8M)                  |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | max_subquery_cache_size             | server parameter        |         | byte     | 2,097,152(2M)                  | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | sort_buffer_size                    | server parameter        |         | byte     | 128 *                          |                       |
 |                               |                                     |                         |         |          | :ref:`db_page_size <dpg>`      |                       |
@@ -391,6 +395,8 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               | deduplicate_key_level               | client/server parameter |         | int      | -1                             |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | print_index_detail                  | client/server parameter |         | bool     | no                             |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | flashback_timeout                   | client parameter        |         | int      | 300                            |                       |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 
 .. _lpg:
@@ -674,6 +680,8 @@ The following are parameters related to the memory used by the database server o
 +--------------------------------+--------+---------------------------+---------------------------+---------------------------+
 | max_hash_list_scan_size        | byte   | 8,388,608(8M)             | 0                         | 128MB                     |
 +--------------------------------+--------+---------------------------+---------------------------+---------------------------+
+| max_subquery_cache_size        | byte   | 2,097,152(2M)             | 0                         | 16,777,216(16M)           |
++--------------------------------+--------+---------------------------+---------------------------+---------------------------+
 | sort_buffer_size               | byte   | 128 *                     | 1 *                       | 2G(32bit),                |
 |                                |        | :ref:`db_page_size <dpg>` | :ref:`db_page_size <dpg>` | INT_MAX *                 |
 |                                |        |                           |                           | :ref:`db_page_size <dpg>` |
@@ -713,6 +721,12 @@ The following are parameters related to the memory used by the database server o
     **max_hash_list_scan_size** is a parameter to configure the maximum memory per transaction allocated for building hash table in a query containing subquerys. The default is 8MB, the minimum size is 0, and the maximum size is 128MB.
 
     If this parameter is set to 0 or If :ref:`NO_HASH_LIST_SCAN <no-hash-list-scan>` hint is specified, hash list scan will not be used.
+
+**max_subquery_cache_size**
+
+    **max_subquery_cache_size** is a parameter used to set the size of the subquery cache (correlated). You can set a unit as B, K or M, which stand for bytes, kilobytes (KB), and megabytes (MB), respectively. If you omit the unit, bytes will be applied. The default value is **2,097,152** (2M) bytes, the minimum value is **0**, and the maximum value is **16,777,216** (16M) bytes. The subquery cache is allocated for the number of subqueries in a query and is deallocated when the main query is completed. 
+    
+    If max_subquery_cache_size is set to 0, the :ref:`NO_SUBQUERY_CACHE <correlated-subquery-cache>` hint is specified, or there is insufficient memory space, the subquery cache optimization is not enabled.
 
 **sort_buffer_size**
 
@@ -1032,7 +1046,7 @@ The following are parameters related to concurrency control and locks of the dat
 
     *   **TRAN_SERIALIZABLE** : This isolation level ensures the highest level of consistency. For details, see :ref:`isolation-level-6`.
 
-    *   **TRAN_REP_READ** : This isolation level can incur phantom read. For details, see :ref:`isolation-level-5`.
+    *   **TRAN_REP_READ** : This isolation level prevents dirty reads, non-repeatable reads, and phantom reads due to snapshot isolation. For details, see :ref:`isolation-level-5`.
 
     *   **TRAN_READ_COMMITTED** : This isolation level can incur unrepeatable read. For details, see :ref:`isolation-level-4`.
 
@@ -1375,7 +1389,7 @@ The following are parameters related to SQL statements and data types supported 
 
 **block_ddl_statement**
 
-    **block_ddl_statement** is a parameter used to limit the execution of DDL (Data Definition Language) statements by the client. If the parameter is set to **no**, the given client is allowed to execute DDL statements. If it is set to **yes**, the client is not permitted to execute DDL statements. The default value is **no**.
+    **block_ddl_statement** is a parameter used to limit the execution of DDL (Data Definition Language) statements by the client. If the parameter is set to **no**, the given client is allowed to execute DDL statements. If it is set to **yes**, the client is not permitted to execute DDL statements. If set to Yes, update statistics may also be restricted. The default value is **no**.
 
 .. _block_nowhere_statement:
 
@@ -1993,13 +2007,17 @@ Query Plan Cache-Related Parameters
 
 The following are parameters related to the query plan cache functionality. The type and value range for each parameter are as follows:
 
-+-------------------------------+--------+----------+----------+----------+
-| Parameter Name                | Type   | Default  | Min      | Max      |
-+===============================+========+==========+==========+==========+
-| max_plan_cache_entries        | int    | 1,000    |          |          |
-+-------------------------------+--------+----------+----------+----------+
-| max_filter_pred_cache_entries | int    | 1,000    |          |          |
-+-------------------------------+--------+----------+----------+----------+
++--------------------------------------+--------+---------+---------+---------+
+| Parameter Name                       | Type   | Default | Min     | Max     |
++======================================+========+=========+=========+=========+
+| max_plan_cache_entries               | int    | 1,000   |         |         |
++--------------------------------------+--------+---------+---------+---------+
+| max_plan_cache_clones                | int    | 1,000   |         |         |
++--------------------------------------+--------+---------+---------+---------+
+| xasl_cache_time_threshold_in_minutes | int    | 360     |         |         |
++--------------------------------------+--------+---------+---------+---------+
+| max_filter_pred_cache_entries        | int    | 1,000   |         |         |
++--------------------------------------+--------+---------+---------+---------+
 
 **max_plan_cache_entries**
 
@@ -2008,6 +2026,13 @@ The following are parameters related to the query plan cache functionality. The 
     The following example shows how to cache up to 1,000 queries. ::
 
         max_plan_cache_entries=1000
+
+**max_plan_cache_clones**
+     The plan cache stores the XASL for a query in a serializable form. When executing the query, the XASL is converted back into its deserialized form, populated with values, and then executed.
+     The clone cache stores deserialized XASL to reuse it instead of discarding. The **max_plan_cache_clones** is a parameter that sets the maximum number of cloned cache entries a single plan can hold, and its default value is set to 1000. When a plan is deleted, its clones are also deleted.
+
+**xasl_cache_time_threshold_in_minutes**
+    It is a parameter that determines the time threshold for deciding whether to recompile (clean-up) a cached plan. It is also used when searching for a candidate plan to remove when there is no space in the plan cache. This parameter can be set in minutes, with a default value of 360 minutes.
 
 **max_filter_pred_cache_entries**
 
@@ -2191,6 +2216,8 @@ The following are other parameters. The type and value range for each parameter 
 +-------------------------------------+--------+----------------+----------------+----------------+
 | print_index_detail                  | bool   | no             |                |                |
 +-------------------------------------+--------+----------------+----------------+----------------+
+| flashback_timeout                   | int    | 300            | 0              | 3600           |
++-------------------------------------+--------+----------------+----------------+----------------+
 
 **access_ip_control**
 
@@ -2335,7 +2362,7 @@ The following are other parameters. The type and value range for each parameter 
 
     If it is set to yes, a long running SQL, a query plan and the output of cubrid statdump command  are written to the server error log file(located on $CUBRID/log/server directory) and CAS log file(located on $CUBRID/log/broker/sql_log directory) .
 
-    If it is set to no, only a long running SQL is written to the server error log file and CAS log file, and this SQL is displayed when you execute **cubrid statdump** command.
+    If it is set to no, only a long running SQL is written to the server error log file and CAS log file.
 
     For example, if you want to write the execution plan of the slow query to the log file, and specify the query which executes more than 5 seconds as the slow query, then configure the value of the **sql_trace_slow** parameter as 5000(ms) and configure the value of the **sql_trace_execution_plan** parameter as yes.
 
@@ -2404,6 +2431,11 @@ The following are other parameters. The type and value range for each parameter 
 
  It specifies whether option information in the **WITH** clause is displayed when index syntax information is displayed, such as in the SHOW CREATE TABLE statement. Default is NO. However, the unloaddb tool is not affected by this setting.
 
+.. _flashback_timeout:
+
+**flashback_timeout**
+
+ It specifies the timeout for entering a transaction identifier in the flashback utility. If a transaction to be rewind is not entered within the specified timeout, an error message will be displayed, and the flashback utility will terminate. If there is no timeout, it may cause an issue where the archive log volumes required by the flashback utility are not deleted. Therefore, a method to remove the timeout is not provided. The default value is 300 seconds.
 
 .. _broker-configuration:
 
@@ -2418,143 +2450,147 @@ Broker System Parameters
 
 The following table shows the broker parameters available in the broker configuration file (**cubrid_broker.conf**). For details, see :ref:`broker-common-parameters` and :ref:`parameter-by-broker`. You can temporarily change the parameter of which configuration values can be dynamically changed by using the **broker_changer** utility. To apply configuration values even after restarting all brokers with **cubrid broker restart**, you should change the values in the **cubrid_broker.conf** file.
 
-+---------------------------------+-------------------------+---------------------------------+--------+------------------------------+-----------+
-| Category                        | Use                     | Parameter Name                  | Type   | Default Value                | Dynamic   |
-|                                 |                         |                                 |        |                              | Changes   |
-+=================================+=========================+=================================+========+==============================+===========+
-| :ref:`broker-common-parameters` | Access                  | ACCESS_CONTROL                  | bool   | no                           |           |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | ACCESS_CONTROL_FILE             | string |                              |           |
-|                                 +-------------------------+---------------------------------+--------+------------------------------+-----------+
-|                                 | Logging                 | ADMIN_LOG_FILE                  | string | log/broker/cubrid_broker.log |           |
-|                                 +-------------------------+---------------------------------+--------+------------------------------+-----------+
-|                                 | Broker server           | MASTER_SHM_ID                   | int    | 30,001                       |           |
-|                                 | (cub_broker)            |                                 |        |                              |           |
-+---------------------------------+-------------------------+---------------------------------+--------+------------------------------+-----------+
-| :ref:`parameter-by-broker`      | Access                  | ACCESS_LIST                     | string |                              |           |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | ACCESS_MODE                     | string | RW                           | available |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | BROKER_PORT                     | int    | 30,000(max : 65,535)         |           |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | CONNECT_ORDER                   | string | SEQ                          | available |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | ENABLE_MONITOR_HANG             | string | OFF                          |           |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | KEEP_CONNECTION                 | string | AUTO                         | available |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | MAX_NUM_DELAYED_HOSTS_LOOKUP    | int    | -1                           |           |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | PREFERRED_HOSTS                 | string |                              | available |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | RECONNECT_TIME                  | sec    | 600                          | available |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | REPLICA_ONLY                    | string | OFF                          |           |
-|                                 +-------------------------+---------------------------------+--------+------------------------------+-----------+
-|                                 | Broker App. Server(CAS) | APPL_SERVER_MAX_SIZE            | MB     | Windows 32bit: 40,           | available |
-|                                 |                         |                                 |        | Windows 64bit: 80,           |           |
-|                                 |                         |                                 |        | Linux: 0(max: 2,097,151)     |           |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | APPL_SERVER_MAX_SIZE_HARD_LIMIT | MB     | 1,024                        | available |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | APPL_SERVER_PORT                | int    | BROKER_PORT+1                |           |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | APPL_SERVER_SHM_ID              | int    | 30,000                       |           |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | AUTO_ADD_APPL_SERVER            | string | ON                           |           |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | MAX_NUM_APPL_SERVER             | int    | 40                           |           |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | MIN_NUM_APPL_SERVER             | int    | 5                            |           |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | TIME_TO_KILL                    | sec    | 120                          | available |
-|                                 +-------------------------+---------------------------------+--------+------------------------------+-----------+
-|                                 | Transaction & Query     | CCI_DEFAULT_AUTOCOMMIT          | string | ON                           |           |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | LONG_QUERY_TIME                 | sec    | 60(max: 86,400)              | available |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | LONG_TRANSACTION_TIME           | sec    | 60(max: 86,400)              | available |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | MAX_PREPARED_STMT_COUNT         | int    | 2,000(min: 1)                | available |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | MAX_QUERY_TIMEOUT               | sec    | 0(max: 86,400)               | available |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | SESSION_TIMEOUT                 | sec    | 300                          | available |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | STATEMENT_POOLING               | string | ON                           | available |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | JDBC_CACHE                      | string | OFF                          | available |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | JDBC_CACHE_HINT_ONLY            | string | OFF                          | available |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | JDBC_CACHE_LIFE_TIME            | sec    | 1000                         | available |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | TRIGGER_ACTION                  | string | ON                           | available |
-|                                 +-------------------------+---------------------------------+--------+------------------------------+-----------+
-|                                 | Logging                 | ACCESS_LOG                      | string | OFF                          | available |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | ACCESS_LOG_DIR                  | string | log/broker                   |           |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | ACCESS_LOG_MAX_SIZE             | KB     | 10M(max: 2G)                 | available |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | ERROR_LOG_DIR                   | string | log/broker/error_log         | available |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | LOG_DIR                         | string | log/broker/sql_log           | available |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | SLOW_LOG                        | string | ON                           | available |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | SLOW_LOG_DIR                    | string | log/broker/sql_log           | available |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | SQL_LOG                         | string | ON                           | available |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | SQL_LOG_MAX_SIZE                | KB     | 10,000                       | available |
-|                                 +-------------------------+---------------------------------+--------+------------------------------+-----------+
-|                                 | Shard                   | SHARD                           | string | OFF                          |           |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | SHARD_CONNECTION_FILE           | string | shard_connection.txt         |           |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | SHARD_DB_NAME                   | string |                              |           |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | SHARD_DB_PASSWORD               | string |                              |           |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | SHARD_DB_USER                   | string |                              |           |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | SHARD_IGNORE_HINT               | string | OFF                          |           |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | SHARD_KEY_FILE                  | string | shard_key.txt                |           |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | SHARD_KEY_FUNCTION_NAME         | string |                              |           |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | SHARD_KEY_LIBRARY_NAME          | string |                              |           |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | SHARD_KEY_MODULAR               | int    | 256                          |           |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | SHARD_MAX_CLIENTS               | int    | 256                          |           |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | SHARD_MAX_PREPARED_STMT_COUNT   | int    | 10,000                       |           |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | SHARD_NUM_PROXY                 | int    | 1                            |           |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | SHARD_PROXY_CONN_WAIT_TIMEOUT   | sec    | 8h                           |           |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | SHARD_PROXY_LOG                 | string | ERROR                        | available |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | SHARD_PROXY_LOG_DIR             | string | log/broker/proxy_log         |           |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | SHARD_PROXY_LOG_MAX_SIZE        | KB     | 100,000                      | available |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | SHARD_PROXY_SHM_ID              | int    |                              |           |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | SHARD_PROXY_TIMEOUT             | sec    | 30(second)                   |           |
-|                                 +-------------------------+---------------------------------+--------+------------------------------+-----------+
-|                                 | Etc                     | MAX_STRING_LENGTH               | int    | -1                           |           |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | SERVICE                         | string | ON                           |           |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | SSL                             | string | OFF                          |           |
-|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-|                                 |                         | SOURCE_ENV                      | string | cubrid.env                   |           |
-+---------------------------------+-------------------------+---------------------------------+--------+------------------------------+-----------+
++---------------------------------+-------------------------+-----------------------------------------+--------+------------------------------+-----------+
+| Category                        | Use                     | Parameter Name                          | Type   | Default Value                | Dynamic   |
+|                                 |                         |                                         |        |                              | Changes   |
++=================================+=========================+=========================================+========+==============================+===========+
+| :ref:`broker-common-parameters` | Access                  | ACCESS_CONTROL                          | bool   | no                           |           |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | ACCESS_CONTROL_FILE                     | string |                              |           |
+|                                 +-------------------------+-----------------------------------------+--------+------------------------------+-----------+
+|                                 | Logging                 | ADMIN_LOG_FILE                          | string | log/broker/cubrid_broker.log |           |
+|                                 +-------------------------+-----------------------------------------+--------+------------------------------+-----------+
+|                                 | Broker server           | MASTER_SHM_ID                           | int    | 30,001                       |           |
+|                                 | (cub_broker)            |                                         |        |                              |           |
++---------------------------------+-------------------------+-----------------------------------------+--------+------------------------------+-----------+
+| :ref:`parameter-by-broker`      | Access                  | ACCESS_LIST                             | string |                              |           |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | ACCESS_MODE                             | string | RW                           | available |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | BROKER_PORT                             | int    | 30,000(max : 65,535)         |           |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | CONNECT_ORDER                           | string | SEQ                          | available |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | ENABLE_MONITOR_HANG                     | string | OFF                          |           |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | KEEP_CONNECTION                         | string | AUTO                         | available |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | MAX_NUM_DELAYED_HOSTS_LOOKUP            | int    | -1                           |           |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | PREFERRED_HOSTS                         | string |                              | available |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | RECONNECT_TIME                          | sec    | 600                          | available |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | REPLICA_ONLY                            | string | OFF                          |           |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER | bool   | DENY                         |           |
+|                                 +-------------------------+-----------------------------------------+--------+------------------------------+-----------+
+|                                 | Broker App. Server(CAS) | APPL_SERVER_MAX_SIZE                    | MB     | Windows 32bit: 40,           | available |
+|                                 |                         |                                         |        | Windows 64bit: 80,           |           |
+|                                 |                         |                                         |        | Linux: 0(max: 2,097,151)     |           |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | APPL_SERVER_MAX_SIZE_HARD_LIMIT         | MB     | 1,024                        | available |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | APPL_SERVER_PORT                        | int    | BROKER_PORT+1                |           |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | APPL_SERVER_SHM_ID                      | int    | 30,000                       |           |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | AUTO_ADD_APPL_SERVER                    | string | ON                           |           |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | MAX_NUM_APPL_SERVER                     | int    | 40                           |           |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | MIN_NUM_APPL_SERVER                     | int    | 5                            |           |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | TIME_TO_KILL                            | sec    | 120                          | available |
+|                                 +-------------------------+-----------------------------------------+--------+------------------------------+-----------+
+|                                 | Transaction & Query     | CCI_DEFAULT_AUTOCOMMIT                  | string | ON                           |           |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | LONG_QUERY_TIME                         | sec    | 60(max: 86,400)              | available |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | LONG_TRANSACTION_TIME                   | sec    | 60(max: 86,400)              | available |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | MAX_PREPARED_STMT_COUNT                 | int    | 2,000(min: 1)                | available |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | MAX_QUERY_TIMEOUT                       | sec    | 0(max: 86,400)               | available |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SESSION_TIMEOUT                         | sec    | 300                          | available |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | STATEMENT_POOLING                       | string | ON                           | available |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | JDBC_CACHE                              | string | OFF                          | available |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | JDBC_CACHE_HINT_ONLY                    | string | OFF                          | available |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | JDBC_CACHE_LIFE_TIME                    | sec    | 1000                         | available |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | TRIGGER_ACTION                          | string | ON                           | available |
+|                                 +-------------------------+-----------------------------------------+--------+------------------------------+-----------+
+|                                 | Logging                 | ACCESS_LOG                              | string | OFF                          | available |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | ACCESS_LOG_DIR                          | string | log/broker                   |           |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | ACCESS_LOG_MAX_SIZE                     | KB     | 10M(max: 2G)                 | available |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | ERROR_LOG_DIR                           | string | log/broker/error_log         | available |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | LOG_DIR                                 | string | log/broker/sql_log           | available |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SLOW_LOG                                | string | ON                           | available |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SLOW_LOG_DIR                            | string | log/broker/sql_log           | available |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SQL_LOG                                 | string | ON                           | available |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SQL_LOG_MAX_SIZE                        | KB     | 10,000                       | available |
+|                                 +-------------------------+-----------------------------------------+--------+------------------------------+-----------+
+|                                 | Shard                   | SHARD                                   | string | OFF                          |           |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_CONNECTION_FILE                   | string | shard_connection.txt         |           |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_DB_NAME                           | string |                              |           |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_DB_PASSWORD                       | string |                              |           |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_DB_USER                           | string |                              |           |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_IGNORE_HINT                       | string | OFF                          |           |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_KEY_FILE                          | string | shard_key.txt                |           |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_KEY_FUNCTION_NAME                 | string |                              |           |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_KEY_LIBRARY_NAME                  | string |                              |           |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_KEY_MODULAR                       | int    | 256                          |           |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_MAX_CLIENTS                       | int    | 256                          |           |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_MAX_PREPARED_STMT_COUNT           | int    | 10,000                       |           |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_NUM_PROXY                         | int    | 1                            |           |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_PROXY_CONN_WAIT_TIMEOUT           | sec    | 8h                           |           |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_PROXY_LOG                         | string | ERROR                        | available |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_PROXY_LOG_DIR                     | string | log/broker/proxy_log         |           |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_PROXY_LOG_MAX_SIZE                | KB     | 100,000                      | available |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_PROXY_SHM_ID                      | int    |                              |           |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SHARD_PROXY_TIMEOUT                     | sec    | 30(second)                   |           |
+|                                 +-------------------------+-----------------------------------------+--------+------------------------------+-----------+
+|                                 | Etc                     | MAX_STRING_LENGTH                       | int    | -1                           |           |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SERVICE                                 | string | ON                           |           |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SSL                                     | string | OFF                          |           |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | SOURCE_ENV                              | string | cubrid.env                   |           |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | NET_BUF_SIZE                            | KB     | 16K                          |           |
++---------------------------------+-------------------------+-----------------------------------------+--------+------------------------------+-----------+
 
 Default Parameters
 ^^^^^^^^^^^^^^^^^^
@@ -2699,6 +2735,16 @@ Access
     
         Please note that replication mismatch occurs when you write the data directly to the replica DB.
 
+.. _access_control_behavior_for_emptybroker:
+
+**ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER**	
+	
+    If no broker is specified in **ACCESS_CONTROL_FILE** and the value of **ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER** is **ALLOW** , all access to the broker are allowed. The default is **DENY**. For more information, see :ref:`limiting-broker-access`.
+
+    .. note::
+    
+       The settings value ALLOW or DENY for **ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER** is valid only when **ACCESS_CONTROL** is set to **ON**. If it is set to **OFF**, the setting value is not applicable.
+	
 Broker App. Server(CAS)
 ^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -3099,6 +3145,10 @@ Etc
     **SOURCE_ENV** is a parameter used to determine the file where the operating system variable for each broker is configured. The extension of the file must be **env**. All parameters specified in **cubrid.conf** can also be configured by environment variables. For example, the **lock_timeout** parameter in **cubrid.conf** can also be configured by the **CUBRID_LOCK_TIMEOUT** environment variable. As another example, to block execution of DDL statements on broker1, you can configure **CUBRID_BLOCK_DDL_STATEMENT** to 1 in the file specified by **SOURCE_ENV**.
 
     An environment variable, if exists, has priority over **cubrid.conf**. The default value is **cubrid.env**.
+
+**NET_BUF_SIZE**
+
+    **NET_BUF_SIZE** is a parameter used to determine the network buffer size used by **CAS** to transmit results to the client. The result sets will be buffered into the **CAS** network buffer, and are sent to the client when the buffer is full. **NET_BUF_SIZE** is the size of the packet that CAS transmits to the client, and it may affect transmission efficiency.
 
 HA Configuration
 ================

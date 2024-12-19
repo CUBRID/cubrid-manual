@@ -16,6 +16,10 @@ DDLs issued through CAS, csql, and loaddb could be recorded in log files in addi
 
 The DDL Audit log will be created in the $CUBRID/log/ddl_audit directory when ddl_audit_log of the system parameter is turned on. Note that the size of each log file cannot exceed the value specified in the ddl_audit_log_size parameter. For parameters related to DDL audit, refer to system parameters of CUBRID Managment :doc:`/admin/config` .
 
+.. note::
+
+    If you use a method from the :ref:`catalog` , the DDL Audit Log will not be created.
+
 DDL Audit Log file name convention
 ======================================
 
@@ -31,11 +35,12 @@ DDL Audit Log file name convention
 DDL Audit Logfile format of CAS
 ======================================
 
-* [Time] [ip_addr]|[user_name]|[result]|[elapsed time]|[auto commit/rollback]|[sql_text]
+* [Time] [ip_addr]|[db_name]|[user_name]|[result]|[elapsed time]|[auto commit/rollback]|[sql_text]
 
 	Description:
 	
 	* [Time]: Time starting execution of the DDL (e.g. 20-12-18 12:08:32.327)
+	* [db_name]: Database name where DDL was executed
 	* [ip_addr]: An IP address of an application client (e.g. 172.31.0.70)
 	* [user_name]: the database user name who issued DDL
 	* [result]: statement execution result. OK if successful, otherwise error code (e.g. ERROR:-494)

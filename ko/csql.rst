@@ -1,4 +1,4 @@
-
+A value that specifies the optimization level. It has the following meanings.
 :meta-keywords: csql, cubrid csql, cubrid commands, executing csql, csql options
 :meta-description: CUBRID CSQL is an application that allows users to use SQL statements through a command-driven interface. This section briefly explains how to use the CSQL Interpreter and associated commands.
 
@@ -633,9 +633,11 @@ CSQL 인터프리터에서 작업 중인 데이터베이스 이름 및 호스트
 
 **;PLan** 세션 명령어는 질의 실행 계획 보기의 수준을 설정한다. 수준은 **simple**, **detail**, **off** 로 지정한다. 각 설정값의 의미는 다음과 같다.
 
-*   **off**: 질의 실행 계획을 출력하지 않음
+*   **off**: 질의 실행 계획을 출력하지 않음(OPT LEVEL=1)
 *   **simple**: 질의 실행 계획을 단순하게 출력함. (OPT LEVEL=257)
 *   **detail**: 질의 실행 계획을 자세하게 출력함. (OPT LEVEL=513)
+
+OPT LEVEL의 상세한 내용은 :ref:`viewing-query-plan`\ 를 참고한다.
 
 .. _set-autotrace:
  
@@ -1430,7 +1432,7 @@ CSQL 인터프리터에서 작업 중인 데이터베이스 이름 및 호스트
     
         Free SQL Formatter 사용을 권고합니다.
 
-        다운로드 URL: https://github.com/CUBRID/fsqlf/releases/download/v.1.1.0-csql/fsqlf-1.1.0.csql.tar.gz
+        다운로드 URL: https://github.com/CUBRID/fsqlf/releases
 
 **편집기 설정(;EDITOR_Cmd)**
 

@@ -37,7 +37,7 @@ CUBRID welcomes your active participation in bug reporting and looks forward to 
 License
 -------
 
-The Apache license 2.0 applies to the CUBRID server engine, and the BSD license applies to CUBRID MANAGER and interfaces (APIs). For more information, see the License Policy on https://www.cubrid.org/cubrid .
+The Apache license 2.0 applies to the CUBRID server engine, and the BSD license applies to CUBRID MANAGER and interfaces (APIs). For more information, see the License Policy on https://www.cubrid.org/license.
 
 Additional Information
 ----------------------

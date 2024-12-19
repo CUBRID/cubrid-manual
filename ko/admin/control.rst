@@ -846,7 +846,7 @@ I/O 읽기를 많이 발생시킨 질의를 기록한다. cubrid.conf의 **sql_t
 
 *   **$CUBRID/include/error_code.h** 파일의 **#define ER_**\로 시작하는 정의문은 모두 서버 에러 코드를 나타낸다.
 
-*   **CUBRID/msg/en_US** (한글은 ko_KR.eucKR 혹은 ko_KR.utf8) **/cubrid.msg** 파일의 "$set 5 MSGCAT_SET_ERROR" 이하 메시지 그룹은 모두 서버 에러 메시지를 나타낸다.
+*   **$CUBRID/msg/en_US** (한글은 ko_KR.eucKR 혹은 ko_KR.utf8) **/cubrid.msg** 파일의 "$set 5 MSGCAT_SET_ERROR" 이하 메시지 그룹은 모두 서버 에러 메시지를 나타낸다.
 
 CCI 드라이버를 사용하여 C로 프로그램을 작성할 때는 에러 코드 번호를 직접 사용하는 것보다는 에러 코드 이름을 사용할 것을 권장한다. 예를 들어, 고유 키 위반 시 에러 코드 번호는 -670 혹은 -886이지만 이 번호보다는 **ER_BTREE_UNIQUE_FAILED** 혹은 **ER_UNIQUE_VIOLATION_WITHKEY**\을 사용하는 것이 프로그램 가독성을 높이기 때문이다.
 
@@ -1454,8 +1454,9 @@ SHARD-Q는 Shard Waiting Queue를 줄인 말이다. SHARD proxy 프로세스가 
 ---------------------
 
 브로커에 접속하는 응용 클라이언트를 제한하려면 **cubrid_broker.conf**\의 **ACCESS_CONTROL** 파라미터 값을 ON으로 설정하고, **ACCESS_CONTROL_FILE** 파라미터 값에 접속을 허용하는 사용자와 데이터베이스 및 IP 목록을 작성한 파일 이름을 입력한다.
+만약 ACCESS_CONTROL_FILE에 브로커 이름이 없으면, 해당 브로커로의 모든 접속이 제한된다. 이 경우, ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER 파라미터를 설정하여 모든 접속을 허용할 수 있다.
 **ACCESS_CONTROL** 브로커 파라미터의 기본값은 **OFF**\이다.
-**ACCESS_CONTROL**, **ACCESS_CONTROL_FILE** 파라미터는 공통 적용 파라미터가 위치하는 [broker] 아래에 작성해야 한다.
+**ACCESS_CONTROL**, **ACCESS_CONTROL_FILE** 파라미터는 공통 적용 파라미터가 위치하는 [broker] 아래에 작성해야 하며, **ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER** 파라미터는 각각의 브로커에 작성하야 한다.
 
 **ACCESS_CONTROL_FILE**\ 의 형식은 다음과 같다.
 
@@ -1470,6 +1471,11 @@ SHARD-Q는 Shard Waiting Queue를 줄인 말이다. SHARD proxy 프로세스가 
 *   <db_user>: 데이터베이스 사용자 ID. \*로 지정하면 모든 데이터베이스 사용자 ID를 허용한다.
 *   <ip_list_file>: 접속 가능한 IP 목록을 저장한 파일의 이름. ip_list_file1, ip_list_file2, ...와 같이 파일 여러 개를 쉼표(,)로 구분하여 지정할 수 있다.
 
+.. note::
+
+    Windows에서 절대 경로명 사용시 드라이브명을 반드시 명시해야 한다 
+    (예, C:\\CUBRID\\CONF\\CUBRID_ACL.CONF).
+
 브로커별로 [%<*broker_name*>]과 <*db_name*>:*<db_user*>:<*ip_list_file*>을 추가 지정할 수 있으며, 같은 <*db_name*>, 같은 <*db_user*>에 대해 별도의 라인으로 추가 지정할 수 있다.
 IP 목록은 하나의 브로커 내에서 <*db_name*>:<*db_user*> 별로 최대 256 라인까지 작성될 수 있다.
 
@@ -1482,7 +1488,13 @@ ip_list_file의 작성 형식은 다음과 같다.
 
 *   <ip_addr>: 접근을 허용할 IP 명. 뒷자리를 \*로 입력하면 뒷자리의 모든 IP를 허용한다.
 
-**ACCESS_CONTROL** 값이 ON인 상태에서 **ACCESS_CONTROL_FILE**\이 지정되지 않으면 브로커는 localhost에서의 접속 요청만을 허용한다.
+**ACCESS_CONTROL** 값이 ON 상태에서 **ACCESS_CONTROL_FILE**\에 지정되지 않으면 브로커는 localhost에서만 접속을 허용한다. 
+그러나 **ACCESS_CONTROL_FILE** 에 지정되지 않은 브로커의 경우, **ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER** 의 값을 ALLOW로 설정한 브로커들에 대해서는 모든 접속 요청을 허용한다.
+
+**ACCESS_CONTROL_FILE** 에 지정되지 않은 브로커 접속 제한 방식.
+
+*  localhost에서만 접속 허용. (기본)
+*  ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER를 ALLOW 로 설정하면 모든 접속 허용.
 
 브로커 구동 시 **ACCESS_CONTROL_FILE** 및 ip_list_file 분석에 실패하는 경우 브로커는 구동되지 않는다. 
 
@@ -1551,6 +1563,8 @@ QUERY_EDITOR 브로커는 다음과 같은 응용의 접속 요청만을 허용�
 
 *   <BR_NAME>: 브로커 이름. 이 값을 지정하면 특정 브로커만 변경 내용을 적용할 수 있으며, 생략하면 전체 브로커에 변경 내용을 적용한다.
 
+.. note:: 현재 접속된 연결은 reload 명령을 이용한 access control list의 재구성에 영향을 받지 않는다. 즉, reload에 의한 재구성은 새로운 연결에만 적용되며, 재구성 전 접속된 연결에 변경된 access control list를 적용하기 위해서는 해당 브로커를 재시작해야 한다. 
+
 현재 구동 중인 브로커에서 허용하는 데이터베이스, 데이터베이스 사용자 ID, IP 목록, 최종 접속 시간을 화면에 출력하려면 다음 명령어를 사용한다. 
 
 ::
@@ -1568,6 +1582,7 @@ QUERY_EDITOR 브로커는 다음과 같은 응용의 접속 요청만을 허용�
     ACCESS_CONTROL_FILE=access_file.txt 
   
     [%broker1] 
+    ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER=DENY
     demodb:dba:iplist1.txt 
            CLIENT IP LAST ACCESS TIME 
     ========================================== 
@@ -1581,6 +1596,9 @@ QUERY_EDITOR 브로커는 다음과 같은 응용의 접속 요청만을 허용�
            CLIENT IP LAST ACCESS TIME 
     ========================================== 
                    * 2013-11-08 10:10:12 
+
+    [%broker2]
+    ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER=ALLOW
 
 **브로커 로그**
 

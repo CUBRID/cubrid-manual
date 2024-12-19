@@ -314,7 +314,7 @@ createdb
 
 .. note:: **기존 키 파일을 사용하는 데이터베이스 생성**
 
-    데이터베이스가 생성될 때 기본적으로 키 파일이 함께 생성된다. 만약 데이터베이스 생성 시 기존 키 파일을 사용하고 싶다면, 먼저 키 파일을 <database-name>_keys 이름으로 복사해 둔다. 이후 복사한 키 파일의 디렉토리를 **tde_keys_file_path** 시스템 파라미터에 지정하고 **createdb** 유틸리티를 통해 데이터베이스를 생성한다. TDE 키 파일에 관한 자세한 내용은 :ref:`tde-file-based-key` 를 참고한다.
+    데이터베이스가 생성될 때 기본적으로 키 파일이 함께 생성된다. 만약 데이터베이스 생성 시 기존 키 파일을 사용하고 싶다면, 먼저 키 파일을 <database-name>_keys 이름으로 복사해 둔다. 이후 복사한 키 파일의 디렉터리를 **tde_keys_file_path** 시스템 파라미터에 지정하고 **createdb** 유틸리티를 통해 데이터베이스를 생성한다. TDE 키 파일에 관한 자세한 내용은 :ref:`tde-file-based-key` 를 참고한다.
     
 .. _adding-database-volume:    
 
@@ -600,8 +600,8 @@ copydb
   -i, --control-file=FILE         여러 개의 볼륨들이 각각 저장되는 디렉터리 경로를 지정하는 제어 파일
   -r, --replace                   같은 이름의 데이터베이스가 존재하면 덮어쓰기
   -d, --delete-source             복사 후 원본 데이터베이스 삭제
-      --copy-lob-path=PATH        원본 데이터베이스의 LOB 파일 디렉터리 경로를 복사
-  -B, --lob-base-path=PATH        LOB 파일이 저장되는 디렉토리 경로
+      --copy-lob-path             원본 데이터베이스의 LOB 대렉터리 경로를 복사. -B 옵션과 함께 사용 불가. 기본값: 복사하지 않음
+  -B, --lob-base-path=PATH        LOB 파일이 저장되는 디렉터리 경로
 
 
 .. option:: --server-name=HOST
@@ -660,11 +660,11 @@ copydb
 
         cubrid copydb -d -F /home/usr/CUBRID/databases demodb new_demodb
 
-.. option:: --copy-lob-path=PATH
+.. option:: --copy-lob-path
 
-    원본 데이터베이스에 대한 **LOB** 파일 디렉터리 경로를 새로운 데이터베이스의 **LOB** 파일 경로로 복사하고, 원본 데이터베이스를 복사한다. 이 옵션을 생략하면, **LOB** 파일 디렉터리 경로를 복사하지 않으므로, **databases.txt** 파일의 **lob-base-path** 항목을 별도로 수정해야 한다. 이 옵션은 **-B** 옵션과 병행할 수 없다. ::
+    이 옵션을 선택하면 대상 데이터베이스의 lob 디렉터리의 위치를 원본 데이터베이스의 lob 디렉터리의 위치와 동일하게 설정한다. 이 옵션이 생력되면 <대상 데이터베이스 디렉터리>/lob 이 대상 데이터베이스의 lob 디렉터리 경로로 설정된다. 이 옵션은 lob 파일을 복사하는 기능이 아니며 **-B** 옵션과 병행할 수 없다. ::
 
-        cubrid copydb --copy-lob-path=/home/usr/CUBRID/databases/new_demodb/lob demodb new_demodb
+        cubrid copydb --copy-lob-path demodb new_demodb
 
 .. option:: -B, --lob-base-path=PATH
 
@@ -710,7 +710,7 @@ installdb
 
 .. option:: --file-path=PATH
 
-    대상 데이터베이스의 데이터베이스 볼륨을 위한 디렉토리 경로를 **databases.txt** 에 등록한다. 이 옵션을 생략하면 현재 작업 디렉토리 경로가 등록된다. ::
+    대상 데이터베이스의 데이터베이스 볼륨을 위한 디렉터리 경로를 **databases.txt** 에 등록한다. 이 옵션을 생략하면 현재 작업 디렉터리 경로가 등록된다. ::
 
         cubrid installdb -F /home/cubrid/CUBRID/databases/testdb testdb
 
@@ -987,8 +987,9 @@ plandump
 
 ::
 
-  -d, --drop                   서버 케시에 있는 모든 플랜 삭제
+  -d, --drop                   서버 캐시에 있는 모든 플랜 삭제
   -o, --output-file=FILE       출력 메시지를 재지정할 파일
+  -s, --sha1=SHA1              서버 캐시에 있는 SHA1 코드의 특정 플랜 삭제
 
 
 .. option:: -d, --drop
@@ -1002,6 +1003,25 @@ plandump
     캐시에 저장된 질의 수행 계획 결과 파일에 저장 ::
 
         cubrid plandump -o output.txt testdb
+
+.. option:: -s, --sha1=SHA1
+
+    캐시에 저장된 SHA1 코드의 특정 질의 수행 계획을 제거한다.::
+
+        $ cubrid plandump testdb
+
+        Entries:
+
+          XASL_ID = {
+                      sha1 = { da9cab5d 597f2fe4 48aa8ae8 66b87d81 49fdd7ca },
+                          time_stored = 1718614753 sec, 257499 usec
+                    }
+          sql info:
+            SQL_ID = 4dfa6d901e048
+            sql user text = select * from game where host_year > '2004'
+            sql plan text = Sequential scan(public.game dba.game)
+
+        cubrid plandump -s 'da9cab5d 597f2fe4 48aa8ae8 66b87d81 49fdd7ca' demodb
 
 .. _statdump:
 
@@ -2778,6 +2798,12 @@ lockdb
 
         cubrid lockdb -o output.txt testdb
 
+.. option:: -c, --contention
+
+    경합중인 잠금 정보만 출력한다. ::
+
+        cubrid lockdb -c testdb
+
 출력 내용
 ^^^^^^^^^
 
@@ -2820,12 +2846,14 @@ lockdb
 
 **객체 잠금 테이블**
 
-**cubrid lockdb** 출력 내용의 세 번째 섹션은 객체 잠금 테이블의 내용을 포함한다. 이것은 어떤 객체에 대해서 어떤 클라이언트가 어떤 모드로 잠금을 가지고 있는지, 어떤 객체에 대해서 어떤 클라이언트가 어떤 모드로 기다리고 있는지를 보여준다. 객체 잠금 테이블 결과물의 첫 부분에는 얼마나 많은 객체가 잠금되었는지가 출력된다. 
+**cubrid lockdb** 출력 내용의 세 번째 섹션은 객체 잠금 테이블의 내용을 포함한다. 이것은 어떤 객체에 대해서 어떤 클라이언트가 어떤 모드로 잠금을 가지고 있는지, 어떤 객체에 대해서 어떤 클라이언트가 어떤 모드로 기다리고 있는지를 보여준다. 객체 잠금 테이블 결과물의 첫 부분에는 얼마나 많은 객체가 잠금 되었는지가 출력된다. 그리고 현재 메모리에 할당된 잠금의 개수와 크기가 출력된다. 성능을 위하여 잠금을 바로 해제하지 않고 재사용하지만, 메모리에 할당된 잠금 개수가 **lock_escalation** 시스템 파라미터값을 넘을 경우에는 해당 잠금은 트랜잭션이 끝나는 시점에 메모리에서 해제된다. 관련 시스템 파라미터인 **lock_escalation** 에 대한 설명은 :ref:`lock-parameters` 를 참고한다.
 
 ::
 
-    Object lock Table:
-        Current number of ojbects which are locked = 2001
+    Object Lock Table:
+        Current number of objects which are locked    = 100
+        Current number of objects which are allocated = 1000
+        Current size of objects which are allocated = 242K
 
 **cubrid lockdb**\는 잠금을 획득한 각 객체의 OID, 객체 타입 및 테이블명을 출력한다. 또한 객체에 대한 잠금을 보유한 트랜잭션 수(*Num holders*), 잠금을 보유하지만 잠금을 상위 잠금으로 변환(예: **SCH_S_LOCK**\에서 **SCH_M_LOCK**\으로의 변환)할 수 없어 차단된 트랜잭션 수(*Num blocked-holders*) 및 객체의 잠금을 기다리는 다른 트랜잭션의 수(*Num waiters*)를 출력한다. 잠금을 보유한 클라이언트 트랜잭션, 차단된 클라이언트 트랜잭션 및 대기 중인 클라이언트 트랜잭션의 목록도 출력한다. 객체 타입이 클래스가 아닌 행에서는 MVCC 정보도 표시된다.
 
@@ -2848,7 +2876,7 @@ lockdb
                         Start_waiting_at = Wed Feb 3 14:45:14 2016
                         Wait_for_secs = -1
 
-다음 예는 **X_LOCK** 을 보유한 트랜잭션 1에 의해서 삽입된 OID가 ( 2 | 50 | 1)인 클래스의 인스턴스를 보여준다. 트랜잭션1이 삽입한 인스턴스를 수정하기 위해 트랜잭션2가 **X_LOCK** 을 기다리는 것을 보여준다. 
+다음 예는 **X_LOCK** 을 보유한 트랜잭션 1에 의해서 삽입된 OID가 ( 2 | 50 | 1)인 클래스의 인스턴스를 보여준다. 트랜잭션1이 삽입한 인스턴스를 수정하기 위해 트랜잭션2가 **X_LOCK** 을 기다리는 것을 보여준다. **-c** 옵션을 사용하면 경합이 발생한 잠금만 확인할 수 있다.
 
 ::
 
@@ -3474,7 +3502,7 @@ vacuumdb
 
 .. option:: -o, --output-file=FILE
 
-    이 옵션은 vacuum에 대한 상태 정보를 저장할 파일명을 지정한다. 파일은 현재 디렉토리에 생성된다.  **-o** 옵션을 지정하지 않으면 콘솔 화면에 메시지가 표시된다. ::
+    이 옵션은 vacuum에 대한 상태 정보를 저장할 파일명을 지정한다. 파일은 현재 디렉터리에 생성된다.  **-o** 옵션을 지정하지 않으면 콘솔 화면에 메시지가 표시된다. ::
 
         cubrid vacuumdb -o db_output demodb
 
@@ -3559,7 +3587,7 @@ flashback
     delete from [dba.tbl] where [a] = 10 limit 1;
 
 위의 예에서 **cubrid flashback** 을 실행하면 지정된 기간 내에 수행된 트랜잭션에 대한 정보를 표시한다. 사용자가 기간을 지정하지 않으면 현재 시각으로부터 10분 전에 수행된 트랜잭션들부터 표시된다.
-사용자가 트랜잭션 식별자(Transaction ID)를 선택하면, 선택한 트랜잭션 내에서 실행된 DML에 대하여 되돌릴 수 있도록 SQL 구문을 제공한다. 사용자는 300초 이내에 트랜잭션 식별자를 입력해야하며, 해당 제한 시간은 시스템 파라미터 **flashback_timeout** 을 통해 조절할 수 있다.
+사용자가 트랜잭션 식별자를 선택하면, 선택된 트랜잭션이 실행한 DML을 되돌릴 수 있도록 SQL 구문을 제공한다. 사용자는 300초 이내에 트랜잭션 식별자를 선택해야 하며, 해당 제한 시간은 시스템 파라미터 :ref:`flashback_timeout<flashback_timeout>` 을 통해 조절할 수 있다.
 
 **Flashback Summary** 에 표시된 각 칼럼의 의미는 다음과 같다.
 
@@ -3574,6 +3602,9 @@ flashback
 
 .. note::
 		**cubrid flashback** 을 통해 되돌리려는 테이블이 :ref:`trigger-event-target` 일 경우, 사용자가 의도하지 않은 결과를 얻을 수 있다. **cubrid flashback** 을 통해 테이블에 대한 변경 사항을 되돌리기 전에 트리거를 비활성화하는 것이 좋다. 자세한 내용은 :ref:`alter-trigger` 을 참조한다.
+
+.. note::
+		**cubrid flashback** 은 복합 데이터 타입인 SET, MULTISET, LIST, JSON을 지원하지 않는다. **cubrid flashback** 수행 시 대상 클래스가 미지원 데이터 타입을 컬럼으로 갖는 경우 해당 컬럼값은 null로 출력된다. 또한, LOB 타입의 컬럼은 데이터가 아닌 해당 파일의 위치 정보(LOB locator)만 출력된다.
 
 다음은 **cubrid flashback** 에서 사용하는 [options]이다.
 

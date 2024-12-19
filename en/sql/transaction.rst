@@ -278,7 +278,7 @@ You can set an isolation level by using the :ref:`set-transaction-isolation-leve
 +================================+========+===============+==========+========================+
 | :ref:`isolation-level-6` (6)   | X      | X             | X        | X                      |
 +--------------------------------+--------+---------------+----------+------------------------+
-| :ref:`isolation-level-5` (5)   | X      | X             | O        | X                      |
+| :ref:`isolation-level-5` (5)   | X      | X             | X        | X                      |
 +--------------------------------+--------+---------------+----------+------------------------+
 | :ref:`isolation-level-4` (4)   | X      | O             | O        | X                      |
 +--------------------------------+--------+---------------+----------+------------------------+
@@ -1288,7 +1288,6 @@ You can set the level of transaction isolation by using **isolation_level** and 
 |                       | Transaction T1 may experience R read (non-repeatable read) that was updated and committed by another transaction T2 when it is repeatedly retrieving the record R.                  |
 +-----------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | REPEATABLE READ (5)   | Another transaction T2 cannot update the schema of table A while transaction T1 is viewing table A.                                                                                 |
-|                       | Transaction T1 may experience phantom read for the record R that was inserted by another transaction T2 when it is repeatedly retrieving a specific record.                         |
 +-----------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | SERIALIZABLE (6)      | Temporarily disabled - details in :ref:`isolation-level-6`                                                                                                                          |
 +-----------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+

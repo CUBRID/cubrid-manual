@@ -6,9 +6,9 @@
 UPDATE
 ******
 
-You can update the column value of a record stored in the target table or view to a new one by using the **UPDATE** statement. Specify the name of the column to update and a new value in the **SET** clause, and specify the condition to be used to extract the record to be updated in the :ref:`where-clause`. You can one or more tables only with one **UPDATE** statement.
-
-.. note:: Updating a view with **JOIN** syntax is possible from 10.0 version.
+You can update the column value of a record stored in the target table or view to a new one by using the **UPDATE** statement.
+Specify the name of the column to update and the new value in the **SET** clause, and specify the condition to extract the record to be updated in the :ref:`where-clause`.
+You can update one or more tables with a single **UPDATE** statement.
 
 ::
 
@@ -37,198 +37,430 @@ You can update the column value of a record stored in the target table or view t
 
 *   *row_count*: Specifies the number of records to be updated after the :ref:`limit-clause`. It can be one of unsigned integer, a host variable or a simple expression.
 
-In case of only one table is to be updated, you can specify :ref:`order-by-clause` or :ref:`limit-clause`. You can also limit the number of records to be updated in the :ref:`limit-clause`. You can use the update with the :ref:`order-by-clause` if you want to maintain the execution order or lock order of triggers. 
+The following are allowed only when a single table is specified in <*table_specifications*>:
 
-.. note:: Previous versions of CUBRID 9.0 allow only one table for <*table_specifications*>.
+* The :ref:`order-by-clause` can be specified.
+  If the :ref:`order-by-clause` is specified, records are updated in the order of the specified column.
+  This is useful for maintaining the order of trigger execution and the order of locking.
 
-The following example shows how to update one table.
+* The :ref:`limit-clause` can be specified.
+  If the :ref:`limit-clause` is specified, the number of records to be updated can be limited.
+
+* Analytic functions can be used in the <*expr*> of the **SET** clause.
+  However, if a **SELECT** query is specified in <*expr*>, analytic functions can be used in the **SELECT** query regardless of the number of tables specified in <*table_specifications*>.
+
+.. note::
+
+    In CUBRID versions prior to 9.0, only a single table can be specified in <*table_specifications*>.
+
+.. note::
+
+    From CUBRID 10.0 onward, updates to views containing **JOIN** clauses are possible.
+
+.. _example_single_table_update_using_order_by:
+
+.. rubric:: Example 1. Single Table Update Using ORDER BY Clause
 
 .. code-block:: sql
 
-    --creating a new table having all records copied from a_tbl1
-    CREATE TABLE a_tbl5 AS SELECT * FROM a_tbl1;
-    SELECT * FROM a_tbl5 WHERE name IS NULL;
+    DROP TABLE IF EXISTS t1;
 
-::
+    CREATE TABLE t1 (id INT);
+    INSERT INTO t1 VALUES (11), (1), (12), (13), (2), (3), (14), (4);
+
+    CREATE TRIGGER trigger1 BEFORE UPDATE ON t1 IF NEW.id < 10 EXECUTE PRINT 'trigger1 executed';
+    CREATE TRIGGER trigger2 BEFORE UPDATE ON t1 IF NEW.id > 10 EXECUTE PRINT 'trigger2 executed';
+
+    UPDATE t1  SET id = id + 1;
+
+	trigger2 executed
+	trigger1 executed
+	trigger2 executed
+	trigger2 executed
+	trigger1 executed
+	trigger1 executed
+	trigger2 executed
+	trigger1 executed
+
+Using the :ref:`order-by-clause` can change the order in which records are updated.
+
+.. code-block:: sql
+
+    TRUNCATE TABLE t1;
+    INSERT INTO t1 VALUES (11), (1), (12), (13), (2), (3), (14), (4);
+
+    UPDATE t1  SET id = id + 1 ORDER BY id;
+
+	trigger1 executed
+	trigger1 executed
+	trigger1 executed
+	trigger1 executed
+	trigger2 executed
+	trigger2 executed
+	trigger2 executed
+	trigger2 executed
+
+.. _example_single_table_update_using_limit:
+
+.. rubric:: Example 2. Single Table Update Using LIMIT Clause
+
+This example uses the *LIMIT 3* clause to update only up to 3 records with *name IS NULL*.
+
+.. code-block:: sql
+
+    DROP TABLE IF EXISTS t1;
+
+    CREATE TABLE t1 (id int, name varchar, phone varchar);
+    INSERT INTO t1 VALUES (NULL,  NULL, '000-0000');
+    INSERT INTO t1 VALUES (   1, 'aaa', '111-1111');
+    INSERT INTO t1 VALUES (   2, 'bbb', '222-2222');
+    INSERT INTO t1 VALUES (   3, 'ccc', '333-3333');
+    INSERT INTO t1 VALUES (   4,  NULL, '000-0000');
+    INSERT INTO t1 VALUES (   5,  NULL, '000-0000');
+    INSERT INTO t1 VALUES (   6, 'ddd', '000-0000');
+    INSERT INTO t1 VALUES (   7,  NULL, '777-7777');
+
+    SELECT * FROM t1 WHERE name IS NULL;
+
+	           id  name                  phone
+	=========================================================
+	         NULL  NULL                  '000-0000'
+	            4  NULL                  '000-0000'
+	            5  NULL                  '000-0000'
+	            7  NULL                  '777-7777'
+
+    UPDATE t1 SET name='update', phone='999-9999' WHERE name IS NULL LIMIT 3;
+
+    SELECT * FROM t1;
+
+	           id  name                  phone
+	=========================================================
+	         NULL  'update'              '999-9999'
+	            1  'aaa'                 '111-1111'
+	            2  'bbb'                 '222-2222'
+	            3  'ccc'                 '333-3333'
+	            4  'update'              '999-9999'
+	            5  'update'              '999-9999'
+	            6  'ddd'                 '000-0000'
+	            7  NULL                  '777-7777'
+
+.. _example_update_with_joins:
+
+.. rubric:: Example 3. Update Using Joins
+
+When a record in table **A** is joined with multiple records in table **B** in an **UPDATE** statement,
+the record in **A** is updated using only the value from the first matching record in **B**.
+
+In this example, a record in table *t1* with an *id* of 3 is joined with two records in table *t2* where *rate_id* is 3.
+However, the *charge* column in the *t1* table is updated using only the *rate* value from the first matching record in the *t2* table.
+
+.. code-block:: sql
+
+    DROP TABLE IF EXISTS t1, t2;
+
+    CREATE TABLE t1 (id INT PRIMARY KEY, charge DOUBLE);
+    INSERT INTO t1 VALUES (1, 100.0);
+    INSERT INTO t1 VALUES (2, 100.0);
+    INSERT INTO t1 VALUES (3, 100.0);
+
+    CREATE TABLE t2 (rate_id INT, rate DOUBLE);
+    INSERT INTO t2 VALUES (1, 0.1);
+    INSERT INTO t2 VALUES (2, 0.2);
+    INSERT INTO t2 VALUES (3, 0.3);
+    INSERT INTO t2 VALUES (3, 0.5);
     
-               id  name                  phone
-    =========================================================
-             NULL  NULL                  '000-0000'
-                4  NULL                  '000-0000'
-                5  NULL                  '000-0000'
-                7  NULL                  '777-7777'
-     
-.. code-block:: sql
+    UPDATE t1 a INNER JOIN t2 b ON a.id = b.rate_id
+    SET a.charge = a.charge * (1 + b.rate);
 
-    UPDATE a_tbl5 SET name='yyy', phone='999-9999' WHERE name IS NULL LIMIT 3;
-    SELECT * FROM a_tbl5;
-     
-::
+    SELECT id, TO_CHAR (charge) AS charge FROM t1;
 
-               id  name                  phone
-    =========================================================
-             NULL  'yyy'                 '999-9999'
-                1  'aaa'                 '000-0000'
-                2  'bbb'                 '000-0000'
-                3  'ccc'                 '333-3333'
-                4  'yyy'                 '999-9999'
-                5  'yyy'                 '999-9999'
-                6  'eee'                 '000-0000'
-                7  NULL                  '777-7777'
-     
-.. code-block:: sql
+	           id  charge
+	===================================
+	            1  '110'
+	            2  '120'
+	            3  '150'
 
-    -- using triggers, that the order in which the rows are updated is modified by the ORDER BY clause.
-     
-    CREATE TABLE t (i INT,d INT);
-    CREATE TRIGGER trigger1 BEFORE UPDATE ON t IF new.i < 10 EXECUTE PRINT 'trigger1 executed';
-    CREATE TRIGGER trigger2 BEFORE UPDATE ON t IF new.i > 10 EXECUTE PRINT 'trigger2 executed';
-    INSERT INTO t VALUES (15,1),(8,0),(11,2),(16,1), (6,0),(1311,3),(3,0);
-    UPDATE t  SET i = i + 1 WHERE 1 = 1;
-     
-::
+For details, see :ref:`join-query`.
 
-    trigger2 executed
-    trigger1 executed
-    trigger2 executed
-    trigger2 executed
-    trigger1 executed
-    trigger2 executed
-    trigger1 executed
-     
-.. code-block:: sql
+.. _example_view_update:
 
-    TRUNCATE TABLE t;
-    INSERT INTO t VALUES (15,1),(8,0),(11,2),(16,1), (6,0),(1311,3),(3,0);
-    UPDATE t SET i = i + 1 WHERE 1 = 1  ORDER BY i;
-     
-::
-
-    trigger1 executed
-    trigger1 executed
-    trigger1 executed
-    trigger2 executed
-    trigger2 executed
-    trigger2 executed
-    trigger2 executed
-
-The following example shows how to update multiple tables after joining them.
+.. rubric:: Example 4. View Update
 
 .. code-block:: sql
 
-    CREATE TABLE a_tbl(id INT PRIMARY KEY, charge DOUBLE);
-    CREATE TABLE b_tbl(rate_id INT, rate DOUBLE);
-    INSERT INTO a_tbl VALUES (1, 100.0), (2, 1000.0), (3, 10000.0);
-    INSERT INTO b_tbl VALUES (1, 0.1), (2, 0.0), (3, 0.2), (3, 0.5);
-    
-    UPDATE
-     a_tbl INNER JOIN b_tbl ON a_tbl.id=b_tbl.rate_id
-    SET
-      a_tbl.charge = a_tbl.charge * (1 + b_tbl.rate)
-    WHERE a_tbl.charge > 900.0;
+    DROP TABLE IF EXISTS t1, t2;
+    DROP VIEW v1;
 
-For *a_tbl* table and *b_tbl* table, which join the **UPDATE** statement, when the number of rows of *a_tbl* which joins one row of *b_tbl* is two or more and the column to be updated is included in *a_tbl*, update is executed by using the value of the row detected first among the rows of *b_tbl*.
+    CREATE TABLE t1 (id INT, val INT) DONT_REUSE_OID;
+    INSERT INTO t1 VALUES (1, 1);
+    INSERT INTO t1 VALUES (2, 2);
+    INSERT INTO t1 VALUES (3, 3);
+    INSERT INTO t1 VALUES (4, 4);
+    INSERT INTO t1 VALUES (5, 5);
 
-In the above example, when the number of rows with *id* = 5, the **JOIN** condition column, is one in *a_tbl* and two in *b_tbl*, *a_tbl.charge*, the update target column in the row with *a_tbl.id* = 5, uses the value of *rate* of the first row in *b_tbl* only.
+    CREATE TABLE t2 (id INT, val INT) DONT_REUSE_OID;
+    INSERT INTO t2 VALUES (1, 1);
+    INSERT INTO t2 VALUES (2, 2);
+    INSERT INTO t2 VALUES (3, 3);
+    INSERT INTO t2 VALUES (4, 4);
+    INSERT INTO t2 VALUES (6, 6);
 
-For more details on join syntax, see :ref:`join-query`.
+    CREATE VIEW v1 AS
+      SELECT b.id, b.val FROM t2 b LEFT JOIN t1 a ON b.id = a.id WHERE b.id <= 3;
 
-The following shows to update a view.
+    UPDATE v1 SET val = -1;
+
+    SELECT * from v1;
+
+	           id          val
+	==========================
+	            1           -1
+	            2           -1
+	            3           -1
+
+    SELECT * from t2;
+
+	           id          val
+	==========================
+	            1           -1
+	            2           -1
+	            3           -1
+	            4            4
+	            6            6
+
+.. warning::
+  
+    Records in views that include tables with REUSE OID cannot be updated.
+
+    For details, see :ref:`reuse-oid` and :ref:`dont-reuse-oid`.
+
+.. _example_update_using_update_use_attribute_references:
+
+.. rubric:: Example 5. Update Using the update_use_attribute_references Parameter
+
+The result of this example depends on the value of the :ref:`update_use_attribute_references <update_use_attribute_references>` parameter.
+
+*   If the value of this parameter is yes, *c2* is updated to 10, influenced by c1 = 10.
+*   If the value of this parameter is no, *c2* is not influenced by *c1 = 10* and is updated to 1, based on the value of c1 stored in the record.
 
 .. code-block:: sql 
 
-    CREATE TABLE tbl1(a INT, b INT); 
-    CREATE TABLE tbl2(a INT, b INT); 
-    INSERT INTO tbl1 VALUES (5,5),(4,4),(3,3),(2,2),(1,1); 
-    INSERT INTO tbl2 VALUES (6,6),(4,4),(3,3),(2,2),(1,1); 
-    CREATE VIEW vw AS SELECT tbl2.* FROM tbl2 LEFT JOIN tbl1 ON tbl2.a=tbl1.a WHERE tbl2.a<=3; 
+    DROP TABLE IF EXISTS t1;
 
-    UPDATE vw SET a=1000; 
+    CREATE TABLE t1 (c1 INT, c2 INT); 
+    INSERT INTO t1 values (1, NULL);
 
-The below result for an UPDATE statement depends on the value of the  :ref:`update_use_attribute_references <update_use_attribute_references>` parameter.
-      
-.. code-block:: sql 
+    SET SYSTEM PARAMETERS 'update_use_attribute_references=yes';
 
-    CREATE TABLE tbl(a INT, b INT); 
-    INSERT INTO tbl values (10, NULL); 
+    UPDATE t1 SET c1 = 10, c2 = c1;
 
-    UPDATE tbl SET a=1, b=a; 
-      
-If the value of this parameter is yes, the updated value of "b" from the above UPDATE query will be 1 as being affected by "a=1".
+    SELECT * FROM t1;
 
-.. code-block:: sql 
-  
-    SELECT * FROM tbl; 
-
-:: 
-  
-    1, 1 
-      
-If the value of this parameter is no, the updated value of "b" from the above UPDATE query will be NULL as being affected by the value of "a" which is stored at this record, not by "a=1".
-
-.. code-block:: sql 
-  
-    SELECT * FROM tbl; 
-      
-:: 
-  
-    1, NULL
-
-Table extensions can be used to perform updates on tables on the remote server as well as on the local server. The following is an example of updating a remote table.
+	           c1           c2
+	==========================
+	           10           10
 
 .. code-block:: sql
 
-    --at remote srv1
-    --creating a new table having all records copied from a_tbl1
-    --origin is a local server
-    CREATE TABLE a_tbl5 AS SELECT * FROM a_tbl1@origin;
+    TRUNCATE TABLE t1;
+    INSERT INTO t1 values (1, NULL);
 
-    --at local
-    SELECT * FROM a_tbl5@srv1 WHERE name IS NULL;
-               id  name                  phone
-    =========================================================
-             NULL  NULL                  '000-0000'
-                4  NULL                  '000-0000'
-                5  NULL                  '000-0000'
-                7  NULL                  '777-7777'
+    SET SYSTEM PARAMETERS 'update_use_attribute_references=no';
 
-    --at local
-    UPDATE a_tbl5@srv1 SET name='yyy', phone='999-9999' WHERE name IS NULL LIMIT 3;
-    SELECT * FROM a_tbl5@srv1;
-               id  name                  phone
-    =========================================================
-             NULL  'yyy'                 '999-9999'
-                1  'aaa'                 '000-0000'
-                2  'bbb'                 '000-0000'
-                3  'ccc'                 '333-3333'
-                4  'yyy'                 '999-9999'
-                5  'yyy'                 '999-9999'
-                6  'eee'                 '000-0000'
+    UPDATE t1 SET c1 = 10, c2 = c1;
 
-The following is an example of performing an update after joining multiple tables, including remote tables.
+    SELECT * FROM t1;
+
+	           c1           c2
+	==========================
+	           10            1
+
+.. _example_single_table_update_using_analytic_functions:
+
+.. rubric:: Example 6. Single Table Update Using Analytic Functions
+
+When only one table is specified in the **UPDATE** statement, analytic functions can be used in the **SET** clause.
 
 .. code-block:: sql
 
-    --at remote srv1
-    --creating a table b_tbl
-    CREATE TABLE b_tbl(rate_id INT, rate DOUBLE);
-    --at local
-    INSERT INTO a_tbl VALUES (1, 100.0), (2, 1000.0), (3, 10000.0);
-    INSERT INTO b_tbl@srv1 VALUES (1, 0.1), (2, 0.0), (3, 0.2), (3, 0.5);
-    UPDATE
-     a_tbl INNER JOIN b_tbl@srv1 b_tbl ON a_tbl.id=b_tbl.rate_id
-    SET
-      a_tbl.charge = a_tbl.charge * (1 + b_tbl.rate)
-    WHERE a_tbl.charge > 900.0;
+    DROP TABLE IF EXISTS t1, t2;
+
+    CREATE TABLE t1 (id INT);
+    INSERT INTO t1 VALUES (1), (2), (3), (4), (5);
+
+    CREATE TABLE t2 (id INT, val INT, update_val DOUBLE, join_update_val DOUBLE);
+    INSERT INTO t2 (id, val) SELECT a.id, b.id FROM t1 a, t1 b WHERE b.id <= a.id;
+
+    UPDATE t2 SET update_val = AVG (val) OVER (PARTITION BY id);
+
+    SELECT DISTINCT id, TO_CHAR (update_val) AS update_val FROM t2;
+
+	           id  update_val
+	===================================
+	            1  '1'
+	            2  '1.5'
+	            3  '2'
+	            4  '2.5'
+	            5  '3'
+
+.. _example_multiple_tables_update_using_analytic_functions:
+
+.. rubric:: Example 7. Multiple Tables Update Using Analytic Functions
+
+This example continues from :ref:`example_single_table_update_using_analytic_functions`.
+
+When multiple tables are specified in the **UPDATE** statement, analytic functions cannot be used in the **SET** clause.
+However, if a **SELECT** query is specified in the **SET** clause, analytic functions can be used within that **SELECT** query, regardless of the number of tables specified.
+
+.. code-block:: sql
+
+    UPDATE t1 a, t2 b SET b.join_update_val = AVG (b.val) OVER (PARTITION BY b.id) WHERE a.id = b.id;
+
+	ERROR: before '  where a.id = b.id; '
+	Nested analytic functions are not allowed.
+
+.. code-block:: sql
+
+    UPDATE t2 c SET c.join_update_val = (SELECT AVG (b.val) OVER (PARTITION BY b.id) FROM t1 a, t2 b WHERE a.id = b.id AND a.id = c.id LIMIT 1);
+
+    SELECT DISTINCT id, TO_CHAR (join_update_val) AS join_update_val FROM t2;
+
+	           id  join_update_val
+	===================================
+	            1  '1'
+	            2  '1.5'
+	            3  '2'
+	            4  '2.5'
+	            5  '3'
+
+.. _example_remote_table_update:
+
+.. rubric:: Example 8. Remote Table Update
+
+By using table extension names, it is possible to update tables not only on the local server but also on remote servers.
+
+.. code-block:: sql
+
+    /**
+     * on the remote server (e.g., 192.168.6.21)
+     */
+
+    -- DROP SERVER origin;
+    CREATE SERVER origin (HOST='localhost', PORT=33000, DBNAME=demodb, USER=public);
+
+    DROP TABLE IF EXISTS t1;
+
+    CREATE TABLE t1 (id int, name varchar, phone varchar);
+    INSERT INTO t1@origin VALUES (NULL,  NULL, '000-0000');
+    INSERT INTO t1@origin VALUES (   1, 'aaa', '111-1111');
+    INSERT INTO t1@origin VALUES (   2, 'bbb', '222-2222');
+    INSERT INTO t1@origin VALUES (   3, 'ccc', '333-3333');
+    INSERT INTO t1@origin VALUES (   4,  NULL, '000-0000');
+    INSERT INTO t1@origin VALUES (   5,  NULL, '000-0000');
+    INSERT INTO t1@origin VALUES (   6, 'ddd', '000-0000');
+    INSERT INTO t1@origin VALUES (   7,  NULL, '777-7777');
+
+    SELECT * FROM t1;
+
+	           id  name                  phone
+	=========================================================
+	         NULL  NULL                  '000-0000'
+	            1  'aaa'                 '111-1111'
+	            2  'bbb'                 '222-2222'
+	            3  'ccc'                 '333-3333'
+	            4  NULL                  '000-0000'
+	            5  NULL                  '000-0000'
+	            6  'ddd'                 '000-0000'
+	            7  NULL                  '777-7777'
+
+.. code-block:: sql
+
+    /**
+     * on the local server (e.g., 192.168.6.22)
+     */
+
+    -- DROP SERVER remote;
+    CREATE SERVER remote (HOST='192.168.6.21', PORT=33000, DBNAME=demodb, USER=public);
+
+    SELECT * FROM t1@remote WHERE name IS NULL;
+
+	           id  name                  phone
+	=========================================================
+	         NULL  NULL                  '000-0000'
+	            4  NULL                  '000-0000'
+	            5  NULL                  '000-0000'
+	            7  NULL                  '777-7777'
+
+    UPDATE t1@remote SET name='update', phone='999-9999' WHERE name IS NULL LIMIT 3;
+
+    SELECT * FROM t1@remote;
+
+	           id  name                  phone
+	=========================================================
+	         NULL  'update'              '999-9999'
+	            1  'aaa'                 '111-1111'
+	            2  'bbb'                 '222-2222'
+	            3  'ccc'                 '333-3333'
+	            4  'update'              '999-9999'
+	            5  'update'              '999-9999'
+	            6  'ddd'                 '000-0000'
+	            7  NULL                  '777-7777'
+
+.. _example_local_table_update_using_joins_with_remote_tables:
+
+.. rubric:: Example 9. Local Table Update Using Joins with Remote Tables
+
+.. code-block:: sql
+
+    /**
+     * on the remote server (e.g., 192.168.6.21)
+     */
+
+    DROP TABLE IF EXISTS t2;
+
+    CREATE TABLE t2 (rate_id INT, rate DOUBLE);
+
+.. code-block:: sql
+
+    /**
+     * on the local server (e.g., 192.168.6.22)
+     */
+
+    -- DROP SERVER remote;
+    CREATE SERVER remote (HOST='192.168.6.21', PORT=33000, DBNAME=demodb, USER=public);
+
+    DROP TABLE IF EXISTS t1;
+
+    CREATE TABLE t1 (id INT PRIMARY KEY, charge DOUBLE);
+    INSERT INTO t1 VALUES (1, 100.0);
+    INSERT INTO t1 VALUES (2, 100.0);
+    INSERT INTO t1 VALUES (3, 100.0);
+
+    INSERT INTO t2@remote VALUES (1, 0.1);
+    INSERT INTO t2@remote VALUES (2, 0.2);
+    INSERT INTO t2@remote VALUES (3, 0.3);
+    INSERT INTO t2@remote VALUES (3, 0.5);
+
+    UPDATE t1 a INNER JOIN t2@remote b ON a.id = b.rate_id
+    SET a.charge = a.charge * (1 + b.rate);
+
+    SELECT id, TO_CHAR (charge) AS charge FROM t1;
+
+	           id  charge
+	===================================
+	            1  '110'
+	            2  '120'
+	            3  '150'
 
 .. warning::
 
-    As shown below, UPDATE ... JOIN queries that include local and remote tables and update the remote table are not allowed.
+    In **UPDATE** statements that join local and remote tables, records in the remote table cannot be updated.
 
-.. code-block:: sql
+    .. code-block:: sql
+    
+	UPDATE t1 a INNER JOIN t2@remote b ON a.id = b.rate_id
+	SET b.rate = b.rate + 0.1;
 
-    UPDATE
-     a_tbl INNER JOIN b_tbl@srv1 b_tbl ON a_tbl.id=b_tbl.rate_id
-    SET
-      b_tbl.charge = a_tbl.charge * (1 + b_tbl.rate)
-    WHERE a_tbl.charge > 900.0;
+	    ERROR: before '  a INNER JOIN t2@remote b ON a.id = b.rate_id
+	    SET b.rate = b....'
+	    dblink: local mixed remote DML is not allowed

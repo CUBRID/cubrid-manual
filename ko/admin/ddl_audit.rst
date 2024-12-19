@@ -16,6 +16,10 @@ CAS, csql 및 loaddb를 통해 수행된 DDL은 필요에 따라 실행 된 파�
 
 시스템 파라미터의 ddl_audit_log가 yes 이면 $CUBRID/log/ddl_audit 디렉토리에 DDL Audit log가 생성된다. 각 로그 파일의 크기는 ddl_audit_log_size 매개 변수에 지정된 값을 초과 할 수 없다. DDL Audit와 관련된 시스템 매개 변수는 CUBRID 운영의  :doc:`/admin/config` 을 참조 한다.
 
+.. note::
+
+    :ref:`catalog` 의 메서드를 사용하는 경우에는 DDL Audit Log는 생성되지 않는다.
+
 DDL Audit 로그 파일 이름 규칙
 ================================
 
@@ -32,11 +36,12 @@ DDL Audit 로그 파일 이름 규칙
 CAS의 DDL Audit 로그 파일 형식
 ================================
 
-* [Time] [ip_addr]|[user_name]|[result]|[elapsed time]|[auto commit/rollback]|[sql_text]
+* [Time] [ip_addr]|[db_name]|[user_name]|[result]|[elapsed time]|[auto commit/rollback]|[sql_text]
 
 	설명:
 
 	* [Time] : DDL 실행 시작 시간 (예 : 20-12-18 12 : 08 : 32.327)
+	* [db_name] : DDL이 실행된 데이터베이스 이름
 	* [ip_addr] : 애플리케이션 클라이언트의 IP 주소 (예 : 172.31.0.70)
 	* [user_name] : DDL을 발행 한 데이터베이스 사용자 이름
 	* [result] : 명령문 실행 결과. 성공하면 OK, 그렇지 않으면 오류 코드 (예 : ERROR : -494)

@@ -616,8 +616,124 @@ The below shows to output dates of March, 2013(201303) with a hierarchical query
 Performance of Hierarchical Query
 =================================
 
-Although this form is shorter and clearer, please keep in mind that it has its limitations regarding speed.
+Hierarchical query with single-table
+------------------------------------
 
-If the result of the query contains all the rows of the table, the **CONNECT BY** form might be slower as it has to do additional processing (such as cycle detection, pseudo-column bookkeeping and others). However, if the result of the query only contains a part of the table rows, the **CONNECT BY** form might be faster.
+A single-table hierarchical query can improve performance by adding an index to the columns corresponding to the child in the **CONNECT BY** clause. The following example shows how to improve performance by adding an index to the *mgrid* column.
 
-For example, if we have a table with 20,000 records and we want to retrieve a sub-tree of roughly 1,000 records, a **SELECT** statement with a **START WITH ... CONNECT BY** clause will run up to 30% faster than an equivalent **UNION ALL** with **SELECT** statements.
+.. code-block:: sql
+
+     -- Creating tree table and then inserting data
+    CREATE TABLE tree(ID INT, MgrID INT, Name VARCHAR(32), BirthYear INT);
+     
+    INSERT INTO tree VALUES (1,NULL,'Kim', 1963);
+    INSERT INTO tree VALUES (2,NULL,'Moy', 1958);
+    INSERT INTO tree VALUES (3,1,'Jonas', 1976);
+    INSERT INTO tree VALUES (4,1,'Smith', 1974);
+    INSERT INTO tree VALUES (5,2,'Verma', 1973);
+    INSERT INTO tree VALUES (6,2,'Foster', 1972);
+    INSERT INTO tree VALUES (7,6,'Brown', 1981);
+
+    -- Copy data
+    INSERT INTO tree select * from tree;
+    INSERT INTO tree select * from tree;
+    INSERT INTO tree select * from tree;
+    INSERT INTO tree select * from tree;
+    INSERT INTO tree select * from tree;
+     
+    -- Executing a single table hierarchical query
+    SELECT count(*)
+    FROM tree
+    CONNECT BY PRIOR id=mgrid
+    ORDER BY id;
+
+::
+    
+    Trace Statistics:
+      SELECT (time: 1686, fetch: 155971, fetch_time: 11, ioread: 0)
+        SCAN (table: dba.tree), (heap time: 1, fetch: 1, ioread: 0, readrows: 224, rows: 224)
+        CONNECTBY (time: 1685, fetch: 155970, fetch_time: 0, ioread: 0)
+          SCAN (table: dba.tree), (heap time: 1607, fetch: 38112, ioread: 0, readrows: 8537088, rows: 37888)
+          ORDERBY (time: 11, sort: true, page: 105, ioread: 0)
+
+.. code-block:: sql
+
+    -- Create index
+    CREATE INDEX idx ON tree(mgrid);
+     
+    -- Executing a single table hierarchical query with index
+    SELECT count(*)
+    FROM tree
+    CONNECT BY PRIOR id=mgrid
+    ORDER BY id;
+
+::
+    
+    Trace Statistics:
+      SELECT (time: 128, fetch: 195206, fetch_time: 9, ioread: 0)
+        SCAN (table: dba.tree), (heap time: 0, fetch: 1, ioread: 0, readrows: 224, rows: 224)
+          CONNECTBY (time: 128, fetch: 195203, fetch_time: 0, ioread: 0)
+            SCAN (index: dba.tree.idx), (btree time: 35, fetch: 77344, ioread: 0, readkeys: 1120, filteredkeys: 0, rows: 37888) (lookup time: 10, rows: 37888)
+            ORDERBY (time: 11, sort: true, page: 105, ioread: 0)
+
+Hierarchical query with join-table
+----------------------------------
+
+A hierarchical query for table join is optimized using a hash list scan when applying the condition in the **CONNECT BY** clause after performing the table join operation. The following example shows the difference in performance between a hash list scan and a list scan.
+
+.. code-block:: sql
+
+    -- Creating tree2 table and then inserting data
+    CREATE TABLE tree2(id int, treeid int, job varchar(32));
+     
+    INSERT INTO tree2 VALUES(1,1,'Partner');
+    INSERT INTO tree2 VALUES(2,2,'Partner');
+    INSERT INTO tree2 VALUES(3,3,'Developer');
+    INSERT INTO tree2 VALUES(4,4,'Developer');
+    INSERT INTO tree2 VALUES(5,5,'Sales Exec.');
+    INSERT INTO tree2 VALUES(6,6,'Sales Exec.');
+    INSERT INTO tree2 VALUES(7,7,'Assistant');
+    INSERT INTO tree2 VALUES(8,null,'Secretary');
+     
+    -- Copy data
+    INSERT INTO tree2 select * from tree2;
+     
+    -- Executing a hierarchical query onto table joins
+    SELECT count(*)
+    FROM tree t INNER JOIN tree2 t2 ON t.id=t2.treeid
+    START WITH t.mgrid is null
+    CONNECT BY prior t.id=t.mgrid
+    ORDER BY t.id;
+
+::
+    
+    Trace Statistics:
+      SELECT (time: 663, fetch: 877290, fetch_time: 54, ioread: 0)
+        SCAN (table: dba.tree), (heap time: 0, fetch: 225, ioread: 0, readrows: 224, rows: 224)
+          SCAN (table: dba.tree2), (heap time: 0, fetch: 224, ioread: 0, readrows: 3584, rows: 448)
+        CONNECTBY (time: 662, fetch: 876841, fetch_time: 0, ioread: 0)
+          SCAN (hash temp(m), build time: 0, time: 53, fetch: 0, ioread: 0, readrows: 278976, rows: 278528)
+          ORDERBY (time: 92, sort: true, page: 1560, ioread: 0)
+
+.. code-block:: sql
+
+    -- Executing a hierarchical query onto table joins without hash list scan
+    SELECT /*+ NO_HASH_LIST_SCAN */ count(*)
+    FROM tree t INNER JOIN tree2 t2 ON t.id=t2.treeid
+    START WITH t.mgrid is null
+    CONNECT BY prior t.id=t.mgrid
+    ORDER BY t.id;
+
+::
+    
+    Trace Statistics:
+      SELECT (time: 8977, fetch: 877335, fetch_time: 57, ioread: 0)
+        SCAN (table: dba.tree), (heap time: 0, fetch: 225, ioread: 0, readrows: 224, rows: 224)
+          SCAN (table: dba.tree2), (heap time: 0, fetch: 224, ioread: 0, readrows: 3584, rows: 448)
+        CONNECTBY (time: 8977, fetch: 876886, fetch_time: 0, ioread: 0)
+          SCAN (temp time: 8353, fetch: 0, ioread: 0, readrows: 124837888, rows: 278528)
+          ORDERBY (time: 91, sort: true, page: 1560, ioread: 0)
+
+.. note::
+
+    **HASH LIST SCAN** optimization for a hierarchical query with join table is supported starting from CUBRID 11.0.

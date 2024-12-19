@@ -33,7 +33,7 @@ CUBRID는 객체 관계형 데이터베이스 관리 시스템으로서, 데이�
 
 .. FIXME: For more information about CUBRID Manager, see http://www.cubrid.org/wiki_tools/entry/cubrid-manager.
 
-.. image:: /images/process_structure.png
+.. image:: images/process_structure.png
 
 .. _database-volume-structure:
 

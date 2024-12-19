@@ -369,14 +369,14 @@ CUBRID HA 그룹 내의 각 노드에서 **cubrid heartbeat start**\ 를 수행�
 
 CUBRID HA 그룹 내의 각 노드에서 **cubrid heartbeat status**\ 를 수행하여 구성 상태를 확인한다. ::
 
-    [nodeA]$ cubrid heartbeat status
+    [cubrid@nodeA]$ cubrid heartbeat status
     @ cubrid heartbeat list
-     HA-Node Info (current nodeA-node-name, state master)
+     HA-Node Info (current nodeA, state master)
        Node nodeB-node-name (priority 2, state slave)
        Node nodeA-node-name (priority 1, state master)
      HA-Process Info (nodeA 9289, state nodeA)
-       Applylogdb testdb@localhost:/home1/cubrid1/DB/testdb_nodeB.cub (pid 9423, state registered)
-       Copylogdb testdb@nodeB-node-name:/home1/cubrid1/DB/testdb_nodeB.cub (pid 9418, state registered)
+       Applylogdb testdb@localhost:/home1/cubrid1/DB/testdb_nodeB (pid 9423, state registered)
+       Copylogdb testdb@nodeB-node-name:/home1/cubrid1/DB/testdb_nodeB (pid 9418, state registered)
        Server testdb (pid 9306, state registered_and_active)
      
     [nodeA]$
@@ -666,9 +666,13 @@ CUBRID는 1시간 주기로 **ha_ping_hosts**\에 명시된 호스트를 점검�
 
 **ha_copy_log_base**
 
-복제 로그를 저장할 위치를 지정한다. 기본값은 **$CUBRID_DATABASES**/\ *<db_name>*\_\ *<host_name>*\ 이다.
+복제 로그를 저장할 상위 경로를 지정한다. 기본값은 $CUBRID_DATABASES 환경 변수에 설정된 디렉토리 경로이다.  복제 로그들은 서버와 데이터베이스명에 따라  <db_name>_<host_name>의 하위 디렉토리에 저장된다.
 
-자세한 내용은 :ref:`log-multiplexing`\ 를 참고한다.
+복제 로그 경로는 상대 경로 또는 절대 경로 설정이 가능하다. 
+다음은 각각의 설정 예제이다.
+
+예1) ha_copy_log_base=copylog : 상대 경로로 간주되어, 복제 로그 경로로 $CUBRID_DATABASES/copylog가 설정된다.
+예2) ha_copy_log_base=/log/copy_log : 절대 경로로 간주되어, 복제 로그 경로로 /log/copy_log copylog base가 설정된다.
 
 .. _ha_copy_log_max_archives:
 
@@ -1389,6 +1393,57 @@ CUBRID HA 그룹 정보와 CUBRID HA 구성 요소의 정보를 확인할 수 �
        Applylogdb testdb@localhost:/home/cubrid/DB/testdb_nodeA (pid 2510, state registered)
        Copylogdb testdb@nodeA:/home/cubrid/DB/testdb_nodeA (pid 2505, state registered)
        Server testdb (pid 2393, state registered_and_standby)
+
+
+-v의 경우, 해당노드의 상세정보를 출력한다.
+* score는 노드의 우선순위를 나타내며, 낮을 수록 높은 우선순위를 가진다.
+* missed heartbeat은 서로의 노드를 인식하는 heartbeat의 유실율을 나타내며, 해당 값이 높은 경우 환경설정/네트워크/방화벽 등을 점검해야 한다.
+
+Applylogdb, Copylogdb, Server 프로세스에 이벤트 발생 시간이며,이벤트가 발생하지 않은 경우 00:00:00.000으로 표기된다.
+
+* registered-time : 명령어를 통하여 프로세스 구동 요청 시간
+* deregistered-time : 명령어를 통하여 원격 프로세스 정지 요청 시간 (copylogdb와 applylogdb만 해당)
+* shutdown-time : HA 매니저(cub_master)가 프로세스를 정지한 시간
+* start-time : HA 매니저(cub_master)가 프로세스를 재 구동시간 
+
+**예시** 
+
+::
+
+    $ cubrid heartbeat status -v
+    @ cubrid heartbeat status
+
+    HA-Node Info (current cubrid1, state master)
+      Node cubrid2 (priority 2, state slave)
+        - score 2
+        - missed heartbeat 0
+      Node cubrid1 (priority 1, state master)
+        - score -32767
+        - missed heartbeat 0
+        
+    HA-Process Info (master 7392, state master)
+    Copylogdb testdb@cubrid2:/home/cubha/CUBRID-11.3.1.1142-bee7aa8-Linux.x86_64/databases/testdb_cubrid2 (pid 7841, state registered)
+     - exec-path [/home/cubha/CUBRID-11.3.1.1142-bee7aa8-Linux.x86_64/bin/cub_admin]
+     - argv      [cub_admin copylogdb -L /home/cubha/CUBRID-11.3.1.1142-bee7aa8-Linux.x86_64/databases/testdb_cubrid2 -m sync testdb@bagus2 ]
+     - registered-time   08/26/24 14:28:37.019
+     - deregistered-time 00/00/00 00:00:00.000
+     - shutdown-time     08/26/24 14:28:35.010
+     - start-time        08/26/24 14:28:36.012
+    Applylogdb testdb@localhost:/home/cubha/CUBRID-11.3.1.1142-bee7aa8-Linux.x86_64/databases/testdb_cubrid2 (pid 7746, state registered)
+     - exec-path [/home/cubha/CUBRID-11.3.1.1142-bee7aa8-Linux.x86_64/bin/cub_admin]
+     - argv      [cub_admin applylogdb -L /home/cubha/CUBRID-11.3.1.1142-bee7aa8-Linux.x86_64/databases/testdb_cubrid2 --max-mem-size=300 testdb@localhost ]
+     - registered-time   08/26/24 14:27:14.566
+     - deregistered-time 00/00/00 00:00:00.000
+     - shutdown-time     08/26/24 14:27:12.552
+     - start-time        08/26/24 14:27:13.558
+    Server testdb (pid 7904, state registered_and_active)
+     - exec-path [/home/cubha/CUBRID-11.3.1.1142-bee7aa8-Linux.x86_64/bin/cub_server]
+     - argv      [cub_server testdb ]
+     - registered-time   08/26/24 14:29:28.955
+     - deregistered-time 00/00/00 00:00:00.000
+     - shutdown-time     08/26/24 14:29:27.593
+     - start-time        08/26/24 14:29:28.594
+
 
 .. note:: CUBRID 9.0 미만 버전에서 사용되었던 **act**, **deact**, **deregister** 명령은 더 이상 사용되지 않는다.
 
@@ -3181,13 +3236,14 @@ HA 서비스 운영 중 슬레이브를 새로 추가하려면 기존의 마스�
             [nodeB]$ rm testdb/log/*
             
             [nodeB]$ rm -rf testdb_nodeA
+            [nodeB]$ rm $CUBRID/var/APPLYLOGDB/testdb
             
     *   *nodeA*\, *nodeC*\에서 *nodeB*\의 로그 복제 정지
     
         ::
         
-            [nodeA]$ cubrid heartbeat repl stop testdb nodeB
-            [nodeC]$ cubrid heartbeat repl stop testdb nodeB
+            [nodeA]$ cubrid heartbeat repl stop nodeB
+            [nodeC]$ cubrid heartbeat repl stop nodeB
     
     *   *nodeA*\, *nodeC*\에서 *nodeB*\에 대한 복제 로그 삭제
     
@@ -3196,17 +3252,8 @@ HA 서비스 운영 중 슬레이브를 새로 추가하려면 기존의 마스�
             [nodeA]$ rm -rf $CUBRID_DATABASES/testdb_nodeB
             [nodeC]$ rm -rf $CUBRID_DATABASES/testdb_nodeB
 
-2.  HA 카탈로그 테이블 삭제, *nodeA*\의 백업 및 *nodeB*\의 복구, HA 카탈로그 테이블에 정보 추가
+2.  *nodeA*\의 백업 및 *nodeB*\의 복구, HA 카탈로그 테이블에 정보 추가
 
-    *   HA 카탈로그 테이블인 db_ha_apply_info의 레코드 삭제
-    
-        *nodeB*\의 db_ha_apply_info 정보를 모두 삭제하여 초기화한다.
-        
-        ::
-        
-            [nodeB]$ csql --sysadm -u dba -S testdb 
-            csql> DELETE FROM db_ha_apply_info;
-            
         *nodeA*, *nodeC*\에서 *nodeB*\에 대한 db_ha_apply_info 정보를 삭제한다.
         
         ::
@@ -3939,7 +3986,7 @@ CUBRID HA 환경에서의 복제 재구축은 다중 슬레이브 노드의 다�
 복제 재구축을 위해서는 마스터 노드, 슬레이브 노드, 레플리카 노드에서 아래 환경이 동일해야 한다.
 
 *   CUBRID 버전
-*   환경 변수(**$CUBRID**, **$CUBRID_DATABASES**, **$LD_LIBRARY_PATH**, **$PATH**)
+*   환경 변수(**$CUBRID**, **$CUBRID_DATABASES**, **$LD_LIBRARY_PATH**, **$PATH**, **$CUBRID_TMP**, **$TMPDIR**)
 *   데이터베이스 볼륨, 로그 및 복제 로그 경로
 *   리눅스 서버의 사용자 아이디 및 비밀번호
 *   **ha_mode**, **ha_copy_sync_mode**, **ha_ping_hosts** 를 제외한 모든 HA 관련 파라미터

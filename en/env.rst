@@ -14,25 +14,31 @@ CUBRID Environment Variables
 
 *   **CUBRID_DATABASES**: The environment variable that designates the location of the **databases.txt** file. The CUBRID system stores the absolute path of database volumes in the **$CUBRID_DATABASES/databases.txt** file. See :ref:`databases-txt-file`.
 
-*   **CUBRID_MSG_LANG**: The environment variable that specifies usage messages and error messages in CUBRID. The initial value upon start is not defined. If it is not defined, it follows the configured locale when :ref:`creating-database`. For more information, see :ref:`language-setting`. 
+*   **CUBRID_MSG_LANG**: The environment variable that specifies the language used for usage and error messages in CUBRID. The initial value upon start is undefined, and if not defined, it is set to **en_US**. Available values for the environment variable are en_US, en_US.utf8, ko_KR.euckr, and ko_KR.utf8.
 
 .. note:: 
 
     *   A user of CUBRID Manager should specify **CUBRID_MSG_LANG**, an environment variable of DB server node into **en_US** to print out messages normally after running database related features. However, database related features are run normally and just the output messages are broken when **CUBRID_MSG_LANG** is not **en_US**.
     *   To apply the changed **CUBRID_MSG_LANG**, CUBRID system of DB server node should be restarted(cubrid service stop, cubrid service start).
 
-*   **CUBRID_TMP**: The environment variable that specifies the location where CUBRID for Linux stores the UNIX domain socket file. If it is not specified, the Unix domain socket file is stored in the following directory according to the process. (not used in CUBRID for Windows)
+*   **CUBRID_TMP**: The environment variable that specifies the location where CUBRID stores temporary files. There are two types of temporary files: regular files and UNIX domain sockets. If specified, temporary files are created in the directory specified in the environment variable CUBRID_TMP.
 
-    *   the cub_master process: under **/tmp** directory
-    *   the cub_broekr process: under **$CUBRID/var/CUBRID_SOCK** directory
-    *   the cub_javasp process: under **$CUBRID/var/CUBRID_SOCK** directory
+    *   **Regular files**: Temporary files are created by utilities such as **plandump** in addition to the database server and csql. If this environment variable is not set, the following directory is used.
+
+        * Linux: /tmp
+        * Windows: C:\\Windows\\TEMP
+
+    *   **UNIX Domain Socket files**: If this environment variable is not set, UNIX Domain sockets will be created in the following directories for each process (Applicable to **Linux** only and does not apply to **Windows**):
+    
+        *   cub_master: **/tmp**
+        *   cub_broker process: **$CUBRID/var/CUBRID_SOCK**
+        *   cub_javasp process: **$CUBRID/var/CUBRID_SOCK**
 
 .. note::
 
-    The **CUBRID_TMP** environment variable affects the **java.io.tmpdir**, specifying the path for temporary files created by the Java VM running in the cub_javasp process. 
-    If the **CUBRID_TMP** environment variable is set, the path for temporary files is designated to the path of the CUBRID_TMP environment variable, to properly store Unix domain socket files.
-    Therefore, even if a user specifies the value of **java.io.tmpdir** through the **java_stored_procedure_jvm_options** parameter, it will be ignored. 
-    This behavior applies only to CUBRID for Linux, which supports Unix domain sockets, and not to CUBRID for Windows.
+    * **java.io.tmpdir** among **java_stored_procedure_jvm_options** is an option that specifies the directory where temporary files of the cub_javasp process (built-in Java VM) are created. If the **CUBRID_TMP** environment variable is set, the value of **java.io.tmpdir** is ignored, and the directory specified by CUBRID_TMP will be used instead.
+
+    * To set this environment variable in Windows, you must add the CUBRID_TMP key to the registry (refer **%CUBRID%**\\share\\windows_scripts\\cubrid_env.bat).
 
 **CUBRID_TMP** value has some constraints, which are as follows:
 

@@ -14,25 +14,30 @@ CUBRID 환경 변수
 
 *   **CUBRID_DATABASES**: **databases.txt** 파일의 위치를 지정하는 환경 변수이다. CUBRID 시스템은 **$CUBRID_DATABASES/databases.txt** 파일에 데이터베이스 볼륨들의 절대 경로를 저장 관리한다. :ref:`databases-txt-file`\ 을 참고한다.
 
-*   **CUBRID_MSG_LANG**: CUBRID 시스템이 명령어 사용법 메시지와 오류 메시지를 출력할 때 사용할 언어를 지정하는 환경 변수이다. 제품 설치 시 초기 설정 값은 없으며, 설정 값이 없으면 :ref:`creating-database` 시 설정한 로캘을 따른다. 자세한 내용은 :ref:`language-setting`\ 을 참고한다. 
+*   **CUBRID_MSG_LANG**: CUBRID 시스템이 명령어 사용법 메시지와 오류 메시지를 출력할 때 사용할 언어를 지정하는 환경 변수이다. 제품 설치 시 초기 설정 값은 없으며, 설정 값이 없으면 **en_US**로 설정된다. 환경변수로 설정할 수 있는 언어는 en_US, en_US.utf8, ko_KR.euckr 및 ko_KR.utf8 이다. 
 
 .. note:: 
 
     *  CUBRID Manager 사용자는 DB 서버 노드의 **CUBRID_MSG_LANG** 환경 변수를 **en_US** 로 설정해야만 데이터베이스 관련 작업 이후 출력되는 메시지를 정상적으로 확인할 수 있다.  **CUBRID_MSG_LANG** 환경 변수가 **en_US** 가 아닌 경우 메시지는 비정상적으로 출력되지만 데이터베이스의 작업은 정상적으로 실행된다.
     *  변경한 **CUBRID_MSG_LANG** 을  적용하려면 DB 서버 노드의 CUBRID 시스템이 반드시 재시작(cubrid service stop; cubrid service start)되어야 한다.
 
-*   **CUBRID_TMP**: Linux용 CUBRID에서 유닉스 도메인 소켓 파일을 저장하는 위치를 지정하는 환경 변수로, 지정하지 않으면 프로세스에 따라 다음의 디렉터리에 유닉스 도메인 소켓 파일을 저장한다 (Windows용 CUBRID에서는 사용되지 않는다).
+*   **CUBRID_TMP**: CUBRID DBMS를 구동에 필요한 임시 파일을 저장하기 위한 디렉터리를 설정하는 환경 변수이다. 임시 파일은 텍스트형과 프로세스간 통신을 위한 UNIX 도메인 소켓의 두 종류가 있다. 이 환경 변수가 설정된 경우 임시 파일은 환경 변수에 지정된 디렉터리에 생성된다.
+
+    *   **텍스트형** 임시 파일은 데이터베이스 서버, csql 이외에도 **plandump** 등과 같은 유틸리티에서 생성하며 이 환경 변수가 설정되지 않으면 다음의 디렉터리를 사용한다.
+
+        * Linux: /tmp
+        * Windows: C:\\Windows\\TEMP
+
+    *   **UNIX 도메인 소켓 파일** 은 이 환경 변수가 설정되지 않은 경우 프로세스 별로 아래의 경로에 생성된다 (이 소켓 파일은 **Linux에만 해당** 되며 Windows에는 적용되지 않는다).
     
-    *   cub_master 프로세스: **/tmp** 디렉터리
-    *   cub_broker 프로세스: **$CUBRID/var/CUBRID_SOCK** 디렉터리
-    *   cub_javasp 프로세스: **$CUBRID/var/CUBRID_SOCK** 디렉터리
+        *   cub_master 프로세스: **/tmp** 디렉터리
+        *   cub_broker 프로세스: **$CUBRID/var/CUBRID_SOCK** 디렉터리
+        *   cub_javasp 프로세스: **$CUBRID/var/CUBRID_SOCK** 디렉터리
 
 .. note::
 
-    **CUBRID_TMP** 환경 변수는 cub_javasp 프로세스 구동하는 Java VM에서 생성하는 임시 파일의 저장 경로를 지정하기 위한 **java.io.tmpdir** 환경 변수에 영향을 준다.
-    만약 **CUBRID_TMP** 환경 변수가 설정된 경우, 임시 파일의 저장 경로는 유닉스 도메인 소켓 파일을 올바르게 저장하기 위해 **CUBRID_TMP** 환경 변수의 경로로 지정된다.
-    따라서 사용자가 **java_stored_procedure_jvm_options** 파라미터를 통해 **java.io.tmpdir** 의 값을 지정하더라도 무시된다.
-    이 동작은 오직 유닉스 도메인 소켓을 지원하는 Linux용 CUBRID에서만 해당하며, Windows용 CUBRID에서는 해당하지 않는다.
+    * **CUBRID_TMP** 환경 변수가 설정된 경우, cub_javasp 프로세스(Java VM 내장) 구동시 사용하는  **java_stored_procedure_jvm_options** 중  임시 파일 저장 경로를 지정하는 **java.io.tmpdir** 의 설정값은 무시된다.
+    * Windows에서 이 환경 변수를 설정하기 위해서는 registry에 CUBRID_TMP key를 추가해야한다 (**%CUBRID%**\\share\\windows_scripts\\cubrid_env.bat 참조).
 
 **CUBRID_TMP** 의 값에는 다음과 같은 제약 사항이 있다.
 

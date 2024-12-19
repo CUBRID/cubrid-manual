@@ -44,6 +44,25 @@ Please confirm :ref:`11_3_changes` in the release notes.
 
     In 2008 R4.0 or before, TIMESTAMP '1970-01-01 00:00:00'(GMT) is the minimum value of TIMESTAMP, but in 2008 4.1 or later, it is recognized as zerodate and TIMESTAMP '1970-01-01 00:00:01'(GMT) is the minimum value of TIMESTAMP.
 
+**Compatibility table**
+
++-----------+-----+-----+-----+-----+-----+-----+
+| Vesion    | 11.3| 11.2| 11.0| 10.2| 10.1| 10.0|
++===========+=====+=====+=====+=====+=====+=====+
+| 11.3      | O   | O   |     |     |     |     |
++-----------+-----+-----+-----+-----+-----+-----+
+| 11.2      | O   | O   |     |     |     |     |
++-----------+-----+-----+-----+-----+-----+-----+
+| 11.0      |     |     | O   |     |     |     |
++-----------+-----+-----+-----+-----+-----+-----+
+| 10.2      |     |     |     | O   |     |     |
++-----------+-----+-----+-----+-----+-----+-----+
+| 10.1      |     |     |     |     | O   |     |
++-----------+-----+-----+-----+-----+-----+-----+
+| 10.0      |     |     |     |     |     | O   |
++-----------+-----+-----+-----+-----+-----+-----+
+
+
 **Reconfiguring environments for replication or HA**
 
 *   From 2008 R4.0, the replication feature is no longer supported; therefore, it is recommended to reconfigure the DB migration and HA environment for systems in which previous replication versions are used. In addition, for systems that use Linux Heartbeat-based HA feature, which is provided in CUBRID 2008 R2.0 and 2008 R2.1, you must reconfigure to DB migration and the CUBRID Heartbeat-based HA environment for better operational stability(see :ref:`ha-db-migration`).

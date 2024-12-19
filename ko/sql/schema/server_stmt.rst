@@ -45,7 +45,7 @@ CREATE SERVER
     *   *db_name*: 원격 접속할 데이터베이스 이름.
     *   *user_name*: 원격 접속할 데이터베이스에 접속할 때 사용할 사용자 이름.
     *   *password_string*: 원격 접속할 데이터베이스에 접속할 때 사용하는 *user_name*\에 대한 패스워드 문자열.
-    *   *properties_string*: 원격 접속할 데이터베이스에 접속할 때 사용하는 property 정보 문자열.(최대 2047바이트)	
+    *   *properties_string*: 원격 데이터베이스 사용을 위해 broker(또는 gateway)에 접속시 사용하는 property 정보 문자열 (최대 2047 바이트).  상세한 정보는 :ref:`cci_connect_with_url`\를 참고한다.	
     *   *server_comment_string*: 서버 정보에 대한 커멘트를 지정한다.(최대 1023바이트)
 
 .. note::
@@ -57,6 +57,8 @@ CREATE SERVER
     * 문자열 형식의 예  
              't123db', '123db'
 
+**예제 1**
+다음은 필수항목(HOST,PORT,DBNAME,USER) 및 PROPERTIES, COMMENT를 사용한 예제이다.
   
 .. code-block:: sql
 
@@ -70,6 +72,7 @@ CREATE SERVER
 	   COMMENT='this is dblink_srv1'	   
     );
 
+**예제 2**
 다음은 서버 생성 시 최소한의 정보만 포함하는 예제이다.
 원격지의 demodb에 비밀번호가 없는 dev1 계정으로 접속할 것임을 나타내고 있다. 
 srv1, srv2, srv3는 동일한 의미이다.
@@ -98,7 +101,8 @@ srv1, srv2, srv3는 동일한 의미이다.
 	   USER=dev1,
 	   PASSWORD=''       	 
     );
-    
+
+**예제 3**
 다음은 서버 생성 시 소유자를 지정하는 예제이다.
 소유자 지정 없이 CREATE하는 경우에는 현재 사용자가 소유자가 된다.
 추후 ALTER SERVER 구문을 이용해서 소유자를 변경할 수 있다.
@@ -124,6 +128,24 @@ srv1, srv2, srv3는 동일한 의미이다.
 	   PASSWORD='dev2-password',
 	   COMMENT='The owner of this server is cub.'
     );
+
+**예제 4**
+다음은 HA 환경으로 구성된  원격 데이터베이스 사용시 PROPERTIES에 altHosts 속성을 사용하여 원격 데이터베이스의 fail-over에 대비한 설정 예제이다. 자세한 내용은 :ref:`cci_connect_with_url`\을 참고한다.
+
+.. code-block:: sql
+
+    CREATE SERVER dblink_srv1 (
+       HOST='192.168.1.8',
+       PORT=3300,
+       DBNAME=demodb,
+       USER=dba,
+       PASSWORD='password1234',
+       PROPERTIES='?altHosts=192.168.1.9:33000',
+       COMMENT='this is dblink_srv1'
+    );
+
+**예제 5**
+다음은 서버명(<dblink_server_name>)를 잘 못 사용한 예제이다. 
 
 .. code-block:: sql
     

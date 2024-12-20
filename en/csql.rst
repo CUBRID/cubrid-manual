@@ -342,9 +342,7 @@ Session Commands
 In addition to SQL statements, CSQL Interpreter provides special commands allowing you to control the Interpreter. These commands are called session commands. All the session commands must start with a semicolon (;).
 
 Enter the **;help** command to display a list of the session commands available in the CSQL Interpreter.
-Session commands in the CSQL Interpreter are incrementally matched based on the shortest unique sequence of characters.
-Only the minimum number of characters required to distinguish each command from others needs to be entered.
-Session commands are not case-sensitive.
+You don't need to type the full session command; the CSQL Interpreter recognizes commands as long as you input the minimum number of characters needed to uniquely identify the command from others. Session commands are not case-sensitive.
 
 "Query buffer" is a buffer to store the query before running it. If you run CSQL as giving the **\-\-no-single-line** option, the query string is kept on the buffer until running **;xr** command.
 

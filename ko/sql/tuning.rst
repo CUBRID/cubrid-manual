@@ -125,7 +125,7 @@ CSQL 인터프리터의 세션 명령어로 지정한 테이블의 통계 정보
 *   *Timestamp*: 통계정보가 갱신된 시간이다.
 *   *Total pages*: 테이블의 페이지 개수이다.
 *   *Total objects*: 테이블의 총 행의 개수이다.
-*   *Number of Distinct Values*: 중복이 제거된 값의 개수이다. **code** 칼럼은 모두 다른 값이므로 5개이다. **LOB** 타입 혹은 **VARCHAR**의 크기가 4,000자리를 넘는 칼럼은 생성되지 않는다. 옵티마이저에서 선택도를 산정하는 데 사용되며 자세한 내용은 :ref:`optimizer-principle`\ 를 참고한다.
+*   *Number of Distinct Values*: 중복이 제거된 값의 개수이다. **code** 칼럼은 모두 다른 값이므로 5개이다. **LOB** 타입 혹은 **VARCHAR**/의 크기가 4,000자리를 넘는 칼럼은 생성되지 않는다. 옵티마이저에서 선택도를 산정하는 데 사용되며 자세한 내용은 :ref:`optimizer-principle`\ 를 참고한다.
 *   B+tree statistics: 인덱스 통계정보이다.
     *   *B+tree Cardinality*: 인덱스 key 값의 누적된 중복이 제거된 값의 개수이다. 위 예제에서 **(5,5)**/는 인덱스 칼럼 **(code,name)**/과 매칭된다. 첫 번째 **5**/는 **code** 컬럼의 중복이 제거된 값의 개수이고, 두 번째 **5**/는 **code,name** 두 컬럼의 값의 중복이 제거된 개수이다. *Number of Distinct Values*/와 달리 앞 칼럼과 함께 누적된 중복이 제거된 값의 개수이므로 5개이다.
     *   *Total pages*: 인덱스 전체 페이지 개수이다.

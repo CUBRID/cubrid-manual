@@ -394,7 +394,7 @@ DBLink에서 Oracle을 사용하기 위해서는 Oracle Instant Client 설치 �
 
 **오라클 인스턴트 클라이언트 ODBC 설치**
 
-Oracle Instant Client 다운로드 사이트에서 ODBC Package와 Basic Package 다운받아 동일한 디렉토리에 압축을 풉니다.
+Oracle Instant Client 다운로드 사이트에서 ODBC Package와 Basic Package 다운받아 동일한 디렉터리에 압축을 풉니다.
 
 ::
     
@@ -419,7 +419,7 @@ Oracle Instant Client 다운로드 사이트: https://www.oracle.com/database/te
 
 Oracle Database에 연결을 하기 위해서는 연결정보를 가지고 있는 tnsnames.ora 파일을 수정해야 한다.
 아래의 기본 형식에 HOST, PORT, SERVICE_NAME 이 세 항목에 연결정보를 작성해야 한다.
-연결정보를 작성한 tnsnames.ora 파일은 TNS_ADMIN 환경변수에서 디렉토리 경로를 설정해야 한다. 
+연결정보를 작성한 tnsnames.ora 파일은 TNS_ADMIN 환경변수에서 디렉터리 경로를 설정해야 한다. 
 TNS_ADMIN설정 방법은 :ref:`TNS_ADMIN 환경변수 설정 <tns_admin-info>`\을 참고한다.
 
 
@@ -463,7 +463,7 @@ Oracle database server 에 아래의 환경변수를 설정해야 한다.
 
 
 * ORACLE_SID는 시스템 식별자이다.
-* ORACLE_BASE은 오라클 기본 디렉토리 구조이다.
+* ORACLE_BASE은 오라클 기본 디렉터리 구조이다.
 * ORACLE_HOME은 오라클 데이터베이스가 설치된 경로이다.	
 
 
@@ -471,7 +471,7 @@ Oracle database server 에 아래의 환경변수를 설정해야 한다.
 
 **TNS_ADMIN 환경변수 설정**
 
-TNS_ADMIN는 tnsnames.ora 파일이 있는 디렉토리 경로를 가리킨다.
+TNS_ADMIN는 tnsnames.ora 파일이 있는 디렉터리 경로를 가리킨다.
 만약 /home/user/myconfigs 에 tnsnames.ora 파일이 있다면 아래와 같이 설정 할 수 있다.
 
 ::

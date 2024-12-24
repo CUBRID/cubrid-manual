@@ -699,6 +699,10 @@ To use the **GROUP_CONCAT** function, you must meet the following conditions.
     ======================
       '35791113'
 
+.. note::
+
+    **GROUP_CONCAT** performance for processing large numbers of rows has been improved starting from CUBRID 11.3 through optimization of internal string operations.
+
 LAG
 ===
 

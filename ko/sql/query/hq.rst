@@ -617,8 +617,124 @@ SYS_CONNECT_BY_PATH
 계층 질의문의 성능
 ==================
 
-**CONNECY BY** 절을 이용한 계층 질의문이 짧고 간편하지만 질의 처리 속도 측면에서는 한계를 가지고 있으므로 주의해야 한다.
+단일 테이블 계층 질의
+----------------------
 
-질의문 수행 결과가 대상 테이블의 모든 행을 출력하는 경우라면, **CONNECT BY** 절을 이용한 계층 질의문은 루프 감지, 의사 칼럼의 예약 등 내부적인 처리로 인해 오히려 일반적인 질의문보다 성능이 낮을 수 있다. 반대로 대상 테이블에 대해 일부 행만 출력하는 경우라면 **CONNECT BY** 절을 이용한 계층 질의문의 성능이 높다.
+단일 테이블 계층 질의는 **CONNECT BY** 절의 자식에 해당하는 컬럼에 인덱스를 추가하면 성능이 향상된다. 아래는 *mgrid* 컬럼에 인덱스를 추가한 예제이다.
 
-예를 들어, 2만 개의 레코드를 가지는 테이블에 대하여 약 1000개의 레코드를 포함하는 서브 트리를 검색하는 경우라면, **CONNECT BY** 절을 포함한 **SELECT** 문은 **UNION ALL** 을 결합한 **SELECT** 문보다 약 30%의 성능 향상을 기대할 수 있다.
+.. code-block:: sql
+
+     -- Creating tree table and then inserting data
+    CREATE TABLE tree(ID INT, MgrID INT, Name VARCHAR(32), BirthYear INT);
+     
+    INSERT INTO tree VALUES (1,NULL,'Kim', 1963);
+    INSERT INTO tree VALUES (2,NULL,'Moy', 1958);
+    INSERT INTO tree VALUES (3,1,'Jonas', 1976);
+    INSERT INTO tree VALUES (4,1,'Smith', 1974);
+    INSERT INTO tree VALUES (5,2,'Verma', 1973);
+    INSERT INTO tree VALUES (6,2,'Foster', 1972);
+    INSERT INTO tree VALUES (7,6,'Brown', 1981);
+
+    -- Copy data
+    INSERT INTO tree select * from tree;
+    INSERT INTO tree select * from tree;
+    INSERT INTO tree select * from tree;
+    INSERT INTO tree select * from tree;
+    INSERT INTO tree select * from tree;
+     
+    -- Executing a single table hierarchical query
+    SELECT count(*)
+    FROM tree
+    CONNECT BY PRIOR id=mgrid
+    ORDER BY id;
+
+::
+    
+    Trace Statistics:
+      SELECT (time: 1686, fetch: 155971, fetch_time: 11, ioread: 0)
+        SCAN (table: dba.tree), (heap time: 1, fetch: 1, ioread: 0, readrows: 224, rows: 224)
+        CONNECTBY (time: 1685, fetch: 155970, fetch_time: 0, ioread: 0)
+          SCAN (table: dba.tree), (heap time: 1607, fetch: 38112, ioread: 0, readrows: 8537088, rows: 37888)
+          ORDERBY (time: 11, sort: true, page: 105, ioread: 0)
+
+.. code-block:: sql
+
+    -- Create index
+    CREATE INDEX idx ON tree(mgrid);
+     
+    -- Executing a single table hierarchical query with index
+    SELECT count(*)
+    FROM tree
+    CONNECT BY PRIOR id=mgrid
+    ORDER BY id;
+
+::
+    
+    Trace Statistics:
+      SELECT (time: 128, fetch: 195206, fetch_time: 9, ioread: 0)
+        SCAN (table: dba.tree), (heap time: 0, fetch: 1, ioread: 0, readrows: 224, rows: 224)
+          CONNECTBY (time: 128, fetch: 195203, fetch_time: 0, ioread: 0)
+            SCAN (index: dba.tree.idx), (btree time: 35, fetch: 77344, ioread: 0, readkeys: 1120, filteredkeys: 0, rows: 37888) (lookup time: 10, rows: 37888)
+            ORDERBY (time: 11, sort: true, page: 105, ioread: 0)
+
+조인 테이블 계층 질의
+----------------------
+
+조인 테이블에 대한 계층 질의는 테이블 조인 연산을 수행한 후, **CONNECT BY** 절의 조건식을 적용할 때 해시 리스트 스캔을 사용하여 최적화 한다. 아래는 해시 리스트 스캔과 일반 스캔을 사용할 때의 예시이다.
+
+.. code-block:: sql
+
+    -- Creating tree2 table and then inserting data
+    CREATE TABLE tree2(id int, treeid int, job varchar(32));
+     
+    INSERT INTO tree2 VALUES(1,1,'Partner');
+    INSERT INTO tree2 VALUES(2,2,'Partner');
+    INSERT INTO tree2 VALUES(3,3,'Developer');
+    INSERT INTO tree2 VALUES(4,4,'Developer');
+    INSERT INTO tree2 VALUES(5,5,'Sales Exec.');
+    INSERT INTO tree2 VALUES(6,6,'Sales Exec.');
+    INSERT INTO tree2 VALUES(7,7,'Assistant');
+    INSERT INTO tree2 VALUES(8,null,'Secretary');
+     
+    -- Copy data
+    INSERT INTO tree2 select * from tree2;
+     
+    -- Executing a hierarchical query onto table joins
+    SELECT count(*)
+    FROM tree t INNER JOIN tree2 t2 ON t.id=t2.treeid
+    START WITH t.mgrid is null
+    CONNECT BY prior t.id=t.mgrid
+    ORDER BY t.id;
+
+::
+    
+    Trace Statistics:
+      SELECT (time: 663, fetch: 877290, fetch_time: 54, ioread: 0)
+        SCAN (table: dba.tree), (heap time: 0, fetch: 225, ioread: 0, readrows: 224, rows: 224)
+          SCAN (table: dba.tree2), (heap time: 0, fetch: 224, ioread: 0, readrows: 3584, rows: 448)
+        CONNECTBY (time: 662, fetch: 876841, fetch_time: 0, ioread: 0)
+          SCAN (hash temp(m), build time: 0, time: 53, fetch: 0, ioread: 0, readrows: 278976, rows: 278528)
+          ORDERBY (time: 92, sort: true, page: 1560, ioread: 0)
+
+.. code-block:: sql
+
+    -- Executing a hierarchical query onto table joins without hash list scan
+    SELECT /*+ NO_HASH_LIST_SCAN */ count(*)
+    FROM tree t INNER JOIN tree2 t2 ON t.id=t2.treeid
+    START WITH t.mgrid is null
+    CONNECT BY prior t.id=t.mgrid
+    ORDER BY t.id;
+
+::
+    
+    Trace Statistics:
+      SELECT (time: 8977, fetch: 877335, fetch_time: 57, ioread: 0)
+        SCAN (table: dba.tree), (heap time: 0, fetch: 225, ioread: 0, readrows: 224, rows: 224)
+          SCAN (table: dba.tree2), (heap time: 0, fetch: 224, ioread: 0, readrows: 3584, rows: 448)
+        CONNECTBY (time: 8977, fetch: 876886, fetch_time: 0, ioread: 0)
+          SCAN (temp time: 8353, fetch: 0, ioread: 0, readrows: 124837888, rows: 278528)
+          ORDERBY (time: 91, sort: true, page: 1560, ioread: 0)
+
+.. note::
+
+    조인 테이블 계층형 질의에 대한 해시 리스트 스캔 최적화는 CUBRID 11.0 부터 지원된다.

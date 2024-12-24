@@ -1,7 +1,7 @@
-
 :meta-keywords: cubrid update statistics, cubrid check statistics, query plan, query profiling, sql hint, cubrid index hint, cubrid special index, cubrid using index
 :meta-description: How to optimize query execution in CUBRID database.
 
+.. include:: join_method.inc
 
 통계 정보 갱신
 ==============
@@ -282,6 +282,7 @@ CSQL에서 ";plan detail" 명령 입력 또는 "SET OPTIMIZATION LEVEL 513;"을 
     *   nl-join: 중첩 루프 조인, Nested loop join
     *   m-join: 정렬 병합 조인, Sort merge join
     *   idx_join: 중첩 루프 조인인데 outer 테이블의 행(row)을 읽으면서 inner 테이블에서 인덱스를 사용하는 조인
+    *   hash-join: 해시 조인, Hash join
     
 *   조인 종류: 위에서 (inner join) 부분으로, 질의 계획에서 출력되는 조인 종류는 다음과 같다.
     
@@ -909,6 +910,8 @@ SQL 힌트
     USE_NL [ (<spec_name_comma_list>) ] |
     USE_IDX [ (<spec_name_comma_list>) ] |
     USE_MERGE [ (<spec_name_comma_list>) ] |
+    USE_HASH [ (<spec_name_comma_list>) ] |
+    NO_USE_HASH [ (<spec_name_comma_list>) ] |
     ORDERED |
     LEADING |
     USE_DESC_IDX |
@@ -949,6 +952,8 @@ SQL 힌트는 주석에 더하기 기호(+)를 함께 사용하여 지정한다.
 
 *   **USE_NL**: 테이블 조인과 관련한 힌트로서, 질의 최적화기 중첩 루프 조인 실행 계획을 만든다.
 *   **USE_MERGE**: 테이블 조인과 관련한 힌트로서, 질의 최적화기는 정렬 병합 조인 실행 계획을 만든다.
+*   **USE_HASH**: 테이블 조인과 관련한 힌트로서, 질의 최적화기는 해시 조인 실행 계획을 만든다. 자세한 내용은 :ref:`join-method_hash`\을 참고한다.
+*   **NO_USE_HASH**: 테이블 조인과 관련한 힌트로서, 질의 최적화기가 해시 조인 실행 계획을 만들지 않는다. 자세한 내용은 :ref:`join-method_hash`\을 참고한다.
 *   **ORDERED**: 테이블 조인과 관련한 힌트로서, 질의 최적화기는 **FROM** 절에 명시된 테이블의 순서대로 조인하는 실행 계획을 만든다. **FROM** 절에서 왼쪽 테이블은 조인의 외부 테이블이 되고, 오른쪽 테이블은 내부 테이블이 된다.
 *   **LEADING**: 테이블 조인과 관련한 힌트로서, 질의 최적화기는 LEADING 힌트에 명시된 테이블의 순서대로 조인하는 실행 계획을 만든다.
 
@@ -1436,12 +1441,12 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
             CREATE TABLE t (a INT, b INT);
             
             -- IS NULL cannot be used with expressions
-            CREATE INDEX idx ON t (a) WHERE (not a) IS NULL;
+            CREATE INDEX idx ON ta (a) WHERE (not ta.a<>0 ) IS NULL;
 
         ::
         
             ERROR: before ' ; '
-            Invalid filter expression (( not t.a<>0) is null ) for index.
+            Invalid filter expression (( not [dba.ta].a<>0) is null ) for index.
              
         .. code-block:: sql
 
@@ -1659,7 +1664,7 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
                 4            5            6
 
 
-다음의 예는 커버링 인덱스 사용시 **SELECT** 리스트에 **COUNT(*)**만 있는 경우 불필요한 스캔을 줄여주는 최적화를 보여준다.
+다음의 예는 커버링 인덱스 사용시 **SELECT** 리스트에 **COUNT(*)** 만 있는 경우 불필요한 스캔을 줄여주는 최적화를 보여준다.
 
 .. code-block:: sql
 
@@ -1690,7 +1695,7 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
 
 .. note::
 
-    커버링 인덱스 사용시 **COUNT(*)**에 대한 최적화는 CUBRID 11.2 부터 지원된다.
+    커버링 인덱스 사용시 단일 질의의 **COUNT(*)** 최적화는 CUBRID 11.2 부터 지원되고, 조인 테이블에 대한 **COUNT(*)** 최적화는 CUBRID 11.3 부터 지원된다.
 
 .. warning::
 
@@ -4635,6 +4640,58 @@ Predicate Push
       ref_count = 1
       deletion_marker = false
     }
+
+캐시 된 질의는 결과 화면 중간에 **query_string** 으로 표시되며 각 **n_entries** 및 **n_pages** 는 캐시된 질의 수와 캐시 된 결과의 페이지 수를 나타낸다. **n_entries** 는 파라미터 **max_QUERY_CACHE_entries** 의 값으로 제한되고 **n_pages** 는 **QUERY_CACHE_size_in_pages** 의 값으로 제한된다. **n_entries** 가 초과하거나 **n_pages** 가 초과하면 캐시 항목 중 일부가 삭제될 후보로 선택되어 삭제되고, 삭제되는 캐시는 **max_QUERY_CACHE_entries** 값과 **QUERY_CACHE_size_in_pages** 값의 약 20%이다.
+
+11.4 버전부터는 부질의 대상으로 QUERY_CACHE 힌트를 사용할 수 있으며, 힌트를 사용할 수 있는 부질의는 아래와 같다.
+
+1) CTE 쿼리
+WITH절에 포함되는 비재귀적 부분에 QUERY_CACHE 힌트를 지정한 경우
+
+.. code-block:: sql
+
+        WITH
+         of_drones AS (SELECT /*+ QUERY_CACHE */ item, 'drones' FROM products WHERE parent_id = 1),
+         of_cars AS (SELECT /*+ QUERY_CACHE */ item, 'cars' FROM products WHERE parent_id = 5)
+        SELECT * FROM of_drones UNION ALL SELECT * FROM of_cars ORDER BY 1;
+
+WITH절에 포함되는 재귀 부분 중 다른 CTE를 참조하는 부질의에 QUERY_CACHE 힌트를 지정한 경우
+
+.. code-block:: sql
+
+        WITH
+         RECURSIVE cars (id, parent_id, item, price) AS (
+                            SELECT /*+ QUERY_CACHE */ id, parent_id, item, price
+                                FROM products WHERE item LIKE 'Car%'
+                            UNION ALL
+                            SELECT /*+ QUERY_CACHE */ p.id, p.parent_id, p.item, p.price
+                                FROM products p
+                            INNER JOIN cars rec_cars ON p.parent_id = rec_cars.id)
+        SELECT item, price FROM cars ORDER BY 1;
+
+위 UNION 쿼리에서 첫 번째 쿼리는 캐시 되지만, 두 번째 쿼리는 다른 테이블을 참조하기 때문에 캐시 되지 않는다.
+
+2) 다른 테이블을 참조하지 않는 부질의에 QUERY_CACHE 힌트를 지정한 경우
+
+.. code-block:: sql
+
+        SELECT h.host_year, (SELECT /*+ QUERY_CACHE */ host_nation FROM olympic o WHERE o.host_year > 1994 limit 1) AS host_nation,
+               h.event_code, h.score, h.unit
+        FROM history h;
+
+        SELECT name, capital, list(SELECT /*+ QUERY_CACHE */ host_city FROM olympic WHERE host_nation like 'K%') AS host_cities
+        FROM nation;
+
+단, 아래와 같이 부질의 내에서 다른 테이블을 참조하는 경우에는 QUERY_CACHE 힌트를 지정해도 캐시 되지 않는다.
+
+.. code-block:: sql
+
+        SELECT h.host_year, (SELECT /*+ QUERY_CACHE */ host_nation FROM olympic o WHERE o.host_year=h.host_year) AS host_nation,
+               h.event_code, h.score, h.unit
+        FROM history h;
+
+        SELECT name, capital, list(SELECT /*+ QUERY_CACHE */ host_city FROM olympic WHERE host_nation = name) AS host_cities
+        FROM nation;
 
 캐시 된 질의는 결과 화면 중간에 **query_string** 으로 표시되며 각 **n_entries** 및 **n_pages** 는 캐시된 질의 수와 캐시 된 결과의 페이지 수를 나타낸다. **n_entries** 는 파라미터 **max_query_cache_entries** 의 값으로 제한되고 **n_pages** 는 **query_cache_size_in_pages** 의 값으로 제한된다. **n_entries** 가 초과되거나 **n_pages** 가 초과되면 캐시 항목 중 일부가 삭제될 후보로 선택되어 삭제되고, 삭제되는 캐시는 **max_query_cache_entries** 값과 **query_cache_size_in_pages** 값의 약 20% 이다.
 

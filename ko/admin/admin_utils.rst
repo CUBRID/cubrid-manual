@@ -314,7 +314,7 @@ createdb
 
 .. note:: **기존 키 파일을 사용하는 데이터베이스 생성**
 
-    데이터베이스가 생성될 때 기본적으로 키 파일이 함께 생성된다. 만약 데이터베이스 생성 시 기존 키 파일을 사용하고 싶다면, 먼저 키 파일을 <database-name>_keys 이름으로 복사해 둔다. 이후 복사한 키 파일의 디렉토리를 **tde_keys_file_path** 시스템 파라미터에 지정하고 **createdb** 유틸리티를 통해 데이터베이스를 생성한다. TDE 키 파일에 관한 자세한 내용은 :ref:`tde-file-based-key` 를 참고한다.
+    데이터베이스가 생성될 때 기본적으로 키 파일이 함께 생성된다. 만약 데이터베이스 생성 시 기존 키 파일을 사용하고 싶다면, 먼저 키 파일을 <database-name>_keys 이름으로 복사해 둔다. 이후 복사한 키 파일의 디렉터리를 **tde_keys_file_path** 시스템 파라미터에 지정하고 **createdb** 유틸리티를 통해 데이터베이스를 생성한다. TDE 키 파일에 관한 자세한 내용은 :ref:`tde-file-based-key` 를 참고한다.
     
 .. _adding-database-volume:    
 
@@ -601,7 +601,7 @@ copydb
   -r, --replace                   같은 이름의 데이터베이스가 존재하면 덮어쓰기
   -d, --delete-source             복사 후 원본 데이터베이스 삭제
       --copy-lob-path             원본 데이터베이스의 LOB 대렉터리 경로를 복사. -B 옵션과 함께 사용 불가. 기본값: 복사하지 않음
-  -B, --lob-base-path=PATH        LOB 파일이 저장되는 디렉토리 경로
+  -B, --lob-base-path=PATH        LOB 파일이 저장되는 디렉터리 경로
 
 
 .. option:: --server-name=HOST
@@ -662,7 +662,7 @@ copydb
 
 .. option:: --copy-lob-path
 
-    이 옵션을 선택하면 대상 데이터베이스의 lob 디렉터리의 위치를 원본 데이터베이스의 lob 디렉토리의 위치와 동일하게 설정한다. 이 옵션이 생력되면 <대상 데이터베이스 디렉토리>/lob 이 대상 데이터베이스의 lob 디렉터리 경로로 설정된다. 이 옵션은 lob 파일을 복사하는 기능이 아니며 **-B** 옵션과 병행할 수 없다. ::
+    이 옵션을 선택하면 대상 데이터베이스의 lob 디렉터리의 위치를 원본 데이터베이스의 lob 디렉터리의 위치와 동일하게 설정한다. 이 옵션이 생력되면 <대상 데이터베이스 디렉터리>/lob 이 대상 데이터베이스의 lob 디렉터리 경로로 설정된다. 이 옵션은 lob 파일을 복사하는 기능이 아니며 **-B** 옵션과 병행할 수 없다. ::
 
         cubrid copydb --copy-lob-path demodb new_demodb
 
@@ -710,7 +710,7 @@ installdb
 
 .. option:: --file-path=PATH
 
-    대상 데이터베이스의 데이터베이스 볼륨을 위한 디렉토리 경로를 **databases.txt** 에 등록한다. 이 옵션을 생략하면 현재 작업 디렉토리 경로가 등록된다. ::
+    대상 데이터베이스의 데이터베이스 볼륨을 위한 디렉터리 경로를 **databases.txt** 에 등록한다. 이 옵션을 생략하면 현재 작업 디렉터리 경로가 등록된다. ::
 
         cubrid installdb -F /home/cubrid/CUBRID/databases/testdb testdb
 
@@ -3502,7 +3502,7 @@ vacuumdb
 
 .. option:: -o, --output-file=FILE
 
-    이 옵션은 vacuum에 대한 상태 정보를 저장할 파일명을 지정한다. 파일은 현재 디렉토리에 생성된다.  **-o** 옵션을 지정하지 않으면 콘솔 화면에 메시지가 표시된다. ::
+    이 옵션은 vacuum에 대한 상태 정보를 저장할 파일명을 지정한다. 파일은 현재 디렉터리에 생성된다.  **-o** 옵션을 지정하지 않으면 콘솔 화면에 메시지가 표시된다. ::
 
         cubrid vacuumdb -o db_output demodb
 

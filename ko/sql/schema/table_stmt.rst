@@ -1503,7 +1503,7 @@ default값이 지정된 칼럼의 타입을 변경할 때, 지정된 default값�
 .. code-block:: sql
 
     CREATE TABLE t_def (a bigint default 123456789012, b varchar(20));
-    ALTER TABLE t_def a a int;
+    ALTER TABLE t_def MODIFY a int;
 
 ::
 

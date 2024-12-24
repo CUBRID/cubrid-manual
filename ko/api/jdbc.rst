@@ -129,7 +129,7 @@ JDBC 프로그래밍
      
     <property> ::= altHosts=<alternative_hosts>
                  | rcTime=<second>
-                 | loadBalance=<bool_type>
+                 | loadBalance=<balance_mode>
                  | connectTimeout=<second>
                  | queryTimeout=<second>
                  | charSet=<character_set>
@@ -149,7 +149,8 @@ JDBC 프로그래밍
         <standby_broker1_host>:<port> [,<standby_broker2_host>:<port>]
         <behavior_type> ::= exception | round | convertToNull
         <bool_type> ::= true | false
-		<unit_size> ::= multiple of mega byte
+        <unit_size> ::= multiple of mega byte
+        <balance_mode> ::= true | false | rr | sh
 
 *   *host*: CUBRID 브로커가 동작하고 있는 서버의 IP 주소 또는 호스트 이름
 *   *port*: CUBRID 브로커의 포트 번호(기본값: 33000)
@@ -165,7 +166,13 @@ JDBC 프로그래밍
         .. note:: 메인 호스트와 **altHosts** 브로커들의 **ACCESS_MODE**\ 설정에 **RW**\ 와 **RO**\ 가 섞여 있다 하더라도, 응용 프로그램은 **ACCESS_MODE**\ 와 무관하게 접속 대상 호스트를 결정한다. 따라서 사용자는 접속 대상 브로커의 **ACCESS_MODE**\ 를 감안해서 메인 호스트와 **altHosts**\ 를 정해야 한다.
 
     *   **rcTime**: 첫 번째로 접속했던 브로커에 장애가 발생한 이후 altHosts 에 명시한 브로커로 접속한다(failover). 이후, rcTime만큼 시간이 경과할 때마다 원래의 브로커에 재접속을 시도한다(기본값 600초). 입력 방법은 아래 URL 예제를 참고한다.
-    *   **loadBalance**: 이 값이 true면 응용 프로그램이 메인 호스트와 altHosts에 지정한 호스트들에 랜덤한 순서로 연결한다(기본값: false). 
+    *   **loadBalance**: 클라이언트가 접속 가능한 다수의 호스트가 있는 경우, 접속 대상 호스트를 결정하는 알고리즘을 선택하는 속성이다. 로드 밸런싱을 통해 클라이언트의 연결 요청이 특정 서버에 집중되지 않도록 분산할 수 있다.(기본값: false)
+
+        설정값에 따른 동작은 다음과 같다.
+
+        *   **false**: connection URL에 나열된 호스트 순서대로 연결한다
+        *   **true 또는 rr**: 지정한 호스트들을 **Round-Robin** 방식으로 연결한다.
+        *   **sh**: 지정한 호스트들을 **무작위(Shuffle)** 방식으로 연결한다.
 
     *   **connectTimeout**: 데이터베이스 접속에 대한 타임아웃 시간을 초 단위로 설정한다.  기본값은 30초이다. 이 값이 0인 경우 무한 대기를 의미한다. 이 값은 최초 접속 이후 내부적인 재접속이 발생하는 경우에도 적용된다. **DriverManger.setLoginTimeout** () 메서드로 설정할 수도 있으나, 연결 URL에 이 값을 설정하면 메서드로 설정한 값은 무시된다.
 

@@ -10,6 +10,13 @@
 
 **UPDATE STATISTICS** 문은 주기적으로 수행할 것을 권장한다. 또한 새로운 인덱스가 추가되거나, 대량의 **INSERT**, 혹은 **DELETE** 문이 수행되어 실제 정보와 통계 정보 사이에 차이가 커질 때 수행할 것을 권장한다.
 
+통계정보 갱신으로 관련된 질의의 실행계획 캐시는 삭제되지 않으며, 질의 실행 시 아래 두 가지 기준을 만족할 때 실행계획이 재생성된다.
+
+    #. 실행계획 캐시 생성 후 6분이 지난 시점
+    #. 페이지가 10배 이상 커지거나 작아진 테이블의 통계정보가 갱신됨
+
+필요한 경우 사용자가 **PLANDUMP** 유틸리티를 사용해서 직접 삭제할 수 있다. **PLANDUMP** 대한 자세한 내용은 :ref:`plandump`\ 를 참고한다.
+
 ::
 
     UPDATE STATISTICS ON [schema_name.]class-name [{, [schema_name.]class-name}] [WITH FULLSCAN]; 
@@ -92,28 +99,38 @@ CSQL 인터프리터의 세션 명령어로 지정한 테이블의 통계 정보
 
 .. code-block:: sql
 
-    CREATE TABLE t1 (code INT);
-    INSERT INTO t1 VALUES(1),(2),(3),(4),(5);
-    CREATE INDEX i_t1_code ON t1(code);
+    CREATE TABLE t1 (code INT, name VARCHAR(20));
+    INSERT INTO t1 VALUES(1,'Park'),(2,'Park'),(3,'Joo'),(4,'Joo'),(5,'Song');
+    CREATE INDEX i_t1_code ON t1(code,name);
     UPDATE STATISTICS ON t1;
+    ;info stats t1
 
 ::
 
-    ;info stats t1
     CLASS STATISTICS
     ****************
-     Class name: t1 Timestamp: Mon Mar 25 17:56:10 2024
+     Class name: t1 Timestamp: Thu Dec 19 15:15:10 2024
      Total pages in class heap: 1
      Total objects: 5
-     Number of attributes: 1
+     Number of attributes: 2
      Attribute: code (integer)
         Number of Distinct Values: 5
         B+tree statistics:
-            BTID: { 1 , 832 }
-            Cardinality: 5 (5) , Total pages: 3 , Leaf pages: 1 , Height: 2
+            BTID: { 0 , 5760 }
+            Cardinality: 5 (5,5) , Total pages: 3 , Leaf pages: 1 , Height: 2
+     
+     Attribute: name (character varying)
+        Number of Distinct Values: 3
 
-*   *Number of Distinct Values*: 중복이 제거된 값의 개수이다. 옵티마이저에서 선택도를 산정하는데 사용된다.
-*   *B+tree Cardinality*: 인덱스 key값의 누적된 중복이 제거된 값의 개수이다. 옵티마이저에서 최소 선택도로 사용된다.
+*   *Timestamp*: 통계정보가 갱신된 시간이다.
+*   *Total pages*: 테이블의 페이지 개수이다.
+*   *Total objects*: 테이블의 총 행의 개수이다.
+*   *Number of Distinct Values*: 중복이 제거된 값의 개수이다. **code** 칼럼은 모두 다른 값이므로 5개이다. **LOB** 타입 혹은 **VARCHAR**의 크기가 4,000자리를 넘는 칼럼은 생성되지 않는다. 옵티마이저에서 선택도를 산정하는 데 사용되며 자세한 내용은 :ref:`optimizer-principle`\ 를 참고한다.
+*   B+tree statistics: 인덱스 통계정보이다.
+    *   *B+tree Cardinality*: 인덱스 key 값의 누적된 중복이 제거된 값의 개수이다. 위 예제에서 **(5,5)**/는 인덱스 칼럼 **(code,name)**/과 매칭된다. 첫 번째 **5**/는 **code** 컬럼의 중복이 제거된 값의 개수이고, 두 번째 **5**/는 **code,name** 두 컬럼의 값의 중복이 제거된 개수이다. *Number of Distinct Values*/와 달리 앞 칼럼과 함께 누적된 중복이 제거된 값의 개수이므로 5개이다.
+    *   *Total pages*: 인덱스 전체 페이지 개수이다.
+    *   *Leaf pages*: 인덱스 리프 블럭의 페이지 개수이다.
+    *   *Height*: 리프 블럭을 포함한 B+tree 인덱스의 높이이다.
 
 .. _viewing-query-plan:
 
@@ -365,6 +382,228 @@ CSQL에서 ";plan detail" 명령 입력 또는 "SET OPTIMIZATION LEVEL 513;"을 
 
     SELECT /*+ RECOMPILE ORDERED */  DISTINCT h.host_year, o.host_nation
     FROM history h INNER JOIN olympic o ON h.host_year = o.host_year;
+
+**LEADING** 힌트를 명시하여 테이블 순서를 지정할 수 있다. **ORDERED** 힌트와 다르게 작성된 순서와 상관없이 지정이 가능하다.
+
+.. code-block:: sql
+
+    SELECT /*+ RECOMPILE LEADING(o,h) */  DISTINCT h.host_year, o.host_nation
+    FROM history h INNER JOIN olympic o ON h.host_year = o.host_year;
+
+.. _optimizer-principle:
+
+최적화기 원리
+=====================
+
+**CUBRID**/의 최적화기는 질의 실행 계획을 생성할 때 비용 기반 최적화를 진행하며, 통계정보를 통해 **선택도**/와 **예측되는 행과 페이지 개수**/를 산정한다. 이를 기반으로 비용을 계산하여 가장 적은 비용을 가진 실행계획을 선택한다.
+
+선택도
+-----------
+
+**선택도**/는 특정 조회 조건을 필터하였을 때 전체 대비 선택될 데이터의 비율이다. 최적화기는 **WHERE** 절의 각각의 조회 조건에 대해서 선택도를 산정한다. **CUBRID**/는 전체 데이터가 고르게 분포되어 있다고 가정하고, 통계정보의 **Number of Distinct Value**/을 사용하여 **선택도**/를 산정한다.
+
+::
+
+    SELECTIVITY = 1 / Number of Distinct Value
+
+.. code-block:: sql
+
+    CREATE TABLE t1 (code INT, name VARCHAR(20));
+    INSERT INTO t1 VALUES(1,'Park'),(2,'Park'),(3,'Park'),(4,'joo'),(5,'joo'),(5,'joo');
+    CREATE INDEX i_t1_code ON t1(code,name);
+    UPDATE STATISTICS ON t1;
+     
+    ;info stats t1
+
+::
+
+    CLASS STATISTICS
+    ****************
+     Class name: t1 Timestamp: Fri Dec 20 13:07:58 2024
+     Total pages in class heap: 1
+     Total objects: 6
+     Number of attributes: 2
+     Attribute: code (integer)
+        Number of Distinct Values: 5
+        B+tree statistics:
+            BTID: { 0 , 5760 }
+            Cardinality: 5 (5,5) , Total pages: 3 , Leaf pages: 1 , Height: 2
+     
+     Attribute: name (character varying)
+        Number of Distinct Values: 2
+
+.. code-block:: sql
+
+    ;plan detail
+    SELECT /*+ recompile */ * FROM t1 WHERE code = 3 AND name IN ('Song', 'Ham');
+
+::
+
+    Join graph terms:
+    term[0]: [dba.t1].code=3 (sel 0.2)
+    term[1]: [dba.t1].[name] range ('Ham' =  or 'Song' = ) (sel 0.75)
+
+**term[0]: [dba.t1].code=3**/는 통계정보에서 **code**/의 **Number of Distinct Values**/가 5이므로 선택도는 1/5, 즉 0.2이다.
+**term[1]: [dba.t1].[name] range ('Ham' =  or 'Song' = )** 는 **name**/을 두 가지 값으로 **OR** 연산하고 있다. **name**/의 **Number of Distinct Values**/가 2이므로 **선택도**/는 1/2이고, 두 값을 더하고 교집합을 제외하면 **0.5 + 0.5 - (0.5 x 0.5)** 계산으로 0.75가 나온다.
+
+예측되는 행수
+---------------
+
+질의를 실행했을 때 조회될 것으로 **예측되는 행수**/는 **전체 데이터 행수**에 **선택도** 곱해서 산정한다.
+
+::
+
+    Number of expected rows = total rows of a table * selectivity
+
+.. code-block:: sql
+
+    ;plan detail
+    SELECT /*+ recompile */ * FROM t1 WHERE name = 'Park';
+
+::
+
+    Join graph nodes:
+    node[0]: dba.t1 dba.t1(6/1)
+    Join graph terms:
+    term[0]: [dba.t1].[name]='Park' (sel 0.5)
+     
+    Query plan:
+     
+    sscan
+        class: t1 node[0]
+        sargs: term[0]
+        cost:  1 card 3
+
+**dba.t1(6/1)** 은 t1 테이블의 전체 행수가 6개이고 페이지수가 1개인 것을 나타낸다. **[dba.t1].[name]='Park'**/의 선택도가 0.5이므로 예측되는 행수는 **6 x 0.5** 계산으로 3개이다. 실행계획의 **cost:  1 card 3**/는 비용은 1이고 예측되는 행수가 3인 것을 나타낸다.
+
+순차 스캔 비용
+---------------
+
+최적화기는 비용을 산정할 때 아래 두 가지 사항을 고려한다.
+
+    #. 페이지를 읽는 비용
+    #. 반복되는 루틴의 CPU 비용
+
+아래는 순차 스캔의 비용이 어떻게 산정되는지 보여준다.
+
+::
+
+    페이지 비용 = 테이블의 페이지 개수
+    CPU 비용 = 테이블의 전체 행의 개수 X CPU 가중치
+
+.. code-block:: sql
+
+    drop table if exists t1;
+    create table t1 (col1 int, col2 int, col3 int, col4 int);
+    insert into t1 select mod(rownum,2), mod(rownum,4), rownum, rownum from dual connect by level <= 4000;
+    update statistics on t1;
+     
+    ;plan detail
+    select /*+ recompile */ count(*) from t1 where col2 = 2;
+
+::
+
+    Join graph nodes:
+    node[0]: dba.t1 dba.t1(4000/9)
+    Join graph terms:
+    term[0]: [dba.t1].col2=2 (sel 0.25)
+     
+    Query plan:
+     
+    sscan
+        class: t1 node[0]
+        sargs: term[0]
+        cost:  19 card 1000
+
+**node[0]: dba.t1 dba.t1(4000/9)** 에서 t1 테이블의 전체 행의 개수는 4000개이고 페이지 개수는 9개인 것을 알 수 있다. 그러므로 페이지 비용은 t1 테이블의 전체 페이지 개수인 9이다. CPU 비용은 테이블의 전체 행수에 CPU 가중치를 곱한 것으로, **4000 x 0.0025** 계산하면 10이다. 두 값을 더하면 19이며, **cost:  19 card 1000** 에서 비용은 19이고 조회가 예상되는 행수는 1000개인 것을 알 수 있다.
+
+인덱스 스캔 비용
+---------------
+
+인덱스 스캔은 논리프 노드, 리프 노드 그리고 힙 영역의 탐색으로 진행된다. 인덱스 스캔의 시작은 루트노드를 포함한 논리프 노드를 탐색하여 리프노드의 시작점을 찾는 것이다. 그리고 리프노드를 탐색하며 만족하는 키의 OID정보를 조회하고 필요하다면 OID 정보로 힙영역을 스캔한다. 아래는 예제는 어떻게 인덱스 스캔이 어떻게 수행되는지 보여준다.
+
+.. code-block:: sql
+
+    drop table if exists t2;
+    create table t2 (col1 int, col2 int, col3 int, col4 int);
+    insert into t2 select mod(rownum,20), mod(rownum,80), rownum, rownum from dual connect by level <= 4000;
+    create index idx on t2(col1,col2,col3);
+    update statistics on t2;
+     
+    ;plan detail
+    select /*+ recompile */ count(*) from t2 where col1 = 1 and col3 = 1 and col4 = 1;
+
+::
+
+    Join graph terms:
+    term[0]: [dba.t2].col4=1 (sel 0.00025)
+    term[1]: [dba.t2].col3=1 (sel 0.0125)
+    term[2]: [dba.t2].col1=1 (sel 0.05)
+
+    Query plan:
+     
+    iscan
+        class: t2 node[0]
+        index: idx term[2]
+        filtr: term[1]
+        sargs: term[0]
+        cost:  4 card 1
+
+**Join graph terms**/의 정보를 통해 실행계획에 사용된 조회 조건의 확인이 가능하다. **index: idx term[2]**/는 인덱스 수직 스캔으로 논리프 노드의 탐색에 사용된 조회 조건이다. 인덱스 수평 스캔 시 리프 노드에 대해서 키 필터하는데 **filtr: term[1]** 조회 조건이 사용되었다. 힙에 접근하여 조회 시에는 **sargs: term[0]** 조회 조건을 사용하여 필터한다.
+
+::
+
+    ;info stats t2
+
+::
+
+     Attribute: col1 (integer)
+        Number of Distinct Values: 20
+        B+tree statistics:
+            BTID: { 0 , 5760 }
+            Cardinality: 4000 (20,4000,4000) , Total pages: 11 , Leaf pages: 9 , Height: 2
+
+인덱스 스캔의 비용은 아래와 같이 계산된다.
+
+    #. 페이지를 읽는 비용 = 접근 예측되는 논리프 노드 페이지 + 리프 노드 페이지 + 힙 페이지
+    #. 반복되는 루틴의 CPU 비용 = 접근 예측되는 리프 노드 키 개수
+
+논리프 노드의 페이지 개수는 통계정보의 인덱스 **Height**/가 2이고 리프노드를 제외한 읽어야 하는 페이지는 **2 - 1** 이므로 1개이다. 리프 노드 페이지 개수는 **Leaf pages** 에 논리프 노드의 탐색에 사용된 조회조건 **index: idx term[2]** 의 선택도를 곱하여 구한다. **MAX(9 X 0.05, 1)** 이므로 읽어야 할 리프 노드 페이지 개수는 1개이다. 읽어야 하는 힙 페이지 개수는 테이블의 전체 page수에 **index**/와 **filtr** 조건의 선택도를 곱하여 구한다. 여기서는 **MAX(9 X 0.05 X 0.0125,1)** 으로 계산되여 1개의 페이지를 읽어야 하는 것으로 계산된다. 마지막으로 CPU 비용은 테이블의 전체 행수에서 **index: idx term[2]** 의 선택도와 CPU 가중치를 곱하여 구한다. **MAX(4000 X 0.05 X 0.0025,1)** 으로 계산하면 1이 나오며, 지금까지의 모든 결과를 합하면 비용은 4라는 것을 알 수 있다. 실행계획에서 **cost:  4 card 1** 를 보면 비용은 4이고 예상되는 행수는 1개라는 것을 알 수 있다.
+
+조인 질의 비용
+-----------------------
+
+조인 질의의 비용은 선행 테이블의 비용과 후행 테이블의 비용을 각각 산출하고, 조인 방법에 따라 비용을 산정한다. 아래 예제는 중첩 루프 조인에서 비용이 어떻게 계산되는지 보여준다.
+
+.. code-block:: sql
+
+    create index idx1 on t2(col4);
+     
+    --;plan detail
+    select /*+ recompile */ count(*)
+    from t1 a, t2 b
+    where a.col4 = b.col4
+    and b.col1 = 1
+    and b.col3 = 1
+    and a.col2 = 2;
+
+::
+
+    Query plan:
+     
+    idx-join (inner join)
+        outer: sscan
+                   class: a node[0]
+                   sargs: term[3]
+                   cost:  19 card 1000
+        inner: iscan
+                   class: b node[1]
+                   index: idx1 term[0]
+                   sargs: term[1] AND term[2]
+                   cost:  2 card 3
+        cost:  572 card 1
+
+선행되는 테이블은 *a*/이며 후행 테이블은 *b* 이다. 중첩 루프 조인 특성상 선행 테이블의 행수만큼 후행 테이블의 실행이 반복되므로 *b* 테이블의 가변 비용과 *a* 테이블의 예상되는 행수를 곱하여 후행 테이블의 비용을 산정 할 수 있다. **CUBRID**/는 내부적으로 고정 비용과 가변 비용을 따로 관리하고 있으며 실행계획에서는 이 정보를 확인 할 수 없다. 대략 후행 테이블의 가변비용은 *0.553*이며 조인 시 발생하는 후행 테이블의 비용은 *0.553 * 1000* 계산하면 553이고 선행 테이블의 비용 *19*/를 더하면 최종 비용은 *572*/이다.
 
 .. _query-profiling:
  
@@ -4084,7 +4323,25 @@ View Merging 최적화
         FROM (SELECT gender, rownum FROM athlete WHERE rownum < 15) a
         WHERE gender = 'M';
 
-뷰에 **ROWNUM, LIMIT**\ 또는 **GROUPBY_NUM (), INST_NUM (), ORDERBY_NUM ()**\을 사용한 질의문의 경우 **View Merging**\이 불가능하다.
+뷰에 **ROWNUM, LIMIT**\ 또는 **GROUPBY_NUM (), INST_NUM (), ORDERBY_NUM ()**\을 사용한 질의문의 경우 **View Merging**\가 불가능하다. 하지만 부분범위 처리를 위해 **ROWNUM**을 사용하는 경우 **ROWNUM** 등이 있더라도 **View Merging** 을 수행한다. 아래 두가지 조건을 만족하는 경우이다.
+
+    #. **WHERE** 절에 **ROWNUM**을 포함한 조회조건만 있다.
+    #. **FROM** 절에 한개의 부질의만 있다.
+
+.. code-block:: sql
+
+        --csql> ;plan detail
+        SELECT *
+        FROM (SELECT name, rownum rn
+                FROM (SELECT name FROM athlete WHERE nation_code = 'KOR') a
+               WHERE rownum < 15) b
+        WHERE rn > 5;
+
+::
+
+    Query stmt:
+     
+    select b.[name], (rownum) from athlete b where ((rownum)> ?:0  and (rownum)< ?:1 ) and (b.nation_code= ?:2 )
 
 다음은 **Correlated Subquery**\ 를 사용하여 작성된 예시이다
 
@@ -4106,6 +4363,26 @@ View Merging 최적화
         WHERE a.code = b.athlete_code;
 
 뷰가 **RANDOM (), DRANDOM (), SYS_GUID ()**\를 포함한 질의문의 경우 **View Merging**\이 불가능하다.
+
+**View Merging** 최적화를 수행할 수 없는 경우, **CUBRID**/는 부질의의 **SELECT-LIST** 항목을 최적화 한다. 다음은 부질의의 **SELECT-LIST**가 어떻게 최적화 되는지 보여주는 예제이다.
+
+.. code-block:: sql
+
+    --csql> ;plan detail
+    SELECT /*+ recompile */ aa.host_year, aa.rn
+    FROM (select host_year,
+                (select name from event where code = a.event_code) event_name,
+                (select name from athlete where code = a.athlete_code) athlete_name,
+                rownum rn
+         from game a
+         where medal = 'G') aa
+    WHERE host_year = '2004';
+
+::
+
+    Query stmt:
+     
+    select aa.host_year, aa.rn from (select a.host_year, (rownum) as [rn] from game a where a.medal= ?:1 ) aa (host_year, rn) where aa.host_year= ?:0
 
 .. _pred-push:
 
@@ -4140,6 +4417,29 @@ Predicate Push
         SELECT a.name, r.score 
         FROM (SELECT name, nation_code, code, count(*) cnt FROM athlete WHERE nation_code = 'KOR' GROUP BY name, nation_code ) a, record r
         WHERE a.code = r.athlete_code;
+
+아래는 여러개의 부질의가 있는 상황에서 **Predicate Push**/가 어떻게 동작하는지 보여주는 예시이다.
+
+.. code-block:: sql
+
+    --csql> ;plan detail
+    SELECT a.host_year
+    FROM (select distinct host_year, event_code, athlete_code from game where host_year = 2004) a,
+         (select distinct host_year, event_code, athlete_code from game where event_code = 20021) b
+    WHERE a.host_year = b.host_year
+    AND a.event_code = b.event_code
+    AND a.athlete_code = b.athlete_code;
+
+::
+
+    Query stmt:
+     
+    select a.host_year
+     from (select distinct game.host_year, game.event_code, game.athlete_code from game game where game.host_year= ?:0  and game.event_code=20021) a (host_year, event_code, athlete_code),
+          (select distinct game.host_year, game.event_code, game.athlete_code from game game where game.event_code= ?:1  and game.host_year=2004) b (host_year, event_code, athlete_code)
+    where a.athlete_code=b.athlete_code and a.host_year=b.host_year and a.event_code=b.event_code
+
+조회조건 **game.event_code=20021** 와 **game.host_year=2004** 가 주질의의 조인조건에 의해서 각각의 부질의에 추가된다.
 
 다음의 경우에는 **Predicate Push**\가 수행되지 않는다.
 
@@ -4196,6 +4496,70 @@ Predicate Push
         WHERE NVL(r.score, '0') = '0';
 
 **OUTER JOIN**\을 수행할 때 푸시될 조건절이나 뷰 내부의 **Predicate Push** 대상에 **NULL** 변환 함수를 사용한 경우 **Predicate Push** 대상이 아니다.
+
+.. _subquery_unnest:
+
+부질의 중첩 제거
+-------------------------
+**부질의 중첩 제거**\는 WHERE절의 부질의를 매번 수행하여 필터하는 방식에서 동일한 결과를 보장하는 조인방식으로 변환하여 성능을 개선한다. WHERE 절의 부질의는 연산자에 따라서 다른 성질을 가질 수 있으며, 연산자 **IN**/이나 **EXISTS** 처럼 여러 행을 결과로 가질 수 있는 부질의가 최적화 대상이다. **CUBRID**/는 **IN** 연산자에 대해서만 부분적으로 지원한다.
+
+아래는 IN 연산자에 대해서 조인 질의로 변환하는 예시이다.
+
+.. code-block:: sql
+
+    --csql> set optimization level 513;
+    SELECT game_date
+      FROM game
+     WHERE (host_year,event_code,athlete_code) IN (select host_year,event_code,athlete_code
+                                                     from game
+                                                    where nation_code = 'KOR' and medal = 'G');
+
+::
+
+    Query plan:
+     
+    idx-join (inner join)
+        outer: sscan
+                   class: av1861 node[1]
+                   cost:  1 card 25
+        inner: iscan
+                   class: game node[0]
+                   index: pk_game_host_year_event_code_athlete_code term[0] AND term[1] AND term[2]
+                   cost:  3 card 8653
+        cost:  17 card 1
+     
+    Query stmt:
+     
+    select game.game_date from game game, (select distinct game.host_year, game.event_code, game.athlete_code from game game where game.medal= ?:0  and game.nation_code= ?:1 ) av1861 (av_1, av_2, av_3) where game.host_year=av1861.av_1 and game.event_code=av1861.av_2 and game.athlete_code=av1861.av_3
+
+.. note::
+
+    CUBRID 11.0 부터 **IN** 연산자의 인자에 여러개의 컬럼을 조회하는 부질의가 허용 된다.
+
+.. _predicate_transitivity:
+
+조건절 이행
+-------------------------
+**조건절 이행**\은 논리적으로 생성될 수 있는 조건절을 추가 함으로써 질의 성능을 개선한다.
+
+아래는 **조건절 이행** 최적화로 **b.col1 = 3** 조회 조건이 추가된 예시이다.
+
+.. code-block:: sql
+
+    CREATE TABLE t1 (col1 int, col2 int, col3 int);
+    CREATE TABLE t2 (col1 int, col2 int, col3 int);
+     
+    --csql> ;plan detail
+    SELECT /*+ recompile */ *
+    FROM t1 a, t2 b
+    WHERE a.col1 = b.col1
+    AND a.col1 = 3;
+
+::
+
+    Query stmt:
+     
+    select a.col1, a.col2, a.col3, b.col1, b.col2, b.col3 from t1 a, t2 b where b.col1= ?:0  and a.col1= ?:1  and a.col1=b.col1
 
 .. _query-cache:
 

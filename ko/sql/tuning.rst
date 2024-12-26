@@ -2771,7 +2771,7 @@ SORT-LIMIT 최적화는 **ORDER BY** 절과 LIMIT 절을 명시한 질의에 적
 **OUTER JOIN**\을 **INNER JOIN**\으로 변환
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-**OUTER JOIN**\은 조인순서가 선행 테이블과 후행 테이블로 이미 정해져 있어 조인 순서 최적화시 순서가 제한된다. **CUBRID**\는 성능을 위하여 후행 테이블에 **NULL** 불가한 조회 조건이 있는 경우 **OUTER JOIN**\을 **INNER JOIN**으로 변환한다. **NULL** 가능한 조회 조건은 이 변환에서 제외되며, 아래 조건을 만족해야 한다.
+**OUTER JOIN**\은 조인순서가 선행 테이블과 후행 테이블로 이미 정해져 있어 조인 순서 최적화시 순서가 제한된다. **CUBRID**\는 성능을 위하여 후행 테이블에 **NULL** 불가한 조회 조건이 있는 경우 **OUTER JOIN**\을 **INNER JOIN**\으로 변환한다. **NULL** 가능한 조회 조건은 이 변환에서 제외되며, 아래 조건을 만족해야 한다.
     
     #. **ON**\절에 조건절이 작성된 경우
     #. **NULL** 변환 함수 (**COALESCE (), NVL (), NVL2 (), DECODE (), IF (), IFNULL (), CONCAT_WS ()**)
@@ -2780,6 +2780,7 @@ SORT-LIMIT 최적화는 **ORDER BY** 절과 LIMIT 절을 명시한 질의에 적
 다음은 **OUTER JOIN**\을 **INNER JOIN**\으로 변환하는 예제이다.
 
 .. code-block:: sql
+
     --create table
     CREATE TABLE t1 (col1 int, col2 int);
     INSERT INTO t1 values (1,1),(2,2),(3,2);
@@ -2799,6 +2800,7 @@ SORT-LIMIT 최적화는 **ORDER BY** 절과 LIMIT 절을 명시한 질의에 적
 다음은 **NULL** 가능한 조회조건 때문에 **INNER JOIN**\으로 변환되지 않는 예제이다.
 
 .. code-block:: sql
+
     -- csql> ;plan simple
     SELECT /*+ recompile */ *
     FROM t1 a LEFT OUTER JOIN t1 b on a.col1 = b.col2
@@ -4329,9 +4331,9 @@ View Merging 최적화
         FROM (SELECT gender, rownum FROM athlete WHERE rownum < 15) a
         WHERE gender = 'M';
 
-뷰에 **ROWNUM, LIMIT**\ 또는 **GROUPBY_NUM (), INST_NUM (), ORDERBY_NUM ()**\을 사용한 질의문의 경우 **View Merging**\가 불가능하다. 하지만 부분범위 처리를 위해 **ROWNUM**을 사용하는 경우 **ROWNUM** 등이 있더라도 **View Merging** 을 수행한다. 아래 두가지 조건을 만족하는 경우이다.
+뷰에 **ROWNUM, LIMIT**\ 또는 **GROUPBY_NUM (), INST_NUM (), ORDERBY_NUM ()**\을 사용한 질의문의 경우 **View Merging**\이 불가능하다. 하지만 부분범위 처리를 위해 **ROWNUM**\을 사용하는 경우 **ROWNUM** 등이 있더라도 **View Merging** 을 수행한다. 아래 두가지 조건을 만족하는 경우이다.
 
-    #. **WHERE** 절에 **ROWNUM**을 포함한 조회조건만 있다.
+    #. **WHERE** 절에 **ROWNUM**\을 포함한 조회조건만 있다.
     #. **FROM** 절에 한개의 부질의만 있다.
 
 .. code-block:: sql
@@ -4370,7 +4372,7 @@ View Merging 최적화
 
 뷰가 **RANDOM (), DRANDOM (), SYS_GUID ()**\를 포함한 질의문의 경우 **View Merging**\이 불가능하다.
 
-**View Merging** 최적화를 수행할 수 없는 경우, **CUBRID**\는 부질의의 **SELECT-LIST** 항목을 최적화 한다. 다음은 부질의의 **SELECT-LIST**가 어떻게 최적화 되는지 보여주는 예제이다.
+**View Merging** 최적화를 수행할 수 없는 경우, **CUBRID**\는 부질의의 **SELECT-LIST** 항목을 최적화 한다. 다음은 부질의의 **SELECT-LIST**\가 어떻게 최적화 되는지 보여주는 예제이다.
 
 .. code-block:: sql
 

@@ -126,9 +126,10 @@ The following shows the statistical information of *t1* table in CSQL interprete
 *   *Timestamp*: The time when the statistics were updated.
 *   *Total pages*: The number of pages in the table.
 *   *Total objects*: The total number of rows in the table.
-*   *Number of Distinct Values*: The number of values with duplicates removed. column **code**  is all different values, so NDV is  5. If type of the column is **LOB** or **VARCHAR** exceeding 4,000, NDV is not generated. NDV is used to calculate **SELECTIVITY** in the optimizer. For more information, see :ref:`optimizer-principle`\.
+*   *Number of Distinct Values*: The number of values with duplicates removed. column **code** is all different values, so NDV is 5. If type of the column is **LOB** or **VARCHAR** exceeding 4,000, NDV is not generated. NDV is used to calculate **SELECTIVITY** in the optimizer. For more information, see :ref:`optimizer-principle`\.
 *   B+tree statistics: Index statistics
-    *   *B+tree Cardinality*: The number of values from which the accumulated duplicates of the index key values have been removed. In the example above, **(5,5)**\ matches the index column **(code,name)**\. The first **5**\ is the number of values from which the duplicates of the **code** column have been removed, and the second **5**\ is the number of values from which the duplicates of the two columns **code,name** have been removed.
+
+    *   *B+tree Cardinality*: The number of values from which the accumulated duplicates of the index key values have been removed. In the example above, **(5,5)** matches the index column **(code,name)**. The first **5** is the number of values from which the duplicates of the **code** column have been removed, and the second **5** is the number of values from which the duplicates of the two columns **code,name** have been removed.
     *   *Total pages*: The total number of index pages.
     *   *Leaf pages*: The number of pages in the index leaf block.
     *   *Height*: The height of the B+tree index including the leaf block.
@@ -397,12 +398,12 @@ You can specify the table order by specifying the **LEADING** hint. Unlike the *
 Optimizer Principle
 =====================
 
-**CUBRID**\'s optimizer performs cost-based optimization when generating a query execution plan, and calculates **selectivity**\ and **expected number of rows and pages**\ through statistics. Based on this, it calculates the cost and selects the execution plan with the lowest cost.
+**CUBRID**\'s optimizer performs cost-based optimization when generating a query execution plan, and calculates **selectivity** and **expected number of rows and pages** through statistics. Based on this, it calculates the cost and selects the execution plan with the lowest cost.
 
 Selectivity
 --------------
 
-**Selectivity**\ is the ratio of data to be selected when a specific predicate is evaluated. The optimizer calculates the selectivity for each predicate in the **WHERE** clause. **CUBRID**\ assumes that the entire data is evenly distributed and calculates the **selectivity**\ using the **Number of Distinct Value**\ of statistics.
+**Selectivity** is the ratio of data to be selected when a specific predicate is evaluated. The optimizer calculates the selectivity for each predicate in the **WHERE** clause. **CUBRID** assumes that the entire data is evenly distributed and calculates the **selectivity** using the **Number of Distinct Value** of statistics.
 
 ::
 
@@ -445,7 +446,7 @@ Selectivity
     term[0]: [dba.t1].code=3 (sel 0.2)
     term[1]: [dba.t1].[name] range ('Ham' =  or 'Song' = ) (sel 0.75)
 
-**term[0]: [dba.t1].code=3**\ The **Number of Distinct Values**\ of **code**\ in the statistics is 5, so the selectivity is 1/5 or 0.2.
+**term[0]: [dba.t1].code=3** The **Number of Distinct Values** of **code** in the statistics is 5, so the selectivity is 1/5 or 0.2.
 **term[1]: [dba.t1].[name] range ('Ham' = or 'Song' = )** performs an **OR** operation on two values of name. Since the **Number of Distinct Values** for **name** is 2, the selectivity for each value is 1/2. Adding the two values and subtracting the intersection gives the calculation **0.5 + 0.5 - (0.5 x 0.5)**, resulting in 0.75.
 
 Expected number of rows
@@ -476,7 +477,7 @@ The **expected number of rows**  is calculated by multiplying the **selectivity*
         sargs: term[0]
         cost:  1 card 3
 
-**dba.t1(6/1)** indicates that the total number of rows in the t1 table is 6 and the number of pages is 1. Since the selectivity of **[dba.t1].[name]='Park'**\ is 0.5, the expected number of rows is 3, which is calculated as **6 x 0.5**. **cost: 1 card 3**\ in the execution plan indicates that the cost is 1 and the expected number of rows is 3.
+**dba.t1(6/1)** indicates that the total number of rows in the t1 table is 6 and the number of pages is 1. Since the selectivity of **[dba.t1].[name]='Park'** is 0.5, the expected number of rows is 3, which is calculated as **6 x 0.5**. **cost: 1 card 3** in the execution plan indicates that the cost is 1 and the expected number of rows is 3.
 
 Cost of sequential scan
 ------------------------
@@ -572,7 +573,7 @@ The cost of an index scan is calculated as follows:
 
 The number of pages in a non-leaf node is 1 because the index **Height** of the statistics is 2 and the number of pages to be read excluding the leaf node is **2 - 1**. The number of leaf node pages is obtained by multiplying **Leaf pages** by the selectivity of the predicate **index: idx term[2]** used to search the non-leaf node. Since it is **MAX(9 X 0.05, 1)**, the number of leaf node pages to be read is 1. The number of heap pages to be read is obtained by multiplying the total number of pages in the table by the selectivity of **index** and **filtr** conditions. Here, it is calculated as **MAX(9 X 0.05 X 0.0125,1)**, so it is calculated that 1 page must be read. Finally, the CPU cost is obtained by multiplying the selectivity of **index: idx term[2]** by the CPU weight from the total number of rows in the table. **If you calculate it as **MAX(4000 X 0.05 X 0.0025,1)**, you get 1, and if you add up all the results so far, you can see that the cost is 4. If you look at **cost: 4 card 1** in the execution plan, you can see that the cost is 4 and the expected number of rows is 1.
 
-cost of join
+Cost of join
 -----------------------
 
 The cost of a join is generated by calculating the cost of the preceding table and the cost of the succeeding table separately, and the cost is calculated according to the join method. The following example below shows how the cost is calculated in a nested loop join method.
@@ -2751,7 +2752,7 @@ Optimization Using Rewrite
 .. _join-elimination-optimization:
 
 Join transforming Optimization
------------------------------
+------------------------------
 
 The join transforming optimization is a method to reduce join operations and improve the query performance by transforming the joins with the tables that do not affect the query results.
 
@@ -2777,6 +2778,7 @@ Transforming **OUTER JOIN** to **INNER JOIN**
 The following example shows an optimization that transform **OUTER JOIN**/ to **INNER JOIN**/.
 
 .. code-block:: sql
+
     --create table
     CREATE TABLE t1 (col1 int, col2 int);
     INSERT INTO t1 values (1,1),(2,2),(3,2);
@@ -2793,9 +2795,10 @@ The following example shows an optimization that transform **OUTER JOIN**/ to **
         TABLE SCAN (a)
         TABLE SCAN (b)
 
-The following example shows that can not be transformed from **OUTER JOIN**/ to **INNER JOIN**/ because of the nullable predicate.
+The following example shows that can not be transformed from **OUTER JOIN** to **INNER JOIN** because of the nullable predicate.
 
 .. code-block:: sql
+
     -- csql> ;plan simple
     SELECT /*+ recompile */ *
     FROM t1 a LEFT OUTER JOIN t1 b on a.col1 = b.col2
@@ -4359,7 +4362,7 @@ The following is an example where a view includes **RANDOM(), DRANDOM(), SYS_GUI
 
 When using **RANDOM(), DRANDOM(), SYS_GUID()** in views as above, **View Merging** optimization cannot be performed.
 
-If **View Merging** optimization cannot be performed, **CUBRID**/ optimizes the **SELECT-LIST** item of the subquery. The following example shows how the **SELECT-LIST** of the subquery is optimized.
+If **View Merging** optimization cannot be performed, **CUBRID** optimizes the **SELECT-LIST** item of the subquery. The following example shows how the **SELECT-LIST** of the subquery is optimized.
 
 .. code-block:: sql
 

@@ -13,7 +13,7 @@ Statistics for tables and indexes enables queries of the database system to proc
 
 When updating statistics, the execution plan cache of the related statistics is not deleted. the execution plan is regenerated when the following two criteria are met during query execution.
 
-    #. 6 minutes after creating the execution plan cache
+    #. 6 minutes after the execution plan cache creation or regeneration check
     #. the page size increases or decreases by more than 10 times. and statistics are updated
 
 The user can delete plan cache using the **PLANDUMP** utility. For more information about **PLANDUMP**, see :ref:`plandump`\.

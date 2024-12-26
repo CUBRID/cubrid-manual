@@ -4191,7 +4191,7 @@ The join with the *right_tbl* table was eliminated.
 .. _view_merge:
 
 View Merging Optimization
-=========================
+---------------------------
 
 **View Merging** is an optimization for reducing overhead that occur during the processing of view or inline view. 
 When a query includes a view, there is an overhead of creating a temporary table for that view. 

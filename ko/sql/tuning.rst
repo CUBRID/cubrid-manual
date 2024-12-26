@@ -2771,13 +2771,13 @@ SORT-LIMIT 최적화는 **ORDER BY** 절과 LIMIT 절을 명시한 질의에 적
 **OUTER JOIN**\을 **INNER JOIN**\으로 변환
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-**OUTER JOIN**/은 조인순서가 선행 테이블과 후행 테이블로 이미 정해져 있어 조인 순서 최적화시 순서가 제한된다. **CUBRID**/는 성능을 위하여 후행 테이블에 **NULL** 불가한 조회 조건이 있는 경우 **OUTER JOIN**/을 **INNER JOIN**으로 변환한다. **NULL** 가능한 조회 조건은 이 변환에서 제외되며, 아래 조건을 만족해야 한다.
+**OUTER JOIN**\은 조인순서가 선행 테이블과 후행 테이블로 이미 정해져 있어 조인 순서 최적화시 순서가 제한된다. **CUBRID**\는 성능을 위하여 후행 테이블에 **NULL** 불가한 조회 조건이 있는 경우 **OUTER JOIN**\을 **INNER JOIN**으로 변환한다. **NULL** 가능한 조회 조건은 이 변환에서 제외되며, 아래 조건을 만족해야 한다.
     
     #. **ON**\절에 조건절이 작성된 경우
     #. **NULL** 변환 함수 (**COALESCE (), NVL (), NVL2 (), DECODE (), IF (), IFNULL (), CONCAT_WS ()**)
     #. **IS NULL, CASE** 문
 
-다음은 **OUTER JOIN**/을 **INNER JOIN**/으로 변환하는 예제이다.
+다음은 **OUTER JOIN**\을 **INNER JOIN**\으로 변환하는 예제이다.
 
 .. code-block:: sql
     --create table
@@ -2796,7 +2796,7 @@ SORT-LIMIT 최적화는 **ORDER BY** 절과 LIMIT 절을 명시한 질의에 적
         TABLE SCAN (a)
         TABLE SCAN (b)
 
-다음은 **NULL** 가능한 조회조건 때문에 **INNER JOIN**/으로 변환되지 않는 예제이다.
+다음은 **NULL** 가능한 조회조건 때문에 **INNER JOIN**\으로 변환되지 않는 예제이다.
 
 .. code-block:: sql
     -- csql> ;plan simple
@@ -4370,7 +4370,7 @@ View Merging 최적화
 
 뷰가 **RANDOM (), DRANDOM (), SYS_GUID ()**\를 포함한 질의문의 경우 **View Merging**\이 불가능하다.
 
-**View Merging** 최적화를 수행할 수 없는 경우, **CUBRID**/는 부질의의 **SELECT-LIST** 항목을 최적화 한다. 다음은 부질의의 **SELECT-LIST**가 어떻게 최적화 되는지 보여주는 예제이다.
+**View Merging** 최적화를 수행할 수 없는 경우, **CUBRID**\는 부질의의 **SELECT-LIST** 항목을 최적화 한다. 다음은 부질의의 **SELECT-LIST**가 어떻게 최적화 되는지 보여주는 예제이다.
 
 .. code-block:: sql
 
@@ -4424,7 +4424,7 @@ Predicate Push
         FROM (SELECT name, nation_code, code, count(*) cnt FROM athlete WHERE nation_code = 'KOR' GROUP BY name, nation_code ) a, record r
         WHERE a.code = r.athlete_code;
 
-아래는 여러개의 부질의가 있는 상황에서 **Predicate Push**/가 어떻게 동작하는지 보여주는 예시이다.
+아래는 여러개의 부질의가 있는 상황에서 **Predicate Push**\가 어떻게 동작하는지 보여주는 예시이다.
 
 .. code-block:: sql
 
@@ -4507,7 +4507,7 @@ Predicate Push
 
 부질의 중첩 제거
 -------------------------
-**부질의 중첩 제거**\는 WHERE절의 부질의를 매번 수행하여 필터하는 방식에서 동일한 결과를 보장하는 조인방식으로 변환하여 성능을 개선한다. WHERE 절의 부질의는 연산자에 따라서 다른 성질을 가질 수 있으며, 연산자 **IN**/이나 **EXISTS** 처럼 여러 행을 결과로 가질 수 있는 부질의가 최적화 대상이다. **CUBRID**/는 **IN** 연산자에 대해서만 부분적으로 지원한다.
+**부질의 중첩 제거**\는 WHERE절의 부질의를 매번 수행하여 필터하는 방식에서 동일한 결과를 보장하는 조인방식으로 변환하여 성능을 개선한다. WHERE 절의 부질의는 연산자에 따라서 다른 성질을 가질 수 있으며, 연산자 **IN**\이나 **EXISTS** 처럼 여러 행을 결과로 가질 수 있는 부질의가 최적화 대상이다. **CUBRID**\는 **IN** 연산자에 대해서만 부분적으로 지원한다.
 
 아래는 IN 연산자에 대해서 조인 질의로 변환하는 예시이다.
 

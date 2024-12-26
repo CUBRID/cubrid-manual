@@ -128,7 +128,7 @@ The following shows the statistical information of *t1* table in CSQL interprete
 *   *Total objects*: The total number of rows in the table.
 *   *Number of Distinct Values*: The number of values with duplicates removed. column **code**  is all different values, so NDV is  5. If type of the column is **LOB** or **VARCHAR** exceeding 4,000, NDV is not generated. NDV is used to calculate **SELECTIVITY** in the optimizer. For more information, see :ref:`optimizer-principle`\.
 *   B+tree statistics: Index statistics
-    *   *B+tree Cardinality*: The number of values from which the accumulated duplicates of the index key values have been removed. In the example above, **(5,5)**/ matches the index column **(code,name)**/. The first **5**/ is the number of values from which the duplicates of the **code** column have been removed, and the second **5**/ is the number of values from which the duplicates of the two columns **code,name** have been removed.
+    *   *B+tree Cardinality*: The number of values from which the accumulated duplicates of the index key values have been removed. In the example above, **(5,5)**\ matches the index column **(code,name)**\. The first **5**\ is the number of values from which the duplicates of the **code** column have been removed, and the second **5**\ is the number of values from which the duplicates of the two columns **code,name** have been removed.
     *   *Total pages*: The total number of index pages.
     *   *Leaf pages*: The number of pages in the index leaf block.
     *   *Height*: The height of the B+tree index including the leaf block.
@@ -397,12 +397,12 @@ You can specify the table order by specifying the **LEADING** hint. Unlike the *
 Optimizer Principle
 =====================
 
-**CUBRID**/'s optimizer performs cost-based optimization when generating a query execution plan, and calculates **selectivity**/ and **expected number of rows and pages**/ through statistics. Based on this, it calculates the cost and selects the execution plan with the lowest cost.
+**CUBRID**\'s optimizer performs cost-based optimization when generating a query execution plan, and calculates **selectivity**\ and **expected number of rows and pages**\ through statistics. Based on this, it calculates the cost and selects the execution plan with the lowest cost.
 
 Selectivity
 --------------
 
-**Selectivity**/ is the ratio of data to be selected when a specific predicate is evaluated. The optimizer calculates the selectivity for each predicate in the **WHERE** clause. **CUBRID**/ assumes that the entire data is evenly distributed and calculates the **selectivity**/ using the **Number of Distinct Value**/ of statistics.
+**Selectivity**\ is the ratio of data to be selected when a specific predicate is evaluated. The optimizer calculates the selectivity for each predicate in the **WHERE** clause. **CUBRID**\ assumes that the entire data is evenly distributed and calculates the **selectivity**\ using the **Number of Distinct Value**\ of statistics.
 
 ::
 
@@ -445,7 +445,7 @@ Selectivity
     term[0]: [dba.t1].code=3 (sel 0.2)
     term[1]: [dba.t1].[name] range ('Ham' =  or 'Song' = ) (sel 0.75)
 
-**term[0]: [dba.t1].code=3**/ The **Number of Distinct Values**/ of **code**/ in the statistics is 5, so the selectivity is 1/5 or 0.2.
+**term[0]: [dba.t1].code=3**\ The **Number of Distinct Values**\ of **code**\ in the statistics is 5, so the selectivity is 1/5 or 0.2.
 **term[1]: [dba.t1].[name] range ('Ham' = or 'Song' = )** performs an **OR** operation on two values of name. Since the **Number of Distinct Values** for **name** is 2, the selectivity for each value is 1/2. Adding the two values and subtracting the intersection gives the calculation **0.5 + 0.5 - (0.5 x 0.5)**, resulting in 0.75.
 
 Expected number of rows
@@ -476,7 +476,7 @@ The **expected number of rows**  is calculated by multiplying the **selectivity*
         sargs: term[0]
         cost:  1 card 3
 
-**dba.t1(6/1)** indicates that the total number of rows in the t1 table is 6 and the number of pages is 1. Since the selectivity of **[dba.t1].[name]='Park'**/ is 0.5, the expected number of rows is 3, which is calculated as **6 x 0.5**. **cost: 1 card 3**/ in the execution plan indicates that the cost is 1 and the expected number of rows is 3.
+**dba.t1(6/1)** indicates that the total number of rows in the t1 table is 6 and the number of pages is 1. Since the selectivity of **[dba.t1].[name]='Park'**\ is 0.5, the expected number of rows is 3, which is calculated as **6 x 0.5**. **cost: 1 card 3**\ in the execution plan indicates that the cost is 1 and the expected number of rows is 3.
 
 Cost of sequential scan
 ------------------------
@@ -551,7 +551,7 @@ Index scan is performed by searching non-leaf nodes, leaf nodes, and heap areas.
         sargs: term[0]
         cost:  4 card 1
 
-You can check the predicates in the execution plan through the information in **Join graph terms**/. **index: idx term[2]**/ is the predicate for searching the non-leaf node during the index vertical scan. The **filtr: term[1]** predicate is for filtering the key in the leaf node during the index horizontal scan. When accessing the heap and filtering data, the **sargs: term[0]** predicate is used to filter.
+You can check the predicates in the execution plan through the information in **Join graph terms**. **index: idx term[2]** is the predicate for searching the non-leaf node during the index vertical scan. The **filtr: term[1]** predicate is for filtering the key in the leaf node during the index horizontal scan. When accessing the heap and filtering data, the **sargs: term[0]** predicate is used to filter.
 
 ::
 
@@ -570,7 +570,7 @@ The cost of an index scan is calculated as follows:
     #. Cost of reading a page = predicted non-leaf node pages accessed + leaf node pages + heap pages
     #. CPU cost of a repeated routine = predicted number of leaf node keys accessed
 
-The number of pages in a non-leaf node is 1 because the index **Height**/ of the statistics is 2 and the number of pages to be read excluding the leaf node is **2 - 1**. The number of leaf node pages is obtained by multiplying **Leaf pages** by the selectivity of the predicate **index: idx term[2]** used to search the non-leaf node. Since it is **MAX(9 X 0.05, 1)**, the number of leaf node pages to be read is 1. The number of heap pages to be read is obtained by multiplying the total number of pages in the table by the selectivity of **index**/ and **filtr** conditions. Here, it is calculated as **MAX(9 X 0.05 X 0.0125,1)**, so it is calculated that 1 page must be read. Finally, the CPU cost is obtained by multiplying the selectivity of **index: idx term[2]** by the CPU weight from the total number of rows in the table. **If you calculate it as **MAX(4000 X 0.05 X 0.0025,1)**, you get 1, and if you add up all the results so far, you can see that the cost is 4. If you look at **cost: 4 card 1** in the execution plan, you can see that the cost is 4 and the expected number of rows is 1.
+The number of pages in a non-leaf node is 1 because the index **Height** of the statistics is 2 and the number of pages to be read excluding the leaf node is **2 - 1**. The number of leaf node pages is obtained by multiplying **Leaf pages** by the selectivity of the predicate **index: idx term[2]** used to search the non-leaf node. Since it is **MAX(9 X 0.05, 1)**, the number of leaf node pages to be read is 1. The number of heap pages to be read is obtained by multiplying the total number of pages in the table by the selectivity of **index** and **filtr** conditions. Here, it is calculated as **MAX(9 X 0.05 X 0.0125,1)**, so it is calculated that 1 page must be read. Finally, the CPU cost is obtained by multiplying the selectivity of **index: idx term[2]** by the CPU weight from the total number of rows in the table. **If you calculate it as **MAX(4000 X 0.05 X 0.0025,1)**, you get 1, and if you add up all the results so far, you can see that the cost is 4. If you look at **cost: 4 card 1** in the execution plan, you can see that the cost is 4 and the expected number of rows is 1.
 
 cost of join
 -----------------------
@@ -605,7 +605,7 @@ The cost of a join is generated by calculating the cost of the preceding table a
                    cost:  2 card 3
         cost:  572 card 1
 
-The preceding table is *a*/ and the succeeding table is *b*. Since the execution of the succeeding table is repeated as many times as the number of rows of the preceding table due to the nature of the nested loop join, the cost of the succeeding table can be calculated by multiplying the variable cost of the *b* table by the expected number of rows of the *a* table. **CUBRID**/ internally manages fixed costs and variable costs separately, and this information cannot be displayed in the execution plan. The variable cost of the succeeding table is approximately *0.553*, and the cost of the succeeding table incurred during the join is 553 when calculated by *0.553 * 1000*, and the final cost is *572*/ when adding the cost of the preceding table *19*/.
+The preceding table is *a* and the succeeding table is *b*. Since the execution of the succeeding table is repeated as many times as the number of rows of the preceding table due to the nature of the nested loop join, the cost of the succeeding table can be calculated by multiplying the variable cost of the *b* table by the expected number of rows of the *a* table. **CUBRID** internally manages fixed costs and variable costs separately, and this information cannot be displayed in the execution plan. The variable cost of the succeeding table is approximately *0.553*, and the cost of the succeeding table incurred during the join is 553 when calculated by *0.553 * 1000*, and the final cost is *572* when adding the cost of the preceding table *19*.
 
 .. _query-profiling:
  
@@ -4408,7 +4408,7 @@ However, if the query is rewritten as follows by using **Predicate Push**, it ca
         FROM (SELECT name, nation_code, code, count(*) cnt FROM athlete WHERE nation_code = 'KOR' GROUP BY name, nation_code ) a, record r
         WHERE a.code = r.athlete_code;
 
-The following example shows how **Predicate Push**/ works in a situation where there are multiple subqueries.
+The following example shows how **Predicate Push** works in a situation where there are multiple subqueries.
 
 .. code-block:: sql
 

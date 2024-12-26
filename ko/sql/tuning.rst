@@ -445,8 +445,8 @@ CSQL에서 ";plan detail" 명령 입력 또는 "SET OPTIMIZATION LEVEL 513;"을 
     term[0]: [dba.t1].code=3 (sel 0.2)
     term[1]: [dba.t1].[name] range ('Ham' =  or 'Song' = ) (sel 0.75)
 
-**term[0]: [dba.t1].code=3**/는 통계정보에서 **code**/의 **Number of Distinct Values**/가 5이므로 선택도는 1/5, 즉 0.2이다.
-**term[1]: [dba.t1].[name] range ('Ham' =  or 'Song' = )** 는 **name**/을 두 가지 값으로 **OR** 연산하고 있다. **name**/의 **Number of Distinct Values**/가 2이므로 **선택도**/는 1/2이고, 두 값을 더하고 교집합을 제외하면 **0.5 + 0.5 - (0.5 x 0.5)** 계산으로 0.75가 나온다.
+**term[0]: [dba.t1].code=3**\는 통계정보에서 **code**\의 **Number of Distinct Values**\가 5이므로 선택도는 1/5, 즉 0.2이다.
+**term[1]: [dba.t1].[name] range ('Ham' =  or 'Song' = )** 는 **name**\을 두 가지 값으로 **OR** 연산하고 있다. **name**\의 **Number of Distinct Values**\가 2이므로 **선택도**\는 1/2이고, 두 값을 더하고 교집합을 제외하면 **0.5 + 0.5 - (0.5 x 0.5)** 계산으로 0.75가 나온다.
 
 예측되는 행수
 ---------------

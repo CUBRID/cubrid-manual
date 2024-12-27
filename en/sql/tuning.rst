@@ -571,7 +571,7 @@ The cost of an index scan is calculated as follows:
     #. Cost of reading a page = predicted non-leaf node pages accessed + leaf node pages + heap pages
     #. CPU cost of a repeated routine = predicted number of leaf node keys accessed
 
-The number of pages in a non-leaf node is 1 because the index **Height** of the statistics is 2 and the number of pages to be read excluding the leaf node is **2 - 1**. The number of leaf node pages is obtained by multiplying **Leaf pages** by the selectivity of the predicate **index: idx term[2]** used to search the non-leaf node. Since it is **MAX(9 X 0.05, 1)**, the number of leaf node pages to be read is 1. The number of heap pages to be read is obtained by multiplying the total number of pages in the table by the selectivity of **index** and **filtr** conditions. Here, it is calculated as **MAX(9 X 0.05 X 0.0125,1)**, so it is calculated that 1 page must be read. Finally, the CPU cost is obtained by multiplying the selectivity of **index: idx term[2]** by the CPU weight from the total number of rows in the table. **If you calculate it as **MAX(4000 X 0.05 X 0.0025,1)**, you get 1, and if you add up all the results so far, you can see that the cost is 4. If you look at **cost: 4 card 1** in the execution plan, you can see that the cost is 4 and the expected number of rows is 1.
+The number of pages in a non-leaf node is 1 because the index **Height** of the statistics is 2 and the number of pages to be read excluding the leaf node is **2 - 1**. The number of leaf node pages is obtained by multiplying **Leaf pages** by the selectivity of the predicate **index: idx term[2]** used to search the non-leaf node. Since it is **MAX(9 X 0.05, 1)**, the number of leaf node pages to be read is 1. The number of heap pages to be read is obtained by multiplying the total number of pages in the table by the selectivity of **index** and **filtr** conditions. Here, it is calculated as **MAX(9 X 0.05 X 0.0125, 1)**, so it is calculated that 1 page must be read. Finally, the CPU cost is obtained by multiplying the selectivity of **index: idx term[2]** by the CPU weight from the total number of rows in the table. If you calculate it as **MAX(4000 X 0.05 X 0.0025, 1)**, you get 1, and if you add up all the results so far, you can see that the cost is 4. If you look at **cost: 4 card 1** in the execution plan, you can see that the cost is 4 and the expected number of rows is 1.
 
 Cost of join
 -----------------------
@@ -2775,7 +2775,7 @@ Transforming **OUTER JOIN** to **INNER JOIN**
     #. Using **NULL** transformation functions. This includes **COALESCE (), NVL (), NVL2 (), DECODE (), IF (), IFNULL (), CONCAT_WS ()**.
     #. **IS NULL ,CASE** statements are also not targets for **Predicate Push**.
 
-The following example shows an optimization that transform **OUTER JOIN**/ to **INNER JOIN**/.
+The following example shows an optimization that transform **OUTER JOIN**\ to **INNER JOIN**\.
 
 .. code-block:: sql
 
@@ -4508,7 +4508,7 @@ When performing an **OUTER JOIN** and either the predicate to be pushed or the t
 
 Subquery unnest
 -------------------------
-**Subquery unnest** improves performance by converting the filtering method, which executes the subquery in the **WHERE** clause repeatedly, into a join method that guarantees the same result. Subqueries in the **WHERE** clause can have different characteristics depending on the operator. Subqueries with operators like IN or EXISTS, which can return multiple rows, are the main targets for optimization. CUBRID partially supports this optimization only for the IN operator.
+**Subquery unnest** improves performance by converting the filtering method, which executes the subquery in the **WHERE** clause repeatedly, into a join method that guarantees the same result. Subqueries in the **WHERE** clause can have different characteristics depending on the operator. Subqueries with operators like **IN** or **EXISTS**, which can return multiple rows, are the main targets for optimization. **CUBRID** partially supports this optimization only for the **IN** operator.
 
 The following example shows converting an IN operator into a join query.
 

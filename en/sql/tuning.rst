@@ -11,10 +11,10 @@ Statistics for tables and indexes enables queries of the database system to proc
 
 **UPDATE STATISTICS** statement is recommended to be executed periodically. It is also recommended to execute when a new index is added or when a mass of **INSERT** or **DELETE** statements make the big difference between the statistics and the actual information.
 
-When updating statistics, the execution plan cache of the related statistics is not deleted. the execution plan is regenerated when the following two criteria are met during query execution.
+When updating statistics, the execution plan cache related to those statistics is not deleted. The execution plan is regenerated when the following two criteria are met during query execution.
 
-    #. 6 minutes after the execution plan cache creation or regeneration check
-    #. the page size increases or decreases by more than 10 times. and statistics are updated
+    #. 6 minutes have passed since the execution plan cache creation or regeneration check
+    #. The page size increases or decreases by more than 10 times, and statistics are updated
 
 The user can delete plan cache using the **PLANDUMP** utility. For more information about **PLANDUMP**, see :ref:`plandump`\.
 
@@ -126,7 +126,7 @@ The following shows the statistical information of *t1* table in CSQL interprete
 *   *Timestamp*: The time when the statistics were updated.
 *   *Total pages*: The number of pages in the table.
 *   *Total objects*: The total number of rows in the table.
-*   *Number of Distinct Values*: The number of values with duplicates removed. column **code** is all different values, so NDV is 5. If type of the column is **LOB** or **VARCHAR** exceeding 4,000, NDV is not generated. NDV is used to calculate **SELECTIVITY** in the optimizer. For more information, see :ref:`optimizer-principle`\.
+*   *Number of Distinct Values*: The number of values, with duplicates removed. The column **code** consists of all different values, so the NDV is 5. If type of the column is **LOB** or **VARCHAR** exceeding 4,000 characters, NDV is not generated. NDV is used to calculate **SELECTIVITY** in the optimizer. For more information, see :ref:`optimizer-principle`\.
 *   B+tree statistics: Index statistics
 
     *   *B+tree Cardinality*: The number of values from which the accumulated duplicates of the index key values have been removed. In the example above, **(5,5)** matches the index column **(code,name)**. The first **5** is the number of values from which the duplicates of the **code** column have been removed, and the second **5** is the number of values from which the duplicates of the two columns **code,name** have been removed.
@@ -484,8 +484,8 @@ Cost of sequential scan
 
 When estimating costs, the optimizer considers two things:
 
-    #. Cost of reading a page
-    #. CPU cost of repetitive routines
+    #. The cost of reading a page
+    #. The CPU cost of repetitive routines
 
 The following example shows how the cost of a sequential scan is calculated.
 
@@ -518,7 +518,7 @@ The following example shows how the cost of a sequential scan is calculated.
         sargs: term[0]
         cost:  19 card 1000
 
-**node[0]: dba.t1 dba.t1(4000/9)** shows that the total number of rows in the t1 table is 4000 and the number of pages is 9. Therefore, the page cost is 9, which is the total number of pages in the t1 table. The CPU cost is the total number of rows in the table multiplied by the CPU weight, which is **4000 x 0.0025**, which is 10. Adding the two values gives 19, and from **cost: 19 card 1000**, we can see that the cost is 19 and the expected number of rows to be retrieved is 1000.
+**node[0]: dba.t1 dba.t1(4000/9)** shows that the total number of rows in the t1 table is 4000 and the number of pages is 9. Therefore, the page cost is 9, which is the total number of pages in the t1 table. The CPU cost is the total number of rows in the table multiplied by the CPU weight, which is **4000 x 0.0025**, resulting in a cost of 10. Adding the two values gives 19, and from **cost: 19 card 1000**, we can see that the cost is 19 and the expected number of rows to be retrieved is 1000.
 
 Cost of index scan
 --------------------
@@ -2795,7 +2795,7 @@ The following example shows an optimization that transform **OUTER JOIN**\ to **
         TABLE SCAN (a)
         TABLE SCAN (b)
 
-The following example shows that can not be transformed from **OUTER JOIN** to **INNER JOIN** because of the nullable predicate.
+The following example demonstrates that the transformation from **OUTER JOIN** to **INNER JOIN** is not possible due to the nullable predicate.
 
 .. code-block:: sql
 
@@ -4323,8 +4323,8 @@ The following is an example using **ROWNUM, LIMIT** or **GROUPBY_NUM(), INST_NUM
 
 When using **ROWNUM, LIMIT** or **GROUPBY_NUM(), INST_NUM(), ORDERBY_NUM()** in views as above, **View Merging** optimization cannot be performed. However, when **ROWNUM** is used for partial range processing, **View Merging** is performed even if **ROWNUM** exists. This is the case when the following two conditions are satisfied.
 
-    #. only predicates including **ROWNUM** in the **WHERE** 
-    #. only one subquery in the **FROM**
+    #. The **WHERE** clause includes only predicates involving **ROWNUM**
+    #. There is only one subquery in the **FROM** clause
 
 .. code-block:: sql
 

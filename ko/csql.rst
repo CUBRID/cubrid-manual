@@ -360,7 +360,7 @@ CSQL은 SQL의 문자열 리터럴, 주석, 식별자를 (참고: :ref:`작성 �
     csql> create table table_c([;exit] int);
     ...
 
-예외적으로 대화형 모드 CSQL에서는 명령행의 첫문자가 세미콜론인 경우 리터럴, 주석, 식별자 처리중이여도 해당 문자열은 세션 명령어로 인식한다. ::
+예외적으로 대화형 모드 CSQL에서는 명령행의 첫문자가 세미콜론인 경우 문자열 리터럴, 주석, 식별자 처리중이여도 해당 문자열은 세션 명령어로 인식한다. ::
 
     csql> select * from table_a where col = '
     csql> ;exit    <-- CSQL 종료

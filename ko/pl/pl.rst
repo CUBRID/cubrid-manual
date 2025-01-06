@@ -1548,7 +1548,7 @@ RAISE
 Exception을 발생시킨다.
 Exception 이름 *identifier*\는 :ref:`시스템 Exception <exception>`\이거나
 :ref:`사용자가 선언 <exception_decl>`\한 것이어야 한다.
-Exception 이름이 생략되는 경우는 RAISE 문의 위치가 Exception 처리 구조의 THEN 절 안에 있을 때 뿐이다.
+Exception의 THEN 절 안의 RAISE는 Exception 이름을 생략할 수 있다.
 이 경우, 현재 처리 중인 Exception을 일으키는 것으로 동작한다.
 
 .. code-block:: sql

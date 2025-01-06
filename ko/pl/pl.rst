@@ -1350,7 +1350,7 @@ COMMIT, ROLLBACK, TRUNCATE 문은 프로그램의 실행문으로서 직접 사�
     END;
 
 다음 예제는 SYS_REFCURSOR를 OUT 인자로 갖는 내부 프로시저와 OPEN-FOR 문을 이용해서 특정 SELECT 문을
-SYS_REFCURSOR 변수에 연결하고 그 SELECT 문의 결과를 조회해 오는 예제이다.
+SYS_REFCURSOR 변수에 연결하고 SELECT 문의 결과를 조회하는 예제이다.
 
 .. code-block:: sql
 

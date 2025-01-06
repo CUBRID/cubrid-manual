@@ -342,7 +342,7 @@ Static/Dynamic SQL 밖의 PL/CSQL 문에서 아래 표의 단어들을 변수, �
 |   XOR                                                                                 |
 +---------------------------------------------------------------------------------------+
 
-위에서 AUTONOMOUS_TRANSACTION은 향후 추가할 기능을 위해서 미리 포함되어 있는 예약어이고 현재는 사용되지 않는다.
+위에서 AUTONOMOUS_TRANSACTION은 향후 추가할 기능을 위해서 미리 포함되어 있는 예약어이다.
 
 .. _types:
 
@@ -355,8 +355,7 @@ Static/Dynamic SQL에서는 SQL에서 제공하는 모든 :ref:`데이터 타입
 BOOLEAN, SYS_REFCURSOR와 SQL에서 제공하는 데이터 타입 중 일부이다.
 
 * BOOLEAN: TRUE, FALSE, NULL을 값으로 가질 수 있다.
-  CREATE PROCEDURE/FUNCTION 문에서 인자 타입이나 리턴 타입으로 BOOLEAN을 사용할 수는 없다.
-  왜냐하면 SQL에 BOOLEAN 타입이 정의되어 있지 않기 때문이다.
+  SQL에서 BOOLEAN 타입을 지원하지 않기 때문에 CREATE PROCEDURE/FUNCTION 문에서 인자 타입이나 리턴 타입으로 BOOLEAN을 사용할 수는 없다.
   단, :ref:`내부 프로시저/함수 <local_routine_decl>`\를 선언할 때는 인자 타입이나 리턴 타입으로
   BOOLEAN을 사용할 수 있다.
 * SYS_REFCURSOR: 커서 변수를 선언할 때 사용한다.
@@ -498,10 +497,10 @@ r의 값은 필드 a, b, c를 갖는 레코드가 되고 r.a, r.b, r.c는 각각
 
 =와 != 아닌 다른 비교 연산자 <=>, <, >, <=, >= 들은 레코드 비교에 적용할 수 없다.
 
-한 레코드 변수 s로부터 다른 레코드 변수 t로의 대입이 다음 경우에 가능하다.
+다음 조건이 만족되는 경우, 레코드 변수 s로부터 다른 레코드 변수 t로의 대입이 가능하다.
 
-* s와 t의 필드 개수가 같다.
-* 각각의 필드 순번 i에 대해서, s와 t의 i번째 필드들의 타입을 S\ :sub:`i`\와 T\ :sub:`i`\라고 할 때, S\ :sub:`i`\에서 T\ :sub:`i`\로 대입 가능하다.
+* s와 t의 필드 개수가 동일함.
+* 각각의 필드 순번 i에 대해서, s와 t의 i번째 필드들의 타입을 S\ :sub:`i`\와 T\ :sub:`i`\라고 할 때, S\ :sub:`i`\에서 T\ :sub:`i`\로 대입 가능함.
 
 레코드 변수 사이에 대입이 가능하기 위해서 같은 순번의 필드명이 동일할 필요는 없다.
 
@@ -1264,7 +1263,7 @@ BLOCK은 프로시저/함수와 마찬가지로 Exception 처리 구조를 가�
 * *body*: 필수적으로 하나 이상의 실행문과 선택적으로 몇 개의 Exception 핸들러로 구성된다.
 * *declare_spec*: 변수, 상수, Exception, 커서, 내부 프로시저/함수 선언. (참조: :ref:`선언문 <decl>`)
 * *handler*:  지정된 Exception이 발생했을 때 실행할 실행문들을 지정한다.
-* *exception_name*: Exception 이름 *identifier*\는 :ref:`시스템 Exception <exception>`\이거나 :ref:`사용자가 선언 <exception_decl>`\한 것이어야 한다. OTHERS는 아직까지 매치되지 않은 모든 Exception에 매치되며 OR로 다른 exception 이름과 연결할 수 없다.
+* *exception_name*: Exception 이름 *identifier*\는 :ref:`시스템 Exception <exception>`\이거나 :ref:`사용자가 선언 <exception_decl>`\한 것이어야 한다. OTHERS는 선언되지 않은 모든 Exception에 매치되며 OR로 다른 exception 이름과 연결할 수 없다.
 
 
 BLOCK 안에서 선언된 아이템들은 그 BLOCK을 벗어나면 참조할 수 없다.
@@ -1351,7 +1350,7 @@ COMMIT, ROLLBACK, TRUNCATE 문은 프로그램의 실행문으로서 직접 사�
     END;
 
 다음 예제는 SYS_REFCURSOR를 OUT 인자로 갖는 내부 프로시저와 OPEN-FOR 문을 이용해서 특정 SELECT 문을
-SYS_REFCURSOR 변수에 연결하고 그 SELECT 문의 결과를 조회해 오는 예제이다.
+SYS_REFCURSOR 변수에 연결하고 SELECT 문의 결과를 조회하는 예제이다.
 
 .. code-block:: sql
 
@@ -1384,8 +1383,8 @@ SYS_REFCURSOR 변수에 연결하고 그 SELECT 문의 결과를 조회해 오�
 RAISE_APPLICATION_ERROR
 =========================
 
-RAISE_APPLICATION_ERROR는 원하는 :ref:`코드와 에러메시지 <sqlcode>`\로 :ref:`Exception <exception>`\을
-일으키고자 할 때 사용한다.
+RAISE_APPLICATION_ERROR는 사용자가 원하는 :ref:`코드와 에러메시지 <sqlcode>`\로 :ref:`Exception <exception>`\을
+발생하고자 할 때 사용한다.
 RAISE_APPLICATION_ERROR의 사용 형태는 Built-in 프로시저 호출처럼 보이지만 내부적으로는 PL/CSQL 실행문이다.
 첫번째 인자로 주는 코드는 1000보다 큰 INTEGER 값을 가져야 한다. 1000 이하의 값은 시스템을 위해 예약되어 있기 때문이다.
 두번째 인자로 주는 에러메시지는 임의의 문자열이 가능하다.
@@ -1425,7 +1424,7 @@ INTO 절을 써서 SELECT 문의 조회 결과를 프로그램의 변수나 OUT 
 값들은 대응되는 변수나 OUT 인자에 대입 가능한 타입을 가져야 한다.
 
 SQL 문 실행 중에 에러가 나면 SQL_ERROR Exception이 발생한다.
-INTO 절을 포함한 경우 SELECT 문의 조회 결과는  단 한 건의 결과 레코드를 가져야 한다.
+INTO 절을 포함한 경우 SELECT 문의 조회 결과는 단 한 건의 결과 레코드를 가져야 한다.
 결과가 없을 때는 NO_DATA_FOUND Exception이 발생하고 결과가 두 건 이상일 때는 TOO_MANY_ROWS Exception이 발생한다.
 
 ::
@@ -1546,10 +1545,10 @@ RAISE
     <raise_statement> ::=
         RAISE [ <identifier> ]
 
-Exception을 일으킨다.
+Exception을 발생시킨다.
 Exception 이름 *identifier*\는 :ref:`시스템 Exception <exception>`\이거나
 :ref:`사용자가 선언 <exception_decl>`\한 것이어야 한다.
-Exception 이름이 생략되는 경우는 RAISE 문의 위치가 Exception 처리 구조의 THEN 절 안에 있을 때 뿐이다.
+Exception의 THEN 절 안의 RAISE는 Exception 이름을 생략할 수 있다.
 이 경우, 현재 처리 중인 Exception을 일으키는 것으로 동작한다.
 
 .. code-block:: sql

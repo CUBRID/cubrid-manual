@@ -1424,7 +1424,7 @@ INTO 절을 써서 SELECT 문의 조회 결과를 프로그램의 변수나 OUT 
 값들은 대응되는 변수나 OUT 인자에 대입 가능한 타입을 가져야 한다.
 
 SQL 문 실행 중에 에러가 나면 SQL_ERROR Exception이 발생한다.
-INTO 절을 포함한 경우 SELECT 문의 조회 결과는  단 한 건의 결과 레코드를 가져야 한다.
+INTO 절을 포함한 경우 SELECT 문의 조회 결과는 단 한 건의 결과 레코드를 가져야 한다.
 결과가 없을 때는 NO_DATA_FOUND Exception이 발생하고 결과가 두 건 이상일 때는 TOO_MANY_ROWS Exception이 발생한다.
 
 ::

@@ -1383,7 +1383,7 @@ SYS_REFCURSOR 변수에 연결하고 SELECT 문의 결과를 조회하는 예제
 RAISE_APPLICATION_ERROR
 =========================
 
-RAISE_APPLICATION_ERROR는 원하는 :ref:`코드와 에러메시지 <sqlcode>`\로 :ref:`Exception <exception>`\을
+RAISE_APPLICATION_ERROR는 사용자가 원하는 :ref:`코드와 에러메시지 <sqlcode>`\로 :ref:`Exception <exception>`\을
 발생하고자 할 때 사용한다.
 RAISE_APPLICATION_ERROR의 사용 형태는 Built-in 프로시저 호출처럼 보이지만 내부적으로는 PL/CSQL 실행문이다.
 첫번째 인자로 주는 코드는 1000보다 큰 INTEGER 값을 가져야 한다. 1000 이하의 값은 시스템을 위해 예약되어 있기 때문이다.

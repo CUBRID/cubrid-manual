@@ -134,7 +134,6 @@ Static SQL
 ==================
 
 SQL 구문 중 다음 구문들은 PL/CSQL 실행문으로 직접 사용할 수 있으며, 이를 Static SQL 문이라고 부른다.
-그러한 경우를 Static SQL 문이라고 부른다.
 
 * SELECT (CTE, UNION, INTERSECT, MINUS 포함)
 * INSERT, UPDATE, DELETE, MERGE, REPLACE

@@ -181,11 +181,11 @@ SELECT 문을 :ref:`커서 선언 <cursor_decl>`\이나 :ref:`OPEN-FOR <cursor_m
         ...
     END;
 
- INTO절을 포함안 SELECT 문의 조회 결과는 한 건의 결과 레코드여야 하며, 두건 이상의 결과를 가져오는 경우는 TOO_MANY_ROWS Exception이 발생한다.
+INTO 절을 포함안 SELECT 문의 조회 결과는 한 건의 결과 레코드여야 하며, 두건 이상의 결과를 가져오는 경우는 TOO_MANY_ROWS Exception이 발생한다.
 결과가 없을 경우에는 NO_DATA_FOUND Exception이 발생한다.
 
 Static SQL 문의 WHERE 절이나 VALUES 절 안에서처럼 값을 필요로 하는 자리에
-프로그램에서 선언한 변수, 상수, 프로시저/함수 인자를 쓸 수 있다.
+PL/CSQL에서 선언한 변수, 상수, 프로시저/함수 인자를 쓸 수 있다.
 단, 이들은 BOOLEAN이나 SYS_REFCURSOR 타입을 가져서는 안된다. :ref:`SQL 데이터타입 <datatype_index>`\이
 이들을 포함하지 않기 때문이다.
 

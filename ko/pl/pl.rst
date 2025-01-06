@@ -355,7 +355,7 @@ Static/Dynamic SQL에서는 SQL에서 제공하는 모든 :ref:`데이터 타입
 BOOLEAN, SYS_REFCURSOR와 SQL에서 제공하는 데이터 타입 중 일부이다.
 
 * BOOLEAN: TRUE, FALSE, NULL을 값으로 가질 수 있다.
-  CREATE PROCEDURE/FUNCTION 문에서 인자 타입이나 리턴 타입으로 BOOLEAN을 사용할 수는 없다.
+  SQL에서 BOOLEAN 타입을 지원하지 않기 때문에 CREATE PROCEDURE/FUNCTION 문에서 인자 타입이나 리턴 타입으로 BOOLEAN을 사용할 수는 없다.
   왜냐하면 SQL에 BOOLEAN 타입이 정의되어 있지 않기 때문이다.
   단, :ref:`내부 프로시저/함수 <local_routine_decl>`\를 선언할 때는 인자 타입이나 리턴 타입으로
   BOOLEAN을 사용할 수 있다.

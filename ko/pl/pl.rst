@@ -911,7 +911,7 @@ Static/Dynamic SQL 제외한 PL/CSQL 문에서는 다음 4개 서버 설정 파�
         -- 다시 a = 3, b는 VARCHAR(10) 타입
     END;
 
-이러한 "이름 가림"은 다른 종류의 항목(상수, 프로시저/함수 인자, Exception, 커서, 내부 프로시저/함수)들에
+이러한 "이름 가림"(Name Hiding)은 다른 종류의 항목(상수, 프로시저/함수 인자, Exception, 커서, 내부 프로시저/함수)들에
 대해서도 동일하게 적용된다.
 
 단, 가려지는 항목이 동일 선언부 위쪽에서 다른 변수나 상수의 초기값 표현식에 사용되었다면 컴파일 과정에서 에러가 발생한다.
@@ -1661,6 +1661,43 @@ PL/CSQL이 제공하는 루프문은 아래와 같이 다섯 가지 형태가 �
 * *for-iter-loop* 형태의 루프에서 *lower_bound*, *upper_bound*, *step*\은 모두 INTEGER로 변환가능한 타입을 가져야 한다. 실행시간에 step 값이 0 이하이면 VALUE_ERROR Exception이 발생한다. REVERSE가 지정되지 않은 경우, *identifier*\는 *lower_bound*\로 초기화 된 후 *upper_bound*\보다 작거나 같다는 조건을 만족하면 루프 바디를 한번 실행하고 그 이후는 *step* 만큼 증가한 값이 *upper_bound*\보다 작거나 같다는 조건을 만족하는 한 반복한다.  REVERSE가 지정된 경우에는, *identifier*\는 *upper_bound*\로 초기화 된 후 *lower_bound*\보다 크거나 같다는 조건을 만족하면 루프 바디를 한번 실행하고 그 이후는 *step*\만큼 감소한 값이 *lower_bound*\보다 크거나 같다는 조건을 만족하는 한 반복한다. 루프 변수 *identifier*\는 루프 바디 안에서 INTEGER 타입 변수로 사용될 수 있다.
 * *for-cursor-loop*, *for-static-sql-loop* 형태의 FOR 루프는 *record* IN 다음에 기술하는 커서나 SELECT 문의 조회 결과들을 순회하기 위해 사용된다. 이 때 사용되는 SELECT 문에 INTO 절이 있으면 컴파일 과정에서 에러가 발생한다. 매 iteration 마다 조회 결과가 한 row 씩 *record*\에 할당된 상태로 루프 바디가 실행된다. 이 때, 결과 row의 각 컬럼들은 루프 바디 안에서 *record*. *column* 모양으로 참조할 수 있다.
 
+기본 형태 LOOP는 보통 아래와 같이 반복 종료를 위한 조건을 내부에 가지게 된다.
+
+.. code-block:: sql
+
+    CREATE OR REPLACE PROCEDURE print_nation_athletes(nation CHAR)
+    AS
+        code INT;
+        name VARCHAR(40);
+        CURSOR c IS SELECT code, name from athlete where nation_code = nation;
+    BEGIN
+        OPEN c;
+        LOOP
+            FETCH c INTO code, name;
+            EXIT WHEN c%NOTFOUND;
+            DBMS_OUTPUT.PUT_LINE('code: ' || code || ' name: ' || name);
+        END LOOP;
+        CLOSE c;
+    END;
+
+다음은 While Loop 구문의 간단한 사용 예를 보여준다.
+
+.. code-block:: sql
+
+    CREATE OR REPLACE FUNCTION sum_upto(n INT) RETURN INT
+    AS
+        sum INT := 0;
+        i INT := 1;
+    BEGIN
+        WHILE i <= n LOOP
+            sum := sum + i;
+            i := i + 1;
+        END LOOP;
+
+        RETURN sum;
+    END;
+
+
 다음은 For-Iterator Loop 구문의 사용 예를 보여준다.
 
 .. code-block:: sql
@@ -1841,6 +1878,41 @@ SQL%ROWCOUNT는 Static SQL을 실행한 직후에 결과 크기를 나타내는 
 * %FOUND: 첫 번째 FETCH 이전이면 NULL. 아니면 마지막 FETCH가 1개의 ROW를 결과로 갖는지 여부 (BOOLEAN). 열려 있지 않은 커서에 대해서 조회하면 INVALID_CURSOR Exception 발생.
 * %NOTFOUND: 첫 번째 FETCH 이전이면 NULL. 아니면 마지막 FETCH가 0개의 ROW를 결과로 갖는지 여부 (BOOLEAN). 열려 있지 않은 커서에 대해서 조회하면 INVALID_CURSOR Exception 발생.
 * %ROWCOUNT: 첫 번째 FETCH 이전이면 NULL. 아니면 현재까지 FETCH된 ROW의 개수 (BIGINT). 열려 있지 않은 커서에 대해서 조회하면 INVALID_CURSOR Exception 발생.
+
+아래 예제에서 내부 함수 iterate_cursor()는 커서 속성을 사용하여 레코드들을 순회하고 전체 레코드 개수를 리턴한다.
+인자로 넘겨 받은 커서가 열려 있지 않을 때는 (커서의 %ISOPEN 속성이 False일 때는) -1을 리턴한다.
+더 이상 조회할 레코드가 없는지는 FETCH 후 커서의 %NOTFOUND 속성을 검사해서 알아낸다.
+커서의 %ROWCOUNT 속성은 FETCH 문으로 조회된 레코드 각각마다 1씩 증가하다가
+FETCH 반복문이 종료된 후에는 조회된 전체 레코드 개수를 나타내게 된다.
+
+.. code-block:: sql
+
+    CREATE OR REPLACE PROCEDURE cursor_attributes AS
+        ...
+
+        FUNCTION iterate_cursor(rc SYS_REFCURSOR) RETURN INT
+        AS
+            v VARCHAR;
+        BEGIN
+            IF rc%ISOPEN THEN
+                LOOP
+                    FETCH rc INTO v;
+                    EXIT WHEN rc%NOTFOUND;
+
+                    -- do something with v
+                    ...
+
+                END LOOP;
+
+                RETURN rc%ROWCOUNT;     -- number of records
+            ELSE
+                RETURN -1;              -- error
+            END IF;
+        END;
+    begin
+        ...
+
+    end;
 
 *cursor_expression*\의 계산 결과가 NULL이면 INVALID_CURSOR Exception이 발생한다.
 

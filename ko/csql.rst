@@ -1402,6 +1402,8 @@ OPT LEVEL의 상세한 내용은 :ref:`viewing-query-plan`\ 를 참고한다.
     csql> ;time
     TIME IS ON
 
+.. _server-output:
+
 **서버 저장 메시지 출력(;SERver-output)**
 
 이 값을 ON으로 설정하면 서버의 DBMS_OUTPUT 버퍼에 저장된 메시지를 출력한다. 기본값은 OFF이다.

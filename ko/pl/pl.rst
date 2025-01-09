@@ -94,6 +94,11 @@ PL/CSQL은 저장 프로시저나 저장 함수를 생성하는데 사용된다.
             RETURN -1;
     END;
 
+위 예제들에서 DBMS_OUTPUT.put_line() 문은 인자로 주어진 문자열을 서버의 DBMS_OUTPUT 버퍼에 저장한다.
+인자가 문자열 타입이 아닐 때는 문자열로 형변환한 값을 저장한다.
+DBMS_OUTPUT 버퍼에 저장된 문자열 메시지들은 CSQL에서 세션 명령어 ;server-output on을 실행해서 확인할 수 있다.
+자세한 내용은 :ref:`CSQL 세션명령어 server-output <server-output>`\을 참조한다.
+
 CREATE PROCEDURE/FUNCTION 문을 실행하면 저장 프로시저/함수의 문법과 실행 의미에 관련된 각종 규칙들을 검사한다.
 검사에서 오류가 발견되면 발생된 위치와 원인을 설명하는 오류 메세지를 출력한다.
 다음은 오류를 가지고 있는 저장 프로시저가 CSQL에서 에러를 발생시키는 예이다.

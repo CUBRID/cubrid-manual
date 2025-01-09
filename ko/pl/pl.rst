@@ -34,21 +34,6 @@ PL/CSQL은 저장 프로시저나 저장 함수를 생성하는데 사용된다.
 저장 프로시저/함수는 :ref:`큐브리드 내장 함수 <operators-and-functions>`\와 동일한 이름을 가질 수 없다.
 동일한 이름으로 선언하면 컴파일 과정에서 (CREATE 문 실행 과정에서) 에러가 발생한다.
 
-body 내부의 실행문들 중 수행시 도달할 수 없는 실햄문이 있는 경우 컴파일 과정에서 에러를 발생한다.
-다음은 도달할 수 없는 실행문이 있는 간단한 예이다.
-
-.. code-block:: sql
-
-    csql> CREATE OR REPLACE PROCEDURE test_unreachable_statement
-    csql> AS
-    csql> BEGIN
-    csql>     RETURN;
-    csql>     DBMS_OUTPUT.put_line('Hello world');
-    csql> END;
-
-    ERROR: In line 5, column 5
-    Stored procedure compile error: unreachable statement
-
 다음은 PL/CSQL을 사용해서 작성한 저장 프로시저/함수의 예이다.
 
 .. code-block:: sql
@@ -1293,6 +1278,21 @@ BLOCK에서 선언된 아이템이 바깥 scope에서 선언된 다른 아이템
 
         DBMS_OUTPUT.put_line(a || b || c);          -- '333'
     END;
+
+body 내부의 실행문들 중 수행시 도달할 수 없는 실햄문이 있는 경우 컴파일 과정에서 에러를 발생한다.
+다음은 도달할 수 없는 실행문이 있는 간단한 예이다.
+
+.. code-block:: sql
+
+    csql> CREATE OR REPLACE PROCEDURE test_unreachable_statement
+    csql> AS
+    csql> BEGIN
+    csql>     RETURN;
+    csql>     DBMS_OUTPUT.put_line('Hello world');
+    csql> END;
+
+    ERROR: In line 5, column 5
+    Stored procedure compile error: unreachable statement
 
 Static SQL
 ==========

@@ -303,30 +303,31 @@ restoredb
 
         *** BACKUP HEADER INFORMATION ***
         Database Name: /local1/testing/demodb
-         DB Creation Time: Mon Oct 1 17:27:40 2008
-                 Pagesize: 4096
+           DB Creation Time: Mon Oct 1 17:27:40 2008
+           Pagesize: 4096
         Backup Level: 1 (INCREMENTAL LEVEL 1)
-                Start_lsa: 513|3688
-                 Last_lsa: 513|3688
+           Start_lsa: 513|3688
+           Last_lsa: 513|3688
         Backup Time: Mon Oct 1 17:32:50 2008
-         Backup Unit Num: 0
+           Backup Unit Num: 0
         Release: 8.1.0
-             Disk Version: 8
+           Disk Version: 8
         Backup Pagesize: 4096
         Zip Method: 0 (NONE)
-                Zip Level: 0 (NONE)
-        Previous Backup level: 0 Time: Mon Oct 1 17:31:40 2008
-        (start_lsa was -1|-1)
-        Database Volume name: /local1/testing/demodb_keys
-             Volume Identifier: -6, Size: 65 bytes (1 pages)
-        Database Volume name: /local1/testing/demodb_vinf
-             Volume Identifier: -5, Size: 308 bytes (1 pages)
-        Database Volume name: /local1/testing/demodb
-             Volume Identifier: 0, Size: 2048000 bytes (500 pages)
-        Database Volume name: /local1/testing/demodb_lginf
-             Volume Identifier: -4, Size: 165 bytes (1 pages)
-        Database Volume name: /local1/testing/demodb_bkvinf
-             Volume Identifier: -3, Size: 132 bytes (1 pages)
+           Zip Level: 0 (NONE)
+        Previous Backup Level: 0
+           Time: Mon Oct 1 17:31:40 2008
+           (start_lsa was -1|-1)
+        Database Volume Name: /local1/testing/demodb_keys
+           Volume Identifier: -6, Size: 65 bytes (1 pages)
+        Database Volume Name: /local1/testing/demodb_vinf
+           Volume Identifier: -5, Size: 308 bytes (1 pages)
+        Database Volume Name: /local1/testing/demodb
+           Volume Identifier: 0, Size: 2048000 bytes (500 pages)
+        Database Volume Name: /local1/testing/demodb_lginf
+           Volume Identifier: -4, Size: 165 bytes (1 pages)
+        Database Volume Name: /local1/testing/demodb_bkvinf
+           Volume Identifier: -3, Size: 132 bytes (1 pages)
      
     **\-\-list** 옵션을 이용하여 출력된 백업 정보를 확인하면, 백업 파일이 백업 수준 1로 생성되었고, 앞의 백업 수준 0의 전체 백업이 수행된 시점을 확인할 수 있다. 따라서, 예시된 데이터베이스의 복구를 위해서는 백업 수준 0인 백업 파일과 백업 수준 1인 백업 파일이 준비되어야 한다.
 

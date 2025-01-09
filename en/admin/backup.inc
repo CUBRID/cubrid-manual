@@ -303,30 +303,31 @@ The following table shows options available with the **cubrid restoredb** utilit
 
         *** BACKUP HEADER INFORMATION ***
         Database Name: /local1/testing/demodb
-         DB Creation Time: Mon Oct 1 17:27:40 2008
-                 Pagesize: 4096
+           DB Creation Time: Mon Oct 1 17:27:40 2008
+           Pagesize: 4096
         Backup Level: 1 (INCREMENTAL LEVEL 1)
-                Start_lsa: 513|3688
-                 Last_lsa: 513|3688
+           Start_lsa: 513|3688
+           Last_lsa: 513|3688
         Backup Time: Mon Oct 1 17:32:50 2008
-         Backup Unit Num: 0
+           Backup Unit Num: 0
         Release: 8.1.0
-             Disk Version: 8
+           Disk Version: 8
         Backup Pagesize: 4096
         Zip Method: 0 (NONE)
-                Zip Level: 0 (NONE)
-        Previous Backup level: 0 Time: Mon Oct 1 17:31:40 2008
-        (start_lsa was -1|-1)
-        Database Volume name: /local1/testing/demodb_keys
-             Volume Identifier: -6, Size: 65 bytes (1 pages)
-        Database Volume name: /local1/testing/demodb_vinf
-             Volume Identifier: -5, Size: 308 bytes (1 pages)
-        Database Volume name: /local1/testing/demodb
-             Volume Identifier: 0, Size: 2048000 bytes (500 pages)
-        Database Volume name: /local1/testing/demodb_lginf
-             Volume Identifier: -4, Size: 165 bytes (1 pages)
-        Database Volume name: /local1/testing/demodb_bkvinf
-             Volume Identifier: -3, Size: 132 bytes (1 pages)
+           Zip Level: 0 (NONE)
+        Previous Backup Level: 0
+           Time: Mon Oct 1 17:31:40 2008
+           (start_lsa was -1|-1)
+        Database Volume Name: /local1/testing/demodb_keys
+           Volume Identifier: -6, Size: 65 bytes (1 pages)
+        Database Volume Name: /local1/testing/demodb_vinf
+           Volume Identifier: -5, Size: 308 bytes (1 pages)
+        Database Volume Name: /local1/testing/demodb
+           Volume Identifier: 0, Size: 2048000 bytes (500 pages)
+        Database Volume Name: /local1/testing/demodb_lginf
+           Volume Identifier: -4, Size: 165 bytes (1 pages)
+        Database Volume Name: /local1/testing/demodb_bkvinf
+           Volume Identifier: -3, Size: 132 bytes (1 pages)
 
     With the backup information displayed by using the **\-\-list** option, you can check that backup files have been created at the backup level 1 as well as the point where the full backup of backup level 0 has been performed. Therefore, to restore the database in the example, you must prepare backup files for backup levels 0 and 1.
 

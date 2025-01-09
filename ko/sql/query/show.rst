@@ -722,9 +722,11 @@ SHOW LOG HEADER
 
 ::
 
-    SHOW LOG HEADER [OF file_name];
+    SHOW LOG HEADER [OF file_path];
     
-OF file_name을 생략하면 메모리의 헤더 정보를 출력하며, OF file_name을 포함하면 file_name의 헤더 정보를 출력한다.
+OF file_path를 생략하면 메모리의 헤더 정보를 출력하며, OF file_path를 포함하면 file_path의 헤더 정보를 출력한다.
+file_path에는 활성 로그 파일의 상대경로 또는 절대경로를 입력할 수 있다.
+상대경로 입력 시 기준이 되는 경로는 활성 로그 파일이 존재하는 폴더이다.
 
 해당 구문은 다음의 칼럼을 출력한다.
 
@@ -877,7 +879,10 @@ SHOW ARCHIVE LOG HEADER
 
 ::
 
-    SHOW ARCHIVE LOG HEADER OF file_name;
+    SHOW ARCHIVE LOG HEADER OF file_path;
+
+file_path에는 활성 로그 파일의 상대경로 또는 절대경로를 입력할 수 있다.
+상대경로 입력 시 기준이 되는 경로는 활성 로그 파일이 존재하는 폴더이다.
 
 해당 구문은 다음의 칼럼을 출력한다.
 

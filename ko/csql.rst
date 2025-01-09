@@ -1405,9 +1405,13 @@ OPT LEVEL의 상세한 내용은 :ref:`viewing-query-plan`\ 를 참고한다.
 **서버 저장 메시지 출력(;SERver-output)**
 
 이 값을 ON으로 설정하면 서버의 DBMS_OUTPUT 버퍼에 저장된 메시지를 출력한다. 기본값은 OFF이다.
-DBMS_OUTPUT 버퍼는 주로 PL/CSQL 저장 프로시저/함수에서 DBMS_OUTPUT.put_line() 호출을 통해 쌓인 메시지들을 저장하고 있다.
-DBMS_OUTPUT 메시지들은 CSQL이 실행한 SQL 문의 결과 출력 후에 '<DBMS_OUTPUT>'  표시와 함께 출력된다.
-저장프로시스에서 오류 발생시 DBMS_OUTPUT.put_line()으로 출력한 메세지들은 실행 순서와 관계없이 에러메시지 출력 후 출력되므로 주의가 필요하다.
+DBMS_OUTPUT 버퍼는 PL/CSQL 저장 프로시저/함수에서 DBMS_OUTPUT.put_line()이나 DBMS_OUTPUT.put()
+호출을 통해 쌓인 메시지들을 저장하고 있다.
+실행한 SQL 문의 결과 출력 후에 '<DBMS_OUTPUT>' 표시 아래에 DBMS_OUTPUT 메시지들을 출력한다.
+이 때, 저장 프로시저/함수 실행 도중에 오류가 발생하면 실행문 순서와 상관없이
+에러 메시지를 포함한 CSQL의 기본 메시지들을 모두 출력한 다음 DBMS_OUTPUT 메세지들을 출력하므로 주의가 필요하다.
+예를 들어, 아래에서 DBMS_OUTPUT.put_line() 문은 ZERO_DIVIDE 예외를 일으키는 RETURN 문 이전에 실행되지만,
+출력에서는 DBMS_OUTPUT 메시지가 에러 메시지보다 나중에 위치한다.  ::
 
     csql> ;server-output on
     SERVER OUTPUT IS ON

@@ -42,8 +42,8 @@ body 내부의 실행문들 중 수행시 도달할 수 없는 실햄문이 있�
     csql> CREATE OR REPLACE PROCEDURE test_unreachable_statement
     csql> AS
     csql> BEGIN
-    csql>     return;
-    csql>     dbms_output.put_line('Hello world');
+    csql>     RETURN;
+    csql>     DBMS_OUTPUT.put_line('Hello world');
     csql> END;
 
     ERROR: In line 5, column 5

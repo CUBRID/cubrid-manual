@@ -1538,6 +1538,7 @@ CUBRID HA의 복제 로그 복사 및 반영 상태를 확인한다. ::
      *** Copied Active Info. *** 
     DB name                        : testdb
     DB creation time               : 04:29:00.000 PM 11/04/2012 (1352014140)
+    Vol creation time              : 04:29:10.000 PM 11/04/2012 (1352014150)
     EOF LSA                        : 27722 | 10088
     Append LSA                     : 27722 | 10088
     HA server state                : active
@@ -1545,6 +1546,7 @@ CUBRID HA의 복제 로그 복사 및 반영 상태를 확인한다. ::
      ***  Active Info. *** 
     DB name                        : testdb
     DB creation time               : 04:29:00.000 PM 11/04/2012 (1352014140)
+    Vol creation time              : 04:29:10.000 PM 11/04/2012 (1352014150)
     EOF LSA                        : 27726 | 2512
     Append LSA                     : 27726 | 2512
     HA server state                : active
@@ -1573,6 +1575,7 @@ CUBRID HA의 복제 로그 복사 및 반영 상태를 확인한다. ::
 
     *   DB name : 복제 로그 복사 프로세스가 로그를 복사하는 대상 데이터베이스의 이름
     *   DB creation time : 복제 로그 복사 프로세스가 복사하는 데이터베이스의 생성 시간
+    *   Vol creation time : 복제 로그 복사 프로세스가 복사하는 볼륨의 생성 시간
 
     *   EOF LSA : 복제 로그 복사 프로세스가 대상 노드에서 복사한 로그의 마지막 pageid와 offset 정보. 이 값과 "Active Info."의 EOF LSA 값의 차이 및 "Copied Active Info."의 Append LSA 값의 차이만큼 로그 복사의 지연이 있다.
 
@@ -1584,6 +1587,7 @@ CUBRID HA의 복제 로그 복사 및 반영 상태를 확인한다. ::
 
     *   DB name : **-r** 옵션에 설정한 노드의 데이터베이스의 이름
     *   DB creation time : **-r** 옵션에 설정한 노드의 데이터베이스 생성 시간
+    *   Vol creation time : **-r** 옵션에 설정한 노드의 볼륨 생성 시간
     *   EOF LSA : **-r** 옵션에 설정한 노드의 데이터베이스 트랜잭션 로그의 마지막 pageid와 offset 정보. 이 값과 "Copied Active Info."의 EOF LSA 값의 차이만큼 복제 로그 복사의 지연이 있다.
     
     *   Append LSA : **-r** 옵션에 설정한 노드의 데이터베이스 서버가 디스크에 실제로 쓴 트랜잭션 로그의 마지막 pageid와 offset 정보
@@ -3497,6 +3501,7 @@ HA 서비스 운영 중 슬레이브를 새로 추가하려면 기존의 마스�
          *** Copied Active Info. ***
         DB name                        : testdb
         DB creation time               : 11:28:00.000 AM 12/17/2010  (1292552880)
+        Vol creation time              : 11:28:10.000 AM 12/17/2010  (1292552890)
         EOF LSA                        : 1913 | 2976
         Append LSA                     : 1913 | 2976
         HA server state                : active
@@ -3504,6 +3509,7 @@ HA 서비스 운영 중 슬레이브를 새로 추가하려면 기존의 마스�
          ***  Active Info. ***
         DB name                        : testdb
         DB creation time               : 11:28:00.000 AM 12/17/2010  (1292552880)
+        Vol creation time              : 11:28:10.000 AM 12/17/2010  (1292552890)
         EOF LSA                        : 1913 | 2976
         Append LSA                     : 1913 | 2976
         HA server state                : active
@@ -3526,6 +3532,7 @@ HA 서비스 운영 중 슬레이브를 새로 추가하려면 기존의 마스�
          *** Copied Active Info. ***
         DB name                        : testdb
         DB creation time               : 11:28:00.000 AM 12/17/2010  (1292552880)
+        Vol creation time              : 11:28:10.000 AM 12/17/2010  (1292552890)
         EOF LSA                        : 1913 | 2976
         Append LSA                     : 1913 | 2976
         HA server state                : active

@@ -2216,13 +2216,13 @@ HA 관련 파라미터
     
 **agg_hash_respect_order**
 
-    **agg_hash_respect_order**  는 집계 함수에서 그룹이 순서대로 반환되는지 여부를 설정하는 파라미터이다. 기본값은 **yes** 이다. :ref:`max_agg_hash_size <max_agg_hash_size>` 를 참고한다.
+    **agg_hash_respect_order**  는 집계 함수에서 그룹이 순서대로 반환되는지 여부를 설정하는 파라미터이다. 기본값은 **yes**  이다. :ref:`max_agg_hash_size <max_agg_hash_size>` 를 참고한다.
     
     이 모든 그룹(키와 누적 결과)이 해시 메모리에 상주할 수 있으면, "agg_hash_respect_order=no" 설정은 결과를 출력하기 전에 정렬하는 과정을 생략할 것이므로, 순서가 보장되지 않을 것이라고 예측할 수 있다. 그러나, 오버플로우가 발생하면 정렬 과정이 수행되어야 하며 "agg_hash_respect_order=false"로 설정되었더라도 정렬된 결과를 얻게 된다.
 
 **auto_restart_server**
 
-    **auto_restart_server**  는 데이터베이스 서버 프로세스(cub_server)에 심각한 오류가 발생해서 프로세스가 중단될 경우에 자동으로 재시작할 것인가를 지정하는 파라미터로 기본값은 **yes**이다. 이 파라미터는 Linux 환경에서만 작동한다.
+    **auto_restart_server**  는 데이터베이스 서버 프로세스(cub_server)에 심각한 오류가 발생해서 프로세스가 중단될 경우에 자동으로 재시작할 것인가를 지정하는 파라미터로 기본값은 **yes** 이다. 이 파라미터는 Linux 환경에서만 작동한다.
 
     **auto_restart_server**  를 **yes** 로 설정하면 마스터 프로세스(cub_master)가 오류로 중단된 non-HA 서버 프로세스(cub_server)를 자동으로 재시작한다. 해당 기능에 의해 자동 재시작 후 120초 이내에 오류로 중단된 경우 또는 정상적인 종료 절차(**cubrid server stop** 명령)에 의해 종료되는 경우에는 자동 재시작하지 않는다.
 

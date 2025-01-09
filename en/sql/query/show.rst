@@ -673,7 +673,7 @@ Sector_alloc_table_first_page       INT             First page of sector allocat
 Page_alloc_table_size_in_pages      INT             Size of page allocation table in page
 Page_alloc_table_first_page         INT             First page of page allocation table
 Last_system_page                    INT             Last system page
-Creation_time                       DATETIME        Database creation time
+Creation_time                       DATETIME        Volume creation time
 Db_charset                          INT             Charset number of database
 Checkpoint_lsa                      VARCHAR(64)     Lowest log sequence address to start the recovery process of this volume
 Boot_hfid                           VARCHAR(64)     System Heap file for booting purposes and multi volumes
@@ -733,7 +733,7 @@ Column name                         Type            Description
 Volume_id                           INT             Volume identifier
 Magic_symbol                        VARCHAR(32)     Magic value for log file
 Magic_symbol_location               INT             Magic symbol location from log page
-Creation_time                       DATETIME        Database creation time
+Creation_time                       DATETIME        Volume creation time
 Release                             VARCHAR(32)     CUBRID Release version
 Compatibility_disk_version          VARCHAR(32)     Compatibility of the database against the current release of CUBRID
 Db_page_size                        INT             Size of pages in the database
@@ -886,7 +886,7 @@ Column name                         Type            Description
 Volume_id                           INT             Identifier of log volume
 Magic_symbol                        VARCHAR(32)     Magic value for file/magic Unix utility
 Magic_symbol_location               INT             Magic symbol location from log page
-Creation_time                       DATETIME        Database creation time
+Creation_time                       DATETIME        Volume creation time
 Next_trans_id                       BIGINT          Next transaction identifier
 Num_pages                           INT             Number of pages in the archive log
 First_page_id                       BIGINT          Logical page id at physical location 1 in archive log

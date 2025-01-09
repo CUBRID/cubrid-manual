@@ -2216,7 +2216,7 @@ HA 관련 파라미터
     
 **agg_hash_respect_order**
 
-    **agg_hash_respect_order**  는 집계 함수에서 그룹이 순서대로 반환되는지 여부를 설정하는 파라미터이다. 기본값은 **yes**  이다. :ref:`max_agg_hash_size <max_agg_hash_size>` 를 참고한다.
+    **agg_hash_respect_order**  는 집계 함수에서 그룹이 순서대로 반환되는지 여부를 설정하는 파라미터이다. 기본값은 **yes** 이다. :ref:`max_agg_hash_size <max_agg_hash_size>` 를 참고한다.
     
     이 모든 그룹(키와 누적 결과)이 해시 메모리에 상주할 수 있으면, "agg_hash_respect_order=no" 설정은 결과를 출력하기 전에 정렬하는 과정을 생략할 것이므로, 순서가 보장되지 않을 것이라고 예측할 수 있다. 그러나, 오버플로우가 발생하면 정렬 과정이 수행되어야 하며 "agg_hash_respect_order=false"로 설정되었더라도 정렬된 결과를 얻게 된다.
 

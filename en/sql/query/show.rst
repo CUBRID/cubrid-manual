@@ -725,7 +725,7 @@ It shows the header information of an active log file.
     
 If you omit **OF** *file_path*, it shows the header information of a memory; if you include **OF** *file_path*, it shows the header information of *file_path*.
 In file_path, you can input either the relative path or the absolute path of the active log file.
-When entering a relative path, the base path is the folder where the active log file is located.
+When entering a relative path, the base path is the directory where the active log file is located.
 
 This query has the following columns:
 
@@ -880,8 +880,8 @@ It shows the header information of an archive log file.
 
     SHOW ARCHIVE LOG HEADER OF file_name;
 
-In file_path, you can input either the relative path or the absolute path of the active log file.
-When entering a relative path, the base path is the folder where the active log file is located.
+In file_path, you can input either the relative path or the absolute path of the archive log file.
+When entering a relative path, the base path is the directory where the archive log file is located.
 
 This query has the following columns:
 

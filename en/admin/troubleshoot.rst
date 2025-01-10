@@ -197,7 +197,7 @@ Detecting Fail-over, Fail-back
   
 If fail-over or fail-back occurs, a node changes its role.
   
-The following is the log file of the cub_master that is changed as slave node after fail-back or master node after fail-over; log messages for fail-over and fail-back are prefixed with [Failover] or [Failback].
+The following is the log file of the cub_master that changes to a slave node after fail-back or to a master node after fail-over; log messages for fail-over and fail-back are prefixed with [Failover] or [Failback].
 
 The log messages for fail-over and fail-back include both diagnosis and result messages.
 
@@ -224,7 +224,7 @@ A result message is logged when a fail-over or fail-back is either canceled or s
     testhost01           1          unknown         32767      1
     ================================================================================
 
-Above example is an information which is printed out to the cub_master log; it is the process that the 'testhost02' host changes the role from slave to master by fail-over because the master node 'testhost01' has lost its role due to server process problem.
+The above example shows information which is printed in the cub_master log; it describes the process where the 'testhost02' host changes its role from slave to master during a fail-over because the master node 'testhost01' has lost its role due to server process issue.
 
 Failure on HA Start
 ===================

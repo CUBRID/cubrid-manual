@@ -795,6 +795,7 @@ SQL 로깅
 로그 파일 이름의 형식은 *<db name>_<master hostname>*\ **.sql.log.**\ *<id>*\ 이며, *<id>*\ 는 0부터 시작한다. 
 **ha_sql_log_max_size_in_mbytes**\에서 지정한 크기를 초과하면 *<id>*\ 의 값이 하나 증가된 새로운 파일이 생성된다.
 예를 들어, "ha_sql_log_max_size_in_mbytes=100"이면 demodb_nodeA.sql.log.0 파일이 100MB가 되면서 demodb_nodeA.sql.log.1이 새로 생성된다.
+*<id>*\ 는 최대값(4294967295)을 초과하게 되면 0부터 재사용하게 된다.
 
 기본적으로, 2개의 최신 SQL 로그 파일만 유지되며, **ha_sql_log_max_count** 설정을 통해 유지할 최대 파일 개수를 조정할 수 있다.
 

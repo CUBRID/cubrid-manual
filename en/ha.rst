@@ -796,6 +796,7 @@ The default is **no**.
 The format of this log file name is *<db name>_<master hostname>*\ **.sql.log.**\ *<id>*, and *<id>* starts from 0.
 If this size is over **ha_sql_log_max_size_in_mbytes**, a new file with "*<id>* + 1" is created.
 For example, if "ha_sql_log_max_size_in_mbytes=100", demodb_nodeA.sql.log.1 is newly created as the size of demodb_nodeA.sql.log.0 file becomes 100MB.
+*<id>* will wrap around to 0 once it exceeds the maximum value (4,294,967,295).
 
 By default, only two latest SQL log files are maintained, and the maximum number of them can be adjusted through **ha_sql_log_max_count**.
 

@@ -2012,27 +2012,25 @@ The following example shows how to retrieve the partition information currently 
 DB_STORED_PROCEDURE
 -------------------
 
-Represents information of Java stored procedure for which the current user has access authorization to a database.
+Represents information of Stored procedure for which the current user has access authorization to a database.
 
-+--------------------+---------------+-----------------------------------------------+
-|   Attribute Name   |   Data Type   |   Description                                 |
-+====================+===============+===============================================+
-| sp_name            | VARCHAR(255)  | Stored procedure name                         |
-+--------------------+---------------+-----------------------------------------------+
-| sp_type            | VARCHAR(16)   | Stored procedure type (function or procedure) |
-+--------------------+---------------+-----------------------------------------------+
-| return_type        | VARCHAR(16)   | Return value type                             |
-+--------------------+---------------+-----------------------------------------------+
-| arg_count          | INTEGER       | The number of arguments                       |
-+--------------------+---------------+-----------------------------------------------+
-| lang               | VARCHAR(16)   | Implementing language (currently, Java)       |
-+--------------------+---------------+-----------------------------------------------+
-| target             | VARCHAR(4096) | Name of the Java method to be executed        |
-+--------------------+---------------+-----------------------------------------------+
-| owner              | VARCHAR(256)  | Owner                                         |
-+--------------------+---------------+-----------------------------------------------+
-| comment            | VARCHAR(1024) | Comment to describe the stored procedure      |
-+--------------------+---------------+-----------------------------------------------+
+
+==================== =========================== =========================================================
+Attribute Name       Data Type                    Description
+==================== =========================== =========================================================
+sp_name              VARCHAR(255)                Stored procedure name
+pkg_name             VARCHAR(255)                Package name containing the stored procedure
+sp_type              VARCHAR(16)                 Stored procedure type (function or procedure)
+return_type          VARCHAR(16)                 Return value type name
+arg_count            INTEGER                     The number of arguments
+lang                 VARCHAR(16)                 Implementation language name
+authid               VARCHAR(16)                 Execution privileges of the stored procedure
+is_deterministic     VARCHAR(3)                  Indicates whether the function is deterministic
+target               VARCHAR(4096)               실행할 저장 프로시저의 대상 이름
+owner                VARCHAR(256)                Owner
+scode                VARCHAR(1073741823)         Source code of the stored procedure
+comment              VARCHAR(1024)               Comment to describe the stored procedure
+==================== =========================== =========================================================
 
 The following example shows how to retrieve Java stored procedures owned by the current user.
 
@@ -2054,25 +2052,24 @@ The following example shows how to retrieve Java stored procedures owned by the 
 DB_STORED_PROCEDURE_ARGS
 ------------------------
 
-Represents argument information of Java stored procedure for which the current user has access authorization to a database.
+Represents argument information of Stored procedure for which the current user has access authorization to a database.
 
-+--------------------+---------------+----------------------------------+
-|   Attribute Name   |   Data Type   |   Description                    |
-+====================+===============+==================================+
-| sp_name            | VARCHAR(255)  | Stored procedure name            |
-+--------------------+---------------+----------------------------------+
-| index_of           | INTEGER       | Order of the arguments           |
-+--------------------+---------------+----------------------------------+
-| arg_name           | VARCHAR(256)  | Argument name                    |
-+--------------------+---------------+----------------------------------+
-| data_type          | VARCHAR(16)   | Data type of the argument        |
-+--------------------+---------------+----------------------------------+
-| mode               | VARCHAR(6)    | Mode (IN, OUT, INOUT)            |
-+--------------------+---------------+----------------------------------+
-| comment            | VARCHAR(1024) | Comment to describe the argument |
-+--------------------+---------------+----------------------------------+
+==================== =========================== =========================================================
+Attribute Name       Data Type                    Description
+==================== =========================== =========================================================
+sp_name              VARCHAR(255)                Stored procedure name
+owner_name           VARCHAR(255)                Owner
+pkg_name             VARCHAR(255)                Package name containing the stored procedure
+index_of             INTEGER                     Order of the arguments
+arg_name             VARCHAR(255)                Argument name
+data_type            VARCHAR(16)                 Data type of the argument
+mode                 VARCHAR(6)                  Mode (IN, OUT, INOUT)
+is_optional          VARCHAR(3)                  Whether the parameter is optional
+default_value        VARCHAR(255)                Default value of the argument
+comment              VARCHAR(1024)               Comment to describe the argument
+==================== =========================== =========================================================
 
-The following example shows how to retrieve arguments the 'phone_info' Java stored procedure in the order of the arguments.
+The following example shows how to retrieve arguments the 'phone_info' Stored procedure in the order of the arguments.
 
 .. code-block:: sql
 

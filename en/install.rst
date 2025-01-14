@@ -33,7 +33,7 @@ Compatibility
 
 **Application Compatibility**
 
-*   Applications that use JDBC, PHP or CCI APIs from 2008 R4.1 or higher version of CUBRID can access the CUBRID 11.3 database. However, you must link the CUBRID 11.3 library or use the driver to use the added/improved features of JDBC, PHP or CCI interfaces. In order to use :ref:`timezone-type` which are introduced as 10.0, users should upgrade drivers.
+*   Applications that use JDBC, PHP or CCI APIs from 2008 R4.1 or higher version of CUBRID can access the CUBRID 11.4 database. However, you must link the CUBRID 11.4 library or use the driver to use the added/improved features of JDBC, PHP or CCI interfaces. In order to use :ref:`timezone-type` which are introduced as 10.0, users should upgrade drivers.
 
 *   Drivers lower version than 10.2 interpret JSON type columns as Varchar.
 
@@ -51,7 +51,7 @@ Compatibility
 
 *   Drivers for 2008 R2.2 and higher versions are included in CUBRID Manager by default, which you can download separately from the https://www.cubrid.org Website.
 
-.. note:: Old version users should upgrade all of driver, broker, DB server; Data migration should be done because 11.1 or early version's DB volume is not compatible with 11.3 version.
+.. note:: Old version users should upgrade all of driver, broker, DB server; Data migration should be done because 11.3 or early version's DB volume is not compatible with 11.4 version.
     For upgrade and data migration, see :doc:`/upgrade`.
 
 **Interoperability between CUBRID DB server and broker**
@@ -106,16 +106,16 @@ Check the following before installing CUBRID for Linux.
     
 **Installing CUBRID**
 
-The installation program consists of shell scripts that contain binary; thus it can be installed automatically. The following example shows how to install CUBRID with the "CUBRID-11.3.0.1089-bd31bd5-Linux.x86_64.sh" file on the Linux. 
+The installation program consists of shell scripts that contain binary; thus it can be installed automatically. The following example shows how to install CUBRID with the "CUBRID-11.4.0.????-???????-Linux.x86_64.sh" file on the Linux. 
 
 ::
 
-    $ sh CUBRID-11.3.0.1089-bd31bd5-Linux.x86_64.sh
+    $ sh CUBRID-11.4.0.????-???????-Linux.x86_64.sh
     Do you agree to the above license terms? (yes or no) : yes
     Do you want to install this software(CUBRID) to the default(/home1/cub_user/CUBRID) directory? (yes or no) [Default: yes] : yes
     Install CUBRID to '/home1/cub_user/CUBRID' ...
     In case a different version of the CUBRID product is being used in other machines, 
-    please note that the CUBRID 11.3 servers are only compatible with the CUBRID 11.3 clients and vice versa.
+    please note that the CUBRID 11.4 servers are only compatible with the CUBRID 11.4 clients and vice versa.
     Do you want to continue? (yes or no) [Default: yes] : yes
     Copying old .cubrid.sh to .cubrid.sh.bak ...
 
@@ -127,7 +127,7 @@ The installation program consists of shell scripts that contain binary; thus it 
     $ . /home1/cub_user/.cubrid.sh
     $ cubrid service start
 
-As shown in the example above, after installing the downloaded file (CUBRID-11.3.0.1089-bd31bd5-Linux.x86_64.sh), the CUBRID related environment variables must be set in order to use the CUBRID database. Such setting has been made automatically when logging in the concerned terminal. Therefore there is no need to re-set after the first installation. ::
+As shown in the example above, after installing the downloaded file (CUBRID-11.4.0.????-???????-Linux.x86_64.sh), the CUBRID related environment variables must be set in order to use the CUBRID database. Such setting has been made automatically when logging in the concerned terminal. Therefore there is no need to re-set after the first installation. ::
 
     $ . /home1/cub_user/.cubrid.sh
 
@@ -158,7 +158,7 @@ When you want to check whether CUBRID Manager server and CUBRID broker works wel
 
 You can install CUBRID by using rpm file that is created on CentOS 6. The way of installing and uninstalling CUBRID is the same as that of using general rpm utility. While CUBRID is being installed, a new system group (cubrid) and a user account (cubrid) are created. After installation is complete, you should log in with a cubrid user account to start a CUBRID service.::
 
-    $ rpm -Uvh CUBRID-11.3.0.1089-bd31bd5-Linux.x86_64.rpm
+    $ rpm -Uvh CUBRID-11.4.0.????-???????-Linux.x86_64.rpm
 
 When rpm is executed, CUBRID is installed in the "cubrid" home directory (/opt/cubrid) and related configuration file (cubrid.[c]sh) is installed in the /etc/profile.d directory. Note that *demodb* is not automatically installed. Therefore, you must executed /opt/cubrid/demo/make_cubrid_demo.sh with "cubrid" Linux ID. When installation is complete, enter the code below to start CUBRID with "cubrid" Linux ID. ::
 
@@ -346,7 +346,7 @@ Check the following before installing CUBRID for Linux.
 
         ::
         
-            tar xvfz CUBRID-11.3.0.1089-bd31bd5-Linux.x86_64.tar.gz /home1/cub_user/
+            tar xvfz CUBRID-11.4.0.????-???????-Linux.x86_64.tar.gz /home1/cub_user/
 
         CUBRID directory is created under /home1/cub_user/ and files are created under CUBRID directory. 
 

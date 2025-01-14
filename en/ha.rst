@@ -1425,22 +1425,22 @@ The event occurrence times for the Applylogdb, Copylogdb, and Server processes a
         - missed heartbeat 0
 
     HA-Process Info (master 7392, state master)
-    Copylogdb testdb@cubrid2:/home/cubha/CUBRID-11.3.1.1142-bee7aa8-Linux.x86_64/databases/testdb_cubrid2 (pid 7841, state registered)
-     - exec-path [/home/cubha/CUBRID-11.3.1.1142-bee7aa8-Linux.x86_64/bin/cub_admin]
-     - argv      [cub_admin copylogdb -L /home/cubha/CUBRID-11.3.1.1142-bee7aa8-Linux.x86_64/databases/testdb_cubrid2 -m sync testdb@bagus2 ]
+    Copylogdb testdb@cubrid2:/home/cubha/CUBRID-11.4.0.????-???????-Linux.x86_64/databases/testdb_cubrid2 (pid 7841, state registered)
+     - exec-path [/home/cubha/CUBRID-11.4.0.????-???????-Linux.x86_64/bin/cub_admin]
+     - argv      [cub_admin copylogdb -L /home/cubha/CUBRID-11.4.0.????-???????-Linux.x86_64/databases/testdb_cubrid2 -m sync testdb@bagus2 ]
      - registered-time   08/26/24 14:28:37.019
      - deregistered-time 00/00/00 00:00:00.000
      - shutdown-time     08/26/24 14:28:35.010
      - start-time        08/26/24 14:28:36.012
-    Applylogdb testdb@localhost:/home/cubha/CUBRID-11.3.1.1142-bee7aa8-Linux.x86_64/databases/testdb_cubrid2 (pid 7746, state registered)
-     - exec-path [/home/cubha/CUBRID-11.3.1.1142-bee7aa8-Linux.x86_64/bin/cub_admin]
-     - argv      [cub_admin applylogdb -L /home/cubha/CUBRID-11.3.1.1142-bee7aa8-Linux.x86_64/databases/testdb_cubrid2 --max-mem-size=300 testdb@localhost ]
+    Applylogdb testdb@localhost:/home/cubha/CUBRID-11.4.0.????-???????-Linux.x86_64/databases/testdb_cubrid2 (pid 7746, state registered)
+     - exec-path [/home/cubha/CUBRID-11.4.0.????-???????-Linux.x86_64/bin/cub_admin]
+     - argv      [cub_admin applylogdb -L /home/cubha/CUBRID-11.4.0.????-???????-Linux.x86_64/databases/testdb_cubrid2 --max-mem-size=300 testdb@localhost ]
       - registered-time   08/26/24 14:27:14.566
       - deregistered-time 00/00/00 00:00:00.000
       - shutdown-time     08/26/24 14:27:12.552
       - start-time        08/26/24 14:27:13.558
      Server testdb (pid 7904, state registered_and_active)
-      - exec-path [/home/cubha/CUBRID-11.3.1.1142-bee7aa8-Linux.x86_64/bin/cub_server]
+      - exec-path [/home/cubha/CUBRID-11.4.0.????-???????-Linux.x86_64/bin/cub_server]
       - argv      [cub_server testdb ]
       - registered-time   08/26/24 14:29:28.955
       - deregistered-time 00/00/00 00:00:00.000

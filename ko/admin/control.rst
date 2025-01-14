@@ -65,7 +65,7 @@ CUBRID 설정 파일에 등록된 서비스를 제어하기 위한 **cubrid** �
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 11.3
+    CUBRID 11.4
 
     ++ cubrid server start: success
 
@@ -73,7 +73,7 @@ CUBRID 설정 파일에 등록된 서비스를 제어하기 위한 **cubrid** �
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 11.3
+    CUBRID 11.4
 
     ++ cubrid server start: success
 
@@ -254,13 +254,13 @@ Windows 환경에서는 시스템 권한을 가진 사용자로 로그인한 경
     @ cubrid server start: demodb
 
     This may take a long time depending on the amount of recovery works to do.
-    CUBRID 11.3
+    CUBRID 11.4
 
     ++ cubrid server start: success
     @ cubrid server start: testdb
 
     This may take a long time depending on the amount of recovery works to do.
-    CUBRID 11.3
+    CUBRID 11.4
 
     ++ cubrid server start: success
     @ cubrid broker start
@@ -341,14 +341,14 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 11.3
+    CUBRID 11.4
 
     ++ cubrid server start: success
     @ cubrid server start: testdb
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 11.3
+    CUBRID 11.4
 
     ++ cubrid server start: success
     @ cubrid broker start
@@ -369,8 +369,8 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
     ++ cubrid master is running.
     @ cubrid server status
 
-    Server testdb (rel 11.3, pid 31059)
-    Server demodb (rel 11.3, pid 30950)
+    Server testdb (rel 11.4, pid 31059)
+    Server demodb (rel 11.4, pid 30950)
 
     @ cubrid broker status
     NAME                   PID  PORT    AS   JQ                  TPS                  QPS   SELECT   INSERT   UPDATE   DELETE   OTHERS     LONG-T     LONG-Q         ERR-Q  UNIQUE-ERR-Q  #CONNECT   #REJECT
@@ -463,7 +463,7 @@ CUBRID는 cubrid 유틸리티의 수행 결과에 대한 로깅 기능을 제공
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 11.3
+    CUBRID 11.4
 
     ++ cubrid server start: success
 
@@ -479,7 +479,7 @@ CUBRID는 cubrid 유틸리티의 수행 결과에 대한 로깅 기능을 제공
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 11.3
+    CUBRID 11.4
 
     ++ cubrid server start: success
 
@@ -536,7 +536,7 @@ CUBRID는 cubrid 유틸리티의 수행 결과에 대한 로깅 기능을 제공
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 11.3
+    CUBRID 11.4
 
     ++ cubrid server start: success
 
@@ -552,8 +552,8 @@ CUBRID는 cubrid 유틸리티의 수행 결과에 대한 로깅 기능을 제공
     % cubrid server status
     
     @ cubrid server status
-    Server testdb (rel 11.3, pid 24465)
-    Server demodb (rel 11.3, pid 24342)
+    Server testdb (rel 11.4, pid 24465)
+    Server demodb (rel 11.4, pid 24342)
 
 마스터 프로세스가 중지된 상태라면, 다음과 같은 메시지가 출력된다. 
 
@@ -2151,7 +2151,7 @@ SQL 로그 파일은 응용 클라이언트가 요청하는 SQL을 기록하며,
 
     13-06-11 15:07:39.282 (0) STATE idle
     13-06-11 15:07:44.832 (0) CLIENT IP 192.168.10.100
-    13-06-11 15:07:44.835 (0) CLIENT VERSION 11.3.0.1089
+    13-06-11 15:07:44.835 (0) CLIENT VERSION 11.4.0.1089
     13-06-11 15:07:44.835 (0) session id for connection 0
     13-06-11 15:07:44.836 (0) connect db demodb user dba url jdbc:cubrid:192.168.10.200:30000:demodb:dba:********: session id 12
     13-06-11 15:07:44.836 (0) DEFAULT isolation_level 4, lock_timeout -1
@@ -3266,7 +3266,7 @@ CUBRID 자바 저장 프로시저 서버 상태 확인
     @ cubrid server start: demodb
 
     This may take a long time depending on the amount of restore works to do.
-    CUBRID 11.3
+    CUBRID 11.4
 
     Calling java stored procedure is allowed
 
@@ -3278,7 +3278,7 @@ CUBRID 자바 저장 프로시저 서버 상태 확인
     @ cubrid server start: testdb
 
     This may take a long time depending on the amount of restore works to do.
-    CUBRID 11.3
+    CUBRID 11.4
 
     java_stored_procedure system parameter is not enabled
     Calling java stored procedure is not allowed

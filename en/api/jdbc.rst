@@ -29,7 +29,7 @@ You can verify the version of JDBC driver as follows: ::
     cubrid/sql/
     cubrid/jdbc/driver/CUBRIDBlob.class
     ...
-    CUBRID-JDBC-11.2.0.0035
+    CUBRID-JDBC-11.3.0.0047
 
 **Registering CUBRID JDBC Driver**
 

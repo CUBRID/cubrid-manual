@@ -1845,7 +1845,7 @@ CLOB
 
 .. note::
 
-    *   CUBRID 11.4 버전에서 lob 파일 경로 정보인 locator는 절대 경로에서 databases.txt에 정의된 ‘**lob-base-path**’ 디렉터리로부터의 **상대 경로로 변경되었다**.
+    *   CUBRID 11.4 버전에서 lob 파일 경로 정보인 locator는 절대 경로에서 databases.txt에 정의된 ‘**lob-base-path**’ 디렉터리의 **상대 경로로 변경되었다**.
     *   databases.txt에 정의된 '**lob-base-path**' 경로가 /home1/data1 인 경우 CUBRID 버전별 locator의 예는 아래와 같다.
 
         * **CUBRID 11.4** (**상대 경로**): file:ces_004/doc_t.00001366272829040346_0773

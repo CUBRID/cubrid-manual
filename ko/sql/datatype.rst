@@ -1857,7 +1857,7 @@ CLOB
        ::
 
           # 예:
-          % cp -r /home1/data1 /home2/data2
+          % cp -r /home1/data1/* /home2/data2
        ::
 
     *   CUBRID 11.3 이전 버전에서 절대 경로 locator로 저장된 LOB 데이터는 CUBRID 11.4에서 별도 변경 없이 조회 가능하다.

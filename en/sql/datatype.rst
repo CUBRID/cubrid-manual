@@ -1783,8 +1783,8 @@ When you get a **LOB** type column, the data stored in a file to which the colum
 
       doc_id                content               image
     ==================================================================
-      'doc-1'               file:/home1/data1/ces_658/doc_t.00001282208855807171_7329  file:/home1/data1/ces_318/image_t.00001282208855809474_7474
-      'doc-2'               file:/home1/data1/ces_180/doc_t.00001282208854194135_5598  file:/home1/data1/ces_519/image_t.00001282208854205773_1215
+      'doc-1'               file:ces_658/doc_t.00001282208855807171_7329  file:ces_318/image_t.00001282208855809474_7474
+      'doc-2'               file:ces_180/doc_t.00001282208854194135_5598  file:ces_519/image_t.00001282208854205773_1215
      
     2 rows selected.
      
@@ -1831,8 +1831,8 @@ When you get a **LOB** type column, the data stored in a file to which the colum
 
       doc_id                content
     ============================================
-      'doc-1'               file:/home1/data1/ces_004/doc_t.00001366272829040346_0773
-      'doc-2'               file:/home1/data1/ces_256/doc_t.00001366272815153996_1229
+      'doc-1'               file:ces_004/doc_t.00001366272829040346_0773
+      'doc-2'               file:ces_256/doc_t.00001366272815153996_1229
     
 .. code-block:: sql
 
@@ -1842,6 +1842,25 @@ When you get a **LOB** type column, the data stored in a file to which the colum
 ::
 
     ERROR: doc_t.content can not be an ORDER BY column
+
+.. note::
+
+    *   From CUBRID 11.4, the locator, which represents lob file path, **changed from an absolute file path to relative**. The relative path starts from '**lob-base-path**' in databases.txt.
+    *   For example, if the '**lob-base-path**' path defined in databases.txt is /home1/data1, an example of the locator for each CUBRID version is as follows.
+
+        * **CUBRID 11.4** (**relative**): file:ces_004/doc_t.00001366272829040346_0773
+        * up to CUBRID 11.3 (**absolute**): file:/home1/data1/ces_004/doc_t.00001366272829040346_0773
+    *   Due to the locator is stored as a relative path, if ‘**lob-base-path**’ in databases.txt is changed,
+
+        * Previously created LOB data cannot be retrieved.
+        * To retrieve previously created LOB data, they should be moved to the changed '**lob-base-path**' directory.
+       ::
+
+          # example:
+          % cp -r /home1/data1/* /home2/data2
+       ::
+
+    *   LOB data created in CUBRID 11.3 or lower, even they store the locator as an absolute file path, can be retrieved in CUBRID 11.4 without any changes.
 
 Functions and Operators for LOB
 -------------------------------

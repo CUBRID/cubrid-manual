@@ -1783,8 +1783,8 @@ CLOB
 
       doc_id                content               image
     ==================================================================
-      'doc-1'               file:/home1/data1/ces_658/doc_t.00001282208855807171_7329  file:/home1/data1/ces_318/image_t.00001282208855809474_7474
-      'doc-2'               file:/home1/data1/ces_180/doc_t.00001282208854194135_5598  file:/home1/data1/ces_519/image_t.00001282208854205773_1215
+      'doc-1'               file:ces_658/doc_t.00001282208855807171_7329  file:ces_318/image_t.00001282208855809474_7474
+      'doc-2'               file:ces_180/doc_t.00001282208854194135_5598  file:ces_519/image_t.00001282208854205773_1215
      
     2 rows selected.
      
@@ -1831,8 +1831,8 @@ CLOB
 
       doc_id                content
     ============================================
-      'doc-1'               file:/home1/data1/ces_004/doc_t.00001366272829040346_0773
-      'doc-2'               file:/home1/data1/ces_256/doc_t.00001366272815153996_1229
+      'doc-1'               file:ces_004/doc_t.00001366272829040346_0773
+      'doc-2'               file:ces_256/doc_t.00001366272815153996_1229
     
 .. code-block:: sql
 
@@ -1842,6 +1842,25 @@ CLOB
 ::
 
     ERROR: doc_t.content can not be an ORDER BY column
+
+.. note::
+
+    *   CUBRID 11.4 버전에서 lob 파일 경로 정보인 locator는 절대 경로에서 databases.txt에 정의된 ‘**lob-base-path**’ 디렉터리로부터의 **상대 경로로 변경되었다**.
+    *   databases.txt에 정의된 '**lob-base-path**' 경로가 /home1/data1 인 경우 CUBRID 버전별 locator의 예는 아래와 같다.
+
+        * **CUBRID 11.4** (**상대 경로**): file:ces_004/doc_t.00001366272829040346_0773
+        * CUBRID 11.3 이전 (**절대 경로**): file:/home1/data1/ces_004/doc_t.00001366272829040346_0773
+    *   locator가 상대 경로로 저장되기 때문에 databases.txt의 ‘**lob-base-path**’ 를 변경하는 경우
+
+        * 이전에 생성된 LOB 데이터는 조회가 불가능하다.
+        * 이전에 생성된 LOB 데이터를 조회하기 위해서는 해당 LOB 파일들을 변경된 '**lob-base-path**' 디렉터리로 이동하여야 한다.
+       ::
+
+          # 예:
+          % cp -r /home1/data1 /home2/data2
+       ::
+
+    *   CUBRID 11.3 이전 버전에서 절대 경로 locator로 저장된 LOB 데이터는 CUBRID 11.4에서 별도 변경 없이 조회 가능하다.
 
 연산자와 함수
 -------------

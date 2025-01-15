@@ -774,8 +774,8 @@ comment              VARCHAR(1024)                         저장 프로시저 �
         
                         NULL = 0, INTEGER = 1, FLOAT = 2, DOUBLE = 3, STRING = 4, 
                         SET = 6, MULTISET = 7, SEQUENCE = 8, TIME = 10, 
-                        TIMESTAMP = 11, DATE = 12, NUMERIC = 22, CHAR = 25, 
-                        RESULTSET = 28, BIGINT = 31, DATETIME = 32
+                        TIMESTAMP = 11, DATE = 12, SHORT = 18, NUMERIC = 22, CHAR = 25, 
+                        CURSOR = 28, BIGINT = 31, DATETIME = 32
                 
                 - 나머지 값은 현재 지원하지 않는다.
 
@@ -827,8 +827,8 @@ comment              CHARACTER VARYING(1024)     저장 프로시저 인자 설�
                 
                         NULL = 0, INTEGER = 1, FLOAT = 2, DOUBLE = 3, STRING = 4, 
                         SET = 6, MULTISET = 7, SEQUENCE = 8, TIME = 10, 
-                        TIMESTAMP = 11, DATE = 12, NUMERIC = 22, CHAR = 25, 
-                        RESULTSET = 28, BIGINT = 31, DATETIME = 32
+                        TIMESTAMP = 11, DATE = 12, SHORT = 18, NUMERIC = 22, CHAR = 25, 
+                        CURSOR = 28, BIGINT = 31, DATETIME = 32
                 
                 - 나머지 값은 현재 지원하지 않는다.
 
@@ -2032,21 +2032,79 @@ code                 VARCHAR(1073741823)         저장 프로시저의 소스 �
 comment              VARCHAR(1024)               저장 프로시저 설명
 ==================== =========================== =========================================================
 
+        .. note::
+
+            - **sp_type**
+                - **PROCEDURE** 또는 **FUNCTION** 값을 가진다.
+
+            - **pkg_name**: 현재 패키지 이름은 **DBMS_OUTPUT** 시스템 패키지에서만 사용된다
+                - **dbms_output** 또는 **NULL** 값을 가진다
+
+            - **return_type**: 반환 타입은 아래 값 중 하나이다
+                
+                ::
+        
+                        NULL, INTEGER, FLOAT, DOUBLE, STRING, 
+                        SET, MULTISET, SEQUENCE, TIME, 
+                        TIMESTAMP, DATE, SHORT, NUMERIC, CHAR, 
+                        CURSOR, BIGINT, DATETIME
+                
+                - 나머지 값은 현재 지원하지 않는다.
+
+            - **lang**: 저장 프로시저의 구현 언어 이름이며 아래의 값 중 하나이다.
+                - **PLCSQL**: PL/CSQL
+                - **JAVA**: Java 저장 프로시저
+
+            - **authid**: 저장 프로시저의 **execution rights (AUTHID)** 를 나타낸다.  
+                - **DEFINER**: 소유자 권한 (또는 정의자 권한)
+                - **CURRENT_USER**: 호출자 권한
+
+            - **is_deterministic**: 결정적 함수 여부를 나타낸다.
+                - **YES**: 결정적 함수
+                - **NO**: 비결정적 함수
+
 
 다음 예제에서는 현재 사용자가 소유하고 있는 저장 프로시저를 조회한다.
 
 .. code-block:: sql
 
+    CREATE OR REPLACE FUNCTION hello RETURN VARCHAR AS BEGIN RETURN 'Hello'; END;
+
+    CREATE OR REPLACE FUNCTION sp_int(p_int INTEGER) RETURN INTEGER AS BEGIN RETURN p_int; END;
+
+    -- csql 
+    ;line on
+
     /* CURRENT_USER: PUBLIC */
-    SELECT sp_name, target from db_stored_procedure
+    SELECT * from db_stored_procedure
     WHERE sp_type = 'FUNCTION' AND owner = CURRENT_USER; 
 
-::
+        ::
 
-      sp_name               target             
-    ============================================
-      'hello'               'SpCubrid.HelloCubrid() return java.lang.String'
-      'sp_int'              'SpCubrid.SpInt(int) return int'
+                <00001> sp_name         : 'hello'
+                        pkg_name        : NULL
+                        sp_type         : 'FUNCTION'
+                        return_type     : 'STRING'
+                        arg_count       : 0
+                        lang            : 'PLCSQL'
+                        authid          : 'DEFINER'
+                        is_deterministic: 'NO'
+                        target          : 'Func_HELLO_9.HELLO() return java.lang.String'
+                        owner           : 'DBA'
+                        code            : 'CREATE OR REPLACE FUNCTION hello RETURN VARCHAR AS BEGIN RETURN 'Hello'; END'
+                        comment         : NULL
+                <00002> sp_name         : 'sp_int'
+                        pkg_name        : NULL
+                        sp_type         : 'FUNCTION'
+                        return_type     : 'INTEGER'
+                        arg_count       : 1
+                        lang            : 'PLCSQL'
+                        authid          : 'DEFINER'
+                        is_deterministic: 'NO'
+                        target          : 'Func_SP_INT_10.SP_INT(java.lang.Integer) return java.lang.Integer'
+                        owner           : 'DBA'
+                        code            : 'CREATE OR REPLACE FUNCTION sp_int(p_int INTEGER) RETURN INTEGER AS BEGIN RETURN p_int; END'
+                        comment         : NULL
 
 .. _db-stored-procedure-args:
 
@@ -2070,21 +2128,56 @@ default_value        VARCHAR(255)                매개변수의 기본값
 comment              VARCHAR(1024)               매개변수에 대한 설명
 ==================== =========================== =========================================================
 
-다음 예제에서는 'phone_info' 저장 프로시저의 인수 정보를 순서대로 조회한다.
+        .. note::
+
+            - **index_of**: 매개변수의 순서는 0부터 시작한다.
+
+            - **data_type**: 매개변수의 데이터 타입은 아래 값 중 하나이다
+                
+                ::
+        
+                        NULL, INTEGER, FLOAT, DOUBLE, STRING, 
+                        SET, MULTISET, SEQUENCE, TIME, 
+                        TIMESTAMP, DATE, SHORT, NUMERIC, CHAR, 
+                        CURSOR, BIGINT, DATETIME
+                
+                - 나머지 값은 현재 지원하지 않는다.
+
+            - **mode**: 매개변수 모드는 아래 값 중 하나이다
+                
+                ::
+                
+                        IN, OUT, INOUT
+
+            - **is_optional**: 매개변수가 선택적이면 **YES**,  필수이면 **NO** 이다.
+
+            - **default_value**: 매개변수의 기본값이다. 자세한 내용은 :ref:`pl-arg-default-value` 을 참고한다.
+
+다음 예제에서는 'process_order' 저장 프로시저의 인수 정보를 순서대로 조회한다.
 
 .. code-block:: sql
 
-    SELECT index_of, arg_name, data_type, mode 
+    CREATE OR REPLACE PROCEDURE process_order(
+      p_order_id IN NUMBER,
+      p_status IN VARCHAR2 DEFAULT 'NEW'
+    )
+    AS
+    BEGIN
+        DBMS_OUTPUT.PUT_LINE('Processing Order ID: ' || p_order_id);
+        DBMS_OUTPUT.PUT_LINE('Order Status: ' || p_status);
+    END;
+
+    SELECT index_of, arg_name, data_type, mode, is_optional, default_value
     FROM db_stored_procedure_args
-    WHERE sp_name = 'phone_info'
+    WHERE sp_name = 'process_order'
     ORDER BY index_of;
 
-::
+        ::
 
-         index_of  arg_name              data_type             mode
-    ===============================================================
-                0  'name'                'STRING'              'IN'
-                1  'phoneno'             'STRING'              'IN'
+                index_of  arg_name              data_type             mode       is_optional  default_value
+        ====================================================================================================
+                        0  'p_order_id'          'NUMBER'              'IN'       'NO'         NULL
+                        1  'p_status'            'VARCHAR2'            'IN'       'YES'        'NEW'
 
 .. _db-server:
 

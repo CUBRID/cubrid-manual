@@ -774,8 +774,8 @@ comment              VARCHAR(1024)                         Comment to describe t
 
                         NULL = 0, INTEGER = 1, FLOAT = 2, DOUBLE = 3, STRING = 4, 
                         SET = 6, MULTISET = 7, SEQUENCE = 8, TIME = 10, 
-                        TIMESTAMP = 11, DATE = 12, NUMERIC = 22, CHAR = 25, 
-                        RESULTSET = 28, BIGINT = 31, DATETIME = 32
+                        TIMESTAMP = 11, DATE = 12, SHORT = 18, NUMERIC = 22, CHAR = 25, 
+                        CURSOR = 28, BIGINT = 31, DATETIME = 32
 
                 - Other values are not currently supported.
 
@@ -827,8 +827,8 @@ comment              CHARACTER VARYING(1024)     Comment to describe the argumen
 
                         NULL = 0, INTEGER = 1, FLOAT = 2, DOUBLE = 3, STRING = 4, 
                         SET = 6, MULTISET = 7, SEQUENCE = 8, TIME = 10, 
-                        TIMESTAMP = 11, DATE = 12, NUMERIC = 22, CHAR = 25, 
-                        RESULTSET = 28, BIGINT = 31, DATETIME = 32
+                        TIMESTAMP = 11, DATE = 12, SHORT = 18, NUMERIC = 22, CHAR = 25, 
+                        CURSOR = 28, BIGINT = 31, DATETIME = 32
 
                 - Other values are not currently supported.
 
@@ -881,7 +881,7 @@ ocode                CHARACTER VARYING(1073741823) Object code
             - **otype**: Represents the type of the object code compiled from the source code of the stored procedure.
 
                 - A value of **0** indicates a Java class file.
-                - A value of **1** indicates a Java archive file.
+                - A value of **1** indicates a Java archive file (Jar).
 
                 - Other values are not currently supported.
 
@@ -2014,7 +2014,6 @@ DB_STORED_PROCEDURE
 
 Represents information of Stored procedure for which the current user has access authorization to a database.
 
-
 ==================== =========================== =========================================================
 Attribute Name       Data Type                    Description
 ==================== =========================== =========================================================
@@ -2026,26 +2025,84 @@ arg_count            INTEGER                     The number of arguments
 lang                 VARCHAR(16)                 Implementation language name
 authid               VARCHAR(16)                 Execution privileges of the stored procedure
 is_deterministic     VARCHAR(3)                  Indicates whether the function is deterministic
-target               VARCHAR(4096)               실행할 저장 프로시저의 대상 이름
+target               VARCHAR(4096)               Name of the target stored procedure code to execute
 owner                VARCHAR(256)                Owner
-scode                VARCHAR(1073741823)         Source code of the stored procedure
+code                 VARCHAR(1073741823)         Source code of the stored procedure
 comment              VARCHAR(1024)               Comment to describe the stored procedure
 ==================== =========================== =========================================================
+
+        .. note::
+
+                - **sp_type**
+                        - **PROCEDURE** or **FUNCTION**.
+
+                - **pkg_name**: Currently, the package name is only used in the **DBMS_OUTPUT** system package.
+                        - **dbms_output** or **NULL**.
+
+                - **return_type**: The return type can be one of the following values:
+                        
+                        ::
+
+                                        NULL, INTEGER, FLOAT, DOUBLE, STRING, 
+                                        SET, MULTISET, SEQUENCE, TIME, 
+                                        TIMESTAMP, DATE, SHORT, NUMERIC, CHAR, 
+                                        CURSOR, BIGINT, DATETIME
+                        
+                        - Other values are not currently supported.
+
+                - **lang**: The implementation language of the stored procedure, which can be one of the following values:
+                        - **PLCSQL**: PL/CSQL
+                        - **JAVA**: Java stored procedure
+
+                - **authid**: Indicates the **execution rights (AUTHID)** of the stored procedure.
+                        - **DEFINER**: Owner rights (or definer rights)
+                        - **CURRENT_USER**: Invoker rights
+
+                - **is_deterministic**: Indicates whether the function is deterministic.
+                        - **YES**: Deterministic function
+                        - **NO**: Non-deterministic function
 
 The following example shows how to retrieve Java stored procedures owned by the current user.
 
 .. code-block:: sql
 
+    CREATE OR REPLACE FUNCTION hello RETURN VARCHAR AS BEGIN RETURN 'Hello'; END;
+
+    CREATE OR REPLACE FUNCTION sp_int(p_int INTEGER) RETURN INTEGER AS BEGIN RETURN p_int; END;
+
+    -- csql 
+    ;line on
+
     /* CURRENT_USER: PUBLIC */
-    SELECT sp_name, target from db_stored_procedure
-    WHERE sp_type = 'FUNCTION' AND owner = CURRENT_USER;
+    SELECT * from db_stored_procedure
+    WHERE sp_type = 'FUNCTION' AND owner = CURRENT_USER; 
 
-::
+        ::
 
-      sp_name               target             
-    ============================================
-      'hello'               'SpCubrid.HelloCubrid() return java.lang.String'
-      'sp_int'              'SpCubrid.SpInt(int) return int'
+                <00001> sp_name         : 'hello'
+                        pkg_name        : NULL
+                        sp_type         : 'FUNCTION'
+                        return_type     : 'STRING'
+                        arg_count       : 0
+                        lang            : 'PLCSQL'
+                        authid          : 'DEFINER'
+                        is_deterministic: 'NO'
+                        target          : 'Func_HELLO_9.HELLO() return java.lang.String'
+                        owner           : 'DBA'
+                        code            : 'CREATE OR REPLACE FUNCTION hello RETURN VARCHAR AS BEGIN RETURN 'Hello'; END'
+                        comment         : NULL
+                <00002> sp_name         : 'sp_int'
+                        pkg_name        : NULL
+                        sp_type         : 'FUNCTION'
+                        return_type     : 'INTEGER'
+                        arg_count       : 1
+                        lang            : 'PLCSQL'
+                        authid          : 'DEFINER'
+                        is_deterministic: 'NO'
+                        target          : 'Func_SP_INT_10.SP_INT(java.lang.Integer) return java.lang.Integer'
+                        owner           : 'DBA'
+                        code            : 'CREATE OR REPLACE FUNCTION sp_int(p_int INTEGER) RETURN INTEGER AS BEGIN RETURN p_int; END'
+                        comment         : NULL
 
 .. _db-stored-procedure-args:
 
@@ -2069,21 +2126,57 @@ default_value        VARCHAR(255)                Default value of the argument
 comment              VARCHAR(1024)               Comment to describe the argument
 ==================== =========================== =========================================================
 
-The following example shows how to retrieve arguments the 'phone_info' Stored procedure in the order of the arguments.
+        .. note::
+
+                - **index_of**: The order of the arguments starts from 0.
+
+                - **data_type**: The data type of the argument is one of the following values
+                        
+                        ::
+        
+                                        NULL, INTEGER, FLOAT, DOUBLE, STRING, 
+                                        SET, MULTISET, SEQUENCE, TIME, 
+                                        TIMESTAMP, DATE, SHORT, NUMERIC, CHAR, 
+                                        CURSOR, BIGINT, DATETIME
+                        
+                        - Other values are not currently supported.
+
+                - **mode**: The argument mode is one of the following values
+                        
+                        ::
+                        
+                                        IN, OUT, INOUT
+
+                - **is_optional**: A value of **YES** indicates the argument is optional, while **NO** indicates it is required.
+
+                - **default_value**: The default value of the argument. For more details, refer to :ref:`pl-arg-default-value`.
+
+The following example shows how to retrieve arguments the 'process_order' Stored procedure in the order of the arguments.
 
 .. code-block:: sql
 
-    SELECT index_of, arg_name, data_type, mode 
+    CREATE OR REPLACE PROCEDURE process_order(
+      p_order_id IN NUMBER,
+      p_status IN VARCHAR2 DEFAULT 'NEW'
+    )
+    AS
+    BEGIN
+        DBMS_OUTPUT.PUT_LINE('Processing Order ID: ' || p_order_id);
+        DBMS_OUTPUT.PUT_LINE('Order Status: ' || p_status);
+    END;
+
+    SELECT index_of, arg_name, data_type, mode, is_optional, default_value
     FROM db_stored_procedure_args
-    WHERE sp_name = 'phone_info'
+    WHERE sp_name = 'process_order'
     ORDER BY index_of;
 
-::
+        ::
 
-         index_of  arg_name              data_type             mode
-    ===============================================================
-                0  'name'                'STRING'              'IN'
-                1  'phoneno'             'STRING'              'IN'
+                index_of  arg_name              data_type             mode       is_optional  default_value
+        ====================================================================================================
+                        0  'p_order_id'          'NUMBER'              'IN'       'NO'         NULL
+                        1  'p_status'            'VARCHAR2'            'IN'       'YES'        'NEW'
+
 
 .. _db-server:
 

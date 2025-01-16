@@ -2149,7 +2149,7 @@ comment              VARCHAR(1024)               매개변수에 대한 설명
                 
                         IN, OUT, INOUT
 
-            - **is_optional**: 매개변수가 선택적이면 **YES**,  필수이면 **NO** 이다.
+            - **is_optional**: 매개변수가 선택 가능하면 **YES**,  필수이면 **NO** 이다.
 
             - **default_value**: 매개변수의 기본값이다. 자세한 내용은 :ref:`pl-arg-default-value` 을 참고한다.
 

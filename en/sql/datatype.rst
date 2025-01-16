@@ -1845,7 +1845,7 @@ When you get a **LOB** type column, the data stored in a file to which the colum
 
 .. note::
 
-    *   From CUBRID 11.4, the locator, which represents lob file path, **changed from an absolute file path to relative**. The relative path starts from '**lob-base-path**' in databases.txt.
+    *   From CUBRID 11.4, the locator, which represents lob file path, **changed from an absolute file path to relative**. The relative path starts from '**lob-base-path**' in databases.txt. With this, LOB file path management has become more flexible, and LOB file path problems have been reduced during database move, backup and restore.
     *   For example, if the '**lob-base-path**' path defined in databases.txt is /home1/data1, an example of the locator for each CUBRID version is as follows.
 
         * **CUBRID 11.4** (**relative**): file:ces_004/doc_t.00001366272829040346_0773
@@ -1861,6 +1861,8 @@ When you get a **LOB** type column, the data stored in a file to which the colum
        ::
 
     *   LOB data created in CUBRID 11.3 or lower, even they store the locator as an absolute file path, can be retrieved in CUBRID 11.4 without any changes.
+    *   Advantages while database move and restore: Even if the database is moved to another location, there is no need to manually modify the LOB file path because the path is managed based on **lob-base-path**.
+    *   Adoption of **relative LOB file path** is one of the notable improvements in CUBRID 11.4 and it considerably improves database management efficiency.
 
 Functions and Operators for LOB
 -------------------------------

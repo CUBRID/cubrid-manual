@@ -156,30 +156,44 @@ CUBRID HA 기능을 사용하기 위한 **cubrid heartbeat** 유틸리티 구문
 
 자세한 내용은 :ref:`cubrid-heartbeat`\ 를 참고한다. 
 
-CUBRID 자바 저장 프로시저 (Java SP) 서버 제어
+CUBRID 프로시저 언어 (PL) 서버 제어
 ----------------------------------------------
 
-CUBRID 자바 저장 프로시저 (Java SP) 서버 프로세스를 제어하기 위한 **cubrid** 유틸리티 구문은 다음과 같다.
+CUBRID 프로시저 언어 (PL) 서버 제어 프로세스를 제어하기 위한 **cubrid** 유틸리티 구문은 다음과 같다.
 
 ::
 
-    cubrid javasp <command> [database_name]
+    cubrid pl <command> [database_name]
     <command>: {start|stop|restart|status}
 
-*   start: 자바 저장 프로시저 서버 프로세스 구동
-*   stop: 자바 저장 프로시저 서버 프로세스 종료
-*   restart: 자바 저장 프로시저 서버 프로세스 재시작
-*   status: 자바 저장 프로시저 서버 프로세스 상태 확인
+*   restart: 프로시저 언어 서버 프로세스 재구동
+*   status: 프로시저 언어 서버 프로세스 상태 확인
 
-| 모든 명령어는 특정 데이터베이스 이름 (**[database_name]**) 을 인수로 지정할 수 있다.
-| 데이터베이스 이름을 지정하지 않으면 **status** 명령어는 구동 중인 모든 데이터베이스에 대해 자바 저장 프로시저 서버의 상태 정보를 표시한다.
+.. note::
+
+        * 모든 명령어는 특정 데이터베이스 이름 (**[database_name]**) 을 인수로 지정할 수 있다.
+        * **restart** 명령어는 프로시저 언어 서버를 강제 종료하며, 데이터베이스 서버가 이를 감지하여 프로시저 언어 서버를 자동으로 재구동한다.
+        * 데이터베이스 이름을 지정하지 않으면 **status** 명령어는 구동 중인 모든 데이터베이스에 대해 프로시저 언어 서버의 상태 정보를 표시한다.
 
 ::
 
-    % cubrid javasp start demodb
+    % cubrid pl restart demodb
 
-    @ cubrid javasp start: demodb
-    ++ cubrid javasp start: success
+    @ cubrid pl start: demodb
+    ++ cubrid pl start: success
+
+    % cubrid pl status demodb
+
+    @ cubrid pl status
+    Procedure Language Server (demobdb, pid 12345, UDS)
+    VM arguments :
+    -------------------------------------------------
+    ...
+    -------------------------------------------------
+
+.. note::
+
+    CUBRID 11.3 버전에서 CUBRID 자바 저장 프로시저 (Java SP) 서버 대신 CUBRID 11.4 버전에서 CUBRID 프로시저 언어 (PL) 서버로 변경되었다.
 
 .. _control-cubrid-services:
 

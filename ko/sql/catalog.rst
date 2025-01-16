@@ -838,7 +838,7 @@ comment              CHARACTER VARYING(1024)     저장 프로시저 인자 설�
                 
                         IN = 0, OUT = 1, INOUT = 2
 
-            - **is_optional**: 매개변수가 선택적이면 **1**,  필수이면 **0** 이다.
+            - **is_optional**: 매개변수가 선택 가능하면 **1**,  필수이면 **0** 이다.
 
             - **default_value**: 매개변수의 기본값이다. 자세한 내용은 :ref:`pl-arg-default-value` 을 참고한다.
 

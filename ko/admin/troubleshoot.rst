@@ -203,7 +203,7 @@ Fail-over 및 Fail-back 로그 메시지는 진단 로그 메시지와 결과 �
 
 진단 로그 메시지는 fail-over 및 fail-back이 결정되는 경우 기록된다. 이 메시지는 fail-over 또는 fail-back이 시작된 원인을 기록하며, [Diagnosis] 접두어를 포함한다.
 
-결과 로그 메시지는 fail-over 및 fail-back이 취소되거나, 성공적으로 완료될 때 기록된다. Fail-over 또는 Fail-back이 취소된 경우, 결과 메시지는 취소된 이유를 기록하며, [Canceled] 접두어를 포함한다. Fail-over 및 Fail-back이 성공적으로 완료된 경우, 결과 메시지는 결과를 기록하며, [Success] 접두어를 포함한다.
+결과 로그 메시지는 fail-over 및 fail-back이 취소되거나, 성공적으로 완료될 때 기록된다. Fail-over 또는 Fail-back이 취소된 경우, 결과 메시지는 취소된 이유를 기록하며, [Canceled] 접두어를 포함한다. Fail-over 및 Fail-back이 성공적으로 완료된 경우, 결과 메시지는 결과를 기록하며, [Success] 접두어를 포함한다. 자세한 내용은 :ref:`failover-messages` 를 참고한다.
   
 :: 
   

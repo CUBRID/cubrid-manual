@@ -4,51 +4,12 @@
 
 .. _jsp-prerequisites:
 
-기능 사용을 위한 준비
+자바 저장 함수/프로시저 작성 사용을 위한 확인
 ==============================================
 
-Java 저장함수/프로시저를 사용하기 위해서 다음의 사항이 준비되어 있어야 한다.
-
-*   **cubrid.conf**\에 있는 **java_stored_procedure** 값을 **yes** 로 설정해야한다.
-*   Java 저장 프로시저/함수를 사용하려는 데이터베이스에 대해 Java 저장 프로시저 서버 (Java SP 서버) 를 시작해야한다.
-
-.. _jsp-system-prm:
-
-cubrid.conf 확인
-----------------
-
-**cubrid.conf** 에 있는 **java_stored_procedure** 의 설정값은 **no** 가 기본이다.     
-Java 저장함수/프로시저를 사용하기 위해서는 이 값을 **yes** 로 변경해야 한다. 이 값과 관련한 자세한 설명은 데이터베이스 서버 설정의 :ref:`other-parameters` 를 참조한다.
-
-.. _jsp-starting-javasp:
-
-자바 저장 프로시저 서버 구동
--------------------------------
-
-Java 저장 프로시저/함수를 사용하려는 데이터베이스에 대해 Java 저장 프로시저 서버 (Java SP 서버)를 시작해야 한다.
-
-**cubrid javasp** **start** *db_name* 을 실행한다 ::
-
-    % cubrid javasp start demodb
-
-    @ cubrid javasp start: demodb
-    ++ cubrid javasp start: success
-
-Java SP 서버가 성공적으로 시작되었는지 다음의 명령어로 확인할 수 있다.
-
-**cubrid javasp** **status** *db_name* 을 실행한다 ::
-
-    % cubrid javasp status demodb
-
-    @ cubrid javasp status: demodb
-    Java Stored Procedure Server (demodb, pid 9220, port 38408)
-    Java VM arguments :
-    -------------------------------------------------
-    -Djava.util.logging.config.file=/path/to/CUBRID/java/logging.properties
-    -Xrs
-    -------------------------------------------------
-
-자바 저장 프로시저 서버에 대한 자세한 내용은 :ref:`cubrid-javasp-server` 와 :ref:`cubrid-javasp-server-config` 을 참고한다.
+Java 저장함수/프로시저를 사용하기 위해서 프로시저 언어 서버가 준비되어 있어야 한다.
+프로시저 언어 서버는 데이터베이스 서버 구동 시 자동으로 시작된다.
+자세한 내용은 :ref:`cubrid-pl-server` 와 :ref:`cubrid-pl-server-config` 을 참고한다.
 
 자바 저장 함수/프로시저 작성과 로드
 =======================================

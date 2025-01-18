@@ -791,7 +791,7 @@ comment              VARCHAR(1024)                         Comment to describe t
                         - A value of **0** indicates owner's rights (also referred to as definer's rights), and **1** indicates caller's rights (also referred to as invoker's rights).
                 - **Bit 1**: Represents the **deterministic** property of the stored procedure.  
                         - A value of **1** indicates deterministic, and **0** indicates non-deterministic.
-                - Other bits are not currently used.
+                - The other bits (**Bit 2** ~ **Bit 31**) are not currently used.
 
             - **pkg_name**: Package name. Currently, the package name is only used in the **DBMS_OUTPUT** system package.
 

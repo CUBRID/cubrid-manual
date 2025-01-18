@@ -29,7 +29,7 @@ CUBRID는 객체 관계형 데이터베이스 관리 시스템으로서, 데이�
 
 *   CUBRID Manager는 사용자가 데이터베이스와 브로커를 원격으로 관리할 수 있게 해주는 GUI 도구이다. 사용자가 데이터베이스 서버에 SQL 질의를 수행할 수 있게 해주는 편리한 도구인 질의 편집기를 제공한다.
 
-*   CUBRID 자바 저장 프로시저 (Java SP) 서버는 데이터베이스 서버에서 요청한 자바 저장 프로시저/함수를 처리하는 실행 (Execution) 서버이다.
+*   CUBRID 프로시저 언어(PL) 서버는 데이터베이스 서버에서 요청한 저장 프로시저와 함수를 컴파일하고 실행하는 서버이다.
 
 .. FIXME: For more information about CUBRID Manager, see http://www.cubrid.org/wiki_tools/entry/cubrid-manager.
 

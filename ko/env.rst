@@ -36,7 +36,7 @@ CUBRID 환경 변수
 
 .. note::
 
-    * **CUBRID_TMP** 환경 변수가 설정된 경우, cub_pl 프로세스(Java VM 내장) 구동시 사용하는  **stored_procedure_jvm_options** 중  임시 파일 저장 경로를 지정하는 **java.io.tmpdir** 의 설정값은 무시된다.
+    * **CUBRID_TMP** 환경 변수가 설정된 경우, cub_pl 프로세스(Java VM 내장) 구동시 사용하는  **stored_procedure_vm_options** 중  임시 파일 저장 경로를 지정하는 **java.io.tmpdir** 의 설정값은 무시된다.
     * Windows에서 이 환경 변수를 설정하기 위해서는 registry에 CUBRID_TMP key를 추가해야한다 (**%CUBRID%**\\share\\windows_scripts\\cubrid_env.bat 참조).
 
 **CUBRID_TMP** 의 값에는 다음과 같은 제약 사항이 있다.

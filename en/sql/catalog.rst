@@ -793,7 +793,7 @@ comment              VARCHAR(1024)                         Comment to describe t
                         - A value of **1** indicates deterministic, and **0** indicates non-deterministic.
                 - Other bits are not currently used.
 
-            - **pkg_name**: Currently, the package name is only used in the **DBMS_OUTPUT** system package.
+            - **pkg_name**: Package name. Currently, the package name is only used in the **DBMS_OUTPUT** system package.
 
 .. _-db-stored-procedure-args:
 
@@ -2040,7 +2040,7 @@ comment              VARCHAR(1024)               Comment to describe the stored 
                 - **sp_type**
                         - **PROCEDURE** or **FUNCTION**.
 
-                - **pkg_name**: Currently, the package name is only used in the **DBMS_OUTPUT** system package.
+                - **pkg_name**: Package name. Currently, the package name is only used in the **DBMS_OUTPUT** system package.
                         - **dbms_output** or **NULL**.
 
                 - **return_type**: The return type can be one of the following values:

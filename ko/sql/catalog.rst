@@ -793,7 +793,7 @@ comment              VARCHAR(1024)                         저장 프로시저 �
                         - 값이 **1** 이면 deterministic, **0** 이면 non-deterministic이다.
                 - 나머지 비트는 현재 사용하지 않는다.
 
-            - **pkg_name**: 현재 패키지 이름은 **DBMS_OUTPUT** 시스템 패키지에서만 사용된다.
+            - **pkg_name**: 패키지 이름. 현재 패키지 이름은 **DBMS_OUTPUT** 시스템 패키지에서만 사용한다.
 
 .. _-db-stored-procedure-args:
 
@@ -2041,7 +2041,7 @@ comment              VARCHAR(1024)               저장 프로시저 설명
             - **sp_type**
                 - **PROCEDURE** 또는 **FUNCTION** 값을 가진다.
 
-            - **pkg_name**: 현재 패키지 이름은 **DBMS_OUTPUT** 시스템 패키지에서만 사용된다
+            - **pkg_name**: 패키지 이름. 현재 패키지 이름은 **DBMS_OUTPUT** 시스템 패키지에서만 사용한다.
                 - **dbms_output** 또는 **NULL** 값을 가진다
 
             - **return_type**: 반환 타입은 아래 값 중 하나이다

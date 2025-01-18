@@ -921,8 +921,61 @@ loadjava 유틸리티
 *   *java-class-file*: 로드하려는 Java 클래스 파일 이름 또는 jar 파일 이름
 *   [*option*]
 
-    *   **-y**: 이름이 같은 클래스 파일이 존재하면 자동으로 덮어쓰기 한다. 기본값은 **no** 이다. 만약 **-y** 옵션을 명시하지 않고 로드할 때 이름이 같은 클래스 파일이 존재하면 덮어쓰기를 할 것인지 묻는다.
-    *   **-j(또는 --jin)**: Java \*.class 파일이나 \*.jar 파일을 정적으로 로드하기 위한 경로로 이동한다. 네이티브 라이브러리의 로딩 오류를 방지하기 위해서 JNI(네이티브 라이브러리)를 사용한 class는 반드시 이 옵션을 사용하여 로드해야 한다.
+    *   **-y**(또는 **--overwrite**): 이름이 같은 클래스 파일이 존재하면 자동으로 덮어쓰기 한다. 기본값은 **no** 이다. 만약 **-y** 옵션을 명시하지 않고 로드할 때 이름이 같은 클래스 파일이 존재하면 덮어쓰기를 할 것인지 묻는다.
+    *   **-j**(또는 **--jni**): Java \*.class 파일이나 \*.jar 파일을 정적으로 로드하기 위한 경로로 이동한다. 네이티브 라이브러리의 로딩 오류를 방지하기 위해서 JNI(네이티브 라이브러리)를 사용한 class는 반드시 이 옵션을 사용하여 로드해야 한다.
+    *   **-p**(또는 **--package**): 클래스 파일을 로드할 때 패키지 이름을 지정한다.
+
+    ::        
+        
+        * 매뉴얼의 예제에서는 Java 파일 코드 상단에 모두 패키지가 명시되어 있지 않다. 이 경우에는 기본 패키지이며 **-p** 옵션을 사용하지 않아도 된다.
+        * 그러나 다음과 같이 패키지가 포함된 Java 파일을 로드할 때는 **-p** 옵션을 사용하여 패키지 이름을 지정해야 한다.
+
+Java 패키지 이름이 포함된 클래스 로드 예제
+------------------------------------------
+
+Java 클래스에 패키지 선언이 포함된 경우 예를 들어:
+
+.. code-block:: java
+
+    package org.cubrid;
+
+    public class NumberUtils {
+        public static int addIntegers(int num1, int num2) {
+            return num1 + num2;
+        }
+    }
+
+1. **Java 파일 컴파일**
+   
+   .. code-block:: bash
+
+       javac NumberUtils.java
+
+2. **컴파일된 파일을 데이터베이스에 로드**
+   
+   .. code-block:: bash
+
+       loadjava demodb -p org.cubrid NumberUtils.class
+
+3. **SQL에서 저장 함수 생성**
+
+   .. code-block:: sql
+
+       CREATE OR REPLACE FUNCTION add_integer(a INT, b INT) RETURN INT 
+       AS LANGUAGE JAVA
+       NAME 'org.cubrid.NumberUtils.addIntegers(int, int) return int';
+
+4. **함수 사용**
+
+   .. code-block:: sql
+
+       SELECT add_integer(1, 2);
+
+   출력::
+
+       add_integer(1, 2)
+       ===================
+                            3
 
 .. _jsp-caution:
 

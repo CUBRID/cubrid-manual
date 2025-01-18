@@ -946,8 +946,61 @@ You can load a Java \*.class or \*.jar file using **loadjava** utility. The file
 *   *java-class-file*: The name of the Java class or jar file to be loaded.
 *   [*option*]
 
-    *   **-y**: automatically overwrites a file with the same name, if any. If you do not use this option, you will get a prompt asking if you want to overwrite the file with the same name, if any.
-    *   **-j(or --jni)**: moves to the path for statically loading Java \*.class files or \*.jar files. This option should be used to prevent native library loading errors when loading classes that include JNI (native libraries).
+    * **-y** (or **--overwrite**): Automatically overwrites an existing file with the same name. By default, the tool prompts for confirmation if a file with the same name exists and this option is not provided.
+    * **-j** (or **--jni**): Specifies that the Java \*.class or \*.jar file includes JNI (native libraries). This prevents native library loading errors and moves the file to the static load path.
+    * **-p** (or **--package**): Specifies the package name when loading Java class files with a package declaration. If the class belongs to the default package, this option is not required.
+
+    ::        
+        
+        * In the examples provided in the manual, the Java files do not specify a package at the top of the code. In this case, the default package is used, and there is no need to use the **-p** option.
+        * However, when loading a Java file that includes a package declaration, you must use the **-p** option to specify the package name.
+
+Example: Loading a Java Class with a Java package name
+-------------------------------------------
+
+If a Java class includes a package declaration, such as:
+
+.. code-block:: java
+
+    package org.cubrid;
+
+    public class NumberUtils {
+        public static int addIntegers(int num1, int num2) {
+            return num1 + num2;
+        }
+    }
+
+1. **Compile the Java File**
+   
+   .. code-block:: bash
+
+       javac NumberUtils.java
+
+2. **Load the Compiled File into the Database**
+   
+   .. code-block:: bash
+
+       loadjava demodb -p org.cubrid NumberUtils.class
+
+3. **Create a Stored Function in SQL**
+
+   .. code-block:: sql
+
+       CREATE OR REPLACE FUNCTION add_integer(a INT, b INT) RETURN INT 
+       AS LANGUAGE JAVA
+       NAME 'org.cubrid.NumberUtils.addIntegers(int, int) return int';
+
+4. **Use the Function**
+
+   .. code-block:: sql
+
+       SELECT add_integer(1, 2);
+
+   Output::
+
+       add_integer(1, 2)
+       ===================
+                            3
 
 .. _jsp-caution:
 

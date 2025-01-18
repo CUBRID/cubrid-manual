@@ -777,7 +777,9 @@ comment              VARCHAR(1024)                         저장 프로시저 �
                         TIMESTAMP = 11, DATE = 12, SHORT = 18, NUMERIC = 22, CHAR = 25, 
                         CURSOR = 28, BIGINT = 31, DATETIME = 32
                 
-                - 나머지 값은 현재 지원하지 않는다.
+                - Java SP는 위 명시된 데이터 타입을 모두 지원한다
+                - PL/CSQL은 위 명시된 데이터 타입 중 SET, MULTISET, SEQUENCE, CURSOR를 제외한 타입을 지원한다.
+                - 나머지 명시되지 않은 데이터 타입은 지원하지 않는다.
 
             - **lang**: 값이 **0** 이면 PL/CSQL, **1** 이면 Java이다.
 
@@ -830,7 +832,9 @@ comment              CHARACTER VARYING(1024)     저장 프로시저 인자 설�
                         TIMESTAMP = 11, DATE = 12, SHORT = 18, NUMERIC = 22, CHAR = 25, 
                         CURSOR = 28, BIGINT = 31, DATETIME = 32
                 
-                - 나머지 값은 현재 지원하지 않는다.
+                - Java SP는 위 명시된 데이터 타입을 모두 지원한다
+                - PL/CSQL은 위 명시된 데이터 타입 중 SET, MULTISET, SEQUENCE, CURSOR를 제외한 타입을 지원한다.
+                - 나머지 명시되지 않은 데이터 타입은 지원하지 않는다.
 
             - **mode**: 매개변수 모드는 아래 값 중 하나이다
                 

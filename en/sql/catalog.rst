@@ -777,7 +777,9 @@ comment              VARCHAR(1024)                         Comment to describe t
                         TIMESTAMP = 11, DATE = 12, SHORT = 18, NUMERIC = 22, CHAR = 25, 
                         CURSOR = 28, BIGINT = 31, DATETIME = 32
 
-                - Other values are not currently supported.
+                - Java stored procedures support all the data types listed above.
+                - PL/CSQL supports the data types listed above except for SET, MULTISET, SEQUENCE, and CURSOR.
+                - Data types not listed above are not supported.
 
             - **lang**: A value of **0** indicates PL/CSQL, and **1** indicates Java.
 
@@ -830,7 +832,9 @@ comment              CHARACTER VARYING(1024)     Comment to describe the argumen
                         TIMESTAMP = 11, DATE = 12, SHORT = 18, NUMERIC = 22, CHAR = 25, 
                         CURSOR = 28, BIGINT = 31, DATETIME = 32
 
-                - Other values are not currently supported.
+                - Java stored procedures support all the data types listed above.
+                - PL/CSQL supports the data types listed above except for SET, MULTISET, SEQUENCE, and CURSOR.
+                - Data types not listed above are not supported.
 
             - **mode**: The argument mode is one of the following values
 

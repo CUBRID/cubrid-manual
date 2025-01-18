@@ -43,6 +43,7 @@ cubrid 유틸리티의 사용법(구문)은 다음과 같다. ::
         tde <operation> [option] <database_name> --- TDE 암호화 관리 도구
         vacuumdb [option] <database-name>  --- 데이터베이스의 삭제된 레코드 또는 불필요한 mvcc 관련 정보를 정리 및 관련 정보 확인하는 도구
         flashback [option] <database-name> <owner_name.class_name> --- 커밋된 특정 트랜잭션을 되돌릴 수 있도록 SQL 구문을 제공하는 도구
+        memmon [option] <database-name> --- 현재 서버의 힙 메모리 사용량에 대한 정보를 확인하는 도구
 
 cubrid 유틸리티 로깅
 --------------------
@@ -3694,6 +3695,67 @@ flashback
     지정된 트랜잭션 내에서 수행된 SQL 구문들을 시간 순서로 표시한다. **\-\-oldest** 옵션을 지정하지 않으면, 트랜잭션 내에서 수행된 SQL 구문들을 시간 역순으로 표시한다. ::
 
         cubrid flashback --oldest demodb dba.tbl
+
+.. _memmon:
+
+memmon
+---------
+
+ **cubrid memmon** 유틸리티는 현재 서버 프로세스에 할당된 힙 메모리 사용량을 출력한다. 시스템 파라미터 **enable_memory_monitoring** 가 yes로 설정된 경우, 서버 메모리 모니터링 모듈은 힙 메모리 총 사용량과 메모리 할당이 발생한 큐브리드 소스 코드 및 라인 정보를 기준으로 세부적인 메모리 할당 정보를 추적 관리한다. 이를 통해 유틸리티를 실행하는 시점의 서버 힙 메모리 사용 현황을 확인할 수 있다. ::
+
+    cubrid memmon [option] database_name
+
+*   **cubrid**: CUBRID 서비스 및 데이터베이스 관리를 위한 통합 유틸리티
+
+*   **memmon**: 서버의 힙 메모리 사용 현황을 출력하는 유틸리티
+
+*   *database_name*: 힙 메모리 사용 현황을 확인할 데이터베이스 이름
+
+다음 예제에서는 사용자가 "cubrid memmon demodb"를 수행했을 때 출력되는 결과를 보여준다.
+
+::
+
+    ====================cubrid memmon====================
+    Server Name: demodb
+    Total Memory Usage: 935240660 Bytes (for meta info: 470300 Bytes)
+    -----------------------------------------------------
+            File Name                                                                                           |     Memory Usage(Ratio)
+            storage/page_buffer.c:4977                                                                          |        525315320 Bytes( 56%)
+            transaction/log_page_buffer.c:584                                                                   |        262147560 Bytes( 28%)
+            ...
+
+**cubrid memmon** 유틸리티를 실행하면 데이터베이스 이름, 힙 메모리 총 사용량, 할당된 힙 메모리를 추적 관리하기 위해 서버 내부적으로 유지되는 메타 정보의 메모리 사용량이 출력된다. 세부 항목으로는 힙 메모리 할당이 발생한 모든 파일과 라인 별[파일:라인] 메모리 사용량과 점유율이 사용량 기준으로 정렬되어 출력된다. 시스템 파라미터 **enable_memory_monitoring** 가 no로 설정된 경우 또는 --disable-force 옵션을 이용하여 메모리 모니터링 기능을 강제로 중지시킨 경우, 에러 메시지가 출력된다.
+
+유틸리티가 출력하는 정보는 다음과 같은 의미를 갖는다.
+
+    *   Server Name : 데이터베이스 이름
+
+    *   Total Memory Usage : 힙 메모리 총 사용량
+
+        *   for meta info : 힙 메모리 총 사용량 중 메모리 사용량을 추적 관리하기 위해 사용되는 메타 정보의 메모리 사용량
+
+    *   File Name : 힙 메모리 할당이 발생한 큐브리드 소스 코드 파일명과 라인 정보
+
+    *   Memory Usage(Ratio) : 힙 메모리 사용량 (총 사용량 대비 점유율)
+
+.. note::
+		힙 메모리 할당이 발생했던 이력을 남기기 위해 힙 메모리 할당 해제가 완료되어 현재 메모리 사용량이 0이 되는 지점 또한 **cubrid memmon** 의 출력 대상이 된다.
+
+다음은 **cubrid memmon** 에서 사용하는 [option]이다.
+
+.. program:: memmon
+
+.. option:: -o, --output-file=FILE
+
+    유틸리티 수행 결과를 지정한 파일에 저장하기 위한 옵션이다. **-o** 옵션을 지정하지 않으면 콘솔 화면에 메시지가 출력된다. ::
+
+        cubrid memmon -o memory_usage_output demodb
+
+.. option:: --disable-force
+
+    메모리 모니터링 기능을 강제로 중지하는 옵션이다. 이 옵션을 이용해 메모리 모니터링 기능을 강제로 중지시키면 **cubrid memmon** 유틸리티를 실행해도 서버의 힙 메모리 사용량은 출력되지 않는다. 메모리 사용량을 다시 추적하기 위해서는 서버를 반드시 재구동해야 한다. ::
+
+        cubrid memmon --disable-force demodb
 
 
 HA 명령어

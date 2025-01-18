@@ -398,6 +398,8 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | print_index_detail                  | client/server parameter |         | bool     | no                             |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | enable_memory_monitoring            | client/server parameter        |         | bool     | no                             |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | flashback_timeout                   | client parameter        |         | int      | 300                            |                       |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 
@@ -2226,6 +2228,8 @@ The following are other parameters. The type and value range for each parameter 
 +-------------------------------------+--------+----------------+----------------+----------------+
 | print_index_detail                  | bool   | no             |                |                |
 +-------------------------------------+--------+----------------+----------------+----------------+
+| enable_memory_monitoring            | bool   | no             |                |                |
++-------------------------------------+--------+----------------+----------------+----------------+
 | flashback_timeout                   | int    | 300            | 0              | 3600           |
 +-------------------------------------+--------+----------------+----------------+----------------+
 
@@ -2444,6 +2448,19 @@ The following are other parameters. The type and value range for each parameter 
 **print_index_detail**
 
  It specifies whether option information in the **WITH** clause is displayed when index syntax information is displayed, such as in the SHOW CREATE TABLE statement. Default is NO. However, the unloaddb tool is not affected by this setting.
+
+**enable_memory_monitoring**
+
+ **enable_memory_monitoring** specifies whether to monitor the server's heap memory usage. Setting the value to YES activates the server's memory monitoring feature, which continuously tracks and manages the server's heap memory usage. Heap memory usage is tracked based on the file and line where dynamic memory allocation occurs in the CUBRID source code. If multiple memory allocations occur at the same location, the memory usage is accumulated. When the tracked memory is deallocated, the amount of deallocated memory is subtracted from the accumulated total, continuously tracking the real-time heap memory usage. The monitored heap memory usage can be checked using the :ref:`memmon` utility. The default value is NO.
+
+.. note::
+
+    *   This feature is only supported on Linux.
+    *   The memory monitoring feature incurs additional overhead as it tracks usage every time memory is allocated on the server. In an HA environment, this can lead to performance issues, particularly for slave nodes, which experience a high proportion of memory allocations while processing logs from the master node. Therefore, it is not recommended to use this feature on slave nodes.
+    * The memory usage tracked by CUBRID may differ from the memory usage displayed by commands like pmap -d and htop. This is because the memory monitoring feature in CUBRID does not track memory allocations occurring within header files and glibc internals, to prevent conflicts that arise from automating the feature at the code level. Additionally, there are a few notable differences:
+
+        *   The heap memory usage of a process in pmap -d can be identified through the writeable/private section. However, this metric reflects the memory occupancy of the process based on the memory management policies of the OS. As a result, there may be differences between the memory usage shown by CUBRID's memory monitoring feature and what is displayed in pmap -d.
+        *   htop provides the memory usage of a process through the RES(Resident Size) section. However, since this shows the physical memory usage of a process, it cannot be used to check only the heap memory usage of a process.
 
 .. _flashback_timeout:
 

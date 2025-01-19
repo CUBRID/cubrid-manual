@@ -1850,7 +1850,7 @@ When you get a **LOB** type column, the data stored in a file to which the colum
 
         * **CUBRID 11.4** (**relative**): file:ces_004/doc_t.00001366272829040346_0773
         * up to CUBRID 11.3 (**absolute**): file:/home1/data1/ces_004/doc_t.00001366272829040346_0773
-    *   Due to the locator is stored as a relative path, if ‘**lob-base-path**’ in databases.txt is changed,
+    *   Due to the locator being stored as a relative path, if ‘**lob-base-path**’ in databases.txt is changed,
 
         * Previously created LOB data cannot be retrieved.
         * To retrieve previously created LOB data, they should be moved to the changed '**lob-base-path**' directory.

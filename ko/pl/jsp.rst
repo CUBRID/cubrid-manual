@@ -1,6 +1,13 @@
 
-:meta-keywords: cubrid jsp, loadjava utility
+:meta-keywords: cubrid jsp, cubrid javasp, loadjava utility
 :meta-description: CUBRID supports to develop stored functions and procedures in Java. Java stored functions/procedures are executed on the JVM (Java Virtual Machine) hosted by CUBRID.
+
+*****************************
+자바 저장 프로시저
+*****************************
+
+CUBRID는 Java로 저장 함수와 프로시저를 개발할 수 있도록 지원한다. Java 저장 함수와 프로시저는 CUBRID에서 호스팅한 Java 가상 머신(JVM, Java Virtual Machine)에서 실행된다.
+Java 저장 함수/프로시저는 Java 가상머신을 사용하므로 뛰어난 상호 운용성과 이식성을 갖는다.
 
 .. _jsp-prerequisites:
 

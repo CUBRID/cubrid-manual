@@ -288,7 +288,7 @@ Exception 선언
 * *body*: 필수적으로 하나 이상의 실행문과 선택적으로 몇 개의 Exception 핸들러로 구성된다.
 * *label_name*: 프로시저/함수 이름과 일치해야 한다.
 * *declare_spec*: 변수, 상수, Exception, 커서, 내부 프로시저/함수 선언 중 하나
-* *statement*: 아래 :ref:`실행문 <stmt>` 절 참조
+* *statement*: 아래 :doc:`실행문 <plcsql_stmt>` 절 참조
 * *handler*: 지정된 Exception이 발생했을 때 실행할 실행문들을 지정한다.
 * *exception_name*: Exception 이름 *identifier*\는 :ref:`시스템 Exception <exception>`\이거나 :ref:`사용자가 선언 <exception_decl>`\한 것이어야 한다. OTHERS는 아직까지 매치되지 않은 모든 Exception에 매치되며 OR로 다른 exception 이름과 연결할 수 없다.
 

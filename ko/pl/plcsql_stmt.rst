@@ -42,7 +42,7 @@ BLOCK은 프로시저/함수와 마찬가지로 Exception 처리 구조를 가�
 
 
 * *body*: 필수적으로 하나 이상의 실행문과 선택적으로 몇 개의 Exception 핸들러로 구성된다.
-* *declare_spec*: 변수, 상수, Exception, 커서, 내부 프로시저/함수 선언. (참조: :ref:`선언문 <decl>`)
+* *declare_spec*: 변수, 상수, Exception, 커서, 내부 프로시저/함수 선언. (참조: :doc:`선언문 <plcsql_decl>`)
 * *handler*:  지정된 Exception이 발생했을 때 실행할 실행문들을 지정한다.
 * *exception_name*: Exception 이름 *identifier*\는 :ref:`시스템 Exception <exception>`\이거나 :ref:`사용자가 선언 <exception_decl>`\한 것이어야 한다. OTHERS는 선언되지 않은 모든 Exception에 매치되며 OR로 다른 exception 이름과 연결할 수 없다.
 

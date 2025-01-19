@@ -11,10 +11,10 @@ PL/CSQL은 CUBRID SQL의 절차적 언어로의 확장으로서, 선언적 언�
 조건문, 반복문, 변수, 에러 처리, 내부 프로시저/함수를 통한 모듈화 같은 절차적 언어의 특성을 지원한다.
 물론, SQL 문을 PL/CSQL 프로그램 안에 포함시켜 함께 사용할 수 있다.
 
-.. include:: plcsql_overview.rst
-
-.. include:: plcsql_decl.rst
-
-.. include:: plcsql_stmt.rst
-
-.. include:: plcsql_expr.rst
+.. toctree::
+        :maxdepth: 2
+        
+        plcsql_overview
+        plcsql_decl
+        plcsql_stmt
+        plcsql_expr

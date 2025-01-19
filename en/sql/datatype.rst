@@ -1864,7 +1864,8 @@ When you get a **LOB** type column, the data stored in a file to which the colum
 
     *   Advantages during database moves and restores: Even if the database is moved to another location, there is no need to manually modify the LOB file path because the path is managed based on **lob-base-path**.
 
-    *   Adoption of **relative LOB file path** is one of the notable improvements in CUBRID 11.4 and it considerably improves database management efficiency.
+    *   The adoption of the **relative LOB file path** is one of the notable improvements in CUBRID 11.4, and it significantly enhances database management efficiency.
+
 
 Functions and Operators for LOB
 -------------------------------

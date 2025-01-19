@@ -321,6 +321,7 @@ PL/CSQL에 Static SQL을 사용하는 저장 프로시저를 생성한 후 정�
     
     ;server-output on
     CALL proc_stadium_code();
+
 ::
     
     Result              

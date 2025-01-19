@@ -1862,7 +1862,8 @@ When you get a **LOB** type column, the data stored in a file to which the colum
 
     *   LOB data created in CUBRID 11.3 or earlier, even though they store the locator as an absolute file path, can be retrieved in CUBRID 11.4 without any changes.
 
-    *   Advantages while database move and restore: Even if the database is moved to another location, there is no need to manually modify the LOB file path because the path is managed based on **lob-base-path**.
+    *   Advantages during database moves and restores: Even if the database is moved to another location, there is no need to manually modify the LOB file path because the path is managed based on **lob-base-path**.
+
     *   Adoption of **relative LOB file path** is one of the notable improvements in CUBRID 11.4 and it considerably improves database management efficiency.
 
 Functions and Operators for LOB

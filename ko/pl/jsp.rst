@@ -127,7 +127,15 @@ Java 클래스 로드
 CUBRID는 SQL 문이나 Java 응용 프로그램에서 Java 메서드를 호출할 수 있도록 Java 클래스를 등록(publish)하는 과정이 필요하다.
 다음과 같이 CUBRID 저장 함수를 생성하여 Java 클래스를 등록한다.
 
+::
+
+    ...
+    AS LANGUAGE JAVA NAME '<java_call_specification>';
+
+위와 같이 JAVA NAME 이하 문자열에 Java 클래스의 메서드를 호출하기 위한 클래스와 메서드 이름을 지정한다. 이것을 **Java Call Specification** 라고 한다.
+
 .. code-block:: sql
+
 
     CREATE FUNCTION hello() RETURN STRING 
     AS LANGUAGE JAVA 
@@ -136,7 +144,7 @@ CUBRID는 SQL 문이나 Java 응용 프로그램에서 Java 메서드를 호출�
 .. _call-specification:
 
 Java Call Specification
-==========================
+-----------------------------
 
 Java 클래스를 로딩했을 때 SQL 문이나 Java 응용 프로그램에서 클래스 내의 함수를 어떻게 호출할지 모르기 때문에 
 Java 저장 함수/프로시저를 사용하기 위해서는 Call Specification를 사용하여 등록해야 한다.
@@ -150,14 +158,6 @@ Call Specification는 Java 함수 이름과 인자 타입 그리고 리턴 값�
     CREATE PROCEDURE test_out(x OUT STRING)
     AS LANGUAGE JAVA
     NAME 'SpCubrid.outTest(java.lang.String[] o)';
-
-또는 **OR REPLACE** 구문을 사용하여 현재의 저장 함수/프로시저를 대체 혹은 새로 생성하는 문장을 작성할 수 있다.
-
-.. code-block:: java
-
-    CREATE OR REPLACE FUNCTION hello() RETURN STRING
-    AS LANGUAGE JAVA
-    NAME 'SpCubrid.HelloCubrid() return java.lang.String'; 
 
 Java 저장 함수/프로시저 호출
 ============================

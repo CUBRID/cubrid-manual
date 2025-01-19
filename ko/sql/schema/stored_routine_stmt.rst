@@ -1,6 +1,6 @@
 
-:meta-keywords: procedure definition, create procedure, drop procedure, function definition, create function, drop function
-:meta-description: Define functions/procedures in CUBRID database using create procedure, create function, drop procedure and drop function statements.
+:meta-keywords: procedure definition, create procedure, alter procedure, drop procedure, function definition, create function, alter function, drop function
+:meta-description: Define functions/procedures in CUBRID database using create procedure, create function, alter procedure, alter function, drop procedure and drop function statements.
 
 
 *************************
@@ -98,6 +98,7 @@ CREATE PROCEDURE
      'athlete_add'                   2  'nation_code'         'STRING'              'IN'
      'athlete_add'                   3  'event'               'STRING'              'IN'
 
+
 .. _create-function:
 
 CREATE FUNCTION
@@ -184,6 +185,165 @@ CREATE FUNCTION
     sp_name   index_of  arg_name  data_type      mode
     =================================================
      'sp_int'                        0  'i'                   'INTEGER'             'IN'
+
+ALTER PROCEDURE
+================
+
+**ALTER PROCEDURE** 문을 사용하여 저장 프로시저를 재컴파일할 수 있다.
+저장 프로시저와 연관된 테이블의 스키마가 변경되더라도 자동으로 재컴파일되지 않으므로, 변경 사항을 반영하려면 사용자가 직접 재컴파일해야 한다.
+
+::
+
+    ALTER PROCEDURE [schema_name.]procedure_name COMPILE;
+
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
+*   *procedure_name*: 재컴파일할 프로시저의 이름을 지정한다.
+
+.. note::
+
+    소유자를 변경하는 경우, 변경된 소유자로 저장 프로시저를 자동으로 재컴파일한다. 
+    소유자를 변경하기 위해서는 :ref:`ALTER … OWNER<change-owner>`\을 참고한다.
+
+다음은 테이블 스키마 변경 후 PL/CSQL을 재컴파일하여 정상적으로 실행할 수 있게 만드는 예이다.  
+
+PL/CSQL에 Static SQL을 사용하는 저장 프로시저를 생성한 후 정상적으로 실행되는지 확인한다. 
+
+.. code-block:: sql
+
+    CREATE OR REPLACE PROCEDURE proc_stadium_code() AS
+      n INTEGER;
+    BEGIN
+      SELECT code INTO n FROM stadium LIMIT 1;
+      DBMS_OUTPUT.put_line('code :' || n);
+    END;
+    
+    ;server-output on
+    CALL proc_stadium_code();
+::
+    
+    Result              
+    ======================
+      NULL                
+
+    <DBMS_OUTPUT>
+    ====
+    code :30140
+
+stadium 테이블의 code 컬럼 타입을 INTEGER에서 VARCHAR로 변경한 후 저장 프로시저를 실행하면 아래와 같은 에러가 발생한다.
+
+.. code-block:: sql
+
+    ALTER TABLE public.stadium MODIFY code VARCHAR;
+
+    CALL proc_stadium_code();
+
+::
+
+    ERROR: Stored procedure execute error: 
+      (line 4, column 3) internal server error
+
+컬럼 타입 변경 정보가 기존에 컴파일된 PL/CSQL의 실행코드에 반영되지 않았기 때문에, 저장 프로시저를 재컴파일해야 정상적으로 실행할 수 있다.
+
+.. code-block:: sql
+
+    ALTER PROCEDURE proc_stadium_code COMPILE;
+
+    CALL proc_stadium_code();
+
+::
+
+    Result              
+    ======================
+      NULL                
+
+    <DBMS_OUTPUT>
+    ====
+    code :30140
+
+ALTER FUNCTION
+===============
+
+**ALTER FUNCTION** 문을 사용하여 저장 함수를 재컴파일할 수 있다.
+저장 함수와 연관된 테이블의 스키마가 변경되더라도 자동으로 재컴파일되지 않으므로, 변경 사항을 반영하려면 사용자가 직접 재컴파일해야 한다.
+
+::
+
+    ALTER FUNCTION [schema_name.]function_name COMPILE;
+
+*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
+*   *function_name*: 재컴파일할 함수의 이름을 지정한다.
+
+.. note::
+
+    소유자를 변경하는 경우, 변경된 소유자로 저장 함수를 자동으로 재컴파일한다.
+    소유자를 변경하기 위해서는 :ref:`ALTER … OWNER<change-owner>`\을 참고한다.
+
+다음은 테이블 스키마 변경 후 PL/CSQL을 재컴파일하여 정상적으로 실행할 수 있게 만드는 예이다. 
+
+PL/CSQL에 Static SQL을 사용하는 저장 함수를 생성한 후 정상적으로 실행되는지 확인한다.
+
+.. code-block:: sql
+
+    CREATE OR REPLACE FUNCTION func_stadium_code() RETURN INTEGER AS
+      n INTEGER;
+    BEGIN
+      SELECT code INTO n FROM stadium LIMIT 1;
+      RETURN n;
+    END;
+    
+    CALL func_stadium_code();
+
+::
+    
+    Result
+    =============
+    30140
+
+stadium 테이블의 code 컬럼 타입을 INTEGER에서 VARCHAR로 변경한 후 저장 함수를 실행하면 아래와 같은 에러가 발생한다.
+
+.. code-block:: sql
+
+    ALTER TABLE public.stadium MODIFY code VARCHAR;
+
+    CALL func_stadium_code();
+
+::
+
+    ERROR: Stored procedure execute error: 
+      (line 4, column 3) internal server error
+
+컬럼 타입 변경 정보가 기존에 컴파일된 PL/CSQL의 실행코드에 반영되지 않았기 때문에, 저장 함수를 재컴파일을 수행해야 정상적으로 실행할 수 있다.
+
+.. code-block:: sql
+
+    ALTER FUNCTION func_stadium_code COMPILE;
+
+    CALL func_stadium_code();
+
+::
+    
+    Result
+    =============
+    30140
+
+DROP PROCEDURE
+==============
+
+CUBRID에서는 등록한 저장 프로시저를 **DROP PROCEDURE** 구문을 사용하여 삭제할 수 있다.
+이 때, 여러 개의 *procedure_name* 을 콤마(,)로 구분하여 한꺼번에 여러 개의 저장 프로시저를 삭제할 수 있다.
+
+::
+
+    DROP PROCEDURE procedure_name [{ , procedure_name , ... }];
+
+*   *procedure_name*: 제거할 프로시저의 이름을 지정한다.
+
+.. code-block:: sql
+
+    DROP PROCEDURE hello, sp_int;
+
+저장 프로시저의 삭제는 프로시저를 등록한 사용자와 DBA의 구성원만 삭제할 수 있다.
+예를 들어 'sp_int' 저장 프로시저를 **PUBLIC** 이 등록했다면, **PUBLIC** 또는 **DBA** 의 구성원만이 'sp_int' 저장 프로시저를 삭제할 수 있다.
 
 DROP PROCEDURE
 ==============

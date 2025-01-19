@@ -1853,7 +1853,7 @@ When you get a **LOB** type column, the data stored in a file to which the colum
     *   Due to the locator being stored as a relative path, if ‘**lob-base-path**’ in databases.txt is changed,
 
         * Previously created LOB data cannot be retrieved.
-        * To retrieve previously created LOB data, they should be moved to the changed '**lob-base-path**' directory.
+        * To retrieve previously created LOB data, it should be moved to the updated '**lob-base-path**' directory.
        ::
 
           # example:

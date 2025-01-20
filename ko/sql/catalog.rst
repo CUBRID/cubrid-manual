@@ -766,7 +766,9 @@ comment              VARCHAR(1024)                         저장 프로시저 �
 
         .. note::
         
-            - **unique_name**: 예) **dba.sp_test**, **
+            - **unique_name**: 예) **dba.sp_test**
+
+            - **sp_name**: 예) **sp_test**
 
             - **sp_type**: 값이 **1** 이면 저장 프로시저, **2** 이면 저장 함수이다.
 

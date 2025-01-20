@@ -188,8 +188,10 @@ CUBRID에서 다음의 데이터베이스 객체에 대해 권한을 부여할 �
 *  **프로시저**
 
 자신이 만든 데이터베이스 객체에 다른 사용자(그룹)의 접근을 허용하려면 해당 사용자(그룹)에게 적절한 권한을 부여해야 한다.
+권한이 부여된 그룹에 속한 모든 멤버는 같은 권한을 소유하므로 모든 멤버에게 개별적으로 권한을 부여할 필요는 없다.
+단, DBA와 소유자 그룹의 멤버가 아닌 WITH GRANT OPTION 권한을 부여받은 그룹의 멤버는 부여받은 권한을 다른 사용자에게 부여할 수 없다.
 
-권한이 부여된 그룹에 속한 모든 멤버는 같은 권한을 소유하므로 모든 멤버에게 개별적으로 권한을 부여할 필요는 없다. **PUBLIC** 사용자가 생성한 (가상) 테이블은 모든 사용자에게 접근이 허용된다.
+**PUBLIC** 사용자가 생성한 데이터베이스 객체는 모든 사용자에게 접근이 허용된다.
 
 다음의 **GRANT** 문을 사용하여 사용자에게 접근 권한을 부여할 수 있다. ::
 
@@ -252,9 +254,28 @@ CUBRID에서 다음의 데이터베이스 객체에 대해 권한을 부여할 �
 
     GRANT SELECT ON record, history TO brown WITH GRANT OPTION;
 
+다음은 *DBA* 가 일반 사용자 *u1* 이 생성한 *tbl3* 테이블에 대하여 사용자 *u2* 에게 **SELECT** 권한을 부여한 예제이다. db_auth의 *grantor_name* (권한을 부여한 사용자명) 을 조회하면 권한을 부여한 DBA가 아닌, 소유자(u1)이 표시된다.
+
+.. code-block:: sql
+    
+    CALL LOGIN ('DBA','') ON CLASS db_user;
+    CREATE USER u1;
+    CREATE USER u2;
+    CREATE TABLE u1.tbl3 (a INT);
+    GRANT SELECT ON u1.tbl3 TO u2;
+
+    SELECT * FROM db_auth WHERE object_name = 'tbl3';
+
+::
+
+    grantor_name          grantee_name          object_type           object_name           owner_name            auth_type             is_grantable        
+    ==========================================================================================================================================================
+    'U1'                  'U2'                  'CLASS'               'tbl3'                'U1'                  'SELECT'              'NO'   
+
 .. note::
 
-    *   권한을 부여하는 사용자는 권한 부여 전에 나열된 모든 테이블의 소유자이거나, **WITH GRANT OPTION** 을 가지고 있어야 한다.
+    *   권한을 부여하는 사용자는 권한 부여 전에 나열된 모든 테이블의 소유자, 소유자 멤버, DBA, DBA 멤버 및 **WITH GRANT OPTION** 을 가지고 있어야 한다.
+    *   DBA, DBA 멤버, 소유자 멤버는 권한을 부여하는 경우, *grantor_name* 컬럼에 권한을 부여한 사용자가 아닌 객체 소유자로 표시된다. 단, **WiTH GRANT OPTION**을 가진 사용자가 권한을 부여하는 경우, **grantor_name** 컬럼에 권한을 부여한 사용자로 표시된다.
     *   뷰에 대한 **SELECT**, **UPDATE**, **DELETE**, **INSERT** 권한을 부여하기 전에 뷰의 소유자는 뷰의 질의 명세부에 포함되어 있는 모든 테이블에 대해서 **SELECT** 권한과 **GRANT** 권한을 가져야 한다. **DBA** 사용자와 **DBA** 그룹에 속한 멤버는 자동적으로 모든 테이블에 대한 모든 권한을 가진다.
     *   **TRUNCATE** 문을 수행하려면 **ALTER**, **INDEX**, **DELETE** 권한이 필요하다.
 
@@ -313,6 +334,47 @@ REVOKE
 
     REVOKE ALL PRIVILEGES ON nation, athlete FROM smith;
 
+다음은 *u1* 사용자가 *tbl1*에 대해 *u2* 사용자에게 **WITH GRANT OPTION** 과 함께 **SELECT** 권한을 부여하고, *u2* 사용자는 *u3* 사용자에게 *tbl1* 테이블의 **SELECT** 권한 부여한 후, *DBA* 가 *u1* 사용자의 *tbl1* 에 부여된 *u2* 의 권한을 해지하는 예시이다.
+*tbl1* 에 대한 *u2* 의 권한 해지시, *u2* 가 **WITH GRANT OPTION** 을 이용해서 부여한 권한에 대해서도 함께 해지된다.
+
+.. code-block:: sql
+    
+    CREATE USER u1;
+    CREATE USER u2;
+    CREATE USER u3;
+    CREATE TABLE u1.tbl1 (a INT);
+
+    CALL LOGIN ('u1', '') ON CLASS db_user;
+    GRANT SELECT ON u1.tbl1 TO u2 WITH GRANT OPTION;
+
+    CALL LOGIN ('u2','') ON CLASS db_user;
+    GRANT SELECT ON u1.tbl1 TO u3 WITH GRANT OPTION;
+    
+    CALL LOGIN ('dba','') ON CLASS db_user;
+    SELECT * FROM db_auth WHERE object_name = 'tbl1';
+
+::
+
+    grantor_name          grantee_name          object_type           object_name           owner_name            auth_type             is_grantable        
+    ==========================================================================================================================================================
+    'U1'                  'U2'                  'CLASS'               'tbl1'                'U1'                  'SELECT'              'YES'               
+    'U2'                  'U3'                  'CLASS'               'tbl1'                'U1'                  'SELECT'              'YES'   
+
+.. code-block:: sql
+    
+    REVOKE SELECT ON u1.tbl1 FROM u2;
+
+    SELECT * FROM db_auth WHERE object_name = 'tbl1';
+
+::
+
+    There are no results.
+    0 row selected.
+
+.. note::
+
+    *   DBA, DBA 멤버, 소유자 멤버는 권한을 해지할 때, 소유자와 동일하게 권한을 해지할 수 있다.
+
 .. _change-owner:
 
 ALTER ... OWNER
@@ -334,6 +396,10 @@ ALTER ... OWNER
     ALTER FUNCTION test_function OWNER TO public;
     ALTER PROCEDURE test_procedure OWNER TO public;
     ALTER SERIAL test_serial OWNER TO public;    
+
+.. warning:: 
+
+    **소유자 변경 시, 해당 객체에 대해 이전 소유자가 다른 사용자에게 부여한 모든 권한은 자동으로 해지되므로, 소유자 변경 전에 해당 객체에 부여된 권한 확인 후 소유자를 변경하는 것을 권장한다.**
 
 .. _authorization-method:
 

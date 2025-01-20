@@ -447,7 +447,7 @@ SHOW GRANTS
 
       Grants for USER1
     ======================
-      'GRANT INSERT, SELECT ON testgrant TO USER1'
+      'GRANT INSERT, SELECT ON dba.testgrant TO USER1'
 
 .. _show-create-table-statement:
 

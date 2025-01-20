@@ -53,8 +53,9 @@
 :ref:`-db-auth`                  클래스에 대한 사용자 권한 정보
 :ref:`-db-data-type`             데이터 타입에 대한 정보
 :ref:`-db-partition`             분할에 대한 정보
-:ref:`-db-stored-procedure`      Java 저장 함수에 대한 정보
-:ref:`-db-stored-procedure-args` Java 저장 함수 인자에 대한 정보
+:ref:`-db-stored-procedure`      저장 프로시저에 대한 정보
+:ref:`-db-stored-procedure-args` 저장 프로시저 인자에 대한 정보
+:ref:`-db-stored-procedure-code` 저장 프로시저 코드에 대한 정보
 :ref:`-db-server`                DBLink에 대한 서버 정보
 :ref:`-db-synonym`               동의어에 대한 대상 객체 정보
 :ref:`db-user`                   사용자에 대한 정보
@@ -561,8 +562,9 @@ _db_index
       '_db_method'          'i__db_method_class_of_meth_name'
       '_db_partition'       'i__db_partition_class_of_pname'
       '_db_query_spec'      'i__db_query_spec_class_of'
-      '_db_stored_procedure'  'u__db_stored_procedure_sp_name'
-      '_db_stored_procedure_args'  'i__db_stored_procedure_args_sp_name'
+      '_db_stored_procedure'  'pk_db_stored_procedure_unique_name'
+      '_db_stored_procedure_args'  'i__db_stored_procedure_args_sp_of'
+      '_db_stored_procedure_code'  'pk__db_stored_procedure_code_name'
       'athlete'             'pk_athlete_code'
       'db_serial'           'pk_db_serial_name'
       'db_user'             'i_db_user_name'
@@ -741,53 +743,157 @@ _db_partition
 _db_stored_procedure
 --------------------
 
-Java 저장 함수에 대한 정보이며 sp_name에 대한 인덱스가 생성되어 있다.
+저장 프로시저에 대한 정보이며 unique_name에 대한 인덱스가 생성되어 있다.
 
-+-------------+---------------------------------------+-------------------------------------------+
-| 속성명      | 데이터 타입                           | 설명                                      |
-+=============+=======================================+===========================================+
-| sp_name     | VARCHAR(255)                          | SP 이름                                   |
-+-------------+---------------------------------------+-------------------------------------------+
-| sp_type     | INTEGER                               | SP 종류                                   |
-|             |                                       | (function or procedure)                   |
-+-------------+---------------------------------------+-------------------------------------------+
-| return_type | INTEGER                               | 리턴 값 타입                              |
-+-------------+---------------------------------------+-------------------------------------------+
-| arg_count   | INTEGER                               | 매개변수 개수                             |
-+-------------+---------------------------------------+-------------------------------------------+
-| args        | SEQUENCE OF _db_stored_procedure_args | 매개변수 리스트                           |
-+-------------+---------------------------------------+-------------------------------------------+
-| lang        | INTEGER                               | 구현 언어(현재로서는 Java)                |
-+-------------+---------------------------------------+-------------------------------------------+
-| target      | VARCHAR(4096)                         | 실행될 Java 메서드 이름                   |
-+-------------+---------------------------------------+-------------------------------------------+
-| owner       | db_user                               | 소유자                                    |
-+-------------+---------------------------------------+-------------------------------------------+
-| comment     | VARCHAR (1024)                        | SP 설명                                   |
-+-------------+---------------------------------------+-------------------------------------------+
+==================== ===================================== =========================================================
+속성명                데이터 타입                            설명
+==================== ===================================== =========================================================
+unique_name          VARCHAR(255)                          스키마 이름이 접두어로 붙은 저장 함수 이름
+sp_name              VARCHAR(255)                          저장 프로시저 이름
+sp_type              INTEGER                               저장 프로시저 종류 (프로시저 또는 함수)
+return_type          INTEGER                               리턴 값 타입
+arg_count            INTEGER                               매개변수 개수
+args                 SEQUENCE OF _db_stored_procedure_args 매개변수 리스트
+pkg_name             VARCHAR(255)                          저장 프로시저가 속한 패키지 이름
+is_system_generated  INTEGER                               시스템이 생성한 저장 프로시저 여부
+lang                 INTEGER                               구현 언어
+target_class         VARCHAR(1024)                         실행할 저장 프로시저의 클래스 이름
+target_method        VARCHAR(1024)                         실행할 저장 프로시저의 메서드 이름
+directive            INTEGER                               저장 프로시저의 실행 동작 속성
+owner                db_user                               저장 프로시저의 소유자
+comment              VARCHAR(1024)                         저장 프로시저 설명
+==================== ===================================== =========================================================
+
+        .. note::
+        
+            - **unique_name**: 예) **dba.sp_test**
+
+            - **sp_name**: 예) **sp_test**
+
+            - **sp_type**: 값이 **1** 이면 저장 프로시저, **2** 이면 저장 함수이다.
+
+            - **return_type**: 반환 타입은 아래 값 중 하나이다
+                
+                ::
+        
+                        NULL = 0, INTEGER = 1, FLOAT = 2, DOUBLE = 3, STRING = 4, 
+                        SET = 6, MULTISET = 7, SEQUENCE = 8, TIME = 10, 
+                        TIMESTAMP = 11, DATE = 12, SHORT = 18, NUMERIC = 22, CHAR = 25, 
+                        CURSOR = 28, BIGINT = 31, DATETIME = 32
+                
+                - Java SP는 위 명시된 데이터 타입을 모두 지원한다
+                - PL/CSQL은 위 명시된 데이터 타입 중 SET, MULTISET, SEQUENCE, CURSOR를 제외한 타입을 지원한다.
+                - 나머지 명시되지 않은 데이터 타입은 지원하지 않는다.
+
+            - **lang**: 값이 **0** 이면 PL/CSQL, **1** 이면 Java이다.
+
+            - **is_system_generated**: 값이 **1** 이면 시스템이 생성한 저장 프로시저이며, **0** 이면 사용자가 생성한 저장 프로시저이다.
+
+            - **directive**: 값의 제일 오른쪽 값부터 **Bit 0** 부터 **Bit 31** 까지 사용한다.
+                
+                - **Bit 0**: 저장 프로시저의 **execution rights (AUTHID)** 를 나타낸다.  
+                        - 값이 **0** 이면 소유자 권한 (또는 정의자 권한), **1** 이면 호출자 권한이다.
+                - **Bit 1**: 저장 프로시저의 **deterministic** 속성을 나타낸다.  
+                        - 값이 **1** 이면 deterministic, **0** 이면 non-deterministic이다.
+                - 나머지 비트 (**Bit 2** ~ **Bit 31**) 은 현재 사용하지 않는다.
+
+            - **pkg_name**: 패키지 이름. 현재 패키지 이름은 **DBMS_OUTPUT** 시스템 패키지에서만 사용한다.
 
 .. _-db-stored-procedure-args:
 
 _db_stored_procedure_args
 -------------------------
 
-Java 저장 함수 인자에 대한 정보이며 sp_name에 대한 인덱스가 생성되어 있다.
+저장 함수 인자에 대한 정보이며 sp_name 칼럼에 대한 인덱스가 생성되어 있다.
 
-+-----------+----------------+----------------------------------+
-| 속성명    | 데이터 타입    | 설명                             |
-+===========+================+==================================+
-| sp_name   | VARCHAR(255)   | SP 이름                          |
-+-----------+----------------+----------------------------------+
-| index_of  | INTEGER        | 매개변수 순서                    |
-+-----------+----------------+----------------------------------+
-| arg_name  | VARCHAR(255)   | 매개변수 이름                    |
-+-----------+----------------+----------------------------------+
-| data_type | INTEGER        | 매개변수 데이터 타입             |
-+-----------+----------------+----------------------------------+
-| mode      | INTEGER        | 모드 (IN, OUT, INOUT)            |
-+-----------+----------------+----------------------------------+
-| comment   | VARCHAR (1024) | 매개변수 설명                    |
-+-----------+----------------+----------------------------------+
+==================== =========================== =========================================================
+속성명                데이터 타입                 설명
+==================== =========================== =========================================================
+sp_of                _db_stored_procedure        저장 프로시저의 객체
+pkg_name             CHARACTER VARYING(255)      저장 프로시저가 속한 패키지 이름
+index_of             INTEGER                     매개변수의 순서
+is_system_generated  INTEGER                     시스템이 생성한 저장 프로시저 인수 여부
+arg_name             CHARACTER VARYING(255)      매개변수의 이름
+data_type            INTEGER                     매개변수의 데이터 타입
+mode                 INTEGER                     매개변수 모드 (IN, OUT, INOUT)
+is_optional          INTEGER                     선택적 매개변수 여부
+default_value        CHARACTER VARYING(255)      매개변수의 기본값
+comment              CHARACTER VARYING(1024)     저장 프로시저 인자 설명
+==================== =========================== =========================================================
+
+        .. note::
+
+            - **index_of**: 매개변수의 순서는 0부터 시작한다.
+
+            - **is_system_generated**: 값이 **1** 이면 시스템이 생성한 저장 프로시저 인수이며, **0** 이면 사용자가 생성한 저장 프로시저 인수이다.
+
+            - **data_type**: 매개변수의 데이터 타입은 아래 값 중 하나이다
+                
+                ::
+                
+                        NULL = 0, INTEGER = 1, FLOAT = 2, DOUBLE = 3, STRING = 4, 
+                        SET = 6, MULTISET = 7, SEQUENCE = 8, TIME = 10, 
+                        TIMESTAMP = 11, DATE = 12, SHORT = 18, NUMERIC = 22, CHAR = 25, 
+                        CURSOR = 28, BIGINT = 31, DATETIME = 32
+                
+                - Java SP는 위 명시된 데이터 타입을 모두 지원한다
+                - PL/CSQL은 위 명시된 데이터 타입 중 SET, MULTISET, SEQUENCE, CURSOR를 제외한 타입을 지원한다.
+                - 나머지 명시되지 않은 데이터 타입은 지원하지 않는다.
+
+            - **mode**: 매개변수 모드는 아래 값 중 하나이다
+                
+                ::
+                
+                        IN = 0, OUT = 1, INOUT = 2
+
+            - **is_optional**: 매개변수가 선택 가능하면 **1**,  필수이면 **0** 이다.
+
+            - **default_value**: 매개변수의 기본값이다. 자세한 내용은 :ref:`pl-arg-default-value` 을 참고한다.
+
+.. _-db-stored-procedure-code:
+
+_db_stored_procedure_code
+-------------------------
+
+저장 함수 코드에 대한 정보이며 name 칼럼에 대한 인덱스가 생성되어 있다.
+
+==================== ============================= =========================================================
+속성명                데이터 타입                    설명
+==================== ============================= =========================================================
+name                 CHARACTER VARYING(1024)       저장 프로시저 코드의 이름
+created_time         CHARACTER VARYING(16)         저장 프로시저 코드의 생성 시간
+owner                db_user                       저장 프로시저 코드의 소유자
+is_static            INTEGER                       저장 프로시저 코드의 정적 로딩 여부
+is_system_generated  INTEGER                       시스템이 생성한 저장 프로시저 코드 여부
+stype                INTEGER                       저장 프로시저의 소스 코드 유형
+scode                CHARACTER VARYING(1073741823) 저장 프로시저의 소스 코드
+otype                INTEGER                       저장 프로시저의 목적 코드 유형
+ocode                CHARACTER VARYING(1073741823) 저장 프로시저의 목적 코드
+==================== ============================= =========================================================
+
+        .. note::
+
+            - **is_static**
+                
+                - 값이 **1** 이면 저장 프로시저 코드를 한번만 로드하며, 프로시저 코드의 변경 시에도 적용되지 않고 서버 재시작 시에만 적용된다.
+                - 값이 **0** 이면 저장 프로시저 코드를 매번 로드하며, DDL 또는 프로시저 로드 유틸리티 사용으로 프로시저 코드 변경 시 즉시 적용된다.
+                
+                - :ref:`pl-jni` 에서 사용된다.
+
+            - **is_system_generated**: 값이 **1** 이면 시스템이 생성한 코드이며, **0** 이면 사용자가 작성한 코드이다.
+
+            - **stype**: 소스 코드의 유형을 나타낸다. 현재 PL/CSQL 코드만 지원하며 값은 **0** 이다.
+
+            - **scode**: 사용자가 입력한 저장 프로시저 코드의 소스 코드가 저장되어 있다. 현재 PL/CSQL 코드만 저장된다.
+
+            - **otype**: 저장 프로시저 소스 코드로부터 컴파일한 목적 코드의 유형을 나타낸다. 현재 PL/CSQL만 지원한다.
+
+                - 값이 **0** 이면 자바 클래스 파일을 나타낸다
+                - 값이 **1** 이면 자바 아카이브 파일을 나타낸다
+
+                - 그 외의 값은 현재 지원하지 않는다.
+                
+            - **ocode**: 저장 프로시저 소스 코드로부터 컴파일하여 PL 실행 서버에서 실행할 수 있는 목적 코드가 저장되어 있다. 현재 PL/CSQL을 위한 목적 코드만 저장한다.
 
 .. _-db-server:
 
@@ -1915,81 +2021,171 @@ comment              VARCHAR(1024) 파티션 설명
 DB_STORED_PROCEDURE
 -------------------
 
-데이터베이스 내에서 현재 사용자가 접근 권한을 가진 Java 저장 함수에 대한 정보를 보여준다.
+데이터베이스 내에서 현재 사용자가 접근 권한을 가진 저장 프로시저에 대한 정보를 보여준다.
 
-+-------------+---------------+---------------------------------+
-| 속성명      | 데이터 타입   | 설명                            |
-+=============+===============+=================================+
-| sp_name     | VARCHAR(255)  | SP 이름                         |
-+-------------+---------------+---------------------------------+
-| sp_type     | VARCHAR(16)   | SP 종류 (function or procedure) |
-+-------------+---------------+---------------------------------+
-| return_type | VARCHAR(16)   | 리턴 값 타입                    |
-+-------------+---------------+---------------------------------+
-| arg_count   | INTEGER       | 매개변수 개수                   |
-+-------------+---------------+---------------------------------+
-| lang        | VARCHAR(16)   | 구현 언어(현재로서는 JAVA)      |
-+-------------+---------------+---------------------------------+
-| target      | VARCHAR(4096) | 실행될 Java 메서드 이름         |
-+-------------+---------------+---------------------------------+
-| owner       | VARCHAR(256)  | 소유자                          |
-+-------------+---------------+---------------------------------+
-| comment     | VARCHAR(1024) | SP 설명                         |
-+-------------+---------------+---------------------------------+
+==================== =========================== =========================================================
+속성명                데이터 타입                 설명
+==================== =========================== =========================================================
+sp_name              VARCHAR(255)                저장 프로시저 이름
+pkg_name             VARCHAR(255)                저장 프로시저가 속한 패키지 이름
+sp_type              VARCHAR(16)                 저장 프로시저의 종류 (프로시저 또는 함수)
+return_type          VARCHAR(16)                 저장 프로시저의 리턴 타입 이름
+arg_count            INTEGER                     매개변수 개수
+lang                 VARCHAR(16)                 저장 프로시저의 구현 언어 이름
+authid               VARCHAR(16)                 저장 프로시저의 실행 권한
+is_deterministic     VARCHAR(3)                  결정적 함수 여부
+target               VARCHAR(4096)               실행할 저장 프로시저의 대상 이름
+owner                VARCHAR(256)                소유자
+code                 VARCHAR(1073741823)         저장 프로시저의 소스 코드
+comment              VARCHAR(1024)               저장 프로시저 설명
+==================== =========================== =========================================================
 
-다음 예제에서는 현재 사용자가 소유하고 있는 Java 저장 함수를 조회한다.
+        .. note::
+            
+            - **sp_type**
+                - **PROCEDURE** 또는 **FUNCTION** 값을 가진다.
+
+            - **pkg_name**: 패키지 이름. 현재 패키지 이름은 **DBMS_OUTPUT** 시스템 패키지에서만 사용한다.
+                - **dbms_output** 또는 **NULL** 값을 가진다
+
+            - **return_type**: 반환 타입은 아래 값 중 하나이다
+                
+                ::
+        
+                        NULL, INTEGER, FLOAT, DOUBLE, STRING, 
+                        SET, MULTISET, SEQUENCE, TIME, 
+                        TIMESTAMP, DATE, SHORT, NUMERIC, CHAR, 
+                        CURSOR, BIGINT, DATETIME
+                
+                - 나머지 값은 현재 지원하지 않는다.
+
+            - **lang**: 저장 프로시저의 구현 언어 이름이며 아래의 값 중 하나이다.
+                - **PLCSQL**: PL/CSQL
+                - **JAVA**: Java 저장 프로시저
+
+            - **authid**: 저장 프로시저의 **execution rights (AUTHID)** 를 나타낸다.  
+                - **DEFINER**: 소유자 권한 (또는 정의자 권한)
+                - **CURRENT_USER**: 호출자 권한
+
+            - **is_deterministic**: 결정적 함수 여부를 나타낸다.
+                - **YES**: 결정적 함수
+                - **NO**: 비결정적 함수
+
+
+다음 예제에서는 현재 사용자가 소유하고 있는 저장 프로시저를 조회한다.
 
 .. code-block:: sql
 
+    CREATE OR REPLACE FUNCTION hello RETURN VARCHAR AS BEGIN RETURN 'Hello'; END;
+
+    CREATE OR REPLACE FUNCTION sp_int(p_int INTEGER) RETURN INTEGER AS BEGIN RETURN p_int; END;
+
+    -- csql 
+    ;line on
+
     /* CURRENT_USER: PUBLIC */
-    SELECT sp_name, target from db_stored_procedure
+    SELECT * from db_stored_procedure
     WHERE sp_type = 'FUNCTION' AND owner = CURRENT_USER; 
 
-::
+        ::
 
-      sp_name               target             
-    ============================================
-      'hello'               'SpCubrid.HelloCubrid() return java.lang.String'
-      'sp_int'              'SpCubrid.SpInt(int) return int'
+                <00001> sp_name         : 'hello'
+                        pkg_name        : NULL
+                        sp_type         : 'FUNCTION'
+                        return_type     : 'STRING'
+                        arg_count       : 0
+                        lang            : 'PLCSQL'
+                        authid          : 'DEFINER'
+                        is_deterministic: 'NO'
+                        target          : 'Func_HELLO_9.HELLO() return java.lang.String'
+                        owner           : 'DBA'
+                        code            : 'CREATE OR REPLACE FUNCTION hello RETURN VARCHAR AS BEGIN RETURN 'Hello'; END'
+                        comment         : NULL
+                <00002> sp_name         : 'sp_int'
+                        pkg_name        : NULL
+                        sp_type         : 'FUNCTION'
+                        return_type     : 'INTEGER'
+                        arg_count       : 1
+                        lang            : 'PLCSQL'
+                        authid          : 'DEFINER'
+                        is_deterministic: 'NO'
+                        target          : 'Func_SP_INT_10.SP_INT(java.lang.Integer) return java.lang.Integer'
+                        owner           : 'DBA'
+                        code            : 'CREATE OR REPLACE FUNCTION sp_int(p_int INTEGER) RETURN INTEGER AS BEGIN RETURN p_int; END'
+                        comment         : NULL
 
 .. _db-stored-procedure-args:
 
 DB_STORED_PROCEDURE_ARGS
 ------------------------
 
-데이터베이스 내에서 현재 사용자가 접근 권한을 가진 Java 저장 함수의 인자에 대한 정보를 보여준다.
+데이터베이스 내에서 현재 사용자가 접근 권한을 가진 저장 프로시저 인자에 대한 정보를 보여준다.
 
-+-----------+--------------+-----------------------+
-| 속성명    | 데이터 타입  | 설명                  |
-+===========+==============+=======================+
-| sp_name   | VARCHAR(255) | SP 이름               |
-+-----------+--------------+-----------------------+
-| index_of  | INTEGER      | 매개변수 순서         |
-+-----------+--------------+-----------------------+
-| arg_name  | VARCHAR(256) | 매개변수 이름         |
-+-----------+--------------+-----------------------+
-| data_type | VARCHAR(16)  | 매개변수 데이터 타입  |
-+-----------+--------------+-----------------------+
-| mode      | VARCHAR(6)   | 모드 (IN, OUT, INOUT) |
-+-----------+--------------+-----------------------+
-| comment   | VARCHAR(1024)| 매개변수 설명         |
-+-----------+--------------+-----------------------+
+==================== =========================== =========================================================
+속성명                데이터 타입                 설명
+==================== =========================== =========================================================
+sp_name              VARCHAR(255)                저장 프로시저 이름
+owner_name           VARCHAR(255)                저장 프로시저 소유자의 이름
+pkg_name             VARCHAR(255)                저장 프로시저가 속한 패키지 이름
+index_of             INTEGER                     매개변수의 순서
+arg_name             VARCHAR(255)                매개변수의 이름
+data_type            VARCHAR(16)                 매개변수의 데이터 타입
+mode                 VARCHAR(6)                  매개변수 모드 (IN, OUT, INOUT)
+is_optional          VARCHAR(3)                  선택적 매개변수 여부
+default_value        VARCHAR(255)                매개변수의 기본값
+comment              VARCHAR(1024)               매개변수에 대한 설명
+==================== =========================== =========================================================
 
-다음 예제에서는 'phone_info' Java 저장 프로시저의 인수 정보를 순서대로 조회한다.
+        .. note::
+
+            - **index_of**: 매개변수의 순서는 0부터 시작하고 63을 최대값으로 가질 수 있다.
+
+            - **data_type**: 매개변수의 데이터 타입은 아래 값 중 하나이다
+                
+                ::
+        
+                        NULL, INTEGER, FLOAT, DOUBLE, STRING, 
+                        SET, MULTISET, SEQUENCE, TIME, 
+                        TIMESTAMP, DATE, SHORT, NUMERIC, CHAR, 
+                        CURSOR, BIGINT, DATETIME
+                
+                - 나머지 값은 현재 지원하지 않는다.
+
+            - **mode**: 매개변수 모드는 아래 값 중 하나이다
+                
+                ::
+                
+                        IN, OUT, INOUT
+
+            - **is_optional**: 매개변수가 선택 가능하면 **YES**,  필수이면 **NO** 이다.
+
+            - **default_value**: 매개변수의 기본값이다. 자세한 내용은 :ref:`pl-arg-default-value` 을 참고한다.
+
+다음 예제에서는 'process_order' 저장 프로시저의 인수 정보를 순서대로 조회한다.
 
 .. code-block:: sql
 
-    SELECT index_of, arg_name, data_type, mode 
+    CREATE OR REPLACE PROCEDURE process_order(
+      p_order_id IN NUMBER,
+      p_status IN VARCHAR2 DEFAULT 'NEW'
+    )
+    AS
+    BEGIN
+        DBMS_OUTPUT.PUT_LINE('Processing Order ID: ' || p_order_id);
+        DBMS_OUTPUT.PUT_LINE('Order Status: ' || p_status);
+    END;
+
+    SELECT index_of, arg_name, data_type, mode, is_optional, default_value
     FROM db_stored_procedure_args
-    WHERE sp_name = 'phone_info'
+    WHERE sp_name = 'process_order'
     ORDER BY index_of;
 
-::
+        ::
 
-         index_of  arg_name              data_type             mode
-    ===============================================================
-                0  'name'                'STRING'              'IN'
-                1  'phoneno'             'STRING'              'IN'
+                index_of  arg_name              data_type             mode       is_optional  default_value
+        ====================================================================================================
+                        0  'p_order_id'          'NUMBER'              'IN'       'NO'         NULL
+                        1  'p_status'            'VARCHAR2'            'IN'       'YES'        'NEW'
 
 .. _db-server:
 

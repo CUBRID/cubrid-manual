@@ -4000,7 +4000,102 @@ The error messages that can be found in this stage are as follows:
 | -1036 | log applier: log applier is terminated by signal.    | error        | The replication log reflection process has been     | It will be recovered internally.                                     |
 |       |                                                      |              | terminated by a specified signal.                   |                                                                      |
 +-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-                                                                                                                         
+
+.. _failover-messages:
+
+Determine the Cause of Failover
+==================================
+
+**Fail-over, Fail-back messages**
+
+In an HA enviroment, messages for fail-over and fail-back are prefixed with [Failover], [Failback], respectively. These messages can be categorized into diagnosis messages, which are logged when fail-over or fail-back is determined, and result messages, which are logged when fail-over or fail-back is either canceled or successfully completed.
+
+Diagnosis messages indicate the reason why the fail-over or fail-back was initiated and are prefixed with [Diagnosis]. Result messages include the prefix [Cancelled] along with the reason if fail-over or fail-back is canceled, and the prefix [Success] along with the result if fail-over or fail-back is successfully completed.
+
+Fail-over and fail-back messages enable to determine the cause of fail-over. Below is a list of situations in which fail-over occurs and the corresponding fail-over and fail-back messages that may be logged. Fail-over messages are logged on the slave node, while fail-back messages are logged on the master node.
+
+Isolation of master node
+-----------------------------
+
+**Isolation of master node**
+
+When the master node determines that it is isolated from the network due to failing to receive heartbeat messages from all slave nodes, the fail-back of the master node and the fail-over of the slave nodes are decided. The **ha_ping_hosts** are used to verify whether the network of the master node is truly partitioned. Fail-back is successfully completed only if the master node’s network partition is confirmed through this verification.
+  
+Similarly, for slave nodes, fail-over is successfully completed only when a ping check using **ha_ping_hosts** confirms that there is no current network partition. Below is a list of fail-over and fail-back messages that could be logged when the master node is isolated.
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------+
+| Diagnosis Messages                                                                                                                                              | Description                                                                                                    |
++=================================================================================================================================================================+================================================================================================================+
+| [Failback] [Diagnosis] The master node has failed to receive heartbeat messages from all other slave nodes, resulting in a network partition.                   | Fail-over has been initiated since master node failed to received heartbeat messages from every slave nodes    |
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------+
+| [Failover] [Diagnosis] The current node has failed to receive heartbeat messages from the master node (master_node_name).                                       | Fail-back has been initiated since slave node failed to received heartbeat messages from master node           |
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------+
+
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Result Messages                                                                                                                                                 | Description                                                                                                                                                                    |
++=================================================================================================================================================================+================================================================================================================================================================================+
+| [Failback] [Cancelled] Ping check succeeded for the hosts registered in ha_ping_hosts, determining that it is not a network partition.                          | Fail-back has been cancelled since master node succeeded ping check to ha_ping_hosts                                                                                           |
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| [Failback] [Cancelled] No hosts are registered in ha_ping_hosts, or all registered hosts are invalid, making it impossible to determine the network partition.  | Fail-back has been cancelled due to the inability to determine the network partition of the master node, as the hosts registered in ha_ping_hosts are either empty or invalid. |
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| [Failback] [Success] Current node has been successfully demoted to slave.                                                                                       | Fail-back is successfully completed, and the master node has been demoted to a slave node                                                                                      |
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| [Failover] [Cancelled] Ping check has been failed to all hosts registered in ha_ping_hosts, indicating a network partition.                                     | Fail-over has been cancelled because the slave node determined a network partition due to a failed ping check and is unable to assume the master role.                         |
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| [Failover] [Success] Current node has been successfully promoted to master.                                                                                     | Fail-over is successfully completed, and the slave node has been promoted to a master node                                                                                     |
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+
+Loss of the master node's role
+-----------------------------------
+
+**Loss of the master node's role**
+
+When the master node loses its role due to reasons such as the failure to restart cub_server or disk errors, a fail-back of the master node and a fail-over of the slave node are initiated. If a disk failure has been detected, an error message like "Disk failure has occurred: prev_eof_lsa(4096, 128), eof_lsa(4096, 128)" is logged in the server error log.
+
+For the slave node, fail-over is successfully completed only when a ping check using **ha_ping_hosts** confirms that there is no current network partition. Below is a list of fail-over and fail-back messages that could be logged when the master node loses its role.
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------+
+| Diagnosis Messages                                                                                                                                              | Description                                                                                                                                |
++=================================================================================================================================================================+============================================================================================================================================+
+| [Failback] [Diagnosis] The master node failed to restart the server process.                                                                                    | Fail-back has been initiated since the master node failed to restart a cub_server process that has been terminated abnormally              |
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------+
+| [Failback] [Diagnosis] The master node has lost its role due to server process problem, such as disk failure.                                                   | Fail-back has been initiated since the master node lost its role due to a disk failure or similar reasons.                                 |
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------+
+| [Failover] [Diagnosis] The master node (master_node_name) has lost its role due to server process problem, such as disk failure.                                | Fail-over has been initiated as the slave node determined that the master node has lost its role due to a disk failure or similar reasons. |
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------+
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Result Messages                                                                                                                                                 | Description                                                                                                                                            |
++=================================================================================================================================================================+========================================================================================================================================================+
+| [Failback] [Success] Current node has been successfully demoted to slave.                                                                                       | Fail-back is successfully completed, and the master node has been demoted to a slave node                                                              |
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
+| [Failover] [Cancelled] Ping check has been failed to all hosts registered in ha_ping_hosts, indicating a network partition.                                     | Fail-over has been cancelled because the slave node determined a network partition due to a failed ping check and is unable to assume the master role. |
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
+| [Failover] [Success] Current node has been successfully promoted to master.                                                                                     | Fail-over is successfully completed, and the slave node has been promoted to a master node                                                             |
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+Multiple master node (split-brain)
+--------------------------------------------
+
+**Multiple master node (split-brain)**
+
+When there is an abnormal situation where two or more servers assume the master role in an HA environment, it is referred to as a "split-brain" scenario. In such cases, all master nodes, except for the one designated to perform the master role, will fail-back to slave nodes to resolve the split-brain situation. Below is a list of fail-back messages that may be logged during a split-brain scenario.
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------+
+| Diagnosis Messages                                                                                                                                              | Description                                                                                                                              |
++=================================================================================================================================================================+==========================================================================================================================================+
+| [Failback] [Diagnosis] Multiple master nodes (master_node_name1, master_node_name2) are detected.                                                               | Fail-back of the master nodes has been initiated to resolve the split-brain situation caused by the detection of multiple master nodes.  |
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------+
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------+
+| Result Messages                                                                                                                                                 | Description                                                                                                  |
++=================================================================================================================================================================+==============================================================================================================+
+| [Failback] [Success]  Current node has been successfully demoted to slave.                                                                                      | Fail-back is successfully completed, and the master node has been demoted to a slave node                    |
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------+
+
+
 .. _rebuilding-replication:
 
 Rebuilding Replication Script

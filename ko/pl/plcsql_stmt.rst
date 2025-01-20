@@ -80,12 +80,12 @@ body 내부의 실행문들 중 수행시 도달할 수 없는 실햄문이 있�
 
 .. code-block:: sql
 
-    csql> CREATE OR REPLACE PROCEDURE test_unreachable_statement
-    csql> AS
-    csql> BEGIN
-    csql>     RETURN;
-    csql>     DBMS_OUTPUT.put_line('Hello world');
-    csql> END;
+    CREATE OR REPLACE PROCEDURE test_unreachable_statement
+    AS
+    BEGIN
+        RETURN;
+        DBMS_OUTPUT.put_line('Hello world');
+    END;
 
     ERROR: In line 5, column 5
     Stored procedure compile error: unreachable statement

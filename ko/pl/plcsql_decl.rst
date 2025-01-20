@@ -66,18 +66,18 @@
 
 .. code-block:: sql
 
-    csql> CREATE OR REPLACE PROCEDURE poo(a INT) AS
-    csql>
-    csql>     PROCEDURE inner AS
-    csql>         i INT := a;
-    csql>         a NUMERIC;
-    csql>     BEGIN
-    csql>         ...
-    csql>     END;
-    csql>
-    csql> BEGIN
-    csql>     ...
-    csql> END;
+     CREATE OR REPLACE PROCEDURE poo(a INT) AS
+    
+         PROCEDURE inner AS
+             i INT := a;
+             a NUMERIC;
+         BEGIN
+             ...
+         END;
+    
+     BEGIN
+         ...
+     END;
 
     ERROR: In line 5, column 9
     Stored procedure compile error: name A has already been used at line 4 and column 18 in the same declaration block

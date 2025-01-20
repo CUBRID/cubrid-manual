@@ -63,7 +63,7 @@
 
 ::
 
-        csql> process_transaction ();
+        process_transaction ();
 
         === <Result of CALL Command in Line 2> ===
 

@@ -102,13 +102,13 @@ CREATE PROCEDURE/FUNCTION 문을 실행하면 저장 프로시저/함수의 문�
 
 .. code-block:: sql
 
-    csql> CREATE OR REPLACE PROCEDURE athlete_code(p_name VARCHAR) AS
-    csql> BEGIN
-    csql>     -- 오류: Static SQL SELECT 문은 INTO 절을 가져야 함
-    csql>     SELECT code
-    csql>     FROM athlete a
-    csql>     WHERE a.name = p_name;
-    csql> END;
+    CREATE OR REPLACE PROCEDURE athlete_code(p_name VARCHAR) AS
+    BEGIN
+         -- 오류: Static SQL SELECT 문은 INTO 절을 가져야 함
+        SELECT code
+        FROM athlete a
+        WHERE a.name = p_name;
+    END;
 
     ERROR: In line 4, column 5
     Stored procedure compile error: SELECT statement must have an INTO clause
@@ -771,7 +771,7 @@ CSQL에서 athlete 테이블에 존재하지 않는 이름을 인자로 주어 N
 
 .. code-block::
 
-   csql> select athlete_code('x');
+    select athlete_code('x');
 
    In line 1, column 22,
 

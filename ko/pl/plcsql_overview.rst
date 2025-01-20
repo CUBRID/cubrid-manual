@@ -15,10 +15,10 @@ PL/CSQL은 저장 프로시저나 저장 함수를 생성하는데 사용된다.
 ::
 
     <create_procedure> ::=
-        CREATE [ OR REPLACE ] PROCEDURE <identifier> [ ( <seq_of_parameters> ) ]
+        CREATE [ OR REPLACE ] PROCEDURE [schema_name.]<identifier> [ ( <seq_of_parameters> ) ]
         { IS | AS } [ LANGUAGE PLCSQL ] [ <seq_of_declare_specs> ] <body> ;
     <create_function> ::=
-        CREATE [ OR REPLACE ] FUNCTION <identifier> [ ( <seq_of_parameters> ) ] RETURN <type_spec>
+        CREATE [ OR REPLACE ] FUNCTION [schema_name.]<identifier> [ ( <seq_of_parameters> ) ] RETURN <type_spec>
         { IS | AS } [ LANGUAGE PLCSQL ] [ <seq_of_declare_specs> ] <body> ;
 
 위 문법에서 저장 프로시저/함수의 *body*\는 PL/CSQL 실행문들을 포함하고

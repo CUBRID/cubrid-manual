@@ -84,23 +84,23 @@ CREATE PROCEDURE
     SELECT * FROM db_stored_procedure WHERE sp_type = 'PROCEDURE';
     
 ::
-    
-    sp_name               sp_type               return_type             arg_count  lang target                owner
-    ================================================================================
-    'athlete_add'         'PROCEDURE'           'void'                          4  'JAVA''Athlete.Athlete(java.lang.String, java.lang.String, java.lang.String, java.lang.String)'  'DBA'
+
+    sp_name               pkg_name              sp_type               return_type             arg_count  lang                  authid                is_deterministic      target                                                                                      owner    code    comment             
+    ============================================================================================================================================================================================================================================================================================
+    'athlete_add'         NULL                  'PROCEDURE'           'void'                          4  'JAVA'                'DEFINER'             'NO'                  'Athlete.Athlete(java.lang.String, java.lang.String, java.lang.String, java.lang.String)'   'DBA'    NULL    NULL 
 
 .. code-block:: sql
     
     SELECT * FROM db_stored_procedure_args WHERE sp_name = 'athlete_add';
     
 ::
-    
-    sp_name   index_of  arg_name  data_type      mode
-    =================================================
-     'athlete_add'                   0  'name'                'STRING'              'IN'
-     'athlete_add'                   1  'gender'              'STRING'              'IN'
-     'athlete_add'                   2  'nation_code'         'STRING'              'IN'
-     'athlete_add'                   3  'event'               'STRING'              'IN'
+
+    sp_name               owner_name            pkg_name                 index_of  arg_name              data_type             mode                  is_optional           default_value         comment           
+    =======================================================================================================================================================================================================
+     'athlete_add'         'DBA'                 NULL                            0  'name'                'STRING'              'IN'                  'NO'                  NULL                  NULL              
+     'athlete_add'         'DBA'                 NULL                            1  'gender'              'STRING'              'IN'                  'NO'                  NULL                  NULL              
+     'athlete_add'         'DBA'                 NULL                            2  'nation_code'         'STRING'              'IN'                  'NO'                  NULL                  NULL              
+     'athlete_add'         'DBA'                 NULL                            3  'event'               'STRING'              'IN'                  'NO'                  NULL                  NULL
 
 
 .. _create-function:
@@ -126,7 +126,7 @@ CREATE FUNCTION
         <lang> ::= [PLCSQL | JAVA]
         <mode> ::= IN | OUT | IN OUT | INOUT
 
-*   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
+*   *schema_name*: 스키마 이름을 지정한다(최대 31바이트). 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *function_name*: 생성할 저장 함수의 이름을 지정한다(최대 222바이트).
 *   *parameter_name*: 인자의 이름을 지정한다(최대 254바이트).
 *   *sql_type*: 인자 또는 리턴 값의 데이터 타입을 지정한다. 지정할 수 있는 데이터 타입은 :ref:`jsp-type-mapping`\을 참고한다.
@@ -179,22 +179,22 @@ CREATE FUNCTION
     SELECT * FROM db_stored_procedure WHERE sp_type = 'FUNCTION';
     
 ::
-    
-    sp_name               sp_type               return_type             arg_count  lang target                owner
-    ================================================================================
-    'hello'               'FUNCTION'            'STRING'                        0  'JAVA''SpCubrid.HelloCubrid() return java.lang.String'  'DBA'
-     
-    'sp_int'              'FUNCTION'            'INTEGER'                       1  'JAVA''SpCubrid.SpInt(int) return int'  'DBA'
+
+    sp_name               pkg_name              sp_type               return_type             arg_count  lang                  authid                is_deterministic      target                                              owner      code      comment             
+    ======================================================================================================================================================================================================================================================
+    'hello'               NULL                  'FUNCTION'            'STRING'                        0  'JAVA'                'DEFINER'             'NO'                  'SpCubrid.HelloCubrid() return java.lang.String'    'DBA'      NULL      NULL                
+    'sp_int'              NULL                  'FUNCTION'            'INTEGER'                       1  'JAVA'                'DEFINER'             'NO'                  'SpCubrid.SpInt(int) return int'                    'DBA'      NULL      NULL  
 
 .. code-block:: sql
     
     SELECT * FROM db_stored_procedure_args WHERE sp_name = 'sp_int';
     
 ::
-    
-    sp_name   index_of  arg_name  data_type      mode
-    =================================================
-     'sp_int'                        0  'i'                   'INTEGER'             'IN'
+
+    sp_name               owner_name            pkg_name                 index_of  arg_name              data_type             mode                  is_optional           default_value         comment           
+    =======================================================================================================================================================================================================
+     'sp_int'              'DBA'                 NULL                            0  'i'                   'INTEGER'             'IN'                  'NO'                  NULL                  NULL    
+
 
 CREATE FUNCTION DETERMINISTIC
 ------------------------------------------
@@ -437,33 +437,14 @@ CUBRID에서는 등록한 저장 프로시저를 **DROP PROCEDURE** 구문을 �
 
 ::
 
-    DROP PROCEDURE procedure_name [{ , procedure_name , ... }];
-
-*   *procedure_name*: 제거할 프로시저의 이름을 지정한다.
-
-.. code-block:: sql
-
-    DROP PROCEDURE hello, sp_int;
-
-저장 프로시저의 삭제는 프로시저를 등록한 사용자와 DBA의 구성원만 삭제할 수 있다.
-예를 들어 'sp_int' 저장 프로시저를 **PUBLIC** 이 등록했다면, **PUBLIC** 또는 **DBA** 의 구성원만이 'sp_int' 저장 프로시저를 삭제할 수 있다.
-
-DROP PROCEDURE
-==============
-
-CUBRID에서는 등록한 저장 프로시저를 **DROP PROCEDURE** 구문을 사용하여 삭제할 수 있다.
-이 때, 여러 개의 *procedure_name* 을 콤마(,)로 구분하여 한꺼번에 여러 개의 저장 프로시저를 삭제할 수 있다.
-
-::
-
-    DROP PROCEDURE [schema_name.]procedure_name [{, [schema_name.]procedure_name} ... ];
+    DROP PROCEDURE [schema_name.]procedure_name [{ , [schema_name.]procedure_name , ... }];
 
 *   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *procedure_name*: 제거할 프로시저의 이름을 지정한다.
 
 .. code-block:: sql
 
-    DROP PROCEDURE hello, sp_int;
+    DROP PROCEDURE hello, public.sp_int;
 
 저장 프로시저의 삭제는 프로시저를 등록한 사용자와 DBA의 구성원만 삭제할 수 있다.
 예를 들어 'sp_int' 저장 프로시저를 **PUBLIC** 이 등록했다면, **PUBLIC** 또는 **DBA** 의 구성원만이 'sp_int' 저장 프로시저를 삭제할 수 있다.
@@ -483,7 +464,7 @@ CUBRID에서는 등록한 저장 함수를 **DROP FUNCTION** 구문을 사용하
 
 .. code-block:: sql
 
-    DROP FUNCTION hello, sp_int;
+    DROP FUNCTION hello, public.sp_int;
 
 저장 함수의 삭제는 함수를 등록한 사용자와 DBA의 구성원만 삭제할 수 있다.
 예를 들어 'sp_int' 저장 함수를 **PUBLIC** 이 등록했다면, **PUBLIC** 또는 **DBA** 의 구성원만이 'sp_int' 저장 함수를 삭제할 수 있다.

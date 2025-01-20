@@ -345,13 +345,13 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------+
 |                               | index_unfill_factor                 | 서버                    |         | float    | 0.05                           |                 |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------+
-|                               | java_stored_procedure               | 서버                    |         | bool     | no                             |                 |
+|                               | stored_procedure                    | 서버                    |         | bool     | yes                            |                 |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------+
-|                               | java_stored_procedure_port          | 서버                    |         | int      |                                |                 |
+|                               | stored_procedure_uds                | 서버                    |         | bool     | yes                            |                 |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------+
-|                               | java_stored_procedure_uds           | 서버                    |         | bool     | yes                            |                 |
+|                               | stored_procedure_port               | 서버                    |         | int      | 0                              |                 |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------+
-|                               | java_stored_procedure_jvm_options   | 서버                    |         | string   |                                |                 |
+|                               | stored_procedure_vm_options         | 서버                    |         | string   |                                |                 |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------+
 |                               | multi_range_optimization_limit      | 서버                    | O       | int      | 100                            | DBA만 가능      |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------+
@@ -2151,11 +2151,13 @@ HA 관련 파라미터
 +-------------------------------------+--------+----------------+----------------+----------------+
 | index_unfill_factor                 | float  | 0.05           | 0              | 0.5            |
 +-------------------------------------+--------+----------------+----------------+----------------+
-| java_stored_procedure               | bool   | no             |                |                |
+| stored_procedure                    | bool   | yes            |                |                |
 +-------------------------------------+--------+----------------+----------------+----------------+
-| java_stored_procedure_port          | int    | 0              | 0              | 65535          |
+| stored_procedure_uds                | bool   | yes            |                |                |
 +-------------------------------------+--------+----------------+----------------+----------------+
-| java_stored_procedure_jvm_options   | string |                |                |                |
+| stored_procedure_port               | int    | 0              | 0              | 65535          |
++-------------------------------------+--------+----------------+----------------+----------------+
+| stored_procedure_vm_options         | string |                |                |                |
 +-------------------------------------+--------+----------------+----------------+----------------+
 | multi_range_optimization_limit      | int    | 100            | 0              | 10,000         |
 +-------------------------------------+--------+----------------+----------------+----------------+
@@ -2254,49 +2256,54 @@ HA 관련 파라미터
     
     이 값이 작으면 인덱스 생성 시 노드 여유 공간이 작기 때문에, 인덱스 노드의 여유 공간이 금방 꽉 차게 될 가능성이 높으므로, 상대적으로 **INSERT** 나 **UPDATE** 에 의한 인덱스 노드 분할 발생 가능성이 높다.
 
-**java_stored_procedure**
+**stored_procedure**
 
-    **java_stored_procedure** 는 Java 가상 머신(Java Virtual Machine, JVM)을 실행하여 Java 저장 프로시저(Java stored procedure)를 사용하게 하기 위한 파라미터이다. 기본값인 **no**\ 로 설정하며 JVM이 실행되지 않고, yes로 설정하면 JVM이 실행되어 Java 저장 프로시저(Java stored procedure)를 사용할 수 있다. 따라서, Java 저장 프로시저를 사용할 계획이 있는 경우에는 파라미터를 yes로 설정해야 한다.
+    **stored_procedure** 는 cub_pl 프로세스를 실행하여 저장 프로시저(stored procedure)를 사용하게 하기 위한 파라미터이다. 기본값은 **yes**\ 이며, **no**\로 설정하는 경우 cub_pl 프로세스가 실행되지 않고, 저장 프로시저(Java stored procedure)를 사용할 수 없다.
 
-**java_stored_procedure_port**
+**stored_procedure_uds**
 
-    **java_stored_procedure_port** 데이터베이스 서버에서 자바 저장 프로시저를 호출하기 위한 TCP 포트 번호를 설정하는 파라미터이다. 이 값은 65,536보다 작아야한다. 기본값은 **0** 이고 이는 임시 포트 범위에서 포트 번호가 자동으로 할당됨을 의미한다. 이 파라미터의 값은 **java_stored_procedure** 파라미터가 **yes** 일 때에만 적용된다. cubrid.conf의 [common]에서 이 파라미터를 설정하면 에러가 발생하므로 주의한다. ::
+    **stored_procedure_uds** 는 저장 프로시저를 호출하는 cub_pl 프로세스와 cub_server 프로세스 간에 유닉스 도메인 소켓을 통한 연결을 사용하기 위한 파라미터이다. 기본값은 **yes**\이고, **no**\로 설정하는 경우나 Windows의 경우 파라미터의 값과 관련 없이 TCP 소켓 연결로 동작한다.
+        
+    .. note:: 
+
+        cub_pl 프로세스의 유닉스 도메인 소켓 파일 경로를 지정하는 **CUBRID_TMP** 환경 변수에 대한 내용은 :doc:`/env` 을 참고한다.
+
+**stored_procedure_port**
+
+    **stored_procedure_port** 데이터베이스 서버에서 저장 프로시저를 호출하기 위한 TCP 포트 번호를 설정하는 파라미터이다. 이 값은 65,536보다 작아야한다. 기본값은 **0** 이고 이는 임시 포트 범위에서 포트 번호가 자동으로 할당됨을 의미한다. 이 파라미터의 값은 **stored_procedure** 파라미터가 **yes** 일 때에만 적용된다. cubrid.conf의 [common]에서 이 파라미터를 설정하면 에러가 발생하므로 주의한다. ::
 
         ..... 
         [common] 
         ..... 
         # an error occurs. remove the following line.
-        java_stored_procedure_port=4333
+        stored_procedure_port=4333
         .....
         [@testdb]
         .....
         # the parameter is configured successfully for testdb
-        java_stored_procedure_port=4334
+        stored_procedure_port=4334
         .....
 
-**java_stored_procedure_uds**
+**stored_procedure_vm_options**
 
-    **java_stored_procedure_uds** 는 자바 저장 프로시저를 호출하는 cub_javasp 프로세스와 cub_server 프로세스 간에 TCP 연결 대신 유닉스 도메인 소켓을 통한 연결을 사용하기 위한 파라미터이다. 기본값은 **yes**\이고 Windows의 경우 파라미터의 값과 관련 없이 **no**\로 동작한다.
+    **stored_procedure_vm_options** 는 저장 프로시저가 실행되는 프로시저 언어 서버의 가상 머신의 설정하기 위한 파라미터이다. 각 옵션 문자열은 공백으로 구분해야한다. 기본값은 빈 문자열이다. 만약 파라미터가 [@<database>] 섹션에 설정되면, [common] 섹션에서 설정된 옵션은 해당 데이터베이스에 적용되지 않는다.
+
+    .. note::
+
+        현재 cub_pl 프로세스에서 자바 가상 머신 (Java Virtual Machine)을 내부적으로 사용하므로 JVM 옵션을 입력할 수 있다.  JVM 옵션의 경우 표준 옵션, 비표준 옵션 그리고 고급 옵션이 있다. 비표준과 고급 옵션의 경우 모든 JVM 구현에서 지원하는 것을 보장하지 않는다.
         
-    .. note:: 
-
-        cub_javasp 프로세스의 유닉스 도메인 소켓 파일 경로를 지정하는 **CUBRID_TMP** 환경 변수에 대한 내용은 :doc:`/env` 을 참고한다.
-
-**java_stored_procedure_jvm_options**
-
-    **java_stored_procedure_jvm_options** 는 Java 저장 프로시저(Java stored procedure)가 실행되는 Java 가상 머신(Java Virtual Machine, JVM)과 Java 옵션을 설정하기 위한 파라미터이다. 각 옵션 문자열은 공백으로 구분해야한다. JVM 옵션의 경우 표준 옵션, 비표준 옵션 그리고 고급 옵션이 있다. 비표준과 고급 옵션의 경우 모든 JVM 구현에서 지원하는 것을 보장하지 않는다. 기본값은 빈 문자열이다. 만약 파라미터가 [@<database>] 섹션에 설정되면, [common] 섹션에서 설정된 옵션은 해당 데이터베이스에 적용되지 않는다. ::
+    ::
 
         ..... 
         [common] 
         ..... 
-        java_stored_procedure_jvm_options="-Xms1024m -Xmx1024m -XX:PermSize=512m -XX:MaxPermSize=512m"
+        stored_procedure_vm_options="-Xms1024m -Xmx1024m -XX:PermSize=512m -XX:MaxPermSize=512m"
         .....
         [@testdb]
         .....
-        java_stored_procedure=yes
 
         # -XX:PermSize=512m and -XX:MaxPermSize=512m 옵션은 [common] 섹션에 설정되었더라도 testdb에 적용되지 않는다.
-        java_stored_procedure_jvm_options="-Xms2048m -Xmx2048m"
+        stored_procedure_vm_options="-Xms2048m -Xmx2048m"
         .....
 
 **multi_range_optimization_limit**

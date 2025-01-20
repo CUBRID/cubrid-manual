@@ -4695,6 +4695,30 @@ However, if another table is referenced within a subquery as shown below, the qu
 
 The cached query is shown as **query_string** in the middle of the result screen. Each of the **n_entries** and **n_pages** represents the number of cached queries and the number of pages in the cached results. The **n_entries** is limited to the value of configuration parameter **max_query_cache_entries** and the **n_pages** is limited to the value of **query_cache_size_in_pages**. If the **n_entries** is overflown or the **n_pages** is overflown, some victims among the cache entries are selected and they are uncached. The number of victims is about 20% of **max_query_cache_entries** value and of the **query_cache_size_in_pages** value.
 
+When executing a query using :ref:`query profiling <query-profiling>`\, profiling information for the uncorrelated subquery cache is displayed as sub-information of the subquery to which the uncorrelated subquery cache is applied.
+
+The following is an example of subquery cache profiling information displayed when executing an uncorrelated subquery.
+
+::
+
+    SELECT name, capital, list (
+                SELECT /*+ QUERY_CACHE */ host_city
+                FROM olympic
+                WHERE host_nation like 'K%'
+    ) AS host_cities
+    FROM nation;
+
+    Trace Statistics:
+      SELECT (time: 13, fetch: 2584, fetch_time: 0, ioread: 0)
+        SCAN (table: public.nation), (heap time: 2, fetch: 864, ioread: 0, readrows: 215, rows: 215)
+        SUBQUERY (uncorrelated)
+          SELECT (time: 0, fetch: 0, fetch_time: 0, ioread: 0)
+            RESULT CACHE (reference count: 1)
+
+The description of the profiling items for the uncorrelated subquery cache is as follows:
+
+* **reference count**: The number of references to the cache referenced by the subquery.
+
 .. _correlated-subquery-cache:
 
 SUBQUERY CACHE (correlated)

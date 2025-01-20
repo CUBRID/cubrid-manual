@@ -4696,7 +4696,31 @@ WITH절에 포함되는 재귀 부분 중 다른 CTE를 참조하는 부질의�
         SELECT name, capital, list(SELECT /*+ QUERY_CACHE */ host_city FROM olympic WHERE host_nation = name) AS host_cities
         FROM nation;
 
-캐시 된 질의는 결과 화면 중간에 **query_string** 으로 표시되며 각 **n_entries** 및 **n_pages** 는 캐시된 질의 수와 캐시 된 결과의 페이지 수를 나타낸다. **n_entries** 는 파라미터 **max_query_cache_entries** 의 값으로 제한되고 **n_pages** 는 **query_cache_size_in_pages** 의 값으로 제한된다. **n_entries** 가 초과되거나 **n_pages** 가 초과되면 캐시 항목 중 일부가 삭제될 후보로 선택되어 삭제되고, 삭제되는 캐시는 **max_query_cache_entries** 값과 **query_cache_size_in_pages** 값의 약 20% 이다.
+캐시된 질의는 결과 화면 중간에 **query_string** 으로 표시되며 각 **n_entries** 및 **n_pages** 는 캐시된 질의 수와 캐시 된 결과의 페이지 수를 나타낸다. **n_entries** 는 파라미터 **max_query_cache_entries** 의 값으로 제한되고 **n_pages** 는 **query_cache_size_in_pages** 의 값으로 제한된다. **n_entries** 가 초과되거나 **n_pages** 가 초과되면 캐시 항목 중 일부가 삭제될 후보로 선택되어 삭제되고, 삭제되는 캐시는 **max_query_cache_entries** 값과 **query_cache_size_in_pages** 값의 약 20% 이다.
+
+:ref:`질의 프로파일링 <query-profiling>` 요청과 함께 질의 수행시 비상관 서브쿼리(uncorrelated subquery) 캐시가 적용된 부질의의 하위 정보로 비상관 서브쿼리 캐시에 대한 프로파일링 정보가 출력된다.
+
+다음은 비상관 부질의 수행시 서브 쿼리 캐시 프로파일링 정보가 표시되는 예시이다.
+
+::
+
+    SELECT name, capital, list (
+                SELECT /*+ QUERY_CACHE */ host_city
+                FROM olympic
+                WHERE host_nation like 'K%'
+    ) AS host_cities
+    FROM nation;
+
+    Trace Statistics:
+      SELECT (time: 13, fetch: 2584, fetch_time: 0, ioread: 0)
+        SCAN (table: public.nation), (heap time: 2, fetch: 864, ioread: 0, readrows: 215, rows: 215)
+        SUBQUERY (uncorrelated)
+          SELECT (time: 0, fetch: 0, fetch_time: 0, ioread: 0)
+            RESULT CACHE (reference count: 1)
+
+비상관 서브쿼리 캐시의 프로파일링 항목에 대한 설명은 다음과 같다.
+
+* **reference count**: 부질의에서 참조한 캐시의 참조 횟수.
 
 .. _correlated-subquery-cache:
 

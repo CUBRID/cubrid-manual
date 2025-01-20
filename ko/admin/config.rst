@@ -2252,7 +2252,7 @@ HA 관련 파라미터
 
 **stored_procedure**
 
-    **stored_procedure** 는 Java 가상 머신(Java Virtual Machine, JVM)을 실행하여 Java 저장 프로시저(Java stored procedure)를 사용하게 하기 위한 파라미터이다. 기본값은 **yes**\ 이며, **no**\로 설정하는 경우 JVM이 실행되지 않고, 저장 프로시저(Java stored procedure)를 사용할 수 없다.
+    **stored_procedure** 는 cub_pl 프로세스를 실행하여 저장 프로시저(stored procedure)를 사용하게 하기 위한 파라미터이다. 기본값은 **yes**\ 이며, **no**\로 설정하는 경우 cub_pl 프로세스가 실행되지 않고, 저장 프로시저(Java stored procedure)를 사용할 수 없다.
 
 **stored_procedure_uds**
 
@@ -2284,7 +2284,7 @@ HA 관련 파라미터
 
     .. note::
 
-        현재 자바 가상 머신 (Java Virtual Machine)을 내부적으로 사용하므로 JVM 옵션을 입력할 수 있다.  JVM 옵션의 경우 표준 옵션, 비표준 옵션 그리고 고급 옵션이 있다. 비표준과 고급 옵션의 경우 모든 JVM 구현에서 지원하는 것을 보장하지 않는다.
+        현재 cub_pl 프로세스에서 자바 가상 머신 (Java Virtual Machine)을 내부적으로 사용하므로 JVM 옵션을 입력할 수 있다.  JVM 옵션의 경우 표준 옵션, 비표준 옵션 그리고 고급 옵션이 있다. 비표준과 고급 옵션의 경우 모든 JVM 구현에서 지원하는 것을 보장하지 않는다.
         
     ::
 

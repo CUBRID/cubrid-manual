@@ -2741,12 +2741,10 @@ cci_register_out_param
 
     다음은 "Hello, CUBRID"라는 문자열을 출력하는 저장 프로시저의 예이다.
     
-    먼저 cubrid.conf에 있는 stored_procedure 파라미터의 값을 yes로 설정하고, 데이터베이스를 구동한다.
     
     ::
     
         $ vi cubrid.conf
-        stored_procedure=yes
     
         $ cubrid service start
         $ cubrid server start demodb

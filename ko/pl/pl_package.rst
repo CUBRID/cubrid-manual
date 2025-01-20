@@ -17,13 +17,13 @@ DBMS_OUTPUT 패키지는 문자열 메시지를 버퍼에 저장하고 읽어오
 이 섹션에서는 DBMS_OUTPUT 패키지의 사용법과 활용 예시를 설명한다.
 DBMS_OUTPUT 패키지의 함수는 다음과 같다:
 
-        * :ref:`dbms_output_enable`
-        * :ref:`dbms_output_disable`
-        * :ref:`dbms_output_put`
-        * :ref:`dbms_output_put_line`
-        * :ref:`dbms_output_new_line`
-        * :ref:`dbms_output_get_line`
-        * :ref:`dbms_output_get_lines`
+        * :ref:`dbms-output-enable`
+        * :ref:`dbms-output-disable`
+        * :ref:`dbms-output-put`
+        * :ref:`dbms-output-put_line`
+        * :ref:`dbms-output-new_line`
+        * :ref:`dbms-output-get_line`
+        * :ref:`dbms-output-get_lines`
 
 .. _dbms-output-enable:
 

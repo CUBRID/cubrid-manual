@@ -163,20 +163,32 @@ To resolve the split-brain status, one of two is dead for itself; cub_master log
  
 :: 
 
-    Time: 05/31/13 17:38:29.138 - ERROR *** file ../../src/executables/master_heartbeat.c, line 714 ERROR CODE = -988 Tran = -1, EID = 19 
-    Node event: More than one master detected and local processes and cub_master will be terminated. 
-  
-    Time: 05/31/13 17:38:32.337 - ERROR *** file ../../src/executables/master_heartbeat.c, line 4493 ERROR CODE = -988 Tran = -1, EID = 20 
-    Node event:HA Node Information 
-    ================================================================================ 
-     * group_id : hagrp host_name : testhost02 state : unknown 
-    -------------------------------------------------------------------------------- 
-    name priority state score missed heartbeat 
-    -------------------------------------------------------------------------------- 
-    testhost03 3 slave 3 0 
-    testhost02 2 master 2 0 
-    testhost01 1 master -32767 0 
-    ================================================================================ 
+    Time: 01/10/25 13:46:34.782 - ERROR *** file ../../src/executables/master_heartbeat.c, line 873 ERROR CODE = -988, Tran = -1, EID = 35
+    Node event: [Failback] [Diagnosis] Multiple master nodes (testhost02, testhost01) are detected.
+
+    Time: 01/10/25 13:46:34.782 - ERROR *** file ../../src/executables/master_heartbeat.c, line 876 ERROR CODE = -988, Tran = -1, EID = 36
+    Node event: HA Node Info
+    ================================================================================
+    * group_id : hagrp   host_name : testhost02   state : master
+    --------------------------------------------------------------------------------
+    name                 priority   state           score      missed heartbeat
+    --------------------------------------------------------------------------------
+    testhost02               2          master          -32766     0
+    testhost01               1          master          -32767     0
+    ================================================================================
+
+    Time: 01/10/25 13:46:34.782 - ERROR *** file ../../src/executables/master_heartbeat.c, line 889 ERROR CODE = -988, Tran = -1, EID = 37
+    Node event: HA Ping Host Info
+    ================================================================================
+    * PING check is enabled
+    --------------------------------------------------------------------------------
+    hostname             PING check result
+    --------------------------------------------------------------------------------
+    8.8.8.8              SUCCESS
+    ================================================================================
+
+    Time: 01/10/25 13:46:34.782 - ERROR *** file ../../src/executables/master_heartbeat.c, line 1371 ERROR CODE = -988, Tran = -1, EID = 38
+    Node event: [Failback] [Success] Current node has been successfully demoted to slave.
 
 Above example is the information to print out into the cub_master log when testhost02 server detects split-brain status and it is dead for itself.    
      
@@ -185,26 +197,34 @@ Detecting Fail-over, Fail-back
   
 If fail-over or fail-back occurs, a node changes its role.
   
-The following is the log file of the cub_master that is changed as slave node after fail-back or master node after fail-over; it includes the following node information.
+The following is the log file of the cub_master that changes to a slave node after fail-back or to a master node after fail-over; log messages for fail-over and fail-back are prefixed with [Failover] or [Failback].
+
+The log messages for fail-over and fail-back include both diagnosis and result messages.
+
+A diagnosis message is logged when a fail-over or fail-back is triggered for a specific reason. These messages indicate the reason why the fail-over or fail-back was initiated and are prefixed with [Diagnosis].
+
+A result message is logged when a fail-over or fail-back is either canceled or successfully completed. If the fail-over or fail-back is canceled, the result message logs the reason for the cancellation and is prefixed with [Canceled]. If the fail-over or fail-back is completed successfully, the result message logs the outcome and is prefixed with [Success]. For details, see :ref:`failover-messages`.
   
 :: 
   
-    Time: 06/04/13 15:23:28.056 - ERROR *** file ../../src/executables/master_heartbeat.c, line 957 ERROR CODE = -988 Tran = -1, EID = 25 
-    Node event: Failover completed. 
-  
-    Time: 06/04/13 15:23:28.056 - ERROR *** file ../../src/executables/master_heartbeat.c, line 4484 ERROR CODE = -988 Tran = -1, EID = 26 
-    Node event: HA Node Information 
-    ================================================================================ 
-     * group_id : hagrp host_name : testhost02 state : master 
-    -------------------------------------------------------------------------------- 
-    name priority state score missed heartbeat 
-    -------------------------------------------------------------------------------- 
-    testhost03 3 slave 3 0 
-    testhost02 2 to-be-master -4094 0 
-    testhost01 1 unknown 32767 0 
-    ================================================================================ 
-  
-Above example is an information which is printed out to the cub_master log; it is the process that the 'testhost02' host changes the role from slave to master because of the fail-over.
+    Time: 01/09/25 16:14:13.005 - ERROR *** file ../../src/executables/master_heartbeat.c, line 924 ERROR CODE = -988, Tran = -1, EID = 6
+    Node event: [Failover] [Diagnosis] The master node (testhost01) has lost its role due to server process problem, such as disk failure.
+
+    Time: 01/09/25 16:14:13.614 - ERROR *** file /../../src/executables/master_heartbeat.c, line 1179 ERROR CODE = -988, Tran = -1, EID = 7
+    Node event: [Failover] [Success] Current node has been successfully promoted to master.
+
+    Time: 01/09/25 16:14:13.614 - ERROR *** file ../../src/executables/master_heartbeat.c, line 1196 ERROR CODE = -988, Tran = -1, EID = 8
+    Node event: HA Node Info
+    ================================================================================
+    * group_id : hagrp   host_name : testhost02   state : master
+    --------------------------------------------------------------------------------
+    name                 priority   state           score      missed heartbeat
+    --------------------------------------------------------------------------------
+    testhost02           2          to-be-master    -4094      0
+    testhost01           1          unknown         32767      1
+    ================================================================================
+
+The above example shows information which is printed in the cub_master log; it describes the process where the 'testhost02' host changes its role from slave to master during a fail-over because the master node 'testhost01' has lost its role due to server process issue.
 
 Failure on HA Start
 ===================

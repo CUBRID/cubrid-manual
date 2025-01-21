@@ -163,20 +163,32 @@ split-brain 상태를 해소하기 위해 스스로 종료하는 마스터 노�
   
 :: 
   
-    Time: 05/31/13 17:38:29.138 - ERROR *** file ../../src/executables/master_heartbeat.c, line 714 ERROR CODE = -988 Tran = -1, EID = 19 
-    Node event: More than one master detected and local processes and cub_master will be terminated. 
-  
-    Time: 05/31/13 17:38:32.337 - ERROR *** file ../../src/executables/master_heartbeat.c, line 4493 ERROR CODE = -988 Tran = -1, EID = 20 
-    Node event:HA Node Information 
-    ================================================================================ 
-     * group_id : hagrp host_name : testhost02 state : unknown 
-    -------------------------------------------------------------------------------- 
-    name priority state score missed heartbeat 
-    -------------------------------------------------------------------------------- 
-    testhost03 3 slave 3 0 
-    testhost02 2 master 2 0 
-    testhost01 1 master -32767 0 
-    ================================================================================ 
+    Time: 01/10/25 13:46:34.782 - ERROR *** file ../../src/executables/master_heartbeat.c, line 873 ERROR CODE = -988, Tran = -1, EID = 35
+    Node event: [Failback] [Diagnosis] Multiple master nodes (testhost02, testhost01) are detected.
+
+    Time: 01/10/25 13:46:34.782 - ERROR *** file ../../src/executables/master_heartbeat.c, line 876 ERROR CODE = -988, Tran = -1, EID = 36
+    Node event: HA Node Info
+    ================================================================================
+    * group_id : hagrp   host_name : testhost02   state : master
+    --------------------------------------------------------------------------------
+    name                 priority   state           score      missed heartbeat
+    --------------------------------------------------------------------------------
+    testhost02               2          master          -32766     0
+    testhost01               1          master          -32767     0
+    ================================================================================
+
+    Time: 01/10/25 13:46:34.782 - ERROR *** file ../../src/executables/master_heartbeat.c, line 889 ERROR CODE = -988, Tran = -1, EID = 37
+    Node event: HA Ping Host Info
+    ================================================================================
+    * PING check is enabled
+    --------------------------------------------------------------------------------
+    hostname             PING check result
+    --------------------------------------------------------------------------------
+    8.8.8.8              SUCCESS
+    ================================================================================
+
+    Time: 01/10/25 13:46:34.782 - ERROR *** file ../../src/executables/master_heartbeat.c, line 1371 ERROR CODE = -988, Tran = -1, EID = 38
+    Node event: [Failback] [Success] Current node has been successfully demoted to slave.
   
 위의 예는 testhost02 서버가 split-brain을 감지하고 스스로 종료될 때 cub_master 로그에 출력하는 정보이다. 
      
@@ -185,24 +197,32 @@ Fail-over, Fail-back 감지
   
 Fail-over 혹은 Fail-back이 발생하면 노드는 역할을 변경하게 된다. 
   
-Fail-over 후 마스터로 변경되는 노드 혹은 Fail-back 후 슬레이브로 변경되는 노드의 cub_master 로그 파일은 다음과 같이 노드 정보를 포함한다. 
+Fail-over 후 마스터로 변경되는 노드 혹은 Fail-back 후 슬레이브로 변경되는 노드의 cub_master 로그 메시지는 [Failover] 또는 [Failback] 접두어로 시작한다.
+
+Fail-over 및 Fail-back 로그 메시지는 진단 로그 메시지와 결과 로그 메시지를 포함한다.
+
+진단 로그 메시지는 fail-over 및 fail-back이 결정되는 경우 기록된다. 이 메시지는 fail-over 또는 fail-back이 시작된 원인을 기록하며, [Diagnosis] 접두어를 포함한다.
+
+결과 로그 메시지는 fail-over 및 fail-back이 취소되거나, 성공적으로 완료될 때 기록된다. Fail-over 또는 Fail-back이 취소된 경우, 결과 메시지는 취소된 이유를 기록하며, [Canceled] 접두어를 포함한다. Fail-over 및 Fail-back이 성공적으로 완료된 경우, 결과 메시지는 결과를 기록하며, [Success] 접두어를 포함한다. 자세한 내용은 :ref:`failover-messages` 를 참고한다.
   
 :: 
   
-    Time: 06/04/13 15:23:28.056 - ERROR *** file ../../src/executables/master_heartbeat.c, line 957 ERROR CODE = -988 Tran = -1, EID = 25 
-    Node event: Failover completed. 
-  
-    Time: 06/04/13 15:23:28.056 - ERROR *** file ../../src/executables/master_heartbeat.c, line 4484 ERROR CODE = -988 Tran = -1, EID = 26 
-    Node event: HA Node Information 
-    ================================================================================ 
-     * group_id : hagrp host_name : testhost02 state : master 
-    -------------------------------------------------------------------------------- 
-    name priority state score missed heartbeat 
-    -------------------------------------------------------------------------------- 
-    testhost03 3 slave 3 0 
-    testhost02 2 to-be-master -4094 0 
-    testhost01 1 unknown 32767 0 
-    ================================================================================ 
+    Time: 01/09/25 16:14:13.005 - ERROR *** file ../../src/executables/master_heartbeat.c, line 924 ERROR CODE = -988, Tran = -1, EID = 6
+    Node event: [Failover] [Diagnosis] The master node (testhost01) has lost its role due to server process problem, such as disk failure.
+
+    Time: 01/09/25 16:14:13.614 - ERROR *** file /../../src/executables/master_heartbeat.c, line 1179 ERROR CODE = -988, Tran = -1, EID = 7
+    Node event: [Failover] [Success] Current node has been successfully promoted to master.
+
+    Time: 01/09/25 16:14:13.614 - ERROR *** file ../../src/executables/master_heartbeat.c, line 1196 ERROR CODE = -988, Tran = -1, EID = 8
+    Node event: HA Node Info
+    ================================================================================
+    * group_id : hagrp   host_name : testhost02   state : master
+    --------------------------------------------------------------------------------
+    name                 priority   state           score      missed heartbeat
+    --------------------------------------------------------------------------------
+    testhost02           2          to-be-master    -4094      0
+    testhost01           1          unknown         32767      1
+    ================================================================================
   
 위의 예는 Fail-over로 인해 testhost02 서버가 슬레이브에서 마스터로 역할을 변경하는 도중 cub_master 로그에 출력하는 정보이다. 
 

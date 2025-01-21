@@ -2728,7 +2728,7 @@ cci_register_out_param
 
 .. c:function:: int cci_register_out_param(int req_handle, int index)
 
-    자바 저장 프로시저에서 아웃 바인드로 정의한 파라미터를 바인딩하기 위해 사용하며, index는 1부터 시작한다.
+    저장 프로시저에서 아웃 바인드로 정의한 파라미터를 바인딩하기 위해 사용하며, index는 1부터 시작한다.
     이 함수를 호출하기 전에 cci_prepare 함수의 플래그에 **CCI_PREPARE_CALL**\ 을 설정해야 한다.
     
     :param req_handle: (IN) 요청 핸들
@@ -2739,19 +2739,17 @@ cci_register_out_param
         *    **CCI_ER_CON_HANDLE**
         *    **CCI_ER_USED_CONNECTION**
 
-    다음은 "Hello, CUBRID"라는 문자열을 출력하는 자바 저장 프로시저의 예이다.
+    다음은 "Hello, CUBRID"라는 문자열을 출력하는 저장 프로시저의 예이다.
     
-    먼저 cubrid.conf에 있는 java_stored_procedure 파라미터의 값을 yes로 설정하고, 데이터베이스를 구동한다.
     
     ::
     
         $ vi cubrid.conf
-        java_stored_procedure=yes
     
         $ cubrid service start
         $ cubrid server start demodb
     
-    자바 저장 프로시저로 등록할 클래스를 구현하고 컴파일한다.
+    저장 프로시저로 등록할 클래스를 구현하고 컴파일한다.
     
     .. code-block:: java
     

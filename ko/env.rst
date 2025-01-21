@@ -32,11 +32,11 @@ CUBRID 환경 변수
     
         *   cub_master 프로세스: **/tmp** 디렉터리
         *   cub_broker 프로세스: **$CUBRID/var/CUBRID_SOCK** 디렉터리
-        *   cub_javasp 프로세스: **$CUBRID/var/CUBRID_SOCK** 디렉터리
+        *   cub_pl 프로세스: **$CUBRID/var/CUBRID_SOCK** 디렉터리
 
 .. note::
 
-    * **CUBRID_TMP** 환경 변수가 설정된 경우, cub_javasp 프로세스(Java VM 내장) 구동시 사용하는  **java_stored_procedure_jvm_options** 중  임시 파일 저장 경로를 지정하는 **java.io.tmpdir** 의 설정값은 무시된다.
+    * **CUBRID_TMP** 환경 변수가 설정된 경우, cub_pl 프로세스(Java VM 내장) 구동시 사용하는  **stored_procedure_vm_options** 중  임시 파일 저장 경로를 지정하는 **java.io.tmpdir** 의 설정값은 무시된다.
     * Windows에서 이 환경 변수를 설정하기 위해서는 registry에 CUBRID_TMP key를 추가해야한다 (**%CUBRID%**\\share\\windows_scripts\\cubrid_env.bat 참조).
 
 **CUBRID_TMP** 의 값에는 다음과 같은 제약 사항이 있다.
@@ -90,9 +90,9 @@ OS 환경 변수 및 Java 환경 변수
 
 *   Path: Windows 환경에서 Path 환경 변수에는 CUBRID 시스템의 실행 파일이 있는 디렉터리인 **%CUBRID%\\bin** 과 **%CUBRID%\\cci\\bin** 이 포함되어 있어야 한다.
 
-*   JAVA_HOME: CUBRID 시스템에서 자바 저장 프로시저 기능을 사용하기 위해서는 Java Runtime Environment (JRE) 1.6 이상 버전이 설치되어야 하고 **JAVA_HOME** 환경 변수에 해당 디렉터리가 지정되어야 한다. :ref:`cubrid-javasp-server-config` 을 참고한다.
+*   JAVA_HOME: CUBRID 시스템에서 저장 프로시저 기능을 사용하기 위해서는 Java Runtime Environment (JRE) 1.8 이상 버전이 설치되어야 하고 **JAVA_HOME** 환경 변수에 해당 디렉터리가 지정되어야 한다. :ref:`cubrid-pl-server-config` 을 참고한다.
 
-*   JVM_PATH: CUBRID 시스템에서 자바 저장 프로시저 기능을 사용하기 위해서 **JAVA_HOME**\에서 JVM 라이브러리 (**libjvm**)을 찾는 대신 **JVM_PATH** 환경 변수를 설정하여 명시적으로 라이브러리의 경로를 지정할 수 있다. :ref:`cubrid-javasp-server-config` 을 참고한다.
+*   JVM_PATH: CUBRID 시스템에서 저장 프로시저 기능을 사용하기 위해서 **JAVA_HOME**\에서 JVM 라이브러리 (**libjvm**)을 찾는 대신 **JVM_PATH** 환경 변수를 설정하여 명시적으로 라이브러리의 경로를 지정할 수 있다. :ref:`cubrid-pl-server-config` 을 참고한다.
 
 환경 변수 설정
 --------------
@@ -176,7 +176,7 @@ Windows에서 특정 포트를 지정하기 번거로운 경우에도 이 방법
 *   cub_master에 대한 모든 포트를 개방하려면 "%CUBRID%\\bin\\cub_master.exe"를 추가한다.
 *   cub_server에 대한 모든 포트를 개방하려면 "%CUBRID%\\bin\\cub_server.exe"를 추가한다.
 *   CUBRID 매니저에 대한 모든 포트를 개방하려면 "%CUBRID%\\bin\\cub_cmserver.exe"를 추가한다.
-*   CUBRID 자바 저장 프로시저 서버에 대한 모든 포트를 개방하려면 "%CUBRID%\\bin\\cub_javasp.exe"를 추가한다.
+*   CUBRID 프로시저 언어 서버에 대한 모든 포트를 개방하려면 "%CUBRID%\\bin\\cub_pl.exe"를 추가한다.
     
 브로커 장비 또는 DB 서버 장비에서 Linux용 CUBRID를 사용한다면 Linux 포트가 모두 개방되어 있어야 한다.
 브로커 장비 또는 DB 서버 장비에서 Windows용 CUBRID를 사용한다면 Windows 포트가 모두 개방되어 있거나, 관련 프로세스들이 모두 Windows 방화벽에서 허용되는 목록에 추가되어 있어야 한다.
@@ -226,7 +226,7 @@ Windows에서 특정 포트를 지정하기 번거로운 경우에도 이 방법
 | Manager 사용  | Manager      | application   | 8001                       | 8001                                                | 개방                     |              |
 |               | 서버         |               |                            |                                                     |                          |              |
 +---------------+--------------+---------------+----------------------------+-----------------------------------------------------+--------------------------+--------------+
-| Java SP 사용  | cub_javasp   | cub_server    | java_stored_procedure_port | java_stored_procedure_port                          | 개방                     | 연결 유지    |
+| PL 서버 사용   | cub_pl       | cub_server    | stored_procedure_port      | stored_procedure_port                               | 개방                     | 연결 유지    |
 +---------------+--------------+---------------+----------------------------+-----------------------------------------------------+--------------------------+--------------+
 
 
@@ -401,15 +401,27 @@ CUBRID 매니저 서버 사용 포트
 
 *   CUBRID 매니저 클라이언트가 CUBRID 매니저 서버 프로세스에 접속할 때 사용하는 포트는 cm.conf의 **cm_port**\이며 기본값은 8001이다.
 
-CUBRID 자바 저장 프로시저 서버 사용 포트
+CUBRID 프로시저 언어 서버 사용 포트
 ---------------------------------------------
 
-다음 표는 CUBRID 자바 저장 프로시저 서버가 사용하는 포트이며, 이것은 OS 종류에 관계없이 동일하다.
+다음 표는 CUBRID 프로시저 언어 서버 (cub_pl)이 데이터베이스 서버 (cub_server) 와 TCP 소켓으로 통신할 때 사용하는 포트이다.
 
 +---------------+--------------+----------------------------+--------------------------+
 | Listener      | Requester    | Port                       | 방화벽 존재 시 포트 설정 |
 +===============+==============+============================+==========================+
-| cub_javasp    | cub_server   | java_stored_procedure_port | 개방(open)               |
+| cub_pl        | cub_server   | stored_procedure_port      | 개방(open)               |
 +---------------+--------------+----------------------------+--------------------------+
 
-*   CUBRID 자바 저장 프로시저 서버 (cub_javasp)가 cub_server 와 통신할 때 사용하는 포트는 **cubrid.conf**\의 **java_stored_procedure_port**\이며 기본값은 0으로, 사용 가능한 임의의 가용 포트가 할당됨을 의미한다.
+OS 종류와 **cubrid.conf**\의 **stored_procedure_uds**\의 설정값에 따른 동작
+
+*   Linux
+  - **stored_procedure_uds**\가 **yes**인 경우 유닉스 도메인 소켓을 사용하며 TCP 소켓을 사용하지 않는다.
+  - **stored_procedure_uds**\가 **no**인 경우 TCP 소켓을 사용하며 포트는 **stored_procedure_port**\의 설정값을 사용한다.
+
+*   Windows
+  - Windows에서는 유닉스 도메인 소켓을 지원하지 않는다.
+  - 따라서 **stored_procedure_uds**\에 상관없이 TCP 소켓을 사용하며 포트는 **stored_procedure_port**\의 설정값을 사용한다.
+
+.. note::
+
+        CUBRID 프로시저 언어 서버 (cub_pl)가 cub_server 와 통신할 때 사용하는 포트는 **cubrid.conf**\의 **stored_procedure_port**\이며 기본값은 0으로, 사용 가능한 임의의 가용 포트가 할당됨을 의미한다.

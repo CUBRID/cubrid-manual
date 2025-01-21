@@ -2,6 +2,18 @@
 :meta-keywords: call statement, cubrid method type
 :meta-description: The methods are written in C with built-in functions of CUBRID database system, and are called by the CALL statement.
 
+*****************************
+메서드
+*****************************
+
+메서드(method)는 CUBRID 데이터베이스 시스템의 내장 함수로 C로 작성된 프로그램이고, **CALL** 문에 의해 호출된다. 
+프로그램은 메서드가 호출되었을 때 동적 로더에 의해 실행 중인 응용과 함께 로드(load)되고 연결(link)된다. 메서드 실행 결과 생성된 리턴 값(return value)은 호출자(caller)에게 전달된다.
+
+**제한사항**
+    * 현재 메서드는 CUBRID 데이터베이스에서 :ref:`authorization-method`\와 같은 일부 시스템에서만 사용 가능하다.  
+    * 사용자 정의 메서드는 제약 사항이 많아서 사용을 권장하지 않으며, 시스템에 내장된 메서드에서만 사용된다.
+
+
 메서드 타입
 ===========
 

@@ -109,7 +109,7 @@ Also, you can delete multiple stored procedures at the same time with several *p
 
 ::
 
-    DROP PROCEDURE procedure_name [{ , procedure_name , ... }]
+    DROP PROCEDURE procedure_name [{ , procedure_name , ... }];
 
 *   *procedure_name*: Specifies the name of procedure to delete
 

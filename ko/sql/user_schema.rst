@@ -3,7 +3,7 @@
 사용자 스키마
 *************
 
-스키마는 데이터베이스 객체의 논리적인 모음이다. 스키마 이름을 통해 객체를 식별할 수 있다는 것이며, 스키마 객체를 물리적으로 분리된 저장공간에 저장하지 않는다. 객체는 하나의 스키마에만 존재할 수 있으며 동시에 다른 스키마에 존재할 수 없다. 스키마는 사용자가 생성할 수 없으며, 데이터베이스 사용자 생성 시 해당 사용자는 사용자 이름과 동일한 이름의 단일 스키마를 소유하게 된다. 스키마에는 테이블, 시리얼 및 트리거가 포함된다. 스키마의 객체는 동일한 스키마 내에서 고유한 이름을 가져야 하지만 다른 스키마의 객체와 중복되는 이름을 가질 수 있다.
+스키마는 데이터베이스 객체의 논리적인 모음이다. 스키마 이름을 통해 객체를 식별할 수 있다는 것이며, 스키마 객체를 물리적으로 분리된 저장공간에 저장하지 않는다. 객체는 하나의 스키마에만 존재할 수 있으며 동시에 다른 스키마에 존재할 수 없다. 스키마는 사용자가 생성할 수 없으며, 데이터베이스 사용자 생성 시 해당 사용자는 사용자 이름과 동일한 이름의 단일 스키마를 소유하게 된다. 스키마에는 테이블, 시리얼, 트리거, 동의어 및 저장 프로시저/함수 가 포함된다. 스키마의 객체는 동일한 스키마 내에서 고유한 이름을 가져야 하지만 다른 스키마의 객체와 중복되는 이름을 가질 수 있다.
 
 객체에 접근하려면 사용자는 "스키마 이름.테이블 이름"의 경로 표현식을 사용해야 한다. 사용자의 스키마가 객체의 스키마와 (소유자) 동일한 경우 경로 표현식에서 스키마 이름을 생략할 수 있다. 스키마 이름을 생략하면 해당 사용자의 스키마 이름이 사용된다. "스키마 이름.테이블 이름"의 경로 표현식을 사용하더라도 사용자는 해당 객체를 사용할 수 있는 권한이 있어야 한다.
 
@@ -30,7 +30,7 @@
             ======================
               'Fernandez Jesus'
 
-테이블, 시리얼 및 트리거를 관리하는 시스템 테이블에 (_db_class, db_serial, db_trigger) unique_name 칼럼이 추가되었다. unique_name 칼럼은 스키마 이름이 접두사로 붙은 이름을 저장한다. _db_class의 unique_name 칼럼에서 시스템 테이블 이름은 스키마 이름이 접두사로 붙지 않는다.
+테이블, 시리얼, 트리거, 동의어 및 저장 프로시저/함수를 관리하는 시스템 테이블에 (_db_class, db_serial, db_trigger, _db_synonym, _db_stored_procedure) unique_name 칼럼이 추가되었다. unique_name 칼럼은 스키마 이름이 접두사로 붙은 이름을 저장한다. _db_class의 unique_name 칼럼에서 시스템 테이블 이름은 스키마 이름이 접두사로 붙지 않는다.
 
 .. code-block:: shell
 
@@ -83,3 +83,15 @@
           unique_name         name         owner.name
         =============================================
           'public.trigger_1'  'trigger_1'  'PUBLIC'
+
+    SELECT unique_name, name, owner.name, target_unique_name, target_name, target_owner.name FROM _db_synonym ORDER BY unique_name;
+
+	  unique_name           name           owner.name           target_unique_name           target_name           target_owner.name   
+        =================================================================================================================================
+          'public.synonym_1'    'synonym_1'    'PUBLIC'             'public.synonym_target_1'    'synonym_target_1'    'PUBLIC' 
+
+    SELECT unique_name, sp_name, owner.name FROM _db_stored_procedure WHERE is_system_generated = 0 ORDER BY unique_name;
+
+	  unique_name                  sp_name                owner.name 
+        ================================================================
+	  'public.stored_procedure_1'  'stored_procedure_1'  'PUBLIC'

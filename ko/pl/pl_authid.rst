@@ -24,12 +24,12 @@
 
 저장 프로시저 또는 저장 함수 생성 시 **AUTHID** 속성을 지정하여 **소유자 권한** 또는 **호출자 권한** 으로의 동작 여부를 지정할 수 있다. 정의문에 대한 자세한 내용은 :doc:`/sql/schema/stored_routine_stmt`\를 참고한다. 
 
-**AUTHID** 속성을 다음과 같이 지정할 수 있으며, **DEFINER**\와 **OWNER**, **CURRENT_USER**\와 **CALLER**는 동의어이다.
+**AUTHID** 속성을 다음과 같이 지정할 수 있으며, **DEFINER**\와 **OWNER** 그리고 **CURRENT_USER**\와 **CALLER**\는 동의어이다.
 
 * **소유자 권한**: AUTHID DEFINER 또는 AUTHID OWNER
 * **호출자 권한**: AUTHID CURRENT_USER 또는 AUTHID CALLER
 
-속성을 지정하지 않으면 기본적으로 **소유자 권한**으로 동작한다.
+속성을 지정하지 않으면 기본적으로 **소유자 권한**\으로 동작한다.
 
 다음은 DBA 사용자로 로그인하여 :ref:`fn_current_user` 를 반환하는 DBA 소유자 권한의 저장 함수를 만들고 U1 사용자에서 호출하는 예이다.
 

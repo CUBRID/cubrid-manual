@@ -35,7 +35,7 @@ CREATE PROCEDURE
 *   *parameter_name*: 인자의 이름을 지정한다. (최대 254바이트)
 *   *sql_type*: 인자의 데이터 타입을 지정한다.
 *   *default_arg*: 인자의 기본값을 지정한다. :ref:`pl-default-argument`\를 참고한다.
-*   *authid*: 저장 프로시저의 실행 권한을 지정한다. DEFINER(OWNER)는 프로시저를 정의한 사용자(소유자)의 권한으로 프로시저를 실행한다. CURRENT_USER(CALLER)는 프로시저를 호출한 사용자의 권한으로 프로시저를 실행한다. 기본값은 DEFINER(OWNER)이다. Java SP는 DEFINER 권한과 CURRENT_USER 권한으로 실행된다. PL/CSQL은 DEFINER 권한으로만 실행된다.
+*   *authid*: 저장 프로시저의 실행 권한을 지정한다. 자세한 내용은 :doc:`/pl/pl_authid`\을 참고한다.
 *   *parameter_comment_string*: 인자 커멘트 문자열을 지정한다.
 *   *body*: 저장 프로시저의 본문을 지정한다.
 *   *procedure_comment*: 저장 프로시저의 커멘트 문자열을 지정한다.
@@ -134,8 +134,8 @@ CREATE FUNCTION
 *   *sql_type*: 인자 또는 리턴 값의 데이터 타입을 지정한다. 지정할 수 있는 데이터 타입은 :ref:`pl-supported_sql_type`\을 참고한다.
 *   *default_arg*: 인자의 기본값을 지정한다. :ref:`pl-default-argument`\를 참고한다.
 *   *param_comment_string*: 인자 커멘트 문자열을 지정한다.
-*   *authid*: 저장 함수의 실행 권한을 지정한다. 자세한 내용은 :doc:`pl-authid`\를 참고한다.
-*   *deterministic*: 하나의 질의내에서 동일 인자값에 대해 저장 함수 결과가 항상 동일한 값을 반환하는 함수인지 여부를 표현하는 것으로, DETERMINISTIC으로 설정된 저장 함수를 상관 부질의 사용시, 질의 최적화기는 해당 함수를 부질의 결과 캐시 최적화의 대상으로 처리한다. 기본값은 NOT DETERMINISTIC이다.
+*   *authid*: 저장 함수의 실행 권한을 지정한다. 자세한 내용은 :doc:`/pl/pl_authid`\을 참고한다.
+*   *deterministic*: 저장 함수가 결정적 함수인지 여부를 지정한다. 자세한 내용은 :ref:`pl-deterministic`\을 참고한다.
 *   *body*: 저장 함수의 본문을 지정한다.
 *   *function_comment*: 저장 함수의 커멘트 문자열을 지정한다.
 

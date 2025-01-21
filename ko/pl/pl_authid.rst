@@ -2,8 +2,7 @@
 소유자 권한과 호출자 권한
 -----------------------------
 
-저장 프로시저는 **소유자** 권한 또는 **호출자** 권한으로 실행될 수 있다. 동시에 두 가지 권한으로 실행할 수 없고, 저장 프로시저를 만들 때 지정한 권한으로 실행된다. 이 권한은 **AUTHID**\로 지정한다.
-저장 프로시저의 생성과 **AUTHID**\의 지정에 대한 자세한 내용은 :doc:`/sql/schema/stored_routine_stmt`\를 참고한다.
+저장 프로시저는 **소유자** 권한 또는 **호출자** 권한으로 실행될 수 있다. 동시에 두 가지 권한으로 실행할 수 없고, 저장 프로시저를 만들 때 지정한 권한으로 실행된다. 
 
 다음은 각 권한에 대한 설명과 차이점을 설명한다.
 
@@ -23,7 +22,44 @@
 
 저장 프로시저 생성 시 소유자 권한과 호출자 권한의 차이를 이해하고 저장 프로시저를 활용하면 보다 효율적으로 데이터베이스를 관리하는 것이 필요하다.
 
+저장 프로시저 또는 저장 함수 생성 시 **AUTHID** 속성을 지정하여 **소유자 권한** 또는 **호출자 권한** 으로의 동작 여부를 지정할 수 있다. 정의문에 대한 자세한 내용은 :doc:`/sql/schema/stored_routine_stmt`\를 참고한다. 
+
+**AUTHID** 속성을 다음과 같이 지정할 수 있으며, **DEFINER**\와 **OWNER**, **CURRENT_USER**\와 **CALLER**는 동의어이다.
+
+* **소유자 권한**: AUTHID DEFINER 또는 AUTHID OWNER
+* **호출자 권한**: AUTHID CURRENT_USER 또는 AUTHID CALLER
+
+속성을 지정하지 않으면 기본적으로 **소유자 권한**으로 동작한다.
+
+다음은 DBA 사용자로 로그인하여 :ref:`fn_current_user` 를 반환하는 DBA 소유자 권한의 저장 함수를 만들고 U1 사용자에서 호출하는 예이다.
+
+.. code-block:: sql
+
+        -- DBA로 로그인
+        CREATE USER U1;
+
+        CREATE OR REPLACE FUNCTION fn_current_user() RETURN STRING AUTHID DEFINER AS
+        BEGIN
+                RETURN CURRENT_USER;
+        END;
+
+        GRANT EXECUTE ON PROCEDURE fn_current_user TO U1;
+
+        CALL login ('U1', '') ON CLASS db_user;
+
+        SELECT dba.fn_current_user();
+
+::
+
+        dba.fn_current_user()
+        ======================
+        'DBA@<host>'    
+
 .. warning::
 
         * CUBRID의 PL/CSQL에서는 현재 **소유자 권한** 만을 지원하고 있으며, **호출자 권한**\은 지원하지 않는다.
         * **호출자 권한**\을 사용하기 위해서는 Java SP를 사용하여 저장 프로시저를 작성해야 한다.
+
+.. note::
+
+        * **소유자 권한**\은 CUBRID 11.4 버전부터 지원한다.

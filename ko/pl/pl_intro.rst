@@ -15,3 +15,90 @@
         
         * PL/CSQL
         * Java
+
+저장 프로시저의 생성
+==============================
+
+.. _pl-supported_sql_type:
+
+지원하는 인수와 결과 데이터 타입
+------------------------------
+
+저장 프로시저와 저장 함수의 인수와 결과 데이터 타입으로 CUBRID SQL이 지원하는 데이터 타입을 명시할 수 있다.
+그 중 :doc:`/sql/datatype`\ 중 다음에서 지원하는 일부의 타입만을 지원한다.
+
++----------------+--------------------------------------+
+| 유형           | 세부 정보                            |
++================+======================================+
+| 수치           | 지원:                                |
+|                | * SHORT, SMALLINT, INTEGER, INT,     |
+|                | * BIGINT, NUMERIC, DECIMAL, FLOAT,   |
+|                | * REAL, DOUBLE, DOUBLE PRECISION      |
++----------------+--------------------------------------+
+| 날짜/시간      | 지원:                                |
+|                | * DATE, TIME, TIMESTAMP, DATETIME    |
+|                | 미지원:                              |
+|                | * TIMESTAMPLTZ, TIMESTAMPTZ,         |
+|                | DATETIMELTZ, DATETIMETZ            |
++----------------+--------------------------------------+
+| 문자열         | 지원:                                 |
+|                | - CHAR, VARCHAR, STRING, CHAR VARYING |
++----------------+--------------------------------------+
+| 컬렉션         | 일부 지원 (Java SP):                  |
+|                | - SET, MULTISET, LIST, SEQUENCE       |
++----------------+--------------------------------------+
+| 기타           | 미지원:                               |
+|                | - BIT, BIT VARYING, ENUM,             |
+|                | - BLOB/CLOB, JSON                     |
++----------------+--------------------------------------+
+
+지원하지 않는 데이터 타입을 사용해서 저장 프로시저를 생성하면 다음과 같은 오류가 발생한다.
+
+.. code-block:: sql
+        
+        CREATE FUNCTION unsupported_json() RETURN JSON 
+        AS BEGIN RETURN NULL; END;
+
+        CREATE PROCEDURE unsupproted_args (arg TIMESTAMPLTZ) 
+        AS BEGIN NULL; END;
+
+::
+
+        ERROR: Unsupported return type 'json' of the stored procedure
+
+        ERROR: before ' ) 
+        AS BEGIN NULL; END; '
+        Unsupported argument type 'timestampltz' of the stored procedure
+
+.. _pl-default-argument:
+
+기본값 인수 사용
+------------------------------
+
+저장 프로시저와 저장 함수의 인수에 기본값을 지정할 수 있다. 기본값을 지정하면 인수를 생략하고 호출할 수 있다.
+
+.. code-block:: sql
+
+        CREATE FUNCTION default_args (
+                a INT := 1, 
+                b INT := 2
+        ) RETURN INT
+        AS BEGIN RETURN a + b; END;
+
+        SELECT default_args(); -- 3
+        SELECT default_args(3); -- 5
+        SELECT default_args(3, 4); -- 7
+
+::
+
+          default_args()
+        ================
+                        3
+
+          default_args(3)
+        =================
+                        5
+
+          default_args(3, 4)
+        ====================
+                        7

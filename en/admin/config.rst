@@ -281,7 +281,7 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | return_null_on_function_errors      | client/server parameter | O       | bool     | no                             | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | stored_procedure_return_numeric_size| client/server parameter |         | list     | 38,15                           |                      |
+|                               | stored_procedure_return_numeric_size| client/server parameter |         | list     | 38,15                          |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | string_max_size_bytes               | client/server parameter | O       | byte     | 1,048,576                      | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+

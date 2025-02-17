@@ -582,7 +582,8 @@ CHAR와 VARCHAR는 길이를 지정할 수 있다.
 예외적으로 인자 타입 자리에서는 임의의 정밀도와 스케일을 허용함을 의미하고
 (단, 정밀도는 1 이상 38 이하,  스케일은 0 이상 정밀도 이하 범위),
 리턴 타입 자리에서는 NUMERIC(p, s)를 의미한다.
-여기서 p와 s는 시스템 파라미터 stored_procedure_return_numeric_size에서 지정하는 정밀도와 스케일을 나타낸다.
+여기서 p와 s는 :ref:`시스템 설정 파라미터 <system_config>` stored_procedure_return_numeric_size에서
+지정하는 정밀도와 스케일을 나타낸다. p와 s의 디폴트 값은 각각 38과 15이다.
 
 .. code-block:: sql
 
@@ -774,12 +775,12 @@ CSQL에서 athlete 테이블에 존재하지 않는 이름을 인자로 주어 N
 위에서 위치 (1, 22)는 SELECT 문 안에서의 위치를 나타내고, (6, 5)는 athlete_code()를 선언한 CREATE 문 안에서의
 위치를 나타낸다.
 
-서버 설정 적용
+시스템 설정 적용
 ==========================
 
-Static/Dynamic SQL 문의 동작은 :ref:`서버 설정 파라미터 <system_config>` 전체의 영향을 동일하게 받는다.
+Static/Dynamic SQL 문의 동작은 :ref:`시스템 설정 파라미터 <system_config>` 전체의 영향을 동일하게 받는다.
 
-Static/Dynamic SQL 제외한 PL/CSQL 문에서는 다음 4개 서버 설정 파라미터만이 유효하다.
+Static/Dynamic SQL 제외한 PL/CSQL 문에서는 다음 4개 시스템 설정 파라미터만이 유효하다.
 
 * compat_numeric_division_scale
 * oracle_compat_number_behavior
@@ -805,7 +806,7 @@ Static/Dynamic SQL 제외한 PL/CSQL 문에서는 다음 4개 서버 설정 파�
         END IF;
     END;
 
-이들 설정의 자세한 의미는 :ref:`서버 설정 파라미터 <system_config>`\를 참조할 수 있다.
+이들 설정의 자세한 의미는 :ref:`시스템 설정 파라미터 <system_config>`\를 참조할 수 있다.
 
 위 4개 외 다른 설정은 Static/Dynamic SQL 제외한 PL/CSQL 문에서 유효하지 않다. 특히,
 

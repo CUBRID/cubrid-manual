@@ -2461,7 +2461,7 @@ The following are other parameters. The type and value range for each parameter 
 
 **enable_memory_monitoring**
 
- **enable_memory_monitoring** specifies whether to monitor the server's heap memory usage. Setting the value to YES activates the server's memory monitoring feature, which continuously tracks and manages the server's heap memory usage. Heap memory usage is tracked based on the file and line where dynamic memory allocation occurs in the CUBRID source code. If multiple memory allocations occur at the same location, the memory usage is accumulated. When the tracked memory is deallocated, the amount of deallocated memory is subtracted from the accumulated total, continuously tracking the real-time heap memory usage. The monitored heap memory usage can be checked using the :ref:`memmon` utility. The default value is NO.
+ **enable_memory_monitoring** specifies whether to monitor the server's heap memory usage. The default value is NO. To apply any modifications to this value, a server restart is required. Setting the value to YES activates the server's memory monitoring feature, which continuously tracks and manages the server's heap memory usage. Heap memory usage is tracked based on the file and line where dynamic memory allocation occurs in the CUBRID source code. If multiple memory allocations occur at the same location, the memory usage is accumulated. When the tracked memory is deallocated, the amount of deallocated memory is subtracted from the accumulated total, continuously tracking the real-time heap memory usage. The monitored heap memory usage can be checked using the :ref:`memmon` utility.
 
 .. note::
 

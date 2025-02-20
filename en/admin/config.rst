@@ -1834,7 +1834,7 @@ The following are parameters related to SQL statements and data types supported 
 **string_max_size_bytes**
 
     **string_max_size_bytes** is a parameter to define the maximum byte allowable in string functions or operators. 
-    You can set a unit as B, K, M, G or T, which stands for bytes, kilobytes(KB), megabytes(MB), gigabytes(GB) or terabytes(TB) respectively. If you omit the unit, bytes will be applied. The default value is **1,048,576**\ (1M). The minimum value is 64 and the maximum value is 33,554,432(32M). If the maximum value is exceeded, REPEAT and SPACE return NULL, while other functions return an error.
+    You can set a unit as B, K, M, G or T, which stands for bytes, kilobytes(KB), megabytes(MB), gigabytes(GB) or terabytes(TB) respectively. If you omit the unit, bytes will be applied. The default value is **1,048,576**\ (1M). The minimum value is 64 and the maximum value is 33,554,432(32M). If the maximum value is exceeded, REPEAT and SPACE functions return NULL, while other functions return an error.
 
     The functions and operators affected by this parameter are as follows:
 

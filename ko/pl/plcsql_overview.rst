@@ -283,53 +283,80 @@ Static/Dynamic SQL 밖의 PL/CSQL 문 작성 규칙도 대체로 같은 규칙�
     select          -- 예약어
 
 PL/CSQL의 예약어는 아래 표에 나열되어 있다.
-Static/Dynamic SQL 밖의 PL/CSQL 문에서 아래 표의 단어들을 변수, 상수, Exception, 내부 프로시저/함수
+Static/Dynamic SQL 밖의 PL/CSQL 문에서는 아래 표의 단어들을 변수, 상수, Exception, 내부 프로시저/함수
 등의 이름을 나타내는 식별자로 쓸 수 없다.
 단, SQL 문에서처럼 큰따옴표(" "), 대괄호([ ]), 백틱(\` \`)으로 감싸면 식별자로 쓸 수 있다.
+Static/Dynamic SQL 안에서는 아래 목록이 아니라 일반 SQL 문에 적용되는
+:ref:`CUBRID 예약어 목록 <reserved_words>`\이 적용된다.
 
 +---------------------------------------------------------------------------------------+
-|   AND, AS, AUTONOMOUS_TRANSACTION                                                     |
+|   ADDDATE AND AS AUTHID AUTONOMOUS_TRANSACTION                                        |
 +---------------------------------------------------------------------------------------+
-|   BEGIN, BETWEEN, BIGINT, BOOLEAN, BY                                                 |
+|   BEGIN BETWEEN BIGINT BOOLEAN BOTH BY                                                |
 +---------------------------------------------------------------------------------------+
-|   CASE, CHAR, CHARACTER, CLOSE, COMMENT, COMMIT, CONSTANT, CONTINUE, CREATE, CURSOR   |
+|   CALLER CASE CAST CHAR CHARACTER CHR CLOSE COMMENT COMMIT CONSTANT CONTINUE CREATE   |
+|   CURRENT_USER CURSOR                                                                 |
 +---------------------------------------------------------------------------------------+
-|   DATE, DATETIME, DATETIMELTZ, DATETIMETZ, DBMS_OUTPUT, DEC, DECIMAL, DECLARE,        |
-|   DEFAULT, DELETE, DIV, DOUBLE                                                        |
+|   DATE DATETIME DATETIMELTZ DATETIMETZ DATE_ADD DATE_SUB DAY DAY_HOUR DAY_MILLISECOND |
+|   DAY_MINUTE DAY_SECOND DBMS_OUTPUT DEC DECIMAL DECLARE DEFAULT DEFINER DELETE        |
+|   DETERMINISTIC DIV DOUBLE                                                            |
 +---------------------------------------------------------------------------------------+
-|   ELSE, ELSIF, END, ESCAPE, EXCEPTION, EXECUTE, EXIT                                  |
+|   ELSE ELSIF END ESCAPE EXCEPTION EXECUTE EXIT EXTRACT                                |
 +---------------------------------------------------------------------------------------+
-|   FALSE, FETCH, FLOAT, FOR, FUNCTION                                                  |
+|   FALSE FETCH FLOAT FOR FROM FUNCTION                                                 |
 +---------------------------------------------------------------------------------------+
-|   IF, IMMEDIATE, IN, INOUT, INSERT, INT, INTEGER, INTO, IS                            |
+|   HOUR HOUR_MILLISECOND HOUR_MINUTE HOUR_SECOND                                       |
 +---------------------------------------------------------------------------------------+
-|   LANGUAGE, LIKE, LIST, LOOP                                                          |
+|   IF IMMEDIATE IN INOUT INSERT INT INTEGER INTERNAL INTO IS ISO88591                  |
 +---------------------------------------------------------------------------------------+
-|   MERGE, MOD, MULTISET                                                                |
+|   LANGUAGE LEADING LIKE LIST LOOP                                                     |
 +---------------------------------------------------------------------------------------+
-|   NOT, NULL, NUMERIC                                                                  |
+|   MERGE MILLISECOND MINUTE MINUTE_MILLISECOND MINUTE_SECOND MOD MONTH MULTISET        |
 +---------------------------------------------------------------------------------------+
-|   OF, OPEN, OR, OUT                                                                   |
+|   NOT NULL NUMERIC                                                                    |
 +---------------------------------------------------------------------------------------+
-|   PLCSQL, PRAGMA, PRECISION, PROCEDURE                                                |
+|   OF OPEN OR OUT OWNER                                                                |
 +---------------------------------------------------------------------------------------+
-|   RAISE, REAL, REPLACE, RETURN, REVERSE, ROLLBACK                                     |
+|   PLCSQL POSITION PRAGMA PRECISION PROCEDURE                                          |
 +---------------------------------------------------------------------------------------+
-|   SEQUENCE, SELECT, SET, SETEQ, SETNEQ, SHORT, SMALLINT, SQL, SQLCODE, SQLERRM,       |
-|   STRING, SUBSET, SUBSETEQ, SUPERSET, SUPERSETEQ, SYS_REFCURSOR                       |
+|   QUARTER                                                                             |
 +---------------------------------------------------------------------------------------+
-|   THEN, TIME, TIMESTAMP, TIMESTAMPLTZ, TIMESTAMPTZ, TRUE, TRUNCATE                    |
+|   RAISE RAISE_APPLICATION_ERROR REAL REPLACE RETURN REVERSE ROLLBACK                  |
 +---------------------------------------------------------------------------------------+
-|   UPDATE, USING                                                                       |
+|   SECOND SECOND_MILLISECOND SEQUENCE SELECT SET SETEQ SETNEQ SHORT SMALLINT SQL       |
+|   SQLCODE SQLERRM STRING SUBDATE SUBSET SUBSETEQ SUPERSET SUPERSETEQ SYS_REFCURSOR    |
 +---------------------------------------------------------------------------------------+
-|   VARCHAR, VARYING                                                                    |
+|   THEN TIME TIMESTAMP TIMESTAMPLTZ TIMESTAMPTZ TRAILING TRIM TRUE TRUNCATE            |
 +---------------------------------------------------------------------------------------+
-|   WHEN, WHILE, WITH, WORK                                                             |
+|   UPDATE USING UTF8                                                                   |
++---------------------------------------------------------------------------------------+
+|   VARCHAR VARYING                                                                     |
++---------------------------------------------------------------------------------------+
+|   WEEK WHEN WHILE WITH WORK                                                           |
 +---------------------------------------------------------------------------------------+
 |   XOR                                                                                 |
 +---------------------------------------------------------------------------------------+
+|   YEAR YEAR_MONTH                                                                     |
++---------------------------------------------------------------------------------------+
 
-위에서 AUTONOMOUS_TRANSACTION은 향후 추가할 기능을 위해서 미리 포함되어 있는 예약어이다.
+PL/CSQL 저장 프로시저/함수를 생성하는 CREATE PROCEDURE/FUNCTION 문은 일반 SQL 문을 위한 문법 검사 과정이 아닌
+별도로 구현된 문법 검사 과정을 거치며, 예약어 목록도 별개의 것이 적용된다.
+단, AS/IS 키워드까지는 일반 문법 검사 과정도 함께 거치기 때문에 일반 SQL에 적용되는
+:ref:`CUBRID 예약어 목록 <reserved_words>`\도 함께 적용된다.
+다음 예제에서 인자 이름 add 는 PL/CSQL 예약어는 아니지만 CUBRID 예약어이기 때문에 문법 에러를 발생시킨다.
+
+.. code-block:: sql
+
+    csql> CREATE OR REPLACE PROCEDURE test_cubrid_reserved_word(add INT) AS
+    csql> BEGIN
+    csql>     NULL;
+    csql> END;
+
+    ERROR: invalid create procedure
+      ... ...
+
+
+위 목록 중에서 AUTONOMOUS_TRANSACTION은 향후 추가할 기능을 위해서 미리 포함되어 있는 예약어이다.
 
 .. _types:
 

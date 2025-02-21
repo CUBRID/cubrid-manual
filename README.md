@@ -24,7 +24,7 @@ Documentation for CUBRID RDBMS
       1. Install read the docs theme
 
          ```
-         pip3 install sphinx_rtd_theme
+         pip3 install sphinx_rtd_theme sphinx-autobuild
          ```
 
       1. Install make to build
@@ -46,6 +46,13 @@ Documentation for CUBRID RDBMS
     ```
     make html
     ```
+
+   - Hot reloading
+        ```
+        // change directory to en or ko
+        make livehtml
+        ```
+        For details about hot reloading, see https://github.com/sphinx-doc/sphinx-autobuild
 
 5. Mainly used tags on sphinx document(.rst file).
 

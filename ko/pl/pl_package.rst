@@ -136,6 +136,7 @@ PUT_LINE 함수는 저장 함수 개발자가 사용하고 ENABLE, DISABLE, GET_
         SELECT test();
 
         ;server-output off  -- CSQL이 내부적으로 DBMS_OUTPUT.DISABLE 호출
+        
 ::
 
         test ()

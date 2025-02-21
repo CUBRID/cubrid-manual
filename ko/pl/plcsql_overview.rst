@@ -283,7 +283,7 @@ Static/Dynamic SQL 밖의 PL/CSQL 문 작성 규칙도 대체로 같은 규칙�
     select          -- 예약어
 
 PL/CSQL의 예약어는 아래 표에 나열되어 있다.
-Static/Dynamic SQL 밖의 PL/CSQL 문에서는 아래 표의 단어들을 변수, 상수, Exception, 내부 프로시저/함수
+Static/Dynamic SQL 밖의 PL/CSQL 문장에서 아래 표의 단어들을 변수, 상수, Exception, 내부 프로시저/함수
 등의 이름을 나타내는 식별자로 쓸 수 없다.
 단, SQL 문에서처럼 큰따옴표(" "), 대괄호([ ]), 백틱(\` \`)으로 감싸면 식별자로 쓸 수 있다.
 Static/Dynamic SQL 안에서는 아래 목록이 아니라 일반 SQL 문에 적용되는

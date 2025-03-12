@@ -26,34 +26,6 @@ unloaddb
 
 .. program:: unloaddb
 
-::
-
-  -u, --user=ID               데이터베이스 접근에 관한 사용자 이름
-  -p, --password=PASS         사용자 패스워드
-  -i, --input-class-file=FILE 테이블 이름이 기입된 파일
-      --include-reference     참조되는 테이블 포함
-      --input-class-only      명세한 클래스만 처리
-      --estimated-size=NUMBER 인스턴스의 대략적인 개수
-      --cached-pages=NUMBER   cached 페이지 개수
-  -O, --output-path=PATH      출력 디렉터리 경로
-  -s, --schema-only           스키마만 처리
-  -d, --data-only             오브젝트만 처리
-      --output-prefix=PREFIEX 출력 파일의 prefix
-      --hash-file=FILE        해쉬 파일이름
-      --latest-image          오브젝트 (객체)를 언로드할 때, 데이터 볼륨의 최신 이미지를 언로드합니다. 
-                              커밋되지않은 데이터와 제거되었지만 배큠되지 않은 데이터가 포함될 수 있습니다
-  -t, --thread-count=COUNT    사용할 쓰레드 개수를 지정; 기본값: 1 최대값: 127
-      --enhanced-estimates    언로드할 테이블의 정확한 레코드 건수 수집; 기본값 : 미적용
-  -v, --verbose               많은 상태 메시지를 출력
-      --use-delimiter         식별자 처음과 끝에 '"' 사용
-  -S, --SA-mode               독립 모드 실행
-  -C, --CS-mode               클라이언트 서버 모드 실행
-      --datafile-per-class    각 클래스별 오브젝트 파일 생성
-      --split-schema-files    스키마 정보를 오브젝트별로 분리하여 각각의 파일로 생성
-      --skip-index-detail     인덱스를 생성할 때 지정된 WITH 절 옵션을 인쇄하지 않음
-      --as-dba                로그인 사용자가 DBA 그룹의 구성원인 경우 DBA와 동일한 스키마 파일을 추출합니다.
-
-
 .. option:: -u, --user=ID
 
     언로딩할 데이터베이스의 사용자 계정을 지정한다. 옵션을 지정하지 않으면 기본값은 **DBA**\가 된다.
@@ -145,7 +117,7 @@ unloaddb
     
 .. option:: --latest-image
 
-    인스턴스들을 언로드할 때 현재 데이터 볼륨의 가장 마지막 이미지에서 언로드한다. 커밋되지 않은 데이터나 삭제되었지만 배큠되지 않은 데이터가 포함될 수 있다. 이 옵션을 지정하면 MVCC 버전은 무시되며 로그 볼륨을 참조하지 않는다.
+    인스턴스들을 언로드할 때 현재 데이터 볼륨의 가장 마지막 이미지에서 언로드한다. 커밋되지 않은 데이터나 삭제되었지만 베큠되지 않은 데이터가 포함될 수 있다. 이 옵션을 지정하면 MVCC 버전은 무시되며 로그 볼륨을 참조하지 않는다.
 
 .. option:: -t, --thread-count=COUNT
 

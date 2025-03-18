@@ -560,7 +560,7 @@ CASE 문은 두 가지 형태가 있다.
     CREATE OR REPLACE PROCEDURE print_even_odd(i INTEGER)
     AS
     BEGIN
-        CASE i % 2
+        CASE i MOD 2
             WHEN 0 THEN
                 DBMS_OUTPUT.put_line('Even');
             WHEN 1 THEN
@@ -578,9 +578,9 @@ CASE 문은 두 가지 형태가 있다.
     AS
     BEGIN
         CASE
-            WHEN i % 2 = 0 THEN
+            WHEN i MOD 2 = 0 THEN
                 DBMS_OUTPUT.put_line('Even');
-            WHEN i % 2 = 1 THEN
+            WHEN i MOD 2 = 1 THEN
                 DBMS_OUTPUT.put_line('Odd');
             ELSE
                 DBMS_OUTPUT.put_line('Null');

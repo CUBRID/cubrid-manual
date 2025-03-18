@@ -2,6 +2,8 @@
 :meta-keywords: cubrid reserved, cubrid keywords
 :meta-description: Table with all CUBRID reserved keywords.
 
+.. _reserved_words:
+
 ******
 예약어
 ******

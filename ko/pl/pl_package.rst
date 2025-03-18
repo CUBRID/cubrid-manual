@@ -2,8 +2,7 @@
 시스템 패키지
 -----------------------------
 
-CUBRID 에서는 사용자의 편의를 위해 시스템 패키지를 제공한다. 
-이는 널리 사용되는 PL/SQL의 DBMS_OUTPUT 패키지와 유사한 기능을 제공하여, 기존에 다른 DBMS를 사용했던 개발자들이 쉽게 적응할 수 있도록 돕는다. 
+CUBRID 에서는 사용자 편의를 위해 시스템 패키지를 제공한다.
 향후 버전에서 더 많은 패키지가 추가되어 CUBRID의 기능이 확장될 예정이며 현재 버전에서는 DBMS_OUTPUT 패키지만을 제공하고 있다.
 
 .. _dbms_output:
@@ -11,8 +10,11 @@ CUBRID 에서는 사용자의 편의를 위해 시스템 패키지를 제공한�
 DBMS_OUTPUT
 ==============================
 
-DBMS_OUTPUT 패키지는 문자열 메시지를 버퍼에 저장하고 읽어오기 위한 기능을 제공한다.
-이 패키지는 주로 저장 프로시저나 저장 함수의 디버깅을 위해 유용하고 사용할 수 있다.
+DBMS_OUTPUT 패키지는 문자열 메시지를 DBMS_OUTPUT 버퍼에 저장하고 읽어오기 위한 기능을 제공한다.
+저장 프로시저/함수 개발자는 이 패키지의 PUT_LINE이나 PUT 함수로 원하는 메시지를 DBMS_OUTPUT 버퍼에 쌓을 수 있다.
+CSQL이나 DBeaver 같은 클라이언트 도구들은 이 패키지의 ENABLE, DISABLE, GET_LINE, GET_LINES 함수들을 사용하여
+메시지 저장 기능을 활성화/비활성화하고 버퍼에 쌓인 메시지들을 가져온다.
+개발자는 프로그램 진행 상황 확인이나 디버깅을 위해 이 메시지들을 유용하게 사용할 수 있다.
 
 이 섹션에서는 DBMS_OUTPUT 패키지의 사용법과 활용 예시를 설명한다.
 DBMS_OUTPUT 패키지의 함수는 다음과 같다:
@@ -32,23 +34,9 @@ DBMS_OUTPUT.ENABLE
 
 .. function:: DBMS_OUTPUT.ENABLE (size)
 
-        DBMS_OUTPUT 패키지를 활성화하고, 메시지를 저장할 버퍼의 크기를 설정한다. 
-        
+        DBMS_OUTPUT 패키지를 활성화하고, 메시지를 저장할 버퍼의 크기를 설정한다.
+
         :param size: 버퍼의 크기를 지정하며, 이 값은 바이트 단위로 지정한다. 최대 크기는 32767 바이트이며 이 값을 초과하면 오류가 발생한다.
-
-.. code-block:: sql
-        
-        CREATE OR REPLACE FUNCTION test() RETURN VARCHAR
-        AS 
-        BEGIN
-                DBMS_OUTPUT.ENABLE(10000);
-                DBMS_OUTPUT.PUT_LINE('Hello, World!');
-        END;
-
-::
-    
-    Hello, World!
-
 
 .. note::
 
@@ -62,7 +50,7 @@ DBMS_OUTPUT.DISABLE
 
 .. function:: DBMS_OUTPUT.DISABLE ()
 
-        현재 버퍼에 저장된 메시지를 제거하고 버퍼를 비활성화한다. 따라서 DBMS_OUTPUT 패키지 내의 다른 프로시저를 호출하더라도 아무런 출력이 나타나지 않는다. 
+        현재 버퍼에 저장된 메시지를 제거하고 버퍼를 비활성화한다. 따라서 DBMS_OUTPUT 패키지 내의 다른 프로시저를 호출하더라도 아무런 출력이 나타나지 않는다.
 
 .. note::
 
@@ -129,30 +117,34 @@ DBMS_OUTPUT.GET_LINES
 ----------------------
 
 다음은 CSQL 인터프리터로 DBMS_OUTPUT 패키지를 사용한 단순한 예시이다.
+PUT_LINE 함수는 저장 함수 개발자가 사용하고 ENABLE, DISABLE, GET_LINE 함수들은 CSQL 인터프리터가
+기능 구현을 위해 내부적으로 사용한다.
 
 .. code-block:: sql
 
-        ;server-output on
+        ;server-output on   -- CSQL이 내부적으로 DBMS_OUTPUT.ENABLE 호출
+
         CREATE OR REPLACE FUNCTION test() RETURN VARCHAR
-        AS 
+        AS
         BEGIN
-                DBMS_OUTPUT.ENABLE(10000);
                 DBMS_OUTPUT.PUT_LINE('Hello, World!');
                 DBMS_OUTPUT.PUT_LINE('Hello, CUBRID!');
                 DBMS_OUTPUT.PUT_LINE('Hello, DBMS_OUTPUT!');
                 RETURN 'Success';
         END;
+
         SELECT test();
 
-::
+        ;server-output off  -- CSQL이 내부적으로 DBMS_OUTPUT.DISABLE 호출
         
+::
+
         test ()
         =======
         'Success'
 
-        <DBMS_OUTPUT>
+        <DBMS_OUTPUT>       <-- CSQL이 출력할 메시지를 가져오기 위해 내부적으로 DBMS_OUTPUT.GET_LINE 여러 번 호출
         ====
-        Hello world
         Hello, World!
         Hello, CUBRID!
         Hello, DBMS_OUTPUT!

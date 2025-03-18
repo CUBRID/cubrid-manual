@@ -283,53 +283,79 @@ Static/Dynamic SQL 밖의 PL/CSQL 문 작성 규칙도 대체로 같은 규칙�
     select          -- 예약어
 
 PL/CSQL의 예약어는 아래 표에 나열되어 있다.
-Static/Dynamic SQL 밖의 PL/CSQL 문에서 아래 표의 단어들을 변수, 상수, Exception, 내부 프로시저/함수
+Static/Dynamic SQL 밖의 PL/CSQL 문장에서 아래 표의 단어들을 변수, 상수, Exception, 내부 프로시저/함수
 등의 이름을 나타내는 식별자로 쓸 수 없다.
 단, SQL 문에서처럼 큰따옴표(" "), 대괄호([ ]), 백틱(\` \`)으로 감싸면 식별자로 쓸 수 있다.
+Static/Dynamic SQL 안에서는 아래 목록이 아니라 일반 SQL 문에 적용되는
+:ref:`CUBRID 예약어 목록 <reserved_words>`\이 적용된다.
 
 +---------------------------------------------------------------------------------------+
-|   AND, AS, AUTONOMOUS_TRANSACTION                                                     |
+|   ADDDATE AND AS AUTHID AUTONOMOUS_TRANSACTION                                        |
 +---------------------------------------------------------------------------------------+
-|   BEGIN, BETWEEN, BIGINT, BOOLEAN, BY                                                 |
+|   BEGIN BETWEEN BIGINT BOOLEAN BOTH BY                                                |
 +---------------------------------------------------------------------------------------+
-|   CASE, CHAR, CHARACTER, CLOSE, COMMENT, COMMIT, CONSTANT, CONTINUE, CREATE, CURSOR   |
+|   CALLER CASE CAST CHAR CHARACTER CHR CLOSE COMMENT COMMIT CONSTANT CONTINUE CREATE   |
+|   CURRENT_USER CURSOR                                                                 |
 +---------------------------------------------------------------------------------------+
-|   DATE, DATETIME, DATETIMELTZ, DATETIMETZ, DBMS_OUTPUT, DEC, DECIMAL, DECLARE,        |
-|   DEFAULT, DELETE, DIV, DOUBLE                                                        |
+|   DATE DATETIME DATETIMELTZ DATETIMETZ DATE_ADD DATE_SUB DAY DAY_HOUR DAY_MILLISECOND |
+|   DAY_MINUTE DAY_SECOND DBMS_OUTPUT DEC DECIMAL DECLARE DEFAULT DEFINER DELETE        |
+|   DETERMINISTIC DIV DOUBLE                                                            |
 +---------------------------------------------------------------------------------------+
-|   ELSE, ELSIF, END, ESCAPE, EXCEPTION, EXECUTE, EXIT                                  |
+|   ELSE ELSIF END ESCAPE EXCEPTION EXECUTE EXIT EXTRACT                                |
 +---------------------------------------------------------------------------------------+
-|   FALSE, FETCH, FLOAT, FOR, FUNCTION                                                  |
+|   FALSE FETCH FLOAT FOR FROM FUNCTION                                                 |
 +---------------------------------------------------------------------------------------+
-|   IF, IMMEDIATE, IN, INOUT, INSERT, INT, INTEGER, INTO, IS                            |
+|   HOUR HOUR_MILLISECOND HOUR_MINUTE HOUR_SECOND                                       |
 +---------------------------------------------------------------------------------------+
-|   LANGUAGE, LIKE, LIST, LOOP                                                          |
+|   IF IMMEDIATE IN INOUT INSERT INT INTEGER INTERNAL INTO IS ISO88591                  |
 +---------------------------------------------------------------------------------------+
-|   MERGE, MOD, MULTISET                                                                |
+|   LANGUAGE LEADING LIKE LIST LOOP                                                     |
 +---------------------------------------------------------------------------------------+
-|   NOT, NULL, NUMERIC                                                                  |
+|   MERGE MILLISECOND MINUTE MINUTE_MILLISECOND MINUTE_SECOND MOD MONTH MULTISET        |
 +---------------------------------------------------------------------------------------+
-|   OF, OPEN, OR, OUT                                                                   |
+|   NOT NULL NUMERIC                                                                    |
 +---------------------------------------------------------------------------------------+
-|   PLCSQL, PRAGMA, PRECISION, PROCEDURE                                                |
+|   OF OPEN OR OUT OWNER                                                                |
 +---------------------------------------------------------------------------------------+
-|   RAISE, REAL, REPLACE, RETURN, REVERSE, ROLLBACK                                     |
+|   PLCSQL POSITION PRAGMA PRECISION PROCEDURE                                          |
 +---------------------------------------------------------------------------------------+
-|   SEQUENCE, SELECT, SET, SETEQ, SETNEQ, SHORT, SMALLINT, SQL, SQLCODE, SQLERRM,       |
-|   STRING, SUBSET, SUBSETEQ, SUPERSET, SUPERSETEQ, SYS_REFCURSOR                       |
+|   QUARTER                                                                             |
 +---------------------------------------------------------------------------------------+
-|   THEN, TIME, TIMESTAMP, TIMESTAMPLTZ, TIMESTAMPTZ, TRUE, TRUNCATE                    |
+|   RAISE RAISE_APPLICATION_ERROR REAL REPLACE RETURN REVERSE ROLLBACK                  |
 +---------------------------------------------------------------------------------------+
-|   UPDATE, USING                                                                       |
+|   SECOND SECOND_MILLISECOND SEQUENCE SELECT SET SETEQ SETNEQ SHORT SMALLINT SQL       |
+|   SQLCODE SQLERRM STRING SUBDATE SUBSET SUBSETEQ SUPERSET SUPERSETEQ SYS_REFCURSOR    |
 +---------------------------------------------------------------------------------------+
-|   VARCHAR, VARYING                                                                    |
+|   THEN TIME TIMESTAMP TIMESTAMPLTZ TIMESTAMPTZ TRAILING TRIM TRUE TRUNCATE            |
 +---------------------------------------------------------------------------------------+
-|   WHEN, WHILE, WITH, WORK                                                             |
+|   UPDATE USING UTF8                                                                   |
++---------------------------------------------------------------------------------------+
+|   VARCHAR VARYING                                                                     |
++---------------------------------------------------------------------------------------+
+|   WEEK WHEN WHILE WITH WORK                                                           |
 +---------------------------------------------------------------------------------------+
 |   XOR                                                                                 |
 +---------------------------------------------------------------------------------------+
+|   YEAR YEAR_MONTH                                                                     |
++---------------------------------------------------------------------------------------+
 
-위에서 AUTONOMOUS_TRANSACTION은 향후 추가할 기능을 위해서 미리 포함되어 있는 예약어이다.
+PL/CSQL 저장 프로시저/함수를 생성하는 CREATE PROCEDURE/FUNCTION 문은 일반 SQL 문법 검사 과정이 아닌, 별도로 구현된 PL/CSQL 문법 검사 과정을 거치며, 예약어 목록도 별개의 것이 적용된다.
+단, AS/IS 키워드까지는 일반 문법 검사 과정도 함께 거치기 때문에 일반 SQL에 적용되는
+:ref:`CUBRID 예약어 목록 <reserved_words>`\도 함께 적용된다.
+다음 예제에서 인자 이름 add 는 PL/CSQL 예약어는 아니지만 CUBRID 예약어이기 때문에 문법 에러를 발생시킨다.
+
+.. code-block:: sql
+
+    csql> CREATE OR REPLACE PROCEDURE test_cubrid_reserved_word(add INT) AS
+    csql> BEGIN
+    csql>     NULL;
+    csql> END;
+
+    ERROR: invalid create procedure
+      ... ...
+
+
+위 목록 중에서 AUTONOMOUS_TRANSACTION은 향후 추가할 기능을 위해서 미리 포함되어 있는 예약어이다.
 
 .. _types:
 
@@ -409,7 +435,7 @@ SQL에서 제공하는 데이터 타입 중 PL/CSQL에서 지원하는 것과 �
 <table>.<column>%TYPE은 CREATE PROCEDURE/FUNTION 문을 실행하는 시점에 지정된 테이블 컬럼의 타입을 나타내지만,
 나중에 그 컬럼의 타입이 변경되어도 자동으로 <table>.<column>%TYPE을 사용한 저장 프로시저/함수의 동작에 반영되지는 않는다.
 그러므로, %TYPE을 적용한 테이블 컬럼의 타입이 변경되었을 때는 그 %TYPE을 사용한 저장 프로시저/함수에 대해서 모두
-ALTER PROCEDURE/FUNCTION <name> REBUILD 문을 실행해서 재컴파일해 주어야 한다.
+ALTER PROCEDURE/FUNCTION <name> COMPILE 문을 실행해서 재컴파일해 주어야 한다.
 
 테이블 컬럼 뿐만 아니라 프로시저/함수의 인자나 변수 이름 뒤에 %TYPE을 덧붙여 그 인자나 변수의 타입을 나타낼 수 있다.
 
@@ -570,7 +596,7 @@ Static SQL UPDATE 문에도 다음과 같이 'SET ROW = <record>' 구문을 사�
 
 :ref:`PL/CSQL에서 지원하는 데이터 타입 <datatype_index>` 중에 NUMERIC은 정밀도와 스케일을,
 CHAR와 VARCHAR는 길이를 지정할 수 있다.
-그러나, 저장 프로시저/함수의 인자 타입과 리턴 타입에는 예외적으로 정밀도와 스케일 지정이 허용되지 않는다.
+그러나, 저장 프로시저/함수의 인자 타입과 리턴 타입에는 정밀도와 스케일 지정이 허용되지 않는다.
 내부 프로시저/함수에서도 마찬가지이다.
 
 .. code-block:: sql
@@ -579,11 +605,11 @@ CHAR와 VARCHAR는 길이를 지정할 수 있다.
     CREATE OR REPLACE FUNCTION sf(a NUMERIC) RETURN VARCHAR AS ...              -- OK
 
 그리고, 일반적으로 정밀도와 스케일이 생략된 NUMERIC은 NUMERIC(15, 0)을 의미하지만
-예외적으로 인자 타입과 리턴 타입 자리에서는 임의의 정밀도와 스케일을 허용하는 것으로 동작한다
-(단, 정밀도는 1 이상 38 이하,  스케일은 0 이상 정밀도 이하 범위).
-또한, CHAR와 VARCHAR도 인자 타입과 리턴 타입 자리에서는 기본 스케일 값인 CHAR(1)과 VARCHAR(1073741823)를 나타내는 것이
-아니라 임의의 길이를 갖는 문자열을 허용하는 것으로 동작한다
-(단, CHAR 길이는 2048 이하, VARCHAR의 길이는 1073741823 이하 범위).
+예외적으로 인자 타입 자리에서는 임의의 정밀도와 스케일을 허용함을 의미하고
+(단, 정밀도는 1 이상 38 이하,  스케일은 0 이상 정밀도 이하 범위),
+리턴 타입 자리에서는 NUMERIC(p, s)를 의미한다.
+여기서 p와 s는 :ref:`시스템 설정 파라미터 <system_config>` stored_procedure_return_numeric_size에서
+지정하는 정밀도와 스케일을 나타낸다. p와 s의 디폴트 값은 각각 38과 15이다.
 
 .. code-block:: sql
 
@@ -593,9 +619,16 @@ CHAR와 VARCHAR는 길이를 지정할 수 있다.
         return a;
     END;
 
-    SELECT test_any_precision_scale(1.23);      -- 결과: 1.23
-    SELECT test_any_precision_scale(1.234);     -- 결과: 1.234
-    SELECT test_any_precision_scale(1.2345);    -- 결과: 1.2345
+    SELECT test_any_precision_scale(1.23);      -- 결과: 1.230000000000000
+    SELECT test_any_precision_scale(1.234);     -- 결과: 1.234000000000000
+    SELECT test_any_precision_scale(1.2345);    -- 결과: 1.234500000000000
+
+또한, CHAR와 VARCHAR도 인자 타입과 리턴 타입 자리에서는
+다른 자리에서처럼 CHAR(1)과 VARCHAR(1073741823)를 나타내는 것이 아니라
+임의의 길이를 갖는 문자열을 허용하는 것으로 동작한다
+(단, CHAR 길이는 2048 이하, VARCHAR의 길이는 1073741823 이하 범위).
+
+.. code-block:: sql
 
     CREATE OR REPLACE FUNCTION test_any_length(a CHAR) return CHAR
     AS
@@ -608,21 +641,21 @@ CHAR와 VARCHAR는 길이를 지정할 수 있다.
     SELECT test_any_length('abcd');     -- 결과: 'abcd'
 
 인자 타입과 리턴 타입을 :ref:`%TYPE <percent_type>`\을 사용해서 지정했을 때에도 참조되는 원래 타입의
-정밀도, 스케일 및 길이 지정은 무시되고 대신 임의의 정밀도, 스케일, 길이를 허용하는 것으로 동작한다.
+정밀도, 스케일 및 길이 지정은 무시되고 위에 기술한 방식으로 동작한다.
 
 .. code-block:: sql
 
     CREATE TABLE tbl(p NUMERIC(3,2), q CHAR(3));
 
-    CREATE OR REPLACE FUNCTION test_ptype_precision_scale(a tbl.p%TYPE) RETURN NUMERIC
+    CREATE OR REPLACE FUNCTION test_ptype_precision_scale(a tbl.p%TYPE) RETURN tbl.p%TYPE
     AS
     BEGIN
         RETURN a;
     END;
 
-    SELECT test_ptype_precision_scale(1.23);      -- 결과: 1.23
-    SELECT test_ptype_precision_scale(1.234);     -- 결과: 1.234
-    SELECT test_ptype_precision_scale(1.2345);    -- 결과: 1.2345
+    SELECT test_ptype_precision_scale(1.23);      -- 결과: 1.230000000000000
+    SELECT test_ptype_precision_scale(1.234);     -- 결과: 1.234000000000000
+    SELECT test_ptype_precision_scale(1.2345);    -- 결과: 1.234500000000000
 
     CREATE OR REPLACE FUNCTION test_ptype_length(a tbl.q%TYPE) RETURN tbl.q%TYPE
     AS
@@ -633,22 +666,6 @@ CHAR와 VARCHAR는 길이를 지정할 수 있다.
     SELECT test_ptype_length('ab');       -- 결과: 'ab'
     SELECT test_ptype_length('abc');      -- 결과: 'abc'
     SELECT test_ptype_length('abcd');     -- 결과: 'abcd'
-
-단, %TYPE 사용과 관련해서 한 가지 예외가 있다. 함수의 리턴 타입에 %TYPE이 사용되고 참조되는 원래 타입이
-NUMERIC(p, s) 이면 원래 타입의 정밀도 p와 스케일 s가 유지된다.
-
-.. code-block:: sql
-
-    CREATE OR REPLACE FUNCTION test_return_ptype_numeric(a tbl.p%TYPE) RETURN tbl.p%TYPE
-    AS
-    BEGIN
-        RETURN a;
-    END;
-
-    SELECT test_return_ptype_numeric(1.23);      -- 결과: 1.23
-    SELECT test_return_ptype_numeric(1.234);     -- 결과: 1.23
-    SELECT test_return_ptype_numeric(1.2345);    -- 결과: 1.23
-    SELECT test_return_ptype_numeric(12.345);    -- Error: 스케일 2로 반올림한 값 12.34가 정밀도 3을 초과
 
 연산자와 함수
 ==================
@@ -784,12 +801,12 @@ CSQL에서 athlete 테이블에 존재하지 않는 이름을 인자로 주어 N
 위에서 위치 (1, 22)는 SELECT 문 안에서의 위치를 나타내고, (6, 5)는 athlete_code()를 선언한 CREATE 문 안에서의
 위치를 나타낸다.
 
-서버 설정 적용
+시스템 설정 적용
 ==========================
 
-Static/Dynamic SQL 문의 동작은 :ref:`서버 설정 파라미터 <system_config>` 전체의 영향을 동일하게 받는다.
+Static/Dynamic SQL 문의 동작은 :ref:`시스템 설정 파라미터 <system_config>` 전체의 영향을 동일하게 받는다.
 
-Static/Dynamic SQL 제외한 PL/CSQL 문에서는 다음 4개 서버 설정 파라미터만이 유효하다.
+Static/Dynamic SQL 제외한 PL/CSQL 문에서는 다음 4개 시스템 설정 파라미터만이 유효하다.
 
 * compat_numeric_division_scale
 * oracle_compat_number_behavior
@@ -815,7 +832,7 @@ Static/Dynamic SQL 제외한 PL/CSQL 문에서는 다음 4개 서버 설정 파�
         END IF;
     END;
 
-이들 설정의 자세한 의미는 :ref:`서버 설정 파라미터 <system_config>`\를 참조할 수 있다.
+이들 설정의 자세한 의미는 :ref:`시스템 설정 파라미터 <system_config>`\를 참조할 수 있다.
 
 위 4개 외 다른 설정은 Static/Dynamic SQL 제외한 PL/CSQL 문에서 유효하지 않다. 특히,
 

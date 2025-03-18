@@ -57,8 +57,8 @@ CREATE PROCEDURE
 
 .. code-block:: sql
 
-    CREATE OR REPLACE FUNCTION test(i in number COMMENT 'arg i') 
-    RETURN NUMBER AS LANGUAGE JAVA NAME 'SpTest.testInt(int) return int' COMMENT 'function test';
+    CREATE OR REPLACE FUNCTION test(i in int COMMENT 'arg i') 
+    RETURN int AS LANGUAGE JAVA NAME 'SpTest.testInt(int) return int' COMMENT 'function test';
 
 저장 프로시저의 커멘트는 다음 구문을 실행하여 확인할 수 있다.
 
@@ -155,8 +155,8 @@ CREATE FUNCTION
 
 .. code-block:: sql
 
-    CREATE OR REPLACE FUNCTION test(i in number COMMENT 'arg i') 
-    RETURN NUMBER AS LANGUAGE JAVA NAME 'SpTest.testInt(int) return int' COMMENT 'function test';
+    CREATE OR REPLACE FUNCTION test(i in int COMMENT 'arg i') 
+    RETURN int AS LANGUAGE JAVA NAME 'SpTest.testInt(int) return int' COMMENT 'function test';
 
 저장 함수의 커멘트는 다음 구문을 실행하여 확인할 수 있다.
 

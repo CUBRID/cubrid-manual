@@ -251,7 +251,7 @@ CASE 표현식은 :ref:`CASE 실행문 <case_stmt>`\(Statement)과 마찬가지�
     AS
         s VARCHAR(5);
     BEGIN
-        s := CASE i % 2
+        s := CASE i MOD 2
             WHEN 0 THEN 'Even'
             WHEN 1 THEN 'Odd'
             ELSE 'NULL'
@@ -269,8 +269,8 @@ CASE 표현식은 :ref:`CASE 실행문 <case_stmt>`\(Statement)과 마찬가지�
         s VARCHAR(5);
     BEGIN
         s := CASE
-            WHEN i % 2 = 0 THEN 'Even'
-            WHEN i % 2 = 1 THEN 'Odd'
+            WHEN i MOD 2 = 0 THEN 'Even'
+            WHEN i MOD 2 = 1 THEN 'Odd'
             ELSE 'NULL'
         END;
 

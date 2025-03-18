@@ -281,6 +281,8 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | return_null_on_function_errors      | client/server parameter | O       | bool     | no                             | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | stored_procedure_return_numeric_size| client/server parameter |         | list     | 38,15                          |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | string_max_size_bytes               | client/server parameter | O       | byte     | 1,048,576                      | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | unicode_input_normalization         | client parameter        | O       | bool     | no                             | available             |
@@ -393,12 +395,12 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               | vacuum_ovfp_check_threshold         | server parameter        |         | int      | 1000                           |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | vacuum_ovfp_check_duration          | server parameter        |         | int      | 45000                          |                       |
-+                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | deduplicate_key_level               | client/server parameter |         | int      | -1                             |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | print_index_detail                  | client/server parameter |         | bool     | no                             |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | enable_memory_monitoring            | client/server parameter        |         | bool     | no                             |                       |
+|                               | enable_memory_monitoring            | client/server parameter |         | bool     | no                             |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | flashback_timeout                   | client parameter        |         | int      | 300                            |                       |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -1282,67 +1284,69 @@ Statement/Type-Related Parameters
 
 The following are parameters related to SQL statements and data types supported by CUBRID. The type and value range for each parameter are as follows:
 
-+---------------------------------+--------+------------+------------+------------+
-| Parameter Name                  | Type   | Default    | Min        | Max        |
-+=================================+========+============+============+============+
-| add_column_update_hard_default  | bool   | no         |            |            |
-+---------------------------------+--------+------------+------------+------------+
-| alter_table_change_type_strict  | bool   | yes        |            |            |
-+---------------------------------+--------+------------+------------+------------+
-| allow_truncated_string          | bool   | no         |            |            |
-+---------------------------------+--------+------------+------------+------------+
-| ansi_quotes                     | bool   | yes        |            |            |
-+---------------------------------+--------+------------+------------+------------+
-| block_ddl_statement             | bool   | no         |            |            |
-+---------------------------------+--------+------------+------------+------------+
-| block_nowhere_statement         | bool   | no         |            |            |
-+---------------------------------+--------+------------+------------+------------+
-| compat_numeric_division_scale   | bool   | no         |            |            |
-+---------------------------------+--------+------------+------------+------------+
-| create_table_reuseoid           | bool   | yes        |            |            |
-+---------------------------------+--------+------------+------------+------------+
-| cte_max_recursions              | int    | 2,000      | 2          | 1,000,000  |
-+---------------------------------+--------+------------+------------+------------+
-| default_week_format             | int    | 0          |            |            |
-+---------------------------------+--------+------------+------------+------------+
-| group_concat_max_len            | byte   | 1,024      | 4          | INT_MAX    |
-+---------------------------------+--------+------------+------------+------------+
-| intl_check_input_string         | bool   | no         |            |            |
-+---------------------------------+--------+------------+------------+------------+
-| intl_collation                  | string |            |            |            |
-+---------------------------------+--------+------------+------------+------------+
-| intl_date_lang                  | string |            |            |            |
-+---------------------------------+--------+------------+------------+------------+
-| intl_number_lang                | string |            |            |            |
-+---------------------------------+--------+------------+------------+------------+
-| json_max_array_idx              | int    | 65,536     | 1,024      | 1,048,576  |
-+---------------------------------+--------+------------+------------+------------+
-| max_query_per_tran              | int    | 100        | 1          | 32,767     |
-+---------------------------------+--------+------------+------------+------------+
-| no_backslash_escapes            | bool   | yes        |            |            |
-+---------------------------------+--------+------------+------------+------------+
-| only_full_group_by              | bool   | no         |            |            |
-+---------------------------------+--------+------------+------------+------------+
-| oracle_compat_number_behavior   | bool   | no         |            |            |
-+---------------------------------+--------+------------+------------+------------+
-| oracle_style_empty_string       | bool   | no         |            |            |
-+---------------------------------+--------+------------+------------+------------+
-| pipes_as_concat                 | bool   | yes        |            |            |
-+---------------------------------+--------+------------+------------+------------+
-| plus_as_concat                  | bool   | yes        |            |            |
-+---------------------------------+--------+------------+------------+------------+
-| require_like_escape_character   | bool   | no         |            |            |
-+---------------------------------+--------+------------+------------+------------+
-| return_null_on_function_errors  | bool   | no         |            |            |
-+---------------------------------+--------+------------+------------+------------+
-| string_max_size_bytes           | byte   | 1,048,576  | 64         | 33,554,432 |
-+---------------------------------+--------+------------+------------+------------+
-| unicode_input_normalization     | bool   | no         |            |            |
-+---------------------------------+--------+------------+------------+------------+
-| unicode_output_normalization    | bool   | no         |            |            |
-+---------------------------------+--------+------------+------------+------------+
-| update_use_attribute_references | bool   | no         |            |            |
-+---------------------------------+--------+------------+------------+------------+
++--------------------------------------+--------+------------+------------+------------+
+| Parameter Name                       | Type   | Default    | Min        | Max        |
++======================================+========+============+============+============+
+| add_column_update_hard_default       | bool   | no         |            |            |
++--------------------------------------+--------+------------+------------+------------+
+| alter_table_change_type_strict       | bool   | yes        |            |            |
++--------------------------------------+--------+------------+------------+------------+
+| allow_truncated_string               | bool   | no         |            |            |
++--------------------------------------+--------+------------+------------+------------+
+| ansi_quotes                          | bool   | yes        |            |            |
++--------------------------------------+--------+------------+------------+------------+
+| block_ddl_statement                  | bool   | no         |            |            |
++--------------------------------------+--------+------------+------------+------------+
+| block_nowhere_statement              | bool   | no         |            |            |
++--------------------------------------+--------+------------+------------+------------+
+| compat_numeric_division_scale        | bool   | no         |            |            |
++--------------------------------------+--------+------------+------------+------------+
+| create_table_reuseoid                | bool   | yes        |            |            |
++--------------------------------------+--------+------------+------------+------------+
+| cte_max_recursions                   | int    | 2,000      | 2          | 1,000,000  |
++--------------------------------------+--------+------------+------------+------------+
+| default_week_format                  | int    | 0          |            |            |
++--------------------------------------+--------+------------+------------+------------+
+| group_concat_max_len                 | byte   | 1,024      | 4          | INT_MAX    |
++--------------------------------------+--------+------------+------------+------------+
+| intl_check_input_string              | bool   | no         |            |            |
++--------------------------------------+--------+------------+------------+------------+
+| intl_collation                       | string |            |            |            |
++--------------------------------------+--------+------------+------------+------------+
+| intl_date_lang                       | string |            |            |            |
++--------------------------------------+--------+------------+------------+------------+
+| intl_number_lang                     | string |            |            |            |
++--------------------------------------+--------+------------+------------+------------+
+| json_max_array_idx                   | int    | 65,536     | 1,024      | 1,048,576  |
++--------------------------------------+--------+------------+------------+------------+
+| max_query_per_tran                   | int    | 100        | 1          | 32,767     |
++--------------------------------------+--------+------------+------------+------------+
+| no_backslash_escapes                 | bool   | yes        |            |            |
++--------------------------------------+--------+------------+------------+------------+
+| only_full_group_by                   | bool   | no         |            |            |
++--------------------------------------+--------+------------+------------+------------+
+| oracle_compat_number_behavior        | bool   | no         |            |            |
++--------------------------------------+--------+------------+------------+------------+
+| oracle_style_empty_string            | bool   | no         |            |            |
++--------------------------------------+--------+------------+------------+------------+
+| pipes_as_concat                      | bool   | yes        |            |            |
++--------------------------------------+--------+------------+------------+------------+
+| plus_as_concat                       | bool   | yes        |            |            |
++--------------------------------------+--------+------------+------------+------------+
+| require_like_escape_character        | bool   | no         |            |            |
++--------------------------------------+--------+------------+------------+------------+
+| return_null_on_function_errors       | bool   | no         |            |            |
++--------------------------------------+--------+------------+------------+------------+
+| stored_procedure_return_numeric_size | list   | 38,15      | 1,0        | 38,38      |
++--------------------------------------+--------+------------+------------+------------+
+| string_max_size_bytes                | byte   | 1,048,576  | 64         | 33,554,432 |
++--------------------------------------+--------+------------+------------+------------+
+| unicode_input_normalization          | bool   | no         |            |            |
++--------------------------------------+--------+------------+------------+------------+
+| unicode_output_normalization         | bool   | no         |            |            |
++--------------------------------------+--------+------------+------------+------------+
+| update_use_attribute_references      | bool   | no         |            |            |
++--------------------------------------+--------+------------+------------+------------+
 
 **add_column_update_hard_default**
 
@@ -1821,10 +1825,16 @@ The following are parameters related to SQL statements and data types supported 
         ======================
            NULL
 
+**stored_procedure_return_numeric_size**
+
+    **stored_procedure_return_numeric_size** is a parameter that sets the precision and scale of values returned as the NUMERIC type in a stored procedure.
+    The setting is specified as a list of positive integers, with the precision and scale designated respectively. For example, to set the precision to 15 and the scale to 10, specify it as 15,10.
+    The default value is 38,15, and the valid range is from 1 to 38 for precision and from 0 to 38 for scale. Additionally, the scale value cannot exceed the precision value.
+
 **string_max_size_bytes**
 
     **string_max_size_bytes** is a parameter to define the maximum byte allowable in string functions or operators. 
-    You can set a unit as B, K, M, G or T, which stands for bytes, kilobytes(KB), megabytes(MB), gigabytes(GB) or terabytes(TB) respectively. If you omit the unit, bytes will be applied. The default value is **1,048,576**\ (1M). The minimum value is 64 and the maximum value is 33,554,432(32M).
+    You can set a unit as B, K, M, G or T, which stands for bytes, kilobytes(KB), megabytes(MB), gigabytes(GB) or terabytes(TB) respectively. If you omit the unit, bytes will be applied. The default value is **1,048,576**\ (1M). The minimum value is 64 and the maximum value is 33,554,432(32M). If the maximum value is exceeded, REPEAT and SPACE functions return NULL, while other functions return an error.
 
     The functions and operators affected by this parameter are as follows:
 
@@ -2451,7 +2461,7 @@ The following are other parameters. The type and value range for each parameter 
 
 **enable_memory_monitoring**
 
- **enable_memory_monitoring** specifies whether to monitor the server's heap memory usage. Setting the value to YES activates the server's memory monitoring feature, which continuously tracks and manages the server's heap memory usage. Heap memory usage is tracked based on the file and line where dynamic memory allocation occurs in the CUBRID source code. If multiple memory allocations occur at the same location, the memory usage is accumulated. When the tracked memory is deallocated, the amount of deallocated memory is subtracted from the accumulated total, continuously tracking the real-time heap memory usage. The monitored heap memory usage can be checked using the :ref:`memmon` utility. The default value is NO.
+ **enable_memory_monitoring** specifies whether to monitor the server's heap memory usage. The default value is NO. To apply any modifications to this value, a server restart is required. Setting the value to YES activates the server's memory monitoring feature, which continuously tracks and manages the server's heap memory usage. Heap memory usage is tracked based on the file and line where dynamic memory allocation occurs in the CUBRID source code. If multiple memory allocations occur at the same location, the memory usage is accumulated. When the tracked memory is deallocated, the amount of deallocated memory is subtracted from the accumulated total, continuously tracking the real-time heap memory usage. The monitored heap memory usage can be checked using the :ref:`memmon` utility.
 
 .. note::
 

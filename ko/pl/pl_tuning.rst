@@ -16,7 +16,7 @@ SQL 질의 최적화
 * **통신 오버헤드**: CUBRID 데이터베이스 서버와 CUBRID PL 서버 간의 통신 오버헤드를 줄이기 위해서는 최소한의 개수의 레코드를 반환하도록 쿼리를 작성해야 한다.
 * **비효율적인 반복문 내의 질의 호출**: 저장 프로시저와 저장 함수 내부에서 반복문을 사용할 때, 반복문 내에서 다수의 질의를 호출하지 않고 한번의 질의로 데이터를 가져오는 것을 권장한다.
 
-:doc:`/sql/tuning` 문서에서 SQL 쿼리 최적화에 대한 자세한 내용을 확인하여 비효율적인 질의를 최적화할 수 있다.
+:doc:`/sql/tuning` 문서를 참조하여 SQL 쿼리 최적화를 수행한다면, 비효율적인 질의도 최적화 할 수 있다. 
 
 질의에서의 저장 함수 호출 최적화
 ===============================
@@ -40,6 +40,7 @@ CUBRID에서 기본적으로 제공하는 내장 함수는 (:doc:`/sql/function/
 따라서 내장 함수의 단순한 조합으로 구현이 가능한 저장 함수보다 내장 함수를 사용하는 것을 것을 권장한다.
 
 아래는 CONCAT 내장 함수와 동일한 기능을 수행하는 저장 함수의 예시이다.
+사용자 저장 함수인 my_concat()보다 내장함수인 concat()사용 시 성능이점이 있다. 
 
 .. code-block:: sql
 
@@ -50,21 +51,21 @@ CUBRID에서 기본적으로 제공하는 내장 함수는 (:doc:`/sql/function/
 
         SELECT COUNT(*) FROM (SELECT /*+ NO_MERGE */ concat (name, event) FROM athlete);
 
-        SELECT COUNT(*) FROM (SELECT /*+ NO_MERGE */ my_concat (name, event) FROM athlete);
+                      count(*)
+        ======================
+                          6677
 
+        1 row selected. (0.019853 sec) Committed. (0.000000 sec)
+
+        SELECT COUNT(*) FROM (SELECT /*+ NO_MERGE */ my_concat (name, event) FROM athlete);
+        
+                      count(*)
+        ======================
+                          6677
+
+        1 row selected. (0.302333 sec) Committed. (0.000000 sec)
 ::
 
-                count(*)
-        ======================
-                        6677
-
-        1 row selected. (0.224946 sec) Committed. (0.000000 sec) 
-
-                count(*)
-        ======================
-                        6677
-
-        1 row selected. (0.014289 sec) Committed. (0.000000 sec)
 
 .. _pl-deterministic:
 

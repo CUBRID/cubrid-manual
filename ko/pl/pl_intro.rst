@@ -135,9 +135,9 @@
         ) RETURN INT
         AS BEGIN RETURN a + b; END;
 
-        SELECT default_args(); -- 3
-        SELECT default_args(3); -- 5
-        SELECT default_args(3, 4); -- 7
+        SELECT default_args(); 
+        SELECT default_args(3);
+        SELECT default_args(3, 4);
 
 ::
 
@@ -157,12 +157,31 @@
 
 .. code-block:: sql
 
-        CREATE FUNCTION default_args_func (
-                a INT := UNIX_TIMESTAMP(), 
-                b DATE DEFAULT CURRENT_DATE
+        CREATE FUNCTION get_age (
+            birth DATE DEFAULT DATE'2000-01-01',
+            today DATE DEFAULT SYS_DATE
         ) RETURN INT
-        AS BEGIN RETURN a + b; END;
+        AS
+        BEGIN
+            RETURN YEAR(today) - YEAR(birth)
+                - CASE WHEN TO_CHAR(today, 'MMDD') < TO_CHAR(birth, 'MMDD') THEN 1 ELSE 0 END;
+        END;
 
-        SELECT default_args_func(); -- UNIX_TIMESTAMP() + CURRENT_DATE
-        SELECT default_args_func(3); -- 3 + CURRENT_DATE
-        SELECT default_args_func(3, 4); -- 3 + 4
+        SELECT get_age();
+        SELECT get_age(DATE'2000-05-10');
+        SELECT get_age(DATE'2000-05-10', DATE'2025-03-24');
+
+::        
+
+        get_age()
+        =============
+                   25
+
+        get_age(date '2000-05-10')
+        ============================
+                                  24
+
+        get_age(date '2000-05-10', date '2025-03-24')
+        ===============================================
+                                                     24
+

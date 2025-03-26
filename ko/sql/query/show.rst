@@ -115,8 +115,6 @@ SHOW COLUMNS
 
 **FULL** 키워드를 사용하면  **collation** 및 **comment** 를 추가로 출력한다.
 
-**SHOW FIELDS** 는 **SHOW COLUMNS** 와 같은 구문이다.
-
 **DESCRIBE** (또는 줄여서 **DESC**) 문과 **EXPLAIN** 문은 **SHOW COLUMNS**\ 와 같은 정보를 제공하지만, LIKE 절 또는 WHERE 절은 지원하지 않는다.
 
 해당 구문은 다음과 같은 칼럼을 출력한다.

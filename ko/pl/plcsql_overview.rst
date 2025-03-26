@@ -120,9 +120,9 @@ CREATE PROCEDURE/FUNCTION 문을 실행하면 저장 프로시저/함수의 문�
 Static SQL
 ==================
 
-Static SQL은 String 변수에 담지 않고 코드 사이에 직접 기술한 SQL문을 말하며, 어떻게 데이터베이스에 접근할지가 미리 정의되는 형태의 SQL으로, SQL 구문이 정적으로 컴파일 시점에 정의되기 때문에 precompile시 Syntax, Sematics체크가 가능하다.
+Static SQL은 String 변수에 담지 않고 코드 사이에 직접 기술한 SQL문을 말하며, 접근 방식이 미리 정의되는 형태의 SQL으로, 컴파일 시점에 Syntax, Sematics체크가 가능하다. 
 
-유연하지 않다는 단점이 있지만, 런타임 전에 접근 방식이 정의가 되므로 최적화가 더 잘되기 때문에 DynamicSQL보다 빠르고 효과적이라는 장점이 있다.
+유연하지 않다는 단점이 있지만, 컴파일 시점에 접근 방식이 정의되어  최적화되기 때문에 런타임시 접근 방식이 정의되는 Dynamic SQL보다 빠르고 효과적이라는 장점이 있다.
 
 
 PL/CSQL 실행문으로 직접 사용할 수 있는 SQL구문은 다음과 같다
@@ -232,7 +232,7 @@ Static SQL 실행 중에 에러가 나면 SQL_ERROR Exception이 발생한다.
 Dynamic SQL
 ==================
 
-Dynamic SQL String변수에 담아서 기술하는 SQL문을 말하며, 실행 시간에 SQL 구문에 해당하는 문자열을 만들어 :ref:`EXECUTE IMMEDIATE <exec_imme>` 문으로 실행하는 방식이다. Dynamic SQL은 주로 다음 두 가지 경우에 필요하다.
+Dynamic SQL String변수에 담아서 기술하는 SQL문을 말하며, 실행 시간에 SQL 구문에 해당하는 문자열을 만들어 :ref:`EXECUTE IMMEDIATE <exec_imme>` 문으로 실행하는 방식이다. 
 
 Dynamic SQL은 주로 다음 두 가지 경우에 필요하다.
 

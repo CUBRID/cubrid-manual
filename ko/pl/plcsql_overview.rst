@@ -494,7 +494,7 @@ r의 값은 필드 a, b, c를 갖는 레코드가 되고 r.a, r.b, r.c는 각각
 
     create table tblA(a INT, b CHAR, c VARCHAR);
     create table tblB(a INT, b CHAR, c VARCHAR);        -- tblA%ROWTYPE과 tblB%ROWTYPE은 동일 타입
-    create table tblB(aa INT, bb CHAR, cc VARCHAR);     -- tblA%ROWTYPE과 tblC%ROWTYPE은 동일 타입 아님
+    create table tblC(aa INT, bb CHAR, cc VARCHAR);     -- tblA%ROWTYPE과 tblC%ROWTYPE은 동일 타입 아님
 
     CREATE OR REPLACE PROCEDURE test_record_equality AS
         r1 tblA%ROWTYPE;

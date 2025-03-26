@@ -203,9 +203,9 @@ RAISE_APPLICATION_ERROR의 사용 형태는 Built-in 프로시저 호출처럼 �
             dbms_output.put_line('code=' || SQLCODE || ', message=''' || SQLERRM || '''');
     END;
 
-    CALL test_raise_app_err(1);     -- 출력: code=1001, message='my error 1'
-    CALL test_raise_app_err(2);     -- 출력: code=1002, message='my error 2'
-    CALL test_raise_app_err(3);     -- 출력: code=1003, message='my error 3'
+    CALL test_raise_app_err(1);     -- DBMS_OUTPUT 출력: code=1001, message='my error 1'
+    CALL test_raise_app_err(2);     -- DBMS_OUTPUT 출력: code=1002, message='my error 2'
+    CALL test_raise_app_err(3);     -- DBMS_OUTPUT 출력: code=1003, message='my error 3'
 
 .. _exec_imme:
 

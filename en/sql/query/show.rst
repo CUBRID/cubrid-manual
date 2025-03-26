@@ -116,8 +116,6 @@ It shows the column information of a table. You can use the **LIKE** clause to s
 
 If a **FULL** keyword is used, it shows the additional information, **collation** and **comment**.
 
-**SHOW FIELDS** is the same statement as **SHOW COLUMNS**.
-
 The **DESCRIBE** (abbreviated **DESC**) statement and the **EXPLAIN** statement provide the same information with **SHOW COLUMNS**, but they don't support LIKE clause or WHERE clause.
 
 This query has the following columns:

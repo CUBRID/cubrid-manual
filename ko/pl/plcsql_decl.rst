@@ -40,10 +40,12 @@
             b FLOAT;
         BEGIN
             -- 여기서 a = 5, b는 FLOAT 타입
+            ...
         END;
 
     BEGIN
         -- 여기서 a = 3, b는 VARCHAR(10) 타입
+        ...
 
         -- Block 실행문
         DECLARE
@@ -51,9 +53,11 @@
             b DATETIME;
         BEGIN
             -- 여기서 a = 7, b는 DATETIME 타입
+            ...
         END;
 
         -- 다시 a = 3, b는 VARCHAR(10) 타입
+        ...
     END;
 
 이러한 "이름 가림"(Name Hiding)은 다른 종류의 항목(상수, 프로시저/함수 인자, Exception, 커서, 내부 프로시저/함수)들에

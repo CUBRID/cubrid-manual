@@ -2418,6 +2418,8 @@ cubrid_broker.conf 설정 파일과 기본 제공 파라미터
 | :ref:`broker-common-parameters` | 접속                    | ACCESS_CONTROL                          | bool   | no                           |           |
 |                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
 |                                 |                         | ACCESS_CONTROL_FILE                     | string |                              |           |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | ACCESS_CONTROL_DEFAULT_POLICY           | bool   | DENY                         |           |
 |                                 +-------------------------+-----------------------------------------+--------+------------------------------+-----------+
 |                                 | 로그                    | ADMIN_LOG_FILE                          | string | log/broker/cubrid_broker.log |           |
 |                                 +-------------------------+-----------------------------------------+--------+------------------------------+-----------+
@@ -2442,8 +2444,6 @@ cubrid_broker.conf 설정 파일과 기본 제공 파라미터
 |                                 |                         | RECONNECT_TIME                          | sec    | 600                          | 가능      |
 |                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
 |                                 |                         | REPLICA_ONLY                            | string | OFF                          |           |
-|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
-|                                 |                         | ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER | bool   | DENY                         |           |
 |                                 +-------------------------+-----------------------------------------+--------+------------------------------+-----------+
 |                                 | 브로커 응용 서버(CAS)   | APPL_SERVER_MAX_SIZE                    | MB     | Windows 32비트: 40,          | 가능      |
 |                                 |                         |                                         |        | Windows 64비트: 80,          |           |
@@ -2612,6 +2612,15 @@ CUBRID 설치 시 생성되는 기본 브로커 설정 파일인 **cubrid_broker
 
     **ACCESS_CONTROL_FILE** 은 브로커에 접속을 허용하는 데이터베이스 이름, 데이터베이스 사용자 ID, IP 목록을 저장한 파일 이름을 지정하는 파라미터이다. IP 목록은 하나의 브로커 내에서 <*db_name*>:<*db_user*> 별로 최대 256 라인까지 작성될 수 있다.  자세한 내용은 :ref:`limiting-broker-access` 을 참고한다.
 
+**ACCESS_CONTROL_DEFAULT_POLICY**
+
+	**ACCESS_CONTROL_DEFAULT_POLICY** 은 ACCESS_CONTROL_FILE에 지정한 브로커가 없고 **ACCESS_CONTROL_DEFAULT_POLICY** 의 값이 **ALLOW** 인 경우, 브로커에 접속을 모두 허용한다. 기본값은 **DENY** 이다.  자세한 내용은 :ref:`limiting-broker-access` 을 참고한다.
+
+    .. note::
+    
+       **ACCESS_CONTROL_DEFAULT_POLICY** 의 설정값은 **ACCESS_CONTROL** 이 **ON** 일 때만 유효하며, **OFF** 일 경우에는 설정값이 적용되지 않는다.
+
+
 로그
 ^^^^
 
@@ -2695,15 +2704,6 @@ CUBRID 설치 시 생성되는 기본 브로커 설정 파일인 **cubrid_broker
     
         레플리카에 직접 데이터를 쓰는 경우 복제 불일치가 발생함에 주의해야 한다.
 
-.. _access_control_behavior_for_emptybroker:
-
-**ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER**	
-	
-    **ACCESS_CONTROL_FILE** 에 지정한 브로커가 없고 **ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER** 의 값이 **ALLOW** 인 경우, 브로커에 접속을 모두 허용한다. 기본값은 **DENY** 이다.  자세한 내용은 :ref:`limiting-broker-access` 을 참고한다.
-
-    .. note::
-    
-       **ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER** 의 설정값 **ALLOW** 또는 **DENY** 는 **ACCESS_CONTROL** 이 **ON** 일 때만 유효하며, **OFF** 일 경우에는 설정값이 적용되지 않습니다.
 
 브로커 응용 서버(CAS)
 ^^^^^^^^^^^^^^^^^^^^^

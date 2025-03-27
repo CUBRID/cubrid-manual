@@ -1488,8 +1488,7 @@ ip_list_file의 작성 형식은 다음과 같다.
 
 *   <ip_addr>: 접근을 허용할 IP 명. 뒷자리를 \*로 입력하면 뒷자리의 모든 IP를 허용한다.
 
-**ACCESS_CONTROL** 값이 ON인 경우에도, localhost의 접속 요청은 무조건 허용한다. (즉, ip_list_file에 localhost ip인 127.0.01를 지정해도 무시됨) 
-또한, **ACCESS_CONTROL_FILE** 에 지정되지 않은 브로커는 **ACCESS_CONTROL_DEFAULT_POLICY** 가 **ALLOW** 로 설정되면 모든 접속 요청이 허용된다.
+**ACCESS_CONTROL** 값이 ON인 경우에도, localhost 의 접속은 허용된다. (즉, ip_list_file에 localhost ip인 127.0.01를 지정해도 무시됨) 
 
 **ACCESS_CONTROL_FILE** 에 지정되지 않은 브로커 접속 제한 방식.
 

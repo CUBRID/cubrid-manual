@@ -1454,7 +1454,7 @@ SHARD-Q는 Shard Waiting Queue를 줄인 말이다. SHARD proxy 프로세스가 
 ---------------------
 
 브로커에 접속하는 응용 클라이언트를 제한하려면 **cubrid_broker.conf**\의 **ACCESS_CONTROL** 파라미터 값을 ON으로 설정하고, **ACCESS_CONTROL_FILE** 파라미터 값에 접속을 허용하는 사용자와 데이터베이스 및 IP 목록을 작성한 파일 이름을 입력한다.
-ACCESS_CONTROL_FILE에 브로커 이름이 없으면 해당 브로커로의 모든 접속이 제한된다. 이때, **ACCESS_CONTROL_DEFAULT_POLICY** 를 설정하면 모든 접속을 허용할 수 있다.
+ACCESS_CONTROL_FILE에 해당 브로커 이름이 없는 경우 그 브로커로의 모든 접속은 **ACCESS_CONTROL_DEFAULT_POLICY** 파라미터에 의해 결정된다. 이 파라미터의 값이 DENY 인 경우 접속이 제한되며, ALLOW 인 경우 접속이 허용된다.
 **ACCESS_CONTROL** 브로커 파라미터의 기본값은 **OFF** , **ACCESS_CONTROL_DEFAULT_POLICY** 의 기본값은 **DENY** 이다.
 **ACCESS_CONTROL** , **ACCESS_CONTROL_FILE** , **ACCESS_CONTROL_DEFAULT_POLICY** 파라미터는 공통 파라미터가 지정되는 [broker] 섹션 아래에 작성해야 한다.
 

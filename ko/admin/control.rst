@@ -1454,9 +1454,9 @@ SHARD-Q는 Shard Waiting Queue를 줄인 말이다. SHARD proxy 프로세스가 
 ---------------------
 
 브로커에 접속하는 응용 클라이언트를 제한하려면 **cubrid_broker.conf**\의 **ACCESS_CONTROL** 파라미터 값을 ON으로 설정하고, **ACCESS_CONTROL_FILE** 파라미터 값에 접속을 허용하는 사용자와 데이터베이스 및 IP 목록을 작성한 파일 이름을 입력한다.
-만약 ACCESS_CONTROL_FILE에 브로커 이름이 없으면, 해당 브로커로의 모든 접속이 제한된다. 이 경우, ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER 파라미터를 설정하여 모든 접속을 허용할 수 있다.
-**ACCESS_CONTROL** 브로커 파라미터의 기본값은 **OFF**\이다.
-**ACCESS_CONTROL**, **ACCESS_CONTROL_FILE** 파라미터는 공통 적용 파라미터가 위치하는 [broker] 아래에 작성해야 하며, **ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER** 파라미터는 각각의 브로커에 작성하야 한다.
+ACCESS_CONTROL_FILE에 브로커 이름이 없으면 해당 브로커로의 모든 접속이 제한된다. 이때, **ACCESS_CONTROL_DEFAULT_POLICY** 를 설정하면 모든 접속을 허용할 수 있다.
+**ACCESS_CONTROL** 브로커 파라미터의 기본값은 **OFF** , **ACCESS_CONTROL_DEFAULT_POLICY** 의 기본값은 **DENY** 이다.
+**ACCESS_CONTROL** , **ACCESS_CONTROL_FILE** , **ACCESS_CONTROL_DEFAULT_POLICY** 파라미터는 공통 파라미터가 지정되는 [broker] 섹션 아래에 작성해야 한다.
 
 **ACCESS_CONTROL_FILE**\ 의 형식은 다음과 같다.
 
@@ -1488,13 +1488,13 @@ ip_list_file의 작성 형식은 다음과 같다.
 
 *   <ip_addr>: 접근을 허용할 IP 명. 뒷자리를 \*로 입력하면 뒷자리의 모든 IP를 허용한다.
 
-**ACCESS_CONTROL** 값이 ON 상태에서 **ACCESS_CONTROL_FILE**\에 지정되지 않으면 브로커는 localhost에서만 접속을 허용한다. 
-그러나 **ACCESS_CONTROL_FILE** 에 지정되지 않은 브로커의 경우, **ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER** 의 값을 ALLOW로 설정한 브로커들에 대해서는 모든 접속 요청을 허용한다.
+**ACCESS_CONTROL** 값이 ON인 경우에도, localhost의 접속 요청은 무조건 허용한다. (즉, ip_list_file에 localhost ip인 127.0.01를 지정해도 무시됨) 
+또한, **ACCESS_CONTROL_FILE** 에 지정되지 않은 브로커는 **ACCESS_CONTROL_DEFAULT_POLICY** 가 **ALLOW** 로 설정되면 모든 접속 요청이 허용된다.
 
 **ACCESS_CONTROL_FILE** 에 지정되지 않은 브로커 접속 제한 방식.
 
 *  localhost에서만 접속 허용. (기본)
-*  ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER를 ALLOW 로 설정하면 모든 접속 허용.
+*  ACCESS_CONTROL_DEFAULT_POLICY를 ALLOW 로 설정하면 모든 접속 허용.
 
 브로커 구동 시 **ACCESS_CONTROL_FILE** 및 ip_list_file 분석에 실패하는 경우 브로커는 구동되지 않는다. 
 
@@ -1580,17 +1580,17 @@ QUERY_EDITOR 브로커는 다음과 같은 응용의 접속 요청만을 허용�
     $ cubrid broker acl status 
     ACCESS_CONTROL=ON 
     ACCESS_CONTROL_FILE=access_file.txt 
+    ACCESS_CONTROL_DEFAULT_POLICY=ALLOW
   
     [%broker1] 
-    ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER=DENY
     demodb:dba:iplist1.txt 
            CLIENT IP LAST ACCESS TIME 
     ========================================== 
-        10.20.129.11 
+      10.20.129.11 
       10.113.153.144 2013-11-07 15:19:14 
       10.113.153.145 
       10.113.153.146 
-             10.64.* 2013-11-07 15:20:50 
+      10.64.* 2013-11-07 15:20:50 
   
     testdb:dba:iplist2.txt 
            CLIENT IP LAST ACCESS TIME 
@@ -1598,7 +1598,6 @@ QUERY_EDITOR 브로커는 다음과 같은 응용의 접속 요청만을 허용�
                    * 2013-11-08 10:10:12 
 
     [%broker2]
-    ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER=ALLOW
 
 **브로커 로그**
 

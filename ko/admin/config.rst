@@ -2614,7 +2614,7 @@ CUBRID 설치 시 생성되는 기본 브로커 설정 파일인 **cubrid_broker
 
 **ACCESS_CONTROL_DEFAULT_POLICY**
 
-	**ACCESS_CONTROL_DEFAULT_POLICY** 은 ACCESS_CONTROL_FILE에 지정한 브로커가 없고 **ACCESS_CONTROL_DEFAULT_POLICY** 의 값이 **ALLOW** 인 경우, 브로커에 접속을 모두 허용한다. 기본값은 **DENY** 이다.  자세한 내용은 :ref:`limiting-broker-access` 을 참고한다.
+    **ACCESS_CONTROL_FILE** 에 지정한 브로커가 없고 **ACCESS_CONTROL_DEFAULT_POLICY** 의 값이 **ALLOW** 인 경우, 브로커에 접속을 모두 허용한다. 기본값은 **DENY** 이다.  자세한 내용은 :ref:`limiting-broker-access` 을 참고한다.
 
     .. note::
     

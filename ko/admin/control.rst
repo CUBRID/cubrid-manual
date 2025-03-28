@@ -1493,7 +1493,7 @@ ip_list_file의 작성 형식은 다음과 같다.
 **ACCESS_CONTROL_FILE** 에 지정되지 않은 브로커 접속 제한 방식.
 
 *  localhost에서만 접속 허용. (기본)
-*  ACCESS_CONTROL_DEFAULT_POLICY를 ALLOW 로 설정하면 모든 접속 허용.
+*  **ACCESS_CONTROL_DEFAULT_POLICY** 를 ALLOW 로 설정하면 모든 접속 허용.
 
 브로커 구동 시 **ACCESS_CONTROL_FILE** 및 ip_list_file 분석에 실패하는 경우 브로커는 구동되지 않는다. 
 

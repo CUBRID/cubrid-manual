@@ -1612,13 +1612,22 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
         ==========
                0.5
 
-    .. note:: 
+    .. note::
 
-        JDBC/CCI에서 NUMERIC, DOUBLE 및 FLOAT 타입의 데이터를 문자열 형태로 읽을 경우만 oracle_compat_number_behavior 설정값이 적용된다. 아래는 설정값이 적용되는 JDBC/CCI함수이다.
-		
-        *   JDBC : getString(int columnIndex), getString(String columnLabel), getObject(int columnIndex), getObject(String columnLabel)
-		
-        *   CCI : cci_get_data(CCI_A_TYPE_STR type을 사용한 경우), 예) cci_get_data(req, i, CCI_A_TYPE_STR, &data, &ind)
+        oracle_compat_number_behavior 설정값이 적용되는 JDBC/CCI 함수는 다음과 같다.
+
+        **JDBC**
+
+        getString(int columnIndex), getString(String columnLabel)
+            *   적용 데이터 타입: NUMERIC, DOUBLE, FLOAT
+
+        getObject(int columnIndex), getObject(String columnLabel)
+            *   적용 데이터 타입: NUMERIC
+
+        **CCI**
+
+        cci_get_data(CCI_A_TYPE_STR 타입을 사용한 경우), 예: cci_get_data(req, i, CCI_A_TYPE_STR, &data, &ind)
+            *   적용 데이터 타입: NUMERIC, DOUBLE, FLOAT
 
 
 .. _oracle_style_empty_string:

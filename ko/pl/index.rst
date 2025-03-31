@@ -14,6 +14,7 @@ CUBRID PL
 
     pl_intro
     pl_authid
+    pl_tcl
     pl_package
     pl_tuning
     plcsql

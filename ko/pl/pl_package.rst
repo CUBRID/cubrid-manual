@@ -40,7 +40,7 @@ DBMS_OUTPUT.ENABLE
 
 .. note::
 
-        CSQL 인터프리터에서 **;server-output on** 을 호출하면 내부적으로 DBMS_OUTPUT.ENABLE(20000)\을 호출한 것과 같다.
+        CSQL 인터프리터에서 **;server-output on** 을 호출하면 내부적으로 기본값인  DBMS_OUTPUT.ENABLE(20000)\을 호출한 것과 동일하다.
         자세한 내용은 :ref:`CSQL 세션명령어 server-output <server-output>`\을 참고한다.
 
 .. _dbms-output-disable:

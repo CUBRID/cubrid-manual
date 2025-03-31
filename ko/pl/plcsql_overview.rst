@@ -120,7 +120,7 @@ CREATE PROCEDURE/FUNCTION 문을 실행하면 저장 프로시저/함수의 문�
 Static SQL
 ==================
 
-Static SQL은 String 변수에 담지 않고 코드 사이에 직접 기술한 SQL문을 말하며, 접근 방식이 미리 정의되는 형태의 SQL으로, 컴파일 시점에 Syntax, Sematics체크가 가능하다. 
+Static SQL은 문자열 변수에 담지 않고 코드 사이에 직접 기술한 SQL문을 말하며, 접근 방식이 미리 정의되는 형태의 SQL으로, 컴파일 시점에 Syntax, Sematics 체크가 가능하다. 
 
 유연하지 않다는 단점이 있지만, 컴파일 시점에 접근 방식이 정의되어  최적화되기 때문에 런타임시 접근 방식이 정의되는 Dynamic SQL보다 빠르고 효과적이라는 장점이 있다.
 

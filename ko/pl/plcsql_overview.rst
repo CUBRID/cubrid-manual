@@ -232,7 +232,7 @@ Static SQL 실행 중에 에러가 나면 SQL_ERROR Exception이 발생한다.
 Dynamic SQL
 ==================
 
-Dynamic SQL String변수에 담아서 기술하는 SQL문을 말하며, 실행 시간에 SQL 구문에 해당하는 문자열을 만들어 :ref:`EXECUTE IMMEDIATE <exec_imme>` 문으로 실행하는 방식이다. 
+Dynamic 문자열 변수에 담아서 기술하는 SQL문을 말하며, 실행 시간에 SQL 구문에 해당하는 문자열을 만들어 :ref:`EXECUTE IMMEDIATE <exec_imme>` 문으로 실행하는 방식이다. 
 
 Dynamic SQL은 주로 다음 두 가지 경우에 필요하다.
 

@@ -342,7 +342,42 @@ Session Commands
 In addition to SQL statements, CSQL Interpreter provides special commands allowing you to control the Interpreter. These commands are called session commands. All the session commands must start with a semicolon (;).
 
 Enter the **;help** command to display a list of the session commands available in the CSQL Interpreter.
-You don't need to type the full session command; the CSQL Interpreter recognizes commands as long as you input the minimum number of characters needed to uniquely identify the command from others. Session commands are not case-sensitive.
+You don't need to type the full session command; the CSQL Interpreter recognizes commands as long as you input the minimum number of characters needed to uniquely identify the command from others.
+Session commands are not case-sensitive.
+
+CSQL recognizes SQL string literals, comments, and identifiers (see: :ref:`lexical rules <lexical_rules>`). Specifically:
+
+* String literals enclosed in single quotes
+* Comments marked by --, //, or /\* \*/
+* Identifiers enclosed in double quotes, brackets, or backticks
+
+Strings within these are recognized only as strings and lose any special meaning they might have outside, 
+and this applies to session commands as well.
+For example, ';exit' within a string literal, comment, or identifier below is not recognized as a session command but only as a string. ::
+
+    csql> select * from table_a where col = ';exit';
+    ...
+    csql> select * from table_b /* ;exit on no results */;
+    ...
+    csql> create table table_c([;exit] int);
+    ...
+
+Exceptionally, in interactive mode CSQL, if the first character of a command line is a semicolon, it is recognized as a session command even if it is within a string literal, comment, or identifier. ::
+
+    csql> select * from table_a where col = '
+    csql> ;exit    <-- CSQL exit
+    ...
+    csql> select * from table_b /*
+    csql> ;exit    <-- CSQL exit
+    ...
+    csql> create table table_c([
+    csql> ;exit    <-- CSQL exit
+    ...
+
+This exception is necessary to allow operations such as exiting CSQL (:ref:`;exit <scmd_exit>`), 
+continuing to edit in an editor (:ref:`;edit <scmd_edit>`), 
+or clearing the query buffer (:ref:`;clear <scmd_clear>`) 
+to be performed at any edit position.
 
 "Query buffer" is a buffer to store the query before running it. If you run CSQL as giving the **\-\-no-single-line** option, the query string is kept on the buffer until running **;xr** command.
 
@@ -451,11 +486,15 @@ This command changes the current working directory where the CSQL Interpreter is
     csql> ;cd /home1/DBA/CUBRID
     Current directory changed to  /home1/DBA/CUBRID.
 
+.. _scmd_exit:
+
 **Exiting the CSQL Interpreter (;EXit)**
 
 This command exits the CSQL Interpreter. ::
 
     csql> ;ex
+
+.. _scmd_clear:
 
 **Clearing the query buffer (;CLear)**
 
@@ -584,7 +623,7 @@ You can check the parameter value currently set in the CSQL Interpreter using th
 
 **Setting the parameter value (;SET)**
 
-You can use the **;SET** session command to set a specific parameter value. Note that changeable parameter values are only can be changed. To change the server parameter values, you must have DBA authorization. For information on list of changeable parameters, see :ref:`broker-configuration`. ::
+You can use the **;set** session command to set a specific parameter value. Note that changeable parameter values are only can be changed. To change the server parameter values, you must have DBA authorization. For information on list of changeable parameters, see :ref:`broker-configuration`. ::
 
     csql> ;set block_ddl_statement=1
     === Set Param Input ===
@@ -1364,6 +1403,41 @@ The **SELECT** query includes the time of outputting the fetched records. Theref
     csql> ;time ON
     csql> ;time
     TIME IS ON
+
+.. _server-output:
+
+**Displaying Server Stored Messages (;SERver-output)**
+
+If this value is set to ON, it will output messages stored in the server's DBMS_OUTPUT buffer. The default value is OFF.
+The DBMS_OUTPUT buffer stores messages through calls to DBMS_OUTPUT.put_line() or DBMS_OUTPUT.put() in PL/CSQL stored procedures/functions.
+After executing an SQL statement, DBMS_OUTPUT messages are displayed under the '<DBMS_OUTPUT>' label.
+If an error occurs during the execution of a stored procedure/function, DBMS_OUTPUT messages are displayed after all CSQL's default messages, including error messages, regardless of the execution order, so caution is needed.
+For example, in the case below, the DBMS_OUTPUT.put_line() statement is executed before the RETURN statement that causes a ZERO_DIVIDE exception, but in the output, the DBMS_OUTPUT message appears after the error message. ::
+
+    csql> ;server-output on
+    SERVER OUTPUT IS ON
+    csql>
+    csql> create or replace function late_message return integer as
+    csql> begin
+    csql>     DBMS_OUTPUT.put_line('Hello world');
+    csql>     return (1/0);   -- ZERO_DIVIDE exception
+    csql> end;
+    Execute OK. (0.024973 sec) Committed. (0.000000 sec)
+
+    1 command(s) successfully processed.
+    csql>
+    csql> select late_message() from dual;
+
+    In line 2, column 23,
+
+    ERROR: Stored procedure execute error:
+      (line 4, column 13) division by zero
+
+    <DBMS_OUTPUT>
+    ====
+    Hello world
+
+    0 command(s) successfully processed.
 
 **Displaying a column of result record in one line(;LINe-output)**
 

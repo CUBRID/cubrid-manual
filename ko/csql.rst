@@ -1441,8 +1441,6 @@ DBMS_OUTPUT 버퍼는 PL/CSQL 저장 프로시저/함수에서 DBMS_OUTPUT.put_l
     Hello world
 
     0 command(s) successfully processed.
-    csql>
-
 
 **질의 결과를 칼럼 당 한 라인으로 출력(;LINe-output)**
 

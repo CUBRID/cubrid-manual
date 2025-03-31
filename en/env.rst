@@ -32,11 +32,11 @@ CUBRID Environment Variables
     
         *   cub_master: **/tmp**
         *   cub_broker process: **$CUBRID/var/CUBRID_SOCK**
-        *   cub_javasp process: **$CUBRID/var/CUBRID_SOCK**
+        *   cub_pl process: **$CUBRID/var/CUBRID_SOCK**
 
 .. note::
 
-    * **java.io.tmpdir** among **java_stored_procedure_jvm_options** is an option that specifies the directory where temporary files of the cub_javasp process (built-in Java VM) are created. If the **CUBRID_TMP** environment variable is set, the value of **java.io.tmpdir** is ignored, and the directory specified by CUBRID_TMP will be used instead.
+    * **java.io.tmpdir** among **cub_plstored_procedure_jvm_options** is an option that specifies the directory where temporary files of the cub_pl process (built-in Java VM) are created. If the **CUBRID_TMP** environment variable is set, the value of **java.io.tmpdir** is ignored, and the directory specified by CUBRID_TMP will be used instead.
 
     * To set this environment variable in Windows, you must add the CUBRID_TMP key to the registry (refer **%CUBRID%**\\share\\windows_scripts\\cubrid_env.bat).
 
@@ -91,9 +91,9 @@ OS Environment and Java Environment Variables
 
 *   Path: In the Windows environment, the **%CUBRID%\\bin** and **%CUBRID%\\cci\\bin**, which is a directory that contains CUBRID system's execution file, must be included in the **Path** environment variable.
 
-*   JAVA_HOME: To use the Java stored procedure in the CUBRID system, the Java Virtual Machine (JVM) version 1.6 or later must be installed, and the **JAVA_HOME** environment variable must designate the concerned directory. See the :ref:`cubrid-javasp-server-config`.
+*   JAVA_HOME: To use the Stored procedure in the CUBRID system, the Java Virtual Machine (JVM) version 1.8 or later must be installed, and the **JAVA_HOME** environment variable must designate the concerned directory. See the :ref:`cubrid-pl-server-config`.
 
-*   JVM_PATH: To use the Java stored procedure in the CUBRD system, the **JVM_PATH** environment variable can specify the JVM library (libjvm) path explicitly instead of finding the library from **JAVA_HOME**. See the :ref:`cubrid-javasp-server-config`.
+*   JVM_PATH: To use the Stored procedure in the CUBRD system, the **JVM_PATH** environment variable can specify the JVM library (libjvm) path explicitly instead of finding the library from **JAVA_HOME**. See the :ref:`cubrid-pl-server-config`.
 
 Configuring the Environment Variable
 ------------------------------------
@@ -177,8 +177,8 @@ This method can be used for the case that it is difficult to specify a specific 
 *   Add "%CUBRID%\\bin\\cub_master.exe" to open all ports for cub_master.
 *   Add "%CUBRID%\\bin\\cub_server.exe" to open all ports for cub_server.
 *   Add "%CUBRID%\\bin\\cub_cmserver.exe" to open all ports for the CUBRID Manager.
-*   Add "%CUBRID%\\bin\\cub_javasp.exe" to open all ports for the CUBRID Java SP server.
-    
+        *   Add "%CUBRID%\\bin\\cub_pl.exe" to open all ports for the CUBRID PL server (cub_pl).
+        
 If you use CUBRID for Linux at the broker machine or the DB server machine, all of Linux ports should be opened. 
 If you use CUBRID for Windows at the broker machine or the DB server machine, all of Linux ports should be opened or the related processes should be added to the program list allowed for the Windows firewall.
      
@@ -227,7 +227,7 @@ If you use CUBRID for Windows at the broker machine or the DB server machine, al
 | Manager use   | Manager       | application   | 8001                       | 8001                                                | Open                     |                        |
 |               | server        |               |                            |                                                     |                          |                        |
 +---------------+---------------+---------------+----------------------------+-----------------------------------------------------+--------------------------+------------------------+
-| Java SP use   | cub_javasp    | cub_server    | java_stored_procedure_port | java_stored_procedure_port                          | Open                     | Keep connected         |
+| PL use        | cub_pl        | cub_server    | stored_procedure_port      | stored_procedure_port                               | Open                     | Keep connected         |
 +---------------+---------------+---------------+----------------------------+-----------------------------------------------------+--------------------------+------------------------+
 
 (*): The machine which has the CAS, CSQL, copylogdb, or applylogdb process
@@ -401,15 +401,27 @@ The following table summarizes the ports, based on the listening processes, used
 
 *   The port used when the CUBRID Manager client accesses the CUBRID Manager server process is **cm_port** of the cm.conf. The default value is 8001.
 
-Ports for CUBRID Java Stored Procedure Server
+Ports for CUBRID Procdedure Language (PL) Server
 ---------------------------------------------
 
-The following table summarizes the ports, based on the listening processes, used for CUBRID Java Stored Procedure (Java SP) server. The ports are identical regardless of the OS type.
+The following table summarizes the ports, based on the listening processes, used for CUBRID Procdedure Language (PL) server. The ports are identical regardless of the OS type.
 
 +---------------+--------------+----------------------------+--------------------------+
 | Listener      | Requester    | Port                       | Firewall Port Setting    |
 +===============+==============+============================+==========================+
-| cub_javasp    | cub_server   | java_stored_procedure_port | Open                     |
+| cub_pl        | cub_server   | stored_procedure_port      | Open                     |
 +---------------+--------------+----------------------------+--------------------------+
 
-*   The port used when the CUBRID Java stored procedure server (cub_javasp) to communicate with the cub_server is **java_stored_procedure_port** of the cubrid.conf. The default value of **java_stored_procedure_port** is 0, which means a random available port is assigned.
+Behavior according to the OS type and the **stored_procedure_uds** setting in **cubrid.conf**
+
+*   Linux
+  - If **stored_procedure_uds** is set to **yes**, a UNIX domain socket is used and a TCP socket is not used.
+  - If **stored_procedure_uds** is set to **no**, a TCP socket is used, and the port is determined by the **stored_procedure_port** setting.
+
+*   Windows
+  - Windows does not support UNIX domain sockets.
+  - Therefore, regardless of the **stored_procedure_uds** setting, a TCP socket is used, and the port is determined by the **stored_procedure_port** setting.
+
+.. note::
+
+        The port used when the CUBRID Procedure Language server (cub_pl) communicates with the cub_server is specified by **stored_procedure_port** in **cubrid.conf**. The default value is 0, which means a random available port is assigned.

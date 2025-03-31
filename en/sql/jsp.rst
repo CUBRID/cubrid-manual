@@ -6,6 +6,9 @@
 Java Stored Function/Procedure
 ******************************
 
+CUBRID는 Java로 저장 함수와 프로시저를 개발할 수 있도록 지원한다. Java 저장 함수와 프로시저는 CUBRID에서 호스팅한 Java 가상 머신(JVM, Java Virtual Machine)에서 실행된다.
+Java 저장 함수/프로시저는 Java 가상머신을 사용하므로 뛰어난 상호 운용성과 이식성을 갖는다.
+
 .. _jsp-introduction:
 
 Introduction to Java Stored Function/Procedure
@@ -28,51 +31,12 @@ The advantages of using Java stored functions/procedures are as follows:
 
 .. _jsp-prerequisites:
 
-Prerequisites
-==============================================
+Prerequisites for Writing and Using Java Stored Functions/Procedures
+====================================================================
 
-To use Java stored function/procedure, the following must be ready
-
-*   **java_stored_procedure** must be set to **yes** in the **cubrid.conf** file.
-*   Java Stored Procedure server (Java SP server) must be started for the database that you want to use Java stored function/procedures.
-
-.. _jsp-system-prm:
-
-Check the cubrid.conf file
---------------------------
-
-By default, the **java_stored_procedure** is set to **no** in the **cubrid.conf** file.   
-To use a Java stored function/procedure, this value must be changed to **yes**. For details on this value, see :ref:`other-parameters` in Database Server Configuration.
-
-.. _jsp-starting-javasp:
-
-Start Java SP Server
----------------------------------
-
-You need to start a Java Stored Procedure server (Java SP server) for the database you want to use Java-stored procedures/functions.
-
-Execute the **cubrid javasp** **start** *db_name*. ::
-
-    % cubrid javasp start demodb
-
-    @ cubrid javasp start: demodb
-    ++ cubrid javasp start: success
-
-You can verify that the Java SP server is successfully started.
-
-Execute the **cubrid javasp** **status** *db_name*. ::
-
-    % cubrid javasp status demodb
-
-    @ cubrid javasp status: demodb
-    Java Stored Procedure Server (demodb, pid 9220, port 38408)
-    Java VM arguments :
-    -------------------------------------------------
-    -Djava.util.logging.config.file=/path/to/CUBRID/java/logging.properties
-    -Xrs
-    -------------------------------------------------
-
-For more details on javasp utility, see :ref:`cubrid-javasp-server` and :ref:`cubrid-javasp-server-config`.
+To use Java stored functions/procedures, the procedure language server must be ready.
+The procedure language server starts automatically when the database server is started.
+For more details, refer to :ref:`cubrid-pl-server` and :ref:`cubrid-pl-server-config`.
 
 How to Write and Load Java Stored Function/Procedure
 ======================================================

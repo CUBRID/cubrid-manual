@@ -345,13 +345,13 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | index_unfill_factor                 | server parameter        |         | float    | 0.05                           |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | java_stored_procedure               | server parameter        |         | bool     | no                             |                       |
+|                               | stored_procedure                    | server parameter        |         | bool     | yes                            |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | java_stored_procedure_port          | server parameter        |         | int      | 0                              |                       |
+|                               | stored_procedure_uds                | server parameter        |         | bool     | yes                            |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | java_stored_procedure_uds           | server parameter        |         | bool     | yes                            |                       |
+|                               | stored_procedure_port               | server parameter        |         | int      | 0                              |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | java_stored_procedure_jvm_options   | server parameter        |         | string   |                                |                       |
+|                               | stored_procedure_vm_options         | server parameter        |         | string   |                                |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | multi_range_optimization_limit      | server parameter        | O       | int      | 100                            | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -2191,13 +2191,13 @@ The following are other parameters. The type and value range for each parameter 
 +-------------------------------------+--------+----------------+----------------+----------------+
 | index_unfill_factor                 | float  | 0.05           | 0              | 0.5            |
 +-------------------------------------+--------+----------------+----------------+----------------+
-| java_stored_procedure               | bool   | no             |                |                |
+| stored_procedure                    | bool   | yes            |                |                |
 +-------------------------------------+--------+----------------+----------------+----------------+
-| java_stored_procedure_port          | int    | 0              | 0              | 65535          |
+| stored_procedure_uds                | bool   | yes            |                |                |
 +-------------------------------------+--------+----------------+----------------+----------------+
-| java_stored_procedure_uds           | bool   | yes            |                |                |
+| stored_procedure_port               | int    | 0              | 0              | 65535          |
 +-------------------------------------+--------+----------------+----------------+----------------+
-| java_stored_procedure_jvm_options   | string |                |                |                |
+| stored_procedure_vm_options         | string |                |                |                |
 +-------------------------------------+--------+----------------+----------------+----------------+
 | multi_range_optimization_limit      | int    | 100            | 0              | 10,000         |
 +-------------------------------------+--------+----------------+----------------+----------------+
@@ -2296,49 +2296,54 @@ The following are other parameters. The type and value range for each parameter 
 
     If this value is small, the amount of free space for the nodes is small when an index is created. Therefore, it is likely that the index nodes are spilt by **INSERT** or **UPDATE** because free space for the index nodes is filled in a short period of time.
 
-**java_stored_procedure**
+**stored_procedure**
 
-    **java_stored_procedure** is a parameter to configure whether to use Java stored procedures by running the Java Virtual Machine (JVM). If the parameter is set to **no**, which is the default value, JVM is not executed; if it is set to **yes**, JVM is executed so you can use Java stored procedures. Therefore, configure the parameter to yes if you plan to use Java stored procedures.
+    **stored_procedure** is a parameter to enable the use of stored procedures by running the cub_pl process. The default value is **yes**. If set to **no**, the cub_pl process will not run, and stored procedures (Java stored procedures) cannot be used.
 
-**java_stored_procedure_port**
+**stored_procedure_uds**
 
-    **java_stored_procedure_port** is a parameter to configure the port number receiving a request that calls the java stored procedures from database server. the value must be unique and smaller than 65,535. The default value of **java_stored_procedure_port** is **0** which means the port number is automatically allocated, typically from an ephemeral port range. The value configured in this parameter affects only **java_stored_procedure** is set to **yes**. Note that an error occurs if the parameter is configured in [common]. ::
+    **stored_procedure_uds** is a parameter to use a Unix domain socket connection between the cub_pl process and the cub_server process when calling stored procedures. The default value is **yes**. If set to **no** or on Windows, the connection operates using a TCP socket regardless of the parameter value.
+        
+    .. note:: 
+
+        For information on the **CUBRID_TMP** environment variable that specifies the Unix domain socket file path for the cub_pl process, see :doc:`/env`.
+
+**stored_procedure_port**
+
+    **stored_procedure_port** is a parameter to set the TCP port number for calling stored procedures on the database server. This value must be less than 65,536. The default value is **0**, which means the port number is automatically assigned from an ephemeral port range. This parameter is only applicable when the **stored_procedure** parameter is set to **yes**. Note that configuring this parameter in the [common] section of cubrid.conf will result in an error. ::
 
         ..... 
         [common] 
         ..... 
         # an error occurs. remove the following line.
-        java_stored_procedure_port=4333
+        stored_procedure_port=4333
         .....
         [@testdb]
         .....
         # the parameter is configured successfully for testdb
-        java_stored_procedure_port=4334
+        stored_procedure_port=4334
         .....
 
-**java_stored_procedure_uds**
+**stored_procedure_vm_options**
 
-    **java_stored_procedure_uds** is a parameter to connect between the cub_javasp process and the cub_server process through a Unix domain socket instead of TCP when calling a Java stored procedure. The default value of **java_stored_procedure_uds** is **yes**. For Windows, regardless of the value of the parameter, TCP connection is used.
+    **stored_procedure_vm_options** is a parameter to configure the virtual machine settings of the procedure language server where stored procedures are executed. Each option string should be separated by spaces. The default is an empty string. If the parameter is set in the [@<database>] section, the options set in the [common] section do not apply to that database.
 
     .. note::
 
-        For the **CUBRID_TMP** environment variable that specifies the UNIX domain socket file path of *cub_javasp** processes, see :doc:`/env`.
-
-**java_stored_procedure_jvm_options**
-
-    **java_stored_procedure_jvm_options** is a parameter to configure Java Virtual Machine (JVM) and Java options on which Java stored procedures are executed. Each option string should be separated by spaces. For JVM options, there are three types of options; standard, non-standard and advanced options. non-standard and advanced options are not guaranteed to be supported on all VM implementations. The default is an empty string. If the parameter value configured in [@<database>], it overwrites the value specified in [common]. ::
+        The cub_pl process internally uses the Java Virtual Machine (JVM), so JVM options can be specified. There are standard, non-standard, and advanced JVM options. Non-standard and advanced options are not guaranteed to be supported by all JVM implementations.
+        
+    ::
 
         ..... 
         [common] 
         ..... 
-        java_stored_procedure_jvm_options="-Xms1024m -Xmx1024m -XX:PermSize=512m -XX:MaxPermSize=512m"
+        stored_procedure_vm_options="-Xms1024m -Xmx1024m -XX:PermSize=512m -XX:MaxPermSize=512m"
         .....
         [@testdb]
         .....
-        java_stored_procedure=yes
 
-        # Note that -XX:PermSize=512m and -XX:MaxPermSize=512m will not be applied for testdb, Even though they specified in [common] section.
-        java_stored_procedure_jvm_options="-Xms2048m -Xmx2048m"
+        # Note that -XX:PermSize=512m and -XX:MaxPermSize=512m will not be applied for testdb, even though they are specified in the [common] section.
+        stored_procedure_vm_options="-Xms2048m -Xmx2048m"
         .....
 
 **multi_range_optimization_limit**

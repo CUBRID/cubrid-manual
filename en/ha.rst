@@ -2095,9 +2095,13 @@ On the partitioned table, the table which has promoted some partitions by the **
 
     The data replication of tables without a primary key is supported by **USE_SBR** hint. For more information, see :ref:`sql-hint`.
 
-**Java Stored Procedure**
+**Stored Procedure**
 
-Because using java stored procedures in CUBRID HA cannot be replicated, java stored procedures should be configured to all nodes. For more details, see :ref:`cubrid-javasp-server-config`.
+In CUBRID HA, **PL/CSQL stored procedures** are replicated, but **Java stored procedures** only replicate the declaration, not the execution program. Therefore, the execution program must be manually copied to all nodes in the HA.
+
+To execute stored procedures, the CUBRID procedure language server must be running, which is automatically started when the database server starts.
+
+However, the **cubrid.conf** configuration for running the CUBRID language server is not replicated, so you must ensure that **stored_procedure** is set to **yes** (default) on both the master and slave nodes.
 
 **Method**
 

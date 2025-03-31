@@ -29,7 +29,7 @@ CUBRID is an object-relational database management system (DBMS) consisting of t
 
 *   The CUBRID Manager is a GUI tool that allows users to remotely manage the database and the broker. It also provides the Query Editor, a convenient tool that allows users to execute SQL queries on the database server. 
 
-*   The CUBRID Java SP server is an execution server that processes Java stored procedures/functions requested from the database server.
+*   The CUBRID procedure language (PL) server is a server that compiles and executes stored procedures and functions requested from the database server.
 
 .. FIXME: For more information about CUBRID Manager, see http://www.cubrid.org/wiki_tools/entry/cubrid-manager.
 
@@ -248,16 +248,12 @@ CUBRID provides High Availability(HA) feature to minimize system down time while
 *   A transaction log multiplication step where the transaction log created in the database server is replicated in real time to another node
 *   A transaction log reflection step where data is applied to the slave database server through the analysis of the transaction log being replicated in real time
 
-**Java Stored Procedure**
+**Stored Procedure**
 
-A stored procedure is a method to decrease the complexity of applications and to improve the reusability, security and performance through the separation of database logic and middleware logic. A stored procedure is written in Java (generic language), and provides Java stored procedures running on the Java Virtual Machine (JVM). To execute Java stored procedures in CUBRID, the following steps should be performed:
-
-*   Install and configure the Java Virtual Machine
-*   Create Java source files
-*   Compile the files and load Java resources
-*   Publish the loaded Java classes so they can be called from the database
-*   Run CUBRID Java SP server for the database (see :ref:`cubrid-javasp-server`)
-*   Call the Java stored procedures
+A stored procedure is a method to decrease the complexity of applications and to improve the reusability, security and performance through the separation of database logic and middleware logic.
+CUBRID supports the SQL extension language PL/CSQL and can also be written in the general-purpose language Java.
+To use the stored procedure feature, the procedure language server must be running. (See :ref:`cubrid-pl-server`\)
+For more details on stored procedures, refer to :doc:`/pl/index`.
 
 **Click Counter**
 

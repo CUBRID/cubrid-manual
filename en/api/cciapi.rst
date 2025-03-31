@@ -2723,7 +2723,7 @@ cci_register_out_param
 
 .. c:function:: int cci_register_out_param(int req_handle, int index)
 
-    The **cci_register_out_param** function is used to bind the parameters as outbind in Java Stored Procedure. The index value begins from 1.
+    The **cci_register_out_param** function is used to bind the parameters as outbind in Stored Procedure. The index value begins from 1.
     To call this function, **CCI_PREPARE_CALL** flag of **cci_prepare** function should be specified.
 
     :param req_handle: (IN) Request handle
@@ -2734,19 +2734,16 @@ cci_register_out_param
         *    **CCI_ER_CON_HANDLE**
         *    **CCI_ER_USED_CONNECTION**
     
-    The following shows to print out "Hello, CUBRID" string with Java Stored Procedure.
-    
-    To use Java Stored Procedure, firstly specify **java_stored_procedure** parameter in cubrid.conf as **yes**, then start the database.
+    The following shows to print out "Hello, CUBRID" string with tored Procedure.
     
     ::
     
         $ vi cubrid.conf
-        java_stored_procedure=yes
     
         $ cubrid service start
         $ cubrid server start demodb
     
-    Implement and compile the class to be used as Java Stored Procedure.
+    Implement and compile the class to be used as Stored Procedure.
     
     .. code-block:: java
     

@@ -181,28 +181,50 @@ The following example shows how to create a user (*test_user1*), change a passwo
 GRANT
 =====
 
-In CUBRID, the smallest grant unit of authorization is a table. You must grant appropriate authorization to other users (groups) before allowing them to access the table you created.
+In CUBRID, the following database objects can be granted permissions:
 
-You don't need to grant authorization individually because the members of the granted group have the same authorization. The access to the (virtual) table created by a **PUBLIC** user is allowed to all users. You can grant access authorization to a user by using the **GRANT** statement. ::
+*  **Table**
+*  **View**
+*  **Procedure**
 
-    GRANT operation [{, operation }] ON [schema_name.]table_name [{, [schema_name.]table_name}]
-    TO user [{,user }] [WITH GRANT OPTION] ;
+To allow other users (groups) to access the database objects you created, you must grant them the appropriate permissions. All members of a group with granted permissions have the same permissions, so there is no need to grant permissions individually to each member. However, members of a group with the WITH GRANT OPTION permission, who are not part of the DBA or owner group, cannot grant the received permissions to other users.
+
+Database objects created by the **PUBLIC** user are accessible to all users.
+
+You can grant access permissions to a user using the following **GRANT** statement: ::
+
+    (1) Table and View: 
+        GRANT operation [ { ,operation } ... ] ON [schema_name.]object_name [ { , [schema_name.]object_name } ... ] 
+        TO user [ { ,user } ... ] [ WITH GRANT OPTION ];
+
+    (2) Stored Procedure and Function: 
+        GRANT EXECUTE ON PROCEDURE [schema_name.]object_name
+        TO user [ { ,user } ... ];
 
 * *operation*: Specifies an operation that can be used when granting authorization. The following table shows operations.
 
-    *   **SELECT**: Allows to read the table definitions and retrieve records. The most general type of permissions.
-    *   **INSERT**: Allows to create records in the table.
-    *   **UPDATE**: Allows to modify the records already existing in the table.
-    *   **DELETE**: Allows to delete records in the table.
-    *   **ALTER**: Allows to modify the table definition, rename or delete the table.
-    *   **INDEX**: Allows to create indexes on columns to speed up searches.
-    *   **EXECUTE**: Allows to call table methods or instance methods.
-    *   **ALL PRIVILEGES**: Includes all permissions described above.
+    * (1) Table and View
+
+        *   **SELECT**: Allows reading the table definitions and retrieving instances. The most common type of permission.
+        *   **INSERT**: Allows creating instances in the table.
+        *   **UPDATE**: Allows modifying instances already existing in the table.
+        *   **DELETE**: Allows deleting instances in the table.
+        *   **ALTER**: Allows modifying the table definition, renaming, or deleting the table.
+        *   **INDEX**: Allows creating indexes on columns to improve search speed.
+        *   **EXECUTE**: Allows calling table methods or instance methods.
+        *   **ALL PRIVILEGES**: Includes all the above-mentioned permissions.
+
+    * (2) Stored Procedure and Function
+
+        *   **EXECUTE ON PROCEDURE**: Allows calling a stored procedure or function.
 
 * *schema_name*: Specifies the schema name of the table or virtual table. If omitted, the schema name of the current session is used.
 * *table_name*: Specifies the name of a table or virtual table to be granted.
 * *user*: Specifies the name of a user (group) to be granted. Enter the login name of the database user or **PUBLIC**, a system-defined user. If **PUBLIC** is specified, all database users are granted with the permission.
-* **WITH GRANT OPTION**: **WITH GRANT OPTION** allows the grantee of authorization to grant that same authorization to another user.
+* **WITH GRANT OPTION**
+    
+    * **WITH GRANT OPTION** allows the grantee of authorization to grant that same authorization to another user.
+    * The **EXECUTE ON PROCEDURE** permission for stored procedures and functions does not support **WITH GRANT OPTION**.
 
 The following example shows how to grant the **SELECT** authorization for the *olympic* table to *smith* (including his members).
 
@@ -236,22 +258,42 @@ The following example shows how to grant retrieving authorization on the *record
     *   Before granting **SELECT**, **UPDATE**, **DELETE** and **INSERT** authorization for a virtual table, the owner of the virtual table must have **SELECT** and **GRANT** authorization for all the tables included in the query specification. The **DBA** user and the members of the **DBA** group are automatically granted all authorization for all tables.
     *   To execute the **TRUNCATE** statement, the **ALTER**, **INDEX**, and **DELETE** authorization is **required**.
 
+The following example shows how to grant the permission to execute the *my_sp* procedure to *smith*.
+
+.. code-block:: sql
+
+    CREATE OR REPLACE PROCEDURE my_sp ()
+    GRANT EXECUTE ON PROCEDURE my_sp TO smith;
+
+.. note::
+
+    *   The **GRANT** statement can only grant permission to one object at a time for stored procedures and functions.
+    *   The **EXECUTE ON PROCEDURE** operation is used for both stored procedures and functions.
+    *   Currently, the **WITH GRANT OPTION** is not supported for granting permissions on stored procedures and functions, and will return a syntax error if used.
+
 .. _revoking-authorization:
 
 REVOKE
 ======
 
-You can revoke authorization using the **REVOKE** statement. The authorization granted to a user can be revoked anytime. If more than one authorization is granted to a user, all or part of the authorization can be revoked. In addition, if authorization on multiple tables is granted to more than one user using one **GRANT** statement, the authorization can be selectively revoked for specific users and tables.
+You can revoke authorization using the **REVOKE** statement. The authorization granted to a user can be revoked at any time. If more than one type of authorization is granted to a user, all or part of the authorization can be revoked. Additionally, even if a single **GRANT** statement is used to grant authorization on multiple database objects to multiple users, selective revocation of authorization for specific users and specific database objects is possible.
 
-If the authorization (**WITH GRANT OPTION**) is revoked from the grantor, the authorization granted to the grantee by that grantor is also revoked. ::
+If the authorization is revoked from the grantor (**WITH GRANT OPTION**), the authorization granted to the grantee by that grantor is also revoked. ::
 
-    REVOKE operation [{, operation}] ON [schema_name.]table_name [{, [schema_name.]table_name}]
-    FROM user [{, user}] ;
+The following **REVOKE** statement can be used to revoke the authorization granted to a user. ::
 
-*   *operation*: Indicates an operation that can be used when granting authorization (see **Syntax** in :ref:`granting-authorization` for details).
-*   *schema_name*: Specifies the schema name of the table or virtual table. If omitted, the schema name of the current session is used.
-*   *table_name*: Specifies the name of the table or virtual table to be granted.
-*   *user*: Specifies the name of the user (group) to be granted.
+    (1) For tables and views: 
+        REVOKE operation [ { ,operation } ... ] ON [schema_name.]object_name [ { , [schema_name.]object_name } ... ] 
+        FROM user [ { ,user } ... ];
+
+    (2) For stored procedures and functions: 
+        REVOKE EXECUTE ON PROCEDURE [schema_name.]object_name
+        FROM user [ { ,user } ... ];
+
+*   *operation*: Indicates the type of operation that can be revoked (see :ref:`granting-authorization` for details).
+*   *schema_name*: Specifies the schema name of the database object. If omitted, the schema name of the current session is used.
+*   *object_name*: Specifies the name of the database object for which the authorization is to be revoked.
+*   *user*: Specifies the name of the user or group from which the authorization is to be revoked.
 
 The following example shows how to grant **SELECT**, **INSERT**, **UPDATE** and **DELETE** authorization to *smith* and *jones* so that they can perform on the *nation* and *athlete* tables.
 

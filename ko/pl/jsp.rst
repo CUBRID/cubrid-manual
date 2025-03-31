@@ -107,11 +107,14 @@ CUBRID는 SQL 문이나 Java 응용 프로그램에서 Java 메서드를 호출�
 Java Call Specification
 -----------------------------
 
-Java 클래스를 로딩했을 때 SQL 문이나 Java 응용 프로그램에서 클래스 내의 함수를 어떻게 호출할지 모르기 때문에 
-Java 저장 함수/프로시저를 사용하기 위해서는 Call Specification를 사용하여 등록해야 한다.
+Java 클래스가 로딩될 때 SQL 문이나 Java 응용 프로그램에서 클래스 내의 함수를 어떻게 호출할지 모르기 때문에 Call Specification을 사용하여 Java 클래스를 등록해야 한다.
 
-Call Specification는 Java 함수 이름과 인자 타입 그리고 리턴 값과 리턴 값의 타입을 SQL 문이나 Java 응용프로그램에서 접근할 수 있도록 해주는 역할을 한다.
+Call Specification을 사용하면 SQL 문이나 Java 응용 프로그램에서 Java 함수 이름, 인자 타입, 리턴 값 및 리턴 값의 타입에 접근할 수 있다.
+Call Specification을 작성하려면 :ref:`create-function` 또는 :ref:`create-procedure` 문을 사용한다.
 
+* Java 저장 함수/프로시저 이름은 대소문자를 구분하지 않는다.
+* Java 저장 함수/프로시저 이름은 최대 254바이트까지 가능하다.
+* Java 저장 함수/프로시저는 최대 64개의 인자를 가질 수 있다.
 * Java 저장 함수/프로시저의 인자를 **OUT** 으로 설정한 경우 길이가 1인 1차원 배열로 전달된다. 그러므로 Java 메서드는 배열의 첫번째 공간에 전달할 값을 저장해야 한다.
 
 .. code-block:: sql

@@ -11,10 +11,10 @@ DBMS_OUTPUT
 ==============================
 
 The DBMS_OUTPUT package provides functionality to store and read string messages in the DBMS_OUTPUT buffer. 
-Developers of stored procedures/functions can use the PUT_LINE or PUT functions of this package to accumulate desired messages in the DBMS_OUTPUT buffer.
+Developers of stored procedures/functions can use the PUT_LINE or PUT functions of this package to accumulate relevant messages in the DBMS_OUTPUT buffer.
 Client tools like CSQL or DBeaver use the ENABLE, DISABLE, GET_LINE, and GET_LINES functions of this package 
 to activate/deactivate the message storage feature and retrieve messages accumulated in the buffer. 
-Developers can use these messages effectively for checking program progress or debugging.
+Developers can effectively use these messages for monitoring program progress or debugging.
 
 This section explains the usage and examples of the DBMS_OUTPUT package.
 The functions of the DBMS_OUTPUT package are as follows:
@@ -50,8 +50,8 @@ DBMS_OUTPUT.DISABLE
 
 .. function:: DBMS_OUTPUT.DISABLE ()
 
-        Removes the messages stored in the current buffer and deactivates the buffer.
-        Therefore, no output will appear even if other procedures in the DBMS_OUTPUT package are called.
+        Clears the messages stored in the current buffer and deactivates it.
+        Consequently, no output will appear even if other procedures in the DBMS_OUTPUT package are called.
 
 .. note::
 
@@ -96,7 +96,7 @@ DBMS_OUTPUT.GET_LINE
 
 .. function:: DBMS_OUTPUT.GET_LINE (line OUT VARCHAR, status OUT INTEGER)
 
-        Reads the first line of the string message stored in the buffer. The read line is deleted from the buffer.
+        Reads the first line of the string message stored in the buffer. The read line is then deleted from the buffer.
 
         :param line: Stores the string read from the buffer.
         :param status: Stores 0 if the string is successfully read, otherwise stores 1.

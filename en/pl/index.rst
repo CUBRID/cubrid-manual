@@ -14,6 +14,8 @@ This chapter introduces the procedural language extension features provided by C
 
     pl_default_args
     pl_authid
+    pl_tcl
+    pl_package
     plcsql
     jsp
     method

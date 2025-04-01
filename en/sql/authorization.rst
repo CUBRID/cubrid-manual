@@ -223,8 +223,8 @@ You can grant access permissions to a user using the following **GRANT** stateme
 * *user*: Specifies the name of a user (group) to be granted. Enter the login name of the database user or **PUBLIC**, a system-defined user. If **PUBLIC** is specified, all database users are granted with the permission.
 * **WITH GRANT OPTION**
     
-    * **WITH GRANT OPTION** allows the grantee of authorization to grant that same authorization to another user.
-    * The **EXECUTE ON PROCEDURE** permission for stored procedures and functions does not support **WITH GRANT OPTION**.
+    * The **WITH GRANT OPTION** allows the grantee of authorization to grant that same authorization to another user.
+    * The **EXECUTE ON PROCEDURE** permission for stored procedures and functions does not support the **WITH GRANT OPTION**.
 
 The following example shows how to grant the **SELECT** authorization for the *olympic* table to *smith* (including his members).
 
@@ -263,6 +263,10 @@ The following example shows how to grant the permission to execute the *my_sp* p
 .. code-block:: sql
 
     CREATE OR REPLACE PROCEDURE my_sp ()
+    IS
+    BEGIN
+             DBMS_OUTPUT.put_line('grant test');
+    END;
     GRANT EXECUTE ON PROCEDURE my_sp TO smith;
 
 .. note::
@@ -278,7 +282,7 @@ REVOKE
 
 You can revoke authorization using the **REVOKE** statement. The authorization granted to a user can be revoked at any time. If more than one type of authorization is granted to a user, all or part of the authorization can be revoked. Additionally, even if a single **GRANT** statement is used to grant authorization on multiple database objects to multiple users, selective revocation of authorization for specific users and specific database objects is possible.
 
-If the authorization is revoked from the grantor (**WITH GRANT OPTION**), the authorization granted to the grantee by that grantor is also revoked. ::
+If the authorization is revoked from the grantor (**WITH GRANT OPTION**), the authorization granted to the grantee by that grantor is also revoked.
 
 The following **REVOKE** statement can be used to revoke the authorization granted to a user. ::
 

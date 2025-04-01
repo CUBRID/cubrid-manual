@@ -2298,7 +2298,7 @@ The following are other parameters. The type and value range for each parameter 
 
 **stored_procedure**
 
-    **stored_procedure** is a parameter to enable the use of stored procedures by running the cub_pl process. The default value is **yes**. If set to **no**, the cub_pl process will not run, and stored procedures (Java stored procedures) cannot be used.
+    **stored_procedure** is a parameter to enable the use of stored procedures by running the cub_pl process. The default value is **yes**. If set to **no**, the cub_pl process will not run, and stored procedures cannot be used.
 
 **stored_procedure_uds**
 

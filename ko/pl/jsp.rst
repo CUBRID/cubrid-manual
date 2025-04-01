@@ -124,7 +124,7 @@ Java 저장 함수/프로시저 호출
 ============================
 
 등록된 Java 저장 함수/프로시저는 **CALL** 문을 사용하거나, SQL 문에서 호출하거나, Java 응용프로그램에서 호출될 수 있다.
-Java 저장 함수/프로시저를 호출하여 수행 중 exception이 발생하면 *dbname*\ **_java.log** 파일에 exception 내용이 기록되어 저장된다. 만약 화면으로 exception 내용을 확인하고자 할 경우는 **$CUBRID/java/logging.properties** 파일의 handlers 값을 "java.lang.logging.ConsoleHandler"로 수정하면 화면으로 exception 내용을 출력한다.
+Java 저장 함수/프로시저를 호출하여 수행 중 exception이 발생하면 *dbname*\ **_pl.log** 파일에 exception 내용이 기록되어 저장된다. 만약 화면으로 exception 내용을 확인하고자 할 경우는 **$CUBRID/java/logging.properties** 파일의 handlers 값을 "java.lang.logging.ConsoleHandler"로 수정하면 화면으로 exception 내용을 출력한다.
 
 CALL 문
 -------
@@ -775,7 +775,7 @@ Java Native Interface (JNI) 지원
 ==================================
 
 Java Native Interface (JNI)를 사용하여 JVM\에서 C/C++ 와 같은 네이티브 언어의 함수를 호출할 수 있다.
-CUBRID의 Java SP에서는 JNI 기능을 사용할 수 있도록 제공하고 있지만 네이티브 코드의 문제가 저장 프로시저 서버 (cub_javasp) 프로세스 및 그 동작에 예상하지 못한 영향을 줄 수 있으므로 주의해서 사용해야 한다.
+CUBRID의 Java SP에서는 JNI 기능을 사용할 수 있도록 제공하고 있지만 네이티브 코드의 문제가 저장 프로시저 서버 (cub_plsp) 프로세스 및 그 동작에 예상하지 못한 영향을 줄 수 있으므로 주의해서 사용해야 한다.
 네이티브 라이브러리를 로드하는 클래스는 동적으로 로드되지 않도록 loadjava의 **-j** 옵션을 사용하여 등록한다. 자세한 내용은 :ref:`jsp-load-java`\를 참조한다.
 
 다음은 Java 저장 함수에서 JNI를 통해 네이티브 함수를 호출하는 예제이다.

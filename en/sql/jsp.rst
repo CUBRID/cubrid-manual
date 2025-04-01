@@ -130,7 +130,7 @@ Call the Java stored function/procedure
 
 You can call the Java stored functions/procedures by using a **CALL** statement, from SQL statements or Java applications.
 
-|  If an exception occurs during the execution of a Java stored function/procedure, the exception is logged and stored in the *dbname*\ **_java.log** file. To display the exception on the screen, change a handler value of the **$CUBRID/java/logging.properties** file to "java.lang.logging.ConsoleHandler" Then, the exception details are displayed on the screen.
+|  If an exception occurs during the execution of a Java stored function/procedure, the exception is logged and stored in the *dbname*\ **_pl.log** file. To display the exception on the screen, change a handler value of the **$CUBRID/java/logging.properties** file to "java.lang.logging.ConsoleHandler" Then, the exception details are displayed on the screen.
 
 Using CALL Statement
 ----------------------
@@ -781,7 +781,7 @@ Java Native Interface (JNI) Support
 ===================================
 
 Using the Java Native Interface (JNI), you can invoke functions in native languages like C/C++ from the Java Virtual Machine (JVM). 
-Java Stored Procedures (SP) in CUBRID provide support for JNI functionality, but you should be cautious when using it because issues in native code can have unexpected impacts on the stored routine server (cub_javasp) process and its operation.
+Java Stored Procedures (SP) in CUBRID provide support for JNI functionality, but you should be cautious when using it because issues in native code can have unexpected impacts on the stored routine server (cub_plsp) process and its operation.
 Java Classes used for loading native libraries should be registered using the **-j** option of **loadjava** to prevent them from being dynamically loaded. For more details, refer to :ref:jsp-load-java.
 
 The following is an example of invoking a native function through JNI in a CUBRID Java stored function:

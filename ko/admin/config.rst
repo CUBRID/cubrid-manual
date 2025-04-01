@@ -2274,7 +2274,7 @@ HA 관련 파라미터
 
 **stored_procedure**
 
-    **stored_procedure** 는 cub_pl 프로세스를 실행하여 저장 프로시저(stored procedure)를 사용하게 하기 위한 파라미터이다. 기본값은 **yes**\ 이며, **no**\로 설정하는 경우 cub_pl 프로세스가 실행되지 않고, 저장 프로시저(Java stored procedure)를 사용할 수 없다.
+    **stored_procedure** 는 cub_pl 프로세스를 실행하여 저장 프로시저(stored procedure)를 사용하게 하기 위한 파라미터이다. 기본값은 **yes**\ 이며, **no**\로 설정하는 경우 cub_pl 프로세스가 실행되지 않고, 저장 프로시저(stored procedure)를 사용할 수 없다.
 
 **stored_procedure_uds**
 

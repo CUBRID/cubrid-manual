@@ -3238,7 +3238,7 @@ Procedure Language Server Configuration
 .. _cubrid-pl-environment-configuration:
 
 Procedure Language Environment Configuration
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To use the Procedure Language in CUBRID, the Java Development Kit (JDK) 1.8 64-bit version must be installed in the environment where the CUBRID server is installed.
 The JDK can be downloaded from the following links:
@@ -3325,8 +3325,8 @@ CUBRID Procedure Language Server Logs
 
 The logs of the CUBRID Procedure Language Server are stored in the **log/** directory of the installation directory. The following log files are created for each database.
 
-* Error log ($CUBRID/log/[db_name]_java.err)
-* Java log ($CUBRID/log/[db_name]_java.log)
+* Error log ($CUBRID/log/[db_name]_pl.err)
+* Java log ($CUBRID/log/[db_name]_pl.log)
 
 Error Log
 ^^^^^^^^^
@@ -3335,7 +3335,7 @@ The error log of the Procedure Language Server for each database is stored in th
 
 ::
 
-    demodb_java.err
+    demodb_pl.err
 
 If an error occurs while starting the Procedure Language Server, the error message is saved in the error log file.
 
@@ -3353,16 +3353,17 @@ If an error occurs while starting the Procedure Language Server, the error messa
     For more details on what errors can occur, see :ref:`cubrid-pl-server-errors`.
 
 
-Java Log
-^^^^^^^^^
+Exception Log
+^^^^^^^^^^^^^^
 
-The Java log of the Procedure Language Server for each database is stored in the **$CUBRID/log** directory, and the file name is in the format **<db_name>_java.log**. The extension is **.log**.
+The JVM exception messages that occur during the execution of procedures are saved.
+The exception log of the Procedure Language Server for each database is stored in the **$CUBRID/log** directory, and the file name is in the format **<db_name>_pl.log**. The extension is **.log**.
 
 ::
 
-    demodb_java.log
+    demodb_pl.log
 
-If an exception occurs while executing stored procedures/functions in the JVM, the exception string is saved in the Java log.
+If an exception occurs while executing stored procedures/functions in the VM, the exception string is saved in the exception log.
 
 ::
 
@@ -3379,7 +3380,7 @@ CUBRID Procedure Language Errors
 -------------------------------
 
 The following are error messages for errors that may occur when starting the CUBRID Procedure Language Server.
-The error messages are stored in **$CUBRID/log**/\ *<db_name>_java*\ **.err**.
+The error messages are stored in **$CUBRID/log**/\ *<db_name>_pl*\ **.err**.
 
 +-------+--------------------------------------------------+-----------------------------------------------------+-----------------------------------------------------------------------------------+
 | Error | Error Message                                    | Description                                         | Action                                                                            |

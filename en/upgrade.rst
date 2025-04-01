@@ -70,10 +70,10 @@ Please confirm :ref:`11_4_changes` in the release notes.
 *   From 2008 R4.0, the replication feature is no longer supported; therefore, it is recommended to reconfigure the DB migration and HA environment for systems in which previous replication versions are used. In addition, for systems that use Linux Heartbeat-based HA feature, which is provided in CUBRID 2008 R2.0 and 2008 R2.1, you must reconfigure to DB migration and the CUBRID Heartbeat-based HA environment for better operational stability(see :ref:`ha-db-migration`).
 *   To reconfigure the HA environment configuration, see :doc:`ha` in the manual.
 
-**Java Stored Function/Procedure**
+**Stored Function/Procedure**
 
-*   A user who uses Java stored function/procedure should run loadjava command to load Java classes into CUBRID. See :ref:`jsp-loadjava`.
-*   **Java SP server** should be started before using Java stored procedure/function. See :ref:`jsp-starting-javasp`.
+*   To use stored functions/procedures, the CUBRID procedure language server (cub_pl) is started by default and is managed by the database server. Therefore, even if the procedure language server is stopped, it will be automatically restarted by the database server.
+*   If you do not want to run the CUBRID procedure language server, set the **stored_procedure** parameter in **cubrid.conf** to **no** and restart. In this case, the PL/CSQL and Java stored procedure functions cannot be used.
 
 Upgrading from CUBRID 9.2/9.3/10.0/10.1/10.2/11.0/11.2/11.3 to CUBRID 11.4
 ----------------------------------------------------------------

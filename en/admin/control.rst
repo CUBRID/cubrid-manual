@@ -1,5 +1,5 @@
 
-:meta-keywords: cubrid server process, cub_server, cubrid broker, cubrid gateway,cubrid cas, cubrid manager server, cubrid HA, cubrid services, cubrid logging, cubrid errors, cubrid server access, cubrid status, cubrid manager, cubrid javasp, cub_javasp
+:meta-keywords: cubrid server process, cub_server, cubrid broker, cubrid gateway,cubrid cas, cubrid manager server, cubrid HA, cubrid services, cubrid logging, cubrid errors, cubrid server access, cubrid status, cubrid manager, cubrid pl, cub_pl
 :meta-description: How to control and check CUBRID services and processes (server, broker, gateway), logging files, access, errors, CUBRID Manager and CUBRID Java SP Server.
 
 .. _control-cubrid-processes:
@@ -157,34 +157,44 @@ The following **cubrid heartbeat** utility syntax shows how to use CUBRID HA. On
 
 For details, see :ref:`cubrid-heartbeat`.
 
-Controlling CUBRID Java Stored Procedure Server
-------------------------------------------------
+Controlling CUBRID Procedure Language (PL) Server
+-------------------------------------------------
 
-The following **cubrid** utility syntax shows how to control CUBRID Java Stored Procedure server process.
-
-::
-
-    cubrid javasp <command> [database_name]
-    <command>: {start|stop|restart|status}
-
-One of the following can be specified in <command>: 
-
-*   start: start a Java Stored Procedure server process.
-*   stop: stop a Java Stored Procedure server process.
-*   restart: restart a Java Stored Procedure server process.
-*   status: check status of a Java Stored Procedure server process.
-
-| Every command can specify a database name (**[database_name]**) as an argument.
-| If the database name is not specified, the **status** command displays status information of the Java stored procedure server of every currently running database server.
+The following **cubrid** utility syntax is used to control the CUBRID Procedure Language (PL) server process.
 
 ::
 
+    cubrid pl <command> [database_name]
+    <command>: {restart|status}
+
+*   restart: restart the procedure language server process.
+*   status: check the status of the procedure language server process.
+
+.. note::
+
+        * Every command can specify a database name (**[database_name]**) as an argument.
+        * The **restart** command forcibly stops the procedure language server, and the database server detects this and automatically restarts the procedure language server.
+        * If the database name is not specified when executing the **status** command, it displays the status information of the procedure language server for all running databases.
+
 ::
 
-    % cubrid javasp start demodb
+    % cubrid pl restart demodb
 
-    @ cubrid javasp start: demodb
-    ++ cubrid javasp start: success
+    @ cubrid pl start: demodb
+    ++ cubrid pl start: success
+
+    % cubrid pl status demodb
+
+    @ cubrid pl status
+    Procedure Language Server (demobdb, pid 12345, UDS)
+    VM arguments:
+    -------------------------------------------------
+    ...
+    -------------------------------------------------
+
+.. note::
+
+    From CUBRID version 11.4, the CUBRID Procedure Language (PL) server has replaced the previously used CUBRID Java Stored Procedure (Java SP) server.
 
 .. _control-cubrid-services:
 
@@ -3158,158 +3168,85 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
 
             cm_admin changedbinfo -p 33000 testcm testdb
 
-.. _cubrid-javasp-server:
 
-CUBRID Java Stored Procedure Server
-===================================
+.. _cubrid-pl-server:
 
-Starting CUBRID Java SP Server
-------------------------------
+CUBRID Procedure Language Server
+====================================
 
-The following example shows how to start CUBRID Java SP server for *demodb*.
+Starting CUBRID Procedure Language Server
+---------------------------------------
 
-To start the Java SP server, the **java_stored_procedure parameter** in the CUBRID configuration file (**cubrid.conf**) must set to yes.
-
-::
-
-    % cubrid javasp start demodb
-
-    @ cubrid javasp start: demodb
-    ++ cubrid javasp start: success
-
-The following message is returned if CUBRID Java SP server is already running. 
+| The CUBRID Procedure Language Server automatically starts when the database server starts and stops when the database server stops.
+| If you do not want to start the Procedure Language Server with the database server, set the **stored_procedure** value to **no** for the corresponding database in the CUBRID configuration file (**cubrid.conf**).
 
 ::
 
-    % cubrid javasp start demodb
-
-    @ cubrid javasp start: demodb
-    ++ cubrid javasp 'demodb' is running.
-
-For details on other types of errors that may occur when starting the server, see :ref:`cubrid-javasp-server-errors`.
-
-Stopping CUBRID Java SP Server
-------------------------------
-
-The following example shows how to stop CUBRID Java SP server for *demodb*. 
-
-::
-
-    % cubrid javasp stop demodb
-
-    @ cubrid javasp stop: demodb
-    ++ cubrid javasp stop: success
-
-The following message is returned when CUBRID Java SP server has been stopped already.
-
-::
-
-    % cubrid javasp stop demodb
-
-    @ cubrid javasp stop: demodb
-    ++ cubrid javasp 'demodb' is not running.
-    ++ cubrid javasp stop: fail
-
-Restarting CUBRID Java SP Server
---------------------------------
-
-The following example shows how to restart CUBRID Java SP server for *demodb*. the server that has already run stops and the server restarts. 
-
-::
-
-    % cubrid javasp restart demodb
-    
-    @ cubrid javasp stop: demodb
-    ++ cubrid javasp stop: success
-    @ cubrid javasp start: demodb
-    ++ cubrid javasp start: success
-
-Checking CUBRID Java SP Server Status
--------------------------------------
-
-The following example shows how to check the status of a CUBRID Java SP server for *demodb*. 
-The database name of Java SP server, which currently running, *demodb* is displayed.
-Additionally, The server's PID, port number, and the applied JVM option are shown together.
-
-::
-
-    % cubrid javasp status demodb
-    
-    @ cubrid javasp status: demodb
-    Java Stored Procedure Server (demodb, pid 9220, port 38408)
-    Java VM arguments :
-    -------------------------------------------------
-    -Djava.util.logging.config.file=/path/to/CUBRID/java/logging.properties
-    -Xrs
-    -------------------------------------------------
-
-
-.. _cubrid-javasp-with-server:
-
-Starting the CUBRID Java SP Server together when the database server starts
-------------------------------------------------------------------------------------------
-
-| If **java_stored_procedure** is set to yes for the corresponding database, 
-| When the database server starts/stops, the Java stored procedure server is started/stopped.
-| The following is an example of Java stored procedure server and database server both are started simultaneously.
-
-::
-
-    # cubrid.conf
-
-    ...
-
-    [@demodb]
-    java_stored_procedure=yes
-    
-    [@testdb]
-    java_stored_procedure=no
-
-    ...
-
-::
-
-    -- demodb's java_stored_procedure is set to yes
     % cubrid server start demodb
-    
-    @ cubrid server start: demodb
 
-    This may take a long time depending on the amount of restore works to do.
-    CUBRID 11.4
+    @ cubrid pl status
 
-    Calling java stored procedure is allowed
+For more details on other types of errors that may occur when starting the CUBRID Procedure Language Server, see :ref:`cubrid-pl-server-errors`.
+
+Restarting CUBRID Procedure Language Server
+-----------------------------------
+
+The following is a method to restart the Procedure Language Server for *demodb*.
+When the restart command for the Procedure Language Server is issued, the Procedure Language Server stops and is restarted by the database server.
+If the database server is not running, the restart command does not work.
 
 ::
 
-    -- testdb's java_stored_procedure is set to no
-    % cubrid server start testdb
+    % cubrid pl restart demodb
+
+    @ cubrid pl restart: demodb
+    ++ cubrid pl restart: success
+
+
+..note::
+
+    Since the database server automatically starts the Procedure Language Server, the restart command is not frequently used.
+    It can be used to stabilize the server when the GC of the Procedure Language Server's VM is slow after performing large I/O operations or analysis tasks using procedures.
+
+.. warning::
+
+    Restarting the Procedure Language Server will interrupt and roll back any currently running transactions.
+
+Checking the Status of CUBRID Procedure Language Server
+----------------------------------------
+
+The following is an example of checking the status of the CUBRID Procedure Language Server for *demodb*.
+The name of the target database, *demodb*, on which the Procedure Language Server is currently running, is displayed.
+Additionally, the server's PID, port number, and applied JVM options are displayed.
+
+::
+
+    % cubrid pl status demodb
     
-    @ cubrid server start: testdb
+    @ cubrid pl status: demodb
+    Procedure Language Server (demodb, pid 9220, UDS)
+    VM arguments :
+    -------------------------------------------------
+    ...
+    -------------------------------------------------
 
-    This may take a long time depending on the amount of restore works to do.
-    CUBRID 11.4
+.. _cubrid-pl-server-config:
 
-    java_stored_procedure system parameter is not enabled
-    Calling java stored procedure is not allowed
-
-
-.. _cubrid-javasp-server-config:
-
-Configuring for CUBRID Java SP Server
+Procedure Language Server Configuration
 -------------------------------------
 
-.. _cubrid-javasp-environment-configuration:
+.. _cubrid-pl-environment-configuration:
 
-Environment Configuration for Java Stored Function/Procedure
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Procedure Language Environment Configuration
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To use Java-stored functions/procedures in CUBRID, you must have JDK (Java Development Kit) 1.8 64bit installed in the environment where the CUBRID server is installed. 
-You can download JDK at the following links
+To use the Procedure Language in CUBRID, the Java Development Kit (JDK) 1.8 64-bit version must be installed in the environment where the CUBRID server is installed.
+The JDK can be downloaded from the following links:
 
 * `OpenJDK 8 <https://openjdk.java.net/projects/jdk8/>`_
-* `Oracle JDK 8 <https://www.oracle.com/java/technologies/javase/javase8-archive-downloads.html>`_
+* `Oracle JDK 8 <https://www.oracle.com/kr/java/technologies/javase/javase8-archive-downloads.html>`_
 
-Execute the following command to check the JRE version if you have it already installed in the system. ::
+If the JDK is already installed, check the JRE version with the following command. ::
 
     % java -version
     openjdk version "1.8.0_302"
@@ -3318,92 +3255,94 @@ Execute the following command to check the JRE version if you have it already in
 
 **Windows Environment**
 
-For Windows, CUBRID loads the **jvm.dll** file to run the Java Virtual Machine. CUBRID first locates the **jvm.dll** file from the **PATH** environment variable and then loads it. If it cannot find the file, it uses the Java runtime information registered in the system registry.
+CUBRID loads the **jvm.dll** file to run the Java Virtual Machine in the Windows environment. CUBRID first searches for **jvm.dll** in the system's **Path** environment variable. If it cannot be found, it uses the Java runtime information registered in the system registry.
 
-You can configure the **JAVA_HOME** environment variable and add the directory in which the Java executable file is located to **Path**, by executing the command as follows: For information on configuring environment variables using GUI, see Installing and Configuring JDBC.
+You can set the **JAVA_HOME** environment variable and add the directory containing the Java executable file to the **Path** environment variable by executing the following commands. For instructions on setting environment variables using the GUI, refer to the JDBC installation and configuration.
 
-*   An example of configuring the JDK 1.8 environment variables ::
+* Example of setting JDK 1.8 environment variables ::
 
     % set JAVA_HOME=C:\jdk1.8.0
     % set PATH=%PATH%;%JAVA_HOME%\jre\bin\server
 
-If you want to specify the path of Java Virtual Machine (JVM) explicitly including cases to use other vendor's implementation instead of Sun's JVM, add the path of the **jvm.dll** file to the **JVM_PATH** variable during the installation.
-CUBRID first looks for the **jvm.dll** file in the **JVM_PATH** variable. if **JVM_PATH** is not set or if the file cannot be loaded, it looks for the file in the **JAVA_HOME** variable as described above.
+To explicitly specify the path to the Java Virtual Machine (JVM), including cases where a non-SUN Java Virtual Machine implementation is used, add the path to the **jvm.dll** file to the **JVM_PATH** environment variable.
+CUBRID first searches for the **jvm.dll** file in the **JVM_PATH** variable. If **JVM_PATH** is not set or the file cannot be loaded, it searches for **jvm.dll** in the **JAVA_HOME** variable as described above.
 
-*   An example of configuring the **JVM_PATH** environment variable ::
+* Example of setting the **JVM_PATH** environment variable ::
     
     % set JVM_PATH=C:\jdk1.8.0\jre\bin\server\libjvm.dll
 
-**Linux/UNIX Environment**
+**Linux/Unix Environment**
 
-For Linux/UNIX environment, CUBRID loads the **libjvm.so** file to run the Java Virtual Machine. CUBRID first locates the **libjvm.so** file from the **LD_LIBRARY_PATH** environment variable and then loads it. If it cannot find the file, it uses the **JAVA_HOME** environment variable. For Linux, glibc 2.3.4 or later versions are supported. The following example shows how to configure the Linux environment variable (e.g., **.profile**, **.cshrc**, **.bashrc**, **.bash_profile**, etc.).
+CUBRID loads the **libjvm.so** file to run the Java Virtual Machine in the Linux/Unix environment. CUBRID first searches for the **libjvm.so** file in the **LD_LIBRARY_PATH** environment variable. If it cannot be found, it uses the **JAVA_HOME** environment variable. Only glibc 2.3.4 or higher is supported on Linux. The following is an example of setting environment variables in Linux environment configuration files (e.g., **.profile**, **.cshrc**, **.bashrc**, **.bash_profile**, etc.).
 
-*   An example of installing JDK 1.8 and configuring the environment variables in a bash shell ::
+* Example of setting JDK 1.8 environment variables in bash shell ::
 
     % JAVA_HOME=/usr/java/jdk1.8.0
     % LD_LIBRARY_PATH=$JAVA_HOME/jre/lib/amd64:$JAVA_HOME/jre/lib/amd64/server:$LD_LIBRARY_PATH
     % export JAVA_HOME
     % export LD_LIBRARY_PATH
 
-*   An example of installing JDK 1.8 and configuring the environment variables in a csh shell ::
+* Example of setting JDK 1.8 environment variables in csh shell ::
 
     % setenv JAVA_HOME /usr/java/jdk1.8.0
     % setenv LD_LIBRARY_PATH $JAVA_HOME/jre/lib/amd64:$JAVA_HOME/jre/lib/amd64/server:$LD_LIBRARY_PATH
     % set path=($path $JAVA_HOME/bin .)
 
-If you want to specify the path of Java Virtual Machine (JVM) explicitly including cases to use other vendor's implementation instead of Sun's JVM, add the path of the **libjvm.so** file to the **JVM_PATH** variable during the installation.
-The path of the **libjvm.so** file can be different depending on the platform. For example, the path is the **$JAVA_HOME/jre/lib/sparc** directory in a SUN Sparc machine.
-CUBRID first looks for the **libjvm.so** file in the **JVM_PATH** variable. if **JVM_PATH** is not set or if the file cannot be loaded, it looks for the file in the **JAVA_HOME** variable as described above.
+To explicitly specify the path to the Java Virtual Machine (JVM), including cases where a non-SUN Java Virtual Machine implementation is used, add the path to the Java VM (**libjvm.so**) file to the **JVM_PATH** environment variable.
+The path to the **libjvm.so** file may vary depending on the OS platform and supported bit. For example, on a SUN Sparc machine, the path to the **libjvm.so** file is **$JAVA_HOME/jre/lib/sparc**.
+CUBRID first searches for the **libjvm.so** file in the **JVM_PATH** variable. If **JVM_PATH** is not set or the file cannot be loaded, it searches for **libjvm.so** in the **JAVA_HOME** variable as described above.
 
-*   An example of configuring the **JVM_PATH** environment variable ::
+* Example of setting the **JVM_PATH** environment variable ::
     
     % JVM_PATH=/usr/java/jdk1.8.0/jre/lib/amd64/server/libjvm.so
     % export JVM_PATH
 
-.. _cubrid-javasp-system-parameter:
+.. _cubrid-pl-system-parameter:
 
-Java SP Server System Parameters
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Procedure Language Server System Parameters
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The following table shows the server paramters related to Java SP server available in the configuration file (**cubrid.conf**)
+The following table lists the server parameters related to the Procedure Language Server that can be set in the configuration file (**cubrid.conf**).
 
-+-------------------------------------+--------+----------------+-----+-------+
-| Parameter Name                      | Type   | Default        | Min | Max   |
-+-------------------------------------+--------+----------------+-----+-------+
-| java_stored_procedure               | bool   | no             |     |       |
-+-------------------------------------+--------+----------------+-----+-------+
-| java_stored_procedure_port          | int    | 0              | 0   | 65535 |
-+-------------------------------------+--------+----------------+-----+-------+
-| java_stored_procedure_jvm_options   | string |                |     |       |
-+-------------------------------------+--------+----------------+-----+-------+
++-------------------------------------+--------+----------------+--------+--------+
+| Parameter Name                      | Type   | Default Value  | Min    | Max    |
++-------------------------------------+--------+----------------+--------+--------+
+| stored_procedure                    | bool   | yes            |        |        |
++-------------------------------------+--------+----------------+--------+--------+
+| stored_procedure_uds                | bool   | yes            |        |        |
++-------------------------------------+--------+----------------+--------+--------+
+| stored_procedure_port               | int    | 0              | 0      | 65535  |
++-------------------------------------+--------+----------------+--------+--------+
+| stored_procedure_vm_options         | string |                |        |        |
++-------------------------------------+--------+----------------+--------+--------+
 
-For more details on these paramters, see :ref:`cubrid-conf`.
+For more details on these parameters, see :ref:`cubrid-conf`.
 
-.. _cubrid-javasp-server-log:
+.. _cubrid-pl-server-log:
 
-CUBRID Java SP Server Log
--------------------------
+CUBRID Procedure Language Server Logs
+------------------------------------
 
-The logs of CUBRID Java SP server are stored in the **log/** directory under the installation directory. The following log files are created for CUBRID Java Stored Procedure Server per database.
+The logs of the CUBRID Procedure Language Server are stored in the **log/** directory of the installation directory. The following log files are created for each database.
 
-*   Error Log ($CUBRID/log/[db_name]_java.err)
-*   Java Log ($CUBRID/log/[db_name]_java.log)
+* Error log ($CUBRID/log/[db_name]_pl.err)
+* Java log ($CUBRID/log/[db_name]_pl.log)
 
 Error Log
 ^^^^^^^^^
 
-An error log of the Java SP server for each database is saved into **$CUBRID/log** directory, and and the format of the file name is **<db_name>_java.err**. The extension is **.err**.
+The error log of the Procedure Language Server for each database is stored in the **$CUBRID/log** directory, and the file name is in the format **<db_name>_pl.err**. The extension is **.err**.
 
 ::
 
-    demodb_java.err
+    demodb_pl.err
 
-If any error occurs during starting the Java SP server, the error message is saved into the error log file.
+If an error occurs while starting the Procedure Language Server, the error message is saved in the error log file.
 
 ::
 
     Time: 11/11/20 18:17:15.438 - ERROR *** file ../../src/jsp/jsp_sr.c, line 501 ERROR CODE = -900, Tran = -1, EID = 1
-    Java VM library is not found: 
+    Cannot find Java Virtual Machine library:
         Failed to get 'JVM_PATH' environment variable.
         Failed to load libjvm from 'JAVA_HOME' environment variable:
             /jre/lib/amd64/server/libjvm.so: cannot open shared object file: No such file or directory
@@ -3411,19 +3350,20 @@ If any error occurs during starting the Java SP server, the error message is sav
 
 .. note::
 
-    For more details on what errors can be occured, see :ref:`cubrid-javasp-server-errors`.
+    For more details on what errors can occur, see :ref:`cubrid-pl-server-errors`.
 
 
-Java Log
-^^^^^^^^^
+Exception Log
+^^^^^^^^^^^^^^
 
-An Java log of the JVM in the Java SP server is saved into **$CUBRID/log** directory, and the format of the file name is **<db_name>_java.log**. The extension is **.log**.
+The JVM exception messages that occur during the execution of procedures are saved.
+The exception log of the Procedure Language Server for each database is stored in the **$CUBRID/log** directory, and the file name is in the format **<db_name>_pl.log**. The extension is **.log**.
 
 ::
 
-    demodb_java.log
+    demodb_pl.log
 
-If any exception during performing java stored procedure/function occurs from JVM, the exception string is saved into the java log.
+If an exception occurs while executing stored procedures/functions in the VM, the exception string is saved in the exception log.
 
 ::
 
@@ -3434,45 +3374,47 @@ If any exception during performing java stored procedure/function occurs from JV
     at com.cubrid.jsp.StoredProcedure.invoke(StoredProcedure.java:263)
     at com.cubrid.jsp.ExecuteThread.run(ExecuteThread.java:197)
 
-.. _cubrid-javasp-server-errors:
+.. _cubrid-pl-server-errors:
 
-CUBRID Java SP Server Errors
-----------------------------
+CUBRID Procedure Language Errors
+-------------------------------
 
-The following are error messages about the errors which can be occurred in starting Java SP server.
-Error messages are written to **$CUBRID/log**/\ *<db_name>_java*\ **.err**.
+The following are error messages for errors that may occur when starting the CUBRID Procedure Language Server.
+The error messages are stored in **$CUBRID/log**/\ *<db_name>_pl*\ **.err**.
 
-+-------+----------------------------------+-----------------------------------------------------+-----------------------------------------------------------------------------------+
-| Error | Error Message                    | Description                                         | Solution                                                                          |
-| Code  |                                  |                                                     |                                                                                   |
-+=======+==================================+=====================================================+===================================================================================+
-| -900  | Java VM library is not found: ?  | CUBRID can't find the JVM library                   | Make sure JAVA_HOME or JVM_PATH variable is set properly.                         |
-|       |                                  | from the JAVA_HOME or JVM_PATH variables            | see :ref:`cubrid-javasp-environment-configuration`.                               |
-+-------+----------------------------------+-----------------------------------------------------+-----------------------------------------------------------------------------------+
-| -901  | Java VM can not be started: ?    | Unexpected internal error occured in JVM library.   | Try installing the JRE again. If you keep getting the error,                      |
-|       |                                  | The JVM library may be broken, or there may be a    | try installing a different version of the JRE.                                    |
-|       |                                  | problem with the $CUBRID/java/jspserver.jar file.   | Try replacing it with the same CUBRID version of $CUBRID/java/jspserver.jar file. |
-+-------+----------------------------------+-----------------------------------------------------+-----------------------------------------------------------------------------------+
++-------+--------------------------------------------------+-----------------------------------------------------+-----------------------------------------------------------------------------------+
+| Error | Error Message                                    | Description                                         | Action                                                                            |
+| Code  |                                                  |                                                     |                                                                                   |
++=======+==================================================+=====================================================+===================================================================================+
+| -900  | VM library is not found: %1$s.                   | CUBRID cannot find the JVM library from the         | Check if the JAVA_HOME or JVM_PATH variables are set correctly.                   |
+|       |                                                  | JAVA_HOME or JVM_PATH environment variables.        | Refer to :ref:`cubrid-pl-environment-configuration`.                              |
++-------+--------------------------------------------------+-----------------------------------------------------+-----------------------------------------------------------------------------------+
+| -901  | PL server can not be started: %1$s.              | An unexpected error occurred within the JVM library | Try reinstalling the JRE, and if the same error occurs,                           |
+|       |                                                  | or in $CUBRID/java/jspserver.jar.                   | try installing a different version of the JRE.                                    |
+|       |                                                  |                                                     | Also, replace the $CUBRID/java/jspserver.jar file with the one from the same      |
+|       |                                                  |                                                     | version of CUBRID.                                                                |
++-------+--------------------------------------------------+-----------------------------------------------------+-----------------------------------------------------------------------------------+
 
-The following are error messages about the errors which can be occurred when there is a problem with the connection to Java SP server including the case it is not started.
-Error messages are written to **$CUBRID/log/broker/error_log**/\ *<broker_name>_<app_server_num>*\ **.err**.
+The following are error messages for errors that may occur when there are connection issues, including when the CUBRID Procedure Language Server is not started.
+The error messages are stored in **$CUBRID/log/broker/error_log**/\ *<broker_name>_<app_server_num>*\ **.err**.
 
-+-------+----------------------------------+-----------------------------------------------------+------------------------------------------------------------------------------------+
-| Error | Error Message                    | Description                                         | Solution                                                                           |
-| Code  |                                  |                                                     |                                                                                    |
-+=======+==================================+=====================================================+====================================================================================+
-| -902  | Java VM is not running.          | Java SP server is not started                       | Start Java SP server by **cubrid javasp start <db_name>** command.                 |
-|       |                                  |                                                     | see :ref:`cubrid-javasp-server`.                                                   |
-+-------+----------------------------------+-----------------------------------------------------+------------------------------------------------------------------------------------+
-| -903  | Can't connect Java VM: ?         | Java SP server cannot be connected from CAS.        | Restart the Java SP server. If the restart fails,                                  |
-|       |                                  | This can happen for many reasons.                   | try to shutdown **cub_javasp <db_name>** process forcibly                          |
-|       |                                  | For example, the Java SP server is unstable,        | with the Linux **kill** command. and restart the server again.                     |
-|       |                                  | the server is unreachable from CAS,                 |                                                                                    |
-|       |                                  | or the server is killed unexpectedly.               | Check if the port of the Java SP server through **cubrid javasp status <db_name>** |
-|       |                                  |                                                     | is reachable from CAS.                                                             |
-|       |                                  |                                                     | It could be that a firewall forbids the port. Open the port in the firewall.       |
-|       |                                  |                                                     | If required, set **java_stored_procedure_port** and restart the Java SP server     |
-|       |                                  |                                                     | see :ref:`connect-to-cubrid-server`.                                               |
-+-------+----------------------------------+-----------------------------------------------------+------------------------------------------------------------------------------------+
-| -905  | Networking with JVM failed: ?    | CAS received invalid packet from the Java SP server |                                                                                    |
-+-------+----------------------------------+-----------------------------------------------------+------------------------------------------------------------------------------------+
++-------+---------------------------------------------------+------------------------------------------------------------+------------------------------------------------------------------------------------------------------+
+| Error | Error Message                                     | Description                                                | Action                                                                                               |
+| Code  |                                                   |                                                            |                                                                                                      |
++=======+===================================================+============================================================+======================================================================================================+
+| -902  | PL server is not running.                         | The Procedure Language Server is not started               | Start the Procedure Language Server with the **cubrid pl start <db_name>** command.                  |
+|       |                                                   |                                                            | For more details, refer to :ref:`cubrid-pl-server`.                                                  |
++-------+---------------------------------------------------+------------------------------------------------------------+------------------------------------------------------------------------------------------------------+
+| -903  | Can't connect PL server: %1$s                     | The Procedure Language Server cannot connect from CAS      | Restart the Procedure Language Server. If the restart fails,                                         |
+|       |                                                   | This error can occur for various reasons.                  | forcibly terminate the **cub_pl <db_name>** process using the Linux **kill** command.                |
+|       |                                                   | For example, if the Procedure Language Server is unstable  | Then restart the Procedure Language Server again.                                                    |
+|       |                                                   | or if CAS cannot connect to the Procedure Language Server, |                                                                                                      |
+|       |                                                   | or if the Procedure Language unexpectedly terminates (kill)| Check if the Procedure Language Server's port is accessible from CAS using the                       |
+|       |                                                   | this error message is displayed.                           | **cubrid pl status <db_name>** command.                                                              |
+|       |                                                   |                                                            | The port may be blocked by a firewall, so open the port in the firewall.                             |
+|       |                                                   |                                                            | If necessary, set the **stored_procedure_port** parameter and restart the Procedure Language Server. |
+|       |                                                   |                                                            | For more details, refer to :ref:`connect-to-cubrid-server`.                                          |
++-------+---------------------------------------------------+------------------------------------------------------------+------------------------------------------------------------------------------------------------------+
+| -905  | Networking with PL server failed: %1$d            | CAS received an incorrect packet from the Procedure        |                                                                                                      |
+|       |                                                   | Language Server                                            |                                                                                                      |
++-------+---------------------------------------------------+------------------------------------------------------------+------------------------------------------------------------------------------------------------------+

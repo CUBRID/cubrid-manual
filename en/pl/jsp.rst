@@ -1,6 +1,13 @@
 :meta-keywords: cubrid jsp, cubrid javasp, loadjava utility
 :meta-description: CUBRID supports to develop stored functions and procedures in Java. Java stored functions/procedures are executed on the JVM (Java Virtual Machine) hosted by CUBRID.
 
+******************************
+Java Stored Function/Procedure
+******************************
+
+CUBRID supports the development of stored functions and procedures using Java. Java stored functions and procedures are executed on a Java Virtual Machine (JVM) hosted by CUBRID.
+Since Java stored functions and procedures use the JVM, they offer excellent interoperability and portability.
+
 .. _jsp-introduction:
 
 Introduction to Java Stored Function/Procedure
@@ -21,51 +28,12 @@ The advantages of using Java stored functions/procedures are as follows:
 
 .. _jsp-prerequisites:
 
-Prerequisites
-==============================================
+Prerequisites for Writing and Using Java Stored Functions/Procedures
+====================================================================
 
-To use Java stored function/procedure, the following must be ready
-
-*   **java_stored_procedure** must be set to **yes** in the **cubrid.conf** file.
-*   Java Stored Procedure server (Java SP server) must be started for the database that you want to use Java stored function/procedures.
-
-.. _jsp-system-prm:
-
-Check the cubrid.conf file
---------------------------
-
-By default, the **java_stored_procedure** is set to **no** in the **cubrid.conf** file.   
-To use a Java stored function/procedure, this value must be changed to **yes**. For details on this value, see :ref:`other-parameters` in Database Server Configuration.
-
-.. _jsp-starting-javasp:
-
-Start Java SP Server
----------------------------------
-
-You need to start a Java Stored Procedure server (Java SP server) for the database you want to use Java-stored procedures/functions.
-
-Execute the **cubrid javasp** **start** *db_name*. ::
-
-    % cubrid javasp start demodb
-
-    @ cubrid javasp start: demodb
-    ++ cubrid javasp start: success
-
-You can verify that the Java SP server is successfully started.
-
-Execute the **cubrid javasp** **status** *db_name*. ::
-
-    % cubrid javasp status demodb
-
-    @ cubrid javasp status: demodb
-    Java Stored Procedure Server (demodb, pid 9220, port 38408)
-    Java VM arguments :
-    -------------------------------------------------
-    -Djava.util.logging.config.file=/path/to/CUBRID/java/logging.properties
-    -Xrs
-    -------------------------------------------------
-
-For more details on javasp utility, see :ref:`cubrid-javasp-server` and :ref:`cubrid-javasp-server-config`.
+To use Java stored functions/procedures, the procedure language server must be ready.
+The procedure language server starts automatically when the database server is started.
+For more details, refer to :ref:`cubrid-pl-server` and :ref:`cubrid-pl-server-config`.
 
 How to Write and Load Java Stored Function/Procedure
 ======================================================
@@ -175,7 +143,7 @@ Call the Java stored function/procedure
 
 You can call the Java stored functions/procedures by using a **CALL** statement, from SQL statements or Java applications.
 
-|  If an exception occurs during the execution of a Java stored function/procedure, the exception is logged and stored in the *dbname*\ **_java.log** file. To display the exception on the screen, change a handler value of the **$CUBRID/java/logging.properties** file to "java.lang.logging.ConsoleHandler" Then, the exception details are displayed on the screen.
+|  If an exception occurs during the execution of a Java stored function/procedure, the exception is logged and stored in the *dbname*\ **_pl.log** file. To display the exception on the screen, change a handler value of the **$CUBRID/java/logging.properties** file to "java.lang.logging.ConsoleHandler" Then, the exception details are displayed on the screen.
 
 Using CALL Statement
 ----------------------
@@ -826,7 +794,7 @@ Java Native Interface (JNI) Support
 ===================================
 
 Using the Java Native Interface (JNI), you can invoke functions in native languages like C/C++ from the Java Virtual Machine (JVM). 
-Java Stored Procedures (SP) in CUBRID provide support for JNI functionality, but you should be cautious when using it because issues in native code can have unexpected impacts on the stored routine server (cub_javasp) process and its operation.
+Java Stored Procedures (SP) in CUBRID provide support for JNI functionality, but you should be cautious when using it because issues in native code can have unexpected impacts on Procedural Languge Server (cub_pl) process and its operation.
 Java Classes used for loading native libraries should be registered using the **-j** option of **loadjava** to prevent them from being dynamically loaded. For more details, refer to :ref:jsp-load-java.
 
 The following is an example of invoking a native function through JNI in a CUBRID Java stored function:

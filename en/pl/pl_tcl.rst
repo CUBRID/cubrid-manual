@@ -1,4 +1,4 @@
------------------------------
+-------------------------------------------------
 Transaction Commit and Rollback Support
 -----------------------------
 
@@ -6,7 +6,7 @@ In stored procedures and stored functions, transactions can be completed or abor
 The logic within stored procedures and functions can control transactions based on conditions or exception handling, which greatly aids in managing complex data logic safely and efficiently.
 
 Advantages of Condition and Exception Handling with Transaction Control
----------------------------------------------
+-------------------------------------------------------------------------------------
 
 1. **Condition-Based Transaction Processing**  
    Within stored procedures and functions, transactions can be committed or rolled back based on conditions. For example, if certain conditions are not met, a rollback can ensure data integrity.
@@ -19,7 +19,7 @@ Advantages of Condition and Exception Handling with Transaction Control
 
 
 Example: Condition and Exception Handling with Transaction Control
-------------------------------------------
+---------------------------------------------------------------------------------
 
 The following is an example of controlling transactions using conditions and exception handling in a stored procedure.
 

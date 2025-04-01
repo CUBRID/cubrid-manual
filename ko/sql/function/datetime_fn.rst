@@ -1315,6 +1315,7 @@ ROUND
 =====
 
 .. function:: ROUND(date, fmt)
+   :noindex:
 
     *fmt* 에서 지정한 단위의 값으로 반올림한다. DATE 타입의 값을 반환한다.
     
@@ -2026,6 +2027,7 @@ TRUNC
 =====
 
 .. function:: TRUNC( date[, fmt] )
+   :noindex:
 
     *fmt* 에서 지정한 단위 아래의 값을 절삭한다. DATE 타입의 값을 반환한다.
 

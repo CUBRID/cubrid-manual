@@ -31,7 +31,7 @@ CREATE USER 문을 사용하여 사용자를 생성할 수 있다. 기본으로 
     CREATE USER user_name
     [PASSWORD password]
     [GROUPS user_name [{, user_name } ... ]]
-    [MEMBERS user_name [{, user_name } ... ]] 
+    [MEMBERS user_name [{, user_name } ... ]]
     [COMMENT 'comment_string'];
 
 *   *user_name*: 생성할 사용자 이름을 지정한다.
@@ -57,7 +57,7 @@ CREATE USER 문을 사용하여 사용자를 생성할 수 있다. 기본으로 
     CREATE USER marketing GROUPS company;
     CREATE USER design GROUPS company;
     CREATE USER smith GROUPS design, marketing;
-    CREATE USER jones GROUPS marketing;  
+    CREATE USER jones GROUPS marketing;
     CREATE USER brown GROUPS engineering;
 
 다음은 위와 동일한 그룹을 생성하는 예이지만 **GROUPS** 대신 **MEMBERS** 문을 사용하는 예제이다.
@@ -70,7 +70,7 @@ CREATE USER 문을 사용하여 사용자를 생성할 수 있다. 기본으로 
     CREATE USER engineering MEMBERS brown;
     CREATE USER marketing MEMBERS smith, jones;
     CREATE USER design MEMBERS smith;
-    CREATE USER company MEMBERS engineering, marketing, design; 
+    CREATE USER company MEMBERS engineering, marketing, design;
 
 사용자의 커멘트
 ---------------
@@ -96,7 +96,7 @@ ALTER USER
 
 ALTER USER 문을 사용하여 사용자의 비밀번호, 멤버 및 커멘트를 변경할 수 있다. ::
 
-    ALTER USER user_name 
+    ALTER USER user_name
     [PASSWORD password] |
     [ADD MEMBERS user_name [{, user_name } ... ]] |
     [DROP MEMBERS user_name [{, user_name } ... ]]
@@ -112,7 +112,7 @@ ALTER USER 문을 사용하여 사용자의 비밀번호, 멤버 및 커멘트�
 
     **일반 사용자** 는 ALTER USER 문을 사용하여 **본인** 의 비밀번호, 멤버 및 커멘트를 변경할 수 있다.
 
-다음은 test_user1 사용자를 생성하고 비밀번호를 변경하는 예제이다. 
+다음은 test_user1 사용자를 생성하고 비밀번호를 변경하는 예제이다.
 
 .. code-block:: sql
 
@@ -174,7 +174,7 @@ DROP USER 문을 사용하여 사용자를 삭제할 수 있다. 테이블, 뷰,
 
     CREATE USER test_user1;
     ALTER USER test_user1 PASSWORD '1234';
-    DROP USER test_user1; 
+    DROP USER test_user1;
 
 .. _granting-authorization:
 
@@ -195,11 +195,11 @@ CUBRID에서 다음의 데이터베이스 객체에 대해 권한을 부여할 �
 
 다음의 **GRANT** 문을 사용하여 사용자에게 접근 권한을 부여할 수 있다. ::
 
-    (1) 테이블과 뷰: 
-        GRANT operation [ { ,operation } ... ] ON [schema_name.]object_name [ { , [schema_name.]object_name } ... ] 
+    (1) 테이블과 뷰:
+        GRANT operation [ { ,operation } ... ] ON [schema_name.]object_name [ { , [schema_name.]object_name } ... ]
         TO user [ { ,user } ... ] [ WITH GRANT OPTION ];
 
-    (2) 저장 프로시저와 저장 함수: 
+    (2) 저장 프로시저와 저장 함수:
         GRANT EXECUTE ON PROCEDURE [schema_name.]object_name
         TO user [ { ,user } ... ];
 
@@ -224,8 +224,8 @@ CUBRID에서 다음의 데이터베이스 객체에 대해 권한을 부여할 �
 * *object_name*: 권한을 부여할 데이터베이스 객체의 이름을 지정한다.
 * *user*: 권한을 부여할 사용자나 그룹의 이름을 지정한다. 데이터베이스 사용자의 로그인 이름을 입력하거나 시스템 정의 사용자인 **PUBLIC** 을 입력할 수 있다. **PUBLIC** 이 명시되면 데이터베이스의 모든 사용자는 부여한 권한을 가진다.
 * **WITH GRANT OPTION**
-    
-    * **WITH GRANT OPTION** 을 이용하면 권한을 부여받은 사용자가 부여받은 권한을 다른 사용자에게 부여할 수 있다. 
+
+    * **WITH GRANT OPTION** 을 이용하면 권한을 부여받은 사용자가 부여받은 권한을 다른 사용자에게 부여할 수 있다.
     * 저장 프로시저와 저장 함수에 대한 **EXECUTE ON PROCEDURE** 권한은 **WITH GRANT OPTION** 을 지원하지 않는다.
 
 다음은 *smith* (*smith* 의 모든 멤버 포함)에게 *olympic* 테이블의 검색 권한을 부여한 예제이다.
@@ -257,7 +257,7 @@ CUBRID에서 다음의 데이터베이스 객체에 대해 권한을 부여할 �
 다음은 *DBA* 가 일반 사용자 *u1* 이 생성한 *tbl3* 테이블에 대하여 사용자 *u2* 에게 **SELECT** 권한을 부여한 예제이다. db_auth의 *grantor_name* (권한을 부여한 사용자명) 을 조회하면 권한을 부여한 DBA가 아닌, 소유자(u1)이 표시된다.
 
 .. code-block:: sql
-    
+
     CALL LOGIN ('DBA','') ON CLASS db_user;
     CREATE USER u1;
     CREATE USER u2;
@@ -268,9 +268,9 @@ CUBRID에서 다음의 데이터베이스 객체에 대해 권한을 부여할 �
 
 ::
 
-    grantor_name          grantee_name          object_type           object_name           owner_name            auth_type             is_grantable        
+    grantor_name          grantee_name          object_type           object_name           owner_name            auth_type             is_grantable
     ==========================================================================================================================================================
-    'U1'                  'U2'                  'CLASS'               'tbl3'                'U1'                  'SELECT'              'NO'   
+    'U1'                  'U2'                  'CLASS'               'tbl3'                'U1'                  'SELECT'              'NO'
 
 .. note::
 
@@ -299,15 +299,14 @@ REVOKE
 
 **REVOKE** 문을 사용하여 권한을 해지할 수 있다. 사용자에게 부여된 권한은 언제든지 해지가 가능하다. 한 사용자에게 두 종류 이상의 권한을 부여했다면 권한 중 일부 또는 전부를 해지할 수 있다. 또한 하나의 **GRANT** 문으로 여러 사용자에게 여러 데이터베이스 객체에 대한 권한을 부여한 경우라도 일부 사용자와 일부 데이터베이스 객체에 대해 선택적인 권한 해지가 가능하다.
 
-권한을 부여한 사용자에게서 권한(**WITH GRANT OPTION**)을 해지하면, 권한을 해지당한 사용자로부터 권한을 받은 사용자도 권한을 해지당한다. ::
+권한을 부여한 사용자에게서 권한(**WITH GRANT OPTION**)을 해지하면, 권한을 해지당한 사용자로부터 권한을 받은 사용자도 권한을 해지당한다.
 
 다음의 **REVOKE** 문을 사용하여 사용자에게 부여된 권한을 해지할 수 있다. ::
 
-    (1) 테이블과 뷰: 
-        REVOKE operation [ { ,operation } ... ] ON [schema_name.]object_name [ { , [schema_name.]object_name } ... ] 
+    (1) 테이블과 뷰:
+        REVOKE operation [ { ,operation } ... ] ON [schema_name.]object_name [ { , [schema_name.]object_name } ... ]
         FROM user [ { ,user } ... ];
-
-    (2) 저장 프로시저와 저장 함수: 
+    (2) 저장 프로시저와 저장 함수:
         REVOKE EXECUTE ON PROCEDURE [schema_name.]object_name
         FROM user [ { ,user } ... ];
 
@@ -338,7 +337,7 @@ REVOKE
 *tbl1* 에 대한 *u2* 의 권한 해지시, *u2* 가 **WITH GRANT OPTION** 을 이용해서 부여한 권한에 대해서도 함께 해지된다.
 
 .. code-block:: sql
-    
+
     CREATE USER u1;
     CREATE USER u2;
     CREATE USER u3;
@@ -349,19 +348,19 @@ REVOKE
 
     CALL LOGIN ('u2','') ON CLASS db_user;
     GRANT SELECT ON u1.tbl1 TO u3 WITH GRANT OPTION;
-    
+
     CALL LOGIN ('dba','') ON CLASS db_user;
     SELECT * FROM db_auth WHERE object_name = 'tbl1';
 
 ::
 
-    grantor_name          grantee_name          object_type           object_name           owner_name            auth_type             is_grantable        
+    grantor_name          grantee_name          object_type           object_name           owner_name            auth_type             is_grantable
     ==========================================================================================================================================================
-    'U1'                  'U2'                  'CLASS'               'tbl1'                'U1'                  'SELECT'              'YES'               
-    'U2'                  'U3'                  'CLASS'               'tbl1'                'U1'                  'SELECT'              'YES'   
+    'U1'                  'U2'                  'CLASS'               'tbl1'                'U1'                  'SELECT'              'YES'
+    'U2'                  'U3'                  'CLASS'               'tbl1'                'U1'                  'SELECT'              'YES'
 
 .. code-block:: sql
-    
+
     REVOKE SELECT ON u1.tbl1 FROM u2;
 
     SELECT * FROM db_auth WHERE object_name = 'tbl1';
@@ -395,9 +394,9 @@ ALTER ... OWNER
     ALTER TRIGGER test_trigger OWNER TO public;
     ALTER FUNCTION test_function OWNER TO public;
     ALTER PROCEDURE test_procedure OWNER TO public;
-    ALTER SERIAL test_serial OWNER TO public;    
+    ALTER SERIAL test_serial OWNER TO public;
 
-.. warning:: 
+.. warning::
 
     **소유자 변경 시, 해당 객체에 대해 이전 소유자가 다른 사용자에게 부여한 모든 권한은 자동으로 해지되므로, 소유자 변경 전에 해당 객체에 부여된 권한 확인 후 소유자를 변경하는 것을 권장한다.**
 
@@ -423,7 +422,7 @@ ALTER ... OWNER
 
     -- 비밀번호가 없는 DBA 사용자로 접속하기
     CALL login ('dba', '') ON CLASS db_user;
-    
+
     -- 비밀번호가 cubrid인 user_1 사용자로 접속하기
     CALL login ('user_1', 'cubrid') ON CLASS db_user;
 
@@ -435,7 +434,7 @@ ALTER ... OWNER
 
     -- 비밀번호가 없는 user_2 추가하기
     CALL add_user ('user_2', '') ON CLASS db_user;
-    
+
     -- 비밀번호가 없는 user_3 추가하고, 메서드 리턴 값을 admin 변수에 저장하기
     CALL add_user ('user_3', '') ON CLASS db_user to admin;
 
@@ -465,7 +464,7 @@ ALTER ... OWNER
 
     -- user_4 를 추가하고 user_common 변수에 저장하기
     CALL add_user ('user_4', '') ON CLASS db_user to user_common;
-    
+
     -- user_4의 비밀번호를 'abcdef'로 변경하기
     CALL set_password('abcdef') on user_common;
 
@@ -485,17 +484,17 @@ ALTER ... OWNER
 .. code-block:: sql
 
     CALL find_user('dba') ON CLASS db_user to x;
-    
+
 ::
 
     Result
     ======================
     db_user
-     
+
 .. code-block:: sql
 
     SELECT x FROM db_root;
-    
+
 ::
 
     x

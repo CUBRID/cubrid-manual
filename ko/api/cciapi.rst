@@ -1631,7 +1631,7 @@ cci_get_class_num_objs
 CCI_GET_COLLECTION_DOMAIN
 -------------------------
 
-.. c:macro:: #define CCI_GET_COLLECTION_DOMAIN(u_type)
+.. c:macro:: CCI_GET_COLLECTION_DOMAIN(u_type)
 
     *u_type* 이 set, multiset, sequence type인 경우 set, multiset, sequence의 domain을 가져온다. *u_type* 이 set type이 아닐 경우 리턴 값은 *u_type* 과 같다.
 
@@ -2066,88 +2066,88 @@ cci_get_result_info
 CCI_GET_RESULT_INFO_ATTR_NAME
 -----------------------------
 
-.. c:macro:: #define CCI_GET_RESULT_INFO_ATTR_NAME(T_CCI_COL_INFO* res_info, int index)
+.. c:macro:: CCI_GET_RESULT_INFO_ATTR_NAME(res_info, index)
 
     prepare된 **SELECT** 리스트에서 *index* 번째 칼럼의 실제 속성 이름을 가져오는 매크로이다. 속성 이름이 없는 경우(상수값, 함수 등)는 빈 문자열 (empty string)을 반환한다. 지정된 인자 *res_info* 가 **NULL** 인지, *index* 가 유효한지에 대한 검사는 하지 않는다. 반환된 메모리 포인터는 사용자가 **free**\ ()를 통해 제거할 수 없다.
 
-    :param res_info: (IN) :c:func:`cci_get_result_info` 에 의한 칼럼 정보 포인터
-    :param index: (IN) 칼럼 인덱스
+    :param T_CCI_COL_INFO* res_info: (IN) :c:func:`cci_get_result_info` 에 의한 칼럼 정보 포인터
+    :param int index: (IN) 칼럼 인덱스
     :return: 속성 이름 (char \*)
 
 CCI_GET_RESULT_INFO_CLASS_NAME
 ------------------------------
 
-.. c:macro:: #define CCI_GET_RESULT_INFO_CLASS_NAME(T_CCI_COL_INFO* res_info, int index)
+.. c:macro:: CCI_GET_RESULT_INFO_CLASS_NAME(res_info, index)
 
     prepare된 **SELECT** 리스트에서 *index* 번째 칼럼의 클래스 이름을 가져오는 매크로이다. 지정된 인자 *res_info* 가 **NULL** 인지, *index* 가 유효한지에 대한 검사는 하지 않는다. 반환된 메모리 포인터는 사용자가 **free**\ ()를 통해 제거할 수 없다. 반환된 값은 **NULL**\ 을 가질 수 있다.
 
-    :param res_info: (IN) :c:func:`cci_get_result_info`\ 에 의한 칼럼 정보 포인터
-    :param index: (IN) 칼럼 인덱스
+    :param T_CCI_COL_INFO* res_info: (IN) :c:func:`cci_get_result_info`\ 에 의한 칼럼 정보 포인터
+    :param int index: (IN) 칼럼 인덱스
     :return: 클래스 이름 (char \*)
 
 CCI_GET_RESULT_INFO_IS_NON_NULL
 -------------------------------
 
-.. c:macro:: #define CCI_GET_RESULT_INFO_IS_NON_NULL(T_CCI_COL_INFO* res_info, int index)
+.. c:macro:: CCI_GET_RESULT_INFO_IS_NON_NULL(res_info, index)
 
     prepare된 **SELECT** 리스트에서 *index* 번째 칼럼이 nullable인지에 대한 값을 가져오는 매크로이다. 지정된 인자 *res_info* 가 **NULL** 인지, *index* 가 유효한지에 대한 검사는 하지 않는다. 
    
     **SELECT** 리스트의 칼럼이 테이블의 칼럼이 아닌 표현식인 경우 NON_NULL 여부를 알 수 없으므로 CCI_GET_RESULT_INFO_IS_NON_NULL 매크로는 일관되게 0을 반환한다.
 
-    :param res_info: (IN) :c:func:`cci_get_result_info`\ 에 의한 칼럼 정보 포인터
-    :param index: (IN) 칼럼 인덱스
+    :param T_CCI_COL_INFO* res_info: (IN) :c:func:`cci_get_result_info`\ 에 의한 칼럼 정보 포인터
+    :param int index: (IN) 칼럼 인덱스
     :return: 0 : nullable, 1 : non **NULL**
 
 CCI_GET_RESULT_INFO_NAME
 ------------------------
 
-.. c:macro:: #define CCI_GET_RESULT_INFO_NAME(T_CCI_COL_INFO* res_info, int index)
+.. c:macro:: CCI_GET_RESULT_INFO_NAME(res_info, index)
 
     prepare된 **SELECT** 리스트에서 *index* 번째 칼럼의 이름을 가져오는 매크로이다. 지정된 인자 *res_info* 가 **NULL** 인지, *index* 가 유효한지에 대한 검사는 하지 않는다. 반환된 메모리 포인터는 사용자가 **free**\ ()를 통해 제거할 수 없다.
 
-    :param res_info: (IN) :c:func:`cci_get_result_info`\ 에 의한 칼럼 정보 포인터
-    :param index: (IN) 칼럼 인덱스
+    :param T_CCI_COL_INFO* res_info: (IN) :c:func:`cci_get_result_info`\ 에 의한 칼럼 정보 포인터
+    :param int index: (IN) 칼럼 인덱스
     :return: 칼럼 이름 (char \*)
 
 CCI_GET_RESULT_INFO_PRECISION
 -----------------------------
 
-.. c:macro:: #define CCI_GET_RESULT_INFO_PRECISION(T_CCI_COL_INFO* res_info, int index)
+.. c:macro:: CCI_GET_RESULT_INFO_PRECISION(res_info, index)
 
     prepare된 **SELECT** 리스트에서 *index* 번째 칼럼의 precision을 가져오는 매크로이다. 지정된 인자 *res_info* 가 **NULL** 인지, *index* 가 유효한지에 대한 검사는 하지 않는다.
 
-    :param res_info: (IN) :c:func:`cci_get_result_info`\ 에 의한 칼럼 정보 포인터
-    :param index: (IN) 칼럼 인덱스
+    :param T_CCI_COL_INFO* res_info: (IN) :c:func:`cci_get_result_info`\ 에 의한 칼럼 정보 포인터
+    :param int index: (IN) 칼럼 인덱스
     :return: precision (int)
 
 CCI_GET_RESULT_INFO_SCALE
 -------------------------
 
-.. c:macro:: #define CCI_GET_RESULT_INFO_SCALE(T_CCI_COL_INFO* res_info, int index)
+.. c:macro:: CCI_GET_RESULT_INFO_SCALE(res_info, index)
 
     prepare된 **SELECT** 리스트에서 *index* 번째 칼럼의 scale을 가져오는 매크로이다. 지정된 인자 *res_info* 가 **NULL** 인지, *index* 가 유효한지에 대한 검사는 하지 않는다.
 
-    :param res_info: (IN) :c:func:`cci_get_result_info`\ 에 의한 칼럼 정보 포인터
-    :param index: (IN) 칼럼 인덱스
+    :param T_CCI_COL_INFO* res_info: (IN) :c:func:`cci_get_result_info`\ 에 의한 칼럼 정보 포인터
+    :param int index: (IN) 칼럼 인덱스
     :return: scale (int)
 
 CCI_GET_RESULT_INFO_TYPE
 ------------------------
 
-.. c:macro:: #define CCI_GET_RESULT_INFO_TYPE(T_CCI_COL_INFO* res_info, int index)
+.. c:macro:: CCI_GET_RESULT_INFO_TYPE(res_info, index)
 
     prepare된 **SELECT** 리스트에서 *index* 번째 칼럼의 타입을 가져오는 매크로이다. 지정된 인자 *res_info* 가 **NULL** 인지, *index* 가 유효한지에 대한 검사는 하지 않는다.  
     
     어떤 칼럼의 SET 타입 여부를 확인하려면 :c:macro:`CCI_IS_SET_TYPE`\ 을 사용한다.
 
-    :param res_info: (IN) :c:func:`cci_get_result_info`\ 에 의한 칼럼 정보 포인터
-    :param index: (IN) 칼럼 인덱스
+    :param T_CCI_COL_INFO* res_info: (IN) :c:func:`cci_get_result_info`\ 에 의한 칼럼 정보 포인터
+    :param int index: (IN) 칼럼 인덱스
     :return: 칼럼 타입 (**T_CCI_U_TYPE**)
 
 CCI_IS_SET_TYPE
 ---------------
 
-.. c:macro:: #define CCI_IS_SET_TYPE(u_type)
+.. c:macro:: CCI_IS_SET_TYPE(u_type)
 
     *u_type*\ 이 set type인지를 검사한다.
 
@@ -2156,7 +2156,7 @@ CCI_IS_SET_TYPE
 
 CCI_IS_MULTISET_TYPE
 --------------------
-.. c:macro:: #define CCI_IS_MULTISET_TYPE(u_type)
+.. c:macro:: CCI_IS_MULTISET_TYPE(u_type)
 
     *u_type*\ 이 multiset type인지를 검사한다.
 
@@ -2166,7 +2166,7 @@ CCI_IS_MULTISET_TYPE
 CCI_IS_SEQUENCE_TYPE
 --------------------
 
-.. c:macro:: #define CCI_IS_SEQUENCE_TYPE(u_type)
+.. c:macro:: CCI_IS_SEQUENCE_TYPE(u_type)
 
     *u_type*\ 이 sequence type인지를 검사한다.
 
@@ -2176,7 +2176,7 @@ CCI_IS_SEQUENCE_TYPE
 CCI_IS_COLLECTION_TYPE
 ----------------------
 
-.. c:macro:: #define CCI_IS_COLLECTION_TYPE(u_type)
+.. c:macro:: CCI_IS_COLLECTION_TYPE(u_type)
 
     *u_type*\ 이 collection (set, multiset, sequence) type인지를 검사한다.
 
@@ -2675,43 +2675,43 @@ cci_query_result_free
 CCI_QUERY_RESULT_ERR_NO
 -----------------------
 
-.. c:macro:: #define CCI_QUERY_RESULT_ERR_NO(T_CCI_QUERY_RESULT* query_result, int index)
+.. c:macro:: CCI_QUERY_RESULT_ERR_NO(query_result, index)
 
     :c:func:`cci_execute_batch`, :c:func:`cci_execute_array`, 또는 :c:func:`cci_execute_result` 함수에 의해 수행된 질의 결과는 **T_CCI_QUERY_RESULT** 타입의 배열로 저장되므로 배열의 항목 별로 질의 결과를 확인해야 한다. 
     
     **CCI_QUERY_RESULT_ERR_NO**\는 *index*\로 지정한 배열 항목에 대한 에러 번호를 가져오며, 에러가 아닌 경우 0을 반환한다.
 
-    :param query_result: (IN) 조회할 질의 결과
-    :param index: (IN) 결과 배열의 인덱스(base : 1). 결과 배열 중 특정 위치를 나타냄.
+    :param T_CCI_QUERY_RESULT* query_result: (IN) 조회할 질의 결과
+    :param int index: (IN) 결과 배열의 인덱스(base : 1). 결과 배열 중 특정 위치를 나타냄.
     
     :return: 에러 번호        
 
 CCI_QUERY_RESULT_ERR_MSG
 ------------------------
 
-.. c:macro:: #define CCI_QUERY_RESULT_ERR_MSG(T_CCI_QUERY_RESULT* query_result, int index)
+.. c:macro:: CCI_QUERY_RESULT_ERR_MSG(query_result, index)
 
     :c:func:`cci_execute_batch`, :c:func:`cci_execute_array` 또는 :c:func:`cci_execute_result` 함수에 의해 수행된 질의 결과에 대한 에러 메시지를 가져오며, 에러 메시지가 없을 경우 ""(empty string)을 반환하는 매크로이다. 지정된 인자 *query_result* 가 **NULL** 인지, *index* 가 유효한지에 대한 검사는 하지 않는다.
     
-    :param query_result: (IN) 조회할 질의 결과
-    :param index: (IN) 칼럼 인덱스(base : 1)
+    :param T_CCI_QUERY_RESULT* query_result: (IN) 조회할 질의 결과
+    :param int index: (IN) 칼럼 인덱스(base : 1)
     :return: 에러 메시지
 
 CCI_QUERY_RESULT_RESULT
 -----------------------
 
-.. c:macro:: #define CCI_QUERY_RESULT_RESULT(T_CCI_QUERY_RESULT* query_result, int index)
+.. c:macro:: CCI_QUERY_RESULT_RESULT(query_result, index)
 
     :c:func:`cci_execute_batch`, :c:func:`cci_execute_array` 또는 :c:func:`cci_execute_result` 함수에 의해 수행된 질의 결과에 대한 result count를 가져오는 매크로이다. 지정된 인자 *query_result* 가 **NULL** 인지, *index* 가 유효한지에 대한 검사는 하지 않는다.
 
-    :param query_result: (IN) 조회할 질의 결과
-    :param index: (IN) 칼럼 인덱스(base : 1)
+    :param T_CCI_QUERY_RESULT* query_result: (IN) 조회할 질의 결과
+    :param int index: (IN) 칼럼 인덱스(base : 1)
     :return: result count
 
 CCI_QUERY_RESULT_STMT_TYPE
 --------------------------
 
-.. c:macro:: #define CCI_QUERY_RESULT_STMT_TYPE(T_CCI_QUERY_RESULT* query_result, int index)
+.. c:macro:: CCI_QUERY_RESULT_STMT_TYPE(query_result, index)
 
     :c:func:`cci_execute_batch`, :c:func:`cci_execute_array` 또는 :c:func:`cci_execute_result` 함수에 의해 수행된 질의 결과는 **T_CCI_QUERY_RESULT** 타입의 배열로 저장되므로 배열의 항목 별로 질의 결과를 확인해야 한다.
     
@@ -2719,8 +2719,8 @@ CCI_QUERY_RESULT_STMT_TYPE
     
     지정된 인자 *query_result* 가 **NULL** 인지, *index* 가 유효한지에 대한 검사는 하지 않는다.
 
-    :param query_result: (IN) 조회할 질의 결과
-    :param index: (IN) 칼럼 인덱스(base : 1)
+    :param T_CCI_QUERY_RESULT* query_result: (IN) 조회할 질의 결과
+    :param int index: (IN) 칼럼 인덱스(base : 1)
     :return: statement type (**T_CCI_CUBRID_STMT**)
 
 cci_register_out_param

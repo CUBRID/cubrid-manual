@@ -646,6 +646,7 @@ TO_CHAR(date_time)
 ===================
 
 .. function:: TO_CHAR ( date_time [, format[, date_lang_string_literal ]] )
+   :noindex:
 
     **TO_CHAR** (date_time) 함수는 날짜/시간 타입 값을 :ref:`날짜/시간 형식 1 <datetime-format1>` 표에 따라 문자열로 변환하여 이를 반환하며, 리턴 값의 타입은 **VARCHAR** 이다.
 

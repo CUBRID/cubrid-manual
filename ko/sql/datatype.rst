@@ -1854,12 +1854,9 @@ CLOB
     *   locator가 상대 경로로 저장되기 때문에 databases.txt의 ‘**lob-base-path**’ 를 변경하는 경우
 
         * 이전에 생성된 LOB 데이터는 조회가 불가능하다.
-        * 이전에 생성된 LOB 데이터를 조회하기 위해서는 해당 LOB 파일들을 변경된 '**lob-base-path**' 디렉터리로 이동하여야 한다.
-       ::
+        * 이전에 생성된 LOB 데이터를 조회하기 위해서는 해당 LOB 파일들을 변경된 '**lob-base-path**' 디렉터리로 이동하여야 한다::
 
-          # 예:
-          % cp -r /home1/data1/* /home2/data2
-       ::
+          # 예: cp -r /home1/data1/* /home2/data2
 
     *   CUBRID 11.3 이전에서 절대 경로 locator로 저장된 LOB 데이터는 CUBRID 11.4에서 별도 변경 없이 조회 가능하다.
     *   데이터베이스 이동 및 복원 시의 이점 : 데이터베이스를 다른 위치로 이동하더라도 **lob-base-path** 를 기반으로 경로를 관리하므로 LOB 파일 경로를 수동으로 수정할 필요가 없어졌다.

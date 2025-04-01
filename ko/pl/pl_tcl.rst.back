@@ -8,13 +8,13 @@
 조건 및 예외 처리와 트랜잭션 제어의 장점
 ---------------------------------------------
 
-1. **조건 기반 트랜잭션 처리**  
+1. **조건 기반 트랜잭션 처리**
    저장 프로시저와 함수 내부에서 조건에 따라 트랜잭션을 커밋하거나 롤백할 수 있다. 예를 들어, 특정 조건이 만족되지 않을 경우 롤백하여 데이터의 무결성을 보장할 수 있다.
 
-2. **예외 발생 시 안전한 롤백**  
+2. **예외 발생 시 안전한 롤백**
    저장 프로시저 내부에서 오류(예외)가 발생하면 해당 트랜잭션을 롤백하고, 작업을 안전한 상태로 되돌릴 수 있다. 이는 예기치 않은 상황에서도 데이터가 손상되지 않도록 하는 데 유용하다.
 
-3. **복잡한 로직의 처리 안정성**  
+3. **복잡한 로직의 처리 안정성**
    여러 작업이 포함된 복잡한 로직을 처리하면서도, 상황에 따라 트랜잭션의 성공 여부를 명확히 제어할 수 있다. 이를 통해 데이터 처리의 신뢰성을 높일 수 있다.
 
 
@@ -38,7 +38,7 @@
           stock INT NOT NULL
         );
 
-        CREATE OR REPLACE PROCEDURE process_transaction() 
+        CREATE OR REPLACE PROCEDURE process_transaction()
         AS
         current_stock INT;
         BEGIN
@@ -67,9 +67,9 @@
 
         === <Result of CALL Command in Line 2> ===
 
-        Result              
+        Result
         ======================
-        NULL                
+        NULL
 
         <DBMS_OUTPUT>
         ====
@@ -83,6 +83,6 @@
 주의사항
 ----------
 
-* PL/CSQL에서는 기본적으로 **COMMIT**과 **ROLLBACK** 문을 지원하며, 이를 통해 저장 프로시저 내부에서 트랜잭션 처리를 명시적으로 제어할 수 있다
-* 그러나 Java 언어의 경우, 하위호환성을 유지하기 위해 **pl_transaction_control** 설정을 활용해야 하며 **yes**로 설정하는 경우에만 COMMIT과 ROLLBACK 문을 사용할 수 있다. 
-* **pl_transaction_control**의 기본값은 **no**로 설정되어 있으며 COMMIT과 ROLLBACK이 무시된다.
+* PL/CSQL에서는 기본적으로 **COMMIT**\과 **ROLLBACK** 문을 지원하며, 이를 통해 저장 프로시저 내부에서 트랜잭션 처리를 명시적으로 제어할 수 있다
+* 그러나 Java 언어의 경우, 하위호환성을 유지하기 위해 **pl_transaction_control** 설정을 활용해야 하며 **yes**\로 설정하는 경우에만 COMMIT과 ROLLBACK 문을 사용할 수 있다.
+* **pl_transaction_control**\의 기본값은 **no**\로 설정되어 있으며 COMMIT과 ROLLBACK이 무시된다.

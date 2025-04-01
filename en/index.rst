@@ -52,6 +52,7 @@ Table of Contents
     start.rst
     csql.rst
     sql/index.rst
+    pl/index.rst
     admin/index.rst
     ha.rst
     security.rst

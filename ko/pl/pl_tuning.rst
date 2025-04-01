@@ -64,8 +64,6 @@ CUBRID에서 기본적으로 제공하는 내장 함수는 (:doc:`/sql/function/
                           6677
 
         1 row selected. (0.302333 sec) Committed. (0.000000 sec)
-::
-
 
 .. _pl-deterministic:
 

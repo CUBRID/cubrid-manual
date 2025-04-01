@@ -402,7 +402,7 @@ The following table summarizes the ports, based on the listening processes, used
 *   The port used when the CUBRID Manager client accesses the CUBRID Manager server process is **cm_port** of the cm.conf. The default value is 8001.
 
 Ports for CUBRID Procdedure Language (PL) Server
----------------------------------------------
+---------------------------------------------------
 
 The following table summarizes the ports, based on the listening processes, used for CUBRID Procedural Language (PL) server. The ports are identical regardless of the OS type.
 

@@ -13,6 +13,7 @@ CUBRID PL
     :maxdepth: 2
 
     pl_intro
+    pl_default_args
     pl_authid
     pl_tcl
     pl_package

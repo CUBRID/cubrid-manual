@@ -3216,7 +3216,7 @@ Checking the Status of CUBRID Procedure Language Server
 ----------------------------------------
 
 The following is an example of checking the status of the CUBRID Procedure Language Server for *demodb*.
-The name of the target database, *demodb*, which the Procedure Language Server is currently running, is displayed.
+The name of the target database, *demodb*, on which the Procedure Language Server is currently running, is displayed.
 Additionally, the server's PID, port number, and applied JVM options are displayed.
 
 ::

@@ -810,7 +810,6 @@ _db_stored_procedure_args
 속성명                데이터 타입                 설명
 ==================== =========================== =========================================================
 sp_of                _db_stored_procedure        저장 프로시저의 객체
-pkg_name             CHARACTER VARYING(255)      저장 프로시저가 속한 패키지 이름
 index_of             INTEGER                     매개변수의 순서
 is_system_generated  INTEGER                     시스템이 생성한 저장 프로시저 인수 여부
 arg_name             CHARACTER VARYING(255)      매개변수의 이름

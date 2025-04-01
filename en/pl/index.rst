@@ -7,17 +7,13 @@
 CUBRID PL
 ***************
 
-이 장에서는 저장 프로시저와 저장 함수를 사용할 수 있도록 CUBRID 에서 제공하는 절차적 언어 확장 기능을 소개한다.
+This chapter introduces the procedural language extension features provided by CUBRID to develop stored procedures and functions.
 
 .. toctree::
     :maxdepth: 2
 
-    pl_intro
     pl_default_args
     pl_authid
-    pl_tcl
-    pl_package
-    pl_tuning
     plcsql
     jsp
     method

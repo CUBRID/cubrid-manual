@@ -12,7 +12,7 @@ You can easily get various schema information from the SQL statement by using th
 
 .. code-block:: sql
 
-    -- Classes that refer to the 'b_user' class
+    -- Classes that refer to the 'db_user' class
     SELECT class_name
     FROM db_attribute
     WHERE domain_class_name = 'db_user';
@@ -53,8 +53,9 @@ Class Name                       Description
 :ref:`-db-auth`                  User authorization information of classes
 :ref:`-db-data-type`             The data type supported by CUBRID
 :ref:`-db-partition`             Partition information
-:ref:`-db-stored-procedure`      Java stored procedure information
-:ref:`-db-stored-procedure-args` Java stored procedure argument information
+:ref:`-db-stored-procedure`      Stored procedure information
+:ref:`-db-stored-procedure-args` Stored procedure argument information
+:ref:`-db-stored-procedure-code` Stored procedure code information
 :ref:`-db-server`                Server information for DBLink
 :ref:`-db-synonym`               Target object information of synonyms
 :ref:`db-user`                   User information
@@ -806,7 +807,6 @@ Represents Stored procedure argument information. An index for sp_of is created.
 Attribute Name       Data Type                   Description
 ==================== =========================== =========================================================
 sp_of                _db_stored_procedure        Stored procedure object
-pkg_name             CHARACTER VARYING(255)      Package name containing the stored procedure
 index_of             INTEGER                     Order of the arguments
 is_system_generated  INTEGER                     Indicates whether the stored procedure is system-generated
 arg_name             CHARACTER VARYING(255)      Argument name
@@ -1209,8 +1209,8 @@ Virtual Class Name               Description
 :ref:`db-auth`                   User authorization information of classes
 :ref:`db-trig`                   Trigger information
 :ref:`db-partition`              Partition information
-:ref:`db-stored-procedure`       Java stored procedure information
-:ref:`db-stored-procedure-args`  Java stored procedure argument information
+:ref:`db-stored-procedure`       Stored procedure information
+:ref:`db-stored-procedure-args`  Stored procedure argument information
 :ref:`db-server`                 Server information for DBLink
 :ref:`db-synonym`                Target object information of synonyms
 ================================ ==============================================================================

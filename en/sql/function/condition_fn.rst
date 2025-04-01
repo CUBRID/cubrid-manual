@@ -164,6 +164,8 @@ The following example shows how to retrieve the number of every medals and the h
                12            5           12                              12
                12           10           11                              12
 
+.. _func_if:
+
 IF
 ==
 

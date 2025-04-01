@@ -8,7 +8,7 @@
 저장 프로시저와 저장 함수는 SQL로 구현하기 어려운 복잡한 비즈니스 로직을 처리하고, 데이터 조작을 간편하게 수행할 수 있도록 도와준다.
 다음의 주요한 장점을 가진다.
 
-* 생산성과 사용성: 저장 프로시저와 저장 함수는 한번 만들어 놓으면 계속해서 사용할 수 있다. 사용자가 저장 프로시저와 저장 함수를 SQL에서도 호출하여 사용할 수 있고, JDBC를 사용하여 쉽게 Java 응용 프로그램에서 호출할 수 있다.
+* 생산성과 사용성: 저장 프로시저와 저장 함수는 한번 만들어 놓으면 계속해서 사용할 수 있다. 사용자가 저장 프로시저와 저장 함수를 SQL에서도 호출하여 사용할 수 있고, JDBC를 사용하여 쉽게 응용 프로그램에서 호출할 수 있다.
 * 성능: 저장 프로시저와 저장 함수는 데이터베이스 서버에서 실행되기 때문에 네트워크 트래픽을 줄이고, 데이터베이스 서버의 성능을 향상시킨다.
 * 보안: 저장 프로시저는 특정 사용자에게만 실행 권한을 부여할 수 있으므로, 데이터 접근 및 수정 권한을 세밀하게 제어할 수 있다.
 * 상호 운용성과 이식성: 저장 프로시저와 저장 함수는 다양한 언어 및 실행 환경으로 동작할 수 있도록 설계되어 데이터베이스의 활용도를 극대화한다. CUBRID는 저장 프로시저/함수를 위해 다음 두 가지 절차적 언어를 지원한다.
@@ -135,9 +135,9 @@
         ) RETURN INT
         AS BEGIN RETURN a + b; END;
 
-        SELECT default_args(); -- 3
-        SELECT default_args(3); -- 5
-        SELECT default_args(3, 4); -- 7
+        SELECT default_args(); 
+        SELECT default_args(3);
+        SELECT default_args(3, 4);
 
 ::
 
@@ -157,12 +157,31 @@
 
 .. code-block:: sql
 
-        CREATE FUNCTION default_args_func (
-                a INT := UNIX_TIMESTAMP(), 
-                b DATE DEFAULT CURRENT_DATE
+        CREATE FUNCTION get_age (
+            birth DATE DEFAULT DATE'2000-01-01',
+            today DATE DEFAULT SYS_DATE
         ) RETURN INT
-        AS BEGIN RETURN a + b; END;
+        AS
+        BEGIN
+            RETURN YEAR(today) - YEAR(birth)
+                - CASE WHEN TO_CHAR(today, 'MMDD') < TO_CHAR(birth, 'MMDD') THEN 1 ELSE 0 END;
+        END;
 
-        SELECT default_args_func(); -- UNIX_TIMESTAMP() + CURRENT_DATE
-        SELECT default_args_func(3); -- 3 + CURRENT_DATE
-        SELECT default_args_func(3, 4); -- 3 + 4
+        SELECT get_age();
+        SELECT get_age(DATE'2000-05-10');
+        SELECT get_age(DATE'2000-05-10', DATE'2025-03-24');
+
+::        
+
+        get_age()
+        =============
+                   25
+
+        get_age(date '2000-05-10')
+        ============================
+                                  24
+
+        get_age(date '2000-05-10', date '2025-03-24')
+        ===============================================
+                                                     24
+

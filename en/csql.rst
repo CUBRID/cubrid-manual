@@ -362,7 +362,7 @@ For example, ';exit' within a string literal, comment, or identifier below is no
     csql> create table table_c([;exit] int);
     ...
 
-Exceptionally, in interactive mode CSQL, if the first character of a command line is a semicolon, it is recognized as a session command even if it is within a string literal, comment, or identifier. ::
+Except in interactive mode CSQL, if the first character of a command line is a semicolon, it is recognized as a session command even if it is within a string literal, comment, or identifier. ::
 
     csql> select * from table_a where col = '
     csql> ;exit    <-- CSQL exit
@@ -623,7 +623,7 @@ You can check the parameter value currently set in the CSQL Interpreter using th
 
 **Setting the parameter value (;SET)**
 
-You can use the **;set** session command to set a specific parameter value. Note that changeable parameter values are only can be changed. To change the server parameter values, you must have DBA authorization. For information on list of changeable parameters, see :ref:`broker-configuration`. ::
+You can use the **;SET** session command to set a specific parameter value. Note that changeable parameter values are only can be changed. To change the server parameter values, you must have DBA authorization. For information on list of changeable parameters, see :ref:`broker-configuration`. ::
 
     csql> ;set block_ddl_statement=1
     === Set Param Input ===

@@ -133,7 +133,7 @@ You can refer to the :ref:`jsp-load-java`.
 Registering Stored Functions/Procedures
 =======================================
 
-CUBRID requires a process to register (publish) Java classes so that Java methods can be called from SQL statements or Java applications.
+CUBRID requires a process to register (publish) Java classes so that Java methods can be called from SQL statements or applications.
 Create a CUBRID stored function as follows to register the Java class.
 
 ::
@@ -154,9 +154,9 @@ In the string following JAVA NAME, specify the class and method names to call th
 Java Call Specification
 -----------------------------
 
-You must publish Java classes by using call specifications because it is not known how a function in a class will be called by SQL statements or Java applications when Java classes are loaded.
+You must publish Java classes by using call specifications because it is not known how a function in a class will be called by SQL statements or applications when Java classes are loaded.
 
-With call specifications, Java function names, parameter types, return values and their types can be accessed by SQL statements or Java applications.
+With call specifications, Java function names, parameter types, return values and their types can be accessed by SQL statements or applications.
 To write call specifications, use :ref:`create-function` or :ref:`create-procedure` statement. 
 
 * Java stored function/procedure names are not case sensitive. 
@@ -1072,7 +1072,7 @@ Appendix
 Data Type Mapping
 ------------------
 
-When a Java stored function/procedure is published, it is not checked whether the return definition of the Java stored function/procedure coincides with the one in the declaration of the Java file.
+When a Java stored function/procedure is published, it is not checked whether the return definition of the Java stored function/procedure coincides with the one in the declaration of the Java method.
 Therefore, the Java stored function/procedure follows the return definition (SQL Type) provided at the time of registration. The return definition in the declaration is significant only as user-defined information.
 
 In call specifications, the data types of SQL must correspond to the data types of Java parameter and return value.

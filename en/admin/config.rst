@@ -2512,6 +2512,8 @@ The following table shows the broker parameters available in the broker configur
 | :ref:`broker-common-parameters` | Access                  | ACCESS_CONTROL                          | bool   | no                           |           |
 |                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
 |                                 |                         | ACCESS_CONTROL_FILE                     | string |                              |           |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | ACCESS_CONTROL_DEFAULT_POLICY           | bool   | DENY                         |           |
 |                                 +-------------------------+-----------------------------------------+--------+------------------------------+-----------+
 |                                 | Logging                 | ADMIN_LOG_FILE                          | string | log/broker/cubrid_broker.log |           |
 |                                 +-------------------------+-----------------------------------------+--------+------------------------------+-----------+
@@ -2537,8 +2539,6 @@ The following table shows the broker parameters available in the broker configur
 |                                 |                         | RECONNECT_TIME                          | sec    | 600                          | available |
 |                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
 |                                 |                         | REPLICA_ONLY                            | string | OFF                          |           |
-|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
-|                                 |                         | ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER | bool   | DENY                         |           |
 |                                 +-------------------------+-----------------------------------------+--------+------------------------------+-----------+
 |                                 | Broker App. Server(CAS) | APPL_SERVER_MAX_SIZE                    | MB     | Windows 32bit: 40,           | available |
 |                                 |                         |                                         |        | Windows 64bit: 80,           |           |
@@ -2707,6 +2707,14 @@ Access
 
     **ACCESS_CONTROL_FILE** is a parameter to configure the name of a file in which a database name, database user ID, and the list of IPs are stored. List of IPs can be written up to the maximum of 256 lines per <*db_name*>:<*db_user*> in a broker. For details, see :ref:`limiting-broker-access`.
 
+**ACCESS_CONTROL_DEFAULT_POLICY**
+
+    If no broker is specified in the **ACCESS_CONTROL_FILE** and the value of **ACCESS_CONTROL_DEFAULT_POLICY** is **ALLOW**, access to the broker is permitted for everyone. The default is **DENY**. For more information, see :ref:`limiting-broker-access`.
+
+    .. note::
+    
+       The settings value ALLOW or DENY for **ACCESS_CONTROL_DEFAULT_POLICY** is valid only when **ACCESS_CONTROL** is set to **ON**. If it is set to **OFF**, the setting value is not applicable.
+
 Logging
 ^^^^^^^
 
@@ -2790,15 +2798,6 @@ Access
     
         Please note that replication mismatch occurs when you write the data directly to the replica DB.
 
-.. _access_control_behavior_for_emptybroker:
-
-**ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER**	
-	
-    If no broker is specified in **ACCESS_CONTROL_FILE** and the value of **ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER** is **ALLOW** , all access to the broker are allowed. The default is **DENY**. For more information, see :ref:`limiting-broker-access`.
-
-    .. note::
-    
-       The settings value ALLOW or DENY for **ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER** is valid only when **ACCESS_CONTROL** is set to **ON**. If it is set to **OFF**, the setting value is not applicable.
 	
 Broker App. Server(CAS)
 ^^^^^^^^^^^^^^^^^^^^^^^

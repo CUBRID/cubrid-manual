@@ -84,5 +84,5 @@ Cautions
 ----------
 
 * In PL/CSQL, **COMMIT** and **ROLLBACK** statements are supported by default, allowing explicit control of transaction processing within stored procedures.
-* However, in the case of the Java language, the **pl_transaction_control** setting must be used to maintain backward compatibility, and COMMIT and ROLLBACK statements can only be used when set to **yes**.
+* However, in the case of the Java Stored Procedures, the **pl_transaction_control** setting must be used to maintain backward compatibility, and COMMIT and ROLLBACK statements can only be used when set to **yes**.
 * The default value of **pl_transaction_control** is set to **no**, and COMMIT and ROLLBACK are ignored.

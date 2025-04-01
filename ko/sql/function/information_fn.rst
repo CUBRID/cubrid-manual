@@ -100,6 +100,8 @@ COLLATION
 
     'utf8_bin'
 
+.. _fn_current_user:
+
 CURRENT_USER, USER
 ==================
 

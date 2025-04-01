@@ -34,7 +34,7 @@ DBMS_OUTPUT.ENABLE
 
 .. function:: DBMS_OUTPUT.ENABLE (size)
 
-        DBMS_OUTPUT 패키지를 활성화하고, 메시지를 저장할 버퍼의 크기를 설정한다.
+        DBMS_OUTPUT 메시지 버퍼를 활성화하고, 메시지를 저장할 버퍼의 크기를 설정한다.
 
         :param size: 버퍼의 크기를 지정하며, 이 값은 바이트 단위로 지정한다. 최대 크기는 32767 바이트이며 이 값을 초과하면 오류가 발생한다.
 

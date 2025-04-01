@@ -36,7 +36,7 @@ CUBRID Environment Variables
 
 .. note::
 
-    * **java.io.tmpdir** among **stored_procedure_vm_options** is an option that specifies the directory where temporary files of the cub_pl process (built-in Java VM) are created. If the **CUBRID_TMP** environment variable is set, the value of **java.io.tmpdir** is ignored, and the directory specified by CUBRID_TMP will be used instead.
+    * The **java.io.tmpdir** option within the **stored_procedure_vm_options** specifies the directory where temporary files for the cub_pl process (the built-in Java VM) are created. If the **CUBRID_TMP** environment variable is set, the value of **java.io.tmpdir** is ignored, and the directory specified by CUBRID_TMP will be used instead.
 
     * To set this environment variable in Windows, you must add the CUBRID_TMP key to the registry (refer **%CUBRID%**\\share\\windows_scripts\\cubrid_env.bat).
 
@@ -91,9 +91,9 @@ OS Environment and Java Environment Variables
 
 *   Path: In the Windows environment, the **%CUBRID%\\bin** and **%CUBRID%\\cci\\bin**, which is a directory that contains CUBRID system's execution file, must be included in the **Path** environment variable.
 
-*   JAVA_HOME: To use the Stored procedure in the CUBRID system, the Java Virtual Machine (JVM) version 1.8 or later must be installed, and the **JAVA_HOME** environment variable must designate the concerned directory. See the :ref:`cubrid-pl-server-config`.
+*   JAVA_HOME: To use stored procedures in the CUBRID system, the Java Virtual Machine (JVM) version 1.8 or later must be installed, and the **JAVA_HOME** environment variable must designate the concerned directory. See the :ref:`cubrid-pl-server-config`.
 
-*   JVM_PATH: To use the Stored procedure in the CUBRD system, the **JVM_PATH** environment variable can specify the JVM library (libjvm) path explicitly instead of finding the library from **JAVA_HOME**. See the :ref:`cubrid-pl-server-config`.
+*   JVM_PATH: To use stored procedures in the CUBRD system, the **JVM_PATH** environment variable can specify the JVM library (libjvm) path explicitly instead of finding the library from **JAVA_HOME**. See the :ref:`cubrid-pl-server-config`.
 
 Configuring the Environment Variable
 ------------------------------------
@@ -404,7 +404,7 @@ The following table summarizes the ports, based on the listening processes, used
 Ports for CUBRID Procdedure Language (PL) Server
 ---------------------------------------------
 
-The following table summarizes the ports, based on the listening processes, used for CUBRID Procdedure Language (PL) server. The ports are identical regardless of the OS type.
+The following table summarizes the ports, based on the listening processes, used for CUBRID Procedural Language (PL) server. The ports are identical regardless of the OS type.
 
 +---------------+--------------+----------------------------+--------------------------+
 | Listener      | Requester    | Port                       | Firewall Port Setting    |
@@ -424,4 +424,4 @@ Behavior according to the OS type and the **stored_procedure_uds** setting in **
 
 .. note::
 
-        The port used when the CUBRID Procedure Language server (cub_pl) communicates with the cub_server is specified by **stored_procedure_port** in **cubrid.conf**. The default value is 0, which means a random available port is assigned.
+        The port used for communication between the CUBRID Procedure Language server (cub_pl) and cub_server is specified by **stored_procedure_port** in **cubrid.conf**. The default value is 0, which means that a random available port will be assigned.

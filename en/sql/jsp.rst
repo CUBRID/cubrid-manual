@@ -781,7 +781,7 @@ Java Native Interface (JNI) Support
 ===================================
 
 Using the Java Native Interface (JNI), you can invoke functions in native languages like C/C++ from the Java Virtual Machine (JVM). 
-Java Stored Procedures (SP) in CUBRID provide support for JNI functionality, but you should be cautious when using it because issues in native code can have unexpected impacts on the stored routine server (cub_plsp) process and its operation.
+Java Stored Procedures (SP) in CUBRID provide support for JNI functionality, but you should be cautious when using it because issues in native code can have unexpected impacts on Procedural Languge Server (cub_pl) process and its operation.
 Java Classes used for loading native libraries should be registered using the **-j** option of **loadjava** to prevent them from being dynamically loaded. For more details, refer to :ref:jsp-load-java.
 
 The following is an example of invoking a native function through JNI in a CUBRID Java stored function:

@@ -2326,7 +2326,7 @@ The following are other parameters. The type and value range for each parameter 
 
 **stored_procedure_vm_options**
 
-    **stored_procedure_vm_options** is a parameter to configure the virtual machine settings of the procedure language server where stored procedures are executed. Each option string should be separated by spaces. The default is an empty string. If the parameter is set in the [@<database>] section, the options set in the [common] section do not apply to that database.
+    **stored_procedure_vm_options** is a parameter to configure the virtual machine settings of Procedural Language Server where stored procedures are executed. Each option string should be separated by spaces. The default is an empty string. If the parameter is set in the [@<database>] section, the options set in the [common] section do not apply to that database.
 
     .. note::
 

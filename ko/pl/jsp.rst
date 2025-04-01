@@ -85,7 +85,7 @@ Java 클래스 로드
 저장 함수/프로시저 등록
 ===========================
 
-CUBRID는 SQL 문이나 Java 응용 프로그램에서 Java 메서드를 호출할 수 있도록 Java 클래스를 등록(publish)하는 과정이 필요하다.
+CUBRID는 SQL 문이나 응용 프로그램에서 Java 메서드를 호출할 수 있도록 Java 클래스를 등록(publish)하는 과정이 필요하다.
 다음과 같이 CUBRID 저장 함수를 생성하여 Java 클래스를 등록한다.
 
 ::
@@ -107,9 +107,9 @@ CUBRID는 SQL 문이나 Java 응용 프로그램에서 Java 메서드를 호출�
 Java Call Specification
 -----------------------------
 
-Java 클래스가 로딩될 때 SQL 문이나 Java 응용 프로그램에서 클래스 내의 함수를 어떻게 호출할지 모르기 때문에 Call Specification을 사용하여 Java 클래스를 등록해야 한다.
+Java 클래스가 로딩될 때 SQL 문이나 응용 프로그램에서 클래스 내의 함수를 어떻게 호출할지 모르기 때문에 Call Specification을 사용하여 Java 클래스를 등록해야 한다.
 
-Call Specification을 사용하면 SQL 문이나 Java 응용 프로그램에서 Java 함수 이름, 인자 타입, 리턴 값 및 리턴 값의 타입에 접근할 수 있다.
+Call Specification을 사용하면 SQL 문이나 응용 프로그램에서 Java 함수 이름, 인자 타입, 리턴 값 및 리턴 값의 타입에 접근할 수 있다.
 Call Specification을 작성하려면 :ref:`create-function` 또는 :ref:`create-procedure` 문을 사용한다.
 
 * Java 저장 함수/프로시저 이름은 대소문자를 구분하지 않는다.
@@ -165,10 +165,10 @@ Java 저장 함수/프로시저를 호출할 때 IN/OUT의 데이터 타입에 �
 
 첫 번째 문장은 파라미터 변수를 이용하여 out 모드의 Java 저장 프로시저를 호출하는 예이고, 두 번째 문장은 할당된 호스트 변수 out_data를 조회하는 질의문이다.
 
-Java 응용 프로그램에서 호출
+응용 프로그램에서 호출
 ---------------------------
 
-Java 응용 프로그램에서 Java 저장 함수/프로시저를 호출하기 위해서는 **CallableStatement** 를 사용한다.
+응용 프로그램에서 저장 함수/프로시저를 호출하기 위해서는 **CallableStatement** 를 사용한다.
 
 CUBRID 데이터베이스에 Phone 클래스를 생성한다.
 
@@ -211,7 +211,7 @@ CUBRID 데이터베이스에 Phone 클래스를 생성한다.
     create PROCEDURE phone_info(name varchar, phoneno varchar) as language java    
     name 'PhoneNumber.Phone(java.lang.String, java.lang.String)';
 
-다음과 같은 Java 응용 프로그램을 작성하고 실행한다.
+다음과 같은 응용 프로그램을 작성하고 실행한다.
 
 .. code-block:: java
 

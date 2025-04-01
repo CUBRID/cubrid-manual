@@ -284,6 +284,10 @@ CUBRID에서 다음의 데이터베이스 객체에 대해 권한을 부여할 �
 .. code-block:: sql
 
     CREATE OR REPLACE PROCEDURE my_sp ()
+    IS
+    BEGIN
+             DBMS_OUTPUT.put_line('grant test');
+    END;
     GRANT EXECUTE ON PROCEDURE my_sp TO smith;
 
 .. note::
@@ -299,7 +303,7 @@ REVOKE
 
 **REVOKE** 문을 사용하여 권한을 해지할 수 있다. 사용자에게 부여된 권한은 언제든지 해지가 가능하다. 한 사용자에게 두 종류 이상의 권한을 부여했다면 권한 중 일부 또는 전부를 해지할 수 있다. 또한 하나의 **GRANT** 문으로 여러 사용자에게 여러 데이터베이스 객체에 대한 권한을 부여한 경우라도 일부 사용자와 일부 데이터베이스 객체에 대해 선택적인 권한 해지가 가능하다.
 
-권한을 부여한 사용자에게서 권한(**WITH GRANT OPTION**)을 해지하면, 권한을 해지당한 사용자로부터 권한을 받은 사용자도 권한을 해지당한다. ::
+권한을 부여한 사용자에게서 권한(**WITH GRANT OPTION**)을 해지하면, 권한을 해지당한 사용자로부터 권한을 받은 사용자도 권한을 해지당한다.
 
 다음의 **REVOKE** 문을 사용하여 사용자에게 부여된 권한을 해지할 수 있다. ::
 

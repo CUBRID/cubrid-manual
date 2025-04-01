@@ -9,7 +9,7 @@ The following explains each type of rights and their differences:
 * **Owner's Rights** (also known as Definer's Rights)
         * Executed with the rights of the user who created the stored procedure.
         * If the creator grants rights to another user, the granted user can also execute the stored procedure.
-        * All rights of the owner of the stored procedure are available, allowing access to database objects without additional rights being granted. If a stored procedure is created with the **DBA**'s owner's rights, it can access all database objects, so special attention should be paid to security issues such as SQL Injection when using dynamic SQL.
+        * All rights of the owner of the stored procedure take effect, allowing it to access database objects that the owner has permission to access without requiring additional grants. If a stored procedure is created with the **DBA**'s owner's rights, it can access all database objects, so special attention should be paid to security issues such as SQL Injection when using dynamic SQL.
         * Suitable for common tasks or data access needs.
 
 In contrast, Caller's Rights are as follows:

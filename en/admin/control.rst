@@ -3331,7 +3331,7 @@ The logs of the CUBRID Procedure Language Server are stored in the **log/** dire
 Error Log
 ^^^^^^^^^
 
-The error log of the Procedure Language Server for each database is stored in the **$CUBRID/log** directory, and the file name is in the format **<db_name>_java.err**. The extension is **.err**.
+The error log of the Procedure Language Server for each database is stored in the **$CUBRID/log** directory, and the file name is in the format **<db_name>_pl.err**. The extension is **.err**.
 
 ::
 

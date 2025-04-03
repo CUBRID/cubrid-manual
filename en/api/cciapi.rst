@@ -867,7 +867,13 @@ cci_connect_with_url
 
     *   **rcTime**: After the failure occurred on the first connected broker, the application connects to the broker specified by **altHosts**\(broker failover). Then it attempts to reconnect to the first connected broker at every **rcTime**\(default value: 600 seconds).
     
-    *    **loadBalance**: When this value is true, the applications try to connect to the main host and alternative hosts specified with the **altHosts** property as a random order. (default value: false).
+    *   **loadBalance**: When there are multiple hosts that a client can connect to, this is the property that selects the algorithm for determining the target host to connect to. Through load balancing, the client's connection requests can be distributed so that they are not concentrated on a specific server. (default value: false)
+
+          The behavior for each setting is as follows:
+
+          *   **false**: Connect to the hosts in the order listed in the connection URL.
+      *   **true or rr**: Connects to the specified hosts using the **Round-Robin** method.
+          *   **sh**: Connects to the specified hosts using the **Random(Shuffle)** method.
     
     *   **login_timeout** | **loginTimeout**: Timeout value (unit: msec.) for database login. Upon timeout, a **CCI_ER_LOGIN_TIMEOUT** (-38) error is returned. The default value is  **30,000**\ (30 sec.). If this value is 0, it means infinite waiting. This value is also applied when internal reconnection occurs after the initial connection.
 

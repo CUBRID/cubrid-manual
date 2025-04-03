@@ -157,24 +157,24 @@ The following **cubrid heartbeat** utility syntax shows how to use CUBRID HA. On
 
 For details, see :ref:`cubrid-heartbeat`.
 
-Controlling CUBRID Procedure Language (PL) Server
+Controlling CUBRID Procedural Langauge (PL) Server
 -------------------------------------------------
 
-The following **cubrid** utility syntax is used to control the CUBRID Procedure Language (PL) server process.
+The following **cubrid** utility syntax is used to control the CUBRID Procedural Langauge (PL) server process.
 
 ::
 
     cubrid pl <command> [database_name]
     <command>: {restart|status}
 
-*   restart: restart the procedure language server process.
-*   status: check the status of the procedure language server process.
+*   restart: restart the procedural langauge server process.
+*   status: check the status of the procedural langauge server process.
 
 .. note::
 
         * Every command can specify a database name (**[database_name]**) as an argument.
-        * The **restart** command forcibly stops the procedure language server, and the database server detects this and automatically restarts the procedure language server.
-        * If the database name is not specified when executing the **status** command, it displays the status information of the procedure language server for all running databases.
+        * The **restart** command forcibly stops the procedural langauge server, and the database server detects this and automatically restarts the procedural langauge server.
+        * If the database name is not specified when executing the **status** command, it displays the status information of the procedural langauge server for all running databases.
 
 ::
 
@@ -186,7 +186,7 @@ The following **cubrid** utility syntax is used to control the CUBRID Procedure 
     % cubrid pl status demodb
 
     @ cubrid pl status
-    Procedure Language Server (demobdb, pid 12345, UDS)
+    Procedural Langauge Server (demobdb, pid 12345, UDS)
     VM arguments:
     -------------------------------------------------
     ...
@@ -194,7 +194,7 @@ The following **cubrid** utility syntax is used to control the CUBRID Procedure 
 
 .. note::
 
-    From CUBRID version 11.4, the CUBRID Procedure Language (PL) server has replaced the previously used CUBRID Java Stored Procedure (Java SP) server.
+    From CUBRID version 11.4, the CUBRID Procedural Langauge (PL) server has replaced the previously used CUBRID Java Stored Procedure (Java SP) server.
 
 .. _control-cubrid-services:
 
@@ -3171,14 +3171,14 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
 
 .. _cubrid-pl-server:
 
-CUBRID Procedure Language Server
+CUBRID Procedural Langauge Server
 ====================================
 
-Starting CUBRID Procedure Language Server
+Starting CUBRID Procedural Langauge Server
 ---------------------------------------
 
-| The CUBRID Procedure Language Server automatically starts when the database server starts and stops when the database server stops.
-| If you do not want to start the Procedure Language Server with the database server, set the **stored_procedure** value to **no** for the corresponding database in the CUBRID configuration file (**cubrid.conf**).
+| The CUBRID Procedural Langauge Server automatically starts when the database server starts and stops when the database server stops.
+| If you do not want to start the Procedural Langauge Server with the database server, set the **stored_procedure** value to **no** for the corresponding database in the CUBRID configuration file (**cubrid.conf**).
 
 ::
 
@@ -3186,13 +3186,13 @@ Starting CUBRID Procedure Language Server
 
     @ cubrid pl status
 
-For more details on other types of errors that may occur when starting the CUBRID Procedure Language Server, see :ref:`cubrid-pl-server-errors`.
+For more details on other types of errors that may occur when starting the CUBRID Procedural Langauge Server, see :ref:`cubrid-pl-server-errors`.
 
-Restarting CUBRID Procedure Language Server
+Restarting CUBRID Procedural Langauge Server
 -----------------------------------
 
-The following is a method to restart the Procedure Language Server for *demodb*.
-When the restart command for the Procedure Language Server is issued, the Procedure Language Server stops and is restarted by the database server.
+The following is a method to restart the Procedural Langauge Server for *demodb*.
+When the restart command for the Procedural Langauge Server is issued, the Procedural Langauge Server stops and is restarted by the database server.
 If the database server is not running, the restart command does not work.
 
 ::
@@ -3205,18 +3205,18 @@ If the database server is not running, the restart command does not work.
 
 ..note::
 
-    Since the database server automatically starts the Procedure Language Server, the restart command is not frequently used.
-    It can be used to stabilize the server when the GC of the Procedure Language Server's VM is slow after performing large I/O operations or analysis tasks using procedures.
+    Since the database server automatically starts the Procedural Langauge Server, the restart command is not frequently used.
+    It can be used to stabilize the server when the GC of the Procedural Langauge Server's VM is slow after performing large I/O operations or analysis tasks using procedures.
 
 .. warning::
 
-    Restarting the Procedure Language Server will interrupt and roll back any currently running transactions.
+    Restarting the Procedural Langauge Server will interrupt and roll back any currently running transactions.
 
-Checking the Status of CUBRID Procedure Language Server
+Checking the Status of CUBRID Procedural Langauge Server
 ----------------------------------------
 
-The following is an example of checking the status of the CUBRID Procedure Language Server for *demodb*.
-The name of the target database, *demodb*, on which the Procedure Language Server is currently running, is displayed.
+The following is an example of checking the status of the CUBRID Procedural Langauge Server for *demodb*.
+The name of the target database, *demodb*, on which the Procedural Langauge Server is currently running, is displayed.
 Additionally, the server's PID, port number, and applied JVM options are displayed.
 
 ::
@@ -3224,7 +3224,7 @@ Additionally, the server's PID, port number, and applied JVM options are display
     % cubrid pl status demodb
     
     @ cubrid pl status: demodb
-    Procedure Language Server (demodb, pid 9220, UDS)
+    Procedural Langauge Server (demodb, pid 9220, UDS)
     VM arguments :
     -------------------------------------------------
     ...
@@ -3232,77 +3232,44 @@ Additionally, the server's PID, port number, and applied JVM options are display
 
 .. _cubrid-pl-server-config:
 
-Procedure Language Server Configuration
+Procedural Langauge Server Configuration
 -------------------------------------
 
 .. _cubrid-pl-environment-configuration:
 
-Procedure Language Environment Configuration
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Procedural Language Environment: Using Bundled JDK
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To use the Procedure Language in CUBRID, the Java Development Kit (JDK) 1.8 64-bit version must be installed in the environment where the CUBRID server is installed.
-The JDK can be downloaded from the following links:
+To use the procedural language feature in CUBRID, a JVM environment is used.
+The CUBRID server includes the Eclipse Temurin JDK 8 version in the $CUBRID/vm directory during installation, so there is no need to configure a separate JDK environment in the user's environment.
+This bundled JDK has been verified for use with the procedural language feature in CUBRID and is generally recommended for good performance and stability.
+To use a JDK configured in the user's environment instead of the bundled JDK, set the **CUBRID_JAVA_HOME** environment variable.
 
-* `OpenJDK 8 <https://openjdk.java.net/projects/jdk8/>`_
-* `Oracle JDK 8 <https://www.oracle.com/kr/java/technologies/javase/javase8-archive-downloads.html>`_
+**CUBRID_JAVA_HOME**
 
-If the JDK is already installed, check the JRE version with the following command. ::
+The **CUBRID_JAVA_HOME** environment variable specifies the JDK installation directory.
+If the user does not specify the **CUBRID_JAVA_HOME** environment variable, the bundled JDK included during CUBRID installation is used.
+If an incorrect **CUBRID_JAVA_HOME** is specified, the procedural language server may not start properly and may return an error.
 
-    % java -version
-    openjdk version "1.8.0_302"
-    OpenJDK Runtime Environment (build 1.8.0_302-b08)
-    OpenJDK 64-Bit Server VM (build 25.302-b08, mixed mode)
+The following is an example of setting the **CUBRID_JAVA_HOME** environment variable.
 
-**Windows Environment**
+::
 
-CUBRID loads the **jvm.dll** file to run the Java Virtual Machine in the Windows environment. CUBRID first searches for **jvm.dll** in the system's **Path** environment variable. If it cannot be found, it uses the Java runtime information registered in the system registry.
-
-You can set the **JAVA_HOME** environment variable and add the directory containing the Java executable file to the **Path** environment variable by executing the following commands. For instructions on setting environment variables using the GUI, refer to the JDBC installation and configuration.
-
-* Example of setting JDK 1.8 environment variables ::
-
-    % set JAVA_HOME=C:\jdk1.8.0
-    % set PATH=%PATH%;%JAVA_HOME%\jre\bin\server
-
-To explicitly specify the path to the Java Virtual Machine (JVM), including cases where a non-SUN Java Virtual Machine implementation is used, add the path to the **jvm.dll** file to the **JVM_PATH** environment variable.
-CUBRID first searches for the **jvm.dll** file in the **JVM_PATH** variable. If **JVM_PATH** is not set or the file cannot be loaded, it searches for **jvm.dll** in the **JAVA_HOME** variable as described above.
-
-* Example of setting the **JVM_PATH** environment variable ::
+    **Example of setting in Windows environment**
     
-    % set JVM_PATH=C:\jdk1.8.0\jre\bin\server\libjvm.dll
+        set CUBRID_JAVA_HOME=C:\Program Files\Java\jdk1.8.0_421
 
-**Linux/Unix Environment**
-
-CUBRID loads the **libjvm.so** file to run the Java Virtual Machine in the Linux/Unix environment. CUBRID first searches for the **libjvm.so** file in the **LD_LIBRARY_PATH** environment variable. If it cannot be found, it uses the **JAVA_HOME** environment variable. Only glibc 2.3.4 or higher is supported on Linux. The following is an example of setting environment variables in Linux environment configuration files (e.g., **.profile**, **.cshrc**, **.bashrc**, **.bash_profile**, etc.).
-
-* Example of setting JDK 1.8 environment variables in bash shell ::
-
-    % JAVA_HOME=/usr/java/jdk1.8.0
-    % LD_LIBRARY_PATH=$JAVA_HOME/jre/lib/amd64:$JAVA_HOME/jre/lib/amd64/server:$LD_LIBRARY_PATH
-    % export JAVA_HOME
-    % export LD_LIBRARY_PATH
-
-* Example of setting JDK 1.8 environment variables in csh shell ::
-
-    % setenv JAVA_HOME /usr/java/jdk1.8.0
-    % setenv LD_LIBRARY_PATH $JAVA_HOME/jre/lib/amd64:$JAVA_HOME/jre/lib/amd64/server:$LD_LIBRARY_PATH
-    % set path=($path $JAVA_HOME/bin .)
-
-To explicitly specify the path to the Java Virtual Machine (JVM), including cases where a non-SUN Java Virtual Machine implementation is used, add the path to the Java VM (**libjvm.so**) file to the **JVM_PATH** environment variable.
-The path to the **libjvm.so** file may vary depending on the OS platform and supported bit. For example, on a SUN Sparc machine, the path to the **libjvm.so** file is **$JAVA_HOME/jre/lib/sparc**.
-CUBRID first searches for the **libjvm.so** file in the **JVM_PATH** variable. If **JVM_PATH** is not set or the file cannot be loaded, it searches for **libjvm.so** in the **JAVA_HOME** variable as described above.
-
-* Example of setting the **JVM_PATH** environment variable ::
+    **Example of setting in Linux environment**
     
-    % JVM_PATH=/usr/java/jdk1.8.0/jre/lib/amd64/server/libjvm.so
-    % export JVM_PATH
+        export CUBRID_JAVA_HOME=/usr/java/jdk1.8.0_421
+
 
 .. _cubrid-pl-system-parameter:
 
-Procedure Language Server System Parameters
+Procedural Langauge Server System Parameters
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The following table lists the server parameters related to the Procedure Language Server that can be set in the configuration file (**cubrid.conf**).
+The following table lists the server parameters related to the Procedural Langauge Server that can be set in the configuration file (**cubrid.conf**).
 
 +-------------------------------------+--------+----------------+--------+--------+
 | Parameter Name                      | Type   | Default Value  | Min    | Max    |
@@ -3320,10 +3287,10 @@ For more details on these parameters, see :ref:`cubrid-conf`.
 
 .. _cubrid-pl-server-log:
 
-CUBRID Procedure Language Server Logs
+CUBRID Procedural Langauge Server Logs
 ------------------------------------
 
-The logs of the CUBRID Procedure Language Server are stored in the **log/** directory of the installation directory. The following log files are created for each database.
+The logs of the CUBRID Procedural Langauge Server are stored in the **log/** directory of the installation directory. The following log files are created for each database.
 
 * Error log ($CUBRID/log/[db_name]_pl.err)
 * Java log ($CUBRID/log/[db_name]_pl.log)
@@ -3331,13 +3298,13 @@ The logs of the CUBRID Procedure Language Server are stored in the **log/** dire
 Error Log
 ^^^^^^^^^
 
-The error log of the Procedure Language Server for each database is stored in the **$CUBRID/log** directory, and the file name is in the format **<db_name>_pl.err**. The extension is **.err**.
+The error log of the Procedural Langauge Server for each database is stored in the **$CUBRID/log** directory, and the file name is in the format **<db_name>_pl.err**. The extension is **.err**.
 
 ::
 
     demodb_pl.err
 
-If an error occurs while starting the Procedure Language Server, the error message is saved in the error log file.
+If an error occurs while starting the Procedural Langauge Server, the error message is saved in the error log file.
 
 ::
 
@@ -3357,7 +3324,7 @@ Exception Log
 ^^^^^^^^^^^^^^
 
 The JVM exception messages that occur during the execution of procedures are saved.
-The exception log of the Procedure Language Server for each database is stored in the **$CUBRID/log** directory, and the file name is in the format **<db_name>_pl.log**. The extension is **.log**.
+The exception log of the Procedural Langauge Server for each database is stored in the **$CUBRID/log** directory, and the file name is in the format **<db_name>_pl.log**. The extension is **.log**.
 
 ::
 
@@ -3376,18 +3343,18 @@ If an exception occurs while executing stored procedures/functions in the VM, th
 
 .. _cubrid-pl-server-errors:
 
-CUBRID Procedure Language Errors
+CUBRID Procedural Langauge Errors
 -------------------------------
 
-The following are error messages for errors that may occur when starting the CUBRID Procedure Language Server.
+The following are error messages for errors that may occur when starting the CUBRID Procedural Langauge Server.
 The error messages are stored in **$CUBRID/log**/\ *<db_name>_pl*\ **.err**.
 
 +-------+--------------------------------------------------+-----------------------------------------------------+-----------------------------------------------------------------------------------+
 | Error | Error Message                                    | Description                                         | Action                                                                            |
 | Code  |                                                  |                                                     |                                                                                   |
 +=======+==================================================+=====================================================+===================================================================================+
-| -900  | VM library is not found: %1$s.                   | CUBRID cannot find the JVM library from the         | Check if the JAVA_HOME or JVM_PATH variables are set correctly.                   |
-|       |                                                  | JAVA_HOME or JVM_PATH environment variables.        | Refer to :ref:`cubrid-pl-environment-configuration`.                              |
+| -900  | VM library is not found: %1$s.                   | CUBRID cannot find the JVM library from the         | Check if the CUBRID_JAVA_HOME is set correctly.                                   |
+|       |                                                  | CUBRID_JAVA_HOME                                    | Refer to :ref:`cubrid-pl-environment-configuration`.                              |
 +-------+--------------------------------------------------+-----------------------------------------------------+-----------------------------------------------------------------------------------+
 | -901  | PL server can not be started: %1$s.              | An unexpected error occurred within the JVM library | Try reinstalling the JRE, and if the same error occurs,                           |
 |       |                                                  | or in $CUBRID/java/jspserver.jar.                   | try installing a different version of the JRE.                                    |
@@ -3395,24 +3362,24 @@ The error messages are stored in **$CUBRID/log**/\ *<db_name>_pl*\ **.err**.
 |       |                                                  |                                                     | version of CUBRID.                                                                |
 +-------+--------------------------------------------------+-----------------------------------------------------+-----------------------------------------------------------------------------------+
 
-The following are error messages for errors that may occur when there are connection issues, including when the CUBRID Procedure Language Server is not started.
+The following are error messages for errors that may occur when there are connection issues, including when the CUBRID Procedural Langauge Server is not started.
 The error messages are stored in **$CUBRID/log/broker/error_log**/\ *<broker_name>_<app_server_num>*\ **.err**.
 
 +-------+---------------------------------------------------+------------------------------------------------------------+------------------------------------------------------------------------------------------------------+
 | Error | Error Message                                     | Description                                                | Action                                                                                               |
 | Code  |                                                   |                                                            |                                                                                                      |
 +=======+===================================================+============================================================+======================================================================================================+
-| -902  | PL server is not running.                         | The Procedure Language Server is not started               | Start the Procedure Language Server with the **cubrid pl start <db_name>** command.                  |
+| -902  | PL server is not running.                         | The Procedural Langauge Server is not started               | Start the Procedural Langauge Server with the **cubrid pl start <db_name>** command.                  |
 |       |                                                   |                                                            | For more details, refer to :ref:`cubrid-pl-server`.                                                  |
 +-------+---------------------------------------------------+------------------------------------------------------------+------------------------------------------------------------------------------------------------------+
-| -903  | Can't connect PL server: %1$s                     | The Procedure Language Server cannot connect from CAS      | Restart the Procedure Language Server. If the restart fails,                                         |
+| -903  | Can't connect PL server: %1$s                     | The Procedural Langauge Server cannot connect from CAS      | Restart the Procedural Langauge Server. If the restart fails,                                         |
 |       |                                                   | This error can occur for various reasons.                  | forcibly terminate the **cub_pl <db_name>** process using the Linux **kill** command.                |
-|       |                                                   | For example, if the Procedure Language Server is unstable  | Then restart the Procedure Language Server again.                                                    |
-|       |                                                   | or if CAS cannot connect to the Procedure Language Server, |                                                                                                      |
-|       |                                                   | or if the Procedure Language unexpectedly terminates (kill)| Check if the Procedure Language Server's port is accessible from CAS using the                       |
+|       |                                                   | For example, if the Procedural Langauge Server is unstable  | Then restart the Procedural Langauge Server again.                                                    |
+|       |                                                   | or if CAS cannot connect to the Procedural Langauge Server, |                                                                                                      |
+|       |                                                   | or if the Procedural Langauge unexpectedly terminates (kill)| Check if the Procedural Langauge Server's port is accessible from CAS using the                       |
 |       |                                                   | this error message is displayed.                           | **cubrid pl status <db_name>** command.                                                              |
 |       |                                                   |                                                            | The port may be blocked by a firewall, so open the port in the firewall.                             |
-|       |                                                   |                                                            | If necessary, set the **stored_procedure_port** parameter and restart the Procedure Language Server. |
+|       |                                                   |                                                            | If necessary, set the **stored_procedure_port** parameter and restart the Procedural Langauge Server. |
 |       |                                                   |                                                            | For more details, refer to :ref:`connect-to-cubrid-server`.                                          |
 +-------+---------------------------------------------------+------------------------------------------------------------+------------------------------------------------------------------------------------------------------+
 | -905  | Networking with PL server failed: %1$d            | CAS received an incorrect packet from the Procedure        |                                                                                                      |

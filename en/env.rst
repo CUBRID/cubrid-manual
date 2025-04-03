@@ -424,4 +424,4 @@ Behavior according to the OS type and the **stored_procedure_uds** setting in **
 
 .. note::
 
-        The port used for communication between the CUBRID Procedure Language server (cub_pl) and cub_server is specified by **stored_procedure_port** in **cubrid.conf**. The default value is 0, which means that a random available port will be assigned.
+        The port used for communication between the CUBRID Procedural Langauge server (cub_pl) and cub_server is specified by **stored_procedure_port** in **cubrid.conf**. The default value is 0, which means that a random available port will be assigned.

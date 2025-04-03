@@ -849,7 +849,7 @@ CSQL에서 athlete 테이블에 존재하지 않는 이름을 인자로 주어 N
 
 Static/Dynamic SQL 문의 동작은 :ref:`시스템 설정 파라미터 <system_config>` 전체의 영향을 동일하게 받는다.
 
-Static/Dynamic SQL 제외한 PL/CSQL 문에서는 다음 4개 시스템 설정 파라미터만이 유효하다.
+Static/Dynamic SQL 밖의 PL/CSQL 문에서는 다음 4개 시스템 설정 파라미터만이 유효하다.
 
 * compat_numeric_division_scale
 * oracle_compat_number_behavior
@@ -877,7 +877,7 @@ Static/Dynamic SQL 제외한 PL/CSQL 문에서는 다음 4개 시스템 설정 �
 
 이들 설정의 자세한 의미는 :ref:`시스템 설정 파라미터 <system_config>`\를 참조할 수 있다.
 
-위 4개 외 다른 설정은 Static/Dynamic SQL 제외한 PL/CSQL 문에서 유효하지 않다. 특히,
+위 4개 외 다른 설정은 Static/Dynamic SQL 밖의 PL/CSQL 문에서 유효하지 않다. 특히,
 
 * no_backslash_escapes 설정 파라미터값과 상관없이 backslash 문자는 escape 문자로 사용되지 않는다.
 * pipes_as_concat 설정 파라미터값과 상관없이 ||는 논리합(OR) 연산자로 사용되지 않는다.

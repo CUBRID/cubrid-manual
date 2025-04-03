@@ -2,7 +2,7 @@
 실행문
 ------------------
 
-현재 PL/CSQL은 다음과 같이 14가지 종류의 실행문을 제공한다.
+현재 PL/CSQL은 다음과 같이 15가지 종류의 실행문을 제공한다.
 ::
 
     <statement> ::=
@@ -345,7 +345,7 @@ Exception을 발생시킨다.
 Exception 이름 *identifier*\는 :ref:`시스템 Exception <exception>`\이거나
 :ref:`사용자가 선언 <exception_decl>`\한 것이어야 한다.
 Exception의 THEN 절 안의 RAISE는 Exception 이름을 생략할 수 있다.
-이 경우, 현재 처리 중인 Exception을 일으키는 것으로 동작한다.
+이 경우, 현재 처리 중인 Exception을 다시 일으키는 것으로 동작한다.
 
 .. code-block:: sql
 

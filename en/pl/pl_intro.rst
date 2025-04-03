@@ -23,8 +23,8 @@ Creating a Stored Procedure
 
 .. _pl-supported_sql_type:
 
-Supported Argument and Return Data Types
-----------------------------------------
+Supported Data Types of Arguments and Return
+---------------------------------------------
 
 Only a subset of the data types supported by CUBRID SQL can be specified for stored procedure/function arguments and return values.
 The following table shows the data types supported by language extensions:

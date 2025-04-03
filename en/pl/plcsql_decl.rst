@@ -4,7 +4,7 @@ Declarations
 
 Stored procedure/function declarations and block statements contain a declaration section called *seq_of_declare_specs*.
 Within this section, you can declare variables, constants, exceptions, cursors, and local procedures/functions as defined by the grammar below.
-Each declared item can be referenced within the *body* that follows the declaration.
+Each declared item can be referenced within the *body* that follows the declaration section.
 
 ::
 
@@ -207,7 +207,7 @@ Cursor Declarations
 
 * *builtin_type*: System-defined types described in :ref:`Data Types <types>`
 
-Cursors can have parameters just like procedures/functions, but **only `IN` parameters** are allowed.
+Cursors can have parameters just like procedures/functions, but only `IN` parameters are allowed.
 These parameters can be referenced within the *select_statement*.
 When calling :ref:`OPEN <cursor_manipulation>`, the provided arguments must match the declared number and types of the cursor parameters, and the `SELECT` statement will execute accordingly.
 
@@ -249,7 +249,7 @@ Alternatively, they can be used with a `FOR-LOOP`, in which the `OPEN`, `FETCH`,
         END LOOP;
     END;
 
-Note that `SELECT` statements used in cursor declarations **must not include an `INTO` clause**.
+Note that `SELECT` statements used in cursor declarations must not include an `INTO` clause.
 
 .. _local_routine_decl:
 
@@ -257,7 +257,7 @@ Local Procedure/Function Declarations
 =====================================
 
 You can define local procedures/functions that are only used inside the currently defined stored procedure/function,
-following the syntax below. If a task is somewhat large or repeated more than once,
+following the syntax below. If a task is somewhat large or repeated,
 modularizing it as a local procedure/function improves code readability and reusability.
 
 ::
@@ -285,7 +285,7 @@ modularizing it as a local procedure/function improves code readability and reus
 * *parameter*: Parameters can be declared as IN, IN OUT, INOUT, or OUT. IN OUT and INOUT are equivalent.
 * *param_comment_string*: A comment string for the parameter.
 * *builtin_type*: System-defined types described in :ref:`Data Types <types>`
-* *body*: Consists of at least one mandatory statement and optionally one or more exception handlers.
+* *body*: Consists of at least one statement and optionally one or more exception handlers.
 * *label_name*: Must match the name of the procedure/function.
 * *declare_spec*: One of variable, constant, exception, cursor, or local procedure/function declarations.
 * *statement*: See the :doc:`Statements <plcsql_stmt>` section.
@@ -294,13 +294,13 @@ modularizing it as a local procedure/function improves code readability and reus
 
 Unlike :ref:`stored procedures/functions <stored_proc>`,
 a local procedure/function may have the same name as a :ref:`CUBRID built-in function <operators-and-functions>`.
-In this case, the built-in function will be shadowed within the scope of the local declaration.
+In this case, the built-in function will be hidden within the scope of the local declaration.
 
 In the case of a function, the *body* must return a value of the declared return type using a `RETURN` statement.
 If a control path reaches the end of the function body without a `RETURN`, a compile-time error will occur.
 For procedures, `RETURN` statements must not specify a return value.
 
-Procedures/functions can reference themselves, enabling **recursive calls**.
+Procedures/functions can reference themselves, enabling recursive calls.
 
 .. code-block:: sql
 

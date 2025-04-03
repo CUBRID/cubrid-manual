@@ -62,7 +62,7 @@ Identifiers
 =================
 In PL/CSQL statements outside Static/Dynamic SQL, the following kinds of identifiers can be used:
 
-* Variables, constants, cursors, exceptions, and internal procedures/functions declared in the declaration section
+* Variables, constants, cursors, exceptions, and local procedures/functions declared in the declaration section
 * Parameters of procedures/functions
 * Implicitly declared iterators of :ref:`FOR loops <loop>` of type integer or record
 
@@ -178,7 +178,7 @@ PL/CSQL supports record variables in the following two cases:
 * Implicitly declared record variables used for iterating over SELECT results in a FOR loop
 * Record variables declared using %ROWTYPE
 
-To reference a field in a record variable, append the field name to the record variable.
+To reference a field in a record variable, append a dot and the field name to the record variable.
 
 .. code-block:: sql
 
@@ -219,9 +219,9 @@ Arguments passed to OUT parameters of the function must be assignable variables 
         ... callee(c) ...   -- Error: constant
     END;
 
-Callable functions may be stored functions, internal functions, or built-in functions.
+Callable functions may be stored functions, local functions, or built-in functions.
 Among these, built-in functions refer to the CUBRID built-in functions listed in :ref:`Operators and Functions <operators-and-functions>`.
-However, the built-in function :ref:`IF <func_if>` that conflicts with PL/CSQL syntax cannot be used.
+However, the built-in function :ref:`IF <func_if>` cannot be used because it conflicts with PL/CSQL syntax .
 
 If an error occurs while calling another stored function or built-in function, an SQL_ERROR Exception is raised.
 

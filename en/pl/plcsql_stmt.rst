@@ -2,7 +2,7 @@
 Statements
 ------------------
 
-Currently, PL/CSQL provides the following 14 types of statements:
+Currently, PL/CSQL provides the following 15 types of statements:
 
 ::
 
@@ -193,7 +193,7 @@ RAISE_APPLICATION_ERROR
 =========================
 
 `RAISE_APPLICATION_ERROR` is used to raise an :ref:`Exception <exception>` with a user-defined
-:ref:`SQL code and error message <sqlcode>`.
+:ref:`code and error message <sqlcode>`.
 Although it appears to be a built-in procedure call, it is internally handled as a PL/CSQL executable statement.
 The first argument must be an `INTEGER` value greater than 1000, as values ≤1000 are reserved for the system.
 The second argument can be any string message.
@@ -227,7 +227,7 @@ EXECUTE IMMEDIATE
 
 As described in the :ref:`Dynamic SQL <dyn_sql>` section,
 you can dynamically build SQL statements at runtime and execute them using the `EXECUTE IMMEDIATE` statement.
-The `USING` clause allows you to bind values from the program into placeholder positions (`?`) in the SQL.
+The `USING` clause allows you to bind values from the program to host variables in the SQL.
 The `INTO` clause allows the program to retrieve result values from a `SELECT` query into variables or OUT parameters.
 The number of result columns must match the number of variables or OUT parameters,
 and the types must be compatible.
@@ -364,7 +364,7 @@ Raises an exception.
 The exception name *identifier* must be a :ref:`system exception <exception>`
 or a :ref:`user-declared exception <exception_decl>`.
 Within an exception handler's `THEN` clause, the exception name may be omitted,
-in which case the currently handled exception is re-raised.
+in which case the currently handled exception is raised again.
 
 .. code-block:: sql
 
@@ -415,7 +415,7 @@ Procedure Call
 Calls the procedure identified by *identifier*, optionally passing *function_argument* values.
 The number and types of arguments must match those declared in the procedure.
 Arguments passed to OUT parameters must be variables or other OUT parameters,
-as their values will be modified by the procedure.
+as their values will be modified by the called procedure.
 
 .. code-block:: sql
 
@@ -436,7 +436,7 @@ as their values will be modified by the procedure.
         callee(c);   -- Error: constant
     END;
 
-The called procedure may be a stored procedure or an internal procedure.
+The called procedure may be a stored procedure or a local procedure.
 If an error occurs during the execution of a stored procedure call,
 a `SQL_ERROR` exception is raised.
 
@@ -488,7 +488,7 @@ The last two are used for iterating over the results of a SELECT statement.
   If REVERSE is specified, *identifier* is initialized with *upper_bound* and the loop body is executed if the value is greater than or equal to *lower_bound*. After each iteration, it decreases by *step* and continues while the condition holds.
   The loop variable *identifier* is treated as an INTEGER-type variable within the loop body.
 * *for-cursor-loop* and *for-static-sql-loop* forms are used to iterate over the result set of a cursor or SELECT statement. The SELECT statement must not contain an INTO clause or a compile-time error occurs.
-  For each iteration, a row from the result set is assigned to *record*, and the loop body executes. Each column of the row can be referenced as *record*.*column* within the body.
+  For each iteration, a row from the result set is assigned to *record*, and the loop body executes. Each column of the row can be referenced as *record.column* within the body.
 
 A basic form of LOOP typically includes an internal condition to exit the loop, as shown below:
 

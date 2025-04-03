@@ -106,7 +106,7 @@ When executing a `CREATE PROCEDURE/FUNCTION` statement, various rules related to
 semantics of the stored procedure/function are checked.
 If any errors are found during this process, an error message is displayed indicating the location and
 cause of the error.
-The following is an example of a stored procedure containing errors that emits an error message in CSQL.
+The following is an example of a stored procedure containing errors and compiling it emits an error message.
 
 .. code-block:: sql
 
@@ -276,16 +276,15 @@ Writing Rules
 ==================
 
 When writing identifiers, reserved words, comments, and literals, follow the rules of
-:ref:`Static <static_sql>`/:ref:`Dynamic <dyn_sql>` SQL.
-Within SQL, the :ref:`SQL writing rules <lexical_rules>` should be followed.
+:ref:`SQL writing rules <lexical_rules>` within :ref:`Static <static_sql>`/:ref:`Dynamic <dyn_sql>` SQL.
 
 The rules for writing PL/CSQL statements outside of Static/Dynamic SQL mostly follow the same rules,
 with a few exceptions:
 
-* Unlike SQL, the `#` symbol cannot be used in identifiers. That is, identifiers must consist only of English letters (uppercase and lowercase), Korean characters, digits, and the underscore (`_`).
+* Unlike SQL, the `#` symbol cannot be used in identifiers. That is, identifiers must consist only of English letters (uppercase and lowercase), Korean letters, digits, and the underscore (`_`).
 * Even if enclosed in double quotes, square brackets, or backticks, special characters cannot be used in identifiers.
-  Only English letters (uppercase and lowercase), Korean characters, digits, and underscores (`_`) are allowed.
-* Bit-string literals cannot be used.
+  Only English letters (uppercase and lowercase), Korean letters, digits, and underscores (`_`) are allowed.
+* Bit string literals cannot be used.
 
 .. rubric:: Examples of Allowed Identifiers
 
@@ -403,10 +402,10 @@ Inside Static/Dynamic SQL, the list below does not apply; instead, the
 +-------------------+--------------------+--------------------+--------------------+
 
 The CREATE PROCEDURE/FUNCTION statement for creating PL/CSQL stored procedures/functions goes through
-a separately implemented PL/CSQL syntax check, not the general SQL syntax check.
-A different set of reserved words also applies.
+a separate PL/CSQL syntax check, not the general SQL syntax check,
+and a different set of reserved words is applied.
 However, up to the AS/IS keywords, the general SQL syntax check also applies, so the
-:ref:`CUBRID reserved word list <reserved_words>` is also in effect.
+:ref:`CUBRID reserved word list <reserved_words>` is also in effect there.
 
 In the following example, the parameter name `add` is not a PL/CSQL reserved word,
 but since it is a CUBRID reserved word, it causes a syntax error.
@@ -506,8 +505,7 @@ the `CREATE PROCEDURE/FUNCTION` statement is executed.
 However, if the column’s data type is later changed, it will *not* be automatically reflected
 in the behavior of stored procedures/functions that use `<table>.<column>%TYPE`.
 Therefore, when the data type of a column using `%TYPE` is changed,
-you must recompile all stored procedures/functions that use that `%TYPE` by executing:
-
+you must recompile all stored procedures/functions that use that `%TYPE` by executing
 `ALTER PROCEDURE/FUNCTION <name> COMPILE`.
 
 In addition to table columns, `%TYPE` can also be appended to procedure/function parameter or variable names
@@ -553,7 +551,7 @@ If no initial value is provided in the declaration of a record variable, it is i
 
 .. code-block:: sql
 
-   r tbl%ROWTYPE;   -- r.a, r.b, r.c are all NULL, but r itself is a non-NULL empty record
+   r tbl%ROWTYPE;   -- r.a, r.b, r.c are all NULL, but r itself is not NULL
 
 Assigning `NULL` to a record variable initializes each field to `NULL`, but the record variable itself does not become `NULL`.
 In other words, a record variable never holds a `NULL` value after being declared.
@@ -588,8 +586,8 @@ cannot be used for record comparisons.
 Assignment from one record variable `s` to another record variable `t` is allowed when the following conditions are met:
 
 * The number of fields in `s` and `t` are the same.
-* For each field position `i`, let the types of the `i`-th fields in `s` and `t` be `S\ :sub:i` and `T\ :sub:i`,
-  respectively. It must be possible to assign a value from `S\ :sub:i` to `T\ :sub:i`.
+* For each field position `i`, let the types of the `i`-th fields in `s` and `t` be `S`\ :sub:`i` and `T`\ :sub:`i`,
+  respectively. It must be possible to assign a value from `S`\ :sub:`i` to `T`\ :sub:`i`.
 
 The names of corresponding fields do *not* need to match in order for assignment between record variables to be valid.
 
@@ -628,7 +626,7 @@ Record variables can be used in the `INTO` clause of Static/Dynamic SQL `SELECT`
 When using a record variable in an `INTO` clause, other variables cannot be used together.
 Also, the column names of the query result do not need to match the field names of the record variable,
 but the number of columns retrieved and the number of fields in the record variable must be the same.
-Additionally, the column types and record field types must either match or be compatible.
+Additionally, the column types and record field types must be compatible.
 
 .. code-block:: sql
 
@@ -650,7 +648,7 @@ In the `VALUES` clause of a Static SQL `INSERT`/`REPLACE` statement, a record va
 When a record variable is used, it cannot be combined with other variables in the same `VALUES` clause.
 Also, the names of the target columns and the record fields do not need to match,
 but the number of columns and fields must be the same,
-and the column types must either match or be compatible with the record field types.
+and the column types must be compatible with the record field types.
 
 .. code-block:: sql
 
@@ -666,8 +664,8 @@ The following forms are also allowed:
 
 In a Static SQL `UPDATE` statement, a record variable can also be used with the
 `SET ROW = <record>` syntax as shown below.
-This is allowed only for single-table updates, and the fields of the record must be
-assignable to the corresponding columns in the same order.
+This is allowed only for single-table updates, and the field types of the record must be
+compatible with the corresponding column types in the same order.
 
 .. code-block:: sql
 
@@ -690,10 +688,10 @@ This restriction also applies to local procedures/functions.
 
 Generally, `NUMERIC` without precision and scale amounts to `NUMERIC(15, 0)`.
 However, in the *parameter type* position, it exceptionally means that any precision and scale are allowed
-(precision must be between 1 and 38; scale must be between 0 and the precision value),
+with precision from 1 to 38 and scale from 0 to the precision,
 while in the *return type* position, it is treated as `NUMERIC(p, s)`,
 where `p` and `s` are determined by the system configuration parameter
-:ref:`stored_procedure_return_numeric_size <system_config>`.
+:ref:`STORED_PROCEDURE_RETURN_NUMERIC_SIZE <system_config>`.
 The default values for `p` and `s` are 38 and 15, respectively.
 
 .. code-block:: sql
@@ -711,7 +709,7 @@ The default values for `p` and `s` are 38 and 15, respectively.
 In addition, when `CHAR` and `VARCHAR` are used as parameter or return types,
 they do not behave as `CHAR(1)` or `VARCHAR(1073741823)` as in other contexts.
 Instead, they indicate that any string length is allowed
-(length must be ≤ 2048 for `CHAR`, and ≤ 1073741823 for `VARCHAR`).
+with length ≤ 2048 for `CHAR` and length ≤ 1073741823 for `VARCHAR`.
 
 .. code-block:: sql
 
@@ -892,13 +890,13 @@ a `NO_DATA_FOUND` exception will be raised as the result.
 In the example above, position `(1, 22)` indicates the location within the `SELECT` statement,
 and `(6, 5)` indicates the location within the `CREATE` statement that declares `athlete_code()`.
 
-System Configuration Application
-=================================
+System Configuration Parameters Application
+============================================
 
 The behavior of Static/Dynamic SQL statements is uniformly affected by all
 :ref:`system configuration parameters <system_config>`.
 
-In contrast, in PL/CSQL statements *excluding* Static/Dynamic SQL,
+In contrast, in PL/CSQL statements outside of Static/Dynamic SQL,
 only the following four system configuration parameters are effective:
 
 * `compat_numeric_division_scale`
@@ -928,7 +926,8 @@ only the following four system configuration parameters are effective:
 For details about these parameters, see
 :ref:`system configuration parameters <system_config>`.
 
-Other than the four listed above, system settings do not apply to PL/CSQL statements outside Static/Dynamic SQL. In particular:
+Other than the four listed above, system settings do not apply to PL/CSQL statements outside Static/Dynamic SQL.
+In particular:
 
 * Regardless of the `no_backslash_escapes` setting, the backslash character is *not* treated as an escape character.
 * Regardless of the `pipes_as_concat` setting, `||` is *not* used as a logical OR operator.

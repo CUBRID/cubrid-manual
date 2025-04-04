@@ -28,7 +28,7 @@ For more details on these syntax elements, refer to :doc:`Declarations <plcsql_d
 :doc:`Statements <plcsql_stmt>`.
 
 Stored procedures/functions are always executed with auto-commit disabled.
-This applies even if the Auto Commit feature is enabled in the calling session.
+This applies even if the auto-commit feature is enabled in the calling session.
 
 Stored procedures/functions cannot have the same name as any
 :ref:`CUBRID built-in functions <operators-and-functions>`.

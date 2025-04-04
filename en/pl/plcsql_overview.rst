@@ -766,8 +766,7 @@ but there are a few exceptions:
   respectively.
 
 The following example shows that string functions `locate` and `substr`,
-as well as the string concatenation operator `||`, can be used in PL/CSQL executable statements outside of
-Static/Dynamic SQL.
+as well as the string concatenation operator `||`, can be used in Non-static/dynamic SQL statements.
 
 .. code-block:: sql
 
@@ -896,7 +895,7 @@ System Configuration Parameters Application
 The behavior of Static/Dynamic SQL statements is uniformly affected by all
 :ref:`system configuration parameters <system_config>`.
 
-In contrast, in PL/CSQL statements outside of Static/Dynamic SQL,
+In contrast, in Non-static/dynamic SQL statements,
 only the following four system configuration parameters are effective:
 
 * `compat_numeric_division_scale`
@@ -926,7 +925,7 @@ only the following four system configuration parameters are effective:
 For details about these parameters, see
 :ref:`system configuration parameters <system_config>`.
 
-Other than the four listed above, system settings do not apply to PL/CSQL statements outside Static/Dynamic SQL.
+Other than the four listed above, system settings do not apply to Non-static/dynamic SQL statements.
 In particular:
 
 * Regardless of the `no_backslash_escapes` setting, the backslash character is *not* treated as an escape character.

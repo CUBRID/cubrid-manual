@@ -44,10 +44,10 @@ Like procedures/functions, a BLOCK can have an exception handling structure.
     <handler> ::= WHEN <exception_name> [ OR <exeption_name> OR ... ] THEN <seq_of_statements>
     <exception_name> ::= identifier | OTHERS
 
-* *body*: Must consist of one or more statements, optionally followed by exception handlers.
-* *declare_spec*: Variable, constant, exception, cursor, or inner procedure/function declarations (see: :doc:`Declarations <plcsql_decl>`)
-* *handler*: Statements to be executed when the specified exception occurs.
-* *exception_name*: The *identifier* must be either a :ref:`system exception <exception>` or a :ref:`user-declared exception <exception_decl>`.
+* *body*: must consist of one or more statements, optionally followed by exception handlers.
+* *declare_spec*: variable, constant, exception, cursor, or inner procedure/function declarations (see: :doc:`Declarations <plcsql_decl>`)
+* *handler*: statements to be executed when the specified exception occurs.
+* *exception_name*: the *identifier* must be either a :ref:`system exception <exception>` or a :ref:`user-declared exception <exception_decl>`.
   `OTHERS` matches all exceptions not otherwise matched, and cannot be combined with other exception names using `OR`.
 
 Items declared inside a BLOCK cannot be accessed from outside the BLOCK.
@@ -122,15 +122,15 @@ Cursor manipulation statements come in the following four forms:
 
     <open_for_statement> ::= OPEN <identifier> FOR <select_statement>
 
-* *cursor_expression*: An expression that evaluates to a cursor or SYS_REFCURSOR variable
-* *open_statement*: Opens a cursor. Note that this can only be used with explicitly declared cursors, not SYS_REFCURSOR variables.
+* *cursor_expression*: an expression that evaluates to a cursor or SYS_REFCURSOR variable
+* *open_statement*: opens a cursor. Note that this can only be used with explicitly declared cursors, not SYS_REFCURSOR variables.
   For cursors declared with parameters, the actual values provided must match the number and types of parameters.
   If you attempt to open an already open cursor, a `CURSOR_ALREADY_OPEN` exception will be raised.
-* *fetch_statement*: Fetches one row from the cursor into the specified variables or OUT parameters.
+* *fetch_statement*: fetches one row from the cursor into the specified variables or OUT parameters.
   The number of columns in the fetched row must match the number of target variables, and their types must be compatible.
   Attempting to fetch from a cursor that is not open will raise an `INVALID_CURSOR` exception.
-* *close_statement*: Closes a cursor. Attempting to close a cursor that is not open will raise an `INVALID_CURSOR` exception.
-* *open_for_statement*: The *identifier* must be a variable declared with type SYS_REFCURSOR.
+* *close_statement*: closes a cursor. Attempting to close a cursor that is not open will raise an `INVALID_CURSOR` exception.
+* *open_for_statement*: the *identifier* must be a variable declared with type SYS_REFCURSOR.
   Internally, this statement opens a cursor for the given *select_statement* and assigns it to the variable.
   If the *select_statement* includes an INTO clause, a compile-time error will occur.
 
@@ -245,14 +245,14 @@ if more than one row is returned, `TOO_MANY_ROWS` is raised.
         <using_element> ::= [ IN ] <expression>
         <into_clause> ::= INTO <identifier> [ , <identifier>, ... ]
 
-* *dynamic_sql*: An expression of string type. It must evaluate to a syntactically valid SQL string.
+* *dynamic_sql*: an expression of string type. It must evaluate to a syntactically valid SQL string.
   You may use `?` placeholders for values.
   The number of `?` placeholders must match the number of expressions in the *using_clause*.
-* *using_clause*: Specifies the values to replace `?` placeholders in the SQL string.
+* *using_clause*: specifies the values to replace `?` placeholders in the SQL string.
   Expressions of type `BOOLEAN` or `SYS_REFCURSOR` are not allowed.
   Record-type values declared with :ref:`%ROWTYPE <percent_rowtype>` or cursors are also not allowed.
-* *into_clause*: Specifies the variables or OUT parameters to receive result values from a `SELECT` statement.
-  If *dynamic_sql* is a `SELECT` but no `INTO` clause is present—or vice versa—then a `SQL_ERROR` exception is raised.
+* *into_clause*: specifies the variables or OUT parameters to receive result values from a `SELECT` statement.
+  If *dynamic_sql* is a `SELECT` but no `INTO` clause is present, or vice versa, then a `SQL_ERROR` exception is raised.
 
 Here is an example usage of `EXECUTE IMMEDIATE`:
 
@@ -276,8 +276,8 @@ Assignment
     <assignment_statement> ::=
         <identifier> := <expression>
 
-* *identifier*: Must be a variable or OUT parameter
-* *expression*: An expression that evaluates to the value to be assigned (see the expressions section)
+* *identifier*: must be a variable or OUT parameter
+* *expression*: an expression that evaluates to the value to be assigned (see the expressions section)
 
 The type of *expression* must be the same as or implicitly convertible to the type of *identifier*.
 Otherwise, a compile-time error occurs.
@@ -481,7 +481,7 @@ The last two are used for iterating over the results of a SELECT statement.
     <for_cursor>      ::= <record> IN <cursor> [ <function_argument> ]
     <for_static_sql>  ::= <record> IN ( <select_statement> )
 
-* *label_declaration*: A label can only be declared at the beginning of a loop statement. It is used by CONTINUE or EXIT statements in the loop body to indicate which loop to branch to.
+* *label_declaration*: a label can only be declared at the beginning of a loop statement. It is used by CONTINUE or EXIT statements in the loop body to indicate which loop to branch to.
 * In the *while-loop*, the condition *expression* must be of type BOOLEAN.
 * In the *for-iter-loop*, *lower_bound*, *upper_bound*, and *step* must all be of types convertible to INTEGER. At runtime, if *step* is less than or equal to 0, a VALUE_ERROR exception is raised.
   If REVERSE is not specified, the *identifier* is initialized with *lower_bound* and the loop body is executed if the value is less than or equal to *upper_bound*. After each iteration, it increases by *step* and continues while still satisfying the condition.

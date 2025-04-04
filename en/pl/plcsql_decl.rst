@@ -62,7 +62,7 @@ However, outside the inner scope, the name still refers to the outer item.
 This kind of "name hiding" also applies to other types of declarations,
 such as constants, procedure/function parameters, exceptions, cursors, and local procedures/functions.
 
-However, if the hidden name is referenced earlier in the same declaration block—such as in an initializer expression—
+However, if the hidden name is referenced earlier in the same declaration block, such as in an initializer expression,
 a compile-time error will occur. Here's a simple example: in procedure `poo`, the parameter `a` is referenced
 in the initializer of variable `i` inside the inner procedure. Then, a new variable with the same name `a` is declared below.
 This results in a compile error message stating that the name has already been used in the same declaration block.
@@ -205,7 +205,7 @@ Cursor Declarations
         | <table>%ROWTYPE
         | <cursor>%ROWTYPE
 
-* *builtin_type*: System-defined types described in :ref:`Data Types <types>`
+* *builtin_type*: system-defined types described in :ref:`Data Types <types>`
 
 Cursors can have parameters just like procedures/functions, but only `IN` parameters are allowed.
 These parameters can be referenced within the *select_statement*.
@@ -282,15 +282,15 @@ modularizing it as a local procedure/function improves code readability and reus
     <handler> ::= WHEN <exception_name> [ OR <exception_name> OR ... ] THEN <seq_of_statements>
     <exception_name> ::= identifier | OTHERS
 
-* *parameter*: Parameters can be declared as IN, IN OUT, INOUT, or OUT. IN OUT and INOUT are equivalent.
-* *param_comment_string*: A comment string for the parameter.
-* *builtin_type*: System-defined types described in :ref:`Data Types <types>`
-* *body*: Consists of at least one statement and optionally one or more exception handlers.
-* *label_name*: Must match the name of the procedure/function.
-* *declare_spec*: One of variable, constant, exception, cursor, or local procedure/function declarations.
-* *statement*: See the :doc:`Statements <plcsql_stmt>` section.
-* *handler*: Specifies the statements to execute when the designated exception is raised.
-* *exception_name*: The exception *identifier* must be a :ref:`System Exception <exception>` or a user-declared one via :ref:`Exception Declaration <exception_decl>`. `OTHERS` matches any unhandled exceptions, and cannot be combined with other exception names using `OR`.
+* *parameter*: parameters can be declared as IN, IN OUT, INOUT, or OUT. IN OUT and INOUT are equivalent.
+* *param_comment_string*: a comment string for the parameter.
+* *builtin_type*: system-defined types described in :ref:`Data Types <types>`
+* *body*: consists of at least one statement and optionally one or more exception handlers.
+* *label_name*: must match the name of the procedure/function.
+* *declare_spec*: one of variable, constant, exception, cursor, or local procedure/function declarations.
+* *statement*: see the :doc:`Statements <plcsql_stmt>` section.
+* *handler*: specifies the statements to execute when the designated exception is raised.
+* *exception_name*: the exception *identifier* must be a :ref:`System Exception <exception>` or a user-declared one via :ref:`Exception Declaration <exception_decl>`. `OTHERS` matches any unhandled exceptions, and cannot be combined with other exception names using `OR`.
 
 Unlike :ref:`stored procedures/functions <stored_proc>`,
 a local procedure/function may have the same name as a :ref:`CUBRID built-in function <operators-and-functions>`.

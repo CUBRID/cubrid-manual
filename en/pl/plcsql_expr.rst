@@ -56,7 +56,7 @@ The types of expressions in PL/CSQL are summarized by the following syntax:
 Literals
 =================
 Literals include date/time, numeric, string, NULL, TRUE, and FALSE values.
-Except for the fact that bit strings and collections are not supported, literal-related rules are the same as described in :ref:`SQL Literals <sql_literal>`.
+Except that bit strings and collections are not supported, literal-related rules are the same as described in :ref:`SQL Literals <sql_literal>`.
 
 Identifiers
 =================

@@ -221,7 +221,7 @@ Arguments passed to OUT parameters of the function must be assignable variables 
 
 Callable functions may be stored functions, local functions, or built-in functions.
 Among these, built-in functions refer to the CUBRID built-in functions listed in :ref:`Operators and Functions <operators-and-functions>`.
-However, the built-in function :ref:`IF <func_if>` cannot be used because it conflicts with PL/CSQL syntax .
+However, the built-in function :ref:`IF <func_if>` cannot be used because it conflicts with PL/CSQL syntax.
 
 If an error occurs while calling another stored function or built-in function, an SQL_ERROR Exception is raised.
 

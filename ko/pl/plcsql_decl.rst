@@ -70,18 +70,18 @@
 
 .. code-block:: sql
 
-     CREATE OR REPLACE PROCEDURE poo(a INT) AS
+    CREATE OR REPLACE PROCEDURE poo(a INT) AS
     
-         PROCEDURE inner AS
-             i INT := a;
-             a NUMERIC;
-         BEGIN
-             ...
-         END;
+        PROCEDURE inner AS
+            i INT := a;
+            a NUMERIC;
+        BEGIN
+            ...
+        END;
     
-     BEGIN
-         ...
-     END;
+    BEGIN
+        ...
+    END;
 
     ERROR: In line 5, column 9
     Stored procedure compile error: name A has already been used at line 4 and column 18 in the same declaration block
@@ -118,8 +118,7 @@ NOT NULL 조건이 지정된 경우에는 반드시 NULL이 아닌 초기값이 
         b VARCHAR(1) := 's';
         c FLOAT;        -- c = NULL
     BEGIN
-        --
-        NULL;
+        ...
     END;
 
 상수 선언

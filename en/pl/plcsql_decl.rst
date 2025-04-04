@@ -69,18 +69,18 @@ This results in a compile error message stating that the name has already been u
 
 .. code-block:: sql
 
-     CREATE OR REPLACE PROCEDURE poo(a INT) AS
+    CREATE OR REPLACE PROCEDURE poo(a INT) AS
 
-         PROCEDURE inner AS
-             i INT := a;
-             a NUMERIC;
-         BEGIN
-             ...
-         END;
+        PROCEDURE inner AS
+            i INT := a;
+            a NUMERIC;
+        BEGIN
+            ...
+        END;
 
-     BEGIN
-         ...
-     END;
+    BEGIN
+        ...
+    END;
 
     ERROR: In line 5, column 9
     Stored procedure compile error: name A has already been used at line 4 and column 18 in the same declaration block
@@ -115,8 +115,7 @@ If no initializer is provided, the variable will implicitly be assigned `NULL`.
         b VARCHAR(1) := 's';
         c FLOAT;        -- c = NULL
     BEGIN
-        --
-        NULL;
+        ...
     END;
 
 Constant Declarations

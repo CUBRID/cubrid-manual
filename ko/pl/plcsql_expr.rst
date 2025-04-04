@@ -214,7 +214,7 @@ PL/CSQL에서는 다음 두 가지 경우에 레코드 변수를 사용할 수 �
         ...
     END;
 
-    CREATE OR REPLACE PROCEDURE caller(i INT, o OUT INT)
+    CREATE OR REPLACE PROCEDURE proc(i INT, o OUT INT)
     AS
         v INT;
         c CONSTANT INT := 0;

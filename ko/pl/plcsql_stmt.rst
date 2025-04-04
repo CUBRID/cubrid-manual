@@ -403,7 +403,7 @@ RETURN
         ...
     END;
 
-    CREATE OR REPLACE PROCEDURE caller(i INT, o OUT INT)
+    CREATE OR REPLACE PROCEDURE proc(i INT, o OUT INT)
     AS
         v INT;
         c CONSTANT INT := 0;

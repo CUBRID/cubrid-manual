@@ -98,7 +98,7 @@ Static SQL
 ==========
 
 As explained in the :ref:`Static SQL <static_sql>` section,
-the following SQL statements—SELECT, INSERT, UPDATE, DELETE, MERGE, REPLACE, COMMIT, ROLLBACK, and TRUNCATE—
+the following SQL statements (SELECT, INSERT, UPDATE, DELETE, MERGE, REPLACE, COMMIT, ROLLBACK, and TRUNCATE)
 can be used directly as executable statements within a program.
 
 .. _cursor_manipulation:

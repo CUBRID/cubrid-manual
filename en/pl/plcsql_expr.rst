@@ -164,7 +164,7 @@ PL/CSQL uses the following precedence for operators:
 +--------------------------------------------------------------------+-------------------------------------+
 
 * In Non-Static/Dynamic SQL statements, the `%` operator cannot be used for modulo, so use MOD instead.
-* Outside Static/Dynamic SQL, logical operators `&&`, `||`, and `!` cannot be used. Use AND, OR, and NOT instead.
+* In Non-static/dynamic SQL statements, logical operators `&&`, `||`, and `!` cannot be used, so use AND, OR, and NOT instead.
 * Outside Static/Dynamic SQL, string comparisons follow UTF8 encoding regardless of DB settings, using lexicographical order of Unicode values.
   Inside Static/Dynamic SQL, encoding and comparison rules follow the database and table settings.
 

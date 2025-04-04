@@ -70,7 +70,7 @@ Using an identifier without explicit or implicit declaration results in a compil
 
 Static SQL Result Size
 =======================
-`SQL%ROWCOUNT` is an expression that represents the result size immediately after executing a Static SQL statement.
+`SQL%ROWCOUNT` is an expression that represents the result count immediately after executing a Static SQL statement.
 
 * For SELECT statements not associated with cursors, the INTO clause must be used, and the result must contain exactly one row. Therefore, when the SELECT executes successfully, `SQL%ROWCOUNT` will be 1. If the result has 0 or more than 1 row and causes a runtime error, the value of `SQL%ROWCOUNT` is undefined.
 * For INSERT, UPDATE, DELETE, MERGE, REPLACE, and TRUNCATE statements, it returns the number of affected rows.

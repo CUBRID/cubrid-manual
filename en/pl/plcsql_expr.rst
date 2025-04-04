@@ -68,8 +68,8 @@ In PL/CSQL statements other than Static/Dynamic SQL, the following kinds of iden
 
 Using an identifier without explicit or implicit declaration results in a compile-time error.
 
-Static SQL Result Size
-=======================
+Result Count for Static SQL
+============================
 `SQL%ROWCOUNT` is an expression that represents the result size immediately after executing a Static SQL statement.
 
 * For SELECT statements not associated with cursors, the INTO clause must be used, and the result must contain exactly one row. Therefore, when the SELECT executes successfully, `SQL%ROWCOUNT` will be 1. If the result has 0 or more than 1 row and causes a runtime error, the value of `SQL%ROWCOUNT` is undefined.

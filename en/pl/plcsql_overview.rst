@@ -278,8 +278,8 @@ Writing Rules
 When writing identifiers, reserved words, comments, and literals, follow the rules of
 :ref:`SQL writing rules <lexical_rules>` within :ref:`Static <static_sql>`/:ref:`Dynamic <dyn_sql>` SQL.
 
-The rules for writing PL/CSQL statements outside of Static/Dynamic SQL mostly follow the same rules,
-with a few exceptions:
+The rules for writing non-Static/Dynamic SQL statements in PL/SQL mostly follow the same rules,
+but there are some exceptions:
 
 * Unlike SQL, the `#` symbol cannot be used in identifiers. That is, identifiers must consist only of English letters (uppercase and lowercase), Korean letters, digits, and the underscore (`_`).
 * Even if enclosed in double quotes, square brackets, or backticks, special characters cannot be used in identifiers.
@@ -306,7 +306,7 @@ with a few exceptions:
     select          -- Reserved word
 
 PL/CSQL reserved words are listed in the table below.
-In PL/CSQL statements outside of Static/Dynamic SQL, the words in the table below cannot be used as identifiers
+In non-Static/Dynamic SQL statements, the words in the table below cannot be used as identifiers
 representing variables, constants, exceptions, internal procedures/functions, etc.
 However, as in SQL statements, they can be used as identifiers if enclosed in double quotes (" "),
 square brackets ([ ]), or backticks (\` \`).
@@ -430,7 +430,7 @@ Data Types
 
 In Static/Dynamic SQL, all :ref:`data types <datatype_index>` provided by SQL can be used.
 
-On the other hand, in PL/CSQL statements outside of Static/Dynamic SQL,
+On the other hand, in non-Static/Dynamic SQL,
 only `BOOLEAN`, `SYS_REFCURSOR`, and a subset of SQL-provided data types can be used.
 
 * `BOOLEAN`: Can have values TRUE, FALSE, or NULL.
@@ -755,7 +755,7 @@ Operators and Functions
 ========================
 
 In Static/Dynamic SQL, all operators and functions provided by SQL can be used.
-On the other hand, in PL/CSQL statements *outside* Static/Dynamic SQL,
+On the other hand, in non-Static/Dynamic SQL statements,
 most SQL-provided operators and functions can also be used in the same way,
 but there are a few exceptions:
 

@@ -60,7 +60,7 @@ Except that bit strings and collections are not supported, literal-related rules
 
 Identifiers
 =================
-In PL/CSQL statements outside Static/Dynamic SQL, the following kinds of identifiers can be used:
+In PL/CSQL statements other than Static/Dynamic SQL, the following kinds of identifiers can be used:
 
 * Variables, constants, cursors, exceptions, and local procedures/functions declared in the declaration section
 * Parameters of procedures/functions

@@ -831,7 +831,7 @@ CSQL에서 athlete 테이블에 존재하지 않는 이름을 인자로 주어 N
 
 .. code-block::
 
-    select athlete_code('x');
+   select athlete_code('x');
 
    In line 1, column 22,
 

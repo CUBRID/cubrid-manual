@@ -70,7 +70,7 @@ Using an identifier without explicit or implicit declaration results in a compil
 
 Result Count for Static SQL
 ============================
-`SQL%ROWCOUNT` is an expression that represents the result size immediately after executing a Static SQL statement.
+`SQL%ROWCOUNT` is an expression that represents the result count immediately after executing a Static SQL statement.
 
 * For SELECT statements not associated with cursors, the INTO clause must be used, and the result must contain exactly one row. Therefore, when the SELECT executes successfully, `SQL%ROWCOUNT` will be 1. If the result has 0 or more than 1 row and causes a runtime error, the value of `SQL%ROWCOUNT` is undefined.
 * For INSERT, UPDATE, DELETE, MERGE, REPLACE, and TRUNCATE statements, it returns the number of affected rows.
@@ -163,10 +163,10 @@ PL/CSQL uses the following precedence for operators:
 | OR                                                                 | Logical OR                          |
 +--------------------------------------------------------------------+-------------------------------------+
 
-* Outside Static/Dynamic SQL, the `%` operator cannot be used for modulo. Use MOD instead.
-* Outside Static/Dynamic SQL, logical operators `&&`, `||`, and `!` cannot be used. Use AND, OR, and NOT instead.
+* In Non-Static/Dynamic SQL statements, the `%` operator cannot be used for modulo, so use MOD instead.
+* In Non-static/dynamic SQL statements, logical operators `&&`, `||`, and `!` cannot be used, so use AND, OR, and NOT instead.
 * Outside Static/Dynamic SQL, string comparisons follow UTF8 encoding regardless of DB settings, using lexicographical order of Unicode values.
-  Inside Static/Dynamic SQL, encoding and comparison rules follow the database and table settings.
+  In Static/Dynamic SQL statements, encoding and comparison rules follow the database and table settings.
 
 Parentheses can be used to explicitly specify evaluation precedence.
 

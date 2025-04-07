@@ -3241,8 +3241,9 @@ CUBRID 서버는 설치 시 $CUBRID/vm 디렉토리에 Eclipse Temurin JDK 8 버
 **CUBRID_JAVA_HOME**
 
 **CUBRID_JAVA_HOME** 환경 변수는 JDK 설치 디렉토리를 지정한다.
-사용자가 **CUBRID_JAVA_HOME**\을 환경 변수를 지정하지 않으면 CUBRID 시 설치 시 포함된 번들 JDK를 사용한다.
+사용자가 **CUBRID_JAVA_HOME**\을 환경 변수를 지정하지 않으면 CUBRID 설치 시 포함된 번들 JDK를 사용한다.
 만약 올바르지 않은 **CUBRID_JAVA_HOME**\을 지정하면 프로시저 언어 서버가 제대로 시작되지 않으며 오류를 반환할 수 있다.
+**CUBRID_JAVA_HOME**\의 경로에는 JDK 환경과 함께 libjvm 라이브러리가 함께 포함되어 있어야 한다.
 
 다음은 **CUBRID_JAVA_HOME** 환경 변수를 설정하는 예시이다.
 

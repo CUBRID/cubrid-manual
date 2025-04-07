@@ -3250,6 +3250,7 @@ To use a JDK configured in the user's environment instead of the bundled JDK, se
 The **CUBRID_JAVA_HOME** environment variable specifies the JDK installation directory.
 If the user does not specify the **CUBRID_JAVA_HOME** environment variable, the bundled JDK included during CUBRID installation is used.
 If an incorrect **CUBRID_JAVA_HOME** is specified, the procedural language server may not start properly and may return an error.
+The path of **CUBRID_JAVA_HOME** must include the JDK environment along with the libjvm library.
 
 The following is an example of setting the **CUBRID_JAVA_HOME** environment variable.
 

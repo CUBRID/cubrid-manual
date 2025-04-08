@@ -764,7 +764,7 @@ The following are the explanation regarding items of trace statistics.
 *   fetch_time : total fetch time when this query is performed(ms)
 *   ioread: total I/O read count about this query. disk access count when the data is read
 
-**FUNC**: This is displayed when stored procedures are called in the query.
+**FUNC**: This is displayed when stored procedures are called in the query. fetch and ioread do not include the counts that occur during the execution of the query within the stored procedure.
 
 *   time: total execution time of the stored procedures in this query(ms)
 *   fetch: the number of times pages are fetched during the stored procedures call in this query

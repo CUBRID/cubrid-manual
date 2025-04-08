@@ -185,7 +185,7 @@ CUBRID 프로시저 언어 (PL) 서버 제어 프로세스를 제어하기 위�
     % cubrid pl status demodb
 
     @ cubrid pl status
-    Procedure Language Server (demobdb, pid 12345, UDS)
+    Procedural Langauge Server (demobdb, pid 12345, UDS)
     VM arguments :
     -------------------------------------------------
     ...
@@ -3217,7 +3217,7 @@ CUBRID 프로시저 언어 서버 상태 확인
     % cubrid pl status demodb
     
     @ cubrid pl status: demodb
-    Procedure Language Server (demodb, pid 9220, UDS)
+    Procedural Langauge Server (demodb, pid 9220, UDS)
     VM arguments :
     -------------------------------------------------
     ...
@@ -3230,65 +3230,33 @@ CUBRID 프로시저 언어 서버 상태 확인
 
 .. _cubrid-pl-environment-configuration:
 
-프로시저 언어 환경 설정
+프로시저 언어 환경: 번들 JDK 사용
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-CUBRID에서 프로시저 언어를 사용하기 위해서는 CUBRID 서버가 설치되는 환경에 Java Development Kit (JDK) 1.8 64bit 버전이 설치되어야 한다.
-JDK는 다음의 경로에서 다운로드할 수 있다.
+CUBRID에서 프로시저 언어 기능을 사용하기 위해 JVM 환경을 사용한다.
+CUBRID 서버는 설치 시 $CUBRID/vm 디렉토리에 Eclipse Temurin JDK 8 버전을 포함하므로 사용자의 환경에 별도로 JDK 환경을 구성할 필요가 없다.
+이 번들 JDK는 CUBRID에서 프로시저 언어 기능의 사용에 대해서 검증되어 있으며 일반적으로 좋은 성능과 안정성을 제공할 수 있으므로 사용을 권장한다.
+번들 JDK 대신 사용자의 환경에 구성된 JDK를 사용하기 위해 다음의 **CUBRID_JAVA_HOME** 환경 변수를 설정할 수 있다.
 
-* `OpenJDK 8 <https://openjdk.java.net/projects/jdk8/>`_
-* `Oracle JDK 8 <https://www.oracle.com/kr/java/technologies/javase/javase8-archive-downloads.html>`_
+**CUBRID_JAVA_HOME**
 
-JDK가 이미 설치되어 있다면, 아래와 같은 명령으로 JRE 버전을 확인한다. ::
+**CUBRID_JAVA_HOME** 환경 변수는 JDK 설치 디렉토리를 지정한다.
+사용자가 **CUBRID_JAVA_HOME**\을 환경 변수를 지정하지 않으면 CUBRID 설치 시 포함된 번들 JDK를 사용한다.
+만약 올바르지 않은 **CUBRID_JAVA_HOME**\을 지정하면 프로시저 언어 서버가 제대로 시작되지 않으며 오류를 반환할 수 있다.
+**CUBRID_JAVA_HOME**\의 경로에는 JDK 환경과 함께 libjvm 라이브러리가 함께 포함되어 있어야 한다.
 
-    % java -version
-    openjdk version "1.8.0_302"
-    OpenJDK Runtime Environment (build 1.8.0_302-b08)
-    OpenJDK 64-Bit Server VM (build 25.302-b08, mixed mode)
+다음은 **CUBRID_JAVA_HOME** 환경 변수를 설정하는 예시이다.
 
-**Windows 환경**
+::
 
-CUBRID는 Windows 환경에서 **jvm.dll** 파일을 로딩하여 Java 가상 머신을 실행시킨다. CUBRID는 먼저 시스템의 **Path** 환경 변수에서 **jvm.dll** 을 찾아 로딩한다. 만약 찾지 못하면 시스템 레지스트리에 등록된 Java 런타임 정보를 이용한다.
-
-아래와 같이 명령어를 실행하여 **JAVA_HOME** 환경 변수를 설정하고 Java 실행 파일이 있는 디렉터리를 **Path** 환경 변수에 추가할 수 있다. GUI를 이용해서 환경 변수를 설정하는 방법은 JDBC 설치 및 설정을 참고한다.
-
-* JDK 1.8 환경 변수를 설정한 예 ::
-
-    % set JAVA_HOME=C:\jdk1.8.0
-    % set PATH=%PATH%;%JAVA_HOME%\jre\bin\server
-
-SUN의 Java 가상 머신을 사용하지 않고 다른 벤더의 구현을 사용하는 경우를 포함하여 명시적으로 Java 가상 머신 (JVM)의 경로를 지정하려면 **jvm.dll** 파일의 경로를 **JVM_PATH** 환경 변수에 추가한다.
-CUBRID는 먼저 **JVM_PATH** 변수에서 **jvm.dll** 파일의 경로를 찾는다. **JVM_PATH** 가 설정되지 않았거나 파일을 로드할 수 없는 경우 위에서 설명한 **JAVA_HOME** 변수에서 **jvm.dll** 을 찾는다.
-
-*   **JVM_PATH** 환경 변수를 설정한 예 ::
+    **Windows 환경에서 설정 예시**
     
-    % set JVM_PATH=C:\jdk1.8.0\jre\bin\server\libjvm.dll
+        set CUBRID_JAVA_HOME=C:\Program Files\Java\jdk1.8.0_421
 
-**Linux/Unix 환경**
-
-CUBRID는 Linux/Unix 환경에서 **libjvm.so** 파일을 로딩하여 Java 가상 머신을 실행시킨다. CUBRID는 먼저 **LD_LIBRARY_PATH** 환경 변수에서 **libjvm.so** 파일을 찾아 로딩한다. 만약 찾지 못하면 **JAVA_HOME** 환경 변수를 이용하여 찾는다. 리눅스의 경우 glibc 2.3.4 이상만 지원되며, 아래는 리눅스 환경 설정 파일(예: **.profile**, **.cshrc**, **.bashrc**, **.bash_profile** 등)에 환경 변수를 설정하는 예이다.
-
-*   bash 셸에서 JDK 1.8 환경 변수를 설정한 예 ::
-
-    % JAVA_HOME=/usr/java/jdk1.8.0
-    % LD_LIBRARY_PATH=$JAVA_HOME/jre/lib/amd64:$JAVA_HOME/jre/lib/amd64/server:$LD_LIBRARY_PATH
-    % export JAVA_HOME
-    % export LD_LIBRARY_PATH
-
-*   csh 셸에서 JDK 1.8 환경 변수를 설정한 예 ::
-
-    % setenv JAVA_HOME /usr/java/jdk1.8.0
-    % setenv LD_LIBRARY_PATH $JAVA_HOME/jre/lib/amd64:$JAVA_HOME/jre/lib/amd64/server:$LD_LIBRARY_PATH
-    % set path=($path $JAVA_HOME/bin .)
-
-SUN의 Java 가상 머신을 사용하지 않고 다른 벤더의 구현을 사용하는 경우를 포함하여 명시적으로 Java 가상 머신 (JVM)의 경로를 지정하려면 Java VM( **libjvm.so** ) 파일의 경로를 **JVM_PATH** 환경 변수에 추가한다.
-**libjvm.so** 파일의 경로는 OS 플랫폼, 지원 비트마다 다를 수 있다. 예를 들어 SUN Sparc 머신에서 **libjvm.so** 파일의 경로는 **$JAVA_HOME/jre/lib/sparc** 이다.
-CUBRID는 먼저 **JVM_PATH** 변수에서 **libjvm.so** 파일의 경로를 찾는다. **JVM_PATH** 가 설정되지 않았거나 파일을 로드할 수 없는 경우 위에서 설명한 **JAVA_HOME** 변수에서 **libjvm.so** 을 찾는다.
-
-*   **JVM_PATH** 환경 변수를 설정한 예 ::
+    **Linux 환경에서 설정 예시**
     
-    % JVM_PATH=/usr/java/jdk1.8.0/jre/lib/amd64/server/libjvm.so
-    % export JVM_PATH
+        export CUBRID_JAVA_HOME=/usr/java/jdk1.8.0_421
+
 
 .. _cubrid-pl-system-parameter:
 
@@ -3379,7 +3347,7 @@ CUBRID 프로시저 언어 에러
 | 에러  | 에러 메시지                                      | 설명                                                | 조치사항                                                                          |
 | 코드  |                                                  |                                                     |                                                                                   |
 +=======+==================================================+=====================================================+===================================================================================+
-| -900  | 가상 머신 라이브러리를 찾을 수 없습니다: %1$s.   | CUBRID 가 JAVA_HOME 또는 JVM_PATH 환경 변수에서     | JAVA_HOME 또는 JVM_PATH 변수가 올바르게 설정 되었는지 확인한다.                   |
+| -900  | 가상 머신 라이브러리를 찾을 수 없습니다: %1$s.   | CUBRID 가 CUBRID_JAVA_HOME 환경 변수에서            | CUBRID_JAVA_HOME 환경 변수가 올바르게 설정 되었는지 확인한다.                     |
 |       |                                                  | JVM 라이브러리를 찾을 수 없음                       | :ref:`cubrid-pl-environment-configuration` 를 참고한다.                           |
 +-------+--------------------------------------------------+-----------------------------------------------------+-----------------------------------------------------------------------------------+
 | -901  | PL 서버를 시작할 수 없습니다: %1$s.              | JVM 라이브러리 내에서 예상치 못한 에러가 발생       | JRE 재설치를 시도해보고 만약 동일한 에러가 발생하면                               |

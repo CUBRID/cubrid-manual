@@ -382,14 +382,12 @@ CSQL은 SQL의 문자열 리터럴, 주석, 식별자를 (참고: :ref:`작성 �
 "질의 버퍼"는 질의문을 실행하기 전까지 질의문을 저장하는 버퍼이다. **\-\-no-single-line** 옵션을 부여하여 CSQL을 실행하는 경우 **;xr** 명령으로 질의를 실행하기 전까지는 질의문을 버퍼에 유지한다.
 
 **세션 명령어 도움말(;HElp)**
-**;HElp** 명령어는 전체 세션 명령어에 대한 도움을 보여주는 명령어로, csql의 세션명령어를 확인하는 용도로 사용할 수 있다. ::
+**;HElp** 는 전체 세션 명령어에 대한 도움을 보여주는 명령어로, csql의 세션명령어를 확인하는 용도로 사용할 수 있다. ::
 
-csql> ;help
+    csql> ;help
+=== <Help: Session Command Summary> === 
 
-=== <Help: Session Command Summary> ===
-
-
-   All session commands should be prefixed by `;' and only blanks/tabs
+   All session commands should be prefixed by ';' and only blanks/tabs
    can precede the prefix. Capitalized characters represent the minimum
    abbreviation that you need to enter to execute the specified command.
 

@@ -13,7 +13,6 @@
 
 CUBRID 11.4은 CUBRID 11.3에서 발견된 오류 수정 및 기능 개선과 이전 버전들에 반영된 모든 오류 수정 및 기능 개선을 포함한다.
 
-CUBRID 11.3에 대한 정보는 https://www.cubrid.org/manual/ko/11.2/release_note/index.html 에서 확인할 수 있다.
 
 CUBRID 11.2에 대한 정보는 https://www.cubrid.org/manual/ko/11.2/release_note/index.html 에서 확인할 수 있다.
 

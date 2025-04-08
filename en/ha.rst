@@ -210,7 +210,7 @@ The following is an example in which two Read Write (RW) brokers are configured.
 
 .. image:: /images/image25.png
 
-The following is an example in which the Read Write (RW) broker and the Read Only (RO) broker are configured in each piece of equipment of the master node and the slave node. First, the *app1* and the *app2* URL connect to *broker A1* (RW) and *broker B2* (RO), respectively. The second connection (altHosts) is made to *broker A2* (RO) and *broker B1* (RW). When equipment that includes *nodeA* fails, app1 and the app2 connect to the broker that includes *nodeB*.
+The following is an example in which the Read Write (RW) broker and the Read Only (RO) broker are configured in each piece of equipment of the master node and the slave node. First, the *app1* and the *app2* URL connect to *broker A1* (RW) and *broker B2* (RO), respectively. The second connection (altHosts) is made to *broker A2* (RO) and *broker B1* (RW). When equipment that includes *nodeA* fails, *app1* and the *app2* connect to the broker that includes *nodeB*.
 
 .. image:: /images/image26.png
 
@@ -1067,9 +1067,9 @@ Here are the main parameters used in the DB connection with the broker.
 |            |                      |                               | checked at last.                                                      |
 |            |                      |                               |                                                                       |
 |            |                      |                               | * -1: check all hosts specified in databases.txt whether replication  | 
-|            |                      |                               |       is delayed or not                                               |
+|            |                      |                               | is delayed or not                                                     |
 |            |                      |                               | * 0: do not check whether replication-delay or not, and process       | 
-|            |                      |                               |       the secondary connection immediately                            |
+|            |                      |                               | the secondary connection immediately                                  |
 |            |                      |                               | * n(>0): check up to n hosts whether replication is delayed or not    | 
 |            |                      +-------------------------------+-----------------------------------------------------------------------+
 |            |                      | RECONNECT_TIME                | Time to try reconnecting after the broker is connected to the         |
@@ -1400,14 +1400,14 @@ This utility is used to output the information of CUBRID HA group and CUBRID HA 
        Server testdb (pid 2393, state registered_and_standby)
 
 The -v option displays detailed information about the node.
-* score: Indicates the priority of the node, with a lower score indicating a higher priority.
-* missed heartbeat: Indicates the loss rate of heartbeat signals sent between nodes configured in a HA environment. If this value is unusually high, the configuration, network, or firewall settings should be inspected.
+*   score: Indicates the priority of the node, with a lower score indicating a higher priority.
+*   missed heartbeat: Indicates the loss rate of heartbeat signals sent between nodes configured in a HA environment. If this value is unusually high, the configuration, network, or firewall settings should be inspected.
 
 The event occurrence times for the Applylogdb, Copylogdb, and Server processes are also displayed. If no event has occurred, it is displayed as "00:00:00.000."
-* registered-time: The time when a process startup request was made via a user command.
-* deregistered-time: The time when a remote process stop request was made via a user command (applicable only to copylogdb and applylogdb).
-* shutdown-time : The time that HA-manager(cub_master) stopped the process
-* start-time : The time that HA-manager(cub_master) restarted the process
+*   registered-time: The time when a process startup request was made via a user command.
+*   deregistered-time: The time when a remote process stop request was made via a user command (applicable only to copylogdb and applylogdb).
+*   shutdown-time : The time that HA-manager(cub_master) stopped the process
+*   start-time : The time that HA-manager(cub_master) restarted the process
 
 **Example**
 

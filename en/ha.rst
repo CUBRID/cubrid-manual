@@ -1044,41 +1044,40 @@ A broker in HA environment should decide the one DB server to connect among mult
 
 Here are the main parameters used in the DB connection with the broker.
 
-+------------+----------------------+-------------------------------+-----------------------------------------------------------------------+
-| Location   | Configuration file   | Parameter name                | Description                                                           |
-+============+======================+===============================+=======================================================================+
-| DB server  | cubrid.conf          | ha_mode                       | HA mode(on/off/replica) of DB server. Default: off                    |
-|            +----------------------+-------------------------------+-----------------------------------------------------------------------+
-|            | cubrid_ha.conf       | ha_delay_limit                | A period to determine whether the replication-delay                   |
-|            |                      +-------------------------------+-----------------------------------------------------------------------+
-|            |                      | ha_delay_limit_delta          | Time subtracting the resolution time of replication-delay from        |
-|            |                      |                               | the time of replication-delay                                         |
-+------------+----------------------+-------------------------------+-----------------------------------------------------------------------+
-| Broker     | cubrid_broker.conf   | ACCESS_MODE                   | Broker mode(RW/RO/SO). Default: RW                                    |
-|            |                      +-------------------------------+-----------------------------------------------------------------------+
-|            |                      | REPLICA_ONLY                  | Connectible to REPLICA server or not(ON/OFF). Default: OFF            |
-|            |                      +-------------------------------+-----------------------------------------------------------------------+
-|            |                      | PREFERRED_HOSTS               | Connecting to the host that is specified here in priority to the host |
-|            |                      |                               | that you set in the db-host of databases.txt                          |
-|            |                      +-------------------------------+-----------------------------------------------------------------------+
-|            |                      | MAX_NUM_DELAYED_HOSTS_LOOKUP  | The number of hosts to determine the delay of replication in          |
-|            |                      |                               | databases.txt. If up to the specified number of hosts was determined  |
-|            |                      |                               | as the delay of replication, the broker is connected to the host      |
-|            |                      |                               | checked at last.                                                      |
-|            |                      |                               |                                                                       |
-|            |                      |                               | * -1: check all hosts specified in databases.txt whether replication  | 
-|            |                      |                               | is delayed or not                                                     |
-|            |                      |                               | * 0: do not check whether replication-delay or not, and process       | 
-|            |                      |                               | the secondary connection immediately                                  |
-|            |                      |                               | * n(>0): check up to n hosts whether replication is delayed or not    | 
-|            |                      +-------------------------------+-----------------------------------------------------------------------+
-|            |                      | RECONNECT_TIME                | Time to try reconnecting after the broker is connected to the         |
-|            |                      |                               | improper DB server. Default: 600s.                                    |
-|            |                      |                               | If this value is 0, no try for reconnection.                          |
-|            |                      +-------------------------------+-----------------------------------------------------------------------+
-|            |                      | CONNECT_ORDER                 | A parameter specifying the connecting order whether to connect as     |
-|            |                      |                               | or the random order(SEQ/RANDOM). Default: SEQ                         |
-+------------+----------------------+-------------------------------+-----------------------------------------------------------------------+
++------------+----------------------+-------------------------------+------------------------------------------------------------------------------------------------------------+
+| Location   | Configuration file   | Parameter name                | Description                                                                                                |
++============+======================+===============================+============================================================================================================+
+| DB server  | cubrid.conf          | ha_mode                       | HA mode(on/off/replica) of DB server. Default: off                                                         |
+|            +----------------------+-------------------------------+------------------------------------------------------------------------------------------------------------+
+|            | cubrid_ha.conf       | ha_delay_limit                | A period to determine whether the replication-delay                                                        |
+|            |                      +-------------------------------+------------------------------------------------------------------------------------------------------------+
+|            |                      | ha_delay_limit_delta          | Time subtracting the resolution time of replication-delay from the time of replication-delay               |
++------------+----------------------+-------------------------------+------------------------------------------------------------------------------------------------------------+
+| Broker     | cubrid_broker.conf   | ACCESS_MODE                   | Broker mode(RW/RO/SO). Default: RW                                                                         |
+|            |                      +-------------------------------+------------------------------------------------------------------------------------------------------------+
+|            |                      | REPLICA_ONLY                  | Connectible to REPLICA server or not(ON/OFF). Default: OFF                                                 |
+|            |                      +-------------------------------+------------------------------------------------------------------------------------------------------------+
+|            |                      | PREFERRED_HOSTS               | Connecting to the host that is specified here in priority to the host that you set in the db-host of       |
+|            |                      |                               | databases.txt                                                                                              |
+|            |                      +-------------------------------+------------------------------------------------------------------------------------------------------------+
+|            |                      | MAX_NUM_DELAYED_HOSTS_LOOKUP  | The number of hosts to determine the delay of replication in                                               |
+|            |                      |                               | databases.txt. If up to the specified number of hosts was determined                                       |
+|            |                      |                               | as the delay of replication, the broker is connected to the host                                           |
+|            |                      |                               | checked at last.                                                                                           |
+|            |                      |                               |                                                                                                            |
+|            |                      |                               | * -1: check all hosts specified in databases.txt whether replication is delayed or not                     | 
+|            |                      |                               |                                                                                                            |
+|            |                      |                               | * 0: do not check whether replication-delay or not, and process the secondary connection immediately       | 
+|            |                      |                               |                                                                                                            |
+|            |                      |                               | * n(>0): check up to n hosts whether replication is delayed or not                                         | 
+|            |                      +-------------------------------+------------------------------------------------------------------------------------------------------------+
+|            |                      | RECONNECT_TIME                | Time to try reconnecting after the broker is connected to the                                              |
+|            |                      |                               | improper DB server. Default: 600s.                                                                         |
+|            |                      |                               | If this value is 0, no try for reconnection.                                                               |
+|            |                      +-------------------------------+------------------------------------------------------------------------------------------------------------+
+|            |                      | CONNECT_ORDER                 | A parameter specifying the connecting order whether to connect as                                          |
+|            |                      |                               | or the random order(SEQ/RANDOM). Default: SEQ                                                              |
++------------+----------------------+-------------------------------+------------------------------------------------------------------------------------------------------------+
 
 Connection Process
 ------------------

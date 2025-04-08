@@ -81,7 +81,7 @@ CUBRID 환경 변수
 
         C:\> set CUBRID
 
-OS 환경 변수 및 Java 환경 변수
+OS 환경 변수
 ------------------------------
 
 *   PATH: Linux 환경에서 PATH 환경 변수에는 CUBRID 시스템의 실행 파일이 있는 디렉터리인 **$CUBRID/bin** 이 포함되어 있어야 한다.
@@ -89,10 +89,6 @@ OS 환경 변수 및 Java 환경 변수
 *   LD_LIBRARY_PATH: Linux 환경에서는 **LD_LIBRARY_PATH** (혹은 **SHLIB_PATH** 나 **LIBPATH**) 환경 변수에 CUBRID 시스템의 동적 라이브러리 파일(libjvm.so)이 있는 디렉터리인 **$CUBRID/lib** 과 **$CUBRID/cci/lib** 이 포함되어 있어야 한다.
 
 *   Path: Windows 환경에서 Path 환경 변수에는 CUBRID 시스템의 실행 파일이 있는 디렉터리인 **%CUBRID%\\bin** 과 **%CUBRID%\\cci\\bin** 이 포함되어 있어야 한다.
-
-*   JAVA_HOME: CUBRID 시스템에서 저장 프로시저 기능을 사용하기 위해서는 Java Runtime Environment (JRE) 1.8 이상 버전이 설치되어야 하고 **JAVA_HOME** 환경 변수에 해당 디렉터리가 지정되어야 한다. :ref:`cubrid-pl-server-config` 을 참고한다.
-
-*   JVM_PATH: CUBRID 시스템에서 저장 프로시저 기능을 사용하기 위해서 **JAVA_HOME**\에서 JVM 라이브러리 (**libjvm**)을 찾는 대신 **JVM_PATH** 환경 변수를 설정하여 명시적으로 라이브러리의 경로를 지정할 수 있다. :ref:`cubrid-pl-server-config` 을 참고한다.
 
 환경 변수 설정
 --------------

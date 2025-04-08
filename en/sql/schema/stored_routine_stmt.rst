@@ -57,8 +57,8 @@ A comment of a paramenter can be written as follows.
 
 .. code-block:: sql
 
-    CREATE OR REPLACE FUNCTION test(i in number COMMENT 'arg i') 
-    RETURN NUMBER AS LANGUAGE JAVA NAME 'SpTest.testInt(int) return int' COMMENT 'function test';
+    CREATE OR REPLACE FUNCTION test(i in int COMMENT 'arg i') 
+    RETURN int AS LANGUAGE JAVA NAME 'SpTest.testInt(int) return int' COMMENT 'function test';
 
 A comment of a stored function/procedure can be shown by running the following syntax.
 
@@ -155,8 +155,8 @@ A comment of a paramenter can be written as follows.
 
 .. code-block:: sql
 
-    CREATE OR REPLACE FUNCTION test(i in number COMMENT 'arg i') 
-    RETURN NUMBER AS LANGUAGE JAVA NAME 'SpTest.testInt(int) return int' COMMENT 'function test';
+    CREATE OR REPLACE FUNCTION test(i in int COMMENT 'arg i') 
+    RETURN int AS LANGUAGE JAVA NAME 'SpTest.testInt(int) return int' COMMENT 'function test';
 
 A comment of a stored function/procedure can be shown by running the following syntax.
 

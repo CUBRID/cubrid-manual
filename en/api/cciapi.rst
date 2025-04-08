@@ -871,7 +871,7 @@ cci_connect_with_url
 
           The behavior for each setting is as follows:
 
-          *   **false**: Connect to the hosts in the order listed in the connection URL.
+          *   **false**: This property is not applied.
       *   **true or rr**: Connects to the specified hosts using the **Round-Robin** method.
           *   **sh**: Connects to the specified hosts using the **Random(Shuffle)** method.
     

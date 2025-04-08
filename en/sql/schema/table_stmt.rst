@@ -234,6 +234,39 @@ The pseudocolumn allows for the **DEFAULT** value as follows.
 
 .. note::
 
+    When using a function not specified in the table above as a **DEFAULT** value, it is evaluated at the time of table creation and stores the result executed with constant arguments.
+    Therefore, the default value for data **INSERT**\ ed into the column is the result stored at the time of table creation.
+    In the case of stored functions, an error is returned because they cannot be pre-evaluated with constant arguments.
+
+.. code-block:: sql
+
+    CREATE TABLE default_val_func_test (id INT DEFAULT RAND ());
+    INSERT INTO default_val_func_test (id) VALUES (1);
+    INSERT INTO default_val_func_test (id) VALUES (DEFAULT);
+    INSERT INTO default_val_func_test (id) VALUES (DEFAULT);
+    
+    SELECT * FROM default_val_func_test;
+
+::
+
+               id
+    =============
+            1
+       1572882525
+       1572882525
+
+.. code-block:: sql
+
+    CREATE FUNCTION fn_int (a int) return int as begin return a; end;
+    CREATE TABLE default_val_sp_test (id INT DEFAULT fn_int (1));
+
+::
+
+    ERROR: before ' ); '
+    'fn_int(1)' function can not be used in DEFAULT clause.
+
+.. note::
+
     In version lower than CUBRID 9.0, the value at the time of **CREATE TABLE** has been saved when the **DATE** value of the **DATE**, **DATETIME**, **TIME**, **TIMESTAMP** column has been specified as **SYS_DATE**, **SYS_DATETIME**, **SYS_TIME**, **SYS_TIMESTAMP** while creating a table. Therefore, to enter the value at the time of data **INSERT** in version lower than CUBRID 9.0, the function should be entered to the **VALUES** clause of the **INSERT** syntax.
 
 .. code-block:: sql

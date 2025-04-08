@@ -226,6 +226,39 @@ CREATE TABLE
 
 .. note::
 
+    위의 표에 명시되지 않은 함수를 **DEFAULT** 값으로 사용하는 경우, 테이블 생성 시점에 평가되어 상수 인수에 대해 실행된 결과를 저장한다.
+    따라서 해당 칼럼에 **INSERT** 되는 데이터의 기본 값은 테이블 생성 시점에 저장된 결과를 저장한다.
+    저장 함수의 경우 상수 인수에 대해 미리 평가할 수 없으므로 오류를 반환한다.
+
+.. code-block:: sql
+
+    CREATE TABLE default_val_func_test (id INT DEFAULT RAND ());
+    INSERT INTO default_val_func_test (id) VALUES (1);
+    INSERT INTO default_val_func_test (id) VALUES (DEFAULT);
+    INSERT INTO default_val_func_test (id) VALUES (DEFAULT);
+    
+    SELECT * FROM default_val_func_test;
+
+::
+
+               id
+    =============
+            1
+       1572882525
+       1572882525
+
+.. code-block:: sql
+
+    CREATE FUNCTION fn_int (a int) return int as begin return a; end;
+    CREATE TABLE default_val_sp_test (id INT DEFAULT fn_int (1));
+
+::
+
+    ERROR: before ' ); '
+    'fn_int(1)' function can not be used in DEFAULT clause.
+
+.. note::
+
     CUBRID 9.0 미만 버전에서는 테이블 생성 시 **DATE**, **DATETIME**, **TIME**, **TIMESTAMP** 칼럼의 **DEFAULT** 값을 **SYS_DATE**, **SYS_DATETIME**, **SYS_TIME**, **SYS_TIMESTAMP** 로 지정하면, **CREATE TABLE** 시점의 값이 저장되었다. 따라서 CUBRID 9.0 미만 버전에서 데이터가 **INSERT** 되는 시점의 값을 입력하려면 **INSERT** 구문의 **VALUES** 절에 해당 함수를 입력해야 한다.
 
 .. code-block:: sql

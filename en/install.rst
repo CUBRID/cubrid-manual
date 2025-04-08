@@ -43,7 +43,7 @@ Compatibility
 
 **CUBRID Admin Compatibility**
 
-*   CUBRID Admin guarantees backward compatibility with the servers using CUBRID 10.0 and uses the CUBRID JDBC driver that matches each server version. However, you must use a CUBRID Admin that is higher than CUBRID servers in version in order to utilize all the features of CUBRID Admin. The CUBRID JDBC driver is included in the $CUBRID/jdbc directory when CUBRID is installed($CUBRID on Linux, %CUBRID% on Windows).
+*   CUBRID Admin guarantees backward compatibility with the servers using CUBRID 10.0 or higher and uses the CUBRID JDBC driver that matches each server version. However, you must use a CUBRID Admin that is higher than CUBRID servers in version in order to utilize all the features of CUBRID Admin. The CUBRID JDBC driver is included in the $CUBRID/jdbc directory when CUBRID is installed($CUBRID on Linux, %CUBRID% on Windows).
 
 .. note:: Old version users should upgrade all of driver, broker, DB server; Data migration should be done because 11.3 or early version's DB volume is not compatible with 11.4 version.
     For upgrade and data migration, see :doc:`/upgrade`.

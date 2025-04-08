@@ -59,7 +59,7 @@ There is a slow query in the application log but that is not printed as slow que
 Some examples are as below.
  
 *   Check if there is a low speed of the network between application and broker.
-*   Check if there is a case that CAS was restarted by watching the broker log(exists in **$CUBRID/log/broker** directory). If it is revealed as CASes are not enough, you should enlarge the number of CASes; to do so, the value of :ref:`MAX_NUM_APPL_SERVER <max-num-appl-server>` should be enlarged properly. Also the value of :ref:`max_clients <max_clients>` should be enlarged if needed.
+*   Check if there is a case that CAS was restarted by watching the broker log(exists in **$CUBRID/log/broker** directory). If it is revealed as CASes are not enough(after processing slow queries, if any), you should enlarge the number of CASes; to do so, the value of :ref:`MAX_NUM_APPL_SERVER <max-num-appl-server>` should be enlarged properly. Also the value of :ref:`max_clients <max_clients>` should be enlarged if needed.
 
 If application log and CAS SQL log show the slow query log together and there is almost no gab between the slow query times of application log and the CAS SQL log, the cause which the query was slow will exist between the broker and DB server. For example, the query execution in the DB server was slow.
 
@@ -137,6 +137,7 @@ Detecting a Deadlock
 --------------------
 
 Locks related information is written to the server error log.
+The server error log file is saveed in the **$CUBRID/log/server** directory as named in  *<databases>_<date>_<time>.err*.
 
 ::
 

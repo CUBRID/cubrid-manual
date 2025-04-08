@@ -78,11 +78,11 @@ Using Session Commands of the CSQL Interpreter
 
 You can configure system parameter values by using session commands (;SET) in the CSQL Interpreter. Note that you cannot change every parameter. For updatable parameters, see :ref:`cubrid-conf`.
 
-The following example shows how to configure the block_ddl_statement parameter to 1 so that execution of DDL statements is not allowed. ::
+The following example shows how to configure the block_ddl_statement parameter to yes so that execution of DDL statements is not allowed. ::
 
-    csql> ;se block_ddl_statement=1
+    csql> ;set block_ddl_statement=yes
     === Set Param Input ===
-    block_ddl_statement=1
+    block_ddl_statement=yes
 
 .. _cubrid-conf:
 
@@ -124,7 +124,7 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 | Category                      | Parameter Name                      | Applied                 | Session | Type     | Default Value                  | Dynamic Change        |
 +===============================+=====================================+=========================+=========+==========+================================+=======================+
-| :ref:`connection-parameters`  | cubrid_port_id                      | client parameter        |         | int      | 1,523                          |                       |
+| :ref:`connection-parameters`  | cubrid_port_id                      | client parameter        |         | int      | 1523                           |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | check_peer_alive                    | client/server parameter | O       | string   | both                           | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -526,13 +526,13 @@ The following are parameters related to the database server. The type and value 
 +---------------------------------+--------+----------+----------+----------+
 | Parameter Name                  | Type   | Default  | Min      | Max      |
 +=================================+========+==========+==========+==========+
-| cubrid_port_id                  | int    | 1,523    | 1        |          |
+| cubrid_port_id                  | int    | 1523     | 1        |          |
 +---------------------------------+--------+----------+----------+----------+
 | check_peer_alive                | string | both     |          |          |
 +---------------------------------+--------+----------+----------+----------+
 | db_hosts                        | string | NULL     |          |          |
 +---------------------------------+--------+----------+----------+----------+
-| max_clients                     | int    | 100      | 10       | 4,000    |
+| max_clients                     | int    | 100      | 10       | 4000     |
 +---------------------------------+--------+----------+----------+----------+
 | tcp_keepalive                   | bool   | yes      |          |          |
 +---------------------------------+--------+----------+----------+----------+
@@ -541,7 +541,7 @@ The following are parameters related to the database server. The type and value 
 
 **cubrid_port_id**
 
-    **cubrid_port_id** is a parameter to configure the port to be used by the master process. The default value is **1,523**. If the port 1,523 is already being used on the server where CUBRID is installed or it is blocked by a firewall, an error message, which means the master server is not connected because the master process cannot be running properly, is displayed. If such port conflict occurs, the administrator must change the value of **cubrid_port_id** considering the server environment.
+    **cubrid_port_id** is a parameter to configure the port to be used by the master process. The default value is **1523**. If the port 1523 is already being used on the server where CUBRID is installed or it is blocked by a firewall, an error message, which means the master server is not connected because the master process cannot be running properly, is displayed. If such port conflict occurs, the administrator must change the value of **cubrid_port_id** considering the server environment.
 
 .. _check_peer_alive:
 
@@ -580,7 +580,7 @@ The following are parameters related to the database server. The type and value 
 
     For example, in the **cubrid_broker.conf** file, two node of a broker where the **MAX_NUM_APPL_SERVER** value of [%query_editor] is 50 and the **MAX_NUM_APPL_SERVER** value of [%BROKER1] is 50 is trying to connect one database server, the concurrent connections (**max_clients** value) allowed by the database server can be configured as follows:
 
-    *   (the maximum number of 100 by each node of a broker) * (two node of a broker) + (10 spare for database server connections of internal CUBRID process such as database server connection of CSQL Interpreter or HA log replication process) = 210
+    *   (the maximum number of 50 by each node of a broker) * (two node of a broker) + (10 spare for database server connections of internal CUBRID process such as database server connection of CSQL Interpreter or HA log replication process) = 110
 
     Especially, in HA environment, the value must be greater than the sum specified in **MAX_NUM_APPL_SERVER** of every broker node which connects to the same database.
 
@@ -2970,7 +2970,7 @@ Transaction & Query
 
     **JDBC_CACHE**, **JDBC_CACHE_HINT_ONLY**, and **JDBC_CACHE_LIFE_TIME** parameters are meaningless
 
-	when the system parameter both of **max_query_cache_entries** and **query_cache_size_in_pages** are not set to positive value.
+	when the query cache-related parameter both of **max_query_cache_entries** and **query_cache_size_in_pages** are not set to positive value.
 
 	For result cache working, the SELECT query must include query hint /\*+ QUERY_CACHE \*/ together with these JDBC related paramter setting.
 

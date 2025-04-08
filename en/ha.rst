@@ -1400,15 +1400,15 @@ This utility is used to output the information of CUBRID HA group and CUBRID HA 
 
 The -v option displays detailed information about the node.
 
-*   **score** : Indicates the priority of the node, with a lower score indicating a higher priority.
-*   **missed heartbeat** : Indicates the loss rate of heartbeat signals sent between nodes configured in a HA environment. If this value is unusually high, the configuration, network, or firewall settings should be inspected.
+*   score : Indicates the priority of the node, with a lower score indicating a higher priority.
+*   missed heartbeat : Indicates the loss rate of heartbeat signals sent between nodes configured in a HA environment. If this value is unusually high, the configuration, network, or firewall settings should be inspected.
 
 The event occurrence times for the Applylogdb, Copylogdb, and Server processes are also displayed. If no event has occurred, it is displayed as "00:00:00.000."
 
-*   **registered-time** : The time when a process startup request was made via a user command.
-*   **deregistered-time** : The time when a remote process stop request was made via a user command (applicable only to copylogdb and applylogdb).
-*   **shutdown-time** : The time that HA-manager(cub_master) stopped the process
-*   **start-time** : The time that HA-manager(cub_master) restarted the process
+*   registered-time : The time when a process startup request was made via a user command.
+*   deregistered-time : The time when a remote process stop request was made via a user command (applicable only to copylogdb and applylogdb).
+*   shutdown-time : The time that HA-manager(cub_master) stopped the process
+*   start-time : The time that HA-manager(cub_master) restarted the process
 
 **Example**
 

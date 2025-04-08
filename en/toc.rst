@@ -13,13 +13,21 @@ The contents of the CUBRID Database Management System (CUBRID DBMS) product manu
 
 *   :doc:`intro`: This chapter provides a description of the structure and characteristics of the CUBRID DBMS.
 
+*   :doc:`install_upgrade`: This chapter explains how to install and run CUBRID, configure environment variables and ports, perform upgrades, migrate databases in an HA environment, and uninstall CUBRID.
+
 *   :doc:`start`: The "Getting Started with CUBRID" provides users with a brief explanation on what to do when first starting CUBRID. The chapter contains information on how to install and execute the system, used ports on accessing to CUBRID and provides simple explanations on the CUBRID query tools. 
 
 *   :doc:`csql`: CSQL is an application that allows you to use SQL statements through a command-driven interface. This chapter explains how to use the CSQL Interpreter and associated commands.
 
 *   :doc:`sql/index`: This chapter describes SQL syntaxes such as data types, functions and operators, data retrieval or table manipulation. The chapter also provides SQL syntaxes used for indexes, triggers, partitioning, serial and user information changes, etc.
 
+*   :doc:`pl/index`: This chapter describes the procedural language extension provided by CUBRID for using stored procedures and stored functions. Stored procedures and functions help handle complex business logic that is difficult to implement with SQL alone and simplify data manipulation tasks.
+
 *   :doc:`admin/index`: This chapter provides instructions on how to create, drop, back up, restore and migrate a database, configuring globalization, and executing CUBRID HA. Also it includes instructions on how to use the  **cubrid** utility, which starts and stops the server, broker, and CUBRID Manager server, etc. Also, this chapter provides instructions on setting system parameters that may influence the performance. It provides information on how to use the configuration file for the server and broker, and describes the meaning of each parameter.
+
+*   :doc:`ha`: This is the application of the High Availability (HA) feature in CUBRID. It keeps the databases synchronized across multiple servers at all times, and if a failure occurs on the active server, another server automatically takes over the service.
+
+*   :doc:`shard`: Sharding is a method of horizontally partitioning and distributing data across physically separate databases for storage and retrieval. CUBRID SHARD is used to distribute and process large volumes of data and high throughput that cannot be handled by a single database instance.
 
 *   :doc:`security`: This chapter describes the CUBRID security features such as packet encryption, ACL(Access Control List), authorization, and TDE(Transparent Data Encryption).
 

@@ -73,7 +73,7 @@ Using the built-in function concat() has performance advantages over the user-de
 Use Deterministic Functions
 ==============================
 
-A deterministic function is a function that always returns the same result for the same arguments. If a stored function is deterministic, its results can be reused to improve performance.
+A deterministic function is a function that always returns the same result for the same arguments during a transaction. If a stored function is deterministic, its results can be reused to improve performance.
 
 *   To make a stored function deterministic, you can specify the **DETERMINISTIC** option in the **CREATE FUNCTION** statement. For more details, refer to :ref:`create-function`.
 *   When the **DETERMINISTIC** attribute is specified, the stored function can be used for correlated subquery result caching optimization and will always return the same result for the same arguments. For more details on correlated subquery cache behavior, refer to :ref:`correlated-subquery-cache`.

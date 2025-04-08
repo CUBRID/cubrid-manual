@@ -1,431 +1,1342 @@
 :tocdepth: 3
 
 ******************
-11.3 Release Notes
+11.4 Release Notes
 ******************
 
 .. contents::
 
+.. _11_4_information:
+
 Release Notes Information
 =========================
 
-This document includes information on CUBRID 11.3.
+This document contains information about CUBRID 11.4 (Build Number 11.4.0.0000).
+CUBRID 11.4 includes bug fixes and feature improvements found in CUBRID 11.3, as well as all bug fixes and feature enhancements applied in previous versions.
 
-CUBRID 11.3 includes all of the fixed errors and improved features that were detected in the CUBRID 11.2 and were applied to the previous versions.
+Information about CUBRID 11.3 can be found at https://www.cubrid.org/manual/ko/11.3/release_note/index.html.
 
-For CUBRID 11.2, please find https://www.cubrid.org/manual/en/11.2/release_note/index.html.
+Information about CUBRID 11.2 can be found at https://www.cubrid.org/manual/ko/11.2/release_note/index.html.
 
-For CUBRID 11.0, please find https://www.cubrid.org/manual/en/11.0/release_note/index.html.
+Information about CUBRID 11.0 can be found at https://www.cubrid.org/manual/ko/11.0/release_note/index.html.
 
-For CUBRID 10.2, please find https://www.cubrid.org/manual/en/10.2/release_note/index.html.
+Information about CUBRID 10.2 can be found at https://www.cubrid.org/manual/ko/10.2/release_note/index.html.
 
-For CUBRID 10.1, please find https://www.cubrid.org/manual/en/10.1/release_note/index.html.
+Information about CUBRID 10.1 can be found at https://www.cubrid.org/manual/ko/10.1/release_note/index.html.
 
-For CUBRID 10.0, please find https://www.cubrid.org/manual/en/10.0/release_note/index.html.
+Information about CUBRID 10.0 can be found at https://www.cubrid.org/manual/ko/10.0/release_note/index.html.
 
-For CUBRID 9.3, please find https://www.cubrid.org/manual/en/9.3.0/release_note/index.html.
+Information about CUBRID 9.3 can be found at https://www.cubrid.org/manual/ko/9.3/release_note/index.html.
 
 Overview
 ========
 
-CUBRID 11.3 is the latest stable version that includes new features, significant changes and enhancements.
+CUBRID 11.4 is the latest stable version that includes new features, significant changes, and improvements.
 
-.. TODO: UPDATE WITH DETAILS.
+CUBRID 11.4 introduces:
 
-CUBRID 11.3
+1. **PL/CSQL support for Oracle compatibility**
+2. **Addition of HASH JOIN for large-scale processing**
+3. **Performance improvements through optimizer and index processing enhancements**
+4. **Performance boost in data recovery through parallel processing**
+5. **Performance enhancement by expanding result caching**
+6. **Improved data dump performance**
+7. **Addition of memory monitoring features**
+8. **Enhanced access control functionality**
+9. **Improved user convenience for backup and recovery operations**
 
-* improves connectivity by enhancing database links.
-* is more stable, faster, and more convenient for administrators.
-* fixes a large number of critical bugs.
-* includes code refactoring and modernization.
-
-CUBRID 11.3 provided user convenience by providing a table extension style (object@server) for database links, and **improved connectivity** by providing the ability to insert, modify, and delete data as well as retrieve data for remote DB.
-
-CUBRID 11.3 is **faster**. This version further improves performance through improve aggregation functions (min, max group_concat) and query optimization, such as predicate pushdown, view transformation, and removal of unnecessary join tables. Additionally, performance problems caused by skewed indexes were improved by providing a deduplication option when creating an index (or foreign key).
-
-CUBRID 11.3 **improved administrator convenience** by improving the csql, unloaddb, and loaddb utilities.
-
-The database volume of CUBRID 11.3 is compatible with the CUBRID 11.2 volume. (However, when a volume created in CUBRID 11.2 is used in CUBRID 11.3 due to a change in view query spec of db_index and db_vclass among catalog views, unexpected results may be obtained when executing a query related the catalog view.)
-
-.. TODO: coming soon 
+These updates bring not only new features but also various performance improvements across multiple areas.
 
 Driver Compatibility
 --------------------
 
-*   The JDBC and CCI driver of CUBRID 11.3 are compatible with the DB server of CUBRID 11.2, 11.1, 11.0, 10.2, 10.1, 10.0, 9.3, 9.2, 9.1, 2008 R4.4, R4.3 or R4.1.
-*   To upgrade drivers are highly recommended.
+-  The JDBC and CCI drivers of CUBRID 11.4 are compatible with database servers from CUBRID versions 11.3, 11.2, 11.1, 11.0, 10.2, 10.1, 10.0, 9.3, 9.2, 9.1, and 2008 R4.4, R4.3, or R4.1.
+-  It is recommended to upgrade the drivers.
 
-For more details on changes, see the :ref:`11_3_changes`. Users of previous versions should check the :ref:`11_3_changes` and :ref:`11_3_new_cautions` sections.
+.. _11_4_changes_add_feature:
 
-.. _11_3_changes:
+New feature
+-----------
 
-11.3 Changes
-============
+SQL
+~~~
 
-Please refer to `change logs of CUBRID 11.3 <https://github.com/CUBRID/cubrid/releases/tag/v11.3>`_.
+HASH JOIN Support 
+^^^^^^^^^^^^^^^^^
 
+To use HASH JOIN, join hints must be specified
+``/*+ USE_HASH */``  Enables consideration of HASH JOIN.
+``/*+ NO_USE_HASH */`` Disables the use of HASH JOIN.
 
-Cautions
-========
+Added SQL Syntax for Changing Serial Owner
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. _11_3_new_cautions:
+Previously, changing the owner of a serial was only possible using the ``call change_serial_owner()`` method. Now, an SQL statement has been added for this functionality.
 
-New Cautions
-------------
+- ``AS-IS``
 
-The query optimizer's statistical information is not automatically updated when DDL statement is executed, the user must manually execute UPDATE STATISTICS statement to update the statistical information. (see :doc:`/sql/tuning`)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. code:: sql
 
-When changing the type of a column included the AUTO_INCREMENT property or default value in the ALTER TABLE statement, an error occurs if the changed type cannot have the AUTO_INCREMENT property or is a type whose existing default value cannot be changed. (see :ref:`change-column`)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   CALL CHANGE_SERIAL_OWNER('test_serial', 'test_user1') on class db_serial;
+  
+.. code:: sql
 
-Unable to get Connection object through cubrid.jdbc.driver.CUBRIDDriver.getDefaultConnection() from server-side JDBC. Instead, you should use DriverManager.getConnection("jdbc\:default\:connection\:"). (see :ref:`jsp-server-side-jdbc-connection`)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   ALTER SERIAL test_serial OWNER TO test_user1;
 
-If an invalid index name or table name is used in a USE INDEX (USING INDEX) statement, it will be ignored rather than occuring an error. (To leave it in the log file, set the error_log warning parameter to yes.)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#. Only the DBA and DBA group members can change the serial owner.
+#. An error occurs if the user lacks the necessary permissions or if the specified serial does not exist.
 
-When writing a CREATE INDEX statement, the position of COMMENT was changed to the end of the statement after the WITH or INVISIBLE clause. (see :doc:`/sql/schema/index_stmt`)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Existing Cautions
------------------
-
-By introducing the concept of user schema, the same object name can be used for each user, and the behavior is changed as follows
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
- * "." (dot) is not allowed in the object name.
- * When using a query or utility command, it must be used as "[user name].object name". (However, the user name can be omitted when querying the object of the logged-in user) (see :doc:`/sql/user_schema`)
- * Changed to include user name in info schema and show full tables results. (see :doc:`/sql/query/show`)
- * The loaddb file prior to 11.2 must be modified to "user name.table name" so that it can be executed in 11.2, or loaddb can be executed by setting the \-\-no-user-specified-name option. (see :ref:`loaddb`)
-
-The following functions and behavior changed when using "jdbc\:default\:connection\:" or calling getDefaultConnection() in JavaSP. (see :ref:`JavaSP Caution <jsp-caution>`)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
- * All functions of java.sql.DatabaseMetaData are not supported.
- * createClob() and createBlob() of java.sql.Connection are not supported.
- * addBatch(), clearBatch(), executeBatch(), setMaxRows() and cancel() of java.sql.Statement are not supported.
- * Multiple SQL is not supported for one prepare (or execute).
- * The cursor is changed to non-holdable.
- * The ResultSet is changed to non-scrollable, non-sensitive and non-updatable.
-
-The behavior of the TRUNCATE TABLE changed if there is set null or cascade of FK (see :doc:`/sql/query/truncate`)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Column properties not written during alter change/modify are changed to be maintained, and auto_increment and on update properties cannot be removed with the alter statement (see :ref:`change-column`)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Changed to handle an error if only the column name exists in the where clause
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
- * If used in the form of UPDATE t1 SET c1 = 9 WHERE c1; , an error occurs.
-
-Multiple SQL must be separated by semicolons
+Added SQL Syntax for Adding Users to a Group
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-The CCI Driver directory in the CUBRID package is changed from $CUBRID/lib and $CUBRID/include to $CUBRID/cci/lib and $CUBRID/cci/include, respectively (see :ref:`CCI Overview <cci-overview>`)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* When using CCI, $CUBRID/cci/lib must be added to LD_LIBRARY_PATH in the environment variable.
+#. In versions prior to 11.4, adding a user to a group required executing ``DROP USER`` followed by ``CREATE USER GROUPS``.
+#. In an HA environment, method call results were not synchronized.
+#. Separate synchronization operations are required for the master and slave nodes. Due to these issues, a new SQL statement has been introduced.
 
-Changed Compression (-z, \-\-compress) option to default on backup (see :ref:`backupdb`)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-System catalog information changed or added due to the addition of new features (see :doc:`/sql/catalog`)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-When creating a table without an option, it is created as a reuse_oid table
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-The maximum length of the CHAR data type has been changed to 256M character string
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Modified to occur error when the input string length is longer than the set length of the string data type
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Modified to recognize the space character at the end of the string, it is recognized as a different character string according to the space character at the end of the string
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Due to the change in the statistics collection method, it is necessary to perform periodic statistics collection
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Locale(language and charset) is specified when creating DB
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. code:: 
 
-It is changed as locale is specified when creating DB.
+   ALTER USER user_name 
+   [PASSWORD password] |
+   [ADD MEMBERS user_name {, user_name}...] |
+   [DROP MEMBERS user_name {, user_name}...]
+   [COMMENT 'comment_string']
+
+#. DBA/DBA group members:
+   -  Can remove users from the DBA/PUBLIC group.
+   -  Can add members to the DBA group.
+
+#. General users:
+   -  Can only add or remove members from their own groups.
+
+Optimizer
+~~~~~~~~~
+
+Added LEADING Hint to Specify Join Order
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The LEADING hint allows specifying a particular table or set of tables to be used as the prefix in the execution plan, enabling more flexible control over the table join order than the ORDERED hint.
+
+.. code:: sql
+
+   SELECT /*+ LEADING(e j) */ *
+   FROM  employees e, departments d, job_history j
+   WHERE e.department_id = d.department_id
+   AND e.hire_date = j.start_date;
+
+- Conditions where the hint is ignored:
+
+-  If the specified tables cannot be joined first due to dependencies in the join graph.
+-  If multiple LEADING hints are used, only the first one is applied.
+-  If an ORDERED hint is present, all LEADING hints are ignored.
+
+Added NDV (Number of Distinct Values) for Each Column in Statistics Table
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To create more accurate execution plans, the NDV (Number of Distinct Values) for each column has been added to the statistics table.
+
+.. code:: sql
+
+   ;info stats t123
+   /* Display NDV information for each column  */
+   Attribute: col3 (INTEGER)
+      Number of Distinct Values: 1
    
-CUBRID_CHARSET environment variable is removed
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   Attribute: col2 (INTEGER)
+      Number of Distinct Values: 501
+   
+   Attribute: col1 (INTEGER)
+      Number of Distinct Values: 10000
 
-As locale(language and charset) is specified when creating DB from 9.2 version, CUBRID_CHARSET is not used anymore.
+Added *fetch_time* (Disk Fetch Time) to **trace info**
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. 4.4new
+The functionality has been enhanced to allow viewing the time spent on disk fetch operations within the total execution time.
 
-[JDBC] Change zero date of TIMESTAMP into '1970-01-01 00:00:00'(GST) from '0001-01-01 00:00:00' when the value of zeroDateTimeBehavior in the connection URL is "round"(CUBRIDSUS-11612)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- 
-From 2008 R4.4, when the value of the property "zeroDateTimeBehavior" in the connection URL is "round", the  zero date value of TIMESTAMP is changed into '1970-01-01 00:00:00'(GST) from '0001-01-01 00:00:00'. You should be cautious when using zero date in your application.
+.. code:: sql
 
+   Trace Statistics:
+   SELECT (
+        time: 840,          // total execution time
+        fetch: 44408,       // Number of fetches
+        fetch_time: 64,     // Time spent on fetch operations
+        ioread: 0           // Number of IO reads
+   )
+   SCAN (table: dba.t111), (
+        heap time: 681,     // Heap processing time
+        fetch: 44408,       // Number of fetches
+        ioread: 0,          // Number of IO reads
+        readrows: 1010000,  // Number of rows read
+        rows: 1010000       // Total number of rows
+   )
 
-Recommendation for installing CUBRID SH package in AIX(CUBRIDSUS-12251)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Improved Subquery Rewrite Method for Hidden Columns in ORDER BY Clause
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If you install CUBRID SH package by using ksh in AIX OS, it fails with the following error. 
-  
-:: 
-  
-    0403-065 An incomplete or invalid multibyte character encountered. 
-  
-Therefore, it is recommended to use ksh93 or bash instead of ksh.
-  
-:: 
-  
-    $ ksh93 ./CUBRID-9.2.0.0146-AIX-ppc64.sh 
-    $ bash ./CUBRID-9.2.0.0146-AIX-ppc64.sh 
+The issue of subqueries being redundantly rewritten due to the management of hidden column properties in the ORDER BY clause has been improved.
 
-CUBRID_LANG is removed, CUBRID_MSG_LANG is added
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. code:: sql
 
-From version 9.1, CUBRID_LANG environment variable is no longer used.
-To output the utility message and the error message, the CUBRID_MSG_LANG environment variable is used. 
+   UPDATE /*+ recompile */ t1
+   SET c2 = 1
+   WHERE c1 = (SELECT c1 FROM t2 ORDER BY c2, c3 LIMIT 1);
 
+#. Now, only a single appropriate query rewrite occurs.
+#. Redundant nested subqueries are no longer created.
 
-Modify how to process an error for the array of the result of executing several queries at once in the CCI application(CUBRIDSUS-9364)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+This improvement ensures better query performance and eliminates unnecessary complexity in query execution.
 
-When executing several queries at once in the CCI application, if an error has occurs from at least one query among the results of executing queries by using the cci_execute_array function, the cci_execute_batch function, the error code of the corresponding query was returned from 2008 R3.0 to 2008 R4.1. This problem has been fixed to return the number of the entire queries and check the error of each query by using the CCI_QUERY_RESULT_* macros from 2008 R4.3 and 9.1.
+Performance
+~~~~~~~~~~~
 
-In earlier versions of this modification, there is no way to know whether each query in the array is success or failure when an error occurs; therefore, it it requires certain conditions.
+Change REDO Recovery from Single-Threaded to Parallel Processing for Performance Improvement
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. code-block:: c
+#. Currently, CUBRID’s REDO recovery runs in a single-threaded manner. However, since REDO logs applied to different data pages do not need to be synchronized, parallelizing this process can enhance performance.
+#. If the proportion of REDO is high and the parallelism index is favorable, the improvement effect will be significant.
 
-    ...
-    char *query = "INSERT INTO test_data (id, ndata, cdata, sdata, ldata) VALUES (?, ?, 'A', 'ABCD', 1234)";
-    ...
-    req = cci_prepare (con, query, 0, &cci_error);
-    ...
-    error = cci_bind_param_array_size (req, 3);
-    ...
-    error = cci_bind_param_array (req, 1, CCI_A_TYPE_INT, co_ex, null_ind, CCI_U_TYPE_INT);
-    ...
-    n_executed = cci_execute_array (req, &result, &cci_error);
+Performance Improvement Using Query Result Cache for Correlated Scalar Subqueries
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    if (n_executed < 0)
-      {
-        printf ("execute error: %d, %s\n", cci_error.err_code, cci_error.err_msg);
+#. A correlated subquery is executed individually for each row of the main query to retrieve values. If there are many duplicate input values, the same query may be executed repeatedly, leading to performance degradation.
+#. To resolve this issue, a result cache is applied to eliminate unnecessary repeated executions.
 
-        for (i = 1; i <= 3; i++)
-          {
-            printf ("query %d\n", i);
-            printf ("result count = %d\n", CCI_QUERY_RESULT_RESULT (result, i));
-            printf ("error message = %s\n", CCI_QUERY_RESULT_ERR_MSG (result, i));
-            printf ("statement type = %d\n", CCI_QUERY_RESULT_STMT_TYPE (result, i));
-          }
-      }
-    ...
-
-From the modified version, entire queries are regarded as failure if an error occurs. In case that no error occurred, it is determined whether each query in the array succeeds or not.
-
-.. code-block:: c
-
-    ...
-    char *query = "INSERT INTO test_data (id, ndata, cdata, sdata, ldata) VALUES (?, ?, 'A', 'ABCD', 1234)";
-    ...
-    req = cci_prepare (con, query, 0, &cci_error);
-    ...
-    error = cci_bind_param_array_size (req, 3);
-    ...
-    error = cci_bind_param_array (req, 1, CCI_A_TYPE_INT, co_ex, null_ind, CCI_U_TYPE_INT);
-    ...
-    n_executed = cci_execute_array (req, &result, &cci_error);
-    if (n_executed < 0)
-      {
-        printf ("execute error: %d, %s\n", cci_error.err_code, cci_error.err_msg);
-      }
-    else
-      {
-        for (i = 1; i <= 3; i++)
-          {
-            printf ("query %d\n", i);
-            printf ("result count = %d\n", CCI_QUERY_RESULT_RESULT (result, i));
-            printf ("error message = %s\n", CCI_QUERY_RESULT_ERR_MSG (result, i));
-            printf ("statement type = %d\n", CCI_QUERY_RESULT_STMT_TYPE (result, i));
-          }
-      }
-    ...
-
-In java.sql.XAConnection interface, HOLD_CURSORS_OVER_COMMIT is not supported(CUBRIDSUS-10800)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Current CUBRID does not support ResultSet.HOLD_CURSORS_OVER_COMMIT in java.sql.XAConnection interface.
-
-From 9.0, STRCMP behaves case-sensitively
+Extend Query Result Cache Support for CTE
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Until the previous version of 9.0, STRCMP did not distinguish an uppercase and a lowercase. From 9.0, it compares the strings case-sensitively.
-To make STRCMP case-insensitive, you should use case-insensitive collation(e.g.: utf8_en_ci).
+#. Extend the existing result cache mechanism to apply caching to Common Table Expression (CTE) subqueries.
+#. Improve performance by caching the results of CTE subqueries.
 
-.. code-block:: sql
+-  When the ``/*+ QUERY_CACHE */`` hint is applied to a CTE query, the caching mechanism is extended from applying a single result cache per query to also caching the results of CTE subqueries.
 
-    -- In previous version of 9.0 STRCMP works case-insensitively
-    SELECT STRCMP ('ABC','abc');
-    0
-    
-    -- From 9.0 version, STRCMP distinguish the uppercase and the lowercase when the collation is case-sensitive.
-    export CUBRID_CHARSET=en_US.iso88591
-    
-    SELECT STRCMP ('ABC','abc');
-    -1
-    
-    -- If the collation is case-insensitive, it distinguish the uppercase and the lowercase.
-    export CUBRID_CHARSET=en_US.iso88591
+Extend Query Cache Support to Uncorrelated Subqueries
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    SELECT STRCMP ('ABC' COLLATE utf8_en_ci ,'abc' COLLATE utf8_en_ci);
-    0
+Extend the result cache applied to CTE queries to also support uncorrelated subqueries.
 
-Since the 2008 R4.1 version, the Default value of CCI_DEFAULT_AUTOCOMMIT has been ON(CUBRIDSUS-5879)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Display Result Cache Reference in Trace Information
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The default value for the CCI_DEFAULT_AUTOCOMMIT broker parameter, which affects the auto commit mode for applications developed with CCI interface, has been changed to ON since CUBRID 2008 R4.1. As a result of this change, CCI and CCI-based interface (PHP, ODBC, OLE DB etc.) users should check whether or not the application's auto commit mode is suitable for this.
+Support displaying the reference count in trace information when executing queries that utilize the result cache.
 
-From the 2008 R4.0 version, the options and parameters that use the unit of pages were changed to use the unit of volume size(CUBRIDSUS-5136)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. code:: sql
 
-The options (-p, -l, -s), which use page units to specify the database volume size and log volume size of the cubrid createdb utility, will be removed. Instead, the new options, added after 2008 R4.0 Beta (\-\-db-volume-size, \-\-log-volume-size, \-\-db-page-size, \-\-log-page-size), are used.
+   Trace Statistics:  
+     SELECT (time: 23, fetch: 156, fetch_time: 0, ioread: 32)  
+       SCAN (table: public.game), (heap time: 17, fetch: 124, ioread: 31, readrows: 8653, rows: 5676)  
+       SCAN (hash temp(m), build time: 0, time: 2, fetch: 0, ioread: 0, readrows: 359, rows: 340)  
+       UNION (time: 0, fetch: 8, fetch_time: 0, ioread: 0)  
+         SELECT (time: 0, fetch: 0, fetch_time: 0, ioread: 0)  
+           RESULT CACHE (reference count : 1)  
+         SELECT (time: 0, fetch: 0, fetch_time: 0, ioread: 0)  
+           RESULT CACHE (reference count : 1)
 
-To specify the database volume size of the cubrid addvoldb utility, use the newly-added option (\-\-db-volume-size) after 2008 R4.0 Beta instead of using the page unit.
-It is recommended to use the new system parameters in bytes because the page-unit system parameters will be removed. For details on the related system parameters, see the below.
+PL/CSQL, JAVA SP
+~~~~~~~~~~~~~~~~
 
-Be cautious when setting db volume size if you are a user of a version before 2008 R4.0 Beta(CUBRIDSUS-4222)
+CUBRID offers the PL/CSQL feature to ensure compatibility with ORACLE’s PL/SQL. For syntax and usage details, please refer to the manual. (PL/CSQL)
+
+Prevent Reloading of JNI-Loading Classes in Java SP Server by Adding a New ClassLoader (Add ``loadjava`` Option: *-j* or *--jni*)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+#. A new ClassLoader has been introduced to prevent the reloading of classes that load JNI in the Java SP server.
+#. Additionally, the ``loadjava`` command now supports the *-j* or *--jni* option. 
+
+Utility
+~~~~~~~
+
+Improve ``unloaddb`` Performance
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The ``unloaddb`` utility, previously operating in a single-threaded manner, has been improved to support multi-threaded execution, significantly reducing data export time.
+
+#. ``unloaddb`` Options
+
+   -  ``--thread-count``: Specifies the number of concurrent execution threads (0~127).
+   -  ``enhanced-estimates``: Provides an accurate record count estimation (verbose mode only).
+
+#. Performance monitoring
+   - ``Elapsed``: Total execution time
+   - ``Fetch``: Server fetch time/count
+   - ``Write``: File write time
+   - ``Add/Get L``: List operation wait time/count
+   - ``Add/Get Q``: Queue operation wait time/count
+   - ``to obj``: DB_VALUE conversion time
+   - ``to str``: Plain text conversion time
+
+Add Memory Monitoring Feature
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+#. The ``cubrid memmon`` utility outputs the heap memory usage allocated to the server process.
+#. When the system parameter **enable_memory_monitoring** is set to *yes*, the server memory monitoring module tracks detailed memory allocation information based on total heap memory usage and the source code and line number where memory allocation occurred.
+#. This allows you to check the server heap memory usage at the time the utility is executed.
+#. For usage and detailed information, please refer to the manual.
+
+Add ``info ndv`` CSQL Session Command to Print NDV (Number of Distinct Values) for Each Column of a Table
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+A new CSQL session command has been added to print the Number of Distinct Values (NDV) for specific columns of a table.
+
+#. Executing the ``info ndv <table_name>`` command will output the number of distinct values (NDV) for each column of the specified table.
+#. Internally, the following query is executed to calculate the NDV,
+
+   .. code:: sql
+
+      SELECT /*+ SAMPLING_SCAN */
+         COUNT(DISTINCT host_year), COUNT(DISTINCT event_code), COUNT(DISTINCT athlete_code),
+         COUNT(DISTINCT stadium_code), COUNT(DISTINCT nation_code), COUNT(DISTINCT medal),
+         COUNT(DISTINCT game_date),COUNT(*)
+      FROM public.game;
+
+#. Example of Execution
+
+   .. code:: sql
+
+      csql> ;info ndv public.game 
+
+      Query : SELECT /*+ SAMPLING_SCAN */ count(distinct [host_year]), count(distinct [event_code]), count(distinct [athlete_code]), count(distinct [stadium_code]), count(distinct [nation_code]), count(distinct [medal]), count(distinct [game_date]), count(*) FROM [public.game] 
+
+      Number of Distinct Values 
+      **************** 
+      Class name: public.game 
+      host_year (5) 
+      event_code (393) 
+      athlete_code (6677) 
+      stadium_code (116) 
+      nation_code (115) 
+      medal (3) 
+      game_date (84) 
+
+      total count : 8653 
+
+      Committed.
+
+Add Fence Key Information to ``SHOW INDEX CAPACITY`` and ``diagdb``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The ``SHOW ALL INDEXES CAPACITY OF [schema_name.]table_name;`` command has been updated to include the ``Num_fence_key`` field in the output.
+
+Changes:
+- The ``Num_fence_key`` is now displayed in the results of the ``SHOW ALL INDEXES CAPACITY`` command.
+- Previously, the ``Num_fence_key`` value was included in the capacity calculation, but it will no longer be considered in the calculation.
+
+This change provides more accurate index capacity information by excluding the fence key in the capacity calculation.
+
+Add Volume Creation Time to ``diagdb`` Utility Output
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The ``diagdb`` utility has been updated to display the volume creation time. This includes the creation time information for the following volumes:
+   -  Database volume
+   -  Active log volume
+   -  Archive log volume
+
+Now, when running the ``diagdb`` utility, the creation time for each volume will be included in the output.
+
+-  before
+
+   .. code:: shell
+
+      $ cat diag.txt | grep "creation time"
+       Database creation time = Mon Aug 12 20:46:32 2024
+       Database creation time = Mon Aug 12 20:46:32 2024
+       Database creation time = Mon Aug 12 20:46:32 2024
+       Database creation time = Mon Aug 12 20:46:32 2024
+
+-  after
+
+   .. code:: shell
+
+      $ cat diag.txt | grep "creation time"
+       Database creation time = Mon Aug 12 20:46:32 2024
+       Volume creation time = Mon Aug 12 20:46:37 2024
+       Database creation time = Mon Aug 12 20:46:32 2024
+       Volume creation time = Mon Aug 12 20:46:37 2024
+       Database creation time = Mon Aug 12 20:46:32 2024
+       Volume creation time = Mon Aug 12 20:46:37 2024
+       Database creation time = Mon Aug 12 20:46:32 2024
+       Volume creation time = Mon Aug 12 20:46:37 2024
+
+Automatically Restart ``cub_server`` Process in Single Server Environment on Abnormal Termination
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+#. When single-server setup (not using HA), if the ``cub_server`` process terminates abnormally, it previously required a manual restart. This has now been updated to support automatic restarts.
+#. The functionality to automatically restart the ``cub_server`` process after an abnormal termination has been added.
+
+.. important::
+
+   #. The server will not automatically restart if it terminates normally. 
+   #. The feature can be enabled or disabled via a system parameter. 
+   #. If the server terminates repeatedly within a short period, it will stop attempting to restart after a certain number of failures.
+
+Broker, CAS, CMS
+~~~~~~~~~~~~~~~~
+
+Add Parameter to Set the Size of Data Sent to Clients in Broker
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+A new parameter, ``NET_BUF_SIZE``, has been introduced to the Broker to control the size of the data transmitted to clients.
+
+Configurable Values: 
+   - 16K(default)
+   - 32K
+   - 48K
+   - 64K
+
+Add Parameter to Set ACL for Each Broker
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+A new parameter has been added to allow setting ACL for each broker, providing a way to allow clients to connect to the broker even when ACCESS_CONTROL is ON.
+
+#. n the ``cubrid_broker.conf`` file, under the ``[broker]`` section, when ACCESS_CONTROL is ON, you can set the new ACL parameter ``ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER`` for each broker.
+#. The parameter can have two possible values: ``DENY`` (default) or ``ALLOW``.
+
+.. code:: shell
+
+   $ cubrid broker acl status 
+   ACCESS_CONTROL=ON 
+   ACCESS_CONTROL_FILE=cubrid_acl.conf 
+
+   [%query_editor] 
+   ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER=DENY 
+   testdb:dba:acl_ip_list.conf 
+
+   CLIENT IP LAST ACCESS TIME 
+   ========================================== 
+   172.29.80.1 
+   192.168.0.31 
+   172.31.0.175 
+
+   [%broker1] 
+   ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER=ALLOW 
+
+   ++ cubrid broker acl: success
+
+-  The ``%query_editor`` broker is set to ``DENY``, allowing only specific IPs to connect.
+-  The ``%broker1`` broker is set to ``ALLOW``, permitting connections from all IPs.
+
+Change CMS(CUBRID Manager Server) SSL Profile to Support TLS v1.2 and Above
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+For security reasons, CUBRID Manager Server (**CMS**) and CUBRID Manager(**CM**)/CUBRID Admin(**CA**) communication has been updated to support **TLS v1.2** instead of the previous **TLS v1.0**. This change ensures enhanced security by enforcing the use of more secure encryption protocols.
+
+Others
+~~~~~~
+
+Provide Script for Restoring a Backup with a New DB Name
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When data recovery is required, restoring a backup to an operational server typically involves tasks such as creating additional accounts and installing extra engines, which can be cumbersome. To simplify this process, a script has been provided to restore a backup and change the database name without additional setup.
+
+- Usage: ``sh rename_to_newdb.sh [OPTION] ASIS_DBNAME TOBE_DBNAME``
+- Options: 
+
+  - ``-F``: Specify the absolute path of the directory where the new database will be created. 
+  - ``-B``: Specify the absolute path of the directory containing the backup files (if not provided, it searches the current working directory). 
+  - ``-d``: Restore the database to the state as of the specified date.
+  - ``-l``: Specify the backup level to restore. 
+  - ``-p``: Perform partial recovery if no log archive is available. 
+  - ``-k``: Specify the path to the key file (_keys) for TDE recovery.
+
+Add “0.0.0.0 your_hostname” to ``cubrid_host.conf`` File and Modify Error Messages
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To improve user convenience, the following changes have been made:
+
+#. **Add the entry “0.0.0.0 your_hostname”** to the ``cubrid_host.conf`` file for easier configuration. This ensures the proper hostname binding.
+#. **Modify error messages** for better clarity, providing more useful information to users when encountering issues.
+
+These changes aim to simplify the setup process and enhance error handling for a better user experience.
+
+Modify ``cubrid_host.conf`` to Be Case-Insensitive for User Hostnames
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The ``cubrid_host.conf`` file has been updated to treat hostnames as **case-insensitive**. This change ensures that the hostname lookup does not differentiate between uppercase and lowercase letters, making it more flexible and user-friendly.
+
+Change the ``att_name`` Column Name to ``attr_name`` in ``db_serial``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Remove Unnecessary Fixed Page Headers for TDE during Sorting
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In the sorting process, the **unnecessary fixed page headers** for **Transparent Data Encryption (TDE)** have been removed. This change helps improve performance by eliminating redundant data that was previously included during the sorting phase
+
+Remove Messages Written in Languages Other than English and Korean
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Messages written in languages other than **English** and **Korean** have been deleted. This ensures that only the relevant languages are included in the system, improving clarity and consistency.
+
+Remove ``dont_reuse_oid`` Table Option from ``demodb_schema`` File
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The ``dont_reuse_oid`` table option has been removed from the ``demodb_schema`` file. This change simplifies the schema configuration by eliminating this option, which was previously used to prevent the reuse of object IDs.
+
+.. _11_4_changes_spec:
+
+Specification Changes
+---------------------
+
+SQL
+~~~
+
+Limit the maximum number of characters for the CHAR type to 2048 (2048 Korean characters) (Previous maximum: 268,435,456)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+#. The current maximum length of the CHAR type is 256MB, which is significantly larger compared to other DBMS (Oracle, MySQL, PostgreSQL). When using the UTF-8 character set, memory allocation can reach up to 1GB.
+#. If there are two or more columns defined with the maximum CHAR type length, an **INSERT** statement can allocate more than 2GB of memory, leading to a memory overflow issue.
+
+To resolve these memory allocation issues and improve server transmission efficiency, the specification for the CHAR type has been modified:
+
+   - The maximum length of the CHAR type has been reduced from **256MB to 2048**.
+
+Change LOB column value locators from absolute path to relative path
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If the **LOB file directory** location changes, all **LOB column locators** in the database must be updated.
+
+**Modification Details:**
+
+#.  Change the locator storage method from **absolute path** to **relative path**.
+#.  Store locators in **relative path format** within LOB columns.
+#.  When referencing LOB file contents, concatenate the **LOB Base Path** with the relative locator path. 
+
+  - **LOB Base Path:** ``/cubrid/demo/lob``
+  - **Locator:** ``ces_272/public.t1.00001720143587746537_3683`` 
+  - **Referenced File:** ``(LOB Base Path) + locator`` 
+      /cubrid/demo/lob/ces_272/public.t1.00001720143587746537_3683
+
+Utility
+~~~~~~~
+
+Modify **CSQL** to recognize session commands when writing SQL or PL/CSQL statements (e.g., ``CREATE`` statements, body statements, etc.)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Additionally, fix the issue where **csql** remained unresponsive when encountering unmatched single quotes.
+
+``"cubrid plandump -s"`` option allows deleting a specific plan. ``"cubrid plandump -d"`` behavior changed (Previous: output plan before deletion, Now: delete plan directly)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+**Enhancements in ``plandump`` Utility**
+
+The ``plandump`` utility has been improved to always display the SQL execution plan and to allow specific plan cache deletion.
+
+**New Features**
+
+#. Improved ``plandump`` to always output the SQL execution plan when executed.
+#. Added the ``-s`` option to enable the deletion of specific plan caches.
+
+**Usage Examples**
+
+#. **Displaying SQL Execution Plan**
+
+   .. code:: shell
+
+      $ cubrid plandump demodb 
+      ... 
+      Entries: XASL_ID = { sha1 = { 6290f2b1 44f088e5 d37d6f0f c8303155 9ef2096a }, time_stored = 1715925895 sec, 58124 usec } 
+      ... 
+      sql plan text = Sequential scan(public.game dba.game) 
+      ...
+
+#. **Deleting a Specific Plan Cache and Displaying Remaining Plans** 
+
+   .. code:: shell
+
+      $ cubrid plandump -s '6290f2b1 44f088e5 d37d6f0f c8303155 9ef2096a' demodb 
+      ... 
+      /* delete specific plan cache and display current plan caches. */ 
+      ...
+
+Simplified Lock Information Logged in ``DBName_latest.event`` File During Deadlock Occurrences
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+#. Improved the server log file (``DBName_latest.event``) to log only the **lock information directly contributing to the deadlock** instead of all held locks.
+#. Previously, all locks held by transactions were logged, making analysis difficult. Now, only **locks causing wait conditions** are recorded sequentially for better readability.
+#. Clearly mark the **deadlock victim transaction** to facilitate root cause analysis.
+
+Broker, CAS, CMS
+~~~~~~~~~~~~~~~~
+
+**Change SQL Log Writing Timing** – Modify to log SQL first, then execute prepare/execute, so that the SQL can be traced in the log even in case of a core dump during execution.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+#. When CAS crashes during ``prepare/execute``, the corresponding SQL statement was not logged, causing difficulty in identifying the problematic SQL.
+#. Logs were recorded only after ``prepare/execute`` completion, making it hard to pinpoint the query that caused the issue.
+#. By changing the order to log SQL **before** ``prepare/execute``, it allows tracing the executed SQL even if CAS crashes, thereby improving the ability to debug.
+
+.. _11_4_changes_improvements:
+
+Improvements
+------------
+
+SQL
+~~~
+
+Improvement of the issue where SELECT does not execute when X_LOCK occurs on the table (preventing unnecessary X_LOCK on rows)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The issue arises because locks are being created too early, causing unnecessary locks. The improvement ensures that unnecessary locks are released after all conditions are evaluated.
+
+Modify the system to perform an index scan when a JavaSP function is used as a condition value in the ``WHERE`` clause with the ``LIKE`` operator
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code:: sql
+
+   CREATE OR REPLACE FUNCTION stringTest(x String) RETURN String AS LANGUAGE JAVA NAME 'SpTest.typeteststring(java.lang.String) return java.lang.String';
+
+   CREATE TABLE tbl (ord INT, col_int INT, col_char char(1));
+   CREATE INDEX i_tbl ON tbl (ord);
+   CREATE INDEX i_tbl_char ON tbl (col_char);
+
+   INSERT INTO tbl VALUES (1,10,'a');
+   INSERT INTO tbl VALUES (2,10,'b');
+   INSERT INTO tbl VALUES (3,10,'c');
+   INSERT INTO tbl VALUES (4,10,'d');
+   INSERT INTO tbl VALUES (5,10,'e');
+
+   SELECT count(*) AS "like" FROM tbl WHERE col_char LIKE (SELECT stringTest('a') FROM dual);
+
+Improvement of the issue where the plan generator does not perform a **range scan** when a function index is used with ``<=`` and ``>=`` conditions, and instead generates a plan that scans the index from the beginning to the end
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Modified to prevent the use of the ``FOR UPDATE`` clause on system tables and system view tables (such as \_db_class, db_root, dual, etc.)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Modified to not check data type consistency when creating view
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+#. Previously, the type compatibility of each column was checked immediately when creating a view.
+#. Now, instead of checking the type at creation time, errors will be handled when the view is executed if type conversion is not possible.
+#. The error handling was changed from generating an error during view creation to generating an error during view execution if type conversion is not possible.
+
+Modified to allow the use of NULL values in the SELECT clause of ``CREATE VIEW``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code:: sql
+
+   CREATE VIEW a_view( col1 ) AS select NULL as col1 from a_tbl;
+
+Modified so that ``AUTO_INCREMENT`` and ``DEFAULT`` cannot coexist when changing table column properties using **ALTER TABLE MODIFY**
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+#. When executing **CREATE TABLE** or **ALTER COLUMN** statements, an error occurs if the ``AUTO_INCREMENT`` and ``DEFAULT`` properties are used together.
+#. Using the **ALTER TABLE MODIFY** statement to execute ``AUTO_INCREMENT`` and ``DEFAULT`` properties separately allows both properties to coexist on the same column. This issue caused a problem where tables with both ``AUTO_INCREMENT`` and ``DEFAULT`` properties could not be reloaded after unloading, resulting in the table not being created.
+
+Modified to allow checking the creation time of DB volumes and logs
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The ``SHOW VOLUME HEADER``, ``SHOW LOG HEADER``, and ``SHOW ARCHIVE LOG HEADER`` commands have been updated to display the volume creation time in the 'Creation_time' field
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Improvement of the length limitation for the WHERE clause when creating filtered indexes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+#. An issue occurred where the length limitation of the WHERE clause
+when using a filtered index did not match the manual.
+#. The problem arose from measuring the length of the rewritten string rather than the user-input string (with a 255-character limit).
+#. The issue has been resolved by removing the length restriction.
+
+Improvement to apply sort limit optimization when there are bind variables and expressions in the LIMIT clause
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code:: sql
+
+   drop table if exists tbl1;
+   create table tbl1 (col1 int, col2 int);
+   insert into tbl1 select rownum, random() % 100000 +1 from db_class a, db_class b, db_class c, db_class d limit 100000;
+   create index idx on tbl1(col1);
+
+   prepare stmt from
+   'SELECT a.col1, a.col2
+   FROM tbl1 a
+      LEFT JOIN tbl1 b ON a.col1 = b.col1
+      LEFT JOIN tbl1 c ON a.col1 = c.col1
+   ORDER BY a.col2,a.col1
+   LIMIT ?*10,?';
+
+   execute stmt using 10,10;
+
+Optimizer
+~~~~~~~~~
+
+Fix the issue where the ``Total objects`` value in the table statistics is not updated when data is deleted
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When data is deleted, the object count in the statistics is not updated, which can cause inaccurate statistics to be used when generating the execution plan, potentially affecting performance. This issue has been improved.
+
+Use the count of unique index keys for the ``Total objects`` value in the ``;info stats table_name`` command
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-From the 2008 R4.0 Beta version, the default value of data page size and log page size in creating the database was changed from 4 KB to 16 KB. If you specify the database volume to the page count, the byte size of the volume may differ from your expectations. If you did not set any options, 100MB-database volume with 4KB-page size was created in the previous version. However, starting from the 2008 R4.0, 512MB-database volume with 16KB-page size is created.
+To reduce performance degradation caused by a full data scan when updating statistics, the count of unique index keys will now be used for the ``Total objects`` value.
 
-In addition, the minimum size of the available database volume is limited to 20 MB. Therefore, a database volume less than this size cannot be created.
+Increase the number of sampling pages to improve the accuracy of B-tree statistics collection
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The change of the default value of some system parameters of the versions before 2008 R4.0(CUBRIDSUS-4095)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#. Increase the number of sampling pages during B-tree statistics collection to improve both accuracy and performance.
+#. At the same time, remove unnecessary logic (such as the same page processing logic and the sampling page selection probability calculation routine) to improve performance.
 
-Starting from 2008 R4.0, the default values of some system parameters have been changed.
+Use NDV (Number of Distinct Values) extracted from the heap first to improve accuracy
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Now, the default value of max_clients, which specifies the number of concurrent connections allowed by a DB server, and the default value of index_unfill_factor that specifies the ratio of reserved space for future updates while creating an index page, have been changed. Furthermore, the default values of the system parameters in bytes now use more memory when they exceed the default values of the previous system parameters per page.
+#. **Prioritize using NDV (Number of Distinct Values) from the Heap**
 
-+-----------------------------+----------------------------+----------------------+--------------------+ 
-| Previous System             | Added System               | Previous Default     | Changed Default    | 
-| Parameter                   | Parameter                  | Value                | Value (unit: byte) |
-|                             |                            |                      |                    | 
-+=============================+============================+======================+====================+ 
-| max_clients                 | None                       | 50                   | 100                | 
-+-----------------------------+----------------------------+----------------------+--------------------+ 
-| index_unfill_factor         | None                       | 0.2                  | 0.05               | 
-+-----------------------------+----------------------------+----------------------+--------------------+
-| data_buffer_pages           | data_buffer_size           | 100M(page size=4K)   | 512M               | 
-+-----------------------------+----------------------------+----------------------+--------------------+
-| log_buffer_pages            | log_buffer_size            | 200K(page size=4K)   | 4M                 | 
-|                             |                            |                      |                    |
-+-----------------------------+----------------------------+----------------------+--------------------+
-| sort_buffer_pages           | sort_buffer_size           | 64K(page size=4K)    | 2M                 | 
-|                             |                            |                      |                    | 
-+-----------------------------+----------------------------+----------------------+--------------------+
-| index_scan_oid_buffer_pages | index_scan_oid_buffer_size | 16K(page size=4K)    | 64K                | 
-|                             |                            |                      |                    | 
-+-----------------------------+----------------------------+----------------------+--------------------+
+   -  **NDV (Number of Distinct Values)**: The count of distinct unique values in a specific column.
+   - First, extract the NDV value from the heap and use it; if it cannot be obtained from the heap, fall back to using the NDV extracted from the B-tree.
 
-In addition, when a database is created using cubrid createdb, the minimum value of the data page size and the log page size has been changed from 1K to 4K.
- 
-Changed so that database services, utilities, and applications cannot be executed when the system parameter is incorrectly configured(CUBRIDSUS-5375)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#. **Exception Handling**
 
-It has been changed so that now the related database services, utilities, and applications are not executed when configuring system parameters that are not defined in cubrid.conf or cubrid_ha.conf, when the value of system parameters exceed the threshold, or when the system parameters per page and the system parameters in bytes are used simultaneously.
+   -  If the length of string types (e.g., ``char``) exceeds 4000 characters, NDV will not be extracted from the heap. (This is to avoid performance or accuracy issues with long strings.)
 
-Database fails to start if the data_buffer_size is configured with a value that exceeds 2G in CUBRID 32-bit version(CUBRIDSUS-5349)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#. **Change in Object Counting Method**
 
-In the CUBRID 32-bit version, if the value of data_buffer_size exceeds 2G, the running database fails. Note that the configuration value cannot exceed 2G in the 32-bit version because of the OS limit.
+   -  Change the counting method to use sampling scan hints to calculate the object count.
 
-Recommendations for controlling services with the CUBRID Utility in Windows Vista and higher(CUBRIDSUS-4186)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+By prioritizing NDV obtained from the heap, the selectivity is set more accurately, and performance and accuracy are improved by handling long strings as exceptions and adopting a sampling-based count method
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To control services using cubrid utility from Windows Vista and higher, it is recommended to start the command prompt window with administrative privileges.
+Minimize rule-based optimization (RBO) and heuristic factor elements to improve accuracy
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If you don't start the command prompt window with administrative privileges and use the cubrid utility, you can still execute it with administrative privileges through the User Account Control (UAC) dialog box, but you will not be able to verify the resulting messages.
+#. **Remove RBO-related elements**
 
-The procedures for starting the command prompt window as an administrator in Windows Vista and higher are as follows:
+   - Remove **Heuristic Factor** (empirical weights) 
+   - Remove **statistics-based estimates** 
+   - Remove **First Node priority processing routine** 
+   - Remove heuristics from expressions 
+   - Remove logic that treated the cost of unique indexes as 0
+   - Remove IO count calculation logic based on selectivity, data buffers, and internal page count
 
-* Right-click [Start > All Programs > Accessories > Command Prompt].
-* When [Execute as an administrator (A)] is selected, a dialog box to verify the privilege escalation is activated. Click “YES" to start with administrative privileges.
-    
-A manager server process-related error occurs in the execution of the CUBRID source after its build(CUBRIDSUS-3553)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    
-If users want to build the CUBRID source and install it themselves, they must build and install CUBRID and the CUBRID Manager respectively. If you check out only CUBRID source and run cubrid service start or cubrid manager start after build, the error "cubrid manager server is not installed" will occur.
+#. **Completely remove RBO** 
+
+   - Previously, RBO was used only when the cost difference was within 1.x. 
+   - Now, RBO is fully removed, and focus is shifted entirely to **Cost-Based Optimization (CBO)**. 
+   - Even when index scan is possible, allow the creation of a sequential scan (seq_scan) plan (RBO used to prioritize index scans).
+
+#. **Other improvements**
+
+   - Add a routine to check the plan cost during **partial search**. 
+   - Fix the bug where **cumulative selectivity** of the next column was incorrectly used during **LIMIT** processing.
+
+This improves the optimization logic by removing RBO and strengthening CBO.
+
+Adjust some cost formulas based on actual execution time
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Reflecting the results from the **Join Order Benchmark**, we improve cost calculation formulas to match actual execution times and carry out several optimization enhancements and improvements.
+
+#. **Cost formula adjustments**
+   
+   - Reflect **index filter scan selectivity**: Modify the data I/O cost calculation for index scans to consider selectivity. 
+   - Add selectivity for the **'NOT LIKE'** operator. 
+   - Add selectivity for **function-based indexes**. 
+   - Increase **sampling page count** to 5000 to improve statistical accuracy. 
+   - Adjust weights when **NDV (Number of Distinct Values)** has a high degree of duplication: If the sample data has a duplication rate below 1%, adjust the statistical weight.
+   - Introduce **SSCAN_DEFAULT_CARD**: To prevent inefficient plans when **NL JOIN(Nested Loop Join)** estimates cardinality (result count) too low.
+
+#. **Additional improvements** 
+  
+   - Add **fetch_time** to trace information to enhance execution time tracking. 
+   - Enable automatic selection of **index skip scan** without the ``index_ss`` hint. 
+   - Activate **Sort Merge Join**: Allow the optimizer to use the Sort Merge Join method.
+
+This improvement enhances the accuracy of cost calculation formulas based on actual execution time and adds optimizations like index usage and join methods.
+
+Add cost formulas for the LIMIT clause
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+We introduce cost formulas that consider the **LIMIT** clause and improve the execution plan selection approach (optimization criteria) when a LIMIT is present.
+
+#. **Cost and cardinality settings for the LIMIT clause**
+
+   - Set the cardinality of a subquery with a LIMIT clause to the **LIMIT value**.
+   - For example, if ``LIMIT 10`` is used, estimate the result count of the subquery to be 10.
+
+#. **Enhance rule-based optimization when a LIMIT is present**
+
+   - When LIMIT is used, give priority to execution plans that can quickly fetch the first few rows. 
+   - Use **ORDER BY SKIP**
+   - Apply **SORT-LIMIT** optimization
+   - Prefer plans that retrieve a subset of the data faster than reading the entire dataset.
+
+#. **Change the value of SSCAN_DEFAULT_CARD (default cardinality)**
+
+   - Change from 1000 to 100 to avoid selecting inefficient plans for sequential scans (SSCAN).
+
+This introduces cardinality and cost adjustments for the **LIMIT** clause, optimizing the performance for small data retrievals and adjusting the default cardinality value for more efficient plans.
+
+Remove logically redundant join conditions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This improvement removes logically redundant join conditions that have already been evaluated, optimizing the query.
+
+.. code:: sql
+
+   a.col1 = b.col1 AND b.col1 = c.col1 AND a.col1 = c.col1;
+
+In this case, having all three conditions is unnecessary, as just one condition is sufficient. Keeping all three results in redundant filters (terms), which should be removed.
+
+This change improves query optimization by eliminating duplicate conditions that don’t contribute to the logic.
+
+Eliminate unnecessary ``INNER JOIN`` and join types during query optimization
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Conditions and exceptions for the “Eliminate INNER JOIN” optimization:
+
+#. **INNER JOIN Removal Optimization**
+   
+   - This optimization removes unnecessary INNER JOINs
+   - For example, if only one table exists, the JOIN itself is meaningless, and it is removed
+
+2. **Optimization Behavior (Conditions)** 
+   
+   - The INNER JOIN removal optimization is applied to the first table. 
+   - If the join type for the second table is INNER JOIN, it will also be removed.
+
+#. **Exception Conditions** 
+   
+   - If the join type for the second table is OUTER JOIN, this optimization is not applied.
+   - OUTER JOIN must be retained as they can affect the result.
+
+#. Example
+  
+   - AS-IS
+     
+   .. code:: sql
+
+      SELECT /*+ ORDERED */ c.c2 FROM t2_parent p INNER JOIN t2_child c ON c.id = p.id
+
+   - TO-BE (The INNER JOIN is removed. The unnecessary JOIN clause is eliminated, leaving just the table.)
+
+   .. code:: sql
+
+      SELECT /*+ ORDERED */ c.c2 FROM t2_child c
 
 
-GLO class which is used in 2008 r3.0 or before is not supported any longer(CUBRIDSUS-3826)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+This optimization removes unnecessary INNER JOIN, but it ensures that the optimization is not applied when the second table has an OUTER JOIN.
 
-CUBRID 2008 R3.0 and earlier versions processed Large Objects with the Generalized Large Object glo class, but the glo class has been removed from CUBRID 2008 R3.1 and later versions. Instead, they support BLOB and CLOB (LOB from this point forward) data types. (See :ref:`blob-clob` for more information about LOB data types).
+Performance
+~~~~~~~~~~~
 
-glo class users are recommended to carry out tasks as follows:
+Redesigning the plan and executor for stored procedure
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* After saving GLO data as a file, modify to not use GLO in any application and DB schema.
-* Implement DB migration by using the unloaddb and loaddb utilities.
-* Perform tasks to load files into LOB data according to the modified application.
-* Verify the application that you modified operates normally.
+We are working on eliminating unnecessary **method transformations** in stored procedures. In the current approach, when a stored procedure parameter is associated with a table column, it is transformed into an inline view and a **lateral join** structure is created. However, this approach leads to performance degradation
+(e.g., inefficient index scans, incorrect outer joins). To resolve this issue, a new execution plan is being introduced.
 
-For reference, if the cubrid loaddb utility loads a table that inherits the GLO class or has the GLO class type, it stops the data from loading by displaying an error message, "Error occurred during schema loading."
+#. Enabling index scans when an stored procedure(SP) is used as a comparison value in the ``WHERE`` clause.
+#. Modifying the rewrite process to prevent stored procedure(SP) calls from being transformed as part of a table scan.
 
-With the discontinued support of GLO class, the deleted functions for each interface are as follows:
+This optimization aims to remove unnecessary transformations from the existing approach and improve the performance of stored procedure execution plans.
 
-+------------+----------------------------+
-| Interface  | Deleted Functions          |
-+============+============================+
-| CCI        | cci_glo_append_data        |
-|            |                            |
-|            | cci_glo_compress_data      |
-|            |                            |
-|            | cci_glo_data_size          |
-|            |                            |
-|            | cci_glo_delete_data        |
-|            |                            |
-|            | cci_glo_destroy_data       |
-|            |                            |
-|            | cci_glo_insert_data        |
-|            |                            |
-|            | cci_glo_load               |
-|            |                            |
-|            | cci_glo_new                |
-|            |                            |
-|            | cci_glo_read_data          |
-|            |                            |
-|            | cci_glo_save               |
-|            |                            |
-|            | cci_glo_truncate_data      |
-|            |                            |
-|            | cci_glo_write_data         |
-|            |                            |
-+------------+----------------------------+
-| JDBC       | CUBRIDConnection.getNewGLO |
-|            |                            |
-|            | CUBRIDOID.loadGLO          |
-|            |                            |
-|            | CUBRIDOID.saveGLO          |
-|            |                            |
-+------------+----------------------------+
-| PHP        | cubrid_new_glo             |
-|            |                            |
-|            | cubrid_save_to_glo         |
-|            |                            |
-|            | cubrid_load_from_glo       |
-|            |                            |
-|            | cubrid_send_glo            |
-|            |                            |
-+------------+----------------------------+
+Improving the process of calculating ``midxkey.buf`` size when reading records from multi-column index nodes for performance enhancement
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Port configuration is required if the protocol between the master and server processes is changed, or if two versions are running at the same time(CUBRIDSUS-3564)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Previously, the key length in a multi-column index had to be recalculated repeatedly. This has been improved by adding an ``OFFSET`` for each column, allowing direct reference. This optimization reduces unnecessary operations during **binary search, key filtering, and DML execution**, leading to improved performance.
 
-Because the communication protocol between a master process (cub_master) and a server process (cub_server) has been changed, the master process of CUBRID 2008 R3.0 or later cannot communicate with the server process of a lower version, and the master process of a lower version cannot communicate with a server process of 2008 R3.0 version or later. Therefore, if you run two versions of CUBRID at the same time by adding a new version in an environment where a lower version has already been installed, you should modify the cubrid_port_id system parameter of cubrid.conf so that different ports are used by the different versions.
+Improving key reading in B-Tree indexes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Specifying a question mark when entering connection information as a URL string in JDBC(CUBRIDSUS-3217)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#. **Optimizing key reading and processing during range scans**:
 
-When entering connection information as a URL string in JDBC, property information was applied even if you did not enter a question mark (?) in the earlier version. However, you must specify a question mark depending on syntax in this CUBRID 2008 R3.0 version. If not, an error is displayed. In addition, you must specify colon (:) even if there is no username or password in the connection information. ::
+   Reduces unnecessary operations by optimizing the way keys are read and processed during range scans.
 
-    URL=jdbc:CUBRID:127.0.0.1:31000:db1:::altHosts=127.0.0.2:31000,127.0.0.3:31000 -- Error
-    URL=jdbc:CUBRID:127.0.0.1:31000:db1:::?altHosts=127.0.0.2:31000,127.0.0.3:31000 -- Normal
+#. **Optimizing key reading for statistics updates and capacity calculations**:
 
-Not allowed to include @ in a database name(CUBRIDSUS-2828)
+   Enhances performance by refining the key reading process when updating statistics and calculating index capacity.
+
+#. **Reducing ``upper_key`` comparison frequency during range scans**: 
+
+   Minimizes unnecessary comparisons with ``upper_key`` to improve performance. 
+
+#. **Reducing redundant index column ID comparisons**: 
+
+   Optimizes operations by decreasing repetitive comparisons of index column ID.
+
+Storing the common prefix in ``BTREE_NODE_HEADER`` for compressed leaf nodes to reduce redundant calculations
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently, the **common prefix** is recalculated every time an index scan occurs. However, since the common prefix remains unchanged unless the node is split or merged, recalculating it repeatedly is inefficient. To determine the common prefix, the **lower fence key** and **upper fence key** within a leaf node must be checked and compared to identify how many columns are shared.
+
+This improvement aims to **enhance binary search performance in compressed leaf nodes** by skipping redundant common prefix calculations.
+
+#. In the improved structure, the common prefix is stored in ``BTREE_NODE_HEADER``, allowing immediate reference without additional computations.
+
+#. This modification improves index scan performance.
+
+Performance improvement for ``time_format()`` and ``date_format()``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Optimized performance by eliminating the use of string concatenation functions in the ``STRCHCAT`` macro, reducing function call overhead.
+
+Improving query performance degradation when ``TRACE`` is enabled
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When executing queries with ``set trace on``, performance drops significantly compared to running the same query with ``set trace off``. To minimize performance degradation, high-cost operations in TRACE statistics collection have been optimized to reduce overhead as much as possible.
+
+Removing unnecessary length checks for string types
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The order of size checks for string types has been changed, and unnecessary steps have been reduced to improve overall query performance.
+
+PL/CSQL, JAVA SP
+~~~~~~~~~~~~~~~~
+
+Modify to restart Java SP on JNI segmentation fault
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In case of a segmentation fault (segfault) in JNI, the system has been modified to restart the Java stored procedure (SP).
+
+Enhancing string functionality to support multiple character encodings (euckr, utf8)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In Java programs before version 11.2, the string encoding was affected by the file encoding, which could lead to incorrect character set conversions and string corruption. Since version 11.2, string handling has been standardized to UTF-8 encoding. However, many databases still use encodings other than UTF-8, so support for these encodings is necessary.
+
+The improvement involves processing strings as byte arrays to support various character encodings.
+
+Setting ``java.io.tmpdir`` in Java SP when ``CUBRID_TMP`` is configured (defaults to ``$CUBRID/tmp`` if not set)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When the ``java.io.File.createTempFile()`` function tries to create a temporary file, an error occurs. Junixsocket internally uses this function to create temporary files and then deletes them immediately. By default, ``createTempFile()`` creates files in the ``/tmp`` directory, but the file creation location can be changed using the ``-Djava.io.tmpdir`` option.
+
+#. If ``CUBRID_TMP`` is set, the value of ``CUBRID_TMP`` is reflected in ``java.io.tmpdir`` even if the ``java_stored_procedure_jvm_options="-Djava.io.tmpdir=<path>"`` option is set.
+
+#. The user-defined values are displayed in the ``cubrid javasp status`` command output, and the ``java.io.tmpdir`` setting is reflected even if set through ``java_stored_procedure_jvm_options``.
+
+#. If ``CUBRID_TMP`` is not set, ``$CUBRID/tmp`` is used as the value for ``java.io.tmpdir``.
+
+#. The ``java.io.tmpdir`` path is initialized only when the Java SP server starts, and changing the path requires restarting the Java SP server.
+
+Utility
+~~~~~~~
+
+Renaming environment variables in CSQL (e.g., ``FORMATTER`` → ``CUBRID_CSQL_FORMATTER``)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+There was an issue where the environment variables used in the CSQL environment, such as ``FORMATTER``, ``EDITOR``, and ``SHELL``, were not clearly related to CUBRID. To resolve this, the variable names have been updated to include the ``CUBRID_CSQL`` prefix to explicitly indicate that they are related to CUBRID.
+
+- **Changes**: 
+
+  -  EDITOR → CUBRID_CSQL_EDITOR
+  -  SHELL → CUBRID_CSQL_SHELL
+  -  FORMATTER → CUBRID_CSQL_FORMATTER
+
+The original variable names are still supported, ensuring compatibility with existing systems.
+
+Modify to release allocated lock resources immediately when exceeding the ``lock_escalation`` setting
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+There was an issue where memory allocated for locks was not released after the lock was freed once the ``lock_escalation`` environment variable value was exceeded. To resolve this, the system has been modified to immediately return memory when the number of locks exceeds the configured limit, ensuring that memory is freed when locks are released.
+
+Modify ``diagdb -d 9`` to dump only specific classes(tables)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Instead of dumping the entire heap file, a feature has been added to allow dumping only a specified class.
+
+- **Usage:**
+
+  -  The ``diagdb -d 9`` command can now accept the class (table) name, including the user name, as a parameter.
+  -  ``diagdb -d 9 -n class-name`` → Dumps only the specified class.
+  -  For partitioned tables: Dumps all partitions.
+  -  For specific partitions: Dumps only the specified partition.
+
+Validating the ``cubrid_hosts.conf`` file when ``use_user_hosts=true``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When ``use_user_hosts=true``, the ``cubrid_hosts.conf`` file will be validated at the CUBRID startup. If an error is found, an appropriate message will be displayed, and the execution will be halted.
+
+- **Validation checks**
+
+  #. **File existence**: If the file does not exist, an error will occur.
+  #. **IP address check**: Only IPv4 addresses are supported.
+  #. **Hostname check**
+
+     -  Length: Between 1 and 63 characters.
+     -  Allowed characters: Alphabets (A-Z, a-z), numbers (0-9), and hyphens (-).
+     -  Hyphens are not allowed at the beginning or end.
+     -  Examples: ``cubrid``, ``node-1``, ``www.cubrid.com``
+
+  #. **FQDN (Fully Qualified Domain Name) check**
+
+     -  Maximum length: 255 characters.
+     -  Multiple labels separated by periods (``.``)
+     -  Each label must follow the hostname rules.
+     -  Example: ``mail.server.cubrid.com``.
+
+- **Restrictions**
+
+  -  Aliases are not supported.
+  -  Lines starting with ``#`` are treated as comments.
+
+- **Scope of validation** 
+  
+  - The validation applies to CUBRID services and all management utilities (e.g., ``service``, ``server``, ``broker``, ``createdb``, ``backupdb``, ``vacuumdb``, etc.).
+
+Fixing HEAP and SYSTEM results in ``cubrid spacedb`` output
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If @ is included in a database name, it can be interpreted that a host name has been specified. To prevent this, a revision has been made so that @ cannot be included in a database name when running cubrid createdb, cubrid renamedb and cubrid copydb utilities.
+In the current implementation, the file types of the database(``FILE_TYPE``) were incorrectly mapped to ``SPACEDB_FILE_TYPE``, causing discrepancies in the ``spacedb`` output compared to previous versions.
+
+The mapping issue has been corrected so that:
+
+-  The **heap pages** in the ``show heap capacity of`` command are correctly calculated as **HEAP**.
+-  The **overflow pages** are correctly calculated as **SYSTEM**.
+
+This fix ensures that the ``spacedb`` output now matches the expected values.
+
+HA
+~~
+
+Fixing error messages when loading ``ha_node_list`` and ``ha_replica_list``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently, when ``ha_node_list`` or ``ha_replica_list`` contains invalid information, the ``master.err`` log only prints a generic error message, making it difficult to identify the root cause. This update aims to provide clear error messages based on the specific error type.
+
+- **AS-IS**
+
+  -  All errors are logged as **“ha_node_list”: Unknown system parameter or bad value.**
+
+- **TO-BE**
+
+  +-----------------------------------+----------------------------------+
+  | 오류 메시지                       | 오류 유형                        |
+  +===================================+==================================+
+  | ha_node_list is empty             | When ``ha_node_list`` is         |
+  |                                   | ``NULL`` or an empty string      |
+  +-----------------------------------+----------------------------------+
+  | cannot fi                         | When ``ha_mode`` is ``on`` but   |
+  | nd (myhost) in the ha_node_list   | ``myhost`` is not listed in      |
+  |                                   | ``ha_node_list``                 |
+  +-----------------------------------+----------------------------------+
+  | group id of (ha_node_list         | When ``ha_node_list`` and        |
+  | , ha_replica_list) is different   | ``ha_replica_list`` have         |
+  |                                   | different group ID               |
+  +-----------------------------------+----------------------------------+
+  | In                                | When ``ha_mode`` is ``replica``, |
+  | replica node, (myhost) must not b | but ``myhost`` is present in     |
+  | e specified in the ha_node_list   | ``ha_node_list``                 |
+  +-----------------------------------+----------------------------------+
+  | ha_replica_list is empty          | When ``ha_mode`` is ``replica``  |
+  |                                   | and ``ha_replica_list`` is       |
+  |                                   | ``NULL`` or empty                |
+  +-----------------------------------+----------------------------------+
+  | In replica node, (myhost) must be | When ``ha_mode`` is ``replica``, |
+  | specified in the ha_replica_list  | but ``myhost`` is missing from   |
+  |                                   | ``ha_replica_list``              |
+  +-----------------------------------+----------------------------------+
+  | In not rep                        | When ``ha_mode`` is ``on``, but  |
+  | lica mode, (myhost) must not be s | ``myhost`` is present in         |
+  | pecified in the ha_replica_list   | ``ha_replica_list``              |
+  +-----------------------------------+----------------------------------+
+
+- **Additional Changes**
+
+  - When `ha_mode` is `on` and `myhost` is present in `ha_node_list`, it will now trigger an **error** instead of switching to replica mode.
+
+Modifying error messages for HA failover and failback
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- **Current Issues**
+ 
+  - Unclear log messages during HA Failover/Failback make root cause analysis difficult. 
+  - In some cases, no logs are recorded. 
+  - Existing messages do not clearly indicate the cause and result.
+
+- **Improvements**
+
+  - Clearly distinguish between **Failover (Slave → Master)** and **Failback (Master → Slave)**. 
+  - Separate **Diagnosis messages** and **Result messages**. 
+  - Add log tags: ``[Failover]``, ``[Failback]``, ``[Diagnosis]``, ``[Cancelled]``, ``[Success]``. 
+  - Log **Failover messages** on the **Slave node** and **Failback messages** on the **Master node**. 
+  - Fix missing log issues (e.g., missing logs during Failback, add logs related to Ping checks).
+
+Modify ``applyinfo`` utility to display volume creation time
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+With the addition of **Volume Creation Time** (``Vol creation time``) to the log volume header, the ``applyinfo`` utility will be updated to include this information when displaying **active log volumes** and **archive log volumes** in an HA environment.
+
+Broker, CAS, CMS
+~~~~~~~~~~~~~~~~
+
+Modify broker ACL reload to apply changes to existing CAS connections
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently, when reloading the ACL using the ``cubrid broker acl reload`` command, the new ACL rules apply only to **new connections**, while **existing CAS (CUBRID Application Server) sessions** continue without the updated rules.
+
+- **Improvements**
+ 
+  - After reloading the ACL, **existing CAS connections** will not persist indefinitely under the old rules. 
+  - Once a transaction is completed, **the updated ACL rules will be enforced** for subsequent access control.
+
+Modify conf (cubrid_broker.conf, cubrid_gateway.conf) to create necessary directories
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- **Issues**
+
+  - CUBRID Broker/Gateway uses separate directories for different types of logs.
+  - Currently, both **CUBRID Broker** and **CUBRID Gateway** create log directories **twice**.
+  - This can cause discrepancies between the **configured** and **actual** directories.
+
+- **Improvements**
+ 
+  - Prevent duplicate creation of log directories. 
+  - Ensure that only the directories defined in the configuration files are created.
+
+Modify ``cubrid broker info`` to always display broker log directory in absolute path
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``cubrid broker info`` command displays broker configuration details, including directory-related information (``LOG_DIR``, ``ERROR_LOG_DIR``, etc.). However, the behavior varies based on system state:
+
+- **After initial CUBRID installation and startup**
+  
+  - If the directories are set with relative path in ``cubrid_broker.conf``, they are displayed as **relative path** 
+
+- **After stopping and restarting the CUBRID service** 
+   
+  - Upon restart, the directories are displayed as **absolute path**, with ``$CUBRID`` prepended.
+
+- **Improvement**
+ 
+  - Ensure that **broker-related directories** are **always displayed as absolute path**, regardless of whether CUBRID has been restarted.
+
+Expand ``cubrid broker info`` output to display ``ADMIN_LOG_FILE``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- **Improvement**
+ 
+  - Modify the ``cubrid broker info`` command to include ``ADMIN_LOG_FILE`` in its output. 
+  - This parameter records timestamps related to **broker operations**, making it easier to track startup and execution details.
+
+Set ppid of broker/cas processes created by ``cub_manager`` to 1 to prevent zombie processes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Modify ``getlogfileinfo()`` API to return SQL logfile info only once
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently, when the ``CMS getlogfileinfo()`` API is called, it returns the same SQL **logfile information** twice.
+Modify the ``getlogfileinfo()`` API to ensure that **SQL logfile information** is returned **only once**. This will eliminate the redundancy and improve the efficiency of the API response.
+
+Modify ``ha_status()`` API to display Replica Node status in HA environment with Master, Slave, Replica
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Others
+~~~~~~
+
+Modify ``cub_vsnprintf()`` to support ``vsnprintf()`` on Windows
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. _11_4_changes_bug_fixes:
+
+Bug Fixes
+---------
+
+SQL
+~~~
+
+Modify *ALTER INDEX … REBUILD* to display an drror when adding columns
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Modify rownum calculation to display an error when exceeding numeric type range
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix issue where rownum in scalar subquery is incorrectly replaced with order_by_num() during view merging
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Modify the result of 'NULL \|\| string' operation when oracle_style_empty_string=yes is enabled
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix issue where REPLACE function returns NULL when oracle_style_empty_string=yes is enabled
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix issue with errors in covered index queries using function indexes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix core dump issue in CTE queries with always false or null conditions (e.g., where 0=1)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix core dump issue when using union all with multiple tables and serial next_value in a single query
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix core dump issue in select queries with concatenation of column and constant value exceeding 255 characters without alias
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix error in view merging when processing queries with outer join
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Modify remote server lookup behavior when user schema is omitted and identical remote servers exist for two accounts
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix issue where ``show create view`` displays both current user's view and public user's view with the same name
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix issue where exceeding string_max_size_bytes does not trigger an error and instead returns null
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix error in query optimization when inner join is removed, causing incorrect table positioning
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix syntax error when using host variables as arguments for casting functions in prepared statements
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix issue where 'drop user' does not remove user information from db_authorization and db_auth catalog table
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Prevent use of analytical functions in update join queries with two or more tables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix issue where oracle style left outer join is not rewritten as inner join when host variables are used in SP call and where clause
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix issue where subquery with orderby_num() is incorrectly output during view merge
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix issue where tables without join relationships are incorrectly joined, producing wrong results
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix issue to trigger error when invalid value is provided for optimization_level setting
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix issue where rownum is displayed as 0 when columns used in where clause for equality condition (=) and order by clause are the same
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix error caused by using inner join and oracle style outer join together in where clause with different outer join condition placement
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix error in 'insert into tbl … select … from view_table … on duplicate key update' query execution
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix issue where column sequence numbers inside analytical functions in views are incorrect
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix issue where range conditions using pipe operator (||) are not reduced to common range items
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Optimizer
+~~~~~~~~~
+
+Fix issue where better indexes are not chosen over primary key (PK)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Performance
+~~~~~~~~~~~
+
+Allow result cache usage even when the number of host variables changes during sql rewrite
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Exclude subquery from cache when it cannot be processed
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix issue where subquery cache is not used in update / delete queries referencing with clause
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix issue to enable query cache handling when using prepare statement
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Allow query caching for SP functions used in correlated subqueries
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+PL/CSQL, JAVA SP
+~~~~~~~~~~~~~~~~
+
+Fix issue when passing datetimeltz value to datetime type java sp parameter
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix NoSuchMethod exception by removing space between method name and opening parenthesis in java sp method calls
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix unsupported argument error for unrelated columns in java sp
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Prevent 'cannot allocate query entry any more' error in java sp
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Utility
+~~~~~~~
+
+Modify loaddb to exit with code 3 when an error occurs during execution
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix incorrect count(*) value after running loaddb with no-logging option
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Ensure reverse unique index comments are not omitted when running unloaddb
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix issue where auto_increment value resets to 1 when unloading PK and auto_increment columns with unloaddb
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Prevent creation of 'dbname_schema_uk' file when no unique index exists during unloaddb –split-schema-files execution
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Prevent unrelated ``alter serial`` statements from being output when using -i and –input-class-only options in unloaddb
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix error occurring during unloaddb/loaddb when serial ``current_val`` equals ``max_val``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Modify loaddb to stop execution after error with error message displayed
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix infinite loop issue in unloaddb when handling json data larger than 1MB
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Remove user schema of ``query_spec`` owner when a regular user unloads a view
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Allow extraction of other schemas (user, serial, sp, server, synonym, grant) when running unloaddb on a database without tables and views
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix issue where [user_schema] is incorrectly stored or omitted in db_trigger catalog’s condition and action_definition columns when executing loaddb with unload files from unsupported versions of trigger creation and schema
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix error in unloaddb/loaddb when identical serial names exist across different accounts
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix issue where schema name is omitted when unloading Serial and Trigger as DBA user using unloaddb
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix error occurring during loaddb after unloaddb when using system tables as synonyms
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix issue where dba members without –as-dba option cause grant on procedure from other users to be output during unloaddb
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Remove [user_schema] from condition and action_definition when a regular user unloads a Trigger and the owner is themselves
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix issue where archived log volumes created during backupdb are not deleted
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix issue where incorrect serial values are generated during unloaddb
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+HA
+~~
+
+Fix issue where archived logs replicated from slave node are not deleted on replica node when ``ha_replica_delay`` is set to 60 seconds or more in ha environment
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+update usage message for -d option in ``cub_commdb`` utility
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix issue to prevent data mismatch with master node during restoreslave execution
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix issue where SQL log files are not automatically deleted when SQL log ID exceeds UINT_MAX and resets to 0 during applylogdb process
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Broker, CAS, CMS
+~~~~~~~~~~~~~~~~
+
+Fix memory leak issue when using ``addbatch()`` and ``executebatch()`` in java development environment
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix broker error due to incorrect acl configuration
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Add ``db name`` to cas ddl audit log to identify the database in multi-db environments
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Record ABORT log in ``ddl_audit`` log even when transaction ends without ``commit/rollback``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Improve handling of ``commit`` or ``rollback`` statements between multiple ddl executions when using ``setautocommit(false)`` - log commit and rollback in ``ddl_audit.log``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

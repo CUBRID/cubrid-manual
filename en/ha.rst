@@ -1400,7 +1400,6 @@ This utility is used to output the information of CUBRID HA group and CUBRID HA 
 
 The -v option displays detailed information about the node.
 
-*   **maintenance** : The status of servers can be manually changed for operational convenience is maintenance. In this status, only a csql can access and no service is provided to the user.
 *   **score** : Indicates the priority of the node, with a lower score indicating a higher priority.
 *   **missed heartbeat** : Indicates the loss rate of heartbeat signals sent between nodes configured in a HA environment. If this value is unusually high, the configuration, network, or firewall settings should be inspected.
 

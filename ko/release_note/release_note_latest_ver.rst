@@ -198,7 +198,7 @@ ORDER BY절 컬럼의 Hidden Column 속성 관리 문제로 서브 쿼리가 중
 
 .. _11_4_changes_add_feature_perf:
 
-Performance
+성능 개선
 ~~~~~~~~~~~
 
 redo recovery 처리를 단일 스레드에서 병렬 처리로 변경하여 성능 향상

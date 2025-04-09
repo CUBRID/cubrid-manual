@@ -29,7 +29,7 @@ You can insert a new record into a table in a database by using the **INSERT** s
         [ON DUPLICATE KEY UPDATE column_name = expr, ... ]
 
     <table_specification> ::= [schema_name.]table_name | <remote_table_spec>
-    <remote_table_spec> ::= [schema_name.]table_name@[shema_name.]server_name
+    <remote_table_spec> ::= [schema_name.]table_name@[schema_name.]server_name
 
 *   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 
@@ -302,7 +302,7 @@ With ON DUPLICATE KEY UPDATE, "affected rows" value per row will be 1 if a new r
 
 .. code-block:: sql
     
-    --insert duplicated value with specifying ON DUPLICATED KEY UPDATE clause
+    --insert duplicated value with specifying ON DUPLICATE KEY UPDATE clause
     INSERT INTO a_tbl3 VALUES(2, 'ggg', '222-2222')
     ON DUPLICATE KEY UPDATE name='ggg', phone = '222-2222';
      

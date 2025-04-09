@@ -20,7 +20,7 @@ A concatenation operator gets a character string or bit string data type as an o
 
 If **pipes_as_concat** that is a parameter related to SQL statement is set to **no** (default value: yes), a double pipe (||) symbol is interpreted as an **OR** operator. If plus_as_concat is set to no (default value: yes), a plus (+) symbol is interpreted as a plus (+) operator. In such case, It is recommended to concatenate strings or bit strings, by using the **CONCAT** function. ::
 
-    <concat_operand1> +  <concat_operand1>
+    <concat_operand1> +  <concat_operand2>
     <concat_operand2> || <concat_operand2>
     
         <concat_operand1> ::=

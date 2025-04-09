@@ -223,7 +223,7 @@ JSON_LENGTH
 .. function:: JSON_LENGTH (json_doc [ , json path])
 
   **JSON_LENGTH** 함수는 주어진 경로에 있는 json 요소의 길이를 반환한다.
-  경로 인자가 주어지지 않으면 josn 루트 요소의 길이가 반환된다.
+  경로 인자가 주어지지 않으면 json 루트 요소의 길이가 반환된다.
   인자가 **NULL** 이거나 해당 경로에 어떤 요소도 존재하지 않으면 **NULL** 이 반환된다.
 
 .. code-block:: sql
@@ -555,7 +555,7 @@ JSON_EXTRACT
 
   *json_doc* 인자가 하나의 컬럼으로 제한된 두 개의 인자를 가지는 **JSON_EXTRACT** 의 별칭 연산자.
   json 경로가 **NULL** 이거나 유효하지 않은 경우 오류를 반환한다.
-  **NULL** *josn_doc* 인자가 적용된 경우에는 **NULL** 을 반환한다.
+  **NULL** *json_doc* 인자가 적용된 경우에는 **NULL** 을 반환한다.
 
 .. code-block:: sql
 

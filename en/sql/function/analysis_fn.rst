@@ -365,7 +365,7 @@ CUME_DIST
 
 If it is used as an aggregate function, **CUME_DIST** sorts the data by the order specified in **ORDER BY** clause; then it returns the relative position of a hypothetical row in the rows of aggregate group. At this time, the position is calculated as if a hypothetical row is newly inserted. That is, **CUME_DIST** returns ("cumulated RANK of a hypothetical row" + 1)/("the number of total rows in an aggregate group").
 
-If it is used as an analytic function, **CUME_DIST** returns the relative position in the value of the group after sorting each row(**ORDER BY**) with each partitioned group(**PARTITION BY**). The relative position is that the number of rows which have values less than or equal to the input argument is divided by the number of total rows within the group(rows grouped by the partition_by_clause or the total rows). That is, it returns (cumulated RANK of a certain row)/(the number or rows within the group). For example, the number of rows which has the RANK 1 is 2, **CUME_DUST** values of the first and the second rows will be "2/10 = 0.2".
+If it is used as an analytic function, **CUME_DIST** returns the relative position in the value of the group after sorting each row(**ORDER BY**) with each partitioned group(**PARTITION BY**). The relative position is that the number of rows which have values less than or equal to the input argument is divided by the number of total rows within the group(rows grouped by the partition_by_clause or the total rows). That is, it returns (cumulated RANK of a certain row)/(the number or rows within the group). For example, the number of rows which has the RANK 1 is 2, **CUME_DIST** values of the first and the second rows will be "2/10 = 0.2".
 
 The following is a schema and data to use in the example of this function.
 
@@ -474,9 +474,9 @@ The following is an example to be used as an analytic function; it returns the c
        11           95           90  'A'                             2     1.000000000000000e+00
        13           95           90  'A'                             2     1.000000000000000e+00
 
-In the above result, the row that *id* is 1, is located at the first and the second on the total 10 rows, and the value of CUME_DUST is 2/10, that is, 0.2.
+In the above result, the row that *id* is 1, is located at the first and the second on the total 10 rows, and the value of CUME_DIST is 2/10, that is, 0.2.
 
-The row that *id* is 5, is located at the fifth on the total 10 rows, and the value of **CUME_DUST** is 5/10, that is, 0.5.
+The row that *id* is 5, is located at the fifth on the total 10 rows, and the value of **CUME_DIST** is 5/10, that is, 0.5.
 
 DENSE_RANK
 ==========

@@ -27,7 +27,7 @@ INCR, DECR
 
 **SELECT** 절에 **INCR** 함수를 명시한 경우, 카운터 값은 1이 증가하고 질의 결과는 증가하기 전의 값으로 출력한다. 그리고, **INCR** 함수는 질의 처리 과정에서 참여한 행(tuple)이 아니라 최종 결과에 참여한 행에 대해서만 값을 증가시킨다.
 
-**SELECT** 리스트에 **INCR** 또는 **DECR** 함수를 명시하지 않고 클릭 카운터를 증가 또는 감소시키고자 하는 경우, WHERE 절 뒤에 **WITH INCREMENT FOR** *column* 또는 **WITH INCREMENT FOR** *column* 을 명시하면 된다. 
+**SELECT** 리스트에 **INCR** 또는 **DECR** 함수를 명시하지 않고 클릭 카운터를 증가 또는 감소시키고자 하는 경우, WHERE 절 뒤에 **WITH INCREMENT FOR** *column* 또는 **WITH DECREMENT FOR** *column* 을 명시하면 된다. 
 
 .. code-block:: sql
 

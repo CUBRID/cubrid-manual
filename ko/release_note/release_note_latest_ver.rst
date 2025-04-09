@@ -408,7 +408,6 @@ Broker 마다 ACL 설정 값을 추가하여 ACCESS_CONTROL이 ON 인 경우에�
    172.31.0.175 
 
    [%broker1] 
-   ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER=ALLOW 
 
    ++ cubrid broker acl: success
 

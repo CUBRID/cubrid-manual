@@ -897,18 +897,19 @@ The following is an example of invoking a native function through JNI in a CUBRI
 
 .. warning::
 
-    Registering and executing Java stored procedures/functions that invoke JNI without the **-j** option may result in a java.lang.UnsatisfiedLinkError.
+    JNI를 호출하는 자바 저장 프로시저/함수를 **-j** 옵션 없이 등록한 후 실행 시 다음과 같은 오류를 반환한다.
+    'Library load not allowed. Please load your class by using 'loadjava' with '-jni' option'
+
     To address this issue, please consider the following:
 
     * If you are loading multiple Java class files that call System.load() for the same native library path:
        * Modify the Java class files to load the native library from only one class file.
        * Register the class that loads the native library using the **-j** option of loadjava.
-       * Restart the javasp utility.
+       * Restart the PL server. (see :ref:`cubrid-pl-server`)
 
     * If you are overwriting a previously loaded Java class file using loadjava:
-       * If the class was registered without the -j option, remove that class from the java directory at the respective database path.
        * Re-register the class using the -j option with loadjava.
-       * Restart the javasp utility.
+       * Restart the pl utility. (see :ref:`cubrid-pl-server`)
 
 .. _jsp-load-java:
 

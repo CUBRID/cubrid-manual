@@ -418,7 +418,7 @@ Broker 마다 ACL 설정 값을 추가하여 ACCESS_CONTROL이 ON 인 경우에�
 TLS v1.2 클라이언트 이상을 지원하도록 CMS SSL 프로파일 변경
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-CUBRID Manager Server(**CMS**)와 CM/CA는 보안상의 이유로 **SSL**\ 을 사용하여 통신하는데 TLS v1.0에서 TLS v1.2를 지원하도록 변경
+CUBRID Manager Server(**CMS**)는 보안상의 이유로 **SSL**\ 통신을 사용하는데 TLS v1.2 클라이언트가 접속할 수 있도록 지원
 
 Others
 ~~~~~~

@@ -394,6 +394,7 @@ Broker 마다 ACL 설정 값을 추가하여 ACCESS_CONTROL이 ON 인 경우에�
 
    $ cubrid broker acl status 
    ACCESS_CONTROL=ON 
+   ACCESS_CONTROL_DEFAULT_POLICY=DENY
    ACCESS_CONTROL_FILE=cubrid_acl.conf 
 
    [%query_editor] 

@@ -398,7 +398,6 @@ Broker 마다 ACL 설정 값을 추가하여 ACCESS_CONTROL이 ON 인 경우에�
    ACCESS_CONTROL_FILE=cubrid_acl.conf 
 
    [%query_editor] 
-   ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER=DENY 
    testdb:dba:acl_ip_list.conf 
 
    CLIENT IP LAST ACCESS TIME 

@@ -415,7 +415,7 @@ Broker 마다 ACL 설정 값을 추가하여 ACCESS_CONTROL이 ON 인 경우에�
 - ``%query_editor`` 브로커는 ``DENY`` 로 설정되어 특정 IP만 허용
 - ``%broker1`` 은 ``ALLOW`` 로 설정되어 모든 IP의 접속을 허용
 
-TLS v1.2 클라이언트 이상을 지원하도록 CMS SSL 프로파일 변경
+CUBRID Manager Server에서 TLS v1.2 클라이언트 지원
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 CUBRID Manager Server(**CMS**)는 보안상의 이유로 **SSL**\ 통신을 사용하는데 TLS v1.2 클라이언트가 접속할 수 있도록 지원

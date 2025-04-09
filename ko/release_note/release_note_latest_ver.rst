@@ -387,7 +387,7 @@ Broker에 새로운 파라미터인 NET_BUF_SIZE를 추가 도입.
 
 Broker 마다 ACL 설정 값을 추가하여 ACCESS_CONTROL이 ON 인 경우에도Broker에 접속하는 클라이언트를 모두 허용하는 방법을 제공.
 
-#. cubrid_broker.conf의 [broker] 섹션에서 ACCESS_CONTROL이 ON일 때, 각 브로커에 대해 새로운 ACL 파라미터인 ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER를 설정
+#. cubrid_broker.conf의 [broker] 섹션에서 ACCESS_CONTROL_DEFAULT_POLICY 설정
 #. 파라미터는 DENY 또는 ALLOW 값을 가질 수 있으며, 기본 값은 DENY
 
 .. code:: shell

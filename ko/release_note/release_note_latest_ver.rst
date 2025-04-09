@@ -79,7 +79,7 @@ Optimizer가 HASH JOIN을 사용하기 위해서는 조인 힌트를 사용해�
 ``/*+ NO_USE_HASH */`` 힌트가 추가되면 HASH JOIN 사용하지 않음.
 HASH JOIN을 사용한 경우와 다른 조인 방법을 사용하는 경우 결과가 동일하여야 한다.
 
-serial의 소유자를 변경하는 SQL 구문을 추가
+serial의 소유자를 변경하는 SQL 구문 추가
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ``call change_serial_owner()`` 메소드만으로 serial 소유자를 변경 가능하던 것을 SQL문으로 소유자 변경 기능 추가함.

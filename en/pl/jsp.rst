@@ -897,7 +897,7 @@ The following is an example of invoking a native function through JNI in a CUBRI
 
 .. warning::
 
-    JNI를 호출하는 자바 저장 프로시저/함수를 **-j** 옵션 없이 등록한 후 실행 시 다음과 같은 오류를 반환한다.
+    When a java stored procedure/function included JNI code is loaded without **-j** or **--jni** option, the following error is returned during execution.
     'Library load not allowed. Please load your class by using 'loadjava' with '-jni' option'
 
     To address this issue, please consider the following:

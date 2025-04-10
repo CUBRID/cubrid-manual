@@ -881,7 +881,7 @@ CUBRID의 Java SP에서는 JNI 기능을 사용할 수 있도록 제공하고 �
 
 .. warning::
 
-    JNI를 호출하는 자바 저장 프로시저/함수를 **-j** 옵션 없이 등록한 후 실행 시 다음과 같은 오류를 반환한다.
+    JNI를 호출하는 자바 저장 프로시저/함수를 **-j** 또는 **--jni** 옵션 없이 등록한 후 실행 시 다음과 같은 오류를 반환한다.
     'Library load not allowed. Please load your class by using 'loadjava' with '-jni' option'
 
     다음의 사항을 확인한다.

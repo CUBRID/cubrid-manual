@@ -21,10 +21,11 @@
 SQL 구문 관련 파라미터인 **pipes_as_concat** 파라미터(기본값: yes)가 no이면 이중 파이프 기호(||)가 불리언(Boolean) OR 연산자로 해석되며 **plus_as_concat** 파라미터(기본값: yes)가 no이면 덧셈 기호가 + 연산자로 해석되므로, 이러한 경우 **CONCAT** 함수를 사용하여 문자열 또는 비트열을 병합하는 것이 좋다. ::
 
     <concat_operand1> +  <concat_operand2>
-    <concat_operand2> || <concat_operand2>
+    <concat_operand1> || <concat_operand2>
     
         <concat_operand1> ::=
             bit string |
+            character string
             NULL
          
         <concat_operand2> ::=

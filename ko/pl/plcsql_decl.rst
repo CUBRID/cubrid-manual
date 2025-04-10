@@ -70,18 +70,18 @@
 
 .. code-block:: sql
 
-     CREATE OR REPLACE PROCEDURE poo(a INT) AS
+    CREATE OR REPLACE PROCEDURE poo(a INT) AS
     
-         PROCEDURE inner AS
-             i INT := a;
-             a NUMERIC;
-         BEGIN
-             ...
-         END;
+        PROCEDURE inner AS
+            i INT := a;
+            a NUMERIC;
+        BEGIN
+            ...
+        END;
     
-     BEGIN
-         ...
-     END;
+    BEGIN
+        ...
+    END;
 
     ERROR: In line 5, column 9
     Stored procedure compile error: name A has already been used at line 4 and column 18 in the same declaration block
@@ -118,8 +118,7 @@ NOT NULL 조건이 지정된 경우에는 반드시 NULL이 아닌 초기값이 
         b VARCHAR(1) := 's';
         c FLOAT;        -- c = NULL
     BEGIN
-        --
-        NULL;
+        ...
     END;
 
 상수 선언
@@ -289,7 +288,7 @@ Exception 선언
 * *parameter*: 인자는 IN, IN OUT, INOUT, OUT 네 가지 경우로 선언할 수 있다. IN OUT과 INOUT은 동일한 효과를 갖는다.
 * *param_comment_string*: 인자 커멘트 문자열을 지정한다.
 * *builtin_type*: :ref:`데이터 타입 <types>` 절에서 설명한 시스템 제공 타입
-* *body*: 필수적으로 하나 이상의 실행문과 선택적으로 몇 개의 Exception 핸들러로 구성된다.
+* *body*: 하나 이상의 실행문과 선택적으로 몇 개의 Exception 핸들러로 구성된다.
 * *label_name*: 프로시저/함수 이름과 일치해야 한다.
 * *declare_spec*: 변수, 상수, Exception, 커서, 내부 프로시저/함수 선언 중 하나
 * *statement*: 아래 :doc:`실행문 <plcsql_stmt>` 절 참조

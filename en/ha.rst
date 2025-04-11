@@ -210,7 +210,7 @@ The following is an example in which two Read Write (RW) brokers are configured.
 
 .. image:: /images/image25.png
 
-The following is an example in which the Read Write (RW) broker and the Read Only (RO) broker are configured in each piece of equipment of the master node and the slave node. First, the *app1* and the *app2* URL connect to *broker A1* (RW) and *broker B2* (RO), respectively. The second connection (altHosts) is made to *broker A2* (RO) and *broker B1* (RW). When equipment that includes *nodeA* fails, *app1* and the *app2* connect to the broker that includes *nodeB*.
+The following is an example in which the Read Write (RW) broker and the Read Only (RO) broker are configured on each piece of equipment for the master node and the slave node. First, the *app1* and *app2* URLs connect to *broker A1* (RW) and *broker B2* (RO), respectively. The second connection (altHosts) is made to *broker A2* (RO) and *broker B1* (RW). When the equipment that includes *nodeA* fails, *app1* and *app2* connect to the broker that includes *nodeB*.
 
 .. image:: /images/image26.png
 

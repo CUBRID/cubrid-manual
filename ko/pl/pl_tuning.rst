@@ -2,7 +2,8 @@
 성능 최적화
 -----------------------------
 
-저장 프로시저와 저장 함수는 사용자가 직접 작성한 코드이므로, 성능 최적화가 필요할 수 있다. 이 장에서는 저장 프로시저와 저장 함수의 성능을 최적화하기 위한 다양한 가이드를 제공한다.
+저장 프로시저와 저장 함수는 사용자가 직접 작성한 코드이므로, 성능 최적화가 필요할 수 있다.
+이 장에서는 저장 프로시저와 저장 함수의 성능을 최적화하기 위한 다양한 가이드를 제공한다.
 
 .. contents::
 
@@ -123,11 +124,13 @@ CUBRID에서 기본적으로 제공하는 내장 함수는 (:doc:`/sql/function/
  === Auto Trace ===
     ...
     Trace Statistics:
-      SELECT (time: 3, fetch: 44, fetch_time: 0, ioread: 0)
-        SCAN (table: dba.dummy_tbl), (heap time: 0, fetch: 20, ioread: 0, readrows: 4, rows: 4)
+      SELECT (time: 4, fetch: 11, fetch_time: 0, ioread: 0)
+        FUNC (time: 4, fetch: 2, ioread: 0, calls: 4)
+        SCAN (table: dba.dummy_tbl), (heap time: 0, fetch: 5, ioread: 0, readrows: 4, rows: 4)
         SUBQUERY (correlated)
-          SELECT (time: 3, fetch: 24, fetch_time: 0, ioread: 0)
-            SCAN (table: dual), (heap time: 0, fetch: 16, ioread: 0, readrows: 4, rows: 4)
+          SELECT (time: 4, fetch: 6, fetch_time: 0, ioread: 0)
+            FUNC (time: 4, fetch: 2, ioread: 0, calls: 4)
+            SCAN (table: dual), (heap time: 0, fetch: 4, ioread: 0, readrows: 4, rows: 4)
 
 pl_csql_not_deterministic 함수는 **NOT DETERMINISTIC** 이므로 상관 부질의 결과를 캐시하지 않는다.
 
@@ -148,11 +151,13 @@ pl_csql_not_deterministic 함수는 **NOT DETERMINISTIC** 이므로 상관 부�
  === Auto Trace ===
     ...
     Trace Statistics:
-      SELECT (time: 3, fetch: 36, fetch_time: 0, ioread: 0)
-        SCAN (table: dba.dummy_tbl), (heap time: 0, fetch: 20, ioread: 0, readrows: 4, rows: 4)
+      SELECT (time: 2, fetch: 9, fetch_time: 0, ioread: 0)
+        FUNC (time: 2, fetch: 2, ioread: 0, calls: 2)
+        SCAN (table: dba.dummy_tbl), (heap time: 0, fetch: 5, ioread: 0, readrows: 4, rows: 4)
         SUBQUERY (correlated)
-          SELECT (time: 3, fetch: 16, fetch_time: 0, ioread: 0)
-            SCAN (table: dual), (heap time: 0, fetch: 8, ioread: 0, readrows: 2, rows: 2)
+          SELECT (time: 2, fetch: 4, fetch_time: 0, ioread: 0)
+            FUNC (time: 2, fetch: 2, ioread: 0, calls: 2)
+            SCAN (table: dual), (heap time: 0, fetch: 2, ioread: 0, readrows: 2, rows: 2)
             SUBQUERY_CACHE (hit: 2, miss: 2, size: 150808, status: enabled)
 
 pl_csql_deterministic 함수의 Trace 결과에서는 **SUBQUERY_CACHE** 항목이 표시되며(hit: 2, miss: 2, size: 150808, status: enabled), 상단의 **SCAN (table: dual)** 에서 읽은 레코드 수(**readrows**)가 **NOT DETERMINISTIC** 예시와 비교해 감소한 것을 확인할 수 있다.

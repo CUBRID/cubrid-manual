@@ -251,7 +251,7 @@ The pseudocolumn allows for the **DEFAULT** value as follows.
 
                id
     =============
-            1
+                1
        1572882525
        1572882525
 

@@ -2970,7 +2970,7 @@ Transaction & Query
 
     **JDBC_CACHE**, **JDBC_CACHE_HINT_ONLY**, and **JDBC_CACHE_LIFE_TIME** parameters are meaningless
 
-	when the query cache-related parameter both of **max_query_cache_entries** and **query_cache_size_in_pages** are not set to positive value.
+	when the query cache-related system parameter both of **max_query_cache_entries** and **query_cache_size_in_pages** are not set to positive value.
 
 	For result cache working, the SELECT query must include query hint /\*+ QUERY_CACHE \*/ together with these JDBC related paramter setting.
 

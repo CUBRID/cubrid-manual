@@ -235,8 +235,8 @@ The pseudocolumn allows for the **DEFAULT** value as follows.
 .. note::
 
     When using a function not specified in the table above as a **DEFAULT** value, it is evaluated at the time of table creation and stored as the **DEFAULT** value.
-    Therefore, the default value for data **INSERT**\ ed into the column is not the value of the function performed at **INSERT**, but the result value performed at the time of table creation.
-    In the case of stored functions, it cannot be used as a **DEFAULT** value, so it returns an error.
+    Therefore, during an **INSERT**, the default value used for the column is not the function result at the time of **INSERT**, but the value evaluated at the time the table was created.
+    Stored functions cannot be used as **DEFAULT** values, and doing so results in an error.
 
 .. code-block:: sql
 

@@ -12,19 +12,19 @@ Supported Platforms and System Requirements
 
 The platforms supported by CUBRID and hardware/software requirements for the installation are as follows:
 
-+---------------------------------------------------------------------+------------------+---------------------+--------------------------------------+
-| Supported Platforms                                                 | Required Memory  | Required Disk Space | Required Software                    |
-+=====================================================================+==================+=====================+======================================+
-| * Windows 64 Bit Windows 7 or higher                                | 1GB or more      | 2GB or more(\*)     | JDK 1.8                              |
-|                                                                     |                  |                     | (Required when Java Stored Procedure |
-| * Linux family 64 Bit(Linux kernel 2.4, glibc 2.3.4 or higher)      |                  |                     | is required)                         |
-+---------------------------------------------------------------------+------------------+---------------------+--------------------------------------+
++---------------------------------------------------------------------+------------------+---------------------+
+| Supported Platforms                                                 | Required Memory  | Required Disk Space |
++=====================================================================+==================+=====================+
+| * Windows 64 Bit Windows 7 or higher                                | 1GB or more      | 2GB or more(\*)     |
+|                                                                     |                  |                     |
+| * Linux family 64 Bit(Linux kernel 2.4, glibc 2.3.4 or higher)      |                  |                     |
++---------------------------------------------------------------------+------------------+---------------------+
 
 (\*): Requires a 500MB of free disk space on the initial installation; requires approximately 1.5GB of free disk space with a database creating with default options.
 
-Beginning with 2008 R4.0, CUBRID Manager Client is not automatically installed when installing the CUBRID package. For this reason, if you require CUBRID Manager you must install it separately. The CUBRID can be downloaded from http://ftp.cubrid.org.
+CUBRID Admin Client is not automatically installed when installing the CUBRID package. For this reason, if you require CUBRID Admin you must install it separately. The CUBRID can be downloaded from http://ftp.cubrid.org.
 
-A variety of drivers such as PHP, ODBC and OLE DB can also be downloaded from http://ftp.cubrid.org.
+A variety of drivers such as JDBC, ODBC and PHP can also be downloaded from http://ftp.cubrid.org.
 
 For more information on the CUBRID engine, tools, and drivers, see https://www.cubrid.org.
 
@@ -41,15 +41,9 @@ Compatibility
 
 *   An application that is developed by using the GLO class can be used after it is converted to an application or schema suitable to the BLOB or CLOB type.
 
-**CUBRID Manager Compatibility**
+**CUBRID Admin Compatibility**
 
-*   CUBRID Manager guarantees backward compatibility with the servers using CUBRID 2008 R2.2 or higher and uses the CUBRID JDBC driver that matches each server version. However, you must use a CUBRID Manager that is higher than CUBRID servers in version in order to utilize all the features of CUBRID Manager. The CUBRID JDBC driver is included in the $CUBRID/jdbc directory when CUBRID is installed($CUBRID on Linux, %CUBRID% on Windows).
-
-*   The bit version of CUBRID Manager must be identical to the bit version of JRE.
-
-    For example, if a 64-bit DB server uses CUBRID Manager 32-bit version, JRE or JDK 32-bit version should be installed.
-
-*   Drivers for 2008 R2.2 and higher versions are included in CUBRID Manager by default, which you can download separately from the https://www.cubrid.org Website.
+*   CUBRID Admin guarantees backward compatibility with the servers using CUBRID 10.0 or higher and uses the CUBRID JDBC driver that matches each server version. However, you must use a CUBRID Admin that is higher than CUBRID servers in version in order to utilize all the features of CUBRID Admin. The CUBRID JDBC driver is included in the $CUBRID/jdbc directory when CUBRID is installed($CUBRID on Linux, %CUBRID% on Windows).
 
 .. note:: Old version users should upgrade all of driver, broker, DB server; Data migration should be done because 11.3 or early version's DB volume is not compatible with 11.4 version.
     For upgrade and data migration, see :doc:`/upgrade`.
@@ -213,9 +207,9 @@ A simple description on each driver can be found on :doc:`/api/index`.
 
 **Installing CUBRID Tools**
 
-You can download various tools including CUBRID Manager and CUBRID Migration Toolkit from https://www.cubrid.org/downloads.
+You can download various tools including CUBRID Admin and CUBRID Migration Toolkit from https://www.cubrid.org/downloads.
 
-.. FIXME You can see the latest information on tools such as CUBRID Manager and install them by downloading files from http://www.cubrid.org/downloads.
+.. FIXME You can see the latest information on tools such as CUBRID Admin and install them by downloading files from http://www.cubrid.org/downloads.
 
 .. _Installing-and-Running-on-Windows:
 
@@ -295,7 +289,7 @@ A simple description on each driver can be found on :doc:`/api/index`.
 
 **Installing CUBRID Tools**
 
-You can download various tools including CUBRID Manager and CUBRID Migration Toolkit from https://www.cubrid.org/downloads.
+You can download various tools including CUBRID Admin and CUBRID Migration Toolkit from https://www.cubrid.org/downloads.
 
 .. FIXME: You can see the latest information on tools such as CUBRID Manager and install them by downloading files from `<http://www.cubrid.org/wiki_tools>`_.
 

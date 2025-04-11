@@ -27,7 +27,8 @@ Unnecessary repeated calls to stored functions executed in queries can degrade p
 * **Minimize Unnecessary Repeated Calls**: Reducing the number of calls to stored functions is the best way to improve performance.
    * Use indexes to reduce the number of records for which the stored function is called.
    * Group duplicate data to handle it with a single call for avoiding repeated calls for the same arguments.
-   * If the function logic is deterministic, use the :ref:`pl-deterministic`\ to improve performance by caching the results of correlated subqueries.
+   * If the function logic is deterministic, use :ref:`pl-deterministic`\ to improve performance by caching the results of correlated subqueries.
+
 
 * **Minimize the Size of Function Arguments and Return Values**: Design the function to return only the necessary values, avoiding the return of unnecessarily large data.
 

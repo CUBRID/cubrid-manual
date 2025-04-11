@@ -766,9 +766,9 @@ The following are the explanation regarding items of trace statistics.
 
 **FUNC**: Outputs the results of the stored procedure call accumulated from the current query and subqueries. The fetch and ioread counts do not include those that occur during the execution of queries within the stored procedure.
 
-*   time: total execution time of the stored procedures (ms)
-*   fetch: the number of times pages are fetched during the stored procedures call
-*   ioread: total I/O read count during the stored procedures call. disk access count when the data is read
+*   time: total execution time of the stored procedure (ms)
+*   fetch: the number of times pages are fetched during the stored procedure call
+*   ioread: total I/O read count during the stored procedure call; indicates the number of disk accesses when reading data
 *   calls: the number of stored procedure calls
 
 **SCAN**

@@ -120,7 +120,7 @@ CREATE PROCEDURE/FUNCTION 문을 실행하면 저장 프로시저/함수의 문�
 Static SQL
 ==================
 
-Static SQL은 문자열 변수에 담지 않고 코드 사이에 직접 기술한 SQL문을 말하며, 접근 방식이 미리 정의되는 형태의 SQL으로, 컴파일 시점에 Syntax, Sematics 체크가 가능하다. 
+Static SQL은 문자열에 담지 않고 코드 사이에 직접 기술한 SQL문을 말하며, 접근 방식이 미리 정의되는 형태의 SQL으로, 컴파일 시점에 Syntax, Sematics 체크가 가능하다.
 
 유연하지 않다는 단점이 있지만, 컴파일 시점에 접근 방식이 정의되어  최적화되기 때문에 런타임시 접근 방식이 정의되는 Dynamic SQL보다 빠르고 효과적이라는 장점이 있다.
 
@@ -232,7 +232,7 @@ Static SQL 실행 중에 에러가 나면 SQL_ERROR Exception이 발생한다.
 Dynamic SQL
 ==================
 
-Dynamic 문자열 변수에 담아서 기술하는 SQL문을 말하며, 실행 시간에 SQL 구문에 해당하는 문자열을 만들어 :ref:`EXECUTE IMMEDIATE <exec_imme>` 문으로 실행하는 방식이다. 
+Dynamic 문자열에 담아서 기술하는 SQL문을 말하며, 실행 시간에 SQL 구문에 해당하는 문자열을 만들어 :ref:`EXECUTE IMMEDIATE <exec_imme>` 문으로 실행하는 방식이다.
 
 Dynamic SQL은 주로 다음 두 가지 경우에 필요하다.
 
@@ -831,7 +831,7 @@ CSQL에서 athlete 테이블에 존재하지 않는 이름을 인자로 주어 N
 
 .. code-block::
 
-    select athlete_code('x');
+   select athlete_code('x');
 
    In line 1, column 22,
 
@@ -849,7 +849,7 @@ CSQL에서 athlete 테이블에 존재하지 않는 이름을 인자로 주어 N
 
 Static/Dynamic SQL 문의 동작은 :ref:`시스템 설정 파라미터 <system_config>` 전체의 영향을 동일하게 받는다.
 
-Static/Dynamic SQL 제외한 PL/CSQL 문에서는 다음 4개 시스템 설정 파라미터만이 유효하다.
+Static/Dynamic SQL 밖의 PL/CSQL 문에서는 다음 4개 시스템 설정 파라미터만이 유효하다.
 
 * compat_numeric_division_scale
 * oracle_compat_number_behavior
@@ -877,7 +877,7 @@ Static/Dynamic SQL 제외한 PL/CSQL 문에서는 다음 4개 시스템 설정 �
 
 이들 설정의 자세한 의미는 :ref:`시스템 설정 파라미터 <system_config>`\를 참조할 수 있다.
 
-위 4개 외 다른 설정은 Static/Dynamic SQL 제외한 PL/CSQL 문에서 유효하지 않다. 특히,
+위 4개 외 다른 설정은 Static/Dynamic SQL 밖의 PL/CSQL 문에서 유효하지 않다. 특히,
 
 * no_backslash_escapes 설정 파라미터값과 상관없이 backslash 문자는 escape 문자로 사용되지 않는다.
 * pipes_as_concat 설정 파라미터값과 상관없이 ||는 논리합(OR) 연산자로 사용되지 않는다.

@@ -12,10 +12,12 @@ This chapter introduces the procedural language extension features provided by C
 .. toctree::
     :maxdepth: 2
 
+    pl_intro
     pl_default_args
     pl_authid
     pl_tcl
     pl_package
+    pl_tuning
     plcsql
     jsp
     method

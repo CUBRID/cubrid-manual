@@ -389,7 +389,7 @@ CREATE TABLE
 ON UPDATE
 ---------
 
-특정 테이블의 해당 열의 다른 속성값이 변경되면 자동으로 변경되는 속성을 추가할 수있다. **ON UPDATE** 의 값은 **ALTER** 문을 통해서 변경할 수있다. 의사 컬럼은 다음과 같은 방법으로 **ON UPDATE** 의 값을 허용한다. 갱신되는 필드의 목록에 의사 컬럼이 포함되는 경우, 정해진 **ON UPDATE** 값으로의 수정되지 않는다.
+특정 테이블의 해당 열의 다른 속성값이 변경되면 자동으로 변경되는 속성을 추가할 수있다. **ON UPDATE** 의 값은 **ALTER** 문을 통해 변경할 수있다. 의사 컬럼은 다음과 같은 방법으로 **ON UPDATE** 의 값을 허용한다. 갱신되는 필드의 목록에 의사 컬럼이 포함되는 경우, 정해진 **ON UPDATE** 값으로의 수정되지 않는다.
 
 +-------------------------------+---------------+
 | 기본값                        | 데이터 타입   |
@@ -1469,7 +1469,7 @@ AUTO_INCREMENT 절
     
     ERROR: To avoid ambiguity, the AUTO_INCREMENT table option requires the table to have exactly one AUTO_INCREMENT column and no seed/increment specification.
 
-.. warning:: **AUTO_INCREMENT** 의 초기값 변경으로 인해 **PRIMARY KEY** 나 **UNIQUE** 와 같은 제약 조건에 위배되는 경우가 발생하지 않도록 주의한다.
+.. warning:: **AUTO_INCREMENT**의 초기값 변경으로 인해 **PRIMARY KEY**나 **UNIQUE**와 같은 제약 조건에 위배되는 경우가 발생하지 않도록 주의한다.
 
 .. note:: **AUTO_INCREMENT** 칼럼의 타입을 변경하면 최대값도 변경된다. 예를 들어, INT 타입을 BIGINT 타입으로 변경하면 **AUTO_INCREMENT** 최대값이 INT의 최대값에서 BIGINT의 최대값으로 변경된다.
 

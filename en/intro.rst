@@ -29,7 +29,7 @@ CUBRID is an object-relational database management system (DBMS) consisting of t
 
 *   The CUBRID Manager is a GUI tool that allows users to remotely manage the database and the broker. It also provides the Query Editor, a convenient tool that allows users to execute SQL queries on the database server. 
 
-*   The CUBRID procedure language (PL) server is a server that compiles and executes stored procedures and functions requested from the database server.
+*   The CUBRID procedural langauge (PL) server is a server that compiles and executes stored procedures and functions requested from the database server.
 
 .. FIXME: For more information about CUBRID Manager, see http://www.cubrid.org/wiki_tools/entry/cubrid-manager.
 
@@ -252,7 +252,7 @@ CUBRID provides High Availability(HA) feature to minimize system down time while
 
 A stored procedure is a method to decrease the complexity of applications and to improve the reusability, security and performance through the separation of database logic and middleware logic.
 CUBRID supports the SQL extension language PL/CSQL and can also be written in the general-purpose language Java.
-To use the stored procedure feature, the procedure language server must be running. (See :ref:`cubrid-pl-server`\)
+To use the stored procedure feature, the procedural langauge server must be running. (See :ref:`cubrid-pl-server`\)
 For more details on stored procedures, refer to :doc:`/pl/index`.
 
 **Click Counter**

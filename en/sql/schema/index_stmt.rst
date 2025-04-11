@@ -55,7 +55,7 @@ For how to use indexes on the **SELECT** statement like Using SQL Hint, Descendi
 
 ..  note::
 
-    *   From CUBRID 9.0, the index name should not be omitted.
+    *   From CUBRID 9.0, the index name should not be omitted in the CREATE/INDEX statement.
 
     *   Prefix index feature is deprecated, so it is not recommended anymore.
     

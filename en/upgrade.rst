@@ -72,8 +72,8 @@ Please confirm :ref:`11_4_changes` in the release notes.
 
 **Stored Function/Procedure**
 
-*   To use stored functions/procedures, the CUBRID procedure language server (cub_pl) is started by default and is managed by the database server. Therefore, even if the procedure language server is stopped, it will be automatically restarted by the database server.
-*   If you do not want to run the CUBRID procedure language server, set the **stored_procedure** parameter in **cubrid.conf** to **no** and restart. In this case, the PL/CSQL and Java stored procedure functions cannot be used.
+*   To use stored functions/procedures, the CUBRID procedural langauge server (cub_pl) is started by default and is managed by the database server. Therefore, even if the procedural langauge server is stopped, it will be automatically restarted by the database server.
+*   If you do not want to run the CUBRID procedural langauge server, set the **stored_procedure** parameter in **cubrid.conf** to **no** and restart. In this case, the PL/CSQL and Java stored procedure functions cannot be used.
 
 Upgrading from CUBRID 9.2/9.3/10.0/10.1/10.2/11.0/11.2/11.3 to CUBRID 11.4
 ----------------------------------------------------------------

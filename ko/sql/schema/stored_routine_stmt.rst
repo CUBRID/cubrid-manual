@@ -33,7 +33,7 @@ CREATE PROCEDURE
 *   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *procedure_name*: 생성할 저장 프로시저의 이름을 지정한다. (최대 222바이트)
 *   *parameter_name*: 인자의 이름을 지정한다. (최대 254바이트)
-*   *sql_type*: 인자의 데이터 타입을 지정한다.
+*   *sql_type*: 인자의 데이터 타입을 지정한다. 지정할 수 있는 데이터 타입은 :doc:`pl_arg_type_restriction`\을 참고한다.
 *   *default_arg*: 인자의 기본값을 지정한다. :ref:`pl-arg-default`\를 참고한다.
 *   *authid*: 저장 프로시저의 실행 권한을 지정한다. 자세한 내용은 :ref:`pl_authid`\을 참고한다.
 *   *parameter_comment_string*: 인자 커멘트 문자열을 지정한다.

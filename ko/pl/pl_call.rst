@@ -141,7 +141,7 @@ SQL 문에서 호출하는 경우 일반적으로 저장 함수를 사용하여 
     ERROR: Stored procedure execute error: 
       (line 8, column 20) data overflow in multiplication of BIGINT values
 
-.. _pl-call-permission:
+.. _pl-call-authorization:
 
 프로시저의 호출 권한
 ============================================

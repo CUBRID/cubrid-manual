@@ -128,10 +128,10 @@ Java 저장 함수/프로시저 호출
 
 Java 저장 함수/프로시저가 등록되고 나면 :doc:`plcsql` 과의 차이점 없이 동일하게 호출할 수 있다. 자세한 내용은 :doc:`pl_call`\을 참고한다.
 
-Java 저장 함수/프로시저를 호출하여 수행 중 exception이 발생하면 *dbname*\ **_pl.log** 파일에 exception 내용이 기록되어 저장된다. 만약 화면으로 exception 내용을 확인하고자 할 경우는 **$CUBRID/java/logging.properties** 파일의 handlers 값을 "java.lang.logging.ConsoleHandler"로 수정하면 화면으로 exception 내용을 출력한다.
+| Java 저장 함수/프로시저를 호출하여 수행 중 exception이 발생하면 *dbname*\ **_pl.log** 파일에 exception 내용이 기록되어 저장된다. 만약 화면으로 exception 내용을 확인하고자 할 경우는 **$CUBRID/java/logging.properties** 파일의 handlers 값을 "java.lang.logging.ConsoleHandler"로 수정하면 화면으로 exception 내용을 출력한다.
 
-Java 저장 함수/프로시저 작성과 호출 예시
---------------------------------------------------------
+Java 저장 프로시저 예시
+--------------------------------------
 
 응용 프로그램에서 저장 함수/프로시저를 호출하기 위해서는 **CallableStatement** 를 사용한다.
 

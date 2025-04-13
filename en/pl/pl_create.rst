@@ -1,5 +1,5 @@
 -----------------------------
-Creating a Stored Procedure
+Create a Stored Procedure
 -----------------------------
 
 Stored procedures and stored functions can be created using :ref:`create-procedure`\ and :ref:`create-function`\ respectively.

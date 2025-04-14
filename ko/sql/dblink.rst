@@ -91,7 +91,7 @@ cub_gateway는 CUBRID Database Server와 cub_cas_cgw 사이의 연결을 중개�
 게이트웨이 종료
 ---------------
 
-게이트웨이가를 종료하기 위하여 다음과 같이 입력한다. 
+게이트웨이를 종료하기 위하여 다음과 같이 입력한다. 
 
 ::
 
@@ -133,7 +133,7 @@ cub_gateway는 CUBRID Database Server와 cub_cas_cgw 사이의 연결을 중개�
 CUBRID 서비스 시작시 게이트웨이 함께 시작
 ----------------------------------------------
 
-CUBRID 서비스 시작(**cubrid service start**) 시 *게이트웨* 를 같이 시작되게 하려면, **cubrid.conf** 파일의 **service** 파라메터에 *gateway* 를 설정한다. ::
+CUBRID 서비스 시작(**cubrid service start**) 시 *게이트웨이* 를 같이 시작되게 하려면, **cubrid.conf** 파일의 **service** 파라메터에 *gateway* 를 설정한다. ::
 
     # cubrid.conf
 
@@ -158,7 +158,7 @@ CUBRID DBLink를 사용하기 위한 설정은 동일기종 DBLink와 이기종 
 이기종 DBLink 설정
 ------------------------
 
-이기종 데이터베이스(Oracle/MySQL/MariaDB)와 연결하기 위해서는 cubrid_gataway.conf 와 unixODBC 설치, ODBC Driver 정보 설정이 필요 하다.
+이기종 데이터베이스(Oracle/MySQL/MariaDB)와 연결하기 위해서는 cubrid_gateway.conf 와 unixODBC 설치, ODBC Driver 정보 설정이 필요 하다.
 
 
 
@@ -167,7 +167,7 @@ CUBRID DBLink를 사용하기 위한 설정은 동일기종 DBLink와 이기종 
 게이트웨이 설정 파일
 ------------------------------------------------
 
-CUBRID 설치 시 생성되는 기본 게이트웨이 설정 파일인 cubrid_gataway.conf 에서 사용되는 파라메터는 브로커 파라메터와 거의 동일 하며, 추가로 반드시 변경해야 할 일부 파라메터가 포함된다. 기본으로 포함되지 않는 파라메터의 값은 직접 추가/편집해서 사용하면 된다. 다음은 설치 시 기본으로 제공되는 cubrid_gateway.conf 파일 내용이다.
+CUBRID 설치 시 생성되는 기본 게이트웨이 설정 파일인 cubrid_gateway.conf 에서 사용되는 파라메터는 브로커 파라메터와 거의 동일 하며, 추가로 반드시 변경해야 할 일부 파라메터가 포함된다. 기본으로 포함되지 않는 파라메터의 값은 직접 추가/편집해서 사용하면 된다. 다음은 설치 시 기본으로 제공되는 cubrid_gateway.conf 파일 내용이다.
 
 
 
@@ -331,7 +331,7 @@ unixODBC 드라이버 관리자는 Linux 및 UNIX 운영 체제에서 ODBC 드�
 
 .. note::
 	
-	Winodws에서는 기본으로 설치된 Microsoft® ODBC 데이터 원본 관리자 를 사용하면 된다.
+	Windows에서는 기본으로 설치된 Microsoft® ODBC 데이터 원본 관리자 를 사용하면 된다.
 
 
 unixODBC 설치 방법
@@ -480,7 +480,7 @@ TNS_ADMIN는 tnsnames.ora 파일이 있는 디렉터리 경로를 가리킨다.
 
 
 
-**Oracle을 위한 cubrid_gataway.conf 설정**
+**Oracle을 위한 cubrid_gateway.conf 설정**
 
 게이트웨이에서 oracle에 연결하기 위해서는 아래와 같이 몇 가지 설정이 필요하다.
 
@@ -509,7 +509,7 @@ MySQL 환경설정
 **MySQL ODBC Driver 설치**
 
 게이트웨이에서 MySQL 연결을 하기위해서는 MySQL Unicode ODBC Driver가 필요 하다.
-아래의 내용은 MYySQL ODBC Drvier 설치 방법이다.
+아래의 내용은 MySQL ODBC Driver 설치 방법이다.
 
 MySQL Yum 저장소 를 사용하여 Connector/ODBC RPM 패키지를 제공합니다. 시스템의 리포지토리 목록에 MySQL Yum 저장소가 있어야 하며,
 없는경우 MySQL Yum 저장소 다운로드 페이지( https://dev.mysql.com/downloads/repo/yum/ ) 에서 플랫폼에 대한 패키지를 선택하고 다운로드한다.
@@ -536,7 +536,7 @@ Yum을 사용하여 저장소를 업데이트한다.
 자세한 설치 방법은 https://dev.mysql.com/doc/connector-odbc/en/connector-odbc-installation-binary-yum.html 을 참고한다.
 
 
-**MySQL을 위한 cubrid_gataway.conf 설정**
+**MySQL을 위한 cubrid_gateway.conf 설정**
 
 게이트웨이에서 MySQL에 연결하기 위해서는 아래와 같이 몇 가지 설정이 필요하다.
 
@@ -565,7 +565,7 @@ MariaDB 환경설정
 **MariaDB ODBC Driver 설치**
 
 게이트웨이에서 MariaDB 연결을 하기위해서는 MariaDB ODBC Driver가 필요하다.
-아래의 내용은 MariaDB ODBC Drvier 설치 방법이다.
+아래의 내용은 MariaDB ODBC Driver 설치 방법이다.
 
 MariaDB Connector/ODBC 패키지는 아래의 페이지에서 버전을 선택하여 다운로드할 수 있다.
 
@@ -582,7 +582,7 @@ https://mariadb.com/downloads/connectors/
 자세한 설치 방법은 https://mariadb.com/kb/en/about-mariadb-connector-odbc/#installing-mariadb-connectorodbc-on-linux 을 참고한다.
 
 
-**MariaDB 위한 cubrid_gataway.conf 설정**
+**MariaDB 위한 cubrid_gateway.conf 설정**
 
 게이트웨이에서 MariaDB에 연결하기 위해서는 아래와 같이 몇 가지 설정이 필요하다.
 
@@ -705,7 +705,7 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
 *   원격 DB의 문자셋(charset)은 유니코드(utf-8) 문자셋만 지원한다.
 *   테이블 확장 형식 (object@server) 지원
        -   테이블, 뷰, 동의어만 지원
-       -   시리얼, 내장함수, 저장함수은 미지원
+       -   시리얼, 내장함수, 저장함수는 미지원
 
            (예 : 원격서버(server1)의 sp_func() 저장 함수는 sp_func@server1(arg1, …) 형식으로 사용할 수 없음)       
 *   SELECT 질의의 모든 함수들(SYSDATE를 포함한 내장 함수, 저장 함수), serial 관련 함수 및 시스템 상수는 모두 로컬에서 실행된다. (원격DB에서 함수 또는 serial 수행이 필요한 경우에는 DBLINK 구문을 사용해야 한다.)

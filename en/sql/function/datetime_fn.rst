@@ -2083,7 +2083,7 @@ TRUNC
     
 .. code-block:: sql
 
-    // It returns the date of Sunday of the week which includes date'2012-12-26'
+    -- It returns the date of Sunday of the week which includes date'2012-12-26'
     SELECT TRUNC(datetime'2012-12-26 12:10:10', 'day');
 
 ::

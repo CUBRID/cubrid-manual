@@ -1978,12 +1978,12 @@ HA로 구성된 노드 수가 많으므로 CUBRID HA 그룹 내의 여러 노드
     Connection connection = DriverManager.getConnection(
         "jdbc:CUBRID:nodeA:33000:testdb:::?charSet=utf-8&altHosts=nodeB:33000", "dba", "");
 
-읽기 전용으로 접속하기 위한 응용 프로그램은 *node C*, *node D* 또는 *node E*\ 에 있는 브로커에 연결한다. 다음은 JDBC 응용 프로그램의 예이다. "**loadBalance**\ =true"로 설정하여 메인 호스트와 **altHosts**\ 에 지정한 호스트들에 랜덤한 순서로 연결한다.
+읽기 전용으로 접속하기 위한 응용 프로그램은 *node C*, *node D* 또는 *node E*\ 에 있는 브로커에 연결한다. 다음은 JDBC 응용 프로그램의 예이다. "**loadBalance**\ =sh"로 설정하여 메인 호스트와 **altHosts**\ 에 지정한 호스트들에 랜덤한 순서로 연결한다.
 
 .. code-block:: java
 
     Connection connection = DriverManager.getConnection(
-        "jdbc:CUBRID:nodeC:33000:testdb:::?charSet=utf-8&loadBalance=true&altHosts=nodeD:33000,nodeE:33000", "dba", "");
+        "jdbc:CUBRID:nodeC:33000:testdb:::?charSet=utf-8&loadBalance=sh&altHosts=nodeD:33000,nodeE:33000", "dba", "");
 
 기타 자세한 사항은 환경 설정의 :ref:`ha-jdbc-conf`, :ref:`ha-cci-conf`, :ref:`ha-php-conf`\ 을 참고한다.
 

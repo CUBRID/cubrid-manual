@@ -1980,12 +1980,12 @@ Connect the application to access in read/write mode to the broker of *node A* o
     Connection connection = DriverManager.getConnection(
         "jdbc:CUBRID:nodeA:33000:testdb:::?charSet=utf-8&altHosts=nodeB:33000", "dba", "");
 
-Connect the application to access in read-only mode to the broker of *node C*, *node D* or *node E*. The following is an example of a JDBC application. Configure "**loadBalance**\ =true" on the URL to connect randomly to the main host and hosts which are specified by **altHosts**.
+Connect the application to access in read-only mode to the broker of *node C*, *node D* or *node E*. The following is an example of a JDBC application. Configure "**loadBalance**\ =sh" on the URL to connect randomly to the main host and hosts which are specified by **altHosts**.
 
 .. code-block:: java
 
     Connection connection = DriverManager.getConnection(
-        "jdbc:CUBRID:nodeC:33000:testdb:::?charSet=utf-8&loadBalance=true&altHosts=nodeD:33000,nodeE:33000", "dba", "");
+        "jdbc:CUBRID:nodeC:33000:testdb:::?charSet=utf-8&loadBalance=sh&altHosts=nodeD:33000,nodeE:33000", "dba", "");
 
 For details, see :ref:`ha-jdbc-conf`, :ref:`ha-cci-conf`, and :ref:`ha-php-conf` in Environment Configuration.
 

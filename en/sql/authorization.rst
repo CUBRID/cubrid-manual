@@ -13,7 +13,7 @@ To know the user name's writing rule, see :doc:`identifier`.
 
 CUBRID has two types of users by default: **DBA** and **PUBLIC**. At initial installation of the product, no password is set.
 
-*   All users have authorization granted to the **PUBLIC** user. All users of the database are automatically the members of **PUBLIC**. Granting authorization to the **PUBLIC** means granting it all users.
+*   All users have authorization granted to the **PUBLIC** user. All users of the database are automatically the members of **PUBLIC**. To grant authorization specific user, must grant authorization to the **PUBLIC** user.
 
 *   The **DBA** user has the authorization of the database administrator. The **DBA** automatically becomes the member of all users and groups. That is, the **DBA** is granted the access for all tables. Therefore, there is no need to grant authorization explicitly to the **DBA** and **DBA** members. Each database user has a unique name. The database administrator can create multiple users simultaneously using the **cubrid createdb** utility (see :ref:`cubrid-utilities` for details). A database user cannot have a member who already has the same authorization. If authorization is granted to a user, all members of the user is automatically granted the same authorization.
 
@@ -246,7 +246,7 @@ The following example shows how to grant every authorization on the *tbl1* and *
     CREATE TABLE tbl2 (a INT);
     GRANT ALL PRIVILEGES ON tbl1, tbl2 TO public;
 
-The following example shows how to grant retrieving authorization on the *record* and *history* tables to *brown*. Using **WITH GRANT OPTION** allows *brown* to grant retrieving to another users. *brown* can grant authorization to others within his authorization.
+The following **GRANT** statement is example shows how to grant retrieving authorization on the *record* and *history* tables to *brown*. Using **WITH GRANT OPTION** allows *brown* to grant retrieving to another users. *brown* can grant authorization to others within his authorization.
 
 .. code-block:: sql
 

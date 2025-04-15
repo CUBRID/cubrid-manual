@@ -87,6 +87,7 @@ CUBRID에서는 :ref:`GRANT <granting-authorization>` 문을 사용하여 프로
         SELECT dba.fn_current_user();
 
 ::
+        -- 위와 같이 U1 사용자로 호출했지만, 결과는 'DBA@' 이므로 소유자 권한으로 실행되었음을 알 수 있다.
 
         dba.fn_current_user()
         ======================

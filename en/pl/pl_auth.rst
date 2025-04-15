@@ -87,7 +87,8 @@ The following is an example of logging in as a DBA user, creating a stored funct
         SELECT dba.fn_current_user();
 
 ::
-
+        -- As shown, even when called by user U1, the result shows ‘DBA@’ because the function executes with Owner’s Rights
+        
         dba.fn_current_user()
         ======================
         'DBA@<host>'    

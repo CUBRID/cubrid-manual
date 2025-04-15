@@ -84,6 +84,21 @@ DBA 권한이 있는 사용자는 다른 사용자의 스키마에 저장 프로
     =================
                     3
 
+.. note::
+
+    저장 프로시저와 저장 함수의 인자 또는 반환 값의 데이터 타입의 이름 만을 명시할 수 있다.
+    즉, VARCHAR 또는 NUMERIC 와 같은 타입에 정밀도와 스케일을 지정하지 않는다.
+    실행 시 실제 전달되는 데이터에 따라 가변적으로 정밀도와 스케일이 결정된다.
+
+::
+    
+    create or replace funtion t (i_min VARCHAR, i_max VARCHAR) RETURN VARCHAR as
+        var_min VARCHAR(5) := i_min;
+        var_max VARCHAR(5) := i_max;
+    begin
+        return var_min || ',' || var_max;
+    end;
+ 
 .. _pl-arg-type-restriction:
 
 지원하는 인자와 결과 데이터 타입

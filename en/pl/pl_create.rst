@@ -45,7 +45,7 @@ If a regular user attempts to create stored procedures and stored functions in a
 .. _pl-parameter:
 
 Specifying Parameters for Stored Procedures
-========================================
+==============================================
 
 Specifying parameters for stored procedures and stored functions allows for passing arguments when the procedure or function is called.
 When specifying parameters, you must specify the name and data type of the parameter, and you can specify up to **64** parameters.
@@ -83,6 +83,21 @@ For more information, refer to :ref:`pl-arg-type-restriction`.
       test_func(1, 2)
     =================
                     3
+
+.. note::
+
+    Only the names of the data types of the parameters or return values of stored procedures and stored functions can be specified.
+    That is, precision and scale are not specified for types such as VARCHAR or NUMERIC.
+    Precision and scale are determined variably according to the actual data passed at runtime.
+
+::
+    
+    create or replace funtion t (i_min VARCHAR, i_max VARCHAR) RETURN VARCHAR as
+        var_min VARCHAR(5) := i_min;
+        var_max VARCHAR(5) := i_max;
+    begin
+        return var_min || ',' || var_max;
+    end;
 
 .. _pl-arg-type-restriction:
 

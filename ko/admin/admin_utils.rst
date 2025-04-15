@@ -779,7 +779,7 @@ spacedb
 .. option:: --size-unit={PAGE|M|G|T|H}
 
     데이터베이스 볼륨의 공간을 지정한 크기 단위로 출력하기 위한 옵션이며, 기본값은 **H** 이다.
-    값을 H로 설정할 경우 단위는 다음과 같이 자동으로 지정된다. DB size < 1024MB보다 작을 경우 M는 MB으로 , DB size < 1024GB보다 작을 경우 G는 GB로 지정된다. ::
+    값을 H로 설정할 경우 단위는 다음과 같이 자동으로 지정된다. DB size < 1024MB 보다 작을 경우 M는 MB 으로 , DB size < 1024GB 보다 작을 경우 G는 GB 로 지정된다. ::
 
         $ cubrid spacedb --size-unit=H testdb
 

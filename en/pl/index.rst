@@ -10,13 +10,13 @@ CUBRID PL
 This chapter introduces the procedural language extension features provided by CUBRID to develop stored procedures and functions.
 
 CUBRID supports stored procedures and stored functions as procedural language extension features.
-Stored procedures and stored functions help handle complex business logic that is difficult to implement with SQL alone and make data manipulation easier to perform.
+Stored procedures and functions help handle complex business logic that is difficult to implement with SQL alone and simplify data manipulation tasks.
 
 They offer the following major advantages:
 
 * Productivity and Usability: Once created, stored procedures and stored functions can be reused repeatedly. Users can call them from SQL and also invoke them easily from applications using JDBC.
 * Performance: Since stored procedures and functions run on the database server, they reduce network traffic and enhance the performance of the database server.
-* Security: Stored procedures can be granted execution permissions to specific users, enabling fine-grained control over data access and modification.
+* Security: Stored procedures can be granted execution privileges to specific users, enabling fine-grained control over data access and modification.
 * Interoperability and Portability: Stored procedures and functions are designed to work across various languages and execution environments, maximizing the usability of the database.
 
 CUBRID supports the following two procedural languages for stored procedures/functions:

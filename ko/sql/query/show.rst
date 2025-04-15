@@ -524,7 +524,7 @@ program_name        VARCHAR(32) 클라이언트 프로그램 이름(broker_cub_c
 
 .. note::
 
-    SHOW ACCESS STATUS의 로그인 정보는 데이터베이스가 재시작되면 초기화되며, HA 환경에서 복제되지 않으므로 각 노드마다 다른 결과를 출력할 수 있다.
+    SHOW ACCESS STATUS의 로그인 정보는 데이터베이스가 재시작되면 초기화되며, HA 환경에서 복제되지 않으므로 각 노드마다 다른 결과를 출력된다.
 
 .. _show-exec-statistics-statement:
 

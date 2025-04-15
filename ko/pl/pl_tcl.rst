@@ -84,6 +84,6 @@
 주의사항
 ----------
 
-* PL/CSQL에서는 기본적으로 **COMMIT**과 **ROLLBACK** 문을 지원하며, 이를 통해 저장 프로시저 내부에서 트랜잭션 처리를 명시적으로 제어할 수 있다
+* PL/CSQL에서는 기본적으로 **COMMIT**\과 **ROLLBACK** 문을 지원하며, 이를 통해 저장 프로시저 내부에서 트랜잭션 처리를 명시적으로 제어할 수 있다
 * 그러나 자바 저장 프로시저의 경우, 하위호환성을 유지하기 위해 **pl_transaction_control** 설정을 활용해야 하며 **yes**\로 설정하는 경우에만 COMMIT과 ROLLBACK 문을 사용할 수 있다. 
 * **pl_transaction_control**\의 기본값은 **no**\로 설정되어 있으며 COMMIT과 ROLLBACK이 무시된다.

@@ -30,6 +30,8 @@ The main contents described in this chapter are as follows:
 
 *   Call a Stored Procedure: Describes how to call stored procedures and stored functions.
 
+*   Stored Procedure Authorization: Describes how to grant call permissions to other users and the difference between Owner's Rights and Caller's Rights.
+
 *   Transaction Commit and Rollback Support: Describes the use of transaction commit and rollback within stored procedures.
 
 *   Performance Tuning: Describes methods to achieve optimized performance when using stored procedures.
@@ -47,6 +49,7 @@ The main contents described in this chapter are as follows:
 
     pl_create
     pl_call
+    pl_auth
     pl_tuning
     pl_package
     plcsql

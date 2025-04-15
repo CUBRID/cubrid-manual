@@ -22,7 +22,7 @@ CUBRID allows you to grant call permission to a stored procedure using the :ref:
 
     GRANT EXECUTE ON PROCEDURE procedure_name TO user_name;
 
-반대로 :ref:`REVOKE <revoking-authorization>` 문을 사용하여 프로시저에 대한 호출 권한을 해지할 수 있다.
+Conversely, you can revoke the execution privilege on a procedure by using the :ref:`REVOKE <revoking-authorization>` statement.
 
 .. code-block:: sql
 

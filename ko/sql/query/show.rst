@@ -208,7 +208,7 @@ Key_name                            VARCHAR         인덱스 이름
 Seq_in_index                        INTEGER         인덱스에 있는 칼럼의 일련번호. 1부터 시작한다.
 Column_name                         VARCHAR         칼럼 이름
 Collation                           VARCHAR         칼럼이 인덱스에서 정렬되는 방법. 'A'는 오름차순(Ascending), **NULL** 은 비정렬을 의미한다.
-Cardinality                         INTEGER         인덱스에서 고유한 값의 개수를 측정한 수치. 카디널리티가 높을수록 인덱스 검색 효율이 높아진다. 
+Cardinality                         INTEGER         인덱스에서 고유한 값의 개수를 측정한 수치. 카디널리티가 높을수록 해당 인덱스를 선택 가능성이 높아진다. 
                                                     이 값은 **SHOW INDEX** 가 실행되면 매번 업데이트된다. 이 값은 근사치임에 유의한다.
 Sub_part                            INTEGER         칼럼의 일부만 인덱스된 경우 인덱스된 문자의 바이트 수. 칼럼 전체가 인덱스되면 **NULL** 이다.
 Packed                                              키가 어떻게 팩되었는지(packed)를 나타냄. 팩되지 않은 경우 **NULL**. 현재 지원 안 함.

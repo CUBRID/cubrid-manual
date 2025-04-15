@@ -27,7 +27,7 @@ The **INCR** function increments the column value specified as an argument. Only
 
 If an **INCR** function is specified in the **SELECT** statement, the **COUNTER** value is incremented by 1 and the query result is displayed with the values before the increment. Furthermore, the **INCR** function does not increment the value of the row(tuple) affected by the query process but rather the one affected by the final result.
 
-If you want to increase or decrease the click counter without specifying **INCR** or **DECR** on the **SELECT** list, specify **WITH INCREMENT FOR** *column* or **WITH INCREMENT FOR** *column* after the WHERE clause. 
+If you want to increase or decrease the click counter without specifying **INCR** or **DECR** on the **SELECT** list, specify **WITH INCREMENT FOR** *column* or **WITH DECREMENT FOR** *column* after the WHERE clause. 
 
 .. code-block:: sql
 

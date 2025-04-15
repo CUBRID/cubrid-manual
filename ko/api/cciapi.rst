@@ -868,7 +868,7 @@ cci_connect_with_url
     *   **rcTime**: 첫 번째로 접속했던 브로커에 장애가 발생한 이후 **altHosts** 에 명시한 브로커로 접속한다(브로커 failover). 이후, **rcTime** 만큼 시간이 경과할 때마다 원래의 브로커에 재접속을 시도한다(기본값 600초).
 
     *   **loadBalance**: 이 값이 true면 응용 프로그램이 메인 호스트와 **altHosts**\에 지정한 호스트들에 랜덤한 순서로 연결한다(기본값: false)
-    
+
     *   **login_timeout** | **loginTimeout**: 데이터베이스에 로그인 시 타임아웃 값 (단위: msec). 이 시간을 초과하면 **CCI_ER_LOGIN_TIMEOUT** (-38) 에러를 반환한다. 기본값은 **30,000**\ (30초)이다. 이 값이 0인 경우 무한 대기를 의미한다. 이 값은 최초 접속 이후 내부적인 재접속이 발생하는 경우에도 적용된다.
 
     *   **query_timeout** | **queryTimeout**: :c:func:`cci_prepare`, :c:func:`cci_execute` 등의 함수를 호출했을 때 이 값으로 설정한 시간이 지나면 서버로 보낸 질의 요청에 대한 취소 메시지를 보내고 호출된 함수는 **CCI_ER_QUERY_TIMEOUT** (-39) 에러를 반환한다. 기본값은 0이며, 0인 경우 무한 대기를 의미한다. 질의를 수행한 함수에서 타임아웃 발생 시 함수의 반환 값은 **disconnect_on_query_timeout**\ 의 설정에 따라 달라질 수 있다. 자세한 내용은 다음의 **disconnect_on_query_timeout**\ 을 참고한다. 

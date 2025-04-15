@@ -89,7 +89,7 @@ BIT_XOR
 
 .. code-block:: sql
 
-    SELECT 1^2^3, BIT_XOR(id) FROM bit_tbl WHERE id in(1,3,5);
+    SELECT 1^3^5, BIT_XOR(id) FROM bit_tbl WHERE id in(1,3,5);
 
 ::
 

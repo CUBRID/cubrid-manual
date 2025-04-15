@@ -44,7 +44,7 @@ BLOB_LENGTH
  
     **BLOB** 파일에 저장된 **LOB** 데이터의 길이를 바이트 단위로 반환한다. 
     
-    :param clob_column: 길이를 구하고자 하는 BLOB 타입의 칼럼
+    :param blob_column: 길이를 구하고자 하는 BLOB 타입의 칼럼
     :rtype: INT
 
 BLOB_TO_BIT

@@ -44,7 +44,7 @@ BLOB_LENGTH
  
     The length of **LOB** data stored in **BLOB** file is returned.
     
-    :param clob_column: The column to get the length of **BLOB**
+    :param blob_column: The column to get the length of **BLOB**
     :rtype: INT
 
 BLOB_TO_BIT

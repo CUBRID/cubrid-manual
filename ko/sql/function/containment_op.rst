@@ -230,7 +230,7 @@ SETEQ
     INSERT INTO contain_tbl VALUES(6, 'Smith', {'country', 'state', 'city', 'street'},{1,2,3,5});
     INSERT INTO contain_tbl VALUES(7, 'Brown', {'country', 'state', 'city', 'street'},{});
      
-    --selecting rows when two collection_operands are same in the WEHRE clause
+    --selecting rows when two collection_operands are same in the WHERE clause
     SELECT id, name, address, zip_code FROM contain_tbl WHERE address SETEQ {'country','state', 'city'};
     
 ::
@@ -243,7 +243,7 @@ SETEQ
      
 .. code-block:: sql
 
-    --selecting rows when two collection_operands are same in the WEHRE clause
+    --selecting rows when two collection_operands are same in the WHERE clause
     SELECT id, name, address, zip_code FROM contain_tbl WHERE zip_code SETEQ {1,2,3};
     
      
@@ -264,7 +264,7 @@ SETNEQ
 
 .. code-block:: sql
 
-    --selecting rows when two collection_operands are not same in the WEHRE clause
+    --selecting rows when two collection_operands are not same in the WHERE clause
     SELECT id, name, address, zip_code FROM contain_tbl WHERE address SETNEQ {'country','state', 'city'};
     
 ::
@@ -282,7 +282,7 @@ SETNEQ
      
 .. code-block:: sql
 
-    --selecting rows when two collection_operands are not same in the WEHRE clause
+    --selecting rows when two collection_operands are not same in the WHERE clause
     SELECT id, name, address, zip_code FROM contain_tbl WHERE zip_code SETNEQ {1,2,3};
     
 ::

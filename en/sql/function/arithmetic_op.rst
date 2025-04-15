@@ -214,7 +214,7 @@ When the arithmetic operator is '/', the result type differs depending on the se
 
 .. code-block:: sql
 
-    -- float * double returns float type  
+    -- float * double returns double type  
     SELECT (CAST(1234567890123 AS FLOAT)*CAST(1234567890123 AS DOUBLE));
     
 ::
@@ -225,7 +225,7 @@ When the arithmetic operator is '/', the result type differs depending on the se
      
 .. code-block:: sql
 
-    -- double * double returns float type  
+    -- double * double returns double type  
     SELECT (CAST(1234567890123 AS DOUBLE)*CAST(1234567890123 AS DOUBLE));
     
 ::

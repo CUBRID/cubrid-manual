@@ -2917,7 +2917,7 @@ tranlist
 
 옵션을 생략하면 각 트랜잭션에 대한 전체 정보를 출력한다. 
 
-"cubrid tranlist demodb"는 "cubrid killtran -q demodb"와 비슷한 결과를 출력하지만, 후자보다 "User name"과 "Host name"을 더 출력한다.
+"cubrid tranlist demodb"는 "cubrid killtran -q demodb"와 비슷한 결과를 출력하지만, "User name"과 "Host name"을 더 출력한다.
 "cubrid tranlist -s demodb"는 "cubrid killtran -d demodb"와 동일한 결과를 출력한다.
 
 다음은 tranlist 출력 결과의 예이다. 

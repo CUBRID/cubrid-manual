@@ -1,6 +1,6 @@
 
 :meta-keywords: cubrid drivers, cubrid api
-:meta-description: This chapter cover CUBRID drivers and API's. JDBC Driver API, CCI Driver API, PHP Driver API, PDO Driver API, ODBC Driver API, ADO.NET Driver API, Perl Driver API, Python Driver API, Ruby Driver API, Node.js Driver API.
+:meta-description: This chapter covers CUBRID drivers and APIs. JDBC Driver API, CCI Driver API, PHP Driver API, PDO Driver API, ODBC Driver API, ADO.NET Driver API, Perl Driver API, Python Driver API, Ruby Driver API, Node.js Driver API.
 
 *************
 API Reference

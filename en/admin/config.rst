@@ -541,7 +541,7 @@ The following are parameters related to the database server. The type and value 
 
 **cubrid_port_id**
 
-    **cubrid_port_id** is a parameter to configure the port to be used by the master process. The default value is **1523**. If the port 1523 is already being used on the server where CUBRID is installed or it is blocked by a firewall, an error message, which means the master server is not connected because the master process cannot be running properly, is displayed. If such port conflict occurs, the administrator must change the value of **cubrid_port_id** considering the server environment.
+    **cubrid_port_id** is a parameter to configure the port to be used by the master process. The default value is **1523**. If port 1523 is already being used on the server where CUBRID is installed or is blocked by a firewall, an error message is displayed indicating that the master server is not connected because the master process cannot run properly. If such a port conflict occurs, the administrator must change the value of **cubrid_port_id** considering the server environment.
 
 .. _check_peer_alive:
 

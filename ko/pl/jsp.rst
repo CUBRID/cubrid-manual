@@ -881,18 +881,19 @@ CUBRID의 Java SP에서는 JNI 기능을 사용할 수 있도록 제공하고 �
 
 .. warning::
 
-    JNI를 호출하는 자바 저장 프로시저/함수를 **-j** 옵션 없이 등록한 후 실행 시 java.lang.UnsatisfiedLinkError가 발생할 수 있다.
+    JNI를 호출하는 자바 저장 프로시저/함수를 **-j** 또는 **--jni** 옵션 없이 등록한 후 실행 시 다음과 같은 오류를 반환한다.
+    'Library load not allowed. Please load your class by using 'loadjava' with '-jni' option'
+
     다음의 사항을 확인한다.
 
     * 동일한 네이티브 라이브러리 경로에 대해 System.load () 를 호출하는 자바 클래스 파일을 여러 개 로드하는 경우
        * 하나의 자바 클래스 파일만 네이티브 라이브러리를 로드하도록 수정한다
        * 네이티브 라이브러리를 로드하는 클래스를 loadjava의 **-j** 옵션을 사용하여 등록한다
-       * javasp 유틸리티를 재시작한다
+       * PL 서버를 재시작한다 (:ref:`cubrid-pl-server` 참고)
 
     * 이미 로드된 자바 클래스 파일을 loadjava로 다시 덮어쓰는 경우
-       * **-j** 옵션 없이 loadjava로 클래스를 등록한 경우 해당 데이터베이스 경로의 **java** 디렉토리에서 해당 클래스를 제거한다
        * **-j** 옵션을 사용하여 loadjava로 해당 클래스를 다시 등록한다
-       * javasp 유틸리티를 재시작한다
+       * PL 서버를 재시작한다 (:ref:`cubrid-pl-server` 참고)
 
 .. _jsp-load-java:
 

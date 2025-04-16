@@ -350,7 +350,7 @@ SystemTap의 가장 유용한 기능은 마커를 사용자 소스 코드(CUBRID
     :param OID: 잠금 요청 대상 객체 ID
     :param table: 객체를 유지하고 있는 테이블
     :param type: 잠금 타입(X_LOCK, S_LOCK etc.)
-    :param status: Value showing whether the request has been granted or not.
+    :param status: 잠금 요청의 성공 여부를 나타내는 값
     
 .. function:: lock_release_start(OID, table, type)
 
@@ -362,7 +362,7 @@ SystemTap의 가장 유용한 기능은 마커를 사용자 소스 코드(CUBRID
     
 .. function:: lock_release_end(OID, table, type)
 
-    This marker should be triggered after a lock release operation has been completed.
+    이 마커는 잠금 해제가 완료된 후에 발동된다.
 
     :param OID: 잠금 요청 대상 객체 ID
     :param table: 객체를 유지하고 있는 테이블
@@ -404,11 +404,11 @@ I/O 액세스는 RDBMS의 주요 병목(bottleneck)이며, I/O 성능을 모니�
 
 .. function:: pgbuf_hit() 
 
-    이 마커는 페이지 버퍼에서 요청 페이지가 발견되어 디스크에서 그것을 검색할 필요가 없을 때 발동된다.
+    이 마커는 요청한 페이지가 페이지 버퍼에 존재하여 디스크에서 따로 가져올 필요가 없을 때 발동된다.
     
 .. function:: pgbuf_miss()
 
-    이 마커는 페이지 버퍼에서 요청 페이지가 발견되지 않아 디스크에서 그것을 검색해야 할 때 발동된다.
+    이 마커는 요청한 페이지가 페이지 버퍼에 존재하지 않아 반드시 디스크에서 가져와야 할 때 발동된다.
 
 .. function:: io_write_start (query_id)
 

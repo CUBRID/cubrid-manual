@@ -25,7 +25,7 @@ The contents of the CUBRID Database Management System (CUBRID DBMS) product manu
 
 *   :doc:`admin/index`: This chapter provides instructions on how to create, drop, back up, restore and migrate a database, configuring globalization, and executing CUBRID HA. Also it includes instructions on how to use the  **cubrid** utility, which starts and stops the server, broker, and CUBRID Manager server, etc. Also, this chapter provides instructions on setting system parameters that may influence the performance. It provides information on how to use the configuration file for the server and broker, and describes the meaning of each parameter.
 
-*   :doc:`ha`: This is the chapter explains how the High Availability (HA) feature in applied in CUBRID. It keeps databases synchronized at all times across multiple servers, and if a failure occurs on the active server, another server automatically takes over the service.
+*   :doc:`ha`: This chapter explains how the High Availability (HA) feature is applied in CUBRID. It keeps databases synchronized at all times across multiple servers, and if a failure occurs on the active server, another server automatically takes over the service.
 
 *   :doc:`shard`: This chapter explains the sharding feature in CUBRID, which horizontally partitions and distributes data across physically separate databases. CUBRID SHARD is used to distribute and process large volumes of data and high throughput workloads that exceed the capacity of a single database instance. 
 

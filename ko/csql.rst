@@ -381,6 +381,70 @@ CSQL은 SQL의 문자열 리터럴, 주석, 식별자를 (참고: :ref:`작성 �
 
 "질의 버퍼"는 질의문을 실행하기 전까지 질의문을 저장하는 버퍼이다. **\-\-no-single-line** 옵션을 부여하여 CSQL을 실행하는 경우 **;xr** 명령으로 질의를 실행하기 전까지는 질의문을 버퍼에 유지한다.
 
+**세션 명령어 도움말(;HElp)**
+**;HElp** 는 전체 세션 명령어에 대한 도움을 보여주는 명령어로, csql의 세션명령어를 확인하는 용도로 사용할 수 있다. ::
+
+    csql> ;help
+    === <Help: Session Command Summary> === 
+
+    All session commands should be prefixed by ';' and only blanks/tabs
+    can precede the prefix. Capitalized characters represent the minimum
+    abbreviation that you need to enter to execute the specified command.
+
+    ;REAd   [<file-name>]        - read a file into command buffer.
+    ;Write  [<file-name>]        - (over)write command buffer into a file.
+    ;APpend [<file-name>]        - append command buffer into a file.
+    ;PRINT                       - print command buffer.
+    ;SHELL                       - invoke shell.
+    ;CD                          - change current working directory.
+    ;EXit (or Ctrl+d)            - exit program.
+
+    ;CLear                       - clear command buffer.
+    ;EDIT   [format/fmt]         - invoke system editor [after formatter] with command buffer.
+    ;LISt                        - display the content of command buffer.
+
+    ;RUn                         - execute sql in command buffer.
+    ;Xrun                        - execute sql in command buffer,
+                                  and clear the command buffer.
+    ;COMmit                      - commit the current transaction.
+    ;ROllback                    - roll back the current transaction.
+    ;AUtocommit [ON|OFF]         - enable/disable auto commit mode.
+    ;REStart                     - reconnect to the current database in a CSQL session.
+    ;CHeckpoint                  - execute the checkpoint(CSQL with --sysadm only).
+    ;Killtran                    - check transaction status information or end a specific transaction.(CSQL with --sysadm only).
+
+    ;SHELL_Cmd     [shell-cmd]   - set default shell, editor, print, pager and formatter
+    ;EDITOR_Cmd    [editor-cmd]    command to new one, or display the current
+    ;PRINT_Cmd     [print-cmd]     one, respectively.
+    ;PAger_cmd     [pager-cmd]
+    ;FOrmatter_cmd [formatter-cmd]
+
+    ;DATE                        - display the local time, date.
+    ;DATAbase                    - display the name of database being accessed.
+    ;SChema class-name           - display schema information of a class.
+    ;TRIgger [`*'|trigger-name]  - display trigger definition.
+    ;Get system_parameter        - get the value of a system parameter.
+    ;SET system_parameter=value  - set the value of a system parameter.
+    ;STring-width [width]        - set width that each column which is a string type is displayed.
+    ;COLumn-width [name]=[width] - set width that a specific column is displayed.
+    ;PLan [simple/detail/off]    - show query execution plan.
+    ;Info <command>              - display internal information.
+    ;TIme [ON/OFF]               - enable/disable to display the query execution time.
+    ;SERver-output [ON/OFF]      - enable/disable displaying server messages stored in DBMS_OUTPUT buffer.
+    ;LINe-output [ON/OFF]        - enable/disable to display each value in a line
+    ;HISTORYList                 - display list of the executed queries.
+    ;HISTORYRead <history_num>   - read entry on the history number into command buffer.
+    ;TRAce [ON/OFF] [text/json]  - enable/disable sql auto trace.
+    ;SIngleline [ON|OFF]         - enable/disable single-line mode.
+    ;CONnect username [dbname | dbname@hostname]
+                                 - connect to the current or other databases as a username.
+    ;.Hist [ON/OFF]              - start/stop collecting statistics information in CSQL(available DBA only).
+    ;.Clear_hist                 - clear the CSQL statistics information in the buffer.
+    ;.Dump_hist                  - display the CSQL statistics information in CSQL.
+    ;.X_hist                     - display the CSQL statistics information in CSQL with statistics data initialized.
+    ;HElp                        - display this help message.
+
+
 **파일에서 질의 읽기(;REAd)**
 
 **;REAd** 명령어는 파일의 내용을 질의 버퍼로 읽는 세션 명령어로, 지정된 입력 파일에 저장된 질의문들을 실행하는데 사용할 수 있다. 질의 버퍼에 올려진 파일 내용을 보기 위해서는 **;List** 명령어를 사용한다. ::

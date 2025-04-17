@@ -59,7 +59,8 @@ There is a slow query in the application log but that is not printed as slow que
 Some examples are as below.
  
 *   Check if there is a low speed of the network between application and broker.
-*   Check if there is a case that CAS was restarted by watching the broker log(exists in **$CUBRID/log/broker** directory). If it is revealed as CASes are not enough (please do tuning it first, if any slow queries), you should enlarge the number of CASes; to do so, the value of :ref:`MAX_NUM_APPL_SERVER <max-num-appl-server>` should be enlarged properly. Also the value of :ref:`max_clients <max_clients>` should be enlarged if needed.
+*   Check if there is a case where CAS was restarted by checking the broker log (located in the **$CUBRID/log/broker** directory). If it is revealed that the number of CASes is insufficient (please tune for any slow queries first), you should increase the number of CASes. To do so, the value of :ref:`MAX_NUM_APPL_SERVER <max-num-appl-server>` should be increased appropriately. Also, increase the value of :ref:`max_clients <max_clients>` if needed.
+
 
 If application log and CAS SQL log show the slow query log together and there is almost no gab between the slow query times of application log and the CAS SQL log, the cause which the query was slow will exist between the broker and DB server. For example, the query execution in the DB server was slow.
 

@@ -51,7 +51,9 @@ SSL은 대칭키(Symmetric Key) 방식으로 송수신 데이터를 암호화한
     * 개인키 파일: cas_ssl_cert.key
 이 인증서는 OpenSSL의 명령어 도구를 이용해 생성된 Self-signed 인증서이다.   
 
-사용자가 원하는 경우 IdenTrust나 DigiCert와 같은 공인 인증기관에서 발급 받은 인증서로 대체 가능하며, OpenSSL 명령어 도구로 새롭게 생성하여 대체하는 것도 가능하다. 아래의 예는 OpenSSL 명령어 도구를 이용하여 개인키와 인증서를 생성하는 것이다.
+사용자는 필요에 따라 IdenTrust, DigiCert 등 공인 인증 기관(CA)에서 발급받은 인증서로 대체할 수 있으며, OpenSSL을 이용해 새로 생성한 인증서를 사용하는 것도 가능하다.
+
+다음은 OpenSSL 명령어 도구를 사용하여 개인키와 인증서를 생성하는 예시입니다:
 
 .. code-block:: bash
 

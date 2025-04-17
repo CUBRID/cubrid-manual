@@ -2,6 +2,8 @@
 :meta-keywords: cubrid sql, database sql, cubrid statements
 :meta-description: This chapter describes SQL syntax such as data types, functions and operators, data retrieval or table manipulation. You can also find SQL statements used for index, trigger, partition, serial and changing user information.
 
+.. _cubrid_sql:
+
 **********
 CUBRID SQL
 **********
@@ -31,10 +33,6 @@ The main topics covered in this chapter are as follows:
 
 *   Trigger: Describes how to create, alter, drop, and rename a trigger that is automatically executed in response to certain events.
 
-*   Java Stored Functions/Procedures: Describes how to create a Java method and call it in the query statement.
-
-*   Method: Describes the method, a built-in function of the CUBRID database system.
-
 *   Class Inheritance: Describes how to inherit the attribute from the parent to the child table (class).
 
 *   Database Administration: Describes about user management, SET and SHOW statements.
@@ -56,9 +54,7 @@ The main topics covered in this chapter are as follows:
     i18n_index.rst
     transaction_index.rst
     trigger.rst
-    jsp.rst
     dblink.rst
-    method.rst
     oodb.rst
     db_admin.rst
     user_schema.rst

@@ -2,7 +2,8 @@
 성능 최적화
 -----------------------------
 
-저장 프로시저와 저장 함수는 사용자가 직접 작성한 코드이므로, 성능 최적화가 필요할 수 있다. 이 장에서는 저장 프로시저와 저장 함수의 성능을 최적화하기 위한 다양한 가이드를 제공한다.
+저장 프로시저와 저장 함수는 사용자가 직접 작성한 코드이므로, 성능 최적화가 필요할 수 있다.
+이 장에서는 저장 프로시저와 저장 함수의 성능을 최적화하기 위한 다양한 가이드를 제공한다.
 
 .. contents::
 
@@ -16,7 +17,7 @@ SQL 질의 최적화
 * **통신 오버헤드**: CUBRID 데이터베이스 서버와 CUBRID PL 서버 간의 통신 오버헤드를 줄이기 위해서는 최소한의 개수의 레코드를 반환하도록 쿼리를 작성해야 한다.
 * **비효율적인 반복문 내의 질의 호출**: 저장 프로시저와 저장 함수 내부에서 반복문을 사용할 때, 반복문 내에서 다수의 질의를 호출하지 않고 한번의 질의로 데이터를 가져오는 것을 권장한다.
 
-:doc:`/sql/tuning` 문서에서 SQL 쿼리 최적화에 대한 자세한 내용을 확인하여 비효율적인 질의를 최적화할 수 있다.
+저장 프로시저와 저장함수에서 사용된 비효율적인 질의는 :doc:`/sql/tuning` 문서를 참조하여 질의 최적화하기를 권장한다.
 
 질의에서의 저장 함수 호출 최적화
 ===============================
@@ -40,6 +41,7 @@ CUBRID에서 기본적으로 제공하는 내장 함수는 (:doc:`/sql/function/
 따라서 내장 함수의 단순한 조합으로 구현이 가능한 저장 함수보다 내장 함수를 사용하는 것을 것을 권장한다.
 
 아래는 CONCAT 내장 함수와 동일한 기능을 수행하는 저장 함수의 예시이다.
+사용자 저장 함수인 my_concat()보다 내장 함수인 concat()사용 시 성능 이점이 있다. 
 
 .. code-block:: sql
 
@@ -50,21 +52,21 @@ CUBRID에서 기본적으로 제공하는 내장 함수는 (:doc:`/sql/function/
 
         SELECT COUNT(*) FROM (SELECT /*+ NO_MERGE */ concat (name, event) FROM athlete);
 
-        SELECT COUNT(*) FROM (SELECT /*+ NO_MERGE */ my_concat (name, event) FROM athlete);
+                      count(*)
+        ======================
+                          6677
 
+        1 row selected. (0.019853 sec) Committed. (0.000000 sec)
+
+        SELECT COUNT(*) FROM (SELECT /*+ NO_MERGE */ my_concat (name, event) FROM athlete);
+        
+                      count(*)
+        ======================
+                          6677
+
+        1 row selected. (0.302333 sec) Committed. (0.000000 sec)
 ::
 
-                count(*)
-        ======================
-                        6677
-
-        1 row selected. (0.224946 sec) Committed. (0.000000 sec) 
-
-                count(*)
-        ======================
-                        6677
-
-        1 row selected. (0.014289 sec) Committed. (0.000000 sec)
 
 .. _pl-deterministic:
 
@@ -122,11 +124,13 @@ CUBRID에서 기본적으로 제공하는 내장 함수는 (:doc:`/sql/function/
  === Auto Trace ===
     ...
     Trace Statistics:
-      SELECT (time: 3, fetch: 44, fetch_time: 0, ioread: 0)
-        SCAN (table: dba.dummy_tbl), (heap time: 0, fetch: 20, ioread: 0, readrows: 4, rows: 4)
+      SELECT (time: 4, fetch: 11, fetch_time: 0, ioread: 0)
+        FUNC (time: 4, fetch: 2, ioread: 0, calls: 4)
+        SCAN (table: dba.dummy_tbl), (heap time: 0, fetch: 5, ioread: 0, readrows: 4, rows: 4)
         SUBQUERY (correlated)
-          SELECT (time: 3, fetch: 24, fetch_time: 0, ioread: 0)
-            SCAN (table: dual), (heap time: 0, fetch: 16, ioread: 0, readrows: 4, rows: 4)
+          SELECT (time: 4, fetch: 6, fetch_time: 0, ioread: 0)
+            FUNC (time: 4, fetch: 2, ioread: 0, calls: 4)
+            SCAN (table: dual), (heap time: 0, fetch: 4, ioread: 0, readrows: 4, rows: 4)
 
 pl_csql_not_deterministic 함수는 **NOT DETERMINISTIC** 이므로 상관 부질의 결과를 캐시하지 않는다.
 
@@ -147,11 +151,13 @@ pl_csql_not_deterministic 함수는 **NOT DETERMINISTIC** 이므로 상관 부�
  === Auto Trace ===
     ...
     Trace Statistics:
-      SELECT (time: 3, fetch: 36, fetch_time: 0, ioread: 0)
-        SCAN (table: dba.dummy_tbl), (heap time: 0, fetch: 20, ioread: 0, readrows: 4, rows: 4)
+      SELECT (time: 2, fetch: 9, fetch_time: 0, ioread: 0)
+        FUNC (time: 2, fetch: 2, ioread: 0, calls: 2)
+        SCAN (table: dba.dummy_tbl), (heap time: 0, fetch: 5, ioread: 0, readrows: 4, rows: 4)
         SUBQUERY (correlated)
-          SELECT (time: 3, fetch: 16, fetch_time: 0, ioread: 0)
-            SCAN (table: dual), (heap time: 0, fetch: 8, ioread: 0, readrows: 2, rows: 2)
+          SELECT (time: 2, fetch: 4, fetch_time: 0, ioread: 0)
+            FUNC (time: 2, fetch: 2, ioread: 0, calls: 2)
+            SCAN (table: dual), (heap time: 0, fetch: 2, ioread: 0, readrows: 2, rows: 2)
             SUBQUERY_CACHE (hit: 2, miss: 2, size: 150808, status: enabled)
 
 pl_csql_deterministic 함수의 Trace 결과에서는 **SUBQUERY_CACHE** 항목이 표시되며(hit: 2, miss: 2, size: 150808, status: enabled), 상단의 **SCAN (table: dual)** 에서 읽은 레코드 수(**readrows**)가 **NOT DETERMINISTIC** 예시와 비교해 감소한 것을 확인할 수 있다.

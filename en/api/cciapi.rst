@@ -868,7 +868,7 @@ cci_connect_with_url
     *   **rcTime**: After the failure occurred on the first connected broker, the application connects to the broker specified by **altHosts**\(broker failover). Then it attempts to reconnect to the first connected broker at every **rcTime**\(default value: 600 seconds).
     
     *    **loadBalance**: When this value is true, the applications try to connect to the main host and alternative hosts specified with the **altHosts** property as a random order. (default value: false).
-    
+
     *   **login_timeout** | **loginTimeout**: Timeout value (unit: msec.) for database login. Upon timeout, a **CCI_ER_LOGIN_TIMEOUT** (-38) error is returned. The default value is  **30,000**\ (30 sec.). If this value is 0, it means infinite waiting. This value is also applied when internal reconnection occurs after the initial connection.
 
     *   **query_timeout** | **queryTimeout**: If time specified in these properties has expired when calling :c:func:`cci_prepare`, :c:func:`cci_execute`, etc. a cancellation message for query request which was sent to a server will be delivered and called function returns a **CCI_ER_QUERY_TIMEOUT** (-39) error. The default value is 0. If this value is 0, it means infinite waiting. The value returned upon timeout may vary depending on a value specified in **disconnect_on_query_timeout**. For details, see **disconnect_on_query_timeout**.
@@ -2723,7 +2723,7 @@ cci_register_out_param
 
 .. c:function:: int cci_register_out_param(int req_handle, int index)
 
-    The **cci_register_out_param** function is used to bind the parameters as outbind in Java Stored Procedure. The index value begins from 1.
+    The **cci_register_out_param** function is used to bind parameters as outbind in a stored procedure. The index value starts from 1.
     To call this function, **CCI_PREPARE_CALL** flag of **cci_prepare** function should be specified.
 
     :param req_handle: (IN) Request handle
@@ -2734,19 +2734,16 @@ cci_register_out_param
         *    **CCI_ER_CON_HANDLE**
         *    **CCI_ER_USED_CONNECTION**
     
-    The following shows to print out "Hello, CUBRID" string with Java Stored Procedure.
-    
-    To use Java Stored Procedure, firstly specify **java_stored_procedure** parameter in cubrid.conf as **yes**, then start the database.
+    The following shows how to print the string "Hello, CUBRID" string using a stored procedure.
     
     ::
     
         $ vi cubrid.conf
-        java_stored_procedure=yes
     
         $ cubrid service start
         $ cubrid server start demodb
     
-    Implement and compile the class to be used as Java Stored Procedure.
+    Implement and compile the class to be used as a stored procedure.
     
     .. code-block:: java
     

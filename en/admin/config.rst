@@ -2,6 +2,8 @@
 :meta-keywords: cubrid configure, cubrid conf, cubrid parameters, cubrid settings, cubrid.conf, cubrid default parameters
 :meta-description: How to configure CUBRID database behavior. Set system parameters for Connection, Memory, Disk, Concurrency/Lock, Logging, Transaction Processing, Query Execution, Utilities and High Availability.
 
+.. _system_config:
+
 *****************
 System Parameters
 *****************
@@ -76,11 +78,11 @@ Using Session Commands of the CSQL Interpreter
 
 You can configure system parameter values by using session commands (;SET) in the CSQL Interpreter. Note that you cannot change every parameter. For updatable parameters, see :ref:`cubrid-conf`.
 
-The following example shows how to configure the block_ddl_statement parameter to 1 so that execution of DDL statements is not allowed. ::
+The following example shows how to configure the block_ddl_statement parameter to yes so that execution of DDL statements is not allowed. ::
 
-    csql> ;se block_ddl_statement=1
+    csql> ;set block_ddl_statement=yes
     === Set Param Input ===
-    block_ddl_statement=1
+    block_ddl_statement=yes
 
 .. _cubrid-conf:
 
@@ -122,7 +124,7 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 | Category                      | Parameter Name                      | Applied                 | Session | Type     | Default Value                  | Dynamic Change        |
 +===============================+=====================================+=========================+=========+==========+================================+=======================+
-| :ref:`connection-parameters`  | cubrid_port_id                      | client parameter        |         | int      | 1,523                          |                       |
+| :ref:`connection-parameters`  | cubrid_port_id                      | client parameter        |         | int      | 1523                           |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | check_peer_alive                    | client/server parameter | O       | string   | both                           | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -345,13 +347,13 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | index_unfill_factor                 | server parameter        |         | float    | 0.05                           |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | java_stored_procedure               | server parameter        |         | bool     | no                             |                       |
+|                               | stored_procedure                    | server parameter        |         | bool     | yes                            |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | java_stored_procedure_port          | server parameter        |         | int      | 0                              |                       |
+|                               | stored_procedure_uds                | server parameter        |         | bool     | yes                            |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | java_stored_procedure_uds           | server parameter        |         | bool     | yes                            |                       |
+|                               | stored_procedure_port               | server parameter        |         | int      | 0                              |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | java_stored_procedure_jvm_options   | server parameter        |         | string   |                                |                       |
+|                               | stored_procedure_vm_options         | server parameter        |         | string   |                                |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | multi_range_optimization_limit      | server parameter        | O       | int      | 100                            | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -524,13 +526,13 @@ The following are parameters related to the database server. The type and value 
 +---------------------------------+--------+----------+----------+----------+
 | Parameter Name                  | Type   | Default  | Min      | Max      |
 +=================================+========+==========+==========+==========+
-| cubrid_port_id                  | int    | 1,523    | 1        |          |
+| cubrid_port_id                  | int    | 1523     | 1        |          |
 +---------------------------------+--------+----------+----------+----------+
 | check_peer_alive                | string | both     |          |          |
 +---------------------------------+--------+----------+----------+----------+
 | db_hosts                        | string | NULL     |          |          |
 +---------------------------------+--------+----------+----------+----------+
-| max_clients                     | int    | 100      | 10       | 4,000    |
+| max_clients                     | int    | 100      | 10       | 4000     |
 +---------------------------------+--------+----------+----------+----------+
 | tcp_keepalive                   | bool   | yes      |          |          |
 +---------------------------------+--------+----------+----------+----------+
@@ -539,7 +541,7 @@ The following are parameters related to the database server. The type and value 
 
 **cubrid_port_id**
 
-    **cubrid_port_id** is a parameter to configure the port to be used by the master process. The default value is **1,523**. If the port 1,523 is already being used on the server where CUBRID is installed or it is blocked by a firewall, an error message, which means the master server is not connected because the master process cannot be running properly, is displayed. If such port conflict occurs, the administrator must change the value of **cubrid_port_id** considering the server environment.
+    **cubrid_port_id** is a parameter to configure the port to be used by the master process. The default value is **1523**. If port 1523 is already being used on the server where CUBRID is installed or is blocked by a firewall, an error message is displayed indicating that the master server is not connected because the master process cannot run properly. If such a port conflict occurs, the administrator must change the value of **cubrid_port_id** considering the server environment.
 
 .. _check_peer_alive:
 
@@ -578,7 +580,7 @@ The following are parameters related to the database server. The type and value 
 
     For example, in the **cubrid_broker.conf** file, two node of a broker where the **MAX_NUM_APPL_SERVER** value of [%query_editor] is 50 and the **MAX_NUM_APPL_SERVER** value of [%BROKER1] is 50 is trying to connect one database server, the concurrent connections (**max_clients** value) allowed by the database server can be configured as follows:
 
-    *   (the maximum number of 100 by each node of a broker) * (two node of a broker) + (10 spare for database server connections of internal CUBRID process such as database server connection of CSQL Interpreter or HA log replication process) = 210
+    *   (the maximum number of 50 by each node of a broker) * (two node of a broker) + (10 spare for database server connections of internal CUBRID process such as database server connection of CSQL Interpreter or HA log replication process) = 110
 
     Especially, in HA environment, the value must be greater than the sum specified in **MAX_NUM_APPL_SERVER** of every broker node which connects to the same database.
 
@@ -1619,14 +1621,23 @@ The following are parameters related to SQL statements and data types supported 
         ==========
                0.5
 
-    .. note:: 
+    .. note::
 
-        The oracle_compat_number_behavior is only applied, when reading NUMERIC, DOUBLE, and FLOAT type data in string format in JDBC/CCI.  The related functions of JDBC/CCI are as follows.
+        The following JDBC/CCI functions are affected by the oracle_compat_number_behavior setting:
 
-        * JDBC : getString(int columnIndex), getString(String columnLabel), getObject(int columnIndex) , getObject(String columnLabel)
+        **JDBC**
 
-        * CCI :  cci_get_data (CCI_A_TYPE_STR as type), Example) cci_get_data(req, i, CCI_A_TYPE_STR, &data, &ind)
-		 
+        getString(int columnIndex), getString(String columnLabel)
+            *   Data Types Affected: NUMERIC, DOUBLE, FLOAT
+
+        getObject(int columnIndex), getObject(String columnLabel)
+            *   Data Types Affected: NUMERIC
+
+        **CCI**
+
+        cci_get_data(CCI_A_TYPE_STR as type), Example) cci_get_data(req, i, CCI_A_TYPE_STR, &data, &ind)
+            *   Data Types Affected: NUMERIC, DOUBLE, FLOAT
+
 .. _oracle_style_empty_string:
 
 **oracle_style_empty_string**
@@ -2182,13 +2193,13 @@ The following are other parameters. The type and value range for each parameter 
 +-------------------------------------+--------+----------------+----------------+----------------+
 | index_unfill_factor                 | float  | 0.05           | 0              | 0.5            |
 +-------------------------------------+--------+----------------+----------------+----------------+
-| java_stored_procedure               | bool   | no             |                |                |
+| stored_procedure                    | bool   | yes            |                |                |
 +-------------------------------------+--------+----------------+----------------+----------------+
-| java_stored_procedure_port          | int    | 0              | 0              | 65535          |
+| stored_procedure_uds                | bool   | yes            |                |                |
 +-------------------------------------+--------+----------------+----------------+----------------+
-| java_stored_procedure_uds           | bool   | yes            |                |                |
+| stored_procedure_port               | int    | 0              | 0              | 65535          |
 +-------------------------------------+--------+----------------+----------------+----------------+
-| java_stored_procedure_jvm_options   | string |                |                |                |
+| stored_procedure_vm_options         | string |                |                |                |
 +-------------------------------------+--------+----------------+----------------+----------------+
 | multi_range_optimization_limit      | int    | 100            | 0              | 10,000         |
 +-------------------------------------+--------+----------------+----------------+----------------+
@@ -2287,49 +2298,54 @@ The following are other parameters. The type and value range for each parameter 
 
     If this value is small, the amount of free space for the nodes is small when an index is created. Therefore, it is likely that the index nodes are spilt by **INSERT** or **UPDATE** because free space for the index nodes is filled in a short period of time.
 
-**java_stored_procedure**
+**stored_procedure**
 
-    **java_stored_procedure** is a parameter to configure whether to use Java stored procedures by running the Java Virtual Machine (JVM). If the parameter is set to **no**, which is the default value, JVM is not executed; if it is set to **yes**, JVM is executed so you can use Java stored procedures. Therefore, configure the parameter to yes if you plan to use Java stored procedures.
+    **stored_procedure** is a parameter to enable the use of stored procedures by running the cub_pl process. The default value is **yes**. If set to **no**, the cub_pl process will not run, and stored procedures cannot be used.
 
-**java_stored_procedure_port**
+**stored_procedure_uds**
 
-    **java_stored_procedure_port** is a parameter to configure the port number receiving a request that calls the java stored procedures from database server. the value must be unique and smaller than 65,535. The default value of **java_stored_procedure_port** is **0** which means the port number is automatically allocated, typically from an ephemeral port range. The value configured in this parameter affects only **java_stored_procedure** is set to **yes**. Note that an error occurs if the parameter is configured in [common]. ::
+    **stored_procedure_uds** is a parameter to use a Unix domain socket connection between the cub_pl process and the cub_server process when calling stored procedures. The default value is **yes**. If set to **no** or on Windows, the connection operates using a TCP socket regardless of the parameter value.
+        
+    .. note:: 
+
+        For information on the **CUBRID_TMP** environment variable that specifies the Unix domain socket file path for the cub_pl process, see :doc:`/env`.
+
+**stored_procedure_port**
+
+    **stored_procedure_port** is a parameter to set the TCP port number for calling stored procedures on the database server. This value must be less than 65,536. The default value is **0**, which means the port number is automatically assigned from an ephemeral port range. This parameter is only applicable when the **stored_procedure** parameter is set to **yes**. Note that configuring this parameter in the [common] section of cubrid.conf will result in an error. ::
 
         ..... 
         [common] 
         ..... 
         # an error occurs. remove the following line.
-        java_stored_procedure_port=4333
+        stored_procedure_port=4333
         .....
         [@testdb]
         .....
         # the parameter is configured successfully for testdb
-        java_stored_procedure_port=4334
+        stored_procedure_port=4334
         .....
 
-**java_stored_procedure_uds**
+**stored_procedure_vm_options**
 
-    **java_stored_procedure_uds** is a parameter to connect between the cub_javasp process and the cub_server process through a Unix domain socket instead of TCP when calling a Java stored procedure. The default value of **java_stored_procedure_uds** is **yes**. For Windows, regardless of the value of the parameter, TCP connection is used.
+    **stored_procedure_vm_options** is a parameter to configure the virtual machine settings of Procedural Language Server where stored procedures are executed. Each option string should be separated by spaces. The default is an empty string. If the parameter is set in the [@<database>] section, the options set in the [common] section do not apply to that database.
 
     .. note::
 
-        For the **CUBRID_TMP** environment variable that specifies the UNIX domain socket file path of *cub_javasp** processes, see :doc:`/env`.
-
-**java_stored_procedure_jvm_options**
-
-    **java_stored_procedure_jvm_options** is a parameter to configure Java Virtual Machine (JVM) and Java options on which Java stored procedures are executed. Each option string should be separated by spaces. For JVM options, there are three types of options; standard, non-standard and advanced options. non-standard and advanced options are not guaranteed to be supported on all VM implementations. The default is an empty string. If the parameter value configured in [@<database>], it overwrites the value specified in [common]. ::
+        The cub_pl process internally uses the Java Virtual Machine (JVM), so JVM options can be specified. There are standard, non-standard, and advanced JVM options. Non-standard and advanced options are not guaranteed to be supported by all JVM implementations.
+        
+    ::
 
         ..... 
         [common] 
         ..... 
-        java_stored_procedure_jvm_options="-Xms1024m -Xmx1024m -XX:PermSize=512m -XX:MaxPermSize=512m"
+        stored_procedure_vm_options="-Xms1024m -Xmx1024m -XX:PermSize=512m -XX:MaxPermSize=512m"
         .....
         [@testdb]
         .....
-        java_stored_procedure=yes
 
-        # Note that -XX:PermSize=512m and -XX:MaxPermSize=512m will not be applied for testdb, Even though they specified in [common] section.
-        java_stored_procedure_jvm_options="-Xms2048m -Xmx2048m"
+        # Note that -XX:PermSize=512m and -XX:MaxPermSize=512m will not be applied for testdb, even though they are specified in the [common] section.
+        stored_procedure_vm_options="-Xms2048m -Xmx2048m"
         .....
 
 **multi_range_optimization_limit**
@@ -2498,6 +2514,8 @@ The following table shows the broker parameters available in the broker configur
 | :ref:`broker-common-parameters` | Access                  | ACCESS_CONTROL                          | bool   | no                           |           |
 |                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
 |                                 |                         | ACCESS_CONTROL_FILE                     | string |                              |           |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | ACCESS_CONTROL_DEFAULT_POLICY           | bool   | DENY                         |           |
 |                                 +-------------------------+-----------------------------------------+--------+------------------------------+-----------+
 |                                 | Logging                 | ADMIN_LOG_FILE                          | string | log/broker/cubrid_broker.log |           |
 |                                 +-------------------------+-----------------------------------------+--------+------------------------------+-----------+
@@ -2523,8 +2541,6 @@ The following table shows the broker parameters available in the broker configur
 |                                 |                         | RECONNECT_TIME                          | sec    | 600                          | available |
 |                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
 |                                 |                         | REPLICA_ONLY                            | string | OFF                          |           |
-|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
-|                                 |                         | ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER | bool   | DENY                         |           |
 |                                 +-------------------------+-----------------------------------------+--------+------------------------------+-----------+
 |                                 | Broker App. Server(CAS) | APPL_SERVER_MAX_SIZE                    | MB     | Windows 32bit: 40,           | available |
 |                                 |                         |                                         |        | Windows 64bit: 80,           |           |
@@ -2693,6 +2709,14 @@ Access
 
     **ACCESS_CONTROL_FILE** is a parameter to configure the name of a file in which a database name, database user ID, and the list of IPs are stored. List of IPs can be written up to the maximum of 256 lines per <*db_name*>:<*db_user*> in a broker. For details, see :ref:`limiting-broker-access`.
 
+**ACCESS_CONTROL_DEFAULT_POLICY**
+
+    If no broker is specified in the **ACCESS_CONTROL_FILE** and the value of **ACCESS_CONTROL_DEFAULT_POLICY** is **ALLOW**, access to the broker is permitted for everyone. The default is **DENY**. For more information, see :ref:`limiting-broker-access`.
+
+    .. note::
+    
+       The settings value ALLOW or DENY for **ACCESS_CONTROL_DEFAULT_POLICY** is valid only when **ACCESS_CONTROL** is set to **ON**. If it is set to **OFF**, the setting value is not applicable.
+
 Logging
 ^^^^^^^
 
@@ -2776,15 +2800,6 @@ Access
     
         Please note that replication mismatch occurs when you write the data directly to the replica DB.
 
-.. _access_control_behavior_for_emptybroker:
-
-**ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER**	
-	
-    If no broker is specified in **ACCESS_CONTROL_FILE** and the value of **ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER** is **ALLOW** , all access to the broker are allowed. The default is **DENY**. For more information, see :ref:`limiting-broker-access`.
-
-    .. note::
-    
-       The settings value ALLOW or DENY for **ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER** is valid only when **ACCESS_CONTROL** is set to **ON**. If it is set to **OFF**, the setting value is not applicable.
 	
 Broker App. Server(CAS)
 ^^^^^^^^^^^^^^^^^^^^^^^
@@ -2955,7 +2970,7 @@ Transaction & Query
 
     **JDBC_CACHE**, **JDBC_CACHE_HINT_ONLY**, and **JDBC_CACHE_LIFE_TIME** parameters are meaningless
 
-	when the system parameter both of **max_query_cache_entries** and **query_cache_size_in_pages** are not set to positive value.
+	when the query cache-related system parameter both of **max_query_cache_entries** and **query_cache_size_in_pages** are not set to positive value.
 
 	For result cache working, the SELECT query must include query hint /\*+ QUERY_CACHE \*/ together with these JDBC related paramter setting.
 

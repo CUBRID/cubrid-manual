@@ -210,7 +210,7 @@ CUBRID는 3-tier DBMS로, 응용 프로그램과 데이터베이스 서버를 �
 
 .. image:: /images/image25.png
 
-다음은 마스터 노드, 슬레이브 노드의 각 장비 내에 Read Write(RW) 브로커와 Read Only(RO) 브로커를 구성한 예이다. *app1*과 *app2* URL의 첫 번째 접속은 각각 *broker A1* (RW), *broker B2* (RO) 이고, 두 번째 접속(**altHosts**)은 각각 *broker A2* (RO), *broker B1* (RW)이다. *nodeA* 를 포함한 장비가 고장나면, *app1*과 *app2*는 *nodeB* 를 포함한 장비의 브로커에 접속한다.
+다음은 마스터 노드, 슬레이브 노드의 각 장비 내에 Read Write(RW) 브로커와 Read Only(RO) 브로커를 구성한 예이다. *app1*\과 *app2*\  URL의 첫 번째 접속은 각각 *broker A1* (RW), *broker B2* (RO) 이고, 두 번째 접속(**altHosts**)은 각각 *broker A2* (RO), *broker B1* (RW)이다. *nodeA* 를 포함한 장비가 고장나면, *app1*\과 *app2*\는 *nodeB*\ 를 포함한 장비의 브로커에 접속한다.
 
 .. image:: /images/image26.png
 
@@ -334,7 +334,7 @@ CUBRID HA에 포함할 데이터베이스를 모든 CUBRID HA 노드에서 동�
 
 **cubrid_ha.conf**
 
-**$CUBRID/conf/cubrid_ha.conf** 의 **ha_port_id**, **ha_node_list**, **ha_db_list** 를 모든 HA 노드에 동일하게 설정한다. 다음 예에서 마스터 노드의 호스트 이름은 *nodeA*, 슬레이브 노드의 호스트 이름은 *nodeB*\라고 가정한다.::
+**$CUBRID/conf/cubrid_ha.conf** 의 **ha_port_id**, **ha_node_list**, **ha_db_list** 를 모든 HA 노드에 동일하게 설정한다. 다음 예에서 마스터 노드의 호스트 이름은 *nodeA*, 슬레이브 노드의 호스트 이름은 *nodeB*\라고 가정한다. ::
 
     [common]
     ha_port_id=59901
@@ -1065,10 +1065,10 @@ HA 환경에서 브로커는 여러 개의 DB 서버 중 하나와 접속을 결
 |            |                      |                               | 가장 마지막에 확인한                                                  |
 |            |                      |                               | 호스트와 연결.                                                        |
 |            |                      |                               |                                                                       |
-|            |                      |                               | * -1: databases.txt에 명시한 모든                                     | 
-|            |                      |                               |       호스트의 복제 지연 여부를 확인.                                 | 
-|            |                      |                               | * 0: 복제 지연 여부를 확인하지 않고                                   | 
-|            |                      |                               |      바로 2차 연결을 수행.                                            | 
+|            |                      |                               | * -1: databases.txt에 명시한 모든 호스트의 복제 지연 여부를 확인.     | 
+|            |                      |                               |                                                                       | 
+|            |                      |                               | * 0: 복제 지연 여부를 확인하지 않고 바로 2차 연결을 수행.             | 
+|            |                      |                               |                                                                       | 
 |            |                      |                               | * n(>0): n개의 호스트까지 복제 지연 여부를 확인.                      | 
 |            |                      +-------------------------------+-----------------------------------------------------------------------+
 |            |                      | RECONNECT_TIME                | 적합하지 않은 DB 서버에 연결된 이후 재연결을 시도하는 시간.           |
@@ -1397,10 +1397,10 @@ CUBRID HA 그룹 정보와 CUBRID HA 구성 요소의 정보를 확인할 수 �
 
 
 -v의 경우, 해당노드의 상세정보를 출력한다.
-* score는 노드의 우선순위를 나타내며, 낮을 수록 높은 우선순위를 가진다.
-* missed heartbeat은 서로의 노드를 인식하는 heartbeat의 유실율을 나타내며, 해당 값이 높은 경우 환경설정/네트워크/방화벽 등을 점검해야 한다.
+**score**\는 노드의 우선순위를 나타내며, 낮을 수록 높은 우선순위를 가진다.
+**missed heartbeat**\은 서로의 노드를 인식하는 heartbeat의 유실율을 나타내며, 해당 값이 높은 경우 환경설정/네트워크/방화벽 등을 점검해야 한다.
 
-Applylogdb, Copylogdb, Server 프로세스에 이벤트 발생 시간이며,이벤트가 발생하지 않은 경우 00:00:00.000으로 표기된다.
+Applylogdb, Copylogdb, Server 프로세스의 이벤트 발생 시간이며,이벤트가 발생하지 않은 경우 00:00:00.000으로 표기된다.
 
 * registered-time : 명령어를 통하여 프로세스 구동 요청 시간
 * deregistered-time : 명령어를 통하여 원격 프로세스 정지 요청 시간 (copylogdb와 applylogdb만 해당)
@@ -1978,12 +1978,12 @@ HA로 구성된 노드 수가 많으므로 CUBRID HA 그룹 내의 여러 노드
     Connection connection = DriverManager.getConnection(
         "jdbc:CUBRID:nodeA:33000:testdb:::?charSet=utf-8&altHosts=nodeB:33000", "dba", "");
 
-읽기 전용으로 접속하기 위한 응용 프로그램은 *node C*, *node D* 또는 *node E*\ 에 있는 브로커에 연결한다. 다음은 JDBC 응용 프로그램의 예이다. "**loadBalance**\ =true"로 설정하여 메인 호스트와 **altHosts**\ 에 지정한 호스트들에 랜덤한 순서로 연결한다.
+읽기 전용으로 접속하기 위한 응용 프로그램은 *node C*, *node D* 또는 *node E*\ 에 있는 브로커에 연결한다. 다음은 JDBC 응용 프로그램의 예이다. "**loadBalance**\ =sh"로 설정하여 메인 호스트와 **altHosts**\ 에 지정한 호스트들에 랜덤한 순서로 연결한다.
 
 .. code-block:: java
 
     Connection connection = DriverManager.getConnection(
-        "jdbc:CUBRID:nodeC:33000:testdb:::?charSet=utf-8&loadBalance=true&altHosts=nodeD:33000,nodeE:33000", "dba", "");
+        "jdbc:CUBRID:nodeC:33000:testdb:::?charSet=utf-8&loadBalance=sh&altHosts=nodeD:33000,nodeE:33000", "dba", "");
 
 기타 자세한 사항은 환경 설정의 :ref:`ha-jdbc-conf`, :ref:`ha-cci-conf`, :ref:`ha-php-conf`\ 을 참고한다.
 
@@ -2095,7 +2095,7 @@ CUBRID HA 그룹 내의 노드 간 특정 테이블의 데이터가 동기화되
 
 **저장 프로시저**
 
-CUBRID HA에서 **PL/CSQL 저장 프로시저**\는 복제되지만 Java 저장 프로시저는 선언문만 복제되고, 실행 프로그램은 복제되지 않으므로 수동으로 HA의 모든 노드에 실행 프로그램을 복사해야 한다. 
+CUBRID HA에서 **PL/CSQL 저장 프로시저**\는 복제되지만 **Java 저장 프로시저**\는 선언문만 복제되고, 실행 프로그램은 복제되지 않으므로 수동으로 HA의 모든 노드에 실행 프로그램을 복사해야 한다. 
 
 저장 프로시저 실행을 위해 CUBRID 프로시저 언어 서버의 구동이 필요하며 데이터베이스 서버 구동 시 자동으로 구동된다.
 

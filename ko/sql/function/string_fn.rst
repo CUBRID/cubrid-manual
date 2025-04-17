@@ -20,11 +20,12 @@
 
 SQL 구문 관련 파라미터인 **pipes_as_concat** 파라미터(기본값: yes)가 no이면 이중 파이프 기호(||)가 불리언(Boolean) OR 연산자로 해석되며 **plus_as_concat** 파라미터(기본값: yes)가 no이면 덧셈 기호가 + 연산자로 해석되므로, 이러한 경우 **CONCAT** 함수를 사용하여 문자열 또는 비트열을 병합하는 것이 좋다. ::
 
-    <concat_operand1> +  <concat_operand1>
-    <concat_operand2> || <concat_operand2>
+    <concat_operand1> +  <concat_operand2>
+    <concat_operand1> || <concat_operand2>
     
         <concat_operand1> ::=
             bit string |
+            character string
             NULL
          
         <concat_operand2> ::=
@@ -106,7 +107,7 @@ BIN
 
 .. function:: BIN (n)
 
-    **BIN** 함수는 **BIGINT** 타입의 숫자를 이진 문자열로 표현한다. 입력 인자가 **NULL** 이면 **NULL** 을 반환한다. **BIGNIT**\ 로 변환되지 않는 문자열을 입력할 때 **cubrid.conf**\ 의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다.
+    **BIN** 함수는 **BIGINT** 타입의 숫자를 이진 문자열로 표현한다. 입력 인자가 **NULL** 이면 **NULL** 을 반환한다. **BIGINT**\ 로 변환되지 않는 문자열을 입력할 때 **cubrid.conf**\ 의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다.
 
     :param n: **BIGINT** 타입의 숫자
     :rtype: STRING
@@ -197,7 +198,7 @@ CHAR_LENGTH, CHARACTER_LENGTH, LENGTHB, LENGTH
 .. function:: LENGTHB (string)
 .. function:: LENGTH (string)
 
-    문자의 개수를 정수 값으로 반환한다. CUBRID가 지원하는 문자셋에 관한 상세한 설명은 :doc:`/sql/i18n`\ 을 참고한다.
+    문자의 개수를 정수 값으로 반환한다. CUBRID가 지원하는 문자셋에 관한 상세한 설명은 :doc:`/sql/i18n`\ 를 참고한다.
     **CHAR_LENGTH**, **CHARACTER_LENGTH**, **LENGTHB**, **LENGTH** 함수는 동일하다.
 
     :param string: 문자 개수 단위로 길이를 구할 문자열을 지정한다. **NULL** 이 지정된 경우는 **NULL** 값이 반환된다.

@@ -185,7 +185,7 @@ CUBRID 프로시저 언어 (PL) 서버 제어 프로세스를 제어하기 위�
     % cubrid pl status demodb
 
     @ cubrid pl status
-    Procedure Language Server (demobdb, pid 12345, UDS)
+    Procedural Langauge Server (demobdb, pid 12345, UDS)
     VM arguments :
     -------------------------------------------------
     ...
@@ -1460,9 +1460,9 @@ SHARD-Q는 Shard Waiting Queue를 줄인 말이다. SHARD proxy 프로세스가 
 ---------------------
 
 브로커에 접속하는 응용 클라이언트를 제한하려면 **cubrid_broker.conf**\의 **ACCESS_CONTROL** 파라미터 값을 ON으로 설정하고, **ACCESS_CONTROL_FILE** 파라미터 값에 접속을 허용하는 사용자와 데이터베이스 및 IP 목록을 작성한 파일 이름을 입력한다.
-만약 ACCESS_CONTROL_FILE에 브로커 이름이 없으면, 해당 브로커로의 모든 접속이 제한된다. 이 경우, ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER 파라미터를 설정하여 모든 접속을 허용할 수 있다.
-**ACCESS_CONTROL** 브로커 파라미터의 기본값은 **OFF**\이다.
-**ACCESS_CONTROL**, **ACCESS_CONTROL_FILE** 파라미터는 공통 적용 파라미터가 위치하는 [broker] 아래에 작성해야 하며, **ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER** 파라미터는 각각의 브로커에 작성하야 한다.
+ACCESS_CONTROL_FILE에 해당 브로커 이름이 없는 경우 그 브로커로의 모든 접속은 **ACCESS_CONTROL_DEFAULT_POLICY** 파라미터에 의해 결정된다. 이 파라미터의 값이 DENY 인 경우 접속이 제한되며, ALLOW 인 경우 접속이 허용된다.
+**ACCESS_CONTROL** 브로커 파라미터의 기본값은 **OFF** , **ACCESS_CONTROL_DEFAULT_POLICY** 의 기본값은 **DENY** 이다.
+**ACCESS_CONTROL** , **ACCESS_CONTROL_FILE** , **ACCESS_CONTROL_DEFAULT_POLICY** 파라미터는 공통 파라미터가 지정되는 [broker] 섹션 아래에 작성해야 한다.
 
 **ACCESS_CONTROL_FILE**\ 의 형식은 다음과 같다.
 
@@ -1494,13 +1494,12 @@ ip_list_file의 작성 형식은 다음과 같다.
 
 *   <ip_addr>: 접근을 허용할 IP 명. 뒷자리를 \*로 입력하면 뒷자리의 모든 IP를 허용한다.
 
-**ACCESS_CONTROL** 값이 ON 상태에서 **ACCESS_CONTROL_FILE**\에 지정되지 않으면 브로커는 localhost에서만 접속을 허용한다. 
-그러나 **ACCESS_CONTROL_FILE** 에 지정되지 않은 브로커의 경우, **ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER** 의 값을 ALLOW로 설정한 브로커들에 대해서는 모든 접속 요청을 허용한다.
+**ACCESS_CONTROL** 값이 ON인 경우에도, localhost 의 접속은 허용된다. (즉, ip_list_file에 localhost ip인 127.0.01를 지정해도 무시됨) 
 
 **ACCESS_CONTROL_FILE** 에 지정되지 않은 브로커 접속 제한 방식.
 
 *  localhost에서만 접속 허용. (기본)
-*  ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER를 ALLOW 로 설정하면 모든 접속 허용.
+*  **ACCESS_CONTROL_DEFAULT_POLICY** 를 ALLOW 로 설정하면 모든 접속 허용.
 
 브로커 구동 시 **ACCESS_CONTROL_FILE** 및 ip_list_file 분석에 실패하는 경우 브로커는 구동되지 않는다. 
 
@@ -1586,17 +1585,17 @@ QUERY_EDITOR 브로커는 다음과 같은 응용의 접속 요청만을 허용�
     $ cubrid broker acl status 
     ACCESS_CONTROL=ON 
     ACCESS_CONTROL_FILE=access_file.txt 
+    ACCESS_CONTROL_DEFAULT_POLICY=ALLOW
   
     [%broker1] 
-    ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER=DENY
     demodb:dba:iplist1.txt 
            CLIENT IP LAST ACCESS TIME 
     ========================================== 
-        10.20.129.11 
+      10.20.129.11 
       10.113.153.144 2013-11-07 15:19:14 
       10.113.153.145 
       10.113.153.146 
-             10.64.* 2013-11-07 15:20:50 
+      10.64.* 2013-11-07 15:20:50 
   
     testdb:dba:iplist2.txt 
            CLIENT IP LAST ACCESS TIME 
@@ -1604,7 +1603,6 @@ QUERY_EDITOR 브로커는 다음과 같은 응용의 접속 요청만을 허용�
                    * 2013-11-08 10:10:12 
 
     [%broker2]
-    ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER=ALLOW
 
 **브로커 로그**
 
@@ -3219,7 +3217,7 @@ CUBRID 프로시저 언어 서버 상태 확인
     % cubrid pl status demodb
     
     @ cubrid pl status: demodb
-    Procedure Language Server (demodb, pid 9220, UDS)
+    Procedural Langauge Server (demodb, pid 9220, UDS)
     VM arguments :
     -------------------------------------------------
     ...
@@ -3232,65 +3230,33 @@ CUBRID 프로시저 언어 서버 상태 확인
 
 .. _cubrid-pl-environment-configuration:
 
-프로시저 언어 환경 설정
+프로시저 언어 환경: 번들 JDK 사용
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-CUBRID에서 프로시저 언어를 사용하기 위해서는 CUBRID 서버가 설치되는 환경에 Java Development Kit (JDK) 1.8 64bit 버전이 설치되어야 한다.
-JDK는 다음의 경로에서 다운로드할 수 있다.
+CUBRID에서 프로시저 언어 기능을 사용하기 위해 JVM 환경을 사용한다.
+CUBRID 서버는 설치 시 $CUBRID/vm 디렉토리에 Eclipse Temurin JDK 8 버전을 포함하므로 사용자의 환경에 별도로 JDK 환경을 구성할 필요가 없다.
+이 번들 JDK는 CUBRID에서 프로시저 언어 기능의 사용에 대해서 검증되어 있으며 일반적으로 좋은 성능과 안정성을 제공할 수 있으므로 사용을 권장한다.
+번들 JDK 대신 사용자의 환경에 구성된 JDK를 사용하기 위해 다음의 **CUBRID_JAVA_HOME** 환경 변수를 설정할 수 있다.
 
-* `OpenJDK 8 <https://openjdk.java.net/projects/jdk8/>`_
-* `Oracle JDK 8 <https://www.oracle.com/kr/java/technologies/javase/javase8-archive-downloads.html>`_
+**CUBRID_JAVA_HOME**
 
-JDK가 이미 설치되어 있다면, 아래와 같은 명령으로 JRE 버전을 확인한다. ::
+**CUBRID_JAVA_HOME** 환경 변수는 JDK 설치 디렉토리를 지정한다.
+사용자가 **CUBRID_JAVA_HOME**\을 환경 변수를 지정하지 않으면 CUBRID 설치 시 포함된 번들 JDK를 사용한다.
+만약 올바르지 않은 **CUBRID_JAVA_HOME**\을 지정하면 프로시저 언어 서버가 제대로 시작되지 않으며 오류를 반환할 수 있다.
+**CUBRID_JAVA_HOME**\의 경로에는 JDK 환경과 함께 libjvm 라이브러리가 함께 포함되어 있어야 한다.
 
-    % java -version
-    openjdk version "1.8.0_302"
-    OpenJDK Runtime Environment (build 1.8.0_302-b08)
-    OpenJDK 64-Bit Server VM (build 25.302-b08, mixed mode)
+다음은 **CUBRID_JAVA_HOME** 환경 변수를 설정하는 예시이다.
 
-**Windows 환경**
+::
 
-CUBRID는 Windows 환경에서 **jvm.dll** 파일을 로딩하여 Java 가상 머신을 실행시킨다. CUBRID는 먼저 시스템의 **Path** 환경 변수에서 **jvm.dll** 을 찾아 로딩한다. 만약 찾지 못하면 시스템 레지스트리에 등록된 Java 런타임 정보를 이용한다.
-
-아래와 같이 명령어를 실행하여 **JAVA_HOME** 환경 변수를 설정하고 Java 실행 파일이 있는 디렉터리를 **Path** 환경 변수에 추가할 수 있다. GUI를 이용해서 환경 변수를 설정하는 방법은 JDBC 설치 및 설정을 참고한다.
-
-* JDK 1.8 환경 변수를 설정한 예 ::
-
-    % set JAVA_HOME=C:\jdk1.8.0
-    % set PATH=%PATH%;%JAVA_HOME%\jre\bin\server
-
-SUN의 Java 가상 머신을 사용하지 않고 다른 벤더의 구현을 사용하는 경우를 포함하여 명시적으로 Java 가상 머신 (JVM)의 경로를 지정하려면 **jvm.dll** 파일의 경로를 **JVM_PATH** 환경 변수에 추가한다.
-CUBRID는 먼저 **JVM_PATH** 변수에서 **jvm.dll** 파일의 경로를 찾는다. **JVM_PATH** 가 설정되지 않았거나 파일을 로드할 수 없는 경우 위에서 설명한 **JAVA_HOME** 변수에서 **jvm.dll** 을 찾는다.
-
-*   **JVM_PATH** 환경 변수를 설정한 예 ::
+    **Windows 환경에서 설정 예시**
     
-    % set JVM_PATH=C:\jdk1.8.0\jre\bin\server\libjvm.dll
+        set CUBRID_JAVA_HOME=C:\Program Files\Java\jdk1.8.0_421
 
-**Linux/Unix 환경**
-
-CUBRID는 Linux/Unix 환경에서 **libjvm.so** 파일을 로딩하여 Java 가상 머신을 실행시킨다. CUBRID는 먼저 **LD_LIBRARY_PATH** 환경 변수에서 **libjvm.so** 파일을 찾아 로딩한다. 만약 찾지 못하면 **JAVA_HOME** 환경 변수를 이용하여 찾는다. 리눅스의 경우 glibc 2.3.4 이상만 지원되며, 아래는 리눅스 환경 설정 파일(예: **.profile**, **.cshrc**, **.bashrc**, **.bash_profile** 등)에 환경 변수를 설정하는 예이다.
-
-*   bash 셸에서 JDK 1.8 환경 변수를 설정한 예 ::
-
-    % JAVA_HOME=/usr/java/jdk1.8.0
-    % LD_LIBRARY_PATH=$JAVA_HOME/jre/lib/amd64:$JAVA_HOME/jre/lib/amd64/server:$LD_LIBRARY_PATH
-    % export JAVA_HOME
-    % export LD_LIBRARY_PATH
-
-*   csh 셸에서 JDK 1.8 환경 변수를 설정한 예 ::
-
-    % setenv JAVA_HOME /usr/java/jdk1.8.0
-    % setenv LD_LIBRARY_PATH $JAVA_HOME/jre/lib/amd64:$JAVA_HOME/jre/lib/amd64/server:$LD_LIBRARY_PATH
-    % set path=($path $JAVA_HOME/bin .)
-
-SUN의 Java 가상 머신을 사용하지 않고 다른 벤더의 구현을 사용하는 경우를 포함하여 명시적으로 Java 가상 머신 (JVM)의 경로를 지정하려면 Java VM( **libjvm.so** ) 파일의 경로를 **JVM_PATH** 환경 변수에 추가한다.
-**libjvm.so** 파일의 경로는 OS 플랫폼, 지원 비트마다 다를 수 있다. 예를 들어 SUN Sparc 머신에서 **libjvm.so** 파일의 경로는 **$JAVA_HOME/jre/lib/sparc** 이다.
-CUBRID는 먼저 **JVM_PATH** 변수에서 **libjvm.so** 파일의 경로를 찾는다. **JVM_PATH** 가 설정되지 않았거나 파일을 로드할 수 없는 경우 위에서 설명한 **JAVA_HOME** 변수에서 **libjvm.so** 을 찾는다.
-
-*   **JVM_PATH** 환경 변수를 설정한 예 ::
+    **Linux 환경에서 설정 예시**
     
-    % JVM_PATH=/usr/java/jdk1.8.0/jre/lib/amd64/server/libjvm.so
-    % export JVM_PATH
+        export CUBRID_JAVA_HOME=/usr/java/jdk1.8.0_421
+
 
 .. _cubrid-pl-system-parameter:
 
@@ -3320,17 +3286,17 @@ CUBRID 프로시저 언어 서버 로그
 
 CUBRID 프로시저 언어 서버의 로그는 설치 디렉터리의 **log/** 에 저장된다. 각 데이터베이스 별로 다음과 같은 로그 파일이 생성된다.
 
-*   에러 로그 ($CUBRID/log/[db_name]_java.err)
-*   자바 로그 ($CUBRID/log/[db_name]_java.log)
+*   에러 로그 ($CUBRID/log/[db_name]_pl.err)
+*   자바 로그 ($CUBRID/log/[db_name]_pl.log)
 
 에러 로그
 ^^^^^^^^^
 
-각 데이터베이스 별 프로시저 언어 서버의 에러 로그는 **$CUBRID/log** 디렉터리에 저장되며, 파일 이름은 **<db_name>_java.err** 형식으로 저장된다. 확장자는 **.err** 이다.
+각 데이터베이스 별 프로시저 언어 서버의 에러 로그는 **$CUBRID/log** 디렉터리에 저장되며, 파일 이름은 **<db_name>_pl.err** 형식으로 저장된다. 확장자는 **.err** 이다.
 
 ::
 
-    demodb_java.err
+    demodb_pl.err
 
 프로시저 언어 서버를 시작하는 동안 에러가 발생하면 에러 메시지가 에러 로그 파일에 저장된다.
 
@@ -3348,16 +3314,17 @@ CUBRID 프로시저 언어 서버의 로그는 설치 디렉터리의 **log/** �
     For more details on what errors can be occured, see :ref:`cubrid-pl-server-errors`.
 
 
-자바 로그
+예외 로그
 ^^^^^^^^^
 
-각 데이터베이스 별 프로시저 언어 서버의 자바 로그는 **$CUBRID/log** 디렉터리에 저장되며, 파일 이름은 **<db_name>_java.log** 형식으로 저장된다. 확장자는 **.log** 이다.
+프로시저 실행 중 발생하는 VM 예외 메시지를 저장한다.
+각 데이터베이스 별 프로시저 언어 서버의 예외 로그는 **$CUBRID/log** 디렉터리에 저장되며, 파일 이름은 **<db_name>_pl.log** 형식으로 저장된다. 확장자는 **.log** 이다.
 
 ::
 
-    demodb_java.log
+    demodb_pl.log
 
-JVM에서 저장 프로시저/함수를 수행하는 동안 예외가 발생하면 예외 문자열이 Java 로그에 저장된다.
+VM에서 저장 프로시저/함수를 수행하는 동안 예외가 발생하면 예외 문자열이 로그에 저장된다.
 
 ::
 
@@ -3374,16 +3341,16 @@ CUBRID 프로시저 언어 에러
 -------------------------------
 
 다음은 CUBRID 프로시저 언어 서버 시작 시 발생할 수 있는 에러에 대한 에러 메시지이다.
-에러 메시지는 **$CUBRID/log**/\ *<db_name>_java*\ **.err** 에 저장된다.
+에러 메시지는 **$CUBRID/log**/\ *<db_name>_pl*\ **.err** 에 저장된다.
 
 +-------+--------------------------------------------------+-----------------------------------------------------+-----------------------------------------------------------------------------------+
 | 에러  | 에러 메시지                                      | 설명                                                | 조치사항                                                                          |
 | 코드  |                                                  |                                                     |                                                                                   |
 +=======+==================================================+=====================================================+===================================================================================+
-| -900  | Java 가상 머신 라이브러리를 찾을 수 없습니다: ?  | CUBRID 가 JAVA_HOME 또는 JVM_PATH 환경 변수에서     | JAVA_HOME 또는 JVM_PATH 변수가 올바르게 설정 되었는지 확인한다.                   |
-|       |                                                  | JVM 라이브러리를 찾을 수 없음                       | :ref:`cubrid-pl-environment-configuration` 를 참고한다.                       |
+| -900  | 가상 머신 라이브러리를 찾을 수 없습니다: %1$s.   | CUBRID 가 CUBRID_JAVA_HOME 환경 변수에서            | CUBRID_JAVA_HOME 환경 변수가 올바르게 설정 되었는지 확인한다.                     |
+|       |                                                  | JVM 라이브러리를 찾을 수 없음                       | :ref:`cubrid-pl-environment-configuration` 를 참고한다.                           |
 +-------+--------------------------------------------------+-----------------------------------------------------+-----------------------------------------------------------------------------------+
-| -901  | Java 가상 머신을 시작할 수 없습니다: ?           | JVM 라이브러리 내에서 예상치 못한 에러가 발생       | JRE 재설치를 시도해보고 만약 동일한 에러가 발생하면                               |
+| -901  | PL 서버를 시작할 수 없습니다: %1$s.              | JVM 라이브러리 내에서 예상치 못한 에러가 발생       | JRE 재설치를 시도해보고 만약 동일한 에러가 발생하면                               |
 |       |                                                  | JVM 라이브러리 또는 $CUBRID/java/jspserver.jar 에서 | 다른 버전의 JRE를 설치를 시도한다.                                                |
 |       |                                                  | 문제가 발생할 가능성 있음                           | 그리고 $CUBRID/java/jspserver.jar 파일을 동일한 CUBRID 버전의 것으로 교체한다.    |
 +-------+--------------------------------------------------+-----------------------------------------------------+-----------------------------------------------------------------------------------+
@@ -3395,18 +3362,18 @@ CUBRID 프로시저 언어 에러
 | 에러  | 에러 메시지                                       | 설명                                                     | 조치사항                                                                                             |
 | 코드  |                                                   |                                                          |                                                                                                      |
 +=======+===================================================+==========================================================+======================================================================================================+
-| -902  | Java 가상 머신이 실행되지 않았습니다.             | 프로시저 언어 서버가 시작되지 않음                  | **cubrid pl start <db_name>** 명령어로 프로시저 언어 서버를 시작한다.                       |
-|       |                                                   |                                                          | 자세한 설명은 :ref:`cubrid-pl-server` 를 참고한다.                                               |
+| -902  | PL 서버가 실행되지 않았습니다.                    | 프로시저 언어 서버가 시작되지 않음                       | **cubrid pl start <db_name>** 명령어로 프로시저 언어 서버를 시작한다.                                |
+|       |                                                   |                                                          | 자세한 설명은 :ref:`cubrid-pl-server` 를 참고한다.                                                   |
 +-------+---------------------------------------------------+----------------------------------------------------------+------------------------------------------------------------------------------------------------------+
-| -903  | Java 가상 머신에 접속할 수 없습니다: ?            | 프로시저 언어 서버가 CAS로부터 연결할 수 없음       | 프로시저 언어 서버를 재시작한다. 만약 재시작을 실패하면                                         |
-|       |                                                   | 이 에러는 여러가지 이유로 발생할 수 있다.                | **cub_pl <db_name>** 프로세스를 리눅스 **kill** 명령어로 강제로 종료 한다.                       |
-|       |                                                   | 예를 들어 프로시저 언어 서버가 불안정하거나         | 그리고 다시 프로시저 언어 서버를 재시작한다.                                                    |
-|       |                                                   | CAS에서 프로시저 언어 서버에 연결할 수 없는 경우,   |                                                                                                      |
-|       |                                                   | 또는 프로시저 언어가 예기치 않게 종료(kill) 된 경우 | **cubrid pl status <db_name>** 명령어를 통해 프로시저 언어 서버의 포트로                    |
+| -903  | PL 서버에 접속할 수 없습니다: %1$s                | 프로시저 언어 서버가 CAS로부터 연결할 수 없음            | 프로시저 언어 서버를 재시작한다. 만약 재시작을 실패하면                                              |
+|       |                                                   | 이 에러는 여러가지 이유로 발생할 수 있다.                | **cub_pl <db_name>** 프로세스를 리눅스 **kill** 명령어로 강제로 종료 한다.                           |
+|       |                                                   | 예를 들어 프로시저 언어 서버가 불안정하거나              | 그리고 다시 프로시저 언어 서버를 재시작한다.                                                        |
+|       |                                                   | CAS에서 프로시저 언어 서버에 연결할 수 없는 경우,        |                                                                                                      |
+|       |                                                   | 또는 프로시저 언어가 예기치 않게 종료(kill) 된 경우      | **cubrid pl status <db_name>** 명령어를 통해 프로시저 언어 서버의 포트로                             |
 |       |                                                   | 이러한 에러 메시지를 출력한다.                           | CAS 에서 접근 가능한지 확인한다.                                                                     |
 |       |                                                   |                                                          | 방화벽에 의해 해당 포트가 막혀있을 수 있으므로 방화벽에서 포트를 열어준다.                           |
-|       |                                                   |                                                          | 필요한 경우 **stored_procedure_port** 파라미터를 설정하고 프로시저 언어 서버를 재시작한다. |
+|       |                                                   |                                                          | 필요한 경우 **stored_procedure_port** 파라미터를 설정하고 프로시저 언어 서버를 재시작한다.          |
 |       |                                                   |                                                          | 자세한 사항은 :ref:`connect-to-cubrid-server` 를 참고한다.                                           |
 +-------+---------------------------------------------------+----------------------------------------------------------+------------------------------------------------------------------------------------------------------+
-| -905  | Java 가상 머신과 통신 중 오류가 발생하였습니다: ? | CAS 가 프로시저 언어 서버로부터 잘못된 패킷을 받음  |                                                                                                      |
+| -905  | PL 서버와 통신 중 오류가 발생하였습니다: %1$d     | CAS 가 프로시저 언어 서버로부터 잘못된 패킷을 받음      |                                                                                                      |
 +-------+---------------------------------------------------+----------------------------------------------------------+------------------------------------------------------------------------------------------------------+

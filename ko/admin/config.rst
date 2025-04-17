@@ -78,11 +78,11 @@ CSQL 인터프리터의 세션 명령어 사용
 
 CSQL 인터프리터 내에서 세션 명령어(**;SET**)를 이용하여 시스템 파라미터의 값을 설정할 수 있다. 단, 갱신할 수 있는 파라미터는 한정되어 있으므로 주의한다. 갱신할 수 있는 파라미터는 :ref:`cubrid-conf`\ 를 참고한다.
 
-다음은 데이터 정의문 수행이 허용되지 않도록 **block_ddl_statement** 파라미터를 1로 설정하는 예제이다. ::
+다음은 데이터 정의문 수행이 허용되지 않도록 **block_ddl_statement** 파라미터를 yes로 설정하는 예제이다. ::
 
-    csql> ;se block_ddl_statement=1
+    csql> ;set block_ddl_statement=yes
     === Set Param Input ===
-    block_ddl_statement=1
+    block_ddl_statement=yes
 
 .. _cubrid-conf:
 
@@ -124,7 +124,7 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------+
 | 용도 구분                     | 파라미터 이름                       | 적용 구분               | 세션    | 타입     | 기본값                         | 동적 변경       |
 +===============================+=====================================+=========================+=========+==========+================================+=================+
-| :ref:`connection-parameters`  | cubrid_port_id                      | 클라이언트              |         | int      | 1,523                          |                 |
+| :ref:`connection-parameters`  | cubrid_port_id                      | 클라이언트              |         | int      | 1523                           |                 |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------+
 |                               | check_peer_alive                    | 클라이언트/서버         | O       | string   | both                           | 가능            |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------+
@@ -526,13 +526,13 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 +--------------------+----------+-------------------+---------+---------+
 | 파라미터 이름      | 타입     | 기본값            | 최소값  | 최대값  |
 +====================+==========+===================+=========+=========+
-| cubrid_port_id     | int      | 1,523             | 1       |         |
+| cubrid_port_id     | int      | 1523              | 1       |         |
 +--------------------+----------+-------------------+---------+---------+
 | check_peer_alive   | string   | both              |         |         |
 +--------------------+----------+-------------------+---------+---------+
 | db_hosts           | string   | NULL              |         |         |
 +--------------------+----------+-------------------+---------+---------+
-| max_clients        | int      | 100               | 10      |  4,000  |
+| max_clients        | int      | 100               | 10      |  4000   |
 +--------------------+----------+-------------------+---------+---------+
 | tcp_keepalive      | bool     | yes               |         |         |
 +--------------------+----------+-------------------+---------+---------+
@@ -541,7 +541,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
 **cubrid_port_id**
 
-    **cubrid_port_id**\ 는 마스터 프로세스가 사용하는 포트를 설정하기 위한 파라미터로 기본값은 **1,523**\ 이다. CUBRID를 설치한 서버에서 이미 1,523 포트를 사용하고 있거나, 방화벽에 의해 1523 포트가 차단된 경우에는 마스터 프로세스가 정상적으로 구동할 수 없으므로, 마스터 서버와 연결할 수 없다는 에러 메시지가 나타날 수 있다. 이와 같이 포트 충돌이 발생하는 경우, 관리자는 서버 환경을 고려하여 **cubrid_port_id** 의 설정값을 변경해야 한다.
+    **cubrid_port_id**\ 는 마스터 프로세스가 사용하는 포트를 설정하기 위한 파라미터로 기본값은 **1523**\ 이다. CUBRID를 설치한 서버에서 이미 1523 포트를 사용하고 있거나, 방화벽에 의해 1523 포트가 차단된 경우에는 마스터 프로세스가 정상적으로 구동할 수 없으므로, 마스터 서버와 연결할 수 없다는 에러 메시지가 나타날 수 있다. 이와 같이 포트 충돌이 발생하는 경우, 관리자는 서버 환경을 고려하여 **cubrid_port_id** 의 설정값을 변경해야 한다.
 
 .. _check_peer_alive:
 
@@ -580,7 +580,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
     예를 들어, **cubrid_broker.conf** 파일에서 [%query_editor]의 **MAX_NUM_APPL_SERVER** 값이 50이고 [%BROKER1]의 **MAX_NUM_APPL_SERVER** 값이 50인 브로커 노드 2개가 하나의 데이터베이스 서버에 접속하는 경우, 데이터베이스 서버가 허용하는 동시 접속 개수인 **max_clients** 의 값은 다음과 같이 설정할 수 있다.
 
-    *   (각 브로커 노드 당 최대 100개) * (브로커 노드 2개) + (CSQL 인터프리터의 데이터베이스 서버 접속, HA 로그 복사 프로세스와 같은 CUBRID 내부 프로세스의 데이터베이스 서버 접속 등에 대한 여유분 10개) = 210
+    *   (각 브로커 노드 당 최대 50개) * (브로커 노드 2개) + (CSQL 인터프리터의 데이터베이스 서버 접속, HA 로그 복사 프로세스와 같은 CUBRID 내부 프로세스의 데이터베이스 서버 접속 등에 대한 여유분 10개) = 110
 
     특히, HA 환경에서는 failover 등으로 인해 여러 브로커 노드 접속이 하나의 데이터베이스 서버에 집중될 수 있으므로, 같은 데이터베이스에 접속하는 모든 브로커 노드의 **MAX_NUM_APPL_SERVER** 값을 합한 값 보다 크게 설정해야 한다.
 
@@ -1612,13 +1612,22 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
         ==========
                0.5
 
-    .. note:: 
+    .. note::
 
-        JDBC/CCI에서 NUMERIC, DOUBLE 및 FLOAT 타입의 데이터를 문자열 형태로 읽을 경우만 oracle_compat_number_behavior 설정값이 적용된다. 아래는 설정값이 적용되는 JDBC/CCI함수이다.
-		
-        *   JDBC : getString(int columnIndex), getString(String columnLabel), getObject(int columnIndex), getObject(String columnLabel)
-		
-        *   CCI : cci_get_data(CCI_A_TYPE_STR type을 사용한 경우), 예) cci_get_data(req, i, CCI_A_TYPE_STR, &data, &ind)
+        oracle_compat_number_behavior 설정값이 적용되는 JDBC/CCI 함수는 다음과 같다.
+
+        **JDBC**
+
+        getString(int columnIndex), getString(String columnLabel)
+            *   적용 데이터 타입: NUMERIC, DOUBLE, FLOAT
+
+        getObject(int columnIndex), getObject(String columnLabel)
+            *   적용 데이터 타입: NUMERIC
+
+        **CCI**
+
+        cci_get_data(CCI_A_TYPE_STR 타입을 사용한 경우), 예: cci_get_data(req, i, CCI_A_TYPE_STR, &data, &ind)
+            *   적용 데이터 타입: NUMERIC, DOUBLE, FLOAT
 
 
 .. _oracle_style_empty_string:
@@ -2265,7 +2274,7 @@ HA 관련 파라미터
 
 **stored_procedure**
 
-    **stored_procedure** 는 cub_pl 프로세스를 실행하여 저장 프로시저(stored procedure)를 사용하게 하기 위한 파라미터이다. 기본값은 **yes**\ 이며, **no**\로 설정하는 경우 cub_pl 프로세스가 실행되지 않고, 저장 프로시저(Java stored procedure)를 사용할 수 없다.
+    **stored_procedure** 는 cub_pl 프로세스를 실행하여 저장 프로시저(stored procedure)를 사용하게 하기 위한 파라미터이다. 기본값은 **yes**\ 이며, **no**\로 설정하는 경우 cub_pl 프로세스가 실행되지 않고, 저장 프로시저(stored procedure)를 사용할 수 없다.
 
 **stored_procedure_uds**
 
@@ -2480,6 +2489,8 @@ cubrid_broker.conf 설정 파일과 기본 제공 파라미터
 | :ref:`broker-common-parameters` | 접속                    | ACCESS_CONTROL                          | bool   | no                           |           |
 |                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
 |                                 |                         | ACCESS_CONTROL_FILE                     | string |                              |           |
+|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
+|                                 |                         | ACCESS_CONTROL_DEFAULT_POLICY           | bool   | DENY                         |           |
 |                                 +-------------------------+-----------------------------------------+--------+------------------------------+-----------+
 |                                 | 로그                    | ADMIN_LOG_FILE                          | string | log/broker/cubrid_broker.log |           |
 |                                 +-------------------------+-----------------------------------------+--------+------------------------------+-----------+
@@ -2504,8 +2515,6 @@ cubrid_broker.conf 설정 파일과 기본 제공 파라미터
 |                                 |                         | RECONNECT_TIME                          | sec    | 600                          | 가능      |
 |                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
 |                                 |                         | REPLICA_ONLY                            | string | OFF                          |           |
-|                                 |                         +-----------------------------------------+--------+------------------------------+-----------+
-|                                 |                         | ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER | bool   | DENY                         |           |
 |                                 +-------------------------+-----------------------------------------+--------+------------------------------+-----------+
 |                                 | 브로커 응용 서버(CAS)   | APPL_SERVER_MAX_SIZE                    | MB     | Windows 32비트: 40,          | 가능      |
 |                                 |                         |                                         |        | Windows 64비트: 80,          |           |
@@ -2674,6 +2683,15 @@ CUBRID 설치 시 생성되는 기본 브로커 설정 파일인 **cubrid_broker
 
     **ACCESS_CONTROL_FILE** 은 브로커에 접속을 허용하는 데이터베이스 이름, 데이터베이스 사용자 ID, IP 목록을 저장한 파일 이름을 지정하는 파라미터이다. IP 목록은 하나의 브로커 내에서 <*db_name*>:<*db_user*> 별로 최대 256 라인까지 작성될 수 있다.  자세한 내용은 :ref:`limiting-broker-access` 을 참고한다.
 
+**ACCESS_CONTROL_DEFAULT_POLICY**
+
+    **ACCESS_CONTROL_FILE** 에 지정한 브로커가 없고 **ACCESS_CONTROL_DEFAULT_POLICY** 의 값이 **ALLOW** 인 경우, 브로커에 접속을 모두 허용한다. 기본값은 **DENY** 이다.  자세한 내용은 :ref:`limiting-broker-access` 을 참고한다.
+
+    .. note::
+    
+       **ACCESS_CONTROL_DEFAULT_POLICY** 의 설정값은 **ACCESS_CONTROL** 이 **ON** 일 때만 유효하며, **OFF** 일 경우에는 설정값이 적용되지 않는다.
+
+
 로그
 ^^^^
 
@@ -2757,15 +2775,6 @@ CUBRID 설치 시 생성되는 기본 브로커 설정 파일인 **cubrid_broker
     
         레플리카에 직접 데이터를 쓰는 경우 복제 불일치가 발생함에 주의해야 한다.
 
-.. _access_control_behavior_for_emptybroker:
-
-**ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER**	
-	
-    **ACCESS_CONTROL_FILE** 에 지정한 브로커가 없고 **ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER** 의 값이 **ALLOW** 인 경우, 브로커에 접속을 모두 허용한다. 기본값은 **DENY** 이다.  자세한 내용은 :ref:`limiting-broker-access` 을 참고한다.
-
-    .. note::
-    
-       **ACCESS_CONTROL_BEHAVIOR_FOR_EMPTYBROKER** 의 설정값 **ALLOW** 또는 **DENY** 는 **ACCESS_CONTROL** 이 **ON** 일 때만 유효하며, **OFF** 일 경우에는 설정값이 적용되지 않습니다.
 
 브로커 응용 서버(CAS)
 ^^^^^^^^^^^^^^^^^^^^^
@@ -2937,7 +2946,7 @@ CUBRID 설치 시 생성되는 기본 브로커 설정 파일인 **cubrid_broker
 
     **JDBC_CACHE** 와 **JDBC_CACHE_HINT_ONLY**, **JDBC_CACHE_LIFE_TIME** 파라미터 설정은
 
-    시스템 파라미터 **max_query_cache_entries** 와 **query_cache_size_in_pages** 가 0보다 큰 값으로 설정되었을 때만 의미를 가진다.
+    질의 캐쉬 관련 파라미터 **max_query_cache_entries** 와 **query_cache_size_in_pages** 가 0보다 큰 값으로 설정되었을 때만 의미를 가진다.
 
     JDBC 클라이언트 결과 캐시가 동작하기 위해서는 앞서 언급된 3개의 JDBC관련 파라미터 설정과 함께 SELECT 질의가 반드시 질의 힌트 /\*+ QUERY CACHE \*/를 포함하고 있어야 한다.
 

@@ -29,7 +29,7 @@ INSERT
         [ON DUPLICATE KEY UPDATE column_name = expr, ... ]
 
     <table_specification> ::= [schema_name.]table_name | <remote_table_spec>
-    <remote_table_spec> ::= [schema_name.]table_name@[shema_name.]server_name
+    <remote_table_spec> ::= [schema_name.]table_name@[schema_name.]server_name
 
 *   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 
@@ -301,7 +301,7 @@ ON DUPLICATE KEY UPDATE에서 "affected rows" 값은 새로운 행이 삽입되�
 
 .. code-block:: sql
     
-    --insert duplicated value with specifying ON DUPLICATED KEY UPDATE clause
+    --insert duplicated value with specifying ON DUPLICATE KEY UPDATE clause
     INSERT INTO a_tbl3 VALUES(2, 'ggg', '222-2222')
     ON DUPLICATE KEY UPDATE name='ggg', phone = '222-2222';
      

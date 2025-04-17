@@ -28,7 +28,7 @@ MERGE
     /*+ [ USE_UPDATE_IDX (<update_index_list>) ] [ USE_INSERT_IDX (<insert_index_list>) ] */
 
 *   <*target*>: 갱신하거나 삽입할 대상 테이블. 여러 개의 테이블 또는 뷰가 될 수 있으며 table-name@server-name처럼 원격 테이블도 지정할 수 있다.
-*   <*source*>: 데이터를 가져올 원본 테이블. 하나의 테이블 또는 뷰가 될 수 있으며, 부질의(subquery)도 가능하다. *target*\이 원격 테이블인 경우, *source*\도 *targe*\과 동일한 서버로 지정된 원격 테이블이거나 뷰이어야 한다. 혹은, target에 지정된 서버가 포함된 부질의이어야 한다.
+*   <*source*>: 데이터를 가져올 원본 테이블. 하나의 테이블 또는 뷰가 될 수 있으며, 부질의(subquery)도 가능하다. *target*\이 원격 테이블인 경우, *source*\도 *target*\과 동일한 서버로 지정된 원격 테이블이거나 뷰이어야 한다. 혹은, target에 지정된 서버가 포함된 부질의이어야 한다.
 *   <*join_condition*>: 갱신할 조건을 명시한다.
 *   <*merge_update_clause*>: <*join_condition*> 조건이 TRUE이면 대상 테이블의 새로운 칼럼 값들을 지정한다.
 

@@ -7,6 +7,7 @@ SPHINXBUILD   = sphinx-build
 SPHINXAUTOBUILD   = sphinx-autobuild
 PAPER         =
 BUILDDIR      = _build
+PORT          = 9000
 
 # Internal variables.
 PAPEROPT_a4     = -D latex_paper_size=a4
@@ -49,7 +50,7 @@ html:
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
 
 livehtml:
-	$(SPHINXAUTOBUILD) $(ALLSPHINXOPTS) $(BUILDDIR)/html
+	$(SPHINXAUTOBUILD) --host=0.0.0.0 --port=$(PORT) $(ALLSPHINXOPTS) $(BUILDDIR)/html
 
 dirhtml:
 	$(SPHINXBUILD) -b dirhtml $(ALLSPHINXOPTS) $(BUILDDIR)/dirhtml

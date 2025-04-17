@@ -11,8 +11,8 @@ Java 저장 함수/프로시저는 Java 가상머신을 사용하므로 뛰어�
 
 .. _jsp-prerequisites:
 
-자바 저장 함수/프로시저 작성 사용을 위한 확인
-==============================================
+자바 저장 함수/프로시저 작성과 사용을 위한 확인
+====================================================
 
 Java 저장함수/프로시저를 사용하기 위해서 프로시저 언어 서버가 준비되어 있어야 한다.
 프로시저 언어 서버는 데이터베이스 서버 구동 시 자동으로 시작된다.
@@ -85,7 +85,7 @@ Java 클래스 로드
 저장 함수/프로시저 등록
 ===========================
 
-CUBRID는 SQL 문이나 Java 응용 프로그램에서 Java 메서드를 호출할 수 있도록 Java 클래스를 등록(publish)하는 과정이 필요하다.
+CUBRID는 SQL 문이나 응용 프로그램에서 Java 메서드를 호출할 수 있도록 Java 클래스를 등록(publish)하는 과정이 필요하다.
 다음과 같이 CUBRID 저장 함수를 생성하여 Java 클래스를 등록한다.
 
 ::
@@ -107,11 +107,14 @@ CUBRID는 SQL 문이나 Java 응용 프로그램에서 Java 메서드를 호출�
 Java Call Specification
 -----------------------------
 
-Java 클래스를 로딩했을 때 SQL 문이나 Java 응용 프로그램에서 클래스 내의 함수를 어떻게 호출할지 모르기 때문에 
-Java 저장 함수/프로시저를 사용하기 위해서는 Call Specification를 사용하여 등록해야 한다.
+Java 클래스가 로딩될 때 SQL 문이나 응용 프로그램에서 클래스 내의 함수를 어떻게 호출할지 모르기 때문에 Call Specification을 사용하여 Java 클래스를 등록해야 한다.
 
-Call Specification는 Java 함수 이름과 인자 타입 그리고 리턴 값과 리턴 값의 타입을 SQL 문이나 Java 응용프로그램에서 접근할 수 있도록 해주는 역할을 한다.
+Call Specification을 사용하면 SQL 문이나 응용 프로그램에서 Java 함수 이름, 인자 타입, 리턴 값 및 리턴 값의 타입에 접근할 수 있다.
+Call Specification을 작성하려면 :ref:`create-function` 또는 :ref:`create-procedure` 문을 사용한다.
 
+* Java 저장 함수/프로시저 이름은 대소문자를 구분하지 않는다.
+* Java 저장 함수/프로시저 이름은 최대 254바이트까지 가능하다.
+* Java 저장 함수/프로시저는 최대 64개의 인자를 가질 수 있다.
 * Java 저장 함수/프로시저의 인자를 **OUT** 으로 설정한 경우 길이가 1인 1차원 배열로 전달된다. 그러므로 Java 메서드는 배열의 첫번째 공간에 전달할 값을 저장해야 한다.
 
 .. code-block:: sql
@@ -124,7 +127,7 @@ Java 저장 함수/프로시저 호출
 ============================
 
 등록된 Java 저장 함수/프로시저는 **CALL** 문을 사용하거나, SQL 문에서 호출하거나, Java 응용프로그램에서 호출될 수 있다.
-Java 저장 함수/프로시저를 호출하여 수행 중 exception이 발생하면 *dbname*\ **_java.log** 파일에 exception 내용이 기록되어 저장된다. 만약 화면으로 exception 내용을 확인하고자 할 경우는 **$CUBRID/java/logging.properties** 파일의 handlers 값을 "java.lang.logging.ConsoleHandler"로 수정하면 화면으로 exception 내용을 출력한다.
+Java 저장 함수/프로시저를 호출하여 수행 중 exception이 발생하면 *dbname*\ **_pl.log** 파일에 exception 내용이 기록되어 저장된다. 만약 화면으로 exception 내용을 확인하고자 할 경우는 **$CUBRID/java/logging.properties** 파일의 handlers 값을 "java.lang.logging.ConsoleHandler"로 수정하면 화면으로 exception 내용을 출력한다.
 
 CALL 문
 -------
@@ -162,10 +165,10 @@ Java 저장 함수/프로시저를 호출할 때 IN/OUT의 데이터 타입에 �
 
 첫 번째 문장은 파라미터 변수를 이용하여 out 모드의 Java 저장 프로시저를 호출하는 예이고, 두 번째 문장은 할당된 호스트 변수 out_data를 조회하는 질의문이다.
 
-Java 응용 프로그램에서 호출
+응용 프로그램에서 호출
 ---------------------------
 
-Java 응용 프로그램에서 Java 저장 함수/프로시저를 호출하기 위해서는 **CallableStatement** 를 사용한다.
+응용 프로그램에서 저장 함수/프로시저를 호출하기 위해서는 **CallableStatement** 를 사용한다.
 
 CUBRID 데이터베이스에 Phone 클래스를 생성한다.
 
@@ -208,7 +211,7 @@ CUBRID 데이터베이스에 Phone 클래스를 생성한다.
     create PROCEDURE phone_info(name varchar, phoneno varchar) as language java    
     name 'PhoneNumber.Phone(java.lang.String, java.lang.String)';
 
-다음과 같은 Java 응용 프로그램을 작성하고 실행한다.
+다음과 같은 응용 프로그램을 작성하고 실행한다.
 
 .. code-block:: java
 
@@ -775,7 +778,7 @@ Java Native Interface (JNI) 지원
 ==================================
 
 Java Native Interface (JNI)를 사용하여 JVM\에서 C/C++ 와 같은 네이티브 언어의 함수를 호출할 수 있다.
-CUBRID의 Java SP에서는 JNI 기능을 사용할 수 있도록 제공하고 있지만 네이티브 코드의 문제가 저장 프로시저 서버 (cub_javasp) 프로세스 및 그 동작에 예상하지 못한 영향을 줄 수 있으므로 주의해서 사용해야 한다.
+CUBRID의 Java SP에서는 JNI 기능을 사용할 수 있도록 제공하고 있지만 네이티브 코드의 문제가 저장 프로시저 서버 (cub_pl) 프로세스 및 그 동작에 예상하지 못한 영향을 줄 수 있으므로 주의해서 사용해야 한다.
 네이티브 라이브러리를 로드하는 클래스는 동적으로 로드되지 않도록 loadjava의 **-j** 옵션을 사용하여 등록한다. 자세한 내용은 :ref:`jsp-load-java`\를 참조한다.
 
 다음은 Java 저장 함수에서 JNI를 통해 네이티브 함수를 호출하는 예제이다.
@@ -878,18 +881,19 @@ CUBRID의 Java SP에서는 JNI 기능을 사용할 수 있도록 제공하고 �
 
 .. warning::
 
-    JNI를 호출하는 자바 저장 프로시저/함수를 **-j** 옵션 없이 등록한 후 실행 시 java.lang.UnsatisfiedLinkError가 발생할 수 있다.
+    JNI를 호출하는 자바 저장 프로시저/함수를 **-j** 또는 **--jni** 옵션 없이 등록한 후 실행 시 다음과 같은 오류를 반환한다.
+    'Library load not allowed. Please load your class by using 'loadjava' with '-jni' option'
+
     다음의 사항을 확인한다.
 
     * 동일한 네이티브 라이브러리 경로에 대해 System.load () 를 호출하는 자바 클래스 파일을 여러 개 로드하는 경우
        * 하나의 자바 클래스 파일만 네이티브 라이브러리를 로드하도록 수정한다
        * 네이티브 라이브러리를 로드하는 클래스를 loadjava의 **-j** 옵션을 사용하여 등록한다
-       * javasp 유틸리티를 재시작한다
+       * PL 서버를 재시작한다 (:ref:`cubrid-pl-server` 참고)
 
     * 이미 로드된 자바 클래스 파일을 loadjava로 다시 덮어쓰는 경우
-       * **-j** 옵션 없이 loadjava로 클래스를 등록한 경우 해당 데이터베이스 경로의 **java** 디렉토리에서 해당 클래스를 제거한다
        * **-j** 옵션을 사용하여 loadjava로 해당 클래스를 다시 등록한다
-       * javasp 유틸리티를 재시작한다
+       * PL 서버를 재시작한다 (:ref:`cubrid-pl-server` 참고)
 
 .. _jsp-load-java:
 

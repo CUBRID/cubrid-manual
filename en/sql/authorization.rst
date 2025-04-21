@@ -11,7 +11,7 @@ Database User
 
 To know the user name's writing rule, see :doc:`identifier`.
 
-CUBRID has two types of users by default: **DBA** and **PUBLIC**. At initial installation of the product, no password is set for the users.
+CUBRID has two types of users by default: **DBA** and **PUBLIC**. At the initial installation of the product, no passwords are set for these users.
 
 *   All users of the database are automatically the members of **PUBLIC**, so all users have authorization granted to the **PUBLIC** user. Granting authorization to the **PUBLIC** means granting it all users.
 

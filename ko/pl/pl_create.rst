@@ -468,3 +468,10 @@ CUBRID에서는 **함수 오버로딩을 지원하지 않는다.** 즉, 인수�
 
     ERROR: Stored procedure execute error: 
       (line 5, column 9) Syntax: Unknown class "dba.test_tbl". select [dba.test_tbl].id from [dba.test_tbl] [dba.test_tbl] ...
+
+.. _pl-string-codeset:
+
+문자열 코드셋 고려사항
+======================================
+
+

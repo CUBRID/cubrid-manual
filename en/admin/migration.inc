@@ -40,7 +40,7 @@ The following is [options] used in **cubrid unloaddb**.
   -O, --output-path=PATH      PATH of output directory
   -s, --schema-only           dump schema only
   -d, --data-only             dump objects only
-      --output-prefix=PREFIEX PREFIX for output files
+      --output-prefix=PREFIX  PREFIX for output files
       --hash-file=FILE        FILE for hash
       --latest-image          when dumping objects, it dumps the latest image of objects in data volumes.
   -t, --thread-count=COUNT    number of threads; default: 1 maximum: 127
@@ -464,7 +464,7 @@ The following table shows [options] available with the **cubrid loaddb** utility
 
 .. option:: -i, --index-file=FILE[:LINE]
 
-    The following loads the index information defined in the index file, from the LINE-th. On the following example, demo_indexes is a file created by the unload operation and contains the index information of the unloaded database. You can create indexes with the **-i** option, after loading records with the **-d** option. ::
+    The following loads the index information defined in the index file, from the LINE-th. On the following example, demodb_indexes is a file created by the unload operation and contains the index information of the unloaded database. You can create indexes with the **-i** option, after loading records with the **-d** option. ::
 
         cubrid loaddb -c 100 -d demodb_objects newdb
         cubrid loaddb -u dba -i demodb_indexes newdb

@@ -292,7 +292,7 @@ CUBRIDSchemaProvider 클래스에 구현되어 있다.
 .. code-block:: c#
 
     CUBRIDSchemaProvider schema = new CUBRIDSchemaProvider(conn);
-    DataTable dt = schema.GetTables(newstring[] { "%" });
+    DataTable dt = schema.GetTables(new string[] { "%" });
      
     Debug.Assert(dt.Columns.Count == 3);
     Debug.Assert(dt.Rows.Count == 10);

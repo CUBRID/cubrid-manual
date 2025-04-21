@@ -234,7 +234,7 @@ CUBRID 2008 R4.0(8.4.0) 이상 버전에서는 GLO 데이터 타입을 더 이�
     
     while (reader.Read())
     {
-        CUBRIDBlob bImage = (CUBRIDBlob)reader0;
+        CUBRIDBlob bImage = (CUBRIDBlob)reader[0];
         byte[] bytes = new byte[(int)bImage.BlobLength];
         bytes = bImage.getBytes(1, (int)bImage.BlobLength);
         //...

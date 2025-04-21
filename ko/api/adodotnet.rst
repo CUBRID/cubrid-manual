@@ -213,7 +213,7 @@ CUBRID 컬렉션
             while (reader.Read())
             {
                 int[] expected = { 7, 1, 2, 3, 7, 4, 5, 6 };
-                object[] o = (object[])reader0;
+                object[] o = (object[])reader[0];
             }
         }
     }

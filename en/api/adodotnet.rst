@@ -78,7 +78,7 @@ To retrieve specific CUBRID data types, you need to use CUBRIDDataReader, instea
         CUBRIDDataReader reader = (CUBRIDDataReader)cmd.ExecuteReader();
          
         reader.Read();
-        Debug.Assert(reader.GetDateTime(0) == newDateTime(2008, 10, 31, 10, 20, 30, 040));
+        Debug.Assert(reader.GetDateTime(0) == new DateTime(2008, 10, 31, 10, 20, 30, 40));
         Debug.Assert(reader.GetDate(0) == "2008-10-31");
         Debug.Assert(reader.GetDate(0, "yy/MM/dd") == "08-10-31");
         Debug.Assert(reader.GetTime(0) == "10:20:30");
@@ -189,7 +189,7 @@ Reading values from a Collection data type:
         {
             while (reader.Read())
             {
-                object[] o = (object[])reader0;
+                object[] o = (object[])reader[0];
                 for (int i = 0; i <SeqSize; i++)
                 {
                     //...
@@ -235,7 +235,7 @@ Reading BLOB data:
     while (reader.Read())
     {
         CUBRIDBlob bImage = (CUBRIDBlob)reader0;
-        byte[] bytes = newbyte(int)bImage.BlobLength;
+        byte[] bytes = new byte[(int)bImage.BlobLength];
         bytes = bImage.getBytes(1, (int)bImage.BlobLength);
         //...
     }
@@ -248,16 +248,16 @@ Updating CLOB data:
     string sql = "UPDATE t SET c = ?";
     CUBRIDCommand cmd = new CUBRIDCommand(sql, conn);
      
-    CUBRIDClobClob = new CUBRIDClob(conn);
+    CUBRIDClob clob = new CUBRIDClob(conn);
     str = conn.ConnectionString; //Use the ConnectionString for testing
      
-    Clob.setString(1, str);
+    clob.SetString(1, str);
     
     CUBRIDParameter param = new CUBRIDParameter();
     
     param.ParameterName = "?";
     param.CUBRIDDataType = CUBRIDDataType.CCI_U_TYPE_CLOB;
-    param.Value = Clob;
+    param.Value = clob;
     
     cmd.Parameters.Add(param);
     cmd.ExecuteNonQuery();
@@ -295,9 +295,9 @@ The example below shows how to get the list of tables in the current CUBRID data
     Debug.Assert(dt.Columns.Count == 3);
     Debug.Assert(dt.Rows.Count == 10);
      
-    Debug.Assert(dt.Rows00.ToString() == "demodb");
-    Debug.Assert(dt.Rows01.ToString() == "demodb");
-    Debug.Assert(dt.Rows02.ToString() == "stadium");
+    Debug.Assert(dt.Rows[0].ToString() == "demodb");
+    Debug.Assert(dt.Rows[1].ToString() == "demodb");
+    Debug.Assert(dt.Rows[2].ToString() == "stadium");
      
     Get the list of Foreign Keys in a table:
      
@@ -307,15 +307,15 @@ The example below shows how to get the list of tables in the current CUBRID data
     Debug.Assert(dt.Columns.Count == 9);
     Debug.Assert(dt.Rows.Count == 2);
      
-    Debug.Assert(dt.Rows00.ToString() == "athlete");
-    Debug.Assert(dt.Rows01.ToString() == "code");
-    Debug.Assert(dt.Rows02.ToString() == "game");
-    Debug.Assert(dt.Rows03.ToString() == "athlete_code");
-    Debug.Assert(dt.Rows04.ToString() == "1");
-    Debug.Assert(dt.Rows05.ToString() == "1");
-    Debug.Assert(dt.Rows06.ToString() == "1");
-    Debug.Assert(dt.Rows07.ToString() == "fk_game_athlete_code");
-    Debug.Assert(dt.Rows08.ToString() == "pk_athlete_code");
+    Debug.Assert(dt.Rows[0].ToString() == "athlete");
+    Debug.Assert(dt.Rows[1].ToString() == "code");
+    Debug.Assert(dt.Rows[2].ToString() == "game");
+    Debug.Assert(dt.Rows[3].ToString() == "athlete_code");
+    Debug.Assert(dt.Rows[4].ToString() == "1");
+    Debug.Assert(dt.Rows[5].ToString() == "1");
+    Debug.Assert(dt.Rows[6].ToString() == "1");
+    Debug.Assert(dt.Rows[7].ToString() == "fk_game_athlete_code");
+    Debug.Assert(dt.Rows[8].ToString() == "pk_athlete_code");
 
 The example below shows how to get the list of indexes in a table.
 
@@ -347,16 +347,16 @@ The following example shows how to get columns attributes.
     String sql = "select * from nation";
     CUBRIDDataAdapter da = new CUBRIDDataAdapter();
     da.SelectCommand = new CUBRIDCommand(sql, conn);
-    DataTable dt = newDataTable("nation");
+    DataTable dt = new DataTable("nation");
     da.FillSchema(dt, SchemaType.Source);//To retrieve all the column properties you have to use the FillSchema() method
      
-    Debug.Assert(dt.Columns0.ColumnName == "code");
-    Debug.Assert(dt.Columns0.AllowDBNull == false);
-    Debug.Assert(dt.Columns0.DefaultValue.ToString() == "");
-    Debug.Assert(dt.Columns0.Unique == true);
-    Debug.Assert(dt.Columns0.DataType == typeof(System.String));
-    Debug.Assert(dt.Columns0.Ordinal == 0);
-    Debug.Assert(dt.Columns0.Table == dt);
+    Debug.Assert(dt.Columns[0].ColumnName == "code");
+    Debug.Assert(dt.Columns[0].AllowDBNull == false);
+    Debug.Assert(dt.Columns[0].DefaultValue.ToString() == "");
+    Debug.Assert(dt.Columns[0].Unique == true);
+    Debug.Assert(dt.Columns[0].DataType == typeof(System.String));
+    Debug.Assert(dt.Columns[0].Ordinal == 0);
+    Debug.Assert(dt.Columns[0].Table == dt);
 
 The following example shows how to insert values into a table by using the **INSERT** statement.
 
@@ -371,15 +371,15 @@ The following example shows how to insert values into a table by using the **INS
             da.InsertCommand = cmdBuilder.GetInsertCommand();
         }
          
-        DataTable dt = newDataTable("nation");
+        DataTable dt = new DataTable("nation");
         da.Fill(dt);
          
         DataRow newRow = dt.NewRow();
         
-        newRow"code" = "ZZZ";
-        newRow"name" = "ABCDEF";
-        newRow"capital" = "MyXYZ";
-        newRow"continent" = "QWERTY";
+        newRow["code"] = "ZZZ";
+        newRow["name"] = "ABCDEF";
+        newRow["capital"] = "MyXYZ";
+        newRow["continent"] = "QWERTY";
         
         dt.Rows.Add(newRow);
         da.Update(dt);

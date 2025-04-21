@@ -7,7 +7,13 @@ Database Sharding
 
 **수평 분할**
 
-수평 분할(horizontal partitioning)이란 스키마가 동일한 데이터를 행을 기준으로 두 개 이상의 테이블에 나누어 저장하는 디자인을 말한다. 예를 들어 'User Table'을 동일 스키마의 13세 미만의 유저를 저장하는 'User Table #0'과 13세 이상의 유저를 저장하는 'User Table #1'로 분할하여 사용할 수 있다. 수평 분할로 인해 각 테이블의 데이터와 인덱스의 크기가 감소하고 작업 동시성이 늘어 성능 향상을 기대할 수 있다. 수평 분할은 일반적으로 하나의 테이터베이스 안에서 이루어진다. 수평 분할로 인해 각 테이블의 데이터와 인덱스의 크기가 감소하기 때문에 성능 향상을 기대할 수 있다.
+**수평 분할(Horizontal Partitioning)**이란, 동일한 스키마를 가진 데이터를 행(row) 단위로 나누어 두 개 이상의 테이블에 분산 저장하는 방식을 말한다.
+
+예를 들어, 하나의 ‘User Table’을 나이 기준으로 분할하여 13세 미만의 유저는 ‘User Table #0’, **13세 이상의 유저는 ‘User Table #1’**에 저장하도록 설계할 수 있다.
+
+수평 분할을 적용하면 각 테이블의 데이터 및 인덱스 크기가 작아져 쿼리 성능이 향상되며, 작업의 동시성도 높아져 전체적인 성능 개선을 기대할 수 있다.
+
+수평 분할은 일반적으로 하나의 데이터베이스 내에서 이루어지며, 대용량 데이터를 효과적으로 관리하고 시스템 부하를 분산시키는 데 유용하다.
 
 .. image:: /images/image38.png
 
@@ -556,7 +562,7 @@ shard 연결 파일(SHARD_CONNECTION_FILE)
 
 CUBRID SHARD는 브로커 구동 시  **cubrid_broker.conf**\ 의 **SHARD_CONNECTION_FILE** 파라미터에 지정된 shard 연결 설정 파일을 로딩하여 backend shard DB와의 연결을 수행한다.
 
-설정 할 수 있는 shard DB 의 최대 개수는 256 개 이다.
+설정 할 수 있는 shard DB 의 최대 개수는 256개 이다.
 
 **cubrid_broker.conf**\ 에 **SHARD_CONNECTION_FILE**\ 을 별도로 지정하지 않은 경우에는 기본값인 **shard_connection.txt** 파일을 로딩한다.
 
@@ -808,7 +814,7 @@ CUBRID SHARD는 기본 내장된 해시 함수 외에 사용자 정의 해시 �
     .. note:: 
     
         *   응용 프로그램에서 사용자 해시 함수를 정의할 때 shard key의 입력 값으로 16bit(short), 32bit(int), 64bit(INT64) integer를 사용할 수 있다.
-        *   VARCHAR를 사용해야 되는 경우 사용자가 해시 함수를 정의해야 한다. 
+        *   VARCHAR를 사용해야 하는 경우 사용자가 해시 함수를 정의해야 한다. 
 
 .. _shard-start-monitoring:
 

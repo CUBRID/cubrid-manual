@@ -246,7 +246,7 @@ The following example shows how to grant every authorization on the *tbl1* and *
     CREATE TABLE tbl2 (a INT);
     GRANT ALL PRIVILEGES ON tbl1, tbl2 TO public;
 
-The following **GRANT** statement is example shows how to grant retrieving authorization on the *record* and *history* tables to *brown*. Using **WITH GRANT OPTION** allows *brown* to grant retrieving to another users. *brown* can grant authorization to others within his authorization.
+The following **GRANT** statement example shows how to grant retrieval authorization on the *record* and *history* tables to *brown*. Using **WITH GRANT OPTION** allows *brown* to grant retrieval authorization to other users. *brown* can grant authorization to others within their own authorization.
 
 .. code-block:: sql
 

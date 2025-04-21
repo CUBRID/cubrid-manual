@@ -1,8 +1,8 @@
 :meta-keywords: cubrid jsp, cubrid javasp, loadjava utility
-:meta-description: CUBRID supports to develop stored functions and procedures in Java. Java stored functions/procedures are executed on the JVM (Java Virtual Machine) hosted by CUBRID.
+:meta-description: CUBRID supports the development of stored functions and procedures in Java. Java stored functions/procedures are executed on the JVM (Java Virtual Machine) hosted by CUBRID.
 
 ******************************
-Java Stored Function/Procedure
+Java Stored Procedure
 ******************************
 
 CUBRID supports the development of stored functions and procedures using Java. Java stored functions and procedures are executed on a Java Virtual Machine (JVM) hosted by CUBRID.
@@ -10,10 +10,10 @@ Since Java stored functions and procedures use the JVM, they offer excellent int
 
 .. _jsp-introduction:
 
-Introduction to Java Stored Function/Procedure
+Introduction to Java Stored Procedure
 ==============================================
 
-CUBRID supports to develop stored functions and procedures in Java. Java stored functions/procedures are executed on the JVM (Java Virtual Machine) hosted by CUBRID.
+CUBRID supports the development of stored functions and procedures in Java. Java stored functions/procedures are executed on the JVM (Java Virtual Machine) hosted by CUBRID.
 
 You can call Java stored functions/procedures from SQL statements or from Java applications using JDBC.
 
@@ -138,51 +138,16 @@ To write call specifications, use :ref:`create-function` or :ref:`create-procedu
     AS LANGUAGE JAVA
     NAME 'SpCubrid.outTest(java.lang.String[] o)';
 
-Call the Java stored function/procedure
-========================================
+Java Stored Function/Procedure Call
+====================================
 
-You can call the Java stored functions/procedures by using a **CALL** statement, from SQL statements or Java applications.
+Java stored functions/procedures, once registered, can be called in the same way as PL/CSQL. For more details, refer to :doc:`pl_call`.
 
-|  If an exception occurs during the execution of a Java stored function/procedure, the exception is logged and stored in the *dbname*\ **_pl.log** file. To display the exception on the screen, change a handler value of the **$CUBRID/java/logging.properties** file to "java.lang.logging.ConsoleHandler" Then, the exception details are displayed on the screen.
+| If an exception occurs during the execution of a Java stored function/procedure, the exception is logged and stored in the *dbname*\ **_pl.log** file. To display the exception on the screen, change a handler value of the **$CUBRID/java/logging.properties** file to "java.lang.logging.ConsoleHandler" Then, the exception details are displayed on the screen.
 
-Using CALL Statement
-----------------------
 
-You can call Java stored procedure/functions by using **CALL** statement as follows.
-For more details, see :doc:`/sql/query/call`.
-
-.. code-block:: sql
-
-    CALL Hello() INTO :HELLO;
-
-::
-
-      Result
-    ======================
-    'Hello, Cubrid !!'
-
-Calling from SQL Statement
---------------------------
-
-You can call a Java stored function from a SQL statement as shown below.
-
-.. code-block:: sql
-
-    SELECT Hello() FROM db_root;
-    SELECT sp_int(99) FROM db_root;
-
-You can use a host variable for the IN/OUT data type when you call a Java stored function/procedure as follows:
-
-.. code-block:: sql
-
-    SELECT 'Hi' INTO :out_data FROM db_root;
-    CALL test_out(:out_data);
-    SELECT :out_data FROM db_root;
-
-The first clause calls a Java stored procedure in out mode by using a parameter variable; the second is a query clause retrieving the assigned host variable out_data.
-
-Calling from Java Application
------------------------------
+Java Stored Procedure Examples
+------------------------------------
 
 To call a Java stored function/procedure from a Java application, use a **CallableStatement** object.
 
@@ -934,7 +899,7 @@ You can load a Java \*.class or \*.jar file using **loadjava** utility. The file
         * However, when loading a Java file that includes a package declaration, you must use the **-p** option to specify the package name.
 
 Example: Loading a Java Class with a Java package name
--------------------------------------------
+------------------------------------------------------------
 
 If a Java class includes a package declaration, such as:
 

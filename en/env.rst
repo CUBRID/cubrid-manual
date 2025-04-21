@@ -411,10 +411,12 @@ The following table summarizes the ports, based on the listening processes, used
 Behavior according to the OS type and the **stored_procedure_uds** setting in **cubrid.conf**
 
 *   Linux
+
   - If **stored_procedure_uds** is set to **yes**, a UNIX domain socket is used and a TCP socket is not used.
   - If **stored_procedure_uds** is set to **no**, a TCP socket is used, and the port is determined by the **stored_procedure_port** setting.
 
 *   Windows
+
   - Windows does not support UNIX domain sockets.
   - Therefore, regardless of the **stored_procedure_uds** setting, a TCP socket is used, and the port is determined by the **stored_procedure_port** setting.
 

@@ -227,7 +227,7 @@ CREATE TABLE
 .. note::
 
     위의 표에 명시되지 않은 함수를 **DEFAULT** 값으로 사용하는 경우, 테이블 생성 시점에 평가된 결과를 **DEFAULT** 값으로 저장한다.
-    따라서 *INSERT** 시 해당 칼럼의 기본 값은 **INSERT** 수행시 함수 수행 값이 아닌, 테이블 생성 시점에 수행된 결과 값을 사용한다.
+    따라서 **INSERT** 시 해당 칼럼의 기본 값은 **INSERT** 수행시 함수 수행 값이 아닌, 테이블 생성 시점에 수행된 결과 값을 사용한다.
     저장 함수인 경우 **DEFAULT** 값으로 사용할 수 없으므로 오류를 반환한다.
 
 .. code-block:: sql
@@ -1502,7 +1502,7 @@ AUTO_INCREMENT 절
     
     ERROR: To avoid ambiguity, the AUTO_INCREMENT table option requires the table to have exactly one AUTO_INCREMENT column and no seed/increment specification.
 
-.. warning:: **AUTO_INCREMENT**의 초기값 변경으로 인해 **PRIMARY KEY**나 **UNIQUE**와 같은 제약 조건에 위배되는 경우가 발생하지 않도록 주의한다.
+.. warning:: **AUTO_INCREMENT**\의 초기값 변경으로 인해 **PRIMARY KEY**\나 **UNIQUE**\와 같은 제약 조건에 위배되는 경우가 발생하지 않도록 주의한다.
 
 .. note:: **AUTO_INCREMENT** 칼럼의 타입을 변경하면 최대값도 변경된다. 예를 들어, INT 타입을 BIGINT 타입으로 변경하면 **AUTO_INCREMENT** 최대값이 INT의 최대값에서 BIGINT의 최대값으로 변경된다.
 

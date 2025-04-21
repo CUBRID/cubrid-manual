@@ -1,6 +1,6 @@
 -------------------------------------------------
 Transaction Commit and Rollback Support
------------------------------
+-------------------------------------------------
 
 In stored procedures and stored functions, transactions can be completed or aborted by **COMMIT** or **ROLLBACK**. This is an important feature that maintains data integrity and provides flexibility in transaction processing.
 The logic within stored procedures and functions can control transactions based on conditions or exception handling, which greatly aids in managing complex data logic safely and efficiently.
@@ -76,9 +76,10 @@ The following is an example of controlling transactions using conditions and exc
         Transaction successful.
 
 This example covers the following scenarios:
-- Rollback the transaction to maintain data integrity if there is insufficient stock.
-- Safely rollback the transaction if an exception occurs during the operation.
-- Commit the transaction to complete the operation if conditions are met.
+
+* Rollback the transaction to maintain data integrity if there is insufficient stock.
+* Safely rollback the transaction if an exception occurs during the operation.
+* Commit the transaction to complete the operation if conditions are met.
 
 Cautions
 ----------

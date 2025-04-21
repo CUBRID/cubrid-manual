@@ -14,7 +14,7 @@ CUBRID 환경 변수
 
 *   **CUBRID_DATABASES**: **databases.txt** 파일의 위치를 지정하는 환경 변수이다. CUBRID 시스템은 **$CUBRID_DATABASES/databases.txt** 파일에 데이터베이스 볼륨들의 절대 경로를 저장 관리한다. :ref:`databases-txt-file`\ 을 참고한다.
 
-*   **CUBRID_MSG_LANG**: CUBRID 시스템이 명령어 사용법 메시지와 오류 메시지를 출력할 때 사용할 언어를 지정하는 환경 변수이다. 제품 설치 시 초기 설정 값은 없으며, 설정 값이 없으면 **en_US**로 설정된다. 환경변수로 설정할 수 있는 언어는 en_US, en_US.utf8, ko_KR.euckr 및 ko_KR.utf8 이다. 
+*   **CUBRID_MSG_LANG**: CUBRID 시스템이 명령어 사용법 메시지와 오류 메시지를 출력할 때 사용할 언어를 지정하는 환경 변수이다. 제품 설치 시 초기 설정 값은 없으며, 설정 값이 없으면 **en_US**\로 설정된다. 환경변수로 설정할 수 있는 언어는 en_US, en_US.utf8, ko_KR.euckr 및 ko_KR.utf8 이다.
 
 .. note:: 
 
@@ -411,10 +411,12 @@ CUBRID 프로시저 언어 서버 사용 포트
 OS 종류와 **cubrid.conf**\의 **stored_procedure_uds**\의 설정값에 따른 동작
 
 *   Linux
-  - **stored_procedure_uds**\가 **yes**인 경우 유닉스 도메인 소켓을 사용하며 TCP 소켓을 사용하지 않는다.
-  - **stored_procedure_uds**\가 **no**인 경우 TCP 소켓을 사용하며 포트는 **stored_procedure_port**\의 설정값을 사용한다.
+
+  - **stored_procedure_uds**\가 **yes**\인 경우 유닉스 도메인 소켓을 사용하며 TCP 소켓을 사용하지 않는다.
+  - **stored_procedure_uds**\가 **no**\인 경우 TCP 소켓을 사용하며 포트는 **stored_procedure_port**\의 설정값을 사용한다.
 
 *   Windows
+
   - Windows에서는 유닉스 도메인 소켓을 지원하지 않는다.
   - 따라서 **stored_procedure_uds**\에 상관없이 TCP 소켓을 사용하며 포트는 **stored_procedure_port**\의 설정값을 사용한다.
 

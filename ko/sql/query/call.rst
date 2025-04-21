@@ -11,7 +11,7 @@ CUBRID에서 지원하는 저장 루틴은 다음과 같다.
 
   * :ref:`create-procedure` 구문을 통해 등록한 저장 프로시저 
   * :ref:`create-function` 구문을 통해 등록한 저장 함수
-  * C로 작성한 :doc:`/sql/method`
+  * C로 작성한 :doc:`/pl/method`
 
 ::
 

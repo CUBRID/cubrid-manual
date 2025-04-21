@@ -59,7 +59,7 @@ CUBRID는 응용 프로그램-브로커-DB 서버의 3 계층 구조로 되어 �
 몇가지 예는 다음과 같다. 
  
 *   응용 프로그램-브로커 사이에서 네트워크 통신 속도가 저하되었는지 확인해 본다. 
-*   브로커 로그( **$CUBRID/log/broker** 디렉터리 이하에 존재)에 기록되는 정보를 통해 CAS가 재시작된 경우가 있는지 확인한다. CAS 개수가 부족한 것으로 파악되면 CAS 개수를 늘리는데, 이를 위해 cubrid_broker.conf의 :ref:`MAX_NUM_APPL_SERVER <max-num-appl-server>`\ 값을 적절히 늘려야 한다. 이와 함께 cubrid.conf의 :ref:`max_clients <max_clients>` 값도 늘리는 것을 고려해야 한다. 
+*   브로커 로그( **$CUBRID/log/broker** 디렉터리 이하에 존재)에 기록되는 정보를 통해 CAS가 재시작된 경우가 있는지 확인한다. CAS 개수가 부족한 것으로 파악되면(단, 슬로우 쿼리가 있으면 슬로우 쿼리 튜닝 후)  CAS 개수를 늘리는데, 이를 위해 cubrid_broker.conf의 :ref:`MAX_NUM_APPL_SERVER <max-num-appl-server>`\ 값을 적절히 늘려야 한다. 이와 함께 cubrid.conf의 :ref:`max_clients <max_clients>` 값도 늘리는 것을 고려해야 한다. 
 
 응용 프로그램 로그와 CAS의 SQL 로그에 둘 다 슬로우 쿼리로 출력되고 둘 사이에 해당 질의의 수행 시간 차이가 거의 없다면, 브로커-DB 서버 사이에서 속도가 저하된 원인이 존재할 것이다. 한 예로, DB 서버에서 질의를 처리하는데 시간이 걸렸을 것이다. 
 
@@ -137,6 +137,7 @@ DB 서버 시작이나 백업 볼륨 복구 시 서버 에러 로그 또는 rest
 --------------
 
 교착 상태 관련 잠금 정보는 서버 오류 로그에 기록된다.
+서버 오류 로그 파일은 $CUBRID/log/server 디렉터리에 <databases>_<date>_<time>.err 이름으로 저장된다.
 
 ::
 

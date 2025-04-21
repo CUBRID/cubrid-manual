@@ -53,21 +53,24 @@ Using the built-in function concat() has performance advantages over the user-de
 
         SELECT COUNT(*) FROM (SELECT /*+ NO_MERGE */ concat (name, event) FROM athlete);
 
+        SELECT COUNT(*) FROM (SELECT /*+ NO_MERGE */ my_concat (name, event) FROM athlete);
+
+::
+
+        -- Using concat function
                       count(*)
         ======================
                           6677
 
         1 row selected. (0.019853 sec) Committed. (0.000000 sec)
 
-        SELECT COUNT(*) FROM (SELECT /*+ NO_MERGE */ my_concat (name, event) FROM athlete);
         
+        -- Using my_concat function
                       count(*)
         ======================
                           6677
 
         1 row selected. (0.302333 sec) Committed. (0.000000 sec)
-::
-
 
 .. _pl-deterministic:
 

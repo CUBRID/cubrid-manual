@@ -29,6 +29,7 @@ Users with DBA privileges can create stored procedures and stored functions in o
 If a regular user attempts to create stored procedures and stored functions in another user's schema, an error will occur.
 
 .. code-block:: sql
+
     -- Login as DBA
     CREATE USER U1;
     CREATE USER U2;
@@ -37,6 +38,7 @@ If a regular user attempts to create stored procedures and stored functions in a
     AS BEGIN
         DBMS_OUTPUT.put_line (arg1 + arg2);
     END;
+
 ::
 
     ERROR: before ' ; '
@@ -222,7 +224,7 @@ it can not be called within a query statement (**SELECT**, **UPDATE**, **DELETE*
     In the command from line 1,
     ERROR: Semantic: Stored procedure/function 'u1.test_func' has OUT or IN OUT arguments
 
-.. _pl-default-args:
+.. _pl-arg-default:
 
 Using Default Arguments
 =======================

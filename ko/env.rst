@@ -411,10 +411,12 @@ CUBRID 프로시저 언어 서버 사용 포트
 OS 종류와 **cubrid.conf**\의 **stored_procedure_uds**\의 설정값에 따른 동작
 
 *   Linux
+
   - **stored_procedure_uds**\가 **yes**\인 경우 유닉스 도메인 소켓을 사용하며 TCP 소켓을 사용하지 않는다.
   - **stored_procedure_uds**\가 **no**\인 경우 TCP 소켓을 사용하며 포트는 **stored_procedure_port**\의 설정값을 사용한다.
 
 *   Windows
+
   - Windows에서는 유닉스 도메인 소켓을 지원하지 않는다.
   - 따라서 **stored_procedure_uds**\에 상관없이 TCP 소켓을 사용하며 포트는 **stored_procedure_port**\의 설정값을 사용한다.
 

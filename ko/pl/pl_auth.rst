@@ -33,7 +33,7 @@ CUBRID에서는 :ref:`GRANT <granting-authorization>` 문을 사용하여 프로
     저장 프로시저와 저장 함수에 대한 **EXECUTE ON PROCEDURE** 권한은 **WITH GRANT OPTION** 을 지원하지 않는다.
     따라서 프로시저의 소유자가 부여한 권한을 다른 사용자에게 부여할 수 없다.
 
-.. _pl_authid:
+.. _pl-authid:
 
 소유자 권한과 호출자 권한의 차이
 ============================================
@@ -87,6 +87,7 @@ CUBRID에서는 :ref:`GRANT <granting-authorization>` 문을 사용하여 프로
         SELECT dba.fn_current_user();
 
 ::
+
         -- 위와 같이 U1 사용자로 호출했지만, 결과는 'DBA@' 이므로 소유자 권한으로 실행되었음을 알 수 있다.
 
         dba.fn_current_user()

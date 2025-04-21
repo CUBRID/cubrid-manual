@@ -33,9 +33,9 @@ You can use the **OR REPLACE** clause to replace or create a new stored function
 *   *schema_name*: Specifies the schema name. If omitted, the schema name of the current session is used.
 *   *procedure_name*: Specifies the name of the stored procedure to be created (maximum 222 bytes).
 *   *parameter_name*: Specifies the name of the parameter (maximum 254 bytes).
-*   *sql_type*: Specifies the data type of the parameter. For available data types, refer to :ref:`pl_arg_type_restriction`.
+*   *sql_type*: Specifies the data type of the parameter. For available data types, refer to :ref:`pl-arg-type-restriction`.
 *   *default_arg*: Specifies the default value of the parameter. Refer to :ref:`pl-arg-default`.
-*   *authid*: Specifies the execution authority of the stored procedure. For more details, refer to :ref:`pl_authid`.
+*   *authid*: Specifies the execution authority of the stored procedure. For more details, refer to :ref:`pl-authid`.
 *   *parameter_comment_string*: Specifies the comment string for the parameter.
 *   *body*: Specifies the body of the stored procedure.
 *   *procedure_comment*: Specifies the comment string for the stored procedure.
@@ -131,10 +131,10 @@ Create stored function using the **CREATE FUNCTION** statement.
 *   *schema_name*: Specifies the schema name (up to 31 bytes). If omitted, the schema name of the current session is used.
 *   *function_name*: Specifies the name of the stored function to be created (up to 222 bytes).
 *   *parameter_name*: Specifies the name of the parameter (up to 254 bytes).
-*   *sql_type*: Specifies the data type of the parameter or return value. For available data types, refer to :ref:`pl_arg_type_restriction`.
-*   *default_arg*: Specifies the default value of the parameter. Refer to :doc:`/pl/pl_default_args`.
+*   *sql_type*: Specifies the data type of the parameter or return value. For available data types, refer to :ref:`pl-arg-type-restriction`.
+*   *default_arg*: Specifies the default value of the parameter. Refer to :ref:`pl-arg-default`.
 *   *param_comment_string*: Specifies the comment string for the parameter.
-*   *authid*: Specifies the execution authority of the stored function. For more details, refer to :doc:`/pl/pl_authid`.
+*   *authid*: Specifies the execution authority of the stored function. For more details, refer to :ref:`pl-authid`.
 *   *deterministic*: Specifies whether the stored function is deterministic. For more details, refer to :ref:`pl-deterministic`.
 *   *body*: Specifies the body of the stored function.
 *   *function_comment*: Specifies the comment string for the stored function.

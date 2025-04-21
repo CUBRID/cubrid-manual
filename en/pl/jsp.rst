@@ -899,7 +899,7 @@ You can load a Java \*.class or \*.jar file using **loadjava** utility. The file
         * However, when loading a Java file that includes a package declaration, you must use the **-p** option to specify the package name.
 
 Example: Loading a Java Class with a Java package name
--------------------------------------------
+------------------------------------------------------------
 
 If a Java class includes a package declaration, such as:
 

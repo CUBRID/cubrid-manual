@@ -50,6 +50,7 @@ The main contents described in this chapter are as follows:
     pl_create
     pl_call
     pl_auth
+    pl_tcl
     pl_tuning
     pl_package
     plcsql

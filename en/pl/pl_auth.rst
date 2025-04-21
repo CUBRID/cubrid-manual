@@ -33,7 +33,7 @@ Conversely, you can revoke the execution privilege on a procedure by using the :
     Stored procedures and stored functions do not support the **EXECUTE ON PROCEDURE** permission with the **WITH GRANT OPTION** option.
     Therefore, the owner of the stored procedure cannot grant the permission to another user.
 
-.. _pl_authid:
+.. _pl-authid:
 
 The Difference Between Owner's Rights and Caller's Rights
 =================================================================
@@ -87,7 +87,8 @@ The following is an example of logging in as a DBA user, creating a stored funct
         SELECT dba.fn_current_user();
 
 ::
-        -- As shown, even when called by user U1, the result shows ‘DBA@’ because the function executes with Owner’s Rights
+        
+        -- As shown, even when called by user U1, the result shows 'DBA@' because the function executes with Owner's Rights
         
         dba.fn_current_user()
         ======================

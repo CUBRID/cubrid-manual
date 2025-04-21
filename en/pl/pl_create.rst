@@ -351,7 +351,7 @@ Function Overloading Not Supported
 
 Function overloading is the process of defining multiple functions with the same name but different argument types or numbers.
 **CUBRID does not support function overloading**. This means that you cannot create multiple stored procedures or stored functions with the same name if they have different argument types or numbers.
-Therefore, when using the **CREATE OR REPLACE** statement, the new procedure is not created and the existing procedure is overwritten, so caution is required.
+Therefore, when using the **CREATE OR REPLACE** statement, the new procedure will overwrite the existing procedure rather than create a new one; use it with caution to avoid accidental replacement.
 
 .. code-block:: sql
 
@@ -428,7 +428,7 @@ The following example will create the test_tbl table correctly.
                 1
 
 In the case of PL/CSQL Dynamic SQL or Java SP, the stored string is executed at runtime, 
-so it is not checked when registering the procedure, but it is checked when calling the procedure.
+so it is not examined when registering the procedure, and is instead validated when the procedure is called.
 
 .. code-block:: sql
 
@@ -450,8 +450,8 @@ so it is not checked when registering the procedure, but it is checked when call
       (line 5, column 9) Syntax: before '  LIMIT 1'
     Unknown class "dba.test_tbl". select id from [dba.test_tbl] limit 1
 
-If the object referenced internally by the stored procedure or stored function is deleted, 
-the system does not check the dependency, so even if it is registered correctly, an error may occur when the procedure is called.
+If an object referenced internally by a stored procedure or stored function is deleted, 
+the system does not perform dependency checks, so even if the routine is registered correctly, an error may occur when the procedure is called.
 Therefore, you should be careful so that the object referenced by the stored procedure or stored function is not deleted.
 
 .. code-block:: sql

@@ -13,7 +13,7 @@ Since Java stored functions and procedures use the JVM, they offer excellent int
 Introduction to Java Stored Procedure
 ==============================================
 
-CUBRID supports to develop stored functions and procedures in Java. Java stored functions/procedures are executed on the JVM (Java Virtual Machine) hosted by CUBRID.
+CUBRID supports the development of stored functions and procedures in Java. Java stored functions/procedures are executed on the JVM (Java Virtual Machine) hosted by CUBRID.
 
 You can call Java stored functions/procedures from SQL statements or from Java applications using JDBC.
 

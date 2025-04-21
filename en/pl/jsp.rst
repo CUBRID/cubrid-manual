@@ -1,5 +1,5 @@
 :meta-keywords: cubrid jsp, cubrid javasp, loadjava utility
-:meta-description: CUBRID supports to develop stored functions and procedures in Java. Java stored functions/procedures are executed on the JVM (Java Virtual Machine) hosted by CUBRID.
+:meta-description: CUBRID supports the development of stored functions and procedures in Java. Java stored functions/procedures are executed on the JVM (Java Virtual Machine) hosted by CUBRID.
 
 ******************************
 Java Stored Procedure

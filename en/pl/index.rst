@@ -1,5 +1,5 @@
 :meta-keywords: cubrid pl, cubrid procedural language, cubrid server programming, cubrid pl/csql, cubrid jsp, cubrid method
-:meta-description: CUBRID supports to develop stored functions and procedures. This chapter describes an introduction to CUBRID PL system
+:meta-description: CUBRID supports the development of stored functions and procedures. This chapter describes an introduction to CUBRID PL system
 
 .. _sql_procedural_langauge:
 

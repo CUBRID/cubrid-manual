@@ -56,7 +56,7 @@ TRUNCATE
     =============
                 3
 
-다음은 **CASCADE** 옵션을 사용하는 예이다. 일부 레코드의 외래 키 컬럼이 NULL로 어떠한 레코드를 가르키지 않더라도 CASCADE로 전파된 TRUNCATE는 모든 레코드를 제거한다.
+다음은 **CASCADE** 옵션을 사용하는 예이다. 일부 레코드의 외래 키 컬럼이 NULL로 어떠한 레코드를 가리키지 않더라도 CASCADE로 전파된 TRUNCATE는 모든 레코드를 제거한다.
 
 .. code-block:: sql
     

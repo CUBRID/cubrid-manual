@@ -162,14 +162,14 @@ This setting is the same as the general broker setting.
 Heterogeneous DBLink Setting
 ---------------------------------------
 
-To connect to a heterogeneous database (Oracle/MySQL/MariaDB), cubrid_gataway.conf, unixODBC installation, and ODBC Driver information settings are required.
+To connect to a heterogeneous database (Oracle/MySQL/MariaDB), cubrid_gateway.conf, unixODBC installation, and ODBC Driver information settings are required.
 
 .. _gatewayconf-info:
 
 Gateway configuration file
 ----------------------------------------
 
-The parameters used in cubrid_gataway.conf, the default gateway configuration file created when CUBRID is installed, are almost identical to the broker parameters, and some additional parameters that must be changed are included.
+The parameters used in cubrid_gateway.conf, the default gateway configuration file created when CUBRID is installed, are almost identical to the broker parameters, and some additional parameters that must be changed are included.
 Parameter values not included by default can be directly added/edited and used.
 The following is the content of the cubrid_gateway.conf file that is provided by default during installation.
 
@@ -334,7 +334,7 @@ To use ODBC in the gateway, unixODBC must be installed.
 
 .. note::
     
-        *   In Winodws, you can use Microsoft® ODBC Data Source Manager, which is installed by default.
+        *   In Windows, you can use Microsoft® ODBC Data Source Manager, which is installed by default.
 
 How to install unixODBC
 
@@ -477,7 +477,7 @@ If there is a tnsnames.ora file in /home/user/myconfigs, you can settings it as 
 	export TNS_ADMIN=/home/user/myconfigs
 
 
-**Configuring cubrid_gataway.conf for Oracle**
+**Configuring cubrid_gateway.conf for Oracle**
 
 In order to connect to Oracle from the gateway, several settings are required as follows.
 
@@ -506,7 +506,7 @@ MySQL Environment Configuration
 **Install MySQL ODBC Driver**
 
 MySQL Unicode ODBC Driver is required to connect to MySQL from the gateway.
-The following is how to install MYySQL ODBC Driver.
+The following is how to install MySQL ODBC Driver.
 
 Use the MySQL Yum repository to provide the Connector/ODBC RPM package. The MySQL Yum repository should be in your system's list of repositories,
 If not, select the package for your platform from the MySQL Yum repository download page ( https://dev.mysql.com/downloads/repo/yum/ ) and download it.
@@ -533,7 +533,7 @@ Install Connector/ODBC with the command below.
 For detailed installation instructions, refer to https://dev.mysql.com/doc/connector-odbc/en/connector-odbc-installation-binary-yum.html.
 
 
-**Configuring cubrid_gataway.conf for MySQL**
+**Configuring cubrid_gateway.conf for MySQL**
 
 In order to connect to MySQL from the gateway, several settings are required as below.
 
@@ -580,7 +580,7 @@ The installed driver must register driver information in odbcinst.ini. For setti
 For detailed installation instructions, refer to  https://mariadb.com/kb/en/about-mariadb-connector-odbc/#installing-mariadb-connectorodbc-on-linux.
 
 
-**Configuring cubrid_gataway.conf for MariaDB**
+**Configuring cubrid_gateway.conf for MariaDB**
 
 In order to connect to MariaDB from the gateway, several settings are required as below.
 

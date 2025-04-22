@@ -25,7 +25,7 @@ CAST
 
 경우에 따라 **CAST** 연산자를 쓰지 않고 데이터 타입이 자동으로 변환될 수 있다. 이에 대한 자세한 내용은 :ref:`implicit-type-conversion`\ 을 참고한다.
 
-문자열을 날짜/시간 타입으로 변환하는 것에 대한 자세한 내용은 :ref:`cast-string-to-datetime` 을 참고한다.
+문자열을 날짜/시간 타입으로 변환하는 것에 대한 자세한 내용은 :ref:`cast-string-to-datetime` 를 참고한다.
 
 CUBRID에서 **CAST** 연산자를 사용한 명시적인 타입 변환에 대해서 정리하면 다음의 표와 같다.
 

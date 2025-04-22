@@ -208,7 +208,7 @@ Key_name                            VARCHAR         인덱스 이름
 Seq_in_index                        INTEGER         인덱스에 있는 칼럼의 일련번호. 1부터 시작한다.
 Column_name                         VARCHAR         칼럼 이름
 Collation                           VARCHAR         칼럼이 인덱스에서 정렬되는 방법. 'A'는 오름차순(Ascending), **NULL** 은 비정렬을 의미한다.
-Cardinality                         INTEGER         인덱스에서 유일한 값의 개수를 측정한 수치. 카디널리티가 높을수록 인덱스를 이용할 기회가 높아진다. 
+Cardinality                         INTEGER         인덱스에서 고유한 값의 개수를 측정한 수치. 카디널리티가 높을수록 해당 인덱스를 선택 가능성이 높아진다. 
                                                     이 값은 **SHOW INDEX** 가 실행되면 매번 업데이트된다. 이 값은 근사치임에 유의한다.
 Sub_part                            INTEGER         칼럼의 일부만 인덱스된 경우 인덱스된 문자의 바이트 수. 칼럼 전체가 인덱스되면 **NULL** 이다.
 Packed                                              키가 어떻게 팩되었는지(packed)를 나타냄. 팩되지 않은 경우 **NULL**. 현재 지원 안 함.
@@ -350,11 +350,11 @@ dst_offset          VARCHAR(32)     일광 절약 시간을 고려한 타임존 
 dst_abbreviation    VARCHAR(32)     일광 절약 시간이 적용된 영역의 약어
 =================== =============== ===================================================
 
-두 번째, 세 번째, 네 번째 칼럼에서 출력되는 정보는 현재 날짜와 시간에 관한 것이다.
+region_offset, dst_offset, dst_abbreviation 값은 현재 날짜와 시간을 기준으로 출력된다.
 
 타임 존 영역이 일광 절약 시간(daylight saving time) 규칙을 적용하지 않는다면, dst_offset과 dst_abbreviation 값은 NULL 값이 된다.
  
-현재의 날짜에 일광 절약 시간이 적용되지 않는다면 dst_offset 값은 0이 되고 dst_abbreviation 값은 빈 문자열이 된다.
+현재의 날짜에 일광 절약 시간이 적용되지 않으면 dst_offset 값은 '0'이 되고 dst_abbreviation 값은 빈 문자열('')이 된다.
 
 WHERE 조건 없는 LIKE 조건은 첫 번째 칼럼에 적용된다. WHERE 조건은 결과를 필터링하기 위해 사용될 수 있다.
 
@@ -492,7 +492,7 @@ SHOW CREATE VIEW
 SHOW ACCESS STATUS 
 ==================
  
-**SHOW ACCESS STATUS** 문은 데이터베이스 계정에 대한 로그인 정보를 출력한다. 이 명령은 데이터베이스 계정이 DBA인 사용자만 사용할 수 있다. 
+**SHOW ACCESS STATUS** 문은 데이터베이스 사용자의 최근 로그인 정보를 출력한다. 이 명령은 데이터베이스 계정이 DBA인 사용자만 사용할 수 있다. 
 
 :: 
   
@@ -514,7 +514,7 @@ program_name        VARCHAR(32) 클라이언트 프로그램 이름(broker_cub_c
 .. code-block:: sql 
   
     SHOW ACCESS STATUS; 
-  
+ 
 :: 
   
       user_name last_access_time last_access_host program_name 
@@ -524,7 +524,7 @@ program_name        VARCHAR(32) 클라이언트 프로그램 이름(broker_cub_c
 
 .. note::
 
-    SHOW ACCESS STATUS가 보여주는 로그인 정보는 데이터베이스가 재시작되면 초기화되며, HA 환경에서 복제되지 않으므로 각 노드마다 다른 결과를 보여준다.
+    SHOW ACCESS STATUS의 로그인 정보는 데이터베이스가 재시작되면 초기화되며, HA 환경에서 복제되지 않으므로 각 노드마다 다른 결과를 출력된다.
 
 .. _show-exec-statistics-statement:
 
@@ -537,7 +537,7 @@ SHOW EXEC STATISTICS
 
 *   통계 정보 수집 결과를 출력한다.
 
-    *   **SHOW EXEC STATISTICS**\ 는 data_page_fetches, data_page_dirties, data_page_ioreads, data_page_iowrites 이렇게 4가지 항목의 데이터 페이지 통계 정보를 출력하며, 결과 칼럼은 통계 정보 이름과 값에 해당하는 variable 칼럼과 value 칼럼으로 구성된다. **SHOW EXEC STATISTICS** 문을 실행하고 나면 그동안 누적되었던 통계 정보가 초기화된다.
+    *   **SHOW EXEC STATISTICS**\ 는 data_page_fetches, data_page_dirties, data_page_ioreads, data_page_iowrites 이렇게 4가지 항목의 데이터 페이지 통계 정보를 출력하며, 결과 칼럼은 통계 정보 이름과 값에 해당하는 variable 칼럼과 value 칼럼으로 구성된다. **SHOW EXEC STATISTICS** 문을 실행하면 그동안 누적된 통계 정보가 초기화된다.
 
     *   **SHOW EXEC STATISTICS ALL**\ 은 모든 항목의 통계 정보를 출력한다.
 
@@ -667,7 +667,7 @@ Num_total_sectors                   INT             섹터 전체 개수
 Num_free_sectors                    INT             여유 섹터 개수
 Num_max_sectors                     INT             섹터 수의 최대값
 Hint_alloc_sector                   INT             할당될 다음 섹터에 대한 힌트
-Sector_alloc_table_size_in_pages    INT             페이지 내 섹터 할당 테이브 크기
+Sector_alloc_table_size_in_pages    INT             페이지 내 섹터 할당 테이블 크기
 Sector_alloc_table_first_page       INT             섹터 할당 테이블의 첫번째 페이지 
 Page_alloc_table_size_in_pages      INT             페이지 내 페이지 할당 테이블의 크기
 Page_alloc_table_first_page         INT             페이지 할당 테이블의 첫번째 페이지
@@ -1358,7 +1358,7 @@ SHOW INDEX HEADER
 
     SHOW INDEX HEADER OF [schema_name.]table_name.index_name;
 
-ALL 키워드를 사용하고 인덱스 이름을 생략하면 해당 테이블의 전체 인덱스의 헤더 정보를 출력한다.
+ALL 키워드를 사용하면 특정 테이블에 속한 모든 인덱스의 헤더 정보를 출력한다.
 
 ::
 
@@ -1775,7 +1775,7 @@ SA MODE일 경우 이 구문은 아무런 결과도 출력하지 않는다.
 해당 구문은 다음의 칼럼을 출력한다.
 
 =========================== =============== ==============================================================================================================================================================
-칼럼명                      타입            설영
+칼럼명                      타입            설명
 =========================== =============== ==============================================================================================================================================================
 Index                       INT             쓰레드 시작 인덱스
 Jobq_index                  INT             워커 쓰레드의 작업 큐 인덱스.  워커 쓰레드가 아닌 경우 NULL 

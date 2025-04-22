@@ -14,7 +14,7 @@ CUBRID 환경 변수
 
 *   **CUBRID_DATABASES**: **databases.txt** 파일의 위치를 지정하는 환경 변수이다. CUBRID 시스템은 **$CUBRID_DATABASES/databases.txt** 파일에 데이터베이스 볼륨들의 절대 경로를 저장 관리한다. :ref:`databases-txt-file`\ 을 참고한다.
 
-*   **CUBRID_MSG_LANG**: CUBRID 시스템이 명령어 사용법 메시지와 오류 메시지를 출력할 때 사용할 언어를 지정하는 환경 변수이다. 제품 설치 시 초기 설정 값은 없으며, 설정 값이 없으면 **en_US**로 설정된다. 환경변수로 설정할 수 있는 언어는 en_US, en_US.utf8, ko_KR.euckr 및 ko_KR.utf8 이다. 
+*   **CUBRID_MSG_LANG**: CUBRID 시스템이 명령어 사용법 메시지와 오류 메시지를 출력할 때 사용할 언어를 지정하는 환경 변수이다. 제품 설치 시 초기 설정 값은 없으며, 설정 값이 없으면 **en_US**\로 설정된다. 환경변수로 설정할 수 있는 언어는 en_US, en_US.utf8, ko_KR.euckr 및 ko_KR.utf8 이다.
 
 .. note:: 
 
@@ -81,7 +81,7 @@ CUBRID 환경 변수
 
         C:\> set CUBRID
 
-OS 환경 변수 및 Java 환경 변수
+OS 환경 변수
 ------------------------------
 
 *   PATH: Linux 환경에서 PATH 환경 변수에는 CUBRID 시스템의 실행 파일이 있는 디렉터리인 **$CUBRID/bin** 이 포함되어 있어야 한다.
@@ -89,10 +89,6 @@ OS 환경 변수 및 Java 환경 변수
 *   LD_LIBRARY_PATH: Linux 환경에서는 **LD_LIBRARY_PATH** (혹은 **SHLIB_PATH** 나 **LIBPATH**) 환경 변수에 CUBRID 시스템의 동적 라이브러리 파일(libjvm.so)이 있는 디렉터리인 **$CUBRID/lib** 과 **$CUBRID/cci/lib** 이 포함되어 있어야 한다.
 
 *   Path: Windows 환경에서 Path 환경 변수에는 CUBRID 시스템의 실행 파일이 있는 디렉터리인 **%CUBRID%\\bin** 과 **%CUBRID%\\cci\\bin** 이 포함되어 있어야 한다.
-
-*   JAVA_HOME: CUBRID 시스템에서 저장 프로시저 기능을 사용하기 위해서는 Java Runtime Environment (JRE) 1.8 이상 버전이 설치되어야 하고 **JAVA_HOME** 환경 변수에 해당 디렉터리가 지정되어야 한다. :ref:`cubrid-pl-server-config` 을 참고한다.
-
-*   JVM_PATH: CUBRID 시스템에서 저장 프로시저 기능을 사용하기 위해서 **JAVA_HOME**\에서 JVM 라이브러리 (**libjvm**)을 찾는 대신 **JVM_PATH** 환경 변수를 설정하여 명시적으로 라이브러리의 경로를 지정할 수 있다. :ref:`cubrid-pl-server-config` 을 참고한다.
 
 환경 변수 설정
 --------------
@@ -415,10 +411,12 @@ CUBRID 프로시저 언어 서버 사용 포트
 OS 종류와 **cubrid.conf**\의 **stored_procedure_uds**\의 설정값에 따른 동작
 
 *   Linux
-  - **stored_procedure_uds**\가 **yes**인 경우 유닉스 도메인 소켓을 사용하며 TCP 소켓을 사용하지 않는다.
-  - **stored_procedure_uds**\가 **no**인 경우 TCP 소켓을 사용하며 포트는 **stored_procedure_port**\의 설정값을 사용한다.
+
+  - **stored_procedure_uds**\가 **yes**\인 경우 유닉스 도메인 소켓을 사용하며 TCP 소켓을 사용하지 않는다.
+  - **stored_procedure_uds**\가 **no**\인 경우 TCP 소켓을 사용하며 포트는 **stored_procedure_port**\의 설정값을 사용한다.
 
 *   Windows
+
   - Windows에서는 유닉스 도메인 소켓을 지원하지 않는다.
   - 따라서 **stored_procedure_uds**\에 상관없이 TCP 소켓을 사용하며 포트는 **stored_procedure_port**\의 설정값을 사용한다.
 

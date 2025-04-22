@@ -1169,7 +1169,7 @@ REGEXP_REPLACE
 
     :param string: 입력 문자열을 지정한다. 값이 **NULL**\이면 **NULL**\을 반환한다
     :param pattern_string: 매칭을 수행할 정규식 패턴 문자열을 지정한다. 값이 **NULL**\이면 **NULL**\을 반환한다.
-    :param replacement_string: Specifies the string to replace the matched string by *pattern_string*\. 값이 **NULL**\이면 **NULL**\을 반환한다.
+    :param replacement_string: *pattern_string*과 일치하는 문자열을 대체할 문자열을 지정한다. 값이 **NULL**\이면 **NULL**\을 반환한다.
     :param position: 매칭을 수행할 *string*\의 위치를 지정한다. 값을 생략하면 기본값 1이 적용된다. 값이 음수이거나 0이면 에러를 반환한다. 값이 **NULL**\이면 **NULL**\을 반환한다
     :param occurrence: 몇 번째 매칭을 사용할 지 지정한다. 값을 생략하면 기본값 1을 적용한다. 만약 값을 생략하면 기본값 0이 적용된다. 값이 음수이면 에러를 반환한다. 값이 **NULL**\이면 **NULL**\을 반환한다.
     :param match_type: 함수의 매칭 옵션을 설정할 문자열을 지정한다.  값을 생략하면 기본값 'i'가 적용된다. 값이 'c' 또는 'i'가 아닌 경우 에러를 반환한다. 값이 **NULL**\이면 **NULL**\을 반환한다.

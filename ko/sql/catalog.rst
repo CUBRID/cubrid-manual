@@ -847,7 +847,7 @@ comment              CHARACTER VARYING(1024)     저장 프로시저 인자 설�
 
             - **is_optional**: 매개변수가 선택 가능하면 **1**,  필수이면 **0** 이다.
 
-            - **default_value**: 매개변수의 기본값이다. 자세한 내용은 :ref:`pl-arg-default-value` 을 참고한다.
+            - **default_value**: 매개변수의 기본값이다. 자세한 내용은 :ref:`pl-arg-default` 을 참고한다.
 
 .. _-db-stored-procedure-code:
 
@@ -877,7 +877,7 @@ ocode                CHARACTER VARYING(1073741823) 저장 프로시저의 목적
                 - 값이 **1** 이면 저장 프로시저 코드를 한번만 로드하며, 프로시저 코드의 변경 시에도 적용되지 않고 서버 재시작 시에만 적용된다.
                 - 값이 **0** 이면 저장 프로시저 코드를 매번 로드하며, DDL 또는 프로시저 로드 유틸리티 사용으로 프로시저 코드 변경 시 즉시 적용된다.
                 
-                - :ref:`pl-jni` 에서 사용된다.
+                - :ref:`jsp-jni` 에서 사용된다.
 
             - **is_system_generated**: 값이 **1** 이면 시스템이 생성한 코드이며, **0** 이면 사용자가 작성한 코드이다.
 
@@ -2158,7 +2158,7 @@ comment              VARCHAR(1024)               매개변수에 대한 설명
 
             - **is_optional**: 매개변수가 선택 가능하면 **YES**,  필수이면 **NO** 이다.
 
-            - **default_value**: 매개변수의 기본값이다. 자세한 내용은 :ref:`pl-arg-default-value` 을 참고한다.
+            - **default_value**: 매개변수의 기본값이다. 자세한 내용은 :ref:`pl-arg-default` 을 참고한다.
 
 다음 예제에서는 'process_order' 저장 프로시저의 인수 정보를 순서대로 조회한다.
 

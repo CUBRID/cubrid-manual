@@ -1,3 +1,4 @@
+.. _user_schema:
 
 ***********
 User Schema

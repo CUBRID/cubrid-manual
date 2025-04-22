@@ -82,7 +82,7 @@ The above mentioned environment variables are set when the CUBRID is installed. 
 
         C:\> set CUBRID
 
-OS Environment and Java Environment Variables
+OS Environment
 ---------------------------------------------
 
 *   PATH: In the Linux environment, the directory **$CUBRID/bin**, which includes a CUBRID system executable file, must be included in the PATH environment variable.
@@ -90,10 +90,6 @@ OS Environment and Java Environment Variables
 *   LD_LIBRARY_PATH: In the Linux environment, **$CUBRID/lib** and **$CUBRID/cci/lib**, which is the CUBRID system's dynamic library file (libjvm.so), must be included in the **LD_LIBRARY_PATH** (or **SHLIB_PATH** or **LIBPATH**) environment variable.
 
 *   Path: In the Windows environment, the **%CUBRID%\\bin** and **%CUBRID%\\cci\\bin**, which is a directory that contains CUBRID system's execution file, must be included in the **Path** environment variable.
-
-*   JAVA_HOME: To use stored procedures in the CUBRID system, the Java Virtual Machine (JVM) version 1.8 or later must be installed, and the **JAVA_HOME** environment variable must designate the concerned directory. See the :ref:`cubrid-pl-server-config`.
-
-*   JVM_PATH: To use stored procedures in the CUBRD system, the **JVM_PATH** environment variable can specify the JVM library (libjvm) path explicitly instead of finding the library from **JAVA_HOME**. See the :ref:`cubrid-pl-server-config`.
 
 Configuring the Environment Variable
 ------------------------------------
@@ -415,13 +411,15 @@ The following table summarizes the ports, based on the listening processes, used
 Behavior according to the OS type and the **stored_procedure_uds** setting in **cubrid.conf**
 
 *   Linux
+
   - If **stored_procedure_uds** is set to **yes**, a UNIX domain socket is used and a TCP socket is not used.
   - If **stored_procedure_uds** is set to **no**, a TCP socket is used, and the port is determined by the **stored_procedure_port** setting.
 
 *   Windows
+
   - Windows does not support UNIX domain sockets.
   - Therefore, regardless of the **stored_procedure_uds** setting, a TCP socket is used, and the port is determined by the **stored_procedure_port** setting.
 
 .. note::
 
-        The port used for communication between the CUBRID Procedure Language server (cub_pl) and cub_server is specified by **stored_procedure_port** in **cubrid.conf**. The default value is 0, which means that a random available port will be assigned.
+        The port used for communication between the CUBRID Procedural Langauge server (cub_pl) and cub_server is specified by **stored_procedure_port** in **cubrid.conf**. The default value is 0, which means that a random available port will be assigned.

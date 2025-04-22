@@ -478,8 +478,8 @@ Therefore, you should be careful so that the object referenced by the stored pro
 
 .. _pl-string-codeset:
 
-String Charset Considerations
-======================================
+Considerations for String Charset Encoding
+==============================================
 
 All string data in CUBRID has a charset. 
 In the CUBRID PL engine, string data within stored procedures and stored functions is handled using a single charset. 

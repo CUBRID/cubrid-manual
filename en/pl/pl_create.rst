@@ -489,11 +489,11 @@ String data is processed according to the following rules:
 * The charset of **string type argument values** is assumed to be the same as the database's charset.
 * The charset of **string type result values** is assumed to be the same as the database's charset.
 * The charset of **string literal values** is assumed to be the same as the database's charset.
-* If the **result of an SQL query** is of string type, it is converted from the charset of the relevant column to the database's charset.
+* If the **result of an SQL query** is of string type, the value is internally converted from the column's charset to the database's charset.
 
 .. note::
 
-    * The database's charset is specified and set using the **charset** option in the :ref:`cubrid createdb <createdb>` utility and cannot be changed.
+    * The database's charset is specified using the **charset** option in the :ref:`cubrid createdb <createdb>` utility and cannot be changed after creation.
     * The charset of client programs that input strings to or output strings from stored procedures and stored functions should be the same as the database's charset.
 
 The following example demonstrates a case where a string type argument is combined with the literal value '한글' to return a result. 
@@ -514,7 +514,7 @@ Therefore, to execute the following SQL statement correctly, it must be stored a
 
     test_func('큐브리드')
     =====================
-                    큐브리드,한글
+      큐브리드,한글
 
 By default, the charset of the result of an SQL query follows the database's charset, but it can be explicitly specified as described in :ref:`collation-charset-column`. 
 The following example shows that when the database's charset is set to UTF-8 and the column's charset is set to EUC-KR, the charset of the query result string is internally converted from EUC-KR to UTF-8.
@@ -542,4 +542,4 @@ The following example shows that when the database's charset is set to UTF-8 and
 
     test_func()
     =============
-                    큐브리드한글
+      큐브리드한글

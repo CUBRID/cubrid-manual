@@ -91,6 +91,37 @@ OS Environment
 
 *   Path: In the Windows environment, the **%CUBRID%\\bin** and **%CUBRID%\\cci\\bin**, which is a directory that contains CUBRID system's execution file, must be included in the **Path** environment variable.
 
+.. note::
+
+    *  In the Linux environment, you can control the heap memory allocation behavior of **CUBRID's memory manager (GLIB memory manager)** through the following environment variable settings. For more details, refer to: https://www.gnu.org/software/libc/manual/html_node/Malloc-Tunable-Parameters.
+
+        +------------------------+----------------------------------------------------------------------------------------------------------------+-----------------+
+        | Environment variables  | Descriptions                                                                                                   | Default         |
+        +========================+================================================================================================================+=================+
+        | MALLOC_MMAP_MAX\_      | Specifies the maximum number of memory blocks that may be allocated via the mmap().                            | 65536           | 
+        +------------------------+----------------------------------------------------------------------------------------------------------------+-----------------+
+        | MALLOC_MMAP_THRESHOLD\_| Specifies the size threshold for deciding whether to use the mmap() system call for memory allocation.         | 128 KiB         |
+        +------------------------+----------------------------------------------------------------------------------------------------------------+-----------------+
+        | MALLOC_TOP_PAD\_       | Specifies the size of additional memory padding to be maintained at the top of the heap.                       | 0               |
+        +------------------------+----------------------------------------------------------------------------------------------------------------+-----------------+
+        | MALLOC_TRIM_THRESHOLD\_| Specifies the threshold for deciding whether freed memory is released back to the kernel.                      | 128 KiB         |
+        |                        | Released if the threshold is exceeded.                                                                         |                 |
+        +------------------------+----------------------------------------------------------------------------------------------------------------+-----------------+
+        | MALLOC_ARENA_MAX       | Specifies the maximum number of memory arenas that a process is allowed to create.                             | 8 times of core |
+        +------------------------+----------------------------------------------------------------------------------------------------------------+-----------------+
+
+    *  In the installation package, cubrid.sh (or cubrid.csh) sets the **MALLOC_TRIM_THRESHOLD\_** value to 0, while the other environment variables are commented out.
+
+.. note::
+
+    *  In the Linux environments, the **LD_PRELOAD** environment variable can be used to override and change the default memory manager used by CUBRID.
+    *  However, replacing the memory manager may cause unexpected behavior during CUBRID operation, so it should be done with careful consideration.
+
+      ::
+
+         예) LD_PRELOAD=/usr/lib64/jemalloc.so.1
+
+
 Configuring the Environment Variable
 ------------------------------------
 

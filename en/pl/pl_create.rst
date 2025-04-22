@@ -494,7 +494,9 @@ String data is processed according to the following rules:
 .. note::
 
     * The database's charset is specified using the **charset** option in the :ref:`cubrid createdb <createdb>` utility and cannot be changed after creation.
-    * The charset of client programs that input strings to or output strings from stored procedures and stored functions should be the same as the database's charset.
+    * All operations that input or output strings in stored procedures/functions must use a charset that matches the database's charset to obtain correct results.
+
+**Example 1**
 
 The following example demonstrates a case where a string type argument is combined with the literal value '한글' to return a result. 
 It is assumed that the charset of the string type argument, result, and literal value is the same as the database's charset. 
@@ -516,8 +518,16 @@ Therefore, to execute the following SQL statement correctly, it must be stored a
     =====================
       큐브리드,한글
 
-By default, the charset of the result of an SQL query follows the database's charset, but it can be explicitly specified as described in :ref:`collation-charset-column`. 
-The following example shows that when the database's charset is set to UTF-8 and the column's charset is set to EUC-KR, the charset of the query result string is internally converted from EUC-KR to UTF-8.
+**Example 2**
+
+The charset used for the result of an SQL query generally follows the database's charset, but as explained in :ref:`collation-charset-column`, each column in a table can have its own specified charset.
+In such cases, the following scenarios may occur:
+
+* If the column charset and the database charset are the same: No conversion is needed.
+* If the column charset and the database charset differ: CUBRID internally converts the charset to the database's charset. Be cautious as incorrect character conversion or data loss may occur during this process.
+
+The following example demonstrates a case where a database set to UTF-8 has a table column specified with the EUC-KR charset.
+The string returned as a result of the query is internally converted from EUC-KR to UTF-8 before being combined with a string literal and returned.
 
 .. code-block:: sql
 

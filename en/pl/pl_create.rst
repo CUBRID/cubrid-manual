@@ -475,3 +475,71 @@ Therefore, you should be careful so that the object referenced by the stored pro
 
     ERROR: Stored procedure execute error: 
       (line 5, column 9) Syntax: Unknown class "dba.test_tbl". select [dba.test_tbl].id from [dba.test_tbl] [dba.test_tbl] ...
+
+.. _pl-string-codeset:
+
+String Charset Considerations
+======================================
+
+All string data in CUBRID has a charset. 
+In the CUBRID PL engine, string data within stored procedures and stored functions is handled using a single charset. 
+No charset conversion occurs when string data is input or output.
+String data is processed according to the following rules:
+
+* The charset of **string type argument values** is assumed to be the same as the database's charset.
+* The charset of **string type result values** is assumed to be the same as the database's charset.
+* The charset of **string literal values** is assumed to be the same as the database's charset.
+* If the **result of an SQL query** is of string type, it is converted from the charset of the relevant column to the database's charset.
+
+.. note::
+
+    * The database's charset is specified and set using the **charset** option in the :ref:`cubrid createdb <createdb>` utility and cannot be changed.
+    * The charset of client programs that input strings to or output strings from stored procedures and stored functions should be the same as the database's charset.
+
+The following example demonstrates a case where a string type argument is combined with the literal value '한글' to return a result. 
+It is assumed that the charset of the string type argument, result, and literal value is the same as the database's charset. 
+Therefore, to execute the following SQL statement correctly, it must be stored and executed with UTF-8 encoding.
+
+.. code-block:: sql
+
+    CREATE OR REPLACE FUNCTION test_func (arg VARCHAR) RETURN VARCHAR
+    AS
+    BEGIN
+        RETURN arg || ',' || '한글';
+    END;
+
+    SELECT test_func('큐브리드');
+
+::
+
+    test_func('큐브리드')
+    =====================
+                    큐브리드,한글
+
+By default, the charset of the result of an SQL query follows the database's charset, but it can be explicitly specified as described in :ref:`collation-charset-column`. 
+The following example shows that when the database's charset is set to UTF-8 and the column's charset is set to EUC-KR, the charset of the query result string is internally converted from EUC-KR to UTF-8.
+
+.. code-block:: sql
+
+    -- This file should be saved in euc-kr, and '큐브리드' should be written with euc-kr encoding.
+    CREATE TABLE tblcharcol (col STRING CHARSET euckr) COLLATE euckr_bin;
+    INSERT INTO tblcharcol VALUES ('큐브리드');
+
+.. code-block:: sql
+
+    -- This file should be saved in utf-8, and '한글' should be written with utf-8 encoding.
+    CREATE OR REPLACE FUNCTION test_func () RETURN VARCHAR
+    AS
+        v VARCHAR;
+    BEGIN
+        SELECT col INTO v FROM tblcharcol LIMIT 1;
+        RETURN v || '한글';
+    END;
+
+    SELECT test_func();
+
+::
+
+    test_func()
+    =============
+                    큐브리드한글

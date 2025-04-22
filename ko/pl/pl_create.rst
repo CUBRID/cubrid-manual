@@ -474,4 +474,65 @@ CUBRID에서는 **함수 오버로딩을 지원하지 않는다.** 즉, 인수�
 문자열 코드셋 고려사항
 ======================================
 
+CUBRID의 모든 문자열 데이터는 코드셋을 가지고 있다.
+CUBRID PL 엔진에서는 저장 프로시저와 저장 함수의 내부에서 문자열 데이터를 하나의 코드셋으로만 다룬다.
+그리고 문자열 데이터를 입출력할 때 코드셋 변환은 수행하지 않는다.
+다음의 규칙에 따라 문자열 데이터를 처리한다.
 
+* **문자열 타입의 인수값**\의 코드셋은 데이터베이스의 코드셋과 동일하다고 가정한다.
+* **문자열 타입의 결과값**\의 코드셋은 데이터베이스의 코드셋과 동일하다고 가정한다.
+* **문자열 리터럴 값**\의 코드셋은 데이터베이스의 코드셋과 동일하다고 가정한다.
+* **SQL 질의문의 결과**\가 문자열 타입인 경우, 관련한 컬럼의 코드셋으로부터 데이터베이스의 코드셋으로 변환된 문자열이 전달된다.
+
+.. note::
+
+    * 데이터베이스의 코드셋은 :ref:`cubrid createdb <createdb>`\ 유틸리티에서 **charset** 옵션을 지정하며 입력하며, 변경되지 않는다.
+    * 저장 프로시저와 저장 함수에 문자열을 입력하는 클라이언트 프로그램, 또는 저장 프로시저와 저장 함수에 문자열을 출력하는 클라이언트 프로그램의 코드셋은 데이터베이스의 코드셋과 동일하도록 주의해야한다.
+
+다음의 예시는 문자열 타입의 인수가 '한글' 리터럴 값과 연산하여 결과를 반환하는 예시이다.
+문자열 타입의 인수와 결과 그리고 리터럴 값의 코드셋은 데이터베이스의 코드셋과 동일하다고 가정한다.
+따라서 다음의 SQL 문을 올바르게 실행하기 위해서는 UTF-8 인코딩으로 저장하고 수행해야 한다.
+
+.. code-block:: sql
+
+    CREATE OR REPLACE FUNCTION test_func (arg VARCHAR) RETURN VARCHAR
+    AS
+    BEGIN
+        RETURN arg || ',' || '한글';
+    END;
+
+    SELECT test_func('큐브리드');
+
+::
+
+    test_func('큐브리드')
+    =====================
+                    큐브리드,한글
+
+SQL 질의문의 결과의 코드셋은 기본적으로 데이터베이스의 코드셋을 따르지만, :ref:`collation-charset-column` 의 설명과 같이 명시적으로 지정할 수 있다.
+다음의 예시는 데이터베이스의 코드셋을 UTF-8로 지정하고, 컬럼의 코드셋을 EUC-KR로 지정한 경우, 질의문 결과 문자열의 코드셋은 EUC-KR으로부터 UTF-8로 내부적으로 변환된다.
+
+.. code-block:: sql
+
+    -- 이 파일은 euc-kr로 저장되어야 하며, '큐브리드'도 euc-kr 인코딩으로 입력되어야 한다.
+    CREATE TABLE tblcharcol (col STRING CHARSET euckr) COLLATE euckr_bin;
+    INSERT INTO tblcharcol VALUES ('큐브리드');
+
+.. code-block:: sql
+
+    -- 이 파일은 utf-8로 저장되어야 하며, '한글'도 utf-8 인코딩으로 입력되어야 한다.
+    CREATE OR REPLACE FUNCTION test_func () RETURN VARCHAR
+    AS
+        v VARCHAR;
+    BEGIN
+        SELECT col INTO v FROM tblcharcol LIMIT 1;
+        RETURN v || '한글';
+    END;
+
+    SELECT test_func();
+
+::
+
+    test_func()
+    =============
+                    큐브리드한글

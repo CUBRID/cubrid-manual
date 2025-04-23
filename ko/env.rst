@@ -114,7 +114,7 @@ OS 환경 변수
 
     *  Linux 환경에서 **LD_PRELOAD** 환경 변수 설정을 통해 CUBRID의 메모리 관리자를 변경할 수 있다. 
     *  단, 메모리 관리자 교체에 의해 CUBRID 운영시 오동작이 발생될 수 있으므로 교체시 신중하게 검토해야 한다.
-    *  설치 패키지안의 .cubrid.sh(또는.cubrid.csh)애는 LD_PRELOAD 환경 변수가 주석 처리되어 있음.
+    *  설치 패키지안의 .cubrid.sh(또는 .cubrid.csh)애는 LD_PRELOAD 환경 변수가 주석 처리되어 있음.
 
       :: 
 

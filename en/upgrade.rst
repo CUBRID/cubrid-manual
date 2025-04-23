@@ -76,7 +76,7 @@ Please confirm :ref:`11_4_changes` in the release notes.
 *   If you do not want to run the CUBRID procedural langauge server, set the **stored_procedure** parameter in **cubrid.conf** to **no** and restart. In this case, the PL/CSQL and Java stored procedure functions cannot be used.
 
 Upgrading from CUBRID 9.2/9.3/10.0/10.1/10.2/11.0/11.2/11.3 to CUBRID 11.4
-----------------------------------------------------------------
+--------------------------------------------------------------------------
 
 Users who are using versions CUBRID 9.2/9.3/10.0/10.1/10.2/11.0/11.2/11.3 should install 11.4 in the different directory, migrate the databases to 11.4 and modify parameter values in the previous environment configuration file.
 

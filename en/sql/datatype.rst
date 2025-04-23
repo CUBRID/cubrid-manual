@@ -1857,11 +1857,11 @@ When you get a **LOB** type column, the data stored in a file to which the colum
 
         * Previously created LOB data cannot be retrieved.
         * To retrieve previously created LOB data, it should be moved to the updated '**lob-base-path**' directory.
+
        ::
 
           # example:
           % cp -r /home1/data1/* /home2/data2
-       ::
 
     *   LOB data created in CUBRID 11.3 or earlier, even though they store the locator as an absolute file path, can be retrieved in CUBRID 11.4 without any changes.
 

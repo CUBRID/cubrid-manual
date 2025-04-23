@@ -252,7 +252,7 @@ CUBRID에서는 다음 데이터베이스 객체에 대한 권한을 부여할 �
     CREATE TABLE tbl2 (a INT);
     GRANT ALL PRIVILEGES ON tbl1, tbl2 TO public;
 
-다음 **GRANT** 문은 *brown*에게 *record*, *history* 테이블에 대한 검색 권한을 부여하고 *brown*이 다른 사용자에게 검색 권한을 부여할 수 있도록 **WITH GRANT OPTION** 절을 사용한 예제이다. 이후 *brown*은 다른 사용자에게 자신이 받은 권한 내에서 권한을 부여할 수 있다.
+다음 **GRANT** 문은 *brown*\에게 *record*, *history* 테이블에 대한 검색 권한을 부여하고 *brown*\이 다른 사용자에게 검색 권한을 부여할 수 있도록 **WITH GRANT OPTION** 절을 사용한 예제이다. 이후 *brown*\은 다른 사용자에게 자신이 받은 권한 내에서 권한을 부여할 수 있다.
 
 .. code-block:: sql
 

@@ -968,6 +968,7 @@ TO_CHAR(number)
 ===============
 
 .. function:: TO_CHAR(number[, format[, number_lang_string_literal ] ])
+    :noindex:
 
     **TO_CHAR** (number) 함수는 수치형 데이터 타입을 :ref:`숫자 형식 <tochar-number-format>`\ 에 맞는 문자열로 변환하여 **VARCHAR** 타입으로 반환한다.
     

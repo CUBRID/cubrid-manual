@@ -468,3 +468,80 @@ CUBRID에서는 **함수 오버로딩을 지원하지 않는다.** 즉, 인수�
 
     ERROR: Stored procedure execute error: 
       (line 5, column 9) Syntax: Unknown class "dba.test_tbl". select [dba.test_tbl].id from [dba.test_tbl] [dba.test_tbl] ...
+
+.. _pl-string-codeset:
+
+문자열 코드셋 인코딩 고려사항
+======================================
+
+CUBRID의 모든 문자열 데이터는 코드셋을 가지고 있다.
+CUBRID PL 엔진에서는 저장 프로시저와 저장 함수의 내부에서 문자열 데이터를 단일 코드셋으로만 처리한다.
+그리고 문자열 데이터를 입출력할 때는 코드셋 변환을 수행하지 않는다.
+다음의 규칙에 따라 문자열 데이터를 처리한다.
+
+* **문자열 타입의 인수값**\은 데이터베이스의 코드셋과 동일 코드셋을 사용하는 것으로 간주한다.
+* **문자열 타입의 결과값**\은 데이터베이스의 코드셋과 동일 코드셋을 사용하는 것으로 간주한다.
+* **문자열 리터럴 값**\은 데이터베이스의 코드셋과 동일한 코드셋을 사용하는 것으로 간주한다.
+* **SQL 질의문의 결과**\가 문자열 타입인 경우, 해당 컬럼의 코드셋에서 데이터베이스의 코드셋으로 변환된 문자열이 전달된다.
+
+.. note::
+
+    * 데이터베이스의 코드셋은 :ref:`cubrid createdb <createdb>`\ 유틸리티에서 **charset** 옵션을 사용하여 설정되며, DB 생성 이후에는 변경할 수 없다.
+    * 저장 프로시저/함수에서 문자열을 입력하거나 출력하는 모든 작업은 데이터베이스 코드셋과 일치하는 코드셋을 사용해야만 올바르게 동작한다.
+
+**예제 1**
+
+다음의 예시는 문자열 타입의 인수가 '한글' 리터럴 값과 연산하여 결과를 반환하는 예시이다.
+문자열 타입의 인수와 결과 그리고 리터럴 값의 코드셋은 데이터베이스의 코드셋과 동일하다고 가정한다.
+따라서 다음의 SQL 문을 올바르게 실행하기 위해서는 UTF-8 인코딩으로 저장하고 수행해야 한다.
+
+.. code-block:: sql
+
+    CREATE OR REPLACE FUNCTION test_func (arg VARCHAR) RETURN VARCHAR
+    AS
+    BEGIN
+        RETURN arg || ',' || '한글';
+    END;
+
+    SELECT test_func('큐브리드');
+
+::
+
+    test_func('큐브리드')
+    =====================
+      큐브리드,한글
+
+**예제 2**
+
+SQL 질의문의 결과에 사용되는 코드셋은 기본적으로 데이터베이스의 코드셋을 따르지만, :ref:`collation-charset-column` 의 설명한 것처럼 테이블의 각 컬럼의 코드셋을 개별적으로 지정할 수 있다.
+이 경우, 다음과 같은 상황이 발생할 수 있다.
+
+* 컬럼 코드셋과 데이터베이스 코드셋이 동일: 변환이 필요하지 않는다.
+* 컬럼 코드셋과 데이터베이스 코드셋이 다름: CUBRID는 내부적으로 데이터베이스 코드셋으로 변환한다. 변환 과정에서 잘못된 문자 변환이나 데이터 손실이 발생할 수 있으니 주의해야 한다.
+
+다음의 예시는 UTF-8로 설정된 데이터베이스에서 테이블 컬럼의 코드셋을 EUC-KR로 지정된 경우에, 질의문 결과로 반환되는 문자열은 EUC-KR에서 UTF-8로 내부적으로 변환되어 문자열 리터럴과 연산한 후 반환하는 것을 보여준다.
+
+.. code-block:: sql
+
+    -- 이 파일은 euc-kr로 저장되어야 하며, '큐브리드'도 euc-kr 인코딩으로 입력되어야 한다.
+    CREATE TABLE tblcharcol (col STRING CHARSET euckr) COLLATE euckr_bin;
+    INSERT INTO tblcharcol VALUES ('큐브리드');
+
+.. code-block:: sql
+
+    -- 이 파일은 utf-8로 저장되어야 하며, '한글'도 utf-8 인코딩으로 입력되어야 한다.
+    CREATE OR REPLACE FUNCTION test_func () RETURN VARCHAR
+    AS
+        v VARCHAR;
+    BEGIN
+        SELECT col INTO v FROM tblcharcol LIMIT 1;
+        RETURN v || '한글';
+    END;
+
+    SELECT test_func();
+
+::
+
+    test_func()
+    =============
+       큐브리드한글

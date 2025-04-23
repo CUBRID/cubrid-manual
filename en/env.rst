@@ -116,7 +116,7 @@ OS Environment
 
     *  In Linux environments, the **LD_PRELOAD** environment variable can be used to override the default memory manager used by CUBRID.
     *  However, replacing the memory manager may cause unexpected behavior during CUBRID operation, so it should be done with careful consideration.
-    *  In the installation package, LD_PRELOAD environment variable is commented out in the cubrid.sh (or cubrid.csh).
+    *  The scripts in the installation package (cubrid.sh and cubrid.csh) include the **LD_PRELOAD** environment variable, but it is commented out by default.
 
       ::
 

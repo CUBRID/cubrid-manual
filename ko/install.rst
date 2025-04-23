@@ -122,7 +122,8 @@ Linux 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항�
     $ . /home1/cub_user/.cubrid.sh
     $ cubrid service start
 
-위의 예제와 같이 다운로드한 파일(CUBRID-11.4.0.????-???????-Linux.x86_64.sh)을 설치한 후, CUBRID 데이터베이스를 사용하기 위해서는 CUBRID 관련 환경 정보를 설정해야 한다. 이 설정은 해당 터미널에 로그인할 때 자동 설정되도록 지정되어 있으므로 설치 후 최초 한 번만 수행하면 된다. ::
+위의 예제와 같이 다운로드한 파일(CUBRID-11.4.0.????-???????-Linux.x86_64.sh)을 설치한 후, CUBRID 데이터베이스를 사용하기 위해서는 사용자의 shell 환경에 맞게 .cubrid.sh (또는 .cubrid.csh) 수행하여 CUBRID 관련 환경 변수값을 설정해야 한다. 
+또한, 로그인시 자동 설정하려면 사용자의 shell 환경에 맞게 .cubrid.sh (또는 .cubrid.csh)를 .bashrc (또는 .cshrc) 등에 수동으로 등록해주어야 한다. ::
 
     $ . /home1/cub_user/.cubrid.sh
 

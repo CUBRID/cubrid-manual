@@ -17,7 +17,7 @@ SystemTap을 사용하여 CUBRID의 성능을 모니터링하려면 먼저 Syste
 
 SystemTap은 Linux OS에서만 지원한다.
 
-SystemTap에 대한 자세한 내용 및 설치 방법에 대해서는 http://sourceware.org/systemtap/index.html\ 을 참고한다.
+SystemTap에 대한 자세한 내용 및 설치 방법에 대해서는 https://sourceware.org/systemtap/index.html\ 을 참고한다.
 
 SystemTap 설치하기
 ==================

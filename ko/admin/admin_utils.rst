@@ -860,9 +860,9 @@ compactdb
     
         ERROR: The class 'reuse_tbl' is marked as REUSE_OID and is non-referable. Non-referable classes can't be the domain of an attribute and their instances' OIDs cannot be returned.
  
-    REUSE_OID에 대한 자세한 설명은 :ref:`reuse-oid`를 참고한다.
+    REUSE_OID에 대한 자세한 설명은 :ref:`REUSE_OID <reuse-oid>`\를 참고한다.
 
-**cubrid compactdb** 유틸리티를 수행하면 삭제된 객체에 대한 참조를 **NULL**로 표시하는데, 이렇게 **NULL** 로 표시된 공간은 OID가 재사용할 수 있는 공간임을 의미한다. ::
+**cubrid compactdb** 유틸리티를 수행하면 삭제된 객체에 대한 참조를 **NULL**\로 표시하는데, 이렇게 **NULL**\로 표시된 공간은 OID가 재사용할 수 있는 공간임을 의미한다. ::
 
     cubrid compactdb [options] database_name [schema_name.class_name [{, schema_name.class_name}]]
 

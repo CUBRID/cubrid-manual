@@ -1817,7 +1817,7 @@ The following shows [options] available with the **cubrid statdump** utility.
     |                                          |                | | with this value                                                     |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
     | Log_page_buffer_hit_ratio                | Computed       | | Hit ratio of log page buffers                                       |
-    |                                          |                | | (Num_log_page_fetches - Num_log_page_ioreads)*100             |
+    |                                          |                | | (Num_log_page_fetches - Num_log_page_ioreads)*100                   |
     |                                          |                | | / Num_log_page_fetches                                              |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
 

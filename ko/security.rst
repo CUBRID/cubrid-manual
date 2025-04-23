@@ -49,6 +49,7 @@ SSL은 대칭키(Symmetric Key) 방식으로 송수신 데이터를 암호화한
 서버의 공개키는 인증서에 포함되어 있으며, 이 인증서와 개인키는 $CUBRID/conf 디렉터리에 저장되어 있다. 각각의 파일명은 다음과 같다.
     * 인증서 파일: cas_ssl_cert.crt
     * 개인키 파일: cas_ssl_cert.key
+
 이 인증서는 OpenSSL의 명령어 도구를 이용해 생성된 Self-signed 인증서이다.   
 
 사용자는 필요에 따라 IdenTrust, DigiCert 등 공인 인증 기관(CA)에서 발급받은 인증서로 대체할 수 있으며, OpenSSL을 이용해 새로 생성한 인증서를 사용하는 것도 가능하다.

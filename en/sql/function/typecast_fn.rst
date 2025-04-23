@@ -644,6 +644,7 @@ TO_CHAR(date_time)
 ==================
 
 .. function:: TO_CHAR ( date_time [, format[, date_lang_string_literal ]] )
+   :noindex:
 
     The **TO_CHAR** (date_time) function converts the value of date/time types (**TIME**, **DATE**, **TIMESTAMP**, **DATETIME**) to a string depending on the table :ref:`Date/Time Format 1 <datetime-format1>` and then returns the value. The type of the return value is **VARCHAR**.
 

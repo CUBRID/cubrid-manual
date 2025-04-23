@@ -110,13 +110,13 @@ OS Environment
         | MALLOC_ARENA_MAX       | Specifies the maximum number of memory arenas that a process is allowed to create.                             | 8 times of core |
         +------------------------+----------------------------------------------------------------------------------------------------------------+-----------------+
 
-    *  In the installation package, cubrid.sh (or cubrid.csh) sets the **MALLOC_TRIM_THRESHOLD\_** value to 0, while the other environment variables are commented out.
+    *  In the installation package, .cubrid.sh (or .cubrid.csh) sets the **MALLOC_TRIM_THRESHOLD\_** value to 0, while the other environment variables are commented out.
 
 .. note::
 
     *  In Linux environments, the **LD_PRELOAD** environment variable can be used to override the default memory manager used by CUBRID.
     *  However, replacing the memory manager may cause unexpected behavior during CUBRID operation, so it should be done with careful consideration.
-    *  The scripts in the installation package (cubrid.sh and cubrid.csh) include the **LD_PRELOAD** environment variable, but it is commented out by default.
+    *  The scripts in the installation package (.cubrid.sh and .cubrid.csh) include the **LD_PRELOAD** environment variable, but it is commented out by default.
 
       ::
 

@@ -874,7 +874,7 @@ For example, if the exception handler clauses are removed from the above `athlet
 Then, if a name that does not exist in the `athlete` table is passed as an argument in CSQL,
 a `NO_DATA_FOUND` exception will be raised as the result.
 
-.. code-block::
+.. code-block:: sql
 
    select athlete_code('x');
 

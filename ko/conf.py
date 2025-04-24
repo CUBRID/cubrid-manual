@@ -290,7 +290,10 @@ linkcheck_ignore = [
   r'https://github.com/CUBRID/cubrid/.*', 
   r'http://jira.cubrid.org/browse/.*',
   r'https://www.apachelounge.com/download/win64/binaries/.*',
-  r'https://linux.die.net/man/2/posix_fadvise'
+  r'https://linux.die.net/man/2/posix_fadvise',
+  r"https://dev\.mysql\.com/downloads/repo/yum/",
+  r"https://dev\.mysql\.com/doc/connector-odbc/en/connector-odbc-installation-binary-yum\.html",
+  r"https://dev\.mysql\.com/doc/connector-odbc/en/connector-odbc-configuration-connection-parameters\.html#codbc-dsn-option-flags"
 ]
 
 linkcheck_timeout = 30

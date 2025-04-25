@@ -37,7 +37,7 @@ CUBRID .NET Data Provider는 full-managed .NET 코드로 작성되어 CUBRID 라
 
 CUBRID ADO.NET Data Provider를 가장 간단하게 설치하는 방법은 CUBRID ADO.NET Data Provider Installer를 실행하는 것이다. 기본 설정(x86)으로 설치하면 **Program Files\\CUBRID\\CUBRID ADO.NET Data Provider 8.4.1** 디렉터리에 설치된다.
 
-드라이버를 GAC( https://en.wikipedia.org/wiki/Global_Assembly_Cache )에 설치할 수도 있다. 드라이버를 GAC에 설치하는 가장 좋은 방법은 tlbimp(  `https://docs.microsoft.com/en-us/previous-versions/dotnet/netframework-2.0/tt0cf3sx(v=vs.80) <https://docs.microsoft.com/en-us/previous-versions/dotnet/netframework-2.0/tt0cf3sx(v=vs.80)>`_ )를 사용하는 것이다. 필요한 네임스페이스는 다음과 같이 import한다.
+드라이버를 GAC( https://en.wikipedia.org/wiki/Global_Assembly_Cache )에 설치할 수도 있다. 드라이버를 GAC에 설치하는 가장 좋은 방법은 tlbimp(  `https://learn.microsoft.com/en-us/previous-versions/dotnet/netframework-2.0/tt0cf3sx(v=vs.80) <https://learn.microsoft.com/en-us/previous-versions/dotnet/netframework-2.0/tt0cf3sx(v=vs.80)>`_ )를 사용하는 것이다. 필요한 네임스페이스는 다음과 같이 import한다.
 
 .. image:: /images/image88.png
 
@@ -64,7 +64,7 @@ CUBRID 데이터베이스의 테이블에서 값을 조회하는 간단한 코�
         }
     }
 
-위와 같이 `DbDataReader <https://docs.microsoft.com/en-us/dotnet/api/system.data.common.dbdatareader?view=netcore-3.1>`_ 객체를 생성한 후에는 Get...() 메서드를 사용하여 칼럼 데이터를 조회할 수 있다. CUBRID ADO.NET 드라이버는 다음과 같이 CUBRID의 모든 데이터 타입을 읽는 데 필요한 모든 메서드를 제공한다.
+위와 같이 `DbDataReader <https://learn.microsoft.com/en-us/dotnet/api/system.data.common.dbdatareader?view=netcore-3.1>`_ 객체를 생성한 후에는 Get...() 메서드를 사용하여 칼럼 데이터를 조회할 수 있다. CUBRID ADO.NET 드라이버는 다음과 같이 CUBRID의 모든 데이터 타입을 읽는 데 필요한 모든 메서드를 제공한다.
 
 .. code-block:: c#
 
@@ -73,7 +73,7 @@ CUBRID 데이터베이스의 테이블에서 값을 조회하는 간단한 코�
 
 Get...() 메서드의 파라미터로 0부터 시작하는 숫자를 입력하여 칼럼에서 조회할 칼럼 데이터의 인덱스 위치를 지정한다.
 
-특정 CUBRID 데이터 타입의 데이터를 조회하려면 `DbDataReader <https://docs.microsoft.com/en-us/dotnet/api/system.data.common.dbdatareader?view=netcore-3.1>`_ 인터페이스 대신 다음과 같이
+특정 CUBRID 데이터 타입의 데이터를 조회하려면 `DbDataReader <https://learn.microsoft.com/en-us/dotnet/api/system.data.common.dbdatareader?view=netcore-3.1>`_ 인터페이스 대신 다음과 같이
 CUBRIDDataReader를 사용해야 한다.
 
 .. code-block:: c#
@@ -95,7 +95,7 @@ CUBRIDDataReader를 사용해야 한다.
 batch 명령어
 ------------
 
-CUBRID ADO.NET Data Provider를 사용하면 하나의 batch에서 데이터 서비스에 하나 이상의 질의를 실행할 수 있다. batch에 대한 자세한 내용은 `https://docs.microsoft.com/en-us/previous-versions/dd744839(v=vs.90) <https://docs.microsoft.com/en-us/previous-versions/dd744839(v=vs.90)>`_\를 참고한다.
+CUBRID ADO.NET Data Provider를 사용하면 하나의 batch에서 데이터 서비스에 하나 이상의 질의를 실행할 수 있다. batch에 대한 자세한 내용은 `https://learn.microsoft.com/en-us/previous-versions/dd744839(v=vs.90) <https://learn.microsoft.com/en-us/previous-versions/dd744839(v=vs.90)>`_\를 참고한다.
 
 예를 들면 다음과 같은 코드를 작성할 수 있다.
 
@@ -335,13 +335,13 @@ CUBRIDSchemaProvider 클래스에 구현되어 있다.
 DataTable 지원
 --------------
 
-`DataTable <https://docs.microsoft.com/en-us/dotnet/api/system.data.datatable?view=netcore-3.1>`_
+`DataTable <https://learn.microsoft.com/en-us/dotnet/api/system.data.datatable?view=netcore-3.1>`_
 은 ADO.NET에서 가장 중심이 되는 객체로, CUBRID ADO.NET Data Provider는 다음과 같은 기능을 지원한다.
 
-*   `DataTable <https://docs.microsoft.com/en-us/dotnet/api/system.data.datatable?view=netcore-3.1>`_ 데이터 채우기
+*   `DataTable <https://learn.microsoft.com/en-us/dotnet/api/system.data.datatable?view=netcore-3.1>`_ 데이터 채우기
 *   기본 제공 명령어: **INSERT**, **UPDATE**, **DELETE**
 *   칼럼 메타데이터/속성
-*   `DataSet <https://docs.microsoft.com/en-us/dotnet/api/system.data.dataset?view=netcore-3.1>`_ , `DataView <https://docs.microsoft.com/en-us/dotnet/api/system.data.dataview?view=netcore-3.1>`_ 상호 연결
+*   `DataSet <https://learn.microsoft.com/en-us/dotnet/api/system.data.dataset?view=netcore-3.1>`_ , `DataView <https://learn.microsoft.com/en-us/dotnet/api/system.data.dataview?view=netcore-3.1>`_ 상호 연결
 
 칼럼 속성을 얻는 코드의 예는 다음과 같다.
 

@@ -305,7 +305,7 @@ ASP 예제를 실행할 가상 디렉터리의 '기본 웹 사이트' 항목에�
 ODBC API
 ========
 
-ODBC API에 대한 자세한 내용은 ODBC API Reference 문서( https://docs.microsoft.com/en-us/sql/odbc/reference/syntax/odbc-api-reference?view=sql-server-ver15 )를 참고한다. CUBRID ODBC에서 지원하는 함수 목록, ODBC Spec 버전 및 호환성은 다음과 같다.
+ODBC API에 대한 자세한 내용은 ODBC API Reference 문서( https://learn.microsoft.com/en-us/sql/odbc/reference/syntax/odbc-api-reference?view=sql-server-ver15 )를 참고한다. CUBRID ODBC에서 지원하는 함수 목록, ODBC Spec 버전 및 호환성은 다음과 같다.
 
 +---------------------+------------------------+--------------------------+---------------------+
 | API                 | Version Introduced     | Standards Compliance     | Support             |

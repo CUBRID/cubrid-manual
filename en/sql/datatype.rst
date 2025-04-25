@@ -966,7 +966,7 @@ IANA Timezone
 
 In IANA(Internet Assigned Numbers Authority) timezone database, there are lots of codes and data which represent the history of localtime for many representative locations around the globe.
 
-This database is periodically updated to reflect changes made by political bodies to time zone boundaries, UTC offsets, and daylight-saving rules. Its management procedure is described in `BCP 175: Procedures for Maintaining the Time Zone Database <https://tools.ietf.org/html/rfc6557>`_. For more details, see http://www.iana.org/time-zones.
+This database is periodically updated to reflect changes made by political bodies to time zone boundaries, UTC offsets, and daylight-saving rules. Its management procedure is described in `BCP 175: Procedures for Maintaining the Time Zone Database <https://datatracker.ietf.org/doc/html/rfc6557>`_. For more details, see http://www.iana.org/time-zones.
 
 CUBRID supports IANA timezone, and a user can use the IANA timezone library in the CUBRID installation package as it is. If you want to update as the recent timezone, update timezone first, compile timezone library, and restart the database. 
 
@@ -2128,7 +2128,7 @@ JSON Data Type
 ==============
 
 From CUBRID 10.2, native **JSON** data type is supported as defined by
-`RFC 7159 <https://tools.ietf.org/html/rfc7159>`__. **JSON** data type
+`RFC 7159 <https://datatracker.ietf.org/doc/html/rfc7159>`__. **JSON** data type
 offers automatic validation and allows fast access and operations on
 JSON data.
 
@@ -2204,10 +2204,10 @@ the string is not a valid JSON.
   Invalid JSON: 'abc'.
 
 JSON type columns with stricter validation rules can be defined using the
-`draft JSON Schema standard <https://json-schema.org/specification.html>`_.
+`draft JSON Schema standard <https://json-schema.org/specification>`_.
 If you are not familiar with JSON Schema, you may refer to
 `Understanding JSON Schema
-<https://json-schema.org/understanding-json-schema>`_.
+<https://json-schema.org/understanding-json-schema/reference>`_.
 
 A simple example of how schema can be used:
 
@@ -2240,7 +2240,7 @@ JSON Value Types
 
 A JSON value must be an object, an array or a scalar (string, number, boolean
 or null), as defined by `RFC 7159
-<https://tools.ietf.org/html/rfc7159#section-3>`__.
+<https://datatracker.ietf.org/doc/html/rfc7159#section-3>`__.
 
 A table of JSON value types:
 
@@ -2381,7 +2381,7 @@ will be done to UTF-8.
 JSON Pointers
 -------------
 
-JSON Pointers, as defined by https://tools.ietf.org/html/rfc6901 provide an
+JSON Pointers, as defined by https://datatracker.ietf.org/doc/html/rfc6901 provide an
 alternative to JSON paths.
 JSON Pointers, like JSON Paths and JSON text, should be encoded using ASCII
 or UTF-8 character set. If other character sets are used, a coercion will be

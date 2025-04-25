@@ -338,7 +338,7 @@ unixODBC 설치 방법
 
 ::
     
-	$ wget http://www.unixodbc.org/unixODBC-2.3.9.tar.gz
+	$ wget https://www.unixodbc.org/unixODBC-2.3.9.tar.gz
 	$ tar xvf unixODBC-2.3.9.tar.gz
 	$ cd unixODBC-2.3.9
 	$ ./configure
@@ -349,7 +349,7 @@ unixODBC 설치 방법
 
 	unixODBC 드라이버 관리자 설치 방법은 아래의 url를 참고 바란다.
 	
-	unixODBC 홈페이지 : http://www.unixodbc.org/ 
+	unixODBC 홈페이지 : https://www.unixodbc.org/ 
 
 
 .. _odbcdriver-info:

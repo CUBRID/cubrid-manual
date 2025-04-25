@@ -966,7 +966,7 @@ IANA 타임존
 
 IANA(Internet Assigned Numbers Authority) 타임존 데이터베이스에는 수많은 세계 대표 장소에 대한 지역 시간의 역사를 표현하는 코드와 데이터가 들어 있다. 
 
-이 데이터베이스는 타임 존 경계, UTC 오프셋, 그리고 일광 절약 규칙에 대해  정치체에 의해 변경된 사항을 반영하기 위해 정기적으로 업데이트되고 있으며, 관리 절차는 `BCP 175: Procedures for Maintaining the Time Zone Database. <http://tools.ietf.org/html/rfc6557>`\에 설명되어 있다. 자세한 사항은 http://www.iana.org/time-zones\ 를 참고한다.
+이 데이터베이스는 타임 존 경계, UTC 오프셋, 그리고 일광 절약 규칙에 대해  정치체에 의해 변경된 사항을 반영하기 위해 정기적으로 업데이트되고 있으며, 관리 절차는 `BCP 175: Procedures for Maintaining the Time Zone Database. <https://datatracker.ietf.org/doc/html/rfc6557>`\에 설명되어 있다. 자세한 사항은 http://www.iana.org/time-zones\ 를 참고한다.
 
 CUBRID는 IANA 타임존을 지원하며, CUBRID 설치 패키지에 포함되어 있는 IANA 타임존 라이브러리를 그대로 사용할 수 있다. 최신 타임존으로 업데이트하고 싶은 경우 타임존 데이터를 업데이트하고, 타임존 라이브러리를 컴파일한 후 데이터베이스를 재구동해야 한다. 
 
@@ -2125,7 +2125,7 @@ LIST 또는 SEQUENCE
 JSON 데이터 타입
 ================
 
-CUBRID 10.2부터 `RFC 7159 <https://tools.ietf.org/html/rfc7159>`__ 에서 정의된 
+CUBRID 10.2부터 `RFC 7159 <https://datatracker.ietf.org/doc/html/rfc7159>`__ 에서 정의된 
 native **JSON** 데이터 타입을 지원한다. **JSON** 데이터 타입은
 JSON 데이터에 대해 자동 검증을 제공하며, 
 빠른 액세스와 동작이 가능하다.
@@ -2200,10 +2200,10 @@ JSON 데이터로의 변환은 내장된 유효성 검사를 수행하고
   유효하지 않은 JSON: 'abc'.
 
 더 엄격한 유효성 검사 규칙을 가진 JSON 타입 컬럼은 
-`JSON 스키마 표준 초안 (draft JSON Schema standard) <https://json-schema.org/specification.html>`_ 를 사용하여 정의할 수 있다.
+`JSON 스키마 표준 초안 (draft JSON Schema standard) <https://json-schema.org/specification>`_ 를 사용하여 정의할 수 있다.
 만약 JSON 스키마를 다루어본 적이 없다면
 `JSON 스키마의 이해 (Understanding JSON Schema)
-<https://json-schema.org/understanding-json-schema>`_ 를 참고하면 된다.
+<https://json-schema.org/understanding-json-schema/reference>`_ 를 참고하면 된다.
 
 
 다음은 스키마 사용 방법에 대한 간단한 예제이다.:
@@ -2235,7 +2235,7 @@ JSON 데이터로의 변환은 내장된 유효성 검사를 수행하고
 JSON 데이터의 타입
 --------------------
 
-JSON 데이터의 값은 `RFC 7159 <https://tools.ietf.org/html/rfc7159#section-3>` 에서 정의된 것과 같이 
+JSON 데이터의 값은 `RFC 7159 <https://datatracker.ietf.org/doc/html/rfc7159#section-3>` 에서 정의된 것과 같이 
 객체 (Object), 배열 (Array) 또는 스칼라 (Scalar) 여야 한다. 스칼라 값은 문자열, 숫자형, 불리언 (boolean) 또는 널 (null) 이다.
 
 JSON 데이터 타입 표:
@@ -2370,7 +2370,7 @@ JSON 포인터 및 JSON 텍스트와 같은 경로 식은 ASCII 또는 UTF-8 문
 JSON 포인터
 -------------
 
-https://tools.ietf.org/html/rfc6901 에서 정의한 JSON 포인터는 JSON 경로와 다른 방법을 제공한다.
+https://datatracker.ietf.org/doc/html/rfc6901 에서 정의한 JSON 포인터는 JSON 경로와 다른 방법을 제공한다.
 JSON 포인터는 JSON 경로 및 JSON 텍스트와 동일하게 ASCII 또는 UTF-8 문자셋으로 인코딩 되어야 한다.
 만약 다른 문자셋이 사용된다면, UTF-8으로 변환(coercion)될 것이다.
 

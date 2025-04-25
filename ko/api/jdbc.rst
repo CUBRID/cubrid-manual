@@ -1568,7 +1568,7 @@ CUBRIDDataSource에 대한 자세한 설명은 :ref:`jdbc-conn-datasource`\ 을 
 JDBC API
 ========
 
-JDBC API에 대한 자세한 내용은 Java API Specification 문서(https://docs.oracle.com/javase/7/docs/api/)를 참고한다. 기타 Java에 대한 자세한 내용은 Java SE Documentation 문서(https://www.oracle.com/technetwork/java/javase/documentation/index.htm)를 참고한다.
+JDBC API에 대한 자세한 내용은 Java API Specification 문서(https://docs.oracle.com/javase/7/docs/api/)를 참고한다. 기타 Java에 대한 자세한 내용은 Java SE Documentation 문서(https://www.oracle.com/java/technologies/javase-documentation.html)를 참고한다.
 
 :ref:`커서 유지(cursor holdability) <cursor-holding>`\ 와 관련하여 설정을 명시하지 않으면 기본으로 커서가 유지된다.
 

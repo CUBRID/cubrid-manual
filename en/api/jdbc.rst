@@ -1563,7 +1563,7 @@ The following example shows how to execute the **INSERT** statement by connectin
 JDBC API
 ========
 
-For details about JDBC API, see Java API Specification (https://docs.oracle.com/javase/7/docs/api/) and for details about Java, see Java SE Documentation (https://www.oracle.com/technetwork/java/javase/documentation/index.htm).
+For details about JDBC API, see Java API Specification (https://docs.oracle.com/javase/7/docs/api/) and for details about Java, see Java SE Documentation (https://www.oracle.com/java/technologies/javase-documentation.html).
 
 If :ref:`cursor holdability <cursor-holding>` is not configured, a cursor is maintained by default.
 

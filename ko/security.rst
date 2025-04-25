@@ -25,7 +25,7 @@ CUBRID 보안
 .. note:: **SSL/TLS**
 
 	SSL 란 네트워크를 통해 통신하는 클라이언트와 서버 간의 인증 및 데이터 암호화를 제공하는 암호화 프로토콜로 Netscape에 의해 처음 개발 되었다. Netscape는 1996년 보안 결함을 개선한 3.0 버전을 릴리즈하였다.
-	SSL 3.0 버전은 TLS 1.0의 기초가 되고, 1999년 1월 IETF에서 `RFC2246 <https://tools.ietf.org/html/RFC2246>`_ 표준 규약으로 정의되었으며, 마지막 갱신은 `RFC5246 <https://tools.ietf.org/html/RFC5246>`_ 이다. TLS는 SSL 3.0 을 기반으로 정의되었기 때문에 SSL 3.0과 거의 유사하다.
+	SSL 3.0 버전은 TLS 1.0의 기초가 되고, 1999년 1월 IETF에서 `RFC2246 <https://datatracker.ietf.org/doc/html/rfc2246>`_ 표준 규약으로 정의되었으며, 마지막 갱신은 `RFC5246 <https://datatracker.ietf.org/doc/html/rfc5246>`_ 이다. TLS는 SSL 3.0 을 기반으로 정의되었기 때문에 SSL 3.0과 거의 유사하다.
 
 	SSL/TLS 은 서버 인증(Server Authentication), 클라이언트 인증(Client Authentication) 그리고 데이터 암호화(Data Encryption) 기능을 제공한다.
 	인증(Authentication)은 상대방이 맞는지 확인하는 절차를 의미하며, 암호화는 데이터를 탈취 하더라도 내용을 열람할 수 없게 하는 것을 의미한다.

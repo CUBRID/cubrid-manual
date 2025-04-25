@@ -625,8 +625,6 @@ Improvement in Checking DB Volume and Log Creation Times
 - The ``diagdb`` utility has been improved to allow users to view the creation times of each volume.
 - Modification to applyinfo Utility to Display added Volume Creation Time in Log Volume Header
 
-  - The ``applyinfo`` utility, which displays information about **Active Log Volumes** and **Archived Log Volumes** in an HA environment, has been modified to also display the creation time of each volume by adding a **volume creation time(Vol creation time)** to the log volume header.
-
 Improvement in User Awareness by Adding Fence Key Information to **SHOW INDEX CAPACITY** and ``diagdb``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -709,6 +707,12 @@ Fixed for Incorrect Column Order Numbers in Analytical Functions Inside Views
 Fixed for Not Recognizing Range Conditions as Range Items When Using Pipe Operator (||)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Fixed Error When Handling NULL in Host Variables of DBLINK Statements
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fixed Issue Where Korean Characters Were Corrupted When Inserting via Host Variables Using DBLINK on EUC-KR Oracle DB
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 PL(JavaSP)
 ~~~~~~~~~~
 
@@ -778,11 +782,20 @@ Fixed for unloaddb as a regular user, schema names identical to the user were no
 Fixed for Unnecessary Archive Log Volumes Being Created During ``backupdb`` Execution
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Fixed Issue Where ``flashback`` Did Not Terminate Properly on Forced Exit (Ctrl+C)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fixed Issue Where ``backupdb`` Could Hang in Certain Situations
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 Broker,CAS, CMS
 ~~~~~~~~~~~~~~~
 
 Fixed for Potential Memory Leak When Processing addBatch() and executeBatch()
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fixed Incorrect Output from getTransactionInfo() Function Call
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 HA
 ~~

@@ -829,7 +829,7 @@ Exception의 종류를 식별하는데 사용할 수 있다.
 
 CSQL에서 athlete 테이블에 존재하지 않는 이름을 인자로 주어 NO_DATA_FOUND Exception을 일으켰을 때 결과는 다음과 같다.
 
-.. code-block::
+.. code-block:: sql
 
    select athlete_code('x');
 

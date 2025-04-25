@@ -281,7 +281,7 @@ Support for Automatic Restart of Non-HA DB Server After Abnormal Termination
 Support for Script to Restore Backup as a New Database
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-- When data recovery from a backup is needed on a production server, the ``rename_to_newdb.sh`` script allows restoring the backup as a new database without the need for additional steps such as creating new accounts or installing extra engine instances. For detailed usage and instructions, please refer to the manual.
+- When data recovery from a backup is needed on a production server, the ``restore_to_newdb.sh`` script allows restoring the backup as a new database without the need for additional steps such as creating new accounts or installing extra engine instances. For detailed usage and instructions, please refer to the manual.
 
 .. _11_4_changes_spec:
 

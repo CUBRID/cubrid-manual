@@ -152,13 +152,13 @@ restore_to_newdb.sh 스크립트는 별도의 추가 작업 없이, CUBRID가 �
 .. option:: -d date
 
 	지정한 날짜 및 시간까지 복구를 수행한다.형식은 dd-mm-yyyy:hh:mi:ss이다. (예: 14-10-2008:14:10:00)
-    이 옵션은 cubrid restoredb의 -d 옵션과 동일하게 작동한다. ::
+    이 옵션은 cubrid restoredb의 -d 옵션과 동일하다. ::
 
 		sh restore_to_newdb.sh backuped-database-name new-database-name -F /home/cubrid -B /home/cubrid/DB/backupdbpath -d 30-10-2025:12:20:00
 
 .. option:: -l level
 
-    백업 수준(0, 1, 2)을 지정하여 복구를 진행한다.cubrid restoredb의 -l 옵션과 동일하다. ::
+    백업 수준(0, 1, 2)을 지정하여 복구를 진행한다. cubrid restoredb의 -l 옵션과 동일하다. ::
 
 		sh restore_to_newdb.sh -B /home/cubrid/DB/backupdbpath -l 1 backuped-database-name new-database-name
 
@@ -183,17 +183,17 @@ restore_to_newdb.sh 스크립트는 별도의 추가 작업 없이, CUBRID가 �
 ::
 
 	Validation passed: newdb_path and vol-path are different.
-	Validation passed: 'new-database-name' does not exist in /home/cubrid/CUBRID-11.3.1.1139-6aaf4dd-Linux.x86_64/databases/databases.txt.
+	Validation passed: 'new-database-name' does not exist in /home/cubrid/CUBRID-11.4-Linux.x86_64/databases/databases.txt.
 
 	Confirmed: Files found for pattern (/home/cubrid/DB/backupdbpath/backuped-database-name_bk0v*).
 	file: /home/cubrid/DB/backupdbpath/backuped-database-name_bk0v*
-	Warning: /home/cubrid/CUBRID-11.3.1.1139-6aaf4dd-Linux.x86_64/databases/databases.txt already exists.
+	Warning: /home/cubrid/CUBRID-11.4-Linux.x86_64/databases/databases.txt already exists.
 	Existing databases.txt backed up as databases.txt.bak.
 	Restoring... /
 
-	CUBRID 11.3
+	CUBRID 11.4
 
-	Restoring... |Updated CUBRID-11.3.1.1139-6aaf4dd-Linux.x86_64/databases/databases.txt
+	Restoring... |Updated CUBRID-11.4-Linux.x86_64/databases/databases.txt
 	successfully.
 	database restoration completed successfully.
 
@@ -207,14 +207,14 @@ restore_to_newdb.sh 스크립트는 별도의 추가 작업 없이, CUBRID가 �
 
 	This may take a long time depending on the amount of recovery works to do.
 
-	CUBRID 11.3
+	CUBRID 11.4
 
 	++ cubrid server start: success
 	Calling java stored procedure is allowed
 
 .. note::
+* 해당 스크립트를 이용한 복구 작업은 $CUBRID_DATABASES를 수정하기 때문에, 스크립트 종료 후 생성 대상 DB가 정상 등록되었는지 확인하는 것이 좋다.
 * 복구된 DBMS는 모든 작업 완료 후, 반드시 점검 및 정리해야 한다.
-* 복구 작업은 $CUBRID_DATABASES를 수정하기 때문에, 작업 후 정상 등록 여부를 확인하는 것이 좋다.
 
 
 

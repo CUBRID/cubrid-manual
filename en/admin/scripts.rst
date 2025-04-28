@@ -188,17 +188,17 @@ The restore_to_newdb.sh script allows you to restore a backup and create a new d
 ::
 
 	Validation passed: newdb_path and vol-path are different.
-	Validation passed: 'new-database-name' does not exist in /home/cubrid/CUBRID-11.3.1.1139-6aaf4dd-Linux.x86_64/databases/databases.txt.
+	Validation passed: 'new-database-name' does not exist in /home/cubrid/CUBRID-11.4-Linux.x86_64/databases/databases.txt.
 
 	Confirmed: Files found for pattern (/home/cubrid/DB/backupdbpath/backuped-database-name_bk0v*).
 	file: /home/cubrid/DB/backupdbpath/backuped-database-name_bk0v*
-	Warning: /home/cubrid/CUBRID-11.3.1.1139-6aaf4dd-Linux.x86_64/databases/databases.txt already exists.
+	Warning: /home/cubrid/CUBRID-11.4-Linux.x86_64/databases/databases.txt already exists.
 	Existing databases.txt backed up as databases.txt.bak.
 	Restoring... /
 
-	CUBRID 11.3
+	CUBRID 11.4
 
-	Restoring... |Updated CUBRID-11.3.1.1139-6aaf4dd-Linux.x86_64/databases/databases.txt
+	Restoring... |Updated CUBRID-11.4-Linux.x86_64/databases/databases.txt
 	successfully.
 	database restoration completed successfully.
 
@@ -212,14 +212,14 @@ Once the database is successfully restored, start the new DBMS as follows:
 
 	This may take a long time depending on the amount of recovery works to do.
 
-	CUBRID 11.3
+	CUBRID 11.4
 
 	++ cubrid server start: success
 	Calling java stored procedure is allowed
 
 .. note::
+* Since the recovery process using this script modifies $CUBRID_DATABASES, it is recommended to verify that the newly created database has been properly registered after the script finishes
 * After the restoration, it is essential to clean up and verify the DBMS environment.
-* Since the restoration modifies $CUBRID_DATABASES, ensure that the database list is properly updated.
 
 
 

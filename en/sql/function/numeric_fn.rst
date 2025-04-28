@@ -448,8 +448,8 @@ LOG
 
 .. function:: LOG ( x , y )
 
-    The **LOG** function returns the logarithm of x with base y, and the return type is DOUBLE. If either x or y is 0 or a negative number, an error is returned
-    When a non-numeric string is provided as input, the behavior depends on the return_null_on_function_errors parameter in cubrid.conf:
+     The **LOG** function returns the logarithm of *x* with base *y*, and its return type is **DOUBLE**. If either *x* or *y* is 0 or a negative number, the function returns an error.
+    When a non-numeric string is provided as input, the function's behavior depends on the value of the **return_null_on_function_errors** parameter in **cubrid.conf**.
 
     :param x: The base of the logarithm; it must be an expression that evaluates to a positive value other than 1.
     :param y: The antilogarithm of the logarithm expression; it must be an expression that evaluates to a positive value.

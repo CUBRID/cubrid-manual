@@ -110,7 +110,7 @@ DBMS_OUTPUT.GET_LINES
         버퍼에 저장된 문자열 메시지를 지정된 줄 수만큼 읽어온다. 읽어온 줄은 버퍼에서 삭제된다.
 
         :param lines: 버퍼로 부터 읽어온 문자열을 저장한다.
-        :param numlines: 읽어올 줄의 수를 지정한다.
+        :param num_lines: 읽어올 줄의 수를 지정한다.
 
 
 활용 예시

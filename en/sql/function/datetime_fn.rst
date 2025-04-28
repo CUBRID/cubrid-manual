@@ -1315,6 +1315,7 @@ ROUND
 =====
 
 .. function:: ROUND(date, fmt)
+   :noindex:
 
     This function rounds date to the unit specified by the format string, *fmt*. It returns a value of DATE type.
     
@@ -2026,6 +2027,7 @@ TRUNC
 =====
 
 .. function:: TRUNC( date[, fmt] )
+   :noindex:
 
     This function truncates date to the unit specified by the format string, *fmt*. It returns a value of DATE type.
     

@@ -242,6 +242,7 @@ The following example shows how to create a table *athlete_idx* where athlete nu
     INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Lee');
     SELECT * FROM athlete_idx;
     SELECT order_no.CURRENT_VALUE;
+
 ::
      
              code  name

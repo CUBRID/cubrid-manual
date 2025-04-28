@@ -139,7 +139,7 @@ createdb
 
     다음은 *testdb* 를 생성하고, *testdb* 의 로그 볼륨 페이지 크기를 8kbyte로 지정하는 구문이다. ::
 
-        cubrid createdb -log-page-size=8K testdb en_US
+        cubrid createdb --log-page-size=8K testdb en_US
 
 .. option:: --comment=COMMENT
 
@@ -172,7 +172,7 @@ createdb
 
     다음은 *testdb* 를 현재 작업 디렉터리에 생성하고, **LOB** 데이터 파일이 저장될 디렉터리를 로컬 파일 시스템의 "/home/data1"으로 지정하는 구문이다. ::
 
-        cubrid createdb --lob-base-path "file:/home1/data1" testdb en_US
+        cubrid createdb --lob-base-path "file:/home/data1" testdb en_US
 
 .. option:: --server-name=HOST
 
@@ -542,7 +542,7 @@ renamedb
 
 .. option:: -d, --delete-backup
 
-    데이터베이스의 이름을 변경하면서 데이터베이스와 와 동일 위치에 있는 모든 백업 볼륨 및 백업 정보 파일을 함께 강제 삭제하는 명령이다. 일단, 데이터베이스 이름이 변경되면 이보다 앞선 이름의 백업 파일은 이용할 수 없으므로 주의해야 한다. 만약, **-d** 옵션을 지정하지 않으면 백업 볼륨 및 백업 정보 파일은 삭제되지 않는다. ::
+    데이터베이스의 이름을 변경하면서 데이터베이스와 동일 위치에 있는 모든 백업 볼륨 및 백업 정보 파일을 함께 강제 삭제하는 명령이다. 일단, 데이터베이스 이름이 변경되면 이보다 앞선 이름의 백업 파일은 이용할 수 없으므로 주의해야 한다. 만약, **-d** 옵션을 지정하지 않으면 백업 볼륨 및 백업 정보 파일은 삭제되지 않는다. ::
 
         cubrid renamedb -d testdb testdb_1
 
@@ -601,7 +601,7 @@ copydb
   -i, --control-file=FILE         여러 개의 볼륨들이 각각 저장되는 디렉터리 경로를 지정하는 제어 파일
   -r, --replace                   같은 이름의 데이터베이스가 존재하면 덮어쓰기
   -d, --delete-source             복사 후 원본 데이터베이스 삭제
-      --copy-lob-path             원본 데이터베이스의 LOB 대렉터리 경로를 복사. -B 옵션과 함께 사용 불가. 기본값: 복사하지 않음
+      --copy-lob-path             원본 데이터베이스의 LOB 디렉터리 경로를 복사. -B 옵션과 함께 사용 불가. 기본값: 복사하지 않음
   -B, --lob-base-path=PATH        LOB 파일이 저장되는 디렉터리 경로
 
 
@@ -627,7 +627,7 @@ copydb
 
     새로운 데이터베이스의 확장 정보 볼륨이 저장되는 특정 디렉터리 경로를 지정할 수 있다. 이 옵션을 생략하면 새로운 데이터베이스 볼륨이 저장되는 경로 또는 제어 파일에 등록된 경로에 확장 정보 볼륨이 저장된다. **-i** 옵션과 병행될 수 없다. ::
 
-        cubrid copydb -E home/usr/CUBRID/databases/extvols demodb new_demodb
+        cubrid copydb -E /home/usr/CUBRID/databases/extvols demodb new_demodb
 
 .. option:: -i, --control-file=FILE
 
@@ -657,13 +657,13 @@ copydb
 
 .. option:: -d, --delete-source
 
-    새로운 데이터베이스로 복사한 후, 원본 데이터베이스를 제거한다. 이 옵션이 주어지면 데이터베이스 복사 후 **cubrid deletedb** 를 수행하는 것과 동일하다. 단, 원본 데이터베이스에 **LOB** 데이터를 포함하는 경우, 원본 데이터베이스 대한 **LOB** 파일 디렉터리 경로가 새로운 데이터베이스로 복사되어 **databases.txt** 의 **lob-base-path** 항목에 등록된다. ::
+    새로운 데이터베이스로 복사한 후, 원본 데이터베이스를 제거한다. 이 옵션이 주어지면 데이터베이스 복사 후 **cubrid deletedb** 를 수행하는 것과 동일하다. 단, 원본 데이터베이스에 **LOB** 데이터를 포함하는 경우, 원본 데이터베이스의 **LOB** 파일 디렉터리 경로가 새로운 데이터베이스로 복사되어 **databases.txt** 의 **--lob-base-path** 항목에 등록된다. ::
 
         cubrid copydb -d -F /home/usr/CUBRID/databases demodb new_demodb
 
 .. option:: --copy-lob-path
 
-    이 옵션을 선택하면 대상 데이터베이스의 lob 디렉터리의 위치를 원본 데이터베이스의 lob 디렉터리의 위치와 동일하게 설정한다. 이 옵션이 생력되면 <대상 데이터베이스 디렉터리>/lob 이 대상 데이터베이스의 lob 디렉터리 경로로 설정된다. 이 옵션은 lob 파일을 복사하는 기능이 아니며 **-B** 옵션과 병행할 수 없다. ::
+    이 옵션을 선택하면 대상 데이터베이스의 lob 디렉터리의 위치를 원본 데이터베이스의 lob 디렉터리의 위치와 동일하게 설정한다. 이 옵션이 생략되면 <대상 데이터베이스 디렉터리>/lob 이 대상 데이터베이스의 lob 디렉터리 경로로 설정된다. 이 옵션은 lob 파일을 복사하는 기능이 아니며 **-B** 옵션과 병행할 수 없다. ::
 
         cubrid copydb --copy-lob-path demodb new_demodb
 
@@ -779,7 +779,7 @@ spacedb
 .. option:: --size-unit={PAGE|M|G|T|H}
 
     데이터베이스 볼륨의 공간을 지정한 크기 단위로 출력하기 위한 옵션이며, 기본값은 **H** 이다.
-    값을 H로 설정할 경우 단위는 다음과 같이 자동으로 지정된다. DB size < 1024 MB 보다 작을 경우 M는 MB 으로 , DB size < 1024 GB 보다 작을 경우 G는 GB 로 지정된다. ::
+    값을 H로 설정할 경우 단위는 다음과 같이 자동으로 지정된다. DB size < 1024MB 보다 작을 경우 M는 MB 으로 , DB size < 1024GB 보다 작을 경우 G는 GB 로 지정된다. ::
 
         $ cubrid spacedb --size-unit=H testdb
 
@@ -860,9 +860,9 @@ compactdb
     
         ERROR: The class 'reuse_tbl' is marked as REUSE_OID and is non-referable. Non-referable classes can't be the domain of an attribute and their instances' OIDs cannot be returned.
  
-    REUSE_OID에 대한 자세한 설명은 :ref:`reuse-oid` 를 참고한다.
+    REUSE_OID에 대한 자세한 설명은 :ref:`REUSE_OID <reuse-oid>`\를 참고한다.
 
-**cubrid compactdb** 유틸리티를 수행하면 삭제된 객체에 대한 참조를 **NULL** 로 표시하는데, 이렇게 **NULL** 로 표시된 공간은 OID가 재사용할 수 있는 공간임을 의미한다. ::
+**cubrid compactdb** 유틸리티를 수행하면 삭제된 객체에 대한 참조를 **NULL**\로 표시하는데, 이렇게 **NULL**\로 표시된 공간은 OID가 재사용할 수 있는 공간임을 의미한다. ::
 
     cubrid compactdb [options] database_name [schema_name.class_name [{, schema_name.class_name}]]
 
@@ -886,7 +886,7 @@ compactdb
   -S, --SA-mode                     독립 모드 실행
   -C, --CS-mode                     클라이언트 서버 모드 실행
   -i, --input-class-file=FILE       테이블 이름을 포함하는 FILE 이름
-  -p, --pages-commited-once=NUMBER  한 번에 커밋할 수 있는 최대 페이지 개수
+  -p, --pages-committed-once=NUMBER  한 번에 커밋할 수 있는 최대 페이지 개수
   -d, --delete-old-repr             카탈로그에서 과거 테이블 표현을 삭제
   -I, --Instance-lock-timeout       인스턴스 잠금에 대한 타임아웃
   -c, --class-lock-timeout          클래스 잠금에 대한 타임아웃
@@ -914,7 +914,7 @@ compactdb
 
 다음은 클라이언트/서버 모드에서만 사용할 수 있는 옵션이다.
 
-.. option:: -p, --pages-commited-once=NUMBER
+.. option:: -p, --pages-committed-once=NUMBER
 
     한 번에 커밋할 수 있는 최대 페이지 수를 지정한다. 기본값은 **10** 이며, 최소 값은 1, 최대 값은 10이다. 옵션 값이 작으면 클래스/인스턴스에 대한 잠금 비용이 작으므로 동시성은 향상될 수 있으나 작업 속도는 저하될 수 있고, 옵션 값이 크면 동시성은 저하되나 작업 속도는 향상될 수 있다.  ::
 
@@ -1007,7 +1007,7 @@ plandump
 
 .. option:: -s, --sha1=SHA1
 
-    캐시에 저장된 SHA1 코드의 특정 질의 수행 계획을 제거한다.::
+    캐시에 저장된 SHA1 코드의 특정 질의 수행 계획을 제거한다. ::
 
         $ cubrid plandump testdb
 
@@ -1807,7 +1807,7 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
     |                                          |                | | 이 값과 비슷한 횟수로 커밋이 발생했다고 가정 할 수 있다.            |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
     | Log_page_buffer_hit_ratio                | Computed       | | 로그 페이지 버퍼의 히트률                                           |
-    |                                          |                | | (Num_log_page_fetches - Num_log_page_fetch_ioreads)*100             |
+    |                                          |                | | (Num_log_page_fetches - Num_log_page_ioreads)*100                   |
     |                                          |                | | / Num_log_page_fetches                                              |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
 
@@ -2182,7 +2182,7 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
     | ..vacuum_job                             | Counter/timer  | vacuum 작업 횟수와 시간                                               |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
-    | ..vacuum_worker_process_log              | Counter/timer  | vacumm 워커의 로그 작업 수행 횟수와 시간                              |
+    | ..vacuum_worker_process_log              | Counter/timer  | vacuum 워커의 로그 작업 수행 횟수와 시간                              |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
     | ..vacuum_worker_execute                  | Counter/timer  | vacuum 워커의 회수 작업 수행 횟수와 시간                              |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
@@ -2847,7 +2847,7 @@ lockdb
 
 **객체 잠금 테이블**
 
-**cubrid lockdb** 출력 내용의 세 번째 섹션은 객체 잠금 테이블의 내용을 포함한다. 이것은 어떤 객체에 대해서 어떤 클라이언트가 어떤 모드로 잠금을 가지고 있는지, 어떤 객체에 대해서 어떤 클라이언트가 어떤 모드로 기다리고 있는지를 보여준다. 객체 잠금 테이블 결과물의 첫 부분에는 얼마나 많은 객체가 잠금 되었는지가 출력된다. 그리고 현재 메모리에 할당된 잠금의 개수와 크기가 출력된다. 성능을 위하여 잠금을 바로 해제하지 않고 재사용하지만, 메모리에 할당된 잠금 개수가 **lock_escalation** 시스템 파라미터값을 넘을 경우에는 해당 잠금은 트랜잭션이 끝나는 시점에 메모리에서 해제된다. 관련 시스템 파라미터인 **lock_escalation** 에 대한 설명은 :ref:`lock-parameters` 를 참고한다.
+**cubrid lockdb** 출력 내용의 세 번째 섹션은 객체 잠금 테이블의 내용을 포함한다. 이것은 어떤 객체에 대해서 어떤 클라이언트가 어떤 모드로 잠금을 가지고 있는지, 어떤 객체에 대해서 어떤 클라이언트가 어떤 모드로 기다리고 있는지를 보여준다. 객체 잠금 테이블 결과물의 첫 부분에는 얼마나 많은 객체가 잠금되었는지가 출력된다. 그리고 현재 메모리에 할당된 잠금의 개수와 크기가 출력된다. 성능을 위하여 잠금을 바로 해제하지 않고 재사용하지만, 메모리에 할당된 잠금 개수가 **lock_escalation** 시스템 파라미터값을 넘을 경우에는 해당 잠금은 트랜잭션이 끝나는 시점에 메모리에서 해제된다. 관련 시스템 파라미터인 **lock_escalation** 에 대한 설명은 :ref:`lock-parameters` 를 참고한다.
 
 ::
 
@@ -2862,7 +2862,7 @@ lockdb
 
 ::
 
-    OID = 0| 62| 5
+    OID = 0|62|5
     Object type: Class = athlete.
     Num holders = 1, Num blocked-holders= 1, Num waiters = 1
     LOCK HOLDERS :
@@ -2881,8 +2881,8 @@ lockdb
 
 ::
 
-    OID = 2| 50| 1
-    Object type: instance of class ( 0| 62| 5) = athlete.
+    OID = 2|50|1
+    Object type: instance of class ( 0|62|5) = athlete.
     MVCC info: insert ID = 6, delete ID = missing.
     Num holders = 1, Num blocked-holders= 1, Num waiters = 1
     LOCK HOLDERS :
@@ -2892,7 +2892,7 @@ lockdb
                           Start_waiting_at = Wed Feb 3 14:45:14 2016
                           Wait_for_secs = -1
 
-*Granted_mode* 는 습득한 잠금의 모드를 나타내며, *Blocked_mode* 는 차단된 잠금의 모드를 나타낸다. *Starting_waiting_at* 은 잠금이 요청된 시간을 나타내며, *Wait_for_secs* 는 잠금의 대기 시간을 나타낸다. *Wait_for_secs* 값은 시스템 파라미터인 **lock_timeout** 에 의해 결정된다.
+*Granted_mode* 는 습득한 잠금의 모드를 나타내며, *Blocked_mode* 는 차단된 잠금의 모드를 나타낸다. *Start_waiting_at* 은 잠금이 요청된 시간을 나타내며, *Wait_for_secs* 는 잠금의 대기 시간을 나타낸다. *Wait_for_secs* 값은 시스템 파라미터인 **lock_timeout** 에 의해 결정된다.
 
 객체 타입이 클래스(테이블)인 경우 테이블의 특정 트랜잭션에서 획득한 레코드 잠금과 키 잠금의 합계를 나타내는 *Nsubgranules* 가 표시된다.
 
@@ -2917,7 +2917,7 @@ tranlist
 
 옵션을 생략하면 각 트랜잭션에 대한 전체 정보를 출력한다. 
 
-"cubrid tranlist demodb"는 "cubrid killtran -q demodb"와 비슷한 결과를 출력하나, 후자에 비해 "User name"과 "Host name"을 더 출력한다.
+"cubrid tranlist demodb"는 "cubrid killtran -q demodb"와 비슷한 결과를 출력하지만, "User name"과 "Host name"을 더 출력한다.
 "cubrid tranlist -s demodb"는 "cubrid killtran -d demodb"와 동일한 결과를 출력한다.
 
 다음은 tranlist 출력 결과의 예이다. 
@@ -3074,7 +3074,7 @@ killtran
 
 ::
 
-  -i, --kill-transaction-index=INDEX로 지정되는 해당 트랜잭션 종료
+  -i, --kill-transaction-index=INDEX INDEX로 지정된 해당 트랜잭션 종료
       --kill-user-name=ID            ID로 지정되는 사용자의 모든 트랜잭션 종료
       --kill-host-name=HOST          HOST로 지정되는 클라이언트의 모든 트랜잭션 종료
       --kill-program-name=NAME       NAME으로 지정되는 모든 트랜잭션 종료
@@ -3173,13 +3173,13 @@ checkdb
 
   -S, --SA-mode                독립 모드 실행
   -C, --CS-mode                클라이언트 서버 모드 실행
-  -r, --repair                 비 일관성 발견 시 복구
+  -r, --repair                 불일치 발견 시 복구
       --check-prev-link        인덱스 링크의 오류를 검사
       --repair-prev-link       인덱스 링크가 잘못된 경우 복구 수행
   -i, --input-class-file=FILE  클래스 이름이 나열된 입력 파일 명시
       --check-file-tracker     파일 트랙커의 모든 파일의 페이지를 검사
       --check-heap             모든 힙 파일 검사
-      --check-catalog          카타로그 정보에 일관성 검사
+      --check-catalog          카탈로그 정보에 일관성 검사
       --check-btree            모든 인덱스 유효 검사
       --check-class-name       클래스 정보의 일치 여부 검사
       --check-btree-entries    모든 인덱스 엔트리의 일관성 검사
@@ -3275,7 +3275,7 @@ diagdb
 
 *   **cubrid**: CUBRID 서비스 및 데이터베이스 관리를 위한 통합 유틸리티이다.
 
-*   **diagdb**: CUBRID에 저장되는 바이너리 형태의 파일 정보를 텍스트 형태로 출력하여 현재의 데이터베이스 저장 상태를 확인하고자 할 때 사용하는 명령어이다. 데이터베이스가 구동 정지 상태인 경우에만 정상적으로 수행된다. 전체를 확인하거나 옵션을 사용하여 파일 테이블, 파일 용량, 힙 용량, 클래스 이름, 디스크 비트맵을 선택해 확인할 수 있다.
+*   **diagdb**: CUBRID에 저장되는 바이너리 형태의 파일 정보를 텍스트 형태로 출력하여 현재 데이터베이스의 저장 상태를 확인할 때 사용하는 명령어이다. 데이터베이스가 구동 정지 상태인 경우에만 정상적으로 수행된다. 전체를 확인하거나 옵션을 사용하여 파일 테이블, 파일 용량, 힙 용량, 클래스 이름, 디스크 비트맵을 선택해 확인할 수 있다.
 
 *   *database_name*: 내부 정보를 확인하려는 데이터베이스 이름이다.
 
@@ -3555,7 +3555,7 @@ vacuumdb
 flashback
 ---------
 
-**cubrid flashback** 유틸리티는 커밋된 트랜잭션을 되돌릴 수 있는 SQL 구문을 제공하며, **DBA** 사용자만 수행할 수 있다. **cubrid flashback** 을 수행하기 위해서는 시스템 파라미터 **supplemental_log** 를 반드시 0보다 큰 값으로 설정해야 하며, **supplemental_log** 가 설정된 후에 실행되는 DML에 대해서만 지원한다. 이 유틸리티는 클라이언트/서버 모드에서만 동작하고 동시에 두개 이상 수행할 수 없다:.::
+**cubrid flashback** 유틸리티는 커밋된 트랜잭션을 되돌릴 수 있는 SQL 구문을 제공하며, **DBA** 사용자만 수행할 수 있다. **cubrid flashback** 을 수행하기 위해서는 시스템 파라미터 **supplemental_log** 를 반드시 0보다 큰 값으로 설정해야 하며, **supplemental_log** 가 설정된 후에 실행되는 DML에 대해서만 지원한다. 이 유틸리티는 클라이언트/서버 모드에서만 동작하고 동시에 두 개 이상 수행할 수 없다:.::
 
     cubrid flashback [options] database_name owner_name.class_name1 [owner_name.class_name2, ...]
 
@@ -3761,7 +3761,7 @@ memmon
 HA 명령어
 ---------
 
-**cubrid changemode** 유틸리티는 서버의 HA 모드 출력 또는 변경하는 유틸리티이다. 
+**cubrid changemode** 유틸리티는 서버의 HA 모드 출력하거나 변경하는 유틸리티이다. 
 
 **cubrid applyinfo** 유틸리티는 HA 환경에서 트랜잭션 로그 반영 정보를 확인하는 유틸리티이다.
 
@@ -3784,7 +3784,7 @@ HA 명령어
 타임존 명령어
 -------------
 
-**cubrid gen_tz** 유틸리티는 다음과 같이 두 가지 모드가 있다.:
+**cubrid gen_tz** 유틸리티는 다음과 같이 두 가지 모드가 있다.
 
 -   **new** 모드는 tzdata 폴더에 저장된 IANA 타임존 데이터를 C 소스 코드 파일로 컴파일할 때 사용한다.
     이후 이 파일은 **make_tz.sh** (Linux) / **make_tz.bat** (Windows) 스크립트를 통해 Linux용 .so 공유 라이브러리나 Windows용 .dll 라이브러리로 변환된다.

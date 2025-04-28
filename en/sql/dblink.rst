@@ -340,7 +340,7 @@ How to install unixODBC
 
 ::
     
-	$ wget http://www.unixodbc.org/unixODBC-2.3.9.tar.gz
+	$ wget https://www.unixodbc.org/unixODBC-2.3.9.tar.gz
 	$ tar xvf unixODBC-2.3.9.tar.gz
 	$ cd unixODBC-2.3.9
 	$ ./configure
@@ -351,7 +351,7 @@ How to install unixODBC
     
     For instructions on how to install the unixODBC driver manager, refer to the url below.
 
-    unixODBC website: http://www.unixodbc.org/
+    unixODBC website: https://www.unixodbc.org/
 
 
 ODBC Driver information setting

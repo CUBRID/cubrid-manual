@@ -121,7 +121,8 @@ The installation program consists of shell scripts that contain binary; thus it 
     $ . /home1/cub_user/.cubrid.sh
     $ cubrid service start
 
-As shown in the example above, after installing the downloaded file (CUBRID-11.4.0.????-???????-Linux.x86_64.sh), the CUBRID related environment variables must be set in order to use the CUBRID database. Such setting has been made automatically when logging in the concerned terminal. Therefore there is no need to re-set after the first installation. ::
+As shown in the example above, after installing the downloaded file (CUBRID-11.4.0.????-???????-Linux.x86_64.sh), you must run .cubrid.sh (or .cubrid.csh) according to your shell environment to set the environment variables required to use the CUBRID database.
+Additionally, to automatically set these variables upon login, you need to manually register .cubrid.sh (or .cubrid.csh) in a shell startup file such as .bashrc (or .cshrc), depending on your shell environment. ::
 
     $ . /home1/cub_user/.cubrid.sh
 

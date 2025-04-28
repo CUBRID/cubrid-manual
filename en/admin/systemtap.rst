@@ -17,7 +17,7 @@ To monitor the performance of CUBRID using SystemTap, you need to install System
 
 SystemTap supports only on Linux.
 
-See http://sourceware.org/systemtap/index.html for further information and installation.
+See https://sourceware.org/systemtap/index.html for further information and installation.
 
 Installing SystemTap
 ====================

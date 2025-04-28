@@ -53,7 +53,7 @@ To install CUBRID Python driver by compiling source code, you should have Python
 
 **Using a Package Manager (EasyInstall) of CUBRID Python Driver (Linux)**
 
-EasyInstall is a Python module (**easy_install**) bundled with **setuptools** that lets you automatically download, build, install, and manage Python packages. It gives you a quick way to install packages remotely by connecting to other websites via HTTP as well as connecting to the Package Index. It is somewhat analogous to the CPAN and PEAR tools for Perl and PHP, respectively. For more information about EasyInstall, see https://setuptools.readthedocs.io/en/latest/deprecated/easy_install.html.
+EasyInstall is a Python module (**easy_install**) bundled with **setuptools** that lets you automatically download, build, install, and manage Python packages. It gives you a quick way to install packages remotely by connecting to other websites via HTTP as well as connecting to the Package Index. It is somewhat analogous to the CPAN and PEAR tools for Perl and PHP, respectively. For more information about EasyInstall, see https://setuptools.pypa.io/en/latest/deprecated/easy_install.html.
 
 Enter the command below to install CUBRID Python driver by using EasyInstall. ::
 
@@ -243,6 +243,6 @@ After you have done using any cursor or connection to the database, you must rel
 Python API
 ==========
 
-Python Database API is composed of connect() module class, Connection object, Cursor object, and many other auxiliary functions. For more information, see Python DB API 2.0 Official Documentation at  https://www.python.org/dev/peps/pep-0249/.
+Python Database API is composed of connect() module class, Connection object, Cursor object, and many other auxiliary functions. For more information, see Python DB API 2.0 Official Documentation at https://peps.python.org/pep-0249/. 
 
 You can find the information about CUBRID Python API at http://ftp.cubrid.org/CUBRID_Docs/Drivers/Python/.

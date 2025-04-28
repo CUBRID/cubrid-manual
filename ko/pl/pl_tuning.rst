@@ -20,7 +20,7 @@ SQL 질의 최적화
 저장 프로시저와 저장함수에서 사용된 비효율적인 질의는 :doc:`/sql/tuning` 문서를 참조하여 질의 최적화하기를 권장한다.
 
 질의에서의 저장 함수 호출 최적화
-===============================
+=======================================
 
 질의에서 실행하는 저장 함수의 불필요한 반복 호출은 성능을 저하시킬 수 있다. 따라서 저장 함수 호출을 최적화하기 위해 다음과 같은 방법을 고려해야 한다.
 
@@ -52,21 +52,24 @@ CUBRID에서 기본적으로 제공하는 내장 함수는 (:doc:`/sql/function/
 
         SELECT COUNT(*) FROM (SELECT /*+ NO_MERGE */ concat (name, event) FROM athlete);
 
+        SELECT COUNT(*) FROM (SELECT /*+ NO_MERGE */ my_concat (name, event) FROM athlete);
+
+::
+
+        -- concat 함수 사용
                       count(*)
         ======================
                           6677
 
         1 row selected. (0.019853 sec) Committed. (0.000000 sec)
 
-        SELECT COUNT(*) FROM (SELECT /*+ NO_MERGE */ my_concat (name, event) FROM athlete);
         
+        -- my_concat 함수 사용
                       count(*)
         ======================
                           6677
 
         1 row selected. (0.302333 sec) Committed. (0.000000 sec)
-::
-
 
 .. _pl-deterministic:
 

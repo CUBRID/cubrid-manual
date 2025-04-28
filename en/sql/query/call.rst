@@ -11,7 +11,7 @@ The stored routines supported by CUBRID are as follows.
 
   * :ref:`create-procedure`
   * :ref:`create-function`
-  * :doc:`/sql/method`
+  * :doc:`/pl/method`
 
 ::
 

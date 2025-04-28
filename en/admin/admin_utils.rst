@@ -172,7 +172,7 @@ The following shows [options] available with the **cubrid** **createdb** utility
 
     The following example shows how to create a database named *testdb* in the working directory and specify /home/data1 of local file system as a location of LOB data files. ::
 
-        cubrid createdb --lob-base-path "file:/home1/data1" testdb en_US
+        cubrid createdb --lob-base-path "file:/home/data1" testdb en_US
 
 .. option:: --server-name=HOST
 
@@ -633,7 +633,7 @@ The following shows [options] available with the **cubrid copydb** utility.
 
     The *-E* option specifies a specific directory path where a new database extended volume is stored with an **-E**. If this option is omitted, a new database extended volume is created in the location of a new database volume or in the registered path of controlling file. The **-i** option cannot be used with this option. ::
 
-        cubrid copydb -E home/usr/CUBRID/databases/extvols demodb new_demodb
+        cubrid copydb -E /home/usr/CUBRID/databases/extvols demodb new_demodb
 
 .. option:: -i, --control-file=FILE
 
@@ -892,7 +892,7 @@ The following shows [options] available with the **cubrid compactdb** utility.
   -S, --SA-mode                     stand-alone mode execution
   -C, --CS-mode                     client-server mode execution
   -i, --input-class-file=FILE       input FILE of table names
-  -p, --pages-commited-once=NUMBER  maximum number of pages to commit once
+  -p, --pages-committed-once=NUMBER maximum number of pages to commit once
   -d, --delete-old-repr             delete old class representations from catalog
   -I, --Instance-lock-timeout       timeout for instance lock
   -c, --class-lock-timeout          timeout for class lock
@@ -921,7 +921,7 @@ The following shows [options] available with the **cubrid compactdb** utility.
 
 The following options can be used in client/server mode only.
 
-.. option:: -p, --pages-commited-once=NUMBER
+.. option:: -p, --pages-committed-once=NUMBER
 
     You can specify the number of maximum pages that can be committed once with this option. The default value is 10, the minimum value is 1, and the maximum value is 10. The less option value is specified, the more concurrency is enhanced because the value for class/instance lock is small; however, it causes slowdown on operation, and vice versa. ::
 
@@ -1817,7 +1817,7 @@ The following shows [options] available with the **cubrid statdump** utility.
     |                                          |                | | with this value                                                     |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
     | Log_page_buffer_hit_ratio                | Computed       | | Hit ratio of log page buffers                                       |
-    |                                          |                | | (Num_log_page_fetches - Num_log_page_fetch_ioreads)*100             |
+    |                                          |                | | (Num_log_page_fetches - Num_log_page_ioreads)*100                   |
     |                                          |                | | / Num_log_page_fetches                                              |
     +------------------------------------------+----------------+-----------------------------------------------------------------------+
 
@@ -2901,7 +2901,7 @@ The next example shows an instance of class, object OID( 2| 50| 1 ), that was in
 
 ::
 
-    OID = 2| 50| 1
+    OID = 2|50|1
     Object type: instance of class ( 0| 62| 5) = athlete.
     MVCC info: insert ID = 6, delete ID = missing.
     Num holders = 1, Num blocked-holders= 1, Num waiters = 1
@@ -2912,7 +2912,7 @@ The next example shows an instance of class, object OID( 2| 50| 1 ), that was in
                           Start_waiting_at = Wed Feb 3 14:45:14 2016
                           Wait_for_secs = -1
 
-*Granted_mode* refers to the mode of the obtained lock, and *Blocked_mode* refers to the mode of the blocked lock. *Starting_waiting_at refers* to the time at which the lock was requested, and *Wait_for_secs* refers to the waiting time of the lock. The value of *Wait_for_secs* is determined by **lock_timeout**, a system parameter.
+*Granted_mode* refers to the mode of the obtained lock, and *Blocked_mode* refers to the mode of the blocked lock. *Start_waiting_at refers* to the time at which the lock was requested, and *Wait_for_secs* refers to the waiting time of the lock. The value of *Wait_for_secs* is determined by **lock_timeout**, a system parameter.
 
 When the object type is a class (table), *Nsubgranules* is displayed, which is the sum of the record locks and the key locks obtained by a specific transaction in the table.
 

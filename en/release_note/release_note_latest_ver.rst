@@ -82,7 +82,7 @@ SQL
 HASH JOIN Support
 ^^^^^^^^^^^^^^^^^
 
-- It supports HASH JOIN, a type of join processing method that creates a hash table based on the join condition column to perform the join.
+- HASH JOIN is now supported—a type of join processing method that creates a hash table based on the join condition column to efficiently execute the join.
 - For the optimizer to apply a HASH JOIN, a join hint is required.
 
   - When ``/*+ USE_HASH */`` hint is added, HASH JOIN is considered.
@@ -185,8 +185,8 @@ Added **LEADING** Hint to Specify Join Order
 - Conditions for Ignoring the LEADING Hint
 
   - Ignored when the ORDERED hint is present.
-  - Multiple LEADING hints are used, only the first one is applied.
-  - Ignored if join graph dependencies prevent early joining of specified tables.
+  - If multiple LEADING hints are used, only the first one is applied.
+  - The hint is ignored if join graph dependencies prevent early joining of specified tables.
 
 Utility
 ~~~~~~~
@@ -200,7 +200,7 @@ Added Support for Separate loadjava Option for JNI-Based JavaSP
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Option: *-j* or *--jni*
-- Without using the new ``loadjava -j`` option will now result in an error when JNI-Based JavaSP executed.
+- Not using the new ``loadjava -j`` option will now result in an error when a JNI-based JavaSP is executed.
 
 Added Memory Monitoring Featured utility
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -208,12 +208,12 @@ Added Memory Monitoring Featured utility
 - The memory monitoring utility ``cubrid memmon`` retrieves and displays the following heap memory information from the server process (*cub_server*) memory management module.
 
   - Total heap memory usage allocated and currently in use by the server process.
-  -  Detailed memory allocation information based on the source code and line number where the memory allocation request was made.
+  - Detailed memory allocation information based on the source code and line number where the memory allocation request was made.
    
 - To use the server process memory management module, the system parameter enable_memory_monitoring must be set to "yes", and the server needs to be restarted.
 - For detailed usage and instructions, please refer to the manual. (:ref:`memmon`\)
 
-Supports ``diagdb -d 9`` to dump only specific classe(table)
+Added support for the ``diagdb -d 9`` option to dump data from a specific class (table)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Option: -n class-name 
@@ -222,7 +222,7 @@ Supports ``diagdb -d 9`` to dump only specific classe(table)
 Broker,CAS,CMS
 ~~~~~~~~~~~~~~
 
-Added Parameter to Set the Size of Data Sent to Clients in Broker
+Added Parameter to Set the Size of Data Sent to Clients in the Broker
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - A new parameter, **NET_BUF_SIZE**, has been introduced to the Broker to control the size of the data transmitted to clients.
@@ -240,7 +240,7 @@ Added Parameter to Set ACL(Access Control) for Each Broker
 
 - Set the value of ACCESS_CONTROL_DEFAULT_POLICY to **DENY** or **ALLOW** in the [broker] section of the ``cubrid_broker.conf`` file (default value is **DENY**).
 
-   - If the broker is not specified in ACCESS_CONTROL_FILE, and the default policy is ALLOW, all clients are allowed to connect; if the policy is DENY, connections are denied.
+   - If a broker is not specified in the ACCESS_CONTROL_FILE, and the default policy is ALLOW, all clients are allowed to connect; if the policy is DENY, connections are denied.
 
 .. code:: shell
 
@@ -470,8 +470,8 @@ Improvement in Stored Procedure Execution Plans
 - The execution plan processing for stored procedures has been modified to align with the execution plan of built-in functions.
 - Improvements
 
-  - Index scans are now possible.
-  - Unnecessary joins have been removed.
+  - Index scans are now supported.
+  - Unnecessary joins have been eliminated.
   - **Result caching** is now available when using stored procedures in **correlated subqueries**.
 
 Improvement in Concurrency by Preventing Unnecessary X-LOCKs on Unneeded Rows
@@ -510,7 +510,7 @@ Improvement to ``unloaddb`` in Databases Without Tables and Views to Extract Oth
 Performance Improvement in unloaddb
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-- To significantly reduce data extraction time, multi-threading has been implemented to improve performance.
+- Multi-threading has been implemented to significantly reduce data extraction time and improve overall performance.
 
 - unloaddb options
 
@@ -553,7 +553,7 @@ Improvement to Allow TLS v1.2 Clients to Connect to CMS(CUBRID Manager Server)
 Improvement to Prevent Zombie Processes When Broker/CAS Processes are Terminated Through CMS
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Improvement to cms getlogfileinfo() API to return SQL log file information only once
+Improvement to CMS getlogfileinfo() API to Return SQL Log File Information Only Once
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Improvement to cms ha_status() API to Display Replica Node Status in HA Environments with Master, Slave, and Replica Configuration
@@ -638,76 +638,76 @@ Bug Fixes
 SQL
 ~~~
 
-Fixed for referencing a remote server object without specifying the user schema could fail to resolve to the correct object when an object with the same name exists in another user account
+Fixed an issue where referencing a remote server object without specifying the user schema could fail to resolve to the correct object if an object with the same name exists in another user.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed for Hidden Column Handling in Scalar Subqueries with ORDER BY
+Fixed Hidden Column Handling in Scalar Subqueries with ORDER BY
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed for View Merging of Inline Views and Scalar Subqueries Containing ORDER BY clauses, the ROWNUM was Incorrectly Rewritten as ORDER_BY_NUM()
+Fixed an issue where View Merging of Inline Views and Scalar Subqueries Containing ORDER BY Clauses, Where ROWNUM Was Incorrectly Rewritten as ORDER_BY_NUM()
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed for **oracle_style_empty_string=yes** is set, the result of the expression ‘NULL || string’ was incorrectly returned as NULL
+Corrected an Issue When **oracle_style_empty_string=yes** is Set and The Result of The Expression ‘null || string’ Was Incorrectly Returned as NULL
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed for NULL Output in REPLACE Function When **oracle_style_empty_string=yes**
+Fixed NULL Output in REPLACE Function When **oracle_style_empty_string=yes**
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed for Incorrect Results in Covered Index Scans Using Function Indexes
+Fixed Incorrect Results in Covered Index Scans Using Function Indexes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed for Segment Fault Errors in CTE Queries with Always False (or NULL) Conditions
+Fixed Segment Fault Errors in CTE Queries with Always False (or NULL) Conditions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed for Segment Fault Errors in UNION ALL Queries Using Multiple Tables and Serial Next Values
+Fixed Segment Fault Errors in UNION ALL Queries Using Multiple Tables and Serial Next Values
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed for Segment Fault Errors in Queries Using Constants Over 255 Characters Without Aliases
+Fixed Segment Fault Errors in Queries Using Constants Over 255 Characters Without Aliases
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed for Errors During View Merging with OUTER JOIN
+Fixed Errors During View Merging with OUTER JOIN
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed for Displaying Both User and Public Views with the Same Name in **SHOW CREATE VIEW**
+Fixed Displaying Both User and Public Views With the Same Name in **SHOW CREATE VIEW**
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed for Missing Error Message and NULL Return in repeat() Function Exceeding string_max_size_bytes Setting
+Fixed Missing Error Message and NULL Return in repeat() Function Exceeding string_max_size_bytes Setting
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed for Incorrect Table Positioning During INNER JOIN Removal in Query Optimization
+Fixed Incorrect Table Positioning During INNER JOIN Removal in Query Optimization
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed for Errors with Host Variables in PREPARE Statement Using Certain Built-in Functions
+Fixed Errors with Host Variables in PREPARE Statements Using Certain Built-in Functions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed for Missing User Information Deletion in System Catalog Tables When Dropping Users by ``DROP USER`` clause
+Fixed Missing User Information Deletion in System Catalog Tables When Dropping Users by The ``DROP USER`` Clause
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed for Oracle-Style LEFT OUTER JOIN Not Rewriting to INNER JOIN When Using Host Variables in SP Call or WHERE Clause
+Fixed Oracle-Style LEFT OUTER JOIN Not Rewriting to INNER JOIN When Using Host Variables in SP Call or WHERE Clause
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed for Incorrect Results in Subquery with **ORDERBY_NUM()** During View Merging
+Fixed Incorrect Results in Subquery with **ORDERBY_NUM()** During View Merging
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fixed for Tables Without Join Relations Being Recognized as Join Tables During Query Optimization
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed for ROWNUM Value Being Printed as 0 When Using Equal Condition (=) in WHERE Clause and the Same Column in ORDER BY
+Fixed ROWNUM Values Being Printed as 0 When Using Equal Condition (=) in WHERE Clause and the Same Column in ORDER BY
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed for Errors with INNER JOIN and Oracle-Style OUTER JOIN Used Together and JOIN Condition Placement in WHERE Clause
+Fixed Errors That Occur When INNER JOIN and Oracle-Style OUTER JOIN Are Used Together and JOIN Condition Placement in WHERE Clause
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed for Incorrect Results in **INSERT INTO tbl … SELECT … FROM View … ON DUPLICATE KEY UPDATEI** Query
+Corrected Incorrect Results in **INSERT INTO tbl … SELECT … FROM View … ON DUPLICATE KEY UPDATEI** Query
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed for Incorrect Column Order Numbers in Analytical Functions Inside Views
+Corrected Incorrect Column Order Numbers in Analytical Functions Inside Views
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed for Not Recognizing Range Conditions as Range Items When Using Pipe Operator (||)
+Resolved a Case Where Range Conditions Were Not Recognized as Range Items When Using The Pipe Operator (||)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed Error When Handling NULL in Host Variables of DBLINK Statements
+Fixed An Error That Occurred When Handling NULL in Host Variables of DBLINK Statements
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fixed Issue Where Korean Characters Were Corrupted When Inserting via Host Variables Using DBLINK on EUC-KR Oracle DB
@@ -716,92 +716,92 @@ Fixed Issue Where Korean Characters Were Corrupted When Inserting via Host Varia
 PL(JavaSP)
 ~~~~~~~~~~
 
-Fixed for Error When Using DATETIMELTZ as a DATETIME Parameter in JavaSP
+Resolved an Issue With Using DATETIMELTZ as a DATETIME Parameter in JavaSP
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed for Error Due to Space Between Declared Java Method Name and Opening Parenthesis in JavaSP
+Fixed An Error That Occured Due to Space Between Declared Java Method Name and Opening Parenthesis in JavaSP
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed for Error When Using Columns of Tables with Unsupported Types as Arguments in JavaSP
+Fixed an Error that Occurred When Using Columns of Tables with Unsupported Types as Arguments in JavaSP
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed for Error **Cannot allocate query entry any more** in JavaSP
+Fixed The **Cannot allocate query entry any more** Error in JavaSP
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Utility
 ~~~~~~~
 
-Fixed for Exit Code Not Being Set to 3 When an Error Occurs During ``loaddb`` Execution
+Fixed The Exit Code Not Being Set to 3 When an Error Occurs During ``loaddb`` Execution
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed for Incorrect **count(*)** Value After Executing ``loaddb`` with **--no-logging**
+Fixed Incorrect **count(*)** Value Returned After Executing ``loaddb`` with **--no-logging**
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed for Error Occurring When Processing Serial Without Schema Name During ``loaddb`` Execution
+Fixed Error That Occurred When Processing Serials Without Schema Names During ``loaddb`` Execution
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed for ``loaddb`` Continuing Execution Even After an Error Occurs
+Fixed an Issue Where loaddb Would Continue Execution Even After an Error Occurred
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed for Error Occurring When Processing Synonym for System Tables During ``loaddb`` Execution
+Resolved an Error That Occurred When Processing a Synonym for System Tables During ``loaddb`` Execution
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed for Schema Name Being Incorrectly Stored or Missing for Trigger System Table Columns(condition, action_definition) During ``loaddb`` Execution Using unloaddb Files from Version 11.4 and Below
+Corrected an Issue Where the Schema Name Was Incorrectly Stored or Missing for Trigger System-Table Columns (condition, action_definition) During ``loaddb`` Execution Using unloaddb Files From Version 11.4 or Earlier
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed for Missing Reverse Unique Index Comments During ``unloaddb`` Execution
+Addressed a Case Where Reverse Unique-Index Comments Were Missing During ``unloaddb`` Execution
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed for **auto_increment** Value Being Reset to 1 for PK Columns with auto_increment Set During ``unloaddb`` Execution
+Corrected an Issue Where the **auto_increment** Value Was Reset to 1 for PK Columns With **auto_increment** Set During ``unloaddb`` Execution
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed for **dbname_schema_uk** File Being Created When No Unique Index Exists During ``unloaddb`` **--split-schema-files** Execution
+Resolved an Issue Where the **dbname_schema_uk** File Was Created Even When No Unique Index Existed During ``unloaddb`` **--split-schema-files** Execution
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed for Missing ALTER SERIAL Statement When Executing ``unloaddb`` with **-i (--input-class-only)** Option
+Addressed a Case Where the **ALTER SERIAL** Statement Was Missing When Executing ``unloaddb`` With the **-i (--input-class-only)** Option
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed for Error Occurring When current_val and max_val of a Serial Are Identical During ``unloaddb`` Execution
+Resolved an Error That Occurred When current_val and max_val of a Serial Were Identical During ``unloaddb`` Execution
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed for Infinite Loop When Processing JSON Data Over 1MB During ``unloaddb`` Execution
+Corrected an Issue Where an Infinite Loop Occurred When Processing JSON Data Over 1MB During ``unloaddb`` Execution
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed for executing unloaddb as a regular user, schema names identical to the user were not removed from the query_spec of views
+Addressed a Case Where, When Running ``unloaddb`` as a Regular User, Schema Names Identical to the User Were Not Removed From the query_spec of Views  
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed for Missing Schema Names for Serial and Trigger When Executing ``unloaddb`` as **DBA** User
+Resolved a Case Where Schema Names for Serials and Triggers Were Missing When Executing ``unloaddb`` as **DBA** User
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed for unloaddb as a DBA user without the --as-dba option, procedure privileges granted by other users (e.g., GRANT ... ON PROCEDURE) were incorrectly included in the output
+Corrected an Issue That Occured When Running ``unloaddb`` as a DBA User Without the --as-dba Option, Where Procedure Privileges Granted by Other Users (e.g., GRANT ... ON PROCEDURE) Were Incorrectly Included in the Output
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed for unloaddb as a regular user, schema names identical to the user were not removed from the condition and action_definition of triggers
+Corrected an Issue That Occured When Running ``unloaddb`` as a Regular User, Where Schema Names Identical to the User Were Not Removed From the Condition and action_definition of Triggers
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fixed for Unnecessary Archive Log Volumes Being Created During ``backupdb`` Execution
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed Issue Where ``flashback`` Did Not Terminate Properly on Forced Exit (Ctrl+C)
+Fixed an Issue Where ``flashback`` Did Not Terminate Properly on Forced Exit (Ctrl+C)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed Issue Where ``backupdb`` Could Hang in Certain Situations
+Resolved a Case Where ``backupdb`` Could Hang in Certain Situations
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Broker,CAS, CMS
 ~~~~~~~~~~~~~~~
 
-Fixed for Potential Memory Leak When Processing addBatch() and executeBatch()
+Fixed a Potential Memory Leak In the Processing of `addBatch()` and `executeBatch()` in Broker/CAS/CMS
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed Incorrect Output from getTransactionInfo() Function Call
+Corrected an Incorrect Output From the `getTransactionInfo()` Function Call
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 HA
 ~~
 
-Fixed for Replication Logs Not Being Deleted on Replica Node When ha_replica_delay Is Set to 60 Seconds or More in an HA Environment with Master, Slave, and Replica Nodes
+Addressed a Case Where Replication Logs Were Not Deleted on a Replica Node When `ha_replica_delay` Was Set to 60 Seconds or More in an HA Environment With Master, Slave, and Replica Nodes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed for SQL Log File Not Being Automatically Deleted Under Certain Conditions During ``applylogdb`` Execution
+Resolved an Issue Where the SQL Log File Was Not Automatically Deleted Under Certain Conditions During ``applylogdb`` Execution
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

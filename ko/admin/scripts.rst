@@ -130,7 +130,7 @@ restore_to_newdb.sh 스크립트는 별도의 추가 작업 없이, CUBRID가 �
 	sh restore_to_new.sh [options] backuped-database-name new-database-name
 
 * **restore_to_new.sh** : 백업본을 이용해 새로운 DBMS를 생성하는 스크립트이다.
-* **backup-database-name** :  복구할 백업 DB의 이름이다.
+* **backup-database-name** : 복구할 백업 DB의 이름이다.
 * **new-database-name** : 새로 생성할 복구 DB의 이름이다.
 
 다음은 **restore_to_new.sh** 에 대한 [options] 설명이다.

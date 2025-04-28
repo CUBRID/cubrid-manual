@@ -163,7 +163,7 @@ The restore_to_newdb.sh script allows you to restore a backup and create a new d
 
 .. option:: -l level
 
-    Specifies the backup level (0, 1, or 2) to restore from. This option works the same as the `-l` option in `cubrid restoredb`. ::
+    Specifies the backup level (0, 1, or 2) to restore from. This option function the same as the `-l` option in `cubrid restoredb`. ::
 
 		sh restore_to_newdb.sh -B /home/cubrid/DB/backupdbpath -l 1 backuped-database-name new-database-name
 

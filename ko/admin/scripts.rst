@@ -104,3 +104,154 @@ unloaddb.sh 스크립트
 .. note::
 
    * unloaddb.sh의 실행이 완전히 종료되기 이전에 터미널에서 인터럽트 키 (**CTRL-C**)를 입력하면, 언로드가 진행중인 unloaddb object 파일들은 삭제된다 (언도드가 완료된 object 파일들은 삭제되지 않는다).
+
+
+.. _restore_to_newdb_sh:
+
+
+restore_to_newdb.sh 스크립트
+============================
+
+
+사용자 실수나 시스템 오류로 데이터 복구가 필요한 경우, “백업본”을 이용해 운영 중인 서버에 복구를 진행해야 한다.  이때 추가 계정 생성이나 엔진 설치 등 번거로운 작업이 선행되어야 하는 불편함이 있다.
+restore_to_newdb.sh 스크립트는 별도의 추가 작업 없이, CUBRID가 설치된 기존 운영 환경에서 백업본을 사용해 신규 DB 이름으로 복구할 수 있도록 지원한다.
+
+.. warning::
+
+   **제약사항:**
+     * Linux 환경에서만 지원된다.
+     * 복구 대상 DB의 백업 파일이 존재해야 한다.
+     * 기존 DB명과 복구할 DB명이 서로 달라야 한다.
+     * 복구할 DB명은 $CUBRID/databases.txt에 등록되어 있으면 안된다.
+
+
+기본 명령어 수행 방법이다. ::
+
+	sh restore_to_new.sh [options] backuped-database-name new-database-name
+
+* **restore_to_new.sh** : 백업본을 이용해 새로운 DBMS를 생성하는 스크립트이다.
+* **backup-database-name** : 복구할 백업 DB의 이름이다.
+* **new-database-name** : 새로 생성할 복구 DB의 이름이다.
+
+다음은 **restore_to_new.sh** 에 대한 [options] 설명이다.
+
+.. program:: sh restore_to_newdb.sh backuped-database-name new-database-name
+
+.. option:: -F path
+
+	복구할 DB의 데이터베이스 경로를 절대경로로 지정한다. 지정하지 않으면 현재 경로를 기본값으로 사용한다. ::
+
+		sh restore_to_newdb.sh -F /home/cubrid/newdbpath backuped-database-name new-database-name
+
+.. option:: -B path
+
+    백업본이 위치한 경로를 절대경로로 지정한다. 지정하지 않으면 현재 경로를 기본값으로 사용한다. ::
+
+		sh restore_to_newdb.sh -B /home/cubrid/backupdbpath backuped-database-name new-database-name
+
+.. option:: -d date
+
+    지정한 날짜 및 시간까지 복구를 수행한다.형식은 dd-mm-yyyy:hh:mi:ss이다. (예: 14-10-2008:14:10:00) 
+
+    이 옵션은 cubrid restoredb의 -d 옵션과 동일하다. ::
+
+		sh restore_to_newdb.sh backuped-database-name new-database-name -F /home/cubrid -B /home/cubrid/DB/backupdbpath -d 30-10-2025:12:20:00
+
+.. option:: -l level
+
+    백업 수준(0, 1, 2)을 지정하여 복구를 진행한다. cubrid restoredb의 -l 옵션과 동일하다. ::
+
+		sh restore_to_newdb.sh -B /home/cubrid/DB/backupdbpath -l 1 backuped-database-name new-database-name
+
+.. option:: -p
+
+    로그 아카이브가 없는 경우, 부분 복구를 수행한다. 상세 내용은 cubrid restoredb의 -p 옵션을 참고한다. ::
+
+		sh restore_to_newdb.sh -B /home/cubrid/DB/backupdbpath -p backuped-database-name new-database-name
+
+.. option:: -k path
+
+    복구 시 필요한 키 파일의 경로를 지정한다. 상세 내용은 cubrid restoredb의 -k 옵션을 참고한다. ::
+
+		sh restore_to_newdb.sh -B /home/cubrid/DB/backupdbpath -k /home/cubdev/DB/backupdbpath/backupdb_bk1_keys backuped-database-name new-database-name
+
+
+**restoredb_newdb.sh에 수행화면**
+
+::
+
+	sh restore_to_newdb.sh -B /home/cubrid/DB/backupdbpath backuped-database-name new-database-name
+
+::
+
+	Validation passed: newdb_path and vol-path are different.
+	Validation passed: 'new-database-name' does not exist in /home/cubrid/CUBRID-11.4-Linux.x86_64/databases/databases.txt.
+
+	Confirmed: Files found for pattern (/home/cubrid/DB/backupdbpath/backuped-database-name_bk0v*).
+	file: /home/cubrid/DB/backupdbpath/backuped-database-name_bk0v*
+	Warning: /home/cubrid/CUBRID-11.4-Linux.x86_64/databases/databases.txt already exists.
+	Existing databases.txt backed up as databases.txt.bak.
+	Restoring... /
+
+	CUBRID 11.4
+
+	Restoring... |Updated CUBRID-11.4-Linux.x86_64/databases/databases.txt
+	successfully.
+	database restoration completed successfully.
+
+
+복구가 정상 완료되면, 복구된 DBMS를 구동한다.
+
+::
+
+	[cubrid ~]$ cubrid server start new-database-name
+	@ cubrid server start: new-database-name
+
+	This may take a long time depending on the amount of recovery works to do.
+
+	CUBRID 11.4
+
+	++ cubrid server start: success
+	Calling java stored procedure is allowed
+
+.. note::
+
+    * 해당 스크립트를 이용한 복구 작업은 $CUBRID_DATABASES를 수정하기 때문에, 스크립트 종료 후 생성 대상 DB가 정상 등록되었는지 확인하는 것이 좋다.
+    * 더 이상 사용하지 않는 복구된 DBMS는 deletedb를 통해 삭제하기를 권고한다
+
+
+
+**restoredb_db_new.sh를 수행한 경로에 log파일 확인**
+
+
+복구 작업을 수행한 경로에는 restoredb_YYYYMMDDhhmiss.log 형식의 로그 파일이 생성된다.
+문제가 발생했을 경우, 이 로그 파일을 통해 복구 진행 내역을 확인할 수 있다.
+
+::
+
+	[cubrid ~]$ cat restoredb_20250411185128.log
+
+	[ Database(db1) Restore (level = 0) start ]
+
+	- restore start time: Fri Api 11 18:51:28 2025
+
+	- restore steps: 1
+	 step 1) restore using (level = 0) backup data
+
+	- restore progress status (using level = 0 backup data)
+	 -----------------------------------------------------------------------------
+	 volume name                  | # of pages |  restore progress status  | done
+	 -----------------------------------------------------------------------------
+	 dbms_keys                     |          1 | ######################### | done
+	 dbms_vinf                     |          1 | ######################### | done
+	 dbms                          |      32768 | ######################### | done
+	 dbms_lgar001                  |      32768 | ######################### | done
+	 dbms_lgar002                  |      32768 | ######################### | done
+	 dbms_lginf                    |          1 | ######################### | done
+	 dbms_lgat                     |      32768 | ######################### | done
+	 -----------------------------------------------------------------------------
+
+	- restore end time: Fri Api 11 18:51:30 2025
+
+	[ Database(db1) Restore (level = 0) end ]
+

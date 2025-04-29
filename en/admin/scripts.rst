@@ -157,6 +157,7 @@ The restore_to_newdb.sh script allows you to restore a backup and create a new d
 .. option:: -d date
 
 	Restores the database up to a specific point in time.  The format must be `dd-mm-yyyy:hh:mi:ss` (e.g., `14-10-2008:14:10:00`).
+
 	This option works the same as the `-d` option in `cubrid restoredb`. ::
 
 		sh restore_to_newdb.sh backuped-database-name new-database-name -F /home/cubrid -B /home/cubrid/DB/backupdbpath -d 30-10-2025:12:20:00

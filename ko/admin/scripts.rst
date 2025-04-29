@@ -151,7 +151,8 @@ restore_to_newdb.sh 스크립트는 별도의 추가 작업 없이, CUBRID가 �
 
 .. option:: -d date
 
-	지정한 날짜 및 시간까지 복구를 수행한다.형식은 dd-mm-yyyy:hh:mi:ss이다. (예: 14-10-2008:14:10:00)
+    지정한 날짜 및 시간까지 복구를 수행한다.형식은 dd-mm-yyyy:hh:mi:ss이다. (예: 14-10-2008:14:10:00) 
+
     이 옵션은 cubrid restoredb의 -d 옵션과 동일하다. ::
 
 		sh restore_to_newdb.sh backuped-database-name new-database-name -F /home/cubrid -B /home/cubrid/DB/backupdbpath -d 30-10-2025:12:20:00
@@ -173,6 +174,7 @@ restore_to_newdb.sh 스크립트는 별도의 추가 작업 없이, CUBRID가 �
     복구 시 필요한 키 파일의 경로를 지정한다. 상세 내용은 cubrid restoredb의 -k 옵션을 참고한다. ::
 
 		sh restore_to_newdb.sh -B /home/cubrid/DB/backupdbpath -k /home/cubdev/DB/backupdbpath/backupdb_bk1_keys backuped-database-name new-database-name
+
 
 **restoredb_newdb.sh에 수행화면**
 
@@ -220,6 +222,7 @@ restore_to_newdb.sh 스크립트는 별도의 추가 작업 없이, CUBRID가 �
 
 
 **restoredb_db_new.sh를 수행한 경로에 log파일 확인**
+
 
 복구 작업을 수행한 경로에는 restoredb_YYYYMMDDhhmiss.log 형식의 로그 파일이 생성된다.
 문제가 발생했을 경우, 이 로그 파일을 통해 복구 진행 내역을 확인할 수 있다.

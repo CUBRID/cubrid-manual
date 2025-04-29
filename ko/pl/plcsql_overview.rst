@@ -181,6 +181,26 @@ PL/CSQL에서 선언한 변수, 상수, 프로시저/함수 인자를 쓸 수 �
 단, 이들은 BOOLEAN이나 SYS_REFCURSOR 타입을 가져서는 안된다. :ref:`SQL 데이터타입 <datatype_index>`\이
 이들을 포함하지 않기 때문이다.
 
+Static SQL 중에서 SELECT 문에 대해서는 :ref:`DBLink <dblink-introduction>` 기능이 지원되지만,
+DML (INSERT, UPDATE, DELETE, MERGE, REPLACE) 문에 대해서는 아직 지원되지 않는다.
+DML 안에서 DBLink 기능을 쓰려면 아래에서 설명하는 Dynamic SQL을 사용해야 한다.
+
+.. code-block:: sql
+
+    CREATE OR REPLACE PROCEDURE test_dblink_in_dml
+    AS
+    BEGIN
+        INSERT INTO athlete@remote_svr(name, gender, nation_code, event)
+        VALUES ('Park Taehwan', 'M', 'KOR', 'Swimming');
+    END;
+
+    In line 4, column 8,
+
+    ERROR: Stored procedure compile error: Semantic: before '
+           VALUES ('Park Taehwan', 'M', 'KOR', 'Swimming')'
+    DBLink DML is not yet supported for PL/CSQL Static SQL.
+
+
 다음은 Static SQL 사용 예이다.
 
 .. code-block:: sql

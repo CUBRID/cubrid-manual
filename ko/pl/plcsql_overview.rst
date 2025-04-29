@@ -183,7 +183,7 @@ PL/CSQL에서 선언한 변수, 상수, 프로시저/함수 인자를 쓸 수 �
 
 Static SQL 중에서 SELECT 문에 대해서는 :ref:`DBLink <dblink-introduction>` 기능이 지원되지만,
 DML (INSERT, UPDATE, DELETE, MERGE, REPLACE) 문에 대해서는 지원되지 않는다.
-DML 안에서 DBLink 기능을 쓰려면 아래에서 설명하는 Dynamic SQL을 사용해야 한다.
+DML 문장에서 DBLink 기능을 사용하려면, 아래에서 설명하는 Dynamic SQL 을 사용해야 한다.
 
 .. code-block:: sql
 

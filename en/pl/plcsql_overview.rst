@@ -195,7 +195,7 @@ However, these must not have the `BOOLEAN` or `SYS_REFCURSOR` type,
 as they are not included in :ref:`SQL Data Types <datatype_index>`.
 
 For Static SQL, the :ref:`DBLink <dblink-introduction>` feature is supported for SELECT statements,
-but it is not yet supported for DML statements (INSERT, UPDATE, DELETE, MERGE, REPLACE).
+but it is not supported for DML statements (INSERT, UPDATE, DELETE, MERGE, REPLACE).
 To use the DBLink feature inside DML statements, you have to use Dynamic SQL described below.
 
 .. code-block:: sql

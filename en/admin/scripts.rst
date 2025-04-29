@@ -218,8 +218,9 @@ Once the database is successfully restored, start the new DBMS as follows:
 	Calling java stored procedure is allowed
 
 .. note::
-* Since the recovery process using this script modifies $CUBRID_DATABASES, it is recommended to verify that the newly created database has been properly registered after the script finishes
-* After the restoration, it is essential to clean up and verify the DBMS environment.
+
+    * Since the recovery process using this script modifies $CUBRID_DATABASES, it is recommended to verify that the newly created database has been properly registered after the script finishes
+    * It is recommended to delete recovered DBMS instances that are no longer in use using the deletedb command.
 
 
 

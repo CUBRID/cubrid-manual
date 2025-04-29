@@ -213,8 +213,9 @@ restore_to_newdb.sh 스크립트는 별도의 추가 작업 없이, CUBRID가 �
 	Calling java stored procedure is allowed
 
 .. note::
-* 해당 스크립트를 이용한 복구 작업은 $CUBRID_DATABASES를 수정하기 때문에, 스크립트 종료 후 생성 대상 DB가 정상 등록되었는지 확인하는 것이 좋다.
-* 복구된 DBMS는 모든 작업 완료 후, 반드시 점검 및 정리해야 한다.
+
+    * 해당 스크립트를 이용한 복구 작업은 $CUBRID_DATABASES를 수정하기 때문에, 스크립트 종료 후 생성 대상 DB가 정상 등록되었는지 확인하는 것이 좋다.
+    * 더 이상 사용하지 않는 복구된 DBMS는 deletedb를 통해 삭제하기를 권고한다
 
 
 

@@ -18,7 +18,7 @@
 Release Notes Information
 =========================
 
-This document contains information about CUBRID 11.4 (Build Number 11.4.0.0000).
+This document contains information about CUBRID 11.4 (Build Number 11.4.0.1777).
 
 CUBRID 11.4 includes bug fixes and feature improvements found in CUBRID 11.3, as well as all bug fixes and feature enhancements applied in previous versions.
 

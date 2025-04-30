@@ -829,7 +829,7 @@ Existing Cautions
 11.3
 ~~~~
 
-The query optimizer's statistical information is not automatically updated when DDL statement is executed, the user must manually execute UPDATE STATISTICS statement to update the statistical information. (see :doc:`/sql/tuning`)
+The query optimizer's statistical information is not automatically updated when a DDL statement is executed; the user must manually execute the UPDATE STATISTICS statement to update the statistical information. (see :doc:`/sql/tuning`)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When changing the type of a column included the AUTO_INCREMENT property or default value in the ALTER TABLE statement, an error occurs if the changed type cannot have the AUTO_INCREMENT property or is a type whose existing default value cannot be changed. (see :ref:`change-column`)

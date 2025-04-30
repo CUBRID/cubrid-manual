@@ -835,7 +835,7 @@ The query optimizer's statistical information is not automatically updated when 
 When changing the type of a column that has the AUTO_INCREMENT property or a default value in an ALTER TABLE statement, an error occurs if the new type cannot use AUTO_INCREMENT or if the existing default value is a type whose existing default value cannot be changed. (see :ref:change-column)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Unable to get Connection object through cubrid.jdbc.driver.CUBRIDDriver.getDefaultConnection() from server-side JDBC. Instead, you should use DriverManager.getConnection("jdbc\:default\:connection\:"). (see :ref:`jsp-server-side-jdbc-connection`)
+You cannot obtain a Connection object through cubrid.jdbc.driver.CUBRIDDriver.getDefaultConnection() from server-side JDBC. Instead, use DriverManager.getConnection("jdbc\:default\:connection\:"). (see :ref:`jsp-server-side-jdbc-connection`)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If an invalid index name or table name is used in a USE INDEX (USING INDEX) statement, it will be ignored rather than occuring an error. (To leave it in the log file, set the error_log warning parameter to yes.)

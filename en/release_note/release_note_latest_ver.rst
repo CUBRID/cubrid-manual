@@ -832,7 +832,7 @@ Existing Cautions
 The query optimizer's statistical information is not automatically updated when a DDL statement is executed; the user must manually execute the UPDATE STATISTICS statement to update the statistical information. (see :doc:`/sql/tuning`)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-When changing the type of a column included the AUTO_INCREMENT property or default value in the ALTER TABLE statement, an error occurs if the changed type cannot have the AUTO_INCREMENT property or is a type whose existing default value cannot be changed. (see :ref:`change-column`)
+When changing the type of a column that has the AUTO_INCREMENT property or a default value in an ALTER TABLE statement, an error occurs if the new type cannot use AUTO_INCREMENT or if the existing default value is a type whose existing default value cannot be changed. (see :ref:change-column)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Unable to get Connection object through cubrid.jdbc.driver.CUBRIDDriver.getDefaultConnection() from server-side JDBC. Instead, you should use DriverManager.getConnection("jdbc\:default\:connection\:"). (see :ref:`jsp-server-side-jdbc-connection`)

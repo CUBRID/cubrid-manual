@@ -22,19 +22,19 @@ This document contains information about CUBRID 11.4 (Build Number 11.4.0.1778).
 
 CUBRID 11.4 includes bug fixes and feature improvements found in CUBRID 11.3, as well as all bug fixes and feature enhancements applied in previous versions.
 
-Information about CUBRID 11.3 can be found at https://www.cubrid.org/manual/ko/11.3/release_note/index.html.
+Information about CUBRID 11.3 can be found at https://www.cubrid.org/manual/en/11.3/release_note/index.html.
 
-Information about CUBRID 11.2 can be found at https://www.cubrid.org/manual/ko/11.2/release_note/index.html.
+Information about CUBRID 11.2 can be found at https://www.cubrid.org/manual/en/11.2/release_note/index.html.
 
-Information about CUBRID 11.0 can be found at https://www.cubrid.org/manual/ko/11.0/release_note/index.html.
+Information about CUBRID 11.0 can be found at https://www.cubrid.org/manual/en/11.0/release_note/index.html.
 
-Information about CUBRID 10.2 can be found at https://www.cubrid.org/manual/ko/10.2/release_note/index.html.
+Information about CUBRID 10.2 can be found at https://www.cubrid.org/manual/en/10.2/release_note/index.html.
 
-Information about CUBRID 10.1 can be found at https://www.cubrid.org/manual/ko/10.1/release_note/index.html.
+Information about CUBRID 10.1 can be found at https://www.cubrid.org/manual/en/10.1/release_note/index.html.
 
-Information about CUBRID 10.0 can be found at https://www.cubrid.org/manual/ko/10.0/release_note/index.html.
+Information about CUBRID 10.0 can be found at https://www.cubrid.org/manual/en/10.0/release_note/index.html.
 
-Information about CUBRID 9.3 can be found at https://www.cubrid.org/manual/ko/9.3/release_note/index.html.
+Information about CUBRID 9.3 can be found at https://www.cubrid.org/manual/en/9.3.0/release_note/index.html.
 
 Overview
 ========

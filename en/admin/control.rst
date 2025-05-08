@@ -616,8 +616,8 @@ The following example shows **access_ip_control_file**.
 ::
 
     [@dbname1]
-    10.10.10.10
-    10.156.*
+    192.10.20.30
+    192.156.*
 
     [@dbname2]
     *
@@ -625,7 +625,7 @@ The following example shows **access_ip_control_file**.
     [@dbname3]
     192.168.1.15
 
-The example above shows that *dbname1* database allows the access of IP addresses starting with 10.156;
+The example above shows that *dbname1* database allows the access connections from the IP address 192.10.20.30 or any IP address that starts with 192.156.
 *dbname2* database allows the access of every IP address;
 *dbname3* database allows the access of an IP address, 192.168.1.15, only.
 
@@ -1552,14 +1552,14 @@ The following example shows how to specify the IPs allowed in ip_list_file.
 
     192.168.1.25
     192.168.*
-    10.*
+    192.*
     *
 
 The descriptions for the IPs specified in the example above are as follows:
 
 *   The first line setting allows an access from 192.168.1.25.
 *   The second line setting allows an access from all IPs starting with 192.168.
-*   The third line setting allows an access from all IPs starting with 10.
+*   The third line setting allows an access from all IPs starting with 192.
 *   The fourth line setting allows an access from all IPs.
 
 For the broker which has already been running, you can modify the configuration file or check the currently applied status of configuration by using the following commands.
@@ -1593,11 +1593,11 @@ The below is an example of displaying results.
     demodb:dba:iplist1.txt 
            CLIENT IP LAST ACCESS TIME 
     ========================================== 
-      10.20.129.11 
-      10.113.153.144 2013-11-07 15:19:14 
-      10.113.153.145 
-      10.113.153.146 
-      10.64.* 2013-11-07 15:20:50 
+      192.20.30.40
+      192.168.1.0 2023-11-07 15:19:14    
+      192.168.2.0
+      192.168.3.0
+      192.169.* 2023-11-07 15:20:50 
   
     testdb:dba:iplist2.txt 
            CLIENT IP LAST ACCESS TIME 

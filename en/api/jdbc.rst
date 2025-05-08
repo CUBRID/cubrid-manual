@@ -350,7 +350,7 @@ Especially, use a setURL() method to set the property through a URL string. Rega
     ... 
     CUBRIDDataSource ds = null;
     ds = new CUBRIDDataSource(); 
-    ds.setUrl("jdbc:cubrid:10.113.153.144:55300:demodb:::?charset=utf8&logSlowQueries=true&slowQueryThresholdMillis=1000&logTraceApi=true&logTraceNetwork=true"); 
+    ds.setUrl("jdbc:cubrid:192.168.0.1:55300:demodb:::?charset=utf8&logSlowQueries=true&slowQueryThresholdMillis=1000&logTraceApi=true&logTraceNetwork=true"); 
 
 Call getConnection method to get a connection object from DataSource.
 

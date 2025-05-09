@@ -625,7 +625,7 @@ The following example shows **access_ip_control_file**.
     [@dbname3]
     192.168.1.15
 
-The example above shows that *dbname1* database allows the access connections from the IP address 192.10.20.30 or any IP address that starts with 192.156.
+The example above shows the *dbname1* database allows the access connections from the IP address 192.10.20.30 or from any IP address that starts with 192.156.
 *dbname2* database allows the access of every IP address;
 *dbname3* database allows the access of an IP address, 192.168.1.15, only.
 
@@ -1557,10 +1557,10 @@ The following example shows how to specify the IPs allowed in ip_list_file.
 
 The descriptions for the IPs specified in the example above are as follows:
 
-*   The first line setting allows an access from 192.168.1.25.
-*   The second line setting allows an access from all IPs starting with 192.168.
-*   The third line setting allows an access from all IPs starting with 192.
-*   The fourth line setting allows an access from all IPs.
+*   The first line setting allows access from 192.168.1.25.
+*   The second line setting allows access from all IPs starting with 192.168.
+*   The third line setting allows access from all IPs starting with 192.
+*   The fourth line setting allows access from all IPs.
 
 For the broker which has already been running, you can modify the configuration file or check the currently applied status of configuration by using the following commands.
 

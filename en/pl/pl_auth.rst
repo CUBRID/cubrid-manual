@@ -1,7 +1,44 @@
-------------------------------------
-Owner's Rights and Caller's Rights
-------------------------------------
+--------------------------------
+Stored Procedure Authorization
+--------------------------------
 
+This chapter explains the permissions required to call a stored procedure and how to grant call permissions to other users.
+It also details the difference between Owner's Rights and Caller's Rights, specifying under which user's permissions the call is made.
+
+.. _pl-call-authorization:
+
+Granting Procedure Call Permission
+============================================
+
+When a stored procedure is created, it belongs to the schema of the user who created it, and only users with **owner** and **DBA** permissions can call it.
+If the owner of the stored procedure grants call permission to another user, the user granted permission can call the stored procedure of the other user.
+
+The important thing to note is that if a routine that is not authorized is referenced in the implementation, it may result in a compilation or execution error.
+Therefore, it is necessary to check whether the stored procedure references authorized objects.
+
+CUBRID allows you to grant call permission to a stored procedure using the :ref:`GRANT <granting-authorization>` statement.
+
+.. code-block:: sql
+
+    GRANT EXECUTE ON PROCEDURE procedure_name TO user_name;
+
+Conversely, you can revoke the execution privilege on a procedure by using the :ref:`REVOKE <revoking-authorization>` statement.
+
+.. code-block:: sql
+
+    REVOKE EXECUTE ON PROCEDURE procedure_name FROM user_name;
+
+.. note::
+        
+    Stored procedures and stored functions do not support the **EXECUTE ON PROCEDURE** permission with the **WITH GRANT OPTION** option.
+    Therefore, the owner of the stored procedure cannot grant the permission to another user.
+
+.. _pl-authid:
+
+The Difference Between Owner's Rights and Caller's Rights
+=================================================================
+
+When a stored procedure or function has call permission, it can specify which user's rights to execute it.
 Stored procedures and functions can be executed with either **Owner's Rights** or **Caller's Rights**. The execution rights can be chosen during the creation of the stored procedure or function, and it will be executed with the specified rights.
 
 The following explains each type of rights and their differences:
@@ -50,7 +87,9 @@ The following is an example of logging in as a DBA user, creating a stored funct
         SELECT dba.fn_current_user();
 
 ::
-
+        
+        -- As shown, even when called by user U1, the result shows 'DBA@' because the function executes with Owner's Rights
+        
         dba.fn_current_user()
         ======================
         'DBA@<host>'    

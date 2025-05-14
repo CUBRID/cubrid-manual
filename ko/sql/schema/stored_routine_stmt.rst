@@ -33,9 +33,9 @@ CREATE PROCEDURE
 *   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *procedure_name*: 생성할 저장 프로시저의 이름을 지정한다. (최대 222바이트)
 *   *parameter_name*: 인자의 이름을 지정한다. (최대 254바이트)
-*   *sql_type*: 인자의 데이터 타입을 지정한다.
-*   *default_arg*: 인자의 기본값을 지정한다. :doc:`/pl/pl_default_args`\를 참고한다.
-*   *authid*: 저장 프로시저의 실행 권한을 지정한다. 자세한 내용은 :doc:`/pl/pl_authid`\을 참고한다.
+*   *sql_type*: 인자의 데이터 타입을 지정한다. 지정할 수 있는 데이터 타입은 :ref:`pl-arg-type-restriction`\을 참고한다.
+*   *default_arg*: 인자의 기본값을 지정한다. :ref:`pl-arg-default`\를 참고한다.
+*   *authid*: 저장 프로시저의 실행 권한을 지정한다. 자세한 내용은 :ref:`pl-authid`\을 참고한다.
 *   *parameter_comment_string*: 인자 커멘트 문자열을 지정한다.
 *   *body*: 저장 프로시저의 본문을 지정한다.
 *   *procedure_comment*: 저장 프로시저의 커멘트 문자열을 지정한다.
@@ -131,10 +131,10 @@ CREATE FUNCTION
 *   *schema_name*: 스키마 이름을 지정한다(최대 31바이트). 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *function_name*: 생성할 저장 함수의 이름을 지정한다(최대 222바이트).
 *   *parameter_name*: 인자의 이름을 지정한다(최대 254바이트).
-*   *sql_type*: 인자 또는 리턴 값의 데이터 타입을 지정한다. 지정할 수 있는 데이터 타입은 :ref:`pl-supported_sql_type`\을 참고한다.
-*   *default_arg*: 인자의 기본값을 지정한다. :doc:`/pl/pl_default_args`\를 참고한다.
+*   *sql_type*: 인자 또는 리턴 값의 데이터 타입을 지정한다. 지정할 수 있는 데이터 타입은 :ref:`pl-arg-type-restriction`\을 참고한다.
+*   *default_arg*: 인자의 기본값을 지정한다. :ref:`pl-arg-default`\를 참고한다.
 *   *param_comment_string*: 인자 커멘트 문자열을 지정한다.
-*   *authid*: 저장 함수의 실행 권한을 지정한다. 자세한 내용은 :doc:`/pl/pl_authid`\을 참고한다.
+*   *authid*: 저장 함수의 실행 권한을 지정한다. 자세한 내용은 :ref:`pl-authid`\을 참고한다.
 *   *deterministic*: 저장 함수가 결정적 함수인지 여부를 지정한다. 자세한 내용은 :ref:`pl-deterministic`\을 참고한다.
 *   *body*: 저장 함수의 본문을 지정한다.
 *   *function_comment*: 저장 함수의 커멘트 문자열을 지정한다.

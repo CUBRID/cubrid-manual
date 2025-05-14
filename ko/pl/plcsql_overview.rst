@@ -173,13 +173,33 @@ SELECT 문을 :ref:`커서 선언 <cursor_decl>`\이나 :ref:`OPEN-FOR <cursor_m
         ...
     END;
 
-INTO 절을 포함안 SELECT 문의 조회 결과는 한 건의 결과 레코드여야 하며, 두건 이상의 결과를 가져오는 경우는 TOO_MANY_ROWS Exception이 발생한다.
+INTO 절을 포함한 SELECT 문의 조회 결과는 한 건의 결과 레코드여야 하며, 두건 이상의 결과를 가져오는 경우는 TOO_MANY_ROWS Exception이 발생한다.
 결과가 없을 경우에는 NO_DATA_FOUND Exception이 발생한다.
 
 Static SQL 문의 WHERE 절이나 VALUES 절 안에서처럼 값을 필요로 하는 자리에
 PL/CSQL에서 선언한 변수, 상수, 프로시저/함수 인자를 쓸 수 있다.
 단, 이들은 BOOLEAN이나 SYS_REFCURSOR 타입을 가져서는 안된다. :ref:`SQL 데이터타입 <datatype_index>`\이
 이들을 포함하지 않기 때문이다.
+
+Static SQL 중에서 SELECT 문에 대해서는 :ref:`DBLink <dblink-introduction>` 기능이 지원되지만,
+DML (INSERT, UPDATE, DELETE, MERGE, REPLACE) 문에 대해서는 지원되지 않는다.
+DML 문장에서 DBLink 기능을 사용하려면, 아래에서 설명하는 Dynamic SQL 을 사용해야 한다.
+
+.. code-block:: sql
+
+    CREATE OR REPLACE PROCEDURE test_dblink_in_dml
+    AS
+    BEGIN
+        INSERT INTO athlete@remote_svr(name, gender, nation_code, event)
+        VALUES ('Park Taehwan', 'M', 'KOR', 'Swimming');
+    END;
+
+    In line 4, column 8,
+
+    ERROR: Stored procedure compile error: Semantic: before '
+           VALUES ('Park Taehwan', 'M', 'KOR', 'Swimming')'
+    DBLink DML is not yet supported for PL/CSQL Static SQL.
+
 
 다음은 Static SQL 사용 예이다.
 
@@ -637,7 +657,7 @@ Static SQL UPDATE 문에도 다음과 같이 'SET ROW = <record>' 구문을 사�
 정밀도와 스케일 지정 예외
 ==============================
 
-:ref:`PL/CSQL에서 지원하는 데이터 타입 <datatype_index>` 중에 NUMERIC은 정밀도와 스케일을,
+:ref:`PL/CSQL에서 지원하는 데이터 타입 <types>` 중에 NUMERIC은 정밀도와 스케일을,
 CHAR와 VARCHAR는 길이를 지정할 수 있다.
 그러나, 저장 프로시저/함수의 인자 타입과 리턴 타입에는 정밀도와 스케일 지정이 허용되지 않는다.
 내부 프로시저/함수에서도 마찬가지이다.
@@ -829,11 +849,11 @@ Exception의 종류를 식별하는데 사용할 수 있다.
 
 CSQL에서 athlete 테이블에 존재하지 않는 이름을 인자로 주어 NO_DATA_FOUND Exception을 일으켰을 때 결과는 다음과 같다.
 
-.. code-block::
+.. code-block:: sql
 
    select athlete_code('x');
 
-   In line 1, column 22,
+   In the command from line 1,
 
    ERROR: Stored procedure execute error:
      (line 6, column 5) no data found
@@ -841,7 +861,7 @@ CSQL에서 athlete 테이블에 존재하지 않는 이름을 인자로 주어 N
 
    0 command(s) successfully processed.
 
-위에서 위치 (1, 22)는 SELECT 문 안에서의 위치를 나타내고, (6, 5)는 athlete_code()를 선언한 CREATE 문 안에서의
+위에서 위치 1은 SELECT 문 안에서의 위치를 나타내고, (6, 5)는 athlete_code()를 선언한 CREATE 문 안에서의
 위치를 나타낸다.
 
 시스템 설정 적용

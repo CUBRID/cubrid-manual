@@ -1542,6 +1542,8 @@ You can use **;HISTORYRead** session command to read input with history number i
 
     csql> ;historyread 1
 
+.. _scmd_edit:
+
 **Calling the default editor (;EDIT)**
 
 This command calls the specified editor. The default editor is **vi** on Linux **Notepad** on Windows environment. Use **;EDITOR_Cmd** command to specify a different editor.

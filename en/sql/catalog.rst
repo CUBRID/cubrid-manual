@@ -844,7 +844,7 @@ comment              CHARACTER VARYING(1024)     Comment to describe the argumen
 
             - **is_optional**: A value of **1** indicates the argument is optional, while **0** indicates it is required.
 
-            - **default_value**: The default value of the argument. For more details, refer to :ref:`pl-arg-default-value`.
+            - **default_value**: The default value of the argument. For more details, refer to :ref:`pl-arg-default`.
 
 .. _-db-stored-procedure-code:
 
@@ -874,7 +874,7 @@ ocode                CHARACTER VARYING(1073741823) Object code
                 - A value of **1** indicates that the stored procedure code is loaded only once and changes to the procedure code are not applied until the server restarts.
                 - A value of **0** indicates that the stored procedure code is loaded every time, and changes are applied immediately using DDL or procedure load utilities.
 
-                - Used in :ref:`pl-jni`.
+                - Used in :ref:`jsp-jni`.
 
             - **is_system_generated**: A value of **1** indicates that the code is system-generated, while **0** indicates it is user-written code.
 
@@ -2153,7 +2153,7 @@ comment              VARCHAR(1024)               Comment to describe the argumen
 
                 - **is_optional**: A value of **YES** indicates the argument is optional, while **NO** indicates it is required.
 
-                - **default_value**: The default value of the argument. For more details, refer to :ref:`pl-arg-default-value`.
+                - **default_value**: The default value of the argument. For more details, refer to :ref:`pl-arg-default`.
 
 The following example shows how to retrieve arguments the 'process_order' Stored procedure in the order of the arguments.
 

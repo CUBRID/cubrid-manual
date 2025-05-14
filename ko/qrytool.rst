@@ -229,8 +229,6 @@ CUBRID가 지원하는 드라이버는 다음과 같다.
 
 *   :doc:`CUBRID ODBC driver <api/odbc>` (`Downloads ODBC <http://ftp.cubrid.org/CUBRID_Drivers/ODBC_Driver/>`_)
 
-*   :doc:`CUBRID OLE DB driver <api/oledb>` (`Downloads OLE DB <http://ftp.cubrid.org/CUBRID_Drivers/OLEDB_Driver/>`_)
-
 *   :doc:`CUBRID ADO.NET driver <api/adodotnet>` (`Downloads ADO.NET <http://ftp.cubrid.org/CUBRID_Drivers/ADO.NET_Driver/>`_)
 
 *   :doc:`CUBRID Perl driver <api/perl>` (`Downloads Perl <http://ftp.cubrid.org/CUBRID_Drivers/Perl_Driver/>`_)

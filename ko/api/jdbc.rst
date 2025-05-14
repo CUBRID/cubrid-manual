@@ -351,7 +351,7 @@ DataSource 객체를 생성하려면 다음과 같이 호출한다.
     ... 
     CUBRIDDataSource ds = null;
     ds = new CUBRIDDataSource(); 
-    ds.setUrl("jdbc:cubrid:10.113.153.144:55300:demodb:::?charset=utf8&logSlowQueries=true&slowQueryThresholdMillis=1000&logTraceApi=true&logTraceNetwork=true"); 
+    ds.setUrl("jdbc:cubrid:192.168.0.1:55300:demodb:::?charset=utf8&logSlowQueries=true&slowQueryThresholdMillis=1000&logTraceApi=true&logTraceNetwork=true"); 
 
 DataSource로부터 연결 객체를 얻기 위해서는 getConnection 메서드를 호출한다.
 
@@ -1568,7 +1568,7 @@ CUBRIDDataSource에 대한 자세한 설명은 :ref:`jdbc-conn-datasource`\ 을 
 JDBC API
 ========
 
-JDBC API에 대한 자세한 내용은 Java API Specification 문서(https://docs.oracle.com/javase/7/docs/api/)를 참고한다. 기타 Java에 대한 자세한 내용은 Java SE Documentation 문서(https://www.oracle.com/technetwork/java/javase/documentation/index.htm)를 참고한다.
+JDBC API에 대한 자세한 내용은 Java API Specification 문서(https://docs.oracle.com/javase/7/docs/api/)를 참고한다. 기타 Java에 대한 자세한 내용은 Java SE Documentation 문서(https://www.oracle.com/java/technologies/javase-documentation.html)를 참고한다.
 
 :ref:`커서 유지(cursor holdability) <cursor-holding>`\ 와 관련하여 설정을 명시하지 않으면 기본으로 커서가 유지된다.
 

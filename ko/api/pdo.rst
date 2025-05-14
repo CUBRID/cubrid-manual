@@ -132,7 +132,7 @@ PDO_CUBRID 데이터 원본 이름(DSN)은 다음과 같은 요소로 구성된�
 
 CUBRID PDO 드라이버에 의해 정의되는 상수(predefined constants)는 CUBRID PDO 드라이버가 PHP와 함께 컴파일되거나 런타임에 동적으로 로드되는 경우에만 사용할 수 있다. 이처럼 특정 드라이버에 의해 정의된 상수를 다른 드라이버와 함께 사용하면 예상과 다르게 동작할 수도 있다.
 
-코드가 여러 개의 드라이버와 함께 실행될 수 있다면, **PDO_ATTR_DRIVER_NAME** 속성 값을 얻어 드라이버를 확인하기 위해 `PDO::getAttribute() <http://www.php.net/manual/en/pdo.getattribute.php>`_ 함수를 사용할 수 있다.
+코드가 여러 개의 드라이버와 함께 실행될 수 있다면, **PDO_ATTR_DRIVER_NAME** 속성 값을 얻어 드라이버를 확인하기 위해 `PDO::getAttribute() <https://www.php.net/manual/en/pdo.getattribute.php>`_ 함수를 사용할 수 있다.
 
 다음 상수는 `PDO::cubrid_schema <https://www.php.net/manual/en/pdo.cubrid-schema.php>`_ () 함수를 이용하여 스키마 정보를 얻을 때 사용할 수 있다.
 
@@ -183,7 +183,7 @@ PDO 예제 프로그램
 CUBRID PDO 드라이버 확인
 ------------------------
 
-사용 가능한 PDO 드라이버를 확인하려면 다음과 같이 `PDO::getAvailableDrivers <http://www.php.net/manual/en/pdo.getavailabledrivers.php>`_ () 함수를 사용한다.
+사용 가능한 PDO 드라이버를 확인하려면 다음과 같이 `PDO::getAvailableDrivers <https://www.php.net/manual/en/pdo.getavailabledrivers.php>`_ () 함수를 사용한다.
 
 .. code-block:: php
 
@@ -252,13 +252,13 @@ SELECT 실행
 
 PDO에서 SQL 질의를 수행하려면 질의나 응용 프로그램의 성격에 따라 다음 중 하나의 방법을 사용할 수 있다.
 
-*   `query <http://www.php.net/manual/en/pdo.query.php>`_ () 함수 사용
-*   prepared statements( `prepare <http://www.php.net/manual/en/pdo.prepare.php>`_ ()/ `execute <http://www.php.net/manual/en/pdostatement.execute.php>`_ ()) 함수 사용
-*   `exec <http://www.php.net/manual/en/pdo.exec.php>`_ () 함수 사용
+*   `query <https://www.php.net/manual/en/pdo.query.php>`_ () 함수 사용
+*   prepared statements( `prepare <https://www.php.net/manual/en/pdo.prepare.php>`_ ()/ `execute <https://www.php.net/manual/en/pdostatement.execute.php>`_ ()) 함수 사용
+*   `exec <https://www.php.net/manual/en/pdo.exec.php>`_ () 함수 사용
 
-다음 예제에서는 가장 간단한 `query <http://www.php.net/manual/en/pdo.query.php>`_ () 함수를 사용한다. 리턴 값은 PDOStatement 객체인 resultset에서 $rs["column_name"]와 같이 칼럼 이름을 이용하여 얻을 수 있다.
+다음 예제에서는 가장 간단한 `query <https://www.php.net/manual/en/pdo.query.php>`_ () 함수를 사용한다. 리턴 값은 PDOStatement 객체인 resultset에서 $rs["column_name"]와 같이 칼럼 이름을 이용하여 얻을 수 있다.
 
-`query <http://www.php.net/manual/en/pdo.query.php>`_ () 함수를 사용할 때에는 질의 코드가 제대로 이스케이프되었는지 확인해야 한다. 이스케이프에 대한 내용은 `PDO::quote <https://www.php.net/manual/en/pdo.quote.php>`_ ()를 참고한다.
+`query <https://www.php.net/manual/en/pdo.query.php>`_ () 함수를 사용할 때에는 질의 코드가 제대로 이스케이프되었는지 확인해야 한다. 이스케이프에 대한 내용은 `PDO::quote <https://www.php.net/manual/en/pdo.quote.php>`_ ()를 참고한다.
 
 .. code-block:: php
 
@@ -298,7 +298,7 @@ PDO에서 SQL 질의를 수행하려면 질의나 응용 프로그램의 성격�
 UPDATE 실행
 -----------
 
-다음은 prepared statement와 파라미터를 사용하여 UPDATE를 실행하는 예제이다. prepared statement 대신 `exec <http://www.php.net/manual/en/pdo.exec.php>`_ () 함수를 사용할 수도 있다.
+다음은 prepared statement와 파라미터를 사용하여 UPDATE를 실행하는 예제이다. prepared statement 대신 `exec <https://www.php.net/manual/en/pdo.exec.php>`_ () 함수를 사용할 수도 있다.
 
 .. code-block:: php
 
@@ -464,16 +464,16 @@ prepared statement는 PDO가 제공하는 유용한 기능 중 하나로, 사용
 PDO::getAttribute() 사용
 ------------------------
 
-`PDO::getAttribute <http://www.php.net/manual/en/pdo.getattribute.php>`_ () 함수는 다음과 같은 데이터베이스 연결 속성을 조회할 때 유용하다.
+`PDO::getAttribute <https://www.php.net/manual/en/pdo.getattribute.php>`_ () 함수는 다음과 같은 데이터베이스 연결 속성을 조회할 때 유용하다.
 
 *   드라이버 이름
 *   데이터베이스 버전
 *   자동 커밋 모드 여부
 *   오류 모드
 
-속성을 쓸 수 있다면 `PDO::setAttribute <http://www.php.net/manual/en/pdo.setattribute.php>`_ () 함수를 사용하여 속성을 설정할 수 있다.
+속성을 쓸 수 있다면 `PDO::setAttribute <https://www.php.net/manual/en/pdo.setattribute.php>`_ () 함수를 사용하여 속성을 설정할 수 있다.
 
-다음은 `PDO::getAttribute <http://www.php.net/manual/en/pdo.getattribute.php>`_ () 함수를 사용하여 클라이언트와 서버의 현재 버전을 조회하는 PHP PDO 스크립트이다.
+다음은 `PDO::getAttribute <https://www.php.net/manual/en/pdo.getattribute.php>`_ () 함수를 사용하여 클라이언트와 서버의 현재 버전을 조회하는 PHP PDO 스크립트이다.
 
 .. code-block:: php
 
@@ -531,6 +531,6 @@ CUBRID PDO 확장은 데이터베이스 스키마와 메타데이터 정보를 �
 PDO API
 =======
 
-PDO API와 관련하여 http://www.php.net/manual/en/book.pdo.php\를 참고한다.
+PDO API와 관련하여 https://www.php.net/manual/en/book.pdo.php\를 참고한다.
 
 CUBRID PDO 드라이버가 제공하는 PDO API는 http://ftp.cubrid.org/CUBRID_Docs/Drivers/PDO/\를 참고한다.

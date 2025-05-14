@@ -194,6 +194,25 @@ variables, constants, and procedure/function parameters declared in PL/CSQL can 
 However, these must not have the `BOOLEAN` or `SYS_REFCURSOR` type,
 as they are not included in :ref:`SQL Data Types <datatype_index>`.
 
+For Static SQL, the :ref:`DBLink <dblink-introduction>` feature is supported for SELECT statements,
+but it is not supported for DML statements (INSERT, UPDATE, DELETE, MERGE, REPLACE).
+To use the DBLink feature inside DML statements, you have to use Dynamic SQL described below.
+
+.. code-block:: sql
+
+    CREATE OR REPLACE PROCEDURE test_dblink_in_dml
+    AS
+    BEGIN
+        INSERT INTO athlete@remote_svr(name, gender, nation_code, event)
+        VALUES ('Park Taehwan', 'M', 'KOR', 'Swimming');
+    END;
+
+    In line 4, column 8,
+
+    ERROR: Stored procedure compile error: Semantic: before '
+           VALUES ('Park Taehwan', 'M', 'KOR', 'Swimming')'
+    DBLink DML is not yet supported for PL/CSQL Static SQL.
+
 The following is an example of using Static SQL.
 
 .. code-block:: sql
@@ -874,7 +893,7 @@ For example, if the exception handler clauses are removed from the above `athlet
 Then, if a name that does not exist in the `athlete` table is passed as an argument in CSQL,
 a `NO_DATA_FOUND` exception will be raised as the result.
 
-.. code-block::
+.. code-block:: sql
 
    select athlete_code('x');
 

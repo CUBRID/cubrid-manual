@@ -158,7 +158,7 @@ The following **cubrid heartbeat** utility syntax shows how to use CUBRID HA. On
 For details, see :ref:`cubrid-heartbeat`.
 
 Controlling CUBRID Procedural Langauge (PL) Server
--------------------------------------------------
+--------------------------------------------------------
 
 The following **cubrid** utility syntax is used to control the CUBRID Procedural Langauge (PL) server process.
 
@@ -616,8 +616,8 @@ The following example shows **access_ip_control_file**.
 ::
 
     [@dbname1]
-    10.10.10.10
-    10.156.*
+    192.10.20.30
+    192.156.*
 
     [@dbname2]
     *
@@ -625,7 +625,7 @@ The following example shows **access_ip_control_file**.
     [@dbname3]
     192.168.1.15
 
-The example above shows that *dbname1* database allows the access of IP addresses starting with 10.156;
+The example above shows the *dbname1* database allows the access connections from the IP address 192.10.20.30 or from any IP address that starts with 192.156.
 *dbname2* database allows the access of every IP address;
 *dbname3* database allows the access of an IP address, 192.168.1.15, only.
 
@@ -1552,15 +1552,15 @@ The following example shows how to specify the IPs allowed in ip_list_file.
 
     192.168.1.25
     192.168.*
-    10.*
+    192.*
     *
 
 The descriptions for the IPs specified in the example above are as follows:
 
-*   The first line setting allows an access from 192.168.1.25.
-*   The second line setting allows an access from all IPs starting with 192.168.
-*   The third line setting allows an access from all IPs starting with 10.
-*   The fourth line setting allows an access from all IPs.
+*   The first line setting allows access from 192.168.1.25.
+*   The second line setting allows access from all IPs starting with 192.168.
+*   The third line setting allows access from all IPs starting with 192.
+*   The fourth line setting allows access from all IPs.
 
 For the broker which has already been running, you can modify the configuration file or check the currently applied status of configuration by using the following commands.
 
@@ -1593,11 +1593,11 @@ The below is an example of displaying results.
     demodb:dba:iplist1.txt 
            CLIENT IP LAST ACCESS TIME 
     ========================================== 
-      10.20.129.11 
-      10.113.153.144 2013-11-07 15:19:14 
-      10.113.153.145 
-      10.113.153.146 
-      10.64.* 2013-11-07 15:20:50 
+      192.20.30.40
+      192.168.1.0 2023-11-07 15:19:14    
+      192.168.2.0
+      192.168.3.0
+      192.169.* 2023-11-07 15:20:50 
   
     testdb:dba:iplist2.txt 
            CLIENT IP LAST ACCESS TIME 
@@ -3175,7 +3175,7 @@ CUBRID Procedural Langauge Server
 ====================================
 
 Starting CUBRID Procedural Langauge Server
----------------------------------------
+----------------------------------------------
 
 | The CUBRID Procedural Langauge Server automatically starts when the database server starts and stops when the database server stops.
 | If you do not want to start the Procedural Langauge Server with the database server, set the **stored_procedure** value to **no** for the corresponding database in the CUBRID configuration file (**cubrid.conf**).
@@ -3189,7 +3189,7 @@ Starting CUBRID Procedural Langauge Server
 For more details on other types of errors that may occur when starting the CUBRID Procedural Langauge Server, see :ref:`cubrid-pl-server-errors`.
 
 Restarting CUBRID Procedural Langauge Server
------------------------------------
+------------------------------------------------
 
 The following is a method to restart the Procedural Langauge Server for *demodb*.
 When the restart command for the Procedural Langauge Server is issued, the Procedural Langauge Server stops and is restarted by the database server.
@@ -3213,7 +3213,7 @@ If the database server is not running, the restart command does not work.
     Restarting the Procedural Langauge Server will interrupt and roll back any currently running transactions.
 
 Checking the Status of CUBRID Procedural Langauge Server
-----------------------------------------
+--------------------------------------------------------------
 
 The following is an example of checking the status of the CUBRID Procedural Langauge Server for *demodb*.
 The name of the target database, *demodb*, on which the Procedural Langauge Server is currently running, is displayed.
@@ -3233,7 +3233,7 @@ Additionally, the server's PID, port number, and applied JVM options are display
 .. _cubrid-pl-server-config:
 
 Procedural Langauge Server Configuration
--------------------------------------
+-------------------------------------------
 
 .. _cubrid-pl-environment-configuration:
 
@@ -3268,7 +3268,7 @@ The following is an example of setting the **CUBRID_JAVA_HOME** environment vari
 .. _cubrid-pl-system-parameter:
 
 Procedural Langauge Server System Parameters
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The following table lists the server parameters related to the Procedural Langauge Server that can be set in the configuration file (**cubrid.conf**).
 
@@ -3289,7 +3289,7 @@ For more details on these parameters, see :ref:`cubrid-conf`.
 .. _cubrid-pl-server-log:
 
 CUBRID Procedural Langauge Server Logs
-------------------------------------
+------------------------------------------
 
 The logs of the CUBRID Procedural Langauge Server are stored in the **log/** directory of the installation directory. The following log files are created for each database.
 
@@ -3345,7 +3345,7 @@ If an exception occurs while executing stored procedures/functions in the VM, th
 .. _cubrid-pl-server-errors:
 
 CUBRID Procedural Langauge Errors
--------------------------------
+------------------------------------
 
 The following are error messages for errors that may occur when starting the CUBRID Procedural Langauge Server.
 The error messages are stored in **$CUBRID/log**/\ *<db_name>_pl*\ **.err**.
@@ -3366,23 +3366,23 @@ The error messages are stored in **$CUBRID/log**/\ *<db_name>_pl*\ **.err**.
 The following are error messages for errors that may occur when there are connection issues, including when the CUBRID Procedural Langauge Server is not started.
 The error messages are stored in **$CUBRID/log/broker/error_log**/\ *<broker_name>_<app_server_num>*\ **.err**.
 
-+-------+---------------------------------------------------+------------------------------------------------------------+------------------------------------------------------------------------------------------------------+
-| Error | Error Message                                     | Description                                                | Action                                                                                               |
-| Code  |                                                   |                                                            |                                                                                                      |
-+=======+===================================================+============================================================+======================================================================================================+
-| -902  | PL server is not running.                         | The Procedural Langauge Server is not started               | Start the Procedural Langauge Server with the **cubrid pl start <db_name>** command.                  |
-|       |                                                   |                                                            | For more details, refer to :ref:`cubrid-pl-server`.                                                  |
-+-------+---------------------------------------------------+------------------------------------------------------------+------------------------------------------------------------------------------------------------------+
-| -903  | Can't connect PL server: %1$s                     | The Procedural Langauge Server cannot connect from CAS      | Restart the Procedural Langauge Server. If the restart fails,                                         |
-|       |                                                   | This error can occur for various reasons.                  | forcibly terminate the **cub_pl <db_name>** process using the Linux **kill** command.                |
-|       |                                                   | For example, if the Procedural Langauge Server is unstable  | Then restart the Procedural Langauge Server again.                                                    |
++-------+---------------------------------------------------+-------------------------------------------------------------+------------------------------------------------------------------------------------------------------+
+| Error | Error Message                                     | Description                                                 | Action                                                                                               |
+| Code  |                                                   |                                                             |                                                                                                      |
++=======+===================================================+=============================================================+======================================================================================================+
+| -902  | PL server is not running.                         | The Procedural Langauge Server is not started               | Start the Procedural Langauge Server with the **cubrid pl start <db_name>** command.                 |
+|       |                                                   |                                                             | For more details, refer to :ref:`cubrid-pl-server`.                                                  |
++-------+---------------------------------------------------+-------------------------------------------------------------+------------------------------------------------------------------------------------------------------+
+| -903  | Can't connect PL server: %1$s                     | The Procedural Langauge Server cannot connect from CAS      | Restart the Procedural Langauge Server. If the restart fails,                                        |
+|       |                                                   | This error can occur for various reasons.                   | forcibly terminate the **cub_pl <db_name>** process using the Linux **kill** command.                |
+|       |                                                   | For example, if the Procedural Langauge Server is unstable  | Then restart the Procedural Langauge Server again.                                                   |
 |       |                                                   | or if CAS cannot connect to the Procedural Langauge Server, |                                                                                                      |
-|       |                                                   | or if the Procedural Langauge unexpectedly terminates (kill)| Check if the Procedural Langauge Server's port is accessible from CAS using the                       |
-|       |                                                   | this error message is displayed.                           | **cubrid pl status <db_name>** command.                                                              |
-|       |                                                   |                                                            | The port may be blocked by a firewall, so open the port in the firewall.                             |
-|       |                                                   |                                                            | If necessary, set the **stored_procedure_port** parameter and restart the Procedural Langauge Server. |
-|       |                                                   |                                                            | For more details, refer to :ref:`connect-to-cubrid-server`.                                          |
-+-------+---------------------------------------------------+------------------------------------------------------------+------------------------------------------------------------------------------------------------------+
-| -905  | Networking with PL server failed: %1$d            | CAS received an incorrect packet from the Procedure        |                                                                                                      |
-|       |                                                   | Language Server                                            |                                                                                                      |
-+-------+---------------------------------------------------+------------------------------------------------------------+------------------------------------------------------------------------------------------------------+
+|       |                                                   | or if the Procedural Langauge unexpectedly terminates (kill)| Check if the Procedural Langauge Server's port is accessible from CAS using the                      |
+|       |                                                   | this error message is displayed.                            | **cubrid pl status <db_name>** command.                                                              |
+|       |                                                   |                                                             | The port may be blocked by a firewall, so open the port in the firewall.                             |
+|       |                                                   |                                                             | If necessary, set the **stored_procedure_port** parameter and restart the Procedural Langauge Server.|
+|       |                                                   |                                                             | For more details, refer to :ref:`connect-to-cubrid-server`.                                          |
++-------+---------------------------------------------------+-------------------------------------------------------------+------------------------------------------------------------------------------------------------------+
+| -905  | Networking with PL server failed: %1$d            | CAS received an incorrect packet from the Procedure         |                                                                                                      |
+|       |                                                   | Language Server                                             |                                                                                                      |
++-------+---------------------------------------------------+-------------------------------------------------------------+------------------------------------------------------------------------------------------------------+

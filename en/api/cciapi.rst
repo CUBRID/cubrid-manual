@@ -1626,10 +1626,11 @@ cci_get_class_num_objs
 CCI_GET_COLLECTION_DOMAIN
 -------------------------
 
-.. c:macro:: #define CCI_GET_COLLECTION_DOMAIN(u_type)
+.. c:macro:: CCI_GET_COLLECTION_DOMAIN(u_type)
 
     If *u_type* is set, multiset, or sequence type, this macro gets the domain of the set, multiset or sequence. If *u_type* is not a set type, the return value is the same as *u_type*.
 
+    :param Type u_type: (IN)
     :return: Type (CCI_U_TYPE)
 
 cci_get_cur_oid
@@ -2061,121 +2062,121 @@ cci_get_result_info
 CCI_GET_RESULT_INFO_ATTR_NAME
 -----------------------------
 
-.. c:macro:: #define CCI_GET_RESULT_INFO_ATTR_NAME(T_CCI_COL_INFO* res_info, int index)
+.. c:macro:: CCI_GET_RESULT_INFO_ATTR_NAME(res_info, index)
 
     The **CCI_GET_RESULT_INFO_ATTR_NAME** macro gets the actual attribute name of the *index*-th column of a prepared **SELECT** list. If there is no name for the attribute (constant, function, etc), " " (empty string) is returned. It does not check whether the specified argument, *res_info*, is **NULL** and whether *index* is valid. You cannot delete the returned memory pointer with **free**\ ().
 
-    :param res_info: (IN) A pointer to the column information fetched by :c:func:`cci_get_result_info`
-    :param index: (IN) Column index
+    :param T_CCI_COL_INFO* res_info: (IN) A pointer to the column information fetched by :c:func:`cci_get_result_info`
+    :param int index: (IN) Column index
     :return: Attribute name (char \*)
 
 CCI_GET_RESULT_INFO_CLASS_NAME
 ------------------------------
 
-.. c:macro:: #define CCI_GET_RESULT_INFO_CLASS_NAME(T_CCI_COL_INFO* res_info, int index)
+.. c:macro:: CCI_GET_RESULT_INFO_CLASS_NAME(res_info, index)
 
     The **CCI_GET_RESULT_INFO_CLASS_NAME** macro gets the *index*-th column's class name of a prepared **SELECT** list. It does not check whether the specified argument, *res_info*, is **NULL** and whether *index* is valid. You cannot delete the returned memory pointer with **free** (). The return value can be **NULL**.
 
-    :param res_info: (IN) Column info pointer by :c:func:`cci_get_result_info`
-    :param index: (IN) Column index
+    :param T_CCI_COL_INFO* res_info: (IN) Column info pointer by :c:func:`cci_get_result_info`
+    :param int index: (IN) Column index
     :return: Class name (char \*)
 
 CCI_GET_RESULT_INFO_IS_NON_NULL
 -------------------------------
 
-.. c:macro:: #define CCI_GET_RESULT_INFO_IS_NON_NULL(T_CCI_COL_INFO* res_info, int index)
+.. c:macro:: CCI_GET_RESULT_INFO_IS_NON_NULL(res_info, index)
 
     The **CCI_GET_RESULT_INFO_IS_NON_NULL** macro gets a value indicating whether the *index*-th column of a prepared **SELECT** list is nullable. It does not check whether the specified argument, *res_info*, is **NULL** and whether *index* is valid.
 
     When a column of a **SELECT** list is not a column but an expression, CUBRID cannot judge it's NON_NULL or not; therefore, CCI_GET_RESULT_INFO_IS_NON_NULL macro always returns 0.
 
-    :param res_info: (IN) Column info pointer by :c:func:`cci_get_result_info`
-    :param index: (IN) Column index
+    :param T_CCI_COL_INFO* res_info: (IN) Column info pointer by :c:func:`cci_get_result_info`
+    :param int index: (IN) Column index
     :return: 0: nullable, 1: non **NULL**
 
 CCI_GET_RESULT_INFO_NAME
 ------------------------
 
-.. c:macro:: #define CCI_GET_RESULT_INFO_NAME(T_CCI_COL_INFO* res_info, int index)
+.. c:macro:: CCI_GET_RESULT_INFO_NAME(res_info, index)
 
     The **CCI_GET_RESULT_INFO_NAME** macro gets the *index*-th column's name of a prepared **SELECT** list. It does not check whether the specified argument, *res_info*, is **NULL** and whether *index* is valid. You cannot delete the returned memory pointer with **free** ().
 
-    :param res_info: (IN) Column info pointer to :c:func:`cci_get_result_info`
-    :param index: (IN) Column index
+    :param T_CCI_COL_INFO* res_info: (IN) Column info pointer to :c:func:`cci_get_result_info`
+    :param int index: (IN) Column index
     :return: Column name (char \*)
 
 CCI_GET_RESULT_INFO_PRECISION
 -----------------------------
 
-.. c:macro:: #define CCI_GET_RESULT_INFO_PRECISION(T_CCI_COL_INFO* res_info, int index)
+.. c:macro:: CCI_GET_RESULT_INFO_PRECISION(res_info, index)
 
     The **CCI_GET_RESULT_INFO_PRECISION** macro gets the *index*-th column's precision of a prepared **SELECT** list. It does not check whether the specified argument, *res_info*, is **NULL** and whether *index* is valid.
 
-    :param res_info: (IN) Column info pointer by :c:func:`cci_get_result_info`
-    :param index: (IN) Column index
+    :param T_CCI_COL_INFO* res_info: (IN) Column info pointer by :c:func:`cci_get_result_info`
+    :param int index: (IN) Column index
     :return: precision (int)
 
 CCI_GET_RESULT_INFO_SCALE
 -------------------------
 
-.. c:macro:: #define CCI_GET_RESULT_INFO_SCALE(T_CCI_COL_INFO* res_info, int index)
+.. c:macro:: CCI_GET_RESULT_INFO_SCALE(res_info, index)
 
     The **CCI_GET_RESULT_INFO_SCALE** macro gets the *index*-th column's scale of a prepared **SELECT** list. It does not check whether the specified argument, *res_info*, is **NULL** and whether *index* is valid. 
     
-    :param res_info: (IN) Column info pointer by :c:func:`cci_get_result_info`
-    :param index: (IN) Column index
+    :param T_CCI_COL_INFO* res_info: (IN) Column info pointer by :c:func:`cci_get_result_info`
+    :param int index: (IN) Column index
     :return: scale (int)
 
 CCI_GET_RESULT_INFO_TYPE
 ------------------------
 
-.. c:macro:: #define CCI_GET_RESULT_INFO_TYPE(T_CCI_COL_INFO* res_info, int index)
+.. c:macro:: CCI_GET_RESULT_INFO_TYPE(res_info, index)
 
     The **CCI_GET_RESULT_INFO_TYPE** macro gets the *index*-th column's type of a prepared **SELECT** list. It does not check whether the specified argument, *res_info*, is **NULL** and whether *index* is valid.
 
     If you want to check which column is a SET type or not, use :c:macro:`CCI_IS_SET_TYPE`.
 
-    :param res_info: (IN) pointer to the column information fetched by :c:func:`cci_get_result_info`
-    :param index: (IN) Column index
+    :param T_CCI_COL_INFO* res_info: (IN) pointer to the column information fetched by :c:func:`cci_get_result_info`
+    :param int index: (IN) Column index
     :return: Column type (**T_CCI_U_TYPE**)
 
 CCI_IS_SET_TYPE
 ---------------
 
-.. c:macro:: #define CCI_IS_SET_TYPE(u_type)
+.. c:macro:: CCI_IS_SET_TYPE(u_type)
 
     The CCI_IS_SET_TYPE macro check whether *u_type* is set type.
 
-    :param u_type: (IN)
+    :param Type u_type: (IN)
     :return: 1 : set, 0 : not set
 
 CCI_IS_MULTISET_TYPE
 --------------------
-.. c:macro:: #define CCI_IS_MULTISET_TYPE(u_type)
+.. c:macro:: CCI_IS_MULTISET_TYPE(u_type)
 
     The CCI_IS_SET_TYPE macro check whether *u_type* is multiset type.
 
-    :param u_type: (IN)
+    :param Type u_type: (IN)
     :return: 1 : multiset, 0 : not multiset
 
 CCI_IS_SEQUENCE_TYPE
 --------------------
 
-.. c:macro:: #define CCI_IS_SEQUENCE_TYPE(u_type)
+.. c:macro:: CCI_IS_SEQUENCE_TYPE(u_type)
 
     The CCI_IS_SET_TYPE macro check whether *u_type* is sequence type.
 
-    :param u_type: (IN)
+    :param Type u_type: (IN)
     :return: 1 : sequence, 0 : not sequence
 
 CCI_IS_COLLECTION_TYPE
 ----------------------
 
-.. c:macro:: #define CCI_IS_COLLECTION_TYPE(u_type)
+.. c:macro:: CCI_IS_COLLECTION_TYPE(u_type)
 
     The CCI_IS_SET_TYPE macro check whether *u_type* is collection (set, multiset, sequence) type.
 
-    :param u_type: (IN)
+    :param Type u_type: (IN)
     :return: 1 : collection (set, multiset, sequence), 0 : not collection
 
 cci_get_version
@@ -2670,43 +2671,43 @@ cci_query_result_free
 CCI_QUERY_RESULT_ERR_NO
 -----------------------
 
-.. c:macro:: #define CCI_QUERY_RESULT_ERR_NO(T_CCI_QUERY_RESULT* query_result, int index)
+.. c:macro:: CCI_QUERY_RESULT_ERR_NO(query_result, index)
 
     Since query results performed by :c:func:`cci_execute_batch`, :c:func:`cci_execute_array`, or :c:func:`cci_execute_result` function are stored as an array of **T_CCI_QUERY_RESULT** structure, you need to check the query result for each item of the array.
     
     **CCI_QUERY_RESULT_ERR_NO** fetches the error number for the array item specified as *index*, if it is not an error, it returns 0. 
 
-    :param query_result: (IN) Query result to retrieve
-    :param index: (IN) Index of the result array(base :1). It represents a specific location of the result array.
+    :param T_CCI_QUERY_RESULT* query_result: (IN) Query result to retrieve
+    :param int index: (IN) Index of the result array(base :1). It represents a specific location of the result array.
     
     :return: Error number
 
 CCI_QUERY_RESULT_ERR_MSG
 ------------------------
 
-.. c:macro:: #define CCI_QUERY_RESULT_ERR_MSG(T_CCI_QUERY_RESULT* query_result, int index)
+.. c:macro:: CCI_QUERY_RESULT_ERR_MSG(query_result, index)
 
     The **CCI_QUERY_RESULT_ERR_MSG** macro gets error messages about query results executed by :c:func:`cci_execute_batch`, :c:func:`cci_execute_array` or :c:func:`cci_execute_result` function. If there is no error message, this macro returns ""(empty string). It does not check whether the specified argument, *query_result*, is **NULL**, and whether *index* is valid.
 
-    :param query_result: (IN) Query results of to be executed
-    :param index: (IN) Column index (base: 1)
+    :param T_CCI_QUERY_RESULT* query_result: (IN) Query results of to be executed
+    :param int index: (IN) Column index (base: 1)
     :return: Error message
 
 CCI_QUERY_RESULT_RESULT
 -----------------------
 
-.. c:macro:: #define CCI_QUERY_RESULT_RESULT(T_CCI_QUERY_RESULT* query_result, int index)
+.. c:macro:: CCI_QUERY_RESULT_RESULT(query_result, index)
 
     The **CCI_QUERY_RESULT_RESULT** macro gets the result count executed by :c:func:`cci_execute_batch`, :c:func:`cci_execute_array` or :c:func:`cci_execute_result` function. It does not check whether the specified argument, *query_result*, is **NULL** and whether *index* is valid.
 
-    :param query_result: (IN) Query results to be retrieved
-    :param index: (IN) Column index (base: 1)
+    :param T_CCI_QUERY_RESULT* query_result: (IN) Query results to be retrieved
+    :param int index: (IN) Column index (base: 1)
     :return: result count
 
 CCI_QUERY_RESULT_STMT_TYPE
 --------------------------
 
-.. c:macro:: #define CCI_QUERY_RESULT_STMT_TYPE(T_CCI_QUERY_RESULT* query_result, int index)
+.. c:macro:: CCI_QUERY_RESULT_STMT_TYPE(query_result, index)
 
     Since query results performed by :c:func:`cci_execute_batch`, :c:func:`cci_execute_array` or :c:func:`cci_execute_result` fuction are stored as an array of T_CCI_QUERY_RESULT  type, you need to check the query result for each item of the array. 
     
@@ -2714,8 +2715,8 @@ CCI_QUERY_RESULT_STMT_TYPE
     
     It does not check whether the specified argument, *query_result*, is **NULL** and whether *index* is valid.
 
-    :param query_result: (IN) Query results to be retrieved
-    :param index: (IN) Column index (base: 1)
+    :param T_CCI_QUERY_RESULT* query_result: (IN) Query results to be retrieved
+    :param int index: (IN) Column index (base: 1)
     :return: statement type (**T_CCI_CUBRID_STMT**)
 
 cci_register_out_param

@@ -443,6 +443,28 @@ LN
     =====================================================
          0.000000000000000e+00     1.000631880307906e+00
 
+LOG
+====
+
+.. function:: LOG ( x , y )
+
+    The **LOG** function returns the logarithm of *x* with base *y*, and its return type is **DOUBLE**. If either *x* or *y* is 0 or a negative number, the function returns an error.
+    When a non-numeric string is provided as input, the function's behavior depends on the value of the **return_null_on_function_errors** parameter in **cubrid.conf**.
+
+    :param x: The base of the logarithm; it must be an expression that evaluates to a positive value other than 1.
+    :param y: The antilogarithm of the logarithm expression; it must be an expression that evaluates to a positive value.
+    :rtype: DOUBLE
+
+.. code-block:: sql
+
+    SELECT log(2,1), log(2,8), log(10,1), log(10,1000);
+    
+::
+
+         log(2,1)                   log(2,8)                  log(10, 1)                log(10, 1000)
+    =======================================================================================================
+         0.000000000000000e+00     3.000000000000000e+00    0.000000000000000e+00     3.000000000000000e+00
+
 LOG2
 ====
 

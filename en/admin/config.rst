@@ -2743,7 +2743,7 @@ Access
 
 **ACCESS_LIST**
 
-    **ACCESS_LIST** is a parameter to configure the name of a file where the list of IP addresses of an application which allows access to the CUBRID broker is stored. To allow access by IP addresses access 210.192.33.* and 210.194.34.*, store them to a file (ip_lists.txt) and then assign the file name with the value of this parameter.
+    **ACCESS_LIST** is a parameter to configure the name of a file where the list of IP addresses of an application which allows access to the CUBRID broker is stored. To allow access by IP addresses access  192.168.10.* and  192.168.20.* store them to a file (ip_lists.txt) and then assign the file name with the value of this parameter.
 
 **ACCESS_MODE**
 

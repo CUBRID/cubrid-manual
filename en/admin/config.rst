@@ -1286,7 +1286,6 @@ The following are parameters for improving transaction commit performance. The t
     **dblink_auto_commit** is a setting that affects the commit behavior of queries executed through dblink during distributed transactions. The default value is **yes**.
 
     *    When this parameter is set to **yes**, queries executed via dblink are automatically committed immediately upon execution.
-
     *    Conversely, if it is set to **no**, the queries on the remote server connected through dblink are committed only when the entire transaction, including the dblink, is committed.
 
     In distributed transactions, the system attempts to commit the dblink queries first. If any of these commits fail, the entire transaction is rolled back.

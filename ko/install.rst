@@ -101,11 +101,11 @@ Linux 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항�
   
 **CUBRID 설치**
 
-설치 프로그램은 바이너리를 포함한 쉘 스크립트로 되어 있어 자동으로 설치할 수 있다. 다음은 리눅스에서 "CUBRID-11.4.0.1778-13a115a-Linux.x86_64.sh" 파일을 이용하여 CUBRID를 설치하는 예제이다. 
+설치 프로그램은 바이너리를 포함한 쉘 스크립트로 되어 있어 자동으로 설치할 수 있다. 다음은 리눅스에서 "CUBRID-11.4-latest-Linux.x86_64.sh" 파일을 이용하여 CUBRID를 설치하는 예제이다. 
 
 ::
 
-    $ sh CUBRID-11.4.0.1778-13a115a-Linux.x86_64.sh
+    $ sh CUBRID-11.4-latest-Linux.x86_64.sh
     Do you agree to the above license terms? (yes or no) : yes
     Do you want to install this software(CUBRID) to the default(/home1/cub_user/CUBRID) directory? (yes or no) [Default: yes] : yes
     Install CUBRID to '/home1/cub_user/CUBRID' ...
@@ -122,7 +122,7 @@ Linux 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항�
     $ . /home1/cub_user/.cubrid.sh
     $ cubrid service start
 
-위의 예제와 같이 다운로드한 파일(CUBRID-11.4.0.1778-13a115a-Linux.x86_64.sh)을 설치한 후, CUBRID 데이터베이스를 사용하기 위해서는 사용자의 shell 환경에 맞게 .cubrid.sh (또는 .cubrid.csh) 수행하여 CUBRID 관련 환경 변수값을 설정해야 한다. 
+위의 예제와 같이 다운로드한 파일(CUBRID-11.4-latest-Linux.x86_64.sh)을 설치한 후, CUBRID 데이터베이스를 사용하기 위해서는 사용자의 shell 환경에 맞게 .cubrid.sh (또는 .cubrid.csh) 수행하여 CUBRID 관련 환경 변수값을 설정해야 한다. 
 또한, 로그인시 자동 설정하려면 사용자의 shell 환경에 맞게 .cubrid.sh (또는 .cubrid.csh)를 .bashrc (또는 .cshrc) 등에 수동으로 등록해주어야 한다. ::
 
     $ . /home1/cub_user/.cubrid.sh
@@ -154,7 +154,7 @@ cubrid service를 구동시킨 후 정상적으로 구동되었는지 확인하�
 
 CentOS 6 환경에서 생성한 RPM 파일을 사용하여 CUBRID를 설치할 수 있으며, 일반적인 RPM 유틸리티와 동일한 방법으로 설치하고 삭제할 수 있다. 설치하면 새로운 시스템 그룹(cubrid) 및 사용자 계정(cubrid)이 생성되며, 설치 후에는 cubrid 사용자 계정으로 로그인하여 CUBRID 서비스를 시작해야 한다. ::
 
-    $ rpm -Uvh CUBRID-11.4.0.1778-13a115a-Linux.x86_64.rpm
+    $ rpm -Uvh CUBRID-11.4-latest-Linux.x86_64.rpm
 
 RPM을 실행하면 CUBRID는 "cubrid" 홈 디렉터리(/opt/cubrid)에 설치되고, CUBRID 관련 환경 설정 파일(cubrid.[c]sh)이 /etc/profile.d 디렉터리에 설치된다. 단, demodb는 자동으로 설치되지 않으므로 "cubrid" Linux 계정으로 로그인하여 /opt/cubrid/demo/make_cubrid_demo.sh를 실행하여야 한다. CUBRID가 설치 완료되면 "cubrid" Linux 계정으로 로그인하여 CUBRID 서비스를 다음과 같이 시작한다. ::
 
@@ -342,7 +342,7 @@ Linux 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항�
 
         ::
         
-            tar xvfz CUBRID-11.4.0.1778-13a115a-Linux.x86_64.tar.gz /home1/cub_user/
+            tar xvfz CUBRID-11.4-latest-Linux.x86_64.tar.gz /home1/cub_user/
 
         /home1/cub_user/ 이하에 CUBRID 디렉터리가 생기고 그 이하에 파일이 생성된다.
 

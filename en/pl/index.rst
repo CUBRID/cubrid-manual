@@ -3,9 +3,9 @@
 
 .. _sql_procedural_langauge:
 
-***************
+****************************
 CUBRID Procedural Language
-***************
+****************************
 
 This chapter introduces the procedural language extension features provided by CUBRID to develop stored procedures and functions.
 

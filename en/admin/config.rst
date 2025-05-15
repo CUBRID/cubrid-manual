@@ -232,6 +232,8 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 | :ref:`transaction-parameters` | async_commit                        | server parameter        |         | bool     | no                             |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | group_commit_interval_in_msecs      | server parameter        |         | msec     | 0                              | DBA only              |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | dblink_auto_commit                  | server parameter        |         | bool     | yes                            |                       |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 | :ref:`stmt-type-parameters`   | add_column_update_hard_default      | client/server parameter | O       | bool     | no                             | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -1278,6 +1280,20 @@ The following are parameters for improving transaction commit performance. The t
 **group_commit_interval_in_msecs**
 
     **group_commit_interval_in_msecs** is a parameter to configure the interval (in milliseconds), at which the group commit is to be performed. If the parameter is configured to **0**, which is the default value, the group commit is not performed. The group commit is a functionality that improves commit performance by combining multiple commits that occurred in the specified time period into a group so that commit logs are flushed on the disk at once.
+
+**dblink_auto_commit**
+
+    **dblink_auto_commit** is a setting that affects the commit behavior of queries executed through dblink during distributed transactions. The default value is **yes**.
+
+    *    When this parameter is set to **yes**, queries executed via dblink are automatically committed immediately upon execution.
+    *    Conversely, if it is set to **no**, the queries on the remote server connected through dblink are committed only when the entire transaction, including the dblink, is committed.
+
+    In distributed transactions, the system attempts to commit the dblink queries first. If any of these commits fail, the entire transaction is rolled back.
+
+    .. warning::
+
+    *    If some dblink queries have already been committed and the overall transaction commit later fails, those prior commits cannot be rolled back.
+    *    Savepoints are not supported in dblink transactions.
 
 .. _stmt-type-parameters:
 

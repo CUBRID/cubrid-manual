@@ -1395,7 +1395,7 @@ The following shows the examples of this syntax.
     <00001> Table_name   : 'tbl1'
             Index_name   : 'index_ab'
             Btid         : '(0|378|950)'
-            Node_type    : 'LEAF'
+            Node_level   : 'LEAF'
             Max_key_len  : 0
             Num_oids     : -1
             Num_nulls    : -1

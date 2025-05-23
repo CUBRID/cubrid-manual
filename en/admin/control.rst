@@ -1067,6 +1067,12 @@ If you do not specify options or arguments, the status of all brokers is display
 *   LQS: The number of long-duration queries processed per second
 *   PSIZE: Size of CAS
 *   STATUS: The current status of CAS (BUSY, IDLE, CLIENT_WAIT, CLOSE_WAIT)
+
+    *   IDLE: The state in which the database is not connected and no operations are being performed.
+    *   BUSY: The state in which an SQL statement is being executed or a task requested by the application is being processed.
+    *   CLIENT_WAIT: The requested operation has been completed, but the transaction has not yet ended.
+    *   CLOSE_WAIT: The transaction has been completed, but the connection remains open.
+
 *   % broker1 OFF: broker1's SERVICE parameter is set to OFF. So, broker1 is not started.
 
 .. note::

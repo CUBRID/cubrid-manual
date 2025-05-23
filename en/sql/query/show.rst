@@ -642,6 +642,10 @@ The following shows the examples of this syntax.
 Diagnostics
 ===========
 
+The following diagnostic SHOW statements can only be used by users who are DBA or members of the DBA group.
+
+::
+
 SHOW VOLUME HEADER
 ------------------
 

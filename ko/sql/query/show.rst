@@ -643,6 +643,10 @@ SHOW EXEC STATISTICS
 진단(Diagnostics)
 =================
 
+다음 진단(Diagnostics) SHOW 명령은 데이터베이스 계정이 DBA 또는 DBA 멤버인 사용자만 사용할 수 있다.
+
+::
+
 SHOW VOLUME HEADER
 ------------------
 
@@ -1402,7 +1406,7 @@ Columns                             VARCHAR(256)    인덱스를 구성하는 �
     <00001> Table_name   : 'tbl1'
             Index_name   : 'index_ab'
             Btid         : '(0|378|950)'
-            Node_type    : 'LEAF'
+            Node_level   : 'LEAF'
             Max_key_len  : 0
             Num_oids     : -1
             Num_nulls    : -1

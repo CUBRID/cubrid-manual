@@ -669,8 +669,7 @@ The following shows [options] available with the **cubrid copydb** utility.
 
 .. option:: --copy-lob-path
 
-    If the **\-\-copy-lob-path** option is specified, the lob directory path of the target database will be set to the lob directory path of the source database. If this option is omitted, the lob directory path of the target database will be set to <target database directory path>/lob. This option does not copy lob files and cannot be used with the **-B** option. ::
-
+    Sets the LOB directory location of the target database to be the same as the source database's LOB directory location. If this option is omitted, the default location will be ``<target_database_directory>/lob``. Note that this option does not copy LOB files and cannot be used together with the ``-B`` option ::
         cubrid copydb --copy-lob-path demodb new_demodb
 
 .. option:: -B, --lob-base-path=PATH

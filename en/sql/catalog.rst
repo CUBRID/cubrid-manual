@@ -1909,7 +1909,7 @@ The following example shows how to retrieve index key information of the class.
 DB_AUTH
 -------
 
-Represents authorization information of classes for which the current user has access authorization to a database.
+Represents authorization information for objects the current user is authorized to access.
 
 +--------------------+---------------+-----------------------------------------------------------------------------------------+
 |   Attribute Name   |   Data Type   |   Description                                                                           |
@@ -1918,27 +1918,29 @@ Represents authorization information of classes for which the current user has a
 +--------------------+---------------+-----------------------------------------------------------------------------------------+
 | grantee_name       | VARCHAR(255)  | Name of the user who is granted authorization                                           |
 +--------------------+---------------+-----------------------------------------------------------------------------------------+
-| class_name         | VARCHAR(255)  | Name of the class for which authorization is to be granted                              |
+| object_type        | VARCHAR(16)   | Type of the object for which authorization is granted                                   |
 +--------------------+---------------+-----------------------------------------------------------------------------------------+
-| owner_name         | VARCHAR(255)  | Owner name of the class for which authorization is to be granted                        |
+| object_name        | VARCHAR(255)  | Name of the object for which authorization is granted                                   |
++--------------------+---------------+-----------------------------------------------------------------------------------------+
+| owner_name         | VARCHAR(255)  | Owner name of the object for which authorization is granted                             |
 +--------------------+---------------+-----------------------------------------------------------------------------------------+
 | auth_type          | VARCHAR(7)    | Name of the authorization type granted                                                  |
 +--------------------+---------------+-----------------------------------------------------------------------------------------+
-| is_grantable       | VARCHAR(3)    | 'YES' if authorization for the class can be granted to other users, and 'NO' otherwise. |
+| is_grantable       | VARCHAR(3)    | 'YES' if authorization for the object can be granted to other users, and 'NO' otherwise.|
 +--------------------+---------------+-----------------------------------------------------------------------------------------+
 
-The following example how to retrieve authorization information of the classes whose names begin with *db_a*.
+The following example show how to retrieve authorization information for objects whose names begin with *db_a*.
 
 .. code-block:: sql
 
-    SELECT class_name, auth_type, grantor_name
+    SELECT object_name, auth_type, grantor_name
     FROM db_auth
-    WHERE class_name like 'db_a%'
+    WHERE object_name like 'db_a%'
     ORDER BY 1;
     
 ::
 
-      class_name               auth_type             grantor_name
+      object_name               auth_type             grantor_name
     ===============================================================
       'db_attr_setdomain_elm'  'SELECT'              'DBA'
       'db_attribute'           'SELECT'              'DBA'

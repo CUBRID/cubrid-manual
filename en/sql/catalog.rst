@@ -635,7 +635,7 @@ The following example shows how to retrieve the names of index that belongs to t
 _db_auth
 --------
 
-Represents user authorization information of the class. An index for the grantee is created.
+Represents user authorization information for objects. An index is created on grantee.
 
 +--------------------+---------------+----------------------------------------------------------------------------------+
 |   Attribute Name   |   Data Type   |   Description                                                                    |
@@ -644,11 +644,13 @@ Represents user authorization information of the class. An index for the grantee
 +--------------------+---------------+----------------------------------------------------------------------------------+
 | grantee            | db_user       | Authorization grantee                                                            |
 +--------------------+---------------+----------------------------------------------------------------------------------+
-| class_of           | _db_class     | Class object to which authorization is to be granted                             |
+| object_type        | INTEGER       | Type of the object for which authorization is granted                            |
++--------------------+---------------+----------------------------------------------------------------------------------+
+| object_of          | object        | Object for which authorization is granted                                        |
 +--------------------+---------------+----------------------------------------------------------------------------------+
 | auth_type          | VARCHAR(7)    | Type name of the authorization granted                                           |
 +--------------------+---------------+----------------------------------------------------------------------------------+
-| is_grantable       | INTEGER       | 1 if authorization for the class can be granted to other users, and 0 otherwise. |
+| is_grantable       | INTEGER       | 1 if authorization for the object can be granted to other users, and 0 otherwise.|
 +--------------------+---------------+----------------------------------------------------------------------------------+
 
 Authorization types supported by CUBRID are as follows:
@@ -665,9 +667,9 @@ The following example shows how to retrieve authorization information defined in
 
 .. code-block:: sql
 
-    SELECT grantor.name, grantee.name, auth_type
-    FROM _db_auth
-    WHERE class_of.class_name = 'db_trig';
+    SELECT a.grantor.name, a.grantee.name, a.auth_type
+    FROM _db_auth a JOIN _db_class c ON a.object_of = c.class_of
+    WHERE c.class_name = 'db_trig';
 
 ::
 

@@ -1942,7 +1942,7 @@ The following example show how to retrieve authorization information for objects
     
 ::
 
-      object_name               auth_type             grantor_name
+      object_name              auth_type             grantor_name
     ===============================================================
       'db_attr_setdomain_elm'  'SELECT'              'DBA'
       'db_attribute'           'SELECT'              'DBA'

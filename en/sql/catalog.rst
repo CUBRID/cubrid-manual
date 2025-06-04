@@ -1913,23 +1913,23 @@ DB_AUTH
 
 Represents authorization information for objects the current user is authorized to access.
 
-+--------------------+---------------+-----------------------------------------------------------------------------------------+
-|   Attribute Name   |   Data Type   |   Description                                                                           |
-+====================+===============+=========================================================================================+
-| grantor_name       | VARCHAR(255)  | Name of the user who grants authorization                                               |
-+--------------------+---------------+-----------------------------------------------------------------------------------------+
-| grantee_name       | VARCHAR(255)  | Name of the user who is granted authorization                                           |
-+--------------------+---------------+-----------------------------------------------------------------------------------------+
-| object_type        | VARCHAR(16)   | Type of the object for which authorization is granted                                   |
-+--------------------+---------------+-----------------------------------------------------------------------------------------+
-| object_name        | VARCHAR(255)  | Name of the object for which authorization is granted                                   |
-+--------------------+---------------+-----------------------------------------------------------------------------------------+
-| owner_name         | VARCHAR(255)  | Owner name of the object for which authorization is granted                             |
-+--------------------+---------------+-----------------------------------------------------------------------------------------+
-| auth_type          | VARCHAR(7)    | Name of the authorization type granted                                                  |
-+--------------------+---------------+-----------------------------------------------------------------------------------------+
-| is_grantable       | VARCHAR(3)    | 'YES' if authorization for the object can be granted to other users, and 'NO' otherwise.|
-+--------------------+---------------+-----------------------------------------------------------------------------------------+
++--------------------+---------------+-------------------------------------------------------------------------------------------+
+|   Attribute Name   |   Data Type   |   Description                                                                             |
++====================+===============+===========================================================================================+
+| grantor_name       | VARCHAR(255)  | Name of the user who grants authorization                                                 |
++--------------------+---------------+-------------------------------------------------------------------------------------------+
+| grantee_name       | VARCHAR(255)  | Name of the user who is granted authorization                                             |
++--------------------+---------------+-------------------------------------------------------------------------------------------+
+| object_type        | VARCHAR(16)   | Type of the object for which authorization is granted (CLASS, VCLASS, PROCEDURE, FUNCTION)|
++--------------------+---------------+-------------------------------------------------------------------------------------------+
+| object_name        | VARCHAR(255)  | Name of the object for which authorization is granted                                     |
++--------------------+---------------+-------------------------------------------------------------------------------------------+
+| owner_name         | VARCHAR(255)  | Owner name of the object for which authorization is granted                               |
++--------------------+---------------+-------------------------------------------------------------------------------------------+
+| auth_type          | VARCHAR(7)    | Name of the authorization type granted                                                    |
++--------------------+---------------+-------------------------------------------------------------------------------------------+
+| is_grantable       | VARCHAR(3)    | 'YES' if authorization for the object can be granted to other users, and 'NO' otherwise.  |
++--------------------+---------------+-------------------------------------------------------------------------------------------+
 
 The following example show how to retrieve authorization information for objects whose names begin with *db_a*.
 

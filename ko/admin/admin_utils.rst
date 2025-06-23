@@ -1031,7 +1031,7 @@ CUBRID 기본적으로 Plancache를 사용한다.
 
 Entries의 상세항목은 다음과 같다. 
 
-*   XASL_ID : 고유한 ID이며, plan cache key로도 사용된다.
+*   XASL_ID : 고유한 ID이며, plan cache key로도 사용된다. XASL_ID안의 time_stored는 plan cache에 저장된 시간으로 $>date -d @1750657813.784232 으로 변환하여 확인할 수 있다.
 *   fix_count : 해당 plan cache entry를 이용해서 수행 중인 thread 수
 *   cache flags : cache entry의 상태
 *   reference count : plan cache가 참조된 횟수

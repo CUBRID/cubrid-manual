@@ -1037,7 +1037,7 @@ If the same SQL query has already been stored, the server reuses the existing XA
 
 The following are the detailed attributes of each plan cache entry:
 
-*   XASL_ID : Unique identifier for the execution plan; serves as a cache key
+*   XASL_ID : A unique identifier assigned to the execution plan. It also serves as the key in the plan cache.The time_stored field within the XASL_ID indicates the time when the plan was stored in the cache. This timestamp can be converted and verified using the following command: $> date -d @1750657813.784232
 *   fix_count : Number of threads currently executing using this plan
 *   cache flags : Internal flags representing the cache entry state
 *   reference count : Total number of times this plan has been referenced

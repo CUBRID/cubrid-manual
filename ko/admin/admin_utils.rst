@@ -1003,23 +1003,23 @@ plandump
 
     Entries:
 
-  XASL_ID = { 
+    XASL_ID = { 
               sha1 = { 939db0ab 7ead8a87 2a1ed142 67e2f059 36a3e601 },
 	          time_stored = 1750657813 sec, 784232 usec
             }
-  fix_count = 0 
-  cache flags = 00000000 
-  reference count = 4 
-  time second last used = 1750657814 
-  clone count = 1 
-  sql info:
+    fix_count = 0 
+    cache flags = 00000000 
+    reference count = 4 
+    time second last used = 1750657814 
+    clone count = 1 
+    sql info:
     SQL_ID = 67d47c14f637a
-    sql user text = select * from game where host_year > '2004' 
-    sql hash text = select [dba.game].[host_year], [dba.game].[event_code], [dba.game].[athlete_code], [dba.game].[stadium_code], [dba.game].[nation_code], [dba.game].[medal], [dba.game].[game_date] from [dba.game] [dba.game] where ([dba.game].[host_year]> ?:0 )?193="en_US";194="en_US";249="Asia/Seoul";user=0|897|1;bind_var_cnt=1
-    sql plan text =
- Sequential scan(public.game dba.game)
-  OID_LIST (count = 1): -- 참고OID
-    OID = 0|208|10, LOCK =     IS_LOCK, TCARD =       31
+        sql user text = select * from game where host_year > '2004' 
+        sql hash text = select [dba.game].[host_year], [dba.game].[event_code], [dba.game].[athlete_code], [dba.game].[stadium_code], [dba.game].[nation_code], [dba.game].[medal], [dba.game].[game_date] from [dba.game] [dba.game] where ([dba.game].[host_year]> ?:0 )?193="en_US";194="en_US";249="Asia/Seoul";user=0|897|1;bind_var_cnt=1
+        sql plan text =
+    Sequential scan(public.game dba.game)
+    OID_LIST (count = 1): 
+        OID = 0|208|10, LOCK =     IS_LOCK, TCARD =       31
 
 
 CUBRID 기본적으로 Plancache를 사용한다. 

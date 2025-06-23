@@ -988,6 +988,66 @@ If no option is used, it checks the query plans stored in the cache. ::
 
     cubrid plandump testdb
 
+::
+
+    XASL cache
+    Stats:
+    Max size:                   1000        -- Maximum number of plan cache entries allowed
+    Current entry count:        4           -- Number of currently cached execution plans 
+    Lookups:                    25          -- Number of plan cache lookup attempts
+    Hits:                       15          -- Number of successful lookups where the plan already existed
+    Miss:                       10          -- Number of failed lookups
+    Inserts:                    5
+    Found at insert:            0
+    Recompiles:                 0
+    Failed recompiles:          0
+    Deletes:                    1
+    Fix:                        15
+    Unfix:                      20
+    Cache cleanups:             0
+    Deletes at cleanup:	    0
+
+    Entries:
+
+    XASL_ID = { 
+              sha1 = { 939db0ab 7ead8a87 2a1ed142 67e2f059 36a3e601 },
+	          time_stored = 1750657813 sec, 784232 usec
+            }
+    fix_count = 0
+    cache flags = 00000000
+    reference count = 4
+    time second last used = 1750657814 
+    clone count = 1
+    sql info:
+        SQL_ID = 67d47c14f637a
+        sql user text = select * from game where host_year > '2004' 
+        sql hash text = select [dba.game].[host_year], [dba.game].[event_code], [dba.game].[athlete_code], [dba.game].[stadium_code], [dba.game].[nation_code], [dba.game].[medal], [dba.game].[game_date] from [dba.game] [dba.game] where ([dba.game].[host_year]> ?:0 )?193="en_US";194="en_US";249="Asia/Seoul";user=0|897|1;bind_var_cnt=1
+        sql plan text =
+    Sequential scan(public.game dba.game)
+    OID_LIST (count = 1): 
+        OID = 0|208|10, LOCK =     IS_LOCK, TCARD =       31
+
+
+CUBRID uses Plan Cache by default to improve SQL execution efficiency. It stores parsed and optimized query plans (XASL – eXtended Access Specification Language) on the server, which are reused when identical SQL statements are issued, reducing parsing and optimization overhead on repeated executions.
+
+*   Prepare Phase : When a client sends an SQL query string to the server, the server generates an execution plan to process the query. This plan is stored in memory, and a unique identifier called XASL_ID (eXtended Access Specification Language Identifier) is assigned to it.
+If the same SQL query has already been stored, the server reuses the existing XASL_ID instead of generating a new plan.
+
+*   Execute Phase : The client sends the XASL_ID to the server to request the execution of the associated query. The server loads the plan corresponding to the XASL_ID, executes the query, and returns the result to the client. Temporary structures created during execution are discarded afterward.
+
+The following are the detailed attributes of each plan cache entry:
+
+*   XASL_ID : Unique identifier for the execution plan; serves as a cache key
+*   fix_count : Number of threads currently executing using this plan
+*   cache flags : Internal flags representing the cache entry state
+*   reference count : Total number of times this plan has been referenced
+*   time second last used : UNIX timestamp of the last usage of this plan. Convert to readable format using: date -d @<timestamp>
+*   clone count : Number of clone instances created from this plan
+*   sql user text : Original SQL statement string
+*   sql plan text : Textual representation of the execution plan
+*   OID_LIST : Object ID list referenced by the execution plan
+
+
 The following shows [options] available with the **cubrid plandump** utility.
 
 .. program:: plandump

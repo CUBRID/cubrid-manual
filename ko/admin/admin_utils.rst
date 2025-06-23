@@ -982,6 +982,65 @@ plandump
 
     cubrid plandump testdb
 
+::
+    
+    XASL cache
+    Stats:
+    Max size:                   1000        -- plan cache에 저장할 수 있는 최대 항목 수
+    Current entry count:        4           -- 현재 저장되어 있는 항목 수
+    Lookups:                    25          -- LOOKUP한 횟수
+    Hits:                       15          -- HIT한 횟수
+    Miss:                       10          -- 실패한 횟수. 이는 대체로 NUM과 비슷함.
+    Inserts:                    5
+    Found at insert:            0
+    Recompiles:                 0
+    Failed recompiles:          0
+    Deletes:                    1
+    Fix:                        15
+    Unfix:                      20
+    Cache cleanups:             0
+    Deletes at cleanup:	    0
+
+    Entries:
+
+  XASL_ID = { 
+              sha1 = { 939db0ab 7ead8a87 2a1ed142 67e2f059 36a3e601 },
+	          time_stored = 1750657813 sec, 784232 usec
+            }
+  fix_count = 0 
+  cache flags = 00000000 
+  reference count = 4 
+  time second last used = 1750657814 
+  clone count = 1 
+  sql info:
+    SQL_ID = 67d47c14f637a
+    sql user text = select * from game where host_year > '2004' 
+    sql hash text = select [dba.game].[host_year], [dba.game].[event_code], [dba.game].[athlete_code], [dba.game].[stadium_code], [dba.game].[nation_code], [dba.game].[medal], [dba.game].[game_date] from [dba.game] [dba.game] where ([dba.game].[host_year]> ?:0 )?193="en_US";194="en_US";249="Asia/Seoul";user=0|897|1;bind_var_cnt=1
+    sql plan text =
+ Sequential scan(public.game dba.game)
+  OID_LIST (count = 1): -- 참고OID
+    OID = 0|208|10, LOCK =     IS_LOCK, TCARD =       31
+
+
+CUBRID 기본적으로 Plancache를 사용한다. 
+
+*   prepare(준비단계) : 클라이언트 프로그램이 SQL 문장을 서버로 보내면, 이 SQL 문장을 처리하기 위해 **실행 계획(plan)**을 만든다. 실행 계획은 서버에 저장되고, 고유한 ID 번호가 부여된다. 이 ID를 XASL_ID라고 부른다. 클라이언트는 나중에 이 ID를 통해 실행 계획을 다시 사용할 수 있는 장점이 있다. 만약 같은 SQL 문장이 서버에 이미 저장되어 있다면, 새로 만들지 않고 기존 ID를 사용한다.
+
+*   Execute (실행단계) : 클라이언트는 받은 XASL_ID를 서버에 보내면서, 질의를 실행해 달라고 요청한다. 서버는 ID에 해당하는 실행 계획을 불러와서 실행한다. 결과 데이터를 클라이언트에게 전달한 후, 실행 과정에서 임시로 만든 데이터 구조는 삭제한다.
+
+
+Entries의 상세항목은 다음과 같다. 
+
+*   XASL_ID : 고유한 ID이며, plan cache key로도 사용된다.
+*   fix_count : 해당 plan cache entry를 이용해서 수행 중인 thread 수
+*   cache flags : cache entry의 상태
+*   reference count : plan cache가 참조된 횟수
+*   time second last used : 최종 사용된 시간으로 unix timestamp으로 표기된다. $>date -d @1750657814을 사용하면 "2025. 06. 23. (월) 14:50:14 KST" 변경된 시간값을 확인할 수 있다.
+*   clone count : 사용된 clone 갯수
+*   sql user text : SQL원문
+*   sql plan text : plan정보
+*   OID_LIST : 참고OID
+
 다음은 **cubrid plandump** 에 대한 [options]이다.
 
 .. program:: plandump

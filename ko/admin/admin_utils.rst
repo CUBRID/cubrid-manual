@@ -1067,25 +1067,26 @@ plandump
 
 
 CUBRID는 Plan Cache 기능을 통해 SQL 문장의 실행 계획을 재사용할 수 있도록 지원한다.
-Plan Cache는 서버에서 관리되며, CAS(Client Application Server)와 서버 간의 협력을 통해 동작한다. 주요 처리 과정은 다음과 같다.
+Plan Cache는 서버에서 관리되며, CAS(Common Application Server)와 서버 간의 협력을 통해 동작한다. 주요 처리 과정은 다음과 같다.
 
     1.   질의분석(Parsing 및 Rewrite) : 클라이언트에서 전달된 SQL 질의는 CAS에서 먼저 Parsing과 Rewrite 과정을 거친다. 이 단계에서 질의를 분석하고 내부적으로 재구성을 진행한다.
-    2.   XASL_ID생성 : Rewrite된 질의를 기반으로 XASL_ID가 생성된다. 이 Hash ID는 질의의 고유한 식별자로 사용되며, 서버의 Plan Cache에 해당 질의가 이미 저장되어 있는지 확인하는 데 사용된다.
-    3.   Plan cache확인 : 생성된 Hash ID를 사용하여 서버 Plan Cache에 이미 저장된 XASL (실행 계획) 이 있는지 확인한다.
+    2.   XASL_ID생성 : Rewrite된 질의를 기반으로 XASL_ID가 생성된다. 이 XASL_ID는 질의의 고유한 식별자로 사용되며, 서버의 Plan Cache에 해당 질의가 이미 저장되어 있는지 확인하는 데 사용된다.
+    3.   Plan cache확인 : 생성된 XASL_ID를 사용하여 서버 Plan Cache에 이미 저장된 XASL (실행 계획) 이 있는지 확인한다.
 	    *	저장되어 있는 경우: 서버는 기존 XASL을 이용해 질의를 실행
-	    * 	저장되어 있지 않은 경우: CAS에서 새롭게 XASL Tree (실행 계획) 를 생성하여 서버로 전달
+	    * 	저장되어 있지 않은 경우: CAS에서 새롭게 XASL (실행 계획) 를 생성하여 서버로 전달
 
 .. note::
 
-    Plan Cache에 등록된 질의라고 하더라도, 매번 CAS에서는 Parsing과 Rewrite 단계는 수행된다. 따라서 Parsing 비용은 항상 존재하며, Plan Cache는 XASL 생성 비용만을 절약하는 데에 초점이 맞춰져 있다.
+    Plan Cache는 XASL(실행계획) 재 사용을 통해 성능을 향상시킨다.
 
 ::
 
-Entries의 상세항목은 다음과 같다.
+plandump 결과의 상세항목은 다음과 같다.
 
 * 	XASL_ID : hash text을 sha1 text로 변환해서 plan cache key로 사용된다. 
 
-        *   time_stored는 plan cache에 저장된 시간으로 $>date -d @1750657813.784232 으로 변환하여 확인할 수 있다.
+        *   time_stored : plan cache에 저장된 시간(unix timestamp)
+
 *   fix_count : 해당 plan cache entry를 이용해서 수행 중인 thread 수이다.
 *   cache flags : cache entry의 상태를 나태낸다.
 
@@ -1095,14 +1096,17 @@ Entries의 상세항목은 다음과 같다.
         *   0800000 : clean up
         *   0400000 : recomiled requested
 *   reference count : plan cache가 참조된 횟수
-*   time second last used : 최종 사용된 시간으로 unix timestamp으로 표기된다. $>date -d @1750657814으로 변환하여 확인할 수 있다.
+*   time second last used : 최종 사용된 시간(unix timestamp)
 *   clone count : 사용된 clone 갯수 (서버에는 컴파일된 XASL이 메모리 스트림 형태로 저장되어 있으며, 실제 실행 시에는 이를 XASL 구조체로 변환한다. 이 변환 비용을 줄이기 위해 Clone Cache를 사용하게된다. Clone Cache는 변환된 XASL 구조체를 보관하여 재 사용하며, 동시에 여러 스레드가 요청할 경우 사용할 Clone이 없으면 새로 생성하여 사용 후 Cache에 등록한다. 이때 Clone 수가 증가한다.
 * 	SQL_ID : SQL ID를 생성할 때는 SQL 문장의 텍스트를 MD5 해시 함수로 변환하여 32자리(16진수) 문자열을 만든다. 이 32자리 중에서 마지막 13자리의 16진수 값(hexa-digit) 을 SQL ID로 사용한다. MD5결과 : e1faffb3e614e6c2fba74296962386b7, SQL_ID : 74296962386b7) 
 *   sql user text : SQL원문
-* 	sql hash text : (hash key로 사용을 위한) 재작성 질의
+* 	sql hash text : (hash key 사용을 위한) 재작성 질의문
 *   sql plan text : plan정보
 *   OID_LIST : 참조하고 있는 object (table, serial 등)의 OID 정보
 
+.. note::
+    unix timestamp는 $>date -d @1750657814 또는 $>date -d @1750657813.784232 와 같이 변환하여 확인이 가능하다.
+    
 
 
 .. _statdump:

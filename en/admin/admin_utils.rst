@@ -1071,29 +1071,31 @@ If no option is used, it checks the query plans stored in the cache. ::
     OID_LIST (count = 1):
 		OID = 0|208|10, LOCK =     IS_LOCK, TCARD =       31
 
-CUBRID supports the reuse of SQL execution plans through the Plan Cache feature. The Plan Cache is managed on the server side and operates through cooperation between the Client Application Server (CAS) and the database server. The main processing steps are as follows:
+CUBRID supports the reuse of SQL execution plans through the Plan Cache feature. The Plan Cache is managed on the server side and operates through cooperation between the Common Application Server (CAS) and the database server. The main processing steps are as follows:
 
     1.   Query Analysis (Parsing and Rewrite) : When an SQL query is sent from the client, it is first parsed and rewritten by the CAS. During this step, the query is analyzed and internally transformed for optimization and normalization purposes.
-    2.   XASL_ID Generation : Based on the rewritten query, a XASL_ID is generated. This ID serves as a unique identifier for the query and is used to check whether the corresponding execution plan (XASL) is already stored in the server’s Plan Cache.
-    3.   Plan Cache Lookup : Using the generated Hash ID, the CAS queries the server to determine if a matching XASL (Execution Plan) already exists in the Plan Cache.
+    2.   XASL_ID Generation : Based on the rewritten query, a XASL_ID is generated. This XASL_ID serves as a unique identifier for the query and is used to check whether the corresponding execution plan (XASL) is already stored in the server’s Plan Cache.
+    3.   Plan Cache Lookup : Using the generated XASL_ID, the CAS queries the server to determine if a matching XASL (Execution Plan) already exists in the Plan Cache.
         *   If the XASL is found: The server uses the existing plan to execute the query.
-        *   If the XASL is not found: The CAS generates a new XASL Tree and sends it to the server, which may then decide whether or not to store it in the Plan Cache.
+        *   If the XASL is not found: The CAS generates a new Tree(Execution Plan) and sends it to the server, which may then decide whether or not to store it in the Plan Cache.
 
 .. note::
-    Even if the query is already registered in the Plan Cache, the Parsing and Rewrite steps are always performed by the CAS. Therefore, while the Plan Cache helps reduce the cost of execution plan generation, it does not eliminate the parsing overhead.
+    The Plan Cache improves performance by reusing XASL(execution plan).
+
+The following describes the detailed fields included in the output of plandump:
 
 *   XASL_ID : A unique identifier assigned to the execution plan. It also serves as the key in the plan cache.
 
-	*	The time_stored field within the XASL_ID indicates the time when the plan was stored in the cache. This timestamp can be converted and verified using the following command: $> date -d @1750657813.784232
+	*	The time_stored field within the XASL_ID indicates the time when the plan was stored in the cache.(unix timestamp)
 *   fix_count : Number of threads currently executing using this plan
 *   cache flags : Internal flags representing the cache entry state
 
     *   8000000 : mark_deleted
     *   4000000 : to be recompiled
-    *   2000000 : was recompileded
-    *   0800000 : clean upd
-    *   0400000 : recomiled requestedd
-*   reference count : Total number of times this plan has been referenced
+    *   2000000 : was recompiled
+    *   0800000 : clean up
+    *   0400000 : recomiled requested
+*   reference count : Total number of times this plan has been referenced(unix timestamp)
 *   time second last used : UNIX timestamp of the last usage of this plan. Convert to readable format using: date -d @<timestamp>
 *   clone count : Number of clone instances created from this plan( On the server side, compiled XASL (eXecutable Algebraic Query Language) is stored as a memory stream. When a query is executed, this stream must be converted into an XASL structure. To reduce the cost of this conversion, Clone Cache is used. The Clone Cache stores already-converted XASL structures so they can be reused. If multiple threads request the same query simultaneously and no available clone exists in the cache, a new XASL structure is created, used, and then registered back in the Clone Cache. When this occurs, the clone count is incremented.)
 *   SQL_ID : To generate a SQL ID, the SQL query text is hashed using the MD5 algorithm, which produces a 32-character hexadecimal string. From this hash, the last 13 hexadecimal digits are used as the SQL ID. For example:
@@ -1103,6 +1105,9 @@ CUBRID supports the reuse of SQL execution plans through the Plan Cache feature.
 *   sql hash text : This is the rewritten SQL text, used as the basis for generating the hash key. It serves as the unique representation of the query for Plan Cache matching.
 *   sql plan text : Textual representation of the execution plan
 *   OID_LIST : Object ID list referenced by the execution plan
+
+.. note::
+    This timestamp can be converted and verified using the following command: $>date -d @1750657813 or $> date -d @1750657813.784232
 
 
 .. _statdump:

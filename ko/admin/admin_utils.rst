@@ -978,68 +978,6 @@ plandump
 
 *   *database_name*: 데이터베이스 서버 캐시로부터 질의 수행 계획을 확인 또는 제거하고자 하는 데이터베이스 이름이다
 
-옵션 없이 사용하면 캐시에 저장된 질의 수행 계획을 확인한다. ::
-
-    cubrid plandump testdb
-
-::
-    
-    XASL cache
-    Stats:
-    Max size:                   1000        -- plan cache에 저장할 수 있는 최대 항목 수
-    Current entry count:        4           -- 현재 저장되어 있는 항목 수
-    Lookups:                    25          -- LOOKUP한 횟수
-    Hits:                       15          -- HIT한 횟수
-    Miss:                       10          -- 실패한 횟수. 이는 대체로 NUM과 비슷함.
-    Inserts:                    5
-    Found at insert:            0
-    Recompiles:                 0
-    Failed recompiles:          0
-    Deletes:                    1
-    Fix:                        15
-    Unfix:                      20
-    Cache cleanups:             0
-    Deletes at cleanup:	    0
-
-    Entries:
-
-    XASL_ID = { 
-              sha1 = { 939db0ab 7ead8a87 2a1ed142 67e2f059 36a3e601 },
-	          time_stored = 1750657813 sec, 784232 usec
-            }
-    fix_count = 0 
-    cache flags = 00000000 
-    reference count = 4 
-    time second last used = 1750657814 
-    clone count = 1 
-    sql info:
-    SQL_ID = 67d47c14f637a
-        sql user text = select * from game where host_year > '2004' 
-        sql hash text = select [dba.game].[host_year], [dba.game].[event_code], [dba.game].[athlete_code], [dba.game].[stadium_code], [dba.game].[nation_code], [dba.game].[medal], [dba.game].[game_date] from [dba.game] [dba.game] where ([dba.game].[host_year]> ?:0 )?193="en_US";194="en_US";249="Asia/Seoul";user=0|897|1;bind_var_cnt=1
-        sql plan text =
-    Sequential scan(public.game dba.game)
-    OID_LIST (count = 1): 
-        OID = 0|208|10, LOCK =     IS_LOCK, TCARD =       31
-
-
-CUBRID 기본적으로 Plancache를 사용한다. 
-
-*   prepare(준비단계) : 클라이언트 프로그램이 SQL 문장을 서버로 보내면, 이 SQL 문장을 처리하기 위해 **실행 계획(plan)**을 만든다. 실행 계획은 서버에 저장되고, 고유한 ID 번호가 부여된다. 이 ID를 XASL_ID라고 부른다. 클라이언트는 나중에 이 ID를 통해 실행 계획을 다시 사용할 수 있는 장점이 있다. 만약 같은 SQL 문장이 서버에 이미 저장되어 있다면, 새로 만들지 않고 기존 ID를 사용한다.
-
-*   Execute (실행단계) : 클라이언트는 받은 XASL_ID를 서버에 보내면서, 질의를 실행해 달라고 요청한다. 서버는 ID에 해당하는 실행 계획을 불러와서 실행한다. 결과 데이터를 클라이언트에게 전달한 후, 실행 과정에서 임시로 만든 데이터 구조는 삭제한다.
-
-
-Entries의 상세항목은 다음과 같다. 
-
-*   XASL_ID : 고유한 ID이며, plan cache key로도 사용된다. XASL_ID안의 time_stored는 plan cache에 저장된 시간으로 $>date -d @1750657813.784232 으로 변환하여 확인할 수 있다.
-*   fix_count : 해당 plan cache entry를 이용해서 수행 중인 thread 수
-*   cache flags : cache entry의 상태
-*   reference count : plan cache가 참조된 횟수
-*   time second last used : 최종 사용된 시간으로 unix timestamp으로 표기된다. $>date -d @1750657814을 사용하면 "2025. 06. 23. (월) 14:50:14 KST" 변경된 시간값을 확인할 수 있다.
-*   clone count : 사용된 clone 갯수
-*   sql user text : SQL원문
-*   sql plan text : plan정보
-*   OID_LIST : 참고OID
 
 다음은 **cubrid plandump** 에 대한 [options]이다.
 
@@ -1082,6 +1020,90 @@ Entries의 상세항목은 다음과 같다.
             sql plan text = Sequential scan(public.game dba.game)
 
         cubrid plandump -s 'da9cab5d 597f2fe4 48aa8ae8 66b87d81 49fdd7ca' demodb
+
+
+옵션 없이 사용하면 캐시에 저장된 질의 수행 계획을 확인할 수 있다. ::
+
+    cubrid plandump testdb
+
+::
+
+    XASL cache
+    Stats:
+    Max size:                   1000        -- plan cache에 저장할 수 있는 최대 항목 수
+    Current entry count:        4           -- 현재 저장되어 있는 항목 수
+    Lookups:                    25          -- LOOKUP한 횟수
+    Hits:                       15          -- HIT한 횟수
+    Miss:                       10          -- 실패한 횟수. 이는 대체로 NUM과 비슷함.
+    Inserts:                    5
+    Found at insert:            0
+    Recompiles:                 0
+    Failed recompiles:          0
+    Deletes:                    1
+    Fix:                        15
+    Unfix:                      20
+    Cache cleanups:             0
+    Deletes at cleanup:     0
+
+    Entries:
+
+    XASL_ID = {
+              sha1 = { 939db0ab 7ead8a87 2a1ed142 67e2f059 36a3e601 },
+              time_stored = 1750657813 sec, 784232 usec
+            }
+    fix_count = 0
+    cache flags = 00000000
+    reference count = 4
+    time second last used = 1750657814
+    clone count = 1
+    sql info:
+        SQL_ID = 67d47c14f637a
+        sql user text = select * from game where host_year > '2004'
+        sql hash text = select [dba.game].[host_year], [dba.game].[event_code], [dba.game].[athlete_code], [dba.game].[stadium_code], [dba.game].[nation_code], [dba.game].[medal], [dba.game].[game_date] from [dba.game] [dba.game] w     here ([dba.game].[host_year]> ?:0 )?193="en_US";194="en_US";249="Asia/Seoul";user=0|897|1;bind_var_cnt=1
+        sql plan text =
+    Sequential scan(public.game dba.game)
+    OID_LIST (count = 1):
+        OID = 0|208|10, LOCK =     IS_LOCK, TCARD =       31
+
+
+CUBRID는 Plan Cache 기능을 통해 SQL 문장의 실행 계획을 재사용할 수 있도록 지원한다.
+Plan Cache는 서버에서 관리되며, CAS(Client Application Server)와 서버 간의 협력을 통해 동작한다. 주요 처리 과정은 다음과 같다.
+
+    1.   질의분석(Parsing 및 Rewrite) : 클라이언트에서 전달된 SQL 질의는 CAS에서 먼저 Parsing과 Rewrite 과정을 거친다. 이 단계에서 질의를 분석하고 내부적으로 재구성을 진행한다.
+    2.   XASL_ID생성 : Rewrite된 질의를 기반으로 XASL_ID가 생성된다. 이 Hash ID는 질의의 고유한 식별자로 사용되며, 서버의 Plan Cache에 해당 질의가 이미 저장되어 있는지 확인하는 데 사용된다.
+    3.   Plan cache확인 : 생성된 Hash ID를 사용하여 서버 Plan Cache에 이미 저장된 XASL (실행 계획) 이 있는지 확인한다.
+	    *	저장되어 있는 경우: 서버는 기존 XASL을 이용해 질의를 실행
+	    * 	저장되어 있지 않은 경우: CAS에서 새롭게 XASL Tree (실행 계획) 를 생성하여 서버로 전달
+
+.. note::
+
+    Plan Cache에 등록된 질의라고 하더라도, 매번 CAS에서는 Parsing과 Rewrite 단계는 수행된다. 따라서 Parsing 비용은 항상 존재하며, Plan Cache는 XASL 생성 비용만을 절약하는 데에 초점이 맞춰져 있다.
+
+::
+
+Entries의 상세항목은 다음과 같다.
+
+* 	XASL_ID : hash text을 sha1 text로 변환해서 plan cache key로 사용된다. 
+
+        *   time_stored는 plan cache에 저장된 시간으로 $>date -d @1750657813.784232 으로 변환하여 확인할 수 있다.
+*   fix_count : 해당 plan cache entry를 이용해서 수행 중인 thread 수이다.
+*   cache flags : cache entry의 상태를 나태낸다.
+
+        *   8000000 : mark_deleted
+        *   4000000 : to be recompiled
+        *   2000000 : was recompiled
+        *   0800000 : clean up
+        *   0400000 : recomiled requested
+*   reference count : plan cache가 참조된 횟수
+*   time second last used : 최종 사용된 시간으로 unix timestamp으로 표기된다. $>date -d @1750657814으로 변환하여 확인할 수 있다.
+*   clone count : 사용된 clone 갯수 (서버에는 컴파일된 XASL이 메모리 스트림 형태로 저장되어 있으며, 실제 실행 시에는 이를 XASL 구조체로 변환한다. 이 변환 비용을 줄이기 위해 Clone Cache를 사용하게된다. Clone Cache는 변환된 XASL 구조체를 보관하여 재 사용하며, 동시에 여러 스레드가 요청할 경우 사용할 Clone이 없으면 새로 생성하여 사용 후 Cache에 등록한다. 이때 Clone 수가 증가한다.
+* 	SQL_ID : SQL ID를 생성할 때는 SQL 문장의 텍스트를 MD5 해시 함수로 변환하여 32자리(16진수) 문자열을 만든다. 이 32자리 중에서 마지막 13자리의 16진수 값(hexa-digit) 을 SQL ID로 사용한다. MD5결과 : e1faffb3e614e6c2fba74296962386b7, SQL_ID : 74296962386b7) 
+*   sql user text : SQL원문
+* 	sql hash text : (hash key로 사용을 위한) 재작성 질의
+*   sql plan text : plan정보
+*   OID_LIST : 참조하고 있는 object (table, serial 등)의 OID 정보
+
+
 
 .. _statdump:
 

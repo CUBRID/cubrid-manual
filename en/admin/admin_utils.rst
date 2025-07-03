@@ -1109,7 +1109,7 @@ The following describes the detailed fields included in the output of plandump:
 
     *   This timestamp can be converted and verified using the following command
 
-        *   $>date -d @1750657813 
+        *   $> date -d @1750657813 
         *   $> date -d @1750657813.784232
     *   Clone count (detailed explanation)
         *   compiled XASL (eXecutable Algebraic Query Language) is stored as a memory stream. When a query is executed, this stream must be converted into an XASL structure. To reduce the cost of this conversion, Clone Cache is used. The Clone Cache stores already-converted XASL structures so they can be reused. If multiple threads request the same query simultaneously and no available clone exists in the cache, a new XASL structure is created, used, and then registered back in the Clone Cache. When this occurs, the clone count is incremented.

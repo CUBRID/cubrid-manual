@@ -635,21 +635,23 @@ The following example shows how to retrieve the names of index that belongs to t
 _db_auth
 --------
 
-Represents user authorization information of the class. An index for the grantee is created.
+Represents user authorization information for objects. An index is created on grantee.
 
-+--------------------+---------------+----------------------------------------------------------------------------------+
-|   Attribute Name   |   Data Type   |   Description                                                                    |
-+====================+===============+==================================================================================+
-| grantor            | db_user       | Authorization grantor                                                            |
-+--------------------+---------------+----------------------------------------------------------------------------------+
-| grantee            | db_user       | Authorization grantee                                                            |
-+--------------------+---------------+----------------------------------------------------------------------------------+
-| class_of           | _db_class     | Class object to which authorization is to be granted                             |
-+--------------------+---------------+----------------------------------------------------------------------------------+
-| auth_type          | VARCHAR(7)    | Type name of the authorization granted                                           |
-+--------------------+---------------+----------------------------------------------------------------------------------+
-| is_grantable       | INTEGER       | 1 if authorization for the class can be granted to other users, and 0 otherwise. |
-+--------------------+---------------+----------------------------------------------------------------------------------+
++--------------------+---------------+--------------------------------------------------------------------------------------+
+|   Attribute Name   |   Data Type   |   Description                                                                        |
++====================+===============+======================================================================================+
+| grantor            | db_user       | Authorization grantor                                                                |
++--------------------+---------------+--------------------------------------------------------------------------------------+
+| grantee            | db_user       | Authorization grantee                                                                |
++--------------------+---------------+--------------------------------------------------------------------------------------+
+| object_type        | INTEGER       | Type of the object for which authorization is granted (0: class, 5: stored procedure)|
++--------------------+---------------+--------------------------------------------------------------------------------------+
+| object_of          | object        | Object for which authorization is granted                                            |
++--------------------+---------------+--------------------------------------------------------------------------------------+
+| auth_type          | VARCHAR(7)    | Type name of the authorization granted                                               |
++--------------------+---------------+--------------------------------------------------------------------------------------+
+| is_grantable       | INTEGER       | 1 if authorization for the object can be granted to other users, and 0 otherwise.    |
++--------------------+---------------+--------------------------------------------------------------------------------------+
 
 Authorization types supported by CUBRID are as follows:
 
@@ -665,9 +667,9 @@ The following example shows how to retrieve authorization information defined in
 
 .. code-block:: sql
 
-    SELECT grantor.name, grantee.name, auth_type
-    FROM _db_auth
-    WHERE class_of.class_name = 'db_trig';
+    SELECT a.grantor.name, a.grantee.name, a.auth_type
+    FROM _db_auth a JOIN _db_class c ON a.object_of = c.class_of
+    WHERE c.class_name = 'db_trig';
 
 ::
 
@@ -1909,36 +1911,38 @@ The following example shows how to retrieve index key information of the class.
 DB_AUTH
 -------
 
-Represents authorization information of classes for which the current user has access authorization to a database.
+Represents authorization information for objects the current user is authorized to access.
 
-+--------------------+---------------+-----------------------------------------------------------------------------------------+
-|   Attribute Name   |   Data Type   |   Description                                                                           |
-+====================+===============+=========================================================================================+
-| grantor_name       | VARCHAR(255)  | Name of the user who grants authorization                                               |
-+--------------------+---------------+-----------------------------------------------------------------------------------------+
-| grantee_name       | VARCHAR(255)  | Name of the user who is granted authorization                                           |
-+--------------------+---------------+-----------------------------------------------------------------------------------------+
-| class_name         | VARCHAR(255)  | Name of the class for which authorization is to be granted                              |
-+--------------------+---------------+-----------------------------------------------------------------------------------------+
-| owner_name         | VARCHAR(255)  | Owner name of the class for which authorization is to be granted                        |
-+--------------------+---------------+-----------------------------------------------------------------------------------------+
-| auth_type          | VARCHAR(7)    | Name of the authorization type granted                                                  |
-+--------------------+---------------+-----------------------------------------------------------------------------------------+
-| is_grantable       | VARCHAR(3)    | 'YES' if authorization for the class can be granted to other users, and 'NO' otherwise. |
-+--------------------+---------------+-----------------------------------------------------------------------------------------+
++--------------------+---------------+-------------------------------------------------------------------------------------------+
+|   Attribute Name   |   Data Type   |   Description                                                                             |
++====================+===============+===========================================================================================+
+| grantor_name       | VARCHAR(255)  | Name of the user who grants authorization                                                 |
++--------------------+---------------+-------------------------------------------------------------------------------------------+
+| grantee_name       | VARCHAR(255)  | Name of the user who is granted authorization                                             |
++--------------------+---------------+-------------------------------------------------------------------------------------------+
+| object_type        | VARCHAR(16)   | Type of the object for which authorization is granted (CLASS, VCLASS, PROCEDURE, FUNCTION)|
++--------------------+---------------+-------------------------------------------------------------------------------------------+
+| object_name        | VARCHAR(255)  | Name of the object for which authorization is granted                                     |
++--------------------+---------------+-------------------------------------------------------------------------------------------+
+| owner_name         | VARCHAR(255)  | Owner name of the object for which authorization is granted                               |
++--------------------+---------------+-------------------------------------------------------------------------------------------+
+| auth_type          | VARCHAR(7)    | Name of the authorization type granted                                                    |
++--------------------+---------------+-------------------------------------------------------------------------------------------+
+| is_grantable       | VARCHAR(3)    | 'YES' if authorization for the object can be granted to other users, and 'NO' otherwise.  |
++--------------------+---------------+-------------------------------------------------------------------------------------------+
 
-The following example how to retrieve authorization information of the classes whose names begin with *db_a*.
+The following example show how to retrieve authorization information for objects whose names begin with *db_a*.
 
 .. code-block:: sql
 
-    SELECT class_name, auth_type, grantor_name
+    SELECT object_name, auth_type, grantor_name
     FROM db_auth
-    WHERE class_name like 'db_a%'
+    WHERE object_name like 'db_a%'
     ORDER BY 1;
     
 ::
 
-      class_name               auth_type             grantor_name
+      object_name              auth_type             grantor_name
     ===============================================================
       'db_attr_setdomain_elm'  'SELECT'              'DBA'
       'db_attribute'           'SELECT'              'DBA'

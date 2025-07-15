@@ -1,0 +1,28 @@
+[
+    {
+        "name": "v11.4 (current)",
+        "version": "v11.4",
+        "url": "http://192.168.7.79:9001/",
+        "preferred": true
+    },
+    {
+        "name": "v11.3",
+        "version": "v11.3",
+	"url": "http://192.168.7.79:9001/manual/ko/11.3/"
+    },
+    {
+        "name": "v11.2",
+        "version": "v11.2",
+        "url": "https://cubrid.org/manual/ko/11.2/"
+    },
+    {
+        "name": "v10.2",
+        "version": "v10.2",
+        "url": "https://cubrid.org/manual/ko/10.2/"
+    },
+    {   
+        "name": "v10.1",
+        "version": "v10.1",
+        "url": "https://cubrid.org/manual/ko/10.1/"
+    }
+]

@@ -35,8 +35,8 @@ master_doc = 'index'
 project = u'CUBRID'
 copyright = u'2016, CUBRID Corparation'
 
-version = '11.4'
-release = '11.4.0'
+version = '10.0'
+release = '10.0.0'
 
 exclude_patterns = ['_build']
 

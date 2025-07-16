@@ -1022,7 +1022,7 @@ plandump
         cubrid plandump -s 'da9cab5d 597f2fe4 48aa8ae8 66b87d81 49fdd7ca' demodb
 
 
-옵션 없이 사용하면 캐시에 저장된 질의 수행 계획을 확인할 수 있다. ::
+옵션 없이 사용하면 플랜 캐시(plan cache)에 저장된 질의 실행 계획(XASL)들을 확인할 수 있다. ::
 
     cubrid plandump testdb
 
@@ -1066,57 +1066,45 @@ plandump
         OID = 0|208|10, LOCK =     IS_LOCK, TCARD =       31
 
 
-CUBRID는 Plan Cache 기능을 통해 SQL 문장의 실행 계획을 재사용할 수 있도록 지원한다.
-Plan Cache는 서버에서 관리되며, CAS(Common Application Server)와 서버 간의 협력을 통해 동작한다. 주요 처리 과정은 다음과 같다.
+CUBRID는 플랜 캐시 기능을 통해 SQL 질의의 실행 계획을 재사용할 수 있도록 지원한다.
+플랜 캐시는 서버에서 관리되며, CAS(Common Application Server)와 서버 간의 협력을 통해 동작한다. 주요 처리 과정은 다음과 같다.
 
-    1.   질의분석(Parsing 및 Rewrite) : 클라이언트에서 전달된 SQL 질의는 CAS에서 먼저 Parsing과 Rewrite 과정을 거친다. 이 단계에서 질의를 분석하고 내부적으로 재구성을 진행한다.
-    2.   XASL_ID생성 : Rewrite된 질의를 기반으로 XASL_ID가 생성된다. 이 XASL_ID는 질의의 고유한 식별자로 사용되며, 서버의 Plan Cache에 해당 질의가 이미 저장되어 있는지 확인하는 데 사용된다.
-    3.   Plan cache확인 : 생성된 XASL_ID를 사용하여 서버 Plan Cache에 이미 저장된 XASL (실행 계획) 이 있는지 확인한다.
-	    *	저장되어 있는 경우: 서버는 기존 XASL을 이용해 질의를 실행
-	    * 	저장되어 있지 않은 경우: CAS에서 새롭게 XASL (실행 계획) 를 생성하여 서버로 전달
-
-.. note::
-
-    Plan Cache는 XASL(실행계획) 재 사용을 통해 성능을 향상시킨다.
-
-::
-
-plandump 결과의 상세항목은 다음과 같다.
-
-* 	XASL_ID : sql hash text를 SHA1으로 변환한 문자열로 plan cache의 key로 사용
-
-        *   time_stored : plan cache에 저장된 시간(unix timestamp)
-
-*   fix_count : 동시 사용하는 쓰레드 수
-*   cache flags : cache entry의 상태정보
-
-        *   8000000 : mark_deleted
-        *   4000000 : to be recompiled
-        *   2000000 : was recompiled
-        *   0800000 : clean up
-        *   0400000 : recomiled requested
-*   reference count : 참조된 횟수
-*   time second last used : 최종 사용된 시간(unix timestamp)
-*   clone count : 사용된 clone 개수 (서버에는 컴파일된 XASL이 메모리 스트림 형태로 저장되어 있으며, 실제 실행 시에는 이를 XASL 구조체로 변환한다. 이 변환 비용을 줄이기 위해 Clone Cache를 사용하게된다. Clone Cache는 변환된 XASL 구조체를 보관하여 재 사용하며, 동시에 여러 스레드가 요청할 경우 사용할 Clone이 없으면 새로 생성하여 사용 후 Cache에 등록한다. 이때 Clone 수가 증가한다.
-* 	SQL_ID : 원문 질의를 MD5 변환하여 32자리(16진수) 문자열 중 마지막 13자리의 16진수 값(hexa-digit) 을 SQL ID로 사용한다. 
-*   sql user text : 원문 질의문
-* 	sql hash text : 재작성된 질의문
-*   sql plan text : 실행계획
-*   OID_LIST : 참조하고 있는 객체(table, serial 등)의 OID 정보
+    1.   질의분석(파싱 및 재작성) : 클라이언트에서 전달된 SQL 질의는 CAS에서 먼저 파싱(parsing)과 재작성(rewrite) 과정을 거친다. 
+    2.   XASL_ID 생성 : 재작성된 질의를 기반으로 XASL_ID가 생성된다. 이 XASL_ID는 질의의 고유한 식별자로 사용되며, 서버의 플랜 캐시에 해당 질의가 이미 저장되어 있는지 확인하는 데 사용된다.
+    3.   플랜 캐시 확인 : 생성된 XASL_ID를 사용하여  플랜 캐시에 이미 저장된 실행 계획이 있는지 확인한다.
+	    *	저장되어 있는 경우: 서버는 플랜 캐시에 저장된 실행 계획을 이용해 질의를 실행
+	    * 	저장되어 있지 않은 경우: CAS에서 새로운 실행 계획을 생성하여 서버로 전달
 
 .. note::
-    *   unix timestamp는 date명령어로 시간을 확인할 수 있다.
 
-        *   $> date -d @1750657814
-        *   $> date -d @1750657813.784232 
-    *   clone count 추가설명
+    플랜 캐시는 실행 계획의 재 사용을 통해 성능을 향상시킨다.
 
-        *   서버에는 컴파일된 XASL이 메모리 스트림 형태로 저장되어 있으며, 실제 실행 시에는 이를 XASL 구조체로 변환한다. 이 변환 비용을 줄이기 위해 Clone Cache를 사용하게된다. Clone Cache는 변환된 XASL 구조체를 보관하여 재 사용하며, 동시에 여러 스레드가 요청할 경우 사용할 Clone이 없으면 새로 생성하여 사용 후 Cache에 등록한다. 이때 Clone 수가 증가한다.
-    *   SQL_ID 예제
 
-        *   MD5결과 : e1faffb3e614e6c2fba74296962386b7
-        *   SQL_ID : 74296962386b7
-    
+plandump 결과의 **상세항목** 은 다음과 같다.
+
+* XASL_ID : sql hash text를 SHA1으로 변환한 문자열로 플랜 캐시의 키(key)로 사용
+    * time_stored : 플랜 캐시에 저장된 시간(unix timestamp)
+    * $> date -d @1750657813.784232 (Mon Jun 23 14:50:13 KST 2025)
+* fix_count : 동시 사용하는 쓰레드 수
+* cache flags : 캐시된 실행 계획의 상태정보
+    * 8000000 : mark_deleted
+    * 4000000 : to be recompiled
+    * 2000000 : was recompiled
+    * 0800000 : clean up
+    * 0400000 : recomiled requested
+* reference count : 참조된 횟수
+* time second last used : 최종 사용된 시간(unix timestamp)
+    * $> date -d @1750657814 (Mon Jun 23 14:50:14 KST 2025)
+* clone count : 사용된 클론(clone) 개수 (서버에는 실행계획이 메모리 스트림 형태로 저장되어 있으며, 실제 실행 시에는 이를 XASL 구조체로 변환한다. 이 변환 비용을 줄이기 위해 클론 캐시(clone cache)를 사용하게된다. 클론 캐시는 변환된 XASL 구조체를 보관하여 재 사용하며, 동시에 여러 스레드가 요청할 경우 사용할 클론이 없으면 새로 생성하여 사용 후 클론 캐시에 등록한다. 이때 해당값이 증가 한다.)
+* SQL_ID : 원문 질의를 MD5 변환하여 32자리(16진수) 문자열 중 마지막 13자리의 16진수 값(hexa-digit) 을 SQL ID로 사용한다.
+    * MD5결과값이 'e1faffb3e614e6c2fba74296962386b7' 인 경우, SQL_ID는 **74296962386b7** 이다.
+* sql user text : 원문 질의문
+* sql hash text : 재작성된 질의문
+* sql plan text : 실행계획
+* OID_LIST : 참조하고 있는 객체(table, serial 등)의 OID 정보
+
+.. note::
+    *   unix timestamp는 date명령어를 사용하여 사람이 이해할 수 있는 형식의 시간으로 변환하여 확인할 수 있다. ::
 
 
 .. _statdump:

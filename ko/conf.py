@@ -6,6 +6,7 @@ from pathlib import Path
 sys.path.append(str(Path('.').resolve()))
 
 # -- General configuration -----------------------------------------------------
+needs_sphinx = "7.3.1"
 
 extensions = [
     'sphinx_simplepdf',

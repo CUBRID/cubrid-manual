@@ -1,12 +1,14 @@
-@page {
-  size: A4;
-  margin: 2cm;
-}
-
-html {
+:root {
   --pst-font-family-base: 'NanumGothic', sans-serif;
   --pst-font-family-heading: 'NanumGothic', sans-serif;
   --pst-font-family-monospace: 'D2Coding', monospace;
+  --pst-font-size-base: 16px;
+  --pst-font-size-heading: 1.6rem;
+}
+
+@page {
+  size: A4;
+  margin: 2cm;
 }
 
 @font-face {
@@ -30,66 +32,76 @@ html {
 }
 
 body {
-    font-family: "NanumGothic", sans-serif, "D2Coding", monospace;
-    /*font-family: var(--pst-font-family-base-system), var(--pst-font-family-monospace-system);*/
-    -webkit-text-size-adjust: 100%;
-    text-rendering: optimizelegibility;
-    font-size: 16px;
+  font-family: var(--pst-font-family-base);
+  font-size: var(--pst-font-size-base);
+  font-size: 16px;
+  font-weight: 450;
+  line-height: 1.6rem;
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizelegibility;
 }
 
-p {
-    line-height: 1.6rem;
-    font-size: 0.9rem;
-    margin: 0;
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--pst-font-family-heading); !important;
+  font-weight: bold;
+}
+
+code, pre {
+  font-family: var(--pst-font-family-monospace) !important;
 }
 
 .rst-content .toctree-wrapper>p.caption, .rst-content h1, .rst-content h2, .rst-content h3, .rst-content h4, .rst-content h5, .rst-content h6 {
-    margin: 1rem 0 0.8rem 0;
+  margin: 0 0 1.6rem;
+}
+
+.rst-content .highlighted {
+  font-weight: bold;
+  padding: 0 0.2rem;
 }
 
 /* 테이블이 용지 너비에 맞도록 자동 조정 */
 @media print {
-    body {
-        font-family: "NanumGothic", sans-serif;
-        text-rendering: optimizelegibility;
-        font-size: 10pt;
-        line-height: 1.6rem;
-        max-width: 160em;
-    }
+  body {
+    font-family: "NanumGothic", sans-serif;
+    text-rendering: optimizelegibility;
+    font-size: 10pt;
+    line-height: 1.6rem;
+    max-width: 160em;
+  }
 
-    .body pre, .body h1, .body h2, .body h3, .body h4, .body h5, .body h6 {
-        text-align: left;
-        margin-bottom: 0.5rem;
-    }
+  .body pre, .body h1, .body h2, .body h3, .body h4, .body h5, .body h6 {
+    text-align: left;
+    margin-bottom: 0.5rem;
+  }
 
-    div.highlight pre {
-        font-family: "D2Coding", monospace;
-        font-size: 0.8rem;
-        line-height: 1.12rem;
-        word-break: break-word;
-        text-align: left;
-    }
+  div.highlight pre {
+    font-family: "D2Coding", monospace;
+    font-size: 0.8rem;
+    line-height: 1.12rem;
+    word-break: break-word;
+    text-align: left;
+  }
 
-    table.docutils {
-        max-width: 100%;
-        width: auto;
-        word-break: break-word;
-    }
+  table.docutils {
+    max-width: 100%;
+    width: auto;
+    word-break: break-word;
+  }
 
-    table.docutils td, table.docutils th {
-    	padding: .4rem;
-    }
+  table.docutils td, table.docutils th {
+    padding: .4rem;
+  }
 
-    div..admonition {
-    	padding: 0.8rem;
-    	line-height: 1.2rem;
-	margin-bottom: 1.2rem;
-    }
+  div..admonition {
+    padding: 0.8rem;
+    line-height: 1.2rem;
+    margin-bottom: 1.2rem;
+  }
 }
 
 .wy-nav-content {
-    max-width: 100vw !important;
-    padding: 0px !important;
+  max-width: 100vw !important;
+  padding: 0px !important;
 }
 
 .wy-table-responsive {
@@ -108,17 +120,17 @@ p {
 }
 
 @media screen and (max-width: 768px) {
-    .wy-nav-top {
-        display: flex !important;
-	justify-content: left;
-    }
-    .fa-bars {
-	margin-right: 1rem;
-    }
-    .wy-nav-top a {
-	font-size: larger;
-	line-height: 2.6rem;
-    }
+  .wy-nav-top {
+    display: flex !important;
+    justify-content: left;
+  }
+  .fa-bars {
+    margin-right: 1rem;
+  }
+  .wy-nav-top a {
+    font-size: larger;
+    line-height: 2.6rem;
+  }
 }
 
 .rst-content [id] {
@@ -132,29 +144,29 @@ p {
 }
 
 table.docutils {
-    width: auto;
-    max-width: 100%;
-    margin-bottom: 1rem;
-    background-color: transparent;
-    border-spacing: 0;
+  width: auto;
+  max-width: 100%;
+  margin-bottom: 1rem;
+  background-color: transparent;
+  border-spacing: 0;
 }
 
 .rst-content div[role="navigation"][aria-label="Page navigation"] {
-    /*background-color: var(--pst-color-on-background) !important;*/
-    box-shadow: 0 0 .15rem 0 rgba(0,0,0,2);
-    background-color: #ffffff;
-    max-width: 100vw;
-    padding: 0;
-    position: sticky;
-    top: 0;
-    width: 100%;
-    z-index: 1030;
-    line-height: 50px;
-    /*color: #efefef;*/
-    padding-left: 2rem;
-    padding-right: 2rem;
-    margin-bottom: 2rem;
-    overflow: hidden;
+  /*background-color: var(--pst-color-on-background) !important;*/
+  box-shadow: 0 0 .15rem 0 rgba(0,0,0,2);
+  background-color: #ffffff;
+  max-width: 100vw;
+  padding: 0;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 1030;
+  line-height: 50px;
+  /*color: #efefef;*/
+  padding-left: 2rem;
+  padding-right: 2rem;
+  margin-bottom: 2rem;
+  overflow: hidden;
 }
 
 .rst-content div[role="navigation"][aria-label="Footer"] {
@@ -203,4 +215,3 @@ table.docutils {
 .version-switcher select option {
   color: #000000;
 }
-

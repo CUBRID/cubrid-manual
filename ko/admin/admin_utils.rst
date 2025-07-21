@@ -1084,7 +1084,7 @@ plandump 결과의 **상세항목** 은 다음과 같다.
 
 * XASL_ID : sql hash text를 SHA1으로 변환한 문자열로 플랜 캐시의 키(key)로 사용
     * time_stored : 플랜 캐시에 저장된 시간(unix timestamp)
-    * $> date -d @1750657813.784232 (Mon Jun 23 14:50:13 KST 2025)
+    * 예제) $> date -d @1750657813.784232 (Mon Jun 23 14:50:13 KST 2025)
 * fix_count : 동시 사용하는 쓰레드 수
 * cache flags : 캐시된 실행 계획의 상태정보
     * 8000000 : mark_deleted
@@ -1094,7 +1094,7 @@ plandump 결과의 **상세항목** 은 다음과 같다.
     * 0400000 : recomiled requested
 * reference count : 참조된 횟수
 * time second last used : 최종 사용된 시간(unix timestamp)
-    * $> date -d @1750657814 (Mon Jun 23 14:50:14 KST 2025)
+    * 예제) $> date -d @1750657814 (Mon Jun 23 14:50:14 KST 2025)
 * clone count : 사용된 클론(clone) 개수 (서버에는 실행계획이 메모리 스트림 형태로 저장되어 있으며, 실제 실행 시에는 이를 XASL 구조체로 변환한다. 이 변환 비용을 줄이기 위해 클론 캐시(clone cache)를 사용하게된다. 클론 캐시는 변환된 XASL 구조체를 보관하여 재 사용하며, 동시에 여러 스레드가 요청할 경우 사용할 클론이 없으면 새로 생성하여 사용 후 클론 캐시에 등록한다. 이때 해당값이 증가 한다.)
 * SQL_ID : 원문 질의를 MD5 변환하여 32자리(16진수) 문자열 중 마지막 13자리의 16진수 값(hexa-digit) 을 SQL ID로 사용한다.
     * MD5결과값이 'e1faffb3e614e6c2fba74296962386b7' 인 경우, SQL_ID는 **74296962386b7** 이다.

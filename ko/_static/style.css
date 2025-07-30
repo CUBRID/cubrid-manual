@@ -180,38 +180,37 @@ table.docutils {
 }
 
 .version-switcher select {
-  /*padding: 3px 10px;
-  font-size: 14px;
-  color: #efefef;
-  /*background-color: #f8f8f8;
-  background-color: #2980b9;;
-  border-radius: 14px;
-  box-shadow: 0 0 0.3rem 0 #16669d;
-  transition: border-color 0.2s ease-in-out;*/
+  background-color: #2980b9;
+  color: #ffffff;
+  border: 1px solid #1c6ca5;
+  padding: 8px 12px;
+  border-radius: 12px;
+  box-shadow: 0 0 0.3rem rgba(28, 108, 165, 0.5);
+  transition: background-color 0.3s, box-shadow 0.3s, border-color 0.3s;
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  background-color: #f9f9f9;
-  border: 1px solid #ccc;
-  padding: 8px 12px;
-  border-radius: 12px;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1),
-              0 1px 2px rgba(0, 0, 0, 0.05);
-  transition: border-color 0.2s, box-shadow 0.2s;
-  color: #333;
 }
 
 .version-switcher select:hover {
-  border-color: #409EFF;
+  background-color: #3498db;
+  border-color: #1c6ca5;
   cursor: pointer;
-  background-color: #ffffff;
 }
 
 .version-switcher select:focus {
   outline: none;
   border-color: #0077cc;
+  box-shadow: 0 0 0.4rem rgba(0, 119, 204, 0.6);
 }
 
 .version-switcher select option {
+  background-color: #ffffff;
   color: #000000;
+}
+
+.version-switcher select option:checked,
+.version-switcher select option:focus {
+  background-color: #2980b9;
+  color: #ffffff;
 }

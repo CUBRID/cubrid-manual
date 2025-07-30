@@ -6,6 +6,7 @@ from pathlib import Path
 sys.path.append(str(Path('.').resolve()))
 
 # -- General configuration -----------------------------------------------------
+needs_sphinx = "7.3.1"
 
 extensions = [
     'sphinx_simplepdf',
@@ -37,6 +38,10 @@ copyright = u'2016, CUBRID Corparation'
 
 version = '10.0'
 release = '10.0.0'
+
+html_context = {
+    "switcher_url": "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json"
+}
 
 exclude_patterns = ['_build']
 
@@ -126,7 +131,6 @@ linkcheck_retries = 5
 
 def setup(app):
     app.add_js_file('version-switcher.js')
-    app.add_js_file('resizer.js')
 
 def setup_jquery(app, exception):
     if sphinx.version_info >= (5, 0, 0):

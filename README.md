@@ -38,7 +38,6 @@ Documentation for CUBRID RDBMS
     | `pango`               | Text layout engine used by PDF renderers like `weasyprint`             |
     | `cairo`               | Graphics library for rendering PDFs and images                         |
     | `gdk-pixbuf2`         | Image processing and rendering support                                 |
-    | `git`                 | Version control and external documentation integration                 |
     
 5. How to build manual
 

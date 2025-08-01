@@ -28,6 +28,7 @@ templates_path = ['_templates']
 
 source_suffix = {
     '.rst': 'restructuredtext',
+    '.inc': 'restructuredtext',
     '.md': 'markdown',
 }
 

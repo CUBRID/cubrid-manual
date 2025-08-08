@@ -45,11 +45,5 @@ jobs:
         docs-folder: ${{ matrix.lang }}
         pre-build-command: |
           python -m pip install --upgrade pip
-              - name: Build and Test Sphinx Doc
-      uses: ammaraskar/sphinx-action@7.3.1
-      with:
-        docs-folder: ${{ matrix.lang }}
-        pre-build-command: |
-          python -m pip install --upgrade pip
           pip installi -r ../requirements.txt
         build-command: make linkcheck

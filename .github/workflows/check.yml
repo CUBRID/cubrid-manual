@@ -31,8 +31,7 @@ jobs:
       fail-fast: false
     steps:
     - name: Set up Python
-      #uses: actions/checkout@v1
-      uses: actions/setup-python@v4
+      uses: actions/checkout@v1
       with:
         python-version: '3.12'
     - name: Install dependencies
@@ -44,7 +43,6 @@ jobs:
       uses: ammaraskar/sphinx-action@master
       with:
         docs-folder: ${{ matrix.lang }}
-        build-command: make html
     - name: Check link
       uses: ammaraskar/sphinx-action@master
       with:

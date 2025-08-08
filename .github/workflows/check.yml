@@ -38,12 +38,12 @@ jobs:
         docs-folder: ${{ matrix.lang }}
         pre-build-command: |
           python -m pip install --upgrade pip
-          pip install -r ../requirements.txt
+          pip install -r requirements.txt
     - name: Check link
       uses: ammaraskar/sphinx-action@7.3.1
       with:
         docs-folder: ${{ matrix.lang }}
         pre-build-command: |
           python -m pip install --upgrade pip
-          pip installi -r ../requirements.txt
+          pip installi -r requirements.txt
         build-command: make linkcheck

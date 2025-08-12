@@ -156,8 +156,6 @@ To view a query plan for a CUBRID SQL query, you can use following methods.
 
 *   *opt-level* : This value specifies the optimization level and is associated with the following settings. Any other value will result in an error. 
 
-    *   0: Does not perform query optimization. The query is executed using the simplest query plan. This value is used only for debugging.
-    
     *   1: Creates a query plan by performing query optimization and executes the query. This is a default value used in CUBRID, and does not have to be changed in most cases.
     
     *   2: Creates a query plan by performing query optimization. However, the query itself is not executed. In general, this value is not used; it is used together with the following values to be set for viewing query plans.

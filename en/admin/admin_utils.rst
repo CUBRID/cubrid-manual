@@ -984,9 +984,6 @@ The **cubrid plandump** utility is used to display information on the query plan
 
 *   *database_name*: The name of the database where the query plans are to be checked or dropped from its server cache.
 
-If no option is used, it checks the query plans stored in the cache. ::
-
-    cubrid plandump testdb
 
 The following shows [options] available with the **cubrid plandump** utility.
 
@@ -996,7 +993,7 @@ The following shows [options] available with the **cubrid plandump** utility.
 
   -d, --drop                   drop all plans in the server's cache
   -o, --output-file=FILE       redirect output messages to FILE
-  -s, --sha1=SHA1              drop specific plan by SHA1 in the server's cache
+  -s, --sha1=SHA1              drop a specific plan using its SHA1 hash from the server’s cache
 
 
 .. option:: -d, --drop
@@ -1029,6 +1026,90 @@ The following shows [options] available with the **cubrid plandump** utility.
             sql plan text = Sequential scan(public.game dba.game)
 
         cubrid plandump -s 'da9cab5d 597f2fe4 48aa8ae8 66b87d81 49fdd7ca' demodb
+
+
+By default, it examines the query plans stored in the plan cache if no options are specified. ::
+
+    cubrid plandump testdb
+
+::
+
+    XASL cache
+    Stats:
+    Max size:                   1000        -- Maximum number of plan cache entries allowed
+    Current entry count:        4           -- Number of currently cached execution plans
+    Lookups:                    25          -- Number of plan cache lookup attempts
+    Hits:                       15          -- Number of successful lookups where the plan already existed
+    Miss:                       10          -- Number of failed lookups 
+    Inserts:                    5
+    Found at insert:            0
+    Recompiles:                 0
+    Failed recompiles:          0
+    Deletes:                    1
+    Fix:                        15
+    Unfix:                      20
+    Cache cleanups:             0
+    Deletes at cleanup:     0
+
+    Entries:
+
+    XASL_ID = {
+              sha1 = { 939db0ab 7ead8a87 2a1ed142 67e2f059 36a3e601 },
+              time_stored = 1750657813 sec, 784232 usec
+            }
+    fix_count = 0
+    cache flags = 00000000
+    reference count = 4
+    time second last used = 1750657814
+    clone count = 1
+    sql info:
+    	SQL_ID = 67d47c14f637a
+        sql user text = select * from game where host_year > '2004'
+        sql hash text = select [dba.game].[host_year], [dba.game].[event_code], [dba.game].[athlete_code], [dba.game].[stadium_code], [dba.game].[nation_code], [dba.game].[medal], [dba.game].[game_date] from [dba.game] [dba.game] w          here ([dba.game].[host_year]> ?:0 )?193="en_US";194="en_US";249="Asia/Seoul";user=0|897|1;bind_var_cnt=1
+		sql plan text =
+    Sequential scan(public.game dba.game)
+    OID_LIST (count = 1):
+		OID = 0|208|10, LOCK =     IS_LOCK, TCARD =       31
+
+CUBRID supports the reuse of SQL execution plans through the Plan Cache feature. The Plan Cache is managed on the server side and operates through cooperation between the Common Application Server (CAS) and the database server. The main processing steps are as follows:
+
+    1.   Query Analysis (Parsing and Rewrite) : When an SQL query is sent from the client, it is first parsed and rewritten by the CAS. During this step, the query is analyzed and internally transformed for optimization and normalization purposes.
+    2.   XASL_ID Generation : Based on the rewritten query, a XASL_ID is generated. This XASL_ID serves as a unique identifier for the query and is used to check whether the corresponding execution plan (XASL) is already stored in the server’s Plan Cache.
+    3.   Plan Cache Lookup : Using the generated XASL_ID, the CAS queries the server to determine if a matching XASL (Execution Plan) already exists in the Plan Cache.
+        *   If the XASL is found: The server uses the existing plan to execute the query.
+        *   If the XASL is not found: The CAS generates a new Tree(Execution Plan) and sends it to the server, which may then decide whether or not to store it in the Plan Cache.
+
+.. note::
+
+    The Plan Cache improves performance by reusing XASL(execution plan).
+
+The following describes **the detailed fields** included in the output of plandump:
+
+* XASL_ID : The SQL hash text is converted into a SHA1 hash string, which is then used as the key for the plan cache.
+    * time_stored: The timestamp indicating when the plan was saved in the plan cache. It is represented as a Unix timestamp and can be converted to a human-readable format using the date command.
+    * ex) $> date -d @1750657813.784232 (Mon Jun 23 14:50:13 KST 2025)
+* fix_count : Number of concurrently used threads
+* cache flags : Status information of the cache entry
+    *   8000000 : mark_deleted
+    *   4000000 : to be recompiled
+    *   2000000 : was recompiled
+    *   0800000 : clean up
+    *   0400000 : recomiled requested
+* reference count: The number of times the execution plan has been referenced (i.e., reused) by queries.
+* time second last used: The UNIX timestamp indicating when this plan was last used. You can convert it to human-readable format using:date -d @<timestamp>
+    * ex) $> date -d @1750657814 (Mon Jun 23 14:50:14 KST 2025)
+* clone count: The number of clone instances created from this plan.When an execution plan is stored in memory as a stream format, it must be converted to an XASL (eXtended Access Specification Language) structure before execution.To reduce this transformation cost, a clone cache is used.The clone cache holds reusable XASL structures.If a thread requests a clone and none are available, a new clone is created and added to the cache. Each time this happens, the clone count increases.
+* SQL_ID: A unique identifier generated from the original SQL statement using the MD5 hash function.From the resulting 32-character hexadecimal hash, the last 13 hexadecimal characters are used as the SQL_ID.
+    * If the MD5 hash value is e1faffb3e614e6c2fba74296962386b7, the corresponding SQL ID is the last 13 characters of the hash: 74296962386b7.
+* sql user text : The original SQL query submitted by the user.
+* sql hash text : The rewritten form of the SQL statement used for caching and plan reuse.
+* sql plan text : The text representation of the execution plan generated for the SQL.
+* OID_LIST : A list of Object ID for database objects (e.g., tables, serials) referenced by this execution plan.
+
+.. note::
+    * You can convert a Unix timestamp to a human-readable date and time format using the date command.
+
+
 
 .. _statdump:
 

@@ -322,8 +322,7 @@ The meaning of each parameter is slightly different for each heterogeneous datab
     *   Connection properties are different for each database, so refer to the site below.
     *   Oracle : https://docs.oracle.com/cd/B19306_01/server.102/b15658/app_odbc.htm#UNXAR418
     *   MySQL : https://dev.mysql.com/doc/connector-odbc/en/connector-odbc-configuration-connection-parameters.html#codbc-dsn-option-flags
-    *   MariaDB : https://mariadb.com/kb/en/about-mariadb-connector-odbc/#general-connection-parameters
-
+    *   MariaDB : https://mariadb.com/docs/connectors/mariadb-connector-odbc/mariadb-connector-odbc-guide#general-connection-parameters
 
 
 Install unixODBC
@@ -577,7 +576,7 @@ The installed driver must register driver information in odbcinst.ini. For setti
     
 	$ mariadb-connector-odbc-3.1.13-centos7-amd64.tar.gz -C mariadb-odbc-3.1.13
 
-For detailed installation instructions, refer to  https://mariadb.com/kb/en/about-mariadb-connector-odbc/#installing-mariadb-connectorodbc-on-linux.
+For detailed installation instructions, refer to https://mariadb.com/docs/connectors/mariadb-connector-odbc/mariadb-connector-odbc-guide#installing-mariadb-connector-odbc-on-linux .
 
 
 **Configuring cubrid_gateway.conf for MariaDB**

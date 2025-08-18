@@ -3746,7 +3746,7 @@ The following example shows the result of executing "cubrid memmon demodb".
             transaction/log_page_buffer.c:584                                                                   |        262147560 Bytes( 28%)
             ...
 
-When **cubrid memmon** is executed, it displays the following information: the name of the database server, the total amount of heap memory in use, and the amount of heap memory used to store meta information for tracking and managing allocated heap memory. Detailed items include the memory usage and usage ratio for each file and line [file:line] at which heap memory allocation occurred, sorted by usage. If the system parameter **enable_memory_monitoring** sets to no or the --disable-force option is used to forcibly stop the memory monitoring feature, an error message will be displayed.
+When **cubrid memmon** is executed, it displays the following information: the name of the database server, the total amount of heap memory in use, and the amount of heap memory used to store meta information for tracking and managing allocated heap memory. Detailed items include the memory usage and usage ratio for each file and line [ `file:line` ] at which heap memory allocation occurred, sorted by usage. If the system parameter **enable_memory_monitoring** sets to no or the --disable-force option is used to forcibly stop the memory monitoring feature, an error message will be displayed.
 
 The information output by the **cubrid memmon** utility has the following meanings.
 

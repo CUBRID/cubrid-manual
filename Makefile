@@ -1,7 +1,7 @@
 # Makefile for Sphinx documentation
 #
 
-.PHONY: clean html
+.PHONY: clean html pdf
 
 help:
 	@echo "Please use \`make <target>' where <target> is one of"
@@ -15,3 +15,6 @@ html:
 	cd ko; make html; cd ..
 	cd en; make html; cd ..
 
+pdf:
+	cd ko; make pdf; cd ..
+	cd en; make pdf; cd ..

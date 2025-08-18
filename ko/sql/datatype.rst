@@ -1852,8 +1852,8 @@ CLOB
     *   **lob-base-path** 설정을 통해 LOB 파일이 저장될 디렉터리를 정의하며, 모든 LOB locator는 이 디렉터리를 기준으로 계산된 **상대 경로** 로 관리된다.
     *   databases.txt에 정의된 '**lob-base-path**' 경로가 /home1/data1 인 경우 CUBRID 버전별 locator의 예는 아래와 같다.
 
-        * **CUBRID 11.4** (**상대 경로**): file:ces_004/doc_t.00001366272829040346_0773
-        * CUBRID 11.3 이전 (**절대 경로**): file:/home1/data1/ces_004/doc_t.00001366272829040346_0773
+        * **CUBRID 11.4** (**상대 경로**): `file:ces_004/doc_t.00001366272829040346_0773`
+        * CUBRID 11.3 이전 (**절대 경로**): `file:/home1/data1/ces_004/doc_t.00001366272829040346_0773`
     *   locator가 상대 경로로 저장되기 때문에 databases.txt의 ‘**lob-base-path**’ 를 변경하는 경우
 
         * 이전에 생성된 LOB 데이터는 조회가 불가능하다.

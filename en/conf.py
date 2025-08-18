@@ -37,8 +37,8 @@ master_doc = 'index'
 project = u'CUBRID'
 copyright = u'2016, CUBRID Corparation'
 
-version = '11.3'
-release = '11.3.0'
+version = '11.2'
+release = '11.2.0'
 
 html_context = {
     "switcher_url": "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json"
@@ -122,7 +122,8 @@ linkcheck_ignore = [
     r'https://linux.die.net/man/2/posix_fadvise',
     r"https://dev\.mysql\.com/downloads/repo/yum/",
     r"https://dev\.mysql\.com/doc/connector-odbc/en/connector-odbc-installation-binary-yum\.html",
-    r"https://dev\.mysql\.com/doc/connector-odbc/en/connector-odbc-configuration-connection-parameters\.html#codbc-dsn-option-flags"
+    r"https://dev\.mysql\.com/doc/connector-odbc/en/connector-odbc-configuration-connection-parameters\.html#codbc-dsn-option-flags",
+    r"http://code.activestate.com/ppm/DBI/"
 ]
 linkcheck_timeout = 30
 linkcheck_workers = 10

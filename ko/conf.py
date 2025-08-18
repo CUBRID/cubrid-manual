@@ -37,8 +37,8 @@ master_doc = 'index'
 project = u'CUBRID'
 copyright = u'2016, CUBRID Corparation'
 
-version = '11.2'
-release = '11.2.0'
+version = '11.3'
+release = '11.3.0'
 
 html_context = {
     "switcher_url": "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json"

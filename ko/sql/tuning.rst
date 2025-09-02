@@ -4230,7 +4230,7 @@ View Merging 최적화
 
     /* 질의문 2 */
     SELECT *
-    FROM emp a, dept b
+    FROM athlete a, record b
     WHERE a.code = b.athlete_code
     AND a.nation_code = 'USA'
     AND b.medal = 'G'

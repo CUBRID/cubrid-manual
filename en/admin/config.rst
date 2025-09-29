@@ -1190,7 +1190,7 @@ The following are parameters related to logs used for database backup and restor
 
     If the value of the **log_buffer_size** parameter is large, performance can be improved (due to the decrease in disk I/O) in an environment where transactions are long and numerous. Moreover, CUBRID Multiversion Concurrency Control system relies on log to access previous row versions and to vacuum invisible versions from database. It is recommended to configure an appropriate value considering the memory size and operations of the system where CUBRID is installed.
 
-    *   Required memory size = the size of log buffer (**log_buffer_size**)
+    *   Required memory size = the size of log buffer (**log_buffer_size**\)
 
 .. _log_max_archives: 
 

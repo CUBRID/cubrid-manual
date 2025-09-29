@@ -834,7 +834,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
 **double_write_buffer_size**
 
-    **double_write_buffer_size**\ 는 이중 쓰기 버퍼 (Double Write Buffer, DWB)의 메모리와 디스크 공간을 설정할 수 있는 파라미터이다. 이 크기를 0으로 설정함으로써 Partial I/O를 방지하기 위한 DWB를 사용하지 않을 수 있다. 기본적으로 DWB는 활성화되어 있으며, 기본값은 **2M** 이다.  
+    **double_write_buffer_size** 는 이중 쓰기 버퍼 (Double Write Buffer, DWB)의 메모리와 디스크 공간을 설정할 수 있는 파라미터이다. 이 크기를 0으로 설정함으로써 Partial I/O를 방지하기 위한 DWB를 사용하지 않을 수 있다. 기본적으로 DWB는 활성화되어 있으며, 기본값은 **2M** 이다.  
     해당 값은 **바이트 단위(byte)**로 동작하므로, 최소 2,097,152 바이트에서 최대 33,554,432 바이트 사이의 값으로 설정해야 한다.
 
 **data_file_os_advise**
@@ -1191,7 +1191,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
 **log_max_archives**
 
-    **log_max_archives**\ 는 보존할 보관 로그 파일의 최대 개수를 설정하는 파라미터이다. 최소값은 0이며, 기본값은 **INT_MAX** (2,147,483,647)이다. 이 파라미터의 동작 방식은 force_remove_log_archives 설정 여부에 따라 달라질 수 있다. 예를 들어, cubrid.conf 파일에서 log_max_archives = 3이고 force_remove_log_archives = yes로 설정되어 있을 경우, 가장 최근의 아카이브 로그 파일 3개만 유지된다. 즉, 네 번째 아카이브 로그 파일이 생성되면, 가장 오래된 아카이브 로그 파일이 자동으로 삭제된다. 삭제된 아카이브 로그에 대한 정보는 *_lginf 파일에 기록된다. 사용자가 ha_mode=off, force_remove_log_archives=n 으로 설정하면, 시스템은 log_max_archives에 사용자가 입력한 값 대신, INT_MAX(2,147,483,647)값을 자동으로 할당한다.
+    **log_max_archives** 는 보존할 보관 로그 파일의 최대 개수를 설정하는 파라미터이다. 최소값은 0이며, 기본값은 **INT_MAX** (2,147,483,647)이다. 이 파라미터의 동작 방식은 force_remove_log_archives 설정 여부에 따라 달라질 수 있다. 예를 들어, cubrid.conf 파일에서 log_max_archives = 3이고 force_remove_log_archives = yes로 설정되어 있을 경우, 가장 최근의 아카이브 로그 파일 3개만 유지된다. 즉, 네 번째 아카이브 로그 파일이 생성되면, 가장 오래된 아카이브 로그 파일이 자동으로 삭제된다. 삭제된 아카이브 로그에 대한 정보는 *_lginf 파일에 기록된다. 사용자가 ha_mode=off, force_remove_log_archives=n 으로 설정하면, 시스템은 log_max_archives에 사용자가 입력한 값 대신, INT_MAX(2,147,483,647)값을 자동으로 할당한다.
 
     하지만 활성화된 트랜잭션이 기존 보관 로그 파일을 여전히 참조하고 있다면, 해당 보관 로그 파일은 삭제되지 않는다. 즉, 어떤 트랜잭션이 첫 번째 보관 로그 파일이 생성되는 시점에서 시작되어 다섯 번째 보관 로그 파일이 생성되는 시점까지도 종료되지 않았다면 첫 번째 보관 로그 파일은 삭제되지 않는다. 
 

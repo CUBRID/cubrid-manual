@@ -11,33 +11,41 @@ Documentation for CUBRID RDBMS
 2. Precaution to edit files.
 
     Please don't use tab character. Change your editor setting that "change tab as spaces". 1 tab should be 4 spaces.
+
+3. Prerequisites
+
+    To build the documentation locally, you need:
+    - **Python 3.12** (recommended)
+    - **pip** (Python package manager)
+    - **make** (for running build commands)
+
+    ```
+    pip3 install -r requirements.txt
+    ```
+
+4. Additional System Packages Required
+
+    The following system packages are required to support advanced features such as PDF rendering, Korean localization, and Sphinx extensions. These are **in addition to basic build tools** like Python, pip, make, and gcc.
+
+    | Package Name          | Purpose                                                                |
+    |-----------------------|------------------------------------------------------------------------|
+    | `glibc-locale-source` | Generates custom locales (e.g., `ko_KR.utf8`)                          |
+    | `glibc-langpack-ko`   | Korean language pack for UTF-8 support                                 |
+    | `openssl-devel`       | Required for SSL-related Python packages                               |
+    | `bzip2-devel`         | Supports compression features used in PDF generation                   |
+    | `libffi-devel`        | Enables building Python C extensions                                   |
+    | `zlib-devel`          | Provides compression support                                           |
+    | `pango`               | Text layout engine used by PDF renderers like `weasyprint`             |
+    | `cairo`               | Graphics library for rendering PDFs and images                         |
+    | `gdk-pixbuf2`         | Image processing and rendering support                                 |
     
-3. How to build manual
-
-   1. Install sphinx package and theme
-      1. Install python
-
-         ```
-         yum install python3 -y
-         ```
-
-      1. Install read the docs theme
-
-         ```
-         pip3 install sphinx_rtd_theme
-         ```
-
-      1. Install make to build
-
-         ```
-         yum install make -y
-         ```
+5. How to build manual
 
    1. go to the manual directory (cd ko for Korean; or cd en for English)
    1. make html
-   1. now you can see the built html files from _built/
+   1. now you can see the built html files from _build/
 
-4. Make commands
+6. Make commands
 
     ```
     make clean
@@ -47,7 +55,11 @@ Documentation for CUBRID RDBMS
     make html
     ```
 
-5. Mainly used tags on sphinx document(.rst file).
+    ```
+    make pdf
+    ```
+
+7. Mainly used tags on sphinx document(.rst file).
 
    Basically, indent is very important when you use tags. For details, see http://sphinx-doc.org/
 

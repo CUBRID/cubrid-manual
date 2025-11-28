@@ -577,7 +577,7 @@ The installed driver must register driver information in odbcinst.ini. For setti
     
 	$ mariadb-connector-odbc-3.1.13-centos7-amd64.tar.gz -C mariadb-odbc-3.1.13
 
-For detailed installation instructions, refer to  https://mariadb.com/kb/en/about-mariadb-connector-odbc/#installing-mariadb-connectorodbc-on-linux.
+For detailed installation instructions, refer to https://mariadb.com/docs/connectors/mariadb-connector-odbc/mariadb-connector-odbc-guide#installing-mariadb-connector-odbc-on-linux .
 
 
 **Configuring cubrid_gataway.conf for MariaDB**

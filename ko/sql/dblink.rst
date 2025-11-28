@@ -579,7 +579,7 @@ https://mariadb.com/downloads/connectors/
     
 	$ mariadb-connector-odbc-3.1.13-centos7-amd64.tar.gz -C mariadb-odbc-3.1.13
 
-자세한 설치 방법은 https://mariadb.com/kb/en/about-mariadb-connector-odbc/#installing-mariadb-connectorodbc-on-linux 을 참고한다.
+자세한 설치 방법은 https://mariadb.com/docs/connectors/mariadb-connector-odbc/mariadb-connector-odbc-guide#installing-mariadb-connector-odbc-on-linux 을 참고한다.
 
 
 **MariaDB 위한 cubrid_gataway.conf 설정**

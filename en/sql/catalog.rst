@@ -421,8 +421,6 @@ The following example shows how to retrieve class methods of the class with a cl
       class_name            sequence((select meth_name from _db_method m where m in c.class_meths))
     ============================================
       'db_serial'           {'change_serial_owner'}
-      'db_authorizations'   {'add_user', 'drop_user', 'find_user', 'print_authorizations', 'info', 'change_owner',
-                             'change_triggr_owner', 'get_owner'}
       'db_authorization'    {'check_authorization'}
       'db_user'             {'add_user', 'drop_user', 'find_user', 'login'}
       'db_root'             {'add_user', 'drop_user', 'find_user', 'print_authorizations', 'info', 'change_owner',
@@ -1339,7 +1337,6 @@ The following example shows how to retrieve system classes that can be accessed 
       class_name
     ======================
       'db_authorization'
-      'db_authorizations'
       'db_ha_apply_info'
       'db_root'
       'db_serial'
@@ -1970,8 +1967,6 @@ The following example show how to retrieve authorization information for objects
       'db_auth'                'SELECT'              'DBA'
       'db_authorization'       'SELECT'              'DBA'
       'db_authorization'       'EXECUTE'             'DBA'
-      'db_authorizations'      'SELECT'              'DBA'
-      'db_authorizations'      'EXECUTE'             'DBA'
 
 .. _db-trig:
 

@@ -63,7 +63,6 @@ A unique_name column has been added to the system tables (_db_class, db_serial, 
           'db_attribute'           'db_attribute'           'DBA'
           'db_auth'                'db_auth'                'DBA'
           'db_authorization'       'db_authorization'       'DBA'
-          'db_authorizations'      'db_authorizations'      'DBA'
               ...
           'public.athlete'         'athlete'                'PUBLIC'
           'public.code'            'code'                   'PUBLIC'

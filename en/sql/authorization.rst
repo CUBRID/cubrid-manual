@@ -349,7 +349,7 @@ Database Administrator (**DBA**) or a member of the **DBA** group can change the
 User Authorization Management METHOD
 ====================================
 
-The database administrator (**DBA**) can check and modify user authorization by calling authorization-related methods defined in **db_user** where information about database user is stored, or **db_authorizations** (the system authorization class). The administrator can specify **db_user** or **db_authorizations** depending on the method to be called, and store the return value of a method to a variable. In addition, some methods can be called only by **DBA** or members of **DBA** group.
+The database administrator (**DBA**) can check and modify user authorization by calling authorization-related methods defined in **db_user** where information about database user is stored, or **db_root** (the system authorization class). The administrator can specify **db_user** or **db_root** depending on the method to be called, and store the return value of a method to a variable. In addition, some methods can be called only by **DBA** or members of **DBA** group.
 
 .. note:: Note that method call made by the master node is not applied to the slave node in the HA environment.
 
@@ -414,16 +414,16 @@ This method is an instance method that can call each user instance, and it is us
 
 **change_owner() method**
 
-As a class method of **db_authorizations** class, this method is used to change the owner of a class. The name of a class for which you want to change the owner, and the name of a new owner are given as arguments. The table name must be prefixed with the schema name. If omitted, the schema name of the current session is used. At this time, the class and owner that are specified as an argument must exist in a database. Otherwise, an error occurs. **change_owner( )** can be called only by **DBA** or members of **DBA** group. The **ALTER ... OWNER** query has the same role as the method. See :ref:`change-owner`.
+As a class method of **db_root** class, this method is used to change the owner of a class. The name of a class for which you want to change the owner, and the name of a new owner are given as arguments. The table name must be prefixed with the schema name. If omitted, the schema name of the current session is used. At this time, the class and owner that are specified as an argument must exist in a database. Otherwise, an error occurs. **change_owner( )** can be called only by **DBA** or members of **DBA** group. The **ALTER ... OWNER** query has the same role as the method. See :ref:`change-owner`.
 
 .. code-block:: sql
 
     -- Change the owner of table_1 owned by user_1 to user_4
-    CALL change_owner ('user_1.table_1', 'user_4') ON CLASS db_authorizations;
+    CALL change_owner ('user_1.table_1', 'user_4') ON CLASS db_root;
 
 The following example shows a **CALL** statement that calls the find_user method defined in the system table **db_user**. It is called to determine whether the database user entered as the **find_user** exists. The first statement calls the table method defined in the **db_user** class. The name (**db_user** in this case) is stored in x if the user is registered in the database. Otherwise, **NULL** is stored.
 
-The second statement outputs the value stored in the variable x. In this query statement, the **DB_ROOT** is a system class that can have only one record. It can be used to output the value of sys_date or other registered variables. For this purpose, the **DB_ROOT** can be replaced by another table having only one record.
+The second statement outputs the value stored in the variable x. In this query statement, the **db_root** is a system class that can have only one record. It can be used to output the value of sys_date or other registered variables. For this purpose, the **db_root** can be replaced by another table having only one record.
 
 .. code-block:: sql
 

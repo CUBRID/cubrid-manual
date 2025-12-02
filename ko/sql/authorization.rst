@@ -190,6 +190,7 @@ CUBRID에서는 다음 데이터베이스 객체에 대한 권한을 부여할 �
 *  **테이블**
 *  **뷰**
 *  **프로시저**
+*  **패키지**
 
 자신이 생성한 데이터베이스 객체에 다른 사용자(그룹)의 접근을 허용하려면 해당 사용자(그룹)에게 적절한 권한을 부여해야 한다.
 권한이 부여된 그룹의 모든 멤버는 동일한 권한을 소유하므로 모든 멤버에게 개별적으로 권한을 부여할 필요는 없다.
@@ -205,6 +206,10 @@ CUBRID에서는 다음 데이터베이스 객체에 대한 권한을 부여할 �
 
     (2) 저장 프로시저와 저장 함수: 
         GRANT EXECUTE ON PROCEDURE [schema_name.]object_name
+        TO user [ { ,user } ... ];
+
+    (2) PL/CSQL 패키지
+        GRANT EXECUTE ON PACKAGE [schema_name.]object_name
         TO user [ { ,user } ... ];
 
 *   *operation*: 권한을 부여할 때 각 데이터베이스 객체에 대하여 사용 가능한 연산을 나타낸다.
@@ -224,6 +229,10 @@ CUBRID에서는 다음 데이터베이스 객체에 대한 권한을 부여할 �
 
         *   **EXECUTE ON PROCEDURE**: 저장 프로시저 또는 저장 함수를 호출할 수 있는 권한.
 
+    * \(3\) PL/CSQL 패키지
+
+        *   **EXECUTE ON PACKAGE**: 패키지가 선언한 항목들을 참조하고 사용할 수 있는 권한.
+
 * *schema_name*: 데이터베이스 객체의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 * *object_name*: 권한을 부여할 데이터베이스 객체의 이름을 지정한다.
 * *user*: 권한을 부여할 사용자나 그룹의 이름을 지정한다. 데이터베이스 사용자의 로그인 이름을 입력하거나 시스템 정의 사용자인 **PUBLIC** 을 입력할 수 있다. **PUBLIC** 이 명시되면 데이터베이스의 모든 사용자는 부여한 권한을 가진다.
@@ -231,6 +240,7 @@ CUBRID에서는 다음 데이터베이스 객체에 대한 권한을 부여할 �
     
     * **WITH GRANT OPTION** 을 이용하면 권한을 부여받은 사용자가 부여받은 권한을 다른 사용자에게 부여할 수 있다. 
     * 저장 프로시저와 저장 함수에 대한 **EXECUTE ON PROCEDURE** 권한은 **WITH GRANT OPTION** 을 지원하지 않는다.
+    * PL/CSQL 패키지에 대한 **EXECUTE ON PACKAGE** 권한은 **WITH GRANT OPTION** 을 지원하지 않는다.
 
 다음은 *smith* (*smith* 의 모든 멤버 포함)에게 *olympic* 테이블의 검색 권한을 부여한 예제이다.
 
@@ -319,6 +329,10 @@ REVOKE
         REVOKE EXECUTE ON PROCEDURE [schema_name.]object_name
         FROM user [ { ,user } ... ];
 
+    (3) PL/CSQL 패키지
+        REVOKE EXECUTE ON PACKAGE [schema_name.]object_name
+        FROM user [ { ,user } ... ];
+
 *   *operation*: 권한을 해지할 때 사용 가능한 연산의 종류이다(자세한 내용은 :ref:`granting-authorization` 참조).
 *   *schema_name*: 데이터베이스 객체의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *object_name*: 권한을 해지할 데이터베이스 객체의 이름을 지정한다.
@@ -388,9 +402,9 @@ REVOKE
 ALTER ... OWNER
 ===============
 
-데이터베이스 관리자(**DBA**) 또는 **DBA** 그룹의 멤버는 다음 질의를 통해 테이블, 뷰, 트리거, 저장 함수/프로시저 및 시리얼의 소유자를 변경할 수 있다. ::
+데이터베이스 관리자(**DBA**) 또는 **DBA** 그룹의 멤버는 다음 질의를 통해 테이블, 뷰, 트리거, 저장 함수/프로시저, 시리얼 및 PL/CSQL 패키지의 소유자를 변경할 수 있다. ::
 
-    ALTER (TABLE | CLASS | VIEW | VCLASS | TRIGGER | PROCEDURE | FUNCTION | SERIAL) [schema_name.]name OWNER TO user_id;
+    ALTER (TABLE | CLASS | VIEW | VCLASS | TRIGGER | PROCEDURE | FUNCTION | SERIAL | PACKAGE) [schema_name.]name OWNER TO user_id;
 
 *   *schema_name*: 객체의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *name*: 소유자를 변경할 스키마 객체의 이름
@@ -404,6 +418,7 @@ ALTER ... OWNER
     ALTER FUNCTION test_function OWNER TO public;
     ALTER PROCEDURE test_procedure OWNER TO public;
     ALTER SERIAL test_serial OWNER TO public;    
+    ALTER PACKAGE test_package OWNER TO public;
 
 .. warning:: 
 

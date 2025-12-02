@@ -2,6 +2,8 @@
 :meta-keywords: cubrid sql, pl/csql, pl/csql package
 :meta-description: This chapter describes PL/CSQL Package Spec.
 
+.. _plcsql_package:
+
 *****************************
 PL/CSQL 패키지
 *****************************

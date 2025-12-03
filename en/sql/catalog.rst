@@ -58,11 +58,11 @@ Class Name                       Description
 :ref:`-db-stored-procedure-code` Stored procedure code information
 :ref:`-db-server`                Server information for DBLink
 :ref:`-db-synonym`               Target object information of synonyms
+:ref:`-db-serial`                Serial information
+:ref:`-db-trigger`               Trigger information
+:ref:`-db-ha-apply-info`         The progress status the **applylogdb** utility applies replication logs
 :ref:`db-user`                   User information
 :ref:`db-authorization`          User authorization information of classes
-:ref:`db-serial`                 Serial information
-:ref:`db-trigger`                Trigger information
-:ref:`db-ha-apply-info`          The progress status the **applylogdb** utility applies replication logs
 :ref:`dual`                      Dummy table
 ================================ =======================================================================
 
@@ -420,11 +420,12 @@ The following example shows how to retrieve class methods of the class with a cl
 
       class_name            sequence((select meth_name from _db_method m where m in c.class_meths))
     ============================================
-      'db_serial'           {'change_serial_owner'}
+      '_db_serial'          {'change_serial_owner'}
       'db_authorization'    {'check_authorization'}
+      'db_root'             {'add_user', 'drop_user', 'find_user', 'print_authorizations', 'info', 'change_owner', 
+                             'change_trigger_owner', 'get_owner', 'change_sp_owner'}
+      'db_serial'           {'change_serial_owner'}
       'db_user'             {'add_user', 'drop_user', 'find_user', 'login'}
-      'db_root'             {'add_user', 'drop_user', 'find_user', 'print_authorizations', 'info', 'change_owner',
-                             'change_triggr_owner', 'get_owner', 'change_sp_owner'}
 
 .. _-db-meth-sig:
 
@@ -557,9 +558,14 @@ The following example shows how to retrieve names of indexes that belong to the 
       '_db_auth'            'i__db_auth_object_of'
       '_db_class'           'i__db_class_unique_name'
       '_db_class'           'i__db_class_class_name_owner'
+      '_db_class'           'i__db_class_class_of'
+      '_db_collation'       'pk__db_collation_coll_id'
+      '_db_data_type'       'pk__db_data_type_type_id_type_name'
       '_db_domain'          'i__db_domain_object_of'
       '_db_domain'          'i__db_domain_data_type'
+      '_db_ha_apply_info'   'u__db_ha_apply_info_db_name_copied_log_path'
       '_db_index'           'i__db_index_class_of'
+      '_db_index'           'i__db_index_index_name'
       '_db_index_key'       'i__db_index_key_index_of'
       '_db_meth_arg'        'i__db_meth_arg_meth_sig_of'
       '_db_meth_file'       'i__db_meth_file_class_of'
@@ -567,6 +573,8 @@ The following example shows how to retrieve names of indexes that belong to the 
       '_db_method'          'i__db_method_class_of_meth_name'
       '_db_partition'       'i__db_partition_class_of_pname'
       '_db_query_spec'      'i__db_query_spec_class_of'
+      '_db_serial'          'pk_db_serial_unique_name'
+      '_db_serial'          'u__db_serial_name_owner'
       '_db_server'          'pk__db_server_link_name_owner'
       '_db_stored_procedure'  'pk_db_stored_procedure_unique_name'
       '_db_stored_procedure_args'  'i__db_stored_procedure_args_sp_of'
@@ -575,11 +583,9 @@ The following example shows how to retrieve names of indexes that belong to the 
       '_db_synonym'         'i__db_synonym_name_owner_is_public'
       'athlete'             'pk_athlete_code'
       'code'                'pk_code'
-      'db_ha_apply_info'    'u_db_ha_apply_info_db_name_copied_log_path'
-      'db_serial'           'pk_db_serial_unique_name'
-      'db_serial'           'u_db_serial_name_owner'
       'db_user'             'u_db_user_name'
       'event'               'pk_event_code'
+      'female_event'        'pk_event_code'
       'game'                'pk_game_host_year_event_code_athlete_code'
       'game'                'fk_game_event_code'
       'game'                'fk_game_athlete_code'
@@ -632,8 +638,9 @@ The following example shows how to retrieve the names of index that belongs to t
     ============================================
       '_db_server'          {'link_name', 'owner'}
       '_db_synonym'         {'name', 'owner', 'is_public'}
-      'db_ha_apply_info'    {'db_name', 'copied_log_path'}
-      'db_serial'           {'name', 'owner'}
+      '_db_ha_apply_info'   {'db_name', 'copied_log_path'}
+      '_db_serial'          {'name', 'owner'}
+      '_db_data_type'       {'type_id', 'type_name'}
       '_db_partition'       {'class_of', 'pname'}
       '_db_method'          {'class_of', 'meth_name'}
       '_db_attribute'       {'class_of', 'attr_name', 'attr_type'}
@@ -676,13 +683,13 @@ Authorization types supported by CUBRID are as follows:
 *   **INDEX**
 *   **EXECUTE**
 
-The following example shows how to retrieve authorization information defined in the class *db_trig*.
+The following example shows how to retrieve authorization information defined in the class *db_trigger*.
 
 .. code-block:: sql
 
     SELECT a.grantor.name, a.grantee.name, a.auth_type
     FROM _db_auth a JOIN _db_class c ON a.object_of = c.class_of
-    WHERE c.class_name = 'db_trig';
+    WHERE c.class_name = 'db_trigger';
 
 ::
 
@@ -949,105 +956,50 @@ comment            VARCHAR(2048) Comment to describe the synonym
     
     It does not support public synonym yet.
 
-.. _db-user:
+.. _-db-serial:
 
-db_user
--------
+_db_serial
+----------
 
-+--------------------+---------------------+---------------------------------------------------------+
-|   Attribute Name   |   Data Type         |   Description                                           |
-+====================+=====================+=========================================================+
-| name               | VARCHAR(1073741823) | User name                                               |
-+--------------------+---------------------+---------------------------------------------------------+
-| id                 | INTEGER             | User identifier                                         |
-+--------------------+---------------------+---------------------------------------------------------+
-| password           | db_password         | User password. Not displayed to the user.               |
-+--------------------+---------------------+---------------------------------------------------------+
-| direct_groups      | SET OF db_user      | Groups to which the user belongs directly               |
-+--------------------+---------------------+---------------------------------------------------------+
-| groups             | SET OF db_user      | Groups to which the user belongs directly or indirectly |
-+--------------------+---------------------+---------------------------------------------------------+
-| authorization      | db_authorization    | Information of the authorization owned by the user      |
-+--------------------+---------------------+---------------------------------------------------------+
-| triggers           | SEQUENCE OF object  | Triggers that occur due to user actions                 |
-+--------------------+---------------------+---------------------------------------------------------+
-| comment            | VARCHAR (1024)      | Comment to describe the user                            |
-+--------------------+---------------------+---------------------------------------------------------+
-
-**Function Names**
-
-*   **set_password** ()
-*   **set_password_encoded** ()
-*   **set_password_encoded_sha1** ()
-*   **add_member** ()
-*   **drop_member** ()
-*   **print_authorizations** ()
-*   **add_user** ()
-*   **drop_user** ()
-*   **find_user** ()
-*   **login** ()
-
-.. _db-authorization:
-
-db_authorization
-----------------
-
-+--------------------+--------------------+--------------------------------------------------------------------------------------------------------------------+
-|   Attribute Name   |   Data Type        |   Description                                                                                                      |
-+====================+====================+====================================================================================================================+
-| owner              | db_user            | User information                                                                                                   |
-+--------------------+--------------------+--------------------------------------------------------------------------------------------------------------------+
-| grants             | SEQUENCE OF        | Sequence of {object for which the user has authorization, authorization grantor of the object, authorization type} |
-+--------------------+--------------------+--------------------------------------------------------------------------------------------------------------------+
-
-**Method Name**
-
-*   **check_authorization** (varchar(255), integer)
-
-.. _db-serial:
-
-db_serial
----------
-
-+-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
-|   Attribute Name  |   Data Type          |   Description                                                                                       |
-+===================+======================+=====================================================================================================+
-| unique_name       | VARCHAR(1073741823)  | Serial name prefixed with schema name.                                                              |
-+-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
-| name              | VARCHAR(1073741823)  | Serial name.                                                                                        |
-+-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
-| owner             | db_user              | Serial owner.                                                                                       |
-+-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
-| current_val       | NUMERIC(38,0)        | Current serial value. Default is 1.                                                                 |
-+-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
-| increment_val     | NUMERIC(38,0)        | Interval of serial values. Default is 1.                                                            |
-+-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
-| max_val           | NUMERIC(38,0)        | The maximum value of the serial. Default is 99999999999999999999999999999999999999.                 |
-+-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
-| min_val           | NUMERIC(38,0)        | The minimum value of the cereal. Default is 1.                                                      |
-+-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
-| cyclic            | INTEGER              | 1 (CYCLE) if a value can be generated by cycling after reaching the maximum                         |
-|                   |                      | or minimum value of the serial; 0 (NOCYCLE) if not.                                                 |
-+-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
-| started           | INTEGER              | 1 if the value has been created at least once after creation, otherwise 0.                          |
-+-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
-| class_name        | VARCHAR(1073741823)  | AUTO_INCREMENT In case of serial, the table name is stored. or **NULL**.                            |
-+-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
-| attr_name         | VARCHAR(1073741823)  | AUTO_INCREMENT In case of serial, the column name is stored. or **NULL**.                           |
-+-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
-| cached_num        | INTEGER              | The number of serial values to pre-create in memory to improve performance. Default is 0.           |
-+-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
-| comment           | VARCHAR (1024)       | Comment to describe the serial.                                                                     |
-+-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
++----------------+---------------------+-------------------------------------------------------------------------------------------+
+| Attribute Name | Data Type           | Description                                                                               |
++================+=====================+===========================================================================================+
+| unique_name    | VARCHAR(1073741823) | Serial name prefixed with schema name.                                                    |
++----------------+---------------------+-------------------------------------------------------------------------------------------+
+| name           | VARCHAR(1073741823) | Serial name.                                                                              |
++----------------+---------------------+-------------------------------------------------------------------------------------------+
+| owner          | db_user             | Serial owner.                                                                             |
++----------------+---------------------+-------------------------------------------------------------------------------------------+
+| current_val    | NUMERIC(38,0)       | Current serial value. Default is 1.                                                       |
++----------------+---------------------+-------------------------------------------------------------------------------------------+
+| increment_val  | NUMERIC(38,0)       | Interval of serial values. Default is 1.                                                  |
++----------------+---------------------+-------------------------------------------------------------------------------------------+
+| max_val        | NUMERIC(38,0)       | The maximum value of the serial. Default is 99999999999999999999999999999999999999.       |
++----------------+---------------------+-------------------------------------------------------------------------------------------+
+| min_val        | NUMERIC(38,0)       | The minimum value of the cereal. Default is 1.                                            |
++----------------+---------------------+-------------------------------------------------------------------------------------------+
+| cyclic         | INTEGER             | 1 (CYCLE) if a value can be generated by cycling after reaching the maximum               |
+|                |                     | or minimum value of the serial; 0 (NOCYCLE) if not.                                       |
++----------------+---------------------+-------------------------------------------------------------------------------------------+
+| started        | INTEGER             | 1 if the value has been created at least once after creation, otherwise 0.                |
++----------------+---------------------+-------------------------------------------------------------------------------------------+
+| class_name     | VARCHAR(1073741823) | AUTO_INCREMENT In case of serial, the table name is stored. or **NULL**.                  |
++----------------+---------------------+-------------------------------------------------------------------------------------------+
+| attr_name      | VARCHAR(1073741823) | AUTO_INCREMENT In case of serial, the column name is stored. or **NULL**.                 |
++----------------+---------------------+-------------------------------------------------------------------------------------------+
+| cached_num     | INTEGER             | The number of serial values to pre-create in memory to improve performance. Default is 0. |
++----------------+---------------------+-------------------------------------------------------------------------------------------+
+| comment        | VARCHAR (1024)      | Comment to describe the serial.                                                           |
++----------------+---------------------+-------------------------------------------------------------------------------------------+
 
 **Method Name**
 
 *   **change_serial_owner** ()
 
-.. _db-trigger:
+.. _-db-trigger:
 
-db_trigger
-----------
+_db_trigger
+-----------
 
 +------------------------+---------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------+
 |   Attribute Name       |   Data Type         |   Description                                                                                                                                              |
@@ -1086,10 +1038,10 @@ db_trigger
 | comment                | VARCHAR (1024)      | Comment to describe the trigger                                                                                                                            |
 +------------------------+---------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
-.. _db-ha-apply-info:
+.. _-db-ha-apply-info:
 
-db_ha_apply_info
-----------------
+_db_ha_apply_info
+-----------------
 
 A table that stores the progress status every time the **applylogdb** utility applies replication logs. This table is updated at every point the **applylogdb** utility commits, and the accumulative count of operations are stored in the \*_counter column. The meaning of each column is as follows:
 
@@ -1144,7 +1096,7 @@ A table that stores the progress status every time the **applylogdb** utility ap
 +----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
 | log_commit_time      | DATETIME        | The time of reflecting the last commit log                                                                                                         |
 +----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
-| last_access_time     | DATETIME        | The final update time of the db_ha_apply_info catalog                                                                                              |
+| last_access_time     | DATETIME        | The final update time of the _db_ha_apply_info catalog                                                                                             |
 +----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
 | status               | INTEGER         | Progress status (0: IDLE, 1: BUSY)                                                                                                                 |
 +----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
@@ -1162,6 +1114,61 @@ A table that stores the progress status every time the **applylogdb** utility ap
 +----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
 | start_time           | DATETIME        | Time when the applylogdb process accessed the slave database                                                                                       |
 +----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
+
+.. _db-user:
+
+db_user
+-------
+
++--------------------+---------------------+---------------------------------------------------------+
+|   Attribute Name   |   Data Type         |   Description                                           |
++====================+=====================+=========================================================+
+| name               | VARCHAR(1073741823) | User name                                               |
++--------------------+---------------------+---------------------------------------------------------+
+| id                 | INTEGER             | User identifier                                         |
++--------------------+---------------------+---------------------------------------------------------+
+| password           | db_password         | User password. Not displayed to the user.               |
++--------------------+---------------------+---------------------------------------------------------+
+| direct_groups      | SET OF db_user      | Groups to which the user belongs directly               |
++--------------------+---------------------+---------------------------------------------------------+
+| groups             | SET OF db_user      | Groups to which the user belongs directly or indirectly |
++--------------------+---------------------+---------------------------------------------------------+
+| authorization      | db_authorization    | Information of the authorization owned by the user      |
++--------------------+---------------------+---------------------------------------------------------+
+| triggers           | SEQUENCE OF object  | Triggers that occur due to user actions                 |
++--------------------+---------------------+---------------------------------------------------------+
+| comment            | VARCHAR (1024)      | Comment to describe the user                            |
++--------------------+---------------------+---------------------------------------------------------+
+
+**Function Names**
+
+*   **set_password** ()
+*   **set_password_encoded** ()
+*   **set_password_encoded_sha1** ()
+*   **add_member** ()
+*   **drop_member** ()
+*   **print_authorizations** ()
+*   **add_user** ()
+*   **drop_user** ()
+*   **find_user** ()
+*   **login** ()
+
+.. _db-authorization:
+
+db_authorization
+----------------
+
++--------------------+--------------------+--------------------------------------------------------------------------------------------------------------------+
+|   Attribute Name   |   Data Type        |   Description                                                                                                      |
++====================+====================+====================================================================================================================+
+| owner              | db_user            | User information                                                                                                   |
++--------------------+--------------------+--------------------------------------------------------------------------------------------------------------------+
+| grants             | SEQUENCE OF        | Sequence of {object for which the user has authorization, authorization grantor of the object, authorization type} |
++--------------------+--------------------+--------------------------------------------------------------------------------------------------------------------+
+
+**Method Name**
+
+*   **check_authorization** (varchar(255), integer)
 
 .. _dual:
 
@@ -1228,7 +1235,9 @@ Virtual Class Name               Description
 :ref:`db-index`                  Index information
 :ref:`db-index-key`              Key information on an index
 :ref:`db-auth`                   User authorization information of classes
-:ref:`db-trig`                   Trigger information
+:ref:`db-serial`                 Serial information
+:ref:`db-trigger`                Trigger information
+:ref:`db-ha-apply-info`          The progress status the **applylogdb** utility applies replication logs
 :ref:`db-partition`              Partition information
 :ref:`db-stored-procedure`       Stored procedure information
 :ref:`db-stored-procedure-args`  Stored procedure argument information
@@ -1309,7 +1318,7 @@ The following example shows how to retrieve virtual classes that can be accessed
       'db_stored_procedure_args'
       'db_stored_procedure'
       'db_partition'
-      'db_trig'
+      'db_trigger'
       'db_auth'
       'db_index_key'
       'db_index'
@@ -1337,9 +1346,7 @@ The following example shows how to retrieve system classes that can be accessed 
       class_name
     ======================
       'db_authorization'
-      'db_ha_apply_info'
       'db_root'
-      'db_serial'
       'db_user'
       'dual'
 
@@ -1844,9 +1851,6 @@ The following example shows how to retrieve index information of the class.
 
       class_name            index_name                                           is_unique
     ========================================================================================
-      'db_ha_apply_info'    'u_db_ha_apply_info_db_name_copied_log_path'         'YES'
-      'db_serial'           'pk_db_serial_unique_name'                           'YES'
-      'db_serial'           'u_db_serial_name_owner'                             'YES'
       'db_user'             'u_db_user_name'                                     'YES'
       'athlete'             'pk_athlete_code'                                    'YES'
       'event'               'pk_event_code'                                      'YES'
@@ -1903,18 +1907,13 @@ The following example shows how to retrieve index key information of the class.
 
       class_name            key_attr_name         index_name
     ==================================================================
-      'db_ha_apply_info'    'db_name'             'u_db_ha_apply_info_db_name_copied_log_path'
-      'db_ha_apply_info'    'copied_log_path'     'u_db_ha_apply_info_db_name_copied_log_path'
-      'db_serial'           'name'                'u_db_serial_name_owner'
-      'db_serial'           'unique_name'         'pk_db_serial_unique_name'
-      'db_serial'           'owner'               'u_db_serial_name_owner'
       'db_user'             'name'                'u_db_user_name'
       'athlete'             'code'                'pk_athlete_code'
       'code'                's_name'              'pk_code'
       'event'               'code'                'pk_event_code'
       'female_event'        'code'                'pk_event_code'
-      'game'                'host_year'           'pk_game_host_year_event_code_athlete_code'
       'game'                'athlete_code'        'fk_game_athlete_code'
+      'game'                'host_year'           'pk_game_host_year_event_code_athlete_code'
       'game'                'event_code'          'fk_game_event_code'
       'game'                'event_code'          'pk_game_host_year_event_code_athlete_code'
       'game'                'athlete_code'        'pk_game_host_year_event_code_athlete_code'
@@ -1923,6 +1922,11 @@ The following example shows how to retrieve index key information of the class.
       'nation'              'code'                'pk_nation_code'
       'olympic'             'host_year'           'pk_olympic_host_year'
       'participant'         'host_year'           'pk_participant_host_year_nation_code'
+      'participant'         'nation_code'         'fk_participant_nation_code'
+      'participant'         'host_year'           'fk_participant_host_year'
+      'participant'         'nation_code'         'pk_participant_host_year_nation_code'
+      'record'              'host_year'           'pk_record_host_year_event_code_athlete_code_medal'
+      'record'              'event_code'          'pk_record_host_year_event_code_athlete_code_medal'
 
 .. _db-auth:
 
@@ -1968,10 +1972,49 @@ The following example show how to retrieve authorization information for objects
       'db_authorization'       'SELECT'              'DBA'
       'db_authorization'       'EXECUTE'             'DBA'
 
-.. _db-trig:
+.. _db-serial:
 
-DB_TRIG
--------
+DB_SERIAL
+---------
+
++----------------+---------------------+-------------------------------------------------------------------------------------------+
+| Attribute Name | Data Type           | Description                                                                               |
++================+=====================+===========================================================================================+
+| name           | VARCHAR(255)        | Serial name.                                                                              |
++----------------+---------------------+-------------------------------------------------------------------------------------------+
+| owner          | VARCHAR(255)        | Serial owner.                                                                             |
++----------------+---------------------+-------------------------------------------------------------------------------------------+
+| current_val    | NUMERIC(38,0)       | Current serial value.                                                                     |
++----------------+---------------------+-------------------------------------------------------------------------------------------+
+| increment_val  | NUMERIC(38,0)       | Interval of serial values.                                                                |
++----------------+---------------------+-------------------------------------------------------------------------------------------+
+| max_val        | NUMERIC(38,0)       | The maximum value of the serial.                                                          |
++----------------+---------------------+-------------------------------------------------------------------------------------------+
+| min_val        | NUMERIC(38,0)       | The minimum value of the cereal.                                                          |
++----------------+---------------------+-------------------------------------------------------------------------------------------+
+| cyclic         | INTEGER             | 1 (CYCLE) if a value can be generated by cycling after reaching the maximum               |
+|                |                     | or minimum value of the serial; 0 (NOCYCLE) if not.                                       |
++----------------+---------------------+-------------------------------------------------------------------------------------------+
+| started        | INTEGER             | 1 if the value has been created at least once after creation, otherwise 0.                |
++----------------+---------------------+-------------------------------------------------------------------------------------------+
+| class_name     | VARCHAR(255)        | AUTO_INCREMENT In case of serial, the table name is stored. or **NULL**.                  |
++----------------+---------------------+-------------------------------------------------------------------------------------------+
+| attr_name      | VARCHAR(255)        | AUTO_INCREMENT In case of serial, the column name is stored. or **NULL**.                 |
++----------------+---------------------+-------------------------------------------------------------------------------------------+
+| cached_num     | INTEGER             | The number of serial values to pre-create in memory to improve performance. Default is 0. |
++----------------+---------------------+-------------------------------------------------------------------------------------------+
+| comment        | VARCHAR (1024)      | Comment to describe the serial.                                                           |
++----------------+---------------------+-------------------------------------------------------------------------------------------+
+
+**Method Name**
+
+*   **change_serial_owner** ()
+
+
+.. _db-trigger:
+
+DB_TRIGGER
+----------
 
 Represents information of a trigger that has the class for which the current user has access authorization to a database, or its attribute as the target.
 
@@ -1996,6 +2039,83 @@ Represents information of a trigger that has the class for which the current use
 +--------------------+---------------+-------------------------------------------------------------------------------------------------------------------------------+
 | comment            | VARCHAR(1024) | Comment to describe the trigger.                                                                                              |
 +--------------------+---------------+-------------------------------------------------------------------------------------------------------------------------------+
+
+.. _db-ha-apply-info:
+
+DB_HA_APPLY_INFO
+----------------
+
+Represents information indicating the replication log application process and its progress status in the database.
+
++----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
+|   Column Name        |   Column Type   |   Description                                                                                                                                      |
++======================+=================+====================================================================================================================================================+
+| db_name              | VARCHAR(255)    | Name of the database stored in the log                                                                                                             |
++----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
+| db_creation_time     | DATETIME        | Creation time of the source database for the log to be applied                                                                                     |
++----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
+| copied_log_path      | VARCHAR(4096)   | Path to the log file to be applied                                                                                                                 |
++----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
+| committed_lsa_pageid | BIGINT          | The page id of commit log lsa reflected last.                                                                                                      |
+|                      |                 | Although applylogdb is restarted, the logs before last_committed_lsa are not reflected again.                                                      |
++----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
+| committed_lsa_offset | INTEGER         | The offset of commit log lsa reflected last.                                                                                                       |
+|                      |                 | Although applylogdb is restarted, the logs before last_committed_lsa are not reflected again.                                                      |
++----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
+| committed_rep_pageid | BIGINT          | The page id of the replication log lsa reflected last.                                                                                             |
+|                      |                 | Check whether the reflection of replication has been delayed or not.                                                                               |
++----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
+| committed_rep_offset | INTEGER         | The offset of the replication log lsa reflected last.                                                                                              |
+|                      |                 | Check whether the reflection of replication has been delayed or not.                                                                               |
++----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
+| append_lsa_page_id   | BIGINT          | The page id of the last replication log lsa at the last reflection.                                                                                |
+|                      |                 | Saves append_lsa of the replication log header that is being processed by applylogdb at the time of reflecting the replication.                    |
+|                      |                 | Checks whether the reflection of replication has been delayed or not at the time of reflecting the replication log.                                |
++----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
+| append_lsa_offset    | INTEGER         | The offset of the last replication log lsa at the last reflection.                                                                                 |
+|                      |                 | Saves append_lsa of the replication log header that is being processed by applylogdb at the time of reflecting the replication.                    |
+|                      |                 | Checks whether the reflection of replication has been delayed or not at the time of reflecting the replication log.                                |
++----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
+| eof_lsa_page_id      | BIGINT          | The page id of the replication log EOF lsa at the last reflection.                                                                                 |
+|                      |                 | Saves eof_lsa of the replication log header that is being processed by applylogdb at the time of reflecting the replication.                       |
+|                      |                 | Checks whether the reflection of replication has been delayed or not at the time of reflecting the replication log.                                |
++----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
+| eof_lsa_offset       | INTEGER         | The offset of the replication log EOF lsa at the last reflection.                                                                                  |
+|                      |                 | Saves eof_lsa of the replication log header that is being processed by applylogdb at the time of reflecting the replication.                       |
+|                      |                 | Checks whether the reflection of replication has been delayed or not at the time of reflecting the replication log.                                |
++----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
+| final_lsa_pageid     | BIGINT          | The pageid of replication log lsa processed last by applylogdb.                                                                                    |
+|                      |                 | Checks whether the reflection of replication has been delayed or not.                                                                              |
++----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
+| final_lsa_offset     | INTEGER         | The offset of replication log lsa processed last by applylogdb.                                                                                    |
+|                      |                 | Checks whether the reflection of replication has been delayed or not.                                                                              |
++----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
+| required_page_id     | BIGINT          | The smallest page which should not be deleted by the log_max_archives parameter. The log page number from which the replication will be reflected. |
++----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
+| required_page_offset | INTEGER         | The offset of the log page from which the replication will be reflected.                                                                           |
++----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
+| log_record_time      | DATETIME        | Timestamp included in replication log committed in the slave database, i.e. the creation time of the log                                           |
++----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
+| log_commit_time      | DATETIME        | The time of reflecting the last commit log                                                                                                         |
++----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
+| last_access_time     | DATETIME        | The final update time of the _db_ha_apply_info catalog                                                                                             |
++----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
+| status               | INTEGER         | Progress status (0: IDLE, 1: BUSY)                                                                                                                 |
++----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
+| insert_counter       | BIGINT          | Number of times that applylogdb was inserted                                                                                                       |
++----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
+| update_counter       | BIGINT          | Number of times that applylogdb was updated                                                                                                        |
++----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
+| delete_counter       | BIGINT          | Number of times that applylogdb was deleted                                                                                                        |
++----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
+| schema_counter       | BIGINT          | Number of times that applylogdb changed the schema                                                                                                 |
++----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
+| commit_counter       | BIGINT          | Number of times that applylogdb was committed                                                                                                      |
++----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
+| fail_counter         | BIGINT          | Number of times that applylogdb failed to be inserted/updated/deleted/committed and to change the schema                                           |
++----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
+| start_time           | DATETIME        | Time when the applylogdb process accessed the slave database                                                                                       |
++----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
 
 .. _db-partition:
 

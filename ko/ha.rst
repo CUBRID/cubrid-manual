@@ -52,7 +52,7 @@ CUBRID HA 노드는 하나의 마스터 프로세스(cub_master), 하나 이상�
 
 .. image:: /images/image15.png
 
-*   **복제 로그 반영 프로세스(applylogdb)** : 복제 로그 복사 프로세스에 의해 복사된 로그를 노드에 반영한다. 반영한 복제 정보는 내부 카탈로그(db_ha_apply_info)에 저장하며, 이 정보는 :ref:`cubrid-applyinfo` 유틸리티로 확인할 수 있다.
+*   **복제 로그 반영 프로세스(applylogdb)** : 복제 로그 복사 프로세스에 의해 복사된 로그를 노드에 반영한다. 반영한 복제 정보는 내부 카탈로그(_db_ha_apply_info)에 저장하며, 이 정보는 :ref:`cubrid-applyinfo` 유틸리티로 확인할 수 있다.
 
 .. image:: /images/image16.png
 
@@ -2285,7 +2285,7 @@ CUBRID HA에서 **LOB** 칼럼 메타 데이터(Locator)는 복제되고, **LOB*
 restoreslave
 ------------
 
-**cubrid restoreslave** 는 백업본으로부터 데이터베이스를 복구하는 **cubrid restoredb** 와 동일하지만 슬레이브(slave)나 레플리카(replica)를 재구성할 때 편리한 기능이 포함되어 있다. **cubrid restoreslave** 를 사용하면 사용자가 **db_ha_apply_info** 에 저장되는 복제 카탈로그 생성을 위해 백업 출력에서 복제 관련 정보를 수동으로 수집하지 않아도 된다. 이 명령은 백업 이미지와 활성 로그로부터 필요한 정보를 모두 자동으로 읽어서 관련 복제 카탈로그를 **db_ha_apply_info** 에 추가한다. 사용자는 백업 이미지가 생성된 노드의 상태와 현재 마스터 노드의 호스트명, 이 두 가지 필수 옵션만 제공하면 된다. 자세한 내용은 :ref:`restoredb` 를 참고한다. ::
+**cubrid restoreslave** 는 백업본으로부터 데이터베이스를 복구하는 **cubrid restoredb** 와 동일하지만 슬레이브(slave)나 레플리카(replica)를 재구성할 때 편리한 기능이 포함되어 있다. **cubrid restoreslave** 를 사용하면 사용자가 **_db_ha_apply_info** 에 저장되는 복제 카탈로그 생성을 위해 백업 출력에서 복제 관련 정보를 수동으로 수집하지 않아도 된다. 이 명령은 백업 이미지와 활성 로그로부터 필요한 정보를 모두 자동으로 읽어서 관련 복제 카탈로그를 **_db_ha_apply_info** 에 추가한다. 사용자는 백업 이미지가 생성된 노드의 상태와 현재 마스터 노드의 호스트명, 이 두 가지 필수 옵션만 제공하면 된다. 자세한 내용은 :ref:`restoredb` 를 참고한다. ::
 
     cubrid restoreslave [OPTION] database-name
 
@@ -2352,7 +2352,7 @@ restoreslave
 
 *   :ref:`rebuild-slave`
 
-    마스터, 슬레이브, 레플리카가 구축된 환경에서 마스터를 이용해 슬레이브를 재구축한다. 사용자에 의해 db_ha_apply_info 카탈로그 테이블의 정보를 변경해야 한다.
+    마스터, 슬레이브, 레플리카가 구축된 환경에서 마스터를 이용해 슬레이브를 재구축한다. 사용자에 의해 _db_ha_apply_info 카탈로그 테이블의 정보를 변경해야 한다.
 
 이상에 대해 좀더 자세히 알아보자.
 
@@ -2361,15 +2361,15 @@ HA 환경에서 비정상 노드만 재구축하고자 하는 경우 :ref:`rebui
 .. note::
 
     *   복제 구축 시 염두에 둬야 할 사항은 새로 구축하거나, 재구축하거나, 특정 노드를 제거하는 모든 경우, 해당 노드에 대한 복제 정보와 복제 로그를 변경 또는 삭제해야 한다는 점이다. 
-        복제 정보는 db_ha_apply_info에 저장되며, 상대방 노드의 복제 진행 상태 정보를 가지고 있다. 
+        복제 정보는 _db_ha_apply_info에 저장되며, 상대방 노드의 복제 진행 상태 정보를 가지고 있다. 
     
         단, 레플리카의 경우 역할 변경(role change)이 발생하지 않으므로 상대방 노드가 레플리카 노드의 복제 정보와 복제 로그를 가지고 있을 필요가 없다. 반면, 레플리카는 마스터와 슬레이브 노드의 정보를 모두 가지고 있다. 
 
-    *   :ref:`rebuild-slave`\의 경우 사용자가 직접 db_ha_apply_info 정보를 변경해야 한다. 
+    *   :ref:`rebuild-slave`\의 경우 사용자가 직접 _db_ha_apply_info 정보를 변경해야 한다. 
     
     *   :ref:`build-slave`\의 경우 슬레이브를 새로 구축하므로 자동 생성되는 정보를 그대로 사용하면 된다.
     
-    *   :ref:`build-another-slave`\, :ref:`add-replica`\의 경우 기존의 슬레이브로부터 백업한 데이터베이스를 사용하는데, 기존의 슬레이브에는 마스터의 db_ha_apply_info 정보가 포함되어 있으므로 그대로 사용할 수 있다.
+    *   :ref:`build-another-slave`\, :ref:`add-replica`\의 경우 기존의 슬레이브로부터 백업한 데이터베이스를 사용하는데, 기존의 슬레이브에는 마스터의 _db_ha_apply_info 정보가 포함되어 있으므로 그대로 사용할 수 있다.
        
     *   :ref:`remove-slave`\의 경우 제거된 슬레이브에 대한 복제 정보를 사용자가 직접 삭제해야 한다. 하지만 이 정보가 남아 있다 하더라도 문제가 되진 않는다. 
 
@@ -2793,7 +2793,7 @@ HA 서비스 운영 중 슬레이브를 새로 추가하려면 기존의 마스�
             
             필요로 하는 복제 로그가 이미 삭제되었는지 여부는 testdb_lginf 파일을 사용하여 확인할 수 있다.
 
-            1.  슬레이브에서 백업한 데이터베이스를 복원한 경우라면, 복원된 데이터베이스의 db_ha_apply_info 카탈로그 테이블에서 required_lsa_pageid를 통해 마스터 데이터베이스의 어느 페이지부터 필요한지 확인할 수 있다.
+            1.  슬레이브에서 백업한 데이터베이스를 복원한 경우라면, 복원된 데이터베이스의 _db_ha_apply_info 카탈로그 테이블에서 required_lsa_pageid를 통해 마스터 데이터베이스의 어느 페이지부터 필요한지 확인할 수 있다.
 
             2.  마스터에서 $CUBRID_DATABASES/testdb/log 디렉터리에 있는 testdb_lginf 파일의 내용을 가장 아래에서부터 확인해 나간다.
             
@@ -2809,7 +2809,7 @@ HA 서비스 운영 중 슬레이브를 새로 추가하려면 기존의 마스�
 
             testdb_lginf 파일의 내용이 위와 같이 기록되어 있을 때, "Time: 03/16/15 17:54:40.892 - ARCHIVE: 0 /home/cubrid/DB/databases/testdb/log/testdb_lgar000 0 1277"의 뒤 두 개의 숫자는 해당 파일이 저장하고 있는 페이지의 시작 ID와 끝 ID이다.
             
-            예를 들어, db_ha_apply_info를 통해 확인한 백업 당시 페이지 ID가 2300번이라면 "testdb_lgar001 1278 2555"을 통해 1278번과 2555번 사이의 페이지 ID임을 확인할 수 있으므로, 복원 시 마스터의 보관 로그 (또는 슬레이브의 복제된 보관 로그)는 1번부터 필요하다는 것을 알 수 있다.
+            예를 들어, _db_ha_apply_info를 통해 확인한 백업 당시 페이지 ID가 2300번이라면 "testdb_lgar001 1278 2555"을 통해 1278번과 2555번 사이의 페이지 ID임을 확인할 수 있으므로, 복원 시 마스터의 보관 로그 (또는 슬레이브의 복제된 보관 로그)는 1번부터 필요하다는 것을 알 수 있다.
 
 5.  *nodeC*\에서 HA 서비스를 구동
 
@@ -2943,7 +2943,7 @@ HA 서비스 운영 중 슬레이브를 새로 추가하려면 기존의 마스�
         
             $ csql -u dba --sysadm --write-on-standby testdb@localhost
             
-            sysadm> DELETE FROM db_ha_apply_info WHERE copied_log_path='/home/cubrid/DB/databases/testdb_nodeC';
+            sysadm> DELETE FROM _db_ha_apply_info WHERE copied_log_path='/home/cubrid/DB/databases/testdb_nodeC';
         
         copied_log_path는 복제 로그 파일이 저장된 경로를 나타낸다.
         
@@ -3286,15 +3286,15 @@ HA 서비스 운영 중 슬레이브를 새로 추가하려면 기존의 마스�
 
 2.  *nodeA*\의 백업 및 *nodeB*\의 복구, HA 카탈로그 테이블에 정보 추가
 
-        *nodeA*, *nodeC*\에서 *nodeB*\에 대한 db_ha_apply_info 정보를 삭제한다.
+        *nodeA*, *nodeC*\에서 *nodeB*\에 대한 _db_ha_apply_info 정보를 삭제한다.
         
         ::
         
             [nodeA]$ csql --sysadm -u dba testdb@localhost 
-            csql> DELETE FROM db_ha_apply_info WHERE copied_log_path='/home/cubrid/DB/databases/testdb_nodeB';
+            csql> DELETE FROM _db_ha_apply_info WHERE copied_log_path='/home/cubrid/DB/databases/testdb_nodeB';
 
             [nodeC]$ csql --sysadm --write-on-standby -u dba testdb@localhost 
-            csql> DELETE FROM db_ha_apply_info WHERE copied_log_path='/home/cubrid/DB/databases/testdb_nodeB';
+            csql> DELETE FROM _db_ha_apply_info WHERE copied_log_path='/home/cubrid/DB/databases/testdb_nodeB';
 
     *   *nodeA* 백업
 
@@ -3327,9 +3327,9 @@ HA 서비스 운영 중 슬레이브를 새로 추가하려면 기존의 마스�
             [nodeB]$ cubrid restoredb -B $CUBRID_DATABASES/testdb/log testdb
 
 
-    *   *nodeB*\의 db_ha_apply_info에 *nodeA*\에 대한 복제 정보를 추가
+    *   *nodeB*\의 _db_ha_apply_info에 *nodeA*\에 대한 복제 정보를 추가
         
-        *nodeA*\에 있는 백업 결과를 저장한 output.txt 파일에서 **db_ha_apply_info**\를 업데이트할 정보를 얻는다. output.txt는 "cubrid backupdb" 명령을 수행한 디렉터리에 저장된다.
+        *nodeA*\에 있는 백업 결과를 저장한 output.txt 파일에서 **_db_ha_apply_info**\를 업데이트할 정보를 얻는다. output.txt는 "cubrid backupdb" 명령을 수행한 디렉터리에 저장된다.
         
         ::
             
@@ -3374,7 +3374,7 @@ HA 서비스 운영 중 슬레이브를 새로 추가하려면 기존의 마스�
             local_db_creation=`awk 'BEGIN { print strftime("%m/%d/%Y %H:%M:%S", '$db_creation') }'`
                 csql_cmd="\
                 INSERT INTO \
-                        db_ha_apply_info \
+                        _db_ha_apply_info \
                 VALUES \
                 ( \
                         '$db_name', \
@@ -3413,7 +3413,7 @@ HA 서비스 운영 중 슬레이브를 새로 추가하려면 기존의 마스�
             [nodeB]$ csql -u dba -S testdb
             
             csql> ;line on
-            csql> SELECT * FROM db_ha_apply_info;
+            csql> SELECT * FROM _db_ha_apply_info;
             
 3.  *nodeA*\의 활성 로그(active log)를 *nodeB*\에 복사
 
@@ -4112,7 +4112,7 @@ CUBRID HA 환경에서의 복제 재구축은 다중 슬레이브 노드의 다�
 
 1.  마스터 데이터베이스 백업 
 2.  슬레이브에서 데이터베이스 복구
-3.  백업 시점을 슬레이브의 HA 메타 테이블(db_ha_apply_info)에 저장
+3.  백업 시점을 슬레이브의 HA 메타 테이블(_db_ha_apply_info)에 저장
 4.  슬레이브에서 HA 서비스 구동 (cubrid hb start)
 
 복제 재구축을 위해서는 마스터 노드, 슬레이브 노드, 레플리카 노드에서 아래 환경이 동일해야 한다.
@@ -4187,4 +4187,4 @@ ha_make_slavedb.sh 스크립트
 
     *   **복제 재구축 스크립트 수행 중 오류 발생**
     
-        복제 재구축 스크립트는 수행 도중 오류가 발생해도 이전 상황으로 자동 롤백되지 않는다. 이는 복제 재구축 스크립트를 수행하기 전에도 복제 대상 노드가 이미 정상적으로 서비스하기 힘든 상황이기 때문이다. 복제 재구축 스크립트를 수행하기 전 상황으로 돌아가려면, 복제 재구축 스크립트를 수행하기 전에 복제 원본 노드와 복제 대상 노드의 내부 카탈로그인 **db_ha_apply_info** 정보와 기존의 복제 로그를 백업해야 한다.
+        복제 재구축 스크립트는 수행 도중 오류가 발생해도 이전 상황으로 자동 롤백되지 않는다. 이는 복제 재구축 스크립트를 수행하기 전에도 복제 대상 노드가 이미 정상적으로 서비스하기 힘든 상황이기 때문이다. 복제 재구축 스크립트를 수행하기 전 상황으로 돌아가려면, 복제 재구축 스크립트를 수행하기 전에 복제 원본 노드와 복제 대상 노드의 내부 카탈로그인 **_db_ha_apply_info** 정보와 기존의 복제 로그를 백업해야 한다.

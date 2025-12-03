@@ -151,6 +151,12 @@ Represents class information. An index for unique_name and an index for class_na
 | partition          | SEQUENCE of _db_partition | Partition information                                                                    |
 |                    |                           |                                                                                          |
 +--------------------+---------------------------+------------------------------------------------------------------------------------------+
+| created_time       | DATETIME                  | Class creation time                                                                      |
++--------------------+---------------------------+------------------------------------------------------------------------------------------+
+| updated_time       | DATETIME                  | Class modification time                                                                  |
++--------------------+---------------------------+------------------------------------------------------------------------------------------+
+| checked_time       | DATETIME                  | Class tatistics information update time                                                  |
++--------------------+---------------------------+------------------------------------------------------------------------------------------+
 
 The following example shows how to retrieve all sub classes under the class owned by user '**PUBLIC**' (for the child class *female_event* in the result, see the example in :ref:`add-superclass`).
 
@@ -540,6 +546,10 @@ Represents index information. An index for class_of is created.
 +--------------------+---------------------------+------------------------------------------------+
 | status             | INTEGER                   | Index status                                   |
 +--------------------+---------------------------+------------------------------------------------+
+| created_time       | DATETIME                  | Index creation time                            |
++--------------------+---------------------------+------------------------------------------------+
+| updated_time       | DATETIME                  | Index modification time                        |
++--------------------+---------------------------+------------------------------------------------+
 
 The following example shows how to retrieve names of indexes that belong to the class.
 
@@ -785,6 +795,8 @@ target_class         VARCHAR(1024)                         Class name of the sto
 target_method        VARCHAR(4096)                         Method name of the stored procedure to execute
 owner                db_user                               Owner
 comment              VARCHAR(1024)                         Comment to describe the stored procedure
+created_time         DATETIME                              Stored procedure creation time
+updated_time         DATETIME                              Stored procedure modification time
 ==================== ===================================== =========================================================
 
         .. note::
@@ -930,6 +942,8 @@ password       VARCHAR(1073741823) Database user password of a server
 properties     VARCHAR(2048)       Property information used for connection
 owner          db_user             The owner of this connection information
 comment        VARCHAR(1024)       Comment to describe the server
+created_time   DATETIME            Server creation time
+updated_time   DATETIME            Server modification time
 ============== =================== ========================================
 
 .. _-db-synonym:
@@ -950,6 +964,8 @@ target_unique_name VARCHAR(255)  Name prefixed with the schema name of the targe
 target_name        VARCHAR(255)  The name of the target object
 target_owner       db_user       The owner name of the target object
 comment            VARCHAR(2048) Comment to describe the synonym
+created_time       DATETIME      Synonym creation time
+updated_time       DATETIME      Synonym modification time
 ================== ============= =======================================================
 
 .. warning::
@@ -990,6 +1006,10 @@ _db_serial
 | cached_num     | INTEGER             | The number of serial values to pre-create in memory to improve performance. Default is 0. |
 +----------------+---------------------+-------------------------------------------------------------------------------------------+
 | comment        | VARCHAR (1024)      | Comment to describe the serial.                                                           |
++----------------+---------------------+-------------------------------------------------------------------------------------------+
+| created_time   | DATETIME            | Serial creation time                                                                      |
++----------------+---------------------+-------------------------------------------------------------------------------------------+
+| updated_time   | DATETIME            | Serial modification time                                                                  |
 +----------------+---------------------+-------------------------------------------------------------------------------------------+
 
 **Method Name**
@@ -1036,6 +1056,10 @@ _db_trigger
 | action_time            | INTEGER             | 1 for BEFORE, 2 for AFTER, and 3 for DEFERRED.                                                                                                             |
 +------------------------+---------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | comment                | VARCHAR (1024)      | Comment to describe the trigger                                                                                                                            |
++------------------------+---------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| created_time           | DATETIME            | Trigger creation time                                                                                                                                      |
++------------------------+---------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| updated_time           | DATETIME            | Trigger modification time                                                                                                                                  |
 +------------------------+---------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 .. _-db-ha-apply-info:
@@ -1138,6 +1162,10 @@ db_user
 | triggers           | SEQUENCE OF object  | Triggers that occur due to user actions                 |
 +--------------------+---------------------+---------------------------------------------------------+
 | comment            | VARCHAR (1024)      | Comment to describe the user                            |
++--------------------+---------------------+---------------------------------------------------------+
+| created_time       | DATETIME            | User creation time                                      |
++--------------------+---------------------+---------------------------------------------------------+
+| updated_time       | DATETIME            | User modification time                                  |
 +--------------------+---------------------+---------------------------------------------------------+
 
 **Function Names**
@@ -1272,6 +1300,12 @@ Represents information of classes for which the current user has access authoriz
 | collation          | VARCHAR(32)   | Collation name                                           |
 +--------------------+---------------+----------------------------------------------------------+
 | comment            | VARCHAR(2048) | Comment to describe the class                            |
++--------------------+---------------+----------------------------------------------------------+
+| created_time       | DATETIME      | Class creation time                                      |
++--------------------+---------------+----------------------------------------------------------+
+| updated_time       | DATETIME      | Class modification time                                  |
++--------------------+---------------+----------------------------------------------------------+
+| checked_time       | DATETIME      | Class statistics information update time                 |
 +--------------------+---------------+----------------------------------------------------------+
 
 The following example shows how to retrieve classes owned by the current user.
@@ -1838,6 +1872,10 @@ Represents information of indexes created for the class for which the current us
 +--------------------+----------------------+-----------------------------------------------------+
 | comment            | VARCHAR(1024)        | Comment to describe the index                       |
 +--------------------+----------------------+-----------------------------------------------------+
+| created_time       | DATETIME             | Index creation time                                 |
++--------------------+----------------------+-----------------------------------------------------+
+| updated_time       | DATETIME             | Index modification time                             |
++--------------------+----------------------+-----------------------------------------------------+
 
 The following example shows how to retrieve index information of the class.
 
@@ -2005,6 +2043,10 @@ DB_SERIAL
 +----------------+---------------------+-------------------------------------------------------------------------------------------+
 | comment        | VARCHAR (1024)      | Comment to describe the serial.                                                           |
 +----------------+---------------------+-------------------------------------------------------------------------------------------+
+| created_time   | DATETIME            | Serial creation time                                                                      |
++----------------+---------------------+-------------------------------------------------------------------------------------------+
+| updated_time   | DATETIME            | Serial modification time                                                                  |
++----------------+---------------------+-------------------------------------------------------------------------------------------+
 
 **Method Name**
 
@@ -2038,6 +2080,10 @@ Represents information of a trigger that has the class for which the current use
 | action_time        | INTEGER       | 1 for BEFORE, 2 for AFTER, and 3 for DEFERRED.                                                                                |
 +--------------------+---------------+-------------------------------------------------------------------------------------------------------------------------------+
 | comment            | VARCHAR(1024) | Comment to describe the trigger.                                                                                              |
++--------------------+---------------+-------------------------------------------------------------------------------------------------------------------------------+
+| created_time       | DATETIME      | Trigger creation time                                                                                                         |
++--------------------+---------------+-------------------------------------------------------------------------------------------------------------------------------+
+| updated_time       | DATETIME      | Trigger modification time                                                                                                     |
 +--------------------+---------------+-------------------------------------------------------------------------------------------------------------------------------+
 
 .. _db-ha-apply-info:
@@ -2175,6 +2221,8 @@ target               VARCHAR(4096)               Name of the target stored proce
 owner                VARCHAR(256)                Owner
 code                 VARCHAR(1073741823)         Source code of the stored procedure
 comment              VARCHAR(1024)               Comment to describe the stored procedure
+created_time         DATETIME                    Stored procedure creation time
+updated_time         DATETIME                    Stored procedure modification time
 ==================== =========================== =========================================================
 
         .. note::
@@ -2340,6 +2388,8 @@ user_name      VARCHAR(255)  Database user name of a server
 properties     VARCHAR(2048) Property information used for connection
 owner          VARCHAR(256)  The name of the owner of this connection information
 comment        VARCHAR(1024) Comment to describe the server
+created_time   DATETIME      Server creation time
+updated_time   DATETIME      Server modification time
 ============== ============= ====================================================
 
 .. _db-synonym:
@@ -2358,6 +2408,8 @@ is_public_synonym  VARCHAR(3)    "YES" for a public synonym, and "NO" for a priv
 target_name        VARCHAR(255)  The name of the target object
 target_owner_name  VARCHAR(255)  The owner name of the target object
 comment            VARCHAR(2048) Comment to describe the synonym
+created_time       DATETIME      Synonym creation time
+updated_time       DATETIME      Synonym modification time
 ================== ============= ==========================================================
 
 .. warning::

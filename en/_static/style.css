@@ -1,216 +1,207 @@
+/*
+Copyright (c) 2021 Kil Hyung-jin, with Reserved Font Name Pretendard.
+https://github.com/orioncactus/pretendard
+
+This Font Software is licensed under the SIL Open Font License, Version 1.1.
+This license is copied below, and is also available with a FAQ at:
+http://scripts.sil.org/OFL
+*/
+
+@font-face {
+  font-family: 'Pretendard Variable';
+  font-weight: 45 920;
+  font-style: normal;
+  font-display: swap;
+  src: url('fonts//PretendardVariable.woff2') format('woff2-variations');
+}
+
+@font-face {
+  font-family: 'D2CodingLigature Nerd Font';
+  src: url('fonts/D2CodingLigatureNF.woff2') format('woff2'),
+       url('fonts/D2CodingLigatureNF.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'D2CodingLigature Nerd Font';
+  src: url('fonts/D2CodingLigatureNF-Bold.woff2') format('woff2'),
+       url('fonts/D2CodingLigatureNF-Bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
-  --pst-font-family-base: 'NanumGothic', sans-serif;
-  --pst-font-family-heading: 'NanumGothic', sans-serif;
-  --pst-font-family-monospace: 'D2Coding', monospace;
-  --pst-font-size-base: 16px;
-  --pst-font-size-heading: 1.6rem;
+  --accent-foreground: 191 49% 42% !important;
+  --foreground: 222 48% 11% !important;
+  --primary: hsl(var(--accent-foreground));
+  --sd-color-primary: hsl(var(--accent-foreground)) !important;
 }
 
-@page {
-  size: A4;
-  margin: 2cm;
+@media (prefers-color-scheme: dark) {
+  :root {
+    --accent-foreground: 180 70% 54% !important;
+    --foreground: 200 16% 78% !important;
+    --sd-color-primary: hsl(var(--accent-foreground)) !important;
+  }
 }
 
-@font-face {
-  font-family: 'NanumGothic';
+.font-sans {
+    font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+}
+
+.font-mono {
+    font-family: 'D2CodingLigature Nerd Font','JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace
+}
+
+#left-sidebar a {
+  word-break: keep-all;
+  font-weight: 500;
+}
+
+#left-sidebar a.current {
+    background-color: transparent !important;
+    border-color: hsl(var(--border));
+    border-width: 1px;
+    color: inherit !important;
+    font-weight: 500
+}
+
+#left-sidebar a.internal:hover {
+  color: hsl(var(--accent-foreground));
+}
+
+#left-sidebar a.expanded {
+  background-color: transparent !important;
+  border-color: hsl(var(--border));
+  border-width: 1px;
+  color: inherit !important;
+}
+
+#left-sidebar li.toctree-l3 > a.current {
+  color: inherit !important;
+  border-width: 0px
+}
+
+#left-sidebar ul {
+  font-size: .875rem;
+  line-height: 1rem;
+}
+
+#content a.reference:hover {
+  color: hsl(var(--accent-foreground));
+}
+
+#page > header > div > div.flex.items-center.justify-between.flex-1.gap-2.sm\:gap-4.md\:justify-end > nav {
+  gap: .615rem;
+}
+
+#searchbox > kbd {
+  font-family: 'JetBrains Mono';
+}
+
+#right-sidebar ul li a[data-current=true] {
+  border-bottom: 2px solid hsl(var(--accent-foreground));
+}
+
+.container {
+  max-width: 96%;
+}
+
+table {
+  word-break: break-all;
+  zoom: 0.99;
+}
+
+code, kbd, pre, samp {
+    font-family: 'D2CodingLigature Nerd Font','JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;
+    font-feature-settings: normal;
+    font-size: 0.78rem;
+    line-height: 1rem;
+    font-variation-settings: normal;
+    background: #f7f7f7;
+    background-color: rgba(247, 247, 247, 0.6); /* 투명도 20% */
+}
+
+@media (prefers-color-scheme: dark) {
+  code, kbd, pre, samp {
+    background: #050d14;
+    background-color: rgba(5, 13, 20, 0.6); /* 투명도 20% */
+  }
+}
+
+#content h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 2.5rem;
+    margin-top: 1.5rem;
+    padding-bottom: 0.5rem;
+}
+
+#content h2 {
+    border-bottom-width: 1px;
+    border-color: hsl(var(--border));
+    font-size: 1.75rem;
+    font-weight: 600;
+    line-height: 2.25rem;
+    margin-top: 1.75rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+}
+
+#content h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 2rem;
+    margin-top: 1.5rem;
+    padding-bottom: 0.5rem;
+}
+
+#content .rubric,#content h4 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.75rem;
+    margin-top: 1.25rem;
+    padding-bottom: 0.5rem;
+}
+
+#content section>p {
+    line-height: inherit;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+#content ul:not(.search),
+#content ul:not(.search) > li,
+#content ul:not(.search) p {
+    margin-top: 0.3rem !important;
+}
+
+blockquote {
+  border-left-width: 0px;
   font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url('fonts/NanumGothic.woff2') format('woff2'),
-       url('fonts/NanumGothic.woff') format('woff'),
-       url('fonts/NanumGothic.ttf') format('truetype');
 }
 
-@font-face {
-  font-family: 'D2Coding';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url('fonts/d2coding-full.woff2') format('woff2'),
-       url('fonts/d2coding-full.woff') format('woff'),
-       url('fonts/d2coding-full.ttf') format('truetype');
+.highlighted {
+    background-color: #b0c4;
+    text-decoration-line: inherit;
+    text-decoration-thickness: 3px;
 }
 
-body {
-  font-family: var(--pst-font-family-base);
-  font-size: var(--pst-font-size-base);
-  font-size: 16px;
-  font-weight: 450;
-  line-height: 1.6rem;
-  -webkit-text-size-adjust: 100%;
-  text-rendering: optimizelegibility;
+.highlight .err {
+    border: none;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--pst-font-family-heading); !important;
-  font-weight: bold;
+/* 그리드 마우스 오버 */
+.sd-card:hover .sd-material-icon {
+  fill: hsl(var(--accent-foreground));
 }
 
-code, pre {
-  font-family: var(--pst-font-family-monospace) !important;
-}
-
-.rst-content .toctree-wrapper>p.caption, .rst-content h1, .rst-content h2, .rst-content h3, .rst-content h4, .rst-content h5, .rst-content h6 {
-  margin: 0 0 1.6rem;
-}
-
-.rst-content .highlighted {
-  font-weight: bold;
-  padding: 0 0.2rem;
-}
-
-/* 테이블이 용지 너비에 맞도록 자동 조정 */
-@media print {
-  body {
-    font-family: "NanumGothic", sans-serif;
-    text-rendering: optimizelegibility;
-    font-size: 10pt;
-    line-height: 1.6rem;
-    max-width: 160em;
+/* 768px 이하(모바일)에서 download 버튼 숨기기 */
+@media only screen and (max-width: 768px) {
+  .hide-on-mobile {
+    display: none !important;
   }
-
-  .body pre, .body h1, .body h2, .body h3, .body h4, .body h5, .body h6 {
-    text-align: left;
-    margin-bottom: 0.5rem;
-  }
-
-  div.highlight pre {
-    font-family: "D2Coding", monospace;
-    font-size: 0.8rem;
-    line-height: 1.12rem;
-    word-break: break-word;
-    text-align: left;
-  }
-
-  table.docutils {
-    max-width: 100%;
-    width: auto;
-    word-break: break-word;
-  }
-
-  table.docutils td, table.docutils th {
-    padding: .4rem;
-  }
-
-  div..admonition {
-    padding: 0.8rem;
-    line-height: 1.2rem;
-    margin-bottom: 1.2rem;
-  }
-}
-
-.wy-nav-content {
-  max-width: 100vw !important;
-  padding: 0px !important;
-}
-
-.wy-table-responsive {
-  margin-bottom: 24px;
-  width: auto;
-  max-width: calc(100vw - 400px);
-  overflow: auto;
-}
-
-@media (max-width: 600px) {
-  .wy-table-responsive {
-    max-width: 100%;
-    padding-left: 16px;
-    padding-right: 16px;
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .wy-nav-top {
-    display: flex !important;
-    justify-content: left;
-  }
-  .fa-bars {
-    margin-right: 1rem;
-  }
-  .wy-nav-top a {
-    font-size: larger;
-    line-height: 2.6rem;
-  }
-}
-
-.rst-content [id] {
-  scroll-margin-top: 4rem; /* 고정 헤더 높이 만큼 상단 여백 확보 */
-}
-
-.rst-content div[role="main"] {
-  padding: 0;
-  padding-left: 2rem;
-  padding-right: 2rem;
-}
-
-table.docutils {
-  width: auto;
-  max-width: 100%;
-  margin-bottom: 1rem;
-  background-color: transparent;
-  border-spacing: 0;
-}
-
-.rst-content div[role="navigation"][aria-label="Page navigation"] {
-  /*background-color: var(--pst-color-on-background) !important;*/
-  box-shadow: 0 0 .15rem 0 rgba(0,0,0,2);
-  background-color: #ffffff;
-  max-width: 100vw;
-  padding: 0;
-  position: sticky;
-  top: 0;
-  width: 100%;
-  z-index: 1030;
-  line-height: 50px;
-  /*color: #efefef;*/
-  padding-left: 2rem;
-  padding-right: 2rem;
-  margin-bottom: 2rem;
-  overflow: hidden;
-}
-
-.rst-content div[role="navigation"][aria-label="Footer"] {
-  padding: 0;
-  padding-left: 2rem;
-  padding-right: 2rem;
-}
-
-.rst-content div[role="contentinfo"] {
-  padding: 2rem;
-}
-
-.version-switcher select {
-  background-color: #2980b9;
-  color: #ffffff;
-  border: 1px solid #1c6ca5;
-  padding: 8px 12px;
-  border-radius: 12px;
-  box-shadow: 0 0 0.3rem rgba(28, 108, 165, 0.5);
-  transition: background-color 0.3s, box-shadow 0.3s, border-color 0.3s;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-}
-
-.version-switcher select:hover {
-  background-color: #3498db;
-  border-color: #1c6ca5;
-  cursor: pointer;
-}
-
-.version-switcher select:focus {
-  outline: none;
-  border-color: #0077cc;
-  box-shadow: 0 0 0.4rem rgba(0, 119, 204, 0.6);
-}
-
-.version-switcher select option {
-  background-color: #ffffff;
-  color: #000000;
-}
-
-.version-switcher select option:checked,
-.version-switcher select option:focus {
-  background-color: #2980b9;
-  color: #ffffff;
 }

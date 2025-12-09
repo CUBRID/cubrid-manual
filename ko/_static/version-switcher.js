@@ -14,36 +14,41 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const currentPath = window.location.pathname;
       const currentHash = window.location.hash;
+      const currentOrigin = window.location.origin;
 
-      // 현재 언어 및 internal 여부 추출
       const langMatch = currentPath.match(/^\/manual\/(internal\/)?(ko|en)\//);
       const currentLang = langMatch ? langMatch[2] : "ko";
-      const internalSegment = langMatch && langMatch[1] ? "internal/" : "";
+      const isInternal = langMatch && langMatch[1] === "internal/";
+      const internalSegment = isInternal ? "internal/" : "";
 
-      // 상대 경로 추출
       const relativePath = currentPath.replace(
         new RegExp(`^/manual/${internalSegment}${currentLang}/[^/]+/`),
         ""
       );
       const cleanPath = relativePath.replace(/^\/+/, "");
 
-      const currentUrl = window.location.origin + currentPath + currentHash;
+      const currentUrl = currentOrigin + currentPath + currentHash;
 
       data.forEach(item => {
         const option = document.createElement("option");
 
-        // baseUrl 언어 및 internal 경로 적용
         let baseUrl = item.url.replace(/\/$/, "");
-        baseUrl = baseUrl.replace(
-          /\/manual\/(internal\/)?ko\//,
+        const urlObj = new URL(baseUrl);
+
+        urlObj.hostname = new URL(currentOrigin).hostname;
+
+        urlObj.pathname = urlObj.pathname.replace(
+          /^\/manual\/(internal\/)?(ko|en)\//,
           `/manual/${internalSegment}${currentLang}/`
         );
 
+        baseUrl = urlObj.origin + urlObj.pathname;
+
         const newUrl = baseUrl + "/" + cleanPath + currentHash;
         option.value = newUrl;
+        option.setAttribute("data-base-url", baseUrl); // 기본 페이지용
         option.textContent = item.version;
 
-        // 현재 URL과 일치하면 선택
         if (newUrl === currentUrl || decodeURIComponent(newUrl) === decodeURIComponent(currentUrl)) {
           option.selected = true;
         }
@@ -53,8 +58,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
       select.addEventListener("change", function () {
         const targetUrl = this.value;
+        const baseUrl = this.selectedOptions[0].getAttribute("data-base-url");
+
         if (targetUrl) {
-          window.location.href = targetUrl;
+          fetch(targetUrl, { method: "HEAD" })
+            .then(response => {
+              if (response.ok) {
+                window.location.href = targetUrl;
+              } else {
+                window.location.href = baseUrl;
+              }
+            })
+            .catch(() => {
+              window.location.href = baseUrl;
+            });
         }
       });
     })

@@ -122,7 +122,9 @@ linkcheck_ignore = [
     r'https://linux.die.net/man/2/posix_fadvise',
     r"https://dev\.mysql\.com/downloads/repo/yum/",
     r"https://dev\.mysql\.com/doc/connector-odbc/en/connector-odbc-installation-binary-yum\.html",
-    r"https://dev\.mysql\.com/doc/connector-odbc/en/connector-odbc-configuration-connection-parameters\.html#codbc-dsn-option-flags"
+    r"https://dev\.mysql\.com/doc/connector-odbc/en/connector-odbc-configuration-connection-parameters\.html#codbc-dsn-option-flags",
+    r"https://metacpan.org/dist/DBI/",
+    r"https://www\.gnu\.org/software/libc/manual/html_node/Malloc-Tunable-Parameters",
 ]
 linkcheck_timeout = 30
 linkcheck_workers = 10

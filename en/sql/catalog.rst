@@ -1000,7 +1000,7 @@ db_authorization
 | owner              | db_user            | User information                                                                                                                |
 +--------------------+--------------------+---------------------------------------------------------------------------------------------------------------------------------+
 | grants             | SEQUENCE OF        | Sequence of {object type, object for which the user has authorization, authorization grantor of the object, authorization type} |
-|                    |                    | For object type, 0 is class and 5 is stored procedure.                                                                          |
+|                    |                    | For object type, 0 is a class and 5 is a stored procedure.                                                                          |
 +--------------------+--------------------+---------------------------------------------------------------------------------------------------------------------------------+
 
 **Method Name**

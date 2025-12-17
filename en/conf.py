@@ -86,9 +86,8 @@ html_theme_options = {
   "show_scrolltop": "true",
   "awesome_headerlinks": "false",
   "main_nav_links": {
-    "Home": "/index",
     "Release Note" : "release_note/index",
-    "Index": "/genindex",
+    "Index": "./genindex",
     "Q&A": "https://www.cubrid.com/qna",
   },
   "extra_header_link_icons": {

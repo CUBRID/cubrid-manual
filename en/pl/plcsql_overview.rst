@@ -16,16 +16,16 @@ writing PL/CSQL code after the AS (or IS) keyword in the CREATE PROCEDURE or CRE
 
     <create_procedure> ::=
         CREATE [ OR REPLACE ] PROCEDURE [schema_name.]<identifier> [ ( <seq_of_parameters> ) ]
-        { IS | AS } [ LANGUAGE PLCSQL ] [ <seq_of_declare_specs> ] <body> ;
+        [ <procedure_properties> ] { IS | AS } [ LANGUAGE PLCSQL ] [ <seq_of_declare_specs> ] <body> ;
     <create_function> ::=
         CREATE [ OR REPLACE ] FUNCTION [schema_name.]<identifier> [ ( <seq_of_parameters> ) ] RETURN <type_spec>
-        { IS | AS } [ LANGUAGE PLCSQL ] [ <seq_of_declare_specs> ] <body> ;
+        [ <procedure_properties> ] { IS | AS } [ LANGUAGE PLCSQL ] [ <seq_of_declare_specs> ] <body> ;
 
 In the above syntax, the *body* of a stored procedure/function contains PL/CSQL statements.
 The declaration section, *seq_of_declare_specs*, declares variables, constants, exceptions, etc.,
 that will be used within the execution statements.
-For more details on these syntax elements, refer to :doc:`Declarations <plcsql_decl>` and
-:doc:`Statements <plcsql_stmt>`.
+For more details on these syntax elements, refer to :ref:`CREATE PROCEDURE <create-procedure>`, :ref:`CREATE FUNCTION <create-function>`,
+:doc:`Declarations <plcsql_decl>` and :doc:`Statements <plcsql_stmt>`.
 
 Stored procedures/functions are always executed with auto-commit disabled.
 This applies even if the auto-commit feature is enabled in the calling session.

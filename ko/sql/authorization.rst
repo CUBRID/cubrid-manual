@@ -208,7 +208,7 @@ CUBRID에서는 다음 데이터베이스 객체에 대한 권한을 부여할 �
         GRANT EXECUTE ON PROCEDURE [schema_name.]object_name
         TO user [ { ,user } ... ];
 
-    (2) PL/CSQL 패키지
+    (2) 패키지
         GRANT EXECUTE ON PACKAGE [schema_name.]object_name
         TO user [ { ,user } ... ];
 
@@ -229,9 +229,9 @@ CUBRID에서는 다음 데이터베이스 객체에 대한 권한을 부여할 �
 
         *   **EXECUTE ON PROCEDURE**: 저장 프로시저 또는 저장 함수를 호출할 수 있는 권한.
 
-    * \(3\) PL/CSQL 패키지
+    * \(3\) 패키지
 
-        *   **EXECUTE ON PACKAGE**: 패키지가 선언한 항목들을 참조하고 사용할 수 있는 권한.
+        *   **EXECUTE ON PACKAGE**: 패키지의 선언 항목들을 참조하고 호출할 수 있는 권한.
 
 * *schema_name*: 데이터베이스 객체의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 * *object_name*: 권한을 부여할 데이터베이스 객체의 이름을 지정한다.
@@ -240,7 +240,7 @@ CUBRID에서는 다음 데이터베이스 객체에 대한 권한을 부여할 �
     
     * **WITH GRANT OPTION** 을 이용하면 권한을 부여받은 사용자가 부여받은 권한을 다른 사용자에게 부여할 수 있다. 
     * 저장 프로시저와 저장 함수에 대한 **EXECUTE ON PROCEDURE** 권한은 **WITH GRANT OPTION** 을 지원하지 않는다.
-    * PL/CSQL 패키지에 대한 **EXECUTE ON PACKAGE** 권한은 **WITH GRANT OPTION** 을 지원하지 않는다.
+    * 패키지에 대한 **EXECUTE ON PACKAGE** 권한은 **WITH GRANT OPTION** 을 지원하지 않는다.
 
 다음은 *smith* (*smith* 의 모든 멤버 포함)에게 *olympic* 테이블의 검색 권한을 부여한 예제이다.
 
@@ -329,7 +329,7 @@ REVOKE
         REVOKE EXECUTE ON PROCEDURE [schema_name.]object_name
         FROM user [ { ,user } ... ];
 
-    (3) PL/CSQL 패키지
+    (3) 패키지
         REVOKE EXECUTE ON PACKAGE [schema_name.]object_name
         FROM user [ { ,user } ... ];
 
@@ -402,7 +402,7 @@ REVOKE
 ALTER ... OWNER
 ===============
 
-데이터베이스 관리자(**DBA**) 또는 **DBA** 그룹의 멤버는 다음 질의를 통해 테이블, 뷰, 트리거, 저장 함수/프로시저, 시리얼 및 PL/CSQL 패키지의 소유자를 변경할 수 있다. ::
+데이터베이스 관리자(**DBA**) 또는 **DBA** 그룹의 멤버는 다음 질의를 통해 테이블, 뷰, 트리거, 저장 함수/프로시저, 시리얼 및 패키지의 소유자를 변경할 수 있다. ::
 
     ALTER (TABLE | CLASS | VIEW | VCLASS | TRIGGER | PROCEDURE | FUNCTION | SERIAL | PACKAGE) [schema_name.]name OWNER TO user_id;
 

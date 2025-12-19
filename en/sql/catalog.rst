@@ -155,7 +155,7 @@ Represents class information. An index for unique_name and an index for class_na
 +--------------------+---------------------------+------------------------------------------------------------------------------------------+
 | updated_time       | DATETIME                  | Class modification time                                                                  |
 +--------------------+---------------------------+------------------------------------------------------------------------------------------+
-| checked_time       | DATETIME                  | Class tatistics information update time                                                  |
+| checked_time       | DATETIME                  | Class statistics information update time                                                 |
 +--------------------+---------------------------+------------------------------------------------------------------------------------------+
 
 The following example shows how to retrieve all sub classes under the class owned by user '**PUBLIC**' (for the child class *female_event* in the result, see the example in :ref:`add-superclass`).

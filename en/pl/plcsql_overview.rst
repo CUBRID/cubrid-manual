@@ -19,7 +19,7 @@ writing PL/CSQL code after the AS (or IS) keyword in the CREATE PROCEDURE or CRE
         [ <procedure_properties> ] { IS | AS } [ LANGUAGE PLCSQL ] [ <seq_of_declare_specs> ] <body> ;
     <create_function> ::=
         CREATE [ OR REPLACE ] FUNCTION [schema_name.]<identifier> [ ( <seq_of_parameters> ) ] RETURN <type_spec>
-        [ <procedure_properties> ] { IS | AS } [ LANGUAGE PLCSQL ] [ <seq_of_declare_specs> ] <body> ;
+        [ <function_properties> ] { IS | AS } [ LANGUAGE PLCSQL ] [ <seq_of_declare_specs> ] <body> ;
 
 In the above syntax, the *body* of a stored procedure/function contains PL/CSQL statements.
 The declaration section, *seq_of_declare_specs*, declares variables, constants, exceptions, etc.,

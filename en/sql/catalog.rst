@@ -829,6 +829,7 @@ lang                 INTEGER                               Implementation langua
 pkg_name             VARCHAR(255)                          Package name containing the stored procedure
 is_system_generated  INTEGER                               Indicates whether the stored procedure is system-generated
 directive            INTEGER                               Execution behavior attributes of the stored procedure
+sql_data_access      INTEGER                               SQL data access attribute (0: NO SQL, 1: CONTAINS SQL, 2: READS SQL DATA, 3: MODIFIES SQL DATA)
 target_class         VARCHAR(1024)                         Class name of the stored procedure to execute
 target_method        VARCHAR(4096)                         Method name of the stored procedure to execute
 owner                db_user                               Owner

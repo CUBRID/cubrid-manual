@@ -829,6 +829,7 @@ lang                 INTEGER                               구현 언어
 pkg_name             VARCHAR(255)                          저장 프로시저가 속한 패키지 이름
 is_system_generated  INTEGER                               시스템이 생성한 저장 프로시저 여부
 directive            INTEGER                               저장 프로시저의 실행 동작 속성
+sql_data_access      INTEGER                               SQL 데이터 접근 속성 (0: NO SQL, 1: CONTAINS SQL, 2: READS SQL DATA, 3: MODIFIES SQL DATA)
 target_class         VARCHAR(1024)                         실행할 저장 프로시저의 클래스 이름
 target_method        VARCHAR(4096)                         실행할 저장 프로시저의 메서드 이름
 owner                db_user                               저장 프로시저의 소유자

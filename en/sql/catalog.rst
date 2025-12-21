@@ -1200,6 +1200,10 @@ db_user
 +--------------------+---------------------+---------------------------------------------------------+
 | triggers           | SEQUENCE OF object  | Triggers that occur due to user actions                 |
 +--------------------+---------------------+---------------------------------------------------------+
+| is_loginable       | INTEGER             | Indicates whether the user can log in                   |
++--------------------+---------------------+---------------------------------------------------------+
+| is_system_created  | INTEGER             | Indicates whether the user is system-created            |
++--------------------+---------------------+---------------------------------------------------------+
 | comment            | VARCHAR (1024)      | Comment to describe the user                            |
 +--------------------+---------------------+---------------------------------------------------------+
 | created_time       | DATETIME            | User creation time                                      |

@@ -115,6 +115,12 @@ Represents class information. An index for unique_name and an index for class_na
 | tde_algorithm      | INTEGER                   | TDE encryption algorithm                                                                 |
 |                    |                           | 0: NONE, 1: AES, 2: ARIA                                                                 |
 +--------------------+---------------------------+------------------------------------------------------------------------------------------+
+| statistics_strategy| INTEGER                   | Statistics collection strategy                                                           |
+|                    |                           | (0: SAMPLING, 1: FULLSCAN)                                                               |
++--------------------+---------------------------+------------------------------------------------------------------------------------------+
+| flags              | INTEGER                   | Class flags                                                                              |
+|                    |                           |                                                                                          |
++--------------------+---------------------------+------------------------------------------------------------------------------------------+
 | sub_classes        | SEQUENCE OF _db_class     | Class one level down                                                                     |
 |                    |                           |                                                                                          |
 +--------------------+---------------------------+------------------------------------------------------------------------------------------+
@@ -157,6 +163,14 @@ Represents class information. An index for unique_name and an index for class_na
 +--------------------+---------------------------+------------------------------------------------------------------------------------------+
 | checked_time       | DATETIME                  | Class statistics information update time                                                 |
 +--------------------+---------------------------+------------------------------------------------------------------------------------------+
+
+        .. note::
+        
+            - **flags**
+                - **Bit 1**: 1 for a view with WITH CHECK OPTION
+                - **Bit 2**: 1 for a view with LOCAL CHECK OPTION
+                - **Bit 3**: 1 for a REUSE_OID class
+                - The other bits are not currently used.
 
 The following example shows how to retrieve all sub classes under the class owned by user '**PUBLIC**' (for the child class *female_event* in the result, see the example in :ref:`add-superclass`).
 
@@ -1292,6 +1306,9 @@ Represents information of classes for which the current user has access authoriz
 | is_system_class    | VARCHAR(3)    | 'YES' for a system class, and 'NO' otherwise.            |
 +--------------------+---------------+----------------------------------------------------------+
 | tde_algorithm      | VARCHAR(32)   | TDE encryption algorithm                                 |
++--------------------+---------------+----------------------------------------------------------+
+| statistics_strategy| VARCHAR(8)    | Statistics collection strategy                           |
+|                    |               | ('SAMPLING', 'FULLSCAN')                                 |
 +--------------------+---------------+----------------------------------------------------------+
 | partitioned        | VARCHAR(3)    | 'YES' for a partitioned group class, and 'NO' otherwise. |
 +--------------------+---------------+----------------------------------------------------------+

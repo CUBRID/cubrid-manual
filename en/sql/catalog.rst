@@ -782,28 +782,32 @@ _db_partition
 
 Represents partition information. An index for class_of and pname is created.
 
-+--------------------+---------------+-----------------------------------+
-|   Attribute Name   |   Data Type   |   Description                     |
-+====================+===============+===================================+
-| class_of           | _db_class     | OID of the parent class           |
-+--------------------+---------------+-----------------------------------+
-| pname              | VARCHAR(255)  | Parent -                          |
-|                    |               | **NULL**                          |
-+--------------------+---------------+-----------------------------------+
-| ptype              | INTEGER       | 0 - HASH                          |
-|                    |               | 1 - RANGE                         |
-|                    |               | 2 - LIST                          |
-+--------------------+---------------+-----------------------------------+
-| pexpr              | VARCHAR(2048) | Parent only                       |
-+--------------------+---------------+-----------------------------------+
-| pvalues            | SEQUENCE OF   | Parent - Column name, Hash size   |
-|                    |               | RANGE - MIN/MAX value :           |
-|                    |               | - Infinite MIN/MAX is stored as   |
-|                    |               | **NULL**                          |
-|                    |               | LIST - value list                 |
-+--------------------+---------------+-----------------------------------+
-| comment            | VARCHAR(1024) | Comment to describe the partition |
-+--------------------+---------------+-----------------------------------+
++----------------------+---------------+--------------------------------------+
+|   Attribute Name     |   Data Type   |   Description                        |
++======================+===============+======================================+
+| class_of             | _db_class     | OID of the parent class              |
++----------------------+---------------+--------------------------------------+
+| pname                | VARCHAR(255)  | Parent -                             |
+|                      |               | **NULL**                             |
++----------------------+---------------+--------------------------------------+
+| ptype                | INTEGER       | 0 - HASH                             |
+|                      |               | 1 - RANGE                            |
+|                      |               | 2 - LIST                             |
++----------------------+---------------+--------------------------------------+
+| pexpr                | VARCHAR(2048) | Parent only                          |
++----------------------+---------------+--------------------------------------+
+| pvalues              | SEQUENCE OF   | Parent - Column name, Hash size      |
+|                      |               | RANGE - MIN/MAX value :              |
+|                      |               | - Infinite MIN/MAX is stored as      |
+|                      |               | **NULL**                             |
+|                      |               | LIST - value list                    |
++----------------------+---------------+--------------------------------------+
+| class_partition_type | INTEGER       | Partition type of partition class    |
+|                      |               | (1: PARTITIONED CLASS,               |
+|                      |               | 2: PARTITION CLASS)                  |
++----------------------+---------------+--------------------------------------+
+| comment              | VARCHAR(1024) | Comment to describe the partition    |
++----------------------+---------------+--------------------------------------+
 
 .. _-db-stored-procedure:
 
@@ -2227,19 +2231,28 @@ DB_PARTITION
 
 Represents information of partitioned classes for which the current user has access authorization to a database.
 
-==================== ============= =========================================================================================
-Attribute Name       Data Type     Description                     
-==================== ============= =========================================================================================
-class_name           VARCHAR(255)  Class name                        
-owner_name           VARCHAR(255)  Owner name                        
-partition_name       VARCHAR(255)  Partition name                    
-partition_class_name VARCHAR(255)  Partitioned class name            
-partition_type       VARCHAR(32)   Partition type (HASH, RANGE, LIST)               
-partition_expr       VARCHAR(255)  Partition expression              
-partition_values     SEQUENCE OF   | MIN and MAX values if the partition type is RANGE, **NULL** if MIN and MAX are infinite
-                                   | If the partition type is LIST, List of values
-comment              VARCHAR(1024) Comment to describe the partition
-==================== ============= =========================================================================================
++----------------------+---------------+--------------------------------------------------------------------------------------------+
+| Attribute Name       | Data Type     | Description                                                                                |
++======================+===============+============================================================================================+
+| class_name           | VARCHAR(255)  | Class name                                                                                 |
++----------------------+---------------+--------------------------------------------------------------------------------------------+
+| owner_name           | VARCHAR(255)  | Owner name                                                                                 |
++----------------------+---------------+--------------------------------------------------------------------------------------------+
+| partition_name       | VARCHAR(255)  | Partition name                                                                             |
++----------------------+---------------+--------------------------------------------------------------------------------------------+
+| partition_class_name | VARCHAR(255)  | Partitioned class name                                                                     |
++----------------------+---------------+--------------------------------------------------------------------------------------------+
+| partition_type       | VARCHAR(32)   | Partition type (HASH, RANGE, LIST)                                                         |
++----------------------+---------------+--------------------------------------------------------------------------------------------+
+| partition_expr       | VARCHAR(2048) | Partition expression                                                                       |
++----------------------+---------------+--------------------------------------------------------------------------------------------+
+| partition_values     | SEQUENCE OF   | MIN and MAX values if the partition type is RANGE, **NULL** if MIN and MAX are infinite    |
+|                      |               | If the partition type is LIST, List of values                                              |
++----------------------+---------------+--------------------------------------------------------------------------------------------+
+| class_partition_type | VARCHAR(32)   | Partition type of partition class (PARTITION CLASS)                                        |
++----------------------+---------------+--------------------------------------------------------------------------------------------+
+| comment              | VARCHAR(1024) | Comment to describe the partition                                                          |
++----------------------+---------------+--------------------------------------------------------------------------------------------+
 
 The following example shows how to retrieve the partition information currently configured for the :ref:`participant2 <range-participant2-table>` class.
 

@@ -21,7 +21,11 @@ The partitioning key is an expression which is used by the partitioning method t
 *   **DATE**
 *   **TIME**
 *   **TIMESTAMP**
+*   **TIMESTAMPTZ**
+*   **TIMESTAMPLTZ**
 *   **DATETIME**
+*   **DATETIMETZ**
+*   **DATETIMELTZ**
 
 The following restrictions apply to the partitioning key:
 
@@ -52,6 +56,33 @@ The following restrictions apply to the partitioning key:
     *   :c:macro:`USER` 
     *   :ref:`PRIOR <prior-operator>` 
     *   :func:`WIDTH_BUCKET`
+    *   :c:macro:`SYS_DATE`
+    *   :c:macro:`SYSDATE`
+    *   :c:macro:`SYS_TIME`
+    *   :c:macro:`SYSTIME`
+    *   :c:macro:`SYS_DATETIME`
+    *   :c:macro:`SYSDATETIME`
+    *   :c:macro:`SYS_TIMESTAMP`
+    *   :c:macro:`SYSTIMESTAMP`
+    *   :func:`CURDATE`
+    *   :func:`CURRENT_DATE`
+    *   :c:macro:`CURRENT_DATE`
+    *   :func:`CURTIME`
+    *   :func:`CURRENT_TIME`
+    *   :c:macro:`CURRENT_TIME`
+    *   :c:macro:`CURRENT_TIMESTAMP`
+    *   :func:`CURRENT_TIMESTAMP`
+    *   :c:macro:`LOCALTIME`
+    *   :func:`LOCALTIME`
+    *   :c:macro:`LOCALTIMESTAMP`
+    *   :func:`LOCALTIMESTAMP`
+    *   :func:`CURRENT_DATETIME`
+    *   :c:macro:`CURRENT_DATETIME`
+    *   :func:`NOW`
+    *   :func:`UTC_TIME`
+    *   :func:`UTC_DATE`
+    *   :func:`UTC_TIMESTAMP`
+    *   :func:`TZ_OFFSET`
 *	The partitioning key needs to be present in the key of each unique index (including primary keys). For more information on this aspect, please see :ref:`here<index-partitions>`.
 *	The partitioning expression's length must not exceed 1024 bytes.
 

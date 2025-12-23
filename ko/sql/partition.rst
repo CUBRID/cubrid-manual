@@ -22,7 +22,11 @@
 *   **DATE**
 *   **TIME**
 *   **TIMESTAMP**
+*   **TIMESTAMPTZ**
+*   **TIMESTAMPLTZ**
 *   **DATETIME**
+*   **DATETIMETZ**
+*   **DATETIMELTZ**
 
 분할 키에는 다음과 같은 제약 사항이 적용된다.
 
@@ -53,6 +57,33 @@
     *   :c:macro:`USER` 
     *   :ref:`PRIOR <prior-operator>` 
     *   :func:`WIDTH_BUCKET`
+    *   :c:macro:`SYS_DATE`
+    *   :c:macro:`SYSDATE`
+    *   :c:macro:`SYS_TIME`
+    *   :c:macro:`SYSTIME`
+    *   :c:macro:`SYS_DATETIME`
+    *   :c:macro:`SYSDATETIME`
+    *   :c:macro:`SYS_TIMESTAMP`
+    *   :c:macro:`SYSTIMESTAMP`
+    *   :func:`CURDATE`
+    *   :func:`CURRENT_DATE`
+    *   :c:macro:`CURRENT_DATE`
+    *   :func:`CURTIME`
+    *   :func:`CURRENT_TIME`
+    *   :c:macro:`CURRENT_TIME`
+    *   :c:macro:`CURRENT_TIMESTAMP`
+    *   :func:`CURRENT_TIMESTAMP`
+    *   :c:macro:`LOCALTIME`
+    *   :func:`LOCALTIME`
+    *   :c:macro:`LOCALTIMESTAMP`
+    *   :func:`LOCALTIMESTAMP`
+    *   :func:`CURRENT_DATETIME`
+    *   :c:macro:`CURRENT_DATETIME`
+    *   :func:`NOW`
+    *   :func:`UTC_TIME`
+    *   :func:`UTC_DATE`
+    *   :func:`UTC_TIMESTAMP`
+    *   :func:`TZ_OFFSET`
 *       각각의 고유 인덱스 키 또는  기본 키는 분할 키를 포함해야 한다.  이에 대한 자세한 내용은 :ref:`여기<index-partitions>` 를 참고한다.
 *       분할 표현식의 길이는 1024바이트를 초과하면 안 된다.
 

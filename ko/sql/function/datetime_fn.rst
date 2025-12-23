@@ -2208,6 +2208,25 @@ UTC_TIME
     ==============
       10:35:52 AM
 
+UTC_TIMESTAMP
+=============
+
+.. function:: UTC_TIMESTAMP ()
+
+    **UTC_TIMESTAMP** 함수는 UTC 날짜와 시간을 'YYYY-MM-DD HH:MI:SS' 형태로 반환한다.
+
+    :rtype: STRING
+
+.. code-block:: sql
+
+    SELECT UTC_TIMESTAMP();
+    
+::
+
+      utc_timestamp()
+    ===========================
+      06:04:19 AM 12/23/2025
+
 WEEK
 ====
 

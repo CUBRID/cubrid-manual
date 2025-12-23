@@ -129,7 +129,7 @@ SELECT 문을 지정하지 않았을 때는 RETURN 절을 포함하여 커서가
 CREATE PACKAGE BODY
 --------------------
 
-CREATE PACKAGE 문의 문법은 아래와 같다.
+CREATE PACKAGE BODY 문의 문법은 아래와 같다.
 
 ::
 

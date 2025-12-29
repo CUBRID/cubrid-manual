@@ -339,7 +339,7 @@ CREATE TRIGGER
 
 .. code-block:: sql
 
-	SELECT name, comment FROM _db_trigger;
+	SELECT name, comment FROM db_trigger;
 	SELECT trigger_name, comment FROM db_trigger;
 
 또는 CSQL 인터프리터에서 스키마를 출력하는 ;sc 명령으로 트리거의 커멘트를 확인할 수 있다.

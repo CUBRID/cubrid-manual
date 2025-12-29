@@ -120,6 +120,10 @@ Represents class information. An index for unique_name and an index for class_na
 +--------------------+---------------------------+------------------------------------------------------------------------------------------+
 | flags              | INTEGER                   | Class flags                                                                              |
 |                    |                           |                                                                                          |
+|                    |                           | - **Bit 1**: 1 for a view with WITH CHECK OPTION                                         |
+|                    |                           | - **Bit 2**: 1 for a view with LOCAL CHECK OPTION                                        |
+|                    |                           | - **Bit 3**: 1 for a REUSE_OID class                                                     |
+|                    |                           | - The other bits are not currently used.                                                 |
 +--------------------+---------------------------+------------------------------------------------------------------------------------------+
 | sub_classes        | SEQUENCE OF _db_class     | Class one level down                                                                     |
 |                    |                           |                                                                                          |
@@ -163,14 +167,6 @@ Represents class information. An index for unique_name and an index for class_na
 +--------------------+---------------------------+------------------------------------------------------------------------------------------+
 | checked_time       | DATETIME                  | Class statistics information update time                                                 |
 +--------------------+---------------------------+------------------------------------------------------------------------------------------+
-
-        .. note::
-        
-            - **flags**
-                - **Bit 1**: 1 for a view with WITH CHECK OPTION
-                - **Bit 2**: 1 for a view with LOCAL CHECK OPTION
-                - **Bit 3**: 1 for a REUSE_OID class
-                - The other bits are not currently used.
 
 The following example shows how to retrieve all sub classes under the class owned by user '**PUBLIC**' (for the child class *female_event* in the result, see the example in :ref:`add-superclass`).
 
@@ -573,6 +569,10 @@ Represents index information. An index for class_of is created.
 | index_type               | INTEGER                   | Index type (0: BTREE)                                                |
 +--------------------------+---------------------------+----------------------------------------------------------------------+
 | options                  | INTEGER                   | Index options                                                        |
+|                          |                           |                                                                      |
+|                          |                           | - **Bit 0 ~ Bit 3**: Represents the **deduplicate level** of the     |
+|                          |                           |   index. For more details, refer to :ref:`deduplicate_overview`.     |
+|                          |                           | - The other bits are not currently used.                             |
 +--------------------------+---------------------------+----------------------------------------------------------------------+
 | comment                  | VARCHAR (1024)            | Comment to describe the index                                        |
 +--------------------------+---------------------------+----------------------------------------------------------------------+
@@ -580,12 +580,6 @@ Represents index information. An index for class_of is created.
 +--------------------------+---------------------------+----------------------------------------------------------------------+
 | updated_time             | DATETIME                  | Index modification time                                              |
 +--------------------------+---------------------------+----------------------------------------------------------------------+
-
-        .. note::
-        
-            - **options**: 
-                - **Bit 0 ~ Bit 3**: Represents the **deduplicate level** of the index. For more details, refer to :ref:`deduplicate_overview`.
-                - The other bits are not currently used.
 
 The following example shows how to retrieve names of indexes that belong to the class.
 
@@ -729,7 +723,7 @@ Authorization types supported by CUBRID are as follows:
 *   **INDEX**
 *   **EXECUTE**
 
-The following example shows how to retrieve authorization information defined in the class *db_trigger*.
+The following example shows how to retrieve authorization information defined in the view *db_trigger*.
 
 .. code-block:: sql
 

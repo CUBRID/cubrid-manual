@@ -111,7 +111,7 @@ To see a comment of the serial, run the below syntax.
 
 .. code-block:: sql
 
-    SELECT name, comment FROM _db_serial;
+    SELECT name, comment FROM db_serial;
 
 To change a comment of a serial, see ALTER SERIAL syntax.
 

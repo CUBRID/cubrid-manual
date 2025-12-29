@@ -112,7 +112,7 @@ CREATE SERIAL
 
 .. code-block:: sql
 
-    SELECT name, comment FROM _db_serial;
+    SELECT name, comment FROM db_serial;
 
 시리얼 커멘트의 변경은 ALTER SERIAL 문의 설명을 참고한다.
 

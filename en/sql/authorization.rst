@@ -349,7 +349,7 @@ Database Administrator (**DBA**) or a member of the **DBA** group can change the
 User Authorization Management METHOD
 ====================================
 
-The database administrator (**DBA**) can check and modify user authorization by calling authorization-related methods defined in **db_user** where information about database user is stored, or **db_root** (the system authorization class). The administrator can specify **db_user** or **db_root** depending on the method to be called, and store the return value of a method to a variable. In addition, some methods can be called only by **DBA** or members of **DBA** group.
+The database administrator (**DBA**) can check and modify user authorization by calling authorization-related methods defined in **db_user** where information about database user is stored, or **db_root** (the system root class). The administrator can specify **db_user** or **db_root** depending on the method to be called, and store the return value of a method to a variable. In addition, some methods can be called only by **DBA** or members of **DBA** group.
 
 .. note:: Note that method call made by the master node is not applied to the slave node in the HA environment.
 

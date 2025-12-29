@@ -567,6 +567,8 @@ Represents index information. An index for class_of is created.
 |                          |                           | (1: RESTRICT, 2: NO ACTION, 3: SET NULL)                             |
 +--------------------------+---------------------------+----------------------------------------------------------------------+
 | referential_match_option | INTEGER                   | The match option for a foreign key constraint (0: NONE)              |
+|                          |                           |                                                                      |
+|                          |                           | - NONE: Does not check if any NULL exists                            |
 +--------------------------+---------------------------+----------------------------------------------------------------------+
 | index_type               | INTEGER                   | Index type (0: BTREE)                                                |
 +--------------------------+---------------------------+----------------------------------------------------------------------+
@@ -582,7 +584,7 @@ Represents index information. An index for class_of is created.
         .. note::
         
             - **options**: 
-                - **Bit 0 ~ Bit 3**: Represents the **duplication_level** of the index.
+                - **Bit 0 ~ Bit 3**: Represents the **deduplicate level** of the index. For more details, refer to :ref:`deduplicate_overview`.
                 - The other bits are not currently used.
 
 The following example shows how to retrieve names of indexes that belong to the class.
@@ -790,21 +792,26 @@ Represents partition information. An index for class_of and pname is created.
 | pname                | VARCHAR(255)  | Parent -                             |
 |                      |               | **NULL**                             |
 +----------------------+---------------+--------------------------------------+
-| ptype                | INTEGER       | 0 - HASH                             |
-|                      |               | 1 - RANGE                            |
-|                      |               | 2 - LIST                             |
+| ptype                | INTEGER       | - 0 - HASH                           |
+|                      |               | - 1 - RANGE                          |
+|                      |               | - 2 - LIST                           |
 +----------------------+---------------+--------------------------------------+
 | pexpr                | VARCHAR(2048) | Parent only                          |
 +----------------------+---------------+--------------------------------------+
-| pvalues              | SEQUENCE OF   | Parent - Column name, Hash size      |
-|                      |               | RANGE - MIN/MAX value :              |
-|                      |               | - Infinite MIN/MAX is stored as      |
-|                      |               | **NULL**                             |
-|                      |               | LIST - value list                    |
+| pvalues              | SEQUENCE OF   | - HASH - Column name, Hash size      |
+|                      |               | - RANGE - MIN/MAX value :            |
+|                      |               |   Infinite MIN/MAX is stored as      |
+|                      |               |   **NULL**                           |
+|                      |               | - LIST - value list                  |
 +----------------------+---------------+--------------------------------------+
 | class_partition_type | INTEGER       | Partition type of partition class    |
 |                      |               | (1: PARTITIONED CLASS,               |
 |                      |               | 2: PARTITION CLASS)                  |
+|                      |               |                                      |
+|                      |               | - PARTITIONED CLASS: Parent table    |
+|                      |               |   that has partitions                |
+|                      |               | - PARTITION CLASS: Individual        |
+|                      |               |   partition table that stores data   |
 +----------------------+---------------+--------------------------------------+
 | comment              | VARCHAR(1024) | Comment to describe the partition    |
 +----------------------+---------------+--------------------------------------+
@@ -1933,6 +1940,8 @@ Represents information of indexes created for the class for which the current us
 |                                    |                      | (RESTRICT, NO ACTION, SET NULL)                     |
 +------------------------------------+----------------------+-----------------------------------------------------+
 | referential_match_option           | VARCHAR(7)           | Match option for foreign key constraint (NONE)      |
+|                                    |                      |                                                     |
+|                                    |                      | - NONE: Does not check if any NULL exists           |
 +------------------------------------+----------------------+-----------------------------------------------------+
 | index_type                         | VARCHAR(32)          | Index type (BTREE)                                  |
 +------------------------------------+----------------------+-----------------------------------------------------+
@@ -2259,6 +2268,8 @@ Represents information of partitioned classes for which the current user has acc
 |                      |               | If the partition type is LIST, List of values                                              |
 +----------------------+---------------+--------------------------------------------------------------------------------------------+
 | class_partition_type | VARCHAR(32)   | Partition type of partition class (PARTITION CLASS)                                        |
+|                      |               |                                                                                            |
+|                      |               | - PARTITION CLASS: Individual partition table that stores data                             |
 +----------------------+---------------+--------------------------------------------------------------------------------------------+
 | comment              | VARCHAR(1024) | Comment to describe the partition                                                          |
 +----------------------+---------------+--------------------------------------------------------------------------------------------+

@@ -42,15 +42,15 @@ CREATE PACKAGE 문의 문법은 아래와 같다.
     CREATE [OR REPLACE] PACKAGE [schema_name.]<package_name> {IS|AS} <package_item> { <package_item> }... END [ <package_name> ]
 
         <package_item> ::=
-            <variable_decl>
-          | <constant_decl>
+            <variable_def>
+          | <constant_def>
           | <exception_decl>
           | <cursor_decl_or_def>
           | <procedure_decl>
           | <function_decl>
           | <record_type_def>
 
-            <variable_decl> ::=
+            <variable_def> ::=
                 <variable_name> <type_spec> [ [ NOT NULL ] <initial_value_part> ] ;
 
                 <type_spec> ::=
@@ -63,7 +63,7 @@ CREATE PACKAGE 문의 문법은 아래와 같다.
 
                 <initial_value_part> ::= { := | DEFAULT } <expression>
 
-            <constant_decl> ::=
+            <constant_def> ::=
                 <constant_name> CONSTANT <type_spec> [ NOT_NULL ] <initial_value_part> ;
 
             <exception_decl> ::=
@@ -138,15 +138,15 @@ CREATE PACKAGE BODY 문의 문법은 아래와 같다.
         <pb_declare_section> ::= <package_body_item> { <package_body_item> }...
 
             <package_body_item> ::=
-                <variable_decl>
-              | <constant_decl>
+                <variable_def>
+              | <constant_def>
               | <exception_decl>
               | <cursor_def>
               | <procedure_def>
               | <function_def>
               | <record_type_def>
 
-                <variable_decl> ::=
+                <variable_def> ::=
                     <variable_name> <type_spec> [ [ NOT NULL ] <initial_value_part> ] ;
 
                     <type_spec> ::=
@@ -159,7 +159,7 @@ CREATE PACKAGE BODY 문의 문법은 아래와 같다.
 
                     <initial_value_part> ::= { := | DEFAULT } <expression>
 
-                <constant_decl> ::=
+                <constant_def> ::=
                     <constant_name> CONSTANT <type_spec> [ NOT_NULL ] <initial_value_part> ;
 
                 <exception_decl> ::=

@@ -10,8 +10,8 @@ Each declared item can be referenced within the *body* that follows the declarat
 
     <seq_of_declare_specs> ::= <declare_spec> { <declare_spec> }...
     <declare_spec> ::=
-          <variable_decl>
-        | <constant_decl>
+          <variable_def>
+        | <constant_def>
         | <exception_decl>
         | <cursor_def>
         | <procedure_def>
@@ -85,12 +85,12 @@ This results in a compile error message stating that the name has already been u
     ERROR: In line 5, column 9
     Stored procedure compile error: name A has already been used at line 4 and column 18 in the same declaration block
 
-Variable Declarations
+Variable Definitions
 =====================
 
 ::
 
-    <variable_decl> ::=
+    <variable_def> ::=
         <identifier> <type_spec> [ [ NOT NULL ] <initial_value_part> ] ;
 
     <type_spec> ::=
@@ -103,7 +103,7 @@ Variable Declarations
 
 * *builtin_type*: system-defined types as described in :ref:`Data Types <types>`
 
-When declaring variables, you may optionally specify a `NOT NULL` constraint and an initial value.
+When defining variables, you may optionally specify a `NOT NULL` constraint and an initial value.
 If `NOT NULL` is specified, a non-null initial value must also be provided.
 If no initializer is provided, the variable will implicitly be assigned `NULL`.
 
@@ -118,11 +118,11 @@ If no initializer is provided, the variable will implicitly be assigned `NULL`.
         ...
     END;
 
-Constant Declarations
+Constant Definitions
 =====================
 ::
 
-    <constant_decl> ::=
+    <constant_def> ::=
         <identifier> CONSTANT <type_spec> [ NOT_NULL ] <value_part> ;
 
     <type_spec> ::=
@@ -135,7 +135,7 @@ Constant Declarations
 
 * *builtin_type*: system-defined types as described in :ref:`Data Types <types>`
 
-Constant declarations must always include a value.
+Constant definitions must always include a value.
 If `NOT NULL` is specified, the value must not be `NULL`.
 
 .. code-block:: sql

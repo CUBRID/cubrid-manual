@@ -11,8 +11,8 @@
 
     <seq_of_declare_specs> ::= <declare_spec> { <declare_spec> }...
     <declare_spec> ::=
-          <variable_decl>
-        | <constant_decl>
+          <variable_def>
+        | <constant_def>
         | <exception_decl>
         | <cursor_def>
         | <procedure_def>
@@ -71,14 +71,14 @@
 .. code-block:: sql
 
     CREATE OR REPLACE PROCEDURE poo(a INT) AS
-    
+
         PROCEDURE inner AS
             i INT := a;
             a NUMERIC;
         BEGIN
             ...
         END;
-    
+
     BEGIN
         ...
     END;
@@ -88,12 +88,12 @@
 
 
 
-변수 선언
+변수 정의
 =========
 
 ::
 
-    <variable_decl> ::=
+    <variable_def> ::=
         <identifier> <type_spec> [ [ NOT NULL ] <initial_value_part> ] ;
 
     <type_spec> ::=
@@ -106,9 +106,9 @@
 
 * *builtin_type*: :ref:`데이터 타입 <types>` 절에서 설명한 시스템 제공 타입
 
-변수 선언에 선택적으로 NOT NULL 조건과 초기값을 지정할 수 있다.
+변수 정의에 선택적으로 NOT NULL 조건과 초기값을 지정할 수 있다.
 NOT NULL 조건이 지정된 경우에는 반드시 NULL이 아닌 초기값이 함께 지정되어야 한다.
-선언할 때 초기값이 지정되지 않은 변수는 묵시적으로 NULL 값을 갖게 된다.
+정의할 때 초기값이 지정되지 않은 변수는 묵시적으로 NULL 값을 갖게 된다.
 
 .. code-block:: sql
 
@@ -121,11 +121,11 @@ NOT NULL 조건이 지정된 경우에는 반드시 NULL이 아닌 초기값이 
         ...
     END;
 
-상수 선언
+상수 정의
 =========
 ::
 
-    <constant_decl> ::=
+    <constant_def> ::=
         <identifier> CONSTANT <type_spec> [ NOT_NULL ] <value_part> ;
 
     <type_spec> ::=
@@ -138,7 +138,7 @@ NOT NULL 조건이 지정된 경우에는 반드시 NULL이 아닌 초기값이 
 
 * *builtin_type*: :ref:`데이터 타입 <types>` 절에서 설명한 시스템 제공 타입
 
-상수 선언에는 필수적으로 값 지정이 포함되어야 한다.
+상수 정의에는 필수적으로 값 지정이 포함되어야 한다.
 NOT NULL 조건이 지정된 경우, 이 값은 NULL이 아니어야 한다.
 
 .. code-block:: sql

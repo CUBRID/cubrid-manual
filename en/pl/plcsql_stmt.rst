@@ -38,10 +38,10 @@ Like procedures/functions, a BLOCK can have an exception handling structure.
         [ DECLARE <seq_of_declare_specs> ] <body>
 
     <body> ::= BEGIN <seq_of_statements> [ EXCEPTION <seq_of_handlers> ] END [ <label_name> ]
-    <seq_of_declare_specs> ::= <declare_spec> [ <declare_spec> ... ]
-    <seq_of_statements> ::= <statement> ; [ <statement> ; ... ]
-    <seq_of_handlers> ::= <handler> [ <handler> ... ]
-    <handler> ::= WHEN <exception_name> [ OR <exeption_name> OR ... ] THEN <seq_of_statements>
+    <seq_of_declare_specs> ::= <declare_spec> { <declare_spec> }...
+    <seq_of_statements> ::= <statement> ; { <statement> ; }...
+    <seq_of_handlers> ::= <handler> { <handler> }...
+    <handler> ::= WHEN <exception_name> { OR <exeption_name> }... THEN <seq_of_statements>
     <exception_name> ::= identifier | OTHERS
 
 * *body*: must consist of one or more statements, optionally followed by exception handlers.
@@ -117,7 +117,7 @@ Cursor manipulation statements come in the following four forms:
         | <open_for_statement>
 
     <open_statement> ::= OPEN <cursor> [ <function_argument> ]
-    <fetch_statement> ::= FETCH <cursor_expression> INTO <identifier> [ , <identifier>, ... ]
+    <fetch_statement> ::= FETCH <cursor_expression> INTO <identifier> { , <identifier> }...
     <close_statement> ::= CLOSE <cursor_expression>
 
     <open_for_statement> ::= OPEN <identifier> FOR <select_statement>
@@ -241,9 +241,9 @@ if more than one row is returned, `TOO_MANY_ROWS` is raised.
 
     <execute_immediate> ::=
         EXECUTE IMMEDIATE <dynamic_sql> { [ <into_clause> ] [ <using_clause> ] | <using_clause> <into_clause> }
-        <using_clause> ::= USING <using_element> [ , <using_element>, ... ]
+        <using_clause> ::= USING <using_element> { , <using_element> }...
         <using_element> ::= [ IN ] <expression>
-        <into_clause> ::= INTO <identifier> [ , <identifier>, ... ]
+        <into_clause> ::= INTO <identifier> { , <identifier> }...
 
 * *dynamic_sql*: an expression of string type. It must evaluate to a syntactically valid SQL string.
   You may use `?` placeholders for values.
@@ -410,7 +410,7 @@ Procedure Call
 
     <procedure_call> ::=
         <identifier> [ <function_argument> ]
-    <function_argument> ::= ( [ <expression> [ , <expression>, ... ] ] )
+    <function_argument> ::= ( [ <expression> { , <expression> }... ] )
 
 Calls the procedure identified by *identifier*, optionally passing *function_argument* values.
 The number and types of arguments must match those declared in the procedure.
@@ -447,7 +447,7 @@ IF
 
     <if_statement> ::=
         IF <expression> THEN <seq_of_statements>
-        [ <elsif_part> [ <elsif_part> ... ] ]
+        [ <elsif_part> { <elsif_part> }... ]
         [ <else_part> ]
         END IF
     <elsif_part> ::= ELSIF <expression> THEN <seq_of_statements>

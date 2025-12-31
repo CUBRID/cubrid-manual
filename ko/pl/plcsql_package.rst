@@ -232,10 +232,11 @@ ALTER PACKAGE 문의 문법은 아래와 같다.
 
 ::
 
-    ALTER PACKAGE [schema_name.]<package_name> COMPILE { PACKAGE | SPECIFICATION | BODY } ;
+    ALTER PACKAGE [schema_name.]<package_name> COMPILE ;
 
-ALTER PACKAGE 문을 이용해서 패키지 전체 혹은 선언이나 구현만 재컴파일 할 수 있다.
-패키지에서 참조하고 있는 테이블의 스키마가 바뀌는 등의 경우에 재컴파일이 필요하다.
+ALTER PACKAGE 문을 이용해서 패키지를 재컴파일 할 수 있다.
+패키지의 명세나 구현이 바뀌지 않았어도 패키지의 외부 조건이 변한 경우에 재컴파일이 필요할 수 있다
+(예를 들어, 패키지에서 참조하고 있는 테이블의 스키마가 바뀜).
 
 SQL 문에서 패키지 참조 제약
 ============================

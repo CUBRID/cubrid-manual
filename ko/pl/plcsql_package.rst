@@ -64,7 +64,7 @@ CREATE PACKAGE 문의 문법은 아래와 같다.
                 <initial_value_part> ::= { := | DEFAULT } <expression>
 
             <constant_def> ::=
-                <constant_name> CONSTANT <type_spec> [ NOT_NULL ] <initial_value_part> ;
+                <constant_name> CONSTANT <type_spec> [ NOT NULL ] <initial_value_part> ;
 
             <exception_decl> ::=
                 <exception_name> EXCEPTION ;
@@ -160,7 +160,7 @@ CREATE PACKAGE BODY 문의 문법은 아래와 같다.
                     <initial_value_part> ::= { := | DEFAULT } <expression>
 
                 <constant_def> ::=
-                    <constant_name> CONSTANT <type_spec> [ NOT_NULL ] <initial_value_part> ;
+                    <constant_name> CONSTANT <type_spec> [ NOT NULL ] <initial_value_part> ;
 
                 <exception_decl> ::=
                     <exception_name> EXCEPTION ;

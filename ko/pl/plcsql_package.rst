@@ -39,7 +39,8 @@ CREATE PACKAGE 문의 문법은 아래와 같다.
 
 ::
 
-    CREATE [OR REPLACE] PACKAGE [schema_name.]<package_name> {IS|AS} <package_item> { <package_item> }... END [ <package_name> ]
+    CREATE [OR REPLACE] PACKAGE [schema_name.]<package_name> {IS|AS}
+        <package_item> { <package_item> }... END [ <package_name> ] [ COMMENT 'comment_string' ]
 
         <package_item> ::=
             <variable_def>
@@ -51,7 +52,7 @@ CREATE PACKAGE 문의 문법은 아래와 같다.
           | <record_type_def>
 
             <variable_def> ::=
-                <variable_name> <type_spec> [ [ NOT NULL ] <initial_value_part> ] ;
+                <variable_name> <type_spec> [ [ NOT NULL ] <initial_value_part> ] [ COMMENT 'comment_string' ] ;
 
                 <type_spec> ::=
                       <builtin_type>
@@ -64,29 +65,29 @@ CREATE PACKAGE 문의 문법은 아래와 같다.
                 <initial_value_part> ::= { := | DEFAULT } <expression>
 
             <constant_def> ::=
-                <constant_name> CONSTANT <type_spec> [ NOT NULL ] <initial_value_part> ;
+                <constant_name> CONSTANT <type_spec> [ NOT NULL ] <initial_value_part> [ COMMENT 'comment_string' ] ;
 
             <exception_decl> ::=
-                <exception_name> EXCEPTION ;
+                <exception_name> EXCEPTION [ COMMENT 'comment_string' ] ;
 
             <cursor_decl_or_def> ::=
-                CURSOR <cursor_name> [ ( <seq_of_cursor_parameters> ) ] RETURN <rowtype> ;
-              | CURSOR <cursor_name> [ ( <seq_of_cursor_parameters> ) ] [ RETURN <rowtype> ] IS <select_statement> ;
+                CURSOR <cursor_name> [ ( <seq_of_cursor_parameters> ) ] RETURN <rowtype> [ COMMENT 'comment_string' ] ;
+              | CURSOR <cursor_name> [ ( <seq_of_cursor_parameters> ) ] [ RETURN <rowtype> ] IS <select_statement> [ COMMENT 'comment_string' ] ;
 
                 <seq_of_cursor_parameters> ::= <cursor_parameter> { , <cursor_parameter> }...
                 <cursor_parameter> ::= <parameter_name> [ IN ] <type_spec>
 
             <procedure_decl> ::=
-                PROCEDURE <procedure_name> [ ( <seq_of_parameters> ) ] ;
+                PROCEDURE <procedure_name> [ ( <seq_of_parameters> ) ] [ COMMENT 'comment_string' ] ;
 
                 <seq_of_parameters> ::= [ <parameter> { , <parameter> }... ]
                 <parameter> ::= <parameter_name> [ { IN | IN OUT | INOUT | OUT } ] <type_spec> [ COMMENT 'param_comment_string' ]
 
             <function_decl> ::=
-                FUNCTION <function_name> [ ( <seq_of_parameters> ) ] RETURN <type_spec> [ [ NOT] DETERMINISTIC ] ;
+                FUNCTION <function_name> [ ( <seq_of_parameters> ) ] RETURN <type_spec> [ [ NOT] DETERMINISTIC ] [ COMMENT 'comment_string' ] ;
 
             <record_type_def> ::=
-                TYPE <record_type_name> IS RECORD ( <field_decl> { , <field_decl> }... ) ;
+                TYPE <record_type_name> IS RECORD ( <field_decl> { , <field_decl> }... ) [ COMMENT 'comment_string' ] ;
 
                 <field_decl> ::= <field_name> <type_spec> [ [ NOT NULL ] <initial_value_part> ]
 
@@ -138,15 +139,15 @@ CREATE PACKAGE BODY 문의 문법은 아래와 같다.
         <pb_declare_section> ::= <package_body_item> { <package_body_item> }...
 
             <package_body_item> ::=
-                <variable_def>
-              | <constant_def>
-              | <exception_decl>
+                <variable_def_b>
+              | <constant_def_b>
+              | <exception_decl_b>
               | <cursor_def>
               | <procedure_def>
               | <function_def>
-              | <record_type_def>
+              | <record_type_def_b>
 
-                <variable_def> ::=
+                <variable_def_b> ::=
                     <variable_name> <type_spec> [ [ NOT NULL ] <initial_value_part> ] ;
 
                     <type_spec> ::=
@@ -159,10 +160,10 @@ CREATE PACKAGE BODY 문의 문법은 아래와 같다.
 
                     <initial_value_part> ::= { := | DEFAULT } <expression>
 
-                <constant_def> ::=
+                <constant_def_b> ::=
                     <constant_name> CONSTANT <type_spec> [ NOT NULL ] <initial_value_part> ;
 
-                <exception_decl> ::=
+                <exception_decl_b> ::=
                     <exception_name> EXCEPTION ;
 
                 <cursor_def> ::=
@@ -181,7 +182,7 @@ CREATE PACKAGE BODY 문의 문법은 아래와 같다.
                 <function_def> ::=
                     FUNCTION <function_name> [ ( <seq_of_parameters> ) ] RETURN <type_spec> [ [ NOT] DETERMINISTIC ] { IS | AS } [ <seq_of_declare_specs> ] <body>  ;
 
-                <record_type_def> ::=
+                <record_type_def_b> ::=
                     TYPE <record_type_name> IS RECORD ( <field_decl> { , <field_decl> }... ) ;
 
                     <field_decl> ::= <field_name> <type_spec> [ [ NOT NULL ] <initial_value_part> ]
@@ -209,6 +210,9 @@ CREATE PACKAGE 문에서 선언한 커서, 프로시저, 함수에 대해서 구
 그렇지 않으면 컴파일 에러이다.
 
 CREATE PACKAGE 문에서 선언한 항목들에 대해서 구현을 제공하는 것이 아니라 같은 이름으로 다시 선언하는 경우에는 컴파일 에러이다.
+
+CREATE PACKAGE 문과 달리 CREATE PACKAGE BODY 문과 그 안에서 정의하는 항목들에 대해서는 COMMENT 절을 추가할 수 없다.
+COMMENT는 사용자가 참조할 수 있는 패키지 명세와 패키지 멤버들에 대해서만 의미가 있기 때문이다.
 
 DROP PACKAGE
 -------------

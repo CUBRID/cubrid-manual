@@ -29,6 +29,8 @@ The main topics covered in this chapter are as follows:
 
 *   Query Optimization: Describes the query optimization by using the index, hint, and the index hint syntax.
 
+*   Parallel Query Processing: Describes the parallel execution features for processing large amounts of data.
+
 *   Partitioning: Describes how to partition one table into several independent logical units.
 
 *   Trigger: Describes how to create, alter, drop, and rename a trigger that is automatically executed in response to certain events.
@@ -50,6 +52,7 @@ The main topics covered in this chapter are as follows:
     function/index.rst
     query/index.rst
     tuning_index.rst
+    parallel_index.rst
     partition_index.rst
     i18n_index.rst
     transaction_index.rst

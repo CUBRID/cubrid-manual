@@ -29,6 +29,8 @@ CUBRID SQL
 
 *   질의 최적화: 인덱스와 힌트, 인덱스 힌트 구문을 이용한 질의 최적화에 대해 설명한다.
 
+*   병렬 질의 처리: 대량 데이터 처리를 위한 병렬 실행 기능에 대해 설명한다.
+
 *   분할: 하나의 테이블을 여러 독립적인 논리적 단위로 분할하는 방법을 설명한다.
 
 *   트리거(trigger): 특정 질의 수행 시 특정 기능이 같이 수행되도록 하는 트리거의 생성, 변경, 삭제 방법을 설명한다.
@@ -51,6 +53,7 @@ CUBRID SQL
     function/index.rst
     query/index.rst
     tuning_index.rst
+    parallel_index.rst
     partition_index.rst
     i18n_index.rst
     transaction_index.rst

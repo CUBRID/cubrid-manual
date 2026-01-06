@@ -533,8 +533,10 @@ Starting from 4,096 pages, the degree calculated by throughput rule increases by
 *   **MIN (throughput rule calculation, parallelism parameter value)**
 
 For example, when parallelism=4 (default):
-- Page count 4,096 → throughput rule calculates 2 → MIN(2, 4) = **2** applied
-- Page count 65,536 → throughput rule calculates 6 → MIN(6, 4) = **4** applied (cannot exceed parallelism)
+
+*   Page count 4,096 → throughput rule calculates 2 → MIN(2, 4) = **2** applied
+
+*   Page count 65,536 → throughput rule calculates 6 → MIN(6, 4) = **4** applied (cannot exceed parallelism)
 
 .. note::
 

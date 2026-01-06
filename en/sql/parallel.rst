@@ -510,7 +510,7 @@ The degree of parallelism for parallel heap scan is determined by the number of 
 The degree of parallelism is determined according to the number of pages in the table as follows:
 
 .. csv-table::
-   :header: "Number of Pages", "Throughput", "Degree of Parallelism"
+   :header: "Number of Pages", "Throughput", "Throughput Rule Calculation"
    :widths: 15, 15, 15
 
    "4,096", "64 MB", "2"
@@ -526,11 +526,15 @@ The degree of parallelism is determined according to the number of pages in the 
    "4,194,304", "64.0 GB", "12"
    "8,388,608", "128.0 GB", "13"
 
-Starting from 4,096 pages, the degree of parallelism increases by 1 each time the number of pages doubles from the previous increase threshold.
+Starting from 4,096 pages, the degree calculated by throughput rule increases by 1 each time the number of pages doubles from the previous increase threshold.
 
-For partitioned tables, the determined degree of parallelism cannot exceed the number of partitions:
+**The degree of parallelism determined by throughput rules cannot exceed the :ref:`parallelism <parallelism>` parameter value:**
 
-*   **MIN (determined degree of parallelism, number of partitions)**
+*   **MIN (throughput rule calculation, parallelism parameter value)**
+
+For example, when parallelism=4 (default):
+- Page count 4,096 → throughput rule calculates 2 → MIN(2, 4) = **2** applied
+- Page count 65,536 → throughput rule calculates 6 → MIN(6, 4) = **4** applied (cannot exceed parallelism)
 
 .. note::
 
@@ -549,19 +553,20 @@ For partitioned tables, the determined degree of parallelism cannot exceed the n
         UNION ALL 
         SELECT n + 1 FROM cte WHERE n < 2000
     )
-    SELECT ROWNUM FROM cte a, cte b, cte c LIMIT 2100000;
+    SELECT ROWNUM FROM cte a, cte b, cte c LIMIT 2200000;
     
     UPDATE STATISTICS ON large_table WITH FULLSCAN;
     
     -- Check table statistics
-    -- Total pages in class heap: 4024 (approximately 64MB)
+    -- Total pages in class heap: 4215 (approximately 66MB when db_page_size is 16K)
+    -- Total objects: 2200000
     
     -- When parallelism parameter is set to 4
-    -- Page count 4024 is 4,096 or more, so degree of parallelism 3 is automatically applied
-    SELECT * FROM large_table WHERE c1 > 100;
+    -- Page count 4215 is 4,096 or more, so degree of parallelism 2 is automatically applied
+    SELECT COUNT(*) FROM large_table;
     
     -- Explicit specification with hint
-    SELECT /*+ PARALLEL(8) */ * FROM large_table WHERE c1 > 100;
+    SELECT /*+ PARALLEL(8) */ COUNT(*) FROM large_table;
 
 Hash Join Throughput Rules
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^

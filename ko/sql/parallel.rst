@@ -513,7 +513,7 @@ COUNT 최적화는 결과 행이 하나이므로 rows가 0으로 표시되며, �
 병렬 처리 수준은 테이블의 페이지 수에 따라 다음과 같이 결정된다:
 
 .. csv-table::
-   :header: "페이지 수", "처리량", "병렬 처리 수준"
+   :header: "페이지 수", "처리량", "처리량 규칙 계산값"
    :widths: 15, 15, 15
 
    "4,096", "64 MB", "2"
@@ -529,11 +529,15 @@ COUNT 최적화는 결과 행이 하나이므로 rows가 0으로 표시되며, �
    "4,194,304", "64.0 GB", "12"
    "8,388,608", "128.0 GB", "13"
 
-페이지 수가 4,096개를 시작으로, 이전에 증가한 기준 페이지 수의 2배가 될 때마다 병렬 처리 수준이 1씩 증가한다.
+페이지 수가 4,096개를 시작으로, 이전에 증가한 기준 페이지 수의 2배가 될 때마다 처리량 규칙으로 계산된 수준이 1씩 증가한다.
 
-파티션 테이블의 경우 결정되는 병렬 처리 수준은 분할 파티션 개수를 초과할 수 없다:
+**처리량 규칙에 따라 결정되는 병렬 처리 수준은 :ref:`parallelism <parallelism>` 파라미터 값을 초과할 수 없다:**
 
-*   **MIN (결정되는 병렬 처리 수준, 분할 파티션 개수)**
+*   **MIN (처리량 규칙 계산값, parallelism 파라미터 값)**
+
+예를 들어, parallelism=4 (기본값)로 설정된 경우:
+- 페이지 수 4,096개 → 처리량 규칙 계산값 2 → MIN(2, 4) = **2** 적용
+- 페이지 수 65,536개 → 처리량 규칙 계산값 6 → MIN(6, 4) = **4** 적용 (parallelism 초과 불가)
 
 .. note::
 
@@ -552,19 +556,20 @@ COUNT 최적화는 결과 행이 하나이므로 rows가 0으로 표시되며, �
         UNION ALL 
         SELECT n + 1 FROM cte WHERE n < 2000
     )
-    SELECT ROWNUM FROM cte a, cte b, cte c LIMIT 2100000;
+    SELECT ROWNUM FROM cte a, cte b, cte c LIMIT 2200000;
     
     UPDATE STATISTICS ON large_table WITH FULLSCAN;
     
     -- 테이블 통계 확인
-    -- Total pages in class heap: 4024 (약 64MB)
+    -- Total pages in class heap: 4215 (약 66MB, db_page_size가 16K일 때)
+    -- Total objects: 2200000
     
     -- parallelism 파라미터가 4로 설정된 경우
-    -- 페이지 수 4024는 4,096 이상이므로 병렬 처리 수준 3이 자동 적용됨
-    SELECT * FROM large_table WHERE c1 > 100;
+    -- 페이지 수 4215는 4,096 이상이므로 병렬 처리 수준 2가 자동 적용됨
+    SELECT COUNT(*) FROM large_table;
     
     -- 힌트로 명시적 지정
-    SELECT /*+ PARALLEL(8) */ * FROM large_table WHERE c1 > 100;
+    SELECT /*+ PARALLEL(8) */ COUNT(*) FROM large_table;
 
 해시 조인 처리량 규칙
 ^^^^^^^^^^^^^^^^^^^^^

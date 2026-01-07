@@ -318,7 +318,7 @@ COUNT 최적화는 결과 행이 하나이므로 rows가 0으로 표시되며, �
 
 다음 조건을 모두 만족할 때 비상관 부질의의 병렬 실행이 가능하다:
 
-*   :ref:`max_parallel_workers <max_parallel_workers>` 파라미터가 1 이상으로 설정되어 있고, 사용 가능한 워커 스레드가 있는 경우
+*   :ref:`max_parallel_workers <max_parallel_workers>` 파라미터가 2 이상으로 설정되어 있고, 사용 가능한 워커 스레드가 있는 경우
 *   :ref:`parallelism <parallelism>` 파라미터가 2 이상으로 설정되어 있거나, **PARALLEL** (2) 이상의 힌트가 명시된 경우
 *   비상관 부질의가 top-level XASL에 연결되어 있는 경우
 *   **NO_PARALLEL_SUBQUERY** 힌트가 사용되지 않은 경우

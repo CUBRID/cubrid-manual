@@ -315,7 +315,7 @@ Execution Conditions
 
 Parallel execution of uncorrelated subqueries is possible when all of the following conditions are met:
 
-*   The :ref:`max_parallel_workers <max_parallel_workers>` parameter is set to 1 or higher, and available worker threads exist
+*   The :ref:`max_parallel_workers <max_parallel_workers>` parameter is set to 2 or higher, and available worker threads exist
 *   The :ref:`parallelism <parallelism>` parameter is set to 2 or higher, or a **PARALLEL** (2) or higher hint is specified
 *   The uncorrelated subquery is connected to the top-level XASL
 *   The **NO_PARALLEL_SUBQUERY** hint is not used

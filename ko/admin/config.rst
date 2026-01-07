@@ -745,7 +745,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
     **max_parallel_workers**\ 는 서버 전역에서 동시에 실행 가능한 병렬 쿼리 워커(parallel query worker) 스레드의 최대 개수를 설정하는 파라미터이다. 기본값은 **100**\ 이며, 최소값은 **0**, 최대값은 **1000**\ 이다.
 
-    이 파라미터가 **0**\ 으로 설정되면 병렬 쿼리 기능이 비활성화된다. 1 이상으로 설정하면 병렬 힙 스캔(Parallel Heap Scan), 병렬 비상관부질의 실행(Parallel Subquery Execution), 병렬 해시 조인(Parallel Hash Join), 병렬 정렬(Parallel Sort)과 같은 병렬 쿼리 기능을 사용할 수 있다.
+    이 파라미터가 **0**\ 으로 설정되면 병렬 쿼리 기능이 비활성화된다. 2 이상으로 설정하면 병렬 힙 스캔(Parallel Heap Scan), 병렬 비상관부질의 실행(Parallel Subquery Execution), 병렬 해시 조인(Parallel Hash Join), 병렬 정렬(Parallel Sort)과 같은 병렬 쿼리 기능을 사용할 수 있다.
 
     서버는 전역 워커 풀(worker pool)을 통해 병렬 쿼리 실행 작업을 관리하며, 다수의 세션에서 동시에 병렬 쿼리를 실행할 경우 **max_parallel_workers** 값을 초과하는 병렬 쿼리 실행이 제한된다. 단일 세션에서도 **max_parallel_workers** 값을 초과하는 병렬 쿼리 실행이 제한된다.
 
@@ -775,7 +775,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
     **parallelism**\ 은 병렬 쿼리 실행 시 하나의 병렬 연산에 적용할 수 있는 병렬 처리 수준(degree of parallelism)의 상한값을 설정하는 파라미터이다. 기본값은 **4**\ 이며, 최소값은 **0**, 최대값은 **MIN(32, 시스템 코어 수)**\ 이다.
 
-    이 파라미터가 **0**\ 으로 설정되면 쿼리에 **PARALLEL** 힌트가 명시적으로 지정되지 않는 한 병렬 실행이 비활성화된다. 1 이상으로 설정하면 병렬 힙 스캔(Parallel Heap Scan), 병렬 해시 조인(Parallel Hash Join), 병렬 정렬(Parallel Sort), 비상관 부질의(uncorrelated subquery)의 병렬 실행이 자동으로 활성화될 수 있다.
+    이 파라미터가 **0**\ 으로 설정되면 쿼리에 **PARALLEL** 힌트가 명시적으로 지정되지 않는 한 병렬 실행이 비활성화된다. 2 이상으로 설정하면 병렬 힙 스캔(Parallel Heap Scan), 병렬 해시 조인(Parallel Hash Join), 병렬 정렬(Parallel Sort), 비상관 부질의(uncorrelated subquery)의 병렬 실행이 자동으로 활성화될 수 있다.
 
     각 병렬 연산의 실제 병렬 처리 수준은 힌트 또는 처리량 규칙에 따라 결정되며, 처리량 규칙으로 계산된 병렬 처리 수준은 이 파라미터 값을 초과할 수 없다. 힌트로 지정된 병렬 처리 수준은 이 파라미터 값을 초과할 수 있지만 최대값(32 또는 시스템 코어 수 중 작은 값)은 초과할 수 없다.
 

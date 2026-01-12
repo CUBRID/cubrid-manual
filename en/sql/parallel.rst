@@ -54,7 +54,7 @@ Parallel heap scan is not supported if any of the following apply:
 
 *   Statements that do not support concurrent processing
 
-    *    JavaSP, Serial, session variables, Recursive CTE, Connect By, object DBMS features, etc.
+    *    JavaSP, Serial, session variables, Recursive CTE, Connect By, object DBMS features
 
 *   Cases requiring lock (X-LOCK) acquisition such as update
 
@@ -66,7 +66,7 @@ Parallel heap scan is not supported if any of the following apply:
 
 .. note::
 
-    The max_parallel_workers and parallelism parameters are set to default values of 100 and 4 respectively, so you can use parallel queries without additional configuration. You can adjust the values in the cubrid.conf file as needed. ::
+    The default values of the max_parallel_workers and parallelism parameters are configured to allow parallel queries without additional settings. You can adjust these values in the cubrid.conf file as needed. ::
 
         # cubrid.conf
         max_parallel_workers=200  # default: 100

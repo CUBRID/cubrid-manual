@@ -56,7 +56,7 @@ CUBRID는 대량의 데이터를 효율적으로 처리하기 위해 병렬 쿼�
 
 *   동시성 처리를 지원하지 않는 구문이 포함된 경우 
 
-    *    JavaSP, Serial, 세션 변수, Recursive CTE, Connect By, 오브젝트 DBMS 기능 사용 등
+    *    JavaSP, Serial, 세션 변수, Recursive CTE, Connect By, 오브젝트 DBMS 기능 사용
 
 *   update 등 lock(X-LOCK) 획득을 필요로 하는 경우
 
@@ -68,7 +68,7 @@ CUBRID는 대량의 데이터를 효율적으로 처리하기 위해 병렬 쿼�
 
 .. note::
 
-    max_parallel_workers와 parallelism 파라미터는 기본값이 각각 100과 4로 설정되어 있어 별도 설정 없이도 병렬 쿼리를 사용할 수 있다. 필요에 따라 cubrid.conf 파일에서 값을 조정할 수 있다. ::
+    max_parallel_workers와 parallelism 파라미터의 기본값은 별도의 설정 없이도 병렬 쿼리를 사용할 수 있도록 구성되어 있다. 필요에 따라 cubrid.conf 파일에서 해당 값을 조정할 수 있다. ::
 
         # cubrid.conf
         max_parallel_workers=200  # 기본값: 100

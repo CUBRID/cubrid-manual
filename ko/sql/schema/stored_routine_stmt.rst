@@ -25,8 +25,8 @@ CREATE PROCEDURE
         <parameter_definition> ::= parameter_name [mode] sql_type [ { DEFAULT | = } <default_expr> ] [COMMENT 'parameter_comment_string']
         <lang> ::= [PLCSQL | JAVA]
         <mode> ::= IN | OUT | IN OUT | INOUT
-        <procedure_properties> ::= 
-          <authid> = AUTHID {DEFINER | OWNER | CALLER | CURRENT_USER}
+        <procedure_properties> ::= <authid>
+            <authid> ::= AUTHID {DEFINER | OWNER | CALLER | CURRENT_USER}
 
 **OR REPLACE** 구문을 사용하여 현재의 저장 함수/프로시저를 대체 혹은 새로 생성하는 문장을 작성할 수 있다.
 
@@ -122,9 +122,9 @@ CREATE FUNCTION
     
         <parameter_definition> ::= parameter_name [mode] sql_type [<default_arg>] [COMMENT 'param_comment_string']
             <default_arg> ::= { DEFAULT | = } <default_expr>
-        <procedure_properties> ::= <authid> | <deterministic>
-            <authid> = AUTHID {DEFINER | OWNER | CALLER | CURRENT_USER}
-            <deterministic> = [NOT DETERMINISTIC | DETERMINISTIC]
+        <function_properties> ::= [<authid>] [<deterministic>]
+            <authid> ::= AUTHID {DEFINER | OWNER | CALLER | CURRENT_USER}
+            <deterministic> ::= [NOT DETERMINISTIC | DETERMINISTIC]
         <lang> ::= [PLCSQL | JAVA]
         <mode> ::= IN | OUT | IN OUT | INOUT
 

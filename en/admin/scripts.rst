@@ -131,14 +131,14 @@ The restore_to_newdb.sh script allows you to restore a backup and create a new d
 
 **Basic Usage** ::
 
-	sh restore_to_new.sh [options] backuped-database-name new-database-name
+	sh restore_to_newdb.sh [options] backuped-database-name new-database-name
 
-* **restore_to_new.sh** : A script that restores a backup and creates a new DBMS instance.
+* **restore_to_newdb.sh** : A script that restores a backup and creates a new DBMS instance.
 * **backup-database-name** : Name of the backed-up database to be restored.
 * **new-database-name** : Name of the newly created database after restoration.
 
 
-**[Options] for restore_to_new.sh**
+**[Options] for restore_to_newdb.sh**
 
 .. program:: sh restore_to_newdb.sh backuped-database-name new-database-name
 

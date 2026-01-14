@@ -188,7 +188,7 @@ The declared exceptions can be used in the :ref:`RAISE <raise>` statement and in
 
 .. _cursor_def:
 
-Cursor Definition
+Cursor Definitions
 ===================
 ::
 

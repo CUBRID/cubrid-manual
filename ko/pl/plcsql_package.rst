@@ -187,7 +187,7 @@ CREATE PACKAGE BODY 문의 문법은 아래와 같다.
 
                     <field_decl> ::= <field_name> <type_spec> [ [ NOT NULL ] <initial_value_part> ]
 
-        <pb_initialize_seaction> ::=
+        <pb_initialize_section> ::=
             BEGIN <statement> { <statement> }... [ EXCEPTION <exception_handler> { <exception_handler> }... ]
 
 * *..._name*: :ref:`PL/CSQL 작성 규칙 <plcsql_identifier>`\에 설명된 식별자
